@@ -2,111 +2,134 @@ Return-Path: <SRS0=zAWw=ZF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.3 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32145C43331
-	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 06:30:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B773C43331
+	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 06:37:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0702F222C9
-	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 06:30:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 350952245D
+	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 06:37:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DkYCtpQV"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e861HBFa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726195AbfKMGay (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Nov 2019 01:30:54 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:38985 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725858AbfKMGay (ORCPT
+        id S1726428AbfKMGho (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Nov 2019 01:37:44 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:38017 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725858AbfKMGho (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Nov 2019 01:30:54 -0500
-Received: by mail-ot1-f66.google.com with SMTP id w24so194654otk.6
-        for <linux-media@vger.kernel.org>; Tue, 12 Nov 2019 22:30:52 -0800 (PST)
+        Wed, 13 Nov 2019 01:37:44 -0500
+Received: by mail-pg1-f194.google.com with SMTP id 15so734253pgh.5;
+        Tue, 12 Nov 2019 22:37:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aCjB/6F99zqoN4KoTxmWPg28xMT44B2/glemKgEW/uQ=;
-        b=DkYCtpQVgFOXZJu36bTIb40Q7m2L6QD+ubRypA5YOyBi7LMMeC5uL0cxhy4BZ37KDE
-         ssTJ0NRw18RSRUwqx/aOlsuEPGks2IsKwE98u82XkN3EVtr0G3JuZ2s7yVdxN/F0LQwJ
-         2YQLwc5pMeXsLt2SeqK9X+ktPI7xhxDQIg/VTiQ2dgj1nhdq1VUa9RldG5pv4ts2eMLn
-         CdHSIsGlCVdlMr85yZCDsSxsd8BiYnovpvFbwtMv014dkA410RotoI0rGS57HhDlN4tJ
-         bpSwuf9Tcr0o2AePlOVqcLXt560UTn+nC43wPQvDvIOZ227jDBcS/ukhrXRcBy892/QK
-         0/ew==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hBMWNBe+ajGPyroH9xX0CnOxEfxyrNH26XF/4DoPOfI=;
+        b=e861HBFaQDhUO0OFaRlI921rTJYFWvqygV2ToxRWlZ1iGhl6xTLV+oe+rcw9zefXe4
+         ivCZCMu/5DO2kblI7BKZABJw8VS9iIUvBp7AZFY6ozBwbIC6lHLYFWGSdaJGKA34yEDX
+         xEkHpFNQFEIDi+8Ne4mspjIlzNpIkmJolzso8GnZYMxF5ugXJZ0M/uZAeIEiv5w+rkCe
+         Bhr2GLEj0uvfxWMrIiAJ2LW9pSVjxzRcUCiKE/C63QmMlt0wSk7eUZJbneYmbDPuWX/j
+         M9nnd/Cvt9txjUKHStew8gOh0SWui+6cvIYJyaTi0WS7tJChPizT8whnqtCZzje36iQv
+         xV0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aCjB/6F99zqoN4KoTxmWPg28xMT44B2/glemKgEW/uQ=;
-        b=dd/yE0HCpMMhTu9Tg+gsgcXRrPUb3cVf1iupVvnmYTgT6NSuwbW5jpuafB92V4k5Nx
-         pik3MjKP5Qigrfk5ydeo1BVF+UMSxJPK/+mpsU29L8xqCwlCoZ6n8sKpmBsABT8E+Smy
-         r+6jROcPq3RJzCqbr2zEZCpE/gMW65GHILHB134qy2c5sQmAwCvbxmXARzVljW5sRiAH
-         kiclm0dzLIXTlBALo7DKCxYd/xd3iKD+TuoQEWc5By8cdOzGnCcJzM1gznHBX2uXwm5N
-         jWhImZcwe/9tjh+r7ALnQsGlR62XdwL/ZMkKpAa4ji04ICNKJW1dpD4n5NdROp6x7wpl
-         RUig==
-X-Gm-Message-State: APjAAAU7hR03kLFwUNlV/62NRmyaEUY6ug+LhP9aliUUu3QvND04rmkM
-        gxHzlTUYnux45tsmpJXCoExQFeHr6As9uw6XQh2tRg==
-X-Google-Smtp-Source: APXvYqytGZusgOyy+wmPXlbhOEUWov4yMKH2sjFoZwLqmZWnIqaGuENf8EFwEQFt2109WRsiroqEFRduBsYqTAECeUY=
-X-Received: by 2002:a9d:5c07:: with SMTP id o7mr1486817otk.33.1573626651864;
- Tue, 12 Nov 2019 22:30:51 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hBMWNBe+ajGPyroH9xX0CnOxEfxyrNH26XF/4DoPOfI=;
+        b=CPJQB4t6i+WD9mKNiBDAF4UMhUUR2NbKLFtnMormq9rO0J0nPObT6WN5/usNy5jYfq
+         pnkDc2zTERMtHUiOpRQLRQ1Wa+AJHARDFfMNlORTC2b//u/Lc+WmeEhNR66U5oOWMDi2
+         D/Fy1pd8uO3SVypjOJm7eq/OZmaRnGkrCYMl6f0fKTO9r71HKTb3MoU8tYFTvHYWtn6x
+         Ea1xh24F+6NAjAeEMniuGM9a4BtpGFk50rtEDBGFkxIn6EuO8YPIEXVZ61Cl5VoXs4HT
+         AJ8nJmo6eqjg/wcU0G3kNo2SBxB3+1gpr1kXKaFLLdcuIbIzNjhk3cEj6NsYtX/3jb8f
+         QoPw==
+X-Gm-Message-State: APjAAAUQwZ+zqQdG5O9C1+SKeSTQ4sGLUd+gLXUlidqLWd1gXIYpOJ3e
+        HWY/D4MGH38rdEx3MocVtS8=
+X-Google-Smtp-Source: APXvYqy40KGHXqbelELr+lYDHJEuaYs0EaC1n8Pm3xmcoICsDTL2PnlNVDt21bFbKKyTN6JSeOHFKg==
+X-Received: by 2002:a63:1323:: with SMTP id i35mr1890724pgl.450.1573627063430;
+        Tue, 12 Nov 2019 22:37:43 -0800 (PST)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id c184sm1411329pfc.159.2019.11.12.22.37.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2019 22:37:42 -0800 (PST)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Fabien Dessenne <fabien.dessenne@st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH] media: bdisp: add missed destroy_workqueue in remove and probe failure
+Date:   Wed, 13 Nov 2019 14:37:30 +0800
+Message-Id: <20191113063730.8776-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <CAPBb6MWXj+PNbJ0_m6O6wnYf6Z9NcYwr49qbSowG66NB-23k2g@mail.gmail.com>
- <20191112115343.1b1908ce@collabora.com>
-In-Reply-To: <20191112115343.1b1908ce@collabora.com>
-From:   Alexandre Courbot <acourbot@google.com>
-Date:   Wed, 13 Nov 2019 15:30:40 +0900
-Message-ID: <CAPBb6MVmUAmp5kmtqOx=V=1NJHyDyK28FD=rtoZEXdXvfZ2-9g@mail.gmail.com>
-Subject: Re: H264 stateless reference frames ordering lists
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 12, 2019 at 7:53 PM Boris Brezillon
-<boris.brezillon@collabora.com> wrote:
->
-> Hi Alexandre,
->
-> On Tue, 12 Nov 2019 19:14:22 +0900
-> Alexandre Courbot <acourbot@google.com> wrote:
->
-> > Hi Boris and Ezequiel,
-> >
-> > Patch c3adb85745ca6 has removed the ref_pic_list_* members from the
-> > v4l2_ctrl_h264_decode_params struct. The MT8183 stateless decoder
-> > driver I am working on still relies on these lists and I am trying (a
-> > bit late to the game) to remove them from the Chromium OS kernel UAPI
-> > in order to match upstream.
-> >
-> > I have dug into the discussion that resulted in this removal and could
-> > not really find how these are supposed to be reconstructed and on the
-> > basis on which information. The commit log for the above-mentioned
-> > patch mentions that "generic helpers will be provided for drivers that
-> > need this list". I could not find any in the kernel so far, do you
-> > have any code available at the moment? Or any idea on how these can be
-> > reconstructed? The process seems to involve reading the DPB itself as
-> > well as reordering information from the slice parameters, and seems to
-> > be a bit involved to be done in the kernel, but maybe I am missing
-> > something here.
->
-> The code is here [1], and it should indeed be extracted and put in a
-> generic v4l2_h264 lib at some point (should happen soon, since we need
-> the same logic for the rkvdec driver).
->
-> Let me know if you have any questions.
+The driver forgets to call destroy_workqueue when remove and probe fails.
+Add the missed calls to fix it.
 
-Thanks - not sure how I missed it. I have tried adapting the code for
-MT8183 and it seems to be working perfectly there as well.
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+---
+ drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-Regarding the lib to make this code available to other drivers, I was
-thinking about doing it on top of
-https://patchwork.kernel.org/patch/11076405/ but is this patch still
-being worked on?
+diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+index e90f1ba30574..4c0b36236a38 100644
+--- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
++++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
+@@ -1275,6 +1275,8 @@ static int bdisp_remove(struct platform_device *pdev)
+ 	if (!IS_ERR(bdisp->clock))
+ 		clk_unprepare(bdisp->clock);
+ 
++	destroy_workqueue(bdisp->work_queue);
++
+ 	dev_dbg(&pdev->dev, "%s driver unloaded\n", pdev->name);
+ 
+ 	return 0;
+@@ -1318,20 +1320,22 @@ static int bdisp_probe(struct platform_device *pdev)
+ 	bdisp->regs = devm_ioremap_resource(dev, res);
+ 	if (IS_ERR(bdisp->regs)) {
+ 		dev_err(dev, "failed to get regs\n");
+-		return PTR_ERR(bdisp->regs);
++		ret = PTR_ERR(bdisp->regs);
++		goto err_wq;
+ 	}
+ 
+ 	bdisp->clock = devm_clk_get(dev, BDISP_NAME);
+ 	if (IS_ERR(bdisp->clock)) {
+ 		dev_err(dev, "failed to get clock\n");
+-		return PTR_ERR(bdisp->clock);
++		ret = PTR_ERR(bdisp->clock);
++		goto err_wq;
+ 	}
+ 
+ 	ret = clk_prepare(bdisp->clock);
+ 	if (ret < 0) {
+ 		dev_err(dev, "clock prepare failed\n");
+ 		bdisp->clock = ERR_PTR(-EINVAL);
+-		return ret;
++		goto err_wq;
+ 	}
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+@@ -1403,7 +1407,8 @@ static int bdisp_probe(struct platform_device *pdev)
+ err_clk:
+ 	if (!IS_ERR(bdisp->clock))
+ 		clk_unprepare(bdisp->clock);
+-
++err_wq:
++	destroy_workqueue(bdisp->work_queue);
+ 	return ret;
+ }
+ 
+-- 
+2.23.0
+
