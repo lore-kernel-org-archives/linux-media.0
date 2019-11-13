@@ -7,45 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3CEBC17440
-	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 02:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C244C43331
+	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 02:07:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A060A21783
-	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 02:06:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A08F206B6
+	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 02:07:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573610804;
-	bh=jIJzKKrRiPN4sYSrKyogbBy6hg42/byJJuVxrEWKYyQ=;
+	s=default; t=1573610877;
+	bh=uPqAL7yy9auhhcmmWvGPsA0w0sPseh05Du9m9H55Qlg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=18VWT2E21904kHXT3e3X0O9Nb03gDe4rT+uY8+urtLVeffTAimYVAsxO9l46PosEL
-	 TY/vI1RnXLQgtxKKVrl3HdxAkuXRYx/aGotrTY2fbvYFomOW4V/hAI7ZjCTCLa7EMG
-	 iEd3Ollge9B3uqDy3OcNZ8j4KeBbGpAa9Uw1gvaU=
+	b=I/786MjYUFSUpuDVnQgSOxNohYodMgBnRlD594OSAn5ErqFdqDBl0QxEWNE68CG9C
+	 y9HEIuUv1ar/a2trHZWR7eZPMsmM/jCoaf+FCu9nWl2LtGcC3WqzizJXrpc2zArvIu
+	 Fh+mWGf7oT3sIvq1Gl8WJ4DCW5QON3dNY3raM6WI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730687AbfKMCGk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Nov 2019 21:06:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56898 "EHLO mail.kernel.org"
+        id S1730467AbfKMCAT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Nov 2019 21:00:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55364 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730450AbfKMCBJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Nov 2019 21:01:09 -0500
+        id S1730457AbfKMCAQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 12 Nov 2019 21:00:16 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 693032247D;
-        Wed, 13 Nov 2019 02:01:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F18982245A;
+        Wed, 13 Nov 2019 02:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573610469;
-        bh=jIJzKKrRiPN4sYSrKyogbBy6hg42/byJJuVxrEWKYyQ=;
+        s=default; t=1573610415;
+        bh=uPqAL7yy9auhhcmmWvGPsA0w0sPseh05Du9m9H55Qlg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IF0SPhifzPA6lNr4tkzqyEUaXatW9Nf1osHqyblu30BPpe2wV/Sqb/oguv319vzuj
-         GyAXatODgGoX+2R1tGrc9FwmrIUdzs2gARtgsq/UmKtvBSJ9L/fZayG7eoOppQxUUf
-         AjSL09eEfvwwnakHbHMw44PSgufNyw3wNNjKu0yg=
+        b=Up4va7JQhMM2qMN7BT8qdEI4Gf1tFxRRV6TLII3dxjqGZqxU43Y6KiQTfxDadEMDV
+         mwUeNOFPVPuKnhSOcbntOdJxrYIRmSbKvWqNOSHyCbmLFYDAe+3RwmlqwhcRbWpYmO
+         X6clxvXD44OoauGbqKBysv5bpJsujMP2UJTmF690=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wenwen Wang <wang6495@umn.edu>, Hans Verkuil <hverkuil@xs4all.nl>,
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 55/68] media: isif: fix a NULL pointer dereference bug
-Date:   Tue, 12 Nov 2019 20:59:19 -0500
-Message-Id: <20191113015932.12655-55-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 4.9 27/68] media: pxa_camera: Fix check for pdev->dev.of_node
+Date:   Tue, 12 Nov 2019 20:58:51 -0500
+Message-Id: <20191113015932.12655-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191113015932.12655-1-sashal@kernel.org>
 References: <20191113015932.12655-1-sashal@kernel.org>
@@ -58,47 +61,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Wenwen Wang <wang6495@umn.edu>
+From: Nathan Chancellor <natechancellor@gmail.com>
 
-[ Upstream commit a26ac6c1bed951b2066cc4b2257facd919e35c0b ]
+[ Upstream commit 44d7f1a77d8c84f8e42789b5475b74ae0e6d4758 ]
 
-In isif_probe(), there is a while loop to get the ISIF base address and
-linearization table0 and table1 address. In the loop body, the function
-platform_get_resource() is called to get the resource. If
-platform_get_resource() returns NULL, the loop is terminated and the
-execution goes to 'fail_nobase_res'. Suppose the loop is terminated at the
-first iteration because platform_get_resource() returns NULL and the
-execution goes to 'fail_nobase_res'. Given that there is another while loop
-at 'fail_nobase_res' and i equals to 0, one iteration of the second while
-loop will be executed. However, the second while loop does not check the
-return value of platform_get_resource(). This can cause a NULL pointer
-dereference bug if the return value is a NULL pointer.
+Clang warns that the address of a pointer will always evaluated as true
+in a boolean context.
 
-This patch avoids the above issue by adding a check in the second while
-loop after the call to platform_get_resource().
+drivers/media/platform/pxa_camera.c:2400:17: warning: address of
+'pdev->dev.of_node' will always evaluate to 'true'
+[-Wpointer-bool-conversion]
+        if (&pdev->dev.of_node && !pcdev->pdata) {
+             ~~~~~~~~~~^~~~~~~ ~~
+1 warning generated.
 
-Signed-off-by: Wenwen Wang <wang6495@umn.edu>
-Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
+Judging from the rest of the kernel, it seems like this was an error and
+just the value of of_node should be checked rather than the address.
+
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/davinci/isif.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/platform/pxa_camera.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/davinci/isif.c b/drivers/media/platform/davinci/isif.c
-index 99faea2e84c6b..78e37cf3470f2 100644
---- a/drivers/media/platform/davinci/isif.c
-+++ b/drivers/media/platform/davinci/isif.c
-@@ -1106,7 +1106,8 @@ static int isif_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
+index 390d708c807a0..3fab9f776afa7 100644
+--- a/drivers/media/platform/pxa_camera.c
++++ b/drivers/media/platform/pxa_camera.c
+@@ -2334,7 +2334,7 @@ static int pxa_camera_probe(struct platform_device *pdev)
+ 	pcdev->res = res;
  
- 	while (i >= 0) {
- 		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
--		release_mem_region(res->start, resource_size(res));
-+		if (res)
-+			release_mem_region(res->start, resource_size(res));
- 		i--;
- 	}
- 	vpfe_unregister_ccdc_device(&isif_hw_dev);
+ 	pcdev->pdata = pdev->dev.platform_data;
+-	if (&pdev->dev.of_node && !pcdev->pdata) {
++	if (pdev->dev.of_node && !pcdev->pdata) {
+ 		err = pxa_camera_pdata_from_dt(&pdev->dev, pcdev, &pcdev->asd);
+ 	} else {
+ 		pcdev->platform_flags = pcdev->pdata->flags;
 -- 
 2.20.1
 
