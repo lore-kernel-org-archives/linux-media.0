@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26B98C432C3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E9C9C33C9A
 	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 054A320715
+	by mail.kernel.org (Postfix) with ESMTP id 5594820715
 	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="q2jtdxeQ"
+	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="uXYPsmif"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbfKNUEX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726881AbfKNUEX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 14 Nov 2019 15:04:23 -0500
-Received: from egyptian.birch.relay.mailchannels.net ([23.83.209.56]:21771
+Received: from egyptian.birch.relay.mailchannels.net ([23.83.209.56]:11645
         "EHLO egyptian.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726852AbfKNUEW (ORCPT
+        by vger.kernel.org with ESMTP id S1726755AbfKNUEX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Nov 2019 15:04:22 -0500
+        Thu, 14 Nov 2019 15:04:23 -0500
 X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id F422B5A0C97;
+        by relay.mailchannels.net (Postfix) with ESMTP id CBD335017C3;
         Thu, 14 Nov 2019 20:04:21 +0000 (UTC)
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com (100-96-14-250.trex.outbound.svc.cluster.local [100.96.14.250])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 315C75A07A6;
+        by relay.mailchannels.net (Postfix) with ESMTPA id 31046501357;
         Thu, 14 Nov 2019 20:04:21 +0000 (UTC)
 X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com ([TEMPUNAVAIL].
@@ -39,32 +39,32 @@ Received: from pdx1-sub0-mail-a96.g.dreamhost.com ([TEMPUNAVAIL].
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|brad@nextdimension.ws
 X-MailChannels-Auth-Id: dreamhost
-X-Whistle-Invention: 58ba2f7e13a43b63_1573761861717_3123050381
-X-MC-Loop-Signature: 1573761861717:4251075625
-X-MC-Ingress-Time: 1573761861717
+X-Skirt-Abiding: 64c9c0b201c28dba_1573761861638_1702946322
+X-MC-Loop-Signature: 1573761861638:3064973055
+X-MC-Ingress-Time: 1573761861638
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTP id 175E88260C;
-        Thu, 14 Nov 2019 12:04:17 -0800 (PST)
+        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTP id DBD8B8260E;
+        Thu, 14 Nov 2019 12:04:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=nextdimension.cc; h=from
         :to:cc:subject:date:message-id:in-reply-to:references
         :mime-version:content-transfer-encoding; s=nextdimension.cc; bh=
-        RbnvllfS2p8GEkG9mYK7b1yWqSM=; b=q2jtdxeQqNDU8heb4Efztu6FjAqV6JeC
-        O6j4ENjJ1JNooUw2Eakb/hMIssUMpTVJKzQukcZC+YgEbrDeeOznBvKchtsxBVTD
-        n8Dq9/tvxsP6uBHL4BHkjv6hATxQxOJzlD5eB4gJGcgh8patdYqX1oLhP60FKubs
-        vK1DQ2FVn2U=
+        y4TkIV2pyQCTfs4f1qsaZwo5BQY=; b=uXYPsmifZOsNU4mL1TTv4cOkHpfb+4ED
+        u5cZ5M1BEgGBlexvLI9xFBggSHGn1TNnpFOmjsSCvTUIfIU5zZ9vGe9COi+r1xuf
+        BqukrRXLcgBoh1ESS5uvaunZFt5LxEN+tewwpua2vcxBskFJUhos1UT1Yzw5+kpA
+        5FvBrSkLToA=
 Received: from localhost.localdomain (67-198-57-188.static.grandenetworks.net [67.198.57.188])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: brad@nextdimension.ws)
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTPSA id AC89D8259B;
-        Thu, 14 Nov 2019 12:04:16 -0800 (PST)
+        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTPSA id 808778260D;
+        Thu, 14 Nov 2019 12:04:19 -0800 (PST)
 X-DH-BACKEND: pdx1-sub0-mail-a96
 From:   Brad Love <brad@nextdimension.cc>
 To:     linux-media@vger.kernel.org
 Cc:     Brad Love <brad@nextdimension.cc>
-Subject: [PATCH v3 02/14] si2157: Check error status bit on cmd execute
-Date:   Thu, 14 Nov 2019 14:03:56 -0600
-Message-Id: <20191114200408.28883-3-brad@nextdimension.cc>
+Subject: [PATCH v3 07/14] cx23885: Add analog frontend to Hauppauge QuadHD
+Date:   Thu, 14 Nov 2019 14:04:01 -0600
+Message-Id: <20191114200408.28883-8-brad@nextdimension.cc>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191114200408.28883-1-brad@nextdimension.cc>
 References: <20191114200408.28883-1-brad@nextdimension.cc>
@@ -75,67 +75,153 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Check error status bit on command execute, if error bit is
-set return -EAGAIN. Ignore -EAGAIN in probe during device check.
+Add analog tuner frontend to 888 Hauppauge QuadHD boards
 
 Signed-off-by: Brad Love <brad@nextdimension.cc>
 ---
 Since v2:
-- Fix -EAGAIN returned by si2141 in si2157_init
+- Remove force_bff from ATSC QuadHD
 
- drivers/media/tuners/si2157.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ drivers/media/pci/cx23885/cx23885-cards.c | 31 ++++++++++++++++++++---
+ drivers/media/pci/cx23885/cx23885-dvb.c   | 20 +++++++++++++++
+ drivers/media/pci/cx23885/cx23885-video.c |  8 +++++-
+ 3 files changed, 54 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.=
-c
-index 12f88304ac0f..69c625eaee25 100644
---- a/drivers/media/tuners/si2157.c
-+++ b/drivers/media/tuners/si2157.c
-@@ -47,14 +47,20 @@ static int si2157_cmd_execute(struct i2c_client *clie=
-nt, struct si2157_cmd *cmd)
- 				break;
- 		}
+diff --git a/drivers/media/pci/cx23885/cx23885-cards.c b/drivers/media/pc=
+i/cx23885/cx23885-cards.c
+index 8644205d3cd3..95c9c7f74ba8 100644
+--- a/drivers/media/pci/cx23885/cx23885-cards.c
++++ b/drivers/media/pci/cx23885/cx23885-cards.c
+@@ -757,24 +757,47 @@ struct cx23885_board cx23885_boards[] =3D {
+ 		} },
+ 	},
+ 	[CX23885_BOARD_HAUPPAUGE_QUADHD_DVB] =3D {
+-		.name        =3D "Hauppauge WinTV-QuadHD-DVB",
++		.name         =3D "Hauppauge WinTV-QuadHD-DVB",
++		.porta        =3D CX23885_ANALOG_VIDEO,
+ 		.portb        =3D CX23885_MPEG_DVB,
+ 		.portc        =3D CX23885_MPEG_DVB,
++		.tuner_type	=3D TUNER_ABSENT,
++		.force_bff	=3D 1,
++		.input          =3D {{
++			.type   =3D CX23885_VMUX_TELEVISION,
++			.vmux   =3D	CX25840_VIN7_CH3 |
++					CX25840_VIN5_CH2 |
++					CX25840_VIN2_CH1 |
++					CX25840_DIF_ON,
++			.amux   =3D CX25840_AUDIO8,
++		} },
+ 	},
+ 	[CX23885_BOARD_HAUPPAUGE_QUADHD_DVB_885] =3D {
+-		.name       =3D "Hauppauge WinTV-QuadHD-DVB(885)",
++		.name         =3D "Hauppauge WinTV-QuadHD-DVB(885)",
+ 		.portb        =3D CX23885_MPEG_DVB,
+ 		.portc        =3D CX23885_MPEG_DVB,
++		.tuner_type   =3D TUNER_ABSENT,
+ 	},
+ 	[CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC] =3D {
+-		.name        =3D "Hauppauge WinTV-QuadHD-ATSC",
++		.name         =3D "Hauppauge WinTV-QuadHD-ATSC",
++		.porta        =3D CX23885_ANALOG_VIDEO,
+ 		.portb        =3D CX23885_MPEG_DVB,
+ 		.portc        =3D CX23885_MPEG_DVB,
++		.tuner_type	=3D TUNER_ABSENT,
++		.input          =3D {{
++			.type   =3D CX23885_VMUX_TELEVISION,
++			.vmux   =3D	CX25840_VIN7_CH3 |
++					CX25840_VIN5_CH2 |
++					CX25840_VIN2_CH1 |
++					CX25840_DIF_ON,
++			.amux   =3D CX25840_AUDIO8,
++		} },
+ 	},
+ 	[CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC_885] =3D {
+-		.name       =3D "Hauppauge WinTV-QuadHD-ATSC(885)",
++		.name         =3D "Hauppauge WinTV-QuadHD-ATSC(885)",
+ 		.portb        =3D CX23885_MPEG_DVB,
+ 		.portc        =3D CX23885_MPEG_DVB,
++		.tuner_type   =3D TUNER_ABSENT,
+ 	},
+ 	[CX23885_BOARD_HAUPPAUGE_HVR1265_K4] =3D {
+ 		.name		=3D "Hauppauge WinTV-HVR-1265(161111)",
+diff --git a/drivers/media/pci/cx23885/cx23885-dvb.c b/drivers/media/pci/=
+cx23885/cx23885-dvb.c
+index 4f386db33a11..590af4656828 100644
+--- a/drivers/media/pci/cx23885/cx23885-dvb.c
++++ b/drivers/media/pci/cx23885/cx23885-dvb.c
+@@ -2373,6 +2373,16 @@ static int dvb_register(struct cx23885_tsport *por=
+t)
+ 				goto frontend_detach;
+ 			}
+ 			port->i2c_client_tuner =3D client_tuner;
++
++			/* we only attach tuner for analog on the 888 version */
++			if (dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_QUADHD_DVB) {
++				pr_info("%s(): QUADHD_DVB analog setup\n",
++					__func__);
++				dev->ts1.analog_fe.tuner_priv =3D client_tuner;
++				memcpy(&dev->ts1.analog_fe.ops.tuner_ops,
++				       &fe0->dvb.frontend->ops.tuner_ops,
++				       sizeof(struct dvb_tuner_ops));
++			}
+ 			break;
 =20
--		dev_dbg(&client->dev, "cmd execution took %d ms\n",
--				jiffies_to_msecs(jiffies) -
--				(jiffies_to_msecs(timeout) - TIMEOUT));
-+		dev_dbg(&client->dev, "cmd execution took %d ms, status=3D%x\n",
-+			jiffies_to_msecs(jiffies) -
-+			(jiffies_to_msecs(timeout) - TIMEOUT),
-+			cmd->args[0]);
+ 		/* port c - terrestrial/cable */
+@@ -2462,6 +2472,16 @@ static int dvb_register(struct cx23885_tsport *por=
+t)
+ 				goto frontend_detach;
+ 			}
+ 			port->i2c_client_tuner =3D client_tuner;
++
++			/* we only attach tuner for analog on the 888 version */
++			if (dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC) {
++				pr_info("%s(): QUADHD_ATSC analog setup\n",
++					__func__);
++				dev->ts1.analog_fe.tuner_priv =3D client_tuner;
++				memcpy(&dev->ts1.analog_fe.ops.tuner_ops,
++				       &fe0->dvb.frontend->ops.tuner_ops,
++				       sizeof(struct dvb_tuner_ops));
++			}
+ 			break;
 =20
- 		if (!((cmd->args[0] >> 7) & 0x01)) {
- 			ret =3D -ETIMEDOUT;
- 			goto err_mutex_unlock;
- 		}
-+		/* check error status bit */
-+		if (cmd->args[0] & 0x40) {
-+			ret =3D -EAGAIN;
-+			goto err_mutex_unlock;
-+		}
- 	}
+ 		/* port c - terrestrial/cable */
+diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pc=
+i/cx23885/cx23885-video.c
+index 8098b15493de..3331d6833769 100644
+--- a/drivers/media/pci/cx23885/cx23885-video.c
++++ b/drivers/media/pci/cx23885/cx23885-video.c
+@@ -253,6 +253,8 @@ static int cx23885_video_mux(struct cx23885_dev *dev,=
+ unsigned int input)
+ 		(dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_HVR1255) ||
+ 		(dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_HVR1255_22111) ||
+ 		(dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_HVR1265_K4) ||
++		(dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC) ||
++		(dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_QUADHD_DVB) ||
+ 		(dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_HVR1850) ||
+ 		(dev->board =3D=3D CX23885_BOARD_MYGICA_X8507) ||
+ 		(dev->board =3D=3D CX23885_BOARD_AVERMEDIA_HC81R) ||
+@@ -995,7 +997,9 @@ static int cx23885_set_freq_via_ops(struct cx23885_de=
+v *dev,
+ 	if ((dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_HVR1850) ||
+ 	    (dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_HVR1255) ||
+ 	    (dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_HVR1255_22111) ||
+-	    (dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_HVR1265_K4))
++	    (dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_HVR1265_K4) ||
++	    (dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_QUADHD_DVB) ||
++	    (dev->board =3D=3D CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC))
+ 		fe =3D &dev->ts1.analog_fe;
 =20
- 	mutex_unlock(&dev->i2c_mutex);
-@@ -106,7 +112,7 @@ static int si2157_init(struct dvb_frontend *fe)
- 	}
- 	cmd.rlen =3D 1;
- 	ret =3D si2157_cmd_execute(client, &cmd);
--	if (ret)
-+	if (ret && (dev->chiptype !=3D SI2157_CHIPTYPE_SI2141 || ret !=3D -EAGA=
-IN))
- 		goto err;
-=20
- 	/* Si2141 needs a second command before it answers the revision query *=
-/
-@@ -478,7 +484,7 @@ static int si2157_probe(struct i2c_client *client,
- 	cmd.wlen =3D 0;
- 	cmd.rlen =3D 1;
- 	ret =3D si2157_cmd_execute(client, &cmd);
--	if (ret)
-+	if (ret && ret !=3D -EAGAIN)
- 		goto err_kfree;
-=20
- 	memcpy(&fe->ops.tuner_ops, &si2157_ops, sizeof(struct dvb_tuner_ops));
+ 	if (fe && fe->ops.tuner_ops.set_analog_params) {
+@@ -1026,6 +1030,8 @@ int cx23885_set_frequency(struct file *file, void *=
+priv,
+ 	case CX23885_BOARD_HAUPPAUGE_HVR1255_22111:
+ 	case CX23885_BOARD_HAUPPAUGE_HVR1265_K4:
+ 	case CX23885_BOARD_HAUPPAUGE_HVR1850:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_DVB:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC:
+ 		ret =3D cx23885_set_freq_via_ops(dev, f);
+ 		break;
+ 	default:
 --=20
 2.23.0
 
