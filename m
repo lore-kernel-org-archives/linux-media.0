@@ -7,64 +7,64 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB841C43215
-	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A624AC432C3
+	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BAAE320723
-	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8413C20723
+	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="Jg90j3z0"
+	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="JVrq15er"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726957AbfKNUE3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Nov 2019 15:04:29 -0500
-Received: from bonobo.elm.relay.mailchannels.net ([23.83.212.22]:48107 "EHLO
+        id S1726969AbfKNUEb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Nov 2019 15:04:31 -0500
+Received: from bonobo.elm.relay.mailchannels.net ([23.83.212.22]:28370 "EHLO
         bonobo.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726592AbfKNUE1 (ORCPT
+        by vger.kernel.org with ESMTP id S1726474AbfKNUEa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Nov 2019 15:04:27 -0500
+        Thu, 14 Nov 2019 15:04:30 -0500
 X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 1819234212C;
-        Thu, 14 Nov 2019 20:04:27 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTP id A2A583C1098;
+        Thu, 14 Nov 2019 20:04:29 +0000 (UTC)
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com (100-96-14-250.trex.outbound.svc.cluster.local [100.96.14.250])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 99C773416E0;
-        Thu, 14 Nov 2019 20:04:26 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 239343C1191;
+        Thu, 14 Nov 2019 20:04:29 +0000 (UTC)
 X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com ([TEMPUNAVAIL].
  [64.90.62.162])
         (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
         by 0.0.0.0:2500 (trex/5.18.5);
-        Thu, 14 Nov 2019 20:04:27 +0000
+        Thu, 14 Nov 2019 20:04:29 +0000
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|brad@nextdimension.ws
 X-MailChannels-Auth-Id: dreamhost
-X-Belong-Fumbling: 5dc050050229cb66_1573761866904_4024260111
-X-MC-Loop-Signature: 1573761866904:3021660062
-X-MC-Ingress-Time: 1573761866904
+X-Snatch-Drop: 215f3a186a4cd5e4_1573761869480_2139471512
+X-MC-Loop-Signature: 1573761869480:3159481071
+X-MC-Ingress-Time: 1573761869479
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTP id AD3D082601;
-        Thu, 14 Nov 2019 12:04:22 -0800 (PST)
+        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTP id C0B4982615;
+        Thu, 14 Nov 2019 12:04:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=nextdimension.cc; h=from
         :to:cc:subject:date:message-id:in-reply-to:references
         :mime-version:content-transfer-encoding; s=nextdimension.cc; bh=
-        PtVCjVnM9sEZsymmeV4zCJLWKII=; b=Jg90j3z0I58BR8hjCirz0BxTxGQeEAdD
-        qaf+FOAvxSgCRv+r+OWKf3U0QfIMfeJH61jEuBGWGa1NzcmyYrm1jcCBTh0hsGxs
-        0G2O3Uuj5VpV1sVV85JTgQHKkd9/CdH544e44LcE+zTHorpG1vd9RIm5vPqzwgjh
-        ur68+FeYkJE=
+        INkE9lqoAqjsaUKhb7l/WCnRpig=; b=JVrq15erri7VmVBJI/WuUfZiQQlZk5QT
+        Rh7C3gLjZcxhbdmCip81xTfmi7v0fNq9F1IVySzCSuYQhglPmSQl05syJMhj8Nta
+        tGnMUkPeKZLatjapOiJsxYqtNdrQhbfXH+wZKwASASXOOnnYnfJYDG5qRRrdV7xy
+        YlXWv51gBgc=
 Received: from localhost.localdomain (67-198-57-188.static.grandenetworks.net [67.198.57.188])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: brad@nextdimension.ws)
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTPSA id 57C598260C;
-        Thu, 14 Nov 2019 12:04:22 -0800 (PST)
+        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTPSA id 611718260D;
+        Thu, 14 Nov 2019 12:04:23 -0800 (PST)
 X-DH-BACKEND: pdx1-sub0-mail-a96
 From:   Brad Love <brad@nextdimension.cc>
 To:     linux-media@vger.kernel.org
 Cc:     Brad Love <brad@nextdimension.cc>
-Subject: [PATCH v3 12/14] si2157: add on-demand rf strength func
-Date:   Thu, 14 Nov 2019 14:04:06 -0600
-Message-Id: <20191114200408.28883-13-brad@nextdimension.cc>
+Subject: [PATCH v3 14/14] cx25840: Register labeling, chip specific correction
+Date:   Thu, 14 Nov 2019 14:04:08 -0600
+Message-Id: <20191114200408.28883-15-brad@nextdimension.cc>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191114200408.28883-1-brad@nextdimension.cc>
 References: <20191114200408.28883-1-brad@nextdimension.cc>
@@ -75,82 +75,86 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add get_rf_strength callback to get RSSI from the tuner. DVBv5
-stat cache is updated. get_rf_strength is called by tuner_core
-for analog tuners and is also used by some bridge drivers to
-obtain RSSI directly from the tuner.
+Remove vbi_regs_offset from a group of registers that are 888 specific,
+include those registers names. Sources used for reference are 885 and 888
+datasheets.
+
+Add labels to some undocumented registers.
 
 Signed-off-by: Brad Love <brad@nextdimension.cc>
 ---
-Changes since v1:
-- simplify normalization of signal strength calculation
-- use clamp and add description of operation
-- remove __func__ from dev_dbg macro
+Since v2:
+- rebase
 
- drivers/media/tuners/si2157.c | 40 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 39 insertions(+), 1 deletion(-)
+ drivers/media/i2c/cx25840/cx25840-core.c | 40 ++++++++++++------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.=
-c
-index 16d7169f46fb..aaf223b9b781 100644
---- a/drivers/media/tuners/si2157.c
-+++ b/drivers/media/tuners/si2157.c
-@@ -725,6 +725,42 @@ static int si2157_get_if_frequency(struct dvb_fronte=
-nd *fe, u32 *frequency)
- 	return 0;
- }
+diff --git a/drivers/media/i2c/cx25840/cx25840-core.c b/drivers/media/i2c=
+/cx25840/cx25840-core.c
+index 0de946fe2109..e2e935f78986 100644
+--- a/drivers/media/i2c/cx25840/cx25840-core.c
++++ b/drivers/media/i2c/cx25840/cx25840-core.c
+@@ -997,14 +997,14 @@ static void cx23885_initialize(struct i2c_client *c=
+lient)
+ 	 */
+ 	cx25840_write4(client, 0x404, 0x0010253e);
 =20
-+static int si2157_get_rf_strength(struct dvb_frontend *fe, u16 *rssi)
-+{
-+	struct i2c_client *client =3D fe->tuner_priv;
-+	struct dtv_frontend_properties *c =3D &fe->dtv_property_cache;
-+	struct si2157_cmd cmd;
-+	int ret;
-+	int strength;
-+
-+	dev_dbg(&client->dev, "\n");
-+
-+	memcpy(cmd.args, "\x42\x00", 2);
-+	cmd.wlen =3D 2;
-+	cmd.rlen =3D 12;
-+	ret =3D si2157_cmd_execute(client, &cmd);
-+	if (ret)
-+		goto err;
-+
-+	c->strength.stat[0].scale =3D FE_SCALE_DECIBEL;
-+	c->strength.stat[0].svalue =3D (s8)cmd.args[3] * 1000;
-+
-+	/* normalize values based on Silicon Labs reference
-+	 * add 100, then anything > 80 is 100% signal
-+	 */
-+	strength =3D (s8)cmd.args[3] + 100;
-+	strength =3D clamp_val(strength, 0, 80);
-+	*rssi =3D (u16)(strength * 0xffff / 80);
-+
-+	dev_dbg(&client->dev, "strength=3D%d rssi=3D%u\n",
-+		(s8)cmd.args[3], *rssi);
-+
-+	return 0;
-+err:
-+	dev_dbg(&client->dev, "failed=3D%d\n", ret);
-+	return ret;
-+}
-+
- static const struct dvb_tuner_ops si2157_ops =3D {
- 	.info =3D {
- 		.name             =3D "Silicon Labs Si2141/Si2146/2147/2148/2157/2158"=
-,
-@@ -738,7 +774,9 @@ static const struct dvb_tuner_ops si2157_ops =3D {
- 	.set_analog_params =3D si2157_set_analog_params,
- 	.get_frequency     =3D si2157_get_frequency,
- 	.get_bandwidth     =3D si2157_get_bandwidth,
--	.get_if_frequency =3D si2157_get_if_frequency,
-+	.get_if_frequency  =3D si2157_get_if_frequency,
-+
-+	.get_rf_strength   =3D si2157_get_rf_strength,
- };
+-	/* CC on  - Undocumented Register */
++	/* CC on  - VBI_LINE_CTRL3, FLD_VBI_MD_LINE12 */
+ 	cx25840_write(client, state->vbi_regs_offset + 0x42f, 0x66);
 =20
- static void si2157_stat_work(struct work_struct *work)
+ 	/* HVR-1250 / HVR1850 DIF related */
+ 	/* Power everything up */
+ 	cx25840_write4(client, 0x130, 0x0);
+=20
+-	/* Undocumented */
++	/* SRC_COMB_CFG */
+ 	if (is_cx23888(state))
+ 		cx25840_write4(client, 0x454, 0x6628021F);
+ 	else
+@@ -1486,24 +1486,24 @@ static int set_input(struct i2c_client *client,
+ 			cx25840_write4(client, 0x410, 0xffff0dbf);
+ 			cx25840_write4(client, 0x414, 0x00137d03);
+=20
+-			cx25840_write4(client, state->vbi_regs_offset + 0x42c,
+-				       0x42600000);
+-			cx25840_write4(client, state->vbi_regs_offset + 0x430,
+-				       0x0000039b);
+-			cx25840_write4(client, state->vbi_regs_offset + 0x438,
+-				       0x00000000);
+-
+-			cx25840_write4(client, state->vbi_regs_offset + 0x440,
+-				       0xF8E3E824);
+-			cx25840_write4(client, state->vbi_regs_offset + 0x444,
+-				       0x401040dc);
+-			cx25840_write4(client, state->vbi_regs_offset + 0x448,
+-				       0xcd3f02a0);
+-			cx25840_write4(client, state->vbi_regs_offset + 0x44c,
+-				       0x161f1000);
+-			cx25840_write4(client, state->vbi_regs_offset + 0x450,
+-				       0x00000802);
+-
++			if (is_cx23888(state)) {
++				/* 888 MISC_TIM_CTRL */
++				cx25840_write4(client, 0x42c, 0x42600000);
++				/* 888 FIELD_COUNT */
++				cx25840_write4(client, 0x430, 0x0000039b);
++				/* 888 VSCALE_CTRL */
++				cx25840_write4(client, 0x438, 0x00000000);
++				/* 888 DFE_CTRL1 */
++				cx25840_write4(client, 0x440, 0xF8E3E824);
++				/* 888 DFE_CTRL2 */
++				cx25840_write4(client, 0x444, 0x401040dc);
++				/* 888 DFE_CTRL3 */
++				cx25840_write4(client, 0x448, 0xcd3f02a0);
++				/* 888 PLL_CTRL */
++				cx25840_write4(client, 0x44c, 0x161f1000);
++				/* 888 HTL_CTRL */
++				cx25840_write4(client, 0x450, 0x00000802);
++			}
+ 			cx25840_write4(client, 0x91c, 0x01000000);
+ 			cx25840_write4(client, 0x8e0, 0x03063870);
+ 			cx25840_write4(client, 0x8d4, 0x7FFF0024);
 --=20
 2.23.0
 
