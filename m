@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E995C43141
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A767FC432C3
 	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E010D206D3
-	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A9E020723
+	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="PZ8w8jPY"
+	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="D9l6LJMG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726549AbfKNUE3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726958AbfKNUE3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 14 Nov 2019 15:04:29 -0500
-Received: from egyptian.birch.relay.mailchannels.net ([23.83.209.56]:10211
+Received: from egyptian.birch.relay.mailchannels.net ([23.83.209.56]:30519
         "EHLO egyptian.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726894AbfKNUE1 (ORCPT
+        by vger.kernel.org with ESMTP id S1726474AbfKNUE1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 14 Nov 2019 15:04:27 -0500
 X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 650C22197B;
+        by relay.mailchannels.net (Postfix) with ESMTP id 1D1235A0666;
         Thu, 14 Nov 2019 20:04:26 +0000 (UTC)
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com (100-96-6-183.trex.outbound.svc.cluster.local [100.96.6.183])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id BB17121F37;
+        by relay.mailchannels.net (Postfix) with ESMTPA id 9720E5A0B51;
         Thu, 14 Nov 2019 20:04:25 +0000 (UTC)
 X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com ([TEMPUNAVAIL].
@@ -39,32 +39,32 @@ Received: from pdx1-sub0-mail-a96.g.dreamhost.com ([TEMPUNAVAIL].
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|brad@nextdimension.ws
 X-MailChannels-Auth-Id: dreamhost
-X-Average-Chief: 698886be4d820127_1573761866181_468827110
-X-MC-Loop-Signature: 1573761866181:1722058548
-X-MC-Ingress-Time: 1573761866181
+X-Left-Ruddy: 15020d7624a40afa_1573761865891_3185931003
+X-MC-Loop-Signature: 1573761865891:3698987506
+X-MC-Ingress-Time: 1573761865891
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTP id 793A7825D5;
-        Thu, 14 Nov 2019 12:04:20 -0800 (PST)
+        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTP id 32A1F8259B;
+        Thu, 14 Nov 2019 12:04:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=nextdimension.cc; h=from
         :to:cc:subject:date:message-id:in-reply-to:references
         :mime-version:content-transfer-encoding; s=nextdimension.cc; bh=
-        DXiWayWSueQHl/FTbdKBnLM4Yzk=; b=PZ8w8jPYrMe02G6c5Zor+1+03QbqEtk/
-        6iJVhh98R2t3MMA2j8jzmfr6wTMDT+qwdS2anNu/ORDSefl/z5dYB0LQWX7ooOOG
-        vi2nLXH3zHwFs7ChuF73eOplsiujj8qjZzznmeCQK9q2oY57ra2A5X4qiEFBWFw7
-        9PcRXYx9vJY=
+        X/3UzQBL4KoonpJBNR8bXWOWDZo=; b=D9l6LJMG0c8sBqSFfFIsPDkI4fZyeWS3
+        PGhkvYNl0CtIhQ0LhbnYE8ru1/kLFEtBCQLfj5IeX1dFqt/ckQ8sbep3y+uXLE3G
+        BZN+j9MzjPNLM9h9vSJvOnCYT2fP42FdcVU68KQz5/Wrovm5alzivscA3iHGhpZR
+        82P7zRMMM7A=
 Received: from localhost.localdomain (67-198-57-188.static.grandenetworks.net [67.198.57.188])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: brad@nextdimension.ws)
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTPSA id 0CFC682601;
-        Thu, 14 Nov 2019 12:04:19 -0800 (PST)
+        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTPSA id C587282616;
+        Thu, 14 Nov 2019 12:04:21 -0800 (PST)
 X-DH-BACKEND: pdx1-sub0-mail-a96
 From:   Brad Love <brad@nextdimension.cc>
 To:     linux-media@vger.kernel.org
 Cc:     Brad Love <brad@nextdimension.cc>
-Subject: [PATCH v3 08/14] cx23885: Add analog frontend to 1265_K4
-Date:   Thu, 14 Nov 2019 14:04:02 -0600
-Message-Id: <20191114200408.28883-9-brad@nextdimension.cc>
+Subject: [PATCH v3 11/14] cx231xx: Add i2c device analog tuner support
+Date:   Thu, 14 Nov 2019 14:04:05 -0600
+Message-Id: <20191114200408.28883-12-brad@nextdimension.cc>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191114200408.28883-1-brad@nextdimension.cc>
 References: <20191114200408.28883-1-brad@nextdimension.cc>
@@ -75,56 +75,241 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enables the analog tuning frontend for Hauppauge HVR-1265_K4.
+The boards listed below use i2c device drivers and have
+tuner_type equal TUNER_ABSENT. This means additional support
+is required to enable the analog tuning capability, a case
+statement is used to identify these models.
+
+Models with analog tuning enabled:
+- CX231XX_BOARD_HAUPPAUGE_930C_HD_1114xx (tested)
+- CX231XX_BOARD_HAUPPAUGE_935C (tested)
+- CX231XX_BOARD_HAUPPAUGE_955Q (tested)
+- CX231XX_BOARD_HAUPPAUGE_975 (tested)
+- CX231XX_BOARD_EVROMEDIA_FULL_HYBRID_FULLHD (untested)
+
+The EvroMedia model was added, since it uses the si2157
+tuner and the board profile claims it has analog inputs.
 
 Signed-off-by: Brad Love <brad@nextdimension.cc>
 ---
 Since v2:
-- Remove force_bff from ATSC 1264_K4
+- Fix capabilities and device caps
+Changes since v1:
+- remove __func__ from dev_dbg macros
 
- drivers/media/pci/cx23885/cx23885-cards.c | 8 +++++++-
- drivers/media/pci/cx23885/cx23885-dvb.c   | 5 +++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ drivers/media/usb/cx231xx/cx231xx-avcore.c | 35 +++++++--
+ drivers/media/usb/cx231xx/cx231xx-video.c  | 85 ++++++++++++++++++----
+ 2 files changed, 101 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/media/pci/cx23885/cx23885-cards.c b/drivers/media/pc=
-i/cx23885/cx23885-cards.c
-index 95c9c7f74ba8..916fa8987f8b 100644
---- a/drivers/media/pci/cx23885/cx23885-cards.c
-+++ b/drivers/media/pci/cx23885/cx23885-cards.c
-@@ -804,8 +804,14 @@ struct cx23885_board cx23885_boards[] =3D {
- 		.porta          =3D CX23885_ANALOG_VIDEO,
- 		.portc		=3D CX23885_MPEG_DVB,
- 		.tuner_type     =3D TUNER_ABSENT,
--		.force_bff	=3D 1,
- 		.input          =3D {{
-+			.type   =3D CX23885_VMUX_TELEVISION,
-+			.vmux   =3D	CX25840_VIN7_CH3 |
-+					CX25840_VIN5_CH2 |
-+					CX25840_VIN2_CH1 |
-+					CX25840_DIF_ON,
-+			.amux   =3D CX25840_AUDIO8,
-+		}, {
- 			.type   =3D CX23885_VMUX_COMPOSITE1,
- 			.vmux   =3D	CX25840_VIN7_CH3 |
- 					CX25840_VIN4_CH2 |
-diff --git a/drivers/media/pci/cx23885/cx23885-dvb.c b/drivers/media/pci/=
-cx23885/cx23885-dvb.c
-index 590af4656828..37dc13b052a3 100644
---- a/drivers/media/pci/cx23885/cx23885-dvb.c
-+++ b/drivers/media/pci/cx23885/cx23885-dvb.c
-@@ -2553,6 +2553,11 @@ static int dvb_register(struct cx23885_tsport *por=
-t)
- 				goto frontend_detach;
+diff --git a/drivers/media/usb/cx231xx/cx231xx-avcore.c b/drivers/media/u=
+sb/cx231xx/cx231xx-avcore.c
+index 0974965e848f..d6117093491b 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-avcore.c
++++ b/drivers/media/usb/cx231xx/cx231xx-avcore.c
+@@ -587,14 +587,27 @@ int cx231xx_set_video_input_mux(struct cx231xx *dev=
+, u8 input)
+ 				return status;
  			}
- 			port->i2c_client_tuner =3D client_tuner;
-+
-+			dev->ts1.analog_fe.tuner_priv =3D client_tuner;
-+			memcpy(&dev->ts1.analog_fe.ops.tuner_ops,
-+			       &fe0->dvb.frontend->ops.tuner_ops,
-+			       sizeof(struct dvb_tuner_ops));
+ 		}
+-		if (dev->tuner_type =3D=3D TUNER_NXP_TDA18271)
++		switch (dev->model) { /* i2c device tuners */
++		case CX231XX_BOARD_HAUPPAUGE_930C_HD_1114xx:
++		case CX231XX_BOARD_HAUPPAUGE_935C:
++		case CX231XX_BOARD_HAUPPAUGE_955Q:
++		case CX231XX_BOARD_HAUPPAUGE_975:
++		case CX231XX_BOARD_EVROMEDIA_FULL_HYBRID_FULLHD:
+ 			status =3D cx231xx_set_decoder_video_input(dev,
+ 							CX231XX_VMUX_TELEVISION,
+ 							INPUT(input)->vmux);
+-		else
+-			status =3D cx231xx_set_decoder_video_input(dev,
++			break;
++		default:
++			if (dev->tuner_type =3D=3D TUNER_NXP_TDA18271)
++				status =3D cx231xx_set_decoder_video_input(dev,
++							CX231XX_VMUX_TELEVISION,
++							INPUT(input)->vmux);
++			else
++				status =3D cx231xx_set_decoder_video_input(dev,
+ 							CX231XX_VMUX_COMPOSITE1,
+ 							INPUT(input)->vmux);
++			break;
++		};
+=20
+ 		break;
+ 	default:
+@@ -1193,12 +1206,22 @@ int cx231xx_set_audio_decoder_input(struct cx231x=
+x *dev,
+ 					cx231xx_set_field(FLD_SIF_EN, 0));
  			break;
+ 		default:
++			switch (dev->model) { /* i2c device tuners */
++			case CX231XX_BOARD_HAUPPAUGE_930C_HD_1114xx:
++			case CX231XX_BOARD_HAUPPAUGE_935C:
++			case CX231XX_BOARD_HAUPPAUGE_955Q:
++			case CX231XX_BOARD_HAUPPAUGE_975:
++			case CX231XX_BOARD_EVROMEDIA_FULL_HYBRID_FULLHD:
++			/* TODO: Normal mode: SIF passthrough at 14.32 MHz?? */
++				break;
++			default:
+ 			/* This is just a casual suggestion to people adding
+ 			   new boards in case they use a tuner type we don't
+ 			   currently know about */
+-			dev_info(dev->dev,
+-				 "Unknown tuner type configuring SIF");
+-			break;
++				dev_info(dev->dev,
++					 "Unknown tuner type configuring SIF");
++				break;
++			}
  		}
  		break;
+=20
+diff --git a/drivers/media/usb/cx231xx/cx231xx-video.c b/drivers/media/us=
+b/cx231xx/cx231xx-video.c
+index 69abafaebbf3..e6b89706a4df 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-video.c
++++ b/drivers/media/usb/cx231xx/cx231xx-video.c
+@@ -1129,7 +1129,7 @@ int cx231xx_s_frequency(struct file *file, void *pr=
+iv,
+ {
+ 	struct cx231xx *dev =3D video_drvdata(file);
+ 	struct v4l2_frequency new_freq =3D *f;
+-	int rc;
++	int rc, need_if_freq =3D 0;
+ 	u32 if_frequency =3D 5400000;
+=20
+ 	dev_dbg(dev->dev,
+@@ -1142,14 +1142,30 @@ int cx231xx_s_frequency(struct file *file, void *=
+priv,
+ 	/* set pre channel change settings in DIF first */
+ 	rc =3D cx231xx_tuner_pre_channel_change(dev);
+=20
+-	call_all(dev, tuner, s_frequency, f);
+-	call_all(dev, tuner, g_frequency, &new_freq);
+-	dev->ctl_freq =3D new_freq.frequency;
++	switch (dev->model) { /* i2c device tuners */
++	case CX231XX_BOARD_HAUPPAUGE_930C_HD_1114xx:
++	case CX231XX_BOARD_HAUPPAUGE_935C:
++	case CX231XX_BOARD_HAUPPAUGE_955Q:
++	case CX231XX_BOARD_HAUPPAUGE_975:
++	case CX231XX_BOARD_EVROMEDIA_FULL_HYBRID_FULLHD:
++		if (dev->cx231xx_set_analog_freq)
++			dev->cx231xx_set_analog_freq(dev, f->frequency);
++		dev->ctl_freq =3D f->frequency;
++		need_if_freq =3D 1;
++		break;
++	default:
++		call_all(dev, tuner, s_frequency, f);
++		call_all(dev, tuner, g_frequency, &new_freq);
++		dev->ctl_freq =3D new_freq.frequency;
++		break;
++	}
++
++	pr_debug("%s() %u  :  %u\n", __func__, f->frequency, dev->ctl_freq);
+=20
+ 	/* set post channel change settings in DIF first */
+ 	rc =3D cx231xx_tuner_post_channel_change(dev);
+=20
+-	if (dev->tuner_type =3D=3D TUNER_NXP_TDA18271) {
++	if (need_if_freq || dev->tuner_type =3D=3D TUNER_NXP_TDA18271) {
+ 		if (dev->norm & (V4L2_STD_MN | V4L2_STD_NTSC_443))
+ 			if_frequency =3D 5400000;  /*5.4MHz	*/
+ 		else if (dev->norm & V4L2_STD_B)
+@@ -1362,9 +1378,20 @@ int cx231xx_querycap(struct file *file, void *priv=
+,
+ 		V4L2_CAP_STREAMING | V4L2_CAP_DEVICE_CAPS;
+ 	if (video_is_registered(&dev->radio_dev))
+ 		cap->capabilities |=3D V4L2_CAP_RADIO;
+-	if (dev->tuner_type !=3D TUNER_ABSENT)
+-		cap->capabilities |=3D V4L2_CAP_TUNER;
+=20
++	switch (dev->model) {
++	case CX231XX_BOARD_HAUPPAUGE_930C_HD_1114xx:
++	case CX231XX_BOARD_HAUPPAUGE_935C:
++	case CX231XX_BOARD_HAUPPAUGE_955Q:
++	case CX231XX_BOARD_HAUPPAUGE_975:
++	case CX231XX_BOARD_EVROMEDIA_FULL_HYBRID_FULLHD:
++		cap->capabilities |=3D V4L2_CAP_TUNER;
++		break;
++	default:
++		if (dev->tuner_type !=3D TUNER_ABSENT)
++			cap->capabilities |=3D V4L2_CAP_TUNER;
++		break;
++	}
+ 	return 0;
+ }
+=20
+@@ -1708,10 +1735,20 @@ static void cx231xx_vdev_init(struct cx231xx *dev=
+,
+=20
+ 	video_set_drvdata(vfd, dev);
+ 	if (dev->tuner_type =3D=3D TUNER_ABSENT) {
+-		v4l2_disable_ioctl(vfd, VIDIOC_G_FREQUENCY);
+-		v4l2_disable_ioctl(vfd, VIDIOC_S_FREQUENCY);
+-		v4l2_disable_ioctl(vfd, VIDIOC_G_TUNER);
+-		v4l2_disable_ioctl(vfd, VIDIOC_S_TUNER);
++		switch (dev->model) {
++		case CX231XX_BOARD_HAUPPAUGE_930C_HD_1114xx:
++		case CX231XX_BOARD_HAUPPAUGE_935C:
++		case CX231XX_BOARD_HAUPPAUGE_955Q:
++		case CX231XX_BOARD_HAUPPAUGE_975:
++		case CX231XX_BOARD_EVROMEDIA_FULL_HYBRID_FULLHD:
++			break;
++		default:
++			v4l2_disable_ioctl(vfd, VIDIOC_G_FREQUENCY);
++			v4l2_disable_ioctl(vfd, VIDIOC_S_FREQUENCY);
++			v4l2_disable_ioctl(vfd, VIDIOC_G_TUNER);
++			v4l2_disable_ioctl(vfd, VIDIOC_S_TUNER);
++			break;
++		}
+ 	}
+ }
+=20
+@@ -1781,8 +1818,20 @@ int cx231xx_register_analog_devices(struct cx231xx=
+ *dev)
+ 	dev->vdev.queue =3D q;
+ 	dev->vdev.device_caps =3D V4L2_CAP_READWRITE | V4L2_CAP_STREAMING |
+ 				V4L2_CAP_VIDEO_CAPTURE;
+-	if (dev->tuner_type !=3D TUNER_ABSENT)
++
++	switch (dev->model) { /* i2c device tuners */
++	case CX231XX_BOARD_HAUPPAUGE_930C_HD_1114xx:
++	case CX231XX_BOARD_HAUPPAUGE_935C:
++	case CX231XX_BOARD_HAUPPAUGE_955Q:
++	case CX231XX_BOARD_HAUPPAUGE_975:
++	case CX231XX_BOARD_EVROMEDIA_FULL_HYBRID_FULLHD:
+ 		dev->vdev.device_caps |=3D V4L2_CAP_TUNER;
++		break;
++	default:
++		if (dev->tuner_type !=3D TUNER_ABSENT)
++			dev->vdev.device_caps |=3D V4L2_CAP_TUNER;
++		break;
++	}
+=20
+ 	/* register v4l2 video video_device */
+ 	ret =3D video_register_device(&dev->vdev, VFL_TYPE_GRABBER,
+@@ -1829,8 +1878,18 @@ int cx231xx_register_analog_devices(struct cx231xx=
+ *dev)
+ 	dev->vbi_dev.queue =3D q;
+ 	dev->vbi_dev.device_caps =3D V4L2_CAP_READWRITE | V4L2_CAP_STREAMING |
+ 				   V4L2_CAP_VBI_CAPTURE;
+-	if (dev->tuner_type !=3D TUNER_ABSENT)
++	switch (dev->model) { /* i2c device tuners */
++	case CX231XX_BOARD_HAUPPAUGE_930C_HD_1114xx:
++	case CX231XX_BOARD_HAUPPAUGE_935C:
++	case CX231XX_BOARD_HAUPPAUGE_955Q:
++	case CX231XX_BOARD_HAUPPAUGE_975:
++	case CX231XX_BOARD_EVROMEDIA_FULL_HYBRID_FULLHD:
+ 		dev->vbi_dev.device_caps |=3D V4L2_CAP_TUNER;
++		break;
++	default:
++		if (dev->tuner_type !=3D TUNER_ABSENT)
++			dev->vbi_dev.device_caps |=3D V4L2_CAP_TUNER;
++	}
+=20
+ 	/* register v4l2 vbi video_device */
+ 	ret =3D video_register_device(&dev->vbi_dev, VFL_TYPE_VBI,
 --=20
 2.23.0
 
