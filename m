@@ -7,64 +7,64 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E9CEC432C3
-	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DDFAC43215
+	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 39785206D3
-	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73715206D3
+	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:04:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="JC4657V+"
+	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="Y8l+zSWv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbfKNUEZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Nov 2019 15:04:25 -0500
-Received: from bonobo.elm.relay.mailchannels.net ([23.83.212.22]:30363 "EHLO
-        bonobo.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726474AbfKNUEZ (ORCPT
+        id S1726910AbfKNUE1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Nov 2019 15:04:27 -0500
+Received: from egyptian.birch.relay.mailchannels.net ([23.83.209.56]:65365
+        "EHLO egyptian.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726444AbfKNUE0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Nov 2019 15:04:25 -0500
+        Thu, 14 Nov 2019 15:04:26 -0500
 X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 7F84E500EA8;
-        Thu, 14 Nov 2019 20:04:24 +0000 (UTC)
-Received: from pdx1-sub0-mail-a96.g.dreamhost.com (100-96-14-250.trex.outbound.svc.cluster.local [100.96.14.250])
+        by relay.mailchannels.net (Postfix) with ESMTP id 3A59D342133;
+        Thu, 14 Nov 2019 20:04:25 +0000 (UTC)
+Received: from pdx1-sub0-mail-a96.g.dreamhost.com (100-96-169-194.trex.outbound.svc.cluster.local [100.96.169.194])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 0957B5017C3;
+        by relay.mailchannels.net (Postfix) with ESMTPA id 975E43417AD;
         Thu, 14 Nov 2019 20:04:24 +0000 (UTC)
 X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com ([TEMPUNAVAIL].
  [64.90.62.162])
         (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
         by 0.0.0.0:2500 (trex/5.18.5);
-        Thu, 14 Nov 2019 20:04:24 +0000
+        Thu, 14 Nov 2019 20:04:25 +0000
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|brad@nextdimension.ws
 X-MailChannels-Auth-Id: dreamhost
-X-Eight-Desert: 025e1c6a6a2e0a3d_1573761864330_1186899233
-X-MC-Loop-Signature: 1573761864330:3064566603
-X-MC-Ingress-Time: 1573761864330
+X-Harmony-Descriptive: 565649b7612d3672_1573761865045_1004167813
+X-MC-Loop-Signature: 1573761865045:2180476386
+X-MC-Ingress-Time: 1573761865045
 Received: from pdx1-sub0-mail-a96.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTP id C47098260A;
-        Thu, 14 Nov 2019 12:04:18 -0800 (PST)
+        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTP id 99A3582614;
+        Thu, 14 Nov 2019 12:04:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=nextdimension.cc; h=from
         :to:cc:subject:date:message-id:in-reply-to:references
         :mime-version:content-transfer-encoding; s=nextdimension.cc; bh=
-        4tyyZct1UyTiFlOMHzwbz8k0keI=; b=JC4657V+cRgRrvUNKNJfInhTdF997Baq
-        q0i+Kf4aFSsiYzQ3zvZZ4TRmbD0WJhqo2HjGpPppiNkCWmYE3cZDBvNmH3nZunIE
-        0ioG4QGtgBrxqEl7hXhnP/+kJcI7Oiqg+KjMqqy0zr2L2m3b9jqbvYlFT6N/p+oW
-        XEKmOWCSbxg=
+        E2TntZjSHOkYP16XG+4FnBzB9To=; b=Y8l+zSWvprR9a2ScKlXO1gRAk3scrzFF
+        d9T2hrkKyekrykJ2ATMKpP/Eq0Cm1tYr79Vy3pqdoueGraXLkPbc9lvqxPigR144
+        3GB9qLffjCe9UqA59wVAnJloQl81fgBVlbouKwMqlwf4u5p433/V9qs2nexvzva1
+        fgf1HTMTh/s=
 Received: from localhost.localdomain (67-198-57-188.static.grandenetworks.net [67.198.57.188])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: brad@nextdimension.ws)
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTPSA id 660338259B;
-        Thu, 14 Nov 2019 12:04:18 -0800 (PST)
+        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTPSA id 3FE598260D;
+        Thu, 14 Nov 2019 12:04:21 -0800 (PST)
 X-DH-BACKEND: pdx1-sub0-mail-a96
 From:   Brad Love <brad@nextdimension.cc>
 To:     linux-media@vger.kernel.org
 Cc:     Brad Love <brad@nextdimension.cc>
-Subject: [PATCH v3 05/14] si2157: Briefly wait for tuning operation to complete
-Date:   Thu, 14 Nov 2019 14:03:59 -0600
-Message-Id: <20191114200408.28883-6-brad@nextdimension.cc>
+Subject: [PATCH v3 10/14] cx23885: Add i2c device analog tuner support
+Date:   Thu, 14 Nov 2019 14:04:04 -0600
+Message-Id: <20191114200408.28883-11-brad@nextdimension.cc>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191114200408.28883-1-brad@nextdimension.cc>
 References: <20191114200408.28883-1-brad@nextdimension.cc>
@@ -75,100 +75,171 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To detect errors in the tuning operation, this waits up 40ms for operatio=
-n
-completion status. This allows for error detection and prevents issuing
-additional commands to the tuner before it is finished.
-
-Tuning typically completes in 20-30ms.
+Hauppauge QuadHD/1265/5525 boards all use i2c device drivers and
+have tuner_type equal TUNER_ABSENT. This means additional support
+is required to enable the analog tuning capability, a case
+statement is used to identify these models.
 
 Signed-off-by: Brad Love <brad@nextdimension.cc>
 ---
 Since v2:
-- Split into two patches, tune completion and signal lock
+- Fix capabilities and device caps
 
- drivers/media/tuners/si2157.c | 52 +++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ drivers/media/pci/cx23885/cx23885-video.c | 87 +++++++++++++++++++----
+ 1 file changed, 75 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.=
-c
-index 78a855df30da..cac4870017f5 100644
---- a/drivers/media/tuners/si2157.c
-+++ b/drivers/media/tuners/si2157.c
-@@ -301,6 +301,54 @@ static int si2157_sleep(struct dvb_frontend *fe)
- 	return ret;
+diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pc=
+i/cx23885/cx23885-video.c
+index e2062a0c4cf7..feb083600b1c 100644
+--- a/drivers/media/pci/cx23885/cx23885-video.c
++++ b/drivers/media/pci/cx23885/cx23885-video.c
+@@ -638,8 +638,18 @@ static int vidioc_querycap(struct file *file, void  =
+*priv,
+ 			    V4L2_CAP_AUDIO | V4L2_CAP_VBI_CAPTURE |
+ 			    V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VBI_CAPTURE |
+ 			    V4L2_CAP_DEVICE_CAPS;
+-	if (dev->tuner_type !=3D TUNER_ABSENT)
++	switch (dev->board) { /* i2c device tuners */
++	case CX23885_BOARD_HAUPPAUGE_HVR1265_K4:
++	case CX23885_BOARD_HAUPPAUGE_HVR5525:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_DVB:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC:
+ 		cap->capabilities |=3D V4L2_CAP_TUNER;
++		break;
++	default:
++		if (dev->tuner_type !=3D TUNER_ABSENT)
++			cap->capabilities |=3D V4L2_CAP_TUNER;
++		break;
++	}
+ 	return 0;
  }
 =20
-+static int si2157_tune_wait(struct i2c_client *client)
-+{
-+#define TUN_TIMEOUT 40
-+	struct si2157_dev *dev =3D i2c_get_clientdata(client);
-+	int ret;
-+	unsigned long timeout;
-+	unsigned long start_time;
-+	u8 wait_status;
-+
-+	mutex_lock(&dev->i2c_mutex);
-+
-+	/* wait tuner command complete */
-+	start_time =3D jiffies;
-+	timeout =3D start_time + msecs_to_jiffies(TUN_TIMEOUT);
-+	while (!time_after(jiffies, timeout)) {
-+		ret =3D i2c_master_recv(client, &wait_status,
-+				      sizeof(wait_status));
-+		if (ret < 0) {
-+			goto err_mutex_unlock;
-+		} else if (ret !=3D sizeof(wait_status)) {
-+			ret =3D -EREMOTEIO;
-+			goto err_mutex_unlock;
-+		}
-+
-+		/* tuner done? */
-+		if ((wait_status & 0x81) =3D=3D 0x81)
-+			break;
-+		usleep_range(5000, 10000);
-+	}
-+
-+	dev_dbg(&client->dev, "tuning took %d ms, status=3D0x%x\n",
-+		jiffies_to_msecs(jiffies) - jiffies_to_msecs(start_time),
-+		wait_status);
-+
-+	if ((wait_status & 0xc0) !=3D 0x80) {
-+		ret =3D -ETIMEDOUT;
-+		goto err_mutex_unlock;
-+	}
-+
-+	mutex_unlock(&dev->i2c_mutex);
-+	return 0;
-+
-+err_mutex_unlock:
-+	mutex_unlock(&dev->i2c_mutex);
-+	dev_err(&client->dev, "failed=3D%d\n", ret);
-+	return ret;
-+}
-+
- static int si2157_set_params(struct dvb_frontend *fe)
+@@ -885,8 +895,17 @@ static int vidioc_g_tuner(struct file *file, void *p=
+riv,
  {
- 	struct i2c_client *client =3D fe->tuner_priv;
-@@ -400,6 +448,8 @@ static int si2157_set_params(struct dvb_frontend *fe)
- 	dev->bandwidth =3D bandwidth;
- 	dev->frequency =3D c->frequency;
+ 	struct cx23885_dev *dev =3D video_drvdata(file);
 =20
-+	si2157_tune_wait(client); /* wait to complete, ignore any errors */
-+
- 	return 0;
- err:
- 	dev->bandwidth =3D 0;
-@@ -594,6 +644,8 @@ static int si2157_set_analog_params(struct dvb_fronte=
-nd *fe,
+-	if (dev->tuner_type =3D=3D TUNER_ABSENT)
+-		return -EINVAL;
++	switch (dev->board) { /* i2c device tuners */
++	case CX23885_BOARD_HAUPPAUGE_HVR1265_K4:
++	case CX23885_BOARD_HAUPPAUGE_HVR5525:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_DVB:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC:
++		break;
++	default:
++		if (dev->tuner_type =3D=3D TUNER_ABSENT)
++			return -EINVAL;
++		break;
++	}
+ 	if (0 !=3D t->index)
+ 		return -EINVAL;
 =20
- 	dev->bandwidth =3D bandwidth;
+@@ -901,8 +920,17 @@ static int vidioc_s_tuner(struct file *file, void *p=
+riv,
+ {
+ 	struct cx23885_dev *dev =3D video_drvdata(file);
 =20
-+	si2157_tune_wait(client); /* wait to complete, ignore any errors */
-+
- 	return 0;
- err:
- 	dev->bandwidth =3D 0;
+-	if (dev->tuner_type =3D=3D TUNER_ABSENT)
+-		return -EINVAL;
++	switch (dev->board) { /* i2c device tuners */
++	case CX23885_BOARD_HAUPPAUGE_HVR1265_K4:
++	case CX23885_BOARD_HAUPPAUGE_HVR5525:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_DVB:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC:
++		break;
++	default:
++		if (dev->tuner_type =3D=3D TUNER_ABSENT)
++			return -EINVAL;
++		break;
++	}
+ 	if (0 !=3D t->index)
+ 		return -EINVAL;
+ 	/* Update the A/V core */
+@@ -916,9 +944,17 @@ static int vidioc_g_frequency(struct file *file, voi=
+d *priv,
+ {
+ 	struct cx23885_dev *dev =3D video_drvdata(file);
+=20
+-	if (dev->tuner_type =3D=3D TUNER_ABSENT)
+-		return -EINVAL;
+-
++	switch (dev->board) { /* i2c device tuners */
++	case CX23885_BOARD_HAUPPAUGE_HVR1265_K4:
++	case CX23885_BOARD_HAUPPAUGE_HVR5525:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_DVB:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC:
++		break;
++	default:
++		if (dev->tuner_type =3D=3D TUNER_ABSENT)
++			return -EINVAL;
++		break;
++	}
+ 	f->type =3D V4L2_TUNER_ANALOG_TV;
+ 	f->frequency =3D dev->freq;
+=20
+@@ -932,8 +968,17 @@ static int cx23885_set_freq(struct cx23885_dev *dev,=
+ const struct v4l2_frequency
+ 	struct v4l2_ctrl *mute;
+ 	int old_mute_val =3D 1;
+=20
+-	if (dev->tuner_type =3D=3D TUNER_ABSENT)
+-		return -EINVAL;
++	switch (dev->board) { /* i2c device tuners */
++	case CX23885_BOARD_HAUPPAUGE_HVR1265_K4:
++	case CX23885_BOARD_HAUPPAUGE_HVR5525:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_DVB:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC:
++		break;
++	default:
++		if (dev->tuner_type =3D=3D TUNER_ABSENT)
++			return -EINVAL;
++		break;
++	}
+ 	if (unlikely(f->tuner !=3D 0))
+ 		return -EINVAL;
+=20
+@@ -1310,8 +1355,17 @@ int cx23885_video_register(struct cx23885_dev *dev=
+)
+ 	dev->video_dev->queue =3D &dev->vb2_vidq;
+ 	dev->video_dev->device_caps =3D V4L2_CAP_READWRITE | V4L2_CAP_STREAMING=
+ |
+ 				      V4L2_CAP_AUDIO | V4L2_CAP_VIDEO_CAPTURE;
+-	if (dev->tuner_type !=3D TUNER_ABSENT)
++	switch (dev->board) { /* i2c device tuners */
++	case CX23885_BOARD_HAUPPAUGE_HVR1265_K4:
++	case CX23885_BOARD_HAUPPAUGE_HVR5525:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_DVB:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC:
+ 		dev->video_dev->device_caps |=3D V4L2_CAP_TUNER;
++		break;
++	default:
++		if (dev->tuner_type !=3D TUNER_ABSENT)
++			dev->video_dev->device_caps |=3D V4L2_CAP_TUNER;
++	}
+ 	err =3D video_register_device(dev->video_dev, VFL_TYPE_GRABBER,
+ 				    video_nr[dev->nr]);
+ 	if (err < 0) {
+@@ -1328,8 +1382,17 @@ int cx23885_video_register(struct cx23885_dev *dev=
+)
+ 	dev->vbi_dev->queue =3D &dev->vb2_vbiq;
+ 	dev->vbi_dev->device_caps =3D V4L2_CAP_READWRITE | V4L2_CAP_STREAMING |
+ 				    V4L2_CAP_AUDIO | V4L2_CAP_VBI_CAPTURE;
+-	if (dev->tuner_type !=3D TUNER_ABSENT)
++	switch (dev->board) { /* i2c device tuners */
++	case CX23885_BOARD_HAUPPAUGE_HVR1265_K4:
++	case CX23885_BOARD_HAUPPAUGE_HVR5525:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_DVB:
++	case CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC:
+ 		dev->vbi_dev->device_caps |=3D V4L2_CAP_TUNER;
++		break;
++	default:
++		if (dev->tuner_type !=3D TUNER_ABSENT)
++			dev->vbi_dev->device_caps |=3D V4L2_CAP_TUNER;
++	}
+ 	err =3D video_register_device(dev->vbi_dev, VFL_TYPE_VBI,
+ 				    vbi_nr[dev->nr]);
+ 	if (err < 0) {
 --=20
 2.23.0
 
