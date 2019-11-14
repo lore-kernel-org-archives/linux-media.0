@@ -2,122 +2,183 @@ Return-Path: <SRS0=w8NS=ZG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E6E4C432C3
-	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:14:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7A7FC432C3
+	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 21:16:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7928820725
-	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 20:14:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="UKQv9Vx4"
+	by mail.kernel.org (Postfix) with ESMTP id B240120724
+	for <linux-media@archiver.kernel.org>; Thu, 14 Nov 2019 21:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1573766173;
+	bh=cM1x8DCsw1fWloYG+Ij/9ZmtPjfOiAsowy4wB1NlS8I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=Pg+2yAZlGerX6epGJNdNYJwgXyThLt0LC4ctrmJMB8kHVK3cKKgubR5C+ivsmcpWv
+	 dWe/Z0GXl2YPkhiMHPEAbX+uJv30sajEmbPWGcEOxJDrmaUv/ialv2L/gxKuQOVhkK
+	 tfdmMJbyLybKifWvlrLMI8bZYU11X5sol46pb1I0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726786AbfKNUOG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Nov 2019 15:14:06 -0500
-Received: from bonobo.elm.relay.mailchannels.net ([23.83.212.22]:61903 "EHLO
-        bonobo.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726474AbfKNUOF (ORCPT
+        id S1726910AbfKNVQK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Nov 2019 16:16:10 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:41591 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726750AbfKNVQJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Nov 2019 15:14:05 -0500
-X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id D49E25A0C08;
-        Thu, 14 Nov 2019 20:04:17 +0000 (UTC)
-Received: from pdx1-sub0-mail-a96.g.dreamhost.com (100-96-169-194.trex.outbound.svc.cluster.local [100.96.169.194])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 41E8C5A0BB0;
-        Thu, 14 Nov 2019 20:04:17 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
-Received: from pdx1-sub0-mail-a96.g.dreamhost.com ([TEMPUNAVAIL].
- [64.90.62.162])
-        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
-        by 0.0.0.0:2500 (trex/5.18.5);
-        Thu, 14 Nov 2019 20:04:17 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|brad@nextdimension.ws
-X-MailChannels-Auth-Id: dreamhost
-X-Irritate-Well-Made: 52dad08903b63cd1_1573761857678_3190511212
-X-MC-Loop-Signature: 1573761857678:2154668290
-X-MC-Ingress-Time: 1573761857678
-Received: from pdx1-sub0-mail-a96.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTP id 8501382601;
-        Thu, 14 Nov 2019 12:04:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=nextdimension.cc; h=from
-        :to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=nextdimension.cc; bh=
-        E3HWcMxER6eIiAN637UUeUKFu9U=; b=UKQv9Vx46UYiooeiFGYvVyT7Qnt4t//x
-        XkJbxSemJsuIV1GYTC/jqSkj/uAop7W12nPUvpblhg7yz2/jSQZ+1TG9/9CrYOyW
-        ONjDGCX3Qr0ozJR1BFdJvw0XlOTdGAHsYoU0QM04z93kqKGOQ1Aryd+IrvnHFB/g
-        LvcDyLbNfOo=
-Received: from localhost.localdomain (67-198-57-188.static.grandenetworks.net [67.198.57.188])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: brad@nextdimension.ws)
-        by pdx1-sub0-mail-a96.g.dreamhost.com (Postfix) with ESMTPSA id 23B978260C;
-        Thu, 14 Nov 2019 12:04:16 -0800 (PST)
-X-DH-BACKEND: pdx1-sub0-mail-a96
-From:   Brad Love <brad@nextdimension.cc>
-To:     linux-media@vger.kernel.org
-Cc:     Brad Love <brad@nextdimension.cc>
-Subject: [PATCH v3 01/14] si2157: Enable tuner status flags
-Date:   Thu, 14 Nov 2019 14:03:55 -0600
-Message-Id: <20191114200408.28883-2-brad@nextdimension.cc>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191114200408.28883-1-brad@nextdimension.cc>
-References: <20191114200408.28883-1-brad@nextdimension.cc>
+        Thu, 14 Nov 2019 16:16:09 -0500
+Received: by mail-oi1-f196.google.com with SMTP id e9so6651131oif.8;
+        Thu, 14 Nov 2019 13:16:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fuBWITyC2SUHGRslSMvj5Vn8Ahl50d58H5d7xUTeDJI=;
+        b=tc7YV5ON3zl81ROXYDKc6mFSGhuezco79nmwVqvjQrOVnXv5z4t7CulJoM4af8tXA+
+         /1ajDCrKZrqlTXA3zhfOBsdwHP1zGHFNWKWQi68ZycawAQ4lTB60jBd2M/IIbSVOtbNj
+         a48ymqEtnrvVD4lUWz4zo4LpzrPGfEhsH5b6tjkneLX2C9OlQfF2Htc2tjAeDcppEw1C
+         /EahNQHUseAoKJfBUOCZ8UE029fItz/XHhnZooVH04UN0zZKl8wmBUuSX8MJAZLCbox4
+         cMcPNTnB4WmQsg2qXrSNggk71JX6LuGTSrL23Ueets1zchQkSIyGMu1MuzwQyWK1XNws
+         4R/Q==
+X-Gm-Message-State: APjAAAXxTTzI1etyH3tx7iBQUFOp007ApJVwLHz67ozgg+7U9sihJAu8
+        iP2obnMHR5me/QfafQzIbUWCWt4=
+X-Google-Smtp-Source: APXvYqwevaCYrY0AyZMovwZy/WJFexiM3d8xYM1wLFqCGNAgEmUo1sPa+HW+eNGxzjEN3JlrU08W9A==
+X-Received: by 2002:aca:b909:: with SMTP id j9mr5324529oif.121.1573766168634;
+        Thu, 14 Nov 2019 13:16:08 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id h9sm2209821otn.14.2019.11.14.13.16.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2019 13:16:07 -0800 (PST)
+Date:   Thu, 14 Nov 2019 15:16:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
+Cc:     mark.rutland@arm.com, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: media: renesas,ceu: Convert to yaml
+Message-ID: <20191114211607.GA4896@bogus>
+References: <20191111120017.83161-1-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191111120017.83161-1-jacopo+renesas@jmondi.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enable flags to get status of commands sent to the tuner.
+On Mon, Nov 11, 2019 at 01:00:17PM +0100, Jacopo Mondi wrote:
+> Convert the Renesas CEU bindings description to json-schema and remove
+> the existing textual bindings document.
+> 
+> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> ---
+>  .../devicetree/bindings/media/renesas,ceu.txt | 86 -------------------
+>  .../bindings/media/renesas,ceu.yaml           | 72 ++++++++++++++++
+>  MAINTAINERS                                   |  2 +-
+>  3 files changed, 73 insertions(+), 87 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/renesas,ceu.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/renesas,ceu.yaml
 
-Signed-off-by: Brad Love <brad@nextdimension.cc>
----
-No changes
 
- drivers/media/tuners/si2157.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+> diff --git a/Documentation/devicetree/bindings/media/renesas,ceu.yaml b/Documentation/devicetree/bindings/media/renesas,ceu.yaml
+> new file mode 100644
+> index 000000000000..3c4a4ff975ae
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/renesas,ceu.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
 
-diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.=
-c
-index 898e0f9f8b70..12f88304ac0f 100644
---- a/drivers/media/tuners/si2157.c
-+++ b/drivers/media/tuners/si2157.c
-@@ -230,6 +230,28 @@ static int si2157_init(struct dvb_frontend *fe)
-=20
- 	dev_info(&client->dev, "firmware version: %c.%c.%d\n",
- 			cmd.args[6], cmd.args[7], cmd.args[8]);
-+
-+	/* enable tuner status flags */
-+	memcpy(cmd.args, "\x14\x00\x01\x05\x01\x00", 6);
-+	cmd.wlen =3D 6;
-+	cmd.rlen =3D 1;
-+	ret =3D si2157_cmd_execute(client, &cmd);
-+	if (ret)
-+		goto err;
-+
-+	memcpy(cmd.args, "\x14\x00\x01\x06\x01\x00", 6);
-+	cmd.wlen =3D 6;
-+	cmd.rlen =3D 1;
-+	ret =3D si2157_cmd_execute(client, &cmd);
-+	if (ret)
-+		goto err;
-+
-+	memcpy(cmd.args, "\x14\x00\x01\x07\x01\x00", 6);
-+	cmd.wlen =3D 6;
-+	cmd.rlen =3D 1;
-+	ret =3D si2157_cmd_execute(client, &cmd);
-+	if (ret)
-+		goto err;
- warm:
- 	/* init statistics in order signal app which are supported */
- 	c->strength.len =3D 1;
---=20
-2.23.0
+If only Renesas authors, can you dual license.
 
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/renesas,ceu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas Capture Engine Unit (CEU) Bindings
+> +
+> +maintainers:
+> +  - Jacopo Mondi <jacopo+renesas@jmondi.org>
+> +  - linux-renesas-soc@vger.kernel.org
+> +
+> +description: |+
+> +  The Capture Engine Unit is the image capture interface found in the Renesas SH
+> +  Mobile, R-Mobile and RZ SoCs. The interface supports a single parallel input
+> +  with data bus width of 8 or 16 bits.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - renesas,r7a72100-ceu
+> +      - renesas,r8a7740-ceu
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  port:
+> +    type: object
+> +    additionalProperties: false
+> +
+> +    properties:
+> +       endpoint:
+> +         type: object
+> +
+> +         # Properties described in
+> +         # Documentation/devicetree/bindings/media/video-interfaces.txt
+> +         properties:
+> +           hsync-active: true
+> +           vsync-active: true
+> +           field-even-active: false
+> +           bus-width:
+> +             enum: [8, 16]
+
+These should all have 'default'.
+
+> +
+> +    required:
+> +      - endpoint
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - port
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    ceu: ceu@e8210000 {
+> +        reg = <0xe8210000 0x209c>;
+> +        compatible = "renesas,r7s72100-ceu";
+> +        interrupts = <GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +        port {
+> +            ceu_in: endpoint {
+> +                remote-endpoint = <&ov7670_out>;
+> +                hsync-active = <1>;
+> +                vsync-active = <0>;
+> +            };
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 37a977cbac6f..feab894f7584 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10133,7 +10133,7 @@ L:	linux-media@vger.kernel.org
+>  L:	linux-renesas-soc@vger.kernel.org
+>  T:	git git://linuxtv.org/media_tree.git
+>  S:	Supported
+> -F:	Documentation/devicetree/bindings/media/renesas,ceu.txt
+> +F:	Documentation/devicetree/bindings/media/renesas,ceu.yaml
+>  F:	drivers/media/platform/renesas-ceu.c
+>  F:	include/media/drv-intf/renesas-ceu.h
+> 
+> --
+> 2.23.0
+> 
