@@ -2,189 +2,288 @@ Return-Path: <SRS0=gaxT=ZH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1801BC432C3
-	for <linux-media@archiver.kernel.org>; Fri, 15 Nov 2019 05:33:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F123C33C9C
+	for <linux-media@archiver.kernel.org>; Fri, 15 Nov 2019 05:54:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D493E20730
-	for <linux-media@archiver.kernel.org>; Fri, 15 Nov 2019 05:33:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED9992073A
+	for <linux-media@archiver.kernel.org>; Fri, 15 Nov 2019 05:54:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesasgroup.onmicrosoft.com header.i=@renesasgroup.onmicrosoft.com header.b="lla8BEyp"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="d5kDf8Qu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbfKOFdm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Nov 2019 00:33:42 -0500
-Received: from mail-eopbgr1400100.outbound.protection.outlook.com ([40.107.140.100]:56880
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725848AbfKOFdm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Nov 2019 00:33:42 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AHyMe8Qdb/jDcIyQQ3FFsQg18eP0uTejrY8N8QJSERGVVslmu0yigB4zEtK59d4CiXQKrEmx7OyWlznawXZDHtdqVIRRa3dwEsZACqcmRsmyrkF/Dhwsuup3l+kG7dKiWMnnOFvDBO2SRrPkwu6p7FGSYtQxDpEOVUkeXDI57EKZ3tn2VWV5vcr9nPOXn/DdxqMk2SKI7Ztx0kZkxkd8/NFnQe8leO9FPVLacVtVXQw8Vbw2Xk+jWdI1h9QqIum7P/YxtN9oNwQyBYPuJ7+xq2h4jFanp9QUtS+d9RUCyP0tpjJnQo7t/+NlX63PaMIJY2fML+PCplQ5NWygNKa7ww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j/QjK9zXBEM2paHzNigaYicDA3fBZrq+OXX76JnzceQ=;
- b=coqxvdPX48/jQerU63eQFgWsrZOBPIGwXA0l1VWGviHIQcCzX6BYp4JUqGj7a8fz2ilmNL1vbCNzvjFTg4zcYs+moCC30MEGZYCOrSbxuKkKFPY9CAwE8A0PnizdvHRPKMWKSIQheMN8x7iVStut58Iomil1Fzx9jeTlHHClbe2qhGqJqpDp/PTY1GsM/kmSRXjr2aFKgPTjgvES/FHyxdAnbg8mCBxf97SNLQK4m5xCa0PbcP7noh+5VTFozx0eMqH+6c7FLeCmDFwBNMDbawVk/iB6+G00zuNOr4zBl0Nzfka1v/NA14GCAAezJ+RUhSLuTi7bH401JaP/STWH2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j/QjK9zXBEM2paHzNigaYicDA3fBZrq+OXX76JnzceQ=;
- b=lla8BEypY6/YMvfvnpPhKpraAytko8sjZPnxdruYcNgmI6Kfbl/fDBQ2qPUIawDpiH6ZV4N9TOoPxO7sv6lZSYMjpCwBt98riOhQb6EXbocJ18XVdyA1EJMwQEOcsVGpinRW3rpm09y1c4nhcUxhtZWyWWuy3p2SrSr8smkAO2M=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
- TYAPR01MB3567.jpnprd01.prod.outlook.com (20.178.137.138) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2451.28; Fri, 15 Nov 2019 05:33:25 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::6998:f6cf:8cf1:2528]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::6998:f6cf:8cf1:2528%5]) with mapi id 15.20.2451.024; Fri, 15 Nov 2019
- 05:33:25 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, Bin Liu <b-liu@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>
-Subject: RE: [PATCH v3 10/13] usb: gadget: udc: renesas_usb3: create debugfs
- directory under usb root
-Thread-Topic: [PATCH v3 10/13] usb: gadget: udc: renesas_usb3: create debugfs
- directory under usb root
-Thread-Index: AQHVmtgjs6kjMfHecE2BmiNGnS0AxqeLtQfg
-Date:   Fri, 15 Nov 2019 05:33:24 +0000
-Message-ID: <TYAPR01MB454479F91B948904C213B94CD8700@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <1573728085-29016-1-git-send-email-chunfeng.yun@mediatek.com>
- <1573728085-29016-10-git-send-email-chunfeng.yun@mediatek.com>
-In-Reply-To: <1573728085-29016-10-git-send-email-chunfeng.yun@mediatek.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [150.249.235.54]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 24511005-60ea-49ab-79b8-08d7698d5624
-x-ms-traffictypediagnostic: TYAPR01MB3567:|TYAPR01MB3567:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <TYAPR01MB35670C3A550C1E32635DEAE8D8700@TYAPR01MB3567.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 02229A4115
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(366004)(346002)(136003)(39860400002)(376002)(189003)(199004)(6246003)(9686003)(66066001)(66476007)(66446008)(6116002)(71190400001)(71200400001)(14444005)(5660300002)(256004)(64756008)(66556008)(229853002)(8676002)(54906003)(4326008)(81166006)(8936002)(99286004)(55016002)(76116006)(6436002)(316002)(52536014)(110136005)(446003)(2906002)(14454004)(476003)(33656002)(11346002)(86362001)(7416002)(81156014)(7696005)(7406005)(486006)(186003)(478600001)(66946007)(74316002)(76176011)(26005)(7736002)(3846002)(305945005)(6506007)(25786009)(102836004);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB3567;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lITUcqsRnYn1Eq8AkwXsMuJODq58lGPlQ7BzIVEzJv8fbhc77IpzvaqDsr5A6YyJJ4dO3wBpj0d5ieXYSuRxMAwIw8cIVwDJL/CNWs8JmfA7RLHEU+6fneDk78YwkQGYf3CtdxWble0JaJvFLZ0SWpn9H1Fp8MKMzE01M6jPqVcPlD9FhQbWY9D1MmFK3SdpCdjPAGUuTOUvR2f84ROyCjTuGKAcUjqTF/vL03JPur8KiOaVQmQSdqOTfVCi8OsT3WxdAPSt0azxlQrHXkewTneRG0GVdF/44jnfJn/VQHMckns11A3qJlJUuBQPa01aNOvrnL3g5Y6178tgh8WXnc17kmnmMfMeun0PGdkgCFwRkGb5qVQv7fcjWbDWwuL5Sxy3VuhY2zMeztp+x5LeG6u2zdsO3YWWDyy0Q7yS7x44gsIVOpGAwyBZL5kYzAB8
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727611AbfKOFyO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Nov 2019 00:54:14 -0500
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:5246 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727531AbfKOFyI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 15 Nov 2019 00:54:08 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dce3d6e0002>; Thu, 14 Nov 2019 21:53:50 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 14 Nov 2019 21:53:47 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 14 Nov 2019 21:53:47 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 15 Nov
+ 2019 05:53:45 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 15 Nov
+ 2019 05:53:45 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 15 Nov 2019 05:53:45 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dce3d690005>; Thu, 14 Nov 2019 21:53:45 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Paul Mackerras" <paulus@samba.org>, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v5 22/24] mm/gup_benchmark: support pin_user_pages() and related calls
+Date:   Thu, 14 Nov 2019 21:53:38 -0800
+Message-ID: <20191115055340.1825745-23-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191115055340.1825745-1-jhubbard@nvidia.com>
+References: <20191115055340.1825745-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24511005-60ea-49ab-79b8-08d7698d5624
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2019 05:33:24.8893
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9wlpzJ/d525cY5R6Qu6qCINh/DW+snSR94J4uPnLnNnC7ujaRZuDpr0shK1TFargAj9z31jtoOoH5kYtEiuVkeN5mTLzLLLymkryYsytu8mIjwj0+dsb0kcFzlhs/bFE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB3567
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1573797230; bh=2VikNfsXV53SqX6j47kop4rTtKhfcK4SlvrERtv5mQ4=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=d5kDf8QuXJzPMFCKZHTgZTNMAKVmsfclXJrSoszImQKfrPLzzHpG4ey/oKtE6tMwF
+         rQD4sFikc+dN2J6K/KWWVJ95f1g4aNGBgZ3kOMUTntNzPik/I+JBSzOBnM0vSDT1so
+         gX1+eotGPvHDMBThm/KF9yJR9aAQFKuzh4i+F9yb5RpEHawYLsWZ2Ms9c/Iaj2VT5J
+         1/6zOQzEqGSaInY7BpGt5U8PYbrdXNtYjyKlMcJ6HkW97V2GQBVFaQPIuzcrgsfza+
+         ARJIQXQurTx+CcJE1xiXmhegd6c2Ay4VyilxQa9kr5/IkABarztrk71H6fVsJOdwTJ
+         nn81+0ou2iiNw==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Chunfeng-san,
+Up until now, gup_benchmark supported testing of the
+following kernel functions:
 
-> From: Chunfeng Yun, Sent: Thursday, November 14, 2019 7:41 PM
->=20
-> Now the USB gadget subsystem can use the USB debugfs root directory,
-> so move it's directory from the root of the debugfs filesystem into
-> the root of usb
->=20
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+* get_user_pages(): via the '-U' command line option
+* get_user_pages_longterm(): via the '-L' command line option
+* get_user_pages_fast(): as the default (no options required)
 
-Thank you for the patch! When I apply this patch on the Greg's usb.git /
-usb-next branch, the following warning happens:
+Add test coverage for the new corresponding pin_*() functions:
 
-$ patch -p1 < ~/Downloads/v3-10-13-usb-gadget-udc-renesas_usb3-create-debug=
-fs-directory-under-usb-root.patch
-patching file drivers/usb/gadget/udc/renesas_usb3.c
-Hunk #1 succeeded at 2536 (offset 1 line).
+* pin_user_pages(): via the '-c' command line option
+* pin_user_pages_fast(): via the '-b' command line option
 
-I'm not sure we should fix it strictly though, this patch seems good to me.=
- So,
+Also, add an option for clarity: '-u' for what is now (still) the
+default choice: get_user_pages_fast().
 
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Also, for the commands that set FOLL_PIN, verify that the pages
+really are dma-pinned, via the new is_dma_pinned() routine.
+Those commands are:
 
-And, I tested this patch on my environment and confirmed that
-the debug file moved from /sys/kernel/debug to /sys/kernel/debug/usb. So,
+    PIN_FAST_BENCHMARK     : calls pin_user_pages_fast()
+    PIN_BENCHMARK          : calls pin_user_pages()
 
-Tested-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+In between the calls to pin_*() and put_user_pages(),
+check each page: if page_dma_pinned() returns false, then
+WARN and return.
 
-Best regards,
-Yoshihiro Shimoda
+Do this outside of the benchmark timestamps, so that it doesn't
+affect reported times.
 
+Cc: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ mm/gup_benchmark.c                         | 65 ++++++++++++++++++++--
+ tools/testing/selftests/vm/gup_benchmark.c | 15 ++++-
+ 2 files changed, 74 insertions(+), 6 deletions(-)
 
-> ---
-> v3: no changes
->=20
-> v2:
->   1. abandon new API usb_debugfs_create_dir(), and use usb_debug_root
-> ---
->  drivers/usb/gadget/udc/renesas_usb3.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/u=
-dc/renesas_usb3.c
-> index e098f16c01cb..4dde69e7f6b1 100644
-> --- a/drivers/usb/gadget/udc/renesas_usb3.c
-> +++ b/drivers/usb/gadget/udc/renesas_usb3.c
-> @@ -2535,7 +2535,7 @@ static const struct file_operations renesas_usb3_b_=
-device_fops =3D {
->  static void renesas_usb3_debugfs_init(struct renesas_usb3 *usb3,
->  				      struct device *dev)
->  {
-> -	usb3->dentry =3D debugfs_create_dir(dev_name(dev), NULL);
-> +	usb3->dentry =3D debugfs_create_dir(dev_name(dev), usb_debug_root);
->=20
->  	debugfs_create_file("b_device", 0644, usb3->dentry, usb3,
->  			    &renesas_usb3_b_device_fops);
-> --
-> 2.23.0
+diff --git a/mm/gup_benchmark.c b/mm/gup_benchmark.c
+index 7fc44d25eca7..1ac089ad815f 100644
+--- a/mm/gup_benchmark.c
++++ b/mm/gup_benchmark.c
+@@ -8,6 +8,8 @@
+ #define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_benchmark)
+ #define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
+ #define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
++#define PIN_FAST_BENCHMARK	_IOWR('g', 4, struct gup_benchmark)
++#define PIN_BENCHMARK		_IOWR('g', 5, struct gup_benchmark)
+=20
+ struct gup_benchmark {
+ 	__u64 get_delta_usec;
+@@ -19,6 +21,42 @@ struct gup_benchmark {
+ 	__u64 expansion[10];	/* For future use */
+ };
+=20
++static void put_back_pages(int cmd, struct page **pages, unsigned long nr_=
+pages)
++{
++	int i;
++
++	switch (cmd) {
++	case GUP_FAST_BENCHMARK:
++	case GUP_LONGTERM_BENCHMARK:
++	case GUP_BENCHMARK:
++		for (i =3D 0; i < nr_pages; i++)
++			put_page(pages[i]);
++		break;
++
++	case PIN_FAST_BENCHMARK:
++	case PIN_BENCHMARK:
++		put_user_pages(pages, nr_pages);
++		break;
++	}
++}
++
++static void verify_dma_pinned(int cmd, struct page **pages,
++			      unsigned long nr_pages)
++{
++	int i;
++
++	switch (cmd) {
++	case PIN_FAST_BENCHMARK:
++	case PIN_BENCHMARK:
++		for (i =3D 0; i < nr_pages; i++) {
++			if (WARN(!page_dma_pinned(pages[i]),
++				 "pages[%d] is NOT dma-pinned\n", i))
++				break;
++		}
++		break;
++	}
++}
++
+ static int __gup_benchmark_ioctl(unsigned int cmd,
+ 		struct gup_benchmark *gup)
+ {
+@@ -65,6 +103,14 @@ static int __gup_benchmark_ioctl(unsigned int cmd,
+ 			nr =3D get_user_pages(addr, nr, gup->flags, pages + i,
+ 					    NULL);
+ 			break;
++		case PIN_FAST_BENCHMARK:
++			nr =3D pin_user_pages_fast(addr, nr, gup->flags,
++						 pages + i);
++			break;
++		case PIN_BENCHMARK:
++			nr =3D pin_user_pages(addr, nr, gup->flags, pages + i,
++					    NULL);
++			break;
+ 		default:
+ 			return -1;
+ 		}
+@@ -75,15 +121,22 @@ static int __gup_benchmark_ioctl(unsigned int cmd,
+ 	}
+ 	end_time =3D ktime_get();
+=20
++	/* Shifting the meaning of nr_pages: now it is actual number pinned: */
++	nr_pages =3D i;
++
+ 	gup->get_delta_usec =3D ktime_us_delta(end_time, start_time);
+ 	gup->size =3D addr - gup->addr;
+=20
++	/*
++	 * Take an un-benchmark-timed moment to verify DMA pinned
++	 * state: print a warning if any non-dma-pinned pages are found:
++	 */
++	verify_dma_pinned(cmd, pages, nr_pages);
++
+ 	start_time =3D ktime_get();
+-	for (i =3D 0; i < nr_pages; i++) {
+-		if (!pages[i])
+-			break;
+-		put_page(pages[i]);
+-	}
++
++	put_back_pages(cmd, pages, nr_pages);
++
+ 	end_time =3D ktime_get();
+ 	gup->put_delta_usec =3D ktime_us_delta(end_time, start_time);
+=20
+@@ -101,6 +154,8 @@ static long gup_benchmark_ioctl(struct file *filep, uns=
+igned int cmd,
+ 	case GUP_FAST_BENCHMARK:
+ 	case GUP_LONGTERM_BENCHMARK:
+ 	case GUP_BENCHMARK:
++	case PIN_FAST_BENCHMARK:
++	case PIN_BENCHMARK:
+ 		break;
+ 	default:
+ 		return -EINVAL;
+diff --git a/tools/testing/selftests/vm/gup_benchmark.c b/tools/testing/sel=
+ftests/vm/gup_benchmark.c
+index 389327e9b30a..43b4dfe161a2 100644
+--- a/tools/testing/selftests/vm/gup_benchmark.c
++++ b/tools/testing/selftests/vm/gup_benchmark.c
+@@ -18,6 +18,10 @@
+ #define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
+ #define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
+=20
++/* Similar to above, but use FOLL_PIN instead of FOLL_GET. */
++#define PIN_FAST_BENCHMARK	_IOWR('g', 4, struct gup_benchmark)
++#define PIN_BENCHMARK		_IOWR('g', 5, struct gup_benchmark)
++
+ /* Just the flags we need, copied from mm.h: */
+ #define FOLL_WRITE	0x01	/* check pte is writable */
+=20
+@@ -40,8 +44,14 @@ int main(int argc, char **argv)
+ 	char *file =3D "/dev/zero";
+ 	char *p;
+=20
+-	while ((opt =3D getopt(argc, argv, "m:r:n:f:tTLUwSH")) !=3D -1) {
++	while ((opt =3D getopt(argc, argv, "m:r:n:f:abtTLUuwSH")) !=3D -1) {
+ 		switch (opt) {
++		case 'a':
++			cmd =3D PIN_FAST_BENCHMARK;
++			break;
++		case 'b':
++			cmd =3D PIN_BENCHMARK;
++			break;
+ 		case 'm':
+ 			size =3D atoi(optarg) * MB;
+ 			break;
+@@ -63,6 +73,9 @@ int main(int argc, char **argv)
+ 		case 'U':
+ 			cmd =3D GUP_BENCHMARK;
+ 			break;
++		case 'u':
++			cmd =3D GUP_FAST_BENCHMARK;
++			break;
+ 		case 'w':
+ 			write =3D 1;
+ 			break;
+--=20
+2.24.0
+
