@@ -2,223 +2,148 @@ Return-Path: <SRS0=tK16=ZL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC505C432C0
-	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 08:21:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77233C432C0
+	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 08:31:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BE1C0208C3
-	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 08:21:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="BeFB+A+E"
+	by mail.kernel.org (Postfix) with ESMTP id 583A1206F4
+	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 08:31:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727080AbfKSIQv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Nov 2019 03:16:51 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:15357 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725784AbfKSIQu (ORCPT
+        id S1727097AbfKSIbG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Nov 2019 03:31:06 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:33631 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725815AbfKSIbG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Nov 2019 03:16:50 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dd3a4f30000>; Tue, 19 Nov 2019 00:16:51 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 19 Nov 2019 00:16:48 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 19 Nov 2019 00:16:48 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 Nov
- 2019 08:16:47 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 19 Nov 2019 08:16:47 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dd3a4ed0008>; Tue, 19 Nov 2019 00:16:46 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH v6 01/24] mm/gup: pass flags arg to __gup_device_* functions
-Date:   Tue, 19 Nov 2019 00:16:20 -0800
-Message-ID: <20191119081643.1866232-2-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191119081643.1866232-1-jhubbard@nvidia.com>
-References: <20191119081643.1866232-1-jhubbard@nvidia.com>
+        Tue, 19 Nov 2019 03:31:06 -0500
+Received: from [IPv6:2001:983:e9a7:1:9879:d2e2:f0e2:9c7]
+ ([IPv6:2001:983:e9a7:1:9879:d2e2:f0e2:9c7])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id WyuXiBiMtcs92WyuYixyxi; Tue, 19 Nov 2019 09:31:03 +0100
+Subject: Re: [PATCH v11 00/11] Rockchip ISP Driver
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Helen Koike <helen.koike@collabora.com>,
+        linux-rockchip@lists.infradead.org
+Cc:     mark.rutland@arm.com, devicetree@vger.kernel.org,
+        eddie.cai.linux@gmail.com, mchehab@kernel.org, heiko@sntech.de,
+        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
+        jeffy.chen@rock-chips.com, zyc@rock-chips.com,
+        linux-kernel@vger.kernel.org, tfiga@chromium.org,
+        robh+dt@kernel.org, hans.verkuil@cisco.com,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com,
+        kernel@collabora.com, linux-media@vger.kernel.org,
+        jacob-chen@iotwrt.com, zhengsq@rock-chips.com
+References: <20191114051242.14651-1-helen.koike@collabora.com>
+ <996a9b6a-0e45-d627-9263-539c22e5f1c0@xs4all.nl>
+ <7fd4bf99fd6316da8acaf0a27b6845bedbf4b25f.camel@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <eafffc6f-061e-65ab-079b-b2bd613d61cb@xs4all.nl>
+Date:   Tue, 19 Nov 2019 09:30:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574151411; bh=shQdk3aSV65MVp9nCFIR9V5hifAIbJq1aZuVoQR8zJ0=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Type:Content-Transfer-Encoding;
-        b=BeFB+A+EJ4mKjCv+/UFQ4KvRmvqdyjoWqtWaibjOPbCpARHJdf2BQCQj0Y5VYK2SK
-         l4yZ90D68hdTXPCnOTR8pAtb21gqPg1SGtOTRMOm/B8hMOaAZ8dQS5wTi9dsLxXPtb
-         i4va/2iA6HIzBf+9wQW4kJJSQzMfFSUs0Vou9prfpmaND6CYavsinow28ibfv30yph
-         C2EC8doSqu/g7/B76TfjNUMReCFcBZbpy3XTq7OjKJ68xEUTnNhNMwBRjlxjIwGFoJ
-         MN1jgXaLuV6UcOdOZI0IPuf9eOnbuFZglMCLrUVLgvDJQp6pjEehLD+NYHX/nNFExC
-         Ho6R0samwlY6w==
+In-Reply-To: <7fd4bf99fd6316da8acaf0a27b6845bedbf4b25f.camel@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfMGsN9TkGwtzRSuVMeonrxJLrUw1XmSkg4IsuhBSRsDFrLC11ivzCFX8aJcfdWeCV5jNkPvVEVJSSeMksMMXQZnuPOLV3vA0z47kH28NIXezbzRMwJVm
+ i0kEQCLAGczqiaGYtSeRJesLq8/NrrPpGhMsD5vDBBc/iagU+JIHt8BmMKjF2tn59ibNsHaMuAnmFWra4a3gUMCdRT/gdrQnHJnrgik0lQofZ0esyk/Nu/DX
+ D65EhczIhRRFxGvaB1eAhJi/v0F6Ozd1KE9URen/4s2vGTWfsgIEnqi5DQRRBJ3pKz0y7XeprGFaVM8esUrwKqcOaItP9rvtsxQLOCB1suLvdupJrx6pZYcd
+ iWWSqkh2ooYO5vpz+kAD70HUg1T9njp9gUjPEB1af8RTf1yux/jSVXu9QBMou3ErrndZ/+b7CCQUyjSvRcI54ZJ1qKKEogk7KHzRN5GuJiW4izKHthrhtquJ
+ lJRTd5LRqspOvFC13to5LvBSzTB/A6dc8kERZs3++ygx9drc3Pfswnzxjv4UFLAzJgD55HoGwrTnTGGiqk/0l76+4P1eGQqy+V5z6BSX/MQz/uqOVmkwIQvh
+ WgyLG9k1iJZt7GaX1QAUCU60ghZsWb2U2SbFm4CfNmutP3mOH2/S5S80JOkq+4SDt7GapP1ysMdumPOfxMrNrOWP3GIS/LD3j0ezNW201zm+k+NTVxtsn0Ya
+ HkMF0ziheb1qenYexxUxz7vlP/y+71YSjuoQNMyW3snuPKVVdh+soPSbqcn6vYv63+ZXtP1L1lQMPl2DcMxoJ49vEp/WW69/QbpDfkwNJBrK6Kl2rOoTW8dY
+ NPEIK9sFKpczRAj9HHUjgeBUW0rX4OPH1vKozIZYCDVG7Zps434Nnr/angm3ZTcstyAS+glPSm0Fhg5fLeXjIzwqwsxsE9veXu/iHB5znhQFN0JBAly+qNUa
+ gx9OZhTsTsatruBMqPo8WnJkJQ+8GIKhvtmPx37mkaMGy+AWBhswC+PNn0A7UhKlvALCrAZCqGTq1XPM00wI+N0yrzK9CsIKHTUokmZ2MZc3b8Kf
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A subsequent patch requires access to gup flags, so
-pass the flags argument through to the __gup_device_*
-functions.
+On 11/18/19 7:52 PM, Ezequiel Garcia wrote:
+> Hi Hans,
+> 
+> Thanks for taking care of this.
+> 
+> On Thu, 2019-11-14 at 09:42 +0100, Hans Verkuil wrote:
+>> On 11/14/19 6:12 AM, Helen Koike wrote:
+>>> Hello,
+>>>
+>>> This series adds the Rockchip Image Signal Processing Unit v1 driver to
+>>> staging.
+>>>
+>>> The main reason to be in staging is that people are already using it from the
+>>> mailing list (including libcamera), and having it in mainline makes the workflow
+>>> easier. Also, it is easier for other people to contribute back (with code
+>>> or testing the driver).
+>>>
+>>> We plan to actively work on this driver to get it our of staging.
+>>>
+>>> This patchset is also available at:
+>>> https://gitlab.collabora.com/koike/linux/tree/rockchip/isp/v11
+>>>
+>>> Libcamera patched to work with this version:
+>>> https://gitlab.collabora.com/koike/libcamera
+>>> (also sent to the mailing list)
+>>>
+>>> The major difference in v11 are:
+>>> - Fixed compiling warnings found with W=1
+>>> - Fixed checkpatch errors
+>>> - Add clock-names values in dt-bindings
+>>
+>> Looking at checkpatch I see a few remaining issues that I believe should be
+>> fixed before merging this:
+>>
+>> CHECK: spinlock_t definition without comment
+>> #575: FILE: drivers/staging/media/rkisp1/isp_stats.h:43:
+>> +       spinlock_t irq_lock;
+>>
+>> CHECK: struct mutex definition without comment
+>> #581: FILE: drivers/staging/media/rkisp1/isp_stats.h:49:
+>> +       struct mutex wq_lock;
+>>
+>> CHECK: spinlock_t definition without comment
+>> #1648: FILE: drivers/staging/media/rkisp1/isp_params.h:25:
+>> +       spinlock_t config_lock;
+>>
+>> CHECK: spinlock_t definition without comment
+>> #2058: FILE: drivers/staging/media/rkisp1/capture.h:145:
+>> +       spinlock_t vbq_lock;
+>>
+> 
+> I'd rather merge this as-is, adding a TODO entry stating
+> we need to revisit locking specifically, because I'd like
+> to take a close look at these spinlocks/mutex,
+> instead of just addding comments for then.
 
-Also placate checkpatch.pl by shortening a nearby line.
+Fair enough! Just as long as it is mentioned somewhere.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- mm/gup.c | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+> 
+>> Once this is done together with the Jacob Chen email clarification
+>> it is ready to be merged for v5.6.
+>>
+> 
+> I'll find out more about this.
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 8f236a335ae9..85caf76b3012 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1890,7 +1890,8 @@ static int gup_pte_range(pmd_t pmd, unsigned long add=
-r, unsigned long end,
-=20
- #if defined(CONFIG_ARCH_HAS_PTE_DEVMAP) && defined(CONFIG_TRANSPARENT_HUGE=
-PAGE)
- static int __gup_device_huge(unsigned long pfn, unsigned long addr,
--		unsigned long end, struct page **pages, int *nr)
-+			     unsigned long end, unsigned int flags,
-+			     struct page **pages, int *nr)
- {
- 	int nr_start =3D *nr;
- 	struct dev_pagemap *pgmap =3D NULL;
-@@ -1916,13 +1917,14 @@ static int __gup_device_huge(unsigned long pfn, uns=
-igned long addr,
- }
-=20
- static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long ad=
-dr,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	unsigned long fault_pfn;
- 	int nr_start =3D *nr;
-=20
- 	fault_pfn =3D pmd_pfn(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
--	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
-+	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
- 		return 0;
-=20
- 	if (unlikely(pmd_val(orig) !=3D pmd_val(*pmdp))) {
-@@ -1933,13 +1935,14 @@ static int __gup_device_huge_pmd(pmd_t orig, pmd_t =
-*pmdp, unsigned long addr,
- }
-=20
- static int __gup_device_huge_pud(pud_t orig, pud_t *pudp, unsigned long ad=
-dr,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	unsigned long fault_pfn;
- 	int nr_start =3D *nr;
-=20
- 	fault_pfn =3D pud_pfn(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
--	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
-+	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
- 		return 0;
-=20
- 	if (unlikely(pud_val(orig) !=3D pud_val(*pudp))) {
-@@ -1950,14 +1953,16 @@ static int __gup_device_huge_pud(pud_t orig, pud_t =
-*pudp, unsigned long addr,
- }
- #else
- static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long ad=
-dr,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	BUILD_BUG();
- 	return 0;
- }
-=20
- static int __gup_device_huge_pud(pud_t pud, pud_t *pudp, unsigned long add=
-r,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	BUILD_BUG();
- 	return 0;
-@@ -2062,7 +2067,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsi=
-gned long addr,
- 	if (pmd_devmap(orig)) {
- 		if (unlikely(flags & FOLL_LONGTERM))
- 			return 0;
--		return __gup_device_huge_pmd(orig, pmdp, addr, end, pages, nr);
-+		return __gup_device_huge_pmd(orig, pmdp, addr, end, flags,
-+					     pages, nr);
- 	}
-=20
- 	refs =3D 0;
-@@ -2092,7 +2098,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsi=
-gned long addr,
- }
-=20
- static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
--		unsigned long end, unsigned int flags, struct page **pages, int *nr)
-+			unsigned long end, unsigned int flags,
-+			struct page **pages, int *nr)
- {
- 	struct page *head, *page;
- 	int refs;
-@@ -2103,7 +2110,8 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsi=
-gned long addr,
- 	if (pud_devmap(orig)) {
- 		if (unlikely(flags & FOLL_LONGTERM))
- 			return 0;
--		return __gup_device_huge_pud(orig, pudp, addr, end, pages, nr);
-+		return __gup_device_huge_pud(orig, pudp, addr, end, flags,
-+					     pages, nr);
- 	}
-=20
- 	refs =3D 0;
---=20
-2.24.0
+Thanks!
+
+Remember that we are in the code freeze until v5.5-rc1 is released,
+so you have time to make more adjustments if you want to.
+
+Regards,
+
+	Hans
+
+> 
+>> It passes all the sparse/smatch tests, so that's very good.
+>>
+> 
+> Great!
+> 
+> Thanks,
+> Ezequiel
+> 
 
