@@ -4,42 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B19AC43141
-	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 08:20:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF5AEC432C0
+	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 08:20:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 340A020878
-	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 08:20:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B621620878
+	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 08:20:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Vx7w9+w5"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="WFQ2Rb/O"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728241AbfKSIUT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Nov 2019 03:20:19 -0500
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:12713 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727472AbfKSIQ7 (ORCPT
+        id S1727464AbfKSIQ4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Nov 2019 03:16:56 -0500
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:15391 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725306AbfKSIQz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Nov 2019 03:16:59 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dd3a4f30000>; Tue, 19 Nov 2019 00:16:51 -0800
+        Tue, 19 Nov 2019 03:16:55 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dd3a4f80002>; Tue, 19 Nov 2019 00:16:56 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 19 Nov 2019 00:16:50 -0800
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 19 Nov 2019 00:16:53 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 19 Nov 2019 00:16:50 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 Nov
- 2019 08:16:49 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 Nov
- 2019 08:16:49 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 19 Nov 2019 08:16:48 +0000
+        by hqpgpgate101.nvidia.com on Tue, 19 Nov 2019 00:16:53 -0800
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 Nov
+ 2019 08:16:53 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 19 Nov 2019 08:16:51 +0000
 Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dd3a4ee0001>; Tue, 19 Nov 2019 00:16:48 -0800
+        id <B5dd3a4f20004>; Tue, 19 Nov 2019 00:16:51 -0800
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Al Viro <viro@zeniv.linux.org.uk>,
@@ -57,11 +54,12 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         Jonathan Corbet <corbet@lwn.net>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Michal Hocko <mhocko@suse.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
-        "Paul Mackerras" <paulus@samba.org>, Shuah Khan <shuah@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
         <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
         <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
@@ -70,11 +68,10 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
         <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>,
-        "Christoph Hellwig" <hch@lst.de>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH v6 02/24] mm/gup: factor out duplicate code from four routines
-Date:   Tue, 19 Nov 2019 00:16:21 -0800
-Message-ID: <20191119081643.1866232-3-jhubbard@nvidia.com>
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v6 05/24] mm: devmap: refactor 1-based refcounting for ZONE_DEVICE pages
+Date:   Tue, 19 Nov 2019 00:16:24 -0800
+Message-ID: <20191119081643.1866232-6-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191119081643.1866232-1-jhubbard@nvidia.com>
 References: <20191119081643.1866232-1-jhubbard@nvidia.com>
@@ -83,219 +80,142 @@ X-NVConfidentiality: public
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574151411; bh=AJB77Rx4Grn5/pvcGhctYUQNnGXjamViAFqO5obaUFI=;
+        t=1574151416; bh=byIqgGf1EJth9UpGxCEb3oipovUAmrOXJL84EZuQwTc=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:MIME-Version:X-NVConfidentiality:
          Content-Type:Content-Transfer-Encoding;
-        b=Vx7w9+w5S5IUfp7nCs/UJOdSWVY5setoLJZak2At2HGEH2ONAyQf5wb+nmNuafuPC
-         WB2VoDSJ9EQTMVzuGG2L/C3bSk2E8hZXpxVaAdzz6j8maU3FMM3no5OB1WGGZeHF7G
-         2+/xea7/u2snZu75gMaxLtWRyo1msaoLanwqAN+Od+u+kz3ovQtZA3Oc5fx5vw/nik
-         N0Z/0DA3UxWfNkr5DLRHBBCqDcTu29QswUvgTRHP9Q4Q1zmWUjPIHx0Mm7Ccv3MpZY
-         L/Z0LCMxUNNE/8myCb5zA1RwJpzwgblH6m6fK8Scu0Hc4MDGaplBwPIm3RXFAC6GYg
-         BAq5hA7mWtD5g==
+        b=WFQ2Rb/OjRFBK0FDh/p6JD8yf0znlCjWfjoHYDa7jgaZly6AXOdF8ZdU4Nnmje3BF
+         2e8vkwaYAMDZtAiwALmXv6NNdu6hjWABW2HjIsPq0ekWQ3UT2DZW4dTyicZeG+mxjt
+         ev4ZASM8E0cPNXNQHUbZK1iSh33dmIUJTKlg3ZI4nMxGZzVCWes/3iw1BLuf05ZcP4
+         yELPeHXX2qrgEWdeaUx81KJV5b5jSn5ecaU5Rmi19cLa9czyMr49M3199ISq47lHxy
+         YTF1az3J+H6j3nqpKX+q3yKU4b/1IbPRneHjm343IiKSHRLmeCa2du13vL6fBS1hRc
+         o3KWlqqsaqi+A==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are four locations in gup.c that have a fair amount of code
-duplication. This means that changing one requires making the same
-changes in four places, not to mention reading the same code four
-times, and wondering if there are subtle differences.
+An upcoming patch changes and complicates the refcounting and
+especially the "put page" aspects of it. In order to keep
+everything clean, refactor the devmap page release routines:
 
-Factor out the common code into static functions, thus reducing the
-overall line count and the code's complexity.
+* Rename put_devmap_managed_page() to page_is_devmap_managed(),
+  and limit the functionality to "read only": return a bool,
+  with no side effects.
 
-Also, take the opportunity to slightly improve the efficiency of the
-error cases, by doing a mass subtraction of the refcount, surrounded
-by get_page()/put_page().
+* Add a new routine, put_devmap_managed_page(), to handle checking
+  what kind of page it is, and what kind of refcount handling it
+  requires.
 
-Also, further simplify (slightly), by waiting until the the successful
-end of each routine, to increment *nr.
+* Rename __put_devmap_managed_page() to free_devmap_managed_page(),
+  and limit the functionality to unconditionally freeing a devmap
+  page.
 
-Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Ira Weiny <ira.weiny@intel.com>
+This is originally based on a separate patch by Ira Weiny, which
+applied to an early version of the put_user_page() experiments.
+Since then, J=C3=A9r=C3=B4me Glisse suggested the refactoring described abo=
+ve.
+
 Cc: Christoph Hellwig <hch@lst.de>
-Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Suggested-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- mm/gup.c | 91 ++++++++++++++++++++++----------------------------------
- 1 file changed, 36 insertions(+), 55 deletions(-)
+ include/linux/mm.h | 27 ++++++++++++++++++++++++---
+ mm/memremap.c      | 16 ++--------------
+ 2 files changed, 26 insertions(+), 17 deletions(-)
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 85caf76b3012..f3c7d6625817 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1969,6 +1969,25 @@ static int __gup_device_huge_pud(pud_t pud, pud_t *p=
-udp, unsigned long addr,
- }
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index a2adf95b3f9c..96228376139c 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -967,9 +967,10 @@ static inline bool is_zone_device_page(const struct pa=
+ge *page)
  #endif
 =20
-+static int __record_subpages(struct page *page, unsigned long addr,
-+			     unsigned long end, struct page **pages)
-+{
-+	int nr;
+ #ifdef CONFIG_DEV_PAGEMAP_OPS
+-void __put_devmap_managed_page(struct page *page);
++void free_devmap_managed_page(struct page *page);
+ DECLARE_STATIC_KEY_FALSE(devmap_managed_key);
+-static inline bool put_devmap_managed_page(struct page *page)
 +
-+	for (nr =3D 0; addr !=3D end; addr +=3D PAGE_SIZE)
-+		pages[nr++] =3D page++;
-+
-+	return nr;
-+}
-+
-+static void put_compound_head(struct page *page, int refs)
-+{
-+	/* Do a get_page() first, in case refs =3D=3D page->_refcount */
-+	get_page(page);
-+	page_ref_sub(page, refs);
-+	put_page(page);
-+}
-+
- #ifdef CONFIG_ARCH_HAS_HUGEPD
- static unsigned long hugepte_addr_end(unsigned long addr, unsigned long en=
-d,
- 				      unsigned long sz)
-@@ -1998,32 +2017,20 @@ static int gup_hugepte(pte_t *ptep, unsigned long s=
-z, unsigned long addr,
- 	/* hugepages are never "special" */
- 	VM_BUG_ON(!pfn_valid(pte_pfn(pte)));
++static inline bool page_is_devmap_managed(struct page *page)
+ {
+ 	if (!static_branch_unlikely(&devmap_managed_key))
+ 		return false;
+@@ -978,7 +979,6 @@ static inline bool put_devmap_managed_page(struct page =
+*page)
+ 	switch (page->pgmap->type) {
+ 	case MEMORY_DEVICE_PRIVATE:
+ 	case MEMORY_DEVICE_FS_DAX:
+-		__put_devmap_managed_page(page);
+ 		return true;
+ 	default:
+ 		break;
+@@ -986,6 +986,27 @@ static inline bool put_devmap_managed_page(struct page=
+ *page)
+ 	return false;
+ }
 =20
--	refs =3D 0;
- 	head =3D pte_page(pte);
++static inline bool put_devmap_managed_page(struct page *page)
++{
++	bool is_devmap =3D page_is_devmap_managed(page);
++
++	if (is_devmap) {
++		int count =3D page_ref_dec_return(page);
++
++		/*
++		 * devmap page refcounts are 1-based, rather than 0-based: if
++		 * refcount is 1, then the page is free and the refcount is
++		 * stable because nobody holds a reference on the page.
++		 */
++		if (count =3D=3D 1)
++			free_devmap_managed_page(page);
++		else if (!count)
++			__put_page(page);
++	}
++
++	return is_devmap;
++}
++
+ #else /* CONFIG_DEV_PAGEMAP_OPS */
+ static inline bool put_devmap_managed_page(struct page *page)
+ {
+diff --git a/mm/memremap.c b/mm/memremap.c
+index e899fa876a62..2ba773859031 100644
+--- a/mm/memremap.c
++++ b/mm/memremap.c
+@@ -411,20 +411,8 @@ struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
+ EXPORT_SYMBOL_GPL(get_dev_pagemap);
+=20
+ #ifdef CONFIG_DEV_PAGEMAP_OPS
+-void __put_devmap_managed_page(struct page *page)
++void free_devmap_managed_page(struct page *page)
+ {
+-	int count =3D page_ref_dec_return(page);
 -
- 	page =3D head + ((addr & (sz-1)) >> PAGE_SHIFT);
--	do {
--		VM_BUG_ON(compound_head(page) !=3D head);
--		pages[*nr] =3D page;
--		(*nr)++;
--		page++;
--		refs++;
--	} while (addr +=3D PAGE_SIZE, addr !=3D end);
-+	refs =3D __record_subpages(page, addr, end, pages + *nr);
-=20
- 	head =3D try_get_compound_head(head, refs);
--	if (!head) {
--		*nr -=3D refs;
-+	if (!head)
- 		return 0;
+-	/* still busy */
+-	if (count > 1)
+-		return;
+-
+-	/* only triggered by the dev_pagemap shutdown path */
+-	if (count =3D=3D 0) {
+-		__put_page(page);
+-		return;
 -	}
-=20
- 	if (unlikely(pte_val(pte) !=3D pte_val(*ptep))) {
--		/* Could be optimized better */
--		*nr -=3D refs;
--		while (refs--)
--			put_page(head);
-+		put_compound_head(head, refs);
- 		return 0;
- 	}
-=20
-+	*nr +=3D refs;
- 	SetPageReferenced(head);
- 	return 1;
+-
+ 	/* notify page idle for dax */
+ 	if (!is_device_private_page(page)) {
+ 		wake_up_var(&page->_refcount);
+@@ -461,5 +449,5 @@ void __put_devmap_managed_page(struct page *page)
+ 	page->mapping =3D NULL;
+ 	page->pgmap->ops->page_free(page);
  }
-@@ -2071,28 +2078,19 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, un=
-signed long addr,
- 					     pages, nr);
- 	}
-=20
--	refs =3D 0;
- 	page =3D pmd_page(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
--	do {
--		pages[*nr] =3D page;
--		(*nr)++;
--		page++;
--		refs++;
--	} while (addr +=3D PAGE_SIZE, addr !=3D end);
-+	refs =3D __record_subpages(page, addr, end, pages + *nr);
-=20
- 	head =3D try_get_compound_head(pmd_page(orig), refs);
--	if (!head) {
--		*nr -=3D refs;
-+	if (!head)
- 		return 0;
--	}
-=20
- 	if (unlikely(pmd_val(orig) !=3D pmd_val(*pmdp))) {
--		*nr -=3D refs;
--		while (refs--)
--			put_page(head);
-+		put_compound_head(head, refs);
- 		return 0;
- 	}
-=20
-+	*nr +=3D refs;
- 	SetPageReferenced(head);
- 	return 1;
- }
-@@ -2114,28 +2112,19 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, un=
-signed long addr,
- 					     pages, nr);
- 	}
-=20
--	refs =3D 0;
- 	page =3D pud_page(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
--	do {
--		pages[*nr] =3D page;
--		(*nr)++;
--		page++;
--		refs++;
--	} while (addr +=3D PAGE_SIZE, addr !=3D end);
-+	refs =3D __record_subpages(page, addr, end, pages + *nr);
-=20
- 	head =3D try_get_compound_head(pud_page(orig), refs);
--	if (!head) {
--		*nr -=3D refs;
-+	if (!head)
- 		return 0;
--	}
-=20
- 	if (unlikely(pud_val(orig) !=3D pud_val(*pudp))) {
--		*nr -=3D refs;
--		while (refs--)
--			put_page(head);
-+		put_compound_head(head, refs);
- 		return 0;
- 	}
-=20
-+	*nr +=3D refs;
- 	SetPageReferenced(head);
- 	return 1;
- }
-@@ -2151,28 +2140,20 @@ static int gup_huge_pgd(pgd_t orig, pgd_t *pgdp, un=
-signed long addr,
- 		return 0;
-=20
- 	BUILD_BUG_ON(pgd_devmap(orig));
--	refs =3D 0;
-+
- 	page =3D pgd_page(orig) + ((addr & ~PGDIR_MASK) >> PAGE_SHIFT);
--	do {
--		pages[*nr] =3D page;
--		(*nr)++;
--		page++;
--		refs++;
--	} while (addr +=3D PAGE_SIZE, addr !=3D end);
-+	refs =3D __record_subpages(page, addr, end, pages + *nr);
-=20
- 	head =3D try_get_compound_head(pgd_page(orig), refs);
--	if (!head) {
--		*nr -=3D refs;
-+	if (!head)
- 		return 0;
--	}
-=20
- 	if (unlikely(pgd_val(orig) !=3D pgd_val(*pgdp))) {
--		*nr -=3D refs;
--		while (refs--)
--			put_page(head);
-+		put_compound_head(head, refs);
- 		return 0;
- 	}
-=20
-+	*nr +=3D refs;
- 	SetPageReferenced(head);
- 	return 1;
- }
+-EXPORT_SYMBOL(__put_devmap_managed_page);
++EXPORT_SYMBOL(free_devmap_managed_page);
+ #endif /* CONFIG_DEV_PAGEMAP_OPS */
 --=20
 2.24.0
 
