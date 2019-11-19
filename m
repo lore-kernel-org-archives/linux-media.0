@@ -2,68 +2,193 @@ Return-Path: <SRS0=tK16=ZL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EDBFC432C0
-	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 17:51:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4029BC43215
+	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 21:08:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 23BB12231C
-	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 17:51:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0EAE6223B0
+	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 21:08:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="ctaU3sXx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727302AbfKSRvX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Nov 2019 12:51:23 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:54024 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727295AbfKSRvX (ORCPT
+        id S1727118AbfKSVI4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Nov 2019 16:08:56 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52392 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726711AbfKSVI4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Nov 2019 12:51:23 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 9FCA528FBF4
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     dafna.hirschfeld@collabora.com, hverkuil@xs4all.nl,
-        dafna3@gmail.com, helen.koike@collabora.com, ezequiel@collabora.com
-Subject: [PATCH v2] media: v4l2-core: set sd->devnode = NULL in v4l2_subdev_release
-Date:   Tue, 19 Nov 2019 18:51:15 +0100
-Message-Id: <20191119175115.12385-1-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 19 Nov 2019 16:08:56 -0500
+Received: by mail-wm1-f67.google.com with SMTP id l1so4775987wme.2
+        for <linux-media@vger.kernel.org>; Tue, 19 Nov 2019 13:08:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=2zlbs2pXUEmTBiqM5uPjmApb3LNff5iUPeL5FIOnQYk=;
+        b=ctaU3sXxMTMJ5J+YF5brTmEYkt8Lr8VGNpVjiIlvoDVnfpkFwRT2zYTiVRMmduytPY
+         fBE0ZX1DtprGbTrac/f5b2ZXqUDRa7rNEks7+/5DUWVD/qXNDL3URNpN8k4cuLw37RxR
+         3aXsKrgEyTsNzdYwlxwhhHU9VVrMKAXjOp7aQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=2zlbs2pXUEmTBiqM5uPjmApb3LNff5iUPeL5FIOnQYk=;
+        b=YPvAaqBVhi8BLbQIVQ9r0C1aYkISOyoMG799OrY5G9OJBm5UFTtBHNUgvPJO89+TjW
+         mbCfmZNWFame1gyuM3z0nwy+lpqkgQ/I1erQmDU1rIL/OLuUBeK4qwmnKTXSyarQCfn6
+         XK9yqcZJcfKH7n6srpgKJRttv2nPGaiugJNjRVeFThF0ehIPIvU9FwpWcEj65UcnYRG5
+         7sidhqep6O1bSyIVni5xpPQfhROnNZC+rWD2aMrBsH4DzKKk7Y7pLRoVwYDl+3dDePNw
+         JiC/Gxb+3rgqs5I1PDr/SxYpsw77AD+byoP2W+aPL18gWbNaPD6/57ofUp86HBp3SuJo
+         RwiA==
+X-Gm-Message-State: APjAAAV8dVw54LGmFbHQO4g84Vbjykn/K9yptUBT154ojrzWHCbO3PY+
+        p4L2AbT35AhXDUMPLZaoO7AASg==
+X-Google-Smtp-Source: APXvYqzxX3jOaHPiLm+PN11cjUpEZn6I77rrmK+0fYGUxMig2vga+11YIaGfPENiJrgAdlabNeLEyg==
+X-Received: by 2002:a1c:41c2:: with SMTP id o185mr7906751wma.34.1574197732676;
+        Tue, 19 Nov 2019 13:08:52 -0800 (PST)
+Received: from phenom.ffwll.local (212-51-149-96.fiber7.init7.net. [212.51.149.96])
+        by smtp.gmail.com with ESMTPSA id z14sm28005126wrl.60.2019.11.19.13.08.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Nov 2019 13:08:52 -0800 (PST)
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Huang Rui <ray.huang@amd.com>, Eric Anholt <eric@anholt.net>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Rob Herring <robh@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Daniel Vetter <daniel.vetter@intel.com>
+Subject: [PATCH 2/3] dma-resv: Also prime acquire ctx for lockdep
+Date:   Tue, 19 Nov 2019 22:08:43 +0100
+Message-Id: <20191119210844.16947-3-daniel.vetter@ffwll.ch>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191119210844.16947-1-daniel.vetter@ffwll.ch>
+References: <20191119210844.16947-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The sd->devnode is release after calling this
-function. Therefore it should be set to NULL so that the
-subdev won't hold a pointer to a released object.
-This fixes a reference after free bug in function
-v4l2_device_unregister_subdev
+Semnatically it really doesn't matter where we grab the ticket. But
+since the ticket is a fake lockdep lock, it matters for lockdep
+validation purposes.
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+This means stuff like grabbing a ticket and then doing
+copy_from/to_user isn't allowed anymore. This is a changed compared to
+the current ttm fault handler, which doesn't bother with having a full
+reservation. Since I'm looking into fixing the TODO entry in
+ttm_mem_evict_wait_busy() I think that'll have to change sooner or
+later anyway, better get started. A bit more context on why I'm
+looking into this: For backwards compat with existing i915 gem code I
+think we'll have to do full slowpath locking in the i915 equivalent of
+the eviction code. And with dynamic dma-buf that will leak across
+drivers, so another thing we need to standardize and make sure it's
+done the same way everyway.
+
+Unfortunately this means another full audit of all drivers:
+
+- gem helpers: acquire_init is done right before taking locks, so no
+  problem. Same for acquire_fini and unlocking, which means nothing
+  that's not already covered by the dma_resv_lock rules will be caught
+  with this extension here to the acquire_ctx.
+
+- etnaviv: An absolute massive amount of code is run between the
+  acquire_init and the first lock acquisition in submit_lock_objects.
+  But nothing that would touch user memory and could cause a fault.
+  Furthermore nothing that uses the ticket, so even if I missed
+  something, it would be easy to fix by pushing the acquire_init right
+  before the first use. Similar on the unlock/acquire_fini side.
+
+- i915: Right now (and this will likely change a lot rsn) the acquire
+  ctx and actual locks are right next to each another. No problem.
+
+- msm has a problem: submit_create calls acquire_init, but then
+  submit_lookup_objects() has a bunch of copy_from_user to do the
+  object lookups. That's the only thing before submit_lock_objects
+  call dma_resv_lock(). Despite all the copypasta to etnaviv, etnaviv
+  does not have this issue since it copies all the userspace structs
+  earlier. submit_cleanup does not have any such issues.
+
+  With the prep patch to pull out the acquire_ctx and reorder it msm
+  is going to be safe too.
+
+- nouveau: acquire_init is right next to ttm_bo_reserve, so all good.
+  Similar on the acquire_fini/ttm_bo_unreserve side.
+
+- ttm execbuf utils: acquire context and locking are even in the same
+  functions here (one function to reserve everything, the other to
+  unreserve), so all good.
+
+- vc4: Another case where acquire context and locking are handled in
+  the same functions (one function to lock everything, the other to
+  unlock).
+
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Chris Wilson <chris@chris-wilson.co.uk>
+Cc: Christian König <christian.koenig@amd.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Cc: Huang Rui <ray.huang@amd.com>
+Cc: Eric Anholt <eric@anholt.net>
+Cc: Ben Skeggs <bskeggs@redhat.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Lucas Stach <l.stach@pengutronix.de>
+Cc: Russell King <linux+etnaviv@armlinux.org.uk>
+Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc: Rob Clark <robdclark@gmail.com>
+Cc: Sean Paul <sean@poorly.run>
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 ---
-changes since v1: move the line to the funtion v4l2_subdev_release
-from the funtion v4l2_subdev_release
+ drivers/dma-buf/dma-resv.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
- drivers/media/v4l2-core/v4l2-device.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/v4l2-core/v4l2-device.c b/drivers/media/v4l2-core/v4l2-device.c
-index 63d6b147b21e..2b3595671d62 100644
---- a/drivers/media/v4l2-core/v4l2-device.c
-+++ b/drivers/media/v4l2-core/v4l2-device.c
-@@ -177,6 +177,7 @@ static void v4l2_subdev_release(struct v4l2_subdev *sd)
+diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+index d3c760e19991..079e38fde33a 100644
+--- a/drivers/dma-buf/dma-resv.c
++++ b/drivers/dma-buf/dma-resv.c
+@@ -100,7 +100,9 @@ static void dma_resv_list_free(struct dma_resv_list *list)
+ static void __init dma_resv_lockdep(void)
  {
- 	struct module *owner = !sd->owner_v4l2_dev ? sd->owner : NULL;
+ 	struct mm_struct *mm = mm_alloc();
++	struct ww_acquire_ctx ctx;
+ 	struct dma_resv obj;
++	int ret;
  
-+	sd->devnode = NULL;
- 	if (sd->internal_ops && sd->internal_ops->release)
- 		sd->internal_ops->release(sd);
- 	module_put(owner);
+ 	if (!mm)
+ 		return;
+@@ -108,10 +110,14 @@ static void __init dma_resv_lockdep(void)
+ 	dma_resv_init(&obj);
+ 
+ 	down_read(&mm->mmap_sem);
+-	ww_mutex_lock(&obj.lock, NULL);
++	ww_acquire_init(&ctx, &reservation_ww_class);
++	ret = dma_resv_lock(&obj, &ctx);
++	if (ret == -EDEADLK)
++		dma_resv_lock_slow(&obj, &ctx);
+ 	fs_reclaim_acquire(GFP_KERNEL);
+ 	fs_reclaim_release(GFP_KERNEL);
+ 	ww_mutex_unlock(&obj.lock);
++	ww_acquire_fini(&ctx);
+ 	up_read(&mm->mmap_sem);
+ 	
+ 	mmput(mm);
 -- 
-2.20.1
+2.24.0
 
