@@ -2,206 +2,195 @@ Return-Path: <SRS0=tK16=ZL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6923C432C0
-	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 11:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5980C432C0
+	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 11:35:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8EBCD2230C
-	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 11:26:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B155022302
+	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 11:35:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="ceS+0oZC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbfKSL0y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Nov 2019 06:26:54 -0500
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:54997 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725904AbfKSL0y (ORCPT
+        id S1728279AbfKSLfB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Nov 2019 06:35:01 -0500
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:56437 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728276AbfKSLfB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Nov 2019 06:26:54 -0500
-X-Originating-IP: 93.34.114.233
-Received: from uno.localdomain (93-34-114-233.ip49.fastwebnet.it [93.34.114.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 29B5920002;
-        Tue, 19 Nov 2019 11:26:49 +0000 (UTC)
-Date:   Tue, 19 Nov 2019 12:28:52 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        tfiga@google.com, pavel@ucw.cz,
-        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
-        <linux-media@vger.kernel.org>
-Subject: Re: [PATCH v5 09/11] media: v4l2-ctrls: Add helper to register
- properties
-Message-ID: <20191119112852.5m5qjutsl7k4n4th@uno.localdomain>
-References: <20191108155944.1040883-1-jacopo@jmondi.org>
- <20191108155944.1040883-10-jacopo@jmondi.org>
- <20191118125435.GF5391@paasikivi.fi.intel.com>
+        Tue, 19 Nov 2019 06:35:01 -0500
+Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:9879:d2e2:f0e2:9c7])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id X1mbiD68Hcs92X1mdiz4T2; Tue, 19 Nov 2019 12:34:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1574163299; bh=ab8zfkJMITpObbt1i394hW56VfOiIBp5Gr5rdYtMVrs=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=ceS+0oZChAS6Jc/kEUShkswlIuYlthq/cYAylGMqXNUjmxsMJgXSi+EtUjmSf4fV5
+         mHV79oWGrYjjqLLFv+IoqdM0uKjGVb7KpGTIoPMfEeRv/1U9oz6wWIWa4ArOHB/14J
+         gje3EDW7bsZ9UM2hZZiUru5SbRZUOIYyivLLJzHUxrVYvuvcFVWNnMdv+az2/d1P9Z
+         JrNPkcdLGitqD47FWAdP+pGQjaxkoeCV6Wt0cTDC6TP88Z3eOCIs3nfp0BacLc0df7
+         TDShYhjNiR6YuLKuXa0K7A2J2Hc9uliFBuMiK0EK8UGfhl24y8oyH8JqTu1XZdN6Sj
+         HMn5LTk5nBapg==
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 4/5] videodev2.h: add V4L2_BUF_FLAG_TOO_SMALL flag
+Date:   Tue, 19 Nov 2019 12:34:56 +0100
+Message-Id: <20191119113457.57833-5-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191119113457.57833-1-hverkuil-cisco@xs4all.nl>
+References: <20191119113457.57833-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gijqaprsi4xj2aky"
-Content-Disposition: inline
-In-Reply-To: <20191118125435.GF5391@paasikivi.fi.intel.com>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfI3Y7RpXC/Wtf53twy38gnVrmrCf/NxR/mfk5WuOJGz6yvR4rJaOru7QsBt0gc21ygyDJ44w6zvd7OpHENeWMom0uyt5K8y3Vs0NwCrvfM0oB02g0VYV
+ lLoX1MSSe/JZ+jXSUHM+DPkUXVtXG9IXkgelmJVvZ1rQrfwMTjkPJfDvHGug6W+diFRvHrFkX2KGnW3jdDRdlbHDIwPFG3YFfKyU/zWDiXliri8tsyFV2T/b
+ EvYh774a3AWXTOZpI2S452Uo8/RiYj0KTaKKpHhZVRHsyAWaJDLNaCr1U0F226NFPScRVlvYjtJxZUI6VQCP0g==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Stateful encoders need to know if V4L2_BUF_FLAG_ERROR was because
+the capture buffer was too small or because there was another
+error. Set this flag (always in combination with FLAG_ERROR) to
+indicate that the buffer was too small.
 
---gijqaprsi4xj2aky
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+A corresponding VB2_BUF_STATE_ERROR_TOO_SMALL vb2 state was added.
 
-Hi Sakari,
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ Documentation/media/uapi/v4l/buffer.rst         |  9 +++++++++
+ drivers/media/common/videobuf2/videobuf2-core.c | 12 +++++++++---
+ drivers/media/common/videobuf2/videobuf2-v4l2.c |  4 ++++
+ include/media/videobuf2-core.h                  |  4 ++++
+ include/uapi/linux/videodev2.h                  |  2 ++
+ 5 files changed, 28 insertions(+), 3 deletions(-)
 
-On Mon, Nov 18, 2019 at 02:54:35PM +0200, Sakari Ailus wrote:
-> Hi Jacopo,
->
-> On Fri, Nov 08, 2019 at 04:59:42PM +0100, Jacopo Mondi wrote:
-> > Add an helper function to v4l2-ctrls to register controls associated
-> > with a device property.
-> >
-> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> > ---
-> >  drivers/media/v4l2-core/v4l2-ctrls.c | 40 ++++++++++++++++++++++++++++
-> >  include/media/v4l2-ctrls.h           | 26 ++++++++++++++++++
-> >  2 files changed, 66 insertions(+)
-> >
-> > diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-> > index 97e97c8069c9..ac1934558969 100644
-> > --- a/drivers/media/v4l2-core/v4l2-ctrls.c
-> > +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-> > @@ -16,6 +16,7 @@
-> >  #include <media/v4l2-dev.h>
-> >  #include <media/v4l2-device.h>
-> >  #include <media/v4l2-event.h>
-> > +#include <media/v4l2-fwnode.h>
-> >  #include <media/v4l2-ioctl.h>
-> >
-> >  #define dprintk(vdev, fmt, arg...) do {					\
-> > @@ -4587,3 +4588,42 @@ __poll_t v4l2_ctrl_poll(struct file *file, struct poll_table_struct *wait)
-> >  	return 0;
-> >  }
-> >  EXPORT_SYMBOL(v4l2_ctrl_poll);
-> > +
-> > +int v4l2_ctrl_new_fwnode_properties(struct v4l2_ctrl_handler *hdl,
-> > +				    const struct v4l2_ctrl_ops *ctrl_ops,
-> > +				    const struct v4l2_fwnode_device_properties *p)
-> > +{
-> > +	if (p->location != V4L2_FWNODE_PROPERTY_UNSET) {
-> > +		u32 location_ctrl;
-> > +
-> > +		switch (p->location) {
-> > +		case V4L2_FWNODE_LOCATION_FRONT:
-> > +			location_ctrl = V4L2_LOCATION_FRONT;
-> > +			break;
-> > +		case V4L2_FWNODE_LOCATION_BACK:
-> > +			location_ctrl = V4L2_LOCATION_BACK;
-> > +			break;
-> > +		case V4L2_FWNODE_LOCATION_EXTERNAL:
-> > +			location_ctrl = V4L2_LOCATION_EXTERNAL;
-> > +			break;
-> > +		default:
-> > +			return -EINVAL;
-> > +		}
-> > +		if (!v4l2_ctrl_new_std(hdl, ctrl_ops,
-> > +				       V4L2_CID_CAMERA_SENSOR_LOCATION,
-> > +				       location_ctrl, location_ctrl, 1,
-> > +				       location_ctrl))
-> > +			return hdl->error;
-> > +	}
-> > +
-> > +	if (p->rotation != V4L2_FWNODE_PROPERTY_UNSET) {
-> > +		if (!v4l2_ctrl_new_std(hdl, ctrl_ops,
-> > +				       V4L2_CID_CAMERA_SENSOR_ROTATION,
-> > +				       p->rotation, p->rotation, 1,
-> > +				       p->rotation))
-> > +			return hdl->error;
-> > +	}
-> > +
-> > +	return 0;
->
-> I think you should return hdl->error also here: calling this function on a
-> failed control handler should result in an error.
->
+diff --git a/Documentation/media/uapi/v4l/buffer.rst b/Documentation/media/uapi/v4l/buffer.rst
+index 9149b57728e5..64a97677ec20 100644
+--- a/Documentation/media/uapi/v4l/buffer.rst
++++ b/Documentation/media/uapi/v4l/buffer.rst
+@@ -540,6 +540,15 @@ Buffer Flags
+ 	streaming may continue as normal and the buffer may be reused
+ 	normally. Drivers set this flag when the ``VIDIOC_DQBUF`` ioctl is
+ 	called.
++    * .. _`V4L2-BUF-FLAG-TOO-SMALL`:
++
++      - ``V4L2_BUF_FLAG_TOO_SMALL``
++      - 0x00080000
++      - When this flag is set, the buffer has been dequeued successfully,
++	but no data was written since the buffer was too small. If this
++	flag is set, then ``V4L2_BUF_FLAG_ERROR`` was also set. This can
++	only happen for capture buffers. Drivers set this flag when
++	the ``VIDIOC_DQBUF`` ioctl is called.
+     * .. _`V4L2-BUF-FLAG-IN-REQUEST`:
+ 
+       - ``V4L2_BUF_FLAG_IN_REQUEST``
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 4489744fbbd9..187a4589a7bb 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -929,6 +929,7 @@ void vb2_buffer_done(struct vb2_buffer *vb, enum vb2_buffer_state state)
+ 
+ 	if (WARN_ON(state != VB2_BUF_STATE_DONE &&
+ 		    state != VB2_BUF_STATE_ERROR &&
++		    state != VB2_BUF_STATE_ERROR_TOO_SMALL &&
+ 		    state != VB2_BUF_STATE_QUEUED))
+ 		state = VB2_BUF_STATE_ERROR;
+ 
+@@ -1816,6 +1817,9 @@ int vb2_core_dqbuf(struct vb2_queue *q, unsigned int *pindex, void *pb,
+ 	case VB2_BUF_STATE_ERROR:
+ 		dprintk(3, "returning done buffer with errors\n");
+ 		break;
++	case VB2_BUF_STATE_ERROR_TOO_SMALL:
++		dprintk(3, "returning done buffer that's too small\n");
++		break;
+ 	default:
+ 		dprintk(1, "invalid buffer state\n");
+ 		return -EINVAL;
+@@ -2383,8 +2387,9 @@ __poll_t vb2_core_poll(struct vb2_queue *q, struct file *file,
+ 					done_entry);
+ 	spin_unlock_irqrestore(&q->done_lock, flags);
+ 
+-	if (vb && (vb->state == VB2_BUF_STATE_DONE
+-			|| vb->state == VB2_BUF_STATE_ERROR)) {
++	if (vb && (vb->state == VB2_BUF_STATE_DONE ||
++		   vb->state == VB2_BUF_STATE_ERROR ||
++		   vb->state == VB2_BUF_STATE_ERROR_TOO_SMALL)) {
+ 		return (q->is_output) ?
+ 				EPOLLOUT | EPOLLWRNORM :
+ 				EPOLLIN | EPOLLRDNORM;
+@@ -2812,7 +2817,8 @@ static int vb2_thread(void *data)
+ 			break;
+ 		try_to_freeze();
+ 
+-		if (vb->state != VB2_BUF_STATE_ERROR)
++		if (vb->state != VB2_BUF_STATE_ERROR &&
++		    vb->state != VB2_BUF_STATE_ERROR_TOO_SMALL)
+ 			if (threadio->fnc(vb, threadio->priv))
+ 				break;
+ 		call_void_qop(q, wait_finish, q);
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index e652f4318284..6ac19734e4a2 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -44,6 +44,7 @@ module_param(debug, int, 0644);
+ /* Flags that are set by us */
+ #define V4L2_BUFFER_MASK_FLAGS	(V4L2_BUF_FLAG_MAPPED | V4L2_BUF_FLAG_QUEUED | \
+ 				 V4L2_BUF_FLAG_DONE | V4L2_BUF_FLAG_ERROR | \
++				 V4L2_BUF_FLAG_ERROR_TOO_SMALL | \
+ 				 V4L2_BUF_FLAG_PREPARED | \
+ 				 V4L2_BUF_FLAG_IN_REQUEST | \
+ 				 V4L2_BUF_FLAG_REQUEST_FD | \
+@@ -546,6 +547,9 @@ static void __fill_v4l2_buffer(struct vb2_buffer *vb, void *pb)
+ 	case VB2_BUF_STATE_IN_REQUEST:
+ 		b->flags |= V4L2_BUF_FLAG_IN_REQUEST;
+ 		break;
++	case VB2_BUF_STATE_ERROR_TOO_SMALL:
++		b->flags |= V4L2_BUF_FLAG_TOO_SMALL;
++		/* fall through */
+ 	case VB2_BUF_STATE_ERROR:
+ 		b->flags |= V4L2_BUF_FLAG_ERROR;
+ 		/* fall through */
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index a2b2208b02da..289c3e090257 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -215,6 +215,9 @@ enum vb2_io_modes {
+  * @VB2_BUF_STATE_ERROR:	same as above, but the operation on the buffer
+  *				has ended with an error, which will be reported
+  *				to the userspace when it is dequeued.
++ * @VB2_BUF_STATE_ERROR_TOO_SMALL: same as above, but the operation on the buffer
++ *				has ended with an error because the receiving buffer
++ *				is too small.
+  */
+ enum vb2_buffer_state {
+ 	VB2_BUF_STATE_DEQUEUED,
+@@ -224,6 +227,7 @@ enum vb2_buffer_state {
+ 	VB2_BUF_STATE_ACTIVE,
+ 	VB2_BUF_STATE_DONE,
+ 	VB2_BUF_STATE_ERROR,
++	VB2_BUF_STATE_ERROR_TOO_SMALL,
+ };
+ 
+ struct vb2_queue;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 7aa1293ac7bc..c7c1179eea65 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1064,6 +1064,8 @@ static inline __u64 v4l2_timeval_to_ns(const struct timeval *tv)
+ #define V4L2_BUF_FLAG_TSTAMP_SRC_MASK		0x00070000
+ #define V4L2_BUF_FLAG_TSTAMP_SRC_EOF		0x00000000
+ #define V4L2_BUF_FLAG_TSTAMP_SRC_SOE		0x00010000
++/* mem2mem encoder */
++#define V4L2_BUF_FLAG_TOO_SMALL			0x00080000
+ /* mem2mem encoder/decoder */
+ #define V4L2_BUF_FLAG_LAST			0x00100000
+ /* request_fd is valid */
+-- 
+2.23.0
 
-I assume it would have failed at v4l2_ctrl_new_std() time, but indeed
-it does not hurt to return hdl->error here. Thanks, I'll take this in.
-
-Thanks
-  j
-
-> > +}
-> > +EXPORT_SYMBOL(v4l2_ctrl_new_fwnode_properties);
-> > diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-> > index cf59abafb0d9..409c800ab1f5 100644
-> > --- a/include/media/v4l2-ctrls.h
-> > +++ b/include/media/v4l2-ctrls.h
-> > @@ -30,6 +30,7 @@ struct v4l2_ctrl;
-> >  struct v4l2_ctrl_handler;
-> >  struct v4l2_ctrl_helper;
-> >  struct v4l2_fh;
-> > +struct v4l2_fwnode_device_properties;
-> >  struct v4l2_subdev;
-> >  struct v4l2_subscribed_event;
-> >  struct video_device;
-> > @@ -1417,4 +1418,29 @@ int v4l2_ctrl_subdev_subscribe_event(struct v4l2_subdev *sd, struct v4l2_fh *fh,
-> >   */
-> >  int v4l2_ctrl_subdev_log_status(struct v4l2_subdev *sd);
-> >
-> > +/**
-> > + * v4l2_ctrl_new_fwnode_properties() - Register controls for the device
-> > + *				       properties
-> > + *
-> > + * @hdl: pointer to &struct v4l2_ctrl_handler to register controls on
-> > + * @ctrl_ops: pointer to &struct v4l2_ctrl_ops to register controls with
-> > + * @p: pointer to &struct v4l2_fwnode_device_properties
-> > + *
-> > + * This function registers controls associated to device properties, using the
-> > + * property values contained in @p parameter, if the property has been set to
-> > + * a value.
-> > + *
-> > + * Currently the following v4l2 controls are parsed and registered:
-> > + * - V4L2_CID_CAMERA_SENSOR_LOCATION;
-> > + * - V4L2_CID_CAMERA_SENSOR_ROTATION;
-> > + *
-> > + * Controls already registered by the caller with the @hdl control handler are
-> > + * not overwritten. Callers should register the controls they want to handle
-> > + * themselves before calling this function.
-> > + *
-> > + * Return: 0 on success, a negative error code on failure.
-> > + */
-> > +int v4l2_ctrl_new_fwnode_properties(struct v4l2_ctrl_handler *hdl,
-> > +				    const struct v4l2_ctrl_ops *ctrl_ops,
-> > +				    const struct v4l2_fwnode_device_properties *p);
-> >  #endif
->
-> --
-> Regards,
->
-> Sakari Ailus
-
---gijqaprsi4xj2aky
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAl3T0fQACgkQcjQGjxah
-Vjyiwg/9H+3LNTCmfNBJViQlqIm1/h/lYhR8safBe6HEw0H/+c99HSGPErxl23I7
-L5qVIA/+GDEnA+xHt7brd8baz9s/VzFknLXRfYzPnpUikts5IVn6DrR2YXsfOOhp
-Uikaf9vNvGrnrqdgcZjYpbT2Xqb5/tQ4slZGs9KFlGXrfk1rl+bqsT9SZVTMuEi2
-CB/kTSQAr7mudA9wvWNrb2eeG4M82jCJmYDpAPWVhq9EcWtChktN9r1RNVSNZqSP
-z3+xvJ+EBYxBqD9zUBLq/2ojzQvqsEr/zxbLry8MfXWs1IlnGYj7y0xaUMqej+R3
-3b4NSjiTXXl59ZCfVvDkH9IMaKzzxgEjJX3XRLF1kqyfNcdyJpyboUjxum0/FPLa
-oNXCHUCDyO0AXPT8l3nkIdHf1lVbBQ/VpuSb4afUKr9VB38ix5G49w1vUANNH2/k
-lwM79SEj1dF3fpF8gKK3ZGRTj2iiKBTS1jPEvmDU6ZtjEER+ZDhmE41mwISnPb6K
-FJtqMIXvoKmPrn+xgv0+zfeNI4JFP8zRGnq/4jUKEkW27GldrxMso4FLWEX2IJg1
-CDRzGd6Ky+Ts//2JBC92jX8cUAcuFqJsP0ATHAY5ECdQgEo3iw5YlQjDXTzbYTR+
-Ds/xLZRv0DpiAsYnN32g0KypsU/etZXU06maLUEVePy0q0MAevE=
-=oMdZ
------END PGP SIGNATURE-----
-
---gijqaprsi4xj2aky--
