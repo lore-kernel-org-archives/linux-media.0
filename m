@@ -2,127 +2,124 @@ Return-Path: <SRS0=tK16=ZL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96031C43215
-	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 11:35:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 551B8C432C3
+	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 11:35:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6CEA822302
-	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 11:35:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D27820679
+	for <linux-media@archiver.kernel.org>; Tue, 19 Nov 2019 11:35:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Ps2BPSYm"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="HRKSjayO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728285AbfKSLfC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Nov 2019 06:35:02 -0500
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:47053 "EHLO
+        id S1728286AbfKSLfD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Nov 2019 06:35:03 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:36327 "EHLO
         lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728033AbfKSLfA (ORCPT
+        by vger.kernel.org with ESMTP id S1727535AbfKSLfA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 19 Nov 2019 06:35:00 -0500
 Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:9879:d2e2:f0e2:9c7])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id X1mbiD68Hcs92X1mdiz4Sy; Tue, 19 Nov 2019 12:34:59 +0100
+        id X1mbiD68Hcs92X1mciz4Sk; Tue, 19 Nov 2019 12:34:58 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1574163299; bh=L0hyTpq0XQ9K6Y83XUf3xue75BrjWO04JtCr4SS+YD8=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=Ps2BPSYmx3VzLPHimjYhvdRXuerX35iQTdF8/M18Tfd4PBNGSOPPEkte/5BVmN9Ee
-         EFSJI+Be9MTOUt8GEZ0IPqQdrhep3bnZV77fgU1mkv8K34FdzDnMK+j8BCzuAatraS
-         vVoeD7ufGXehMsLvhAGmw/SuncW7fl9qnI6P+89Dq/NJ2sCgu1O0d9+IrGsOYNFb79
-         cYqE4KF8eAWvd8BQyFjK+ReeYjHonSnYdLDl2oci7v/uOoSjRVWVFpg78Q3rscBOv8
-         wqFbFkoW9X/fwlKjxeaARvKKwsHQwEmGrCI1NUWfZrU7Ciz/Y/N1pO/pTWrte+eehJ
-         1m7VjXxe1aB9A==
+        t=1574163298; bh=Gan/T2QsIqLdmBhjaDjEZVwVOGYKyRlgmLqp+Lr87Pc=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:Content-Type:From:
+         Subject;
+        b=HRKSjayOpJ93+ExsHWbkzfmfCDJ76n/F5BwCkmwN3purGr+XX2b46hAzP337V3G8j
+         P+g3YV27i/ej/Gg4Z5+XIyGDTjzYGX1nEPVey8/iROUrbeNFiMeaUAD01uYr5ZiuKx
+         ascw64XdT4frOywBOcS9noBTdAEKD6NA0pByKZDHcHBxUrkD33UBEyPja1d8o7Xxz5
+         urn556laQ8TWTI/UIVjotEJNKh7ZmyxwYYAw973xlbZz9FXX3BFYm/k56JP4Bgvr0b
+         4N5PpRwwrl4i7TL8yY79b7A0lOrOqQtRYaIepOh0RcpjNz/auCUbqJZLGX0jQnEuOY
+         V9cv4VQelWzqA==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 3/5] v4l2-controls.h: add V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE
-Date:   Tue, 19 Nov 2019 12:34:55 +0100
-Message-Id: <20191119113457.57833-4-hverkuil-cisco@xs4all.nl>
+Cc:     Michael Tretter <m.tretter@pengutronix.de>
+Subject: [PATCH 0/5] Stateful Encoding: final bits
+Date:   Tue, 19 Nov 2019 12:34:52 +0100
+Message-Id: <20191119113457.57833-1-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191119113457.57833-1-hverkuil-cisco@xs4all.nl>
-References: <20191119113457.57833-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfI3Y7RpXC/Wtf53twy38gnVrmrCf/NxR/mfk5WuOJGz6yvR4rJaOru7QsBt0gc21ygyDJ44w6zvd7OpHENeWMom0uyt5K8y3Vs0NwCrvfM0oB02g0VYV
- lLoX1MSSe/JZ+jXSUHM+DPkUXVtXG9IXkgelmJVvZ1rQrfwMTjkPJfDvHGug6W+diFRvHrFkX2KGnW3jdDRdlbHDIwPFG3YFfKyU/zWDiXliri8tsyFV2T/b
- EvYh774a3AWXTOZpI2S452Uo8/RiYj0KTaKKpHhZVRHsyAWaJDLNaCr1U0F226NFPScRVlvYjtJxZUI6VQCP0g==
+X-CMAE-Envelope: MS4wfFUhROMm2voOTMjc/XBUnfb5XAAWKSPDCRQXxUVYQjENyk2j+DwN6BWcvdTwO7AWX4lkjcMLYCAiFBUan8sdAKQoZZeF1IPC1nttoOzzSgU4C+j0bNDW
+ 6GrYQVMJZEsVvdIqPiWjtnbe2xBWxTRS8bsOtSagjqd1XxDtIQHC58v0YYdnvU2Rf0L7OEnWzofRrjtW+vh77cGbLhlc0AjQMJWIIIVn6EGUhVIBHe8O41D0
+ z6uGcKk8BFGSmVbKQ2dXTVIot5JmzJM7bxO/p8nYauVfUi0NfQVRU0x7fEkEPG8j
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new control to specify the frame rate that a HW encoder
-should assume. This is one of the parameters that determines the
-compression ratio.
+This series adds support for fractions in the control framework,
+and a way to obtain the min and max values of compound controls
+such as v4l2_fract.
 
-In the past drivers used G/S_PARM for this, but that should be
-used to set the speed at which userspace sends frames to the encoder
-and it can be used to schedule encoding hardware if there are
-multiple encoder cores.
+Next it adds the V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE control to
+set the framerate for the encoder.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- Documentation/media/uapi/v4l/ext-ctrls-codec.rst | 8 ++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c             | 4 ++++
- include/uapi/linux/v4l2-controls.h               | 1 +
- 3 files changed, 13 insertions(+)
+The next patch adds support for the V4L2_BUF_FLAG_TOO_SMALL flag
+to signal that the capture buffer was too small.
 
-diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-index 28313c0f4e7c..3bf11f45e20f 100644
---- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-@@ -592,6 +592,14 @@ enum v4l2_mpeg_video_bitrate_mode -
-     the average video bitrate. It is ignored if the video bitrate mode
-     is set to constant bitrate.
- 
-+``V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE (struct)``
-+    The frame rate of the to-be-encoded frames. This information is needed
-+    by hardware encoders in order to compress the video stream correctly.
-+
-+    This control is in frames per second and is represented as a fraction.
-+    The struct :c:type:`v4l2_fract` provides the numerator and the denominator
-+    of the frame rate.
-+
- ``V4L2_CID_MPEG_VIDEO_TEMPORAL_DECIMATION (integer)``
-     For every captured frame, skip this many subsequent frames (default
-     0).
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index af74609dce0a..863a8fdce99d 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -904,6 +904,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE:		return "Vertical MV Search Range";
- 	case V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER:		return "Repeat Sequence Header";
- 	case V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME:		return "Force Key Frame";
-+	case V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE:		return "Encoder Frame Rate";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS:		return "MPEG-2 Slice Parameters";
- 	case V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION:		return "MPEG-2 Quantization Matrices";
- 	case V4L2_CID_MPEG_VIDEO_FWHT_PARAMS:			return "FWHT Stateless Parameters";
-@@ -1411,6 +1412,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 		*type = V4L2_CTRL_TYPE_AREA;
- 		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 		break;
-+	case V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE:
-+		*type = V4L2_CTRL_TYPE_FRACT;
-+		break;
- 	default:
- 		*type = V4L2_CTRL_TYPE_INTEGER;
- 		break;
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 5a7bedee2b0e..e4a42e4e293e 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -408,6 +408,7 @@ enum v4l2_mpeg_video_multi_slice_mode {
- #define V4L2_CID_MPEG_VIDEO_MV_H_SEARCH_RANGE		(V4L2_CID_MPEG_BASE+227)
- #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE		(V4L2_CID_MPEG_BASE+228)
- #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME		(V4L2_CID_MPEG_BASE+229)
-+#define V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE		(V4L2_CID_MPEG_BASE+230)
- 
- /* CIDs for the MPEG-2 Part 2 (H.262) codec */
- #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_MPEG_BASE+270)
+The final patch adds the encoder spec (unchanged from v3).
+
+Michael, can you add support for V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE
+to your encoder driver? Let me know if something isn't working.
+I need to add a test control for this to vivid as well and add support
+for this to v4l2-ctl, that's on my TODO list.
+
+Open questions:
+
+1) Existing encoder drivers use S_PARM to signal the frameperiod,
+but as discussed in Lyon this should be the rate at which frames are
+submitted for encoding, which can be different from
+V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE. But given the current use-cases
+I was wondering if calling S_PARM should set the ENC_FRAME_RATE
+control as well, and you would need to explicitly set the control
+after S_PARM if the two are not the same. This would mean that
+existing applications that don't know about the control can keep working.
+
+2) I do believe that we need a RELEASE/DEL/DESTROY_BUFS ioctl in
+order to do proper handling of the V4L2_BUF_FLAG_TOO_SMALL case.
+I am inclined to postpone adding this flag until we have that ioctl.
+We can still merge the stateful encoder spec if we mention that that
+is work in progress.
+
+Regards,
+
+	Hans
+
+Hans Verkuil (4):
+  v4l2-ctrls: add support for v4l2_fract types
+  v4l2-ctrls: add support for V4L2_CTRL_WHICH_MIN/MAX_VAL
+  v4l2-controls.h: add V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE
+  videodev2.h: add V4L2_BUF_FLAG_TOO_SMALL flag
+
+Tomasz Figa (1):
+  media: docs-rst: Document memory-to-memory video encoder interface
+
+ Documentation/media/uapi/v4l/buffer.rst       |   9 +
+ Documentation/media/uapi/v4l/dev-encoder.rst  | 608 ++++++++++++++++++
+ Documentation/media/uapi/v4l/dev-mem2mem.rst  |   1 +
+ .../media/uapi/v4l/ext-ctrls-codec.rst        |   8 +
+ Documentation/media/uapi/v4l/pixfmt-v4l2.rst  |   5 +
+ Documentation/media/uapi/v4l/v4l2.rst         |   2 +
+ .../media/uapi/v4l/vidioc-encoder-cmd.rst     |  51 +-
+ .../media/uapi/v4l/vidioc-g-ext-ctrls.rst     |  15 +-
+ .../media/uapi/v4l/vidioc-queryctrl.rst       |   6 +
+ .../media/videodev2.h.rst.exceptions          |   3 +
+ .../media/common/videobuf2/videobuf2-core.c   |  12 +-
+ .../media/common/videobuf2/videobuf2-v4l2.c   |   4 +
+ drivers/media/i2c/imx214.c                    |   4 +-
+ drivers/media/v4l2-core/v4l2-ctrls.c          | 222 ++++++-
+ include/media/v4l2-ctrls.h                    |  72 ++-
+ include/media/videobuf2-core.h                |   4 +
+ include/uapi/linux/v4l2-controls.h            |   1 +
+ include/uapi/linux/videodev2.h                |   6 +
+ 18 files changed, 980 insertions(+), 53 deletions(-)
+ create mode 100644 Documentation/media/uapi/v4l/dev-encoder.rst
+
 -- 
 2.23.0
 
