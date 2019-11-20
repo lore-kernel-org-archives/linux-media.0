@@ -7,65 +7,65 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A049C432C3
-	for <linux-media@archiver.kernel.org>; Wed, 20 Nov 2019 12:41:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65ED2C432C3
+	for <linux-media@archiver.kernel.org>; Wed, 20 Nov 2019 12:44:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E9BC12251F
-	for <linux-media@archiver.kernel.org>; Wed, 20 Nov 2019 12:41:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F84E22520
+	for <linux-media@archiver.kernel.org>; Wed, 20 Nov 2019 12:44:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RfOzJ494"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="arwFzBSZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729780AbfKTMlO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Nov 2019 07:41:14 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:42042 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728001AbfKTMlK (ORCPT
+        id S1728318AbfKTMoZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Nov 2019 07:44:25 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:44737 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728313AbfKTMoZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Nov 2019 07:41:10 -0500
-Received: by mail-ed1-f65.google.com with SMTP id m13so20138690edv.9
-        for <linux-media@vger.kernel.org>; Wed, 20 Nov 2019 04:41:07 -0800 (PST)
+        Wed, 20 Nov 2019 07:44:25 -0500
+Received: by mail-ed1-f68.google.com with SMTP id a67so20101114edf.11
+        for <linux-media@vger.kernel.org>; Wed, 20 Nov 2019 04:44:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Q+55S+QuaO7Th4WX3Vhb1ULyGdTHdLCacptPup2Qy0E=;
-        b=RfOzJ494tIm42VFJ2nHTZjMUE2E9u1fIhqHULNHcdGVgr5NCf6crR8AO8m63508fHy
-         5z0lddyOQ1hTIWTEQuviag10+HZ4MGBs+Ec1U0WaOq2a3Pck6yn36lphZIXzHOy/Y4hT
-         Dmlr8bJZhQLW1HHjaloUCzjBtEsrc1Qtiir9A=
+        bh=HviZfN2k+Zd+emwLWrTA9g1CfuiJpYrc79Znlkyezqg=;
+        b=arwFzBSZNJjQt0kefLROlBKMg+mng7y5GKdI5zvN0OlBIofxb3lFWA8mRhlROMiwq0
+         bq+o2vP9tLQgVaGN4HqFRUG3Io0JKJm8afxoYL/BLyddunjpqiL1wTIZKPFR+zHp7C2o
+         wfYhXWhUwQHbtDAR4TSyeUkQeN7E3E9nwDpTY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Q+55S+QuaO7Th4WX3Vhb1ULyGdTHdLCacptPup2Qy0E=;
-        b=bE3D5pf3P5EjZdzmGz/Bre3PWBTYu/rtSAvKfjuVVP4d8M+/ynlwuV8cHUk0kMXpLm
-         8JmKSpG20g1nulIUBVJxDwoWiUP8E8j3/Mlqjrg1Mp9Hy6rbRhAgJceNAFyBeeiD4Hrc
-         S2UfMiv86UE0d3lZOqJfKdxrMp9NCExF+HBxl4Fb5+aMnPuvXR8rupdkkusPB7rJjGaJ
-         NWZLhvf3pC+rvdRslFiZg1jw+KlNJrewvVVq7IAPX9mrkh04NslHS1WIRoMv6v3kWA6G
-         UEgYg0aRVd0xzZQxCoZk60kVrpuLaHlzeiXwj50voTp9UJhP7LJVbpth57UH5ciV+pik
-         JssA==
-X-Gm-Message-State: APjAAAUjVNQSTKupyrT7E+TCJx4pQzvGsQBGTgxymgF6wCdX2VRORjWZ
-        MkfHlFdQo024IPCBXPXmc0ttJLTCZLed8Q==
-X-Google-Smtp-Source: APXvYqyIkMW5CDxiqDFuWA1xANaLmYTGTQEKCsrQW67jp/9Kndu3Xuh6n/drJNBtvEhWJjEKjsQrBQ==
-X-Received: by 2002:a17:906:5c4d:: with SMTP id c13mr5130358ejr.80.1574253666163;
-        Wed, 20 Nov 2019 04:41:06 -0800 (PST)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id p5sm338909edi.9.2019.11.20.04.41.04
+        bh=HviZfN2k+Zd+emwLWrTA9g1CfuiJpYrc79Znlkyezqg=;
+        b=FlrtsKU+DBCRZyVXbwjxVxiBIGDxtpdbmhA7J1HSFbBG48mWHNDEqejw0e3g7yieIi
+         bT7oRdiYt5jnq7u9QcwoeGiSqh73wQdr65kDNrMe+TITki59KZcQF4QwBSZlH91YwxEO
+         XgjbCzv7hDaSyfiCr3SBfiytB6qTF2uSmUWdLJ3BuoQdzUwX1LoGZSSl/evFD76ieaLT
+         U2HXe5W2tGoUPA57ByA/GwvmBZq7/qXakWuNFgcYiwjlsMFWyCz23VUasv2g1ecoX2Cz
+         UUmbw1Y7yo05FG91ktftOf5W0FJ6Kg9wXPsk45Wa0x7vXR7heQBVP8WBb3TG4lrrJoJl
+         y1uw==
+X-Gm-Message-State: APjAAAWpgsGZUu+sOOVIBUot9cIu5O4DhdkzpOP+0hbYGcBjkHvdHXql
+        tPgOcgQUebiGSpnQib8YJ0+X408hrXycRw==
+X-Google-Smtp-Source: APXvYqykbtyVRlGwlVfwdHMu1v2hMNmwj8qJQWKlYWtFC7KEVnEfpB1EOJQIAte5KXZLw/7iT7iVLg==
+X-Received: by 2002:a17:906:3019:: with SMTP id 25mr5229384ejz.280.1574253862730;
+        Wed, 20 Nov 2019 04:44:22 -0800 (PST)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id ay27sm63816edb.52.2019.11.20.04.44.21
         for <linux-media@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Nov 2019 04:41:05 -0800 (PST)
-Received: by mail-wm1-f42.google.com with SMTP id l17so6837558wmh.0
-        for <linux-media@vger.kernel.org>; Wed, 20 Nov 2019 04:41:04 -0800 (PST)
-X-Received: by 2002:a1c:40c1:: with SMTP id n184mr3122697wma.116.1574253664291;
- Wed, 20 Nov 2019 04:41:04 -0800 (PST)
+        Wed, 20 Nov 2019 04:44:22 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id t26so1099037wmi.0
+        for <linux-media@vger.kernel.org>; Wed, 20 Nov 2019 04:44:21 -0800 (PST)
+X-Received: by 2002:a1c:7fd8:: with SMTP id a207mr3051203wmd.10.1574253861317;
+ Wed, 20 Nov 2019 04:44:21 -0800 (PST)
 MIME-Version: 1.0
 References: <HE1PR06MB4011EDD5F2686A05BC35F61CAC790@HE1PR06MB4011.eurprd06.prod.outlook.com>
- <HE1PR06MB4011A23596DCD988F2CAC603AC790@HE1PR06MB4011.eurprd06.prod.outlook.com>
-In-Reply-To: <HE1PR06MB4011A23596DCD988F2CAC603AC790@HE1PR06MB4011.eurprd06.prod.outlook.com>
+ <20191106223408.2176-1-jonas@kwiboo.se> <HE1PR06MB4011FF930111A869E4645C8CAC790@HE1PR06MB4011.eurprd06.prod.outlook.com>
+In-Reply-To: <HE1PR06MB4011FF930111A869E4645C8CAC790@HE1PR06MB4011.eurprd06.prod.outlook.com>
 From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Wed, 20 Nov 2019 21:40:52 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5CPpHH74fZJZdFfju0VXp+swXxCmzcWJ8=c8wi3Tje7CA@mail.gmail.com>
-Message-ID: <CAAFQd5CPpHH74fZJZdFfju0VXp+swXxCmzcWJ8=c8wi3Tje7CA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] media: hantro: Fix H264 motion vector buffer offset
+Date:   Wed, 20 Nov 2019 21:44:09 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5CSWea=DNjySJxZmVi+2c5U4EKVPa1mf3vHh70+YrAQCA@mail.gmail.com>
+Message-ID: <CAAFQd5CSWea=DNjySJxZmVi+2c5U4EKVPa1mf3vHh70+YrAQCA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] media: hantro: Reduce H264 extra space for motion vectors
 To:     Jonas Karlman <jonas@kwiboo.se>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Ezequiel Garcia <ezequiel@collabora.com>,
@@ -85,7 +85,9 @@ Hi Jonas,
 On Thu, Nov 7, 2019 at 7:34 AM Jonas Karlman <jonas@kwiboo.se> wrote:
 >
 > A decoded 8-bit 4:2:0 frame need memory for up to 448 bytes per
-> macroblock and is laid out in memory as follow:
+> macroblock with additional 32 bytes on multi-core variants.
+>
+> Memory layout is as follow:
 >
 > +---------------------------+
 > | Y-plane   256 bytes x MBs |
@@ -94,137 +96,72 @@ On Thu, Nov 7, 2019 at 7:34 AM Jonas Karlman <jonas@kwiboo.se> wrote:
 > +---------------------------+
 > | MV buffer  64 bytes x MBs |
 > +---------------------------+
+> | MC sync          32 bytes |
+> +---------------------------+
 >
-> The motion vector buffer offset is currently correct for 4:2:0 because the
-> extra space for motion vectors is overallocated with an extra 64 bytes x MBs.
+> Reduce the extra space allocated now that motion vector buffer offset no
+> longer is based on the extra space.
 >
-> Wrong offset for both destination and motion vector buffer are used
-> for the bottom field of field encoded content, wrong offset is
-> also used for 4:0:0 (monochrome) content.
+> Only allocate extra space for 64 bytes x MBs of motion vector buffer
+> and 32 bytes for multi-core sync.
 >
-> Fix this by setting the motion vector address to the expected 384 bytes x MBs
-> offset for 4:2:0 and 256 bytes x MBs offset for 4:0:0 content.
->
-> Also use correct destination and motion vector buffer offset
-> for the bottom field of field encoded content.
->
-> While at it also extend the check for 4:0:0 (monochrome) to include an
-> additional check for High Profile (100).
->
-> Fixes: dea0a82f3d22 ("media: hantro: Add support for H264 decoding on G1")
+> Fixes: a9471e25629b ("media: hantro: Add core bits to support H264 decoding")
 > Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 > Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
 > ---
 > Changes in v3:
->   * address remarks from Boris
->   - use src_fmt instead of dst_fmt
+>   - add memory layout to code comment (Boris)
 > Changes in v2:
->   * address remarks from Philipp and Ezequiel
->   - update commit message
->   - rename offset to bytes_per_mb
->   - remove MV_OFFSET macros
->   - move PIC_MB_WIDTH/HEIGHT_P change to separate patch
+>   - updated commit message
 > ---
->  .../staging/media/hantro/hantro_g1_h264_dec.c | 31 +++++++++++++------
->  1 file changed, 22 insertions(+), 9 deletions(-)
+>  drivers/staging/media/hantro/hantro_v4l2.c | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
 >
 
-First of all, thanks for the patches! Good to see more members of the
-community contributing to the driver.
+Thanks for the patch!
 
-Please find my comments inline.
-
-> diff --git a/drivers/staging/media/hantro/hantro_g1_h264_dec.c b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-> index 70a6b5b26477..30d977c3d529 100644
-> --- a/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-> +++ b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-> @@ -81,7 +81,7 @@ static void set_params(struct hantro_ctx *ctx)
->                 reg |= G1_REG_DEC_CTRL4_CABAC_E;
->         if (sps->flags & V4L2_H264_SPS_FLAG_DIRECT_8X8_INFERENCE)
->                 reg |= G1_REG_DEC_CTRL4_DIR_8X8_INFER_E;
-> -       if (sps->chroma_format_idc == 0)
-> +       if (sps->profile_idc >= 100 && sps->chroma_format_idc == 0)
-
-I'd rather make this a separate patch with proper explanation in commit message.
-
->                 reg |= G1_REG_DEC_CTRL4_BLACKWHITE_E;
->         if (pps->flags & V4L2_H264_PPS_FLAG_WEIGHTED_PRED)
->                 reg |= G1_REG_DEC_CTRL4_WEIGHT_PRED_E;
-> @@ -234,6 +234,7 @@ static void set_buffers(struct hantro_ctx *ctx)
->         struct vb2_v4l2_buffer *src_buf, *dst_buf;
->         struct hantro_dev *vpu = ctx->dev;
->         dma_addr_t src_dma, dst_dma;
-> +       size_t offset = 0;
->
->         src_buf = hantro_get_src_buf(ctx);
->         dst_buf = hantro_get_dst_buf(ctx);
-> @@ -244,18 +245,30 @@ static void set_buffers(struct hantro_ctx *ctx)
->
->         /* Destination (decoded frame) buffer. */
->         dst_dma = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
-> -       vdpu_write_relaxed(vpu, dst_dma, G1_REG_ADDR_DST);
-> +       /* Adjust dma addr to start at second line for bottom field */
-> +       if (ctrls->slices[0].flags & V4L2_H264_SLICE_FLAG_BOTTOM_FIELD)
-> +               offset = ALIGN(ctx->src_fmt.width, MB_DIM);
-
-Isn't ctx->src_fmt.width already aligned to MB_DIM?
-
-Also, offset is in bytes, so should we rather use the bytesperline field?
-
-> +       vdpu_write_relaxed(vpu, dst_dma + offset, G1_REG_ADDR_DST);
->
->         /* Higher profiles require DMV buffer appended to reference frames. */
->         if (ctrls->sps->profile_idc > 66 && ctrls->decode->nal_ref_idc) {
-> -               size_t pic_size = ctx->h264_dec.pic_size;
-> -               size_t mv_offset = round_up(pic_size, 8);
-> -
-> +               unsigned int bytes_per_mb = 384;
-> +
-> +               /* DMV buffer for monochrome start directly after Y-plane */
-> +               if (ctrls->sps->profile_idc >= 100 &&
-> +                   ctrls->sps->chroma_format_idc == 0)
-> +                       bytes_per_mb = 256;
-
-nit: Adding a blank line here would make it much easier to read.
-
-> +               offset = bytes_per_mb * MB_WIDTH(ctx->src_fmt.width) *
-> +                        MB_HEIGHT(ctx->src_fmt.height);
-
-It's kind of difficult to follow with this idea of bytes_per_mb IMHO.
-Would it perhaps make sense to rewrite the code as below?
-
-luma_size = ctx->src_fmt.planes[0].bytesperline * ctx->src_fmt.height;
-
-if (ctrls->sps->profile_idc >= 100 &&
-    ctrls->sps->chroma_format_idc == 0)
-        chroma_size = 0;
-else
-        chroma_size = ctx->src_fmt.planes[0].bytesperline *
-ctx->src_fmt.height / 4;
-
-offset = luma_size + chroma_size;
-
-Also, the code only handles 4:2:0 and 4:0:0. How about 4:2:2?
+What platform did you test it on and how? Was it tested with IOMMU enabled?
 
 Best regards,
 Tomasz
 
-> +
-> +               /*
-> +                * DMV buffer is split in two for field encoded frames,
-> +                * adjust offset for bottom field
-> +                */
->                 if (ctrls->slices[0].flags & V4L2_H264_SLICE_FLAG_BOTTOM_FIELD)
-> -                       mv_offset += 32 * MB_WIDTH(ctx->dst_fmt.width);
-> -
-> -               vdpu_write_relaxed(vpu, dst_dma + mv_offset,
-> -                                  G1_REG_ADDR_DIR_MV);
-> +                       offset += 32 * MB_WIDTH(ctx->src_fmt.width) *
-> +                                 MB_HEIGHT(ctx->src_fmt.height);
-> +               vdpu_write_relaxed(vpu, dst_dma + offset, G1_REG_ADDR_DIR_MV);
->         }
->
->         /* Auxiliary buffer prepared in hantro_g1_h264_dec_prepare_table(). */
+> diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+> index 3dae52abb96c..c8c896a06f58 100644
+> --- a/drivers/staging/media/hantro/hantro_v4l2.c
+> +++ b/drivers/staging/media/hantro/hantro_v4l2.c
+> @@ -240,14 +240,30 @@ static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f,
+>                 v4l2_fill_pixfmt_mp(pix_mp, fmt->fourcc, pix_mp->width,
+>                                     pix_mp->height);
+>                 /*
+> +                * A decoded 8-bit 4:2:0 NV12 frame may need memory for up to
+> +                * 448 bytes per macroblock with additional 32 bytes on
+> +                * multi-core variants.
+> +                *
+>                  * The H264 decoder needs extra space on the output buffers
+>                  * to store motion vectors. This is needed for reference
+>                  * frames.
+> +                *
+> +                * Memory layout is as follow:
+> +                *
+> +                * +---------------------------+
+> +                * | Y-plane   256 bytes x MBs |
+> +                * +---------------------------+
+> +                * | UV-plane  128 bytes x MBs |
+> +                * +---------------------------+
+> +                * | MV buffer  64 bytes x MBs |
+> +                * +---------------------------+
+> +                * | MC sync          32 bytes |
+> +                * +---------------------------+
+>                  */
+>                 if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_H264_SLICE)
+>                         pix_mp->plane_fmt[0].sizeimage +=
+> -                               128 * DIV_ROUND_UP(pix_mp->width, 16) *
+> -                                     DIV_ROUND_UP(pix_mp->height, 16);
+> +                               64 * MB_WIDTH(pix_mp->width) *
+> +                                    MB_WIDTH(pix_mp->height) + 32;
+>         } else if (!pix_mp->plane_fmt[0].sizeimage) {
+>                 /*
+>                  * For coded formats the application can specify
 > --
 > 2.17.1
 >
