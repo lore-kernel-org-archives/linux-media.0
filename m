@@ -7,62 +7,62 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80610C432C0
-	for <linux-media@archiver.kernel.org>; Wed, 20 Nov 2019 11:14:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B07F8C432C0
+	for <linux-media@archiver.kernel.org>; Wed, 20 Nov 2019 11:14:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4B4862245B
-	for <linux-media@archiver.kernel.org>; Wed, 20 Nov 2019 11:14:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 851242245D
+	for <linux-media@archiver.kernel.org>; Wed, 20 Nov 2019 11:14:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="TwqwRr+z"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="uxjV/l32"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729041AbfKTLOm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1729044AbfKTLOm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 20 Nov 2019 06:14:42 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:40060 "EHLO
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:54378 "EHLO
         mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727052AbfKTLOk (ORCPT
+        with ESMTP id S1729029AbfKTLOk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 20 Nov 2019 06:14:40 -0500
-Received: by mail-wm1-f67.google.com with SMTP id y5so1172537wmi.5
-        for <linux-media@vger.kernel.org>; Wed, 20 Nov 2019 03:14:36 -0800 (PST)
+Received: by mail-wm1-f67.google.com with SMTP id z26so6525744wmi.4
+        for <linux-media@vger.kernel.org>; Wed, 20 Nov 2019 03:14:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7OQW2DHYgmBIlXG6zmK9XIg6mefmFvu2tJV+rZvlPNo=;
-        b=TwqwRr+zepj15txJ0fs0OG/rGXM125OJhoTlBAUsZcKjdlA//X5OCOGSiEn2a3tOYg
-         P53qU9y+dIbTQPLV2Ap0RT8L32wV+8BEfV6W6qOAS5rp2TtWCh/IaUK/xSvwwlACBGar
-         5MPqyxE+fvHUufnpBOILhvWTphexPXwJloG/Ap9UrAo1mQWE3tzsscqzAN6F67eY8lsl
-         WnbsJxx3QEkjFrWEaBRF0ir9+upwfyzX5cpZhIDZHg6bMHz5/FwtzrQezgxG9kEXXfNf
-         qZ6At8e0wTQPEFDiIgDL242/fEW6t58C8QAyfy6gvLs2apd3kR7/AfTwZtIPzm/T/Aco
-         y0GA==
+        bh=cvIKYbv02jfkUFc5yq+y3wt+kyYSZpa4lPRFM3efvsQ=;
+        b=uxjV/l32qVppX/6hMVYuLEHcOzTj2V82Am9eU53lR9/+lCm7uQx0b9YxSnHTPQ2RO2
+         kL/nKisP9MMXL2jYLueogpXsVMaPPbGFTCb/jGhjw4leb0TyI0idM0AlU2tAuOWqhNxM
+         Bqk/fIB8fJYIkxRuSMzWrXXUER86zpAKud6mSMe1uPEW+wBRA3rKKt83LHZv3tJdfkWY
+         TnWsDxjkeZ1Nd32BfTPn0Vqv9FCyLBzt5Vbaunp905EyhrTtIijoXRk7/6RgHOP/7KYx
+         lsmVWz5XokU4Yky4+lN8W8NzSRK6N3Ht8/cHS+kEb5i70Q5qlu6u6CpFJo3P6qvgeycm
+         /sGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7OQW2DHYgmBIlXG6zmK9XIg6mefmFvu2tJV+rZvlPNo=;
-        b=I/0OZqDArFN0puHVBN5SriWSYL65gTtCtxm2TE5yhsKAn8nGVxkru87dJLUvVkQZ76
-         pw6OudixxOHpYGybWCV/+vtjsX1WAFEEkx0fOAR37ywClMOMc+jXQjvimeTCru8uCXRs
-         9fe/sgyqFUvihwvVz5jUd7EK42JdwJxMQdvxBIyLVS0bgdQrz23xo/3KjqPpetlPQ3TP
-         OKe4evX6pyM0f9yDxGkOB24LpIiqlle0gMD62Ni7d+D1PUUN+OOYw69oKmn7gGSzjKIc
-         65TvfwQaoovI0xGV9z+z6G9NIiWWV1dCG4QNsRoCgzUJInNpl1+gMCaOFHCa0v+ZtAjF
-         rtjQ==
-X-Gm-Message-State: APjAAAUEQKIxiijVQwo2oLbyh3HzAJ0Kuo9PMQgvM4Nw9dadsw3EwJHG
-        Kyhds7TX0l2DtYvL1OWKMCAnrw==
-X-Google-Smtp-Source: APXvYqwFDyPMhX8v9E0rkiIozBRcvsgT5k1HZL0RhzlHO09Ao7gy4hXMq6JF8MlgV+FBDmeJxrHonA==
-X-Received: by 2002:a05:600c:210b:: with SMTP id u11mr2546194wml.170.1574248475131;
-        Wed, 20 Nov 2019 03:14:35 -0800 (PST)
+        bh=cvIKYbv02jfkUFc5yq+y3wt+kyYSZpa4lPRFM3efvsQ=;
+        b=iQTA7YrSpaux5lyczjT97OHxR3eJmJgOYOmqEQVb7kRVJx27xnjkCWXMhg/AcGWRRI
+         nzSGtB3Kimq9Razfilln7zj5qvnNwnxJ16xtCMG+7svRECiOtQhm2dZ9Ck4xPkHnAxst
+         wYb9/5gpo5bvmYhvn8fOqo2UvwyzJwuLSJ+U3lxUe+E7DWKSvOSkUhuSu7NhO0OdQnvN
+         SnZPtbx2NK+ZLkVoQecqV5v6km++KHslnWctCZkpCjMQdD3SzZeHFy0aqs6SAnwgvcvR
+         1M8skxuH2XVCIIIdtRQ19EanPA4ooRkcC1pzMKzgCpzzuwbQ820LcHzpm8CD48N1afNG
+         zPkw==
+X-Gm-Message-State: APjAAAWOnCpSRYaLiLiVYqNfbG/3hvhR9VqUpESo86tkr5Qcumns2t12
+        Wicw2iJNyfBK+Mfxk4VCNoZ67g==
+X-Google-Smtp-Source: APXvYqzweKOlyuKQyMd1c/pQf5Z3HB8SFvqepcvQaZ5FjDPXqF7JOhs3aoQy+ZURieFYrTLyR80vzQ==
+X-Received: by 2002:a05:600c:299:: with SMTP id 25mr2616954wmk.50.1574248477850;
+        Wed, 20 Nov 2019 03:14:37 -0800 (PST)
 Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id u1sm6061748wmc.3.2019.11.20.03.14.33
+        by smtp.gmail.com with ESMTPSA id u1sm6061748wmc.3.2019.11.20.03.14.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Nov 2019 03:14:34 -0800 (PST)
+        Wed, 20 Nov 2019 03:14:37 -0800 (PST)
 From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     mjourdan@baylibre.com, devicetree@vger.kernel.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] dt-bindings: media: amlogic,vdec: convert to yaml
-Date:   Wed, 20 Nov 2019 12:14:27 +0100
-Message-Id: <20191120111430.29552-2-narmstrong@baylibre.com>
+To:     mjourdan@baylibre.com
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: [PATCH 4/4] arm64: dts: meson-g12-common: add video decoder node
+Date:   Wed, 20 Nov 2019 12:14:30 +0100
+Message-Id: <20191120111430.29552-5-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20191120111430.29552-1-narmstrong@baylibre.com>
 References: <20191120111430.29552-1-narmstrong@baylibre.com>
@@ -73,210 +73,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that we have the DT validation in place, let's convert the device tree
-bindings for the Amlogic Video Controller over to YAML schemas.
+From: Maxime Jourdan <mjourdan@baylibre.com>
 
-This yaml bindings will then be extended to support new SoCs.
+Add the video decoder node for the Amlogic G12A and compatible SoC.
 
+Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
 Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 ---
- .../bindings/media/amlogic,gx-vdec.yaml       | 107 ++++++++++++++++++
- .../bindings/media/amlogic,vdec.txt           |  72 ------------
- 2 files changed, 107 insertions(+), 72 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/amlogic,vdec.txt
+ .../boot/dts/amlogic/meson-g12-common.dtsi    | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml b/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
-new file mode 100644
-index 000000000000..878944867d6e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
-@@ -0,0 +1,107 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2019 BayLibre, SAS
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/media/amlogic,gx-vdec.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+index 3f39e020f74e..6fe7dead5a92 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+@@ -2152,6 +2152,29 @@
+ 			};
+ 		};
+ 
++		vdec: video-decoder@ff620000 {
++			compatible = "amlogic,g12a-vdec";
++			reg = <0x0 0xff620000 0x0 0x10000>,
++			      <0x0 0xffd0e180 0x0 0xe4>;
++			reg-names = "dos", "esparser";
++			interrupts = <GIC_SPI 44 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 32 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "vdec", "esparser";
 +
-+title: Amlogic Video Decoder
++			amlogic,ao-sysctrl = <&rti>;
++			amlogic,canvas = <&canvas>;
 +
-+maintainers:
-+  - Neil Armstrong <narmstrong@baylibre.com>
-+  - Maxime Jourdan <mjourdan@baylibre.com>
++			clocks = <&clkc CLKID_PARSER>,
++				 <&clkc CLKID_DOS>,
++				 <&clkc CLKID_VDEC_1>,
++				 <&clkc CLKID_VDEC_HEVC>,
++				 <&clkc CLKID_VDEC_HEVCF>;
++			clock-names = "dos_parser", "dos", "vdec_1",
++				      "vdec_hevc", "vdec_hevcf";
++			resets = <&reset RESET_PARSER>;
++			reset-names = "esparser";
++		};
 +
-+description: |
-+  The video decoding IP lies within the DOS memory region,
-+  except for the hardware bitstream parser that makes use of an undocumented
-+  region.
-+
-+  It makes use of the following blocks:
-+  - ESPARSER is a bitstream parser that outputs to a VIFIFO. Further VDEC blocks
-+    then feed from this VIFIFO.
-+  - VDEC_1 can decode MPEG-1, MPEG-2, MPEG-4 part 2, MJPEG, H.263, H.264, VC-1.
-+  - VDEC_HEVC can decode HEVC and VP9.
-+
-+  Both VDEC_1 and VDEC_HEVC share the "vdec" IRQ and as such cannot run
-+  concurrently.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+        - amlogic,gxbb-vdec # GXBB (S905)
-+        - amlogic,gxl-vdec # GXL (S905X, S905D)
-+        - amlogic,gxm-vdec # GXM (S912)
-+      - const: amlogic,gx-vdec
-+
-+  interrupts:
-+    minItems: 2
-+
-+  interrupt-names:
-+    items:
-+      - const: vdec
-+      - const: esparser
-+
-+  reg:
-+    minItems: 2
-+
-+  reg-names:
-+    items:
-+      - const: dos
-+      - const: esparser
-+
-+  resets:
-+    maxItems: 1
-+
-+  reset-names:
-+    items:
-+      - const: esparser
-+
-+  clocks:
-+    minItems: 4
-+
-+  clock-names:
-+    items:
-+      - const: dos_parser
-+      - const: dos
-+      - const: vdec_1
-+      - const: vdec_hevc
-+
-+  amlogic,ao-sysctrl:
-+    description: should point to the AOBUS sysctrl node
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  amlogic,canvas:
-+    description: should point to a canvas provider node
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/phandle
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clock-names
-+  - resets
-+  - reset-names
-+  - amlogic,ao-sysctrl
-+  - amlogic,canvas
-+
-+examples:
-+  - |
-+    vdec: video-decoder@c8820000 {
-+          compatible = "amlogic,gxl-vdec", "amlogic,gx-vdec";
-+          reg = <0xc8820000 0x10000>, <0xc110a580 0xe4>;
-+          reg-names = "dos", "esparser";
-+          interrupts = <44>, <32>;
-+          interrupt-names = "vdec", "esparser";
-+          clocks = <&clk_dos_parser> ,<&clk_dos>, <&clk_vdec_1>, <&clk_vdec_hevc>;
-+          clock-names = "dos_parser", "dos", "vdec_1", "vdec_hevc";
-+          resets = <&reset_parser>;
-+          reset-names = "esparser";
-+          amlogic,ao-sysctrl = <&sysctrl_AO>;
-+          amlogic,canvas = <&canvas>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/amlogic,vdec.txt b/Documentation/devicetree/bindings/media/amlogic,vdec.txt
-deleted file mode 100644
-index 9b6aace86ca7..000000000000
---- a/Documentation/devicetree/bindings/media/amlogic,vdec.txt
-+++ /dev/null
-@@ -1,72 +0,0 @@
--Amlogic Video Decoder
--================================
--
--The video decoding IP lies within the DOS memory region,
--except for the hardware bitstream parser that makes use of an undocumented
--region.
--
--It makes use of the following blocks:
--
--- ESPARSER is a bitstream parser that outputs to a VIFIFO. Further VDEC blocks
--then feed from this VIFIFO.
--- VDEC_1 can decode MPEG-1, MPEG-2, MPEG-4 part 2, MJPEG, H.263, H.264, VC-1.
--- VDEC_HEVC can decode HEVC and VP9.
--
--Both VDEC_1 and VDEC_HEVC share the "vdec" IRQ and as such cannot run
--concurrently.
--
--Device Tree Bindings:
-----------------------
--
--VDEC: Video Decoder
----------------------------
--
--Required properties:
--- compatible: value should be different for each SoC family as :
--	- GXBB (S905) : "amlogic,gxbb-vdec"
--	- GXL (S905X, S905D) : "amlogic,gxl-vdec"
--	- GXM (S912) : "amlogic,gxm-vdec"
--	followed by the common "amlogic,gx-vdec"
--- reg: base address and size of he following memory-mapped regions :
--	- dos
--	- esparser
--- reg-names: should contain the names of the previous memory regions
--- interrupts: should contain the following IRQs:
--	- vdec
--	- esparser
--- interrupt-names: should contain the names of the previous interrupts
--- amlogic,ao-sysctrl: should point to the AOBUS sysctrl node
--- amlogic,canvas: should point to a canvas provider node
--- clocks: should contain the following clocks :
--	- dos_parser
--	- dos
--	- vdec_1
--	- vdec_hevc
--- clock-names: should contain the names of the previous clocks
--- resets: should contain the parser reset
--- reset-names: should be "esparser"
--
--Example:
--
--vdec: video-codec@c8820000 {
--	compatible = "amlogic,gxbb-vdec", "amlogic,gx-vdec";
--	reg = <0x0 0xc8820000 0x0 0x10000>,
--	      <0x0 0xc110a580 0x0 0xe4>;
--	reg-names = "dos", "esparser";
--
--	interrupts = <GIC_SPI 44 IRQ_TYPE_EDGE_RISING>,
--		     <GIC_SPI 32 IRQ_TYPE_EDGE_RISING>;
--	interrupt-names = "vdec", "esparser";
--
--	amlogic,ao-sysctrl = <&sysctrl_AO>;
--	amlogic,canvas = <&canvas>;
--
--	clocks = <&clkc CLKID_DOS_PARSER>,
--		 <&clkc CLKID_DOS>,
--		 <&clkc CLKID_VDEC_1>,
--		 <&clkc CLKID_VDEC_HEVC>;
--	clock-names = "dos_parser", "dos", "vdec_1", "vdec_hevc";
--
--	resets = <&reset RESET_PARSER>;
--	reset-names = "esparser";
--};
+ 		vpu: vpu@ff900000 {
+ 			compatible = "amlogic,meson-g12a-vpu";
+ 			reg = <0x0 0xff900000 0x0 0x100000>,
 -- 
 2.22.0
 
