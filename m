@@ -2,184 +2,147 @@ Return-Path: <SRS0=v/kU=ZN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20713C432C0
-	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 06:44:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E50EC43141
+	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 07:14:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E00FA2089D
-	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 06:44:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76354208D4
+	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 07:14:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kc0neAm2"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="isoRBm62"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbfKUGo5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Nov 2019 01:44:57 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:40216 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725904AbfKUGo5 (ORCPT
+        id S1727515AbfKUHOZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Nov 2019 02:14:25 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:4480 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727399AbfKUHOO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Nov 2019 01:44:57 -0500
-Received: by mail-oi1-f193.google.com with SMTP id d22so2223128oic.7
-        for <linux-media@vger.kernel.org>; Wed, 20 Nov 2019 22:44:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b1NWuEHKT/ZKVyznzXe6dqG/WmSBtWXohc3JHKwitvU=;
-        b=Kc0neAm2vhnvqidEsp0GbAvbv7gTpTawsmpphNDS6lWipgx2WF84f8HKl7nmhSPkON
-         rMa9o5nF4U3GaBkSVOg2AeiD84kQNXUTC5JJwBXqO45CiZOrJkpdyu5DgSPZSbGGsFe+
-         y5F1K/1/rdCz2ptjtZbG8lRNMPfjZCtEzTG152n+YantyYN44TmLIddaE4fcRE+zrdaa
-         i6SoxSfQ9rLAx+/eoH8lqynhhZKVWPafWliw+/V1f3+vHR9qyVklJlscmE5ZAFeBSjY1
-         CblJF3AC6QwICU2VVHFwPA/q6yDEWi0YYK0I1l1T5/WHCAelRvc0DHR5lehphKG6YnB3
-         DqbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b1NWuEHKT/ZKVyznzXe6dqG/WmSBtWXohc3JHKwitvU=;
-        b=rCdb53ab1p4Q+LF8KgH6KppMWSuc/wCsogaejQ3tPmBcmZ+3XISEbEM2bhCaYzbFc9
-         3NvxNQD34+aclWRMm3DGjLOilajqW+5Z9HoJ2XkO9RNFXBRL5vaSisf6uZ2YWrxEmin5
-         96Om+dCq4bnpt8/36n/w3LuHVdk11ccDgxO8GCWB6STWvIa4hUGQDuLQnsmsII1Bhfx0
-         9zG9cEEgrfgOOu6rchAMHdjPska4SMIDA8KTNhaOCJjll+Vty0CbLUld9wmTICQz6mZw
-         PaFZlNNbE9EuwfMOgpSilu/5vAKggGkmKNWvjjMxKiBWCFbNk6q2Z0jBcCzx/5pj+RE6
-         vYew==
-X-Gm-Message-State: APjAAAXTvK2mUt+uGlbtltZFXRnCH3/4JwCQP7YK0O3nBRRbocqjjE+l
-        OVmrAAvh/VIRrCWGztHXjImEDW26tEjSZ2H4Z3L3yymiCuKqpQ==
-X-Google-Smtp-Source: APXvYqzzAYi0F/fPfcesVjUyNbNzJQsZ6yU9eNtCO0lcvZEJQNstgSZkhRV7tSqmdmqqBaIi3dGM1iNnqQIfqePo6+c=
-X-Received: by 2002:aca:2811:: with SMTP id 17mr6044582oix.46.1574318693766;
- Wed, 20 Nov 2019 22:44:53 -0800 (PST)
+        Thu, 21 Nov 2019 02:14:14 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dd639360002>; Wed, 20 Nov 2019 23:13:58 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 20 Nov 2019 23:13:57 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 20 Nov 2019 23:13:57 -0800
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 21 Nov
+ 2019 07:13:57 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 21 Nov 2019 07:13:57 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dd639340009>; Wed, 20 Nov 2019 23:13:56 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH v7 18/24] media/v4l2-core: pin_user_pages (FOLL_PIN) and put_user_page() conversion
+Date:   Wed, 20 Nov 2019 23:13:48 -0800
+Message-ID: <20191121071354.456618-19-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191121071354.456618-1-jhubbard@nvidia.com>
+References: <20191121071354.456618-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-References: <CABdg0zG8KzOBWMNDU8eDcjW_FA3zrdJBR7Fu_YQz-uwu1Gfwcg@mail.gmail.com>
-In-Reply-To: <CABdg0zG8KzOBWMNDU8eDcjW_FA3zrdJBR7Fu_YQz-uwu1Gfwcg@mail.gmail.com>
-From:   Nick French <nickfrench@gmail.com>
-Date:   Thu, 21 Nov 2019 00:44:42 -0600
-Message-ID: <CABdg0zGzR=2Qt5d+VR18j-gR-5vu0=QgnjKvcDW9g4g_ceGV_w@mail.gmail.com>
-Subject: Re: ir_kbd_i2c oops
-To:     linux-media@vger.kernel.org
-Cc:     kraxel@bytesex.org, mkochano@pld.org.pl, lirc@bartelmus.de,
-        ulrich.mueller42@web.de, jarod@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1574320438; bh=sXkMwo6nCTbLEEe6A0fE3HZE6drkGcT2bf/xg2miV08=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=isoRBm62akfQQn8ZChi5BClTVDiZwqENu4cnQwBu1u/ZNe2Xuz4mRZyKdKXVls6IO
+         tB7GIHdeQhs1onG9n01Oo2E/Fh1pUl5X4xdgPYRhaVrHimWrfVVehzM0+KSR9A/LBp
+         vYqIRixYkkq2UMaPDPO7t3q/IS1XHcNhmeyFq5KSvHmmqFYlkDAail3i95XQ21qKT0
+         Uhys3VHcNvasoN6fmLaSTthn+1WBXJ763xou69tO3rs0HoOXQEpIcYGmzoeh3AYi00
+         u/rSZrtnQLHjfHuGKYqPTBDl8cd/7uzCmXrHijARe+2sZ18z3gh2GxsL8Q6LQvefJ/
+         fMjtI/AGK+yBA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 10:21 AM Nick French <nickfrench@gmail.com> wrote:
->
-> Hello all,
->
-> I'm about to start trying to track down an intermittent oops in
-> ir_kbd_i2c that I've been having for a long time over various recent
-> kernels. It must be some kind of timing/race condition at startup,
-> because I only get it about 5% of boots.
->
-> Here's the relevant snippet from the log, if anyone has any smart
-> ideas let me know. I should have better debugging data within the next
-> week or so.
->
-> ...
-> Registered IR keymap rc-hauppauge
-> rc rc0: Hauppauge WinTV PVR-350 as
-> /devices/pci0000:00/0000:00:1e.0/0000:04:00.0/i2c-0/0-0018/rc/rc0
-> input: Hauppauge WinTV PVR-350 as
-> /devices/pci0000:00/0000:00:1e.0/0000:04:00.0/i2c-0/0-0018/rc/rc0/input9
-> BUG: kernel NULL pointer dereference, address: 0000000000000038
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 0 P4D 0
-> Oops: 0000 [#1] SMP PTI
-> CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.3.11-300.fc31.x86_64 #1
-> Hardware name:  /DG43NB, BIOS NBG4310H.86A.0096.2009.0903.1845 09/03/2009
-> Workqueue: events ir_work [ir_kbd_i2c]
-> RIP: 0010:ir_lirc_scancode_event+0x3d/0xb0
-> Code: a6 b4 07 00 00 49 81 c6 b8 07 00 00 55 53 e8 ba a7 9d ff 4c 89
-> e7 49 89 45 00 e8 5e 7a 25 00 49 8b 1e 48 89 c5 4c 39 f3 74 58 <8b> 43
-> 38 8b 53 40 89 c1 2b 4b 3c 39 ca 72 41 21 d0 49 8b 7d 00 49
-> RSP: 0018:ffffaae2000b3d88 EFLAGS: 00010017
-> RAX: 0000000000000002 RBX: 0000000000000000 RCX: 0000000000000019
-> RDX: 0000000000000001 RSI: 006e801b1f26ce6a RDI: ffff9e39797c37b4
-> RBP: 0000000000000002 R08: 0000000000000001 R09: 0000000000000001
-> R10: 0000000000000001 R11: 0000000000000001 R12: ffff9e39797c37b4
-> R13: ffffaae2000b3db8 R14: ffff9e39797c37b8 R15: ffff9e39797c33d8
-> FS:  0000000000000000(0000) GS:ffff9e397b680000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000038 CR3: 0000000035844000 CR4: 00000000000006e0
-> Call Trace:
-> ir_do_keydown+0x8e/0x2b0
-> rc_keydown+0x52/0xc0
-> ir_work+0xb8/0x130 [ir_kbd_i2c]
-> process_one_work+0x19d/0x340
-> worker_thread+0x50/0x3b0
-> kthread+0xfb/0x130
-> ? process_one_work+0x340/0x340
-> ? kthread_park+0x80/0x80
-> ret_from_fork+0x35/0x40
-> Modules linked in: rc_hauppauge tuner msp3400 saa7127 saa7115 ivtv(+)
-> tveeprom cx2341x v4l2_common videodev mc i2c_algo_bit ir_kbd_i2c
-> ip_tables firewire_ohci e1000e serio_raw firewire_core ata_generic
-> crc_itu_t pata_acpi pata_jmicron fuse
-> CR2: 0000000000000038
-> ---[ end trace c67c2697a99fa74b ]---
-> RIP: 0010:ir_lirc_scancode_event+0x3d/0xb0
-> Code: a6 b4 07 00 00 49 81 c6 b8 07 00 00 55 53 e8 ba a7 9d ff 4c 89
-> e7 49 89 45 00 e8 5e 7a 25 00 49 8b 1e 48 89 c5 4c 39 f3 74 58 <8b> 43
-> 38 8b 53 40 89 c1 2b 4b 3c 39 ca 72 41 21 d0 49 8b 7d 00 49
-> RSP: 0018:ffffaae2000b3d88 EFLAGS: 00010017
-> RAX: 0000000000000002 RBX: 0000000000000000 RCX: 0000000000000019
-> RDX: 0000000000000001 RSI: 006e801b1f26ce6a RDI: ffff9e39797c37b4
-> RBP: 0000000000000002 R08: 0000000000000001 R09: 0000000000000001
-> R10: 0000000000000001 R11: 0000000000000001 R12: ffff9e39797c37b4
-> R13: ffffaae2000b3db8 R14: ffff9e39797c37b8 R15: ffff9e39797c33d8
-> FS:  0000000000000000(0000) GS:ffff9e397b680000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000038 CR3: 0000000035844000 CR4: 00000000000006e0
-> rc rc0: lirc_dev: driver ir_kbd_i2c registered at minor = 0, scancode
-> receiver, no transmitter
-> tuner-simple 0-0061: creating new instance
-> tuner-simple 0-0061: type set to 2 (Philips NTSC (FI1236,FM1236 and
-> compatibles))
-> ivtv0: Registered device video0 for encoder MPG (4096 kB)
-> ivtv0: Registered device video32 for encoder YUV (2048 kB)
-> ivtv0: Registered device vbi0 for encoder VBI (1024 kB)
-> ivtv0: Registered device video24 for encoder PCM (320 kB)
-> ivtv0: Registered device radio0 for encoder radio
-> ivtv0: Registered device video16 for decoder MPG (1024 kB)
-> ivtv0: Registered device vbi8 for decoder VBI (64 kB)
-> ivtv0: Registered device vbi16 for decoder VOUT
-> ivtv0: Registered device video48 for decoder YUV (1024 kB)
-> ...
->
-> - Nick
+1. Change v4l2 from get_user_pages() to pin_user_pages().
 
-I haven't been able to recreate with a debug build yet, but I think I
-see the problem:
+2. Because all FOLL_PIN-acquired pages must be released via
+put_user_page(), also convert the put_page() call over to
+put_user_pages_dirty_lock().
 
-ir_kbd_i2c calls rc_register_device(), where the ordering of calls is this:
-  dev->registered = true;
-  rc_setup_rx_device(dev); <--calls rc_open()
-  ir_lirc_register(dev); <--initializes lirc_fh/lirc_fh_lock
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ drivers/media/v4l2-core/videobuf-dma-sg.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-however, ir_kbd_i2c's rc_open() callback schedules work whose
-call-stack looks like:
-ir_work()
-ir_key_poll()
-rc_keydown()
-ir_do_keydown()
-ir_lirc_scancode_event() <-- uses lirc_fh/lirc_hf_lock
+diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2=
+-core/videobuf-dma-sg.c
+index 28262190c3ab..162a2633b1e3 100644
+--- a/drivers/media/v4l2-core/videobuf-dma-sg.c
++++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
+@@ -183,12 +183,12 @@ static int videobuf_dma_init_user_locked(struct video=
+buf_dmabuf *dma,
+ 	dprintk(1, "init user [0x%lx+0x%lx =3D> %d pages]\n",
+ 		data, size, dma->nr_pages);
+=20
+-	err =3D get_user_pages(data & PAGE_MASK, dma->nr_pages,
++	err =3D pin_user_pages(data & PAGE_MASK, dma->nr_pages,
+ 			     flags | FOLL_LONGTERM, dma->pages, NULL);
+=20
+ 	if (err !=3D dma->nr_pages) {
+ 		dma->nr_pages =3D (err >=3D 0) ? err : 0;
+-		dprintk(1, "get_user_pages: err=3D%d [%d]\n", err,
++		dprintk(1, "pin_user_pages: err=3D%d [%d]\n", err,
+ 			dma->nr_pages);
+ 		return err < 0 ? err : -EINVAL;
+ 	}
+@@ -349,11 +349,8 @@ int videobuf_dma_free(struct videobuf_dmabuf *dma)
+ 	BUG_ON(dma->sglen);
+=20
+ 	if (dma->pages) {
+-		for (i =3D 0; i < dma->nr_pages; i++) {
+-			if (dma->direction =3D=3D DMA_FROM_DEVICE)
+-				set_page_dirty_lock(dma->pages[i]);
+-			put_page(dma->pages[i]);
+-		}
++		put_user_pages_dirty_lock(dma->pages, dma->nr_pages,
++					  dma->direction =3D=3D DMA_FROM_DEVICE);
+ 		kfree(dma->pages);
+ 		dma->pages =3D NULL;
+ 	}
+--=20
+2.24.0
 
-So basically if there is a keydown detection *during* ir_kbd_i2c
-initialization, its going to oops accessing the uninitialized
-lirc_fh_lock, I think?
-
-Not sure what to do with that info though, even if correct.
-An 'is registered' check does no good, because the device is marked
-registered before rc_setup_rx_device() happens. In fact rc_open()
-already checks this.
-
-Hoping someone smarter than me can weigh in here...
-
-Thanks,
-Nick
