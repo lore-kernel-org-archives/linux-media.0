@@ -2,70 +2,67 @@ Return-Path: <SRS0=v/kU=ZN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8CFCC432C0
-	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 10:14:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 863D0C432C3
+	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 10:14:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A41AA206CB
-	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 10:14:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E590206CB
+	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 10:14:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="sgQbSuyR"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="CzFSpjV1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbfKUKOh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Nov 2019 05:14:37 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:36216 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726014AbfKUKOg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S1726760AbfKUKOg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 21 Nov 2019 05:14:36 -0500
-Received: by mail-wr1-f66.google.com with SMTP id z3so3655445wru.3
-        for <linux-media@vger.kernel.org>; Thu, 21 Nov 2019 02:14:33 -0800 (PST)
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36392 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726593AbfKUKOe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 21 Nov 2019 05:14:34 -0500
+Received: by mail-wm1-f66.google.com with SMTP id n188so1070593wme.1
+        for <linux-media@vger.kernel.org>; Thu, 21 Nov 2019 02:14:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9Uj/OJizfCMV+pm8Bm80+o6nYf9xOidEjQZOmhbw7Tk=;
-        b=sgQbSuyRaTjHtb50b5Ns8I+KWD74RpH72vWeYkSEw5qOkc4dTlhWmfpSKp2d9KBo1R
-         5lIpurfOlRUpmLLsGEbbwEH1Mklf7Attq2+b3KkSJqZvwIqOlmMMLkYyjIEDmZuvb5a5
-         c3N2ZchOyTXhU0rCSD39k31tKb46cpMWRTA8jLS57lpw0qa8LfujBe6PdpfodQxamnrQ
-         6AnHGvfUWPCcAmK3kW/k+9GMZnS9UB/l0sUWlAfICUGyq33D5M2xt2DenAamLzr7FEt1
-         qPEt1mN5TLHesyMZQMrVEWsR5UqUt0efpdBbkyH9i/awhCWFxMaAlnIQWbF5r+iFPauy
-         zZSw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n7DzjzsuSLvj9pdWFStqaFJF8gdHM1T9f/YXYyoJOjk=;
+        b=CzFSpjV143IUsg5swiQ/xd6HekWPa8WT+SHymkLFYW8WZccwKp/V8QjnOfEjuNP5t8
+         w1z9rdRXOZ+T7qZDUi3vPMh3P9JWM+j4gZ7XTw0wFUO1vLMosw9OCFMGHaa13EE/zh/v
+         pc3Y+j7ILOj0i+k14bnEZTcqxcxkpAo1TwUCm8geSaM9PF24vQ771JN0p19hpN84c4JP
+         EgQ3njdMGF/c0Ra+WHZDIEOONMVnKYqIQ4QldDIeGamQNwG7x4mZWuDD1929IZk4gj1y
+         omx3QqMOxGBNqbSdF+oD4fm6Gb5fknsFczRcokiQ4ZUgZ1tN1xyTizuJfONw9k4j0V/Q
+         1/bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9Uj/OJizfCMV+pm8Bm80+o6nYf9xOidEjQZOmhbw7Tk=;
-        b=PlK/7W0sX2scKmg1DnhwCRG73ZyE3tZCjR0R2tmmIr3ZwZrZUUsntItstJElab/ZI6
-         GrMzAX8IHHKTWsc6GvG8hIzFO7+/v0phDcVRC4Bf8cBtjJjDW49A8A8ZTq4y+nfJ5ox9
-         vLSoIMET6q71dtagaHTX8h+LrLegFMheSrOXxIcDEoudenGkHRmQPUS4uT1N2uxbVCgG
-         av6ze7elQGIOtVti5KMgjrX2nHMc746Luoi3QUynlTdgNT27m5r7mAPlkW9yVx5bTJJp
-         tNDwE+4LbYNfUmvhuU6TAtbcXK2YOW5RcNNeW6Tqv4jE58wYcDSM9eBdX0oaWtXO8At3
-         SUig==
-X-Gm-Message-State: APjAAAULADHwfe8N57913pZohQYHK3vIbGG3z9SjD8aO5KeA7nivQGxT
-        XtF/gdBbM1Jtm0Xwt11qHEEF7w==
-X-Google-Smtp-Source: APXvYqyH/ovyemEL/zz1cttC+sZ2PiFUJwPCumuv2fNDV5bChB+c10N4Ys6A9Lzh7HcYx+2s+N1h5g==
-X-Received: by 2002:adf:fc0a:: with SMTP id i10mr9942497wrr.105.1574331272916;
-        Thu, 21 Nov 2019 02:14:32 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n7DzjzsuSLvj9pdWFStqaFJF8gdHM1T9f/YXYyoJOjk=;
+        b=CjS2w8xyee5G8QdfuRkDbV6nviSyvaXi7DFFiMgsrzAMNRdJXWbv6EQsIE+e68RrZq
+         4XGIGB+VfI75xDZf5YD+0cw+8fvZn4LTf+OGAp5wXgpNYAheznXVdaHRN3uDO0UFT/W5
+         afCL2s/732FY9Zel6WAG7K3WLETtN5lD8DAk7T0SGQSXyr6H+0IaLACzc+P1G/xOAVsg
+         Sk593mXAD+ORxuOT9KVKBjYRcaySAuTfIAPg0GuvkAfxO0/77MyPutm1brBpO9xZ7ZLW
+         Dy4JbuQQj9gPUg2UFsO+vWheZJbUoRvi/1ts5bMvkZ4n2mVdsMTWDzn+JbNVl+LK1Tyf
+         PiHQ==
+X-Gm-Message-State: APjAAAXi6LfJXK0OG/+SzJM9l+kYl/neJPrvJoYibpU7uy5xAxH/Q/3S
+        OkmwTG63K+um1+tHwobwyB/TLwEHQzvbDQ==
+X-Google-Smtp-Source: APXvYqxPADgVv5/yD9ctzuTcZNw5cUFWHwvJhUI0DOZzRCGful8vLGq7ZwkZBc87z0uvxwTFov8oDQ==
+X-Received: by 2002:a7b:ca4d:: with SMTP id m13mr8689497wml.21.1574331271418;
+        Thu, 21 Nov 2019 02:14:31 -0800 (PST)
 Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id o21sm1289932wmc.17.2019.11.21.02.14.32
+        by smtp.gmail.com with ESMTPSA id o21sm1289932wmc.17.2019.11.21.02.14.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2019 02:14:32 -0800 (PST)
+        Thu, 21 Nov 2019 02:14:30 -0800 (PST)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     mjourdan@baylibre.com
 Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] media: meson: vdec: add sm1 platform
-Date:   Thu, 21 Nov 2019 11:14:28 +0100
-Message-Id: <20191121101429.23831-3-narmstrong@baylibre.com>
+Subject: [PATCH 0/3] media: meson: vdec: add sm1 platform
+Date:   Thu, 21 Nov 2019 11:14:26 +0100
+Message-Id: <20191121101429.23831-1-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20191121101429.23831-1-narmstrong@baylibre.com>
-References: <20191121101429.23831-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -73,171 +70,122 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for the Amlogic SM1 platform for the current MPEG1 & MPEG2
-support.
+This patchset adds support for the current Amlogic Video Decoder
+driver for the Amlogic SM1 & compatible SoCs.
 
-The SM1 family, very close to the G12A SoCs, has a slighly different power
-management control, thus needing a separate compatible and family id.
+Then support is added for the currently supported MPEG1 & MPEG2 decoders
+like for G12A support.
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
+This patchset depends on G12A support patchset at [1].
+
+M2M Decoder compliance is handled in a separate patchset at [2].
+
+# v4l2-compliance 
+v4l2-compliance SHA: 7ead0e1856b89f2e19369af452bb03fd0cd16793, 64 bits
+
+Compliance test for meson-vdec device /dev/video0:
+
+Driver Info:
+	Driver name      : meson-vdec
+	Card type        : Amlogic Video Decoder
+	Bus info         : platform:meson-vdec
+	Driver version   : 5.4.0
+	Capabilities     : 0x84204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+	Detected Stateful Decoder
+
+Required ioctls:
+	test VIDIOC_QUERYCAP: OK
+
+Allow for multiple opens:
+	test second /dev/video0 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 2 Private Controls: 0
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK (Not Supported)
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK (Not Supported)
+	test Composing: OK (Not Supported)
+	test Scaling: OK (Not Supported)
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK
+
+Buffer ioctls:
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+
+Total for meson-vdec device /dev/video0: 44, Succeeded: 44, Failed: 0, Warnings: 0
+
+[1] https://lore.kernel.org/linux-media/20191120111430.29552-1-narmstrong@baylibre.com
+[2] https://lore.kernel.org/linux-media/20191007145909.29979-1-mjourdan@baylibre.com
+
+Neil Armstrong (3):
+  dt-bindings: media: amlogic,gx-vdec: add bindings for SM1 family
+  media: meson: vdec: add sm1 platform
+  arm64: dts: meson-sm1: add video decoder compatible
+
+ .../bindings/media/amlogic,gx-vdec.yaml       |  2 ++
+ arch/arm64/boot/dts/amlogic/meson-sm1.dtsi    |  4 +++
  drivers/staging/media/meson/vdec/vdec.c       |  5 +++-
  drivers/staging/media/meson/vdec/vdec_1.c     | 29 ++++++++++++++----
  .../staging/media/meson/vdec/vdec_platform.c  | 30 +++++++++++++++++++
  .../staging/media/meson/vdec/vdec_platform.h  |  2 ++
- 4 files changed, 59 insertions(+), 7 deletions(-)
+ 6 files changed, 65 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/staging/media/meson/vdec/vdec.c b/drivers/staging/media/meson/vdec/vdec.c
-index 875a12be9c9e..a8a4c380ccc9 100644
---- a/drivers/staging/media/meson/vdec/vdec.c
-+++ b/drivers/staging/media/meson/vdec/vdec.c
-@@ -958,6 +958,8 @@ static const struct of_device_id vdec_dt_match[] = {
- 	  .data = &vdec_platform_gxl },
- 	{ .compatible = "amlogic,g12a-vdec",
- 	  .data = &vdec_platform_g12a },
-+	{ .compatible = "amlogic,sm1-vdec",
-+	  .data = &vdec_platform_sm1 },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, vdec_dt_match);
-@@ -1008,7 +1010,8 @@ static int vdec_probe(struct platform_device *pdev)
- 	of_id = of_match_node(vdec_dt_match, dev->of_node);
- 	core->platform = of_id->data;
- 
--	if (core->platform->revision == VDEC_REVISION_G12A) {
-+	if (core->platform->revision == VDEC_REVISION_G12A ||
-+	    core->platform->revision == VDEC_REVISION_SM1) {
- 		core->vdec_hevcf_clk = devm_clk_get(dev, "vdec_hevcf");
- 		if (IS_ERR(core->vdec_hevcf_clk))
- 			return -EPROBE_DEFER;
-diff --git a/drivers/staging/media/meson/vdec/vdec_1.c b/drivers/staging/media/meson/vdec/vdec_1.c
-index 3a15c6fc0567..3fe2de0c9331 100644
---- a/drivers/staging/media/meson/vdec/vdec_1.c
-+++ b/drivers/staging/media/meson/vdec/vdec_1.c
-@@ -18,6 +18,7 @@
- #define AO_RTI_GEN_PWR_SLEEP0	0xe8
- #define AO_RTI_GEN_PWR_ISO0	0xec
- 	#define GEN_PWR_VDEC_1 (BIT(3) | BIT(2))
-+	#define GEN_PWR_VDEC_1_SM1 (BIT(1))
- 
- #define MC_SIZE			(4096 * 4)
- 
-@@ -142,12 +143,20 @@ static int vdec_1_stop(struct amvdec_session *sess)
- 	amvdec_read_dos(core, DOS_SW_RESET0);
- 
- 	/* enable vdec1 isolation */
--	regmap_write(core->regmap_ao, AO_RTI_GEN_PWR_ISO0, 0xc0);
-+	if (core->platform->revision == VDEC_REVISION_SM1)
-+		regmap_update_bits(core->regmap_ao, AO_RTI_GEN_PWR_ISO0,
-+				   GEN_PWR_VDEC_1_SM1, GEN_PWR_VDEC_1_SM1);
-+	else
-+		regmap_write(core->regmap_ao, AO_RTI_GEN_PWR_ISO0, 0xc0);
- 	/* power off vdec1 memories */
- 	amvdec_write_dos(core, DOS_MEM_PD_VDEC, 0xffffffff);
- 	/* power off vdec1 */
--	regmap_update_bits(core->regmap_ao, AO_RTI_GEN_PWR_SLEEP0,
--			   GEN_PWR_VDEC_1, GEN_PWR_VDEC_1);
-+	if (core->platform->revision == VDEC_REVISION_SM1)
-+		regmap_update_bits(core->regmap_ao, AO_RTI_GEN_PWR_SLEEP0,
-+				   GEN_PWR_VDEC_1_SM1, GEN_PWR_VDEC_1_SM1);
-+	else
-+		regmap_update_bits(core->regmap_ao, AO_RTI_GEN_PWR_SLEEP0,
-+				   GEN_PWR_VDEC_1, GEN_PWR_VDEC_1);
- 
- 	clk_disable_unprepare(core->vdec_1_clk);
- 
-@@ -170,8 +179,12 @@ static int vdec_1_start(struct amvdec_session *sess)
- 		return ret;
- 
- 	/* Enable power for VDEC_1 */
--	regmap_update_bits(core->regmap_ao, AO_RTI_GEN_PWR_SLEEP0,
--			   GEN_PWR_VDEC_1, 0);
-+	if (core->platform->revision == VDEC_REVISION_SM1)
-+		regmap_update_bits(core->regmap_ao, AO_RTI_GEN_PWR_SLEEP0,
-+				   GEN_PWR_VDEC_1_SM1, 0);
-+	else
-+		regmap_update_bits(core->regmap_ao, AO_RTI_GEN_PWR_SLEEP0,
-+				   GEN_PWR_VDEC_1, 0);
- 	usleep_range(10, 20);
- 
- 	/* Reset VDEC1 */
-@@ -183,7 +196,11 @@ static int vdec_1_start(struct amvdec_session *sess)
- 	/* enable VDEC Memories */
- 	amvdec_write_dos(core, DOS_MEM_PD_VDEC, 0);
- 	/* Remove VDEC1 Isolation */
--	regmap_write(core->regmap_ao, AO_RTI_GEN_PWR_ISO0, 0);
-+	if (core->platform->revision == VDEC_REVISION_SM1)
-+		regmap_update_bits(core->regmap_ao, AO_RTI_GEN_PWR_ISO0,
-+				   GEN_PWR_VDEC_1_SM1, 0);
-+	else
-+		regmap_write(core->regmap_ao, AO_RTI_GEN_PWR_ISO0, 0);
- 	/* Reset DOS top registers */
- 	amvdec_write_dos(core, DOS_VDEC_MCRCC_STALL_CTRL, 0);
- 
-diff --git a/drivers/staging/media/meson/vdec/vdec_platform.c b/drivers/staging/media/meson/vdec/vdec_platform.c
-index 7845a889ce24..ea39f8209ec7 100644
---- a/drivers/staging/media/meson/vdec/vdec_platform.c
-+++ b/drivers/staging/media/meson/vdec/vdec_platform.c
-@@ -106,6 +106,30 @@ static const struct amvdec_format vdec_formats_g12a[] = {
- 	},
- };
- 
-+static const struct amvdec_format vdec_formats_sm1[] = {
-+	{
-+		.pixfmt = V4L2_PIX_FMT_MPEG1,
-+		.min_buffers = 8,
-+		.max_buffers = 8,
-+		.max_width = 1920,
-+		.max_height = 1080,
-+		.vdec_ops = &vdec_1_ops,
-+		.codec_ops = &codec_mpeg12_ops,
-+		.firmware_path = "meson/vdec/gxl_mpeg12.bin",
-+		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, V4L2_PIX_FMT_YUV420M, 0 },
-+	}, {
-+		.pixfmt = V4L2_PIX_FMT_MPEG2,
-+		.min_buffers = 8,
-+		.max_buffers = 8,
-+		.max_width = 1920,
-+		.max_height = 1080,
-+		.vdec_ops = &vdec_1_ops,
-+		.codec_ops = &codec_mpeg12_ops,
-+		.firmware_path = "meson/vdec/gxl_mpeg12.bin",
-+		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, V4L2_PIX_FMT_YUV420M, 0 },
-+	},
-+};
-+
- const struct vdec_platform vdec_platform_gxbb = {
- 	.formats = vdec_formats_gxbb,
- 	.num_formats = ARRAY_SIZE(vdec_formats_gxbb),
-@@ -129,3 +153,9 @@ const struct vdec_platform vdec_platform_g12a = {
- 	.num_formats = ARRAY_SIZE(vdec_formats_g12a),
- 	.revision = VDEC_REVISION_G12A,
- };
-+
-+const struct vdec_platform vdec_platform_sm1 = {
-+	.formats = vdec_formats_sm1,
-+	.num_formats = ARRAY_SIZE(vdec_formats_sm1),
-+	.revision = VDEC_REVISION_SM1,
-+};
-diff --git a/drivers/staging/media/meson/vdec/vdec_platform.h b/drivers/staging/media/meson/vdec/vdec_platform.h
-index 7c61b941b39f..731877a771f4 100644
---- a/drivers/staging/media/meson/vdec/vdec_platform.h
-+++ b/drivers/staging/media/meson/vdec/vdec_platform.h
-@@ -16,6 +16,7 @@ enum vdec_revision {
- 	VDEC_REVISION_GXL,
- 	VDEC_REVISION_GXM,
- 	VDEC_REVISION_G12A,
-+	VDEC_REVISION_SM1,
- };
- 
- struct vdec_platform {
-@@ -28,5 +29,6 @@ extern const struct vdec_platform vdec_platform_gxbb;
- extern const struct vdec_platform vdec_platform_gxm;
- extern const struct vdec_platform vdec_platform_gxl;
- extern const struct vdec_platform vdec_platform_g12a;
-+extern const struct vdec_platform vdec_platform_sm1;
- 
- #endif
 -- 
 2.22.0
 
