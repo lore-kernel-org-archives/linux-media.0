@@ -2,98 +2,111 @@ Return-Path: <SRS0=v/kU=ZN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09811C432C0
-	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 08:11:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C4FCC432C0
+	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 08:20:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D62462089D
-	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 08:11:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D382A20855
+	for <linux-media@archiver.kernel.org>; Thu, 21 Nov 2019 08:20:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fWeW5VfF"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="hZvmjFh4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727182AbfKUIKv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Nov 2019 03:10:51 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:43292 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726343AbfKUIKu (ORCPT
+        id S1726568AbfKUIUj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Nov 2019 03:20:39 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:34978 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726014AbfKUIUj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Nov 2019 03:10:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=VjO9eYbS8IFyLCNQdhIWL3IwgO2zhTRITxFTV7Q4ke0=; b=fWeW5VfFSpSocy6gUTyTq7ohZ
-        duWI/ht/WJEZCytte4q/OoCO3XHZsxub0zfdWXgJMwm0kxZ4Evu+pSu8vDqAde8NJcekP1KvZWTtD
-        xHQFS3QQWbDzJp6QKE6jzpGTkVBlvWLzk+RBcL8X5N1TsvDfMwPHaaBCvtN9JjwQ1rQi+7po+k2A4
-        Z39WgOu5ergP2HMb8sGCzyRKDSO/I+mbgAEZqSFGA0pwIVj1Qkrec7CtCQPnXQeGS/IaPqmpnFKNf
-        aZrMXAwd8HXogYEVWB+AdeEhKcdzRbKuMoG04Ftic11jIRTcwm+pNK8JK68LoASBzHMxqDwKIt+f7
-        gT4vwZRAg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iXhWR-0000HT-5s; Thu, 21 Nov 2019 08:09:03 +0000
-Date:   Thu, 21 Nov 2019 00:09:03 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: [PATCH v7 08/24] media/v4l2-core: set pages dirty upon releasing
- DMA buffers
-Message-ID: <20191121080903.GE30991@infradead.org>
-References: <20191121071354.456618-1-jhubbard@nvidia.com>
- <20191121071354.456618-9-jhubbard@nvidia.com>
+        Thu, 21 Nov 2019 03:20:39 -0500
+Received: from pendragon.ideasonboard.com (unknown [124.219.31.93])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D97FDA2B;
+        Thu, 21 Nov 2019 09:20:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1574324437;
+        bh=XnJrDFeVfKlgwTIhqIeZ8iYDIShZX+0oCiZ/fO7XWyg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hZvmjFh4wZPXuwc7EHErOnkUUgp4gbRqOZ5uDKFjRmeHPWFyN7KtqCLOTbz+MSPE/
+         ukCFDpALlhwZ2a6BgKZl2FlLBwhjIg52DbQaF4pOT+Mi6eEsPNpHddaPAnlZckTeQ+
+         20kV0mxqc78t8JDZtN2mFpxjkQhk+LT8lI+fzNt8=
+Date:   Thu, 21 Nov 2019 10:20:27 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Eugen.Hristev@microchip.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sakari.ailus@iki.fi
+Subject: Re: [PATCH] media: i2c: mt9v032: fix enum mbus codes and frame sizes
+Message-ID: <20191121082027.GJ4958@pendragon.ideasonboard.com>
+References: <1574322901-7097-1-git-send-email-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191121071354.456618-9-jhubbard@nvidia.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <1574322901-7097-1-git-send-email-eugen.hristev@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Nov 20, 2019 at 11:13:38PM -0800, John Hubbard wrote:
-> After DMA is complete, and the device and CPU caches are synchronized,
-> it's still required to mark the CPU pages as dirty, if the data was
-> coming from the device. However, this driver was just issuing a
-> bare put_page() call, without any set_page_dirty*() call.
+Hi Eugen,
+
+Thank you for the patch.
+
+On Thu, Nov 21, 2019 at 07:55:24AM +0000, Eugen.Hristev@microchip.com wrote:
+> From: Eugen Hristev <eugen.hristev@microchip.com>
 > 
-> Fix the problem, by calling set_page_dirty_lock() if the CPU pages
-> were potentially receiving data from the device.
+> This driver supports both the mt9v032 (color) and the mt9v022 (mono) sensors.
+> Depending on which sensor is used, the format from the sensor is different.
+> The format.code inside the dev struct holds this information.
+> The enum mbus and enum frame sizes need to take into account both type of
+> sensors, not just the color one.
+> To solve this, use the format.code in these functions instead of the
+> hardcoded bayer color format (which is only used for mt9v032).
+> 
+> Suggested-by: Wenyou Yang <wenyou.yang@microchip.com>
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 
-Looks good, and like a fix that should be queued up through the media
-tree for 5.5 and maybe even added to -stable.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/media/i2c/mt9v032.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/mt9v032.c b/drivers/media/i2c/mt9v032.c
+> index 4b9b98c..5bd3ae82 100644
+> --- a/drivers/media/i2c/mt9v032.c
+> +++ b/drivers/media/i2c/mt9v032.c
+> @@ -428,10 +428,12 @@ static int mt9v032_enum_mbus_code(struct v4l2_subdev *subdev,
+>  				  struct v4l2_subdev_pad_config *cfg,
+>  				  struct v4l2_subdev_mbus_code_enum *code)
+>  {
+> +	struct mt9v032 *mt9v032 = to_mt9v032(subdev);
+> +
+>  	if (code->index > 0)
+>  		return -EINVAL;
+>  
+> -	code->code = MEDIA_BUS_FMT_SGRBG10_1X10;
+> +	code->code = mt9v032->format.code;
+>  	return 0;
+>  }
+>  
+> @@ -439,7 +441,11 @@ static int mt9v032_enum_frame_size(struct v4l2_subdev *subdev,
+>  				   struct v4l2_subdev_pad_config *cfg,
+>  				   struct v4l2_subdev_frame_size_enum *fse)
+>  {
+> -	if (fse->index >= 3 || fse->code != MEDIA_BUS_FMT_SGRBG10_1X10)
+> +	struct mt9v032 *mt9v032 = to_mt9v032(subdev);
+> +
+> +	if (fse->index >= 3)
+> +		return -EINVAL;
+> +	if (mt9v032->format.code != fse->code)
+>  		return -EINVAL;
+>  
+>  	fse->min_width = MT9V032_WINDOW_WIDTH_DEF / (1 << fse->index);
+
+-- 
+Regards,
+
+Laurent Pinchart
