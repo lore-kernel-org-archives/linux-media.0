@@ -2,125 +2,137 @@ Return-Path: <SRS0=iFqQ=ZP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B026FC432C0
-	for <linux-media@archiver.kernel.org>; Sat, 23 Nov 2019 16:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9278DC432C0
+	for <linux-media@archiver.kernel.org>; Sat, 23 Nov 2019 18:36:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 87DAC2070E
-	for <linux-media@archiver.kernel.org>; Sat, 23 Nov 2019 16:46:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 56DBC2068D
+	for <linux-media@archiver.kernel.org>; Sat, 23 Nov 2019 18:36:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="qJ+YZIBB";
-	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="qJ+YZIBB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l9uPI6NN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726907AbfKWQqR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 23 Nov 2019 11:46:17 -0500
-Received: from smtp-out-so.shaw.ca ([64.59.136.138]:37172 "EHLO
-        smtp-out-so.shaw.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726861AbfKWQqR (ORCPT
+        id S1726676AbfKWSgU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 23 Nov 2019 13:36:20 -0500
+Received: from mail-pg1-f172.google.com ([209.85.215.172]:36194 "EHLO
+        mail-pg1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726620AbfKWSgT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 23 Nov 2019 11:46:17 -0500
-Received: from shaw.ca ([70.71.78.228])
-        by shaw.ca with ESMTPA
-        id YYXziRYDERnrKYYY4iYY1W; Sat, 23 Nov 2019 09:46:16 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shaw.ca;
-        s=s20180605; t=1574527576;
-        bh=ZbZjeMg4bRMV1Ftgtz/8dBzcw3I1FF14MWwDJ/6Nyms=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=qJ+YZIBBG+seLo3EEBwiTNhNVyTSYL2iNNZA6I/KeV0qjuAlWP6Si5x3M1gTOZG0l
-         tN6ZKzDcEN8RDlPH0FSKBnnTE0gpd9TlS6f/xzIlWKhcWqVoTFIJoYn1+jCbok+Kon
-         DPlKU/XGUVECHoXPiPSlHoRahzMO4JndlUVAfufUd7nx33VJLskdET2b+A/5yxHoKP
-         4YHtO2p4izUCDMuRu8EFngt7Fu2GXCNZqvT9VznZVhhtFjeXX7Goahz1FvSdqDzPdY
-         vrc0jiS2E/M91j/iCPHc+5IEfc6Nb7VvOGbqtCLxF8Ke6NrQWpmM8/fwDDF75dJYDL
-         DANpZECJ5Zgjw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shaw.ca;
-        s=s20180605; t=1574527576;
-        bh=ZbZjeMg4bRMV1Ftgtz/8dBzcw3I1FF14MWwDJ/6Nyms=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=qJ+YZIBBG+seLo3EEBwiTNhNVyTSYL2iNNZA6I/KeV0qjuAlWP6Si5x3M1gTOZG0l
-         tN6ZKzDcEN8RDlPH0FSKBnnTE0gpd9TlS6f/xzIlWKhcWqVoTFIJoYn1+jCbok+Kon
-         DPlKU/XGUVECHoXPiPSlHoRahzMO4JndlUVAfufUd7nx33VJLskdET2b+A/5yxHoKP
-         4YHtO2p4izUCDMuRu8EFngt7Fu2GXCNZqvT9VznZVhhtFjeXX7Goahz1FvSdqDzPdY
-         vrc0jiS2E/M91j/iCPHc+5IEfc6Nb7VvOGbqtCLxF8Ke6NrQWpmM8/fwDDF75dJYDL
-         DANpZECJ5Zgjw==
-X-Authority-Analysis: v=2.3 cv=L7FjvNb8 c=1 sm=1 tr=0
- a=qDatE6m/3wxSEG8Wq7h0zQ==:117 a=qDatE6m/3wxSEG8Wq7h0zQ==:17
- a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=_Dj-zB-qAAAA:8 a=bAolQom50hykzV7YMrMA:9
- a=3YPUzw7YLU6Ixx1t:21 a=L6LgHPg5I2kkYD5o:21 a=c-cOe7UV8MviEfHuAVEQ:22
-From:   joevt <joevt@shaw.ca>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, joevt <joevt@shaw.ca>
-Subject: [PATCH 06/10] edid-decode: Dump hex of unknown CTA Vendor-Specific blocks
-Date:   Sat, 23 Nov 2019 08:46:00 -0800
-Message-Id: <20191123164604.268-7-joevt@shaw.ca>
-X-Mailer: git-send-email 2.21.0 (Apple Git-122.2)
-In-Reply-To: <20191123164604.268-1-joevt@shaw.ca>
-References: <20191123164604.268-1-joevt@shaw.ca>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfNqLdg9ZMaVKC21oywaFt3H2bmA4YWhViyWonWA1WjvSCAEe3Hxa+KbFs9/SNd4ZO7JkIwMXwq2UloVIL/JtoYTG6UZAghSoIQ1tAq28T9I+4o2kIusj
- 94N4R7mU4NjgkzMPk420nSsXDfywUqT72ReQMGimik884sXR9gG/i2L30LqzQ1p0adqWTZp/wT2Jyvr0RrPkEFILxSRUOtiZU4g=
+        Sat, 23 Nov 2019 13:36:19 -0500
+Received: by mail-pg1-f172.google.com with SMTP id k13so5066952pgh.3
+        for <linux-media@vger.kernel.org>; Sat, 23 Nov 2019 10:36:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=OfIDh+EvmIwR2u9sw52JxYk9mV/z+oYaTYxXDP8ivR0=;
+        b=l9uPI6NN0HCJCbgyalcT76BQxadSiF0NpKmy7MTrPt2ZW8ugY0X4hh9BedgP6Eu3dw
+         ahRiiWcRrvp9qJuSbP5oFiOBkUsVh0TwCZ9sBjADH+p0HRov5m1zBBRLjKZ2aWWZmDEM
+         Yw5kfJO8ZPxhL+zlD+Pc10QS5fHq6u3Y5tKznP9h5NjF5GittQk3LutSrcFbBNRm43EB
+         mSz4FDWH6sbcf6/fTNxLxQci6jq4Autvms/SApV5BcHQ0Tsx3/Hi9oKaa621caBE4UBB
+         MFLR1LN8E8wB4RZhPskDYh/3FX60E1T6vLIS33QODSPPPiQm5+T8aP81ZZyNUu9nxAGZ
+         2qrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=OfIDh+EvmIwR2u9sw52JxYk9mV/z+oYaTYxXDP8ivR0=;
+        b=qapgCbOwBafuudi9y3nRdvWVwUbIOtE0l448QC7I4/4u/zkOhdtuVcfTK9EQTYPKdW
+         aUb5xAgKlcPPVb0pmRuaXivWVWlsxa8RJOR2qAaEzAgnM4dI3MdsaB1C9i6h0JQNUdgI
+         9WTy65+ISRuUu7SsdWjJh4KDd5AWjdQ/Er0YGX/r6uWzCQ6/Cym2JhXl8O4aU1JpX+TQ
+         EidSUM5sJUDH6Q7f0ZJf/Ok4+tCRklwesofWgxNBgE6HlfDOsDkobwiXsZeFSU6kO/ic
+         iyTQIn77H2Skldp+QQvnfC01iVX/rDDxavG3Ix3dZhTAYcMkf/ZW7PaFH2O+xSfpxkLe
+         +a1Q==
+X-Gm-Message-State: APjAAAW6DFfSCOxBC0zWHXjgEjFWygBigh1N1tAmCcX10obU3IpW2z9i
+        7w3oUMFr+bF17F2Fn+0vtLU=
+X-Google-Smtp-Source: APXvYqwZG6fdbr68B3MWWmUZydNLjycetEHp7JSADDc5a7+V1YVP8G8KdHFDkXZeXXZqs87loj1rSA==
+X-Received: by 2002:a63:5611:: with SMTP id k17mr23446551pgb.210.1574534178744;
+        Sat, 23 Nov 2019 10:36:18 -0800 (PST)
+Received: from localhost.localdomain ([223.186.246.249])
+        by smtp.gmail.com with ESMTPSA id h9sm2725751pgk.84.2019.11.23.10.36.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Nov 2019 10:36:18 -0800 (PST)
+From:   Vandana BN <bnvandana@gmail.com>
+To:     hverkuil@xs4all.nl, linux-media@vger.kernel.org
+Cc:     Vandana BN <bnvandana@gmail.com>
+Subject: [PATCH v4] v4l2-ctl:Add Support for Touch
+Date:   Sun, 24 Nov 2019 00:06:11 +0530
+Message-Id: <20191123183611.8655-1-bnvandana@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <31f4c184-8890-cd93-8c37-36a66a71f5a3@xs4all.nl>
+References: <31f4c184-8890-cd93-8c37-36a66a71f5a3@xs4all.nl>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Unknown CTA Vendor-Specific blocks will output as hex. With this, two EDIDs with different data will not be considered equal.
-- Added hex_block to output hex for blocks of data that are not decoded.
+Add support to verify V4L2_TCH_FMT_DELTA_TD16 format touch inputs.
 
-Signed-off-by: Joe van Tunen <joevt@shaw.ca>
+Signed-off-by: Vandana BN <bnvandana@gmail.com>
 ---
- edid-decode.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+ utils/v4l2-ctl/v4l2-ctl-streaming.cpp |  5 +++++
+ utils/v4l2-ctl/v4l2-ctl-vidcap.cpp    | 19 +++++++++++++++++++
+ utils/v4l2-ctl/v4l2-ctl.h             |  1 +
+ 3 files changed, 25 insertions(+)
 
-diff --git a/edid-decode.c b/edid-decode.c
-index 4d6fe29..ce404cd 100644
---- a/edid-decode.c
-+++ b/edid-decode.c
-@@ -1934,6 +1934,18 @@ static void cta_hdr10plus(const unsigned char *x, unsigned length)
- 	printf("    Application Version: %u\n", x[0]);
+diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+index 184bfd64..47addc41 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+@@ -595,6 +595,11 @@ static void print_concise_buffer(FILE *f, cv4l_buffer &buf, cv4l_fmt &fmt,
+ 	if (v4l_type_is_meta(buf.g_type()) && buf.g_bytesused(0) &&
+ 	    !(buf.g_flags() & V4L2_BUF_FLAG_ERROR))
+ 		print_meta_buffer(f, buf, fmt, q);
++
++	if ((capabilities & V4L2_CAP_TOUCH) && buf.g_bytesused(0) &&
++	    !(buf.g_flags() & V4L2_BUF_FLAG_ERROR) &&
++	    (fmt.g_width() < 64 ||  fmt.g_height() < 64))
++		print_touch_buffer(f, buf, fmt, q);
  }
  
-+static void hex_block(const unsigned char *x, unsigned int length)
+ static void stream_buf_caps(cv4l_fd &fd, unsigned buftype)
+diff --git a/utils/v4l2-ctl/v4l2-ctl-vidcap.cpp b/utils/v4l2-ctl/v4l2-ctl-vidcap.cpp
+index 3a29251a..538ece3e 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-vidcap.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-vidcap.cpp
+@@ -358,3 +358,22 @@ void vidcap_list(cv4l_fd &fd)
+ 		}
+ 	}
+ }
++
++void print_touch_buffer(FILE *f, cv4l_buffer &buf, cv4l_fmt &fmt, cv4l_queue &q)
 +{
-+	if (length) {
-+		for (int i = 0; i < length; i++)
-+			printf("%02x", x[i]);
-+		printf("  ");
-+		for (int i = 0; i < length; i++)
-+			printf("%c", x[i] >= ' ' && x[i] <= '~' ? x[i] : '.');
-+		printf("\n");
++	__s16 *vbuf = NULL;
++	__u32 x, y;
++
++	switch (fmt.g_pixelformat()) {
++	case V4L2_TCH_FMT_DELTA_TD16:
++		vbuf = (__s16*)q.g_dataptr(buf.g_index(), 0);
++		for (y = 0; y < fmt.g_height(); y++) {
++			fprintf(f, "TD16:");
++			for (x = 0; x < fmt.g_width(); x++, vbuf++) {
++				fprintf(f, "%-3d ", (__s16)le16toh(*vbuf));
++			}
++			fprintf(f, "\n");
++		}
++		break;
 +	}
 +}
-+
- DEFINE_FIELD("YCbCr quantization", YCbCr_quantization, 7, 7,
- 	     { 0, "No Data" },
- 	     { 1, "Selectable (via AVI YQ)" });
-@@ -2321,7 +2333,9 @@ static void cta_block(const unsigned char *x)
- 			cta_hf_scdb(x + 4, length - 3);
- 			have_hf_vsdb = 1;
- 		} else {
--			printf("\n");
-+			printf(" (unknown)\n");
-+			printf("    ");
-+			hex_block(x + 4, length - 3);
- 		}
- 		break;
- 	case 0x04:
-@@ -2348,7 +2362,9 @@ static void cta_block(const unsigned char *x)
- 				printf(" (HDR10+)\n");
- 				cta_hdr10plus(x + 5, length - 4);
- 			} else {
--				printf("\n");
-+				printf(" (unknown)\n");
-+				printf("    ");
-+				hex_block(x + 5, length - 4);
- 			}
- 			break;
- 		case 0x02:
+diff --git a/utils/v4l2-ctl/v4l2-ctl.h b/utils/v4l2-ctl/v4l2-ctl.h
+index b0f65e9b..b31be7f5 100644
+--- a/utils/v4l2-ctl/v4l2-ctl.h
++++ b/utils/v4l2-ctl/v4l2-ctl.h
+@@ -373,6 +373,7 @@ int vidcap_get_and_update_fmt(cv4l_fd &_fd, struct v4l2_format &vfmt);
+ void vidcap_set(cv4l_fd &fd);
+ void vidcap_get(cv4l_fd &fd);
+ void vidcap_list(cv4l_fd &fd);
++void print_touch_buffer(FILE *f, cv4l_buffer &buf, cv4l_fmt &fmt, cv4l_queue &q);
+ 
+ // v4l2-ctl-vidout.cpp
+ void vidout_usage(void);
 -- 
-2.21.0 (Apple Git-122.2)
+2.17.1
 
