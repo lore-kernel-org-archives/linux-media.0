@@ -2,63 +2,59 @@ Return-Path: <SRS0=iFqQ=ZP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E7EBC432C0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24393C43215
 	for <linux-media@archiver.kernel.org>; Sat, 23 Nov 2019 16:46:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C11F32071C
+	by mail.kernel.org (Postfix) with ESMTP id F071220720
 	for <linux-media@archiver.kernel.org>; Sat, 23 Nov 2019 16:46:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="Mg7+Z/UV";
-	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="Mg7+Z/UV"
+	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="gxY8tlrV";
+	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="gxY8tlrV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbfKWQqR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726887AbfKWQqR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 23 Nov 2019 11:46:17 -0500
-Received: from smtp-out-so.shaw.ca ([64.59.136.139]:37148 "EHLO
+Received: from smtp-out-so.shaw.ca ([64.59.136.139]:37140 "EHLO
         smtp-out-so.shaw.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726820AbfKWQqQ (ORCPT
+        with ESMTP id S1726762AbfKWQqQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sat, 23 Nov 2019 11:46:16 -0500
 Received: from shaw.ca ([70.71.78.228])
         by shaw.ca with ESMTPA
-        id YYXziRYDERnrKYYY3iYY1A; Sat, 23 Nov 2019 09:46:15 -0700
+        id YYXziRYDERnrKYYY2iYY0y; Sat, 23 Nov 2019 09:46:15 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shaw.ca;
         s=s20180605; t=1574527575;
-        bh=tgLrh+iaKB9+zqsMp8DhAXMSnYDt1IxAnf2Ur9H9HPU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Mg7+Z/UVpXN8COZ1yUggUwXucuEkADxhs8YRh+IWsezma1TOglL9v1H+9FjZYsD7N
-         w5L677LhLUj3c9ZVps8AzLzLX3w0EvD0iY6+8OAA9UfndXqVyWtAETFGtUnKIqj8jZ
-         DYsLQNthgq5mpMemOfMOvpAMQUQkCixTuDo3tmcngwJoX9FxHjtrq20+SO1IL/8tXe
-         sOuZ6dL0AjqZcWYHtHwU3A7EzNLpkKNMkiYg5CR/0a9+MNMgsPI3yqavyk/ULQKA/a
-         Xa7HNoVnH8EvcPRwUwpGCpz8p8F+bwmv7zTHjJuwZeiy7c/99KQQn4DuznQn93lWLz
-         X5j0WakjTl5FQ==
+        bh=AQdv4G/mSkEfz7b1eoaRqAXKVimupndYiBmQr3Yo3NA=;
+        h=From:To:Cc:Subject:Date;
+        b=gxY8tlrVUPJR4+vUsOnfh4b1A7/z7JQ8Hy02fV6weTLTw0yySzWBkn1zd6+mHss5a
+         VNc3+ysFm0JUk+vilsqd9Nsy5aVDdF9O7RDnOEb1o4EFuYkE833IHzaRSr78aSy18M
+         SgCLdeQRjYF9fFm3qXgyazC+XsnN4ZUjuIH/7P7c6v2kMJ+O4vY68bsRnKfdcWRLXi
+         6FPtZHj7tsTNPgV28z99wwjyle8WYtrCKFxhbpc/6AOI07b3yZFyfMykr3PG2whjwf
+         UU1sswJ9qHm7M2lRu1NDk3rMYQpo7i9EMovBEoxTUtH9AW4nq2VlY+ZNjD6QhcOYOl
+         359auYB6qPSeg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shaw.ca;
         s=s20180605; t=1574527575;
-        bh=tgLrh+iaKB9+zqsMp8DhAXMSnYDt1IxAnf2Ur9H9HPU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Mg7+Z/UVpXN8COZ1yUggUwXucuEkADxhs8YRh+IWsezma1TOglL9v1H+9FjZYsD7N
-         w5L677LhLUj3c9ZVps8AzLzLX3w0EvD0iY6+8OAA9UfndXqVyWtAETFGtUnKIqj8jZ
-         DYsLQNthgq5mpMemOfMOvpAMQUQkCixTuDo3tmcngwJoX9FxHjtrq20+SO1IL/8tXe
-         sOuZ6dL0AjqZcWYHtHwU3A7EzNLpkKNMkiYg5CR/0a9+MNMgsPI3yqavyk/ULQKA/a
-         Xa7HNoVnH8EvcPRwUwpGCpz8p8F+bwmv7zTHjJuwZeiy7c/99KQQn4DuznQn93lWLz
-         X5j0WakjTl5FQ==
+        bh=AQdv4G/mSkEfz7b1eoaRqAXKVimupndYiBmQr3Yo3NA=;
+        h=From:To:Cc:Subject:Date;
+        b=gxY8tlrVUPJR4+vUsOnfh4b1A7/z7JQ8Hy02fV6weTLTw0yySzWBkn1zd6+mHss5a
+         VNc3+ysFm0JUk+vilsqd9Nsy5aVDdF9O7RDnOEb1o4EFuYkE833IHzaRSr78aSy18M
+         SgCLdeQRjYF9fFm3qXgyazC+XsnN4ZUjuIH/7P7c6v2kMJ+O4vY68bsRnKfdcWRLXi
+         6FPtZHj7tsTNPgV28z99wwjyle8WYtrCKFxhbpc/6AOI07b3yZFyfMykr3PG2whjwf
+         UU1sswJ9qHm7M2lRu1NDk3rMYQpo7i9EMovBEoxTUtH9AW4nq2VlY+ZNjD6QhcOYOl
+         359auYB6qPSeg==
 X-Authority-Analysis: v=2.3 cv=L7FjvNb8 c=1 sm=1 tr=0
  a=qDatE6m/3wxSEG8Wq7h0zQ==:117 a=qDatE6m/3wxSEG8Wq7h0zQ==:17
- a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=_Dj-zB-qAAAA:8 a=949wn93ibDxs2xV9dCkA:9
- a=c-cOe7UV8MviEfHuAVEQ:22
+ a=Q9Rj0_lbYESmYbdiyZkA:9
 From:   joevt <joevt@shaw.ca>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     linux-media@vger.kernel.org, joevt <joevt@shaw.ca>
-Subject: [PATCH 02/10] edid-decode: correct horizontal range in Monitor Ranges
-Date:   Sat, 23 Nov 2019 08:45:56 -0800
-Message-Id: <20191123164604.268-3-joevt@shaw.ca>
+Subject: [PATCH 00/10] edid-decode: bug fixes, additions, changes
+Date:   Sat, 23 Nov 2019 08:45:54 -0800
+Message-Id: <20191123164604.268-1-joevt@shaw.ca>
 X-Mailer: git-send-email 2.21.0 (Apple Git-122.2)
-In-Reply-To: <20191123164604.268-1-joevt@shaw.ca>
-References: <20191123164604.268-1-joevt@shaw.ca>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-CMAE-Envelope: MS4wfOY6nnjBSesckqm77OB5dyWnLm6UQqNHBC7vZ047/8VRMvM6rNflFdVjf6nubFnhlRqoWuSaML5TpDL7gY6UtKQ9Pk5mYHLY/Ck9TSN39sE3kukH3vL+
@@ -68,30 +64,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Broken since commit 1508f040.
-The max and min horizontal frequency in the "Monitor ranges" descriptor is to be offset by 255 when bit 3 and bit 2 are set, respectively.
+This patchset is a set of bug-fixes, additions, and changes I've made while examining various EDIDs I have encountered.
 
-Signed-off-by: Joe van Tunen <joevt@shaw.ca>
----
- edid-decode.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+joevt (10):
+  edid-decode: change horizontal refresh rates to kHz
+  edid-decode: correct horizontal range in Monitor Ranges
+  edid-decode: correct calculation of DisplayID type 1 timings
+  edid-decode: add front porch, pulse width, and back porch
+  edid-decode: output timings for YCbCr 4:2:0 cmdb
+  edid-decode: Dump hex of unknown CTA Vendor-Specific blocks
+  edid-decode: cleanup printf format string compiler warnings
+  edid-decode: Dump hex of non-decoded extension blocks
+  edid-decode: DisplayID additions
+  edid-decode: add example EDIDs
 
-diff --git a/edid-decode.c b/edid-decode.c
-index 4ba0808..b2e57a3 100644
---- a/edid-decode.c
-+++ b/edid-decode.c
-@@ -863,9 +863,9 @@ static int detailed_block(const unsigned char *x, int in_extension)
- 						v_min_offset = 255;
- 					}
- 				}
--				if (x[4] & 0x04) {
-+				if (x[4] & 0x08) {
- 					h_max_offset = 255;
--					if (x[4] & 0x03) {
-+					if (x[4] & 0x04) {
- 						h_min_offset = 255;
- 					}
- 				}
+ data/acer-xv273k-dp1                          | Bin 0 -> 384 bytes
+ data/acer-xv273k-dp1-tile0                    | Bin 0 -> 384 bytes
+ data/acer-xv273k-dp2                          | Bin 0 -> 384 bytes
+ data/acer-xv273k-dp2-tile1                    | Bin 0 -> 384 bytes
+ data/dell-p2415q-dp-mdp                       | Bin 0 -> 256 bytes
+ data/dell-p2415q-hdmi1.4                      | Bin 0 -> 256 bytes
+ data/dell-p2415q-hdmi2.0                      | Bin 0 -> 256 bytes
+ data/dell-up2715k-dp1-tile1                   | Bin 0 -> 384 bytes
+ data/dell-up2715k-dp2-tile0                   | Bin 0 -> 256 bytes
+ data/dell-up2715k-mdp                         | Bin 0 -> 256 bytes
+ data/dell-up2715k-mdp-switchresx              | Bin 0 -> 384 bytes
+ data/kogan-kaled24144f-dp                     | Bin 0 -> 256 bytes
+ data/kogan-kaled24144f-hdmi                   | Bin 0 -> 256 bytes
+ data/lg-ultrafine-5k-v2-thunderbolt-dp1-tile0 | Bin 0 -> 384 bytes
+ data/lg-ultrafine-5k-v2-thunderbolt-dp2-tile1 | Bin 0 -> 256 bytes
+ edid-decode.c                                 | 758 ++++++++++++++++--
+ 16 files changed, 671 insertions(+), 87 deletions(-)
+ create mode 100644 data/acer-xv273k-dp1
+ create mode 100644 data/acer-xv273k-dp1-tile0
+ create mode 100644 data/acer-xv273k-dp2
+ create mode 100644 data/acer-xv273k-dp2-tile1
+ create mode 100644 data/dell-p2415q-dp-mdp
+ create mode 100644 data/dell-p2415q-hdmi1.4
+ create mode 100644 data/dell-p2415q-hdmi2.0
+ create mode 100644 data/dell-up2715k-dp1-tile1
+ create mode 100644 data/dell-up2715k-dp2-tile0
+ create mode 100644 data/dell-up2715k-mdp
+ create mode 100644 data/dell-up2715k-mdp-switchresx
+ create mode 100644 data/kogan-kaled24144f-dp
+ create mode 100644 data/kogan-kaled24144f-hdmi
+ create mode 100644 data/lg-ultrafine-5k-v2-thunderbolt-dp1-tile0
+ create mode 100644 data/lg-ultrafine-5k-v2-thunderbolt-dp2-tile1
+
 -- 
 2.21.0 (Apple Git-122.2)
 
