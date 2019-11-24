@@ -8,59 +8,59 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56B86C432C0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1C13C33C9C
 	for <linux-media@archiver.kernel.org>; Sun, 24 Nov 2019 19:07:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 205C12075E
+	by mail.kernel.org (Postfix) with ESMTP id C3AA620823
 	for <linux-media@archiver.kernel.org>; Sun, 24 Nov 2019 19:07:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qfl7mpn0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IX4Y9Bz/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbfKXTHV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 24 Nov 2019 14:07:21 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:45926 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726975AbfKXTHU (ORCPT
+        id S1727008AbfKXTHW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 24 Nov 2019 14:07:22 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43622 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727007AbfKXTHW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 24 Nov 2019 14:07:20 -0500
-Received: by mail-pj1-f66.google.com with SMTP id m71so5405824pjb.12
-        for <linux-media@vger.kernel.org>; Sun, 24 Nov 2019 11:07:19 -0800 (PST)
+        Sun, 24 Nov 2019 14:07:22 -0500
+Received: by mail-pf1-f195.google.com with SMTP id 3so6134596pfb.10
+        for <linux-media@vger.kernel.org>; Sun, 24 Nov 2019 11:07:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=O/5KfUP0LpkEm4DJb+IianL3viLiCU0yRFlJf10usn8=;
-        b=qfl7mpn0dtIN16wpxCG2vs/tl1m0pVxpBvfdTTTkvh62cFmYhpqcRhuuIPEI1+hzfn
-         FbJyss+kn3HcL/My85UetVEOg1fLafvnDsK96MGhhu+dkWH8AycgNQGePWWVC4ywLpfl
-         sDAXb1wdJ8UZShfNXbPKSrEVon6w+0OVTrCav7KplfXtkhbaT8b3vHL0C7iDYITUoyWE
-         UpjL4v+7Cy8gSeV9iZfSj4szsP4IxpFJFG4PI9Wk7uL2MINHwJl+a1sSnoUZ16TQEErk
-         ESqEq6JGBXc13RA9zIJFhNVlUGzz+H/nnh+Pmr8Y6DklPP9yG7XmJSQ1WtSnbpA3qCGo
-         WL/Q==
+        bh=cuZoH/JLmsjVG1Yg//mGp6FIvC3w8f1MmhjZrWshNBg=;
+        b=IX4Y9Bz/oaP/VAPUGFUyK43T18l1VPj60JTc6pL0zbdvaybJfeifheGeXq4OUAX8ad
+         U4Po6D9ilLnP+P0dbpbJaY4PSyVgzYF6Q2OYIALjVuM6/fVroictl+aJdyq5r2emykwj
+         4pHyEQIOaqUrinTyNvQdHCjdgKCKCBfza7cq4mYf3UNilIzaIzBXFjvwRjg+Lv3HfjpD
+         hNbnzTclxFHzv9EDOXpN4368pwi/ct4be3Hw4vX78Ineji6i7KmuOAErKsvvcSThesX2
+         Wx2MTwthNIqm6G76MehseNrO8VvlN0fAAkiML1cExwYdHBVq/lPD0d20hJXS+IFZh5Ay
+         az6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=O/5KfUP0LpkEm4DJb+IianL3viLiCU0yRFlJf10usn8=;
-        b=AgF+1w/IXffXceXxMY3gnbMwBEtyT3nEUpkDMOAHofGCysgPZCQ1cNaL3RDSw2xkK2
-         m8s86KvIlqI2Q65AeNqcxruAeocaVLhqSUdLnrhA3OyQpO3BYWhrHYIWO+7D9bU2wuVd
-         m7NH9WEzvpjvhqhz9XdqVZNm+XbrJ0uZ38byLfgLjbnV5Eov1NTK+aeurWDt/dzT8Y8D
-         XokU0P0OxhBtCzPB96qfOWnDxZF27CDleHGIxOG4ShB42jca+ENXSZC+p4Cn6AHjaRor
-         8/kGcL4/g4ca/f/qXZzvUTIgZGGu84/exHGl4tJ75q8sJOnmHAy2CWGwBYzJxrOnP7V/
-         OyWQ==
-X-Gm-Message-State: APjAAAUNY+mLtdskj8MzrKPPbOALSfKSybqKXIKIJAYiB6zNVzoio/Th
-        gJzpJYUN+0NDIOPWPINVfsXLVeR4z+0=
-X-Google-Smtp-Source: APXvYqziMo5OM1bptcjmxrqJHW7BnUYopgZHmnzFq8lyAck+PC0icOGMKSdSQzpC9Efz9zpLnMrFCQ==
-X-Received: by 2002:a17:90a:b109:: with SMTP id z9mr33159099pjq.108.1574622438335;
-        Sun, 24 Nov 2019 11:07:18 -0800 (PST)
+        bh=cuZoH/JLmsjVG1Yg//mGp6FIvC3w8f1MmhjZrWshNBg=;
+        b=W04vlpyfn70k58XC5aKerbuRtgwrmKi5T3uS8KKLoCpU4Iu1s/qzfEeSFBNdAflafl
+         kWrR2e7H1nHlOM+0nEM5Zpyb49zZi22Bnx8EZP9662rS5Lg71gsfu8768CTsiVyb27hr
+         kWHPSOY6cH3b8ZvOB/ymWMBhWwUgAUZXhTbB3qu9KyLBwqNWobWjqtONjSofEoIM2vJQ
+         PlWrt5tcjxnDRzFztS9/8ILpin2rFe4E5gAjn/Y8x0w0ZPCTdRRKlbtw2sMtDo2kzkTC
+         TWKI0syqXdcPMr7f0RqT0BeSkp1M2PQ6LfjJLoj9nnqm/Ap74HXtFKfIl0fs80a2cnKk
+         hITw==
+X-Gm-Message-State: APjAAAUzeLzipDG7XjWMwTuLFWWvslBOGpRnZHQLBI4fmAJyPOLkN7Tb
+        jTbl/xwlSq2eLiDa7gWcy87air8CMSw=
+X-Google-Smtp-Source: APXvYqx4H4sE/y5iGINvFwtgb+M0aoC+Ej9aY8Eos8fYhLzhc7CLSmjyZtwqAN5RxKdhhdT/3tHTPQ==
+X-Received: by 2002:a62:7f93:: with SMTP id a141mr30562612pfd.82.1574622441016;
+        Sun, 24 Nov 2019 11:07:21 -0800 (PST)
 Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id r20sm5367801pgo.74.2019.11.24.11.07.17
+        by smtp.googlemail.com with ESMTPSA id r20sm5367801pgo.74.2019.11.24.11.07.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Nov 2019 11:07:17 -0800 (PST)
+        Sun, 24 Nov 2019 11:07:20 -0800 (PST)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>
-Subject: [PATCH v2 05/23] media: entity: Add functions to convert fwnode endpoints to media links
-Date:   Sun, 24 Nov 2019 11:06:45 -0800
-Message-Id: <20191124190703.12138-6-slongerbeam@gmail.com>
+Subject: [PATCH v2 08/23] media: cadence: csi2rx: Fix fwnode media link creation
+Date:   Sun, 24 Nov 2019 11:06:48 -0800
+Message-Id: <20191124190703.12138-9-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191124190703.12138-1-slongerbeam@gmail.com>
 References: <20191124190703.12138-1-slongerbeam@gmail.com>
@@ -69,295 +69,73 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds two functions:
+csi2rx_async_bound() passes the bound subdev's sd->fwnode to
+media_entity_get_fwnode_pad(). This is likely not an endpoint
+fwnode as required by media_entity_get_fwnode_pad(), for most
+subdevices it is the port parent of endpoint fwnode(s). This has only
+worked before because no entities have implemented the .get_fwnode_pad()
+op yet, and the default behavior of media_entity_get_fwnode_pad()
+was to ignore the passed fwnode and return the first pad that matches
+the given direction flags.
 
-media_create_fwnode_pad_links(), which converts fwnode endpoints that
-connect a local pad to all pads on a remote entity into media links.
+Fix this by replacing the calls to media_entity_get_fwnode_pad() and
+media_create_pad_link() with a call to media_create_fwnode_pad_links().
 
-media_create_fwnode_links(), which converts fwnode endpoints that
-connect all pads from a local entity to all pads on a remote entity into
-media links.
-
+Fixes: 1fc3b37f34f69 ("media: v4l: cadence: Add Cadence MIPI-CSI2 RX driver")
 Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
 ---
-Changes in v2:
-- fixed/improved the prototype descriptions.
----
- drivers/media/mc/mc-entity.c | 178 +++++++++++++++++++++++++++++++++++
- include/media/media-entity.h |  71 ++++++++++++++
- 2 files changed, 249 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 27 ++++++++------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index e9e090244fd4..45bbd6c91019 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -787,6 +787,184 @@ int media_create_pad_links(const struct media_device *mdev,
- }
- EXPORT_SYMBOL_GPL(media_create_pad_links);
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index be9ec59774d6..d79345820225 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -83,7 +83,6 @@ struct csi2rx_priv {
+ 	/* Remote source */
+ 	struct v4l2_async_subdev	asd;
+ 	struct v4l2_subdev		*source_subdev;
+-	int				source_pad;
+ };
  
-+static int __media_create_fwnode_pad_link(struct media_pad *local_pad,
-+					struct media_entity *remote,
-+					const struct fwnode_handle *remote_ep,
-+					const u32 flags)
-+{
-+	struct media_entity *local = local_pad->entity;
-+	unsigned long local_dir = local_pad->flags;
-+	unsigned long remote_dir = (local_dir & MEDIA_PAD_FL_SOURCE) ?
-+		MEDIA_PAD_FL_SINK : MEDIA_PAD_FL_SOURCE;
-+	struct media_entity *src, *sink;
-+	int src_pad, sink_pad;
-+	int remote_pad;
-+	int ret;
-+
-+	remote_pad = media_entity_get_fwnode_pad(remote, remote_ep,
-+						 remote_dir);
-+	if (remote_pad < 0)
-+		return 0;
-+
-+	if (local_dir & MEDIA_PAD_FL_SOURCE) {
-+		src = local;
-+		src_pad = local_pad->index;
-+		sink = remote;
-+		sink_pad = remote_pad;
-+	} else {
-+		src = remote;
-+		src_pad = remote_pad;
-+		sink = local;
-+		sink_pad = local_pad->index;
-+	}
-+
-+	/* make sure link doesn't already exist */
-+	if (media_entity_find_link(&src->pads[src_pad],
-+				   &sink->pads[sink_pad]))
-+		return 0;
-+
-+	ret = media_create_pad_link(src, src_pad, sink, sink_pad, flags);
-+	if (ret) {
-+		dev_dbg(sink->graph_obj.mdev->dev,
-+			"%s:%d -> %s:%d failed with %d\n",
-+			src->name, src_pad, sink->name, sink_pad,
-+			ret);
-+		return ret;
-+	}
-+
-+	dev_dbg(sink->graph_obj.mdev->dev, "%s:%d -> %s:%d\n",
-+		src->name, src_pad, sink->name, sink_pad);
-+
-+	return 0;
-+}
-+
-+int __media_create_fwnode_pad_links(struct media_pad *local_pad,
-+				    const struct fwnode_handle *local_fwnode,
-+				    struct media_entity *remote,
-+				    const struct fwnode_handle *remote_fwnode,
-+				    const u32 link_flags)
-+{
-+	struct fwnode_handle *endpoint;
-+
-+	fwnode_graph_for_each_endpoint(remote_fwnode, endpoint) {
-+		struct fwnode_link link;
-+		int ret;
-+
-+		ret = fwnode_graph_parse_link(endpoint, &link);
-+		if (ret)
-+			continue;
-+
-+		/*
-+		 * if this endpoint does not link to the local fwnode
-+		 * device, ignore it and continue.
-+		 */
-+		if (link.remote_port_parent != local_fwnode) {
-+			fwnode_graph_put_link(&link);
-+			continue;
-+		}
-+
-+		ret = __media_create_fwnode_pad_link(local_pad,
-+						     remote, endpoint,
-+						     link_flags);
-+
-+		fwnode_graph_put_link(&link);
-+
-+		if (ret) {
-+			fwnode_handle_put(endpoint);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(__media_create_fwnode_pad_links);
-+
-+int media_create_fwnode_pad_links(struct media_pad *local_pad,
-+				  const struct fwnode_handle *local_fwnode,
-+				  struct media_entity *remote,
-+				  const struct fwnode_handle *remote_fwnode,
-+				  const u32 link_flags)
-+{
-+	struct media_device *mdev = local_pad->entity->graph_obj.mdev;
-+	int ret;
-+
-+	mutex_lock(&mdev->graph_mutex);
-+	ret = __media_create_fwnode_pad_links(local_pad, local_fwnode,
-+					      remote, remote_fwnode,
-+					      link_flags);
-+	mutex_unlock(&mdev->graph_mutex);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(media_create_fwnode_pad_links);
-+
-+int __media_create_fwnode_links(struct media_entity *local,
-+				const struct fwnode_handle *local_fwnode,
-+				struct media_entity *remote,
-+				const struct fwnode_handle *remote_fwnode,
-+				const u32 link_flags)
-+{
-+	struct fwnode_handle *endpoint;
-+
-+	fwnode_graph_for_each_endpoint(local_fwnode, endpoint) {
-+		struct fwnode_link link;
-+		int local_pad;
-+		int ret;
-+
-+		local_pad = media_entity_get_fwnode_pad(local, endpoint,
-+							MEDIA_PAD_FL_SINK |
-+							MEDIA_PAD_FL_SOURCE);
-+		if (local_pad < 0)
-+			continue;
-+
-+		ret = fwnode_graph_parse_link(endpoint, &link);
-+		if (ret)
-+			continue;
-+
-+		/*
-+		 * if this endpoint does not link to the remote fwnode
-+		 * device, ignore it and continue.
-+		 */
-+		if (link.remote_port_parent != remote_fwnode) {
-+			fwnode_graph_put_link(&link);
-+			continue;
-+		}
-+
-+		ret = __media_create_fwnode_pad_link(&local->pads[local_pad],
-+						     remote,
-+						     link.remote.local_fwnode,
-+						     link_flags);
-+
-+		fwnode_graph_put_link(&link);
-+
-+		if (ret) {
-+			fwnode_handle_put(endpoint);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(__media_create_fwnode_links);
-+
-+int media_create_fwnode_links(struct media_entity *local,
-+			      const struct fwnode_handle *local_fwnode,
-+			      struct media_entity *remote,
-+			      const struct fwnode_handle *remote_fwnode,
-+			      const u32 link_flags)
-+{
-+	struct media_device *mdev = local->graph_obj.mdev;
-+	int ret;
-+
-+	mutex_lock(&mdev->graph_mutex);
-+	ret = __media_create_fwnode_links(local, local_fwnode,
-+					  remote, remote_fwnode, link_flags);
-+	mutex_unlock(&mdev->graph_mutex);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(media_create_fwnode_links);
-+
- void __media_entity_remove_links(struct media_entity *entity)
+ static inline
+@@ -251,26 +250,20 @@ static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
  {
- 	struct media_link *link, *tmp;
-diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index de7fc3676b5a..100673ad83c4 100644
---- a/include/media/media-entity.h
-+++ b/include/media/media-entity.h
-@@ -772,6 +772,77 @@ int media_create_pad_links(const struct media_device *mdev,
- 			   u32 flags,
- 			   const bool allow_both_undefined);
+ 	struct v4l2_subdev *subdev = notifier->sd;
+ 	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	int ret;
  
-+/**
-+ * media_create_fwnode_pad_links() - create links between a single local pad
-+ *			and a remote entity, using the fwnode endpoints
-+ *			between them.
-+ *
-+ * @local_pad: Pointer to &media_pad of the local media pad.
-+ * @local_fwnode: Pointer to the local device's firmware node.
-+ * @remote: Pointer to &media_entity of the remote device.
-+ * @remote_fwnode: Pointer to the remote device's firmware node.
-+ * @link_flags: Link flags, as defined in include/uapi/linux/media.h.
-+ *
-+ * .. note::
-+ *
-+ *    Before calling this function, media_entity_pads_init() and
-+ *    media_device_register_entity() should be called previously for
-+ *    both entities to be linked.
-+ *
-+ *    Locked (via the mdev graph_mutex) and unlocked versions of this
-+ *    function are provided. If this function is called from v4l2-async
-+ *    notifier bound handlers, the locked version should be used to
-+ *    prevent races with other subdevices loading and binding to their
-+ *    notifiers in parallel. The unlocked version can for example be
-+ *    called from v4l2-async notifier complete handlers, after all
-+ *    subdevices have loaded and bound.
-+ */
-+int __media_create_fwnode_pad_links(struct media_pad *local_pad,
-+				    const struct fwnode_handle *local_fwnode,
-+				    struct media_entity *remote,
-+				    const struct fwnode_handle *remote_fwnode,
-+				    const u32 link_flags);
-+int media_create_fwnode_pad_links(struct media_pad *local_pad,
-+				  const struct fwnode_handle *local_fwnode,
-+				  struct media_entity *remote,
-+				  const struct fwnode_handle *remote_fwnode,
-+				  const u32 link_flags);
-+
-+/**
-+ * media_create_fwnode_links() - create links between two entities, using
-+ *				the fwnode endpoints between them.
-+ *
-+ * @local: Pointer to &media_entity of the local device.
-+ * @local_fwnode: Pointer to the local device's firmware node.
-+ * @remote: Pointer to &media_entity of the remote device.
-+ * @remote_fwnode: Pointer to the remote device's firmware node.
-+ * @link_flags: Link flags, as defined in include/uapi/linux/media.h.
-+ *
-+ * .. note::
-+ *
-+ *    Before calling this function, media_entity_pads_init() and
-+ *    media_device_register_entity() should be called previously for
-+ *    both entities to be linked.
-+ *
-+ *    Locked (via the mdev graph_mutex) and unlocked versions of this
-+ *    function are provided. If this function is called from v4l2-async
-+ *    notifier bound handlers, the locked version should be used to
-+ *    prevent races with other subdevices loading and binding to their
-+ *    notifiers in parallel. The unlocked version can for example be
-+ *    called from v4l2-async notifier complete handlers, after all
-+ *    subdevices have loaded and bound.
-+ */
-+int __media_create_fwnode_links(struct media_entity *local,
-+				const struct fwnode_handle *local_fwnode,
-+				struct media_entity *remote,
-+				const struct fwnode_handle *remote_fwnode,
-+				const u32 link_flags);
-+int media_create_fwnode_links(struct media_entity *local,
-+			      const struct fwnode_handle *local_fwnode,
-+			      struct media_entity *remote,
-+			      const struct fwnode_handle *remote_fwnode,
-+			      const u32 link_flags);
-+
- void __media_entity_remove_links(struct media_entity *entity);
+-	csi2rx->source_pad = media_entity_get_fwnode_pad(&s_subdev->entity,
+-							 s_subdev->fwnode,
+-							 MEDIA_PAD_FL_SOURCE);
+-	if (csi2rx->source_pad < 0) {
+-		dev_err(csi2rx->dev, "Couldn't find output pad for subdev %s\n",
+-			s_subdev->name);
+-		return csi2rx->source_pad;
+-	}
++	ret = media_create_fwnode_pad_links(&csi2rx->subdev.entity.pads[0],
++					    dev_fwnode(csi2rx->dev),
++					    &s_subdev->entity,
++					    dev_fwnode(s_subdev->dev),
++					    MEDIA_LNK_FL_ENABLED |
++					    MEDIA_LNK_FL_IMMUTABLE);
++	if (ret)
++		return ret;
  
- /**
+ 	csi2rx->source_subdev = s_subdev;
+ 
+-	dev_dbg(csi2rx->dev, "Bound %s pad: %d\n", s_subdev->name,
+-		csi2rx->source_pad);
+-
+-	return media_create_pad_link(&csi2rx->source_subdev->entity,
+-				     csi2rx->source_pad,
+-				     &csi2rx->subdev.entity, 0,
+-				     MEDIA_LNK_FL_ENABLED |
+-				     MEDIA_LNK_FL_IMMUTABLE);
++	return 0;
+ }
+ 
+ static const struct v4l2_async_notifier_operations csi2rx_notifier_ops = {
 -- 
 2.17.1
 
