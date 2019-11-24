@@ -2,119 +2,111 @@ Return-Path: <SRS0=IAqP=ZQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98FFAC432C0
-	for <linux-media@archiver.kernel.org>; Sun, 24 Nov 2019 11:12:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC87BC43215
+	for <linux-media@archiver.kernel.org>; Sun, 24 Nov 2019 19:07:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6B1DD2071A
-	for <linux-media@archiver.kernel.org>; Sun, 24 Nov 2019 11:12:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C53E2080D
+	for <linux-media@archiver.kernel.org>; Sun, 24 Nov 2019 19:07:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="kn4saRXc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UV26zfJ2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbfKXLMT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 24 Nov 2019 06:12:19 -0500
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:49183 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726673AbfKXLMT (ORCPT
+        id S1726926AbfKXTHP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 24 Nov 2019 14:07:15 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:35158 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726945AbfKXTHP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 24 Nov 2019 06:12:19 -0500
-Received: from [192.168.2.10] ([46.9.232.237])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id YpoMiFzf6LwWdYpoPiT0EX; Sun, 24 Nov 2019 12:12:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1574593937; bh=P2WDD3Hs74oOP+K2BrxQQP3KD0ndfSRIowsT5rZ7WdA=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=kn4saRXcnZ272vjBpPDbq+GfHA5iLzeYogZZWkTZdCKk+cPGLjOCjQqCk3fONy098
-         xYXIiHI+rD6on418elCwPM/nu8V2x33O5k/0dHtpUudp2YQXPUUtv7RbxpqLZqN9Km
-         +kyxKANrhdBe++dtQqqSkJdORdbuY2p1DseodB2QzzhOG0LTGVKgiJbcz5Ua1kBSKC
-         T0G8+FRkQGWNJdosLef/PlLyUmJ9f2ha7fbXpRaWpJycUUalZJK5aTCSWcBG4ako9V
-         SmYSpO2L2o3HfOu9WNqkWbR/d592HsRFL2MU8RhYdCRzg4npZ2cGKXwA/VHgOR79iw
-         GlsiOUAkPEmRA==
-Subject: Re: [PATCH 00/10] edid-decode: bug fixes, additions, changes
-To:     joevt <joevt@shaw.ca>
-Cc:     linux-media@vger.kernel.org
-References: <20191123164604.268-1-joevt@shaw.ca>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <454f6b55-1679-1997-0da3-77b140312792@xs4all.nl>
-Date:   Sun, 24 Nov 2019 12:12:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191123164604.268-1-joevt@shaw.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfCowgip6D30QQF1FQrLv8GKywM2ELGPhSCRbf19vLX3K4THEqdjIhILWtQ+T5lS2eBgkZychv1GHf/hRzol00dVVFyoGFD7IzuLYvDUyaayK6W4ou/sx
- 0cAMguBAoocFCb2WdimBAXjlqhPYEUpJEh5q8HuCc8ZRmJiIB90IxxQmFQ0grcVgksirp64ToZVcS4E8d3JKerYBCnX7Z7Xk2vg=
+        Sun, 24 Nov 2019 14:07:15 -0500
+Received: by mail-pj1-f66.google.com with SMTP id s8so5423734pji.2
+        for <linux-media@vger.kernel.org>; Sun, 24 Nov 2019 11:07:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=ySxgjAsGLxeO4I//v6isWP1TjOEEKi4r4maQM3cg6UA=;
+        b=UV26zfJ2ALmUcqb0SIl7nsVwQaBVtEKaqEOJ7FOZIU1MXOLTEVrmT0+2Lk3r8X1pBD
+         EWTZZzSCZQ3dvK3T3L1IwIT83RVcXqFHQPxA8iz1i1ShEoOZforSk3vNNWKcNPbvjoIe
+         jQRwQtKa+m+iO0tZawqOfHRA22lhZrGrR54eQiZSHMeD8dnZvGN/UnXjEVVmw/vjq3X/
+         a6vQ/5IA+OEpy4f5VDNwdh71t7yliRqL1gJ2hKlh2zIy8XCdC2gkAk35CHPPqV8bm06Z
+         WvAeHEZaUeuO+3phumD8ucXsTxf9sK4y3nofbu6fPWVz9U8FRgnPYYQMDJ+amHbva8R7
+         Y7WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=ySxgjAsGLxeO4I//v6isWP1TjOEEKi4r4maQM3cg6UA=;
+        b=ma3PwsWVszTIfjQHItsc6q5avJj/dR1McjoIpdgcgGB6JlzeeLanOUUW3sdTC3qB0Q
+         1PwgVjdPxuMDQ1t8MpFcCqzzGyXyL1RYYAtapvwU1P47BYqpcD+MtguGP0ooW7QZvbrj
+         vz3bNDkgg7t6WZM+RwQTckx1vxSoL3JIgbEprgO4duxb4r43EKHMLAxbgnaDz3PJg2Gy
+         tBDuoMrllTYPDXcXjZbNfQcm29EyjvAbhp2rAwi/ieJLNAk/k73GxJQQyFOXnqovBsVb
+         tZnwm+SdMQrYZ05CTiDGCLOKwUQEPfc0h0Vdk8/uKARbNZXaAku05lkBaUm8FQb75mR4
+         brtQ==
+X-Gm-Message-State: APjAAAWl+8XRhrB89DT5P1WVmb4yvVj+HI80iJ9OGKstw5UQAgin0zNT
+        BYGFSoij15ln/HLHf0MPun+ZjWhhg6A=
+X-Google-Smtp-Source: APXvYqxqkhEEcD+njj1uevTtVo+XaMzb7QjwQVtabdzRp6Xp0sfx2N2Kfa6V6tyukmj8zIen6uhLaw==
+X-Received: by 2002:a17:90a:8a12:: with SMTP id w18mr34447493pjn.51.1574622434690;
+        Sun, 24 Nov 2019 11:07:14 -0800 (PST)
+Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
+        by smtp.googlemail.com with ESMTPSA id r20sm5367801pgo.74.2019.11.24.11.07.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Nov 2019 11:07:14 -0800 (PST)
+From:   Steve Longerbeam <slongerbeam@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>
+Subject: [PATCH v2 01/23] media: entity: Pass entity to get_fwnode_pad operation
+Date:   Sun, 24 Nov 2019 11:06:41 -0800
+Message-Id: <20191124190703.12138-2-slongerbeam@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191124190703.12138-1-slongerbeam@gmail.com>
+References: <20191124190703.12138-1-slongerbeam@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Joe,
+Add a missing pointer to the entity in the media_entity operation
+get_fwnode_pad.
 
-On 11/23/19 5:45 PM, joevt wrote:
-> This patchset is a set of bug-fixes, additions, and changes I've made while examining various EDIDs I have encountered.
-> 
-> joevt (10):
->   edid-decode: change horizontal refresh rates to kHz
->   edid-decode: correct horizontal range in Monitor Ranges
->   edid-decode: correct calculation of DisplayID type 1 timings
->   edid-decode: add front porch, pulse width, and back porch
->   edid-decode: output timings for YCbCr 4:2:0 cmdb
->   edid-decode: Dump hex of unknown CTA Vendor-Specific blocks
->   edid-decode: cleanup printf format string compiler warnings
->   edid-decode: Dump hex of non-decoded extension blocks
->   edid-decode: DisplayID additions
->   edid-decode: add example EDIDs
+Fixes: ae45cd5efc120 ("[media] media: entity: Add get_fwnode_pad entity
+operation")
+Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
+---
+ drivers/media/mc/mc-entity.c | 2 +-
+ include/media/media-entity.h | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-I merged patches 1-4, and 6-8.
-
-The others need a bit more work.
-
-Note that I made some slight changes to some of the patches for stylistic
-reasons. It's noted in the commit log.
-
-Regards,
-
-	Hans
-
-> 
->  data/acer-xv273k-dp1                          | Bin 0 -> 384 bytes
->  data/acer-xv273k-dp1-tile0                    | Bin 0 -> 384 bytes
->  data/acer-xv273k-dp2                          | Bin 0 -> 384 bytes
->  data/acer-xv273k-dp2-tile1                    | Bin 0 -> 384 bytes
->  data/dell-p2415q-dp-mdp                       | Bin 0 -> 256 bytes
->  data/dell-p2415q-hdmi1.4                      | Bin 0 -> 256 bytes
->  data/dell-p2415q-hdmi2.0                      | Bin 0 -> 256 bytes
->  data/dell-up2715k-dp1-tile1                   | Bin 0 -> 384 bytes
->  data/dell-up2715k-dp2-tile0                   | Bin 0 -> 256 bytes
->  data/dell-up2715k-mdp                         | Bin 0 -> 256 bytes
->  data/dell-up2715k-mdp-switchresx              | Bin 0 -> 384 bytes
->  data/kogan-kaled24144f-dp                     | Bin 0 -> 256 bytes
->  data/kogan-kaled24144f-hdmi                   | Bin 0 -> 256 bytes
->  data/lg-ultrafine-5k-v2-thunderbolt-dp1-tile0 | Bin 0 -> 384 bytes
->  data/lg-ultrafine-5k-v2-thunderbolt-dp2-tile1 | Bin 0 -> 256 bytes
->  edid-decode.c                                 | 758 ++++++++++++++++--
->  16 files changed, 671 insertions(+), 87 deletions(-)
->  create mode 100644 data/acer-xv273k-dp1
->  create mode 100644 data/acer-xv273k-dp1-tile0
->  create mode 100644 data/acer-xv273k-dp2
->  create mode 100644 data/acer-xv273k-dp2-tile1
->  create mode 100644 data/dell-p2415q-dp-mdp
->  create mode 100644 data/dell-p2415q-hdmi1.4
->  create mode 100644 data/dell-p2415q-hdmi2.0
->  create mode 100644 data/dell-up2715k-dp1-tile1
->  create mode 100644 data/dell-up2715k-dp2-tile0
->  create mode 100644 data/dell-up2715k-mdp
->  create mode 100644 data/dell-up2715k-mdp-switchresx
->  create mode 100644 data/kogan-kaled24144f-dp
->  create mode 100644 data/kogan-kaled24144f-hdmi
->  create mode 100644 data/lg-ultrafine-5k-v2-thunderbolt-dp1-tile0
->  create mode 100644 data/lg-ultrafine-5k-v2-thunderbolt-dp2-tile1
-> 
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 7c429ce98bae..c333320f790a 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -386,7 +386,7 @@ int media_entity_get_fwnode_pad(struct media_entity *entity,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = entity->ops->get_fwnode_pad(&endpoint);
++	ret = entity->ops->get_fwnode_pad(entity, &endpoint);
+ 	if (ret < 0)
+ 		return ret;
+ 
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index 8cb2c504a05c..cde80ad029b7 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -212,7 +212,8 @@ struct media_pad {
+  *    mutex held.
+  */
+ struct media_entity_operations {
+-	int (*get_fwnode_pad)(struct fwnode_endpoint *endpoint);
++	int (*get_fwnode_pad)(struct media_entity *entity,
++			      struct fwnode_endpoint *endpoint);
+ 	int (*link_setup)(struct media_entity *entity,
+ 			  const struct media_pad *local,
+ 			  const struct media_pad *remote, u32 flags);
+-- 
+2.17.1
 
