@@ -2,80 +2,57 @@ Return-Path: <SRS0=EoNX=ZR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24FD6C432C0
-	for <linux-media@archiver.kernel.org>; Mon, 25 Nov 2019 00:53:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCB62C432C3
+	for <linux-media@archiver.kernel.org>; Mon, 25 Nov 2019 04:20:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E843A20637
-	for <linux-media@archiver.kernel.org>; Mon, 25 Nov 2019 00:53:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 906AA20815
+	for <linux-media@archiver.kernel.org>; Mon, 25 Nov 2019 04:20:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="bf4wQj5h"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Ag+u7Sri"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727125AbfKYAxs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 24 Nov 2019 19:53:48 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:43780 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727020AbfKYAxs (ORCPT
+        id S1727116AbfKYEUQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 24 Nov 2019 23:20:16 -0500
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:19303 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726977AbfKYEUP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 24 Nov 2019 19:53:48 -0500
-Received: by mail-qt1-f195.google.com with SMTP id q8so12649794qtr.10
-        for <linux-media@vger.kernel.org>; Sun, 24 Nov 2019 16:53:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=W5KvmIUsZXoQMVbzDoxYnt7yT+pQC9oHjmWUHowLIDE=;
-        b=bf4wQj5hUYAUJ6J+IG0+hDMiHwo0y37jHBHT8UdhIIsQlzBQ4CxdtIHJrRj51DxlRK
-         CKLiYZNarSFFj4FEgRzMNxy+kI0kMWkp2JP+w0At3xJ5awQQfKCflGDMEbLjgI1axJbX
-         hAKULgjdId2ND6JafSG19IZ76B47iyKuc//kc4PjYIOLOtUHlwtDFurR95sHJjXvaqXY
-         fGrur8LfkpaaQNAoNniODg3+dsAf2S2GrC+6cEhUlICPkA/CU1JiTx+UkO0BkI15CMLp
-         7s5O7Rwk6bHEYMLHf8Cgu9Ix5CmyXm+g4xBp1CqvpB7TPmrxsr5ItFDOP1iwxt6Ai6Gn
-         z9sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=W5KvmIUsZXoQMVbzDoxYnt7yT+pQC9oHjmWUHowLIDE=;
-        b=JVl8pkTiS9SloQF2cWNxOxSu3DFK0BDAMcNFMGQbNHPNUOfaIl5RGhvg/fQ8BfhRik
-         hPunr0uLx3grrp6xfOlRTzidT1xLJCOS2Q84maUoDN2+HQxtaEVURCRwgHxRZ+o5YUqp
-         eyS/XOLyKIxP9X4CG6i8W979Wfvfprpj/4K3PwPdUtlhVdbLstZQMNEJPPyjhgk2lS5Z
-         roydtyz/RLKADGbjMbQc0wg1AVIw+Fb1uj+Xl7aXvddU/rxSDzde+Kof7Z0U35bwl30v
-         zP9/p7UI4QPoatfX6aHf6XmftqyV11AcsjGG03AKs1DJIoqw2nq7avwiMmmmPr9M21PD
-         gbjQ==
-X-Gm-Message-State: APjAAAWLrioU77Id1rkg7HUoRPc8gWLuR63ccIKFLK1w64vf4XR/9Y7k
-        PdiEp+6OWAihIMB7O9vlYnuxxw==
-X-Google-Smtp-Source: APXvYqyaLXo5MUyD+I9dO6HiLJFn2uWdH+8xt8jSkZ8bt7a48VQTUuqWsbmWyw/EGV6UxA2EsKJ0Ug==
-X-Received: by 2002:ac8:2209:: with SMTP id o9mr27065091qto.246.1574643226463;
-        Sun, 24 Nov 2019 16:53:46 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-180.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.180])
-        by smtp.gmail.com with ESMTPSA id o124sm2535273qkf.66.2019.11.24.16.53.45
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 24 Nov 2019 16:53:45 -0800 (PST)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1iZ2dH-00020J-3s; Sun, 24 Nov 2019 20:53:39 -0400
-Date:   Sun, 24 Nov 2019 20:53:39 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        Sun, 24 Nov 2019 23:20:15 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ddb56810000>; Sun, 24 Nov 2019 20:20:17 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Sun, 24 Nov 2019 20:20:13 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Sun, 24 Nov 2019 20:20:13 -0800
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 25 Nov
+ 2019 04:20:13 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 25 Nov 2019 04:20:13 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5ddb567d0001>; Sun, 24 Nov 2019 20:20:13 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
         Alex Williamson <alex.williamson@redhat.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Dave Chinner <david@fromorbit.com>,
         David Airlie <airlied@linux.ie>,
         "David S . Miller" <davem@davemloft.net>,
         Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -83,121 +60,106 @@ Cc:     Leon Romanovsky <leon@kernel.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Paul Mackerras <paulus@samba.org>,
         Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 07/24] IB/umem: use get_user_pages_fast() to pin DMA
- pages
-Message-ID: <20191125005339.GC5634@ziepe.ca>
-References: <20191121071354.456618-1-jhubbard@nvidia.com>
- <20191121071354.456618-8-jhubbard@nvidia.com>
- <20191121080746.GC30991@infradead.org>
- <20191121143643.GC7448@ziepe.ca>
- <20191124100724.GH136476@unreal>
- <e8319590-a3f0-5ba4-af4c-65213358a742@nvidia.com>
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 02/19] mm/gup: move try_get_compound_head() to top, fix minor issues
+Date:   Sun, 24 Nov 2019 20:19:54 -0800
+Message-ID: <20191125042011.3002372-3-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191125042011.3002372-1-jhubbard@nvidia.com>
+References: <20191125042011.3002372-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e8319590-a3f0-5ba4-af4c-65213358a742@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1574655617; bh=JKnh6awNMnXx+WkfJCjCpP/dD2pEJJn8AxQ3IWMhLGw=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=Ag+u7Srir8nvbObwGswAhksM3lf7yhFcBnF9prXEqkjmBbbMlv6MAuwygC5CTdfJ5
+         yE4lfgVi/yE60GFGtA5YNkQ6Ixmb8HKLSLW4UmelKpt3+hIwMQ2v0Xv2lkIRBq/Vz9
+         UyTjt6wkmv/nZ8z4gOSYJ8ODHkT4eW9VcCswEjTPRRKwV/MPtR/2JYgXJPBUa1TpC3
+         X61Mq+s8iu1E8+ey0/n2CT8DHSxzUkKRvGF7G2xUsQVyE52JcynPyIkq/Zd1uyYuWt
+         OjAf4OH2PMbY5AWLJfB/7CI7Kw9bUgcUGPSDczmntAYIcz7EXi+UxoWrCfAF0welk3
+         sIZFe64yADXzg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Nov 24, 2019 at 04:05:16PM -0800, John Hubbard wrote:
- 
-> I looked into this, and I believe that the problem is in gup.c. There appears to
-> have been an oversight, in commit 817be129e6f2 ("mm: validate get_user_pages_fast
-> flags"), in filtering out FOLL_FORCE. There is nothing in the _fast() implementation
-> that requires that we avoid writing to the pages.
+An upcoming patch uses try_get_compound_head() more widely,
+so move it to the top of gup.c.
 
-I think it is too late to be doing these kinds of changes, I will
-revert the patch and this will miss this merge window.
+Also fix a tiny spelling error and a checkpatch.pl warning.
 
-Jason
-
-From ec6cb45292d21d1af9b9d95997b8cf204bbe854c Mon Sep 17 00:00:00 2001
-From: Jason Gunthorpe <jgg@mellanox.com>
-Date: Sun, 24 Nov 2019 20:47:59 -0400
-Subject: [PATCH] Revert "IB/umem: use get_user_pages_fast() to pin DMA pages"
-
-This reverts commit c9a7a2ed837c563f9f89743a6db732591cb4035b.
-
-This was merged before enough testing was done, and it triggers a WARN_ON()
-in get_user_pages_fast():
-
-  WARNING: CPU: 1 PID: 2557 at mm/gup.c:2404 get_user_pages_fast+0x115/0x180
-  Call Trace:
-   ib_umem_get+0x298/0x550 [ib_uverbs]
-   mlx5_ib_db_map_user+0xad/0x130 [mlx5_ib]
-   mlx5_ib_create_cq+0x1e8/0xaa0 [mlx5_ib]
-   create_cq+0x1c8/0x2d0 [ib_uverbs]
-   ib_uverbs_create_cq+0x70/0xa0 [ib_uverbs]
-   ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0xc2/0xf0 [ib_uverbs]
-   ib_uverbs_cmd_verbs.isra.6+0x5be/0xbe0 [ib_uverbs]
-   ? uverbs_disassociate_api+0xd0/0xd0 [ib_uverbs]
-   ? kvm_clock_get_cycles+0xd/0x10
-   ? kmem_cache_alloc+0x176/0x1c0
-   ? filemap_map_pages+0x18c/0x350
-   ib_uverbs_ioctl+0xc0/0x120 [ib_uverbs]
-   do_vfs_ioctl+0xa1/0x610
-   ksys_ioctl+0x70/0x80
-   __x64_sys_ioctl+0x16/0x20
-   do_syscall_64+0x42/0x110
-   entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-2404         if (WARN_ON_ONCE(gup_flags & ~(FOLL_WRITE | FOLL_LONGTERM)))
-2405                 return -EINVAL;
-
-While we think this WARN_ON is probably bogus, resolving this will have to
-wait.
-
-Signed-off-by: Jason Gunthorpe <jgg@mellanox.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- drivers/infiniband/core/umem.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ mm/gup.c | 29 +++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/infiniband/core/umem.c b/drivers/infiniband/core/umem.c
-index 214e87aa609d6e..7a3b99597eada1 100644
---- a/drivers/infiniband/core/umem.c
-+++ b/drivers/infiniband/core/umem.c
-@@ -266,13 +266,16 @@ struct ib_umem *ib_umem_get(struct ib_udata *udata, unsigned long addr,
- 	sg = umem->sg_head.sgl;
- 
- 	while (npages) {
--		ret = get_user_pages_fast(cur_base,
--					  min_t(unsigned long, npages,
--						PAGE_SIZE /
--						sizeof(struct page *)),
--					  gup_flags | FOLL_LONGTERM, page_list);
--		if (ret < 0)
-+		down_read(&mm->mmap_sem);
-+		ret = get_user_pages(cur_base,
-+				     min_t(unsigned long, npages,
-+					   PAGE_SIZE / sizeof (struct page *)),
-+				     gup_flags | FOLL_LONGTERM,
-+				     page_list, NULL);
-+		if (ret < 0) {
-+			up_read(&mm->mmap_sem);
- 			goto umem_release;
-+		}
- 
- 		cur_base += ret * PAGE_SIZE;
- 		npages   -= ret;
-@@ -280,6 +283,8 @@ struct ib_umem *ib_umem_get(struct ib_udata *udata, unsigned long addr,
- 		sg = ib_umem_add_sg_table(sg, page_list, ret,
- 			dma_get_max_seg_size(context->device->dma_device),
- 			&umem->sg_nents);
+diff --git a/mm/gup.c b/mm/gup.c
+index f764432914c4..3ecce297a47f 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -29,6 +29,21 @@ struct follow_page_context {
+ 	unsigned int page_mask;
+ };
+=20
++/*
++ * Return the compound head page with ref appropriately incremented,
++ * or NULL if that failed.
++ */
++static inline struct page *try_get_compound_head(struct page *page, int re=
+fs)
++{
++	struct page *head =3D compound_head(page);
 +
-+		up_read(&mm->mmap_sem);
++	if (WARN_ON_ONCE(page_ref_count(head) < 0))
++		return NULL;
++	if (unlikely(!page_cache_add_speculative(head, refs)))
++		return NULL;
++	return head;
++}
++
+ /**
+  * put_user_pages_dirty_lock() - release and optionally dirty gup-pinned p=
+ages
+  * @pages:  array of pages to be maybe marked dirty, and definitely releas=
+ed.
+@@ -1807,20 +1822,6 @@ static void __maybe_unused undo_dev_pagemap(int *nr,=
+ int nr_start,
  	}
- 
- 	sg_mark_end(sg);
--- 
+ }
+=20
+-/*
+- * Return the compund head page with ref appropriately incremented,
+- * or NULL if that failed.
+- */
+-static inline struct page *try_get_compound_head(struct page *page, int re=
+fs)
+-{
+-	struct page *head =3D compound_head(page);
+-	if (WARN_ON_ONCE(page_ref_count(head) < 0))
+-		return NULL;
+-	if (unlikely(!page_cache_add_speculative(head, refs)))
+-		return NULL;
+-	return head;
+-}
+-
+ #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
+ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
+ 			 unsigned int flags, struct page **pages, int *nr)
+--=20
 2.24.0
 
