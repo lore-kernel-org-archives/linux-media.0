@@ -2,194 +2,191 @@ Return-Path: <SRS0=EoNX=ZR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25ABAC432C0
-	for <linux-media@archiver.kernel.org>; Mon, 25 Nov 2019 08:20:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F02DDC432C0
+	for <linux-media@archiver.kernel.org>; Mon, 25 Nov 2019 08:32:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A067520815
-	for <linux-media@archiver.kernel.org>; Mon, 25 Nov 2019 08:20:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B727620748
+	for <linux-media@archiver.kernel.org>; Mon, 25 Nov 2019 08:32:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="XIR7/+7O"
+	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="dDJWumwV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725916AbfKYIUL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Nov 2019 03:20:11 -0500
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:34663 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727337AbfKYIUK (ORCPT
+        id S1727052AbfKYIc4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Nov 2019 03:32:56 -0500
+Received: from esa1.microchip.iphmx.com ([68.232.147.91]:17045 "EHLO
+        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727047AbfKYIcz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Nov 2019 03:20:10 -0500
-Received: from [192.168.2.10] ([46.9.232.237])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id Z9bHiQTTFecrtZ9bKiHnMR; Mon, 25 Nov 2019 09:20:07 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1574670007; bh=Cy2tmwI4YT71CWLwCNRCrtJatB4A6RrAJMVt3luR0oM=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=XIR7/+7OQZruZ+OJZuUnu4epmX/4pHEV94V1lQwrTkNj2e5mRfurSCf/AfytSgjNG
-         4BygKpj3C1+Fbc679hCeABSJhSuPnHa9rB9xZfvywnZdEMxIIV4+i4GYv83Z/HccnQ
-         H5cMqkel+SsSICgpIuHGdpLcwrPjwhtavTK78WWZmMjhZx0eZ8k80a03ryQRf/dqK1
-         TbqAzsV9iTfw3E7nj3dA4QoiG8yxPaOSK9aDzrhxJ7XlXXRJsFBkH4bpPMoXu01r5q
-         OFSkKsclMtNN1GE2pyMeVz9ddz3OqdBls99fxCF9wq9NmILyBVF2mRGmfa37HGge2X
-         FToNrKjgzJ5Vg==
-Subject: Re: [PATCH 05/10] edid-decode: output timings for YCbCr 4:2:0 cmdb
-To:     Joe van Tunen <joevt@shaw.ca>
-Cc:     linux-media@vger.kernel.org
-References: <20191123164604.268-1-joevt@shaw.ca>
- <20191123164604.268-6-joevt@shaw.ca>
- <7C871732-2189-421D-A4E1-CA6F1F972AC8@shaw.ca>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <080daa8d-53e7-4d16-2a62-04fbbfedaf99@xs4all.nl>
-Date:   Mon, 25 Nov 2019 09:20:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <7C871732-2189-421D-A4E1-CA6F1F972AC8@shaw.ca>
-Content-Type: text/plain; charset=utf-8
+        Mon, 25 Nov 2019 03:32:55 -0500
+Received-SPF: Pass (esa1.microchip.iphmx.com: domain of
+  Eugen.Hristev@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="Eugen.Hristev@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa1.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa1.microchip.iphmx.com; spf=Pass smtp.mailfrom=Eugen.Hristev@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: 5x4y3u3sX/XuWfSBk8Y1NBjEBG7S5BaJJq6XB9SdTWa7upytfLZxDzPKdmEH2mwVbhAGZg47RL
+ ULuD+GwPZNeIF23ZGu6A1BZ5WOuG5WObRWnF7cCqRf7Ck9QiFi8iMAYjb9I4k6Vzw26Ev4NmYG
+ VjZw9dZcSg+790/7aDJWpEW0oE1yUSmo3qHMB8iNO5mhVUi0cOaOQE63REHlRMHcJmFMAamwj4
+ P5jPrb7abc0aVE9XXQW7FdyFLt6tr41ZR+YMofMq7FvhoGAD89PsbPxCvlUYAEctBOz/Npbg56
+ Jww=
+X-IronPort-AV: E=Sophos;i="5.69,241,1571727600"; 
+   d="scan'208";a="59582554"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Nov 2019 01:32:54 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Mon, 25 Nov 2019 01:32:54 -0700
+Received: from NAM05-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Mon, 25 Nov 2019 01:32:54 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P4cVq01jrd9SYlvtFITUDwq+A/0z4WywamYIRd5iTyWUw5DrW/QP7jFGHyGN30sJkj20bxSCOo3LWnv7Wzon3uWB3aBoGLWK5WNTDDCh85hoWUlVsJtIy+j3LwdMsHZzXHBtadLhoNCRaSsDWjMnQXPtP+ihBISZbFlyQNrG/BhJRQ/DR7jWJ8Uu2/LN4SHkECjhrE0ZB/gUCjzTlvIdr6AhGGJYwpyJKh2+uX3Ux/ar2ijSBclnzQJ98hrr1Hwq6DFUhTi1oGhcsyVSXSgV+tCWTPxf/dyEBjf0vgFUCjfUN/JMkELQlisGdZd0G7TUp9vK9dUVt5Ud7d1G8XUkww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+ODnUOcqY0KalriTcExTCa9U7N8wvQUUlGpEuL53z34=;
+ b=KsTlz7Y3PtpycZk37SYKr1TgG9otj03xAWT6uZE5hYlHCmdo58Gc7QWYivOz2nmB7yqXmFlc4qWaOOu55tbzUilTiRT/DS0Dsokugja8OzXCwcCZGjuxC2NU0BjLshZQZ/9sZKKtn8AfdDzcVWrvEDqftzDyv57ca9mNY7Sfm3KWfWMQwvL4TrbT8Yw8NIvq4+ZdgzwJ4VdfCLbClZ1+5trRBAvuKEpQZTePIbzEx5ERqmyv6Zc5yUAEXUwZTsvc90pA75acHDLHZedgcOuzHeXJQdpWsOWX5p/U4thlgMk52El9URs9NLYcqC80MHvkTAaHpDJG1lCLWM1X2FmJBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+ODnUOcqY0KalriTcExTCa9U7N8wvQUUlGpEuL53z34=;
+ b=dDJWumwV0MP6jCZE7AsKGGODEAiII24r/o4biihomD+mvVfRSwMtzufYnJWbc4Sw9NPvA47KS70RFvyNRq+mGZFFOWgDhxsFx2UNNUpJFdLtSV0ziSg6778gLZx44DDGArMTmjcWU59TOwrUxVLb5mWEEd/aPNPp6spt5m2vnjo=
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
+ DM5PR11MB1418.namprd11.prod.outlook.com (10.168.102.9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2474.17; Mon, 25 Nov 2019 08:32:53 +0000
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::9039:e0e8:9032:20c1]) by DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::9039:e0e8:9032:20c1%12]) with mapi id 15.20.2474.023; Mon, 25 Nov
+ 2019 08:32:53 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <hverkuil@xs4all.nl>
+CC:     <Eugen.Hristev@microchip.com>
+Subject: [PATCH 4/5] media: atmel: atmel-isc-base: fix enum calls default
+ format
+Thread-Topic: [PATCH 4/5] media: atmel: atmel-isc-base: fix enum calls default
+ format
+Thread-Index: AQHVo2rtyZwWiP6YTkSg0h1tviYJpw==
+Date:   Mon, 25 Nov 2019 08:32:53 +0000
+Message-ID: <1574670712-31992-5-git-send-email-eugen.hristev@microchip.com>
+References: <1574670712-31992-1-git-send-email-eugen.hristev@microchip.com>
+In-Reply-To: <1574670712-31992-1-git-send-email-eugen.hristev@microchip.com>
+Accept-Language: en-US, ro-RO
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfEdQZUK3EnNt6zj1dC1Pbxe9xQ1nX5rF5rI+PhsgSj/lJC+c2l6KcYfh80EwCsBd4oO+ozfq2X7bM1/SSSfm1lVzj/v88ol0XfT5Juss2Dw1cF+vIgwK
- WtDTwVlgSDjr0/nmwHY3dplNxwfRlRVcno08/H+lWD8e71rTFbKB8QckStgy+eaM2uyK9OPmrITITyGXlWJO2bfI3uujN21/oBs=
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: AM4PR07CA0029.eurprd07.prod.outlook.com
+ (2603:10a6:205:1::42) To DM5PR11MB1242.namprd11.prod.outlook.com
+ (2603:10b6:3:14::8)
+x-mailer: git-send-email 2.7.4
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [94.177.32.156]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 136d7c3d-b6bc-45aa-e4b0-08d77182105d
+x-ms-traffictypediagnostic: DM5PR11MB1418:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR11MB14186E78C65FF89CE2F73FF0E84A0@DM5PR11MB1418.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2449;
+x-forefront-prvs: 0232B30BBC
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(346002)(376002)(396003)(366004)(136003)(189003)(199004)(305945005)(2201001)(66476007)(66556008)(76176011)(64756008)(66446008)(26005)(81156014)(81166006)(4326008)(3846002)(50226002)(5660300002)(25786009)(86362001)(8676002)(6116002)(2501003)(52116002)(66946007)(6436002)(66066001)(256004)(6486002)(446003)(14454004)(2906002)(386003)(71200400001)(102836004)(6512007)(2616005)(11346002)(6506007)(478600001)(71190400001)(36756003)(110136005)(107886003)(99286004)(186003)(7736002)(8936002)(316002)(461764006);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1418;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: driQ8bkwk581uJ0o1b9kFRi0qqeSqDZL/ynCQezw62J1zJcnluSmpcSO93ybZq4hxp90IPzTZV4KWm9f77sHBT+4b35kgkbzHsYjdMP5whWeB5munwn9Qcj8j5x8OPMMMMJLidj1McpEgloV6J2/YXCaMcbUfbVi2hatFfTKFQ9zBXpi4pktbVKQ+/UC4SjMkp+tES1Tv7dVkP3MTet7YNU7Dihs+rT+tngq/GIoPZGuCrwmdSFz2j2e8EapqO2mzoRFWhd6EQhvtZO/C6XpZt6NMl1CKRn2tjg5mJ8O5RX4K1bwQitTAMH/7+mpZccRqyEpxCSovZ73WclVI6S3PIXA2+GWa8OvYeXNc2pQjiIERBk0jGJakUXkkvx7krUYWFEh2q8qq74acD4TVIDjjAJISR+8X/kPYLyfgCNtT8jVVkSYtLq1eGJnh57qIa9Q
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 136d7c3d-b6bc-45aa-e4b0-08d77182105d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2019 08:32:53.3079
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: v3g9Ql0WAe63YWp0+wOotNZF1JvmqLvgf8w/EgyCUdc7FtujhcFI5KWVLkSEU7mxXUCgnEEsjn/8jkG5vVctZkV44ChXjATIzQOZL3Cdq84=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1418
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/25/19 7:32 AM, Joe van Tunen wrote:
-> Right. The code will have to iterate EDID extension blocks, find CTA extension blocks, then find VDB blocks.
-> In the case where Y420CMDB length = 0, I would maybe output "All VDB SVDs"?
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-Yes,
+With some sensors, the mbus code must match the one that sensor supports.
+In this case we should initialize the mbus_code of the fse/fie before
+calling the subdev, and not after.
 
-> Also, shouldn't "VSD Index" be "SVD Index" to match the abbreviations in the spec (or "VDB SVD Index" since it doesn't include SVDs from other sources such as Y420VDB)?
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+ drivers/media/platform/atmel/atmel-isc-base.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-I think 'VBD SVDs' is correct.
-
->  
-> Can we assume that an EDID can't use more than one Y420CMDB to get beyond VDB SVD Index 240? Each Y420CMDB will use the same set of SVDs (starting at VDB SVD index 1). The spec explicitly says that bit 0 is the first SVD of the VDBs.
-
-I agree with that assumption.
-
-Regards,
-
-	Hans
-
->  
-> On 2019-11-24, 2:26 AM, "Hans Verkuil" <hverkuil@xs4all.nl> wrote:
-> 
->     On 11/23/19 5:45 PM, joevt wrote:
->     > - "YCbCr 4:2:0 capability map data block" now outputs the modes that support YCbCr 4:2:0 instead of just indexes of the modes. Indexes refer to timings in "Video Data Block".
->     > - Warnings are included in the output if "Video Data Block" doesn't appear before "YCbCr 4:2:0 Capability Map Data Block" or if the index is outside the range defined in the "Video Data Block".
->     > - Moved inner loop of cta_svd into a new function cta_svd_one so that it can be reused by cta_y420cmdb.
->     
->     This isn't sufficient. There may be multiple SVD blocks in the EDID, and that's not taken
->     into account.
->     
->     Also, I can't find any requirement in the CTA-861 spec that the YCbCr 4:2:0 Capability
->     Map Data Block has to appear after all SVD blocks. So the final check if the Y420CMDB
->     block references invalid SVDs should be postponed to the end of the CTA block.
->     
->     I also found a pre-existing bug: if length == 0 in cta_y420cmdb() then that means that
->     all SVDs support 4:2:0. That should be added to cta_y420cmdb().
->     
->     Regards,
->     
->                 Hans
->     
->     > 
->     > Signed-off-by: Joe van Tunen <joevt@shaw.ca>
->     > ---
->     >  edid-decode.c | 44 +++++++++++++++++++++++++++++++++++---------
->     >  1 file changed, 35 insertions(+), 9 deletions(-)
->     > 
->     > diff --git a/edid-decode.c b/edid-decode.c
->     > index b833178..4d6fe29 100644
->     > --- a/edid-decode.c
->     > +++ b/edid-decode.c
->     > @@ -1454,13 +1454,10 @@ static const struct edid_cta_mode *vic_to_mode(unsigned char vic)
->     >         return NULL;
->     >  }
->     >  
->     > -static void cta_svd(const unsigned char *x, unsigned n, int for_ycbcr420)
->     > +static void cta_svd_one(const unsigned char *x, int for_ycbcr420)
->     >  {
->     > -       unsigned i;
->     > -
->     > -       for (i = 0; i < n; i++)  {
->     >                         const struct edid_cta_mode *vicmode = NULL;
->     > -                       unsigned char svd = x[i];
->     > +                      unsigned char svd = x[0];
->     >                         unsigned char native;
->     >                         unsigned char vic;
->     >                         const char *mode;
->     > @@ -1468,7 +1465,7 @@ static void cta_svd(const unsigned char *x, unsigned n, int for_ycbcr420)
->     >                         unsigned clock_khz = 0;
->     >  
->     >                         if ((svd & 0x7f) == 0)
->     > -                                       continue;
->     > +                                      return;
->     >  
->     >                         if ((svd - 1) & 0x40) {
->     >                                         vic = svd;
->     > @@ -1511,10 +1508,23 @@ static void cta_svd(const unsigned char *x, unsigned n, int for_ycbcr420)
->     >                         if (vic == 1)
->     >                                         has_cta861_vic_1 = 1;
->     >         }
->     > +
->     > +static void cta_svd(const unsigned char *x, int n, int for_ycbcr420)
->     > +{
->     > +      for (unsigned i = 0; i < n; i++)  {
->     > +                      printf("    ");
->     > +                      cta_svd_one(x+i, for_ycbcr420);
->     > +                      printf("\n");
->     > +      }
->     >  }
->     >  
->     > +unsigned const char *last_cta_video_block_start = NULL;
->     > +unsigned last_cta_video_block_length = 0;
->     > +
->     >  static void cta_video_block(const unsigned char *x, unsigned length)
->     >  {
->     > +      last_cta_video_block_start = x;
->     > +      last_cta_video_block_length = length;
->     >         cta_svd(x, length, 0);
->     >  }
->     >  
->     > @@ -1531,9 +1541,25 @@ static void cta_y420cmdb(const unsigned char *x, unsigned length)
->     >                         uint8_t v = x[0 + i];
->     >                         unsigned j;
->     >  
->     > -                       for (j = 0; j < 8; j++)
->     > -                                       if (v & (1 << j))
->     > -                                                       printf("    VSD Index %u\n", i * 8 + j);
->     > +                      for (j = 0; j < 8; j++) {
->     > +                                      if (v & (1 << j)) {
->     > +                                                      unsigned k = i * 8 + j;
->     > +                                                      printf("    VSD Index %u", k + 1);
->     > +                                                      if (k >= last_cta_video_block_length) {
->     > +                                                                      if (last_cta_video_block_start) {
->     > +                                                                                      printf(" (out of range)");
->     > +                                                                      } else {
->     > +                                                                                      printf(" (missing CTA video block)");
->    > +                                                                      }
->     > +                                                      }
->     > +                                                      else
->     > +                                                      {
->     > +                                                                      printf(" ");
->     > +                                                                      cta_svd_one(last_cta_video_block_start+k, 0);
->     > +                                                      }
->     > +                                                      printf("\n");
->     > +                                      }
->     > +                      }
->     >         }
->     >  }
->     >  
->     > 
->     
->     
-> 
-> 
+diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/=
+platform/atmel/atmel-isc-base.c
+index 7c73bcd..1bb1dd5 100644
+--- a/drivers/media/platform/atmel/atmel-isc-base.c
++++ b/drivers/media/platform/atmel/atmel-isc-base.c
+@@ -1461,6 +1461,7 @@ static int isc_enum_framesizes(struct file *file, voi=
+d *fh,
+ {
+ 	struct isc_device *isc =3D video_drvdata(file);
+ 	struct v4l2_subdev_frame_size_enum fse =3D {
++		.code =3D isc->config.sd_format->mbus_code,
+ 		.index =3D fsize->index,
+ 		.which =3D V4L2_SUBDEV_FORMAT_ACTIVE,
+ 	};
+@@ -1483,8 +1484,6 @@ static int isc_enum_framesizes(struct file *file, voi=
+d *fh,
+ 	if (ret)
+ 		return ret;
+=20
+-	fse.code =3D isc->config.sd_format->mbus_code;
+-
+ 	fsize->type =3D V4L2_FRMSIZE_TYPE_DISCRETE;
+ 	fsize->discrete.width =3D fse.max_width;
+ 	fsize->discrete.height =3D fse.max_height;
+@@ -1497,6 +1496,7 @@ static int isc_enum_frameintervals(struct file *file,=
+ void *fh,
+ {
+ 	struct isc_device *isc =3D video_drvdata(file);
+ 	struct v4l2_subdev_frame_interval_enum fie =3D {
++		.code =3D isc->config.sd_format->mbus_code,
+ 		.index =3D fival->index,
+ 		.width =3D fival->width,
+ 		.height =3D fival->height,
+@@ -1521,7 +1521,6 @@ static int isc_enum_frameintervals(struct file *file,=
+ void *fh,
+ 	if (ret)
+ 		return ret;
+=20
+-	fie.code =3D isc->config.sd_format->mbus_code;
+ 	fival->type =3D V4L2_FRMIVAL_TYPE_DISCRETE;
+ 	fival->discrete =3D fie.interval;
+=20
+--=20
+2.7.4
 
