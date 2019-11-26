@@ -2,36 +2,36 @@ Return-Path: <SRS0=dpHg=ZS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB2C0C432C3
-	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 12:08:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA85DC432C0
+	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 12:08:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AFD112075C
-	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 12:08:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8CF232075C
+	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 12:08:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728221AbfKZMIf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728222AbfKZMIf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 26 Nov 2019 07:08:35 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:49510 "EHLO
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49506 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727547AbfKZMIe (ORCPT
+        with ESMTP id S1727637AbfKZMIf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Nov 2019 07:08:34 -0500
+        Tue, 26 Nov 2019 07:08:35 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id C56EA283BD0
+        with ESMTPSA id 371E9283BA1
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     dafna.hirschfeld@collabora.com, hverkuil@xs4all.nl,
         dafna3@gmail.com, helen.koike@collabora.com,
         ezequiel@collabora.com, skhan@linuxfoundation.org,
         kernel@collabora.com
-Subject: [PATCH v3 2/3] media: vimc: allocate vimc_device dynamically
-Date:   Tue, 26 Nov 2019 13:08:21 +0100
-Message-Id: <20191126120822.11451-3-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v3 1/3] media: vimc: replace vimc->pdev.dev with vimc->mdev.dev
+Date:   Tue, 26 Nov 2019 13:08:20 +0100
+Message-Id: <20191126120822.11451-2-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191126120822.11451-1-dafna.hirschfeld@collabora.com>
 References: <20191126120822.11451-1-dafna.hirschfeld@collabora.com>
@@ -42,136 +42,110 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In future patch, the release of the device will move
-to the release callback of v4l2_device. Therefore the
-device will be released only when the last fh will be
-closed. Dynamic allocation will then be needed since
-when the device is unbounded and then bounded again,
-it might be that the probe callback will run before
-the release of the last device is finished. In that
-case both operations will run on the same memory
-concurrently and cause memory corruption.
-This patch also removes the pdev field of
-vimc_device since it is not needed anymore.
+replace 'vimc->pdev.dev' with 'vimc->mdev.dev'
+in debug prints and in assignment to
+vimc_ent_device.dev. This helps to unify the debug
+statements. This will also eliminate the need to use
+the pdev field in vimc_device in future patch.
 
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- drivers/media/platform/vimc/vimc-common.h |  2 --
- drivers/media/platform/vimc/vimc-core.c   | 31 +++++++++++++----------
- 2 files changed, 18 insertions(+), 15 deletions(-)
+ drivers/media/platform/vimc/vimc-capture.c | 6 +++---
+ drivers/media/platform/vimc/vimc-core.c    | 4 ++--
+ drivers/media/platform/vimc/vimc-debayer.c | 2 +-
+ drivers/media/platform/vimc/vimc-scaler.c  | 2 +-
+ drivers/media/platform/vimc/vimc-sensor.c  | 2 +-
+ 5 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/vimc/vimc-common.h b/drivers/media/platform/vimc/vimc-common.h
-index 87eb8259c2a8..1b6ef7196f3c 100644
---- a/drivers/media/platform/vimc/vimc-common.h
-+++ b/drivers/media/platform/vimc/vimc-common.h
-@@ -106,14 +106,12 @@ struct vimc_ent_device {
- /**
-  * struct vimc_device - main device for vimc driver
-  *
-- * @pdev	pointer to the platform device
-  * @pipe_cfg	pointer to the vimc pipeline configuration structure
-  * @ent_devs	array of vimc_ent_device pointers
-  * @mdev	the associated media_device parent
-  * @v4l2_dev	Internal v4l2 parent device
-  */
- struct vimc_device {
--	struct platform_device pdev;
- 	const struct vimc_pipeline_config *pipe_cfg;
- 	struct vimc_ent_device **ent_devs;
- 	struct media_device mdev;
+diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
+index 76c015898cfd..9a78bb7826a8 100644
+--- a/drivers/media/platform/vimc/vimc-capture.c
++++ b/drivers/media/platform/vimc/vimc-capture.c
+@@ -423,7 +423,7 @@ struct vimc_ent_device *vimc_cap_add(struct vimc_device *vimc,
+ 
+ 	ret = vb2_queue_init(q);
+ 	if (ret) {
+-		dev_err(&vimc->pdev.dev, "%s: vb2 queue init failed (err=%d)\n",
++		dev_err(vimc->mdev.dev, "%s: vb2 queue init failed (err=%d)\n",
+ 			vcfg_name, ret);
+ 		goto err_clean_m_ent;
+ 	}
+@@ -443,7 +443,7 @@ struct vimc_ent_device *vimc_cap_add(struct vimc_device *vimc,
+ 	vcap->ved.ent = &vcap->vdev.entity;
+ 	vcap->ved.process_frame = vimc_cap_process_frame;
+ 	vcap->ved.vdev_get_format = vimc_cap_get_format;
+-	vcap->ved.dev = &vimc->pdev.dev;
++	vcap->ved.dev = vimc->mdev.dev;
+ 
+ 	/* Initialize the video_device struct */
+ 	vdev = &vcap->vdev;
+@@ -462,7 +462,7 @@ struct vimc_ent_device *vimc_cap_add(struct vimc_device *vimc,
+ 	/* Register the video_device with the v4l2 and the media framework */
+ 	ret = video_register_device(vdev, VFL_TYPE_GRABBER, -1);
+ 	if (ret) {
+-		dev_err(&vimc->pdev.dev, "%s: video register failed (err=%d)\n",
++		dev_err(vimc->mdev.dev, "%s: video register failed (err=%d)\n",
+ 			vcap->vdev.name, ret);
+ 		goto err_release_queue;
+ 	}
 diff --git a/drivers/media/platform/vimc/vimc-core.c b/drivers/media/platform/vimc/vimc-core.c
-index 51c89fc79d90..1c55e0382f09 100644
+index 97a272f3350a..51c89fc79d90 100644
 --- a/drivers/media/platform/vimc/vimc-core.c
 +++ b/drivers/media/platform/vimc/vimc-core.c
-@@ -252,16 +252,21 @@ static void vimc_unregister(struct vimc_device *vimc)
- 	media_device_cleanup(&vimc->mdev);
- 	v4l2_device_unregister(&vimc->v4l2_dev);
- 	kfree(vimc->ent_devs);
-+	kfree(vimc);
- }
+@@ -162,12 +162,12 @@ static int vimc_add_subdevs(struct vimc_device *vimc)
+ 	unsigned int i;
  
- static int vimc_probe(struct platform_device *pdev)
- {
--	struct vimc_device *vimc = container_of(pdev, struct vimc_device, pdev);
-+	struct vimc_device *vimc;
- 	int ret;
+ 	for (i = 0; i < vimc->pipe_cfg->num_ents; i++) {
+-		dev_dbg(&vimc->pdev.dev, "new entity for %s\n",
++		dev_dbg(vimc->mdev.dev, "new entity for %s\n",
+ 			vimc->pipe_cfg->ents[i].name);
+ 		vimc->ent_devs[i] = vimc->pipe_cfg->ents[i].add(vimc,
+ 					vimc->pipe_cfg->ents[i].name);
+ 		if (!vimc->ent_devs[i]) {
+-			dev_err(&vimc->pdev.dev, "add new entity for %s\n",
++			dev_err(vimc->mdev.dev, "add new entity for %s\n",
+ 				vimc->pipe_cfg->ents[i].name);
+ 			return -EINVAL;
+ 		}
+diff --git a/drivers/media/platform/vimc/vimc-debayer.c b/drivers/media/platform/vimc/vimc-debayer.c
+index 5d1b67d684bb..34b98b235880 100644
+--- a/drivers/media/platform/vimc/vimc-debayer.c
++++ b/drivers/media/platform/vimc/vimc-debayer.c
+@@ -569,7 +569,7 @@ struct vimc_ent_device *vimc_deb_add(struct vimc_device *vimc,
+ 		goto err_free_hdl;
  
- 	dev_dbg(&pdev->dev, "probe");
+ 	vdeb->ved.process_frame = vimc_deb_process_frame;
+-	vdeb->ved.dev = &vimc->pdev.dev;
++	vdeb->ved.dev = vimc->mdev.dev;
+ 	vdeb->mean_win_size = vimc_deb_ctrl_mean_win_size.def;
  
--	memset(&vimc->mdev, 0, sizeof(vimc->mdev));
-+	vimc = kzalloc(sizeof(*vimc), GFP_KERNEL);
-+	if (!vimc)
-+		return -ENOMEM;
-+
-+	vimc->pipe_cfg = &pipe_cfg;
- 
- 	/* Link the media device within the v4l2_device */
- 	vimc->v4l2_dev.mdev = &vimc->mdev;
-@@ -277,15 +282,17 @@ static int vimc_probe(struct platform_device *pdev)
- 	ret = vimc_register_devices(vimc);
- 	if (ret) {
- 		media_device_cleanup(&vimc->mdev);
-+		kfree(vimc);
- 		return ret;
+ 	/* Initialize the frame format */
+diff --git a/drivers/media/platform/vimc/vimc-scaler.c b/drivers/media/platform/vimc/vimc-scaler.c
+index 2f88a7d9d67b..ecdbec5824c8 100644
+--- a/drivers/media/platform/vimc/vimc-scaler.c
++++ b/drivers/media/platform/vimc/vimc-scaler.c
+@@ -379,7 +379,7 @@ struct vimc_ent_device *vimc_sca_add(struct vimc_device *vimc,
  	}
  
-+	platform_set_drvdata(pdev, vimc);
- 	return 0;
- }
+ 	vsca->ved.process_frame = vimc_sca_process_frame;
+-	vsca->ved.dev = &vimc->pdev.dev;
++	vsca->ved.dev = vimc->mdev.dev;
  
- static int vimc_remove(struct platform_device *pdev)
- {
--	struct vimc_device *vimc = container_of(pdev, struct vimc_device, pdev);
-+	struct vimc_device *vimc = platform_get_drvdata(pdev);
+ 	/* Initialize the frame format */
+ 	vsca->sink_fmt = sink_fmt_default;
+diff --git a/drivers/media/platform/vimc/vimc-sensor.c b/drivers/media/platform/vimc/vimc-sensor.c
+index 32380f504591..9788fe291193 100644
+--- a/drivers/media/platform/vimc/vimc-sensor.c
++++ b/drivers/media/platform/vimc/vimc-sensor.c
+@@ -370,7 +370,7 @@ struct vimc_ent_device *vimc_sen_add(struct vimc_device *vimc,
+ 		goto err_free_tpg;
  
- 	dev_dbg(&pdev->dev, "remove");
+ 	vsen->ved.process_frame = vimc_sen_process_frame;
+-	vsen->ved.dev = &vimc->pdev.dev;
++	vsen->ved.dev = vimc->mdev.dev;
  
-@@ -299,12 +306,10 @@ static void vimc_dev_release(struct device *dev)
- {
- }
- 
--static struct vimc_device vimc_dev = {
--	.pipe_cfg = &pipe_cfg,
--	.pdev = {
--		.name = VIMC_PDEV_NAME,
--		.dev.release = vimc_dev_release,
--	}
-+
-+static struct platform_device vimc_pdev = {
-+	.name = VIMC_PDEV_NAME,
-+	.dev.release = vimc_dev_release,
- };
- 
- static struct platform_driver vimc_pdrv = {
-@@ -319,16 +324,16 @@ static int __init vimc_init(void)
- {
- 	int ret;
- 
--	ret = platform_device_register(&vimc_dev.pdev);
-+	ret = platform_device_register(&vimc_pdev);
- 	if (ret) {
--		dev_err(&vimc_dev.pdev.dev,
-+		dev_err(&vimc_pdev.dev,
- 			"platform device registration failed (err=%d)\n", ret);
- 		return ret;
- 	}
- 
- 	ret = platform_driver_register(&vimc_pdrv);
- 	if (ret) {
--		dev_err(&vimc_dev.pdev.dev,
-+		dev_err(&vimc_pdev.dev,
- 			"platform driver registration failed (err=%d)\n", ret);
- 		platform_driver_unregister(&vimc_pdrv);
- 		return ret;
-@@ -341,7 +346,7 @@ static void __exit vimc_exit(void)
- {
- 	platform_driver_unregister(&vimc_pdrv);
- 
--	platform_device_unregister(&vimc_dev.pdev);
-+	platform_device_unregister(&vimc_pdev);
- }
- 
- module_init(vimc_init);
+ 	/* Initialize the frame format */
+ 	vsen->mbus_format = fmt_default;
 -- 
 2.20.1
 
