@@ -2,258 +2,68 @@ Return-Path: <SRS0=dpHg=ZS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 894DAC43215
-	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 16:19:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8C89C432C0
+	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 16:19:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D6CB2075C
-	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 16:19:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A92772071A
+	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 16:19:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728789AbfKZQS6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Nov 2019 11:18:58 -0500
-Received: from mout.kundenserver.de ([212.227.17.10]:49401 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728736AbfKZQSm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Nov 2019 11:18:42 -0500
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MkpvV-1i6P0X3prb-00mMHc; Tue, 26 Nov 2019 17:18:34 +0100
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     y2038@lists.linaro.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v5 5/8] media: v4l2-core: fix VIDIOC_DQEVENT for time64 ABI
-Date:   Tue, 26 Nov 2019 17:18:21 +0100
-Message-Id: <20191126161824.337724-6-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20191126161824.337724-1-arnd@arndb.de>
-References: <20191126161824.337724-1-arnd@arndb.de>
+        id S1727851AbfKZQTU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Nov 2019 11:19:20 -0500
+Received: from guitar.tcltek.co.il ([192.115.133.116]:35089 "EHLO
+        mx.tkos.co.il" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726231AbfKZQTT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 26 Nov 2019 11:19:19 -0500
+X-Greylist: delayed 495 seconds by postgrey-1.27 at vger.kernel.org; Tue, 26 Nov 2019 11:19:19 EST
+Received: from sapphire.tkos.co.il (unknown [192.168.100.188])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx.tkos.co.il (Postfix) with ESMTPS id 29BB7440319;
+        Tue, 26 Nov 2019 18:11:02 +0200 (IST)
+Date:   Tue, 26 Nov 2019 18:11:00 +0200
+From:   Baruch Siach <baruch@tkos.co.il>
+To:     Stuvart S <lovelinuxdeeply@gmail.com>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: TI Deserializer DT node configuration
+Message-ID: <20191126161100.lmow4vehzy3b5vcd@sapphire.tkos.co.il>
+References: <CAAMGra5wp8o3DAFQdYk3Ky2oaWaNcX-o4gejW7jro5Rm1pkVug@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:wkgRxtQA2JMregiwL6hSMY9oukvaH+tLG6uRYJ+QQU6deycwLFW
- OJkb9MDnuw3lm4y4OMQT0gltJ26h4xHU2/atWaqRkpUhq3Shp0Piwov4qNrsCIKWAa2G9AS
- JGEf2pt0n2hjrG5nTBWrwSX5k8ZLXV9MTWeDig2zzwiKG1IFrICbX5o/feNIBJhz179YuLg
- LER7vA16ObgXZRxwC++LA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZmXBWwy9Psg=:6JoRMFo9SGexQszH7tkr7p
- UMBj2wK63k6e50z0+PSmRtDl7s4naauXpJdMV8vef7iNzB5wy5VkFdp82yBF8baaUkXsmXL2Y
- L/lkuXGRFzjBvgNpKKXGaOX+vYYGN1P/maw8dnaTaamwpXyyMLeAjYMliioX3Z1lLEwVR43zg
- oJp5nzzZqyAB13hl25/lePGZDGRTKaSVgv7UVtk4xkOA5UWyj6T88X8z6GCvgjFbJEUDd9lHI
- ESgzkUT8tvc2FeIvzyPZGBAkSLDHeKibMsd7R1vSGm60Ch2uib6HCgj40EZdO90JBZoxMyWgi
- cPlEdjfxqCoff9vAqHJW2NSIhKH3tUbSjc9wgb0NAFw7dU3UqtyUviQXhwUgpaKdSo1ORbq6Q
- L5/4qavSweE8K31bOc2OWNzwQBdZoGquqhhspHoRGd4f976JAuzPpb3bOHXOezZNbXte/uN0c
- PnuVNMGOIXxaUhx1eits6evu8hesTDBP0YZVh6GGVGP58QviiXQSGrsNSOnn3bYF//hpybxoo
- tFcDM5oAchj22Slm9wpBeTrtnyVElj2SYVNKpFCETQU7V19h7ZAy/C5+vkOG0sdbT7ITQpQpP
- k+nqJMOAdyrwITTh9Zs1oOneDi31Rt3DHmOBd74tOmfUgQ7kuf2FU/WxxnUCbFsEyWtdmSOwz
- PdJsublY7CkeV3uCtJCMG9sTSRPHf/ui2Ko6nbZmcPNfyW0TS/gpu8RrYtbyVyrjeyNALEfwH
- E0+wnAehXqqoxrdeIHg+bzFNzZ+lz/03tE/X09M16kx8yTQqrhLS4IEsKGW6n873wegFAM0Zi
- Z6Df1DRGhoeD5xMPtMO7ag02DKFLnZSters6GDn9WUDve1qFBgPARj9AEFFHaHdHOwkS6NTCz
- Iv4teznMneinnT6P9QbQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAMGra5wp8o3DAFQdYk3Ky2oaWaNcX-o4gejW7jro5Rm1pkVug@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The v4l2_event structure contains a 'struct timespec' member that is
-defined by the user space C library, creating an ABI incompatibility
-when that gets updated to a 64-bit time_t.
+Hi Stuvart,
 
-While passing a 32-bit time_t here would be sufficient for CLOCK_MONOTONIC
-timestamps, simply redefining the structure to use the kernel's
-__kernel_old_timespec would not work for any library that uses a copy
-of the linux/videodev2.h header file rather than including the copy from
-the latest kernel headers.
+On Tue, Nov 26, 2019 at 09:25:48PM +0530, Stuvart S wrote:
+> I am integrating DS90UB964 deserializer into my custom board based on
+> Rcar H3 Salvator XS. Deserializer is connected in i2c6.Also I have my
+> four serializers as DS90UB913 and cameras OV10635.
+> 
+> Can any one please help with the following?
+> 
+> How Deserializer connects to Serializer in DT node?I came accross
+> about the terms remote i2c, i2c-mux,i2c-atr.but I dont understand.I am
+> not using any i2c switches.
+> Any DT example is helpful for me
 
-This means the kernel has to be changed to handle both versions of the
-structure layout on a 32-bit architecture. The easiest way to do this
-is during the copy from/to user space.
+You might find this Luca Ceresoli ELCE talk interesting:
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/media/v4l2-core/v4l2-event.c  |  5 ++++-
- drivers/media/v4l2-core/v4l2-ioctl.c  | 29 ++++++++++++++++++++++++++-
- drivers/media/v4l2-core/v4l2-subdev.c | 26 +++++++++++++++++++++++-
- include/media/v4l2-ioctl.h            | 25 +++++++++++++++++++++++
- include/uapi/linux/videodev2.h        |  4 ++++
- 5 files changed, 86 insertions(+), 3 deletions(-)
+  https://www.youtube.com/watch?v=7hLv6fYAW-E
 
-diff --git a/drivers/media/v4l2-core/v4l2-event.c b/drivers/media/v4l2-core/v4l2-event.c
-index 9d673d113d7a..290c6b213179 100644
---- a/drivers/media/v4l2-core/v4l2-event.c
-+++ b/drivers/media/v4l2-core/v4l2-event.c
-@@ -27,6 +27,7 @@ static unsigned sev_pos(const struct v4l2_subscribed_event *sev, unsigned idx)
- static int __v4l2_event_dequeue(struct v4l2_fh *fh, struct v4l2_event *event)
- {
- 	struct v4l2_kevent *kev;
-+	struct timespec64 ts;
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&fh->vdev->fh_lock, flags);
-@@ -44,7 +45,9 @@ static int __v4l2_event_dequeue(struct v4l2_fh *fh, struct v4l2_event *event)
- 
- 	kev->event.pending = fh->navailable;
- 	*event = kev->event;
--	event->timestamp = ns_to_timespec(kev->ts);
-+	ts = ns_to_timespec64(kev->ts);
-+	event->timestamp.tv_sec = ts.tv_sec;
-+	event->timestamp.tv_nsec = ts.tv_nsec;
- 	kev->sev->first = sev_pos(kev->sev, 1);
- 	kev->sev->in_use--;
- 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 2ce91f88369b..96aafb659783 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -821,7 +821,7 @@ static void v4l_print_event(const void *arg, bool write_only)
- 	const struct v4l2_event *p = arg;
- 	const struct v4l2_event_ctrl *c;
- 
--	pr_cont("type=0x%x, pending=%u, sequence=%u, id=%u, timestamp=%lu.%9.9lu\n",
-+	pr_cont("type=0x%x, pending=%u, sequence=%u, id=%u, timestamp=%llu.%9.9llu\n",
- 			p->type, p->pending, p->sequence, p->id,
- 			p->timestamp.tv_sec, p->timestamp.tv_nsec);
- 	switch (p->type) {
-@@ -3025,6 +3025,13 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
- 
- static unsigned int video_translate_cmd(unsigned int cmd)
- {
-+	switch (cmd) {
-+#ifdef CONFIG_COMPAT_32BIT_TIME
-+	case VIDIOC_DQEVENT_TIME32:
-+		return VIDIOC_DQEVENT;
-+#endif
-+	}
-+
- 	return cmd;
- }
- 
-@@ -3074,6 +3081,26 @@ static int video_put_user(void __user *arg, void *parg, unsigned int cmd)
- 		return 0;
- 
- 	switch (cmd) {
-+#ifdef CONFIG_COMPAT_32BIT_TIME
-+	case VIDIOC_DQEVENT_TIME32: {
-+		struct v4l2_event *ev = parg;
-+		struct v4l2_event_time32 ev32 = {
-+			.type		= ev->type,
-+			.pending	= ev->pending,
-+			.sequence	= ev->sequence,
-+			.timestamp.tv_sec  = ev->timestamp.tv_sec,
-+			.timestamp.tv_nsec = ev->timestamp.tv_nsec,
-+			.id		= ev->id,
-+		};
-+
-+		memcpy(&ev32.u, &ev->u, sizeof(ev->u));
-+		memcpy(&ev32.reserved, &ev->reserved, sizeof(ev->reserved));
-+
-+		if (copy_to_user(arg, &ev32, sizeof(ev32)))
-+			return -EFAULT;
-+		break;
-+	}
-+#endif
- 	default:
- 		/*  Copy results into user buffer  */
- 		if (copy_to_user(arg, parg, _IOC_SIZE(cmd)))
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 9e987c0f840e..de926e311348 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -331,8 +331,8 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 	struct v4l2_fh *vfh = file->private_data;
- #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
- 	struct v4l2_subdev_fh *subdev_fh = to_v4l2_subdev_fh(vfh);
--	int rval;
- #endif
-+	int rval;
- 
- 	switch (cmd) {
- 	case VIDIOC_QUERYCTRL:
-@@ -392,6 +392,30 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 
- 		return v4l2_event_dequeue(vfh, arg, file->f_flags & O_NONBLOCK);
- 
-+	case VIDIOC_DQEVENT_TIME32: {
-+		struct v4l2_event_time32 *ev32 = arg;
-+		struct v4l2_event ev;
-+
-+		if (!(sd->flags & V4L2_SUBDEV_FL_HAS_EVENTS))
-+			return -ENOIOCTLCMD;
-+
-+		rval = v4l2_event_dequeue(vfh, &ev, file->f_flags & O_NONBLOCK);
-+
-+		*ev32 = (struct v4l2_event_time32) {
-+			.type		= ev.type,
-+			.pending	= ev.pending,
-+			.sequence	= ev.sequence,
-+			.timestamp.tv_sec  = ev.timestamp.tv_sec,
-+			.timestamp.tv_nsec = ev.timestamp.tv_nsec,
-+			.id		= ev.id,
-+		};
-+
-+		memcpy(&ev32->u, &ev.u, sizeof(ev.u));
-+		memcpy(&ev32->reserved, &ev.reserved, sizeof(ev.reserved));
-+
-+		return rval;
-+	}
-+
- 	case VIDIOC_SUBSCRIBE_EVENT:
- 		return v4l2_subdev_call(sd, core, subscribe_event, vfh, arg);
- 
-diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
-index 4bba65a59d46..05c1ec93a911 100644
---- a/include/media/v4l2-ioctl.h
-+++ b/include/media/v4l2-ioctl.h
-@@ -724,4 +724,29 @@ long int video_usercopy(struct file *file, unsigned int cmd,
- long int video_ioctl2(struct file *file,
- 		      unsigned int cmd, unsigned long int arg);
- 
-+/*
-+ * The user space interpretation of the 'v4l2_event' differs
-+ * based on the 'time_t' definition on 32-bit architectures, so
-+ * the kernel has to handle both.
-+ * This is the old version for 32-bit architectures.
-+ */
-+struct v4l2_event_time32 {
-+	__u32				type;
-+	union {
-+		struct v4l2_event_vsync		vsync;
-+		struct v4l2_event_ctrl		ctrl;
-+		struct v4l2_event_frame_sync	frame_sync;
-+		struct v4l2_event_src_change	src_change;
-+		struct v4l2_event_motion_det	motion_det;
-+		__u8				data[64];
-+	} u;
-+	__u32				pending;
-+	__u32				sequence;
-+	struct old_timespec32		timestamp;
-+	__u32				id;
-+	__u32				reserved[8];
-+};
-+
-+#define	VIDIOC_DQEVENT_TIME32	 _IOR('V', 89, struct v4l2_event_time32)
-+
- #endif /* _V4L2_IOCTL_H */
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 6ef4a5b787a4..caf156d45842 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -2341,7 +2341,11 @@ struct v4l2_event {
- 	} u;
- 	__u32				pending;
- 	__u32				sequence;
-+#ifdef __KERNEL__
-+	struct __kernel_timespec	timestamp;
-+#else
- 	struct timespec			timestamp;
-+#endif
- 	__u32				id;
- 	__u32				reserved[8];
- };
+Slides: https://elinux.org/images/f/fc/Ceresoli-elce2019-video-serdes-linux.pdf
+
+baruch
+
 -- 
-2.20.0
-
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
