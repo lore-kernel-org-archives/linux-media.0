@@ -2,36 +2,39 @@ Return-Path: <SRS0=dpHg=ZS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70194C432C0
-	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 12:08:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB2C0C432C3
+	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 12:08:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 50AD02075C
-	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 12:08:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFD112075C
+	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 12:08:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728218AbfKZMId (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Nov 2019 07:08:33 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:49498 "EHLO
+        id S1728221AbfKZMIf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Nov 2019 07:08:35 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49510 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727547AbfKZMId (ORCPT
+        with ESMTP id S1727547AbfKZMIe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Nov 2019 07:08:33 -0500
+        Tue, 26 Nov 2019 07:08:34 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id 86002281E9A
+        with ESMTPSA id C56EA283BD0
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     dafna.hirschfeld@collabora.com, hverkuil@xs4all.nl,
         dafna3@gmail.com, helen.koike@collabora.com,
         ezequiel@collabora.com, skhan@linuxfoundation.org,
         kernel@collabora.com
-Subject: [PATCH v3 0/3] media: vimc: release vimc in release cb of v4l2_device
-Date:   Tue, 26 Nov 2019 13:08:19 +0100
-Message-Id: <20191126120822.11451-1-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v3 2/3] media: vimc: allocate vimc_device dynamically
+Date:   Tue, 26 Nov 2019 13:08:21 +0100
+Message-Id: <20191126120822.11451-3-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191126120822.11451-1-dafna.hirschfeld@collabora.com>
+References: <20191126120822.11451-1-dafna.hirschfeld@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -39,43 +42,136 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patchset solves a crash that happens when unbinding the vimc
-device while it is streaming. Currently when the device is unbounded
-the vimc entities are released imidiettaly, this cause a crash
-if the streaming thread or the capture device dereference them
-after the release. The patchset solves this by deferring the release
-to the release callback of v4l2_device. This ensures that
-the vimc entities will be released after the last fh is closed
-and so the streaming terminates before.
+In future patch, the release of the device will move
+to the release callback of v4l2_device. Therefore the
+device will be released only when the last fh will be
+closed. Dynamic allocation will then be needed since
+when the device is unbounded and then bounded again,
+it might be that the probe callback will run before
+the release of the last device is finished. In that
+case both operations will run on the same memory
+concurrently and cause memory corruption.
+This patch also removes the pdev field of
+vimc_device since it is not needed anymore.
 
-- The first patch replaces the usage of vimc_device.pdev.dev
-with vimc.mdev.dev
-- The second patch allocates the vimc_device dynamically.
-This is needed since the release of the device is deferred
-and might run after the device is initialized again.
-- The third patch moves the release of the vimc_device
-and all the vimc entities to the release callback of
-v4l2_device.
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/media/platform/vimc/vimc-common.h |  2 --
+ drivers/media/platform/vimc/vimc-core.c   | 31 +++++++++++++----------
+ 2 files changed, 18 insertions(+), 15 deletions(-)
 
-Changes from v2:
-in patch 3, in case of failure in the probe function the memory is released
-directly from the probe function, and only on success path the release callback
-of v4l2_device is assigned
-
-Dafna Hirschfeld (3):
-  media: vimc: replace vimc->pdev.dev with vimc->mdev.dev
-  media: vimc: allocate vimc_device dynamically
-  media: vimc: crash fix - release vimc in the v4l_device release
-
- drivers/media/platform/vimc/vimc-capture.c |  18 ++--
- drivers/media/platform/vimc/vimc-common.c  |   2 -
- drivers/media/platform/vimc/vimc-common.h  |  30 +++---
- drivers/media/platform/vimc/vimc-core.c    | 101 ++++++++++++++-------
- drivers/media/platform/vimc/vimc-debayer.c |  19 ++--
- drivers/media/platform/vimc/vimc-scaler.c  |  19 ++--
- drivers/media/platform/vimc/vimc-sensor.c  |  18 ++--
- 7 files changed, 115 insertions(+), 92 deletions(-)
-
+diff --git a/drivers/media/platform/vimc/vimc-common.h b/drivers/media/platform/vimc/vimc-common.h
+index 87eb8259c2a8..1b6ef7196f3c 100644
+--- a/drivers/media/platform/vimc/vimc-common.h
++++ b/drivers/media/platform/vimc/vimc-common.h
+@@ -106,14 +106,12 @@ struct vimc_ent_device {
+ /**
+  * struct vimc_device - main device for vimc driver
+  *
+- * @pdev	pointer to the platform device
+  * @pipe_cfg	pointer to the vimc pipeline configuration structure
+  * @ent_devs	array of vimc_ent_device pointers
+  * @mdev	the associated media_device parent
+  * @v4l2_dev	Internal v4l2 parent device
+  */
+ struct vimc_device {
+-	struct platform_device pdev;
+ 	const struct vimc_pipeline_config *pipe_cfg;
+ 	struct vimc_ent_device **ent_devs;
+ 	struct media_device mdev;
+diff --git a/drivers/media/platform/vimc/vimc-core.c b/drivers/media/platform/vimc/vimc-core.c
+index 51c89fc79d90..1c55e0382f09 100644
+--- a/drivers/media/platform/vimc/vimc-core.c
++++ b/drivers/media/platform/vimc/vimc-core.c
+@@ -252,16 +252,21 @@ static void vimc_unregister(struct vimc_device *vimc)
+ 	media_device_cleanup(&vimc->mdev);
+ 	v4l2_device_unregister(&vimc->v4l2_dev);
+ 	kfree(vimc->ent_devs);
++	kfree(vimc);
+ }
+ 
+ static int vimc_probe(struct platform_device *pdev)
+ {
+-	struct vimc_device *vimc = container_of(pdev, struct vimc_device, pdev);
++	struct vimc_device *vimc;
+ 	int ret;
+ 
+ 	dev_dbg(&pdev->dev, "probe");
+ 
+-	memset(&vimc->mdev, 0, sizeof(vimc->mdev));
++	vimc = kzalloc(sizeof(*vimc), GFP_KERNEL);
++	if (!vimc)
++		return -ENOMEM;
++
++	vimc->pipe_cfg = &pipe_cfg;
+ 
+ 	/* Link the media device within the v4l2_device */
+ 	vimc->v4l2_dev.mdev = &vimc->mdev;
+@@ -277,15 +282,17 @@ static int vimc_probe(struct platform_device *pdev)
+ 	ret = vimc_register_devices(vimc);
+ 	if (ret) {
+ 		media_device_cleanup(&vimc->mdev);
++		kfree(vimc);
+ 		return ret;
+ 	}
+ 
++	platform_set_drvdata(pdev, vimc);
+ 	return 0;
+ }
+ 
+ static int vimc_remove(struct platform_device *pdev)
+ {
+-	struct vimc_device *vimc = container_of(pdev, struct vimc_device, pdev);
++	struct vimc_device *vimc = platform_get_drvdata(pdev);
+ 
+ 	dev_dbg(&pdev->dev, "remove");
+ 
+@@ -299,12 +306,10 @@ static void vimc_dev_release(struct device *dev)
+ {
+ }
+ 
+-static struct vimc_device vimc_dev = {
+-	.pipe_cfg = &pipe_cfg,
+-	.pdev = {
+-		.name = VIMC_PDEV_NAME,
+-		.dev.release = vimc_dev_release,
+-	}
++
++static struct platform_device vimc_pdev = {
++	.name = VIMC_PDEV_NAME,
++	.dev.release = vimc_dev_release,
+ };
+ 
+ static struct platform_driver vimc_pdrv = {
+@@ -319,16 +324,16 @@ static int __init vimc_init(void)
+ {
+ 	int ret;
+ 
+-	ret = platform_device_register(&vimc_dev.pdev);
++	ret = platform_device_register(&vimc_pdev);
+ 	if (ret) {
+-		dev_err(&vimc_dev.pdev.dev,
++		dev_err(&vimc_pdev.dev,
+ 			"platform device registration failed (err=%d)\n", ret);
+ 		return ret;
+ 	}
+ 
+ 	ret = platform_driver_register(&vimc_pdrv);
+ 	if (ret) {
+-		dev_err(&vimc_dev.pdev.dev,
++		dev_err(&vimc_pdev.dev,
+ 			"platform driver registration failed (err=%d)\n", ret);
+ 		platform_driver_unregister(&vimc_pdrv);
+ 		return ret;
+@@ -341,7 +346,7 @@ static void __exit vimc_exit(void)
+ {
+ 	platform_driver_unregister(&vimc_pdrv);
+ 
+-	platform_device_unregister(&vimc_dev.pdev);
++	platform_device_unregister(&vimc_pdev);
+ }
+ 
+ module_init(vimc_init);
 -- 
 2.20.1
 
