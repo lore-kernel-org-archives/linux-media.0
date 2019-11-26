@@ -2,146 +2,89 @@ Return-Path: <SRS0=dpHg=ZS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA668C432C0
-	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 16:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8505C432C0
+	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 17:00:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D6A220722
-	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 16:48:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W1vVEnMA"
+	by mail.kernel.org (Postfix) with ESMTP id 9CDBD2075C
+	for <linux-media@archiver.kernel.org>; Tue, 26 Nov 2019 17:00:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727754AbfKZQsn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Nov 2019 11:48:43 -0500
-Received: from mail-qv1-f67.google.com ([209.85.219.67]:43016 "EHLO
-        mail-qv1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727532AbfKZQsm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Nov 2019 11:48:42 -0500
-Received: by mail-qv1-f67.google.com with SMTP id cg2so7550095qvb.10
-        for <linux-media@vger.kernel.org>; Tue, 26 Nov 2019 08:48:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H+zPkA8+xnxZt5YlzMia4m3XjGDeqnWO3gTXHV1iMw8=;
-        b=W1vVEnMAfoWOr9tfIE4OO7WOdRBMvYJr1iYrardHluig0uJv5ZiQhcgVfJ3jvNvIZn
-         5kq0zjR2/vxZonoHZQVDPtM4lUJp4HOZHu0tnX8UuXvpVV56VDkDVEefvhcqjRWoqlH+
-         etupSk6HtmMFYihC1R1e70per9jH8vSzZ/2wc1M4miC+8HvX2AwZF/seoaRNhElD8NKA
-         Tvxihiz+wMGJxqwlQsZgLnb5N1KqAHj6VU5oxSVt5eRJvtXyeVlIKITU2YRT6J62NWET
-         DoiM4OKNeA9coOEkNFgB/aH1l7GxvjMWgL/wOTyDHmseVIyr5y+4a1JpRi+5sgaAX1Ty
-         h76g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H+zPkA8+xnxZt5YlzMia4m3XjGDeqnWO3gTXHV1iMw8=;
-        b=ThwSrwZOeaK3EW2amm2ehsZPk6ZPWhT5IHR64spSvxUp2BPB2vCl6vWwe0IOyF4BJD
-         jv0sBCCJhm8EvbWrxH0K0EuY1O/HtCoK8np8yxuHl/afrHhlJkig/wo558LD+MUtzasY
-         irbkN6usMzof3/+3Ak87o7gZLnEIxeeSEcQ7Sn6hMyjvsH8yJLMx6sdxju+Wm2RiUlj6
-         4/u8sS8Ubs3d1SPW94/cvuXye57KZxKnfL4pcfPWP/yN/s0t3pwrTKhGJXlWf/+xyGtg
-         b+gjP5wo+DK1U0MB1s/UXknZyaw2vwr9NIlQ7T4PZPTlKIHmhOCojH04C4prcqV8iTDT
-         u94w==
-X-Gm-Message-State: APjAAAVbzOaD8sNt1MOnRqCkWuNASQJ0sLQogo2daeZSjExuBYYynprZ
-        Wb5SkYoYa0iM/RjIx0iJbpU=
-X-Google-Smtp-Source: APXvYqzLtSh3CFHeSjcjesN7FVQ5aF0i3rYiD9rP9xs+OmFmlzVG5T/rlkNfe2f+aPpLGoxvpDF2+w==
-X-Received: by 2002:a0c:f114:: with SMTP id i20mr34101622qvl.167.1574786921642;
-        Tue, 26 Nov 2019 08:48:41 -0800 (PST)
-Received: from localhost.localdomain ([2804:14d:72b1:8920:a2ce:f815:f14d:bfac])
-        by smtp.gmail.com with ESMTPSA id e5sm5936362qtq.29.2019.11.26.08.48.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2019 08:48:41 -0800 (PST)
-From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
-X-Google-Original-From: Daniel W. S. Almeida
-To:     mchehab@kernel.org, p.zabel@pengutronix.de
-Cc:     "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH] Documentation: media: dtv-frontend.rst: fix a few minor typos
-Date:   Tue, 26 Nov 2019 13:40:51 -0300
-Message-Id: <20191126164051.39920-1-dwlsalmeida@gmail.com>
-X-Mailer: git-send-email 2.24.0
+        id S1728212AbfKZRAp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Nov 2019 12:00:45 -0500
+Received: from mleia.com ([178.79.152.223]:45872 "EHLO mail.mleia.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727339AbfKZRAp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 26 Nov 2019 12:00:45 -0500
+X-Greylist: delayed 478 seconds by postgrey-1.27 at vger.kernel.org; Tue, 26 Nov 2019 12:00:44 EST
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 00EBE3B37BD;
+        Tue, 26 Nov 2019 16:52:46 +0000 (UTC)
+Subject: Re: TI Deserializer DT node configuration
+To:     Stuvart S <lovelinuxdeeply@gmail.com>
+References: <CAAMGra5wp8o3DAFQdYk3Ky2oaWaNcX-o4gejW7jro5Rm1pkVug@mail.gmail.com>
+Cc:     linux-media@vger.kernel.org
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <8137b15e-084d-417a-6ee8-b425b74140df@mleia.com>
+Date:   Tue, 26 Nov 2019 18:52:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAMGra5wp8o3DAFQdYk3Ky2oaWaNcX-o4gejW7jro5Rm1pkVug@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20191126_165246_022854_C9791A8F 
+X-CRM114-Status: GOOD (  10.18  )
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
+Hello Stuvart,
 
-Fix a few minor typos throughout the document without changing the
-meaning of the sentences.
+On 11/26/19 5:55 PM, Stuvart S wrote:
+> Hello team,
+> 
+> I am integrating DS90UB964 deserializer into my custom board based on
+> Rcar H3 Salvator XS. Deserializer is connected in i2c6.Also I have my
+> four serializers as DS90UB913 and cameras OV10635.
+> 
+> Can any one please help with the following?
+> 
+> How Deserializer connects to Serializer in DT node?I came accross
+> about the terms remote i2c, i2c-mux,i2c-atr.but I dont understand.I am
+> not using any i2c switches.
+> Any DT example is helpful for me
+> 
 
-Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
----
- Documentation/media/kapi/dtv-frontend.rst | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+once in the past I've shared the essential part of my device drivers
+and the device tree configuration of connecting a serializer/deserializer
+to a display panel [1][2]. Unfortunately for dealing with camera sensors
+there should be one more device driver present, and MIPI CSI-2 controllers
+are very specific to particular deserializer/serializer ICs.
 
-diff --git a/Documentation/media/kapi/dtv-frontend.rst b/Documentation/media/kapi/dtv-frontend.rst
-index fbc5517c8d5a..b362109bb131 100644
---- a/Documentation/media/kapi/dtv-frontend.rst
-+++ b/Documentation/media/kapi/dtv-frontend.rst
-@@ -15,8 +15,8 @@ The header file for this API is named ``dvb_frontend.h`` and located in
- Demodulator driver
- ^^^^^^^^^^^^^^^^^^
- 
--The demodulator driver is responsible to talk with the decoding part of the
--hardware. Such driver should implement :c:type:`dvb_frontend_ops`, with
-+The demodulator driver is responsible for talking with the decoding part of the
-+hardware. Such driver should implement :c:type:`dvb_frontend_ops`, which
- tells what type of digital TV standards are supported, and points to a
- series of functions that allow the DVB core to command the hardware via
- the code under ``include/media/dvb_frontend.c``.
-@@ -120,7 +120,7 @@ Satellite TV reception is::
- 
- .. |delta|   unicode:: U+00394
- 
--The ``include/media/dvb_frontend.c`` has a kernel thread with is
-+The ``include/media/dvb_frontend.c`` has a kernel thread which is
- responsible for tuning the device. It supports multiple algorithms to
- detect a channel, as defined at enum :c:func:`dvbfe_algo`.
- 
-@@ -220,11 +220,11 @@ Signal strength (:ref:`DTV-STAT-SIGNAL-STRENGTH`)
-   - As the gain is visible through the set of registers that adjust the gain,
-     typically, this statistics is always available [#f3]_.
- 
--  - Drivers should try to make it available all the times, as this statistics
-+  - Drivers should try to make it available all the times, as these statistics
-     can be used when adjusting an antenna position and to check for troubles
-     at the cabling.
- 
--  .. [#f3] On a few devices, the gain keeps floating if no carrier.
-+  .. [#f3] On a few devices, the gain keeps floating if there is no carrier.
-      On such devices, strength report should check first if carrier is
-      detected at the tuner (``FE_HAS_CARRIER``, see :c:type:`fe_status`),
-      and otherwise return the lowest possible value.
-@@ -232,7 +232,7 @@ Signal strength (:ref:`DTV-STAT-SIGNAL-STRENGTH`)
- Carrier Signal to Noise ratio (:ref:`DTV-STAT-CNR`)
-   - Signal to Noise ratio for the main carrier.
- 
--  - Signal to Noise measurement depends on the device. On some hardware, is
-+  - Signal to Noise measurement depends on the device. On some hardware, it is
-     available when the main carrier is detected. On those hardware, CNR
-     measurement usually comes from the tuner (e. g. after ``FE_HAS_CARRIER``,
-     see :c:type:`fe_status`).
-@@ -323,8 +323,8 @@ A typical example of the logic that handle status and statistics is::
- 		.read_status = foo_get_status_and_stats,
- 	};
- 
--Statistics collect
--^^^^^^^^^^^^^^^^^^
-+Statistics collection
-+^^^^^^^^^^^^^^^^^^^^^
- 
- On almost all frontend hardware, the bit and byte counts are stored by
- the hardware after a certain amount of time or after the total bit/block
--- 
-2.24.0
+Both TI DS90UB964 and DS90UB913 are supported in my driver suite,
+however your hardware configuration may require some adjustments, also
+note that my selected approach is different from Luca's one, and to my
+knowledge anyone's published work is still under development.
 
+I feel I have to find more time and complete the driver series,
+the precondition is quite difficult though...
+
+[1] https://lore.kernel.org/lkml/f0a52a64-a7e7-b266-a402-1279036fad36@mleia.com/
+[2] https://lore.kernel.org/lkml/20181012060314.GU4939@dell/T/#mead5ea226550b6f0
+
+Slides for introduction into the patch series:
+
+* https://schd.ws/hosted_files/ossalsjp18/8a/vzapolskiy_als2018.pdf
+* https://events19.linuxfoundation.org/wp-content/uploads/2018/07/Vladimir_Zapolskiy_Bridging.pdf
+
+Hope it helps.
+
+--
+Best wishes,
+Vladimir
