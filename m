@@ -2,174 +2,82 @@ Return-Path: <SRS0=4FjG=ZT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D455EC43215
-	for <linux-media@archiver.kernel.org>; Wed, 27 Nov 2019 04:55:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA9E0C432C0
+	for <linux-media@archiver.kernel.org>; Wed, 27 Nov 2019 07:23:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 620E12084D
-	for <linux-media@archiver.kernel.org>; Wed, 27 Nov 2019 04:55:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="G4wd9QOd"
+	by mail.kernel.org (Postfix) with ESMTP id A3CF720637
+	for <linux-media@archiver.kernel.org>; Wed, 27 Nov 2019 07:23:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbfK0EzM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Nov 2019 23:55:12 -0500
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:43603 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726548AbfK0EzM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Nov 2019 23:55:12 -0500
-Received: from localhost ([IPv6:2001:983:e9a7:1:8093:c9f3:e5:47f2])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id ZpM4i2PtVFc4FZpM5iEylN; Wed, 27 Nov 2019 05:55:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1574830510; bh=azcaB/t4hlC6Hcdy3+1X3F1Uy+iVogRDzyKnO0gXSfw=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=G4wd9QOdyUxa+KSNavPdPoRiNwHsBcmlW/EJwUzIl3udy6RFCCGHvvk+C2AzoV73k
-         6gvFLUXcaIqMfT1oWAtSxFHB7zy5gKHjvJ5r9s5M9iS2TP9pSjpYaxAKWNDE+LTTW8
-         wTx3ChCMhM02d9Zw8VXGjRxpMs+nb7kuFkAvhtlbgQcKmm6282A8ymVlulxoHUVroB
-         iw0OXvEkgL9pYb+bbtiP/1Uc6QlLwKmwF9t9AbwQymZnIpp26DNEW2MpcKjHvYnwJw
-         5J/lJlNOd9qX6Q8AH013dY415KTdJMOXM++AFsHfZYgv8hRopWeVVrqM+5RkEgV98C
-         JcjQDw1mXTmwQ==
-Message-ID: <2dc154acb5fd27e27e22d8ce500fe4eb@smtp-cloud9.xs4all.net>
-Date:   Wed, 27 Nov 2019 05:55:08 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfIu3lDNq1BXFMtLZnR8AWwKs81fLIiu1Yv/ci1ZZQ+NzIcP9nDPj0qsiR+iY3rweU93MVG9MhFbBITkLyrlLdrHifoASPG8YUgIGBuQNfsc2mtm2HuMX
- QND9sBnsCzs4V77CEzENQltrRhPe+fkRKeE5viXCRWKtchM0VDmZhnv5RMZGiMquEG2Kk3dXe5346JGDPG6vEUf83sw5YYNoDQW2c21kZ9ijsipgpe71qXW8
+        id S1726722AbfK0HXt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Nov 2019 02:23:49 -0500
+Received: from mga07.intel.com ([134.134.136.100]:37770 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726145AbfK0HXs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 27 Nov 2019 02:23:48 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Nov 2019 23:23:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,248,1571727600"; 
+   d="scan'208";a="383413228"
+Received: from pl-dbox.sh.intel.com (HELO intel.com) ([10.239.13.128])
+  by orsmga005.jf.intel.com with ESMTP; 26 Nov 2019 23:23:46 -0800
+Date:   Wed, 27 Nov 2019 15:30:54 +0800
+From:   Philip Li <philip.li@intel.com>
+To:     Chris Wilson <chris@chris-wilson.co.uk>
+Cc:     kernel test robot <lkp@intel.com>, LKP <lkp@lists.01.org>,
+        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: 2989f64510 ("dma-buf: Add selftests for dma-fence"): WARNING:
+ CPU: 0 PID: 1 at lib/debugobjects.c:524 __debug_object_init
+Message-ID: <20191127073054.GG30842@intel.com>
+References: <5dd63a8f.BFdOlqs/XZAJHDfR%lkp@intel.com>
+ <157432116576.24852.2065478066028556019@skylake-alporthouse-com>
+ <20191122013244.GC313@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191122013244.GC313@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+On Fri, Nov 22, 2019 at 09:32:45AM +0800, Philip Li wrote:
+> On Thu, Nov 21, 2019 at 07:26:05AM +0000, Chris Wilson wrote:
+> > Quoting kernel test robot (2019-11-21 07:19:43)
+> > > Greetings,
+> > > 
+> > > 0day kernel testing robot got the below dmesg and the first bad commit is
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > 
+> > > commit 2989f6451084aed3f8cc9992477f7a9bf57a3716
+> > > Author:     Chris Wilson <chris@chris-wilson.co.uk>
+> > > AuthorDate: Mon Aug 19 10:59:27 2019 +0100
+> > > Commit:     Chris Wilson <chris@chris-wilson.co.uk>
+> > > CommitDate: Mon Aug 19 18:09:46 2019 +0100
+> > 
+> > That's a belated report, fixed by
+> Hi Chris, thanks for the feedback, we will double check this report and
+> provide update later.
+Hi Chris, it is confirmed that this report is false positive. 6ac3a0e had
+fixed the issue. Sorry for inconvenience.
 
-Results of the daily build of media_tree:
-
-date:			Wed Nov 27 05:00:11 CET 2019
-media-tree git hash:	dca6b3733a4a46e63603496f544ece8ace541fde
-media_build git hash:	efba365ba11b958a6bf6fb4b397942f9461cefca
-v4l-utils git hash:	8ae5d055c9ad60c65ef6813f925ad3719a92ccb5
-edid-decode git hash:	7bbed3aef6da3d83c490788ab45c75c19e180caf
-gcc version:		i686-linux-gcc (GCC) 9.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.1-rc1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 6903fe8f5101fc43440b3259290c97d2dd51733d
-host hardware:		x86_64
-host os:		5.2.0-3-amd64
-
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4-i686: OK
-linux-5.4-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 2791, Succeeded: 2791, Failed: 0, Warnings: 0
-sparse: WARNINGS
-smatch: WARNINGS
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+> 
+> > 
+> > commit 6ac3a0ebfcc2f0c75ca0ca6974389ce421aa5cbd
+> > Author: Chris Wilson <chris@chris-wilson.co.uk>
+> > Date:   Tue Aug 20 13:21:18 2019 +0100
+> > 
+> > 	dmabuf: Mark up onstack timer for selftests
+> > 
+> > No?
+> > -Chris
