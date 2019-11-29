@@ -2,199 +2,297 @@ Return-Path: <SRS0=tUiA=ZV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6FFCC432C0
-	for <linux-media@archiver.kernel.org>; Fri, 29 Nov 2019 14:10:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46954C432C0
+	for <linux-media@archiver.kernel.org>; Fri, 29 Nov 2019 15:40:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9276B217D9
-	for <linux-media@archiver.kernel.org>; Fri, 29 Nov 2019 14:10:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0499C2075C
+	for <linux-media@archiver.kernel.org>; Fri, 29 Nov 2019 15:40:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="fQ4/lIi/"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="F82YmRMv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726957AbfK2OKo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Nov 2019 09:10:44 -0500
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:58848 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726808AbfK2OKo (ORCPT
+        id S1727124AbfK2Pk0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Nov 2019 10:40:26 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37437 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727008AbfK2PkZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Nov 2019 09:10:44 -0500
-Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
-  Eugen.Hristev@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Eugen.Hristev@microchip.com";
-  x-sender="Eugen.Hristev@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa2.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Eugen.Hristev@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa2.microchip.iphmx.com; spf=Pass smtp.mailfrom=Eugen.Hristev@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: sWXEZOpJUCNWRBjzD0efO4WbbA6Mpz39fH3m/88R9aTmTRP6KPwKEB7les4HHDd79GALNYL+TR
- IwvbRUeq/PZtZ79FW24evApgnq9H9dZWc4XpkAlfPKiNR0nN8wXbEBec1FNE+IX3ydMN3TZRHC
- 9WE0v7QBK6gl3J59u2vwP8aBuD6x4ZbOD7LD8D6glXPymnamRpVUencQz5a3T2Clnfby4Ka8Cs
- L4RFvbbLPCv5evMECXY45rkTLh92l2Lny4Y+/1fW5soJ1OFD40oNMM1A1UJU4/PTjdBj8lLrUJ
- 4uA=
-X-IronPort-AV: E=Sophos;i="5.69,257,1571727600"; 
-   d="scan'208";a="58274489"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2019 07:10:43 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 29 Nov 2019 07:10:43 -0700
-Received: from NAM03-DM3-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
- Transport; Fri, 29 Nov 2019 07:10:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WJCFFDGwO2M6RqmL8BW4S7DN8hduXm4Nc2LTJ2hB768r6pMcsPyN9VdgGE+4GzufGrSYwe6zYGu6fNcj5c238XeRW7Mb2gyruNKafNiAPoKPxxGnKGposCpDeANY3x9kd7TkK8S3K4ERDi6o3UC+I5m0Y0Hoy6ruh5DfxvPt3qJ1DL0nYDeQXMgvoqoN/JNJ5RK3tAtUCM2VdwSiaf51/o78LSOstykaYTUEKFUMVw/KePmt/NTP8Y5ta4F9KYkU4pjf45V2ixPVCmiwmj7GI3EXuv5RGLKKg3z97SjPBKV/ta1F78hviAlX+mbhWlJ4L2bab9MljgQbwpI6R857nA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7KcY949h0ZVaxS7wV9+hihfL5uVisKoGF5OhOm6pq+4=;
- b=NAw0mwt63ZATEDLwwWBOMClN8Pfei3ILsvfD3RTCj6IYl6kLMUL3gauzdTIO0oCW4MXq6GS7mHsqv9gAwYMzp6VFgnDbCYMftIBAjLI5CnO7++BzRKGMnKd0P1UWO86CUhNlr8Dq2FO2F+WzoHSmtpD1AuMQIhy/UzEUQFp1V9uCtTbfnu99ScPknhO3LhvI8Q6dHfdPTCHLnFggKefu+zzk6qcKH+HUGYb41YlOA6f/LSEr6+dGKj6adxZyybE4z/MYQTRsc0LjNmLePQS+kkk40ozbIgRXY6YXNzPMDklgrerBlmG7PXvwHHHzhWaK45Uc4nVPFcRnDnPVlfYulg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Fri, 29 Nov 2019 10:40:25 -0500
+Received: by mail-wr1-f66.google.com with SMTP id w15so4757285wru.4
+        for <linux-media@vger.kernel.org>; Fri, 29 Nov 2019 07:40:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7KcY949h0ZVaxS7wV9+hihfL5uVisKoGF5OhOm6pq+4=;
- b=fQ4/lIi/R2O8hKo7H9Fcgeu1txfVdPF2+sg7eO4ManJoq0AQQWq0CE7BikygeAkN6Z041Lc6pKKp79oAcEb9iKXulzvXlgswU2RogbxWMCyKbAES/+/10Ef+Gebdpk4ebP57Vv7V5tAo8HGQT+Tyd58EZUvMFtC0UOEOQ1dApvU=
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
- DM5PR11MB1916.namprd11.prod.outlook.com (10.175.87.21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2495.19; Fri, 29 Nov 2019 14:10:40 +0000
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::9039:e0e8:9032:20c1]) by DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::9039:e0e8:9032:20c1%12]) with mapi id 15.20.2495.014; Fri, 29 Nov
- 2019 14:10:40 +0000
-From:   <Eugen.Hristev@microchip.com>
-To:     <hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <Eugen.Hristev@microchip.com>
-Subject: [PATCH 1/3] media: atmel: atmel-isi: add support for mono sensors,
- GRAY and Y16
-Thread-Topic: [PATCH 1/3] media: atmel: atmel-isi: add support for mono
- sensors, GRAY and Y16
-Thread-Index: AQHVpr7GvLIuZGJMNEmiKig2JR9Z7w==
-Date:   Fri, 29 Nov 2019 14:10:38 +0000
-Message-ID: <1575036609-11381-1-git-send-email-eugen.hristev@microchip.com>
-Accept-Language: en-US, ro-RO
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM0PR07CA0017.eurprd07.prod.outlook.com
- (2603:10a6:208:ac::30) To DM5PR11MB1242.namprd11.prod.outlook.com
- (2603:10b6:3:14::8)
-x-mailer: git-send-email 2.7.4
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [94.177.32.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e00bf316-bcb3-4c19-f6d1-08d774d5e924
-x-ms-traffictypediagnostic: DM5PR11MB1916:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM5PR11MB191673F71B1D2701647EB3CEE8460@DM5PR11MB1916.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 0236114672
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(346002)(396003)(39860400002)(376002)(199004)(189003)(66446008)(102836004)(6506007)(36756003)(71190400001)(386003)(316002)(99286004)(71200400001)(66946007)(6512007)(110136005)(66476007)(66556008)(64756008)(3846002)(5660300002)(6116002)(107886003)(14454004)(52116002)(186003)(14444005)(256004)(26005)(66066001)(478600001)(50226002)(2201001)(6436002)(2906002)(2501003)(8936002)(305945005)(2616005)(81156014)(81166006)(86362001)(6486002)(8676002)(4326008)(7736002)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1916;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 59bw2dUcx/KkZkJQU1w0ZKoP9py9aW27zXAcBR1ufnaIBthUKT754z/hAKUjbFJjqL1407eYxbcKj06+X+y9uz8r4sE1D0y1RtvuqNQrYT2X314ZdSxmdxYWWKyLnMvdmAREz6wbxbgiss/8irhoQMnqLS0/jOzqvISRVx4Q9+eJdUF62F5oPdzLOpPj6CBvy0l0ejlUny2WbSRUmSeB8fKo9PjO/Rab0nkTP+F+cnwkGiSOkjEyiB//ijwBo4WvRs5YqnXH45i04hN0fyZK2EK8C1MQCoRkPg8jaol3VAK39/J8/jRROb6Sam2o8RdQuT1D5VcETRFjWiM2K8SVNLQFrk2R91QgnTFcgBeGeVe5qRhUUvEbfP04Gh4huqYRT3r4I+gbMpUu1Yd74gsbF/CAmwsTRaq2tLLYJEEDd6pHP8zKNoCE7odVysRG1tri
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=d1qlPGKEub2zxKrCwvu7wl5sgPz0ycWM4uVqvybEP3o=;
+        b=F82YmRMvls0MB5LUz2QLPFzl3BfaxgxvnOVCEJhs1lPCNqRLd1ALGX/cWTwx/odPIW
+         IemIWncQEOpg+J/XVdmZD8pa932RyfoOZV4pOcjVYPzCUl6MH1uJfvVchf6zsgyCwhxG
+         bCPE7pnQMnBdKE05ualTzpbl3MPA+ESEs8cyw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=d1qlPGKEub2zxKrCwvu7wl5sgPz0ycWM4uVqvybEP3o=;
+        b=T7RsUZaLZ/ntJcdVUqQYgprhAYQeBsU6bllgt166Yf3ZZd6mx3fqLAZOcsdsFf0RDD
+         DRs+XNZ+loJZHO2KobqK28ql/gMKZGvz0POoZerspIHsxxQzoNW69UNCOf0py5mslABD
+         AQ0JtFCIx6I6hteIXjz7CJf3WgInJEoSOR/g78ekYtTTAJchlzHeob6nQEeBqWazlPx9
+         XgBq1njV6eZhKSqjOv7at1+tpCluhGFom4jtgMIFXtuEdZPDRLi9ZeI9BVxpj4/tZXZY
+         lnpIXVh3X08P1PqcPWiNfIGxYWygSdVaqCe/tVdxIxP1uDD6DgSEhdWmR2sLmnu3wNUm
+         3Yuw==
+X-Gm-Message-State: APjAAAXItwRtn4+JSs3rtWGW3StGiSOACIdYq0+JHrKUOavOXiYKbAnk
+        jHgEJUcw6RWa441E1Db28JDhdQ==
+X-Google-Smtp-Source: APXvYqyOcTZwJaF1yb8C5yGqGrIDeDIxvzOnil0vbT94pRF4zJdnCm1UYhNHwa7P+mD1vwCUSOZm1A==
+X-Received: by 2002:adf:fa87:: with SMTP id h7mr44553361wrr.172.1575042022285;
+        Fri, 29 Nov 2019 07:40:22 -0800 (PST)
+Received: from phenom.ffwll.local (212-51-149-96.fiber7.init7.net. [212.51.149.96])
+        by smtp.gmail.com with ESMTPSA id e16sm13723160wme.35.2019.11.29.07.40.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Nov 2019 07:40:21 -0800 (PST)
+Date:   Fri, 29 Nov 2019 16:40:19 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, ville.syrjala@linux.intel.com,
+        Andy Walls <awalls@md.metrocast.net>,
+        Bernie Thompson <bernie@plugable.com>,
+        Bruno =?iso-8859-1?Q?Pr=E9mont?= <bonbons@linux-vserver.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Jaya Kumar <jayalk@intworks.biz>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Miguel Ojeda Sandonis <miguel.ojeda.sandonis@gmail.com>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        ivtv-devel@ivtvdriver.org, kvm@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH v2 00/14] video, drm, etc: constify fbops in struct
+ fb_info
+Message-ID: <20191129154019.GI624164@phenom.ffwll.local>
+References: <cover.1575022735.git.jani.nikula@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: e00bf316-bcb3-4c19-f6d1-08d774d5e924
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2019 14:10:40.1416
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YjwVOJwwwP5A1+rAhNAXNJnWkMy9sWDFPfAs2SXF4NbDF8LTAIt0yNzJ+B8s5YzZ0B4YuW0aeJ8Rma9vWzI2/S0RW0hmX1aoeIi/78HgJU4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1916
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1575022735.git.jani.nikula@intel.com>
+X-Operating-System: Linux phenom 5.3.0-2-amd64 
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+On Fri, Nov 29, 2019 at 12:29:30PM +0200, Jani Nikula wrote:
+> This is v2 of https://patchwork.freedesktop.org/series/70119/
+> 
+> I wanted to make our struct fb_ops const because we don't modify
+> it... and this is what I ended up with to fix it and a bunch of others.
+> 
+> I would appreciate acks to merge all this via the drm-misc tree. This is
+> especially important for patches 1-8 to reasonably get the job
+> done. Patches 9-14 are somewhat easier to merge at leisure afterwards,
+> but there really isn't much conflict potential IMO.
 
-This adds support for GREY and Y16 formats, based on Y10 mbus codes.
-Y16 needs to go through preview path in the ISI, with 2 pixels per word,
-and it fits the Y16 format. The ISI data lines need to be MSB aligned with
-the sensor data lines.
-GREY format in 8 bits per pixel is done by dropping the 2 LSB bits
-from the Y10 format, and packed as 4 pixels per word.
+Only patches 11-14 need acks, drivers/video is already officially
+maintained in drm-misc.
 
-Suggested-by: Wenyou Yang <wenyou.yang@microchip.com>
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
- drivers/media/platform/atmel/atmel-isi.c | 13 ++++++++++++-
- drivers/media/platform/atmel/atmel-isi.h |  2 ++
- 2 files changed, 14 insertions(+), 1 deletion(-)
+> Daniel, please double-check me adding your Reviewed-by on the later
+> patches wasn't overzealous.
 
-diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platf=
-orm/atmel/atmel-isi.c
-index 428f117..35c1f1a 100644
---- a/drivers/media/platform/atmel/atmel-isi.c
-+++ b/drivers/media/platform/atmel/atmel-isi.c
-@@ -148,7 +148,8 @@ static void configure_geometry(struct atmel_isi *isi)
- 	u32 fourcc =3D isi->current_fmt->fourcc;
-=20
- 	isi->enable_preview_path =3D fourcc =3D=3D V4L2_PIX_FMT_RGB565 ||
--				   fourcc =3D=3D V4L2_PIX_FMT_RGB32;
-+				   fourcc =3D=3D V4L2_PIX_FMT_RGB32 ||
-+				   fourcc =3D=3D V4L2_PIX_FMT_Y16;
-=20
- 	/* According to sensor's output format to set cfg2 */
- 	cfg2 =3D isi->current_fmt->swap;
-@@ -990,6 +991,16 @@ static const struct isi_format isi_formats[] =3D {
- 		.mbus_code =3D MEDIA_BUS_FMT_VYUY8_2X8,
- 		.bpp =3D 2,
- 		.swap =3D ISI_CFG2_YCC_SWAP_MODE_1,
-+	}, {
-+		.fourcc =3D V4L2_PIX_FMT_GREY,
-+		.mbus_code =3D MEDIA_BUS_FMT_Y10_1X10,
-+		.bpp =3D 1,
-+		.swap =3D ISI_CFG2_GS_MODE_2_PIXEL | ISI_CFG2_GRAYSCALE,
-+	}, {
-+		.fourcc =3D V4L2_PIX_FMT_Y16,
-+		.mbus_code =3D MEDIA_BUS_FMT_Y10_1X10,
-+		.bpp =3D 2,
-+		.swap =3D ISI_CFG2_GS_MODE_2_PIXEL | ISI_CFG2_GRAYSCALE,
- 	},
- };
-=20
-diff --git a/drivers/media/platform/atmel/atmel-isi.h b/drivers/media/platf=
-orm/atmel/atmel-isi.h
-index 47a9108..7ad3895 100644
---- a/drivers/media/platform/atmel/atmel-isi.h
-+++ b/drivers/media/platform/atmel/atmel-isi.h
-@@ -62,6 +62,8 @@
- #define		ISI_CFG1_THMASK_BEATS_16	(2 << 13)
-=20
- /* Bitfields in CFG2 */
-+#define ISI_CFG2_GS_MODE_2_PIXEL		(0 << 11)
-+#define ISI_CFG2_GS_MODE_1_PIXEL		(1 << 11)
- #define ISI_CFG2_GRAYSCALE			(1 << 13)
- #define ISI_CFG2_COL_SPACE_YCbCr		(0 << 15)
- #define ISI_CFG2_COL_SPACE_RGB			(1 << 15)
---=20
-2.7.4
+Yeah, looks all neat&tidy.
+-Daniel
 
+> 
+> BR,
+> Jani.
+> 
+> 
+> Cc: Andy Walls <awalls@md.metrocast.net>
+> Cc: Bernie Thompson <bernie@plugable.com>
+> Cc: Bruno Prémont <bonbons@linux-vserver.org>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Hans Verkuil <hverkuil@xs4all.nl>
+> Cc: Jaya Kumar <jayalk@intworks.biz>
+> Cc: Kirti Wankhede <kwankhede@nvidia.com>
+> Cc: Miguel Ojeda Sandonis <miguel.ojeda.sandonis@gmail.com>
+> Cc: Noralf Trønnes <noralf@tronnes.org>
+> Cc: Robin van der Gracht <robin@protonic.nl>
+> Cc: Steve Glendinning <steve.glendinning@shawell.net>
+> Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: ivtv-devel@ivtvdriver.org
+> Cc: kvm@vger.kernel.org
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-omap@vger.kernel.org
+> 
+> 
+> Jani Nikula (14):
+>   video: fb_defio: preserve user fb_ops
+>   drm/fb-helper: don't preserve fb_ops across deferred IO use
+>   video: smscufx: don't restore fb_mmap after deferred IO cleanup
+>   video: udlfb: don't restore fb_mmap after deferred IO cleanup
+>   video: fbdev: vesafb: modify the static fb_ops directly
+>   video: fbmem: use const pointer for fb_ops
+>   video: omapfb: use const pointer for fb_ops
+>   video: fbdev: make fbops member of struct fb_info a const pointer
+>   drm: constify fb ops across all drivers
+>   video: constify fb ops across all drivers
+>   HID: picoLCD: constify fb ops
+>   media: constify fb ops across all drivers
+>   samples: vfio-mdev: constify fb ops
+>   auxdisplay: constify fb ops
+> 
+>  drivers/auxdisplay/cfag12864bfb.c             |  2 +-
+>  drivers/auxdisplay/ht16k33.c                  |  2 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c        |  2 +-
+>  drivers/gpu/drm/armada/armada_fbdev.c         |  2 +-
+>  drivers/gpu/drm/drm_fb_helper.c               | 27 +++----------------
+>  drivers/gpu/drm/exynos/exynos_drm_fbdev.c     |  2 +-
+>  .../gpu/drm/hisilicon/hibmc/hibmc_drm_fbdev.c |  2 +-
+>  drivers/gpu/drm/i915/display/intel_fbdev.c    |  2 +-
+>  drivers/gpu/drm/msm/msm_fbdev.c               |  2 +-
+>  drivers/gpu/drm/nouveau/nouveau_fbcon.c       |  4 +--
+>  drivers/gpu/drm/omapdrm/omap_fbdev.c          |  2 +-
+>  drivers/gpu/drm/radeon/radeon_fb.c            |  2 +-
+>  drivers/gpu/drm/rockchip/rockchip_drm_fbdev.c |  2 +-
+>  drivers/gpu/drm/tegra/fb.c                    |  2 +-
+>  drivers/gpu/drm/vmwgfx/vmwgfx_fb.c            |  2 +-
+>  drivers/hid/hid-picolcd_fb.c                  |  3 +--
+>  drivers/media/pci/ivtv/ivtvfb.c               |  3 +--
+>  drivers/media/platform/vivid/vivid-osd.c      |  3 +--
+>  drivers/video/fbdev/68328fb.c                 |  2 +-
+>  drivers/video/fbdev/acornfb.c                 |  2 +-
+>  drivers/video/fbdev/amba-clcd.c               |  2 +-
+>  drivers/video/fbdev/amifb.c                   |  2 +-
+>  drivers/video/fbdev/arcfb.c                   |  2 +-
+>  drivers/video/fbdev/arkfb.c                   |  2 +-
+>  drivers/video/fbdev/asiliantfb.c              |  2 +-
+>  drivers/video/fbdev/atmel_lcdfb.c             |  2 +-
+>  drivers/video/fbdev/aty/aty128fb.c            |  2 +-
+>  drivers/video/fbdev/aty/atyfb_base.c          |  2 +-
+>  drivers/video/fbdev/aty/radeon_base.c         |  2 +-
+>  drivers/video/fbdev/au1100fb.c                |  2 +-
+>  drivers/video/fbdev/au1200fb.c                |  2 +-
+>  drivers/video/fbdev/broadsheetfb.c            |  2 +-
+>  drivers/video/fbdev/bw2.c                     |  2 +-
+>  drivers/video/fbdev/carminefb.c               |  2 +-
+>  drivers/video/fbdev/cg14.c                    |  2 +-
+>  drivers/video/fbdev/cg3.c                     |  2 +-
+>  drivers/video/fbdev/cg6.c                     |  2 +-
+>  drivers/video/fbdev/chipsfb.c                 |  2 +-
+>  drivers/video/fbdev/cirrusfb.c                |  2 +-
+>  drivers/video/fbdev/clps711x-fb.c             |  2 +-
+>  drivers/video/fbdev/cobalt_lcdfb.c            |  2 +-
+>  drivers/video/fbdev/controlfb.c               |  2 +-
+>  drivers/video/fbdev/core/fb_defio.c           |  3 ---
+>  drivers/video/fbdev/core/fbmem.c              | 19 ++++++++-----
+>  drivers/video/fbdev/cyber2000fb.c             |  2 +-
+>  drivers/video/fbdev/da8xx-fb.c                |  2 +-
+>  drivers/video/fbdev/dnfb.c                    |  2 +-
+>  drivers/video/fbdev/efifb.c                   |  2 +-
+>  drivers/video/fbdev/ep93xx-fb.c               |  2 +-
+>  drivers/video/fbdev/fb-puv3.c                 |  2 +-
+>  drivers/video/fbdev/ffb.c                     |  2 +-
+>  drivers/video/fbdev/fm2fb.c                   |  2 +-
+>  drivers/video/fbdev/fsl-diu-fb.c              |  2 +-
+>  drivers/video/fbdev/g364fb.c                  |  2 +-
+>  drivers/video/fbdev/gbefb.c                   |  2 +-
+>  drivers/video/fbdev/geode/gx1fb_core.c        |  2 +-
+>  drivers/video/fbdev/geode/gxfb_core.c         |  2 +-
+>  drivers/video/fbdev/geode/lxfb_core.c         |  2 +-
+>  drivers/video/fbdev/goldfishfb.c              |  2 +-
+>  drivers/video/fbdev/grvga.c                   |  2 +-
+>  drivers/video/fbdev/gxt4500.c                 |  2 +-
+>  drivers/video/fbdev/hecubafb.c                |  2 +-
+>  drivers/video/fbdev/hgafb.c                   |  2 +-
+>  drivers/video/fbdev/hitfb.c                   |  2 +-
+>  drivers/video/fbdev/hpfb.c                    |  2 +-
+>  drivers/video/fbdev/hyperv_fb.c               |  2 +-
+>  drivers/video/fbdev/i740fb.c                  |  2 +-
+>  drivers/video/fbdev/imsttfb.c                 |  2 +-
+>  drivers/video/fbdev/imxfb.c                   |  2 +-
+>  drivers/video/fbdev/intelfb/intelfbdrv.c      |  2 +-
+>  drivers/video/fbdev/kyro/fbdev.c              |  2 +-
+>  drivers/video/fbdev/leo.c                     |  2 +-
+>  drivers/video/fbdev/macfb.c                   |  2 +-
+>  drivers/video/fbdev/matrox/matroxfb_crtc2.c   |  2 +-
+>  drivers/video/fbdev/maxinefb.c                |  2 +-
+>  drivers/video/fbdev/mb862xx/mb862xxfbdrv.c    |  2 +-
+>  drivers/video/fbdev/mbx/mbxfb.c               |  2 +-
+>  drivers/video/fbdev/metronomefb.c             |  2 +-
+>  drivers/video/fbdev/mmp/fb/mmpfb.c            |  2 +-
+>  drivers/video/fbdev/mx3fb.c                   |  5 ++--
+>  drivers/video/fbdev/neofb.c                   |  2 +-
+>  drivers/video/fbdev/nvidia/nvidia.c           |  2 +-
+>  drivers/video/fbdev/ocfb.c                    |  2 +-
+>  drivers/video/fbdev/offb.c                    |  2 +-
+>  drivers/video/fbdev/omap/omapfb_main.c        |  2 +-
+>  .../video/fbdev/omap2/omapfb/omapfb-main.c    |  2 +-
+>  drivers/video/fbdev/p9100.c                   |  2 +-
+>  drivers/video/fbdev/platinumfb.c              |  2 +-
+>  drivers/video/fbdev/pm2fb.c                   |  2 +-
+>  drivers/video/fbdev/pm3fb.c                   |  2 +-
+>  drivers/video/fbdev/pmag-aa-fb.c              |  2 +-
+>  drivers/video/fbdev/pmag-ba-fb.c              |  2 +-
+>  drivers/video/fbdev/pmagb-b-fb.c              |  2 +-
+>  drivers/video/fbdev/ps3fb.c                   |  2 +-
+>  drivers/video/fbdev/pvr2fb.c                  |  2 +-
+>  drivers/video/fbdev/pxa168fb.c                |  2 +-
+>  drivers/video/fbdev/pxafb.c                   |  4 +--
+>  drivers/video/fbdev/q40fb.c                   |  2 +-
+>  drivers/video/fbdev/riva/fbdev.c              |  2 +-
+>  drivers/video/fbdev/s3c-fb.c                  |  2 +-
+>  drivers/video/fbdev/s3c2410fb.c               |  2 +-
+>  drivers/video/fbdev/s3fb.c                    |  2 +-
+>  drivers/video/fbdev/sa1100fb.c                |  2 +-
+>  drivers/video/fbdev/savage/savagefb_driver.c  |  2 +-
+>  drivers/video/fbdev/sh7760fb.c                |  2 +-
+>  drivers/video/fbdev/sh_mobile_lcdcfb.c        |  4 +--
+>  drivers/video/fbdev/simplefb.c                |  2 +-
+>  drivers/video/fbdev/sis/sis_main.c            |  2 +-
+>  drivers/video/fbdev/skeletonfb.c              |  2 +-
+>  drivers/video/fbdev/sm712fb.c                 |  2 +-
+>  drivers/video/fbdev/smscufx.c                 |  3 +--
+>  drivers/video/fbdev/ssd1307fb.c               |  2 +-
+>  drivers/video/fbdev/sstfb.c                   |  2 +-
+>  drivers/video/fbdev/stifb.c                   |  2 +-
+>  drivers/video/fbdev/sunxvr1000.c              |  2 +-
+>  drivers/video/fbdev/sunxvr2500.c              |  2 +-
+>  drivers/video/fbdev/sunxvr500.c               |  2 +-
+>  drivers/video/fbdev/tcx.c                     |  2 +-
+>  drivers/video/fbdev/tdfxfb.c                  |  2 +-
+>  drivers/video/fbdev/tgafb.c                   |  2 +-
+>  drivers/video/fbdev/tmiofb.c                  |  2 +-
+>  drivers/video/fbdev/tridentfb.c               |  2 +-
+>  drivers/video/fbdev/udlfb.c                   |  1 -
+>  drivers/video/fbdev/uvesafb.c                 |  2 +-
+>  drivers/video/fbdev/valkyriefb.c              |  2 +-
+>  drivers/video/fbdev/vesafb.c                  |  6 ++---
+>  drivers/video/fbdev/vfb.c                     |  2 +-
+>  drivers/video/fbdev/vga16fb.c                 |  2 +-
+>  drivers/video/fbdev/vt8500lcdfb.c             |  2 +-
+>  drivers/video/fbdev/vt8623fb.c                |  2 +-
+>  drivers/video/fbdev/w100fb.c                  |  2 +-
+>  drivers/video/fbdev/wm8505fb.c                |  2 +-
+>  drivers/video/fbdev/xen-fbfront.c             |  2 +-
+>  drivers/video/fbdev/xilinxfb.c                |  2 +-
+>  include/linux/fb.h                            |  2 +-
+>  samples/vfio-mdev/mdpy-fb.c                   |  2 +-
+>  136 files changed, 156 insertions(+), 175 deletions(-)
+> 
+> -- 
+> 2.20.1
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
