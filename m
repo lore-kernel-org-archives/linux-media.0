@@ -3,325 +3,162 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NORMAL_HTTP_TO_IP,NUMERIC_HTTP_ADDR,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C808C432C0
-	for <linux-media@archiver.kernel.org>; Fri, 29 Nov 2019 11:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D537BC43215
+	for <linux-media@archiver.kernel.org>; Fri, 29 Nov 2019 14:10:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1FDE821774
-	for <linux-media@archiver.kernel.org>; Fri, 29 Nov 2019 11:32:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA3E821847
+	for <linux-media@archiver.kernel.org>; Fri, 29 Nov 2019 14:10:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="Ex+QJwYK";
-	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="Ex+QJwYK"
+	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="QnFyvvSG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbfK2Lcu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Nov 2019 06:32:50 -0500
-Received: from smtp-out-so.shaw.ca ([64.59.136.137]:44462 "EHLO
-        smtp-out-so.shaw.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726360AbfK2Lcu (ORCPT
+        id S1727030AbfK2OKr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Nov 2019 09:10:47 -0500
+Received: from esa2.microchip.iphmx.com ([68.232.149.84]:58848 "EHLO
+        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726824AbfK2OKo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Nov 2019 06:32:50 -0500
-Received: from shaw.ca ([70.71.78.228])
-        by shaw.ca with ESMTPA
-        id aeVviGeNuRnrKaeVyiqO0X; Fri, 29 Nov 2019 04:32:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shaw.ca;
-        s=s20180605; t=1575027166;
-        bh=pRjJH1DKK070jE4dJuT+JNIXpB2KEmePaGq7aq+zZrY=;
-        h=From:To:Cc:Subject:Date;
-        b=Ex+QJwYKPrUJvQJmZoL5qFNwYJlgvZzyibBlbzma2ll3ALWdE8JSMWO8qDHHiTajL
-         46IMl8OgxwWBIo1pyBfHd46mwIVL6Te5eXQntO59ZdD/wFv9WOpEqC8+Z8tN/nxJqf
-         Y0cMME4OqJuRQtPr5diZAjHR1N1EE4t5DGdlXd4yRgh5Yvo4kPdYWuLFVvNrqezheo
-         6Pf/nMq2V0NCQM4tO0Y3Yccdu49XyopWl756eGKJQnfwy66b0jV99GcUWIzvd33OTp
-         X6IXgXjFkGCrkJcNeWaiOkgSbyo0zxPh+lPZznbIKrWmC0ExO+oGf/1fuIiXJDgwA9
-         eBmNmA7C3ESUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shaw.ca;
-        s=s20180605; t=1575027166;
-        bh=pRjJH1DKK070jE4dJuT+JNIXpB2KEmePaGq7aq+zZrY=;
-        h=From:To:Cc:Subject:Date;
-        b=Ex+QJwYKPrUJvQJmZoL5qFNwYJlgvZzyibBlbzma2ll3ALWdE8JSMWO8qDHHiTajL
-         46IMl8OgxwWBIo1pyBfHd46mwIVL6Te5eXQntO59ZdD/wFv9WOpEqC8+Z8tN/nxJqf
-         Y0cMME4OqJuRQtPr5diZAjHR1N1EE4t5DGdlXd4yRgh5Yvo4kPdYWuLFVvNrqezheo
-         6Pf/nMq2V0NCQM4tO0Y3Yccdu49XyopWl756eGKJQnfwy66b0jV99GcUWIzvd33OTp
-         X6IXgXjFkGCrkJcNeWaiOkgSbyo0zxPh+lPZznbIKrWmC0ExO+oGf/1fuIiXJDgwA9
-         eBmNmA7C3ESUg==
-X-Authority-Analysis: v=2.3 cv=L7FjvNb8 c=1 sm=1 tr=0
- a=qDatE6m/3wxSEG8Wq7h0zQ==:117 a=qDatE6m/3wxSEG8Wq7h0zQ==:17 a=_Dj-zB-qAAAA:8
- a=KAjdbGGSt7oLFJS_ZOAA:9 a=qknmYsy4o65BZQCh:21 a=DDaweFOcy5SbG2pq:21
- a=c-cOe7UV8MviEfHuAVEQ:22
-From:   joevt <joevt@shaw.ca>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, joevt <joevt@shaw.ca>
-Subject: [PATCH v2 10/10] edid-decode: add example EDIDs
-Date:   Fri, 29 Nov 2019 03:32:43 -0800
-Message-Id: <20191129113243.65869-1-joevt@shaw.ca>
-X-Mailer: git-send-email 2.21.0 (Apple Git-122.2)
+        Fri, 29 Nov 2019 09:10:44 -0500
+Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
+  Eugen.Hristev@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="Eugen.Hristev@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa2.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa2.microchip.iphmx.com; spf=Pass smtp.mailfrom=Eugen.Hristev@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: B2BnvbwiPbawwQAY88RSZVPw1jQHE9YA+LWmLXp+AJjkGXLeRzS5ly5eTiwnr2/8vcINnFJuan
+ zkuiTG7YVcadn+j4lgbLzaC6bI5owOtj0u7/WzRNS05lbaRfrTMRqy4ZVUyZ2/uAJJVtOAC0mC
+ sqmXb1EIzBT90qgeUme1qi9pjpwNycXn7dAOHd/mygneDS+ohEr4H4dycVXux1OSPzIhAj/+Vd
+ +BTNcKt5jil19mKakiBEmCdDXsKDxDgqIswUv52qRzPhAoDyvpqENw3Wi2F96Jgoji3C/23fXi
+ uig=
+X-IronPort-AV: E=Sophos;i="5.69,257,1571727600"; 
+   d="scan'208";a="58274490"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2019 07:10:43 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 29 Nov 2019 07:10:43 -0700
+Received: from NAM03-DM3-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
+ Transport; Fri, 29 Nov 2019 07:10:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F8bFgeaLeIRrojD6kIVv2DfrdrdHRfVJIELOV0jcAY7LVfqsYYDOdP8YjzYQ0exHPZxBpm9sjI+JHA8PDsSPrK4ncX8R7vTeZnkpF8jdHEmFIjv1vk4APw9BMeBrVPzDKIMC3ggIWmck0PFpdpgI1gUN2AgSgPeQOAGrDcIheQkYS7uD55uYk90v5NZv4RgsJiQ+ZU4YzD5mA8FA6icuPYZdnWJvDJ0xi2v8+XxMqSP3z4YfkPW2GZTtzszLQFmsJuXJiZx/iXjuhDiut2i8/OMKa0UOWyCUvJhk1xxtVrzW10fmxrSeVlG68rcmFdAa4TjeYN2FCYLXE2vMyxH69w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ywMW/j7IZg2yhNiCNf36pMDe8UFOhyciUrOhY4Y32L8=;
+ b=idZTatw7bsEDc6bFDhBiuP9Bp/Zxq2XFss8itDa+lU0ZQLdm+mIKZ7skn210Qo0bYb+YaH667wrqK+sGd6bWML9wSBDE5PK/03I6VdSaqNgXp4wTQYOr6RA1Nsh6PEl+aSo2FOEHqM/u9LwrCY0cdfb+93oILAxgHfkACoL9EsQogYqQb9QDa84rYDI9G8gZdAzZMpLpPnuiAmK8DEwTRjpVszt0O80JWpmD3YW6bphR61aJ/aYWErNY3P/ZTj1jp4ka3mG9/DtPmEFwHTABTS1vwWTrqhUhny10zWbaWPRghE6JwA6ownrghODltrbTCFVW0mWNgfVApuQVNNSILQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ywMW/j7IZg2yhNiCNf36pMDe8UFOhyciUrOhY4Y32L8=;
+ b=QnFyvvSG7RqfyRIYFp3rahoozuM9OY83ueOAU+ilRI1Rqhvi2aM54glh01uq7xYNn8kHr4mujySAPX2Z9USSEMp1OYxwMgYVSvaFFp+6iUgjR5GHQsBydIRSxikv1tVESxfEY3WOHBtDjcMlpuaPoalOOet40sVtuIJV12O4ar8=
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
+ DM5PR11MB1916.namprd11.prod.outlook.com (10.175.87.21) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2495.19; Fri, 29 Nov 2019 14:10:42 +0000
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::9039:e0e8:9032:20c1]) by DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::9039:e0e8:9032:20c1%12]) with mapi id 15.20.2495.014; Fri, 29 Nov
+ 2019 14:10:42 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <Eugen.Hristev@microchip.com>
+Subject: [PATCH 2/3] media: atmel: atmel-isi: properly initialize pad_cfg
+Thread-Topic: [PATCH 2/3] media: atmel: atmel-isi: properly initialize pad_cfg
+Thread-Index: AQHVpr7IrYfUxuYI0kG+YYqSznzXOg==
+Date:   Fri, 29 Nov 2019 14:10:42 +0000
+Message-ID: <1575036609-11381-2-git-send-email-eugen.hristev@microchip.com>
+References: <1575036609-11381-1-git-send-email-eugen.hristev@microchip.com>
+In-Reply-To: <1575036609-11381-1-git-send-email-eugen.hristev@microchip.com>
+Accept-Language: en-US, ro-RO
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: AM0PR07CA0017.eurprd07.prod.outlook.com
+ (2603:10a6:208:ac::30) To DM5PR11MB1242.namprd11.prod.outlook.com
+ (2603:10b6:3:14::8)
+x-mailer: git-send-email 2.7.4
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [94.177.32.156]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f2cd441e-cecb-48a3-ec74-08d774d5eb0f
+x-ms-traffictypediagnostic: DM5PR11MB1916:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR11MB1916E2396FB7A002060AF9ADE8460@DM5PR11MB1916.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2582;
+x-forefront-prvs: 0236114672
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(346002)(396003)(39860400002)(376002)(199004)(189003)(66446008)(102836004)(6506007)(36756003)(71190400001)(76176011)(386003)(316002)(99286004)(71200400001)(66946007)(6512007)(110136005)(66476007)(66556008)(4744005)(64756008)(3846002)(5660300002)(6116002)(107886003)(14454004)(52116002)(186003)(14444005)(256004)(26005)(66066001)(478600001)(50226002)(2201001)(6436002)(2906002)(11346002)(2501003)(8936002)(305945005)(2616005)(81156014)(81166006)(446003)(86362001)(6486002)(8676002)(4326008)(7736002)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1916;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dR+VQAk9Jxx8JXRTYxef4T0CgixrsQCQF0J+9wbn9VWy4x4JM7xiYXpZ5UGEBqH21b73TtX/3sIOE+zi+A9NRNEcOv+ZiRaj1XmilyBQL3NsThoQhZe6cbWR6cX7jZDrODvms6NMxRkPrQqY3PRVIdA1pJE6yQm4iwXiJMgAAFQpVabIC1896xSsgwChnpCv7EXSKZUCXYHqQdcdPu7p63HodGbMMqD7yY6EKIWn25YDVFcALbwDXE0v5J17YClLASXnJhY9p1H23HA36kZvEFMnhBf12CwQUqhHIHlMOeNHJIPdo2LLXXgPHuSQYiWS//D9sSXW8C4yDVrcqtc4z3SgHUcIguKOlGAaE9GE1PdKpIhyjXAa4eb6S1W9fGI0ESdDM5ixXdQeFGTJQrOiqVlz5LMLtXiIk+KyXTYJG8wShFD4eQm/oPy5xLDL31u5
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfP0Lu93EZLhEOmNP02bbcAZwEQ64JwBklQxjxnBv4mYSAkcIMZr7bHzsK9MlHM4p4sjOgk7F3UhToEy2ln/CkDLC9Hs34Ae5sAJtnD0rM9JEHdEVOIZY
- VP3vhL3KL67Jsx8dao87s4jwmYUMGKec4y4eTUP35cK3CyhLCU3WS6VrFeCoHypJ71k9fH0gb+8e8wR6vPwSBdE4qEx1LCRnUEk=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2cd441e-cecb-48a3-ec74-08d774d5eb0f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2019 14:10:42.1287
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 291QD5EHafCodJtMGJnP4C25/WRnVGqoowODuLQlaOgdw9q4bgwvEZKECNriehSYjebhhouvWRRbrPTnonbWmB9Utvmsvtin8gBzEFHyj94=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1916
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-acer-xv273k*
-- contains a broken example of "Display Interface Features Data Block" (appears to be missing the "additional combinations count" byte).
-- contains an unknown "Vendor-Specific Data Block".
-- dp1-tile0 and dp2-tile1 are from "DP 1" and "DP 2" inputs when the "4K-144Hz Mode" option is enabled.
-- dp is from "DP 1" when the "4K-144Hz Mode" option is disabled. "DP 2" is not included ("Source physical address" is "2.0.0.0").
-- not included: "HDMI 1 (2.0)" and "HDMI 2 (2.0)" inputs.
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-dell-p2415q*
-- hdmi1.4 is from the "HDMI (MHL)" input. There is a hidden menu option to enable HDMI 2.0. HDMI 1.4 is the default.
-- hdmi2.0 is from the "HDMI (MHL)" input when HDMI 2.0 is enabled. It contains an example of "YCbCr 4:2:0 Capability Map Data Block". They have specified that the last two "Video Data Block" resolutions 4K50Hz and 4K60Hz support "YCbCr 4:2:0", while lower refresh rates do not support "YCbCr 4:2:0". For example, HDMI 2.0 has bandwidth for 4K60 8bpc RGB and 4:4:4, but there is not enough bandwidth for 10bpc at 60Hz so 4:2:0 is allowed for that refresh rate.
-- dp is from the "DP" and "mDP" inputs (they use the same EDID).
+In try_fmt, properly initialize the pad_cfg variable to zeros.
+This can be used by various calls from the subdev, so it's better
+to have it initialized.
 
-dell-up2715k*
-- dp is from the "mDP(4K2K)" input. The old dp file's contents exist in the new dp1-tile1 file (with different serial number and date).
-- dp-switchresx contains an example of "GP ASCII String Block".
-- dp1-tile1 and dp2-tile0 are from the two "DP(5K3K)" inputs.
-- dp1-tile1 contains an example of "Type 1 VESA DMT Timings Block".
-
-lg-ultrafine-5k-v2*
-- contains an example of "Display Parameters Block".
-- contains an example of "ContainerID Data Block".
-- not included: USB-C (not Thunderbolt) input. The v2 uses a Titan Ridge Thunderbolt 3 controller which can accept either Thunderbolt (dual-link SST) or USB-C with DisplayPort alt mode input.
-
-kogan-kaled24144f*
-- hdmi contains a type 1 timing with a negative horizontal back porch.
-
-Signed-off-by: Joe van Tunen <joevt@shaw.ca>
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- data/acer-xv273k-dp                           | Bin 0 -> 384 bytes
- data/acer-xv273k-dp1-tile0                    | Bin 0 -> 384 bytes
- data/acer-xv273k-dp2-tile1                    | Bin 0 -> 384 bytes
- data/dell-p2415q-dp                           | Bin 0 -> 256 bytes
- data/dell-p2415q-hdmi1.4                      | Bin 0 -> 256 bytes
- data/dell-p2415q-hdmi2.0                      | Bin 0 -> 256 bytes
- data/dell-up2715k-dp                          | Bin 384 -> 256 bytes
- data/dell-up2715k-dp-switchresx               | Bin 0 -> 384 bytes
- data/dell-up2715k-dp1-tile1                   | Bin 0 -> 384 bytes
- data/dell-up2715k-dp2-tile0                   | Bin 0 -> 256 bytes
- data/kogan-kaled24144f-dp                     | Bin 0 -> 256 bytes
- data/kogan-kaled24144f-hdmi                   | Bin 0 -> 256 bytes
- data/lg-ultrafine-5k-v2-thunderbolt-dp1-tile0 | Bin 0 -> 384 bytes
- data/lg-ultrafine-5k-v2-thunderbolt-dp2-tile1 | Bin 0 -> 256 bytes
- 14 files changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/acer-xv273k-dp
- create mode 100644 data/acer-xv273k-dp1-tile0
- create mode 100644 data/acer-xv273k-dp2-tile1
- create mode 100644 data/dell-p2415q-dp
- create mode 100644 data/dell-p2415q-hdmi1.4
- create mode 100644 data/dell-p2415q-hdmi2.0
- create mode 100644 data/dell-up2715k-dp-switchresx
- create mode 100644 data/dell-up2715k-dp1-tile1
- create mode 100644 data/dell-up2715k-dp2-tile0
- create mode 100644 data/kogan-kaled24144f-dp
- create mode 100644 data/kogan-kaled24144f-hdmi
- create mode 100644 data/lg-ultrafine-5k-v2-thunderbolt-dp1-tile0
- create mode 100644 data/lg-ultrafine-5k-v2-thunderbolt-dp2-tile1
+ drivers/media/platform/atmel/atmel-isi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/data/acer-xv273k-dp b/data/acer-xv273k-dp
-new file mode 100644
-index 0000000000000000000000000000000000000000..47c1528f315725450aa703e369c8709d5d607a5a
-GIT binary patch
-literal 384
-zcmZSh4+ab@MH|_I`x#n|WEfet+9*|6s|&6PG~KGk7Z9TC!O-Z?*wA>Okzp#sW`>Ig
-z7#V#pFf8~`VAo)vV9F30pvb@=wIvNCBHzHFAi)9=VPIhR%VRL%|Nm@8E(I_Eiu_@S
-z2s1J__J)cuDKas8d<<k{W)Tu*6_KC7&J-ILpO9#;%*oE)%*ep-h~YpkGY^9RgGGe`
-zLjofcbA}WH10$os1ct|~j~SovGaO)e#>UQ=7$(Es)DTi&;p@Pm@Pj7|>>`Kf3|R{n
-zWCd_2%z(Nm{}9811q(t0;I5WqI8Y!|$-uzOs4;5+W6OWO1q}KPiVXQ2b_~o6tPBsn
-jF|gFLM*_v<fnt&jj6hK}1`c+1X66U=K+jMPrc3|;_Ayfd
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/acer-xv273k-dp1-tile0 b/data/acer-xv273k-dp1-tile0
-new file mode 100644
-index 0000000000000000000000000000000000000000..d93c5d21f10d90f86eb8af00b205537d5b6323ca
-GIT binary patch
-literal 384
-zcmZSh4+ab@MH|_I`x#n|WEfet+9*|6s|&6PG~KGk7Z9TC!O-Z?*wA>Okzp#sW`>Ig
-z7#V#pFf8~`VAo)vV9F30pvb@=wIvNCBHzHFAi)9=VPIhR%VSXS|9>_kmjW07MgA~E
-zgc+F|dqYK-ESZ=+J_a%}vj_>ZipWo3XNrxBPe`;^=45AYW@KP^#Bd;&nTJ7u!J<Ne
-zA%T&JIYWwpfsxUmg5fdiW5y@^3<nsVv9U8IhRHBlHAoa%=sHB`xI$bc$0*BC6nH^S
-zAx|R|Dw2PQVZnk0p#gAL%P|BN2vssLFf(dA_{Pvu&mPI3-yqMB&mqac$iU1nYXKw6
-zf4&7kF-4%59Z-aoL5+cfot>HaK|KS55QA8k00Tokdp-xyXABIE&Osa5z$~H(j|l*}
-CM^ga+
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/acer-xv273k-dp2-tile1 b/data/acer-xv273k-dp2-tile1
-new file mode 100644
-index 0000000000000000000000000000000000000000..8e41faf6cd086876bda4519bc823815ee655013b
-GIT binary patch
-literal 384
-zcmZSh4+ab@MH|_I`x#n|WEfet+9*|6s|&6PG~KGk7Z9TC!O-Z?*wA>Okzp#sW`>Ig
-z7#V#pFf8~`VAo)vV9F30pvb@=wIvNCBHzHFAi)9=VPIhR%VSXS|9>_kmjW07MgA~E
-zgc+F|dqYK-ESZ=+J_a%}vj_>ZipWo3XNrxBPe`;^=45AYW@KP^#Bd;&nTJ7v!J<Ne
-zA%T&JIYWwpfsxUmg5fdiW5y@^3?~?#v9U8IhRHBlHAoa%=sHB`xI$bc$0*BC6nH^S
-zAx|R|Dw2PQVZnk0p#gAL%Q09M2vssLFf(dA_{Pvu&mPI3-yqMB&mqac$iU1nYXKw6
-zf4&7kF-4%59Z-aoL5+cfot>HaK|KS55QA8kfB-{1dp-xyXABIE&Osa5z$~H(iwOY5
-C$5R0S
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/dell-p2415q-dp b/data/dell-p2415q-dp
-new file mode 100644
-index 0000000000000000000000000000000000000000..ffc77f0cbc914500564f7df3b08bddf27e315416
-GIT binary patch
-literal 256
-zcmZSh4+abZYxXU0^6@cHmSSXCYARP@^~iNasPAGm?tqY`-VBBQjSVXgtaP||;330B
-z21Z8T3k(ZB6xcP`8JIHgYbY`>NHH)l{AX}Cb}@G|v+y_Y@p0k;iu_@4arN<02rx1+
-zG!5iZ0E+x&koA%4F=OCT00YLSOw6($0|ew1SVdTbg#?+I#6;QI7?nBY*_#;|7{cNh
-z7A#nx8DO9Qvxdp4L88z?*C9ej6=Ja*qbx&F-~~B_JdIGO$l^4R<K!C<x_}nr0IvZ|
-CY&!t}
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/dell-p2415q-hdmi1.4 b/data/dell-p2415q-hdmi1.4
-new file mode 100644
-index 0000000000000000000000000000000000000000..ada8d54fa0dd28c18763f41632502207bda56392
-GIT binary patch
-literal 256
-zcmZSh4+abZYYr@M^6@cHmSSXXFqNx#^~iNasPAGm?tqY`-VBBQjSVXgtaP||;2{Ge
-z5G+n(Sn#1hzQI7jl!0GEk%2*qfq~&agS)Ydxtp1Vzk!dB6BkhA4}*)VkB>rtk%^&c
-zAeRDA<S&D)k6e!&1D66AFivD**83Pdft7`cU5rsgUPxG7K~agBO;A*sQ=Yw<k%1wX
-znTG+W(MEwGftiVs$*Mu3&_dTCLPr&1uN<Q+P((&d0WLC+rG&xYQ$bY2hKMexny@&A
-R1q&8v2B5eW=olcV0swnGJOKaz
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/dell-p2415q-hdmi2.0 b/data/dell-p2415q-hdmi2.0
-new file mode 100644
-index 0000000000000000000000000000000000000000..d9f3eca07a46223ae750a025b5bdc77242cd7b62
-GIT binary patch
-literal 256
-zcmZSh4+abZYmP2(^6@cHmSSXXFqNx#^~iNasPAGm?tqY`-VBBQjSVXgtaP||;2{Ge
-z5OBO;F!)pu)vzI=i-BK5k%2*qfq~&agS)Ydxtp1Vzk!dB6BkhA4}*)VkB>rtk%^&c
-zAeRDA<S&D)k6e!p1D66AFs@}{cK8?}z{<kJF2*P#FC?t4ps2*mCMX&k7oV7*%qh>_
-z%*eoy%gn<7)Lo&#kig8un0_Pn2xG+o_9y%d3<nrx8zc&4#1tZQR3R>z$5MjkHo34k
-Vh6M{2Xa*Q4m?B&YbPNzQ0RUN@K>+{&
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/dell-up2715k-dp b/data/dell-up2715k-dp
-index 18404713e9c29f265e315e385cd7fe71dc657fa2..835aaa5e87fd431a73579319724a97f4c136db27 100644
-GIT binary patch
-delta 161
-zcmZo*ZeS8*_zwmQ0&8|S1Y24d2u&1JRr0;Su;4?1U4wywDMM(0A_IdI0|Uc<1~)@5
-zXJ1p3Py-9gi4kfsjQ5zBg+97YU}0urROV!7Z)Rj*V6tkED74UZh|p1m=#&eKV_2|Y
-qfo1^0EJj&|qQDDs3V9l#P&GYV7rGQ4=n4qfO@oL?Ox&o-coYBt11nVk
-
-literal 384
-zcmZSh4+abZYqmKA8<-f%N;0x+wNa|DDpFk&V7y(8J0L`ngQ1aOGs8uOl@5&!7Y{H3
-zL0BBaf&~jS0}K>Q8A1aT85pD(7#RLDxEXpm`<j}&7@8Oaa{)#EFu1t-_$Y)17?~TI
-zdV@s%GRS(%Z!u%!QUC*{6HLrJAC)=T*_#;|7<?}<Ecj4h*ASqP$^$l40;@ehW2gp9
-z3WO>d7=#$angj$G{&U)MgG~my8WI}J3^qO&7+U`G&1cYWkY~u}uw`IkU||r5WnlTw
-l2@$jB)&PoeG91~1EEWhBV`t#vXk_4EVPIhr!0P0y69BOUMF9W+
-
-diff --git a/data/dell-up2715k-dp-switchresx b/data/dell-up2715k-dp-switchresx
-new file mode 100644
-index 0000000000000000000000000000000000000000..d0d425a8d4db26170d21a92ee9e469eb7f9fc318
-GIT binary patch
-literal 384
-zcmZSh4+abZYj!vUTUr<hNiwo*wNa|DDpFk&V7y(8J0L`ngQ1aOGs8uOl@5&!7Y{H3
-zf$s%|1s@9R8VnRn8A1aT85pD(7#RLDxEXpm`<j}B8dz8ca{)#EFu1t-_$Y)17?~TI
-zdV@s%GRS(%Z!u%!QUC*{yG+bNA6+M~Ff%bKbF#BHGcqtRSv5!$TIf1N=%_->mJ5qx
-zSg>G$W&pxAMp=fUzzcE;c^aWmH9cGxx)dJh3JBOugNR4~Z6geh76_^^GcYrVG~_Wd
-p{1=|jpx+?RV9y=Mz{J49z|FuFT%K8yoDq~-95IuyVPvS7007E9LjeE)
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/dell-up2715k-dp1-tile1 b/data/dell-up2715k-dp1-tile1
-new file mode 100644
-index 0000000000000000000000000000000000000000..424394df2b31b89aae15440c7f11be1d1e3ef86b
-GIT binary patch
-literal 384
-zcmZSh4+abZYqmKATUr<hNiwo*wNa|DDpFk&V7y(8J0L`ngQ1aOGs8uOl@5&!7Y{H3
-zL0BBaf&~jS0}K>Q8A1aT85pD(7#RLDxEXpm`<j}B8dz8ca{)#EFu1t-_$Y)17?~TI
-zdV@s%GRS(%Z!u%!QUC*{wM@)BAC)=T*_#;|7<?}<Ecj4h*ASqP$^$l40;@ehW2gp9
-z3WO>d7=#$angj$G{&U)MgG~my8WI}J3^qO&7+U`G&1cYWkY~u}uw`IkU||r5WnlTw
-l2@$jB)&PoeG91~1EEWhBV`t#vXk_4EVPIhr!0P0a69Bq!MF9W+
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/dell-up2715k-dp2-tile0 b/data/dell-up2715k-dp2-tile0
-new file mode 100644
-index 0000000000000000000000000000000000000000..c95095fecc3962145d89efe0ae7caf7c6c1cb6cd
-GIT binary patch
-literal 256
-zcmZSh4+abZYqmKATUr<hNiwo*wNa|DDpFk&V7y(8J0OICfq@YX%;yeRVDNxXz(B#2
-zAv8ddfk6tW=s$y-p_j9-sY$4Tg=H`oP~;DTi>r^1LTG@IxuK~yNaQbrthf9YGe#~2
-zFkqZeAXLe~AjBZnAOJLg)1Dish5@7t;u>ZK4S`q&mj9gd8T1?E8SJ?=7?>D18IJ5h
-P77GN6fi;p!)K35az+)`|
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/kogan-kaled24144f-dp b/data/kogan-kaled24144f-dp
-new file mode 100644
-index 0000000000000000000000000000000000000000..ce340a6c2fd85e6b459b33d966ad896a2bed6c60
-GIT binary patch
-literal 256
-zcmZSh4+ac6?-*1VfIvoyk!7igLWObr(<Na6^VE0)Le`&V*vv4Mp|PRyK%xK21KkH0
-z8JMgZBnmBb9U^pG8Se53GBC&iwf<$$n6P{~7bBMf7yw27FnBxqxVjjb7@C;4aVY>r
-z1b`R`Fdk)M<~gX$$<E%)$iSf0)DTc$;p@Pm@Po%}6;P>ESAN5S0t*KR0|iqC2Ny-4
-K2$E)MFj)XpaxDP>
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/kogan-kaled24144f-hdmi b/data/kogan-kaled24144f-hdmi
-new file mode 100644
-index 0000000000000000000000000000000000000000..f3d4a0f0700493d72de0e2cc8fb91214f2fbf1d6
-GIT binary patch
-literal 256
-zcmZSh4+ac6?-*1VfIvoyk!6vILWN#pz_PG_1!}wjA?r^wY-X6s(Ady;pwNHif$js0
-z3`|xH5``AJ4iP%840m}185kshTK_P3JNme~7?~KFn7DB%07d>XXiQkJK#_q<0Stg5
-z0zixe7@L@wwLb<-U}a%uViXh-7GYx-6_Zy`=45AYW@KPUzY%+cvEl$jDl-p*0>iBO
-zhKd3U1+b-I0g6CNyYd?r6j(So7$}%BIJf{s<TTAdBJxNgOp*)>0xpOufYdbH0NM|7
-IDjbLd0L{=k0RR91
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/lg-ultrafine-5k-v2-thunderbolt-dp1-tile0 b/data/lg-ultrafine-5k-v2-thunderbolt-dp1-tile0
-new file mode 100644
-index 0000000000000000000000000000000000000000..13ab607a1763bf26fc8219904f7548963e9fd851
-GIT binary patch
-literal 384
-zcmZSh4+ac!xh2tutyvk^WEoku+9*{t@K0P9<h((RKOjVbfq@YXsGea6_)uWiz@Z?)
-z5D}utz#z3anjv7p0?hz~2m=Gde+EkfGrth$C`Thpb4xCu$R7qDcZJZLlA=Vn%)C@C
-zrh5fKmCOu`3_Nz?V!R9@4%`71els;01hzbm>%YIiIbm0bRqnr6Ojns1G*r$owEXAu
-zXJBuTXUONU1scZA5ZA}RQqKbsV`n!8ivbCuLB#~H{Xz_4O#(pYa@uo)wYmrUmPCWR
-e%*-HiVGjexf6n<}YwfuMf%5D`8&6Q7&;$T`UqAr>
-
-literal 0
-HcmV?d00001
-
-diff --git a/data/lg-ultrafine-5k-v2-thunderbolt-dp2-tile1 b/data/lg-ultrafine-5k-v2-thunderbolt-dp2-tile1
-new file mode 100644
-index 0000000000000000000000000000000000000000..abc93a47301db232ea159a68f1e5df5d64db4c27
-GIT binary patch
-literal 256
-zcmZSh4+ac!xh2tutyvk^WEoku+9*{t@K0P9<h((RKOlsGfq@YX0EGmA7!_cO{AaK<
-zF!Kv>j&d}zG`HjeD*waa<E{{zQ&N=ZmYJ8z#W=Y@sFIn1k%7lfT#T1N#DP1Y!f&P~
-zgTR)@asBrfI4A51vC94Tis`BlgII%r0K<Pydv36$?!mq#(I7`LGl*Q+!@%*Mb3Oxm
-TgFJ&hcOX!n9o1pDd2$l~Q#URF
-
-literal 0
-HcmV?d00001
-
--- 
-2.21.0 (Apple Git-122.2)
+diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platf=
+orm/atmel/atmel-isi.c
+index 35c1f1a..59d4c9f 100644
+--- a/drivers/media/platform/atmel/atmel-isi.c
++++ b/drivers/media/platform/atmel/atmel-isi.c
+@@ -560,7 +560,7 @@ static int isi_try_fmt(struct atmel_isi *isi, struct v4=
+l2_format *f,
+ {
+ 	const struct isi_format *isi_fmt;
+ 	struct v4l2_pix_format *pixfmt =3D &f->fmt.pix;
+-	struct v4l2_subdev_pad_config pad_cfg;
++	struct v4l2_subdev_pad_config pad_cfg =3D {0};
+ 	struct v4l2_subdev_format format =3D {
+ 		.which =3D V4L2_SUBDEV_FORMAT_TRY,
+ 	};
+--=20
+2.7.4
 
