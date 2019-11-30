@@ -3,30 +3,30 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-0.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SHORT_SHORTNER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SHORT_SHORTNER,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C8AAC432C3
-	for <linux-media@archiver.kernel.org>; Sat, 30 Nov 2019 11:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78596C432C3
+	for <linux-media@archiver.kernel.org>; Sat, 30 Nov 2019 12:26:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 307422073C
-	for <linux-media@archiver.kernel.org>; Sat, 30 Nov 2019 11:46:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4ABF62073C
+	for <linux-media@archiver.kernel.org>; Sat, 30 Nov 2019 12:26:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbfK3Lqv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 Nov 2019 06:46:51 -0500
-Received: from zeus.seaquake.net ([195.62.218.101]:47356 "EHLO
+        id S1725985AbfK3M0i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Nov 2019 07:26:38 -0500
+Received: from zeus.seaquake.net ([195.62.218.101]:52174 "EHLO
         zeus.seaquake.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725887AbfK3Lqv (ORCPT
+        with ESMTP id S1725811AbfK3M0i (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 Nov 2019 06:46:51 -0500
+        Sat, 30 Nov 2019 07:26:38 -0500
 Received: from [192.168.8.111] (unknown [81.96.60.135])
-        by zeus.seaquake.net (Postfix) with ESMTP id 02CBC21C117
-        for <linux-media@vger.kernel.org>; Sat, 30 Nov 2019 11:28:46 +0000 (GMT)
+        by zeus.seaquake.net (Postfix) with ESMTP id 9AA9D21C116
+        for <linux-media@vger.kernel.org>; Sat, 30 Nov 2019 12:26:37 +0000 (GMT)
 To:     linux-media@vger.kernel.org
 From:   Steven Maddox <s.maddox@lantizia.me.uk>
 Subject: em28xx: new board id [0b1a:2820]
-Message-ID: <bac344de-de3a-812d-a0c0-9249813244f7@lantizia.me.uk>
-Date:   Sat, 30 Nov 2019 11:28:45 +0000
+Message-ID: <623be288-0fe5-8313-bd40-7223e045c796@lantizia.me.uk>
+Date:   Sat, 30 Nov 2019 12:26:36 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
