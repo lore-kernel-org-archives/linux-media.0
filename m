@@ -4,54 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D326EC432C0
-	for <linux-media@archiver.kernel.org>; Sun,  1 Dec 2019 07:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6623C432C0
+	for <linux-media@archiver.kernel.org>; Sun,  1 Dec 2019 08:07:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A39A420833
-	for <linux-media@archiver.kernel.org>; Sun,  1 Dec 2019 07:57:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 781FD20725
+	for <linux-media@archiver.kernel.org>; Sun,  1 Dec 2019 08:07:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1575187067;
-	bh=lkpVAFUrqWlz+Qi+xOup83gZHWw1ca8MK8IiTYk8p/E=;
+	s=default; t=1575187666;
+	bh=G5ogXVdLOsvfojLCavkuISfCai58fyqniCibgcQjeY0=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=OhWZn0b1agk8MOXAuR8lyy4Jfm6XkOpqcZKT+6v+9NtVG795oiXzy0ZTpY0L2h03l
-	 +TfcpMlvTXTXESii+6NRjw/QJ68YRtXkdcyCWkRn+Gj0/mTeWCb+8e31fjmfGQl6Mf
-	 3hnvDEfJE7QnOv4/76eDVjRnKjixHlJaJH3Q/j8o=
+	b=u5aPiGbr/53GH3/Ljkd6+acKxM63oAzYpM7CBGtjSfdj9TZvEswCuyLt0uAuLxAFo
+	 OYq677T2MVtIU2OBSxDTVSvopEq5KrCPRM4ha5hpZ91AVOh/xv1s4qgIGfFNMsRM9w
+	 zwNlir8f/bi8x6ADovB4wparHyWGNFjHRu5nJ6T0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725987AbfLAH5r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 1 Dec 2019 02:57:47 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:48844 "EHLO
+        id S1726086AbfLAIHn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 1 Dec 2019 03:07:43 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:49014 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbfLAH5q (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 1 Dec 2019 02:57:46 -0500
+        with ESMTP id S1725908AbfLAIHn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 1 Dec 2019 03:07:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
         From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=R3O1tEL04g7Y6dxw+q2oztyWrq1wqe4VVQQmpY4zt24=; b=WayxkVcFZEUtUXElTZL7Dnkui
-        k1XHIze17aRY6C6J08uel9NS1euiilhi2fLM/5acu99zv3YuAfO+gCJcf7I9mO33o6TwuC/2ZIV+L
-        8atxQsqXY7Ahz89hn1bU6fjeJbAsKG8zxMpMxv5D51PiOkm+IAkpHlGTo/ObYNfWYQBN5Y+OIuPo1
-        icTEnWZCGSHFnMKEaHQ0ca+jfTggXruKSdi9QbPg35zW/Ij9nbEMbj6pTTqCBn+7YOUvtC/qTtmT3
-        YEKI04cI2isUC1cwhPBCFaE9tuWuSeAjSevA9tSJG0ZPKNAbqjQlBPdFZICA5g2pWISYuTaoVUpV7
-        ymwzoYYAg==;
+         bh=OcvQUVi7k/pWsxDxL6CGsNVQjHASwhpi4TW6HCrsSh4=; b=OylsbUzZ8kLnsCApp3udLK84E
+        zD5N6wGhFnizCAQp3BhT2WSKBqFo5MUn5UDfgm2jMYtoU3M3TDLXnig84eodvEB8mO7Px51hDYOAj
+        rxOmlXdc3R5sGCdkPIuDIj/WtwgRmA7xOL9ci0j6PThBw+nGxBYmNw8nrC7hSHvWU0S/KlQrZZqjF
+        wKWvdqAX2I+/gHr4QAOHlrMaSEu7H9LTmbYDGqmX+VQy7dRP/O1yuQ0a2hIeRvVmOvfXfAaIyjXf2
+        BJvAOIg/DSF2eqi9pwqn79ezdQ50lFtQG3QYsw0SZWS589SdsH26WS/cnHdyrMCefUDIvxsIIz2g8
+        i2wHl4oBg==;
 Received: from [80.156.29.194] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ibK6y-0004py-Nx; Sun, 01 Dec 2019 07:57:44 +0000
-Date:   Sun, 1 Dec 2019 08:57:41 +0100
+        id 1ibKGX-0007jf-32; Sun, 01 Dec 2019 08:07:37 +0000
+Date:   Sun, 1 Dec 2019 09:07:33 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
-Cc:     p.zabel@pengutronix.de, skhan@linuxfoundation.org,
+Cc:     gregkh@linuxfoundation.org, rfontana@redhat.com,
+        kstewart@linuxfoundation.org, tglx@linutronix.de,
+        skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] Documentation: media: dtv-frontend.rst: fix a few minor
- typos
-Message-ID: <20191201085741.67d9389c@kernel.org>
-In-Reply-To: <20191126164051.39920-1-dwlsalmeida@gmail.com>
-References: <20191126164051.39920-1-dwlsalmeida@gmail.com>
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: dvb_dummy_fe.c: add members to
+ dvb_dummy_fe_state
+Message-ID: <20191201090733.2bd8c2c4@kernel.org>
+In-Reply-To: <20191130045420.111288-1-dwlsalmeida@gmail.com>
+References: <20191130045420.111288-1-dwlsalmeida@gmail.com>
 X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -61,82 +63,96 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Tue, 26 Nov 2019 13:40:51 -0300
+Em Sat, 30 Nov 2019 01:54:20 -0300
 "Daniel W. S. Almeida" <dwlsalmeida@gmail.com> escreveu:
 
 > From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 > 
-> Fix a few minor typos throughout the document without changing the
-> meaning of the sentences.
+> Add members to dvb_dummy_fe_state in order to match with other frontends.
 > 
 > Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
-
-Looks OK on my eyes.
-
 > ---
->  Documentation/media/kapi/dtv-frontend.rst | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+>  drivers/media/dvb-frontends/dvb_dummy_fe.c | 26 +++++++++++++++++-----
+>  1 file changed, 21 insertions(+), 5 deletions(-)
 > 
-> diff --git a/Documentation/media/kapi/dtv-frontend.rst b/Documentation/media/kapi/dtv-frontend.rst
-> index fbc5517c8d5a..b362109bb131 100644
-> --- a/Documentation/media/kapi/dtv-frontend.rst
-> +++ b/Documentation/media/kapi/dtv-frontend.rst
-> @@ -15,8 +15,8 @@ The header file for this API is named ``dvb_frontend.h`` and located in
->  Demodulator driver
->  ^^^^^^^^^^^^^^^^^^
+> diff --git a/drivers/media/dvb-frontends/dvb_dummy_fe.c b/drivers/media/dvb-frontends/dvb_dummy_fe.c
+> index 1ccb58c67e8e..80e6a3bf76e0 100644
+> --- a/drivers/media/dvb-frontends/dvb_dummy_fe.c
+> +++ b/drivers/media/dvb-frontends/dvb_dummy_fe.c
+> @@ -15,18 +15,29 @@
 >  
-> -The demodulator driver is responsible to talk with the decoding part of the
-> -hardware. Such driver should implement :c:type:`dvb_frontend_ops`, with
-> +The demodulator driver is responsible for talking with the decoding part of the
-> +hardware. Such driver should implement :c:type:`dvb_frontend_ops`, which
->  tells what type of digital TV standards are supported, and points to a
->  series of functions that allow the DVB core to command the hardware via
->  the code under ``include/media/dvb_frontend.c``.
-> @@ -120,7 +120,7 @@ Satellite TV reception is::
+>  DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
 >  
->  .. |delta|   unicode:: U+00394
+> +struct dvb_dummy_fe_config {};
+> +
+>  struct dvb_dummy_fe_state {
+>  	struct dvb_frontend frontend;
+> +	struct mutex lock;
+> +	struct dvb_adapter adapter;
+> +	struct dvb_frontend frontend;
+> +	struct dvb_dummy_fe_config config;
+> +
+> +	enum fe_status frontend_status;
+> +	u32 current_frequency;
+
+While the above will very likely makes sense, once we add the missing
+functionality at the dummy frontend, please don't add fields at the
+struct while they're not used, as this makes harder for reviewers to be
+sure that we're not adding bloatware at the code.
+
+> +
+> +	bool sleeping;
+>  };
 >  
-> -The ``include/media/dvb_frontend.c`` has a kernel thread with is
-> +The ``include/media/dvb_frontend.c`` has a kernel thread which is
->  responsible for tuning the device. It supports multiple algorithms to
->  detect a channel, as defined at enum :c:func:`dvbfe_algo`.
->  
-> @@ -220,11 +220,11 @@ Signal strength (:ref:`DTV-STAT-SIGNAL-STRENGTH`)
->    - As the gain is visible through the set of registers that adjust the gain,
->      typically, this statistics is always available [#f3]_.
->  
-> -  - Drivers should try to make it available all the times, as this statistics
-> +  - Drivers should try to make it available all the times, as these statistics
->      can be used when adjusting an antenna position and to check for troubles
->      at the cabling.
->  
-> -  .. [#f3] On a few devices, the gain keeps floating if no carrier.
-> +  .. [#f3] On a few devices, the gain keeps floating if there is no carrier.
->       On such devices, strength report should check first if carrier is
->       detected at the tuner (``FE_HAS_CARRIER``, see :c:type:`fe_status`),
->       and otherwise return the lowest possible value.
-> @@ -232,7 +232,7 @@ Signal strength (:ref:`DTV-STAT-SIGNAL-STRENGTH`)
->  Carrier Signal to Noise ratio (:ref:`DTV-STAT-CNR`)
->    - Signal to Noise ratio for the main carrier.
->  
-> -  - Signal to Noise measurement depends on the device. On some hardware, is
-> +  - Signal to Noise measurement depends on the device. On some hardware, it is
->      available when the main carrier is detected. On those hardware, CNR
->      measurement usually comes from the tuner (e. g. after ``FE_HAS_CARRIER``,
->      see :c:type:`fe_status`).
-> @@ -323,8 +323,8 @@ A typical example of the logic that handle status and statistics is::
->  		.read_status = foo_get_status_and_stats,
->  	};
->  
-> -Statistics collect
-> -^^^^^^^^^^^^^^^^^^
-> +Statistics collection
-> +^^^^^^^^^^^^^^^^^^^^^
->  
->  On almost all frontend hardware, the bit and byte counts are stored by
->  the hardware after a certain amount of time or after the total bit/block
+> +
+> +
+>  static int dvb_dummy_fe_read_status(struct dvb_frontend *fe,
+>  				    enum fe_status *status)
+>  {
+> -	*status = FE_HAS_SIGNAL
+> -		| FE_HAS_CARRIER
+> -		| FE_HAS_VITERBI
+> -		| FE_HAS_SYNC
+> -		| FE_HAS_LOCK;
+> +	struct dvb_dummy_fe_state *state = fe->demodulator_priv;
+> +
+> +	*status = state->frontend_status;
+
+That sounds wrong to me, at least on this patch as-is. Please remember that
+we want one logical change per patch.
+
+It means that, if you add a state->frontend_status at the driver, the
+patch should implement the entire logic for it.
+
+In other words, when the device is not tuned, status should return 0 and
+when the device is tuned, it should return:
+
+  FE_HAS_SIGNAL | FE_HAS_CARRIER | FE_HAS_VITERBI | FE_HAS_SYNC | FE_HAS_LOCK
 
 
+So, while it is OK to move the status into a var at state, you need also
+to modify the set_frontend part of the code for it to properly initalize
+the state->frontend_status var.
+
+>  
+>  	return 0;
+>  }
+> @@ -79,6 +90,11 @@ static int dvb_dummy_fe_set_frontend(struct dvb_frontend *fe)
+>  
+>  static int dvb_dummy_fe_sleep(struct dvb_frontend* fe)
+>  {
+> +
+> +	struct dvb_dummy_fe_state *state = fe->demodulator_priv;
+> +
+> +	state->sleeping = true;
+> +
+
+Hmm...what's the sense of adding it? Where are you setting it to false?
+Where are you using the sleeping state?
+
+>  	return 0;
+>  }
+>  
 
 Cheers,
 Mauro
