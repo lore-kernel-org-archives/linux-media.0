@@ -2,222 +2,369 @@ Return-Path: <SRS0=2+9f=ZY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2794C43215
-	for <linux-media@archiver.kernel.org>; Mon,  2 Dec 2019 09:25:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BAD5C432C3
+	for <linux-media@archiver.kernel.org>; Mon,  2 Dec 2019 09:48:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D454624249
-	for <linux-media@archiver.kernel.org>; Mon,  2 Dec 2019 09:25:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C9F0820661
+	for <linux-media@archiver.kernel.org>; Mon,  2 Dec 2019 09:48:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Rk9LL81A"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727368AbfLBJZI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Dec 2019 04:25:08 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:43781 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726251AbfLBJZH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Dec 2019 04:25:07 -0500
-Received: by mail-il1-f199.google.com with SMTP id m67so7572211ill.10
-        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2019 01:25:07 -0800 (PST)
+        id S1726469AbfLBJso (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Dec 2019 04:48:44 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:46021 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbfLBJso (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Dec 2019 04:48:44 -0500
+Received: by mail-ed1-f67.google.com with SMTP id v28so6234697edw.12
+        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2019 01:48:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s1zlZMarLi4nAUCn1GIvPXbRFhUOTq04Huhogccl8tM=;
+        b=Rk9LL81AeGldv3idTvopx1eq3lGmYB1xNoBlcTAr6Gc7YipmeLPUtYeZRUxmMdxAtM
+         HmYf9gQljxw/wr8tzQlTUm/175gP09W8/L7YZ8/tdeGz73hCPKWJDVZl9TcPNFlao5H3
+         KYri1VkZSoZ/7r4sg4Q3irewd8m3kkgtWOEDU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=s/fzY9n/Wc759s+X5jwa5PXhW5V1f6rxMUh+sQv+EIU=;
-        b=AeI4AV6L1Hbd64k4sbWbqxKOokivUcyCqUjJb104MeH/5CHurm9l9ZrFF0pu201kMY
-         FELoiRhkFqyiKpmptMYLkhoPnt9fxI+rrF6nmeKiIkdO04bnvaNEtha+9vRm08AdBwQ3
-         JtGyWDL0GYmbkGwqqM+laZiWc9Wm0xXDUkObEZLbRyRp+w8zJwg7AEBS2bGar/Au8CeA
-         XTsbAfp7m/5yHyTerrVqK3kHqkzWa2y0W1/YxXyCRrv+n8u+3u9+tw/7AInyFpSBzOa+
-         yys55w1QZQ2CoQ3riQmkNOMCdxizKgkVYP/eZXcYVA0uV7sHKUXX0RB6ckbj52TxYCKT
-         StBg==
-X-Gm-Message-State: APjAAAXwdmBSRwYRLfkmeqBhhdK4sZ6JO5qoUcoz6RAUyg9xp72ALVSo
-        NslWBmjVH1MnVWBFtqPpFksJ6dKEAIC5Pni/gPOEM/r7SKMa
-X-Google-Smtp-Source: APXvYqxUgkfSuyTzo7urgNwiNWOccCUAD3r/7Xc6+I7tBgXjkAdKtW2Xb8ndo2wJJNzCx0qC3O1QWtMZvde93oeGiTGB9b+IeVx2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s1zlZMarLi4nAUCn1GIvPXbRFhUOTq04Huhogccl8tM=;
+        b=ESGi4Xddbfh8bVHzFH03+cBP9uKHNovIxSzsUKGJ7oixqc5MVw3Lz1SkA/KJInV34n
+         Go8Dw2EZcHBAWlhGkB8ExvEIDqWOCq7gGLW0CslDfyaz2uK1/866B7U9o6tZssdeKupS
+         SeK0ioW3OWQdH2vZTzwsbh6HlmflinJP86zfe0scR3HW4JuX179FJ4+sbfYvOMtJebe4
+         ZNoX6evgaP77l5C4yWXIBmOoRX2/HhAJmw9mEpXHRNQgvSecmG26iLfwF+Im+sq48rGk
+         6xRbEUbAxPYN8aCXiH2egZIQlnitA+bT4fJOBJliccVmdqzh2AZ/BvHdbQdCavSAwy2U
+         zBdA==
+X-Gm-Message-State: APjAAAUN+ynLdcb+hjJGSfQVvdY9KvYrZZ/zZ/KoMxmFnzcG+JTObrHS
+        hKDVfzfpW25uYKdRY1TC7BFi2it+bPI=
+X-Google-Smtp-Source: APXvYqzBsapq8GdfQNIHcKGJAW9PIV1iy8brKb+sq9mpy86TMgMMGYWg7+PYiTsE7371uCrHwnxafg==
+X-Received: by 2002:aa7:ce13:: with SMTP id d19mr3568707edv.296.1575280119888;
+        Mon, 02 Dec 2019 01:48:39 -0800 (PST)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id f2sm813983ejt.88.2019.12.02.01.48.38
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Dec 2019 01:48:38 -0800 (PST)
+Received: by mail-wr1-f53.google.com with SMTP id q10so7162375wrm.11
+        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2019 01:48:38 -0800 (PST)
+X-Received: by 2002:adf:dfc1:: with SMTP id q1mr9118440wrn.155.1575280117799;
+ Mon, 02 Dec 2019 01:48:37 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:8995:: with SMTP id w21mr6775582ilk.231.1575278706708;
- Mon, 02 Dec 2019 01:25:06 -0800 (PST)
-Date:   Mon, 02 Dec 2019 01:25:06 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bc5c0e0598b52778@google.com>
-Subject: KASAN: use-after-free Write in as102_release
-From:   syzbot <syzbot+edff65c4ade21b5db190@syzkaller.appspotmail.com>
-To:     allison@lohutok.net, andreyknvl@google.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, rfontana@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+References: <20190906101125.3784-1-Jerry-Ch.chen@mediatek.com>
+ <20190906101125.3784-4-Jerry-Ch.chen@mediatek.com> <1571109375.3706.40.camel@mtksdccf07>
+ <20191025035211.GA67000@chromium.org> <1574237450.20087.17.camel@mtksdccf07>
+ <CAAFQd5DPErhL0_1f6BzDMMOVhxNfJdctBsK=mcBP6oNcmw-r=w@mail.gmail.com> <1575046535.22859.12.camel@mtksdccf07>
+In-Reply-To: <1575046535.22859.12.camel@mtksdccf07>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Mon, 2 Dec 2019 18:48:23 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5D-F1C4RyVeTzX=z72h6x0P5Gyb2X0EsH0YRQVAP6hGmQ@mail.gmail.com>
+Message-ID: <CAAFQd5D-F1C4RyVeTzX=z72h6x0P5Gyb2X0EsH0YRQVAP6hGmQ@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 3/3] platform: mtk-isp: Add Mediatek FD driver
+To:     Jerry-ch Chen <Jerry-ch.Chen@mediatek.com>
+Cc:     "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "lkml@metux.net" <lkml@metux.net>,
+        =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
+        "yuzhao@chromium.org" <yuzhao@chromium.org>,
+        "zwisler@chromium.org" <zwisler@chromium.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?U2VhbiBDaGVuZyAo6YSt5piH5byYKQ==?= 
+        <Sean.Cheng@mediatek.com>,
+        =?UTF-8?B?U2ogSHVhbmcgKOm7g+S/oeeSiyk=?= <sj.huang@mediatek.com>,
+        =?UTF-8?B?Q2hyaXN0aWUgWXUgKOa4uOmbheaDoCk=?= 
+        <christie.yu@mediatek.com>,
+        =?UTF-8?B?RnJlZGVyaWMgQ2hlbiAo6Zmz5L+K5YWDKQ==?= 
+        <Frederic.Chen@mediatek.com>,
+        =?UTF-8?B?SnVuZ28gTGluICjmnpfmmI7kv4op?= <jungo.lin@mediatek.com>,
+        =?UTF-8?B?UG8tWWFuZyBIdWFuZyAo6buD5p+P6Zm9KQ==?= 
+        <po-yang.huang@mediatek.com>,
+        =?UTF-8?B?UnlubiBXdSAo5ZCz6IKy5oGpKQ==?= <Rynn.Wu@mediatek.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "laurent.pinchart+renesas@ideasonboard.com" 
+        <laurent.pinchart+renesas@ideasonboard.com>,
+        "hans.verkuil@cisco.com" <hans.verkuil@cisco.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+On Sat, Nov 30, 2019 at 1:55 AM Jerry-ch Chen
+<Jerry-ch.Chen@mediatek.com> wrote:
+>
+> Hi Tomasz,
+>
+> On Wed, 2019-11-20 at 18:28 +0900, Tomasz Figa wrote:
+> > On Wed, Nov 20, 2019 at 5:11 PM Jerry-ch Chen
+> > <Jerry-ch.Chen@mediatek.com> wrote:
+> > >
+> > > Hi Tomasz,
+> > >
+> > > On Fri, 2019-10-25 at 11:52 +0800, Tomasz Figa wrote:
+> > > > On Tue, Oct 15, 2019 at 11:16:15AM +0800, Jerry-ch Chen wrote:
+> > > > > Hi Tomasz,
+> > > > >
+> > > > > On Fri, 2019-09-06 at 18:11 +0800, Jerry-ch Chen wrote:
+> > > > > > From: Jerry-ch Chen <jerry-ch.chen@mediatek.com>
+> > > > > >
+> > > > > > This patch adds the driver of Face Detection (FD) unit in
+> > > > > > Mediatek camera system, providing face detection function.
+> > > > > >
+> > > > > > The mtk-isp directory will contain drivers for multiple IP
+> > > > > > blocks found in Mediatek ISP system. It will include ISP Pass 1
+> > > > > > driver (CAM), sensor interface driver, DIP driver and face
+> > > > > > detection driver.
+> > > > > >
+> > > > > > Signed-off-by: Jerry-ch Chen <jerry-ch.chen@mediatek.com>
+> > > > > > ---
+> > > > > >  drivers/media/platform/Kconfig                |    2 +
+> > > > > >  drivers/media/platform/Makefile               |    2 +
+> > > > > >  drivers/media/platform/mtk-isp/fd/Kconfig     |   19 +
+> > > > > >  drivers/media/platform/mtk-isp/fd/Makefile    |    5 +
+> > > > > >  drivers/media/platform/mtk-isp/fd/mtk_fd.h    |  148 ++
+> > > > > >  drivers/media/platform/mtk-isp/fd/mtk_fd_40.c | 1219 +++++++++++++++++
+> > > > > >  include/uapi/linux/mtk-fd-v4l2-controls.h     |   69 +
+> > > > > >  include/uapi/linux/v4l2-controls.h            |    4 +
+> > > > > >  8 files changed, 1468 insertions(+)
+> > > > > >  create mode 100644 drivers/media/platform/mtk-isp/fd/Kconfig
+> > > > > >  create mode 100644 drivers/media/platform/mtk-isp/fd/Makefile
+> > > > > >  create mode 100644 drivers/media/platform/mtk-isp/fd/mtk_fd.h
+> > > > > >  create mode 100644 drivers/media/platform/mtk-isp/fd/mtk_fd_40.c
+> > > > > >  create mode 100644 include/uapi/linux/mtk-fd-v4l2-controls.h
+> > > > > >
+> > > >
+> > > > [snip]
+> > > >
+> > > > > > +static int mtk_fd_job_abort(struct mtk_fd_dev *fd)
+> > > > > > +{
+> > > > > > + u32 ret;
+> > > > > > +
+> > > > > > + ret = wait_for_completion_timeout(&fd->fd_irq_done,
+> > > > > > +                                   msecs_to_jiffies(MTK_FD_HW_TIMEOUT));
+> > > > > > + /* Reset FD HW */
+> > > > > > + if (!ret) {
+> > > > > > +         struct ipi_message fd_ipi_msg;
+> > > > > > +
+> > > > > > +         fd_ipi_msg.cmd_id = MTK_FD_IPI_CMD_RESET;
+> > > > > > +         if (scp_ipi_send(fd->scp_pdev, SCP_IPI_FD_CMD, &fd_ipi_msg,
+> > > > > > +                          sizeof(fd_ipi_msg), MTK_FD_IPI_SEND_TIMEOUT))
+> > > > > > +                 dev_err(fd->dev, "FD Reset HW error\n");
+> > > > > > +         return -ETIMEDOUT;
+> > > > > > + }
+> > > > > > + return 0;
+> > > > > > +}
+> > > > > > +
+> > > > >
+> > > > > Continue the discussion about job abort in RFC v2,
+> > > > >
+> > > > > I think the job_abort callback in v4l2_m2m_ops() might be useful.
+> > > > >
+> > > > > ref:
+> > > > > https://elixir.bootlin.com/linux/v5.4-rc2/source/drivers/media/v4l2-core/v4l2-mem2mem.c#L398
+> > > > > https://elixir.bootlin.com/linux/v5.4-rc2/source/include/media/v4l2-mem2mem.h#L43
+> > > > >
+> > > > > in drivers/media/v4l2-core/v4l2-mem2mem.c #398 v4l2_m2m_cancel_job()
+> > > > > ...
+> > > > > if (m2m_ctx->job_flags & TRANS_RUNNING) {
+> > > > >     spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags);
+> > > > >     if (m2m_dev->m2m_ops->job_abort)
+> > > > >             m2m_dev->m2m_ops->job_abort(m2m_ctx->priv);
+> > > > >     dprintk("m2m_ctx %p running, will wait to complete\n", m2m_ctx);
+> > > > >     wait_event(m2m_ctx->finished,
+> > > > >                     !(m2m_ctx->job_flags & TRANS_RUNNING));
+> > > > > } ...
+> > > > >
+> > > > > If this operation is set, we might use the v4l2_m2m_cancel_job() when
+> > > > > suspend, and it will do mtk_fd_job_abort() here.
+> > > > >
+> > > >
+> > > > The expectation for .job_abort() is that signals the hardware to
+> > > > instantly abandon the current job. Do we have a way to tell the
+> > > > firmware/hardware to do so?
+> > > >
+> > > > Also, suspend must not abort the current job. Anything that was already
+> > > > running is expected to complete successfuly and further jobs should
+> > > > continue executing once the system resumes.
+> > > >
+> > > I appreciate your comments and Pi-Hsun's patch,
+> > >
+> > > Ok, I see.
+> > > For FD40, we can't tell the firmware/hardware to instantly abandon the
+> > > current job.
+> > > Therefore, for suspend, we stop sending further jobs to hardware and
+> > > wait for the completion of the running job.
+> > > For resume, we continue sending jobs to hardware.
+> > >
+> > > > [snip]
+> > > >
+> > > > > > +
+> > > > > > +static int mtk_fd_suspend(struct device *dev)
+> > > > > > +{
+> > > > > > + struct mtk_fd_dev *fd = dev_get_drvdata(dev);
+> > > > > > +
+> > > > > > + if (pm_runtime_suspended(dev))
+> > > > > > +         return 0;
+> > > > > > +
+> > > > > > + if (fd->fd_stream_count)
+> > > > > > +         if (mtk_fd_job_abort(fd))
+> > > > > > +                 mtk_fd_hw_job_finish(fd, VB2_BUF_STATE_ERROR);
+> > > > > > +
+> > > > >
+> > > > > To avoid mtk_fd_hw_job_finish() trigger the next job,
+> > > > > I suppose that we could use v4l2_m2m_cancel_job instead of job_abort and
+> > > > > job_finish here.
+> > > > >
+> > > > > /**
+> > > > >  * v4l2_m2m_cancel_job() - cancel pending jobs for the context
+> > > > >  * @m2m_ctx: m2m context with jobs to be canceled
+> > > > >  *
+> > > > >  * In case of streamoff or release called on any context,
+> > > > >  * 1] If the context is currently running, then abort job will be called
+> > > > >  * 2] If the context is queued, then the context will be removed from
+> > > > >  *    the job_queue
+> > > > >  */
+> > > > >
+> > > > > or another way,
+> > > > > we may add a flag and implement mtk_fd_job_ready() that reads the flag
+> > > > > if we suspend, we set the flag and do job_abort and job_finish, even if
+> > > > > it try enqueue, it will still not really queue the job, until we reset
+> > > > > the flag in mtk_fd_resume().
+> > > > >
+> > > > > how do you think?
+> > > > >
+> > > >
+> > > > As per my comment above, suspend must just pause the execution of the
+> > > > jobs. It must not cause any jobs to be skipped.
+> > > >
+> > > > After analyzing the m2m framework and existing m2m drivers I realized
+> > > > that they currently provide no way to correctly handle suspend/resume.
+> > > > Pi-Hsun has been looking into fixing this in crrev.com/c/1878112 and
+> > > > we'll send it upstream as soon as we get something that should handle
+> > > > all the cases correctly.
+> > > >
+> > > Ok, thanks for the patches.
+> > >
+> > > > > > + /* suspend FD HW */
+> > > > > > + writel(0x0, fd->fd_base + MTK_FD_REG_OFFSET_INT_EN);
+> > > > > > + writel(0x0, fd->fd_base + MTK_FD_REG_OFFSET_HW_ENABLE);
+> > > > > > + clk_disable_unprepare(fd->fd_clk);
+> > > > > > + dev_dbg(dev, "%s:disable clock\n", __func__);
+> > > > > > +
+> > > > > > + return 0;
+> > > > > > +}
+> > > > > > +
+> > > > > > +static int mtk_fd_resume(struct device *dev)
+> > > > > > +{
+> > > > > > + struct mtk_fd_dev *fd = dev_get_drvdata(dev);
+> > > > > > + int ret;
+> > > > > > +
+> > > > > > + if (pm_runtime_suspended(dev))
+> > > > > > +         return 0;
+> > > > > > +
+> > > > > > + ret = clk_prepare_enable(fd->fd_clk);
+> > > > > > + if (ret < 0) {
+> > > > > > +         dev_dbg(dev, "Failed to open fd clk:%d\n", ret);
+> > > > > > +         return ret;
+> > > > > > + }
+> > > > > > +
+> > > > > > + /* resume FD HW */
+> > > > > > + writel(MTK_FD_SET_HW_ENABLE, fd->fd_base + MTK_FD_REG_OFFSET_HW_ENABLE);
+> > > > > > + writel(0x1, fd->fd_base + MTK_FD_REG_OFFSET_INT_EN);
+> > > > > > + dev_dbg(dev, "%s:enable clock\n", __func__);
+> > > >
+> > > > By the way, we need to kick the m2m framework here to schedule further
+> > > > jobs. Pi-Hsun's patch will also take care of this.
+> > > >
+> > > Ok, I see.
+> > > I would like to use Pi-Hsun's patch, otherwise I would need to call
+> > > v4l2_m2m_try_run() here.
+> > >
+> >
+> > Yes, please include Pi-Hsun's patch (with original author, sign-off +
+> > your sign-off added) at the beginning of the next version of your
+> > series.
+> >
+> Done.
+>
+> > > > [snip]
+> > > >
+> > > > > > +/* Set the face angle and directions to be detected */
+> > > > > > +#define V4L2_CID_MTK_FD_DETECT_POSE              (V4L2_CID_USER_MTK_FD_BASE + 1)
+> > > > > > +
+> > > > > > +/* Set image widths for an input image to be scaled down for face detection */
+> > > > > > +#define V4L2_CID_MTK_FD_SCALE_DOWN_IMG_WIDTH     (V4L2_CID_USER_MTK_FD_BASE + 2)
+> > > > > > +
+> > > > > > +/* Set image heights for an input image to be scaled down for face detection */
+> > > > > > +#define V4L2_CID_MTK_FD_SCALE_DOWN_IMG_HEIGHT    (V4L2_CID_USER_MTK_FD_BASE + 3)
+> > > > > > +
+> > > > > > +/* Set the length of scale down size array */
+> > > > > > +#define V4L2_CID_MTK_FD_SCALE_IMG_NUM            (V4L2_CID_USER_MTK_FD_BASE + 4)
+> > > > > > +
+> > > > > > +/* Set the detection speed, usually reducing accuracy. */
+> > > > > > +#define V4L2_CID_MTK_FD_DETECT_SPEED             (V4L2_CID_USER_MTK_FD_BASE + 5)
+> > > > > > +
+> > > > > > +/* Select the detection model or algorithm to be used. */
+> > > > > > +#define V4L2_CID_MTK_FD_DETECTION_MODEL          (V4L2_CID_USER_MTK_FD_BASE + 6)
+> > > > > > +
+> > > > > > +/* We reserve 16 controls for this driver. */
+> > > > > > +#define V4L2_CID_MTK_FD_MAX                      16
+> > > > > > +
+> > > > >
+> > > > > For these control IDs, I think the following should be remained as chip
+> > > > > specific controls.
+> > > > > V4L2_CID_MTK_FD_SCALE_DOWN_IMG_WIDTH,
+> > > > > V4L2_CID_MTK_FD_SCALE_DOWN_IMG_HEIGHT and V4L2_CID_MTK_FD_SCALE_IMG_NUM
+> > > > >
+> > > > > Hope there would be standardizing face detection api that cover the rest
+> > > > > controls: V4L2_CID_MTK_FD_DETECT_POSE, V4L2_CID_MTK_FD_DETECT_SPEED and
+> > > > > V4L2_CID_MTK_FD_DETECTION_MODEL
+> > > > >
+> > > > > Would you have any suggestions on how to propose the standard face
+> > > > > detection apis?
+> > > > >
+> > > >
+> > > > Given no follow up feedback from the community, I think we can keep them
+> > > > as driver-specific, but should make sure that they have some reasonable
+> > > > default values in case an application doesn't recognize them.
+> > > >
+> > > > Best regards,
+> > > > Tomasz
+> > > >
+> > > Should I keep the file "mtk-fd-v4l2-controls.h" which defines the
+> > > control ids under the folder "/include/uapi/linux"?
+> >
+> > We should define the CID base for the FD driver in v4l2-controls.h,
+> > but the controls themselves should be only defined inside the driver.
+> >
+> > For example:
+> > https://elixir.bootlin.com/linux/v5.4-rc8/source/include/uapi/linux/v4l2-controls.h#L178
+> > https://elixir.bootlin.com/linux/v5.4-rc8/source/drivers/media/i2c/adv7180.c#L181
+> >
+> > Best regards,
+> > Tomasz
+>
+> Appreciate for providing the example,
+> Would it be fine for me to put the private CID in the mtk_fd.h(which is
+> similar to before...) or follow the example to define inside
+> mtk_fd_40.c??
+>
+> The next version is almost ready, maybe I can send it when I ready in a
+> few days?
 
-syzbot found the following crash on:
+Since mtk_fd_40.c is the only place the definitions from mtk_fd.h are
+used, I'd suggest just moving all the contents to the .c file.
 
-HEAD commit:    32b5e2b2 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1255457ae00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d88612251f7691bd
-dashboard link: https://syzkaller.appspot.com/bug?extid=edff65c4ade21b5db190
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-
-Unfortunately, I don't have any reproducer for this crash yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+edff65c4ade21b5db190@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in atomic_fetch_sub  
-include/asm-generic/atomic-instrumented.h:199 [inline]
-BUG: KASAN: use-after-free in refcount_sub_and_test  
-include/linux/refcount.h:253 [inline]
-BUG: KASAN: use-after-free in refcount_dec_and_test  
-include/linux/refcount.h:281 [inline]
-BUG: KASAN: use-after-free in kref_put include/linux/kref.h:64 [inline]
-BUG: KASAN: use-after-free in as102_release+0x58/0xd8  
-drivers/media/usb/as102/as102_usb_drv.c:458
-Write of size 4 at addr ffff8881adb84140 by task syz-executor.5/16315
-
-CPU: 1 PID: 16315 Comm: syz-executor.5 Not tainted 5.4.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xef/0x16e lib/dump_stack.c:118
-  print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
-  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
-  kasan_report+0xe/0x20 mm/kasan/common.c:634
-  check_memory_region_inline mm/kasan/generic.c:185 [inline]
-  check_memory_region+0x128/0x190 mm/kasan/generic.c:192
-  atomic_fetch_sub include/asm-generic/atomic-instrumented.h:199 [inline]
-  refcount_sub_and_test include/linux/refcount.h:253 [inline]
-  refcount_dec_and_test include/linux/refcount.h:281 [inline]
-  kref_put include/linux/kref.h:64 [inline]
-  as102_release+0x58/0xd8 drivers/media/usb/as102/as102_usb_drv.c:458
-  __fput+0x2d7/0x840 fs/file_table.c:280
-  task_work_run+0x13f/0x1c0 kernel/task_work.c:113
-  exit_task_work include/linux/task_work.h:22 [inline]
-  do_exit+0x8ab/0x2bc0 kernel/exit.c:797
-  do_group_exit+0x125/0x340 kernel/exit.c:895
-  get_signal+0x466/0x23c0 kernel/signal.c:2734
-  do_signal+0x88/0x1490 arch/x86/kernel/signal.c:815
-  exit_to_usermode_loop+0x1a2/0x200 arch/x86/entry/common.c:160
-  prepare_exit_to_usermode arch/x86/entry/common.c:195 [inline]
-  syscall_return_slowpath arch/x86/entry/common.c:278 [inline]
-  do_syscall_64+0x4d1/0x5b0 arch/x86/entry/common.c:304
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x45a4e7
-Code: Bad RIP value.
-RSP: 002b:00007f8274f103c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: fffffffffffffffc RBX: 0000000000000000 RCX: 000000000045a4e7
-RDX: 00007f8274f10810 RSI: 0000000080085502 RDI: 0000000000000003
-RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
-R13: 00000000004ca701 R14: 00000000004e2e78 R15: 00000000ffffffff
-
-Allocated by task 17:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_kmalloc mm/kasan/common.c:510 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:483
-  kmalloc include/linux/slab.h:556 [inline]
-  kzalloc include/linux/slab.h:690 [inline]
-  as102_usb_probe+0x4e/0x3d0 drivers/media/usb/as102/as102_usb_drv.c:350
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
-  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
-  port_event drivers/usb/core/hub.c:5470 [inline]
-  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 17:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  kasan_set_free_info mm/kasan/common.c:332 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:471
-  slab_free_hook mm/slub.c:1424 [inline]
-  slab_free_freelist_hook mm/slub.c:1457 [inline]
-  slab_free mm/slub.c:3004 [inline]
-  kfree+0xdc/0x310 mm/slub.c:3956
-  as102_usb_probe.cold+0x133/0x366  
-drivers/media/usb/as102/as102_usb_drv.c:412
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
-  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
-  port_event drivers/usb/core/hub.c:5470 [inline]
-  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff8881adb84000
-  which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 320 bytes inside of
-  4096-byte region [ffff8881adb84000, ffff8881adb85000)
-The buggy address belongs to the page:
-page:ffffea0006b6e000 refcount:1 mapcount:0 mapping:ffff8881da00c280  
-index:0x0 compound_mapcount: 0
-raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da00c280
-raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8881adb84000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881adb84080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff8881adb84100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                            ^
-  ffff8881adb84180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881adb84200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Best regards,
+Tomasz
