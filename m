@@ -1,146 +1,175 @@
-Return-Path: <SRS0=WZtR=ZX=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=2+9f=ZY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E32EDC432C0
-	for <linux-media@archiver.kernel.org>; Sun,  1 Dec 2019 17:15:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84BC3C432C0
+	for <linux-media@archiver.kernel.org>; Mon,  2 Dec 2019 04:55:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AA0A92082E
-	for <linux-media@archiver.kernel.org>; Sun,  1 Dec 2019 17:15:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F24BB2146E
+	for <linux-media@archiver.kernel.org>; Mon,  2 Dec 2019 04:55:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="LJS1Vk3C"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="UgV2652E"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727228AbfLARP7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 1 Dec 2019 12:15:59 -0500
-Received: from mout.gmx.net ([212.227.15.18]:37455 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726393AbfLARP6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 1 Dec 2019 12:15:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1575220557;
-        bh=WfcQmcChZbEZzMGmbvocHLIIHBtZZR03BB4jVPTY46w=;
-        h=X-UI-Sender-Class:To:From:Subject:Cc:Date;
-        b=LJS1Vk3CMdrYriKCWNsGuX1ZWHQo2xEQ4TilrMS5chyIDHXvdpPJKw7bC5gO6lH3A
-         u3sk6jWKCYs/Up5Bf/RInaLT351i0dqIDoPCq2vnIV+DJOWuLTus6tHO02nATel/Sc
-         4LMd+lUgfJGU6AtO2NpkJX9mXTx6EcKJFIN1LD/Q=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.47.81] ([87.148.76.53]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTzf6-1iAPlP1KL4-00QzkJ; Sun, 01
- Dec 2019 18:15:57 +0100
+        id S1727318AbfLBEzj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 1 Dec 2019 23:55:39 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:38211 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727308AbfLBEzj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 1 Dec 2019 23:55:39 -0500
+Received: from localhost ([IPv6:2001:983:e9a7:1:9b5:45c2:36f5:e0c6])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id bdkFiSFXfFc4FbdkGiP8dg; Mon, 02 Dec 2019 05:55:36 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1575262536; bh=3+dDuIAW9uKIm+IU1CQ8BpfKKTiagepA7b8TxaSnVTU=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=UgV2652EyT3s9Hf5Qco6hbvq/KjIPfq8lVGKNZpv/l4kMVMDar6N1MziDvkbivtOW
+         pZSHe12YQglRIomOSriT1MHEn8usBZgBx3tHcvgKmxsVGR2MtkT1+bcg2I+WB3ZSUP
+         N93ejAXUbjSJop2dHb6uItajEqap9Oo9cKCH+ZCA13KhxKYrW05CZuQxnRoxuvSKke
+         KGda01KhMbV2KjL2EDPgQCQ3i1710ZDQKYjbZlgJSMaJOCG49NrgDSujoeIPrjxhoQ
+         lrH33IWS/V6v/Y2S3DuvlVqbOQczm9uYRCT6XkpARMOR94zkXPX2yhPlMmFrrE31To
+         JBQjTSVVLOSKg==
+Message-ID: <dfb9ab7184a21695fb1049eab2d59ebd@smtp-cloud9.xs4all.net>
+Date:   Mon, 02 Dec 2019 05:55:35 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
 To:     linux-media@vger.kernel.org
-From:   "Andreas W. Wieland" <awwieland@gmx.de>
-Subject: ir-ctl: invalid scancode '0x857a3a45' for protocol 'nec32'
-Cc:     "Andreas W. Wieland" <awwieland@gmx.de>
-Message-ID: <9ea5a12d-b981-2289-3f0a-b614378a4bda@gmx.de>
-Date:   Sun, 1 Dec 2019 18:15:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:LNia+34IthFc3sPcH4Db9tb8KytRyzagLhaT+Dm30Fc/EBLJaq5
- u9U6ueWEUaOFojuykzDmvOwUaexMP/WNAyR8YpFcDQ0WY/OEkKNb9hdhK42+kz9GvE0/mGx
- Kph6Se6zG+XjiVWW6fvt3RJg7geu8kuPj2qzlpZr5CkyNOtpM8vqA319PLiHMrpZe9tk1Xb
- ERv+AuGUK0dhCAIGUU/GQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:V/RQH3Di/WE=:b2O+S8RVK533OO9MOP5maK
- nmLU4mtUhzydvZDZXYHnoF3J6O3Z01FkAqvjUo7OrIwh5p19ZQpBUyEYUSzzUhslv+LbHIamJ
- fdB30PAxrwa2NRdY/UkpvrfmW8K7tKkSUPc0nS83/hfPoCYBQPe50TSRncyupYCAHomgW+zPT
- VXC4i9SJ+8+Wb9glntl8hJ9NH0ROAO3fMFxF1RlyPb1Sa8BxcH4RmMaKnnVrKgwqUKLPjuJGl
- HzsgXBVLLL6gaPqL+Rk9aGQdbGOnsHMto/inOCD1yBG6qvVjAS/x1nbz8s867eVPuR23mj8Kf
- V9vYgP1NZLmq/ZwE7AC+4ph4PgI4ks7iPRAH0+oKOFHQSpEa+PmimG8YupFDFlgXL1E5Rvsid
- /T3wE9SP3B4lU02v6YIBwwFofdBUMJuffff/XaBJhdceO2/7GXcc7LsqovPD1xad/+bqJMA0k
- HcNOhKOvWHz7jrAyE7EYav2M74EtX5aX7KfyyKff+cHgIdI7RmIWA2MSQyOOSrgR61DqW/nfi
- /GZEGjYfhDmMCBn++XlpblP92c5PU6sSPgvYUB2ZT2Fahx5+DHAQSpbJe84nUlYXdZWvuBGys
- W+D+GVFVX/Qxv0+/j21UXYN6n7CS/q9vE11vbMpQTedly+3Ut2hIEkAFgbHe0C0V4ChzV+FVm
- DPiali2pUGojiVmlocaXSc0v1tH0/hFIBB1sslRQA8rNwjNVWn3WT86ORyE8FYET6/uAR/rlW
- Oc85iGFS1EkvHkLY5yeYb2j07xKz/xr6WC6wS++8kVQNaDjMCNIWqZpG68/bsewaHuP2M6PhR
- 3CCoWi6rxgtqi4cZXLVo9f/cXud6HwV4gkP3woyNgAlseQtxOe1eB/YeIcrOCtglJkRPjMf/G
- t1YS+DCCxvu/YRnGvumYotqTnT0aVblt7sVL/KsJSuO/IKL1Ys62XxT8FrSh5Rif0VRrd/CkK
- MAsicOMCyAgScUIsM7wJDsoOAXv2dDF7DDGyBDad+jKZkCE9BiJVaCejIhtEDDE+H86OotM/l
- LgFCt7ywbGm1yZcx+tM3PwUazfpsPQ7OBHREmZwG0oglQOmczV5sW27pL1mJ5szuywGmqaUA6
- 1Lkrp4gD5V9cbr4j5w6tGdECMaNQ69anoIpHw4YDzpmcGQ1bXQoyH/AWvaxsKz1AOZf4fuArM
- uBIEYg7NCVkMnG6Tnmt0FFm9DRYUKG35yN5Ibz1yRP5VBAqqMGfmKlsGuTNtHVCYuJ3BvH3dP
- oYmIy6TqzN5WzJekIZZLPbOTInN/mGWFKDjCqkWlLOjSdYKZLXPNC2ixtH7U=
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfLIh+LIepsJ0ALqH+6Z0Hw13RLABLDjD/jMs4ODTdbfE/H01axZOEb+lqt8UdlG7D6nIr9h38UPHnp34tuNTaDw6VTFxELE9AtPTz8rhAg2Hgiw8UbSr
+ Q80j3epSo/h/khy7r7///Huz1LrNGQ6MtWOM/T7wqNwAmjy0QGpMsudDs7CjiUMc46IRZRjWV7wRcIfsko+JzoVwjJK9G3j9Ar84Fxu1+8uR25H+IvXXk8XL
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear Developers!
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-I think I have discovered a bug in ir-ctl. My application is pretty
-simple: I want to change certain settings on my Yamaha surround receiver
-via a Raspberry Pi. For this, I have to transmit keycodes with ir-ctl to
-the Yamaha. While this works fine for most keycodes, for some keycodes
-errors are thrown.
+Results of the daily build of media_tree:
 
-Basically, I record the scancodes of all functions that I need with
-ir-keytable, and later use the recorded scancodes for transmitting, for
-example:
+date:			Mon Dec  2 05:00:11 CET 2019
+media-tree git hash:	dca6b3733a4a46e63603496f544ece8ace541fde
+media_build git hash:	efba365ba11b958a6bf6fb4b397942f9461cefca
+v4l-utils git hash:	8021c9d3aac0f4446ef5bedd2c53f0c2afbaa752
+edid-decode git hash:	5dc6e53a1a59903dd6c51126f971540cf14dc13b
+gcc version:		i686-linux-gcc (GCC) 9.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 6903fe8f5101fc43440b3259290c97d2dd51733d
+host hardware:		x86_64
+host os:		5.2.0-3-amd64
 
-root@raspberrypi:~# ir-keytable -v -t
-Found device /sys/class/rc/rc1/
-Found device /sys/class/rc/rc0/
-Parsing uevent /sys/class/rc/rc0/lirc0/uevent
-/sys/class/rc/rc0/lirc0/uevent uevent MAJOR=3D252
-/sys/class/rc/rc0/lirc0/uevent uevent MINOR=3D0
-/sys/class/rc/rc0/lirc0/uevent uevent DEVNAME=3Dlirc0
-Input sysfs node is /sys/class/rc/rc0/input0/
-Event sysfs node is /sys/class/rc/rc0/input0/event0/
-Parsing uevent /sys/class/rc/rc0/input0/event0/uevent
-/sys/class/rc/rc0/input0/event0/uevent uevent MAJOR=3D13
-/sys/class/rc/rc0/input0/event0/uevent uevent MINOR=3D64
-/sys/class/rc/rc0/input0/event0/uevent uevent DEVNAME=3Dinput/event0
-Parsing uevent /sys/class/rc/rc0/uevent
-/sys/class/rc/rc0/uevent uevent NAME=3Drc-rc6-mce
-/sys/class/rc/rc0/uevent uevent DRV_NAME=3Dgpio_ir_recv
-/sys/class/rc/rc0/uevent uevent DEV_NAME=3Dgpio_ir_recv
-input device is /dev/input/event0
-/sys/class/rc/rc0/protocols protocol rc-5 (enabled)
-/sys/class/rc/rc0/protocols protocol nec (enabled)
-/sys/class/rc/rc0/protocols protocol rc-6 (enabled)
-/sys/class/rc/rc0/protocols protocol jvc (enabled)
-/sys/class/rc/rc0/protocols protocol sony (enabled)
-/sys/class/rc/rc0/protocols protocol rc-5-sz (enabled)
-/sys/class/rc/rc0/protocols protocol sanyo (enabled)
-/sys/class/rc/rc0/protocols protocol sharp (enabled)
-/sys/class/rc/rc0/protocols protocol mce_kbd (enabled)
-/sys/class/rc/rc0/protocols protocol xmp (enabled)
-/sys/class/rc/rc0/protocols protocol imon (enabled)
-/sys/class/rc/rc0/protocols protocol lirc (enabled)
-Opening /dev/input/event0
-Input Protocol version: 0x00010001
-Testing events. Please, press CTRL-C to abort.
-30063.090086: lirc protocol(nec32): scancode =3D 0x857a3a45
-30063.140081: lirc protocol(nec32): scancode =3D 0x857a3a45 repeat
-30063.250082: lirc protocol(nec32): scancode =3D 0x857a3a45 repeat
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4-i686: OK
+linux-5.4-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2791, Succeeded: 2791, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
 
-I now try to transmit exactly that keycode via ir-ctl and get an error
-message. Nothing is transmitted:
+Detailed results are available here:
 
-root@raspberrypi:~# ir-ctl -d /dev/lirc1 -S nec32:0x857a3a45
-error: invalid scancode '0x857a3a45' for protocol 'nec32'
+http://www.xs4all.nl/~hverkuil/logs/Monday.log
 
-As I said, this works fine for most of the keycodes I need, only some
-cause this error message. All of the key codes that cause the error are
-protocol nec32 and start with 0x8.
+Detailed regression test results are available here:
 
-My hardware is a Raspberry Pi Zero (latest Raspbian Buster, freshly
-updated this morning), a homebrew ir receiver with gpio_ir, a homebrew
-transmitter with pwm-ir-tx and the Yamaha Remote is an RAV423 (shipped
-with my RX-A3030). IR keytable and ir-ctl both have version number 1.16.3.
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
 
-If you need further information, please let me know.
+Full logs are available here:
 
-I'd like to thank you already in advance for your efforts, and I wish you
-Good Luck in finding the problem!
+http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
 
-Best Regards,
+The Media Infrastructure API from this daily build is here:
 
-Andreas
+http://www.xs4all.nl/~hverkuil/spec/index.html
