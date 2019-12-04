@@ -2,305 +2,105 @@ Return-Path: <SRS0=Ori4=Z2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F059BC43603
-	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 13:28:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92DA5C2BC73
+	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 13:36:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B926B2077B
-	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 13:28:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 653DC2077B
+	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 13:36:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LAlb7P9i"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727909AbfLDN2f convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Dec 2019 08:28:35 -0500
-Received: from proofpoint-cluster.metrocast.net ([65.175.128.136]:53682 "EHLO
-        proofpoint-cluster.metrocast.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727530AbfLDN2f (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 4 Dec 2019 08:28:35 -0500
-X-Greylist: delayed 2030 seconds by postgrey-1.27 at vger.kernel.org; Wed, 04 Dec 2019 08:28:34 EST
-Received: from [192.168.100.35] (static-72-9-14-85.md.cpe.atlanticbb.net [72.9.14.85])
-        (authenticated bits=0)
-        by huckleberry.metrocast.net (8.14.7/8.14.4) with ESMTP id xB4Csapv028917;
-        Wed, 4 Dec 2019 12:54:37 GMT
-Date:   Wed, 04 Dec 2019 07:54:35 -0500
-User-Agent: K-9 Mail for Android
-In-Reply-To: <09ed5e97-084d-17a2-e22f-0817527ebcdc@xs4all.nl>
-References: <09ed5e97-084d-17a2-e22f-0817527ebcdc@xs4all.nl>
+        id S1727831AbfLDNgB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Dec 2019 08:36:01 -0500
+Received: from mail-yb1-f194.google.com ([209.85.219.194]:34474 "EHLO
+        mail-yb1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727530AbfLDNgB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Dec 2019 08:36:01 -0500
+Received: by mail-yb1-f194.google.com with SMTP id k17so3005417ybp.1;
+        Wed, 04 Dec 2019 05:36:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6Fu/F/3hbRJ1qpwigXrSbTCuUbqafK5Sx/Cpuh8kUDQ=;
+        b=LAlb7P9ibskFckAA6MOHQZ2SzqGzOPg2jrOu9Ii4vrlScWsZJk6oqx1KGpLR/+R6sv
+         /zllHCuuL6ePy2eW1Xc7CJF9kfT9EmJbz3y/zOJV66lIL78B/w5ZyY1wuEShadWEbS3X
+         KH9GUNzuxVTZOjU0ehb740KlcybYaWNggFS0W1LCkgxOCcwVVqjXLbl9CIjhbzl5IxG+
+         KGaanmVkhm0J9A+K5fU+SLZ6OKPi23oLxJ385EGWM2C1/odROujUt7xT1lAc4Fi02MML
+         KcEt8cWt0hriA1qVdZeRm79yryd9aXRLKDAwe5Q1bEJ56u52LqJlsplLK4k9duWts2nM
+         54yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6Fu/F/3hbRJ1qpwigXrSbTCuUbqafK5Sx/Cpuh8kUDQ=;
+        b=XdfUV/SWxNpMh1QEjo6xlij9f4WzjRRKwpuI3UF3l6CS5K3y2gG+vgFE2egyMwgcx4
+         9eVk08JRh3VTFpNr8xuSELmcQsvLx245lsVIXpOzsBn0h8kGIEKs0WcBq6R6H/V2+Qjg
+         cqM0nm/2TV9JW/Cd1mZItbyRJepRp0M568PwjmSqMAnUc5OzWUmsx2xB3qd3F/vUeuRO
+         eOBHdGaRCSXibfsh9p5VDnB+wgCe32mZKdacdfVMLpShPG7+JU3+AdwdLOLUYarTx0TA
+         5thLGcHfUilmlkcWu+F+LzJRa7hWVkF28PUDXRJLj6aTP5io/9rr0j06mD90mCmtC3PD
+         oNYQ==
+X-Gm-Message-State: APjAAAXXb+5N0h6L8L+ZjsVimpMnD0d1yYrHFqymjVYKOjtYxpnetA0y
+        1x7dxhuI6klD+nXNJ6KW5Z8fh6bJzug=
+X-Google-Smtp-Source: APXvYqwH0C/8Ivgr9kMlmTemKaNo43xh2PqidFqISWQD0lb0U1kt+HoFDClBqBpuoekqEMhpyh/BOA==
+X-Received: by 2002:a25:dc86:: with SMTP id y128mr2102393ybe.126.1575466559849;
+        Wed, 04 Dec 2019 05:35:59 -0800 (PST)
+Received: from localhost.localdomain (c-73-37-219-234.hsd1.mn.comcast.net. [73.37.219.234])
+        by smtp.gmail.com with ESMTPSA id e198sm3254617ywa.51.2019.12.04.05.35.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2019 05:35:59 -0800 (PST)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     adam.ford@logicpd.com, maxime.ripard@bootlin.com,
+        Adam Ford <aford173@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3] media: ov5640: Fix check for PLL1 exceeding max allowed rate
+Date:   Wed,  4 Dec 2019 07:35:42 -0600
+Message-Id: <20191204133542.17239-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Subject: Re: [PATCH] ivtv/cx18: remove ivtvdriver.org references
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-CC:     Sakari Ailus <sakari.ailus@linux.intel.com>
-From:   Andy Walls <awalls@md.metrocast.net>
-Message-ID: <980C85A2-AD15-46C3-AAB2-3AA719D4DBD4@md.metrocast.net>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10432:6.0.95,18.0.572,0.0.0000
- definitions=2019-12-04_03:2019-12-04,2019-12-04,1970-01-01 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 phishscore=0
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=7.0.1-1810110000 definitions=main-1912040105
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On December 4, 2019 6:57:10 AM EST, Hans Verkuil <hverkuil@xs4all.nl> wrote:
->That URL is no longer valid, so either remove references to it or
->replace it with linuxtv.org.
->
->Rather than updating the URL I've just dropped the cx18.rst driver
->documentation since it was really out of date.
->
->Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->---
-> .../media/uapi/v4l/pixfmt-reserved.rst        |  3 +-
-> Documentation/media/v4l-drivers/cx18.rst      | 39 -------------------
-> Documentation/media/v4l-drivers/index.rst     |  1 -
-> MAINTAINERS                                   |  6 +--
-> drivers/media/pci/cx18/cx18-cards.c           |  8 ++--
-> drivers/media/pci/cx18/cx18-driver.c          |  2 +-
-> drivers/media/pci/ivtv/Kconfig                |  5 +--
-> drivers/media/pci/ivtv/ivtv-driver.c          |  3 +-
-> drivers/media/pci/ivtv/ivtv-driver.h          |  1 -
-> 9 files changed, 10 insertions(+), 58 deletions(-)
-> delete mode 100644 Documentation/media/v4l-drivers/cx18.rst
->
->diff --git a/Documentation/media/uapi/v4l/pixfmt-reserved.rst
->b/Documentation/media/uapi/v4l/pixfmt-reserved.rst
->index b2cd155e691b..7d98a7bf9f1f 100644
->--- a/Documentation/media/uapi/v4l/pixfmt-reserved.rst
->+++ b/Documentation/media/uapi/v4l/pixfmt-reserved.rst
->@@ -55,8 +55,7 @@ please make a proposal on the linux-media mailing
->list.
->
->       - ``V4L2_PIX_FMT_HM12``
->       - 'HM12'
->-      - YUV 4:2:0 format used by the IVTV driver,
->-	`http://www.ivtvdriver.org/ <http://www.ivtvdriver.org/>`__
->+      - YUV 4:2:0 format used by the IVTV driver.
->
-> 	The format is documented in the kernel sources in the file
-> 	``Documentation/media/v4l-drivers/cx2341x.rst``
->diff --git a/Documentation/media/v4l-drivers/cx18.rst
->b/Documentation/media/v4l-drivers/cx18.rst
->deleted file mode 100644
->index 16895a734bae..000000000000
->--- a/Documentation/media/v4l-drivers/cx18.rst
->+++ /dev/null
->@@ -1,39 +0,0 @@
->-.. SPDX-License-Identifier: GPL-2.0
->-
->-The cx18 driver
->-===============
->-
->-.. note::
->-
->-   This documentation is outdated.
->-
->-Some notes regarding the cx18 driver for the Conexant CX23418 MPEG
->-encoder chip:
->-
->-1) Currently supported are:
->-
->-	- Hauppauge HVR-1600
->-	- Compro VideoMate H900
->-	- Yuan MPC718
->-	- Conexant Raptor PAL/SECAM devkit
->-
->-2) Some people have problems getting the i2c bus to work.
->-   The symptom is that the eeprom cannot be read and the card is
->-   unusable. This is probably fixed, but if you have problems
->-   then post to the video4linux or ivtv-users mailing list.
->-
->-3) VBI (raw or sliced) has not yet been implemented.
->-
->-4) MPEG indexing is not yet implemented.
->-
->-5) The driver is still a bit rough around the edges, this should
->-   improve over time.
->-
->-
->-Firmware:
->-
->-You can obtain the firmware files here:
->-
->-http://dl.ivtvdriver.org/ivtv/firmware/cx18-firmware.tar.gz
->-
->-Untar and copy the .fw files to your firmware directory.
->diff --git a/Documentation/media/v4l-drivers/index.rst
->b/Documentation/media/v4l-drivers/index.rst
->index c4c78a28654c..b41fea23fe5d 100644
->--- a/Documentation/media/v4l-drivers/index.rst
->+++ b/Documentation/media/v4l-drivers/index.rst
->@@ -38,7 +38,6 @@ For more details see the file COPYING in the source
->distribution of Linux.
-> 	bttv
-> 	cafe_ccic
-> 	cpia2
->-	cx18
-> 	cx2341x
-> 	cx88
-> 	davinci-vpbe
->diff --git a/MAINTAINERS b/MAINTAINERS
->index 37a977cbac6f..dcf45a59a183 100644
->--- a/MAINTAINERS
->+++ b/MAINTAINERS
->@@ -4398,13 +4398,10 @@ F:	drivers/net/wireless/st/cw1200/
->
-> CX18 VIDEO4LINUX DRIVER
-> M:	Andy Walls <awalls@md.metrocast.net>
->-L:	ivtv-devel@ivtvdriver.org (subscribers-only)
-> L:	linux-media@vger.kernel.org
-> T:	git git://linuxtv.org/media_tree.git
-> W:	https://linuxtv.org
->-W:	http://www.ivtvdriver.org/index.php/Cx18
-> S:	Maintained
->-F:	Documentation/media/v4l-drivers/cx18*
-> F:	drivers/media/pci/cx18/
-> F:	include/uapi/linux/ivtv*
->
->@@ -8752,10 +8749,9 @@ F:	drivers/media/tuners/it913x*
->
-> IVTV VIDEO4LINUX DRIVER
-> M:	Andy Walls <awalls@md.metrocast.net>
->-L:	ivtv-devel@ivtvdriver.org (subscribers-only)
-> L:	linux-media@vger.kernel.org
-> T:	git git://linuxtv.org/media_tree.git
->-W:	http://www.ivtvdriver.org
->+W:	https://linuxtv.org
-> S:	Maintained
-> F:	Documentation/media/v4l-drivers/ivtv*
-> F:	drivers/media/pci/ivtv/
->diff --git a/drivers/media/pci/cx18/cx18-cards.c
->b/drivers/media/pci/cx18/cx18-cards.c
->index cf118760d124..ecbe76f1ca63 100644
->--- a/drivers/media/pci/cx18/cx18-cards.c
->+++ b/drivers/media/pci/cx18/cx18-cards.c
->@@ -245,7 +245,7 @@ static const struct cx18_card cx18_card_mpc718 = {
-> 	.type = CX18_CARD_YUAN_MPC718,
-> 	.name = "Yuan MPC718 MiniPCI DVB-T/Analog",
-> 	.comment = "Experimenters needed for device to work well.\n"
->-		  "\tTo help, mail the ivtv-devel list (www.ivtvdriver.org).\n",
->+		  "\tTo help, mail the linux-media list (www.linuxtv.org).\n",
-> 	.v4l2_capabilities = CX18_CAP_ENCODER,
-> 	.hw_audio_ctrl = CX18_HW_418_AV,
-> 	.hw_muxer = CX18_HW_GPIO_MUX,
->@@ -305,7 +305,7 @@ static const struct cx18_card
->cx18_card_gotview_dvd3 = {
-> 	.type = CX18_CARD_GOTVIEW_PCI_DVD3,
-> 	.name = "GoTView PCI DVD3 Hybrid",
-> 	.comment = "Experimenters needed for device to work well.\n"
->-		  "\tTo help, mail the ivtv-devel list (www.ivtvdriver.org).\n",
->+		  "\tTo help, mail the linux-media list (www.linuxtv.org).\n",
-> 	.v4l2_capabilities = CX18_CAP_ENCODER,
-> 	.hw_audio_ctrl = CX18_HW_418_AV,
-> 	.hw_muxer = CX18_HW_GPIO_MUX,
->@@ -419,7 +419,7 @@ static const struct cx18_card
->cx18_card_toshiba_qosmio_dvbt = {
-> 	.type = CX18_CARD_TOSHIBA_QOSMIO_DVBT,
-> 	.name = "Toshiba Qosmio DVB-T/Analog",
->	.comment = "Experimenters and photos needed for device to work
->well.\n"
->-		  "\tTo help, mail the ivtv-devel list (www.ivtvdriver.org).\n",
->+		  "\tTo help, mail the linux-media list (www.linuxtv.org).\n",
-> 	.v4l2_capabilities = CX18_CAP_ENCODER,
-> 	.hw_audio_ctrl = CX18_HW_418_AV,
-> 	.hw_all = CX18_HW_418_AV | CX18_HW_TUNER | CX18_HW_GPIO_RESET_CTRL,
->@@ -462,7 +462,7 @@ static const struct cx18_card
->cx18_card_leadtek_pvr2100 = {
-> 	.type = CX18_CARD_LEADTEK_PVR2100,
-> 	.name = "Leadtek WinFast PVR2100",
->	.comment = "Experimenters and photos needed for device to work
->well.\n"
->-		  "\tTo help, mail the ivtv-devel list (www.ivtvdriver.org).\n",
->+		  "\tTo help, mail the linux-media list (www.linuxtv.org).\n",
-> 	.v4l2_capabilities = CX18_CAP_ENCODER,
-> 	.hw_audio_ctrl = CX18_HW_418_AV,
-> 	.hw_muxer = CX18_HW_GPIO_MUX,
->diff --git a/drivers/media/pci/cx18/cx18-driver.c
->b/drivers/media/pci/cx18/cx18-driver.c
->index fd47bd07ffd8..16119f4e9404 100644
->--- a/drivers/media/pci/cx18/cx18-driver.c
->+++ b/drivers/media/pci/cx18/cx18-driver.c
->@@ -676,7 +676,7 @@ static void cx18_process_options(struct cx18 *cx)
-> 			 cx->pci_dev->subsystem_device);
-> 		CX18_ERR("Defaulting to %s card\n", cx->card->name);
->		CX18_ERR("Please mail the vendor/device and subsystem vendor/device
->IDs and what kind of\n");
->-		CX18_ERR("card you have to the ivtv-devel mailinglist
->(www.ivtvdriver.org)\n");
->+		CX18_ERR("card you have to the linux-media mailinglist
->(www.linuxtv.org)\n");
-> 		CX18_ERR("Prefix your subject line with [UNKNOWN CX18 CARD].\n");
-> 	}
-> 	cx->v4l2_cap = cx->card->v4l2_capabilities;
->diff --git a/drivers/media/pci/ivtv/Kconfig
->b/drivers/media/pci/ivtv/Kconfig
->index 36c089103cf9..c729e54692c4 100644
->--- a/drivers/media/pci/ivtv/Kconfig
->+++ b/drivers/media/pci/ivtv/Kconfig
->@@ -24,7 +24,7 @@ config VIDEO_IVTV
-> 	  PCI personal video recorder devices.
->
-> 	  This is used in devices such as the Hauppauge PVR-150/250/350/500
->-	  cards. There is a driver homepage at <http://www.ivtvdriver.org>.
->+	  cards.
->
-> 	  To compile this driver as a module, choose M here: the
-> 	  module will be called ivtv.
->@@ -67,8 +67,7 @@ config VIDEO_FB_IVTV
-> 	  This is a framebuffer driver for the Conexant cx23415 MPEG
-> 	  encoder/decoder.
->
->-	  This is used in the Hauppauge PVR-350 card. There is a driver
->-	  homepage at <http://www.ivtvdriver.org>.
->+	  This is used in the Hauppauge PVR-350 card.
->
-> 	  To compile this driver as a module, choose M here: the
-> 	  module will be called ivtvfb.
->diff --git a/drivers/media/pci/ivtv/ivtv-driver.c
->b/drivers/media/pci/ivtv/ivtv-driver.c
->index 3f3f40ea890b..88dec72f29dc 100644
->--- a/drivers/media/pci/ivtv/ivtv-driver.c
->+++ b/drivers/media/pci/ivtv/ivtv-driver.c
->@@ -23,7 +23,6 @@
->  * Driver for the Conexant CX23415/CX23416 chip.
->  * Author: Kevin Thayer (nufan_wfk at yahoo.com)
->  * License: GPL
->- * http://www.ivtvdriver.org
->  *
->  * -----
->  * MPG600/MPG160 support by  T.Adachi <tadachi@tadachi-net.com>
->@@ -723,7 +722,7 @@ static void ivtv_process_options(struct ivtv *itv)
-> 		IVTV_ERR("              %s based\n", chipname);
-> 		IVTV_ERR("Defaulting to %s card\n", itv->card->name);
->		IVTV_ERR("Please mail the vendor/device and subsystem vendor/device
->IDs and what kind of\n");
->-		IVTV_ERR("card you have to the ivtv-devel mailinglist
->(www.ivtvdriver.org)\n");
->+		IVTV_ERR("card you have to the linux-media mailinglist
->(www.linuxtv.org)\n");
-> 		IVTV_ERR("Prefix your subject line with [UNKNOWN IVTV CARD].\n");
-> 	}
-> 	itv->v4l2_cap = itv->card->v4l2_capabilities;
->diff --git a/drivers/media/pci/ivtv/ivtv-driver.h
->b/drivers/media/pci/ivtv/ivtv-driver.h
->index cafba6b1055d..e5efe525ad7b 100644
->--- a/drivers/media/pci/ivtv/ivtv-driver.h
->+++ b/drivers/media/pci/ivtv/ivtv-driver.h
->@@ -28,7 +28,6 @@
->  * Driver for the cx23415/6 chip.
->  * Author: Kevin Thayer (nufan_wfk at yahoo.com)
->  * License: GPL
->- * http://www.ivtvdriver.org
->  *
->  * -----
->  * MPG600/MPG160 support by  T.Adachi <tadachi@tadachi-net.com>
+The PLL calculation routine checks the wrong variable name 'rate'
+when it should be called '_rate' when checking to see whether or
+not the PLL1 output frequency exceeds 1GHz.
 
-Acked-By: awalls@md.metrocast.net 
+This patch changes it to the correct variable '_rate'
+
+Fixes: aa2882481cad ("media: ov5640: Adjust the clock based on the expected rate")
+
+Acked-by: Jacopo Mondi <jacopo@jmondi.org>
+Signed-off-by: Adam Ford <aford173@gmail.com>
+---
+V3:  Add Fixes Tag.
+V2:  No code change.  Only change commit description to be less confusing.
+
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index 500d9bbff10b..a3c0be56ae02 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -874,7 +874,7 @@ static unsigned long ov5640_calc_sys_clk(struct ov5640_dev *sensor,
+ 			 * We have reached the maximum allowed PLL1 output,
+ 			 * increase sysdiv.
+ 			 */
+-			if (!rate)
++			if (!_rate)
+ 				break;
+ 
+ 			/*
+-- 
+2.20.1
+
