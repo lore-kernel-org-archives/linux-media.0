@@ -2,71 +2,95 @@ Return-Path: <SRS0=Ori4=Z2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65BA5C43603
-	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 18:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E72BBC2BD09
+	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 18:58:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 444BE20675
-	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 18:27:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBEFC20803
+	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 18:58:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1575485896;
+	bh=McCwFHhSRAQuk8yqV0NAsm3QnK1YvRkL9WsIakZl/eg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=pl9P3xF0t/z7R2PDmtY1RIg48Z2Vuoil/zClxvEh4DusXk8jSB4SpdSSJQ5c+1r+b
+	 mgBLPXD75ouyypEMBON5mtub/ttHOBwOXiiIqmbYDRTWif7VUJaS+qZwy41kei2li+
+	 wiQZa8vN8J0aQvgu2bx63eRrPh8IMJa8yC/I/W/M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729371AbfLDS15 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Dec 2019 13:27:57 -0500
-Received: from vsp-unauthed02.binero.net ([195.74.38.227]:22342 "EHLO
-        vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728072AbfLDR6M (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Dec 2019 12:58:12 -0500
-X-Halon-ID: 9de541bf-16bf-11ea-a00b-005056917a89
-Authorized-sender: niklas@soderlund.pp.se
-Received: from bismarck.berto.se (p54ac5865.dip0.t-ipconnect.de [84.172.88.101])
-        by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
-        id 9de541bf-16bf-11ea-a00b-005056917a89;
-        Wed, 04 Dec 2019 18:58:07 +0100 (CET)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v2] rcar-vin: Use correct pixel format when aligning format
-Date:   Wed,  4 Dec 2019 18:57:59 +0100
-Message-Id: <20191204175759.2976251-1-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.24.0
+        id S1728083AbfLDS6Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Dec 2019 13:58:16 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:33679 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727989AbfLDS6P (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Dec 2019 13:58:15 -0500
+Received: by mail-ot1-f68.google.com with SMTP id d17so263814otc.0;
+        Wed, 04 Dec 2019 10:58:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bhAw5EIrwwGC1eqIzLBcurAl7dDZA4dCCIXam/BMZgA=;
+        b=G3uAdrZgBx5I7Y/Xw2v6uUKz6XsuLJ2njfif0yqpNHFKKGIpt81sulEBlkSTmeq6In
+         bdG/0jE5ojWz86HQqPxV5aiFS5C5XNkhoQoQaacsoThT2um0VmW8+HEzg579HYaPtMT1
+         gfZ1aRgekgOYPPqZ4c2WNpAjZheKcSICuSHlx2lrMtJ5Hz0eSLXQAVt6otw1liWbQR7p
+         5UokoCuYETlbDq0JmDl5Nv7J+/eOb5AnBiON3p7g7FeY7AE0Jib7tA42DuqLjjJj/jqZ
+         po+JLJZtwV7f5dboU4Q/NabW3Jv+0kblbeZbeyYRqoqI/KpnID3YWSWHXWfMllEL0En2
+         jYfQ==
+X-Gm-Message-State: APjAAAUrvxMWYgLhpTabvvcx4lYRdrp/3SLgXiqdkbP5DNaryTzjAVAb
+        dL82aBc6VNaiEk3TalG0DA==
+X-Google-Smtp-Source: APXvYqyhikx3yghkHjt5R9cmpYpMgQpTzsJXnZPaFUw1zHqWLWzLrAfwaR2k5BK5VzCtPrWZ+QpwoQ==
+X-Received: by 2002:a9d:630d:: with SMTP id q13mr3480338otk.31.1575485894893;
+        Wed, 04 Dec 2019 10:58:14 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v24sm2456801ote.38.2019.12.04.10.58.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2019 10:58:14 -0800 (PST)
+Date:   Wed, 4 Dec 2019 12:58:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jerry-ch Chen <Jerry-Ch.chen@mediatek.com>
+Cc:     hans.verkuil@cisco.com, laurent.pinchart+renesas@ideasonboard.com,
+        tfiga@chromium.org, matthias.bgg@gmail.com, mchehab@kernel.org,
+        pihsun@chromium.org, yuzhao@chromium.org, zwisler@chromium.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, Sean.Cheng@mediatek.com,
+        sj.huang@mediatek.com, christie.yu@mediatek.com,
+        frederic.chen@mediatek.com, Jerry-ch.Chen@mediatek.com,
+        jungo.lin@mediatek.com, Rynn.Wu@mediatek.com,
+        linux-media@vger.kernel.org, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org,
+        Jerry-ch Chen <jerry-ch.chen@mediatek.com>
+Subject: Re: [RFC PATCH V4 2/4] dt-bindings: mt8183: Added FD dt-bindings
+Message-ID: <20191204185813.GA23184@bogus>
+References: <20191204124732.10932-1-Jerry-Ch.chen@mediatek.com>
+ <20191204124732.10932-3-Jerry-Ch.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191204124732.10932-3-Jerry-Ch.chen@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When aligning the format the pixel format that is being processed shall
-be used to figure out alignment constraints, not the currently active
-pixel format. The alignment might be part of a try operation and shall
-not be effected by the active format. Fix this by looking at the correct
-pixel format.
+On Wed, 4 Dec 2019 20:47:30 +0800, Jerry-ch Chen wrote:
+> From: Jerry-ch Chen <jerry-ch.chen@mediatek.com>
+> 
+> This patch adds DT binding documentation for the Face Detection (FD)
+> unit of the Mediatek's mt8183 SoC.
+> 
+> Signed-off-by: Jerry-ch Chen <jerry-ch.chen@mediatek.com>
+> ---
+>  .../bindings/media/mediatek,mt8183-fd.txt     | 34 +++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8183-fd.txt
+> 
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/media/platform/rcar-vin/rcar-v4l2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-index 62d308a4ddaee82e..339cb2de111de166 100644
---- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-@@ -149,7 +149,7 @@ static void rvin_format_align(struct rvin_dev *vin, struct v4l2_pix_format *pix)
- 	}
- 
- 	/* HW limit width to a multiple of 32 (2^5) for NV12/16 else 2 (2^1) */
--	switch (vin->format.pixelformat) {
-+	switch (pix->pixelformat) {
- 	case V4L2_PIX_FMT_NV12:
- 	case V4L2_PIX_FMT_NV16:
- 		walign = 5;
--- 
-2.24.0
-
+If a tag was not added on purpose, please state why and what changed.
