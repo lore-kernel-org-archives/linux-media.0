@@ -2,160 +2,73 @@ Return-Path: <SRS0=Ori4=Z2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.2 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA267C43603
-	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 15:03:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCB88C43603
+	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 18:17:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 895562084F
-	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 15:03:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AACED20833
+	for <linux-media@archiver.kernel.org>; Wed,  4 Dec 2019 18:17:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbfLDPDn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Dec 2019 10:03:43 -0500
-Received: from mx2.suse.de ([195.135.220.15]:38616 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727878AbfLDPDn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 4 Dec 2019 10:03:43 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 4AE96AECA;
-        Wed,  4 Dec 2019 15:03:40 +0000 (UTC)
-Message-ID: <1575471809.30318.6.camel@suse.com>
+        id S1731499AbfLDSRK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Dec 2019 13:17:10 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:42827 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731959AbfLDSRB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Dec 2019 13:17:01 -0500
+Received: by mail-io1-f71.google.com with SMTP id p1so522548ioo.9
+        for <linux-media@vger.kernel.org>; Wed, 04 Dec 2019 10:17:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=4wdFb/go3+wXQG1FazkaJLX0eWR/JfQ2cs/FXkmodVM=;
+        b=JnMpLFC6H0Q+jMt1jjECxU/q0KyrJACCSqxdczSGZHr1fDRgI6V2I6WFZDW0fHTexl
+         cWy8r6dgmSN1s+kRItx/TR4ylIwNrDKXMM5+Eod23AstzD/ubqVrrZiFjd/L+urn6Urr
+         1JMnsHRBm5lr4vQJR5S5MA4M9C9EtxIJlTZUj94sSrR2Sw3QOiIvUdu9TRY+Hz/ovDkH
+         k15juVNCy7iG+qLiiLkfLigoKMfiwI7GQ2hQ/uXNiYcMIbapaYTRXYH3JmmqVNYDpX78
+         5tqgi4Xn23OZlEX0L+kmQ9uZXyjv2ZC5lc3Q3mohsxFzviCQIVoh2ZE1ttaP5wixpVZJ
+         d2Iw==
+X-Gm-Message-State: APjAAAUEn5mo8PyuZBNs3v4UZFe0WkZY/Z/zVKcFadVVwOkQMmmY+2bC
+        LecD+iXn37d4q//48ZrAWLBU0boY3MucJRS8ns255gntFwsk
+X-Google-Smtp-Source: APXvYqxfEJfcqqHIsUcy3WUxOi+VGXY6BPT7GEEyyyT795+CsrgW5AxgzYvjkVDBbiwQc8KpAHs0g0CC3cd5CmVN4OqVVyq0yZ6f
+MIME-Version: 1.0
+X-Received: by 2002:a02:40c6:: with SMTP id n189mr4320421jaa.18.1575483421189;
+ Wed, 04 Dec 2019 10:17:01 -0800 (PST)
+Date:   Wed, 04 Dec 2019 10:17:01 -0800
+In-Reply-To: <1575471809.30318.6.camel@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ab6be80598e4d18d@google.com>
 Subject: Re: KASAN: use-after-free Read in si470x_int_in_callback (2)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, hverkuil@xs4all.nl,
+From:   syzbot <syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, hverkuil@xs4all.nl,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, oneukum@suse.com,
         syzkaller-bugs@googlegroups.com
-Date:   Wed, 04 Dec 2019 16:03:29 +0100
-In-Reply-To: <000000000000f47f0b0595307ddc@google.com>
-References: <000000000000f47f0b0595307ddc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am Freitag, den 18.10.2019, 07:53 -0700 schrieb syzbot:
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=102b65cf600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9ca7a12fd736d93e0232
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143b9060e00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d3b94b600000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
+Hello,
 
-JUST IN CASE
-Final test before submission
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-#syz test: https://github.com/google/kasan.git 22be26f7
+Reported-and-tested-by:  
+syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
 
-From ccc2a7baec5a5117216972b1c502c5a0b97de0c4 Mon Sep 17 00:00:00 2001
-From: Oliver Neukum <oneukum@suse.com>
-Date: Wed, 4 Dec 2019 13:40:19 +0100
-Subject: [PATCH] si470x: fixup error handling of the interrupt URB
+Tested on:
 
-The error handling of the interrupt URB is not correct
-in every case and assumes that low level errors
-are either transient or end with a disconnect.
+commit:         22be26f7 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
+dashboard link: https://syzkaller.appspot.com/bug?extid=9ca7a12fd736d93e0232
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1063382ee00000
 
-Starting IO to a device is not necessarily a NOP in every error
-case. So we need to terminate all IO in every case of probe
-failure and disconnect with absolute certainty.
-We also must not retry forever in an error case.
-As this is unlikely in an actual device, we just give
-up.
-
-Reported-and-tested-by: syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/media/radio/si470x/radio-si470x-usb.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
-index fedff68d8c49..1b974c2683a6 100644
---- a/drivers/media/radio/si470x/radio-si470x-usb.c
-+++ b/drivers/media/radio/si470x/radio-si470x-usb.c
-@@ -370,15 +370,12 @@ static void si470x_int_in_callback(struct urb *urb)
- 	unsigned char tmpbuf[3];
- 
- 	if (urb->status) {
--		if (urb->status == -ENOENT ||
-+		if (!(urb->status == -ENOENT ||
- 				urb->status == -ECONNRESET ||
--				urb->status == -ESHUTDOWN) {
--			return;
--		} else {
-+				urb->status == -ESHUTDOWN))
- 			dev_warn(&radio->intf->dev,
- 			 "non-zero urb status (%d)\n", urb->status);
--			goto resubmit; /* Maybe we can recover. */
--		}
-+		return;
- 	}
- 
- 	/* Sometimes the device returns len 0 packets */
-@@ -463,6 +460,7 @@ static void si470x_int_in_callback(struct urb *urb)
- 	/* Resubmit if we're still running. */
- 	if (radio->int_in_running && radio->usbdev) {
- 		retval = usb_submit_urb(radio->int_in_urb, GFP_ATOMIC);
-+		printk(KERN_ERR"In resubmit code path with result %d\n", retval);
- 		if (retval) {
- 			dev_warn(&radio->intf->dev,
- 			       "resubmitting urb failed (%d)", retval);
-@@ -542,6 +540,8 @@ static int si470x_start_usb(struct si470x_device *radio)
- 		radio->int_in_running = 0;
- 	}
- 	radio->status_rssi_auto_update = radio->int_in_running;
-+	if (retval < 0)
-+		return retval;
- 
- 	/* start radio */
- 	retval = si470x_start(radio);
-@@ -734,7 +734,8 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
- 	/* start radio */
- 	retval = si470x_start_usb(radio);
- 	if (retval < 0)
--		goto err_buf;
-+		/* the urb may be running even after an error */
-+		goto err_all;
- 
- 	/* set initial frequency */
- 	si470x_set_freq(radio, 87.5 * FREQ_MUL); /* available in all regions */
-@@ -749,8 +750,7 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
- 
- 	return 0;
- err_all:
--	usb_kill_urb(radio->int_in_urb);
--err_buf:
-+	usb_poison_urb(radio->int_in_urb);
- 	kfree(radio->buffer);
- err_ctrl:
- 	v4l2_ctrl_handler_free(&radio->hdl);
-@@ -824,7 +824,7 @@ static void si470x_usb_driver_disconnect(struct usb_interface *intf)
- 	mutex_lock(&radio->lock);
- 	v4l2_device_disconnect(&radio->v4l2_dev);
- 	video_unregister_device(&radio->videodev);
--	usb_kill_urb(radio->int_in_urb);
-+	usb_poison_urb(radio->int_in_urb);
- 	usb_set_intfdata(intf, NULL);
- 	mutex_unlock(&radio->lock);
- 	v4l2_device_put(&radio->v4l2_dev);
--- 
-2.16.4
-
+Note: testing is done by a robot and is best-effort only.
