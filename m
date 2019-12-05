@@ -3,150 +3,135 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC8AEC43603
-	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 14:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E5E6C43603
+	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 14:33:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BB9DA24652
-	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 14:25:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E75324651
+	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 14:33:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729706AbfLEOZR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Dec 2019 09:25:17 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:49382 "EHLO
+        id S1729512AbfLEOdX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Dec 2019 09:33:23 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49636 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729684AbfLEOZR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Dec 2019 09:25:17 -0500
+        with ESMTP id S1729099AbfLEOdX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Dec 2019 09:33:23 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 60AFC292243
+        with ESMTPSA id 62EBD29227C
+Message-ID: <88a48cb78843458b55896eeb3af2f46488d42744.camel@collabora.com>
+Subject: Re: [PATCH v3 2/3] media: hantro: Support color conversion via
+ post-processing
 From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org
+To:     Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org
 Cc:     kernel@collabora.com, Tomasz Figa <tfiga@chromium.org>,
         linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
         Jonas Karlman <jonas@kwiboo.se>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
         Boris Brezillon <boris.brezillon@collabora.com>,
-        Chris Healy <cphealy@gmail.com>, linux-kernel@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v4 0/4] Enable Hantro G1 post-processor
-Date:   Thu,  5 Dec 2019 11:24:39 -0300
-Message-Id: <20191205142443.1298-1-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.22.0
+        Chris Healy <cphealy@gmail.com>, linux-kernel@vger.kernel.org
+Date:   Thu, 05 Dec 2019 11:33:13 -0300
+In-Reply-To: <dc637b43a4ef4609f9200f3fc91ee76fef75f64a.camel@collabora.com>
+References: <20191113175603.24742-1-ezequiel@collabora.com>
+         <20191113175603.24742-3-ezequiel@collabora.com>
+         <1e1c7a0e3d25187723ccac1a8360b5aae9aed8cd.camel@pengutronix.de>
+         <dc637b43a4ef4609f9200f3fc91ee76fef75f64a.camel@collabora.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+Hello Philipp,
 
-The Hantro G1 VPU post-processor block can be pipelined with
-the decoder hardware, allowing to perform operations such as
-color conversion, scaling, rotation, cropping, among others.
+On Fri, 2019-11-15 at 12:44 -0300, Ezequiel Garcia wrote:
+> Hello Philipp,
+> 
+> Thanks for reviewing.
+> 
+> On Thu, 2019-11-14 at 10:48 +0100, Philipp Zabel wrote:
+> > Hi Ezequiel,
+> > 
+> > On Wed, 2019-11-13 at 14:56 -0300, Ezequiel Garcia wrote:
+> > > The Hantro G1 decoder is able to enable a post-processor
+> > > on the decoding pipeline, which can be used to perform
+> > > scaling and color conversion.
+> > > 
+> > > The post-processor is integrated to the decoder, and it's
+> > > possible to use it in a way that is completely transparent
+> > > to the user.
+> > > 
+> > > This commit enables color conversion via post-processing,
+> > > which means the driver now exposes YUV packed, in addition to NV12.
+> > > 
+> > > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > > ---
+> > >  drivers/staging/media/hantro/Makefile         |   1 +
+> > >  drivers/staging/media/hantro/hantro.h         |  64 +++++++-
+> > >  drivers/staging/media/hantro/hantro_drv.c     |   8 +-
+> > >  .../staging/media/hantro/hantro_g1_h264_dec.c |   2 +-
+> > >  .../media/hantro/hantro_g1_mpeg2_dec.c        |   2 +-
+> > >  drivers/staging/media/hantro/hantro_g1_regs.h |  53 +++++++
+> > >  .../staging/media/hantro/hantro_g1_vp8_dec.c  |   2 +-
+> > >  drivers/staging/media/hantro/hantro_h264.c    |   6 +-
+> > >  drivers/staging/media/hantro/hantro_hw.h      |  13 ++
+> > >  .../staging/media/hantro/hantro_postproc.c    | 141 ++++++++++++++++++
+> > >  drivers/staging/media/hantro/hantro_v4l2.c    |  52 ++++++-
+> > >  drivers/staging/media/hantro/rk3288_vpu_hw.c  |  10 ++
+> > >  12 files changed, 343 insertions(+), 11 deletions(-)
+> > >  create mode 100644 drivers/staging/media/hantro/hantro_postproc.c
+> > > 
+> > > 
+[..]
+> 
+> > >  			pix_mp->plane_fmt[0].sizeimage +=
+> > >  				128 * DIV_ROUND_UP(pix_mp->width, 16) *
+> > >  				      DIV_ROUND_UP(pix_mp->height, 16);
+> > > @@ -611,10 +643,23 @@ static int hantro_start_streaming(struct vb2_queue *q, unsigned int count)
+> > >  
+> > >  		vpu_debug(4, "Codec mode = %d\n", codec_mode);
+> > >  		ctx->codec_ops = &ctx->dev->variant->codec_ops[codec_mode];
+> > > -		if (ctx->codec_ops->init)
+> > > +		if (ctx->codec_ops->init) {
+> > >  			ret = ctx->codec_ops->init(ctx);
+> > > +			if (ret)
+> > > +				return ret;
+> > > +		}
+> > > +
+> > > +		if (hantro_needs_postproc(ctx)) {
+> > > +			ret = hantro_postproc_alloc(ctx);
+> > 
+> > Why is this done in start_streaming? Wouldn't capture side REQBUFS be a
+> > better place for this?
+> > 
+> 
+> Yes, makes sense as well.
+> 
 
-When the post-processor is enabled, the decoder hardware
-needs its own set of NV12 buffers (the native decoder format),
-and the post-processor is the owner of the CAPTURE buffers,
-allocated for the post-processed format.
+This didn't work so well, so I have decided to leave it as-is in the
+just submitted v4 series.
 
-This way, applications obtain post-processed
-(scaled, converted, etc) buffers transparently.
+The vb2 framework provides two mechanism for drivers to allocate
+buffers, REQBUFS and CREATEBUFS, so the bounce buffer allocation
+has to be hooked on both of them.
 
-This feature is implemented by exposing the post-processed pixel
-formats on ENUM_FMT, ordered as "preferred pixelformat first":
+Also, REQBUFS and CREATEBUFS can be called multiple times
+to grow/shrink the vb2_queue, so the driver has to check
+if the bounce buffers were already created or not.
 
-v4l2-ctl -d 1 --list-formats
-ioctl: VIDIOC_ENUM_FMT
-	Type: Video Capture Multiplanar
+Not a big deal, but I felt the implementation ended up being
+too nasty for my taste.
 
-	[0]: 'NV12' (Y/CbCr 4:2:0)
-	[1]: 'YUYV' (YUYV 4:2:2)
+If fragmentation turns out to be an issue and we want to avoid
+allocating and destroying in start and stop (STREAMOFF, STREAMON),
+we can revisit this.
 
-The order of preference in ENUM_FMT can be used as a hint
-by applications. This series updates the uAPI specification
-accordingly.
-
-When the application sets a pixel format other than NV12,
-the post-processor is transparently enabled.
-
-Patch 1 updates the uAPI specification.
-Patch 2 and 3 are cleanups to easier integrate the post-processor.
-Patch 4 introduces the post-processing support.
-
-This is tested on RK3288 platforms with MPEG-2, VP8 and
-H264 streams, decoding to YUY2 surfaces. For now, this series
-is only adding support for NV12-to-YUY2 conversion.
-
-Applies to media/master.
-
-Changelog
----------
-
-Changes v4:
-
-* Make the post-proc queue as deep as the capture queue.
-* Rework the mmio read/write/relaxed helpers to avoid impacting
-  the VP8 implementation.
-* Rename prepare/finish_run to avoid confusion.
-* Remove HANTRO_PP_REG_WRITE unneeded checks. 
-* Add a comment in vidioc_enum_fmt regarding the format enumeration
-  order.
-
-Changes v3:
-
-* After discussing with Hans and Tomasz during the media summit
-in ELCE, we decided to go back on the MC changes. The MC topology
-is now untouched. This means the series is now similar to v1,
-except we explicitly use the ENUM_FMT to hint about the post-processed
-formats.
-
-Changes v2:
-
-* The decoder->post-processor topology is now exposed
-  explicitly and applications need to configure the pipeline.
-  By default, the decoder is enabled and the post-processor
-  is disabled.
-
-* RGB post-processing output has been dropped. We might
-  add this in the future, but for now, it seems it would
-  make the code more complex without a use-case in mind.
-  RGB is much more memory-consuming so less attractive
-  than YUV, and modern GPUs and display controllers support YUV.
-
-* The post-processor implementation still supports RK3288
-  only. However, a generic register infrastructure is introduced
-  to make addition of other variants such as RK3399 really easy.
-
-Ezequiel Garcia (4):
-  media: vidioc-enum-fmt.rst: clarify format preference
-  media: hantro: Cleanup format negotiation helpers
-  hantro: Rename {prepare,finish}_run to {start,end}_prepare_run
-  media: hantro: Support color conversion via post-processing
-
- .../media/uapi/v4l/vidioc-enum-fmt.rst        |   4 +-
- drivers/staging/media/hantro/Makefile         |   1 +
- drivers/staging/media/hantro/hantro.h         |  66 +++++++-
- drivers/staging/media/hantro/hantro_drv.c     |  11 +-
- .../staging/media/hantro/hantro_g1_h264_dec.c |   4 +-
- .../media/hantro/hantro_g1_mpeg2_dec.c        |   6 +-
- drivers/staging/media/hantro/hantro_g1_regs.h |  53 +++++++
- .../staging/media/hantro/hantro_g1_vp8_dec.c  |   6 +-
- .../staging/media/hantro/hantro_h1_jpeg_enc.c |   4 +-
- drivers/staging/media/hantro/hantro_h264.c    |   2 +-
- drivers/staging/media/hantro/hantro_hw.h      |  17 ++-
- .../staging/media/hantro/hantro_postproc.c    | 142 ++++++++++++++++++
- drivers/staging/media/hantro/hantro_v4l2.c    | 109 +++++++++-----
- drivers/staging/media/hantro/rk3288_vpu_hw.c  |  10 ++
- .../media/hantro/rk3399_vpu_hw_jpeg_enc.c     |   4 +-
- .../media/hantro/rk3399_vpu_hw_mpeg2_dec.c    |   4 +-
- .../media/hantro/rk3399_vpu_hw_vp8_dec.c      |   4 +-
- 17 files changed, 384 insertions(+), 63 deletions(-)
- create mode 100644 drivers/staging/media/hantro/hantro_postproc.c
-
--- 
-2.22.0
+Thanks,
+Ezequiel
 
