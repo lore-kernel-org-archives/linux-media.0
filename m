@@ -2,119 +2,112 @@ Return-Path: <SRS0=MqeG=Z3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 297ECC2D0BF
-	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 07:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 283FBC43603
+	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 07:34:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F3367206DB
-	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 07:31:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDBEA206DB
+	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 07:34:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=qtec.com header.i=@qtec.com header.b="bsN/dzuV"
+	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="FpXNbVVh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726243AbfLEHbO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Dec 2019 02:31:14 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:41253 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725926AbfLEHbO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Dec 2019 02:31:14 -0500
-Received: by mail-ed1-f66.google.com with SMTP id c26so1753348eds.8
-        for <linux-media@vger.kernel.org>; Wed, 04 Dec 2019 23:31:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=qtec.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5bZTVLB6SlZZvHSZ52IQ5R9DgapBKk835vt1/NqLuFM=;
-        b=bsN/dzuVIYXI1ejuF6K83PYcEMFOMOeUaB9u1lISiTkBdZZHwNYggeimMOG9be7uOD
-         9wCQM0eAY3DUWwfgeDzrcFCzL4GnUrsKlDaczEPOHAV1GjxsDV1MkV6VkOAmorbuhymL
-         kwMhThITg49GiY2StsdjLBlt5N5cukkLp/ydQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5bZTVLB6SlZZvHSZ52IQ5R9DgapBKk835vt1/NqLuFM=;
-        b=C3AgxQN15exSABvErx9J99Z+1big+5J7pPz6jlRMCCGgjTdjx7zsFkHPPuGoclX0FH
-         iKTAPA7WQtlOX41KRnTqmkE58QyyTnyAdjoaVuWIPJ1AGUcjS54yiZijZu4w7U2qfiDc
-         eehsAZMhe3B0fttupGCtXxFNWZAqBKgrlQCcKWU1Bu5Dt0ESkuGaUFh5Y6CsMHSWqOp+
-         hd2ewAiDFF//OLEMSZX52S+lXuc13q4eXd40jKpk0goTIRO7DOGuFsWZfuBaM0eL1QmS
-         1Meo2zndlBMBQ0ued29mANQrsH64ggWQYCPUSDATGRAFdSgIuVnWTY9L/lBT7XZxREcy
-         e4Bg==
-X-Gm-Message-State: APjAAAUZCVO3l04/2bBq65/uH2rQdWBZwEN4tJQGYxAEn3pdHeBhEbm1
-        OCEoBMC2rNqhAE7Fb0EMZMGQXAd15OQaTt0R4/UEPA==
-X-Google-Smtp-Source: APXvYqzzYaQTO/FR95xhPh9Wrn+4C+E8T1axiWOzdH3Skzt6J/P5+5UvQfwaBbkT2D+o1N25fFQjgCHPEMcNWQkZds0=
-X-Received: by 2002:a17:906:82ca:: with SMTP id a10mr7937423ejy.40.1575531071920;
- Wed, 04 Dec 2019 23:31:11 -0800 (PST)
+        id S1728213AbfLEHeT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Dec 2019 02:34:19 -0500
+Received: from smtp-out-so.shaw.ca ([64.59.136.138]:35562 "EHLO
+        smtp-out-so.shaw.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725926AbfLEHeT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Dec 2019 02:34:19 -0500
+Received: from shaw.ca ([70.71.78.228])
+        by shaw.ca with ESMTPA
+        id cleQi8c1NRnrKcleTi9Y2R; Thu, 05 Dec 2019 00:34:17 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shaw.ca;
+        s=s20180605; t=1575531257;
+        bh=UOIozgZnL+femg7nbXbBvFmc5AKDVGKw7DX8bbcGI9k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=FpXNbVVh9SPlgOQWOXcAmxEt8DliJ+1yzKPnufZaGwq9Rq+vWiQHMQCFyQkc9RK0w
+         jFWmrbjZZ/j4AdarISqadZ1HcAGkxs+K16EPSqwx+hX7oPjIkOTj6wiqjL7X3ETOwY
+         FfxsiQJAzEcYWIqdQP/izC3IiPfgnMShSStcdl7fMQpEdgOoV95yFGskUFPA5faOOq
+         ZWx/kot8Mf3yDdEm/NHAlCsC+D8O7yVJyj5YZac6HUr1W6Zco5oMEgi0vWSOHk0aUQ
+         zOe2CaYFFyxhNGN0g9ISaRBHoG4FVv2OgbxdhKlWXwu+SInLcgrCZ8H/wWhyxxCbtY
+         637hgufBS4mwQ==
+X-Authority-Analysis: v=2.3 cv=L7FjvNb8 c=1 sm=1 tr=0
+ a=qDatE6m/3wxSEG8Wq7h0zQ==:117 a=qDatE6m/3wxSEG8Wq7h0zQ==:17
+ a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=_Dj-zB-qAAAA:8 a=2EPVxaLeQsKgbbdgV34A:9
+ a=c-cOe7UV8MviEfHuAVEQ:22
+From:   joevt <joevt@shaw.ca>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org
+Subject: [PATCH 2/5] edid-decode: Change horizontal frequency to kHz
+Date:   Wed,  4 Dec 2019 23:34:11 -0800
+Message-Id: <20191205073414.53672-2-joevt@shaw.ca>
+X-Mailer: git-send-email 2.21.0 (Apple Git-122.2)
+In-Reply-To: <20191205073414.53672-1-joevt@shaw.ca>
+References: <20191205073414.53672-1-joevt@shaw.ca>
 MIME-Version: 1.0
-References: <20191203151202.18081-1-daniel@qtec.com> <20191204113046.GF5282@valkosipuli.retiisi.org.uk>
-In-Reply-To: <20191204113046.GF5282@valkosipuli.retiisi.org.uk>
-From:   Daniel Gomez <daniel@qtec.com>
-Date:   Thu, 5 Dec 2019 08:31:00 +0100
-Message-ID: <CAH1Ww+R_wdORar58_BmiVN2AAafYqxGo3H5T9COCQeLsDkc3Xg@mail.gmail.com>
-Subject: Re: [PATCH] media: v4l2: Fix fourcc names for BAYER12P
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfGKGFL3pWD/mknp2ADiM5nC+muuLz2pocAWuchsn0pq459OfyvE68G8q2KvmWX9t/TvrnQMTbkCqnOz+Xwcxk4JQqbCv4cUHJZ2KnkZnjzJo8U4luiXY
+ 0QkVFGVzP3+qNqHmlukUoSHHAzuAfGoN/5LXpeYjQPprzNqNK3begSmhi7KXtX14Obvuq1UB7B7BOA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+Change Monitor Ranges error message to use kHz for horizontal frequency.
 
-On Wed, 4 Dec 2019 at 12:31, Sakari Ailus <sakari.ailus@iki.fi> wrote:
->
-> Hi Daniel,
->
-> On Tue, Dec 03, 2019 at 04:12:00PM +0100, Daniel Gomez wrote:
-> > Fix documentation fourcc names for the 12-bit packed Bayer formats.
-> >
-> > Signed-off-by: Daniel Gomez <daniel@qtec.com>
-> > ---
-> >  Documentation/media/uapi/v4l/pixfmt-srggb12p.rst | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/media/uapi/v4l/pixfmt-srggb12p.rst b/Documentation/media/uapi/v4l/pixfmt-srggb12p.rst
-> > index 960851275f23..7060a4ffad08 100644
-> > --- a/Documentation/media/uapi/v4l/pixfmt-srggb12p.rst
-> > +++ b/Documentation/media/uapi/v4l/pixfmt-srggb12p.rst
-> > @@ -13,7 +13,7 @@
-> >  .. _v4l2-pix-fmt-sgrbg12p:
-> >
-> >  *******************************************************************************************************************************
-> > -V4L2_PIX_FMT_SRGGB12P ('pRAA'), V4L2_PIX_FMT_SGRBG12P ('pgAA'), V4L2_PIX_FMT_SGBRG12P ('pGAA'), V4L2_PIX_FMT_SBGGR12P ('pBAA'),
-> > +V4L2_PIX_FMT_SRGGB12P ('pBCC'), V4L2_PIX_FMT_SGRBG12P ('pgCC'), V4L2_PIX_FMT_SGBRG12P ('pGCC'), V4L2_PIX_FMT_SBGGR12P ('pBCC'),
-> >  *******************************************************************************************************************************
->
-> Thanks for the patch.
->
-> There's a bug there, but this doesn't still seem entirely correct. For
-> instance, V4L2_PIX_FMT_SRGGB12P is defined as follows in videodev2.h:
->
-> #define V4L2_PIX_FMT_SRGGB12P v4l2_fourcc('p', 'R', 'C', 'C')
->
-> Could you fix that, and check the rest?
-Thanks for the review.
-I'll send a new patch with the proper names:
-include/uapi/linux/videodev2.h:#define V4L2_PIX_FMT_SBGGR12P
-v4l2_fourcc('p', 'B', 'C', 'C')
-include/uapi/linux/videodev2.h:#define V4L2_PIX_FMT_SGBRG12P
-v4l2_fourcc('p', 'G', 'C', 'C')
-include/uapi/linux/videodev2.h:#define V4L2_PIX_FMT_SGRBG12P
-v4l2_fourcc('p', 'g', 'C', 'C')
-include/uapi/linux/videodev2.h:#define V4L2_PIX_FMT_SRGGB12P
-v4l2_fourcc('p', 'R', 'C', 'C')
->
-> Please also set the To: header to a valid value; not setting it sometimes
-> ends up replies being only sent to the original sender of the patch,
-> omitting the list and others cc'd.
->
-okay.
-> --
-> Kind regards,
->
-> Sakari Ailus
+Signed-off-by: Joe van Tunen <joevt@shaw.ca>
+---
+ edid-decode.cpp | 32 ++++++++++++++------------------
+ 1 file changed, 14 insertions(+), 18 deletions(-)
+
+diff --git a/edid-decode.cpp b/edid-decode.cpp
+index eac47c5..0c6c237 100644
+--- a/edid-decode.cpp
++++ b/edid-decode.cpp
+@@ -735,26 +735,22 @@ int edid_state::parse_edid()
+ 		 * EDID 1.4 states (in an Errata) that explicitly defined
+ 		 * timings supersede the monitor range definition.
+ 		 */
++		char buf[512];
++		snprintf(buf, sizeof(buf),
++			"One or more of the timings is out of range of the Monitor Ranges:\n"
++			"    Vertical Freq: %u - %u Hz (Monitor: %u - %u Hz)\n"
++			"    Horizontal Freq: %.3f - %.3f kHz (Monitor: %.3f - %.3f kHz)\n"
++			"    Maximum Clock: %.3f MHz (Monitor: %.3f MHz)\n",
++			min_vert_freq_hz, max_vert_freq_hz,
++			min_display_vert_freq_hz, max_display_vert_freq_hz,
++			min_hor_freq_hz / 1000.0, max_hor_freq_hz / 1000.0,
++			min_display_hor_freq_hz / 1000.0, max_display_hor_freq_hz / 1000.0,
++			max_pixclk_khz / 1000.0, max_display_pixclk_khz / 1000.0);
++		
+ 		if (edid_minor < 4) {
+-			fail("One or more of the timings is out of range of the Monitor Ranges:\n"
+-			     "    Vertical Freq: %u - %u Hz (Monitor: %u - %u Hz)\n"
+-			     "    Horizontal Freq: %u - %u Hz (Monitor: %u - %u Hz)\n"
+-			     "    Maximum Clock: %.3f MHz (Monitor: %.3f MHz)\n",
+-			     min_vert_freq_hz, max_vert_freq_hz,
+-			     min_display_vert_freq_hz, max_display_vert_freq_hz,
+-			     min_hor_freq_hz, max_hor_freq_hz,
+-			     min_display_hor_freq_hz, max_display_hor_freq_hz,
+-			     max_pixclk_khz / 1000.0, max_display_pixclk_khz / 1000.0);
++			fail("%s", buf);
+ 		} else {
+-			warn("One or more of the timings is out of range of the Monitor Ranges:\n"
+-			     "    Vertical Freq: %u - %u Hz (Monitor: %u - %u Hz)\n"
+-			     "    Horizontal Freq: %u - %u Hz (Monitor: %u - %u Hz)\n"
+-			     "    Maximum Clock: %.3f MHz (Monitor: %.3f MHz)\n",
+-			     min_vert_freq_hz, max_vert_freq_hz,
+-			     min_display_vert_freq_hz, max_display_vert_freq_hz,
+-			     min_hor_freq_hz, max_hor_freq_hz,
+-			     min_display_hor_freq_hz, max_display_hor_freq_hz,
+-			     max_pixclk_khz / 1000.0, max_display_pixclk_khz / 1000.0);
++			warn("%s", buf);
+ 		}
+ 	}
+ 
+-- 
+2.21.0 (Apple Git-122.2)
+
