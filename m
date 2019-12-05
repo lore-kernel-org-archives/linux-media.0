@@ -7,638 +7,457 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3891C43603
-	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 07:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB5C6C2D0BF
+	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 07:34:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8B4E7206DB
-	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 07:34:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95F60206DB
+	for <linux-media@archiver.kernel.org>; Thu,  5 Dec 2019 07:34:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="M6K2OwOw"
+	dkim=pass (2048-bit key) header.d=shaw.ca header.i=@shaw.ca header.b="ErAieLMD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725926AbfLEHeU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Dec 2019 02:34:20 -0500
-Received: from smtp-out-so.shaw.ca ([64.59.136.139]:39444 "EHLO
+        id S1726069AbfLEHeY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Dec 2019 02:34:24 -0500
+Received: from smtp-out-so.shaw.ca ([64.59.136.139]:36167 "EHLO
         smtp-out-so.shaw.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726069AbfLEHeU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Dec 2019 02:34:20 -0500
+        with ESMTP id S1726239AbfLEHeY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Dec 2019 02:34:24 -0500
 Received: from shaw.ca ([70.71.78.228])
         by shaw.ca with ESMTPA
-        id cleQi8c1NRnrKcleSi9Y2O; Thu, 05 Dec 2019 00:34:17 -0700
+        id cleQi8c1NRnrKcleUi9Y2V; Thu, 05 Dec 2019 00:34:18 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shaw.ca;
-        s=s20180605; t=1575531257;
-        bh=Eo0RjlzAWmC5XCUeAtYxAGxUDFkdLkLPHqSIZ+tlRUc=;
-        h=From:To:Cc:Subject:Date;
-        b=M6K2OwOwn5M/TkjMoJq79q59c9LfKyu++RttLVeIYWC5HV2dQi3glVR6bxxXxuP3/
-         ex4kM58PjwhCI9ZEPvx/n6ntWaAtLwaHXpNl+zLmLM654qWygkm9XW12RGae2ykUta
-         QAUx3+ITnSm+CwGt+B/+3fX+JhYOHY66ra0gyPKIrsKB6BPoqaLTcRkKWGrwGcpfVZ
-         0iuMuZCYBLUi09ox1ldIVOBDNaPKEAWbx7ssQn5yV3pera6W+1TXmAJBqudzx4sWGi
-         TI15tjjbXths6L3UgsSgw6BwHvQRiQ8Dvy/gYT2ShYuHkJspC9s7snFZwyRMoOOiRu
-         2gM8w80hmSR4g==
+        s=s20180605; t=1575531258;
+        bh=ckBuL8koxkerxl8B9sPaJFfUnE+2bKHA16dfvRlqZyI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=ErAieLMDR6w80rlZY+NatB5WXhF6G6CDe/dUcWKFIUkdGB8cJZD0gEMnn3I2D7INf
+         aB/uWJtuw75o7KK6eidU+LjHaX75ehzzDq2TtdaZUO/gGPuLoDJRzEI2AtEubHkRxd
+         0xFQTBRWhS4WZ/kPE1vyPO/0LZ91KavTK6IYuFetTIq8CHQefWp2jD6N74e+H/iDSv
+         wdOdyjvb7mLvTRqSeSbIQy1To1DBVADsQPNSioYU/6Ft7Re0pjOD2CBzT8NEhb2EtJ
+         66MCZ1fCxoX3oJ5Spp7R805NA74d5j3+/h00RVEbxaojBzpnfFBZxuzYUkWIYLA4rH
+         5vuJxMQA7OhxQ==
 X-Authority-Analysis: v=2.3 cv=L7FjvNb8 c=1 sm=1 tr=0
- a=qDatE6m/3wxSEG8Wq7h0zQ==:117 a=qDatE6m/3wxSEG8Wq7h0zQ==:17 a=_Dj-zB-qAAAA:8
- a=BlMTphcG3gmWzIQiBEkA:9 a=73pvVqpVDC28bn2k:21 a=dOrvsWYqlR0IaaEc:21
+ a=qDatE6m/3wxSEG8Wq7h0zQ==:117 a=qDatE6m/3wxSEG8Wq7h0zQ==:17
+ a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=_Dj-zB-qAAAA:8 a=NkkpCSOSCSmbDrRmHikA:9
+ a=XlzQoAgWNp1CfoM_:21 a=I-tnMgcYzh4RlgPL:21 a=itKHPHTafuwA:10
  a=c-cOe7UV8MviEfHuAVEQ:22
 From:   joevt <joevt@shaw.ca>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     linux-media@vger.kernel.org
-Subject: [PATCH 1/5] edid-decode: DisplayID additions
-Date:   Wed,  4 Dec 2019 23:34:10 -0800
-Message-Id: <20191205073414.53672-1-joevt@shaw.ca>
+Subject: [PATCH 4/5] edid-decode: CTA extension block cleanup
+Date:   Wed,  4 Dec 2019 23:34:13 -0800
+Message-Id: <20191205073414.53672-4-joevt@shaw.ca>
 X-Mailer: git-send-email 2.21.0 (Apple Git-122.2)
+In-Reply-To: <20191205073414.53672-1-joevt@shaw.ca>
+References: <20191205073414.53672-1-joevt@shaw.ca>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfGKGFL3pWD/mknp2ADiM5nC+muuLz2pocAWuchsn0pq459OfyvE68G8q2KvmWX9t/TvrnQMTbkCqnOz+Xwcxk4JQqbCv4cUHJZ2KnkZnjzJo8U4luiXY
- 0QkVFGVzP3+qNqHmlukUoSHHAzuAfGoN/5LXpeYjQPprzNqNK3begSmhi7KXtX14Obvuq1UB7B7BOA==
+X-CMAE-Envelope: MS4wfNRI+2yjonfkxDYFUh+DoQZcda613OpF0rHNVmDO9sa+XCCITWfYq1AbNTewEU5yr7FjT9a/mz74d5y3Tr70uw8baeFfGUQiqgKY8696Niy2pyHU1dfD
+ 6ZmCgEa8Mlb1HQMLkq6niES9CIK05wGDz/04Cbm/SYRVlhRmFNAAboAcVUolDAS+FLPEQn2xb6UaVQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Decode "Display Parameters Block". Example in lg-ultrafine-5k*.
-- Decode "CTA Timings Block". Similar to "Type 1 VESA DMT Timings Block".
-- Decode "GP ASCII String Block". Example in dell-up2715k-mdp-switchresx.
-
-- Added DisplayID 2.0 tags:
-    - Decode "Display Interface Features Data Block". Example in acer-xv273k* but it appears to be missing the "Minimum pixel rate at which YCbCr 4:2:0 encoding is supported" byte.
-    - Decode "ContainerID Data Block". Example in lg-ultrafine-5k*
-    - Unknown DisplayID blocks are dumped as hex.
-    - Add DisplayID 2.0 spec to man page.
-
-- Show DisplayID tag hex byte to make it possible to distinguish between DisplayID 1.3 and 2.0 spec blocks of the same name.
-- Show DisplayID product type.
-- Renamed Type* blocks to distinguish between different types of Video Timing Modes and Supported Timing Modes.
-- Check padding after DisplayID checksum.
-- Add more checks for DisplayID length and revision.
-- Move Tiled Topology decode to new function.
+Reduced tag parsing code.
+Added OUI min block length checks.
 
 Signed-off-by: Joe van Tunen <joevt@shaw.ca>
 ---
- edid-decode.1             |   4 +-
- edid-decode.h             |   2 +
- parse-base-block.cpp      |   2 +-
- parse-cta-block.cpp       |   2 +-
- parse-displayid-block.cpp | 446 ++++++++++++++++++++++++++++++++------
- 5 files changed, 386 insertions(+), 70 deletions(-)
+ edid-decode.h       |   1 +
+ parse-cta-block.cpp | 336 ++++++++++++++++++--------------------------
+ 2 files changed, 138 insertions(+), 199 deletions(-)
 
-diff --git a/edid-decode.1 b/edid-decode.1
-index 3debc47..48c53c6 100644
---- a/edid-decode.1
-+++ b/edid-decode.1
-@@ -55,10 +55,12 @@ SPWG Notebook Panel Specification, Version 3.5
- EPI Embedded Panel Interface, Revision 1.0
- .RE
- .TP
--The following EDID standard is partially supported by edid-decode:
-+The following EDID standards are partially supported by edid-decode:
- .RS
- .TP
- DisplayID 1.3: VESA Display Identification Data (DisplayID) Standard, Version 1.3
-+.TP
-+DisplayID 2.0: VESA DisplayID Standard, Version 2.0
- .RE
- 
- .SH OPTIONS
 diff --git a/edid-decode.h b/edid-decode.h
-index 577d5ff..83ded83 100644
+index 83ded83..758bdcf 100644
 --- a/edid-decode.h
 +++ b/edid-decode.h
-@@ -146,5 +146,7 @@ std::string block_name(unsigned char block);
- void print_timings(edid_state &state, const char *prefix, const struct timings *t, const char *suffix);
- 
- const struct timings *find_dmt_id(unsigned char dmt_id);
-+const struct timings *vic_to_mode(unsigned char vic);
-+char *extract_string(const unsigned char *x, unsigned len);
- 
- #endif
-diff --git a/parse-base-block.cpp b/parse-base-block.cpp
-index 896952b..2d384e8 100644
---- a/parse-base-block.cpp
-+++ b/parse-base-block.cpp
-@@ -773,7 +773,7 @@ void edid_state::detailed_cvt_descriptor(const unsigned char *x, bool first)
- }
- 
- /* extract a string from a detailed subblock, checking for termination */
--static char *extract_string(const unsigned char *x, unsigned len)
-+char *extract_string(const unsigned char *x, unsigned len)
- {
- 	static char s[EDID_PAGE_SIZE];
- 	int seen_newline = 0;
+@@ -111,6 +111,7 @@ struct edid_state {
+ 	void cta_y420cmdb(const unsigned char *x, unsigned length);
+ 	void cta_vfpdb(const unsigned char *x, unsigned length);
+ 	void cta_hdmi_block(const unsigned char *x, unsigned length);
++	void cta_oui(const char *block_name, const unsigned char *x, unsigned length, unsigned *ouinum);
+ 	void cta_block(const unsigned char *x);
+ 	void preparse_cta_block(const unsigned char *x);
+ 	void parse_cta_block(const unsigned char *x);
 diff --git a/parse-cta-block.cpp b/parse-cta-block.cpp
-index 4487edb..dea87c1 100644
+index dea87c1..e52822a 100644
 --- a/parse-cta-block.cpp
 +++ b/parse-cta-block.cpp
-@@ -191,7 +191,7 @@ static const struct timings edid_cta_modes2[] = {
+@@ -375,6 +375,11 @@ void edid_state::cta_svd(const unsigned char *x, unsigned n, int for_ycbcr420)
  
- static const unsigned char edid_hdmi_mode_map[] = { 95, 94, 93, 98 };
- 
--static const struct timings *vic_to_mode(unsigned char vic)
-+const struct timings *vic_to_mode(unsigned char vic)
+ 		if (vic == 1 && !for_ycbcr420)
+ 			has_cta861_vic_1 = 1;
++
++		// vics and has_vic are basically the same (if has_vic was not bool), except vics
++		// is built after preparse (during parse) which allows errors for duplicates to be
++		// output in parse order. has_vic is built during preparse and is used when vics
++		// from other blocks need to be checked.
+ 		if (++vics[vic][for_ycbcr420] == 2)
+ 			fail("Duplicate %sVIC %u\n", for_ycbcr420 ? "YCbCr 4:2:0 " : "", vic);
+ 		if (for_ycbcr420 && has_vic[0][vic])
+@@ -485,7 +490,6 @@ void edid_state::cta_hdmi_block(const unsigned char *x, unsigned length)
  {
- 	if (vic > 0 && vic <= ARRAY_SIZE(edid_cta_modes1))
- 		return edid_cta_modes1 + vic - 1;
-diff --git a/parse-displayid-block.cpp b/parse-displayid-block.cpp
-index cdd3a9f..403ae7b 100644
---- a/parse-displayid-block.cpp
-+++ b/parse-displayid-block.cpp
-@@ -9,6 +9,78 @@
+ 	unsigned len_vic, len_3d;
  
- #include "edid-decode.h"
+-	printf(" (HDMI)\n");
+ 	printf("    Source physical address %u.%u.%u.%u\n", x[3] >> 4, x[3] & 0x0f,
+ 	       x[4] >> 4, x[4] & 0x0f);
  
-+
-+// misc functions
-+
-+static void check_displayid_datablock_revision(const unsigned char *x)
+@@ -1228,10 +1232,20 @@ static void cta_hdmi_audio_block(const unsigned char *x, unsigned length)
+ 		x += 4;
+ 	}
+ }
++const unsigned kOUI_Unknown   = 1<<12;
++const unsigned kOUI_HDMI      = 2<<12;
++const unsigned kOUI_HDMIForum = 3<<12;
++const unsigned kOUI_HDR10     = 4<<12;
+ 
+-static const char *oui_name(unsigned oui)
++static const char *oui_name(unsigned oui, unsigned *ouinum = NULL)
+ {
++	unsigned ouinumscratch;
++	if (!ouinum) ouinum = &ouinumscratch;
++	*ouinum = kOUI_Unknown;
+ 	switch (oui) {
++	case 0x000c03: *ouinum = kOUI_HDMI      ; return "HDMI";
++	case 0xc45dd8: *ouinum = kOUI_HDMIForum ; return "HDMI Forum";
++	case 0x90848b: *ouinum = kOUI_HDR10     ; return "HDR10+";
+ 	case 0x00001a: return "AMD";
+ 	case 0x00044b: return "NVIDIA";
+ 	case 0x000c6e: return "ASUS";
+@@ -1244,212 +1258,136 @@ static const char *oui_name(unsigned oui)
+ 	}
+ }
+ 
++void edid_state::cta_oui(const char *block_name, const unsigned char *x, unsigned length, unsigned *ouinum)
 +{
-+	unsigned char revisionflags=x[1];
-+	if (revisionflags) {
-+		warn("Unexpected revision and flags (0x%02x != 0)\n", revisionflags);
-+	}
-+}
++	char buf[10];
++	unsigned oui;
 +
-+static bool check_displayid_datablock_length(const unsigned char *x, unsigned expectedlenmin = 0, unsigned expectedlenmax = 128 - 2 - 5 - 3, unsigned payloaddumpstart = 0)
-+{
-+	unsigned char len=x[2];
-+	if ( expectedlenmin == expectedlenmax && len != expectedlenmax ) {
-+		fail("DisplayID payload length is different than expected (%d != %d)\n", len, expectedlenmax);
-+	} else if (len > expectedlenmax) {
-+		fail("DisplayID payload length is greater than expected (%d > %d)\n", len, expectedlenmax);
-+	} else if (len < expectedlenmin) {
-+		fail("DisplayID payload length is less than expected (%d < %d)\n", len, expectedlenmin);
++	if (length < 3) {
++		oui = 0xffffffff;
++		sprintf(buf, "?");
 +	} else {
-+		return true;
-+	}
-+
-+	if (len > payloaddumpstart) {
-+		hex_block("    ", x + 3 + payloaddumpstart, len - payloaddumpstart);
-+	}
-+	return false;
-+}
-+
-+// tag 0x01
-+
-+static const char *feature_support_flags[] = {
-+	"De-interlacing",
-+	"Support ACP, ISRC1, or ISRC2packets",
-+	"Fixed pixel format",
-+	"Fixed timing",
-+	"Power management (DPM)",
-+	"Audio input override",
-+	"Separate audio inputs provided",
-+	"Audio support on video interface"
-+};
-+
-+static void print_flag_lines(const char *indent, const char *label, unsigned char flag_byte, const char **flags) {
-+	if (flag_byte) {
-+		printf("%s\n", label);
-+		for (int i = 0; i < 8; i++) {
-+			if (flag_byte & (1<<i)) {
-+				printf("%s%s\n", indent, flags[i]);
-+			}
-+		}
-+	}
-+}
-+
-+static void parse_displayid_parameters(const unsigned char *x) {
-+	check_displayid_datablock_revision(x);
-+	if (check_displayid_datablock_length(x, 12, 12)) {
-+		printf("    Image size: %.1f mm x %.1f mm\n", ((x[4]<<8) + x[3]) / 10.0, ((x[6]<<8) + x[5]) / 10.0);
-+		printf("    Pixels: %d x %d\n", (x[8]<<8) + x[7], (x[10]<<8) + x[9]);
-+		print_flag_lines("      ", "    Feature support flags:", x[11], feature_support_flags);
-+
-+		if (x[12] != 0xff) {
-+			printf("    Gamma: %.2f\n", ((x[12] + 100.0) / 100.0));
-+		}
-+		printf("    Aspect ratio: %.2f\n", ((x[13] + 100.0) / 100.0));
-+		printf("    Dynamic bpc native: %d\n", (x[14] & 0xf) + 1);
-+		printf("    Dynamic bpc overall: %d\n", ((x[14] >> 4) & 0xf) + 1);
-+	}
-+}
-+
-+// tag 0x03
-+
- static void parse_displayid_detailed_timing(const unsigned char *x)
- {
- 	struct timings t = {};
-@@ -112,11 +184,226 @@ static void parse_displayid_detailed_timing(const unsigned char *x)
- 	      );
- }
- 
-+// tag 0x0b
-+
-+static void parse_displayid_gp_string(const unsigned char *x)
-+{
-+	check_displayid_datablock_revision(x);
-+	if (check_displayid_datablock_length(x)) {
-+		printf("    %s\n", extract_string(x + 3, x[2]));
-+	}
-+}
-+
-+// tag 0x12
-+
-+static void parse_displayid_tiled_display_topology(const unsigned char *x)
-+{
-+	check_displayid_datablock_revision(x);
-+	if (check_displayid_datablock_length(x, 22, 22)) {
-+		unsigned capabilities = x[3];
-+		unsigned num_v_tile = (x[4] & 0xf) | (x[6] & 0x30);
-+		unsigned num_h_tile = (x[4] >> 4) | ((x[6] >> 2) & 0x30);
-+		unsigned tile_v_location = (x[5] & 0xf) | ((x[6] & 0x3) << 4);
-+		unsigned tile_h_location = (x[5] >> 4) | (((x[6] >> 2) & 0x3) << 4);
-+		unsigned tile_width = x[7] | (x[8] << 8);
-+		unsigned tile_height = x[9] | (x[10] << 8);
-+		unsigned pix_mult = x[11];
-+
-+		printf("    Capabilities: 0x%08x\n", capabilities);
-+		printf("    Num horizontal tiles: %u Num vertical tiles: %u\n", num_h_tile + 1, num_v_tile + 1);
-+		printf("    Tile location: %u, %u\n", tile_h_location, tile_v_location);
-+		printf("    Tile resolution: %ux%u\n", tile_width + 1, tile_height + 1);
-+		if (capabilities & 0x40) {
-+			if (pix_mult) {
-+				printf("    Top bevel size: %u pixels\n",
-+					   pix_mult * x[12] / 10);
-+				printf("    Bottom bevel size: %u pixels\n",
-+					   pix_mult * x[13] / 10);
-+				printf("    Right bevel size: %u pixels\n",
-+					   pix_mult * x[14] / 10);
-+				printf("    Left bevel size: %u pixels\n",
-+					   pix_mult * x[15] / 10);
-+			} else {
-+				fail("No bevel information, but the pixel multiplier is non-zero\n");
-+			}
-+			printf("    Tile resolution: %ux%u\n", tile_width + 1, tile_height + 1);
-+		} else if (pix_mult) {
-+			fail("No bevel information, but the pixel multiplier is non-zero\n");
-+		}
-+	}
-+}
-+
-+// tag 0x26
-+
-+static const char *bpc444[] = {"6", "8", "10", "12", "14", "16", NULL, NULL};
-+static const char *bpc4xx[] = {"8", "10", "12", "14", "16", NULL, NULL, NULL};
-+static const char *audiorates[] = {"32", "44.1", "48", NULL, NULL, NULL, NULL, NULL};
-+
-+static const char *colorspace_eotf_combinations[] = {
-+	"sRGB",
-+	"BT.601",
-+	"BT.709/BT.1886",
-+	"Adobe RGB",
-+	"DCI-P3",
-+	"BT.2020",
-+	"BT.2020/SMPTE ST 2084"
-+};
-+
-+static const char *colorspace_eotf_reserved[] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-+
-+static const char *colorspaces[] = {
-+	"Undefined",
-+	"sRGB",
-+	"BT.601",
-+	"BT.709",
-+	"Adobe RGB",
-+	"DCI-P3",
-+	"BT.2020",
-+	"Custom"
-+};
-+
-+static const char *eotfs[] = {
-+	"Undefined",
-+	"sRGB",
-+	"BT.601",
-+	"BT.1886",
-+	"Adobe RGB",
-+	"DCI-P3",
-+	"BT.2020",
-+	"Gamma function",
-+	"SMPTE ST 2084",
-+	"Hybrid Log",
-+	"Custom"
-+};
-+
-+static void print_flags(const char *label, unsigned char flag_byte, const char **flags, bool reverse = false)
-+{
-+	if (flag_byte) {
-+		printf("%s: ", label);
-+		int countflags = 0;
-+		for (int i = 0; i < 8; i++) {
-+			if (flag_byte & (1<<(reverse?7-i:i))) {
-+				if (countflags)
-+					printf(", ");
-+				if (flags[i])
-+					printf("%s", flags[i]);
-+				else
-+					printf("Undefined(%d)", i);
-+				countflags++;
-+			}
-+		}
-+		printf("\n");
-+	}
-+}
-+
-+static void parse_displayid_interface_features(const unsigned char *x)
-+{
-+	check_displayid_datablock_revision(x);
-+	if (!check_displayid_datablock_length(x, 9)) {
-+		return;
-+	}
-+	int len=x[2];
-+	if (len > 0) print_flags("    Supported bpc for RGB encoding", x[3], bpc444);
-+	if (len > 1) print_flags("    Supported bpc for YCbCr 4:4:4 encoding", x[4], bpc444);
-+	if (len > 2) print_flags("    Supported bpc for YCbCr 4:2:2 encoding", x[5], bpc4xx);
-+	if (len > 3) print_flags("    Supported bpc for YCbCr 4:2:0 encoding", x[6], bpc4xx);
-+	if (len > 4 && x[7])
-+	                  printf("    Minimum pixel rate at which YCbCr 4:2:0 encoding is supported: %.3f MHz\n", 74.25 * x[7]);
-+	if (len > 5) print_flags("    Supported audio capability and features (kHz)", x[8], audiorates, true);
-+	if (len > 6) print_flags("    Supported color space and EOTF standard combination 1", x[9], colorspace_eotf_combinations);
-+	if (len > 7) print_flags("    Supported color space and EOTF standard combination 2", x[10], colorspace_eotf_reserved);
-+	int i = 0;
-+	if (len > 8 && x[11]) {
-+		printf("    Supported color space and EOTF additional combinations:");
-+		for (i = 0; i < x[11]; i++) {
-+			if (i > 6) {
-+				printf("\n    Number of additional color space and EOTF combinations (%d) is greater than allowed (7).", x[11]);
-+				break;
-+			} else if (i + 10 > len) {
-+				printf("\n    Number of additional color space and EOTF combinations (%d) is too many to fit in block (%d).", x[11], len - 9);
-+				break;
-+			}
-+
-+			const char *colorspace = "Out of range";
-+			const char *eotf = "Out of range";
-+			unsigned colorspace_index = (x[12 + i] >> 4) & 0xf;
-+			unsigned eotf_index = x[12 + i] & 0xf;
-+			if (colorspace_index < sizeof(colorspaces) / sizeof(colorspaces[0])) {
-+				colorspace = colorspaces[colorspace_index];
-+			}
-+			if (eotf_index < sizeof(eotfs) / sizeof(eotfs[0])) {
-+				eotf = eotfs[eotf_index];
-+			}
-+
-+			if (i > 0)
-+				printf(", ");
-+			if (!strcmp(colorspace, eotf)) {
-+				printf("%s", colorspace);
-+			} else {
-+				printf("%s/%s", colorspace, eotf);
-+			}
-+		} // for
-+		printf("\n");
-+	} // x[11]
-+	check_displayid_datablock_length(x, 9 + i, 9 + i, 9 + i);
-+}
-+
-+// tag 0x29
-+
-+static void parse_displayid_ContainerID(const unsigned char *x)
-+{
-+	check_displayid_datablock_revision(x);
-+	if (check_displayid_datablock_length(x, 16, 16)) {
-+		x += 3;
-+		printf("    %02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x\n",x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10],x[11],x[12],x[13],x[14],x[15]);
-+	}
-+}
-+
-+// DisplayID main
-+
-+static std::string product_type(unsigned version, unsigned char x, bool heading)
-+{
-+	std::string headingstr;
-+	if (version < 0x20) {
-+		headingstr = "Display Product Type";
-+		if (heading) return headingstr;
-+		switch (x) {
-+		case 0: return "Extension Section";
-+		case 1: return "Test Structure; test equipment only";
-+		case 2: return "Display panel or other transducer, LCD or PDP module, etc.";
-+		case 3: return "Standalone display device";
-+		case 4: return "Television receiver";
-+		case 5: return "Repeater/translator";
-+		case 6: return "DIRECT DRIVE monitor";
-+		default: break;
-+		}
-+	}
-+	else
-+	{
-+		headingstr = "Display Product Primary Use Case";
-+		if (heading) return headingstr;
-+		switch (x) {
-+		case 0: return "Same primary use case as the base section";
-+		case 1: return "Test Structure; test equipment only";
-+		case 2: return "None of the listed primary use cases; generic display";
-+		case 3: return "Television (TV) display";
-+		case 4: return "Desktop productivity display";
-+		case 5: return "Desktop gaming display";
-+		case 6: return "Presentation display";
-+		case 7: return "Head-mounted Virtual Reality (VR) display";
-+		case 8: return "Head-mounted Augmented Reality (AR) display";
-+		default: break;
-+		}
-+	}
-+	fail("Unknown %s 0x%02x\n", headingstr.c_str(), x);
-+	return std::string("Unknown " + headingstr + " (") + utohex(x) + ")";
-+}
-+
- void edid_state::parse_displayid_block(const unsigned char *x)
- {
--	const unsigned char *orig = x;
- 	unsigned version = x[1];
--	int length = x[2];
-+	unsigned length = x[2];
-+	unsigned prod_type = x[3]; // future check: based on type, check for required data blocks
- 	unsigned ext_count = x[4];
- 	unsigned i;
- 
-@@ -124,94 +411,114 @@ void edid_state::parse_displayid_block(const unsigned char *x)
- 	       block.c_str(), version >> 4, version & 0xf,
- 	       length, ext_count);
- 
-+	if (ext_count > 0) {
-+		warn("Non-0 DisplayID extension count %d\n", ext_count);
++		oui = (x[2] << 16) + (x[1] << 8) + x[0];
++		sprintf(buf, "0x%06x", oui);
 +	}
 +	
-+	printf("%s: %s\n", product_type(version, prod_type, true).c_str(), product_type(version, prod_type, false).c_str());
++	const char *ouiname = oui_name(oui, ouinum);
++	std::string name = std::string(block_name) + ", OUI " + buf;
++	if (ouiname) name += std::string(" (") + ouiname + ")";
++	data_block = name;
 +	
-+	if (length > 121) {
-+		fail("DisplayID length %d is greater than 121\n", length);
-+		length = 121;
++	if (oui == 0xffffffff)
++		fail("CTA data block is not long enough to contain an OUI\n");
++}
++
++#define data_block_o(n) cta_oui(n, x + 1 + extended, length - extended, &ouinum)
++
+ void edid_state::cta_block(const unsigned char *x)
+ {
+-	static int last_block_was_hdmi_vsdb;
+-	static int have_hf_vsdb, have_hf_scdb;
+-	static int first_block = 1;
++	static unsigned previous_cta_tag = 0;
++	static bool have_hf_vsdb = false;
++	static bool have_hf_scdb = false;
++	static unsigned cta_block_number = 0;
++
+ 	unsigned length = x[0] & 0x1f;
+-	const char *name;
+-	unsigned oui;
++	unsigned ouinum = 0;
++	unsigned tag=(x[0] & 0xe0) >> 5;
++	unsigned extended = tag == 0x07 ? 1 : 0;
++	if (extended) tag = 0x700 + x[1];
++
++	switch (tag) {
++	case 0x001: data_block = "Audio Data Block"; break;
++	case 0x002: data_block = "Video Data Block"; break;
++	case 0x003: data_block_o("Vendor-Specific Data Block"); break;
++	case 0x004: data_block = "Speaker Allocation Data Block"; break;
++	case 0x005: data_block = "VESA DTC Data Block"; break; // not implemented
++
++	case 0x700: data_block = "Video Capability Data Block"; break;
++	case 0x701: data_block_o("Vendor-Specific Video Data Block"); break;
++	case 0x702: data_block = "VESA Video Display Device Data Block"; break; // not implemented
++	case 0x703: data_block = "VESA Video Timing Block Extension"; break; // not implemented
++	case 0x704: data_block = "Reserved for HDMI Video Data Block"; break; // reserved
++	case 0x705: data_block = "Colorimetry Data Block"; break;
++	case 0x706: data_block = "HDR Static Metadata Data Block"; break;
++	case 0x707: data_block = "HDR Dynamic Metadata Data Block"; break;
++
++	case 0x70d: data_block = "Video Format Preference Data Block"; break;
++	case 0x70e: data_block = "YCbCr 4:2:0 Video Data Block"; break;
++	case 0x70f: data_block = "YCbCr 4:2:0 Capability Map Data Block"; break;
++	case 0x710: data_block = "Reserved for CTA Miscellaneous Audio Fields"; break; // reserved
++	case 0x711: data_block_o("Vendor-Specific Audio Data Block"); break; // no vendors implemented
++	case 0x712: data_block = "HDMI Audio Data Block"; break;
++	case 0x713: data_block = "Room Configuration Data Block"; break;
++	case 0x714: data_block = "Speaker Location Data Block"; break;
++
++	case 0x720: data_block = "InfoFrame Data Block"; break;
++
++	case 0x778: data_block = "HDMI Forum EDID Extension Override Data Block"; break;
++	case 0x779: data_block = "HDMI Forum Sink Capability Data Block"; break;
++	default:
++		     if (tag < 0x700) data_block = "Unknown CTA Data Block";
++		else if (tag < 0x70d) data_block = "Unknown CTA Video-Related Data Block";
++		else if (tag < 0x720) data_block = "Unknown CTA Audio-Related Data Block";
++		else if (tag < 0x778) data_block = "Unknown CTA Data Block";
++		else if (tag < 0x780) data_block = "Unknown CTA HDMI-Related Data Block";
++		else                  data_block = "Unknown CTA Data Block";
++		data_block += std::string(" (") + (extended ? "extended " : "") + "tag " + utohex(tag & 0xff) + ")";
 +	}
-+
- 	unsigned offset = 5;
- 	while (length > 0) {
- 		unsigned tag = x[offset];
-+		switch (tag) {
-+		// DisplayID 1.3:
-+		case 0x00: data_block = "Product Identification Data Block (" + utohex(tag) + ")"; break; // not implemented
-+		case 0x01: data_block = "Display Parameters Data Block (" + utohex(tag) + ")"; break;
-+		case 0x02: data_block = "Color Characteristics Data Block"; break; // not implemented
-+		case 0x03: data_block = "Video Timing Modes Type 1 - Detailed Timings Data Block"; break;
-+		case 0x04: data_block = "Video Timing Modes Type 2 - Detailed Timings Data Block"; break; // not implemented
-+		case 0x05: data_block = "Video Timing Modes Type 3 - Short Timings Data Block"; break; // not implemented
-+		case 0x06: data_block = "Video Timing Modes Type 4 - DMT Timings Data Block"; break; // not implemented
-+		case 0x07: data_block = "Supported Timing Modes Type 1 - VESA DMT Timings Data Block"; break;
-+		case 0x08: data_block = "Supported Timing Modes Type 2 - CTA Timings Data Block"; break;
-+		case 0x09: data_block = "Video Timing Range Data Block"; break; // not implemented
-+		case 0x0a: data_block = "Product Serial Number Data Block"; break; // not implemented
-+		case 0x0b: data_block = "GP ASCII String Data Block"; break;
-+		case 0x0c: data_block = "Display Device Data Data Block"; break; // not implemented
-+		case 0x0d: data_block = "Interface Power Sequencing Data Block"; break; // not implemented
-+		case 0x0e: data_block = "Transfer Characteristics Data Block"; break; // not implemented
-+		case 0x0f: data_block = "Display Interface Data Block"; break; // not implemented
-+		case 0x10: data_block = "Stereo Display Interface Data Block (" + utohex(tag) + ")"; break; // not implemented
-+		case 0x11: data_block = "Video Timing Modes Type 5 - Short Timings Data Block"; break; // not implemented
-+		case 0x12: data_block = "Tiled Display Topology Data Block (" + utohex(tag) + ")"; break;
-+		case 0x13: data_block = "Video Timing Modes Type 6 - Detailed Timings Data Block"; break; // not implemented
-+		// 14h .. 7Eh RESERVED for Additional VESA-defined Data Blocks
-+		// DisplayID 2.0
-+		case 0x20: data_block = "Product Identification Data Block (" + utohex(tag) + ")"; break; // not implemented
-+		case 0x21: data_block = "Display Parameters Data Block (" + utohex(tag) + ")"; break; // not implemented
-+		case 0x22: data_block = "Video Timing Modes Type 7 - Detailed Timings Data Block"; break; // not implemented
-+		case 0x23: data_block = "Video Timing Modes Type 8 - Enumerated Timing Codes Data Block"; break; // not implemented
-+		case 0x24: data_block = "Video Timing Modes Type 9 - Formula-based Timings Data Block"; break; // not implemented
-+		case 0x25: data_block = "Dynamic Video Timing Range Limits Data Block"; break; // not implemented
-+		case 0x26: data_block = "Display Interface Features Data Block"; break;
-+		case 0x27: data_block = "Stereo Display Interface Data Block (" + utohex(tag) + ")"; break; // not implemented
-+		case 0x28: data_block = "Tiled Display Topology Data Block (" + utohex(tag) + ")"; break; // not implemented
-+		case 0x29: data_block = "ContainerID Data Block"; break;
-+		// 2Ah .. 7Dh RESERVED for Additional VESA-defined Data Blocks
-+		case 0x7e: // DisplayID 2.0
-+		case 0x7f: data_block = "Vendor-specific Data Block (" + utohex(tag) + ")"; break; // DisplayID 1.3 // not implemented
-+		// 7Fh .. 80h RESERVED
-+		case 0x81: data_block = "CTA DisplayID Data Block (" + utohex(tag) + ")"; break; // not implemented
-+		// 82h .. FFh RESERVED
-+		default:   data_block = "Unknown DisplayID Data Block (" + utohex(tag) + ")"; break;
-+		}
-+
-+		if (length < 3) {
-+			// report a problem when the remaining bytes are not 0.
-+			if (tag || x[offset + 1]) {
-+				fail("Not enough bytes remain (%d) for a DisplayID data block or the DisplayID filler is non-0\n", length);
-+			}
-+			break;
-+		}
-+
- 		unsigned len = x[offset + 2];
-+		
-+		if (length < len + 3) {
-+			fail("The length of this DisplayID data block (%d) exceeds the number of bytes remaining (%d)\n", len + 3, length);
-+			break;
-+		}
  
- 		if (!tag && !len) {
--			while (length && !x[offset]) {
--				length--;
--				offset++;
--			}
--			if (length)
-+			// A Product Identification Data Block with no payload bytes is not valid - assume this is the end.
-+			if (!memchk(x + offset, length)) {
- 				fail("Non-0 filler bytes in the DisplayID block\n");
-+			}
- 			break;
- 		}
--		switch (tag) {
--		case 0x00: data_block = "Product ID Data Block"; break;
--		case 0x01: data_block = "Display Parameters Data Block"; break;
--		case 0x02: data_block = "Color Characteristics Data Block"; break;
--		case 0x03: data_block = "Type 1 Detailed Timings Data Block"; break;
--		case 0x04: data_block = "Type 2 Detailed Timings Data Block"; break;
--		case 0x05: data_block = "Type 3 Short Timings Data Block"; break;
--		case 0x06: data_block = "Type 4 DMT Timings Data Block"; break;
--		case 0x07: data_block = "Type 1 VESA DMT Timings Data Block"; break;
--		case 0x08: data_block = "CTA Timings Data Block"; break;
--		case 0x09: data_block = "Video Timing Range Data Block"; break;
--		case 0x0a: data_block = "Product Serial Number Data Block"; break;
--		case 0x0b: data_block = "GP ASCII String Data Block"; break;
--		case 0x0c: data_block = "Display Device Data Data Block"; break;
--		case 0x0d: data_block = "Interface Power Sequencing Data Block"; break;
--		case 0x0e: data_block = "Transfer Characteristics Data Block"; break;
--		case 0x0f: data_block = "Display Interface Data Block"; break;
--		case 0x10: data_block = "Stereo Display Interface Data Block"; break;
--		case 0x12: data_block = "Tiled Display Topology Data Block"; break;
--		default: data_block = "Unknown DisplayID Data Block (" + utohex(tag) + ")"; break;
+-	switch ((x[0] & 0xe0) >> 5) {
+-	case 0x01:
+-		data_block = "Audio Data Block";
+-		printf("  %s\n", data_block.c_str());
+-		cta_audio_block(x + 1, length);
++	printf("  %s\n", data_block.c_str());
++	
++	tag |= ouinum;
++	switch (tag) {
++	case 0x001: cta_audio_block(x + 1, length); break;
++	case 0x002: cta_svd(x + 1, length, 0); break;
++	case 0x003|kOUI_HDMI:
++		cta_hdmi_block(x + 1, length);
++		if (edid_minor != 3)
++			fail("The HDMI Specification uses EDID 1.3, not 1.%u\n", edid_minor);
+ 		break;
+-	case 0x02:
+-		data_block = "Video Data Block";
+-		printf("  %s\n", data_block.c_str());
+-		cta_svd(x + 1, length, 0);
++	case 0x003|kOUI_HDMIForum:
++		if (previous_cta_tag != (0x003|kOUI_HDMI))
++			fail("HDMI Forum VSDB did not immediately follow the HDMI VSDB\n");
++		if (have_hf_scdb || have_hf_vsdb)
++			fail("Duplicate HDMI Forum VSDB/SCDB\n");
++		cta_hf_scdb(x + 4, length - 3);
++		have_hf_vsdb = true;
+ 		break;
+-	case 0x03:
+-		oui = (x[3] << 16) + (x[2] << 8) + x[1];
+-		printf("  Vendor-Specific Data Block, OUI 0x%06x", oui);
+-		name = oui_name(oui);
+-		if (oui == 0x000c03) {
+-			data_block = "Vendor-Specific Data Block (HDMI)";
+-			cta_hdmi_block(x + 1, length);
+-			last_block_was_hdmi_vsdb = 1;
+-			first_block = 0;
+-			if (edid_minor != 3)
+-				fail("The HDMI Specification uses EDID 1.3, not 1.%u\n", edid_minor);
+-			return;
 -		}
- 
- 		printf("  %s\n", data_block.c_str());
- 
- 		switch (tag) {
-+		case 0x01: parse_displayid_parameters(x + offset); break;
- 		case 0x03:
- 			for (i = 0; i < len / 20; i++) {
- 				parse_displayid_detailed_timing(&x[offset + 3 + (i * 20)]);
- 			}
- 			break;
--
- 		case 0x07:
- 			for (i = 0; i < min(len, 10) * 8; i++)
--				if (x[offset + 3 + i / 8] & (1 << (i % 8)))
-+				if (x[offset + 3 + i / 8] & (1 << (i % 8))) {
- 					print_timings("    ", find_dmt_id(i + 1), "DMT");
+-		if (oui == 0xc45dd8) {
+-			data_block = "Vendor-Specific Data Block (HDMI Forum)";
+-			if (!last_block_was_hdmi_vsdb)
+-				fail("HDMI Forum VSDB did not immediately follow the HDMI VSDB\n");
+-			if (have_hf_scdb || have_hf_vsdb)
+-				fail("Duplicate HDMI Forum VSDB/SCDB\n");
+-			printf(" (HDMI Forum)\n");
+-			cta_hf_scdb(x + 4, length - 3);
+-			have_hf_vsdb = 1;
+-		} else if (name) {
+-			data_block = std::string("Vendor-Specific Data Block (") + name + ")";
+-			printf(" (%s)\n", name);
+-			hex_block("    ", x + 4, length - 3);
+-		} else {
+-			printf("\n");
+-			hex_block("    ", x + 4, length - 3);
+-			data_block.clear();
+-			warn("Unknown Vendor-Specific Data Block, OUI 0x%06x\n", oui);
+-		}
+-		break;
+-	case 0x04:
+-		data_block = "Speaker Allocation Data Block";
+-		printf("  %s\n", data_block.c_str());
+-		cta_sadb(x + 1, length);
+-		break;
+-	case 0x05:
+-		printf("  VESA DTC Data Block\n");
+-		hex_block("  ", x + 1, length);
+-		break;
+-	case 0x07:
+-		printf("  Extended tag: ");
+-		switch (x[1]) {
+-		case 0x00:
+-			data_block = "Video Capability Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_vcdb(x + 2, length - 1);
 -			break;
--
--		case 0x12: {
--			unsigned capabilities = x[offset + 3];
--			unsigned num_v_tile = (x[offset + 4] & 0xf) | (x[offset + 6] & 0x30);
--			unsigned num_h_tile = (x[offset + 4] >> 4) | ((x[offset + 6] >> 2) & 0x30);
--			unsigned tile_v_location = (x[offset + 5] & 0xf) | ((x[offset + 6] & 0x3) << 4);
--			unsigned tile_h_location = (x[offset + 5] >> 4) | (((x[offset + 6] >> 2) & 0x3) << 4);
--			unsigned tile_width = x[offset + 7] | (x[offset + 8] << 8);
--			unsigned tile_height = x[offset + 9] | (x[offset + 10] << 8);
--			unsigned pix_mult = x[offset + 11];
--
--			printf("    Capabilities: 0x%08x\n", capabilities);
--			printf("    Num horizontal tiles: %u Num vertical tiles: %u\n", num_h_tile + 1, num_v_tile + 1);
--			printf("    Tile location: %u, %u\n", tile_h_location, tile_v_location);
--			printf("    Tile resolution: %ux%u\n", tile_width + 1, tile_height + 1);
--			if (capabilities & 0x40) {
--				if (pix_mult) {
--					printf("    Top bevel size: %u pixels\n",
--					       pix_mult * x[offset + 12] / 10);
--					printf("    Bottom bevel size: %u pixels\n",
--					       pix_mult * x[offset + 13] / 10);
--					printf("    Right bevel size: %u pixels\n",
--					       pix_mult * x[offset + 14] / 10);
--					printf("    Left bevel size: %u pixels\n",
--					       pix_mult * x[offset + 15] / 10);
--				} else {
--					fail("No bevel information, but the pixel multiplier is non-zero\n");
- 				}
--				printf("    Tile resolution: %ux%u\n", tile_width + 1, tile_height + 1);
--			} else if (pix_mult) {
--				fail("No bevel information, but the pixel multiplier is non-zero\n");
+-		case 0x01:
+-			oui = (x[4] << 16) + (x[3] << 8) + x[2];
+-			printf("Vendor-Specific Video Data Block, OUI 0x%06x", oui);
+-			name = oui_name(oui);
+-			if (oui == 0x90848b) {
+-				data_block = "Vendor-Specific Video Data Block (HDR10+)";
+-				printf(" (HDR10+)\n");
+-				cta_hdr10plus(x + 5, length - 4);
+-			} else if (name) {
+-				data_block = std::string("Vendor-Specific Data Block (") + name + ")";
+-				printf(" (%s)\n", name);
+-				hex_block("    ", x + 5, length - 4);
+-			} else {
+-				printf("\n");
+-				hex_block("    ", x + 5, length - 4);
+-				data_block.clear();
+-				warn("Unknown Extended Vendor-Specific Data Block, OUI 0x%06x\n", oui);
 -			}
- 			break;
--		}
--
+-			break;
+-		case 0x02:
+-			printf("VESA Video Display Device Data Block\n");
+-			hex_block("  ", x + 2, length - 1);
+-			break;
+-		case 0x03:
+-			printf("VESA Video Timing Block Extension\n");
+-			hex_block("  ", x + 2, length - 1);
+-			break;
+-		case 0x04:
+-			printf("Reserved for HDMI Video Data Block\n");
+-			hex_block("  ", x + 2, length - 1);
+-			break;
+-		case 0x05:
+-			data_block = "Colorimetry Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_colorimetry_block(x + 2, length - 1);
+-			break;
+-		case 0x06:
+-			data_block = "HDR Static Metadata Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_hdr_static_metadata_block(x + 2, length - 1);
+-			break;
+-		case 0x07:
+-			data_block = "HDR Dynamic Metadata Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_hdr_dyn_metadata_block(x + 2, length - 1);
+-			break;
+-		case 0x0d:
+-			data_block = "Video Format Preference Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_vfpdb(x + 2, length - 1);
+-			break;
+-		case 0x0e:
+-			data_block = "YCbCr 4:2:0 Video Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_svd(x + 2, length - 1, 1);
+-			break;
+-		case 0x0f:
+-			data_block = "YCbCr 4:2:0 Capability Map Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_y420cmdb(x + 2, length - 1);
+-			break;
+-		case 0x10:
+-			printf("Reserved for CTA Miscellaneous Audio Fields\n");
+-			hex_block("  ", x + 2, length - 1);
+-			break;
+-		case 0x11:
+-			printf("Vendor-Specific Audio Data Block\n");
+-			hex_block("  ", x + 2, length - 1);
+-			break;
+-		case 0x12:
+-			data_block = "HDMI Audio Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_hdmi_audio_block(x + 2, length - 1);
+-			break;
+-		case 0x13:
+-			data_block = "Room Configuration Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_rcdb(x + 2, length - 1);
+-			break;
+-		case 0x14:
+-			data_block = "Speaker Location Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_sldb(x + 2, length - 1);
+-			break;
+-		case 0x20:
+-			printf("InfoFrame Data Block\n");
+-			cta_ifdb(x + 2, length - 1);
+-			break;
+-		case 0x78:
+-			data_block = "HDMI Forum EDID Extension Override Data Block";
+-			printf("%s\n", data_block.c_str());
+-			cta_hf_eeodb(x + 2, length - 1);
+-			// This must be the first CTA block
+-			if (!first_block)
+-				fail("Block starts at a wrong offset\n");
+-			break;
+-		case 0x79:
+-			data_block = "HDMI Forum Sink Capability Data Block";
+-			printf("%s\n", data_block.c_str());
+-			if (!last_block_was_hdmi_vsdb)
+-				fail("HDMI Forum SCDB did not immediately follow the HDMI VSDB\n");
+-			if (have_hf_scdb || have_hf_vsdb)
+-				fail("Duplicate HDMI Forum VSDB/SCDB\n");
+-			if (x[2] || x[3])
+-				printf("  Non-zero SCDB reserved fields!\n");
+-			cta_hf_scdb(x + 4, length - 3);
+-			have_hf_scdb = 1;
+-			break;
 -		default:
--			hex_block("    ", x + offset + 3, len);
-+		case 0x08:
-+			for (i = 0; i < min(len, 8) * 8; i++)
-+				if (x[offset + 3 + i / 8] & (1 << (i % 8))) {
-+					char suffix[16];
-+					sprintf(suffix, "VIC %3u", i + 1);
-+					print_timings("    ", vic_to_mode(i + 1), suffix);
-+				}
- 			break;
-+		case 0x0b: parse_displayid_gp_string(x + offset); break;
-+		case 0x12: parse_displayid_tiled_display_topology(x + offset); break;
-+		case 0x26: parse_displayid_interface_features(x + offset); break;
-+		case 0x29: parse_displayid_ContainerID(x + offset); break;
-+		default: hex_block("    ", x + offset + 3, len); break;
- 		}
- 		length -= len + 3;
- 		offset += len + 3;
-@@ -223,5 +530,10 @@ void edid_state::parse_displayid_block(const unsigned char *x)
- 	 * (excluding DisplayID-in-EDID magic byte)
- 	 */
- 	data_block.clear();
--	do_checksum("  ", orig + 1, orig[2] + 5);
-+	do_checksum("  ", x + 1, x[2] + 5);
-+	
-+	if (!memchk(x + 1 + x[2] + 5, 0x7f - (1 + x[2] + 5))) {
-+		data_block = "Padding";
-+		fail("DisplayID padding contains non-zero bytes\n");
-+	}
+-			if (x[1] <= 12)
+-				printf("Unknown CTA Video-Related");
+-			else if (x[1] <= 31)
+-				printf("Unknown CTA Audio-Related");
+-			else if (x[1] >= 120 && x[1] <= 127)
+-				printf("Unknown CTA HDMI-Related");
+-			else
+-				printf("Unknown CTA");
+-			printf(" Data Block (extended tag 0x%02x, length %u)\n", x[1], length - 1);
+-			hex_block("    ", x + 2, length - 1);
+-			data_block.clear();
+-			warn("Unknown Extended CTA Data Block 0x%02x\n", x[1]);
+-			break;
+-		}
++	case 0x004: cta_sadb(x + 1, length); break;
++	case 0x700: cta_vcdb(x + 2, length - 1); break;
++	case 0x701|kOUI_HDR10: cta_hdr10plus(x + 5, length - 4); break;
++	case 0x705: cta_colorimetry_block(x + 2, length - 1); break;
++	case 0x706: cta_hdr_static_metadata_block(x + 2, length - 1); break;
++	case 0x707: cta_hdr_dyn_metadata_block(x + 2, length - 1); break;
++	case 0x70d: cta_vfpdb(x + 2, length - 1); break;
++	case 0x70e: cta_svd(x + 2, length - 1, 1); break;
++	case 0x70f: cta_y420cmdb(x + 2, length - 1); break;
++	case 0x712: cta_hdmi_audio_block(x + 2, length - 1); break;
++	case 0x713: cta_rcdb(x + 2, length - 1); break;
++	case 0x714: cta_sldb(x + 2, length - 1); break;
++	case 0x720: cta_ifdb(x + 2, length - 1); break;
++	case 0x778: 
++		cta_hf_eeodb(x + 2, length - 1);
++		// This must be the first CTA block
++		if (cta_block_number != 0)
++			fail("Block starts at a wrong offset\n");
+ 		break;
+-	default: {
+-		unsigned tag = (*x & 0xe0) >> 5;
+-		unsigned length = *x & 0x1f;
+-		printf("  Unknown CTA tag 0x%02x, length %u\n", tag, length);
+-		hex_block("    ", x + 1, length);
+-		data_block.clear();
+-		warn("Unknown CTA Data Block %u\n", tag);
++	case 0x779:
++		if (previous_cta_tag != (0x003|kOUI_HDMI))
++			fail("HDMI Forum SCDB did not immediately follow the HDMI VSDB\n");
++		if (have_hf_scdb || have_hf_vsdb)
++			fail("Duplicate HDMI Forum VSDB/SCDB\n");
++		if (x[2] || x[3])
++			printf("    Non-zero SCDB reserved fields!\n");
++		cta_hf_scdb(x + 4, length - 3);
++		have_hf_scdb = true;
+ 		break;
++	default:
++		warn("Unknown %s\n", data_block.c_str());
++		hex_block("    ", x + 1 + extended + (ouinum ? 3 : 0), length - (extended + (ouinum ? 3 : 0)));
+ 	}
+-	}
+-	first_block = 0;
+-	last_block_was_hdmi_vsdb = 0;
++	cta_block_number++;
++	previous_cta_tag = tag;
  }
+ 
+ void edid_state::preparse_cta_block(const unsigned char *x)
 -- 
 2.21.0 (Apple Git-122.2)
 
