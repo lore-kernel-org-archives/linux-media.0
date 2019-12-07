@@ -1,130 +1,78 @@
-Return-Path: <SRS0=nexb=Z4=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=CUCK=Z5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49D42C43603
-	for <linux-media@archiver.kernel.org>; Fri,  6 Dec 2019 21:59:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DED0C2BD09
+	for <linux-media@archiver.kernel.org>; Sat,  7 Dec 2019 01:30:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1D27721835
-	for <linux-media@archiver.kernel.org>; Fri,  6 Dec 2019 21:59:24 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EzYr1iSS"
+	by mail.kernel.org (Postfix) with ESMTP id 7E2BE2173E
+	for <linux-media@archiver.kernel.org>; Sat,  7 Dec 2019 01:30:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726413AbfLFV7U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Dec 2019 16:59:20 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:42035 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbfLFV7U (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Dec 2019 16:59:20 -0500
-Received: by mail-pj1-f65.google.com with SMTP id o11so3299886pjp.9
-        for <linux-media@vger.kernel.org>; Fri, 06 Dec 2019 13:59:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QRBpOBKrG8bdYcDSxvL4Ncie9tUQ46zSSXSNCQ/ptww=;
-        b=EzYr1iSS/43KvcyAMRF5WxsPmvM4P1WVDXs7cB8RszXAhHNAjjyGHW/9wXHa9GPFQK
-         bDmsZ95dWgvAF9DuNC+7HmT/LvTWpQJgDVj/rXk7/pSR41xYMtdKzceoobvKuFhN6moE
-         NHMoCj5RV1oxu3FJSS20U1Pdlhq/Ofzn0iEL+5tlvNfpAS/fB87A+u8G3kNKSXqzjZ+f
-         TK0RKqxKzGLEtC03aNXRmB1O1lgd9pK6siizuiqBb8wNHcquEr/Z/cNaT8cKApRNNX7u
-         Si4FRbR12limo6gRjCIpIhFJ7v7F3W0uT6jkx0xWxxxLFUirLMeMiYrAgwVK1merHRKX
-         COzA==
+        id S1726407AbfLGBaB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Dec 2019 20:30:01 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:38680 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726371AbfLGBaB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Dec 2019 20:30:01 -0500
+Received: by mail-il1-f200.google.com with SMTP id o18so6681303ilb.5
+        for <linux-media@vger.kernel.org>; Fri, 06 Dec 2019 17:30:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QRBpOBKrG8bdYcDSxvL4Ncie9tUQ46zSSXSNCQ/ptww=;
-        b=kgaSC7I2oiZJKsnUH5lCD2lSa4W3knz+wTJGy/epx8AP/f8rMQImUNsaF9LudfzIIF
-         3X530/aFKQaX8eyUFrHWK3BAUsfHr/g7+cwxuSTwMnb1+T+4Ttf3pRLap3PK81DAllOl
-         0OL9zL78b3xYXR7iE/SdyuzOJGmY8qw6uAEzgoK9vX59Y1Er6SKzmaOY5eVE2jvjtAI8
-         a8KtkOvZEbXfYdc/84man0lGzGq3yeRQECWLYWU0ko6w1JetHNFKpHPx/HM60XqmbZlr
-         ItUjAAxLFqLeBUAoIKqPbZLQUxKqjImbk1DGhh3VDxmVhQH99oWHwKTtf1HjRv9jK5Fy
-         tAyA==
-X-Gm-Message-State: APjAAAXCRdjB4HU+bsaFwXf3QCBjLjlpWUk6BEzCO69vMLLMBkPeEOQN
-        +HS3cu2nkwyNW2rdEyCIGv506yr6jU/TT/+He7zeAg==
-X-Google-Smtp-Source: APXvYqwHYwaMTzN123flVCAXr3GzbWAtJi/KnOVS9rjd9DBDXsUkXHvlLkq8qqed8tGFJHZSrIRI79QQhFD4ssPrKxc=
-X-Received: by 2002:a17:902:9f91:: with SMTP id g17mr3377709plq.179.1575669559051;
- Fri, 06 Dec 2019 13:59:19 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=HNhXiE6HePkhSCnwQ3V/NPWMZ1Hpm58RJpGnE6ed2EU=;
+        b=BT6sQirUbg8PGgN8zUFlhHmOOpKaCcJUdl1Ue4xMXkgN9vWkOOkDOzQNoLkh+3lWsg
+         Dj3llfu32RB+ImzrBgy4aV+GZ9UtKVgxZnBoiUB9SQ0rGJa/ivm5bf6Ee5Hw/ydV5qBl
+         wen0poGN8ZZY48CIiMk6pL9SXhh3kdGjI24tuQB3MAorxzIQTK2lDk2elV23QJBaV0CP
+         hGfTbFgx3DGSsUIjh07sLsRmuDWaYZUXfQ0Qg5jTPBq0vy9XZUV996v3dpsfmvbXgi+R
+         97xELd6zm/7Pr7RTYvDaauKNVUdfhbyPfHuzzm3ZJaUWPGjtS5fXh9TZhGSS4YI7Y5af
+         S04g==
+X-Gm-Message-State: APjAAAXAhjHzfDvVNK2jBvOjeT6GTeTVj+jx12Ze0oPBZxA0otS5/Nyu
+        fPczdnDKPMe/XPSJOs/BMbgHnjMF+2rVTNALNkB3zBoL+1s/
+X-Google-Smtp-Source: APXvYqxz9KBPD51VM3KJ5gnxGMtw4DWz8VDuRdv+40oCBMIhFEk1AOET+26mMuYYk8RExBPPeHQ+h/6hZNb57eiZ5RaZKKFaaCCq
 MIME-Version: 1.0
-References: <20191024201240.49063-1-natechancellor@gmail.com> <20191105045907.26123-1-natechancellor@gmail.com>
-In-Reply-To: <20191105045907.26123-1-natechancellor@gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 6 Dec 2019 13:59:07 -0800
-Message-ID: <CAKwvOdndvDuOFtPrdSuN=1nRpbc-T9qHKzQoVZ4JaAedKe9_SQ@mail.gmail.com>
-Subject: Re: [PATCH v2] media: v4l2-device.h: Explicitly compare grpmask to
- zero in v4l2_device_mask_call_all
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Nathan Chancellor <natechancellor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a92:9f9c:: with SMTP id z28mr17483689ilk.239.1575682200860;
+ Fri, 06 Dec 2019 17:30:00 -0800 (PST)
+Date:   Fri, 06 Dec 2019 17:30:00 -0800
+In-Reply-To: <00000000000057e614057a9abcd3@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dc7fc70599131995@google.com>
+Subject: Re: KASAN: null-ptr-deref Read in refcount_sub_and_test_checked (2)
+From:   syzbot <syzbot+0468b73bdbb243217224@syzkaller.appspotmail.com>
+To:     hverkuil-cisco@xs4all.nl, kyungmin.park@samsung.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        m.szyprowski@samsung.com, mchehab+samsung@kernel.org,
+        mchehab@kernel.org, pawel@osciak.com,
+        syzkaller-bugs@googlegroups.com, tfiga@chromium.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Bumping for review.
+syzbot suspects this bug was fixed by commit:
 
-On Mon, Nov 4, 2019 at 9:00 PM Nathan Chancellor
-<natechancellor@gmail.com> wrote:
->
-> When building with Clang + -Wtautological-constant-compare, several of
-> the ivtv drivers warn along the lines of:
->
->  drivers/media/pci/cx18/cx18-driver.c:1005:21: warning: converting the
->  result of '<<' to a boolean always evaluates to true
->  [-Wtautological-constant-compare]
->                          cx18_call_hw(cx, CX18_HW_GPIO_RESET_CTRL,
->                                          ^
->  drivers/media/pci/cx18/cx18-cards.h:18:37: note: expanded from macro
->  'CX18_HW_GPIO_RESET_CTRL'
->  #define CX18_HW_GPIO_RESET_CTRL         (1 << 6)
->                                            ^
->  1 warning generated.
->
-> This is because the shift operation is implicitly converted to a boolean
-> in v4l2_device_mask_call_all before being negated. This can be solved by
-> just comparing the mask result to 0 explicitly so that there is no
-> boolean conversion.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/752
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-> ---
->
-> v1 -> v2: https://lore.kernel.org/lkml/20191024201240.49063-1-natechancellor@gmail.com/
->
-> * Fix typo in commit message
-> * Add Nick's Reviewed-by.
->
->  include/media/v4l2-device.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/include/media/v4l2-device.h b/include/media/v4l2-device.h
-> index e0b8f2602670..8564b3227887 100644
-> --- a/include/media/v4l2-device.h
-> +++ b/include/media/v4l2-device.h
-> @@ -431,8 +431,8 @@ static inline bool v4l2_device_supports_requests(struct v4l2_device *v4l2_dev)
->                 struct v4l2_subdev *__sd;                               \
->                                                                         \
->                 __v4l2_device_call_subdevs_p(v4l2_dev, __sd,            \
-> -                       !(grpmsk) || (__sd->grp_id & (grpmsk)), o, f ,  \
-> -                       ##args);                                        \
-> +                       (grpmsk) == 0 || (__sd->grp_id & (grpmsk)), o,  \
-> +                       f , ##args);                                    \
->         } while (0)
->
->  /**
-> --
-> 2.24.0
->
+commit 62dcb4f41836bd3c44b5b651bb6df07ea4cb1551
+Author: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Date:   Thu Nov 8 12:23:37 2018 +0000
 
+     media: vb2: check memory model for VIDIOC_CREATE_BUFS
 
--- 
-Thanks,
-~Nick Desaulniers
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14972e41e00000
+start commit:   ccda4af0 Linux 4.20-rc2
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4a0a89f12ca9b0f5
+dashboard link: https://syzkaller.appspot.com/bug?extid=0468b73bdbb243217224
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16d20893400000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=118f5a2b400000
+
+If the result looks correct, please mark the bug fixed by replying with:
+
+#syz fix: media: vb2: check memory model for VIDIOC_CREATE_BUFS
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
