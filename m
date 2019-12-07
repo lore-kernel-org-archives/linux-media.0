@@ -2,174 +2,125 @@ Return-Path: <SRS0=CUCK=Z5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F3B7C43603
-	for <linux-media@archiver.kernel.org>; Sat,  7 Dec 2019 04:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CBE3C43603
+	for <linux-media@archiver.kernel.org>; Sat,  7 Dec 2019 10:41:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 062C121835
-	for <linux-media@archiver.kernel.org>; Sat,  7 Dec 2019 04:55:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="VvAsHDsN"
+	by mail.kernel.org (Postfix) with ESMTP id 2C6E224670
+	for <linux-media@archiver.kernel.org>; Sat,  7 Dec 2019 10:41:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726465AbfLGEzm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Dec 2019 23:55:42 -0500
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:36109 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726400AbfLGEzm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 6 Dec 2019 23:55:42 -0500
-Received: from localhost ([IPv6:2001:983:e9a7:1:1de4:8bca:2810:78bf])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id dS82i9agu85rjdS83iCAtI; Sat, 07 Dec 2019 05:55:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1575694540; bh=8klbDElybqBGmBBEKLJQQpBaTCngYEBK77deK0jmCO8=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=VvAsHDsNpy//66BIhxo55+1uxjfef6ete8hbdB6KAPan92lcT60LFnJEAp/L1W7XY
-         Qq2ejdtJS0yVmLfl+By7ARKbJeW/G+6pn8O8uStewakVWCXdQFekJzPIfRsRgtZkn6
-         ENvfYA6Khzr94gYuIFXcKcE++XEvEfJ+TSaLLSIa9X6BB7rSls6dRqdLXbmWbAdXiS
-         mT0NXQ0Ui6v/UjBxF5IdDghck7ypul44qCssedcBw0dCFvFuoI06NsdSajN/WaIVq9
-         MTYZM6+V74oLo9BOWxSfdQZrajVMPof6BrkfEDiZrcu7o6Ni11IdWxgOA2E2KLCcrW
-         1+2LwEkScXLiA==
-Message-ID: <db79ce4ae4eec4fcbb34dafcdde86be5@smtp-cloud8.xs4all.net>
-Date:   Sat, 07 Dec 2019 05:55:38 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfJocvArkXuPBucHUAyDDE9oscVNnaVKBBUslLYFZFISD5YYrGFiQ7/fQ0P9OdlpueJFRDI7yF0ykPGdZ8L0+f9OoY7q6tBlbbFOoU2DUyxDueKCKpPCg
- nmFXdD9hLsMvao0P+7NWY0tUXvAt5vufEewMsSYJlECmfJdcjQU3G3n07muFlPCUAMg2DqXl57q/FK+QD/1eLftjP+zVMDGdivLq6t4/qBxrc+rHohONXYUj
+        id S1726289AbfLGKli (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 7 Dec 2019 05:41:38 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:33448 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725992AbfLGKli (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 7 Dec 2019 05:41:38 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id A4916283C82
+Message-ID: <79cb93108abc1f0a11f41ad3ab02cc5535b3e784.camel@collabora.com>
+Subject: Re: [PATCH v2] media: v4l2-device.h: Explicitly compare grpmask to
+ zero in v4l2_device_mask_call_all
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Nathan Chancellor <natechancellor@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Nick Desaulniers <ndesaulniers@google.com>
+Date:   Sat, 07 Dec 2019 07:41:27 -0300
+In-Reply-To: <20191105045907.26123-1-natechancellor@gmail.com>
+References: <20191024201240.49063-1-natechancellor@gmail.com>
+         <20191105045907.26123-1-natechancellor@gmail.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+(Adding Hans)
 
-Results of the daily build of media_tree:
+Hi Nathan, Nick,
 
-date:			Sat Dec  7 05:00:13 CET 2019
-media-tree git hash:	dca6b3733a4a46e63603496f544ece8ace541fde
-media_build git hash:	efba365ba11b958a6bf6fb4b397942f9461cefca
-v4l-utils git hash:	cb0ec2fd537333a62fa0d8e4acded7442851e956
-edid-decode git hash:	77700d6171b5c7eb4145de3283d36a033ab3322d
-gcc version:		i686-linux-gcc (GCC) 9.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.1-rc1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 6903fe8f5101fc43440b3259290c97d2dd51733d
-host hardware:		x86_64
-host os:		5.2.0-3-amd64
+Thanks for the patch (and the patience).
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4-i686: OK
-linux-5.4-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: WARNINGS: Final Summary: 2793, Succeeded: 2793, Failed: 0, Warnings: 2
-sparse: WARNINGS
-smatch: WARNINGS
+On Mon, 2019-11-04 at 21:59 -0700, Nathan Chancellor wrote:
+> When building with Clang + -Wtautological-constant-compare, several of
+> the ivtv drivers warn along the lines of:
+> 
 
-Detailed results are available here:
+Nitpick: s/ivtv/ivtv and cx18
 
-http://www.xs4all.nl/~hverkuil/logs/Saturday.log
+>  drivers/media/pci/cx18/cx18-driver.c:1005:21: warning: converting the
+>  result of '<<' to a boolean always evaluates to true
+>  [-Wtautological-constant-compare]
+>                          cx18_call_hw(cx, CX18_HW_GPIO_RESET_CTRL,
+>                                          ^
+>  drivers/media/pci/cx18/cx18-cards.h:18:37: note: expanded from macro
+>  'CX18_HW_GPIO_RESET_CTRL'
+>  #define CX18_HW_GPIO_RESET_CTRL         (1 << 6)
+>                                            ^
+>  1 warning generated.
+> 
+> This is because the shift operation is implicitly converted to a boolean
+> in v4l2_device_mask_call_all before being negated. This can be solved by
+> just comparing the mask result to 0 explicitly so that there is no
+> boolean conversion.
+> 
 
-Detailed regression test results are available here:
+Perhaps it's interesting to mention the reason for this change,
+which you mentioned as a comment before:
 
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
+"""
+ The ultimate goal is to get
+-Wtautological-compare enabled because there are several subwarnings
+that would be helpful to have and right now they are all disabled.
+"""
 
-Full logs are available here:
+> Link: https://github.com/ClangBuiltLinux/linux/issues/752
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> ---
+> 
+> v1 -> v2: https://lore.kernel.org/lkml/20191024201240.49063-1-natechancellor@gmail.com/
+> 
+> * Fix typo in commit message
+> * Add Nick's Reviewed-by.
+> 
+>  include/media/v4l2-device.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/media/v4l2-device.h b/include/media/v4l2-device.h
+> index e0b8f2602670..8564b3227887 100644
+> --- a/include/media/v4l2-device.h
+> +++ b/include/media/v4l2-device.h
+> @@ -431,8 +431,8 @@ static inline bool v4l2_device_supports_requests(struct v4l2_device *v4l2_dev)
+>  		struct v4l2_subdev *__sd;				\
+>  									\
+>  		__v4l2_device_call_subdevs_p(v4l2_dev, __sd,		\
+> -			!(grpmsk) || (__sd->grp_id & (grpmsk)), o, f ,	\
+> -			##args);					\
+> +			(grpmsk) == 0 || (__sd->grp_id & (grpmsk)), o,	\
+> +			f , ##args);					\
+>  	} while (0)
+>  
+>  /**
 
-http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
+The change is small enough and if it helps enabling helpful
+warnings, then it seems a good idea.
 
-The Media Infrastructure API from this daily build is here:
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 
-http://www.xs4all.nl/~hverkuil/spec/index.html
+For consistency, it would be good to also patch the other case(s).
+
+Thanks,
+Ezequiel
+
