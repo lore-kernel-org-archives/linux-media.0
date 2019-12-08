@@ -1,92 +1,100 @@
-Return-Path: <SRS0=CUCK=Z5=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=s4UQ=Z6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3A55C2D0C2
-	for <linux-media@archiver.kernel.org>; Sat,  7 Dec 2019 22:49:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B167DC43603
+	for <linux-media@archiver.kernel.org>; Sun,  8 Dec 2019 04:20:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7FD9D2467F
-	for <linux-media@archiver.kernel.org>; Sat,  7 Dec 2019 22:49:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1575758949;
-	bh=fQiHeTSkXa+q0MUHJbEeA+eMFm4vY8RORCB2PwtjnWI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ZU8Tqcer2/PnlEjk8ZfbfJsOVlHgE8I74C2pm8I/KkFdtWl3LlSK5hQr8Jr/TuZHZ
-	 I3wIFS4YuMItdxHUnohtaai34/4nZdf9B6kVlogDJnL93GH1EJZUKy/FwSspwQqfqF
-	 J4UP1q3jG5ldNSUBG+2HUX1dvxoOzx7zlUJ0FyXk=
+	by mail.kernel.org (Postfix) with ESMTP id 7F9FF20692
+	for <linux-media@archiver.kernel.org>; Sun,  8 Dec 2019 04:20:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726834AbfLGWsP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 7 Dec 2019 17:48:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43236 "EHLO mail.kernel.org"
+        id S1726465AbfLHEU1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 7 Dec 2019 23:20:27 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:35860 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726810AbfLGWsN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 7 Dec 2019 17:48:13 -0500
-Received: from ziggy.de (unknown [95.169.229.25])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1335524681;
-        Sat,  7 Dec 2019 22:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575758892;
-        bh=fQiHeTSkXa+q0MUHJbEeA+eMFm4vY8RORCB2PwtjnWI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ATvc5XgEKBnyQmykQVFhL2x6QB9sfUZk+OXJI6aKl618V6PDw+zl7yuV1BOxRuwCQ
-         0gkAd6WF+8i5Mh/qxHLsA0m++R3o4tTUw+SQb5IKfBzhrZtB/b6bnhS1UXSr/yJmNF
-         3lPiABM6zPffZVMJWlz3Nx9BzHhaXo/5GSVYi/qg=
-From:   matthias.bgg@kernel.org
-To:     robh+dt@kernel.org, mark.rutland@arm.com, ck.hu@mediatek.com,
-        p.zabel@pengutronix.de, airlied@linux.ie, mturquette@baylibre.com,
-        sboyd@kernel.org, ulrich.hecht+renesas@gmail.com,
-        laurent.pinchart@ideasonboard.com, enric.balletbo@collabora.com
-Cc:     sean.wang@mediatek.com, sean.wang@kernel.org,
-        rdunlap@infradead.org, wens@csie.org, hsinyi@chromium.org,
-        frank-w@public-files.de, drinkcat@chromium.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, mbrugger@suse.com,
-        matthias.bgg@kernel.org
-Subject: [resend PATCH v6 02/12] dt-bindings: mediatek: Add compatible for mt7623
-Date:   Sat,  7 Dec 2019 23:47:30 +0100
-Message-Id: <20191207224740.24536-3-matthias.bgg@kernel.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191207224740.24536-1-matthias.bgg@kernel.org>
-References: <20191207224740.24536-1-matthias.bgg@kernel.org>
+        id S1726421AbfLHEU1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 7 Dec 2019 23:20:27 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1ido3G-003vHo-Nc; Sun, 08 Dec 2019 04:20:10 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1ido4L-0004ec-02; Sun, 08 Dec 2019 04:21:17 +0000
+Date:   Sun, 8 Dec 2019 04:21:16 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <2084199844.23.1575778876989.JavaMail.jenkins@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #2841
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Matthias Brugger <mbrugger@suse.com>
+See <https://builder.linuxtv.org/job/media-build/2841/display/redirect>
 
-MediaTek mt7623 uses the mt2701 binings as fallback.
-Document this in the binding description.
+Changes:
 
-Signed-off-by: Matthias Brugger <mbrugger@suse.com>
----
- .../devicetree/bindings/display/mediatek/mediatek,disp.txt      | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
-index c71c8a4b73ff..a747895574f1 100644
---- a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
-+++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
-@@ -42,6 +42,8 @@ Required properties (all function blocks):
- 	"mediatek,<chip>-disp-od"		- overdrive
- 	"mediatek,<chip>-mmsys", "syscon"	- provide clocks and components management
-   the supported chips are mt2701, mt2712 and mt8173.
-+  For mt7623, compatible must be:
-+        "mediatek,mt7623-<component>" , "mediatek,mt2701-<component>"
- 
- - reg: Physical base address and length of the function block register space
- - interrupts: The interrupt signal from the function block (required, except for
--- 
-2.24.0
+------------------------------------------
+Started by timer
+Running as SYSTEM
+Building remotely on slave1 in workspace <https://builder.linuxtv.org/job/media-build/ws/>
+No credentials specified
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url git://linuxtv.org/media_build.git # timeout=10
+Fetching upstream changes from git://linuxtv.org/media_build.git
+ > git --version # timeout=10
+ > git fetch --tags --force --progress -- git://linuxtv.org/media_build.git +refs/heads/*:refs/remotes/origin/*
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+Checking out Revision efba365ba11b958a6bf6fb4b397942f9461cefca (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f efba365ba11b958a6bf6fb4b397942f9461cefca
+Commit message: "VIDEO_HI556 needs probe_new"
+ > git rev-list --no-walk efba365ba11b958a6bf6fb4b397942f9461cefca # timeout=10
+[media-build] $ /bin/sh -xe /tmp/jenkins10986090624908030724.sh
++ ./build
+Checking if the needed tools for Debian GNU/Linux 10 (buster) are available
+Needed package dependencies are met.
 
+************************************************************
+* This script will download the latest tarball and build it*
+* Assuming that your kernel is compatible with the latest  *
+* drivers. If not, you'll need to add some extra backports,*
+* ./backports/<kernel> directory.                          *
+* It will also update this tree to be sure that all compat *
+* bits are there, to avoid compilation failures            *
+************************************************************
+************************************************************
+* All drivers and build system are under GPLv2 License     *
+* Firmware files are under the license terms found at:     *
+* http://www.linuxtv.org/downloads/firmware/               *
+* Please abort in the next 5 secs if you don't agree with  *
+* the license                                              *
+************************************************************
+
+Not aborted. It means that the licence was agreed. Proceeding...
+
+****************************
+Updating the building system
+****************************
+fatal: unable to connect to linuxtv.org:
+linuxtv.org[0: 130.149.80.248]: errno=Connection timed out
+
+Can't clone tree from linuxtv.org at ./build line 502
+Build step 'Execute shell' marked build as failure
