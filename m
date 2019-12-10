@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 481C9C2D0BF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:32:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 198C9C43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:32:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 12AA62073B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:32:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFF7922464
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:32:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576013564;
-	bh=aqwj88xl6FPJ4U9MmiU7+N9Oby5fcrFg6woKbKAen2I=;
+	s=default; t=1576013570;
+	bh=lLkoJQElicBxj4yEKTOq9Qs5dm4FLEJf01xJj+bPK+c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=eVKtyizEl08vkBr+lPi6dBNeuP0Xv5FpHU1UnnoqQV8JHhyoj6mwn68UIj5xTwWyO
-	 Wa+HkPny1pLDw8ebuL3FpYtpOvmPckVO1EMckY4h/uDygQmXUOnKd8b135j/qooxaJ
-	 2yk36WIuNMeFLxLBLp2LCSiG/rJESbjJYqxDLZoU=
+	b=fzD8nxhq+yoSWxVkrfuoNjbs3bSEOKutDXLacwAbn5kBcANFzpt572kLfFKYD7WEN
+	 kU4XKGp3K1ww5eNGTSlV4IRr0dkFf25uUBGq1DAmouMfWxkdMF7jm0O9D96uGebhol
+	 VvmCT2F+TcsAdOvj4D/L5z2BbHywVj4sCpPBbxRg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729333AbfLJVcm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:32:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36322 "EHLO mail.kernel.org"
+        id S1729481AbfLJVct (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:32:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36562 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729231AbfLJVck (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:32:40 -0500
+        id S1729440AbfLJVcs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:32:48 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 240B2207FF;
-        Tue, 10 Dec 2019 21:32:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 56019205C9;
+        Tue, 10 Dec 2019 21:32:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576013560;
-        bh=aqwj88xl6FPJ4U9MmiU7+N9Oby5fcrFg6woKbKAen2I=;
+        s=default; t=1576013568;
+        bh=lLkoJQElicBxj4yEKTOq9Qs5dm4FLEJf01xJj+bPK+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AKyfeaoAhB/gW9RjDdiYoNvQb8cQIwepV0JmpTndUp6kDVR5T5ry/mzXYrUOM7L+K
-         +fgW07YF7gm+94JFOKN0LLniulrun9/qb+thUCS/lf8VK+Nuee/mtZtXsADtEgAxQN
-         OsIBWVyFtcJl+qmdqvAhIKj5qUWJQUOz2EsUgSk8=
+        b=A1cAIwBhLRsjfGegIQT1yIL/O1d3UCUmq0bHENIpRioXz3ksQM3uWPUmXjVgLG17v
+         Fgi1JA9tAPuSTg6haPJDIqm79oqJdcBVklFjiJ9yfT341owHxwbwpmuUmX9N8Q1h3S
+         skS+ScV3EwKDXNfTh98ZX25+u+F0bTN6rGBuiSww=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Benoit Parrot <bparrot@ti.com>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Loic Poulain <loic.poulain@linaro.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 015/177] media: am437x-vpfe: Setting STD to current value is not an error
-Date:   Tue, 10 Dec 2019 16:29:39 -0500
-Message-Id: <20191210213221.11921-15-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 022/177] media: venus: core: Fix msm8996 frequency table
+Date:   Tue, 10 Dec 2019 16:29:46 -0500
+Message-Id: <20191210213221.11921-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
 References: <20191210213221.11921-1-sashal@kernel.org>
@@ -60,38 +60,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Benoit Parrot <bparrot@ti.com>
+From: Loic Poulain <loic.poulain@linaro.org>
 
-[ Upstream commit 13aa21cfe92ce9ebb51824029d89f19c33f81419 ]
+[ Upstream commit c690435ed07901737e5c007a65ec59f53b33eb71 ]
 
-VIDIOC_S_STD should not return an error if the value is identical
-to the current one.
-This error was highlighted by the v4l2-compliance test.
+In downstream driver, there are two frequency tables defined,
+one for the encoder and one for the decoder:
 
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+/* Encoders /
+<972000 490000000 0x55555555>, / 4k UHD @ 30 /
+<489600 320000000 0x55555555>, / 1080p @ 60 /
+<244800 150000000 0x55555555>, / 1080p @ 30 /
+<108000 75000000 0x55555555>, / 720p @ 30 */
+
+/* Decoders /
+<1944000 490000000 0xffffffff>, / 4k UHD @ 60 /
+< 972000 320000000 0xffffffff>, / 4k UHD @ 30 /
+< 489600 150000000 0xffffffff>, / 1080p @ 60 /
+< 244800 75000000 0xffffffff>; / 1080p @ 30 */
+
+It shows that encoder always needs a higher clock than decoder.
+
+In current venus driver, the unified frequency table is aligned
+with the downstream decoder table which causes performance issues
+in encoding scenarios. Fix that by aligning frequency table on
+worst case (encoding).
+
+Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/platform/qcom/venus/core.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index b05738a95e55e..809320decdeb2 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -1848,6 +1848,10 @@ static int vpfe_s_std(struct file *file, void *priv, v4l2_std_id std_id)
- 	if (!(sdinfo->inputs[0].capabilities & V4L2_IN_CAP_STD))
- 		return -ENODATA;
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 5b8350e87e750..60069869596cb 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -430,10 +430,11 @@ static const struct venus_resources msm8916_res = {
+ };
  
-+	/* if trying to set the same std then nothing to do */
-+	if (vpfe_standards[vpfe->std_index].std_id == std_id)
-+		return 0;
-+
- 	/* If streaming is started, return error */
- 	if (vb2_is_busy(&vpfe->buffer_queue)) {
- 		vpfe_err(vpfe, "%s device busy\n", __func__);
+ static const struct freq_tbl msm8996_freq_table[] = {
+-	{ 1944000, 490000000 },	/* 4k UHD @ 60 */
+-	{  972000, 320000000 },	/* 4k UHD @ 30 */
+-	{  489600, 150000000 },	/* 1080p @ 60 */
+-	{  244800,  75000000 },	/* 1080p @ 30 */
++	{ 1944000, 520000000 },	/* 4k UHD @ 60 (decode only) */
++	{  972000, 520000000 },	/* 4k UHD @ 30 */
++	{  489600, 346666667 },	/* 1080p @ 60 */
++	{  244800, 150000000 },	/* 1080p @ 30 */
++	{  108000,  75000000 },	/* 720p @ 30 */
+ };
+ 
+ static const struct reg_val msm8996_reg_preset[] = {
 -- 
 2.20.1
 
