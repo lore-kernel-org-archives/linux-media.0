@@ -2,95 +2,86 @@ Return-Path: <SRS0=nGM0=2A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07768C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60036C43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF80320652
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 33E1820828
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727462AbfLJN7J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 08:59:09 -0500
-Received: from mx2.suse.de ([195.135.220.15]:51723 "EHLO mx1.suse.de"
+        id S1727480AbfLJN7L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 08:59:11 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51728 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727370AbfLJN7D (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1727377AbfLJN7D (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 10 Dec 2019 08:59:03 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E494DAD85;
-        Tue, 10 Dec 2019 13:58:59 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 29E7AB19C;
+        Tue, 10 Dec 2019 13:59:00 +0000 (UTC)
 From:   Takashi Iwai <tiwai@suse.de>
 To:     linux-media@vger.kernel.org
 Cc:     alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Andrey Utkin <andrey.utkin@corp.bluecherry.net>,
-        Andy Walls <awalls@md.metrocast.net>,
-        Anton Sviridenko <anton@corp.bluecherry.net>,
-        Bluecherry Maintainers <maintainers@bluecherrydvr.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Ismael Luceno <ismael@iodev.co.uk>
-Subject: [PATCH for-5.6 00/14] media: ALSA PCM API updates
-Date:   Tue, 10 Dec 2019 14:58:35 +0100
-Message-Id: <20191210135849.15607-1-tiwai@suse.de>
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH for-5.6 11/14] media: cobalt: Drop superfluous ioctl PCM ops
+Date:   Tue, 10 Dec 2019 14:58:46 +0100
+Message-Id: <20191210135849.15607-12-tiwai@suse.de>
 X-Mailer: git-send-email 2.16.4
+In-Reply-To: <20191210135849.15607-1-tiwai@suse.de>
+References: <20191210135849.15607-1-tiwai@suse.de>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+snd_cobalt_pcm_ioctl() does nothing but calling the default handler.
+Now PCM core accepts NULL as the default ioctl ops, so let's drop
+altogether.
 
-this is a patch set to adapt the latest ALSA PCM API to media
-drivers.  Basically these are merely cleanups, as shown in diffstat,
-and there should be no functional changes.
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ drivers/media/pci/cobalt/cobalt-alsa-pcm.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-As the corresponding ALSA PCM API change is found in 5.5-rc1, please
-apply these on 5.5-rc1 or later.  Or if you prefer, I can merge them
-through sound tree, too.  Let me know.
-
-
-thanks,
-
-Takashi
-
-===
-
-Takashi Iwai (14):
-  media: solo6x10: Use managed buffer allocation
-  media: tw686x: Use managed buffer allocation
-  media: usbtv: Use managed buffer allocation
-  media: cobalt: Clean up ALSA PCM API usages
-  media: cx18: Clean up ALSA PCM API usages
-  media: ivtv: Clean up ALSA PCM API usages
-  media: cs231xx: Clean up ALSA PCM API usages
-  media: em28xx: Clean up ALSA PCM API usages
-  media: go7007: Clean up ALSA PCM API usages
-  media: tm6000: Clean up ALSA PCM API usages
-  media: cobalt: Drop superfluous ioctl PCM ops
-  media: cx18: Drop superfluous ioctl PCM ops
-  media: ivtv: Drop superfluous ioctl PCM ops
-  media: Drop superfluous ioctl PCM ops
-
- drivers/media/pci/cobalt/cobalt-alsa-pcm.c | 69 ++----------------------
- drivers/media/pci/cx18/cx18-alsa-pcm.c     | 75 +-------------------------
- drivers/media/pci/cx23885/cx23885-alsa.c   |  1 -
- drivers/media/pci/cx25821/cx25821-alsa.c   |  1 -
- drivers/media/pci/cx88/cx88-alsa.c         |  1 -
- drivers/media/pci/ivtv/ivtv-alsa-pcm.c     | 76 +-------------------------
- drivers/media/pci/saa7134/saa7134-alsa.c   |  1 -
- drivers/media/pci/solo6x10/solo6x10-g723.c | 24 ++-------
- drivers/media/pci/tw686x/tw686x-audio.c    | 16 +-----
- drivers/media/usb/cx231xx/cx231xx-audio.c  | 79 +--------------------------
- drivers/media/usb/em28xx/em28xx-audio.c    | 87 +-----------------------------
- drivers/media/usb/go7007/snd-go7007.c      | 25 ++-------
- drivers/media/usb/tm6000/tm6000-alsa.c     | 82 +---------------------------
- drivers/media/usb/usbtv/usbtv-audio.c      | 29 +---------
- 14 files changed, 19 insertions(+), 547 deletions(-)
-
+diff --git a/drivers/media/pci/cobalt/cobalt-alsa-pcm.c b/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
+index 77570a1127c9..9e7504e3cfd8 100644
+--- a/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
++++ b/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
+@@ -237,12 +237,6 @@ static int snd_cobalt_pcm_capture_close(struct snd_pcm_substream *substream)
+ 	return 0;
+ }
+ 
+-static int snd_cobalt_pcm_ioctl(struct snd_pcm_substream *substream,
+-		     unsigned int cmd, void *arg)
+-{
+-	return snd_pcm_lib_ioctl(substream, cmd, arg);
+-}
+-
+ static int snd_cobalt_pcm_prepare(struct snd_pcm_substream *substream)
+ {
+ 	struct snd_cobalt_card *cobsc = snd_pcm_substream_chip(substream);
+@@ -450,7 +444,6 @@ snd_pcm_uframes_t snd_cobalt_pcm_pb_pointer(struct snd_pcm_substream *substream)
+ static const struct snd_pcm_ops snd_cobalt_pcm_capture_ops = {
+ 	.open		= snd_cobalt_pcm_capture_open,
+ 	.close		= snd_cobalt_pcm_capture_close,
+-	.ioctl		= snd_cobalt_pcm_ioctl,
+ 	.prepare	= snd_cobalt_pcm_prepare,
+ 	.trigger	= snd_cobalt_pcm_trigger,
+ 	.pointer	= snd_cobalt_pcm_pointer,
+@@ -459,7 +452,6 @@ static const struct snd_pcm_ops snd_cobalt_pcm_capture_ops = {
+ static const struct snd_pcm_ops snd_cobalt_pcm_playback_ops = {
+ 	.open		= snd_cobalt_pcm_playback_open,
+ 	.close		= snd_cobalt_pcm_playback_close,
+-	.ioctl		= snd_cobalt_pcm_ioctl,
+ 	.prepare	= snd_cobalt_pcm_pb_prepare,
+ 	.trigger	= snd_cobalt_pcm_pb_trigger,
+ 	.pointer	= snd_cobalt_pcm_pb_pointer,
 -- 
 2.16.4
 
