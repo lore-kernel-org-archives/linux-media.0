@@ -7,48 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 845EDC00454
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:09:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A91EBC43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:12:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4FCB6246A3
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:09:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C191246B4
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576012197;
-	bh=P0/PbYyyDZsUZPAxA/S55Zz6WtpgAvbR5ywx9JD0LyA=;
+	s=default; t=1576012322;
+	bh=k7/LvRIg+FVurNHsLIAF9XCyp1knTfLcFUKzl/naCUw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=sszCZyavpXjircpIeETSj2k6a/kvvz2YY5PE7Skrg6qWmbth+Z9+HS1e57BscxfqG
-	 q3psLp3pe3aPoMrlW25+f35225wLjEwM2AYlHRCbF+9wtJyKJcTdW8BRcRy4J9var6
-	 g5NHkrK3vN8Quvh/e3vN12IKAYZEXWMGMtaUOr+A=
+	b=j/a2Lpxo86BdcwJL1NepR4S3WEBbJ0ObpkjDCzXMP4prSB8M1poNqVJuhaAVOzRK2
+	 GAxG/WaSkK+2vBXevpuBBZqlo2fshsZ9/31tx98pBiGKAsNbmrZ7ZqPe1M1iGStISp
+	 EDctomrk/ULOGa89zFecdNQ9c/VmiTQlGNybiWlA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728317AbfLJVJ4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:09:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59058 "EHLO mail.kernel.org"
+        id S1728888AbfLJVMB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:12:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35276 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728310AbfLJVJy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:09:54 -0500
+        id S1728883AbfLJVL7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:11:59 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB29C2077B;
-        Tue, 10 Dec 2019 21:09:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D3CAC24697;
+        Tue, 10 Dec 2019 21:11:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012193;
-        bh=P0/PbYyyDZsUZPAxA/S55Zz6WtpgAvbR5ywx9JD0LyA=;
+        s=default; t=1576012318;
+        bh=k7/LvRIg+FVurNHsLIAF9XCyp1knTfLcFUKzl/naCUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CIYBjoFHcAE2uhzaoxdt512OiD88B9Gr1mJW5GkXN9TXIFyNtFx2ZmDRBqs98194X
-         qHemsVnTRbm6e1C3PwNvYwDd4UqjYEKn7FGMedhYVuw0me4E7Yot3x7s9vU1sj1+se
-         7FxPeC0/vMK9drEopVLKMFKxX2AEWEYNYaY7dOcc=
+        b=UQw/wknF5eI4tOnh5/N+b0fQz6zDIJ4bkJAcq25ssWJweYRZmCF9qOlJomcqWH5s/
+         QEtKBlA4Au38torxja+IhfaZVpxhfAlnlZ8AgfgC11VgPZPld0JXBue6hkZajz+tgJ
+         Dy+sIrUOsZ79FCF9yEIc/+eDkMEImx6NWk9rB7Zo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+Cc:     Mike Isely <isely@pobox.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 148/350] media: ad5820: Define entity function
-Date:   Tue, 10 Dec 2019 16:04:13 -0500
-Message-Id: <20191210210735.9077-109-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 252/350] media: pvrusb2: Fix oops on tear-down when radio support is not present
+Date:   Tue, 10 Dec 2019 16:05:57 -0500
+Message-Id: <20191210210735.9077-213-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -61,38 +59,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ricardo Ribalda Delgado <ribalda@kernel.org>
+From: Mike Isely <isely@pobox.com>
 
-[ Upstream commit 801ef7c4919efba6b96b5aed1e72844ca69e26d3 ]
+[ Upstream commit 7f404ae9cf2a285f73b3c18ab9303d54b7a3d8e1 ]
 
-Without this patch, media_device_register_entity throws a warning:
+In some device configurations there's no radio or radio support in the
+driver.  That's OK, as the driver sets itself up accordingly.  However
+on tear-down in these caes it's still trying to tear down radio
+related context when there isn't anything there, leading to
+dereferences through a null pointer and chaos follows.
 
-dev_warn(mdev->dev,
-	 "Entity type for entity %s was not initialized!\n",
-	 entity->name);
+How this bug survived unfixed for 11 years in the pvrusb2 driver is a
+mystery to me.
 
-Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
-Acked-by: Pavel Machek <pavel@ucw.cz>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+[hverkuil: fix two checkpatch warnings]
+
+Signed-off-by: Mike Isely <isely@pobox.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ad5820.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/usb/pvrusb2/pvrusb2-v4l2.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ad5820.c b/drivers/media/i2c/ad5820.c
-index 925c171e77976..7a49651f4d1f2 100644
---- a/drivers/media/i2c/ad5820.c
-+++ b/drivers/media/i2c/ad5820.c
-@@ -309,6 +309,7 @@ static int ad5820_probe(struct i2c_client *client,
- 	v4l2_i2c_subdev_init(&coil->subdev, client, &ad5820_ops);
- 	coil->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 	coil->subdev.internal_ops = &ad5820_internal_ops;
-+	coil->subdev.entity.function = MEDIA_ENT_F_LENS;
- 	strscpy(coil->subdev.name, "ad5820 focus", sizeof(coil->subdev.name));
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
+index a34717eba409b..eaa08c7999d4f 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
+@@ -898,8 +898,12 @@ static void pvr2_v4l2_internal_check(struct pvr2_channel *chp)
+ 	pvr2_v4l2_dev_disassociate_parent(vp->dev_video);
+ 	pvr2_v4l2_dev_disassociate_parent(vp->dev_radio);
+ 	if (!list_empty(&vp->dev_video->devbase.fh_list) ||
+-	    !list_empty(&vp->dev_radio->devbase.fh_list))
++	    (vp->dev_radio &&
++	     !list_empty(&vp->dev_radio->devbase.fh_list))) {
++		pvr2_trace(PVR2_TRACE_STRUCT,
++			   "pvr2_v4l2 internal_check exit-empty id=%p", vp);
+ 		return;
++	}
+ 	pvr2_v4l2_destroy_no_lock(vp);
+ }
  
- 	ret = media_entity_pads_init(&coil->subdev.entity, 0, NULL);
+@@ -935,7 +939,8 @@ static int pvr2_v4l2_release(struct file *file)
+ 	kfree(fhp);
+ 	if (vp->channel.mc_head->disconnect_flag &&
+ 	    list_empty(&vp->dev_video->devbase.fh_list) &&
+-	    list_empty(&vp->dev_radio->devbase.fh_list)) {
++	    (!vp->dev_radio ||
++	     list_empty(&vp->dev_radio->devbase.fh_list))) {
+ 		pvr2_v4l2_destroy_no_lock(vp);
+ 	}
+ 	return 0;
 -- 
 2.20.1
 
