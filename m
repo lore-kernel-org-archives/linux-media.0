@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0975CC43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75242C2D0C4
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:05:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF775208C3
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4965320637
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:05:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576015431;
-	bh=l5jMXXmT6DdsbNBo5e77aKW1RJQJkZYzlzPywfCUMts=;
+	s=default; t=1576015504;
+	bh=YOu9UTBZrMAjtalmh5Wl+lzo8vM3nHebKvu8uuaFI7Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=XBZFBIiRbwj5uJ5YrQxfeOfRjh3U7YcX9X/EoLWAvOGQz7GvI1UodWZawcW1wJhPX
-	 uq16IH8kxcGvYqEOGb2Tl2ZWz2seZEgP5yn1po7EGKJiPqa8dkn0cYq6+njaSv/eo4
-	 8SxLgaiIhHU26iuT7rCPHYUjBrQodwkMB9485+ek=
+	b=qjQu8LcUn+jm4seNMtGq9FWRH0KDloA03Mj7uIV6BsYYJIzGTwzyUYgBhH8Yj9t5Y
+	 mURvjZ2z4Q1s3x+jji6Idsdswx8m92xTBRONAXAPrzlyx0xksQHiL5W/AJQ6bTN9W+
+	 sqhSx/JtQTw34H/7rRxGwEapIRMFS4tQtCSQxADY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728181AbfLJWDv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:03:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34176 "EHLO mail.kernel.org"
+        id S1728894AbfLJWFC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:05:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36096 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728088AbfLJWDt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:03:49 -0500
+        id S1727559AbfLJWFA (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:05:00 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 620B52073B;
-        Tue, 10 Dec 2019 22:03:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AC2D0208C3;
+        Tue, 10 Dec 2019 22:04:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576015428;
-        bh=l5jMXXmT6DdsbNBo5e77aKW1RJQJkZYzlzPywfCUMts=;
+        s=default; t=1576015499;
+        bh=YOu9UTBZrMAjtalmh5Wl+lzo8vM3nHebKvu8uuaFI7Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Agpo/fVNoZEGhMQtbZyc5r9EI1zc4jV11k5fJMptEU3PEVumptKdsch2s3lVkJ7E
-         xNnMiDcVwVnq4fcxjjKT1yBYl1m02XmlWrI5iB2WoMwKBoEjb/u10faOeqr250tmKQ
-         rekTWDZ9R7egJFD8od0vIym3g9RYJ3WSN6KTREjk=
+        b=REGXdGXG5Q0ZfUcY8E93nT0KgtGfFfE6KnzngQs26PL8YSv+am7wzZi9ah1zzyyKT
+         TAyjFexpUvPZZHdlaIGeGCJtwl57qwPnpbLpKOGmjm0bdiULasn7ubMZYJ4w0vUkHR
+         7oqOC8TVdEPpDO3yxLWl1GFFA0cCFBk7zl6eInng=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Benoit Parrot <bparrot@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+Cc:     Mike Isely <isely@pobox.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 039/130] media: ti-vpe: vpe: ensure buffers are cleaned up properly in abort cases
-Date:   Tue, 10 Dec 2019 17:01:30 -0500
-Message-Id: <20191210220301.13262-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 099/130] media: pvrusb2: Fix oops on tear-down when radio support is not present
+Date:   Tue, 10 Dec 2019 17:02:30 -0500
+Message-Id: <20191210220301.13262-99-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
 References: <20191210220301.13262-1-sashal@kernel.org>
@@ -60,124 +59,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Benoit Parrot <bparrot@ti.com>
+From: Mike Isely <isely@pobox.com>
 
-[ Upstream commit cf6acb73b050e98b5cc435fae0e8ae0157520410 ]
+[ Upstream commit 7f404ae9cf2a285f73b3c18ab9303d54b7a3d8e1 ]
 
-v4l2-compliance fails with this message:
+In some device configurations there's no radio or radio support in the
+driver.  That's OK, as the driver sets itself up accordingly.  However
+on tear-down in these caes it's still trying to tear down radio
+related context when there isn't anything there, leading to
+dereferences through a null pointer and chaos follows.
 
-   fail: v4l2-test-buffers.cpp(691): ret == 0
-   fail: v4l2-test-buffers.cpp(974): captureBufs(node, q, m2m_q,
-frame_count, true)
-   test MMAP: FAIL
+How this bug survived unfixed for 11 years in the pvrusb2 driver is a
+mystery to me.
 
-This caused the following Kernel Warning:
+[hverkuil: fix two checkpatch warnings]
 
-WARNING: CPU: 0 PID: 961 at
-drivers/media/v4l2-core/videobuf2-core.c:1658
-__vb2_queue_cancel+0x174/0x1d8
-...
-CPU: 0 PID: 961 Comm: v4l2-compliance Not tainted
-4.14.62-01720-g20ecd717e87a #6
-Hardware name: Generic DRA72X (Flattened Device Tree)
-Backtrace:
-[<c020b5bc>] (dump_backtrace) from [<c020b8a0>] (show_stack+0x18/0x1c)
- r7:00000009 r6:60070013 r5:00000000 r4:c1053824
-[<c020b888>] (show_stack) from [<c09232e8>] (dump_stack+0x90/0xa4)
-[<c0923258>] (dump_stack) from [<c022b740>] (__warn+0xec/0x104)
-  r7:00000009 r6:c0c0ad50 r5:00000000 r4:00000000
-[<c022b654>] (__warn) from [<c022b810>] (warn_slowpath_null+0x28/0x30)
-  r9:00000008 r8:00000000 r7:eced4808 r6:edbc9bac r5:eced4844
-r4:eced4808
-[<c022b7e8>] (warn_slowpath_null) from [<c0726f48>]
-(__vb2_queue_cancel+0x174/0x1d8)
-[<c0726dd4>] (__vb2_queue_cancel) from [<c0727648>]
-(vb2_core_queue_release+0x20/0x40)
-  r10:ecc7bd70 r9:00000008 r8:00000000 r7:edb73010 r6:edbc9bac
-r5:eced4844
-  r4:eced4808 r3:00000004
-[<c0727628>] (vb2_core_queue_release) from [<c0729528>]
-(vb2_queue_release+0x10/0x14)
-  r5:edbc9810 r4:eced4800
-[<c0729518>] (vb2_queue_release) from [<c0724d08>]
-(v4l2_m2m_ctx_release+0x1c/0x30)
-[<c0724cec>] (v4l2_m2m_ctx_release) from [<bf0e8f28>]
-(vpe_release+0x74/0xb0 [ti_vpe])
-  r5:edbc9810 r4:ed67a400
-[<bf0e8eb4>] (vpe_release [ti_vpe]) from [<c070fccc>]
-(v4l2_release+0x3c/0x80)
-  r7:edb73010 r6:ed176aa0 r5:edbc9868 r4:ed5119c0
-[<c070fc90>] (v4l2_release) from [<c033cf1c>] (__fput+0x8c/0x1dc)
-  r5:ecc7bd70 r4:ed5119c0
-[<c033ce90>] (__fput) from [<c033d0cc>] (____fput+0x10/0x14)
-  r10:00000000 r9:ed5119c0 r8:ece392d0 r7:c1059544 r6:ece38d80
-r5:ece392b4
-  r4:00000000
-[<c033d0bc>] (____fput) from [<c0246e00>] (task_work_run+0x98/0xb8)
-[<c0246d68>] (task_work_run) from [<c022f1d8>] (do_exit+0x170/0xa80)
-  r9:ece351fc r8:00000000 r7:ecde3f58 r6:ffffe000 r5:ece351c0
-r4:ece38d80
-[<c022f068>] (do_exit) from [<c022fb6c>] (do_group_exit+0x48/0xc4)
-  r7:000000f8
-[<c022fb24>] (do_group_exit) from [<c022fc00>]
-(__wake_up_parent+0x0/0x28)
-  r7:000000f8 r6:b6c6a798 r5:00000001 r4:00000001
-[<c022fbe8>] (SyS_exit_group) from [<c0207c80>]
-(ret_fast_syscall+0x0/0x4c)
-
-These warnings are caused by buffers which not properly cleaned
-up/release during an abort use case.
-
-In the abort cases the VPDMA desc buffers would still be mapped and the
-in-flight VB2 buffers would not be released properly causing a kernel
-warning from being generated by the videobuf2-core level.
-
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+Signed-off-by: Mike Isely <isely@pobox.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/media/usb/pvrusb2/pvrusb2-v4l2.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 5adafee98e4c4..7af66fe95a542 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -1435,9 +1435,6 @@ static irqreturn_t vpe_irq(int irq_vpe, void *data)
- 	 /* the previous dst mv buffer becomes the next src mv buffer */
- 	ctx->src_mv_buf_selector = !ctx->src_mv_buf_selector;
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
+index 4320bda9352df..e0413db267816 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
+@@ -915,8 +915,12 @@ static void pvr2_v4l2_internal_check(struct pvr2_channel *chp)
+ 	pvr2_v4l2_dev_disassociate_parent(vp->dev_video);
+ 	pvr2_v4l2_dev_disassociate_parent(vp->dev_radio);
+ 	if (!list_empty(&vp->dev_video->devbase.fh_list) ||
+-	    !list_empty(&vp->dev_radio->devbase.fh_list))
++	    (vp->dev_radio &&
++	     !list_empty(&vp->dev_radio->devbase.fh_list))) {
++		pvr2_trace(PVR2_TRACE_STRUCT,
++			   "pvr2_v4l2 internal_check exit-empty id=%p", vp);
+ 		return;
++	}
+ 	pvr2_v4l2_destroy_no_lock(vp);
+ }
  
--	if (ctx->aborting)
--		goto finished;
--
- 	s_vb = ctx->src_vbs[0];
- 	d_vb = ctx->dst_vb;
- 
-@@ -1502,6 +1499,9 @@ static irqreturn_t vpe_irq(int irq_vpe, void *data)
- 	ctx->src_vbs[0] = NULL;
- 	ctx->dst_vb = NULL;
- 
-+	if (ctx->aborting)
-+		goto finished;
-+
- 	ctx->bufs_completed++;
- 	if (ctx->bufs_completed < ctx->bufs_per_job && job_ready(ctx)) {
- 		device_run(ctx);
-@@ -2400,6 +2400,12 @@ static int vpe_release(struct file *file)
- 
- 	mutex_lock(&dev->dev_mutex);
- 	free_mv_buffers(ctx);
-+
-+	vpdma_unmap_desc_buf(dev->vpdma, &ctx->desc_list.buf);
-+	vpdma_unmap_desc_buf(dev->vpdma, &ctx->mmr_adb);
-+	vpdma_unmap_desc_buf(dev->vpdma, &ctx->sc_coeff_h);
-+	vpdma_unmap_desc_buf(dev->vpdma, &ctx->sc_coeff_v);
-+
- 	vpdma_free_desc_list(&ctx->desc_list);
- 	vpdma_free_desc_buf(&ctx->mmr_adb);
- 
+@@ -990,7 +994,8 @@ static int pvr2_v4l2_release(struct file *file)
+ 	kfree(fhp);
+ 	if (vp->channel.mc_head->disconnect_flag &&
+ 	    list_empty(&vp->dev_video->devbase.fh_list) &&
+-	    list_empty(&vp->dev_radio->devbase.fh_list)) {
++	    (!vp->dev_radio ||
++	     list_empty(&vp->dev_radio->devbase.fh_list))) {
+ 		pvr2_v4l2_destroy_no_lock(vp);
+ 	}
+ 	return 0;
 -- 
 2.20.1
 
