@@ -2,52 +2,53 @@ Return-Path: <SRS0=nGM0=2A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A19D1C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:23:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 415BFC00454
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:24:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7305820836
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:23:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0577E2073B
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:24:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576013037;
-	bh=4AT+BhJk04uH2Tcdyxf4+IP04hgHCY4zWu3WRrHazF0=;
+	s=default; t=1576013048;
+	bh=O+ShWLda6d+UTjYF4L4NDPbM6P7Zibhn1erEIHuUVjc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=UK35RVyPNMb6cHopR0chUdwZFRTBVgmwkb2IVVTEBjFDo6YvRkndQOKZ9n8/PjaEM
-	 NtaIcKGJeRACwO62BVTkC/KKrvqzhYcYA0qrM0k5lkoJDSEE1lmNY9UqybosTqzkjz
-	 qZDEuUnUA2RH6Qf2rOnYCSWStJYDk+LCTFc2vJN8=
+	b=uf4SZ46CMLPSAmCdzD9aO6A5hhZy/PZrZdnxeIB7j8eLm5txq9/fXmjB9OIFZUEK3
+	 SsOq6BkHNH/PdZ2o6PQ7+780Pg53eG2LqzKygioULenrQOioJUdClde8hJXIM+IVHv
+	 8fuEagQmDhjTt4v5tdauZWztEPch8dd//B3fJNEg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728656AbfLJVLC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:11:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33236 "EHLO mail.kernel.org"
+        id S1727077AbfLJVK5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:10:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33078 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728645AbfLJVLA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:11:00 -0500
+        id S1727441AbfLJVK4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:10:56 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9241B246B8;
-        Tue, 10 Dec 2019 21:10:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D465F246AF;
+        Tue, 10 Dec 2019 21:10:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012259;
-        bh=4AT+BhJk04uH2Tcdyxf4+IP04hgHCY4zWu3WRrHazF0=;
+        s=default; t=1576012255;
+        bh=O+ShWLda6d+UTjYF4L4NDPbM6P7Zibhn1erEIHuUVjc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fziFEhL0rEKr08sgpZ/w3Ha1aiwS8uDZgXMnOyWheyn+4ZKHTE5ZFMHt2Io6mZRX5
-         3ItYlQAVmcX1ztNAY5eYKyPjl2P13ve7A7pbntB/uoiK2nazvWtkzMcC5/oWF9B8Zd
-         wx3sdrX1BldUpVWCqsn3XqsuqHOWcVEt3hvsFlVA=
+        b=gSStA3FKgX1hOF3+eB21CDDUgO/6bHPTivUnOCzN8ic2qkDfNVF2xfVWWCB+sGcgw
+         xdrihmn9hpc2hZfO7XG5xXdAthKGeK+UN28sZqKjlO6r1BnDEGFFxVyOFFH2e+QnoA
+         /WBPLvsQ4Z98Tf/cA7uBUYtZ81mudS3whf57kOis=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Fabio Estevam <festevam@gmail.com>,
+Cc:     Kangjie Lu <kjlu@umn.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 205/350] media: staging/imx: Use a shorter name for driver
-Date:   Tue, 10 Dec 2019 16:05:10 -0500
-Message-Id: <20191210210735.9077-166-sashal@kernel.org>
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 202/350] media: rcar_drif: fix a memory disclosure
+Date:   Tue, 10 Dec 2019 16:05:07 -0500
+Message-Id: <20191210210735.9077-163-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -60,55 +61,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Fabio Estevam <festevam@gmail.com>
+From: Kangjie Lu <kjlu@umn.edu>
 
-[ Upstream commit ce22c6f242b6d7b5e0318da2c92b5b00b5bbc698 ]
+[ Upstream commit d39083234c60519724c6ed59509a2129fd2aed41 ]
 
-Currently v4l2-compliance tool returns the following output:
+"f->fmt.sdr.reserved" is uninitialized. As other peer drivers
+like msi2500 and airspy do, the fix initializes it to avoid
+memory disclosures.
 
-Compliance test for imx-media-captu device /dev/video0:
-
-Driver Info:
-        Driver name      : imx-media-captu
-        Card type        : imx-media-capture
-...
-
-The driver name string is limited to 16 characters, so provide
-a shorter name so that we can have a better output.
-
-While at it, use the same shorter name for driver and card.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Kangjie Lu <kjlu@umn.edu>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/imx/imx-media-capture.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/platform/rcar_drif.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index b33a07bc9105d..46576e32581f0 100644
---- a/drivers/staging/media/imx/imx-media-capture.c
-+++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -26,6 +26,8 @@
- #include <media/imx.h>
- #include "imx-media.h"
- 
-+#define IMX_CAPTURE_NAME "imx-capture"
-+
- struct capture_priv {
- 	struct imx_media_video_dev vdev;
- 
-@@ -69,8 +71,8 @@ static int vidioc_querycap(struct file *file, void *fh,
+diff --git a/drivers/media/platform/rcar_drif.c b/drivers/media/platform/rcar_drif.c
+index 608e5217ccd50..0f267a237b424 100644
+--- a/drivers/media/platform/rcar_drif.c
++++ b/drivers/media/platform/rcar_drif.c
+@@ -912,6 +912,7 @@ static int rcar_drif_g_fmt_sdr_cap(struct file *file, void *priv,
  {
- 	struct capture_priv *priv = video_drvdata(file);
+ 	struct rcar_drif_sdr *sdr = video_drvdata(file);
  
--	strscpy(cap->driver, "imx-media-capture", sizeof(cap->driver));
--	strscpy(cap->card, "imx-media-capture", sizeof(cap->card));
-+	strscpy(cap->driver, IMX_CAPTURE_NAME, sizeof(cap->driver));
-+	strscpy(cap->card, IMX_CAPTURE_NAME, sizeof(cap->card));
- 	snprintf(cap->bus_info, sizeof(cap->bus_info),
- 		 "platform:%s", priv->src_sd->name);
++	memset(f->fmt.sdr.reserved, 0, sizeof(f->fmt.sdr.reserved));
+ 	f->fmt.sdr.pixelformat = sdr->fmt->pixelformat;
+ 	f->fmt.sdr.buffersize = sdr->fmt->buffersize;
  
 -- 
 2.20.1
