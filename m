@@ -6,30 +6,29 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82440C00454
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2436DC2D0C4
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 58056214AF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01FBB214AF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727436AbfLJN7E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 08:59:04 -0500
-Received: from mx2.suse.de ([195.135.220.15]:51740 "EHLO mx1.suse.de"
+        id S1727441AbfLJN7F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 08:59:05 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51726 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727385AbfLJN7D (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 08:59:03 -0500
+        id S1727380AbfLJN7E (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 08:59:04 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 3668CB1A1;
+        by mx1.suse.de (Postfix) with ESMTP id 18DD7B157;
         Tue, 10 Dec 2019 13:59:00 +0000 (UTC)
 From:   Takashi Iwai <tiwai@suse.de>
 To:     linux-media@vger.kernel.org
 Cc:     alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>,
-        Andy Walls <awalls@md.metrocast.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH for-5.6 13/14] media: ivtv: Drop superfluous ioctl PCM ops
-Date:   Tue, 10 Dec 2019 14:58:48 +0100
-Message-Id: <20191210135849.15607-14-tiwai@suse.de>
+Subject: [PATCH for-5.6 10/14] media: tm6000: Clean up ALSA PCM API usages
+Date:   Tue, 10 Dec 2019 14:58:45 +0100
+Message-Id: <20191210135849.15607-11-tiwai@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191210135849.15607-1-tiwai@suse.de>
 References: <20191210135849.15607-1-tiwai@suse.de>
@@ -38,48 +37,150 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-snd_ivtv_pcm_ioctl() does nothing but calling the default handler.
-Now PCM core accepts NULL as the default ioctl ops, so let's drop
-altogether.
+With the recent change in ALSA PCM core, the whole open-coded vmalloc
+buffer handling in this driver can be dropped by replacing with the
+managed buffer allocation.
 
-Cc: Andy Walls <awalls@md.metrocast.net>
+Also, snd_tm6000_capture_free() is dropped since the check of
+stream_started flag makes no sense; hw_free callback is guaranteed to
+be called after the stream gets stopped.
+
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/media/pci/ivtv/ivtv-alsa-pcm.c | 13 -------------
- 1 file changed, 13 deletions(-)
+ drivers/media/usb/tm6000/tm6000-alsa.c | 81 +---------------------------------
+ 1 file changed, 1 insertion(+), 80 deletions(-)
 
-diff --git a/drivers/media/pci/ivtv/ivtv-alsa-pcm.c b/drivers/media/pci/ivtv/ivtv-alsa-pcm.c
-index cb281ce089f9..8f346d7da9c8 100644
---- a/drivers/media/pci/ivtv/ivtv-alsa-pcm.c
-+++ b/drivers/media/pci/ivtv/ivtv-alsa-pcm.c
-@@ -204,18 +204,6 @@ static int snd_ivtv_pcm_capture_close(struct snd_pcm_substream *substream)
+diff --git a/drivers/media/usb/tm6000/tm6000-alsa.c b/drivers/media/usb/tm6000/tm6000-alsa.c
+index d6c79c13b332..2bfa5abc1b49 100644
+--- a/drivers/media/usb/tm6000/tm6000-alsa.c
++++ b/drivers/media/usb/tm6000/tm6000-alsa.c
+@@ -10,7 +10,6 @@
+ #include <linux/interrupt.h>
+ #include <linux/usb.h>
+ #include <linux/slab.h>
+-#include <linux/vmalloc.h>
+ 
+ #include <linux/delay.h>
+ #include <sound/core.h>
+@@ -94,40 +93,6 @@ static int _tm6000_stop_audio_dma(struct snd_tm6000_card *chip)
  	return 0;
  }
  
--static int snd_ivtv_pcm_ioctl(struct snd_pcm_substream *substream,
--		     unsigned int cmd, void *arg)
+-static void dsp_buffer_free(struct snd_pcm_substream *substream)
 -{
--	struct snd_ivtv_card *itvsc = snd_pcm_substream_chip(substream);
--	int ret;
+-	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
 -
--	snd_ivtv_lock(itvsc);
--	ret = snd_pcm_lib_ioctl(substream, cmd, arg);
--	snd_ivtv_unlock(itvsc);
--	return ret;
+-	dprintk(2, "Freeing buffer\n");
+-
+-	vfree(substream->runtime->dma_area);
+-	substream->runtime->dma_area = NULL;
+-	substream->runtime->dma_bytes = 0;
 -}
 -
- static int snd_ivtv_pcm_prepare(struct snd_pcm_substream *substream)
- {
- 	struct snd_ivtv_card *itvsc = snd_pcm_substream_chip(substream);
-@@ -248,7 +236,6 @@ snd_pcm_uframes_t snd_ivtv_pcm_pointer(struct snd_pcm_substream *substream)
- static const struct snd_pcm_ops snd_ivtv_pcm_capture_ops = {
- 	.open		= snd_ivtv_pcm_capture_open,
- 	.close		= snd_ivtv_pcm_capture_close,
--	.ioctl		= snd_ivtv_pcm_ioctl,
- 	.prepare	= snd_ivtv_pcm_prepare,
- 	.trigger	= snd_ivtv_pcm_trigger,
- 	.pointer	= snd_ivtv_pcm_pointer,
+-static int dsp_buffer_alloc(struct snd_pcm_substream *substream, int size)
+-{
+-	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
+-
+-	dprintk(2, "Allocating buffer\n");
+-
+-	if (substream->runtime->dma_area) {
+-		if (substream->runtime->dma_bytes > size)
+-			return 0;
+-
+-		dsp_buffer_free(substream);
+-	}
+-
+-	substream->runtime->dma_area = vmalloc(size);
+-	if (!substream->runtime->dma_area)
+-		return -ENOMEM;
+-
+-	substream->runtime->dma_bytes = size;
+-
+-	return 0;
+-}
+-
+-
+ /****************************************************************************
+ 				ALSA PCM Interface
+  ****************************************************************************/
+@@ -268,40 +233,6 @@ static int tm6000_fillbuf(struct tm6000_core *core, char *buf, int size)
+ 	return 0;
+ }
+ 
+-/*
+- * hw_params callback
+- */
+-static int snd_tm6000_hw_params(struct snd_pcm_substream *substream,
+-			      struct snd_pcm_hw_params *hw_params)
+-{
+-	int size, rc;
+-
+-	size = params_period_bytes(hw_params) * params_periods(hw_params);
+-
+-	rc = dsp_buffer_alloc(substream, size);
+-	if (rc < 0)
+-		return rc;
+-
+-	return 0;
+-}
+-
+-/*
+- * hw free callback
+- */
+-static int snd_tm6000_hw_free(struct snd_pcm_substream *substream)
+-{
+-	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
+-	struct tm6000_core *core = chip->core;
+-
+-	if (atomic_read(&core->stream_started) > 0) {
+-		atomic_set(&core->stream_started, 0);
+-		schedule_work(&core->wq_trigger);
+-	}
+-
+-	dsp_buffer_free(substream);
+-	return 0;
+-}
+-
+ /*
+  * prepare callback
+  */
+@@ -369,14 +300,6 @@ static snd_pcm_uframes_t snd_tm6000_pointer(struct snd_pcm_substream *substream)
+ 	return chip->buf_pos;
+ }
+ 
+-static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
+-					     unsigned long offset)
+-{
+-	void *pageptr = subs->runtime->dma_area + offset;
+-
+-	return vmalloc_to_page(pageptr);
+-}
+-
+ /*
+  * operators
+  */
+@@ -384,12 +307,9 @@ static const struct snd_pcm_ops snd_tm6000_pcm_ops = {
+ 	.open = snd_tm6000_pcm_open,
+ 	.close = snd_tm6000_close,
+ 	.ioctl = snd_pcm_lib_ioctl,
+-	.hw_params = snd_tm6000_hw_params,
+-	.hw_free = snd_tm6000_hw_free,
+ 	.prepare = snd_tm6000_prepare,
+ 	.trigger = snd_tm6000_card_trigger,
+ 	.pointer = snd_tm6000_pointer,
+-	.page = snd_pcm_get_vmalloc_page,
+ };
+ 
+ /*
+@@ -459,6 +379,7 @@ static int tm6000_audio_init(struct tm6000_core *dev)
+ 	strscpy(pcm->name, "Trident TM5600/60x0", sizeof(pcm->name));
+ 
+ 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_tm6000_pcm_ops);
++	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
+ 
+ 	INIT_WORK(&dev->wq_trigger, audio_trigger);
+ 	rc = snd_card_register(card);
 -- 
 2.16.4
 
