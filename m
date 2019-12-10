@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D575C00454
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D51CC43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:46:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D22CE205C9
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:45:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 419DF208C3
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014349;
-	bh=mvXvOd2QmF66LP5aLAmLb7idpOcK3Y9vW51ob+koF4I=;
+	s=default; t=1576014372;
+	bh=231WITj2uu7iIYUjSAXepNNdPwMP5eE8URFBi3K2M2w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=O9Asv4ZoyjreZWy9jM2WA9bZ47YxP6/BLdERimQP74ifaSn2z2DomDlVE3+i3hOGs
-	 wJe3jXykCs/j1QMaKewHa/QKZj3jgpy583Z2grwCLUddQwU+KvZIowKKVwnje2wM/t
-	 yIG5a2bQGmQeAZYv4+p1KcY9rKw2Kk5NS52sZQYk=
+	b=c6nExUvj7KLIXVHT+veMwoNLpj1u5T1DlsZt7Hm2D7p3Br9txZDjMSstZBwci+wT6
+	 samHQsJeSfX57hYu/UyHq3VEWhGuNQ4v0tNz/NMb6lzCMspjQhF6CkiKb1HC8HvzT+
+	 TTyOsNgo/uyb6QLp1qW9XgfA3dPyTBhwixyVJ9oM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728579AbfLJVps (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:45:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36766 "EHLO mail.kernel.org"
+        id S1729420AbfLJVcq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:32:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36470 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728133AbfLJVcy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:32:54 -0500
+        id S1729400AbfLJVcq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:32:46 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8F684207FF;
-        Tue, 10 Dec 2019 21:32:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DC71224655;
+        Tue, 10 Dec 2019 21:32:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576013574;
-        bh=mvXvOd2QmF66LP5aLAmLb7idpOcK3Y9vW51ob+koF4I=;
+        s=default; t=1576013565;
+        bh=231WITj2uu7iIYUjSAXepNNdPwMP5eE8URFBi3K2M2w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XKH1RvXSqaA+mycOTuGr+JYX+caiY9YA2jL2SHex3M+l1121CFt7L/bmDZVCSfDU4
-         VRm0QppHgH3cdfutLapeoOf5PWxZDlh/gKmahRboff23uFmXlyrZHVRBPUpe2DK1Tp
-         OvzafCk3DQiB62/7Vl8BR2pRbyGpiA28KOk0haP0=
+        b=0XY0Nvy6y0sZMC8filWQ1H1sTnQuNPwue2xRy1KWsZIllIiIMt73ggi1KcCHjujWz
+         b+IoVnSpL/UWjk0rBqDb/xjWt3PsoJkg/KH8H3z/qeygaFw5N1qRWVa9vYftpOl5kq
+         i3TCdHWI/67BpAuu25Yty99ekK+8I2t+JHlyyP0U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 027/177] media: venus: Fix occasionally failures to suspend
-Date:   Tue, 10 Dec 2019 16:29:51 -0500
-Message-Id: <20191210213221.11921-27-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 020/177] media: ov6650: Fix stored crop rectangle not in sync with hardware
+Date:   Tue, 10 Dec 2019 16:29:44 -0500
+Message-Id: <20191210213221.11921-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
 References: <20191210213221.11921-1-sashal@kernel.org>
@@ -59,55 +59,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 
-[ Upstream commit 8dbebb2bd01e6f36e9a215dcde99ace70408f2c8 ]
+[ Upstream commit 1463b371aff0682c70141f7521db13cc4bbf3016 ]
 
-Failure to suspend (venus_suspend_3xx) happens when the system
-is fresh booted and loading venus driver. This happens once and
-after reload the venus driver modules the problem disrepair.
+The driver stores crop rectangle settings supposed to be in line with
+hardware state in a device private structure.  Since the driver initial
+submission, crop rectangle width and height settings are not updated
+correctly when rectangle offset settings are applied on hardware.  If
+an error occurs while the device is updated, the stored settings my no
+longer reflect hardware state and consecutive calls to .get_selection()
+as well as .get/set_fmt() may return incorrect information.  That in
+turn may affect ability of a bridge device to use correct DMA transfer
+settings if such incorrect informamtion on active frame format returned
+by .get/set_fmt() is used.
 
-Fix the failure by skipping the check for WFI and IDLE bits if
-PC_READY is on in control status register.
+Assuming a failed update of the device means its actual settings haven't
+changed, update crop rectangle width and height settings stored in the
+device private structure correctly while the rectangle offset is
+successfully applied on hardware so the stored values always reflect
+actual hardware state to the extent possible.
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Fixes: 2f6e2404799a ("[media] SoC Camera: add driver for OV6650 sensor")
+Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/hfi_venus.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/media/i2c/ov6650.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index 124085556b94b..fbcc67c10993f 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -1484,6 +1484,7 @@ static int venus_suspend_3xx(struct venus_core *core)
- {
- 	struct venus_hfi_device *hdev = to_hfi_priv(core);
- 	struct device *dev = core->dev;
-+	u32 ctrl_status;
- 	bool val;
- 	int ret;
+diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
+index 60109442a0729..c5aadd8dd23f1 100644
+--- a/drivers/media/i2c/ov6650.c
++++ b/drivers/media/i2c/ov6650.c
+@@ -485,6 +485,7 @@ static int ov6650_set_selection(struct v4l2_subdev *sd,
  
-@@ -1499,6 +1500,10 @@ static int venus_suspend_3xx(struct venus_core *core)
- 		return -EINVAL;
+ 	ret = ov6650_reg_write(client, REG_HSTRT, sel->r.left >> 1);
+ 	if (!ret) {
++		priv->rect.width += priv->rect.left - sel->r.left;
+ 		priv->rect.left = sel->r.left;
+ 		ret = ov6650_reg_write(client, REG_HSTOP,
+ 				       (sel->r.left + sel->r.width) >> 1);
+@@ -494,6 +495,7 @@ static int ov6650_set_selection(struct v4l2_subdev *sd,
+ 		ret = ov6650_reg_write(client, REG_VSTRT, sel->r.top >> 1);
  	}
- 
-+	ctrl_status = venus_readl(hdev, CPU_CS_SCIACMDARG0);
-+	if (ctrl_status & CPU_CS_SCIACMDARG0_PC_READY)
-+		goto power_off;
-+
- 	/*
- 	 * Power collapse sequence for Venus 3xx and 4xx versions:
- 	 * 1. Check for ARM9 and video core to be idle by checking WFI bit
-@@ -1523,6 +1528,7 @@ static int venus_suspend_3xx(struct venus_core *core)
- 	if (ret)
- 		return ret;
- 
-+power_off:
- 	mutex_lock(&hdev->lock);
- 
- 	ret = venus_power_off(hdev);
+ 	if (!ret) {
++		priv->rect.height += priv->rect.top - sel->r.top;
+ 		priv->rect.top = sel->r.top;
+ 		ret = ov6650_reg_write(client, REG_VSTOP,
+ 				       (sel->r.top + sel->r.height) >> 1);
 -- 
 2.20.1
 
