@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B326DC2D0BF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62CCEC43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:20:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 87D872077B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:20:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36AD5206D5
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:20:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576012825;
-	bh=4nmCBGDmTjlj8RxkgiEgGZZWDF4POOuLpQPwXgDNb1s=;
+	s=default; t=1576012843;
+	bh=aoGwtzeudb6z/V4Ipb9WWzgYaui7dppJKVndwpmTc8U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kHCSUH6wJE7yVcjr8VtKLWZqyVOPu4WAM7DyZi0Bvcd5koRUF7VnuS+IturLgrhAq
-	 fNnkeZYUyB2RStzP4QnyGQ2OXC6zm4IM18Z3Ps7/JxO7lKi1kt0UIorX47iCyX8VpM
-	 jTPOyRJ4KvMe60V7wvqACpd9y/xJxtB6aklzgbIE=
+	b=mrXz/YdW25qNPDDtPWujfi6wUTpJ+VwC/KXmKFFrbs5Bb74yMhnw6IInlFgQhYs86
+	 1fhQq5opCj8N+tIJgnSSL2RsEiRnt3/Caf09oBqaCSPOZG1pKMt9cnByLFsGDOqt67
+	 MMmCkIxYZNqI+gCTg9LlCvtS8B9n1naA39QMkHa0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728691AbfLJVUY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:20:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35552 "EHLO mail.kernel.org"
+        id S1728911AbfLJVUf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:20:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35438 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728663AbfLJVMH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:12:07 -0500
+        id S1728331AbfLJVME (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:12:04 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 10DFF246A2;
-        Tue, 10 Dec 2019 21:12:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8B162246AA;
+        Tue, 10 Dec 2019 21:12:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012326;
-        bh=4nmCBGDmTjlj8RxkgiEgGZZWDF4POOuLpQPwXgDNb1s=;
+        s=default; t=1576012324;
+        bh=aoGwtzeudb6z/V4Ipb9WWzgYaui7dppJKVndwpmTc8U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vBbiGxwWBujMiClJ1FkL24gLhGdyCgE9YMJAKN+QIsasdXpCq0uM3Sq/5T35boGSr
-         UJI4jdRZXp2CxYlp65e9xHNGYtPgm4rVEU6b9PoC2j2YnhQm5nlxCCOcBWLAhyFLVr
-         bJGRY4jjeMnBxewXg4c1H1AS0wbf0uhwQVWuQyD0=
+        b=JiRA0dx0Ao71Mv7+KEO8fso+6QPqOl0Ip7ZV2PXDTwRao6EMnJXeNOOZF8QOC5VBp
+         tWwbI+GK/9cnKApLyTzhRKJX5DhT1zh1mREPJZlKftI/UXUUJNFJCZHAgyMf5J+uXo
+         0yiWLdfe2/OsZDm0Ry5+6PBAAl7cpqbXErfFrE5Q=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pi-Hsun Shih <pihsun@chromium.org>,
+Cc:     Chuhong Yuan <hslester96@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 259/350] media: v4l2-ctrl: Lock main_hdl on operations of requests_queued.
-Date:   Tue, 10 Dec 2019 16:06:04 -0500
-Message-Id: <20191210210735.9077-220-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 257/350] media: si470x-i2c: add missed operations in remove
+Date:   Tue, 10 Dec 2019 16:06:02 -0500
+Message-Id: <20191210210735.9077-218-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -59,77 +59,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Pi-Hsun Shih <pihsun@chromium.org>
+From: Chuhong Yuan <hslester96@gmail.com>
 
-[ Upstream commit df4a3e7f88e3b0d7ae46d70b9ff8e3c0ea730785 ]
+[ Upstream commit 2df200ab234a86836a8879a05a8007d6b884eb14 ]
 
-There's a race condition between the list_del_init in the
-v4l2_ctrl_request_complete, and the list_add_tail in the
-v4l2_ctrl_request_queue, since they can be called in different thread
-and the requests_queued list is not protected by a lock. This can lead
-to that the v4l2_ctrl_handler is still in the requests_queued list while
-the request_is_queued is already set to false, which would cause
-use-after-free if the v4l2_ctrl_handler is later released.
+The driver misses calling v4l2_ctrl_handler_free and
+v4l2_device_unregister in remove like what is done in probe failure.
+Add the calls to fix it.
 
-Fix this by locking the ->lock of main_hdl (which is the owner of the
-requests_queued list) when doing list operations on the
-->requests_queued list.
-
-Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/radio/si470x/radio-si470x-i2c.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 1d8f388246313..cd84dbbf6a890 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -3144,6 +3144,7 @@ static void v4l2_ctrl_request_queue(struct media_request_object *obj)
- 	struct v4l2_ctrl_handler *prev_hdl = NULL;
- 	struct v4l2_ctrl_ref *ref_ctrl, *ref_ctrl_prev = NULL;
+diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c
+index 7541698a0be11..f491420d7b538 100644
+--- a/drivers/media/radio/si470x/radio-si470x-i2c.c
++++ b/drivers/media/radio/si470x/radio-si470x-i2c.c
+@@ -482,6 +482,8 @@ static int si470x_i2c_remove(struct i2c_client *client)
+ 	if (radio->gpio_reset)
+ 		gpiod_set_value(radio->gpio_reset, 0);
  
-+	mutex_lock(main_hdl->lock);
- 	if (list_empty(&main_hdl->requests_queued))
- 		goto queue;
- 
-@@ -3175,18 +3176,22 @@ static void v4l2_ctrl_request_queue(struct media_request_object *obj)
- queue:
- 	list_add_tail(&hdl->requests_queued, &main_hdl->requests_queued);
- 	hdl->request_is_queued = true;
-+	mutex_unlock(main_hdl->lock);
++	v4l2_ctrl_handler_free(&radio->hdl);
++	v4l2_device_unregister(&radio->v4l2_dev);
+ 	return 0;
  }
  
- static void v4l2_ctrl_request_unbind(struct media_request_object *obj)
- {
- 	struct v4l2_ctrl_handler *hdl =
- 		container_of(obj, struct v4l2_ctrl_handler, req_obj);
-+	struct v4l2_ctrl_handler *main_hdl = obj->priv;
- 
- 	list_del_init(&hdl->requests);
-+	mutex_lock(main_hdl->lock);
- 	if (hdl->request_is_queued) {
- 		list_del_init(&hdl->requests_queued);
- 		hdl->request_is_queued = false;
- 	}
-+	mutex_unlock(main_hdl->lock);
- }
- 
- static void v4l2_ctrl_request_release(struct media_request_object *obj)
-@@ -4128,9 +4133,11 @@ void v4l2_ctrl_request_complete(struct media_request *req,
- 		v4l2_ctrl_unlock(ctrl);
- 	}
- 
-+	mutex_lock(main_hdl->lock);
- 	WARN_ON(!hdl->request_is_queued);
- 	list_del_init(&hdl->requests_queued);
- 	hdl->request_is_queued = false;
-+	mutex_unlock(main_hdl->lock);
- 	media_request_object_complete(obj);
- 	media_request_object_put(obj);
- }
 -- 
 2.20.1
 
