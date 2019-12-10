@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55F6AC00454
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:12:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A72FC43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:12:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2AC95207FF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:12:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54DE620637
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576015921;
-	bh=IK4yETR9Uqu46qZrHkOVvpPuKVCdVd7R2bzpFGcaoYQ=;
+	s=default; t=1576015922;
+	bh=Z+gxcSRBALymU/z+rCEXW7uPIV+JARB6XxH9QYktmxo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=1WjSrGdItnO7uAc+0ARTcyEwgFKStAxVgNVXObkQ+z5pjAUeSbqO+8VOnhlnc4jJA
-	 4Gi7UqmIcc9tAJ/YkoyJTynlKwYbIB7bnRJkj8Ru0I3xETqwHRcwJVMhTVrmumKGCt
-	 YHSqoVIbWpD9q0N2ATHwN5kiuLX/v1dNvwh9qRT0=
+	b=pF9nHJLhmUApC9IacZbpDVXuGolSgjZLnMyzXU+NkEe2UQg7pw+QtVaGvQXhdFzxd
+	 IWwSGO2zpvyfppb22S7F9u5sC+FmSQ/yZXRM7xV9oyuE5IohcrW4xt6LJGG191lUxl
+	 QG2Lpr2BJHvfdrZ+L2Jg/KC+Aw0x1coKi9z9+KRM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728891AbfLJWL5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:11:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34102 "EHLO mail.kernel.org"
+        id S1728077AbfLJWDp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:03:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34066 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728092AbfLJWDq (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:03:46 -0500
+        id S1728047AbfLJWDp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:03:45 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F41A6214D8;
-        Tue, 10 Dec 2019 22:03:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C59452077B;
+        Tue, 10 Dec 2019 22:03:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576015425;
-        bh=IK4yETR9Uqu46qZrHkOVvpPuKVCdVd7R2bzpFGcaoYQ=;
+        s=default; t=1576015424;
+        bh=Z+gxcSRBALymU/z+rCEXW7uPIV+JARB6XxH9QYktmxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zaIHCOFy499jbqr6dqYbLoYuvYR0U9II2QseYscsbM/GmmH6fNHzNcdGDOeQ95S6S
-         gMFgh2Kn8aeBEty58H/abyvrgbZV3lhSONJE/ICZh0wfYoVOx+K+EeYmMG46rfvX6W
-         r1kT1wGBxDUX/qzSBZiCtIT4xcj54Jrtgn/qwfhg=
+        b=rUfKPAt1x+gXQRes2raQrjBxDgPtDIdhW3ymQewWgt9f0wif3ziE8tEaWxyMakrID
+         OCUN1Bh3TYRFIe/oA8MHSjRX6WiKEvmaEPEYEUsuCNID/GzBbGXP7nv225OQVkVAqw
+         x6kBQIZmHUwzRXSmUfgvOoU+Cd2NX7cPHrg/aJ68=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Benoit Parrot <bparrot@ti.com>,
@@ -45,9 +45,9 @@ Cc:     Benoit Parrot <bparrot@ti.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 037/130] media: ti-vpe: vpe: Make sure YUYV is set as default format
-Date:   Tue, 10 Dec 2019 17:01:28 -0500
-Message-Id: <20191210220301.13262-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 036/130] media: ti-vpe: vpe: fix a v4l2-compliance failure about frame sequence number
+Date:   Tue, 10 Dec 2019 17:01:27 -0500
+Message-Id: <20191210220301.13262-36-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
 References: <20191210220301.13262-1-sashal@kernel.org>
@@ -62,49 +62,46 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Benoit Parrot <bparrot@ti.com>
 
-[ Upstream commit e20b248051ca0f90d84b4d9378e4780bc31f16c6 ]
+[ Upstream commit 2444846c0dbfa4ead21b621e4300ec32c90fbf38 ]
 
 v4l2-compliance fails with this message:
 
-   fail: v4l2-test-formats.cpp(672): \
-	Video Capture Multiplanar: TRY_FMT(G_FMT) != G_FMT
-   fail: v4l2-test-formats.cpp(672): \
-	Video Output Multiplanar: TRY_FMT(G_FMT) != G_FMT
-	...
-   test VIDIOC_TRY_FMT: FAIL
+   fail: v4l2-test-buffers.cpp(294): \
+	(int)g_sequence() < seq.last_seq + 1
+   fail: v4l2-test-buffers.cpp(740): \
+	buf.check(m2m_q, last_m2m_seq)
+   fail: v4l2-test-buffers.cpp(974): \
+	captureBufs(node, q, m2m_q, frame_count, true)
+   test MMAP: FAIL
 
-The default pixel format was setup as pointing to a specific offset in
-the vpe_formats table assuming it was pointing to the V4L2_PIX_FMT_YUYV
-entry. This became false after the addition on the NV21 format (see
-above commid-id)
+The driver is failing to update the source frame sequence number in the
+vb2 buffer object. Only the destination frame sequence was being
+updated.
 
-So instead of hard-coding an offset which might change over time we need
-to use a lookup helper instead so we know the default will always be what
-we intended.
+This is only a reporting issue if the user space app actually cares
+about the frame sequence number. But it is fixed nonetheless.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Fixes: 40cc823f7005 ("media: ti-vpe: Add support for NV21 format")
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/ti-vpe/vpe.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 8a5c0d3e733e1..a136fb14bf1a7 100644
+index 4dc08f5a60811..8a5c0d3e733e1 100644
 --- a/drivers/media/platform/ti-vpe/vpe.c
 +++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -2322,7 +2322,7 @@ static int vpe_open(struct file *file)
- 	v4l2_ctrl_handler_setup(hdl);
+@@ -1448,6 +1448,7 @@ static irqreturn_t vpe_irq(int irq_vpe, void *data)
+ 		d_vb->timecode = s_vb->timecode;
  
- 	s_q_data = &ctx->q_data[Q_DATA_SRC];
--	s_q_data->fmt = &vpe_formats[2];
-+	s_q_data->fmt = __find_format(V4L2_PIX_FMT_YUYV);
- 	s_q_data->width = 1920;
- 	s_q_data->height = 1080;
- 	s_q_data->nplanes = 1;
+ 	d_vb->sequence = ctx->sequence;
++	s_vb->sequence = ctx->sequence;
+ 
+ 	d_q_data = &ctx->q_data[Q_DATA_DST];
+ 	if (d_q_data->flags & Q_IS_INTERLACED) {
 -- 
 2.20.1
 
