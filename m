@@ -7,50 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89C43C2D0BF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:39:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AED1C43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:41:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5622A2077B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:39:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5DDC2053B
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:41:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576017554;
-	bh=0UTppwjja+mDbI1LJGPxJ1hNwKzUn7kPVpfiS3MxMZI=;
+	s=default; t=1576017667;
+	bh=Sk1k1orUaMqbGnLm5dbkcNZRPwqQ4lz1wzAXISBDG/I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ZNsMiFHbDQtW+IMBQIdkCH9wScKGXtPWLU5SzKfRtq1yxw84iih+Pc/teIgTV5U0R
-	 tlYU2bzMi0rXpjcOc00/iJM9AF5D4I/a8ZNF+XbrVN2KaKJd/Sg+9aTvdESzZMPR1y
-	 q0qQ4yg26DM4awuudvp1PmWbgssj4ZgIZp+EdiFk=
+	b=ZIy8r8CdurKlN3+mnnbWe2axjnc66a3xIDEczW2bTi8zVFw8Z55TRE5QGByf4oe/g
+	 ZHOmCh47ol5bUIaZGpIwmjBtm4u71elnX7lqiAsZpNu3Q9vty2uuVQiYjSvRuN7reV
+	 Vn+AnIjeHvysJsYLDnz71C6cVXjEmSBNU+pZFbb4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730079AbfLJWjJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:39:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54252 "EHLO mail.kernel.org"
+        id S1727254AbfLJWbz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:31:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52126 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726691AbfLJWd1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:33:27 -0500
+        id S1728996AbfLJWby (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:31:54 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE920207FF;
-        Tue, 10 Dec 2019 22:33:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 209ED21D7D;
+        Tue, 10 Dec 2019 22:31:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017206;
-        bh=0UTppwjja+mDbI1LJGPxJ1hNwKzUn7kPVpfiS3MxMZI=;
+        s=default; t=1576017113;
+        bh=Sk1k1orUaMqbGnLm5dbkcNZRPwqQ4lz1wzAXISBDG/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tRjHWp9jlsHTO6v5kinom+taLfVCYjQ5fIMedbpc47mYUU5NT5QT3l8cXDQ4drapH
-         ZnTCkyvkT/xss2A5Bc4mcJ0ZmM2zzXCLSkkEpkGn3t3HW3yi6DDXJkIyCWBELkPnc4
-         6/yfNTwYIX2qemRa0lr5qwCAlsClgDuQlziZW1/8=
+        b=NPzwxT9pKvhz7KKmVq2AJm+Zd20Wo8ey8umZKpAwc1yObbVobzPRovvICsg7FFrBS
+         xE4uO2JNFj8XnV5+It0ZB+U7w1Cvx0NDJd/C6R9Yy1FjTiezV3TXmk6F6QNm8zOccs
+         2V+WpChiRgnYCBz59zuY5pAHRBR58+9lY7do7y7c=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Benoit Parrot <bparrot@ti.com>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
+Cc:     Chuhong Yuan <hslester96@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 08/71] media: am437x-vpfe: Setting STD to current value is not an error
-Date:   Tue, 10 Dec 2019 17:32:13 -0500
-Message-Id: <20191210223316.14988-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 66/91] media: si470x-i2c: add missed operations in remove
+Date:   Tue, 10 Dec 2019 17:30:10 -0500
+Message-Id: <20191210223035.14270-66-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210223316.14988-1-sashal@kernel.org>
-References: <20191210223316.14988-1-sashal@kernel.org>
+In-Reply-To: <20191210223035.14270-1-sashal@kernel.org>
+References: <20191210223035.14270-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,38 +59,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Benoit Parrot <bparrot@ti.com>
+From: Chuhong Yuan <hslester96@gmail.com>
 
-[ Upstream commit 13aa21cfe92ce9ebb51824029d89f19c33f81419 ]
+[ Upstream commit 2df200ab234a86836a8879a05a8007d6b884eb14 ]
 
-VIDIOC_S_STD should not return an error if the value is identical
-to the current one.
-This error was highlighted by the v4l2-compliance test.
+The driver misses calling v4l2_ctrl_handler_free and
+v4l2_device_unregister in remove like what is done in probe failure.
+Add the calls to fix it.
 
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/radio/si470x/radio-si470x-i2c.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 572bc043b62de..36add3c463f75 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -1847,6 +1847,10 @@ static int vpfe_s_std(struct file *file, void *priv, v4l2_std_id std_id)
- 	if (!(sdinfo->inputs[0].capabilities & V4L2_IN_CAP_STD))
- 		return -ENODATA;
+diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c
+index f218886c504d9..fb69534a8b56f 100644
+--- a/drivers/media/radio/si470x/radio-si470x-i2c.c
++++ b/drivers/media/radio/si470x/radio-si470x-i2c.c
+@@ -460,6 +460,8 @@ static int si470x_i2c_remove(struct i2c_client *client)
+ 	video_unregister_device(&radio->videodev);
+ 	kfree(radio);
  
-+	/* if trying to set the same std then nothing to do */
-+	if (vpfe_standards[vpfe->std_index].std_id == std_id)
-+		return 0;
-+
- 	/* If streaming is started, return error */
- 	if (vb2_is_busy(&vpfe->buffer_queue)) {
- 		vpfe_err(vpfe, "%s device busy\n", __func__);
++	v4l2_ctrl_handler_free(&radio->hdl);
++	v4l2_device_unregister(&radio->v4l2_dev);
+ 	return 0;
+ }
+ 
 -- 
 2.20.1
 
