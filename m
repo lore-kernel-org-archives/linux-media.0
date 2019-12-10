@@ -7,48 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0007AC2D0BF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:20:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 541F1C43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:21:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C90BF20838
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:20:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 200F7207FF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:21:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576012843;
-	bh=alF0iVCcCKNzMmvm++PJFTaNJLFbEjzDjBZ5N5Wh7Ik=;
+	s=default; t=1576012873;
+	bh=MnjkOJzQpeys/zJdC8tULjlZdIzXW7jVsRu4TsHrD9k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EuiJJnmogqVCNgVlhnE0W60uMny9cYF/W5zAGtQf1wmaRvk+W5dpiIwMEC85E6Ibl
-	 SxvuvC+H+wZ9XQF5e9qLSFBRvE0BisMNZx6lblELrP6j57rlpRVh0PyrL8GsBn7zCo
-	 KIIJWGGNMLkaYKBEamjXEYGXap9X3Fd2pytDDBXU=
+	b=BmTHWgkFC7GAnGmAGHMLb40CYkVmfQrLFiro60T39qDwjBfwWmHtRGrCv2W7aZtkw
+	 znfEWepVCXRcUvMPBP1cNyVZ6S7l3uSMANtVrm9ZT/ZwyMX+f1IVItj705n0qzqXZP
+	 cpcvYsGk72JjMfzmP8qG5mhl6w18ro4DgMB3P6+Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728756AbfLJVUd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:20:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35500 "EHLO mail.kernel.org"
+        id S1727854AbfLJVVJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:21:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728660AbfLJVMG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:12:06 -0500
+        id S1728859AbfLJVLx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:11:53 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AEAEE246B4;
-        Tue, 10 Dec 2019 21:12:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 591F5246A8;
+        Tue, 10 Dec 2019 21:11:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012325;
-        bh=alF0iVCcCKNzMmvm++PJFTaNJLFbEjzDjBZ5N5Wh7Ik=;
+        s=default; t=1576012312;
+        bh=MnjkOJzQpeys/zJdC8tULjlZdIzXW7jVsRu4TsHrD9k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c6ogMpVVVNXNkM3gHTDPez/XuK+/xjvVC6G7wk32griTt20HMUm/fHq7oA6n5ptV3
-         kSYMNfvy7dABNHOUqVBcZDPPsFIxmcKbOaUZ3dNmNgTXPh8HFAJ0bGcuEGnFq69XK5
-         DGGr/C43+LutRINGQA7fhA2JpZhdlBVqjG8m7Pww=
+        b=YBNw3FRXIgSAB5/1mbeqZzh8gJyq0B/LsZ5FuXS75EsqT3EZ+Va2oLBsJonlMPfbE
+         +V74QoafMGXn9c4Uuw1wVQJ19JK7XrZenDpYvQsu/gooGxqyq4Y9Ysx1okG1AIZEad
+         +y6ejDOm/cFyoxEzHLvLMGL9Z1+gS87Em/WrmB+E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jernej Skrabec <jernej.skrabec@siol.net>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+Cc:     Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 258/350] media: cedrus: Use helpers to access capture queue
-Date:   Tue, 10 Dec 2019 16:06:03 -0500
-Message-Id: <20191210210735.9077-219-sashal@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 247/350] media: exynos4-is: fix wrong mdev and v4l2 dev order in error path
+Date:   Tue, 10 Dec 2019 16:05:52 -0500
+Message-Id: <20191210210735.9077-208-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -61,84 +62,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jernej Skrabec <jernej.skrabec@siol.net>
+From: Seung-Woo Kim <sw0312.kim@samsung.com>
 
-[ Upstream commit 1fd50a2c294457508f06b8b631d01a58de81cdd2 ]
+[ Upstream commit 4d741cbd58bf889c8a68cf6e592a7892b5c2802e ]
 
-Accessing capture queue structue directly is not safe. Use helpers for
-that.
+When driver is built as module and probe during insmod is deferred
+because of sensor subdevs, there is NULL pointer deference because
+mdev is cleaned up and then access it from v4l2_device_unregister().
+Fix the wrong mdev and v4l2 dev order in error path of probe.
 
-Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+This fixes below null pointer deference:
+   Unable to handle kernel NULL pointer dereference at virtual address 00000000
+   pgd = ca026f68
+   [00000000] *pgd=00000000
+   Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+   [...]
+   Hardware name: SAMSUNG EXYNOS (Flattened Device Tree)
+   PC is at ida_free+0x7c/0x160
+   LR is at xas_start+0x44/0x204
+   [...]
+   [<c0dafd60>] (ida_free) from [<c083c20c>] (__media_device_unregister_entity+0x18/0xc0)
+   [<c083c20c>] (__media_device_unregister_entity) from [<c083c2e0>] (media_device_unregister_entity+0x2c/0x38)
+   [<c083c2e0>] (media_device_unregister_entity) from [<c0843404>] (v4l2_device_release+0xd0/0x104)
+   [<c0843404>] (v4l2_device_release) from [<c0632558>] (device_release+0x28/0x98)
+   [<c0632558>] (device_release) from [<c0db1204>] (kobject_put+0xa4/0x208)
+   [<c0db1204>] (kct_put) from [<bf00bac4>] (fimc_capture_subdev_unregistered+0x58/0x6c [s5p_fimc])
+   [<bf00bac4>] (fimc_capture_subdev_unregistered [s5p_fimc]) from [<c084a1cc>] (v4l2_device_unregister_subdev+0x6c/0xa8)
+   [<c084a1cc>] (v4l2_device_unregister_subdev) from [<c084a350>] (v4l2_device_unregister+0x64/0x94)
+   [<c084a350>] (v4l2_device_unregister) from [<bf0101ac>] (fimc_md_probe+0x4ec/0xaf8 [s5p_fimc])
+   [...]
+
+Signed-off-by: Seung-Woo Kim <sw0312.kim@samsung.com>
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Fixes: 9832e155f1ed ("[media] media-device: split media initialization and registration")
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.h      | 8 ++++++--
- drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 8 ++++++--
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ drivers/media/platform/exynos4-is/media-dev.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
-index 2f017a6518486..3758a1c4e2d05 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-@@ -179,12 +179,16 @@ static inline dma_addr_t cedrus_buf_addr(struct vb2_buffer *buf,
- static inline dma_addr_t cedrus_dst_buf_addr(struct cedrus_ctx *ctx,
- 					     int index, unsigned int plane)
- {
--	struct vb2_buffer *buf;
-+	struct vb2_buffer *buf = NULL;
-+	struct vb2_queue *vq;
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+index a838189d44902..9aaf3b8060d50 100644
+--- a/drivers/media/platform/exynos4-is/media-dev.c
++++ b/drivers/media/platform/exynos4-is/media-dev.c
+@@ -1457,12 +1457,12 @@ static int fimc_md_probe(struct platform_device *pdev)
+ 	ret = v4l2_device_register(dev, &fmd->v4l2_dev);
+ 	if (ret < 0) {
+ 		v4l2_err(v4l2_dev, "Failed to register v4l2_device: %d\n", ret);
+-		return ret;
++		goto err_md;
+ 	}
  
- 	if (index < 0)
- 		return 0;
+ 	ret = fimc_md_get_clocks(fmd);
+ 	if (ret)
+-		goto err_md;
++		goto err_v4l2dev;
  
--	buf = ctx->fh.m2m_ctx->cap_q_ctx.q.bufs[index];
-+	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+	if (vq)
-+		buf = vb2_get_buffer(vq, index);
-+
- 	return buf ? cedrus_buf_addr(buf, &ctx->dst_fmt, plane) : 0;
+ 	ret = fimc_md_get_pinctrl(fmd);
+ 	if (ret < 0) {
+@@ -1519,9 +1519,10 @@ static int fimc_md_probe(struct platform_device *pdev)
+ 	fimc_md_unregister_entities(fmd);
+ err_clk:
+ 	fimc_md_put_clocks(fmd);
++err_v4l2dev:
++	v4l2_device_unregister(&fmd->v4l2_dev);
+ err_md:
+ 	media_device_cleanup(&fmd->media_dev);
+-	v4l2_device_unregister(&fmd->v4l2_dev);
+ 	return ret;
  }
  
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-index d6a782703c9b0..08c6c9c410cc3 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-@@ -96,7 +96,7 @@ static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
- 	const struct v4l2_ctrl_h264_decode_params *decode = run->h264.decode_params;
- 	const struct v4l2_ctrl_h264_slice_params *slice = run->h264.slice_params;
- 	const struct v4l2_ctrl_h264_sps *sps = run->h264.sps;
--	struct vb2_queue *cap_q = &ctx->fh.m2m_ctx->cap_q_ctx.q;
-+	struct vb2_queue *cap_q;
- 	struct cedrus_buffer *output_buf;
- 	struct cedrus_dev *dev = ctx->dev;
- 	unsigned long used_dpbs = 0;
-@@ -104,6 +104,8 @@ static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
- 	unsigned int output = 0;
- 	unsigned int i;
- 
-+	cap_q = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+
- 	memset(pic_list, 0, sizeof(pic_list));
- 
- 	for (i = 0; i < ARRAY_SIZE(decode->dpb); i++) {
-@@ -167,12 +169,14 @@ static void _cedrus_write_ref_list(struct cedrus_ctx *ctx,
- 				   enum cedrus_h264_sram_off sram)
- {
- 	const struct v4l2_ctrl_h264_decode_params *decode = run->h264.decode_params;
--	struct vb2_queue *cap_q = &ctx->fh.m2m_ctx->cap_q_ctx.q;
-+	struct vb2_queue *cap_q;
- 	struct cedrus_dev *dev = ctx->dev;
- 	u8 sram_array[CEDRUS_MAX_REF_IDX];
- 	unsigned int i;
- 	size_t size;
- 
-+	cap_q = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+
- 	memset(sram_array, 0, sizeof(sram_array));
- 
- 	for (i = 0; i < num_ref; i++) {
 -- 
 2.20.1
 
