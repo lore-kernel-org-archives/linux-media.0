@@ -7,48 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED30FC43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:30:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF4ADC43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:30:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B570C205C9
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:30:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9444220836
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:30:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576013408;
-	bh=Q/WB4rKuF1LKvZvuCApJ15O1SGEplzZkLXpoMKEtV/Y=;
+	s=default; t=1576013411;
+	bh=RY7/22cQdS0rro6ZXYKwL+zVZFVFfSfqinoLihuH4yI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=p29j+WHqsEz9CbaUsIJ+ZO+1rlpgqjFNRwhfDX5eFf3byvuKdRTBoj5iPM4b4iIic
-	 o1nLthlWmU0WJVh3jSCkkXn7FnYa/NtpeKVe6jDK8UGuJcdm9o3U5Rh3mRBPIt4SuI
-	 ZJFniYwYL/gmoUUge9ClkgP8iRzdTr9FyqBK+nWs=
+	b=rgGtGXATqUnXB1eoQjQYg4mTK9/oG7wFqYQnFw3j14AF1GRxH+JRMHKwhQ6Z1P0VO
+	 XUOb63qx5o8ZS1+ja1UV3hBtRj5kntNfdEJPOhNQTb+15xX5zyAtdaNaxDYGWMZ8Po
+	 z0gPOQ4QQYF8XKG/Y+sRPXoVtQJ9rQOcX+TYkodA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728465AbfLJVaG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:30:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59240 "EHLO mail.kernel.org"
+        id S1728324AbfLJVJ5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:09:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58968 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728329AbfLJVJ6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:09:58 -0500
+        id S1728307AbfLJVJx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:09:53 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 89207246BB;
-        Tue, 10 Dec 2019 21:09:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CD4E3246AF;
+        Tue, 10 Dec 2019 21:09:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012197;
-        bh=Q/WB4rKuF1LKvZvuCApJ15O1SGEplzZkLXpoMKEtV/Y=;
+        s=default; t=1576012192;
+        bh=RY7/22cQdS0rro6ZXYKwL+zVZFVFfSfqinoLihuH4yI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qOmECpCTbb5ZPyZ7l8DeqHwuPnxF+SaH+zP6hQ52/PsAVMSXlajGWvpjHDhrfoH/q
-         uYvH7Jp+NbdhPveAMDy6ffvfDjk/6roiAJ2iGDxAblsJqbdoc+VmN1buchQrJytXLd
-         kQuGPf3gGtqDbHkSATXf52WIg6sDIx3mEzi/x+VE=
+        b=W19lcYS8Vr0O4/QJC5SOil5QqDrt1R+xNj27gZgF6ipfOxpF9rSeqXhQoKScw1YuJ
+         jY5EAOOtv4PnbRoiy3cufZbz0C3+sotlGUy3+U/I6EnQ6rbDm9CwPE6WafmNVDeGRR
+         U8BQpGPOlyFPQc89maZJP8zJC2n7fCAGfIClcICA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chuhong Yuan <hslester96@gmail.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
+Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 151/350] media: imx7-mipi-csis: Add a check for devm_regulator_get
-Date:   Tue, 10 Dec 2019 16:04:16 -0500
-Message-Id: <20191210210735.9077-112-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 147/350] media: ov6650: Fix stored frame interval not in sync with hardware
+Date:   Tue, 10 Dec 2019 16:04:12 -0500
+Message-Id: <20191210210735.9077-108-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -61,50 +59,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Chuhong Yuan <hslester96@gmail.com>
+From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 
-[ Upstream commit a0219deefe9ee5006a28d48522f76b217d198c51 ]
+[ Upstream commit 57822068dd120386b98891cb151dc20107b63ba7 ]
 
-devm_regulator_get may return an error but mipi_csis_phy_init misses
-a check for it.
-This may lead to problems when regulator_set_voltage uses the unchecked
-pointer.
-This patch adds a check for devm_regulator_get to avoid potential risk.
+The driver stores a frame interval value supposed to be in line with
+hardware state in a device private structure.  Since the driver initial
+submission, the respective field of the structure has never been
+initialised on device probe.  Moreover, if updated from
+.s_frame_interval(), a new value is stored before it is applied on
+hardware.  If an error occurs during device update, the stored value
+may no longer reflect hardware state and consecutive calls to
+.g_frame_interval() may return incorrect information.
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Assuming a failed update of the device means its actual state hasn't
+changed, update the frame interval field of the device private
+structure with a new value only after it is successfully applied on
+hardware so it always reflects actual hardware state to the extent
+possible.  Also, initialise the field with hardware default frame
+interval on device probe.
+
+Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/media/i2c/ov6650.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 73d8354e618c4..e50b1f88e25b5 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -350,6 +350,8 @@ static void mipi_csis_sw_reset(struct csi_state *state)
- static int mipi_csis_phy_init(struct csi_state *state)
- {
- 	state->mipi_phy_regulator = devm_regulator_get(state->dev, "phy");
-+	if (IS_ERR(state->mipi_phy_regulator))
-+		return PTR_ERR(state->mipi_phy_regulator);
+diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
+index 43c3f1b6e19ac..a5b2448c0abc2 100644
+--- a/drivers/media/i2c/ov6650.c
++++ b/drivers/media/i2c/ov6650.c
+@@ -130,6 +130,7 @@
+ #define CLKRC_24MHz		0xc0
+ #define CLKRC_DIV_MASK		0x3f
+ #define GET_CLKRC_DIV(x)	(((x) & CLKRC_DIV_MASK) + 1)
++#define DEF_CLKRC		0x00
  
- 	return regulator_set_voltage(state->mipi_phy_regulator, 1000000,
- 				     1000000);
-@@ -966,7 +968,10 @@ static int mipi_csis_probe(struct platform_device *pdev)
- 		return ret;
+ #define COMA_RESET		BIT(7)
+ #define COMA_QCIF		BIT(5)
+@@ -758,19 +759,17 @@ static int ov6650_s_frame_interval(struct v4l2_subdev *sd,
+ 	else if (div > GET_CLKRC_DIV(CLKRC_DIV_MASK))
+ 		div = GET_CLKRC_DIV(CLKRC_DIV_MASK);
+ 
+-	/*
+-	 * Keep result to be used as tpf limit
+-	 * for subsequent clock divider calculations
+-	 */
+-	priv->tpf.numerator = div;
+-	priv->tpf.denominator = FRAME_RATE_MAX;
++	tpf->numerator = div;
++	tpf->denominator = FRAME_RATE_MAX;
+ 
+-	clkrc = to_clkrc(&priv->tpf, priv->pclk_limit, priv->pclk_max);
++	clkrc = to_clkrc(tpf, priv->pclk_limit, priv->pclk_max);
+ 
+ 	ret = ov6650_reg_rmw(client, REG_CLKRC, clkrc, CLKRC_DIV_MASK);
+ 	if (!ret) {
+-		tpf->numerator = GET_CLKRC_DIV(clkrc);
+-		tpf->denominator = FRAME_RATE_MAX;
++		priv->tpf.numerator = GET_CLKRC_DIV(clkrc);
++		priv->tpf.denominator = FRAME_RATE_MAX;
++
++		*tpf = priv->tpf;
  	}
  
--	mipi_csis_phy_init(state);
-+	ret = mipi_csis_phy_init(state);
-+	if (ret < 0)
-+		return ret;
-+
- 	mipi_csis_phy_reset(state);
+ 	return ret;
+@@ -1011,6 +1010,10 @@ static int ov6650_probe(struct i2c_client *client,
+ 	priv->code	  = MEDIA_BUS_FMT_YUYV8_2X8;
+ 	priv->colorspace  = V4L2_COLORSPACE_JPEG;
  
- 	mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	/* Hardware default frame interval */
++	priv->tpf.numerator   = GET_CLKRC_DIV(DEF_CLKRC);
++	priv->tpf.denominator = FRAME_RATE_MAX;
++
+ 	priv->subdev.internal_ops = &ov6650_internal_ops;
+ 
+ 	ret = v4l2_async_register_subdev(&priv->subdev);
 -- 
 2.20.1
 
