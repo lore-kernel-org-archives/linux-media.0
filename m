@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36188C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:49:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3F37C43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:49:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0964B20838
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:49:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C20D52073B
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014573;
-	bh=+aw5AlMCprmp1PNUlgU/M4imj/nUQPaFM81sKtS9l7Y=;
+	s=default; t=1576014588;
+	bh=d9mLUKPd89tC8LsFJ0WQNcaYMRDzZZYts+vS6DDVSUI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=KuHA1vYQZOoWazVpuZKiPoMV41/t/hGMYvgeBGURdCcSGzWhbOuzlRFuTxQWVReCs
-	 hcwntqtugqaoV9ZL0aOETVAGyRsG6AU+TR5gkVe8oRvqSC8bPMSovwPd9PP2GRCEJa
-	 5Y/O3tzSONA2iWflNGg0i/AB5hN2621vTjiLho34=
+	b=umathipeXNME06smclCROKRFHW8dPy18wAkev1HrFN9q/Y+RIICV2vX67XQdTL3Ii
+	 DMHP7xxD8+aJxuxbAJ2+JAOFj2VizeQ+YMl8ZHQLKLNGHoNvLMDuqBwfzaxxq31gvj
+	 P8mMx4A3qd94Yv2Z+dTmxXKQUEAgG3wpZ2x5DtQ0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727899AbfLJVIj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:08:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56210 "EHLO mail.kernel.org"
+        id S1729203AbfLJVtf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:49:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55946 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727495AbfLJVIi (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:08:38 -0500
+        id S1727877AbfLJVIc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:08:32 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC9B224698;
-        Tue, 10 Dec 2019 21:08:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BDFEC2077B;
+        Tue, 10 Dec 2019 21:08:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012117;
-        bh=+aw5AlMCprmp1PNUlgU/M4imj/nUQPaFM81sKtS9l7Y=;
+        s=default; t=1576012111;
+        bh=d9mLUKPd89tC8LsFJ0WQNcaYMRDzZZYts+vS6DDVSUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bXo+udF8RyB0zB5I7jfgEYIxTE/l7A6SBVcbupHdLTSrRy7gSMGBbf4mbYsAjL9iv
-         TBHy2FnVtJohvUy+ZiryIHi7DDokZny3UeJAu1GnCbomzk471R/Q20Oc7FHudYXPOT
-         6d1autPC9m7XxWspUgBeXC7H50nlCXZK1Gz6hZsA=
+        b=MXS9rHHUGgYJ3THrog+d7OCzhQz8Nihk2BbE//aA963R87vkRCJlWnohpMGkBZpbO
+         MyLtwgaeMS9nUf/6JfXKMkOozCjMOxHOOx+Ob3G1GPaucPOfKo+bwj4j+HHwE9BnSV
+         A2dnrQqfVycWQY/k83m4ZFEumJ55sy8KZNKyEX1E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Benoit Parrot <bparrot@ti.com>,
-        Nikhil Devshatwar <nikhil.nd@ti.com>,
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 089/350] media: ti-vpe: vpe: Fix Motion Vector vpdma stride
-Date:   Tue, 10 Dec 2019 16:03:14 -0500
-Message-Id: <20191210210735.9077-50-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 084/350] media: cx88: Fix some error handling path in 'cx8800_initdev()'
+Date:   Tue, 10 Dec 2019 16:03:09 -0500
+Message-Id: <20191210210735.9077-45-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -60,103 +59,74 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Benoit Parrot <bparrot@ti.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 102af9b9922f658f705a4b0deaccabac409131bf ]
+[ Upstream commit e1444e9b0424c70def6352580762d660af50e03f ]
 
-commit 3dc2046ca78b ("[media] media: ti-vpe: vpe: allow use of user
-specified stride") and commit da4414eaed15 ("[media] media: ti-vpe: vpdma:
-add support for user specified stride") resulted in the Motion Vector
-stride to be the same as the image stride.
+A call to 'pci_disable_device()' is missing in the error handling path.
+In some cases, a call to 'free_irq()' may also be missing.
 
-This caused memory corruption in the output image as mentioned in
-commit 00db969964c8 ("[media] media: ti-vpe: vpe: Fix line stride
-for output motion vector").
+Reorder the error handling path, add some new labels and fix the 2 issues
+mentionned above.
 
-Fixes: 3dc2046ca78b ("[media] media: ti-vpe: vpe: allow use of user specified stride")
-Fixes: da4414eaed15 ("[media] media: ti-vpe: vpdma: add support for user specified stride")
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Acked-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+This way, the error handling path in more in line with 'cx8800_finidev()'
+(i.e. the remove function)
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ drivers/media/pci/cx88/cx88-video.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 60b575bb44c46..5ba72445584da 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -1013,11 +1013,14 @@ static void add_out_dtd(struct vpe_ctx *ctx, int port)
- 	dma_addr_t dma_addr;
- 	u32 flags = 0;
- 	u32 offset = 0;
-+	u32 stride;
- 
- 	if (port == VPE_PORT_MV_OUT) {
- 		vpdma_fmt = &vpdma_misc_fmts[VPDMA_DATA_FMT_MV];
- 		dma_addr = ctx->mv_buf_dma[mv_buf_selector];
- 		q_data = &ctx->q_data[Q_DATA_SRC];
-+		stride = ALIGN((q_data->width * vpdma_fmt->depth) >> 3,
-+			       VPDMA_STRIDE_ALIGN);
- 	} else {
- 		/* to incorporate interleaved formats */
- 		int plane = fmt->coplanar ? p_data->vb_part : 0;
-@@ -1044,6 +1047,7 @@ static void add_out_dtd(struct vpe_ctx *ctx, int port)
- 		}
- 		/* Apply the offset */
- 		dma_addr += offset;
-+		stride = q_data->bytesperline[VPE_LUMA];
+diff --git a/drivers/media/pci/cx88/cx88-video.c b/drivers/media/pci/cx88/cx88-video.c
+index dcc0f02aeb70c..b8abcd5506047 100644
+--- a/drivers/media/pci/cx88/cx88-video.c
++++ b/drivers/media/pci/cx88/cx88-video.c
+@@ -1277,7 +1277,7 @@ static int cx8800_initdev(struct pci_dev *pci_dev,
+ 	core = cx88_core_get(dev->pci);
+ 	if (!core) {
+ 		err = -EINVAL;
+-		goto fail_free;
++		goto fail_disable;
  	}
+ 	dev->core = core;
  
- 	if (q_data->flags & Q_DATA_FRAME_1D)
-@@ -1055,7 +1059,7 @@ static void add_out_dtd(struct vpe_ctx *ctx, int port)
- 			   MAX_W, MAX_H);
- 
- 	vpdma_add_out_dtd(&ctx->desc_list, q_data->width,
--			  q_data->bytesperline[VPE_LUMA], &q_data->c_rect,
-+			  stride, &q_data->c_rect,
- 			  vpdma_fmt, dma_addr, MAX_OUT_WIDTH_REG1,
- 			  MAX_OUT_HEIGHT_REG1, p_data->channel, flags);
- }
-@@ -1074,10 +1078,13 @@ static void add_in_dtd(struct vpe_ctx *ctx, int port)
- 	dma_addr_t dma_addr;
- 	u32 flags = 0;
- 	u32 offset = 0;
-+	u32 stride;
- 
- 	if (port == VPE_PORT_MV_IN) {
- 		vpdma_fmt = &vpdma_misc_fmts[VPDMA_DATA_FMT_MV];
- 		dma_addr = ctx->mv_buf_dma[mv_buf_selector];
-+		stride = ALIGN((q_data->width * vpdma_fmt->depth) >> 3,
-+			       VPDMA_STRIDE_ALIGN);
- 	} else {
- 		/* to incorporate interleaved formats */
- 		int plane = fmt->coplanar ? p_data->vb_part : 0;
-@@ -1104,6 +1111,7 @@ static void add_in_dtd(struct vpe_ctx *ctx, int port)
+@@ -1323,7 +1323,7 @@ static int cx8800_initdev(struct pci_dev *pci_dev,
+ 				       cc->step, cc->default_value);
+ 		if (!vc) {
+ 			err = core->audio_hdl.error;
+-			goto fail_core;
++			goto fail_irq;
  		}
- 		/* Apply the offset */
- 		dma_addr += offset;
-+		stride = q_data->bytesperline[VPE_LUMA];
+ 		vc->priv = (void *)cc;
+ 	}
+@@ -1337,7 +1337,7 @@ static int cx8800_initdev(struct pci_dev *pci_dev,
+ 				       cc->step, cc->default_value);
+ 		if (!vc) {
+ 			err = core->video_hdl.error;
+-			goto fail_core;
++			goto fail_irq;
+ 		}
+ 		vc->priv = (void *)cc;
+ 		if (vc->id == V4L2_CID_CHROMA_AGC)
+@@ -1509,11 +1509,14 @@ static int cx8800_initdev(struct pci_dev *pci_dev,
  
- 		if (q_data->flags & Q_DATA_INTERLACED_SEQ_TB) {
- 			/*
-@@ -1139,10 +1147,10 @@ static void add_in_dtd(struct vpe_ctx *ctx, int port)
- 	if (p_data->vb_part && fmt->fourcc == V4L2_PIX_FMT_NV12)
- 		frame_height /= 2;
- 
--	vpdma_add_in_dtd(&ctx->desc_list, q_data->width,
--			 q_data->bytesperline[VPE_LUMA], &q_data->c_rect,
--		vpdma_fmt, dma_addr, p_data->channel, field, flags, frame_width,
--		frame_height, 0, 0);
-+	vpdma_add_in_dtd(&ctx->desc_list, q_data->width, stride,
-+			 &q_data->c_rect, vpdma_fmt, dma_addr,
-+			 p_data->channel, field, flags, frame_width,
-+			 frame_height, 0, 0);
- }
- 
- /*
+ fail_unreg:
+ 	cx8800_unregister_video(dev);
+-	free_irq(pci_dev->irq, dev);
+ 	mutex_unlock(&core->lock);
++fail_irq:
++	free_irq(pci_dev->irq, dev);
+ fail_core:
+ 	core->v4ldev = NULL;
+ 	cx88_core_put(core, dev->pci);
++fail_disable:
++	pci_disable_device(pci_dev);
+ fail_free:
+ 	kfree(dev);
+ 	return err;
 -- 
 2.20.1
 
