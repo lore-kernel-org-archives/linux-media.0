@@ -7,50 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA288C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3439C00454
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:33:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BE48D214AF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:31:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7614D207FF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:33:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576017067;
-	bh=TwpJsn+VWHD6/a00zAejKGYPYa89KcNwRWbQTMR1IVk=;
+	s=default; t=1576017213;
+	bh=iXrNNQ+iLcuxDivbefHTA17DGz9vPsw1x9aknKSRrxM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=nH1dvxcpiVgNZxepG5bfcKEOKniDZYbFGsF435xL6hQWGf9IhRqoUWy0ufsgtXkNh
-	 G37RT4Fu8ar+IOCSl4GX6j8nJzRpyCuVQmZlxiuGvTiUMvbejm5O49jXWzIAtSMTAq
-	 +huW0qMyPw29mJcX98Z63IWVg72bH/1Z4ak+yZAs=
+	b=rQnp9Ikglo9fo8CjKdDrLqqvpW7RjPB38uWz2DiPIRXWYyo7jt2yVtX673Hc7Wo0b
+	 85ze3wd8bPwfQ574KY69FzM6dpIX+pJOjilVqezEDZiyMAaltHGqsNcwijR7WP87BL
+	 VVwKWGafuhNK3RpXqzjDp4J+K9auEYhjUfOENhLk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727955AbfLJWbG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:31:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50970 "EHLO mail.kernel.org"
+        id S1729823AbfLJWdc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:33:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54352 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727913AbfLJWbG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:31:06 -0500
+        id S1729083AbfLJWdb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:33:31 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B787E207FF;
-        Tue, 10 Dec 2019 22:31:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 554E821556;
+        Tue, 10 Dec 2019 22:33:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017065;
-        bh=TwpJsn+VWHD6/a00zAejKGYPYa89KcNwRWbQTMR1IVk=;
+        s=default; t=1576017210;
+        bh=iXrNNQ+iLcuxDivbefHTA17DGz9vPsw1x9aknKSRrxM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P3jUTg3NI7UKDdggR0pJ0WP28+U+55kkf01cYerHDjGP1CFAOsO30n+aXYxbkhyh3
-         T3Mi7m8UfvD6jFPJA0tysb9JbZJeBRQaGrQjFZvLnqP4Kvp1m8/E83DQlnJuelBsd9
-         A4NdTE7af/uny9P4iuOGCvhVmuhRAQEXqrOn9iiw=
+        b=eaoDdMB3QoahxGAp0KiSYUBUFdQtEkzipnV8nrs7BZgk0g7vIzijAbnSrUaTGhvIp
+         /nUKgXMG/s5xlyN8KCTZCzKuLWIUoh1TIUPz2eWppw+xSo8yIwlZ5m3I8QL5Yh/nKA
+         vny17QR5FormFNF/Vv7a9jEj5YXCik7+Uv9vrwOk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Benoit Parrot <bparrot@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 25/91] media: ti-vpe: vpe: fix a v4l2-compliance warning about invalid pixel format
-Date:   Tue, 10 Dec 2019 17:29:29 -0500
-Message-Id: <20191210223035.14270-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 11/71] media: ov6650: Fix stored frame format not in sync with hardware
+Date:   Tue, 10 Dec 2019 17:32:16 -0500
+Message-Id: <20191210223316.14988-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210223035.14270-1-sashal@kernel.org>
-References: <20191210223035.14270-1-sashal@kernel.org>
+In-Reply-To: <20191210223316.14988-1-sashal@kernel.org>
+References: <20191210223316.14988-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,79 +59,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Benoit Parrot <bparrot@ti.com>
+From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 
-[ Upstream commit 06bec72b250b2cb3ba96fa45c2b8e0fb83745517 ]
+[ Upstream commit 3143b459de4cdcce67b36827476c966e93c1cf01 ]
 
-v4l2-compliance warns with this message:
+The driver stores frame format settings supposed to be in line with
+hardware state in a device private structure.  Since the driver initial
+submission, those settings are updated before they are actually applied
+on hardware.  If an error occurs on device update, the stored settings
+my not reflect hardware state anymore and consecutive calls to
+.get_fmt() may return incorrect information.  That in turn may affect
+ability of a bridge device to use correct DMA transfer settings if such
+incorrect informmation on active frame format returned by .get_fmt() is
+used.
 
-   warn: v4l2-test-formats.cpp(717): \
- 	TRY_FMT cannot handle an invalid pixelformat.
-   warn: v4l2-test-formats.cpp(718): \
- 	This may or may not be a problem. For more information see:
-   warn: v4l2-test-formats.cpp(719): \
- 	http://www.mail-archive.com/linux-media@vger.kernel.org/msg56550.html
-	...
-   test VIDIOC_TRY_FMT: FAIL
+Assuming a failed device update means its state hasn't changed, update
+frame format related settings stored in the device private structure
+only after they are successfully applied so the stored values always
+reflect hardware state as closely as possible.
 
-We need to make sure that the returns a valid pixel format in all
-instance. Based on the v4l2 framework convention drivers must return a
-valid pixel format when the requested pixel format is either invalid or
-not supported.
-
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 2f6e2404799a ("[media] SoC Camera: add driver for OV6650 sensor")
+Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/media/i2c/soc_camera/ov6650.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 0189f7f7cb03f..da308fa6561fc 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -330,20 +330,25 @@ enum {
- };
- 
- /* find our format description corresponding to the passed v4l2_format */
--static struct vpe_fmt *find_format(struct v4l2_format *f)
-+static struct vpe_fmt *__find_format(u32 fourcc)
- {
- 	struct vpe_fmt *fmt;
- 	unsigned int k;
- 
- 	for (k = 0; k < ARRAY_SIZE(vpe_formats); k++) {
- 		fmt = &vpe_formats[k];
--		if (fmt->fourcc == f->fmt.pix.pixelformat)
-+		if (fmt->fourcc == fourcc)
- 			return fmt;
+diff --git a/drivers/media/i2c/soc_camera/ov6650.c b/drivers/media/i2c/soc_camera/ov6650.c
+index 4e19f5e5d8cf7..bb55ddfbf7337 100644
+--- a/drivers/media/i2c/soc_camera/ov6650.c
++++ b/drivers/media/i2c/soc_camera/ov6650.c
+@@ -611,7 +611,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
+ 		dev_err(&client->dev, "Pixel format not handled: 0x%x\n", code);
+ 		return -EINVAL;
  	}
+-	priv->code = code;
  
- 	return NULL;
- }
+ 	if (code == MEDIA_BUS_FMT_Y8_1X8 ||
+ 			code == MEDIA_BUS_FMT_SBGGR8_1X8) {
+@@ -637,7 +636,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
+ 		dev_dbg(&client->dev, "max resolution: CIF\n");
+ 		coma_mask |= COMA_QCIF;
+ 	}
+-	priv->half_scale = half_scale;
  
-+static struct vpe_fmt *find_format(struct v4l2_format *f)
-+{
-+	return __find_format(f->fmt.pix.pixelformat);
-+}
+ 	if (sense) {
+ 		if (sense->master_clock == 8000000) {
+@@ -677,8 +675,13 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
+ 		ret = ov6650_reg_rmw(client, REG_COMA, coma_set, coma_mask);
+ 	if (!ret)
+ 		ret = ov6650_reg_write(client, REG_CLKRC, clkrc);
+-	if (!ret)
++	if (!ret) {
++		priv->half_scale = half_scale;
 +
- /*
-  * there is one vpe_dev structure in the driver, it is shared by
-  * all instances.
-@@ -1433,9 +1438,9 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
- 	int i, depth, depth_bytes;
+ 		ret = ov6650_reg_rmw(client, REG_COML, coml_set, coml_mask);
++	}
++	if (!ret)
++		priv->code = code;
  
- 	if (!fmt || !(fmt->types & type)) {
--		vpe_err(ctx->dev, "Fourcc format (0x%08x) invalid.\n",
-+		vpe_dbg(ctx->dev, "Fourcc format (0x%08x) invalid.\n",
- 			pix->pixelformat);
--		return -EINVAL;
-+		fmt = __find_format(V4L2_PIX_FMT_YUYV);
- 	}
- 
- 	if (pix->field != V4L2_FIELD_NONE && pix->field != V4L2_FIELD_ALTERNATE)
+ 	if (!ret) {
+ 		mf->colorspace	= priv->colorspace;
 -- 
 2.20.1
 
