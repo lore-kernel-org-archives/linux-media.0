@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B673C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:05:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B59CC00454
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:05:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C9E482467E
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:05:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4408F2467E
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:05:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576011919;
-	bh=pG19F23Ng3dfKisEuzyv6YuvWsbpkjojpMZZsXuxVgE=;
+	s=default; t=1576011921;
+	bh=OnbJqA0+frurLx+b+snX4US2vZhw+RxCrJhg7CIcF2M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TuD6Ew0TTQxkcuxpOh42MBwO/6B+4P+hgcFFYbV0fyLxRO5GILIQPLdU5g8NLroQe
-	 W531kdfuLGTDnKpYJugWsv6xNbDE2oDe/k+6gDbBnb9twApns3ja5MlCpTZAHI6Ly0
-	 PhOUBo1O3BGldWAyMlsSvMXuz3//rkrF0uU3WWro=
+	b=rG1Pnjb60sMxMbpW6NJY/Qvw4Ouxt2gl+HmRUvQr9wKzTC7onEVxKES2AurRj/8Nn
+	 DQX5arVZ5/ss0xLUArLUZpqQFNcXX9UyS+XVJTelrRKKUVDdcshFsQr6WGdkVegA7r
+	 K648yoFJtzP8TT+lTxMlabC9TI1K36nuVj1jUhSw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727659AbfLJVFQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:05:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50040 "EHLO mail.kernel.org"
+        id S1727508AbfLJVEp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:04:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49992 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727509AbfLJVEq (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:04:46 -0500
+        id S1727499AbfLJVEp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:04:45 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F1BE42465C;
-        Tue, 10 Dec 2019 21:04:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B29532468A;
+        Tue, 10 Dec 2019 21:04:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576011885;
-        bh=pG19F23Ng3dfKisEuzyv6YuvWsbpkjojpMZZsXuxVgE=;
+        s=default; t=1576011884;
+        bh=OnbJqA0+frurLx+b+snX4US2vZhw+RxCrJhg7CIcF2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HIqtHUdlII9Y/GsydmjFZ3jHMBNmyE4VauZTwryC/QOVjcPnkKSXK+c2AEx32AsLQ
-         nv4E9RaeZ+njYZ5q7EZzckEi8osVgS6Z4k5kLaE1YKQStOWfrB1IRk3G9Gp/QR1H5z
-         6NvhjaqDv2+tutv1IpdqOtMCr5WfoueR83lzzQl8=
+        b=YGH0r0roU+BMV17w7ah5yIiDmRVV9xNK+w4oijGgHq7Y8mHrArMTa/0Lhu8jmBS7q
+         SGewc1MyO3+uEK3fxY+IZT427yjDOW4lOTB9a792FrytVhe6FcKPJQNK4WiK1lDnwh
+         0GgLWl9kNpuFudWxd8M9lx2tenggMJskmi8Y43qs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 036/350] media: seco-cec: Add a missing 'release_region()' in an error handling path
-Date:   Tue, 10 Dec 2019 15:58:48 -0500
-Message-Id: <20191210210402.8367-36-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.4 035/350] media: cedrus: fill in bus_info for media device
+Date:   Tue, 10 Dec 2019 15:58:47 -0500
+Message-Id: <20191210210402.8367-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210402.8367-1-sashal@kernel.org>
 References: <20191210210402.8367-1-sashal@kernel.org>
@@ -59,39 +60,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit a9cc4cbcdfd378b65fd4e398800cfa14e3855042 ]
+[ Upstream commit ae0688f659adb17ae6ae5710c886b20b5406e5c4 ]
 
-At the beginning of the probe function, we have a call to
-'request_muxed_region(BRA_SMB_BASE_ADDR, 7, "CEC00001")()'
+Fixes this compliance warning:
 
-A corresponding 'release_region()' is performed in the remove function but
-is lacking in the error handling path.
+$ v4l2-compliance -m0
+v4l2-compliance SHA: b514d615166bdc0901a4c71261b87db31e89f464, 32 bits
 
-Add it.
+Compliance test for cedrus device /dev/media0:
 
-Fixes: b03c2fb97adc ("media: add SECO cec driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Media Driver Info:
+        Driver name      : cedrus
+        Model            : cedrus
+        Serial           :
+        Bus info         :
+        Media version    : 5.3.0
+        Hardware revision: 0x00000000 (0)
+        Driver version   : 5.3.0
+
+Required ioctls:
+                warn: v4l2-test-media.cpp(51): empty bus_info
+        test MEDIA_IOC_DEVICE_INFO: OK
+
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Jernej Skrabec <jernej.skrabec@siol.net>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/seco-cec/seco-cec.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/media/sunxi/cedrus/cedrus.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/seco-cec/seco-cec.c b/drivers/media/platform/seco-cec/seco-cec.c
-index 9cd60fe1867c9..a86b6e8f91969 100644
---- a/drivers/media/platform/seco-cec/seco-cec.c
-+++ b/drivers/media/platform/seco-cec/seco-cec.c
-@@ -675,6 +675,7 @@ err_notifier:
- err_delete_adapter:
- 	cec_delete_adapter(secocec->cec_adap);
- err:
-+	release_region(BRA_SMB_BASE_ADDR, 7);
- 	dev_err(dev, "%s device probe failed\n", dev_name(dev));
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+index 2d3ea8b74dfdc..3439f6ad63380 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -357,6 +357,8 @@ static int cedrus_probe(struct platform_device *pdev)
  
- 	return ret;
+ 	dev->mdev.dev = &pdev->dev;
+ 	strscpy(dev->mdev.model, CEDRUS_NAME, sizeof(dev->mdev.model));
++	strscpy(dev->mdev.bus_info, "platform:" CEDRUS_NAME,
++		sizeof(dev->mdev.bus_info));
+ 
+ 	media_device_init(&dev->mdev);
+ 	dev->mdev.ops = &cedrus_m2m_media_ops;
 -- 
 2.20.1
 
