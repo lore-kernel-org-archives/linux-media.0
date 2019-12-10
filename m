@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E7D3C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:49:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8FE8C2D0BF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:49:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 09260208C3
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:49:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF398205C9
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014559;
-	bh=C8pkPNteKe4v3Hogd5f/wzVbWZbO5QD6AhnNQUR05OM=;
+	s=default; t=1576014571;
+	bh=CD9pA2/dHQW2yqQUcRti5TU0wbUQTrWO6caMvvxDoPw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=C8OHwbB73RZ2FcLWleeDvR7+m5EK94HTzua0L0cVlhuOARmmZQTnTIUgfnmhISTqw
-	 ifNMdqN+kR5Roq39QKyRI5P0+g9Bk1BOyPwc8A0QiCkv3RKrByyP8O1icZX63m18pt
-	 32EkT+NL8zlZ0mbUuj0Wdf9WtHfIkzSthf8Njq3E=
+	b=fal6h4VtVE5cAevr6MbzOwbwRid5uwLv1XyxGkFQiQEJeBkwji37RtdIc87petNqR
+	 f016tWujy9+NZJY3zmQWBogna2XRsr3eGy7jqp0FzpnyHZxsJ3fdj+ydZHcVGiO/Dl
+	 sQ0My/nvFPCUlqWSFIv625rL5sYAUd/m6prHzV50=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727928AbfLJVIl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:08:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56286 "EHLO mail.kernel.org"
+        id S1728895AbfLJVt1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:49:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56254 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727573AbfLJVIk (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:08:40 -0500
+        id S1727261AbfLJVIj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:08:39 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5792A24680;
-        Tue, 10 Dec 2019 21:08:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 23EC224699;
+        Tue, 10 Dec 2019 21:08:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012120;
-        bh=C8pkPNteKe4v3Hogd5f/wzVbWZbO5QD6AhnNQUR05OM=;
+        s=default; t=1576012118;
+        bh=CD9pA2/dHQW2yqQUcRti5TU0wbUQTrWO6caMvvxDoPw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EpxT6YUaaTH2lZVcV2wP4P1H+iG+xZLcDBJsWF7ez69s9xvQ7iw7P4vnwe5L0P4Ic
-         +oFflLBj/rF89VGzkCSk1x974bfuATFBcMuJ16Xht1BBm3vdrVX/2qA6QWgySP1K6J
-         BidFK6bbFiK7heg1pLS8GuTncfHYTx3fcbQ63bzo=
+        b=XoPnCQS/hJKlYRWe0cff61gvSFTHWTAiFS6o4I/RQFv33VFvcPpgjIrE70+f3WSfs
+         Z4RVdjuxNsprnR7mNmUfJfo8XXuogZdg/wqF6/9W6HOIkr9gpp2vkYchg2j3GD3nh/
+         QRHLu4KaXluLxC86BJPCBO2G3AmNh9bv67GuXmK0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Benoit Parrot <bparrot@ti.com>,
@@ -45,9 +45,9 @@ Cc:     Benoit Parrot <bparrot@ti.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 091/350] media: ti-vpe: vpe: fix a v4l2-compliance failure about frame sequence number
-Date:   Tue, 10 Dec 2019 16:03:16 -0500
-Message-Id: <20191210210735.9077-52-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 090/350] media: ti-vpe: vpe: fix a v4l2-compliance warning about invalid pixel format
+Date:   Tue, 10 Dec 2019 16:03:15 -0500
+Message-Id: <20191210210735.9077-51-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -62,24 +62,23 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Benoit Parrot <bparrot@ti.com>
 
-[ Upstream commit 2444846c0dbfa4ead21b621e4300ec32c90fbf38 ]
+[ Upstream commit 06bec72b250b2cb3ba96fa45c2b8e0fb83745517 ]
 
-v4l2-compliance fails with this message:
+v4l2-compliance warns with this message:
 
-   fail: v4l2-test-buffers.cpp(294): \
-	(int)g_sequence() < seq.last_seq + 1
-   fail: v4l2-test-buffers.cpp(740): \
-	buf.check(m2m_q, last_m2m_seq)
-   fail: v4l2-test-buffers.cpp(974): \
-	captureBufs(node, q, m2m_q, frame_count, true)
-   test MMAP: FAIL
+   warn: v4l2-test-formats.cpp(717): \
+ 	TRY_FMT cannot handle an invalid pixelformat.
+   warn: v4l2-test-formats.cpp(718): \
+ 	This may or may not be a problem. For more information see:
+   warn: v4l2-test-formats.cpp(719): \
+ 	http://www.mail-archive.com/linux-media@vger.kernel.org/msg56550.html
+	...
+   test VIDIOC_TRY_FMT: FAIL
 
-The driver is failing to update the source frame sequence number in the
-vb2 buffer object. Only the destination frame sequence was being
-updated.
-
-This is only a reporting issue if the user space app actually cares
-about the frame sequence number. But it is fixed nonetheless.
+We need to make sure that the returns a valid pixel format in all
+instance. Based on the v4l2 framework convention drivers must return a
+valid pixel format when the requested pixel format is either invalid or
+not supported.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
@@ -87,21 +86,53 @@ Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/ti-vpe/vpe.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 328976a529414..e44299008a7b5 100644
+index 5ba72445584da..328976a529414 100644
 --- a/drivers/media/platform/ti-vpe/vpe.c
 +++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -1417,6 +1417,7 @@ static irqreturn_t vpe_irq(int irq_vpe, void *data)
- 		d_vb->timecode = s_vb->timecode;
+@@ -338,20 +338,25 @@ enum {
+ };
  
- 	d_vb->sequence = ctx->sequence;
-+	s_vb->sequence = ctx->sequence;
+ /* find our format description corresponding to the passed v4l2_format */
+-static struct vpe_fmt *find_format(struct v4l2_format *f)
++static struct vpe_fmt *__find_format(u32 fourcc)
+ {
+ 	struct vpe_fmt *fmt;
+ 	unsigned int k;
  
- 	d_q_data = &ctx->q_data[Q_DATA_DST];
- 	if (d_q_data->flags & Q_IS_INTERLACED) {
+ 	for (k = 0; k < ARRAY_SIZE(vpe_formats); k++) {
+ 		fmt = &vpe_formats[k];
+-		if (fmt->fourcc == f->fmt.pix.pixelformat)
++		if (fmt->fourcc == fourcc)
+ 			return fmt;
+ 	}
+ 
+ 	return NULL;
+ }
+ 
++static struct vpe_fmt *find_format(struct v4l2_format *f)
++{
++	return __find_format(f->fmt.pix.pixelformat);
++}
++
+ /*
+  * there is one vpe_dev structure in the driver, it is shared by
+  * all instances.
+@@ -1574,9 +1579,9 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 	unsigned int stride = 0;
+ 
+ 	if (!fmt || !(fmt->types & type)) {
+-		vpe_err(ctx->dev, "Fourcc format (0x%08x) invalid.\n",
++		vpe_dbg(ctx->dev, "Fourcc format (0x%08x) invalid.\n",
+ 			pix->pixelformat);
+-		return -EINVAL;
++		fmt = __find_format(V4L2_PIX_FMT_YUYV);
+ 	}
+ 
+ 	if (pix->field != V4L2_FIELD_NONE && pix->field != V4L2_FIELD_ALTERNATE
 -- 
 2.20.1
 
