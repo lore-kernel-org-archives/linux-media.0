@@ -7,47 +7,45 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C56C1C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E890C2D0BF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9368C214D8
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5357B2465A
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576015406;
-	bh=7Dc4axMlf7o0Iscg6wxMmGHMCOp0oY38gUotoCDzxbM=;
+	s=default; t=1576015417;
+	bh=bOJWqFHT1L9YfgioB/q0u16wyH4dko1MuPUOSW1YLhI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=b7AXG/YkV8u1Oemebg7+RzM4wsZwlxd2xMjZiwfTMWMhB1rrOmaNIVi49s9Nnsrsk
-	 Th4+hjb2GUQnlZrM+o22vQ+31zSl0nuAh+mQP1RP3aLTIYz6r2f4odvJmTGJbHyWLP
-	 GaBALqxz++iABaez0GAbCQeFuQzi1iytDOWbBc5U=
+	b=cQ+iPw1cGlmwy6PeCIJzzyKWgw8ZS2R9p3Xt2eWxG7i3LJC3nMEVXVmwBImRynOxH
+	 YuXge3mo7/ZCGdmjY8V+EUw5TRPzmHgGnTvcHi6JQmBAd9CWk89+0P/9KX1GS2bV05
+	 9i98gP6WvMhQCRJL7JyBoQanJxwXTTrzNwmcczDI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727700AbfLJWDZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:03:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33508 "EHLO mail.kernel.org"
+        id S1727919AbfLJWDg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:03:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33794 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727666AbfLJWDZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:03:25 -0500
+        id S1727892AbfLJWDe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:03:34 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C7DF320637;
-        Tue, 10 Dec 2019 22:03:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7B2722053B;
+        Tue, 10 Dec 2019 22:03:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576015404;
-        bh=7Dc4axMlf7o0Iscg6wxMmGHMCOp0oY38gUotoCDzxbM=;
+        s=default; t=1576015414;
+        bh=bOJWqFHT1L9YfgioB/q0u16wyH4dko1MuPUOSW1YLhI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HZs9bmrbARVB1iEmsyXNPGL/SK8/fQAi/1I/pk9W92QCHvoUeK5tgCn8URK2h9HFV
-         OoL7R74Lrrs9L3ot9t8bhs2E/xDySh7HxziZX+3Qn6iDdQCS34vubKk05YYrvKCBgl
-         C1wagIfogQuWKdbhp+78z8tcQ19C9Uz8UtjmnOk4=
+        b=PuTPBhcOpUuSF4Rr/XMq0kg988GbYXVZQbaiQ1sIjxtZqJ1CWlpkHCEyHyLaFbnCw
+         k7e87foFWCz16PUF/wcZAgW3v89WWiTtXvM0QGeEv0g0oQrojm1aqG5hIK91oQjokS
+         EdDmtm/u81ixfG0NSKaMzoQTEuPu+1WppTzkEx3Q=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 019/130] media: venus: core: Fix msm8996 frequency table
-Date:   Tue, 10 Dec 2019 17:01:10 -0500
-Message-Id: <20191210220301.13262-19-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 027/130] media: cec-funcs.h: add status_req checks
+Date:   Tue, 10 Dec 2019 17:01:18 -0500
+Message-Id: <20191210220301.13262-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
 References: <20191210220301.13262-1-sashal@kernel.org>
@@ -60,60 +58,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Loic Poulain <loic.poulain@linaro.org>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit c690435ed07901737e5c007a65ec59f53b33eb71 ]
+[ Upstream commit 9b211f9c5a0b67afc435b86f75d78273b97db1c5 ]
 
-In downstream driver, there are two frequency tables defined,
-one for the encoder and one for the decoder:
+The CEC_MSG_GIVE_DECK_STATUS and CEC_MSG_GIVE_TUNER_DEVICE_STATUS commands
+both have a status_req argument: ON, OFF, ONCE. If ON or ONCE, then the
+follower will reply with a STATUS message. Either once or whenever the
+status changes (status_req == ON).
 
-/* Encoders /
-<972000 490000000 0x55555555>, / 4k UHD @ 30 /
-<489600 320000000 0x55555555>, / 1080p @ 60 /
-<244800 150000000 0x55555555>, / 1080p @ 30 /
-<108000 75000000 0x55555555>, / 720p @ 30 */
+If status_req == OFF, then it will stop sending continuous status updates,
+but the follower will *not* send a STATUS message in that case.
 
-/* Decoders /
-<1944000 490000000 0xffffffff>, / 4k UHD @ 60 /
-< 972000 320000000 0xffffffff>, / 4k UHD @ 30 /
-< 489600 150000000 0xffffffff>, / 1080p @ 60 /
-< 244800 75000000 0xffffffff>; / 1080p @ 30 */
+This means that if status_req == OFF, then msg->reply should be 0 as well
+since no reply is expected in that case.
 
-It shows that encoder always needs a higher clock than decoder.
-
-In current venus driver, the unified frequency table is aligned
-with the downstream decoder table which causes performance issues
-in encoding scenarios. Fix that by aligning frequency table on
-worst case (encoding).
-
-Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/core.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ include/uapi/linux/cec-funcs.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 769e9e68562df..9360b36b82cd8 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -345,10 +345,11 @@ static const struct venus_resources msm8916_res = {
- };
+diff --git a/include/uapi/linux/cec-funcs.h b/include/uapi/linux/cec-funcs.h
+index 28e8a2a86e166..2a114f7a24d42 100644
+--- a/include/uapi/linux/cec-funcs.h
++++ b/include/uapi/linux/cec-funcs.h
+@@ -952,7 +952,8 @@ static inline void cec_msg_give_deck_status(struct cec_msg *msg,
+ 	msg->len = 3;
+ 	msg->msg[1] = CEC_MSG_GIVE_DECK_STATUS;
+ 	msg->msg[2] = status_req;
+-	msg->reply = reply ? CEC_MSG_DECK_STATUS : 0;
++	msg->reply = (reply && status_req != CEC_OP_STATUS_REQ_OFF) ?
++				CEC_MSG_DECK_STATUS : 0;
+ }
  
- static const struct freq_tbl msm8996_freq_table[] = {
--	{ 1944000, 490000000 },	/* 4k UHD @ 60 */
--	{  972000, 320000000 },	/* 4k UHD @ 30 */
--	{  489600, 150000000 },	/* 1080p @ 60 */
--	{  244800,  75000000 },	/* 1080p @ 30 */
-+	{ 1944000, 520000000 },	/* 4k UHD @ 60 (decode only) */
-+	{  972000, 520000000 },	/* 4k UHD @ 30 */
-+	{  489600, 346666667 },	/* 1080p @ 60 */
-+	{  244800, 150000000 },	/* 1080p @ 30 */
-+	{  108000,  75000000 },	/* 720p @ 30 */
- };
+ static inline void cec_ops_give_deck_status(const struct cec_msg *msg,
+@@ -1056,7 +1057,8 @@ static inline void cec_msg_give_tuner_device_status(struct cec_msg *msg,
+ 	msg->len = 3;
+ 	msg->msg[1] = CEC_MSG_GIVE_TUNER_DEVICE_STATUS;
+ 	msg->msg[2] = status_req;
+-	msg->reply = reply ? CEC_MSG_TUNER_DEVICE_STATUS : 0;
++	msg->reply = (reply && status_req != CEC_OP_STATUS_REQ_OFF) ?
++				CEC_MSG_TUNER_DEVICE_STATUS : 0;
+ }
  
- static const struct reg_val msm8996_reg_preset[] = {
+ static inline void cec_ops_give_tuner_device_status(const struct cec_msg *msg,
 -- 
 2.20.1
 
