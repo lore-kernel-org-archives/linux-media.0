@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECE57C2D0BF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:43:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A001C00454
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:43:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B964D2077B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:43:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35D022077B
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:43:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576017803;
-	bh=DDCumilzqX1hW15OnazxpP3d5zUeNiUF7JTCApGmrvE=;
+	s=default; t=1576017816;
+	bh=7yAdFeAARDJpG2jDWe2tPjifPkOJrct+bsnHlvoz40g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EbiYefYCg4MIcK7CrEb0xJT7J26cbpNnnnyyUMhwy3Ub3IRyYWsIOGPF7BBKo53mx
-	 lrEzUBJo0n4lOZ081fF2UFyvYnodmxMUZwqBUoOOP8vOqC3B6uYp/UB8CBGOmVUBko
-	 FcF7lbudw9I8ktrIF9IEVMsdW5DooUlqP4XPXrVI=
+	b=A+b58Wm9kTW5KZcykkAb32fmezjssyFXFhex+Ji4Yj0vh6CwuMah+3MpbqDtevqBS
+	 hpJhDaaZufo59heoxVYTbh1Tiy1GRDjW5GfNtXF8JkAP6BNAgb8jcdNws0XsAUFOQP
+	 dQ1WyOqlWuN8Gbvl1101UjVT7e+98F74xVz8IO0c=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728833AbfLJWnS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:43:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50992 "EHLO mail.kernel.org"
+        id S1727779AbfLJWbB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:31:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50830 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727967AbfLJWbH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:31:07 -0500
+        id S1727678AbfLJWbA (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:31:00 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E672920836;
-        Tue, 10 Dec 2019 22:31:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5363C214D8;
+        Tue, 10 Dec 2019 22:30:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017066;
-        bh=DDCumilzqX1hW15OnazxpP3d5zUeNiUF7JTCApGmrvE=;
+        s=default; t=1576017060;
+        bh=7yAdFeAARDJpG2jDWe2tPjifPkOJrct+bsnHlvoz40g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DPysJRhM8He4noCCEX+mZ70+P8rQZdcRsS2CjW1h8F+x43OrKDDTXZrzfn8kqA+b+
-         qrnZfUYESY1lUorHUVm/4YpDojTxx/U79nJgVXTzhqVP094v/cz2Av4+M4FYPWXZ90
-         M3GxuA9w+U5pOqR+/dLxgiSbGYsStmCpfdBVlKfc=
+        b=viuzsW/iGblDgmwxpeQe76BKm49iCSOMbTg49yZ+//O8FpbGCVoGY7baoDIlaTN2t
+         fQO2yFi8X2eb4CyIU7fM1UGNn8FJvCSXMTtJ9r/3K3FbBB838N+eTV8zuD3siO/5j+
+         c4fWdEAhNkDUmaMTBl5Il5WrJR0Go+0eqLAsj2iw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Benoit Parrot <bparrot@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 26/91] media: ti-vpe: vpe: fix a v4l2-compliance failure about frame sequence number
-Date:   Tue, 10 Dec 2019 17:29:30 -0500
-Message-Id: <20191210223035.14270-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 20/91] media: flexcop-usb: fix NULL-ptr deref in flexcop_usb_transfer_init()
+Date:   Tue, 10 Dec 2019 17:29:24 -0500
+Message-Id: <20191210223035.14270-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210223035.14270-1-sashal@kernel.org>
 References: <20191210223035.14270-1-sashal@kernel.org>
@@ -60,48 +59,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Benoit Parrot <bparrot@ti.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 2444846c0dbfa4ead21b621e4300ec32c90fbf38 ]
+[ Upstream commit 649cd16c438f51d4cd777e71ca1f47f6e0c5e65d ]
 
-v4l2-compliance fails with this message:
+If usb_set_interface() failed, iface->cur_altsetting will
+not be assigned and it will be used in flexcop_usb_transfer_init()
+It may lead a NULL pointer dereference.
 
-   fail: v4l2-test-buffers.cpp(294): \
-	(int)g_sequence() < seq.last_seq + 1
-   fail: v4l2-test-buffers.cpp(740): \
-	buf.check(m2m_q, last_m2m_seq)
-   fail: v4l2-test-buffers.cpp(974): \
-	captureBufs(node, q, m2m_q, frame_count, true)
-   test MMAP: FAIL
+Check usb_set_interface() return value in flexcop_usb_init()
+and return failed to avoid using this NULL pointer.
 
-The driver is failing to update the source frame sequence number in the
-vb2 buffer object. Only the destination frame sequence was being
-updated.
-
-This is only a reporting issue if the user space app actually cares
-about the frame sequence number. But it is fixed nonetheless.
-
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/usb/b2c2/flexcop-usb.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index da308fa6561fc..067548e14e113 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -1298,6 +1298,7 @@ static irqreturn_t vpe_irq(int irq_vpe, void *data)
- 		d_vb->timecode = s_vb->timecode;
- 
- 	d_vb->sequence = ctx->sequence;
-+	s_vb->sequence = ctx->sequence;
- 
- 	d_q_data = &ctx->q_data[Q_DATA_DST];
- 	if (d_q_data->flags & Q_DATA_INTERLACED) {
+diff --git a/drivers/media/usb/b2c2/flexcop-usb.c b/drivers/media/usb/b2c2/flexcop-usb.c
+index 1fc3c8d7dd9b8..2594d6a7393fa 100644
+--- a/drivers/media/usb/b2c2/flexcop-usb.c
++++ b/drivers/media/usb/b2c2/flexcop-usb.c
+@@ -504,7 +504,13 @@ static int flexcop_usb_transfer_init(struct flexcop_usb *fc_usb)
+ static int flexcop_usb_init(struct flexcop_usb *fc_usb)
+ {
+ 	/* use the alternate setting with the larges buffer */
+-	usb_set_interface(fc_usb->udev,0,1);
++	int ret = usb_set_interface(fc_usb->udev, 0, 1);
++
++	if (ret) {
++		err("set interface failed.");
++		return ret;
++	}
++
+ 	switch (fc_usb->udev->speed) {
+ 	case USB_SPEED_LOW:
+ 		err("cannot handle USB speed because it is too slow.");
 -- 
 2.20.1
 
