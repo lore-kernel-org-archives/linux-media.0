@@ -6,43 +6,43 @@ X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDD70C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 19:48:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48F6EC2D0BF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 19:48:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CE4B920652
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 19:48:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2759620828
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 19:48:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726818AbfLJTsE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 14:48:04 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:37530 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726741AbfLJTsE (ORCPT
+        id S1726901AbfLJTsQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 14:48:16 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:37242 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726739AbfLJTsC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 14:48:04 -0500
-Received: by mail-io1-f69.google.com with SMTP id p2so14113407iof.4
-        for <linux-media@vger.kernel.org>; Tue, 10 Dec 2019 11:48:03 -0800 (PST)
+        Tue, 10 Dec 2019 14:48:02 -0500
+Received: by mail-il1-f198.google.com with SMTP id t19so15321213ila.4
+        for <linux-media@vger.kernel.org>; Tue, 10 Dec 2019 11:48:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
          :from:to:cc;
         bh=EpJ1D8lGNCCnF6AyqKcMgQqopgAaZAfpppfEN6g4mew=;
-        b=RY8DbobIk8Sw8SSCxi3RqnIphs27/ard+KnLuNLUo7P4HmSMRI//4B78VbWt1cJl+1
-         YY12vfnEDp3v73LSzk/wFf3vCW6PDAPeaZmDOe7btASysbf7v0UfzKTKrqXZLKyZeIZN
-         vF4IboBgLaHlw3mQOnDr9GgXb0gZ1LoX48DLk7VXoPxBFfr8vJYHjtPkBd/UBTESr344
-         hxEIoHXQDRGzEWI2FOzf0mdS+5KA94KNjowt/9zmXhgQ1cVys9qAD/6SAulpdRuDQ4TV
-         0b++TEUMeTbTN2FRIfOCUN2VQmiIn3gAL3qz9h91pykHxhhU1braYaL4j1QY/5vpt8Sl
-         m34w==
-X-Gm-Message-State: APjAAAUKbilVHf45RmyMLeUOeS0ay0T04Zg0+wCX3W3KfkCXFVX8NG8O
-        Me2889RlntQX/huZbZJx01WMDPMCtykx1FcQFvdmIVmwKUiy
-X-Google-Smtp-Source: APXvYqwuqiWxFJXsBzogBCZjMGzDiTKUypBZbe+oMoucxW8s2E2Cb8cXBp3EE0k/qlPWuuAizvelDPXY0UPuH6oDIY+R0HfGA4r5
+        b=mINxMujhbWCWYzrlOslkGgLoS/yKSV+vOGC3YH8xbnDa+l0VPlWdvJ3NXSUnXcKPA9
+         /E4djaiAXAvmDku+bZ3TtGUbEDy3R838OQ8QSXBXSTfBOhvXi0qdRaLd3k6crOMoguT1
+         lCSCtfJQn6TKGR9vPkJqfBPw6cHIiq/XslGCfbfm8UPDqrJZAIziLPYrTdjwi0RgeulL
+         ijifIKJtu+2aIPesue5jamIL7MpMRQbpE2ZNd7XeddjxUqOHBFp5O0vkm+9U4NZBKA/W
+         rd3x8zundDEFM1S+F7gKr+juA5YEUBEMkuoKfyef1vHYY4MkkmwzeNCLpSLqBsuF8iXL
+         ty9Q==
+X-Gm-Message-State: APjAAAU9unzCj/+BcC+6H3Z+Faf3f8OkCxs8ZpUu9d7gYFHvoxUyE2Kd
+        6fgcIfbAuIwTmHf10RK8NLjFH2FQr+fxa4tyiCR0a+O+q3hM
+X-Google-Smtp-Source: APXvYqxKD48ONsQ6nd5juqNdffFaYjK5nU3Y6JRWaFArNPVl+DXJ+YsIUSBXX56eZo+5lxcnBCxl8zBrHunWIDie2WOBj/1rR/k5
 MIME-Version: 1.0
-X-Received: by 2002:a02:2385:: with SMTP id u127mr5450623jau.127.1576007282986;
- Tue, 10 Dec 2019 11:48:02 -0800 (PST)
-Date:   Tue, 10 Dec 2019 11:48:02 -0800
+X-Received: by 2002:a02:cd3b:: with SMTP id h27mr16048577jaq.18.1576007281775;
+ Tue, 10 Dec 2019 11:48:01 -0800 (PST)
+Date:   Tue, 10 Dec 2019 11:48:01 -0800
 In-Reply-To: <Pine.LNX.4.44L0.1912101440100.1647-100000@iolanthe.rowland.org>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000441a4205995eca11@google.com>
+Message-ID: <00000000000031a0af05995eca0b@google.com>
 Subject: Re: Re: KASAN: use-after-free Read in usbvision_v4l2_open
 From:   syzbot <syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
