@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D18E2C47409
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:39:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCA25C2D0BF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:39:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 97C9220838
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:39:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8BC5207FF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576017542;
-	bh=0qL3SwA6m1eRx1gaflIScIFZmaIyxiPgB20tGMqjR00=;
+	s=default; t=1576017547;
+	bh=XxvBREQPuGGdyhqoXoacx7lXj4cVXXd21T7m0AxWGng=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WEdG7UkPcUOuExE/W28y42ZxJ/YH9RtRt+gblE3B0wVp/2iCYbmb26y5Cq6QZjUse
-	 /BGymLVPIT5LOLGBU9crIaEtibaJjCvbjltCyypyDDegzqvUR4LXKY4iJZPi4C6fdp
-	 NOc+RZvg+mV1fzA59VVXoBILF2KrZqFdcTw+aLNA=
+	b=2FtkNcs+LONkw1aDEFnFlXQrnR9G+xkMmV5R6apPhLV8booewv7Q7s7RnnvaduzZg
+	 QjImlcsh6gL57lMdetudpQxdgVjqNqXlWdeHFnXt0/BaI4wKWENySl1Ugtz/1ONddc
+	 6NNhXP2IYO8lBaiw2tDtgYrX+g228AzrgSVxHShA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729790AbfLJWd3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:33:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54310 "EHLO mail.kernel.org"
+        id S1730107AbfLJWjE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:39:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54330 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728660AbfLJWd2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:33:28 -0500
+        id S1729776AbfLJWd3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:33:29 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0DA1121556;
-        Tue, 10 Dec 2019 22:33:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2F8DE20828;
+        Tue, 10 Dec 2019 22:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017207;
-        bh=0qL3SwA6m1eRx1gaflIScIFZmaIyxiPgB20tGMqjR00=;
+        s=default; t=1576017208;
+        bh=XxvBREQPuGGdyhqoXoacx7lXj4cVXXd21T7m0AxWGng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=shSi3d8L0ZrrYp3rXflC6ffP+WIJR68w/0zkusoxDotJnICpKKnJPmqAlcWM45Kwm
-         uUXkRTu4QDMlBPYFm/p4uBcJgOMIzD6/nGEVx9mGOxh0SBOYTMAW6RfsofUL8qpEZp
-         Wt+IR3l78HGRwczZQZoEAGdVVKpEKVa4kQHBNj9M=
+        b=x0jgYTTdCxruMJfPSv6S5xh4TbHLRcWAaVQSKysGcu2wCZ2tZ/kcqZ3R6c/NQkdaC
+         yN/4xFb2DCy96TS8R9v10zXPsL7NnQSMt/OAznXmMDN03k5gKkpBqPaF8Se5iO90fR
+         lOWKjVVtTLB5oo+TbTTbnOcAb28xnvqGAVuoO13I=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Benoit Parrot <bparrot@ti.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 09/71] media: i2c: ov2659: fix s_stream return value
-Date:   Tue, 10 Dec 2019 17:32:14 -0500
-Message-Id: <20191210223316.14988-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 10/71] media: i2c: ov2659: Fix missing 720p register config
+Date:   Tue, 10 Dec 2019 17:32:15 -0500
+Message-Id: <20191210223316.14988-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210223316.14988-1-sashal@kernel.org>
 References: <20191210223316.14988-1-sashal@kernel.org>
@@ -61,44 +61,43 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Benoit Parrot <bparrot@ti.com>
 
-[ Upstream commit 85c4043f1d403c222d481dfc91846227d66663fb ]
+[ Upstream commit 9d669fbfca20e6035ead814e55d9ef1a6b500540 ]
 
-In ov2659_s_stream() return value for invoked function should be checked
-and propagated.
+The initial registers sequence is only loaded at probe
+time. Afterward only the resolution and format specific
+register are modified. Care must be taken to make sure
+registers modified by one resolution setting are reverted
+back when another resolution is programmed.
+
+This was not done properly for the 720p case.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov2659.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/media/i2c/ov2659.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
-index fadec1d705829..4f43e8c43950e 100644
+index 4f43e8c43950e..6eefb8bbb5b54 100644
 --- a/drivers/media/i2c/ov2659.c
 +++ b/drivers/media/i2c/ov2659.c
-@@ -1204,11 +1204,15 @@ static int ov2659_s_stream(struct v4l2_subdev *sd, int on)
- 		goto unlock;
- 	}
+@@ -419,10 +419,14 @@ static struct sensor_register ov2659_720p[] = {
+ 	{ REG_TIMING_YINC, 0x11 },
+ 	{ REG_TIMING_VERT_FORMAT, 0x80 },
+ 	{ REG_TIMING_HORIZ_FORMAT, 0x00 },
++	{ 0x370a, 0x12 },
+ 	{ 0x3a03, 0xe8 },
+ 	{ 0x3a09, 0x6f },
+ 	{ 0x3a0b, 0x5d },
+ 	{ 0x3a15, 0x9a },
++	{ REG_VFIFO_READ_START_H, 0x00 },
++	{ REG_VFIFO_READ_START_L, 0x80 },
++	{ REG_ISP_CTRL02, 0x00 },
+ 	{ REG_NULL, 0x00 },
+ };
  
--	ov2659_set_pixel_clock(ov2659);
--	ov2659_set_frame_size(ov2659);
--	ov2659_set_format(ov2659);
--	ov2659_set_streaming(ov2659, 1);
--	ov2659->streaming = on;
-+	ret = ov2659_set_pixel_clock(ov2659);
-+	if (!ret)
-+		ret = ov2659_set_frame_size(ov2659);
-+	if (!ret)
-+		ret = ov2659_set_format(ov2659);
-+	if (!ret) {
-+		ov2659_set_streaming(ov2659, 1);
-+		ov2659->streaming = on;
-+	}
- 
- unlock:
- 	mutex_unlock(&ov2659->lock);
 -- 
 2.20.1
 
