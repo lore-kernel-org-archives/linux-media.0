@@ -7,46 +7,45 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB16DC43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69F01C3F68F
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:42:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9FFFC2073B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:41:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3487A205C9
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014071;
-	bh=CBG6cFNUEWOLCZ3C2+Ez+tEDmfHwhetORL9IB5PYp0U=;
+	s=default; t=1576014160;
+	bh=8xCK5ejZJw5JqOCLcC9w9ySdHcu669dw0YnPtDHWbv8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=n56pm51o5tvNoDq7BqffUkOve0a8HgpCzficOtvtqzXCwrtaalykSsrHA+WEJ5Cwz
-	 FbTGXG1R16r2LOekCJu60ST7n8sNxK0Yg4rUsvLWWPoLpRZf3pr5ZZts2BYIfK9fSk
-	 vYE0u5ysiTJ4STKzHOr9Gstyx6rwf9sxV7woc0mk=
+	b=kaGKNCvUArNIhPUTlDOaimg2BXpC8f6q/QrGotst6mgfvT/8VB+Nf7An++ZaAVhVy
+	 x3WyFoc8LS6vdcnQtxwdhiAU6cnZtRmZ4a5ErFqSakoFd50j7s/ga0NDsEH8aznu2/
+	 p8eDajerIg1an8ynpjrp6Na34TMYjz5ok4Hve95o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728250AbfLJVk5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:40:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39504 "EHLO mail.kernel.org"
+        id S1729878AbfLJVd6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:33:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38528 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727634AbfLJVeY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:34:24 -0500
+        id S1729821AbfLJVdx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:33:53 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 174F62073B;
-        Tue, 10 Dec 2019 21:34:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3BA93208C3;
+        Tue, 10 Dec 2019 21:33:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576013663;
-        bh=CBG6cFNUEWOLCZ3C2+Ez+tEDmfHwhetORL9IB5PYp0U=;
+        s=default; t=1576013632;
+        bh=8xCK5ejZJw5JqOCLcC9w9ySdHcu669dw0YnPtDHWbv8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pMzpmCJDAKR4tatPza94z6XWCjzPN7ahcDvkQvJc0X3iAQV4Ee5H79oIT5z5Mtyur
-         HaF/vUuF+0uC0F6YMu8AaqJdd9UVfcHC+8krE41UKVvhxO5O2TlP5mlRdOY4d+uOtT
-         RbNkcg4nD0Up6wFP1rUC5HDBuZ4MZio43tbwaeUQ=
+        b=2KdXUbfHopZYViaG28sBaVpe9eNcmWrLcF7lp6K+jbPfABhjHXlnIvDWiZtvaNNB+
+         xJlud/yf9wX4qB/1VjdXMCa6zA9MunHSZn4odTIe4xe4MrZ5gQ40prISo/zWPowZM0
+         KiCi652TWYZ1zSF05Yg5UNh4StGgGbiE9QSarRxA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vandana BN <bnvandana@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 101/177] media: v4l2-core: fix touch support in v4l_g_fmt
-Date:   Tue, 10 Dec 2019 16:31:05 -0500
-Message-Id: <20191210213221.11921-101-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 074/177] media: smiapp: Register sensor after enabling runtime PM on the device
+Date:   Tue, 10 Dec 2019 16:30:38 -0500
+Message-Id: <20191210213221.11921-74-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
 References: <20191210213221.11921-1-sashal@kernel.org>
@@ -59,85 +58,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Vandana BN <bnvandana@gmail.com>
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-[ Upstream commit 545b618cfb5cadacd00c25066b9a36540e5ca9e9 ]
+[ Upstream commit 90c9e4a4dba9f4de331372e745fb1991c1faa598 ]
 
-v4l_s_fmt, for VFL_TYPE_TOUCH, sets unneeded members of
-the v4l2_pix_format structure to default values.This was
-missing in v4l_g_fmt, which would lead to failures in
-v4l2-compliance tests.
+Earlier it was possible that the parts of the driver that assumed runtime
+PM was enabled were being called before runtime PM was enabled in the
+driver's probe function. So enable runtime PM before registering the
+sub-device.
 
-Signed-off-by: Vandana BN <bnvandana@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ioctl.c | 33 +++++++++++++++-------------
- 1 file changed, 18 insertions(+), 15 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-core.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index a4d3e94a400c8..7675b645db2ec 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1415,10 +1415,26 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
- 	return ret;
- }
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index 1236683da8f75..4731e1c72f960 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -3108,19 +3108,23 @@ static int smiapp_probe(struct i2c_client *client,
+ 	if (rval < 0)
+ 		goto out_media_entity_cleanup;
  
-+static void v4l_pix_format_touch(struct v4l2_pix_format *p)
-+{
-+	/*
-+	 * The v4l2_pix_format structure contains fields that make no sense for
-+	 * touch. Set them to default values in this case.
-+	 */
-+
-+	p->field = V4L2_FIELD_NONE;
-+	p->colorspace = V4L2_COLORSPACE_RAW;
-+	p->flags = 0;
-+	p->ycbcr_enc = 0;
-+	p->quantization = 0;
-+	p->xfer_func = 0;
-+}
-+
- static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
- 				struct file *file, void *fh, void *arg)
- {
- 	struct v4l2_format *p = arg;
-+	struct video_device *vfd = video_devdata(file);
- 	int ret = check_fmt(file, p->type);
- 
- 	if (ret)
-@@ -1456,6 +1472,8 @@ static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
- 		ret = ops->vidioc_g_fmt_vid_cap(file, fh, arg);
- 		/* just in case the driver zeroed it again */
- 		p->fmt.pix.priv = V4L2_PIX_FMT_PRIV_MAGIC;
-+		if (vfd->vfl_type == VFL_TYPE_TOUCH)
-+			v4l_pix_format_touch(&p->fmt.pix);
- 		return ret;
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
- 		return ops->vidioc_g_fmt_vid_cap_mplane(file, fh, arg);
-@@ -1491,21 +1509,6 @@ static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
- 	return -EINVAL;
- }
- 
--static void v4l_pix_format_touch(struct v4l2_pix_format *p)
--{
--	/*
--	 * The v4l2_pix_format structure contains fields that make no sense for
--	 * touch. Set them to default values in this case.
--	 */
+-	rval = v4l2_async_register_subdev_sensor_common(&sensor->src->sd);
+-	if (rval < 0)
+-		goto out_media_entity_cleanup;
 -
--	p->field = V4L2_FIELD_NONE;
--	p->colorspace = V4L2_COLORSPACE_RAW;
--	p->flags = 0;
--	p->ycbcr_enc = 0;
--	p->quantization = 0;
--	p->xfer_func = 0;
--}
--
- static int v4l_s_fmt(const struct v4l2_ioctl_ops *ops,
- 				struct file *file, void *fh, void *arg)
- {
+ 	pm_runtime_set_active(&client->dev);
+ 	pm_runtime_get_noresume(&client->dev);
+ 	pm_runtime_enable(&client->dev);
++
++	rval = v4l2_async_register_subdev_sensor_common(&sensor->src->sd);
++	if (rval < 0)
++		goto out_disable_runtime_pm;
++
+ 	pm_runtime_set_autosuspend_delay(&client->dev, 1000);
+ 	pm_runtime_use_autosuspend(&client->dev);
+ 	pm_runtime_put_autosuspend(&client->dev);
+ 
+ 	return 0;
+ 
++out_disable_runtime_pm:
++	pm_runtime_disable(&client->dev);
++
+ out_media_entity_cleanup:
+ 	media_entity_cleanup(&sensor->src->sd.entity);
+ 
 -- 
 2.20.1
 
