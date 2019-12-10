@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99D22C00454
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D18E2C47409
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:39:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6593C2053B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:38:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97C9220838
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:39:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576017533;
-	bh=oOxMJ+A2UfXI1FaJjvAhzHsorqxw6QouucVm0mMiEqk=;
+	s=default; t=1576017542;
+	bh=0qL3SwA6m1eRx1gaflIScIFZmaIyxiPgB20tGMqjR00=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=f6JO3Un0haGWVnnT327R8BqDbMaG7lKuIsG67s8LAkldLXh+gw3kir0NkjAEzjlNa
-	 i5xhi8+n/xaftOSH8GCDDzRxMMY9yCt0sZnEDySlfXpfny9oLAg8ivI3BTZh5YxmNu
-	 NQnGKGq8+VbkZCYz6PnMQmGyCj7shBAIe6wSrDlo=
+	b=WEdG7UkPcUOuExE/W28y42ZxJ/YH9RtRt+gblE3B0wVp/2iCYbmb26y5Cq6QZjUse
+	 /BGymLVPIT5LOLGBU9crIaEtibaJjCvbjltCyypyDDegzqvUR4LXKY4iJZPi4C6fdp
+	 NOc+RZvg+mV1fzA59VVXoBILF2KrZqFdcTw+aLNA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728957AbfLJWio (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:38:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54514 "EHLO mail.kernel.org"
+        id S1729790AbfLJWd3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:33:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54310 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729857AbfLJWdg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:33:36 -0500
+        id S1728660AbfLJWd2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:33:28 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 637CD20838;
-        Tue, 10 Dec 2019 22:33:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0DA1121556;
+        Tue, 10 Dec 2019 22:33:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017216;
-        bh=oOxMJ+A2UfXI1FaJjvAhzHsorqxw6QouucVm0mMiEqk=;
+        s=default; t=1576017207;
+        bh=0qL3SwA6m1eRx1gaflIScIFZmaIyxiPgB20tGMqjR00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vv8kv61PuSQ5/Tw7o6Hz2ReheVEJCnRrGKoH+JE2L3iEXO3iB1h8m4GBRQSxu59Vv
-         k7lWfWfBFb0w+pDtkQvi8HVe/LChbsmqkjqp8CKWINnlILKB2VdOVa/x4i1uNzzXeQ
-         ifJRxx2ZAm42S0yqfJIsPJo/7pslOw3Jhx4xC3J4=
+        b=shSi3d8L0ZrrYp3rXflC6ffP+WIJR68w/0zkusoxDotJnICpKKnJPmqAlcWM45Kwm
+         uUXkRTu4QDMlBPYFm/p4uBcJgOMIzD6/nGEVx9mGOxh0SBOYTMAW6RfsofUL8qpEZp
+         Wt+IR3l78HGRwczZQZoEAGdVVKpEKVa4kQHBNj9M=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
-        Sean Young <sean@mess.org>,
+Cc:     Benoit Parrot <bparrot@ti.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 16/71] media: flexcop-usb: fix NULL-ptr deref in flexcop_usb_transfer_init()
-Date:   Tue, 10 Dec 2019 17:32:21 -0500
-Message-Id: <20191210223316.14988-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 09/71] media: i2c: ov2659: fix s_stream return value
+Date:   Tue, 10 Dec 2019 17:32:14 -0500
+Message-Id: <20191210223316.14988-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210223316.14988-1-sashal@kernel.org>
 References: <20191210223316.14988-1-sashal@kernel.org>
@@ -59,44 +59,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Benoit Parrot <bparrot@ti.com>
 
-[ Upstream commit 649cd16c438f51d4cd777e71ca1f47f6e0c5e65d ]
+[ Upstream commit 85c4043f1d403c222d481dfc91846227d66663fb ]
 
-If usb_set_interface() failed, iface->cur_altsetting will
-not be assigned and it will be used in flexcop_usb_transfer_init()
-It may lead a NULL pointer dereference.
+In ov2659_s_stream() return value for invoked function should be checked
+and propagated.
 
-Check usb_set_interface() return value in flexcop_usb_init()
-and return failed to avoid using this NULL pointer.
-
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/b2c2/flexcop-usb.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/media/i2c/ov2659.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/usb/b2c2/flexcop-usb.c b/drivers/media/usb/b2c2/flexcop-usb.c
-index 83d3a5cf272f2..932fa31e0624a 100644
---- a/drivers/media/usb/b2c2/flexcop-usb.c
-+++ b/drivers/media/usb/b2c2/flexcop-usb.c
-@@ -474,7 +474,13 @@ static int flexcop_usb_transfer_init(struct flexcop_usb *fc_usb)
- static int flexcop_usb_init(struct flexcop_usb *fc_usb)
- {
- 	/* use the alternate setting with the larges buffer */
--	usb_set_interface(fc_usb->udev,0,1);
-+	int ret = usb_set_interface(fc_usb->udev, 0, 1);
-+
-+	if (ret) {
-+		err("set interface failed.");
-+		return ret;
+diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
+index fadec1d705829..4f43e8c43950e 100644
+--- a/drivers/media/i2c/ov2659.c
++++ b/drivers/media/i2c/ov2659.c
+@@ -1204,11 +1204,15 @@ static int ov2659_s_stream(struct v4l2_subdev *sd, int on)
+ 		goto unlock;
+ 	}
+ 
+-	ov2659_set_pixel_clock(ov2659);
+-	ov2659_set_frame_size(ov2659);
+-	ov2659_set_format(ov2659);
+-	ov2659_set_streaming(ov2659, 1);
+-	ov2659->streaming = on;
++	ret = ov2659_set_pixel_clock(ov2659);
++	if (!ret)
++		ret = ov2659_set_frame_size(ov2659);
++	if (!ret)
++		ret = ov2659_set_format(ov2659);
++	if (!ret) {
++		ov2659_set_streaming(ov2659, 1);
++		ov2659->streaming = on;
 +	}
-+
- 	switch (fc_usb->udev->speed) {
- 	case USB_SPEED_LOW:
- 		err("cannot handle USB speed because it is too slow.");
+ 
+ unlock:
+ 	mutex_unlock(&ov2659->lock);
 -- 
 2.20.1
 
