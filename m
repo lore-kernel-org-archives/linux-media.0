@@ -2,33 +2,35 @@ Return-Path: <SRS0=nGM0=2A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2436DC2D0C4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AB5EC2D0BF
 	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 01FBB214AF
+	by mail.kernel.org (Postfix) with ESMTP id 79A8E214AF
 	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727441AbfLJN7F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 08:59:05 -0500
-Received: from mx2.suse.de ([195.135.220.15]:51726 "EHLO mx1.suse.de"
+        id S1727448AbfLJN7G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 08:59:06 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51708 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727380AbfLJN7E (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1727159AbfLJN7E (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 10 Dec 2019 08:59:04 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 18DD7B157;
+        by mx1.suse.de (Postfix) with ESMTP id 09EBAAEEC;
         Tue, 10 Dec 2019 13:59:00 +0000 (UTC)
 From:   Takashi Iwai <tiwai@suse.de>
 To:     linux-media@vger.kernel.org
 Cc:     alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>,
+        Andy Walls <awalls@md.metrocast.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH for-5.6 10/14] media: tm6000: Clean up ALSA PCM API usages
-Date:   Tue, 10 Dec 2019 14:58:45 +0100
-Message-Id: <20191210135849.15607-11-tiwai@suse.de>
+Subject: [PATCH for-5.6 05/14] media: cx18: Clean up ALSA PCM API usages
+Date:   Tue, 10 Dec 2019 14:58:40 +0100
+Message-Id: <20191210135849.15607-6-tiwai@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191210135849.15607-1-tiwai@suse.de>
 References: <20191210135849.15607-1-tiwai@suse.de>
@@ -37,116 +39,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With the recent change in ALSA PCM core, the whole open-coded vmalloc
-buffer handling in this driver can be dropped by replacing with the
+With the recent	change in ALSA PCM core, the whole open-coded vmalloc
+buffer handling	in this	driver can be dropped by replacing with	the
 managed buffer allocation.
 
-Also, snd_tm6000_capture_free() is dropped since the check of
-stream_started flag makes no sense; hw_free callback is guaranteed to
-be called after the stream gets stopped.
-
+Cc: Andy Walls <awalls@md.metrocast.net>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/media/usb/tm6000/tm6000-alsa.c | 81 +---------------------------------
- 1 file changed, 1 insertion(+), 80 deletions(-)
+ drivers/media/pci/cx18/cx18-alsa-pcm.c | 62 +---------------------------------
+ 1 file changed, 1 insertion(+), 61 deletions(-)
 
-diff --git a/drivers/media/usb/tm6000/tm6000-alsa.c b/drivers/media/usb/tm6000/tm6000-alsa.c
-index d6c79c13b332..2bfa5abc1b49 100644
---- a/drivers/media/usb/tm6000/tm6000-alsa.c
-+++ b/drivers/media/usb/tm6000/tm6000-alsa.c
-@@ -10,7 +10,6 @@
- #include <linux/interrupt.h>
- #include <linux/usb.h>
- #include <linux/slab.h>
+diff --git a/drivers/media/pci/cx18/cx18-alsa-pcm.c b/drivers/media/pci/cx18/cx18-alsa-pcm.c
+index 13f858c41836..7dec5ce20eb7 100644
+--- a/drivers/media/pci/cx18/cx18-alsa-pcm.c
++++ b/drivers/media/pci/cx18/cx18-alsa-pcm.c
+@@ -11,7 +11,6 @@
+ 
+ #include <linux/init.h>
+ #include <linux/kernel.h>
 -#include <linux/vmalloc.h>
  
- #include <linux/delay.h>
- #include <sound/core.h>
-@@ -94,40 +93,6 @@ static int _tm6000_stop_audio_dma(struct snd_tm6000_card *chip)
- 	return 0;
+ #include <media/v4l2-device.h>
+ 
+@@ -213,55 +212,6 @@ static int snd_cx18_pcm_ioctl(struct snd_pcm_substream *substream,
+ 	return ret;
  }
  
--static void dsp_buffer_free(struct snd_pcm_substream *substream)
+-
+-static int snd_pcm_alloc_vmalloc_buffer(struct snd_pcm_substream *subs,
+-					size_t size)
 -{
--	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
+-	struct snd_pcm_runtime *runtime = subs->runtime;
 -
--	dprintk(2, "Freeing buffer\n");
--
--	vfree(substream->runtime->dma_area);
--	substream->runtime->dma_area = NULL;
--	substream->runtime->dma_bytes = 0;
--}
--
--static int dsp_buffer_alloc(struct snd_pcm_substream *substream, int size)
--{
--	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
--
--	dprintk(2, "Allocating buffer\n");
--
--	if (substream->runtime->dma_area) {
--		if (substream->runtime->dma_bytes > size)
+-	dprintk("Allocating vbuffer\n");
+-	if (runtime->dma_area) {
+-		if (runtime->dma_bytes > size)
 -			return 0;
 -
--		dsp_buffer_free(substream);
+-		vfree(runtime->dma_area);
 -	}
--
--	substream->runtime->dma_area = vmalloc(size);
--	if (!substream->runtime->dma_area)
+-	runtime->dma_area = vmalloc(size);
+-	if (!runtime->dma_area)
 -		return -ENOMEM;
 -
--	substream->runtime->dma_bytes = size;
+-	runtime->dma_bytes = size;
 -
 -	return 0;
 -}
 -
--
- /****************************************************************************
- 				ALSA PCM Interface
-  ****************************************************************************/
-@@ -268,40 +233,6 @@ static int tm6000_fillbuf(struct tm6000_core *core, char *buf, int size)
- 	return 0;
- }
- 
--/*
-- * hw_params callback
-- */
--static int snd_tm6000_hw_params(struct snd_pcm_substream *substream,
--			      struct snd_pcm_hw_params *hw_params)
+-static int snd_cx18_pcm_hw_params(struct snd_pcm_substream *substream,
+-			 struct snd_pcm_hw_params *params)
 -{
--	int size, rc;
+-	dprintk("%s called\n", __func__);
 -
--	size = params_period_bytes(hw_params) * params_periods(hw_params);
--
--	rc = dsp_buffer_alloc(substream, size);
--	if (rc < 0)
--		return rc;
--
--	return 0;
+-	return snd_pcm_alloc_vmalloc_buffer(substream,
+-					   params_buffer_bytes(params));
 -}
 -
--/*
-- * hw free callback
-- */
--static int snd_tm6000_hw_free(struct snd_pcm_substream *substream)
+-static int snd_cx18_pcm_hw_free(struct snd_pcm_substream *substream)
 -{
--	struct snd_tm6000_card *chip = snd_pcm_substream_chip(substream);
--	struct tm6000_core *core = chip->core;
+-	struct snd_cx18_card *cxsc = snd_pcm_substream_chip(substream);
+-	unsigned long flags;
+-	unsigned char *dma_area = NULL;
 -
--	if (atomic_read(&core->stream_started) > 0) {
--		atomic_set(&core->stream_started, 0);
--		schedule_work(&core->wq_trigger);
+-	spin_lock_irqsave(&cxsc->slock, flags);
+-	if (substream->runtime->dma_area) {
+-		dprintk("freeing pcm capture region\n");
+-		dma_area = substream->runtime->dma_area;
+-		substream->runtime->dma_area = NULL;
 -	}
+-	spin_unlock_irqrestore(&cxsc->slock, flags);
+-	vfree(dma_area);
 -
--	dsp_buffer_free(substream);
 -	return 0;
 -}
 -
- /*
-  * prepare callback
-  */
-@@ -369,14 +300,6 @@ static snd_pcm_uframes_t snd_tm6000_pointer(struct snd_pcm_substream *substream)
- 	return chip->buf_pos;
+ static int snd_cx18_pcm_prepare(struct snd_pcm_substream *substream)
+ {
+ 	struct snd_cx18_card *cxsc = snd_pcm_substream_chip(substream);
+@@ -291,24 +241,13 @@ snd_pcm_uframes_t snd_cx18_pcm_pointer(struct snd_pcm_substream *substream)
+ 	return hwptr_done;
  }
  
 -static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
@@ -157,30 +130,27 @@ index d6c79c13b332..2bfa5abc1b49 100644
 -	return vmalloc_to_page(pageptr);
 -}
 -
- /*
-  * operators
-  */
-@@ -384,12 +307,9 @@ static const struct snd_pcm_ops snd_tm6000_pcm_ops = {
- 	.open = snd_tm6000_pcm_open,
- 	.close = snd_tm6000_close,
- 	.ioctl = snd_pcm_lib_ioctl,
--	.hw_params = snd_tm6000_hw_params,
--	.hw_free = snd_tm6000_hw_free,
- 	.prepare = snd_tm6000_prepare,
- 	.trigger = snd_tm6000_card_trigger,
- 	.pointer = snd_tm6000_pointer,
--	.page = snd_pcm_get_vmalloc_page,
+ static const struct snd_pcm_ops snd_cx18_pcm_capture_ops = {
+ 	.open		= snd_cx18_pcm_capture_open,
+ 	.close		= snd_cx18_pcm_capture_close,
+ 	.ioctl		= snd_cx18_pcm_ioctl,
+-	.hw_params	= snd_cx18_pcm_hw_params,
+-	.hw_free	= snd_cx18_pcm_hw_free,
+ 	.prepare	= snd_cx18_pcm_prepare,
+ 	.trigger	= snd_cx18_pcm_trigger,
+ 	.pointer	= snd_cx18_pcm_pointer,
+-	.page		= snd_pcm_get_vmalloc_page,
  };
  
- /*
-@@ -459,6 +379,7 @@ static int tm6000_audio_init(struct tm6000_core *dev)
- 	strscpy(pcm->name, "Trident TM5600/60x0", sizeof(pcm->name));
+ int snd_cx18_pcm_create(struct snd_cx18_card *cxsc)
+@@ -334,6 +273,7 @@ int snd_cx18_pcm_create(struct snd_cx18_card *cxsc)
  
- 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_tm6000_pcm_ops);
-+	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
- 
- 	INIT_WORK(&dev->wq_trigger, audio_trigger);
- 	rc = snd_card_register(card);
+ 	snd_pcm_set_ops(sp, SNDRV_PCM_STREAM_CAPTURE,
+ 			&snd_cx18_pcm_capture_ops);
++	snd_pcm_set_managed_buffer_all(sp, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
+ 	sp->info_flags = 0;
+ 	sp->private_data = cxsc;
+ 	strscpy(sp->name, cx->card_name, sizeof(sp->name));
 -- 
 2.16.4
 
