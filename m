@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F15DC43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA288C43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:31:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F38FE208C3
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:13:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE48D214AF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:31:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576016033;
-	bh=FOKD6FXWX6YBeDn+aiJmzV5MbF2npfo3geb+DF/JBBI=;
+	s=default; t=1576017067;
+	bh=TwpJsn+VWHD6/a00zAejKGYPYa89KcNwRWbQTMR1IVk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=UuYyNFwEPwTtj7KatxQ2o5mLKiQpDJNJBl+h8+XjNCP72OEYppkPXQClaqErRHhGg
-	 lNKdRkimHod4GmoprO2TF58Jx2WgqHzIj3lJzNvrAwas62ePWgKwmQ8EzqnJz5NeC9
-	 4fAx9UUW7CKjkrEz6ivhsr29VQe8ccWQQ0uNdPG8=
+	b=nH1dvxcpiVgNZxepG5bfcKEOKniDZYbFGsF435xL6hQWGf9IhRqoUWy0ufsgtXkNh
+	 G37RT4Fu8ar+IOCSl4GX6j8nJzRpyCuVQmZlxiuGvTiUMvbejm5O49jXWzIAtSMTAq
+	 +huW0qMyPw29mJcX98Z63IWVg72bH/1Z4ak+yZAs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727965AbfLJWNr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:13:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33320 "EHLO mail.kernel.org"
+        id S1727955AbfLJWbG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:31:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727325AbfLJWDR (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:03:17 -0500
+        id S1727913AbfLJWbG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:31:06 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E57272053B;
-        Tue, 10 Dec 2019 22:03:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B787E207FF;
+        Tue, 10 Dec 2019 22:31:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576015396;
-        bh=FOKD6FXWX6YBeDn+aiJmzV5MbF2npfo3geb+DF/JBBI=;
+        s=default; t=1576017065;
+        bh=TwpJsn+VWHD6/a00zAejKGYPYa89KcNwRWbQTMR1IVk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hAbzOqvbqNi8mD/fb4V8YA34UpPjKM2+RivhuXAxDkkwPLj0ia6DXsvsXFAex7Olq
-         iPfJSpcpr/MJGMFA+WW0+z+vi4uHRvwCySJCabnAuqE7NCE1V7wJk4BsxDP7bMNoLX
-         0twZbnTjmTpDpEZIa6D+B/T6mMAF+8pnCe1sJe1E=
+        b=P3jUTg3NI7UKDdggR0pJ0WP28+U+55kkf01cYerHDjGP1CFAOsO30n+aXYxbkhyh3
+         T3Mi7m8UfvD6jFPJA0tysb9JbZJeBRQaGrQjFZvLnqP4Kvp1m8/E83DQlnJuelBsd9
+         A4NdTE7af/uny9P4iuOGCvhVmuhRAQEXqrOn9iiw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Benoit Parrot <bparrot@ti.com>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 012/130] media: am437x-vpfe: Setting STD to current value is not an error
-Date:   Tue, 10 Dec 2019 17:01:03 -0500
-Message-Id: <20191210220301.13262-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 25/91] media: ti-vpe: vpe: fix a v4l2-compliance warning about invalid pixel format
+Date:   Tue, 10 Dec 2019 17:29:29 -0500
+Message-Id: <20191210223035.14270-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
-References: <20191210220301.13262-1-sashal@kernel.org>
+In-Reply-To: <20191210223035.14270-1-sashal@kernel.org>
+References: <20191210223035.14270-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,36 +62,77 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Benoit Parrot <bparrot@ti.com>
 
-[ Upstream commit 13aa21cfe92ce9ebb51824029d89f19c33f81419 ]
+[ Upstream commit 06bec72b250b2cb3ba96fa45c2b8e0fb83745517 ]
 
-VIDIOC_S_STD should not return an error if the value is identical
-to the current one.
-This error was highlighted by the v4l2-compliance test.
+v4l2-compliance warns with this message:
+
+   warn: v4l2-test-formats.cpp(717): \
+ 	TRY_FMT cannot handle an invalid pixelformat.
+   warn: v4l2-test-formats.cpp(718): \
+ 	This may or may not be a problem. For more information see:
+   warn: v4l2-test-formats.cpp(719): \
+ 	http://www.mail-archive.com/linux-media@vger.kernel.org/msg56550.html
+	...
+   test VIDIOC_TRY_FMT: FAIL
+
+We need to make sure that the returns a valid pixel format in all
+instance. Based on the v4l2 framework convention drivers must return a
+valid pixel format when the requested pixel format is either invalid or
+not supported.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/platform/ti-vpe/vpe.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index dfcc484cab898..e92c5b56be422 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -1848,6 +1848,10 @@ static int vpfe_s_std(struct file *file, void *priv, v4l2_std_id std_id)
- 	if (!(sdinfo->inputs[0].capabilities & V4L2_IN_CAP_STD))
- 		return -ENODATA;
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
+index 0189f7f7cb03f..da308fa6561fc 100644
+--- a/drivers/media/platform/ti-vpe/vpe.c
++++ b/drivers/media/platform/ti-vpe/vpe.c
+@@ -330,20 +330,25 @@ enum {
+ };
  
-+	/* if trying to set the same std then nothing to do */
-+	if (vpfe_standards[vpfe->std_index].std_id == std_id)
-+		return 0;
+ /* find our format description corresponding to the passed v4l2_format */
+-static struct vpe_fmt *find_format(struct v4l2_format *f)
++static struct vpe_fmt *__find_format(u32 fourcc)
+ {
+ 	struct vpe_fmt *fmt;
+ 	unsigned int k;
+ 
+ 	for (k = 0; k < ARRAY_SIZE(vpe_formats); k++) {
+ 		fmt = &vpe_formats[k];
+-		if (fmt->fourcc == f->fmt.pix.pixelformat)
++		if (fmt->fourcc == fourcc)
+ 			return fmt;
+ 	}
+ 
+ 	return NULL;
+ }
+ 
++static struct vpe_fmt *find_format(struct v4l2_format *f)
++{
++	return __find_format(f->fmt.pix.pixelformat);
++}
 +
- 	/* If streaming is started, return error */
- 	if (vb2_is_busy(&vpfe->buffer_queue)) {
- 		vpfe_err(vpfe, "%s device busy\n", __func__);
+ /*
+  * there is one vpe_dev structure in the driver, it is shared by
+  * all instances.
+@@ -1433,9 +1438,9 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 	int i, depth, depth_bytes;
+ 
+ 	if (!fmt || !(fmt->types & type)) {
+-		vpe_err(ctx->dev, "Fourcc format (0x%08x) invalid.\n",
++		vpe_dbg(ctx->dev, "Fourcc format (0x%08x) invalid.\n",
+ 			pix->pixelformat);
+-		return -EINVAL;
++		fmt = __find_format(V4L2_PIX_FMT_YUYV);
+ 	}
+ 
+ 	if (pix->field != V4L2_FIELD_NONE && pix->field != V4L2_FIELD_ALTERNATE)
 -- 
 2.20.1
 
