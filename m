@@ -4,52 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE4D6C00454
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:46:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 474F3C2D0BF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:48:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 87E6520637
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:46:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19FC820836
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:48:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014393;
-	bh=TsLxIM1ChRlHACQ/UXlGyCn+c1lnnLqfOcJ7qGUgX7w=;
+	s=default; t=1576014530;
+	bh=7zLsb//lUHhQDy4cBSzI/supsbevb/WRTjAn9ktL5Bg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VxjZfP6mMKaRHXSG+GPMLVZRSIRs3vDmlc/uUVRQ+ZQK2vot2xijvDH+VxKElgEQz
-	 eP1uK39Ilh8bkygBjlBTa8bLBZ5Q8iH1lDCIuFmcsJhBLw71vxk9W2RH6CduF16OhF
-	 WBx1vNoFwWE6NrUdoFjh/fg0bWhIApuymCXG5IlU=
+	b=VozaNFcscgN0QHOjBsdOx4EIdGLez2kUWe/shUeeP+/TWTPDTbNSSMAJpp58d4C6n
+	 yL3/x3zrReQmX8BU8Lfe+aRwHzihj0GwTFDH3BAdgsFmxNUKZE49aLiLaHiQXjHtmb
+	 qr+ZWhYsUrxv+VFUMJGPGGKpWMRIyVTRuq5satvw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729299AbfLJVcm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:32:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36364 "EHLO mail.kernel.org"
+        id S1728192AbfLJVst (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:48:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56514 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728185AbfLJVcl (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:32:41 -0500
+        id S1727954AbfLJVIt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:08:49 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 572DA2073B;
-        Tue, 10 Dec 2019 21:32:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7093024696;
+        Tue, 10 Dec 2019 21:08:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576013561;
-        bh=TsLxIM1ChRlHACQ/UXlGyCn+c1lnnLqfOcJ7qGUgX7w=;
+        s=default; t=1576012128;
+        bh=7zLsb//lUHhQDy4cBSzI/supsbevb/WRTjAn9ktL5Bg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c6Z965SPYt0m8h8Ub52l2U1y+c+Od325/q6LP8r1eprAqp6HZmZS3GY9Yl3YKsEmz
-         uApMDXquQ2OkGZ84DVMURjuIc7Vxf/JcLmSdVO43yORQMYvMf6FCT/pr8VUHEcNNty
-         EJtdScQMmfS/pS/qhcJ5GgYAEeylA2Z1UIWQCIA8=
+        b=pIpfc+SdNqhEO7FycEpRyEuIQCNNX1WGlg9bZGG8uXikREKpj6Y+uDTvepBZpor6W
+         eUAuQZD/obpeC0DF0CAcTjuhHD3CRNtuLMuV4YxB3ptop62rU1vcfGPOFCXgsabtxe
+         52gKEJ4mZAiDVl7sy80YMBDi0EFqopWvrdRmpsVE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Benoit Parrot <bparrot@ti.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 016/177] media: i2c: ov2659: fix s_stream return value
-Date:   Tue, 10 Dec 2019 16:29:40 -0500
-Message-Id: <20191210213221.11921-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 097/350] media: ti-vpe: vpe: fix a v4l2-compliance failure about invalid sizeimage
+Date:   Tue, 10 Dec 2019 16:03:22 -0500
+Message-Id: <20191210210735.9077-58-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
-References: <20191210213221.11921-1-sashal@kernel.org>
+In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
+References: <20191210210735.9077-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,44 +62,60 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Benoit Parrot <bparrot@ti.com>
 
-[ Upstream commit 85c4043f1d403c222d481dfc91846227d66663fb ]
+[ Upstream commit 0bac73adea4df8d34048b38f6ff24dc3e73e90b6 ]
 
-In ov2659_s_stream() return value for invoked function should be checked
-and propagated.
+v4l2-compliance fails with this message:
+
+   fail: v4l2-test-formats.cpp(463): !pfmt.sizeimage
+   fail: v4l2-test-formats.cpp(736): \
+	Video Capture Multiplanar is valid, \
+	but TRY_FMT failed to return a format
+   test VIDIOC_TRY_FMT: FAIL
+
+This failure is causd by the driver failing to handle out range
+'bytesperline' values from user space applications.
+
+VPDMA hardware is limited to 64k line stride (16 bytes aligned, so 65520
+bytes). So make sure the provided or calculated 'bytesperline' is
+smaller than the maximum value.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov2659.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/media/platform/ti-vpe/vpdma.h | 1 +
+ drivers/media/platform/ti-vpe/vpe.c   | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
-index e6a8b5669b9cc..ca079996c7cee 100644
---- a/drivers/media/i2c/ov2659.c
-+++ b/drivers/media/i2c/ov2659.c
-@@ -1203,11 +1203,15 @@ static int ov2659_s_stream(struct v4l2_subdev *sd, int on)
- 		goto unlock;
- 	}
+diff --git a/drivers/media/platform/ti-vpe/vpdma.h b/drivers/media/platform/ti-vpe/vpdma.h
+index 28bc941293484..9bacfd6032501 100644
+--- a/drivers/media/platform/ti-vpe/vpdma.h
++++ b/drivers/media/platform/ti-vpe/vpdma.h
+@@ -57,6 +57,7 @@ struct vpdma_data_format {
+ 						 * line stride of source and dest
+ 						 * buffers should be 16 byte aligned
+ 						 */
++#define VPDMA_MAX_STRIDE		65520	/* Max line stride 16 byte aligned */
+ #define VPDMA_DTD_DESC_SIZE		32	/* 8 words */
+ #define VPDMA_CFD_CTD_DESC_SIZE		16	/* 4 words */
  
--	ov2659_set_pixel_clock(ov2659);
--	ov2659_set_frame_size(ov2659);
--	ov2659_set_format(ov2659);
--	ov2659_set_streaming(ov2659, 1);
--	ov2659->streaming = on;
-+	ret = ov2659_set_pixel_clock(ov2659);
-+	if (!ret)
-+		ret = ov2659_set_frame_size(ov2659);
-+	if (!ret)
-+		ret = ov2659_set_format(ov2659);
-+	if (!ret) {
-+		ov2659_set_streaming(ov2659, 1);
-+		ov2659->streaming = on;
-+	}
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
+index 512660b4ee636..8b14ba4a3d9ea 100644
+--- a/drivers/media/platform/ti-vpe/vpe.c
++++ b/drivers/media/platform/ti-vpe/vpe.c
+@@ -1668,6 +1668,10 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 		if (stride > plane_fmt->bytesperline)
+ 			plane_fmt->bytesperline = stride;
  
- unlock:
- 	mutex_unlock(&ov2659->lock);
++		plane_fmt->bytesperline = clamp_t(u32, plane_fmt->bytesperline,
++						  stride,
++						  VPDMA_MAX_STRIDE);
++
+ 		plane_fmt->bytesperline = ALIGN(plane_fmt->bytesperline,
+ 						VPDMA_STRIDE_ALIGN);
+ 
 -- 
 2.20.1
 
