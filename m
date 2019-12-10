@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3E04C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 521DCC43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:44:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B7E792053B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:44:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2204F2077B
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:44:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576017843;
-	bh=HU9zdePqA6XbDcZNb+CMkH9XK1c2bLdiZEalOsxEZUY=;
+	s=default; t=1576017858;
+	bh=9ayxFiiRo/5juvAvRN+DLnoDZxTnce77doeiWpqr+8E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=GS0MKjE/b37ujJ1RiLc/B6pJ07RYKWSYQFf/+Krl2gAyZw/3NU9P+8HaanNIWHao9
-	 hV13FWIsFUDfhxHsLiT38wrPiWKoXITwDdvMX92v+D2t1mUVBhLFxxD5z+B6Hv5J8V
-	 r5D7lsAApqOqniHWB2LcNg4O91p44Xy5OOLVxjiQ=
+	b=rgNw4Qk/UkFArhU8ogZaLKZfWoIrFGNajGouExcVJ4WrS0nP2FnD3VeQ+/TVR7tI0
+	 T8A08vM4s6TMJZVq4zGZCd9+YVNxGhD8zqQznBOIh6yWRXWnoNXZ5XGd2e4AYiil1s
+	 BCo8ur4r6PtwKjoiAq8+Jz73+YFkHOULYW2gAPz8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728241AbfLJWn7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:43:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50708 "EHLO mail.kernel.org"
+        id S1729824AbfLJWoK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:44:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50620 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727489AbfLJWay (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:30:54 -0500
+        id S1727170AbfLJWav (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:30:51 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3F4BB214D8;
-        Tue, 10 Dec 2019 22:30:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B9279207FF;
+        Tue, 10 Dec 2019 22:30:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017054;
-        bh=HU9zdePqA6XbDcZNb+CMkH9XK1c2bLdiZEalOsxEZUY=;
+        s=default; t=1576017050;
+        bh=9ayxFiiRo/5juvAvRN+DLnoDZxTnce77doeiWpqr+8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KnkFB/MlEUVsVmF8Fe7vjOYC8bkUBafCnpthTJGbNkDi6b4KgPhw+J8z+Hc1RXjPe
-         kHYEOdADWhq/SLKzIeKCP0AbZRwD0DCQgwdsVOoo6EynJQw68sWpAeBCuHK0PULM+Z
-         PWIeHZIy8dbKmm2Y81Z015W1JxpeNHW0OC+zobho=
+        b=U53+gAq+nschF5peaBcm7PP1HNflK3Y+LMkKGOh2WJZ/DkJBasSYGZgxwYJ1tkoxw
+         eO3+M6QpBQTmYyuFV+uzYF6HmEIJL/yqMoQzpUFC4mFicaH6Lq833xwQeotTXAx4nv
+         7qiOikXF9KQlIqEICRHoPUKRcBCzgEVuumQ9KcGw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Benoit Parrot <bparrot@ti.com>,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 15/91] media: ov6650: Fix stored frame format not in sync with hardware
-Date:   Tue, 10 Dec 2019 17:29:19 -0500
-Message-Id: <20191210223035.14270-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 12/91] media: am437x-vpfe: Setting STD to current value is not an error
+Date:   Tue, 10 Dec 2019 17:29:16 -0500
+Message-Id: <20191210223035.14270-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210223035.14270-1-sashal@kernel.org>
 References: <20191210223035.14270-1-sashal@kernel.org>
@@ -59,69 +60,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+From: Benoit Parrot <bparrot@ti.com>
 
-[ Upstream commit 3143b459de4cdcce67b36827476c966e93c1cf01 ]
+[ Upstream commit 13aa21cfe92ce9ebb51824029d89f19c33f81419 ]
 
-The driver stores frame format settings supposed to be in line with
-hardware state in a device private structure.  Since the driver initial
-submission, those settings are updated before they are actually applied
-on hardware.  If an error occurs on device update, the stored settings
-my not reflect hardware state anymore and consecutive calls to
-.get_fmt() may return incorrect information.  That in turn may affect
-ability of a bridge device to use correct DMA transfer settings if such
-incorrect informmation on active frame format returned by .get_fmt() is
-used.
+VIDIOC_S_STD should not return an error if the value is identical
+to the current one.
+This error was highlighted by the v4l2-compliance test.
 
-Assuming a failed device update means its state hasn't changed, update
-frame format related settings stored in the device private structure
-only after they are successfully applied so the stored values always
-reflect hardware state as closely as possible.
-
-Fixes: 2f6e2404799a ("[media] SoC Camera: add driver for OV6650 sensor")
-Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/soc_camera/ov6650.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/media/platform/am437x/am437x-vpfe.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/i2c/soc_camera/ov6650.c b/drivers/media/i2c/soc_camera/ov6650.c
-index fc187c5aeb1e9..7a119466f9734 100644
---- a/drivers/media/i2c/soc_camera/ov6650.c
-+++ b/drivers/media/i2c/soc_camera/ov6650.c
-@@ -612,7 +612,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
- 		dev_err(&client->dev, "Pixel format not handled: 0x%x\n", code);
- 		return -EINVAL;
- 	}
--	priv->code = code;
+diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
+index 05489a401c5c1..bd500f12d0f79 100644
+--- a/drivers/media/platform/am437x/am437x-vpfe.c
++++ b/drivers/media/platform/am437x/am437x-vpfe.c
+@@ -1847,6 +1847,10 @@ static int vpfe_s_std(struct file *file, void *priv, v4l2_std_id std_id)
+ 	if (!(sdinfo->inputs[0].capabilities & V4L2_IN_CAP_STD))
+ 		return -ENODATA;
  
- 	if (code == MEDIA_BUS_FMT_Y8_1X8 ||
- 			code == MEDIA_BUS_FMT_SBGGR8_1X8) {
-@@ -638,7 +637,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
- 		dev_dbg(&client->dev, "max resolution: CIF\n");
- 		coma_mask |= COMA_QCIF;
- 	}
--	priv->half_scale = half_scale;
- 
- 	if (sense) {
- 		if (sense->master_clock == 8000000) {
-@@ -678,8 +676,13 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
- 		ret = ov6650_reg_rmw(client, REG_COMA, coma_set, coma_mask);
- 	if (!ret)
- 		ret = ov6650_reg_write(client, REG_CLKRC, clkrc);
--	if (!ret)
-+	if (!ret) {
-+		priv->half_scale = half_scale;
++	/* if trying to set the same std then nothing to do */
++	if (vpfe_standards[vpfe->std_index].std_id == std_id)
++		return 0;
 +
- 		ret = ov6650_reg_rmw(client, REG_COML, coml_set, coml_mask);
-+	}
-+	if (!ret)
-+		priv->code = code;
- 
- 	if (!ret) {
- 		mf->colorspace	= priv->colorspace;
+ 	/* If streaming is started, return error */
+ 	if (vb2_is_busy(&vpfe->buffer_queue)) {
+ 		vpfe_err(vpfe, "%s device busy\n", __func__);
 -- 
 2.20.1
 
