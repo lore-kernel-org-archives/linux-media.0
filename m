@@ -7,45 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E890C2D0BF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57DF8C2D0BF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5357B2465A
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B8DA214D8
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576015417;
-	bh=bOJWqFHT1L9YfgioB/q0u16wyH4dko1MuPUOSW1YLhI=;
+	s=default; t=1576015432;
+	bh=SGz8r9eKX9gBJ68+HikN3ji8vq9hVDcvAiYpnhVEZjQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cQ+iPw1cGlmwy6PeCIJzzyKWgw8ZS2R9p3Xt2eWxG7i3LJC3nMEVXVmwBImRynOxH
-	 YuXge3mo7/ZCGdmjY8V+EUw5TRPzmHgGnTvcHi6JQmBAd9CWk89+0P/9KX1GS2bV05
-	 9i98gP6WvMhQCRJL7JyBoQanJxwXTTrzNwmcczDI=
+	b=0q7Cyz9SQ5qCVE1QMI16oRr2Wpi+3KbLYA6wlgd1ah3OoTa4VpRC1K+6uKqPLcIln
+	 nRAS0bSRYb4/JvUlkN8Wm+jCdqTB/4WnLhF2vBbv2yTtWdmB2ZxN/qIBsPb5SKUSXc
+	 ykUKqO3kgKyQnBMp/0dskepQy+Y7pmg+Rf7aseAY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727919AbfLJWDg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:03:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33794 "EHLO mail.kernel.org"
+        id S1728213AbfLJWDv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:03:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34226 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727892AbfLJWDe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:03:34 -0500
+        id S1728165AbfLJWDu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:03:50 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7B2722053B;
-        Tue, 10 Dec 2019 22:03:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9E3AF214AF;
+        Tue, 10 Dec 2019 22:03:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576015414;
-        bh=bOJWqFHT1L9YfgioB/q0u16wyH4dko1MuPUOSW1YLhI=;
+        s=default; t=1576015429;
+        bh=SGz8r9eKX9gBJ68+HikN3ji8vq9hVDcvAiYpnhVEZjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PuTPBhcOpUuSF4Rr/XMq0kg988GbYXVZQbaiQ1sIjxtZqJ1CWlpkHCEyHyLaFbnCw
-         k7e87foFWCz16PUF/wcZAgW3v89WWiTtXvM0QGeEv0g0oQrojm1aqG5hIK91oQjokS
-         EdDmtm/u81ixfG0NSKaMzoQTEuPu+1WppTzkEx3Q=
+        b=yIY4Xr4IKiZFaO8AYc7dyPYIOSM4IYM599z7OCBRJCPGhmXKN4lXsMuJplOpYnHAd
+         PRigRA90Q5r/oqMpdCY6OPkAIrL2RsKz0X0jmvACeU9BGodaj04C1PiPp9FELrLwY9
+         1nq1iZbtC4KCuUgIUqCng9xbpxlmP1sWQ7VPKmzI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Benoit Parrot <bparrot@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 027/130] media: cec-funcs.h: add status_req checks
-Date:   Tue, 10 Dec 2019 17:01:18 -0500
-Message-Id: <20191210220301.13262-27-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 040/130] media: ti-vpe: vpe: fix a v4l2-compliance failure about invalid sizeimage
+Date:   Tue, 10 Dec 2019 17:01:31 -0500
+Message-Id: <20191210220301.13262-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
 References: <20191210220301.13262-1-sashal@kernel.org>
@@ -58,52 +60,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Benoit Parrot <bparrot@ti.com>
 
-[ Upstream commit 9b211f9c5a0b67afc435b86f75d78273b97db1c5 ]
+[ Upstream commit 0bac73adea4df8d34048b38f6ff24dc3e73e90b6 ]
 
-The CEC_MSG_GIVE_DECK_STATUS and CEC_MSG_GIVE_TUNER_DEVICE_STATUS commands
-both have a status_req argument: ON, OFF, ONCE. If ON or ONCE, then the
-follower will reply with a STATUS message. Either once or whenever the
-status changes (status_req == ON).
+v4l2-compliance fails with this message:
 
-If status_req == OFF, then it will stop sending continuous status updates,
-but the follower will *not* send a STATUS message in that case.
+   fail: v4l2-test-formats.cpp(463): !pfmt.sizeimage
+   fail: v4l2-test-formats.cpp(736): \
+	Video Capture Multiplanar is valid, \
+	but TRY_FMT failed to return a format
+   test VIDIOC_TRY_FMT: FAIL
 
-This means that if status_req == OFF, then msg->reply should be 0 as well
-since no reply is expected in that case.
+This failure is causd by the driver failing to handle out range
+'bytesperline' values from user space applications.
 
+VPDMA hardware is limited to 64k line stride (16 bytes aligned, so 65520
+bytes). So make sure the provided or calculated 'bytesperline' is
+smaller than the maximum value.
+
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/uapi/linux/cec-funcs.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/platform/ti-vpe/vpdma.h | 1 +
+ drivers/media/platform/ti-vpe/vpe.c   | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/include/uapi/linux/cec-funcs.h b/include/uapi/linux/cec-funcs.h
-index 28e8a2a86e166..2a114f7a24d42 100644
---- a/include/uapi/linux/cec-funcs.h
-+++ b/include/uapi/linux/cec-funcs.h
-@@ -952,7 +952,8 @@ static inline void cec_msg_give_deck_status(struct cec_msg *msg,
- 	msg->len = 3;
- 	msg->msg[1] = CEC_MSG_GIVE_DECK_STATUS;
- 	msg->msg[2] = status_req;
--	msg->reply = reply ? CEC_MSG_DECK_STATUS : 0;
-+	msg->reply = (reply && status_req != CEC_OP_STATUS_REQ_OFF) ?
-+				CEC_MSG_DECK_STATUS : 0;
- }
+diff --git a/drivers/media/platform/ti-vpe/vpdma.h b/drivers/media/platform/ti-vpe/vpdma.h
+index 7e611501c2916..f29074c849155 100644
+--- a/drivers/media/platform/ti-vpe/vpdma.h
++++ b/drivers/media/platform/ti-vpe/vpdma.h
+@@ -60,6 +60,7 @@ struct vpdma_data_format {
+ 						 * line stride of source and dest
+ 						 * buffers should be 16 byte aligned
+ 						 */
++#define VPDMA_MAX_STRIDE		65520	/* Max line stride 16 byte aligned */
+ #define VPDMA_DTD_DESC_SIZE		32	/* 8 words */
+ #define VPDMA_CFD_CTD_DESC_SIZE		16	/* 4 words */
  
- static inline void cec_ops_give_deck_status(const struct cec_msg *msg,
-@@ -1056,7 +1057,8 @@ static inline void cec_msg_give_tuner_device_status(struct cec_msg *msg,
- 	msg->len = 3;
- 	msg->msg[1] = CEC_MSG_GIVE_TUNER_DEVICE_STATUS;
- 	msg->msg[2] = status_req;
--	msg->reply = reply ? CEC_MSG_TUNER_DEVICE_STATUS : 0;
-+	msg->reply = (reply && status_req != CEC_OP_STATUS_REQ_OFF) ?
-+				CEC_MSG_TUNER_DEVICE_STATUS : 0;
- }
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
+index 7af66fe95a542..2e8970c7e22da 100644
+--- a/drivers/media/platform/ti-vpe/vpe.c
++++ b/drivers/media/platform/ti-vpe/vpe.c
+@@ -1702,6 +1702,10 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 		if (stride > plane_fmt->bytesperline)
+ 			plane_fmt->bytesperline = stride;
  
- static inline void cec_ops_give_tuner_device_status(const struct cec_msg *msg,
++		plane_fmt->bytesperline = clamp_t(u32, plane_fmt->bytesperline,
++						  stride,
++						  VPDMA_MAX_STRIDE);
++
+ 		plane_fmt->bytesperline = ALIGN(plane_fmt->bytesperline,
+ 						VPDMA_STRIDE_ALIGN);
+ 
 -- 
 2.20.1
 
