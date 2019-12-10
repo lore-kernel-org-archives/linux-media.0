@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3439C00454
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:33:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C26CC00454
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:36:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7614D207FF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:33:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 51F062073D
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:36:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576017213;
-	bh=iXrNNQ+iLcuxDivbefHTA17DGz9vPsw1x9aknKSRrxM=;
+	s=default; t=1576017383;
+	bh=WQ3Li1psb4hv/QIV9QWOgQ+DgDXxIcwAt7zduwsnj0s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=rQnp9Ikglo9fo8CjKdDrLqqvpW7RjPB38uWz2DiPIRXWYyo7jt2yVtX673Hc7Wo0b
-	 85ze3wd8bPwfQ574KY69FzM6dpIX+pJOjilVqezEDZiyMAaltHGqsNcwijR7WP87BL
-	 VVwKWGafuhNK3RpXqzjDp4J+K9auEYhjUfOENhLk=
+	b=oixDwr76jv+L0Z059snjQgYcKK0GwxUSZq7wF/nclB3JFqCGXdQqr5TuhbBeSM/Fv
+	 8CKOTwVy7HCL9NBgOavEb8jYfBRRJdFvliyHRx+ZSZEobrkL1X6CoieMu5ZDbv+MMV
+	 Q/Z53KGimDg72XE86+sZ+VpFSDeao2jcBP0qEGNk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729823AbfLJWdc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:33:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54352 "EHLO mail.kernel.org"
+        id S1729570AbfLJWeU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:34:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55652 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729083AbfLJWdb (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:33:31 -0500
+        id S1730240AbfLJWeS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:34:18 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 554E821556;
-        Tue, 10 Dec 2019 22:33:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4D8C0208C3;
+        Tue, 10 Dec 2019 22:34:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576017210;
-        bh=iXrNNQ+iLcuxDivbefHTA17DGz9vPsw1x9aknKSRrxM=;
+        s=default; t=1576017258;
+        bh=WQ3Li1psb4hv/QIV9QWOgQ+DgDXxIcwAt7zduwsnj0s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eaoDdMB3QoahxGAp0KiSYUBUFdQtEkzipnV8nrs7BZgk0g7vIzijAbnSrUaTGhvIp
-         /nUKgXMG/s5xlyN8KCTZCzKuLWIUoh1TIUPz2eWppw+xSo8yIwlZ5m3I8QL5Yh/nKA
-         vny17QR5FormFNF/Vv7a9jEj5YXCik7+Uv9vrwOk=
+        b=ftmJPGBPdEA92M/Cwx9VcwKaUMygs1gsAnyRcRBwAw2pjnd7PyxgsVWGDxcORnfG4
+         GCsQkmC+beUaqXZpcz9ijONlBtttGj6DYtRzS3rDlUdXWEzGYDBM1G9q3MfZD0DESX
+         ggBEaCH0heaZemNAaawozvmQYwfdyHxzZVWbuPlA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+Cc:     Mike Isely <isely@pobox.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 11/71] media: ov6650: Fix stored frame format not in sync with hardware
-Date:   Tue, 10 Dec 2019 17:32:16 -0500
-Message-Id: <20191210223316.14988-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 52/71] media: pvrusb2: Fix oops on tear-down when radio support is not present
+Date:   Tue, 10 Dec 2019 17:32:57 -0500
+Message-Id: <20191210223316.14988-52-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210223316.14988-1-sashal@kernel.org>
 References: <20191210223316.14988-1-sashal@kernel.org>
@@ -59,69 +59,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+From: Mike Isely <isely@pobox.com>
 
-[ Upstream commit 3143b459de4cdcce67b36827476c966e93c1cf01 ]
+[ Upstream commit 7f404ae9cf2a285f73b3c18ab9303d54b7a3d8e1 ]
 
-The driver stores frame format settings supposed to be in line with
-hardware state in a device private structure.  Since the driver initial
-submission, those settings are updated before they are actually applied
-on hardware.  If an error occurs on device update, the stored settings
-my not reflect hardware state anymore and consecutive calls to
-.get_fmt() may return incorrect information.  That in turn may affect
-ability of a bridge device to use correct DMA transfer settings if such
-incorrect informmation on active frame format returned by .get_fmt() is
-used.
+In some device configurations there's no radio or radio support in the
+driver.  That's OK, as the driver sets itself up accordingly.  However
+on tear-down in these caes it's still trying to tear down radio
+related context when there isn't anything there, leading to
+dereferences through a null pointer and chaos follows.
 
-Assuming a failed device update means its state hasn't changed, update
-frame format related settings stored in the device private structure
-only after they are successfully applied so the stored values always
-reflect hardware state as closely as possible.
+How this bug survived unfixed for 11 years in the pvrusb2 driver is a
+mystery to me.
 
-Fixes: 2f6e2404799a ("[media] SoC Camera: add driver for OV6650 sensor")
-Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+[hverkuil: fix two checkpatch warnings]
+
+Signed-off-by: Mike Isely <isely@pobox.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/soc_camera/ov6650.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/media/usb/pvrusb2/pvrusb2-v4l2.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/soc_camera/ov6650.c b/drivers/media/i2c/soc_camera/ov6650.c
-index 4e19f5e5d8cf7..bb55ddfbf7337 100644
---- a/drivers/media/i2c/soc_camera/ov6650.c
-+++ b/drivers/media/i2c/soc_camera/ov6650.c
-@@ -611,7 +611,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
- 		dev_err(&client->dev, "Pixel format not handled: 0x%x\n", code);
- 		return -EINVAL;
- 	}
--	priv->code = code;
- 
- 	if (code == MEDIA_BUS_FMT_Y8_1X8 ||
- 			code == MEDIA_BUS_FMT_SBGGR8_1X8) {
-@@ -637,7 +636,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
- 		dev_dbg(&client->dev, "max resolution: CIF\n");
- 		coma_mask |= COMA_QCIF;
- 	}
--	priv->half_scale = half_scale;
- 
- 	if (sense) {
- 		if (sense->master_clock == 8000000) {
-@@ -677,8 +675,13 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
- 		ret = ov6650_reg_rmw(client, REG_COMA, coma_set, coma_mask);
- 	if (!ret)
- 		ret = ov6650_reg_write(client, REG_CLKRC, clkrc);
--	if (!ret)
-+	if (!ret) {
-+		priv->half_scale = half_scale;
-+
- 		ret = ov6650_reg_rmw(client, REG_COML, coml_set, coml_mask);
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
+index 1c5f85bf7ed4b..2d6195e9a1953 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
+@@ -886,8 +886,12 @@ static void pvr2_v4l2_internal_check(struct pvr2_channel *chp)
+ 	pvr2_v4l2_dev_disassociate_parent(vp->dev_video);
+ 	pvr2_v4l2_dev_disassociate_parent(vp->dev_radio);
+ 	if (!list_empty(&vp->dev_video->devbase.fh_list) ||
+-	    !list_empty(&vp->dev_radio->devbase.fh_list))
++	    (vp->dev_radio &&
++	     !list_empty(&vp->dev_radio->devbase.fh_list))) {
++		pvr2_trace(PVR2_TRACE_STRUCT,
++			   "pvr2_v4l2 internal_check exit-empty id=%p", vp);
+ 		return;
 +	}
-+	if (!ret)
-+		priv->code = code;
+ 	pvr2_v4l2_destroy_no_lock(vp);
+ }
  
- 	if (!ret) {
- 		mf->colorspace	= priv->colorspace;
+@@ -961,7 +965,8 @@ static int pvr2_v4l2_release(struct file *file)
+ 	kfree(fhp);
+ 	if (vp->channel.mc_head->disconnect_flag &&
+ 	    list_empty(&vp->dev_video->devbase.fh_list) &&
+-	    list_empty(&vp->dev_radio->devbase.fh_list)) {
++	    (!vp->dev_radio ||
++	     list_empty(&vp->dev_radio->devbase.fh_list))) {
+ 		pvr2_v4l2_destroy_no_lock(vp);
+ 	}
+ 	return 0;
 -- 
 2.20.1
 
