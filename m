@@ -6,29 +6,30 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C54B6C3F68F
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94B29C00454
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A6DD220652
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74FDF20652
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727466AbfLJN7K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 08:59:10 -0500
-Received: from mx2.suse.de ([195.135.220.15]:51706 "EHLO mx1.suse.de"
+        id S1727482AbfLJN7M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 08:59:12 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51548 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727345AbfLJN7D (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 08:59:03 -0500
+        id S1727149AbfLJN7B (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 08:59:01 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 14E9BAFA1;
-        Tue, 10 Dec 2019 13:59:00 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id E5044AE4D;
+        Tue, 10 Dec 2019 13:58:59 +0000 (UTC)
 From:   Takashi Iwai <tiwai@suse.de>
 To:     linux-media@vger.kernel.org
 Cc:     alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH for-5.6 08/14] media: em28xx: Clean up ALSA PCM API usages
-Date:   Tue, 10 Dec 2019 14:58:43 +0100
-Message-Id: <20191210135849.15607-9-tiwai@suse.de>
+Subject: [PATCH for-5.6 04/14] media: cobalt: Clean up ALSA PCM API usages
+Date:   Tue, 10 Dec 2019 14:58:39 +0100
+Message-Id: <20191210135849.15607-5-tiwai@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191210135849.15607-1-tiwai@suse.de>
 References: <20191210135849.15607-1-tiwai@suse.de>
@@ -41,36 +42,33 @@ With the recent change in ALSA PCM core, the whole open-coded vmalloc
 buffer handling in this driver can be dropped by replacing with the
 managed buffer allocation.
 
-Also, snd_em28xx_hw_capture_free() is dropped since the check of
-stream_started flag makes no sense; hw_free callback is guaranteed to
-be called after the stream gets stopped.
-
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/media/usb/em28xx/em28xx-audio.c | 86 +--------------------------------
- 1 file changed, 1 insertion(+), 85 deletions(-)
+ drivers/media/pci/cobalt/cobalt-alsa-pcm.c | 61 ++----------------------------
+ 1 file changed, 4 insertions(+), 57 deletions(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-audio.c b/drivers/media/usb/em28xx/em28xx-audio.c
-index 79dfbb25714b..a5215fb1d36a 100644
---- a/drivers/media/usb/em28xx/em28xx-audio.c
-+++ b/drivers/media/usb/em28xx/em28xx-audio.c
-@@ -30,7 +30,6 @@
- #include <linux/spinlock.h>
- #include <linux/soundcard.h>
- #include <linux/slab.h>
+diff --git a/drivers/media/pci/cobalt/cobalt-alsa-pcm.c b/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
+index 38d00935a292..77570a1127c9 100644
+--- a/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
++++ b/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
+@@ -9,7 +9,6 @@
+ 
+ #include <linux/init.h>
+ #include <linux/kernel.h>
 -#include <linux/vmalloc.h>
- #include <linux/module.h>
- #include <sound/core.h>
- #include <sound/pcm.h>
-@@ -192,28 +191,6 @@ static int em28xx_init_audio_isoc(struct em28xx *dev)
- 	return 0;
+ #include <linux/delay.h>
+ 
+ #include <media/v4l2-device.h>
+@@ -244,48 +243,6 @@ static int snd_cobalt_pcm_ioctl(struct snd_pcm_substream *substream,
+ 	return snd_pcm_lib_ioctl(substream, cmd, arg);
  }
  
+-
 -static int snd_pcm_alloc_vmalloc_buffer(struct snd_pcm_substream *subs,
 -					size_t size)
 -{
--	struct em28xx *dev = snd_pcm_substream_chip(subs);
 -	struct snd_pcm_runtime *runtime = subs->runtime;
 -
 -	dprintk("Allocating vbuffer\n");
@@ -89,75 +87,31 @@ index 79dfbb25714b..a5215fb1d36a 100644
 -	return 0;
 -}
 -
- static const struct snd_pcm_hardware snd_em28xx_hw_capture = {
- 	.info = SNDRV_PCM_INFO_BLOCK_TRANSFER |
- 		SNDRV_PCM_INFO_MMAP           |
-@@ -341,63 +318,12 @@ static int snd_em28xx_pcm_close(struct snd_pcm_substream *substream)
- 	}
- 
- 	em28xx_audio_analog_set(dev);
+-static int snd_cobalt_pcm_hw_params(struct snd_pcm_substream *substream,
+-			 struct snd_pcm_hw_params *params)
+-{
+-	dprintk("%s called\n", __func__);
+-
+-	return snd_pcm_alloc_vmalloc_buffer(substream,
+-					   params_buffer_bytes(params));
+-}
+-
+-static int snd_cobalt_pcm_hw_free(struct snd_pcm_substream *substream)
+-{
 -	if (substream->runtime->dma_area) {
--		dprintk("freeing\n");
+-		dprintk("freeing pcm capture region\n");
 -		vfree(substream->runtime->dma_area);
 -		substream->runtime->dma_area = NULL;
 -	}
- 	mutex_unlock(&dev->lock);
- 	kref_put(&dev->ref, em28xx_free_device);
- 
- 	return 0;
- }
- 
--static int snd_em28xx_hw_capture_params(struct snd_pcm_substream *substream,
--					struct snd_pcm_hw_params *hw_params)
--{
--	int ret;
--	struct em28xx *dev = snd_pcm_substream_chip(substream);
--
--	if (dev->disconnected)
--		return -ENODEV;
--
--	dprintk("Setting capture parameters\n");
--
--	ret = snd_pcm_alloc_vmalloc_buffer(substream,
--					   params_buffer_bytes(hw_params));
--	if (ret < 0)
--		return ret;
--#if 0
--	/*
--	 * TODO: set up em28xx audio chip to deliver the correct audio format,
--	 * current default is 48000hz multiplexed => 96000hz mono
--	 * which shouldn't matter since analogue TV only supports mono
--	 */
--	unsigned int channels, rate, format;
--
--	format = params_format(hw_params);
--	rate = params_rate(hw_params);
--	channels = params_channels(hw_params);
--#endif
 -
 -	return 0;
 -}
 -
--static int snd_em28xx_hw_capture_free(struct snd_pcm_substream *substream)
--{
--	struct em28xx *dev = snd_pcm_substream_chip(substream);
--	struct em28xx_audio *adev = &dev->adev;
--
--	dprintk("Stop capture, if needed\n");
--
--	if (atomic_read(&adev->stream_started) > 0) {
--		atomic_set(&adev->stream_started, 0);
--		schedule_work(&adev->wq_trigger);
--	}
--
--	return 0;
--}
--
- static int snd_em28xx_prepare(struct snd_pcm_substream *substream)
+ static int snd_cobalt_pcm_prepare(struct snd_pcm_substream *substream)
  {
- 	struct em28xx *dev = snd_pcm_substream_chip(substream);
-@@ -471,14 +397,6 @@ static snd_pcm_uframes_t snd_em28xx_capture_pointer(struct snd_pcm_substream
- 	return hwptr_done;
+ 	struct snd_cobalt_card *cobsc = snd_pcm_substream_chip(substream);
+@@ -490,36 +447,22 @@ snd_pcm_uframes_t snd_cobalt_pcm_pb_pointer(struct snd_pcm_substream *substream)
+ 	       substream->runtime->buffer_size;
  }
  
 -static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
@@ -168,30 +122,49 @@ index 79dfbb25714b..a5215fb1d36a 100644
 -	return vmalloc_to_page(pageptr);
 -}
 -
- /*
-  * AC97 volume control support
-  */
-@@ -709,12 +627,9 @@ static const struct snd_pcm_ops snd_em28xx_pcm_capture = {
- 	.open      = snd_em28xx_capture_open,
- 	.close     = snd_em28xx_pcm_close,
- 	.ioctl     = snd_pcm_lib_ioctl,
--	.hw_params = snd_em28xx_hw_capture_params,
--	.hw_free   = snd_em28xx_hw_capture_free,
- 	.prepare   = snd_em28xx_prepare,
- 	.trigger   = snd_em28xx_capture_trigger,
- 	.pointer   = snd_em28xx_capture_pointer,
--	.page      = snd_pcm_get_vmalloc_page,
+ static const struct snd_pcm_ops snd_cobalt_pcm_capture_ops = {
+ 	.open		= snd_cobalt_pcm_capture_open,
+ 	.close		= snd_cobalt_pcm_capture_close,
+ 	.ioctl		= snd_cobalt_pcm_ioctl,
+-	.hw_params	= snd_cobalt_pcm_hw_params,
+-	.hw_free	= snd_cobalt_pcm_hw_free,
+ 	.prepare	= snd_cobalt_pcm_prepare,
+ 	.trigger	= snd_cobalt_pcm_trigger,
+ 	.pointer	= snd_cobalt_pcm_pointer,
+-	.page		= snd_pcm_get_vmalloc_page,
  };
  
- static void em28xx_audio_free_urb(struct em28xx *dev)
-@@ -936,6 +851,7 @@ static int em28xx_audio_init(struct em28xx *dev)
- 		goto card_free;
+ static const struct snd_pcm_ops snd_cobalt_pcm_playback_ops = {
+ 	.open		= snd_cobalt_pcm_playback_open,
+ 	.close		= snd_cobalt_pcm_playback_close,
+ 	.ioctl		= snd_cobalt_pcm_ioctl,
+-	.hw_params	= snd_cobalt_pcm_hw_params,
+-	.hw_free	= snd_cobalt_pcm_hw_free,
+ 	.prepare	= snd_cobalt_pcm_pb_prepare,
+ 	.trigger	= snd_cobalt_pcm_pb_trigger,
+ 	.pointer	= snd_cobalt_pcm_pb_pointer,
+-	.page		= snd_pcm_get_vmalloc_page,
+ };
  
- 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_em28xx_pcm_capture);
-+	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_VMALLOC, NULL, 0, 0);
- 	pcm->info_flags = 0;
- 	pcm->private_data = dev;
- 	strscpy(pcm->name, "Empia 28xx Capture", sizeof(pcm->name));
+ int snd_cobalt_pcm_create(struct snd_cobalt_card *cobsc)
+@@ -555,6 +498,8 @@ int snd_cobalt_pcm_create(struct snd_cobalt_card *cobsc)
+ 
+ 		snd_pcm_set_ops(sp, SNDRV_PCM_STREAM_CAPTURE,
+ 				&snd_cobalt_pcm_capture_ops);
++		snd_pcm_set_managed_buffer_all(sp, SNDRV_DMA_TYPE_VMALLOC,
++					       NULL, 0, 0);
+ 		sp->info_flags = 0;
+ 		sp->private_data = cobsc;
+ 		strscpy(sp->name, "cobalt", sizeof(sp->name));
+@@ -579,6 +524,8 @@ int snd_cobalt_pcm_create(struct snd_cobalt_card *cobsc)
+ 
+ 		snd_pcm_set_ops(sp, SNDRV_PCM_STREAM_PLAYBACK,
+ 				&snd_cobalt_pcm_playback_ops);
++		snd_pcm_set_managed_buffer_all(sp, SNDRV_DMA_TYPE_VMALLOC,
++					       NULL, 0, 0);
+ 		sp->info_flags = 0;
+ 		sp->private_data = cobsc;
+ 		strscpy(sp->name, "cobalt", sizeof(sp->name));
 -- 
 2.16.4
 
