@@ -7,49 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69AC7C00454
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 845EDC00454
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:09:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 35075246A2
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:09:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4FCB6246A3
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:09:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576012193;
-	bh=p4Ouzi2dQxXDQpMa6jd+uJ+hILDlMBsHNOy9APzS59k=;
+	s=default; t=1576012197;
+	bh=P0/PbYyyDZsUZPAxA/S55Zz6WtpgAvbR5ywx9JD0LyA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=rdIE/BgcfL8q27+o59OHTXGYiRGNqSYgNs0b1HbSor+3gU+3CkqbeczPtgQl/ZBfc
-	 T5eb9NZcVaDkRRlpV6Jy2joXYXFwNw24FMCulctTfdwNzr76AyLVUh/B+Pkdd3v0Q0
-	 Nq8f/gLGIp0/zKpPGyQPRXIp1X5FQtuUgC8S9bmA=
+	b=sszCZyavpXjircpIeETSj2k6a/kvvz2YY5PE7Skrg6qWmbth+Z9+HS1e57BscxfqG
+	 q3psLp3pe3aPoMrlW25+f35225wLjEwM2AYlHRCbF+9wtJyKJcTdW8BRcRy4J9var6
+	 g5NHkrK3vN8Quvh/e3vN12IKAYZEXWMGMtaUOr+A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728305AbfLJVJv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:09:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58854 "EHLO mail.kernel.org"
+        id S1728317AbfLJVJ4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:09:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59058 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728301AbfLJVJu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:09:50 -0500
+        id S1728310AbfLJVJy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:09:54 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BBCD3246AC;
-        Tue, 10 Dec 2019 21:09:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB29C2077B;
+        Tue, 10 Dec 2019 21:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012189;
-        bh=p4Ouzi2dQxXDQpMa6jd+uJ+hILDlMBsHNOy9APzS59k=;
+        s=default; t=1576012193;
+        bh=P0/PbYyyDZsUZPAxA/S55Zz6WtpgAvbR5ywx9JD0LyA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xHjbqSKYOiXcnpkoTKKJQU07CPOWVTvQCspubSXECTFO5SYGnDpbUOLfeQMCRq/id
-         FvlkODOPlH0IMpD9Kcn14aZJF5BECQ003XT04kr8czD/aOrC+ZnaMvzoObJsxhtLc/
-         RbjIDD55rXE2RgrjCscwJBCgLXTVjNxnQ0IJRpYA=
+        b=CIYBjoFHcAE2uhzaoxdt512OiD88B9Gr1mJW5GkXN9TXIFyNtFx2ZmDRBqs98194X
+         qHemsVnTRbm6e1C3PwNvYwDd4UqjYEKn7FGMedhYVuw0me4E7Yot3x7s9vU1sj1+se
+         7FxPeC0/vMK9drEopVLKMFKxX2AEWEYNYaY7dOcc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 5.4 145/350] media: aspeed: set hsync and vsync polarities to normal before starting mode detection
-Date:   Tue, 10 Dec 2019 16:04:10 -0500
-Message-Id: <20191210210735.9077-106-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 148/350] media: ad5820: Define entity function
+Date:   Tue, 10 Dec 2019 16:04:13 -0500
+Message-Id: <20191210210735.9077-109-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -62,38 +61,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+From: Ricardo Ribalda Delgado <ribalda@kernel.org>
 
-[ Upstream commit 5b3f3c41c5c791c1c22cd91655e7ef4b2a1dff7c ]
+[ Upstream commit 801ef7c4919efba6b96b5aed1e72844ca69e26d3 ]
 
-Sometimes it detects a weird resolution such as 1024x287 when the
-actual resolution is 1024x768. To resolve such an issue, this
-commit adds clearing for hsync and vsync polarity register bits
-at the beginning of the first mode detection. This is recommended
-in the datasheet.
+Without this patch, media_device_register_entity throws a warning:
 
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+dev_warn(mdev->dev,
+	 "Entity type for entity %s was not initialized!\n",
+	 entity->name);
+
+Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
+Acked-by: Pavel Machek <pavel@ucw.cz>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/aspeed-video.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/i2c/ad5820.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index eb12f37930629..84e0650106f51 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -741,6 +741,8 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 		}
+diff --git a/drivers/media/i2c/ad5820.c b/drivers/media/i2c/ad5820.c
+index 925c171e77976..7a49651f4d1f2 100644
+--- a/drivers/media/i2c/ad5820.c
++++ b/drivers/media/i2c/ad5820.c
+@@ -309,6 +309,7 @@ static int ad5820_probe(struct i2c_client *client,
+ 	v4l2_i2c_subdev_init(&coil->subdev, client, &ad5820_ops);
+ 	coil->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 	coil->subdev.internal_ops = &ad5820_internal_ops;
++	coil->subdev.entity.function = MEDIA_ENT_F_LENS;
+ 	strscpy(coil->subdev.name, "ad5820 focus", sizeof(coil->subdev.name));
  
- 		set_bit(VIDEO_RES_DETECT, &video->flags);
-+		aspeed_video_update(video, VE_CTRL,
-+				    VE_CTRL_VSYNC_POL | VE_CTRL_HSYNC_POL, 0);
- 		aspeed_video_enable_mode_detect(video);
- 
- 		rc = wait_event_interruptible_timeout(video->wait,
+ 	ret = media_entity_pads_init(&coil->subdev.entity, 0, NULL);
 -- 
 2.20.1
 
