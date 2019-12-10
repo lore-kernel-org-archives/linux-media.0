@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6F83C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:44:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD15C2D0BF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:44:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9730120828
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:44:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E45BD205C9
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:44:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014286;
-	bh=IpeT1J4r3E/yTbBjg2c2XpjtEYHd4b99dK5pPO1iCxM=;
+	s=default; t=1576014292;
+	bh=f38Jx4/6Deu3n07d+lF0iJ0iuKa7+PFN5PZae7nkKww=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=2Vn8v0JJ/GA+NKE1KQ+HZYvRm6sUIXsE3lEiJq1wtYxKdYKovvWTur2krZXuQzG33
-	 jFdSgBkL/jVrlgqyJwITlMhwvf2chBp5+GLx0tVT3AmsoduasC+++vyA76LupivY0J
-	 49dANM+gzotjsF2RnWb8A6GPWDuvb3m9dJajtFjM=
+	b=SyYqdmW+i3odHytGS3rCy5e3w5Ec7wxgnXB2qH9J81Y66njdFUMnUh4Il/6NQ63Oc
+	 pXjCthy26CdC6rnBBVdeIA1+tS0s/cTfDlV6O7482HrL82iswBvA06Qzjmkzre+eWV
+	 A7iYiXAvjVWJ9jYFlXmHujn2goQz03wCwFJeap+I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728331AbfLJVop (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:44:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37304 "EHLO mail.kernel.org"
+        id S1729660AbfLJVdK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:33:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37248 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729672AbfLJVdM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:33:12 -0500
+        id S1729655AbfLJVdK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:33:10 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6B60F22B48;
-        Tue, 10 Dec 2019 21:33:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 132D8208C3;
+        Tue, 10 Dec 2019 21:33:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576013592;
-        bh=IpeT1J4r3E/yTbBjg2c2XpjtEYHd4b99dK5pPO1iCxM=;
+        s=default; t=1576013589;
+        bh=f38Jx4/6Deu3n07d+lF0iJ0iuKa7+PFN5PZae7nkKww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ftlyMBcLqEUKa5Gz5OfSRhO1DvrA1rQaBQLfQunZSAknIfm4SjIDaTrBOZJQ9abfr
-         8mGo+IYY6VIImDW9dZ8S5/HVb94B5AL1KRppL2YZ40JSlmZrPjZe+fIf0Hr8PI0Vge
-         liAHJluXCJZeyrVhoSxgjtubnbI1BaBvOep9u8y8=
+        b=I5d0lm+v+/fg8+gFISBq4OoT5AX4PbdhbBcKkPeREC/rkQVDCSIznJ60oIzyfj18I
+         cOBxYtgR45Niim+H85XqtSXeXzazu/KjKuUYJVW4YD1w09fLhEeyiBOXz1SOCF6usv
+         d+eYBt+GZvK2x/g+lrstmpBejYeKrPz2P6y8/6jU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Benoit Parrot <bparrot@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 042/177] media: ti-vpe: vpe: fix a v4l2-compliance warning about invalid pixel format
-Date:   Tue, 10 Dec 2019 16:30:06 -0500
-Message-Id: <20191210213221.11921-42-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 040/177] media: cx88: Fix some error handling path in 'cx8800_initdev()'
+Date:   Tue, 10 Dec 2019 16:30:04 -0500
+Message-Id: <20191210213221.11921-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
 References: <20191210213221.11921-1-sashal@kernel.org>
@@ -60,79 +59,74 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Benoit Parrot <bparrot@ti.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 06bec72b250b2cb3ba96fa45c2b8e0fb83745517 ]
+[ Upstream commit e1444e9b0424c70def6352580762d660af50e03f ]
 
-v4l2-compliance warns with this message:
+A call to 'pci_disable_device()' is missing in the error handling path.
+In some cases, a call to 'free_irq()' may also be missing.
 
-   warn: v4l2-test-formats.cpp(717): \
- 	TRY_FMT cannot handle an invalid pixelformat.
-   warn: v4l2-test-formats.cpp(718): \
- 	This may or may not be a problem. For more information see:
-   warn: v4l2-test-formats.cpp(719): \
- 	http://www.mail-archive.com/linux-media@vger.kernel.org/msg56550.html
-	...
-   test VIDIOC_TRY_FMT: FAIL
+Reorder the error handling path, add some new labels and fix the 2 issues
+mentionned above.
 
-We need to make sure that the returns a valid pixel format in all
-instance. Based on the v4l2 framework convention drivers must return a
-valid pixel format when the requested pixel format is either invalid or
-not supported.
+This way, the error handling path in more in line with 'cx8800_finidev()'
+(i.e. the remove function)
 
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/media/pci/cx88/cx88-video.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 69c0e14cccb17..76d699e94b001 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -352,20 +352,25 @@ enum {
- };
- 
- /* find our format description corresponding to the passed v4l2_format */
--static struct vpe_fmt *find_format(struct v4l2_format *f)
-+static struct vpe_fmt *__find_format(u32 fourcc)
- {
- 	struct vpe_fmt *fmt;
- 	unsigned int k;
- 
- 	for (k = 0; k < ARRAY_SIZE(vpe_formats); k++) {
- 		fmt = &vpe_formats[k];
--		if (fmt->fourcc == f->fmt.pix.pixelformat)
-+		if (fmt->fourcc == fourcc)
- 			return fmt;
+diff --git a/drivers/media/pci/cx88/cx88-video.c b/drivers/media/pci/cx88/cx88-video.c
+index 7b113bad70d23..248fb3b6833cc 100644
+--- a/drivers/media/pci/cx88/cx88-video.c
++++ b/drivers/media/pci/cx88/cx88-video.c
+@@ -1312,7 +1312,7 @@ static int cx8800_initdev(struct pci_dev *pci_dev,
+ 	core = cx88_core_get(dev->pci);
+ 	if (!core) {
+ 		err = -EINVAL;
+-		goto fail_free;
++		goto fail_disable;
  	}
+ 	dev->core = core;
  
- 	return NULL;
- }
- 
-+static struct vpe_fmt *find_format(struct v4l2_format *f)
-+{
-+	return __find_format(f->fmt.pix.pixelformat);
-+}
-+
- /*
-  * there is one vpe_dev structure in the driver, it is shared by
-  * all instances.
-@@ -1591,9 +1596,9 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
- 	unsigned int stride = 0;
- 
- 	if (!fmt || !(fmt->types & type)) {
--		vpe_err(ctx->dev, "Fourcc format (0x%08x) invalid.\n",
-+		vpe_dbg(ctx->dev, "Fourcc format (0x%08x) invalid.\n",
- 			pix->pixelformat);
--		return -EINVAL;
-+		fmt = __find_format(V4L2_PIX_FMT_YUYV);
+@@ -1358,7 +1358,7 @@ static int cx8800_initdev(struct pci_dev *pci_dev,
+ 				       cc->step, cc->default_value);
+ 		if (!vc) {
+ 			err = core->audio_hdl.error;
+-			goto fail_core;
++			goto fail_irq;
+ 		}
+ 		vc->priv = (void *)cc;
  	}
+@@ -1372,7 +1372,7 @@ static int cx8800_initdev(struct pci_dev *pci_dev,
+ 				       cc->step, cc->default_value);
+ 		if (!vc) {
+ 			err = core->video_hdl.error;
+-			goto fail_core;
++			goto fail_irq;
+ 		}
+ 		vc->priv = (void *)cc;
+ 		if (vc->id == V4L2_CID_CHROMA_AGC)
+@@ -1535,11 +1535,14 @@ static int cx8800_initdev(struct pci_dev *pci_dev,
  
- 	if (pix->field != V4L2_FIELD_NONE && pix->field != V4L2_FIELD_ALTERNATE
+ fail_unreg:
+ 	cx8800_unregister_video(dev);
+-	free_irq(pci_dev->irq, dev);
+ 	mutex_unlock(&core->lock);
++fail_irq:
++	free_irq(pci_dev->irq, dev);
+ fail_core:
+ 	core->v4ldev = NULL;
+ 	cx88_core_put(core, dev->pci);
++fail_disable:
++	pci_disable_device(pci_dev);
+ fail_free:
+ 	kfree(dev);
+ 	return err;
 -- 
 2.20.1
 
