@@ -2,169 +2,365 @@ Return-Path: <SRS0=nGM0=2A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94B29C00454
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1828BC43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 19:26:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 74FDF20652
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 13:59:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAE46207FF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 19:26:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fm7Zf5V9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727482AbfLJN7M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 08:59:12 -0500
-Received: from mx2.suse.de ([195.135.220.15]:51548 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727149AbfLJN7B (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 08:59:01 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E5044AE4D;
-        Tue, 10 Dec 2019 13:58:59 +0000 (UTC)
-From:   Takashi Iwai <tiwai@suse.de>
-To:     linux-media@vger.kernel.org
-Cc:     alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH for-5.6 04/14] media: cobalt: Clean up ALSA PCM API usages
-Date:   Tue, 10 Dec 2019 14:58:39 +0100
-Message-Id: <20191210135849.15607-5-tiwai@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191210135849.15607-1-tiwai@suse.de>
-References: <20191210135849.15607-1-tiwai@suse.de>
+        id S1726595AbfLJT0Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 14:26:16 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:39083 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbfLJT0Q (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 14:26:16 -0500
+Received: by mail-oi1-f195.google.com with SMTP id a67so10913164oib.6
+        for <linux-media@vger.kernel.org>; Tue, 10 Dec 2019 11:26:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WVHVkfcvfgpQqMRQujPWSRu4i8i1Sky9CuD1MxlO2TM=;
+        b=Fm7Zf5V93aR4mkGweA2dDD5nHLL8tAYMiTQ2JTjwMz2U3VNDQiyAFlGIrfbwSOJJ5W
+         06A6+RnJWYGf3vmm8ztvJSLjnY0/Wx5EmeNcSu2h/wy4d++HsxTa/ifspVqxI5ts6FtV
+         oPy6oMUuiOaaw/cLyGhKANcpyI4iti9pk3r28Aq8xRHJ0hefmW2SvZKF2GDnOi6PGo1S
+         jx+zCYJLXCbdtarmjeW/3JF9NRuzR+CUDKQek0Zs4xLm6vo+FdxX2h9WFrfF8uKx31V5
+         RjzdFEibZKqjt7XAwM7BB457USLGxPa8Avrf2xV/6pRfIYVRofQ5isHy2kYb/5ddtei5
+         jnHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WVHVkfcvfgpQqMRQujPWSRu4i8i1Sky9CuD1MxlO2TM=;
+        b=Lg8CELjyKeMr+8/EK8y0ZVPGZmnLAEsKNCs7AHpOIjMQ8yPZoKJVJUypW5Nq57QBUP
+         hCSjyquFsJ+di+DwpDcnO/a+mGdoB0dm9pMYcLHH9PwPTeiDQilhbZbAlJZ96qNXxW0q
+         7m8YU3DtWLXT/0KdPh5c6RWMZrYhI2/053BadzUB0tYkHlN/1g8t8WBO3j4LGYvQz8hO
+         yKKqmpdd69jyUl/J+qr9VKV5pcNgWuphZCL03Os9eW5RFvxPw5ARAFp2LsilukEjaRuw
+         OBoqtPbDAp+oLhSeZPllx/j2Y+eZcPhvnKX+yE8cqfzWlR3UgqPBEWpPIufwgT6PZyIg
+         eTjg==
+X-Gm-Message-State: APjAAAW9ACgDO19+TQZK/5rjqTB6yEVGp0W613AQDKJ2FLIpWDHnCeho
+        1wBsUT711b2/uFC5yNkMmXWVSOGWXGsGJf95JW0WipUmOZjIXw==
+X-Google-Smtp-Source: APXvYqzy9L5FKzu4dAmV9kL8pFKaF0/9q135c5psvtplqYwDKXI8tIxsoqgL1Rf2nnPySj41JlV4zY97sPDlU8qajyE=
+X-Received: by 2002:aca:4ad1:: with SMTP id x200mr424833oia.104.1576005975009;
+ Tue, 10 Dec 2019 11:26:15 -0800 (PST)
+MIME-Version: 1.0
+References: <CABdg0zG8KzOBWMNDU8eDcjW_FA3zrdJBR7Fu_YQz-uwu1Gfwcg@mail.gmail.com>
+ <CABdg0zGzR=2Qt5d+VR18j-gR-5vu0=QgnjKvcDW9g4g_ceGV_w@mail.gmail.com>
+ <20191121102455.GA30519@gofer.mess.org> <CABdg0zETXD82WQu8idAciDwkLT+RFaR1tHY8otrYXaPNexgiBg@mail.gmail.com>
+In-Reply-To: <CABdg0zETXD82WQu8idAciDwkLT+RFaR1tHY8otrYXaPNexgiBg@mail.gmail.com>
+From:   Nick French <nickfrench@gmail.com>
+Date:   Tue, 10 Dec 2019 13:26:02 -0600
+Message-ID: <CABdg0zHh8WFxui36F5SQaB8yBu4iWvNOk-NntbVoKxw0R5Ssog@mail.gmail.com>
+Subject: Re: ir_kbd_i2c oops
+To:     Sean Young <sean@mess.org>
+Cc:     linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With the recent change in ALSA PCM core, the whole open-coded vmalloc
-buffer handling in this driver can be dropped by replacing with the
-managed buffer allocation.
+On Thu, Nov 21, 2019 at 8:19 AM Nick French <nickfrench@gmail.com> wrote:
+>
+> On Thu, Nov 21, 2019 at 4:24 AM Sean Young <sean@mess.org> wrote:
+> >
+> > Hi Nick,
+> >
+> > On Thu, Nov 21, 2019 at 12:44:42AM -0600, Nick French wrote:
+> > > On Mon, Nov 18, 2019 at 10:21 AM Nick French <nickfrench@gmail.com> wrote:
+> > > > I'm about to start trying to track down an intermittent oops in
+> > > > ir_kbd_i2c that I've been having for a long time over various recent
+> > > > kernels. It must be some kind of timing/race condition at startup,
+> > > > because I only get it about 5% of boots.
+> > > >
+> > > > Here's the relevant snippet from the log, if anyone has any smart
+> > > > ideas let me know. I should have better debugging data within the next
+> > > > week or so.
+> > > >
+> > > > ...
+> > > > Registered IR keymap rc-hauppauge
+> > > > rc rc0: Hauppauge WinTV PVR-350 as
+> > > > /devices/pci0000:00/0000:00:1e.0/0000:04:00.0/i2c-0/0-0018/rc/rc0
+> > > > input: Hauppauge WinTV PVR-350 as
+> > > > /devices/pci0000:00/0000:00:1e.0/0000:04:00.0/i2c-0/0-0018/rc/rc0/input9
+> > > > BUG: kernel NULL pointer dereference, address: 0000000000000038
+> > > > #PF: supervisor read access in kernel mode
+> > > > #PF: error_code(0x0000) - not-present page
+> > > > PGD 0 P4D 0
+> > > > Oops: 0000 [#1] SMP PTI
+> > > > CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.3.11-300.fc31.x86_64 #1
+> > > > Hardware name:  /DG43NB, BIOS NBG4310H.86A.0096.2009.0903.1845 09/03/2009
+> > > > Workqueue: events ir_work [ir_kbd_i2c]
+> > > > RIP: 0010:ir_lirc_scancode_event+0x3d/0xb0
+> > > > Code: a6 b4 07 00 00 49 81 c6 b8 07 00 00 55 53 e8 ba a7 9d ff 4c 89
+> > > > e7 49 89 45 00 e8 5e 7a 25 00 49 8b 1e 48 89 c5 4c 39 f3 74 58 <8b> 43
+> > > > 38 8b 53 40 89 c1 2b 4b 3c 39 ca 72 41 21 d0 49 8b 7d 00 49
+> > > > RSP: 0018:ffffaae2000b3d88 EFLAGS: 00010017
+> > > > RAX: 0000000000000002 RBX: 0000000000000000 RCX: 0000000000000019
+> > > > RDX: 0000000000000001 RSI: 006e801b1f26ce6a RDI: ffff9e39797c37b4
+> > > > RBP: 0000000000000002 R08: 0000000000000001 R09: 0000000000000001
+> > > > R10: 0000000000000001 R11: 0000000000000001 R12: ffff9e39797c37b4
+> > > > R13: ffffaae2000b3db8 R14: ffff9e39797c37b8 R15: ffff9e39797c33d8
+> > > > FS:  0000000000000000(0000) GS:ffff9e397b680000(0000) knlGS:0000000000000000
+> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > CR2: 0000000000000038 CR3: 0000000035844000 CR4: 00000000000006e0
+> > > > Call Trace:
+> > > > ir_do_keydown+0x8e/0x2b0
+> > > > rc_keydown+0x52/0xc0
+> > > > ir_work+0xb8/0x130 [ir_kbd_i2c]
+> > > > process_one_work+0x19d/0x340
+> > > > worker_thread+0x50/0x3b0
+> > > > kthread+0xfb/0x130
+> > > > ? process_one_work+0x340/0x340
+> > > > ? kthread_park+0x80/0x80
+> > > > ret_from_fork+0x35/0x40
+> > > > Modules linked in: rc_hauppauge tuner msp3400 saa7127 saa7115 ivtv(+)
+> > > > tveeprom cx2341x v4l2_common videodev mc i2c_algo_bit ir_kbd_i2c
+> > > > ip_tables firewire_ohci e1000e serio_raw firewire_core ata_generic
+> > > > crc_itu_t pata_acpi pata_jmicron fuse
+> > > > CR2: 0000000000000038
+> > > > ---[ end trace c67c2697a99fa74b ]---
+> > > > RIP: 0010:ir_lirc_scancode_event+0x3d/0xb0
+> > > > Code: a6 b4 07 00 00 49 81 c6 b8 07 00 00 55 53 e8 ba a7 9d ff 4c 89
+> > > > e7 49 89 45 00 e8 5e 7a 25 00 49 8b 1e 48 89 c5 4c 39 f3 74 58 <8b> 43
+> > > > 38 8b 53 40 89 c1 2b 4b 3c 39 ca 72 41 21 d0 49 8b 7d 00 49
+> > > > RSP: 0018:ffffaae2000b3d88 EFLAGS: 00010017
+> > > > RAX: 0000000000000002 RBX: 0000000000000000 RCX: 0000000000000019
+> > > > RDX: 0000000000000001 RSI: 006e801b1f26ce6a RDI: ffff9e39797c37b4
+> > > > RBP: 0000000000000002 R08: 0000000000000001 R09: 0000000000000001
+> > > > R10: 0000000000000001 R11: 0000000000000001 R12: ffff9e39797c37b4
+> > > > R13: ffffaae2000b3db8 R14: ffff9e39797c37b8 R15: ffff9e39797c33d8
+> > > > FS:  0000000000000000(0000) GS:ffff9e397b680000(0000) knlGS:0000000000000000
+> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > CR2: 0000000000000038 CR3: 0000000035844000 CR4: 00000000000006e0
+> > > > rc rc0: lirc_dev: driver ir_kbd_i2c registered at minor = 0, scancode
+> > > > receiver, no transmitter
+> > > > tuner-simple 0-0061: creating new instance
+> > > > tuner-simple 0-0061: type set to 2 (Philips NTSC (FI1236,FM1236 and
+> > > > compatibles))
+> > > > ivtv0: Registered device video0 for encoder MPG (4096 kB)
+> > > > ivtv0: Registered device video32 for encoder YUV (2048 kB)
+> > > > ivtv0: Registered device vbi0 for encoder VBI (1024 kB)
+> > > > ivtv0: Registered device video24 for encoder PCM (320 kB)
+> > > > ivtv0: Registered device radio0 for encoder radio
+> > > > ivtv0: Registered device video16 for decoder MPG (1024 kB)
+> > > > ivtv0: Registered device vbi8 for decoder VBI (64 kB)
+> > > > ivtv0: Registered device vbi16 for decoder VOUT
+> > > > ivtv0: Registered device video48 for decoder YUV (1024 kB)
+> > > > ...
+> > > >
+> > > > - Nick
+> > >
+> > > I haven't been able to recreate with a debug build yet, but I think I
+> > > see the problem:
+> > >
+> > > ir_kbd_i2c calls rc_register_device(), where the ordering of calls is this:
+> > >   dev->registered = true;
+> > >   rc_setup_rx_device(dev); <--calls rc_open()
+> > >   ir_lirc_register(dev); <--initializes lirc_fh/lirc_fh_lock
+> > >
+> > > however, ir_kbd_i2c's rc_open() callback schedules work whose
+> > > call-stack looks like:
+> > > ir_work()
+> > > ir_key_poll()
+> > > rc_keydown()
+> > > ir_do_keydown()
+> > > ir_lirc_scancode_event() <-- uses lirc_fh/lirc_hf_lock
+> > >
+> > > So basically if there is a keydown detection *during* ir_kbd_i2c
+> > > initialization, its going to oops accessing the uninitialized
+> > > lirc_fh_lock, I think?
+> > >
+> > > Not sure what to do with that info though, even if correct.
+> > > An 'is registered' check does no good, because the device is marked
+> > > registered before rc_setup_rx_device() happens. In fact rc_open()
+> > > already checks this.
+> > >
+> > > Hoping someone smarter than me can weigh in here...
+> >
+> > I think you have figured it out exactly. That's a highly unlikely race
+> > condition; in rc_register_device(), in between rc_setup_rx_device()
+> > and ir_lirc_register() user space must open the input device, and the
+> > ir_work must be scheduled and execute as well.
+> >
+> > The comment on ir_lirc_register() alludes to the same problem, which
+> > I considered for raw IR devices, but obviously not for scancode devices.
+> >
+> > It would be very useful to have this patch tested, I have never seen
+> > this race condition.
+> >
+> > Thanks!
+> >
+> > Sean
+> >
+> > From d14f6695982b86b383063e74fc6a4febf29248f3 Mon Sep 17 00:00:00 2001
+> > From: Sean Young <sean@mess.org>
+> > Date: Thu, 21 Nov 2019 10:10:47 +0000
+> > Subject: [PATCH] media: rc: ensure lirc is initialized before registering
+> >  input device
+> >
+> > Once rc_open is called on the input device, lirc events can be delivered.
+> > Ensure lirc is ready to do so else we might get this:
+> >
+> > Registered IR keymap rc-hauppauge
+> > rc rc0: Hauppauge WinTV PVR-350 as
+> > /devices/pci0000:00/0000:00:1e.0/0000:04:00.0/i2c-0/0-0018/rc/rc0
+> > input: Hauppauge WinTV PVR-350 as
+> > /devices/pci0000:00/0000:00:1e.0/0000:04:00.0/i2c-0/0-0018/rc/rc0/input9
+> > BUG: kernel NULL pointer dereference, address: 0000000000000038
+> > PGD 0 P4D 0
+> > Oops: 0000 [#1] SMP PTI
+> > CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.3.11-300.fc31.x86_64 #1
+> > Hardware name:  /DG43NB, BIOS NBG4310H.86A.0096.2009.0903.1845 09/03/2009
+> > Workqueue: events ir_work [ir_kbd_i2c]
+> > RIP: 0010:ir_lirc_scancode_event+0x3d/0xb0
+> > Code: a6 b4 07 00 00 49 81 c6 b8 07 00 00 55 53 e8 ba a7 9d ff 4c 89
+> > e7 49 89 45 00 e8 5e 7a 25 00 49 8b 1e 48 89 c5 4c 39 f3 74 58 <8b> 43
+> > 38 8b 53 40 89 c1 2b 4b 3c 39 ca 72 41 21 d0 49 8b 7d 00 49
+> > RSP: 0018:ffffaae2000b3d88 EFLAGS: 00010017
+> > RAX: 0000000000000002 RBX: 0000000000000000 RCX: 0000000000000019
+> > RDX: 0000000000000001 RSI: 006e801b1f26ce6a RDI: ffff9e39797c37b4
+> > RBP: 0000000000000002 R08: 0000000000000001 R09: 0000000000000001
+> > R10: 0000000000000001 R11: 0000000000000001 R12: ffff9e39797c37b4
+> > R13: ffffaae2000b3db8 R14: ffff9e39797c37b8 R15: ffff9e39797c33d8
+> > FS:  0000000000000000(0000) GS:ffff9e397b680000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 0000000000000038 CR3: 0000000035844000 CR4: 00000000000006e0
+> > Call Trace:
+> > ir_do_keydown+0x8e/0x2b0
+> > rc_keydown+0x52/0xc0
+> > ir_work+0xb8/0x130 [ir_kbd_i2c]
+> > process_one_work+0x19d/0x340
+> > worker_thread+0x50/0x3b0
+> > kthread+0xfb/0x130
+> > ? process_one_work+0x340/0x340
+> > ? kthread_park+0x80/0x80
+> > ret_from_fork+0x35/0x40
+> > Modules linked in: rc_hauppauge tuner msp3400 saa7127 saa7115 ivtv(+)
+> > tveeprom cx2341x v4l2_common videodev mc i2c_algo_bit ir_kbd_i2c
+> > ip_tables firewire_ohci e1000e serio_raw firewire_core ata_generic
+> > crc_itu_t pata_acpi pata_jmicron fuse
+> > CR2: 0000000000000038
+> > ---[ end trace c67c2697a99fa74b ]---
+> > RIP: 0010:ir_lirc_scancode_event+0x3d/0xb0
+> > Code: a6 b4 07 00 00 49 81 c6 b8 07 00 00 55 53 e8 ba a7 9d ff 4c 89
+> > e7 49 89 45 00 e8 5e 7a 25 00 49 8b 1e 48 89 c5 4c 39 f3 74 58 <8b> 43
+> > 38 8b 53 40 89 c1 2b 4b 3c 39 ca 72 41 21 d0 49 8b 7d 00 49
+> > RSP: 0018:ffffaae2000b3d88 EFLAGS: 00010017
+> > RAX: 0000000000000002 RBX: 0000000000000000 RCX: 0000000000000019
+> > RDX: 0000000000000001 RSI: 006e801b1f26ce6a RDI: ffff9e39797c37b4
+> > RBP: 0000000000000002 R08: 0000000000000001 R09: 0000000000000001
+> > R10: 0000000000000001 R11: 0000000000000001 R12: ffff9e39797c37b4
+> > R13: ffffaae2000b3db8 R14: ffff9e39797c37b8 R15: ffff9e39797c33d8
+> > FS:  0000000000000000(0000) GS:ffff9e397b680000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 0000000000000038 CR3: 0000000035844000 CR4: 00000000000006e0
+> > rc rc0: lirc_dev: driver ir_kbd_i2c registered at minor = 0, scancode
+> > receiver, no transmitter
+> > tuner-simple 0-0061: creating new instance
+> > tuner-simple 0-0061: type set to 2 (Philips NTSC (FI1236,FM1236 and
+> > compatibles))
+> > ivtv0: Registered device video0 for encoder MPG (4096 kB)
+> > ivtv0: Registered device video32 for encoder YUV (2048 kB)
+> > ivtv0: Registered device vbi0 for encoder VBI (1024 kB)
+> > ivtv0: Registered device video24 for encoder PCM (320 kB)
+> > ivtv0: Registered device radio0 for encoder radio
+> > ivtv0: Registered device video16 for decoder MPG (1024 kB)
+> > ivtv0: Registered device vbi8 for decoder VBI (64 kB)
+> > ivtv0: Registered device vbi16 for decoder VOUT
+> > ivtv0: Registered device video48 for decoder YUV (1024 kB)
+> >
+> > Cc: stable@vger.kernel.org
+> > Reported-by: Nick French <nickfrench@gmail.com>
+> > Signed-off-by: Sean Young <sean@mess.org>
+> > ---
+> >  drivers/media/rc/rc-main.c | 20 ++++++++++----------
+> >  1 file changed, 10 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+> > index 7741151606ef..f29def4f35d8 100644
+> > --- a/drivers/media/rc/rc-main.c
+> > +++ b/drivers/media/rc/rc-main.c
+> > @@ -1891,23 +1891,23 @@ int rc_register_device(struct rc_dev *dev)
+> >
+> >         dev->registered = true;
+> >
+> > -       if (dev->driver_type != RC_DRIVER_IR_RAW_TX) {
+> > -               rc = rc_setup_rx_device(dev);
+> > -               if (rc)
+> > -                       goto out_dev;
+> > -       }
+> > -
+> >         /* Ensure that the lirc kfifo is setup before we start the thread */
+> >         if (dev->allowed_protocols != RC_PROTO_BIT_CEC) {
+> >                 rc = ir_lirc_register(dev);
+> >                 if (rc < 0)
+> > -                       goto out_rx;
+> > +                       goto out_dev;
+> > +       }
+> > +
+> > +       if (dev->driver_type != RC_DRIVER_IR_RAW_TX) {
+> > +               rc = rc_setup_rx_device(dev);
+> > +               if (rc)
+> > +                       goto out_lirc;
+> >         }
+> >
+> >         if (dev->driver_type == RC_DRIVER_IR_RAW) {
+> >                 rc = ir_raw_event_register(dev);
+> >                 if (rc < 0)
+> > -                       goto out_lirc;
+> > +                       goto out_rx;
+> >         }
+> >
+> >         dev_dbg(&dev->dev, "Registered rc%u (driver: %s)\n", dev->minor,
+> > @@ -1915,11 +1915,11 @@ int rc_register_device(struct rc_dev *dev)
+> >
+> >         return 0;
+> >
+> > +out_rx:
+> > +       rc_free_rx_device(dev);
+> >  out_lirc:
+> >         if (dev->allowed_protocols != RC_PROTO_BIT_CEC)
+> >                 ir_lirc_unregister(dev);
+> > -out_rx:
+> > -       rc_free_rx_device(dev);
+> >  out_dev:
+> >         device_del(&dev->dev);
+> >  out_rx_free:
+> > --
+> > 2.23.0
+> >
+>
+> (re-sending to list)
+>
+> Hey Sean,
+>
+> Thanks for the amazingly quick response.
+>
+> I built that patch and did a few reboots. Everything remains
+> functional in my setup (1 pvr350 + 1 pchdtv5500).
+> Obviously I can't verify the intermittent oopses are gone since I
+> cannot intentionally recreate them, but your patch certainly passes
+> the eyeball test.
+>
+> Tested-by: Nick French <nickfrench@gmail.com>
 
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- drivers/media/pci/cobalt/cobalt-alsa-pcm.c | 61 ++----------------------------
- 1 file changed, 4 insertions(+), 57 deletions(-)
+Sean,
 
-diff --git a/drivers/media/pci/cobalt/cobalt-alsa-pcm.c b/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
-index 38d00935a292..77570a1127c9 100644
---- a/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
-+++ b/drivers/media/pci/cobalt/cobalt-alsa-pcm.c
-@@ -9,7 +9,6 @@
- 
- #include <linux/init.h>
- #include <linux/kernel.h>
--#include <linux/vmalloc.h>
- #include <linux/delay.h>
- 
- #include <media/v4l2-device.h>
-@@ -244,48 +243,6 @@ static int snd_cobalt_pcm_ioctl(struct snd_pcm_substream *substream,
- 	return snd_pcm_lib_ioctl(substream, cmd, arg);
- }
- 
--
--static int snd_pcm_alloc_vmalloc_buffer(struct snd_pcm_substream *subs,
--					size_t size)
--{
--	struct snd_pcm_runtime *runtime = subs->runtime;
--
--	dprintk("Allocating vbuffer\n");
--	if (runtime->dma_area) {
--		if (runtime->dma_bytes > size)
--			return 0;
--
--		vfree(runtime->dma_area);
--	}
--	runtime->dma_area = vmalloc(size);
--	if (!runtime->dma_area)
--		return -ENOMEM;
--
--	runtime->dma_bytes = size;
--
--	return 0;
--}
--
--static int snd_cobalt_pcm_hw_params(struct snd_pcm_substream *substream,
--			 struct snd_pcm_hw_params *params)
--{
--	dprintk("%s called\n", __func__);
--
--	return snd_pcm_alloc_vmalloc_buffer(substream,
--					   params_buffer_bytes(params));
--}
--
--static int snd_cobalt_pcm_hw_free(struct snd_pcm_substream *substream)
--{
--	if (substream->runtime->dma_area) {
--		dprintk("freeing pcm capture region\n");
--		vfree(substream->runtime->dma_area);
--		substream->runtime->dma_area = NULL;
--	}
--
--	return 0;
--}
--
- static int snd_cobalt_pcm_prepare(struct snd_pcm_substream *substream)
- {
- 	struct snd_cobalt_card *cobsc = snd_pcm_substream_chip(substream);
-@@ -490,36 +447,22 @@ snd_pcm_uframes_t snd_cobalt_pcm_pb_pointer(struct snd_pcm_substream *substream)
- 	       substream->runtime->buffer_size;
- }
- 
--static struct page *snd_pcm_get_vmalloc_page(struct snd_pcm_substream *subs,
--					     unsigned long offset)
--{
--	void *pageptr = subs->runtime->dma_area + offset;
--
--	return vmalloc_to_page(pageptr);
--}
--
- static const struct snd_pcm_ops snd_cobalt_pcm_capture_ops = {
- 	.open		= snd_cobalt_pcm_capture_open,
- 	.close		= snd_cobalt_pcm_capture_close,
- 	.ioctl		= snd_cobalt_pcm_ioctl,
--	.hw_params	= snd_cobalt_pcm_hw_params,
--	.hw_free	= snd_cobalt_pcm_hw_free,
- 	.prepare	= snd_cobalt_pcm_prepare,
- 	.trigger	= snd_cobalt_pcm_trigger,
- 	.pointer	= snd_cobalt_pcm_pointer,
--	.page		= snd_pcm_get_vmalloc_page,
- };
- 
- static const struct snd_pcm_ops snd_cobalt_pcm_playback_ops = {
- 	.open		= snd_cobalt_pcm_playback_open,
- 	.close		= snd_cobalt_pcm_playback_close,
- 	.ioctl		= snd_cobalt_pcm_ioctl,
--	.hw_params	= snd_cobalt_pcm_hw_params,
--	.hw_free	= snd_cobalt_pcm_hw_free,
- 	.prepare	= snd_cobalt_pcm_pb_prepare,
- 	.trigger	= snd_cobalt_pcm_pb_trigger,
- 	.pointer	= snd_cobalt_pcm_pb_pointer,
--	.page		= snd_pcm_get_vmalloc_page,
- };
- 
- int snd_cobalt_pcm_create(struct snd_cobalt_card *cobsc)
-@@ -555,6 +498,8 @@ int snd_cobalt_pcm_create(struct snd_cobalt_card *cobsc)
- 
- 		snd_pcm_set_ops(sp, SNDRV_PCM_STREAM_CAPTURE,
- 				&snd_cobalt_pcm_capture_ops);
-+		snd_pcm_set_managed_buffer_all(sp, SNDRV_DMA_TYPE_VMALLOC,
-+					       NULL, 0, 0);
- 		sp->info_flags = 0;
- 		sp->private_data = cobsc;
- 		strscpy(sp->name, "cobalt", sizeof(sp->name));
-@@ -579,6 +524,8 @@ int snd_cobalt_pcm_create(struct snd_cobalt_card *cobsc)
- 
- 		snd_pcm_set_ops(sp, SNDRV_PCM_STREAM_PLAYBACK,
- 				&snd_cobalt_pcm_playback_ops);
-+		snd_pcm_set_managed_buffer_all(sp, SNDRV_DMA_TYPE_VMALLOC,
-+					       NULL, 0, 0);
- 		sp->info_flags = 0;
- 		sp->private_data = cobsc;
- 		strscpy(sp->name, "cobalt", sizeof(sp->name));
--- 
-2.16.4
+A quick update: still no oops after ~2.5 weeks of running with above patch.
 
+The ~2.5 weeks is a significant amount of time without an oops
+compared to previous unpatched kernels at ~3 oops/week (the box powers
+on/off multiple times per day so it gets lots of bootup-timing
+samples), so I'm personally convinced your patch is indeed a stability
+improvement.
+
+- Nick
