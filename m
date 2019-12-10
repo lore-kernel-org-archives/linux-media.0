@@ -4,49 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6AAAC43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:39:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B1FAC2D0BF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:40:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7B9602073B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:39:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3687C20828
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:40:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576013970;
-	bh=1babmQM4+K24X+5mb2qf7Srsl8X3oOursEsQlBCqiuA=;
+	s=default; t=1576014059;
+	bh=ZwpzM8Y0sqnzkQFfcAOhYlxqY7bdpTFSVMrrVZOOfqc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=tVENAcGWclCygFvNfDkHNugx2dlPcL8eTCvwZwNNx52aGBgoqxaCXPgywFA/dh0eH
-	 skv/FsLwzJ7CFiEw/RO/MGUPpFzEkn/EtgmfEY65JxHSP6qIktdbDgCg7ZsObWBhX+
-	 ryIyGsb9JOd7AKLFa1QHsH+QeFyYewlAaG85Y7QY=
+	b=VOlSUv82nWpivWwlXIl2WDgSnompOSu2fnaPsDoiWN18GvTZm7Vfymj1z+LUJ53ax
+	 +9MGNK2MQJoiw0wBIjBvXhooM45j7DSXJ24k92DexUTgJnvMMjWOXh4YBnLCLhocNr
+	 i2pCJDPLqcuoofBdjmH3dSebn2yGvN9DjHGdSuYk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727564AbfLJVjV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:39:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40492 "EHLO mail.kernel.org"
+        id S1729748AbfLJVk6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:40:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39462 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729742AbfLJVfA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:35:00 -0500
+        id S1730023AbfLJVeX (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:34:23 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2630F207FF;
-        Tue, 10 Dec 2019 21:34:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C35AF24654;
+        Tue, 10 Dec 2019 21:34:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576013699;
-        bh=1babmQM4+K24X+5mb2qf7Srsl8X3oOursEsQlBCqiuA=;
+        s=default; t=1576013662;
+        bh=ZwpzM8Y0sqnzkQFfcAOhYlxqY7bdpTFSVMrrVZOOfqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JEoVc1hi+TyaFdTiynZr8IDWJRXdYmNmTNrOkpUADhEsyj4TaWaWh1s9usL8r/Byk
-         pItubQs1Qvb3u2mnGxEsahSE33VmMsGtFHGDuQ3n0VvKUowM3vZb5ra7ab85OHp96a
-         O4Kh6W8wvwWUGCAc2Mv7uK4RIJzY83iZD/rVaJuU=
+        b=Uzf72vEfpyg+IvBraPH57fgOh1dwULjIo9/zAGx6VblOG7+IXIfrv6YYZBavY2GEN
+         NvQXfqta1PThL/T2WkJ0nRwbSu8t4RHoHFbjYHAi60Zz+bvTqj7vqXTfmRCne86eKK
+         hs9lNY1pSbkDdHCGf/4udGP9hv7eeeS/7skjlcIw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mike Isely <isely@pobox.com>,
+Cc:     Kangjie Lu <kjlu@umn.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 129/177] media: pvrusb2: Fix oops on tear-down when radio support is not present
-Date:   Tue, 10 Dec 2019 16:31:33 -0500
-Message-Id: <20191210213221.11921-129-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 100/177] media: rcar_drif: fix a memory disclosure
+Date:   Tue, 10 Dec 2019 16:31:04 -0500
+Message-Id: <20191210213221.11921-100-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
 References: <20191210213221.11921-1-sashal@kernel.org>
@@ -59,57 +61,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mike Isely <isely@pobox.com>
+From: Kangjie Lu <kjlu@umn.edu>
 
-[ Upstream commit 7f404ae9cf2a285f73b3c18ab9303d54b7a3d8e1 ]
+[ Upstream commit d39083234c60519724c6ed59509a2129fd2aed41 ]
 
-In some device configurations there's no radio or radio support in the
-driver.  That's OK, as the driver sets itself up accordingly.  However
-on tear-down in these caes it's still trying to tear down radio
-related context when there isn't anything there, leading to
-dereferences through a null pointer and chaos follows.
+"f->fmt.sdr.reserved" is uninitialized. As other peer drivers
+like msi2500 and airspy do, the fix initializes it to avoid
+memory disclosures.
 
-How this bug survived unfixed for 11 years in the pvrusb2 driver is a
-mystery to me.
-
-[hverkuil: fix two checkpatch warnings]
-
-Signed-off-by: Mike Isely <isely@pobox.com>
+Signed-off-by: Kangjie Lu <kjlu@umn.edu>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-v4l2.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/platform/rcar_drif.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-index e53a80b589a15..04d334152eae2 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-@@ -916,8 +916,12 @@ static void pvr2_v4l2_internal_check(struct pvr2_channel *chp)
- 	pvr2_v4l2_dev_disassociate_parent(vp->dev_video);
- 	pvr2_v4l2_dev_disassociate_parent(vp->dev_radio);
- 	if (!list_empty(&vp->dev_video->devbase.fh_list) ||
--	    !list_empty(&vp->dev_radio->devbase.fh_list))
-+	    (vp->dev_radio &&
-+	     !list_empty(&vp->dev_radio->devbase.fh_list))) {
-+		pvr2_trace(PVR2_TRACE_STRUCT,
-+			   "pvr2_v4l2 internal_check exit-empty id=%p", vp);
- 		return;
-+	}
- 	pvr2_v4l2_destroy_no_lock(vp);
- }
+diff --git a/drivers/media/platform/rcar_drif.c b/drivers/media/platform/rcar_drif.c
+index 81413ab52475d..b677d014e7bab 100644
+--- a/drivers/media/platform/rcar_drif.c
++++ b/drivers/media/platform/rcar_drif.c
+@@ -912,6 +912,7 @@ static int rcar_drif_g_fmt_sdr_cap(struct file *file, void *priv,
+ {
+ 	struct rcar_drif_sdr *sdr = video_drvdata(file);
  
-@@ -953,7 +957,8 @@ static int pvr2_v4l2_release(struct file *file)
- 	kfree(fhp);
- 	if (vp->channel.mc_head->disconnect_flag &&
- 	    list_empty(&vp->dev_video->devbase.fh_list) &&
--	    list_empty(&vp->dev_radio->devbase.fh_list)) {
-+	    (!vp->dev_radio ||
-+	     list_empty(&vp->dev_radio->devbase.fh_list))) {
- 		pvr2_v4l2_destroy_no_lock(vp);
- 	}
- 	return 0;
++	memset(f->fmt.sdr.reserved, 0, sizeof(f->fmt.sdr.reserved));
+ 	f->fmt.sdr.pixelformat = sdr->fmt->pixelformat;
+ 	f->fmt.sdr.buffersize = sdr->fmt->buffersize;
+ 
 -- 
 2.20.1
 
