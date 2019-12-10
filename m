@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 474F3C2D0BF
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:48:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E78AC00454
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:49:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 19FC820836
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:48:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41F0920838
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014530;
-	bh=7zLsb//lUHhQDy4cBSzI/supsbevb/WRTjAn9ktL5Bg=;
+	s=default; t=1576014540;
+	bh=m8ciEoBLTIrY1g+kJKs8N67Pn6ZF7YyGwNY2w89M4eg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VozaNFcscgN0QHOjBsdOx4EIdGLez2kUWe/shUeeP+/TWTPDTbNSSMAJpp58d4C6n
-	 yL3/x3zrReQmX8BU8Lfe+aRwHzihj0GwTFDH3BAdgsFmxNUKZE49aLiLaHiQXjHtmb
-	 qr+ZWhYsUrxv+VFUMJGPGGKpWMRIyVTRuq5satvw=
+	b=U+tsAup2wguo1+qyBMee/wa+BqB1+aTrKXdNnygfR5hPysKl1ggtwgE6cVWBvQqA2
+	 4SFS4zak5Z1VJMywQ+7oyriHY1q3s9S3UXzfDpxRYc3bWh764NVNi8SNzeinKCcRH7
+	 +p5Ab2bgz1AeF/uqkQFf+LnN9VVihoY0Fpx//H+8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728192AbfLJVst (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:48:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56514 "EHLO mail.kernel.org"
+        id S1727079AbfLJVIp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:08:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56332 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727954AbfLJVIt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:08:49 -0500
+        id S1726826AbfLJVIn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:08:43 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7093024696;
-        Tue, 10 Dec 2019 21:08:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C59E624681;
+        Tue, 10 Dec 2019 21:08:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012128;
-        bh=7zLsb//lUHhQDy4cBSzI/supsbevb/WRTjAn9ktL5Bg=;
+        s=default; t=1576012122;
+        bh=m8ciEoBLTIrY1g+kJKs8N67Pn6ZF7YyGwNY2w89M4eg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pIpfc+SdNqhEO7FycEpRyEuIQCNNX1WGlg9bZGG8uXikREKpj6Y+uDTvepBZpor6W
-         eUAuQZD/obpeC0DF0CAcTjuhHD3CRNtuLMuV4YxB3ptop62rU1vcfGPOFCXgsabtxe
-         52gKEJ4mZAiDVl7sy80YMBDi0EFqopWvrdRmpsVE=
+        b=JKoUW/2BmMC6SS3mZFrWbJP9bgUXJ1j0r50jScbAGTnunrKPm2HZIBARXH5hK8utL
+         DkS25YdmndM8gdniSlvr7rl3gAV+DEUWNlA8GlWdkMAIr4LIgvWl7/T5ZgCxNeb2+X
+         EqKWR/rYpKdR8u+fP0iBqU6mPA+ShxeLXZrgUnB0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Benoit Parrot <bparrot@ti.com>,
@@ -45,9 +45,9 @@ Cc:     Benoit Parrot <bparrot@ti.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 097/350] media: ti-vpe: vpe: fix a v4l2-compliance failure about invalid sizeimage
-Date:   Tue, 10 Dec 2019 16:03:22 -0500
-Message-Id: <20191210210735.9077-58-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 093/350] media: ti-vpe: vpe: fix a v4l2-compliance failure causing a kernel panic
+Date:   Tue, 10 Dec 2019 16:03:18 -0500
+Message-Id: <20191210210735.9077-54-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -62,22 +62,34 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Benoit Parrot <bparrot@ti.com>
 
-[ Upstream commit 0bac73adea4df8d34048b38f6ff24dc3e73e90b6 ]
+[ Upstream commit a37980ac5be29b83da67bf7d571c6bd9f90f8e45 ]
 
 v4l2-compliance fails with this message:
 
-   fail: v4l2-test-formats.cpp(463): !pfmt.sizeimage
-   fail: v4l2-test-formats.cpp(736): \
-	Video Capture Multiplanar is valid, \
-	but TRY_FMT failed to return a format
+   warn: v4l2-test-formats.cpp(717): \
+   	TRY_FMT cannot handle an invalid pixelformat.
    test VIDIOC_TRY_FMT: FAIL
 
-This failure is causd by the driver failing to handle out range
-'bytesperline' values from user space applications.
+This causes the following kernel panic:
 
-VPDMA hardware is limited to 64k line stride (16 bytes aligned, so 65520
-bytes). So make sure the provided or calculated 'bytesperline' is
-smaller than the maximum value.
+Unable to handle kernel paging request at virtual address 56595561
+pgd = ecd80e00
+*pgd=00000000
+Internal error: Oops: 205 [#1] PREEMPT SMP ARM
+...
+CPU: 0 PID: 930 Comm: v4l2-compliance Not tainted \
+	4.14.62-01715-gc8cd67f49a19 #1
+Hardware name: Generic DRA72X (Flattened Device Tree)
+task: ece44d80 task.stack: ecc6e000
+PC is at __vpe_try_fmt+0x18c/0x2a8 [ti_vpe]
+LR is at 0x8
+
+Because the driver fails to properly check the 'num_planes' values for
+proper ranges it ends up accessing out of bound data causing the kernel
+panic.
+
+Since this driver only handle single or dual plane pixel format, make
+sure the provided value does not exceed 2 planes.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
@@ -85,37 +97,22 @@ Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/ti-vpe/vpdma.h | 1 +
- drivers/media/platform/ti-vpe/vpe.c   | 4 ++++
- 2 files changed, 5 insertions(+)
+ drivers/media/platform/ti-vpe/vpe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/ti-vpe/vpdma.h b/drivers/media/platform/ti-vpe/vpdma.h
-index 28bc941293484..9bacfd6032501 100644
---- a/drivers/media/platform/ti-vpe/vpdma.h
-+++ b/drivers/media/platform/ti-vpe/vpdma.h
-@@ -57,6 +57,7 @@ struct vpdma_data_format {
- 						 * line stride of source and dest
- 						 * buffers should be 16 byte aligned
- 						 */
-+#define VPDMA_MAX_STRIDE		65520	/* Max line stride 16 byte aligned */
- #define VPDMA_DTD_DESC_SIZE		32	/* 8 words */
- #define VPDMA_CFD_CTD_DESC_SIZE		16	/* 4 words */
- 
 diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 512660b4ee636..8b14ba4a3d9ea 100644
+index 2b731c8f54593..7b321c3b594f5 100644
 --- a/drivers/media/platform/ti-vpe/vpe.c
 +++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -1668,6 +1668,10 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
- 		if (stride > plane_fmt->bytesperline)
- 			plane_fmt->bytesperline = stride;
+@@ -1629,7 +1629,7 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 			      &pix->height, MIN_H, MAX_H, H_ALIGN,
+ 			      S_ALIGN);
  
-+		plane_fmt->bytesperline = clamp_t(u32, plane_fmt->bytesperline,
-+						  stride,
-+						  VPDMA_MAX_STRIDE);
-+
- 		plane_fmt->bytesperline = ALIGN(plane_fmt->bytesperline,
- 						VPDMA_STRIDE_ALIGN);
- 
+-	if (!pix->num_planes)
++	if (!pix->num_planes || pix->num_planes > 2)
+ 		pix->num_planes = fmt->coplanar ? 2 : 1;
+ 	else if (pix->num_planes > 1 && !fmt->coplanar)
+ 		pix->num_planes = 1;
 -- 
 2.20.1
 
