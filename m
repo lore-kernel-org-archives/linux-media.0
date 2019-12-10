@@ -4,50 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1650C43603
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:52:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 664D8C43603
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75C6F205C9
-	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 21:52:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 392832077B
+	for <linux-media@archiver.kernel.org>; Tue, 10 Dec 2019 22:03:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014762;
-	bh=6Ap/4dLrJtbhgDZjWBk601+fL/rDqhvc0pmlWurQAGU=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=a2kH8M13Ap/nBENT7x7Hmxu3Lcn7nElqSHtS0FSKec07kGlukkcMIysWTGF4zRpUI
-	 YI82GEO/H7/TzOwy5iXl7LSZAxDIprljHB0c9gDn1kdRJA1b8fR6FwH3UcxwGkpUWU
-	 h1LEd0SeQl+3Ej3le7MW+0eGAaYsWVBFSge+o0NY=
+	s=default; t=1576015403;
+	bh=uTlGLfGAE2nW558+g5y+/xKF1wWkFem5YS3fRPar4FU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=IEzFNmvWeGqW5UW2IW5PcuUdhy7CEUgRwRcZkrVXMxK/T4sXhQxAZPbnzhgK5AF+u
+	 GkwMMZNz1+GsafiOePjJP1rOB+v1w/8MXvQFL3KEPBhP0oO239hc+aV4FfXih3OAip
+	 qih70keHoTYUqiXm3aVkqs0nME5qKwD1e7H6Wyx4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbfLJVHi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:07:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53942 "EHLO mail.kernel.org"
+        id S1727589AbfLJWDV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:03:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33384 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725999AbfLJVHi (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:07:38 -0500
+        id S1727565AbfLJWDU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:03:20 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EE43D20652;
-        Tue, 10 Dec 2019 21:07:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 59544214D8;
+        Tue, 10 Dec 2019 22:03:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012057;
-        bh=6Ap/4dLrJtbhgDZjWBk601+fL/rDqhvc0pmlWurQAGU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kdEHs/Bhl7rM1+9nc/zM8Ex/1+7zhPDMoiklTbPbcRuLmm/Pm2M06u0z+TLBmnEoc
-         TthxW+WqWq8URoo3YpQ2KoknCXTwwL16wgw6n99ppNGLfws8ODeiFQvPmrn9/6cqm4
-         rQfkKoUAHaUcUoxjE7n+euY6JYc/J8HP3FY6I5M8=
+        s=default; t=1576015400;
+        bh=uTlGLfGAE2nW558+g5y+/xKF1wWkFem5YS3fRPar4FU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NvgJMAFr4e86Pfb4h0AoyYklVu34YFywKsgNaHn2COyjg4od6UXUqIhJKRP3C3E7F
+         It6940yQMRiJ3UxaCbIecJoEydYMiw50lRSPDWTm9p3qLcf6FKyHuV3Tz6yhNUrKwf
+         ekftX4anIWVnqnt7+PGjbbPfBbfnoHSCpK9FgmTU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+Cc:     Benoit Parrot <bparrot@ti.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 040/350] media: ov6650: Fix control handler not freed on init error
-Date:   Tue, 10 Dec 2019 16:02:25 -0500
-Message-Id: <20191210210735.9077-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 015/130] media: i2c: ov2659: Fix missing 720p register config
+Date:   Tue, 10 Dec 2019 17:01:06 -0500
+Message-Id: <20191210220301.13262-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
+References: <20191210220301.13262-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,54 +59,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+From: Benoit Parrot <bparrot@ti.com>
 
-[ Upstream commit c404af950d14b71bfbf574a752b6c29d726baaba ]
+[ Upstream commit 9d669fbfca20e6035ead814e55d9ef1a6b500540 ]
 
-Since commit afd9690c72c3 ("[media] ov6650: convert to the control
-framework"), if an error occurs during initialization of a control
-handler, resources possibly allocated to the handler are not freed
-before device initialiaton is aborted.  Fix it.
+The initial registers sequence is only loaded at probe
+time. Afterward only the resolution and format specific
+register are modified. Care must be taken to make sure
+registers modified by one resolution setting are reverted
+back when another resolution is programmed.
 
-Fixes: afd9690c72c3 ("[media] ov6650: convert to the control framework")
-Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+This was not done properly for the 720p case.
+
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov6650.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/media/i2c/ov2659.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index 5b9af5e5b7f13..68776b0710f98 100644
---- a/drivers/media/i2c/ov6650.c
-+++ b/drivers/media/i2c/ov6650.c
-@@ -989,8 +989,10 @@ static int ov6650_probe(struct i2c_client *client,
- 			V4L2_CID_GAMMA, 0, 0xff, 1, 0x12);
+diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
+index 04d493aea45eb..44b0584eb8a6c 100644
+--- a/drivers/media/i2c/ov2659.c
++++ b/drivers/media/i2c/ov2659.c
+@@ -419,10 +419,14 @@ static struct sensor_register ov2659_720p[] = {
+ 	{ REG_TIMING_YINC, 0x11 },
+ 	{ REG_TIMING_VERT_FORMAT, 0x80 },
+ 	{ REG_TIMING_HORIZ_FORMAT, 0x00 },
++	{ 0x370a, 0x12 },
+ 	{ 0x3a03, 0xe8 },
+ 	{ 0x3a09, 0x6f },
+ 	{ 0x3a0b, 0x5d },
+ 	{ 0x3a15, 0x9a },
++	{ REG_VFIFO_READ_START_H, 0x00 },
++	{ REG_VFIFO_READ_START_L, 0x80 },
++	{ REG_ISP_CTRL02, 0x00 },
+ 	{ REG_NULL, 0x00 },
+ };
  
- 	priv->subdev.ctrl_handler = &priv->hdl;
--	if (priv->hdl.error)
--		return priv->hdl.error;
-+	if (priv->hdl.error) {
-+		ret = priv->hdl.error;
-+		goto ectlhdlfree;
-+	}
- 
- 	v4l2_ctrl_auto_cluster(2, &priv->autogain, 0, true);
- 	v4l2_ctrl_auto_cluster(3, &priv->autowb, 0, true);
-@@ -1008,8 +1010,10 @@ static int ov6650_probe(struct i2c_client *client,
- 	priv->subdev.internal_ops = &ov6650_internal_ops;
- 
- 	ret = v4l2_async_register_subdev(&priv->subdev);
--	if (ret)
--		v4l2_ctrl_handler_free(&priv->hdl);
-+	if (!ret)
-+		return 0;
-+ectlhdlfree:
-+	v4l2_ctrl_handler_free(&priv->hdl);
- 
- 	return ret;
- }
 -- 
 2.20.1
 
