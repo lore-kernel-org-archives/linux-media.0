@@ -2,138 +2,72 @@ Return-Path: <SRS0=PmDt=2B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 022A3C00454
-	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A27F9C00454
+	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:23:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBD712073D
-	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:22:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="r+OTEuL3"
+	by mail.kernel.org (Postfix) with ESMTP id 7DA142073D
+	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:23:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730259AbfLKQWl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Dec 2019 11:22:41 -0500
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:59085 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730219AbfLKQWf (ORCPT
+        id S1730595AbfLKQXA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Dec 2019 11:23:00 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:55628 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729118AbfLKQW7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Dec 2019 11:22:35 -0500
-Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:d0c4:2b08:27a4:6946])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id f4kxiY8tRapzpf4kziSRbb; Wed, 11 Dec 2019 17:22:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1576081353; bh=W+eJqpP/1iPsUGmYey1VVBTz1YTzP7zth4vakGkbjOE=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=r+OTEuL33yeE4rrok9OVg/nyk2wDwPXACwo7Krg8vQ4IFvR4oFAE/ukaxnH2uG1S5
-         HXvsHfzc/ofT7DhA9H3U98JSnjN7efzwy4A5vMdKGcKLFYprkAysHyorGUCLO52R4g
-         pr1NoQAuOQ8MIMvnbwkBHNLnKimHtdYLl5DKq6USclIP5vCCo16cISCFi5PYXp5+Ll
-         3Qbw0Y9RXQwPJ7sF6Wx+WV1PNLT0B3hpYJdLMn1HYEGPEeCnUmQVBZbP+/eTT+NX5t
-         hfvsKPy541+tST3GgjPq82LNJdmX9KTAwjqEMAlg3iBpNKYT04BSFiInUuiLSMRGk/
-         YzuZYDV1c5w5Q==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 04/10] pulse8-cec: add 2nd debug level
-Date:   Wed, 11 Dec 2019 17:22:25 +0100
-Message-Id: <20191211162231.99978-5-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191211162231.99978-1-hverkuil-cisco@xs4all.nl>
-References: <20191211162231.99978-1-hverkuil-cisco@xs4all.nl>
+        Wed, 11 Dec 2019 11:22:59 -0500
+Received: (qmail 4502 invoked by uid 2102); 11 Dec 2019 11:22:58 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 11 Dec 2019 11:22:58 -0500
+Date:   Wed, 11 Dec 2019 11:22:58 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Dmitry Vyukov <dvyukov@google.com>
+cc:     Andrey Konovalov <andreyknvl@google.com>,
+        syzbot <syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Souptick Joarder <jrdr.linux@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Richard Fontana <rfontana@redhat.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: KASAN: use-after-free Read in usbvision_v4l2_open
+In-Reply-To: <CACT4Y+ZSmwr4y2VrUxZSvFCL0Ws4cp6T5FwyVRg_CqhCf354HQ@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1912111111510.1549-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfLIuqXjK/nGb1Cb9ikFROFqZEzmt2J7yWvtecDDS5F8o0dP/p5K1rS7xn74w8YDg+F2LT4hgg+nqsiYVn6jFki0p7KwOiFZnBesw3h0xLBDnPalo5IY5
- VE+BRsUOL/dTfjcMEXZaO0UO85SHdk3joVWdbVzGvBitF0wQ/jRdl3yVeoOAHWlm/vId6aznsElobMYLfIEpn3iaJQofMu7Ff0yBVsZU13kbY/HhVOPo+iWy
- g37kMwDBkMBOeTCpyTbJCXcq6WTZP2Nx9SBniQpCoEQXnYw0jbEhMLZgFEue0gc4
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use debug level 2 to show the low-level Pulse-Eight commands.
+On Wed, 11 Dec 2019, Dmitry Vyukov wrote:
 
-Also show the message to transmit on debug level 1 and add a
-debug log to show where the transmit failed.
+> > > By the way, do you know why syzbot sent _two_ reply messages?  One with
+> > > message ID <00000000000031a0af05995eca0b@google.com> and the other with
+> > > message ID <000000000000441a4205995eca11@google.com>?  It seems like
+> > > overkill.
+> >
+> > Hm, I'm not sure. Dmitry?
+> 
+> I would assume it received 2 emails (second from syzkaller-bugs@
+> mailing list) and deduplication logic did not work somehow. So it
+> replied to both.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/usb/pulse8-cec/pulse8-cec.c | 24 ++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+Does that mean when I send in a test request, it's better to omit 
+syzkaller-bugs from the CC: list?
 
-diff --git a/drivers/media/usb/pulse8-cec/pulse8-cec.c b/drivers/media/usb/pulse8-cec/pulse8-cec.c
-index 40880cb79f9a..5ac257d01243 100644
---- a/drivers/media/usb/pulse8-cec/pulse8-cec.c
-+++ b/drivers/media/usb/pulse8-cec/pulse8-cec.c
-@@ -49,7 +49,7 @@ static int debug;
- static int persistent_config;
- module_param(debug, int, 0644);
- module_param(persistent_config, int, 0644);
--MODULE_PARM_DESC(debug, "debug level (0-1)");
-+MODULE_PARM_DESC(debug, "debug level (0-2)");
- MODULE_PARM_DESC(persistent_config, "read config from persistent memory (0-1)");
- 
- enum pulse8_msgcodes {
-@@ -215,7 +215,9 @@ static int pulse8_send_and_wait_once(struct pulse8 *pulse8,
- {
- 	int err;
- 
--	/* dev_info(pulse8->dev, "transmit %s: %*ph\n", pulse8_msgname(cmd[0]), cmd_len, cmd); */
-+	if (debug > 1)
-+		dev_info(pulse8->dev, "transmit %s: %*ph\n",
-+			 pulse8_msgname(cmd[0]), cmd_len, cmd);
- 	init_completion(&pulse8->cmd_done);
- 
- 	err = pulse8_send(pulse8->serio, cmd, cmd_len);
-@@ -231,8 +233,9 @@ static int pulse8_send_and_wait_once(struct pulse8 *pulse8,
- 		return -ENOTTY;
- 	if (response &&
- 	    ((pulse8->data[0] & 0x3f) != response || pulse8->len < size + 1)) {
--		dev_info(pulse8->dev, "transmit %s: failed %s\n",
--			 pulse8_msgname(cmd[0]), pulse8_msgname(pulse8->data[0]));
-+		dev_info(pulse8->dev, "transmit %s failed with %s\n",
-+			 pulse8_msgname(cmd[0]),
-+			 pulse8_msgname(pulse8->data[0]));
- 		return -EIO;
- 	}
- 	return 0;
-@@ -307,9 +310,10 @@ static irqreturn_t pulse8_interrupt(struct serio *serio, unsigned char data,
- 		struct cec_msg *msg = &pulse8->rx_msg;
- 		u8 msgcode = pulse8->buf[0];
- 
--		if (debug)
-+		if (debug > 1)
- 			dev_info(pulse8->dev, "received %s: %*ph\n",
--				 pulse8_msgname(msgcode), pulse8->idx, pulse8->buf);
-+				 pulse8_msgname(msgcode),
-+				 pulse8->idx, pulse8->buf);
- 		switch (msgcode & 0x3f) {
- 		case MSGCODE_FRAME_START:
- 			msg->len = 1;
-@@ -511,6 +515,9 @@ static int pulse8_cec_adap_transmit(struct cec_adapter *adap, u8 attempts,
- 	unsigned int i;
- 	int err;
- 
-+	if (debug)
-+		dev_info(pulse8->dev, "adap transmit %*ph\n",
-+			 msg->len, msg->msg);
- 	mutex_lock(&pulse8->lock);
- 	cmd[0] = MSGCODE_TRANSMIT_IDLETIME;
- 	cmd[1] = signal_free_time;
-@@ -540,7 +547,10 @@ static int pulse8_cec_adap_transmit(struct cec_adapter *adap, u8 attempts,
- 						   MSGCODE_COMMAND_ACCEPTED, 1);
- 		}
- 	}
--
-+	if (err && debug)
-+		dev_info(pulse8->dev, "%s(0x%02x) failed with error %d for msg %*ph\n",
-+			 pulse8_msgname(cmd[0]), cmd[1],
-+			 err, msg->len, msg->msg);
- 	mutex_unlock(&pulse8->lock);
- 	return err;
- }
--- 
-2.23.0
+Also, whatever did happen to the most recent test request (the one sent 
+to syzbot+7fa38a608b1075dfd634 even though it was meant to test the 
+bug reported by syzbot+c7b0ec009a216143df30)?  Did it truly fail to 
+build?  I can't find anything about it in the dashboard link for either 
+bug report, and I haven't gotten a reply from syzbot.
+
+Alan Stern
 
