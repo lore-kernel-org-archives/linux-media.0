@@ -2,148 +2,112 @@ Return-Path: <SRS0=PmDt=2B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BFAFC43603
-	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9958CC2D0C7
+	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:10:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F4872077B
-	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:05:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69F532173E
+	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:10:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vTsmwQUG"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="rf7jgxv0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388102AbfLKQF4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Dec 2019 11:05:56 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:39725 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732793AbfLKQFy (ORCPT
+        id S2387650AbfLKQKP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Dec 2019 11:10:15 -0500
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:58077 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730701AbfLKQKO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Dec 2019 11:05:54 -0500
-Received: by mail-qk1-f193.google.com with SMTP id c16so11660381qko.6
-        for <linux-media@vger.kernel.org>; Wed, 11 Dec 2019 08:05:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rehiyiPENjIb3TkGzxdImMUheY4m13it4HkAOv4ifvA=;
-        b=vTsmwQUGn0PUh4gMKS4wWcvmJG9Rls92dzR7yu3qn9LK1XT3kD28mO+CU67Z6t3Kjg
-         Hdg1fiVHJmBBtpaFSWqVTc8/bEFywDYGJH/GPAe+PvySrIKunzLxecQ5DxeXrtNn04T7
-         MZbJXaN6QLLDpvIJFkZoeoYorXVI56DjLDfGXfmV9VXgzcEvimD1OsJ/ObTAkyFpTK9j
-         Bh4zi2aWz1IAadMIXSNWBe7WEjdVJM963QzpsU8/fprO8FZ2t6aMpI+3qrBcCClsTg7s
-         fIaIr27QMj1Um5In/gi8No9JpBYd1pH9esdh8Wg/nVdRbFKofD6BOkla/vA26Wpq3lR9
-         trzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rehiyiPENjIb3TkGzxdImMUheY4m13it4HkAOv4ifvA=;
-        b=MSpAAbXjNZ/KUauztmatZB4eG8Wu+78L0uhSRoZXxHDKpZKDLpsORrgqEUfBu88UjQ
-         OfXs7OLJ6sIU+jCeoFkTa5MKJA8JXQ/4f6qor/ddTInn8uQf7alD6rgPBnYuavhekOme
-         zjyvZur/n8AhShnQwt5NTm2GqjCQqOQvkfNS1SjtebraUjqFfC3w8YKoIyf2dxGGCZvZ
-         VO4W7FbI5CuZmW4puJKmTSPMQIryR9zEGxZ9A6iY1XamSbdtTxNxKcBrUXmK46gFMLCY
-         hIext33qksKvZjflRYobInA0VrHgP6rZYf9uDGfPjMlCGxwQQ4DKh01N0ajTJtCXK5R+
-         jPsg==
-X-Gm-Message-State: APjAAAUQklro4tHurWq2D3yPU03ai3yz5egc03kX3kTHkrBGuqEz+XIs
-        QT7kYTR8cqI1xJERwISdY6Kkt+Jr/cYuP1YseefTKw==
-X-Google-Smtp-Source: APXvYqwfhmkuQ3K22hYcRkCOlEFPEw9qgU3YRMBjW3CG9Yuk+ek1oqXWKsbNqkZQBQzVDCnoEwkSWILGRpBU8BTNRKM=
-X-Received: by 2002:a37:48f:: with SMTP id 137mr3663089qke.25.1576080352362;
- Wed, 11 Dec 2019 08:05:52 -0800 (PST)
+        Wed, 11 Dec 2019 11:10:14 -0500
+Received: from [IPv6:2001:983:e9a7:1:d0c4:2b08:27a4:6946]
+ ([IPv6:2001:983:e9a7:1:d0c4:2b08:27a4:6946])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id f4Z1iY3QXapzpf4Z2iSLDu; Wed, 11 Dec 2019 17:10:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1576080612; bh=MaQBzeeOchKNMsCa1kTCBJOs6orHhbBr5JcwI/rwbCE=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=rf7jgxv0s7s0Zlj8dYe0JRUAGsmx/OQqfiVyT61EvLNkdE5IWohdUygBkB16UT/WI
+         mh6cPFOs2AaLe+Za3G/SMs+r3qBuat5WHmiAgrCHXGSbqqgfFXFTuA35M3qanYA+V/
+         XPbydWWznWnIFe+mCLCVxFFw5bSdgeQNTnOIcAqChleK3yNIrEVWVxRbxja9ie53Bc
+         THgHqaD+1zTomVVbWx8ziULYOwPA4246rBdWPAVwGoYigx6YDlBAX/zRdNZIeFH2v1
+         9/u3VPAMSrLCStRWOZzo3RrQCUdgkyJVcGTlJ5r9ulA9gjSCc5tq6FY+ZI+zBMMA1n
+         dvZBfOh2aGG3A==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH for v5.5] cec: avoid decrementing transmit_queue_sz if it is 0
+Message-ID: <2209c858-bbe3-fd0f-3e6d-c799888dd404@xs4all.nl>
+Date:   Wed, 11 Dec 2019 17:10:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20191105105456.7xbhtistnbp272lj@sirius.home.kraxel.org>
- <CAD=HUj7EsxrkSubmY6HE4aYJOykVKtmGXjMjeGqnoJw1KZUc5Q@mail.gmail.com>
- <20191106124101.fsfxibdkypo4rswv@sirius.home.kraxel.org> <72712fe048af1489368f7416faa92c45@hostfission.com>
- <CAAFQd5Cpb=3HRL3NbgxP+S259nkNEuA=u75ew1JQTzvVUU5NeQ@mail.gmail.com>
- <d65bec5074eda5f389668e28922c1609@hostfission.com> <CAAFQd5AWqYaNWfYQ2hepjg7OD8y8ehHn0guusAR8JYefc+BNaw@mail.gmail.com>
- <CAEUnVG77y2DrV5kLTHDy1xio+yzMGv9j=M0c4388vH_LUaiXLg@mail.gmail.com>
- <CAD=HUj40Jb2cy8EP=24coO-CPUvq6ib+01bvXHn1G9GD8KuenA@mail.gmail.com> <20191211092625.jzqx2ukphhggwavo@sirius.home.kraxel.org>
-In-Reply-To: <20191211092625.jzqx2ukphhggwavo@sirius.home.kraxel.org>
-From:   Enrico Granata <egranata@google.com>
-Date:   Wed, 11 Dec 2019 08:05:40 -0800
-Message-ID: <CAPR809tr7cY_ONLgc2Gq2hzuR+FZrtJ5nsLsq-UmV0LxFu0CRA@mail.gmail.com>
-Subject: Re: [virtio-dev] Re: guest / host buffer sharing ...
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     David Stevens <stevensd@chromium.org>,
-        Dylan Reid <dgreid@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Zach Reizner <zachr@chromium.org>,
-        Geoffrey McRae <geoff@hostfission.com>,
-        Keiichi Watanabe <keiichiw@chromium.org>,
-        Dmitry Morozov <dmitry.morozov@opensynergy.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Alex Lau <alexlau@chromium.org>,
-        =?UTF-8?Q?St=C3=A9phane_Marchesin?= <marcheu@chromium.org>,
-        Pawel Osciak <posciak@chromium.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        virtio-dev@lists.oasis-open.org, qemu-devel <qemu-devel@nongnu.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfAEunf+732qZ87a/9sagY9+kUm0JVrdGbPG5VGRvNiQ43ZxGXyBDh51AdIyAYh2pMA31Ijdp5zgiHYA28EvwQFxHVBcjtZutc+cJ/J70pCq0MZmHBrya
+ hE+DVUAeOCwpXuNBmClJmmSsxamBaLEdrEKhTXMuYPH7GCE/EJQfP3YphTa10mpx/Z810tn6+t+c4h1ACUqgjqV3bVvv5bYZLVkMLClTFGzVTFyb4ZhotVsp
+ Wrvpz4Hrf2Tuydw5Bnmkvcbt9A9bOwT6VNM9lTLAGT0=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 1:26 AM Gerd Hoffmann <kraxel@redhat.com> wrote:
->
->   Hi,
->
-> > None of the proposals directly address the use case of sharing host
-> > allocated buffers between devices, but I think they can be extended to
-> > support it. Host buffers can be identified by the following tuple:
-> > (transport type enum, transport specific device address, shmid,
-> > offset). I think this is sufficient even for host-allocated buffers
-> > that aren't visible to the guest (e.g. protected memory, vram), since
-> > they can still be given address space in some shared memory region,
-> > even if those addresses are actually inaccessible to the guest. At
-> > this point, the host buffer identifier can simply be passed in place
-> > of the guest ram scatterlist with either proposed buffer sharing
-> > mechanism.
->
-> > I think the main question here is whether or not the complexity of
-> > generic buffers and a buffer sharing device is worth it compared to
-> > the more implicit definition of buffers.
->
-> Here are two issues mixed up.  First is, whenever we'll go define a
-> buffer sharing device or not.  Second is how we are going to address
-> buffers.
->
-> I think defining (and addressing) buffers implicitly is a bad idea.
-> First the addressing is non-trivial, especially with the "transport
-> specific device address" in the tuple.  Second I think it is a bad idea
-> from the security point of view.  When explicitly exporting buffers it
-> is easy to restrict access to the actual exports.
->
+WARN if transmit_queue_sz is 0 but do not decrement it.
+The CEC adapter will become unresponsive if it goes below
+0 since then it thinks there are 4 billion messages in the
+queue.
 
-Strong +1 to the above. There are definitely use cases of interest
-where it makes sense to be able to attach security attributes to
-buffers.
-Having an explicit interface that can handle all of this, instead of
-duplicating logic in several subsystems, seems a worthy endeavor to
-me.
+Obviously this should not happen, but a driver bug could
+cause this.
 
-> Instead of using a dedicated buffer sharing device we can also use
-> virtio-gpu (or any other driver which supports dma-buf exports) to
-> manage buffers.  virtio-gpu would create an identifier when exporting a
-> buffer (dma-buf exports inside the guest), attach the identifier to the
-> dma-buf so other drivers importing the buffer can see and use it.  Maybe
-> add an ioctl to query, so guest userspace can query the identifier too.
-> Also send the identifier to the host so it can also be used on the host
-> side to lookup and access the buffer.
->
-> With no central instance (buffer sharing device) being there managing
-> the buffer identifiers I think using uuids as identifiers would be a
-> good idea, to avoid clashes.  Also good for security because it's pretty
-> much impossible to guess buffer identifiers then.
->
-> cheers,
->   Gerd
->
->
-> ---------------------------------------------------------------------
-> To unsubscribe, e-mail: virtio-dev-unsubscribe@lists.oasis-open.org
-> For additional commands, e-mail: virtio-dev-help@lists.oasis-open.org
->
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: <stable@vger.kernel.org>      # for v4.12 and up
+---
+ drivers/media/cec/cec-adap.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/cec/cec-adap.c b/drivers/media/cec/cec-adap.c
+index 9340435a94a0..d96add70b293 100644
+--- a/drivers/media/cec/cec-adap.c
++++ b/drivers/media/cec/cec-adap.c
+@@ -380,7 +380,8 @@ static void cec_data_cancel(struct cec_data *data, u8 tx_status)
+ 	} else {
+ 		list_del_init(&data->list);
+ 		if (!(data->msg.tx_status & CEC_TX_STATUS_OK))
+-			data->adap->transmit_queue_sz--;
++			if (!WARN_ON(!data->adap->transmit_queue_sz))
++				data->adap->transmit_queue_sz--;
+ 	}
+
+ 	if (data->msg.tx_status & CEC_TX_STATUS_OK) {
+@@ -432,6 +433,14 @@ static void cec_flush(struct cec_adapter *adap)
+ 		 * need to do anything special in that case.
+ 		 */
+ 	}
++	/*
++	 * If something went wrong and this counter isn't what it should
++	 * be, then this will reset it back to 0. Warn if it is not 0,
++	 * since it indicates a bug, either in this framework or in a
++	 * CEC driver.
++	 */
++	if (WARN_ON(adap->transmit_queue_sz))
++		adap->transmit_queue_sz = 0;
+ }
+
+ /*
+@@ -522,7 +531,8 @@ int cec_thread_func(void *_adap)
+ 		data = list_first_entry(&adap->transmit_queue,
+ 					struct cec_data, list);
+ 		list_del_init(&data->list);
+-		adap->transmit_queue_sz--;
++		if (!WARN_ON(!data->adap->transmit_queue_sz))
++			adap->transmit_queue_sz--;
+
+ 		/* Make this the current transmitting message */
+ 		adap->transmitting = data;
+-- 
+2.23.0
+
