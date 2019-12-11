@@ -2,90 +2,111 @@ Return-Path: <SRS0=PmDt=2B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 681C2C2D0C8
-	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 12:45:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C212C2D0C6
+	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 13:00:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3A829208C3
-	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 12:45:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E485421556
+	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 13:00:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="UD6A0YuR"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="sMtZvl98"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729220AbfLKMpH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Dec 2019 07:45:07 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:46590 "EHLO
+        id S1729281AbfLKNAC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Dec 2019 08:00:02 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:46824 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727402AbfLKMpH (ORCPT
+        with ESMTP id S1727402AbfLKNAC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Dec 2019 07:45:07 -0500
-Received: from Q.local (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F1E789D0;
-        Wed, 11 Dec 2019 13:45:03 +0100 (CET)
+        Wed, 11 Dec 2019 08:00:02 -0500
+Received: from [192.168.0.239] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A78889D0;
+        Wed, 11 Dec 2019 13:59:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1576068304;
-        bh=MQyyqPRnPcjwxjUZ7lNR0wF2JLDrWPM3dUeRyJLZiNg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UD6A0YuRWoMty5j+KOjyajQg1YF7M6pNfz4uDiu9+aWkUQqRXfSoijCxulmdqII6G
-         42sSI166gRA/mvmpraLkNrJv7JvUqJkcD86vU3kHd9+zjFwvWcxDD9+FlavNyMJUAL
-         Y2Em3ox/Q0BSjJ1L1GPjzFnGyLdNpbmT7vmk+QDc=
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-To:     linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        s=mail; t=1576069200;
+        bh=lKEz6Z8NRASclAzwJR4kRXkYGtMfsuGfi7KEZ6mogfw=;
+        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=sMtZvl98Y3m0cmwA4LJP7WTI66ESHgC5vEWUOY2v3NptpftyBymBaFVI6x3vQ2TXk
+         wVP6EiVGsUceygub7sOSojgm5+5bWVECh3oW2HWcfK8SDKuWGB5UotONMNZtg3++ya
+         LDe8iVSJMM5lpKxaQDjQpjq+HBU+JXKmDOlF9d9g=
+Reply-To: kieran.bingham+renesas@ideasonboard.com
+Subject: Re: [PATCH] media: vsp1: tidyup VI6_HGT_LBn_H() macro
+To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, sakari.ailus@iki.fi,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Subject: [PATCH v6 0/2] MAX9286 GMSL Support
-Date:   Wed, 11 Dec 2019 12:44:57 +0000
-Message-Id: <20191211124459.20508-1-kieran.bingham+renesas@ideasonboard.com>
-X-Mailer: git-send-email 2.20.1
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        koji.matsuoka.xm@renesas.com, takeshi.kihara.df@renesas.com,
+        harunobu.kurokawa.dn@renesas.com, khiem.nguyen.xt@renesas.com,
+        hien.dang.eb@renesas.com
+References: <redmine.issue-245033.20191211005426@dm.renesas.com>
+ <redmine.issue-245033.20191211005426.161918957b73008d@dm.renesas.com>
+ <87k173bp76.wl-kuninori.morimoto.gx@renesas.com>
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Organization: Ideas on Board
+Message-ID: <fb1648d4-3949-01c1-7d13-679b9b8540dd@ideasonboard.com>
+Date:   Wed, 11 Dec 2019 12:59:57 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <87k173bp76.wl-kuninori.morimoto.gx@renesas.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series provides the deserialiser driver for GMSL cameras on the R-Car ADAS
-platforms.
+Hi Morimoto-san,
 
-These drivers originate from Cogent Embedded, and have been refactored to split
-the MAX9286 away from the RDACM20 drivers which were once very tightly coupled.
+Thank you for the patch,
 
-This posting is the culmination of > 100 changesets spread across Jacopo,
-Niklas, Laurent and myself - thus they contain all of our SoB tags.
+On 11/12/2019 01:55, Kuninori Morimoto wrote:
+> 
+> From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+> 
+> The address of VSP2_VI6_HGT_LBx_H are
+> 	VSP2_VI6_HGT_LB0_H : 0x3428
+> 	VSP2_VI6_HGT_LB1_H : 0x3430
+> 	VSP2_VI6_HGT_LB2_H : 0x3438
+> 	VSP2_VI6_HGT_LB3_H : 0x3440
+> 
+> Thus, VI6_HGT_LBn_H() macro should start from 0x3420 instead of 0x3430.
+> This patch fixup it.
 
-This driver along with an intiial camera driver for the RDACM20 and the
-associated platform support for the Renesas R-Car Salvator-X, and the Eagle-V3M
-can be found at:
+I think this deserves a fixes tag:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git gmsl/v6
+Fixes: 26e0ca22c3b8 ("[media] v4l: Renesas R-Car VSP1 driver")
 
-Kieran Bingham (1):
-  media: i2c: Add MAX9286 driver
+> Reported-by: Koji Matsuoka <koji.matsuoka.xm@renesas.com>
+> Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 
-Laurent Pinchart (1):
-  dt-bindings: media: i2c: Add bindings for Maxim Integrated MAX9286
+Otherwise,
 
- .../bindings/media/i2c/maxim,max9286.yaml     |  289 +++++
- MAINTAINERS                                   |   10 +
- drivers/media/i2c/Kconfig                     |   11 +
- drivers/media/i2c/Makefile                    |    1 +
- drivers/media/i2c/max9286.c                   | 1090 +++++++++++++++++
- 5 files changed, 1401 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
- create mode 100644 drivers/media/i2c/max9286.c
+Yes I can clearly see that this offset is marked as H'3428 at page 32-39
+within the Gen3 datasheet.
 
--- 
-2.20.1
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+> ---
+>  drivers/media/platform/vsp1/vsp1_regs.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/vsp1/vsp1_regs.h b/drivers/media/platform/vsp1/vsp1_regs.h
+> index 5c67ff9..fe3130d 100644
+> --- a/drivers/media/platform/vsp1/vsp1_regs.h
+> +++ b/drivers/media/platform/vsp1/vsp1_regs.h
+> @@ -706,7 +706,7 @@
+>  #define VI6_HGT_HUE_AREA_LOWER_SHIFT	16
+>  #define VI6_HGT_HUE_AREA_UPPER_SHIFT	0
+>  #define VI6_HGT_LB_TH			0x3424
+> -#define VI6_HGT_LBn_H(n)		(0x3438 + (n) * 8)
+> +#define VI6_HGT_LBn_H(n)		(0x3428 + (n) * 8)
+>  #define VI6_HGT_LBn_V(n)		(0x342c + (n) * 8)
+>  #define VI6_HGT_HISTO(m, n)		(0x3450 + (m) * 128 + (n) * 4)
+>  #define VI6_HGT_MAXMIN			0x3750
+> 
 
