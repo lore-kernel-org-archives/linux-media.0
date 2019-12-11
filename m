@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F709C43603
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2EF3C2D0C6
 	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:22:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 54EB22073D
+	by mail.kernel.org (Postfix) with ESMTP id 807C42077B
 	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:22:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="hlHGYUtA"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="a91WJCeX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730227AbfLKQWi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730490AbfLKQWi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 11 Dec 2019 11:22:38 -0500
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:45847 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728912AbfLKQWg (ORCPT
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:60949 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730070AbfLKQWg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 11 Dec 2019 11:22:36 -0500
 Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:d0c4:2b08:27a4:6946])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id f4kxiY8tRapzpf4kziSRbn; Wed, 11 Dec 2019 17:22:33 +0100
+        id f4kxiY8tRapzpf4kziSRbV; Wed, 11 Dec 2019 17:22:33 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1576081353; bh=YdIJ05Du2FYI6IClHTHhw7fA74fsBxdLX7F0YsnhA70=;
+        t=1576081353; bh=SvWYtUz5VA/EQa7C3fttyFJjuFlGwDYDmkd+is/niV8=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=hlHGYUtArYNo8WmY6Iu2nD/EZDFwNRKg8Q/R6p0woAqbzZhPBeptF3QMWBwUvR3NW
-         nLwGuTD7aBGeZ7BmY8py9lOBw9at3l1EgxZAEbxCmppPcym0H1jVdoQ9r3CPbxFvp+
-         CkPbznbT4aHwy+uwET9ssNk6svEFJtjxLd8B6mj7qfvv6pwE5cQERTXtqQLk1Qv8xc
-         Cxkq2XQejYNq+G18WeX54bZr6x0OVrmRQVzk6CGBsaIVBCdvpMd5O9lcjnVlX74UoK
-         3oFIHDH3dzShTzAT+ddRNcsbztas8iHAP2qjfR48WCysp2JN85PciZ4zI+YFsEHnCb
-         wUIYl64iL+3sQ==
+        b=a91WJCeXUtE7cL0wSMCQwkS+j2PD9K+17G4Cs2bNg7WXFqxdQcMpzyxnQjqn77PcH
+         hQgrNZEzwnaRR8XEFRCOrO97kwC3523FpNlA+rCOVGvYI+T+hB6rA4rQi+c2jqjq5Y
+         16AXXmTY/gIV5O/d8DvJCC067k655doE9Ipoa+6cT6peSnRCBk4ysWOh/nQ99GE2sB
+         rnu5PwXtd7BDS0tGTM3KcH7CRgv8aZMOsJlLEVrdaXQyTjfASRj7D9dB3m2AvV36lp
+         fRYipLQ+IlFs8Z2kxXyMKuRjdXruO8LYVRqug5cmSEQus0vuncuz+6aZQ1MdsoleJ3
+         dZgKVZ6WyjJQQ==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 07/10] pulse8-cec: queue received messages in an array
-Date:   Wed, 11 Dec 2019 17:22:28 +0100
-Message-Id: <20191211162231.99978-8-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 02/10] pulse8-cec: reorganize function order
+Date:   Wed, 11 Dec 2019 17:22:23 +0100
+Message-Id: <20191211162231.99978-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191211162231.99978-1-hverkuil-cisco@xs4all.nl>
 References: <20191211162231.99978-1-hverkuil-cisco@xs4all.nl>
@@ -53,174 +53,558 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It turns out that received CEC messages can arrive faster than
-can be processed by the CEC framework, resulting in lost messages.
+Reorganize the order of the functions in the source, going from
+low-level to high-level.
 
-Instead of storing only one CEC message, store up to 8.
-
-Also fix a bug where the EOM bit wasn't checked for a received
-message of length 1, so POLL messages weren't properly reported.
+No functional changes were made.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/usb/pulse8-cec/pulse8-cec.c | 80 +++++++++++++++++------
- 1 file changed, 61 insertions(+), 19 deletions(-)
+ drivers/media/usb/pulse8-cec/pulse8-cec.c | 504 +++++++++++-----------
+ 1 file changed, 248 insertions(+), 256 deletions(-)
 
 diff --git a/drivers/media/usb/pulse8-cec/pulse8-cec.c b/drivers/media/usb/pulse8-cec/pulse8-cec.c
-index 34dbc567dbe0..961b34dfaf6d 100644
+index ea9d42d19bfd..1637141907d0 100644
 --- a/drivers/media/usb/pulse8-cec/pulse8-cec.c
 +++ b/drivers/media/usb/pulse8-cec/pulse8-cec.c
-@@ -164,6 +164,8 @@ static const char *pulse8_msgname(u8 cmd)
+@@ -187,7 +187,81 @@ struct pulse8 {
+ 	bool autonomous;
+ };
  
- #define PING_PERIOD	(15 * HZ)
- 
-+#define NUM_MSGS 8
+-static void pulse8_ping_eeprom_work_handler(struct work_struct *work);
++static int pulse8_send(struct serio *serio, const u8 *command, u8 cmd_len)
++{
++	int err = 0;
 +
- struct pulse8 {
- 	struct device *dev;
- 	struct serio *serio;
-@@ -173,8 +175,12 @@ struct pulse8 {
- 	struct delayed_work ping_eeprom_work;
- 
- 	struct work_struct irq_work;
--	u8 irq_work_result;
--	struct cec_msg rx_msg;
-+	struct cec_msg rx_msg[NUM_MSGS];
-+	unsigned int rx_msg_cur_idx, rx_msg_num;
-+	/* protect rx_msg_cur_idx and rx_msg_num */
-+	spinlock_t msg_lock;
-+	u8 new_rx_msg[CEC_MAX_MSG_SIZE];
-+	u8 new_rx_msg_len;
- 
- 	struct work_struct tx_work;
- 	u32 tx_done_status;
-@@ -321,15 +327,22 @@ static void pulse8_irq_work_handler(struct work_struct *work)
- {
- 	struct pulse8 *pulse8 =
- 		container_of(work, struct pulse8, irq_work);
--	u8 result = pulse8->irq_work_result;
-+	unsigned long flags;
- 	u32 status;
- 
--	pulse8->irq_work_result = 0;
--	switch (result & 0x3f) {
--	case MSGCODE_FRAME_DATA:
--		cec_received_msg(pulse8->adap, &pulse8->rx_msg);
--		break;
-+	spin_lock_irqsave(&pulse8->msg_lock, flags);
-+	while (pulse8->rx_msg_num) {
-+		spin_unlock_irqrestore(&pulse8->msg_lock, flags);
-+		cec_received_msg(pulse8->adap,
-+				 &pulse8->rx_msg[pulse8->rx_msg_cur_idx]);
-+		spin_lock_irqsave(&pulse8->msg_lock, flags);
-+		if (pulse8->rx_msg_num)
-+			pulse8->rx_msg_num--;
-+		pulse8->rx_msg_cur_idx =
-+			(pulse8->rx_msg_cur_idx + 1) % NUM_MSGS;
- 	}
-+	spin_unlock_irqrestore(&pulse8->msg_lock, flags);
-+
- 	mutex_lock(&pulse8->lock);
- 	status = pulse8->tx_done_status;
- 	pulse8->tx_done_status = 0;
-@@ -342,6 +355,8 @@ static irqreturn_t pulse8_interrupt(struct serio *serio, unsigned char data,
- 				    unsigned int flags)
- {
- 	struct pulse8 *pulse8 = serio_get_drvdata(serio);
-+	unsigned long irq_flags;
-+	unsigned int idx;
- 
- 	if (!pulse8->started && data != MSGSTART)
- 		return IRQ_HANDLED;
-@@ -353,7 +368,6 @@ static irqreturn_t pulse8_interrupt(struct serio *serio, unsigned char data,
- 		data += MSGOFFSET;
- 		pulse8->escape = false;
- 	} else if (data == MSGEND) {
--		struct cec_msg *msg = &pulse8->rx_msg;
- 		u8 msgcode = pulse8->buf[0];
- 
- 		if (debug > 1)
-@@ -362,19 +376,43 @@ static irqreturn_t pulse8_interrupt(struct serio *serio, unsigned char data,
- 				 pulse8->idx, pulse8->buf);
- 		switch (msgcode & 0x3f) {
- 		case MSGCODE_FRAME_START:
--			msg->len = 1;
--			msg->msg[0] = pulse8->buf[1];
--			break;
-+			/*
-+			 * Test if we are receiving a new msg when a previous
-+			 * message is still pending.
-+			 */
-+			if (!(msgcode & MSGCODE_FRAME_EOM)) {
-+				pulse8->new_rx_msg_len = 1;
-+				pulse8->new_rx_msg[0] = pulse8->buf[1];
-+				break;
-+			}
-+			/* fall through */
- 		case MSGCODE_FRAME_DATA:
--			if (msg->len == CEC_MAX_MSG_SIZE)
-+			if (pulse8->new_rx_msg_len < CEC_MAX_MSG_SIZE)
-+				pulse8->new_rx_msg[pulse8->new_rx_msg_len++] =
-+					pulse8->buf[1];
-+			if (!(msgcode & MSGCODE_FRAME_EOM))
- 				break;
--			msg->msg[msg->len++] = pulse8->buf[1];
--			if (msgcode & MSGCODE_FRAME_EOM) {
--				WARN_ON(pulse8->irq_work_result);
--				pulse8->irq_work_result = msgcode;
--				schedule_work(&pulse8->irq_work);
-+
-+			spin_lock_irqsave(&pulse8->msg_lock, irq_flags);
-+			idx = (pulse8->rx_msg_cur_idx + pulse8->rx_msg_num) %
-+				NUM_MSGS;
-+			if (pulse8->rx_msg_num == NUM_MSGS) {
-+				dev_warn(pulse8->dev,
-+					 "message queue is full, dropping %*ph\n",
-+					 pulse8->new_rx_msg_len,
-+					 pulse8->new_rx_msg);
-+				spin_unlock_irqrestore(&pulse8->msg_lock,
-+						       irq_flags);
-+				pulse8->new_rx_msg_len = 0;
- 				break;
- 			}
-+			pulse8->rx_msg_num++;
-+			memcpy(pulse8->rx_msg[idx].msg, pulse8->new_rx_msg,
-+			       pulse8->new_rx_msg_len);
-+			pulse8->rx_msg[idx].len = pulse8->new_rx_msg_len;
-+			spin_unlock_irqrestore(&pulse8->msg_lock, irq_flags);
-+			schedule_work(&pulse8->irq_work);
-+			pulse8->new_rx_msg_len = 0;
- 			break;
- 		case MSGCODE_TRANSMIT_SUCCEEDED:
- 			WARN_ON(pulse8->tx_done_status);
-@@ -403,6 +441,7 @@ static irqreturn_t pulse8_interrupt(struct serio *serio, unsigned char data,
- 		case MSGCODE_LOW_ERROR:
- 		case MSGCODE_RECEIVE_FAILED:
- 		case MSGCODE_TIMEOUT_ERROR:
-+			pulse8->new_rx_msg_len = 0;
- 			break;
- 		case MSGCODE_COMMAND_ACCEPTED:
- 		case MSGCODE_COMMAND_REJECTED:
-@@ -443,8 +482,10 @@ static int pulse8_cec_adap_enable(struct cec_adapter *adap, bool enable)
- 	cmd[1] = enable;
- 	err = pulse8_send_and_wait(pulse8, cmd, 2,
- 				   MSGCODE_COMMAND_ACCEPTED, 1);
--	if (!enable)
-+	if (!enable) {
-+		pulse8->rx_msg_num = 0;
- 		pulse8->tx_done_status = 0;
++	err = serio_write(serio, MSGSTART);
++	if (err)
++		return err;
++	for (; !err && cmd_len; command++, cmd_len--) {
++		if (*command >= MSGESC) {
++			err = serio_write(serio, MSGESC);
++			if (!err)
++				err = serio_write(serio, *command - MSGOFFSET);
++		} else {
++			err = serio_write(serio, *command);
++		}
 +	}
- 	mutex_unlock(&pulse8->lock);
- 	return enable ? err : 0;
- }
-@@ -790,6 +831,7 @@ static int pulse8_connect(struct serio *serio, struct serio_driver *drv)
- 	INIT_WORK(&pulse8->irq_work, pulse8_irq_work_handler);
- 	INIT_WORK(&pulse8->tx_work, pulse8_tx_work_handler);
- 	mutex_init(&pulse8->lock);
-+	spin_lock_init(&pulse8->msg_lock);
- 	pulse8->config_pending = false;
++	if (!err)
++		err = serio_write(serio, MSGEND);
++
++	return err;
++}
++
++static int pulse8_send_and_wait_once(struct pulse8 *pulse8,
++				     const u8 *cmd, u8 cmd_len,
++				     u8 response, u8 size)
++{
++	int err;
++
++	/* dev_info(pulse8->dev, "transmit %s: %*ph\n", pulse8_msgname(cmd[0]), cmd_len, cmd); */
++	init_completion(&pulse8->cmd_done);
++
++	err = pulse8_send(pulse8->serio, cmd, cmd_len);
++	if (err)
++		return err;
++
++	if (!wait_for_completion_timeout(&pulse8->cmd_done, HZ))
++		return -ETIMEDOUT;
++	if ((pulse8->data[0] & 0x3f) == MSGCODE_COMMAND_REJECTED &&
++	    cmd[0] != MSGCODE_SET_CONTROLLED &&
++	    cmd[0] != MSGCODE_SET_AUTO_ENABLED &&
++	    cmd[0] != MSGCODE_GET_BUILDDATE)
++		return -ENOTTY;
++	if (response &&
++	    ((pulse8->data[0] & 0x3f) != response || pulse8->len < size + 1)) {
++		dev_info(pulse8->dev, "transmit %s: failed %s\n",
++			 pulse8_msgname(cmd[0]), pulse8_msgname(pulse8->data[0]));
++		return -EIO;
++	}
++	return 0;
++}
++
++static int pulse8_send_and_wait(struct pulse8 *pulse8,
++				const u8 *cmd, u8 cmd_len, u8 response, u8 size)
++{
++	u8 cmd_sc[2];
++	int err;
++
++	mutex_lock(&pulse8->write_lock);
++	err = pulse8_send_and_wait_once(pulse8, cmd, cmd_len, response, size);
++
++	if (err == -ENOTTY) {
++		cmd_sc[0] = MSGCODE_SET_CONTROLLED;
++		cmd_sc[1] = 1;
++		err = pulse8_send_and_wait_once(pulse8, cmd_sc, 2,
++						MSGCODE_COMMAND_ACCEPTED, 1);
++		if (err)
++			goto unlock;
++		err = pulse8_send_and_wait_once(pulse8, cmd, cmd_len,
++						response, size);
++	}
++
++unlock:
++	mutex_unlock(&pulse8->write_lock);
++	return err == -ENOTTY ? -EIO : err;
++}
  
- 	err = serio_open(serio, drv);
+ static void pulse8_irq_work_handler(struct work_struct *work)
+ {
+@@ -293,228 +367,6 @@ static irqreturn_t pulse8_interrupt(struct serio *serio, unsigned char data,
+ 	return IRQ_HANDLED;
+ }
+ 
+-static void pulse8_disconnect(struct serio *serio)
+-{
+-	struct pulse8 *pulse8 = serio_get_drvdata(serio);
+-
+-	cec_unregister_adapter(pulse8->adap);
+-	cancel_delayed_work_sync(&pulse8->ping_eeprom_work);
+-	dev_info(&serio->dev, "disconnected\n");
+-	serio_close(serio);
+-	serio_set_drvdata(serio, NULL);
+-	kfree(pulse8);
+-}
+-
+-static int pulse8_send(struct serio *serio, const u8 *command, u8 cmd_len)
+-{
+-	int err = 0;
+-
+-	err = serio_write(serio, MSGSTART);
+-	if (err)
+-		return err;
+-	for (; !err && cmd_len; command++, cmd_len--) {
+-		if (*command >= MSGESC) {
+-			err = serio_write(serio, MSGESC);
+-			if (!err)
+-				err = serio_write(serio, *command - MSGOFFSET);
+-		} else {
+-			err = serio_write(serio, *command);
+-		}
+-	}
+-	if (!err)
+-		err = serio_write(serio, MSGEND);
+-
+-	return err;
+-}
+-
+-static int pulse8_send_and_wait_once(struct pulse8 *pulse8,
+-				     const u8 *cmd, u8 cmd_len,
+-				     u8 response, u8 size)
+-{
+-	int err;
+-
+-	/* dev_info(pulse8->dev, "transmit %s: %*ph\n", pulse8_msgname(cmd[0]), cmd_len, cmd); */
+-	init_completion(&pulse8->cmd_done);
+-
+-	err = pulse8_send(pulse8->serio, cmd, cmd_len);
+-	if (err)
+-		return err;
+-
+-	if (!wait_for_completion_timeout(&pulse8->cmd_done, HZ))
+-		return -ETIMEDOUT;
+-	if ((pulse8->data[0] & 0x3f) == MSGCODE_COMMAND_REJECTED &&
+-	    cmd[0] != MSGCODE_SET_CONTROLLED &&
+-	    cmd[0] != MSGCODE_SET_AUTO_ENABLED &&
+-	    cmd[0] != MSGCODE_GET_BUILDDATE)
+-		return -ENOTTY;
+-	if (response &&
+-	    ((pulse8->data[0] & 0x3f) != response || pulse8->len < size + 1)) {
+-		dev_info(pulse8->dev, "transmit %s: failed %s\n",
+-			 pulse8_msgname(cmd[0]), pulse8_msgname(pulse8->data[0]));
+-		return -EIO;
+-	}
+-	return 0;
+-}
+-
+-static int pulse8_send_and_wait(struct pulse8 *pulse8,
+-				const u8 *cmd, u8 cmd_len, u8 response, u8 size)
+-{
+-	u8 cmd_sc[2];
+-	int err;
+-
+-	mutex_lock(&pulse8->write_lock);
+-	err = pulse8_send_and_wait_once(pulse8, cmd, cmd_len, response, size);
+-
+-	if (err == -ENOTTY) {
+-		cmd_sc[0] = MSGCODE_SET_CONTROLLED;
+-		cmd_sc[1] = 1;
+-		err = pulse8_send_and_wait_once(pulse8, cmd_sc, 2,
+-						MSGCODE_COMMAND_ACCEPTED, 1);
+-		if (err)
+-			goto unlock;
+-		err = pulse8_send_and_wait_once(pulse8, cmd, cmd_len,
+-						response, size);
+-	}
+-
+-unlock:
+-	mutex_unlock(&pulse8->write_lock);
+-	return err == -ENOTTY ? -EIO : err;
+-}
+-
+-static int pulse8_setup(struct pulse8 *pulse8, struct serio *serio,
+-			struct cec_log_addrs *log_addrs, u16 *pa)
+-{
+-	u8 *data = pulse8->data + 1;
+-	u8 cmd[2];
+-	int err;
+-	struct tm tm;
+-	time64_t date;
+-
+-	pulse8->vers = 0;
+-
+-	cmd[0] = MSGCODE_FIRMWARE_VERSION;
+-	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 2);
+-	if (err)
+-		return err;
+-	pulse8->vers = (data[0] << 8) | data[1];
+-	dev_info(pulse8->dev, "Firmware version %04x\n", pulse8->vers);
+-	if (pulse8->vers < 2) {
+-		*pa = CEC_PHYS_ADDR_INVALID;
+-		return 0;
+-	}
+-
+-	cmd[0] = MSGCODE_GET_BUILDDATE;
+-	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 4);
+-	if (err)
+-		return err;
+-	date = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
+-	time64_to_tm(date, 0, &tm);
+-	dev_info(pulse8->dev, "Firmware build date %04ld.%02d.%02d %02d:%02d:%02d\n",
+-		 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
+-		 tm.tm_hour, tm.tm_min, tm.tm_sec);
+-
+-	dev_dbg(pulse8->dev, "Persistent config:\n");
+-	cmd[0] = MSGCODE_GET_AUTO_ENABLED;
+-	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 1);
+-	if (err)
+-		return err;
+-	pulse8->autonomous = data[0];
+-	dev_dbg(pulse8->dev, "Autonomous mode: %s",
+-		data[0] ? "on" : "off");
+-
+-	cmd[0] = MSGCODE_GET_DEVICE_TYPE;
+-	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 1);
+-	if (err)
+-		return err;
+-	log_addrs->primary_device_type[0] = data[0];
+-	dev_dbg(pulse8->dev, "Primary device type: %d\n", data[0]);
+-	switch (log_addrs->primary_device_type[0]) {
+-	case CEC_OP_PRIM_DEVTYPE_TV:
+-		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_TV;
+-		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_TV;
+-		break;
+-	case CEC_OP_PRIM_DEVTYPE_RECORD:
+-		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_RECORD;
+-		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_RECORD;
+-		break;
+-	case CEC_OP_PRIM_DEVTYPE_TUNER:
+-		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_TUNER;
+-		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_TUNER;
+-		break;
+-	case CEC_OP_PRIM_DEVTYPE_PLAYBACK:
+-		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_PLAYBACK;
+-		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_PLAYBACK;
+-		break;
+-	case CEC_OP_PRIM_DEVTYPE_AUDIOSYSTEM:
+-		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_PLAYBACK;
+-		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_AUDIOSYSTEM;
+-		break;
+-	case CEC_OP_PRIM_DEVTYPE_SWITCH:
+-		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_UNREGISTERED;
+-		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_SWITCH;
+-		break;
+-	case CEC_OP_PRIM_DEVTYPE_PROCESSOR:
+-		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_SPECIFIC;
+-		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_SWITCH;
+-		break;
+-	default:
+-		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_UNREGISTERED;
+-		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_SWITCH;
+-		dev_info(pulse8->dev, "Unknown Primary Device Type: %d\n",
+-			 log_addrs->primary_device_type[0]);
+-		break;
+-	}
+-
+-	cmd[0] = MSGCODE_GET_LOGICAL_ADDRESS_MASK;
+-	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 2);
+-	if (err)
+-		return err;
+-	log_addrs->log_addr_mask = (data[0] << 8) | data[1];
+-	dev_dbg(pulse8->dev, "Logical address ACK mask: %x\n",
+-		log_addrs->log_addr_mask);
+-	if (log_addrs->log_addr_mask)
+-		log_addrs->num_log_addrs = 1;
+-
+-	cmd[0] = MSGCODE_GET_PHYSICAL_ADDRESS;
+-	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 1);
+-	if (err)
+-		return err;
+-	*pa = (data[0] << 8) | data[1];
+-	dev_dbg(pulse8->dev, "Physical address: %x.%x.%x.%x\n",
+-		cec_phys_addr_exp(*pa));
+-
+-	cmd[0] = MSGCODE_GET_HDMI_VERSION;
+-	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 1);
+-	if (err)
+-		return err;
+-	log_addrs->cec_version = data[0];
+-	dev_dbg(pulse8->dev, "CEC version: %d\n", log_addrs->cec_version);
+-
+-	cmd[0] = MSGCODE_GET_OSD_NAME;
+-	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 0);
+-	if (err)
+-		return err;
+-	strscpy(log_addrs->osd_name, data, sizeof(log_addrs->osd_name));
+-	dev_dbg(pulse8->dev, "OSD name: %s\n", log_addrs->osd_name);
+-
+-	return 0;
+-}
+-
+-static int pulse8_apply_persistent_config(struct pulse8 *pulse8,
+-					  struct cec_log_addrs *log_addrs,
+-					  u16 pa)
+-{
+-	int err;
+-
+-	err = cec_s_log_addrs(pulse8->adap, log_addrs, false);
+-	if (err)
+-		return err;
+-
+-	cec_s_phys_addr(pulse8->adap, pa, false);
+-
+-	return 0;
+-}
+-
+ static int pulse8_cec_adap_enable(struct cec_adapter *adap, bool enable)
+ {
+ 	struct pulse8 *pulse8 = cec_get_drvdata(adap);
+@@ -688,18 +540,185 @@ static int pulse8_cec_adap_transmit(struct cec_adapter *adap, u8 attempts,
+ 	return err;
+ }
+ 
+-static int pulse8_received(struct cec_adapter *adap, struct cec_msg *msg)
+-{
+-	return -ENOMSG;
+-}
+-
+ static const struct cec_adap_ops pulse8_cec_adap_ops = {
+ 	.adap_enable = pulse8_cec_adap_enable,
+ 	.adap_log_addr = pulse8_cec_adap_log_addr,
+ 	.adap_transmit = pulse8_cec_adap_transmit,
+-	.received = pulse8_received,
+ };
+ 
++static void pulse8_disconnect(struct serio *serio)
++{
++	struct pulse8 *pulse8 = serio_get_drvdata(serio);
++
++	cec_unregister_adapter(pulse8->adap);
++	cancel_delayed_work_sync(&pulse8->ping_eeprom_work);
++	dev_info(&serio->dev, "disconnected\n");
++	serio_close(serio);
++	serio_set_drvdata(serio, NULL);
++	kfree(pulse8);
++}
++
++static int pulse8_setup(struct pulse8 *pulse8, struct serio *serio,
++			struct cec_log_addrs *log_addrs, u16 *pa)
++{
++	u8 *data = pulse8->data + 1;
++	u8 cmd[2];
++	int err;
++	struct tm tm;
++	time64_t date;
++
++	pulse8->vers = 0;
++
++	cmd[0] = MSGCODE_FIRMWARE_VERSION;
++	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 2);
++	if (err)
++		return err;
++	pulse8->vers = (data[0] << 8) | data[1];
++	dev_info(pulse8->dev, "Firmware version %04x\n", pulse8->vers);
++	if (pulse8->vers < 2) {
++		*pa = CEC_PHYS_ADDR_INVALID;
++		return 0;
++	}
++
++	cmd[0] = MSGCODE_GET_BUILDDATE;
++	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 4);
++	if (err)
++		return err;
++	date = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
++	time64_to_tm(date, 0, &tm);
++	dev_info(pulse8->dev, "Firmware build date %04ld.%02d.%02d %02d:%02d:%02d\n",
++		 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
++		 tm.tm_hour, tm.tm_min, tm.tm_sec);
++
++	dev_dbg(pulse8->dev, "Persistent config:\n");
++	cmd[0] = MSGCODE_GET_AUTO_ENABLED;
++	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 1);
++	if (err)
++		return err;
++	pulse8->autonomous = data[0];
++	dev_dbg(pulse8->dev, "Autonomous mode: %s",
++		data[0] ? "on" : "off");
++
++	cmd[0] = MSGCODE_GET_DEVICE_TYPE;
++	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 1);
++	if (err)
++		return err;
++	log_addrs->primary_device_type[0] = data[0];
++	dev_dbg(pulse8->dev, "Primary device type: %d\n", data[0]);
++	switch (log_addrs->primary_device_type[0]) {
++	case CEC_OP_PRIM_DEVTYPE_TV:
++		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_TV;
++		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_TV;
++		break;
++	case CEC_OP_PRIM_DEVTYPE_RECORD:
++		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_RECORD;
++		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_RECORD;
++		break;
++	case CEC_OP_PRIM_DEVTYPE_TUNER:
++		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_TUNER;
++		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_TUNER;
++		break;
++	case CEC_OP_PRIM_DEVTYPE_PLAYBACK:
++		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_PLAYBACK;
++		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_PLAYBACK;
++		break;
++	case CEC_OP_PRIM_DEVTYPE_AUDIOSYSTEM:
++		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_PLAYBACK;
++		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_AUDIOSYSTEM;
++		break;
++	case CEC_OP_PRIM_DEVTYPE_SWITCH:
++		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_UNREGISTERED;
++		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_SWITCH;
++		break;
++	case CEC_OP_PRIM_DEVTYPE_PROCESSOR:
++		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_SPECIFIC;
++		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_SWITCH;
++		break;
++	default:
++		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_UNREGISTERED;
++		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_SWITCH;
++		dev_info(pulse8->dev, "Unknown Primary Device Type: %d\n",
++			 log_addrs->primary_device_type[0]);
++		break;
++	}
++
++	cmd[0] = MSGCODE_GET_LOGICAL_ADDRESS_MASK;
++	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 2);
++	if (err)
++		return err;
++	log_addrs->log_addr_mask = (data[0] << 8) | data[1];
++	dev_dbg(pulse8->dev, "Logical address ACK mask: %x\n",
++		log_addrs->log_addr_mask);
++	if (log_addrs->log_addr_mask)
++		log_addrs->num_log_addrs = 1;
++
++	cmd[0] = MSGCODE_GET_PHYSICAL_ADDRESS;
++	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 1);
++	if (err)
++		return err;
++	*pa = (data[0] << 8) | data[1];
++	dev_dbg(pulse8->dev, "Physical address: %x.%x.%x.%x\n",
++		cec_phys_addr_exp(*pa));
++
++	cmd[0] = MSGCODE_GET_HDMI_VERSION;
++	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 1);
++	if (err)
++		return err;
++	log_addrs->cec_version = data[0];
++	dev_dbg(pulse8->dev, "CEC version: %d\n", log_addrs->cec_version);
++
++	cmd[0] = MSGCODE_GET_OSD_NAME;
++	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 0);
++	if (err)
++		return err;
++	strscpy(log_addrs->osd_name, data, sizeof(log_addrs->osd_name));
++	dev_dbg(pulse8->dev, "OSD name: %s\n", log_addrs->osd_name);
++
++	return 0;
++}
++
++static int pulse8_apply_persistent_config(struct pulse8 *pulse8,
++					  struct cec_log_addrs *log_addrs,
++					  u16 pa)
++{
++	int err;
++
++	err = cec_s_log_addrs(pulse8->adap, log_addrs, false);
++	if (err)
++		return err;
++
++	cec_s_phys_addr(pulse8->adap, pa, false);
++
++	return 0;
++}
++
++static void pulse8_ping_eeprom_work_handler(struct work_struct *work)
++{
++	struct pulse8 *pulse8 =
++		container_of(work, struct pulse8, ping_eeprom_work.work);
++	u8 cmd;
++
++	schedule_delayed_work(&pulse8->ping_eeprom_work, PING_PERIOD);
++	cmd = MSGCODE_PING;
++	pulse8_send_and_wait(pulse8, &cmd, 1,
++			     MSGCODE_COMMAND_ACCEPTED, 0);
++
++	if (pulse8->vers < 2)
++		return;
++
++	mutex_lock(&pulse8->config_lock);
++	if (pulse8->config_pending && persistent_config) {
++		dev_dbg(pulse8->dev, "writing pending config to EEPROM\n");
++		cmd = MSGCODE_WRITE_EEPROM;
++		if (pulse8_send_and_wait(pulse8, &cmd, 1,
++					 MSGCODE_COMMAND_ACCEPTED, 0))
++			dev_info(pulse8->dev, "failed to write pending config to EEPROM\n");
++		else
++			pulse8->config_pending = false;
++	}
++	mutex_unlock(&pulse8->config_lock);
++}
++
+ static int pulse8_connect(struct serio *serio, struct serio_driver *drv)
+ {
+ 	u32 caps = CEC_CAP_DEFAULTS | CEC_CAP_PHYS_ADDR | CEC_CAP_MONITOR_ALL;
+@@ -764,33 +783,6 @@ static int pulse8_connect(struct serio *serio, struct serio_driver *drv)
+ 	return err;
+ }
+ 
+-static void pulse8_ping_eeprom_work_handler(struct work_struct *work)
+-{
+-	struct pulse8 *pulse8 =
+-		container_of(work, struct pulse8, ping_eeprom_work.work);
+-	u8 cmd;
+-
+-	schedule_delayed_work(&pulse8->ping_eeprom_work, PING_PERIOD);
+-	cmd = MSGCODE_PING;
+-	pulse8_send_and_wait(pulse8, &cmd, 1,
+-			     MSGCODE_COMMAND_ACCEPTED, 0);
+-
+-	if (pulse8->vers < 2)
+-		return;
+-
+-	mutex_lock(&pulse8->config_lock);
+-	if (pulse8->config_pending && persistent_config) {
+-		dev_dbg(pulse8->dev, "writing pending config to EEPROM\n");
+-		cmd = MSGCODE_WRITE_EEPROM;
+-		if (pulse8_send_and_wait(pulse8, &cmd, 1,
+-					 MSGCODE_COMMAND_ACCEPTED, 0))
+-			dev_info(pulse8->dev, "failed to write pending config to EEPROM\n");
+-		else
+-			pulse8->config_pending = false;
+-	}
+-	mutex_unlock(&pulse8->config_lock);
+-}
+-
+ static const struct serio_device_id pulse8_serio_ids[] = {
+ 	{
+ 		.type	= SERIO_RS232,
 -- 
 2.23.0
 
