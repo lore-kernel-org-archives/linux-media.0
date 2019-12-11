@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DF46C2D0C6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C469BC00454
 	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:22:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 257802073D
+	by mail.kernel.org (Postfix) with ESMTP id 8B4572073D
 	for <linux-media@archiver.kernel.org>; Wed, 11 Dec 2019 16:22:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="cCq3f1zQ"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Ik3OtYE3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730454AbfLKQWf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Dec 2019 11:22:35 -0500
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:59027 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730106AbfLKQWf (ORCPT
+        id S1730405AbfLKQWg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Dec 2019 11:22:36 -0500
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:51913 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730436AbfLKQWf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 11 Dec 2019 11:22:35 -0500
 Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:d0c4:2b08:27a4:6946])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id f4kxiY8tRapzpf4kziSRbR; Wed, 11 Dec 2019 17:22:33 +0100
+        id f4kxiY8tRapzpf4kziSRbw; Wed, 11 Dec 2019 17:22:33 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1576081353; bh=FxRdh2a6QTokfqEvvc9OPn9VVCwjmX3Pu23sY4TvB3Y=;
+        t=1576081353; bh=qkzG0ORl07Aawzy8TDz1yGE+TnQvc//Zs5RCPi9Ny6Q=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=cCq3f1zQrrjZ/E6K9DHQo6EYCmNB5TfmGZfWgRkqUmXZ5KnqpK62YrQ03EDrSvZZR
-         6tyJo7OQtblIbGTuIrpQxae8JqwHLezQyK2ykeiUCeZ+CB991pgjSghDIDBixkqxZE
-         dtGdEvl+ozqOcdg5S15ut/2Ii90zsuqJjw+faq3hxo1RQropI6eL2GnAthCB+GkXYU
-         /vwG5ZgOIAKPVdmwtE6AHMuNG8Xf1OL5N9hNhW7BQkFz5XT9Zj8tHpbkJ6WU7rQIfe
-         2Gfev9dvspsFOFDIWl2Ym/hEqsgrTbQaxyiE9lws376ofbucSR1x+tTsigersDZMmf
-         mhRliC2ULIfVA==
+        b=Ik3OtYE386WT2pUuKeRAl/YNZj4LFazQJTAIEqWz0oDcd83V+ajfneUxFTGksIs3Q
+         n/q15s+PdoRtPQwbXZOzKevHPWLgkNa3gM6SBEBbM0ST01uCbij6DMozXMBOymnGkS
+         cutxCgfyapncByvHrw9acievsPZRn+Eo0NSL5F6aFI/CbLkErMrm8fUJ2JDQB/NLiu
+         yo3e9BRSyRmTLfJLlJgwGq9gkpVgPFeZyG4zE/+74NXRO8QkeIkNn4yyjfNKexK/wC
+         cIQYOW/Rjkok5KoAIuV4+N7ur+24HvBZKpkoIILCn08NscGN2wxMCRGw+oAE/3Av6V
+         6FrVz2X7U87Ag==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 01/10] pulse8-cec: improve debugging
-Date:   Wed, 11 Dec 2019 17:22:22 +0100
-Message-Id: <20191211162231.99978-2-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 09/10] pulse8-cec: schedule next ping after current ping finished
+Date:   Wed, 11 Dec 2019 17:22:30 +0100
+Message-Id: <20191211162231.99978-10-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191211162231.99978-1-hverkuil-cisco@xs4all.nl>
 References: <20191211162231.99978-1-hverkuil-cisco@xs4all.nl>
@@ -53,111 +53,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add and use pulse8_msgname() to show the message codes as a
-human readable text instead of a number.
+Don't schedule the next ping before the current ping is
+sent, schedule it after.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/usb/pulse8-cec/pulse8-cec.c | 65 +++++++++++++++++++++--
- 1 file changed, 60 insertions(+), 5 deletions(-)
+ drivers/media/usb/pulse8-cec/pulse8-cec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/usb/pulse8-cec/pulse8-cec.c b/drivers/media/usb/pulse8-cec/pulse8-cec.c
-index 59609556d969..ea9d42d19bfd 100644
+index d18d1f456576..17fcaf7e558a 100644
 --- a/drivers/media/usb/pulse8-cec/pulse8-cec.c
 +++ b/drivers/media/usb/pulse8-cec/pulse8-cec.c
-@@ -100,6 +100,61 @@ enum pulse8_msgcodes {
- 	MSGCODE_FRAME_ACK = 0x40,
- };
+@@ -790,7 +790,6 @@ static void pulse8_ping_eeprom_work_handler(struct work_struct *work)
+ 		container_of(work, struct pulse8, ping_eeprom_work.work);
+ 	u8 cmd;
  
-+static const char * const pulse8_msgnames[] = {
-+	"NOTHING",
-+	"PING",
-+	"TIMEOUT_ERROR",
-+	"HIGH_ERROR",
-+	"LOW_ERROR",
-+	"FRAME_START",
-+	"FRAME_DATA",
-+	"RECEIVE_FAILED",
-+	"COMMAND_ACCEPTED",
-+	"COMMAND_REJECTED",
-+	"SET_ACK_MASK",
-+	"TRANSMIT",
-+	"TRANSMIT_EOM",
-+	"TRANSMIT_IDLETIME",
-+	"TRANSMIT_ACK_POLARITY",
-+	"TRANSMIT_LINE_TIMEOUT",
-+	"TRANSMIT_SUCCEEDED",
-+	"TRANSMIT_FAILED_LINE",
-+	"TRANSMIT_FAILED_ACK",
-+	"TRANSMIT_FAILED_TIMEOUT_DATA",
-+	"TRANSMIT_FAILED_TIMEOUT_LINE",
-+	"FIRMWARE_VERSION",
-+	"START_BOOTLOADER",
-+	"GET_BUILDDATE",
-+	"SET_CONTROLLED",
-+	"GET_AUTO_ENABLED",
-+	"SET_AUTO_ENABLED",
-+	"GET_DEFAULT_LOGICAL_ADDRESS",
-+	"SET_DEFAULT_LOGICAL_ADDRESS",
-+	"GET_LOGICAL_ADDRESS_MASK",
-+	"SET_LOGICAL_ADDRESS_MASK",
-+	"GET_PHYSICAL_ADDRESS",
-+	"SET_PHYSICAL_ADDRESS",
-+	"GET_DEVICE_TYPE",
-+	"SET_DEVICE_TYPE",
-+	"GET_HDMI_VERSION",
-+	"SET_HDMI_VERSION",
-+	"GET_OSD_NAME",
-+	"SET_OSD_NAME",
-+	"WRITE_EEPROM",
-+	"GET_ADAPTER_TYPE",
-+	"SET_ACTIVE_SOURCE",
-+};
-+
-+static const char *pulse8_msgname(u8 cmd)
-+{
-+	static char unknown_msg[5];
-+
-+	if ((cmd & 0x3f) < ARRAY_SIZE(pulse8_msgnames))
-+		return pulse8_msgnames[cmd & 0x3f];
-+	snprintf(unknown_msg, sizeof(unknown_msg), "0x%02x", cmd);
-+	return unknown_msg;
-+}
-+
- #define MSGSTART	0xff
- #define MSGEND		0xfe
- #define MSGESC		0xfd
-@@ -178,8 +233,8 @@ static irqreturn_t pulse8_interrupt(struct serio *serio, unsigned char data,
- 		u8 msgcode = pulse8->buf[0];
- 
- 		if (debug)
--			dev_info(pulse8->dev, "received: %*ph\n",
--				 pulse8->idx, pulse8->buf);
-+			dev_info(pulse8->dev, "received %s: %*ph\n",
-+				 pulse8_msgname(msgcode), pulse8->idx, pulse8->buf);
- 		switch (msgcode & 0x3f) {
- 		case MSGCODE_FRAME_START:
- 			msg->len = 1;
-@@ -278,7 +333,7 @@ static int pulse8_send_and_wait_once(struct pulse8 *pulse8,
- {
- 	int err;
- 
--	/*dev_info(pulse8->dev, "transmit: %*ph\n", cmd_len, cmd);*/
-+	/* dev_info(pulse8->dev, "transmit %s: %*ph\n", pulse8_msgname(cmd[0]), cmd_len, cmd); */
- 	init_completion(&pulse8->cmd_done);
- 
- 	err = pulse8_send(pulse8->serio, cmd, cmd_len);
-@@ -294,8 +349,8 @@ static int pulse8_send_and_wait_once(struct pulse8 *pulse8,
- 		return -ENOTTY;
- 	if (response &&
- 	    ((pulse8->data[0] & 0x3f) != response || pulse8->len < size + 1)) {
--		dev_info(pulse8->dev, "transmit: failed %02x\n",
--			 pulse8->data[0] & 0x3f);
-+		dev_info(pulse8->dev, "transmit %s: failed %s\n",
-+			 pulse8_msgname(cmd[0]), pulse8_msgname(pulse8->data[0]));
- 		return -EIO;
+-	schedule_delayed_work(&pulse8->ping_eeprom_work, PING_PERIOD);
+ 	mutex_lock(&pulse8->lock);
+ 	cmd = MSGCODE_PING;
+ 	pulse8_send_and_wait(pulse8, &cmd, 1,
+@@ -809,6 +808,7 @@ static void pulse8_ping_eeprom_work_handler(struct work_struct *work)
+ 			pulse8->config_pending = false;
  	}
- 	return 0;
+ unlock:
++	schedule_delayed_work(&pulse8->ping_eeprom_work, PING_PERIOD);
+ 	mutex_unlock(&pulse8->lock);
+ }
+ 
 -- 
 2.23.0
 
