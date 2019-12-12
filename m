@@ -2,92 +2,171 @@ Return-Path: <SRS0=Yp04=2C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B220C2D0C9
-	for <linux-media@archiver.kernel.org>; Thu, 12 Dec 2019 12:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE5FC2D0C9
+	for <linux-media@archiver.kernel.org>; Thu, 12 Dec 2019 12:02:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0C5E822B48
-	for <linux-media@archiver.kernel.org>; Thu, 12 Dec 2019 12:00:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A14F222527
+	for <linux-media@archiver.kernel.org>; Thu, 12 Dec 2019 12:02:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="nzEPxu/X"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729122AbfLLMAK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Dec 2019 07:00:10 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:35395 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726492AbfLLMAK (ORCPT
+        id S1729069AbfLLMCO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Dec 2019 07:02:14 -0500
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:57371 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729043AbfLLMCO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Dec 2019 07:00:10 -0500
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ifN8R-00078C-2V; Thu, 12 Dec 2019 12:59:59 +0100
-Message-ID: <50977f1c8f17cbc1e3ac4f68d6642f1c3bd01b79.camel@pengutronix.de>
-Subject: Re: [PATCH] media: imx7-mipi-csis: Add the missed
- v4l2_async_notifier_cleanup in remove
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Chuhong Yuan <hslester96@gmail.com>
-Cc:     devel@driverdev.osuosl.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Date:   Thu, 12 Dec 2019 12:59:55 +0100
-In-Reply-To: <20191212115134.GA1895@kadam>
-References: <20191209085828.16183-1-hslester96@gmail.com>
-         <20191212115134.GA1895@kadam>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
+        Thu, 12 Dec 2019 07:02:14 -0500
+Received: from [IPv6:2001:983:e9a7:1:1c4a:480a:7ba1:9c65]
+ ([IPv6:2001:983:e9a7:1:1c4a:480a:7ba1:9c65])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id fNAYiZIm6GyJwfNAZiy0h9; Thu, 12 Dec 2019 13:02:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1576152132; bh=grA3mrY/IXTuR/bHnsfsFfTSA8BCPNcViLc0fRgFSEg=;
+        h=Subject:From:To:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=nzEPxu/XiAq6xqJTEPtu2DMyFeL+3oKzznjfS8x4FT/5JQvyJe0A1cdg52/aYtQje
+         Q28MS1eZ97eJ2uG0m5TG7zFtGiD5VwDcEzvhRbV19ST4l0c8kRotbI94BHivZy8UBY
+         Y7yWuKKaX0PsLD4qBdn5bfYJNC4WJXSXFOsSios8DGvU7P8nfX/fgwQMyEPT0fSg1P
+         PvsgHSBA/JZe4yikXFhnQ+cJPgCsD6PcsqpH3kJ74VOTxg7d1gcbH4qUudjqoKmSaV
+         4jCvItG9+5UaRbH0H38fvOK6XOqSvcheujlc2B51AZBo6LD0NVxVagx2ujgm0i+6ls
+         CONsICQSvGD0Q==
+Subject: Re: [PATCH v11 00/11] Rockchip ISP Driver
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Helen Koike <helen.koike@collabora.com>,
+        linux-rockchip@lists.infradead.org
+Cc:     mark.rutland@arm.com, devicetree@vger.kernel.org,
+        eddie.cai.linux@gmail.com, mchehab@kernel.org, heiko@sntech.de,
+        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
+        jeffy.chen@rock-chips.com, zyc@rock-chips.com, tfiga@chromium.org,
+        robh+dt@kernel.org, laurent.pinchart@ideasonboard.com,
+        sakari.ailus@linux.intel.com, kernel@collabora.com,
+        linux-media@vger.kernel.org, jacob-chen@iotwrt.com,
+        zhengsq@rock-chips.com
+References: <20191114051242.14651-1-helen.koike@collabora.com>
+ <996a9b6a-0e45-d627-9263-539c22e5f1c0@xs4all.nl>
+ <7fd4bf99fd6316da8acaf0a27b6845bedbf4b25f.camel@collabora.com>
+ <eafffc6f-061e-65ab-079b-b2bd613d61cb@xs4all.nl>
+Message-ID: <20f99f0e-dfec-f6c0-eeb3-7561018f32e9@xs4all.nl>
+Date:   Thu, 12 Dec 2019 13:02:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+In-Reply-To: <eafffc6f-061e-65ab-079b-b2bd613d61cb@xs4all.nl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+X-CMAE-Envelope: MS4wfMDfu7petJydGdzuJyylr5ZiNog40vMypqvfQw7ZVz48j+cgXHx/cTeFqN1/hiF8DSXEOpCJ20WY7E5a94cB1D2PZi7ML8XhkxMVMy0iR4SJQ4vKxJKi
+ ftB/XN39JhQEUYBc8BqlxhyoQuxxXMDZIwBgwdBCeW1iR27+uOELF8KpcwgxwC3YpRMZCXHyBUlXOlsmilsvxlZ+tUPadvpHrZMXa0fbpTJN1NQ3Gfhb4C8g
+ Ey9971QU/1aNWS6qs55K9REyFymqQcD+MCjep1VvsImgMFileSAM1UvR1WvQ0UQSwCKiuv/5JpKWQyObfLI9YHJqOnlCMVkwado7cwy3VaqW7/tZ/kWL+bN4
+ vD42oWtQwV4mxkcNc1FkEdzle+uDb0YzHHrsz0otltr7IWNTGAI1Hst8Gozocr63Czju4gGbtp7oIDByGPBe83x2ZgI09gn/gc28vBtdfs/oaoBnHS6cnaEC
+ E7+SsuD1fZi95WxWXfUtazbaT6MH5cDsJU9m3cEylYYAQqSlrUF5zYkDcsdo4TCXAM84dpoB344aucpHrv7M9QvnpsLqzVUZISK7wYM1Lo9Hb8MDDXlmwL4r
+ xIi7vcXizDuJhzNTp5BfrFPDWCXJs8SR1jKhutFfQ2+XMd1OCUg9k17FyR+3gLw1z+uCGGqbDD9pyEWcqul0IBR0PWOrbFOLrI01v1XO+DyZ9ZoXMrCZM3/D
+ kT+0Y0OCCd5k4pu6X7fCGA81kV5oK8daXF0zIbPFhTfhBc/37ACc7L2orLrRPLcVsdB+ZOHB9LiaHg0OCH78xdxF8K2JtKLfQaIQqCP5SQxxPi8Nh8TIZCrm
+ 2GA9v6FZ5YAaldkVTokUB1wwSMdC+8vMdIYnb18vTMQmRcwMomQoHjPl+lZXwGI7bj0CGM1R/OUDogkUdk3xRQJIAaTy+HUtshdELy+I7KHCWAxUjSv5gf3f
+ tanncCiL1byhYkycQwgkjxEWtnc=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 2019-12-12 at 14:51 +0300, Dan Carpenter wrote:
-> On Mon, Dec 09, 2019 at 04:58:28PM +0800, Chuhong Yuan wrote:
-> > All drivers in imx call v4l2_async_notifier_cleanup() after unregistering
-> > the notifier except this driver.
-> > This should be a miss and we need to add the call to fix it.
-> > 
-> > Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-> > ---
-> >  drivers/staging/media/imx/imx7-mipi-csis.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-> > index 99166afca071..2bfa85bb84e7 100644
-> > --- a/drivers/staging/media/imx/imx7-mipi-csis.c
-> > +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-> > @@ -1105,6 +1105,7 @@ static int mipi_csis_remove(struct platform_device *pdev)
-> >  	mipi_csis_debugfs_exit(state);
-> >  	v4l2_async_unregister_subdev(&state->mipi_sd);
-> >  	v4l2_async_notifier_unregister(&state->subdev_notifier);
-> > +	v4l2_async_notifier_cleanup(&state->subdev_notifier);
-> >  
-> 
-> In this case the "state->subdev_notifier" was never initialized or used
-> so both v4l2_async_notifier_unregister() and v4l2_async_notifier_cleanup()
-> are no-ops.
-> 
-> We should just delete "subdev_notifier".
+Hi Helen, Ezequiel,
 
-I agree with Dan and Hans, the subdev_notifier field and the
-v4l2_async_notifier_unregister() call should be removed. Since
-this issue was there from the start, the patch can be tagged
-as fixing commit 7807063b862b.
+The merge window is open, so you want to get this in, then please post a v12
+with the few remaining items addressed so that I can merge it.
 
-regards
-Philipp
+Regards,
+
+	Hans
+
+On 11/19/19 9:30 AM, Hans Verkuil wrote:
+> On 11/18/19 7:52 PM, Ezequiel Garcia wrote:
+>> Hi Hans,
+>>
+>> Thanks for taking care of this.
+>>
+>> On Thu, 2019-11-14 at 09:42 +0100, Hans Verkuil wrote:
+>>> On 11/14/19 6:12 AM, Helen Koike wrote:
+>>>> Hello,
+>>>>
+>>>> This series adds the Rockchip Image Signal Processing Unit v1 driver to
+>>>> staging.
+>>>>
+>>>> The main reason to be in staging is that people are already using it from the
+>>>> mailing list (including libcamera), and having it in mainline makes the workflow
+>>>> easier. Also, it is easier for other people to contribute back (with code
+>>>> or testing the driver).
+>>>>
+>>>> We plan to actively work on this driver to get it our of staging.
+>>>>
+>>>> This patchset is also available at:
+>>>> https://gitlab.collabora.com/koike/linux/tree/rockchip/isp/v11
+>>>>
+>>>> Libcamera patched to work with this version:
+>>>> https://gitlab.collabora.com/koike/libcamera
+>>>> (also sent to the mailing list)
+>>>>
+>>>> The major difference in v11 are:
+>>>> - Fixed compiling warnings found with W=1
+>>>> - Fixed checkpatch errors
+>>>> - Add clock-names values in dt-bindings
+>>>
+>>> Looking at checkpatch I see a few remaining issues that I believe should be
+>>> fixed before merging this:
+>>>
+>>> CHECK: spinlock_t definition without comment
+>>> #575: FILE: drivers/staging/media/rkisp1/isp_stats.h:43:
+>>> +       spinlock_t irq_lock;
+>>>
+>>> CHECK: struct mutex definition without comment
+>>> #581: FILE: drivers/staging/media/rkisp1/isp_stats.h:49:
+>>> +       struct mutex wq_lock;
+>>>
+>>> CHECK: spinlock_t definition without comment
+>>> #1648: FILE: drivers/staging/media/rkisp1/isp_params.h:25:
+>>> +       spinlock_t config_lock;
+>>>
+>>> CHECK: spinlock_t definition without comment
+>>> #2058: FILE: drivers/staging/media/rkisp1/capture.h:145:
+>>> +       spinlock_t vbq_lock;
+>>>
+>>
+>> I'd rather merge this as-is, adding a TODO entry stating
+>> we need to revisit locking specifically, because I'd like
+>> to take a close look at these spinlocks/mutex,
+>> instead of just addding comments for then.
+> 
+> Fair enough! Just as long as it is mentioned somewhere.
+> 
+>>
+>>> Once this is done together with the Jacob Chen email clarification
+>>> it is ready to be merged for v5.6.
+>>>
+>>
+>> I'll find out more about this.
+> 
+> Thanks!
+> 
+> Remember that we are in the code freeze until v5.5-rc1 is released,
+> so you have time to make more adjustments if you want to.
+> 
+> Regards,
+> 
+> 	Hans
+> 
+>>
+>>> It passes all the sparse/smatch tests, so that's very good.
+>>>
+>>
+>> Great!
+>>
+>> Thanks,
+>> Ezequiel
+>>
+> 
 
