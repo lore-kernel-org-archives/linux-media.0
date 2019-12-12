@@ -2,82 +2,137 @@ Return-Path: <SRS0=Yp04=2C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79C4FC43603
-	for <linux-media@archiver.kernel.org>; Thu, 12 Dec 2019 13:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4C9DC43603
+	for <linux-media@archiver.kernel.org>; Thu, 12 Dec 2019 14:03:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5B9062077B
-	for <linux-media@archiver.kernel.org>; Thu, 12 Dec 2019 13:48:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 907082173E
+	for <linux-media@archiver.kernel.org>; Thu, 12 Dec 2019 14:03:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729518AbfLLNsW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Dec 2019 08:48:22 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:49670 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729425AbfLLNsW (ORCPT
+        id S1729606AbfLLOD0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Dec 2019 09:03:26 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:43365 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729568AbfLLODZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Dec 2019 08:48:22 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 1EEFF1C25CE; Thu, 12 Dec 2019 14:48:20 +0100 (CET)
-Date:   Thu, 12 Dec 2019 14:48:20 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Greg KH <greg@kroah.com>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Ricardo Ribalda Delgado <ribalda@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.4 148/350] media: ad5820: Define entity function
-Message-ID: <20191212134820.yfwkamocjxumz6ci@ucw.cz>
-References: <20191210210735.9077-1-sashal@kernel.org>
- <20191210210735.9077-109-sashal@kernel.org>
- <20191212121938.GB17876@duo.ucw.cz>
- <20191212122437.GA1541615@kroah.com>
+        Thu, 12 Dec 2019 09:03:25 -0500
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1ifP3s-0007e8-JQ; Thu, 12 Dec 2019 15:03:24 +0100
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     kernel@pengutronix.de
+Subject: [PATCH v2 2/4] media: coda: jpeg: merge Huffman table bits and values
+Date:   Thu, 12 Dec 2019 15:02:53 +0100
+Message-Id: <20191212140255.8766-2-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191212140255.8766-1-p.zabel@pengutronix.de>
+References: <20191212140255.8766-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191212122437.GA1541615@kroah.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-> On Thu, Dec 12, 2019 at 01:19:38PM +0100, Pavel Machek wrote:
-> > On Tue 2019-12-10 16:04:13, Sasha Levin wrote:
-> > > From: Ricardo Ribalda Delgado <ribalda@kernel.org>
-> > > 
-> > > [ Upstream commit 801ef7c4919efba6b96b5aed1e72844ca69e26d3 ]
-> > > 
-> > > Without this patch, media_device_register_entity throws a warning:
-> > > 
-> > > dev_warn(mdev->dev,
-> > > 	 "Entity type for entity %s was not initialized!\n",
-> > > 	 entity->name);
-> > 
-> > This fixes warning, not a serious bug. Thus it is against stable
-> > rules.
-> 
-> That's a good enough fix for a real issue.  We take patches in stable
-> for this all the time.
+The Huffman bits tables are always 16 bytes long, and they are always
+followed directly by the values tables, both in hardware and in JPEG
+files. Just merge the two tables.
 
-I know you do this all the time...
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+ drivers/media/platform/coda/coda-jpeg.c | 40 ++++++++++---------------
+ 1 file changed, 16 insertions(+), 24 deletions(-)
 
-But that's not what the documentation says you should be doing!
+diff --git a/drivers/media/platform/coda/coda-jpeg.c b/drivers/media/platform/coda/coda-jpeg.c
+index bf61a3ecc580..27e20aee1a8c 100644
+--- a/drivers/media/platform/coda/coda-jpeg.c
++++ b/drivers/media/platform/coda/coda-jpeg.c
+@@ -19,32 +19,29 @@
+  * chrominance from JPEG ITU-T.81 (ISO/IEC 10918-1) Annex K.3
+  */
+ 
+-static const unsigned char luma_dc_bits[16] = {
++static const unsigned char luma_dc[16 + 12] = {
++	/* bits */
+ 	0x00, 0x01, 0x05, 0x01, 0x01, 0x01, 0x01, 0x01,
+ 	0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-};
+-
+-static const unsigned char luma_dc_value[12] = {
++	/* values */
+ 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+ 	0x08, 0x09, 0x0a, 0x0b,
+ };
+ 
+-static const unsigned char chroma_dc_bits[16] = {
++static const unsigned char chroma_dc[16 + 12] = {
++	/* bits */
+ 	0x00, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+ 	0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+-};
+-
+-static const unsigned char chroma_dc_value[12] = {
++	/* values */
+ 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+ 	0x08, 0x09, 0x0a, 0x0b,
+ };
+ 
+-static const unsigned char luma_ac_bits[16] = {
++static const unsigned char luma_ac[16 + 162 + 2] = {
++	/* bits */
+ 	0x00, 0x02, 0x01, 0x03, 0x03, 0x02, 0x04, 0x03,
+ 	0x05, 0x05, 0x04, 0x04, 0x00, 0x00, 0x01, 0x7d,
+-};
+-
+-static const unsigned char luma_ac_value[162 + 2] = {
++	/* values */
+ 	0x01, 0x02, 0x03, 0x00, 0x04, 0x11, 0x05, 0x12,
+ 	0x21, 0x31, 0x41, 0x06, 0x13, 0x51, 0x61, 0x07,
+ 	0x22, 0x71, 0x14, 0x32, 0x81, 0x91, 0xa1, 0x08,
+@@ -68,12 +65,11 @@ static const unsigned char luma_ac_value[162 + 2] = {
+ 	0xf9, 0xfa, /* padded to 32-bit */
+ };
+ 
+-static const unsigned char chroma_ac_bits[16] = {
++static const unsigned char chroma_ac[16 + 162 + 2] = {
++	/* bits */
+ 	0x00, 0x02, 0x01, 0x02, 0x04, 0x04, 0x03, 0x04,
+ 	0x07, 0x05, 0x04, 0x04, 0x00, 0x01, 0x02, 0x77,
+-};
+-
+-static const unsigned char chroma_ac_value[162 + 2] = {
++	/* values */
+ 	0x00, 0x01, 0x02, 0x03, 0x11, 0x04, 0x05, 0x21,
+ 	0x31, 0x06, 0x12, 0x41, 0x51, 0x07, 0x61, 0x71,
+ 	0x13, 0x22, 0x32, 0x81, 0x08, 0x14, 0x42, 0x91,
+@@ -148,14 +144,10 @@ int coda_jpeg_write_tables(struct coda_ctx *ctx)
+ {
+ 	int i;
+ 	static const struct coda_memcpy_desc huff[8] = {
+-		{ 0,   luma_dc_bits,    sizeof(luma_dc_bits)    },
+-		{ 16,  luma_dc_value,   sizeof(luma_dc_value)   },
+-		{ 32,  luma_ac_bits,    sizeof(luma_ac_bits)    },
+-		{ 48,  luma_ac_value,   sizeof(luma_ac_value)   },
+-		{ 216, chroma_dc_bits,  sizeof(chroma_dc_bits)  },
+-		{ 232, chroma_dc_value, sizeof(chroma_dc_value) },
+-		{ 248, chroma_ac_bits,  sizeof(chroma_ac_bits)  },
+-		{ 264, chroma_ac_value, sizeof(chroma_ac_value) },
++		{ 0,   luma_dc,    sizeof(luma_dc)    },
++		{ 32,  luma_ac,    sizeof(luma_ac)    },
++		{ 216, chroma_dc,  sizeof(chroma_dc)  },
++		{ 248, chroma_ac,  sizeof(chroma_ac)  },
+ 	};
+ 	struct coda_memcpy_desc qmat[3] = {
+ 		{ 512, ctx->params.jpeg_qmat_tab[0], 64 },
+-- 
+2.20.1
 
- - It must fix a problem that causes a build error (but not for things
-    marked CONFIG_BROKEN), an oops, a hang, data corruption, a real
-       security issue, or some "oh, that's not good" issue.  In short,
-       something
-          critical.
-
-I'd prefer you to act as the documentation says you would, but even
-just fixing the documentation would be improvement over current
-situation.
-
-Thanks,
-								Pavel
