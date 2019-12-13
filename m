@@ -6,27 +6,27 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED52C34974
-	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 20:36:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B526C3B1B9
+	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 20:36:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CEB5C246A2
-	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 20:36:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E3F7246B8
+	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 20:36:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726987AbfLMMHH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Dec 2019 07:07:07 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:39920 "EHLO inva021.nxp.com"
+        id S1727035AbfLMMHK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Dec 2019 07:07:10 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:37174 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726939AbfLMMHG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Dec 2019 07:07:06 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 03C4B200EAC;
-        Fri, 13 Dec 2019 13:07:04 +0100 (CET)
+        id S1726939AbfLMMHK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 13 Dec 2019 07:07:10 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 670FD1A08FE;
+        Fri, 13 Dec 2019 13:07:08 +0100 (CET)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E5BB120035B;
-        Fri, 13 Dec 2019 13:07:03 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 55F6B1A0801;
+        Fri, 13 Dec 2019 13:07:08 +0100 (CET)
 Received: from fsr-ub1664-134.ea.freescale.net (fsr-ub1664-134.ea.freescale.net [10.171.74.111])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 1CC3E203B1;
-        Fri, 13 Dec 2019 13:07:03 +0100 (CET)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 82668203B1;
+        Fri, 13 Dec 2019 13:07:07 +0100 (CET)
 From:   Mirela Rabulea <mirela.rabulea@nxp.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
         robh+dt@kernel.org
@@ -40,9 +40,9 @@ Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
         niklas.soderlund+renesas@ragnatech.se,
         dafna.hirschfeld@collabora.com,
         Mirela Rabulea <mirela.rabulea@nxp.com>
-Subject: [PATCH v3 3/6] media: dt-bindings: Add bindings for i.MX8QXP/QM JPEG driver
-Date:   Fri, 13 Dec 2019 14:06:18 +0200
-Message-Id: <1576238781-5911-4-git-send-email-mirela.rabulea@nxp.com>
+Subject: [PATCH v3 5/6] arm64: dts: imx8qxp: Add jpeg encoder/decoder nodes
+Date:   Fri, 13 Dec 2019 14:06:20 +0200
+Message-Id: <1576238781-5911-6-git-send-email-mirela.rabulea@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1576238781-5911-1-git-send-email-mirela.rabulea@nxp.com>
 References: <1576238781-5911-1-git-send-email-mirela.rabulea@nxp.com>
@@ -52,103 +52,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add bindings documentation for i.MX8QXP/QM JPEG decoder & encoder driver.
+Add jpeg decoder/encoder nodes, for now on imx8qxp only.
+The same should work on imx8qm, but it was not tested.
 
 Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
 ---
- .../devicetree/bindings/media/imx8-jpeg.yaml       | 83 ++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/imx8-jpeg.yaml
+ arch/arm64/boot/dts/freescale/imx8qxp-mek.dts |  8 ++++++
+ arch/arm64/boot/dts/freescale/imx8qxp.dtsi    | 37 +++++++++++++++++++++++++++
+ 2 files changed, 45 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/imx8-jpeg.yaml b/Documentation/devicetree/bindings/media/imx8-jpeg.yaml
-new file mode 100644
-index 0000000..2df538d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/imx8-jpeg.yaml
-@@ -0,0 +1,83 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/imx8-jpeg.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+index d3d26cc..3c6fe76 100644
+--- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+@@ -242,3 +242,11 @@
+ &scu_key {
+ 	status = "okay";
+ };
 +
-+title: i.MX8QXP/QM JPEG decoder/encoder Device Tree Bindings
++&jpegdec {
++	status = "okay";
++};
 +
-+maintainers:
-+  - Mirela Rabulea <mirela.rabulea@nxp.com>
++&jpegenc {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+index fb5f752..8248a0882 100644
+--- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+@@ -586,4 +586,41 @@
+ 			#clock-cells = <1>;
+ 		};
+ 	};
 +
-+description: |-
-+  The JPEG decoder/encoder present in.MXQXP/QM SoC is an
-+  ISO/IEC 10918-1 JPEG standard compliant decoder/encoder, for Baseline
-+  and Extended Sequential DCT modes.
++	img_subsys: bus@58000000 {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0x58000000 0x0 0x58000000 0x1000000>;
 +
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+            # JPEG decoder
-+          - fsl,imx8-jpgdec
-+            # JPEG encoder
-+          - fsl,imx8-jpgenc
++		jpegdec: jpegdec@58400000 {
++			compatible = "fsl,imx8-jpgdec";
++			reg = <0x58400000 0x00050000 >;
++			interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 311 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 312 IRQ_TYPE_LEVEL_HIGH>;
++			power-domains = <&pd IMX_SC_R_MJPEG_DEC_MP>,
++					<&pd IMX_SC_R_MJPEG_DEC_S0>,
++					<&pd IMX_SC_R_MJPEG_DEC_S1>,
++					<&pd IMX_SC_R_MJPEG_DEC_S2>,
++					<&pd IMX_SC_R_MJPEG_DEC_S3>;
++			status = "disabled";
++		};
 +
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    description: |
-+      There are 4 slots available in the IP
-+      If a certain slot is used, it should have an associated interrupt
-+    minItems: 1               # At least one slot should be available
-+    maxItems: 4               # The IP has 4 slots available for use
-+
-+  power-domains:
-+    description:
-+      List of phandle and PM domain specifier as documented in
-+      Documentation/devicetree/bindings/power/power_domain.txt
-+    minItems: 2               # Wrapper and 1 slot
-+    maxItems: 5               # Wrapper and 4 slots
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/firmware/imx/rsrc.h>
-+
-+    jpegdec: jpegdec@58400000 {
-+        compatible = "fsl,imx8-jpgdec";
-+        reg = <0x58400000 0x00050000 >;
-+        interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 311 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 312 IRQ_TYPE_LEVEL_HIGH>;
-+        power-domains = <&pd IMX_SC_R_MJPEG_DEC_MP>,
-+                        <&pd IMX_SC_R_MJPEG_DEC_S0>,
-+                        <&pd IMX_SC_R_MJPEG_DEC_S1>,
-+                        <&pd IMX_SC_R_MJPEG_DEC_S2>,
-+                        <&pd IMX_SC_R_MJPEG_DEC_S3>;
-+    };
-+
-+    jpegenc: jpegenc@58450000 {
-+        compatible = "fsl,imx8-jpgenc";
-+        reg = <0x58450000 0x00050000 >;
-+        interrupts = <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 308 IRQ_TYPE_LEVEL_HIGH>;
-+        power-domains = <&pd IMX_SC_R_MJPEG_ENC_MP>,
-+                        <&pd IMX_SC_R_MJPEG_ENC_S0>,
-+                        <&pd IMX_SC_R_MJPEG_ENC_S1>,
-+                        <&pd IMX_SC_R_MJPEG_ENC_S2>,
-+                        <&pd IMX_SC_R_MJPEG_ENC_S3>;
-+    };
-+...
++		jpegenc: jpegenc@58450000 {
++			compatible = "fsl,imx8-jpgenc";
++			reg = <0x58450000 0x00050000 >;
++			interrupts = <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 308 IRQ_TYPE_LEVEL_HIGH>;
++			power-domains = <&pd IMX_SC_R_MJPEG_ENC_MP>,
++					<&pd IMX_SC_R_MJPEG_ENC_S0>,
++					<&pd IMX_SC_R_MJPEG_ENC_S1>,
++					<&pd IMX_SC_R_MJPEG_ENC_S2>,
++					<&pd IMX_SC_R_MJPEG_ENC_S3>;
++			status = "disabled";
++		};
++	};
+ };
 -- 
 2.7.4
 
