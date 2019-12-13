@@ -1,4 +1,4 @@
-Return-Path: <SRS0=Yp04=2C=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=EP8b=2D=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -7,96 +7,112 @@ X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02FA8C43603
-	for <linux-media@archiver.kernel.org>; Thu, 12 Dec 2019 23:42:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3D90C00454
+	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 00:12:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C0AB0227BF
-	for <linux-media@archiver.kernel.org>; Thu, 12 Dec 2019 23:42:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3C07206E2
+	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 00:12:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="RndbV6MA"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="dFG8aT+m"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731179AbfLLXm3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Dec 2019 18:42:29 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:56574 "EHLO
+        id S1731513AbfLMAMm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Dec 2019 19:12:42 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:56694 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726427AbfLLXm2 (ORCPT
+        with ESMTP id S1731295AbfLMAMm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Dec 2019 18:42:28 -0500
+        Thu, 12 Dec 2019 19:12:42 -0500
 Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2E677A2B;
-        Fri, 13 Dec 2019 00:42:26 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B281D440;
+        Fri, 13 Dec 2019 01:12:39 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1576194146;
-        bh=Zigp7SWN2m4H6YUkBIdGVKmC/isQiYmdYdZtzt8Jztk=;
+        s=mail; t=1576195959;
+        bh=q7+PzftOpW7kWfLrX5kDBoWt+echFEY9YwOmkpZA0Ho=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RndbV6MA+dGWmvZ8wzqXHSiv1XkHg7/dIXqIHfZSjpsohZe7cAXRD4W7DRtNJD5gq
-         TAoQleBsM/vUVrxVAWvJ4bd1I49mwSPfuqw8FZRBq3naYfcCwFG5mnizDN/yy62WUT
-         icU0UJEstnAAbSa74Yss0oOgUmaBCzv4t9St5zs8=
-Date:   Fri, 13 Dec 2019 01:42:16 +0200
+        b=dFG8aT+m7xKE1kIvi+//gFzbHrNuP7+mjmGjzJafpBEjO+SdtCoUC7GVXVJfbC6AJ
+         9U9PNAOF9eoCmYwWN2j3gU/MQ0zgMWUjZ3CqBhMm4gXFyanbO8Eq/e1hiWJomuEJyu
+         D4UAfnshjTRwM+giezvmMuKIRHvW1YcSNHbV/jJ4=
+Date:   Fri, 13 Dec 2019 02:12:30 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Chuhong Yuan <hslester96@gmail.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: omap3isp: add checks for devm_regulator_get
-Message-ID: <20191212234216.GE4892@pendragon.ideasonboard.com>
-References: <20191210091428.23448-1-hslester96@gmail.com>
+Subject: Re: [PATCH v2] uvcvideo: Also validate buffers in BULK mode
+Message-ID: <20191213001230.GG4892@pendragon.ideasonboard.com>
+References: <2206409.jVpTcjFX6j@avalon>
+ <20180605234607.5334-1-nicolas.dufresne@collabora.com>
+ <b30648712504dedd388ac13100afc43beba9408a.camel@collabora.com>
+ <2a6629b95f9c8a5f41ec783ef2e39f5cba8e7a20.camel@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191210091428.23448-1-hslester96@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2a6629b95f9c8a5f41ec783ef2e39f5cba8e7a20.camel@collabora.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Chuhong,
+Hi Nicolas,
 
-(CC'ing Sakari Ailus)
-
-Thank you for the patch.
-
-On Tue, Dec 10, 2019 at 05:14:28PM +0800, Chuhong Yuan wrote:
-> The driver misses checks for devm_regulator_get().
-> Add checks to fix it.
+On Mon, Dec 09, 2019 at 09:30:44PM -0500, Nicolas Dufresne wrote:
+> Le lundi 09 décembre 2019 à 21:27 -0500, Nicolas Dufresne a écrit :
+> > Le mardi 05 juin 2018 à 19:46 -0400, Nicolas Dufresne a écrit :
+> > > Just like for ISOC, validate the decoded BULK buffer size when possible.
+> > > This avoids sending corrupted or partial buffers to userspace, which may
+> > > lead to application crash or run-time failure.
+> > > 
+> > > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > 
+> > Ping. That was a year and a half ago and still applies.
 > 
-> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-> ---
->  drivers/media/platform/omap3isp/isp.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-> index 327c5716922a..ef3502182c3a 100644
-> --- a/drivers/media/platform/omap3isp/isp.c
-> +++ b/drivers/media/platform/omap3isp/isp.c
-> @@ -2312,7 +2312,16 @@ static int isp_probe(struct platform_device *pdev)
->  
->  	/* Regulators */
->  	isp->isp_csiphy1.vdd = devm_regulator_get(&pdev->dev, "vdd-csiphy1");
-> +	if (IS_ERR(isp->isp_csiphy1.vdd)) {
-> +		ret = PTR_ERR(isp->isp_csiphy1.vdd);
-> +		goto error;
-> +	}
-> +
->  	isp->isp_csiphy2.vdd = devm_regulator_get(&pdev->dev, "vdd-csiphy2");
-> +	if (IS_ERR(isp->isp_csiphy2.vdd)) {
-> +		ret = PTR_ERR(isp->isp_csiphy2.vdd);
-> +		goto error;
-> +	}
+> Please ignore, I was looking into the wrong branch by accident. Please,
+> update patchwork, that might also help to avoid confusion.
 
-Those regulators are currently checked at runtime in
-omap3isp_csiphy_acquire(). The check is incorrect as it checks for NULL
-while vdd would contain an ERR_PTR, so there's a real issue. However,
-not all platforms support the CSI-2 receivers, and only omap3-n950.dts
-and omap3-n9.dts provide the regulators. They thus need to be kept
-optional.
+Unless someone has changed the patch status in the last few days without
+telling me, it was already marked as accepted.
 
-Would you like to provide another patch that fixes the checks in
-omap3isp_csiphy_acquire() ?
-
->  
->  	/* Clocks
->  	 *
+> > > ---
+> > >  drivers/media/usb/uvc/uvc_video.c | 9 +++------
+> > >  1 file changed, 3 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> > > index aa0082fe5833..025ffac196f3 100644
+> > > --- a/drivers/media/usb/uvc/uvc_video.c
+> > > +++ b/drivers/media/usb/uvc/uvc_video.c
+> > > @@ -1234,6 +1234,7 @@ static void uvc_video_next_buffers(struct uvc_streaming *stream,
+> > >  		*meta_buf = uvc_queue_next_buffer(&stream->meta.queue,
+> > >  						  *meta_buf);
+> > >  	}
+> > > +	uvc_video_validate_buffer(stream, *video_buf);
+> > >  	*video_buf = uvc_queue_next_buffer(&stream->queue, *video_buf);
+> > >  }
+> > >  
+> > > @@ -1258,10 +1259,8 @@ static void uvc_video_decode_isoc(struct urb *urb, struct uvc_streaming *stream,
+> > >  		do {
+> > >  			ret = uvc_video_decode_start(stream, buf, mem,
+> > >  				urb->iso_frame_desc[i].actual_length);
+> > > -			if (ret == -EAGAIN) {
+> > > -				uvc_video_validate_buffer(stream, buf);
+> > > +			if (ret == -EAGAIN)
+> > >  				uvc_video_next_buffers(stream, &buf, &meta_buf);
+> > > -			}
+> > >  		} while (ret == -EAGAIN);
+> > >  
+> > >  		if (ret < 0)
+> > > @@ -1277,10 +1276,8 @@ static void uvc_video_decode_isoc(struct urb *urb, struct uvc_streaming *stream,
+> > >  		uvc_video_decode_end(stream, buf, mem,
+> > >  			urb->iso_frame_desc[i].actual_length);
+> > >  
+> > > -		if (buf->state == UVC_BUF_STATE_READY) {
+> > > -			uvc_video_validate_buffer(stream, buf);
+> > > +		if (buf->state == UVC_BUF_STATE_READY)
+> > >  			uvc_video_next_buffers(stream, &buf, &meta_buf);
+> > > -		}
+> > >  	}
+> > >  }
+> > >  
 
 -- 
 Regards,
