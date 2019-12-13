@@ -2,155 +2,95 @@ Return-Path: <SRS0=EP8b=2D=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4257C3499A
-	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 20:36:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08F5FC352A3
+	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 20:36:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0671224728
-	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 20:36:35 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="VM81bLRH"
+	by mail.kernel.org (Postfix) with ESMTP id 49F3A246C0
+	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 20:36:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726823AbfLMLzU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Dec 2019 06:55:20 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:53074 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726750AbfLMLzU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Dec 2019 06:55:20 -0500
-Received: from [192.168.0.239] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8FA30A23;
-        Fri, 13 Dec 2019 12:55:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1576238118;
-        bh=b//CHFQop3hwx9VLQKcag9slpnqEUgmelQ40alaLRy0=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=VM81bLRHviSijxSoIZILUwmXJ2SdQnhG4WpWfV3ViRZ7hXz6q3Q+lcThgk9A9HXtg
-         ruBuRzB3dWrmw+usonQFBCwMy270HyGfymCxV7St+Pw/yAxCDkz8yMzTAkU8UcY3kH
-         HB0nXKuLw77+OeHNTt1taWzW0ZgN24EhLdAwaLXo=
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-Subject: Re: [PATCH] media: vsp1: tidyup VI6_HGT_LBn_H() macro
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        koji.matsuoka.xm@renesas.com, takeshi.kihara.df@renesas.com,
-        harunobu.kurokawa.dn@renesas.com, khiem.nguyen.xt@renesas.com,
-        hien.dang.eb@renesas.com
-References: <redmine.issue-245033.20191211005426@dm.renesas.com>
- <redmine.issue-245033.20191211005426.161918957b73008d@dm.renesas.com>
- <87k173bp76.wl-kuninori.morimoto.gx@renesas.com>
- <fb1648d4-3949-01c1-7d13-679b9b8540dd@ideasonboard.com>
- <20191211175811.GC4863@pendragon.ideasonboard.com>
- <b8891c8c-fefe-5728-f792-a56da08bd7aa@ideasonboard.com>
- <20191212073306.GB1364286@kroah.com>
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Organization: Ideas on Board
-Message-ID: <6808431b-a5d0-0720-b276-ed8333fb26d5@ideasonboard.com>
-Date:   Fri, 13 Dec 2019 11:55:14 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191212073306.GB1364286@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+        id S1726884AbfLMMGr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Dec 2019 07:06:47 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:39706 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726717AbfLMMGr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 13 Dec 2019 07:06:47 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 06875200804;
+        Fri, 13 Dec 2019 13:06:43 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E9D5A200761;
+        Fri, 13 Dec 2019 13:06:42 +0100 (CET)
+Received: from fsr-ub1664-134.ea.freescale.net (fsr-ub1664-134.ea.freescale.net [10.171.74.111])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 234F6203B1;
+        Fri, 13 Dec 2019 13:06:42 +0100 (CET)
+From:   Mirela Rabulea <mirela.rabulea@nxp.com>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
+        robh+dt@kernel.org
+Cc:     paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        s.hauer@pengutronix.de, aisheng.dong@nxp.com,
+        daniel.baluta@nxp.com, leonard.crestez@nxp.com,
+        robert.chiras@nxp.com, laurentiu.palcu@nxp.com,
+        mark.rutland@arm.com, devicetree@vger.kernel.org,
+        p.zabel@pengutronix.de, laurent.pinchart+renesas@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se,
+        dafna.hirschfeld@collabora.com,
+        Mirela Rabulea <mirela.rabulea@nxp.com>
+Subject: [PATCH v3 0/6] Add V4L2 driver for i.MX8 JPEG Encoder/Decoder
+Date:   Fri, 13 Dec 2019 14:06:15 +0200
+Message-Id: <1576238781-5911-1-git-send-email-mirela.rabulea@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Greg, Laurent, Sasha,
+Changes in v3:
+Add a 6th patch to update the MAINTAINERS file with an entry for this driver.
 
-On 12/12/2019 07:33, Greg Kroah-Hartman wrote:
-> On Wed, Dec 11, 2019 at 09:58:11PM +0000, Kieran Bingham wrote:
->> Hi Laurent,
->>
->> +Greg, +Sasha to opine on the merit of whether this should go to stable
->> trees (for my future learning and understanding more so than this
->> specific case)
->>
->> On 11/12/2019 17:58, Laurent Pinchart wrote:
->>> Hello,
->>>
->>> On Wed, Dec 11, 2019 at 12:59:57PM +0000, Kieran Bingham wrote:
->>>> Hi Morimoto-san,
->>>>
->>>> Thank you for the patch,
->>>
->>> Likewise :-)
->>>
->>>> On 11/12/2019 01:55, Kuninori Morimoto wrote:
->>>>>
->>>>> From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
->>>>>
->>>>> The address of VSP2_VI6_HGT_LBx_H are
->>>>> 	VSP2_VI6_HGT_LB0_H : 0x3428
->>>>> 	VSP2_VI6_HGT_LB1_H : 0x3430
->>>>> 	VSP2_VI6_HGT_LB2_H : 0x3438
->>>>> 	VSP2_VI6_HGT_LB3_H : 0x3440
->>>>>
->>>>> Thus, VI6_HGT_LBn_H() macro should start from 0x3420 instead of 0x3430.
->>>>> This patch fixup it.
->>
->> s/fixup/fixes/
->>
->>
->>>> I think this deserves a fixes tag:
->>>>
->>>> Fixes: 26e0ca22c3b8 ("[media] v4l: Renesas R-Car VSP1 driver")
->>>
->>> Given that this macro is not used, we could argue that it doesn't fix
->>> anything yet :-) I'd rather avoid having this backported to stable
->>> kernels as it's not useful to have it there, and thus not add a Fixes
->>
->> I'm sorry - I'm not sure I can agree here, Do you know that no one will
->> use this macro when they back port the HGT functionality to an LTSI kernel?
->>
->> We know the Renesas BSP uses LTSI kernels, and the very nature of the
->> fact that this typo has been spotted by the Renesas BSP team suggests
->> that they are indeed looking at/using this functionality ...
->>
->> (Ok, so maybe they will thus apply the fix themselves, but that's not my
->> point, and if they 'have' to apply the fix - it should be in stable?)
->>
->> It feels a bit presumptuous to state that we shouldn't fix this because
->> /we/ don't utilise it yet, when this issue is in mainline regardless ...
-> 
-> Nothing should be in the kernel tree that is not already used by
-> something in that specific kernel tree.  We don't care about out-of-tree
-> code, and especially for stable kernel patches, it does not matter in
-> the least.
+This patch set adds the V4L2 driver for i.MX8QXP/QM JPEG encoder/decoder
+and it's dependencies.
+The driver was tested on i.MX8QXP, using a unit test application and
+the v4l2-compliance tool, including the  streaming tests for encoder.
 
-So perhaps this patch should actually remove this macro rather than fix it?
+Mirela Rabulea (6):
+  media: v4l: Add packed YUV444 24bpp pixel format
+  firmware: imx: scu-pd: Add power domains for imx-jpeg
+  media: dt-bindings: Add bindings for i.MX8QXP/QM JPEG driver
+  media: imx-jpeg: Add V4L2 driver for i.MX8 JPEG Encoder/Decoder
+  arm64: dts: imx8qxp: Add jpeg encoder/decoder nodes
+  Add maintainer for IMX jpeg v4l2 driver
 
-> If you have out-of-tree code, you are on your own here, sorry.
-> 
-> So no, no backporting of stuff that no one actually uses in the codebase
-> itself.
+ .../devicetree/bindings/media/imx8-jpeg.yaml       |   83 +
+ Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst |   37 +-
+ MAINTAINERS                                        |    8 +
+ arch/arm64/boot/dts/freescale/imx8qxp-mek.dts      |    8 +
+ arch/arm64/boot/dts/freescale/imx8qxp.dtsi         |   37 +
+ drivers/firmware/imx/scu-pd.c                      |    6 +
+ drivers/media/platform/Kconfig                     |    2 +
+ drivers/media/platform/Makefile                    |    1 +
+ drivers/media/platform/imx-jpeg/Kconfig            |   10 +
+ drivers/media/platform/imx-jpeg/Makefile           |    3 +
+ drivers/media/platform/imx-jpeg/mxc-jpeg-hw.c      |  168 ++
+ drivers/media/platform/imx-jpeg/mxc-jpeg-hw.h      |  140 ++
+ drivers/media/platform/imx-jpeg/mxc-jpeg.c         | 2293 ++++++++++++++++++++
+ drivers/media/platform/imx-jpeg/mxc-jpeg.h         |  188 ++
+ drivers/media/v4l2-core/v4l2-ioctl.c               |    1 +
+ include/uapi/linux/videodev2.h                     |    1 +
+ 16 files changed, 2985 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/media/imx8-jpeg.yaml
+ create mode 100644 drivers/media/platform/imx-jpeg/Kconfig
+ create mode 100644 drivers/media/platform/imx-jpeg/Makefile
+ create mode 100644 drivers/media/platform/imx-jpeg/mxc-jpeg-hw.c
+ create mode 100644 drivers/media/platform/imx-jpeg/mxc-jpeg-hw.h
+ create mode 100644 drivers/media/platform/imx-jpeg/mxc-jpeg.c
+ create mode 100644 drivers/media/platform/imx-jpeg/mxc-jpeg.h
 
-Ok understood, It was really the 'the macro exists in the kernel, but is
-wrong' part that got me.
-
-Along with the fact that we now have various automated machinery that
-would likely pick this patch up and backport it anyway?
-
-(Sasha, is that assumption accurate? Or would you/your system have
-identified that this macro is not used?)
-
---
-Kieran
-
-
-> 
-> thanks,
-> 
-> greg k-h
-> 
+-- 
+2.7.4
 
