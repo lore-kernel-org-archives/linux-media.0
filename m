@@ -7,53 +7,50 @@ X-Spam-Status: No, score=-12.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C831C43603
-	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 10:48:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21065C43603
+	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 10:49:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 50527206B7
-	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 10:48:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E8AF521655
+	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 10:49:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Wma0y7Nw"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="oOjsDZ6O"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726313AbfLMKsq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Dec 2019 05:48:46 -0500
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:56673 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725928AbfLMKsq (ORCPT
+        id S1726368AbfLMKtu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Dec 2019 05:49:50 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:41557 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725928AbfLMKtu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Dec 2019 05:48:46 -0500
+        Fri, 13 Dec 2019 05:49:50 -0500
 Received: from [IPv6:2001:983:e9a7:1:c93c:45bd:1710:e478]
  ([IPv6:2001:983:e9a7:1:c93c:45bd:1710:e478])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id fiV0il3nSapzpfiV1idv5z; Fri, 13 Dec 2019 11:48:44 +0100
+        id fiW3il4DoapzpfiW4idvX4; Fri, 13 Dec 2019 11:49:48 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1576234124; bh=q9WCQnSJK0dN1iObZCsSbodAkz0ILsCmdtkb7tjUKaY=;
+        t=1576234188; bh=2UlMWZHoPHcK8XZXSg38vbhHauhnz7+dw35kMpPmqAE=;
         h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=Wma0y7NwrK71vqGoVGSFFCCwPQSs7OFD042So2JJDYx8V2UqPCAghVl+z5bTp0rmX
-         CkI3RxjoeBb4+lK/Uotm6KdvI2tUtkWmKZ2YgFEuVz7WWr1hgTPTAI6TQ9Omkgaj80
-         nck8tBGGm442E56es/fOvHouE2iW1Skg5AjxdEtChwLSE7OzZlyNogyC9TzKBuKkme
-         V/l5AQrMre0jAo0bHsuI5immXmVGf0bR8P1cp958PeHogMw5z4s7CSJSQM+75R9qG8
-         5Qjr/ugQ7BuTCPc89mQjJHlsOX425ZaqcoJ85E97rXHDW3/op5SIyupzx7vjDqFvo5
-         j3AtWpRxOLrzA==
+        b=oOjsDZ6ORxX4CosClBZYSk4ubA1qjbRNR5LdmmbrfDK6qVfoe4uqNU/e9iTJ35QEw
+         LBy9ixrPwVmZVIap5VOPhJ5bnjTA1kWlvzLhxDZKB4D6FQqk8w7PXDVkqMEnEiUlOE
+         JhMpWIU66chiVDsVKTL4+u7lkOVSaR6aPDTup0M3tNFHC/yzVMQPAsjJhkOITX8gbN
+         9YKyHEykb1SXJx4D+omWJYjFrouJg9F14wdMxu1kjolDoIrEOaRh+/+KMLpsEryniE
+         HLHLH9r/SLga2Qt+0Pd9vzgvWleEFjYi2DRO0u8/kpAWl5rx30JJaCOS/BMffUGDQ2
+         ELWToqyhAdX3A==
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Eugen Hristev <Eugen.Hristev@microchip.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.6] Various fixes/enhancements
-Message-ID: <e47a67f8-da88-b0af-d59a-bf54f28e56c1@xs4all.nl>
-Date:   Fri, 13 Dec 2019 11:48:42 +0100
+Subject: [GIT PULL FOR v5.6] Fixes and add hantro csc postproc
+Message-ID: <ffd3da67-83c4-bb65-c286-6d33a3d5100c@xs4all.nl>
+Date:   Fri, 13 Dec 2019 11:49:46 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfJuOf6iWT4V2PE3NjVY5XmI2GfcNbW/+2rv5P2IvlZjb7L7TSElX+IpK289s/f4ZS9zjYDxDL4lPZBd/etkxFpYVsuTw2gT7tXYTLbRqgBFtP2o2apHa
- OWhzGpemHH2HOa72OesEW9G4WsaNzhRloVkBZfNTOMy1Fzb+dnOj/J0wPn5dok3hZ4+t+jmf2C+k80TEOsXCkrjSOafGxduGUBYwr7t7uejiBfZlTsUzrE37
- KrOHzZr9gdttWqLq3NYoIwe5G0ns5rA8hnQ5zM1PIkmvVe1sqCftxkOkx2IVUzTmzMXSxKc3U1pEyEUSmt+TN90k0TQDhtmPoRz799n1+KObZXA+hwz45m+s
- iSffvKuazKwWhMm5yIBJNFqRppYm+b81H+OWIozxBFXA1Ko/c6c=
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfOqmVr1nfRCEechMNZmeOO6aUK4jCQZtbc5adGYgTsUAwyrF8SmfOXTumVkbyZQa5gwEcvmE264uCGsagGnD+nxo74CyUG4LdcRqCI5vx0Oi2C8RMBe2
+ Fcvw8TONg4sLUXG341HbowB5GO4sfmwpEaF+2drJg2ylN0Z9E5fcAGkSAtp5subG/TrU01ogC8VrJg/e71ZJwAHj1wa1PxZ4PLUJJhPYc0St/o+gE63L1jbX
+ ZDo32532LcTCYSJuN4uHVhE0a80sa29/njHPRJTh2wS59JqO0E+if3/IKVzw5SJjrJAFyccBdAaVj831/5pymA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -65,85 +62,46 @@ The following changes since commit da090bf60370c9ad6ede4e76adbf37ce79b84791:
 
 are available in the Git repository at:
 
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.6d
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.6e
 
-for you to fetch changes up to 425738b4771df9c973bf8d233835b198ba141677:
+for you to fetch changes up to 466c9caa509745a170b337194675c2a191c91934:
 
-  media: vimc: Implement get/set selection in sink (2019-12-13 11:37:05 +0100)
+  media: v4l2-device.h: Explicitly compare grp{id,mask} to zero in v4l2_device macros (2019-12-13 11:22:18 +0100)
 
 ----------------------------------------------------------------
 Tag branch
 
 ----------------------------------------------------------------
-Eugen Hristev (8):
-      media: atmel: atmel-isc-base: allow 8 bit direct dump
-      media: atmel: atmel-isc-base: add support for Y10 format
-      media: atmel: atmel-isc-base: properly initialize pad_cfg
-      media: atmel: atmel-isc-base: fix enum calls default format
-      media: atmel: atmel-isc-base: initialize the try_crop for the pads in try_fmt
-      media: atmel: atmel-isi: add support for mono sensors, GRAY and Y16
-      media: atmel: atmel-isi: properly initialize pad_cfg
-      media: atmel: atmel-isi: initialize the try_crop for the pads in try_fmt
+Dragos Bogdan (1):
+      media: adv7604: extend deep color mode to ADV7611
 
-Guilherme Alcarde Gallo (1):
-      media: vimc: Implement get/set selection in sink
+Ezequiel Garcia (4):
+      media: vidioc-enum-fmt.rst: clarify format preference
+      media: hantro: Cleanup format negotiation helpers
+      hantro: Rename {prepare,finish}_run to {start,end}_prepare_run
+      media: hantro: Support color conversion via post-processing
 
-Hans Verkuil (1):
-      pixfmt-tch-td16/tu16.rst: document that this is little endian
+Nathan Chancellor (1):
+      media: v4l2-device.h: Explicitly compare grp{id,mask} to zero in v4l2_device macros
 
-Hirokazu Honda (1):
-      media: mtk-vcodec: Remove extra area allocation in an input buffer on encoding
-
-Maxime Jourdan (1):
-      media: meson: vdec: add g12a platform
-
-Neil Armstrong (4):
-      dt-bindings: media: amlogic,vdec: convert to yaml
-      dt-bindings: media: amlogic,gx-vdec: add bindings for G12A family
-      dt-bindings: media: amlogic,gx-vdec: add bindings for SM1 family
-      media: meson: vdec: add sm1 platform
-
-Niklas Söderlund (2):
-      dt-bindings: rcar-vin: Remove paragraph about aliases
-      dt-bindings: rcar-vin: Document compatibility string for R8A77470
-
-Philipp Zabel (6):
-      media: coda: do not skip finish_run if aborting
-      media: coda: jpeg: merge Huffman table bits and values
-      media: coda: jpeg: add JPEG register definitions for CODA960
-      media: coda: jpeg: add CODA960 JPEG encoder support
-      media: coda: remove redundant platform_get_irq error message
-      media: coda: avoid hardware lockups with more than 13 capture buffers
-
-Rui Miguel Silva (1):
-      media: imx7-mipi-csis: remove subdev_notifier
-
-Wei Yongjun (1):
-      media: sun8i: Remove redundant dev_err call in deinterlace_probe()
-
- Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml | 141 ++++++++
- Documentation/devicetree/bindings/media/amlogic,vdec.txt     |  72 ----
- Documentation/devicetree/bindings/media/renesas,vin.txt      |   4 +-
- Documentation/media/uapi/v4l/pixfmt-tch-td16.rst             |  34 +-
- Documentation/media/uapi/v4l/pixfmt-tch-tu16.rst             |  34 +-
- drivers/media/platform/atmel/atmel-isc-base.c                |  94 ++++--
- drivers/media/platform/atmel/atmel-isi.c                     |  42 ++-
- drivers/media/platform/atmel/atmel-isi.h                     |   2 +
- drivers/media/platform/coda/coda-bit.c                       |  29 +-
- drivers/media/platform/coda/coda-common.c                    |  45 ++-
- drivers/media/platform/coda/coda-jpeg.c                      | 746 ++++++++++++++++++++++++++++++++++++++++--
- drivers/media/platform/coda/coda.h                           |   3 +
- drivers/media/platform/coda/coda_regs.h                      |  83 +++++
- drivers/media/platform/coda/trace.h                          |  10 +
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c           |   9 +-
- drivers/media/platform/sunxi/sun8i-di/sun8i-di.c             |   5 +-
- drivers/media/platform/vimc/vimc-scaler.c                    | 166 +++++++++-
- drivers/staging/media/imx/imx7-mipi-csis.c                   |   3 -
- drivers/staging/media/meson/vdec/vdec.c                      |  16 +-
- drivers/staging/media/meson/vdec/vdec.h                      |   1 +
- drivers/staging/media/meson/vdec/vdec_1.c                    |  29 +-
- drivers/staging/media/meson/vdec/vdec_platform.c             |  60 ++++
- drivers/staging/media/meson/vdec/vdec_platform.h             |   4 +
- 23 files changed, 1427 insertions(+), 205 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/amlogic,vdec.txt
+ Documentation/media/uapi/v4l/vidioc-enum-fmt.rst       |   4 +-
+ drivers/media/i2c/adv7604.c                            |  32 +++++++----
+ drivers/staging/media/hantro/Makefile                  |   1 +
+ drivers/staging/media/hantro/hantro.h                  |  66 ++++++++++++++++++++--
+ drivers/staging/media/hantro/hantro_drv.c              |  11 +++-
+ drivers/staging/media/hantro/hantro_g1_h264_dec.c      |   4 +-
+ drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c     |   6 +-
+ drivers/staging/media/hantro/hantro_g1_regs.h          |  53 ++++++++++++++++++
+ drivers/staging/media/hantro/hantro_g1_vp8_dec.c       |   6 +-
+ drivers/staging/media/hantro/hantro_h1_jpeg_enc.c      |   4 +-
+ drivers/staging/media/hantro/hantro_h264.c             |   2 +-
+ drivers/staging/media/hantro/hantro_hw.h               |  17 +++++-
+ drivers/staging/media/hantro/hantro_postproc.c         | 142 ++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/staging/media/hantro/hantro_v4l2.c             | 109 +++++++++++++++++++++++++------------
+ drivers/staging/media/hantro/rk3288_vpu_hw.c           |  10 ++++
+ drivers/staging/media/hantro/rk3399_vpu_hw_jpeg_enc.c  |   4 +-
+ drivers/staging/media/hantro/rk3399_vpu_hw_mpeg2_dec.c |   4 +-
+ drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c   |   4 +-
+ include/media/v4l2-device.h                            |  12 ++--
+ 19 files changed, 411 insertions(+), 80 deletions(-)
+ create mode 100644 drivers/staging/media/hantro/hantro_postproc.c
