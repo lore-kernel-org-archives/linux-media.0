@@ -2,95 +2,84 @@ Return-Path: <SRS0=EP8b=2D=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D09AC33CA5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9678C3498C
 	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 20:37:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4304524756
+	by mail.kernel.org (Postfix) with ESMTP id E94D024715
 	for <linux-media@archiver.kernel.org>; Fri, 13 Dec 2019 20:37:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="fAowkLwb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727487AbfLMNaO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Dec 2019 08:30:14 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39405 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727489AbfLMNaC (ORCPT
+        id S1727415AbfLMNcC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Dec 2019 08:32:02 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57716 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727256AbfLMNcC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Dec 2019 08:30:02 -0500
-Received: by mail-wr1-f68.google.com with SMTP id y11so6663408wrt.6
-        for <linux-media@vger.kernel.org>; Fri, 13 Dec 2019 05:30:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=RihAxbyPf1sWOBRmJF5IKCF0zpUINaJgm3m7kfkEZZY=;
-        b=fAowkLwbvcaMDwhICxvEuVnjEW+/HgTUaD7s4A/Xn36fZT0rVKZ4y7m1k0IE2WY4yG
-         HpLmm5baYQ5QfDQDu1l10QecPEfxHOTfdJPIpLnZ51SFJQ4h0v/1XCERjTz+Lewf5W0S
-         RoqxDd5K94lovPJJYQIzqqsWkO4Qd8QDymklzOooZuJrb9LpQFXyXk5+KLfphgJeKNY/
-         rmGC7TI6Wv2mdHg7NC3Q0x6uxP4dOZEwaNz7COjP6srZrTQrT36UqZt2d1GSZdsWDte9
-         eJDuz/WkglAvJY9CbMC40XjUUkcqgFwuOeInr59Xp2kvFvbrbOsB5eGqYlqUMV+MDr2Z
-         HD7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=RihAxbyPf1sWOBRmJF5IKCF0zpUINaJgm3m7kfkEZZY=;
-        b=OCKqrt+41K0bMxgavpxBDBwmmxx5ukrJGNfMbpAwLTVYEBQxpkzqThCjV9cpF0C6/l
-         +H399gLJLVaT9MqwKFw8MGSvS0zLEQcNteLUTnBpzjTymWFz12ol+3SpLGESKsCll60l
-         rt/Q7a75uER+RrX3IxHv4BWvxhN0IQ0kKgEUKZZZkcgunrf3Uh1wqIGgQZ1C3/SIG1Hx
-         Zgds7wUUB3kuf5Np5roQrwZYG9wY/e1WDJCg2heW0T9CvkbSGxFTLE06r3dl+SgA7LLN
-         KkZuKbtDj08FA78TtS+K7RxGZ1je72N0juAmjcZGy+Lr5Lmg+oZ6i7qESlSfhry29F6M
-         2hzw==
-X-Gm-Message-State: APjAAAXhzyqXfkoEB71BafuxF/q+fQAhxJRhw8dMi6iZQkJ+Y2vfvUGG
-        LBIzDmu0Kv++tiAjq9YFh8HZUQ==
-X-Google-Smtp-Source: APXvYqwNnx7cmRRsx41+o7uRC5/UJmd0OtDKCdpnC8FmFH+IVjL9ZtYfSJJwPHF91ntNAr9l0PWr/w==
-X-Received: by 2002:adf:e6c6:: with SMTP id y6mr12978031wrm.284.1576243800998;
-        Fri, 13 Dec 2019 05:30:00 -0800 (PST)
-Received: from localhost.localdomain ([2a01:cb1d:6e7:d500:82a9:347a:43f3:d2ca])
-        by smtp.gmail.com with ESMTPSA id n3sm10540543wmc.27.2019.12.13.05.29.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2019 05:30:00 -0800 (PST)
-From:   Guillaume La Roque <glaroque@baylibre.com>
-To:     narmstrong@baylibre.com, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, khilman@baylibre.com,
-        devicetree@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] arm64: dts: meson-g12g12: add syscon phandle in cec node
-Date:   Fri, 13 Dec 2019 14:29:55 +0100
-Message-Id: <20191213132956.11074-3-glaroque@baylibre.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191213132956.11074-1-glaroque@baylibre.com>
-References: <20191213132956.11074-1-glaroque@baylibre.com>
+        Fri, 13 Dec 2019 08:32:02 -0500
+Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 7BC60292D3E;
+        Fri, 13 Dec 2019 13:32:00 +0000 (GMT)
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>, kernel@collabora.com,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Subject: [PATCH 0/3] media: rkvdec: Add a VP9 backend
+Date:   Fri, 13 Dec 2019 14:31:54 +0100
+Message-Id: <20191213133157.105554-1-boris.brezillon@collabora.com>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-add syscon phandle in cec node to activate wakeup support
+Hello,
 
-Tested-by: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
----
- arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+This patch series adds controls for stateless VP9 decoders plus a VP9
+backend to the rkvdec driver showing how those controls can be used in
+a real implementation. This means this series depends on the rkvdec
+series posted here [1].
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-index 7fabc8d9654a..98c6a1d1d035 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-@@ -1899,6 +1899,7 @@
- 				interrupts = <GIC_SPI 203 IRQ_TYPE_EDGE_RISING>;
- 				clocks = <&clkc_AO CLKID_AO_CTS_OSCIN>;
- 				clock-names = "oscin";
-+				amlogic,ao-sysctrl = <&rti>;
- 				status = "disabled";
- 			};
- 
+Regards,
+
+Boris
+
+[1]https://patchwork.linuxtv.org/project/linux-media/list/?series=1483
+
+Boris Brezillon (3):
+  media: v4l2-ctrls: Add the [__]v4l2_ctrl_s_ctrl_compound() helpers
+  media: uapi: Add VP9 stateless decoder controls
+  media: rkvdec: Add the VP9 backend
+
+ Documentation/media/uapi/v4l/biblio.rst       |   10 +
+ .../media/uapi/v4l/ext-ctrls-codec.rst        |  584 ++++++
+ drivers/media/v4l2-core/v4l2-ctrls.c          |  258 +++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+ drivers/staging/media/rkvdec/Makefile         |    2 +-
+ drivers/staging/media/rkvdec/rkvdec-vp9.c     | 1572 +++++++++++++++++
+ drivers/staging/media/rkvdec/rkvdec.c         |   56 +-
+ drivers/staging/media/rkvdec/rkvdec.h         |    6 +
+ include/media/v4l2-ctrls.h                    |   44 +
+ include/media/vp9-ctrls.h                     |  515 ++++++
+ 10 files changed, 3044 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/staging/media/rkvdec/rkvdec-vp9.c
+ create mode 100644 include/media/vp9-ctrls.h
+
 -- 
-2.17.1
+2.23.0
 
