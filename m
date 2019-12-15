@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94C61C43603
-	for <linux-media@archiver.kernel.org>; Sun, 15 Dec 2019 16:59:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C90DC2D0CB
+	for <linux-media@archiver.kernel.org>; Sun, 15 Dec 2019 17:00:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6C59C24679
-	for <linux-media@archiver.kernel.org>; Sun, 15 Dec 2019 16:59:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 43D0A24671
+	for <linux-media@archiver.kernel.org>; Sun, 15 Dec 2019 17:00:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576429198;
-	bh=m5GPdarvxrtjsXfbUyU7e3PQz2NgpIQ560CvjxxvtEw=;
+	s=default; t=1576429202;
+	bh=EZHv3FHkZdfny3NSAdab5tp7Y0RDcEfbHiuBOD3ZxQo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=sAocgfjrsSPDdWTj8x/UaLgmmUWwXcgGuOfMXZuGX35oZuVLe9dBDFaYj6UbPXOqT
-	 r/xWO3nUQyP5mcuCW4UPDVw2dVYDoWvufrxRAY919UVb5T0oeIE/48Y5wkhwPRQwgA
-	 /Z0NqbyijDOELspJ1tTE6Al+yXmU/EZrF4ZKUHVU=
+	b=cYwqm4WxGuTkToJVfJ4HLgCMv16NTHdqgiMnqnhk/NP9rnpBD4pAY6i4jbVE2kO+v
+	 /d36+O873YlCqkLBQgp5jD+Lam+grUucC9HO8WvXQqYXxMPlTM/SRK7b7jbmTqNSTg
+	 3FSLLTx/Z2Ntg85dPFL7zUoPVub0QXHhEeVwbZrg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726911AbfLOQ75 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 15 Dec 2019 11:59:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55262 "EHLO mail.kernel.org"
+        id S1726691AbfLOQ7c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 15 Dec 2019 11:59:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55142 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726637AbfLOQ7d (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 15 Dec 2019 11:59:33 -0500
+        id S1726537AbfLOQ7c (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 15 Dec 2019 11:59:32 -0500
 Received: from wens.tw (mirror2.csie.ntu.edu.tw [140.112.30.76])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F1ED7246AB;
+        by mail.kernel.org (Postfix) with ESMTPSA id 8BAFA24676;
         Sun, 15 Dec 2019 16:59:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576429172;
-        bh=m5GPdarvxrtjsXfbUyU7e3PQz2NgpIQ560CvjxxvtEw=;
+        s=default; t=1576429171;
+        bh=EZHv3FHkZdfny3NSAdab5tp7Y0RDcEfbHiuBOD3ZxQo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FBfdymPna5qbjaty8485LW2z9uHzMwnu9A50cgCugkkgPnwnqZTuZLMAYFFazwb/I
-         6/9hHMyxaSzhVCW39FqIabcI7XDijrgIRkhsX4LeJbTTpbPg5besqa6/Z3usQkY3dt
-         dmFnfm2RRY+ciO+eprRDIY71e2cqzuzS1e3gI9MM=
+        b=xwiYOsuzNAWmNvP5nIpflWhBotg3GwseugwEVquZTU9FO2v2x4qdUzaotd9+R8Ibn
+         lEkoZUXeAgGIVD6zoRRX2wwffcooRSlf5d0MTvnW7qG5mCQfXs1Yeojuh4eGsbOayX
+         SA6PinGY+41TiMJXEbnQkX01H4aGDHi35+chg2j0=
 Received: by wens.tw (Postfix, from userid 1000)
-        id 97FC35FF78; Mon, 16 Dec 2019 00:59:26 +0800 (CST)
+        id 6B3535FD8D; Mon, 16 Dec 2019 00:59:26 +0800 (CST)
 From:   Chen-Yu Tsai <wens@kernel.org>
 To:     Maxime Ripard <mripard@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -49,9 +49,9 @@ To:     Maxime Ripard <mripard@kernel.org>,
 Cc:     Chen-Yu Tsai <wens@kernel.org>, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>
-Subject: [PATCH 14/14] [DO NOT MERGE] ARM: dts: sun8i-r40: bananapi-m2-ultra: Enable OV5640 camera
-Date:   Mon, 16 Dec 2019 00:59:24 +0800
-Message-Id: <20191215165924.28314-15-wens@kernel.org>
+Subject: [PATCH 08/14] ARM: dts: sun7i: Add CSI1 controller and pinmux options
+Date:   Mon, 16 Dec 2019 00:59:18 +0800
+Message-Id: <20191215165924.28314-9-wens@kernel.org>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191215165924.28314-1-wens@kernel.org>
 References: <20191215165924.28314-1-wens@kernel.org>
@@ -64,115 +64,70 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Chen-Yu Tsai <wens@csie.org>
 
-Bananapi offers a small OV5640 based camera module, attached via an FPC
-connector.
+The CSI controller driver now supports the second CSI controller, CSI1.
 
-Add the related regulator constraints, and hook everything up.
+Add a device node for it. Pinmuxing options for the MCLK output, the
+standard 8-bit interface, and a secondary 24-bit interface are included.
 
 Signed-off-by: Chen-Yu Tsai <wens@csie.org>
 ---
- .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ arch/arm/boot/dts/sun7i-a20.dtsi | 36 ++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-index 42d62d1ba1dc..86183d40c7af 100644
---- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-+++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-@@ -113,6 +113,24 @@ &ahci {
- 	status = "okay";
- };
+diff --git a/arch/arm/boot/dts/sun7i-a20.dtsi b/arch/arm/boot/dts/sun7i-a20.dtsi
+index 8aebefd6accf..92b5be97085d 100644
+--- a/arch/arm/boot/dts/sun7i-a20.dtsi
++++ b/arch/arm/boot/dts/sun7i-a20.dtsi
+@@ -729,6 +729,17 @@ ohci1: usb@1c1c400 {
+ 			status = "disabled";
+ 		};
  
-+&csi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&csi0_8bits_pins>;
-+	status = "okay";
-+
-+	port {
-+		/* Parallel bus endpoint */
-+		csi0_from_ov5640: endpoint {
-+			remote-endpoint = <&ov5640_to_csi0>;
-+			bus-width = <8>;
-+			hsync-active = <1>; /* Active high */
-+			vsync-active = <1>; /* Active high */
-+			data-active = <1>;  /* Active high */
-+			pclk-sample = <1>;  /* Rising */
++		csi1: csi@1c1d000 {
++			compatible = "allwinner,sun7i-a20-csi1",
++				     "allwinner,sun4i-a10-csi1";
++			reg = <0x01c1d000 0x1000>;
++			interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_AHB_CSI1>, <&ccu CLK_DRAM_CSI1>;
++			clock-names = "bus", "ram";
++			resets = <&ccu RST_CSI1>;
++			status = "disabled";
 +		};
-+	};
-+};
 +
- &de {
- 	status = "okay";
- };
-@@ -164,6 +182,37 @@ axp22x: pmic@34 {
+ 		spi3: spi@1c1f000 {
+ 			compatible = "allwinner,sun4i-a10-spi";
+ 			reg = <0x01c1f000 0x1000>;
+@@ -802,6 +813,31 @@ csi0_clk_pin: csi-clk-pin {
+ 				function = "csi0";
+ 			};
  
- #include "axp22x.dtsi"
- 
-+&i2c4 {
-+	status = "okay";
-+
-+	ov5640: camera@3c {
-+		compatible = "ovti,ov5640";
-+		reg = <0x3c>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&csi0_mclk_pin>;
-+		clocks = <&ccu CLK_CSI0_MCLK>;
-+		clock-names = "xclk";
-+
-+		reset-gpios = <&pio 8 7 GPIO_ACTIVE_LOW>; /* PI7 */
-+		powerdown-gpios = <&pio 8 6 GPIO_ACTIVE_HIGH>; /* PI6 */
-+		AVDD-supply = <&reg_aldo1>;
-+		DOVDD-supply = <&reg_eldo1>;
-+		DVDD-supply = <&reg_eldo2>;
-+
-+		port {
-+			ov5640_to_csi0: endpoint {
-+				remote-endpoint = <&csi0_from_ov5640>;
-+				bus-width = <8>;
-+				data-shift = <2>;
-+				hsync-active = <1>; /* Active high */
-+				vsync-active = <1>; /* Active high */
-+				data-active = <1>;  /* Active high */
-+				pclk-sample = <1>;  /* Rising */
++			/omit-if-no-ref/
++			csi1_8bits_pg_pins: csi1-8bits-pg-pins {
++				pins = "PG0", "PG2", "PG3", "PG4", "PG5",
++				       "PG6", "PG7", "PG8", "PG9", "PG10",
++				       "PG11";
++				function = "csi1";
 +			};
-+		};
-+	};
-+};
 +
- &mmc0 {
- 	vmmc-supply = <&reg_dcdc1>;
- 	bus-width = <4>;
-@@ -209,6 +258,12 @@ &pio {
- 	vcc-pg-supply = <&reg_dldo1>;
- };
- 
-+&reg_aldo1 {
-+	regulator-name = "csi-avdd";
-+	regulator-min-microvolt = <2800000>;
-+	regulator-max-microvolt = <2800000>;
-+};
++			/omit-if-no-ref/
++			csi1_24bits_ph_pins: csi1-24bits-ph-pins {
++				pins = "PH0", "PH1", "PH2", "PH3", "PH4",
++				       "PH5", "PH6", "PH7", "PH8", "PH9",
++				       "PH10", "PH11", "PH12", "PH13", "PH14",
++				       "PH15", "PH16", "PH17", "PH18", "PH19",
++				       "PH20", "PH21", "PH22", "PH23", "PH24",
++				       "PH25", "PH26", "PH27";
++				function = "csi1";
++			};
 +
- &reg_aldo2 {
- 	regulator-min-microvolt = <2500000>;
- 	regulator-max-microvolt = <2500000>;
-@@ -289,6 +344,18 @@ &reg_dldo4 {
- 	regulator-name = "vdd2v5-sata";
- };
- 
-+&reg_eldo1 {
-+	regulator-name = "csi-iovcc";
-+	regulator-min-microvolt = <2800000>;
-+	regulator-max-microvolt = <2800000>;
-+};
++			/omit-if-no-ref/
++			csi1_clk_pg_pin: csi1-clk-pg-pin {
++				pins = "PG1";
++				function = "csi1";
++			};
 +
-+&reg_eldo2 {
-+	regulator-name = "csi-dvdd";
-+	regulator-min-microvolt = <1500000>;
-+	regulator-max-microvolt = <1500000>;
-+};
-+
- &reg_eldo3 {
- 	regulator-min-microvolt = <1200000>;
- 	regulator-max-microvolt = <1200000>;
+ 			/omit-if-no-ref/
+ 			emac_pa_pins: emac-pa-pins {
+ 				pins = "PA0", "PA1", "PA2",
 -- 
 2.24.0
 
