@@ -2,60 +2,59 @@ Return-Path: <SRS0=N/L2=2F=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 332C5C43603
-	for <linux-media@archiver.kernel.org>; Sun, 15 Dec 2019 18:09:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABEDBC2D0CC
+	for <linux-media@archiver.kernel.org>; Sun, 15 Dec 2019 18:09:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 10BF42467F
-	for <linux-media@archiver.kernel.org>; Sun, 15 Dec 2019 18:09:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EFCE2467E
+	for <linux-media@archiver.kernel.org>; Sun, 15 Dec 2019 18:09:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HFvqKztJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bipom6FU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbfLOSJk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 15 Dec 2019 13:09:40 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:34560 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbfLOSJb (ORCPT
+        id S1726351AbfLOSJa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 15 Dec 2019 13:09:30 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34558 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726232AbfLOSJa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 15 Dec 2019 13:09:31 -0500
-Received: by mail-lj1-f194.google.com with SMTP id m6so4251861ljc.1;
-        Sun, 15 Dec 2019 10:09:29 -0800 (PST)
+        Sun, 15 Dec 2019 13:09:30 -0500
+Received: by mail-lj1-f196.google.com with SMTP id m6so4251812ljc.1;
+        Sun, 15 Dec 2019 10:09:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VmZvyuWnyMjyosw1/AewOLN2QYH7RAhMY4SlplBdnDg=;
-        b=HFvqKztJi0rfRz/czGQzT3+JIaAebM6DOwS2JXt1X1H4Q2cn5kVkkMylVSd3gB2BUP
-         nqFOSB/7qgNP5EDrQSb+Da99cxuh/WgBbgKPz9aF0d5RVQU3LrAQ9ZX5aZzkngxaR/g8
-         MA1AlbC55gEFVk4zQye7K+QFCmT528fAsO3jDf1LxmSzQPys2NHsxt6f1J2sQEZSpv8A
-         ypPgr6jYlFVPvnVorGLcln0EoOEUPGv60xRg+TidEwWyfGwdZW+MBwAQWJOqhjcdSsAq
-         3lqlGy0JvZKqpchTurnZhYhXHzXOfEG6Yh1+9KGPLTb3NaGikdhefaaxFmv84X29Mffl
-         ycXw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6BwnLgIw1O6Pl9DGM8GPZ2MRa8LW0r8gaeFDwLz4cXY=;
+        b=Bipom6FUC0WO3TCqvzVyO12ZkoPXYR/rXIPD3qGKXxWhqDR3zF/bPgqWf5ivb0Ivdy
+         fUjjMP9/DSFCZRptRknJoupOgk+MpqJYJK9bl7Kxc/+h78uhAiPS9wctOZBk+uW75su8
+         WwPUXrh4VI9NKsRn5zm5lA7yILGTNtWQV7d0IudazRL6qZU1rqocy7TKwwpa2Fa3ezO4
+         Dk+iPMAwhXuAGQvWzI3pa3iJKHKp5yKAZWlcbfbk+g8Axk/843n7tK5MsC42mshuoob9
+         j/s7mD8XMIyOXNufpQ77/lzWcFsC2T3crt7Fk/DG60XN113q8pixbjtlo+7hV+sUoE8J
+         On8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VmZvyuWnyMjyosw1/AewOLN2QYH7RAhMY4SlplBdnDg=;
-        b=NU5uYguz4uESeCjs2inXCf5/TXTrjXTBqc1hdy9521kEWf+ROVcsNitxtpPG79rMPE
-         ViFE9zcUnhKqKRfQuU4nfBWO8ozKuiEtqOdyP4EVr6UrUD7g6Wp9h4GOdA84D7u/rQ66
-         PTw5F+IzcgCxa2wJWnsyphRaU6uvSP1WLPjmreoRNJt9S1G8OhLreiVV6WZKwlxDaUq+
-         9Xw7RALs77/zYl79/Nd5R0A40Xmg7dWUNCT5XC1MrTNWpBi1gLfLGxrI+9zkQ+3rKD83
-         TjPqlLYiuwfZ2ct0Q5EAVluwSDZA5Bj98LJjGbY9kVohdRmV0t+sMQc2L74mWbl1yLKf
-         fdAA==
-X-Gm-Message-State: APjAAAVp2bKAXfUdjAUMnaacbyBp0G3DXU8ydLmcwGsDpBolEMSNaVPt
-        LktWh4ocMK1ipdD3aO1yO/w=
-X-Google-Smtp-Source: APXvYqysxGsK6/xpWY5BjP3RIq3vp7cdqPyr4DSYQnG/nA7yMy23kX+zxHuLmwh9De5Qpjc4z7HDHQ==
-X-Received: by 2002:a2e:3e08:: with SMTP id l8mr17187483lja.236.1576433369351;
-        Sun, 15 Dec 2019 10:09:29 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6BwnLgIw1O6Pl9DGM8GPZ2MRa8LW0r8gaeFDwLz4cXY=;
+        b=si/W6NlZoVegOXwqX8/NqdBBTnaZIFxfLxNHT1Q6pZkwUK9eb2rqgVEsLNcv9hyeby
+         iFddpXxFIqvrNsfczVfMeVHp8d8xbz/RasckzBkpdrrSHJ4MHOaJ1WrONNTvoibimWJp
+         HXkWG/WWQ/yv78xy1Veg4PNr8mMEwKt/UqiiEa+ecjdBMnbjR614RSNjhy005BP3pkNK
+         f4UFko5PPG3/AFCQrekQo4mUSSl2RZAiR88WFqCAP4blSOl8DMPqjmAXkvbkWiDpJufD
+         cF5VYEnMrZLOgPPhtGmfvF0duROLJ4O6qiZi9dxjFO69EV20MVGfS9jQ+wzg+/soF5BG
+         D5hg==
+X-Gm-Message-State: APjAAAURZdHC2sKKzGmTDmgaGz086u+zkFsnzv5Kj0JZCRpljjtf5ySV
+        GpSuN+Y0U4g2yY3VvYecdH0=
+X-Google-Smtp-Source: APXvYqzBE614d51TKdCJodABHNuKxNyNlbBjrp69WJZ5wESzrJnGB5fpNG1iDS6jv04Zq0cO+bASSg==
+X-Received: by 2002:a2e:99cd:: with SMTP id l13mr16798134ljj.243.1576433367539;
+        Sun, 15 Dec 2019 10:09:27 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id t27sm8871875ljd.26.2019.12.15.10.09.28
+        by smtp.gmail.com with ESMTPSA id t27sm8871875ljd.26.2019.12.15.10.09.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Dec 2019 10:09:28 -0800 (PST)
+        Sun, 15 Dec 2019 10:09:26 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -63,12 +62,10 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/3] media: staging: tegra-vde: Sort headers alphabetically
-Date:   Sun, 15 Dec 2019 21:07:51 +0300
-Message-Id: <20191215180752.5408-3-digetx@gmail.com>
+Subject: [PATCH v1 0/3] Tegra VDE: Minor code clean up
+Date:   Sun, 15 Dec 2019 21:07:49 +0300
+Message-Id: <20191215180752.5408-1-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191215180752.5408-1-digetx@gmail.com>
-References: <20191215180752.5408-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -76,30 +73,22 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Keep the alphabetical order for consistency.
+Hello,
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/staging/media/tegra-vde/vde.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This small series just makes a minor clean up of the driver's code,
+addressing COMPILE_TEST build problem that was reported sometime ago.
 
-diff --git a/drivers/staging/media/tegra-vde/vde.h b/drivers/staging/media/tegra-vde/vde.h
-index d369f1466bc7..5561291b0c88 100644
---- a/drivers/staging/media/tegra-vde/vde.h
-+++ b/drivers/staging/media/tegra-vde/vde.h
-@@ -10,11 +10,11 @@
- 
- #include <linux/completion.h>
- #include <linux/dma-direction.h>
-+#include <linux/iova.h>
- #include <linux/list.h>
- #include <linux/miscdevice.h>
- #include <linux/mutex.h>
- #include <linux/types.h>
--#include <linux/iova.h>
- 
- struct clk;
- struct dma_buf;
+Dmitry Osipenko (3):
+  media: staging: tegra-vde: Select IOVA unconditionally in Kconfig
+  media: staging: tegra-vde: Sort headers alphabetically
+  media: staging: tegra-vde: Use __maybe_unused attribute instead of
+    ifdef
+
+ drivers/staging/media/tegra-vde/Kconfig | 2 +-
+ drivers/staging/media/tegra-vde/vde.c   | 6 ++----
+ drivers/staging/media/tegra-vde/vde.h   | 2 +-
+ 3 files changed, 4 insertions(+), 6 deletions(-)
+
 -- 
 2.24.0
 
