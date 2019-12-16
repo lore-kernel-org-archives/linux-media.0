@@ -2,115 +2,78 @@ Return-Path: <SRS0=j3BJ=2G=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B47E9C2D0C3
-	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 15:37:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D312EC2D0BF
+	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 15:52:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4492820717
-	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 15:37:30 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="qfEFrHlB"
+	by mail.kernel.org (Postfix) with ESMTP id A9FC0206EC
+	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 15:52:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728286AbfLPPh3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Dec 2019 10:37:29 -0500
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:42993 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728234AbfLPPh3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Dec 2019 10:37:29 -0500
-Received: from [IPv6:2001:983:e9a7:1:319d:6a65:b2d0:e9e9]
- ([IPv6:2001:983:e9a7:1:319d:6a65:b2d0:e9e9])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id gsR3i0rvIGyJwgsR4i8Jux; Mon, 16 Dec 2019 16:37:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1576510647; bh=gtdS5UOT8c4Yjl2uuM8f04Ct7MToS3O6I26eVwciy8w=;
-        h=From:Subject:To:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=qfEFrHlBSrNMLVpoy3fIdjgiscUvr7tHUmhXSuXZK24SZzseQiRiqZJdT2b0/9sNl
-         Xm9P6CJ7htY2dAy6UlY6JClq3yrkJFrBiPMHsTam8h9Jmol5Pi4Vwd1ZjuD8fkGoBA
-         dWpgNopbf3qUC9s7XFM/nvC0HkWQv9rkmSMHSLemRO6WRRXgYJDEk4h53VJTNdx7mW
-         ZP62H4Hetlx5mKe+CMDYq1Eq94UsoyozyTtUmPjGittLLiqDPyLQcE+743YD99Sivf
-         qCOOYOZKDuUVU5ThN1MQR7Y1fg7V9AOdRcGu/+zq07g8qpEVDKY9HF2ZCQ8TlcDQnn
-         dyw8IJOfzAjBw==
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.6] y2038 safety in v4l2
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>
-Message-ID: <362c4787-e114-1b90-66e2-f9a1cbafe567@xs4all.nl>
-Date:   Mon, 16 Dec 2019 16:37:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728666AbfLPPwM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Dec 2019 10:52:12 -0500
+Received: from sauhun.de ([88.99.104.3]:42006 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728642AbfLPPwD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 16 Dec 2019 10:52:03 -0500
+Received: from localhost (p54B33297.dip0.t-ipconnect.de [84.179.50.151])
+        by pokefinder.org (Postfix) with ESMTPSA id 3E9B72C2DB8;
+        Mon, 16 Dec 2019 16:52:02 +0100 (CET)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-media@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND 15/16] media: usb: dvb-usb: dw2102: convert to use i2c_new_client_device()
+Date:   Mon, 16 Dec 2019 16:51:42 +0100
+Message-Id: <20191216155146.8803-16-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191216155146.8803-1-wsa+renesas@sang-engineering.com>
+References: <20191216155146.8803-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfNfmlpi+KU+o1aO5LPfhKU8TFJoqT6Mu41vyN//K/Pmso/yiWlP9WpKgdlO4thXmptvjf4f1lVqLR+Dh+GBG9wPRmv9Th7w8HIZMYiovZTtY1f+XUlrl
- jgXRGsQXF2B5hPO/3P+LkBDIpuMiEGsZx/Xtz+Lpm13Ins+6GSCMReCzxEGVSD+uy8aXlDpdOOCMhWt2rG9hsC7VyNqaj7o2HIslBOfNlIJTN+GvUGoBX4aR
- Y3bXRd3mupEW8WqUekhNeNnQZWTijJxo/LtBmzxp3630He5g0eSZne5v4eNvvbvd
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+Use the newer API returning an ERRPTR and use the new helper to bail
+out.
 
-This series makes the V4L2 API y2038 safe. Many thanks to Arnd for working on
-this!
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/media/usb/dvb-usb/dw2102.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I have tested this using the test-media script and v4l2-ctl/v4l2-compliance
-binaries compiled for x86_64, i686, i686 with 64-bit time_t under both a
-64 bit kernel (so the compat-ioctl32 code is called) and a native 32 bit
-kernel (to make sure both the 32 and 64-bit time_t versions are handled
-correctly).
+diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
+index b960abd00d48..8b584507dd59 100644
+--- a/drivers/media/usb/dvb-usb/dw2102.c
++++ b/drivers/media/usb/dvb-usb/dw2102.c
+@@ -1590,8 +1590,8 @@ static int tt_s2_4600_frontend_attach(struct dvb_usb_adapter *adap)
+ 	board_info.addr = 0x68;
+ 	board_info.platform_data = &m88ds3103_pdata;
+ 	request_module("m88ds3103");
+-	client = i2c_new_device(&d->i2c_adap, &board_info);
+-	if (client == NULL || client->dev.driver == NULL)
++	client = i2c_new_client_device(&d->i2c_adap, &board_info);
++	if (!i2c_client_has_driver(client))
+ 		return -ENODEV;
+ 	if (!try_module_get(client->dev.driver->owner)) {
+ 		i2c_unregister_device(client);
+@@ -1609,9 +1609,9 @@ static int tt_s2_4600_frontend_attach(struct dvb_usb_adapter *adap)
+ 	board_info.addr = 0x60;
+ 	board_info.platform_data = &ts2020_config;
+ 	request_module("ts2020");
+-	client = i2c_new_device(i2c_adapter, &board_info);
++	client = i2c_new_client_device(i2c_adapter, &board_info);
+ 
+-	if (client == NULL || client->dev.driver == NULL) {
++	if (!i2c_client_has_driver(client)) {
+ 		dvb_frontend_detach(adap->fe_adap[0].fe);
+ 		return -ENODEV;
+ 	}
+-- 
+2.20.1
 
-Regards,
-
-	Hans
-
-The following changes since commit 0885acd77eb4644fd88f6d9f41e433f4ee9bc37a:
-
-  media: vivid: support multiplanar touch devices (2019-12-16 13:24:16 +0100)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-y2038
-
-for you to fetch changes up to 416f076ff267d2208d4e09767080558cc619dd9c:
-
-  media: v4l2-core: fix compat v4l2_buffer handling for time64 ABI (2019-12-16 15:27:20 +0100)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Arnd Bergmann (8):
-      media: documentation: fix video_event description
-      media: v4l2: abstract timeval handling in v4l2_buffer
-      media: v4l2-core: compat: ignore native command codes
-      media: v4l2-core: split out data copy from video_usercopy
-      media: v4l2-core: fix VIDIOC_DQEVENT for time64 ABI
-      media: v4l2-core: fix v4l2_buffer handling for time64 ABI
-      media: v4l2-core: fix compat VIDIOC_DQEVENT for time64 ABI
-      media: v4l2-core: fix compat v4l2_buffer handling for time64 ABI
-
- Documentation/media/uapi/dvb/video-get-event.rst |   2 +-
- Documentation/media/uapi/dvb/video_types.rst     |   2 +-
- drivers/media/common/videobuf2/videobuf2-v4l2.c  |   4 +-
- drivers/media/pci/meye/meye.c                    |   4 +-
- drivers/media/usb/cpia2/cpia2_v4l.c              |   4 +-
- drivers/media/usb/stkwebcam/stk-webcam.c         |   2 +-
- drivers/media/usb/usbvision/usbvision-video.c    |   4 +-
- drivers/media/v4l2-core/v4l2-compat-ioctl32.c    | 476 +++++++++++++++++++++++++++++++++++++++++++++---------
- drivers/media/v4l2-core/v4l2-event.c             |   5 +-
- drivers/media/v4l2-core/v4l2-ioctl.c             | 211 +++++++++++++++++++-----
- drivers/media/v4l2-core/v4l2-subdev.c            |  26 ++-
- drivers/media/v4l2-core/videobuf-core.c          |   5 +-
- include/media/v4l2-common.h                      |  21 +++
- include/media/v4l2-ioctl.h                       |  55 +++++++
- include/trace/events/v4l2.h                      |   2 +-
- include/uapi/linux/videodev2.h                   |  29 ++++
- 16 files changed, 717 insertions(+), 135 deletions(-)
