@@ -2,75 +2,82 @@ Return-Path: <SRS0=j3BJ=2G=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7F2BC43603
-	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 12:17:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A3D4C2D0C0
+	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 12:29:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E995206CB
-	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 12:17:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576498621;
-	bh=y3xrqwndnHqBmt8OZzbLzXuw772VMZ49R/W5r6PEWvE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=sa/S85Sc+vWXIwOJcBDIT9zwpuoI8vrMNfBjwo7rxcm+9Jn9xbxn+1JUmxQijjvfa
-	 tapp3mwv1WGO9nXE0Gv+vokO09TfsLIEmc8qTxMe7aDRQmLHEQHCCzqrrik3DNIvqX
-	 PqllGOgTJUiMnJksXjS0nR+EutfE/jgLLE/fF/8c=
+	by mail.kernel.org (Postfix) with ESMTP id E8D2720726
+	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 12:29:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbfLPMQ5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Dec 2019 07:16:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38716 "EHLO mail.kernel.org"
+        id S1727723AbfLPM3v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Dec 2019 07:29:51 -0500
+Received: from sauhun.de ([88.99.104.3]:39798 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727316AbfLPMQ5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Dec 2019 07:16:57 -0500
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4A8C3206CB;
-        Mon, 16 Dec 2019 12:16:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576498617;
-        bh=y3xrqwndnHqBmt8OZzbLzXuw772VMZ49R/W5r6PEWvE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w67PQUfZe3869rj6TQCOzn3NQLjLbEmBaZAB2QQgE4KmK3kzuDSuXm5bYtSRc9Dmx
-         ve75LPFaZO2PfrlosWyX0XhcHp2QjPAKE2UqfLce6Pq+SfZup9QCOq8/b9vGsPd6Vl
-         01ynwYiYt5S1uNtIu15+fcYr0pCfrQgJgbhv0cxc=
-Date:   Mon, 16 Dec 2019 12:16:52 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andreyknvl@google.com, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org,
+        id S1727534AbfLPM3t (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 16 Dec 2019 07:29:49 -0500
+Received: from localhost (p54B33297.dip0.t-ipconnect.de [84.179.50.151])
+        by pokefinder.org (Postfix) with ESMTPSA id 42D702C2D98;
+        Mon, 16 Dec 2019 13:29:48 +0100 (CET)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH RESEND RESEND] media: uvc: Avoid cyclic entity chains due
- to malformed USB descriptors
-Message-ID: <20191216121651.GA12947@willie-the-truck>
-References: <20191108154838.21487-1-will@kernel.org>
- <20191108155503.GB15731@pendragon.ideasonboard.com>
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 3/5] media: pci: bt8xx: convert to i2c_new_scanned_device
+Date:   Mon, 16 Dec 2019 13:29:43 +0100
+Message-Id: <20191216122946.3495-4-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191216122946.3495-1-wsa+renesas@sang-engineering.com>
+References: <20191216122946.3495-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191108155503.GB15731@pendragon.ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+Move from the deprecated i2c_new_probed_device() to the new
+i2c_new_scanned_device(). Make use of the new ERRPTR if suitable.
 
-On Fri, Nov 08, 2019 at 05:55:03PM +0200, Laurent Pinchart wrote:
-> Thank you for the patch.
-> 
-> I'm sorry for the delay, and will have to ask you to be a bit more
-> patient I'm afraid. I will leave tomorrow for a week without computer
-> access and will only be able to go through my backlog when I will be
-> back on the 17th.
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Acked-by: Sean Young <sean@mess.org>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+Build tested only.
 
-Gentle reminder on this, now you've been back a month ;)
+ drivers/media/pci/bt8xx/bttv-input.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Will
+diff --git a/drivers/media/pci/bt8xx/bttv-input.c b/drivers/media/pci/bt8xx/bttv-input.c
+index 492bc85c2700..41226f1d0e5b 100644
+--- a/drivers/media/pci/bt8xx/bttv-input.c
++++ b/drivers/media/pci/bt8xx/bttv-input.c
+@@ -386,7 +386,7 @@ void init_bttv_i2c_ir(struct bttv *btv)
+ 
+ 	if (btv->init_data.name) {
+ 		info.platform_data = &btv->init_data;
+-		i2c_dev = i2c_new_device(&btv->c.i2c_adap, &info);
++		i2c_dev = i2c_new_client_device(&btv->c.i2c_adap, &info);
+ 	} else {
+ 		/*
+ 		 * The external IR receiver is at i2c address 0x34 (0x35 for
+@@ -396,9 +396,9 @@ void init_bttv_i2c_ir(struct bttv *btv)
+ 		 * internal.
+ 		 * That's why we probe 0x1a (~0x34) first. CB
+ 		 */
+-		i2c_dev = i2c_new_probed_device(&btv->c.i2c_adap, &info, addr_list, NULL);
++		i2c_dev = i2c_new_scanned_device(&btv->c.i2c_adap, &info, addr_list, NULL);
+ 	}
+-	if (NULL == i2c_dev)
++	if (IS_ERR(i2c_dev))
+ 		return;
+ 
+ #if defined(CONFIG_MODULES) && defined(MODULE)
+-- 
+2.20.1
+
