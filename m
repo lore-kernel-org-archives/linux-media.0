@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BBD7C2D0BF
-	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 18:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A62FC43603
+	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 18:05:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EF99F206B7
-	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 18:00:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34E292072D
+	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 18:05:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576519257;
-	bh=8NCXrLCwzmdazBmKh3MPc3z/jq4Rubpa4X2/ZG55fGY=;
+	s=default; t=1576519507;
+	bh=DIq68H6C4WDWqKvKZ7xrNEXmEWRCTheZD3gZ60Y7vkk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=BlrLJeOZdMBdiCJaWdguERqn+PAZaT7LrwbvI1lCIYz7boGtrNTCBBgFuQLXM8fxU
-	 P7WkQmkrZH9Ok7g861NUWxxCNpLVynvQbfo+Zp6w6Lwcc2c6UKRYwVzKEe9ArBLSNw
-	 N6vqWy3S0+9PIhd3eFyl+MKch65sUrf1dZh6Lw28=
+	b=IVugg0nm3866ugCy3kNFxjtrsS121lrBbbEYpkT2tszckbkkr5UJzaBaJBCyqcrEB
+	 xD1N0wrY78Ef3BeOirNYU7gPbqAh9eVXCf/7tiXkIQKP5+xteg6YiRhi6r0H2e4fU3
+	 ATCLlL2s3PzR2hBrSfjZtQGcLCi9wHjGS3zy6SS0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729039AbfLPSAz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Dec 2019 13:00:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35370 "EHLO mail.kernel.org"
+        id S1729767AbfLPSFF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Dec 2019 13:05:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42872 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729032AbfLPSAy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Dec 2019 13:00:54 -0500
+        id S1729762AbfLPSFC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 16 Dec 2019 13:05:02 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C635C205C9;
-        Mon, 16 Dec 2019 18:00:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8A0E020726;
+        Mon, 16 Dec 2019 18:05:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576519253;
-        bh=8NCXrLCwzmdazBmKh3MPc3z/jq4Rubpa4X2/ZG55fGY=;
+        s=default; t=1576519502;
+        bh=DIq68H6C4WDWqKvKZ7xrNEXmEWRCTheZD3gZ60Y7vkk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vORe0nVBEk9TdcSi8/4emXYgFFrNNV90+k1ibiA3geDi2fgZqj11ZpNlscpMONCzq
-         VMKpsVLptR73TRLjtLzp6DJlyi4FEsqSgcXVkeiL4HSw9/kgzbjm2bHMCQf83Ht1Ew
-         qo9B3FLJFnzH33E9yYWDpl+Y+3AskNJyDV01o9H4=
+        b=Ezpj8ZOIV1REHpbo//Vnq660MVYs0q9tR+7r+CTVVGvUi959kszkBOAWulK6UEilD
+         xWFWIt8XyCuH+i4RW8+rscQIIbcCRGTGFVHuspgBn9AxFEdfrEF/EiiHBS98Omx45q
+         CYpVpRUHeA6wm2MECqkWLlHL8D+RRjHkMswwaJQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -48,12 +48,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@osg.samsung.com>,
         =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
         <ville.syrjala@linux.intel.com>
-Subject: [PATCH 4.14 231/267] video/hdmi: Fix AVI bar unpack
-Date:   Mon, 16 Dec 2019 18:49:17 +0100
-Message-Id: <20191216174915.211691381@linuxfoundation.org>
+Subject: [PATCH 4.19 090/140] video/hdmi: Fix AVI bar unpack
+Date:   Mon, 16 Dec 2019 18:49:18 +0100
+Message-Id: <20191216174811.201999222@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191216174848.701533383@linuxfoundation.org>
-References: <20191216174848.701533383@linuxfoundation.org>
+In-Reply-To: <20191216174747.111154704@linuxfoundation.org>
+References: <20191216174747.111154704@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -88,7 +88,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/video/hdmi.c
 +++ b/drivers/video/hdmi.c
-@@ -1036,12 +1036,12 @@ static int hdmi_avi_infoframe_unpack(str
+@@ -1039,12 +1039,12 @@ static int hdmi_avi_infoframe_unpack(str
  	if (ptr[0] & 0x10)
  		frame->active_aspect = ptr[1] & 0xf;
  	if (ptr[0] & 0x8) {
