@@ -2,147 +2,112 @@ Return-Path: <SRS0=j3BJ=2G=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 425CDC43603
-	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 14:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB927C43603
+	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 15:21:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1E782206B7
-	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 14:16:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1B4C206E0
+	for <linux-media@archiver.kernel.org>; Mon, 16 Dec 2019 15:21:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1576509694;
+	bh=okycGbmE3Ah37WAzOd/ed3zrSdNTR882moZGtJuuh20=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=KEMUSWePhFST24Y0CiYQFp0mOX47HBSClSpGOkPQODOpIuPsanVmOvMyc8k7GfVS5
+	 sjMPrnsPZZiytgnG+5roApt1CJCGem2dlezcoSNSkg7X4Onl6MLtxXdIw36Z+YE4uV
+	 gJ5KvPVXhtVPQQ5mAWMVYivXS23L6U+titig+D7k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728083AbfLPOPW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Dec 2019 09:15:22 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:45827 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727807AbfLPOPW (ORCPT
+        id S1728309AbfLPPVa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Dec 2019 10:21:30 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:44922 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728225AbfLPPVa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Dec 2019 09:15:22 -0500
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1N3sNa-1hhE4h2cca-00zkk5; Mon, 16 Dec 2019 15:15:15 +0100
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        y2038@lists.linaro.org, linux-kernel@vger.kernel.org, arnd@arndb.de
-Subject: [PATCH v6 0/8] y2038 safety in v4l2
-Date:   Mon, 16 Dec 2019 15:14:58 +0100
-Message-Id: <20191216141506.121728-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
+        Mon, 16 Dec 2019 10:21:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=S09ne7xBB+FzyhRmEbi4DpLN8RlKiZzIskLABcuaT+s=; b=uyOLa8pxzeg2dVT8lMYQSFa/I
+        HMKsTh03xyf5K0fXjiX7B08/wLq7EVeEcQ9ulFK4pBBBAp7P/x5OasvBSR+GjsxNHQIJdru6JQBtt
+        Y7yJyCXwpfQRAijoR0V7iRCq3l80nLBN1dtsjjN5bnjeZeY9NAPq5FJFcbsWy54uXYxmWWOhMyZOL
+        LmW59RCKg6JOamGcfFfwhHbLRIQMiB8uzABIZP9VD4947qMJOjUgB+bmtQW6Rowd576rZAUfTkYNZ
+        /pgHvXSrBwGlp/uGlQus9zDbu4w+gN48PK48mD1Ttr6qzGtZ5s5umfg4SucR5UNXfGRY8ys1KJA/w
+        J4x3CYOAw==;
+Received: from tmo-101-54.customers.d1-online.com ([80.187.101.54] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1igsBa-0005pp-HP; Mon, 16 Dec 2019 15:21:26 +0000
+Date:   Mon, 16 Dec 2019 16:21:22 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Sean Young <sean@mess.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        y2038@lists.linaro.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/8] media: documentation: fix video_event
+ description
+Message-ID: <20191216162040.6aba340b@kernel.org>
+In-Reply-To: <20191216141506.121728-2-arnd@arndb.de>
+References: <20191216141506.121728-1-arnd@arndb.de>
+        <20191216141506.121728-2-arnd@arndb.de>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Ms8ZjxHKdb7el0sg9w88S96vO5S5zP9+tRpSPr8R5J/dO7vFpPZ
- AS6t8+xKN/Nsxen4vC5UZu5WqHJ6S09vNqkLe9MQpG5sat1Kk6St+ur3xkWteWkKtqGVlEl
- 6msS5AFFbfZwyaoT3kbH79CyoZXpC2wrghlabRXR5QUG/lGKW6x44YwIGnRrsjIvMObPoeT
- 2tWTE8sK02IbkHc1Wsdng==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HNUaHH6Gr3M=:2md3i0z8AuQCc1xfksdpPu
- TjAT98IM232AuuesBd7ESvGoVoR8juBA8EzLUDaJsU+TiuwWB60tSzV5KkAntAkwxPPCpNn2S
- rBqv1bKeVG+wyW1d477lf9+q9Wmjos9vQoBywN6jO9O5D/6vReST24z8T/D5jx5MdlABJGHZg
- LR/oKF5Y/R0zV+e90dsH+Njnkd4pfOa9KAJQIcUwkxg9I3UtN4qaLJ/EJep4kDNWPeENLwmUO
- gOwpgB5r9rYJhV+zJcglnFaVzyct6bSvlCkwtCav9VeoesaWt9PWOek2RB/tSZvoDpK7z/diK
- 83byu6MrlsYzQ/R2c76HMClSrNcwP+0XrZzY33/yXjWMiqTd5bbf1ZjQa6FJ292v33sH1trqB
- XTtq56nY/uw9/K5Dk0Q5yPvSU50B473QQUcPhTzMoXBpiVwWiGdA5+WN6gw0W9U0t2D8XDhwh
- h74P6GqvU4Bn9I785TAgujlcWsb8Fq3hLeYGWMmd/e4i3kolC2WH5hHStyByP8xoU0FHvMXUI
- duhnYkllrmzDqBVpP84dKgr4/5172GqjtO81DqAOzWESR7lQO3jvsFvDRJ51YPhoDeezkucvf
- 2dYIOnbVKmsZLh8SynDlLtehKxf4U+j5ESQM9VX+XZQ6lSDyPYcjFDOzITTbq6SESxjuOAWuP
- fceFCJhNe+DflF8anUGEoLn9H31C7FN/DszRMpL8IHrVYrAtQmKG9svD2E61GJRlSb/uE82Oe
- dK1zoatVYd/QDK4KfRCx9301wj/xUIVs6IOZpVyVank21nDWh/0y/vE5rGQ4HcPlw4yIk7m9o
- x5gLWBIJP9znH1n043ZhROM3O2Xn740zIdpdtyVHBrgygzqmrtsMElDuBTRWu7LqrW/EV2AxZ
- JO05OKfCEy0n0+6au2ZA==
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-I'm in the process of finishing up the last bits on y2038-unsafe
-code in the kernel, this series is for v4l2, which has no problem
-with overflow, but has multiple ioctls that break with user space
-built against a new 32-bit libc.
+Em Mon, 16 Dec 2019 15:14:59 +0100
+Arnd Bergmann <arnd@arndb.de> escreveu:
 
-I posted similar patches as part of a series back in 2015, the
-new version was rewritten from scratch and I double-checked with
-the old version to make sure I did not miss anything I had already
-taken care of before.
+> The type for the timestamp in video_event was changed to
+> 'long' a long time ago, change the documentation to match.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Hans Verkuil worked on a different patch set in 2017, but this
-also did not get to the point of being merged.
+This patch seems fine for me. Even if the other patches need a v7,
+let's apply this one and remove it from any future re-spin of this
+(if ever needed).
 
-My new version contains compat-ioctl support, which the old one
-did not and should be complete, but given its size likely contains
-bugs. I did randconfig build tests, but no runtime test, so
-careful review as well as testing would be much appreciated.
-
-With this version, the newly added code takes care of the existing
-ABI, while the existing code got moved to the 64-bit time_t
-interface and is used internally. This means that testing with
-existing binaries should exercise most of the modifications
-and if that works and doesn't get shot down in review, we can
-probably live without testing the new ABI explicitly.
-
-I'm not entirely happy with the compat-ioctl implementation that
-adds quite a bit of code duplication, but I hope this is
-acceptable anyway, as a better implementation would likely
-require a larger refactoring of the compat-ioctl file, while
-my approach simply adds support for the additional data structure
-variants.
-
-I uploaded git branch on top of the v4l2/dvb branch to [2].
-
-      Arnd
-
-Changes since v5:
-
-- Fix all bugs that Hans found during testing
-- Add a comment about x32 still being broken
-
-Changes since v4:
-
-- Move non-public contents out of uapi header
-- split out __kernel_v4l2_timeval into separate struct
-- use compound initializers for v4l2_event_time32 and
-  v4l2_buffer_time32 conversion
-- add comment for v4l2_buffer_get_timestamp()
-
-Changes since v3:
-
-- This is a minor update compared to version 3 of this series,
-  with bugfixes for small mistakes that I found or that were
-  reported by automated build bots.
+> ---
+>  Documentation/media/uapi/dvb/video-get-event.rst | 2 +-
+>  Documentation/media/uapi/dvb/video_types.rst     | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/media/uapi/dvb/video-get-event.rst b/Documentation/media/uapi/dvb/video-get-event.rst
+> index def6c40db601..7f03fbe3d3b0 100644
+> --- a/Documentation/media/uapi/dvb/video-get-event.rst
+> +++ b/Documentation/media/uapi/dvb/video-get-event.rst
+> @@ -81,7 +81,7 @@ for this ioctl call.
+>  	#define VIDEO_EVENT_FRAME_RATE_CHANGED	2
+>  	#define VIDEO_EVENT_DECODER_STOPPED 	3
+>  	#define VIDEO_EVENT_VSYNC 		4
+> -		__kernel_time_t timestamp;
+> +		long timestamp;
+>  		union {
+>  			video_size_t size;
+>  			unsigned int frame_rate;	/* in frames per 1000sec */
+> diff --git a/Documentation/media/uapi/dvb/video_types.rst b/Documentation/media/uapi/dvb/video_types.rst
+> index 479942ce6fb8..2697400ccf62 100644
+> --- a/Documentation/media/uapi/dvb/video_types.rst
+> +++ b/Documentation/media/uapi/dvb/video_types.rst
+> @@ -170,7 +170,7 @@ VIDEO_GET_EVENT call.
+>      #define VIDEO_EVENT_FRAME_RATE_CHANGED  2
+>      #define VIDEO_EVENT_DECODER_STOPPED     3
+>      #define VIDEO_EVENT_VSYNC       4
+> -	__kernel_time_t timestamp;
+> +	long timestamp;
+>  	union {
+>  	    video_size_t size;
+>  	    unsigned int frame_rate;    /* in frames per 1000sec */
 
 
-[1] https://lwn.net/Articles/657754/
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=y2038-v4l2-v6
 
 
-Arnd Bergmann (8):
-  media: documentation: fix video_event description
-  media: v4l2: abstract timeval handling in v4l2_buffer
-  media: v4l2-core: compat: ignore native command codes
-  media: v4l2-core: split out data copy from video_usercopy
-  media: v4l2-core: fix VIDIOC_DQEVENT for time64 ABI
-  media: v4l2-core: fix v4l2_buffer handling for time64 ABI
-  media: v4l2-core: fix compat VIDIOC_DQEVENT for time64 ABI
-  media: v4l2-core: fix compat v4l2_buffer handling for time64 ABI
-
- .../media/uapi/dvb/video-get-event.rst        |   2 +-
- Documentation/media/uapi/dvb/video_types.rst  |   2 +-
- .../media/common/videobuf2/videobuf2-v4l2.c   |   4 +-
- drivers/media/pci/meye/meye.c                 |   4 +-
- drivers/media/usb/cpia2/cpia2_v4l.c           |   4 +-
- drivers/media/usb/stkwebcam/stk-webcam.c      |   2 +-
- drivers/media/usb/usbvision/usbvision-video.c |   4 +-
- drivers/media/v4l2-core/v4l2-compat-ioctl32.c | 477 +++++++++++++++---
- drivers/media/v4l2-core/v4l2-event.c          |   5 +-
- drivers/media/v4l2-core/v4l2-ioctl.c          | 211 ++++++--
- drivers/media/v4l2-core/v4l2-subdev.c         |  26 +-
- drivers/media/v4l2-core/videobuf-core.c       |   5 +-
- include/media/v4l2-common.h                   |  21 +
- include/media/v4l2-ioctl.h                    |  55 ++
- include/trace/events/v4l2.h                   |   2 +-
- include/uapi/linux/videodev2.h                |  29 ++
- 16 files changed, 718 insertions(+), 135 deletions(-)
-
--- 
-2.20.0
-
+Cheers,
+Mauro
