@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB7EC2D0C0
-	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 03:22:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6351BC43603
+	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 03:22:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A34812176D
-	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 03:22:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3953B2176D
+	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 03:22:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ciRLBiY6"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YVDNNgjM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbfLQDU4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Dec 2019 22:20:56 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:38141 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727327AbfLQDUz (ORCPT
+        id S1727205AbfLQDUs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Dec 2019 22:20:48 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:46611 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727135AbfLQDUs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Dec 2019 22:20:55 -0500
-Received: by mail-pl1-f196.google.com with SMTP id f20so3641135plj.5
-        for <linux-media@vger.kernel.org>; Mon, 16 Dec 2019 19:20:54 -0800 (PST)
+        Mon, 16 Dec 2019 22:20:48 -0500
+Received: by mail-pj1-f67.google.com with SMTP id z21so3890894pjq.13
+        for <linux-media@vger.kernel.org>; Mon, 16 Dec 2019 19:20:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZqrDhJWgamLEnJ0f+brWH5beGZW3pxf2EqtCOMwdJgg=;
-        b=ciRLBiY63+o+8cMoR1Kw48sNUnjhyOCQZtFN2AexGo3e5cIwHq1miF7ZBa7MvDakPj
-         /XjXlF1uV+68e45tDtV3jKx4Mo7VbE05xzqMQ+dyNh64lG84W/oJE6YZRej99Sv8KTzb
-         KOIl/O69xGS4G0jgY7L+2CUeit4CwKF9N3QYM=
+        bh=0gw2WS97E5ShS4EFOOCzORU1xpTlrM5Z/donDWDF7mI=;
+        b=YVDNNgjM5etiFQrJcTUTaollxlxvDIKwIvPu2HtyAPe++/UBQSrkXOF7/m9WgS14NU
+         Nec4nDWahlnGX0mjpbyTqhtxEfsAcEPDjd6cRFSkqlIJXnYX5pyEg2ae5wewd7j7g58N
+         68NqpsQEc+/pSLg8LYCtQy9kfaNbZRoAIy+3M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZqrDhJWgamLEnJ0f+brWH5beGZW3pxf2EqtCOMwdJgg=;
-        b=AtC2sx9K2QdmgRyoOV6GXreN/s7TDunSApA7arrepGyNK7MZCOq5B0kIO3EvZ0EXyD
-         +uu0BCfpxnLvAgzCCP6/BZWxQ2a9pJ0GeMs6G1iS1zMVdfgL/tu9NmPAn8bOxWWDk1p4
-         iWo+6L2+2hOcwHrlFjjWl1w8as2s2aj/Qk93Mmu9wLf5LRUFWvi7UTGTbeSQ+PEA64oD
-         Je455zGXDLNNlEkM0fZaacQLqfB3TNGI33k1mSrh+0FpEbzKGIxMQ8LykYvPoG2wPi/O
-         xHclt/IpCXGjV8bDJfALTcKKR5L5IXLaBR1scd2fM3UUIsSfDud1rXVhbLtC+OMbjCiz
-         fozg==
-X-Gm-Message-State: APjAAAW2hJYuRXq4k+CNKqra57QtpVnzw4Wq6DhBymlJidh1GtaFyy+J
-        DB4NIUQGBnToar5V6awJzVDL6A==
-X-Google-Smtp-Source: APXvYqw5ABjXI02YnEoGwgEOZOpJzyu7CZRg0ZYyfTMRaQSNW88K9oAZ4u+zuKSnSQ3smW8TIFh0rQ==
-X-Received: by 2002:a17:90a:2710:: with SMTP id o16mr3311690pje.110.1576552854487;
-        Mon, 16 Dec 2019 19:20:54 -0800 (PST)
+        bh=0gw2WS97E5ShS4EFOOCzORU1xpTlrM5Z/donDWDF7mI=;
+        b=Wr+zgxmcSmicJwMaHdhgFemMAzE8+AU9rt11RqrnGSIrCS8wF/cCVYKVDGDn1R62Gl
+         HMzxMV+4X6qtZ1i9Q3o1a1sZ+9GLbtcj0DvQjwnu9aWXA4o1dJvXb7raHpfaqZvQruLW
+         na8BzRQawbw5IBj1Ayo/l3eEb2XP6CnttPYie1k9olUu0nIBAwxTrALu4bB+BOfTTBhj
+         QRKM6IlImYqOxnKp5ZQSbdKXOApTWDFi7qXbm5r6D9ZROmVBPU1wVmF0FC/4+UfnfrpV
+         1c43+fNnneilMk5sN5BWHUmebc6Uljl1mnuTj2pmwRjlDzdtnZvyqSmnXcJtuN4uz0vq
+         lXZQ==
+X-Gm-Message-State: APjAAAXRn0UxoL6GkWMTFquIXtqsNVdtmD+GjtgFld75eUXuL7F4iyMe
+        oEW4ekT4TGyx8tikm5sxCk0v3w==
+X-Google-Smtp-Source: APXvYqzXQPTSjofGjWn62rO0KIyfidaxbVkZuEOZ9EyPk6iQ9ahpXwmaqzpUpWu9UAP4nsApVBNuLg==
+X-Received: by 2002:a17:902:6b0a:: with SMTP id o10mr19518464plk.15.1576552847255;
+        Mon, 16 Dec 2019 19:20:47 -0800 (PST)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:250d:e71d:5a0a:9afe])
-        by smtp.gmail.com with ESMTPSA id j3sm24387455pfi.8.2019.12.16.19.20.51
+        by smtp.gmail.com with ESMTPSA id j3sm24387455pfi.8.2019.12.16.19.20.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 19:20:54 -0800 (PST)
+        Mon, 16 Dec 2019 19:20:46 -0800 (PST)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Hans Verkuil <hans.verkuil@cisco.com>,
         Tomasz Figa <tfiga@chromium.org>,
@@ -63,9 +63,9 @@ Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Pawel Osciak <posciak@chromium.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [RFC][PATCH 03/15] videobuf2: add V4L2_FLAG_MEMORY_NON_CONSISTENT flag
-Date:   Tue, 17 Dec 2019 12:20:22 +0900
-Message-Id: <20191217032034.54897-4-senozhatsky@chromium.org>
+Subject: [RFC][PATCH 01/15] videobuf2: add cache management members
+Date:   Tue, 17 Dec 2019 12:20:20 +0900
+Message-Id: <20191217032034.54897-2-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
 In-Reply-To: <20191217032034.54897-1-senozhatsky@chromium.org>
 References: <20191217032034.54897-1-senozhatsky@chromium.org>
@@ -76,61 +76,82 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-By setting or clearing V4L2_FLAG_MEMORY_NON_CONSISTENT flag
-user-space should be able to set or clear queue's NON_CONSISTENT
-->dma_attrs. Queue's ->dma_attrs are passed to the underlying
-allocator in __vb2_buf_mem_alloc(), so user-space will be able
-to request consistent or non-consistent memory allocations.
+Extend vb2_buffer and vb2_queue structs with cache management
+members.
+
+V4L2 UAPI already contains two buffer flags which user-space,
+supposedly, can use to control buffer cache sync:
+
+- V4L2_BUF_FLAG_NO_CACHE_INVALIDATE
+- V4L2_BUF_FLAG_NO_CACHE_CLEAN
+
+None of these, however, do anything at the moment. This patch
+set is intended to change it.
+
+Since user-space cache management hints are supposed to be
+implemented on a per-buffer basis we need to extend vb2_buffer
+struct with two new memebers ->need_cache_sync_on_prepare and
+->need_cache_sync_on_finish, which will store corresponding
+user-space hints.
+
+In order to preserve the existing behaviour, user-space cache
+managements flags will be handled only by those drivers that
+permit user-space cache hints. That's the purpose of vb2_queue
+->allow_cache_hints member. Driver must set ->allow_cache_hints
+during queue initialisation to enable cache management hints
+mechanism.
+
+Only drivers that set ->allow_cache_hints during queue initialisation
+will handle user-space cache management hints. Otherwise hints
+will be ignored.
 
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- Documentation/media/uapi/v4l/buffer.rst | 19 +++++++++++++++++++
- include/uapi/linux/videodev2.h          |  2 ++
- 2 files changed, 21 insertions(+)
+ include/media/videobuf2-core.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/Documentation/media/uapi/v4l/buffer.rst b/Documentation/media/uapi/v4l/buffer.rst
-index 9149b57728e5..b08b5609f5f3 100644
---- a/Documentation/media/uapi/v4l/buffer.rst
-+++ b/Documentation/media/uapi/v4l/buffer.rst
-@@ -705,6 +705,25 @@ Buffer Flags
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index a2b2208b02da..026004180440 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -263,6 +263,10 @@ struct vb2_buffer {
+ 	 *			after the 'buf_finish' op is called.
+ 	 * copied_timestamp:	the timestamp of this capture buffer was copied
+ 	 *			from an output buffer.
++	 * need_cache_sync_on_prepare: do not sync/invalidate cache from
++	 * 			buffer's ->prepare() callback.
++	 * need_cache_sync_on_finish: do not sync/invalidate cache from buffer's
++	 * 			->finish() callback.
+ 	 * queued_entry:	entry on the queued buffers list, which holds
+ 	 *			all buffers queued from userspace
+ 	 * done_entry:		entry on the list that stores all buffers ready
+@@ -273,6 +277,8 @@ struct vb2_buffer {
+ 	unsigned int		synced:1;
+ 	unsigned int		prepared:1;
+ 	unsigned int		copied_timestamp:1;
++	unsigned int		need_cache_sync_on_prepare:1;
++	unsigned int		need_cache_sync_on_finish:1;
  
- .. c:type:: v4l2_memory
+ 	struct vb2_plane	planes[VB2_MAX_PLANES];
+ 	struct list_head	queued_entry;
+@@ -491,6 +497,9 @@ struct vb2_buf_ops {
+  * @uses_requests: requests are used for this queue. Set to 1 the first time
+  *		a request is queued. Set to 0 when the queue is canceled.
+  *		If this is 1, then you cannot queue buffers directly.
++ * @allow_cache_hints: when set user-space can pass cache management hints in
++ * 		order to skip cache flush/invalidation on ->prepare() or/and
++ * 		->finish().
+  * @lock:	pointer to a mutex that protects the &struct vb2_queue. The
+  *		driver can set this to a mutex to let the v4l2 core serialize
+  *		the queuing ioctls. If the driver wants to handle locking
+@@ -564,6 +573,7 @@ struct vb2_queue {
+ 	unsigned			requires_requests:1;
+ 	unsigned			uses_qbuf:1;
+ 	unsigned			uses_requests:1;
++	unsigned			allow_cache_hints:1;
  
-+Memory Consistency Flags
-+========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{2.2cm}|p{8.3cm}|
-+
-+.. cssclass:: longtable
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       3 1 4
-+
-+    * .. _`V4L2_FLAG_MEMORY_NON_CONSISTENT`:
-+
-+      - ``V4L2_FLAG_MEMORY_NON_CONSISTENT``
-+      - 0x00000001
-+      - Set DMA_ATTR_NON_CONSISTENT queue memory consistency bit,
-+	so all queue buffers may be allocated in non-consistent memory.
-+
- enum v4l2_memory
- ================
- 
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 04481c717fee..d352997f2b62 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -189,6 +189,8 @@ enum v4l2_memory {
- 	V4L2_MEMORY_DMABUF           = 4,
- };
- 
-+#define V4L2_FLAG_MEMORY_NON_CONSISTENT		(1 << 0)
-+
- /* see also http://vektor.theorem.ca/graphics/ycbcr/ */
- enum v4l2_colorspace {
- 	/*
+ 	struct mutex			*lock;
+ 	void				*owner;
 -- 
 2.24.1.735.g03f4e72817-goog
 
