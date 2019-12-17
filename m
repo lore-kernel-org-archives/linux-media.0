@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4506CC43603
-	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 03:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07AB0C2D0C3
+	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 03:21:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 19B1621835
-	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 03:20:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD2E52465E
+	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 03:21:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AuyeJPrs"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="UP/Ni4kC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727298AbfLQDUw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Dec 2019 22:20:52 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36308 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727278AbfLQDUv (ORCPT
+        id S1727393AbfLQDU7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Dec 2019 22:20:59 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:40189 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727351AbfLQDU6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Dec 2019 22:20:51 -0500
-Received: by mail-pg1-f193.google.com with SMTP id k3so4853215pgc.3
-        for <linux-media@vger.kernel.org>; Mon, 16 Dec 2019 19:20:51 -0800 (PST)
+        Mon, 16 Dec 2019 22:20:58 -0500
+Received: by mail-pf1-f194.google.com with SMTP id q8so6728174pfh.7
+        for <linux-media@vger.kernel.org>; Mon, 16 Dec 2019 19:20:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XQU25h5Spo3bbOg5zOxdwOlScB+ZgzGM7jWNIFKX5qo=;
-        b=AuyeJPrs+C5UHSNUQ1/hQz67goI/N0/Nb7veYBfr9IiTDOqWSusJ64kUodFVC+g3ju
-         au+IMXsBOOZJm/80/2yPSIoD4G7H/AuV0fgOMGhlZ+l9PRwgliwtPFaMCOCxbynLR6Xq
-         X4KY88/Vc75Hfm3bFXlrPJ0Sn1Jd+guYRU5jw=
+        bh=FZaVeJ1PcpIK1+RAgv+t01ZSozUenljGrTod0GVW8cM=;
+        b=UP/Ni4kCwtM4CJbIx5FkbMSeWzYLsbm1yhBu3gEXT7WHHlsPXSgA56HyxkEfh8qdjJ
+         IDej9jhliSUBzQlQIJ43tGwEaL0dXZn3s7B+oSOzivKuVX5C3UIPhpmj9J3ZhS6lVeFW
+         3MeMCMBEx3bAgTUK9xKU8tleckIZDR9Q8ITG4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XQU25h5Spo3bbOg5zOxdwOlScB+ZgzGM7jWNIFKX5qo=;
-        b=lEHkiHZTMyXkvBu6eKujuWi5Dgok5Est+p2xaVuXBpg5cVdh/XE/9WCRGeCNtzjlY0
-         nTDFlPVM5SmvK3mAapV/AjKw1Uz49kE7dT/2ohur/YmRtVYbsyfeQJ9tNUiGxcbG6mE0
-         euMtU3MbZ4VbarAyZ9raovqjG0lemqtidNMc2HUpRv8LPk6DLT26tHV2m4+fZTOZ0Jwu
-         2MBB0oT8+csufwuVfOn/OeJAX4tlXboPTCLv579l8iRu30HkwpUTcdGzHSYnXVsuXF6/
-         21XfLsFvSDG3uOB3qcfgrrxya/wqNx7H+AP7aP+92vcvp3a/Nwi8Ye8YBMDxU6tkqY2i
-         XmBA==
-X-Gm-Message-State: APjAAAU6DtVciti4fgYrECg1gZzmWy7U/h5OcJVIqG3f7p3uJk3up0HH
-        e5FV2Sd6ECiRF6biqMN9z9VZdg==
-X-Google-Smtp-Source: APXvYqyJzexYK0ODH7UR7ZIPwhL2sqGBeU3kvXT48fiBc4VyqOBa54ERKTM3FDd+ldv7CbjUZmf5Rw==
-X-Received: by 2002:a62:d449:: with SMTP id u9mr20535023pfl.225.1576552851080;
-        Mon, 16 Dec 2019 19:20:51 -0800 (PST)
+        bh=FZaVeJ1PcpIK1+RAgv+t01ZSozUenljGrTod0GVW8cM=;
+        b=o/+pbTfiIsoXwudJSV1ZHTG6K3aCf/I5rnEutx06AC0GesQeSIlf6cMCt2Q4YjaP/L
+         I0wvraS6uOQrmP937bn4pZP686jEHAaI26F685J7KzO/XPVzXvt6BdM48Mha4eIzEOnz
+         yM4Zrha3hv2pEI016XVm9VCQqOvb+0Rri8sGba8s9BWDljlUU7de4NscimiAaUz1d8XV
+         mT82SMmTmAe4IICIcfdDZCt1m85qGP1pT5dDnBe3RgM5kI35NZKDHWX7hAf+NTAI6DaF
+         i3LaerTv9TNhMkSJUlbL/8sc4ZZEDJzYKIa9dGBkKniB7RL5+lrP5t2aj/zGfQ/VMQCP
+         YgAw==
+X-Gm-Message-State: APjAAAW/KEbZtZzEFK35qH4/P0RAlXFQZpZbVu7rsNu9dj/C859HrRv9
+        mnRdSr9TNdfy+0LEjMnt8InHpg==
+X-Google-Smtp-Source: APXvYqzWlMHyMZoG/nm6t6U32w0jijpNQVnnJZCAUGdgiXRK3mUZ6A/LrGPH/s4Aa5Q1o38IzWq1dA==
+X-Received: by 2002:a62:f842:: with SMTP id c2mr20092420pfm.104.1576552857748;
+        Mon, 16 Dec 2019 19:20:57 -0800 (PST)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:250d:e71d:5a0a:9afe])
-        by smtp.gmail.com with ESMTPSA id j3sm24387455pfi.8.2019.12.16.19.20.48
+        by smtp.gmail.com with ESMTPSA id j3sm24387455pfi.8.2019.12.16.19.20.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 19:20:50 -0800 (PST)
+        Mon, 16 Dec 2019 19:20:57 -0800 (PST)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Hans Verkuil <hans.verkuil@cisco.com>,
         Tomasz Figa <tfiga@chromium.org>,
@@ -63,9 +63,9 @@ Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Pawel Osciak <posciak@chromium.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [RFC][PATCH 02/15] videobuf2: handle V4L2 buffer cache flags
-Date:   Tue, 17 Dec 2019 12:20:21 +0900
-Message-Id: <20191217032034.54897-3-senozhatsky@chromium.org>
+Subject: [RFC][PATCH 04/15] videobuf2: add queue memory consistency parameter
+Date:   Tue, 17 Dec 2019 12:20:23 +0900
+Message-Id: <20191217032034.54897-5-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
 In-Reply-To: <20191217032034.54897-1-senozhatsky@chromium.org>
 References: <20191217032034.54897-1-senozhatsky@chromium.org>
@@ -76,65 +76,138 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Set video buffer cache management flags corresponding to V4L2 cache
-flags.
+Preparations for future V4L2_FLAG_MEMORY_NON_CONSISTENT support.
 
-Both ->prepare() and ->finish() cache management hints should be
-passed during this stage (buffer preparation), because there is no
-other way for user-space to skip ->finish() cache flush.
+Extend vb2_core_reqbufs() with queue memory consistency flag.
+API permits queue's consistency attribute adjustment only if
+the queue has no allocated buffers, not busy, and does not have
+buffers waiting to be de-queued.
 
-There are two possible alternative approaches:
-- The first one is to move cache sync from ->finish() to dqbuf().
-  But this breaks some drivers, that need to fix-up buffers before
-  dequeueing them.
-
-- The second one is to move ->finish() call from ->done() to dqbuf.
+If user-space attempts to allocate a buffer with consistency
+requirements which don't match queue's consistency model such
+allocation requests will be failed.
 
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- .../media/common/videobuf2/videobuf2-v4l2.c   | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/media/common/videobuf2/videobuf2-core.c | 17 +++++++++++++----
+ drivers/media/common/videobuf2/videobuf2-v4l2.c |  4 ++--
+ drivers/media/dvb-core/dvb_vb2.c                |  2 +-
+ include/media/videobuf2-core.h                  |  3 ++-
+ 4 files changed, 18 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index e652f4318284..2fccfe2a57f8 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -337,6 +337,27 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
- 	return 0;
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 4489744fbbd9..668c56df13f6 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -664,8 +664,16 @@ int vb2_verify_memory_type(struct vb2_queue *q,
  }
+ EXPORT_SYMBOL(vb2_verify_memory_type);
  
-+static void set_buffer_cache_hints(struct vb2_queue *q,
-+				   struct vb2_buffer *vb,
-+				   struct v4l2_buffer *b)
++static void __set_queue_consistency(struct vb2_queue *q, bool consistent_mem)
 +{
-+	vb->need_cache_sync_on_prepare = 1;
-+
-+	if (q->dma_dir != DMA_TO_DEVICE)
-+		vb->need_cache_sync_on_finish = 1;
++	if (consistent_mem)
++		q->dma_attrs &= ~DMA_ATTR_NON_CONSISTENT;
 +	else
-+		vb->need_cache_sync_on_finish = 0;
-+
-+	if (!q->allow_cache_hints)
-+		return;
-+
-+	if (b->flags & V4L2_BUF_FLAG_NO_CACHE_INVALIDATE)
-+		vb->need_cache_sync_on_finish = 0;
-+
-+	if (b->flags & V4L2_BUF_FLAG_NO_CACHE_CLEAN)
-+		vb->need_cache_sync_on_prepare = 0;
++		q->dma_attrs |= DMA_ATTR_NON_CONSISTENT;
 +}
 +
- static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
- 				    struct v4l2_buffer *b, bool is_prepare,
- 				    struct media_request **p_req)
-@@ -381,6 +402,7 @@ static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *md
- 	}
+ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+-		unsigned int *count)
++		bool consistent_mem, unsigned int *count)
+ {
+ 	unsigned int num_buffers, allocated_buffers, num_planes = 0;
+ 	unsigned plane_sizes[VB2_MAX_PLANES] = { };
+@@ -720,6 +728,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	num_buffers = min_t(unsigned int, num_buffers, VB2_MAX_FRAME);
+ 	memset(q->alloc_devs, 0, sizeof(q->alloc_devs));
+ 	q->memory = memory;
++	__set_queue_consistency(q, consistent_mem);
  
- 	if (!vb->prepared) {
-+		set_buffer_cache_hints(q, vb, b);
- 		/* Copy relevant information provided by the userspace */
- 		memset(vbuf->planes, 0,
- 		       sizeof(vbuf->planes[0]) * vb->num_planes);
+ 	/*
+ 	 * Ask the driver how many buffers and planes per buffer it requires.
+@@ -2498,7 +2507,7 @@ static int __vb2_init_fileio(struct vb2_queue *q, int read)
+ 	fileio->memory = VB2_MEMORY_MMAP;
+ 	fileio->type = q->type;
+ 	q->fileio = fileio;
+-	ret = vb2_core_reqbufs(q, fileio->memory, &fileio->count);
++	ret = vb2_core_reqbufs(q, fileio->memory, true, &fileio->count);
+ 	if (ret)
+ 		goto err_kfree;
+ 
+@@ -2555,7 +2564,7 @@ static int __vb2_init_fileio(struct vb2_queue *q, int read)
+ 
+ err_reqbufs:
+ 	fileio->count = 0;
+-	vb2_core_reqbufs(q, fileio->memory, &fileio->count);
++	vb2_core_reqbufs(q, fileio->memory, true, &fileio->count);
+ 
+ err_kfree:
+ 	q->fileio = NULL;
+@@ -2575,7 +2584,7 @@ static int __vb2_cleanup_fileio(struct vb2_queue *q)
+ 		vb2_core_streamoff(q, q->type);
+ 		q->fileio = NULL;
+ 		fileio->count = 0;
+-		vb2_core_reqbufs(q, fileio->memory, &fileio->count);
++		vb2_core_reqbufs(q, fileio->memory, true, &fileio->count);
+ 		kfree(fileio);
+ 		dprintk(3, "file io emulator closed\n");
+ 	}
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index 2fccfe2a57f8..f1e88c9398c7 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -695,7 +695,7 @@ int vb2_reqbufs(struct vb2_queue *q, struct v4l2_requestbuffers *req)
+ 	int ret = vb2_verify_memory_type(q, req->memory, req->type);
+ 
+ 	fill_buf_caps(q, &req->capabilities);
+-	return ret ? ret : vb2_core_reqbufs(q, req->memory, &req->count);
++	return ret ? ret : vb2_core_reqbufs(q, req->memory, true, &req->count);
+ }
+ EXPORT_SYMBOL_GPL(vb2_reqbufs);
+ 
+@@ -945,7 +945,7 @@ int vb2_ioctl_reqbufs(struct file *file, void *priv,
+ 		return res;
+ 	if (vb2_queue_is_busy(vdev, file))
+ 		return -EBUSY;
+-	res = vb2_core_reqbufs(vdev->queue, p->memory, &p->count);
++	res = vb2_core_reqbufs(vdev->queue, p->memory, true, &p->count);
+ 	/* If count == 0, then the owner has released all buffers and he
+ 	   is no longer owner of the queue. Otherwise we have a new owner. */
+ 	if (res == 0)
+diff --git a/drivers/media/dvb-core/dvb_vb2.c b/drivers/media/dvb-core/dvb_vb2.c
+index 6974f1731529..e60063652164 100644
+--- a/drivers/media/dvb-core/dvb_vb2.c
++++ b/drivers/media/dvb-core/dvb_vb2.c
+@@ -342,7 +342,7 @@ int dvb_vb2_reqbufs(struct dvb_vb2_ctx *ctx, struct dmx_requestbuffers *req)
+ 
+ 	ctx->buf_siz = req->size;
+ 	ctx->buf_cnt = req->count;
+-	ret = vb2_core_reqbufs(&ctx->vb_q, VB2_MEMORY_MMAP, &req->count);
++	ret = vb2_core_reqbufs(&ctx->vb_q, VB2_MEMORY_MMAP, true, &req->count);
+ 	if (ret) {
+ 		ctx->state = DVB_VB2_STATE_NONE;
+ 		dprintk(1, "[%s] count=%d size=%d errno=%d\n", ctx->name,
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 026004180440..810af5cf5742 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -726,6 +726,7 @@ void vb2_core_querybuf(struct vb2_queue *q, unsigned int index, void *pb);
+  * vb2_core_reqbufs() - Initiate streaming.
+  * @q:		pointer to &struct vb2_queue with videobuf2 queue.
+  * @memory:	memory type, as defined by &enum vb2_memory.
++ * @consistent_mem:	memory consistency model.
+  * @count:	requested buffer count.
+  *
+  * Videobuf2 core helper to implement VIDIOC_REQBUF() operation. It is called
+@@ -750,7 +751,7 @@ void vb2_core_querybuf(struct vb2_queue *q, unsigned int index, void *pb);
+  * Return: returns zero on success; an error code otherwise.
+  */
+ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+-		unsigned int *count);
++		bool consistent_mem, unsigned int *count);
+ 
+ /**
+  * vb2_core_create_bufs() - Allocate buffers and any required auxiliary structs
 -- 
 2.24.1.735.g03f4e72817-goog
 
