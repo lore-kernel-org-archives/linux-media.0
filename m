@@ -2,156 +2,174 @@ Return-Path: <SRS0=w9vA=2H=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6351BC43603
-	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 03:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3617AC43603
+	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 04:58:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3953B2176D
-	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 03:22:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8E442146E
+	for <linux-media@archiver.kernel.org>; Tue, 17 Dec 2019 04:58:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YVDNNgjM"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="hzmPmVAn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727205AbfLQDUs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Dec 2019 22:20:48 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:46611 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727135AbfLQDUs (ORCPT
+        id S1726526AbfLQE6O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Dec 2019 23:58:14 -0500
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:40059 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725836AbfLQE6O (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Dec 2019 22:20:48 -0500
-Received: by mail-pj1-f67.google.com with SMTP id z21so3890894pjq.13
-        for <linux-media@vger.kernel.org>; Mon, 16 Dec 2019 19:20:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0gw2WS97E5ShS4EFOOCzORU1xpTlrM5Z/donDWDF7mI=;
-        b=YVDNNgjM5etiFQrJcTUTaollxlxvDIKwIvPu2HtyAPe++/UBQSrkXOF7/m9WgS14NU
-         Nec4nDWahlnGX0mjpbyTqhtxEfsAcEPDjd6cRFSkqlIJXnYX5pyEg2ae5wewd7j7g58N
-         68NqpsQEc+/pSLg8LYCtQy9kfaNbZRoAIy+3M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0gw2WS97E5ShS4EFOOCzORU1xpTlrM5Z/donDWDF7mI=;
-        b=Wr+zgxmcSmicJwMaHdhgFemMAzE8+AU9rt11RqrnGSIrCS8wF/cCVYKVDGDn1R62Gl
-         HMzxMV+4X6qtZ1i9Q3o1a1sZ+9GLbtcj0DvQjwnu9aWXA4o1dJvXb7raHpfaqZvQruLW
-         na8BzRQawbw5IBj1Ayo/l3eEb2XP6CnttPYie1k9olUu0nIBAwxTrALu4bB+BOfTTBhj
-         QRKM6IlImYqOxnKp5ZQSbdKXOApTWDFi7qXbm5r6D9ZROmVBPU1wVmF0FC/4+UfnfrpV
-         1c43+fNnneilMk5sN5BWHUmebc6Uljl1mnuTj2pmwRjlDzdtnZvyqSmnXcJtuN4uz0vq
-         lXZQ==
-X-Gm-Message-State: APjAAAXRn0UxoL6GkWMTFquIXtqsNVdtmD+GjtgFld75eUXuL7F4iyMe
-        oEW4ekT4TGyx8tikm5sxCk0v3w==
-X-Google-Smtp-Source: APXvYqzXQPTSjofGjWn62rO0KIyfidaxbVkZuEOZ9EyPk6iQ9ahpXwmaqzpUpWu9UAP4nsApVBNuLg==
-X-Received: by 2002:a17:902:6b0a:: with SMTP id o10mr19518464plk.15.1576552847255;
-        Mon, 16 Dec 2019 19:20:47 -0800 (PST)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:250d:e71d:5a0a:9afe])
-        by smtp.gmail.com with ESMTPSA id j3sm24387455pfi.8.2019.12.16.19.20.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 19:20:46 -0800 (PST)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Hans Verkuil <hans.verkuil@cisco.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pawel Osciak <posciak@chromium.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [RFC][PATCH 01/15] videobuf2: add cache management members
-Date:   Tue, 17 Dec 2019 12:20:20 +0900
-Message-Id: <20191217032034.54897-2-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
-In-Reply-To: <20191217032034.54897-1-senozhatsky@chromium.org>
-References: <20191217032034.54897-1-senozhatsky@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 16 Dec 2019 23:58:14 -0500
+Received: from localhost ([IPv6:2001:983:e9a7:1:6849:44be:5342:dc40])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id h4vyiLnWdTsDeh4vziy0Ze; Tue, 17 Dec 2019 05:58:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1576558691; bh=Cbi5GMrh0vKLcIY6oXti78F/kvPj2gHSbM+ZVH2t47k=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=hzmPmVAn0iI1gPQ7OCrt9g32qK3cZr15vPPw+zoTpvuevRFXmRNUzKOivKLrvhqzQ
+         7RewCmxJq3+CGRPbnkCUQAPVXC2lg1mavMRwRtZBbrE4oI8pckuj1VFVDx9RXlzR+O
+         d97FGmEbYDHYCAlO6qTBpxzsS+xhhYk82eSRwWMNVbYH3/Ma90dP2z4h2sN9OsLW1h
+         O/761Z0s/Ib3sY9harB3l5/2vv8NrOFbsoFMpeQH0l3CcX84nlu02HFIzHWM3/p79M
+         +vxtiinKPPGqt8f6A3hFr3p5VDjlos8hbmN+dd69dh/Klv7oKIsi8vrw1kd4JI1tlS
+         /3iySvtRU0VRg==
+Message-ID: <a97559103c486c3b791023117008912b@smtp-cloud8.xs4all.net>
+Date:   Tue, 17 Dec 2019 05:58:10 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfGTzCrB3o1MjE/Ef4r+d6fxU/yStqnryEg3eFoBD4PqfgQfcDvpTdDGL/fvei5zra8TcEFKCSs6YQ50dKHt+SNx2yBxeHnF0ImYk7JyAZPTSA0TANZwv
+ 0gBw3bFwAjgqUsqTtU/OC6zaugUxTvJ9ena1cjXjgJhX+dMBhFli8YDao7REQCobkJDT3oXUgRb3i8/JtnCg0P7ii0Hw2ccpq7yzqU6C/Xj2HBDx5OwjeCHk
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Extend vb2_buffer and vb2_queue structs with cache management
-members.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-V4L2 UAPI already contains two buffer flags which user-space,
-supposedly, can use to control buffer cache sync:
+Results of the daily build of media_tree:
 
-- V4L2_BUF_FLAG_NO_CACHE_INVALIDATE
-- V4L2_BUF_FLAG_NO_CACHE_CLEAN
+date:			Tue Dec 17 05:00:10 CET 2019
+media-tree git hash:	0885acd77eb4644fd88f6d9f41e433f4ee9bc37a
+media_build git hash:	2555f73ab11b9936171fc31d38498818922c2f7a
+v4l-utils git hash:	21c474bfca2d9167489d87a06fa9f1698b3c80bd
+edid-decode git hash:	e719d04077d098eb51d9494f41060eba2419d4bc
+gcc version:		i686-linux-gcc (GCC) 9.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 2bba801e0e7dfc02308d972580fab46d27aaaffe
+host hardware:		x86_64
+host os:		5.2.0-3-amd64
 
-None of these, however, do anything at the moment. This patch
-set is intended to change it.
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.2-i686: OK
+linux-5.4.2-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: ERRORS: Final Summary: 2900, Succeeded: 2896, Failed: 4, Warnings: 2
+sparse: WARNINGS
+smatch: WARNINGS
 
-Since user-space cache management hints are supposed to be
-implemented on a per-buffer basis we need to extend vb2_buffer
-struct with two new memebers ->need_cache_sync_on_prepare and
-->need_cache_sync_on_finish, which will store corresponding
-user-space hints.
+Detailed results are available here:
 
-In order to preserve the existing behaviour, user-space cache
-managements flags will be handled only by those drivers that
-permit user-space cache hints. That's the purpose of vb2_queue
-->allow_cache_hints member. Driver must set ->allow_cache_hints
-during queue initialisation to enable cache management hints
-mechanism.
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
 
-Only drivers that set ->allow_cache_hints during queue initialisation
-will handle user-space cache management hints. Otherwise hints
-will be ignored.
+Detailed regression test results are available here:
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- include/media/videobuf2-core.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
 
-diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index a2b2208b02da..026004180440 100644
---- a/include/media/videobuf2-core.h
-+++ b/include/media/videobuf2-core.h
-@@ -263,6 +263,10 @@ struct vb2_buffer {
- 	 *			after the 'buf_finish' op is called.
- 	 * copied_timestamp:	the timestamp of this capture buffer was copied
- 	 *			from an output buffer.
-+	 * need_cache_sync_on_prepare: do not sync/invalidate cache from
-+	 * 			buffer's ->prepare() callback.
-+	 * need_cache_sync_on_finish: do not sync/invalidate cache from buffer's
-+	 * 			->finish() callback.
- 	 * queued_entry:	entry on the queued buffers list, which holds
- 	 *			all buffers queued from userspace
- 	 * done_entry:		entry on the list that stores all buffers ready
-@@ -273,6 +277,8 @@ struct vb2_buffer {
- 	unsigned int		synced:1;
- 	unsigned int		prepared:1;
- 	unsigned int		copied_timestamp:1;
-+	unsigned int		need_cache_sync_on_prepare:1;
-+	unsigned int		need_cache_sync_on_finish:1;
- 
- 	struct vb2_plane	planes[VB2_MAX_PLANES];
- 	struct list_head	queued_entry;
-@@ -491,6 +497,9 @@ struct vb2_buf_ops {
-  * @uses_requests: requests are used for this queue. Set to 1 the first time
-  *		a request is queued. Set to 0 when the queue is canceled.
-  *		If this is 1, then you cannot queue buffers directly.
-+ * @allow_cache_hints: when set user-space can pass cache management hints in
-+ * 		order to skip cache flush/invalidation on ->prepare() or/and
-+ * 		->finish().
-  * @lock:	pointer to a mutex that protects the &struct vb2_queue. The
-  *		driver can set this to a mutex to let the v4l2 core serialize
-  *		the queuing ioctls. If the driver wants to handle locking
-@@ -564,6 +573,7 @@ struct vb2_queue {
- 	unsigned			requires_requests:1;
- 	unsigned			uses_qbuf:1;
- 	unsigned			uses_requests:1;
-+	unsigned			allow_cache_hints:1;
- 
- 	struct mutex			*lock;
- 	void				*owner;
--- 
-2.24.1.735.g03f4e72817-goog
+Full logs are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
