@@ -2,131 +2,126 @@ Return-Path: <SRS0=kwvz=2I=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A90FCC43603
-	for <linux-media@archiver.kernel.org>; Wed, 18 Dec 2019 14:08:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 839EFC2D0CD
+	for <linux-media@archiver.kernel.org>; Wed, 18 Dec 2019 15:52:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 78FCE227BF
-	for <linux-media@archiver.kernel.org>; Wed, 18 Dec 2019 14:08:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 51FEF2146E
+	for <linux-media@archiver.kernel.org>; Wed, 18 Dec 2019 15:52:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KCDwxgP4"
+	dkim=pass (2048-bit key) header.d=shutemov-name.20150623.gappssmtp.com header.i=@shutemov-name.20150623.gappssmtp.com header.b="KDdHHJJR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727052AbfLROIy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Dec 2019 09:08:54 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:36252 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726984AbfLROIx (ORCPT
+        id S1727216AbfLRPwO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Dec 2019 10:52:14 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:43429 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727114AbfLRPwO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Dec 2019 09:08:53 -0500
-Received: by mail-ed1-f68.google.com with SMTP id j17so1768021edp.3
-        for <linux-media@vger.kernel.org>; Wed, 18 Dec 2019 06:08:53 -0800 (PST)
+        Wed, 18 Dec 2019 10:52:14 -0500
+Received: by mail-lj1-f196.google.com with SMTP id a13so2682167ljm.10
+        for <linux-media@vger.kernel.org>; Wed, 18 Dec 2019 07:52:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=evrYOOuomFe9tdD3KBiTjInS7pmV9ulXAvfxRSVoT44=;
-        b=KCDwxgP4MCuwW63X1ZGCm58bnN4StTkBk/96kX7113sj/Vqadn+mWQcrRs3KlAYiuF
-         7lnsppmTXqHYJoqAnGqyUS1RixRodmF+MbiwGBFDCXretq3LqFdouwqVCV+kSD+pLCSB
-         hgEIdbgl0RE5Z1ie4ze7X7ub3G0raWHaIPads=
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9SaCbmKz1ngtAKjewhoah2l6ODU7+VciCnZ7nlhe26A=;
+        b=KDdHHJJR0qVpHZqAH81m6HqiNucHS6+DyOVljs3zJhGM2FtVdbdAm0v2Xxx2kkMzcc
+         COndoaW+YFAjiesHFNY+QGvBhkVduyh7QLCQeLwcNzFcgoRSyGgSLcKxln6/f1EUD6yP
+         0y/6+ZumAIbzC9iZaVPFSydS1BkjYoeUFSafS/fB2OWFlpyQaG5ZPEXYvAMbIqCKuFSL
+         vWtk3rEHKc5uyahuOPC2nUQfw14PqKcbFsQXhuikgf46s/H3eDyiCMpavZwnwbAsy3mj
+         YXZ/SZZpNe1V4549MQIslp0gnIgv8CLO8jjGejFKXWpzPMIfXWxDiYo5N9hhWPoVV8yK
+         Z+eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=evrYOOuomFe9tdD3KBiTjInS7pmV9ulXAvfxRSVoT44=;
-        b=s7NUf7VYH4U4nSgm337StB+yuvdd3KOXUmbsfVacnZom87sr1V8GD3T8zLc1QUbVv8
-         PYM55Wuv99nsBMeScm3+BpXaRoxMkKVFfO7xLtezZ1xqddpmbiRCUulB4Cq5ENlT7usr
-         jmrPGe0ZcnpsFVyYIarpwWMK+y0InEC9kCaIbvciYvoa5XRyVU/Xfb0TuSY6cKmDCAsv
-         YbHDHsX8yKmo/ran/fqbNngUgHw549rHWC5CNER09DNZ22k3kXE/qWlITB8SlGGBrenv
-         rd73+M0EM8sq+BiuUeSYGybkk7anskUsyWh7s+pvEL6VTv2TTwkdrzRFecWQsAKPYNxm
-         tsNg==
-X-Gm-Message-State: APjAAAXrsS6+yMK+Xf7kPLkRTBcQuRG9S+3FMXOuLC3e4LJMsM8KKEt9
-        eA4fILi6mOgvG+MK0iOagY6CUMzCDKulOg==
-X-Google-Smtp-Source: APXvYqwVpzYJvMfqmuFu1kSlRN6LsEv3+Tgq2BHvB/3+Sz8zFwbIF7KVl1ch7DoOlItHIrHTz2Wnjw==
-X-Received: by 2002:a50:d69a:: with SMTP id r26mr2639963edi.148.1576678131538;
-        Wed, 18 Dec 2019 06:08:51 -0800 (PST)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id l26sm38996edq.5.2019.12.18.06.08.50
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Dec 2019 06:08:50 -0800 (PST)
-Received: by mail-wm1-f42.google.com with SMTP id 20so1924443wmj.4
-        for <linux-media@vger.kernel.org>; Wed, 18 Dec 2019 06:08:50 -0800 (PST)
-X-Received: by 2002:a7b:c4c5:: with SMTP id g5mr3560459wmk.85.1576678129975;
- Wed, 18 Dec 2019 06:08:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20191218130214.170703-1-keiichiw@chromium.org>
- <20191218130214.170703-2-keiichiw@chromium.org> <20191218134037.3jbouht52bxqwfyy@sirius.home.kraxel.org>
-In-Reply-To: <20191218134037.3jbouht52bxqwfyy@sirius.home.kraxel.org>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Wed, 18 Dec 2019 23:08:37 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5AEJ0sUzqrXJAmFnBn0aU8Ef6FwXYo0LgK0NO_CdWXRVg@mail.gmail.com>
-Message-ID: <CAAFQd5AEJ0sUzqrXJAmFnBn0aU8Ef6FwXYo0LgK0NO_CdWXRVg@mail.gmail.com>
-Subject: Re: [virtio-dev] Re: [PATCH v2 1/1] virtio-video: Add virtio video
- device specification
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     Keiichi Watanabe <keiichiw@chromium.org>,
-        virtio-dev@lists.oasis-open.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Alex Lau <alexlau@chromium.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9SaCbmKz1ngtAKjewhoah2l6ODU7+VciCnZ7nlhe26A=;
+        b=H9xXBZhzxU+TB6fmPBpK0LX4GV8HEi3maNpq2fb8MGz3ydoewc9zMP3L8UhzoMIIfm
+         vFD5pHaIzbXoUWAlXRcNYK3V96N2gW5g0LLMkAah+MLNPsWcOk1I0EPfm9mEQ9XBnUGr
+         rne1xVpjtmkXKfVD06HttXYvEwRPoHAEpTi8FKiyDyPLVxn7crgvM7yoDY/PVvItbrUE
+         zFCHFw/2qnraEvTRRLlXcs0rTTHK18tkolG0bXuI13p92OexIIQluwpfdZzgza9+/GBP
+         9CSxkPirEpDMn3bcUYQULcFsiba+G+fv2LiJxqAFzOgKnQOsHHSlI2MQswcV1tH8TvnV
+         FxSw==
+X-Gm-Message-State: APjAAAX1Pq9NY3SJfdPpDbQAtdY1moEPdbcgKJ6c5i2JQLjJDCqUQUFg
+        xqveeCKRd/HidFcEPqKdOEbxbQ==
+X-Google-Smtp-Source: APXvYqwSmzkDxFfUqfRx+ol+ctreHSER3AZEkxHGbqQ5sNtLr5I/0+mwtD90Owb4uveY0c44Ujy5Kw==
+X-Received: by 2002:a2e:3312:: with SMTP id d18mr2333248ljc.222.1576684332255;
+        Wed, 18 Dec 2019 07:52:12 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id s16sm1351312lfc.35.2019.12.18.07.52.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2019 07:52:11 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 66C2E1012CF; Wed, 18 Dec 2019 18:52:11 +0300 (+03)
+Date:   Wed, 18 Dec 2019 18:52:11 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Dylan Reid <dgreid@chromium.org>,
-        Dmitry Sepp <dmitry.sepp@opensynergy.com>,
-        Enrico Granata <egranata@google.com>, fziglio@redhat.com,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        =?UTF-8?Q?St=C3=A9phane_Marchesin?= <marcheu@chromium.org>,
-        Pawel Osciak <posciak@chromium.org>,
-        spice-devel@lists.freedesktop.org,
-        David Stevens <stevensd@chromium.org>, uril@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
+Subject: Re: [PATCH v11 01/25] mm/gup: factor out duplicate code from four
+ routines
+Message-ID: <20191218155211.emcegdp5uqgorfwe@box>
+References: <20191216222537.491123-1-jhubbard@nvidia.com>
+ <20191216222537.491123-2-jhubbard@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191216222537.491123-2-jhubbard@nvidia.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 10:40 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
->
->   Hi,
->
-> > +The device MUST mark the last buffer with the
-> > +VIRTIO_VIDEO_BUFFER_F_EOS flag to denote completion of the drain
-> > +sequence.
->
-> No, that would build a race condition into the protocol.  The device
-> could complete the last buffer after the driver has sent the drain
-> command but before the device saw it.  So the flag would not be
-> reliable.
->
-> I also can't see why the flag is needed in the first place.  The driver
-> should know which buffers are queued still and be able to figure
-> whenever the drain is complete or not without depending on that flag.
-> So I'd suggest to simply drop it.
+On Mon, Dec 16, 2019 at 02:25:13PM -0800, John Hubbard wrote:
+> +static void put_compound_head(struct page *page, int refs)
+> +{
+> +	/* Do a get_page() first, in case refs == page->_refcount */
+> +	get_page(page);
+> +	page_ref_sub(page, refs);
+> +	put_page(page);
+> +}
 
-Unfortunately video decoders are not that simple. There are always
-going to be some buffers on the decoder side used as reference frames.
-Only the decoder knows when to release them, as it continues decoding
-the stream. Moreover, with certain features of certain codecs (e.g.
-framebuffer reordering in H.264), there could be decoded frames that
-need to be held by decoder, because later bitstream may contain
-earlier frames.
+It's not terribly efficient. Maybe something like:
 
-How we defined this in the V4L2 stateful decoder interface is that if
-the decoder happened to return the last framebuffer before the drain
-request arrived, it would return one more, empty. From our experience
-that was the easiest thing to deal with from both the driver and the
-application, so I believe the same should apply to the host device
-implementation and the guest driver.
+	VM_BUG_ON_PAGE(page_ref_count(page) < ref, page);
+	if (refs > 2)
+		page_ref_sub(page, refs - 1);
+	put_page(page);
 
->
-> That is the only issue I've spotted in the protocol on a first quick
-> look.  There are a few places where the spec text could be improved.
-> I'll try to set aside some time to go over this in detail, but I can't
-> promise I'll find the time to do that before xmas and new year.
+?
 
-Thanks a lot for review.
-
-Best regards,
-Tomasz
+-- 
+ Kirill A. Shutemov
