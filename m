@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D9B7C2D0D1
-	for <linux-media@archiver.kernel.org>; Thu, 19 Dec 2019 19:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C26EFC2D0C1
+	for <linux-media@archiver.kernel.org>; Thu, 19 Dec 2019 19:10:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EDF35227BF
-	for <linux-media@archiver.kernel.org>; Thu, 19 Dec 2019 19:04:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8DC7D227BF
+	for <linux-media@archiver.kernel.org>; Thu, 19 Dec 2019 19:10:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576782257;
+	s=default; t=1576782604;
 	bh=3K4N9OE0RaryNp4KTlU4FXDaW7UdwQ7b4wXkp9IHSQQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=OByxXK3wkbXgmUFiUs1FWbfTVZkCFszPdigwzcmja1W8rCbvG13X5275864okP9y5
-	 EKUR4XyB9+CVQNamKN1RbX1HlXlQS56mLM6BbaQrwx2UMeC4VL1KcsXoSSJnV+aZBS
-	 ySwa+9EWq+P7L7W7iVCi9IkVqd+wUxTu0fbXx7Ls=
+	b=YYVxCmmI00kfGyD6xbFo8etWUo9RbFcjg5SzQOUBXFy5GwEYAFyqQNbNJCkQSBhnF
+	 DTN8bhSLRb0h4fGdtQaiMxVnMKuFDS69TbnAr9QqnzNM5nOLhy1p9iSd5dl24gjDBZ
+	 tyl9Fapo3QueJgnryDBNRFS7D1OXZK1OMatdXrU4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729469AbfLSSr3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Dec 2019 13:47:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40352 "EHLO mail.kernel.org"
+        id S1728301AbfLSSjy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Dec 2019 13:39:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58410 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727897AbfLSSr2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Dec 2019 13:47:28 -0500
+        id S1728294AbfLSSjx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 19 Dec 2019 13:39:53 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 608B5206D7;
-        Thu, 19 Dec 2019 18:47:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BD3E424650;
+        Thu, 19 Dec 2019 18:39:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576781247;
+        s=default; t=1576780792;
         bh=3K4N9OE0RaryNp4KTlU4FXDaW7UdwQ7b4wXkp9IHSQQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YzBqfSdLlQ7Anlqif0sYhL6I2rea6sCwEOd9TlhCbhZTr75YDTBdv7H24YNOKIqlH
-         4/pk2DyKxoW8g4VFbdADSq+dW/ecgOQFHs6OB96v+TEiJM3ZTvBASA7mxOU7yhwkCZ
-         tNp0c0R75rhf8dOL24GYM4nmlBMoArerKBvCuvcI=
+        b=NHq03vZOAKEsz8nKbxqwuOHc1IT7mUuBzXR3/VLaIvOR27K0iONojZd+z3TfgnURb
+         EVSz/EnMvhbVHKDNizuqjjUSflIhyZ9KAh7vY9Hg6YE++bJIgPHcvZD3HxSI5L8Vpp
+         +qGUrnr1G+Tbxwf5de1KVyjABATiZPHdNkwmCeME=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -48,12 +48,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@osg.samsung.com>,
         =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
         <ville.syrjala@linux.intel.com>
-Subject: [PATCH 4.9 143/199] video/hdmi: Fix AVI bar unpack
-Date:   Thu, 19 Dec 2019 19:33:45 +0100
-Message-Id: <20191219183223.107627157@linuxfoundation.org>
+Subject: [PATCH 4.4 120/162] video/hdmi: Fix AVI bar unpack
+Date:   Thu, 19 Dec 2019 19:33:48 +0100
+Message-Id: <20191219183215.056079256@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191219183214.629503389@linuxfoundation.org>
-References: <20191219183214.629503389@linuxfoundation.org>
+In-Reply-To: <20191219183150.477687052@linuxfoundation.org>
+References: <20191219183150.477687052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
