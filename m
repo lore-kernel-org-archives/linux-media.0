@@ -1,134 +1,90 @@
-Return-Path: <SRS0=QOIR=2N=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=1f6v=2O=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6135DC2D0D0
-	for <linux-media@archiver.kernel.org>; Mon, 23 Dec 2019 18:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E30EFC2D0CF
+	for <linux-media@archiver.kernel.org>; Tue, 24 Dec 2019 12:12:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3A0B3206CB
-	for <linux-media@archiver.kernel.org>; Mon, 23 Dec 2019 18:24:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFBA820731
+	for <linux-media@archiver.kernel.org>; Tue, 24 Dec 2019 12:12:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="FctYOOrJ"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="w4Zyg4g7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbfLWSYv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Dec 2019 13:24:51 -0500
-Received: from mail-qv1-f65.google.com ([209.85.219.65]:33933 "EHLO
-        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726867AbfLWSYv (ORCPT
+        id S1726971AbfLXMMv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Dec 2019 07:12:51 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:58362 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726195AbfLXMMm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Dec 2019 13:24:51 -0500
-Received: by mail-qv1-f65.google.com with SMTP id o18so6673322qvf.1
-        for <linux-media@vger.kernel.org>; Mon, 23 Dec 2019 10:24:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=KNSp0xKzXXca6h2YP8X3emLAqK9GuJuCbstCZTI5ulI=;
-        b=FctYOOrJ074bGu2erxfD+ggi+amf34vJ2+/SB/OaLs8ZFEcoEOPSKxrX7J7vfW72iX
-         iaD1ph6XI9oWEr/nnku4Pr+MbBh9He5Xr+rBPzoju6TBhM7n5pqaYtl/oqkKFK9Nr8fH
-         Us04jbJ3zTX0WDIVdGhJyQO5EPn2JUvIhBvTug4ZRXtCzaFxharK0qUYwO9ZIkwiEqhS
-         c9Aa/tUvtqh3RdzKBnkDvwefmOBkVu9RUXlbwmdawA3jtTcA8wQCgHrvBfiWYN8r7VQg
-         T/hlkSjI6vXJcCVxYIXrbbrRmfsaCa4t09oEgSwlogc3AYXQW7LtDW06LM/jq8bAmut6
-         WCJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=KNSp0xKzXXca6h2YP8X3emLAqK9GuJuCbstCZTI5ulI=;
-        b=GlHUUBkKjRaydlVoGuXX2DD167KVJBCUyDaJiUyn1EMeQM27Kcfj3Bn9Tx3zqDYz23
-         qvbtdYaDO5LJdKIXbpfUYJQDwmc6naNiSk3Hhh1J9gq02NuqU3xkG6g9uxm2t/FuoL07
-         KMtrforKANUhKX8/BJ0aUR2CL3E3aGncQ+gLdLXa5tRQMRAA26V8m/0DpEgMXzIi+J2Q
-         j8RWi5tWC5eNtEbmzelERnLPBDDgTPFlVUcAgBxyA5lulWT/Y6JF6bJd3dkULjiVcLXo
-         +fLIEhk9vpXfSH0vxf7pdttXzOGKI38KEU5FP3t4TxMoPkBmu8q/JMo0JwWWOEF9s7kk
-         AUTg==
-X-Gm-Message-State: APjAAAXPabcWoMfJRwebBctCdI7cF+mou2SpqAy6Zz078eI/DlUYIIsf
-        f6VyRSi4shrdNNiIjIY6Rpgsag==
-X-Google-Smtp-Source: APXvYqyOJm+HA/OOXOk1TxOLC8pk6pJEfZhfUy8M7as0rtMhyNSoNfAsriRZZomXf9eRLN7qDrjm+A==
-X-Received: by 2002:a0c:e150:: with SMTP id c16mr25637620qvl.51.1577125488455;
-        Mon, 23 Dec 2019 10:24:48 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-57-212.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.57.212])
-        by smtp.gmail.com with ESMTPSA id b7sm6449933qtj.15.2019.12.23.10.24.47
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 23 Dec 2019 10:24:47 -0800 (PST)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ijSNq-0007Pv-LV; Mon, 23 Dec 2019 14:24:46 -0400
-Date:   Mon, 23 Dec 2019 14:24:46 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, KVM list <kvm@vger.kernel.org>,
-        linux-block@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        "Linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Netdev <netdev@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maor Gottlieb <maorg@mellanox.com>
-Subject: Re: [PATCH v11 00/25] mm/gup: track dma-pinned pages: FOLL_PIN
-Message-ID: <20191223182446.GA28321@ziepe.ca>
-References: <20191216222537.491123-1-jhubbard@nvidia.com>
- <20191219132607.GA410823@unreal>
- <a4849322-8e17-119e-a664-80d9f95d850b@nvidia.com>
- <20191219210743.GN17227@ziepe.ca>
- <42a3e5c1-6301-db0b-5d09-212edf5ecf2a@nvidia.com>
- <20191220133423.GA13506@ziepe.ca>
- <CAPcyv4hX9TsTMjsv2hnbEM-TpkC9abtWGSVskr9nPwpR8c5E1Q@mail.gmail.com>
+        Tue, 24 Dec 2019 07:12:42 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1577189561; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=IFZOTR8XW9iOWd65uY/xT59CKc3w+pTje1cV3Wl7IOQ=;
+ b=w4Zyg4g7rc12E+H7V7Cy/GPgYNIKU0Kk+yHJvM0WP02P4v56glavbRJ09DZ5+GJ2x0WKiyA1
+ FILUjf/+sdHztYVuZHoj6d8G+X85wEkM2Hq8UGc99oxSNKUA5s3CwZBspdRayhH2jV4y/apn
+ 8gknMY9pFZaOCi5qA7FSaGFvUvI=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e0200b3.7f0160a8a2d0-smtp-out-n02;
+ Tue, 24 Dec 2019 12:12:35 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 5C97CC4479D; Tue, 24 Dec 2019 12:12:34 +0000 (UTC)
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: saiprakash.ranjan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F1D71C43383;
+        Tue, 24 Dec 2019 12:12:33 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPcyv4hX9TsTMjsv2hnbEM-TpkC9abtWGSVskr9nPwpR8c5E1Q@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 24 Dec 2019 17:42:33 +0530
+From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     Dikshita Agarwal <dikshita@codeaurora.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vgarodia@codeaurora.org, linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [PATCH 1/3] arm64: dts: sc7180: Add Venus video codec DT node
+In-Reply-To: <17a371c0-d73a-75eb-34f2-c9afb51d46f5@linaro.org>
+References: <1576828760-13176-1-git-send-email-dikshita@codeaurora.org>
+ <1576828760-13176-2-git-send-email-dikshita@codeaurora.org>
+ <17a371c0-d73a-75eb-34f2-c9afb51d46f5@linaro.org>
+Message-ID: <8a43b13d0cd4a7bcb18e0f1f8259ec72@codeaurora.org>
+X-Sender: saiprakash.ranjan@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Dec 20, 2019 at 04:32:13PM -0800, Dan Williams wrote:
+Hi Stan,
 
-> > > There's already a limit, it's just a much larger one. :) What does "no limit"
-> > > really mean, numerically, to you in this case?
-> >
-> > I guess I mean 'hidden limit' - hitting the limit and failing would
-> > be managable.
-> >
-> > I think 7 is probably too low though, but we are not using 1GB huge
-> > pages, only 2M..
+On 2019-12-20 15:04, Stanimir Varbanov wrote:
 > 
-> What about RDMA to 1GB-hugetlbfs and 1GB-device-dax mappings?
+> This subnode should be in sc7180-idp.dts, because we assume that by
+> default the qcom platforms have TZ.
+> 
 
-I don't think the failing testing is doing that.
+sc7180.dtsi will not be used on TZ based platforms which was the case 
+for SDM845
+where sdm845.dtsi was common for TZ (dragonboards) and non TZ(cheza 
+boards) based platforms.
+So in order to avoid duplicating this node in other board specific dts 
+files, it
+would be better to have it here itself.
 
-It is also less likely that 1GB regions will need multi-mapping, IMHO.
+Thanks,
+Sai
 
-Jason
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+member
+of Code Aurora Forum, hosted by The Linux Foundation
