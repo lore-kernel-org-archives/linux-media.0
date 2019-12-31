@@ -6,84 +6,86 @@ X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F22EC2D0C2
-	for <linux-media@archiver.kernel.org>; Tue, 31 Dec 2019 09:08:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B5A4C2D0DD
+	for <linux-media@archiver.kernel.org>; Tue, 31 Dec 2019 09:37:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D2039206DB
-	for <linux-media@archiver.kernel.org>; Tue, 31 Dec 2019 09:08:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0BFE72072A
+	for <linux-media@archiver.kernel.org>; Tue, 31 Dec 2019 09:37:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725906AbfLaJIv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Dec 2019 04:08:51 -0500
-Received: from gofer.mess.org ([88.97.38.141]:37767 "EHLO gofer.mess.org"
+        id S1725906AbfLaJhf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Dec 2019 04:37:35 -0500
+Received: from gofer.mess.org ([88.97.38.141]:52489 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725770AbfLaJIv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Dec 2019 04:08:51 -0500
+        id S1725770AbfLaJhf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 31 Dec 2019 04:37:35 -0500
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id D46C711A001; Tue, 31 Dec 2019 09:08:48 +0000 (GMT)
-Date:   Tue, 31 Dec 2019 09:08:48 +0000
+        id 1A73711A001; Tue, 31 Dec 2019 09:37:34 +0000 (GMT)
+Date:   Tue, 31 Dec 2019 09:37:33 +0000
 From:   Sean Young <sean@mess.org>
-To:     Peter Seiderer <ps.report@gmx.net>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH v4l-utils] keymap.h needs sys/types.h and argp.h
-Message-ID: <20191231090848.GB24469@gofer.mess.org>
-References: <20191218211016.18796-1-ps.report@gmx.net>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] [media] af9035: issue an error message when i2c stuff
+ fails
+Message-ID: <20191231093733.GC24469@gofer.mess.org>
+References: <20190707205933.23059-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191218211016.18796-1-ps.report@gmx.net>
+In-Reply-To: <20190707205933.23059-1-uwe@kleine-koenig.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Peter,
+Hello Uwe,
 
-On Wed, Dec 18, 2019 at 10:10:16PM +0100, Peter Seiderer wrote:
-> Fixes:
+First apologies for taking so long to get to your patch.
+
+On Sun, Jul 07, 2019 at 10:59:33PM +0200, Uwe Kleine-K�nig wrote:
+> Instead of failing silent give a hint what went wrong.
 > 
->   keymap.h:23:2: error: unknown type name ‘u_int32_t’
->   keymap.h:36:1: error: unknown type name ‘error_t’
+> Signed-off-by: Uwe Kleine-K�nig <uwe@kleine-koenig.org>
+> ---
+>  drivers/media/usb/dvb-usb-v2/af9035.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/dvb-usb-v2/af9035.c b/drivers/media/usb/dvb-usb-v2/af9035.c
+> index de52309eaaab..f5701fab192c 100644
+> --- a/drivers/media/usb/dvb-usb-v2/af9035.c
+> +++ b/drivers/media/usb/dvb-usb-v2/af9035.c
+> @@ -211,13 +211,19 @@ static int af9035_add_i2c_dev(struct dvb_usb_device *d, const char *type,
+>  
+>  	/* register I2C device */
+>  	client = i2c_new_device(adapter, &board_info);
+> -	if (client == NULL || client->dev.driver == NULL) {
+> +	if (client == NULL) {
+> +		dev_err(&intf->dev, "failed to register i2c device\n");
+> +		ret = -ENODEV;
+> +		goto err;
+> +	} else if (client->dev.driver == NULL) {
+> +		dev_err(&intf->dev, "no driver for i2c device (type=%s)\n", type);
+>  		ret = -ENODEV;
+>  		goto err;
+>  	}
 
-It would be nice to know where/how you are encountering these errors. ir-ctl
-with these changes are building fine on Fedora and Debian (unstable).
+i2c_new_device() calls i2c_new_client_device(), which in every error path
+does a dev_err(). I suspect that this patch has become obsolete because
+of fixes in i2c.
 
 Thanks,
+
 Sean
 
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  utils/common/keymap.c      | 2 ++
->  utils/ir-ctl/bpf_encoder.c | 1 +
->  2 files changed, 3 insertions(+)
-> 
-> diff --git a/utils/common/keymap.c b/utils/common/keymap.c
-> index f574f24f..d06deb59 100644
-> --- a/utils/common/keymap.c
-> +++ b/utils/common/keymap.c
-> @@ -9,6 +9,8 @@
->  #include <string.h>
->  #include <limits.h>
->  #include <stdbool.h>
-> +#include <sys/types.h>
-> +#include <argp.h>
 >  
->  #include "keymap.h"
->  #include "toml.h"
-> diff --git a/utils/ir-ctl/bpf_encoder.c b/utils/ir-ctl/bpf_encoder.c
-> index 82d12cc0..e3e705e7 100644
-> --- a/utils/ir-ctl/bpf_encoder.c
-> +++ b/utils/ir-ctl/bpf_encoder.c
-> @@ -5,6 +5,7 @@
->  #include <errno.h>
->  #include <string.h>
->  #include <sys/types.h>
-> +#include <argp.h>
->  
->  #include "keymap.h"
->  
+>  	/* increase I2C driver usage count */
+>  	if (!try_module_get(client->dev.driver->owner)) {
+> +		dev_err(&intf->dev, "failed to get module for i2c driver\n");
+>  		i2c_unregister_device(client);
+>  		ret = -ENODEV;
+>  		goto err;
 > -- 
-> 2.24.0
-> 
+> 2.20.1
