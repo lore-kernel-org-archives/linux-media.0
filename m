@@ -2,73 +2,94 @@ Return-Path: <SRS0=7K7D=2W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.2 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDA72C2D0DE
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jan 2020 08:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCAFBC2D0DC
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jan 2020 09:27:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BB5BB2072C
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jan 2020 08:21:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8ECFB2073D
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jan 2020 09:27:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbgAAIUN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jan 2020 03:20:13 -0500
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:56920 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725916AbgAAIUM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 1 Jan 2020 03:20:12 -0500
-X-IronPort-AV: E=Sophos;i="5.69,382,1571695200"; 
-   d="scan'208";a="429578752"
-Received: from palace.rsr.lip6.fr (HELO palace.lip6.fr) ([132.227.105.202])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/AES128-SHA256; 01 Jan 2020 09:20:08 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Antti Palosaari <crope@iki.fi>
-Cc:     kernel-janitors@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 03/16] [media] anysee: constify copied structure
-Date:   Wed,  1 Jan 2020 08:43:21 +0100
-Message-Id: <1577864614-5543-4-git-send-email-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1577864614-5543-1-git-send-email-Julia.Lawall@inria.fr>
-References: <1577864614-5543-1-git-send-email-Julia.Lawall@inria.fr>
+        id S1725809AbgAAJ12 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jan 2020 04:27:28 -0500
+Received: from gofer.mess.org ([88.97.38.141]:38363 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725783AbgAAJ12 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 1 Jan 2020 04:27:28 -0500
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 2B36C11A001; Wed,  1 Jan 2020 09:27:27 +0000 (GMT)
+Date:   Wed, 1 Jan 2020 09:27:26 +0000
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR v5.6] DVB & RC
+Message-ID: <20200101092726.GA15659@gofer.mess.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The anysee_tda18212_config and anysee_tda18212_config2 structures
-are only copied into other structures, so make them const.
+Hi Mauro,
 
-The opportunity for this change was found using Coccinelle.
+Here are the first set of changes for dvb and rc.
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+Thanks,
+Sean
 
----
- drivers/media/usb/dvb-usb-v2/anysee.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The following changes since commit 0885acd77eb4644fd88f6d9f41e433f4ee9bc37a:
 
-diff --git a/drivers/media/usb/dvb-usb-v2/anysee.c b/drivers/media/usb/dvb-usb-v2/anysee.c
-index fb6d99dea31a..94b8d3e5d8f7 100644
---- a/drivers/media/usb/dvb-usb-v2/anysee.c
-+++ b/drivers/media/usb/dvb-usb-v2/anysee.c
-@@ -318,14 +318,14 @@ static struct tda10023_config anysee_tda10023_tda18212_config = {
- 	.deltaf = 0xba02,
- };
- 
--static struct tda18212_config anysee_tda18212_config = {
-+static const struct tda18212_config anysee_tda18212_config = {
- 	.if_dvbt_6 = 4150,
- 	.if_dvbt_7 = 4150,
- 	.if_dvbt_8 = 4150,
- 	.if_dvbc = 5000,
- };
- 
--static struct tda18212_config anysee_tda18212_config2 = {
-+static const struct tda18212_config anysee_tda18212_config2 = {
- 	.if_dvbt_6 = 3550,
- 	.if_dvbt_7 = 3700,
- 	.if_dvbt_8 = 4150,
+  media: vivid: support multiplanar touch devices (2019-12-16 13:24:16 +0100)
 
+are available in the Git repository at:
+
+  git://linuxtv.org/syoung/media_tree.git tags/v5.6a
+
+for you to fetch changes up to 7f539aff71435d56f374912935565ee8efb287f4:
+
+  media: dvb: add support for TerraTec TC2 Stick (193534) (2020-01-01 08:27:23 +0000)
+
+----------------------------------------------------------------
+v5.6a
+
+----------------------------------------------------------------
+Bodo Eggert (1):
+      media: serial_ir: change "ignoring spike" to debug level
+
+Daniel W. S. Almeida (2):
+      media: dvb_dummy_fe: place EXPORT_SYMBOL below corresponding function
+      media: dvb_dummy_fe: Add blank line after declaration
+
+David J. Fiddes (1):
+      media: rtl28xxu: Add support for PROlectrix DV107669 DVB-T dongle
+
+James Hogan (1):
+      MAINTAINERS: Orphan img-ir driver
+
+Sean Young (5):
+      media: digitv: don't continue if remote control state can't be read
+      media: af9005: uninitialized variable printked
+      media: vp7045: do not read uninitialized values if usb transfer fails
+      media: cxusb: use dev_dbg() rather than hand-rolled debug
+      media: rc: ensure lirc is initialized before registering input device
+
+Tomasz Maciej Nowak (1):
+      media: dvb: add support for TerraTec TC2 Stick (193534)
+
+ MAINTAINERS                                |  3 +--
+ drivers/media/dvb-frontends/dvb_dummy_fe.c | 10 ++++-----
+ drivers/media/rc/rc-main.c                 | 27 ++++++++++++++----------
+ drivers/media/rc/serial_ir.c               |  2 +-
+ drivers/media/usb/dvb-usb-v2/af9035.c      | 15 +++++++++-----
+ drivers/media/usb/dvb-usb-v2/rtl28xxu.c    |  2 ++
+ drivers/media/usb/dvb-usb/af9005.c         |  2 +-
+ drivers/media/usb/dvb-usb/cxusb.c          | 33 ++++++++++++++----------------
+ drivers/media/usb/dvb-usb/digitv.c         | 10 ++++++---
+ drivers/media/usb/dvb-usb/vp7045.c         | 21 ++++++++++++-------
+ include/media/dvb-usb-ids.h                |  2 ++
+ 11 files changed, 74 insertions(+), 53 deletions(-)
