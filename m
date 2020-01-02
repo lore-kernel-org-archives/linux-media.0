@@ -2,80 +2,83 @@ Return-Path: <SRS0=5h/u=2X=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=-12.3 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C115C2D0DC
-	for <linux-media@archiver.kernel.org>; Thu,  2 Jan 2020 13:27:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E202FC2D0DC
+	for <linux-media@archiver.kernel.org>; Thu,  2 Jan 2020 13:47:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 422E6217F4
-	for <linux-media@archiver.kernel.org>; Thu,  2 Jan 2020 13:27:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BFB5320866
+	for <linux-media@archiver.kernel.org>; Thu,  2 Jan 2020 13:47:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728387AbgABN0s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Jan 2020 08:26:48 -0500
-Received: from alexa-out-blr-01.qualcomm.com ([103.229.18.197]:49300 "EHLO
-        alexa-out-blr-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728341AbgABN0s (ORCPT
+        id S1728395AbgABNr7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Jan 2020 08:47:59 -0500
+Received: from retiisi.org.uk ([95.216.213.190]:56656 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728378AbgABNr7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 2 Jan 2020 08:26:48 -0500
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by alexa-out-blr-01.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Jan 2020 18:55:47 +0530
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 02 Jan 2020 18:55:34 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 3FC0C34E1; Thu,  2 Jan 2020 18:55:33 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, vgarodia@codeaurora.org,
-        Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH V3 0/4] Enable video on sc7180
-Date:   Thu,  2 Jan 2020 18:54:57 +0530
-Message-Id: <1577971501-3732-1-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
+        Thu, 2 Jan 2020 08:47:59 -0500
+Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 09A3E634C86;
+        Thu,  2 Jan 2020 15:46:58 +0200 (EET)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1in0oU-0001sr-AW; Thu, 02 Jan 2020 15:46:58 +0200
+Date:   Thu, 2 Jan 2020 15:46:58 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com
+Subject: [GIT PULL for 5.6] Smiapp PM patches and omap3isp fixes
+Message-ID: <20200102134658.GH5050@valkosipuli.retiisi.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Hi Mauro,
 
-Changes since v2:
+Here's a few fixes for omap3isp plus cleanups for the smiapp driver.
 
-  - added changes to enable ICB in DT.
-
-  - addressed DT schema and resource struct review comments.
-
-  - added Venus firmware subnode for non-TZ platform.
+Please pull.
 
 
-v2 can be found at [1].
-These changes depend on patch series [2] - [6].
+The following changes since commit 0885acd77eb4644fd88f6d9f41e433f4ee9bc37a:
 
-Thanks,
-Dikshita
+  media: vivid: support multiplanar touch devices (2019-12-16 13:24:16 +0100)
 
-[1] https://lkml.org/lkml/2019/12/20/126
-[2] https://patchwork.kernel.org/project/linux-media/list/?series=219021
-[3] https://patchwork.kernel.org/project/linux-media/list/?series=214797
-[4] https://lkml.org/lkml/2019/12/27/73
-[5] https://lore.kernel.org/patchwork/project/lkml/list/?series=418681 
-[6] https://lore.kernel.org/patchwork/project/lkml/list/?series=424054
+are available in the Git repository at:
 
-Dikshita Agarwal (4):
-  arm64: dts: sc7180: Add Venus video codec DT node
-  dt-bindings: media: venus: Add sc7180 DT schema
-  venus: core: add sc7180 DT compatible and resource struct
-  arm64: dts: sc7180: Add Venus firmware subnode
+  git://linuxtv.org/sailus/media_tree.git tags/smiapp-pm-5.6-1-signed
 
- .../bindings/media/qcom,venus-sc7180.yaml          | 136 +++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc7180-idp.dts            |   6 +
- arch/arm64/boot/dts/qcom/sc7180.dtsi               |  36 ++++++
- drivers/media/platform/qcom/venus/core.c           |  45 +++++++
- 4 files changed, 223 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/qcom,venus-sc7180.yaml
+for you to fetch changes up to 5836ef92ac0205bfb6d354b39aabf2fab54f6666:
+
+  smiapp: Put the device again if starting streaming fails (2020-01-02 14:59:35 +0200)
+
+----------------------------------------------------------------
+smiapp patches for 5.6
+
+----------------------------------------------------------------
+Sakari Ailus (4):
+      omap3isp: Ignore failure of stopping streaming on external subdev
+      omap3isp: Don't restart CCDC if we're about to stop
+      smiapp: Avoid maintaining power state information
+      smiapp: Put the device again if starting streaming fails
+
+ drivers/media/i2c/smiapp/smiapp-core.c    | 198 +++++++++++++++++-------------
+ drivers/media/i2c/smiapp/smiapp-regs.c    |   3 -
+ drivers/media/i2c/smiapp/smiapp.h         |   1 -
+ drivers/media/platform/omap3isp/isp.c     |   8 +-
+ drivers/media/platform/omap3isp/ispccdc.c |  12 +-
+ 5 files changed, 126 insertions(+), 96 deletions(-)
 
 -- 
-1.9.1
-
+Sakari Ailus
