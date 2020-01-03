@@ -2,67 +2,63 @@ Return-Path: <SRS0=b4b/=2Y=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0AF4C2D0CE
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 16:36:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDA38C2D0C2
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 16:36:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 769AC206E6
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 16:36:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82E4B21835
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 16:36:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1578069364;
-	bh=6tmWngJho+6nvSioNSpEVxS7yF/xEHxBUuDKi0b0X9A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=GOt0qRXRSx+minB2hMWEyiCsyRpm6lzazdseqyss4NzIJZVStm63Dh45jR2Mb/UUI
-	 DtVxKljOA9FaCTY9U3LxD7AemlBDe52dVbHLw0rU3jECFgE1vnz1m51B2tY+mgf+wB
-	 xzxi8V+K6WREXkd2IV6QCuOoXZhBpZRcULIDJ8bo=
+	s=default; t=1578069375;
+	bh=t4bgbJJbSS52nJcUUxdgLK3cBH7RVMsYoAXiO4lvpIU=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=JffbteaXBUm+jTfdQfVi9zQPkYuy11mNIPzjFMjz4828eZ/EdRo0WVsL3IxFee4GW
+	 y4aWIupUb4S6s8lG3sNvcqJ4+bxNAY3PL3ahbzpt0j691siVFjH2YvX46BHUNfACGP
+	 nqMJ6brUEfq0g8DBe0IP8orz0oq4fOTPyS4R4nDE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728182AbgACQgD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Jan 2020 11:36:03 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:37003 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728040AbgACQff (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jan 2020 11:35:35 -0500
-Received: by mail-lj1-f196.google.com with SMTP id o13so33001084ljg.4;
-        Fri, 03 Jan 2020 08:35:34 -0800 (PST)
+        id S1728051AbgACQfe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Jan 2020 11:35:34 -0500
+Received: from mail-lj1-f177.google.com ([209.85.208.177]:41824 "EHLO
+        mail-lj1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728035AbgACQfe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jan 2020 11:35:34 -0500
+Received: by mail-lj1-f177.google.com with SMTP id h23so44436932ljc.8;
+        Fri, 03 Jan 2020 08:35:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+tlqOZeymQPSzMRwJcWO6YbRSpeG6g0qeksDnmBdU10=;
-        b=BazQZLFwOzVOPB0VwBVnhNRyeWeWGjqREEXs3llMKwYOeEXpkM3tVqZyT0/uoRPAXZ
-         AMKQAoSCJaN5P7pF+VaGE5PA/tWv4ANx04bkrQpYbF1c6aTzKZlsLxrgzJEfQKOg/F0H
-         eavjvabmBdBXR9fltugjvoGyBbeMLFcsbTxcxQJaTvot5eVWGlrme8gjLbUNfOqTGBCl
-         adtFem8UAThZY+omHYBSNzO8PIYYegf16Ql35sHIRKoGU7oUHIP2rYskl0y2zgKJO5Wu
-         THVkyagqzSeeeu2b9vXJMKK3D9RMigj61CUMNgh3X9gtryIFQXwb7rTnxvafTVMjgWWJ
-         PyJw==
-X-Gm-Message-State: APjAAAVI9PuztnpjnsrbfR24A4Y3/oJIVvAps4dxNRKoAuU0yy4Lszqu
-        Q+oVPYti98UzCGkzfwD6HWg=
-X-Google-Smtp-Source: APXvYqwYSsLJyZGoPLjR6puxlsXnmFozkkoUW6uBboL+dGzIHZp3/IWNSbX0v5RXpEQ36TA9fZ4bOg==
-X-Received: by 2002:a2e:8603:: with SMTP id a3mr43840365lji.210.1578069333597;
-        Fri, 03 Jan 2020 08:35:33 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fFX7uGIZ1X+s79thV3DjoWZzF0PRIpeDDbwCxzY7LwM=;
+        b=tB4oPF5Pt840/umBcBu0ZUXFfgP4G8j0ioHyS7wrRSnmcUiciLUY+hwLYnd3Y/AYw6
+         M93VdIaHjO2P/xu/dth1dR4zBw7iKOA+kvTyTjpQUa+JQjUxooFKl83thFOCnOZdyMAT
+         +vuotpWTyBEpkjRQcSHLisM1LgPBP4lke8u9qfmAfaE9439mpZgLLT89gWtSk/GOe+Lw
+         JDmCuREF5SthddWRGbxXuaVaLHHHyR/nyf78JN+wNrGdcyQtlJouTSttEd7IeE+HskkI
+         92JVEyzAsfwJETQio4zNn7BCpDOJIMuPNltApGvSfmAzYPz71sJuoVITmgEU3bHOSNTv
+         l0gw==
+X-Gm-Message-State: APjAAAW4D0j7fKNTEM9M6gOKc0reZTOsdcj6AJ5AY8+ylzAoziPiDGSO
+        S9JY5iFPjFSrRtYa53FSYTQ=
+X-Google-Smtp-Source: APXvYqwdsfT9Ue4rfa7wkDSMJ6nFrh+aKIp0gZyMBI5hCHZMJfPLm13CY0cMs1nbZoC3osiPdRFX/Q==
+X-Received: by 2002:a2e:9b9a:: with SMTP id z26mr52058439lji.181.1578069331694;
+        Fri, 03 Jan 2020 08:35:31 -0800 (PST)
 Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id l5sm23959515lje.1.2020.01.03.08.35.31
+        by smtp.gmail.com with ESMTPSA id w6sm24854434lfq.95.2020.01.03.08.35.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jan 2020 08:35:32 -0800 (PST)
+        Fri, 03 Jan 2020 08:35:30 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@xi.terra>)
-        id 1inPvB-0000L3-FV; Fri, 03 Jan 2020 17:35:33 +0100
+        id 1inPvA-0000Kg-Vr; Fri, 03 Jan 2020 17:35:33 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Sean Young <sean@mess.org>, Hans Verkuil <hverkuil@xs4all.nl>,
         linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH 5/6] media: dib0700: fix rc endpoint lookup
-Date:   Fri,  3 Jan 2020 17:35:12 +0100
-Message-Id: <20200103163513.1229-6-johan@kernel.org>
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/6] media: fix USB descriptor issues
+Date:   Fri,  3 Jan 2020 17:35:07 +0100
+Message-Id: <20200103163513.1229-1-johan@kernel.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200103163513.1229-1-johan@kernel.org>
-References: <20200103163513.1229-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -70,41 +66,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make sure to use the current alternate setting when verifying the
-interface descriptors to avoid submitting an URB to an invalid endpoint.
+This series fixes a number of issues due to missing or incomplete sanity
+checks that could lead to NULL-pointer dereferences, memory corruption
+or driver misbehaviour when a device has unexpected descriptors.
 
-Failing to do so could cause the driver to misbehave or trigger a WARN()
-in usb_submit_urb() that kernels with panic_on_warn set would choke on.
+Johan
 
-Fixes: c4018fa2e4c0 ("[media] dib0700: fix RC support on Hauppauge Nova-TD")
-Cc: stable <stable@vger.kernel.org>     # 3.16
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/media/usb/dvb-usb/dib0700_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/dib0700_core.c b/drivers/media/usb/dvb-usb/dib0700_core.c
-index e53c58ab6488..ef62dd6c5ae4 100644
---- a/drivers/media/usb/dvb-usb/dib0700_core.c
-+++ b/drivers/media/usb/dvb-usb/dib0700_core.c
-@@ -818,7 +818,7 @@ int dib0700_rc_setup(struct dvb_usb_device *d, struct usb_interface *intf)
- 
- 	/* Starting in firmware 1.20, the RC info is provided on a bulk pipe */
- 
--	if (intf->altsetting[0].desc.bNumEndpoints < rc_ep + 1)
-+	if (intf->cur_altsetting->desc.bNumEndpoints < rc_ep + 1)
- 		return -ENODEV;
- 
- 	purb = usb_alloc_urb(0, GFP_KERNEL);
-@@ -838,7 +838,7 @@ int dib0700_rc_setup(struct dvb_usb_device *d, struct usb_interface *intf)
- 	 * Some devices like the Hauppauge NovaTD model 52009 use an interrupt
- 	 * endpoint, while others use a bulk one.
- 	 */
--	e = &intf->altsetting[0].endpoint[rc_ep].desc;
-+	e = &intf->cur_altsetting->endpoint[rc_ep].desc;
- 	if (usb_endpoint_dir_in(e)) {
- 		if (usb_endpoint_xfer_bulk(e)) {
- 			pipe = usb_rcvbulkpipe(d->udev, rc_ep);
+Johan Hovold (6):
+  media: flexcop-usb: fix endpoint sanity check
+  media: ov519: add missing endpoint sanity checks
+  media: stv06xx: add missing descriptor sanity checks
+  media: xirlink_cit: add missing descriptor sanity checks
+  media: dib0700: fix rc endpoint lookup
+  media: iguanair: fix endpoint sanity check
+
+ drivers/media/rc/iguanair.c                   |  2 +-
+ drivers/media/usb/b2c2/flexcop-usb.c          |  6 +++---
+ drivers/media/usb/dvb-usb/dib0700_core.c      |  4 ++--
+ drivers/media/usb/gspca/ov519.c               | 10 ++++++++++
+ drivers/media/usb/gspca/stv06xx/stv06xx.c     | 19 ++++++++++++++++++-
+ .../media/usb/gspca/stv06xx/stv06xx_pb0100.c  |  4 ++++
+ drivers/media/usb/gspca/xirlink_cit.c         | 18 +++++++++++++++++-
+ 7 files changed, 55 insertions(+), 8 deletions(-)
+
 -- 
 2.24.1
 
