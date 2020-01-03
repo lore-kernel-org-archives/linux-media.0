@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C35AC32771
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 16:35:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F49AC2D0C2
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 16:35:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 53BA1206E6
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 16:35:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36E06206E6
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 16:35:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1578069353;
-	bh=qi2vtcJ1NohHCZGnuOHTQ56B1+deOvxq4b7kiG7enfc=;
+	s=default; t=1578069356;
+	bh=tXEYp3rsknBT4lY/sIr/UR4oa/ChTHaOLmC/7e7QlNU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qzgX+2aEznIGxhXu9omsPxxmVOtOrItMF8DTH3iGKfuk0YJU9kgix/Q5UAvUgsFyF
-	 tkMqIjhgmD4H4oFsvZKS9TNVq7qsNUuW8qAOnPJKvSq5ay95cSg5uxUJXQohWn3pPA
-	 CwkXN/6Esz3tkJ8gPy1Pxfb90jjJ3kJOPCUR8t/k=
+	b=KdKnc50x/sBKW/vSZ1d+qB5cUoC2LrLgSYQScZskpQliPRZ5ew+R0/GZAL+Ig057w
+	 0nWv6Wag2EPUyv+km4o006OjVOU0/Phlvnc0Ci6q/rH5Pkj3NamLANg++fd9I6BV8o
+	 a7tLT7vZiXGtR4I3DEmQyzwjOkXZVobN+aYgzJCA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbgACQfi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Jan 2020 11:35:38 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:45524 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728064AbgACQfh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jan 2020 11:35:37 -0500
-Received: by mail-lj1-f193.google.com with SMTP id j26so44403262ljc.12;
-        Fri, 03 Jan 2020 08:35:35 -0800 (PST)
+        id S1728151AbgACQfz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Jan 2020 11:35:55 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:46601 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728037AbgACQfg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jan 2020 11:35:36 -0500
+Received: by mail-lj1-f195.google.com with SMTP id m26so41970604ljc.13;
+        Fri, 03 Jan 2020 08:35:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fvUvyPauFgb0gSD0dBGAKRr2laNeAtuutqe4RwswNwo=;
-        b=HNkvjSfytuTs2BsFxEvBmoTJbcNYqlO1KkHDd0GLJa1b9Th60vzPBrEKocrypaPFX8
-         5awHdLZ5FlRU1rr+lyV1tA1HTgwXu8etVZneBbcoxsORI/1QdKxiKqiOLPK0QIZsOtQe
-         WlNzOnSGwUz7i4X/O+ywARE26ke9sxqyHpptdqPHdk/YAB87s0ofD34k7YVBX/iL7+Nb
-         56AvxYU/TOvtGiXxpB5LinrLY8vNqFD9G3pPETFFh4i+RkjryIjSJr9CSonlZQsffQPY
-         1+F3e241z1GWaPt/vViKGFrgiYRanmwfqkiDpyutfNUAoRRsGn1sJ0a6WAmCui3sWrPs
-         Iadw==
-X-Gm-Message-State: APjAAAUqqNpsJJd5SVon3svXFAEIMMTNwhFNNj3tFZt8BIhU47LKqSKP
-        g4l/fns1ei/vJeQpkrKWXMM=
-X-Google-Smtp-Source: APXvYqw7CC0QU8Touq6DWulQjWAKvYvfvYb2oEEcSrTqdjfy566G+5e/mN2WX3nEvGCEmfRtDY0bTw==
-X-Received: by 2002:a2e:9592:: with SMTP id w18mr52088640ljh.98.1578069334478;
-        Fri, 03 Jan 2020 08:35:34 -0800 (PST)
+        bh=wOGJDK9VxSi0BWGjIljSq4Feb+Qmi92twu6Ha+tsjbE=;
+        b=cnVUvsvXf783t5+2W62Fg2E7o4YGU3E0lvBkN+xPaXe2wPLCzyi01iygyLxI9N0Y5p
+         CiKREjOEAY9hRPGYxvF9ihI9y3vtSKhXqr16B00Lpv4U+N8hTH94K7X4hDDTs4zlzlAy
+         aEVhNYjqya7kBwy8MhFKmO+G+UFmF9GaX44ogVtqri8JkoGWZkXNdirrhcEFP/su9Eol
+         NDdLeieM33Iez2bg/FRRM9xt5axFHEummOmIhhH1Wg53NAdjXFO8pFZirpWkk2nDgAdO
+         u6FMmnPDer2tOxHZLTidLo+2ecNncyRblcowiFKrCwb8P0OLbHDU+3Mu1g90SDYU+a40
+         xytw==
+X-Gm-Message-State: APjAAAXnXhEzANHbeXpfFCX8MzuxA9FRmF4gelMGpKUmT6XGtxNWzGen
+        xh5pG6ctF+PXap8oGbKeLE8=
+X-Google-Smtp-Source: APXvYqyatX6mOcKLHVud6xipKNRdmBsg36UpiSC6YsOJEh3KwyNzesOFwI+O4Bmvtdt2PcidB4wVmg==
+X-Received: by 2002:a2e:7816:: with SMTP id t22mr53001895ljc.161.1578069333139;
+        Fri, 03 Jan 2020 08:35:33 -0800 (PST)
 Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id r21sm24849749ljn.64.2020.01.03.08.35.30
+        by smtp.gmail.com with ESMTPSA id u17sm15855057ljk.62.2020.01.03.08.35.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 03 Jan 2020 08:35:32 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@xi.terra>)
-        id 1inPvB-0000Kp-6W; Fri, 03 Jan 2020 17:35:33 +0100
+        id 1inPvB-0000Kz-D3; Fri, 03 Jan 2020 17:35:33 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Sean Young <sean@mess.org>, Hans Verkuil <hverkuil@xs4all.nl>,
@@ -58,9 +58,9 @@ Cc:     Sean Young <sean@mess.org>, Hans Verkuil <hverkuil@xs4all.nl>,
         linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         stable <stable@vger.kernel.org>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH 2/6] media: ov519: add missing endpoint sanity checks
-Date:   Fri,  3 Jan 2020 17:35:09 +0100
-Message-Id: <20200103163513.1229-3-johan@kernel.org>
+Subject: [PATCH 4/6] media: xirlink_cit: add missing descriptor sanity checks
+Date:   Fri,  3 Jan 2020 17:35:11 +0100
+Message-Id: <20200103163513.1229-5-johan@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200103163513.1229-1-johan@kernel.org>
 References: <20200103163513.1229-1-johan@kernel.org>
@@ -71,50 +71,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make sure to check that we have at least one endpoint before accessing
-the endpoint array to avoid dereferencing a NULL-pointer on stream
-start.
+Make sure to check that we have two alternate settings and at least one
+endpoint before accessing the second altsetting structure and
+dereferencing the endpoint arrays.
 
-Note that these sanity checks are not redundant as the driver is mixing
-looking up altsettings by index and by number, which need not coincide.
+This specifically avoids dereferencing NULL-pointers or corrupting
+memory when a device does not have the expected descriptors.
 
-Fixes: 1876bb923c98 ("V4L/DVB (12079): gspca_ov519: add support for the ov511 bridge")
-Fixes: b282d87332f5 ("V4L/DVB (12080): gspca_ov519: Fix ov518+ with OV7620AE (Trust spacecam 320)")
-Cc: stable <stable@vger.kernel.org>     # 2.6.31
+Note that the sanity check in cit_get_packet_size() is not redundant as
+the driver is mixing looking up altsettings by index and by number,
+which may not coincide.
+
+Fixes: 659fefa0eb17 ("V4L/DVB: gspca_xirlink_cit: Add support for camera with a bcd version of 0.01")
+Fixes: 59f8b0bf3c12 ("V4L/DVB: gspca_xirlink_cit: support bandwidth changing for devices with 1 alt setting")
+Cc: stable <stable@vger.kernel.org>     # 2.6.37
 Cc: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/media/usb/gspca/ov519.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/media/usb/gspca/xirlink_cit.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/gspca/ov519.c b/drivers/media/usb/gspca/ov519.c
-index f417dfc0b872..0afe70a3f9a2 100644
---- a/drivers/media/usb/gspca/ov519.c
-+++ b/drivers/media/usb/gspca/ov519.c
-@@ -3477,6 +3477,11 @@ static void ov511_mode_init_regs(struct sd *sd)
- 		return;
+diff --git a/drivers/media/usb/gspca/xirlink_cit.c b/drivers/media/usb/gspca/xirlink_cit.c
+index 934a90bd78c2..c579b100f066 100644
+--- a/drivers/media/usb/gspca/xirlink_cit.c
++++ b/drivers/media/usb/gspca/xirlink_cit.c
+@@ -1442,6 +1442,9 @@ static int cit_get_packet_size(struct gspca_dev *gspca_dev)
+ 		return -EIO;
  	}
  
-+	if (alt->desc.bNumEndpoints < 1) {
-+		sd->gspca_dev.usb_err = -ENODEV;
-+		return;
-+	}
++	if (alt->desc.bNumEndpoints < 1)
++		return -ENODEV;
 +
- 	packet_size = le16_to_cpu(alt->endpoint[0].desc.wMaxPacketSize);
- 	reg_w(sd, R51x_FIFO_PSIZE, packet_size >> 5);
+ 	return le16_to_cpu(alt->endpoint[0].desc.wMaxPacketSize);
+ }
  
-@@ -3603,6 +3608,11 @@ static void ov518_mode_init_regs(struct sd *sd)
- 		return;
+@@ -2626,6 +2629,7 @@ static int sd_start(struct gspca_dev *gspca_dev)
+ 
+ static int sd_isoc_init(struct gspca_dev *gspca_dev)
+ {
++	struct usb_interface_cache *intfc;
+ 	struct usb_host_interface *alt;
+ 	int max_packet_size;
+ 
+@@ -2641,8 +2645,17 @@ static int sd_isoc_init(struct gspca_dev *gspca_dev)
+ 		break;
  	}
  
-+	if (alt->desc.bNumEndpoints < 1) {
-+		sd->gspca_dev.usb_err = -ENODEV;
-+		return;
-+	}
++	intfc = gspca_dev->dev->actconfig->intf_cache[0];
 +
- 	packet_size = le16_to_cpu(alt->endpoint[0].desc.wMaxPacketSize);
- 	ov518_reg_w32(sd, R51x_FIFO_PSIZE, packet_size & ~7, 2);
++	if (intfc->num_altsetting < 2)
++		return -ENODEV;
++
++	alt = &intfc->altsetting[1];
++
++	if (alt->desc.bNumEndpoints < 1)
++		return -ENODEV;
++
+ 	/* Start isoc bandwidth "negotiation" at max isoc bandwidth */
+-	alt = &gspca_dev->dev->actconfig->intf_cache[0]->altsetting[1];
+ 	alt->endpoint[0].desc.wMaxPacketSize = cpu_to_le16(max_packet_size);
  
+ 	return 0;
+@@ -2665,6 +2678,9 @@ static int sd_isoc_nego(struct gspca_dev *gspca_dev)
+ 		break;
+ 	}
+ 
++	/*
++	 * Existence of altsetting and endpoint was verified in sd_isoc_init()
++	 */
+ 	alt = &gspca_dev->dev->actconfig->intf_cache[0]->altsetting[1];
+ 	packet_size = le16_to_cpu(alt->endpoint[0].desc.wMaxPacketSize);
+ 	if (packet_size <= min_packet_size)
 -- 
 2.24.1
 
