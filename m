@@ -2,66 +2,93 @@ Return-Path: <SRS0=b4b/=2Y=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=0.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MALFORMED_FREEMAIL,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CF12C2D0C2
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 11:06:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE916C2D0C2
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 12:57:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1FC1B206DB
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 11:06:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0C18222C3
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jan 2020 12:57:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=post.cz header.i=@post.cz header.b="VyhgMTl7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbgACLGA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Jan 2020 06:06:00 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:39826 "EHLO www.linuxtv.org"
+        id S1727542AbgACM5P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Jan 2020 07:57:15 -0500
+Received: from mxa1.seznam.cz ([77.75.78.90]:43374 "EHLO mxa1.seznam.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727220AbgACLGA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 3 Jan 2020 06:06:00 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1inKlW-00A9al-Lo; Fri, 03 Jan 2020 11:05:14 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1inKnG-0002AM-7h; Fri, 03 Jan 2020 11:07:02 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL for 5.6] Sensor and bridge driver patches
-Date:   Fri,  3 Jan 2020 11:07:01 +0000
-Message-Id: <20200103110701.8284-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200103104802.GK5050@valkosipuli.retiisi.org.uk>
-References: 
+        id S1727350AbgACM5O (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 3 Jan 2020 07:57:14 -0500
+X-Greylist: delayed 774 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Jan 2020 07:57:13 EST
+Received: from email.seznam.cz
+        by email-smtpc3a.ko.seznam.cz (email-smtpc3a.ko.seznam.cz [10.53.10.75])
+        id 501caf9687a716f350b4b151;
+        Fri, 03 Jan 2020 13:57:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=post.cz; s=beta;
+        t=1578056231; bh=gmJYERsgZXJhuLAyaeMIXNvdxqStI1Z1MY1ZIeFMQL8=;
+        h=Received:From:To:Date:MIME-Version:Subject:Message-ID:Priority:
+         X-mailer:Content-type:Content-transfer-encoding:
+         Content-description;
+        b=VyhgMTl7w3boxkFxgAhQa9ihsYrxOmUANMgmGoF1SPNjEbUmCfjOnnvZOGvjM6KtP
+         5JGF3mWfAezetpl1kWikmRR2mdGGG1Mf3sjCNKB/w25IOwSUA135J+BN7x8a4U988N
+         4bNwL6NKl+zMzrTOF4DWhXogA9f+Xv0Lq+kCy/EU=
+Received: from [192.168.2.14] (250.68.pool1.tetanet.cz [109.202.68.250])
+        by email-relay1.ko.seznam.cz (Seznam SMTPD 1.3.108) with ESMTP;
+        Fri, 03 Jan 2020 13:44:15 +0100 (CET)  
+From:   "Frantisek Rysanek" <Frantisek.Rysanek@post.cz>
+To:     linux-media@vger.kernel.org
+Date:   Fri, 03 Jan 2020 13:44:13 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: FYI: Mygica T230C v2 works for me in 5.4.6 vanilla
+Message-ID: <5E0F371D.25003.17A93399@Frantisek.Rysanek.post.cz>
+X-mailer: Pegasus Mail for Windows (4.73.639)
+Content-type: text/plain; charset=US-ASCII
+Content-transfer-encoding: 7BIT
+Content-description: Mail message body
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Dear gentlemen (you know who you are),
 
-Pull request: https://patchwork.linuxtv.org/patch/60969/
-Build log: https://builder.linuxtv.org/job/patchwork/32031/
-Build time: 00:06:52
-Link: https://lore.kernel.org/linux-media/20200103104802.GK5050@valkosipuli.retiisi.org.uk
+I'm back to "T230C v2" and things look significantly better than half 
+a year ago. As far as I can tell, the vanilla driver (dvbsky) works 
+just fine, I can receive DVB-T and DVB-T2. I haven't tested the IR 
+remote yet, I actually have a wireless mini-keyboard, will get to IR 
+later. I have a few further small issues to polish in the user space 
+config and mechanical integration, before "production phase-in" :-)
 
-gpg: Signature made Fri 03 Jan 2020 10:44:15 AM UTC
-gpg:                using DSA key F0D0377A0D4F25A79238EFE56D40361B6E28C193
-gpg:                issuer "sakari.ailus@linux.intel.com"
-gpg: Good signature from "Sakari Ailus <sakari.ailus@linux.intel.com>" [full]
+Namely I'd like to thank the following people for making this 
+possible:
 
-Summary: 1 patches and/or PDF generation with issues, being 0 at build time
+Antti Palosaari
+Jan Pieter van Woerkom
+Sean Young
+and of course MCC the master maintainer.
+Plus a few further people in the user space department: 
+Klaus Schmidinger, Rolf Ahrenberg to name just two - but there are 
+many others.
 
-Error/warnings:
+FYI: I'm aiming for DVR as the TV viewer and recorder app, with 
+vdr-vaapidevice-plugin as the front-end part, or maybe the latest 
+developments of the softhddevice (also with VAAPI support).
+Just about yesterday I've become aware of a few friendly 
+German-speaking hackers at vdr-portal.de who seem to have quite a bit 
+going on at that software front.
+I've compiled fresh VDR and about 5 of its dependency packages, all 
+without significant compile-time errors, in Debian 10.
+I have a shiny new J4105-ITX to test on and over the last month I've 
+spent a few happy evenings hacking away at the funny little hardware 
+(mechanical integration, custom-length cabling, power supply stuff).
+I'm not taking the easy mainstream route :-) It's all starting to 
+take shape and make sense, and to my surprise, the Gemini Lake 
+apparently renders the picture better than the temporary Skylake 
+machine I used to test on in the summer.
 
+All the best in the new year, thank you, keep having fun :-)
 
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0012-media-sun4i-csi-Add-support-for-A10-CSI1-camera-sens.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0012-media-sun4i-csi-Add-support-for-A10-CSI1-camera-sens.patch
-patches/0012-media-sun4i-csi-Add-support-for-A10-CSI1-camera-sens.patch:97: WARNING: line over 80 characters
-patches/0012-media-sun4i-csi-Add-support-for-A10-CSI1-camera-sens.patch:98: WARNING: line over 80 characters
+Frank Rysanek
 
