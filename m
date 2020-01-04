@@ -2,160 +2,95 @@ Return-Path: <SRS0=HsZd=2Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=0.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MALFORMED_FREEMAIL,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E6A4C2D0C2
-	for <linux-media@archiver.kernel.org>; Sat,  4 Jan 2020 15:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C289C2D0C2
+	for <linux-media@archiver.kernel.org>; Sat,  4 Jan 2020 16:24:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 661942467A
-	for <linux-media@archiver.kernel.org>; Sat,  4 Jan 2020 15:22:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1578151338;
-	bh=jcT4GSBIn8e+Ebzgnoq/9qfcn1TpLAtbC6dlWOL1uUU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qamg7O0DPLGt4WWMa3NJaYBPsy2kBLq7kvf7kwMW9ig27Jlir3wq9nq2UehkPPYod
-	 SlDZZR0+uo+4v6u3uNlJEV15om7B0D9wCBsMCLcFyd7ks+PckquvGi9yWyoEnisHWd
-	 WmIF4kY4z6JnEvNmsARO2JS72qCWj8HLwwVEviFM=
+	by mail.kernel.org (Postfix) with ESMTP id D503C24654
+	for <linux-media@archiver.kernel.org>; Sat,  4 Jan 2020 16:24:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=post.cz header.i=@post.cz header.b="cxoCy3i8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726647AbgADPWN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 4 Jan 2020 10:22:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59874 "EHLO mail.kernel.org"
+        id S1726080AbgADQYP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 4 Jan 2020 11:24:15 -0500
+Received: from mxa1.seznam.cz ([77.75.78.90]:64094 "EHLO mxa1.seznam.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726080AbgADPWN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 4 Jan 2020 10:22:13 -0500
-Received: from localhost.localdomain (unknown [194.230.155.149])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F0F1024653;
-        Sat,  4 Jan 2020 15:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578151332;
-        bh=jcT4GSBIn8e+Ebzgnoq/9qfcn1TpLAtbC6dlWOL1uUU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZD5yZ8fNVPFpBjWdpdTnb38YwvSNT84/QcNJtBIJAGj+kxv8KX7wfS+N/N6F7gIzf
-         dLnRjSyxkoJzjCE/QWfF1Azr+H/CR7K8DnF3lA6geiq4YSOz50EfAkr2xq7TOJ5TRU
-         UK4XG8Vk/bw/b/F6KH+PfVvU971I81XooI9PvZ/0=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 07/20] media: samsung: Rename Samsung and Exynos to lowercase
-Date:   Sat,  4 Jan 2020 16:20:54 +0100
-Message-Id: <20200104152107.11407-8-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200104152107.11407-1-krzk@kernel.org>
-References: <20200104152107.11407-1-krzk@kernel.org>
+        id S1726004AbgADQYO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 4 Jan 2020 11:24:14 -0500
+Received: from email.seznam.cz
+        by email-smtpc20b.ko.seznam.cz (email-smtpc20b.ko.seznam.cz [10.53.18.25])
+        id 5379fb2284c2424753d1e5e5;
+        Sat, 04 Jan 2020 17:24:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=post.cz; s=beta;
+        t=1578155051; bh=w3/SGSyppjcjo0U3hSVmdY6GF1fAeH79vTfhtZ44I2o=;
+        h=Received:From:To:Date:MIME-Version:Subject:CC:Message-ID:Priority:
+         X-mailer:Content-type:Content-transfer-encoding:
+         Content-description;
+        b=cxoCy3i8ve5EmAwFakUAy4OBUTgDn0GE+pwFFWHLkFRK247Cwc7xkQT+9JZm6lmse
+         3QEC/MpJnaVrpXzispHd63uuKnewLC8YXhLW9852tWErifuC2mYdx/9I1W4VhCt1W5
+         56OetPvsuYOFzgl5RITKfgqF2Gs6dTWhUMFVboOs=
+Received: from [192.168.12.172] (unknown [109.202.94.47])
+        by email-relay28.ko.seznam.cz (Seznam SMTPD 1.3.108) with ESMTP;
+        Sat, 04 Jan 2020 17:24:07 +0100 (CET)  
+From:   "Frantisek Rysanek" <Frantisek.Rysanek@post.cz>
+To:     linux-media@vger.kernel.org
+Date:   Sat, 04 Jan 2020 17:24:05 +0100
+MIME-Version: 1.0
+Subject: Re: Building own DVB-T channel file from frequencies (w_scan issues)?
+CC:     Michal Zatloukal <myxal.mxl@gmail.com>
+Message-ID: <5E10BC25.28008.1D98D978@Frantisek.Rysanek.post.cz>
+X-mailer: Pegasus Mail for Windows (4.73.639)
+Content-type: text/plain; charset=US-ASCII
+Content-transfer-encoding: 7BIT
+Content-description: Mail message body
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix up inconsistent usage of upper and lowercase letters in "Samsung"
-and "Exynos" names.
+On 4 Jan 2020 at 16:08, linux-media@vger.kernel.org wrote:
+>
+> ...just for the sake of completeness, t2scan seems to face some 
+> misunderstanding with my Mygica T230C2, w_scan2 works fine...
+> 
+> [LOG SAMPLE of t2scan]
+> Info: using DVB adapter auto detection.
+>         /dev/dvb/adapter0/frontend0 -> TERRESTRIAL "Silicon Labs 
+> Si2168": very good :-))
+> 
+> Using TERRESTRIAL frontend (adapter /dev/dvb/adapter0/frontend0)
+> -_-_-_-_ Getting frontend capabilities-_-_-_-_
+> main:2852: FATAL: FE_READ_STATUS failed: 121 Remote I/O error
+> [/SAMPLE]
+> 
+> Apparently, compared to w_scan and w_scan2, t2scan is more pedantic 
+> about checking the state of the tuner before starting its scan.
+> And, I understand that these tuners have a fair share of their own HW 
+> quirks.
+> 
+> I've already reported this to the author of t2scan.
+> 
+> Frank
+>
 
-"SAMSUNG" and "EXYNOS" are not abbreviations but regular trademarked
-names.  Therefore they should be written with lowercase letters starting
-with capital letter.
+It took mighty-p, the author of t2scan, just a couple minutes to 
+respond. Amazing.
 
-The lowercase "Exynos" name is promoted by its manufacturer Samsung
-Electronics Co., Ltd., in advertisement materials and on website.
+Apparently the check (and hence the error) can be suppressed by 
+commenting out two lines in the source code:
 
-Although advertisement materials usually use uppercase "SAMSUNG", the
-lowercase version is used in all legal aspects (e.g. on Wikipedia and in
-privacy/legal statements on
-https://www.samsung.com/semiconductor/privacy-global/).
+if (ioctl(frontend_fd, FE_READ_STATUS, &fe_status) == -1) {
+	//cleanup();
+	//fatal("FE_READ_STATUS failed: %d %s\n",errno, strerror(errno));
+}
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+After that, t2scan works just fine.
 
----
+The hardware is a T230C v2, kernel 5.4.6.
+Just in case someone has comments :-)
 
-Changes since v1:
-1. Move bindings change to separate patch.
----
- Documentation/media/v4l-drivers/fimc.rst      | 6 +++---
- Documentation/media/v4l-drivers/tuners.rst    | 2 +-
- drivers/media/platform/exynos4-is/media-dev.c | 2 +-
- drivers/media/platform/s3c-camif/camif-core.c | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/media/v4l-drivers/fimc.rst b/Documentation/media/v4l-drivers/fimc.rst
-index 74585ba48b7f..2783aef65c01 100644
---- a/Documentation/media/v4l-drivers/fimc.rst
-+++ b/Documentation/media/v4l-drivers/fimc.rst
-@@ -2,7 +2,7 @@
- 
- .. include:: <isonum.txt>
- 
--The Samsung S5P/EXYNOS4 FIMC driver
-+The Samsung S5P/Exynos4 FIMC driver
- ===================================
- 
- Copyright |copy| 2012 - 2013 Samsung Electronics Co., Ltd.
-@@ -19,7 +19,7 @@ drivers/media/platform/exynos4-is directory.
- Supported SoCs
- --------------
- 
--S5PC100 (mem-to-mem only), S5PV210, EXYNOS4210
-+S5PC100 (mem-to-mem only), S5PV210, Exynos4210
- 
- Supported features
- ------------------
-@@ -65,7 +65,7 @@ Media device interface
- ~~~~~~~~~~~~~~~~~~~~~~
- 
- The driver supports Media Controller API as defined at :ref:`media_controller`.
--The media device driver name is "SAMSUNG S5P FIMC".
-+The media device driver name is "Samsung S5P FIMC".
- 
- The purpose of this interface is to allow changing assignment of FIMC instances
- to the SoC peripheral camera input at runtime and optionally to control internal
-diff --git a/Documentation/media/v4l-drivers/tuners.rst b/Documentation/media/v4l-drivers/tuners.rst
-index 7509be888909..d7924141c544 100644
---- a/Documentation/media/v4l-drivers/tuners.rst
-+++ b/Documentation/media/v4l-drivers/tuners.rst
-@@ -18,7 +18,7 @@ These differ mainly by the bandswitch byte.
- Tuner Manufacturers
- -------------------
- 
--- SAMSUNG Tuner identification: (e.g. TCPM9091PD27)
-+- Samsung Tuner identification: (e.g. TCPM9091PD27)
- 
- .. code-block:: none
- 
-diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
-index 9aaf3b8060d5..96e336b19cc3 100644
---- a/drivers/media/platform/exynos4-is/media-dev.c
-+++ b/drivers/media/platform/exynos4-is/media-dev.c
-@@ -1439,7 +1439,7 @@ static int fimc_md_probe(struct platform_device *pdev)
- 	INIT_LIST_HEAD(&fmd->pipelines);
- 	fmd->pdev = pdev;
- 
--	strscpy(fmd->media_dev.model, "SAMSUNG S5P FIMC",
-+	strscpy(fmd->media_dev.model, "Samsung S5P FIMC",
- 		sizeof(fmd->media_dev.model));
- 	fmd->media_dev.ops = &fimc_md_ops;
- 	fmd->media_dev.dev = dev;
-diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
-index c6fbcd7036d6..92f43c0cbc0c 100644
---- a/drivers/media/platform/s3c-camif/camif-core.c
-+++ b/drivers/media/platform/s3c-camif/camif-core.c
-@@ -304,7 +304,7 @@ static int camif_media_dev_init(struct camif_dev *camif)
- 	int ret;
- 
- 	memset(md, 0, sizeof(*md));
--	snprintf(md->model, sizeof(md->model), "SAMSUNG S3C%s CAMIF",
-+	snprintf(md->model, sizeof(md->model), "Samsung S3C%s CAMIF",
- 		 ip_rev == S3C6410_CAMIF_IP_REV ? "6410" : "244X");
- 	strscpy(md->bus_info, "platform", sizeof(md->bus_info));
- 	md->hw_revision = ip_rev;
--- 
-2.17.1
-
+Frank
