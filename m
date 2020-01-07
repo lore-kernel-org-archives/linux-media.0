@@ -2,107 +2,185 @@ Return-Path: <SRS0=GRoN=24=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6C12C33C9B
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jan 2020 19:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63153C282DD
+	for <linux-media@archiver.kernel.org>; Tue,  7 Jan 2020 21:30:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B4CDF2087F
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jan 2020 19:19:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3889C2081E
+	for <linux-media@archiver.kernel.org>; Tue,  7 Jan 2020 21:30:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728685AbgAGTTu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Jan 2020 14:19:50 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:11552 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728633AbgAGTTt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 7 Jan 2020 14:19:49 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 007JH4Vd173752;
-        Tue, 7 Jan 2020 14:18:36 -0500
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xb8sa441s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jan 2020 14:18:35 -0500
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 007JI0QY019239;
-        Tue, 7 Jan 2020 19:18:35 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma02dal.us.ibm.com with ESMTP id 2xajb6w3md-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jan 2020 19:18:35 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 007JIX2X48431424
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Jan 2020 19:18:33 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 700006E052;
-        Tue,  7 Jan 2020 19:18:33 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 10D296E050;
-        Tue,  7 Jan 2020 19:18:32 +0000 (GMT)
-Received: from [9.163.26.112] (unknown [9.163.26.112])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Jan 2020 19:18:32 +0000 (GMT)
-Subject: Re: [PATCH 3/3] video: aspeed: Update copyright information
-To:     Joel Stanley <joel@jms.id.au>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Andrew Jeffery <andrew@aj.id.au>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20200107034324.38073-1-joel@jms.id.au>
- <20200107034324.38073-4-joel@jms.id.au>
-From:   Eddie James <eajames@linux.ibm.com>
-Message-ID: <48c5f0dd-4fa3-919c-9dd7-91afb5da8840@linux.ibm.com>
-Date:   Tue, 7 Jan 2020 13:18:32 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1727128AbgAGVan convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Jan 2020 16:30:43 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:37056 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726389AbgAGVam (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 7 Jan 2020 16:30:42 -0500
+Received: from ip5f5a5f74.dynamic.kabel-deutschland.de ([95.90.95.116] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <heiko@sntech.de>)
+        id 1iowQn-0004mA-9K; Tue, 07 Jan 2020 22:30:29 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Helen Koike <helen.koike@collabora.com>,
+        linux-rockchip@lists.infradead.org, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, eddie.cai.linux@gmail.com,
+        mchehab@kernel.org, gregkh@linuxfoundation.org,
+        andrey.konovalov@linaro.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org, robh+dt@kernel.org, hans.verkuil@cisco.com,
+        sakari.ailus@linux.intel.com, joacim.zetterling@gmail.com,
+        kernel@collabora.com, linux-media@vger.kernel.org,
+        jacob-chen@iotwrt.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v12 09/11] media: staging: dt-bindings: add Rockchip MIPI RX D-PHY yaml bindings
+Date:   Tue, 07 Jan 2020 22:30:28 +0100
+Message-ID: <2299954.gvZHxIxoM0@diego>
+In-Reply-To: <657de953782be2514849bc8bd12a3fbcb6794427.camel@collabora.com>
+References: <20191227200116.2612137-1-helen.koike@collabora.com> <2549505.MsbA2le1sL@diego> <657de953782be2514849bc8bd12a3fbcb6794427.camel@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <20200107034324.38073-4-joel@jms.id.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-07_06:2020-01-07,2020-01-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- spamscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 mlxlogscore=999 adultscore=0 mlxscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001070152
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Ezequiel,
 
-On 1/6/20 9:43 PM, Joel Stanley wrote:
-> Use the preferred form for GPL2+, and add IBM and Intel as the authors.
-> The driver was initially upstreamed by Eddie from IBM, and has had major
-> contributions from Jae at Intel.
+Am Dienstag, 7. Januar 2020, 14:20:10 CET schrieb Ezequiel Garcia:
+> Hi Heiko, Laurent,
+> 
+> On Tue, 2020-01-07 at 10:28 +0100, Heiko Stübner wrote:
+> > Am Dienstag, 7. Januar 2020, 03:37:21 CET schrieb Laurent Pinchart:
+> > > On Mon, Jan 06, 2020 at 11:06:12PM -0300, Ezequiel Garcia wrote:
+> > > > On Tue, 2020-01-07 at 02:10 +0200, Laurent Pinchart wrote:
+> > > > > Hi Helen,
+> > > > > 
+> > > > > Thank you for the patch.
+> > > > > 
+> > > > > On Fri, Dec 27, 2019 at 05:01:14PM -0300, Helen Koike wrote:
+> > > > > > Add yaml DT bindings for Rockchip MIPI D-PHY RX
+> > > > > > 
+> > > > > > This was tested and verified with:
+> > > > > > mv drivers/staging/media/phy-rockchip-dphy/Documentation/devicetree/bindings/phy/rockchip-mipi-
+> > > > > > dphy.yaml  Documentation/devicetree/bindings/phy/
+> > > > > > make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/phy/rockchip-mipi-dphy.yaml
+> > > > > > make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/phy/rockchip-mipi-dphy.yaml
+> > > > > > 
+> > > > > > Signed-off-by: Helen Koike <helen.koike@collabora.com>
+> > > > > > 
+> > > > > > ---
+> > > > > > 
+> > > > > > Changes in v12:
+> > > > > > - The commit replaces the following commit in previous series named
+> > > > > > media: staging: dt-bindings: Document the Rockchip MIPI RX D-PHY bindings
+> > > > > > This new patch adds yaml binding and was verified with
+> > > > > > make dtbs_check and make dt_binding_check
+> > > > > > 
+> > > > > > Changes in v11: None
+> > > > > > Changes in v10:
+> > > > > > - unsquash
+> > > > > > 
+> > > > > > Changes in v9:
+> > > > > > - fix title division style
+> > > > > > - squash
+> > > > > > - move to staging
+> > > > > > 
+> > > > > > Changes in v8: None
+> > > > > > Changes in v7:
+> > > > > > - updated doc with new design and tested example
+> > > > > > 
+> > > > > >  .../bindings/phy/rockchip-mipi-dphy.yaml      | 75 +++++++++++++++++++
+> > > > > >  1 file changed, 75 insertions(+)
+> > > > > >  create mode 100644 drivers/staging/media/phy-rockchip-dphy/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy.yaml
+> > > > > > 
+> > > > > > diff --git a/drivers/staging/media/phy-rockchip-dphy/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy.yaml
+> > > > > > b/drivers/staging/media/phy-
+> > > > > > rockchip-dphy/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy.yaml
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..af97f1b3e005
+> > > > > > --- /dev/null
+> > > > > > +++ b/drivers/staging/media/phy-rockchip-dphy/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy.yaml
+> > > > > > @@ -0,0 +1,75 @@
+> > > > > > +# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > > > > > +%YAML 1.2
+> > > > > > +---
+> > > > > > +$id: http://devicetree.org/schemas/phy/rockchip-mipi-dphy.yaml#
+> > > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > > +
+> > > > > > +title: Rockchip SoC MIPI RX0 D-PHY Device Tree Bindings
+> > > > > 
+> > > > > Should this be s/RX0/RX/ ? Or do you expect different bindings for RX1 ?
+> > > > 
+> > > > The driver currently only supports RX0, but I think you are right,
+> > > > it should say RX here. This binding could be extended for RX1.
+> > > > 
+> > > > > Looking at the PHY driver, it seems to handle all PHYs with a single
+> > > > > struct device. Should we thus use #phy-cells = <1> to select the PHY ?
+> > > > 
+> > > > I am not following this. The driver handles just one PHY. Each PHY
+> > > > should have its own node.
+> > > 
+> > > Looking at the registers, it seems that the different PHYs are
+> > > intertwined and we would could have trouble handling the different PHYs
+> > > with different DT nodes and thus struct device instances.
+> > 
+> > I have to confess to not following _ALL_ of the threads, so may say
+> > something stupid, but I don't think the PHYs are intertwined so much.
+> > 
+> > Where RX0 is controlled from the "General Register Files" alone
+> > [register dumping ground for soc designers], the TX1RX1-phy
+> > actually gets controlled from inside the dsi1 register area it seems.
+> > 
+> > So in my previous (still unsucessful) tests, I was rolling with something like
+> > https://github.com/mmind/linux-rockchip/commit/e0d4b03976d2aab85a8c1630be937ea003b5df88
+> > 
+> > With the actual "logic" picked from the vendor kernel, that just double-
+> > maps the dsi1-registers in both dsi and dphy driver, which was strange.
+> > 
+> > 
+> 
+> Describing each PHY in its own device node (as we currently do)
+> results in:
+> 
+>         mipi_dphy_tx1rx1: mipi-dphy-tx1rx1@ff968000 {
+>                 compatible = "rockchip,rk3399-mipi-dphy";
+>                 reg = <0x0 0xff968000 0x0 0x8000>;
+>                 rockchip,grf = <&grf>;
+>         };
+
+0xff968000 actually really is the dsi1 controller, so we'll already
+have a node for that area. That is the reason I went that way to make
+the rockchip-dsi optionally also behave as phy-provider.
+
+So when it's used in combination with drm and a panel or so it will
+behave as dsi controller, but when requested via the phy-framework
+it will expose the dphy functionality.
 
 
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
+>         grf: syscon@ff770000 {
+>                 mipi_dphy_rx0: mipi-dphy-rx0 {
+>                         compatible = "rockchip,rk3399-mipi-dphy";
+>                 };
+>         };
+> 
+> Which is mildly ugly, as it uses two mechanism to describe
+> the GRF resource. In addition, the driver will then _infer_
+> which device node is RX0 and which is TX1RX1, from this.
+> 
+> Perhaps Laurent's proposal, describing each PHY explicitly,
+> would be cleaner?
+
+so I really think we shouldn't merge these two things together,
+especially to not break the dsi1 controller part.
 
 
->
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->   drivers/media/platform/aspeed-video.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-> index d70b893fd4cf..71e0dbdb37dc 100644
-> --- a/drivers/media/platform/aspeed-video.c
-> +++ b/drivers/media/platform/aspeed-video.c
-> @@ -1,4 +1,6 @@
-> -// SPDX-License-Identifier: GPL-2.0+
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +// Copyright 2020 IBM Corp.
-> +// Copyright (c) 2019 Intel Corporation
->   
->   #include <linux/atomic.h>
->   #include <linux/bitfield.h>
+Heiko
+
+
+
