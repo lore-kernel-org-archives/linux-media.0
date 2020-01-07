@@ -7,38 +7,35 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E046C33CB3
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jan 2020 22:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D76AC352A3
+	for <linux-media@archiver.kernel.org>; Tue,  7 Jan 2020 22:47:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EAEB52075A
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jan 2020 22:47:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE4F92075A
+	for <linux-media@archiver.kernel.org>; Tue,  7 Jan 2020 22:47:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="pjbO7VhQ"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="MVgWMvjd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728056AbgAGWrE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Jan 2020 17:47:04 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:11511 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727761AbgAGWqP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jan 2020 17:46:15 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e1509fa0000>; Tue, 07 Jan 2020 14:45:14 -0800
+        id S1727795AbgAGWqP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Jan 2020 17:46:15 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:5197 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727627AbgAGWqK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jan 2020 17:46:10 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e150a180002>; Tue, 07 Jan 2020 14:45:45 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
+  by hqpgpgate101.nvidia.com (PGP Universal service);
   Tue, 07 Jan 2020 14:46:02 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 07 Jan 2020 14:46:02 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
- 2020 22:46:01 +0000
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
- 2020 22:46:01 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 7 Jan 2020 22:46:01 +0000
+        by hqpgpgate101.nvidia.com on Tue, 07 Jan 2020 14:46:02 -0800
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
+ 2020 22:46:02 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 7 Jan 2020 22:46:02 +0000
 Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e150a290006>; Tue, 07 Jan 2020 14:46:01 -0800
+        id <B5e150a29000e>; Tue, 07 Jan 2020 14:46:01 -0800
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Al Viro <viro@zeniv.linux.org.uk>,
@@ -56,7 +53,7 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         Jonathan Corbet <corbet@lwn.net>,
         =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         "Kirill A . Shutemov" <kirill@shutemov.name>,
-        "Magnus Karlsson" <magnus.karlsson@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Michal Hocko <mhocko@suse.com>,
@@ -71,9 +68,9 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
         <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v12 16/22] fs/io_uring: set FOLL_PIN via pin_user_pages()
-Date:   Tue, 7 Jan 2020 14:45:52 -0800
-Message-ID: <20200107224558.2362728-17-jhubbard@nvidia.com>
+Subject: [PATCH v12 21/22] mm/gup_benchmark: use proper FOLL_WRITE flags instead of hard-coding "1"
+Date:   Tue, 7 Jan 2020 14:45:57 -0800
+Message-ID: <20200107224558.2362728-22-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200107224558.2362728-1-jhubbard@nvidia.com>
 References: <20200107224558.2362728-1-jhubbard@nvidia.com>
@@ -82,53 +79,90 @@ X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1578437114; bh=+ZAU2uGq23lKZbEw6uef005t38Iwen7Z6JkwY4uKSeQ=;
+        t=1578437145; bh=QmPxrU1QAodbGxQOTjUXr6s2/wIdqi7diGO1jSgiLTQ=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:MIME-Version:X-NVConfidentiality:
          Content-Transfer-Encoding:Content-Type;
-        b=pjbO7VhQEZ7Ff9pXD4te/6ceS3tisAYtOAvtOMeLMsOY3tbiX2SHNdLPOr/6BxGKi
-         yBYDmITaoi6Azw5ae5kASafDrzKX6Q4iKUvDx6dZkpAm5Oe+3nImadR1JIw576e8cF
-         LIzBW/IcRmc+zcRiWKU5itg4LLKkq8MZDyNOQtK5PrewkaYv40i6rnERtBga9FNBiT
-         wja4iqS0c1do2buD8ggqzT2M8QySz0EI5eF9F6QKKFSrhJt/te/qTfatDiG0JbFPCu
-         N6ZSCPKKxTqcSwmLUacco4IASH+qQF+y30qoWGyy5Go+aaIS6GjnOH7qoq5HE6Lc15
-         uW2ZN6HTIBFwQ==
+        b=MVgWMvjdCoYVAfxCmBg0NkeDuPYr/zOYLE4OTWeZR9q3VqqevAsdy2UdGUuFZxfeA
+         SMXnAV+U/1AQPUQHcK4HAu3zgWUEx+Dp3LLq0fmKMcRIgp4qB0DWjZ+VuMvfOjtJzB
+         FGceX1ZoJtOhybYH/7Tc+eWjMlMFwLDP5ggAZ3tnXeUk+18gPYHqnQv7Xq5O5aDZTh
+         EJMGjywChJyLI9V3528wjXiiRjSLVSp1+FVD+98X1l/ottZlL21BJDshqX6wxXGRN/
+         jy4gD3rsAW6FsslS5UKchsny0+bSxhxCtODDUO8KOA+5NC5F3EXV9TsGAco6HAcOU/
+         ATjD6ZgtnQnkg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert fs/io_uring to use the new pin_user_pages() call, which sets
-FOLL_PIN. Setting FOLL_PIN is now required for code that requires
-tracking of pinned pages, and therefore for any code that calls
-put_user_page().
+Fix the gup benchmark flags to use the symbolic FOLL_WRITE,
+instead of a hard-coded "1" value.
 
-In partial anticipation of this work, the io_uring code was already
-calling put_user_page() instead of put_page(). Therefore, in order to
-convert from the get_user_pages()/put_page() model, to the
-pin_user_pages()/put_user_page() model, the only change required
-here is to change get_user_pages() to pin_user_pages().
+Also, clean up the filtering of gup flags a little, by just doing
+it once before issuing any of the get_user_pages*() calls. This
+makes it harder to overlook, instead of having little "gup_flags & 1"
+phrases in the function calls.
 
-Reviewed-by: Jens Axboe <axboe@kernel.dk>
-Reviewed-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- fs/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/gup_benchmark.c                         | 9 ++++++---
+ tools/testing/selftests/vm/gup_benchmark.c | 6 +++++-
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 562e3a1a1bf9..9f804cb25c61 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -4815,7 +4815,7 @@ static int io_sqe_buffer_register(struct io_ring_ctx =
-*ctx, void __user *arg,
+diff --git a/mm/gup_benchmark.c b/mm/gup_benchmark.c
+index ad9d5b1c4473..8dba38e79a9f 100644
+--- a/mm/gup_benchmark.c
++++ b/mm/gup_benchmark.c
+@@ -49,18 +49,21 @@ static int __gup_benchmark_ioctl(unsigned int cmd,
+ 			nr =3D (next - addr) / PAGE_SIZE;
+ 		}
 =20
- 		ret =3D 0;
- 		down_read(&current->mm->mmap_sem);
--		pret =3D get_user_pages(ubuf, nr_pages,
-+		pret =3D pin_user_pages(ubuf, nr_pages,
- 				      FOLL_WRITE | FOLL_LONGTERM,
- 				      pages, vmas);
- 		if (pret =3D=3D nr_pages) {
++		/* Filter out most gup flags: only allow a tiny subset here: */
++		gup->flags &=3D FOLL_WRITE;
++
+ 		switch (cmd) {
+ 		case GUP_FAST_BENCHMARK:
+-			nr =3D get_user_pages_fast(addr, nr, gup->flags & 1,
++			nr =3D get_user_pages_fast(addr, nr, gup->flags,
+ 						 pages + i);
+ 			break;
+ 		case GUP_LONGTERM_BENCHMARK:
+ 			nr =3D get_user_pages(addr, nr,
+-					    (gup->flags & 1) | FOLL_LONGTERM,
++					    gup->flags | FOLL_LONGTERM,
+ 					    pages + i, NULL);
+ 			break;
+ 		case GUP_BENCHMARK:
+-			nr =3D get_user_pages(addr, nr, gup->flags & 1, pages + i,
++			nr =3D get_user_pages(addr, nr, gup->flags, pages + i,
+ 					    NULL);
+ 			break;
+ 		default:
+diff --git a/tools/testing/selftests/vm/gup_benchmark.c b/tools/testing/sel=
+ftests/vm/gup_benchmark.c
+index 485cf06ef013..389327e9b30a 100644
+--- a/tools/testing/selftests/vm/gup_benchmark.c
++++ b/tools/testing/selftests/vm/gup_benchmark.c
+@@ -18,6 +18,9 @@
+ #define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
+ #define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
+=20
++/* Just the flags we need, copied from mm.h: */
++#define FOLL_WRITE	0x01	/* check pte is writable */
++
+ struct gup_benchmark {
+ 	__u64 get_delta_usec;
+ 	__u64 put_delta_usec;
+@@ -85,7 +88,8 @@ int main(int argc, char **argv)
+ 	}
+=20
+ 	gup.nr_pages_per_call =3D nr_pages;
+-	gup.flags =3D write;
++	if (write)
++		gup.flags |=3D FOLL_WRITE;
+=20
+ 	fd =3D open("/sys/kernel/debug/gup_benchmark", O_RDWR);
+ 	if (fd =3D=3D -1)
 --=20
 2.24.1
 
