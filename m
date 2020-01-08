@@ -1,248 +1,133 @@
-Return-Path: <SRS0=GRoN=24=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=i92q=25=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6A50C33C9E
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jan 2020 22:49:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 767C8C33C99
+	for <linux-media@archiver.kernel.org>; Wed,  8 Jan 2020 02:27:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AD5162075A
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jan 2020 22:49:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4C06D2081E
+	for <linux-media@archiver.kernel.org>; Wed,  8 Jan 2020 02:27:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="W+8dwZIC"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="R842ZIDz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728066AbgAGWtY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Jan 2020 17:49:24 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:4706 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727077AbgAGWqD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jan 2020 17:46:03 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e150a170001>; Tue, 07 Jan 2020 14:45:43 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 07 Jan 2020 14:46:01 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 07 Jan 2020 14:46:01 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
- 2020 22:46:00 +0000
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
- 2020 22:46:00 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 7 Jan 2020 22:46:00 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e150a270008>; Tue, 07 Jan 2020 14:45:59 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        "Magnus Karlsson" <magnus.karlsson@intel.com>,
+        id S1726199AbgAHC1o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Jan 2020 21:27:44 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:37087 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726111AbgAHC1n (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jan 2020 21:27:43 -0500
+Received: by mail-pj1-f65.google.com with SMTP id m13so402927pjb.2
+        for <linux-media@vger.kernel.org>; Tue, 07 Jan 2020 18:27:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=TxCBIIGREavpCVrRs9QNlaW6niSLc1GB+TRhNf+Qpmo=;
+        b=R842ZIDzQUYEND1R5s7cntI/r/5WU1Mlc62dtk1Wrbk7IdDkynyqhS/SeUXFyzPXUN
+         1Nk47N4euErxEnpMFOUkTdtGvi/lQ41Dwo0VbusHkEI+5/LaHz45hTiKDFAap8hgdFg4
+         CEB/UqMZtUqwfpExLHBKwe2lYBXPb0fMW5L4A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=TxCBIIGREavpCVrRs9QNlaW6niSLc1GB+TRhNf+Qpmo=;
+        b=DFkqBbs84/i1PeKpS6TQd5dpQZ9lCFL7CsoG1/kBusiENAqrujPsD2aadHPcxqFVpD
+         UPetVXj7ghkZ33Og9E5ClLT108onjJLyK5h9t7BUXlsp548U1YtMiKV+FqL62TkhxQlK
+         lguP7Gvi1m+HCRNoS47kY5RnHVF6s6q5yXZpLlxgnmLAli4PuYkquMxtiwWsVxVW7LWR
+         2QHvvU3TA9n1sx/nfq9Gm5s465unrj6VjAxZgc1/vKqdD5iurcA08DfdPsVXco+e9Kns
+         spWmTYJCY4F+w+6k5qESNKJNfm0t0G4HD+vDZciRlr9xveOI31ZIC1V1Id56PWHVd7bX
+         LtEg==
+X-Gm-Message-State: APjAAAWHob+0cxFc6f3m27lx1MkH7SSeDr3+L4XUHdcQdkSU1m5G9MJt
+        ZHXbFcF/fp090h0bjxrCzYLSXg==
+X-Google-Smtp-Source: APXvYqyApuWFuZqGIyOf5rbM7brHnaEX2kHU+YLA3DErCW/+r7iApFECfrvpBxwUNNbksYTQ0nXytg==
+X-Received: by 2002:a17:90b:f0f:: with SMTP id br15mr1822086pjb.138.1578450463118;
+        Tue, 07 Jan 2020 18:27:43 -0800 (PST)
+Received: from localhost ([2401:fa00:8f:203:250d:e71d:5a0a:9afe])
+        by smtp.gmail.com with ESMTPSA id b15sm925307pft.58.2020.01.07.18.27.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jan 2020 18:27:42 -0800 (PST)
+Date:   Wed, 8 Jan 2020 11:27:41 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
+        Tomasz Figa <tfiga@chromium.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Christoph Hellwig" <hch@lst.de>
-Subject: [PATCH v12 03/22] mm: Cleanup __put_devmap_managed_page() vs ->page_free()
-Date:   Tue, 7 Jan 2020 14:45:39 -0800
-Message-ID: <20200107224558.2362728-4-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200107224558.2362728-1-jhubbard@nvidia.com>
-References: <20200107224558.2362728-1-jhubbard@nvidia.com>
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pawel Osciak <posciak@chromium.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH 00/15] Implement V4L2_BUF_FLAG_NO_CACHE_* flags
+Message-ID: <20200108022741.GA7366@google.com>
+References: <20191217032034.54897-1-senozhatsky@chromium.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1578437144; bh=EG/ndmk57WYqgnzxcjchAe4qv1nyLB8s4ZN10kfPz0g=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Type:Content-Transfer-Encoding;
-        b=W+8dwZIC5SbeUTQkZGgYicaoiQpw28m5WnycTWyhqWRzh8fydpnEnuHNg5A+XX3R9
-         BrdSJsnI71v0PxcwNP9tvmfDXqC3YPc+YWovrw/X0gnOHWS+TNplHbIgI0v2n9ey59
-         lNUYRdpjAR6ns6uR6N2CZn0PxmWMUiqREIZwOVNXePRhTaZZmhAaWAJu0BMAiSE0Dc
-         AG6iQ3PCEQgPbM1o7y5WpWdcvhNnW7gCGhBV4z4nUpWSIE2PMxinuyGcJtVQbWTJy1
-         lQLTzyqM+Ds7S9tIY+4qS+0ufv4PKzhYcDpueA2HUY2yb38EUbsQy3T0y0PAZ9OWJ3
-         voNNJO8WquVGA==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191217032034.54897-1-senozhatsky@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dan Williams <dan.j.williams@intel.com>
+On (19/12/17 12:20), Sergey Senozhatsky wrote:
+> Hello,
+> 
+> 	RFC
+> 
+> 	This is a reworked version of the vb2 cache hints
+> (V4L2_BUF_FLAG_NO_CACHE_INVALIDATE / V4L2_BUF_FLAG_NO_CACHE_CLEAN)
+> support patch series which previsouly was developed by Sakari and
+> Laurent [0].
+> 
+> The patch set attempts to preserve the existing behvaiour - cache
+> sync is performed in ->prepare() and ->finish() (unless the buffer
+> is DMA exported). User space can request “default behavior” override
+> with cache management hints, which are handled on a per-buffer basis
+> and should be supplied with v4l2_buffer ->flags during buffer
+> preparation. There are two possible hints:
+> 
+> - V4L2_BUF_FLAG_NO_CACHE_INVALIDATE
+> 	No cache sync on ->finish()
+> 
+> - V4L2_BUF_FLAG_NO_CACHE_CLEAN
+> 	No cache sync on ->prepare()
+> 
+> In order to keep things on the safe side, we also require driver
+> to explicitly state which of its queues (if any) support user space
+> cache management hints (such queues should have ->allow_cache_hints
+> bit set).
+> 
+> The patch set also (to some extent) simplifies allocators' ->prepare()
+> and ->finish() callbacks. Namely, we move cache management decision
+> making to the upper - core - layer. For example, if, previously, we
+> would have something like this
+> 
+> 	vb2_buffer_done()
+> 	  vb2_dc_finish()
+> 	    if (buf->db_attach)
+> 	       return;
+> 
+> where each allocators' ->finish() callback would either bail
+> out (DMA exported buffer, for instance) or sync, now that "bail
+> out or sync" decision is made before we call into the allocator.
+> 
+> Along with cache management hints, user space is also able to
+> adjust queue's memory consistency attributes. Memory consistency
+> attribute (dma_attrs) is per-queue, yet it plays its role on the
+> allocator level, when we allocate buffers’ private memory (planes).
+> For the time being, only one consistency attribute is supported:
+> DMA_ATTR_NON_CONSISTENT.
 
-After the removal of the device-public infrastructure there are only 2
-->page_free() call backs in the kernel. One of those is a device-private
-callback in the nouveau driver, the other is a generic wakeup needed in
-the DAX case. In the hopes that all ->page_free() callbacks can be
-migrated to common core kernel functionality, move the device-private
-specific actions in __put_devmap_managed_page() under the
-is_device_private_page() conditional, including the ->page_free()
-callback. For the other page types just open-code the generic wakeup.
+Gentle ping.
 
-Yes, the wakeup is only needed in the MEMORY_DEVICE_FSDAX case, but it
-does no harm in the MEMORY_DEVICE_DEVDAX and MEMORY_DEVICE_PCI_P2PDMA
-case.
-
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- drivers/nvdimm/pmem.c |  6 ----
- mm/memremap.c         | 80 ++++++++++++++++++++++++-------------------
- 2 files changed, 44 insertions(+), 42 deletions(-)
-
-diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-index ad8e4df1282b..4eae441f86c9 100644
---- a/drivers/nvdimm/pmem.c
-+++ b/drivers/nvdimm/pmem.c
-@@ -337,13 +337,7 @@ static void pmem_release_disk(void *__pmem)
- 	put_disk(pmem->disk);
- }
-=20
--static void pmem_pagemap_page_free(struct page *page)
--{
--	wake_up_var(&page->_refcount);
--}
--
- static const struct dev_pagemap_ops fsdax_pagemap_ops =3D {
--	.page_free		=3D pmem_pagemap_page_free,
- 	.kill			=3D pmem_pagemap_kill,
- 	.cleanup		=3D pmem_pagemap_cleanup,
- };
-diff --git a/mm/memremap.c b/mm/memremap.c
-index c51c6bd2fe34..f915d074ac20 100644
---- a/mm/memremap.c
-+++ b/mm/memremap.c
-@@ -27,7 +27,8 @@ static void devmap_managed_enable_put(void)
-=20
- static int devmap_managed_enable_get(struct dev_pagemap *pgmap)
- {
--	if (!pgmap->ops || !pgmap->ops->page_free) {
-+	if (pgmap->type =3D=3D MEMORY_DEVICE_PRIVATE &&
-+	    (!pgmap->ops || !pgmap->ops->page_free)) {
- 		WARN(1, "Missing page_free method\n");
- 		return -EINVAL;
- 	}
-@@ -414,44 +415,51 @@ void __put_devmap_managed_page(struct page *page)
- {
- 	int count =3D page_ref_dec_return(page);
-=20
--	/*
--	 * If refcount is 1 then page is freed and refcount is stable as nobody
--	 * holds a reference on the page.
--	 */
--	if (count =3D=3D 1) {
--		/* Clear Active bit in case of parallel mark_page_accessed */
--		__ClearPageActive(page);
--		__ClearPageWaiters(page);
-+	/* still busy */
-+	if (count > 1)
-+		return;
-=20
--		mem_cgroup_uncharge(page);
-+	/* only triggered by the dev_pagemap shutdown path */
-+	if (count =3D=3D 0) {
-+		__put_page(page);
-+		return;
-+	}
-=20
--		/*
--		 * When a device_private page is freed, the page->mapping field
--		 * may still contain a (stale) mapping value. For example, the
--		 * lower bits of page->mapping may still identify the page as
--		 * an anonymous page. Ultimately, this entire field is just
--		 * stale and wrong, and it will cause errors if not cleared.
--		 * One example is:
--		 *
--		 *  migrate_vma_pages()
--		 *    migrate_vma_insert_page()
--		 *      page_add_new_anon_rmap()
--		 *        __page_set_anon_rmap()
--		 *          ...checks page->mapping, via PageAnon(page) call,
--		 *            and incorrectly concludes that the page is an
--		 *            anonymous page. Therefore, it incorrectly,
--		 *            silently fails to set up the new anon rmap.
--		 *
--		 * For other types of ZONE_DEVICE pages, migration is either
--		 * handled differently or not done at all, so there is no need
--		 * to clear page->mapping.
--		 */
--		if (is_device_private_page(page))
--			page->mapping =3D NULL;
-+	/* notify page idle for dax */
-+	if (!is_device_private_page(page)) {
-+		wake_up_var(&page->_refcount);
-+		return;
-+	}
-=20
--		page->pgmap->ops->page_free(page);
--	} else if (!count)
--		__put_page(page);
-+	/* Clear Active bit in case of parallel mark_page_accessed */
-+	__ClearPageActive(page);
-+	__ClearPageWaiters(page);
-+
-+	mem_cgroup_uncharge(page);
-+
-+	/*
-+	 * When a device_private page is freed, the page->mapping field
-+	 * may still contain a (stale) mapping value. For example, the
-+	 * lower bits of page->mapping may still identify the page as an
-+	 * anonymous page. Ultimately, this entire field is just stale
-+	 * and wrong, and it will cause errors if not cleared.  One
-+	 * example is:
-+	 *
-+	 *  migrate_vma_pages()
-+	 *    migrate_vma_insert_page()
-+	 *      page_add_new_anon_rmap()
-+	 *        __page_set_anon_rmap()
-+	 *          ...checks page->mapping, via PageAnon(page) call,
-+	 *            and incorrectly concludes that the page is an
-+	 *            anonymous page. Therefore, it incorrectly,
-+	 *            silently fails to set up the new anon rmap.
-+	 *
-+	 * For other types of ZONE_DEVICE pages, migration is either
-+	 * handled differently or not done at all, so there is no need
-+	 * to clear page->mapping.
-+	 */
-+	page->mapping =3D NULL;
-+	page->pgmap->ops->page_free(page);
- }
- EXPORT_SYMBOL(__put_devmap_managed_page);
- #endif /* CONFIG_DEV_PAGEMAP_OPS */
---=20
-2.24.1
-
+	-ss
