@@ -2,175 +2,237 @@ Return-Path: <SRS0=fbk1=27=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EF0EC3F68F
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jan 2020 15:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39D36C282DD
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jan 2020 15:06:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 557EB20721
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jan 2020 15:03:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0734B2077C
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jan 2020 15:06:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="WPUm0YU5"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="bFgoHw7J"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbgAJPDB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Jan 2020 10:03:01 -0500
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:8141 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728249AbgAJPDA (ORCPT
+        id S1728276AbgAJPGi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Jan 2020 10:06:38 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51210 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728141AbgAJPGi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Jan 2020 10:03:00 -0500
-Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
-  Claudiu.Beznea@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="Claudiu.Beznea@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa3.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa3.microchip.iphmx.com; spf=Pass smtp.mailfrom=Claudiu.Beznea@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: q1mZVEN9+9nW+41vxWAi9UpPaolO36Gv6BAftDCUtxI9Vs+WlxZ+r9Mt14bSknsGsG5e9CWlT5
- GUOEqYpVdaJTX6RGfbeKYdrSIYqx9T6gj+foUKu4P/Ofdq7mPWdys8NrkrX9y42aCZSY4Hg6iX
- OVtsUuuauqEFqqwrjejtqKe75XqvXJHv8oVd6oZENCHuwIxMoh7J+3R7n/2mcsZ2ozbePmnEl2
- 3PACBOOhyXFJQ/K3CgpJGMhmbiSZ6HOiWhKRpdjwSnVjCWGSoI+7P1HT/CI67Qv0r1q7ns2WFW
- hBc=
-X-IronPort-AV: E=Sophos;i="5.69,417,1571727600"; 
-   d="scan'208";a="62881054"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Jan 2020 08:02:57 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 10 Jan 2020 08:02:56 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
- Transport; Fri, 10 Jan 2020 08:02:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lswe8IrsffHQnGEOc/m08k4TFkyhASIbI9pLP6ZP2SUMgxlht8kOovEEVcmJ4yWRwdyVeOtRZmkeDv45nlY2bzGxvtZRNEaaYQFUiE3VkrTnjHIllvWdq/Uc74H6JMM92/gHliW4o4yPy/P4BUL4sJZXoxG6qtWIzR4b+7KSENVYEUIMmMBxgYH7ogVCUMk1i/vIcCUXPYAh4Q/p0Glhw4DvkLFQrc0TsR/p8g8NdDDATRD666Yty2aD8r2eByhKgxdigyGuTjy/lRjfYBiOnJhSdX7GbG+xWJqzWdCdqd/brn3PefDRVOlXAxhWUHfHJN64sK+AihX5+rYrShSigQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ROYUQMPp03uT25P58fK2sBlfAea5ZRoYtOpcKJhSISs=;
- b=LJAbNACXHrIL1ZOgru/FlYDYtHSbDZlz4TNkRIyjjALHC3sZbaAVjfi7lkUiomU62b7NzM959T6TATPshzX6b5caUnj7jDRQBCrGaY84L/zAwflQsrK3Jdvk95xbNZWXD+gBZ9wIO1hkoQUEfWPJ9fHK4oDvY5XGni0g6DObq/hlsZayX0h+bLSRahhXDBlI5xU+9h65jBIaXNSWPCJ9av1PINBkANLhrG7Eazp2hFGgJosGfTkv7SgTdsjF1OtQF+rW2yTMGFrccLM+gwU1F//G2kJLPjLTnybYWNp8rb1F8wcsb7hQ2ZXzjmpSEEK7NymestctrNnH1es7VjofTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Fri, 10 Jan 2020 10:06:38 -0500
+Received: by mail-wm1-f68.google.com with SMTP id d73so2359789wmd.1
+        for <linux-media@vger.kernel.org>; Fri, 10 Jan 2020 07:06:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ROYUQMPp03uT25P58fK2sBlfAea5ZRoYtOpcKJhSISs=;
- b=WPUm0YU5eWGC/DgvWkZMio4tPNbVPq899Z9fw6fILUacE1XLRZNfmq8dc290WXJZ3uDua0/2NFCNfRQzAWiPBAQhh2OHk2aMBbNNMaqSD4xWkR+1MiGnJqUDw15E7r8BzbcDJNO/Y2xs6DHLVPnTwhV68HDEfbG9h2GFuhEHqJ8=
-Received: from DM6PR11MB3225.namprd11.prod.outlook.com (20.176.120.224) by
- DM6PR11MB4073.namprd11.prod.outlook.com (10.255.61.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2623.9; Fri, 10 Jan 2020 15:02:55 +0000
-Received: from DM6PR11MB3225.namprd11.prod.outlook.com
- ([fe80::106f:424f:ac54:1dbb]) by DM6PR11MB3225.namprd11.prod.outlook.com
- ([fe80::106f:424f:ac54:1dbb%7]) with mapi id 15.20.2623.008; Fri, 10 Jan 2020
- 15:02:55 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <alexandre.belloni@bootlin.com>
-CC:     <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <Nicolas.Ferre@microchip.com>, <Ludovic.Desroches@microchip.com>,
-        <vkoul@kernel.org>, <Eugen.Hristev@microchip.com>,
-        <jic23@kernel.org>, <knaack.h@gmx.de>, <lars@metafoo.de>,
-        <pmeerw@pmeerw.net>, <mchehab@kernel.org>, <lee.jones@linaro.org>,
-        <richard.genoud@gmail.com>, <radu_nicolae.pirea@upb.ro>,
-        <Tudor.Ambarus@microchip.com>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>, <wg@grandegger.com>,
-        <mkl@pengutronix.de>, <a.zummo@towertech.it>, <broonie@kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>
-Subject: Re: [PATCH 11/16] dt-bindings: atmel,at91rm9200-rtc: add
- microchip,sam9x60-rtc
-Thread-Topic: [PATCH 11/16] dt-bindings: atmel,at91rm9200-rtc: add
- microchip,sam9x60-rtc
-Thread-Index: AQHVx8cJ1Sdz4XPBp0a+PBJp3PSmrg==
-Date:   Fri, 10 Jan 2020 15:02:55 +0000
-Message-ID: <cd8ecfb1-b88a-88c4-205f-45ac7e25c5cc@microchip.com>
-References: <1578488123-26127-1-git-send-email-claudiu.beznea@microchip.com>
- <1578488123-26127-12-git-send-email-claudiu.beznea@microchip.com>
- <20200110143001.GE1027187@piout.net>
-In-Reply-To: <20200110143001.GE1027187@piout.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [94.177.32.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3f3eed86-8fd5-4bf0-35f0-08d795de2c78
-x-ms-traffictypediagnostic: DM6PR11MB4073:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR11MB4073030C1B5DBFA428B71AF787380@DM6PR11MB4073.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-forefront-prvs: 02788FF38E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(396003)(39860400002)(376002)(366004)(136003)(199004)(189003)(8676002)(186003)(5660300002)(6486002)(6512007)(2906002)(71200400001)(53546011)(6506007)(2616005)(26005)(478600001)(66556008)(6916009)(66946007)(66446008)(76116006)(64756008)(66476007)(4326008)(8936002)(81166006)(54906003)(91956017)(31686004)(31696002)(7416002)(7406005)(966005)(316002)(86362001)(81156014)(36756003)(142933001);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR11MB4073;H:DM6PR11MB3225.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iwSqYCZiVdt5raWL0+yTz682VYv1qyx7XtWg5eo1oekx5xf+sw34bc+EqB2Vat14SBoqfHBZUhe9AONHULKP8ivYiLSZs7xr+DXzvLR8ttdv2tvPCBpwTma/flzeDtc7Iit+bqLnXKQMep/PIIEDt37PDXTPhqHOoqHvZVSOdoC+rfSP9yQx+BRACJXVCFZQ9tFrbQKqr2GpctWj6kRFS8z+2eX+sBjuu4yjg3anKLa5LX1r07sOqueQo5ZPonA4FULeeAah2U+2kN83Dj9+5nF4KEPY/HGGofbi2Tcqph845d2tmA4ZjQdM7FHfIpU7UN19QOmwRhmOCXxlvVZOVo09I/UiXWjRT47z9AF+29AO/ayrBLKwqpIjt1Ltl7IbS4s++yTfnpkLlDl7RNP5luU6+XeTgwG6SEzdUK7aQoCJnmXwK2AmGNX8cHrnMUqGwaYFLHpCvvHEiOJYOB78PykKqXObMglF01qSpJKVNmY1mEdG8WWlVGqv1NPBEVQbm5TZEP3brumwVq61Foe0yg==
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AE39BBAE4DFACA498B36344FFFF2868E@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=ZVAhaO7TDnAseI4aLa4+t0s+5RJrm76nog/ifK4rxPA=;
+        b=bFgoHw7JJp8GVGZl/T3YZ4eiHv/jBo78Cru6gcpG/9KAzvNQlA/OK5vLKZ6HYSRvvr
+         YDw4lLBKZMesQI/NQNUYtISeX91bwfTyZrmYNL1JPpcsLyYx4YiGwcooXk/wDdJvJwA9
+         MkxegkuuthWTKwiPkZy3y5v1pS7xiufU5S0YA2xdwaGJFgFmEsrYQZFfRYCXpmp5g6Wh
+         MFbOHjzfLmMdysNri/pPq1XjqxzxV4YjApCNUcSJo/3uer1cTemSjYyIEvyrwXmK3uSZ
+         uYsDFJ0wpFqB201rBe0eoiTRcHN922G3aE281jAVxDRRPV1i20JuA8Jt38g9yOfhNIl/
+         PdnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=ZVAhaO7TDnAseI4aLa4+t0s+5RJrm76nog/ifK4rxPA=;
+        b=lab/TtSTBYP5Mh1M3//r4ejFQav+t7/pJnqGNM0LdwwzA2SMWv3m9ug1FZ4MGGJlpK
+         HR0ocvTaxKGeykwq5KODCkXfTPQ25paaxlstH7Uvfa1i7eY+m1zJ3NlxzVuKb6re5/uJ
+         YaoSaiz4C7ZrYJi8dmraSI0D+0Udb1YlFTtF6edylfOxs0v2fnZ8ek6rda0+35HvPvnU
+         v9+jaWRH48ttaLbAVAEZuDEiojNL7ZAV1/xzXRy8ZvVWAh4KydFgBkf7jzc3Is1Ar+Z1
+         AR7VchiI1nL3mI9ZfGCmCMKpex4yqDzu5WWZhmf2vRnl7GHMfg1yTapkey6Vke+Fy+wd
+         MjDg==
+X-Gm-Message-State: APjAAAVsHAgIsuhMpI1Xi4WmBfHpkLmecYSDmtJDdzrsEE7HGua3qI7Z
+        sYrldV/KkKCcA2TVST7FZ7hdBA==
+X-Google-Smtp-Source: APXvYqzdaIwdojvVYENuw7ZWfAleo6eDsYH1yb2itBtPItx5viijEdtcxkQhBbYGecbcjjrO+s/MLQ==
+X-Received: by 2002:a7b:cc82:: with SMTP id p2mr5077382wma.159.1578668796089;
+        Fri, 10 Jan 2020 07:06:36 -0800 (PST)
+Received: from [10.1.4.98] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id c15sm2469320wrt.1.2020.01.10.07.06.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jan 2020 07:06:35 -0800 (PST)
+Subject: Re: [PATCH v2 3/3] media: platform: meson-ao-cec-g12a: add wakeup
+ support
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>, narmstrong@baylibre.com,
+        mchehab@kernel.org, khilman@baylibre.com,
+        devicetree@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20191213132956.11074-1-glaroque@baylibre.com>
+ <20191213132956.11074-4-glaroque@baylibre.com>
+ <cccc0cda-7403-1378-40c8-291b11bf868a@xs4all.nl>
+From:   guillaume La Roque <glaroque@baylibre.com>
+Message-ID: <0a07b5cc-a7dc-2983-89de-a1894ae6a469@baylibre.com>
+Date:   Fri, 10 Jan 2020 16:06:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f3eed86-8fd5-4bf0-35f0-08d795de2c78
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2020 15:02:55.5649
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lstx1sjPtslO9cBwiO8kwk8GOEMvvmTcWCx/9VtduurAc4xi13Z118GNEtPtQAoOyi5efonltgFH80Q7t6LwkHm2VBspvI71Uh+h8ZS3nmM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4073
+In-Reply-To: <cccc0cda-7403-1378-40c8-291b11bf868a@xs4all.nl>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: fr
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-DQoNCk9uIDEwLjAxLjIwMjAgMTY6MzAsIEFsZXhhbmRyZSBCZWxsb25pIHdyb3RlOg0KPiBFWFRF
-Uk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNz
-IHlvdSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IEhpLA0KPiANCj4gT24gMDgvMDEv
-MjAyMCAxNDo1NToxOCswMjAwLCBDbGF1ZGl1IEJlem5lYSB3cm90ZToNCj4+IEFkZCBtaWNyb2No
-aXAsc2FtOXg2MC1ydGMgdG8gRFQgYmluZGluZ3MgZG9jdW1lbnRhdGlvbi4NCj4gDQo+IFRoaXMg
-d2lsbCBoYXZlIHRvIGJlIHJlYmFzZWQgb24gdG9wIG9mDQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwu
-b3JnL2xpbnV4LXJ0Yy8yMDE5MTIyOTIwNDQyMS4zMzc2MTItMi1hbGV4YW5kcmUuYmVsbG9uaUBi
-b290bGluLmNvbS8NCg0KVGhpcyBpcyBhbHNvIG5vdCBpbnRlZ3JhdGVkIGluIGxhdGVzdCBuZXh0
-LiBXaWxsIHRoaXMgcG9zdHBvbmUgdGhlDQphY2NlcHRhbmNlIG9mIHRoZSBkZXZpY2UgdHJlZSwg
-dW50aWwgdGhlIHlhbWwgY29udmVyc2lvbiBpcyBhY2NlcHRlZD8NCg0KPiANCj4+DQo+PiBTaWdu
-ZWQtb2ZmLWJ5OiBDbGF1ZGl1IEJlem5lYSA8Y2xhdWRpdS5iZXpuZWFAbWljcm9jaGlwLmNvbT4N
-Cj4+IC0tLQ0KPj4gIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9ydGMvYXRtZWws
-YXQ5MXJtOTIwMC1ydGMudHh0IHwgMyArKy0NCj4+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRp
-b25zKCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy9ydGMvYXRtZWwsYXQ5MXJtOTIwMC1ydGMudHh0IGIvRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3J0Yy9hdG1lbCxhdDkxcm05MjAwLXJ0Yy50eHQN
-Cj4+IGluZGV4IDVkMzc5MWU3ODljNi4uMzVlYWI5MTM4ZDBiIDEwMDY0NA0KPj4gLS0tIGEvRG9j
-dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3J0Yy9hdG1lbCxhdDkxcm05MjAwLXJ0Yy50
-eHQNCj4+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9ydGMvYXRtZWws
-YXQ5MXJtOTIwMC1ydGMudHh0DQo+PiBAQCAtMSw3ICsxLDggQEANCj4+ICBBdG1lbCBBVDkxUk05
-MjAwIFJlYWwgVGltZSBDbG9jaw0KPj4NCj4+ICBSZXF1aXJlZCBwcm9wZXJ0aWVzOg0KPj4gLS0g
-Y29tcGF0aWJsZTogc2hvdWxkIGJlOiAiYXRtZWwsYXQ5MXJtOTIwMC1ydGMiIG9yICJhdG1lbCxh
-dDkxc2FtOXg1LXJ0YyINCj4+ICstIGNvbXBhdGlibGU6IHNob3VsZCBiZTogImF0bWVsLGF0OTFy
-bTkyMDAtcnRjIiwgImF0bWVsLGF0OTFzYW05eDUtcnRjIiBvcg0KPj4gKyAgIm1pY3JvY2hpcCxz
-YW05eDYwLXJ0YyINCj4+ICAtIHJlZzogcGh5c2ljYWwgYmFzZSBhZGRyZXNzIG9mIHRoZSBjb250
-cm9sbGVyIGFuZCBsZW5ndGggb2YgbWVtb3J5IG1hcHBlZA0KPj4gICAgcmVnaW9uLg0KPj4gIC0g
-aW50ZXJydXB0czogcnRjIGFsYXJtL2V2ZW50IGludGVycnVwdA0KPj4gLS0NCj4+IDIuNy40DQo+
-Pg0KPiANCj4gLS0NCj4gQWxleGFuZHJlIEJlbGxvbmksIEJvb3RsaW4NCj4gRW1iZWRkZWQgTGlu
-dXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZw0KPiBodHRwczovL2Jvb3RsaW4uY29tDQo+IA==
+Hi Hans,
+
+On 1/7/20 3:36 PM, Hans Verkuil wrote:
+> Hi Guillaume,
+>
+> On 12/13/19 2:29 PM, Guillaume La Roque wrote:
+>> add register configuration to activate wakeup feature in bl301
+>>
+>> Tested-by: Kevin Hilman <khilman@baylibre.com>
+>> Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
+>> ---
+>>  drivers/media/platform/meson/ao-cec-g12a.c | 33 ++++++++++++++++++++++
+>>  1 file changed, 33 insertions(+)
+>>
+>> diff --git a/drivers/media/platform/meson/ao-cec-g12a.c b/drivers/media/platform/meson/ao-cec-g12a.c
+>> index 891533060d49..85850b974126 100644
+>> --- a/drivers/media/platform/meson/ao-cec-g12a.c
+>> +++ b/drivers/media/platform/meson/ao-cec-g12a.c
+>> @@ -25,6 +25,7 @@
+>>  #include <media/cec.h>
+>>  #include <media/cec-notifier.h>
+>>  #include <linux/clk-provider.h>
+>> +#include <linux/mfd/syscon.h>
+>>  
+>>  /* CEC Registers */
+>>  
+>> @@ -168,6 +169,18 @@
+>>  
+>>  #define CECB_WAKEUPCTRL		0x31
+>>  
+>> +#define CECB_FUNC_CFG_REG		0xA0
+>> +#define CECB_FUNC_CFG_MASK		GENMASK(6, 0)
+>> +#define CECB_FUNC_CFG_CEC_ON		0x01
+>> +#define CECB_FUNC_CFG_OTP_ON		0x02
+>> +#define CECB_FUNC_CFG_AUTO_STANDBY	0x04
+>> +#define CECB_FUNC_CFG_AUTO_POWER_ON	0x08
+>> +#define CECB_FUNC_CFG_ALL		0x2f
+>> +#define CECB_FUNC_CFG_NONE		0x0
+>> +
+>> +#define CECB_LOG_ADDR_REG	0xA4
+>> +#define CECB_LOG_ADDR_MASK	GENMASK(22, 16)
+>> +
+>>  struct meson_ao_cec_g12a_data {
+>>  	/* Setup the internal CECB_CTRL2 register */
+>>  	bool				ctrl2_setup;
+>> @@ -177,6 +190,7 @@ struct meson_ao_cec_g12a_device {
+>>  	struct platform_device		*pdev;
+>>  	struct regmap			*regmap;
+>>  	struct regmap			*regmap_cec;
+>> +	struct regmap			*regmap_ao_sysctrl;
+>>  	spinlock_t			cec_reg_lock;
+>>  	struct cec_notifier		*notify;
+>>  	struct cec_adapter		*adap;
+>> @@ -518,6 +532,13 @@ meson_ao_cec_g12a_set_log_addr(struct cec_adapter *adap, u8 logical_addr)
+>>  					 BIT(logical_addr - 8));
+>>  	}
+>>  
+>> +	if (ao_cec->regmap_ao_sysctrl)
+>> +		ret |= regmap_update_bits(ao_cec->regmap_ao_sysctrl,
+>> +					 CECB_LOG_ADDR_REG,
+>> +					 CECB_LOG_ADDR_MASK,
+>> +					 FIELD_PREP(CECB_LOG_ADDR_MASK,
+>> +						    logical_addr));
+>> +
+>>  	/* Always set Broadcast/Unregistered 15 address */
+>>  	ret |= regmap_update_bits(ao_cec->regmap_cec, CECB_LADD_HIGH,
+>>  				  BIT(CEC_LOG_ADDR_UNREGISTERED - 8),
+>> @@ -618,6 +639,13 @@ static int meson_ao_cec_g12a_adap_enable(struct cec_adapter *adap, bool enable)
+>>  		regmap_write(ao_cec->regmap_cec, CECB_CTRL2,
+>>  			     FIELD_PREP(CECB_CTRL2_RISE_DEL_MAX, 2));
+>>  
+>> +	if (ao_cec->regmap_ao_sysctrl) {
+>> +		regmap_update_bits(ao_cec->regmap_ao_sysctrl,
+>> +				   CECB_FUNC_CFG_REG,
+>> +				   CECB_FUNC_CFG_MASK,
+>> +				   CECB_FUNC_CFG_ALL);
+> What exactly is enabled here? Looking at CECB_FUNC_CFG_ALL it seems to
+> enable automatic standby (I presume when the STANDBY message is received?)
+> and power on (I presume when SET_STREAM_PATH is received?).
+this register and flags are used by bl301 part.
+
+amlogic implemented a task to check cec event/message.
+
+for power on in bl301 it's not only on SET_STREAM_PATH but also on :
+
+USER_CONTROL_PRESSED
+TEXT_VIEW_ON
+ACTIVE_SOURCE
+ROUTING_CHANGE
+
+when in CECB_FUNC_CFG_REG register we put  CECB_FUNC_CFG_CEC_ON and  CECB_FUNC_CFG_AUTO_POWER_ON
+
+it's not possible to change this
+
+>
+> Do you really want to automatically handle STANDBY that way? What does this
+> do on the hardware level anyway? Isn't this something that should be
+> controlled in userspace?
+
+in fact i do a new check in bl301 code amlogic do nothing on STANDBY so i will clean code
+
+and activate real option supported by bl301
+
+>
+> Similar questions for power on: you may not always want to enable this feature
+> since it depends very much on the precise use-case.
+>
+> And which messages it reacts to in order to do a power-on needs to be
+> documented since this differs depending on whether the CEC adapter is
+> used for a TV or for a playback device. This feature may be hardwired for
+> a playback device only, in which case it should probably be disabled if
+> the CEC adapter is configured as a TV.
+>
+> In any case I would like to see some more details about how this works,
+> especially since this is the first implementation of such a feature.
+>
+> I suspect that some userspace API might be needed to get the right level
+> of control of such a feature.
+
+i will send v3 next week with some comments and fix ( disable are missing for example)
+
+actual usercase is for android TV.
+
+when cec was enable android TV want to be wakeup by cec event.
+
+
+> Regards,
+>
+> 	Hans
+>
+
+thanks for your review
+
+Regards
+
+Guillaume
+
+>> +	}
+>> +
+>>  	meson_ao_cec_g12a_irq_setup(ao_cec, true);
+>>  
+>>  	return 0;
+>> @@ -685,6 +713,11 @@ static int meson_ao_cec_g12a_probe(struct platform_device *pdev)
+>>  		goto out_probe_adapter;
+>>  	}
+>>  
+>> +	ao_cec->regmap_ao_sysctrl = syscon_regmap_lookup_by_phandle
+>> +		(pdev->dev.of_node, "amlogic,ao-sysctrl");
+>> +	if (IS_ERR(ao_cec->regmap_ao_sysctrl))
+>> +		dev_warn(&pdev->dev, "ao-sysctrl syscon regmap lookup failed.\n");
+>> +
+>>  	irq = platform_get_irq(pdev, 0);
+>>  	ret = devm_request_threaded_irq(&pdev->dev, irq,
+>>  					meson_ao_cec_g12a_irq,
+>>
