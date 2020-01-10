@@ -2,121 +2,207 @@ Return-Path: <SRS0=fbk1=27=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9A1DC282DD
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jan 2020 16:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E765C282DD
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jan 2020 16:25:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A1591205F4
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jan 2020 16:22:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2007120661
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jan 2020 16:25:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xe4rE2oi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729101AbgAJQU1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Jan 2020 11:20:27 -0500
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:25465 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729081AbgAJQU0 (ORCPT
+        id S1728539AbgAJQZu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Jan 2020 11:25:50 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:44726 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728474AbgAJQZu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Jan 2020 11:20:26 -0500
-Received-SPF: Pass (esa4.microchip.iphmx.com: domain of
-  Claudiu.Beznea@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="Claudiu.Beznea@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa4.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa4.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Claudiu.Beznea@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: LrzaHbSQy37L8CEyNm9sxZucOUH5zKlVbNSkSOctqn2dAInOP4KemBehINfeWmnpa7GQqPWezN
- nUPDt1IWXdJhHAWpmKbYpm6tVPRZK62QGj+M6EqMgToCB44RUdz5sDdkN5RQTf218fqSM9aWoJ
- U/JKGr7Ei20tlYQnRdjF46lspCy+gAB/FgMy3SStBZnQcIVgbePADoX7R7SBkQ9SZncs5r55Yr
- /Y4NnGZI5P+TTWL03GP+WrA0lBfKIujdiiZDHJbczWT0ipOBmz+5YuLwhRzeYs3QqepWUdwyXJ
- S0s=
-X-IronPort-AV: E=Sophos;i="5.69,417,1571727600"; 
-   d="scan'208";a="60748452"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Jan 2020 09:20:25 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 10 Jan 2020 09:20:23 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.85.251) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.1713.5 via Frontend Transport; Fri, 10 Jan 2020 09:20:15 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <vkoul@kernel.org>,
-        <eugen.hristev@microchip.com>, <jic23@kernel.org>,
-        <knaack.h@gmx.de>, <lars@metafoo.de>, <pmeerw@pmeerw.net>,
-        <mchehab@kernel.org>, <lee.jones@linaro.org>,
-        <radu_nicolae.pirea@upb.ro>, <richard.genoud@gmail.com>,
-        <tudor.ambarus@microchip.com>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>, <wg@grandegger.com>,
-        <mkl@pengutronix.de>, <a.zummo@towertech.it>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <linux-can@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v2 12/17] dt-bindings: atmel,at91rm9200-rtc: add microchip,sam9x60-rtc
-Date:   Fri, 10 Jan 2020 18:18:04 +0200
-Message-ID: <1578673089-3484-13-git-send-email-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1578673089-3484-1-git-send-email-claudiu.beznea@microchip.com>
-References: <1578673089-3484-1-git-send-email-claudiu.beznea@microchip.com>
+        Fri, 10 Jan 2020 11:25:50 -0500
+Received: by mail-wr1-f66.google.com with SMTP id q10so2368262wrm.11
+        for <linux-media@vger.kernel.org>; Fri, 10 Jan 2020 08:25:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G0AX1yfFRW6HDZGzDQ9EaHqKYHKiSmV5U3fr8wITPK4=;
+        b=Xe4rE2oiwfkGxtemT+eVE0/VvU0pH8GE3HWNLdA2zas+3LBOjemkixkV95o8sqg/yg
+         /H74kXPS1NNOPRRfKYXHptQsKQRiYzOcvfGX45JZEoZUOFm1MKvj5lic6Pf1VKRSTgXW
+         LVCXCIU7IC6FrMCM/fBc9/mpRQ6CsfT1gBx7S2VupMiSudrC+dEYl/1kNmiLsTYWgKYn
+         acNfrBuyXG+4xZyN+H6vyN2vrqSWLYfl4y7kSq+PQWbA7vCuPWejBi0l0P1YxrdqFyML
+         6+wx+1AZbzjcU2HJ4dFnB7gG9AhLfFyigvh4vUvoYFmp9a9Ia8ivxwM6nUmx9YVL5010
+         ICrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G0AX1yfFRW6HDZGzDQ9EaHqKYHKiSmV5U3fr8wITPK4=;
+        b=DFfoK0Jfj8hrtan3t9dcB+JR7x8pwa/lVNP2fM14s/OBccX5ht9JUropSNZkI6vZQr
+         +GvUJCTgCdW3i3s4jQwDhLHelUahXuv4Dz7Y4q27yxlQT7XligmoBv3PxSi5VbSBH43O
+         p0zAqH3CYM6FR+/lN/NGpQbATIULtvqA4IG54TlfgdYLPjtH7fpfAq7EFSeyur1uCbMi
+         8QWU0Jk2XMMATYWGEJ4A4t9XRg5ta3krX16K9K9AwywQB6Wa0dPwo127krNH62h0/QwP
+         1DIiH4Ueo+ex1xfBNp7WmTcQdz8IuJ8wmj+U5uc57z41958HZ712/jensjcFydw6HQjE
+         0ngA==
+X-Gm-Message-State: APjAAAV2M3q4gggX0ySDxxrBz1gsKuM8I9KGlyDsuEcPlaqMopyAXl/z
+        C7VmsGgaQO4iTnNwmPszIsslB1pD
+X-Google-Smtp-Source: APXvYqxf9PRH793cV3gvy6+qwzRScXOXLCSeJzbNmLP2CfgfPcJ7We9/HiJW4pOutB+aCHs/FfAdFw==
+X-Received: by 2002:adf:eb09:: with SMTP id s9mr4609417wrn.61.1578673548494;
+        Fri, 10 Jan 2020 08:25:48 -0800 (PST)
+Received: from localhost ([37.237.208.29])
+        by smtp.gmail.com with ESMTPSA id z6sm2709834wrw.36.2020.01.10.08.25.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2020 08:25:47 -0800 (PST)
+From:   Mohammad Rasim <mohammad.rasim96@gmail.com>
+To:     linux-media@vger.kernel.org, Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mohammad Rasim <mohammad.rasim96@gmail.com>
+Subject: [PATCH v3] media: rc: add keymap for Videostrong KII Pro
+Date:   Fri, 10 Jan 2020 19:25:45 +0300
+Message-Id: <20200110162545.4299-1-mohammad.rasim96@gmail.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add microchip,sam9x60-rtc to DT bindings documentation.
+This is an NEC remote control device shipped with the Videostrong KII Pro tv box as well as other devices from videostrong.
 
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Changes since v1:
+- fix styling issues
+
+Changes since v2:
+- use KEY_VENDOR for mouse key
+- use KEY_PVR instead of KEY_RECORD
+- use KEY_APPSELECT for the launcher
+- use KEY_TV for the tv app key
+
+Signed-off-by: Mohammad Rasim <mohammad.rasim96@gmail.com>
 ---
+ drivers/media/rc/keymaps/Makefile             |  1 +
+ .../media/rc/keymaps/rc-videostrong-kii-pro.c | 83 +++++++++++++++++++
+ include/media/rc-map.h                        |  1 +
+ 3 files changed, 85 insertions(+)
+ create mode 100644 drivers/media/rc/keymaps/rc-videostrong-kii-pro.c
 
-Hi Alexandre,
-
-I kept this patch as in v1 (same for patch
-"dt-bindings: atmel-tcb: add microchip,sam9x60-tcb").
-I'm waiting your response to this version and take an action aftewards.
-
-Thank you,
-Claudiu Beznea
-
- Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt
-index 5d3791e789c6..35eab9138d0b 100644
---- a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt
-+++ b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt
-@@ -1,7 +1,8 @@
- Atmel AT91RM9200 Real Time Clock
- 
- Required properties:
--- compatible: should be: "atmel,at91rm9200-rtc" or "atmel,at91sam9x5-rtc"
-+- compatible: should be: "atmel,at91rm9200-rtc", "atmel,at91sam9x5-rtc" or
-+  "microchip,sam9x60-rtc"
- - reg: physical base address of the controller and length of memory mapped
-   region.
- - interrupts: rtc alarm/event interrupt
--- 
-2.7.4
+diff --git a/drivers/media/rc/keymaps/Makefile b/drivers/media/rc/keymaps/Makefile
+index 63261ef6380a..aaa1bf81d00d 100644
+--- a/drivers/media/rc/keymaps/Makefile
++++ b/drivers/media/rc/keymaps/Makefile
+@@ -119,6 +119,7 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
+ 			rc-videomate-m1f.o \
+ 			rc-videomate-s350.o \
+ 			rc-videomate-tv-pvr.o \
++			rc-videostrong-kii-pro.o \
+ 			rc-wetek-hub.o \
+ 			rc-wetek-play2.o \
+ 			rc-winfast.o \
+diff --git a/drivers/media/rc/keymaps/rc-videostrong-kii-pro.c b/drivers/media/rc/keymaps/rc-videostrong-kii-pro.c
+new file mode 100644
+index 000000000000..74a278ffa3f1
+--- /dev/null
++++ b/drivers/media/rc/keymaps/rc-videostrong-kii-pro.c
+@@ -0,0 +1,83 @@
++// SPDX-License-Identifier: GPL-2.0+
++//
++// Copyright (C) 2019 Mohammad Rasim <mohammad.rasim96@gmail.com>
++
++#include <media/rc-map.h>
++#include <linux/module.h>
++
++//
++// Keytable for the Videostrong KII Pro STB remote control
++//
++
++static struct rc_map_table kii_pro[] = {
++	{ 0x59, KEY_POWER },
++	{ 0x19, KEY_MUTE },
++	{ 0x42, KEY_RED },
++	{ 0x40, KEY_GREEN },
++	{ 0x00, KEY_YELLOW },
++	{ 0x03, KEY_BLUE },
++	{ 0x4a, KEY_BACK },
++	{ 0x48, KEY_FORWARD },
++	{ 0x08, KEY_PREVIOUSSONG},
++	{ 0x0b, KEY_NEXTSONG},
++	{ 0x46, KEY_PLAYPAUSE },
++	{ 0x44, KEY_STOP },
++	{ 0x1f, KEY_FAVORITES},	//KEY_F5?
++	{ 0x04, KEY_PVR},
++	{ 0x4d, KEY_EPG},
++	{ 0x02, KEY_INFO},
++	{ 0x09, KEY_SUBTITLE},
++	{ 0x01, KEY_AUDIO},
++	{ 0x0d, KEY_HOMEPAGE},
++	{ 0x11, KEY_TV},		// DTV ?
++	{ 0x06, KEY_UP},
++	{ 0x5a, KEY_LEFT},
++	{ 0x1a, KEY_ENTER},	// KEY_OK ?
++	{ 0x1b, KEY_RIGHT},
++	{ 0x16, KEY_DOWN},
++	{ 0x45, KEY_MENU},
++	{ 0x05, KEY_ESC},
++	{ 0x13, KEY_VOLUMEUP },
++	{ 0x17, KEY_VOLUMEDOWN },
++	{ 0x58, KEY_APPSELECT},
++	{ 0x12, KEY_VENDOR},	// mouse
++	{ 0x55, KEY_PAGEUP},	// KEY_CHANNELUP ?
++	{ 0x15, KEY_PAGEDOWN},	//KEY_CHANNELDOWN ?
++	{ 0x52, KEY_1},
++	{ 0x50, KEY_2},
++	{ 0x10, KEY_3},
++	{ 0x56, KEY_4},
++	{ 0x54, KEY_5},
++	{ 0x14, KEY_6},
++	{ 0x4e, KEY_7},
++	{ 0x4c, KEY_8},
++	{ 0x0c, KEY_9},
++	{ 0x18, KEY_F7},
++	{ 0x0f, KEY_0},
++	{ 0x51, KEY_BACKSPACE},
++};
++
++static struct rc_map_list kii_pro_map = {
++	.map = {
++		.scan     = kii_pro,
++		.size     = ARRAY_SIZE(kii_pro),
++		.rc_proto = RC_PROTO_NEC,
++		.name     = RC_MAP_KII_PRO,
++	}
++};
++
++static int __init init_rc_map_kii_pro(void)
++{
++	return rc_map_register(&kii_pro_map);
++}
++
++static void __exit exit_rc_map_kii_pro(void)
++{
++	rc_map_unregister(&kii_pro_map);
++}
++
++module_init(init_rc_map_kii_pro)
++module_exit(exit_rc_map_kii_pro)
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Mohammad Rasim <mohammad.rasim96@gmail.com>");
+diff --git a/include/media/rc-map.h b/include/media/rc-map.h
+index f99575a0d29c..d22810dcd85c 100644
+--- a/include/media/rc-map.h
++++ b/include/media/rc-map.h
+@@ -274,6 +274,7 @@ struct rc_map *rc_map_get(const char *name);
+ #define RC_MAP_VIDEOMATE_K100            "rc-videomate-k100"
+ #define RC_MAP_VIDEOMATE_S350            "rc-videomate-s350"
+ #define RC_MAP_VIDEOMATE_TV_PVR          "rc-videomate-tv-pvr"
++#define RC_MAP_KII_PRO                   "rc-videostrong-kii-pro"
+ #define RC_MAP_WETEK_HUB                 "rc-wetek-hub"
+ #define RC_MAP_WETEK_PLAY2               "rc-wetek-play2"
+ #define RC_MAP_WINFAST                   "rc-winfast"
+--
+2.24.1
 
