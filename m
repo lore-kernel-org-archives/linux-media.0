@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91CC6C33CAE
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 14:16:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C64D2C33CAD
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 14:16:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7224E207FD
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 14:16:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A629921739
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 14:16:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729101AbgAMOPz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1729094AbgAMOPz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 13 Jan 2020 09:15:55 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:53131 "EHLO
+Received: from mout.kundenserver.de ([212.227.126.135]:42957 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729064AbgAMOPs (ORCPT
+        with ESMTP id S1726074AbgAMOPy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jan 2020 09:15:48 -0500
+        Mon, 13 Jan 2020 09:15:54 -0500
 Received: from mail.cetitecgmbh.com ([87.190.42.90]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1N9dbx-1jlOmx0isn-015e1N; Mon, 13 Jan 2020 15:15:34 +0100
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mq1GE-1jVEoL1Rkg-00nAr8; Mon, 13 Jan 2020 15:15:47 +0100
 Received: from pflvmailgateway.corp.cetitec.com (unknown [127.0.0.1])
-        by mail.cetitecgmbh.com (Postfix) with ESMTP id EAD7A64F293;
-        Mon, 13 Jan 2020 14:15:33 +0000 (UTC)
+        by mail.cetitecgmbh.com (Postfix) with ESMTP id 09B8564F293;
+        Mon, 13 Jan 2020 14:15:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at cetitec.com
 Received: from mail.cetitecgmbh.com ([127.0.0.1])
         by pflvmailgateway.corp.cetitec.com (pflvmailgateway.corp.cetitec.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zSUt-Fw9X00y; Mon, 13 Jan 2020 15:15:33 +0100 (CET)
+        with ESMTP id MpW3x8_PgRq7; Mon, 13 Jan 2020 15:15:46 +0100 (CET)
 Received: from pfwsexchange.corp.cetitec.com (unknown [10.10.1.99])
-        by mail.cetitecgmbh.com (Postfix) with ESMTPS id A747864E2AB;
-        Mon, 13 Jan 2020 15:15:33 +0100 (CET)
+        by mail.cetitecgmbh.com (Postfix) with ESMTPS id 3D7C264D641;
+        Mon, 13 Jan 2020 15:15:46 +0100 (CET)
 Received: from pflmari.corp.cetitec.com (10.10.2.141) by
  PFWSEXCHANGE.corp.cetitec.com (10.10.1.99) with Microsoft SMTP Server (TLS)
- id 15.0.1320.4; Mon, 13 Jan 2020 15:15:33 +0100
+ id 15.0.1320.4; Mon, 13 Jan 2020 15:15:46 +0100
 Received: by pflmari.corp.cetitec.com (Postfix, from userid 1000)
-        id 5D6DB804E9; Mon, 13 Jan 2020 15:15:33 +0100 (CET)
-Date:   Mon, 13 Jan 2020 15:15:33 +0100
+        id E583A804E9; Mon, 13 Jan 2020 15:15:45 +0100 (CET)
+Date:   Mon, 13 Jan 2020 15:15:45 +0100
 From:   Alex Riesen <alexander.riesen@cetitec.com>
 To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
 CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -48,9 +48,9 @@ CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         <devel@driverdev.osuosl.org>, <linux-media@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-renesas-soc@vger.kernel.org>
-Subject: [PATCH 4/8] media: adv748x: reserve space for the audio (I2S) port
- in the driver structures
-Message-ID: <20200113141533.GE3606@pflmari>
+Subject: [PATCH 6/8] media: adv748x: reduce amount of code for bitwise
+ modification of device registers
+Message-ID: <20200113141545.GG3606@pflmari>
 Mail-Followup-To: Alex Riesen <alexander.riesen@cetitec.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -70,50 +70,64 @@ X-ClientProxiedBy: PFWSEXCHANGE.corp.cetitec.com (10.10.1.99) To
  PFWSEXCHANGE.corp.cetitec.com (10.10.1.99)
 X-EsetResult: clean, is OK
 X-EsetId: 37303A29536F936F657D64
-X-Provags-ID: V03:K1:GCk2luEwK7oQKq+TVDmnLvDi4cpAoKdN6TRH/nlXVMKt3Z5GHwu
- H3avNrMuWgo13wQ7Ze/a2VAvbetXqrN6m+l72/5aFqtdk2UyXNuWQJHDhFrsY38zJsq3Uws
- +Nh74MidEuL3prr2ArVSCHN9M4ykTAlnbyxPCdDMKRSR6pLqKYtXwfv5NU2/yCF19ZsVknR
- qE1k9GTehtJ1US1u68Fzg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IdhXLHCtac8=:FwiUzFjjrZsbLy8MBOXV/l
- jrlUrLFzvSSLWKSSNT18aCS4sNiVsHlAa49p0eYIwYKUNaXsePcAxPb+hya2JFD24Qvkunifd
- AVBx7hjI8giCZN7rko0ogwSQLQBLIrVz0M3d3tQ93++1vCsmuxI/owy8Dgc5rJQ5I9Hgi2kKw
- YTzc8Cb6bf8uFoJJ9UR/yb/eS1VjpiLmBhFOA4N4ceRuyROuNBAK4HBlcp9mAoz8WnYYQB1ZK
- F5YkTo2/TVPj1Fv9GG4yB1nFidCk37j4Sp0qXaLtG5C8sD/I3SRftWhnnF10vBORFvGZ6Vg9v
- T/tnEx3scvamELA6QmP4b0UNayGaDyakyfY8V/1pyURCQYrzJ5rzNsaBhgR57R87fIcGv35hu
- 3YZUHo/z8X0flMtuCQYId1YXy24c/GGQzETlISKRGTCo/jtoy8gvBk+sEFBMmu3HC5OSp461h
- +OSHNKliS/6rrFnZceiq12RZAgZWpw+7dG4h/BrVhUXBquBny3oQ47yrcSGKadysIsG5T/wTY
- U+nUtk771wmCq7Dh1yF9ahwNr7yv52VuG0JHKHhc4KGm51OojhqufJLKfcyX36Le4v+lTQyGu
- IfBd7WgIvGXUYbR2ewj7CEiEpP0otKV9BTTyz6OCjV6M6nEmbIVwWjTbRVafQ1D+O/uTLWg1T
- zsMu28Cep9PWUnhmeBSldJXX/Rj78IbkYeXv3xG5ry6L/f0bhkp3gAnFsnqKaP4jkDqaWspre
- aIF/nf2OfFgAtKB9JMSLL965QHHMAPb3A3jOVo3lQF12Q93bvQcSKjN+akSAb0aFhma50hcHg
- 0X1EF7OZ3dL1umwjmDCjRRAdnqE0DiZ86GBO6L75vd6F0h3CexOctlUHpFOy/ODP4zu2M6aoN
- 3lWmghCN1TRokcwhUJrpaDA7VeuxwGcICVQ/D3ynM=
+X-Provags-ID: V03:K1:/85G/aaVRJTZkr6Gku52togdEm1yvKqdKcF2c6D9t/wZUMxfwf+
+ ueDyXqBfeWDjMif7FvC+VnxwEbJgUx3FyGyTzatFR1guD9V4uw2RNoDaNeH/Nwnp0pV4896
+ DESxa+kfbQ+uqth3DkTy9kl+NvJsPVifiYh/OpUX30+bAkg2vu/QBJ2kTzX9Sh27m1aE5S2
+ 7B6hcDjYeJBDE0WrhNmsg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5ZCwtVUm3R0=:K645eVt6J/mrOudtoJiooK
+ MPK+yBSC1zEBtHzDuRiCAkKjRzkLtFB/2lbGxuSo0GCiyy9DW+wXlseZtCOrTysV6rqRf3MyO
+ GqBQB6wkHW8p5v9EqUmhjB69ORSUKpfCbRubBOLlt9jrLLU7w9p541cFihbJAwV352Yq4J4fO
+ wtQgyYQ1AkLsT8BEGVN9se34GMoFJkgOiT9sm7B29S2KMGSR/jB9wnjOfN6XSLO87zKEXks4Z
+ 0PABl0gPXRX48X1/QBzZSDIixRtl7AepMJrAP3h1XG+K+Lx/SP0QuJi0dGNLC4Nalb4WasJ5i
+ Db2+LbvTCVGnK5AvN4zy9y4SLk2amVboFL9pxZu+POZ2jBoOK08/GxZlwY946RWJq1J8LZKaW
+ PLGCUbugnrqGUIeDOJLo1dGuFSZJHKv/d9HJmigyn/7PurV3QNSWm7NXYCZ+7R3kYFTlcv7Qv
+ PdM1Sqwsn7uajbaFsMXJVhV73Jbj3MuJKv+zEI1iiCThlTfrN9wAnExMejo84kZiQT631gkbr
+ +U8YEdD2m+qTfhcpAkXTK3F96AtdlCju6Mw2QVStUyPWb3v2K+enLPzgTq7hGmnkX4VUfG0Xu
+ XqouWEOvbUpskEB6jRu2H+NXzDDulYJECfp/tsNNj5DLx2Qo+ciOVvhI7GIkP48ratxCYT6R5
+ D4pdQaMn3lMFltGT7bC3KEFJrOSnesRzVH8M3rr0hkFTWlADfLgBBB+7Qoi9pozCDE0OPzOe3
+ 209hNcGsA281A51sfZouewsrkFIJRzBOeZH8XdeWtDZkOILvOhNWzzzXvkAqmTLyHU9mDwV9/
+ /ep+nApMI4YLZHFd8PSC6H4g5im4Jnd7SPlBVQljCHj0QVUTD9Itk673MCpCqeRZ9cMFwRNo7
+ EhhtCJD6UniZOJIJiXpTnaKy2vdPmzspAc8d0Q758=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This allows use of the port in the device tree files.
+The regmap provides corresponding routine (regmap_update_bits) already
+wrapped for this device earlier.
 
 Signed-off-by: Alexander Riesen <alexander.riesen@cetitec.com>
 ---
- drivers/media/i2c/adv748x/adv748x.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/i2c/adv748x/adv748x.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/adv748x/adv748x.h b/drivers/media/i2c/adv748x/adv748x.h
-index fdda6982e437..5db06410f102 100644
+index 5db06410f102..ab3f754542fe 100644
 --- a/drivers/media/i2c/adv748x/adv748x.h
 +++ b/drivers/media/i2c/adv748x/adv748x.h
-@@ -61,7 +61,8 @@ enum adv748x_ports {
- 	ADV748X_PORT_TTL = 9,
- 	ADV748X_PORT_TXA = 10,
- 	ADV748X_PORT_TXB = 11,
--	ADV748X_PORT_MAX = 12,
-+	ADV748X_PORT_I2S = 12,
-+	ADV748X_PORT_MAX = 13,
- };
+@@ -432,7 +432,7 @@ int adv748x_update_bits(struct adv748x_state *state, u8 page, u8 reg,
  
- enum adv748x_csi2_pads {
+ #define io_read(s, r) adv748x_read(s, ADV748X_PAGE_IO, r)
+ #define io_write(s, r, v) adv748x_write(s, ADV748X_PAGE_IO, r, v)
+-#define io_clrset(s, r, m, v) io_write(s, r, (io_read(s, r) & ~m) | v)
++#define io_clrset(s, r, m, v) adv748x_update_bits(s, ADV748X_PAGE_IO, r, m, v)
+ #define io_update(s, r, m, v) adv748x_update_bits(s, ADV748X_PAGE_IO, r, m, v)
+ 
+ #define hdmi_read(s, r) adv748x_read(s, ADV748X_PAGE_HDMI, r)
+@@ -450,11 +450,11 @@ int adv748x_update_bits(struct adv748x_state *state, u8 page, u8 reg,
+ 
+ #define sdp_read(s, r) adv748x_read(s, ADV748X_PAGE_SDP, r)
+ #define sdp_write(s, r, v) adv748x_write(s, ADV748X_PAGE_SDP, r, v)
+-#define sdp_clrset(s, r, m, v) sdp_write(s, r, (sdp_read(s, r) & ~m) | v)
++#define sdp_clrset(s, r, m, v) adv748x_update_bits(s, ADV748X_PAGE_SDP, r, m, v)
+ 
+ #define cp_read(s, r) adv748x_read(s, ADV748X_PAGE_CP, r)
+ #define cp_write(s, r, v) adv748x_write(s, ADV748X_PAGE_CP, r, v)
+-#define cp_clrset(s, r, m, v) cp_write(s, r, (cp_read(s, r) & ~m) | v)
++#define cp_clrset(s, r, m, v) adv748x_update_bits(s, ADV748X_PAGE_CP, r, m, v)
+ 
+ #define tx_read(t, r) adv748x_read(t->state, t->page, r)
+ #define tx_write(t, r, v) adv748x_write(t->state, t->page, r, v)
 -- 
 2.24.1.508.g91d2dafee0
 
