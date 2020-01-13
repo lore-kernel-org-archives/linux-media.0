@@ -2,80 +2,182 @@ Return-Path: <SRS0=VeA5=3C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE4F8C33CA8
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 03:52:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2381FC33CAB
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 05:48:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A50A12082E
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 03:52:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="errFA5cA"
+	by mail.kernel.org (Postfix) with ESMTP id F28E021744
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 05:48:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387460AbgAMDw3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 Jan 2020 22:52:29 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:23713 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2387415AbgAMDw2 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 Jan 2020 22:52:28 -0500
-X-UUID: 755dcea4cc3b43c48f8b3cab63487c60-20200113
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=GEn5TTMvrgKaWqCbybjZ0pxAsz0JFNP9RC57YNtlclc=;
-        b=errFA5cA0MqrasLeU2c7EgGO/8aV41Ke1aMqrEVxSbItW5deywTZf6OhH7Aj6Vpbf4oyN0XR1MwIXCiq4eCtIrzRWcMAWL/5QChr8p24FK2uV+ENWfkVi8pPoEMTf2+Zfw5rrq5ughg55vaIJ5TzKdmP2teiU2RokAsHpboH7Yk=;
-X-UUID: 755dcea4cc3b43c48f8b3cab63487c60-20200113
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <maoguang.meng@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1495602143; Mon, 13 Jan 2020 11:52:21 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 13 Jan 2020 11:51:06 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 13 Jan 2020 11:52:35 +0800
-From:   <maoguang.meng@mediatek.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-CC:     Yong Wu <yong.wu@mediatek.com>, Xia Jiang <xia.jiang@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Maoguang Meng <maoguang.meng@mediatek.com>
-Subject: [PATCH 1/1] media: platform: VIDEO_MEDIATEK_JPEG can also depend on MTK_IOMMU
-Date:   Mon, 13 Jan 2020 11:52:02 +0800
-Message-ID: <20200113035202.7797-1-maoguang.meng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 6669261D4D362FA0B90A9D2C43FB1733D5513E1AEFCDD470B21449EB489B41AA2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1726193AbgAMFsx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jan 2020 00:48:53 -0500
+Received: from mga17.intel.com ([192.55.52.151]:54588 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725268AbgAMFsx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 13 Jan 2020 00:48:53 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jan 2020 21:48:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,427,1571727600"; 
+   d="scan'208";a="243113321"
+Received: from shawn-bm6650-pc.itwn.intel.com ([10.5.230.127])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Jan 2020 21:48:51 -0800
+From:   Shawnx Tu <shawnx.tu@intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     sakari.ailus@linux.intel.com, andy.yeh@intel.com,
+        shawnx.tu@intel.com
+Subject: [PATCH v5] ov5675: add vflip/hflip control support
+Date:   Mon, 13 Jan 2020 14:27:02 +0800
+Message-Id: <1578896822-32004-1-git-send-email-shawnx.tu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-RnJvbTogTWFvZ3VhbmcgTWVuZyA8bWFvZ3VhbmcubWVuZ0BtZWRpYXRlay5jb20+DQoNCm1lZGlh
-dGVrIGpwZWcgY29kZWMgZHJpdmVyIGNhbiBkZXBlbmQgb24gTVRLX0lPTU1VIG9yIE1US19JT01N
-VV9WMQ0KDQpDaGFuZ2UtSWQ6IEk3ODk3OWFmOTI0ZDRmZDUyYTM2NDFlZmYxNDYzYTEwZDZlMWQ0
-NjVmDQpTaWduZWQtb2ZmLWJ5OiBNYW9ndWFuZyBNZW5nIDxtYW9ndWFuZy5tZW5nQG1lZGlhdGVr
-LmNvbT4NCi0tLQ0KIGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0vS2NvbmZpZyB8IDIgKy0NCiAxIGZp
-bGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCg0KZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vS2NvbmZpZyBiL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0v
-S2NvbmZpZw0KaW5kZXggZTg0ZjM1ZDNhNjhlLi44NTM3N2M4OGU5MWEgMTAwNjQ0DQotLS0gYS9k
-cml2ZXJzL21lZGlhL3BsYXRmb3JtL0tjb25maWcNCisrKyBiL2RyaXZlcnMvbWVkaWEvcGxhdGZv
-cm0vS2NvbmZpZw0KQEAgLTIwMCw3ICsyMDAsNyBAQCBjb25maWcgVklERU9fSU1YX1BYUA0KIA0K
-IGNvbmZpZyBWSURFT19NRURJQVRFS19KUEVHDQogCXRyaXN0YXRlICJNZWRpYXRlayBKUEVHIENv
-ZGVjIGRyaXZlciINCi0JZGVwZW5kcyBvbiBNVEtfSU9NTVVfVjEgfHwgQ09NUElMRV9URVNUDQor
-CWRlcGVuZHMgb24gTVRLX0lPTU1VX1YxIHx8IE1US19JT01NVSB8fCBDT01QSUxFX1RFU1QNCiAJ
-ZGVwZW5kcyBvbiBWSURFT19ERVYgJiYgVklERU9fVjRMMg0KIAlkZXBlbmRzIG9uIEFSQ0hfTUVE
-SUFURUsgfHwgQ09NUElMRV9URVNUDQogCXNlbGVjdCBWSURFT0JVRjJfRE1BX0NPTlRJRw0KLS0g
-DQoyLjE4LjANCg==
+From: Shawn Tu <shawnx.tu@intel.com>
+
+- Add V4L2 controls: horizontal/vertical flip,
+  keep SGRBG10 Bayer order output (via change v/hflip)
+- Fix Bayer order output in 1296x972 binning registers
+
+Signed-off-by: Shawn Tu <shawnx.tu@intel.com>
+---
+ drivers/media/i2c/ov5675.c | 82 +++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 73 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+index 1ae2523..8537cc4 100644
+--- a/drivers/media/i2c/ov5675.c
++++ b/drivers/media/i2c/ov5675.c
+@@ -63,6 +63,10 @@
+ #define OV5675_TEST_PATTERN_ENABLE	BIT(7)
+ #define OV5675_TEST_PATTERN_BAR_SHIFT	2
+ 
++/* Flip Mirror Controls from sensor */
++#define OV5675_REG_FORMAT1		0x3820
++#define OV5675_REG_FORMAT2		0x373d
++
+ #define to_ov5675(_sd)			container_of(_sd, struct ov5675, sd)
+ 
+ enum {
+@@ -314,21 +318,21 @@ static const struct ov5675_reg mode_1296x972_regs[] = {
+ 	{0x3800, 0x00},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
+-	{0x3803, 0xf4},
++	{0x3803, 0x00},
+ 	{0x3804, 0x0a},
+ 	{0x3805, 0x3f},
+-	{0x3806, 0x06},
+-	{0x3807, 0xb3},
++	{0x3806, 0x07},
++	{0x3807, 0xb7},
+ 	{0x3808, 0x05},
+-	{0x3809, 0x00},
+-	{0x380a, 0x02},
+-	{0x380b, 0xd0},
++	{0x3809, 0x10},
++	{0x380a, 0x03},
++	{0x380b, 0xcc},
+ 	{0x380c, 0x02},
+ 	{0x380d, 0xee},
+ 	{0x380e, 0x07},
+-	{0x380f, 0xe4},
+-	{0x3811, 0x10},
+-	{0x3813, 0x09},
++	{0x380f, 0xd0},
++	{0x3811, 0x08},
++	{0x3813, 0x0d},
+ 	{0x3814, 0x03},
+ 	{0x3815, 0x01},
+ 	{0x3816, 0x03},
+@@ -604,6 +608,53 @@ static int ov5675_test_pattern(struct ov5675 *ov5675, u32 pattern)
+ 				OV5675_REG_VALUE_08BIT, pattern);
+ }
+ 
++/*
++ * OV5675 supports keeping the pixel order by mirror and flip function
++ * The Bayer order isn't affected by the flip controls
++ */
++static int ov5675_set_ctrl_hflip(struct ov5675 *ov5675, u32 ctrl_val)
++{
++	int ret;
++	u32 val;
++
++	ret = ov5675_read_reg(ov5675, OV5675_REG_FORMAT1,
++			      OV5675_REG_VALUE_08BIT, &val);
++	if (ret)
++		return ret;
++
++	return ov5675_write_reg(ov5675, OV5675_REG_FORMAT1,
++				OV5675_REG_VALUE_08BIT,
++				ctrl_val ? val & ~BIT(3) : val);
++}
++
++static int ov5675_set_ctrl_vflip(struct ov5675 *ov5675, u8 ctrl_val)
++{
++	int ret;
++	u32 val;
++
++	ret = ov5675_read_reg(ov5675, OV5675_REG_FORMAT1,
++			      OV5675_REG_VALUE_08BIT, &val);
++	if (ret)
++		return ret;
++
++	ret = ov5675_write_reg(ov5675, OV5675_REG_FORMAT1,
++			       OV5675_REG_VALUE_08BIT,
++			       ctrl_val ? val | BIT(4) | BIT(5)  : val);
++
++	if (ret)
++		return ret;
++
++	ret = ov5675_read_reg(ov5675, OV5675_REG_FORMAT2,
++			      OV5675_REG_VALUE_08BIT, &val);
++
++	if (ret)
++		return ret;
++
++	return ov5675_write_reg(ov5675, OV5675_REG_FORMAT2,
++				OV5675_REG_VALUE_08BIT,
++				ctrl_val ? val | BIT(1) : val);
++}
++
+ static int ov5675_set_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct ov5675 *ov5675 = container_of(ctrl->handler,
+@@ -654,6 +705,14 @@ static int ov5675_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		ret = ov5675_test_pattern(ov5675, ctrl->val);
+ 		break;
+ 
++	case V4L2_CID_HFLIP:
++		ov5675_set_ctrl_hflip(ov5675, ctrl->val);
++		break;
++
++	case V4L2_CID_VFLIP:
++		ov5675_set_ctrl_vflip(ov5675, ctrl->val);
++		break;
++
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+@@ -722,6 +781,11 @@ static int ov5675_init_controls(struct ov5675 *ov5675)
+ 				     V4L2_CID_TEST_PATTERN,
+ 				     ARRAY_SIZE(ov5675_test_pattern_menu) - 1,
+ 				     0, 0, ov5675_test_pattern_menu);
++	v4l2_ctrl_new_std(ctrl_hdlr, &ov5675_ctrl_ops,
++			  V4L2_CID_HFLIP, 0, 1, 1, 0);
++	v4l2_ctrl_new_std(ctrl_hdlr, &ov5675_ctrl_ops,
++			  V4L2_CID_VFLIP, 0, 1, 1, 0);
++
+ 	if (ctrl_hdlr->error)
+ 		return ctrl_hdlr->error;
+ 
+-- 
+2.7.4
 
