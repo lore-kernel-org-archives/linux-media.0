@@ -2,147 +2,125 @@ Return-Path: <SRS0=VeA5=3C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.3 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43EF9C33CAB
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 06:00:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77A57C33CAE
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 07:44:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 198D9214D8
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 06:00:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3973E20661
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jan 2020 07:44:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H1bh6tmx"
+	dkim=pass (1024-bit key) header.d=NETORGFT5553547.onmicrosoft.com header.i=@NETORGFT5553547.onmicrosoft.com header.b="X8N5yuo+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729099AbgAMGAI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jan 2020 01:00:08 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:42479 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726804AbgAMGAH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jan 2020 01:00:07 -0500
-Received: by mail-pl1-f193.google.com with SMTP id p9so3389412plk.9;
-        Sun, 12 Jan 2020 22:00:07 -0800 (PST)
+        id S1728512AbgAMHo3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jan 2020 02:44:29 -0500
+Received: from mail-ma1ind01hn2035.outbound.protection.outlook.com ([52.103.200.35]:52186
+        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727021AbgAMHo3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 13 Jan 2020 02:44:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MsrkQCL5/iTw6WfQRd97cZiw+H4HsO3Ulc4h7fLufjcI/MOFy1YBE3uxH3SgdF2CiJ33z8hoa3mkQv3eSX1cAuo43N+0/v8j+ElnZqJbGSilKXNuYAyUImYr2ncaCIk34Tu74pQudNzCb1sZsKlsPxVbnzYVAbGz5CZQtsVPMzrIrgEyU3/4S00S4QM37DU3roEsQ3j4t1SUiL8dpzLkOoAJosjdrlCm63VoAO8Cvg/M2Noy0XKD/M5FzyOLYiZRcgJ1GjFK3Q+rzD19uwm6+5VnILY8f+d4eME5BHOjgg9LQqybYWwJOPcfIwUAwWUnwHuLqrPxRbqP++cs7e253w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3VTUqdNCfmz+XgTaEFqj4wt+KWzO/RiTluWlKU9D9cM=;
+ b=lmR4zQzTYqcD3vSGdYEtkttzgZjdhWSvD+6wFjXyz3AEEp/gKqLKJLf2fMBDjus1ld3t/TWRRHVxVsTwTTwmTyN9L/WmkiaEOnhNZ8d//yQw5Dfb/CIOXTDHA49yQbZnSwika1mBEq3HRIkke1hGXaHueRtA7CISsGZ/tNn7NBOjLwzse3wHZf/V3U4P6BdTLjBUIobnfUvWigGm4KmMpzonqlnUzG20siousfHA6mBx8//MC5POB7aaQGURuUCWb49QJ5Bn2e2C4A7D84AuDp0a0MzeoeJnHc+C7HAl4DZgLMxOk3t/33A5reTfmITF/HeMoHAAXAEIqh2ZSyqvPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=universaledigitaldata.com; dmarc=pass action=none
+ header.from=universaledigitaldata.com; dkim=pass
+ header.d=universaledigitaldata.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BZudNU1j/GxZrYgiqrSmCxqZu+3g41iMiIQCkxkhVAY=;
-        b=H1bh6tmx268zowtgeJ2z3BDM7/Dc5ajaVde9nFJzlNrrToUQMQlpj5eUkGdvyqavrd
-         W8yhGyjgcqMWC8QgQRCI6m0vvZKwmIM8eMkgYJiGAtr0X2zPVrxCiKsUqXDrSTm4dPE+
-         0lV0v2SiP0/KybQJudeecXv2MHIF0XXC8z+aIbzguaYst4nPTu3F9w58ou67Qc7KPQgh
-         f0XbHjz+7KRET83fUAQTd8vV7JW9Sq7sy/7/pvXwN/N1CHEuLnsx4F58Am5xcbTU+Ssn
-         /vHs0Xam5LNkVGvBJJ6Ky76/gBKYsVb64eM/aZRisX8DpYnLDY0j297x1D83wN4SDESH
-         PqHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BZudNU1j/GxZrYgiqrSmCxqZu+3g41iMiIQCkxkhVAY=;
-        b=VmA34HSBMXV8EaSddD9ni/J3vxAyBWxuK0RS2TNN0yij6v+/VCaYpN4H+X+ll5i9Ef
-         P/N7n2QXhdk5affdlaZ15v2ZllU7sWONFggrbJWze1P5Dj0nKi+Ylb9CBZSnTDJYQOTY
-         9O9pKeNX+KKhZwSs2AYP/ak9k+Y6MYPjuKujm/rjwLtcaTeqghFExWlnlJOHnxlac2r8
-         Ib1XsorOXHPL5FY28rl/Sbi2P8gnyicHmzjfrgUEPl7cIFVjEjHkOf6i5odqkkGrj+ns
-         vWmpCqOpyyuSr34JVg7L6yIsJezLmdS2C6h5hkm1LE0x/1QqxvDAUkVa9/RsRyrJ7F8u
-         MdGw==
-X-Gm-Message-State: APjAAAWPgmFxDjPjVzQg2Dfs8/bcyN7RFOxvbuP2HlP/F/pcDwg1gMkm
-        rwQdcsUKnYG7Wwp8h4ysMVY=
-X-Google-Smtp-Source: APXvYqyhCJDT2p9yUG+p4vnlHW0qO1CJmu0Rv1esgppxvSv5rAQVvQCAD+ZHU3mFnj6W8b1RIhPu7w==
-X-Received: by 2002:a17:90a:330f:: with SMTP id m15mr20053801pjb.24.1578895206878;
-        Sun, 12 Jan 2020 22:00:06 -0800 (PST)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.gmail.com with ESMTPSA id u23sm12182518pfm.29.2020.01.12.22.00.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jan 2020 22:00:06 -0800 (PST)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH v3] media: allegro: add missed checks in allegro_open()
-Date:   Mon, 13 Jan 2020 13:59:51 +0800
-Message-Id: <20200113055951.8718-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.24.1
+ d=NETORGFT5553547.onmicrosoft.com;
+ s=selector1-NETORGFT5553547-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3VTUqdNCfmz+XgTaEFqj4wt+KWzO/RiTluWlKU9D9cM=;
+ b=X8N5yuo+S0jvwrQNB60+qdAlsxM8Cq/eCZyDWSuVxLKjkZ+YTCuS9pLBw2+JvHAAw1g9WxGHgINqBGRmus+j7F21rQle5QAeEXoiYiguuMPi30g5wZEKcClUmIf2b7niZNjbn8JV/NeHnyTtTvWya+G8xvyPmoeXv4sQhHR54Yk=
+Received: from BMXPR01MB3735.INDPRD01.PROD.OUTLOOK.COM (20.179.243.22) by
+ BMXPR01MB4023.INDPRD01.PROD.OUTLOOK.COM (20.179.243.144) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2623.9; Mon, 13 Jan 2020 07:44:25 +0000
+Received: from BMXPR01MB3735.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::a10c:740:420:ec6e]) by BMXPR01MB3735.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::a10c:740:420:ec6e%6]) with mapi id 15.20.2623.015; Mon, 13 Jan 2020
+ 07:44:25 +0000
+Received: from DESKTOPMPN5UI4 (106.51.26.46) by MAXPR0101CA0047.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:d::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2623.9 via Frontend Transport; Mon, 13 Jan 2020 07:44:25 +0000
+From:   Sarah Wilson <sarah.wilson@universaledigitaldata.com>
+To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Subject: Leads On Integrated Systems Europe  2020
+Thread-Topic: Leads On Integrated Systems Europe  2020
+Thread-Index: AdXJ5UXDiY/HIT7XQhWRzyX6qxdsGg==
+Date:   Mon, 13 Jan 2020 07:44:25 +0000
+Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAPTePss7+FFKu8Ddkhz/AhXCgAAAEAAAAGGRCFxGnftAguW7oRNQFmkBAAAAAA==@universaledigitaldata.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MAXPR0101CA0047.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:d::33) To BMXPR01MB3735.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:61::22)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=sarah.wilson@universaledigitaldata.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: Microsoft Outlook 15.0
+x-antivirus: Avast (VPS 200112-0, 01/12/2020), Outbound message
+x-antivirus-status: Clean
+x-originating-ip: [106.51.26.46]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 24ba8a2c-501b-440f-e2a1-08d797fc69a5
+x-ms-traffictypediagnostic: BMXPR01MB4023:
+x-microsoft-antispam-prvs: <BMXPR01MB40234C907310AC9CB336C4E790350@BMXPR01MB4023.INDPRD01.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:5516;
+x-forefront-prvs: 028166BF91
+x-forefront-antispam-report: SFV:SPM;SFS:(10009020)(346002)(366004)(376002)(39830400003)(136003)(396003)(189003)(199004)(64756008)(66556008)(6496006)(66476007)(1006002)(186003)(26005)(71200400001)(5660300002)(4744005)(66946007)(16526019)(44832011)(2906002)(52116002)(8936002)(81166006)(81156014)(8676002)(956004)(2616005)(316002)(86362001)(66446008)(6916009)(55236004)(6486002)(508600001)(36756003)(32030200002);DIR:OUT;SFP:1501;SCL:5;SRVR:BMXPR01MB4023;H:BMXPR01MB3735.INDPRD01.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: universaledigitaldata.com does not
+ designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1jGkrFNFKemiUQ4+oFy4zzDpB+HfpIr9qxTylkxQIbuuwRXSZ3PQx0CkkVbrFeMUxFKdmimkKkqqBK49+Q7yg+TfA/oaMQAY2BSrfTTw861yswpA90yVaAMJaWbbGWjl1zu3njnDu+DeVB/PujjQhDWEjCbaB+gtf97v44TRErnblcVJWn5AebBhC71NhJjbtrHBWRboplG/oYuTtgc/L3/IYlbyzTRldq05qSRmnHdiNFLnarWn03xU9IMZDkACbCDe9tAr2dBxIbEcp6mBpFztpWHQRnd9IOoxLMfuKfGj9lt57d0Tl73b2+dagrRn5qfs6TPmgpUGAUb4eIMQPaA4m3xFVeaJ1FDOcl1PEG6zERK4fbgNht74R+BlpbhX/fMGW7RPycwsRfejkcUPc14nvIGFyI8NH0ipAC3akbY7FweB0KZelNMjWL3hmAP0PV0yGkhkD5uIVD3l47R27DrMiKXI5x6GW8BM8sgBFcnqglnk5gkrlF1AftIeohN+puITAu8rEx5jYvpZ8LxNdl7CC9r38KllYhXXHUs/+u0hEqWtCQeOClSQN36HTprV5TaVAFzuPFbZ+a4dVOiJc/E8hnn0CHFr+QlBFWlQ3pVWw6kfgQFlbdGtOe5TOqbXGAwaWEMvmS43KEMjatMF6erktX+6aeJuOHgaJPBdSsVf5Y0Q6OfkyjjRQKflKOqd8FsOO8G5yvxSsQGdcbgQJVbyPVrJm9/bB9ntp+fbBAZ5vi9zqEl7I0kEILPb1ePGyX3Tcz1h2WFJ96EIYHu3CQ==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <075288F4AC42BD4AB1D75AC93937E151@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+X-OriginatorOrg: universaledigitaldata.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24ba8a2c-501b-440f-e2a1-08d797fc69a5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jan 2020 07:44:25.7395
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 136679fb-fa93-4ffb-ae24-fda892c47083
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NvcwwWwCcJOYg9yeGsGfS2BdkegC8RRgUwuLaVgFi1ngvTDJTfqAq1PIIh2f1UYJnwXkHBLEilQh1nSZ1qT6lJ4YQuFvBEFkU0v8bH7lnMthFn26NN6JehuTz5vE4Le7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BMXPR01MB4023
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-allegro_open() misses checks for v4l2_m2m_ctx_init() and results of
-v4l2_ctrl_new* calls.
-Add checks and error handlers to fix the problems.
+Hi,
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
----
-Changes in v3:
-  - Make code cleaner.
-  - Add a check for handler->error.
+I hope you're the right person to discuss about Integrated Systems Europe
+2020 Attendees Database.
+=20
+Key Contacts:
+                              .	Computer
+                              .	Electronics
+                              .	Electrical Engineering
+                              .	Integrated Systems
+                              .	Electronic Systems
+                              .	Audiovisual and AV Industry
 
- .../staging/media/allegro-dvt/allegro-core.c  | 24 +++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
-index 6f0cd0784786..e86001e42963 100644
---- a/drivers/staging/media/allegro-dvt/allegro-core.c
-+++ b/drivers/staging/media/allegro-dvt/allegro-core.c
-@@ -2270,15 +2270,12 @@ static int allegro_open(struct file *file)
- 	struct allegro_channel *channel = NULL;
- 	struct v4l2_ctrl_handler *handler;
- 	u64 mask;
-+	int ret;
- 
- 	channel = kzalloc(sizeof(*channel), GFP_KERNEL);
- 	if (!channel)
- 		return -ENOMEM;
- 
--	v4l2_fh_init(&channel->fh, vdev);
--	file->private_data = &channel->fh;
--	v4l2_fh_add(&channel->fh);
--
- 	init_completion(&channel->completion);
- 
- 	channel->dev = dev;
-@@ -2328,6 +2325,11 @@ static int allegro_open(struct file *file)
- 			V4L2_CID_MIN_BUFFERS_FOR_OUTPUT,
- 			1, 32,
- 			1, 1);
-+	if (handler->error != 0) {
-+		ret = handler->error;
-+		goto error;
-+	}
-+
- 	channel->fh.ctrl_handler = handler;
- 
- 	channel->mcu_channel_id = -1;
-@@ -2341,7 +2343,21 @@ static int allegro_open(struct file *file)
- 	channel->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->m2m_dev, channel,
- 						allegro_queue_init);
- 
-+	if (IS_ERR(channel->fh.m2m_ctx)) {
-+		ret = PTR_ERR(channel->fh.m2m_ctx);
-+		goto error;
-+	}
-+
-+	v4l2_fh_init(&channel->fh, vdev);
-+	file->private_data = &channel->fh;
-+	v4l2_fh_add(&channel->fh);
-+
- 	return 0;
-+
-+error:
-+	v4l2_ctrl_handler_free(handler);
-+	kfree(channel);
-+	return ret;
- }
- 
- static int allegro_release(struct file *file)
--- 
-2.24.1
+Venue: Amsterdam, Netherlands
+
+Please let me know your thoughts, So that I can send you the Number of
+Contacts available and the Cost for it.
+
+Best Regards,
+Sarah Wilson
+B2B Tradeshow Specialist
+
+If you're not interested kindly reply with the subject line "Opt-Out".
 
