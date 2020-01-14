@@ -2,99 +2,124 @@ Return-Path: <SRS0=7WKT=3D=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFBD5C33CA9
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jan 2020 00:30:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3538C33CA9
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jan 2020 00:30:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 90685207FF
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jan 2020 00:30:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 769CE2084D
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jan 2020 00:30:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1578961818;
-	bh=qMV9t6yq7xpLcOxvDk7MIU+TGS/TsLnI3P1Rd0BbMos=;
+	s=default; t=1578961824;
+	bh=l2r4AlqX7DIu8a1vCjrQQY2nUvcTBGVepDbO5HswZfs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=YxCib3/g3jxDs58UdIyeSidqCnsgilY+0txkTVMIz9NA/KAJlO9fxoyMSPsSb7DEO
-	 cliDRyoKWOMIkLhI5eCndjIdtrSP/CFyNVtVS/MHd2kwi+1RtyyNNnpr+h8Qy2r/87
-	 gvUL2smIQnBPuKzRXtbb/6jn3/gqVkdVhIRLVsis=
+	b=ndIeyAwd9OS7pUD0R2AhzbS3J9Rgqm+LfhDNNYqeWdJ60f0FJI1iYC9iP+7Q5MMUz
+	 WvxE/CbR6BP0p8qzk7EhrJq8a1++6XR4JC7m+4Su4u+cwVTiBpJlLMZEcogOQ7S0vR
+	 Rmt9ji6HU85gMrNeVlVhE1AtlpZktXBjRAMf+C5A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728802AbgANAaS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jan 2020 19:30:18 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:44371 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728865AbgANAaR (ORCPT
+        id S1729052AbgANAaX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jan 2020 19:30:23 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45616 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729061AbgANAaT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jan 2020 19:30:17 -0500
-Received: by mail-oi1-f194.google.com with SMTP id d62so10147349oia.11
-        for <linux-media@vger.kernel.org>; Mon, 13 Jan 2020 16:30:17 -0800 (PST)
+        Mon, 13 Jan 2020 19:30:19 -0500
+Received: by mail-ot1-f65.google.com with SMTP id 59so10851249otp.12
+        for <linux-media@vger.kernel.org>; Mon, 13 Jan 2020 16:30:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=z4zWbyVluCegWLV1bmjQGYNlUCTLZBFCektijqCqk8g=;
-        b=mvgRGV0QdcdvfOmyVcE2KVlJGpWIRHgGjxuM1YLQLbfpfhJF4h8NH8dBKBK2/2u0yh
-         8qa6YQIIWvV9JIYS4KHvJ4Ry6li7zHr9uVfE3YmXwPNQAbmeRCIPdQ2tkRvpKq/mgZnX
-         FHfjEHTVUmV2MiDSyM6c8p73WPuVDmVE37FJ4RxrJ9gpMGuQBSieClWaC+PhsTYni7nc
-         7tT4LoUhfHIML7bYzSgsfXGwWeVToJS3JF0akZYpT7b5duFj8lwQY85kEsLt2pH3p1xB
-         8z1utDFnWbBfKu1YpTKffF4u+/6IHxlxyjwhZsSBW7Z0n09/zvk2aa5KkWKFy57L3r8k
-         D/xQ==
-X-Gm-Message-State: APjAAAVGS/lYKh0IGMbYRZDLfTGcwa3u97Ec1BKxJZxqUHdAWrJsDwxr
-        YvVRYPh7YCqpz5wQbsRHOsZLM4lzkA==
-X-Google-Smtp-Source: APXvYqzdY360gPsL0+c8bTHhbJYe+orte+PC8914vegPn2Na6ygQR0JeUOr0nQGireNFi7y6RbcLXw==
-X-Received: by 2002:aca:d806:: with SMTP id p6mr15170180oig.17.1578961815776;
-        Mon, 13 Jan 2020 16:30:15 -0800 (PST)
+        bh=fTr7T7GJceLoLFzB5OjtrxDOobOt56IiyvMJHYGzl0w=;
+        b=MAyPfZ2cuXfSxDSG9awTTM9Ze5YzAuOjcRc2AC0h7o7aw9n5vVjSG9P6vwxgK8bSdd
+         9oCoFfmFpnOygwgUZBZNiFV1fhibhn4pwFptHZK4rIpA9Xf0Q20VJP0VWu9mMengneyt
+         IrspByYNBboaDnfL7Ks6yghgwiijz+zbgTpWCXEWnmX9bGA7brzfv6c7j2ovPPerR5TX
+         a8KsQ6DxK4M0FpyAVaWVQamMzw/f4abzKVqsiuu5p5YavxoQt4znAzRW4Bllybw58aBE
+         ZLSoeyDJ+lmP8j182bmThc7smipHHO626KZUgzThjPDO4wBBOEFAclLOjLssk9QXdfRa
+         KP0w==
+X-Gm-Message-State: APjAAAUoNYIRuA8jiB21Z3j4/s5Qu/JQRB1QMHJvmlKVIHIWyPEiXC1C
+        707MivblDeGQwzPKNN1IjiV1xRmIDA==
+X-Google-Smtp-Source: APXvYqwyPxoeCukPGgDP81oGJALF0W1M/cQaZjfialJ1XF1ypvakykK8eVeXtPt4rEO8qws3zwtcTA==
+X-Received: by 2002:a9d:7b4e:: with SMTP id f14mr15329897oto.355.1578961818699;
+        Mon, 13 Jan 2020 16:30:18 -0800 (PST)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id u75sm4076384oie.15.2020.01.13.16.30.15
+        by smtp.gmail.com with ESMTPSA id t11sm4730649otk.50.2020.01.13.16.30.17
         for <linux-media@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2020 16:30:15 -0800 (PST)
+        Mon, 13 Jan 2020 16:30:18 -0800 (PST)
 Received: from rob (uid 1000)
         (envelope-from rob@rob-hp-laptop)
-        id 2219d0
+        id 223ddc
         by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Mon, 13 Jan 2020 18:20:42 -0600
-Date:   Mon, 13 Jan 2020 18:20:42 -0600
+        Mon, 13 Jan 2020 18:24:15 -0600
+Date:   Mon, 13 Jan 2020 18:24:15 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, vkoul@kernel.org,
-        eugen.hristev@microchip.com, jic23@kernel.org, knaack.h@gmx.de,
-        lars@metafoo.de, pmeerw@pmeerw.net, mchehab@kernel.org,
-        lee.jones@linaro.org, radu_nicolae.pirea@upb.ro,
-        richard.genoud@gmail.com, tudor.ambarus@microchip.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        wg@grandegger.com, mkl@pengutronix.de, a.zummo@towertech.it,
+Cc:     mark.rutland@arm.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
+        vkoul@kernel.org, eugen.hristev@microchip.com, jic23@kernel.org,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
+        mchehab@kernel.org, lee.jones@linaro.org,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        tudor.ambarus@microchip.com, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, wg@grandegger.com,
+        mkl@pengutronix.de, a.zummo@towertech.it,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH v2 11/17] dt-bindings: atmel-gpbr: add
- microchip,sam9x60-gpbr
-Message-ID: <20200114002042.GA17036@bogus>
+        linux-can@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 13/17] dt-bindings: atmel-usart: remove wildcard
+Message-ID: <20200114002415.GA18336@bogus>
 References: <1578673089-3484-1-git-send-email-claudiu.beznea@microchip.com>
- <1578673089-3484-12-git-send-email-claudiu.beznea@microchip.com>
+ <1578673089-3484-14-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1578673089-3484-12-git-send-email-claudiu.beznea@microchip.com>
+In-Reply-To: <1578673089-3484-14-git-send-email-claudiu.beznea@microchip.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 10 Jan 2020 18:18:03 +0200, Claudiu Beznea wrote:
-> Add microchip,sam9x60-gpbr to DT bindings documentation.
+On Fri, Jan 10, 2020 at 06:18:05PM +0200, Claudiu Beznea wrote:
+> Remove chip whildcard and introduce the list of compatibles instead.
 > 
 > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
->  Documentation/devicetree/bindings/mfd/atmel-gpbr.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/mfd/atmel-usart.txt | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel-usart.txt b/Documentation/devicetree/bindings/mfd/atmel-usart.txt
+> index 699fd3c9ace8..09013c49f6cc 100644
+> --- a/Documentation/devicetree/bindings/mfd/atmel-usart.txt
+> +++ b/Documentation/devicetree/bindings/mfd/atmel-usart.txt
+> @@ -1,10 +1,11 @@
+>  * Atmel Universal Synchronous Asynchronous Receiver/Transmitter (USART)
+>  
+>  Required properties for USART:
+> -- compatible: Should be "atmel,<chip>-usart" or "atmel,<chip>-dbgu"
+> -  The compatible <chip> indicated will be the first SoC to support an
+> -  additional mode or an USART new feature.
+> -  For the dbgu UART, use "atmel,<chip>-dbgu", "atmel,<chip>-usart"
+> +- compatible: Should be one of the following:
+> +	- "atmel,at91rm9200-usart"
+> +	- "atmel,at91sam9260-usart"
+> +	- "atmel,at91rm9200-dbgu"
+> +	- "atmel,at91sam9260-dbgu"
 
-Acked-by: Rob Herring <robh@kernel.org>
+Should be:
+
+"atmel,at91rm9200-dbgu", "atmel,at91rm9200-usart"
+"atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart"
+
+>  - reg: Should contain registers location and length
+>  - interrupts: Should contain interrupt
+>  - clock-names: tuple listing input clock names.
+> -- 
+> 2.7.4
+> 
