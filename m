@@ -2,113 +2,102 @@ Return-Path: <SRS0=7WKT=3D=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D4CAC33CB1
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jan 2020 12:54:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DBA2C33CB1
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jan 2020 13:35:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2AF3E2467C
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jan 2020 12:54:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 528A92467A
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jan 2020 13:35:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1579008906;
+	bh=0ghVVnTBZhNvg1AJ2oPToO73881dd/NHeITQTqTLWxI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=fUPg+h4g88nthWw4hbt24lNtQMEHiOhx5uH69z9TPTqozv1DH0/ZPCEpPU5d2O9KV
+	 +KYYZpBZ6Uk9Nvd4Jb27Jm5X7zVwWS48eJyeNcioaGuOc5m9/XfJvPSXxhDfgDjeTm
+	 n2zV8CWEThjKn4ePioizQQHisuwe8PjQ1WTGqJkk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728809AbgANMyo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Jan 2020 07:54:44 -0500
-Received: from alexa-out-blr-01.qualcomm.com ([103.229.18.197]:56403 "EHLO
-        alexa-out-blr-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728795AbgANMyo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Jan 2020 07:54:44 -0500
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by alexa-out-blr-01.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Jan 2020 18:24:00 +0530
-Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 14 Jan 2020 18:23:48 +0530
-Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id 046B33588; Tue, 14 Jan 2020 18:23:46 +0530 (IST)
-From:   Dikshita Agarwal <dikshita@codeaurora.org>
-To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, vgarodia@codeaurora.org,
-        Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH V4 1/4] arm64: dts: sc7180: Add Venus video codec DT node
-Date:   Tue, 14 Jan 2020 18:23:33 +0530
-Message-Id: <1579006416-11599-2-git-send-email-dikshita@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1579006416-11599-1-git-send-email-dikshita@codeaurora.org>
-References: <1579006416-11599-1-git-send-email-dikshita@codeaurora.org>
+        id S1726450AbgANNfC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Jan 2020 08:35:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48466 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726038AbgANNfC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Jan 2020 08:35:02 -0500
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3ED932467A;
+        Tue, 14 Jan 2020 13:35:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579008901;
+        bh=0ghVVnTBZhNvg1AJ2oPToO73881dd/NHeITQTqTLWxI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=G/lFZEhdHe3ydclV+TmtrDs9QjTdwW6bZ31l3IhVdfAOwOCVu2AfDi94vmifvYmm1
+         TXFehXUCRWmiGutK1ymNrnQtMUGERrIgLohMmfLFNu/px184/IyY6AmwqxILVhrygJ
+         NZBCIjp3FRCbLPTESuVqZfBtOrfNLGNjTHthFOkU=
+Received: by mail-qv1-f45.google.com with SMTP id x1so5636843qvr.8;
+        Tue, 14 Jan 2020 05:35:01 -0800 (PST)
+X-Gm-Message-State: APjAAAX3iZMikQme1ty+I5WM/+JNdqCxQT5z0fvp8630X2v06iUazYyO
+        R0eExvz+Jn60hL7tD78h5isdFBPTwaOvkmZWdtg=
+X-Google-Smtp-Source: APXvYqzOqlxC0uai1sE24Xuw2w8hBzEMT/71be1S1hw9KqGPL+bJoJZFBLpiVMGuBZvnEV9JeXw9j+9BEBZFKOwbSCs=
+X-Received: by 2002:ad4:4dc3:: with SMTP id cw3mr20423625qvb.130.1579008900416;
+ Tue, 14 Jan 2020 05:35:00 -0800 (PST)
+MIME-Version: 1.0
+References: <20200114091836.19403-1-gtk_ruiwang@mediatek.com>
+In-Reply-To: <20200114091836.19403-1-gtk_ruiwang@mediatek.com>
+From:   Josh Boyer <jwboyer@kernel.org>
+Date:   Tue, 14 Jan 2020 08:34:28 -0500
+X-Gmail-Original-Message-ID: <CA+5PVA5aD+8Zc-e39eUtE=vPA_Dm5Z5_iXhFoYwpKstUssUVWQ@mail.gmail.com>
+Message-ID: <CA+5PVA5aD+8Zc-e39eUtE=vPA_Dm5Z5_iXhFoYwpKstUssUVWQ@mail.gmail.com>
+Subject: Re: pull request: linux-firmware: Update Mediatek MT8173 VPU firmware
+To:     gtk_ruiwang@mediatek.com
+Cc:     Linux Firmware <linux-firmware@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        PoChun.Lin@mediatek.com, Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This adds Venus video codec DT node for sc7180.
+On Tue, Jan 14, 2020 at 4:18 AM <gtk_ruiwang@mediatek.com> wrote:
+>
+> Hi linux-firmware maintainers,
+>
+> The following changes since commit 67d4ff59bf3334895626cf165e508e9eb1846e24:
+>
+>   Mellanox: Add new mlxsw_spectrum firmware xx.2000.2714 (2020-01-07 09:08:25 -0500)
+>
+> are available in the Git repository at:
+>
+>   https://github.com/ruiwang-mtk/linux_fw_vpu_v1.1.3.git
+>
+> for you to fetch changes up to 7f3177d224ee7afdd6e36ed01a13f499d671e167:
+>
+>   mediatek: update MT8173 VPU firmware to v1.1.3 (2020-01-14 15:33:19 +0800)
+>
+> ----------------------------------------------------------------
+> gtk_ruiwang (1):
+>       mediatek: update MT8173 VPU firmware to v1.1.3
+>
+>  vpu_d.bin | Bin 2977008 -> 2977136 bytes
+>  vpu_p.bin | Bin 131180 -> 131180 bytes
+>  2 files changed, 0 insertions(+), 0 deletions(-)
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+Pulled the v1.1.3 branch and pushed out.  I'm assuming the pull
+request is sufficient since it looks like the patch you sent
+separately is the only thing in the pull request.  Let me know if
+there is something else needed with the patch.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 3676bfd..6ecacca 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -10,6 +10,7 @@
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/phy/phy-qcom-qusb2.h>
- #include <dt-bindings/soc/qcom,rpmh-rsc.h>
-+#include <dt-bindings/clock/qcom,videocc-sc7180.h>
- 
- / {
- 	interrupt-parent = <&intc>;
-@@ -66,6 +67,11 @@
- 			compatible = "qcom,cmd-db";
- 			no-map;
- 		};
-+
-+		venus_mem: memory@8f600000 {
-+			reg = <0 0x8f600000 0 0x500000>;
-+			no-map;
-+		};
- 	};
- 
- 	cpus {
-@@ -1043,6 +1049,36 @@
- 			};
- 		};
- 
-+		venus: video-codec@aa00000 {
-+			compatible = "qcom,sc7180-venus";
-+			reg = <0 0x0aa00000 0 0xff000>;
-+			interrupts = <GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
-+			power-domains = <&videocc VENUS_GDSC>,
-+					<&videocc VCODEC0_GDSC>;
-+			power-domain-names = "venus", "vcodec0";
-+			clocks = <&videocc VIDEO_CC_VENUS_CTL_CORE_CLK>,
-+				 <&videocc VIDEO_CC_VENUS_AHB_CLK>,
-+				 <&videocc VIDEO_CC_VENUS_CTL_AXI_CLK>,
-+				 <&videocc VIDEO_CC_VCODEC0_CORE_CLK>,
-+				 <&videocc VIDEO_CC_VCODEC0_AXI_CLK>;
-+			clock-names = "core", "iface", "bus",
-+				      "vcodec0_core", "vcodec0_bus";
-+			iommus = <&apps_smmu 0x0c00 0x60>;
-+			memory-region = <&venus_mem>;
-+
-+			interconnects = <&mmss_noc MASTER_VIDEO_P0 &mc_virt SLAVE_EBI1>,
-+					<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_VENUS_CFG>;
-+			interconnect-names = "video-mem", "cpu-cfg";
-+
-+			video-decoder {
-+				compatible = "venus-decoder";
-+			};
-+
-+			video-encoder {
-+				compatible = "venus-encoder";
-+			};
-+		};
-+
- 		pdc: interrupt-controller@b220000 {
- 			compatible = "qcom,sc7180-pdc", "qcom,pdc";
- 			reg = <0 0x0b220000 0 0x30000>;
--- 
-1.9.1
-
+josh
