@@ -2,88 +2,135 @@ Return-Path: <SRS0=vVRq=3E=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1049FC33CB1
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jan 2020 12:48:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C152CC33CB1
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jan 2020 12:58:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D185A20728
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jan 2020 12:48:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 942CA207FF
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jan 2020 12:58:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Hh/U0B0S"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bFAWiJ+p"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728899AbgAOMs0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jan 2020 07:48:26 -0500
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:49987 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726132AbgAOMsZ (ORCPT
+        id S1729025AbgAOM6H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jan 2020 07:58:07 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:41772 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726440AbgAOM6G (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jan 2020 07:48:25 -0500
-Received: from cobaltpc1.rd.cisco.com
- ([IPv6:2001:420:44c1:2577:18d8:d5d6:4408:6200])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id ri5riEH6BT6sRri5viaE9X; Wed, 15 Jan 2020 13:48:23 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1579092503; bh=skQOh0UDnlq++woZzbxHhrfhetqgLU+bb5Fvkq/eJGw=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=Hh/U0B0Srx++cMxq8ldK8BnC1Ntz5QElXufAAZJqCDcCKOrM6f6ikvYk8ZGBLZ3dJ
-         N1gUmhzQ5iUXegwX6UfYSpVI1inLsfJFthr7UJiyLwo5/uK636obrecoSp0YqVGbbj
-         Up99vlKpsvkNyrWLnAK7B5d/hgCmAWl66GF2TrFZQJeTi5PeuHYwfQzK8/zcbZtqO4
-         8oUfZnNn2sqx3fa4IzDOChodwDvGnTQxOH1Rb4T1SF8iyR061iDoaPeVzScSArhDp8
-         IXCVteOtlISmzlRIZXva1oyQJchSXA9AA1MfAGiB5v8bWSAs3QqcpmZSEFb9silTa1
-         miHiMnDXNNhLw==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     linux-input@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Timo Kaufmann <timokau@zoho.com>
-Subject: [PATCH for v5.5 0/2] input/rmi4 regression fix
-Date:   Wed, 15 Jan 2020 13:48:17 +0100
-Message-Id: <20200115124819.3191024-1-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.24.0
+        Wed, 15 Jan 2020 07:58:06 -0500
+Received: by mail-ed1-f65.google.com with SMTP id c26so15390133eds.8
+        for <linux-media@vger.kernel.org>; Wed, 15 Jan 2020 04:58:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=F0IrgxxhrlMpoyesP99y4ED5MN7eSDPKuqKnmmmOfeo=;
+        b=bFAWiJ+pTmXySYrLcicW7MkB6MhBhEUBwshS4tMwkyou1BC20ExUM7DAK7PuuSXCaj
+         /ceF6SUfCqwX1EcdOv0r1sCwALoYDVm7uBhgIRerOBbzsKDPBV229hlfIimblAJ4LVES
+         alo2gwAzcSgPLtE50Z/U+DnVRF4UvH3maoHHIYM/D8oxPy+UeDet79/H7O1neBAjvIxj
+         gtFu6rZuL3MZz9tx9Ln7PIyxrOJxDUC8p/I10JEYINuMkOinvXJw+ijulohuFwg/qigE
+         VKe7sBoROKmva4wmYNwovuvd8TLoQFMfX3VEm6AYEjneYpmAQTRCJsDcBNgcKn+7D9qI
+         R1kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=F0IrgxxhrlMpoyesP99y4ED5MN7eSDPKuqKnmmmOfeo=;
+        b=O1fn0vljrBiUf/0F9OG9aK657EdcMzHDJsyqydniSZA2aspngVwaPJSfZ4oMTc4mbU
+         LAQdMPoQ5TNFmEt9bvZOhn9d3UePT32dbdc0LyRcgVsZromRCGT7zC0ewyDrA3ivlFHa
+         5Qo7Vo0w+S+OKyM+8UZG6HnvgJP/cspjqLrm57b+QbIcTu2bQiCRUGythyKIl4a8NGeZ
+         1Die2Q90I1cYCtTTZBRgk//xJy7bh9EcwVP8ZBBjfBM5W6JxdKL9lCgWPSKE9ADxdOxr
+         GoSUplsI3QSyyLiCwkYsjCKfp0WH0a5KSHNTYhSyMTB1iJK1teDrz5JDphrCrp3PMgQG
+         AVkQ==
+X-Gm-Message-State: APjAAAWX7cZNS8vCXC/ybsRE9Ak64dxcdnj5YcVNDKPHViyhRspyX85+
+        6OfFHMKQRkgM81LqeF7uXSpBMPZlIUA=
+X-Google-Smtp-Source: APXvYqya91DZD5YFx1j3ydML6Pjo32mSGFf+5r0BmBq3aM2hL7ulkBidlAOjHjLqXJXTYaC38uOyvw==
+X-Received: by 2002:a17:906:4e46:: with SMTP id g6mr28245019ejw.309.1579093084398;
+        Wed, 15 Jan 2020 04:58:04 -0800 (PST)
+Received: from [192.168.27.209] ([37.157.136.193])
+        by smtp.googlemail.com with ESMTPSA id l11sm670860ejq.4.2020.01.15.04.58.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jan 2020 04:58:03 -0800 (PST)
+Subject: Re: [GIT PULL for v5.6] Venus updates
+To:     Jenkins <jenkins@linuxtv.org>, mchehab+samsung@kernel.org,
+        linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+References: <20200110145511.8772-1-jenkins@linuxtv.org>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <0e7e8329-15b4-cee6-16cd-ce0dec9e600a@linaro.org>
+Date:   Wed, 15 Jan 2020 14:58:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfHtLOMtd5cSJjLwITyux5LphDSHVMMSNoYyoe3o66her6nFGvAJ6AAeFmnV0N0XHsab3z1MnsAFMJ4Cru6j/poz9A2JrQ3+w6ypwGPu+3hFHjuTT9+eH
- q/WQ0zobB5qyLP505FK2w2ZLiZnw9YlyLUYX1mKUyPtvVDPYb7fTF+xAw8YZH6mPDQly6Qns62Huuow4x09AjDceD1T29iHvSXVmO1gu7Cv1WIggsC3QXedm
- k+zpGUAZ48R7mnxvaMSdUEucVnnEVq4RA9pX2A3DgWxMy0bbfDAyTPYY3XBXdMiijP96zymRtu22JU/KgLkNebi6+mSsdET67MEAfC7GbnlFed8xDL1+XEG0
- 1IFz2noIzWF5jt8dPZRzKOQ0coWWeA==
+In-Reply-To: <20200110145511.8772-1-jenkins@linuxtv.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dmitry,
+Hi Mauro,
 
-Timo Kaufmann reported that the "don't increment rmiaddr" patch broke
-his Thinkpad T450 (the cursor started drifting after a while).
+On 1/10/20 4:55 PM, Jenkins wrote:
+> From: builder@linuxtv.org
+> 
+> Pull request: https://patchwork.linuxtv.org/patch/61112/
+> Build log: https://builder.linuxtv.org/job/patchwork/33062/
+> Build time: 00:05:03
+> Link: https://lore.kernel.org/linux-media/20200110144017.16648-1-stanimir.varbanov@linaro.org
+> 
+> gpg: Signature made Fri 10 Jan 2020 02:33:09 PM UTC
+> gpg:                using RSA key E1558C2497CE3CCC2B5AA30F25B55FC81B7035F2
+> gpg: Good signature from "Stanimir Varbanov <stanimir.varbanov@linaro.org>" [unknown]
+> gpg: WARNING: This key is not certified with a trusted signature!
+> gpg:          There is no indication that the signature belongs to the owner.
+> Primary key fingerprint: 34CF E039 8A16 AD93 18FD  D5E8 A6D0 26D8 E358 14D4
+>      Subkey fingerprint: E155 8C24 97CE 3CCC 2B5A  A30F 25B5 5FC8 1B70 35F2
+> 
+> Summary: 6 patches and/or PDF generation with issues, being 0 at build time
+> 
+> Error/warnings:
+> 
+> 
 
-Some more digging revealed that that patch was bad, and that the
-real solution for the original problem (function F54 reported bad
-data) had to be done in rmi_f54.c.
+I'm not sure how to fix bellow warnings.
 
-So the first patch reverts the old fix (and so will break F54 again),
-and this should be merged for v5.5 asap. The second patch that fixes
-F54 can be postponed to v5.6: F54 is rarely used and I don't think it
-is important enough for v5.5.
+I found [1], which seems describe the issue.
 
-I have only tested the F54 fix for smbus, I don't know if it is OK
-for i2c/spi since I have no hardware to test that. It seems sane :-)
+[1] https://lore.kernel.org/patchwork/patch/527353/
 
-Regards,
-
-	Hans
-
-Hans Verkuil (2):
-  Revert "Input: synaptics-rmi4 - don't increment rmiaddr for SMBus
-    transfers"
-  Input: rmi_f54: read from FIFO in 32 byte blocks
-
- drivers/input/rmi4/rmi_f54.c   | 43 +++++++++++++++++++++-------------
- drivers/input/rmi4/rmi_smbus.c |  2 ++
- 2 files changed, 29 insertions(+), 16 deletions(-)
+> Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0003-venus-redesign-clocks-and-pm-domains-control.patch:
+> $ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0003-venus-redesign-clocks-and-pm-domains-control.patch
+> patches/0003-venus-redesign-clocks-and-pm-domains-control.patch:679: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+> 
+> Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0007-dt-bindings-media-venus-Convert-msm8916-to-DT-schema.patch:
+> $ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0007-dt-bindings-media-venus-Convert-msm8916-to-DT-schema.patch
+> patches/0007-dt-bindings-media-venus-Convert-msm8916-to-DT-schema.patch:16: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+> 
+> Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0008-dt-bindings-media-venus-Convert-msm8996-to-DT-schema.patch:
+> $ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0008-dt-bindings-media-venus-Convert-msm8996-to-DT-schema.patch
+> patches/0008-dt-bindings-media-venus-Convert-msm8996-to-DT-schema.patch:16: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+> 
+> Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0009-dt-bindings-media-venus-Convert-sdm845-to-DT-schema.patch:
+> $ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0009-dt-bindings-media-venus-Convert-sdm845-to-DT-schema.patch
+> patches/0009-dt-bindings-media-venus-Convert-sdm845-to-DT-schema.patch:16: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+> 
+> Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0010-dt-bindings-media-venus-Add-sdm845v2-DT-schema.patch:
+> $ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0010-dt-bindings-media-venus-Add-sdm845v2-DT-schema.patch
+> patches/0010-dt-bindings-media-venus-Add-sdm845v2-DT-schema.patch:16: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+> 
+> Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0012-dt-bindings-media-venus-delete-old-binding-document.patch:
+> $ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0012-dt-bindings-media-venus-delete-old-binding-document.patch
+> patches/0012-dt-bindings-media-venus-delete-old-binding-document.patch:17: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+> patches/0012-dt-bindings-media-venus-delete-old-binding-document.patch:20: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.txt
+> 
 
 -- 
-2.24.0
-
+regards,
+Stan
