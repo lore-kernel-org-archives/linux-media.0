@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB843C33CAF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7704C33CB6
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:09:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C5D4A2176D
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:07:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB6D02176D
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:09:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579198074;
-	bh=eKMbYS1eV6aH1R+JumnZaqRP3Om9A8sq8qmG+cOdrOs=;
+	s=default; t=1579198143;
+	bh=IJMGW8gLWsyyTQNqcA+b0r72ujTF6o/zNtEEivEBwGU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=KCMo51w8tfS2GlOM5OjAV0ok063Iz+5si6znDBhSTd7Dt1m9dgr0LXl9wf/WsGqhl
-	 H7wToBlAU7PRr+GzH1s0Ug8oG23eP478+Fwjm2OmkMmSkQO/M65e/FJ0/xc2Yk3Yq+
-	 yT8TEuljO/2UgCDtcNjp0yGaWFFRxjmPa6UhBL1c=
+	b=e6uGzcgSOwgN2uEdPResQKPor8jSib5e8dRA0/u1+kNar9q0nKTxqXjjSZQLiRsoU
+	 qozqKOvv0dTIJ7vScoDlFUZdWa5q16ZjcRkEuCGWJMRjSG9A3vQ8VbHximvcVQNLVW
+	 rTPDkYeA4MLxbVx03M4z1L/NGTNgwx2RKEsciDh0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394891AbgAPSHq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 13:07:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54986 "EHLO mail.kernel.org"
+        id S2388465AbgAPSJD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 13:09:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54472 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388313AbgAPRi5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:38:57 -0500
+        id S2405041AbgAPRic (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:38:32 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 22B5E246E5;
-        Thu, 16 Jan 2020 17:38:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6A97F246D5;
+        Thu, 16 Jan 2020 17:38:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196337;
-        bh=eKMbYS1eV6aH1R+JumnZaqRP3Om9A8sq8qmG+cOdrOs=;
+        s=default; t=1579196312;
+        bh=IJMGW8gLWsyyTQNqcA+b0r72ujTF6o/zNtEEivEBwGU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IaCvLozLAn2cYMM17j/ITPUorIAkvVrlFvH3Y0PCab5MGP0BvNkyir1TQ1yq/6025
-         QlRh4sq4nl5Si7vtT7Wu7V7Va69gksHi8TP2f49cR46K1QzFwOO7Xl/NA9FAtVGLDK
-         E7X7Jl6klYGaxpSSm107j4cB5bdLhSCxWL95O9g8=
+        b=AewYDxpR//30uo/k1I63fylpx0T9p2kqsEBLJ1MA2cjusMIhr3BtbS3aLVlkgyYxt
+         nuzSWQpud6f1SXgWoM94C2287ItjUFw88LPdbq/KHnnoDNSIV1S2p50kkBwzFeUVDe
+         JY/8qSaY+0nEAQ+KZVdLXkkMYM2Hk7soWIqHQCTQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
         "Lad Prabhakar" <prabhakar.csengg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 135/251] media: davinci/vpbe: array underflow in vpbe_enum_outputs()
-Date:   Thu, 16 Jan 2020 12:34:44 -0500
-Message-Id: <20200116173641.22137-95-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 119/251] media: ov2659: fix unbalanced mutex_lock/unlock
+Date:   Thu, 16 Jan 2020 12:34:28 -0500
+Message-Id: <20200116173641.22137-79-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
 References: <20200116173641.22137-1-sashal@kernel.org>
@@ -60,52 +60,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Akinobu Mita <akinobu.mita@gmail.com>
 
-[ Upstream commit b72845ee5577b227131b1fef23f9d9a296621d7b ]
+[ Upstream commit 384538bda10913e5c94ec5b5d34bd3075931bcf4 ]
 
-In vpbe_enum_outputs() we check if (temp_index >= cfg->num_outputs) but
-the problem is that "temp_index" can be negative.  This patch changes
-the types to unsigned to address this array underflow bug.
+Avoid returning with mutex locked.
 
-Fixes: 66715cdc3224 ("[media] davinci vpbe: VPBE display driver")
+Fixes: fa8cb6444c32 ("[media] ov2659: Don't depend on subdev API")
 
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: "Lad Prabhakar" <prabhakar.csengg@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: "Lad Prabhakar" <prabhakar.csengg@gmail.com>
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/davinci/vpbe.c | 2 +-
- include/media/davinci/vpbe.h          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov2659.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/davinci/vpbe.c b/drivers/media/platform/davinci/vpbe.c
-index abce9c4a1a8e..59518c08528b 100644
---- a/drivers/media/platform/davinci/vpbe.c
-+++ b/drivers/media/platform/davinci/vpbe.c
-@@ -130,7 +130,7 @@ static int vpbe_enum_outputs(struct vpbe_device *vpbe_dev,
- 			     struct v4l2_output *output)
- {
- 	struct vpbe_config *cfg = vpbe_dev->cfg;
--	int temp_index = output->index;
-+	unsigned int temp_index = output->index;
- 
- 	if (temp_index >= cfg->num_outputs)
- 		return -EINVAL;
-diff --git a/include/media/davinci/vpbe.h b/include/media/davinci/vpbe.h
-index 4376beeb28c2..5d8ceeddc797 100644
---- a/include/media/davinci/vpbe.h
-+++ b/include/media/davinci/vpbe.h
-@@ -96,7 +96,7 @@ struct vpbe_config {
- 	struct encoder_config_info *ext_encoders;
- 	/* amplifier information goes here */
- 	struct amp_config_info *amp;
--	int num_outputs;
-+	unsigned int num_outputs;
- 	/* Order is venc outputs followed by LCD and then external encoders */
- 	struct vpbe_output *outputs;
- };
+diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
+index ade3c48e2e0c..18546f950d79 100644
+--- a/drivers/media/i2c/ov2659.c
++++ b/drivers/media/i2c/ov2659.c
+@@ -1137,7 +1137,7 @@ static int ov2659_set_fmt(struct v4l2_subdev *sd,
+ 		mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
+ 		*mf = fmt->format;
+ #else
+-		return -ENOTTY;
++		ret = -ENOTTY;
+ #endif
+ 	} else {
+ 		s64 val;
 -- 
 2.20.1
 
