@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 507CDC33CAF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D3EDC33CAF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 19:00:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2DA642073A
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:56:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B16E206D7
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 19:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579201019;
-	bh=Gs31IuVAjx8wN9Pan7ak3hf915MS9bR82/HYp0eCCgA=;
+	s=default; t=1579201234;
+	bh=ez2yAsRvFLLawmV9jKSDXs2Og8ukBee7MRN+9q7bKV4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=oclXm9ynRJvloIDmZn3Fg1GGziRWs3SZk+V5b13yRZovIaL/3gKEJKUGaVbXacOlo
-	 o/bstypvtwL+ylU1Cs0zk+RCzEzb1VXJxn+qa0L09imZEvHqsxBGkR3771KsqbsQz4
-	 yaPiR5DH8EyuPQv4YvzHCDylvO4qnZXRo6tuRAsI=
+	b=MbY9bH0wnQcfw9XamQHue6UxU5mtJfaGRl8iflbHUUv8JWpr3G/2GfpDPUEgR0+hm
+	 4kxOKmTB8tjLnMJFNuiPr36PVxwunZXNaTM7XW70f94VaLmVDOXI+UEkR35rZ+QwAz
+	 RXp9JI1Jm5T7rU0qMJ1T3CLG3UdSQBAzTjqwima0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389087AbgAPRHJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:07:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38546 "EHLO mail.kernel.org"
+        id S2388880AbgAPRGO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 12:06:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36162 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388650AbgAPRHJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:07:09 -0500
+        id S2388875AbgAPRGN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:06:13 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9C52D2081E;
-        Thu, 16 Jan 2020 17:07:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8547724679;
+        Thu, 16 Jan 2020 17:06:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194428;
-        bh=Gs31IuVAjx8wN9Pan7ak3hf915MS9bR82/HYp0eCCgA=;
+        s=default; t=1579194373;
+        bh=ez2yAsRvFLLawmV9jKSDXs2Og8ukBee7MRN+9q7bKV4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=esSCedNLhqfVIw/5C1sR+IFopXmp5XopEEhcvOldxJ0nTUyXhdVttaLUAPWQSezcT
-         LstrjGFXtXxJfiJYK+STQ4PXoFIWRVrEiHW9PngSmuTBe1UXyD0AEv6K+QbTBCSCvg
-         W9AVFyJWfFbvwfARM9L+i1WSNo6LpWyRtJeSGZ/4=
+        b=fIoadlFxXFHSCEnMOgLD/sz00OKGJq4BwHgGMvJ8cZs3Quh3I2EhSvDz9010A5kEZ
+         PUb4yozqjacLNXiChXKACm3pDPlamOmy83li+3lkk6iMD2HgUD0/6RJr+hbRQ0rSs2
+         4SgLLB0aybVyPJ7pJbH2z45mzJDBHmCfN/MjDrLI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        "Lad Prabhakar" <prabhakar.csengg@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 345/671] media: omap_vout: potential buffer overflow in vidioc_dqbuf()
-Date:   Thu, 16 Jan 2020 11:59:43 -0500
-Message-Id: <20200116170509.12787-82-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 306/671] media: ov2659: fix unbalanced mutex_lock/unlock
+Date:   Thu, 16 Jan 2020 11:59:04 -0500
+Message-Id: <20200116170509.12787-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
 References: <20200116170509.12787-1-sashal@kernel.org>
@@ -59,66 +60,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Akinobu Mita <akinobu.mita@gmail.com>
 
-[ Upstream commit dd6e2a981bfe83aa4a493143fd8cf1edcda6c091 ]
+[ Upstream commit 384538bda10913e5c94ec5b5d34bd3075931bcf4 ]
 
-The "b->index" is a u32 the comes from the user in the ioctl.  It hasn't
-been checked.  We aren't supposed to use it but we're instead supposed
-to use the value that gets written to it when we call videobuf_dqbuf().
+Avoid returning with mutex locked.
 
-The videobuf_dqbuf() first memsets it to zero and then re-initializes it
-inside the videobuf_status() function.  It's this final value which we
-want.
+Fixes: fa8cb6444c32 ("[media] ov2659: Don't depend on subdev API")
 
-Hans Verkuil pointed out that we need to check the return from
-videobuf_dqbuf().  I ended up doing a little cleanup related to that as
-well.
-
-Fixes: 72915e851da9 ("[media] V4L2: OMAP: VOUT: dma map and unmap v4l2 buffers in qbuf and dqbuf")
-
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: "Lad Prabhakar" <prabhakar.csengg@gmail.com>
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/omap/omap_vout.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ drivers/media/i2c/ov2659.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/omap/omap_vout.c b/drivers/media/platform/omap/omap_vout.c
-index 5700b7818621..45511d24d570 100644
---- a/drivers/media/platform/omap/omap_vout.c
-+++ b/drivers/media/platform/omap/omap_vout.c
-@@ -1527,23 +1527,20 @@ static int vidioc_dqbuf(struct file *file, void *fh, struct v4l2_buffer *b)
- 	unsigned long size;
- 	struct videobuf_buffer *vb;
- 
--	vb = q->bufs[b->index];
--
- 	if (!vout->streaming)
- 		return -EINVAL;
- 
--	if (file->f_flags & O_NONBLOCK)
--		/* Call videobuf_dqbuf for non blocking mode */
--		ret = videobuf_dqbuf(q, (struct v4l2_buffer *)b, 1);
--	else
--		/* Call videobuf_dqbuf for  blocking mode */
--		ret = videobuf_dqbuf(q, (struct v4l2_buffer *)b, 0);
-+	ret = videobuf_dqbuf(q, b, !!(file->f_flags & O_NONBLOCK));
-+	if (ret)
-+		return ret;
-+
-+	vb = q->bufs[b->index];
- 
- 	addr = (unsigned long) vout->buf_phy_addr[vb->i];
- 	size = (unsigned long) vb->size;
- 	dma_unmap_single(vout->vid_dev->v4l2_dev.dev,  addr,
- 				size, DMA_TO_DEVICE);
--	return ret;
-+	return 0;
- }
- 
- static int vidioc_streamon(struct file *file, void *fh, enum v4l2_buf_type i)
+diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
+index 4b6be3b0fd52..5cdda9d6ca31 100644
+--- a/drivers/media/i2c/ov2659.c
++++ b/drivers/media/i2c/ov2659.c
+@@ -1136,7 +1136,7 @@ static int ov2659_set_fmt(struct v4l2_subdev *sd,
+ 		mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
+ 		*mf = fmt->format;
+ #else
+-		return -ENOTTY;
++		ret = -ENOTTY;
+ #endif
+ 	} else {
+ 		s64 val;
 -- 
 2.20.1
 
