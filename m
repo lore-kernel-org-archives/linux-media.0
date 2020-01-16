@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B183DC33CAF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD987C33CB6
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:38:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 896DD246A1
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:33:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9DC22207FF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:38:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579196028;
-	bh=dUaJPHJ5EO2kM/cavMN9Bvrqn6LucKsR5EqWYAfIwP0=;
+	s=default; t=1579196280;
+	bh=bIFZMnrtPxehiDYOcc4OQ4kbtN8MY8B3HN+2+c8olC0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=gZBKGoja5xuO92YwdV/rnkzXTWo4IbYrPAop124RTAb6CSZOO9vgem00844px6Rk/
-	 a1XrD2pNGl84CeGKjxMNW6DF7hRh5DaUFdlmfR4pRfj5bcrnpbh10R3WRINVtP3FRc
-	 h/Y9q8tntAV7bF3buefdwLBYGje371923UM7lnLY=
+	b=PXc0OEiCMAWBP2z5yPMYRqMrVtjZt3jVA6Cj4FJaqWih5WaBR6ob87Np1VDZl3sT/
+	 5SHDUUCSfVepMK59Iwo9X9dJE9B8vs7DIhETfSUed81+SYiJ46UCZgFOQx43McT3Ge
+	 dPgSmxDAgOGtepoI9UmgivcY/mAdpFKKSYGP0mjc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404836AbgAPRdq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:33:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42950 "EHLO mail.kernel.org"
+        id S2393245AbgAPRh7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 12:37:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53622 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404407AbgAPRaW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:30:22 -0500
+        id S2393232AbgAPRh5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:37:57 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 039CA2471F;
-        Thu, 16 Jan 2020 17:30:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 377AC246E9;
+        Thu, 16 Jan 2020 17:37:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195821;
-        bh=dUaJPHJ5EO2kM/cavMN9Bvrqn6LucKsR5EqWYAfIwP0=;
+        s=default; t=1579196277;
+        bh=bIFZMnrtPxehiDYOcc4OQ4kbtN8MY8B3HN+2+c8olC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a5fbKmRM0a8EU5KfRiPhpqTaoXC7ojNNGelMgh2b+FmlajhuEwT6G4UsyANCNrTY3
-         4UsQsg6ZNqQrPObW2aqJ4BlxDTUjU6bu8UbNsEyCePk3qhV2pD0GqzAyMUU5jtOuAG
-         dI9nigdYiRnw0B8m1fyt1/hRboI1Gi3jsgYHkFk4=
+        b=txGm8Q7OGh5L9NRCHUro5kw7rxhn08DJkB7mb1s4SIVZ0Vy3NsEiTf5ZMDBbCkwTx
+         tMuRFzE8wU5KIM2Gbijl/MCEOaA4bf/UThz0z4RM88TyigQZ3ppsi7XP7FvZgvegL9
+         5Vxv2X2lgZQM+A1eOWZmt7uzOOSwuenq55+J97hM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 330/371] media: ov6650: Fix incorrect use of JPEG colorspace
-Date:   Thu, 16 Jan 2020 12:23:22 -0500
-Message-Id: <20200116172403.18149-273-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 097/251] media: cx18: update *pos correctly in cx18_read_pos()
+Date:   Thu, 16 Jan 2020 12:34:06 -0500
+Message-Id: <20200116173641.22137-57-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
-References: <20200116172403.18149-1-sashal@kernel.org>
+In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
+References: <20200116173641.22137-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,96 +59,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 12500731895ef09afc5b66b86b76c0884fb9c7bf ]
+[ Upstream commit 7afb0df554292dca7568446f619965fb8153085d ]
 
-Since its initial submission, the driver selects V4L2_COLORSPACE_JPEG
-for supported formats other than V4L2_MBUS_FMT_SBGGR8_1X8.  According
-to v4l2-compliance test program, V4L2_COLORSPACE_JPEG applies
-exclusively to V4L2_PIX_FMT_JPEG.  Since the sensor does not support
-JPEG format, fix it to always select V4L2_COLORSPACE_SRGB.
+We should be updating *pos.  The current code is a no-op.
 
-Fixes: 2f6e2404799a ("[media] SoC Camera: add driver for OV6650 sensor")
-Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Fixes: 1c1e45d17b66 ("V4L/DVB (7786): cx18: new driver for the Conexant CX23418 MPEG encoder chip")
+
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov6650.c | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+ drivers/media/pci/cx18/cx18-fileops.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index 348296be4925..5d6a231a4163 100644
---- a/drivers/media/i2c/ov6650.c
-+++ b/drivers/media/i2c/ov6650.c
-@@ -203,7 +203,6 @@ struct ov6650 {
- 	unsigned long		pclk_max;	/* from resolution and format */
- 	struct v4l2_fract	tpf;		/* as requested with s_parm */
- 	u32 code;
--	enum v4l2_colorspace	colorspace;
- };
+diff --git a/drivers/media/pci/cx18/cx18-fileops.c b/drivers/media/pci/cx18/cx18-fileops.c
+index df837408efd5..0171dc5b8809 100644
+--- a/drivers/media/pci/cx18/cx18-fileops.c
++++ b/drivers/media/pci/cx18/cx18-fileops.c
+@@ -490,7 +490,7 @@ static ssize_t cx18_read_pos(struct cx18_stream *s, char __user *ubuf,
  
+ 	CX18_DEBUG_HI_FILE("read %zd from %s, got %zd\n", count, s->name, rc);
+ 	if (rc > 0)
+-		pos += rc;
++		*pos += rc;
+ 	return rc;
+ }
  
-@@ -520,7 +519,7 @@ static int ov6650_get_fmt(struct v4l2_subdev *sd,
- 	mf->width	= priv->rect.width >> priv->half_scale;
- 	mf->height	= priv->rect.height >> priv->half_scale;
- 	mf->code	= priv->code;
--	mf->colorspace	= priv->colorspace;
-+	mf->colorspace	= V4L2_COLORSPACE_SRGB;
- 	mf->field	= V4L2_FIELD_NONE;
- 
- 	return 0;
-@@ -627,11 +626,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
- 		priv->pclk_max = 8000000;
- 	}
- 
--	if (code == MEDIA_BUS_FMT_SBGGR8_1X8)
--		priv->colorspace = V4L2_COLORSPACE_SRGB;
--	else if (code != 0)
--		priv->colorspace = V4L2_COLORSPACE_JPEG;
--
- 	if (half_scale) {
- 		dev_dbg(&client->dev, "max resolution: QCIF\n");
- 		coma_set |= COMA_QCIF;
-@@ -666,7 +660,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
- 		priv->code = code;
- 
- 	if (!ret) {
--		mf->colorspace	= priv->colorspace;
- 		mf->width = priv->rect.width >> half_scale;
- 		mf->height = priv->rect.height >> half_scale;
- 	}
-@@ -689,6 +682,7 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
- 				&mf->height, 2, H_CIF, 1, 0);
- 
- 	mf->field = V4L2_FIELD_NONE;
-+	mf->colorspace = V4L2_COLORSPACE_SRGB;
- 
- 	switch (mf->code) {
- 	case MEDIA_BUS_FMT_Y10_1X10:
-@@ -699,13 +693,11 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
- 	case MEDIA_BUS_FMT_YUYV8_2X8:
- 	case MEDIA_BUS_FMT_VYUY8_2X8:
- 	case MEDIA_BUS_FMT_UYVY8_2X8:
--		mf->colorspace = V4L2_COLORSPACE_JPEG;
- 		break;
- 	default:
- 		mf->code = MEDIA_BUS_FMT_SBGGR8_1X8;
- 		/* fall through */
- 	case MEDIA_BUS_FMT_SBGGR8_1X8:
--		mf->colorspace = V4L2_COLORSPACE_SRGB;
- 		break;
- 	}
- 
-@@ -1020,7 +1012,6 @@ static int ov6650_probe(struct i2c_client *client,
- 	priv->rect.height = H_CIF;
- 	priv->half_scale  = false;
- 	priv->code	  = MEDIA_BUS_FMT_YUYV8_2X8;
--	priv->colorspace  = V4L2_COLORSPACE_JPEG;
- 
- 	ret = ov6650_video_probe(client);
- 	if (ret)
 -- 
 2.20.1
 
