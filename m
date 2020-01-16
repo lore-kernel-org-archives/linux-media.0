@@ -7,47 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97971C33CB1
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 16:50:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92131C33CB1
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 16:52:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6E03020663
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 16:50:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 660D32176D
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 16:52:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579193430;
-	bh=UvBSdpWu94Cr/vu/swFwEY05gb5S7dZpvtQ4ZH8wg9Q=;
+	s=default; t=1579193550;
+	bh=z7KVdw7Z8+sBDxB18wiOv1PsdtW1lfFnRoY3zKQDzDI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EjSuYoP0W2Hg70RZNY4gBy3wLfSUCEnIzgXiape8rjF07/nHuEyhhVoKhTC1tZXiU
-	 5gsxO0BG48AjsnGwGXsz6S9TOYbGxax4vpEqOOgpWXKl11WMcdXRkFp6VGxyfUcfFj
-	 EhS4s4kZWQRV/e4J5wVXYWKqnxwDIyyO2yvCxNJs=
+	b=loT2oQE61lOuFr/MaYQgvrjhzjnYiY9tHgkrkb8JESoySuX1O9Nh0Kfs8AZn0GNoZ
+	 5sjWf2liUlx8ytPUvm/hXGj11Kx2hAO6PDChBYkAoec+W3bXyz+YR1UOh/1fNmxwks
+	 9IilmWqSIebauWxmo+IyjVEOq1BW/tQh6ZrmanHA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729990AbgAPQrn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 11:47:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57588 "EHLO mail.kernel.org"
+        id S1730005AbgAPQw1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 11:52:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35510 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729613AbgAPQrl (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:47:41 -0500
+        id S1727008AbgAPQw0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 11:52:26 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC83821582;
-        Thu, 16 Jan 2020 16:47:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 521EC2081E;
+        Thu, 16 Jan 2020 16:52:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193261;
-        bh=UvBSdpWu94Cr/vu/swFwEY05gb5S7dZpvtQ4ZH8wg9Q=;
+        s=default; t=1579193546;
+        bh=z7KVdw7Z8+sBDxB18wiOv1PsdtW1lfFnRoY3zKQDzDI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gp3hh562FFufViCb7wQkEBNZAnn6v/3KTBRiBUX95XSgFlpQVNY+5hsDUc18mUdIH
-         gHtvhmjw43U4v6uKRieq0RqujkcW2LzYvkGqZQvjaNwda0z+W8HHmfe2DPdsNAefSK
-         MCi2ZtsF42iV/AoD6dyqzKNIbujVw4V8neZ1HbFs=
+        b=Xojj+wZx9ZHvc//UtF6JHXkeNEtyXIwIZcjI2NtVGR00TA9wYvoLv+5EshCiyJYfP
+         6WtcEYP9X00zOWckKu4do0kO1uM+UPsIOCr/dU8A19qFbK3Bq3uy/N16sVBzKqxYKQ
+         uX7r48x+B7qL1Hjibsw9Un+UKWZckrbCV76+C8e4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>, linux-nfs@vger.kernel.org,
-        netdev@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH AUTOSEL 5.4 058/205] xprtrdma: Connection becomes unstable after a reconnect
-Date:   Thu, 16 Jan 2020 11:40:33 -0500
-Message-Id: <20200116164300.6705-58-sashal@kernel.org>
+Cc:     Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 100/205] media: exynos4-is: Fix recursive locking in isp_video_release()
+Date:   Thu, 16 Jan 2020 11:41:15 -0500
+Message-Id: <20200116164300.6705-100-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
 References: <20200116164300.6705-1-sashal@kernel.org>
@@ -60,93 +62,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Seung-Woo Kim <sw0312.kim@samsung.com>
 
-[ Upstream commit a31b2f939219dd9bffdf01a45bd91f209f8cc369 ]
+[ Upstream commit 704c6c80fb471d1bb0ef0d61a94617d1d55743cd ]
 
-This is because xprt_request_get_cong() is allowing more than one
-RPC Call to be transmitted before the first Receive on the new
-connection. The first Receive fills the Receive Queue based on the
-server's credit grant. Before that Receive, there is only a single
-Receive WR posted because the client doesn't know the server's
-credit grant.
+>From isp_video_release(), &isp->video_lock is held and subsequent
+vb2_fop_release() tries to lock vdev->lock which is same with the
+previous one. Replace vb2_fop_release() with _vb2_fop_release() to
+fix the recursive locking.
 
-Solution is to clear rq_cong on all outstanding rpc_rqsts when the
-the cwnd is reset. This is because an RPC/RDMA credit is good for
-one connection instance only.
-
-Fixes: 75891f502f5f ("SUNRPC: Support for congestion control ... ")
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Fixes: 1380f5754cb0 ("[media] videobuf2: Add missing lock held on vb2_fop_release")
+Signed-off-by: Seung-Woo Kim <sw0312.kim@samsung.com>
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/xprtrdma/transport.c |  3 +++
- net/sunrpc/xprtrdma/verbs.c     | 22 ++++++++++++++++++++++
- 2 files changed, 25 insertions(+)
+ drivers/media/platform/exynos4-is/fimc-isp-video.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
-index 160558b4135e..c67d465dc062 100644
---- a/net/sunrpc/xprtrdma/transport.c
-+++ b/net/sunrpc/xprtrdma/transport.c
-@@ -428,8 +428,11 @@ void xprt_rdma_close(struct rpc_xprt *xprt)
- 	/* Prepare @xprt for the next connection by reinitializing
- 	 * its credit grant to one (see RFC 8166, Section 3.3.3).
- 	 */
-+	spin_lock(&xprt->transport_lock);
- 	r_xprt->rx_buf.rb_credits = 1;
-+	xprt->cong = 0;
- 	xprt->cwnd = RPC_CWNDSHIFT;
-+	spin_unlock(&xprt->transport_lock);
+diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.c b/drivers/media/platform/exynos4-is/fimc-isp-video.c
+index 378cc302e1f8..d2cbcdca0463 100644
+--- a/drivers/media/platform/exynos4-is/fimc-isp-video.c
++++ b/drivers/media/platform/exynos4-is/fimc-isp-video.c
+@@ -313,7 +313,7 @@ static int isp_video_release(struct file *file)
+ 		ivc->streaming = 0;
+ 	}
  
- out:
- 	xprt->reestablish_timeout = 0;
-diff --git a/net/sunrpc/xprtrdma/verbs.c b/net/sunrpc/xprtrdma/verbs.c
-index 3a907537e2cf..f4b136504e96 100644
---- a/net/sunrpc/xprtrdma/verbs.c
-+++ b/net/sunrpc/xprtrdma/verbs.c
-@@ -75,6 +75,7 @@
-  * internal functions
-  */
- static void rpcrdma_sendctx_put_locked(struct rpcrdma_sendctx *sc);
-+static void rpcrdma_reqs_reset(struct rpcrdma_xprt *r_xprt);
- static void rpcrdma_reps_destroy(struct rpcrdma_buffer *buf);
- static void rpcrdma_mrs_create(struct rpcrdma_xprt *r_xprt);
- static void rpcrdma_mrs_destroy(struct rpcrdma_buffer *buf);
-@@ -780,6 +781,7 @@ rpcrdma_ep_disconnect(struct rpcrdma_ep *ep, struct rpcrdma_ia *ia)
- 	trace_xprtrdma_disconnect(r_xprt, rc);
+-	vb2_fop_release(file);
++	_vb2_fop_release(file, NULL);
  
- 	rpcrdma_xprt_drain(r_xprt);
-+	rpcrdma_reqs_reset(r_xprt);
- }
- 
- /* Fixed-size circular FIFO queue. This implementation is wait-free and
-@@ -1042,6 +1044,26 @@ struct rpcrdma_req *rpcrdma_req_create(struct rpcrdma_xprt *r_xprt, size_t size,
- 	return NULL;
- }
- 
-+/**
-+ * rpcrdma_reqs_reset - Reset all reqs owned by a transport
-+ * @r_xprt: controlling transport instance
-+ *
-+ * ASSUMPTION: the rb_allreqs list is stable for the duration,
-+ * and thus can be walked without holding rb_lock. Eg. the
-+ * caller is holding the transport send lock to exclude
-+ * device removal or disconnection.
-+ */
-+static void rpcrdma_reqs_reset(struct rpcrdma_xprt *r_xprt)
-+{
-+	struct rpcrdma_buffer *buf = &r_xprt->rx_buf;
-+	struct rpcrdma_req *req;
-+
-+	list_for_each_entry(req, &buf->rb_allreqs, rl_all) {
-+		/* Credits are valid only for one connection */
-+		req->rl_slot.rq_cong = 0;
-+	}
-+}
-+
- static struct rpcrdma_rep *rpcrdma_rep_create(struct rpcrdma_xprt *r_xprt,
- 					      bool temp)
- {
+ 	if (v4l2_fh_is_singular_file(file)) {
+ 		fimc_pipeline_call(&ivc->ve, close);
 -- 
 2.20.1
 
