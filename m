@@ -7,52 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9606C33CAF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:38:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9213C33CAF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:44:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8FDDB246EF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:38:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9ED7D24765
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:44:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579196293;
-	bh=QNGO+4h+4tv4Cjbm89Vwy1rtiuhXMwGt9Ox0SnAPSOc=;
+	s=default; t=1579196693;
+	bh=GoHBoKx3RUqZ8FJbrRymDvYTYhD8iWnMrAGonitZ8t8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=r/xcahvbVft25rL+5vJbYzYlyoD4c8qc9abcaJEbIEifM/TZp3MF3C04dApwAYzxH
-	 Ls+nkalqA3j/hVHJdvtaKt/euEVYVbsx9IQHAa96yEgUtVs7EdNtpMYsUTp4e0aI/O
-	 FsK4f/IwxP2vRP2BLZrgtO+SOg4iwt0/Yk2osFfo=
+	b=WCVJCOoLgilGJt+nZFZifVzf1O/FQBjyANVtdck4gOSPHwzYP4OIXd0hjAKAJUFYA
+	 9RrlmDBetgsD40X9+cq0hprqzTogRJaps9KsUUK2O5Yf0zpPL5yzqtbC7AHck3rWJf
+	 hFS4/V3rw0Ip67hS0hEPpFqSej4TsANuUR/FG7ek=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393299AbgAPRiM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:38:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53934 "EHLO mail.kernel.org"
+        id S2405991AbgAPRow (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 12:44:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389965AbgAPRiL (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:38:11 -0500
+        id S2405980AbgAPRov (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:44:51 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8E05A246C3;
-        Thu, 16 Jan 2020 17:38:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2697A2476A;
+        Thu, 16 Jan 2020 17:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196290;
-        bh=QNGO+4h+4tv4Cjbm89Vwy1rtiuhXMwGt9Ox0SnAPSOc=;
+        s=default; t=1579196690;
+        bh=GoHBoKx3RUqZ8FJbrRymDvYTYhD8iWnMrAGonitZ8t8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QK1imqXp+k9/9NFVCgciT3I0li/54tXXNxYkhYQzTAslzhyvoXo3xqjFcLsDui5of
-         XMQu87GL/MfAFQ+xvY8+NDF0wFfBhTPtI8xtQD+pSNub8TNLoBoigjKb4yhCgl2QPI
-         ZyGO0FDrPkJeuAUHfQ+FxhrKx6EH4Et7yoDLvC7I=
+        b=iYMzMocpNCNJf5TdhyTbYWNpNcdWuRh5J/aeC3slbFTfgWu+F0KAA3DvJXphvY9zf
+         mikGI3q4fHEMxc6SdNuOrxLEt1WqFrc65gx4Yg4ERoj2SY5P4ApxdOKS/Qam3bCaMZ
+         NRdSOGSQHR/WfqetApe0VsOtZ2TJQrTYrZgacjVQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.9 105/251] media: davinci-isif: avoid uninitialized variable use
-Date:   Thu, 16 Jan 2020 12:34:14 -0500
-Message-Id: <20200116173641.22137-65-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 086/174] media: omap_vout: potential buffer overflow in vidioc_dqbuf()
+Date:   Thu, 16 Jan 2020 12:41:23 -0500
+Message-Id: <20200116174251.24326-86-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
-References: <20200116173641.22137-1-sashal@kernel.org>
+In-Reply-To: <20200116174251.24326-1-sashal@kernel.org>
+References: <20200116174251.24326-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,76 +59,66 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 0e633f97162c1c74c68e2eb20bbd9259dce87cd9 ]
+[ Upstream commit dd6e2a981bfe83aa4a493143fd8cf1edcda6c091 ]
 
-clang warns about a possible variable use that gcc never
-complained about:
+The "b->index" is a u32 the comes from the user in the ioctl.  It hasn't
+been checked.  We aren't supposed to use it but we're instead supposed
+to use the value that gets written to it when we call videobuf_dqbuf().
 
-drivers/media/platform/davinci/isif.c:982:32: error: variable 'frame_size' is uninitialized when used here
-      [-Werror,-Wuninitialized]
-                dm365_vpss_set_pg_frame_size(frame_size);
-                                             ^~~~~~~~~~
-drivers/media/platform/davinci/isif.c:887:2: note: variable 'frame_size' is declared here
-        struct vpss_pg_frame_size frame_size;
-        ^
-1 error generated.
+The videobuf_dqbuf() first memsets it to zero and then re-initializes it
+inside the videobuf_status() function.  It's this final value which we
+want.
 
-There is no initialization for this variable at all, and there
-has never been one in the mainline kernel, so we really should
-not put that stack data into an mmio register.
+Hans Verkuil pointed out that we need to check the return from
+videobuf_dqbuf().  I ended up doing a little cleanup related to that as
+well.
 
-On the other hand, I suspect that gcc checks the condition
-more closely and notices that the global
-isif_cfg.bayer.config_params.test_pat_gen flag is initialized
-to zero and never written to from any code path, so anything
-depending on it can be eliminated.
+Fixes: 72915e851da9 ("[media] V4L2: OMAP: VOUT: dma map and unmap v4l2 buffers in qbuf and dqbuf")
 
-To shut up the clang warning, just remove the dead code manually,
-it has probably never been used because any attempt to do so
-would have resulted in undefined behavior.
-
-Fixes: 63e3ab142fa3 ("V4L/DVB: V4L - vpfe capture - source for ISIF driver on DM365")
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
-Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/davinci/isif.c | 9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/media/platform/omap/omap_vout.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/davinci/isif.c b/drivers/media/platform/davinci/isif.c
-index 78e37cf3470f..b51b875c5a61 100644
---- a/drivers/media/platform/davinci/isif.c
-+++ b/drivers/media/platform/davinci/isif.c
-@@ -890,9 +890,7 @@ static int isif_set_hw_if_params(struct vpfe_hw_if_param *params)
- static int isif_config_ycbcr(void)
- {
- 	struct isif_ycbcr_config *params = &isif_cfg.ycbcr;
--	struct vpss_pg_frame_size frame_size;
- 	u32 modeset = 0, ccdcfg = 0;
--	struct vpss_sync_pol sync;
+diff --git a/drivers/media/platform/omap/omap_vout.c b/drivers/media/platform/omap/omap_vout.c
+index 596359576109..cf015bfc559b 100644
+--- a/drivers/media/platform/omap/omap_vout.c
++++ b/drivers/media/platform/omap/omap_vout.c
+@@ -1580,23 +1580,20 @@ static int vidioc_dqbuf(struct file *file, void *fh, struct v4l2_buffer *b)
+ 	unsigned long size;
+ 	struct videobuf_buffer *vb;
  
- 	dev_dbg(isif_cfg.dev, "\nStarting isif_config_ycbcr...");
+-	vb = q->bufs[b->index];
+-
+ 	if (!vout->streaming)
+ 		return -EINVAL;
  
-@@ -980,13 +978,6 @@ static int isif_config_ycbcr(void)
- 		/* two fields are interleaved in memory */
- 		regw(0x00000249, SDOFST);
+-	if (file->f_flags & O_NONBLOCK)
+-		/* Call videobuf_dqbuf for non blocking mode */
+-		ret = videobuf_dqbuf(q, (struct v4l2_buffer *)b, 1);
+-	else
+-		/* Call videobuf_dqbuf for  blocking mode */
+-		ret = videobuf_dqbuf(q, (struct v4l2_buffer *)b, 0);
++	ret = videobuf_dqbuf(q, b, !!(file->f_flags & O_NONBLOCK));
++	if (ret)
++		return ret;
++
++	vb = q->bufs[b->index];
  
--	/* Setup test pattern if enabled */
--	if (isif_cfg.bayer.config_params.test_pat_gen) {
--		sync.ccdpg_hdpol = params->hd_pol;
--		sync.ccdpg_vdpol = params->vd_pol;
--		dm365_vpss_set_sync_pol(sync);
--		dm365_vpss_set_pg_frame_size(frame_size);
--	}
- 	return 0;
+ 	addr = (unsigned long) vout->buf_phy_addr[vb->i];
+ 	size = (unsigned long) vb->size;
+ 	dma_unmap_single(vout->vid_dev->v4l2_dev.dev,  addr,
+ 				size, DMA_TO_DEVICE);
+-	return ret;
++	return 0;
  }
  
+ static int vidioc_streamon(struct file *file, void *fh, enum v4l2_buf_type i)
 -- 
 2.20.1
 
