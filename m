@@ -7,46 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD987C33CB6
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9606C33CAF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:38:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9DC22207FF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:38:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8FDDB246EF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:38:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579196280;
-	bh=bIFZMnrtPxehiDYOcc4OQ4kbtN8MY8B3HN+2+c8olC0=;
+	s=default; t=1579196293;
+	bh=QNGO+4h+4tv4Cjbm89Vwy1rtiuhXMwGt9Ox0SnAPSOc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=PXc0OEiCMAWBP2z5yPMYRqMrVtjZt3jVA6Cj4FJaqWih5WaBR6ob87Np1VDZl3sT/
-	 5SHDUUCSfVepMK59Iwo9X9dJE9B8vs7DIhETfSUed81+SYiJ46UCZgFOQx43McT3Ge
-	 dPgSmxDAgOGtepoI9UmgivcY/mAdpFKKSYGP0mjc=
+	b=r/xcahvbVft25rL+5vJbYzYlyoD4c8qc9abcaJEbIEifM/TZp3MF3C04dApwAYzxH
+	 Ls+nkalqA3j/hVHJdvtaKt/euEVYVbsx9IQHAa96yEgUtVs7EdNtpMYsUTp4e0aI/O
+	 FsK4f/IwxP2vRP2BLZrgtO+SOg4iwt0/Yk2osFfo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393245AbgAPRh7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:37:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53622 "EHLO mail.kernel.org"
+        id S2393299AbgAPRiM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 12:38:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53934 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393232AbgAPRh5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:37:57 -0500
+        id S2389965AbgAPRiL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:38:11 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 377AC246E9;
-        Thu, 16 Jan 2020 17:37:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8E05A246C3;
+        Thu, 16 Jan 2020 17:38:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196277;
-        bh=bIFZMnrtPxehiDYOcc4OQ4kbtN8MY8B3HN+2+c8olC0=;
+        s=default; t=1579196290;
+        bh=QNGO+4h+4tv4Cjbm89Vwy1rtiuhXMwGt9Ox0SnAPSOc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=txGm8Q7OGh5L9NRCHUro5kw7rxhn08DJkB7mb1s4SIVZ0Vy3NsEiTf5ZMDBbCkwTx
-         tMuRFzE8wU5KIM2Gbijl/MCEOaA4bf/UThz0z4RM88TyigQZ3ppsi7XP7FvZgvegL9
-         5Vxv2X2lgZQM+A1eOWZmt7uzOOSwuenq55+J97hM=
+        b=QK1imqXp+k9/9NFVCgciT3I0li/54tXXNxYkhYQzTAslzhyvoXo3xqjFcLsDui5of
+         XMQu87GL/MfAFQ+xvY8+NDF0wFfBhTPtI8xtQD+pSNub8TNLoBoigjKb4yhCgl2QPI
+         ZyGO0FDrPkJeuAUHfQ+FxhrKx6EH4Et7yoDLvC7I=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 097/251] media: cx18: update *pos correctly in cx18_read_pos()
-Date:   Thu, 16 Jan 2020 12:34:06 -0500
-Message-Id: <20200116173641.22137-57-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 4.9 105/251] media: davinci-isif: avoid uninitialized variable use
+Date:   Thu, 16 Jan 2020 12:34:14 -0500
+Message-Id: <20200116173641.22137-65-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
 References: <20200116173641.22137-1-sashal@kernel.org>
@@ -59,33 +62,74 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 7afb0df554292dca7568446f619965fb8153085d ]
+[ Upstream commit 0e633f97162c1c74c68e2eb20bbd9259dce87cd9 ]
 
-We should be updating *pos.  The current code is a no-op.
+clang warns about a possible variable use that gcc never
+complained about:
 
-Fixes: 1c1e45d17b66 ("V4L/DVB (7786): cx18: new driver for the Conexant CX23418 MPEG encoder chip")
+drivers/media/platform/davinci/isif.c:982:32: error: variable 'frame_size' is uninitialized when used here
+      [-Werror,-Wuninitialized]
+                dm365_vpss_set_pg_frame_size(frame_size);
+                                             ^~~~~~~~~~
+drivers/media/platform/davinci/isif.c:887:2: note: variable 'frame_size' is declared here
+        struct vpss_pg_frame_size frame_size;
+        ^
+1 error generated.
 
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+There is no initialization for this variable at all, and there
+has never been one in the mainline kernel, so we really should
+not put that stack data into an mmio register.
+
+On the other hand, I suspect that gcc checks the condition
+more closely and notices that the global
+isif_cfg.bayer.config_params.test_pat_gen flag is initialized
+to zero and never written to from any code path, so anything
+depending on it can be eliminated.
+
+To shut up the clang warning, just remove the dead code manually,
+it has probably never been used because any attempt to do so
+would have resulted in undefined behavior.
+
+Fixes: 63e3ab142fa3 ("V4L/DVB: V4L - vpfe capture - source for ISIF driver on DM365")
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx18/cx18-fileops.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/davinci/isif.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/drivers/media/pci/cx18/cx18-fileops.c b/drivers/media/pci/cx18/cx18-fileops.c
-index df837408efd5..0171dc5b8809 100644
---- a/drivers/media/pci/cx18/cx18-fileops.c
-+++ b/drivers/media/pci/cx18/cx18-fileops.c
-@@ -490,7 +490,7 @@ static ssize_t cx18_read_pos(struct cx18_stream *s, char __user *ubuf,
+diff --git a/drivers/media/platform/davinci/isif.c b/drivers/media/platform/davinci/isif.c
+index 78e37cf3470f..b51b875c5a61 100644
+--- a/drivers/media/platform/davinci/isif.c
++++ b/drivers/media/platform/davinci/isif.c
+@@ -890,9 +890,7 @@ static int isif_set_hw_if_params(struct vpfe_hw_if_param *params)
+ static int isif_config_ycbcr(void)
+ {
+ 	struct isif_ycbcr_config *params = &isif_cfg.ycbcr;
+-	struct vpss_pg_frame_size frame_size;
+ 	u32 modeset = 0, ccdcfg = 0;
+-	struct vpss_sync_pol sync;
  
- 	CX18_DEBUG_HI_FILE("read %zd from %s, got %zd\n", count, s->name, rc);
- 	if (rc > 0)
--		pos += rc;
-+		*pos += rc;
- 	return rc;
+ 	dev_dbg(isif_cfg.dev, "\nStarting isif_config_ycbcr...");
+ 
+@@ -980,13 +978,6 @@ static int isif_config_ycbcr(void)
+ 		/* two fields are interleaved in memory */
+ 		regw(0x00000249, SDOFST);
+ 
+-	/* Setup test pattern if enabled */
+-	if (isif_cfg.bayer.config_params.test_pat_gen) {
+-		sync.ccdpg_hdpol = params->hd_pol;
+-		sync.ccdpg_vdpol = params->vd_pol;
+-		dm365_vpss_set_sync_pol(sync);
+-		dm365_vpss_set_pg_frame_size(frame_size);
+-	}
+ 	return 0;
  }
  
 -- 
