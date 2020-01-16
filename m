@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7597BC33CB6
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:29:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC89CC33CAF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:29:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 525E2214AF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:29:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A8B420684
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:29:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579199381;
-	bh=yUHjz8v7EmxVjnEM2/tMfJCWMjVBEjwAlwO/UMnTXH8=;
+	s=default; t=1579199386;
+	bh=40AYRX+XYA5r8KQlSam5DZOIb3boQuYcYpYbsyWOSeI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NG9H+1EyR5VJJ9MjZs6bxx/SrLEkl/c7+puSeQ/aiBDUwCWWWtZ0jB++ukHRFaL9n
-	 m+ZBbYuHaS1I8V46XeYJ9YHhDl1hXcPT7JieWyS/Tr7saQQmq9b3KmLvpQIQlMXrA/
-	 QxjyZFd7dH/nZLLxHhUXDI6Y2vt06eElv9c9usnU=
+	b=2VDdy6Ac5XxguNLDRIO0lvHk4ZsDDNabiNuygF6AMEtjmxefsJWYvXe6dCSNiSuTG
+	 xTo009aUR1WN9iG0dUzv3YH5zLMA0a/TcnNEj3Xttz+g6BVn3oTKBuvHmmhBo2uXct
+	 o07pLcs01SmTF61P1zHTUhKGFprfOHL/vDt6y6Gg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388589AbgAPS3h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 13:29:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33994 "EHLO mail.kernel.org"
+        id S2403891AbgAPS3l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 13:29:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392032AbgAPRZs (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:25:48 -0500
+        id S2392161AbgAPRZr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:25:47 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF7BC2464B;
-        Thu, 16 Jan 2020 17:25:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB7722051A;
+        Thu, 16 Jan 2020 17:25:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195547;
-        bh=yUHjz8v7EmxVjnEM2/tMfJCWMjVBEjwAlwO/UMnTXH8=;
+        s=default; t=1579195546;
+        bh=40AYRX+XYA5r8KQlSam5DZOIb3boQuYcYpYbsyWOSeI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ch2s3W0njf021Rpl0z3OAWDkjspSjK3KlFICN16C5AY5Mg9jEFF65OU0Ykf5SCm5C
-         RV+QrtFzZ6wanb8c96cp7Zt8moub8PjAfADT0SzoTtpHkX4hjMFcr5W3MJlFNb1gmI
-         r3Tk2GgC+ANYx4lOxCvZ6SCCt9l339RP2LDjAr7k=
+        b=ESCmeUDy3jQFbs/KtcIrrh7hwy2keHkfaf5yzHkZ0y74QXPENfbcLJJIVZnCJjP10
+         6NmoJ32C4bGhfpV9TqzfeRwtlS9/oivf1vm5bGKvirfMlywlH78Pt7YRug5+cIcLUa
+         wVS6msKP+14PetAVfJJaU8AMAcqnhyPtKfbII00E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 139/371] media: wl128x: Fix an error code in fm_download_firmware()
-Date:   Thu, 16 Jan 2020 12:20:11 -0500
-Message-Id: <20200116172403.18149-82-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 138/371] media: cx18: update *pos correctly in cx18_read_pos()
+Date:   Thu, 16 Jan 2020 12:20:10 -0500
+Message-Id: <20200116172403.18149-81-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
 References: <20200116172403.18149-1-sashal@kernel.org>
@@ -61,36 +61,33 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit ef4bb63dc1f7213c08e13f6943c69cd27f69e4a3 ]
+[ Upstream commit 7afb0df554292dca7568446f619965fb8153085d ]
 
-We forgot to set "ret" on this error path.
+We should be updating *pos.  The current code is a no-op.
 
-Fixes: e8454ff7b9a4 ("[media] drivers:media:radio: wl128x: FM Driver Common sources")
+Fixes: 1c1e45d17b66 ("V4L/DVB (7786): cx18: new driver for the Conexant CX23418 MPEG encoder chip")
 
 Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/radio/wl128x/fmdrv_common.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/pci/cx18/cx18-fileops.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
-index 26895ae42fcf..2d20d908e280 100644
---- a/drivers/media/radio/wl128x/fmdrv_common.c
-+++ b/drivers/media/radio/wl128x/fmdrv_common.c
-@@ -1271,8 +1271,9 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
+diff --git a/drivers/media/pci/cx18/cx18-fileops.c b/drivers/media/pci/cx18/cx18-fileops.c
+index 98467b2089fa..099d59b992c1 100644
+--- a/drivers/media/pci/cx18/cx18-fileops.c
++++ b/drivers/media/pci/cx18/cx18-fileops.c
+@@ -484,7 +484,7 @@ static ssize_t cx18_read_pos(struct cx18_stream *s, char __user *ubuf,
  
- 		switch (action->type) {
- 		case ACTION_SEND_COMMAND:	/* Send */
--			if (fmc_send_cmd(fmdev, 0, 0, action->data,
--						action->size, NULL, NULL))
-+			ret = fmc_send_cmd(fmdev, 0, 0, action->data,
-+					   action->size, NULL, NULL);
-+			if (ret)
- 				goto rel_fw;
+ 	CX18_DEBUG_HI_FILE("read %zd from %s, got %zd\n", count, s->name, rc);
+ 	if (rc > 0)
+-		pos += rc;
++		*pos += rc;
+ 	return rc;
+ }
  
- 			cmd_cnt++;
 -- 
 2.20.1
 
