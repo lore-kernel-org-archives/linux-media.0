@@ -4,49 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3B9CC47409
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:44:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33A42C33CB3
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:44:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7F32D22525
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:44:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06257206E6
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:44:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579200261;
-	bh=8pmzowCdGMNdlrVuisE8cxbRdFU+AF3IhU1RZb79fXs=;
+	s=default; t=1579200280;
+	bh=UJXpdwgUgEDaEfqLqTmPWk2BbGW7Ngv25la4YVI2Fi4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VWlglEG+05Q3q/kRPgGtZZTrJUuTfbI7e+KpY4jL6xBfGnu5qtbJAVnsTI6EwyU8Z
-	 VWJga7/LJoOFi5HkHDR2AECKjCaD12Am0TWPbn8OSn7NN239OLYmC12xB2Y5yM1DEx
-	 aatDTFMfhnnxIS2b/z0ANso1ig4aGkcKsfw28738=
+	b=zCP+fS5z+/6g74sHIOtXKJVKtDnf5w0hrrE0LBdelGCqkdFOxXz7Z5gLLdhmkrzfh
+	 xVVRC5j7lYrDWLftbEnSjuRdwAa7RuLLbJPmuZOpKitMq4LHBbJCkup6tih9jNScAH
+	 NMPh5UHfJD8kZVsudXoQltH8eMVDSgsphu3Lq6fk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390106AbgAPRK6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:10:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50436 "EHLO mail.kernel.org"
+        id S2389845AbgAPSoi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 13:44:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50024 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390096AbgAPRK5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:10:57 -0500
+        id S2390072AbgAPRKv (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:10:51 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5338A20684;
-        Thu, 16 Jan 2020 17:10:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 806FF24687;
+        Thu, 16 Jan 2020 17:10:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194657;
-        bh=8pmzowCdGMNdlrVuisE8cxbRdFU+AF3IhU1RZb79fXs=;
+        s=default; t=1579194650;
+        bh=UJXpdwgUgEDaEfqLqTmPWk2BbGW7Ngv25la4YVI2Fi4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R6DGo0TfYnHDMguMkacizVMRDWtJsZY/9KZalJIHL/uvtV2gsAwH2flLt3xwvoL5/
-         +4LnV07EZM5htYrALAaAholzMU7qYEIN5EAbdeUUeTUevPtuoShHLMtsf1jwG0kDoG
-         pUJNYHnkN+7SX6sh93tI2MYFsUPxTz/X41F2wmuA=
+        b=Zza311atfthgODC/+icLnTE+MSmojkF3VE++0u8P+JRnzs7yi8e/p67rnFBZN97vD
+         cD4tpB8ViUjN/XIz5+bEwih/jzMjU5B1zt/lWcM33PlxSuY8dYv469oLGsE2AXsOkv
+         bZCy0wUKh0N6ISg+RbavqsClTGN78HCM+/tySYhU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Markus Elfring <elfring@users.sourceforge.net>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Alexandre Kroupski <alexandre.kroupski@ingenico.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 509/671] media: em28xx: Fix exception handling in em28xx_alloc_urbs()
-Date:   Thu, 16 Jan 2020 12:02:27 -0500
-Message-Id: <20200116170509.12787-246-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.19 505/671] media: atmel: atmel-isi: fix timeout value for stop streaming
+Date:   Thu, 16 Jan 2020 12:02:23 -0500
+Message-Id: <20200116170509.12787-242-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
 References: <20200116170509.12787-1-sashal@kernel.org>
@@ -59,39 +61,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Markus Elfring <elfring@users.sourceforge.net>
+From: Alexandre Kroupski <alexandre.kroupski@ingenico.com>
 
-[ Upstream commit ecbce48f1ff2442371ebcd12ec0ecddb431fbd72 ]
+[ Upstream commit 623fd246bb40234fe68dd4e7c1f1f081f9c45a3d ]
 
-A null pointer would be passed to a call of the function "kfree" directly
-after a call of the function "kcalloc" failed at one place.
-Pass the data structure member "urb" instead for which memory
-was allocated before (so that this resource will be properly cleaned up).
+In case of sensor malfunction, stop streaming timeout takes much longer
+than expected. This is due to conversion of time to jiffies: milliseconds
+multiplied with HZ (ticks/second) gives out a value of jiffies with 10^3
+greater. We need to also divide by 10^3 to obtain the right jiffies value.
+In other words FRAME_INTERVAL_MILLI_SEC must be in seconds in order to
+multiply by HZ and get the right jiffies value to add to the current
+jiffies for the timeout expire time.
 
-This issue was detected by using the Coccinelle software.
-
-Fixes: d571b592c6206d33731f41aa710fa0f69ac8611b ("media: em28xx: don't use coherent buffer for DMA transfers")
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 195ebc43bf76 ("[media] V4L: at91: add Atmel Image Sensor Interface (ISI) support")
+Signed-off-by: Alexandre Kroupski <alexandre.kroupski@ingenico.com>
+Reviewed-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/em28xx/em28xx-core.c | 2 +-
+ drivers/media/platform/atmel/atmel-isi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-core.c b/drivers/media/usb/em28xx/em28xx-core.c
-index 5657f8710ca6..69445c8e38e2 100644
---- a/drivers/media/usb/em28xx/em28xx-core.c
-+++ b/drivers/media/usb/em28xx/em28xx-core.c
-@@ -930,7 +930,7 @@ int em28xx_alloc_urbs(struct em28xx *dev, enum em28xx_mode mode, int xfer_bulk,
+diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platform/atmel/atmel-isi.c
+index e8db4df1e7c4..1a0e5233ae28 100644
+--- a/drivers/media/platform/atmel/atmel-isi.c
++++ b/drivers/media/platform/atmel/atmel-isi.c
+@@ -496,7 +496,7 @@ static void stop_streaming(struct vb2_queue *vq)
+ 	spin_unlock_irq(&isi->irqlock);
  
- 	usb_bufs->buf = kcalloc(num_bufs, sizeof(void *), GFP_KERNEL);
- 	if (!usb_bufs->buf) {
--		kfree(usb_bufs->buf);
-+		kfree(usb_bufs->urb);
- 		return -ENOMEM;
- 	}
- 
+ 	if (!isi->enable_preview_path) {
+-		timeout = jiffies + FRAME_INTERVAL_MILLI_SEC * HZ;
++		timeout = jiffies + (FRAME_INTERVAL_MILLI_SEC * HZ) / 1000;
+ 		/* Wait until the end of the current frame. */
+ 		while ((isi_readl(isi, ISI_STATUS) & ISI_CTRL_CDC) &&
+ 				time_before(jiffies, timeout))
 -- 
 2.20.1
 
