@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6445C33CAF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:24:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86878C33CB3
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:25:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A3C31214AF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:24:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64C6C214AF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:25:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579199089;
-	bh=8iRFm89jihfp3NUUzy4kvRT0BpudT1RYy/C7LLvQQX0=;
+	s=default; t=1579199116;
+	bh=g2pj0gi9Ui3WUZYUpszQBhEQoL3MST3QvZu9kt67wxU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=t7ix9gm+u/MPZwiihD1fQ5b6PlvpGcWyNh0J3VnLSuTSiHAirp20yjq7UvXwDcWUR
-	 5RVYyaoYecHxO1Vm4AoEejx9CRn3AoIIGgeqJ4k4QRYuDO/bdupBSG3C0zOuhvoYAA
-	 GTT2ARpH09CPBhff8TY/RMm2QfuZJMWoBHHUhisI=
+	b=q6ZBW4+0z6Q/H03UAaVYk9NaVuA0ANXV249jTUrS34qugZrYNJHEVpc7IA3JgH94o
+	 XRRF+SBN0SBGF00UllyD9tnjj5HHzA3+cNurMxLTnlnhP9wgnqYJJUuCFUj4YXPMA9
+	 qa4y5oU5X1SPOta3HL87zfpAEzTiKti7YayB1Hls=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392401AbgAPR1F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:27:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36514 "EHLO mail.kernel.org"
+        id S2436649AbgAPSZK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 13:25:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36462 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392392AbgAPR1E (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:27:04 -0500
+        id S2392384AbgAPR1D (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:27:03 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A6BF6246D3;
-        Thu, 16 Jan 2020 17:27:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 649C1246D5;
+        Thu, 16 Jan 2020 17:27:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195623;
-        bh=8iRFm89jihfp3NUUzy4kvRT0BpudT1RYy/C7LLvQQX0=;
+        s=default; t=1579195622;
+        bh=g2pj0gi9Ui3WUZYUpszQBhEQoL3MST3QvZu9kt67wxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AAtiSOQ6gsT+Q5CF9PJVkE9o7ubq4+Qq5E50qidI4+ipH3PDc89e2SjyJcFrIq/co
-         FKn+8lCsAZq1SQ7FuAAsM6N54D3AfkE+IyCtaeNz5G9EvkQg04Y144r6hNHwtnidby
-         IGEg5ob8xwoXYpeYuY74me1w8am2cmrIogwqLIVE=
+        b=er5rndEdXXH+NEYeuKoalZfr9rAIuDojICj8jd4P+lblFECNMP7dbM9U/JrLjcb5t
+         dMGrmn6Qvhk39OaQCc0W2OBAERPoVD6FIypyyNejU1Akn+GMU2vPYvCh1QOEvxArp3
+         hlkTekS8q+fUOaS2jLAFkMwrFTFuzGn/LhcQxOnY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        "Lad Prabhakar" <prabhakar.csengg@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 194/371] media: davinci/vpbe: array underflow in vpbe_enum_outputs()
-Date:   Thu, 16 Jan 2020 12:21:06 -0500
-Message-Id: <20200116172403.18149-137-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 193/371] media: omap_vout: potential buffer overflow in vidioc_dqbuf()
+Date:   Thu, 16 Jan 2020 12:21:05 -0500
+Message-Id: <20200116172403.18149-136-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
 References: <20200116172403.18149-1-sashal@kernel.org>
@@ -62,50 +61,64 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit b72845ee5577b227131b1fef23f9d9a296621d7b ]
+[ Upstream commit dd6e2a981bfe83aa4a493143fd8cf1edcda6c091 ]
 
-In vpbe_enum_outputs() we check if (temp_index >= cfg->num_outputs) but
-the problem is that "temp_index" can be negative.  This patch changes
-the types to unsigned to address this array underflow bug.
+The "b->index" is a u32 the comes from the user in the ioctl.  It hasn't
+been checked.  We aren't supposed to use it but we're instead supposed
+to use the value that gets written to it when we call videobuf_dqbuf().
 
-Fixes: 66715cdc3224 ("[media] davinci vpbe: VPBE display driver")
+The videobuf_dqbuf() first memsets it to zero and then re-initializes it
+inside the videobuf_status() function.  It's this final value which we
+want.
+
+Hans Verkuil pointed out that we need to check the return from
+videobuf_dqbuf().  I ended up doing a little cleanup related to that as
+well.
+
+Fixes: 72915e851da9 ("[media] V4L2: OMAP: VOUT: dma map and unmap v4l2 buffers in qbuf and dqbuf")
 
 Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: "Lad Prabhakar" <prabhakar.csengg@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/davinci/vpbe.c | 2 +-
- include/media/davinci/vpbe.h          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/omap/omap_vout.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/davinci/vpbe.c b/drivers/media/platform/davinci/vpbe.c
-index 1d3c13e36904..915af9ca4711 100644
---- a/drivers/media/platform/davinci/vpbe.c
-+++ b/drivers/media/platform/davinci/vpbe.c
-@@ -126,7 +126,7 @@ static int vpbe_enum_outputs(struct vpbe_device *vpbe_dev,
- 			     struct v4l2_output *output)
- {
- 	struct vpbe_config *cfg = vpbe_dev->cfg;
--	int temp_index = output->index;
-+	unsigned int temp_index = output->index;
+diff --git a/drivers/media/platform/omap/omap_vout.c b/drivers/media/platform/omap/omap_vout.c
+index 4d29860d27b4..18604b608ab2 100644
+--- a/drivers/media/platform/omap/omap_vout.c
++++ b/drivers/media/platform/omap/omap_vout.c
+@@ -1527,23 +1527,20 @@ static int vidioc_dqbuf(struct file *file, void *fh, struct v4l2_buffer *b)
+ 	unsigned long size;
+ 	struct videobuf_buffer *vb;
  
- 	if (temp_index >= cfg->num_outputs)
+-	vb = q->bufs[b->index];
+-
+ 	if (!vout->streaming)
  		return -EINVAL;
-diff --git a/include/media/davinci/vpbe.h b/include/media/davinci/vpbe.h
-index 79a566d7defd..180a05e91497 100644
---- a/include/media/davinci/vpbe.h
-+++ b/include/media/davinci/vpbe.h
-@@ -92,7 +92,7 @@ struct vpbe_config {
- 	struct encoder_config_info *ext_encoders;
- 	/* amplifier information goes here */
- 	struct amp_config_info *amp;
--	int num_outputs;
-+	unsigned int num_outputs;
- 	/* Order is venc outputs followed by LCD and then external encoders */
- 	struct vpbe_output *outputs;
- };
+ 
+-	if (file->f_flags & O_NONBLOCK)
+-		/* Call videobuf_dqbuf for non blocking mode */
+-		ret = videobuf_dqbuf(q, (struct v4l2_buffer *)b, 1);
+-	else
+-		/* Call videobuf_dqbuf for  blocking mode */
+-		ret = videobuf_dqbuf(q, (struct v4l2_buffer *)b, 0);
++	ret = videobuf_dqbuf(q, b, !!(file->f_flags & O_NONBLOCK));
++	if (ret)
++		return ret;
++
++	vb = q->bufs[b->index];
+ 
+ 	addr = (unsigned long) vout->buf_phy_addr[vb->i];
+ 	size = (unsigned long) vb->size;
+ 	dma_unmap_single(vout->vid_dev->v4l2_dev.dev,  addr,
+ 				size, DMA_TO_DEVICE);
+-	return ret;
++	return 0;
+ }
+ 
+ static int vidioc_streamon(struct file *file, void *fh, enum v4l2_buf_type i)
 -- 
 2.20.1
 
