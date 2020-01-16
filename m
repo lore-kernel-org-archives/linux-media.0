@@ -2,145 +2,127 @@ Return-Path: <SRS0=OtTt=3F=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7540C33CB1
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 13:35:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F790C33CB1
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 13:52:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 787702075B
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 13:35:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C3142075B
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 13:52:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="1Bs13GLW"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="sH9Nbjzb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbgAPNeq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 08:34:46 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:40790 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727012AbgAPNeq (ORCPT
+        id S1726329AbgAPNwm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 08:52:42 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:46723 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726084AbgAPNwm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 08:34:46 -0500
-Received: by mail-wm1-f67.google.com with SMTP id t14so3804276wmi.5
-        for <linux-media@vger.kernel.org>; Thu, 16 Jan 2020 05:34:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tsG/kNWOY1oaLEfx3AisRYovgh6oCd1Sk94EaWADP1A=;
-        b=1Bs13GLWG0q2oepJBkkMKBXN55AsJyFVIq83RdE7FstgXFKYTqAM1fdoPdTjTsIfPa
-         kkqRNS1Wk8ISL8gDFtyPgSQq3Z1zlqP/Ns4yWx3XFdbmT1KYDVkIbjTpwmQdyn8QwUYs
-         M4oMN04iFRP7BThXs5qLF4c2HLvGKJ0cEONeHTkZu0ZSn4qLZi8dp0qD2+teA/o+g4Gc
-         YvKsoYRTPQgj/5F0YUO26C/UV6jOi2Z5hR/vNQdbt3TdlF6FmbWvaziQxi2xhF/7mVlL
-         8dOOGV81WYjpsLXe+f6lJa5oVU1BrICKWOs6oI6dh187EIZm8ZLKyLbcu8N0Z6GbBitP
-         nIxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tsG/kNWOY1oaLEfx3AisRYovgh6oCd1Sk94EaWADP1A=;
-        b=Nai73ISsIacvRBOdSFlA7CsQmQxpYRgjnwI9U2KpYTpALveMUjts14jX9zqqyQJFVd
-         oygjkNerw+ZSv1VERoNCORbkmHUUytsVPaE1CqIbP0mgmZTEnJi5JkKxAAi3l+HR4hUI
-         EQx6jsQjbtXERE/+iSr4M8ICMkGGQYTxfo73eNNtQuYaE39rmI0gjOq2L2dX6iS4iTrG
-         sSzi70gmogALWksDG89ygjIGFIiS2yiSR0/QkteWvxSxs/LEF5OOaph6065ITHVU66rf
-         Kt5SjWu81zzp+72vUBER8Is7vdGxG16UD6CbxqMn86xIDIGvrt0W5yrp6ZSbztJQTNT1
-         1OnQ==
-X-Gm-Message-State: APjAAAVpdF0pfU6xMfuMPZZ5l8lpd59SEz0JoZmV9IUGJBW+FzzMyu7l
-        Z69f7Ze9UiGu2L4jB0DhL1z4gXYwuKzGig==
-X-Google-Smtp-Source: APXvYqyXmfYjyCLjI7Jq4nu3MhkiOKk2tOb7dImKfGrnqC+3eVJikhsp0cBodESHkU94cTJ8uUFX7g==
-X-Received: by 2002:a05:600c:145:: with SMTP id w5mr6598741wmm.157.1579181682932;
-        Thu, 16 Jan 2020 05:34:42 -0800 (PST)
-Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id x14sm162559wmj.42.2020.01.16.05.34.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 05:34:42 -0800 (PST)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     mchehab@kernel.org, hans.verkuil@cisco.com
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/5] media: meson: vdec: align stride on 32 bytes
-Date:   Thu, 16 Jan 2020 14:34:33 +0100
-Message-Id: <20200116133437.2443-2-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200116133437.2443-1-narmstrong@baylibre.com>
-References: <20200116133437.2443-1-narmstrong@baylibre.com>
+        Thu, 16 Jan 2020 08:52:42 -0500
+Received: from [IPv6:2001:420:44c1:2577:1825:cb8:c622:6168]
+ ([IPv6:2001:420:44c1:2577:1825:cb8:c622:6168])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id s5Zci8RyarNgys5ZgiDCVl; Thu, 16 Jan 2020 14:52:40 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1579182760; bh=RhdCPcmAHGoRU66eAS3Ugj7utaPaZC3vhEUuuimbs/o=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=sH9NbjzbjLs39ub7UXFOno1jePJzsu1fv+iJ5AA3uEfKwOQqQEyTKFZN7AGc0l5gJ
+         QeV0KgOHMCRRAgiX6xogorHq2RlOrAgKhmbnlrcNDLy8TTeMLyPqdimhjYQ42idVJ5
+         CnoHcQEZipVWLTBAjvuQD4tQ9TaOzMgaALcTVB2wvqLLZ1ERUsEs3gHtjM+wBfuHqE
+         haoCUUP2CySgk1v2hNSynwASgvjv1BhvYes7/id7+jEADi+QwE23q9tEyVqUpCIFkp
+         Be44YgaL9d96pPIEynhJ6IH7nKjBGhDp3MEGXduYC3ZNYQsRm5odleCZpnZoHzbXRD
+         DR0cE6aeNjcXQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.6] Various fixes
+Message-ID: <05d43c5d-f0ba-74df-3a95-e424c6b39a79@xs4all.nl>
+Date:   Thu, 16 Jan 2020 14:52:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfB7HH/eBC0kNhwfg2qQ3VgTr2yRzmNIJ+enav79fyoB3LZR0Rn9BTY+VR94/hhQGaZzm6vnm3KlFlZ9LonsKgCe0LKs8TPCICi/HDpHZW9CC1aSxe+8S
+ 0NbGlSl1uBY5AHSqT5JPewyHXP+qs7aqQO1/GILzztNEG0F5bGP3Usp40jjJK9Ur1U7K2z578jEaROGfffy3+KSPe5jMw0cdMNGEbHJkZA3iZZaYB9HyWxIa
+ Avv1OvwdfRgnjWwzeD3lvRJ4Z6SXwQ5n7cvBKIPgCV1vskOG5wPOvFyAhC0GdwSc
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The HEVC/VP9 aligns the plane stride on 32, so align the planes stride
-for all codecs to 32 to satisfy HEVC/VP9 decoding using the "HEVC" HW.
+The following changes since commit 2a0a0bc7020ef7e66c9569d8229d79fa72e3d659:
 
-This fixes VP9 decoding of streams with following (not limited) widths:
-- 264
- -288
-- 350
-- 352
-- 472
-- 480
-- 528
-- 600
-- 720
-- 800
-- 848
-- 1440
+  media: MAINTAINERS: add entry for Rockchip ISP1 driver (2020-01-09 16:45:01 +0100)
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- drivers/staging/media/meson/vdec/vdec.c         | 10 +++++-----
- drivers/staging/media/meson/vdec/vdec_helpers.c |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+are available in the Git repository at:
 
-diff --git a/drivers/staging/media/meson/vdec/vdec.c b/drivers/staging/media/meson/vdec/vdec.c
-index 20e95b71c2d6..5514d2d259a4 100644
---- a/drivers/staging/media/meson/vdec/vdec.c
-+++ b/drivers/staging/media/meson/vdec/vdec.c
-@@ -527,20 +527,20 @@ vdec_try_fmt_common(struct amvdec_session *sess, u32 size,
- 		memset(pfmt[1].reserved, 0, sizeof(pfmt[1].reserved));
- 		if (pixmp->pixelformat == V4L2_PIX_FMT_NV12M) {
- 			pfmt[0].sizeimage = output_size;
--			pfmt[0].bytesperline = ALIGN(pixmp->width, 64);
-+			pfmt[0].bytesperline = ALIGN(pixmp->width, 32);
- 
- 			pfmt[1].sizeimage = output_size / 2;
--			pfmt[1].bytesperline = ALIGN(pixmp->width, 64);
-+			pfmt[1].bytesperline = ALIGN(pixmp->width, 32);
- 			pixmp->num_planes = 2;
- 		} else if (pixmp->pixelformat == V4L2_PIX_FMT_YUV420M) {
- 			pfmt[0].sizeimage = output_size;
--			pfmt[0].bytesperline = ALIGN(pixmp->width, 64);
-+			pfmt[0].bytesperline = ALIGN(pixmp->width, 32);
- 
- 			pfmt[1].sizeimage = output_size / 4;
--			pfmt[1].bytesperline = ALIGN(pixmp->width, 64) / 2;
-+			pfmt[1].bytesperline = ALIGN(pixmp->width, 32) / 2;
- 
- 			pfmt[2].sizeimage = output_size / 2;
--			pfmt[2].bytesperline = ALIGN(pixmp->width, 64) / 2;
-+			pfmt[2].bytesperline = ALIGN(pixmp->width, 32) / 2;
- 			pixmp->num_planes = 3;
- 		}
- 	}
-diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
-index ff4333074197..fc59d8801643 100644
---- a/drivers/staging/media/meson/vdec/vdec_helpers.c
-+++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
-@@ -154,8 +154,8 @@ int amvdec_set_canvases(struct amvdec_session *sess,
- {
- 	struct v4l2_m2m_buffer *buf;
- 	u32 pixfmt = sess->pixfmt_cap;
--	u32 width = ALIGN(sess->width, 64);
--	u32 height = ALIGN(sess->height, 64);
-+	u32 width = ALIGN(sess->width, 32);
-+	u32 height = ALIGN(sess->height, 32);
- 	u32 reg_cur = reg_base[0];
- 	u32 reg_num_cur = 0;
- 	u32 reg_base_cur = 0;
--- 
-2.22.0
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.6m
 
+for you to fetch changes up to 14c6e30267c855093778bcec15b53b4051823498:
+
+  rcar-vin: Add support for V4L2_FIELD_SEQ_{TB,BT} (2020-01-16 14:50:13 +0100)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Dafna Hirschfeld (1):
+      media: vimc: streamer: fix memory leak in vimc subdevs if kthread_run fails
+
+Eugen Hristev (2):
+      media: atmel: atmel-isc-base: expose white balance as v4l2 controls
+      MAINTAINERS: add atmel-isc-media.h file to ATMEL ISC driver
+
+Hans Verkuil (1):
+      vidioc-queryctrl.rst: fix error code
+
+Hirokazu Honda (1):
+      media: hantro: Support H264 profile control
+
+Jae Hyun Yoo (1):
+      Documentation: dt-bindings: media: add AST2600 Video Engine support
+
+Joel Stanley (3):
+      media: aspeed: Rework memory mapping in probe
+      media: aspeed: Use runtime configuration
+      video: aspeed: Update copyright information
+
+Johan Hovold (1):
+      media: usbtv: fix control-message timeouts
+
+Niklas Söderlund (3):
+      adv7180: Add init_cfg pad operation
+      rcar-vin: Move hardware buffer tracking to own struct
+      rcar-vin: Add support for V4L2_FIELD_SEQ_{TB,BT}
+
+Peter Ujfalusi (3):
+      media: pxa_camera: Use dma_request_chan() instead dma_request_slave_channel()
+      media: rcar_drif: Use dma_request_chan() instead dma_request_slave_channel()
+      media: xilinx: Use dma_request_chan() instead dma_request_slave_channel()
+
+ Documentation/devicetree/bindings/media/aspeed-video.txt |   5 +-
+ Documentation/media/uapi/v4l/vidioc-queryctrl.rst        |   2 +-
+ MAINTAINERS                                              |   1 +
+ drivers/media/i2c/adv7180.c                              |  12 +++
+ drivers/media/platform/aspeed-video.c                    |  73 +++++++++++------
+ drivers/media/platform/atmel/atmel-isc-base.c            | 222 ++++++++++++++++++++++++++++++++++++++++++++-------
+ drivers/media/platform/atmel/atmel-isc.h                 |  23 +++++-
+ drivers/media/platform/pxa_camera.c                      |  20 ++---
+ drivers/media/platform/rcar-vin/rcar-dma.c               |  91 ++++++++++++++++-----
+ drivers/media/platform/rcar-vin/rcar-v4l2.c              |   5 ++
+ drivers/media/platform/rcar-vin/rcar-vin.h               |  28 ++++++-
+ drivers/media/platform/rcar_drif.c                       |   6 +-
+ drivers/media/platform/vimc/vimc-streamer.c              |   9 ++-
+ drivers/media/platform/xilinx/xilinx-dma.c               |  11 +--
+ drivers/media/usb/usbtv/usbtv-core.c                     |   2 +-
+ drivers/media/usb/usbtv/usbtv-video.c                    |   5 +-
+ drivers/staging/media/hantro/hantro_drv.c                |  10 +++
+ include/linux/atmel-isc-media.h                          |  58 ++++++++++++++
+ include/uapi/linux/v4l2-controls.h                       |   6 ++
+ 19 files changed, 486 insertions(+), 103 deletions(-)
+ create mode 100644 include/linux/atmel-isc-media.h
