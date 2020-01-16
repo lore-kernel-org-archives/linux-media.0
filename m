@@ -7,49 +7,45 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60C13C33CAF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:55:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CF20C33CB6
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:55:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3D20C2469B
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:55:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6EF18246A8
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:55:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579197319;
-	bh=QNGO+4h+4tv4Cjbm89Vwy1rtiuhXMwGt9Ox0SnAPSOc=;
+	s=default; t=1579197336;
+	bh=PkaWdYxqxdWMRUsmEVtqI7yY+n4bIU56XI/NRCZjYLc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=M+sVU3ADdjpiDHPYGIcQWk6MmEJz0lrcbRuEWjebJ/aLZ+l/rro9ATFbzU7mrzvD1
-	 pBFby3OznWBvgb4r3PGnfgi1909vqvl4PvS1I69KTiTg2vZfI7iZG1Ntp6NdWbKDlE
-	 rhKQrC5o5BbnnTBL5nzzWfA/03WfPF/aBC1P6y7o=
+	b=gCkHMpnt1EufzZ4lOiZY67dKw+dM2GL59wBF7+0OJ94jc35LV9XPE8J8k4upuJpFX
+	 njiNaMm6gr2ymV5Vvh9VjaZeffDDfhehJOtxKBEXel93LY41XWqVFLdkVF2im5pn7L
+	 MgAac3875GU3s+lHrOJYwVQgNsWN9dMegQ5MvMVw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394136AbgAPRoZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:44:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35354 "EHLO mail.kernel.org"
+        id S2394151AbgAPRzc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 12:55:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35056 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394153AbgAPRoY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:44:24 -0500
+        id S2394112AbgAPRoP (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:44:15 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC21024750;
-        Thu, 16 Jan 2020 17:44:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 12CEC2475E;
+        Thu, 16 Jan 2020 17:44:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196663;
-        bh=QNGO+4h+4tv4Cjbm89Vwy1rtiuhXMwGt9Ox0SnAPSOc=;
+        s=default; t=1579196655;
+        bh=PkaWdYxqxdWMRUsmEVtqI7yY+n4bIU56XI/NRCZjYLc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z/Obe6hgf0kMEtmA1Qq10eM7OnjpG3ehpWp++U9la6pa3toGzjDSuXKbPWXFtbYhV
-         etGGdw0BVJSOBNZTwZI8BjfKs7Q9ofrxA5Ef5zWrfL7lOrKN8Veasf1nL3lXR/KQYb
-         e+Qt/OMU2Kn5bdmuAmmB+PxQ0m0NiOZUHPO7pq2o=
+        b=Z2Yv6oGDu/73qL1wVyB2YgBOUSu9qrutu64Xugk+hjVJwpVzclGdqHX9VW4/w89Wt
+         /6eYqcj7fEWC4PdL8kzdTW3lVf7CvCoKeoNdzBAnHyZmpR9mHyCYlUE0H5qQ4bfSM2
+         wkrgCqUCOcQekad6of2OQNfiUBrPGoLMnMAKtNuQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Nicholas Mc Guire <hofrat@osadl.org>, Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.4 066/174] media: davinci-isif: avoid uninitialized variable use
-Date:   Thu, 16 Jan 2020 12:41:03 -0500
-Message-Id: <20200116174251.24326-66-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 062/174] media: cx23885: check allocation return
+Date:   Thu, 16 Jan 2020 12:40:59 -0500
+Message-Id: <20200116174251.24326-62-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116174251.24326-1-sashal@kernel.org>
 References: <20200116174251.24326-1-sashal@kernel.org>
@@ -62,76 +58,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Nicholas Mc Guire <hofrat@osadl.org>
 
-[ Upstream commit 0e633f97162c1c74c68e2eb20bbd9259dce87cd9 ]
+[ Upstream commit a3d7f22ef34ec4206b50ee121384d5c8bebd5591 ]
 
-clang warns about a possible variable use that gcc never
-complained about:
+Checking of kmalloc() seems to have been committed - as
+cx23885_dvb_register() is checking for != 0 return, returning
+-ENOMEM should be fine here.  While at it address the coccicheck
+suggestion to move to kmemdup rather than using kmalloc+memcpy.
 
-drivers/media/platform/davinci/isif.c:982:32: error: variable 'frame_size' is uninitialized when used here
-      [-Werror,-Wuninitialized]
-                dm365_vpss_set_pg_frame_size(frame_size);
-                                             ^~~~~~~~~~
-drivers/media/platform/davinci/isif.c:887:2: note: variable 'frame_size' is declared here
-        struct vpss_pg_frame_size frame_size;
-        ^
-1 error generated.
+Fixes: 46b21bbaa8a8 ("[media] Add support for DViCO FusionHDTV DVB-T Dual Express2")
 
-There is no initialization for this variable at all, and there
-has never been one in the mainline kernel, so we really should
-not put that stack data into an mmio register.
-
-On the other hand, I suspect that gcc checks the condition
-more closely and notices that the global
-isif_cfg.bayer.config_params.test_pat_gen flag is initialized
-to zero and never written to from any code path, so anything
-depending on it can be eliminated.
-
-To shut up the clang warning, just remove the dead code manually,
-it has probably never been used because any attempt to do so
-would have resulted in undefined behavior.
-
-Fixes: 63e3ab142fa3 ("V4L/DVB: V4L - vpfe capture - source for ISIF driver on DM365")
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
-Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Nicholas Mc Guire <hofrat@osadl.org>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/davinci/isif.c | 9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/media/pci/cx23885/cx23885-dvb.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/davinci/isif.c b/drivers/media/platform/davinci/isif.c
-index 78e37cf3470f..b51b875c5a61 100644
---- a/drivers/media/platform/davinci/isif.c
-+++ b/drivers/media/platform/davinci/isif.c
-@@ -890,9 +890,7 @@ static int isif_set_hw_if_params(struct vpfe_hw_if_param *params)
- static int isif_config_ycbcr(void)
- {
- 	struct isif_ycbcr_config *params = &isif_cfg.ycbcr;
--	struct vpss_pg_frame_size frame_size;
- 	u32 modeset = 0, ccdcfg = 0;
--	struct vpss_sync_pol sync;
+diff --git a/drivers/media/pci/cx23885/cx23885-dvb.c b/drivers/media/pci/cx23885/cx23885-dvb.c
+index e543cbbf2ec4..8fe78b8b1c25 100644
+--- a/drivers/media/pci/cx23885/cx23885-dvb.c
++++ b/drivers/media/pci/cx23885/cx23885-dvb.c
+@@ -1452,8 +1452,9 @@ static int dvb_register(struct cx23885_tsport *port)
+ 		if (fe0->dvb.frontend != NULL) {
+ 			struct i2c_adapter *tun_i2c;
  
- 	dev_dbg(isif_cfg.dev, "\nStarting isif_config_ycbcr...");
- 
-@@ -980,13 +978,6 @@ static int isif_config_ycbcr(void)
- 		/* two fields are interleaved in memory */
- 		regw(0x00000249, SDOFST);
- 
--	/* Setup test pattern if enabled */
--	if (isif_cfg.bayer.config_params.test_pat_gen) {
--		sync.ccdpg_hdpol = params->hd_pol;
--		sync.ccdpg_vdpol = params->vd_pol;
--		dm365_vpss_set_sync_pol(sync);
--		dm365_vpss_set_pg_frame_size(frame_size);
--	}
- 	return 0;
- }
- 
+-			fe0->dvb.frontend->sec_priv = kmalloc(sizeof(dib7000p_ops), GFP_KERNEL);
+-			memcpy(fe0->dvb.frontend->sec_priv, &dib7000p_ops, sizeof(dib7000p_ops));
++			fe0->dvb.frontend->sec_priv = kmemdup(&dib7000p_ops, sizeof(dib7000p_ops), GFP_KERNEL);
++			if (!fe0->dvb.frontend->sec_priv)
++				return -ENOMEM;
+ 			tun_i2c = dib7000p_ops.get_i2c_master(fe0->dvb.frontend, DIBX000_I2C_INTERFACE_TUNER, 1);
+ 			if (!dvb_attach(dib0070_attach, fe0->dvb.frontend, tun_i2c, &dib7070p_dib0070_config))
+ 				return -ENODEV;
 -- 
 2.20.1
 
