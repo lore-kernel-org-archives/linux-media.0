@@ -4,58 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D13A9C33CAF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:13:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CD09C33CB6
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:17:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 987D4246AF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:13:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC94020730
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 17:17:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579194805;
-	bh=ayTV0SyUH0e2bABLL/2P8fDxp82lebQiM6N7Y8tD5Uw=;
+	s=default; t=1579195033;
+	bh=t3NzLjqky/Ad3i0HuvmURg01ba2B4dUEqMwPsFzQWqo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=XSADr8Wv4IdCsC83FUyH1lIjvJWDI1ThZ+++8PwpTnJ4U6DH+7bsymvl4eTMF3xU5
-	 lo0RLdtQ6okEnP/17t82ooOePATprxrZ6JlVrDnvlYbOzAGTzRkvkrScZNem0ul09r
-	 cUrFRbvTwYDlLeCYvkumbbt00BXAsW4XgkSsIW7Y=
+	b=MB543Ya6MDg/DJFs8CNjH2aQf9vzU1h9+5KWgwQNPuzHK7BG1/grV9c2/4cIuup3Q
+	 WsH71gTHlSaoqU7DS8p7xzaeK/HEkxQAeLd6IK/QgtixIHY45TLjUUttP59X7NAXyY
+	 vAxyZrSRpjHrE28Cv9hGBRn+YakRP466eHMuaya8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390737AbgAPRNX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:13:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58178 "EHLO mail.kernel.org"
+        id S2390826AbgAPRRJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 12:17:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60054 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390729AbgAPRNW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:13:22 -0500
+        id S2390859AbgAPRNy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:13:54 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 549B3246AA;
-        Thu, 16 Jan 2020 17:13:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 86E5E246A7;
+        Thu, 16 Jan 2020 17:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194801;
-        bh=ayTV0SyUH0e2bABLL/2P8fDxp82lebQiM6N7Y8tD5Uw=;
+        s=default; t=1579194833;
+        bh=t3NzLjqky/Ad3i0HuvmURg01ba2B4dUEqMwPsFzQWqo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bngEY89dxoMr+tvTWdHEw0wrmfHx4zVUc0R6g0fgSpLaGNbdOIDsGuEmIBRX3qcvW
-         f92MfDRxSzpe+9XzIpEJYXP1x8rSBZwQaa7zpQUo/UVm8gcX3EQNyEzZjkOZEGJmNJ
-         /BTNu54RIf/wC7w8h8LuXzkzmEu9RUvdZrOQynbA=
+        b=NUCjHXK64dpBBkIuul/oisKrmjMyYgc/IxOag+nDIo6hMmHZJd2RWhqVivQisyBkn
+         K0qNSRiwfLivIfJQ2WYmEkHNTiHlHXk9pNdqwL3h5Zyw7VK9j60XNLvT2zZJW+o7Dd
+         0PBr1pi+RUU1ypIYMkHmkMN1sR+s23jYxFe9WaX4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 612/671] media: rcar-vin: Fix incorrect return statement in rvin_try_format()
-Date:   Thu, 16 Jan 2020 12:04:10 -0500
-Message-Id: <20200116170509.12787-349-sashal@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 634/671] media: exynos4-is: Fix recursive locking in isp_video_release()
+Date:   Thu, 16 Jan 2020 12:04:32 -0500
+Message-Id: <20200116170509.12787-371-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
 References: <20200116170509.12787-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -64,46 +62,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+From: Seung-Woo Kim <sw0312.kim@samsung.com>
 
-[ Upstream commit a0862a40364e2f87109317e31c51c9d7bc89e33f ]
+[ Upstream commit 704c6c80fb471d1bb0ef0d61a94617d1d55743cd ]
 
-While refactoring code the return statement became corrupted, fix it by
-returning the correct return code.
+>From isp_video_release(), &isp->video_lock is held and subsequent
+vb2_fop_release() tries to lock vdev->lock which is same with the
+previous one. Replace vb2_fop_release() with _vb2_fop_release() to
+fix the recursive locking.
 
-Reported-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Fixes: 897e371389e77514 ("media: rcar-vin: simplify how formats are set and reset"
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Fixes: 1380f5754cb0 ("[media] videobuf2: Add missing lock held on vb2_fop_release")
+Signed-off-by: Seung-Woo Kim <sw0312.kim@samsung.com>
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/rcar-vin/rcar-v4l2.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/platform/exynos4-is/fimc-isp-video.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-index 5a54779cfc27..1236e6e8228c 100644
---- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-@@ -196,6 +196,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
- 	ret = v4l2_subdev_call(sd, pad, set_fmt, pad_cfg, &format);
- 	if (ret < 0 && ret != -ENOIOCTLCMD)
- 		goto done;
-+	ret = 0;
+diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.c b/drivers/media/platform/exynos4-is/fimc-isp-video.c
+index a920164f53f1..39340abefd14 100644
+--- a/drivers/media/platform/exynos4-is/fimc-isp-video.c
++++ b/drivers/media/platform/exynos4-is/fimc-isp-video.c
+@@ -316,7 +316,7 @@ static int isp_video_release(struct file *file)
+ 		ivc->streaming = 0;
+ 	}
  
- 	v4l2_fill_pix_format(pix, &format.format);
+-	vb2_fop_release(file);
++	_vb2_fop_release(file, NULL);
  
-@@ -230,7 +231,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
- done:
- 	v4l2_subdev_free_pad_config(pad_cfg);
- 
--	return 0;
-+	return ret;
- }
- 
- static int rvin_querycap(struct file *file, void *priv,
+ 	if (v4l2_fh_is_singular_file(file)) {
+ 		fimc_pipeline_call(&ivc->ve, close);
 -- 
 2.20.1
 
