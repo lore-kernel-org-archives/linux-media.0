@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E61E8C33CAF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:07:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D690C33CAF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:07:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BAE192176D
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:07:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3737E2176D
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jan 2020 18:07:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579198020;
-	bh=NAW0lDxZxbdXmUcJNQfaYox57i6EhRso58SUUQPAoK8=;
+	s=default; t=1579198073;
+	bh=RxwM+6dQQiPlDK/OlqLM0wNGJJ+mVuVkfE7h3sIO5Yk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=K4HcHIfWLKvh2SONkInfpcB+uoK7Lm8eprscyyfmQGS4NqH0Ksiwh2kbWVwQ+kouG
-	 tUh9eh08Iqs9Foam1eSS42c11wNS3guLMfsJiXX+Qim65V8W54T5bsUdDXaHYAQ6V0
-	 2aPSEuvcVgEmxdurg418rahHoHQQXKeV//K7YBKU=
+	b=EHgSOjD53MXQog7pjiXmA1IhGjoF6eG4Rt3mmjuWUfhbOxua9xMWR0bIETNvi4dep
+	 PmghyrzKR9KVe4/sgOy+xu9FXUKtTMqo8yqxzedsUgLOUE3OUQkneDOv7IaNWMzw+n
+	 kFwdx26kPIRdRUqvlRGbhcemXNclKoAvJW9UEwU0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406948AbgAPSHA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jan 2020 13:07:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55594 "EHLO mail.kernel.org"
+        id S2395007AbgAPSHq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jan 2020 13:07:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54958 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393458AbgAPRjV (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:39:21 -0500
+        id S2393394AbgAPRi4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:38:56 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE80924711;
-        Thu, 16 Jan 2020 17:39:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E22EF246C3;
+        Thu, 16 Jan 2020 17:38:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196360;
-        bh=NAW0lDxZxbdXmUcJNQfaYox57i6EhRso58SUUQPAoK8=;
+        s=default; t=1579196335;
+        bh=RxwM+6dQQiPlDK/OlqLM0wNGJJ+mVuVkfE7h3sIO5Yk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U/+cdnpnan79lHdDLeMR+EbqWx4KG3ye9HXt968WxyGWpEoo5IyGDyi+5RRLrM8tg
-         a/XutI+ZS52Gm9DVMjBQAPSV1GFBvjaTmFwjyhEP5HPlOwIlLQ7ozmqjd87KF9ZmqS
-         JVIp179J34ayZ3ylnQ8GuJNTkYgeHZ09lUqhqBbc=
+        b=wQyCYORMZGDZ9WrCSfpK5hqhb7JKSsMPqGbFE7C1YPOarFijNfRxbVS82dEsH2K1h
+         L/vcsH2E5JrDgFCaDXaKnycK42jCspk2L9Ryscb69VVEeDfpeTcJ4F75Qnc+O6aFrd
+         FzNLjjmR1NZXyiFfQAMu0rHngJgUw0zrR7l4hiLI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Colin Ian King <colin.king@canonical.com>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 151/251] media: vivid: fix incorrect assignment operation when setting video mode
-Date:   Thu, 16 Jan 2020 12:35:00 -0500
-Message-Id: <20200116173641.22137-111-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 134/251] media: omap_vout: potential buffer overflow in vidioc_dqbuf()
+Date:   Thu, 16 Jan 2020 12:34:43 -0500
+Message-Id: <20200116173641.22137-94-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
 References: <20200116173641.22137-1-sashal@kernel.org>
@@ -59,39 +59,66 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit d4ec9550e4b2d2e357a46fdc65d8ef3d4d15984c ]
+[ Upstream commit dd6e2a981bfe83aa4a493143fd8cf1edcda6c091 ]
 
-The assigment of FB_VMODE_NONINTERLACE to var->vmode should be a
-bit-wise or of FB_VMODE_NONINTERLACE instead of an assignment,
-otherwise the previous clearing of the FB_VMODE_MASK bits of
-var->vmode makes no sense and is redundant.
+The "b->index" is a u32 the comes from the user in the ioctl.  It hasn't
+been checked.  We aren't supposed to use it but we're instead supposed
+to use the value that gets written to it when we call videobuf_dqbuf().
 
-Addresses-Coverity: ("Unused value")
-Fixes: ad4e02d5081d ("[media] vivid: add a simple framebuffer device for overlay testing")
+The videobuf_dqbuf() first memsets it to zero and then re-initializes it
+inside the videobuf_status() function.  It's this final value which we
+want.
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Hans Verkuil pointed out that we need to check the return from
+videobuf_dqbuf().  I ended up doing a little cleanup related to that as
+well.
+
+Fixes: 72915e851da9 ("[media] V4L2: OMAP: VOUT: dma map and unmap v4l2 buffers in qbuf and dqbuf")
+
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/vivid/vivid-osd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/omap/omap_vout.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/vivid/vivid-osd.c b/drivers/media/platform/vivid/vivid-osd.c
-index bdc380b14e0c..a95b7c56569e 100644
---- a/drivers/media/platform/vivid/vivid-osd.c
-+++ b/drivers/media/platform/vivid/vivid-osd.c
-@@ -167,7 +167,7 @@ static int _vivid_fb_check_var(struct fb_var_screeninfo *var, struct vivid_dev *
- 	var->nonstd = 0;
+diff --git a/drivers/media/platform/omap/omap_vout.c b/drivers/media/platform/omap/omap_vout.c
+index a31b95cb3b09..77ec70f5fef6 100644
+--- a/drivers/media/platform/omap/omap_vout.c
++++ b/drivers/media/platform/omap/omap_vout.c
+@@ -1526,23 +1526,20 @@ static int vidioc_dqbuf(struct file *file, void *fh, struct v4l2_buffer *b)
+ 	unsigned long size;
+ 	struct videobuf_buffer *vb;
  
- 	var->vmode &= ~FB_VMODE_MASK;
--	var->vmode = FB_VMODE_NONINTERLACED;
-+	var->vmode |= FB_VMODE_NONINTERLACED;
+-	vb = q->bufs[b->index];
+-
+ 	if (!vout->streaming)
+ 		return -EINVAL;
  
- 	/* Dummy values */
- 	var->hsync_len = 24;
+-	if (file->f_flags & O_NONBLOCK)
+-		/* Call videobuf_dqbuf for non blocking mode */
+-		ret = videobuf_dqbuf(q, (struct v4l2_buffer *)b, 1);
+-	else
+-		/* Call videobuf_dqbuf for  blocking mode */
+-		ret = videobuf_dqbuf(q, (struct v4l2_buffer *)b, 0);
++	ret = videobuf_dqbuf(q, b, !!(file->f_flags & O_NONBLOCK));
++	if (ret)
++		return ret;
++
++	vb = q->bufs[b->index];
+ 
+ 	addr = (unsigned long) vout->buf_phy_addr[vb->i];
+ 	size = (unsigned long) vb->size;
+ 	dma_unmap_single(vout->vid_dev->v4l2_dev.dev,  addr,
+ 				size, DMA_TO_DEVICE);
+-	return ret;
++	return 0;
+ }
+ 
+ static int vidioc_streamon(struct file *file, void *fh, enum v4l2_buf_type i)
 -- 
 2.20.1
 
