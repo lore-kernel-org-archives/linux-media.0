@@ -2,215 +2,329 @@ Return-Path: <SRS0=/zvZ=3I=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AABD4C33CB1
-	for <linux-media@archiver.kernel.org>; Sun, 19 Jan 2020 15:14:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE104C33CAF
+	for <linux-media@archiver.kernel.org>; Sun, 19 Jan 2020 21:16:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7CB80206D7
-	for <linux-media@archiver.kernel.org>; Sun, 19 Jan 2020 15:14:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 60ACA206B7
+	for <linux-media@archiver.kernel.org>; Sun, 19 Jan 2020 21:16:39 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="DDhY6Xkg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727403AbgASPOU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 19 Jan 2020 10:14:20 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56602 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727007AbgASPOT (ORCPT
+        id S1728792AbgASVQi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 19 Jan 2020 16:16:38 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:35574 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727556AbgASVQi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 19 Jan 2020 10:14:19 -0500
-Received: from [IPv6:2804:431:e7cc:d244:9e0a:75ab:540f:cbbe] (unknown [IPv6:2804:431:e7cc:d244:9e0a:75ab:540f:cbbe])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: koike)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9302C28A0E6;
-        Sun, 19 Jan 2020 15:14:13 +0000 (GMT)
-Subject: Re: [PATCH] staging: media: rkisp1: make links immutable by default
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
-        kernel@collabora.com, laurent.pinchart@ideasonboard.com,
-        tfiga@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20200117201218.3745311-1-helen.koike@collabora.com>
- <20200117223634.GJ1074550@oden.dyn.berto.se>
-From:   Helen Koike <helen.koike@collabora.com>
-Autocrypt: addr=helen.koike@collabora.com; keydata=
- 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
-Message-ID: <8011cc70-a32c-efe3-817d-6a17ae672fd4@collabora.com>
-Date:   Sun, 19 Jan 2020 12:14:10 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        Sun, 19 Jan 2020 16:16:38 -0500
+Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0E060504;
+        Sun, 19 Jan 2020 22:16:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1579468594;
+        bh=ffTWHrk2gyKHevm9liaAZrpFbmtycmoi4n/4zfmpCaU=;
+        h=Subject:To:References:Reply-To:From:Date:In-Reply-To:From;
+        b=DDhY6XkgPxJ6oNo3hxUL31plVhNaHhr6+UevyJO7bI6DjZX6Rk9NLGCDmny7f+wIJ
+         e0W+gkVTA1ojQQqRlwdoE24ENjK/5CoHbcZQZseqEIvgtT5uX5+CL/0doY6Qk6DMcU
+         u1azbVkObAAwnP8xH9/N1AHoxU/AckNMFZcv3kFg=
+Subject: Re: Build failed in Jenkins: libcamera #72
+To:     Jenkins Builder Robot <jenkins@linuxtv.org>, mchehab@kernel.org,
+        linux-media@vger.kernel.org,
+        LibCamera Devel <libcamera-devel@lists.libcamera.org>
+References: <659134945.14.1579046596894.JavaMail.jenkins@builder.linuxtv.org>
+Reply-To: kieran.bingham@ideasonboard.com
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=kieran.bingham@ideasonboard.com; keydata=
+ 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
+ WZw01QYHU/GUV/zHJSFk
+Organization: Ideas on Board
+Message-ID: <263aa6e2-9b6c-5939-687d-005ae8fc2059@ideasonboard.com>
+Date:   Sun, 19 Jan 2020 21:16:31 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200117223634.GJ1074550@oden.dyn.berto.se>
+In-Reply-To: <659134945.14.1579046596894.JavaMail.jenkins@builder.linuxtv.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Mauro,
+
+It looks like the Jenkins jobs for Libcamera are failing continuously.
+
+I believe it looks like the jobs reuse an existing build configuration,
+and that doesn't get reconfigured if we change the top level meson.build
+or such.
+
+In particular, here we have changed to C++14, and the build should
+certainly be done from clean, as compiler flags should be updated.
 
 
-On 1/17/20 8:36 PM, Niklas Söderlund wrote:
-> Hi Helen,
+As a side note, is it possible (or desirable?) to cc
+<libcamera-devel@lists.libcamera.org> on these failures to make sure we
+see them?
+
+Thanks
+--
+Kieran
+
+On 15/01/2020 00:03, Jenkins Builder Robot wrote:
+> See <https://builder.linuxtv.org/job/libcamera/72/display/redirect?page=changes>
 > 
-> Thanks for your work.
+> Changes:
 > 
-> On 2020-01-17 17:12:18 -0300, Helen Koike wrote:
->> The only places which make sese to allow users to enable or disable
->> links are:
->>
->> * between sensors and isp:
->> So users can select which sensor should be used while streaming
->>
->> * between isp and the resizers:
->>               |
->>               v here
->> rkisp1_isp:2 -> rkisp1_resizer_mainpath -> rkisp1_mainpath (capture)
->>             \-> rkisp1_resizer_selfpath -> rkisp1_selfpath (capture)
->>               ^ here
->>               |
->>
->> So users can disable one of the capture paths when unused, to avoid
->> worring about matching formats.
->>
->> Make the following links immutable to simplify userspace:
->>
->> rkisp1_resizer_mainpath -> rkisp1_mainpath
->> rkisp1_resizer_selfpath -> rkisp1_selfpath
->> rkisp1_params           -> rkisp1_isp
->> rkisp1_isp              -> rkisp1_stats
->>
->> Signed-off-by: Helen Koike <helen.koike@collabora.com>
->>
->> ---
->> This is the topology graph after disabling all the links with
->> media -r
->> http://col.la/rkisp1immutable
->>
->> Dashed links are the only one can can be enabled/disabled, the others
->> are immutable.
->>
->>  drivers/staging/media/rkisp1/rkisp1-dev.c | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/staging/media/rkisp1/rkisp1-dev.c b/drivers/staging/media/rkisp1/rkisp1-dev.c
->> index 558126e66465..4030d5e71af1 100644
->> --- a/drivers/staging/media/rkisp1/rkisp1-dev.c
->> +++ b/drivers/staging/media/rkisp1/rkisp1-dev.c
->> @@ -145,14 +145,15 @@ static int rkisp1_create_links(struct rkisp1_device *rkisp1)
->>  		flags = 0;
->>  	}
->>  
->> -	flags = MEDIA_LNK_FL_ENABLED;
->> +	flags = MEDIA_LNK_FL_ENABLED | MEDIA_LNK_FL_IMMUTABLE;
->>  
->>  	/* create ISP->RSZ->CAP links */
->>  	for (i = 0; i < 2; i++) {
->>  		source = &rkisp1->isp.sd.entity;
->>  		sink = &rkisp1->resizer_devs[i].sd.entity;
+> [laurent.pinchart] meson.build: Switch to C++14
 > 
-> nit: To keep with the style of the rest of the function I would set 
-> flags here and once more bellow in the same loop.
+> [laurent.pinchart] libcamera: Switch from utils::make_unique to std::make_unique
+> 
+> 
+> ------------------------------------------
+> Started by an SCM change
+> Running as SYSTEM
+> Building remotely on slave1 in workspace <https://builder.linuxtv.org/job/libcamera/ws/>
+> No credentials specified
+>  > git rev-parse --is-inside-work-tree # timeout=10
+> Fetching changes from the remote Git repository
+>  > git config remote.origin.url git://linuxtv.org/libcamera.git # timeout=10
+> Fetching upstream changes from git://linuxtv.org/libcamera.git
+>  > git --version # timeout=10
+>  > git fetch --tags --force --progress -- git://linuxtv.org/libcamera.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+>  > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+>  > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+> Checking out Revision acf18e4265dec2991e62f7c8baecfacf1a6708b3 (refs/remotes/origin/master)
+>  > git config core.sparsecheckout # timeout=10
+>  > git checkout -f acf18e4265dec2991e62f7c8baecfacf1a6708b3 # timeout=10
+> Commit message: "libcamera: Switch from utils::make_unique to std::make_unique"
+>  > git rev-list --no-walk 055335bf49dbcb8c149bdcd4e96004c68e6b6ece # timeout=10
+> [libcamera] $ /bin/sh -xe /tmp/jenkins2777310540601637282.sh
+> + meson build -Dandroid=true
+> Directory already configured.
+
+^^ This implies the previous build is being re-used.
+
+Perhaps for a CI job, would it make more sense to do from-scratch clean
+configure and rebuilds?
 
 
-Do you mean this: http://ix.io/27Pm ?
-hmm, I don't see why to assign flags inside the loop.
-the previous loop is a different case, since it sets the link
-to the first sensor as enabled, but the other sensor links are disabled
-(in case there are more then one link).
+It would be nice if meson always knew when to reconfigure, but I'm not
+sure how to make sure that always happens :-D
+
+
 
 > 
-> With or without this fixed,
+> Just run your build command (e.g. ninja) and Meson will regenerate as necessary.
+> If ninja fails, run "ninja reconfigure" or "meson --reconfigure"
+> to force Meson to regenerate.
 > 
-> Reviewed-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+> If build failures persist, run "meson setup --wipe" to rebuild from scratch
+> using the same options as passed when configuring the build.
+> To change option values, run "meson configure" instead.
+> + cd build
+> + ninja
+> [0/1] Regenerating build files.
+> The Meson build system
+> Version: 0.49.2
+> Source dir: <https://builder.linuxtv.org/job/libcamera/ws/>
+> Build dir: <https://builder.linuxtv.org/job/libcamera/ws/build>
+> Build type: native build
+> Project name: libcamera
+> Project version: 0.0.0
+> Native C compiler: ccache cc (gcc 8.3.0 "cc (Debian 8.3.0-6) 8.3.0")
+> Native C++ compiler: ccache c++ (gcc 8.3.0 "c++ (Debian 8.3.0-6) 8.3.0")
+> Build machine cpu family: x86_64
+> Build machine cpu: x86_64
+> Header <execinfo.h> has symbol "backtrace" : YES
+> Header <stdlib.h> has symbol "secure_getenv" : YES
+> Configuring version.h using configuration
+> Dependency libudev found: YES (cached)
+> Library atomic found: YES
+> Library dl found: YES
+> Dependency threads found: YES (cached)
+> WARNING: rcc dependencies will not work reliably until this upstream issue is fixed: https://bugreports.qt.io/browse/QTBUG-45460
+> Dependency qt5 found: YES (cached)
+> Detecting Qt5 tools
+>  moc: YES (/usr/lib/x86_64-linux-gnu/qt5/bin/moc, 5.11.3)
+>  uic: YES (/usr/lib/x86_64-linux-gnu/qt5/bin/uic, 5.11.3)
+>  rcc: YES (/usr/lib/x86_64-linux-gnu/qt5/bin/rcc, 5.11.3)
+>  lrelease: NO
+> Program doxygen found: YES (/usr/bin/doxygen)
+> Configuring Doxyfile using configuration
+> Program sphinx-build-3 found: NO
+> Program sphinx-build found: YES (/usr/bin/sphinx-build)
+> Configuring config.h using configuration
+> Build targets in project: 68
+> Option werror is: True [default: true]
+> Option cpp_std is: c++11 [default: c++14]
+> Found ninja-1.8.2 at /usr/bin/ninja
+> [1/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/buffer.cpp.o'.
+> [2/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/message.cpp.o'.
+> [3/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/object.cpp.o'.
+> [4/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/media_object.cpp.o'.
+> [5/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/process.cpp.o'.
+> [6/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/pipeline_vimc.cpp.o'.
+> FAILED: src/libcamera/4ab8042@@camera@sha/pipeline_vimc.cpp.o 
+> ccache c++ -Isrc/libcamera/4ab8042@@camera@sha -Isrc/libcamera -I../src/libcamera -Iinclude -I../include -Isrc/libcamera/include -I../src/libcamera/include -I../include/android/hardware/libhardware/include/ -I../include/android/metadata/ -I../include/android/system/core/include -Iinclude/libcamera -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -Werror -std=c++11 -g -Wno-unused-parameter -include config.h -fPIC -pthread  -MD -MQ 'src/libcamera/4ab8042@@camera@sha/pipeline_vimc.cpp.o' -MF 'src/libcamera/4ab8042@@camera@sha/pipeline_vimc.cpp.o.d' -o 'src/libcamera/4ab8042@@camera@sha/pipeline_vimc.cpp.o' -c ../src/libcamera/pipeline/vimc.cpp
+> ../src/libcamera/pipeline/vimc.cpp: In member function ‘virtual bool libcamera::PipelineHandlerVimc::match(libcamera::DeviceEnumerator*)’:
+> ../src/libcamera/pipeline/vimc.cpp:368:46: error: ‘make_unique’ is not a member of ‘std’
+>   std::unique_ptr<VimcCameraData> data = std::make_unique<VimcCameraData>(this);
+>                                               ^~~~~~~~~~~
+> ../src/libcamera/pipeline/vimc.cpp:368:46: note: ‘std::make_unique’ is defined in header ‘<memory>’; did you forget to ‘#include <memory>’?
+> ../src/libcamera/pipeline/vimc.cpp:34:1:
+> +#include <memory>
+>  
+> ../src/libcamera/pipeline/vimc.cpp:368:46:
+>   std::unique_ptr<VimcCameraData> data = std::make_unique<VimcCameraData>(this);
+>                                               ^~~~~~~~~~~
+> ../src/libcamera/pipeline/vimc.cpp:368:72: error: expected primary-expression before ‘>’ token
+>   std::unique_ptr<VimcCameraData> data = std::make_unique<VimcCameraData>(this);
+>                                                                         ^
+> [7/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/framebuffer_allocator.cpp.o'.
+> [8/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/pipeline_ipu3_ipu3.cpp.o'.
+> FAILED: src/libcamera/4ab8042@@camera@sha/pipeline_ipu3_ipu3.cpp.o 
+> ccache c++ -Isrc/libcamera/4ab8042@@camera@sha -Isrc/libcamera -I../src/libcamera -Iinclude -I../include -Isrc/libcamera/include -I../src/libcamera/include -I../include/android/hardware/libhardware/include/ -I../include/android/metadata/ -I../include/android/system/core/include -Iinclude/libcamera -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -Werror -std=c++11 -g -Wno-unused-parameter -include config.h -fPIC -pthread  -MD -MQ 'src/libcamera/4ab8042@@camera@sha/pipeline_ipu3_ipu3.cpp.o' -MF 'src/libcamera/4ab8042@@camera@sha/pipeline_ipu3_ipu3.cpp.o.d' -o 'src/libcamera/4ab8042@@camera@sha/pipeline_ipu3_ipu3.cpp.o' -c ../src/libcamera/pipeline/ipu3/ipu3.cpp
+> ../src/libcamera/pipeline/ipu3/ipu3.cpp: In member function ‘int libcamera::PipelineHandlerIPU3::registerCameras()’:
+> ../src/libcamera/pipeline/ipu3/ipu3.cpp:879:9: error: ‘make_unique’ is not a member of ‘std’
+>     std::make_unique<IPU3CameraData>(this);
+>          ^~~~~~~~~~~
+> ../src/libcamera/pipeline/ipu3/ipu3.cpp:879:9: note: ‘std::make_unique’ is defined in header ‘<memory>’; did you forget to ‘#include <memory>’?
+> ../src/libcamera/pipeline/ipu3/ipu3.cpp:29:1:
+> +#include <memory>
+>  
+> ../src/libcamera/pipeline/ipu3/ipu3.cpp:879:9:
+>     std::make_unique<IPU3CameraData>(this);
+>          ^~~~~~~~~~~
+> ../src/libcamera/pipeline/ipu3/ipu3.cpp:879:35: error: expected primary-expression before ‘>’ token
+>     std::make_unique<IPU3CameraData>(this);
+>                                    ^
+> [9/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/request.cpp.o'.
+> [10/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/pipeline_rkisp1_timeline.cpp.o'.
+> [11/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/pipeline_handler.cpp.o'.
+> [12/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/proxy_ipa_proxy_linux.cpp.o'.
+> FAILED: src/libcamera/4ab8042@@camera@sha/proxy_ipa_proxy_linux.cpp.o 
+> ccache c++ -Isrc/libcamera/4ab8042@@camera@sha -Isrc/libcamera -I../src/libcamera -Iinclude -I../include -Isrc/libcamera/include -I../src/libcamera/include -I../include/android/hardware/libhardware/include/ -I../include/android/metadata/ -I../include/android/system/core/include -Iinclude/libcamera -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -Werror -std=c++11 -g -Wno-unused-parameter -include config.h -fPIC -pthread  -MD -MQ 'src/libcamera/4ab8042@@camera@sha/proxy_ipa_proxy_linux.cpp.o' -MF 'src/libcamera/4ab8042@@camera@sha/proxy_ipa_proxy_linux.cpp.o.d' -o 'src/libcamera/4ab8042@@camera@sha/proxy_ipa_proxy_linux.cpp.o' -c ../src/libcamera/proxy/ipa_proxy_linux.cpp
+> In file included from ../src/libcamera/proxy/ipa_proxy_linux.cpp:14:
+> ../src/libcamera/proxy/ipa_proxy_linux.cpp: In member function ‘virtual std::unique_ptr<libcamera::IPAProxy> libcamera::IPAProxyLinuxFactory::create(libcamera::IPAModule*)’:
+> ../src/libcamera/include/ipa_proxy.h:58:15: error: ‘make_unique’ is not a member of ‘std’
+>    return std::make_unique<proxy>(ipam); \
+>                ^~~~~~~~~~~
+> ../src/libcamera/proxy/ipa_proxy_linux.cpp:93:1: note: in expansion of macro ‘REGISTER_IPA_PROXY’
+>  REGISTER_IPA_PROXY(IPAProxyLinux)
+>  ^~~~~~~~~~~~~~~~~~
+> ../src/libcamera/include/ipa_proxy.h:58:15: note: ‘std::make_unique’ is defined in header ‘<memory>’; did you forget to ‘#include <memory>’?
+>    return std::make_unique<proxy>(ipam); \
+>                ^~~~~~~~~~~
+> ../src/libcamera/proxy/ipa_proxy_linux.cpp:93:1: note: in expansion of macro ‘REGISTER_IPA_PROXY’
+>  REGISTER_IPA_PROXY(IPAProxyLinux)
+>  ^~~~~~~~~~~~~~~~~~
+> ../src/libcamera/include/ipa_proxy.h:58:32: error: expected primary-expression before ‘>’ token
+>    return std::make_unique<proxy>(ipam); \
+>                                 ^
+> ../src/libcamera/proxy/ipa_proxy_linux.cpp:93:1: note: in expansion of macro ‘REGISTER_IPA_PROXY’
+>  REGISTER_IPA_PROXY(IPAProxyLinux)
+>  ^~~~~~~~~~~~~~~~~~
+> [13/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/.._android_camera3_hal.cpp.o'.
+> [14/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/device_enumerator_udev.cpp.o'.
+> [15/144] Compiling C++ object 'src/libcamera/4ab8042@@camera@sha/pipeline_rkisp1_rkisp1.cpp.o'.
+> FAILED: src/libcamera/4ab8042@@camera@sha/pipeline_rkisp1_rkisp1.cpp.o 
+> ccache c++ -Isrc/libcamera/4ab8042@@camera@sha -Isrc/libcamera -I../src/libcamera -Iinclude -I../include -Isrc/libcamera/include -I../src/libcamera/include -I../include/android/hardware/libhardware/include/ -I../include/android/metadata/ -I../include/android/system/core/include -Iinclude/libcamera -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -Werror -std=c++11 -g -Wno-unused-parameter -include config.h -fPIC -pthread  -MD -MQ 'src/libcamera/4ab8042@@camera@sha/pipeline_rkisp1_rkisp1.cpp.o' -MF 'src/libcamera/4ab8042@@camera@sha/pipeline_rkisp1_rkisp1.cpp.o.d' -o 'src/libcamera/4ab8042@@camera@sha/pipeline_rkisp1_rkisp1.cpp.o' -c ../src/libcamera/pipeline/rkisp1/rkisp1.cpp
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp: In member function ‘void libcamera::RkISP1CameraData::queueFrameAction(unsigned int, const libcamera::IPAOperationData&)’:
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:391:33: error: ‘make_unique’ is not a member of ‘std’
+>    timeline_.scheduleAction(std::make_unique<RkISP1ActionSetSensor>(frame,
+>                                  ^~~~~~~~~~~
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:391:33: note: ‘std::make_unique’ is defined in header ‘<memory>’; did you forget to ‘#include <memory>’?
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:34:1:
+> +#include <memory>
+>  
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:391:33:
+>    timeline_.scheduleAction(std::make_unique<RkISP1ActionSetSensor>(frame,
+>                                  ^~~~~~~~~~~
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:391:66: error: expected primary-expression before ‘>’ token
+>    timeline_.scheduleAction(std::make_unique<RkISP1ActionSetSensor>(frame,
+>                                                                   ^
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:392:12: error: left operand of comma operator has no effect [-Werror=unused-value]
+>             sensor_,
+>             ^~~~~~~
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:392:12: error: right operand of comma operator has no effect [-Werror=unused-value]
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp: In member function ‘virtual int libcamera::PipelineHandlerRkISP1::queueRequestDevice(libcamera::Camera*, libcamera::Request*)’:
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:849:38: error: ‘make_unique’ is not a member of ‘std’
+>   data->timeline_.scheduleAction(std::make_unique<RkISP1ActionQueueBuffers>(data->frame_,
+>                                       ^~~~~~~~~~~
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:849:38: note: ‘std::make_unique’ is defined in header ‘<memory>’; did you forget to ‘#include <memory>’?
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:849:74: error: expected primary-expression before ‘>’ token
+>   data->timeline_.scheduleAction(std::make_unique<RkISP1ActionQueueBuffers>(data->frame_,
+>                                                                           ^
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:849:82: error: left operand of comma operator has no effect [-Werror=unused-value]
+>   data->timeline_.scheduleAction(std::make_unique<RkISP1ActionQueueBuffers>(data->frame_,
+>                                                                             ~~~~~~^~~~~~
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:851:13: error: right operand of comma operator has no effect [-Werror=unused-value]
+>              this));
+>              ^~~~
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp: In member function ‘int libcamera::PipelineHandlerRkISP1::createCamera(libcamera::MediaEntity*)’:
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:895:8: error: ‘make_unique’ is not a member of ‘std’
+>    std::make_unique<RkISP1CameraData>(this);
+>         ^~~~~~~~~~~
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:895:8: note: ‘std::make_unique’ is defined in header ‘<memory>’; did you forget to ‘#include <memory>’?
+> ../src/libcamera/pipeline/rkisp1/rkisp1.cpp:895:36: error: expected primary-expression before ‘>’ token
+>    std::make_unique<RkISP1CameraData>(this);
+>                                     ^
+> cc1plus: all warnings being treated as errors
+> ninja: build stopped: subcommand failed.
+> Build step 'Execute shell' marked build as failure
+> 
 
-Thanks,
-Helen
 
-> 
->>  		ret = media_create_pad_link(source, RKISP1_ISP_PAD_SOURCE_VIDEO,
->> -					    sink, RKISP1_RSZ_PAD_SINK, flags);
->> +					    sink, RKISP1_RSZ_PAD_SINK,
->> +					    MEDIA_LNK_FL_ENABLED);
->>  		if (ret)
->>  			return ret;
->>  
->> -- 
->> 2.24.0
->>
-> 
+-- 
+Regards
+--
+Kieran
