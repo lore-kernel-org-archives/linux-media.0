@@ -2,122 +2,91 @@ Return-Path: <SRS0=ewPS=3J=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBB93C33CAF
-	for <linux-media@archiver.kernel.org>; Mon, 20 Jan 2020 00:58:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2638BC33CA1
+	for <linux-media@archiver.kernel.org>; Mon, 20 Jan 2020 07:16:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5D371206B7
-	for <linux-media@archiver.kernel.org>; Mon, 20 Jan 2020 00:58:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=vanguardiasur-com-ar.20150623.gappssmtp.com header.i=@vanguardiasur-com-ar.20150623.gappssmtp.com header.b="TbRKmBIW"
+	by mail.kernel.org (Postfix) with ESMTP id E82692073A
+	for <linux-media@archiver.kernel.org>; Mon, 20 Jan 2020 07:16:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728911AbgATA6H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 19 Jan 2020 19:58:07 -0500
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:43286 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728895AbgATA6H (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 19 Jan 2020 19:58:07 -0500
-Received: by mail-ua1-f66.google.com with SMTP id o42so10884521uad.10
-        for <linux-media@vger.kernel.org>; Sun, 19 Jan 2020 16:58:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KaojyHcqWI4LJpzN8M6IdyMUjveEL4lea69EXS7aAzs=;
-        b=TbRKmBIWG9gzQtuedwlP+NAdCuVOPMwr4AgFPjLRnaQJoK6F5QijFrUewj9k5umKde
-         4fi5SBgG3hPW2eNtfEgKuTeugKgTSrZ3D6uQFyGjrGSr+XayIbX2E4Li9dtvymF8z509
-         QV/RsYLZuzmn6mwaz+ypChXqSqoO2wGdSNjx9Oh+RFG3lNWd38BuNRpTlfigqw9ix10Q
-         CgftWg1Fi/uSg4O1XeY9uxDXs6bBpnm7NafivdSf5iKbp9G3IdG9mEl4GUL33Q5B3zwE
-         VkBT4BPdu23kkwsnmB7Uvs6G/FEr/gdd7x7QlF3s1YK7uFM9tPuX0pKht8SkK16SrWRB
-         qjEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KaojyHcqWI4LJpzN8M6IdyMUjveEL4lea69EXS7aAzs=;
-        b=ny0G2tQxhmwkw79fJ9zmVInlpBY4ByO3vOsZsHdF316Zx0bE4f982E8/lhxA9ba/tR
-         AAelOUDFK4t39PNGg/X5XVSCCDl8h2quyEoMo0lQ8hzXkgBHd5h2FhJKNZOOy/UF2T+B
-         3BNPUqxfe7wjvelsgE4zgkbpjbNMGUsdRkiRVYiLd4kpVHdiZIVT1fRdTKsm8yeVaEPe
-         gIy8HFpCNvtf0Br/4AzSC8VYJVtWmTqIUDzpPz3rvwAl5TXhq3+gHnJnugyjyRx/JuWk
-         WkQbX5O7cC5h30Jq1WE1jlsb0PcCRdNN1DS3F4TsUx+6lveOgm0jF0liochKI4d0tZ8b
-         N6KA==
-X-Gm-Message-State: APjAAAXOxGqZcF7g1QrZ5tg428wxsRgqUJuzQ4Hi+pHRPi1Ne1Vd5xDs
-        +dvVt3xYYEk0OI6C7k0p1zIlpZ6ZZL2i+0BEfgZRfwUP
-X-Google-Smtp-Source: APXvYqyAbYCaa7aB/HrUR4aFjQUKMk1M/4wODTR62A8xNfIH0fruYoGz839aiMKFxDkqyEs3nNlTnvB04qVmopP597Q=
-X-Received: by 2002:ab0:20a:: with SMTP id 10mr27216203uas.19.1579481886542;
- Sun, 19 Jan 2020 16:58:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20200119123434.17567-1-dafna.hirschfeld@collabora.com>
-In-Reply-To: <20200119123434.17567-1-dafna.hirschfeld@collabora.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Sun, 19 Jan 2020 21:57:55 -0300
-Message-ID: <CAAEAJfBn1E10HJ+kEj5dfeE9fvscUQk3D-m0VBR9BS8cpH-Ztw@mail.gmail.com>
-Subject: Re: [PATCH v4] media: vimc: streamer: if kthread_stop fails, ignore
- the error
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        skhan@linuxfoundation.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        kernel@collabora.com, Dafna Hirschfeld <dafna3@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1725933AbgATHQ5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 20 Jan 2020 02:16:57 -0500
+Received: from mga14.intel.com ([192.55.52.115]:7877 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725851AbgATHQ5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 20 Jan 2020 02:16:57 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Jan 2020 23:16:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,341,1574150400"; 
+   d="scan'208";a="215155403"
+Received: from ipu5-build.bj.intel.com ([10.238.232.196])
+  by orsmga007.jf.intel.com with ESMTP; 19 Jan 2020 23:16:55 -0800
+From:   Bingbu Cao <bingbu.cao@intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     sakari.ailus@linux.intel.com, tfiga@chromium.org,
+        bingbu.cao@linux.intel.com, laurent.pinchart@ideasonboard.com,
+        tian.shu.qiu@intel.com
+Subject: [PATCH v1] media: ipu3.rst: add imgu pipe config tool link
+Date:   Mon, 20 Jan 2020 15:22:21 +0800
+Message-Id: <1579504941-28999-1-git-send-email-bingbu.cao@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dafna,
+A specific tool which can be used to generate imgu intermedia
+resolutions now is public on github, this patch adds this information
+into ipu3.rst.
 
-Thanks for the patch.
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+---
+ Documentation/media/v4l-drivers/ipu3.rst | 11 +++++++----
+ drivers/staging/media/ipu3/TODO          |  2 --
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-On Sun, 19 Jan 2020 at 09:34, Dafna Hirschfeld
-<dafna.hirschfeld@collabora.com> wrote:
->
-> Ignore errors returned from kthread_stop since the
-> vimc subdevices should still be notified that
-> streaming stopped so they can release the memory for
-> the streaming, and also kthread should be set to NULL.
-> kthread_stop can return -EINTR in case the thread
-> did not yet run. This can happen if userspace calls
-> streamon and streamoff right after.
->
-> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> ---
-> Changes from v3: change the comment to explain when kthread fails
->
+diff --git a/Documentation/media/v4l-drivers/ipu3.rst b/Documentation/media/v4l-drivers/ipu3.rst
+index 50bd264a3408..361d577b1d02 100644
+--- a/Documentation/media/v4l-drivers/ipu3.rst
++++ b/Documentation/media/v4l-drivers/ipu3.rst
+@@ -311,10 +311,13 @@ Down Scaler and GDC blocks should be configured with the supported resolutions
+ as each hardware block has its own alignment requirement.
+ 
+ You must configure the output resolution of the hardware blocks smartly to meet
+-the hardware requirement along with keeping the maximum field of view.
+-The intermediate resolutions can be generated by specific tool and this
+-information can be obtained by looking at the following IPU3 ImgU configuration
+-table.
++the hardware requirement along with keeping the maximum field of view. The
++intermediate resolutions can be generated by specific tool -
++
++https://github.com/intel/intel-ipu3-pipecfg
++
++This tool can be used to generate intermediate resolutions. More information can
++be obtained by looking at the following IPU3 ImgU configuration table.
+ 
+ https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/master
+ 
+diff --git a/drivers/staging/media/ipu3/TODO b/drivers/staging/media/ipu3/TODO
+index 9ef036f23a21..fe3fc3bb6864 100644
+--- a/drivers/staging/media/ipu3/TODO
++++ b/drivers/staging/media/ipu3/TODO
+@@ -16,8 +16,6 @@ staging directory.
+ - Elaborate the functionality of different selection rectangles in driver
+   documentation. This may require driver changes as well.
+ 
+-- More detailed documentation on calculating BDS, GCD etc. sizes needed.
+-
+ - Document different operation modes, and which buffer queues are relevant
+   in each mode. To process an image, which queues require a buffer an in
+   which ones is it optional?
+-- 
+2.7.4
 
-Please keep all the history here, so we'd see the changes
-done to v1, v2, v3.
-
->  drivers/media/platform/vimc/vimc-streamer.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/media/platform/vimc/vimc-streamer.c b/drivers/media/platform/vimc/vimc-streamer.c
-> index cd6b55433c9e..26ec81b265c4 100644
-> --- a/drivers/media/platform/vimc/vimc-streamer.c
-> +++ b/drivers/media/platform/vimc/vimc-streamer.c
-> @@ -215,9 +215,15 @@ int vimc_streamer_s_stream(struct vimc_stream *stream,
->                         return 0;
->
->                 ret = kthread_stop(stream->kthread);
-> -               if (ret)
-> -                       return ret;
->
-> +               /*
-> +                * kthread_stop returns -EINTR in cases when streamon was
-> +                * immediately followed by streamoff, and the thread didn't had
-> +                * a chance to run. Ignore errors to stop the stream in the
-> +                * pipeline.
-> +                */
-> +               if (ret)
-> +                       dev_warn(ved->dev, "kthread_stop returned '%d'\n", ret);
-
-Is this situation serious enough to deserve warning the user?
-If not, perhaps dev_dbg would be better.
-
-Regards,
-Ezequiel
