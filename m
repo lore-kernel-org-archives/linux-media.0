@@ -2,110 +2,118 @@ Return-Path: <SRS0=XjDO=3K=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B818C2D0CE
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jan 2020 13:39:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45BA8C2D0CE
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jan 2020 13:41:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DC4E12253D
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jan 2020 13:39:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15AFD2070C
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jan 2020 13:41:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728733AbgAUNjd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Jan 2020 08:39:33 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:36552 "EHLO www.linuxtv.org"
+        id S1729188AbgAUNlw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Jan 2020 08:41:52 -0500
+Received: from mga02.intel.com ([134.134.136.20]:28735 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726968AbgAUNjd (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Jan 2020 08:39:33 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1ittjf-000Uxe-1B; Tue, 21 Jan 2020 13:38:27 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1ittlq-00027y-Rh; Tue, 21 Jan 2020 13:40:42 +0000
-Date:   Tue, 21 Jan 2020 13:40:42 +0000 (UTC)
-From:   Jenkins Builder Robot <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        libcamera-devel@lists.libcamera.org
-Message-ID: <1451039710.2.1579614042852.JavaMail.jenkins@builder.linuxtv.org>
-Subject: Build failed in Jenkins: libcamera #80
+        id S1729159AbgAUNlt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 21 Jan 2020 08:41:49 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Jan 2020 05:41:49 -0800
+X-IronPort-AV: E=Sophos;i="5.70,346,1574150400"; 
+   d="scan'208";a="275304981"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Jan 2020 05:41:45 -0800
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 9EA1620B1D;
+        Tue, 21 Jan 2020 15:41:39 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1ittn4-0005K5-1c; Tue, 21 Jan 2020 15:41:58 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
+        linux-media@vger.kernel.org,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>
+Subject: [PATCH v4 6/6] Documentation: ACPI: Document probe-low-power _DSD property
+Date:   Tue, 21 Jan 2020 15:41:57 +0200
+Message-Id: <20200121134157.20396-7-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200121134157.20396-1-sakari.ailus@linux.intel.com>
+References: <20200121134157.20396-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
-X-Jenkins-Job: libcamera
-X-Jenkins-Result: FAILURE
-Auto-submitted: auto-generated
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/libcamera/80/display/redirect>
+Document the probe-low-power _DSD property and how it is used with I²C
+drivers.
 
-Changes:
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ .../acpi/dsd/probe-low-power.rst              | 28 +++++++++++++++++++
+ Documentation/firmware-guide/acpi/index.rst   |  1 +
+ 2 files changed, 29 insertions(+)
+ create mode 100644 Documentation/firmware-guide/acpi/dsd/probe-low-power.rst
 
+diff --git a/Documentation/firmware-guide/acpi/dsd/probe-low-power.rst b/Documentation/firmware-guide/acpi/dsd/probe-low-power.rst
+new file mode 100644
+index 0000000000000..e0343ffefe071
+--- /dev/null
++++ b/Documentation/firmware-guide/acpi/dsd/probe-low-power.rst
+@@ -0,0 +1,28 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++======================================
++Probing I²C devices in low power state
++======================================
++
++Introduction
++============
++
++In some cases it may be preferred to leave certain devices powered off for
++the entire system bootup if powering on these devices has adverse side
++effects, beyond just powering on the said device. The _DSD property
++"probe-low-power" has been defined for this purpose.
++
++How it works
++============
++
++The property "probe-low-power" boolean property may be used to tell Linux
++that the I²C framework should instruct the kernel ACPI framework to leave
++the device in the low power state. If the driver indicates its support for
++this in its struct i2c_driver.probe_low_power field and the
++"probe-low-power" property is present, the device will not be powered on
++for probe.
++
++The downside is that as the device is not powered on, even if there's a
++problem with the device, the driver likely probes just fine but the first
++user will find out the device doesn't work, instead of a failure at probe
++time. This feature should thus be used sparingly.
+diff --git a/Documentation/firmware-guide/acpi/index.rst b/Documentation/firmware-guide/acpi/index.rst
+index ad3b5afdae77e..4e4ac675c0ff8 100644
+--- a/Documentation/firmware-guide/acpi/index.rst
++++ b/Documentation/firmware-guide/acpi/index.rst
+@@ -11,6 +11,7 @@ ACPI Support
+    dsd/graph
+    dsd/data-node-references
+    dsd/leds
++   dsd/probe-low-power
+    enumeration
+    osi
+    method-customizing
+-- 
+2.20.1
 
-------------------------------------------
-Started by user Mauro Carvalho Chehab
-Running as SYSTEM
-Building remotely on slave1 in workspace <https://builder.linuxtv.org/job/libcamera/ws/>
-No credentials specified
- > git rev-parse --is-inside-work-tree # timeout=10
-Fetching changes from the remote Git repository
- > git config remote.origin.url git://linuxtv.org/libcamera.git # timeout=10
-Fetching upstream changes from git://linuxtv.org/libcamera.git
- > git --version # timeout=10
- > git fetch --tags --force --progress -- git://linuxtv.org/libcamera.git +refs/heads/*:refs/remotes/origin/* # timeout=10
- > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
- > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
-Checking out Revision 9977fc3fcbfa0a6aaab04118fc67f0b9b9627570 (refs/remotes/origin/master)
- > git config core.sparsecheckout # timeout=10
- > git checkout -f 9977fc3fcbfa0a6aaab04118fc67f0b9b9627570 # timeout=10
-Commit message: "qcam: Support scaling of the viewfinder"
- > git rev-list --no-walk 9977fc3fcbfa0a6aaab04118fc67f0b9b9627570 # timeout=10
-[libcamera] $ /bin/sh -xe /tmp/jenkins8218803920890772055.sh
-+ meson setup --wipe build
-The Meson build system
-Version: 0.49.2
-Source dir: <https://builder.linuxtv.org/job/libcamera/ws/>
-Build dir: <https://builder.linuxtv.org/job/libcamera/ws/build>
-Build type: native build
-Project name: libcamera
-Project version: 0.0.0
-Native C compiler: ccache cc (gcc 8.3.0 "cc (Debian 8.3.0-6) 8.3.0")
-Native C++ compiler: ccache c++ (gcc 8.3.0 "c++ (Debian 8.3.0-6) 8.3.0")
-Build machine cpu family: x86_64
-Build machine cpu: x86_64
-Header <execinfo.h> has symbol "backtrace" : YES
-Header <stdlib.h> has symbol "secure_getenv" : YES
-Configuring version.h using configuration
-Found pkg-config: /usr/bin/pkg-config (0.29)
-Dependency libudev found: YES 241
-Library atomic found: YES
-Library dl found: YES
-Dependency threads found: YES 
-WARNING: rcc dependencies will not work reliably until this upstream issue is fixed: https://bugreports.qt.io/browse/QTBUG-45460
-Dependency qt5 (modules: Core, Gui, Widgets) found: YES 5.11.3 (pkg-config)
-Detecting Qt5 tools
- moc: YES (/usr/lib/x86_64-linux-gnu/qt5/bin/moc, 5.11.3)
- uic: YES (/usr/lib/x86_64-linux-gnu/qt5/bin/uic, 5.11.3)
- rcc: YES (/usr/lib/x86_64-linux-gnu/qt5/bin/rcc, 5.11.3)
- lrelease: NO
-Program doxygen found: YES (/usr/bin/doxygen)
-Configuring Doxyfile using configuration
-Program sphinx-build-3 found: NO
-Program sphinx-build found: YES (/usr/bin/sphinx-build)
-Configuring config.h using configuration
-Build targets in project: 69
-Option werror is: True [default: true]
-Found ninja-1.8.2 at /usr/bin/ninja
-+ meson configure
-Meson configurator encountered an error:
-
-ERROR: Directory <https://builder.linuxtv.org/job/libcamera/ws/> does not seem to be a Meson build directory.
-Build step 'Execute shell' marked build as failure
