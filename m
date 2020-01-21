@@ -2,31 +2,40 @@ Return-Path: <SRS0=XjDO=3K=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 818F3C2D0CE
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jan 2020 16:52:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4648C2D0CE
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jan 2020 16:56:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5E06021569
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jan 2020 16:52:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3ED024653
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jan 2020 16:56:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729085AbgAUQwO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Jan 2020 11:52:14 -0500
-Received: from gofer.mess.org ([88.97.38.141]:51785 "EHLO gofer.mess.org"
+        id S1726968AbgAUQ4r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Jan 2020 11:56:47 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:38994 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726555AbgAUQwN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Jan 2020 11:52:13 -0500
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id BA174C635E; Tue, 21 Jan 2020 16:52:12 +0000 (GMT)
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Cc:     Camden Lindsay <camden.lindsay+kernel@gmail.com>
-Subject: [PATCH v4l-utils] keytable: keymap without protocol is invalid
-Date:   Tue, 21 Jan 2020 16:52:12 +0000
-Message-Id: <20200121165212.441-1-sean@mess.org>
+        id S1726555AbgAUQ4q (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 21 Jan 2020 11:56:46 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1itwoW-000fKZ-M9; Tue, 21 Jan 2020 16:55:40 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1itwqi-0006Cz-1o; Tue, 21 Jan 2020 16:57:56 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL for 5.6] Sensor, V4L2 fwnode and ImgU driver patches
+Date:   Tue, 21 Jan 2020 16:57:56 +0000
+Message-Id: <20200121165756.23824-1-jenkins@linuxtv.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200121164816.GW856@valkosipuli.retiisi.org.uk>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -34,30 +43,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Without a protocol, keymap cannot be loaded and causes a segfault.
+From: builder@linuxtv.org
 
-Reported-by: Camden Lindsay <camden.lindsay+kernel@gmail.com>
-Signed-off-by: Sean Young <sean@mess.org>
----
- utils/common/keymap.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Pull request: https://patchwork.linuxtv.org/patch/61240/
+Build log: https://builder.linuxtv.org/job/patchwork/34657/
+Build time: 00:07:46
+Link: https://lore.kernel.org/linux-media/20200121164816.GW856@valkosipuli.retiisi.org.uk
 
-diff --git a/utils/common/keymap.c b/utils/common/keymap.c
-index d06deb59..6ca33745 100644
---- a/utils/common/keymap.c
-+++ b/utils/common/keymap.c
-@@ -169,6 +169,11 @@ static error_t parse_plain_keymap(char *fname, struct keymap **keymap, bool verb
- 	}
- 	fclose(fin);
- 
-+	if (!map->protocol) {
-+		fprintf(stderr, _("Missing protocol in %s\n"), fname);
-+		return EINVAL;
-+	}
-+
- 	*keymap = map;
- 
- 	return 0;
--- 
-2.24.1
+gpg: Signature made Tue 21 Jan 2020 04:07:19 PM UTC
+gpg:                using DSA key F0D0377A0D4F25A79238EFE56D40361B6E28C193
+gpg:                issuer "sakari.ailus@linux.intel.com"
+gpg: Good signature from "Sakari Ailus <sakari.ailus@linux.intel.com>" [full]
+
+Summary: 2 patches and/or PDF generation with issues, being 0 at build time
+
+Error/warnings:
+
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0003-Revert-media-staging-intel-ipu3-make-imgu-use-fixed-.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0003-Revert-media-staging-intel-ipu3-make-imgu-use-fixed-.patch
+patches/0003-Revert-media-staging-intel-ipu3-make-imgu-use-fixed-.patch:112: WARNING: line over 80 characters
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0007-media-i2c-Add-driver-for-Sony-IMX219-sensor.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0007-media-i2c-Add-driver-for-Sony-IMX219-sensor.patch
+patches/0007-media-i2c-Add-driver-for-Sony-IMX219-sensor.patch:60: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
 
