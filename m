@@ -1,4 +1,4 @@
-Return-Path: <SRS0=cCoD=3L=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=DIJ2=3M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -6,31 +6,34 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 130CDC32771
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jan 2020 23:55:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5CD5C32771
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jan 2020 01:06:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E309E2465B
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jan 2020 23:55:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84B232253D
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jan 2020 01:06:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727453AbgAVXzu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Jan 2020 18:55:50 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:51826 "EHLO
+        id S1726164AbgAWBGs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Jan 2020 20:06:48 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:52908 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbgAVXzt (ORCPT
+        with ESMTP id S1725911AbgAWBGr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Jan 2020 18:55:49 -0500
+        Wed, 22 Jan 2020 20:06:47 -0500
 Received: from [82.43.126.140] (helo=localhost)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <colin.king@canonical.com>)
-        id 1iuPqe-0000oF-3M; Wed, 22 Jan 2020 23:55:48 +0000
+        id 1iuQxH-000063-QP; Thu, 23 Jan 2020 01:06:43 +0000
 From:   Colin King <colin.king@canonical.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
+To:     Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: rc: fix spelling mistake "to" -> "too"
-Date:   Wed, 22 Jan 2020 23:55:47 +0000
-Message-Id: <20200122235547.2830605-1-colin.king@canonical.com>
+Subject: [PATCH] media: allegro: fix spelling mistake "to" -> "too"
+Date:   Thu, 23 Jan 2020 01:06:43 +0000
+Message-Id: <20200123010643.2834801-1-colin.king@canonical.com>
 X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -42,26 +45,26 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Colin Ian King <colin.king@canonical.com>
 
-There is a spelling mistake in a dev_dbg message. Fix it.
+There is a spelling mistake in a v4l2_err message. Fix it.
 
 Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
- drivers/media/rc/ir-xmp-decoder.c | 2 +-
+ drivers/staging/media/allegro-dvt/allegro-core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/rc/ir-xmp-decoder.c b/drivers/media/rc/ir-xmp-decoder.c
-index 74a1d30fae6e..4c3d03876200 100644
---- a/drivers/media/rc/ir-xmp-decoder.c
-+++ b/drivers/media/rc/ir-xmp-decoder.c
-@@ -166,7 +166,7 @@ static int ir_xmp_decode(struct rc_dev *dev, struct ir_raw_event ev)
- 		} else if (geq_margin(ev.duration, XMP_NIBBLE_PREFIX, XMP_UNIT)) {
- 			/* store nibble raw data, decode after trailer */
- 			if (data->count == 16) {
--				dev_dbg(&dev->dev, "to many pulses (%d) ignoring: %u\n",
-+				dev_dbg(&dev->dev, "too many pulses (%d) ignoring: %u\n",
- 					data->count, ev.duration);
- 				data->state = STATE_INACTIVE;
- 				return -EINVAL;
+diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
+index 3be41698df4c..9908d851d4be 100644
+--- a/drivers/staging/media/allegro-dvt/allegro-core.c
++++ b/drivers/staging/media/allegro-dvt/allegro-core.c
+@@ -781,7 +781,7 @@ static int allegro_mbox_write(struct allegro_dev *dev,
+ 
+ 	if (size > mbox->size) {
+ 		v4l2_err(&dev->v4l2_dev,
+-			 "message (%zu bytes) to large for mailbox (%zu bytes)\n",
++			 "message (%zu bytes) too large for mailbox (%zu bytes)\n",
+ 			 size, mbox->size);
+ 		return -EINVAL;
+ 	}
 -- 
 2.24.0
 
