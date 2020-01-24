@@ -2,174 +2,120 @@ Return-Path: <SRS0=bEWJ=3N=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C425AC2D0CE
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jan 2020 04:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 181CEC2D0CE
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jan 2020 07:32:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3396A2072C
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jan 2020 04:59:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD36520709
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jan 2020 07:32:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="sINkqDnF"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XNlEkrtB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729425AbgAXE7S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Jan 2020 23:59:18 -0500
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:59991 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729253AbgAXE7S (ORCPT
+        id S1727430AbgAXHcx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Jan 2020 02:32:53 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45029 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725817AbgAXHcx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Jan 2020 23:59:18 -0500
-Received: from localhost ([IPv6:2001:983:e9a7:1:dded:8f92:97b:fe6e])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id ur3ri2MayT6sRur3sizoln; Fri, 24 Jan 2020 05:59:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1579841956; bh=LNIAz31Sl/BwOJ3Ixxkw0XNQf76h7UhW4onhqHNSzKk=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=sINkqDnFx5kJUR+I2NpYLlnmyr1WH/aFUfk3HKZHZ0qxdlLbUpCyGHY8eTa+3MA5x
-         ZYPCAvfVlcdW2k8PwxLitHWDZtgNqbYalft0+Jtajzvl0FX8FuI1JjGEk1maTmpA+d
-         Bo5Ox7VNP6kjaGRtdiynNETIC3Yyi6pi6JnSafTYh6dsIDwAUihdtjuk4XQLBGFNHz
-         JNn9pWgTtxaYK9LGQV+D8L2ZU+E8GMCbUrxsYZTQ2nRWSx/x3jm1X2G7lzJoBP9Thj
-         xljD1Uky6+s7yv+p3cvqwYI1MjegZECnHxLgmZHL3ZwrWHaQyGFkn9RfO34PJ9/Knm
-         3BBctJcxaZuPg==
-Message-ID: <967264ac4c8e71260ae233c530015a7c@smtp-cloud9.xs4all.net>
-Date:   Fri, 24 Jan 2020 05:59:15 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfJr1649DUFK0jpp1E9+DEjoWZxDiwsCG9yNSN5hckDlDbr+w9dlORJJAhRLWlmXt9mqFpZ2OZ5rnasdQMpu5X/WNbNtahcR5bScAXX77rouRJSDtyehs
- v3bVwN+FHot5CCh83qdMN4QybSPJAHfFphfsWZDMvUdQGhdW5GNPrvZuFKmQLNvMhROIiFPDEQ3xzYLPxUKCy2y0OFscMJRkd9UdQQiwH6VgOxphENvtaUii
+        Fri, 24 Jan 2020 02:32:53 -0500
+Received: by mail-pf1-f195.google.com with SMTP id 62so664302pfu.11
+        for <linux-media@vger.kernel.org>; Thu, 23 Jan 2020 23:32:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XMan5I+mKArqobbqFNZ+gUF18xHrDU9k/d4NqHI6zu4=;
+        b=XNlEkrtB5WyC+6KEfcv9h47Qsg6EErvwdpfmokrUteEgzL60mkvaZxTq6BbI6ETlBX
+         XdjnC0mX6AeVz20ETbOKynfAkVrQyiIFqpPZoCPcSunnwy6rizJ0b6eKupQONUPo1Rkr
+         9Yi3IZ+BzIJwT7Bb5XadFn5dcRZGLuSB5NixY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XMan5I+mKArqobbqFNZ+gUF18xHrDU9k/d4NqHI6zu4=;
+        b=iktzzjjRsE7gvWZebuuVtg8mffwOHTAVlaG0L8lEmsB0Cf3JetThNZaP9YvLJXIQNh
+         fFDtSd9eIw4Bgi8EYf6Q3+y7Txzpoa7jqngyKzS8KYECTP6bQX4lVcksbayp1jEwMudI
+         RHsZBqbo/iuvz6xMs0JeGdOOtjwu8pBjeA+eeBkCinyVn1Vvp+eyMUBrgkJbjawmXEEZ
+         h22xKCehbMhG34XYZNj3MHd7A8cAL05EOb1YTSJdvw7DDk+QItu7ew0ZsAAHOgL3ipb1
+         UdvfRiHsovVvKJadovg1tUO1NAY0lDyvhYewv277sySeuok3rgcV8FKscDc0Z19jxclH
+         fmhA==
+X-Gm-Message-State: APjAAAXkaZRG9SBSZcAHBDdMNi3yqUFV3915KEYIO6Dk8xbyHQ8S8Vao
+        TvPZAkhXzgJ4qR72cVngRFmySg==
+X-Google-Smtp-Source: APXvYqxiUqWwFe+UJfx8sjkXD/VqNusZI+TARTuJH/GXSLaBL6MI+VbKjEv23KOYn+XOWzCHtYk1Pw==
+X-Received: by 2002:a63:b64a:: with SMTP id v10mr2701819pgt.145.1579851172840;
+        Thu, 23 Jan 2020 23:32:52 -0800 (PST)
+Received: from localhost ([2401:fa00:8f:203:5bbb:c872:f2b1:f53b])
+        by smtp.gmail.com with ESMTPSA id p5sm5517224pga.69.2020.01.23.23.32.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2020 23:32:52 -0800 (PST)
+Date:   Fri, 24 Jan 2020 16:32:50 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pawel Osciak <posciak@chromium.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [RFC][PATCH 13/15] videobuf2: do not sync buffers for DMABUF
+ queues
+Message-ID: <20200124073250.GA100275@google.com>
+References: <20191217032034.54897-1-senozhatsky@chromium.org>
+ <20191217032034.54897-14-senozhatsky@chromium.org>
+ <2d0e1a9b-6c5e-ff70-9862-32c8b8aaf65f@xs4all.nl>
+ <20200122050515.GB49953@google.com>
+ <57f711a0-6183-74f6-ab24-ebe414cb6881@xs4all.nl>
+ <20200124022544.GD158382@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200124022544.GD158382@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+On (20/01/24 11:25), Sergey Senozhatsky wrote:
+[..]
+>
+> > Then, if q->allow_cache_hint is set, then default to a cache sync (cache clean)
+> > in the prepare for OUTPUT buffers and a cache sync (cache invalidate) in the
+> > finish for CAPTURE buffers.
+>
+> We alter default cache sync behaviour based both on queue ->memory
+> type and queue ->dma_dir. Shall both of those cases depend on
+> ->allow_cache_hints, or q->memory can be independent?
+>
+> static void set_buffer_cache_hints(struct vb2_queue *q,
+> 				   struct vb2_buffer *vb,
+> 				   struct v4l2_buffer *b)
+> {
+> 	if (!q->allow_cache_hints)
+> 		return;
+>
+> 	/*
+> 	 * DMA exporter should take care of cache syncs, so we can avoid
+> 	 * explicit ->prepare()/->finish() syncs. For other ->memory types
+> 	 * we always need ->prepare() or/and ->finish() cache sync.
+> 	 */
+> 	if (q->memory == VB2_MEMORY_DMABUF) {
+> 		vb->need_cache_sync_on_finish = 0;
+> 		vb->need_cache_sync_on_prepare = 0;
+> 		return;
+> 	}
 
-Results of the daily build of media_tree:
+I personally would prefer this to be above ->allow_cache_hints check,
+IOW to be independent. Because we need to skip flush/invalidation for
+DMABUF anyway, that's what allocators do in ->prepare() and ->finish()
+currently.
 
-date:			Fri Jan 24 05:00:13 CET 2020
-media-tree git hash:	1697d98124819aab09b86602978bd4f50e101e2d
-media_build git hash:	a79e3bf0b7383ff0aa87ebff715ea4101eea5581
-v4l-utils git hash:	e7402fb758fd106955c3b7d5a5e961d1cb606f4a
-edid-decode git hash:	a6b199e94e62bb43d5856426187ef62e3851f780
-gcc version:		i686-linux-gcc (GCC) 9.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.1-rc1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: eb9b2120da0c807b5a48cb872a43d111a2c3cf06
-host hardware:		x86_64
-host os:		5.2.0-3-amd64
-
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4.2-i686: OK
-linux-5.4.2-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 1
-sparse: OK
-smatch: OK
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Friday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Friday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Friday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Friday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+	-ss
