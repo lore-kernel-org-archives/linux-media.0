@@ -2,88 +2,95 @@ Return-Path: <SRS0=bEWJ=3N=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 259E4C2D0DB
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jan 2020 11:41:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A15EC2D0DB
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jan 2020 11:53:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D35EB20678
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jan 2020 11:41:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 201DA206D5
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jan 2020 11:53:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bzadvert.net header.i=@bzadvert.net header.b="I/wAI7By"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="AdULU56Q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389999AbgAXLlf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Jan 2020 06:41:35 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:34555 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390582AbgAXLSA (ORCPT
+        id S1731214AbgAXLxf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Jan 2020 06:53:35 -0500
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:49923 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730785AbgAXLxf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Jan 2020 06:18:00 -0500
-Received: by mail-oi1-f193.google.com with SMTP id l136so1515249oig.1
-        for <linux-media@vger.kernel.org>; Fri, 24 Jan 2020 03:17:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bzadvert.net; s=google;
-        h=message-id:date:from:mime-version:content-transfer-encoding:subject
-         :to:content-disposition;
-        bh=y70Qz32C9BSrb6DtDjyoA+gVpofcqks2VlkNOEChTg8=;
-        b=I/wAI7Byvlu/h+pzJa7IoLUcdkdneZZ00n3ywi7qrRB5irBM2P9DZbI+Fj9eUuxH12
-         4SLVImhI5q3OKDHxh9X7RtZMqwOMrZlQCmetkTMLHKegMacLmWM5n/qU++Pj+Rsa7+Kc
-         j1CNjI6el20pdPVSfwDcSxvpJnI2xMtN/vYiAqqFxpEOt48MCyDo5xeUTMYXZQ8k1m6V
-         usAEb9543xhmqwVpgMNftUnyTkRHhT++qJ//Q9aDazc4Nq/RDehbjvJI2L5dtZtyVC6S
-         tK90Zw2yU8Kw0ODkeDZ1c/j/A5wFfxUAGdzgIL7o3ARYjx6pHgM5z7IskpToO9HiXdxs
-         jmjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:mime-version
-         :content-transfer-encoding:subject:to:content-disposition;
-        bh=y70Qz32C9BSrb6DtDjyoA+gVpofcqks2VlkNOEChTg8=;
-        b=kj+rmuprdW9HDSxF4uH/awLu8KfxM75qmfiRL+d87HHit6IKdl7QHLq1Qce6GFUr3k
-         PAE5syFbwQ87mLRCe06lPihgkQFuYOtMqJVXwgH8DrPfbBWHmRVk/oYu4jp+eF9nu2QB
-         AATC9jP+l+43f3K4ojmJ8tbMxroQShr6Z+c6nqufxZQezV+MjyuPs0qbFKBLt7rNePvT
-         jAIJxylMiydlGY8pWXv+83JSCrP2oPs+ym3qouKFKFjyxG/vGBzOxMz3rC+/892GlS/W
-         tRlAtFXC5mvgc3BNm2EcUt6qP6yZvCuTUXNF5XDnDYtec2vXPOl+IO0N1hH3bEnXd59H
-         d48g==
-X-Gm-Message-State: APjAAAVY1HN6Mgs4tHYMXZ2B7yJ4HoVYOXOKFTslH4BTqEfgJ8SUUcpt
-        zcevEd88q+Mja/OLQrNbNhP+7HSzEi5r93ak
-X-Google-Smtp-Source: APXvYqzPddT4f/FMhR+Q8l7SWqAUHd30Kir+KGnO4C3eRvsaUtRAoXUJh9IvLeeywEg/aQSds/JGoA==
-X-Received: by 2002:aca:cc07:: with SMTP id c7mr1569225oig.165.1579864679220;
-        Fri, 24 Jan 2020 03:17:59 -0800 (PST)
-Received: from [127.0.0.1] ([2600:3c00::f03c:91ff:fe50:9fcb])
-        by smtp.gmail.com with ESMTPSA id 17sm1867305oty.48.2020.01.24.03.17.58
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 24 Jan 2020 03:17:58 -0800 (PST)
-Message-ID: <5e2ad266.1c69fb81.eb291.b4c1@mx.google.com>
-Date:   Fri, 24 Jan 2020 03:17:58 -0800 (PST)
-From:   george.anderson@bzadvert.net
-X-Google-Original-From: root@debian
-Content-Type: text/plain; charset="utf-8"
+        Fri, 24 Jan 2020 06:53:35 -0500
+Received: from [IPv6:2001:983:e9a7:1:dded:8f92:97b:fe6e]
+ ([IPv6:2001:983:e9a7:1:dded:8f92:97b:fe6e])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id uxWmivmF9rNgyuxWni4tfG; Fri, 24 Jan 2020 12:53:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1579866813; bh=CNI++yUw+DobxIwUMm3/J9+Jd0/RHOt9mRtcKye8z7Q=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=AdULU56Q3s5RonTkzOKq5DAztLlrv+AvlTLc3xK8RDkymv9dneIXRq/VjZD7eu3ba
+         +DOZj6820XSS0FbnXGUb4N1BG6cdo9ozHX00t4r105q2SnEV0LMJbReXn+ARIkfjzs
+         l9U4uJhXU6Df46EXscjrLuiVh7mwQ1QWeKKdO1ZpEZ4xIIIypdhQtVb3jyuvE/qpfV
+         RsWYfTWoVVfmyWT8H0HQU6NT9M8A0iQv4H7OyEZFaRCeZocjy0dSkjrPmZs/8M4YHR
+         uJYtcjFQ6pKx/BXTE0drfPsNE5lE8wmIosLdRWoKQV2oS+Fdez9+zsMVqOT9B9WfY+
+         DKx6vQOEXVo1w==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH for v5.6] pulse8-cec: INIT_DELAYED_WORK was called too late
+Message-ID: <7bec3c31-67e2-a565-70ff-bb45899b0b15@xs4all.nl>
+Date:   Fri, 24 Jan 2020 12:53:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Subject: Sponsorship inquiry to bootlin.com
-To:     linux-media@vger.kernel.org
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfIib+dGOY0/d0sr3q1pdJhVigO8uc4+nahCUrwvDsmmzfYVnDTOGcWbf3IbeQguaqnsC4kueFgAzCMogtd+aGCsadisbBhLPDHKZpMZi7IUtwlzISpgM
+ gOFSSr7Q1/IdUkj4nQQYB907FwRpY9qDVffFqEBBa8mPtl368AKWZyfYJ25pJIKIzrkRyzow3sq0j6x6BBlRAOA30zL3+bilMRiVIEtfLTlumsPRbFPB/VKE
+ kbMlWOQ84Cr/Vab4BPbfnKelLIXO6QG1Ji16FDgqaUo=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello!
-I=E2=80=99m=20an=20SEO=20manager=20at=20Bzadverts.com.=20Having=20visited=
-=20your=20website,=20I=20would=20like=20to=20say=20that=20it=20is=20very=20=
-informative=20and=20well-organized.=20
-Actually,=20I=E2=80=99m=20writing=20to=20ask=20about=20some=20advert=20oppo=
-rtunities=20you=20offer.
-I=E2=80=99m=20greatly=20interested=20in=20
-guest=20posts
-link=20insertion=20(in=20the=20existing=20article)
-homepage=20link=20placement
-banners
-Do=20you=20have=20a=20price-list=20for=20these=20kinds=20of=20advertising?=
-=20I=E2=80=99m=20interested=20in=20both=20permanent=20placement=20and=20mon=
-thly.
-If=20you=20have=20any=20other=20online=20platforms=20for=20advertising,=20I=
-=20will=20gladly=20consider=20them=20too.
-Hope=20to=20hear=20from=20you=20soon!
+If earlier in the connect() an error occurred, then pulse8_cec_adap_free
+was called by cec_delete_adapter, and that free function tried to
+cancel the ping_eeprom_work workqueue, but that workqueue hasn't
+been initialized yet, resulting in a kernel warning.
+
+Move the initialization of that workqueue up to where the other
+workqueues are initialized.
+
+Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
+Fixes: 601282d65b96 ("media: pulse8-cec: use adap_free callback")
+---
+ drivers/media/usb/pulse8-cec/pulse8-cec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/usb/pulse8-cec/pulse8-cec.c b/drivers/media/usb/pulse8-cec/pulse8-cec.c
+index afda438d4e0a..8d61bcec14bb 100644
+--- a/drivers/media/usb/pulse8-cec/pulse8-cec.c
++++ b/drivers/media/usb/pulse8-cec/pulse8-cec.c
+@@ -840,6 +840,8 @@ static int pulse8_connect(struct serio *serio, struct serio_driver *drv)
+ 	serio_set_drvdata(serio, pulse8);
+ 	INIT_WORK(&pulse8->irq_work, pulse8_irq_work_handler);
+ 	INIT_WORK(&pulse8->tx_work, pulse8_tx_work_handler);
++	INIT_DELAYED_WORK(&pulse8->ping_eeprom_work,
++			  pulse8_ping_eeprom_work_handler);
+ 	mutex_init(&pulse8->lock);
+ 	spin_lock_init(&pulse8->msg_lock);
+ 	pulse8->config_pending = false;
+@@ -865,8 +867,6 @@ static int pulse8_connect(struct serio *serio, struct serio_driver *drv)
+ 		pulse8->restoring_config = true;
+ 	}
+
+-	INIT_DELAYED_WORK(&pulse8->ping_eeprom_work,
+-			  pulse8_ping_eeprom_work_handler);
+ 	schedule_delayed_work(&pulse8->ping_eeprom_work, PING_PERIOD);
+
+ 	return 0;
+-- 
+2.23.0
+
