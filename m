@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 196A8C2D0DB
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25220C2D0DB
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DA8CF214AF
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC77A2467E
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580223082;
-	bh=PcE8BBpEouu6QcFp0wL9wrsi5teS0iVNnlOia6qoxTg=;
+	s=default; t=1580223085;
+	bh=aRB+F8aPuOXIKhGA4PgLcxC037sTgrQxSls+FlqjkKY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uSO6Me9l/z8mFAidVmeEw/Opm3jAEDeRIYyalrMxwKlY7tnVxNz1NrhzIV/1Nyllc
-	 dWI50clLN7sDb/1//wXAdfqq7o0sXGsxJHbB6d7muyCv8WCK94byjxahnrG8e6QFPN
-	 4V/4ljY4UaQAfKfra4eoIjs7KoGxh1gz+uMzKMpI=
+	b=nHaS7Em/20RWXD1cP+WW2jedhyQ3dDslASWY3obajiQlXVFZN/YHbsGWiLoMvVU9N
+	 goHdhCNlsYt9AiA2JMgOet+9c9xaWZ5hUM/OpNVbYfZpEFofSMYTI0vk5FPmiiwqhN
+	 RQmjvPBffNq2K+cDPazhgHxMLB6GwCpvzxQxYx6Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727518AbgA1OvV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:51:21 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58536 "EHLO
+        id S1727516AbgA1OvT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:51:19 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:58540 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726583AbgA1N6p (ORCPT
+        with ESMTP id S1726590AbgA1N6p (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 08:58:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,29 +33,31 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=qSQNK5Ivf59NAVe6e3CbDIPuMhg/3mhXwdp9SJF3SBc=; b=UAp4z2OGa2j0tTakFsoHY0IkYV
-        mdzavhq23GBpGSJ3VX2I8KnPm1PMNWcYJPnU45iPJU/NOZtBrqeq1ktD6tb6cWQmRMyV0fkEmabMr
-        3NDJKvtWR6/H1LbRI05kAQWd3DCRedR0m8ukRRK+XupgnbdXNmhz/fprYx075ArJLc6SB42n0OcsZ
-        Da0ne+DDfsiZe1oYCI4PM48+ya6JAYx+USyQeixxJQEvvcws4j4dQ6zVM5izobdh/+MWLfx5PcoT+
-        z6vX+ykzCQ6pmPHV6gvIyQQUVwojlvn/DfZ5iwY1iOwPa+4ikFYrhtZT7XYk4ffIHGFFLDWFcg0QD
-        iuViXTpw==;
+        bh=Gpnnwuexn6E79rDCRXA/tGQCjM2huV9ksFH2E/NUq90=; b=OMQWASgwllqCy80wkoSzdTfT+P
+        6SNkLZIXkNlr68YaVfUrjdxaTYV+71eUe3Pr2NqWkaZKRMHVDK+OMTjOkO14N6yqjtKn3hvWRlomZ
+        IfHEhMIsbMpOrR8Pb+SfETBQtgU4o7EKUc2xhggzfXMaG3a2QIH1/ly5fVZ5qvhUXStFGIftCK4tN
+        zjsDei2QUBJGCakHGyW7CoxeOcYJqAG+bTJW14cAc4XhvTGZcjfC6ePE7qDsOhHoWaGmzMxZ5LoDx
+        BEfnfGq/QvvfBqssGQkkKmXe4u/laMDZVkpuXl+VPOnHL7QAWlK6+NbblaH0F/hOXe9YRxE19Ophz
+        INdGSX2A==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRO8-0006I7-CR; Tue, 28 Jan 2020 13:58:45 +0000
+        id 1iwRO6-0006Hz-ON; Tue, 28 Jan 2020 13:58:43 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRNq-001BKZ-RL; Tue, 28 Jan 2020 14:58:26 +0100
+        id 1iwRNq-001BJN-5t; Tue, 28 Jan 2020 14:58:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-um@lists.infradead.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 21/27] docs: kvm: Convert locking.txt to ReST format
-Date:   Tue, 28 Jan 2020 14:58:17 +0100
+Subject: [PATCH 03/27] docs: virt: user_mode_linux.rst: update compiling instructions
+Date:   Tue, 28 Jan 2020 14:57:59 +0100
 Message-Id:
- <31d840edcc924b6b4d6f3f6b3f130623c2a4d91c.1580219586.git.mchehab+huawei@kernel.org>
+ <ea87ca5eef3b32e8caa2057d34909bb5aebf1cb4.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,231 +67,127 @@ Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Message-ID: <20200128135817.6Esg2o6p65oRfvvnFMQAvTowRrszxY5NsljBHlDd1rc@z>
+Message-ID: <20200128135759.gaMPVI6gefp57B0xirNqhIU8LsXp9LVUCu7ps_Bw3aQ@z>
 
-- Use document title and chapter markups;
-- Add markups for literal blocks;
-- use :field: for field descriptions;
-- Add blank lines and adjust indentation.
+Instead of pointing for a pre-2.4 and a seaparate patch,
+update it to match current upstream, as UML was merged
+a long time ago.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/index.rst              |   1 +
- .../virt/kvm/{locking.txt => locking.rst}     | 109 ++++++++++--------
- 2 files changed, 61 insertions(+), 49 deletions(-)
- rename Documentation/virt/kvm/{locking.txt => locking.rst} (79%)
+ Documentation/virt/uml/user_mode_linux.rst | 62 ++++------------------
+ 1 file changed, 9 insertions(+), 53 deletions(-)
 
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index ac83bc588f7e..9be8f53b729d 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -12,6 +12,7 @@ KVM
-    cpuid
-    halt-polling
-    hypercalls
-+   locking
-    msr
-    vcpu-requests
+diff --git a/Documentation/virt/uml/user_mode_linux.rst b/Documentation/virt/uml/user_mode_linux.rst
+index 98922008be23..a96d29243964 100644
+--- a/Documentation/virt/uml/user_mode_linux.rst
++++ b/Documentation/virt/uml/user_mode_linux.rst
+@@ -3,7 +3,7 @@ User Mode Linux HOWTO
+ =====================
  
-diff --git a/Documentation/virt/kvm/locking.txt b/Documentation/virt/kvm/locking.rst
-similarity index 79%
-rename from Documentation/virt/kvm/locking.txt
-rename to Documentation/virt/kvm/locking.rst
-index 635cd6eaf714..065706a9155e 100644
---- a/Documentation/virt/kvm/locking.txt
-+++ b/Documentation/virt/kvm/locking.rst
-@@ -1,3 +1,4 @@
-+=================
- KVM Lock Overview
- =================
+ :Author:  User Mode Linux Core Team
+-:Last-updated: Mon Nov 18 14:16:16 EST 2002
++:Last-updated: Sat Jan 25 16:07:55 CET 2020
  
-@@ -18,7 +19,7 @@ On x86, vcpu->mutex is taken outside kvm->arch.hyperv.hv_lock.
- Everything else is a leaf: no other lock is taken inside the critical
- sections.
+ This document describes the use and abuse of Jeff Dike's User Mode
+ Linux: a port of the Linux kernel as a normal Intel Linux process.
+@@ -221,23 +221,15 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
  
--2: Exception
-+2. Exception
- ------------
  
- Fast page fault:
-@@ -28,15 +29,16 @@ the mmu-lock on x86. Currently, the page fault can be fast in one of the
- following two cases:
+   Compiling the user mode kernel is just like compiling any other
+-  kernel.  Let's go through the steps, using 2.4.0-prerelease (current
+-  as of this writing) as an example:
++  kernel.
  
- 1. Access Tracking: The SPTE is not present, but it is marked for access
--tracking i.e. the SPTE_SPECIAL_MASK is set. That means we need to
--restore the saved R/X bits. This is described in more detail later below.
-+   tracking i.e. the SPTE_SPECIAL_MASK is set. That means we need to
-+   restore the saved R/X bits. This is described in more detail later below.
  
- 2. Write-Protection: The SPTE is present and the fault is
--caused by write-protect. That means we just need to change the W bit of the 
--spte.
-+   caused by write-protect. That means we just need to change the W bit of
-+   the spte.
+-  1. Download the latest UML patch from
+-     the download page <http://user-mode-linux.sourceforge.net/
+-
+-     In this example, the file is uml-patch-2.4.0-prerelease.bz2.
+-
+-
+-  2. Download the matching kernel from your favourite kernel mirror,
++  1. Download the latest kernel from your favourite kernel mirror,
+      such as:
  
- What we use to avoid all the race is the SPTE_HOST_WRITEABLE bit and
- SPTE_MMU_WRITEABLE bit on the spte:
-+
- - SPTE_HOST_WRITEABLE means the gfn is writable on host.
- - SPTE_MMU_WRITEABLE means the gfn is writable on mmu. The bit is set when
-   the gfn is writable on guest mmu and it is not write-protected by shadow
-@@ -48,19 +50,23 @@ restore the saved R/X bits if VMX_EPT_TRACK_ACCESS mask is set, or both. This
- is safe because whenever changing these bits can be detected by cmpxchg.
+-     ftp://ftp.ca.kernel.org/pub/kernel/v2.4/linux-2.4.0-prerelease.tar.bz2
++     https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.4.14.tar.xz
  
- But we need carefully check these cases:
--1): The mapping from gfn to pfn
-+
-+1) The mapping from gfn to pfn
-+
- The mapping from gfn to pfn may be changed since we can only ensure the pfn
- is not changed during cmpxchg. This is a ABA problem, for example, below case
- will happen:
+-
+-  3. Make a directory and unpack the kernel into it::
++  2. Make a directory and unpack the kernel into it::
  
--At the beginning:
--gpte = gfn1
--gfn1 is mapped to pfn1 on host
--spte is the shadow page table entry corresponding with gpte and
--spte = pfn1
-+At the beginning::
+        host%
+        mkdir ~/uml
+@@ -246,21 +238,10 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
+        cd ~/uml
  
--   VCPU 0                           VCPU0
--on fast page fault path:
-+	gpte = gfn1
-+	gfn1 is mapped to pfn1 on host
-+	spte is the shadow page table entry corresponding with gpte and
-+	spte = pfn1
-+
-+	   VCPU 0                           VCPU0
-+
-+on fast page fault path::
+        host%
+-       tar -xzvf linux-2.4.0-prerelease.tar.bz2
++       tar xvf linux-5.4.14.tar.xz
  
-    old_spte = *spte;
-                                  pfn1 is swapped out:
-@@ -81,6 +87,7 @@ We dirty-log for gfn1, that means gfn2 is lost in dirty-bitmap.
- For direct sp, we can easily avoid it since the spte of direct sp is fixed
- to gfn. For indirect sp, before we do cmpxchg, we call gfn_to_pfn_atomic()
- to pin gfn to pfn, because after gfn_to_pfn_atomic():
-+
- - We have held the refcount of pfn that means the pfn can not be freed and
-   be reused for another gfn.
- - The pfn is writable that means it can not be shared between different gfns
-@@ -91,7 +98,8 @@ Then, we can ensure the dirty bitmaps is correctly set for a gfn.
- Currently, to simplify the whole things, we disable fast page fault for
- indirect shadow page.
  
--2): Dirty bit tracking
-+2) Dirty bit tracking
-+
- In the origin code, the spte can be fast updated (non-atomically) if the
- spte is read-only and the Accessed bit has already been set since the
- Accessed bit and Dirty bit can not be lost.
-@@ -99,12 +107,14 @@ Accessed bit and Dirty bit can not be lost.
- But it is not true after fast page fault since the spte can be marked
- writable between reading spte and updating spte. Like below case:
+-
+-  4. Apply the patch using::
+-
+-       host%
+-       cd ~/uml/linux
+-
+-       host%
+-       bzcat uml-patch-2.4.0-prerelease.bz2 | patch -p1
+-
+-
+-
+-  5. Run your favorite config; ``make xconfig ARCH=um`` is the most
++  3. Run your favorite config; ``make xconfig ARCH=um`` is the most
+      convenient.  ``make config ARCH=um`` and ``make menuconfig ARCH=um``
+      will work as well.  The defaults will give you a useful kernel.  If
+      you want to change something, go ahead, it probably won't hurt
+@@ -274,34 +255,9 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
  
--At the beginning:
--spte.W = 0
--spte.Accessed = 1
-+At the beginning::
  
--   VCPU 0                                       VCPU0
--In mmu_spte_clear_track_bits():
-+	spte.W = 0
-+	spte.Accessed = 1
-+
-+	   VCPU 0                                       VCPU0
-+
-+In mmu_spte_clear_track_bits()::
  
-    old_spte = *spte;
+-  6. Finish with ``make linux ARCH=um``: the result is a file called
++  4. Finish with ``make linux ARCH=um``: the result is a file called
+      ``linux`` in the top directory of your source tree.
  
-@@ -134,7 +144,8 @@ In order to avoid this kind of issue, we always treat the spte as "volatile"
- if it can be updated out of mmu-lock, see spte_has_volatile_bits(), it means,
- the spte is always atomically updated in this case.
+-  Make sure that you don't build this kernel in /usr/src/linux.  On some
+-  distributions, /usr/include/asm is a link into this pool.  The user-
+-  mode build changes the other end of that link, and things that include
+-  <asm/anything.h> stop compiling.
+-
+-  The sources are also available from cvs at the project's cvs page,
+-  which has directions on getting the sources. You can also browse the
+-  CVS pool from there.
+-
+-  If you get the CVS sources, you will have to check them out into an
+-  empty directory. You will then have to copy each file into the
+-  corresponding directory in the appropriate kernel pool.
+-
+-  If you don't have the latest kernel pool, you can get the
+-  corresponding user-mode sources with::
+-
+-
+-       host% cvs co -r v_2_3_x linux
+-
+-
+-
+-
+-  where 'x' is the version in your pool. Note that you will not get the
+-  bug fixes and enhancements that have gone into subsequent releases.
+-
  
--3): flush tlbs due to spte updated
-+3) flush tlbs due to spte updated
-+
- If the spte is updated from writable to readonly, we should flush all TLBs,
- otherwise rmap_write_protect will find a read-only spte, even though the
- writable spte might be cached on a CPU's TLB.
-@@ -166,47 +177,47 @@ which time it will be set using the Dirty tracking mechanism described above.
- 3. Reference
- ------------
+ 2.2.  Compiling and installing kernel modules
+ ---------------------------------------------
+@@ -414,7 +370,7 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
+ 3.1.  Running UML
+ -----------------
  
--Name:		kvm_lock
--Type:		mutex
--Arch:		any
--Protects:	- vm_list
-+:Name:		kvm_lock
-+:Type:		mutex
-+:Arch:		any
-+:Protects:	- vm_list
+-  It runs on 2.2.15 or later, and all 2.4 kernels.
++  It runs on 2.2.15 or later, and all kernel versions since 2.4.
  
--Name:		kvm_count_lock
--Type:		raw_spinlock_t
--Arch:		any
--Protects:	- hardware virtualization enable/disable
--Comment:	'raw' because hardware enabling/disabling must be atomic /wrt
-+:Name:		kvm_count_lock
-+:Type:		raw_spinlock_t
-+:Arch:		any
-+:Protects:	- hardware virtualization enable/disable
-+:Comment:	'raw' because hardware enabling/disabling must be atomic /wrt
- 		migration.
  
--Name:		kvm_arch::tsc_write_lock
--Type:		raw_spinlock
--Arch:		x86
--Protects:	- kvm_arch::{last_tsc_write,last_tsc_nsec,last_tsc_offset}
-+:Name:		kvm_arch::tsc_write_lock
-+:Type:		raw_spinlock
-+:Arch:		x86
-+:Protects:	- kvm_arch::{last_tsc_write,last_tsc_nsec,last_tsc_offset}
- 		- tsc offset in vmcb
--Comment:	'raw' because updating the tsc offsets must not be preempted.
-+:Comment:	'raw' because updating the tsc offsets must not be preempted.
- 
--Name:		kvm->mmu_lock
--Type:		spinlock_t
--Arch:		any
--Protects:	-shadow page/shadow tlb entry
--Comment:	it is a spinlock since it is used in mmu notifier.
-+:Name:		kvm->mmu_lock
-+:Type:		spinlock_t
-+:Arch:		any
-+:Protects:	-shadow page/shadow tlb entry
-+:Comment:	it is a spinlock since it is used in mmu notifier.
- 
--Name:		kvm->srcu
--Type:		srcu lock
--Arch:		any
--Protects:	- kvm->memslots
-+:Name:		kvm->srcu
-+:Type:		srcu lock
-+:Arch:		any
-+:Protects:	- kvm->memslots
- 		- kvm->buses
--Comment:	The srcu read lock must be held while accessing memslots (e.g.
-+:Comment:	The srcu read lock must be held while accessing memslots (e.g.
- 		when using gfn_to_* functions) and while accessing in-kernel
- 		MMIO/PIO address->device structure mapping (kvm->buses).
- 		The srcu index can be stored in kvm_vcpu->srcu_idx per vcpu
- 		if it is needed by multiple functions.
- 
--Name:		blocked_vcpu_on_cpu_lock
--Type:		spinlock_t
--Arch:		x86
--Protects:	blocked_vcpu_on_cpu
--Comment:	This is a per-CPU lock and it is used for VT-d posted-interrupts.
-+:Name:		blocked_vcpu_on_cpu_lock
-+:Type:		spinlock_t
-+:Arch:		x86
-+:Protects:	blocked_vcpu_on_cpu
-+:Comment:	This is a per-CPU lock and it is used for VT-d posted-interrupts.
- 		When VT-d posted-interrupts is supported and the VM has assigned
- 		devices, we put the blocked vCPU on the list blocked_vcpu_on_cpu
- 		protected by blocked_vcpu_on_cpu_lock, when VT-d hardware issues
+   Booting UML is straightforward.  Simply run 'linux': it will try to
 -- 
 2.24.1
 
