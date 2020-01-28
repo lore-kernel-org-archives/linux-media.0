@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F1CFC2D0DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFC0EC35240
 	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:01:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2727324683
+	by mail.kernel.org (Postfix) with ESMTP id B69BE24690
 	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:01:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1580220079;
-	bh=QMjmcSh5y1m0k4nqwk+54CZiksCu9gEv/xL2K68cAOc=;
+	bh=a6mkRzjWhCmIHE9IUbkl8qYiPklT0cEDtjZ7TXoFbrE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ZgfYj+7JqfO78BpyVnplaJ5P1ka9cvXxy1ofD4UDa9PvA7kZzC799SNdCeyKH9uKE
-	 ih/6QaUhjMiC2ZyZ0O9eFDkO1hR3ZWoTfIJXtmfM2FOEt0FUr7JLyRN76CJp6oV103
-	 ld/zjM7tmuFRkK6bsklrhIv+MAOK2WJpMBKJzuek=
+	b=L4P2ZoKUXn5qy7EnuSHlkIdRRGI9tB3q2ZtbwOeReJ0UMALcuVNiFkTj4aONJWgKf
+	 rpNKsMuLdCWZ8wk+3fg9on98vwiCgmjWGq56MNR4Mhkhfz6OXavmkqqqUo1M2RS6i9
+	 abR6dGItAE4JzN8CPyITmbrMQo0iDnKD+ced9gHU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727297AbgA1OBP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727395AbgA1OBP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 28 Jan 2020 09:01:15 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59282 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:59306 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727290AbgA1OAq (ORCPT
+        with ESMTP id S1727297AbgA1OAq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 09:00:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=MfbPPBfVOsZ1ekqbduEWSsRYBXTtAjqiqdXfPqQdPuI=; b=aBQ9Hrv/71Hg26WLtVc5E2auPr
-        2GVZK3Jem/WMCd+XFWJdaVxcFuZNej7dVqKOpzjW3z3176P3ZBWtwNXnirpuqn+I+nASxQKziHiPX
-        drN3T03CZq7FsHD1IHKK3SsYjqr/WINVz6gHeK6DD6XwEY0PLg2l6cka31NEASl2Kmrq0bHctPHZQ
-        /lNpx8z2c6ZFRzStR+dv/iUkEtbGYGTHf7Ri4ASls5f55llAKrHsml082OHDjjHDtaToYjfgdyCb9
-        3azeYHt82sOALev1WwPGxWYWC3/IlkzukhQS2E9drF256+r/TU23DcUEy1feot3iAVFJMy3oy7rNF
-        Kojul6SA==;
+        bh=/9G2blGVWjqgR965RRc1wFm/0hKu3kd3si70pvH2CPo=; b=h3dKn3NPPEjfnXRXe/6ajZsD0D
+        91dZ0ibztBRd911ztaZtHOy6t76huzWm4uuaNsfVaQ0LtoxEDCFo3aWVH91Qvyo8HvUZDGST13iNC
+        OgzIpUXrWvOlWISQdQIlYcQcJfdtRXW4/fCcFC45eR4peyJSpweBCsKWjgcFDZaIgKp+qGquYytzr
+        4WvNtNHzg4jgyj5eOrMTAROoE0VW9x4QTzSfUg6t4NzwF1gTRw7/xaHCDyVgZqAJl1PMc7Eo7iKVU
+        xU2j5TIMiz3PvKTkdMtzs9MZP5QPEMUgJ7NLW0m4x2Gty6vgOFuCQWsuBBBs/tTWY5CsCi/P/YRnm
+        kCqVv44Q==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRQ5-0007ir-V2; Tue, 28 Jan 2020 14:00:45 +0000
+        id 1iwRQ6-0007io-09; Tue, 28 Jan 2020 14:00:46 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRPp-001BOE-Kd; Tue, 28 Jan 2020 15:00:29 +0100
+        id 1iwRPp-001BNa-BR; Tue, 28 Jan 2020 15:00:29 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 13/27] docs: kvm: convert devices/vcpu.txt to ReST
-Date:   Tue, 28 Jan 2020 15:00:14 +0100
-Message-Id: <b53d6dcb4e2e8f705750379b339bd534770cfd7d.1580219586.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 05/27] docs: virt: convert halt-polling.txt to ReST format
+Date:   Tue, 28 Jan 2020 15:00:06 +0100
+Message-Id: <b33f744ca5cdba1c0e3898c9c1aa50a2075b40f5.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,70 +65,144 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Use standard title markup;
-- adjust lists;
-- mark code blocks as such.
+- Fix document title to match ReST format
+- Convert the table to be properly recognized
+- Some indentation fixes to match ReST syntax.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/devices/index.rst      |  1 +
- .../virt/kvm/devices/{vfio.txt => vfio.rst}   | 23 +++++++++++--------
- 2 files changed, 14 insertions(+), 10 deletions(-)
- rename Documentation/virt/kvm/devices/{vfio.txt => vfio.rst} (74%)
+ .../{halt-polling.txt => halt-polling.rst}    | 84 ++++++++++---------
+ Documentation/virt/kvm/index.rst              |  1 +
+ 2 files changed, 44 insertions(+), 41 deletions(-)
+ rename Documentation/virt/kvm/{halt-polling.txt => halt-polling.rst} (64%)
 
-diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
-index 5a61838f0e61..cbbadda080d0 100644
---- a/Documentation/virt/kvm/devices/index.rst
-+++ b/Documentation/virt/kvm/devices/index.rst
-@@ -13,3 +13,4 @@ Devices
-    mpic
-    s390_flic
-    vcpu
-+   vfio
-diff --git a/Documentation/virt/kvm/devices/vfio.txt b/Documentation/virt/kvm/devices/vfio.rst
-similarity index 74%
-rename from Documentation/virt/kvm/devices/vfio.txt
-rename to Documentation/virt/kvm/devices/vfio.rst
-index 528c77c8022c..07a1acde25e4 100644
---- a/Documentation/virt/kvm/devices/vfio.txt
-+++ b/Documentation/virt/kvm/devices/vfio.rst
-@@ -1,8 +1,10 @@
-+===================
- VFIO virtual device
- ===================
+diff --git a/Documentation/virt/kvm/halt-polling.txt b/Documentation/virt/kvm/halt-polling.rst
+similarity index 64%
+rename from Documentation/virt/kvm/halt-polling.txt
+rename to Documentation/virt/kvm/halt-polling.rst
+index 4f791b128dd2..d8f7516bd8d9 100644
+--- a/Documentation/virt/kvm/halt-polling.txt
++++ b/Documentation/virt/kvm/halt-polling.rst
+@@ -1,3 +1,4 @@
++===========================
+ The KVM halt polling system
+ ===========================
  
- Device types supported:
--  KVM_DEV_TYPE_VFIO
-+
-+  - KVM_DEV_TYPE_VFIO
+@@ -68,7 +69,8 @@ steady state polling interval but will only really do a good job for wakeups
+ which come at an approximately constant rate, otherwise there will be constant
+ adjustment of the polling interval.
  
- Only one VFIO instance may be created per VM.  The created device
- tracks VFIO groups in use by the VM and features of those groups
-@@ -23,14 +25,15 @@ KVM_DEV_VFIO_GROUP attributes:
- 	for the VFIO group.
-   KVM_DEV_VFIO_GROUP_SET_SPAPR_TCE: attaches a guest visible TCE table
- 	allocated by sPAPR KVM.
--	kvm_device_attr.addr points to a struct:
-+	kvm_device_attr.addr points to a struct::
+-[0] total block time: the time between when the halt polling function is
++[0] total block time:
++		      the time between when the halt polling function is
+ 		      invoked and a wakeup source received (irrespective of
+ 		      whether the scheduler is invoked within that function).
  
--	struct kvm_vfio_spapr_tce {
--		__s32	groupfd;
--		__s32	tablefd;
--	};
-+		struct kvm_vfio_spapr_tce {
-+			__s32	groupfd;
-+			__s32	tablefd;
-+		};
+@@ -81,31 +83,32 @@ shrunk. These variables are defined in include/linux/kvm_host.h and as module
+ parameters in virt/kvm/kvm_main.c, or arch/powerpc/kvm/book3s_hv.c in the
+ powerpc kvm-hv case.
  
--	where
--	@groupfd is a file descriptor for a VFIO group;
--	@tablefd is a file descriptor for a TCE table allocated via
--		KVM_CREATE_SPAPR_TCE.
-+	where:
-+
-+	- @groupfd is a file descriptor for a VFIO group;
-+	- @tablefd is a file descriptor for a TCE table allocated via
-+	  KVM_CREATE_SPAPR_TCE.
+-Module Parameter	|   Description		    |	     Default Value
+---------------------------------------------------------------------------------
+-halt_poll_ns		| The global max polling    | KVM_HALT_POLL_NS_DEFAULT
+-			| interval which defines    |
+-			| the ceiling value of the  |
+-			| polling interval for      | (per arch value)
+-			| each vcpu.		    |
+---------------------------------------------------------------------------------
+-halt_poll_ns_grow	| The value by which the    | 2
+-			| halt polling interval is  |
+-			| multiplied in the	    |
+-			| grow_halt_poll_ns()	    |
+-			| function.		    |
+---------------------------------------------------------------------------------
+-halt_poll_ns_grow_start | The initial value to grow | 10000
+-			| to from zero in the	    |
+-			| grow_halt_poll_ns()	    |
+-			| function.		    |
+---------------------------------------------------------------------------------
+-halt_poll_ns_shrink	| The value by which the    | 0
+-			| halt polling interval is  |
+-			| divided in the	    |
+-			| shrink_halt_poll_ns()	    |
+-			| function.		    |
+---------------------------------------------------------------------------------
+++-----------------------+---------------------------+-------------------------+
++|Module Parameter	|   Description		    |	     Default Value    |
+++-----------------------+---------------------------+-------------------------+
++|halt_poll_ns		| The global max polling    | KVM_HALT_POLL_NS_DEFAULT|
++|			| interval which defines    |			      |
++|			| the ceiling value of the  |			      |
++|			| polling interval for      | (per arch value)	      |
++|			| each vcpu.		    |			      |
+++-----------------------+---------------------------+-------------------------+
++|halt_poll_ns_grow	| The value by which the    | 2			      |
++|			| halt polling interval is  |			      |
++|			| multiplied in the	    |			      |
++|			| grow_halt_poll_ns()	    |			      |
++|			| function.		    |			      |
+++-----------------------+---------------------------+-------------------------+
++|halt_poll_ns_grow_start| The initial value to grow | 10000		      |
++|			| to from zero in the	    |			      |
++|			| grow_halt_poll_ns()	    |			      |
++|			| function.		    |			      |
+++-----------------------+---------------------------+-------------------------+
++|halt_poll_ns_shrink	| The value by which the    | 0			      |
++|			| halt polling interval is  |			      |
++|			| divided in the	    |			      |
++|			| shrink_halt_poll_ns()	    |			      |
++|			| function.		    |			      |
+++-----------------------+---------------------------+-------------------------+
+ 
+ These module parameters can be set from the debugfs files in:
+ 
+@@ -117,20 +120,19 @@ Note: that these module parameters are system wide values and are not able to
+ Further Notes
+ =============
+ 
+-- Care should be taken when setting the halt_poll_ns module parameter as a
+-large value has the potential to drive the cpu usage to 100% on a machine which
+-would be almost entirely idle otherwise. This is because even if a guest has
+-wakeups during which very little work is done and which are quite far apart, if
+-the period is shorter than the global max polling interval (halt_poll_ns) then
+-the host will always poll for the entire block time and thus cpu utilisation
+-will go to 100%.
++- Care should be taken when setting the halt_poll_ns module parameter as a large value
++  has the potential to drive the cpu usage to 100% on a machine which would be almost
++  entirely idle otherwise. This is because even if a guest has wakeups during which very
++  little work is done and which are quite far apart, if the period is shorter than the
++  global max polling interval (halt_poll_ns) then the host will always poll for the
++  entire block time and thus cpu utilisation will go to 100%.
+ 
+-- Halt polling essentially presents a trade off between power usage and latency
+-and the module parameters should be used to tune the affinity for this. Idle
+-cpu time is essentially converted to host kernel time with the aim of decreasing
+-latency when entering the guest.
++- Halt polling essentially presents a trade off between power usage and latency and
++  the module parameters should be used to tune the affinity for this. Idle cpu time is
++  essentially converted to host kernel time with the aim of decreasing latency when
++  entering the guest.
+ 
+-- Halt polling will only be conducted by the host when no other tasks are
+-runnable on that cpu, otherwise the polling will cease immediately and
+-schedule will be invoked to allow that other task to run. Thus this doesn't
+-allow a guest to denial of service the cpu.
++- Halt polling will only be conducted by the host when no other tasks are runnable on
++  that cpu, otherwise the polling will cease immediately and schedule will be invoked to
++  allow that other task to run. Thus this doesn't allow a guest to denial of service the
++  cpu.
+diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
+index 488c6370a447..b39f4894b61d 100644
+--- a/Documentation/virt/kvm/index.rst
++++ b/Documentation/virt/kvm/index.rst
+@@ -9,6 +9,7 @@ KVM
+ 
+    amd-memory-encryption
+    cpuid
++   halt-polling
+    vcpu-requests
+ 
+    arm/index
 -- 
 2.24.1
 
