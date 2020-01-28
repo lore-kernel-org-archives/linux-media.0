@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A84CC35240
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C248EC33CB3
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 41C7120716
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99E9D207FD
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580222996;
-	bh=RQJBSrCBQoRjRPzNpPiEOUwoi4zmhWHM5Ddo22O4ojU=;
+	s=default; t=1580222998;
+	bh=NoI27l/cCtHM2oMOjtSzMqwiz1a5EKr0KHNB3L2+DUE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=q4yYjE/E610j41sqgWbHG0fT/dqg8a/DNTmiIsPWkIrhGM16jEX4L4JF8HDpApxP+
-	 a1U+bQZCWKf4UWfLDgThzEopMtIxZghnPGHdW0LchwWafQvBDqV/GZGvIww/pGG/n2
-	 RO5vzBuj5fgSh5sFV7CtGy1ufJDkN7CRtBmkn2v8=
+	b=p2dAzTn3q79/1OePO6UelyIOu6w4GDwq+8reP+/6/CbWZ387+2Hi8yziDgN8d1Hqb
+	 yWsasfGKtQWPFSKdBn119H+pGQbwEEHlrC9tOfBV/gfiH5XusyVAmFFmopa9KTBoTS
+	 dP77keefnArP+baJH6zOnjmhy03ESKwIZVqDDEwU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727399AbgA1Otx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:49:53 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59266 "EHLO
+        id S1727067AbgA1Otv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:49:51 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:59288 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726401AbgA1OAq (ORCPT
+        with ESMTP id S1727285AbgA1OAq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 09:00:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/hfBTm+pwI/qMUzI6610HUXH01FV0FRb49kTIzGz0Ww=; b=E/bWrY8g75zMz0ST+qe+W7HFkj
-        wDMeKMTZMTAyuysD4oyzDqiPBfq5PJjaqrBHRbO3DRwETGjT76NiTJ+IDOMcElzDWhEGVr0YMtfgb
-        Clq9k7LePmOncq0P8ZEpqRb4REj15uCz1EE3YO/SQx7Te3aX6CBCynK+ysJpcYHSeApyw70qoM2FZ
-        CygR3aUEr9lg6MIKD0scM8wD3QBwwk1XO81cIcUdFdBrMDw8SKV1R3NrFnsnmCuKVVR1x3S50fLpY
-        ev1Ps5YqW1PODTcpYMtybxkqWu9DCRG1cTwVDZKrG4uz8OS7M4zwQegY/h4bWibcDsKxbLZ6dt7Ny
-        MU2bgp0A==;
+        bh=BCH2exYpaTXxc+kQslPFBsbgIXC7remIkotVPujXUxc=; b=u8XTUhmGA2bFEcFdqnn+WUlgkh
+        qfKkyu2iGKzOQfmkY5Ak8KYJOripGOY1cDy6qDcwxyzxOMNjBxA2pP75O+TuKKzZpmsMDqv+j7Vbh
+        a6bGpoYyu1iFcM/IZ52PUYbt0xlzRf9OjWHWpjmBGyzpNQWkCpaeyhBIusu0u4uMZ5eGZFvN2ga9K
+        T3SI8RmHSJ0fRhFSxUYT9QxF2vzOykn/YsrGVeeGZfFOqLdQ8FFh/ELcLkcPVKllsZfOsu6m4u68a
+        ATDiREnvVseD/EMEpkzG2O+912y/oTu9H3i7n2Vl5UI/X7S2wz9rNjD6WMhVXJM+XkBHWC+xxPwva
+        w6JG2vHw==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRQ5-0007iZ-9c; Tue, 28 Jan 2020 14:00:45 +0000
+        id 1iwRQ5-0007ig-Vl; Tue, 28 Jan 2020 14:00:45 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRPp-001BNG-6Z; Tue, 28 Jan 2020 15:00:29 +0100
+        id 1iwRPp-001BNu-G0; Tue, 28 Jan 2020 15:00:29 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 01/27] docs: kvm: add arm/pvtime.rst to index.rst
-Date:   Tue, 28 Jan 2020 15:00:02 +0100
-Message-Id: <8efe846ddd76d97a62a150a997619e5d7d992774.1580219586.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 09/27] docs: kvm: convert devices/arm-vgit.txt to ReST
+Date:   Tue, 28 Jan 2020 15:00:10 +0100
+Message-Id: <f54d732903825b889626cfff48384c9b293a5b86.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,42 +65,174 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add this file to a new kvm/arm index.rst, in order for it to
-be shown as part of the virt book.
+- Use title markups;
+- change indent to match ReST syntax;
+- use proper table markups;
+- use literal block markups.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/arm/index.rst | 10 ++++++++++
- Documentation/virt/kvm/index.rst     |  2 ++
- 2 files changed, 12 insertions(+)
- create mode 100644 Documentation/virt/kvm/arm/index.rst
+ .../devices/{arm-vgic.txt => arm-vgic.rst}    | 87 ++++++++++++-------
+ Documentation/virt/kvm/devices/index.rst      |  1 +
+ 2 files changed, 58 insertions(+), 30 deletions(-)
+ rename Documentation/virt/kvm/devices/{arm-vgic.txt => arm-vgic.rst} (66%)
 
-diff --git a/Documentation/virt/kvm/arm/index.rst b/Documentation/virt/kvm/arm/index.rst
-new file mode 100644
-index 000000000000..e039d9b1e076
---- /dev/null
-+++ b/Documentation/virt/kvm/arm/index.rst
-@@ -0,0 +1,10 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/Documentation/virt/kvm/devices/arm-vgic.txt b/Documentation/virt/kvm/devices/arm-vgic.rst
+similarity index 66%
+rename from Documentation/virt/kvm/devices/arm-vgic.txt
+rename to Documentation/virt/kvm/devices/arm-vgic.rst
+index 97b6518148f8..882a7ecf317e 100644
+--- a/Documentation/virt/kvm/devices/arm-vgic.txt
++++ b/Documentation/virt/kvm/devices/arm-vgic.rst
+@@ -1,8 +1,10 @@
++==================================================
+ ARM Virtual Generic Interrupt Controller v2 (VGIC)
+ ==================================================
+ 
+ Device types supported:
+-  KVM_DEV_TYPE_ARM_VGIC_V2     ARM Generic Interrupt Controller v2.0
 +
-+===
-+ARM
-+===
++  - KVM_DEV_TYPE_ARM_VGIC_V2     ARM Generic Interrupt Controller v2.0
+ 
+ Only one VGIC instance may be instantiated through either this API or the
+ legacy KVM_CREATE_IRQCHIP API.  The created VGIC will act as the VM interrupt
+@@ -17,7 +19,8 @@ create both a GICv3 and GICv2 device on the same VM.
+ 
+ Groups:
+   KVM_DEV_ARM_VGIC_GRP_ADDR
+-  Attributes:
++   Attributes:
 +
-+.. toctree::
-+   :maxdepth: 2
+     KVM_VGIC_V2_ADDR_TYPE_DIST (rw, 64-bit)
+       Base address in the guest physical address space of the GIC distributor
+       register mappings. Only valid for KVM_DEV_TYPE_ARM_VGIC_V2.
+@@ -27,19 +30,25 @@ Groups:
+       Base address in the guest physical address space of the GIC virtual cpu
+       interface register mappings. Only valid for KVM_DEV_TYPE_ARM_VGIC_V2.
+       This address needs to be 4K aligned and the region covers 4 KByte.
 +
-+   pvtime
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index ada224a511fe..488c6370a447 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -10,3 +10,5 @@ KVM
-    amd-memory-encryption
-    cpuid
-    vcpu-requests
+   Errors:
+-    -E2BIG:  Address outside of addressable IPA range
+-    -EINVAL: Incorrectly aligned address
+-    -EEXIST: Address already configured
+-    -ENXIO:  The group or attribute is unknown/unsupported for this device
 +
-+   arm/index
++    =======  =============================================================
++    -E2BIG   Address outside of addressable IPA range
++    -EINVAL  Incorrectly aligned address
++    -EEXIST  Address already configured
++    -ENXIO   The group or attribute is unknown/unsupported for this device
+              or hardware support is missing.
+-    -EFAULT: Invalid user pointer for attr->addr.
++    -EFAULT  Invalid user pointer for attr->addr.
++    =======  =============================================================
+ 
+   KVM_DEV_ARM_VGIC_GRP_DIST_REGS
+-  Attributes:
+-    The attr field of kvm_device_attr encodes two values:
+-    bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
+-    values:   |    reserved   | vcpu_index |      offset     |
++   Attributes:
++
++    The attr field of kvm_device_attr encodes two values::
++
++      bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
++      values:   |    reserved   | vcpu_index |      offset     |
+ 
+     All distributor regs are (rw, 32-bit)
+ 
+@@ -58,16 +67,22 @@ Groups:
+     KVM_DEV_ARM_VGIC_GRP_DIST_REGS and KVM_DEV_ARM_VGIC_GRP_CPU_REGS) to ensure
+     the expected behavior. Unless GICD_IIDR has been set from userspace, writes
+     to the interrupt group registers (GICD_IGROUPR) are ignored.
++
+   Errors:
+-    -ENXIO: Getting or setting this register is not yet supported
+-    -EBUSY: One or more VCPUs are running
+-    -EINVAL: Invalid vcpu_index supplied
++
++    =======  =====================================================
++    -ENXIO   Getting or setting this register is not yet supported
++    -EBUSY   One or more VCPUs are running
++    -EINVAL  Invalid vcpu_index supplied
++    =======  =====================================================
+ 
+   KVM_DEV_ARM_VGIC_GRP_CPU_REGS
+-  Attributes:
+-    The attr field of kvm_device_attr encodes two values:
+-    bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
+-    values:   |    reserved   | vcpu_index |      offset     |
++   Attributes:
++
++    The attr field of kvm_device_attr encodes two values::
++
++      bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
++      values:   |    reserved   | vcpu_index |      offset     |
+ 
+     All CPU interface regs are (rw, 32-bit)
+ 
+@@ -101,27 +116,39 @@ Groups:
+     value left by 3 places to obtain the actual priority mask level.
+ 
+   Errors:
+-    -ENXIO: Getting or setting this register is not yet supported
+-    -EBUSY: One or more VCPUs are running
+-    -EINVAL: Invalid vcpu_index supplied
++
++    =======  =====================================================
++    -ENXIO   Getting or setting this register is not yet supported
++    -EBUSY   One or more VCPUs are running
++    -EINVAL  Invalid vcpu_index supplied
++    =======  =====================================================
+ 
+   KVM_DEV_ARM_VGIC_GRP_NR_IRQS
+-  Attributes:
++   Attributes:
++
+     A value describing the number of interrupts (SGI, PPI and SPI) for
+     this GIC instance, ranging from 64 to 1024, in increments of 32.
+ 
+   Errors:
+-    -EINVAL: Value set is out of the expected range
+-    -EBUSY: Value has already be set, or GIC has already been initialized
+-            with default values.
++
++    =======  =============================================================
++    -EINVAL  Value set is out of the expected range
++    -EBUSY   Value has already be set, or GIC has already been initialized
++             with default values.
++    =======  =============================================================
+ 
+   KVM_DEV_ARM_VGIC_GRP_CTRL
+-  Attributes:
++   Attributes:
++
+     KVM_DEV_ARM_VGIC_CTRL_INIT
+       request the initialization of the VGIC or ITS, no additional parameter
+       in kvm_device_attr.addr.
++
+   Errors:
+-    -ENXIO: VGIC not properly configured as required prior to calling
+-     this attribute
+-    -ENODEV: no online VCPU
+-    -ENOMEM: memory shortage when allocating vgic internal data
++
++    =======  =========================================================
++    -ENXIO   VGIC not properly configured as required prior to calling
++             this attribute
++    -ENODEV  no online VCPU
++    -ENOMEM  memory shortage when allocating vgic internal data
++    =======  =========================================================
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index 80c1e0e225f4..7eabce80c61e 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -8,4 +8,5 @@ Devices
+    :maxdepth: 2
+ 
+    arm-vgic-its
++   arm-vgic
+    arm-vgic-v3
 -- 
 2.24.1
 
