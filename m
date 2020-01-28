@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B70BFC2D0DB
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFFDAC33CB2
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D353207FD
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8895A24683
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580222986;
-	bh=Sb/Hso3qzAp/GG1dD7fNZoQ6ftlA7QzLpHUxJn5c08A=;
+	s=default; t=1580222988;
+	bh=l4Dy/nc9l2l/dLSwIzDxThpTPMaVLxv+C84DZJAeXoQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=r3Z7ZRlF7AgXQ2PlJhQverL5iyasWdpRKmrL3xkZ9KJ5AxogaSHhH569UlIfNWn+l
-	 nOywsMtHHksd+TEpQFYmD5FHVHrJH/YTxpi0UOp2TwF5P+Cn9cWEvlmwDD1aSV6FFf
-	 b2LlbPUbb8BKDdYcZLn0FSClGCOnjC22W0yFHLT8=
+	b=tPfPf6ADRTHUf2BWrWyaHusRyjJHQBuCR3Rjnw3G+WH5RXgeO3XiMddthvhFmiBGz
+	 29uNduw7Fz4UhUqIFJ4qgAT7l/A0Q0IKgXiZWooRGyahlTeR1oCwzQz5UpCyEXkPAa
+	 hgB7+1X6PzvKLAXj9ow/4pbZuemK/53rcTRH7CyU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727227AbgA1Otl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727105AbgA1Otl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 28 Jan 2020 09:49:41 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59298 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:59292 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727291AbgA1OAq (ORCPT
+        with ESMTP id S1727287AbgA1OAq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 09:00:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=c3O1qU0BaMW0VdPESODOU6k7pCSNM7sfr+uBlXdB8Yc=; b=VnbMV/CL+BuVOTSUlJU69re/gN
-        FEb0itjrAe+qnYYATKh8N1q7AaJ+B6+OuxF0xqUKvnVL+1YhGqR/HN1iKiUvg2zxUh/TfdJLgHSBj
-        /bXuWZCWr+nuImnMTYfUeHbstcaxUQAsUvvlCYbOs/RoYUaM5WCs9MnwH4xcXi8iIy9TLgSasrPyq
-        zRPwqgg0kZkqJdAAyRjnJKGhMAZFYJhUXkEl65agnbjLhXZlr23Er+oG0Er5jZ8NDEPvIvQMWvlmq
-        NGVAK+dbGkTMSwxK7ufEDRTk+YosYBBxm1BleU+raNfUnk82vye7ajAgcKT4tLRiDUZumhkmrwWRF
-        qmFXuChA==;
+        bh=jCGNvxr49Lix6H95n0igp3NkedHJdEszNuxewfmtp4U=; b=fc1iY6Qx1yxSY+62KFqb/Clia9
+        OYMkvWWkR2paMXKhmnjOBuzaKgV4Fnj3tCcWxxWsPGGpwPlfd4FwU4ZNJrCD2axU49+P7xMsEZmC9
+        uWL/3zfYB+LS52QsgFLaFweeGd1SCMsQnXoOHQvKsTbA7ZQpmjOm69YifcTOfo2ft9cnDOCYAlmYh
+        xt8sfvCT30mLzamI4qwPr9JyJ2GEMoXLSibP0E7uclu84q/KXaABqGTaPkr+6YUeI/LX839RXw4BU
+        H2XceMpCByAw264O0SuA9EnqzIbOESmFWqwCzbZAt6WU0yu/K3HzPRIj9n36xc5UOrvD35bsWn9/Q
+        pinGjYiw==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRQ5-0007iq-W1; Tue, 28 Jan 2020 14:00:46 +0000
+        id 1iwRQ5-0007ip-UM; Tue, 28 Jan 2020 14:00:45 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRPp-001BOi-SH; Tue, 28 Jan 2020 15:00:29 +0100
+        id 1iwRPp-001BOO-Mg; Tue, 28 Jan 2020 15:00:29 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 19/27] docs: kvm: arm/psci.txt: convert to ReST
-Date:   Tue, 28 Jan 2020 15:00:20 +0100
-Message-Id: <cfd61af2a61678bbde6394dc5bcfe2e82bc26da4.1580219586.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 15/27] docs: kvm: convert devices/xics.txt to ReST
+Date:   Tue, 28 Jan 2020 15:00:16 +0100
+Message-Id: <ad7db80d43d8afef0fffb5424fa1fc12fdf4ef50.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,100 +65,100 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Add a title for the document;
-- Adjust whitespaces for it to be properly formatted after
-  parsed.
+- Use title markups;
+- adjust indentation and add blank lines as needed;
+- adjust tables to match ReST accepted formats;
+- use :field: markups.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/arm/index.rst          |  1 +
- .../virt/kvm/arm/{psci.txt => psci.rst}       | 44 ++++++++++++-------
- 2 files changed, 30 insertions(+), 15 deletions(-)
- rename Documentation/virt/kvm/arm/{psci.txt => psci.rst} (61%)
+ Documentation/virt/kvm/devices/index.rst      |  1 +
+ .../virt/kvm/devices/{xics.txt => xics.rst}   | 26 ++++++++++++++-----
+ 2 files changed, 21 insertions(+), 6 deletions(-)
+ rename Documentation/virt/kvm/devices/{xics.txt => xics.rst} (85%)
 
-diff --git a/Documentation/virt/kvm/arm/index.rst b/Documentation/virt/kvm/arm/index.rst
-index 134fa5fa77e5..3e2b2aba90fc 100644
---- a/Documentation/virt/kvm/arm/index.rst
-+++ b/Documentation/virt/kvm/arm/index.rst
-@@ -8,4 +8,5 @@ ARM
-    :maxdepth: 2
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index 29f8ecdf7fa0..63b61369d09b 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -15,3 +15,4 @@ Devices
+    vcpu
+    vfio
+    vm
++   xics
+diff --git a/Documentation/virt/kvm/devices/xics.txt b/Documentation/virt/kvm/devices/xics.rst
+similarity index 85%
+rename from Documentation/virt/kvm/devices/xics.txt
+rename to Documentation/virt/kvm/devices/xics.rst
+index 423332dda7bc..74e36dbea0fd 100644
+--- a/Documentation/virt/kvm/devices/xics.txt
++++ b/Documentation/virt/kvm/devices/xics.rst
+@@ -1,20 +1,29 @@
++=========================
+ XICS interrupt controller
++=========================
  
-    hyp-abi
-+   psci
-    pvtime
-diff --git a/Documentation/virt/kvm/arm/psci.txt b/Documentation/virt/kvm/arm/psci.rst
-similarity index 61%
-rename from Documentation/virt/kvm/arm/psci.txt
-rename to Documentation/virt/kvm/arm/psci.rst
-index 559586fc9d37..5cdf8fb86779 100644
---- a/Documentation/virt/kvm/arm/psci.txt
-+++ b/Documentation/virt/kvm/arm/psci.rst
-@@ -1,3 +1,7 @@
-+=========================================
-+Power State Coordination Interface (PSCI)
-+=========================================
-+
- KVM implements the PSCI (Power State Coordination Interface)
- specification in order to provide services such as CPU on/off, reset
- and power-off to the guest.
-@@ -30,32 +34,42 @@ The following register is defined:
-   - Affects the whole VM (even if the register view is per-vcpu)
+ Device type supported: KVM_DEV_TYPE_XICS
  
- * KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1:
--  Holds the state of the firmware support to mitigate CVE-2017-5715, as
--  offered by KVM to the guest via a HVC call. The workaround is described
--  under SMCCC_ARCH_WORKAROUND_1 in [1].
-+    Holds the state of the firmware support to mitigate CVE-2017-5715, as
-+    offered by KVM to the guest via a HVC call. The workaround is described
-+    under SMCCC_ARCH_WORKAROUND_1 in [1].
-+
-   Accepted values are:
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_AVAIL: KVM does not offer
-+
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_AVAIL:
-+      KVM does not offer
-       firmware support for the workaround. The mitigation status for the
-       guest is unknown.
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_AVAIL: The workaround HVC call is
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_AVAIL:
-+      The workaround HVC call is
-       available to the guest and required for the mitigation.
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_REQUIRED: The workaround HVC call
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_REQUIRED:
-+      The workaround HVC call
-       is available to the guest, but it is not needed on this VCPU.
+ Groups:
+   1. KVM_DEV_XICS_GRP_SOURCES
+-  Attributes: One per interrupt source, indexed by the source number.
++       Attributes:
  
- * KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2:
--  Holds the state of the firmware support to mitigate CVE-2018-3639, as
--  offered by KVM to the guest via a HVC call. The workaround is described
--  under SMCCC_ARCH_WORKAROUND_2 in [1].
-+    Holds the state of the firmware support to mitigate CVE-2018-3639, as
-+    offered by KVM to the guest via a HVC call. The workaround is described
-+    under SMCCC_ARCH_WORKAROUND_2 in [1]_.
++         One per interrupt source, indexed by the source number.
+   2. KVM_DEV_XICS_GRP_CTRL
+-  Attributes:
+-    2.1 KVM_DEV_XICS_NR_SERVERS (write only)
++       Attributes:
 +
-   Accepted values are:
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_AVAIL: A workaround is not
++         2.1 KVM_DEV_XICS_NR_SERVERS (write only)
 +
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_AVAIL:
-+      A workaround is not
-       available. KVM does not offer firmware support for the workaround.
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_UNKNOWN: The workaround state is
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_UNKNOWN:
-+      The workaround state is
-       unknown. KVM does not offer firmware support for the workaround.
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_AVAIL: The workaround is available,
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_AVAIL:
-+      The workaround is available,
-       and can be disabled by a vCPU. If
-       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_ENABLED is set, it is active for
-       this vCPU.
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED: The workaround is
--      always active on this vCPU or it is not needed.
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED:
-+      The workaround is always active on this vCPU or it is not needed.
+   The kvm_device_attr.addr points to a __u32 value which is the number of
+   interrupt server numbers (ie, highest possible vcpu id plus one).
++
+   Errors:
+-    -EINVAL: Value greater than KVM_MAX_VCPU_ID.
+-    -EFAULT: Invalid user pointer for attr->addr.
+-    -EBUSY:  A vcpu is already connected to the device.
++
++    =======  ==========================================
++    -EINVAL  Value greater than KVM_MAX_VCPU_ID.
++    -EFAULT  Invalid user pointer for attr->addr.
++    -EBUSY   A vcpu is already connected to the device.
++    =======  ==========================================
  
--[1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmware_interfaces_for_mitigating_CVE-2017-5715.pdf
-+.. [1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmware_interfaces_for_mitigating_CVE-2017-5715.pdf
+ This device emulates the XICS (eXternal Interrupt Controller
+ Specification) defined in PAPR.  The XICS has a set of interrupt
+@@ -53,24 +62,29 @@ the interrupt source number.  The 64 bit state word has the following
+ bitfields, starting from the least-significant end of the word:
+ 
+ * Destination (server number), 32 bits
++
+   This specifies where the interrupt should be sent, and is the
+   interrupt server number specified for the destination vcpu.
+ 
+ * Priority, 8 bits
++
+   This is the priority specified for this interrupt source, where 0 is
+   the highest priority and 255 is the lowest.  An interrupt with a
+   priority of 255 will never be delivered.
+ 
+ * Level sensitive flag, 1 bit
++
+   This bit is 1 for a level-sensitive interrupt source, or 0 for
+   edge-sensitive (or MSI).
+ 
+ * Masked flag, 1 bit
++
+   This bit is set to 1 if the interrupt is masked (cannot be delivered
+   regardless of its priority), for example by the ibm,int-off RTAS
+   call, or 0 if it is not masked.
+ 
+ * Pending flag, 1 bit
++
+   This bit is 1 if the source has a pending interrupt, otherwise 0.
+ 
+ Only one XICS instance may be created per VM.
 -- 
 2.24.1
 
