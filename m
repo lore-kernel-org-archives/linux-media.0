@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4D7FC2D0DB
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 120A8C33CB3
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:52:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8CE90214AF
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD780214AF
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:52:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580223118;
-	bh=l4Dy/nc9l2l/dLSwIzDxThpTPMaVLxv+C84DZJAeXoQ=;
+	s=default; t=1580223121;
+	bh=JQBwOUwZBEbNLgL4NUKye2Z47Qz39/TtXsJJ0DxHe9c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=oSQp6ns1tsKYKUJmXlur4+E1lrM2ppmBv24l97NmMNZTd9iDOUdPBslSdescXRgRY
-	 fN6UaS0BrJvP2vXJnK/TfsRC4xxBmGW1AjdE5P+Y3nREyCLMGYr8teH3qxTkPXZfxe
-	 PfGjUs11WSegii0axIjBKv2RaJ/99TBNaFwH0DxM=
+	b=JAugsi91O8/6Vd4aCpIoA081RBrhwgbwPUacTnabu8G528mjfc9MFkzqHHC7bxvtA
+	 3gdIwmu3bb/bcy8NE5RpG7FwpHAwj8G+3gC+Adf1mSQXjto3eRFNLLoV+IeGNTzJj7
+	 ayzmj8nL9fclkUFquLEWFzaX0vGr1t7jO4LrA6s0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727484AbgA1Ovw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727324AbgA1Ovw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 28 Jan 2020 09:51:52 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58480 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:58442 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726551AbgA1N6o (ORCPT
+        with ESMTP id S1726525AbgA1N6o (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 08:58:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=jCGNvxr49Lix6H95n0igp3NkedHJdEszNuxewfmtp4U=; b=VQdf9TEIB8Dhhfw85/MgN0Ypih
-        KBLfGXtPVMxYJFL2zQUfNoPK3oWvXtRJzmvNjqySXXr14favuy7cHaEkUv9/ibIu+caWpWAJHqjCx
-        9FtO8ONtlUgWOghz0dtCiALQkd0Mz+KHd/SJBJEyRyGh7bTRyZ0wCZ8JBEbgh9PzdhqgahLl0sN/f
-        I698EPyVwMc3mBytRQH9uIeqSCLUBoPZyx14XZUNHeYVkUKI9bS3b9uMYGXbZKPsiZ6LGR/149kw1
-        hqLuzZhoYEZ9G8eJJ4qoQHJTDMsYQjxHpMxKMpRYHmuS2OIvn0JBq8VKoEv6wCE6RmpqAo4COpXKz
-        dDBs1p3A==;
+        bh=Z/uTEaWAPqmykjmqaZJAVwB7XFP3pqrhmBP5QoZS5Zs=; b=qEbvsb3c9peFLMbHQQ9ZRF6NlP
+        WuYjK8ErWzE4qOhhh2tmvF8j/+6CwwMOeimHwgVQVBLkQ3mxKBPMQIKiGCn4YV6taBFhaujIaTAqV
+        1XqXiPeC/9jdn2SXqEOElJHHbRP8WzGwJHbAcji8zQF2IVJXwnxqcwpCkBVGYTToBzs5Tk1gku9hg
+        0bo7iA1ZzeY3kcsEgD9VVb/KwQlEOMe5ib51HifNEccolbS0BRVNLpupgWYZB3z/tgXkU6bjM/hVh
+        b+8mJR/6Jb8FiZTlSxXihBjiZY3QokThFsXo8SJ5FHGk0dw8mTFK402b56A4K95ZgkYNwuEaS8D3A
+        3u1c+u3Q==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRO7-0006KU-UZ; Tue, 28 Jan 2020 13:58:43 +0000
+        id 1iwRO7-0006Hr-0n; Tue, 28 Jan 2020 13:58:43 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRNq-001BK9-Jq; Tue, 28 Jan 2020 14:58:26 +0100
+        id 1iwRNq-001BKt-Vp; Tue, 28 Jan 2020 14:58:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,10 +52,10 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 15/27] docs: kvm: convert devices/xics.txt to ReST
-Date:   Tue, 28 Jan 2020 14:58:11 +0100
+Subject: [PATCH 25/27] docs: kvm: Convert s390-diag.txt to ReST format
+Date:   Tue, 28 Jan 2020 14:58:21 +0100
 Message-Id:
- <ad7db80d43d8afef0fffb5424fa1fc12fdf4ef50.1580219586.git.mchehab+huawei@kernel.org>
+ <614882a25b34203f6e1de2982b2d619bf1cfddc1.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,102 +65,64 @@ Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Message-ID: <20200128135811.RmltmXVpyY1lwqGFP6awgAajywgktirz_v0xz9l0E3s@z>
+Message-ID: <20200128135821.DvAjIzrLBYDEh_UB7FEbqej8oJijfRtXbLuDkQfjLxU@z>
 
-- Use title markups;
-- adjust indentation and add blank lines as needed;
-- adjust tables to match ReST accepted formats;
-- use :field: markups.
+This file is almost in ReST format. Just one change was
+needed:
+
+    - Add markups for a literal block and change its indentation.
+
+While here, use the standard markup for the document title.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/devices/index.rst      |  1 +
- .../virt/kvm/devices/{xics.txt => xics.rst}   | 26 ++++++++++++++-----
- 2 files changed, 21 insertions(+), 6 deletions(-)
- rename Documentation/virt/kvm/devices/{xics.txt => xics.rst} (85%)
+ Documentation/virt/kvm/index.rst                      |  1 +
+ .../virt/kvm/{s390-diag.txt => s390-diag.rst}         | 11 ++++++-----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+ rename Documentation/virt/kvm/{s390-diag.txt => s390-diag.rst} (91%)
 
-diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
-index 29f8ecdf7fa0..63b61369d09b 100644
---- a/Documentation/virt/kvm/devices/index.rst
-+++ b/Documentation/virt/kvm/devices/index.rst
-@@ -15,3 +15,4 @@ Devices
-    vcpu
-    vfio
-    vm
-+   xics
-diff --git a/Documentation/virt/kvm/devices/xics.txt b/Documentation/virt/kvm/devices/xics.rst
-similarity index 85%
-rename from Documentation/virt/kvm/devices/xics.txt
-rename to Documentation/virt/kvm/devices/xics.rst
-index 423332dda7bc..74e36dbea0fd 100644
---- a/Documentation/virt/kvm/devices/xics.txt
-+++ b/Documentation/virt/kvm/devices/xics.rst
-@@ -1,20 +1,29 @@
-+=========================
- XICS interrupt controller
-+=========================
+diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
+index d0e17e717461..e5ea75f97d52 100644
+--- a/Documentation/virt/kvm/index.rst
++++ b/Documentation/virt/kvm/index.rst
+@@ -17,6 +17,7 @@ KVM
+    msr
+    nested-vmx
+    ppc-pv
++   s390-diag
+    vcpu-requests
  
- Device type supported: KVM_DEV_TYPE_XICS
+    arm/index
+diff --git a/Documentation/virt/kvm/s390-diag.txt b/Documentation/virt/kvm/s390-diag.rst
+similarity index 91%
+rename from Documentation/virt/kvm/s390-diag.txt
+rename to Documentation/virt/kvm/s390-diag.rst
+index 7c52e5f8b210..db6eb7a06b2a 100644
+--- a/Documentation/virt/kvm/s390-diag.txt
++++ b/Documentation/virt/kvm/s390-diag.rst
+@@ -1,3 +1,4 @@
++=============================
+ The s390 DIAGNOSE call on KVM
+ =============================
  
- Groups:
-   1. KVM_DEV_XICS_GRP_SOURCES
--  Attributes: One per interrupt source, indexed by the source number.
-+       Attributes:
+@@ -16,12 +17,12 @@ DIAGNOSE calls by the guest cause a mandatory intercept. This implies
+ all supported DIAGNOSE calls need to be handled by either KVM or its
+ userspace.
  
-+         One per interrupt source, indexed by the source number.
-   2. KVM_DEV_XICS_GRP_CTRL
--  Attributes:
--    2.1 KVM_DEV_XICS_NR_SERVERS (write only)
-+       Attributes:
-+
-+         2.1 KVM_DEV_XICS_NR_SERVERS (write only)
-+
-   The kvm_device_attr.addr points to a __u32 value which is the number of
-   interrupt server numbers (ie, highest possible vcpu id plus one).
-+
-   Errors:
--    -EINVAL: Value greater than KVM_MAX_VCPU_ID.
--    -EFAULT: Invalid user pointer for attr->addr.
--    -EBUSY:  A vcpu is already connected to the device.
-+
-+    =======  ==========================================
-+    -EINVAL  Value greater than KVM_MAX_VCPU_ID.
-+    -EFAULT  Invalid user pointer for attr->addr.
-+    -EBUSY   A vcpu is already connected to the device.
-+    =======  ==========================================
+-All DIAGNOSE calls supported by KVM use the RS-a format:
++All DIAGNOSE calls supported by KVM use the RS-a format::
  
- This device emulates the XICS (eXternal Interrupt Controller
- Specification) defined in PAPR.  The XICS has a set of interrupt
-@@ -53,24 +62,29 @@ the interrupt source number.  The 64 bit state word has the following
- bitfields, starting from the least-significant end of the word:
+---------------------------------------
+-|  '83'  | R1 | R3 | B2 |     D2     |
+---------------------------------------
+-0        8    12   16   20           31
++  --------------------------------------
++  |  '83'  | R1 | R3 | B2 |     D2     |
++  --------------------------------------
++  0        8    12   16   20           31
  
- * Destination (server number), 32 bits
-+
-   This specifies where the interrupt should be sent, and is the
-   interrupt server number specified for the destination vcpu.
- 
- * Priority, 8 bits
-+
-   This is the priority specified for this interrupt source, where 0 is
-   the highest priority and 255 is the lowest.  An interrupt with a
-   priority of 255 will never be delivered.
- 
- * Level sensitive flag, 1 bit
-+
-   This bit is 1 for a level-sensitive interrupt source, or 0 for
-   edge-sensitive (or MSI).
- 
- * Masked flag, 1 bit
-+
-   This bit is set to 1 if the interrupt is masked (cannot be delivered
-   regardless of its priority), for example by the ibm,int-off RTAS
-   call, or 0 if it is not masked.
- 
- * Pending flag, 1 bit
-+
-   This bit is 1 if the source has a pending interrupt, otherwise 0.
- 
- Only one XICS instance may be created per VM.
+ The second-operand address (obtained by the base/displacement calculation)
+ is not used to address data. Instead, bits 48-63 of this address specify
 -- 
 2.24.1
 
