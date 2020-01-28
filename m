@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04ECEC33CB3
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A741DC2D0DB
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CB03A207FD
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7AEC4207FD
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580223071;
-	bh=sGk0BrUSu5QXbj5v/8QRxYs4iY17tAGC+ZJwXkfkCGU=;
+	s=default; t=1580223073;
+	bh=rbPvMROj4Jp8r5A5ZVQZZCrKLe+WvU3VXIOCB9zTPF4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=m9nw5gD61knIx2hBkJljg3LRkb5nsIOq+zJkEHCw4DWXigbIMcLYR6gxDz2YRYiEy
-	 5SFh22Clr3h6JuQCWAWyfCBIYvI6otOIG77cqqpZCAH6Ye+ajXwlpzLRC9/qNnO2W9
-	 h8xVeSeoLpwwFFS1zPnGrigwekeTsY31jaRrTp/s=
+	b=DNQJwthsAqwScFsHUtfkAOrX5fgLScVT2qBx/e0Uf/DJqNRJGTvI2T/Y+GXiEgCp+
+	 70QduR4e6H0g/6qBDQCxctFMlQO0oHVyvqPU2VmHwVu5HDzTUuXndqfgMbXKiTfxyE
+	 Pnwudb4NI6G2ujqG9uIb961b0FIxfNRXDReodEK0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727482AbgA1OvG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:51:06 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58438 "EHLO
+        id S1727395AbgA1OvF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:51:05 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:58476 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726526AbgA1N6p (ORCPT
+        with ESMTP id S1726556AbgA1N6p (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 08:58:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vckRGT1a+50xrf38zV+HbwSHDdDQVhODH0o9Xm2cn8g=; b=tBD7MDpfjYucRDfi3NanPLkuC7
-        OrlxWSF+88JNX2babgD4pkQj0msJqWrh6tIZR62UO7PD8cqL09AvWgc/Iaug1EWEuFpF+Ig58NDfr
-        +eKahss+byHVx/YvdQOeIholqoDiJO7Fe7mtF72Qsysf2dLwcgm3qAkPe+pSPksdiJkSdME6NBRjo
-        7TComBmG7n4OOqG6uC9wNUOy9EohvkIcVoLBAJpWiNBg4bjcWz50y2dF9hAWbQtO6lul5Rdru5+bp
-        a8jwyeD7qXrqY5MK3XM+xClwxMAuczj5BZ17M75MLH+CLr/CAhT2EeOp0t4UXSg8ADQHuvYRbhl+6
-        eaCzTbhw==;
+        bh=RXe1JKO96FijdOP7zXpZboFzdx1W+5+6NP6MZ/BiAps=; b=SKyRfa3/Xa/31PJ5JhDJx/Izne
+        57hdUUFxjfpyAi/K2326Gw2T3dOyR6hU4jkxQP2LAUNae10Ejr4k3iRE8NcjEjVYpGjcd/a464AP2
+        tYLMnQJ3apTWRkOUHYmjgstWTlB5o6MyDG9CDfycLDT7WCT7eHlCi47YcKSj3T003lJ6Ahw11L/is
+        qp0QSbX4LZt78YtpJ+uv+IXcIfhVR76avtvJUAoLXvCKL31dVXXBbQjwaNh4ZPJi9QHBXRh6ArTe3
+        zohP9rIk4+3gam0ZwTocYKAC5y2JmZ51Lp5voKz3GjzcPIWQC+/aAaYSHs9fecmC8VMywtq6V/FIZ
+        1URwuV8A==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRO7-0006Hu-1k; Tue, 28 Jan 2020 13:58:43 +0000
+        id 1iwRO7-0006KP-U5; Tue, 28 Jan 2020 13:58:43 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRNq-001BKj-TF; Tue, 28 Jan 2020 14:58:26 +0100
+        id 1iwRNq-001BJt-FE; Tue, 28 Jan 2020 14:58:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,10 +52,10 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 23/27] docs: kvm: Convert nested-vmx.txt to ReST format
-Date:   Tue, 28 Jan 2020 14:58:19 +0100
+Subject: [PATCH 11/27] docs: kvm: convert devices/s390_flic.txt to ReST
+Date:   Tue, 28 Jan 2020 14:58:07 +0100
 Message-Id:
- <af45fd6f197d2bc69864c5532387d87be706293f.1580219586.git.mchehab+huawei@kernel.org>
+ <12634be89f4a8b662bf4bc0a0c7baef42675548f.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,105 +65,171 @@ Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Message-ID: <20200128135819.naL8BuHNCKVkfVQc41XCnTO2ycS-FPPeCifYtdFLFs0@z>
+Message-ID: <20200128135807.M0r7gNCdBYsSTMx_6oN4nVAdFoU_-xLpckYP1i6fF6w@z>
 
-This file is almost in ReST format. Just a small set of
-changes were needed:
-
-    - Add markups for lists;
-    - Add markups for a literal block;
-    - Adjust whitespaces.
-
-While here, use the standard markup for the document title.
+- Use standard markup for document title;
+- Adjust indentation and add blank lines as needed;
+- use the notes markup;
+- mark code blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/index.rst              |  1 +
- .../kvm/{nested-vmx.txt => nested-vmx.rst}    | 35 ++++++++++---------
- 2 files changed, 20 insertions(+), 16 deletions(-)
- rename Documentation/virt/kvm/{nested-vmx.txt => nested-vmx.rst} (90%)
+ Documentation/virt/kvm/devices/index.rst      |  1 +
+ .../devices/{s390_flic.txt => s390_flic.rst}  | 68 +++++++++++--------
+ 2 files changed, 39 insertions(+), 30 deletions(-)
+ rename Documentation/virt/kvm/devices/{s390_flic.txt => s390_flic.rst} (88%)
 
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 95e2487d38f4..123385d0a74a 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -15,6 +15,7 @@ KVM
-    locking
-    mmu
-    msr
-+   nested-vmx
-    vcpu-requests
- 
-    arm/index
-diff --git a/Documentation/virt/kvm/nested-vmx.txt b/Documentation/virt/kvm/nested-vmx.rst
-similarity index 90%
-rename from Documentation/virt/kvm/nested-vmx.txt
-rename to Documentation/virt/kvm/nested-vmx.rst
-index 97eb1353e962..7f28a5d2c135 100644
---- a/Documentation/virt/kvm/nested-vmx.txt
-+++ b/Documentation/virt/kvm/nested-vmx.rst
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index 9e5586e371de..e6caccc36623 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -11,3 +11,4 @@ Devices
+    arm-vgic
+    arm-vgic-v3
+    mpic
++   s390_flic
+diff --git a/Documentation/virt/kvm/devices/s390_flic.txt b/Documentation/virt/kvm/devices/s390_flic.rst
+similarity index 88%
+rename from Documentation/virt/kvm/devices/s390_flic.txt
+rename to Documentation/virt/kvm/devices/s390_flic.rst
+index a4e20a090174..860fa0dec9b7 100644
+--- a/Documentation/virt/kvm/devices/s390_flic.txt
++++ b/Documentation/virt/kvm/devices/s390_flic.rst
 @@ -1,3 +1,4 @@
-+==========
- Nested VMX
- ==========
++====================================
+ FLIC (floating interrupt controller)
+ ====================================
  
-@@ -41,9 +42,9 @@ No modifications are required to user space (qemu). However, qemu's default
- emulated CPU type (qemu64) does not list the "VMX" CPU feature, so it must be
- explicitly enabled, by giving qemu one of the following options:
- 
--     -cpu host              (emulated CPU has all features of the real CPU)
-+     - cpu host              (emulated CPU has all features of the real CPU)
- 
--     -cpu qemu64,+vmx       (add just the vmx feature to a named CPU type)
-+     - cpu qemu64,+vmx       (add just the vmx feature to a named CPU type)
- 
- 
- ABIs
-@@ -75,6 +76,8 @@ of this structure changes, this can break live migration across KVM versions.
- VMCS12_REVISION (from vmx.c) should be changed if struct vmcs12 or its inner
- struct shadow_vmcs is ever changed.
- 
-+::
+@@ -31,8 +32,10 @@ Groups:
+     Copies all floating interrupts into a buffer provided by userspace.
+     When the buffer is too small it returns -ENOMEM, which is the indication
+     for userspace to try again with a bigger buffer.
 +
- 	typedef u64 natural_width;
- 	struct __packed vmcs12 {
- 		/* According to the Intel spec, a VMCS region must start with
-@@ -220,21 +223,21 @@ Authors
- -------
+     -ENOBUFS is returned when the allocation of a kernelspace buffer has
+     failed.
++
+     -EFAULT is returned when copying data to userspace failed.
+     All interrupts remain pending, i.e. are not deleted from the list of
+     currently pending interrupts.
+@@ -60,38 +63,41 @@ Groups:
  
- These patches were written by:
--     Abel Gordon, abelg <at> il.ibm.com
--     Nadav Har'El, nyh <at> il.ibm.com
--     Orit Wasserman, oritw <at> il.ibm.com
--     Ben-Ami Yassor, benami <at> il.ibm.com
--     Muli Ben-Yehuda, muli <at> il.ibm.com
-+    - Abel Gordon, abelg <at> il.ibm.com
-+    - Nadav Har'El, nyh <at> il.ibm.com
-+    - Orit Wasserman, oritw <at> il.ibm.com
-+    - Ben-Ami Yassor, benami <at> il.ibm.com
-+    - Muli Ben-Yehuda, muli <at> il.ibm.com
+   KVM_DEV_FLIC_ADAPTER_REGISTER
+     Register an I/O adapter interrupt source. Takes a kvm_s390_io_adapter
+-    describing the adapter to register:
++    describing the adapter to register::
  
- With contributions by:
--     Anthony Liguori, aliguori <at> us.ibm.com
--     Mike Day, mdday <at> us.ibm.com
--     Michael Factor, factor <at> il.ibm.com
--     Zvi Dubitzky, dubi <at> il.ibm.com
-+    - Anthony Liguori, aliguori <at> us.ibm.com
-+    - Mike Day, mdday <at> us.ibm.com
-+    - Michael Factor, factor <at> il.ibm.com
-+    - Zvi Dubitzky, dubi <at> il.ibm.com
+-struct kvm_s390_io_adapter {
+-	__u32 id;
+-	__u8 isc;
+-	__u8 maskable;
+-	__u8 swap;
+-	__u8 flags;
+-};
++	struct kvm_s390_io_adapter {
++		__u32 id;
++		__u8 isc;
++		__u8 maskable;
++		__u8 swap;
++		__u8 flags;
++	};
  
- And valuable reviews by:
--     Avi Kivity, avi <at> redhat.com
--     Gleb Natapov, gleb <at> redhat.com
--     Marcelo Tosatti, mtosatti <at> redhat.com
--     Kevin Tian, kevin.tian <at> intel.com
--     and others.
-+    - Avi Kivity, avi <at> redhat.com
-+    - Gleb Natapov, gleb <at> redhat.com
-+    - Marcelo Tosatti, mtosatti <at> redhat.com
-+    - Kevin Tian, kevin.tian <at> intel.com
-+    - and others.
+    id contains the unique id for the adapter, isc the I/O interruption subclass
+    to use, maskable whether this adapter may be masked (interrupts turned off),
+    swap whether the indicators need to be byte swapped, and flags contains
+    further characteristics of the adapter.
++
+    Currently defined values for 'flags' are:
++
+    - KVM_S390_ADAPTER_SUPPRESSIBLE: adapter is subject to AIS
+      (adapter-interrupt-suppression) facility. This flag only has an effect if
+      the AIS capability is enabled.
++
+    Unknown flag values are ignored.
+ 
+ 
+   KVM_DEV_FLIC_ADAPTER_MODIFY
+     Modifies attributes of an existing I/O adapter interrupt source. Takes
+-    a kvm_s390_io_adapter_req specifying the adapter and the operation:
++    a kvm_s390_io_adapter_req specifying the adapter and the operation::
+ 
+-struct kvm_s390_io_adapter_req {
+-	__u32 id;
+-	__u8 type;
+-	__u8 mask;
+-	__u16 pad0;
+-	__u64 addr;
+-};
++	struct kvm_s390_io_adapter_req {
++		__u32 id;
++		__u8 type;
++		__u8 mask;
++		__u16 pad0;
++		__u64 addr;
++	};
+ 
+     id specifies the adapter and type the operation. The supported operations
+     are:
+@@ -103,8 +109,9 @@ struct kvm_s390_io_adapter_req {
+       perform a gmap translation for the guest address provided in addr,
+       pin a userspace page for the translated address and add it to the
+       list of mappings
+-      Note: A new mapping will be created unconditionally; therefore,
+-            the calling code should avoid making duplicate mappings.
++
++      .. note:: A new mapping will be created unconditionally; therefore,
++	        the calling code should avoid making duplicate mappings.
+ 
+     KVM_S390_IO_ADAPTER_UNMAP
+       release a userspace page for the translated address specified in addr
+@@ -112,16 +119,17 @@ struct kvm_s390_io_adapter_req {
+ 
+   KVM_DEV_FLIC_AISM
+     modify the adapter-interruption-suppression mode for a given isc if the
+-    AIS capability is enabled. Takes a kvm_s390_ais_req describing:
++    AIS capability is enabled. Takes a kvm_s390_ais_req describing::
+ 
+-struct kvm_s390_ais_req {
+-	__u8 isc;
+-	__u16 mode;
+-};
++	struct kvm_s390_ais_req {
++		__u8 isc;
++		__u16 mode;
++	};
+ 
+     isc contains the target I/O interruption subclass, mode the target
+     adapter-interruption-suppression mode. The following modes are
+     currently supported:
++
+     - KVM_S390_AIS_MODE_ALL: ALL-Interruptions Mode, i.e. airq injection
+       is always allowed;
+     - KVM_S390_AIS_MODE_SINGLE: SINGLE-Interruption Mode, i.e. airq
+@@ -139,12 +147,12 @@ struct kvm_s390_ais_req {
+ 
+   KVM_DEV_FLIC_AISM_ALL
+     Gets or sets the adapter-interruption-suppression mode for all ISCs. Takes
+-    a kvm_s390_ais_all describing:
++    a kvm_s390_ais_all describing::
+ 
+-struct kvm_s390_ais_all {
+-       __u8 simm; /* Single-Interruption-Mode mask */
+-       __u8 nimm; /* No-Interruption-Mode mask *
+-};
++	struct kvm_s390_ais_all {
++	       __u8 simm; /* Single-Interruption-Mode mask */
++	       __u8 nimm; /* No-Interruption-Mode mask *
++	};
+ 
+     simm contains Single-Interruption-Mode mask for all ISCs, nimm contains
+     No-Interruption-Mode mask for all ISCs. Each bit in simm and nimm corresponds
+@@ -159,5 +167,5 @@ ENXIO, as specified in the API documentation). It is not possible to conclude
+ that a FLIC operation is unavailable based on the error code resulting from a
+ usage attempt.
+ 
+-Note: The KVM_DEV_FLIC_CLEAR_IO_IRQ ioctl will return EINVAL in case a zero
+-schid is specified.
++.. note:: The KVM_DEV_FLIC_CLEAR_IO_IRQ ioctl will return EINVAL in case a
++	  zero schid is specified.
 -- 
 2.24.1
 
