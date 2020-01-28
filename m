@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2F3DC35246
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D171EC47409
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:00:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 994CA205F4
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:00:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A975424691
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:00:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580220053;
-	bh=PcE8BBpEouu6QcFp0wL9wrsi5teS0iVNnlOia6qoxTg=;
+	s=default; t=1580220054;
+	bh=8ZS/6n8J5UB5wubzZ7z35fAmP7GS0V68re8Wr+VDze8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WKWY+EquVbJlLWt0nVrRYq/UFnssPBuT1chU01Z0WN9gvDj99nM/av4MpVTLby2iA
-	 TJT5MPOmSMfnldjYOgvQqfq7MMMsNN5vd0yMcHT/g+iRCVci+95N+QEKnzwwp3vpEp
-	 Ouw02gfsWbd8LGqoURufFOiOS0XcVGg5MQlHVBDI=
+	b=Ejz6qZfEUvfX/ObLj0UeWtUz7v4Qu8mORtWjwteNamFm/8HeJK9tplkHwNd1JxrRi
+	 +iPF6iQWU3l+b7rPuQZiMIeo5Drc2mY7HxOOxYKTd8yqyLX4SfmgtnPisqfBDc0FwM
+	 VGYTb7+tLLjvWBk868MjPRUO47UE85nfzNqXGO3g=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727351AbgA1OAu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:00:50 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59428 "EHLO
+        id S1726817AbgA1OAt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:00:49 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:59418 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727308AbgA1OAr (ORCPT
+        with ESMTP id S1727306AbgA1OAr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 09:00:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=qSQNK5Ivf59NAVe6e3CbDIPuMhg/3mhXwdp9SJF3SBc=; b=dbi4rOLWK4VPc4F5gqe5vAiWbW
-        zHY6QmdxRQO3QfkDrqx0CbpJv2TFp0MgelsMkzZN6LxkeGpgMu0ADBhNsdidm5iiVTrXtBpF2pUM0
-        7lnduDY7uX/oa+pjLPnepXOljxyV93LJX1g3TeBS9sdfbdGPkARNp9eUmOBCOpKyegzv6zsHsHlUK
-        dGgq5rBhzeMtU1nxnFlpSGtw/z7BIAzrHArV8vZy2NKycFDGnMV4XAfIy83NzjP8UedBGFwPpVnaG
-        YWcUZqTy+Ih/NtDbZBug5r0GTYxG7j6pOSo4VxzULrUhQC96pmXya9PrfGjO8ycjWm+U2z0LwEOYe
-        PCmCItCQ==;
+        bh=47knvKP2hkOqYj0lWrn/u5a+ztvae81C4pMTyKp2WE4=; b=qv6nbjlQmpV9D0gQtQlJLKkXio
+        klniMlQpj/3q2O56PvvRtTdG6KxobJfOEPbh+CMHI2Jhj6LdDOaXPtx8fk8PO40Ay1KgzD4dqWhC2
+        wvjOjOUwYskxfjmL2yGzI7kiX++7xVYxeKfwxG0hMBf5jgPSYp3thtaEHJxgwF1ZqQt8M/wko5efC
+        wvTzI+8L2UNbCh4Kb88/vbF1kft4wUiyxOfGkkykfnTIHyknpn1CC4TSBe2+eC5B9NcxCkrgcAa2j
+        dhwn1vaTYhQgcHOXU2WwOgPjUr7IgpQ4CCVjjDm77YQ4JUP9enL+gCCt3vMpwHvHJsqb2Q8yUf82v
+        X5LV+RNA==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRQ6-0007ix-95; Tue, 28 Jan 2020 14:00:46 +0000
+        id 1iwRQ5-0007if-Ey; Tue, 28 Jan 2020 14:00:46 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRPp-001BOs-Uo; Tue, 28 Jan 2020 15:00:29 +0100
+        id 1iwRPp-001BNp-EV; Tue, 28 Jan 2020 15:00:29 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 21/27] docs: kvm: Convert locking.txt to ReST format
-Date:   Tue, 28 Jan 2020 15:00:22 +0100
-Message-Id: <31d840edcc924b6b4d6f3f6b3f130623c2a4d91c.1580219586.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 08/27] docs: kvm: devices/arm-vgit-v3.txt to ReST
+Date:   Tue, 28 Jan 2020 15:00:09 +0100
+Message-Id: <20d4b1a9338c37ef127e3d1801c1d14f8353b9f0.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,229 +65,280 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Use document title and chapter markups;
-- Add markups for literal blocks;
-- use :field: for field descriptions;
-- Add blank lines and adjust indentation.
+- Use title markups;
+- change indent to match ReST syntax;
+- use proper table markups;
+- use literal block markups.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/index.rst              |   1 +
- .../virt/kvm/{locking.txt => locking.rst}     | 109 ++++++++++--------
- 2 files changed, 61 insertions(+), 49 deletions(-)
- rename Documentation/virt/kvm/{locking.txt => locking.rst} (79%)
+ .../{arm-vgic-v3.txt => arm-vgic-v3.rst}      | 130 +++++++++++-------
+ Documentation/virt/kvm/devices/index.rst      |   1 +
+ 2 files changed, 85 insertions(+), 46 deletions(-)
+ rename Documentation/virt/kvm/devices/{arm-vgic-v3.txt => arm-vgic-v3.rst} (77%)
 
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index ac83bc588f7e..9be8f53b729d 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -12,6 +12,7 @@ KVM
-    cpuid
-    halt-polling
-    hypercalls
-+   locking
-    msr
-    vcpu-requests
+diff --git a/Documentation/virt/kvm/devices/arm-vgic-v3.txt b/Documentation/virt/kvm/devices/arm-vgic-v3.rst
+similarity index 77%
+rename from Documentation/virt/kvm/devices/arm-vgic-v3.txt
+rename to Documentation/virt/kvm/devices/arm-vgic-v3.rst
+index ff290b43c8e5..1a64644d1a43 100644
+--- a/Documentation/virt/kvm/devices/arm-vgic-v3.txt
++++ b/Documentation/virt/kvm/devices/arm-vgic-v3.rst
+@@ -1,9 +1,10 @@
++==============================================================
+ ARM Virtual Generic Interrupt Controller v3 and later (VGICv3)
+ ==============================================================
  
-diff --git a/Documentation/virt/kvm/locking.txt b/Documentation/virt/kvm/locking.rst
-similarity index 79%
-rename from Documentation/virt/kvm/locking.txt
-rename to Documentation/virt/kvm/locking.rst
-index 635cd6eaf714..065706a9155e 100644
---- a/Documentation/virt/kvm/locking.txt
-+++ b/Documentation/virt/kvm/locking.rst
-@@ -1,3 +1,4 @@
-+=================
- KVM Lock Overview
- =================
  
-@@ -18,7 +19,7 @@ On x86, vcpu->mutex is taken outside kvm->arch.hyperv.hv_lock.
- Everything else is a leaf: no other lock is taken inside the critical
- sections.
+ Device types supported:
+-  KVM_DEV_TYPE_ARM_VGIC_V3     ARM Generic Interrupt Controller v3.0
++  - KVM_DEV_TYPE_ARM_VGIC_V3     ARM Generic Interrupt Controller v3.0
  
--2: Exception
-+2. Exception
- ------------
+ Only one VGIC instance may be instantiated through this API.  The created VGIC
+ will act as the VM interrupt controller, requiring emulated user-space devices
+@@ -15,7 +16,8 @@ Creating a guest GICv3 device requires a host GICv3 as well.
  
- Fast page fault:
-@@ -28,15 +29,16 @@ the mmu-lock on x86. Currently, the page fault can be fast in one of the
- following two cases:
- 
- 1. Access Tracking: The SPTE is not present, but it is marked for access
--tracking i.e. the SPTE_SPECIAL_MASK is set. That means we need to
--restore the saved R/X bits. This is described in more detail later below.
-+   tracking i.e. the SPTE_SPECIAL_MASK is set. That means we need to
-+   restore the saved R/X bits. This is described in more detail later below.
- 
- 2. Write-Protection: The SPTE is present and the fault is
--caused by write-protect. That means we just need to change the W bit of the 
--spte.
-+   caused by write-protect. That means we just need to change the W bit of
-+   the spte.
- 
- What we use to avoid all the race is the SPTE_HOST_WRITEABLE bit and
- SPTE_MMU_WRITEABLE bit on the spte:
+ Groups:
+   KVM_DEV_ARM_VGIC_GRP_ADDR
+-  Attributes:
++   Attributes:
 +
- - SPTE_HOST_WRITEABLE means the gfn is writable on host.
- - SPTE_MMU_WRITEABLE means the gfn is writable on mmu. The bit is set when
-   the gfn is writable on guest mmu and it is not write-protected by shadow
-@@ -48,19 +50,23 @@ restore the saved R/X bits if VMX_EPT_TRACK_ACCESS mask is set, or both. This
- is safe because whenever changing these bits can be detected by cmpxchg.
+     KVM_VGIC_V3_ADDR_TYPE_DIST (rw, 64-bit)
+       Base address in the guest physical address space of the GICv3 distributor
+       register mappings. Only valid for KVM_DEV_TYPE_ARM_VGIC_V3.
+@@ -29,21 +31,25 @@ Groups:
+       This address needs to be 64K aligned.
  
- But we need carefully check these cases:
--1): The mapping from gfn to pfn
+     KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION (rw, 64-bit)
+-      The attribute data pointed to by kvm_device_attr.addr is a __u64 value:
+-      bits:     | 63   ....  52  |  51   ....   16 | 15 - 12  |11 - 0
+-      values:   |     count      |       base      |  flags   | index
++      The attribute data pointed to by kvm_device_attr.addr is a __u64 value::
 +
-+1) The mapping from gfn to pfn
++        bits:     | 63   ....  52  |  51   ....   16 | 15 - 12  |11 - 0
++        values:   |     count      |       base      |  flags   | index
 +
- The mapping from gfn to pfn may be changed since we can only ensure the pfn
- is not changed during cmpxchg. This is a ABA problem, for example, below case
- will happen:
- 
--At the beginning:
--gpte = gfn1
--gfn1 is mapped to pfn1 on host
--spte is the shadow page table entry corresponding with gpte and
--spte = pfn1
-+At the beginning::
- 
--   VCPU 0                           VCPU0
--on fast page fault path:
-+	gpte = gfn1
-+	gfn1 is mapped to pfn1 on host
-+	spte is the shadow page table entry corresponding with gpte and
-+	spte = pfn1
+       - index encodes the unique redistributor region index
+       - flags: reserved for future use, currently 0
+       - base field encodes bits [51:16] of the guest physical base address
+         of the first redistributor in the region.
+       - count encodes the number of redistributors in the region. Must be
+         greater than 0.
 +
-+	   VCPU 0                           VCPU0
+       There are two 64K pages for each redistributor in the region and
+       redistributors are laid out contiguously within the region. Regions
+       are filled with redistributors in the index order. The sum of all
+       region count fields must be greater than or equal to the number of
+       VCPUs. Redistributor regions must be registered in the incremental
+       index order, starting from index 0.
 +
-+on fast page fault path::
+       The characteristics of a specific redistributor region can be read
+       by presetting the index field in the attr data.
+       Only valid for KVM_DEV_TYPE_ARM_VGIC_V3.
+@@ -52,23 +58,27 @@ Groups:
+   KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION attributes.
  
-    old_spte = *spte;
-                                  pfn1 is swapped out:
-@@ -81,6 +87,7 @@ We dirty-log for gfn1, that means gfn2 is lost in dirty-bitmap.
- For direct sp, we can easily avoid it since the spte of direct sp is fixed
- to gfn. For indirect sp, before we do cmpxchg, we call gfn_to_pfn_atomic()
- to pin gfn to pfn, because after gfn_to_pfn_atomic():
+   Errors:
+-    -E2BIG:  Address outside of addressable IPA range
+-    -EINVAL: Incorrectly aligned address, bad redistributor region
 +
- - We have held the refcount of pfn that means the pfn can not be freed and
-   be reused for another gfn.
- - The pfn is writable that means it can not be shared between different gfns
-@@ -91,7 +98,8 @@ Then, we can ensure the dirty bitmaps is correctly set for a gfn.
- Currently, to simplify the whole things, we disable fast page fault for
- indirect shadow page.
++    =======  =============================================================
++    -E2BIG   Address outside of addressable IPA range
++    -EINVAL  Incorrectly aligned address, bad redistributor region
+              count/index, mixed redistributor region attribute usage
+-    -EEXIST: Address already configured
+-    -ENOENT: Attempt to read the characteristics of a non existing
++    -EEXIST  Address already configured
++    -ENOENT  Attempt to read the characteristics of a non existing
+              redistributor region
+-    -ENXIO:  The group or attribute is unknown/unsupported for this device
++    -ENXIO   The group or attribute is unknown/unsupported for this device
+              or hardware support is missing.
+-    -EFAULT: Invalid user pointer for attr->addr.
++    -EFAULT  Invalid user pointer for attr->addr.
++    =======  =============================================================
  
--2): Dirty bit tracking
-+2) Dirty bit tracking
+ 
+-  KVM_DEV_ARM_VGIC_GRP_DIST_REGS
+-  KVM_DEV_ARM_VGIC_GRP_REDIST_REGS
+-  Attributes:
+-    The attr field of kvm_device_attr encodes two values:
+-    bits:     | 63   ....  32  |  31   ....    0 |
+-    values:   |      mpidr     |      offset     |
++  KVM_DEV_ARM_VGIC_GRP_DIST_REGS, KVM_DEV_ARM_VGIC_GRP_REDIST_REGS
++   Attributes:
 +
- In the origin code, the spte can be fast updated (non-atomically) if the
- spte is read-only and the Accessed bit has already been set since the
- Accessed bit and Dirty bit can not be lost.
-@@ -99,12 +107,14 @@ Accessed bit and Dirty bit can not be lost.
- But it is not true after fast page fault since the spte can be marked
- writable between reading spte and updating spte. Like below case:
- 
--At the beginning:
--spte.W = 0
--spte.Accessed = 1
-+At the beginning::
- 
--   VCPU 0                                       VCPU0
--In mmu_spte_clear_track_bits():
-+	spte.W = 0
-+	spte.Accessed = 1
++    The attr field of kvm_device_attr encodes two values::
 +
-+	   VCPU 0                                       VCPU0
++      bits:     | 63   ....  32  |  31   ....    0 |
++      values:   |      mpidr     |      offset     |
+ 
+     All distributor regs are (rw, 32-bit) and kvm_device_attr.addr points to a
+     __u32 value.  64-bit registers must be accessed by separately accessing the
+@@ -93,7 +103,8 @@ Groups:
+     redistributor is accessed.  The mpidr is ignored for the distributor.
+ 
+     The mpidr encoding is based on the affinity information in the
+-    architecture defined MPIDR, and the field is encoded as follows:
++    architecture defined MPIDR, and the field is encoded as follows::
 +
-+In mmu_spte_clear_track_bits()::
+       | 63 .... 56 | 55 .... 48 | 47 .... 40 | 39 .... 32 |
+       |    Aff3    |    Aff2    |    Aff1    |    Aff0    |
  
-    old_spte = *spte;
+@@ -148,24 +159,30 @@ Groups:
+     ignored.
  
-@@ -134,7 +144,8 @@ In order to avoid this kind of issue, we always treat the spte as "volatile"
- if it can be updated out of mmu-lock, see spte_has_volatile_bits(), it means,
- the spte is always atomically updated in this case.
- 
--3): flush tlbs due to spte updated
-+3) flush tlbs due to spte updated
+   Errors:
+-    -ENXIO: Getting or setting this register is not yet supported
+-    -EBUSY: One or more VCPUs are running
 +
- If the spte is updated from writable to readonly, we should flush all TLBs,
- otherwise rmap_write_protect will find a read-only spte, even though the
- writable spte might be cached on a CPU's TLB.
-@@ -166,47 +177,47 @@ which time it will be set using the Dirty tracking mechanism described above.
- 3. Reference
- ------------
++    ======  =====================================================
++    -ENXIO  Getting or setting this register is not yet supported
++    -EBUSY  One or more VCPUs are running
++    ======  =====================================================
  
--Name:		kvm_lock
--Type:		mutex
--Arch:		any
--Protects:	- vm_list
-+:Name:		kvm_lock
-+:Type:		mutex
-+:Arch:		any
-+:Protects:	- vm_list
  
--Name:		kvm_count_lock
--Type:		raw_spinlock_t
--Arch:		any
--Protects:	- hardware virtualization enable/disable
--Comment:	'raw' because hardware enabling/disabling must be atomic /wrt
-+:Name:		kvm_count_lock
-+:Type:		raw_spinlock_t
-+:Arch:		any
-+:Protects:	- hardware virtualization enable/disable
-+:Comment:	'raw' because hardware enabling/disabling must be atomic /wrt
- 		migration.
+   KVM_DEV_ARM_VGIC_GRP_CPU_SYSREGS
+-  Attributes:
+-    The attr field of kvm_device_attr encodes two values:
+-    bits:     | 63      ....       32 | 31  ....  16 | 15  ....  0 |
+-    values:   |         mpidr         |      RES     |    instr    |
++   Attributes:
++
++    The attr field of kvm_device_attr encodes two values::
++
++      bits:     | 63      ....       32 | 31  ....  16 | 15  ....  0 |
++      values:   |         mpidr         |      RES     |    instr    |
  
--Name:		kvm_arch::tsc_write_lock
--Type:		raw_spinlock
--Arch:		x86
--Protects:	- kvm_arch::{last_tsc_write,last_tsc_nsec,last_tsc_offset}
-+:Name:		kvm_arch::tsc_write_lock
-+:Type:		raw_spinlock
-+:Arch:		x86
-+:Protects:	- kvm_arch::{last_tsc_write,last_tsc_nsec,last_tsc_offset}
- 		- tsc offset in vmcb
--Comment:	'raw' because updating the tsc offsets must not be preempted.
-+:Comment:	'raw' because updating the tsc offsets must not be preempted.
+     The mpidr field encodes the CPU ID based on the affinity information in the
+-    architecture defined MPIDR, and the field is encoded as follows:
++    architecture defined MPIDR, and the field is encoded as follows::
++
+       | 63 .... 56 | 55 .... 48 | 47 .... 40 | 39 .... 32 |
+       |    Aff3    |    Aff2    |    Aff1    |    Aff0    |
  
--Name:		kvm->mmu_lock
--Type:		spinlock_t
--Arch:		any
--Protects:	-shadow page/shadow tlb entry
--Comment:	it is a spinlock since it is used in mmu notifier.
-+:Name:		kvm->mmu_lock
-+:Type:		spinlock_t
-+:Arch:		any
-+:Protects:	-shadow page/shadow tlb entry
-+:Comment:	it is a spinlock since it is used in mmu notifier.
+     The instr field encodes the system register to access based on the fields
+     defined in the A64 instruction set encoding for system register access
+-    (RES means the bits are reserved for future use and should be zero):
++    (RES means the bits are reserved for future use and should be zero)::
  
--Name:		kvm->srcu
--Type:		srcu lock
--Arch:		any
--Protects:	- kvm->memslots
-+:Name:		kvm->srcu
-+:Type:		srcu lock
-+:Arch:		any
-+:Protects:	- kvm->memslots
- 		- kvm->buses
--Comment:	The srcu read lock must be held while accessing memslots (e.g.
-+:Comment:	The srcu read lock must be held while accessing memslots (e.g.
- 		when using gfn_to_* functions) and while accessing in-kernel
- 		MMIO/PIO address->device structure mapping (kvm->buses).
- 		The srcu index can be stored in kvm_vcpu->srcu_idx per vcpu
- 		if it is needed by multiple functions.
+       | 15 ... 14 | 13 ... 11 | 10 ... 7 | 6 ... 3 | 2 ... 0 |
+       |   Op 0    |    Op1    |    CRn   |   CRm   |   Op2   |
+@@ -178,26 +195,35 @@ Groups:
  
--Name:		blocked_vcpu_on_cpu_lock
--Type:		spinlock_t
--Arch:		x86
--Protects:	blocked_vcpu_on_cpu
--Comment:	This is a per-CPU lock and it is used for VT-d posted-interrupts.
-+:Name:		blocked_vcpu_on_cpu_lock
-+:Type:		spinlock_t
-+:Arch:		x86
-+:Protects:	blocked_vcpu_on_cpu
-+:Comment:	This is a per-CPU lock and it is used for VT-d posted-interrupts.
- 		When VT-d posted-interrupts is supported and the VM has assigned
- 		devices, we put the blocked vCPU on the list blocked_vcpu_on_cpu
- 		protected by blocked_vcpu_on_cpu_lock, when VT-d hardware issues
+     CPU interface registers access is not implemented for AArch32 mode.
+     Error -ENXIO is returned when accessed in AArch32 mode.
++
+   Errors:
+-    -ENXIO: Getting or setting this register is not yet supported
+-    -EBUSY: VCPU is running
+-    -EINVAL: Invalid mpidr or register value supplied
++
++    =======  =====================================================
++    -ENXIO   Getting or setting this register is not yet supported
++    -EBUSY   VCPU is running
++    -EINVAL  Invalid mpidr or register value supplied
++    =======  =====================================================
+ 
+ 
+   KVM_DEV_ARM_VGIC_GRP_NR_IRQS
+-  Attributes:
++   Attributes:
++
+     A value describing the number of interrupts (SGI, PPI and SPI) for
+     this GIC instance, ranging from 64 to 1024, in increments of 32.
+ 
+     kvm_device_attr.addr points to a __u32 value.
+ 
+   Errors:
+-    -EINVAL: Value set is out of the expected range
+-    -EBUSY: Value has already be set.
++
++    =======  ======================================
++    -EINVAL  Value set is out of the expected range
++    -EBUSY   Value has already be set.
++    =======  ======================================
+ 
+ 
+   KVM_DEV_ARM_VGIC_GRP_CTRL
+-  Attributes:
++   Attributes:
++
+     KVM_DEV_ARM_VGIC_CTRL_INIT
+       request the initialization of the VGIC, no additional parameter in
+       kvm_device_attr.addr.
+@@ -205,20 +231,26 @@ Groups:
+       save all LPI pending bits into guest RAM pending tables.
+ 
+       The first kB of the pending table is not altered by this operation.
++
+   Errors:
+-    -ENXIO: VGIC not properly configured as required prior to calling
+-     this attribute
+-    -ENODEV: no online VCPU
+-    -ENOMEM: memory shortage when allocating vgic internal data
+-    -EFAULT: Invalid guest ram access
+-    -EBUSY:  One or more VCPUS are running
++
++    =======  ========================================================
++    -ENXIO   VGIC not properly configured as required prior to calling
++             this attribute
++    -ENODEV  no online VCPU
++    -ENOMEM  memory shortage when allocating vgic internal data
++    -EFAULT  Invalid guest ram access
++    -EBUSY   One or more VCPUS are running
++    =======  ========================================================
+ 
+ 
+   KVM_DEV_ARM_VGIC_GRP_LEVEL_INFO
+-  Attributes:
+-    The attr field of kvm_device_attr encodes the following values:
+-    bits:     | 63      ....       32 | 31   ....    10 | 9  ....  0 |
+-    values:   |         mpidr         |      info       |   vINTID   |
++   Attributes:
++
++    The attr field of kvm_device_attr encodes the following values::
++
++      bits:     | 63      ....       32 | 31   ....    10 | 9  ....  0 |
++      values:   |         mpidr         |      info       |   vINTID   |
+ 
+     The vINTID specifies which set of IRQs is reported on.
+ 
+@@ -228,6 +260,7 @@ Groups:
+       VGIC_LEVEL_INFO_LINE_LEVEL:
+ 	Get/Set the input level of the IRQ line for a set of 32 contiguously
+ 	numbered interrupts.
++
+ 	vINTID must be a multiple of 32.
+ 
+ 	kvm_device_attr.addr points to a __u32 value which will contain a
+@@ -243,9 +276,14 @@ Groups:
+     reported with the same value regardless of the mpidr specified.
+ 
+     The mpidr field encodes the CPU ID based on the affinity information in the
+-    architecture defined MPIDR, and the field is encoded as follows:
++    architecture defined MPIDR, and the field is encoded as follows::
++
+       | 63 .... 56 | 55 .... 48 | 47 .... 40 | 39 .... 32 |
+       |    Aff3    |    Aff2    |    Aff1    |    Aff0    |
++
+   Errors:
+-    -EINVAL: vINTID is not multiple of 32 or
+-     info field is not VGIC_LEVEL_INFO_LINE_LEVEL
++
++    =======  =============================================
++    -EINVAL  vINTID is not multiple of 32 or info field is
++	     not VGIC_LEVEL_INFO_LINE_LEVEL
++    =======  =============================================
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index 2aad8d426097..80c1e0e225f4 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -8,3 +8,4 @@ Devices
+    :maxdepth: 2
+ 
+    arm-vgic-its
++   arm-vgic-v3
 -- 
 2.24.1
 
