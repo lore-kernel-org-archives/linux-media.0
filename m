@@ -2,239 +2,164 @@ Return-Path: <SRS0=rRrk=3R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BED9EC2D0DB
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8505EC33CB2
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8A9B8214AF
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C0B4214AF
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580223079;
-	bh=NoI27l/cCtHM2oMOjtSzMqwiz1a5EKr0KHNB3L2+DUE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kjCU6FHOYOOe/P1TzMaYYwTaDwbN5mrhYkEVC+sMJpXjFDHX0y2KXCrMET7IdcJtZ
-	 LXHlekZLFKwPAxVtT0jAA4+OIvccl5zi8a6YCMQAdAVNXZ72hnBRHcWzKSfpdfC55z
-	 XOe28NCZPnXnEG1L5qTA3Oc6SfdY3A0PiMDnJuw4=
+	s=default; t=1580223081;
+	bh=Mv8f/pliX+ocV47UnDmPvVenRZUxEIIXDtdMqeYs8qA=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=GJ/Tj+TfNUcofHwUUbuDBnjtWvXCNdNXsZpvzon7Dpj4skoZ0tmRUMRpnT1/d7ah6
+	 3CL91/OD7y68krB3m4lLAWoqgRSmuLHJVVw372b20z2MQA5EgowMy//zOBAaAgBiNq
+	 tWbB7UaDT18prHJlnAi56KB/Zdw5mUcP2z1f5zvs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727262AbgA1OvS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:51:18 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58446 "EHLO
+        id S1727497AbgA1OvU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:51:20 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:58552 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726540AbgA1N6p (ORCPT
+        with ESMTP id S1726595AbgA1N6p (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 08:58:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=BCH2exYpaTXxc+kQslPFBsbgIXC7remIkotVPujXUxc=; b=OyxUASrievcKblYUzjYi7v48TW
-        K/1rh+dFD1DkcrTujxzgt22qn/CrwWjrXzJJRK57Nmh89HsbC2WyYS0FPuhTQieXFArDUr1SpqhqO
-        jL6xBYwdGbO9sQWZIJpo7RDIMrC92QBlZVPxg+l1IzOTG3iiJA10LF9Guye3/7tyQJVeIVczQFysE
-        PKTxO4uqRIDz8Rfo15mqR6rA8RGKES9XM3rLZUcB5a6VBRcES2Yib1lpGA12f1hE/qkPXOQPI70qF
-        scQyeeesvv1ZZgP6Xn0FOCLSxaKXexhPgjp4zuEgk+TRtbYCtD1PdO1NCt8Qey87HZmfTdKPVBcOv
-        etPR0Cxg==;
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=DXSED2YLe82h5LjexvdXkjf3Ix9TaTo2l6rYLelz1VU=; b=I6JXhiBvTPnxAO4xl5bXPdJT/
+        IMcr66RCWxFIXF4QbZ6roOONRSRzDdeIVF3taD8tJjLdxXFjT3eNYaSfh2T9xwBLnWcfDXOMYl9Lp
+        YgJWWa/fBNXoLe78ImqUSk5OW4KxV6GBNsX7KblWK4bKPJYjDboVXCiwSgJxPF9MuMi2SqgwWqlaf
+        0TcsMxG0BBI6la7Scf0kK75mCQpDtQQj9VIRND31YSkwN5hmiDMnrw0PHykzjcRvd/oAzu2xcYXAc
+        XAiJ980vlNy2hY0tJN9QXCIUul4j1b+EX10mb+9fJs43+DV/OSA4dIraTt2+yl1jduOffBF4QwWh8
+        HzwXAws2Q==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRO6-0006Hs-N9; Tue, 28 Jan 2020 13:58:42 +0000
+        id 1iwRO8-0006LY-FB; Tue, 28 Jan 2020 13:58:44 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRNq-001BJl-Cd; Tue, 28 Jan 2020 14:58:26 +0100
+        id 1iwRNq-001BJB-1s; Tue, 28 Jan 2020 14:58:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 09/27] docs: kvm: convert devices/arm-vgit.txt to ReST
-Date:   Tue, 28 Jan 2020 14:58:05 +0100
-Message-Id:
- <f54d732903825b889626cfff48384c9b293a5b86.1580219586.git.mchehab+huawei@kernel.org>
+        linux-um@lists.infradead.org, linux-doc@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 00/27] docs: virt: convert text documents to ReST format
+Date:   Tue, 28 Jan 2020 14:57:56 +0100
+Message-Id: <cover.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
-References: <cover.1580219586.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Message-ID: <20200128135805.PZgMYy7wLVgYDhhZHJng_ghUc701VuR9F8yys4s1BNw@z>
+Message-ID: <20200128135756.ee-Pylmj8U3k5fga5Pf-kwoHD_JhFRucVgGFKxnMVwU@z>
 
-- Use title markups;
-- change indent to match ReST syntax;
-- use proper table markups;
-- use literal block markups.
+Manually convert the documentation under Documentation/virt to ReST,
+minimizing the usage of uneeded markups and preserving the documentation
+writer's style.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- .../devices/{arm-vgic.txt => arm-vgic.rst}    | 87 ++++++++++++-------
- Documentation/virt/kvm/devices/index.rst      |  1 +
- 2 files changed, 58 insertions(+), 30 deletions(-)
+PS.: Patches are against docs-next tree.
+
+Mauro Carvalho Chehab (27):
+  docs: kvm: add arm/pvtime.rst to index.rst
+  docs: virt: convert UML documentation to ReST
+  docs: virt: user_mode_linux.rst: update compiling instructions
+  docs: virt: user_mode_linux.rst: fix URL references
+  docs: virt: convert halt-polling.txt to ReST format
+  docs: virt: Convert msr.txt to ReST format
+  docs: kvm: devices/arm-vgic-its.txt to ReST format
+  docs: kvm: devices/arm-vgit-v3.txt to ReST
+  docs: kvm: convert devices/arm-vgit.txt to ReST
+  docs: kvm: convert devices/mpic.txt to ReST
+  docs: kvm: convert devices/s390_flic.txt to ReST
+  docs: kvm: convert devices/vcpu.txt to ReST
+  docs: kvm: convert devices/vcpu.txt to ReST
+  docs: kvm: convert devices/vm.txt to ReST
+  docs: kvm: convert devices/xics.txt to ReST
+  docs: kvm: convert devices/xive.txt to ReST
+  docs: kvm: Convert api.txt to ReST format
+  docs: kvm: convert arm/hyp-abi.txt to ReST
+  docs: kvm: arm/psci.txt: convert to ReST
+  docs: kvm: Convert hypercalls.txt to ReST format
+  docs: kvm: Convert locking.txt to ReST format
+  docs: kvm: Convert mmu.txt to ReST format
+  docs: kvm: Convert nested-vmx.txt to ReST format
+  docs: kvm: Convert ppc-pv.txt to ReST format
+  docs: kvm: Convert s390-diag.txt to ReST format
+  docs: kvm: Convert timekeeping.txt to ReST format
+  docs: kvm: review-checklist.txt: rename to ReST
+
+ Documentation/virt/index.rst                  |    1 +
+ Documentation/virt/kvm/{api.txt => api.rst}   | 3343 ++++++++++-------
+ .../virt/kvm/arm/{hyp-abi.txt => hyp-abi.rst} |   26 +-
+ Documentation/virt/kvm/arm/index.rst          |   12 +
+ .../virt/kvm/arm/{psci.txt => psci.rst}       |   44 +-
+ .../{arm-vgic-its.txt => arm-vgic-its.rst}    |  104 +-
+ .../{arm-vgic-v3.txt => arm-vgic-v3.rst}      |  130 +-
+ .../devices/{arm-vgic.txt => arm-vgic.rst}    |   87 +-
+ Documentation/virt/kvm/devices/index.rst      |   19 +
+ .../virt/kvm/devices/{mpic.txt => mpic.rst}   |    9 +-
+ .../devices/{s390_flic.txt => s390_flic.rst}  |   68 +-
+ Documentation/virt/kvm/devices/vcpu.rst       |  112 +
+ Documentation/virt/kvm/devices/vcpu.txt       |   76 -
+ .../virt/kvm/devices/{vfio.txt => vfio.rst}   |   23 +-
+ .../virt/kvm/devices/{vm.txt => vm.rst}       |  204 +-
+ .../virt/kvm/devices/{xics.txt => xics.rst}   |   26 +-
+ .../virt/kvm/devices/{xive.txt => xive.rst}   |  146 +-
+ .../{halt-polling.txt => halt-polling.rst}    |   84 +-
+ .../kvm/{hypercalls.txt => hypercalls.rst}    |  127 +-
+ Documentation/virt/kvm/index.rst              |   16 +
+ .../virt/kvm/{locking.txt => locking.rst}     |  109 +-
+ Documentation/virt/kvm/{mmu.txt => mmu.rst}   |   60 +-
+ Documentation/virt/kvm/{msr.txt => msr.rst}   |  145 +-
+ .../kvm/{nested-vmx.txt => nested-vmx.rst}    |   35 +-
+ .../virt/kvm/{ppc-pv.txt => ppc-pv.rst}       |   24 +-
+ ...iew-checklist.txt => review-checklist.rst} |    1 +
+ .../virt/kvm/{s390-diag.txt => s390-diag.rst} |   11 +-
+ .../kvm/{timekeeping.txt => timekeeping.rst}  |  221 +-
+ ...odeLinux-HOWTO.txt => user_mode_linux.rst} | 1812 ++++-----
+ 29 files changed, 3954 insertions(+), 3121 deletions(-)
+ rename Documentation/virt/kvm/{api.txt => api.rst} (71%)
+ rename Documentation/virt/kvm/arm/{hyp-abi.txt => hyp-abi.rst} (80%)
+ create mode 100644 Documentation/virt/kvm/arm/index.rst
+ rename Documentation/virt/kvm/arm/{psci.txt => psci.rst} (61%)
+ rename Documentation/virt/kvm/devices/{arm-vgic-its.txt => arm-vgic-its.rst} (71%)
+ rename Documentation/virt/kvm/devices/{arm-vgic-v3.txt => arm-vgic-v3.rst} (77%)
  rename Documentation/virt/kvm/devices/{arm-vgic.txt => arm-vgic.rst} (66%)
+ create mode 100644 Documentation/virt/kvm/devices/index.rst
+ rename Documentation/virt/kvm/devices/{mpic.txt => mpic.rst} (92%)
+ rename Documentation/virt/kvm/devices/{s390_flic.txt => s390_flic.rst} (88%)
+ create mode 100644 Documentation/virt/kvm/devices/vcpu.rst
+ delete mode 100644 Documentation/virt/kvm/devices/vcpu.txt
+ rename Documentation/virt/kvm/devices/{vfio.txt => vfio.rst} (74%)
+ rename Documentation/virt/kvm/devices/{vm.txt => vm.rst} (61%)
+ rename Documentation/virt/kvm/devices/{xics.txt => xics.rst} (85%)
+ rename Documentation/virt/kvm/devices/{xive.txt => xive.rst} (63%)
+ rename Documentation/virt/kvm/{halt-polling.txt => halt-polling.rst} (64%)
+ rename Documentation/virt/kvm/{hypercalls.txt => hypercalls.rst} (55%)
+ rename Documentation/virt/kvm/{locking.txt => locking.rst} (79%)
+ rename Documentation/virt/kvm/{mmu.txt => mmu.rst} (94%)
+ rename Documentation/virt/kvm/{msr.txt => msr.rst} (75%)
+ rename Documentation/virt/kvm/{nested-vmx.txt => nested-vmx.rst} (90%)
+ rename Documentation/virt/kvm/{ppc-pv.txt => ppc-pv.rst} (91%)
+ rename Documentation/virt/kvm/{review-checklist.txt => review-checklist.rst} (97%)
+ rename Documentation/virt/kvm/{s390-diag.txt => s390-diag.rst} (91%)
+ rename Documentation/virt/kvm/{timekeeping.txt => timekeeping.rst} (85%)
+ rename Documentation/virt/uml/{UserModeLinux-HOWTO.txt => user_mode_linux.rst} (74%)
 
-diff --git a/Documentation/virt/kvm/devices/arm-vgic.txt b/Documentation/virt/kvm/devices/arm-vgic.rst
-similarity index 66%
-rename from Documentation/virt/kvm/devices/arm-vgic.txt
-rename to Documentation/virt/kvm/devices/arm-vgic.rst
-index 97b6518148f8..882a7ecf317e 100644
---- a/Documentation/virt/kvm/devices/arm-vgic.txt
-+++ b/Documentation/virt/kvm/devices/arm-vgic.rst
-@@ -1,8 +1,10 @@
-+==================================================
- ARM Virtual Generic Interrupt Controller v2 (VGIC)
- ==================================================
- 
- Device types supported:
--  KVM_DEV_TYPE_ARM_VGIC_V2     ARM Generic Interrupt Controller v2.0
-+
-+  - KVM_DEV_TYPE_ARM_VGIC_V2     ARM Generic Interrupt Controller v2.0
- 
- Only one VGIC instance may be instantiated through either this API or the
- legacy KVM_CREATE_IRQCHIP API.  The created VGIC will act as the VM interrupt
-@@ -17,7 +19,8 @@ create both a GICv3 and GICv2 device on the same VM.
- 
- Groups:
-   KVM_DEV_ARM_VGIC_GRP_ADDR
--  Attributes:
-+   Attributes:
-+
-     KVM_VGIC_V2_ADDR_TYPE_DIST (rw, 64-bit)
-       Base address in the guest physical address space of the GIC distributor
-       register mappings. Only valid for KVM_DEV_TYPE_ARM_VGIC_V2.
-@@ -27,19 +30,25 @@ Groups:
-       Base address in the guest physical address space of the GIC virtual cpu
-       interface register mappings. Only valid for KVM_DEV_TYPE_ARM_VGIC_V2.
-       This address needs to be 4K aligned and the region covers 4 KByte.
-+
-   Errors:
--    -E2BIG:  Address outside of addressable IPA range
--    -EINVAL: Incorrectly aligned address
--    -EEXIST: Address already configured
--    -ENXIO:  The group or attribute is unknown/unsupported for this device
-+
-+    =======  =============================================================
-+    -E2BIG   Address outside of addressable IPA range
-+    -EINVAL  Incorrectly aligned address
-+    -EEXIST  Address already configured
-+    -ENXIO   The group or attribute is unknown/unsupported for this device
-              or hardware support is missing.
--    -EFAULT: Invalid user pointer for attr->addr.
-+    -EFAULT  Invalid user pointer for attr->addr.
-+    =======  =============================================================
- 
-   KVM_DEV_ARM_VGIC_GRP_DIST_REGS
--  Attributes:
--    The attr field of kvm_device_attr encodes two values:
--    bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
--    values:   |    reserved   | vcpu_index |      offset     |
-+   Attributes:
-+
-+    The attr field of kvm_device_attr encodes two values::
-+
-+      bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
-+      values:   |    reserved   | vcpu_index |      offset     |
- 
-     All distributor regs are (rw, 32-bit)
- 
-@@ -58,16 +67,22 @@ Groups:
-     KVM_DEV_ARM_VGIC_GRP_DIST_REGS and KVM_DEV_ARM_VGIC_GRP_CPU_REGS) to ensure
-     the expected behavior. Unless GICD_IIDR has been set from userspace, writes
-     to the interrupt group registers (GICD_IGROUPR) are ignored.
-+
-   Errors:
--    -ENXIO: Getting or setting this register is not yet supported
--    -EBUSY: One or more VCPUs are running
--    -EINVAL: Invalid vcpu_index supplied
-+
-+    =======  =====================================================
-+    -ENXIO   Getting or setting this register is not yet supported
-+    -EBUSY   One or more VCPUs are running
-+    -EINVAL  Invalid vcpu_index supplied
-+    =======  =====================================================
- 
-   KVM_DEV_ARM_VGIC_GRP_CPU_REGS
--  Attributes:
--    The attr field of kvm_device_attr encodes two values:
--    bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
--    values:   |    reserved   | vcpu_index |      offset     |
-+   Attributes:
-+
-+    The attr field of kvm_device_attr encodes two values::
-+
-+      bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
-+      values:   |    reserved   | vcpu_index |      offset     |
- 
-     All CPU interface regs are (rw, 32-bit)
- 
-@@ -101,27 +116,39 @@ Groups:
-     value left by 3 places to obtain the actual priority mask level.
- 
-   Errors:
--    -ENXIO: Getting or setting this register is not yet supported
--    -EBUSY: One or more VCPUs are running
--    -EINVAL: Invalid vcpu_index supplied
-+
-+    =======  =====================================================
-+    -ENXIO   Getting or setting this register is not yet supported
-+    -EBUSY   One or more VCPUs are running
-+    -EINVAL  Invalid vcpu_index supplied
-+    =======  =====================================================
- 
-   KVM_DEV_ARM_VGIC_GRP_NR_IRQS
--  Attributes:
-+   Attributes:
-+
-     A value describing the number of interrupts (SGI, PPI and SPI) for
-     this GIC instance, ranging from 64 to 1024, in increments of 32.
- 
-   Errors:
--    -EINVAL: Value set is out of the expected range
--    -EBUSY: Value has already be set, or GIC has already been initialized
--            with default values.
-+
-+    =======  =============================================================
-+    -EINVAL  Value set is out of the expected range
-+    -EBUSY   Value has already be set, or GIC has already been initialized
-+             with default values.
-+    =======  =============================================================
- 
-   KVM_DEV_ARM_VGIC_GRP_CTRL
--  Attributes:
-+   Attributes:
-+
-     KVM_DEV_ARM_VGIC_CTRL_INIT
-       request the initialization of the VGIC or ITS, no additional parameter
-       in kvm_device_attr.addr.
-+
-   Errors:
--    -ENXIO: VGIC not properly configured as required prior to calling
--     this attribute
--    -ENODEV: no online VCPU
--    -ENOMEM: memory shortage when allocating vgic internal data
-+
-+    =======  =========================================================
-+    -ENXIO   VGIC not properly configured as required prior to calling
-+             this attribute
-+    -ENODEV  no online VCPU
-+    -ENOMEM  memory shortage when allocating vgic internal data
-+    =======  =========================================================
-diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
-index 80c1e0e225f4..7eabce80c61e 100644
---- a/Documentation/virt/kvm/devices/index.rst
-+++ b/Documentation/virt/kvm/devices/index.rst
-@@ -8,4 +8,5 @@ Devices
-    :maxdepth: 2
- 
-    arm-vgic-its
-+   arm-vgic
-    arm-vgic-v3
 -- 
 2.24.1
+
 
