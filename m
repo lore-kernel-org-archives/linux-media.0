@@ -7,56 +7,55 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51739C33CB2
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:50:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 917EBC33CB2
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:50:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 29282207FD
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:50:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 51245207FD
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:50:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580223008;
-	bh=aRB+F8aPuOXIKhGA4PgLcxC037sTgrQxSls+FlqjkKY=;
+	s=default; t=1580223048;
+	bh=Y5aV3hZGIyPek7EfsIo9rePy4FvllvoqLQ1StFaYEGQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Ayf2EbYOsRnSCKWbBLLEY7gL/aZpLusB6yVJPknjf5mS4ZmNJlyxH8NWheed+E+4C
-	 U+ViA4h7HetTs3XFY7ekI6j+sN5QlVcW2Z33s+c/EOlvnL7WZpk/JMeKczGSL/OkpX
-	 ZqQ7EhlKk1ZW7P+MBetqzHTgnKxTxlXBLB/7xoNY=
+	b=EjFfbwfh6fFjxoiRXPdGSVleFUjvzxJUXeO6XoRk5Dp+zxXZySC1S6QJqDU5jK+BG
+	 TXAwagbbYXc28qxmqYq2MRF1gQDipb+M27UVvCEsPPmswCBGxLb61csUUCuKmZpt7U
+	 OsXXI9wLEXuvoRv264W8zXkZXJj+Cbv4fN5CwVUY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726766AbgA1OuE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:50:04 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59272 "EHLO
+        id S1726618AbgA1N6q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 08:58:46 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:58490 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726813AbgA1OAp (ORCPT
+        with ESMTP id S1726560AbgA1N6p (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Jan 2020 09:00:45 -0500
+        Tue, 28 Jan 2020 08:58:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Gpnnwuexn6E79rDCRXA/tGQCjM2huV9ksFH2E/NUq90=; b=r6kNJ2jJVv4UJ/2qrj3SlvaeCu
-        CgPIBvPaXcrfP4kLibGIRF2xRxaHxUojVKahdDJQ+QwUU9TeTlgGpx84WIRv6UKLQDfjvBDU3m7pd
-        pGQMZo2rhxV1HYhqtlU7SauOVSKPsQeobaMA/2FvigxWmsq0lCB2Wr2g6+7cQ4k6tnv4hobqt4fA+
-        aCNlRxhgTpIiBC+NDJePGP8XqNL/TC2srX7a+wMgS96YqJJtXE2UTndusI3IssoKFwaOIRmgdkFqV
-        1KL/GxcVwrsdb9KqMmFmKCbXyKwfBuKgj2oF/ORVIX8BbhHtqX9dMQCJfFAHCFyfadGbk8+Q7ZUQm
-        OJJhNqlw==;
+        bh=O3Bsu4uD9UgtNB0QQELv28C8SHkVh8CCN2pYgVVPZ10=; b=oC2PH9uNv2IBDBXBCX8h16/jbJ
+        Oih4oBbKrrxTLtZCsot5BjSI0z+1mOuJ1T5XA+G6/ZbDtwYlKVZgDOWbNZp45zFBRLvAcw7S3ZlCT
+        q0wEsl5yO8y8Tin4A8ooYPKkcKVqVk+pnvGEDFQd2AJOJnra0RMV/CtyQVbfXe02cjXGWd5q7PNYy
+        dFsSe0NTMhtAQ2ppM+5WG7Z3/bSY/sbfNqoNRi/Hz35W+2dprqce9HRweCPwp/54c19PVn1I+q9cP
+        /AwfveRWiYsrP379mlDeLe8N5Yg5UWehYQTtyX872rDeH0dl8nxPhfbk3rsjCiLqipqZum25DNz3V
+        zaYOREvQ==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRQ5-0007iY-Ek; Tue, 28 Jan 2020 14:00:45 +0000
+        id 1iwRO7-0006I1-1r; Tue, 28 Jan 2020 13:58:44 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRPp-001BNQ-9H; Tue, 28 Jan 2020 15:00:29 +0100
+        id 1iwRNq-001BJZ-8z; Tue, 28 Jan 2020 14:58:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-um@lists.infradead.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 03/27] docs: virt: user_mode_linux.rst: update compiling instructions
-Date:   Tue, 28 Jan 2020 15:00:04 +0100
-Message-Id: <ea87ca5eef3b32e8caa2057d34909bb5aebf1cb4.1580219586.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 06/27] docs: virt: Convert msr.txt to ReST format
+Date:   Tue, 28 Jan 2020 14:58:02 +0100
+Message-Id:
+ <00eb6bb2ec51ac985360c5231fc416342c2782df.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -66,126 +65,340 @@ Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
+Message-ID: <20200128135802.Vydl_IMwpCYCH6oSbzC-MmyCfBeLTE6uDviDDg2muHw@z>
 
-Instead of pointing for a pre-2.4 and a seaparate patch,
-update it to match current upstream, as UML was merged
-a long time ago.
+- Use document title markup;
+- Convert tables;
+- Add blank lines and adjust indentation.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/uml/user_mode_linux.rst | 62 ++++------------------
- 1 file changed, 9 insertions(+), 53 deletions(-)
+ Documentation/virt/kvm/index.rst            |   1 +
+ Documentation/virt/kvm/{msr.txt => msr.rst} | 145 ++++++++++++--------
+ 2 files changed, 91 insertions(+), 55 deletions(-)
+ rename Documentation/virt/kvm/{msr.txt => msr.rst} (75%)
 
-diff --git a/Documentation/virt/uml/user_mode_linux.rst b/Documentation/virt/uml/user_mode_linux.rst
-index 98922008be23..a96d29243964 100644
---- a/Documentation/virt/uml/user_mode_linux.rst
-+++ b/Documentation/virt/uml/user_mode_linux.rst
-@@ -3,7 +3,7 @@ User Mode Linux HOWTO
- =====================
+diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
+index b39f4894b61d..cc6dde47b267 100644
+--- a/Documentation/virt/kvm/index.rst
++++ b/Documentation/virt/kvm/index.rst
+@@ -10,6 +10,7 @@ KVM
+    amd-memory-encryption
+    cpuid
+    halt-polling
++   msr
+    vcpu-requests
  
- :Author:  User Mode Linux Core Team
--:Last-updated: Mon Nov 18 14:16:16 EST 2002
-+:Last-updated: Sat Jan 25 16:07:55 CET 2020
+    arm/index
+diff --git a/Documentation/virt/kvm/msr.txt b/Documentation/virt/kvm/msr.rst
+similarity index 75%
+rename from Documentation/virt/kvm/msr.txt
+rename to Documentation/virt/kvm/msr.rst
+index df1f4338b3ca..952ac339765b 100644
+--- a/Documentation/virt/kvm/msr.txt
++++ b/Documentation/virt/kvm/msr.rst
+@@ -1,6 +1,8 @@
+-KVM-specific MSRs.
+-Glauber Costa <glommer@redhat.com>, Red Hat Inc, 2010
+-=====================================================
++=================
++KVM-specific MSRs
++=================
++
++:Author: Glauber Costa <glommer@redhat.com>, Red Hat Inc, 2010
  
- This document describes the use and abuse of Jeff Dike's User Mode
- Linux: a port of the Linux kernel as a normal Intel Linux process.
-@@ -221,23 +221,15 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
+ KVM makes use of some custom MSRs to service some requests.
+ 
+@@ -9,34 +11,39 @@ Custom MSRs have a range reserved for them, that goes from
+ but they are deprecated and their use is discouraged.
+ 
+ Custom MSR list
+---------
++---------------
+ 
+ The current supported Custom MSR list is:
+ 
+-MSR_KVM_WALL_CLOCK_NEW:   0x4b564d00
++MSR_KVM_WALL_CLOCK_NEW:
++	0x4b564d00
+ 
+-	data: 4-byte alignment physical address of a memory area which must be
++data:
++	4-byte alignment physical address of a memory area which must be
+ 	in guest RAM. This memory is expected to hold a copy of the following
+-	structure:
++	structure::
+ 
+-	struct pvclock_wall_clock {
++	 struct pvclock_wall_clock {
+ 		u32   version;
+ 		u32   sec;
+ 		u32   nsec;
+-	} __attribute__((__packed__));
++	  } __attribute__((__packed__));
+ 
+ 	whose data will be filled in by the hypervisor. The hypervisor is only
+ 	guaranteed to update this data at the moment of MSR write.
+ 	Users that want to reliably query this information more than once have
+ 	to write more than once to this MSR. Fields have the following meanings:
+ 
+-		version: guest has to check version before and after grabbing
++	version:
++		guest has to check version before and after grabbing
+ 		time information and check that they are both equal and even.
+ 		An odd version indicates an in-progress update.
+ 
+-		sec: number of seconds for wallclock at time of boot.
++	sec:
++		 number of seconds for wallclock at time of boot.
+ 
+-		nsec: number of nanoseconds for wallclock at time of boot.
++	nsec:
++		 number of nanoseconds for wallclock at time of boot.
+ 
+ 	In order to get the current wallclock time, the system_time from
+ 	MSR_KVM_SYSTEM_TIME_NEW needs to be added.
+@@ -47,13 +54,15 @@ MSR_KVM_WALL_CLOCK_NEW:   0x4b564d00
+ 	Availability of this MSR must be checked via bit 3 in 0x4000001 cpuid
+ 	leaf prior to usage.
+ 
+-MSR_KVM_SYSTEM_TIME_NEW:  0x4b564d01
++MSR_KVM_SYSTEM_TIME_NEW:
++	0x4b564d01
+ 
+-	data: 4-byte aligned physical address of a memory area which must be in
++data:
++	4-byte aligned physical address of a memory area which must be in
+ 	guest RAM, plus an enable bit in bit 0. This memory is expected to hold
+-	a copy of the following structure:
++	a copy of the following structure::
+ 
+-	struct pvclock_vcpu_time_info {
++	  struct pvclock_vcpu_time_info {
+ 		u32   version;
+ 		u32   pad0;
+ 		u64   tsc_timestamp;
+@@ -62,7 +71,7 @@ MSR_KVM_SYSTEM_TIME_NEW:  0x4b564d01
+ 		s8    tsc_shift;
+ 		u8    flags;
+ 		u8    pad[2];
+-	} __attribute__((__packed__)); /* 32 bytes */
++	  } __attribute__((__packed__)); /* 32 bytes */
+ 
+ 	whose data will be filled in by the hypervisor periodically. Only one
+ 	write, or registration, is needed for each VCPU. The interval between
+@@ -72,23 +81,28 @@ MSR_KVM_SYSTEM_TIME_NEW:  0x4b564d01
+ 
+ 	Fields have the following meanings:
+ 
+-		version: guest has to check version before and after grabbing
++	version:
++		guest has to check version before and after grabbing
+ 		time information and check that they are both equal and even.
+ 		An odd version indicates an in-progress update.
+ 
+-		tsc_timestamp: the tsc value at the current VCPU at the time
++	tsc_timestamp:
++		the tsc value at the current VCPU at the time
+ 		of the update of this structure. Guests can subtract this value
+ 		from current tsc to derive a notion of elapsed time since the
+ 		structure update.
+ 
+-		system_time: a host notion of monotonic time, including sleep
++	system_time:
++		a host notion of monotonic time, including sleep
+ 		time at the time this structure was last updated. Unit is
+ 		nanoseconds.
+ 
+-		tsc_to_system_mul: multiplier to be used when converting
++	tsc_to_system_mul:
++		multiplier to be used when converting
+ 		tsc-related quantity to nanoseconds
+ 
+-		tsc_shift: shift to be used when converting tsc-related
++	tsc_shift:
++		shift to be used when converting tsc-related
+ 		quantity to nanoseconds. This shift will ensure that
+ 		multiplication with tsc_to_system_mul does not overflow.
+ 		A positive value denotes a left shift, a negative value
+@@ -96,7 +110,7 @@ MSR_KVM_SYSTEM_TIME_NEW:  0x4b564d01
+ 
+ 		The conversion from tsc to nanoseconds involves an additional
+ 		right shift by 32 bits. With this information, guests can
+-		derive per-CPU time by doing:
++		derive per-CPU time by doing::
+ 
+ 			time = (current_tsc - tsc_timestamp)
+ 			if (tsc_shift >= 0)
+@@ -106,29 +120,34 @@ MSR_KVM_SYSTEM_TIME_NEW:  0x4b564d01
+ 			time = (time * tsc_to_system_mul) >> 32
+ 			time = time + system_time
+ 
+-		flags: bits in this field indicate extended capabilities
++	flags:
++		bits in this field indicate extended capabilities
+ 		coordinated between the guest and the hypervisor. Availability
+ 		of specific flags has to be checked in 0x40000001 cpuid leaf.
+ 		Current flags are:
+ 
+-		 flag bit   | cpuid bit    | meaning
+-		-------------------------------------------------------------
+-			    |	           | time measures taken across
+-		     0      |	   24      | multiple cpus are guaranteed to
+-			    |		   | be monotonic
+-		-------------------------------------------------------------
+-			    |		   | guest vcpu has been paused by
+-		     1	    |	  N/A	   | the host
+-			    |		   | See 4.70 in api.txt
+-		-------------------------------------------------------------
++
++		+-----------+--------------+----------------------------------+
++		| flag bit  | cpuid bit    | meaning			      |
++		+-----------+--------------+----------------------------------+
++		|	    |		   | time measures taken across       |
++		|    0      |	   24      | multiple cpus are guaranteed to  |
++		|	    |		   | be monotonic		      |
++		+-----------+--------------+----------------------------------+
++		|	    |		   | guest vcpu has been paused by    |
++		|    1	    |	  N/A	   | the host			      |
++		|	    |		   | See 4.70 in api.txt	      |
++		+-----------+--------------+----------------------------------+
+ 
+ 	Availability of this MSR must be checked via bit 3 in 0x4000001 cpuid
+ 	leaf prior to usage.
  
  
-   Compiling the user mode kernel is just like compiling any other
--  kernel.  Let's go through the steps, using 2.4.0-prerelease (current
--  as of this writing) as an example:
-+  kernel.
+-MSR_KVM_WALL_CLOCK:  0x11
++MSR_KVM_WALL_CLOCK:
++	0x11
  
+-	data and functioning: same as MSR_KVM_WALL_CLOCK_NEW. Use that instead.
++data and functioning:
++	same as MSR_KVM_WALL_CLOCK_NEW. Use that instead.
  
--  1. Download the latest UML patch from
--     the download page <http://user-mode-linux.sourceforge.net/
--
--     In this example, the file is uml-patch-2.4.0-prerelease.bz2.
--
--
--  2. Download the matching kernel from your favourite kernel mirror,
-+  1. Download the latest kernel from your favourite kernel mirror,
-      such as:
+ 	This MSR falls outside the reserved KVM range and may be removed in the
+ 	future. Its usage is deprecated.
+@@ -136,9 +155,11 @@ MSR_KVM_WALL_CLOCK:  0x11
+ 	Availability of this MSR must be checked via bit 0 in 0x4000001 cpuid
+ 	leaf prior to usage.
  
--     ftp://ftp.ca.kernel.org/pub/kernel/v2.4/linux-2.4.0-prerelease.tar.bz2
-+     https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.4.14.tar.xz
+-MSR_KVM_SYSTEM_TIME: 0x12
++MSR_KVM_SYSTEM_TIME:
++	0x12
  
--
--  3. Make a directory and unpack the kernel into it::
-+  2. Make a directory and unpack the kernel into it::
+-	data and functioning: same as MSR_KVM_SYSTEM_TIME_NEW. Use that instead.
++data and functioning:
++	same as MSR_KVM_SYSTEM_TIME_NEW. Use that instead.
  
-        host%
-        mkdir ~/uml
-@@ -246,21 +238,10 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
-        cd ~/uml
+ 	This MSR falls outside the reserved KVM range and may be removed in the
+ 	future. Its usage is deprecated.
+@@ -146,7 +167,7 @@ MSR_KVM_SYSTEM_TIME: 0x12
+ 	Availability of this MSR must be checked via bit 0 in 0x4000001 cpuid
+ 	leaf prior to usage.
  
-        host%
--       tar -xzvf linux-2.4.0-prerelease.tar.bz2
-+       tar xvf linux-5.4.14.tar.xz
+-	The suggested algorithm for detecting kvmclock presence is then:
++	The suggested algorithm for detecting kvmclock presence is then::
  
+ 		if (!kvm_para_available())    /* refer to cpuid.txt */
+ 			return NON_PRESENT;
+@@ -163,8 +184,11 @@ MSR_KVM_SYSTEM_TIME: 0x12
+ 		} else
+ 			return NON_PRESENT;
  
--
--  4. Apply the patch using::
--
--       host%
--       cd ~/uml/linux
--
--       host%
--       bzcat uml-patch-2.4.0-prerelease.bz2 | patch -p1
--
--
--
--  5. Run your favorite config; ``make xconfig ARCH=um`` is the most
-+  3. Run your favorite config; ``make xconfig ARCH=um`` is the most
-      convenient.  ``make config ARCH=um`` and ``make menuconfig ARCH=um``
-      will work as well.  The defaults will give you a useful kernel.  If
-      you want to change something, go ahead, it probably won't hurt
-@@ -274,34 +255,9 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
+-MSR_KVM_ASYNC_PF_EN: 0x4b564d02
+-	data: Bits 63-6 hold 64-byte aligned physical address of a
++MSR_KVM_ASYNC_PF_EN:
++	0x4b564d02
++
++data:
++	Bits 63-6 hold 64-byte aligned physical address of a
+ 	64 byte memory area which must be in guest RAM and must be
+ 	zeroed. Bits 5-3 are reserved and should be zero. Bit 0 is 1
+ 	when asynchronous page faults are enabled on the vcpu 0 when
+@@ -200,20 +224,22 @@ MSR_KVM_ASYNC_PF_EN: 0x4b564d02
+ 	Currently type 2 APF will be always delivered on the same vcpu as
+ 	type 1 was, but guest should not rely on that.
  
+-MSR_KVM_STEAL_TIME: 0x4b564d03
++MSR_KVM_STEAL_TIME:
++	0x4b564d03
  
+-	data: 64-byte alignment physical address of a memory area which must be
++data:
++	64-byte alignment physical address of a memory area which must be
+ 	in guest RAM, plus an enable bit in bit 0. This memory is expected to
+-	hold a copy of the following structure:
++	hold a copy of the following structure::
  
--  6. Finish with ``make linux ARCH=um``: the result is a file called
-+  4. Finish with ``make linux ARCH=um``: the result is a file called
-      ``linux`` in the top directory of your source tree.
+-	struct kvm_steal_time {
++	  struct kvm_steal_time {
+ 		__u64 steal;
+ 		__u32 version;
+ 		__u32 flags;
+ 		__u8  preempted;
+ 		__u8  u8_pad[3];
+ 		__u32 pad[11];
+-	}
++	  }
  
--  Make sure that you don't build this kernel in /usr/src/linux.  On some
--  distributions, /usr/include/asm is a link into this pool.  The user-
--  mode build changes the other end of that link, and things that include
--  <asm/anything.h> stop compiling.
--
--  The sources are also available from cvs at the project's cvs page,
--  which has directions on getting the sources. You can also browse the
--  CVS pool from there.
--
--  If you get the CVS sources, you will have to check them out into an
--  empty directory. You will then have to copy each file into the
--  corresponding directory in the appropriate kernel pool.
--
--  If you don't have the latest kernel pool, you can get the
--  corresponding user-mode sources with::
--
--
--       host% cvs co -r v_2_3_x linux
--
--
--
--
--  where 'x' is the version in your pool. Note that you will not get the
--  bug fixes and enhancements that have gone into subsequent releases.
--
+ 	whose data will be filled in by the hypervisor periodically. Only one
+ 	write, or registration, is needed for each VCPU. The interval between
+@@ -224,25 +250,32 @@ MSR_KVM_STEAL_TIME: 0x4b564d03
  
- 2.2.  Compiling and installing kernel modules
- ---------------------------------------------
-@@ -414,7 +370,7 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
- 3.1.  Running UML
- -----------------
+ 	Fields have the following meanings:
  
--  It runs on 2.2.15 or later, and all 2.4 kernels.
-+  It runs on 2.2.15 or later, and all kernel versions since 2.4.
+-		version: a sequence counter. In other words, guest has to check
++	version:
++		a sequence counter. In other words, guest has to check
+ 		this field before and after grabbing time information and make
+ 		sure they are both equal and even. An odd version indicates an
+ 		in-progress update.
  
+-		flags: At this point, always zero. May be used to indicate
++	flags:
++		At this point, always zero. May be used to indicate
+ 		changes in this structure in the future.
  
-   Booting UML is straightforward.  Simply run 'linux': it will try to
+-		steal: the amount of time in which this vCPU did not run, in
++	steal:
++		the amount of time in which this vCPU did not run, in
+ 		nanoseconds. Time during which the vcpu is idle, will not be
+ 		reported as steal time.
+ 
+-		preempted: indicate the vCPU who owns this struct is running or
++	preempted:
++		indicate the vCPU who owns this struct is running or
+ 		not. Non-zero values mean the vCPU has been preempted. Zero
+ 		means the vCPU is not preempted. NOTE, it is always zero if the
+ 		the hypervisor doesn't support this field.
+ 
+-MSR_KVM_EOI_EN: 0x4b564d04
+-	data: Bit 0 is 1 when PV end of interrupt is enabled on the vcpu; 0
++MSR_KVM_EOI_EN:
++	0x4b564d04
++
++data:
++	Bit 0 is 1 when PV end of interrupt is enabled on the vcpu; 0
+ 	when disabled.  Bit 1 is reserved and must be zero.  When PV end of
+ 	interrupt is enabled (bit 0 set), bits 63-2 hold a 4-byte aligned
+ 	physical address of a 4 byte memory area which must be in guest RAM and
+@@ -274,11 +307,13 @@ MSR_KVM_EOI_EN: 0x4b564d04
+ 	clear it using a single CPU instruction, such as test and clear, or
+ 	compare and exchange.
+ 
+-MSR_KVM_POLL_CONTROL: 0x4b564d05
++MSR_KVM_POLL_CONTROL:
++	0x4b564d05
++
+ 	Control host-side polling.
+ 
+-	data: Bit 0 enables (1) or disables (0) host-side HLT polling logic.
++data:
++	Bit 0 enables (1) or disables (0) host-side HLT polling logic.
+ 
+ 	KVM guests can request the host not to poll on HLT, for example if
+ 	they are performing polling themselves.
+-
 -- 
 2.24.1
 
