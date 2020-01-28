@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB7D7C33CB3
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:01:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BE21C33CB3
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:01:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 98DD2205F4
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:01:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CCA9B205F4
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:01:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580220072;
-	bh=Y5aV3hZGIyPek7EfsIo9rePy4FvllvoqLQ1StFaYEGQ=;
+	s=default; t=1580220078;
+	bh=0QE9r9M4nSusoBtn0uQmTsBwPDzhFl/0GJzag3gO7W4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TM3vK6IFn/fo+D5C6qe/cGH6Ql1BIJByPTPSMxIVzZpfPkv07c1l/ncgGJnheuNrO
-	 6I6Nx+ENyHcvj7zKAE1II2eeKzE1t/Bi87SOSL5gbKSgox9fI4JOMg/B4gdQqBXike
-	 v1C2K8zzh1Sco6r/J/XJV/3trr2nBpbjAy40VJWM=
+	b=H30waU3RCkWVbuIWnI9qIwNViQOKRzwvKgWxydn38NPePYWwMkfpFhpbrzd4VQO6I
+	 A7/xd5CwrKRvb3flBULoQnSK4B6tKOzrkLA911UfT83Tz5SCehtFCjeTPh24JPuBQv
+	 XIrg0qEYH70tyRvG3ttkS9lz9GWwA8KxOAnIxZ8g=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727365AbgA1OBJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:01:09 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59450 "EHLO
+        id S1727402AbgA1OBQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:01:16 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:59352 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727311AbgA1OAr (ORCPT
+        with ESMTP id S1726824AbgA1OAq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Jan 2020 09:00:47 -0500
+        Tue, 28 Jan 2020 09:00:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=O3Bsu4uD9UgtNB0QQELv28C8SHkVh8CCN2pYgVVPZ10=; b=I0e2f7UEc79N0R0e+SyV3a4k27
-        Jhspr8AL1tInGYrZ8JjTBVPQtfOaKY2XaSNFqf4YN7m15p/L8/p6Nbbb0/yVnNi8ZlqUPVJ0lP2wK
-        IBv9BKo3MFlg/Oj9f6cPKONdSGK27BdrspYv2anEIzwH+wNzvtJ+UNoJj9Pxw21dNmLX765CTSbMn
-        ryFYXBvJ3jK4qWWcbJ0EpxsA1yWpBxsH5rEIhNsSx93JDtcyNlSCZgNAamDB59mgQbvRZImDzLE7y
-        zzneoKH8qQUyLUtsaqEiRFMS4kDvKc/0ijPCke3dMLPFGWoJAsa8i3KINZnj+brjGH7qklYO5BcuP
-        htt730EQ==;
+        bh=F1P+6+TuszupGu0Tp2g0JB6lrpho1zIIc3pb798RBPM=; b=W1KEICt4HTRfCqH6HDrd2RpgfF
+        Jb4fIstRpNv/q1FMnmdjYqMGqtZhcInwnHmqMAgON6KJWcuX7kxArsd9ETe3BJXdGrU+CcOJw6V7p
+        wHRVaCSE4BpuHf0uDYmJEslSy49sZrQuXZT+nXOENWRcv60emPPxH53Wkugt1thfA1Wit6vVKC1by
+        700qXBQn6bT4M8td7hHrdTCGEhcYka9wahJUjvelgx7gbfo2vRysg/Tf0AgbGeo27SrOkxHnxSFYU
+        Vw3UDE/5jL2zO1rgHdR3Oouo9P3GPtcUYY0YWNbkRz8fn8+c40gSoe+KMQo09m22K/fEli60/KOA6
+        rQHNFnwA==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRQ5-0007ik-G8; Tue, 28 Jan 2020 14:00:46 +0000
+        id 1iwRQ5-0007iv-VI; Tue, 28 Jan 2020 14:00:46 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRPp-001BNf-CM; Tue, 28 Jan 2020 15:00:29 +0100
+        id 1iwRPp-001BOx-Vo; Tue, 28 Jan 2020 15:00:29 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 06/27] docs: virt: Convert msr.txt to ReST format
-Date:   Tue, 28 Jan 2020 15:00:07 +0100
-Message-Id: <00eb6bb2ec51ac985360c5231fc416342c2782df.1580219586.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 22/27] docs: kvm: Convert mmu.txt to ReST format
+Date:   Tue, 28 Jan 2020 15:00:23 +0100
+Message-Id: <5e12ebc5b94bfd269d18d1e56d8b71c9f86a9ff2.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,337 +65,202 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Use document title markup;
-- Convert tables;
+- Use document title and chapter markups;
+- Add markups for tables;
+- Add markups for literal blocks;
 - Add blank lines and adjust indentation.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/index.rst            |   1 +
- Documentation/virt/kvm/{msr.txt => msr.rst} | 145 ++++++++++++--------
- 2 files changed, 91 insertions(+), 55 deletions(-)
- rename Documentation/virt/kvm/{msr.txt => msr.rst} (75%)
+ Documentation/virt/kvm/index.rst            |  1 +
+ Documentation/virt/kvm/{mmu.txt => mmu.rst} | 60 ++++++++++++++++-----
+ 2 files changed, 47 insertions(+), 14 deletions(-)
+ rename Documentation/virt/kvm/{mmu.txt => mmu.rst} (94%)
 
 diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index b39f4894b61d..cc6dde47b267 100644
+index 9be8f53b729d..95e2487d38f4 100644
 --- a/Documentation/virt/kvm/index.rst
 +++ b/Documentation/virt/kvm/index.rst
-@@ -10,6 +10,7 @@ KVM
-    amd-memory-encryption
-    cpuid
+@@ -13,6 +13,7 @@ KVM
     halt-polling
-+   msr
+    hypercalls
+    locking
++   mmu
+    msr
     vcpu-requests
  
-    arm/index
-diff --git a/Documentation/virt/kvm/msr.txt b/Documentation/virt/kvm/msr.rst
-similarity index 75%
-rename from Documentation/virt/kvm/msr.txt
-rename to Documentation/virt/kvm/msr.rst
-index df1f4338b3ca..952ac339765b 100644
---- a/Documentation/virt/kvm/msr.txt
-+++ b/Documentation/virt/kvm/msr.rst
-@@ -1,6 +1,8 @@
--KVM-specific MSRs.
--Glauber Costa <glommer@redhat.com>, Red Hat Inc, 2010
--=====================================================
-+=================
-+KVM-specific MSRs
-+=================
+diff --git a/Documentation/virt/kvm/mmu.txt b/Documentation/virt/kvm/mmu.rst
+similarity index 94%
+rename from Documentation/virt/kvm/mmu.txt
+rename to Documentation/virt/kvm/mmu.rst
+index dadb29e8738f..bf700a9a95fa 100644
+--- a/Documentation/virt/kvm/mmu.txt
++++ b/Documentation/virt/kvm/mmu.rst
+@@ -1,3 +1,4 @@
++======================
+ The x86 kvm shadow mmu
+ ======================
+ 
+@@ -7,27 +8,37 @@ physical addresses to host physical addresses.
+ 
+ The mmu code attempts to satisfy the following requirements:
+ 
+-- correctness: the guest should not be able to determine that it is running
++- correctness:
++	       the guest should not be able to determine that it is running
+                on an emulated mmu except for timing (we attempt to comply
+                with the specification, not emulate the characteristics of
+                a particular implementation such as tlb size)
+-- security:    the guest must not be able to touch host memory not assigned
++- security:
++	       the guest must not be able to touch host memory not assigned
+                to it
+-- performance: minimize the performance penalty imposed by the mmu
+-- scaling:     need to scale to large memory and large vcpu guests
+-- hardware:    support the full range of x86 virtualization hardware
+-- integration: Linux memory management code must be in control of guest memory
++- performance:
++               minimize the performance penalty imposed by the mmu
++- scaling:
++               need to scale to large memory and large vcpu guests
++- hardware:
++               support the full range of x86 virtualization hardware
++- integration:
++               Linux memory management code must be in control of guest memory
+                so that swapping, page migration, page merging, transparent
+                hugepages, and similar features work without change
+-- dirty tracking: report writes to guest memory to enable live migration
++- dirty tracking:
++               report writes to guest memory to enable live migration
+                and framebuffer-based displays
+-- footprint:   keep the amount of pinned kernel memory low (most memory
++- footprint:
++               keep the amount of pinned kernel memory low (most memory
+                should be shrinkable)
+-- reliability:  avoid multipage or GFP_ATOMIC allocations
++- reliability:
++               avoid multipage or GFP_ATOMIC allocations
+ 
+ Acronyms
+ ========
+ 
++====  ====================================================================
+ pfn   host page frame number
+ hpa   host physical address
+ hva   host virtual address
+@@ -41,6 +52,7 @@ pte   page table entry (used also to refer generically to paging structure
+ gpte  guest pte (referring to gfns)
+ spte  shadow pte (referring to pfns)
+ tdp   two dimensional paging (vendor neutral term for NPT and EPT)
++====  ====================================================================
+ 
+ Virtual and real hardware supported
+ ===================================
+@@ -90,11 +102,13 @@ Events
+ The mmu is driven by events, some from the guest, some from the host.
+ 
+ Guest generated events:
 +
-+:Author: Glauber Costa <glommer@redhat.com>, Red Hat Inc, 2010
+ - writes to control registers (especially cr3)
+ - invlpg/invlpga instruction execution
+ - access to missing or protected translations
  
- KVM makes use of some custom MSRs to service some requests.
- 
-@@ -9,34 +11,39 @@ Custom MSRs have a range reserved for them, that goes from
- but they are deprecated and their use is discouraged.
- 
- Custom MSR list
----------
-+---------------
- 
- The current supported Custom MSR list is:
- 
--MSR_KVM_WALL_CLOCK_NEW:   0x4b564d00
-+MSR_KVM_WALL_CLOCK_NEW:
-+	0x4b564d00
- 
--	data: 4-byte alignment physical address of a memory area which must be
-+data:
-+	4-byte alignment physical address of a memory area which must be
- 	in guest RAM. This memory is expected to hold a copy of the following
--	structure:
-+	structure::
- 
--	struct pvclock_wall_clock {
-+	 struct pvclock_wall_clock {
- 		u32   version;
- 		u32   sec;
- 		u32   nsec;
--	} __attribute__((__packed__));
-+	  } __attribute__((__packed__));
- 
- 	whose data will be filled in by the hypervisor. The hypervisor is only
- 	guaranteed to update this data at the moment of MSR write.
- 	Users that want to reliably query this information more than once have
- 	to write more than once to this MSR. Fields have the following meanings:
- 
--		version: guest has to check version before and after grabbing
-+	version:
-+		guest has to check version before and after grabbing
- 		time information and check that they are both equal and even.
- 		An odd version indicates an in-progress update.
- 
--		sec: number of seconds for wallclock at time of boot.
-+	sec:
-+		 number of seconds for wallclock at time of boot.
- 
--		nsec: number of nanoseconds for wallclock at time of boot.
-+	nsec:
-+		 number of nanoseconds for wallclock at time of boot.
- 
- 	In order to get the current wallclock time, the system_time from
- 	MSR_KVM_SYSTEM_TIME_NEW needs to be added.
-@@ -47,13 +54,15 @@ MSR_KVM_WALL_CLOCK_NEW:   0x4b564d00
- 	Availability of this MSR must be checked via bit 3 in 0x4000001 cpuid
- 	leaf prior to usage.
- 
--MSR_KVM_SYSTEM_TIME_NEW:  0x4b564d01
-+MSR_KVM_SYSTEM_TIME_NEW:
-+	0x4b564d01
- 
--	data: 4-byte aligned physical address of a memory area which must be in
-+data:
-+	4-byte aligned physical address of a memory area which must be in
- 	guest RAM, plus an enable bit in bit 0. This memory is expected to hold
--	a copy of the following structure:
-+	a copy of the following structure::
- 
--	struct pvclock_vcpu_time_info {
-+	  struct pvclock_vcpu_time_info {
- 		u32   version;
- 		u32   pad0;
- 		u64   tsc_timestamp;
-@@ -62,7 +71,7 @@ MSR_KVM_SYSTEM_TIME_NEW:  0x4b564d01
- 		s8    tsc_shift;
- 		u8    flags;
- 		u8    pad[2];
--	} __attribute__((__packed__)); /* 32 bytes */
-+	  } __attribute__((__packed__)); /* 32 bytes */
- 
- 	whose data will be filled in by the hypervisor periodically. Only one
- 	write, or registration, is needed for each VCPU. The interval between
-@@ -72,23 +81,28 @@ MSR_KVM_SYSTEM_TIME_NEW:  0x4b564d01
- 
- 	Fields have the following meanings:
- 
--		version: guest has to check version before and after grabbing
-+	version:
-+		guest has to check version before and after grabbing
- 		time information and check that they are both equal and even.
- 		An odd version indicates an in-progress update.
- 
--		tsc_timestamp: the tsc value at the current VCPU at the time
-+	tsc_timestamp:
-+		the tsc value at the current VCPU at the time
- 		of the update of this structure. Guests can subtract this value
- 		from current tsc to derive a notion of elapsed time since the
- 		structure update.
- 
--		system_time: a host notion of monotonic time, including sleep
-+	system_time:
-+		a host notion of monotonic time, including sleep
- 		time at the time this structure was last updated. Unit is
- 		nanoseconds.
- 
--		tsc_to_system_mul: multiplier to be used when converting
-+	tsc_to_system_mul:
-+		multiplier to be used when converting
- 		tsc-related quantity to nanoseconds
- 
--		tsc_shift: shift to be used when converting tsc-related
-+	tsc_shift:
-+		shift to be used when converting tsc-related
- 		quantity to nanoseconds. This shift will ensure that
- 		multiplication with tsc_to_system_mul does not overflow.
- 		A positive value denotes a left shift, a negative value
-@@ -96,7 +110,7 @@ MSR_KVM_SYSTEM_TIME_NEW:  0x4b564d01
- 
- 		The conversion from tsc to nanoseconds involves an additional
- 		right shift by 32 bits. With this information, guests can
--		derive per-CPU time by doing:
-+		derive per-CPU time by doing::
- 
- 			time = (current_tsc - tsc_timestamp)
- 			if (tsc_shift >= 0)
-@@ -106,29 +120,34 @@ MSR_KVM_SYSTEM_TIME_NEW:  0x4b564d01
- 			time = (time * tsc_to_system_mul) >> 32
- 			time = time + system_time
- 
--		flags: bits in this field indicate extended capabilities
-+	flags:
-+		bits in this field indicate extended capabilities
- 		coordinated between the guest and the hypervisor. Availability
- 		of specific flags has to be checked in 0x40000001 cpuid leaf.
- 		Current flags are:
- 
--		 flag bit   | cpuid bit    | meaning
--		-------------------------------------------------------------
--			    |	           | time measures taken across
--		     0      |	   24      | multiple cpus are guaranteed to
--			    |		   | be monotonic
--		-------------------------------------------------------------
--			    |		   | guest vcpu has been paused by
--		     1	    |	  N/A	   | the host
--			    |		   | See 4.70 in api.txt
--		-------------------------------------------------------------
+ Host generated events:
 +
-+		+-----------+--------------+----------------------------------+
-+		| flag bit  | cpuid bit    | meaning			      |
-+		+-----------+--------------+----------------------------------+
-+		|	    |		   | time measures taken across       |
-+		|    0      |	   24      | multiple cpus are guaranteed to  |
-+		|	    |		   | be monotonic		      |
-+		+-----------+--------------+----------------------------------+
-+		|	    |		   | guest vcpu has been paused by    |
-+		|    1	    |	  N/A	   | the host			      |
-+		|	    |		   | See 4.70 in api.txt	      |
-+		+-----------+--------------+----------------------------------+
+ - changes in the gpa->hpa translation (either through gpa->hva changes or
+   through hva->hpa changes)
+ - memory pressure (the shrinker)
+@@ -117,16 +131,19 @@ Leaf ptes point at guest pages.
+ The following table shows translations encoded by leaf ptes, with higher-level
+ translations in parentheses:
  
- 	Availability of this MSR must be checked via bit 3 in 0x4000001 cpuid
- 	leaf prior to usage.
- 
- 
--MSR_KVM_WALL_CLOCK:  0x11
-+MSR_KVM_WALL_CLOCK:
-+	0x11
- 
--	data and functioning: same as MSR_KVM_WALL_CLOCK_NEW. Use that instead.
-+data and functioning:
-+	same as MSR_KVM_WALL_CLOCK_NEW. Use that instead.
- 
- 	This MSR falls outside the reserved KVM range and may be removed in the
- 	future. Its usage is deprecated.
-@@ -136,9 +155,11 @@ MSR_KVM_WALL_CLOCK:  0x11
- 	Availability of this MSR must be checked via bit 0 in 0x4000001 cpuid
- 	leaf prior to usage.
- 
--MSR_KVM_SYSTEM_TIME: 0x12
-+MSR_KVM_SYSTEM_TIME:
-+	0x12
- 
--	data and functioning: same as MSR_KVM_SYSTEM_TIME_NEW. Use that instead.
-+data and functioning:
-+	same as MSR_KVM_SYSTEM_TIME_NEW. Use that instead.
- 
- 	This MSR falls outside the reserved KVM range and may be removed in the
- 	future. Its usage is deprecated.
-@@ -146,7 +167,7 @@ MSR_KVM_SYSTEM_TIME: 0x12
- 	Availability of this MSR must be checked via bit 0 in 0x4000001 cpuid
- 	leaf prior to usage.
- 
--	The suggested algorithm for detecting kvmclock presence is then:
-+	The suggested algorithm for detecting kvmclock presence is then::
- 
- 		if (!kvm_para_available())    /* refer to cpuid.txt */
- 			return NON_PRESENT;
-@@ -163,8 +184,11 @@ MSR_KVM_SYSTEM_TIME: 0x12
- 		} else
- 			return NON_PRESENT;
- 
--MSR_KVM_ASYNC_PF_EN: 0x4b564d02
--	data: Bits 63-6 hold 64-byte aligned physical address of a
-+MSR_KVM_ASYNC_PF_EN:
-+	0x4b564d02
+- Non-nested guests:
++ Non-nested guests::
 +
-+data:
-+	Bits 63-6 hold 64-byte aligned physical address of a
- 	64 byte memory area which must be in guest RAM and must be
- 	zeroed. Bits 5-3 are reserved and should be zero. Bit 0 is 1
- 	when asynchronous page faults are enabled on the vcpu 0 when
-@@ -200,20 +224,22 @@ MSR_KVM_ASYNC_PF_EN: 0x4b564d02
- 	Currently type 2 APF will be always delivered on the same vcpu as
- 	type 1 was, but guest should not rely on that.
- 
--MSR_KVM_STEAL_TIME: 0x4b564d03
-+MSR_KVM_STEAL_TIME:
-+	0x4b564d03
- 
--	data: 64-byte alignment physical address of a memory area which must be
-+data:
-+	64-byte alignment physical address of a memory area which must be
- 	in guest RAM, plus an enable bit in bit 0. This memory is expected to
--	hold a copy of the following structure:
-+	hold a copy of the following structure::
- 
--	struct kvm_steal_time {
-+	  struct kvm_steal_time {
- 		__u64 steal;
- 		__u32 version;
- 		__u32 flags;
- 		__u8  preempted;
- 		__u8  u8_pad[3];
- 		__u32 pad[11];
--	}
-+	  }
- 
- 	whose data will be filled in by the hypervisor periodically. Only one
- 	write, or registration, is needed for each VCPU. The interval between
-@@ -224,25 +250,32 @@ MSR_KVM_STEAL_TIME: 0x4b564d03
- 
- 	Fields have the following meanings:
- 
--		version: a sequence counter. In other words, guest has to check
-+	version:
-+		a sequence counter. In other words, guest has to check
- 		this field before and after grabbing time information and make
- 		sure they are both equal and even. An odd version indicates an
- 		in-progress update.
- 
--		flags: At this point, always zero. May be used to indicate
-+	flags:
-+		At this point, always zero. May be used to indicate
- 		changes in this structure in the future.
- 
--		steal: the amount of time in which this vCPU did not run, in
-+	steal:
-+		the amount of time in which this vCPU did not run, in
- 		nanoseconds. Time during which the vcpu is idle, will not be
- 		reported as steal time.
- 
--		preempted: indicate the vCPU who owns this struct is running or
-+	preempted:
-+		indicate the vCPU who owns this struct is running or
- 		not. Non-zero values mean the vCPU has been preempted. Zero
- 		means the vCPU is not preempted. NOTE, it is always zero if the
- 		the hypervisor doesn't support this field.
- 
--MSR_KVM_EOI_EN: 0x4b564d04
--	data: Bit 0 is 1 when PV end of interrupt is enabled on the vcpu; 0
-+MSR_KVM_EOI_EN:
-+	0x4b564d04
+   nonpaging:     gpa->hpa
+   paging:        gva->gpa->hpa
+   paging, tdp:   (gva->)gpa->hpa
+- Nested guests:
 +
-+data:
-+	Bit 0 is 1 when PV end of interrupt is enabled on the vcpu; 0
- 	when disabled.  Bit 1 is reserved and must be zero.  When PV end of
- 	interrupt is enabled (bit 0 set), bits 63-2 hold a 4-byte aligned
- 	physical address of a 4 byte memory area which must be in guest RAM and
-@@ -274,11 +307,13 @@ MSR_KVM_EOI_EN: 0x4b564d04
- 	clear it using a single CPU instruction, such as test and clear, or
- 	compare and exchange.
- 
--MSR_KVM_POLL_CONTROL: 0x4b564d05
-+MSR_KVM_POLL_CONTROL:
-+	0x4b564d05
++ Nested guests::
 +
- 	Control host-side polling.
+   non-tdp:       ngva->gpa->hpa  (*)
+   tdp:           (ngva->)ngpa->gpa->hpa
  
--	data: Bit 0 enables (1) or disables (0) host-side HLT polling logic.
-+data:
-+	Bit 0 enables (1) or disables (0) host-side HLT polling logic.
+-(*) the guest hypervisor will encode the ngva->gpa translation into its page
+-    tables if npt is not present
++  (*) the guest hypervisor will encode the ngva->gpa translation into its page
++      tables if npt is not present
  
- 	KVM guests can request the host not to poll on HLT, for example if
- 	they are performing polling themselves.
+ Shadow pages contain the following information:
+   role.level:
+@@ -291,28 +308,41 @@ Handling a page fault is performed as follows:
+ 
+  - if the RSV bit of the error code is set, the page fault is caused by guest
+    accessing MMIO and cached MMIO information is available.
++
+    - walk shadow page table
+    - check for valid generation number in the spte (see "Fast invalidation of
+      MMIO sptes" below)
+    - cache the information to vcpu->arch.mmio_gva, vcpu->arch.mmio_access and
+      vcpu->arch.mmio_gfn, and call the emulator
++
+  - If both P bit and R/W bit of error code are set, this could possibly
+    be handled as a "fast page fault" (fixed without taking the MMU lock).  See
+    the description in Documentation/virt/kvm/locking.txt.
++
+  - if needed, walk the guest page tables to determine the guest translation
+    (gva->gpa or ngpa->gpa)
++
+    - if permissions are insufficient, reflect the fault back to the guest
++
+  - determine the host page
++
+    - if this is an mmio request, there is no host page; cache the info to
+      vcpu->arch.mmio_gva, vcpu->arch.mmio_access and vcpu->arch.mmio_gfn
++
+  - walk the shadow page table to find the spte for the translation,
+    instantiating missing intermediate page tables as necessary
++
+    - If this is an mmio request, cache the mmio info to the spte and set some
+      reserved bit on the spte (see callers of kvm_mmu_set_mmio_spte_mask)
++
+  - try to unsynchronize the page
++
+    - if successful, we can let the guest continue and modify the gpte
++
+  - emulate the instruction
++
+    - if failed, unshadow the page and let the guest continue
++
+  - update any translations that were modified by the instruction
+ 
+ invlpg handling:
+@@ -324,10 +354,12 @@ invlpg handling:
+ Guest control register updates:
+ 
+ - mov to cr3
++
+   - look up new shadow roots
+   - synchronize newly reachable shadow pages
+ 
+ - mov to cr0/cr4/efer
++
+   - set up mmu context for new paging mode
+   - look up new shadow roots
+   - synchronize newly reachable shadow pages
+@@ -358,6 +390,7 @@ on fault type:
+ (user write faults generate a #PF)
+ 
+ In the first case there are two additional complications:
++
+ - if CR4.SMEP is enabled: since we've turned the page into a kernel page,
+   the kernel may now execute it.  We handle this by also setting spte.nx.
+   If we get a user fetch or read fault, we'll change spte.u=1 and
+@@ -446,4 +479,3 @@ Further reading
+ 
+ - NPT presentation from KVM Forum 2008
+   http://www.linux-kvm.org/images/c/c8/KvmForum2008%24kdf2008_21.pdf
 -
 -- 
 2.24.1
