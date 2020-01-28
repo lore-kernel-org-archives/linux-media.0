@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BE21C33CB3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F1CFC2D0DB
 	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:01:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CCA9B205F4
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:01:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2727324683
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:01:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580220078;
-	bh=0QE9r9M4nSusoBtn0uQmTsBwPDzhFl/0GJzag3gO7W4=;
+	s=default; t=1580220079;
+	bh=QMjmcSh5y1m0k4nqwk+54CZiksCu9gEv/xL2K68cAOc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=H30waU3RCkWVbuIWnI9qIwNViQOKRzwvKgWxydn38NPePYWwMkfpFhpbrzd4VQO6I
-	 A7/xd5CwrKRvb3flBULoQnSK4B6tKOzrkLA911UfT83Tz5SCehtFCjeTPh24JPuBQv
-	 XIrg0qEYH70tyRvG3ttkS9lz9GWwA8KxOAnIxZ8g=
+	b=ZgfYj+7JqfO78BpyVnplaJ5P1ka9cvXxy1ofD4UDa9PvA7kZzC799SNdCeyKH9uKE
+	 ih/6QaUhjMiC2ZyZ0O9eFDkO1hR3ZWoTfIJXtmfM2FOEt0FUr7JLyRN76CJp6oV103
+	 ld/zjM7tmuFRkK6bsklrhIv+MAOK2WJpMBKJzuek=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727402AbgA1OBQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:01:16 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59352 "EHLO
+        id S1727297AbgA1OBP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:01:15 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:59282 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726824AbgA1OAq (ORCPT
+        with ESMTP id S1727290AbgA1OAq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 09:00:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=F1P+6+TuszupGu0Tp2g0JB6lrpho1zIIc3pb798RBPM=; b=W1KEICt4HTRfCqH6HDrd2RpgfF
-        Jb4fIstRpNv/q1FMnmdjYqMGqtZhcInwnHmqMAgON6KJWcuX7kxArsd9ETe3BJXdGrU+CcOJw6V7p
-        wHRVaCSE4BpuHf0uDYmJEslSy49sZrQuXZT+nXOENWRcv60emPPxH53Wkugt1thfA1Wit6vVKC1by
-        700qXBQn6bT4M8td7hHrdTCGEhcYka9wahJUjvelgx7gbfo2vRysg/Tf0AgbGeo27SrOkxHnxSFYU
-        Vw3UDE/5jL2zO1rgHdR3Oouo9P3GPtcUYY0YWNbkRz8fn8+c40gSoe+KMQo09m22K/fEli60/KOA6
-        rQHNFnwA==;
+        bh=MfbPPBfVOsZ1ekqbduEWSsRYBXTtAjqiqdXfPqQdPuI=; b=aBQ9Hrv/71Hg26WLtVc5E2auPr
+        2GVZK3Jem/WMCd+XFWJdaVxcFuZNej7dVqKOpzjW3z3176P3ZBWtwNXnirpuqn+I+nASxQKziHiPX
+        drN3T03CZq7FsHD1IHKK3SsYjqr/WINVz6gHeK6DD6XwEY0PLg2l6cka31NEASl2Kmrq0bHctPHZQ
+        /lNpx8z2c6ZFRzStR+dv/iUkEtbGYGTHf7Ri4ASls5f55llAKrHsml082OHDjjHDtaToYjfgdyCb9
+        3azeYHt82sOALev1WwPGxWYWC3/IlkzukhQS2E9drF256+r/TU23DcUEy1feot3iAVFJMy3oy7rNF
+        Kojul6SA==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRQ5-0007iv-VI; Tue, 28 Jan 2020 14:00:46 +0000
+        id 1iwRQ5-0007ir-V2; Tue, 28 Jan 2020 14:00:45 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRPp-001BOx-Vo; Tue, 28 Jan 2020 15:00:29 +0100
+        id 1iwRPp-001BOE-Kd; Tue, 28 Jan 2020 15:00:29 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 22/27] docs: kvm: Convert mmu.txt to ReST format
-Date:   Tue, 28 Jan 2020 15:00:23 +0100
-Message-Id: <5e12ebc5b94bfd269d18d1e56d8b71c9f86a9ff2.1580219586.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 13/27] docs: kvm: convert devices/vcpu.txt to ReST
+Date:   Tue, 28 Jan 2020 15:00:14 +0100
+Message-Id: <b53d6dcb4e2e8f705750379b339bd534770cfd7d.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,203 +65,70 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Use document title and chapter markups;
-- Add markups for tables;
-- Add markups for literal blocks;
-- Add blank lines and adjust indentation.
+- Use standard title markup;
+- adjust lists;
+- mark code blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/index.rst            |  1 +
- Documentation/virt/kvm/{mmu.txt => mmu.rst} | 60 ++++++++++++++++-----
- 2 files changed, 47 insertions(+), 14 deletions(-)
- rename Documentation/virt/kvm/{mmu.txt => mmu.rst} (94%)
+ Documentation/virt/kvm/devices/index.rst      |  1 +
+ .../virt/kvm/devices/{vfio.txt => vfio.rst}   | 23 +++++++++++--------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
+ rename Documentation/virt/kvm/devices/{vfio.txt => vfio.rst} (74%)
 
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 9be8f53b729d..95e2487d38f4 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -13,6 +13,7 @@ KVM
-    halt-polling
-    hypercalls
-    locking
-+   mmu
-    msr
-    vcpu-requests
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index 5a61838f0e61..cbbadda080d0 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -13,3 +13,4 @@ Devices
+    mpic
+    s390_flic
+    vcpu
++   vfio
+diff --git a/Documentation/virt/kvm/devices/vfio.txt b/Documentation/virt/kvm/devices/vfio.rst
+similarity index 74%
+rename from Documentation/virt/kvm/devices/vfio.txt
+rename to Documentation/virt/kvm/devices/vfio.rst
+index 528c77c8022c..07a1acde25e4 100644
+--- a/Documentation/virt/kvm/devices/vfio.txt
++++ b/Documentation/virt/kvm/devices/vfio.rst
+@@ -1,8 +1,10 @@
++===================
+ VFIO virtual device
+ ===================
  
-diff --git a/Documentation/virt/kvm/mmu.txt b/Documentation/virt/kvm/mmu.rst
-similarity index 94%
-rename from Documentation/virt/kvm/mmu.txt
-rename to Documentation/virt/kvm/mmu.rst
-index dadb29e8738f..bf700a9a95fa 100644
---- a/Documentation/virt/kvm/mmu.txt
-+++ b/Documentation/virt/kvm/mmu.rst
-@@ -1,3 +1,4 @@
-+======================
- The x86 kvm shadow mmu
- ======================
+ Device types supported:
+-  KVM_DEV_TYPE_VFIO
++
++  - KVM_DEV_TYPE_VFIO
  
-@@ -7,27 +8,37 @@ physical addresses to host physical addresses.
+ Only one VFIO instance may be created per VM.  The created device
+ tracks VFIO groups in use by the VM and features of those groups
+@@ -23,14 +25,15 @@ KVM_DEV_VFIO_GROUP attributes:
+ 	for the VFIO group.
+   KVM_DEV_VFIO_GROUP_SET_SPAPR_TCE: attaches a guest visible TCE table
+ 	allocated by sPAPR KVM.
+-	kvm_device_attr.addr points to a struct:
++	kvm_device_attr.addr points to a struct::
  
- The mmu code attempts to satisfy the following requirements:
+-	struct kvm_vfio_spapr_tce {
+-		__s32	groupfd;
+-		__s32	tablefd;
+-	};
++		struct kvm_vfio_spapr_tce {
++			__s32	groupfd;
++			__s32	tablefd;
++		};
  
--- correctness: the guest should not be able to determine that it is running
-+- correctness:
-+	       the guest should not be able to determine that it is running
-                on an emulated mmu except for timing (we attempt to comply
-                with the specification, not emulate the characteristics of
-                a particular implementation such as tlb size)
--- security:    the guest must not be able to touch host memory not assigned
-+- security:
-+	       the guest must not be able to touch host memory not assigned
-                to it
--- performance: minimize the performance penalty imposed by the mmu
--- scaling:     need to scale to large memory and large vcpu guests
--- hardware:    support the full range of x86 virtualization hardware
--- integration: Linux memory management code must be in control of guest memory
-+- performance:
-+               minimize the performance penalty imposed by the mmu
-+- scaling:
-+               need to scale to large memory and large vcpu guests
-+- hardware:
-+               support the full range of x86 virtualization hardware
-+- integration:
-+               Linux memory management code must be in control of guest memory
-                so that swapping, page migration, page merging, transparent
-                hugepages, and similar features work without change
--- dirty tracking: report writes to guest memory to enable live migration
-+- dirty tracking:
-+               report writes to guest memory to enable live migration
-                and framebuffer-based displays
--- footprint:   keep the amount of pinned kernel memory low (most memory
-+- footprint:
-+               keep the amount of pinned kernel memory low (most memory
-                should be shrinkable)
--- reliability:  avoid multipage or GFP_ATOMIC allocations
-+- reliability:
-+               avoid multipage or GFP_ATOMIC allocations
- 
- Acronyms
- ========
- 
-+====  ====================================================================
- pfn   host page frame number
- hpa   host physical address
- hva   host virtual address
-@@ -41,6 +52,7 @@ pte   page table entry (used also to refer generically to paging structure
- gpte  guest pte (referring to gfns)
- spte  shadow pte (referring to pfns)
- tdp   two dimensional paging (vendor neutral term for NPT and EPT)
-+====  ====================================================================
- 
- Virtual and real hardware supported
- ===================================
-@@ -90,11 +102,13 @@ Events
- The mmu is driven by events, some from the guest, some from the host.
- 
- Guest generated events:
+-	where
+-	@groupfd is a file descriptor for a VFIO group;
+-	@tablefd is a file descriptor for a TCE table allocated via
+-		KVM_CREATE_SPAPR_TCE.
++	where:
 +
- - writes to control registers (especially cr3)
- - invlpg/invlpga instruction execution
- - access to missing or protected translations
- 
- Host generated events:
-+
- - changes in the gpa->hpa translation (either through gpa->hva changes or
-   through hva->hpa changes)
- - memory pressure (the shrinker)
-@@ -117,16 +131,19 @@ Leaf ptes point at guest pages.
- The following table shows translations encoded by leaf ptes, with higher-level
- translations in parentheses:
- 
-- Non-nested guests:
-+ Non-nested guests::
-+
-   nonpaging:     gpa->hpa
-   paging:        gva->gpa->hpa
-   paging, tdp:   (gva->)gpa->hpa
-- Nested guests:
-+
-+ Nested guests::
-+
-   non-tdp:       ngva->gpa->hpa  (*)
-   tdp:           (ngva->)ngpa->gpa->hpa
- 
--(*) the guest hypervisor will encode the ngva->gpa translation into its page
--    tables if npt is not present
-+  (*) the guest hypervisor will encode the ngva->gpa translation into its page
-+      tables if npt is not present
- 
- Shadow pages contain the following information:
-   role.level:
-@@ -291,28 +308,41 @@ Handling a page fault is performed as follows:
- 
-  - if the RSV bit of the error code is set, the page fault is caused by guest
-    accessing MMIO and cached MMIO information is available.
-+
-    - walk shadow page table
-    - check for valid generation number in the spte (see "Fast invalidation of
-      MMIO sptes" below)
-    - cache the information to vcpu->arch.mmio_gva, vcpu->arch.mmio_access and
-      vcpu->arch.mmio_gfn, and call the emulator
-+
-  - If both P bit and R/W bit of error code are set, this could possibly
-    be handled as a "fast page fault" (fixed without taking the MMU lock).  See
-    the description in Documentation/virt/kvm/locking.txt.
-+
-  - if needed, walk the guest page tables to determine the guest translation
-    (gva->gpa or ngpa->gpa)
-+
-    - if permissions are insufficient, reflect the fault back to the guest
-+
-  - determine the host page
-+
-    - if this is an mmio request, there is no host page; cache the info to
-      vcpu->arch.mmio_gva, vcpu->arch.mmio_access and vcpu->arch.mmio_gfn
-+
-  - walk the shadow page table to find the spte for the translation,
-    instantiating missing intermediate page tables as necessary
-+
-    - If this is an mmio request, cache the mmio info to the spte and set some
-      reserved bit on the spte (see callers of kvm_mmu_set_mmio_spte_mask)
-+
-  - try to unsynchronize the page
-+
-    - if successful, we can let the guest continue and modify the gpte
-+
-  - emulate the instruction
-+
-    - if failed, unshadow the page and let the guest continue
-+
-  - update any translations that were modified by the instruction
- 
- invlpg handling:
-@@ -324,10 +354,12 @@ invlpg handling:
- Guest control register updates:
- 
- - mov to cr3
-+
-   - look up new shadow roots
-   - synchronize newly reachable shadow pages
- 
- - mov to cr0/cr4/efer
-+
-   - set up mmu context for new paging mode
-   - look up new shadow roots
-   - synchronize newly reachable shadow pages
-@@ -358,6 +390,7 @@ on fault type:
- (user write faults generate a #PF)
- 
- In the first case there are two additional complications:
-+
- - if CR4.SMEP is enabled: since we've turned the page into a kernel page,
-   the kernel may now execute it.  We handle this by also setting spte.nx.
-   If we get a user fetch or read fault, we'll change spte.u=1 and
-@@ -446,4 +479,3 @@ Further reading
- 
- - NPT presentation from KVM Forum 2008
-   http://www.linux-kvm.org/images/c/c8/KvmForum2008%24kdf2008_21.pdf
--
++	- @groupfd is a file descriptor for a VFIO group;
++	- @tablefd is a file descriptor for a TCE table allocated via
++	  KVM_CREATE_SPAPR_TCE.
 -- 
 2.24.1
 
