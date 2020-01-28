@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0717C33CB2
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D34CC2D0DB
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D955214AF
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E2106214AF
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580223102;
-	bh=a6mkRzjWhCmIHE9IUbkl8qYiPklT0cEDtjZ7TXoFbrE=;
+	s=default; t=1580223104;
+	bh=I2BhXYr4D0j6Y7cTfsuoGiVS0oSjL3AedkKyFaRDD00=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=D6rC0yxtqPyDYZWAG+XRqKL5CpSxcwbFGk5EW0sOqQUi8mUlC8Woe71Tttg81Vjev
-	 1xCRa39U6pPD8lLKXMNUXv/6sYWYIA+vpZyGVlnLg3Cqw5PZTt3zibkFJ75T2uGTlX
-	 CEUGGMNxMa4bn41hExOwDPijBfH0UMQXdKC2rAcg=
+	b=OslYtf+P+ViI+AmXvGWnoOLFcbIS5d5rha7unH+KxP+zDoSJisz0sNTabFRY4STFD
+	 Pc89096NKl9Xhky/Fc9TjlUWVFkk4YjkpYoJl0eZGrXNp+hKH5lDJ+YiphmqkgRakU
+	 kpJhGi0hdRQ2SNSSLK684NUcGZgOIgwFBp8FXM0Q=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727327AbgA1Ove (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726940AbgA1Ove (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 28 Jan 2020 09:51:34 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58462 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:58550 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726533AbgA1N6o (ORCPT
+        with ESMTP id S1726594AbgA1N6p (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Jan 2020 08:58:44 -0500
+        Tue, 28 Jan 2020 08:58:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/9G2blGVWjqgR965RRc1wFm/0hKu3kd3si70pvH2CPo=; b=Xisg9X849OtD8zbByFgVJBnLBt
-        VdKJHkSKahIaqluRL21AOFSDbAU/V9d2Q+mr8eWrFotNK4Q1cPgtGQOUXohULJG4SgfFju62n8YpK
-        SAeI63pMDipuhM77xZu2sQKbasH9AdRi99bYBxcgIeGEyu7Nh4mQNzVvsB/zshpqXRVxvlNhmfWKC
-        Fu0weLkkfQW4fdy/M0wkbVN3ahMkUVcNIGd3s4pO8HA1geeqjX3jOX7qeoqgJH7YW+yBU2BKUnO1I
-        jgrbIMFuu07Bijjba/YibGvE3Ol30MH2OKz2Q/Ha2WSQefSLcBI9CMZCuGV1SClz2TOXEa3g1CfmC
-        CliurnVw==;
+        bh=XbGNFtogCQRMXF01dSGrQnNJXmqzkuMVFSbrbXMmdyA=; b=izc/MeBw2M/SAC8sFYlvzeozUv
+        t7ZGCho5eyTTPnZI3qdcGO+3Zh+9YEhnN8ze83vTeI2lX0vHsXFBd0HAXM+TGswgMIQQWTsVOGa2f
+        7ZB+MnmtaHB06v4elfGLacy6LmJq0gEC3Jp0EQXJjcEV+7AimpHK1Yft+rjCEQnbvmv9XXeqJL2Pj
+        oj7GE0Iek9teyxhMGK5UZBKnEp+Z/xAFsTiTMyori3CSBG4p33HcB0hl+osJYOKIKPQziOn4LM4rf
+        hj4gJi5/Rze2jfltGUsVmxWF9YjbkRdD/TiKZCrBf0K+GKznuvS0xW3U5L106NJ3Xnd9iHWMlrAUC
+        C4x1weaQ==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRO7-0006I3-2C; Tue, 28 Jan 2020 13:58:43 +0000
+        id 1iwRO7-0006KT-UX; Tue, 28 Jan 2020 13:58:45 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRNq-001BJV-7z; Tue, 28 Jan 2020 14:58:26 +0100
+        id 1iwRNq-001BK5-IG; Tue, 28 Jan 2020 14:58:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,10 +52,10 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 05/27] docs: virt: convert halt-polling.txt to ReST format
-Date:   Tue, 28 Jan 2020 14:58:01 +0100
+Subject: [PATCH 14/27] docs: kvm: convert devices/vm.txt to ReST
+Date:   Tue, 28 Jan 2020 14:58:10 +0100
 Message-Id:
- <b33f744ca5cdba1c0e3898c9c1aa50a2075b40f5.1580219586.git.mchehab+huawei@kernel.org>
+ <11ebca7843c1fd54a328e9260c552fe2d2cc5503.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,146 +65,407 @@ Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Message-ID: <20200128135801.L2LdI1ikRKNkgIvOyIE0hDGPDs-2To8Ed5x7yax_K9M@z>
+Message-ID: <20200128135810.6hEAu2tIAcFoaDkDu5zdgGzWhkiI9a_2ysAp6p0q1G0@z>
 
-- Fix document title to match ReST format
-- Convert the table to be properly recognized
-- Some indentation fixes to match ReST syntax.
+- Use title markups;
+- adjust indentation and add blank lines as needed;
+- use :field: markups;
+- Use cross-references;
+- mark code blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../{halt-polling.txt => halt-polling.rst}    | 84 ++++++++++---------
- Documentation/virt/kvm/index.rst              |  1 +
- 2 files changed, 44 insertions(+), 41 deletions(-)
- rename Documentation/virt/kvm/{halt-polling.txt => halt-polling.rst} (64%)
+ Documentation/virt/kvm/devices/index.rst      |   1 +
+ .../virt/kvm/devices/{vm.txt => vm.rst}       | 204 +++++++++++-------
+ 2 files changed, 125 insertions(+), 80 deletions(-)
+ rename Documentation/virt/kvm/devices/{vm.txt => vm.rst} (61%)
 
-diff --git a/Documentation/virt/kvm/halt-polling.txt b/Documentation/virt/kvm/halt-polling.rst
-similarity index 64%
-rename from Documentation/virt/kvm/halt-polling.txt
-rename to Documentation/virt/kvm/halt-polling.rst
-index 4f791b128dd2..d8f7516bd8d9 100644
---- a/Documentation/virt/kvm/halt-polling.txt
-+++ b/Documentation/virt/kvm/halt-polling.rst
-@@ -1,3 +1,4 @@
-+===========================
- The KVM halt polling system
- ===========================
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index cbbadda080d0..29f8ecdf7fa0 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -14,3 +14,4 @@ Devices
+    s390_flic
+    vcpu
+    vfio
++   vm
+diff --git a/Documentation/virt/kvm/devices/vm.txt b/Documentation/virt/kvm/devices/vm.rst
+similarity index 61%
+rename from Documentation/virt/kvm/devices/vm.txt
+rename to Documentation/virt/kvm/devices/vm.rst
+index 4ffb82b02468..4bcbc730265f 100644
+--- a/Documentation/virt/kvm/devices/vm.txt
++++ b/Documentation/virt/kvm/devices/vm.rst
+@@ -1,5 +1,6 @@
++====================
+ Generic vm interface
+-====================================
++====================
  
-@@ -68,7 +69,8 @@ steady state polling interval but will only really do a good job for wakeups
- which come at an approximately constant rate, otherwise there will be constant
- adjustment of the polling interval.
+ The virtual machine "device" also accepts the ioctls KVM_SET_DEVICE_ATTR,
+ KVM_GET_DEVICE_ATTR, and KVM_HAS_DEVICE_ATTR. The interface uses the same
+@@ -10,30 +11,38 @@ The groups and attributes per virtual machine, if any, are architecture
+ specific.
  
--[0] total block time: the time between when the halt polling function is
-+[0] total block time:
-+		      the time between when the halt polling function is
- 		      invoked and a wakeup source received (irrespective of
- 		      whether the scheduler is invoked within that function).
+ 1. GROUP: KVM_S390_VM_MEM_CTRL
+-Architectures: s390
++==============================
++
++:Architectures: s390
  
-@@ -81,31 +83,32 @@ shrunk. These variables are defined in include/linux/kvm_host.h and as module
- parameters in virt/kvm/kvm_main.c, or arch/powerpc/kvm/book3s_hv.c in the
- powerpc kvm-hv case.
+ 1.1. ATTRIBUTE: KVM_S390_VM_MEM_ENABLE_CMMA
+-Parameters: none
+-Returns: -EBUSY if a vcpu is already defined, otherwise 0
++-------------------------------------------
++
++:Parameters: none
++:Returns: -EBUSY if a vcpu is already defined, otherwise 0
  
--Module Parameter	|   Description		    |	     Default Value
----------------------------------------------------------------------------------
--halt_poll_ns		| The global max polling    | KVM_HALT_POLL_NS_DEFAULT
--			| interval which defines    |
--			| the ceiling value of the  |
--			| polling interval for      | (per arch value)
--			| each vcpu.		    |
----------------------------------------------------------------------------------
--halt_poll_ns_grow	| The value by which the    | 2
--			| halt polling interval is  |
--			| multiplied in the	    |
--			| grow_halt_poll_ns()	    |
--			| function.		    |
----------------------------------------------------------------------------------
--halt_poll_ns_grow_start | The initial value to grow | 10000
--			| to from zero in the	    |
--			| grow_halt_poll_ns()	    |
--			| function.		    |
----------------------------------------------------------------------------------
--halt_poll_ns_shrink	| The value by which the    | 0
--			| halt polling interval is  |
--			| divided in the	    |
--			| shrink_halt_poll_ns()	    |
--			| function.		    |
----------------------------------------------------------------------------------
-++-----------------------+---------------------------+-------------------------+
-+|Module Parameter	|   Description		    |	     Default Value    |
-++-----------------------+---------------------------+-------------------------+
-+|halt_poll_ns		| The global max polling    | KVM_HALT_POLL_NS_DEFAULT|
-+|			| interval which defines    |			      |
-+|			| the ceiling value of the  |			      |
-+|			| polling interval for      | (per arch value)	      |
-+|			| each vcpu.		    |			      |
-++-----------------------+---------------------------+-------------------------+
-+|halt_poll_ns_grow	| The value by which the    | 2			      |
-+|			| halt polling interval is  |			      |
-+|			| multiplied in the	    |			      |
-+|			| grow_halt_poll_ns()	    |			      |
-+|			| function.		    |			      |
-++-----------------------+---------------------------+-------------------------+
-+|halt_poll_ns_grow_start| The initial value to grow | 10000		      |
-+|			| to from zero in the	    |			      |
-+|			| grow_halt_poll_ns()	    |			      |
-+|			| function.		    |			      |
-++-----------------------+---------------------------+-------------------------+
-+|halt_poll_ns_shrink	| The value by which the    | 0			      |
-+|			| halt polling interval is  |			      |
-+|			| divided in the	    |			      |
-+|			| shrink_halt_poll_ns()	    |			      |
-+|			| function.		    |			      |
-++-----------------------+---------------------------+-------------------------+
+ Enables Collaborative Memory Management Assist (CMMA) for the virtual machine.
  
- These module parameters can be set from the debugfs files in:
+ 1.2. ATTRIBUTE: KVM_S390_VM_MEM_CLR_CMMA
+-Parameters: none
+-Returns: -EINVAL if CMMA was not enabled
+-         0 otherwise
++----------------------------------------
++
++:Parameters: none
++:Returns: -EINVAL if CMMA was not enabled;
++	  0 otherwise
  
-@@ -117,20 +120,19 @@ Note: that these module parameters are system wide values and are not able to
- Further Notes
- =============
+ Clear the CMMA status for all guest pages, so any pages the guest marked
+ as unused are again used any may not be reclaimed by the host.
  
--- Care should be taken when setting the halt_poll_ns module parameter as a
--large value has the potential to drive the cpu usage to 100% on a machine which
--would be almost entirely idle otherwise. This is because even if a guest has
--wakeups during which very little work is done and which are quite far apart, if
--the period is shorter than the global max polling interval (halt_poll_ns) then
--the host will always poll for the entire block time and thus cpu utilisation
--will go to 100%.
-+- Care should be taken when setting the halt_poll_ns module parameter as a large value
-+  has the potential to drive the cpu usage to 100% on a machine which would be almost
-+  entirely idle otherwise. This is because even if a guest has wakeups during which very
-+  little work is done and which are quite far apart, if the period is shorter than the
-+  global max polling interval (halt_poll_ns) then the host will always poll for the
-+  entire block time and thus cpu utilisation will go to 100%.
+ 1.3. ATTRIBUTE KVM_S390_VM_MEM_LIMIT_SIZE
+-Parameters: in attr->addr the address for the new limit of guest memory
+-Returns: -EFAULT if the given address is not accessible
+-         -EINVAL if the virtual machine is of type UCONTROL
+-         -E2BIG if the given guest memory is to big for that machine
+-         -EBUSY if a vcpu is already defined
+-         -ENOMEM if not enough memory is available for a new shadow guest mapping
+-          0 otherwise
++-----------------------------------------
++
++:Parameters: in attr->addr the address for the new limit of guest memory
++:Returns: -EFAULT if the given address is not accessible;
++	  -EINVAL if the virtual machine is of type UCONTROL;
++	  -E2BIG if the given guest memory is to big for that machine;
++	  -EBUSY if a vcpu is already defined;
++	  -ENOMEM if not enough memory is available for a new shadow guest mapping;
++	  0 otherwise.
  
--- Halt polling essentially presents a trade off between power usage and latency
--and the module parameters should be used to tune the affinity for this. Idle
--cpu time is essentially converted to host kernel time with the aim of decreasing
--latency when entering the guest.
-+- Halt polling essentially presents a trade off between power usage and latency and
-+  the module parameters should be used to tune the affinity for this. Idle cpu time is
-+  essentially converted to host kernel time with the aim of decreasing latency when
-+  entering the guest.
+ Allows userspace to query the actual limit and set a new limit for
+ the maximum guest memory size. The limit will be rounded up to
+@@ -42,78 +51,92 @@ the number of page table levels. In the case that there is no limit we will set
+ the limit to KVM_S390_NO_MEM_LIMIT (U64_MAX).
  
--- Halt polling will only be conducted by the host when no other tasks are
--runnable on that cpu, otherwise the polling will cease immediately and
--schedule will be invoked to allow that other task to run. Thus this doesn't
--allow a guest to denial of service the cpu.
-+- Halt polling will only be conducted by the host when no other tasks are runnable on
-+  that cpu, otherwise the polling will cease immediately and schedule will be invoked to
-+  allow that other task to run. Thus this doesn't allow a guest to denial of service the
-+  cpu.
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 488c6370a447..b39f4894b61d 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -9,6 +9,7 @@ KVM
+ 2. GROUP: KVM_S390_VM_CPU_MODEL
+-Architectures: s390
++===============================
++
++:Architectures: s390
  
-    amd-memory-encryption
-    cpuid
-+   halt-polling
-    vcpu-requests
+ 2.1. ATTRIBUTE: KVM_S390_VM_CPU_MACHINE (r/o)
++---------------------------------------------
  
-    arm/index
+-Allows user space to retrieve machine and kvm specific cpu related information:
++Allows user space to retrieve machine and kvm specific cpu related information::
+ 
+-struct kvm_s390_vm_cpu_machine {
++  struct kvm_s390_vm_cpu_machine {
+        __u64 cpuid;           # CPUID of host
+        __u32 ibc;             # IBC level range offered by host
+        __u8  pad[4];
+        __u64 fac_mask[256];   # set of cpu facilities enabled by KVM
+        __u64 fac_list[256];   # set of cpu facilities offered by host
+-}
++  }
+ 
+-Parameters: address of buffer to store the machine related cpu data
+-            of type struct kvm_s390_vm_cpu_machine*
+-Returns:    -EFAULT if the given address is not accessible from kernel space
+-	    -ENOMEM if not enough memory is available to process the ioctl
+-	    0 in case of success
++:Parameters: address of buffer to store the machine related cpu data
++	     of type struct kvm_s390_vm_cpu_machine*
++:Returns:   -EFAULT if the given address is not accessible from kernel space;
++	    -ENOMEM if not enough memory is available to process the ioctl;
++	    0 in case of success.
+ 
+ 2.2. ATTRIBUTE: KVM_S390_VM_CPU_PROCESSOR (r/w)
++===============================================
+ 
+-Allows user space to retrieve or request to change cpu related information for a vcpu:
++Allows user space to retrieve or request to change cpu related information for a vcpu::
+ 
+-struct kvm_s390_vm_cpu_processor {
++  struct kvm_s390_vm_cpu_processor {
+        __u64 cpuid;           # CPUID currently (to be) used by this vcpu
+        __u16 ibc;             # IBC level currently (to be) used by this vcpu
+        __u8  pad[6];
+        __u64 fac_list[256];   # set of cpu facilities currently (to be) used
+-                              # by this vcpu
+-}
++			      # by this vcpu
++  }
+ 
+ KVM does not enforce or limit the cpu model data in any form. Take the information
+ retrieved by means of KVM_S390_VM_CPU_MACHINE as hint for reasonable configuration
+ setups. Instruction interceptions triggered by additionally set facility bits that
+ are not handled by KVM need to by imlemented in the VM driver code.
+ 
+-Parameters: address of buffer to store/set the processor related cpu
+-	    data of type struct kvm_s390_vm_cpu_processor*.
+-Returns:    -EBUSY in case 1 or more vcpus are already activated (only in write case)
+-	    -EFAULT if the given address is not accessible from kernel space
+-	    -ENOMEM if not enough memory is available to process the ioctl
+-	    0 in case of success
++:Parameters: address of buffer to store/set the processor related cpu
++	     data of type struct kvm_s390_vm_cpu_processor*.
++:Returns:  -EBUSY in case 1 or more vcpus are already activated (only in write case);
++	   -EFAULT if the given address is not accessible from kernel space;
++	   -ENOMEM if not enough memory is available to process the ioctl;
++	   0 in case of success.
++
++.. _KVM_S390_VM_CPU_MACHINE_FEAT:
+ 
+ 2.3. ATTRIBUTE: KVM_S390_VM_CPU_MACHINE_FEAT (r/o)
++--------------------------------------------------
+ 
+ Allows user space to retrieve available cpu features. A feature is available if
+ provided by the hardware and supported by kvm. In theory, cpu features could
+ even be completely emulated by kvm.
+ 
+-struct kvm_s390_vm_cpu_feat {
+-        __u64 feat[16]; # Bitmap (1 = feature available), MSB 0 bit numbering
+-};
++::
+ 
+-Parameters: address of a buffer to load the feature list from.
+-Returns:    -EFAULT if the given address is not accessible from kernel space.
+-	    0 in case of success.
++  struct kvm_s390_vm_cpu_feat {
++	__u64 feat[16]; # Bitmap (1 = feature available), MSB 0 bit numbering
++  };
++
++:Parameters: address of a buffer to load the feature list from.
++:Returns:  -EFAULT if the given address is not accessible from kernel space;
++	   0 in case of success.
+ 
+ 2.4. ATTRIBUTE: KVM_S390_VM_CPU_PROCESSOR_FEAT (r/w)
++----------------------------------------------------
+ 
+ Allows user space to retrieve or change enabled cpu features for all VCPUs of a
+ VM. Features that are not available cannot be enabled.
+ 
+-See 2.3. for a description of the parameter struct.
++See :ref:`KVM_S390_VM_CPU_MACHINE_FEAT` for
++a description of the parameter struct.
+ 
+-Parameters: address of a buffer to store/load the feature list from.
+-Returns:    -EFAULT if the given address is not accessible from kernel space.
+-	    -EINVAL if a cpu feature that is not available is to be enabled.
+-	    -EBUSY if at least one VCPU has already been defined.
++:Parameters: address of a buffer to store/load the feature list from.
++:Returns:   -EFAULT if the given address is not accessible from kernel space;
++	    -EINVAL if a cpu feature that is not available is to be enabled;
++	    -EBUSY if at least one VCPU has already been defined;
+ 	    0 in case of success.
+ 
++.. _KVM_S390_VM_CPU_MACHINE_SUBFUNC:
++
+ 2.5. ATTRIBUTE: KVM_S390_VM_CPU_MACHINE_SUBFUNC (r/o)
++-----------------------------------------------------
+ 
+ Allows user space to retrieve available cpu subfunctions without any filtering
+ done by a set IBC. These subfunctions are indicated to the guest VCPU via
+@@ -126,7 +149,9 @@ contained in the returned struct. If the affected instruction
+ indicates subfunctions via a "test bit" mechanism, the subfunction codes are
+ contained in the returned struct in MSB 0 bit numbering.
+ 
+-struct kvm_s390_vm_cpu_subfunc {
++::
++
++  struct kvm_s390_vm_cpu_subfunc {
+        u8 plo[32];           # always valid (ESA/390 feature)
+        u8 ptff[16];          # valid with TOD-clock steering
+        u8 kmac[16];          # valid with Message-Security-Assist
+@@ -143,13 +168,14 @@ struct kvm_s390_vm_cpu_subfunc {
+        u8 kma[16];           # valid with Message-Security-Assist-Extension 8
+        u8 kdsa[16];          # valid with Message-Security-Assist-Extension 9
+        u8 reserved[1792];    # reserved for future instructions
+-};
++  };
+ 
+-Parameters: address of a buffer to load the subfunction blocks from.
+-Returns:    -EFAULT if the given address is not accessible from kernel space.
++:Parameters: address of a buffer to load the subfunction blocks from.
++:Returns:   -EFAULT if the given address is not accessible from kernel space;
+ 	    0 in case of success.
+ 
+ 2.6. ATTRIBUTE: KVM_S390_VM_CPU_PROCESSOR_SUBFUNC (r/w)
++-------------------------------------------------------
+ 
+ Allows user space to retrieve or change cpu subfunctions to be indicated for
+ all VCPUs of a VM. This attribute will only be available if kernel and
+@@ -164,107 +190,125 @@ As long as no data has been written, a read will fail. The IBC will be used
+ to determine available subfunctions in this case, this will guarantee backward
+ compatibility.
+ 
+-See 2.5. for a description of the parameter struct.
++See :ref:`KVM_S390_VM_CPU_MACHINE_SUBFUNC` for a
++description of the parameter struct.
+ 
+-Parameters: address of a buffer to store/load the subfunction blocks from.
+-Returns:    -EFAULT if the given address is not accessible from kernel space.
+-	    -EINVAL when reading, if there was no write yet.
+-	    -EBUSY if at least one VCPU has already been defined.
++:Parameters: address of a buffer to store/load the subfunction blocks from.
++:Returns:   -EFAULT if the given address is not accessible from kernel space;
++	    -EINVAL when reading, if there was no write yet;
++	    -EBUSY if at least one VCPU has already been defined;
+ 	    0 in case of success.
+ 
+ 3. GROUP: KVM_S390_VM_TOD
+-Architectures: s390
++=========================
++
++:Architectures: s390
+ 
+ 3.1. ATTRIBUTE: KVM_S390_VM_TOD_HIGH
++------------------------------------
+ 
+ Allows user space to set/get the TOD clock extension (u8) (superseded by
+ KVM_S390_VM_TOD_EXT).
+ 
+-Parameters: address of a buffer in user space to store the data (u8) to
+-Returns:    -EFAULT if the given address is not accessible from kernel space
++:Parameters: address of a buffer in user space to store the data (u8) to
++:Returns:   -EFAULT if the given address is not accessible from kernel space;
+ 	    -EINVAL if setting the TOD clock extension to != 0 is not supported
+ 
+ 3.2. ATTRIBUTE: KVM_S390_VM_TOD_LOW
++-----------------------------------
+ 
+ Allows user space to set/get bits 0-63 of the TOD clock register as defined in
+ the POP (u64).
+ 
+-Parameters: address of a buffer in user space to store the data (u64) to
+-Returns:    -EFAULT if the given address is not accessible from kernel space
++:Parameters: address of a buffer in user space to store the data (u64) to
++:Returns:    -EFAULT if the given address is not accessible from kernel space
+ 
+ 3.3. ATTRIBUTE: KVM_S390_VM_TOD_EXT
++-----------------------------------
++
+ Allows user space to set/get bits 0-63 of the TOD clock register as defined in
+ the POP (u64). If the guest CPU model supports the TOD clock extension (u8), it
+ also allows user space to get/set it. If the guest CPU model does not support
+ it, it is stored as 0 and not allowed to be set to a value != 0.
+ 
+-Parameters: address of a buffer in user space to store the data
+-            (kvm_s390_vm_tod_clock) to
+-Returns:    -EFAULT if the given address is not accessible from kernel space
++:Parameters: address of a buffer in user space to store the data
++	     (kvm_s390_vm_tod_clock) to
++:Returns:   -EFAULT if the given address is not accessible from kernel space;
+ 	    -EINVAL if setting the TOD clock extension to != 0 is not supported
+ 
+ 4. GROUP: KVM_S390_VM_CRYPTO
+-Architectures: s390
++============================
++
++:Architectures: s390
+ 
+ 4.1. ATTRIBUTE: KVM_S390_VM_CRYPTO_ENABLE_AES_KW (w/o)
++------------------------------------------------------
+ 
+ Allows user space to enable aes key wrapping, including generating a new
+ wrapping key.
+ 
+-Parameters: none
+-Returns:    0
++:Parameters: none
++:Returns:    0
+ 
+ 4.2. ATTRIBUTE: KVM_S390_VM_CRYPTO_ENABLE_DEA_KW (w/o)
++------------------------------------------------------
+ 
+ Allows user space to enable dea key wrapping, including generating a new
+ wrapping key.
+ 
+-Parameters: none
+-Returns:    0
++:Parameters: none
++:Returns:    0
+ 
+ 4.3. ATTRIBUTE: KVM_S390_VM_CRYPTO_DISABLE_AES_KW (w/o)
++-------------------------------------------------------
+ 
+ Allows user space to disable aes key wrapping, clearing the wrapping key.
+ 
+-Parameters: none
+-Returns:    0
++:Parameters: none
++:Returns:    0
+ 
+ 4.4. ATTRIBUTE: KVM_S390_VM_CRYPTO_DISABLE_DEA_KW (w/o)
++-------------------------------------------------------
+ 
+ Allows user space to disable dea key wrapping, clearing the wrapping key.
+ 
+-Parameters: none
+-Returns:    0
++:Parameters: none
++:Returns:    0
+ 
+ 5. GROUP: KVM_S390_VM_MIGRATION
+-Architectures: s390
++===============================
++
++:Architectures: s390
+ 
+ 5.1. ATTRIBUTE: KVM_S390_VM_MIGRATION_STOP (w/o)
++------------------------------------------------
+ 
+ Allows userspace to stop migration mode, needed for PGSTE migration.
+ Setting this attribute when migration mode is not active will have no
+ effects.
+ 
+-Parameters: none
+-Returns:    0
++:Parameters: none
++:Returns:    0
+ 
+ 5.2. ATTRIBUTE: KVM_S390_VM_MIGRATION_START (w/o)
++-------------------------------------------------
+ 
+ Allows userspace to start migration mode, needed for PGSTE migration.
+ Setting this attribute when migration mode is already active will have
+ no effects.
+ 
+-Parameters: none
+-Returns:    -ENOMEM if there is not enough free memory to start migration mode
+-	    -EINVAL if the state of the VM is invalid (e.g. no memory defined)
++:Parameters: none
++:Returns:   -ENOMEM if there is not enough free memory to start migration mode;
++	    -EINVAL if the state of the VM is invalid (e.g. no memory defined);
+ 	    0 in case of success.
+ 
+ 5.3. ATTRIBUTE: KVM_S390_VM_MIGRATION_STATUS (r/o)
++--------------------------------------------------
+ 
+ Allows userspace to query the status of migration mode.
+ 
+-Parameters: address of a buffer in user space to store the data (u64) to;
+-	    the data itself is either 0 if migration mode is disabled or 1
+-	    if it is enabled
+-Returns:    -EFAULT if the given address is not accessible from kernel space
++:Parameters: address of a buffer in user space to store the data (u64) to;
++	     the data itself is either 0 if migration mode is disabled or 1
++	     if it is enabled
++:Returns:   -EFAULT if the given address is not accessible from kernel space;
+ 	    0 in case of success.
 -- 
 2.24.1
 
