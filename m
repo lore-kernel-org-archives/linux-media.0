@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EE2DC33CB2
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:50:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 968E6C2D0DB
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:50:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 481712173E
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:50:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 61817207FD
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:50:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580223058;
-	bh=0QE9r9M4nSusoBtn0uQmTsBwPDzhFl/0GJzag3gO7W4=;
+	s=default; t=1580223059;
+	bh=UJ/CLYBBn6wHB9tWc1xNzUBDjNwGM2S5kzW6xD/rgaM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EJl24vzrjqHTlEASgHnuxU+aE1uWriyM43HjwaoBxAPvEhQje2Wp2pD7kNoPySlAI
-	 /IXU3oGBPP74hBukHad4h+KFuwWKWczjakLy7v7b2Qzqsyqfy2Q0jtin4Nba86lqIz
-	 liUlLY3YOK1cpl09rm0rtQlxD3KHleGYfSmdoaeE=
+	b=DLYcJVjHFqHSNWG+pxweAjvBRmicxy6R4eV2p/HM2dpD/fy8R2JcHw1MB3MAAiRku
+	 5x6rNfduIKhz3Az2dA7Cu3b7xAcX2CKHbkbX3AbfDqrzfQbRLkk2LkzCG35VQC0qoV
+	 Tp1sX18z4rZj8uHlaqDiPTmaqPQWXBW5ZNyUZWGA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbgA1Ou5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:50:57 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58496 "EHLO
+        id S1727438AbgA1Ou6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:50:58 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:58474 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726561AbgA1N6p (ORCPT
+        with ESMTP id S1726557AbgA1N6p (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 08:58:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=F1P+6+TuszupGu0Tp2g0JB6lrpho1zIIc3pb798RBPM=; b=Gpj9DHXAVBppP2mBRWcll/IJno
-        GveCb+/eHmGE8CyIF/3anYgfYX/qDH+lWWKuuB9wbehcUe1KlFAElIxGhJW9Y4U+ghFWl1hWYMKh2
-        Lryk2Y9P/rLxTdeMQ6GUVg7wTMm11JzWyXRFqYHa6pfW5PM3D/SveaxZmB4UdjSFS4Dstz5F3s0zW
-        BRK0f9I4BMP8s1fpId8/FX6tfN6c4L7b3JMtkiOBDvP4lI/daMa1nOTiBZLe2w1LNl8RCmQptDfFF
-        WXEyvDOqsfymUQb29v7aG/xX36+WXbUHv/pVqZS8xHgeUp5o3bkuBZ8v1C89vu34Fimc0UFNK5GwC
-        zNnTv5Bg==;
+        bh=dAo4MTL8JFdzXH3mr7nnacHwuW8dPHCRz9vjZt/hWIQ=; b=Cq2FFDAxQMQA3FsjTZb1MeJOxO
+        h1//oxs2MGBvgWnpvYllEWdaTMgz0cE9NWcsczLXn3Lf9/0aG6sTuagQpdXZaIqlMHW8/8FRMto9T
+        Oynzyb7s9CGgjALYTsVYJQbtPktfCQQWoDptjOdzdCwQMXcC4W8o7Oowyj7C7XX1GFQKfuUrMTsOZ
+        JIDStqh9oMDNBVSow15oz0E8PXd+5J6RcIx8jek7NU6WKxJ0DjrhIK4skas/8OX5fzQ4B42SwyZj6
+        le8op2jFq0WdpX7n/hYQcF7xLBPC83+OzCttCRZ7k5QqPZVuzfwdWOvausjkB8PzffX8h39dVzf04
+        EMgMV75g==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRO7-0006I5-Mh; Tue, 28 Jan 2020 13:58:44 +0000
+        id 1iwRO7-0006I0-Bk; Tue, 28 Jan 2020 13:58:43 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRNq-001BKe-SK; Tue, 28 Jan 2020 14:58:26 +0100
+        id 1iwRNq-001BKU-QI; Tue, 28 Jan 2020 14:58:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,10 +52,10 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 22/27] docs: kvm: Convert mmu.txt to ReST format
-Date:   Tue, 28 Jan 2020 14:58:18 +0100
+Subject: [PATCH 20/27] docs: kvm: Convert hypercalls.txt to ReST format
+Date:   Tue, 28 Jan 2020 14:58:16 +0100
 Message-Id:
- <5e12ebc5b94bfd269d18d1e56d8b71c9f86a9ff2.1580219586.git.mchehab+huawei@kernel.org>
+ <c9badaa7b7a0473ef75d6117a19a1bf8e98bc13f.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,205 +65,229 @@ Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Message-ID: <20200128135818.SR2Yq7DAKbdNeU9q0K9xLC_HKm-Ip5zKojb5718Udfo@z>
+Message-ID: <20200128135816.CMHbrlVH4ydiSBmT_AGt37Rl2Cn72uD5x0ZInUzsrxg@z>
 
 - Use document title and chapter markups;
-- Add markups for tables;
+- Convert tables;
 - Add markups for literal blocks;
-- Add blank lines and adjust indentation.
+- use :field: for field descriptions;
+- Add blank lines and adjust indentation
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/index.rst            |  1 +
- Documentation/virt/kvm/{mmu.txt => mmu.rst} | 60 ++++++++++++++++-----
- 2 files changed, 47 insertions(+), 14 deletions(-)
- rename Documentation/virt/kvm/{mmu.txt => mmu.rst} (94%)
+ .../kvm/{hypercalls.txt => hypercalls.rst}    | 127 ++++++++++--------
+ Documentation/virt/kvm/index.rst              |   2 +
+ 2 files changed, 73 insertions(+), 56 deletions(-)
+ rename Documentation/virt/kvm/{hypercalls.txt => hypercalls.rst} (55%)
 
+diff --git a/Documentation/virt/kvm/hypercalls.txt b/Documentation/virt/kvm/hypercalls.rst
+similarity index 55%
+rename from Documentation/virt/kvm/hypercalls.txt
+rename to Documentation/virt/kvm/hypercalls.rst
+index 5f6d291bd004..fb4ccaf8641a 100644
+--- a/Documentation/virt/kvm/hypercalls.txt
++++ b/Documentation/virt/kvm/hypercalls.rst
+@@ -1,5 +1,7 @@
+-Linux KVM Hypercall:
+ ===================
++Linux KVM Hypercall
++===================
++
+ X86:
+  KVM Hypercalls have a three-byte sequence of either the vmcall or the vmmcall
+  instruction. The hypervisor can replace it with instructions that are
+@@ -20,7 +22,7 @@ S390:
+   For further information on the S390 diagnose call as supported by KVM,
+   refer to Documentation/virt/kvm/s390-diag.txt.
+ 
+- PowerPC:
++PowerPC:
+   It uses R3-R10 and hypercall number in R11. R4-R11 are used as output registers.
+   Return value is placed in R3.
+ 
+@@ -34,7 +36,8 @@ MIPS:
+   the return value is placed in $2 (v0).
+ 
+ KVM Hypercalls Documentation
+-===========================
++============================
++
+ The template for each hypercall is:
+ 1. Hypercall name.
+ 2. Architecture(s)
+@@ -43,56 +46,64 @@ The template for each hypercall is:
+ 
+ 1. KVM_HC_VAPIC_POLL_IRQ
+ ------------------------
+-Architecture: x86
+-Status: active
+-Purpose: Trigger guest exit so that the host can check for pending
+-interrupts on reentry.
++
++:Architecture: x86
++:Status: active
++:Purpose: Trigger guest exit so that the host can check for pending
++          interrupts on reentry.
+ 
+ 2. KVM_HC_MMU_OP
+-------------------------
+-Architecture: x86
+-Status: deprecated.
+-Purpose: Support MMU operations such as writing to PTE,
+-flushing TLB, release PT.
++----------------
++
++:Architecture: x86
++:Status: deprecated.
++:Purpose: Support MMU operations such as writing to PTE,
++          flushing TLB, release PT.
+ 
+ 3. KVM_HC_FEATURES
+-------------------------
+-Architecture: PPC
+-Status: active
+-Purpose: Expose hypercall availability to the guest. On x86 platforms, cpuid
+-used to enumerate which hypercalls are available. On PPC, either device tree
+-based lookup ( which is also what EPAPR dictates) OR KVM specific enumeration
+-mechanism (which is this hypercall) can be used.
++------------------
++
++:Architecture: PPC
++:Status: active
++:Purpose: Expose hypercall availability to the guest. On x86 platforms, cpuid
++          used to enumerate which hypercalls are available. On PPC, either
++	  device tree based lookup ( which is also what EPAPR dictates)
++	  OR KVM specific enumeration mechanism (which is this hypercall)
++	  can be used.
+ 
+ 4. KVM_HC_PPC_MAP_MAGIC_PAGE
+-------------------------
+-Architecture: PPC
+-Status: active
+-Purpose: To enable communication between the hypervisor and guest there is a
+-shared page that contains parts of supervisor visible register state.
+-The guest can map this shared page to access its supervisor register through
+-memory using this hypercall.
++----------------------------
++
++:Architecture: PPC
++:Status: active
++:Purpose: To enable communication between the hypervisor and guest there is a
++	  shared page that contains parts of supervisor visible register state.
++	  The guest can map this shared page to access its supervisor register
++	  through memory using this hypercall.
+ 
+ 5. KVM_HC_KICK_CPU
+-------------------------
+-Architecture: x86
+-Status: active
+-Purpose: Hypercall used to wakeup a vcpu from HLT state
+-Usage example : A vcpu of a paravirtualized guest that is busywaiting in guest
+-kernel mode for an event to occur (ex: a spinlock to become available) can
+-execute HLT instruction once it has busy-waited for more than a threshold
+-time-interval. Execution of HLT instruction would cause the hypervisor to put
+-the vcpu to sleep until occurrence of an appropriate event. Another vcpu of the
+-same guest can wakeup the sleeping vcpu by issuing KVM_HC_KICK_CPU hypercall,
+-specifying APIC ID (a1) of the vcpu to be woken up. An additional argument (a0)
+-is used in the hypercall for future use.
++------------------
++
++:Architecture: x86
++:Status: active
++:Purpose: Hypercall used to wakeup a vcpu from HLT state
++:Usage example:
++  A vcpu of a paravirtualized guest that is busywaiting in guest
++  kernel mode for an event to occur (ex: a spinlock to become available) can
++  execute HLT instruction once it has busy-waited for more than a threshold
++  time-interval. Execution of HLT instruction would cause the hypervisor to put
++  the vcpu to sleep until occurrence of an appropriate event. Another vcpu of the
++  same guest can wakeup the sleeping vcpu by issuing KVM_HC_KICK_CPU hypercall,
++  specifying APIC ID (a1) of the vcpu to be woken up. An additional argument (a0)
++  is used in the hypercall for future use.
+ 
+ 
+ 6. KVM_HC_CLOCK_PAIRING
+-------------------------
+-Architecture: x86
+-Status: active
+-Purpose: Hypercall used to synchronize host and guest clocks.
++-----------------------
++:Architecture: x86
++:Status: active
++:Purpose: Hypercall used to synchronize host and guest clocks.
++
+ Usage:
+ 
+ a0: guest physical address where host copies
+@@ -101,6 +112,8 @@ a0: guest physical address where host copies
+ a1: clock_type, ATM only KVM_CLOCK_PAIRING_WALLCLOCK (0)
+ is supported (corresponding to the host's CLOCK_REALTIME clock).
+ 
++       ::
++
+ 		struct kvm_clock_pairing {
+ 			__s64 sec;
+ 			__s64 nsec;
+@@ -123,15 +136,16 @@ Returns KVM_EOPNOTSUPP if the host does not use TSC clocksource,
+ or if clock type is different than KVM_CLOCK_PAIRING_WALLCLOCK.
+ 
+ 6. KVM_HC_SEND_IPI
+-------------------------
+-Architecture: x86
+-Status: active
+-Purpose: Send IPIs to multiple vCPUs.
++------------------
+ 
+-a0: lower part of the bitmap of destination APIC IDs
+-a1: higher part of the bitmap of destination APIC IDs
+-a2: the lowest APIC ID in bitmap
+-a3: APIC ICR
++:Architecture: x86
++:Status: active
++:Purpose: Send IPIs to multiple vCPUs.
++
++- a0: lower part of the bitmap of destination APIC IDs
++- a1: higher part of the bitmap of destination APIC IDs
++- a2: the lowest APIC ID in bitmap
++- a3: APIC ICR
+ 
+ The hypercall lets a guest send multicast IPIs, with at most 128
+ 128 destinations per hypercall in 64-bit mode and 64 vCPUs per
+@@ -143,12 +157,13 @@ corresponds to the APIC ID a2+1, and so on.
+ Returns the number of CPUs to which the IPIs were delivered successfully.
+ 
+ 7. KVM_HC_SCHED_YIELD
+-------------------------
+-Architecture: x86
+-Status: active
+-Purpose: Hypercall used to yield if the IPI target vCPU is preempted
++---------------------
++
++:Architecture: x86
++:Status: active
++:Purpose: Hypercall used to yield if the IPI target vCPU is preempted
+ 
+ a0: destination APIC ID
+ 
+-Usage example: When sending a call-function IPI-many to vCPUs, yield if
+-any of the IPI target vCPUs was preempted.
++:Usage example: When sending a call-function IPI-many to vCPUs, yield if
++	        any of the IPI target vCPUs was preempted.
 diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 9be8f53b729d..95e2487d38f4 100644
+index 6fe79185b9bc..ac83bc588f7e 100644
 --- a/Documentation/virt/kvm/index.rst
 +++ b/Documentation/virt/kvm/index.rst
-@@ -13,6 +13,7 @@ KVM
+@@ -11,8 +11,10 @@ KVM
+    amd-memory-encryption
+    cpuid
     halt-polling
-    hypercalls
-    locking
-+   mmu
++   hypercalls
     msr
     vcpu-requests
  
-diff --git a/Documentation/virt/kvm/mmu.txt b/Documentation/virt/kvm/mmu.rst
-similarity index 94%
-rename from Documentation/virt/kvm/mmu.txt
-rename to Documentation/virt/kvm/mmu.rst
-index dadb29e8738f..bf700a9a95fa 100644
---- a/Documentation/virt/kvm/mmu.txt
-+++ b/Documentation/virt/kvm/mmu.rst
-@@ -1,3 +1,4 @@
-+======================
- The x86 kvm shadow mmu
- ======================
- 
-@@ -7,27 +8,37 @@ physical addresses to host physical addresses.
- 
- The mmu code attempts to satisfy the following requirements:
- 
--- correctness: the guest should not be able to determine that it is running
-+- correctness:
-+	       the guest should not be able to determine that it is running
-                on an emulated mmu except for timing (we attempt to comply
-                with the specification, not emulate the characteristics of
-                a particular implementation such as tlb size)
--- security:    the guest must not be able to touch host memory not assigned
-+- security:
-+	       the guest must not be able to touch host memory not assigned
-                to it
--- performance: minimize the performance penalty imposed by the mmu
--- scaling:     need to scale to large memory and large vcpu guests
--- hardware:    support the full range of x86 virtualization hardware
--- integration: Linux memory management code must be in control of guest memory
-+- performance:
-+               minimize the performance penalty imposed by the mmu
-+- scaling:
-+               need to scale to large memory and large vcpu guests
-+- hardware:
-+               support the full range of x86 virtualization hardware
-+- integration:
-+               Linux memory management code must be in control of guest memory
-                so that swapping, page migration, page merging, transparent
-                hugepages, and similar features work without change
--- dirty tracking: report writes to guest memory to enable live migration
-+- dirty tracking:
-+               report writes to guest memory to enable live migration
-                and framebuffer-based displays
--- footprint:   keep the amount of pinned kernel memory low (most memory
-+- footprint:
-+               keep the amount of pinned kernel memory low (most memory
-                should be shrinkable)
--- reliability:  avoid multipage or GFP_ATOMIC allocations
-+- reliability:
-+               avoid multipage or GFP_ATOMIC allocations
- 
- Acronyms
- ========
- 
-+====  ====================================================================
- pfn   host page frame number
- hpa   host physical address
- hva   host virtual address
-@@ -41,6 +52,7 @@ pte   page table entry (used also to refer generically to paging structure
- gpte  guest pte (referring to gfns)
- spte  shadow pte (referring to pfns)
- tdp   two dimensional paging (vendor neutral term for NPT and EPT)
-+====  ====================================================================
- 
- Virtual and real hardware supported
- ===================================
-@@ -90,11 +102,13 @@ Events
- The mmu is driven by events, some from the guest, some from the host.
- 
- Guest generated events:
+    arm/index
 +
- - writes to control registers (especially cr3)
- - invlpg/invlpga instruction execution
- - access to missing or protected translations
- 
- Host generated events:
-+
- - changes in the gpa->hpa translation (either through gpa->hva changes or
-   through hva->hpa changes)
- - memory pressure (the shrinker)
-@@ -117,16 +131,19 @@ Leaf ptes point at guest pages.
- The following table shows translations encoded by leaf ptes, with higher-level
- translations in parentheses:
- 
-- Non-nested guests:
-+ Non-nested guests::
-+
-   nonpaging:     gpa->hpa
-   paging:        gva->gpa->hpa
-   paging, tdp:   (gva->)gpa->hpa
-- Nested guests:
-+
-+ Nested guests::
-+
-   non-tdp:       ngva->gpa->hpa  (*)
-   tdp:           (ngva->)ngpa->gpa->hpa
- 
--(*) the guest hypervisor will encode the ngva->gpa translation into its page
--    tables if npt is not present
-+  (*) the guest hypervisor will encode the ngva->gpa translation into its page
-+      tables if npt is not present
- 
- Shadow pages contain the following information:
-   role.level:
-@@ -291,28 +308,41 @@ Handling a page fault is performed as follows:
- 
-  - if the RSV bit of the error code is set, the page fault is caused by guest
-    accessing MMIO and cached MMIO information is available.
-+
-    - walk shadow page table
-    - check for valid generation number in the spte (see "Fast invalidation of
-      MMIO sptes" below)
-    - cache the information to vcpu->arch.mmio_gva, vcpu->arch.mmio_access and
-      vcpu->arch.mmio_gfn, and call the emulator
-+
-  - If both P bit and R/W bit of error code are set, this could possibly
-    be handled as a "fast page fault" (fixed without taking the MMU lock).  See
-    the description in Documentation/virt/kvm/locking.txt.
-+
-  - if needed, walk the guest page tables to determine the guest translation
-    (gva->gpa or ngpa->gpa)
-+
-    - if permissions are insufficient, reflect the fault back to the guest
-+
-  - determine the host page
-+
-    - if this is an mmio request, there is no host page; cache the info to
-      vcpu->arch.mmio_gva, vcpu->arch.mmio_access and vcpu->arch.mmio_gfn
-+
-  - walk the shadow page table to find the spte for the translation,
-    instantiating missing intermediate page tables as necessary
-+
-    - If this is an mmio request, cache the mmio info to the spte and set some
-      reserved bit on the spte (see callers of kvm_mmu_set_mmio_spte_mask)
-+
-  - try to unsynchronize the page
-+
-    - if successful, we can let the guest continue and modify the gpte
-+
-  - emulate the instruction
-+
-    - if failed, unshadow the page and let the guest continue
-+
-  - update any translations that were modified by the instruction
- 
- invlpg handling:
-@@ -324,10 +354,12 @@ invlpg handling:
- Guest control register updates:
- 
- - mov to cr3
-+
-   - look up new shadow roots
-   - synchronize newly reachable shadow pages
- 
- - mov to cr0/cr4/efer
-+
-   - set up mmu context for new paging mode
-   - look up new shadow roots
-   - synchronize newly reachable shadow pages
-@@ -358,6 +390,7 @@ on fault type:
- (user write faults generate a #PF)
- 
- In the first case there are two additional complications:
-+
- - if CR4.SMEP is enabled: since we've turned the page into a kernel page,
-   the kernel may now execute it.  We handle this by also setting spte.nx.
-   If we get a user fetch or read fault, we'll change spte.u=1 and
-@@ -446,4 +479,3 @@ Further reading
- 
- - NPT presentation from KVM Forum 2008
-   http://www.linux-kvm.org/images/c/c8/KvmForum2008%24kdf2008_21.pdf
--
+    devices/index
 -- 
 2.24.1
 
