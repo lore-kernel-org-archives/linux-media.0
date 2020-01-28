@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71636C2D0DB
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14C29C35240
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3BFD5207FD
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5E4B207FD
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580222976;
-	bh=NUa9wOdnULSFN80KMTvTexLw0fLdLRakNVV/kz8ETNU=;
+	s=default; t=1580222977;
+	bh=D1FWdsnA7nLngLah5lSD/OjUTqeHAjWlBi/Tx5+dYsU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=BJzj/UaA2uu9+WQwVc+oTx0wRlmWfcHfgX2l0FHKvLkXFyBzc2Zy0XIQRuU5P7nSc
-	 9J2gRf/af3Yr/+YQYndUp/YlP4wXEo+T/B+u6SgyAMvn1OuxQlf69kjwOVKInnvGXt
-	 LD0jEOgdtHC59X7VdckJaVVRd0u7KuyUvxQnhqvc=
+	b=PI1cQ8VPl8WlnvjHMYMeaOcUelIZqFsEFxY4TwZykRexvxfRMhxgSVBP+H8PedNrf
+	 QKexbojYc9GrapIKYh6+mOJKqHp/BvujQ3bWqJCqFkcb1bJ/1nQfJiW6ibDGWvZDtY
+	 H9E6Zh6TMAjBTfOM34FwIK8yJYYv+ufrtgLQLgsw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727385AbgA1OBO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727366AbgA1OBO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 28 Jan 2020 09:01:14 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59362 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:59358 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727304AbgA1OAr (ORCPT
+        with ESMTP id S1727303AbgA1OAr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 09:00:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cLewyjoNlj0NAqOJ/2/JgEHHKOKhNDS+TNzq9GjVM+s=; b=F82CP3TWym1rOqd5pGItFGmp6C
-        ECE5dgZy+glq4bt83wBr4EtHrVKQmsHgCWa3TM3pSD41ACxHWN9FDcC0kbwhZghig8soTOZpEvJgZ
-        42pUebPmzdZYkZFy5OkaLToN8iwkeLx6UfiQ7Qqge8i5vXVG+8iXyGC4hpwn7eJ59EmtQZlQTtDJj
-        GdpCYJMF31KvLev8T3KHfXrhKBv3mXo2HenZ/rIaL6JHRn+tbEW+izBil4jEvWPBUA0Zduk2F2qrX
-        ATDc+Hf27dsyJJG0vUOlDYYkhd0bffEzDGIXrNC0txF1bOvIQtZ3ZkZd0XtXUkme5KXgps2nwHHJY
-        dEJDbQjw==;
+        bh=x2sp6iOc0E903sdVig18K8EVOnXyeDCsbEfAqgSYd/k=; b=GzW5tuhw0/UVkEKTt12cdFXIdP
+        acieGBF+dJF3ESI1fKqsSaSOMJydY3YH2QHL6YYURRmr24NwKzdPR5xZ6g/tLxFCw0JDbHwGgGr3h
+        r5/6AdlH6r+HlLl6FRNrD0oc3VuCMozX6Et5yTNGLVU2TNP28fqYVvkkq+oV2MUhdAYM8blefzxIV
+        0047eZ0Ph8Nw6N3+/uiQnrQZH7AS0ge4MiQVOhu8/gMol6aBb4H/Zs9y5iKfBrB0WfDVvz4CFM5PT
+        Y618f0hYArDAuaemOj2SdMfh+RqoTqC2XV7By1DUvL9bzVaailrKKoZm/DaCD+M8Esj3+QcfDwuOH
+        OQ94ndig==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRQ5-0007ii-WF; Tue, 28 Jan 2020 14:00:46 +0000
+        id 1iwRQ5-0007il-Ve; Tue, 28 Jan 2020 14:00:46 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRPp-001BNk-DW; Tue, 28 Jan 2020 15:00:29 +0100
+        id 1iwRPp-001BOT-Nn; Tue, 28 Jan 2020 15:00:29 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 07/27] docs: kvm: devices/arm-vgic-its.txt to ReST format
-Date:   Tue, 28 Jan 2020 15:00:08 +0100
-Message-Id: <5681dbc80e10388917107f3d0b33eb90e2e4b5a3.1580219586.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 16/27] docs: kvm: convert devices/xive.txt to ReST
+Date:   Tue, 28 Jan 2020 15:00:17 +0100
+Message-Id: <126a26241472a0df74b8c19f489162ddc1edfc4b.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,247 +65,261 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Fix document title to match ReST format
-- Convert the table to be properly recognized
-- use proper markups for literal blocks
-- Some indentation fixes to match ReST
-
-While here, add an index for kvm devices.
+- Use title markups;
+- adjust indentation and add blank lines as needed;
+- adjust tables to match ReST accepted formats;
+- mark code blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../{arm-vgic-its.txt => arm-vgic-its.rst}    | 104 +++++++++++-------
- Documentation/virt/kvm/devices/index.rst      |  10 ++
- Documentation/virt/kvm/index.rst              |   1 +
- 3 files changed, 76 insertions(+), 39 deletions(-)
- rename Documentation/virt/kvm/devices/{arm-vgic-its.txt => arm-vgic-its.rst} (71%)
- create mode 100644 Documentation/virt/kvm/devices/index.rst
+ Documentation/virt/kvm/devices/index.rst      |   1 +
+ .../virt/kvm/devices/{xive.txt => xive.rst}   | 146 +++++++++++-------
+ 2 files changed, 94 insertions(+), 53 deletions(-)
+ rename Documentation/virt/kvm/devices/{xive.txt => xive.rst} (63%)
 
-diff --git a/Documentation/virt/kvm/devices/arm-vgic-its.txt b/Documentation/virt/kvm/devices/arm-vgic-its.rst
-similarity index 71%
-rename from Documentation/virt/kvm/devices/arm-vgic-its.txt
-rename to Documentation/virt/kvm/devices/arm-vgic-its.rst
-index eeaa95b893a8..4197d9d6a870 100644
---- a/Documentation/virt/kvm/devices/arm-vgic-its.txt
-+++ b/Documentation/virt/kvm/devices/arm-vgic-its.rst
-@@ -1,3 +1,4 @@
-+===============================================
- ARM Virtual Interrupt Translation Service (ITS)
- ===============================================
- 
-@@ -12,22 +13,32 @@ There can be multiple ITS controllers per guest, each of them has to have
- a separate, non-overlapping MMIO region.
- 
- 
--Groups:
--  KVM_DEV_ARM_VGIC_GRP_ADDR
-+Groups
-+======
-+
-+KVM_DEV_ARM_VGIC_GRP_ADDR
-+-------------------------
-+
-   Attributes:
-     KVM_VGIC_ITS_ADDR_TYPE (rw, 64-bit)
-       Base address in the guest physical address space of the GICv3 ITS
-       control register frame.
-       This address needs to be 64K aligned and the region covers 128K.
-+
-   Errors:
--    -E2BIG:  Address outside of addressable IPA range
--    -EINVAL: Incorrectly aligned address
--    -EEXIST: Address already configured
--    -EFAULT: Invalid user pointer for attr->addr.
--    -ENODEV: Incorrect attribute or the ITS is not supported.
- 
-+    =======  =================================================
-+    -E2BIG   Address outside of addressable IPA range
-+    -EINVAL  Incorrectly aligned address
-+    -EEXIST  Address already configured
-+    -EFAULT  Invalid user pointer for attr->addr.
-+    -ENODEV  Incorrect attribute or the ITS is not supported.
-+    =======  =================================================
-+
-+
-+KVM_DEV_ARM_VGIC_GRP_CTRL
-+-------------------------
- 
--  KVM_DEV_ARM_VGIC_GRP_CTRL
-   Attributes:
-     KVM_DEV_ARM_VGIC_CTRL_INIT
-       request the initialization of the ITS, no additional parameter in
-@@ -58,16 +69,21 @@ Groups:
-       "ITS Restore Sequence".
- 
-   Errors:
--    -ENXIO:  ITS not properly configured as required prior to setting
-+
-+    =======  ==========================================================
-+     -ENXIO  ITS not properly configured as required prior to setting
-              this attribute
--    -ENOMEM: Memory shortage when allocating ITS internal data
--    -EINVAL: Inconsistent restored data
--    -EFAULT: Invalid guest ram access
--    -EBUSY:  One or more VCPUS are running
--    -EACCES: The virtual ITS is backed by a physical GICv4 ITS, and the
-+    -ENOMEM  Memory shortage when allocating ITS internal data
-+    -EINVAL  Inconsistent restored data
-+    -EFAULT  Invalid guest ram access
-+    -EBUSY   One or more VCPUS are running
-+    -EACCES  The virtual ITS is backed by a physical GICv4 ITS, and the
- 	     state is not available
-+    =======  ==========================================================
-+
-+KVM_DEV_ARM_VGIC_GRP_ITS_REGS
-+-----------------------------
- 
--  KVM_DEV_ARM_VGIC_GRP_ITS_REGS
-   Attributes:
-       The attr field of kvm_device_attr encodes the offset of the
-       ITS register, relative to the ITS control frame base address
-@@ -78,6 +94,7 @@ Groups:
-       be accessed with full length.
- 
-       Writes to read-only registers are ignored by the kernel except for:
-+
-       - GITS_CREADR. It must be restored otherwise commands in the queue
-         will be re-executed after restoring CWRITER. GITS_CREADR must be
-         restored before restoring the GITS_CTLR which is likely to enable the
-@@ -91,30 +108,36 @@ Groups:
- 
-       For other registers, getting or setting a register has the same
-       effect as reading/writing the register on real hardware.
-+
-   Errors:
--    -ENXIO: Offset does not correspond to any supported register
--    -EFAULT: Invalid user pointer for attr->addr
--    -EINVAL: Offset is not 64-bit aligned
--    -EBUSY: one or more VCPUS are running
- 
-- ITS Restore Sequence:
-- -------------------------
-+    =======  ====================================================
-+    -ENXIO   Offset does not correspond to any supported register
-+    -EFAULT  Invalid user pointer for attr->addr
-+    -EINVAL  Offset is not 64-bit aligned
-+    -EBUSY   one or more VCPUS are running
-+    =======  ====================================================
-+
-+ITS Restore Sequence:
-+---------------------
- 
- The following ordering must be followed when restoring the GIC and the ITS:
-+
- a) restore all guest memory and create vcpus
- b) restore all redistributors
- c) provide the ITS base address
-    (KVM_DEV_ARM_VGIC_GRP_ADDR)
- d) restore the ITS in the following order:
--   1. Restore GITS_CBASER
--   2. Restore all other GITS_ registers, except GITS_CTLR!
--   3. Load the ITS table data (KVM_DEV_ARM_ITS_RESTORE_TABLES)
--   4. Restore GITS_CTLR
-+
-+     1. Restore GITS_CBASER
-+     2. Restore all other ``GITS_`` registers, except GITS_CTLR!
-+     3. Load the ITS table data (KVM_DEV_ARM_ITS_RESTORE_TABLES)
-+     4. Restore GITS_CTLR
- 
- Then vcpus can be started.
- 
-- ITS Table ABI REV0:
-- -------------------
-+ITS Table ABI REV0:
-+-------------------
- 
-  Revision 0 of the ABI only supports the features of a virtual GICv3, and does
-  not support a virtual GICv4 with support for direct injection of virtual
-@@ -125,12 +148,13 @@ Then vcpus can be started.
-  entries in the collection are listed in no particular order.
-  All entries are 8 bytes.
- 
-- Device Table Entry (DTE):
-+ Device Table Entry (DTE)::
- 
-- bits:     | 63| 62 ... 49 | 48 ... 5 | 4 ... 0 |
-- values:   | V |   next    | ITT_addr |  Size   |
-+   bits:     | 63| 62 ... 49 | 48 ... 5 | 4 ... 0 |
-+   values:   | V |   next    | ITT_addr |  Size   |
-+
-+ where:
- 
-- where;
-  - V indicates whether the entry is valid. If not, other fields
-    are not meaningful.
-  - next: equals to 0 if this entry is the last one; otherwise it
-@@ -140,32 +164,34 @@ Then vcpus can be started.
-  - Size specifies the supported number of bits for the EventID,
-    minus one
- 
-- Collection Table Entry (CTE):
-+ Collection Table Entry (CTE)::
- 
-- bits:     | 63| 62 ..  52  | 51 ... 16 | 15  ...   0 |
-- values:   | V |    RES0    |  RDBase   |    ICID     |
-+   bits:     | 63| 62 ..  52  | 51 ... 16 | 15  ...   0 |
-+   values:   | V |    RES0    |  RDBase   |    ICID     |
- 
-  where:
-+
-  - V indicates whether the entry is valid. If not, other fields are
-    not meaningful.
-  - RES0: reserved field with Should-Be-Zero-or-Preserved behavior.
-  - RDBase is the PE number (GICR_TYPER.Processor_Number semantic),
-  - ICID is the collection ID
- 
-- Interrupt Translation Entry (ITE):
-+ Interrupt Translation Entry (ITE)::
- 
-- bits:     | 63 ... 48 | 47 ... 16 | 15 ... 0 |
-- values:   |    next   |   pINTID  |  ICID    |
-+   bits:     | 63 ... 48 | 47 ... 16 | 15 ... 0 |
-+   values:   |    next   |   pINTID  |  ICID    |
- 
-  where:
-+
-  - next: equals to 0 if this entry is the last one; otherwise it corresponds
-    to the EventID offset to the next ITE capped by 2^16 -1.
-  - pINTID is the physical LPI ID; if zero, it means the entry is not valid
-    and other fields are not meaningful.
-  - ICID is the collection ID
- 
-- ITS Reset State:
-- ----------------
-+ITS Reset State:
-+----------------
- 
- RESET returns the ITS to the same state that it was when first created and
- initialized. When the RESET command returns, the following things are
 diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
-new file mode 100644
-index 000000000000..2aad8d426097
---- /dev/null
+index 63b61369d09b..192cda7405c8 100644
+--- a/Documentation/virt/kvm/devices/index.rst
 +++ b/Documentation/virt/kvm/devices/index.rst
-@@ -0,0 +1,10 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=======
-+Devices
-+=======
-+
-+.. toctree::
-+   :maxdepth: 2
-+
-+   arm-vgic-its
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index cc6dde47b267..24d1076ec680 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -14,3 +14,4 @@ KVM
-    vcpu-requests
+@@ -16,3 +16,4 @@ Devices
+    vfio
+    vm
+    xics
++   xive
+diff --git a/Documentation/virt/kvm/devices/xive.txt b/Documentation/virt/kvm/devices/xive.rst
+similarity index 63%
+rename from Documentation/virt/kvm/devices/xive.txt
+rename to Documentation/virt/kvm/devices/xive.rst
+index f5d1d6b5af61..e3947089b19c 100644
+--- a/Documentation/virt/kvm/devices/xive.txt
++++ b/Documentation/virt/kvm/devices/xive.rst
+@@ -1,8 +1,9 @@
++===========================================================
+ POWER9 eXternal Interrupt Virtualization Engine (XIVE Gen1)
+-==========================================================
++===========================================================
  
-    arm/index
-+   devices/index
+ Device types supported:
+-  KVM_DEV_TYPE_XIVE     POWER9 XIVE Interrupt Controller generation 1
++  - KVM_DEV_TYPE_XIVE     POWER9 XIVE Interrupt Controller generation 1
+ 
+ This device acts as a VM interrupt controller. It provides the KVM
+ interface to configure the interrupt sources of a VM in the underlying
+@@ -64,72 +65,100 @@ the legacy interrupt mode, referred as XICS (POWER7/8).
+ 
+ * Groups:
+ 
+-  1. KVM_DEV_XIVE_GRP_CTRL
+-  Provides global controls on the device
++1. KVM_DEV_XIVE_GRP_CTRL
++     Provides global controls on the device
++
+   Attributes:
+     1.1 KVM_DEV_XIVE_RESET (write only)
+     Resets the interrupt controller configuration for sources and event
+     queues. To be used by kexec and kdump.
++
+     Errors: none
+ 
+     1.2 KVM_DEV_XIVE_EQ_SYNC (write only)
+     Sync all the sources and queues and mark the EQ pages dirty. This
+     to make sure that a consistent memory state is captured when
+     migrating the VM.
++
+     Errors: none
+ 
+     1.3 KVM_DEV_XIVE_NR_SERVERS (write only)
+     The kvm_device_attr.addr points to a __u32 value which is the number of
+     interrupt server numbers (ie, highest possible vcpu id plus one).
++
+     Errors:
+-      -EINVAL: Value greater than KVM_MAX_VCPU_ID.
+-      -EFAULT: Invalid user pointer for attr->addr.
+-      -EBUSY:  A vCPU is already connected to the device.
+ 
+-  2. KVM_DEV_XIVE_GRP_SOURCE (write only)
+-  Initializes a new source in the XIVE device and mask it.
++      =======  ==========================================
++      -EINVAL  Value greater than KVM_MAX_VCPU_ID.
++      -EFAULT  Invalid user pointer for attr->addr.
++      -EBUSY   A vCPU is already connected to the device.
++      =======  ==========================================
++
++2. KVM_DEV_XIVE_GRP_SOURCE (write only)
++     Initializes a new source in the XIVE device and mask it.
++
+   Attributes:
+     Interrupt source number  (64-bit)
+-  The kvm_device_attr.addr points to a __u64 value:
+-  bits:     | 63   ....  2 |   1   |   0
+-  values:   |    unused    | level | type
++
++  The kvm_device_attr.addr points to a __u64 value::
++
++    bits:     | 63   ....  2 |   1   |   0
++    values:   |    unused    | level | type
++
+   - type:  0:MSI 1:LSI
+   - level: assertion level in case of an LSI.
++
+   Errors:
+-    -E2BIG:  Interrupt source number is out of range
+-    -ENOMEM: Could not create a new source block
+-    -EFAULT: Invalid user pointer for attr->addr.
+-    -ENXIO:  Could not allocate underlying HW interrupt
+ 
+-  3. KVM_DEV_XIVE_GRP_SOURCE_CONFIG (write only)
+-  Configures source targeting
++    =======  ==========================================
++    -E2BIG   Interrupt source number is out of range
++    -ENOMEM  Could not create a new source block
++    -EFAULT  Invalid user pointer for attr->addr.
++    -ENXIO   Could not allocate underlying HW interrupt
++    =======  ==========================================
++
++3. KVM_DEV_XIVE_GRP_SOURCE_CONFIG (write only)
++     Configures source targeting
++
+   Attributes:
+     Interrupt source number  (64-bit)
+-  The kvm_device_attr.addr points to a __u64 value:
+-  bits:     | 63   ....  33 |  32  | 31 .. 3 |  2 .. 0
+-  values:   |    eisn       | mask |  server | priority
++
++  The kvm_device_attr.addr points to a __u64 value::
++
++    bits:     | 63   ....  33 |  32  | 31 .. 3 |  2 .. 0
++    values:   |    eisn       | mask |  server | priority
++
+   - priority: 0-7 interrupt priority level
+   - server: CPU number chosen to handle the interrupt
+   - mask: mask flag (unused)
+   - eisn: Effective Interrupt Source Number
++
+   Errors:
+-    -ENOENT: Unknown source number
+-    -EINVAL: Not initialized source number
+-    -EINVAL: Invalid priority
+-    -EINVAL: Invalid CPU number.
+-    -EFAULT: Invalid user pointer for attr->addr.
+-    -ENXIO:  CPU event queues not configured or configuration of the
+-             underlying HW interrupt failed
+-    -EBUSY:  No CPU available to serve interrupt
+ 
+-  4. KVM_DEV_XIVE_GRP_EQ_CONFIG (read-write)
+-  Configures an event queue of a CPU
++    =======  =======================================================
++    -ENOENT  Unknown source number
++    -EINVAL  Not initialized source number
++    -EINVAL  Invalid priority
++    -EINVAL  Invalid CPU number.
++    -EFAULT  Invalid user pointer for attr->addr.
++    -ENXIO   CPU event queues not configured or configuration of the
++	     underlying HW interrupt failed
++    -EBUSY   No CPU available to serve interrupt
++    =======  =======================================================
++
++4. KVM_DEV_XIVE_GRP_EQ_CONFIG (read-write)
++     Configures an event queue of a CPU
++
+   Attributes:
+     EQ descriptor identifier (64-bit)
+-  The EQ descriptor identifier is a tuple (server, priority) :
+-  bits:     | 63   ....  32 | 31 .. 3 |  2 .. 0
+-  values:   |    unused     |  server | priority
+-  The kvm_device_attr.addr points to :
++
++  The EQ descriptor identifier is a tuple (server, priority)::
++
++    bits:     | 63   ....  32 | 31 .. 3 |  2 .. 0
++    values:   |    unused     |  server | priority
++
++  The kvm_device_attr.addr points to::
++
+     struct kvm_ppc_xive_eq {
+ 	__u32 flags;
+ 	__u32 qshift;
+@@ -138,8 +167,9 @@ the legacy interrupt mode, referred as XICS (POWER7/8).
+ 	__u32 qindex;
+ 	__u8  pad[40];
+     };
++
+   - flags: queue flags
+-    KVM_XIVE_EQ_ALWAYS_NOTIFY (required)
++      KVM_XIVE_EQ_ALWAYS_NOTIFY (required)
+ 	forces notification without using the coalescing mechanism
+ 	provided by the XIVE END ESBs.
+   - qshift: queue size (power of 2)
+@@ -147,22 +177,31 @@ the legacy interrupt mode, referred as XICS (POWER7/8).
+   - qtoggle: current queue toggle bit
+   - qindex: current queue index
+   - pad: reserved for future use
++
+   Errors:
+-    -ENOENT: Invalid CPU number
+-    -EINVAL: Invalid priority
+-    -EINVAL: Invalid flags
+-    -EINVAL: Invalid queue size
+-    -EINVAL: Invalid queue address
+-    -EFAULT: Invalid user pointer for attr->addr.
+-    -EIO:    Configuration of the underlying HW failed
+ 
+-  5. KVM_DEV_XIVE_GRP_SOURCE_SYNC (write only)
+-  Synchronize the source to flush event notifications
++    =======  =========================================
++    -ENOENT  Invalid CPU number
++    -EINVAL  Invalid priority
++    -EINVAL  Invalid flags
++    -EINVAL  Invalid queue size
++    -EINVAL  Invalid queue address
++    -EFAULT  Invalid user pointer for attr->addr.
++    -EIO     Configuration of the underlying HW failed
++    =======  =========================================
++
++5. KVM_DEV_XIVE_GRP_SOURCE_SYNC (write only)
++     Synchronize the source to flush event notifications
++
+   Attributes:
+     Interrupt source number  (64-bit)
++
+   Errors:
+-    -ENOENT: Unknown source number
+-    -EINVAL: Not initialized source number
++
++    =======  =============================
++    -ENOENT  Unknown source number
++    -EINVAL  Not initialized source number
++    =======  =============================
+ 
+ * VCPU state
+ 
+@@ -175,11 +214,12 @@ the legacy interrupt mode, referred as XICS (POWER7/8).
+   as it synthesizes the priorities of the pending interrupts. We
+   capture a bit more to report debug information.
+ 
+-  KVM_REG_PPC_VP_STATE (2 * 64bits)
+-  bits:     |  63  ....  32  |  31  ....  0  |
+-  values:   |   TIMA word0   |   TIMA word1  |
+-  bits:     | 127       ..........       64  |
+-  values:   |            unused              |
++  KVM_REG_PPC_VP_STATE (2 * 64bits)::
++
++    bits:     |  63  ....  32  |  31  ....  0  |
++    values:   |   TIMA word0   |   TIMA word1  |
++    bits:     | 127       ..........       64  |
++    values:   |            unused              |
+ 
+ * Migration:
+ 
+@@ -196,7 +236,7 @@ the legacy interrupt mode, referred as XICS (POWER7/8).
+   3. Capture the state of the source targeting, the EQs configuration
+   and the state of thread interrupt context registers.
+ 
+-  Restore is similar :
++  Restore is similar:
+ 
+   1. Restore the EQ configuration. As targeting depends on it.
+   2. Restore targeting
 -- 
 2.24.1
 
