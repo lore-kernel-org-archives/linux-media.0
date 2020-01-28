@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 968E6C2D0DB
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF52BC33CB3
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 61817207FD
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:50:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DC91207FD
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580223059;
-	bh=UJ/CLYBBn6wHB9tWc1xNzUBDjNwGM2S5kzW6xD/rgaM=;
+	s=default; t=1580223061;
+	bh=IkF+9xLafRu4mfLrUwCIgZx6XAr2dtL/tskYzhw25yY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DLYcJVjHFqHSNWG+pxweAjvBRmicxy6R4eV2p/HM2dpD/fy8R2JcHw1MB3MAAiRku
-	 5x6rNfduIKhz3Az2dA7Cu3b7xAcX2CKHbkbX3AbfDqrzfQbRLkk2LkzCG35VQC0qoV
-	 Tp1sX18z4rZj8uHlaqDiPTmaqPQWXBW5ZNyUZWGA=
+	b=KDzeX4m/eDyi4tBbutGy5Qjw2C9OBlG4o4YywSIxQnf/DEWCMESajnu5Sf28axVCM
+	 36oWibt4B9rctKBbt4byE4Ptk+/PuFD/HvcJ/AIFfwR0LfbtZ6GaRPZZXgXNEMBxCO
+	 IRCZak66bCSRS3tu9WkC+frrovqZY18qtakrO4zc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727438AbgA1Ou6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727431AbgA1Ou6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 28 Jan 2020 09:50:58 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58474 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:58544 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726557AbgA1N6p (ORCPT
+        with ESMTP id S1726591AbgA1N6p (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 08:58:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,29 +33,31 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=dAo4MTL8JFdzXH3mr7nnacHwuW8dPHCRz9vjZt/hWIQ=; b=Cq2FFDAxQMQA3FsjTZb1MeJOxO
-        h1//oxs2MGBvgWnpvYllEWdaTMgz0cE9NWcsczLXn3Lf9/0aG6sTuagQpdXZaIqlMHW8/8FRMto9T
-        Oynzyb7s9CGgjALYTsVYJQbtPktfCQQWoDptjOdzdCwQMXcC4W8o7Oowyj7C7XX1GFQKfuUrMTsOZ
-        JIDStqh9oMDNBVSow15oz0E8PXd+5J6RcIx8jek7NU6WKxJ0DjrhIK4skas/8OX5fzQ4B42SwyZj6
-        le8op2jFq0WdpX7n/hYQcF7xLBPC83+OzCttCRZ7k5QqPZVuzfwdWOvausjkB8PzffX8h39dVzf04
-        EMgMV75g==;
+        bh=EUyT6uzt3haakoO/7i6biiig32qDL/WZNuhjyHnht4Q=; b=nY/3+392RnzD5JHlK+8n+FZ9Uh
+        g867rYWH1cnssAPSt6NwbRSU9hXDuqnCKC+dtCnBFMB90Tw+UBnLnK/EJlqqaj2dKZKALZXFDJZxQ
+        sgTCEVCU1rxFjgsUgmOTd/ppCG8PcPpF4rcZ1sbkGdl1hx+CokLk3Y8ymvG2VrJjMPG3mlVGu36VO
+        iclKfPUg6xNLj/Cn0l1OxL5yhLnE9jUNwwZBadXn9HNsSvqz1YiY4yI1BuMIpeJr4NQcEqm/nNK0M
+        RqcdhK+X+IpQ3nbnagzDVCZGLEtbgNVFSiv7o612R9B+FGBvpX5GJkJ+vzKL5y5GKuTWiAGlPjsmy
+        qPWFuKaQ==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRO7-0006I0-Bk; Tue, 28 Jan 2020 13:58:43 +0000
+        id 1iwRO8-0006I8-1z; Tue, 28 Jan 2020 13:58:44 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRNq-001BKU-QI; Tue, 28 Jan 2020 14:58:26 +0100
+        id 1iwRNq-001BJR-6w; Tue, 28 Jan 2020 14:58:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-um@lists.infradead.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 20/27] docs: kvm: Convert hypercalls.txt to ReST format
-Date:   Tue, 28 Jan 2020 14:58:16 +0100
+Subject: [PATCH 04/27] docs: virt: user_mode_linux.rst: fix URL references
+Date:   Tue, 28 Jan 2020 14:58:00 +0100
 Message-Id:
- <c9badaa7b7a0473ef75d6117a19a1bf8e98bc13f.1580219586.git.mchehab+huawei@kernel.org>
+ <c26437ef62ca1568c75a0c771e3f8a837299a17b.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -65,229 +67,214 @@ Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Message-ID: <20200128135816.CMHbrlVH4ydiSBmT_AGt37Rl2Cn72uD5x0ZInUzsrxg@z>
+Message-ID: <20200128135800.3aLF1-1TlK-MtgF1ytAQaL4XWRpCf_nVcRRwU2VTINQ@z>
 
-- Use document title and chapter markups;
-- Convert tables;
-- Add markups for literal blocks;
-- use :field: for field descriptions;
-- Add blank lines and adjust indentation
+Several URLs are pointing to outdated places.
+
+Update the references for the URLs whose contents still exists,
+removing the others.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../kvm/{hypercalls.txt => hypercalls.rst}    | 127 ++++++++++--------
- Documentation/virt/kvm/index.rst              |   2 +
- 2 files changed, 73 insertions(+), 56 deletions(-)
- rename Documentation/virt/kvm/{hypercalls.txt => hypercalls.rst} (55%)
+ Documentation/virt/uml/user_mode_linux.rst | 71 +++++++++-------------
+ 1 file changed, 29 insertions(+), 42 deletions(-)
 
-diff --git a/Documentation/virt/kvm/hypercalls.txt b/Documentation/virt/kvm/hypercalls.rst
-similarity index 55%
-rename from Documentation/virt/kvm/hypercalls.txt
-rename to Documentation/virt/kvm/hypercalls.rst
-index 5f6d291bd004..fb4ccaf8641a 100644
---- a/Documentation/virt/kvm/hypercalls.txt
-+++ b/Documentation/virt/kvm/hypercalls.rst
-@@ -1,5 +1,7 @@
--Linux KVM Hypercall:
- ===================
-+Linux KVM Hypercall
-+===================
-+
- X86:
-  KVM Hypercalls have a three-byte sequence of either the vmcall or the vmmcall
-  instruction. The hypervisor can replace it with instructions that are
-@@ -20,7 +22,7 @@ S390:
-   For further information on the S390 diagnose call as supported by KVM,
-   refer to Documentation/virt/kvm/s390-diag.txt.
- 
-- PowerPC:
-+PowerPC:
-   It uses R3-R10 and hypercall number in R11. R4-R11 are used as output registers.
-   Return value is placed in R3.
- 
-@@ -34,7 +36,8 @@ MIPS:
-   the return value is placed in $2 (v0).
- 
- KVM Hypercalls Documentation
--===========================
-+============================
-+
- The template for each hypercall is:
- 1. Hypercall name.
- 2. Architecture(s)
-@@ -43,56 +46,64 @@ The template for each hypercall is:
- 
- 1. KVM_HC_VAPIC_POLL_IRQ
- ------------------------
--Architecture: x86
--Status: active
--Purpose: Trigger guest exit so that the host can check for pending
--interrupts on reentry.
-+
-+:Architecture: x86
-+:Status: active
-+:Purpose: Trigger guest exit so that the host can check for pending
-+          interrupts on reentry.
- 
- 2. KVM_HC_MMU_OP
--------------------------
--Architecture: x86
--Status: deprecated.
--Purpose: Support MMU operations such as writing to PTE,
--flushing TLB, release PT.
-+----------------
-+
-+:Architecture: x86
-+:Status: deprecated.
-+:Purpose: Support MMU operations such as writing to PTE,
-+          flushing TLB, release PT.
- 
- 3. KVM_HC_FEATURES
--------------------------
--Architecture: PPC
--Status: active
--Purpose: Expose hypercall availability to the guest. On x86 platforms, cpuid
--used to enumerate which hypercalls are available. On PPC, either device tree
--based lookup ( which is also what EPAPR dictates) OR KVM specific enumeration
--mechanism (which is this hypercall) can be used.
-+------------------
-+
-+:Architecture: PPC
-+:Status: active
-+:Purpose: Expose hypercall availability to the guest. On x86 platforms, cpuid
-+          used to enumerate which hypercalls are available. On PPC, either
-+	  device tree based lookup ( which is also what EPAPR dictates)
-+	  OR KVM specific enumeration mechanism (which is this hypercall)
-+	  can be used.
- 
- 4. KVM_HC_PPC_MAP_MAGIC_PAGE
--------------------------
--Architecture: PPC
--Status: active
--Purpose: To enable communication between the hypervisor and guest there is a
--shared page that contains parts of supervisor visible register state.
--The guest can map this shared page to access its supervisor register through
--memory using this hypercall.
-+----------------------------
-+
-+:Architecture: PPC
-+:Status: active
-+:Purpose: To enable communication between the hypervisor and guest there is a
-+	  shared page that contains parts of supervisor visible register state.
-+	  The guest can map this shared page to access its supervisor register
-+	  through memory using this hypercall.
- 
- 5. KVM_HC_KICK_CPU
--------------------------
--Architecture: x86
--Status: active
--Purpose: Hypercall used to wakeup a vcpu from HLT state
--Usage example : A vcpu of a paravirtualized guest that is busywaiting in guest
--kernel mode for an event to occur (ex: a spinlock to become available) can
--execute HLT instruction once it has busy-waited for more than a threshold
--time-interval. Execution of HLT instruction would cause the hypervisor to put
--the vcpu to sleep until occurrence of an appropriate event. Another vcpu of the
--same guest can wakeup the sleeping vcpu by issuing KVM_HC_KICK_CPU hypercall,
--specifying APIC ID (a1) of the vcpu to be woken up. An additional argument (a0)
--is used in the hypercall for future use.
-+------------------
-+
-+:Architecture: x86
-+:Status: active
-+:Purpose: Hypercall used to wakeup a vcpu from HLT state
-+:Usage example:
-+  A vcpu of a paravirtualized guest that is busywaiting in guest
-+  kernel mode for an event to occur (ex: a spinlock to become available) can
-+  execute HLT instruction once it has busy-waited for more than a threshold
-+  time-interval. Execution of HLT instruction would cause the hypervisor to put
-+  the vcpu to sleep until occurrence of an appropriate event. Another vcpu of the
-+  same guest can wakeup the sleeping vcpu by issuing KVM_HC_KICK_CPU hypercall,
-+  specifying APIC ID (a1) of the vcpu to be woken up. An additional argument (a0)
-+  is used in the hypercall for future use.
+diff --git a/Documentation/virt/uml/user_mode_linux.rst b/Documentation/virt/uml/user_mode_linux.rst
+index a96d29243964..d6844fb89b46 100644
+--- a/Documentation/virt/uml/user_mode_linux.rst
++++ b/Documentation/virt/uml/user_mode_linux.rst
+@@ -319,7 +319,7 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
+   as modules, especially filesystems and network protocols and filters,
+   so most symbols which need to be exported probably already are.
+   However, if you do find symbols that need exporting, let  us
+-  <http://user-mode-linux.sourceforge.net/>  know, and
++  know at http://user-mode-linux.sourceforge.net/, and
+   they'll be "taken care of".
  
  
- 6. KVM_HC_CLOCK_PAIRING
--------------------------
--Architecture: x86
--Status: active
--Purpose: Hypercall used to synchronize host and guest clocks.
-+-----------------------
-+:Architecture: x86
-+:Status: active
-+:Purpose: Hypercall used to synchronize host and guest clocks.
-+
- Usage:
+@@ -381,9 +381,9 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
  
- a0: guest physical address where host copies
-@@ -101,6 +112,8 @@ a0: guest physical address where host copies
- a1: clock_type, ATM only KVM_CLOCK_PAIRING_WALLCLOCK (0)
- is supported (corresponding to the host's CLOCK_REALTIME clock).
  
-+       ::
-+
- 		struct kvm_clock_pairing {
- 			__s64 sec;
- 			__s64 nsec;
-@@ -123,15 +136,16 @@ Returns KVM_EOPNOTSUPP if the host does not use TSC clocksource,
- or if clock type is different than KVM_CLOCK_PAIRING_WALLCLOCK.
+   You will need a filesystem to boot UML from.  There are a number
+-  available for download from  here  <http://user-mode-
+-  linux.sourceforge.net/> .  There are also  several tools
+-  <http://user-mode-linux.sourceforge.net/>  which can be
++  available for download from http://user-mode-linux.sourceforge.net.
++  There are also  several tools at
++  http://user-mode-linux.sourceforge.net/  which can be
+   used to generate UML-compatible filesystem images from media.
+   The kernel will boot up and present you with a login prompt.
  
- 6. KVM_HC_SEND_IPI
--------------------------
--Architecture: x86
--Status: active
--Purpose: Send IPIs to multiple vCPUs.
-+------------------
+@@ -462,10 +462,9 @@ Note:
  
--a0: lower part of the bitmap of destination APIC IDs
--a1: higher part of the bitmap of destination APIC IDs
--a2: the lowest APIC ID in bitmap
--a3: APIC ICR
-+:Architecture: x86
-+:Status: active
-+:Purpose: Send IPIs to multiple vCPUs.
-+
-+- a0: lower part of the bitmap of destination APIC IDs
-+- a1: higher part of the bitmap of destination APIC IDs
-+- a2: the lowest APIC ID in bitmap
-+- a3: APIC ICR
+   Here are some examples of UML in action:
  
- The hypercall lets a guest send multicast IPIs, with at most 128
- 128 destinations per hypercall in 64-bit mode and 64 vCPUs per
-@@ -143,12 +157,13 @@ corresponds to the APIC ID a2+1, and so on.
- Returns the number of CPUs to which the IPIs were delivered successfully.
+-  -  A login session <http://user-mode-linux.sourceforge.net/login.html>
+-
+-  -  A virtual network <http://user-mode-linux.sourceforge.net/net.html>
++  -  A login session http://user-mode-linux.sourceforge.net/old/login.html
  
- 7. KVM_HC_SCHED_YIELD
--------------------------
--Architecture: x86
--Status: active
--Purpose: Hypercall used to yield if the IPI target vCPU is preempted
-+---------------------
-+
-+:Architecture: x86
-+:Status: active
-+:Purpose: Hypercall used to yield if the IPI target vCPU is preempted
++  -  A virtual network http://user-mode-linux.sourceforge.net/old/net.html
  
- a0: destination APIC ID
  
--Usage example: When sending a call-function IPI-many to vCPUs, yield if
--any of the IPI target vCPUs was preempted.
-+:Usage example: When sending a call-function IPI-many to vCPUs, yield if
-+	        any of the IPI target vCPUs was preempted.
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 6fe79185b9bc..ac83bc588f7e 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -11,8 +11,10 @@ KVM
-    amd-memory-encryption
-    cpuid
-    halt-polling
-+   hypercalls
-    msr
-    vcpu-requests
  
-    arm/index
-+
-    devices/index
+@@ -1130,11 +1129,6 @@ Note:
+ 
+ 
+ 
+-
+-  Harald's original README is here <http://user-mode-linux.source-
+-  forge.net/>  and explains these in detail, as well as
+-  some other issues.
+-
+   There is also a related point-to-point only "ucast" transport.
+   This is useful when your network does not support multicast, and
+   all network connections are simple point to point links.
+@@ -1217,8 +1211,7 @@ Note:
+   make sure that /usr/src/linux points to the headers for the running
+   kernel.
+ 
+-  These were pointed out by Tim Robinson <timro at trkr dot net> in
+-  <http://www.geocrawler.com/> name="this uml-user post"> .
++  These were pointed out by Tim Robinson <timro at trkr dot net> in the past.
+ 
+ 
+ 
+@@ -1912,8 +1905,8 @@ Note:
+ 
+   uml_moo is installed with the UML deb and RPM.  If you didn't install
+   UML from one of those packages, you can also get it from the UML
+-  utilities <http://user-mode-linux.sourceforge.net/
+-  utilities>  tar file in tools/moo.
++  utilities http://user-mode-linux.sourceforge.net/utilities tar file
++  in tools/moo.
+ 
+ 
+ 
+@@ -3707,18 +3700,15 @@ Note:
+ 
+ 
+   This is a syslogd bug.  There's a race between a parent process
+-  installing a signal handler and its child sending the signal.  See
+-  this uml-devel post <http://www.geocrawler.com/lists/3/Source-
+-  Forge/709/0/6612801>  for the details.
++  installing a signal handler and its child sending the signal.
+ 
+ 
+ 
+ 13.8.  TUN/TAP networking doesn't work on a 2.4 host
+ ----------------------------------------------------
+ 
+-  There are a couple of problems which were
+-  <http://www.geocrawler.com/lists/3/SourceForge/597/0/> name="pointed
+-  out">  by Tim Robinson <timro at trkr dot net>
++  There are a couple of problems which were reported by
++  Tim Robinson <timro at trkr dot net>
+ 
+   -  It doesn't work on hosts running 2.4.7 (or thereabouts) or earlier.
+      The fix is to upgrade to something more recent and then read the
+@@ -3761,7 +3751,7 @@ Note:
+ 
+ 
+   Documentation on IP Masquerading, and SNAT, can be found at
+-  www.netfilter.org  <http://www.netfilter.org> .
++  http://www.netfilter.org.
+ 
+ 
+   If you can reach the local net, but not the outside Internet, then
+@@ -4111,14 +4101,14 @@ Note:
+ 
+   Rusty Russell <rusty at linuxcare.com.au>  -
+ 
+-  -  wrote the  HOWTO <http://user-mode-
+-     linux.sourceforge.net/UserModeLinux-HOWTO.html>
++  -  wrote the  HOWTO
++     http://user-mode-linux.sourceforge.net/old/UserModeLinux-HOWTO.html
+ 
+   -  prodded me into making this project official and putting it on
+      SourceForge
+ 
+-  -  came up with the way cool UML logo <http://user-mode-
+-     linux.sourceforge.net/uml-small.png>
++  -  came up with the way cool UML logo
++     http://user-mode-linux.sourceforge.net/uml-small.png
+ 
+   -  redid the config process
+ 
+@@ -4146,17 +4136,15 @@ Note:
+   Jim Leu <jleu at mindspring.com>  - Wrote the virtual ethernet driver
+   and associated usermode tools
+ 
+-  Lars Brinkhoff <http://lars.nocrew.org/>  - Contributed the ptrace
+-  proxy from his own  project <http://a386.nocrew.org/> to allow easier
+-  kernel debugging
++  Lars Brinkhoff http://lars.nocrew.org/  - Contributed the ptrace
++  proxy from his own  project to allow easier kernel debugging
+ 
+ 
+   Andrea Arcangeli <andrea at suse.de>  - Redid some of the early boot
+   code so that it would work on machines with Large File Support
+ 
+ 
+-  Chris Emerson <http://www.chiark.greenend.org.uk/~cemerson/>  - Did
+-  the first UML port to Linux/ppc
++  Chris Emerson - Did the first UML port to Linux/ppc
+ 
+ 
+   Harald Welte <laforge at gnumonks.org>  - Wrote the multicast
+@@ -4171,7 +4159,7 @@ Note:
+   wrote the iomem emulation support
+ 
+ 
+-  Henrik Nordstrom <http://hem.passagen.se/hno/>  - Provided a variety
++  Henrik Nordstrom http://hem.passagen.se/hno/  - Provided a variety
+   of patches, fixes, and clues
+ 
+ 
+@@ -4206,16 +4194,15 @@ Note:
+   submitted patches for the slip transport and lots of other things.
+ 
+ 
+-  David Coulson <http://davidcoulson.net>  -
++  David Coulson http://davidcoulson.net  -
+ 
+-  -  Set up the usermodelinux.org <http://usermodelinux.org>  site,
++  -  Set up the http://usermodelinux.org  site,
+      which is a great way of keeping the UML user community on top of
+      UML goings-on.
+ 
+   -  Site documentation and updates
+ 
+   -  Nifty little UML management daemon  UMLd
+-     <http://uml.openconsultancy.com/umld/>
+ 
+   -  Lots of testing and bug reports
+ 
+@@ -4388,12 +4375,12 @@ Note:
+   work with RH 6.2.
+ 
+   Michael Jennings <mikejen at hevanet.com>  sent in some material which
+-  is now gracing the top of the  index  page <http://user-mode-
+-  linux.sourceforge.net/>  of this site.
++  is now gracing the top of the  index  page
++  http://user-mode-linux.sourceforge.net/  of this site.
+ 
+-  SGI <http://www.sgi.com>  (and more specifically Ralf Baechle <ralf at
+-  uni-koblenz.de> ) gave me an account on oss.sgi.com
+-  <http://www.oss.sgi.com> .  The bandwidth there made it possible to
++  SGI (and more specifically Ralf Baechle <ralf at
++  uni-koblenz.de> ) gave me an account on oss.sgi.com.
++  The bandwidth there made it possible to
+   produce most of the filesystems available on the project download
+   page.
+ 
+@@ -4410,5 +4397,5 @@ Note:
+ 
+   Chris Reahard built a specialized root filesystem for running a DNS
+   server jailed inside UML.  It's available from the download
+-  <http://user-mode-linux.sourceforge.net/dl-sf.html>  page in the Jail
++  http://user-mode-linux.sourceforge.net/old/dl-sf.html  page in the Jail
+   Filesystems section.
 -- 
 2.24.1
 
