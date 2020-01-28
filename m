@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF52BC33CB3
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99B06C35240
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DC91207FD
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67F54214AF
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:51:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580223061;
-	bh=IkF+9xLafRu4mfLrUwCIgZx6XAr2dtL/tskYzhw25yY=;
+	s=default; t=1580223063;
+	bh=QMjmcSh5y1m0k4nqwk+54CZiksCu9gEv/xL2K68cAOc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=KDzeX4m/eDyi4tBbutGy5Qjw2C9OBlG4o4YywSIxQnf/DEWCMESajnu5Sf28axVCM
-	 36oWibt4B9rctKBbt4byE4Ptk+/PuFD/HvcJ/AIFfwR0LfbtZ6GaRPZZXgXNEMBxCO
-	 IRCZak66bCSRS3tu9WkC+frrovqZY18qtakrO4zc=
+	b=O01vdxeFszY5KTi2DzexaeL7J3Hz+4CmjycZl/0JiB1KYHTdSoT5OzCBX1WwTVSVi
+	 SkRmbhQO7RyEQYPC+GiPgrrEGSdgXb+h7FRNKYkGqB+LXYK7qA+PbL2D2bUNBnJqmd
+	 HkWf2naePZgrGLNJg3RfNnefoyj1xBebhAsLrJEs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727431AbgA1Ou6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:50:58 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58544 "EHLO
+        id S1726948AbgA1Ou5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:50:57 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:58484 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726591AbgA1N6p (ORCPT
+        with ESMTP id S1726558AbgA1N6p (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 08:58:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,31 +33,29 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=EUyT6uzt3haakoO/7i6biiig32qDL/WZNuhjyHnht4Q=; b=nY/3+392RnzD5JHlK+8n+FZ9Uh
-        g867rYWH1cnssAPSt6NwbRSU9hXDuqnCKC+dtCnBFMB90Tw+UBnLnK/EJlqqaj2dKZKALZXFDJZxQ
-        sgTCEVCU1rxFjgsUgmOTd/ppCG8PcPpF4rcZ1sbkGdl1hx+CokLk3Y8ymvG2VrJjMPG3mlVGu36VO
-        iclKfPUg6xNLj/Cn0l1OxL5yhLnE9jUNwwZBadXn9HNsSvqz1YiY4yI1BuMIpeJr4NQcEqm/nNK0M
-        RqcdhK+X+IpQ3nbnagzDVCZGLEtbgNVFSiv7o612R9B+FGBvpX5GJkJ+vzKL5y5GKuTWiAGlPjsmy
-        qPWFuKaQ==;
+        bh=MfbPPBfVOsZ1ekqbduEWSsRYBXTtAjqiqdXfPqQdPuI=; b=CCjM22PSEzorvo4GHpNnagyNlq
+        xBF/1TnUeLHMrOXFIX3fMm1RwvQOO4zFvYqePgwGLe/Cem7R4uqdDpHy7K9Uf8V5Nkl+BLluP2KVt
+        txv+OkPOX8vF4MVUJlIgv1UgI4trEZK0Re3tsLVDAcqOx5hkT2x7evYnKCl1N5MwcPDv+0XMFF8gu
+        0TSI5GUho3EUIGJRRR2uDYn+wUivA6+yUyVyEd9ySL/9atfdPUv+ENB6vGJidVfLe2eUUDpG7jqhs
+        cZ8LA94GQ5Nrgl/avCTaQdjspTdJ2q05wwrbdG2m/oLw1XS5m7mf6rRZuSXIzeFdP0PViDwHh7B4p
+        8Msmfmjg==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRO8-0006I8-1z; Tue, 28 Jan 2020 13:58:44 +0000
+        id 1iwRO8-0006KS-1K; Tue, 28 Jan 2020 13:58:44 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRNq-001BJR-6w; Tue, 28 Jan 2020 14:58:26 +0100
+        id 1iwRNq-001BK1-H7; Tue, 28 Jan 2020 14:58:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-um@lists.infradead.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 04/27] docs: virt: user_mode_linux.rst: fix URL references
-Date:   Tue, 28 Jan 2020 14:58:00 +0100
+Subject: [PATCH 13/27] docs: kvm: convert devices/vcpu.txt to ReST
+Date:   Tue, 28 Jan 2020 14:58:09 +0100
 Message-Id:
- <c26437ef62ca1568c75a0c771e3f8a837299a17b.1580219586.git.mchehab+huawei@kernel.org>
+ <b53d6dcb4e2e8f705750379b339bd534770cfd7d.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -67,214 +65,72 @@ Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Message-ID: <20200128135800.3aLF1-1TlK-MtgF1ytAQaL4XWRpCf_nVcRRwU2VTINQ@z>
+Message-ID: <20200128135809.RxIh376uZ9Ps_eu8mOLx6wvFK8Tl_VHs2ZylK4MXM10@z>
 
-Several URLs are pointing to outdated places.
-
-Update the references for the URLs whose contents still exists,
-removing the others.
+- Use standard title markup;
+- adjust lists;
+- mark code blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/uml/user_mode_linux.rst | 71 +++++++++-------------
- 1 file changed, 29 insertions(+), 42 deletions(-)
+ Documentation/virt/kvm/devices/index.rst      |  1 +
+ .../virt/kvm/devices/{vfio.txt => vfio.rst}   | 23 +++++++++++--------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
+ rename Documentation/virt/kvm/devices/{vfio.txt => vfio.rst} (74%)
 
-diff --git a/Documentation/virt/uml/user_mode_linux.rst b/Documentation/virt/uml/user_mode_linux.rst
-index a96d29243964..d6844fb89b46 100644
---- a/Documentation/virt/uml/user_mode_linux.rst
-+++ b/Documentation/virt/uml/user_mode_linux.rst
-@@ -319,7 +319,7 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
-   as modules, especially filesystems and network protocols and filters,
-   so most symbols which need to be exported probably already are.
-   However, if you do find symbols that need exporting, let  us
--  <http://user-mode-linux.sourceforge.net/>  know, and
-+  know at http://user-mode-linux.sourceforge.net/, and
-   they'll be "taken care of".
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index 5a61838f0e61..cbbadda080d0 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -13,3 +13,4 @@ Devices
+    mpic
+    s390_flic
+    vcpu
++   vfio
+diff --git a/Documentation/virt/kvm/devices/vfio.txt b/Documentation/virt/kvm/devices/vfio.rst
+similarity index 74%
+rename from Documentation/virt/kvm/devices/vfio.txt
+rename to Documentation/virt/kvm/devices/vfio.rst
+index 528c77c8022c..07a1acde25e4 100644
+--- a/Documentation/virt/kvm/devices/vfio.txt
++++ b/Documentation/virt/kvm/devices/vfio.rst
+@@ -1,8 +1,10 @@
++===================
+ VFIO virtual device
+ ===================
  
+ Device types supported:
+-  KVM_DEV_TYPE_VFIO
++
++  - KVM_DEV_TYPE_VFIO
  
-@@ -381,9 +381,9 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
+ Only one VFIO instance may be created per VM.  The created device
+ tracks VFIO groups in use by the VM and features of those groups
+@@ -23,14 +25,15 @@ KVM_DEV_VFIO_GROUP attributes:
+ 	for the VFIO group.
+   KVM_DEV_VFIO_GROUP_SET_SPAPR_TCE: attaches a guest visible TCE table
+ 	allocated by sPAPR KVM.
+-	kvm_device_attr.addr points to a struct:
++	kvm_device_attr.addr points to a struct::
  
+-	struct kvm_vfio_spapr_tce {
+-		__s32	groupfd;
+-		__s32	tablefd;
+-	};
++		struct kvm_vfio_spapr_tce {
++			__s32	groupfd;
++			__s32	tablefd;
++		};
  
-   You will need a filesystem to boot UML from.  There are a number
--  available for download from  here  <http://user-mode-
--  linux.sourceforge.net/> .  There are also  several tools
--  <http://user-mode-linux.sourceforge.net/>  which can be
-+  available for download from http://user-mode-linux.sourceforge.net.
-+  There are also  several tools at
-+  http://user-mode-linux.sourceforge.net/  which can be
-   used to generate UML-compatible filesystem images from media.
-   The kernel will boot up and present you with a login prompt.
- 
-@@ -462,10 +462,9 @@ Note:
- 
-   Here are some examples of UML in action:
- 
--  -  A login session <http://user-mode-linux.sourceforge.net/login.html>
--
--  -  A virtual network <http://user-mode-linux.sourceforge.net/net.html>
-+  -  A login session http://user-mode-linux.sourceforge.net/old/login.html
- 
-+  -  A virtual network http://user-mode-linux.sourceforge.net/old/net.html
- 
- 
- 
-@@ -1130,11 +1129,6 @@ Note:
- 
- 
- 
--
--  Harald's original README is here <http://user-mode-linux.source-
--  forge.net/>  and explains these in detail, as well as
--  some other issues.
--
-   There is also a related point-to-point only "ucast" transport.
-   This is useful when your network does not support multicast, and
-   all network connections are simple point to point links.
-@@ -1217,8 +1211,7 @@ Note:
-   make sure that /usr/src/linux points to the headers for the running
-   kernel.
- 
--  These were pointed out by Tim Robinson <timro at trkr dot net> in
--  <http://www.geocrawler.com/> name="this uml-user post"> .
-+  These were pointed out by Tim Robinson <timro at trkr dot net> in the past.
- 
- 
- 
-@@ -1912,8 +1905,8 @@ Note:
- 
-   uml_moo is installed with the UML deb and RPM.  If you didn't install
-   UML from one of those packages, you can also get it from the UML
--  utilities <http://user-mode-linux.sourceforge.net/
--  utilities>  tar file in tools/moo.
-+  utilities http://user-mode-linux.sourceforge.net/utilities tar file
-+  in tools/moo.
- 
- 
- 
-@@ -3707,18 +3700,15 @@ Note:
- 
- 
-   This is a syslogd bug.  There's a race between a parent process
--  installing a signal handler and its child sending the signal.  See
--  this uml-devel post <http://www.geocrawler.com/lists/3/Source-
--  Forge/709/0/6612801>  for the details.
-+  installing a signal handler and its child sending the signal.
- 
- 
- 
- 13.8.  TUN/TAP networking doesn't work on a 2.4 host
- ----------------------------------------------------
- 
--  There are a couple of problems which were
--  <http://www.geocrawler.com/lists/3/SourceForge/597/0/> name="pointed
--  out">  by Tim Robinson <timro at trkr dot net>
-+  There are a couple of problems which were reported by
-+  Tim Robinson <timro at trkr dot net>
- 
-   -  It doesn't work on hosts running 2.4.7 (or thereabouts) or earlier.
-      The fix is to upgrade to something more recent and then read the
-@@ -3761,7 +3751,7 @@ Note:
- 
- 
-   Documentation on IP Masquerading, and SNAT, can be found at
--  www.netfilter.org  <http://www.netfilter.org> .
-+  http://www.netfilter.org.
- 
- 
-   If you can reach the local net, but not the outside Internet, then
-@@ -4111,14 +4101,14 @@ Note:
- 
-   Rusty Russell <rusty at linuxcare.com.au>  -
- 
--  -  wrote the  HOWTO <http://user-mode-
--     linux.sourceforge.net/UserModeLinux-HOWTO.html>
-+  -  wrote the  HOWTO
-+     http://user-mode-linux.sourceforge.net/old/UserModeLinux-HOWTO.html
- 
-   -  prodded me into making this project official and putting it on
-      SourceForge
- 
--  -  came up with the way cool UML logo <http://user-mode-
--     linux.sourceforge.net/uml-small.png>
-+  -  came up with the way cool UML logo
-+     http://user-mode-linux.sourceforge.net/uml-small.png
- 
-   -  redid the config process
- 
-@@ -4146,17 +4136,15 @@ Note:
-   Jim Leu <jleu at mindspring.com>  - Wrote the virtual ethernet driver
-   and associated usermode tools
- 
--  Lars Brinkhoff <http://lars.nocrew.org/>  - Contributed the ptrace
--  proxy from his own  project <http://a386.nocrew.org/> to allow easier
--  kernel debugging
-+  Lars Brinkhoff http://lars.nocrew.org/  - Contributed the ptrace
-+  proxy from his own  project to allow easier kernel debugging
- 
- 
-   Andrea Arcangeli <andrea at suse.de>  - Redid some of the early boot
-   code so that it would work on machines with Large File Support
- 
- 
--  Chris Emerson <http://www.chiark.greenend.org.uk/~cemerson/>  - Did
--  the first UML port to Linux/ppc
-+  Chris Emerson - Did the first UML port to Linux/ppc
- 
- 
-   Harald Welte <laforge at gnumonks.org>  - Wrote the multicast
-@@ -4171,7 +4159,7 @@ Note:
-   wrote the iomem emulation support
- 
- 
--  Henrik Nordstrom <http://hem.passagen.se/hno/>  - Provided a variety
-+  Henrik Nordstrom http://hem.passagen.se/hno/  - Provided a variety
-   of patches, fixes, and clues
- 
- 
-@@ -4206,16 +4194,15 @@ Note:
-   submitted patches for the slip transport and lots of other things.
- 
- 
--  David Coulson <http://davidcoulson.net>  -
-+  David Coulson http://davidcoulson.net  -
- 
--  -  Set up the usermodelinux.org <http://usermodelinux.org>  site,
-+  -  Set up the http://usermodelinux.org  site,
-      which is a great way of keeping the UML user community on top of
-      UML goings-on.
- 
-   -  Site documentation and updates
- 
-   -  Nifty little UML management daemon  UMLd
--     <http://uml.openconsultancy.com/umld/>
- 
-   -  Lots of testing and bug reports
- 
-@@ -4388,12 +4375,12 @@ Note:
-   work with RH 6.2.
- 
-   Michael Jennings <mikejen at hevanet.com>  sent in some material which
--  is now gracing the top of the  index  page <http://user-mode-
--  linux.sourceforge.net/>  of this site.
-+  is now gracing the top of the  index  page
-+  http://user-mode-linux.sourceforge.net/  of this site.
- 
--  SGI <http://www.sgi.com>  (and more specifically Ralf Baechle <ralf at
--  uni-koblenz.de> ) gave me an account on oss.sgi.com
--  <http://www.oss.sgi.com> .  The bandwidth there made it possible to
-+  SGI (and more specifically Ralf Baechle <ralf at
-+  uni-koblenz.de> ) gave me an account on oss.sgi.com.
-+  The bandwidth there made it possible to
-   produce most of the filesystems available on the project download
-   page.
- 
-@@ -4410,5 +4397,5 @@ Note:
- 
-   Chris Reahard built a specialized root filesystem for running a DNS
-   server jailed inside UML.  It's available from the download
--  <http://user-mode-linux.sourceforge.net/dl-sf.html>  page in the Jail
-+  http://user-mode-linux.sourceforge.net/old/dl-sf.html  page in the Jail
-   Filesystems section.
+-	where
+-	@groupfd is a file descriptor for a VFIO group;
+-	@tablefd is a file descriptor for a TCE table allocated via
+-		KVM_CREATE_SPAPR_TCE.
++	where:
++
++	- @groupfd is a file descriptor for a VFIO group;
++	- @tablefd is a file descriptor for a TCE table allocated via
++	  KVM_CREATE_SPAPR_TCE.
 -- 
 2.24.1
 
