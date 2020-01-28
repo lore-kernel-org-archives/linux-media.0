@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B465C2D0DB
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:00:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BB41C33CB3
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:00:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5259F24688
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:00:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 267CA2469F
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:00:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580220049;
-	bh=sGk0BrUSu5QXbj5v/8QRxYs4iY17tAGC+ZJwXkfkCGU=;
+	s=default; t=1580220051;
+	bh=oDp2GFCusvjVIy+pDKtbQhh1Q7QweP/hmVWzwiRJCEk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=1ck6R6I8hWmFIZYdKp+XsBCZ15Y68tYEmjHH2caOQTC9LiEtJXqehMYKtG/CGNmbu
-	 S0PYdcvNzJlxf7UTLCwxpW+S2buqxgEW2E0FmAg9R31YkjfH7QrNKKqk1ZatzFiEf5
-	 TrFm4px66uCb0V2gsQpIDisd2tO829ZMsHNHVpTE=
+	b=SAiuiu9NymtfzfANmLgekRPOEfF/OCdvCtfrQvT32HVueAXM0JfzCQGx1bzl+hl04
+	 BUOiq1TW33lBxwf0BuZGptuW0CP9eERNcvXS4CUyb254U+vTSsM6EConjXnTCpESRQ
+	 a5Z0gtbDykIFoPvoW3hbwohkP0/VDEu/vYzi6fGc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbgA1OAs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:00:48 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59366 "EHLO
+        id S1727356AbgA1OAu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:00:50 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:59430 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727305AbgA1OAr (ORCPT
+        with ESMTP id S1727310AbgA1OAr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 09:00:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vckRGT1a+50xrf38zV+HbwSHDdDQVhODH0o9Xm2cn8g=; b=rrs1VPIIVbr+Y9y298ws/9HrHG
-        jfht9ve1xN9Wozx/momDeScw4XmhMrl/CVw4F2xOnwASR1YL/AjyQMSXyjx4R0lUThKHRZXOs+gel
-        iT7+tAE8gRMa8ZZXERY3ndnEc44gn3RkZ30iCzwLAMScP7zlthlDLe0BofZbIRIVfCK0plBqzDTSC
-        QLwVEq1ynKm12+UYXsfUpoMpt9ax1vB9vSVDx++RDTSpXfQgOCWGd8ke+J85f1dGK5l2/vEo1LsBL
-        vvIFUqDa64CirLDAJAv9b34fzXDiXKbCPnVoxki4rvtY9FsRS2+kzKl1sLTNHTAlG+NLFwbjWcTy3
-        bBeOjVew==;
+        bh=RPG23Q5VInCW2/dcxso2308vuKWS9qa+8lTMVckj8OQ=; b=Jm/mS4979PllP7wiC6ArM0x9ZV
+        R/hEEfHUbGbhrxuRhyGKFrRsFMP+gybu6Pv+8uF+TlTAEKL62nKtR7gfbpr3m/ACN/Fpp4teRdEvM
+        93YF8FHsWuq6xYxW6eHfbsnsUz4eVjCqnWqx85lU1eVVNaIykphUd1elb9X0CTlvyeFWt142uLd31
+        G9q+5uiSACyQHnuIpaqweYOVCTmWAuLEnCYpruPLuAGnKkxZ/AlGXm48+tIq8nyrSjjl1+cK0rc0C
+        NF6jy6R8gU/hIU8lTRR5dhiJW4yjkne0XFwptReZZgLVPEAyiP50+I9rKP7ikVBZLdaro+4eLKPXE
+        LgdZgfGg==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRQ6-0007iy-JT; Tue, 28 Jan 2020 14:00:46 +0000
+        id 1iwRQ6-0007is-91; Tue, 28 Jan 2020 14:00:46 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRPq-001BP2-0X; Tue, 28 Jan 2020 15:00:30 +0100
+        id 1iwRPp-001BO9-Iz; Tue, 28 Jan 2020 15:00:29 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -52,9 +52,10 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 23/27] docs: kvm: Convert nested-vmx.txt to ReST format
-Date:   Tue, 28 Jan 2020 15:00:24 +0100
-Message-Id: <af45fd6f197d2bc69864c5532387d87be706293f.1580219586.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 12/27] docs: kvm: convert devices/vcpu.txt to ReST
+Date:   Tue, 28 Jan 2020 15:00:13 +0100
+Message-Id:
+ <10cb8731b167ee8f0bbec245a9f89af3842bc279.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -64,104 +65,232 @@ Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
+Message-ID: <20200128140013.NqSsFbFSdmfJdEbzzizCWC1MgIbIU0dVWTXn9bEu6oQ@z>
 
-This file is almost in ReST format. Just a small set of
-changes were needed:
-
-    - Add markups for lists;
-    - Add markups for a literal block;
-    - Adjust whitespaces.
-
-While here, use the standard markup for the document title.
+- Use title markups;
+- adjust indentation and add blank lines as needed;
+- adjust tables to match ReST accepted formats;
+- use :field: markups;
+- mark code blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/index.rst              |  1 +
- .../kvm/{nested-vmx.txt => nested-vmx.rst}    | 35 ++++++++++---------
- 2 files changed, 20 insertions(+), 16 deletions(-)
- rename Documentation/virt/kvm/{nested-vmx.txt => nested-vmx.rst} (90%)
+ Documentation/virt/kvm/devices/index.rst |   1 +
+ Documentation/virt/kvm/devices/vcpu.rst  | 112 +++++++++++++++++++++++
+ Documentation/virt/kvm/devices/vcpu.txt  |  76 ---------------
+ 3 files changed, 113 insertions(+), 76 deletions(-)
+ create mode 100644 Documentation/virt/kvm/devices/vcpu.rst
+ delete mode 100644 Documentation/virt/kvm/devices/vcpu.txt
 
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 95e2487d38f4..123385d0a74a 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -15,6 +15,7 @@ KVM
-    locking
-    mmu
-    msr
-+   nested-vmx
-    vcpu-requests
- 
-    arm/index
-diff --git a/Documentation/virt/kvm/nested-vmx.txt b/Documentation/virt/kvm/nested-vmx.rst
-similarity index 90%
-rename from Documentation/virt/kvm/nested-vmx.txt
-rename to Documentation/virt/kvm/nested-vmx.rst
-index 97eb1353e962..7f28a5d2c135 100644
---- a/Documentation/virt/kvm/nested-vmx.txt
-+++ b/Documentation/virt/kvm/nested-vmx.rst
-@@ -1,3 +1,4 @@
-+==========
- Nested VMX
- ==========
- 
-@@ -41,9 +42,9 @@ No modifications are required to user space (qemu). However, qemu's default
- emulated CPU type (qemu64) does not list the "VMX" CPU feature, so it must be
- explicitly enabled, by giving qemu one of the following options:
- 
--     -cpu host              (emulated CPU has all features of the real CPU)
-+     - cpu host              (emulated CPU has all features of the real CPU)
- 
--     -cpu qemu64,+vmx       (add just the vmx feature to a named CPU type)
-+     - cpu qemu64,+vmx       (add just the vmx feature to a named CPU type)
- 
- 
- ABIs
-@@ -75,6 +76,8 @@ of this structure changes, this can break live migration across KVM versions.
- VMCS12_REVISION (from vmx.c) should be changed if struct vmcs12 or its inner
- struct shadow_vmcs is ever changed.
- 
-+::
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index e6caccc36623..5a61838f0e61 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -12,3 +12,4 @@ Devices
+    arm-vgic-v3
+    mpic
+    s390_flic
++   vcpu
+diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
+new file mode 100644
+index 000000000000..1270fd7f2cff
+--- /dev/null
++++ b/Documentation/virt/kvm/devices/vcpu.rst
+@@ -0,0 +1,112 @@
++======================
++Generic vcpu interface
++======================
 +
- 	typedef u64 natural_width;
- 	struct __packed vmcs12 {
- 		/* According to the Intel spec, a VMCS region must start with
-@@ -220,21 +223,21 @@ Authors
- -------
- 
- These patches were written by:
--     Abel Gordon, abelg <at> il.ibm.com
--     Nadav Har'El, nyh <at> il.ibm.com
--     Orit Wasserman, oritw <at> il.ibm.com
--     Ben-Ami Yassor, benami <at> il.ibm.com
--     Muli Ben-Yehuda, muli <at> il.ibm.com
-+    - Abel Gordon, abelg <at> il.ibm.com
-+    - Nadav Har'El, nyh <at> il.ibm.com
-+    - Orit Wasserman, oritw <at> il.ibm.com
-+    - Ben-Ami Yassor, benami <at> il.ibm.com
-+    - Muli Ben-Yehuda, muli <at> il.ibm.com
- 
- With contributions by:
--     Anthony Liguori, aliguori <at> us.ibm.com
--     Mike Day, mdday <at> us.ibm.com
--     Michael Factor, factor <at> il.ibm.com
--     Zvi Dubitzky, dubi <at> il.ibm.com
-+    - Anthony Liguori, aliguori <at> us.ibm.com
-+    - Mike Day, mdday <at> us.ibm.com
-+    - Michael Factor, factor <at> il.ibm.com
-+    - Zvi Dubitzky, dubi <at> il.ibm.com
- 
- And valuable reviews by:
--     Avi Kivity, avi <at> redhat.com
--     Gleb Natapov, gleb <at> redhat.com
--     Marcelo Tosatti, mtosatti <at> redhat.com
--     Kevin Tian, kevin.tian <at> intel.com
--     and others.
-+    - Avi Kivity, avi <at> redhat.com
-+    - Gleb Natapov, gleb <at> redhat.com
-+    - Marcelo Tosatti, mtosatti <at> redhat.com
-+    - Kevin Tian, kevin.tian <at> intel.com
-+    - and others.
++The virtual cpu "device" also accepts the ioctls KVM_SET_DEVICE_ATTR,
++KVM_GET_DEVICE_ATTR, and KVM_HAS_DEVICE_ATTR. The interface uses the same struct
++kvm_device_attr as other devices, but targets VCPU-wide settings and controls.
++
++The groups and attributes per virtual cpu, if any, are architecture specific.
++
++1. GROUP: KVM_ARM_VCPU_PMU_V3_CTRL
++==================================
++
++:Architectures: ARM64
++
++1.1. ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_IRQ
++---------------------------------------
++
++:Parameters: in kvm_device_attr.addr the address for PMU overflow interrupt is a
++	     pointer to an int
++
++Returns:
++
++	 =======  ========================================================
++	 -EBUSY   The PMU overflow interrupt is already set
++	 -ENXIO   The overflow interrupt not set when attempting to get it
++	 -ENODEV  PMUv3 not supported
++	 -EINVAL  Invalid PMU overflow interrupt number supplied or
++		  trying to set the IRQ number without using an in-kernel
++		  irqchip.
++	 =======  ========================================================
++
++A value describing the PMUv3 (Performance Monitor Unit v3) overflow interrupt
++number for this vcpu. This interrupt could be a PPI or SPI, but the interrupt
++type must be same for each vcpu. As a PPI, the interrupt number is the same for
++all vcpus, while as an SPI it must be a separate number per vcpu.
++
++1.2 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_INIT
++---------------------------------------
++
++:Parameters: no additional parameter in kvm_device_attr.addr
++
++Returns:
++
++	 =======  ======================================================
++	 -ENODEV  PMUv3 not supported or GIC not initialized
++	 -ENXIO   PMUv3 not properly configured or in-kernel irqchip not
++		  configured as required prior to calling this attribute
++	 -EBUSY   PMUv3 already initialized
++	 =======  ======================================================
++
++Request the initialization of the PMUv3.  If using the PMUv3 with an in-kernel
++virtual GIC implementation, this must be done after initializing the in-kernel
++irqchip.
++
++
++2. GROUP: KVM_ARM_VCPU_TIMER_CTRL
++=================================
++
++:Architectures: ARM,ARM64
++
++2.1. ATTRIBUTES: KVM_ARM_VCPU_TIMER_IRQ_VTIMER, KVM_ARM_VCPU_TIMER_IRQ_PTIMER
++-----------------------------------------------------------------------------
++
++:Parameters: in kvm_device_attr.addr the address for the timer interrupt is a
++	     pointer to an int
++
++Returns:
++
++	 =======  =================================
++	 -EINVAL  Invalid timer interrupt number
++	 -EBUSY   One or more VCPUs has already run
++	 =======  =================================
++
++A value describing the architected timer interrupt number when connected to an
++in-kernel virtual GIC.  These must be a PPI (16 <= intid < 32).  Setting the
++attribute overrides the default values (see below).
++
++=============================  ==========================================
++KVM_ARM_VCPU_TIMER_IRQ_VTIMER  The EL1 virtual timer intid (default: 27)
++KVM_ARM_VCPU_TIMER_IRQ_PTIMER  The EL1 physical timer intid (default: 30)
++=============================  ==========================================
++
++Setting the same PPI for different timers will prevent the VCPUs from running.
++Setting the interrupt number on a VCPU configures all VCPUs created at that
++time to use the number provided for a given timer, overwriting any previously
++configured values on other VCPUs.  Userspace should configure the interrupt
++numbers on at least one VCPU after creating all VCPUs and before running any
++VCPUs.
++
++3. GROUP: KVM_ARM_VCPU_PVTIME_CTRL
++==================================
++
++:Architectures: ARM64
++
++3.1 ATTRIBUTE: KVM_ARM_VCPU_PVTIME_IPA
++--------------------------------------
++
++:Parameters: 64-bit base address
++
++Returns:
++
++	 =======  ======================================
++	 -ENXIO   Stolen time not implemented
++	 -EEXIST  Base address already set for this VCPU
++	 -EINVAL  Base address not 64 byte aligned
++	 =======  ======================================
++
++Specifies the base address of the stolen time structure for this VCPU. The
++base address must be 64 byte aligned and exist within a valid guest memory
++region. See Documentation/virt/kvm/arm/pvtime.txt for more information
++including the layout of the stolen time structure.
+diff --git a/Documentation/virt/kvm/devices/vcpu.txt b/Documentation/virt/kvm/devices/vcpu.txt
+deleted file mode 100644
+index 6f3bd64a05b0..000000000000
+--- a/Documentation/virt/kvm/devices/vcpu.txt
++++ /dev/null
+@@ -1,76 +0,0 @@
+-Generic vcpu interface
+-====================================
+-
+-The virtual cpu "device" also accepts the ioctls KVM_SET_DEVICE_ATTR,
+-KVM_GET_DEVICE_ATTR, and KVM_HAS_DEVICE_ATTR. The interface uses the same struct
+-kvm_device_attr as other devices, but targets VCPU-wide settings and controls.
+-
+-The groups and attributes per virtual cpu, if any, are architecture specific.
+-
+-1. GROUP: KVM_ARM_VCPU_PMU_V3_CTRL
+-Architectures: ARM64
+-
+-1.1. ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_IRQ
+-Parameters: in kvm_device_attr.addr the address for PMU overflow interrupt is a
+-            pointer to an int
+-Returns: -EBUSY: The PMU overflow interrupt is already set
+-         -ENXIO: The overflow interrupt not set when attempting to get it
+-         -ENODEV: PMUv3 not supported
+-         -EINVAL: Invalid PMU overflow interrupt number supplied or
+-                  trying to set the IRQ number without using an in-kernel
+-                  irqchip.
+-
+-A value describing the PMUv3 (Performance Monitor Unit v3) overflow interrupt
+-number for this vcpu. This interrupt could be a PPI or SPI, but the interrupt
+-type must be same for each vcpu. As a PPI, the interrupt number is the same for
+-all vcpus, while as an SPI it must be a separate number per vcpu.
+-
+-1.2 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_INIT
+-Parameters: no additional parameter in kvm_device_attr.addr
+-Returns: -ENODEV: PMUv3 not supported or GIC not initialized
+-         -ENXIO: PMUv3 not properly configured or in-kernel irqchip not
+-                 configured as required prior to calling this attribute
+-         -EBUSY: PMUv3 already initialized
+-
+-Request the initialization of the PMUv3.  If using the PMUv3 with an in-kernel
+-virtual GIC implementation, this must be done after initializing the in-kernel
+-irqchip.
+-
+-
+-2. GROUP: KVM_ARM_VCPU_TIMER_CTRL
+-Architectures: ARM,ARM64
+-
+-2.1. ATTRIBUTE: KVM_ARM_VCPU_TIMER_IRQ_VTIMER
+-2.2. ATTRIBUTE: KVM_ARM_VCPU_TIMER_IRQ_PTIMER
+-Parameters: in kvm_device_attr.addr the address for the timer interrupt is a
+-            pointer to an int
+-Returns: -EINVAL: Invalid timer interrupt number
+-         -EBUSY:  One or more VCPUs has already run
+-
+-A value describing the architected timer interrupt number when connected to an
+-in-kernel virtual GIC.  These must be a PPI (16 <= intid < 32).  Setting the
+-attribute overrides the default values (see below).
+-
+-KVM_ARM_VCPU_TIMER_IRQ_VTIMER: The EL1 virtual timer intid (default: 27)
+-KVM_ARM_VCPU_TIMER_IRQ_PTIMER: The EL1 physical timer intid (default: 30)
+-
+-Setting the same PPI for different timers will prevent the VCPUs from running.
+-Setting the interrupt number on a VCPU configures all VCPUs created at that
+-time to use the number provided for a given timer, overwriting any previously
+-configured values on other VCPUs.  Userspace should configure the interrupt
+-numbers on at least one VCPU after creating all VCPUs and before running any
+-VCPUs.
+-
+-3. GROUP: KVM_ARM_VCPU_PVTIME_CTRL
+-Architectures: ARM64
+-
+-3.1 ATTRIBUTE: KVM_ARM_VCPU_PVTIME_IPA
+-Parameters: 64-bit base address
+-Returns: -ENXIO:  Stolen time not implemented
+-         -EEXIST: Base address already set for this VCPU
+-         -EINVAL: Base address not 64 byte aligned
+-
+-Specifies the base address of the stolen time structure for this VCPU. The
+-base address must be 64 byte aligned and exist within a valid guest memory
+-region. See Documentation/virt/kvm/arm/pvtime.txt for more information
+-including the layout of the stolen time structure.
 -- 
 2.24.1
 
