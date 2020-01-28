@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D51EC2D0DB
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2D33C2D0DB
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6AC4B207FD
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB2EA20716
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jan 2020 14:49:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580222990;
-	bh=IkF+9xLafRu4mfLrUwCIgZx6XAr2dtL/tskYzhw25yY=;
+	s=default; t=1580222993;
+	bh=XJBqHP9X6xdwKnRYGlBBnIC+Wnep6UMrJLUN94RU6hE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=U8dH7xkfiSly3tHNaHPOVqBdR9u2Y5IQlNKGpSW7hyWK0w6hLf825Em6Qjq1lrkqQ
-	 +cbxMJ2EbrbzmGTx6Uk3Hz0HQGZf4Tb7IufJofe5fELy9v8Wq2nf0OVBJfqlrvSelN
-	 nDR5DE73f7dsJko02jYw6w92mPHsMyX45515jeNs=
+	b=L7cFZU1DA5peQg+ukxCGlHdzAhltQCMZJ91flhAhmVc4z5VjmB2dI3n/zLNJlQEF6
+	 RuoRHqb+jGtHqjbF8MzMv6a/Q8RepYhoRxMCLS5HJ2k6UTXqYCpyV+zEXQ8EYAppqf
+	 d7jNGi6/NlXEQoKdzVhmB0yEb06oYIsGJ+WtJAkc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbgA1Otk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jan 2020 09:49:40 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59338 "EHLO
+        id S1727285AbgA1Otw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jan 2020 09:49:52 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:59296 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727302AbgA1OAq (ORCPT
+        with ESMTP id S1727296AbgA1OAq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jan 2020 09:00:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,30 +33,28 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=EUyT6uzt3haakoO/7i6biiig32qDL/WZNuhjyHnht4Q=; b=IkQOe5Q+Zp3EeDodVdaxeNUCVg
-        E9uYk31IJ88/Ta5ZqKQQ18UL6UQ4esabUV/roX2kR4vgi9Q0YyU587hwaPwqYwklSZAQJSHWmoMTD
-        MyYelyN63znCcoW/VfTCRb50hj7bvK8LaGvrCGQUAWspOOzE7Oqi9IMnbVqL6GpicUXVTCKSxunll
-        +Yjjr6RucRuubbqwb5skR3awB0dQPuNQkSkVdUNfv8ceoQsNVHdBGtWXk85dGRRRnv0hb7x9MDB2w
-        eIDzcw3ioFNKuuFtVoUG0qenm3asy0hK4SeTgp+GCJd2WhHnXp1maQavpgLhnYqd5JFTft5F4+V/w
-        ScvfzR9A==;
+        bh=pdZ8qcVwJgau11WErg9V3Yc+VhPbjBFzGGVo//flLAo=; b=sySpSqJoeSAZ6nqHqhBfl+XL21
+        5TpZr0mZuhA3gjKteTVLv/eqBXj3j7v3SR1IaT6AyaLkVi3P4i120VOT1GYEelIixnpAIOMp3avUF
+        dWcV5qIF8XF9ZnBIr9iXJTJe7MY/1z3Z31t0hDyHWgbw23m7VunkcFNqCC8Lm8sxfmfcEZhjKd/Hx
+        nbff9DxLcKkcvU9gyzcTNaaEfwwssfyhaayE8Ohm4Rhd5zovUeG4zPiap29IglIpc4Wuh7PJgtMEK
+        Gm8rcvGV2v6NOPWzyyspbvE4H4nXlHJNNtTz/xOxOdik+kQXZGDOgtULAm98Rq3XeAtvhaMKEr/Lk
+        l7p89GIA==;
 Received: from [177.41.103.99] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwRQ5-0007ih-F2; Tue, 28 Jan 2020 14:00:46 +0000
+        id 1iwRQ5-0007ij-Uh; Tue, 28 Jan 2020 14:00:45 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iwRPp-001BNV-AQ; Tue, 28 Jan 2020 15:00:29 +0100
+        id 1iwRPp-001BOd-RL; Tue, 28 Jan 2020 15:00:29 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-um@lists.infradead.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 04/27] docs: virt: user_mode_linux.rst: fix URL references
-Date:   Tue, 28 Jan 2020 15:00:05 +0100
-Message-Id: <c26437ef62ca1568c75a0c771e3f8a837299a17b.1580219586.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 18/27] docs: kvm: convert arm/hyp-abi.txt to ReST
+Date:   Tue, 28 Jan 2020 15:00:19 +0100
+Message-Id: <707c15ba05c14b49801e29840154ee1aed5cd910.1580219586.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1580219586.git.mchehab+huawei@kernel.org>
 References: <cover.1580219586.git.mchehab+huawei@kernel.org>
@@ -67,212 +65,83 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Several URLs are pointing to outdated places.
-
-Update the references for the URLs whose contents still exists,
-removing the others.
+- Add proper markups for titles;
+- Adjust whitespaces and blank lines to match ReST
+  needs;
+- Mark literal blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/uml/user_mode_linux.rst | 71 +++++++++-------------
- 1 file changed, 29 insertions(+), 42 deletions(-)
+ .../virt/kvm/arm/{hyp-abi.txt => hyp-abi.rst} | 26 ++++++++++++-------
+ Documentation/virt/kvm/arm/index.rst          |  1 +
+ 2 files changed, 18 insertions(+), 9 deletions(-)
+ rename Documentation/virt/kvm/arm/{hyp-abi.txt => hyp-abi.rst} (80%)
 
-diff --git a/Documentation/virt/uml/user_mode_linux.rst b/Documentation/virt/uml/user_mode_linux.rst
-index a96d29243964..d6844fb89b46 100644
---- a/Documentation/virt/uml/user_mode_linux.rst
-+++ b/Documentation/virt/uml/user_mode_linux.rst
-@@ -319,7 +319,7 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
-   as modules, especially filesystems and network protocols and filters,
-   so most symbols which need to be exported probably already are.
-   However, if you do find symbols that need exporting, let  us
--  <http://user-mode-linux.sourceforge.net/>  know, and
-+  know at http://user-mode-linux.sourceforge.net/, and
-   they'll be "taken care of".
+diff --git a/Documentation/virt/kvm/arm/hyp-abi.txt b/Documentation/virt/kvm/arm/hyp-abi.rst
+similarity index 80%
+rename from Documentation/virt/kvm/arm/hyp-abi.txt
+rename to Documentation/virt/kvm/arm/hyp-abi.rst
+index a20a0bee268d..cf74b5b87df6 100644
+--- a/Documentation/virt/kvm/arm/hyp-abi.txt
++++ b/Documentation/virt/kvm/arm/hyp-abi.rst
+@@ -1,4 +1,6 @@
+-* Internal ABI between the kernel and HYP
++=======================================
++Internal ABI between the kernel and HYP
++=======================================
  
+ This file documents the interaction between the Linux kernel and the
+ hypervisor layer when running Linux as a hypervisor (for example
+@@ -19,25 +21,31 @@ and only act on individual CPUs.
+ Unless specified otherwise, any built-in hypervisor must implement
+ these functions (see arch/arm{,64}/include/asm/virt.h):
  
-@@ -381,9 +381,9 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
+-* r0/x0 = HVC_SET_VECTORS
+-  r1/x1 = vectors
++* ::
++
++    r0/x0 = HVC_SET_VECTORS
++    r1/x1 = vectors
  
+   Set HVBAR/VBAR_EL2 to 'vectors' to enable a hypervisor. 'vectors'
+   must be a physical address, and respect the alignment requirements
+   of the architecture. Only implemented by the initial stubs, not by
+   Linux hypervisors.
  
-   You will need a filesystem to boot UML from.  There are a number
--  available for download from  here  <http://user-mode-
--  linux.sourceforge.net/> .  There are also  several tools
--  <http://user-mode-linux.sourceforge.net/>  which can be
-+  available for download from http://user-mode-linux.sourceforge.net.
-+  There are also  several tools at
-+  http://user-mode-linux.sourceforge.net/  which can be
-   used to generate UML-compatible filesystem images from media.
-   The kernel will boot up and present you with a login prompt.
+-* r0/x0 = HVC_RESET_VECTORS
++* ::
++
++    r0/x0 = HVC_RESET_VECTORS
  
-@@ -462,10 +462,9 @@ Note:
+   Turn HYP/EL2 MMU off, and reset HVBAR/VBAR_EL2 to the initials
+   stubs' exception vector value. This effectively disables an existing
+   hypervisor.
  
-   Here are some examples of UML in action:
+-* r0/x0 = HVC_SOFT_RESTART
+-  r1/x1 = restart address
+-  x2 = x0's value when entering the next payload (arm64)
+-  x3 = x1's value when entering the next payload (arm64)
+-  x4 = x2's value when entering the next payload (arm64)
++* ::
++
++    r0/x0 = HVC_SOFT_RESTART
++    r1/x1 = restart address
++    x2 = x0's value when entering the next payload (arm64)
++    x3 = x1's value when entering the next payload (arm64)
++    x4 = x2's value when entering the next payload (arm64)
  
--  -  A login session <http://user-mode-linux.sourceforge.net/login.html>
--
--  -  A virtual network <http://user-mode-linux.sourceforge.net/net.html>
-+  -  A login session http://user-mode-linux.sourceforge.net/old/login.html
+   Mask all exceptions, disable the MMU, move the arguments into place
+   (arm64 only), and jump to the restart address while at HYP/EL2. This
+diff --git a/Documentation/virt/kvm/arm/index.rst b/Documentation/virt/kvm/arm/index.rst
+index e039d9b1e076..134fa5fa77e5 100644
+--- a/Documentation/virt/kvm/arm/index.rst
++++ b/Documentation/virt/kvm/arm/index.rst
+@@ -7,4 +7,5 @@ ARM
+ .. toctree::
+    :maxdepth: 2
  
-+  -  A virtual network http://user-mode-linux.sourceforge.net/old/net.html
- 
- 
- 
-@@ -1130,11 +1129,6 @@ Note:
- 
- 
- 
--
--  Harald's original README is here <http://user-mode-linux.source-
--  forge.net/>  and explains these in detail, as well as
--  some other issues.
--
-   There is also a related point-to-point only "ucast" transport.
-   This is useful when your network does not support multicast, and
-   all network connections are simple point to point links.
-@@ -1217,8 +1211,7 @@ Note:
-   make sure that /usr/src/linux points to the headers for the running
-   kernel.
- 
--  These were pointed out by Tim Robinson <timro at trkr dot net> in
--  <http://www.geocrawler.com/> name="this uml-user post"> .
-+  These were pointed out by Tim Robinson <timro at trkr dot net> in the past.
- 
- 
- 
-@@ -1912,8 +1905,8 @@ Note:
- 
-   uml_moo is installed with the UML deb and RPM.  If you didn't install
-   UML from one of those packages, you can also get it from the UML
--  utilities <http://user-mode-linux.sourceforge.net/
--  utilities>  tar file in tools/moo.
-+  utilities http://user-mode-linux.sourceforge.net/utilities tar file
-+  in tools/moo.
- 
- 
- 
-@@ -3707,18 +3700,15 @@ Note:
- 
- 
-   This is a syslogd bug.  There's a race between a parent process
--  installing a signal handler and its child sending the signal.  See
--  this uml-devel post <http://www.geocrawler.com/lists/3/Source-
--  Forge/709/0/6612801>  for the details.
-+  installing a signal handler and its child sending the signal.
- 
- 
- 
- 13.8.  TUN/TAP networking doesn't work on a 2.4 host
- ----------------------------------------------------
- 
--  There are a couple of problems which were
--  <http://www.geocrawler.com/lists/3/SourceForge/597/0/> name="pointed
--  out">  by Tim Robinson <timro at trkr dot net>
-+  There are a couple of problems which were reported by
-+  Tim Robinson <timro at trkr dot net>
- 
-   -  It doesn't work on hosts running 2.4.7 (or thereabouts) or earlier.
-      The fix is to upgrade to something more recent and then read the
-@@ -3761,7 +3751,7 @@ Note:
- 
- 
-   Documentation on IP Masquerading, and SNAT, can be found at
--  www.netfilter.org  <http://www.netfilter.org> .
-+  http://www.netfilter.org.
- 
- 
-   If you can reach the local net, but not the outside Internet, then
-@@ -4111,14 +4101,14 @@ Note:
- 
-   Rusty Russell <rusty at linuxcare.com.au>  -
- 
--  -  wrote the  HOWTO <http://user-mode-
--     linux.sourceforge.net/UserModeLinux-HOWTO.html>
-+  -  wrote the  HOWTO
-+     http://user-mode-linux.sourceforge.net/old/UserModeLinux-HOWTO.html
- 
-   -  prodded me into making this project official and putting it on
-      SourceForge
- 
--  -  came up with the way cool UML logo <http://user-mode-
--     linux.sourceforge.net/uml-small.png>
-+  -  came up with the way cool UML logo
-+     http://user-mode-linux.sourceforge.net/uml-small.png
- 
-   -  redid the config process
- 
-@@ -4146,17 +4136,15 @@ Note:
-   Jim Leu <jleu at mindspring.com>  - Wrote the virtual ethernet driver
-   and associated usermode tools
- 
--  Lars Brinkhoff <http://lars.nocrew.org/>  - Contributed the ptrace
--  proxy from his own  project <http://a386.nocrew.org/> to allow easier
--  kernel debugging
-+  Lars Brinkhoff http://lars.nocrew.org/  - Contributed the ptrace
-+  proxy from his own  project to allow easier kernel debugging
- 
- 
-   Andrea Arcangeli <andrea at suse.de>  - Redid some of the early boot
-   code so that it would work on machines with Large File Support
- 
- 
--  Chris Emerson <http://www.chiark.greenend.org.uk/~cemerson/>  - Did
--  the first UML port to Linux/ppc
-+  Chris Emerson - Did the first UML port to Linux/ppc
- 
- 
-   Harald Welte <laforge at gnumonks.org>  - Wrote the multicast
-@@ -4171,7 +4159,7 @@ Note:
-   wrote the iomem emulation support
- 
- 
--  Henrik Nordstrom <http://hem.passagen.se/hno/>  - Provided a variety
-+  Henrik Nordstrom http://hem.passagen.se/hno/  - Provided a variety
-   of patches, fixes, and clues
- 
- 
-@@ -4206,16 +4194,15 @@ Note:
-   submitted patches for the slip transport and lots of other things.
- 
- 
--  David Coulson <http://davidcoulson.net>  -
-+  David Coulson http://davidcoulson.net  -
- 
--  -  Set up the usermodelinux.org <http://usermodelinux.org>  site,
-+  -  Set up the http://usermodelinux.org  site,
-      which is a great way of keeping the UML user community on top of
-      UML goings-on.
- 
-   -  Site documentation and updates
- 
-   -  Nifty little UML management daemon  UMLd
--     <http://uml.openconsultancy.com/umld/>
- 
-   -  Lots of testing and bug reports
- 
-@@ -4388,12 +4375,12 @@ Note:
-   work with RH 6.2.
- 
-   Michael Jennings <mikejen at hevanet.com>  sent in some material which
--  is now gracing the top of the  index  page <http://user-mode-
--  linux.sourceforge.net/>  of this site.
-+  is now gracing the top of the  index  page
-+  http://user-mode-linux.sourceforge.net/  of this site.
- 
--  SGI <http://www.sgi.com>  (and more specifically Ralf Baechle <ralf at
--  uni-koblenz.de> ) gave me an account on oss.sgi.com
--  <http://www.oss.sgi.com> .  The bandwidth there made it possible to
-+  SGI (and more specifically Ralf Baechle <ralf at
-+  uni-koblenz.de> ) gave me an account on oss.sgi.com.
-+  The bandwidth there made it possible to
-   produce most of the filesystems available on the project download
-   page.
- 
-@@ -4410,5 +4397,5 @@ Note:
- 
-   Chris Reahard built a specialized root filesystem for running a DNS
-   server jailed inside UML.  It's available from the download
--  <http://user-mode-linux.sourceforge.net/dl-sf.html>  page in the Jail
-+  http://user-mode-linux.sourceforge.net/old/dl-sf.html  page in the Jail
-   Filesystems section.
++   hyp-abi
+    pvtime
 -- 
 2.24.1
 
