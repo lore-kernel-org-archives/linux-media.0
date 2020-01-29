@@ -2,103 +2,202 @@ Return-Path: <SRS0=dZFy=3S=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80E00C33CB2
-	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 11:53:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05798C33CB2
+	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 11:54:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 303E32070E
-	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 11:53:00 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="KUJEKJYr"
+	by mail.kernel.org (Postfix) with ESMTP id D849D2071E
+	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 11:54:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgA2Lw7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 Jan 2020 06:52:59 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38252 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726067AbgA2Lw7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 Jan 2020 06:52:59 -0500
-Received: by mail-wr1-f67.google.com with SMTP id y17so19839327wrh.5
-        for <linux-media@vger.kernel.org>; Wed, 29 Jan 2020 03:52:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H6KzueQP2DpIWEZuPuIZtE6qNFOkAKNKomjBXz6Gbm0=;
-        b=KUJEKJYr/mlfHwu1zk74/GheDNIHUkgqRdFl3BgygZmUEqTc/P106C4DDlj6zoozC+
-         aAvvJrma5YGvyPHdF23eWr+8h7i78nA1DI+WZbYQCYkdt/QBz4JiJICvUmtti5c36MT4
-         IUj8Mlp7pCrHmRE0JCxI/BHOYUROb8NxjWPwHgn6HyHX9AAc7k4GSRJ5pr+TRHAOHFcV
-         ue0cIDfy2i/3VkzpPeh8Fq7+NPX4fY/LafredCNL5G1uInwHbj/cB+cDtcMHU7NYQrSr
-         mSaQZKguWkEhC4cQdFKYrAHZfZEwItaKk0gqaVtx4hg5uNKXIA2XrAuI7J+2lvdKjDtK
-         QaJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H6KzueQP2DpIWEZuPuIZtE6qNFOkAKNKomjBXz6Gbm0=;
-        b=eigSkWXgbw8MsKMEvxfoMEtD/OveyiDW5YENdaDgjEnzmi2fhSOkRBaEsKgPgE3Tgf
-         11nwkNjk4ByyB4hgBJOl7ONLELDHFTzlbme19Udi7lPXQLCInkI584Tfw95ureFMPkaV
-         4KJAg24zFM7jKP57zoiRG9NhZBm9w/Uhc9OPUYZ2BPSp3IlAMY8Vnj8UXHDZSRazY1jq
-         RbuXaJdKPJKImi9TNCatxOvbJdC59VWytt97lAeb3BHsRxCay710QYOlEGAT9GLk0RNf
-         iZUqW0zFCIKVHccsCAViwbWTupm7zRo6ShGsKwaBfn/8nLTqyut0LM+CbSTvqLbhb+yR
-         nRnw==
-X-Gm-Message-State: APjAAAVJQGiPsAsdQgJzl2RDzr3grRcoJkAVZ51JfF9HmOUI20vknfnX
-        F7PMJLPwbd/NkY/wXUKgIZb8oaaPBCGovuVGilO9Yg==
-X-Google-Smtp-Source: APXvYqx6UiIOjlxSpmopeSYdNAlmnfrmbzyydEGq6Jz+dJxxqfaPyDq12Sy2ZBeqhehjqKmQoeUUKuuUYMp79O6/wjw=
-X-Received: by 2002:a5d:6a8e:: with SMTP id s14mr36709308wru.150.1580298777649;
- Wed, 29 Jan 2020 03:52:57 -0800 (PST)
+        id S1726632AbgA2LyW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 Jan 2020 06:54:22 -0500
+Received: from gofer.mess.org ([88.97.38.141]:53595 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726599AbgA2LyV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 29 Jan 2020 06:54:21 -0500
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 709F1C645D; Wed, 29 Jan 2020 11:54:19 +0000 (GMT)
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>
+Subject: [PATCH v4l-utils 2/4] keytable: new samsung36 bpf decoder
+Date:   Wed, 29 Jan 2020 11:54:17 +0000
+Message-Id: <20200129115419.8456-3-sean@mess.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200129115419.8456-1-sean@mess.org>
+References: <20200129115419.8456-1-sean@mess.org>
 MIME-Version: 1.0
-References: <20190916100433.24367-1-hverkuil-cisco@xs4all.nl>
- <20190916115207.GO843@valkosipuli.retiisi.org.uk> <2c0da850-7073-0fc6-7246-9e530a54cf26@xs4all.nl>
-In-Reply-To: <2c0da850-7073-0fc6-7246-9e530a54cf26@xs4all.nl>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Wed, 29 Jan 2020 11:52:40 +0000
-Message-ID: <CAPY8ntCOAeq1OLS4dn846ubujnbUxSwMu-Tfb9fcNgaDcn3_JQ@mail.gmail.com>
-Subject: Re: [PATCHv2 0/2] Add helper functions to print a fourcc
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans.
+Signed-off-by: Sean Young <sean@mess.org>
+---
+ utils/keytable/bpf_protocols/Makefile.am |   2 +-
+ utils/keytable/bpf_protocols/samsung36.c | 136 +++++++++++++++++++++++
+ 2 files changed, 137 insertions(+), 1 deletion(-)
+ create mode 100644 utils/keytable/bpf_protocols/samsung36.c
 
-On Mon, 16 Sep 2019 at 13:00, Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->
-> On 9/16/19 1:52 PM, Sakari Ailus wrote:
-> > On Mon, Sep 16, 2019 at 12:04:31PM +0200, Hans Verkuil wrote:
-> >> It turns out that Sakari posted a newer patch in 2018. I used that
-> >> for this v2: https://patchwork.linuxtv.org/patch/48372/
-> >>
-> >> Mauro commented on that original patch that there was no need to
-> >> have this available for userspace.
-> >>
-> >> I disagree: why wouldn't userspace want to report pixelformats?
-> >>
-> >> It happens in several places in v4l-utils, and there the pixelformats are
-> >> printed in different ways as well. Providing a standard way of reporting
-> >> a V4L2 fourcc is very useful.
-> >
-> > Thanks, Hans!
-> >
-> > Can you take these to your tree (perhaps pending some sort of agreement
-> > with Mauro)?
-> >
->
-> Certainly.
->
->         Hans
+diff --git a/utils/keytable/bpf_protocols/Makefile.am b/utils/keytable/bpf_protocols/Makefile.am
+index 3423aba1..13be2794 100644
+--- a/utils/keytable/bpf_protocols/Makefile.am
++++ b/utils/keytable/bpf_protocols/Makefile.am
+@@ -10,7 +10,7 @@ CLANG_SYS_INCLUDES := $(shell $(CLANG) -v -E - </dev/null 2>&1 \
+ %.o: %.c bpf_helpers.h
+ 	$(CLANG) $(CLANG_SYS_INCLUDES) -D__linux__ -I$(top_srcdir)/include -target bpf -O2 -c $<
+ 
+-PROTOCOLS = grundig.o pulse_distance.o pulse_length.o rc_mm.o manchester.o xbox-dvd.o imon_rsc.o raw.o
++PROTOCOLS = grundig.o pulse_distance.o pulse_length.o rc_mm.o manchester.o xbox-dvd.o imon_rsc.o raw.o samsung36.o
+ 
+ all: $(PROTOCOLS)
+ 
+diff --git a/utils/keytable/bpf_protocols/samsung36.c b/utils/keytable/bpf_protocols/samsung36.c
+new file mode 100644
+index 00000000..1b09365f
+--- /dev/null
++++ b/utils/keytable/bpf_protocols/samsung36.c
+@@ -0,0 +1,136 @@
++// SPDX-License-Identifier: GPL-2.0+
++//
++// Remote protocol used by some Samsung remotes. It has 36 bits and the
++// 16th bit is not really a bit, but a marker to distinguish it from
++// shorter samsung protocols.
++//
++// http://www.hifi-remote.com/wiki/index.php/DecodeIR#Samsung36
++// Copyright (C) 2020 Sean Young <sean@mess.org>
++
++#include <linux/lirc.h>
++#include <linux/bpf.h>
++
++#include "bpf_helpers.h"
++
++enum state {
++	STATE_INACTIVE,
++	STATE_HEADER_SPACE,
++	STATE_BITS_SPACE,
++	STATE_BITS_PULSE,
++	STATE_TRAILER,
++};
++
++struct decoder_state {
++	unsigned long bits;
++	enum state state;
++	unsigned int count;
++};
++
++struct bpf_map_def SEC("maps") decoder_state_map = {
++	.type = BPF_MAP_TYPE_ARRAY,
++	.key_size = sizeof(unsigned int),
++	.value_size = sizeof(struct decoder_state),
++	.max_entries = 1,
++};
++
++// These values can be overridden in the rc_keymap toml
++//
++// We abuse elf relocations. We cast the address of these variables to
++// an int, so that the compiler emits a mov immediate for the address
++// but uses it as an int. The bpf loader replaces the relocation with the
++// actual value (either overridden or taken from the data segment).
++int margin = 300;
++int rc_protocol = 69;
++
++#define BPF_PARAM(x) (int)(&(x))
++
++static inline int eq_margin(unsigned d1, unsigned d2)
++{
++	return ((d1 > (d2 - BPF_PARAM(margin))) && (d1 < (d2 + BPF_PARAM(margin))));
++}
++
++SEC("samsung36")
++int bpf_decoder(unsigned int *sample)
++{
++	unsigned int key = 0;
++	struct decoder_state *s = bpf_map_lookup_elem(&decoder_state_map, &key);
++
++	if (!s)
++		return 0;
++
++	switch (*sample & LIRC_MODE2_MASK) {
++	case LIRC_MODE2_SPACE:
++	case LIRC_MODE2_PULSE:
++	case LIRC_MODE2_TIMEOUT:
++		break;
++	default:
++		// not a timing events
++		return 0;
++	}
++
++	int duration = LIRC_VALUE(*sample);
++	int pulse = LIRC_IS_PULSE(*sample);
++
++	switch (s->state) {
++	case STATE_INACTIVE:
++		if (pulse && eq_margin(duration, 4500)) {
++			s->bits = 0;
++			s->state = STATE_HEADER_SPACE;
++			s->count = 0;
++		}
++		break;
++	case STATE_HEADER_SPACE:
++		if (!pulse && eq_margin(duration, 4500))
++			s->state = STATE_BITS_PULSE;
++		else
++			s->state = STATE_INACTIVE;
++		break;
++	case STATE_BITS_PULSE:
++		if (pulse && eq_margin(duration, 500))
++			s->state = STATE_BITS_SPACE;
++		else
++			s->state = STATE_INACTIVE;
++		break;
++	case STATE_BITS_SPACE:
++		if (pulse) {
++			s->state = STATE_INACTIVE;
++			break;
++		}
++
++		s->count++;
++
++		if (s->count == 17) {
++			if (eq_margin(duration, 4450)) {
++				s->state = STATE_BITS_PULSE;
++			} else {
++				s->state = STATE_INACTIVE;
++			}
++			break;
++		}
++
++		s->bits <<= 1;
++
++		if (eq_margin(duration, 1600)) {
++			s->bits |= 1;
++		} else if (!eq_margin(duration, 500)) {
++			s->state = STATE_INACTIVE;
++			break;
++		}
++
++		if (s->count == 37)
++			s->state = STATE_TRAILER;
++		else
++			s->state = STATE_BITS_PULSE;
++		break;
++	case STATE_TRAILER:
++		if (pulse && eq_margin(duration, 500)) {
++			bpf_rc_keydown(sample, BPF_PARAM(rc_protocol), s->bits, 0);
++		}
++
++		s->state = STATE_INACTIVE;
++	}
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.24.1
 
-What happened to these? Patchwork is flagging them as rejected[1], but
-there's only been positive responses to them on the mailing list.
-
-Thanks.
-  Dave
-
-[1] https://patchwork.linuxtv.org/patch/58781/ and
-https://patchwork.linuxtv.org/patch/58780/
