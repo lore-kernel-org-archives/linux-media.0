@@ -6,27 +6,29 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFA7C35240
-	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 11:54:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CA25C33CB2
+	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 11:54:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7C3EA2071E
-	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 11:54:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D69E2071E
+	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 11:54:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726622AbgA2LyW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 Jan 2020 06:54:22 -0500
-Received: from gofer.mess.org ([88.97.38.141]:35395 "EHLO gofer.mess.org"
+        id S1726668AbgA2LyY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 Jan 2020 06:54:24 -0500
+Received: from gofer.mess.org ([88.97.38.141]:37937 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726140AbgA2LyV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726604AbgA2LyV (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 29 Jan 2020 06:54:21 -0500
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 34F5CC643D; Wed, 29 Jan 2020 11:54:19 +0000 (GMT)
+        id 9AC90C6460; Wed, 29 Jan 2020 11:54:19 +0000 (GMT)
 From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org
 Cc:     Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH v4l-utils 1/4] keytable: support 64 bit scancodes
-Date:   Wed, 29 Jan 2020 11:54:15 +0000
-Message-Id: <20200129115419.8456-1-sean@mess.org>
+Subject: [PATCH v4l-utils 3/4] Add keymap for Samsung AK59-00125A remote
+Date:   Wed, 29 Jan 2020 11:54:18 +0000
+Message-Id: <20200129115419.8456-4-sean@mess.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200129115419.8456-1-sean@mess.org>
+References: <20200129115419.8456-1-sean@mess.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -36,218 +38,85 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Signed-off-by: Sean Young <sean@mess.org>
 ---
- utils/common/keymap.c     |  4 +-
- utils/common/keymap.h     |  4 +-
- utils/keytable/keytable.c | 80 +++++++++++++++++++++++++++------------
- 3 files changed, 59 insertions(+), 29 deletions(-)
+ .../samsung_ak59_00125a.toml                  | 69 +++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+ create mode 100644 utils/keytable/rc_keymaps_userspace/samsung_ak59_00125a.toml
 
-diff --git a/utils/common/keymap.c b/utils/common/keymap.c
-index d06deb59..15c31c76 100644
---- a/utils/common/keymap.c
-+++ b/utils/common/keymap.c
-@@ -162,7 +162,7 @@ static error_t parse_plain_keymap(char *fname, struct keymap **keymap, bool verb
- 			return ENOMEM;
- 		}
- 
--		se->scancode = strtoul(scancode, NULL, 0);
-+		se->scancode = strtoull(scancode, NULL, 0);
- 		se->keycode = strdup(keycode);
- 		se->next = map->scancode;
- 		map->scancode = se;
-@@ -442,7 +442,7 @@ static error_t parse_toml_protocol(const char *fname, struct toml_table_t *proot
- 			return ENOMEM;
- 		}
- 
--		se->scancode = strtoul(scancode, NULL, 0);
-+		se->scancode = strtoull(scancode, NULL, 0);
- 		se->keycode = keycode;
- 		*next = se;
- 		next = &se->next;
-diff --git a/utils/common/keymap.h b/utils/common/keymap.h
-index f2b29632..99833827 100644
---- a/utils/common/keymap.h
-+++ b/utils/common/keymap.h
-@@ -20,13 +20,13 @@ struct protocol_param {
- 
- struct scancode_entry {
- 	struct scancode_entry *next;
--	u_int32_t scancode;
-+	u_int64_t scancode;
- 	char *keycode;
- };
- 
- struct raw_entry {
- 	struct raw_entry *next;
--	u_int32_t scancode;
-+	u_int64_t scancode;
- 	u_int32_t raw_length;
- 	char *keycode;
- 	u_int32_t raw[1];
-diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
-index e2a1bfe1..cc1b5217 100644
---- a/utils/keytable/keytable.c
-+++ b/utils/keytable/keytable.c
-@@ -76,7 +76,8 @@ struct input_keymap_entry_v2 {
- #endif
- 
- struct keytable_entry {
--	u_int32_t scancode;
-+	// 64 bit int which can printed with %llx
-+	unsigned long long scancode;
- 	u_int32_t keycode;
- 	struct keytable_entry *next;
- };
-@@ -400,7 +401,7 @@ static int add_keymap(struct keymap *map, const char *fname)
- 			if (value == -1) {
- 				value = strtol(se->keycode, &p, 0);
- 				if (errno || *p) {
--					fprintf(stderr, _("%s: keycode `%s' not recognised, no mapping for scancode %d\n"), fname, se->keycode, se->scancode);
-+					fprintf(stderr, _("%s: keycode `%s' not recognised, no mapping for scancode %llx\n"), fname, se->keycode, (unsigned long long)se->scancode);
- 					continue;
- 				}
- 			}
-@@ -589,7 +590,7 @@ static error_t parse_opt(int k, char *arg, struct argp_state *state)
- 				return ENOMEM;
- 			}
- 
--			ke->scancode = strtoul(p, NULL, 0);
-+			ke->scancode = strtoull(p, NULL, 0);
- 			if (errno) {
- 				free(ke);
- 				argp_error(state, _("Invalid scancode: %s"), p);
-@@ -616,7 +617,7 @@ static error_t parse_opt(int k, char *arg, struct argp_state *state)
- 			ke->keycode = key;
- 
- 			if (debug)
--				fprintf(stderr, _("scancode 0x%04x=%u\n"),
-+				fprintf(stderr, _("scancode 0x%04llx=%u\n"),
- 					ke->scancode, ke->keycode);
- 
- 			ke->next = keytable;
-@@ -722,21 +723,21 @@ static struct argp argp = {
- 	.doc = doc,
- };
- 
--static void prtcode(int *codes)
-+static void prtcode(unsigned long long scancode, int keycode)
- {
- 	struct parse_event *p;
- 
- 	for (p = key_events; p->name != NULL; p++) {
--		if (p->value == (unsigned)codes[1]) {
--			printf(_("scancode 0x%04x = %s (0x%02x)\n"), codes[0], p->name, codes[1]);
-+		if (p->value == keycode) {
-+			printf(_("scancode 0x%04llx = %s (0x%02x)\n"), scancode, p->name, keycode);
- 			return;
- 		}
- 	}
- 
--	if (isprint (codes[1]))
--		printf(_("scancode 0x%04x = '%c' (0x%02x)\n"), codes[0], codes[1], codes[1]);
-+	if (isprint (keycode))
-+		printf(_("scancode 0x%04llx = '%c' (0x%02x)\n"), scancode, keycode, keycode);
- 	else
--		printf(_("scancode 0x%04x = 0x%02x\n"), codes[0], codes[1]);
-+		printf(_("scancode 0x%04llx = 0x%02x\n"), scancode, keycode);
- }
- 
- static void free_names(struct sysfs_names *names)
-@@ -1399,17 +1400,34 @@ static int add_keys(int fd)
- 	for (ke = keytable; ke; ke = ke->next) {
- 		write_cnt++;
- 		if (debug)
--			fprintf(stderr, "\t%04x=%04x\n",
-+			fprintf(stderr, "\t%04llx=%04x\n",
- 				ke->scancode, ke->keycode);
- 
- 		codes[0] = ke->scancode;
- 		codes[1] = ke->keycode;
- 
--		if (ioctl(fd, EVIOCSKEYCODE, codes)) {
--			fprintf(stderr,
--				_("Setting scancode 0x%04x with 0x%04x via "),
--				ke->scancode, ke->keycode);
--			perror("EVIOCSKEYCODE");
-+		if (codes[0] != ke->scancode) {
-+			// 64 bit scancode
-+			struct input_keymap_entry_v2 entry = {
-+				.keycode = ke->keycode,
-+				.len = sizeof(ke->scancode)
-+			};
-+
-+			memcpy(entry.scancode, &ke->scancode, sizeof(ke->scancode));
-+
-+			if (ioctl(fd, EVIOCSKEYCODE_V2, &entry)) {
-+				fprintf(stderr,
-+					_("Setting scancode 0x%04llx with 0x%04x via "),
-+					ke->scancode, ke->keycode);
-+				perror("EVIOCSKEYCODE");
-+			}
-+		} else {
-+			if (ioctl(fd, EVIOCSKEYCODE, codes)) {
-+				fprintf(stderr,
-+					_("Setting scancode 0x%04llx with 0x%04x via "),
-+					ke->scancode, ke->keycode);
-+				perror("EVIOCSKEYCODE");
-+			}
- 		}
- 	}
- 
-@@ -1596,7 +1614,7 @@ static void display_table_v1(struct rc_device *rc_dev, int fd)
- 			if (ioctl(fd, EVIOCGKEYCODE, codes) == -1)
- 				perror("EVIOCGKEYCODE");
- 			else if (codes[1] != KEY_RESERVED)
--				prtcode(codes);
-+				prtcode(codes[0], codes[1]);
- 		}
- 	}
- 	display_proto(rc_dev);
-@@ -1604,25 +1622,37 @@ static void display_table_v1(struct rc_device *rc_dev, int fd)
- 
- static void display_table_v2(struct rc_device *rc_dev, int fd)
- {
-+	struct input_keymap_entry_v2 entry = {};
-+	unsigned long long scancode;
- 	int i;
--	struct input_keymap_entry_v2 entry;
--	int codes[2];
- 
--	memset(&entry, '\0', sizeof(entry));
- 	i = 0;
- 	do {
- 		entry.flags = KEYMAP_BY_INDEX;
- 		entry.index = i;
--		entry.len = sizeof(u_int32_t);
-+		entry.len = sizeof(scancode);
- 
- 		if (ioctl(fd, EVIOCGKEYCODE_V2, &entry) == -1)
- 			break;
- 
--		/* FIXME: Extend it to support scancodes > 32 bits */
--		memcpy(&codes[0], entry.scancode, sizeof(codes[0]));
--		codes[1] = entry.keycode;
-+		if (entry.len == sizeof(u_int32_t)) {
-+			u_int32_t temp;
-+
-+			memcpy(&temp, entry.scancode, sizeof(temp));
-+
-+			scancode = temp;
-+		} else if (entry.len == sizeof(u_int64_t)) {
-+			u_int64_t temp;
-+
-+			memcpy(&temp, entry.scancode, sizeof(temp));
-+
-+			scancode = temp;
-+		} else {
-+			printf("error: unknown scancode length %d\n", entry.len);
-+			continue;
-+		}
- 
--		prtcode(codes);
-+		prtcode(scancode, entry.keycode);
- 		i++;
- 	} while (1);
- 	display_proto(rc_dev);
+diff --git a/utils/keytable/rc_keymaps_userspace/samsung_ak59_00125a.toml b/utils/keytable/rc_keymaps_userspace/samsung_ak59_00125a.toml
+new file mode 100644
+index 00000000..5d068f7c
+--- /dev/null
++++ b/utils/keytable/rc_keymaps_userspace/samsung_ak59_00125a.toml
+@@ -0,0 +1,69 @@
++[[protocols]]
++name = 'Samsung AK59-00125A'
++protocol = 'pulse_distance'
++header_pulse = 4500
++header_space = 4500
++bit_pulse = 600
++bit_0_space = 500
++bit_1_space = 1600
++bits = 32
++margin = 300
++trailer_pulse = 600
++[protocols.scancodes]
++0xe0e040bf = "KEY_POWER2"
++# input
++0xe0e0807f = "KEY_VIDEO"
++0xe0e0e01f = "KEY_VOLUMEUP"
++0xe0e0d02f = "KEY_VOLUMEDOWN"
++0xe0e0f00f = "KEY_MUTE"
++0xe0e048b7 = "KEY_CHANNELUP"
++0xe0e008f7 = "KEY_CHANNELDOWN"
++[[protocols]]
++protocol = 'samsung36'
++[protocols.scancodes]
++0x400e00ff = "KEY_POWER"
++# bonus view
++0x400ecc33 = "KEY_VENDOR"
++0x400e807f = "KEY_EJECTCD"
++0x400e40bf = "KEY_NUMERIC_1"
++0x400ec03f = "KEY_NUMERIC_2"
++0x400e20df = "KEY_NUMERIC_3"
++0x400ea05f = "KEY_NUMERIC_4"
++0x400e609f = "KEY_NUMERIC_5"
++0x400ee01f = "KEY_NUMERIC_6"
++0x400e10ef = "KEY_NUMERIC_7"
++0x400e906f = "KEY_NUMERIC_8"
++0x400e50af = "KEY_NUMERIC_9"
++0x400ed02f = "KEY_NUMERIC_0"
++0x400ea45b = "KEY_AUDIO"
++0x400e649b = "KEY_SUBTITLE"
++0x400eb04f = "KEY_PREVIOUS"
++0x400e8877 = "KEY_NEXT"
++0x400e48b7 = "KEY_FASTREVERSE"
++0x400ea857 = "KEY_FASTFORWARD"
++0x400ec837 = "KEY_STOP"
++0x400e28d7 = "KEY_PLAY"
++0x400e4cb3 = "KEY_PAUSE"
++# disc menu
++0x400eb847 = "KEY_ROOT_MENU" 
++0x400e6897 = "KEY_MENU"
++# title menu/popup
++0x400e04fb = "KEY_TITLE"
++# tools
++0x400e5ca3 = "KEY_CONFIG"
++0x400e7887 = "KEY_INFO"
++0x400e18e7 = "KEY_UP"
++0x400ed827 = "KEY_LEFT"
++0x400e58a7 = "KEY_RIGHT"
++0x400e9867 = "KEY_DOWN"
++0x400e38c7 = "KEY_ENTER"
++0x400ee817 = "KEY_ESC"
++0x400ed42b = "KEY_EXIT"
++0x400e847b = "KEY_RED"
++0x400e44bb = "KEY_GREEN"
++0x400ec43b = "KEY_YELLOW"
++0x400e24db = "KEY_BLUE"
++# smart/hub
++0x400e1ce3 = "KEY_VENDOR"
++0x400ebc43 = "KEY_SEARCH"
++0x400ee41b = "KEY_MEDIA_REPEAT"
 -- 
 2.24.1
 
