@@ -2,121 +2,88 @@ Return-Path: <SRS0=dZFy=3S=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CA25C33CB2
-	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 11:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D9D2C2D0DB
+	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 13:20:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1D69E2071E
-	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 11:54:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0314620716
+	for <linux-media@archiver.kernel.org>; Wed, 29 Jan 2020 13:20:26 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=bzadverts.com header.i=@bzadverts.com header.b="ao5yBc6K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbgA2LyY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 Jan 2020 06:54:24 -0500
-Received: from gofer.mess.org ([88.97.38.141]:37937 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726604AbgA2LyV (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 Jan 2020 06:54:21 -0500
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 9AC90C6460; Wed, 29 Jan 2020 11:54:19 +0000 (GMT)
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH v4l-utils 3/4] Add keymap for Samsung AK59-00125A remote
-Date:   Wed, 29 Jan 2020 11:54:18 +0000
-Message-Id: <20200129115419.8456-4-sean@mess.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200129115419.8456-1-sean@mess.org>
-References: <20200129115419.8456-1-sean@mess.org>
+        id S1726177AbgA2NUZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 Jan 2020 08:20:25 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43428 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726140AbgA2NUZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 29 Jan 2020 08:20:25 -0500
+Received: by mail-oi1-f195.google.com with SMTP id p125so13883095oif.10
+        for <linux-media@vger.kernel.org>; Wed, 29 Jan 2020 05:20:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bzadverts.com; s=google;
+        h=message-id:date:from:mime-version:content-transfer-encoding:subject
+         :to:content-disposition;
+        bh=9tUYY5gmt+xiddI2+CbxleouQlrCrrUaadISs5MBZIA=;
+        b=ao5yBc6K37wnDAEBSG+nXQ7nhAxSmIxAf13vKHAFREl6R6EdqyGvKDEorcYbJyYTpH
+         Ycf9+pj9F8R09mDwjjGZxwdGJ+OEir8CPXAokmEjPkX2lY5Yy9/ZUv3uqRKvma/KXVQg
+         +Iaw13+zbcGO5RMSvMUTDepHGvSbsezaBs6S0cHc5bJaDnkj+8p5cyvlVoaYwD4aa+lg
+         KiUc09YnUkX70f0HyKX5OxZ/DUSv/+scAgrGNSBuxbYa4Tn3Mrq22jDnlNLcJQtBtBc4
+         3A/FyCtaHi3ru8owtu6yERk4dH57y2ElM3nnFfQAS2NLTfZL6YD5dmcG4xl6tNtGlPje
+         4Fyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:mime-version
+         :content-transfer-encoding:subject:to:content-disposition;
+        bh=9tUYY5gmt+xiddI2+CbxleouQlrCrrUaadISs5MBZIA=;
+        b=WpNx5CP7x5VhyudNQUeh/Ou52ZOHIZthO2lw3Vnkiq6Zt/kd9ARnCV5NEl2nKJrpst
+         qhTP/lHtQKlhudrX7wLFvdA+/v75Gv2227eW0B9Ct52JrRfa9f7UWrRRSuiY57SXk7H8
+         p+Wb3SfJrdGJi3gbVD2IysKbFjt6m57OpEllZRKwFNfWCauKgH4StoRwOvVnYCoMHwlV
+         po173CcHNC5875C/z7I37jOa74xnyzkqc1GpaNtuXIBuhFWkGfe4o0Y4oyy08qhQdANr
+         nPy7ulBro/7r4neFHUHrLf6tysG6FfqGpS/GsYQRtW6QjI2ljWhCklsX5F8cCA3H4PCB
+         ARvg==
+X-Gm-Message-State: APjAAAUVMJYiqf0XQpHBO5hSxBSOw0kbHfMvPlgCZ6iSWDR+SUQULAEx
+        +wDxZWdtcyr4WD5PoFuSTekv1h/eSMQphQ==
+X-Google-Smtp-Source: APXvYqzTua8clhueJv9eBNhyOGVfsPPUGXbrNOWcvLs2pPAFE1VcmVbUp0zFwHkTQVw54nBNEFS7Vw==
+X-Received: by 2002:aca:8d5:: with SMTP id 204mr6172926oii.141.1580304024189;
+        Wed, 29 Jan 2020 05:20:24 -0800 (PST)
+Received: from [127.0.0.1] ([2600:3c00::f03c:91ff:fe50:9fcb])
+        by smtp.gmail.com with ESMTPSA id i12sm682357otk.11.2020.01.29.05.20.23
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 Jan 2020 05:20:23 -0800 (PST)
+Message-ID: <5e318697.1c69fb81.b4f5c.448f@mx.google.com>
+Date:   Wed, 29 Jan 2020 05:20:23 -0800 (PST)
+From:   joseph.moore@bzadverts.com
+X-Google-Original-From: root@debian
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Subject: Collaboration inquiry to bootlin.com
+To:     linux-media@vger.kernel.org
+Content-Disposition: inline
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- .../samsung_ak59_00125a.toml                  | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 utils/keytable/rc_keymaps_userspace/samsung_ak59_00125a.toml
-
-diff --git a/utils/keytable/rc_keymaps_userspace/samsung_ak59_00125a.toml b/utils/keytable/rc_keymaps_userspace/samsung_ak59_00125a.toml
-new file mode 100644
-index 00000000..5d068f7c
---- /dev/null
-+++ b/utils/keytable/rc_keymaps_userspace/samsung_ak59_00125a.toml
-@@ -0,0 +1,69 @@
-+[[protocols]]
-+name = 'Samsung AK59-00125A'
-+protocol = 'pulse_distance'
-+header_pulse = 4500
-+header_space = 4500
-+bit_pulse = 600
-+bit_0_space = 500
-+bit_1_space = 1600
-+bits = 32
-+margin = 300
-+trailer_pulse = 600
-+[protocols.scancodes]
-+0xe0e040bf = "KEY_POWER2"
-+# input
-+0xe0e0807f = "KEY_VIDEO"
-+0xe0e0e01f = "KEY_VOLUMEUP"
-+0xe0e0d02f = "KEY_VOLUMEDOWN"
-+0xe0e0f00f = "KEY_MUTE"
-+0xe0e048b7 = "KEY_CHANNELUP"
-+0xe0e008f7 = "KEY_CHANNELDOWN"
-+[[protocols]]
-+protocol = 'samsung36'
-+[protocols.scancodes]
-+0x400e00ff = "KEY_POWER"
-+# bonus view
-+0x400ecc33 = "KEY_VENDOR"
-+0x400e807f = "KEY_EJECTCD"
-+0x400e40bf = "KEY_NUMERIC_1"
-+0x400ec03f = "KEY_NUMERIC_2"
-+0x400e20df = "KEY_NUMERIC_3"
-+0x400ea05f = "KEY_NUMERIC_4"
-+0x400e609f = "KEY_NUMERIC_5"
-+0x400ee01f = "KEY_NUMERIC_6"
-+0x400e10ef = "KEY_NUMERIC_7"
-+0x400e906f = "KEY_NUMERIC_8"
-+0x400e50af = "KEY_NUMERIC_9"
-+0x400ed02f = "KEY_NUMERIC_0"
-+0x400ea45b = "KEY_AUDIO"
-+0x400e649b = "KEY_SUBTITLE"
-+0x400eb04f = "KEY_PREVIOUS"
-+0x400e8877 = "KEY_NEXT"
-+0x400e48b7 = "KEY_FASTREVERSE"
-+0x400ea857 = "KEY_FASTFORWARD"
-+0x400ec837 = "KEY_STOP"
-+0x400e28d7 = "KEY_PLAY"
-+0x400e4cb3 = "KEY_PAUSE"
-+# disc menu
-+0x400eb847 = "KEY_ROOT_MENU" 
-+0x400e6897 = "KEY_MENU"
-+# title menu/popup
-+0x400e04fb = "KEY_TITLE"
-+# tools
-+0x400e5ca3 = "KEY_CONFIG"
-+0x400e7887 = "KEY_INFO"
-+0x400e18e7 = "KEY_UP"
-+0x400ed827 = "KEY_LEFT"
-+0x400e58a7 = "KEY_RIGHT"
-+0x400e9867 = "KEY_DOWN"
-+0x400e38c7 = "KEY_ENTER"
-+0x400ee817 = "KEY_ESC"
-+0x400ed42b = "KEY_EXIT"
-+0x400e847b = "KEY_RED"
-+0x400e44bb = "KEY_GREEN"
-+0x400ec43b = "KEY_YELLOW"
-+0x400e24db = "KEY_BLUE"
-+# smart/hub
-+0x400e1ce3 = "KEY_VENDOR"
-+0x400ebc43 = "KEY_SEARCH"
-+0x400ee41b = "KEY_MEDIA_REPEAT"
--- 
-2.24.1
-
+Hello!
+I=E2=80=99m=20an=20SEO=20manager=20at=20Bzadverts.com.=20Having=20visited=
+=20your=20website,=20I=20would=20like=20to=20say=20that=20it=20is=20very=20=
+informative=20and=20well-organized.=20
+Actually,=20I=E2=80=99m=20writing=20to=20ask=20about=20some=20advert=20oppo=
+rtunities=20you=20offer.
+I=E2=80=99m=20greatly=20interested=20in=20
+=E2=80=A2=09guest=20posts
+=E2=80=A2=09link=20insertion=20(in=20the=20existing=20article)
+=E2=80=A2=09homepage=20link=20placement
+=E2=80=A2=09banners
+Do=20you=20have=20a=20price-list=20for=20these=20kinds=20of=20advertising?=
+=20I=E2=80=99m=20interested=20in=20both=20permanent=20placement=20and=20mon=
+thly.
+If=20you=20have=20any=20other=20online=20platforms=20for=20advertising,=20I=
+=20will=20gladly=20consider=20them=20too.
+Hope=20to=20hear=20from=20you=20soon!
