@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50A5FC35247
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6586C3524D
 	for <linux-media@archiver.kernel.org>; Mon,  3 Feb 2020 11:42:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 121E62080D
+	by mail.kernel.org (Postfix) with ESMTP id 738EA2080D
 	for <linux-media@archiver.kernel.org>; Mon,  3 Feb 2020 11:42:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="RwpuE+RU"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Y6nIk3IX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727044AbgBCLmc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727256AbgBCLmc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 3 Feb 2020 06:42:32 -0500
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:33265 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726884AbgBCLmb (ORCPT
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:44019 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727170AbgBCLmc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 Feb 2020 06:42:31 -0500
+        Mon, 3 Feb 2020 06:42:32 -0500
 Received: from tschai.fritz.box ([46.9.235.248])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id ya7UiS6YMn7E5ya7Yi3UgY; Mon, 03 Feb 2020 12:42:28 +0100
+        id ya7UiS6YMn7E5ya7Zi3Uh0; Mon, 03 Feb 2020 12:42:29 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1580730148; bh=6xg/da71Bcr3KtlkYrCee9nwT4VlLKmaUurtBuZcRJ0=;
+        t=1580730149; bh=Ua1oFW4PVBSN0rXHqBcPSN7yFXpAVY2c/p5bksKDkK8=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=RwpuE+RUZK9H3WNzKacaHNsO/OD4P427jYu7cIhvlFhaxQU7YSxKdgl0Qh00150N6
-         kSYa/gyo8VnynT17z+EiZgIBzqiS9RgMkH7RaIiBkfS6/+pF8Koi7SYSGNVZKujVmH
-         seYn58dkWfUi21oRDiY5MiU7AIiJSOE7R3xxMdFldYRLyzgTo9QQCIoQveEptE88fk
-         0zDOufLEgkQ3Njmx5npQuTXyZdYhoY75XMZ7yJrPMDzNv6VwnuWSx/eoqbZK26cP32
-         QMsE6D+/QTmFFt2nDr9decmqtd5R941al9tiZy5CopbxiJaGGzqS8kozKZj0MXCCFY
-         0XJx75uw5cY+w==
+        b=Y6nIk3IXMo5OKS3AZjhXx/IoXndh+HdJogGG0Z/PNfdyy9u66TkRqRR4/rHSIbcKW
+         k8DwiIPzrnMzAAw3aowANWlU54OkOVz02LrG7A0m5ZfN1omVNHesjgKMiXIfLhblvg
+         Vl81a7eGxvqQMFtxEru1WEUPZOgiqnsNT44aCRa1rFv8HSZEFvrr08XIMb0CxYyGTn
+         NuuDmGECSdBANfblCSPLIkeSeKc1R79n21ec6xesByRMoqWcuH7MTprUpnVTDOL0Lg
+         9Vy3Dt3bnkrszMN6aB3Mra8dn3f451AYdoI4sXuqgPY0cygSyhyp3uH+ecxHWjYatO
+         afuBMxYL8n0kQ==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 06/11] media/usb: rename VFL_TYPE_GRABBER to _VIDEO
-Date:   Mon,  3 Feb 2020 12:41:14 +0100
-Message-Id: <20200203114119.1177490-7-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 09/11] media/pci: rename VFL_TYPE_GRABBER to _VIDEO
+Date:   Mon,  3 Feb 2020 12:41:17 +0100
+Message-Id: <20200203114119.1177490-10-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20200203114119.1177490-1-hverkuil-cisco@xs4all.nl>
 References: <20200203114119.1177490-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfBlm7j4ipVFsMKZB5UP8rL6vsDJFKc+XUHKEXnXCviY/Cv3BJy3qjHKnit9fCljxAR0+Nwtb7KTuELdz7IrElv6I9eyk4LfVVXdnN9FlC5bq5/fVzAvR
- Yrr5Kcanwk8MeQeVh7T2woIPtqPgogRHAwlMBwWmbREFH3aFAwQyQJjUIU7BwMjtx/r2l5ziK7DQNtXN0m4BFuMoYfsD6DFVn5vopZJUqrBKh96IK4QNQTI7
+X-CMAE-Envelope: MS4wfNA7tlWQO9+VYXzSmWAQtZnLv9cm1mfpXXL3Diz9gMU3P6deIqCz8FLWdIPuuYQVnddVmc7sYMQIaZKq5HC/CgUtOtvlz0LIA4qdCtjpSDk4ZBIZJKcQ
+ XsJTeLs02zjKb5qacGz/PciiWvcDaWM2kKtlfF+4h4g1cVPUEyWvSIIaM/bEzN58hNVfPVjM0PZK2uHeLyN1cIAAoqMqbbKDkZ0wRFMiST/4p35r+B6TYQ/S
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -58,360 +58,465 @@ other types.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/usb/au0828/au0828-video.c       |  4 ++--
- drivers/media/usb/cpia2/cpia2_v4l.c           |  2 +-
- drivers/media/usb/cx231xx/cx231xx-417.c       |  2 +-
- drivers/media/usb/cx231xx/cx231xx-video.c     |  2 +-
- drivers/media/usb/dvb-usb/cxusb-analog.c      | 12 ++++++------
- drivers/media/usb/em28xx/em28xx-video.c       |  4 ++--
- drivers/media/usb/go7007/go7007-v4l2.c        |  2 +-
- drivers/media/usb/gspca/gspca.c               |  2 +-
- drivers/media/usb/hdpvr/hdpvr-video.c         |  2 +-
- drivers/media/usb/pvrusb2/pvrusb2-v4l2.c      |  4 ++--
- drivers/media/usb/pwc/pwc-if.c                |  2 +-
- drivers/media/usb/s2255/s2255drv.c            |  4 ++--
- drivers/media/usb/stk1160/stk1160-v4l.c       |  2 +-
- drivers/media/usb/stkwebcam/stk-webcam.c      |  2 +-
- drivers/media/usb/tm6000/tm6000-video.c       |  4 ++--
- drivers/media/usb/usbtv/usbtv-video.c         |  2 +-
- drivers/media/usb/usbvision/usbvision-video.c |  2 +-
- drivers/media/usb/uvc/uvc_driver.c            |  2 +-
- drivers/media/usb/zr364xx/zr364xx.c           |  2 +-
- 19 files changed, 29 insertions(+), 29 deletions(-)
+ drivers/media/pci/bt8xx/bttv-driver.c          |  4 ++--
+ drivers/media/pci/cobalt/cobalt-v4l2.c         |  2 +-
+ drivers/media/pci/cx18/cx18-streams.c          | 12 ++++++------
+ drivers/media/pci/cx23885/cx23885-417.c        |  2 +-
+ drivers/media/pci/cx23885/cx23885-video.c      |  2 +-
+ drivers/media/pci/cx25821/cx25821-video.c      |  2 +-
+ drivers/media/pci/cx88/cx88-blackbird.c        |  2 +-
+ drivers/media/pci/cx88/cx88-video.c            |  2 +-
+ drivers/media/pci/dt3155/dt3155.c              |  2 +-
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c       |  2 +-
+ drivers/media/pci/ivtv/ivtv-streams.c          | 12 ++++++------
+ drivers/media/pci/meye/meye.c                  |  2 +-
+ drivers/media/pci/saa7134/saa7134-core.c       |  2 +-
+ drivers/media/pci/saa7134/saa7134-empress.c    |  2 +-
+ drivers/media/pci/saa7146/hexium_gemini.c      |  2 +-
+ drivers/media/pci/saa7146/hexium_orion.c       |  2 +-
+ drivers/media/pci/saa7146/mxb.c                |  2 +-
+ drivers/media/pci/saa7164/saa7164-encoder.c    |  2 +-
+ drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c |  2 +-
+ drivers/media/pci/solo6x10/solo6x10-v4l2.c     |  2 +-
+ drivers/media/pci/sta2x11/sta2x11_vip.c        |  2 +-
+ drivers/media/pci/ttpci/av7110_v4l.c           |  2 +-
+ drivers/media/pci/ttpci/budget-av.c            |  2 +-
+ drivers/media/pci/tw5864/tw5864-video.c        |  2 +-
+ drivers/media/pci/tw68/tw68-video.c            |  2 +-
+ drivers/media/pci/tw686x/tw686x-video.c        |  2 +-
+ 26 files changed, 37 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/media/usb/au0828/au0828-video.c b/drivers/media/usb/au0828/au0828-video.c
-index d1895334cbbf..51b8d14fb4dc 100644
---- a/drivers/media/usb/au0828/au0828-video.c
-+++ b/drivers/media/usb/au0828/au0828-video.c
-@@ -1042,7 +1042,7 @@ static int au0828_v4l2_close(struct file *filp)
- 		dev->streaming_users, dev->users);
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index a359da7773a9..9144f795fb93 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -2964,7 +2964,7 @@ static int bttv_open(struct file *file)
  
- 	mutex_lock(&dev->lock);
--	if (vdev->vfl_type == VFL_TYPE_GRABBER && dev->vid_timeout_running) {
-+	if (vdev->vfl_type == VFL_TYPE_VIDEO && dev->vid_timeout_running) {
- 		/* Cancel timeout thread in case they didn't call streamoff */
- 		dev->vid_timeout_running = 0;
- 		del_timer_sync(&dev->vid_timeout);
-@@ -2007,7 +2007,7 @@ int au0828_analog_register(struct au0828_dev *dev,
+ 	dprintk("open dev=%s\n", video_device_node_name(vdev));
  
- 	/* Register the v4l2 device */
- 	video_set_drvdata(&dev->vdev, dev);
--	retval = video_register_device(&dev->vdev, VFL_TYPE_GRABBER, -1);
-+	retval = video_register_device(&dev->vdev, VFL_TYPE_VIDEO, -1);
- 	if (retval != 0) {
- 		dprintk(1, "unable to register video device (error = %d).\n",
- 			retval);
-diff --git a/drivers/media/usb/cpia2/cpia2_v4l.c b/drivers/media/usb/cpia2/cpia2_v4l.c
-index 9d3d05125d7b..e488e7870f42 100644
---- a/drivers/media/usb/cpia2/cpia2_v4l.c
-+++ b/drivers/media/usb/cpia2/cpia2_v4l.c
-@@ -1134,7 +1134,7 @@ int cpia2_register_camera(struct camera_data *cam)
- 	reset_camera_struct_v4l(cam);
+-	if (vdev->vfl_type == VFL_TYPE_GRABBER) {
++	if (vdev->vfl_type == VFL_TYPE_VIDEO) {
+ 		type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+ 	} else if (vdev->vfl_type == VFL_TYPE_VBI) {
+ 		type = V4L2_BUF_TYPE_VBI_CAPTURE;
+@@ -3905,7 +3905,7 @@ static int bttv_register_video(struct bttv *btv)
+ 	if (no_overlay <= 0)
+ 		btv->video_dev.device_caps |= V4L2_CAP_VIDEO_OVERLAY;
  
- 	/* register v4l device */
--	if (video_register_device(&cam->vdev, VFL_TYPE_GRABBER, video_nr) < 0) {
-+	if (video_register_device(&cam->vdev, VFL_TYPE_VIDEO, video_nr) < 0) {
- 		ERR("video_register_device failed\n");
- 		return -ENODEV;
- 	}
-diff --git a/drivers/media/usb/cx231xx/cx231xx-417.c b/drivers/media/usb/cx231xx/cx231xx-417.c
-index 1aec4459f50a..b0cd51134654 100644
---- a/drivers/media/usb/cx231xx/cx231xx-417.c
-+++ b/drivers/media/usb/cx231xx/cx231xx-417.c
-@@ -1790,7 +1790,7 @@ int cx231xx_417_register(struct cx231xx *dev)
- 	dev->v4l_device.queue = q;
+-	if (video_register_device(&btv->video_dev, VFL_TYPE_GRABBER,
++	if (video_register_device(&btv->video_dev, VFL_TYPE_VIDEO,
+ 				  video_nr[btv->c.nr]) < 0)
+ 		goto err;
+ 	pr_info("%d: registered device %s\n",
+diff --git a/drivers/media/pci/cobalt/cobalt-v4l2.c b/drivers/media/pci/cobalt/cobalt-v4l2.c
+index c5207501d5e0..0ff37496c9ab 100644
+--- a/drivers/media/pci/cobalt/cobalt-v4l2.c
++++ b/drivers/media/pci/cobalt/cobalt-v4l2.c
+@@ -1272,7 +1272,7 @@ static int cobalt_node_register(struct cobalt *cobalt, int node)
+ 	video_set_drvdata(vdev, s);
+ 	ret = vb2_queue_init(q);
+ 	if (!s->is_audio && ret == 0)
+-		ret = video_register_device(vdev, VFL_TYPE_GRABBER, -1);
++		ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
+ 	else if (!s->is_dummy)
+ 		ret = cobalt_alsa_init(s);
  
- 	err = video_register_device(&dev->v4l_device,
+diff --git a/drivers/media/pci/cx18/cx18-streams.c b/drivers/media/pci/cx18/cx18-streams.c
+index b79718519b9b..3178df3c4922 100644
+--- a/drivers/media/pci/cx18/cx18-streams.c
++++ b/drivers/media/pci/cx18/cx18-streams.c
+@@ -48,19 +48,19 @@ static struct {
+ } cx18_stream_info[] = {
+ 	{	/* CX18_ENC_STREAM_TYPE_MPG */
+ 		"encoder MPEG",
+-		VFL_TYPE_GRABBER, 0,
++		VFL_TYPE_VIDEO, 0,
+ 		PCI_DMA_FROMDEVICE,
+ 		V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE |
+ 		V4L2_CAP_AUDIO | V4L2_CAP_TUNER
+ 	},
+ 	{	/* CX18_ENC_STREAM_TYPE_TS */
+ 		"TS",
+-		VFL_TYPE_GRABBER, -1,
++		VFL_TYPE_VIDEO, -1,
+ 		PCI_DMA_FROMDEVICE,
+ 	},
+ 	{	/* CX18_ENC_STREAM_TYPE_YUV */
+ 		"encoder YUV",
+-		VFL_TYPE_GRABBER, CX18_V4L2_ENC_YUV_OFFSET,
++		VFL_TYPE_VIDEO, CX18_V4L2_ENC_YUV_OFFSET,
+ 		PCI_DMA_FROMDEVICE,
+ 		V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE |
+ 		V4L2_CAP_STREAMING | V4L2_CAP_AUDIO | V4L2_CAP_TUNER
+@@ -74,13 +74,13 @@ static struct {
+ 	},
+ 	{	/* CX18_ENC_STREAM_TYPE_PCM */
+ 		"encoder PCM audio",
+-		VFL_TYPE_GRABBER, CX18_V4L2_ENC_PCM_OFFSET,
++		VFL_TYPE_VIDEO, CX18_V4L2_ENC_PCM_OFFSET,
+ 		PCI_DMA_FROMDEVICE,
+ 		V4L2_CAP_TUNER | V4L2_CAP_AUDIO | V4L2_CAP_READWRITE,
+ 	},
+ 	{	/* CX18_ENC_STREAM_TYPE_IDX */
+ 		"encoder IDX",
+-		VFL_TYPE_GRABBER, -1,
++		VFL_TYPE_VIDEO, -1,
+ 		PCI_DMA_FROMDEVICE,
+ 	},
+ 	{	/* CX18_ENC_STREAM_TYPE_RAD */
+@@ -434,7 +434,7 @@ static int cx18_reg_dev(struct cx18 *cx, int type)
+ 	name = video_device_node_name(&s->video_dev);
+ 
+ 	switch (vfl_type) {
+-	case VFL_TYPE_GRABBER:
++	case VFL_TYPE_VIDEO:
+ 		CX18_INFO("Registered device %s for %s (%d x %d.%02d kB)\n",
+ 			  name, s->name, cx->stream_buffers[type],
+ 			  cx->stream_buf_size[type] / 1024,
+diff --git a/drivers/media/pci/cx23885/cx23885-417.c b/drivers/media/pci/cx23885/cx23885-417.c
+index 2327fe612610..434677bd4ad1 100644
+--- a/drivers/media/pci/cx23885/cx23885-417.c
++++ b/drivers/media/pci/cx23885/cx23885-417.c
+@@ -1545,7 +1545,7 @@ int cx23885_417_register(struct cx23885_dev *dev)
+ 	if (dev->tuner_type != TUNER_ABSENT)
+ 		dev->v4l_device->device_caps |= V4L2_CAP_TUNER;
+ 	err = video_register_device(dev->v4l_device,
 -		VFL_TYPE_GRABBER, -1);
 +		VFL_TYPE_VIDEO, -1);
  	if (err < 0) {
- 		dprintk(3, "%s: can't register mpeg device\n", dev->name);
- 		v4l2_ctrl_handler_free(&dev->mpeg_ctrl_handler.hdl);
-diff --git a/drivers/media/usb/cx231xx/cx231xx-video.c b/drivers/media/usb/cx231xx/cx231xx-video.c
-index 69abafaebbf3..8bff7d8a0310 100644
---- a/drivers/media/usb/cx231xx/cx231xx-video.c
-+++ b/drivers/media/usb/cx231xx/cx231xx-video.c
-@@ -1785,7 +1785,7 @@ int cx231xx_register_analog_devices(struct cx231xx *dev)
- 		dev->vdev.device_caps |= V4L2_CAP_TUNER;
+ 		pr_info("%s: can't register mpeg device\n", dev->name);
+ 		return err;
+diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
+index 7fc408ee4934..000c108b94fd 100644
+--- a/drivers/media/pci/cx23885/cx23885-video.c
++++ b/drivers/media/pci/cx23885/cx23885-video.c
+@@ -1304,7 +1304,7 @@ int cx23885_video_register(struct cx23885_dev *dev)
+ 				      V4L2_CAP_AUDIO | V4L2_CAP_VIDEO_CAPTURE;
+ 	if (dev->tuner_type != TUNER_ABSENT)
+ 		dev->video_dev->device_caps |= V4L2_CAP_TUNER;
+-	err = video_register_device(dev->video_dev, VFL_TYPE_GRABBER,
++	err = video_register_device(dev->video_dev, VFL_TYPE_VIDEO,
+ 				    video_nr[dev->nr]);
+ 	if (err < 0) {
+ 		pr_info("%s: can't register video device\n",
+diff --git a/drivers/media/pci/cx25821/cx25821-video.c b/drivers/media/pci/cx25821/cx25821-video.c
+index a10261da0db6..1b80c990cb94 100644
+--- a/drivers/media/pci/cx25821/cx25821-video.c
++++ b/drivers/media/pci/cx25821/cx25821-video.c
+@@ -757,7 +757,7 @@ int cx25821_video_register(struct cx25821_dev *dev)
+ 		snprintf(vdev->name, sizeof(vdev->name), "%s #%d", dev->name, i);
+ 		video_set_drvdata(vdev, chan);
  
- 	/* register v4l2 video video_device */
--	ret = video_register_device(&dev->vdev, VFL_TYPE_GRABBER,
-+	ret = video_register_device(&dev->vdev, VFL_TYPE_VIDEO,
- 				    video_nr[dev->devno]);
- 	if (ret) {
- 		dev_err(dev->dev,
-diff --git a/drivers/media/usb/dvb-usb/cxusb-analog.c b/drivers/media/usb/dvb-usb/cxusb-analog.c
-index 0699f718d052..001cae648797 100644
---- a/drivers/media/usb/dvb-usb/cxusb-analog.c
-+++ b/drivers/media/usb/dvb-usb/cxusb-analog.c
-@@ -1223,7 +1223,7 @@ static int cxusb_medion_g_tuner(struct file *file, void *fh,
- 	if (tuner->index != 0)
- 		return -EINVAL;
+-		err = video_register_device(vdev, VFL_TYPE_GRABBER,
++		err = video_register_device(vdev, VFL_TYPE_VIDEO,
+ 					    video_nr[dev->nr]);
  
--	if (vdev->vfl_type == VFL_TYPE_GRABBER)
-+	if (vdev->vfl_type == VFL_TYPE_VIDEO)
- 		tuner->type = V4L2_TUNER_ANALOG_TV;
- 	else
- 		tuner->type = V4L2_TUNER_RADIO;
-@@ -1259,7 +1259,7 @@ static int cxusb_medion_g_tuner(struct file *file, void *fh,
- 	if (ret != 0)
- 		return ret;
- 
--	if (vdev->vfl_type == VFL_TYPE_GRABBER)
-+	if (vdev->vfl_type == VFL_TYPE_VIDEO)
- 		strscpy(tuner->name, "TV tuner", sizeof(tuner->name));
- 	else
- 		strscpy(tuner->name, "Radio tuner", sizeof(tuner->name));
-@@ -1292,7 +1292,7 @@ static int cxusb_medion_s_tuner(struct file *file, void *fh,
- 	 * make sure that cx25840 is in a correct TV / radio mode,
- 	 * since calls above may have changed it for tuner / IF demod
- 	 */
--	if (vdev->vfl_type == VFL_TYPE_GRABBER)
-+	if (vdev->vfl_type == VFL_TYPE_VIDEO)
- 		v4l2_subdev_call(cxdev->cx25840, video, s_std, cxdev->norm);
- 	else
- 		v4l2_subdev_call(cxdev->cx25840, tuner, s_radio);
-@@ -1335,7 +1335,7 @@ static int cxusb_medion_s_frequency(struct file *file, void *fh,
- 	 * make sure that cx25840 is in a correct TV / radio mode,
- 	 * since calls above may have changed it for tuner / IF demod
- 	 */
--	if (vdev->vfl_type == VFL_TYPE_GRABBER)
-+	if (vdev->vfl_type == VFL_TYPE_VIDEO)
- 		v4l2_subdev_call(cxdev->cx25840, video, s_std, cxdev->norm);
- 	else
- 		v4l2_subdev_call(cxdev->cx25840, tuner, s_radio);
-@@ -1564,7 +1564,7 @@ static int cxusb_videoradio_release(struct file *f)
- 
- 	cxusb_vprintk(dvbdev, OPS, "got release\n");
- 
--	if (vdev->vfl_type == VFL_TYPE_GRABBER)
-+	if (vdev->vfl_type == VFL_TYPE_VIDEO)
- 		ret = vb2_fop_release(f);
- 	else
- 		ret = v4l2_fh_release(f);
-@@ -1663,7 +1663,7 @@ static int cxusb_medion_register_analog_video(struct dvb_usb_device *dvbdev)
- 	cxdev->videodev->lock = &cxdev->dev_lock;
- 	video_set_drvdata(cxdev->videodev, dvbdev);
- 
--	ret = video_register_device(cxdev->videodev, VFL_TYPE_GRABBER, -1);
-+	ret = video_register_device(cxdev->videodev, VFL_TYPE_VIDEO, -1);
- 	if (ret) {
- 		dev_err(&dvbdev->udev->dev,
- 			"video device register failed, ret = %d\n", ret);
-diff --git a/drivers/media/usb/em28xx/em28xx-video.c b/drivers/media/usb/em28xx/em28xx-video.c
-index b0f7390e4b4f..6b84c3413e83 100644
---- a/drivers/media/usb/em28xx/em28xx-video.c
-+++ b/drivers/media/usb/em28xx/em28xx-video.c
-@@ -2141,7 +2141,7 @@ static int em28xx_v4l2_open(struct file *filp)
- 	int ret;
- 
- 	switch (vdev->vfl_type) {
--	case VFL_TYPE_GRABBER:
-+	case VFL_TYPE_VIDEO:
- 		fh_type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
- 		break;
- 	case VFL_TYPE_VBI:
-@@ -2789,7 +2789,7 @@ static int em28xx_v4l2_init(struct em28xx *dev)
- 	}
- 
- 	/* register v4l2 video video_device */
--	ret = video_register_device(&v4l2->vdev, VFL_TYPE_GRABBER,
-+	ret = video_register_device(&v4l2->vdev, VFL_TYPE_VIDEO,
- 				    video_nr[dev->devno]);
- 	if (ret) {
- 		dev_err(&dev->intf->dev,
-diff --git a/drivers/media/usb/go7007/go7007-v4l2.c b/drivers/media/usb/go7007/go7007-v4l2.c
-index 0b3d185f3cb0..b2edc4deaca3 100644
---- a/drivers/media/usb/go7007/go7007-v4l2.c
-+++ b/drivers/media/usb/go7007/go7007-v4l2.c
-@@ -1138,7 +1138,7 @@ int go7007_v4l2_init(struct go7007 *go)
- 	go7007_s_input(go);
- 	if (go->board_info->sensor_flags & GO7007_SENSOR_TV)
- 		go7007_s_std(go);
--	rv = video_register_device(vdev, VFL_TYPE_GRABBER, -1);
-+	rv = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
- 	if (rv < 0)
- 		return rv;
- 	dev_info(go->dev, "registered device %s [v4l2]\n",
-diff --git a/drivers/media/usb/gspca/gspca.c b/drivers/media/usb/gspca/gspca.c
-index c1b307bbe540..0566e00d6fea 100644
---- a/drivers/media/usb/gspca/gspca.c
-+++ b/drivers/media/usb/gspca/gspca.c
-@@ -1555,7 +1555,7 @@ int gspca_dev_probe2(struct usb_interface *intf,
- 
- 	/* init video stuff */
- 	ret = video_register_device(&gspca_dev->vdev,
--				  VFL_TYPE_GRABBER,
-+				  VFL_TYPE_VIDEO,
- 				  -1);
- 	if (ret < 0) {
- 		pr_err("video_register_device err %d\n", ret);
-diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
-index bad71d863d39..563128d11731 100644
---- a/drivers/media/usb/hdpvr/hdpvr-video.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-video.c
-@@ -1238,7 +1238,7 @@ int hdpvr_register_videodev(struct hdpvr_device *dev, struct device *parent,
- 	dev->video_dev.v4l2_dev = &dev->v4l2_dev;
- 	video_set_drvdata(&dev->video_dev, dev);
- 
--	res = video_register_device(&dev->video_dev, VFL_TYPE_GRABBER, devnum);
-+	res = video_register_device(&dev->video_dev, VFL_TYPE_VIDEO, devnum);
- 	if (res < 0) {
- 		v4l2_err(&dev->v4l2_dev, "video_device registration failed\n");
- 		goto error;
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-index eaa08c7999d4..9657c1883311 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-@@ -1196,7 +1196,7 @@ static void pvr2_v4l2_dev_init(struct pvr2_v4l2_dev *dip,
- 	hdw = vp->channel.mc_head->hdw;
- 	dip->v4l_type = v4l_type;
- 	switch (v4l_type) {
--	case VFL_TYPE_GRABBER:
-+	case VFL_TYPE_VIDEO:
- 		dip->stream = &vp->channel.mc_head->video_stream;
- 		dip->config = pvr2_config_mpeg;
- 		dip->minor_type = pvr2_v4l_type_video;
-@@ -1276,7 +1276,7 @@ struct pvr2_v4l2 *pvr2_v4l2_create(struct pvr2_context *mnp)
- 	/* register streams */
- 	vp->dev_video = kzalloc(sizeof(*vp->dev_video),GFP_KERNEL);
- 	if (!vp->dev_video) goto fail;
--	pvr2_v4l2_dev_init(vp->dev_video,vp,VFL_TYPE_GRABBER);
-+	pvr2_v4l2_dev_init(vp->dev_video,vp,VFL_TYPE_VIDEO);
- 	if (pvr2_hdw_get_input_available(vp->channel.mc_head->hdw) &
- 	    (1 << PVR2_CVAL_INPUT_RADIO)) {
- 		vp->dev_radio = kzalloc(sizeof(*vp->dev_radio),GFP_KERNEL);
-diff --git a/drivers/media/usb/pwc/pwc-if.c b/drivers/media/usb/pwc/pwc-if.c
-index 9b76cf133d52..d57b8b786506 100644
---- a/drivers/media/usb/pwc/pwc-if.c
-+++ b/drivers/media/usb/pwc/pwc-if.c
-@@ -1116,7 +1116,7 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id
- 	pdev->vdev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING |
- 				 V4L2_CAP_READWRITE;
- 
--	rc = video_register_device(&pdev->vdev, VFL_TYPE_GRABBER, -1);
-+	rc = video_register_device(&pdev->vdev, VFL_TYPE_VIDEO, -1);
- 	if (rc < 0) {
- 		PWC_ERROR("Failed to register as video device (%d).\n", rc);
- 		goto err_unregister_v4l2_dev;
-diff --git a/drivers/media/usb/s2255/s2255drv.c b/drivers/media/usb/s2255/s2255drv.c
-index 329ec8089592..4af55e2478be 100644
---- a/drivers/media/usb/s2255/s2255drv.c
-+++ b/drivers/media/usb/s2255/s2255drv.c
-@@ -1649,11 +1649,11 @@ static int s2255_probe_v4l(struct s2255_dev *dev)
- 		video_set_drvdata(&vc->vdev, vc);
- 		if (video_nr == -1)
- 			ret = video_register_device(&vc->vdev,
--						    VFL_TYPE_GRABBER,
-+						    VFL_TYPE_VIDEO,
- 						    video_nr);
- 		else
- 			ret = video_register_device(&vc->vdev,
--						    VFL_TYPE_GRABBER,
-+						    VFL_TYPE_VIDEO,
- 						    cur_nr + i);
- 
- 		if (ret) {
-diff --git a/drivers/media/usb/stk1160/stk1160-v4l.c b/drivers/media/usb/stk1160/stk1160-v4l.c
-index bcd14c66e8df..6a4eb616d516 100644
---- a/drivers/media/usb/stk1160/stk1160-v4l.c
-+++ b/drivers/media/usb/stk1160/stk1160-v4l.c
-@@ -830,7 +830,7 @@ int stk1160_video_register(struct stk1160 *dev)
- 			dev->norm);
- 
- 	video_set_drvdata(&dev->vdev, dev);
--	rc = video_register_device(&dev->vdev, VFL_TYPE_GRABBER, -1);
-+	rc = video_register_device(&dev->vdev, VFL_TYPE_VIDEO, -1);
- 	if (rc < 0) {
- 		stk1160_err("video_register_device failed (%d)\n", rc);
- 		return rc;
-diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
-index b22501f76b78..a45d464427c4 100644
---- a/drivers/media/usb/stkwebcam/stk-webcam.c
-+++ b/drivers/media/usb/stkwebcam/stk-webcam.c
-@@ -1254,7 +1254,7 @@ static int stk_register_video_device(struct stk_camera *dev)
- 	dev->vdev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE |
- 				V4L2_CAP_STREAMING;
- 	video_set_drvdata(&dev->vdev, dev);
--	err = video_register_device(&dev->vdev, VFL_TYPE_GRABBER, -1);
-+	err = video_register_device(&dev->vdev, VFL_TYPE_VIDEO, -1);
+ 		if (err < 0)
+diff --git a/drivers/media/pci/cx88/cx88-blackbird.c b/drivers/media/pci/cx88/cx88-blackbird.c
+index d3da7f4297af..fa4ca002ed19 100644
+--- a/drivers/media/pci/cx88/cx88-blackbird.c
++++ b/drivers/media/pci/cx88/cx88-blackbird.c
+@@ -1138,7 +1138,7 @@ static int blackbird_register_video(struct cx8802_dev *dev)
+ 				    V4L2_CAP_VIDEO_CAPTURE;
+ 	if (dev->core->board.tuner_type != UNSET)
+ 		dev->mpeg_dev.device_caps |= V4L2_CAP_TUNER;
+-	err = video_register_device(&dev->mpeg_dev, VFL_TYPE_GRABBER, -1);
++	err = video_register_device(&dev->mpeg_dev, VFL_TYPE_VIDEO, -1);
+ 	if (err < 0) {
+ 		pr_info("can't register mpeg device\n");
+ 		return err;
+diff --git a/drivers/media/pci/cx88/cx88-video.c b/drivers/media/pci/cx88/cx88-video.c
+index b8abcd550604..6aabc45aa93c 100644
+--- a/drivers/media/pci/cx88/cx88-video.c
++++ b/drivers/media/pci/cx88/cx88-video.c
+@@ -1451,7 +1451,7 @@ static int cx8800_initdev(struct pci_dev *pci_dev,
+ 				     V4L2_CAP_VIDEO_CAPTURE;
+ 	if (core->board.tuner_type != UNSET)
+ 		dev->video_dev.device_caps |= V4L2_CAP_TUNER;
+-	err = video_register_device(&dev->video_dev, VFL_TYPE_GRABBER,
++	err = video_register_device(&dev->video_dev, VFL_TYPE_VIDEO,
+ 				    video_nr[core->nr]);
+ 	if (err < 0) {
+ 		pr_err("can't register video device\n");
+diff --git a/drivers/media/pci/dt3155/dt3155.c b/drivers/media/pci/dt3155/dt3155.c
+index 7480f0d3ad0f..82581aa5a2a3 100644
+--- a/drivers/media/pci/dt3155/dt3155.c
++++ b/drivers/media/pci/dt3155/dt3155.c
+@@ -550,7 +550,7 @@ static int dt3155_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 					IRQF_SHARED, DT3155_NAME, pd);
  	if (err)
- 		pr_err("v4l registration failed\n");
- 	else
-diff --git a/drivers/media/usb/tm6000/tm6000-video.c b/drivers/media/usb/tm6000/tm6000-video.c
-index c07a81a6cbe2..bfba06ea60e9 100644
---- a/drivers/media/usb/tm6000/tm6000-video.c
-+++ b/drivers/media/usb/tm6000/tm6000-video.c
-@@ -1300,7 +1300,7 @@ static int __tm6000_open(struct file *file)
- 		video_device_node_name(vdev));
+ 		goto err_iounmap;
+-	err = video_register_device(&pd->vdev, VFL_TYPE_GRABBER, -1);
++	err = video_register_device(&pd->vdev, VFL_TYPE_VIDEO, -1);
+ 	if (err)
+ 		goto err_free_irq;
+ 	dev_info(&pdev->dev, "/dev/video%i is ready\n", pd->vdev.minor);
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+index 1adfdc7ab0db..92f5eadf2c99 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+@@ -1647,7 +1647,7 @@ static int cio2_queue_init(struct cio2_device *cio2, struct cio2_queue *q)
+ 	vdev->queue = &q->vbq;
+ 	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE_MPLANE | V4L2_CAP_STREAMING;
+ 	video_set_drvdata(vdev, cio2);
+-	r = video_register_device(vdev, VFL_TYPE_GRABBER, -1);
++	r = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
+ 	if (r) {
+ 		dev_err(&cio2->pci_dev->dev,
+ 			"failed to register video device (%d)\n", r);
+diff --git a/drivers/media/pci/ivtv/ivtv-streams.c b/drivers/media/pci/ivtv/ivtv-streams.c
+index f7de9118f609..f04ee84bab5f 100644
+--- a/drivers/media/pci/ivtv/ivtv-streams.c
++++ b/drivers/media/pci/ivtv/ivtv-streams.c
+@@ -99,7 +99,7 @@ static struct {
+ } ivtv_stream_info[] = {
+ 	{	/* IVTV_ENC_STREAM_TYPE_MPG */
+ 		"encoder MPG",
+-		VFL_TYPE_GRABBER, 0,
++		VFL_TYPE_VIDEO, 0,
+ 		PCI_DMA_FROMDEVICE, 0,
+ 		V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_TUNER |
+ 			V4L2_CAP_AUDIO | V4L2_CAP_READWRITE,
+@@ -107,7 +107,7 @@ static struct {
+ 	},
+ 	{	/* IVTV_ENC_STREAM_TYPE_YUV */
+ 		"encoder YUV",
+-		VFL_TYPE_GRABBER, IVTV_V4L2_ENC_YUV_OFFSET,
++		VFL_TYPE_VIDEO, IVTV_V4L2_ENC_YUV_OFFSET,
+ 		PCI_DMA_FROMDEVICE, 0,
+ 		V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_TUNER |
+ 			V4L2_CAP_AUDIO | V4L2_CAP_READWRITE,
+@@ -123,7 +123,7 @@ static struct {
+ 	},
+ 	{	/* IVTV_ENC_STREAM_TYPE_PCM */
+ 		"encoder PCM",
+-		VFL_TYPE_GRABBER, IVTV_V4L2_ENC_PCM_OFFSET,
++		VFL_TYPE_VIDEO, IVTV_V4L2_ENC_PCM_OFFSET,
+ 		PCI_DMA_FROMDEVICE, 0,
+ 		V4L2_CAP_TUNER | V4L2_CAP_AUDIO | V4L2_CAP_READWRITE,
+ 		&ivtv_v4l2_enc_fops
+@@ -137,7 +137,7 @@ static struct {
+ 	},
+ 	{	/* IVTV_DEC_STREAM_TYPE_MPG */
+ 		"decoder MPG",
+-		VFL_TYPE_GRABBER, IVTV_V4L2_DEC_MPG_OFFSET,
++		VFL_TYPE_VIDEO, IVTV_V4L2_DEC_MPG_OFFSET,
+ 		PCI_DMA_TODEVICE, 0,
+ 		V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_AUDIO | V4L2_CAP_READWRITE,
+ 		&ivtv_v4l2_dec_fops
+@@ -158,7 +158,7 @@ static struct {
+ 	},
+ 	{	/* IVTV_DEC_STREAM_TYPE_YUV */
+ 		"decoder YUV",
+-		VFL_TYPE_GRABBER, IVTV_V4L2_DEC_YUV_OFFSET,
++		VFL_TYPE_VIDEO, IVTV_V4L2_DEC_YUV_OFFSET,
+ 		PCI_DMA_TODEVICE, 0,
+ 		V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_AUDIO | V4L2_CAP_READWRITE,
+ 		&ivtv_v4l2_dec_fops
+@@ -318,7 +318,7 @@ static int ivtv_reg_dev(struct ivtv *itv, int type)
+ 	name = video_device_node_name(&s->vdev);
  
- 	switch (vdev->vfl_type) {
+ 	switch (vfl_type) {
 -	case VFL_TYPE_GRABBER:
 +	case VFL_TYPE_VIDEO:
- 		type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+ 		IVTV_INFO("Registered device %s for %s (%d kB)\n",
+ 			name, s->name, itv->options.kilobytes[type]);
  		break;
- 	case VFL_TYPE_VBI:
-@@ -1639,7 +1639,7 @@ int tm6000_v4l2_register(struct tm6000_core *dev)
- 	INIT_LIST_HEAD(&dev->vidq.active);
- 	INIT_LIST_HEAD(&dev->vidq.queued);
+diff --git a/drivers/media/pci/meye/meye.c b/drivers/media/pci/meye/meye.c
+index 3a4c29bc0ba5..73e064e6f56d 100644
+--- a/drivers/media/pci/meye/meye.c
++++ b/drivers/media/pci/meye/meye.c
+@@ -1711,7 +1711,7 @@ static int meye_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
+ 	v4l2_ctrl_handler_setup(&meye.hdl);
+ 	meye.vdev.ctrl_handler = &meye.hdl;
  
--	ret = video_register_device(&dev->vfd, VFL_TYPE_GRABBER, video_nr);
-+	ret = video_register_device(&dev->vfd, VFL_TYPE_VIDEO, video_nr);
+-	if (video_register_device(&meye.vdev, VFL_TYPE_GRABBER,
++	if (video_register_device(&meye.vdev, VFL_TYPE_VIDEO,
+ 				  video_nr) < 0) {
+ 		v4l2_err(v4l2_dev, "video_register_device failed\n");
+ 		goto outvideoreg;
+diff --git a/drivers/media/pci/saa7134/saa7134-core.c b/drivers/media/pci/saa7134/saa7134-core.c
+index 2d582c02adbf..e4623ed2f831 100644
+--- a/drivers/media/pci/saa7134/saa7134-core.c
++++ b/drivers/media/pci/saa7134/saa7134-core.c
+@@ -1214,7 +1214,7 @@ static int saa7134_initdev(struct pci_dev *pci_dev,
+ 	if (saa7134_no_overlay <= 0)
+ 		dev->video_dev->device_caps |= V4L2_CAP_VIDEO_OVERLAY;
  
+-	err = video_register_device(dev->video_dev,VFL_TYPE_GRABBER,
++	err = video_register_device(dev->video_dev,VFL_TYPE_VIDEO,
+ 				    video_nr[dev->nr]);
+ 	if (err < 0) {
+ 		pr_info("%s: can't register video device\n",
+diff --git a/drivers/media/pci/saa7134/saa7134-empress.c b/drivers/media/pci/saa7134/saa7134-empress.c
+index cb65d345fd3e..8ad7879bd840 100644
+--- a/drivers/media/pci/saa7134/saa7134-empress.c
++++ b/drivers/media/pci/saa7134/saa7134-empress.c
+@@ -291,7 +291,7 @@ static int empress_init(struct saa7134_dev *dev)
+ 		dev->empress_dev->device_caps |= V4L2_CAP_TUNER;
+ 
+ 	video_set_drvdata(dev->empress_dev, dev);
+-	err = video_register_device(dev->empress_dev,VFL_TYPE_GRABBER,
++	err = video_register_device(dev->empress_dev,VFL_TYPE_VIDEO,
+ 				    empress_nr[dev->nr]);
+ 	if (err < 0) {
+ 		pr_info("%s: can't register video device\n",
+diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
+index f96226930670..2214c74bbbf1 100644
+--- a/drivers/media/pci/saa7146/hexium_gemini.c
++++ b/drivers/media/pci/saa7146/hexium_gemini.c
+@@ -289,7 +289,7 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
+ 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+ 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+ 	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
+-	ret = saa7146_register_device(&hexium->video_dev, dev, "hexium gemini", VFL_TYPE_GRABBER);
++	ret = saa7146_register_device(&hexium->video_dev, dev, "hexium gemini", VFL_TYPE_VIDEO);
  	if (ret < 0) {
- 		printk(KERN_INFO "%s: can't register video device\n",
-diff --git a/drivers/media/usb/usbtv/usbtv-video.c b/drivers/media/usb/usbtv/usbtv-video.c
-index 3d9284a09ee5..9f5553473d6e 100644
---- a/drivers/media/usb/usbtv/usbtv-video.c
-+++ b/drivers/media/usb/usbtv/usbtv-video.c
-@@ -940,7 +940,7 @@ int usbtv_video_init(struct usbtv *usbtv)
- 	usbtv->vdev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE |
- 				  V4L2_CAP_STREAMING;
- 	video_set_drvdata(&usbtv->vdev, usbtv);
--	ret = video_register_device(&usbtv->vdev, VFL_TYPE_GRABBER, -1);
-+	ret = video_register_device(&usbtv->vdev, VFL_TYPE_VIDEO, -1);
- 	if (ret < 0) {
- 		dev_warn(usbtv->dev, "Could not register video device\n");
- 		goto vdev_fail;
-diff --git a/drivers/media/usb/usbvision/usbvision-video.c b/drivers/media/usb/usbvision/usbvision-video.c
-index 5ca2c2f35fe2..3ea25fdcf767 100644
---- a/drivers/media/usb/usbvision/usbvision-video.c
-+++ b/drivers/media/usb/usbvision/usbvision-video.c
-@@ -1271,7 +1271,7 @@ static int usbvision_register_video(struct usb_usbvision *usbvision)
- 	if (usbvision->have_tuner)
- 		usbvision->vdev.device_caps |= V4L2_CAP_TUNER;
+ 		pr_err("cannot register capture v4l2 device. skipping.\n");
+ 		saa7146_vv_release(dev);
+diff --git a/drivers/media/pci/saa7146/hexium_orion.c b/drivers/media/pci/saa7146/hexium_orion.c
+index bf5e55348f15..39d14c179d22 100644
+--- a/drivers/media/pci/saa7146/hexium_orion.c
++++ b/drivers/media/pci/saa7146/hexium_orion.c
+@@ -362,7 +362,7 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
+ 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+ 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+ 	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
+-	if (0 != saa7146_register_device(&hexium->video_dev, dev, "hexium orion", VFL_TYPE_GRABBER)) {
++	if (0 != saa7146_register_device(&hexium->video_dev, dev, "hexium orion", VFL_TYPE_VIDEO)) {
+ 		pr_err("cannot register capture v4l2 device. skipping.\n");
+ 		return -1;
+ 	}
+diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
+index e6a71c17566d..129a1f8ebe1a 100644
+--- a/drivers/media/pci/saa7146/mxb.c
++++ b/drivers/media/pci/saa7146/mxb.c
+@@ -707,7 +707,7 @@ static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data
+ 	vv_data.vid_ops.vidioc_g_register = vidioc_g_register;
+ 	vv_data.vid_ops.vidioc_s_register = vidioc_s_register;
+ #endif
+-	if (saa7146_register_device(&mxb->video_dev, dev, "mxb", VFL_TYPE_GRABBER)) {
++	if (saa7146_register_device(&mxb->video_dev, dev, "mxb", VFL_TYPE_VIDEO)) {
+ 		ERR("cannot register capture v4l2 device. skipping.\n");
+ 		saa7146_vv_release(dev);
+ 		return -1;
+diff --git a/drivers/media/pci/saa7164/saa7164-encoder.c b/drivers/media/pci/saa7164/saa7164-encoder.c
+index 3fca7257a720..11e1eb6a6809 100644
+--- a/drivers/media/pci/saa7164/saa7164-encoder.c
++++ b/drivers/media/pci/saa7164/saa7164-encoder.c
+@@ -1087,7 +1087,7 @@ int saa7164_encoder_register(struct saa7164_port *port)
+ 	v4l2_ctrl_handler_setup(hdl);
+ 	video_set_drvdata(port->v4l_device, port);
+ 	result = video_register_device(port->v4l_device,
+-		VFL_TYPE_GRABBER, -1);
++		VFL_TYPE_VIDEO, -1);
+ 	if (result < 0) {
+ 		printk(KERN_INFO "%s: can't register mpeg device\n",
+ 			dev->name);
+diff --git a/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c b/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
+index 476d7f3b32d6..cbf85231b708 100644
+--- a/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
++++ b/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
+@@ -1304,7 +1304,7 @@ static struct solo_enc_dev *solo_enc_alloc(struct solo_dev *solo_dev,
+ 	solo_enc->vfd->queue = &solo_enc->vidq;
+ 	solo_enc->vfd->lock = &solo_enc->lock;
+ 	video_set_drvdata(solo_enc->vfd, solo_enc);
+-	ret = video_register_device(solo_enc->vfd, VFL_TYPE_GRABBER, nr);
++	ret = video_register_device(solo_enc->vfd, VFL_TYPE_VIDEO, nr);
+ 	if (ret < 0)
+ 		goto vdev_release;
  
--	if (video_register_device(&usbvision->vdev, VFL_TYPE_GRABBER, video_nr) < 0)
-+	if (video_register_device(&usbvision->vdev, VFL_TYPE_VIDEO, video_nr) < 0)
- 		goto err_exit;
- 	printk(KERN_INFO "USBVision[%d]: registered USBVision Video device %s [v4l2]\n",
- 	       usbvision->nr, video_device_node_name(&usbvision->vdev));
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 99883550375e..431d86e1c94b 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2014,7 +2014,7 @@ int uvc_register_video_device(struct uvc_device *dev,
- 	 */
- 	video_set_drvdata(vdev, stream);
+diff --git a/drivers/media/pci/solo6x10/solo6x10-v4l2.c b/drivers/media/pci/solo6x10/solo6x10-v4l2.c
+index 78792067e920..54434f3c428d 100644
+--- a/drivers/media/pci/solo6x10/solo6x10-v4l2.c
++++ b/drivers/media/pci/solo6x10/solo6x10-v4l2.c
+@@ -692,7 +692,7 @@ int solo_v4l2_init(struct solo_dev *solo_dev, unsigned nr)
+ 	while (erase_off(solo_dev))
+ 		/* Do nothing */;
  
--	ret = video_register_device(vdev, VFL_TYPE_GRABBER, -1);
-+	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
- 	if (ret < 0) {
- 		uvc_printk(KERN_ERR, "Failed to register %s device (%d).\n",
- 			   v4l2_type_names[type], ret);
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index 57dbcc8083bf..8c670934d920 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -1516,7 +1516,7 @@ static int zr364xx_probe(struct usb_interface *intf,
- 				    V4L2_FIELD_NONE,
- 				    sizeof(struct zr364xx_buffer), cam, &cam->lock);
- 
--	err = video_register_device(&cam->vdev, VFL_TYPE_GRABBER, -1);
-+	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
- 	if (err) {
- 		dev_err(&udev->dev, "video_register_device failed\n");
+-	ret = video_register_device(solo_dev->vfd, VFL_TYPE_GRABBER, nr);
++	ret = video_register_device(solo_dev->vfd, VFL_TYPE_VIDEO, nr);
+ 	if (ret < 0)
  		goto fail;
+ 
+diff --git a/drivers/media/pci/sta2x11/sta2x11_vip.c b/drivers/media/pci/sta2x11/sta2x11_vip.c
+index fd3de3bb0c89..798574cfad35 100644
+--- a/drivers/media/pci/sta2x11/sta2x11_vip.c
++++ b/drivers/media/pci/sta2x11/sta2x11_vip.c
+@@ -1069,7 +1069,7 @@ static int sta2x11_vip_init_one(struct pci_dev *pdev,
+ 	vip->video_dev.lock = &vip->v4l_lock;
+ 	video_set_drvdata(&vip->video_dev, vip);
+ 
+-	ret = video_register_device(&vip->video_dev, VFL_TYPE_GRABBER, -1);
++	ret = video_register_device(&vip->video_dev, VFL_TYPE_VIDEO, -1);
+ 	if (ret)
+ 		goto vrelease;
+ 
+diff --git a/drivers/media/pci/ttpci/av7110_v4l.c b/drivers/media/pci/ttpci/av7110_v4l.c
+index f3d6c3cdb872..cabe006658dd 100644
+--- a/drivers/media/pci/ttpci/av7110_v4l.c
++++ b/drivers/media/pci/ttpci/av7110_v4l.c
+@@ -831,7 +831,7 @@ int av7110_init_v4l(struct av7110 *av7110)
+ 	if (FW_VERSION(av7110->arm_app) < 0x2623)
+ 		vv_data->capabilities &= ~V4L2_CAP_SLICED_VBI_OUTPUT;
+ 
+-	if (saa7146_register_device(&av7110->v4l_dev, dev, "av7110", VFL_TYPE_GRABBER)) {
++	if (saa7146_register_device(&av7110->v4l_dev, dev, "av7110", VFL_TYPE_VIDEO)) {
+ 		ERR("cannot register capture device. skipping\n");
+ 		saa7146_vv_release(dev);
+ 		return -ENODEV;
+diff --git a/drivers/media/pci/ttpci/budget-av.c b/drivers/media/pci/ttpci/budget-av.c
+index e2d482af2367..38cac508bd72 100644
+--- a/drivers/media/pci/ttpci/budget-av.c
++++ b/drivers/media/pci/ttpci/budget-av.c
+@@ -1470,7 +1470,7 @@ static int budget_av_attach(struct saa7146_dev *dev, struct saa7146_pci_extensio
+ 		vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+ 		vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
+ 
+-		if ((err = saa7146_register_device(&budget_av->vd, dev, "knc1", VFL_TYPE_GRABBER))) {
++		if ((err = saa7146_register_device(&budget_av->vd, dev, "knc1", VFL_TYPE_VIDEO))) {
+ 			/* fixme: proper cleanup here */
+ 			ERR("cannot register capture v4l2 device\n");
+ 			saa7146_vv_release(dev);
+diff --git a/drivers/media/pci/tw5864/tw5864-video.c b/drivers/media/pci/tw5864/tw5864-video.c
+index 09732eed7eb4..ec1e06da7e4f 100644
+--- a/drivers/media/pci/tw5864/tw5864-video.c
++++ b/drivers/media/pci/tw5864/tw5864-video.c
+@@ -1156,7 +1156,7 @@ static int tw5864_video_input_init(struct tw5864_input *input, int video_nr)
+ 	input->gop = GOP_SIZE;
+ 	input->frame_interval = 1;
+ 
+-	ret = video_register_device(&input->vdev, VFL_TYPE_GRABBER, video_nr);
++	ret = video_register_device(&input->vdev, VFL_TYPE_VIDEO, video_nr);
+ 	if (ret)
+ 		goto free_v4l2_hdl;
+ 
+diff --git a/drivers/media/pci/tw68/tw68-video.c b/drivers/media/pci/tw68/tw68-video.c
+index 2fb82d50c53e..10986fcd66a5 100644
+--- a/drivers/media/pci/tw68/tw68-video.c
++++ b/drivers/media/pci/tw68/tw68-video.c
+@@ -962,7 +962,7 @@ int tw68_video_init2(struct tw68_dev *dev, int video_nr)
+ 	dev->vdev.lock = &dev->lock;
+ 	dev->vdev.queue = &dev->vidq;
+ 	video_set_drvdata(&dev->vdev, dev);
+-	return video_register_device(&dev->vdev, VFL_TYPE_GRABBER, video_nr);
++	return video_register_device(&dev->vdev, VFL_TYPE_VIDEO, video_nr);
+ }
+ 
+ /*
+diff --git a/drivers/media/pci/tw686x/tw686x-video.c b/drivers/media/pci/tw686x/tw686x-video.c
+index 9be8c6e4fb69..1ced2b0ddb24 100644
+--- a/drivers/media/pci/tw686x/tw686x-video.c
++++ b/drivers/media/pci/tw686x/tw686x-video.c
+@@ -1282,7 +1282,7 @@ int tw686x_video_init(struct tw686x_dev *dev)
+ 		vc->device = vdev;
+ 		video_set_drvdata(vdev, vc);
+ 
+-		err = video_register_device(vdev, VFL_TYPE_GRABBER, -1);
++		err = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
+ 		if (err < 0)
+ 			goto error;
+ 		vc->num = vdev->num;
 -- 
 2.24.0
 
