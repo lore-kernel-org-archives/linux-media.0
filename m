@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AA06C33CAC
-	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 02:57:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8D2DC33CAC
+	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 02:57:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 030432166E
-	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 02:57:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BFF122166E
+	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 02:57:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="j3Fq0i83"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XVafVv2F"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbgBDC5R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Feb 2020 21:57:17 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41407 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727305AbgBDC5P (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Feb 2020 21:57:15 -0500
-Received: by mail-pg1-f193.google.com with SMTP id l3so4804100pgi.8
-        for <linux-media@vger.kernel.org>; Mon, 03 Feb 2020 18:57:14 -0800 (PST)
+        id S1727364AbgBDC51 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Feb 2020 21:57:27 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:36844 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727348AbgBDC5Z (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Feb 2020 21:57:25 -0500
+Received: by mail-pl1-f195.google.com with SMTP id a6so6651134plm.3
+        for <linux-media@vger.kernel.org>; Mon, 03 Feb 2020 18:57:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3NyRU2xy1z/nYwBRLVUPtO+ZHRnpI9P9k60fSC2X+DE=;
-        b=j3Fq0i83ztEE46oH9dTHoPUFBJ9tpWElVSi0sKJRUZcsRbsxCRK+bWgt1i6ZdvjhO8
-         ZV7hTIydDJatMj68kNoBQQ/DWG5kqPpCeiEGZheluT9CfCXmnX4rmfk92P97gjhc1IzM
-         EFAdrs3PsNDg1PIBW0b1qc0dRsThBCU7KFkmQ=
+        bh=QggxwG9xXj9/Y8aTLUoH0ga4g8iQi+a/2zxkwKUkbVk=;
+        b=XVafVv2FGd5SwvcOmpasGzgMAcJ0QWnLsWBGTqB9pizESHAispXx4sC7Jb10NDMUYo
+         H2OK7XfQiWozQxXr5Ewhm3UycEJTq0kdAH2QB+8JHzciaEJTVx/sS21Pag1mdLwtNKD0
+         8z4VHvNvtsFWkqfB5taldMN3QBu50CAZzJQZE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3NyRU2xy1z/nYwBRLVUPtO+ZHRnpI9P9k60fSC2X+DE=;
-        b=dxCwMTFOQIhdqK6+3DGx7osu1Qe5xsQHZSaXAXHrrL+ysy7bkssvEIoEsVS+BYXpKM
-         oDig09Q81qYfqfjr9065bTIF1VdO8tG125zHBaiOuruX6c3DI8PG8TcSDcBvRFeaaNOy
-         2xOAKrXGc3grTiFmoiOI5pyPK6V731mAr5Fa1G/4GibvLwLJKwATWgbDtpUJG/iPWVp4
-         TQ2IYpOaHlOceg9MOy9Wy/vTJwBQyBlmRb3DS9IMLg6ZrGBzcqP+mUzyplNjulUHSJ9y
-         fa4pmNnL/7yOSiCCDuxBBfFo9KqFYs48NxO3C8ympn0qUr7aQVgOO2c8gYJQd5uV2tHx
-         SKPA==
-X-Gm-Message-State: APjAAAUc4+61+hUkM9E7m0yC+20UmqUEDpMp/m0zeYzsRQQp1T+JyygN
-        JigOonjBZNqKWp+yglZ9+xjLPA==
-X-Google-Smtp-Source: APXvYqwFBek9VnVsgN4EGGqi1nNxFt8Z4wI/xHpJb1NQ4wxHusH5uLLX8YW9xr/VCW1sE1Muy5gUqg==
-X-Received: by 2002:a63:ed4a:: with SMTP id m10mr25299793pgk.99.1580785034064;
-        Mon, 03 Feb 2020 18:57:14 -0800 (PST)
+        bh=QggxwG9xXj9/Y8aTLUoH0ga4g8iQi+a/2zxkwKUkbVk=;
+        b=Ax+BHAJt1RCWRThrj/6GU1XEFQsSAsa8BKkD7wm7quOmRZSocl9z3e9l4Pp/THn9LL
+         BZ+S5Xt8/yKULTNnkEDU4S6bNYwtUO4JZKeTDA4thcL593fkg8kB8OFLzB+ralMvCPPR
+         ATtwysszX33erUu92wUqWC39jJNiIxHYIVNwdEd+yTiajlak6SAVSadU8+OChn2UiQqO
+         nvJGTYMW7C/MhJuLsrEzVDRM+1YgM0xw7FxvvUhpDDW6kN4TJEBGFa7WHpl3qs8o3vG3
+         hYwssvFg+MR2YhiGMtjLJK+75Fp0onB97q2iYMKXYB7a20feKRur/zou7sDMA44MziiO
+         /27g==
+X-Gm-Message-State: APjAAAV09Q3iWexenkCr4iWjvmBai14SbG/0uL+NnPJKk+v0YhnEq4va
+        tHuEOsYYiNiMlo2Q46WFDQspag==
+X-Google-Smtp-Source: APXvYqw4EPSp/jHl1ZP1MjHFiCpedVdzBc7i6MSfYRUBK4L0qMuQu2sYSCzXYdECmOkCL1RgPljgCA==
+X-Received: by 2002:a17:902:8d94:: with SMTP id v20mr17785871plo.259.1580785044745;
+        Mon, 03 Feb 2020 18:57:24 -0800 (PST)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:5bbb:c872:f2b1:f53b])
-        by smtp.gmail.com with ESMTPSA id e1sm22491971pfl.98.2020.02.03.18.57.11
+        by smtp.gmail.com with ESMTPSA id e1sm22491971pfl.98.2020.02.03.18.57.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2020 18:57:13 -0800 (PST)
+        Mon, 03 Feb 2020 18:57:24 -0800 (PST)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Hans Verkuil <hans.verkuil@cisco.com>,
         Tomasz Figa <tfiga@chromium.org>,
@@ -62,9 +62,9 @@ Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Pawel Osciak <posciak@chromium.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [RFC][PATCHv2 07/12] videobuf2: do not sync caches when we are allowed not to
-Date:   Tue,  4 Feb 2020 11:56:36 +0900
-Message-Id: <20200204025641.218376-8-senozhatsky@chromium.org>
+Subject: [RFC][PATCHv2 10/12] videobuf2: add begin/end cpu_access callbacks to dma-contig
+Date:   Tue,  4 Feb 2020 11:56:39 +0900
+Message-Id: <20200204025641.218376-11-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
 In-Reply-To: <20200204025641.218376-1-senozhatsky@chromium.org>
 References: <20200204025641.218376-1-senozhatsky@chromium.org>
@@ -75,48 +75,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Skip ->prepare() or/and ->finish() cache synchronisation if
-user-space requested us to do so (or when queue dma direction
-permits us to skip cache syncs).
+Provide begin_cpu_access() and end_cpu_access() callbacks for
+cache synchronisation on exported buffers.
 
-Change-Id: I37c89d666542ed8d536eac329953d921bb1c94b6
+The patch also adds a new helper function - vb2_dc_buffer_consistent(),
+which returns true is if the buffer is consistent (DMA_ATTR_NON_CONSISTENT
+bit cleared), so then we don't need to sync anything.
+
+Change-Id: I653ee20302014920b4705f3eba27c0b1232ab89d
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- drivers/media/common/videobuf2/videobuf2-core.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ .../common/videobuf2/videobuf2-dma-contig.c   | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index 46be9c790ff6..c3637ca0c65b 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -304,8 +304,11 @@ static void __vb2_buf_mem_prepare(struct vb2_buffer *vb)
- {
- 	unsigned int plane;
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index d0c9dffe49e5..a387260fb321 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -42,6 +42,11 @@ struct vb2_dc_buf {
+ 	struct dma_buf_attachment	*db_attach;
+ };
  
--	for (plane = 0; plane < vb->num_planes; ++plane)
--		call_void_memop(vb, prepare, vb->planes[plane].mem_priv);
-+	if (vb->need_cache_sync_on_prepare) {
-+		for (plane = 0; plane < vb->num_planes; ++plane)
-+			call_void_memop(vb, prepare,
-+					vb->planes[plane].mem_priv);
-+	}
- 	vb->synced = 1;
++static inline bool vb2_dc_buffer_consistent(unsigned long attr)
++{
++	return !(attr & DMA_ATTR_NON_CONSISTENT);
++}
++
+ /*********************************************/
+ /*        scatterlist table functions        */
+ /*********************************************/
+@@ -335,6 +340,32 @@ static void vb2_dc_dmabuf_ops_release(struct dma_buf *dbuf)
+ 	vb2_dc_put(dbuf->priv);
  }
  
-@@ -317,8 +320,11 @@ static void __vb2_buf_mem_finish(struct vb2_buffer *vb)
++static int vb2_dc_dmabuf_ops_begin_cpu_access(struct dma_buf *dbuf,
++					      enum dma_data_direction direction)
++{
++	struct vb2_dc_buf *buf = dbuf->priv;
++	struct sg_table *sgt = buf->dma_sgt;
++
++	if (vb2_dc_buffer_consistent(buf->attrs))
++		return 0;
++
++	dma_sync_sg_for_cpu(buf->dev, sgt->sgl, sgt->nents, buf->dma_dir);
++	return 0;
++}
++
++static int vb2_dc_dmabuf_ops_end_cpu_access(struct dma_buf *dbuf,
++					    enum dma_data_direction direction)
++{
++	struct vb2_dc_buf *buf = dbuf->priv;
++	struct sg_table *sgt = buf->dma_sgt;
++
++	if (vb2_dc_buffer_consistent(buf->attrs))
++		return 0;
++
++	dma_sync_sg_for_device(buf->dev, sgt->sgl, sgt->nents, buf->dma_dir);
++	return 0;
++}
++
+ static void *vb2_dc_dmabuf_ops_vmap(struct dma_buf *dbuf)
  {
- 	unsigned int plane;
- 
--	for (plane = 0; plane < vb->num_planes; ++plane)
--		call_void_memop(vb, finish, vb->planes[plane].mem_priv);
-+	if (vb->need_cache_sync_on_finish) {
-+		for (plane = 0; plane < vb->num_planes; ++plane)
-+			call_void_memop(vb, finish,
-+					vb->planes[plane].mem_priv);
-+	}
- 	vb->synced = 0;
- }
- 
+ 	struct vb2_dc_buf *buf = dbuf->priv;
+@@ -353,6 +384,8 @@ static const struct dma_buf_ops vb2_dc_dmabuf_ops = {
+ 	.detach = vb2_dc_dmabuf_ops_detach,
+ 	.map_dma_buf = vb2_dc_dmabuf_ops_map,
+ 	.unmap_dma_buf = vb2_dc_dmabuf_ops_unmap,
++	.begin_cpu_access = vb2_dc_dmabuf_ops_begin_cpu_access,
++	.end_cpu_access = vb2_dc_dmabuf_ops_end_cpu_access,
+ 	.vmap = vb2_dc_dmabuf_ops_vmap,
+ 	.mmap = vb2_dc_dmabuf_ops_mmap,
+ 	.release = vb2_dc_dmabuf_ops_release,
 -- 
 2.25.0.341.g760bfbb309-goog
 
