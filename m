@@ -2,122 +2,174 @@ Return-Path: <SRS0=VKxf=3Y=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58AA6C3524D
-	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 02:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B07F9C3524A
+	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 04:56:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 312FA2084E
-	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 02:57:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 382A42087E
+	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 04:56:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bvNna1e6"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="KaZP92b6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727327AbgBDC5V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Feb 2020 21:57:21 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36837 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727308AbgBDC5S (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Feb 2020 21:57:18 -0500
-Received: by mail-pl1-f195.google.com with SMTP id a6so6651006plm.3
-        for <linux-media@vger.kernel.org>; Mon, 03 Feb 2020 18:57:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1pXTWkZoMBIf1iKBkXLSAWapvVeX9VPPX3FIrIBSBVo=;
-        b=bvNna1e6NxD9FZJneV6BaVLd7xK66kO+n4o1HRdkwGa/lOtkLP8+vWFybesFggnBPz
-         /QZc+YoCBP0xZDz/bpxih4eEIOQbA2H/ivUeH+ZcgGaVzXMp6G2/ILwOuPksAR5X/Sgf
-         gAf5jCoAkm+1nZN19uQ+hRL4PbJ19Rzk6nTYU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1pXTWkZoMBIf1iKBkXLSAWapvVeX9VPPX3FIrIBSBVo=;
-        b=re/CoRB/jzvb3RAWhtPMgA4/HkwUNNzzgrkwxze+YXKMmheR300vKUpe9Vgp1ZeEJN
-         bV6HVOgyFE8G0BQZFNXIxnwn8qC8qZfPBOKHxIzEAHyhvw/HvuFtPLcduaRofT5XhH84
-         fmOig09llenHbHPSeva63RKYujEY/eKhSHRboOoUvXyMjoR0h7Yn2ISdDgbhngzkunVf
-         43c8OpLKNrNxqJmFesnGXqpDoGamIkYvnErKgU+rgjAM+mmC8FKlKr2JQTHJAiJ0ar2r
-         thVDBIJPgEgQaRpB8CAK2SXOTAZ0cOqLBbMjYjaSB8+KVlwj6Cr5hOGqWH39inUKW34I
-         1wOg==
-X-Gm-Message-State: APjAAAW5MQWGw0qAmfdo6X3dxPI6+cu+nbOuDc+Zw9oA+ihnErtEwQL3
-        ExGBJCrhI7Z0X1cPyxOq3lE2GEjwkiMM1w==
-X-Google-Smtp-Source: APXvYqzDTARrYg6qPArxaStR0lWXrAEmWXTgHZRpYxBMYcpQMiClm40tAMEKMl7YxvXoCxGbDUKgRQ==
-X-Received: by 2002:a17:902:8545:: with SMTP id d5mr25714862plo.116.1580785037637;
-        Mon, 03 Feb 2020 18:57:17 -0800 (PST)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:5bbb:c872:f2b1:f53b])
-        by smtp.gmail.com with ESMTPSA id e1sm22491971pfl.98.2020.02.03.18.57.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2020 18:57:17 -0800 (PST)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Hans Verkuil <hans.verkuil@cisco.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pawel Osciak <posciak@chromium.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [RFC][PATCHv2 08/12] videobuf2: check ->synced flag in prepare() and finish()
-Date:   Tue,  4 Feb 2020 11:56:37 +0900
-Message-Id: <20200204025641.218376-9-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-In-Reply-To: <20200204025641.218376-1-senozhatsky@chromium.org>
-References: <20200204025641.218376-1-senozhatsky@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727023AbgBDE4K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Feb 2020 23:56:10 -0500
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:36299 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726924AbgBDE4K (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 Feb 2020 23:56:10 -0500
+Received: from localhost ([IPv6:2001:983:e9a7:1:d1f1:f21:7be9:5333])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id yqFriWTyjn7E5yqFsi8OaE; Tue, 04 Feb 2020 05:56:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1580792168; bh=nbETR9842xFG6lbXsX7Qk6r9n0Spwp5Tl6AO4SZTGso=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=KaZP92b6eJRAPcAND44WdScWveYMcQ1htZ2kUqXiDxsrWOOQ7MP9vKbZMAXqWKe4A
+         X56wiQ3ragavFcCd6rtywHi6z723cjIIeQ1hvHyUM8E3cTpfdOMYUIq9XQS6NxCMR0
+         f9esi5ny1c4PorkWrB8Bh2s/l3cEBMw+Cl4tGxwPBa93sPtoMZ0uBBMul2tDXbzKwV
+         NjL5LAeLBELKouEBk4B2F0vIT31PDeQOEC3er3K4iL+tiDHbW3+O9hupjpZMj5NP2k
+         KjtPOrxRb2OHha1angD1lsOjsK+0v8Wybq1HFhUrHfjJ4q3iUT3qG3GbUXIAUNaxeT
+         ncSGm6lXlPCvQ==
+Message-ID: <74ed81051fcb810f4e790448d96fead0@smtp-cloud8.xs4all.net>
+Date:   Tue, 04 Feb 2020 05:56:07 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfK13e2CpT/rXP/RhpcltLcfzKXCKbgvPmqzwNyyZaMBWvEWK21Mp55lmE6zdBwiO1vuxw96leWHLb5nCnMUpYFFUcAX7KykAw5Bzq0XgXs/qFkDOlVGV
+ eNOIyDCAHBTLFry/ZnomhY8uOSpeg4i/tMF2zmtvKBeUeV3nKI9Qd3qNIHrqU+3J9za8U0onsvwWWJAQXRpnVotmyhco9Y7Z9CmAChPdCFYZTUGmzSI390TZ
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This simplifies the code a tiny bit and let's us to avoid
-unneeded ->prepare()/->finish() calls.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Change-Id: Ia7c8b4d75a72d0fe1bf37382780e173f6dd9b7ff
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- drivers/media/common/videobuf2/videobuf2-core.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Results of the daily build of media_tree:
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index c3637ca0c65b..631667db7094 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -304,6 +304,9 @@ static void __vb2_buf_mem_prepare(struct vb2_buffer *vb)
- {
- 	unsigned int plane;
- 
-+	if (vb->synced)
-+		return;
-+
- 	if (vb->need_cache_sync_on_prepare) {
- 		for (plane = 0; plane < vb->num_planes; ++plane)
- 			call_void_memop(vb, prepare,
-@@ -320,6 +323,9 @@ static void __vb2_buf_mem_finish(struct vb2_buffer *vb)
- {
- 	unsigned int plane;
- 
-+	if (!vb->synced)
-+		return;
-+
- 	if (vb->need_cache_sync_on_finish) {
- 		for (plane = 0; plane < vb->num_planes; ++plane)
- 			call_void_memop(vb, finish,
-@@ -1991,8 +1997,7 @@ static void __vb2_queue_cancel(struct vb2_queue *q)
- 				call_void_vb_qop(vb, buf_request_complete, vb);
- 		}
- 
--		if (vb->synced)
--			__vb2_buf_mem_finish(vb);
-+		__vb2_buf_mem_finish(vb);
- 
- 		if (vb->prepared) {
- 			call_void_vb_qop(vb, buf_finish, vb);
--- 
-2.25.0.341.g760bfbb309-goog
+date:			Tue Feb  4 05:00:13 CET 2020
+media-tree git hash:	1697d98124819aab09b86602978bd4f50e101e2d
+media_build git hash:	a79e3bf0b7383ff0aa87ebff715ea4101eea5581
+v4l-utils git hash:	c4a62f26c5c3ecd856ca10cf2f0d35d100283d7f
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: eb9b2120da0c807b5a48cb872a43d111a2c3cf06
+host hardware:		x86_64
+host os:		5.2.0-3-amd64
 
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.2-i686: OK
+linux-5.4.2-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 1
+sparse: OK
+smatch: OK
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
