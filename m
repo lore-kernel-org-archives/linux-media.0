@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EF07C33CAC
-	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 02:57:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30638C33CAC
+	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 02:57:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 456D120732
-	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 02:57:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0500521741
+	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 02:57:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Qb+Op006"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FHz9qg9v"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727386AbgBDC53 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Feb 2020 21:57:29 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34730 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727369AbgBDC53 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Feb 2020 21:57:29 -0500
-Received: by mail-pf1-f194.google.com with SMTP id i6so8690717pfc.1
-        for <linux-media@vger.kernel.org>; Mon, 03 Feb 2020 18:57:28 -0800 (PST)
+        id S1727341AbgBDC5Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Feb 2020 21:57:24 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:35388 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727323AbgBDC5W (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Feb 2020 21:57:22 -0500
+Received: by mail-pf1-f193.google.com with SMTP id y73so8683987pfg.2
+        for <linux-media@vger.kernel.org>; Mon, 03 Feb 2020 18:57:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8h+I8oxNIcMrbLvsm+8Df46AS8oNWipq59orM6/5OoQ=;
-        b=Qb+Op0063itwM7zF2RFmjrsNv3YJmj5LgRFLABUotYSOIhCarSuW8fKd+TFe9XAhyi
-         y1ZRx1+0rv6FfLP0lVijNYckb3zEXXivjrOQaNC4SBXY5Dv0OvJxacxjg90Y2rMqYSk4
-         JfoBGGHHMGDkDOmZFLdXGlhmgp73izBpnIVP4=
+        bh=raQvSM5V/uMvgqOsdMStTvPP8E1jqsk9wa9DPg9FZM8=;
+        b=FHz9qg9vqBt1VTVoYCNd2qaYaNJG/29qmMaSm30O/XXyzEZe4S/DF7cLRmDUeCoytY
+         UikEMN5nN/TsyisDq8bLb9d3/9TkBMebeVUnBNtqg3gnJ/FMhrsZvYtni0l134SO5H76
+         VYfoFzJW5VGyyJ+wGiX0LjKbVeKPI+Dgvb93A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8h+I8oxNIcMrbLvsm+8Df46AS8oNWipq59orM6/5OoQ=;
-        b=rHT2y3SHU6i7wfQIJvIhwHy2GtFEVb8GJxGpwDZGTAIkDPq4y5IQcUSV3kbGx0ZFhH
-         YKDPMIZC2kEJZfXxyajXGTgxac5ELvuez0TnuA4V1dChckm4L8scu7JF2fQxdRDYA7dL
-         7sPJZ4VUH5ci6ujRL1HIhVWvOn9daF1Pc01NSv0K3G3hopak92UUmPLlc/qIxAg86ZB5
-         IicA/n2bpl4mFX8q25kzdpKzn4QsjdfRxotgmQ+aXsUZ0ZqtwJCqJ7VBd3Wt5/Dnq1Dm
-         uuPrbQV2pWYHY3k4I5jHEo8HP2lNmndfMJHrv79DMpYxkUoJu2vx3JbcRv7EGiF/CGYy
-         ZHBg==
-X-Gm-Message-State: APjAAAXoZym67yX3eUEQ5z7bWfQnET0w3LWNaFy0H7+lGmOscEsFnkZm
-        dbxaDZxo+qj11U8Oa3sFyT4lFA==
-X-Google-Smtp-Source: APXvYqxu/ATw/8OV8+fM2uhq19GOMnYoGMlei5elIfGBc5xRNveJHWeIEJNo6C01L8N+dDLi+C7fvw==
-X-Received: by 2002:a63:f57:: with SMTP id 23mr18739474pgp.46.1580785048241;
-        Mon, 03 Feb 2020 18:57:28 -0800 (PST)
+        bh=raQvSM5V/uMvgqOsdMStTvPP8E1jqsk9wa9DPg9FZM8=;
+        b=n4Ix2hGYZWmTmQGlzDUyApYZ7IJOlLP+E3NnKavXJ6H0ZrDVpBLoRDmzHHUfc7ccEv
+         Ubl+ye4u5MyPnZi+k1FJ9qLgDG7nDf0wHljlIMcvGrZfl4dPMy5OqKa50QPgdzKyKhVD
+         drbDGnk/DOJr490JFO4znk6MxtbMJu/pvRxG3vJwSLQ9tWsG/FSTmsp/hXozg36dqCh/
+         t2ZUlBconshbk4y8XH9ngNnoUHtbLiZ7oMnuUXpqxKvURhG1c88et+zOzxXf9eB3oIw+
+         jmC/XXbozsUbZEXNiWegRnOghxIvugj5NNP0oFU1vA7pYF978RfhONQEIVGL0BzANYia
+         vlFQ==
+X-Gm-Message-State: APjAAAW3RcvhXOo7VxGgwuNge+8CC3nyWsksAlM1q/HWRNbbOBsS9LvW
+        bTY1/Ofsrafh0BzetrTy/BDYOw==
+X-Google-Smtp-Source: APXvYqyniqRgXTBNCmKcTESug8rjHaeK7Uxfak70Cz/Vrue0dxlUhVtDJIqEBQzy/JDyESeD9UdZ0w==
+X-Received: by 2002:a62:be0a:: with SMTP id l10mr29348868pff.110.1580785041112;
+        Mon, 03 Feb 2020 18:57:21 -0800 (PST)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:5bbb:c872:f2b1:f53b])
-        by smtp.gmail.com with ESMTPSA id e1sm22491971pfl.98.2020.02.03.18.57.25
+        by smtp.gmail.com with ESMTPSA id e1sm22491971pfl.98.2020.02.03.18.57.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2020 18:57:27 -0800 (PST)
+        Mon, 03 Feb 2020 18:57:20 -0800 (PST)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Hans Verkuil <hans.verkuil@cisco.com>,
         Tomasz Figa <tfiga@chromium.org>,
@@ -62,9 +62,9 @@ Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Pawel Osciak <posciak@chromium.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [RFC][PATCHv2 11/12] videobuf2: add begin/end cpu_access callbacks to dma-sg
-Date:   Tue,  4 Feb 2020 11:56:40 +0900
-Message-Id: <20200204025641.218376-12-senozhatsky@chromium.org>
+Subject: [RFC][PATCHv2 09/12] videobuf2: let user-space know if driver supports cache hints
+Date:   Tue,  4 Feb 2020 11:56:38 +0900
+Message-Id: <20200204025641.218376-10-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
 In-Reply-To: <20200204025641.218376-1-senozhatsky@chromium.org>
 References: <20200204025641.218376-1-senozhatsky@chromium.org>
@@ -75,59 +75,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Provide begin_cpu_access() and end_cpu_access() dma_buf_ops
-callbacks for cache synchronisation on exported buffers.
+Add V4L2_BUF_CAP_SUPPORTS_CACHE_HINTS to fill_buf_caps(), which
+is set when queue supports user-space cache management hints.
 
-V4L2_FLAG_MEMORY_NON_CONSISTENT has no effect on dma-sg buffers.
-dma-sg allocates memory using the page allocator directly, so
-there is no memory consistency guarantee.
-
-Change-Id: Ia0d9d72a8c2a9fe3264ac148f59201573289ed2c
+Change-Id: Ieac93f3726c61fd3b88e02c36980c1f3c7a82ecc
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- .../media/common/videobuf2/videobuf2-dma-sg.c | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ Documentation/media/uapi/v4l/vidioc-reqbufs.rst | 7 +++++++
+ drivers/media/common/videobuf2/videobuf2-v4l2.c | 2 ++
+ include/uapi/linux/videodev2.h                  | 1 +
+ 3 files changed, 10 insertions(+)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-index 6db60e9d5183..bfc99a0cb7b9 100644
---- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-+++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-@@ -470,6 +470,26 @@ static void vb2_dma_sg_dmabuf_ops_release(struct dma_buf *dbuf)
- 	vb2_dma_sg_put(dbuf->priv);
- }
+diff --git a/Documentation/media/uapi/v4l/vidioc-reqbufs.rst b/Documentation/media/uapi/v4l/vidioc-reqbufs.rst
+index 9741dac0d5b3..80603f57eb8a 100644
+--- a/Documentation/media/uapi/v4l/vidioc-reqbufs.rst
++++ b/Documentation/media/uapi/v4l/vidioc-reqbufs.rst
+@@ -165,6 +165,13 @@ aborting or finishing any DMA in progress, an implicit
+       - Only valid for stateless decoders. If set, then userspace can set the
+         ``V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF`` flag to hold off on returning the
+ 	capture buffer until the OUTPUT timestamp changes.
++    * - ``V4L2_BUF_CAP_SUPPORTS_CACHE_HINTS``
++      - 0x00000040
++      - Set when the queue/buffer support memory consistency and cache
++        management hints. See :ref:`V4L2_FLAG_MEMORY_NON_CONSISTENT`,
++        :ref:`V4L2_BUF_FLAG_NO_CACHE_INVALIDATE` and
++        :ref:`V4L2_BUF_FLAG_NO_CACHE_CLEAN`.
++
  
-+static int vb2_dma_sg_dmabuf_ops_begin_cpu_access(struct dma_buf *dbuf,
-+					enum dma_data_direction direction)
-+{
-+	struct vb2_dma_sg_buf *buf = dbuf->priv;
-+	struct sg_table *sgt = buf->dma_sgt;
-+
-+	dma_sync_sg_for_cpu(buf->dev, sgt->sgl, sgt->nents, buf->dma_dir);
-+	return 0;
-+}
-+
-+static int vb2_dma_sg_dmabuf_ops_end_cpu_access(struct dma_buf *dbuf,
-+					enum dma_data_direction direction)
-+{
-+	struct vb2_dma_sg_buf *buf = dbuf->priv;
-+	struct sg_table *sgt = buf->dma_sgt;
-+
-+	dma_sync_sg_for_device(buf->dev, sgt->sgl, sgt->nents, buf->dma_dir);
-+	return 0;
-+}
-+
- static void *vb2_dma_sg_dmabuf_ops_vmap(struct dma_buf *dbuf)
- {
- 	struct vb2_dma_sg_buf *buf = dbuf->priv;
-@@ -488,6 +508,8 @@ static const struct dma_buf_ops vb2_dma_sg_dmabuf_ops = {
- 	.detach = vb2_dma_sg_dmabuf_ops_detach,
- 	.map_dma_buf = vb2_dma_sg_dmabuf_ops_map,
- 	.unmap_dma_buf = vb2_dma_sg_dmabuf_ops_unmap,
-+	.begin_cpu_access = vb2_dma_sg_dmabuf_ops_begin_cpu_access,
-+	.end_cpu_access = vb2_dma_sg_dmabuf_ops_end_cpu_access,
- 	.vmap = vb2_dma_sg_dmabuf_ops_vmap,
- 	.mmap = vb2_dma_sg_dmabuf_ops_mmap,
- 	.release = vb2_dma_sg_dmabuf_ops_release,
+ Return Value
+ ============
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index eb5d1306cb03..22ae0ff64684 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -698,6 +698,8 @@ static void fill_buf_caps(struct vb2_queue *q, u32 *caps)
+ 		*caps |= V4L2_BUF_CAP_SUPPORTS_DMABUF;
+ 	if (q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF)
+ 		*caps |= V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF;
++	if (q->allow_cache_hints)
++		*caps |= V4L2_BUF_CAP_SUPPORTS_CACHE_HINTS;
+ #ifdef CONFIG_MEDIA_CONTROLLER_REQUEST_API
+ 	if (q->supports_requests)
+ 		*caps |= V4L2_BUF_CAP_SUPPORTS_REQUESTS;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 169a8cf345ed..12b1bd220347 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -951,6 +951,7 @@ struct v4l2_requestbuffers {
+ #define V4L2_BUF_CAP_SUPPORTS_REQUESTS			(1 << 3)
+ #define V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS		(1 << 4)
+ #define V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF	(1 << 5)
++#define V4L2_BUF_CAP_SUPPORTS_CACHE_HINTS		(1 << 6)
+ 
+ /**
+  * struct v4l2_plane - plane info for multi-planar buffers
 -- 
 2.25.0.341.g760bfbb309-goog
 
