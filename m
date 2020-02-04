@@ -6,33 +6,33 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C328C35247
-	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 21:45:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA6B3C35247
+	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 21:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B1842084E
-	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 21:45:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E93A217BA
+	for <linux-media@archiver.kernel.org>; Tue,  4 Feb 2020 21:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727480AbgBDVpV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Feb 2020 16:45:21 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44028 "EHLO
+        id S1727522AbgBDVp0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Feb 2020 16:45:26 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44040 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727389AbgBDVpV (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Feb 2020 16:45:21 -0500
+        with ESMTP id S1727389AbgBDVp0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Feb 2020 16:45:26 -0500
 Received: from localhost.localdomain (unknown [IPv6:2a02:810a:113f:ad1c:28d4:5c9b:1c04:c661])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 004E6294286;
-        Tue,  4 Feb 2020 21:45:19 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 68001294288;
+        Tue,  4 Feb 2020 21:45:24 +0000 (GMT)
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
         dafna3@gmail.com, sakari.ailus@linux.intel.com,
         linux-rockchip@lists.infradead.org, mchehab@kernel.org
-Subject: [PATCH] media: staging: rkisp1: fix test of return value of media_entity_get_fwnode_pad
-Date:   Tue,  4 Feb 2020 22:44:45 +0100
-Message-Id: <20200204214446.20381-2-dafna.hirschfeld@collabora.com>
+Subject: [PATCH] media: staging: rkisp1: improve inner documentation in rkisp1-isp.c
+Date:   Tue,  4 Feb 2020 22:44:46 +0100
+Message-Id: <20200204214446.20381-3-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200204214446.20381-1-dafna.hirschfeld@collabora.com>
 References: <20200204214446.20381-1-dafna.hirschfeld@collabora.com>
@@ -41,29 +41,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-media_entity_get_fwnode_pad returns negative value on error
-and the pad numeber on success. Therefore change the error test
-from 'if (ret)' to 'if (ret < 0)' .
+Improve the documentation in the beginning of the file
+rkisp1-isp1.c
 
-Fixes: d65dd85281fb ("media: staging: rkisp1: add Rockchip ISP1 base driver")
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- drivers/staging/media/rkisp1/rkisp1-dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/rkisp1/rkisp1-isp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-dev.c b/drivers/staging/media/rkisp1/rkisp1-dev.c
-index 21837d4dc9e1..9d866396a5de 100644
---- a/drivers/staging/media/rkisp1/rkisp1-dev.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-dev.c
-@@ -128,7 +128,7 @@ static int rkisp1_create_links(struct rkisp1_device *rkisp1)
+diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
+index 2b0513e826fe..844556389b0b 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-isp.c
++++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
+@@ -28,9 +28,9 @@
+ #define RKISP1_DIR_SINK_SRC (RKISP1_DIR_SINK | RKISP1_DIR_SRC)
  
- 		ret = media_entity_get_fwnode_pad(&sd->entity, sd->fwnode,
- 						  MEDIA_PAD_FL_SOURCE);
--		if (ret) {
-+		if (ret < 0) {
- 			dev_err(sd->dev, "failed to find src pad for %s\n",
- 				sd->name);
- 			return ret;
+ /*
+- * NOTE: MIPI controller and input MUX are also configured in this file,
+- * because ISP Subdev is not only describe ISP submodule(input size,format,
+- * output size, format), but also a virtual route device.
++ * NOTE: MIPI controller and input MUX are also configured in this file.
++ * This is because ISP Subdev describes not only ISP submodule (input size,
++ * format, output size, format), but also a virtual route device.
+  */
+ 
+ /*
 -- 
 2.17.1
 
