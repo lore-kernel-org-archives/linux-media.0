@@ -4,58 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA474C352A2
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58DE8C352A6
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BBDFC24125
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2666820838
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002283;
-	bh=op7eP86ynCTXd8Ox1Ttv502rN/tOuJ9csm0uPgp2G6Y=;
+	s=default; t=1581002299;
+	bh=S7HDHTt5quKvAL6rcKE6LrGUr9AeD5k+QZcuh0+oPpo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=fZ0V7I/bPTNUVyGDA5nDElTxS051KQykSN+IRQ3KIjUlU2t+DaJqp9ChTDHbyCtb/
-	 6s3VYvXEhJtsuosSmeqFBqOG/b0EDSk9oqYohAhyNwE4gzzBsLhs2Q2X+9opi8DVYy
-	 zVv/YD5N+F7pGq8Qy3xTJlXW9WF46+gSVn9aSOJk=
+	b=u42KjlhpWWb2dyTZ/OQXTmnfuHrMDsxd1Rz5C60JgV1Skqn36Obzcx0h5IzYi9yiB
+	 9wpsG4dhQ0/YGnIIJ54snZ6w8ngL7wPtikOMXDub9W7aKn4wt0GTrAz2QSSeQmLGcU
+	 W5xnGbQJ+Kbkjckydz7SHoCU1OgY8BRe6/QWZ+7A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727681AbgBFPSC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:18:02 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38090 "EHLO
+        id S1727658AbgBFPSB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:18:01 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38072 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727572AbgBFPR7 (ORCPT
+        with ESMTP id S1727562AbgBFPR7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:17:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=t2yWmhu1E5vZJKxFd22eXuudQGWyjBMcjrUmGzb6AJ8=; b=I7AU+Ful4eBxEXYWh/h3Q/pFNo
-        TPr4sZuabGHRRtrEPnInySpPHKamVwqtrVrRo2J6bFAfh6N2S0BC7BpAzwzKQ7NJqv6mVTYd1hfmi
-        ruwsQTlbuISoBMBKtwIAzSZeOmM0v2oyUIV+OGjXGK0n8o0IJkOcWKcImpVikJzvz16zVTddqRgbS
-        QDIYZC1wDB0EDXyaUvaN1GEaNKF/ldq18y73bb0Mlp5WBzycYpjKvh6MxMM2FT9HDaZ0SdqqdW8gg
-        CL2gCBukzgtRR8cAQRrB7gzCFC8eai6bI8unRgWJJKOktrHQwAPIODp/h2xp4HIlprVI1fZ10I6TW
-        DAPjMWVw==;
+        bh=v+PzJtydJRO9Tk5W91RNpUCemT4QtYTSBwQ8mRUkMZw=; b=bAVQIcv3Kigh8UjI0x/LtERSBr
+        2CKE6O9xDa2OcwHLEr7oRJfPiySCp6D8xVDq+HuziLaiacnLSxpHfrdLPax6INp9x5livASgBqCZj
+        pdX1oKtw+nSK2g5Y1LrCyjo75f38vp6l4X5MT6hux300xUXkRFiUtnOMDq8sAhsnA0rP3f4PJtRTF
+        Z/qzzUErCMM4NplcsA+1wPWCMZaf01UDFkKFLJc1k5/yZ28pWnTJS9UwwqLDjixhwLhjk+WSPxB3d
+        ZXPVYzO4JQ8smKjiItbMpI8RDRt362DhBHj76BVRVKK6kPvjKX0csXG9Matn39vtBVncxxAUTaKFT
+        4Z6NdoWQ==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziul-0005jD-Ay; Thu, 06 Feb 2020 15:17:59 +0000
+        id 1iziuk-0005jC-VQ; Thu, 06 Feb 2020 15:17:59 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziuc-002oUr-GO; Thu, 06 Feb 2020 16:17:50 +0100
+        id 1iziud-002oVV-8G; Thu, 06 Feb 2020 16:17:51 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Jukka Rissanen <jukka.rissanen@linux.intel.com>,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-wpan@vger.kernel.org
-Subject: [PATCH 02/28] docs: networking: convert 6lowpan.txt to ReST
-Date:   Thu,  6 Feb 2020 16:17:22 +0100
-Message-Id: <bfa773f25584a3939e0a3e1fc6bc0e91f415cd91.1581002063.git.mchehab+huawei@kernel.org>
+        Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 12/28] docs: networking: convert cops.txt to ReST
+Date:   Thu,  6 Feb 2020 16:17:32 +0100
+Message-Id: <d935b712ee6a192fd6b535d9ddb67fda5e876922.1581002063.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
 References: <cover.1581002062.git.mchehab+huawei@kernel.org>
@@ -67,97 +64,185 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 - add SPDX header;
-- use document title markup;
+- adjust titles and chapters, adding proper markups;
 - mark code blocks and literals as such;
 - adjust identation, whitespaces and blank lines;
 - add to networking/index.rst.
 
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../networking/{6lowpan.txt => 6lowpan.rst}   | 29 ++++++++++---------
- Documentation/networking/index.rst            |  1 +
- 2 files changed, 17 insertions(+), 13 deletions(-)
- rename Documentation/networking/{6lowpan.txt => 6lowpan.rst} (64%)
+ Documentation/networking/cops.rst  | 80 ++++++++++++++++++++++++++++++
+ Documentation/networking/cops.txt  | 63 -----------------------
+ Documentation/networking/index.rst |  1 +
+ 3 files changed, 81 insertions(+), 63 deletions(-)
+ create mode 100644 Documentation/networking/cops.rst
+ delete mode 100644 Documentation/networking/cops.txt
 
-diff --git a/Documentation/networking/6lowpan.txt b/Documentation/networking/6lowpan.rst
-similarity index 64%
-rename from Documentation/networking/6lowpan.txt
-rename to Documentation/networking/6lowpan.rst
-index 2e5a939d7e6f..e70a6520cc33 100644
---- a/Documentation/networking/6lowpan.txt
-+++ b/Documentation/networking/6lowpan.rst
-@@ -1,37 +1,40 @@
+diff --git a/Documentation/networking/cops.rst b/Documentation/networking/cops.rst
+new file mode 100644
+index 000000000000..964ba80599a9
+--- /dev/null
++++ b/Documentation/networking/cops.rst
+@@ -0,0 +1,80 @@
 +.. SPDX-License-Identifier: GPL-2.0
- 
--Netdev private dataroom for 6lowpan interfaces:
-+==============================================
-+Netdev private dataroom for 6lowpan interfaces
-+==============================================
- 
- All 6lowpan able net devices, means all interfaces with ARPHRD_6LOWPAN,
- must have "struct lowpan_priv" placed at beginning of netdev_priv.
- 
--The priv_size of each interface should be calculate by:
-+The priv_size of each interface should be calculate by::
- 
-  dev->priv_size = LOWPAN_PRIV_SIZE(LL_6LOWPAN_PRIV_DATA);
- 
- Where LL_PRIV_6LOWPAN_DATA is sizeof linklayer 6lowpan private data struct.
--To access the LL_PRIV_6LOWPAN_DATA structure you can cast:
-+To access the LL_PRIV_6LOWPAN_DATA structure you can cast::
- 
-  lowpan_priv(dev)-priv;
- 
- to your LL_6LOWPAN_PRIV_DATA structure.
- 
--Before registering the lowpan netdev interface you must run:
-+Before registering the lowpan netdev interface you must run::
- 
-  lowpan_netdev_setup(dev, LOWPAN_LLTYPE_FOOBAR);
- 
- wheres LOWPAN_LLTYPE_FOOBAR is a define for your 6LoWPAN linklayer type of
- enum lowpan_lltypes.
- 
--Example to evaluate the private usually you can do:
-+Example to evaluate the private usually you can do::
- 
--static inline struct lowpan_priv_foobar *
--lowpan_foobar_priv(struct net_device *dev)
--{
-+ static inline struct lowpan_priv_foobar *
-+ lowpan_foobar_priv(struct net_device *dev)
-+ {
- 	return (struct lowpan_priv_foobar *)lowpan_priv(dev)->priv;
--}
-+ }
- 
--switch (dev->type) {
--case ARPHRD_6LOWPAN:
-+ switch (dev->type) {
-+ case ARPHRD_6LOWPAN:
- 	lowpan_priv = lowpan_priv(dev);
- 	/* do great stuff which is ARPHRD_6LOWPAN related */
- 	switch (lowpan_priv->lltype) {
-@@ -42,8 +45,8 @@ case ARPHRD_6LOWPAN:
- 	...
- 	}
- 	break;
--...
--}
-+ ...
-+ }
- 
- In case of generic 6lowpan branch ("net/6lowpan") you can remove the check
- on ARPHRD_6LOWPAN, because you can be sure that these function are called
++
++========================================
++The COPS LocalTalk Linux driver (cops.c)
++========================================
++
++By Jay Schulist <jschlst@samba.org>
++
++This driver has two modes and they are: Dayna mode and Tangent mode.
++Each mode corresponds with the type of card. It has been found
++that there are 2 main types of cards and all other cards are
++the same and just have different names or only have minor differences
++such as more IO ports. As this driver is tested it will
++become more clear exactly what cards are supported.
++
++Right now these cards are known to work with the COPS driver. The
++LT-200 cards work in a somewhat more limited capacity than the
++DL200 cards, which work very well and are in use by many people.
++
++TANGENT driver mode:
++	- Tangent ATB-II, Novell NL-1000, Daystar Digital LT-200
++
++DAYNA driver mode:
++	- Dayna DL2000/DaynaTalk PC (Half Length), COPS LT-95,
++	- Farallon PhoneNET PC III, Farallon PhoneNET PC II
++
++Other cards possibly supported mode unknown though:
++	- Dayna DL2000 (Full length)
++
++The COPS driver defaults to using Dayna mode. To change the driver's
++mode if you built a driver with dual support use board_type=1 or
++board_type=2 for Dayna or Tangent with insmod.
++
++Operation/loading of the driver
++===============================
++
++Use modprobe like this:	/sbin/modprobe cops.o (IO #) (IRQ #)
++If you do not specify any options the driver will try and use the IO = 0x240,
++IRQ = 5. As of right now I would only use IRQ 5 for the card, if autoprobing.
++
++To load multiple COPS driver Localtalk cards you can do one of the following::
++
++	insmod cops io=0x240 irq=5
++	insmod -o cops2 cops io=0x260 irq=3
++
++Or in lilo.conf put something like this::
++
++	append="ether=5,0x240,lt0 ether=3,0x260,lt1"
++
++Then bring up the interface with ifconfig. It will look something like this::
++
++  lt0       Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-F7-00-00-00-00-00-00-00-00
++	    inet addr:192.168.1.2  Bcast:192.168.1.255  Mask:255.255.255.0
++	    UP BROADCAST RUNNING NOARP MULTICAST  MTU:600  Metric:1
++	    RX packets:0 errors:0 dropped:0 overruns:0 frame:0
++	    TX packets:0 errors:0 dropped:0 overruns:0 carrier:0 coll:0
++
++Netatalk Configuration
++======================
++
++You will need to configure atalkd with something like the following to make
++it work with the cops.c driver.
++
++* For single LTalk card use::
++
++    dummy -seed -phase 2 -net 2000 -addr 2000.10 -zone "1033"
++    lt0 -seed -phase 1 -net 1000 -addr 1000.50 -zone "1033"
++
++* For multiple cards, Ethernet and LocalTalk::
++
++    eth0 -seed -phase 2 -net 3000 -addr 3000.20 -zone "1033"
++    lt0 -seed -phase 1 -net 1000 -addr 1000.50 -zone "1033"
++
++* For multiple LocalTalk cards, and an Ethernet card.
++
++* Order seems to matter here, Ethernet last::
++
++    lt0 -seed -phase 1 -net 1000 -addr 1000.10 -zone "LocalTalk1"
++    lt1 -seed -phase 1 -net 2000 -addr 2000.20 -zone "LocalTalk2"
++    eth0 -seed -phase 2 -net 3000 -addr 3000.30 -zone "EtherTalk"
+diff --git a/Documentation/networking/cops.txt b/Documentation/networking/cops.txt
+deleted file mode 100644
+index 3e344b448e07..000000000000
+--- a/Documentation/networking/cops.txt
++++ /dev/null
+@@ -1,63 +0,0 @@
+-Text File for the COPS LocalTalk Linux driver (cops.c).
+-	By Jay Schulist <jschlst@samba.org>
+-
+-This driver has two modes and they are: Dayna mode and Tangent mode.
+-Each mode corresponds with the type of card. It has been found
+-that there are 2 main types of cards and all other cards are
+-the same and just have different names or only have minor differences
+-such as more IO ports. As this driver is tested it will
+-become more clear exactly what cards are supported. 
+-
+-Right now these cards are known to work with the COPS driver. The
+-LT-200 cards work in a somewhat more limited capacity than the
+-DL200 cards, which work very well and are in use by many people.
+-
+-TANGENT driver mode:
+-	Tangent ATB-II, Novell NL-1000, Daystar Digital LT-200
+-DAYNA driver mode:
+-	Dayna DL2000/DaynaTalk PC (Half Length), COPS LT-95,
+-	Farallon PhoneNET PC III, Farallon PhoneNET PC II
+-Other cards possibly supported mode unknown though:
+-	Dayna DL2000 (Full length)
+-
+-The COPS driver defaults to using Dayna mode. To change the driver's 
+-mode if you built a driver with dual support use board_type=1 or
+-board_type=2 for Dayna or Tangent with insmod.
+-
+-** Operation/loading of the driver.
+-Use modprobe like this:	/sbin/modprobe cops.o (IO #) (IRQ #)
+-If you do not specify any options the driver will try and use the IO = 0x240,
+-IRQ = 5. As of right now I would only use IRQ 5 for the card, if autoprobing.
+-
+-To load multiple COPS driver Localtalk cards you can do one of the following.
+-
+-insmod cops io=0x240 irq=5
+-insmod -o cops2 cops io=0x260 irq=3
+-
+-Or in lilo.conf put something like this:
+-	append="ether=5,0x240,lt0 ether=3,0x260,lt1"
+-
+-Then bring up the interface with ifconfig. It will look something like this:
+-lt0       Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-F7-00-00-00-00-00-00-00-00
+-          inet addr:192.168.1.2  Bcast:192.168.1.255  Mask:255.255.255.0
+-          UP BROADCAST RUNNING NOARP MULTICAST  MTU:600  Metric:1
+-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+-          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0 coll:0
+-
+-** Netatalk Configuration
+-You will need to configure atalkd with something like the following to make
+-it work with the cops.c driver.
+-
+-* For single LTalk card use.
+-dummy -seed -phase 2 -net 2000 -addr 2000.10 -zone "1033"
+-lt0 -seed -phase 1 -net 1000 -addr 1000.50 -zone "1033"
+-
+-* For multiple cards, Ethernet and LocalTalk.
+-eth0 -seed -phase 2 -net 3000 -addr 3000.20 -zone "1033"
+-lt0 -seed -phase 1 -net 1000 -addr 1000.50 -zone "1033"
+-
+-* For multiple LocalTalk cards, and an Ethernet card.
+-* Order seems to matter here, Ethernet last.
+-lt0 -seed -phase 1 -net 1000 -addr 1000.10 -zone "LocalTalk1"
+-lt1 -seed -phase 1 -net 2000 -addr 2000.20 -zone "LocalTalk2"
+-eth0 -seed -phase 2 -net 3000 -addr 3000.30 -zone "EtherTalk"
 diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 3ccb89bf5585..cc34c06477eb 100644
+index ef13fa26b4df..2201f848d8f7 100644
 --- a/Documentation/networking/index.rst
 +++ b/Documentation/networking/index.rst
-@@ -34,6 +34,7 @@ Contents:
-    tls
-    tls-offload
-    nfc
-+   6lowpan
+@@ -44,6 +44,7 @@ Contents:
+    baycom
+    bonding
+    cdc_mbim
++   cops
  
  .. only::  subproject and html
  
