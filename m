@@ -2,175 +2,80 @@ Return-Path: <SRS0=0Sen=32=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4622EC352A3
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 21:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B0E2C352A2
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 22:07:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1C5F9214AF
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 21:57:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FGZ/e3iN"
+	by mail.kernel.org (Postfix) with ESMTP id D8ED8218AC
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 22:07:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727532AbgBFV5t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 16:57:49 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:49304 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727502AbgBFV5t (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 16:57:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581026267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=10sxOSYhRMsVf98oXqVUEQI4+OBsS58gSL9iiVuqLjE=;
-        b=FGZ/e3iN8XwtLsTMLyUmFaR1Yab+RnDGkVH9q2c777Xda8ALepSoXKvhyvejMMY7BUBaXa
-        DhtutlXhc9icsbXcPtz2ksaJuEejp74rW+FENdaKGe61Iun9Iu6tFWkYlV+lnv0wFVyrkW
-        +LNLoasvYiR+7XRLlGbJZOovfBsm0uY=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-14-4WbJXrF1Nf2AU8fjojvISg-1; Thu, 06 Feb 2020 16:57:45 -0500
-X-MC-Unique: 4WbJXrF1Nf2AU8fjojvISg-1
-Received: by mail-wr1-f71.google.com with SMTP id x15so118320wrl.15
-        for <linux-media@vger.kernel.org>; Thu, 06 Feb 2020 13:57:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=10sxOSYhRMsVf98oXqVUEQI4+OBsS58gSL9iiVuqLjE=;
-        b=c0tDGzrkxXSMjDgmvdOvASfcg4ocmh44QXdPRvHXI9y2aMIBB02fjnAHrf2cIbPnT/
-         qyT8PYJbaPKkQvV0GER/50J1Top+iCN4n2dKe7xdQWbdHyFiumzkSW7xxwiLmqeZEDGB
-         /jr72cmwF41RdZIDCBKjV/HjKdrDL5uZI0hyg0xYWkRcsBArlXe1F+R72k3Fa8uG1Z1x
-         oqIoHLBsSgdXFbHunSPIcVuhYAyjaEIekXfkeeJomQoHjC2bEEmoV/TvqQMrzUXY4gif
-         7YIhN7qxOLI2/VQBwVH9XLTWqMiLv7u4GtnnKBuzHpRr2R0YudnPCiVumG0aT2mLWZ6B
-         gnTw==
-X-Gm-Message-State: APjAAAWUMpPWysNuFrOe1rhoTr/QSt2jVpV0vZleq625ClKgB0URdv5P
-        bsr0+XJBDQxy51xH4xfQ+fOULewB1DR7Uij/HGKm91WGUu6Dx+f2qjIuwJxyyTvzRtFoSwr9TpD
-        DEsuJpYF4vSdzyrA5LqtoYcA=
-X-Received: by 2002:adf:f44a:: with SMTP id f10mr112378wrp.16.1581026263797;
-        Thu, 06 Feb 2020 13:57:43 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxkLFknJmswfLS3WjKUC9icqucrhzXHz50poy/wudiPuIytWlnrCqIq9yCj0/e3FcMbZ4huIQ==
-X-Received: by 2002:adf:f44a:: with SMTP id f10mr112362wrp.16.1581026263425;
-        Thu, 06 Feb 2020 13:57:43 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:a9f0:cbc3:a8a6:fc56? ([2001:b07:6468:f312:a9f0:cbc3:a8a6:fc56])
-        by smtp.gmail.com with ESMTPSA id e16sm733749wrs.73.2020.02.06.13.57.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Feb 2020 13:57:42 -0800 (PST)
-Subject: Re: [PATCH v2 21/27] docs: kvm: Convert locking.txt to ReST format
-To:     Cornelia Huck <cohuck@redhat.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <cover.1581000481.git.mchehab+huawei@kernel.org>
- <1464d69fe780940cec6ecec4ac2505b9701a1e01.1581000481.git.mchehab+huawei@kernel.org>
- <20200206171132.4f51f17a.cohuck@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <a17d6a27-0d3f-2020-7fc2-87ec20a6225f@redhat.com>
-Date:   Thu, 6 Feb 2020 22:57:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1727717AbgBFWHb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 17:07:31 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:45040 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727502AbgBFWHb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 17:07:31 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id DA470295903
+From:   Helen Koike <helen.koike@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     dafna.hirschfeld@collabora.com, hverkuil@xs4all.nl,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Helen Koike <helen.koike@collabora.com>
+Subject: [PATCH] media: staging: rkisp1: rsz: don't ignore set format in bayer mainpath
+Date:   Thu,  6 Feb 2020 19:07:10 -0300
+Message-Id: <20200206220712.1243438-3-helen.koike@collabora.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20200206220712.1243438-1-helen.koike@collabora.com>
+References: <20200206220712.1243438-1-helen.koike@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <20200206171132.4f51f17a.cohuck@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 06/02/20 17:11, Cornelia Huck wrote:
-> On Thu,  6 Feb 2020 15:50:18 +0100
-> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
-> 
->> - Use document title and chapter markups;
->> - Add markups for literal blocks;
->> - use :field: for field descriptions;
->> - Add blank lines and adjust indentation.
->>
->> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
->> ---
->>  Documentation/virt/kvm/index.rst              |   1 +
->>  .../virt/kvm/{locking.txt => locking.rst}     | 111 ++++++++++--------
->>  2 files changed, 63 insertions(+), 49 deletions(-)
->>  rename Documentation/virt/kvm/{locking.txt => locking.rst} (78%)
-> 
-> (...)
-> 
->> @@ -48,19 +52,23 @@ restore the saved R/X bits if VMX_EPT_TRACK_ACCESS mask is set, or both. This
->>  is safe because whenever changing these bits can be detected by cmpxchg.
->>  
->>  But we need carefully check these cases:
->> -1): The mapping from gfn to pfn
->> +
->> +1) The mapping from gfn to pfn
->> +
->>  The mapping from gfn to pfn may be changed since we can only ensure the pfn
->>  is not changed during cmpxchg. This is a ABA problem, for example, below case
->>  will happen:
->>  
->> -At the beginning:
->> -gpte = gfn1
->> -gfn1 is mapped to pfn1 on host
->> -spte is the shadow page table entry corresponding with gpte and
->> -spte = pfn1
->> +At the beginning::
->>  
->> -   VCPU 0                           VCPU0
->> -on fast page fault path:
->> +	gpte = gfn1
->> +	gfn1 is mapped to pfn1 on host
->> +	spte is the shadow page table entry corresponding with gpte and
->> +	spte = pfn1
->> +
->> +	   VCPU 0                           VCPU0
->> +
->> +on fast page fault path::
->>  
->>     old_spte = *spte;
->>                                   pfn1 is swapped out:
-> 
-> I'm wondering if that should rather be converted to a proper table.
+Fix issue when, in case of raw bayer format in mainpath,
+VIDIOC_SUBDEV_S_FMT ioctl didn't have any effect, is wasn't updating the
+format of the pad.
 
-Would be nicer but this is acceptable too I think.  Especially, the
-monospaced font allows breaking the table and keeping the parts aligned.
+There is no crop for mainpath bayer raw data. Remove leftover check in
+set_format, since check is already done in crop rkisp1_rsz_set_sink_crop()
+function.
 
-But the two headers should be "CPU 0" and "CPU 1", and it's worth
-changing that while we're at it.  Same for the table below.
+Fixes: d65dd85281fb ("media: staging: rkisp1: add Rockchip ISP1 base driver")
 
-Paolo
+Signed-off-by: Helen Koike <helen.koike@collabora.com>
+---
+ drivers/staging/media/rkisp1/rkisp1-resizer.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-
-> 
->> @@ -99,12 +109,14 @@ Accessed bit and Dirty bit can not be lost.
->>  But it is not true after fast page fault since the spte can be marked
->>  writable between reading spte and updating spte. Like below case:
->>  
->> -At the beginning:
->> -spte.W = 0
->> -spte.Accessed = 1
->> +At the beginning::
->>  
->> -   VCPU 0                                       VCPU0
->> -In mmu_spte_clear_track_bits():
->> +	spte.W = 0
->> +	spte.Accessed = 1
->> +
->> +	   VCPU 0                                       VCPU0
->> +
->> +In mmu_spte_clear_track_bits()::
->>  
->>     old_spte = *spte;
->>  
-> 
-> This one as well.
-
-
+diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+index 8cdc29c1a178..d986953d268b 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
++++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+@@ -537,15 +537,6 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
+ 	if (which == V4L2_SUBDEV_FORMAT_ACTIVE)
+ 		rsz->fmt_type = mbus_info->fmt_type;
+ 
+-	if (rsz->id == RKISP1_MAINPATH &&
+-	    mbus_info->fmt_type == RKISP1_FMT_BAYER) {
+-		sink_crop->left = 0;
+-		sink_crop->top = 0;
+-		sink_crop->width = sink_fmt->width;
+-		sink_crop->height = sink_fmt->height;
+-		return;
+-	}
+-
+ 	/* Propagete to source pad */
+ 	src_fmt->code = sink_fmt->code;
+ 
+-- 
+2.24.0
 
