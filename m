@@ -2,49 +2,45 @@ Return-Path: <SRS0=0Sen=32=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 114FAC33CAC
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 16:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F02DC35247
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 16:22:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D7277217BA
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 16:17:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Me92aZ1d"
+	by mail.kernel.org (Postfix) with ESMTP id 5BF81214AF
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 16:22:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1581006121;
+	bh=W2A8Z7ewxa3B9dd5D0zPw28cT04IBvQgv3GngA2tVFA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=rZvqqokfqEHXZmsUOxAqPvVTIs3gtNHEOv/KDtv4tKH8RfSUPiHVHeEPmG84JwfYH
+	 2DSgqwdhOOVVI59aNIYWYla+aj5Rb5V6Ca2yzdEKuGRKLN1/SZwNHaDEbw0dfDrbZ5
+	 DiqcOn8QQLmKX+wTgjABtMsflXk4RRL+VM+Eqog8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727637AbgBFQRt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 11:17:49 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:21166 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727613AbgBFQRt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 11:17:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581005868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y/Qft0V8xjpz5L2nA4UniKh71mergu/nSXCSw/xoDUU=;
-        b=Me92aZ1dd8sNlEOcwVgM/ZXm7e47GkjLpeyeYuLMSal8HdxLJEfpM/dMvX18JeZFLmuZJS
-        JPo1AdTbe+4w0TE4SMZckNHqewnAwnlBMucOyJKLNyeJPOpd1uB7lXG/0SvDgFn9y9lv2s
-        oW202ivILjOEm46gHbe1iJp1UH5SehQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-304-EV9chORxOEadFW-G8wx9rg-1; Thu, 06 Feb 2020 11:17:45 -0500
-X-MC-Unique: EV9chORxOEadFW-G8wx9rg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4BCFF18B5FA9;
-        Thu,  6 Feb 2020 16:17:43 +0000 (UTC)
-Received: from gondolin (dhcp-192-195.str.redhat.com [10.33.192.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 91EF18EA0C;
-        Thu,  6 Feb 2020 16:17:40 +0000 (UTC)
-Date:   Thu, 6 Feb 2020 17:17:38 +0100
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+        id S1727604AbgBFQWA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 11:22:00 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:58934 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727514AbgBFQWA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 11:22:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Mqf4DktaGBMsaZFAiQnQOroz3SR1zlxAOUelwVv3tVU=; b=mArUrAhBeybhMJno8cHRbjqfQB
+        bRDfliZO/WT5dvULl2FSAulaWTDe/KeCbivBMUe+N5L9jc6rKV6yvCCYiEu787imMP+wUO63C4zWd
+        dpOuVtuf98CCt5y4oXxaR4wtbSC73W5Ddp9oU2dTANYwG4nfC60cK1EAZczDSajjru4UlLd6cq5p+
+        f+1P6lq/CmRHaOwgAv4Xt++gPvTb2gfxGgzzi40Bbmuqr4/JHVHQsONjHkezGWfpiW4a9VIsb0DD/
+        Ofbm2cHu8wQbLFtEjeDPC/Ro5gJQcxO5/f8Dw+KF6xjAKUx+6jeExyZ0oEho2ib1Ut6zL0qUWTVRm
+        viFFB3gw==;
+Received: from [179.95.15.160] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1izjud-00057R-2N; Thu, 06 Feb 2020 16:21:56 +0000
+Date:   Thu, 6 Feb 2020 17:21:36 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Cornelia Huck <cohuck@redhat.com>
 Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         linux-doc@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
@@ -54,28 +50,35 @@ Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-um@lists.infradead.org
 Subject: Re: [PATCH v2 00/27] docs: virt: manually convert text documents to
  ReST format
-Message-ID: <20200206171738.75f374da.cohuck@redhat.com>
-In-Reply-To: <cover.1581000481.git.mchehab+huawei@kernel.org>
+Message-ID: <20200206172136.2fd36abd@kernel.org>
+In-Reply-To: <20200206171738.75f374da.cohuck@redhat.com>
 References: <cover.1581000481.git.mchehab+huawei@kernel.org>
-Organization: Red Hat GmbH
+        <20200206171738.75f374da.cohuck@redhat.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu,  6 Feb 2020 15:49:57 +0100
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+Em Thu, 6 Feb 2020 17:17:38 +0100
+Cornelia Huck <cohuck@redhat.com> escreveu:
 
-> Manually convert the documentation under Documentation/virt to ReST,
-> minimizing the usage of uneeded markups and preserving the documentation
-> writer's style.
+> On Thu,  6 Feb 2020 15:49:57 +0100
+> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+> 
+> > Manually convert the documentation under Documentation/virt to ReST,
+> > minimizing the usage of uneeded markups and preserving the documentation
+> > writer's style.  
+> 
+> While you're at it: Would it make sense to convert and move the lone
+> file under Documentation/virtual/ that survived 2f5947dfcaec
+> ("Documentation: move Documentation/virtual to Documentation/virt")
+> (probably due to a conflict) under virt/ as well?
 
-While you're at it: Would it make sense to convert and move the lone
-file under Documentation/virtual/ that survived 2f5947dfcaec
-("Documentation: move Documentation/virtual to Documentation/virt")
-(probably due to a conflict) under virt/ as well?
+Sure. Will do at the next version of this series.
 
+Regards,
+Mauro
