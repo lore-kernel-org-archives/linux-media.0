@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1089EC352A2
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:11:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34F2AC3B18B
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:11:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D5FC020838
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:11:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 043D52192A
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:11:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581001909;
-	bh=l7H1FlGZAtH5V7csuITiXzF4fvtEJZ4FNkc+IiSZ+sU=;
+	s=default; t=1581001913;
+	bh=kDZPlakYE4tkJOE5yXMZJFhwHWqmyBXvNK9LQWRx8r4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=lcIbPPAgWK2vyrhlspWERBFwtsyZZ928brN1oF8hXOdVj4Fk/FRumZAElczE7DnQm
-	 ORV+0f/SSijI8qSj4sdL82V16aP7nqilGERHEwMYxjZrYUqo5+d1J6lv8aT0onf6YJ
-	 jBzBgiTYMnnIhKEfxxTx5FmsZFIPK5k7pMPf80J8=
+	b=yemqCXM+9EWDR0keC0KID7m9oZ/MRpAr2VY8xT9ExAT3UzOwkdaEK9jrTJKMYe+RN
+	 AWF68qsHtAv+THoJNcxz/EXFdVKk1BUTmqJGs/kR0HoUqCUudoLIxs6t01sDvH570b
+	 LhD0CaNLQK60bhVm6N9sTwZIMEVxRxpmmERmMQAw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727581AbgBFPLn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:11:43 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:37522 "EHLO
+        id S1727697AbgBFPLw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:11:52 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:37544 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727481AbgBFPLm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:11:42 -0500
+        with ESMTP id S1727562AbgBFPLn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:11:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=+zWwoxB/GlzqIdYKTQ20K+hSDuhycL4nJOvIJEmXBXA=; b=Dcw/UGCWunTHr9oVLWmCEjFwML
-        vDzET1yIhKZpZczSi8xBuwe3qwRBhWgqG677kIZ+WCUHdrTAbRyGy2k4D/gc+QKucHTtyWGEyz4Pc
-        JMUMLoQw5BAOU21jXhjg8Z0rJcs0r9ra4cDEB3vIdZ+3VZ+danWJRiu7ubDANkZ7tqGP1enCzk3OE
-        AJ9VTkSVKu2LnV1SEC9TR/UasmF0anFkX7Ta0qe8nMzGpvJdd0BlYmYlwfZ6yrODsnQ4r5dMEkQ3B
-        WZ3KbqyVoV41mbbhyi1D1WRfvAD4Rm18NpqhOsbqFtC2XDbeCTt0Ip6PW5ioprVfdoilKA8cy2V4T
-        nnKw3H7A==;
+        bh=GtwkLmmzfM76VxBMXlHIbbgbtZN35Zt+G8w8FKWpUbY=; b=gtmaFmBzc7TUFZpa1WBBmsWNZG
+        bnRSg5bQ7Zxp5SxXh4e7PMjaCDGr53jQs0aUUJa3nbxXUX9drKZkcBO/zbWpWF7V3D/c1Uk6LafcP
+        0LyloVeX1aYk0OZJkD5xcY4AxCx8ssey3+qj11HH47PVc5L6ZQsTj+JUq9J1TiuTPe5lAsyd6bEzk
+        ogeYDjYUefW1uf3RU1IBNPfuzjUlCRcnM+zN5z49SAGZS2S5G95xLvyUeSKWHCsSrfkrYq+yvjV6i
+        Y8NH50o1NrKePx4Uj9m0nLM9NJ6mRznchrvA7FeCMWpLkXlHfmmtEh6DuGJXDTxIHf9a3ErNfTzhm
+        yZEqLpJQ==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziod-000439-6m; Thu, 06 Feb 2020 15:11:42 +0000
+        id 1izioc-000436-DR; Thu, 06 Feb 2020 15:11:42 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1izioW-002oNa-2s; Thu, 06 Feb 2020 16:11:32 +0100
+        id 1izioV-002oNL-Vd; Thu, 06 Feb 2020 16:11:31 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 11/11] docs: misc-devices/apds990x.txt: convert to ReST format
-Date:   Thu,  6 Feb 2020 16:11:30 +0100
-Message-Id: <c75bb62b507c06ebe5bb6bf35291b27c074ffa1f.1581001737.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 08/11] docs: misc-devices/pci-endpoint-test.txt: convert to ReST
+Date:   Thu,  6 Feb 2020 16:11:27 +0100
+Message-Id: <9766bd8385fc1605aa131acc7fb4fdc3614a6f89.1581001737.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581001737.git.mchehab+huawei@kernel.org>
 References: <cover.1581001737.git.mchehab+huawei@kernel.org>
@@ -60,115 +60,140 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Adjust title markup;
-- Adjust identation.
+- Use titles markups;
+- Adjust identation;
+- use literal markup;
+- Use the proper notation for footnotes.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../{apds990x.txt => apds990x.rst}            | 31 ++++++++++++++-----
  Documentation/misc-devices/index.rst          |  1 +
- 2 files changed, 25 insertions(+), 7 deletions(-)
- rename Documentation/misc-devices/{apds990x.txt => apds990x.rst} (86%)
+ .../misc-devices/pci-endpoint-test.rst        | 56 +++++++++++++++++++
+ .../misc-devices/pci-endpoint-test.txt        | 41 --------------
+ 3 files changed, 57 insertions(+), 41 deletions(-)
+ create mode 100644 Documentation/misc-devices/pci-endpoint-test.rst
+ delete mode 100644 Documentation/misc-devices/pci-endpoint-test.txt
 
-diff --git a/Documentation/misc-devices/apds990x.txt b/Documentation/misc-devices/apds990x.rst
-similarity index 86%
-rename from Documentation/misc-devices/apds990x.txt
-rename to Documentation/misc-devices/apds990x.rst
-index 454d95d623b3..e2f75577f731 100644
---- a/Documentation/misc-devices/apds990x.txt
-+++ b/Documentation/misc-devices/apds990x.rst
-@@ -1,3 +1,6 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======================
- Kernel driver apds990x
- ======================
- 
-@@ -50,14 +53,18 @@ chip_id
- 
- power_state
- 	RW - enable / disable chip. Uses counting logic
-+
- 	     1 enables the chip
- 	     0 disables the chip
- lux0_input
- 	RO - measured lux value
-+
- 	     sysfs_notify called when threshold interrupt occurs
- 
- lux0_sensor_range
--	RO - lux0_input max value. Actually never reaches since sensor tends
-+	RO - lux0_input max value.
-+
-+	     Actually never reaches since sensor tends
- 	     to saturate much before that. Real max value varies depending
- 	     on the light spectrum etc.
- 
-@@ -68,7 +75,9 @@ lux0_rate_avail
- 	RO - supported measurement rates
- 
- lux0_calibscale
--	RW - calibration value. Set to neutral value by default.
-+	RW - calibration value.
-+
-+	     Set to neutral value by default.
- 	     Output results are multiplied with calibscale / calibscale_default
- 	     value.
- 
-@@ -76,16 +85,21 @@ lux0_calibscale_default
- 	RO - neutral calibration value
- 
- lux0_thresh_above_value
--	RW - HI level threshold value. All results above the value
-+	RW - HI level threshold value.
-+
-+	     All results above the value
- 	     trigs an interrupt. 65535 (i.e. sensor_range) disables the above
- 	     interrupt.
- 
- lux0_thresh_below_value
--	RW - LO level threshold value. All results below the value
-+	RW - LO level threshold value.
-+
-+	     All results below the value
- 	     trigs an interrupt. 0 disables the below interrupt.
- 
- prox0_raw
- 	RO - measured proximity value
-+
- 	     sysfs_notify called when threshold interrupt occurs
- 
- prox0_sensor_range
-@@ -93,11 +107,14 @@ prox0_sensor_range
- 
- prox0_raw_en
- 	RW - enable / disable proximity - uses counting logic
--	     1 enables the proximity
--	     0 disables the proximity
-+
-+	     - 1 enables the proximity
-+	     - 0 disables the proximity
- 
- prox0_reporting_mode
--	RW - trigger / periodic. In "trigger" mode the driver tells two possible
-+	RW - trigger / periodic.
-+
-+	     In "trigger" mode the driver tells two possible
- 	     values: 0 or prox0_sensor_range value. 0 means no proximity,
- 	     1023 means proximity. This causes minimal number of interrupts.
- 	     In "periodic" mode the driver reports all values above
 diff --git a/Documentation/misc-devices/index.rst b/Documentation/misc-devices/index.rst
-index 40a4c104e7a2..16973310d32e 100644
+index 005547c1ad5d..04f5dab2384c 100644
 --- a/Documentation/misc-devices/index.rst
 +++ b/Documentation/misc-devices/index.rst
-@@ -15,6 +15,7 @@ fit into other categories.
-    :maxdepth: 2
- 
-    ad525x_dpot
-+   apds990x
-    bh1770glc
-    eeprom
-    c2port
+@@ -21,5 +21,6 @@ fit into other categories.
+    isl29003
+    lis3lv02d
+    max6875
++   pci-endpoint-test
+    spear-pcie-gadget
+    xilinx_sdfec
+diff --git a/Documentation/misc-devices/pci-endpoint-test.rst b/Documentation/misc-devices/pci-endpoint-test.rst
+new file mode 100644
+index 000000000000..26e5d9ba146b
+--- /dev/null
++++ b/Documentation/misc-devices/pci-endpoint-test.rst
+@@ -0,0 +1,56 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=====================================
++Driver for PCI Endpoint Test Function
++=====================================
++
++This driver should be used as a host side driver if the root complex is
++connected to a configurable PCI endpoint running ``pci_epf_test`` function
++driver configured according to [1]_.
++
++The "pci_endpoint_test" driver can be used to perform the following tests.
++
++The PCI driver for the test device performs the following tests:
++
++	#) verifying addresses programmed in BAR
++	#) raise legacy IRQ
++	#) raise MSI IRQ
++	#) raise MSI-X IRQ
++	#) read data
++	#) write data
++	#) copy data
++
++This misc driver creates /dev/pci-endpoint-test.<num> for every
++``pci_epf_test`` function connected to the root complex and "ioctls"
++should be used to perform the above tests.
++
++ioctl
++-----
++
++ PCITEST_BAR:
++	      Tests the BAR. The number of the BAR to be tested
++	      should be passed as argument.
++ PCITEST_LEGACY_IRQ:
++	      Tests legacy IRQ
++ PCITEST_MSI:
++	      Tests message signalled interrupts. The MSI number
++	      to be tested should be passed as argument.
++ PCITEST_MSIX:
++	      Tests message signalled interrupts. The MSI-X number
++	      to be tested should be passed as argument.
++ PCITEST_SET_IRQTYPE:
++	      Changes driver IRQ type configuration. The IRQ type
++	      should be passed as argument (0: Legacy, 1:MSI, 2:MSI-X).
++ PCITEST_GET_IRQTYPE:
++	      Gets driver IRQ type configuration.
++ PCITEST_WRITE:
++	      Perform write tests. The size of the buffer should be passed
++	      as argument.
++ PCITEST_READ:
++	      Perform read tests. The size of the buffer should be passed
++	      as argument.
++ PCITEST_COPY:
++	      Perform read tests. The size of the buffer should be passed
++	      as argument.
++
++.. [1] Documentation/PCI/endpoint/function/binding/pci-test.txt
+diff --git a/Documentation/misc-devices/pci-endpoint-test.txt b/Documentation/misc-devices/pci-endpoint-test.txt
+deleted file mode 100644
+index 58ccca4416b1..000000000000
+--- a/Documentation/misc-devices/pci-endpoint-test.txt
++++ /dev/null
+@@ -1,41 +0,0 @@
+-Driver for PCI Endpoint Test Function
+-
+-This driver should be used as a host side driver if the root complex is
+-connected to a configurable PCI endpoint running *pci_epf_test* function
+-driver configured according to [1].
+-
+-The "pci_endpoint_test" driver can be used to perform the following tests.
+-
+-The PCI driver for the test device performs the following tests
+-	*) verifying addresses programmed in BAR
+-	*) raise legacy IRQ
+-	*) raise MSI IRQ
+-	*) raise MSI-X IRQ
+-	*) read data
+-	*) write data
+-	*) copy data
+-
+-This misc driver creates /dev/pci-endpoint-test.<num> for every
+-*pci_epf_test* function connected to the root complex and "ioctls"
+-should be used to perform the above tests.
+-
+-ioctl
+------
+- PCITEST_BAR: Tests the BAR. The number of the BAR to be tested
+-	      should be passed as argument.
+- PCITEST_LEGACY_IRQ: Tests legacy IRQ
+- PCITEST_MSI: Tests message signalled interrupts. The MSI number
+-	      to be tested should be passed as argument.
+- PCITEST_MSIX: Tests message signalled interrupts. The MSI-X number
+-	      to be tested should be passed as argument.
+- PCITEST_SET_IRQTYPE: Changes driver IRQ type configuration. The IRQ type
+-	      should be passed as argument (0: Legacy, 1:MSI, 2:MSI-X).
+- PCITEST_GET_IRQTYPE: Gets driver IRQ type configuration.
+- PCITEST_WRITE: Perform write tests. The size of the buffer should be passed
+-		as argument.
+- PCITEST_READ: Perform read tests. The size of the buffer should be passed
+-	       as argument.
+- PCITEST_COPY: Perform read tests. The size of the buffer should be passed
+-	       as argument.
+-
+-[1] -> Documentation/PCI/endpoint/function/binding/pci-test.txt
 -- 
 2.24.1
 
