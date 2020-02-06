@@ -2,46 +2,46 @@ Return-Path: <SRS0=0Sen=32=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36494C33CAC
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D542AC352A2
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 044A720838
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A380D20838
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002325;
-	bh=FK84vztnebgMP5356ZEclB4xZu7jJBCHCveVFQU0uLk=;
+	s=default; t=1581002331;
+	bh=ygfOVfgycWbMei797c9aQ1rx607llWV3sSjAcnvTgzg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=xoWMVEyD0RqldluEYi7ZhBLC0gGzYE9/6mrrc/yPbuaLx1s2ftERNlAsXeIR8xMcD
-	 yd+dH6exJawMmN4iB02dlVb2FX9S8dZMbyyY2pmXHvZQLTWi47jvar+EGhNM77x/48
-	 sqnl6FgEMqXqQcY0QmdlfPUGVbMWkk8UtqOLi4VM=
+	b=2lpM6fe+SaMBAUx9lOlAAS1AwWMOAGwynW/LsbboCqmRS+9/Y168DIUpTSRnwjwn+
+	 u6Wu0A39CSjZs25Eg1fSCKHnVIKdHpHeP2PFRun0u74AnSwz8NRQ9LNmu4LFXUqCft
+	 p2hYxJ5wbHGdUmfNHdY64EuOAX4K/TSg6285rdLA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727888AbgBFPSo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:18:44 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38136 "EHLO
+        id S1727901AbgBFPSt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:18:49 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38098 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727595AbgBFPSA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:18:00 -0500
+        with ESMTP id S1727574AbgBFPR7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:17:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=xThXLGdKzyuCachMmsPMIkDMz9YQVURMpo17Id/BQSk=; b=Qsmba8ULMQPZ/0hfjInuZicZPL
-        zbiUwju5JUH1+lVk89nbXaDpQNUY7p0clQ+yVv7K+9VzYENR48C/Bx4FXIrByUUOKNTiIbpdM9Ttw
-        cBzdjYIYh5EcnrvlW9hJiIvmlkXpiapm0lBdZggx4Xz9dPc8pnpTIBGrTpFijayOjtR3NBndvy3EZ
-        yUsh8EZLjUU+8S6dF2Ilox8ztsHPPFutx/PhYoghagahgIz/Mmf01ICy5K3+ackrhYK4xEB+0Yb9t
-        VEa5bqR1dZwkD0K+WcUe4+xgG1zXVm62nsw5iBJr1SVwpcmMV2w8wiGcQXYqkifosTxwcCPWtwz9N
-        MelVSBnQ==;
+        bh=Ak/KbW+gdVbw1EI9JpPND+zd9rSSb3zzdRYWVU3zH1U=; b=hyXtZlOkgro8tu3yKa+0jhLiAc
+        jU+gswC/2PqXFgy8ZtV8Wg1ujIU983w9lcx/VAwvw5By0SaJfVMRtCRDRuNXxFFmPoRBhFFJV6X1a
+        FdjZgxlKkPiujapmLdxSJMv7hDEkVsn/zHK6zkIQSRy8YnvHNCwMMIdLtI+m0vPEStXBFsX1NSLAX
+        wplCfa8nRIal8Js/QaAZVas+TCPgWo6v/TBhRMiT/Rp1gW4hXDv/4/5YBDCtSyng9RJApC2EuiaNu
+        4Dkj1zxeqpihJ7Hba+D5Cfq/MydwKXvW04RkpBW9xDhOBwfk10awVtE4qt4uDPNyOUD8whNbtanPZ
+        Q7fLnsdQ==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziul-0005jF-H2; Thu, 06 Feb 2020 15:18:00 +0000
+        id 1iziul-0005jY-2e; Thu, 06 Feb 2020 15:17:59 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziue-002oWf-2m; Thu, 06 Feb 2020 16:17:52 +0100
+        id 1iziud-002oVl-FH; Thu, 06 Feb 2020 16:17:51 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -49,10 +49,10 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 28/28] docs: networking: convert gtp.txt to ReST
-Date:   Thu,  6 Feb 2020 16:17:48 +0100
-Message-Id: <c6b1e50ab787da57f20507e83a0fb3dbdc7f22b9.1581002063.git.mchehab+huawei@kernel.org>
+        linux-doc@vger.kernel.org, linux-decnet-user@lists.sourceforge.net
+Subject: [PATCH 16/28] docs: networking: convert decnet.txt to ReST
+Date:   Thu,  6 Feb 2020 16:17:36 +0100
+Message-Id: <9b3a8f28718aa8badb1c7b9b13a0499f19af4281.1581002063.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
 References: <cover.1581002062.git.mchehab+huawei@kernel.org>
@@ -65,231 +65,227 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 - add SPDX header;
 - adjust titles and chapters, adding proper markups;
-- add notes markups;
+- mark lists as such;
+- mark code blocks and literals as such;
 - adjust identation, whitespaces and blank lines;
 - add to networking/index.rst.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/networking/{gtp.txt => gtp.rst} | 95 +++++++++++--------
+ .../networking/{decnet.txt => decnet.rst}     | 77 +++++++++++--------
  Documentation/networking/index.rst            |  1 +
- 2 files changed, 59 insertions(+), 37 deletions(-)
- rename Documentation/networking/{gtp.txt => gtp.rst} (79%)
+ 2 files changed, 46 insertions(+), 32 deletions(-)
+ rename Documentation/networking/{decnet.txt => decnet.rst} (87%)
 
-diff --git a/Documentation/networking/gtp.txt b/Documentation/networking/gtp.rst
-similarity index 79%
-rename from Documentation/networking/gtp.txt
-rename to Documentation/networking/gtp.rst
-index 6966bbec1ecb..1563fb94b289 100644
---- a/Documentation/networking/gtp.txt
-+++ b/Documentation/networking/gtp.rst
-@@ -1,12 +1,18 @@
+diff --git a/Documentation/networking/decnet.txt b/Documentation/networking/decnet.rst
+similarity index 87%
+rename from Documentation/networking/decnet.txt
+rename to Documentation/networking/decnet.rst
+index d192f8b9948b..b8bc11ff8370 100644
+--- a/Documentation/networking/decnet.txt
++++ b/Documentation/networking/decnet.rst
+@@ -1,26 +1,31 @@
+-                    Linux DECnet Networking Layer Information
+-                   ===========================================
 +.. SPDX-License-Identifier: GPL-2.0
-+
-+=====================================
- The Linux kernel GTP tunneling module
--======================================================================
--Documentation by Harald Welte <laforge@gnumonks.org> and
--                 Andreas Schultz <aschultz@tpip.net>
-+=====================================
-+
-+Documentation by
-+		 Harald Welte <laforge@gnumonks.org> and
-+		 Andreas Schultz <aschultz@tpip.net>
  
- In 'drivers/net/gtp.c' you are finding a kernel-level implementation
- of a GTP tunnel endpoint.
+-1) Other documentation....
++=========================================
++Linux DECnet Networking Layer Information
++=========================================
  
--== What is GTP ==
-+What is GTP
-+===========
- 
- GTP is the Generic Tunnel Protocol, which is a 3GPP protocol used for
- tunneling User-IP payload between a mobile station (phone, modem)
-@@ -41,7 +47,8 @@ publicly via the 3GPP website at http://www.3gpp.org/DynaReport/29060.htm
- A direct PDF link to v13.6.0 is provided for convenience below:
- http://www.etsi.org/deliver/etsi_ts/129000_129099/129060/13.06.00_60/ts_129060v130600p.pdf
- 
--== The Linux GTP tunnelling module ==
-+The Linux GTP tunnelling module
-+===============================
- 
- The module implements the function of a tunnel endpoint, i.e. it is
- able to decapsulate tunneled IP packets in the uplink originated by
-@@ -70,7 +77,8 @@ Userspace :)
- The official homepage of the module is at
- https://osmocom.org/projects/linux-kernel-gtp-u/wiki
- 
--== Userspace Programs with Linux Kernel GTP-U support ==
-+Userspace Programs with Linux Kernel GTP-U support
-+==================================================
- 
- At the time of this writing, there are at least two Free Software
- implementations that implement GTP-C and can use the netlink interface
-@@ -82,7 +90,8 @@ to make use of the Linux kernel GTP-U support:
- * ergw (GGSN + P-GW in Erlang):
-   https://github.com/travelping/ergw
- 
--== Userspace Library / Command Line Utilities ==
-+Userspace Library / Command Line Utilities
-+==========================================
- 
- There is a userspace library called 'libgtpnl' which is based on
- libmnl and which implements a C-language API towards the netlink
-@@ -90,7 +99,8 @@ interface provided by the Kernel GTP module:
- 
- http://git.osmocom.org/libgtpnl/
- 
--== Protocol Versions ==
-+Protocol Versions
-+=================
- 
- There are two different versions of GTP-U: v0 [GSM TS 09.60] and v1
- [3GPP TS 29.281].  Both are implemented in the Kernel GTP module.
-@@ -105,7 +115,8 @@ doesn't implement GTP-C, we don't have to worry about this.  It's the
- responsibility of the control plane implementation in userspace to
- implement that.
- 
--== IPv6 ==
-+IPv6
-+====
- 
- The 3GPP specifications indicate either IPv4 or IPv6 can be used both
- on the inner (user) IP layer, or on the outer (transport) layer.
-@@ -114,22 +125,25 @@ Unfortunately, the Kernel module currently supports IPv6 neither for
- the User IP payload, nor for the outer IP layer.  Patches or other
- Contributions to fix this are most welcome!
- 
--== Mailing List ==
-+Mailing List
-+============
- 
--If yo have questions regarding how to use the Kernel GTP module from
-+If you have questions regarding how to use the Kernel GTP module from
- your own software, or want to contribute to the code, please use the
- osmocom-net-grps mailing list for related discussion. The list can be
- reached at osmocom-net-gprs@lists.osmocom.org and the mailman
- interface for managing your subscription is at
- https://lists.osmocom.org/mailman/listinfo/osmocom-net-gprs
- 
--== Issue Tracker ==
-+Issue Tracker
-+=============
- 
- The Osmocom project maintains an issue tracker for the Kernel GTP-U
- module at
- https://osmocom.org/projects/linux-kernel-gtp-u/issues
- 
--== History / Acknowledgements ==
-+History / Acknowledgements
+-   o Project Home Pages
+-       http://www.chygwyn.com/                      	    - Kernel info
+-       http://linux-decnet.sourceforge.net/                - Userland tools
+-       http://www.sourceforge.net/projects/linux-decnet/   - Status page
++1. Other documentation....
 +==========================
  
- The Module was originally created in 2012 by Harald Welte, but never
- completed.  Pablo came in to finish the mess Harald left behind.  But
-@@ -139,9 +153,11 @@ In 2015, Andreas Schultz came to the rescue and fixed lots more bugs,
- extended it with new features and finally pushed all of us to get it
- mainline, where it was merged in 4.7.0.
- 
--== Architectural Details ==
-+Architectural Details
-+=====================
- 
--=== Local GTP-U entity and tunnel identification ===
-+Local GTP-U entity and tunnel identification
-+--------------------------------------------
- 
- GTP-U uses UDP for transporting PDU's. The receiving UDP port is 2152
- for GTPv1-U and 3386 for GTPv0-U.
-@@ -164,15 +180,15 @@ Therefore:
-     destination IP and the tunnel endpoint id. The source IP and port
-     have no meaning and can change at any time.
- 
--[3GPP TS 29.281] Section 4.3.0 defines this so:
-+[3GPP TS 29.281] Section 4.3.0 defines this so::
- 
--> The TEID in the GTP-U header is used to de-multiplex traffic
--> incoming from remote tunnel endpoints so that it is delivered to the
--> User plane entities in a way that allows multiplexing of different
--> users, different packet protocols and different QoS levels.
--> Therefore no two remote GTP-U endpoints shall send traffic to a
--> GTP-U protocol entity using the same TEID value except
--> for data forwarding as part of mobility procedures.
-+  The TEID in the GTP-U header is used to de-multiplex traffic
-+  incoming from remote tunnel endpoints so that it is delivered to the
-+  User plane entities in a way that allows multiplexing of different
-+  users, different packet protocols and different QoS levels.
-+  Therefore no two remote GTP-U endpoints shall send traffic to a
-+  GTP-U protocol entity using the same TEID value except
-+  for data forwarding as part of mobility procedures.
- 
- The definition above only defines that two remote GTP-U endpoints
- *should not* send to the same TEID, it *does not* forbid or exclude
-@@ -183,7 +199,8 @@ multiple or unknown peers.
- Therefore, the receiving side identifies tunnels exclusively based on
- TEIDs, not based on the source IP!
- 
--== APN vs. Network Device ==
-+APN vs. Network Device
-+======================
- 
- The GTP-U driver creates a Linux network device for each Gi/SGi
- interface.
-@@ -201,29 +218,33 @@ number of Gi/SGi interfaces implemented by a GGSN/P-GW.
- 
- [3GPP TS 29.061] Section 11.3 makes it clear that the selection of a
- specific Gi/SGi interfaces is made through the Access Point Name
--(APN):
-+(APN)::
- 
--> 2. each private network manages its own addressing. In general this
-->    will result in different private networks having overlapping
-->    address ranges. A logically separate connection (e.g. an IP in IP
-->    tunnel or layer 2 virtual circuit) is used between the GGSN/P-GW
-->    and each private network.
-->
-->    In this case the IP address alone is not necessarily unique.  The
-->    pair of values, Access Point Name (APN) and IPv4 address and/or
-->    IPv6 prefixes, is unique.
-+  2. each private network manages its own addressing. In general this
-+     will result in different private networks having overlapping
-+     address ranges. A logically separate connection (e.g. an IP in IP
-+     tunnel or layer 2 virtual circuit) is used between the GGSN/P-GW
-+     and each private network.
+-2) Configuring the kernel
++   - Project Home Pages
++     - http://www.chygwyn.com/				   - Kernel info
++     - http://linux-decnet.sourceforge.net/                - Userland tools
++     - http://www.sourceforge.net/projects/linux-decnet/   - Status page
 +
-+     In this case the IP address alone is not necessarily unique.  The
-+     pair of values, Access Point Name (APN) and IPv4 address and/or
-+     IPv6 prefixes, is unique.
++2. Configuring the kernel
++=========================
  
- In order to support the overlapping address range use case, each APN
- is mapped to a separate Gi/SGi interface (network device).
+ Be sure to turn on the following options:
  
--NOTE: The Access Point Name is purely a control plane (GTP-C) concept.
--At the GTP-U level, only Tunnel Endpoint Identifiers are present in
--GTP-U packets and network devices are known
-+.. note::
+-    CONFIG_DECNET (obviously)
+-    CONFIG_PROC_FS (to see what's going on)
+-    CONFIG_SYSCTL (for easy configuration)
++    - CONFIG_DECNET (obviously)
++    - CONFIG_PROC_FS (to see what's going on)
++    - CONFIG_SYSCTL (for easy configuration)
+ 
+ if you want to try out router support (not properly debugged yet)
+ you'll need the following options as well...
+ 
+-    CONFIG_DECNET_ROUTER (to be able to add/delete routes)
+-    CONFIG_NETFILTER (will be required for the DECnet routing daemon)
++    - CONFIG_DECNET_ROUTER (to be able to add/delete routes)
++    - CONFIG_NETFILTER (will be required for the DECnet routing daemon)
+ 
+ Don't turn on SIOCGIFCONF support for DECnet unless you are really sure
+ that you need it, in general you won't and it can cause ifconfig to
+@@ -29,7 +34,7 @@ malfunction.
+ Run time configuration has changed slightly from the 2.4 system. If you
+ want to configure an endnode, then the simplified procedure is as follows:
+ 
+- o Set the MAC address on your ethernet card before starting _any_ other
++ - Set the MAC address on your ethernet card before starting _any_ other
+    network protocols.
+ 
+ As soon as your network card is brought into the UP state, DECnet should
+@@ -37,7 +42,8 @@ start working. If you need something more complicated or are unsure how
+ to set the MAC address, see the next section. Also all configurations which
+ worked with 2.4 will work under 2.5 with no change.
+ 
+-3) Command line options
++3. Command line options
++=======================
+ 
+ You can set a DECnet address on the kernel command line for compatibility
+ with the 2.4 configuration procedure, but in general it's not needed any more.
+@@ -56,7 +62,7 @@ interface then you won't see any entries in /proc/net/neigh for the local
+ host until such time as you start a connection. This doesn't affect the
+ operation of the local communications in any other way though.
+ 
+-The kernel command line takes options looking like the following:
++The kernel command line takes options looking like the following::
+ 
+     decnet.addr=1,2
+ 
+@@ -82,7 +88,7 @@ address of the node in order for it to be autoconfigured (and then appear in
+ FTP sites called dn2ethaddr which can compute the correct ethernet
+ address to use. The address can be set by ifconfig either before or
+ at the time the device is brought up. If you are using RedHat you can
+-add the line:
++add the line::
+ 
+     MACADDR=AA:00:04:00:03:04
+ 
+@@ -95,7 +101,7 @@ verify with iproute2).
+ The default device for routing can be set through the /proc filesystem
+ by setting /proc/sys/net/decnet/default_device to the
+ device you want DECnet to route packets out of when no specific route
+-is available. Usually this will be eth0, for example:
++is available. Usually this will be eth0, for example::
+ 
+     echo -n "eth0" >/proc/sys/net/decnet/default_device
+ 
+@@ -106,7 +112,9 @@ confirm that by looking in the default_device file of course.
+ There is a list of what the other files under /proc/sys/net/decnet/ do
+ on the kernel patch web site (shown above).
+ 
+-4) Run time kernel configuration
++4. Run time kernel configuration
++================================
 +
-+   The Access Point Name is purely a control plane (GTP-C) concept.
-+   At the GTP-U level, only Tunnel Endpoint Identifiers are present in
-+   GTP-U packets and network devices are known
  
- Therefore for a given UE the mapping in IP to PDN network is:
-+
-   * network device + MS IP -> Peer IP + Peer TEID,
+ This is either done through the sysctl/proc interface (see the kernel web
+ pages for details on what the various options do) or through the iproute2
+@@ -122,20 +130,21 @@ since its the _only_ way to add and delete routes currently. Eventually
+ there will be a routing daemon to send and receive routing messages for
+ each interface and update the kernel routing tables accordingly. The
+ routing daemon will use netfilter to listen to routing packets, and
+-rtnetlink to update the kernels routing tables. 
++rtnetlink to update the kernels routing tables.
  
- and from PDN to IP network:
-+
-   * local GTP-U IP + TEID  -> network device
+ The DECnet raw socket layer has been removed since it was there purely
+ for use by the routing daemon which will now use netfilter (a much cleaner
+ and more generic solution) instead.
  
- Furthermore, before a received T-PDU is injected into the network
+-5) How can I tell if its working ?
++5. How can I tell if its working?
++=================================
+ 
+ Here is a quick guide of what to look for in order to know if your DECnet
+ kernel subsystem is working.
+ 
+    - Is the node address set (see /proc/sys/net/decnet/node_address)
+-   - Is the node of the correct type 
+-                             (see /proc/sys/net/decnet/conf/<dev>/forwarding)
++   - Is the node of the correct type
++     (see /proc/sys/net/decnet/conf/<dev>/forwarding)
+    - Is the Ethernet MAC address of each Ethernet card set to match
+      the DECnet address. If in doubt use the dn2ethaddr utility available
+      at the ftp archive.
+@@ -160,7 +169,8 @@ kernel subsystem is working.
+      network, and see if you can obtain the same results.
+    - At this point you are on your own... :-)
+ 
+-6) How to send a bug report
++6. How to send a bug report
++===========================
+ 
+ If you've found a bug and want to report it, then there are several things
+ you can do to help me work out exactly what it is that is wrong. Useful
+@@ -175,18 +185,19 @@ information (_most_ of which _is_ _essential_) includes:
+  - How much data was being transferred ?
+  - Was the network congested ?
+  - How can the problem be reproduced ?
+- - Can you use tcpdump to get a trace ? (N.B. Most (all?) versions of 
++ - Can you use tcpdump to get a trace ? (N.B. Most (all?) versions of
+    tcpdump don't understand how to dump DECnet properly, so including
+    the hex listing of the packet contents is _essential_, usually the -x flag.
+    You may also need to increase the length grabbed with the -s flag. The
+    -e flag also provides very useful information (ethernet MAC addresses))
+ 
+-7) MAC FAQ
++7. MAC FAQ
++==========
+ 
+ A quick FAQ on ethernet MAC addresses to explain how Linux and DECnet
+-interact and how to get the best performance from your hardware. 
++interact and how to get the best performance from your hardware.
+ 
+-Ethernet cards are designed to normally only pass received network frames 
++Ethernet cards are designed to normally only pass received network frames
+ to a host computer when they are addressed to it, or to the broadcast address.
+ 
+ Linux has an interface which allows the setting of extra addresses for
+@@ -197,8 +208,8 @@ significant processor time and bus bandwidth can be used up on a busy
+ network (see the NAPI documentation for a longer explanation of these
+ effects).
+ 
+-DECnet makes use of this interface to allow running DECnet on an ethernet 
+-card which has already been configured using TCP/IP (presumably using the 
++DECnet makes use of this interface to allow running DECnet on an ethernet
++card which has already been configured using TCP/IP (presumably using the
+ built in MAC address of the card, as usual) and/or to allow multiple DECnet
+ addresses on each physical interface. If you do this, be aware that if your
+ ethernet card doesn't support perfect hashing in its MAC address filter
+@@ -210,7 +221,8 @@ to gain the best efficiency. Better still is to use a card which supports
+ NAPI as well.
+ 
+ 
+-8) Mailing list
++8. Mailing list
++===============
+ 
+ If you are keen to get involved in development, or want to ask questions
+ about configuration, or even just report bugs, then there is a mailing
+@@ -218,7 +230,8 @@ list that you can join, details are at:
+ 
+ http://sourceforge.net/mail/?group_id=4993
+ 
+-9) Legal Info
++9. Legal Info
++=============
+ 
+ The Linux DECnet project team have placed their code under the GPL. The
+ software is provided "as is" and without warranty express or implied.
 diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 548f8c281d01..9c638b913387 100644
+index 7c815ffb1403..3acf02aaacee 100644
 --- a/Documentation/networking/index.rst
 +++ b/Documentation/networking/index.rst
-@@ -60,6 +60,7 @@ Contents:
-    generic-hdlc
-    generic_netlink
-    gen_stats
-+   gtp
+@@ -48,6 +48,7 @@ Contents:
+    cxacru
+    dccp
+    dctcp
++   decnet
  
  .. only::  subproject and html
  
