@@ -2,247 +2,195 @@ Return-Path: <SRS0=0Sen=32=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11E75C3B187
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7140AC3B184
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D30B020838
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002318;
-	bh=WsUjLft8s/0sVeDKMpuCn8hiOrg7iJGOX9NrHavdXX4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=FnLOmh/l0NCKnxKYAL39114VY29kAHQR2YSJqqePKQo/+p/+IwLjrJbzZShVDoq58
-	 f1Ro+RG1/yIVz4uQHHjywyDZJ9ZtGy7MmGSiy2nrF2KFDtdU7Py51hD3RzjIunFHBv
-	 wOQZpguXsOXmv7FLBsIyDW2jOxrFrULQjbOq9Cmc=
+	by mail.kernel.org (Postfix) with ESMTP id 3DC8C20838
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EsANk3EN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727856AbgBFPSh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:18:37 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38150 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727604AbgBFPSA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:18:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=hxtqPG2PmCrRsqAVYVDHkWSaT6ymA3jSiP5ZLoDasWE=; b=R2q93KJMFjW/TXg1otCvKSICSO
-        NeDoZ6Y0QPiIolUzlSEgwgHrklzCGbSkt6O7yjg3dHj55DIyxOFxSs5678HMqqHtQgNzbwr+HCLIj
-        hYo6O77bI/poQh8Wm/dnOh1Tdqbx6k3zGUESaPQfOMiE38/ZpFW8E0jBdFryRPz9K2fbfn29yeIXr
-        2vJa7g0gPjlky4lk3ErkL/oqslGf8fwvJ+5AGudci99G0KB1cTnWJrleq+rNjrpHx/2DQLFqIGNsw
-        iWTomgF7q/VwMLmhF7i57K5kU5it+CVpBAyYSmukDzWNCKgDO1w73fkDHY/QFkY7oaMYrdhn1Hcsn
-        48U5Ssrw==;
-Received: from [179.95.15.160] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziul-0005jK-LQ; Thu, 06 Feb 2020 15:18:00 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziuc-002oUz-Md; Thu, 06 Feb 2020 16:17:50 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 04/28] docs: networking: convert altera_tse.txt to ReST
-Date:   Thu,  6 Feb 2020 16:17:24 +0100
-Message-Id: <4904cf566caff70fefba1c3e4bdb8a3ec0ab94aa.1581002063.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
-References: <cover.1581002062.git.mchehab+huawei@kernel.org>
+        id S1727881AbgBFPSn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:18:43 -0500
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:29252 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727873AbgBFPSm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 6 Feb 2020 10:18:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1581002321;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bmV5fzydc3rcIazejW+HPUQs71G2JgpFlEg2HuiWNZ4=;
+        b=EsANk3ENHMDxF938RHvSmQt17OH96TAIcZOZsozE504ccJ57DKQk5XXDdWJTG0+QKHghKB
+        RR7Ze//dr5bbpGK1KKBUWAXtimbuVRxFGJE0PkYz73pQEXuRnjX29cKaY2lWDxgwS7Z70Q
+        N78npyuSCNGUxUr2rYbA+vJYYg8mPYo=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-411-x_P5Hu3fMoGsIOSFQsJIlA-1; Thu, 06 Feb 2020 10:18:39 -0500
+X-MC-Unique: x_P5Hu3fMoGsIOSFQsJIlA-1
+Received: by mail-wr1-f71.google.com with SMTP id t3so3527597wrm.23
+        for <linux-media@vger.kernel.org>; Thu, 06 Feb 2020 07:18:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bmV5fzydc3rcIazejW+HPUQs71G2JgpFlEg2HuiWNZ4=;
+        b=sdmleGy5n/cs/GF6odUfDJP8GRJkJAqw+V8WOkSpph2Awv1x66I6t5aPI13RByU7qh
+         cO614Ln1vXx0wZY3HXR7gmr7nAcK9CxURJMooWXMEtbOqm2NeNDz/pR/uEeyXUdK2Mvx
+         GJP6c7ahrcxHArxlrHZEmv1pttOCkSxL57BuLBLmmyHmlrZ46oSAvlAU9UUCAR5m/frD
+         2Hb964XkiJer4DSBsPNHOePlMycSpMaermxfIU8GcN3+XFuIPB+f2Iootdf20rGodQ7Y
+         7fa3e0IE/xy3L9oFsMfcYPGVmc4rlxbHzvuwwM0zhXEPN/mT6i6eSgBxYNI8eibc5U8u
+         YVmA==
+X-Gm-Message-State: APjAAAXyqEfiLf/E/cw1wH8Eak20nGvltiIgFpIK6gaJM0PI8QxsRB7X
+        iMmM46lWTDakB2WmRvvdSH0RvsPs1Q+gFz/hNpekUsQdxgCGVNO/gNEmiAu9gyaaC84YwMK6Qe8
+        4LgpLS6v/o1ePLaUle+22uOU=
+X-Received: by 2002:a7b:ca49:: with SMTP id m9mr5329731wml.50.1581002318396;
+        Thu, 06 Feb 2020 07:18:38 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzAJWYqhylWktnILpnrmT9YkEhB6Yu5lRTU8758ARVrJbf++M5496LmTA7BV6VbGzIBWVT6Uw==
+X-Received: by 2002:a7b:ca49:: with SMTP id m9mr5329708wml.50.1581002318087;
+        Thu, 06 Feb 2020 07:18:38 -0800 (PST)
+Received: from [10.201.49.5] (nat-pool-mxp-u.redhat.com. [149.6.153.187])
+        by smtp.gmail.com with ESMTPSA id p15sm3918709wma.40.2020.02.06.07.18.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Feb 2020 07:18:37 -0800 (PST)
+Subject: Re: [PATCH v2 00/27] docs: virt: manually convert text documents to
+ ReST format
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-doc@vger.kernel.org,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Richard Weinberger <richard@nod.at>,
+        Jeff Dike <jdike@addtoit.com>, kvm@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-um@lists.infradead.org
+References: <cover.1581000481.git.mchehab+huawei@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <f8dab5f5-3b54-0b0a-0b34-c1c450813af5@redhat.com>
+Date:   Thu, 6 Feb 2020 16:18:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1581000481.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- add SPDX header;
-- use copyright symbol;
-- adjust titles and chapters, adding proper markups;
-- mark lists as such;
-- adjust identation, whitespaces and blank lines;
-- add to networking/index.rst.
+On 06/02/20 15:49, Mauro Carvalho Chehab wrote:
+> Manually convert the documentation under Documentation/virt to ReST,
+> minimizing the usage of uneeded markups and preserving the documentation
+> writer's style.
+> 
+> PS.: Patches are against linux-next tree (20200204).
+> 
+> v2:
+> 
+> - Solved a conflict with linux-next;
+> - Added SPDX headers.
+> 
+> Mauro Carvalho Chehab (27):
+>   docs: kvm: add arm/pvtime.rst to index.rst
+>   docs: virt: convert UML documentation to ReST
+>   docs: virt: user_mode_linux.rst: update compiling instructions
+>   docs: virt: user_mode_linux.rst: fix URL references
+>   docs: virt: convert halt-polling.txt to ReST format
+>   docs: virt: Convert msr.txt to ReST format
+>   docs: kvm: devices/arm-vgic-its.txt to ReST format
+>   docs: kvm: devices/arm-vgit-v3.txt to ReST
+>   docs: kvm: convert devices/arm-vgit.txt to ReST
+>   docs: kvm: convert devices/mpic.txt to ReST
+>   docs: kvm: convert devices/s390_flic.txt to ReST
+>   docs: kvm: convert devices/vcpu.txt to ReST
+>   docs: kvm: convert devices/vcpu.txt to ReST
+>   docs: kvm: convert devices/vm.txt to ReST
+>   docs: kvm: convert devices/xics.txt to ReST
+>   docs: kvm: convert devices/xive.txt to ReST
+>   docs: kvm: Convert api.txt to ReST format
+>   docs: kvm: convert arm/hyp-abi.txt to ReST
+>   docs: kvm: arm/psci.txt: convert to ReST
+>   docs: kvm: Convert hypercalls.txt to ReST format
+>   docs: kvm: Convert locking.txt to ReST format
+>   docs: kvm: Convert mmu.txt to ReST format
+>   docs: kvm: Convert nested-vmx.txt to ReST format
+>   docs: kvm: Convert ppc-pv.txt to ReST format
+>   docs: kvm: Convert s390-diag.txt to ReST format
+>   docs: kvm: Convert timekeeping.txt to ReST format
+>   docs: kvm: review-checklist.txt: rename to ReST
+> 
+>  Documentation/virt/index.rst                  |    1 +
+>  Documentation/virt/kvm/{api.txt => api.rst}   | 3348 ++++++++++-------
+>  .../virt/kvm/arm/{hyp-abi.txt => hyp-abi.rst} |   28 +-
+>  Documentation/virt/kvm/arm/index.rst          |   12 +
+>  .../virt/kvm/arm/{psci.txt => psci.rst}       |   46 +-
+>  .../{arm-vgic-its.txt => arm-vgic-its.rst}    |  106 +-
+>  .../{arm-vgic-v3.txt => arm-vgic-v3.rst}      |  132 +-
+>  .../devices/{arm-vgic.txt => arm-vgic.rst}    |   89 +-
+>  Documentation/virt/kvm/devices/index.rst      |   19 +
+>  .../virt/kvm/devices/{mpic.txt => mpic.rst}   |   11 +-
+>  .../devices/{s390_flic.txt => s390_flic.rst}  |   70 +-
+>  Documentation/virt/kvm/devices/vcpu.rst       |  114 +
+>  Documentation/virt/kvm/devices/vcpu.txt       |   76 -
+>  .../virt/kvm/devices/{vfio.txt => vfio.rst}   |   25 +-
+>  .../virt/kvm/devices/{vm.txt => vm.rst}       |  206 +-
+>  .../virt/kvm/devices/{xics.txt => xics.rst}   |   28 +-
+>  .../virt/kvm/devices/{xive.txt => xive.rst}   |  148 +-
+>  .../{halt-polling.txt => halt-polling.rst}    |   86 +-
+>  .../kvm/{hypercalls.txt => hypercalls.rst}    |  129 +-
+>  Documentation/virt/kvm/index.rst              |   16 +
+>  .../virt/kvm/{locking.txt => locking.rst}     |  111 +-
+>  Documentation/virt/kvm/{mmu.txt => mmu.rst}   |   62 +-
+>  Documentation/virt/kvm/{msr.txt => msr.rst}   |  147 +-
+>  .../kvm/{nested-vmx.txt => nested-vmx.rst}    |   37 +-
+>  .../virt/kvm/{ppc-pv.txt => ppc-pv.rst}       |   26 +-
+>  ...iew-checklist.txt => review-checklist.rst} |    3 +
+>  .../virt/kvm/{s390-diag.txt => s390-diag.rst} |   13 +-
+>  .../kvm/{timekeeping.txt => timekeeping.rst}  |  221 +-
+>  ...odeLinux-HOWTO.txt => user_mode_linux.rst} | 1814 ++++-----
+>  29 files changed, 4003 insertions(+), 3121 deletions(-)
+>  rename Documentation/virt/kvm/{api.txt => api.rst} (71%)
+>  rename Documentation/virt/kvm/arm/{hyp-abi.txt => hyp-abi.rst} (79%)
+>  create mode 100644 Documentation/virt/kvm/arm/index.rst
+>  rename Documentation/virt/kvm/arm/{psci.txt => psci.rst} (60%)
+>  rename Documentation/virt/kvm/devices/{arm-vgic-its.txt => arm-vgic-its.rst} (71%)
+>  rename Documentation/virt/kvm/devices/{arm-vgic-v3.txt => arm-vgic-v3.rst} (77%)
+>  rename Documentation/virt/kvm/devices/{arm-vgic.txt => arm-vgic.rst} (66%)
+>  create mode 100644 Documentation/virt/kvm/devices/index.rst
+>  rename Documentation/virt/kvm/devices/{mpic.txt => mpic.rst} (91%)
+>  rename Documentation/virt/kvm/devices/{s390_flic.txt => s390_flic.rst} (87%)
+>  create mode 100644 Documentation/virt/kvm/devices/vcpu.rst
+>  delete mode 100644 Documentation/virt/kvm/devices/vcpu.txt
+>  rename Documentation/virt/kvm/devices/{vfio.txt => vfio.rst} (72%)
+>  rename Documentation/virt/kvm/devices/{vm.txt => vm.rst} (61%)
+>  rename Documentation/virt/kvm/devices/{xics.txt => xics.rst} (84%)
+>  rename Documentation/virt/kvm/devices/{xive.txt => xive.rst} (62%)
+>  rename Documentation/virt/kvm/{halt-polling.txt => halt-polling.rst} (64%)
+>  rename Documentation/virt/kvm/{hypercalls.txt => hypercalls.rst} (55%)
+>  rename Documentation/virt/kvm/{locking.txt => locking.rst} (78%)
+>  rename Documentation/virt/kvm/{mmu.txt => mmu.rst} (94%)
+>  rename Documentation/virt/kvm/{msr.txt => msr.rst} (74%)
+>  rename Documentation/virt/kvm/{nested-vmx.txt => nested-vmx.rst} (90%)
+>  rename Documentation/virt/kvm/{ppc-pv.txt => ppc-pv.rst} (91%)
+>  rename Documentation/virt/kvm/{review-checklist.txt => review-checklist.rst} (95%)
+>  rename Documentation/virt/kvm/{s390-diag.txt => s390-diag.rst} (90%)
+>  rename Documentation/virt/kvm/{timekeeping.txt => timekeeping.rst} (85%)
+>  rename Documentation/virt/uml/{UserModeLinux-HOWTO.txt => user_mode_linux.rst} (74%)
+> 
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- .../{altera_tse.txt => altera_tse.rst}        | 87 ++++++++++++-------
- Documentation/networking/index.rst            |  1 +
- 2 files changed, 56 insertions(+), 32 deletions(-)
- rename Documentation/networking/{altera_tse.txt => altera_tse.rst} (85%)
+Wow, thanks very much for doing this.  It would be great if we could get
+this to Linus not long after the merge window; I'll do my best to review
+it quickly.
 
-diff --git a/Documentation/networking/altera_tse.txt b/Documentation/networking/altera_tse.rst
-similarity index 85%
-rename from Documentation/networking/altera_tse.txt
-rename to Documentation/networking/altera_tse.rst
-index 50b8589d12fd..7a7040072e58 100644
---- a/Documentation/networking/altera_tse.txt
-+++ b/Documentation/networking/altera_tse.rst
-@@ -1,6 +1,12 @@
--       Altera Triple-Speed Ethernet MAC driver
-+.. SPDX-License-Identifier: GPL-2.0
- 
--Copyright (C) 2008-2014 Altera Corporation
-+.. include:: <isonum.txt>
-+
-+=======================================
-+Altera Triple-Speed Ethernet MAC driver
-+=======================================
-+
-+Copyright |copy| 2008-2014 Altera Corporation
- 
- This is the driver for the Altera Triple-Speed Ethernet (TSE) controllers
- using the SGDMA and MSGDMA soft DMA IP components. The driver uses the
-@@ -46,23 +52,33 @@ Jumbo frames are not supported at this time.
- The driver limits PHY operations to 10/100Mbps, and has not yet been fully
- tested for 1Gbps. This support will be added in a future maintenance update.
- 
--1) Kernel Configuration
-+1. Kernel Configuration
-+=======================
-+
- The kernel configuration option is ALTERA_TSE:
-+
-  Device Drivers ---> Network device support ---> Ethernet driver support --->
-  Altera Triple-Speed Ethernet MAC support (ALTERA_TSE)
- 
--2) Driver parameters list:
--	debug: message level (0: no output, 16: all);
--	dma_rx_num: Number of descriptors in the RX list (default is 64);
--	dma_tx_num: Number of descriptors in the TX list (default is 64).
-+2. Driver parameters list
-+=========================
-+
-+	- debug: message level (0: no output, 16: all);
-+	- dma_rx_num: Number of descriptors in the RX list (default is 64);
-+	- dma_tx_num: Number of descriptors in the TX list (default is 64).
-+
-+3. Command line options
-+=======================
-+
-+Driver parameters can be also passed in command line by using::
- 
--3) Command line options
--Driver parameters can be also passed in command line by using:
- 	altera_tse=dma_rx_num:128,dma_tx_num:512
- 
--4) Driver information and notes
-+4. Driver information and notes
-+===============================
- 
--4.1) Transmit process
-+4.1. Transmit process
-+---------------------
- When the driver's transmit routine is called by the kernel, it sets up a
- transmit descriptor by calling the underlying DMA transmit routine (SGDMA or
- MSGDMA), and initiates a transmit operation. Once the transmit is complete, an
-@@ -70,7 +86,8 @@ interrupt is driven by the transmit DMA logic. The driver handles the transmit
- completion in the context of the interrupt handling chain by recycling
- resource required to send and track the requested transmit operation.
- 
--4.2) Receive process
-+4.2. Receive process
-+--------------------
- The driver will post receive buffers to the receive DMA logic during driver
- initialization. Receive buffers may or may not be queued depending upon the
- underlying DMA logic (MSGDMA is able queue receive buffers, SGDMA is not able
-@@ -79,34 +96,39 @@ received, the DMA logic generates an interrupt. The driver handles a receive
- interrupt by obtaining the DMA receive logic status, reaping receive
- completions until no more receive completions are available.
- 
--4.3) Interrupt Mitigation
-+4.3. Interrupt Mitigation
-+-------------------------
- The driver is able to mitigate the number of its DMA interrupts
- using NAPI for receive operations. Interrupt mitigation is not yet supported
- for transmit operations, but will be added in a future maintenance release.
- 
- 4.4) Ethtool support
-+--------------------
- Ethtool is supported. Driver statistics and internal errors can be taken using:
- ethtool -S ethX command. It is possible to dump registers etc.
- 
- 4.5) PHY Support
-+----------------
- The driver is compatible with PAL to work with PHY and GPHY devices.
- 
- 4.7) List of source files:
-- o Kconfig
-- o Makefile
-- o altera_tse_main.c: main network device driver
-- o altera_tse_ethtool.c: ethtool support
-- o altera_tse.h: private driver structure and common definitions
-- o altera_msgdma.h: MSGDMA implementation function definitions
-- o altera_sgdma.h: SGDMA implementation function definitions
-- o altera_msgdma.c: MSGDMA implementation
-- o altera_sgdma.c: SGDMA implementation
-- o altera_sgdmahw.h: SGDMA register and descriptor definitions
-- o altera_msgdmahw.h: MSGDMA register and descriptor definitions
-- o altera_utils.c: Driver utility functions
-- o altera_utils.h: Driver utility function definitions
-+--------------------------
-+ - Kconfig
-+ - Makefile
-+ - altera_tse_main.c: main network device driver
-+ - altera_tse_ethtool.c: ethtool support
-+ - altera_tse.h: private driver structure and common definitions
-+ - altera_msgdma.h: MSGDMA implementation function definitions
-+ - altera_sgdma.h: SGDMA implementation function definitions
-+ - altera_msgdma.c: MSGDMA implementation
-+ - altera_sgdma.c: SGDMA implementation
-+ - altera_sgdmahw.h: SGDMA register and descriptor definitions
-+ - altera_msgdmahw.h: MSGDMA register and descriptor definitions
-+ - altera_utils.c: Driver utility functions
-+ - altera_utils.h: Driver utility function definitions
- 
--5) Debug Information
-+5. Debug Information
-+====================
- 
- The driver exports debug information such as internal statistics,
- debug information, MAC and DMA registers etc.
-@@ -118,17 +140,18 @@ or sees the MAC registers: e.g. using: ethtool -d ethX
- The developer can also use the "debug" module parameter to get
- further debug information.
- 
--6) Statistics Support
-+6. Statistics Support
-+=====================
- 
- The controller and driver support a mix of IEEE standard defined statistics,
- RFC defined statistics, and driver or Altera defined statistics. The four
- specifications containing the standard definitions for these statistics are
- as follows:
- 
-- o IEEE 802.3-2012 - IEEE Standard for Ethernet.
-- o RFC 2863 found at http://www.rfc-editor.org/rfc/rfc2863.txt.
-- o RFC 2819 found at http://www.rfc-editor.org/rfc/rfc2819.txt.
-- o Altera Triple Speed Ethernet User Guide, found at http://www.altera.com
-+ - IEEE 802.3-2012 - IEEE Standard for Ethernet.
-+ - RFC 2863 found at http://www.rfc-editor.org/rfc/rfc2863.txt.
-+ - RFC 2819 found at http://www.rfc-editor.org/rfc/rfc2819.txt.
-+ - Altera Triple Speed Ethernet User Guide, found at http://www.altera.com
- 
- The statistics supported by the TSE and the device driver are as follows:
- 
-diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 0b8b4848683d..16778c7e023b 100644
---- a/Documentation/networking/index.rst
-+++ b/Documentation/networking/index.rst
-@@ -36,6 +36,7 @@ Contents:
-    nfc
-    6lowpan
-    6pack
-+   altera_tse
- 
- .. only::  subproject and html
- 
--- 
-2.24.1
+Paolo
 
