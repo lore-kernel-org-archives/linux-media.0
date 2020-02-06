@@ -2,66 +2,60 @@ Return-Path: <SRS0=0Sen=32=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 382C4C352A4
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE517C2D0B1
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0DF0E21741
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB76A20838
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002306;
-	bh=UnNMWC/0/qM4XcS+W8r6JNL2MhsJZ+d+LVYR7MJikgQ=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=MhHA3jVIvwBo51I5aQyYAwPmlaa6/Wt3KsVR3uFmgleS5dRPWfgwtrZLWZ1LsVB3v
-	 ex6n0Zyk4l9I07MzDjEIuaiWtEU1CnsJQ/aEMSkE9C/OtWkKz53D/ffdDU6FS54vob
-	 CRDLcLPWMq4alqxWUw0fmc5AhqRYVx3L7XgN41o4=
+	s=default; t=1581002309;
+	bh=XdTyZooBRMKtyKSrT4v/e8SPc1N3XdUEAP2haII5urU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=mAw241bKGsCDu3s9vwb1SRHt1fax63Tax7alWyXOsVTCDEyWWewOQXdjhwLifO44O
+	 pwHLnHRB60HlEavmGBvb/n3Dgfyi2BKLK8/3OUN7w3L9TLWpMpWw0mPBtVsAbSL81k
+	 uE+QKhk4YSgXApPXvTf+ZG/9tD+RQZ3HeJqgp248=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727782AbgBFPSX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:18:23 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38224 "EHLO
+        id S1727833AbgBFPS2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:18:28 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38146 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727641AbgBFPSB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:18:01 -0500
+        with ESMTP id S1727600AbgBFPSA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:18:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=eNDq33QOomCijKEVn1Z9oPH66Mc+mguHW+VeL5pLAhc=; b=So8I9geR14GrGuO9lA9c6sXiEo
-        7Ws15T/LX0KmsnmzEPlAAEj23x41YzqKtxcygM1Xqa3cte8wLkTcHLT/w0P+Mx8wvk79NQg2iSCJ6
-        fctuWwiTO348VpvHZBgzU9iqP9XQIh1Ohc78Tr+kj7Mm0cbBOWXGEsDO6B0PgI+o+1yyscaCOyL/A
-        8AD1Iv7rkKa0ycgY8nsAEugIElBxYwhWE91OCEI+owntY79wPXGI++GaM9OCtOmkpd9Nn8rpu7QfJ
-        72YqQZf8OZZXxyX88DBgxCoA76E6oyjzgcVYxeEFOzHXAyBfkpM9+mA0BT54q/c9g0dxFRCiSzrqF
-        UHHHAhNA==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=TDw4+n6xFIkIZr6/PMan7IvWXuztzHBg7QOOp1nQd6U=; b=tyrOorZGg0l/BAcXz//a1S6VmB
+        AHc1UDlvIBDN1MUiIG0StZ1YKBfgyBLYKBSOEfTQ6ForLgpKnFh+nxaacZwGL/Z94KB779y1I/UW0
+        XDMYScpzS1mJ5Uw4DIBg2WTuRNO1kUJCEJEucUFRSc8E3mQ6ko3N54wColDvdlMPi2SqVa3SBQv2S
+        bjXhW2DOFuU74Z++DCsmssYt3hyw1HXowaS+1ErYB0/AuGfFFxRVHgQWAPfOgGUcquorhNmZQMWDA
+        7qjSWYVT9Ye9/AZD9Qo+U2xVFcP5I0+bjfJij+m6WvFS4ve35WzW0JtWB65hYrJa8lj0lufC/d2ZE
+        4AsiTcgA==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziul-0005jA-Al; Thu, 06 Feb 2020 15:17:59 +0000
+        id 1iziul-0005jP-Ib; Thu, 06 Feb 2020 15:18:00 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziuc-002oUk-B9; Thu, 06 Feb 2020 16:17:50 +0100
+        id 1iziud-002oVJ-3l; Thu, 06 Feb 2020 16:17:51 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        linux-doc@vger.kernel.org, Yonghong Song <yhs@fb.com>,
-        Jukka Rissanen <jukka.rissanen@linux.intel.com>,
-        netdev@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-wpan@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>, bpf@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-bluetooth@vger.kernel.org
-Subject: [PATCH 00/28] Manually convert network text files to ReST (part 1)
-Date:   Thu,  6 Feb 2020 16:17:20 +0100
-Message-Id: <cover.1581002062.git.mchehab+huawei@kernel.org>
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 09/28] docs: networking: convert baycom.txt to ReST
+Date:   Thu,  6 Feb 2020 16:17:29 +0100
+Message-Id: <14095ed618a5e64460923da48236bfc6d8943e5a.1581002063.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
+References: <cover.1581002062.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -69,110 +63,232 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Manually convert Documentation/networking text files to ReST.
+- add SPDX header;
+- adjust titles and chapters, adding proper markups;
+- mark code blocks and literals as such;
+- mark tables as such;
+- adjust identation, whitespaces and blank lines;
+- add to networking/index.rst.
 
-As there are lots of unconverted files there, I have ~120 patches.
-So, I'll split the conversion into 4 parts. This is the first patch.
-
-Mauro Carvalho Chehab (28):
-  docs: networking: caif: convert to ReST
-  docs: networking: convert 6lowpan.txt to ReST
-  docs: networking: convert 6pack.txt to ReST
-  docs: networking: convert altera_tse.txt to ReST
-  docs: networking: convert arcnet-hardware.txt to ReST
-  docs: networking: convert arcnet.txt to ReST
-  docs: networking: convert atm.txt to ReST
-  docs: networking: convert ax25.txt to ReST
-  docs: networking: convert baycom.txt to ReST
-  docs: networking: convert bonding.txt to ReST
-  docs: networking: convert cdc_mbim.txt to ReST
-  docs: networking: convert cops.txt to ReST
-  docs: networking: convert cxacru.txt to ReST
-  docs: networking: convert dccp.txt to ReST
-  docs: networking: convert dctcp.txt to ReST
-  docs: networking: convert decnet.txt to ReST
-  docs: networking: convert defza.txt to ReST
-  docs: networking: convert dns_resolver.txt to ReST
-  docs: networking: convert driver.txt to ReST
-  docs: networking: convert eql.txt to ReST
-  docs: networking: convert fib_trie.txt to ReST
-  docs: networking: convert filter.txt to ReST
-  docs: networking: convert fore200e.txt to ReST
-  docs: networking: convert framerelay.txt to ReST
-  docs: networking: convert generic-hdlc.txt to ReST
-  docs: networking: convert generic_netlink.txt to ReST
-  docs: networking: convert gen_stats.txt to ReST
-  docs: networking: convert gtp.txt to ReST
-
- .../networking/{6lowpan.txt => 6lowpan.rst}   |   29 +-
- .../networking/{6pack.txt => 6pack.rst}       |   46 +-
- .../{altera_tse.txt => altera_tse.rst}        |   87 +-
- ...rcnet-hardware.txt => arcnet-hardware.rst} | 2169 +++++++++--------
- .../networking/{arcnet.txt => arcnet.rst}     |  348 +--
- Documentation/networking/{atm.txt => atm.rst} |    6 +
- .../networking/{ax25.txt => ax25.rst}         |    6 +
- .../networking/{baycom.txt => baycom.rst}     |  110 +-
- .../networking/{bonding.txt => bonding.rst}   | 1273 +++++-----
- Documentation/networking/caif/caif.rst        |    2 -
- Documentation/networking/caif/index.rst       |   13 +
- .../caif/{Linux-CAIF.txt => linux_caif.rst}   |   54 +-
- Documentation/networking/caif/spi_porting.rst |  229 ++
- Documentation/networking/caif/spi_porting.txt |  208 --
- .../networking/{cdc_mbim.txt => cdc_mbim.rst} |   76 +-
- Documentation/networking/cops.rst             |   80 +
- Documentation/networking/cops.txt             |   63 -
- .../networking/{cxacru.txt => cxacru.rst}     |   86 +-
- .../networking/{dccp.txt => dccp.rst}         |   39 +-
- .../networking/{dctcp.txt => dctcp.rst}       |   14 +-
- .../networking/{decnet.txt => decnet.rst}     |   77 +-
- .../networking/{defza.txt => defza.rst}       |    8 +-
- .../{dns_resolver.txt => dns_resolver.rst}    |   52 +-
- .../networking/{driver.txt => driver.rst}     |   22 +-
- Documentation/networking/{eql.txt => eql.rst} |  445 ++--
- .../networking/{fib_trie.txt => fib_trie.rst} |   16 +-
- .../networking/{filter.txt => filter.rst}     |  850 ++++---
- .../networking/{fore200e.txt => fore200e.rst} |    8 +-
- .../{framerelay.txt => framerelay.rst}        |   21 +-
- .../{gen_stats.txt => gen_stats.rst}          |   98 +-
- .../{generic-hdlc.txt => generic-hdlc.rst}    |   86 +-
- ...eneric_netlink.txt => generic_netlink.rst} |    6 +
- Documentation/networking/{gtp.txt => gtp.rst} |   95 +-
- Documentation/networking/index.rst            |   28 +
- 34 files changed, 3610 insertions(+), 3140 deletions(-)
- rename Documentation/networking/{6lowpan.txt => 6lowpan.rst} (64%)
- rename Documentation/networking/{6pack.txt => 6pack.rst} (90%)
- rename Documentation/networking/{altera_tse.txt => altera_tse.rst} (85%)
- rename Documentation/networking/{arcnet-hardware.txt => arcnet-hardware.rst} (66%)
- rename Documentation/networking/{arcnet.txt => arcnet.rst} (76%)
- rename Documentation/networking/{atm.txt => atm.rst} (89%)
- rename Documentation/networking/{ax25.txt => ax25.rst} (91%)
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ .../networking/{baycom.txt => baycom.rst}     | 110 ++++++++++--------
+ Documentation/networking/index.rst            |   1 +
+ 2 files changed, 64 insertions(+), 47 deletions(-)
  rename Documentation/networking/{baycom.txt => baycom.rst} (58%)
- rename Documentation/networking/{bonding.txt => bonding.rst} (75%)
- create mode 100644 Documentation/networking/caif/index.rst
- rename Documentation/networking/caif/{Linux-CAIF.txt => linux_caif.rst} (90%)
- create mode 100644 Documentation/networking/caif/spi_porting.rst
- delete mode 100644 Documentation/networking/caif/spi_porting.txt
- rename Documentation/networking/{cdc_mbim.txt => cdc_mbim.rst} (88%)
- create mode 100644 Documentation/networking/cops.rst
- delete mode 100644 Documentation/networking/cops.txt
- rename Documentation/networking/{cxacru.txt => cxacru.rst} (66%)
- rename Documentation/networking/{dccp.txt => dccp.rst} (94%)
- rename Documentation/networking/{dctcp.txt => dctcp.rst} (89%)
- rename Documentation/networking/{decnet.txt => decnet.rst} (87%)
- rename Documentation/networking/{defza.txt => defza.rst} (91%)
- rename Documentation/networking/{dns_resolver.txt => dns_resolver.rst} (89%)
- rename Documentation/networking/{driver.txt => driver.rst} (85%)
- rename Documentation/networking/{eql.txt => eql.rst} (62%)
- rename Documentation/networking/{fib_trie.txt => fib_trie.rst} (96%)
- rename Documentation/networking/{filter.txt => filter.rst} (77%)
- rename Documentation/networking/{fore200e.txt => fore200e.rst} (94%)
- rename Documentation/networking/{framerelay.txt => framerelay.rst} (93%)
- rename Documentation/networking/{gen_stats.txt => gen_stats.rst} (60%)
- rename Documentation/networking/{generic-hdlc.txt => generic-hdlc.rst} (75%)
- rename Documentation/networking/{generic_netlink.txt => generic_netlink.rst} (64%)
- rename Documentation/networking/{gtp.txt => gtp.rst} (79%)
 
+diff --git a/Documentation/networking/baycom.txt b/Documentation/networking/baycom.rst
+similarity index 58%
+rename from Documentation/networking/baycom.txt
+rename to Documentation/networking/baycom.rst
+index 688f18fd4467..fe2d010f0e86 100644
+--- a/Documentation/networking/baycom.txt
++++ b/Documentation/networking/baycom.rst
+@@ -1,26 +1,31 @@
+-		    LINUX DRIVERS FOR BAYCOM MODEMS
++.. SPDX-License-Identifier: GPL-2.0
+ 
+-       Thomas M. Sailer, HB9JNX/AE4WA, <sailer@ife.ee.ethz.ch>
++===============================
++Linux Drivers for Baycom Modems
++===============================
+ 
+-!!NEW!! (04/98) The drivers for the baycom modems have been split into
++Thomas M. Sailer, HB9JNX/AE4WA, <sailer@ife.ee.ethz.ch>
++
++The drivers for the baycom modems have been split into
+ separate drivers as they did not share any code, and the driver
+ and device names have changed.
+ 
+ This document describes the Linux Kernel Drivers for simple Baycom style
+-amateur radio modems. 
++amateur radio modems.
+ 
+ The following drivers are available:
++====================================
+ 
+ baycom_ser_fdx:
+   This driver supports the SER12 modems either full or half duplex.
+-  Its baud rate may be changed via the `baud' module parameter,
++  Its baud rate may be changed via the ``baud`` module parameter,
+   therefore it supports just about every bit bang modem on a
+   serial port. Its devices are called bcsf0 through bcsf3.
+   This is the recommended driver for SER12 type modems,
+   however if you have a broken UART clone that does not have working
+-  delta status bits, you may try baycom_ser_hdx. 
++  delta status bits, you may try baycom_ser_hdx.
+ 
+-baycom_ser_hdx: 
++baycom_ser_hdx:
+   This is an alternative driver for SER12 type modems.
+   It only supports half duplex, and only 1200 baud. Its devices
+   are called bcsh0 through bcsh3. Use this driver only if baycom_ser_fdx
+@@ -37,45 +42,48 @@ baycom_epp:
+ 
+ The following modems are supported:
+ 
+-ser12:  This is a very simple 1200 baud AFSK modem. The modem consists only
+-        of a modulator/demodulator chip, usually a TI TCM3105. The computer
+-        is responsible for regenerating the receiver bit clock, as well as
+-        for handling the HDLC protocol. The modem connects to a serial port,
+-        hence the name. Since the serial port is not used as an async serial
+-        port, the kernel driver for serial ports cannot be used, and this
+-        driver only supports standard serial hardware (8250, 16450, 16550)
++======= ========================================================================
++ser12   This is a very simple 1200 baud AFSK modem. The modem consists only
++	of a modulator/demodulator chip, usually a TI TCM3105. The computer
++	is responsible for regenerating the receiver bit clock, as well as
++	for handling the HDLC protocol. The modem connects to a serial port,
++	hence the name. Since the serial port is not used as an async serial
++	port, the kernel driver for serial ports cannot be used, and this
++	driver only supports standard serial hardware (8250, 16450, 16550)
+ 
+-par96:  This is a modem for 9600 baud FSK compatible to the G3RUH standard.
+-        The modem does all the filtering and regenerates the receiver clock.
+-        Data is transferred from and to the PC via a shift register.
+-        The shift register is filled with 16 bits and an interrupt is signalled.
+-        The PC then empties the shift register in a burst. This modem connects
+-        to the parallel port, hence the name. The modem leaves the 
+-        implementation of the HDLC protocol and the scrambler polynomial to
+-        the PC.
++par96   This is a modem for 9600 baud FSK compatible to the G3RUH standard.
++	The modem does all the filtering and regenerates the receiver clock.
++	Data is transferred from and to the PC via a shift register.
++	The shift register is filled with 16 bits and an interrupt is signalled.
++	The PC then empties the shift register in a burst. This modem connects
++	to the parallel port, hence the name. The modem leaves the
++	implementation of the HDLC protocol and the scrambler polynomial to
++	the PC.
+ 
+-picpar: This is a redesign of the par96 modem by Henning Rech, DF9IC. The modem
+-        is protocol compatible to par96, but uses only three low power ICs
+-        and can therefore be fed from the parallel port and does not require
+-        an additional power supply. Furthermore, it incorporates a carrier
+-        detect circuitry.
++picpar  This is a redesign of the par96 modem by Henning Rech, DF9IC. The modem
++	is protocol compatible to par96, but uses only three low power ICs
++	and can therefore be fed from the parallel port and does not require
++	an additional power supply. Furthermore, it incorporates a carrier
++	detect circuitry.
+ 
+-EPP:    This is a high-speed modem adaptor that connects to an enhanced parallel port.
+-        Its target audience is users working over a high speed hub (76.8kbit/s).
+-
+-eppfpga: This is a redesign of the EPP adaptor.
++EPP     This is a high-speed modem adaptor that connects to an enhanced parallel
++	port.
+ 
++	Its target audience is users working over a high speed hub (76.8kbit/s).
+ 
++eppfpga This is a redesign of the EPP adaptor.
++======= ========================================================================
+ 
+ All of the above modems only support half duplex communications. However,
+ the driver supports the KISS (see below) fullduplex command. It then simply
+ starts to send as soon as there's a packet to transmit and does not care
+ about DCD, i.e. it starts to send even if there's someone else on the channel.
+-This command is required by some implementations of the DAMA channel 
++This command is required by some implementations of the DAMA channel
+ access protocol.
+ 
+ 
+ The Interface of the drivers
++============================
+ 
+ Unlike previous drivers, these drivers are no longer character devices,
+ but they are now true kernel network interfaces. Installation is therefore
+@@ -88,20 +96,22 @@ me for WAMPES which allows attaching a kernel network interface directly.
+ 
+ 
+ Configuring the driver
++======================
+ 
+ Every time a driver is inserted into the kernel, it has to know which
+ modems it should access at which ports. This can be done with the setbaycom
+ utility. If you are only using one modem, you can also configure the
+ driver from the insmod command line (or by means of an option line in
+-/etc/modprobe.d/*.conf).
++``/etc/modprobe.d/*.conf``).
++
++Examples::
+ 
+-Examples:
+   modprobe baycom_ser_fdx mode="ser12*" iobase=0x3f8 irq=4
+   sethdlc -i bcsf0 -p mode "ser12*" io 0x3f8 irq 4
+ 
+ Both lines configure the first port to drive a ser12 modem at the first
+-serial port (COM1 under DOS). The * in the mode parameter instructs the driver to use
+-the software DCD algorithm (see below).
++serial port (COM1 under DOS). The * in the mode parameter instructs the driver
++to use the software DCD algorithm (see below)::
+ 
+   insmod baycom_par mode="picpar" iobase=0x378
+   sethdlc -i bcp0 -p mode "picpar" io 0x378
+@@ -115,29 +125,33 @@ Note that both utilities interpret the values slightly differently.
+ 
+ 
+ Hardware DCD versus Software DCD
++================================
+ 
+ To avoid collisions on the air, the driver must know when the channel is
+ busy. This is the task of the DCD circuitry/software. The driver may either
+ utilise a software DCD algorithm (options=1) or use a DCD signal from
+ the hardware (options=0).
+ 
+-ser12:  if software DCD is utilised, the radio's squelch should always be
+-        open. It is highly recommended to use the software DCD algorithm,
+-        as it is much faster than most hardware squelch circuitry. The
+-        disadvantage is a slightly higher load on the system.
++======= =================================================================
++ser12   if software DCD is utilised, the radio's squelch should always be
++	open. It is highly recommended to use the software DCD algorithm,
++	as it is much faster than most hardware squelch circuitry. The
++	disadvantage is a slightly higher load on the system.
+ 
+-par96:  the software DCD algorithm for this type of modem is rather poor.
+-        The modem simply does not provide enough information to implement
+-        a reasonable DCD algorithm in software. Therefore, if your radio
+-        feeds the DCD input of the PAR96 modem, the use of the hardware
+-        DCD circuitry is recommended.
++par96   the software DCD algorithm for this type of modem is rather poor.
++	The modem simply does not provide enough information to implement
++	a reasonable DCD algorithm in software. Therefore, if your radio
++	feeds the DCD input of the PAR96 modem, the use of the hardware
++	DCD circuitry is recommended.
+ 
+-picpar: the picpar modem features a builtin DCD hardware, which is highly
+-        recommended.
++picpar  the picpar modem features a builtin DCD hardware, which is highly
++	recommended.
++======= =================================================================
+ 
+ 
+ 
+ Compatibility with the rest of the Linux kernel
++===============================================
+ 
+ The serial driver and the baycom serial drivers compete
+ for the same hardware resources. Of course only one driver can access a given
+@@ -154,5 +168,7 @@ The parallel port drivers (baycom_par, baycom_epp) now use the parport subsystem
+ to arbitrate the ports between different client drivers.
+ 
+ vy 73s de
++
+ Tom Sailer, sailer@ife.ee.ethz.ch
++
+ hb9jnx @ hb9w.ampr.org
+diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
+index 1e0fc66739cc..250d29bf9efb 100644
+--- a/Documentation/networking/index.rst
++++ b/Documentation/networking/index.rst
+@@ -41,6 +41,7 @@ Contents:
+    arcnet
+    atm
+    ax25
++   baycom
+ 
+ .. only::  subproject and html
+ 
 -- 
 2.24.1
-
 
