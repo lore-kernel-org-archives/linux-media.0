@@ -7,52 +7,55 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CB37C2D0B1
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA474C352A2
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 735282469A
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBDFC24125
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002282;
-	bh=YcWEzxoi6XvebNyYQTHZDJZa1KQxF6cMSTpEZAjbyNk=;
+	s=default; t=1581002283;
+	bh=op7eP86ynCTXd8Ox1Ttv502rN/tOuJ9csm0uPgp2G6Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=tLvVySC26tLgqpdirqS5H9pLUkc84+WlKrlLA3LC+SdGW6X4OjVIm+s7PXXMsIF06
-	 nUSLZUxN1ANQ7u0vQM2V+5kJhBE520Gc0S7Cep5a1jdU2OsqDmbfk86pE5dqnDERf9
-	 yPFhelVrDoA46b8y2ereNotcfvuq8KaUQuge5g64=
+	b=fZ0V7I/bPTNUVyGDA5nDElTxS051KQykSN+IRQ3KIjUlU2t+DaJqp9ChTDHbyCtb/
+	 6s3VYvXEhJtsuosSmeqFBqOG/b0EDSk9oqYohAhyNwE4gzzBsLhs2Q2X+9opi8DVYy
+	 zVv/YD5N+F7pGq8Qy3xTJlXW9WF46+gSVn9aSOJk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727649AbgBFPSB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:18:01 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38022 "EHLO
+        id S1727681AbgBFPSC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:18:02 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38090 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727398AbgBFPR7 (ORCPT
+        with ESMTP id S1727572AbgBFPR7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:17:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=yBFv8aJbI4oYb9Rrvk3UXwfv0Yl1ScqGFr86JBwxikg=; b=r//LqI/jTIcnkcqMErLYF/XgNe
-        7dpcfp/3tAButvC4bpQhM0Rp1dSCOy7sSf3lfFRwqUFsA0jRecVnJSxQF3N14Fz7cosZR9XZoPBG0
-        CA2+81ODotuoxGLIxa57td1x8x0+B+c5TdDRY94zCY9r6swNOY4FeehE1k3QoaPUsqPjiFnI6imcm
-        WNFy4PGTBkvun9GnMqpBT/CZ7f7JomImND0Nye7G7z48GJ4ND8roKFu+Wf6krOKdP/nbuJsKFCVNJ
-        HkyVt/AnOnssJCp3g7LCNDtm/GVlN83IvB+Xhr3ZDZS+QIf9vNc+CN6+80zp68wT7BTT3o2RjIrVS
-        2CjCrs2Q==;
+        bh=t2yWmhu1E5vZJKxFd22eXuudQGWyjBMcjrUmGzb6AJ8=; b=I7AU+Ful4eBxEXYWh/h3Q/pFNo
+        TPr4sZuabGHRRtrEPnInySpPHKamVwqtrVrRo2J6bFAfh6N2S0BC7BpAzwzKQ7NJqv6mVTYd1hfmi
+        ruwsQTlbuISoBMBKtwIAzSZeOmM0v2oyUIV+OGjXGK0n8o0IJkOcWKcImpVikJzvz16zVTddqRgbS
+        QDIYZC1wDB0EDXyaUvaN1GEaNKF/ldq18y73bb0Mlp5WBzycYpjKvh6MxMM2FT9HDaZ0SdqqdW8gg
+        CL2gCBukzgtRR8cAQRrB7gzCFC8eai6bI8unRgWJJKOktrHQwAPIODp/h2xp4HIlprVI1fZ10I6TW
+        DAPjMWVw==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziuk-0005j7-W0; Thu, 06 Feb 2020 15:17:59 +0000
+        id 1iziul-0005jD-Ay; Thu, 06 Feb 2020 15:17:59 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziud-002oWE-Rp; Thu, 06 Feb 2020 16:17:51 +0100
+        id 1iziuc-002oUr-GO; Thu, 06 Feb 2020 16:17:50 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 23/28] docs: networking: convert fore200e.txt to ReST
-Date:   Thu,  6 Feb 2020 16:17:43 +0100
-Message-Id: <1e98e9d69a5f7e19086a536b806d8b39a7b4c37c.1581002063.git.mchehab+huawei@kernel.org>
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Jukka Rissanen <jukka.rissanen@linux.intel.com>,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-wpan@vger.kernel.org
+Subject: [PATCH 02/28] docs: networking: convert 6lowpan.txt to ReST
+Date:   Thu,  6 Feb 2020 16:17:22 +0100
+Message-Id: <bfa773f25584a3939e0a3e1fc6bc0e91f415cd91.1581002063.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
 References: <cover.1581002062.git.mchehab+huawei@kernel.org>
@@ -64,56 +67,97 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 - add SPDX header;
-- adjust title markup;
+- use document title markup;
 - mark code blocks and literals as such;
 - adjust identation, whitespaces and blank lines;
 - add to networking/index.rst.
 
-
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/networking/{fore200e.txt => fore200e.rst} | 8 +++++---
- Documentation/networking/index.rst                      | 1 +
- 2 files changed, 6 insertions(+), 3 deletions(-)
- rename Documentation/networking/{fore200e.txt => fore200e.rst} (94%)
+ .../networking/{6lowpan.txt => 6lowpan.rst}   | 29 ++++++++++---------
+ Documentation/networking/index.rst            |  1 +
+ 2 files changed, 17 insertions(+), 13 deletions(-)
+ rename Documentation/networking/{6lowpan.txt => 6lowpan.rst} (64%)
 
-diff --git a/Documentation/networking/fore200e.txt b/Documentation/networking/fore200e.rst
-similarity index 94%
-rename from Documentation/networking/fore200e.txt
-rename to Documentation/networking/fore200e.rst
-index 1f98f62b4370..55df9ec09ac8 100644
---- a/Documentation/networking/fore200e.txt
-+++ b/Documentation/networking/fore200e.rst
-@@ -1,6 +1,8 @@
+diff --git a/Documentation/networking/6lowpan.txt b/Documentation/networking/6lowpan.rst
+similarity index 64%
+rename from Documentation/networking/6lowpan.txt
+rename to Documentation/networking/6lowpan.rst
+index 2e5a939d7e6f..e70a6520cc33 100644
+--- a/Documentation/networking/6lowpan.txt
++++ b/Documentation/networking/6lowpan.rst
+@@ -1,37 +1,40 @@
 +.. SPDX-License-Identifier: GPL-2.0
  
-+=============================================
- FORE Systems PCA-200E/SBA-200E ATM NIC driver
-----------------------------------------------
-+=============================================
+-Netdev private dataroom for 6lowpan interfaces:
++==============================================
++Netdev private dataroom for 6lowpan interfaces
++==============================================
  
- This driver adds support for the FORE Systems 200E-series ATM adapters
- to the Linux operating system. It is based on the earlier PCA-200E driver
-@@ -27,8 +29,8 @@ in the linux/drivers/atm directory for details and restrictions.
- Firmware Updates
- ----------------
+ All 6lowpan able net devices, means all interfaces with ARPHRD_6LOWPAN,
+ must have "struct lowpan_priv" placed at beginning of netdev_priv.
  
--The FORE Systems 200E-series driver is shipped with firmware data being 
--uploaded to the ATM adapters at system boot time or at module loading time. 
-+The FORE Systems 200E-series driver is shipped with firmware data being
-+uploaded to the ATM adapters at system boot time or at module loading time.
- The supplied firmware images should work with all adapters.
+-The priv_size of each interface should be calculate by:
++The priv_size of each interface should be calculate by::
  
- However, if you encounter problems (the firmware doesn't start or the driver
+  dev->priv_size = LOWPAN_PRIV_SIZE(LL_6LOWPAN_PRIV_DATA);
+ 
+ Where LL_PRIV_6LOWPAN_DATA is sizeof linklayer 6lowpan private data struct.
+-To access the LL_PRIV_6LOWPAN_DATA structure you can cast:
++To access the LL_PRIV_6LOWPAN_DATA structure you can cast::
+ 
+  lowpan_priv(dev)-priv;
+ 
+ to your LL_6LOWPAN_PRIV_DATA structure.
+ 
+-Before registering the lowpan netdev interface you must run:
++Before registering the lowpan netdev interface you must run::
+ 
+  lowpan_netdev_setup(dev, LOWPAN_LLTYPE_FOOBAR);
+ 
+ wheres LOWPAN_LLTYPE_FOOBAR is a define for your 6LoWPAN linklayer type of
+ enum lowpan_lltypes.
+ 
+-Example to evaluate the private usually you can do:
++Example to evaluate the private usually you can do::
+ 
+-static inline struct lowpan_priv_foobar *
+-lowpan_foobar_priv(struct net_device *dev)
+-{
++ static inline struct lowpan_priv_foobar *
++ lowpan_foobar_priv(struct net_device *dev)
++ {
+ 	return (struct lowpan_priv_foobar *)lowpan_priv(dev)->priv;
+-}
++ }
+ 
+-switch (dev->type) {
+-case ARPHRD_6LOWPAN:
++ switch (dev->type) {
++ case ARPHRD_6LOWPAN:
+ 	lowpan_priv = lowpan_priv(dev);
+ 	/* do great stuff which is ARPHRD_6LOWPAN related */
+ 	switch (lowpan_priv->lltype) {
+@@ -42,8 +45,8 @@ case ARPHRD_6LOWPAN:
+ 	...
+ 	}
+ 	break;
+-...
+-}
++ ...
++ }
+ 
+ In case of generic 6lowpan branch ("net/6lowpan") you can remove the check
+ on ARPHRD_6LOWPAN, because you can be sure that these function are called
 diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 73b573739f67..022e0e895156 100644
+index 3ccb89bf5585..cc34c06477eb 100644
 --- a/Documentation/networking/index.rst
 +++ b/Documentation/networking/index.rst
-@@ -55,6 +55,7 @@ Contents:
-    eql
-    fib_trie
-    filter
-+   fore200e
+@@ -34,6 +34,7 @@ Contents:
+    tls
+    tls-offload
+    nfc
++   6lowpan
  
  .. only::  subproject and html
  
