@@ -2,70 +2,66 @@ Return-Path: <SRS0=0Sen=32=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D2CEC2D0B1
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 08:27:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84883C352A3
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 08:27:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 477B3218AC
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 08:27:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4ACE52192A
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 08:27:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Tx8Q+/nx"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="YOEluXsM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728039AbgBFI1M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 03:27:12 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:43717 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727963AbgBFI1A (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 03:27:00 -0500
-Received: by mail-wr1-f68.google.com with SMTP id z9so5981969wrs.10
-        for <linux-media@vger.kernel.org>; Thu, 06 Feb 2020 00:26:58 -0800 (PST)
+        id S1728041AbgBFI1O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 03:27:14 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:53673 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726673AbgBFI0y (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 03:26:54 -0500
+Received: by mail-wm1-f67.google.com with SMTP id s10so5248233wmh.3
+        for <linux-media@vger.kernel.org>; Thu, 06 Feb 2020 00:26:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Q0KVm2jLb2riQiTD9KW6RurAfIWMzOlCyoKI6A+fmL8=;
-        b=Tx8Q+/nxlppS5yWe3cQrfm9AKrmswGcD+SlOj8jFr/QIAj7glDrWeF2jFdiyWGoMyc
-         O3kR8cslb81PNgTeSHfVyAzHikAfKqiw479JQOPYBOQg1yB4O+vK5a3aSAWwIjUQTWiN
-         jVj7pLqAQFdfUBaMTP/5WRMggHuZeEB0bydZ3bM57+n2icc2Wc2PzNa8//fyMI0S3eYz
-         hoepC68sLYWROD68DTxMQF4P5UBLZ0NzmJEfBWnf2kHAm2oUhUMpU+VeoGOz6OyZAwX0
-         lUeuifBF1tidOzam9MjhBC915NWKJf4yeCYRd8roqKCKetztiJ4EPPi8iSzzzoCyNHUV
-         ANjA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uElpQqjJlORb1Z1H6UeJgJtYJWxJRwfTKDbebqv3j90=;
+        b=YOEluXsMfq0MXDNHQZxAYXHC8O7RDoCD7+tp5PBvlfyRKiVXksf40fdW7xxEDU7wNY
+         3fEI5I5w/MoqTR5h1YjqXhXLtlCNb3Ju9HLKGu+v6IyWXGusBAEEj9cMY+7RyXZuGYC3
+         +dH4RYwq1wd4lf6Pku0TBWuUrNrQQZ5tsZPcJlvO+OyKLfaVZpEItA/UjOYRpuffSzfO
+         Un0iC+cV7J9YlSa4zaaDjdXW4o+AbqqOu4U5JJBCDJa2twGuMbaD5VXvlnKN+iTrCEym
+         Lqa/B2XMwQDbb7/8KIpfDyNDYtMUhA2MrepaZ55z41XfEmDss3/E3w0Q0Ngmd5tMjPyf
+         5/lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Q0KVm2jLb2riQiTD9KW6RurAfIWMzOlCyoKI6A+fmL8=;
-        b=geFbcJzgrMfZYqfThAuQvk2/ODKrKeyRZOtB6H2ewy8ssXDg3RL5cISy5QqTScfLmz
-         6oSNuWAjmr3MuOiQez0OG0JWsZfjxcHDRbW1pz0kekdV4kziio+LRHZGdhU83g/gm1ge
-         6eTRowggWoPX/g6xOnTWRc4BFOrIMP+QkiV/m5QSVABQFJn0vZ6kXYvynTyxKRi8+v4d
-         zDca5m5zs/Lk2amiRlR7qLKDL1/x2tqK4MUfCmUNPnJm0KEF/JbmdJrc5BQ5A6OBa376
-         UgEZcaebwW5y22yskNOWfT7ZUWv6tHj+Dbjl9JhstXV0Xhw33Z99AChlrU+Z6aA29vGG
-         jP7A==
-X-Gm-Message-State: APjAAAXKLnZcoIvBlHVNAiZdMJgtR9SkSJj3RjTr0PTzjqqU1WXYyZ7i
-        Zg27JHuzMpG1C4tOReN56lsbWg==
-X-Google-Smtp-Source: APXvYqyYS5bUWonnIwIcfmCEv0itPMLZDBb1WjNJxd6VVih4carnhEIGzP2yCtaq+2hIjBiC3DTI1Q==
-X-Received: by 2002:adf:f28c:: with SMTP id k12mr2579528wro.360.1580977617677;
-        Thu, 06 Feb 2020 00:26:57 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uElpQqjJlORb1Z1H6UeJgJtYJWxJRwfTKDbebqv3j90=;
+        b=Vx2TPYN0IUbJ9YdwZnoYyWOeK3R5peKiM3xEsQ8UDjDq/LUHybPju0S4G2KCpXsOLs
+         oxoZTtiSapMHZ2ZbJ4DEmu+riOgdbPdKdwPaD4LbOfo1c/eGVKmWABxWeeSm6pdz3xO9
+         dCkfw1WnOUbYtjCrq0gkE9uJ6H0hhU8HIlHpinGkK0xBT5xt47TvBoYghXM8kniUZRU8
+         TAGUMxd+tq7VdAzFVdhmW44eKbU5NctsgaP7mi9KB/8kVU/v/EIWg8V+vX2ZJYQB6nbz
+         Du2O3fXfOTsKVHyk+bO91qF5HlVWO/iYucIvx5YPQYcLI+Ed7aJq797Z7TH0arqiZta2
+         a6wQ==
+X-Gm-Message-State: APjAAAX4yzbmMEW7ZLoPbuyez42tmZV1Q6Ij987e19TcGflefR7+1tkI
+        6yFA8w4TOokiXEd8iRifYqrTVg==
+X-Google-Smtp-Source: APXvYqxOjcJXIDMW/a4TvPU28SV7UoBNLOuXI8XKG+/DpYQAAKyqUoXZb4vZeIp+w+lguLqEPhXIbQ==
+X-Received: by 2002:a1c:4d18:: with SMTP id o24mr3017002wmh.35.1580977611576;
+        Thu, 06 Feb 2020 00:26:51 -0800 (PST)
 Received: from bender.baylibre.local ([2a01:e35:2ec0:82b0:7d33:17f7:8097:ecc7])
-        by smtp.gmail.com with ESMTPSA id e16sm3148027wrs.73.2020.02.06.00.26.56
+        by smtp.gmail.com with ESMTPSA id e16sm3148027wrs.73.2020.02.06.00.26.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2020 00:26:56 -0800 (PST)
+        Thu, 06 Feb 2020 00:26:51 -0800 (PST)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     mchehab@kernel.org, hans.verkuil@cisco.com
-Cc:     Maxime Jourdan <mjourdan@baylibre.com>,
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH v5 4/4] media: meson: vdec: add H.264 decoding support
-Date:   Thu,  6 Feb 2020 09:26:48 +0100
-Message-Id: <20200206082648.25184-5-narmstrong@baylibre.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/4] media: meson: vdec: Add compliant H264 support
+Date:   Thu,  6 Feb 2020 09:26:44 +0100
+Message-Id: <20200206082648.25184-1-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200206082648.25184-1-narmstrong@baylibre.com>
-References: <20200206082648.25184-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -73,644 +69,191 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Maxime Jourdan <mjourdan@baylibre.com>
+Hello,
 
-Add support for the H264 compressed format (V4L2_PIX_FMT_H264).
+This patch series aims to bring H.264 support as well as compliance update
+to the amlogic stateful video decoder driver.
 
-Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
+The issue in the V1 patchset at [1] is solved by patch #1 following comments
+and requirements from hans. It moves the full draining & stopped state tracking
+and handling from vicodec to core v4l2-mem2mem.
+
+The vicodec changes still passes the v4l2-utils "media-test" tests, log at [5]:
+[...]
+vicodec media controller compliance tests
+
+Thu Jan 16 13:00:56 UTC 2020
+v4l2-compliance SHA: 7ead0e1856b89f2e19369af452bb03fd0cd16793, 64 bits
+[...]
+Summary:
+
+Total for vicodec device /dev/media3: 7, Succeeded: 7, Failed: 0, Warnings: 0
+Total for vicodec device /dev/video13: 51, Succeeded: 51, Failed: 0, Warnings: 0
+Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+
+Final Summary: 364, Succeeded: 364, Failed: 0, Warnings: 0
+Thu Jan 16 13:02:59 UTC 2020
+
+With this, it also passes vdec v4l2-compliance with H264 streaming on Amlogic G12A
+and Amlogic SM1 SoCs successfully.
+
+The compliance log is:
+# v4l2-compliance --stream-from-hdr test-25fps.h264.hdr -s
+v4l2-compliance SHA: 7ead0e1856b89f2e19369af452bb03fd0cd16793, 64 bits
+
+Compliance test for meson-vdec device /dev/video0:
+
+Driver Info:
+	Driver name      : meson-vdec
+	Card type        : Amlogic Video Decoder
+	Bus info         : platform:meson-vdec
+	Driver version   : 5.5.0
+	Capabilities     : 0x84204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+	Detected Stateful Decoder
+
+Required ioctls:
+	test VIDIOC_QUERYCAP: OK
+
+Allow for multiple opens:
+	test second /dev/video19 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 2 Private Controls: 0
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK (Not Supported)
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK (Not Supported)
+	test Composing: OK (Not Supported)
+	test Scaling: OK (Not Supported)
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK
+
+Buffer ioctls:
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+
+Test input 0:
+
+Streaming ioctls:
+	test read/write: OK (Not Supported)
+	test blocking wait: OK
+	Video Capture Multiplanar: Captured 60 buffers    
+	test MMAP (select): OK
+	Video Capture Multiplanar: Captured 60 buffers    
+	test MMAP (epoll): OK
+	test USERPTR (select): OK (Not Supported)
+	test DMABUF: Cannot test, specify --expbuf-device
+
+Total for meson-vdec device /dev/video0: 49, Succeeded: 49, Failed: 0, Warnings: 0
+
+Changes since v4 at [5]:
+- Squashed "don't resume instantly if not streaming capture" and "fix OUTPUT buffer size configuration" fixes from maxime
+
+Changes since v3 at [3]:
+- Fixed vicodec compliance
+- Fixed vdec compliance with v4l2 state management
+- fixed doc errors for v4l2-mem2mem.h
+
+Changes since v2 at [2]:
+- Move full draining & stopped state tracking into core v4l2-mem2mem
+- Adapt vicodec to use the core v4l2-mem2mem draining & stopped state tracking
+
+Changes since v1 at [1]:
+- fixed output_size is never used reported by hans
+- rebased on G12A and SM1 patches
+- added handling of qbuf after STREAMON and STOP before enought buffer queued
+
+[1] https://lore.kernel.org/linux-media/20191007145909.29979-1-mjourdan@baylibre.com
+[2] https://lore.kernel.org/linux-media/20191126093733.32404-1-narmstrong@baylibre.com
+[3] https://lore.kernel.org/linux-media/20191209122028.13714-1-narmstrong@baylibre.com
+[4] https://people.freedesktop.org/~narmstrong/vicodec-compliance-7ead0e1856b89f2e19369af452bb03fd0cd16793-20200116.log
+[5] https://lore.kernel.org/linux-media/20200116133025.1903-1-narmstrong@baylibre.com
+
+Maxime Jourdan (2):
+  media: meson: vdec: bring up to compliance
+  media: meson: vdec: add H.264 decoding support
+
+Neil Armstrong (2):
+  media: v4l2-mem2mem: handle draining, stopped and next-buf-is-last
+    states
+  media: vicodec: use v4l2-mem2mem draining, stopped and
+    next-buf-is-last states handling
+
+ drivers/media/platform/vicodec/vicodec-core.c | 162 ++----
+ drivers/media/v4l2-core/v4l2-mem2mem.c        | 172 ++++++-
  drivers/staging/media/meson/vdec/Makefile     |   2 +-
  drivers/staging/media/meson/vdec/codec_h264.c | 482 ++++++++++++++++++
  drivers/staging/media/meson/vdec/codec_h264.h |  14 +
- .../staging/media/meson/vdec/vdec_platform.c  |  61 +++
- 4 files changed, 558 insertions(+), 1 deletion(-)
+ drivers/staging/media/meson/vdec/esparser.c   |  58 +--
+ drivers/staging/media/meson/vdec/vdec.c       |  90 ++--
+ drivers/staging/media/meson/vdec/vdec.h       |  14 +-
+ .../staging/media/meson/vdec/vdec_helpers.c   |  88 ++--
+ .../staging/media/meson/vdec/vdec_helpers.h   |   6 +-
+ .../staging/media/meson/vdec/vdec_platform.c  |  71 +++
+ include/media/v4l2-mem2mem.h                  |  95 ++++
+ 12 files changed, 1024 insertions(+), 230 deletions(-)
  create mode 100644 drivers/staging/media/meson/vdec/codec_h264.c
  create mode 100644 drivers/staging/media/meson/vdec/codec_h264.h
 
-diff --git a/drivers/staging/media/meson/vdec/Makefile b/drivers/staging/media/meson/vdec/Makefile
-index 6bea129084b7..711d990c760e 100644
---- a/drivers/staging/media/meson/vdec/Makefile
-+++ b/drivers/staging/media/meson/vdec/Makefile
-@@ -3,6 +3,6 @@
- 
- meson-vdec-objs = esparser.o vdec.o vdec_helpers.o vdec_platform.o
- meson-vdec-objs += vdec_1.o
--meson-vdec-objs += codec_mpeg12.o
-+meson-vdec-objs += codec_mpeg12.o codec_h264.o
- 
- obj-$(CONFIG_VIDEO_MESON_VDEC) += meson-vdec.o
-diff --git a/drivers/staging/media/meson/vdec/codec_h264.c b/drivers/staging/media/meson/vdec/codec_h264.c
-new file mode 100644
-index 000000000000..4528a6a01c3d
---- /dev/null
-+++ b/drivers/staging/media/meson/vdec/codec_h264.c
-@@ -0,0 +1,482 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2019 BayLibre, SAS
-+ * Author: Maxime Jourdan <mjourdan@baylibre.com>
-+ */
-+
-+#include <media/v4l2-mem2mem.h>
-+#include <media/videobuf2-dma-contig.h>
-+
-+#include "vdec_helpers.h"
-+#include "dos_regs.h"
-+
-+#define SIZE_EXT_FW	(20 * SZ_1K)
-+#define SIZE_WORKSPACE	0x1ee000
-+#define SIZE_SEI	(8 * SZ_1K)
-+
-+/*
-+ * Offset added by the firmware which must be substracted
-+ * from the workspace phyaddr
-+ */
-+#define WORKSPACE_BUF_OFFSET	0x1000000
-+
-+/* ISR status */
-+#define CMD_MASK		GENMASK(7, 0)
-+#define CMD_SRC_CHANGE		1
-+#define CMD_FRAMES_READY	2
-+#define CMD_FATAL_ERROR		6
-+#define CMD_BAD_WIDTH		7
-+#define CMD_BAD_HEIGHT		8
-+
-+#define SEI_DATA_READY	BIT(15)
-+
-+/* Picture type */
-+#define PIC_TOP_BOT	5
-+#define PIC_BOT_TOP	6
-+
-+/* Size of Motion Vector per macroblock */
-+#define MB_MV_SIZE	96
-+
-+/* Frame status data */
-+#define PIC_STRUCT_BIT	5
-+#define PIC_STRUCT_MASK	GENMASK(2, 0)
-+#define BUF_IDX_MASK	GENMASK(4, 0)
-+#define ERROR_FLAG	BIT(9)
-+#define OFFSET_BIT	16
-+#define OFFSET_MASK	GENMASK(15, 0)
-+
-+/* Bitstream parsed data */
-+#define MB_TOTAL_BIT	8
-+#define MB_TOTAL_MASK	GENMASK(15, 0)
-+#define MB_WIDTH_MASK	GENMASK(7, 0)
-+#define MAX_REF_BIT	24
-+#define MAX_REF_MASK	GENMASK(6, 0)
-+#define AR_IDC_BIT	16
-+#define AR_IDC_MASK	GENMASK(7, 0)
-+#define AR_PRESENT_FLAG	BIT(0)
-+#define AR_EXTEND	0xff
-+
-+/*
-+ * Buffer to send to the ESPARSER to signal End Of Stream for H.264.
-+ * This is a 16x16 encoded picture that will trigger drain firmware-side.
-+ * There is no known alternative.
-+ */
-+static const u8 eos_sequence[SZ_4K] = {
-+	0x00, 0x00, 0x00, 0x01, 0x06, 0x05, 0xff, 0xe4, 0xdc, 0x45, 0xe9, 0xbd,
-+	0xe6, 0xd9, 0x48, 0xb7,	0x96, 0x2c, 0xd8, 0x20, 0xd9, 0x23, 0xee, 0xef,
-+	0x78, 0x32, 0x36, 0x34, 0x20, 0x2d, 0x20, 0x63,	0x6f, 0x72, 0x65, 0x20,
-+	0x36, 0x37, 0x20, 0x72, 0x31, 0x31, 0x33, 0x30, 0x20, 0x38, 0x34, 0x37,
-+	0x35, 0x39, 0x37, 0x37, 0x20, 0x2d, 0x20, 0x48, 0x2e, 0x32, 0x36, 0x34,
-+	0x2f, 0x4d, 0x50, 0x45,	0x47, 0x2d, 0x34, 0x20, 0x41, 0x56, 0x43, 0x20,
-+	0x63, 0x6f, 0x64, 0x65, 0x63, 0x20, 0x2d, 0x20,	0x43, 0x6f, 0x70, 0x79,
-+	0x6c, 0x65, 0x66, 0x74, 0x20, 0x32, 0x30, 0x30, 0x33, 0x2d, 0x32, 0x30,
-+	0x30, 0x39, 0x20, 0x2d, 0x20, 0x68, 0x74, 0x74, 0x70, 0x3a, 0x2f, 0x2f,
-+	0x77, 0x77, 0x77, 0x2e,	0x76, 0x69, 0x64, 0x65, 0x6f, 0x6c, 0x61, 0x6e,
-+	0x2e, 0x6f, 0x72, 0x67, 0x2f, 0x78, 0x32, 0x36,	0x34, 0x2e, 0x68, 0x74,
-+	0x6d, 0x6c, 0x20, 0x2d, 0x20, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73,
-+	0x3a, 0x20, 0x63, 0x61, 0x62, 0x61, 0x63, 0x3d, 0x31, 0x20, 0x72, 0x65,
-+	0x66, 0x3d, 0x31, 0x20,	0x64, 0x65, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x3d,
-+	0x31, 0x3a, 0x30, 0x3a, 0x30, 0x20, 0x61, 0x6e,	0x61, 0x6c, 0x79, 0x73,
-+	0x65, 0x3d, 0x30, 0x78, 0x31, 0x3a, 0x30, 0x78, 0x31, 0x31, 0x31, 0x20,
-+	0x6d, 0x65, 0x3d, 0x68, 0x65, 0x78, 0x20, 0x73, 0x75, 0x62, 0x6d, 0x65,
-+	0x3d, 0x36, 0x20, 0x70,	0x73, 0x79, 0x5f, 0x72, 0x64, 0x3d, 0x31, 0x2e,
-+	0x30, 0x3a, 0x30, 0x2e, 0x30, 0x20, 0x6d, 0x69,	0x78, 0x65, 0x64, 0x5f,
-+	0x72, 0x65, 0x66, 0x3d, 0x30, 0x20, 0x6d, 0x65, 0x5f, 0x72, 0x61, 0x6e,
-+	0x67, 0x65, 0x3d, 0x31, 0x36, 0x20, 0x63, 0x68, 0x72, 0x6f, 0x6d, 0x61,
-+	0x5f, 0x6d, 0x65, 0x3d,	0x31, 0x20, 0x74, 0x72, 0x65, 0x6c, 0x6c, 0x69,
-+	0x73, 0x3d, 0x30, 0x20, 0x38, 0x78, 0x38, 0x64,	0x63, 0x74, 0x3d, 0x30,
-+	0x20, 0x63, 0x71, 0x6d, 0x3d, 0x30, 0x20, 0x64, 0x65, 0x61, 0x64, 0x7a,
-+	0x6f, 0x6e, 0x65, 0x3d, 0x32, 0x31, 0x2c, 0x31, 0x31, 0x20, 0x63, 0x68,
-+	0x72, 0x6f, 0x6d, 0x61,	0x5f, 0x71, 0x70, 0x5f, 0x6f, 0x66, 0x66, 0x73,
-+	0x65, 0x74, 0x3d, 0x2d, 0x32, 0x20, 0x74, 0x68,	0x72, 0x65, 0x61, 0x64,
-+	0x73, 0x3d, 0x31, 0x20, 0x6e, 0x72, 0x3d, 0x30, 0x20, 0x64, 0x65, 0x63,
-+	0x69, 0x6d, 0x61, 0x74, 0x65, 0x3d, 0x31, 0x20, 0x6d, 0x62, 0x61, 0x66,
-+	0x66, 0x3d, 0x30, 0x20,	0x62, 0x66, 0x72, 0x61, 0x6d, 0x65, 0x73, 0x3d,
-+	0x30, 0x20, 0x6b, 0x65, 0x79, 0x69, 0x6e, 0x74,	0x3d, 0x32, 0x35, 0x30,
-+	0x20, 0x6b, 0x65, 0x79, 0x69, 0x6e, 0x74, 0x5f, 0x6d, 0x69, 0x6e, 0x3d,
-+	0x32, 0x35, 0x20, 0x73, 0x63, 0x65, 0x6e, 0x65, 0x63, 0x75, 0x74, 0x3d,
-+	0x34, 0x30, 0x20, 0x72,	0x63, 0x3d, 0x61, 0x62, 0x72, 0x20, 0x62, 0x69,
-+	0x74, 0x72, 0x61, 0x74, 0x65, 0x3d, 0x31, 0x30,	0x20, 0x72, 0x61, 0x74,
-+	0x65, 0x74, 0x6f, 0x6c, 0x3d, 0x31, 0x2e, 0x30, 0x20, 0x71, 0x63, 0x6f,
-+	0x6d, 0x70, 0x3d, 0x30, 0x2e, 0x36, 0x30, 0x20, 0x71, 0x70, 0x6d, 0x69,
-+	0x6e, 0x3d, 0x31, 0x30,	0x20, 0x71, 0x70, 0x6d, 0x61, 0x78, 0x3d, 0x35,
-+	0x31, 0x20, 0x71, 0x70, 0x73, 0x74, 0x65, 0x70,	0x3d, 0x34, 0x20, 0x69,
-+	0x70, 0x5f, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x3d, 0x31, 0x2e, 0x34, 0x30,
-+	0x20, 0x61, 0x71, 0x3d, 0x31, 0x3a, 0x31, 0x2e, 0x30, 0x30, 0x00, 0x80,
-+	0x00, 0x00, 0x00, 0x01,	0x67, 0x4d, 0x40, 0x0a, 0x9a, 0x74, 0xf4, 0x20,
-+	0x00, 0x00, 0x03, 0x00, 0x20, 0x00, 0x00, 0x06,	0x51, 0xe2, 0x44, 0xd4,
-+	0x00, 0x00, 0x00, 0x01, 0x68, 0xee, 0x32, 0xc8, 0x00, 0x00, 0x00, 0x01,
-+	0x65, 0x88, 0x80, 0x20, 0x00, 0x08, 0x7f, 0xea, 0x6a, 0xe2, 0x99, 0xb6,
-+	0x57, 0xae, 0x49, 0x30,	0xf5, 0xfe, 0x5e, 0x46, 0x0b, 0x72, 0x44, 0xc4,
-+	0xe1, 0xfc, 0x62, 0xda, 0xf1, 0xfb, 0xa2, 0xdb,	0xd6, 0xbe, 0x5c, 0xd7,
-+	0x24, 0xa3, 0xf5, 0xb9, 0x2f, 0x57, 0x16, 0x49, 0x75, 0x47, 0x77, 0x09,
-+	0x5c, 0xa1, 0xb4, 0xc3, 0x4f, 0x60, 0x2b, 0xb0, 0x0c, 0xc8, 0xd6, 0x66,
-+	0xba, 0x9b, 0x82, 0x29,	0x33, 0x92, 0x26, 0x99, 0x31, 0x1c, 0x7f, 0x9b,
-+	0x00, 0x00, 0x01, 0x0ff,
-+};
-+
-+static const u8 *codec_h264_eos_sequence(u32 *len)
-+{
-+	*len = ARRAY_SIZE(eos_sequence);
-+	return eos_sequence;
-+}
-+
-+struct codec_h264 {
-+	/* H.264 decoder requires an extended firmware */
-+	void      *ext_fw_vaddr;
-+	dma_addr_t ext_fw_paddr;
-+
-+	/* Buffer for the H.264 Workspace */
-+	void      *workspace_vaddr;
-+	dma_addr_t workspace_paddr;
-+
-+	/* Buffer for the H.264 references MV */
-+	void      *ref_vaddr;
-+	dma_addr_t ref_paddr;
-+	u32	   ref_size;
-+
-+	/* Buffer for parsed SEI data */
-+	void      *sei_vaddr;
-+	dma_addr_t sei_paddr;
-+
-+	u32 mb_width;
-+	u32 mb_height;
-+	u32 max_refs;
-+};
-+
-+static int codec_h264_can_recycle(struct amvdec_core *core)
-+{
-+	return !amvdec_read_dos(core, AV_SCRATCH_7) ||
-+	       !amvdec_read_dos(core, AV_SCRATCH_8);
-+}
-+
-+static void codec_h264_recycle(struct amvdec_core *core, u32 buf_idx)
-+{
-+	/*
-+	 * Tell the firmware it can recycle this buffer.
-+	 * AV_SCRATCH_8 serves the same purpose.
-+	 */
-+	if (!amvdec_read_dos(core, AV_SCRATCH_7))
-+		amvdec_write_dos(core, AV_SCRATCH_7, buf_idx + 1);
-+	else
-+		amvdec_write_dos(core, AV_SCRATCH_8, buf_idx + 1);
-+}
-+
-+static int codec_h264_start(struct amvdec_session *sess)
-+{
-+	u32 workspace_offset;
-+	struct amvdec_core *core = sess->core;
-+	struct codec_h264 *h264 = sess->priv;
-+
-+	/* Allocate some memory for the H.264 decoder's state */
-+	h264->workspace_vaddr =
-+		dma_alloc_coherent(core->dev, SIZE_WORKSPACE,
-+				   &h264->workspace_paddr, GFP_KERNEL);
-+	if (!h264->workspace_vaddr)
-+		return -ENOMEM;
-+
-+	/* Allocate some memory for the H.264 SEI dump */
-+	h264->sei_vaddr = dma_alloc_coherent(core->dev, SIZE_SEI,
-+					     &h264->sei_paddr, GFP_KERNEL);
-+	if (!h264->sei_vaddr)
-+		return -ENOMEM;
-+
-+	amvdec_write_dos_bits(core, POWER_CTL_VLD, BIT(9) | BIT(6));
-+
-+	workspace_offset = h264->workspace_paddr - WORKSPACE_BUF_OFFSET;
-+	amvdec_write_dos(core, AV_SCRATCH_1, workspace_offset);
-+	amvdec_write_dos(core, AV_SCRATCH_G, h264->ext_fw_paddr);
-+	amvdec_write_dos(core, AV_SCRATCH_I, h264->sei_paddr -
-+					     workspace_offset);
-+
-+	/* Enable "error correction" */
-+	amvdec_write_dos(core, AV_SCRATCH_F,
-+			 (amvdec_read_dos(core, AV_SCRATCH_F) & 0xffffffc3) |
-+			 BIT(4) | BIT(7));
-+
-+	amvdec_write_dos(core, MDEC_PIC_DC_THRESH, 0x404038aa);
-+
-+	return 0;
-+}
-+
-+static int codec_h264_stop(struct amvdec_session *sess)
-+{
-+	struct codec_h264 *h264 = sess->priv;
-+	struct amvdec_core *core = sess->core;
-+
-+	if (h264->ext_fw_vaddr)
-+		dma_free_coherent(core->dev, SIZE_EXT_FW,
-+				  h264->ext_fw_vaddr, h264->ext_fw_paddr);
-+
-+	if (h264->workspace_vaddr)
-+		dma_free_coherent(core->dev, SIZE_WORKSPACE,
-+				 h264->workspace_vaddr, h264->workspace_paddr);
-+
-+	if (h264->ref_vaddr)
-+		dma_free_coherent(core->dev, h264->ref_size,
-+				  h264->ref_vaddr, h264->ref_paddr);
-+
-+	if (h264->sei_vaddr)
-+		dma_free_coherent(core->dev, SIZE_SEI,
-+				  h264->sei_vaddr, h264->sei_paddr);
-+
-+	return 0;
-+}
-+
-+static int codec_h264_load_extended_firmware(struct amvdec_session *sess,
-+					     const u8 *data, u32 len)
-+{
-+	struct codec_h264 *h264;
-+	struct amvdec_core *core = sess->core;
-+
-+	if (len < SIZE_EXT_FW)
-+		return -EINVAL;
-+
-+	h264 = kzalloc(sizeof(*h264), GFP_KERNEL);
-+	if (!h264)
-+		return -ENOMEM;
-+
-+	h264->ext_fw_vaddr = dma_alloc_coherent(core->dev, SIZE_EXT_FW,
-+					      &h264->ext_fw_paddr, GFP_KERNEL);
-+	if (!h264->ext_fw_vaddr) {
-+		kfree(h264);
-+		return -ENOMEM;
-+	}
-+
-+	memcpy(h264->ext_fw_vaddr, data, SIZE_EXT_FW);
-+	sess->priv = h264;
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_fract par_table[] = {
-+	{ 1, 1 },   { 1, 1 },    { 12, 11 }, { 10, 11 },
-+	{ 16, 11 }, { 40, 33 },  { 24, 11 }, { 20, 11 },
-+	{ 32, 11 }, { 80, 33 },  { 18, 11 }, { 15, 11 },
-+	{ 64, 33 }, { 160, 99 }, { 4, 3 },   { 3, 2 },
-+	{ 2, 1 }
-+};
-+
-+static void codec_h264_set_par(struct amvdec_session *sess)
-+{
-+	struct amvdec_core *core = sess->core;
-+	u32 seq_info = amvdec_read_dos(core, AV_SCRATCH_2);
-+	u32 ar_idc = (seq_info >> AR_IDC_BIT) & AR_IDC_MASK;
-+
-+	if (!(seq_info & AR_PRESENT_FLAG))
-+		return;
-+
-+	if (ar_idc == AR_EXTEND) {
-+		u32 ar_info = amvdec_read_dos(core, AV_SCRATCH_3);
-+
-+		sess->pixelaspect.numerator = ar_info & 0xffff;
-+		sess->pixelaspect.denominator = (ar_info >> 16) & 0xffff;
-+		return;
-+	}
-+
-+	if (ar_idc >= ARRAY_SIZE(par_table))
-+		return;
-+
-+	sess->pixelaspect = par_table[ar_idc];
-+}
-+
-+static void codec_h264_resume(struct amvdec_session *sess)
-+{
-+	struct amvdec_core *core = sess->core;
-+	struct codec_h264 *h264 = sess->priv;
-+	u32 mb_width, mb_height, mb_total;
-+
-+	amvdec_set_canvases(sess, (u32[]){ ANC0_CANVAS_ADDR, 0 },
-+				  (u32[]){ 24, 0 });
-+
-+	dev_dbg(core->dev, "max_refs = %u; actual_dpb_size = %u\n",
-+		h264->max_refs, sess->num_dst_bufs);
-+
-+	/* Align to a multiple of 4 macroblocks */
-+	mb_width = ALIGN(h264->mb_width, 4);
-+	mb_height = ALIGN(h264->mb_height, 4);
-+	mb_total = mb_width * mb_height;
-+
-+	h264->ref_size = mb_total * MB_MV_SIZE * h264->max_refs;
-+	h264->ref_vaddr = dma_alloc_coherent(core->dev, h264->ref_size,
-+					     &h264->ref_paddr, GFP_KERNEL);
-+	if (!h264->ref_vaddr) {
-+		amvdec_abort(sess);
-+		return;
-+	}
-+
-+	/* Address to store the references' MVs */
-+	amvdec_write_dos(core, AV_SCRATCH_1, h264->ref_paddr);
-+	/* End of ref MV */
-+	amvdec_write_dos(core, AV_SCRATCH_4, h264->ref_paddr + h264->ref_size);
-+
-+	amvdec_write_dos(core, AV_SCRATCH_0, (h264->max_refs << 24) |
-+					     (sess->num_dst_bufs << 16) |
-+					     ((h264->max_refs - 1) << 8));
-+}
-+
-+/**
-+ * Configure the H.264 decoder when the parser detected a parameter set change
-+ */
-+static void codec_h264_src_change(struct amvdec_session *sess)
-+{
-+	struct amvdec_core *core = sess->core;
-+	struct codec_h264 *h264 = sess->priv;
-+	u32 parsed_info, mb_total;
-+	u32 crop_infor, crop_bottom, crop_right;
-+	u32 frame_width, frame_height;
-+
-+	sess->keyframe_found = 1;
-+
-+	parsed_info = amvdec_read_dos(core, AV_SCRATCH_1);
-+
-+	/* Total number of 16x16 macroblocks */
-+	mb_total = (parsed_info >> MB_TOTAL_BIT) & MB_TOTAL_MASK;
-+	/* Number of macroblocks per line */
-+	h264->mb_width = parsed_info & MB_WIDTH_MASK;
-+	/* Number of macroblock lines */
-+	h264->mb_height = mb_total / h264->mb_width;
-+
-+	h264->max_refs = ((parsed_info >> MAX_REF_BIT) & MAX_REF_MASK) + 1;
-+
-+	crop_infor = amvdec_read_dos(core, AV_SCRATCH_6);
-+	crop_bottom = (crop_infor & 0xff);
-+	crop_right = (crop_infor >> 16) & 0xff;
-+
-+	frame_width = h264->mb_width * 16 - crop_right;
-+	frame_height = h264->mb_height * 16 - crop_bottom;
-+
-+	dev_dbg(core->dev, "frame: %ux%u; crop: %u %u\n",
-+		frame_width, frame_height, crop_right, crop_bottom);
-+
-+	codec_h264_set_par(sess);
-+	amvdec_src_change(sess, frame_width, frame_height, h264->max_refs + 5);
-+}
-+
-+/**
-+ * The bitstream offset is split in half in 2 different registers.
-+ * Fetch its MSB here, which location depends on the frame number.
-+ */
-+static u32 get_offset_msb(struct amvdec_core *core, int frame_num)
-+{
-+	int take_msb = frame_num % 2;
-+	int reg_offset = (frame_num / 2) * 4;
-+	u32 offset_msb = amvdec_read_dos(core, AV_SCRATCH_A + reg_offset);
-+
-+	if (take_msb)
-+		return offset_msb & 0xffff0000;
-+
-+	return (offset_msb & 0x0000ffff) << 16;
-+}
-+
-+static void codec_h264_frames_ready(struct amvdec_session *sess, u32 status)
-+{
-+	struct amvdec_core *core = sess->core;
-+	int error_count;
-+	int num_frames;
-+	int i;
-+
-+	error_count = amvdec_read_dos(core, AV_SCRATCH_D);
-+	num_frames = (status >> 8) & 0xff;
-+	if (error_count) {
-+		dev_warn(core->dev,
-+			 "decoder error(s) happened, count %d\n", error_count);
-+		amvdec_write_dos(core, AV_SCRATCH_D, 0);
-+	}
-+
-+	for (i = 0; i < num_frames; i++) {
-+		u32 frame_status = amvdec_read_dos(core, AV_SCRATCH_1 + i * 4);
-+		u32 buffer_index = frame_status & BUF_IDX_MASK;
-+		u32 pic_struct = (frame_status >> PIC_STRUCT_BIT) &
-+				 PIC_STRUCT_MASK;
-+		u32 offset = (frame_status >> OFFSET_BIT) & OFFSET_MASK;
-+		u32 field = V4L2_FIELD_NONE;
-+
-+		/*
-+		 * A buffer decode error means it was decoded,
-+		 * but part of the picture will have artifacts.
-+		 * Typical reason is a temporarily corrupted bitstream
-+		 */
-+		if (frame_status & ERROR_FLAG)
-+			dev_dbg(core->dev, "Buffer %d decode error\n",
-+				buffer_index);
-+
-+		if (pic_struct == PIC_TOP_BOT)
-+			field = V4L2_FIELD_INTERLACED_TB;
-+		else if (pic_struct == PIC_BOT_TOP)
-+			field = V4L2_FIELD_INTERLACED_BT;
-+
-+		offset |= get_offset_msb(core, i);
-+		amvdec_dst_buf_done_idx(sess, buffer_index, offset, field);
-+	}
-+}
-+
-+static irqreturn_t codec_h264_threaded_isr(struct amvdec_session *sess)
-+{
-+	struct amvdec_core *core = sess->core;
-+	u32 status;
-+	u32 size;
-+	u8 cmd;
-+
-+	status = amvdec_read_dos(core, AV_SCRATCH_0);
-+	cmd = status & CMD_MASK;
-+
-+	switch (cmd) {
-+	case CMD_SRC_CHANGE:
-+		codec_h264_src_change(sess);
-+		break;
-+	case CMD_FRAMES_READY:
-+		codec_h264_frames_ready(sess, status);
-+		break;
-+	case CMD_FATAL_ERROR:
-+		dev_err(core->dev, "H.264 decoder fatal error\n");
-+		goto abort;
-+	case CMD_BAD_WIDTH:
-+		size = (amvdec_read_dos(core, AV_SCRATCH_1) + 1) * 16;
-+		dev_err(core->dev, "Unsupported video width: %u\n", size);
-+		goto abort;
-+	case CMD_BAD_HEIGHT:
-+		size = (amvdec_read_dos(core, AV_SCRATCH_1) + 1) * 16;
-+		dev_err(core->dev, "Unsupported video height: %u\n", size);
-+		goto abort;
-+	case 0: /* Unused but not worth printing for */
-+	case 9:
-+		break;
-+	default:
-+		dev_info(core->dev, "Unexpected H264 ISR: %08X\n", cmd);
-+		break;
-+	}
-+
-+	if (cmd && cmd != CMD_SRC_CHANGE)
-+		amvdec_write_dos(core, AV_SCRATCH_0, 0);
-+
-+	/* Decoder has some SEI data for us ; ignore */
-+	if (amvdec_read_dos(core, AV_SCRATCH_J) & SEI_DATA_READY)
-+		amvdec_write_dos(core, AV_SCRATCH_J, 0);
-+
-+	return IRQ_HANDLED;
-+abort:
-+	amvdec_abort(sess);
-+	return IRQ_HANDLED;
-+}
-+
-+static irqreturn_t codec_h264_isr(struct amvdec_session *sess)
-+{
-+	struct amvdec_core *core = sess->core;
-+
-+	amvdec_write_dos(core, ASSIST_MBOX1_CLR_REG, 1);
-+
-+	return IRQ_WAKE_THREAD;
-+}
-+
-+struct amvdec_codec_ops codec_h264_ops = {
-+	.start = codec_h264_start,
-+	.stop = codec_h264_stop,
-+	.load_extended_firmware = codec_h264_load_extended_firmware,
-+	.isr = codec_h264_isr,
-+	.threaded_isr = codec_h264_threaded_isr,
-+	.can_recycle = codec_h264_can_recycle,
-+	.recycle = codec_h264_recycle,
-+	.eos_sequence = codec_h264_eos_sequence,
-+	.resume = codec_h264_resume,
-+};
-diff --git a/drivers/staging/media/meson/vdec/codec_h264.h b/drivers/staging/media/meson/vdec/codec_h264.h
-new file mode 100644
-index 000000000000..7cb4fb86ff36
---- /dev/null
-+++ b/drivers/staging/media/meson/vdec/codec_h264.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright (C) 2019 BayLibre, SAS
-+ * Author: Maxime Jourdan <mjourdan@baylibre.com>
-+ */
-+
-+#ifndef __MESON_VDEC_CODEC_H264_H_
-+#define __MESON_VDEC_CODEC_H264_H_
-+
-+#include "vdec.h"
-+
-+extern struct amvdec_codec_ops codec_h264_ops;
-+
-+#endif
-diff --git a/drivers/staging/media/meson/vdec/vdec_platform.c b/drivers/staging/media/meson/vdec/vdec_platform.c
-index 066d4a055894..e9356a46828f 100644
---- a/drivers/staging/media/meson/vdec/vdec_platform.c
-+++ b/drivers/staging/media/meson/vdec/vdec_platform.c
-@@ -9,9 +9,22 @@
- 
- #include "vdec_1.h"
- #include "codec_mpeg12.h"
-+#include "codec_h264.h"
- 
- static const struct amvdec_format vdec_formats_gxbb[] = {
- 	{
-+		.pixfmt = V4L2_PIX_FMT_H264,
-+		.min_buffers = 2,
-+		.max_buffers = 24,
-+		.max_width = 1920,
-+		.max_height = 1080,
-+		.vdec_ops = &vdec_1_ops,
-+		.codec_ops = &codec_h264_ops,
-+		.firmware_path = "meson/vdec/gxbb_h264.bin",
-+		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, 0 },
-+		.flags = V4L2_FMT_FLAG_COMPRESSED |
-+			 V4L2_FMT_FLAG_DYN_RESOLUTION,
-+	}, {
- 		.pixfmt = V4L2_PIX_FMT_MPEG1,
- 		.min_buffers = 8,
- 		.max_buffers = 8,
-@@ -38,6 +51,18 @@ static const struct amvdec_format vdec_formats_gxbb[] = {
- 
- static const struct amvdec_format vdec_formats_gxl[] = {
- 	{
-+		.pixfmt = V4L2_PIX_FMT_H264,
-+		.min_buffers = 2,
-+		.max_buffers = 24,
-+		.max_width = 3840,
-+		.max_height = 2160,
-+		.vdec_ops = &vdec_1_ops,
-+		.codec_ops = &codec_h264_ops,
-+		.firmware_path = "meson/vdec/gxl_h264.bin",
-+		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, 0 },
-+		.flags = V4L2_FMT_FLAG_COMPRESSED |
-+			 V4L2_FMT_FLAG_DYN_RESOLUTION,
-+	}, {
- 		.pixfmt = V4L2_PIX_FMT_MPEG1,
- 		.min_buffers = 8,
- 		.max_buffers = 8,
-@@ -64,6 +89,18 @@ static const struct amvdec_format vdec_formats_gxl[] = {
- 
- static const struct amvdec_format vdec_formats_gxm[] = {
- 	{
-+		.pixfmt = V4L2_PIX_FMT_H264,
-+		.min_buffers = 2,
-+		.max_buffers = 24,
-+		.max_width = 3840,
-+		.max_height = 2160,
-+		.vdec_ops = &vdec_1_ops,
-+		.codec_ops = &codec_h264_ops,
-+		.firmware_path = "meson/vdec/gxm_h264.bin",
-+		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, 0 },
-+		.flags = V4L2_FMT_FLAG_COMPRESSED |
-+			 V4L2_FMT_FLAG_DYN_RESOLUTION,
-+	}, {
- 		.pixfmt = V4L2_PIX_FMT_MPEG1,
- 		.min_buffers = 8,
- 		.max_buffers = 8,
-@@ -90,6 +127,18 @@ static const struct amvdec_format vdec_formats_gxm[] = {
- 
- static const struct amvdec_format vdec_formats_g12a[] = {
- 	{
-+		.pixfmt = V4L2_PIX_FMT_H264,
-+		.min_buffers = 2,
-+		.max_buffers = 24,
-+		.max_width = 3840,
-+		.max_height = 2160,
-+		.vdec_ops = &vdec_1_ops,
-+		.codec_ops = &codec_h264_ops,
-+		.firmware_path = "meson/vdec/g12a_h264.bin",
-+		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, 0 },
-+		.flags = V4L2_FMT_FLAG_COMPRESSED |
-+			 V4L2_FMT_FLAG_DYN_RESOLUTION,
-+	}, {
- 		.pixfmt = V4L2_PIX_FMT_MPEG1,
- 		.min_buffers = 8,
- 		.max_buffers = 8,
-@@ -116,6 +165,18 @@ static const struct amvdec_format vdec_formats_g12a[] = {
- 
- static const struct amvdec_format vdec_formats_sm1[] = {
- 	{
-+		.pixfmt = V4L2_PIX_FMT_H264,
-+		.min_buffers = 2,
-+		.max_buffers = 24,
-+		.max_width = 3840,
-+		.max_height = 2160,
-+		.vdec_ops = &vdec_1_ops,
-+		.codec_ops = &codec_h264_ops,
-+		.firmware_path = "meson/vdec/g12a_h264.bin",
-+		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, 0 },
-+		.flags = V4L2_FMT_FLAG_COMPRESSED |
-+			 V4L2_FMT_FLAG_DYN_RESOLUTION,
-+	}, {
- 		.pixfmt = V4L2_PIX_FMT_MPEG1,
- 		.min_buffers = 8,
- 		.max_buffers = 8,
 -- 
 2.22.0
 
