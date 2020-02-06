@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59ED3C33CAC
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 066C8C2D0B1
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3095920838
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE3B120838
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002351;
-	bh=EjV62c45UxozYqlGOlJVAo+k2SxtFV3WFQC0kuMJgLk=;
+	s=default; t=1581002353;
+	bh=3mw5NwwyoUbAwYCpiWZdYTS8q7Kk2qnl1qnsEdRMXMA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DaPeLjTYDtyops1UIo3kfMr35qddbdVUCFIDfLVV3wCUA2GbdxYv045Iqal5XoA0w
-	 fqINPyDE28N72Yz+tK+4ZveF9wiVi27pJQa7Jk/9uu9YB147PmEyXbzDA/xS359Syv
-	 pvQ5t4Tx4Zv6Tw0FXg9xxR9V1jyZio6Aqe4tEASU=
+	b=VdLjrqwEfE8+xDBZrqIMH2zj7hrW40xO7jgSVRhDBx2cY/+ekMJQhHMPAYizksn30
+	 Hjb5SFGAJpNx0NEUIbdKA/YbBzY0cNMgKOUkdoPyV+VAF3fIFqaJSOkKaLgb+VRlyA
+	 l8njhIfL2ECjGK//t3nX4XYFNLgY2zbp+WpOnc7k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727941AbgBFPTE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:19:04 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38032 "EHLO
+        id S1727952AbgBFPTN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:19:13 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38074 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727471AbgBFPR7 (ORCPT
+        with ESMTP id S1727563AbgBFPR7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:17:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=3U2jOuPo2uetl5hCcVnDDEibOIXkIZxyqnB2Z+N+1fM=; b=DzfQZCl5I6Dp3nm34Ctmfbd/bv
-        b6Ryxr2s6uYuVZ9o94z1LLsZYXBjoSHLTp6t66sljuVWKyVQ23nAK+01dba8PuatJ+oskFkRKKM1N
-        3Qxg4dORbRb3WC2Y0QnWR0Ee0Awfs582pKMdY+imNq2lOICQy+l2D675LIXXVsGfQVManDWbgLN47
-        CNVK0KjyVDc+0C3Sb6ICXI9k8gfSkEz8NwMqudLDunHQTxlcz8JQSCzT8tflHt1tr9u1tKQFbWd4P
-        DPaqi+CMTlplw1k694mxePS9nmf5xxRpBn7aZFoZCD3AFqt7EwF1MKedY4PvM++y0Pwzis01qMFZf
-        6lU3woKg==;
+        bh=9h37LNRT4TQ+jg7PGN9p0cblxBVnWIynsEAVhRhcbvw=; b=IkuQW28IaV0PzbFPcEZtuoBGxy
+        MI3+Yz2J7nZIdZct2v3buZ0CcuSt20aCDZHAi9afxfggHuuA0v5PcFp8BaXj17BmQF+qneNGzct+O
+        jdhGXca5Qqr/XjYT43tQ8WhjWk3RtJr4/Djr1dNydsRqUcVrvqrgp2JjvFySx+tO/ejnvPiXds4Ld
+        10KhWaDJfFX8Nbu9Y13qelRHFntUqarztVdI5EVyKCAXMGLZ53YUztgMOJM/FMBeGdmLtYOAqAp8G
+        c7BhU7KrH7JVDd/l3Q1Ev0zv2Yn5Am8eH7fgeUhPbxZkNb3uyERCUSkb18Y002sRkXq5BNJFneONe
+        FhkodhJw==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziul-0005jG-38; Thu, 06 Feb 2020 15:17:59 +0000
+        id 1iziul-0005jd-HP; Thu, 06 Feb 2020 15:17:59 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziud-002oWO-Tz; Thu, 06 Feb 2020 16:17:51 +0100
+        id 1iziud-002oW5-NY; Thu, 06 Feb 2020 16:17:51 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -50,9 +50,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 25/28] docs: networking: convert generic-hdlc.txt to ReST
-Date:   Thu,  6 Feb 2020 16:17:45 +0100
-Message-Id: <cd18b3d0ff03b8163784e69d80599798d9a6c897.1581002063.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 21/28] docs: networking: convert fib_trie.txt to ReST
+Date:   Thu,  6 Feb 2020 16:17:41 +0100
+Message-Id: <494446737ab19b024792b00901405698fc0d6b07.1581002063.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
 References: <cover.1581002062.git.mchehab+huawei@kernel.org>
@@ -65,204 +65,76 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 - add SPDX header;
 - adjust title markup;
-- mark code blocks and literals as such;
 - adjust identation, whitespaces and blank lines;
 - add to networking/index.rst.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../{generic-hdlc.txt => generic-hdlc.rst}    | 86 +++++++++++++------
- Documentation/networking/index.rst            |  1 +
- 2 files changed, 63 insertions(+), 24 deletions(-)
- rename Documentation/networking/{generic-hdlc.txt => generic-hdlc.rst} (75%)
+ .../networking/{fib_trie.txt => fib_trie.rst}    | 16 ++++++++++------
+ Documentation/networking/index.rst               |  1 +
+ 2 files changed, 11 insertions(+), 6 deletions(-)
+ rename Documentation/networking/{fib_trie.txt => fib_trie.rst} (96%)
 
-diff --git a/Documentation/networking/generic-hdlc.txt b/Documentation/networking/generic-hdlc.rst
-similarity index 75%
-rename from Documentation/networking/generic-hdlc.txt
-rename to Documentation/networking/generic-hdlc.rst
-index 4eb3cc40b702..1c3bb5cb98d4 100644
---- a/Documentation/networking/generic-hdlc.txt
-+++ b/Documentation/networking/generic-hdlc.rst
-@@ -1,14 +1,22 @@
+diff --git a/Documentation/networking/fib_trie.txt b/Documentation/networking/fib_trie.rst
+similarity index 96%
+rename from Documentation/networking/fib_trie.txt
+rename to Documentation/networking/fib_trie.rst
+index fe719388518b..f1435b7fcdb7 100644
+--- a/Documentation/networking/fib_trie.txt
++++ b/Documentation/networking/fib_trie.rst
+@@ -1,8 +1,12 @@
+-			LC-trie implementation notes.
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+==================
- Generic HDLC layer
-+==================
-+
- Krzysztof Halasa <khc@pm.waw.pl>
++============================
++LC-trie implementation notes
++============================
  
+ Node types
+ ----------
+-leaf 
++leaf
+ 	An end node with data. This has a copy of the relevant key, along
+ 	with 'hlist' with routing table entries sorted by prefix length.
+ 	See struct leaf and struct leaf_info.
+@@ -13,7 +17,7 @@ trie node or tnode
  
- Generic HDLC layer currently supports:
-+
- 1. Frame Relay (ANSI, CCITT, Cisco and no LMI)
-+
-    - Normal (routed) and Ethernet-bridged (Ethernet device emulation)
-      interfaces can share a single PVC.
-    - ARP support (no InARP support in the kernel - there is an
-      experimental InARP user-space daemon available on:
-      http://www.kernel.org/pub/linux/utils/net/hdlc/).
-+
- 2. raw HDLC - either IP (IPv4) interface or Ethernet device emulation
- 3. Cisco HDLC
- 4. PPP
-@@ -24,19 +32,24 @@ with IEEE 802.1Q (VLANs) and 802.1D (Ethernet bridging).
- Make sure the hdlc.o and the hardware driver are loaded. It should
- create a number of "hdlc" (hdlc0 etc) network devices, one for each
- WAN port. You'll need the "sethdlc" utility, get it from:
-+
- 	http://www.kernel.org/pub/linux/utils/net/hdlc/
+ A few concepts explained
+ ------------------------
+-Bits (tnode) 
++Bits (tnode)
+ 	The number of bits in the key segment used for indexing into the
+ 	child array - the "child index". See Level Compression.
  
--Compile sethdlc.c utility:
-+Compile sethdlc.c utility::
-+
- 	gcc -O2 -Wall -o sethdlc sethdlc.c
-+
- Make sure you're using a correct version of sethdlc for your kernel.
+@@ -23,7 +27,7 @@ Pos (tnode)
  
- Use sethdlc to set physical interface, clock rate, HDLC mode used,
- and add any required PVCs if using Frame Relay.
--Usually you want something like:
-+Usually you want something like::
+ Path Compression / skipped bits
+ 	Any given tnode is linked to from the child array of its parent, using
+-	a segment of the key specified by the parent's "pos" and "bits" 
++	a segment of the key specified by the parent's "pos" and "bits"
+ 	In certain cases, this tnode's own "pos" will not be immediately
+ 	adjacent to the parent (pos+bits), but there will be some bits
+ 	in the key skipped over because they represent a single path with no
+@@ -56,8 +60,8 @@ full_children
+ Comments
+ ---------
  
- 	sethdlc hdlc0 clock int rate 128000
- 	sethdlc hdlc0 cisco interval 10 timeout 25
--or
-+
-+or::
-+
- 	sethdlc hdlc0 rs232 clock ext
- 	sethdlc hdlc0 fr lmi ansi
- 	sethdlc hdlc0 create 99
-@@ -49,46 +62,63 @@ any IP address to it) before using pvc devices.
+-We have tried to keep the structure of the code as close to fib_hash as 
+-possible to allow verification and help up reviewing. 
++We have tried to keep the structure of the code as close to fib_hash as
++possible to allow verification and help up reviewing.
  
- Setting interface:
- 
--* v35 | rs232 | x21 | t1 | e1 - sets physical interface for a given port
--                                if the card has software-selectable interfaces
--  loopback - activate hardware loopback (for testing only)
--* clock ext - both RX clock and TX clock external
--* clock int - both RX clock and TX clock internal
--* clock txint - RX clock external, TX clock internal
--* clock txfromrx - RX clock external, TX clock derived from RX clock
--* rate - sets clock rate in bps (for "int" or "txint" clock only)
-+* v35 | rs232 | x21 | t1 | e1
-+    - sets physical interface for a given port
-+      if the card has software-selectable interfaces
-+  loopback
-+    - activate hardware loopback (for testing only)
-+* clock ext
-+    - both RX clock and TX clock external
-+* clock int
-+    - both RX clock and TX clock internal
-+* clock txint
-+    - RX clock external, TX clock internal
-+* clock txfromrx
-+    - RX clock external, TX clock derived from RX clock
-+* rate
-+    - sets clock rate in bps (for "int" or "txint" clock only)
- 
- 
- Setting protocol:
- 
- * hdlc - sets raw HDLC (IP-only) mode
-+
-   nrz / nrzi / fm-mark / fm-space / manchester - sets transmission code
-+
-   no-parity / crc16 / crc16-pr0 (CRC16 with preset zeros) / crc32-itu
-+
-   crc16-itu (CRC16 with ITU-T polynomial) / crc16-itu-pr0 - sets parity
- 
- * hdlc-eth - Ethernet device emulation using HDLC. Parity and encoding
-   as above.
- 
- * cisco - sets Cisco HDLC mode (IP, IPv6 and IPX supported)
-+
-   interval - time in seconds between keepalive packets
-+
-   timeout - time in seconds after last received keepalive packet before
--            we assume the link is down
-+	    we assume the link is down
- 
- * ppp - sets synchronous PPP mode
- 
- * x25 - sets X.25 mode
- 
- * fr - Frame Relay mode
-+
-   lmi ansi / ccitt / cisco / none - LMI (link management) type
-+
-   dce - Frame Relay DCE (network) side LMI instead of default DTE (user).
-+
-   It has nothing to do with clocks!
--  t391 - link integrity verification polling timer (in seconds) - user
--  t392 - polling verification timer (in seconds) - network
--  n391 - full status polling counter - user
--  n392 - error threshold - both user and network
--  n393 - monitored events count - both user and network
-+
-+  - t391 - link integrity verification polling timer (in seconds) - user
-+  - t392 - polling verification timer (in seconds) - network
-+  - n391 - full status polling counter - user
-+  - n392 - error threshold - both user and network
-+  - n393 - monitored events count - both user and network
- 
- Frame-Relay only:
-+
- * create n | delete n - adds / deletes PVC interface with DLCI #n.
-   Newly created interface will be named pvc0, pvc1 etc.
- 
-@@ -101,26 +131,34 @@ Frame-Relay only:
- Board-specific issues
- ---------------------
- 
--n2.o and c101.o need parameters to work:
-+n2.o and c101.o need parameters to work::
- 
- 	insmod n2 hw=io,irq,ram,ports[:io,irq,...]
--example:
-+
-+example::
-+
- 	insmod n2 hw=0x300,10,0xD0000,01
- 
--or
-+or::
-+
- 	insmod c101 hw=irq,ram[:irq,...]
--example:
-+
-+example::
-+
- 	insmod c101 hw=9,0xdc000
- 
--If built into the kernel, these drivers need kernel (command line) parameters:
-+If built into the kernel, these drivers need kernel (command line) parameters::
-+
- 	n2.hw=io,irq,ram,ports:...
--or
-+
-+or::
-+
- 	c101.hw=irq,ram:...
- 
- 
- 
- If you have a problem with N2, C101 or PLX200SYN card, you can issue the
--"private" command to see port's packet descriptor rings (in kernel logs):
-+"private" command to see port's packet descriptor rings (in kernel logs)::
- 
- 	sethdlc hdlc0 private
- 
+ fib_find_node()
+ 	A good start for understanding this code. This function implements a
 diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 538b9d3e838e..1f47d74fd33e 100644
+index 889216cdf00d..5f0ab638ef3f 100644
 --- a/Documentation/networking/index.rst
 +++ b/Documentation/networking/index.rst
-@@ -57,6 +57,7 @@ Contents:
-    filter
-    fore200e
-    framerelay
-+   generic-hdlc
+@@ -53,6 +53,7 @@ Contents:
+    dns_resolver
+    driver
+    eql
++   fib_trie
  
  .. only::  subproject and html
  
