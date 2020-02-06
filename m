@@ -4,55 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A560C3B183
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09C71C352A2
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E24BE20838
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:11:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2779227BF
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581001919;
-	bh=H6v8m9+eTb8TJjP7/IX9nuNDh4mqr7FOvBYBGbPbrrI=;
+	s=default; t=1581002280;
+	bh=ujAU9kFfO+i79vVX94Zx3u7o+aAom7ufmHsIW5TLoGE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NXtaGUuTygyFQSbnqK6vir5ioQMTXukx1/8hWtzWNgo+OJlMBYhXSO0E3ZBI+rz2O
-	 23nQ3lTM5TNRKRqR2R/wA3iL/UcZbmu4tElMggUMiw9mM+SIDVqIbmxtVSb7irXT5w
-	 t4ow68nBcI6Q6MqGk0/pgrLw0M5cZpmoiCe6ihK4=
+	b=FMo6qFmLpbEpCQ+oIYCCzpUFsA2S+wd2w9SeP/VGsHJc0ndx8keaiA+rgVEUaixUL
+	 hXSiuqjV5VEZsGoX1ZvAw+yAjdbAUE28WC/XgsO4+eb3xcOxWVgYMAIB6bqPzrQQBx
+	 aQ7dvtbd8FoHQ9MBw4UYiWT79PpcetXfCtaDG/5I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727540AbgBFPLm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:11:42 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:37526 "EHLO
+        id S1727585AbgBFPSA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:18:00 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38012 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727450AbgBFPLm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:11:42 -0500
+        with ESMTP id S1726956AbgBFPR7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:17:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=CdqmLOZ5sQ/Aflxvzy0izWi/tvqp/in3SnUYEGpwbcw=; b=c9XnhoYKCB1t/Ir0JOCrXRdVmI
-        4j2ExvLFcfIDC1WGd7F6hP5uLaq0meoHKIdmwf1+by44zO90p4L+0RN9bqNYW68wSIZMS/bbCYxO6
-        eCCjFdeXgKm8eMbxr48U9CWdKDUVX8Sb1dPT4bs1qzKpAC2S9r8przpKsUZoj86HmJkhYwRk7PoDW
-        Gdz/xTw5gciIvoxC572NhQJ5QPKKCJBZy8URSs6/hDo/ITyBF1R663YINYNYAOyu1veNK37D03tuN
-        12j8H873ffk2r5GjtEnp7qt0vpZ9FmeG27kZeLvCS6FbHPJ3+Rq/vOTLXtxAh5MoDFrn9GkAxLuRm
-        DKXAMaTQ==;
+        bh=jamutMjPpFV0b/KpqTKM/1NPs0Wk4CSrFS6j8vN5Ty4=; b=bEnrLp5lnF1FNsLATAWmwBdgZC
+        LrUKTDWRT1ZaYb+dqxy61jWNurFD8ZxeSTAbk1EWIz961eEWPtr3eg5iVUG42/+kClhHHaSeaa41C
+        ou+EFt1KhOFztl8AqVGF++Er4A2ZTTQTTwt7HOUaYp58rE9/jf/0ZdwxrqngWJY3s0m2zJmZNdQK4
+        48Svc5MyLArtnrbdVQSDlePyQFuhH8aGfnk/K6w801g2QOgTXEyleo9RwiSbC9E1XGZnnUcSm0MDB
+        oCxzhGyw26Mf02lC7d6cGyNGrKLi8++VrEaDxoQrvLlFZlOHMgB0o1qZW78DDLmuWvBbrNDJk1X8b
+        78bg27KQ==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1izioc-000437-U5; Thu, 06 Feb 2020 15:11:42 +0000
+        id 1iziuk-0005jX-NN; Thu, 06 Feb 2020 15:17:58 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1izioW-002oNQ-0v; Thu, 06 Feb 2020 16:11:32 +0100
+        id 1iziud-002oVd-Ba; Thu, 06 Feb 2020 16:17:51 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 09/11] docs: misc-devices/c2port.txt: convert to ReST format
-Date:   Thu,  6 Feb 2020 16:11:28 +0100
-Message-Id: <0a053afb27db3fe13443ea54885ef9afcf480b34.1581001737.git.mchehab+huawei@kernel.org>
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 14/28] docs: networking: convert dccp.txt to ReST
+Date:   Thu,  6 Feb 2020 16:17:34 +0100
+Message-Id: <8952844e1979198f367ef29b54347f396b5b589e.1581002063.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <cover.1581001737.git.mchehab+huawei@kernel.org>
-References: <cover.1581001737.git.mchehab+huawei@kernel.org>
+In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
+References: <cover.1581002062.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -60,132 +63,141 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Use copyright symbol;
-- use title markups;
-- adjust indentation;
-- mark literal blocks as such.
+- add SPDX header;
+- adjust title markup;
+- comment out text-only TOC from html/pdf output;
+- mark code blocks and literals as such;
+- adjust identation, whitespaces and blank lines;
+- add to networking/index.rst.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../misc-devices/{c2port.txt => c2port.rst}   | 58 ++++++++++---------
- Documentation/misc-devices/index.rst          |  1 +
- 2 files changed, 32 insertions(+), 27 deletions(-)
- rename Documentation/misc-devices/{c2port.txt => c2port.rst} (59%)
+ .../networking/{dccp.txt => dccp.rst}         | 39 ++++++++++++-------
+ Documentation/networking/index.rst            |  1 +
+ 2 files changed, 25 insertions(+), 15 deletions(-)
+ rename Documentation/networking/{dccp.txt => dccp.rst} (94%)
 
-diff --git a/Documentation/misc-devices/c2port.txt b/Documentation/misc-devices/c2port.rst
-similarity index 59%
-rename from Documentation/misc-devices/c2port.txt
-rename to Documentation/misc-devices/c2port.rst
-index ea7344465610..258e1c1d43c7 100644
---- a/Documentation/misc-devices/c2port.txt
-+++ b/Documentation/misc-devices/c2port.rst
-@@ -1,7 +1,11 @@
--			C2 port support
--			---------------
+diff --git a/Documentation/networking/dccp.txt b/Documentation/networking/dccp.rst
+similarity index 94%
+rename from Documentation/networking/dccp.txt
+rename to Documentation/networking/dccp.rst
+index 55c575fcaf17..dde16be04456 100644
+--- a/Documentation/networking/dccp.txt
++++ b/Documentation/networking/dccp.rst
+@@ -1,16 +1,18 @@
 +.. SPDX-License-Identifier: GPL-2.0
-+.. include:: <isonum.txt>
- 
--(C) Copyright 2007 Rodolfo Giometti <giometti@enneenne.com>
-+===============
-+C2 port support
-+===============
 +
-+|copy| Copyright 2007 Rodolfo Giometti <giometti@enneenne.com>
++=============
+ DCCP protocol
+ =============
  
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
-@@ -32,10 +36,10 @@ The C2 Interface main references are at (http://www.silabs.com)
- Silicon Laboratories site], see:
  
- - AN127: FLASH Programming via the C2 Interface at
--http://www.silabs.com/Support Documents/TechnicalDocs/an127.pdf 
-+  http://www.silabs.com/Support Documents/TechnicalDocs/an127.pdf
+-Contents
+-========
+-- Introduction
+-- Missing features
+-- Socket options
+-- Sysctl variables
+-- IOCTLs
+-- Other tunables
+-- Notes
++.. Contents
++   - Introduction
++   - Missing features
++   - Socket options
++   - Sysctl variables
++   - IOCTLs
++   - Other tunables
++   - Notes
  
- - C2 Specification at
--http://www.silabs.com/pages/DownloadDoc.aspx?FILEURL=Support%20Documents/TechnicalDocs/an127.pdf&src=SearchResults
-+  http://www.silabs.com/pages/DownloadDoc.aspx?FILEURL=Support%20Documents/TechnicalDocs/an127.pdf&src=SearchResults
  
- however it implements a two wire serial communication protocol (bit
- banging) designed to enable in-system programming, debugging, and
-@@ -47,44 +51,44 @@ Using the driver
- ----------------
+ Introduction
+@@ -38,6 +40,7 @@ The Linux DCCP implementation does not currently support all the features that a
+ specified in RFCs 4340...42.
  
- Once the driver is loaded you can use sysfs support to get C2port's
--info or read/write in-system flash.
-+info or read/write in-system flash::
+ The known bugs are at:
++
+ 	http://www.linuxfoundation.org/collaborate/workgroups/networking/todo#DCCP
  
--# ls /sys/class/c2port/c2port0/
--access            flash_block_size  flash_erase       rev_id
--dev_id            flash_blocks_num  flash_size        subsystem/
--flash_access      flash_data        reset             uevent
-+  # ls /sys/class/c2port/c2port0/
-+  access            flash_block_size  flash_erase       rev_id
-+  dev_id            flash_blocks_num  flash_size        subsystem/
-+  flash_access      flash_data        reset             uevent
+ For more up-to-date versions of the DCCP implementation, please consider using
+@@ -54,7 +57,8 @@ defined: the "simple" policy (DCCPQ_POLICY_SIMPLE), which does nothing special,
+ and a priority-based variant (DCCPQ_POLICY_PRIO). The latter allows to pass an
+ u32 priority value as ancillary data to sendmsg(), where higher numbers indicate
+ a higher packet priority (similar to SO_PRIORITY). This ancillary data needs to
+-be formatted using a cmsg(3) message header filled in as follows:
++be formatted using a cmsg(3) message header filled in as follows::
++
+ 	cmsg->cmsg_level = SOL_DCCP;
+ 	cmsg->cmsg_type	 = DCCP_SCM_PRIORITY;
+ 	cmsg->cmsg_len	 = CMSG_LEN(sizeof(uint32_t));	/* or CMSG_LEN(4) */
+@@ -94,7 +98,7 @@ must be registered on the socket before calling connect() or listen().
  
- Initially the C2port access is disabled since you hardware may have
- such lines multiplexed with other devices so, to get access to the
--C2port, you need the command:
-+C2port, you need the command::
+ DCCP_SOCKOPT_TX_CCID is read/write. It returns the current CCID (if set) or sets
+ the preference list for the TX CCID, using the same format as DCCP_SOCKOPT_CCID.
+-Please note that the getsockopt argument type here is `int', not uint8_t.
++Please note that the getsockopt argument type here is ``int``, not uint8_t.
  
--# echo 1 > /sys/class/c2port/c2port0/access
-+  # echo 1 > /sys/class/c2port/c2port0/access
+ DCCP_SOCKOPT_RX_CCID is analogous to DCCP_SOCKOPT_TX_CCID, but for the RX CCID.
  
- after that you should read the device ID and revision ID of the
--connected micro controller:
-+connected micro controller::
+@@ -113,6 +117,7 @@ be enabled at the receiver, too with suitable choice of CsCov.
+ DCCP_SOCKOPT_SEND_CSCOV sets the sender checksum coverage. Values in the
+ 	range 0..15 are acceptable. The default setting is 0 (full coverage),
+ 	values between 1..15 indicate partial coverage.
++
+ DCCP_SOCKOPT_RECV_CSCOV is for the receiver and has a different meaning: it
+ 	sets a threshold, where again values 0..15 are acceptable. The default
+ 	of 0 means that all packets with a partial coverage will be discarded.
+@@ -123,11 +128,13 @@ DCCP_SOCKOPT_RECV_CSCOV is for the receiver and has a different meaning: it
  
--# cat /sys/class/c2port/c2port0/dev_id
--8
--# cat /sys/class/c2port/c2port0/rev_id
--1
-+  # cat /sys/class/c2port/c2port0/dev_id
-+  8
-+  # cat /sys/class/c2port/c2port0/rev_id
-+  1
+ The following two options apply to CCID 3 exclusively and are getsockopt()-only.
+ In either case, a TFRC info struct (defined in <linux/tfrc.h>) is returned.
++
+ DCCP_SOCKOPT_CCID_RX_INFO
+-	Returns a `struct tfrc_rx_info' in optval; the buffer for optval and
++	Returns a ``struct tfrc_rx_info`` in optval; the buffer for optval and
+ 	optlen must be set to at least sizeof(struct tfrc_rx_info).
++
+ DCCP_SOCKOPT_CCID_TX_INFO
+-	Returns a `struct tfrc_tx_info' in optval; the buffer for optval and
++	Returns a ``struct tfrc_tx_info`` in optval; the buffer for optval and
+ 	optlen must be set to at least sizeof(struct tfrc_tx_info).
  
- However, for security reasons, the in-system flash access in not
--enabled yet, to do so you need the command:
-+enabled yet, to do so you need the command::
+ On unidirectional connections it is useful to close the unused half-connection
+@@ -182,7 +189,7 @@ sync_ratelimit = 125 ms
+ IOCTLS
+ ======
+ FIONREAD
+-	Works as in udp(7): returns in the `int' argument pointer the size of
++	Works as in udp(7): returns in the ``int`` argument pointer the size of
+ 	the next pending datagram in bytes, or 0 when no datagram is pending.
  
--# echo 1 > /sys/class/c2port/c2port0/flash_access
-+  # echo 1 > /sys/class/c2port/c2port0/flash_access
  
--After that you can read the whole flash:
-+After that you can read the whole flash::
+@@ -191,10 +198,12 @@ Other tunables
+ Per-route rto_min support
+ 	CCID-2 supports the RTAX_RTO_MIN per-route setting for the minimum value
+ 	of the RTO timer. This setting can be modified via the 'rto_min' option
+-	of iproute2; for example:
++	of iproute2; for example::
++
+ 		> ip route change 10.0.0.0/24   rto_min 250j dev wlan0
+ 		> ip route add    10.0.0.254/32 rto_min 800j dev wlan0
+ 		> ip route show dev wlan0
++
+ 	CCID-3 also supports the rto_min setting: it is used to define the lower
+ 	bound for the expiry of the nofeedback timer. This can be useful on LANs
+ 	with very low RTTs (e.g., loopback, Gbit ethernet).
+diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
+index 4f8dc5fd6b20..56372aae88a3 100644
+--- a/Documentation/networking/index.rst
++++ b/Documentation/networking/index.rst
+@@ -46,6 +46,7 @@ Contents:
+    cdc_mbim
+    cops
+    cxacru
++   dccp
  
--# cat /sys/class/c2port/c2port0/flash_data > image
-+  # cat /sys/class/c2port/c2port0/flash_data > image
+ .. only::  subproject and html
  
--erase it:
-+erase it::
- 
--# echo 1 > /sys/class/c2port/c2port0/flash_erase
-+  # echo 1 > /sys/class/c2port/c2port0/flash_erase
- 
--and write it:
-+and write it::
- 
--# cat image > /sys/class/c2port/c2port0/flash_data
-+  # cat image > /sys/class/c2port/c2port0/flash_data
- 
--after writing you have to reset the device to execute the new code:
-+after writing you have to reset the device to execute the new code::
- 
--# echo 1 > /sys/class/c2port/c2port0/reset
-+  # echo 1 > /sys/class/c2port/c2port0/reset
-diff --git a/Documentation/misc-devices/index.rst b/Documentation/misc-devices/index.rst
-index 04f5dab2384c..c2e880d78734 100644
---- a/Documentation/misc-devices/index.rst
-+++ b/Documentation/misc-devices/index.rst
-@@ -16,6 +16,7 @@ fit into other categories.
- 
-    ad525x_dpot
-    eeprom
-+   c2port
-    ibmvmc
-    ics932s401
-    isl29003
 -- 
 2.24.1
 
