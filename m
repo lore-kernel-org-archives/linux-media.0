@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C705C33CAC
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4ACCC352A3
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:51:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 62FC520838
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:51:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BACBC214AF
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:51:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581000673;
-	bh=P4LnyLZ65S8o8II+eEhSbCd4kvDsh7wLEYquFYAmk84=;
+	s=default; t=1581000675;
+	bh=NVrL1r/WD2UJey4RkFo5kuJwFbJVgc7nDJEPRpKPRYw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kUjRCBchaABf4PAAoKLsj+9y4v+08ya/Sy3rDGAW0+yd0As4mtVwDWpaxGgVS+UfU
-	 dRe2RU4OTZ1nxbkRm5ZMcoUOt3I7HSo/gnOi+fmx82xjz9KWU5YswKPEqPzWe4REYG
-	 HE6qkiyvUK+RKkHB0+yI6dxJrmrE+l4o+qBDolmw=
+	b=ufl9LqCPmtOSJsi8LnxxVqnjSB0hFUAct6OYV/if/kkJrKNcRM4QSLmCpq10CcJCT
+	 h0N1kVxk4ZstdWr0CQLsFu5BKlzpXXjhqnHvDhTzI+enrdOxQpI2H2+tlsG+/RWNAN
+	 zyLS2c8W6P2caddYVyjNtg/CnHI09wQiLCKyPTPk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727575AbgBFOuh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 09:50:37 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:55360 "EHLO
+        id S1727560AbgBFOug (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 09:50:36 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:55370 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727516AbgBFOuf (ORCPT
+        with ESMTP id S1727517AbgBFOuf (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 09:50:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=CzvFNiYCk6rJkYqH7EYJZ58H6P3c8r/RaU40sj/CJoI=; b=MJ3nET1tgKYR+AmQJB3Pb2Ff+w
-        WmZkDAZtAUa0+2XZdKd5WULniThzwz7jdD5/anNZGc/f7SzLubsGECJG/6sDxlPccF9tgoMdG2aAd
-        TC0Jrr75pM37oUOq1nIm7CjNrcRvWe4RQzWj9cAonNY4CmkUYRlzImqmYw+tBhS5yRm9cn9Sb3Bag
-        8PN9yjOd9QROd/nyElSpXX7K1O/V7QqncbWpAyqlMmm38LFXdSj8Mvc1r0xWc9S8/Uw8r9OV3jTEI
-        vnr9wJkpIHS1fORUQLNShNbuVEquMdTpcBnjGCRXUL/Dc8dgkBQEQUZ+sytsIXVL7Ht9V1uqPrMgv
-        S9u5eQyg==;
+        bh=v0HoWkcIfPjQPsHagVx5eBe/TlRMM8+XhIwobLt5XOw=; b=XuZtbJ07L/ELdmyg9op72JzhKs
+        QQ7eic7vwV66HTzMrC03V3z/pYSLc6ClWun6tQTWHn+tOBTglReb8/d1rYArFnT8qKhPSbWCO/AUM
+        iRVVNWTyAEpas9Sa03mqgPDDgkMoh8IiFZ191YK3uu6eDdvhQ7vxNFE0osPlayuygB4CbnEdVzl5s
+        dAjDbuqNHJDnG8mVinViu/DeeshjeUuIY4pxVzdfaDalUt/8XG4y25zjVbelLAb9ED4dDHtpncJnO
+        vjC/sMCdgZOkhYUxW59RA2fCA/uK/ApjAugW+VUONNnh+1SgvdZRTkc6MPlRUb9IVIzXOTgxu1Bho
+        wRarzwCg==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziUE-0004IK-P7; Thu, 06 Feb 2020 14:50:34 +0000
+        id 1iziUE-0004IR-TF; Thu, 06 Feb 2020 14:50:34 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziU6-002nLY-U3; Thu, 06 Feb 2020 15:50:26 +0100
+        id 1iziU7-002nMA-4R; Thu, 06 Feb 2020 15:50:27 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v2 19/27] docs: kvm: arm/psci.txt: convert to ReST
-Date:   Thu,  6 Feb 2020 15:50:16 +0100
-Message-Id: <bc1b1d791d0eb5e981804bec66c937a322e62ae5.1581000481.git.mchehab+huawei@kernel.org>
+        linux-doc@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>
+Subject: [PATCH v2 25/27] docs: kvm: Convert s390-diag.txt to ReST format
+Date:   Thu,  6 Feb 2020 15:50:22 +0100
+Message-Id: <1ece183394e2de9a9f84d43fc06219cfde77ff8e.1581000481.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581000481.git.mchehab+huawei@kernel.org>
 References: <cover.1581000481.git.mchehab+huawei@kernel.org>
@@ -62,102 +62,65 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Add a title for the document;
-- Adjust whitespaces for it to be properly formatted after
-  parsed.
+This file is almost in ReST format. Just one change was
+needed:
+
+    - Add markups for a literal block and change its indentation.
+
+While here, use the standard markup for the document title.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
 ---
- Documentation/virt/kvm/arm/index.rst          |  1 +
- .../virt/kvm/arm/{psci.txt => psci.rst}       | 46 +++++++++++++------
- 2 files changed, 32 insertions(+), 15 deletions(-)
- rename Documentation/virt/kvm/arm/{psci.txt => psci.rst} (60%)
+ Documentation/virt/kvm/index.rst                    |  1 +
+ .../virt/kvm/{s390-diag.txt => s390-diag.rst}       | 13 ++++++++-----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
+ rename Documentation/virt/kvm/{s390-diag.txt => s390-diag.rst} (90%)
 
-diff --git a/Documentation/virt/kvm/arm/index.rst b/Documentation/virt/kvm/arm/index.rst
-index 134fa5fa77e5..3e2b2aba90fc 100644
---- a/Documentation/virt/kvm/arm/index.rst
-+++ b/Documentation/virt/kvm/arm/index.rst
-@@ -8,4 +8,5 @@ ARM
-    :maxdepth: 2
+diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
+index d0e17e717461..e5ea75f97d52 100644
+--- a/Documentation/virt/kvm/index.rst
++++ b/Documentation/virt/kvm/index.rst
+@@ -17,6 +17,7 @@ KVM
+    msr
+    nested-vmx
+    ppc-pv
++   s390-diag
+    vcpu-requests
  
-    hyp-abi
-+   psci
-    pvtime
-diff --git a/Documentation/virt/kvm/arm/psci.txt b/Documentation/virt/kvm/arm/psci.rst
-similarity index 60%
-rename from Documentation/virt/kvm/arm/psci.txt
-rename to Documentation/virt/kvm/arm/psci.rst
-index 559586fc9d37..d52c2e83b5b8 100644
---- a/Documentation/virt/kvm/arm/psci.txt
-+++ b/Documentation/virt/kvm/arm/psci.rst
-@@ -1,3 +1,9 @@
+    arm/index
+diff --git a/Documentation/virt/kvm/s390-diag.txt b/Documentation/virt/kvm/s390-diag.rst
+similarity index 90%
+rename from Documentation/virt/kvm/s390-diag.txt
+rename to Documentation/virt/kvm/s390-diag.rst
+index 7c52e5f8b210..eaac4864d3d6 100644
+--- a/Documentation/virt/kvm/s390-diag.txt
++++ b/Documentation/virt/kvm/s390-diag.rst
+@@ -1,3 +1,6 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+=========================================
-+Power State Coordination Interface (PSCI)
-+=========================================
-+
- KVM implements the PSCI (Power State Coordination Interface)
- specification in order to provide services such as CPU on/off, reset
- and power-off to the guest.
-@@ -30,32 +36,42 @@ The following register is defined:
-   - Affects the whole VM (even if the register view is per-vcpu)
++=============================
+ The s390 DIAGNOSE call on KVM
+ =============================
  
- * KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1:
--  Holds the state of the firmware support to mitigate CVE-2017-5715, as
--  offered by KVM to the guest via a HVC call. The workaround is described
--  under SMCCC_ARCH_WORKAROUND_1 in [1].
-+    Holds the state of the firmware support to mitigate CVE-2017-5715, as
-+    offered by KVM to the guest via a HVC call. The workaround is described
-+    under SMCCC_ARCH_WORKAROUND_1 in [1].
-+
-   Accepted values are:
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_AVAIL: KVM does not offer
-+
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_AVAIL:
-+      KVM does not offer
-       firmware support for the workaround. The mitigation status for the
-       guest is unknown.
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_AVAIL: The workaround HVC call is
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_AVAIL:
-+      The workaround HVC call is
-       available to the guest and required for the mitigation.
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_REQUIRED: The workaround HVC call
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_REQUIRED:
-+      The workaround HVC call
-       is available to the guest, but it is not needed on this VCPU.
+@@ -16,12 +19,12 @@ DIAGNOSE calls by the guest cause a mandatory intercept. This implies
+ all supported DIAGNOSE calls need to be handled by either KVM or its
+ userspace.
  
- * KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2:
--  Holds the state of the firmware support to mitigate CVE-2018-3639, as
--  offered by KVM to the guest via a HVC call. The workaround is described
--  under SMCCC_ARCH_WORKAROUND_2 in [1].
-+    Holds the state of the firmware support to mitigate CVE-2018-3639, as
-+    offered by KVM to the guest via a HVC call. The workaround is described
-+    under SMCCC_ARCH_WORKAROUND_2 in [1]_.
-+
-   Accepted values are:
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_AVAIL: A workaround is not
-+
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_AVAIL:
-+      A workaround is not
-       available. KVM does not offer firmware support for the workaround.
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_UNKNOWN: The workaround state is
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_UNKNOWN:
-+      The workaround state is
-       unknown. KVM does not offer firmware support for the workaround.
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_AVAIL: The workaround is available,
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_AVAIL:
-+      The workaround is available,
-       and can be disabled by a vCPU. If
-       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_ENABLED is set, it is active for
-       this vCPU.
--    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED: The workaround is
--      always active on this vCPU or it is not needed.
-+    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED:
-+      The workaround is always active on this vCPU or it is not needed.
+-All DIAGNOSE calls supported by KVM use the RS-a format:
++All DIAGNOSE calls supported by KVM use the RS-a format::
  
--[1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmware_interfaces_for_mitigating_CVE-2017-5715.pdf
-+.. [1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmware_interfaces_for_mitigating_CVE-2017-5715.pdf
+---------------------------------------
+-|  '83'  | R1 | R3 | B2 |     D2     |
+---------------------------------------
+-0        8    12   16   20           31
++  --------------------------------------
++  |  '83'  | R1 | R3 | B2 |     D2     |
++  --------------------------------------
++  0        8    12   16   20           31
+ 
+ The second-operand address (obtained by the base/displacement calculation)
+ is not used to address data. Instead, bits 48-63 of this address specify
 -- 
 2.24.1
 
