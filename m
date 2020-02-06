@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB50DC352A6
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59ED3C33CAC
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BED4B20838
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3095920838
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002348;
-	bh=dBhE4o4pk/p9mLyeGVwtLnBU7UYdhbrjbCFpmZv3YQM=;
+	s=default; t=1581002351;
+	bh=EjV62c45UxozYqlGOlJVAo+k2SxtFV3WFQC0kuMJgLk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=CCiuT5n7pISDF7RsVL5Dru+0CISfYNj8ZYFpg5cAZaosHt3D0x9ywdjVF59ErYx/c
-	 G8n7NZNFeKmB3AKOVq330PNH6NBvwIoLCdlCxqN0UaQkEkQhK1KWwf7es3GEYFFV+H
-	 ZTl2y2ggNblNpvCrjrnluF/7wL5/sWHMniRpXHow=
+	b=DaPeLjTYDtyops1UIo3kfMr35qddbdVUCFIDfLVV3wCUA2GbdxYv045Iqal5XoA0w
+	 fqINPyDE28N72Yz+tK+4ZveF9wiVi27pJQa7Jk/9uu9YB147PmEyXbzDA/xS359Syv
+	 pvQ5t4Tx4Zv6Tw0FXg9xxR9V1jyZio6Aqe4tEASU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727947AbgBFPTF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:19:05 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38054 "EHLO
+        id S1727941AbgBFPTE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:19:04 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38032 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727548AbgBFPR7 (ORCPT
+        with ESMTP id S1727471AbgBFPR7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:17:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
-        To:From:Reply-To:Content-ID:Content-Description;
-        bh=nnWg+8aH8ZOHODuRm5r6ALThw0WyVVTSxDI4IeVcmA8=; b=Wqr+twoyQB1AVUq905ouezfJKy
-        jDmqD61YbBlTFM0BOBte7IwCudSMG+QSSinKk4Nz8bBXt0rKomwwi8MpXj8wwmUmphagTOZul7Q9B
-        Cgj8EZrYSNvnYcSJBGvmLRj61KuBX4OS3w8DhjS6CuZTKqfoDSIZ3TDe3DPCWYQUdJ6mcMVjqqjJW
-        cFULsIKe0uC/HZN6ZJz0Vba+kyNJ/XaLl/4NyO8E6DGqiZ73Y5nIvA1CIn9/SWfUKRf5i9/pNE3n/
-        YiyIksxi0sO6XOkOZ7Qyr0WF1ES9//F6zmBE4PyE4WH2dQtYW1VTrmd3NANR1TMSdscQVAC506cr+
-        asYyLbiw==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=3U2jOuPo2uetl5hCcVnDDEibOIXkIZxyqnB2Z+N+1fM=; b=DzfQZCl5I6Dp3nm34Ctmfbd/bv
+        b6Ryxr2s6uYuVZ9o94z1LLsZYXBjoSHLTp6t66sljuVWKyVQ23nAK+01dba8PuatJ+oskFkRKKM1N
+        3Qxg4dORbRb3WC2Y0QnWR0Ee0Awfs582pKMdY+imNq2lOICQy+l2D675LIXXVsGfQVManDWbgLN47
+        CNVK0KjyVDc+0C3Sb6ICXI9k8gfSkEz8NwMqudLDunHQTxlcz8JQSCzT8tflHt1tr9u1tKQFbWd4P
+        DPaqi+CMTlplw1k694mxePS9nmf5xxRpBn7aZFoZCD3AFqt7EwF1MKedY4PvM++y0Pwzis01qMFZf
+        6lU3woKg==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziul-0005jI-4E; Thu, 06 Feb 2020 15:17:59 +0000
+        id 1iziul-0005jG-38; Thu, 06 Feb 2020 15:17:59 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziuc-002oUv-KM; Thu, 06 Feb 2020 16:17:50 +0100
+        id 1iziud-002oWO-Tz; Thu, 06 Feb 2020 16:17:51 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -50,14 +50,13 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 03/28] docs: networking: convert 6pack.txt to ReST
-Date:   Thu,  6 Feb 2020 16:17:23 +0100
-Message-Id: <a3f4a0a45533b6182d69e6577be5fdc00548dac1.1581002063.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 25/28] docs: networking: convert generic-hdlc.txt to ReST
+Date:   Thu,  6 Feb 2020 16:17:45 +0100
+Message-Id: <cd18b3d0ff03b8163784e69d80599798d9a6c897.1581002063.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
 References: <cover.1581002062.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -65,161 +64,205 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 - add SPDX header;
-- use title markups;
+- adjust title markup;
 - mark code blocks and literals as such;
 - adjust identation, whitespaces and blank lines;
 - add to networking/index.rst.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../networking/{6pack.txt => 6pack.rst}       | 46 +++++++++++++------
+ .../{generic-hdlc.txt => generic-hdlc.rst}    | 86 +++++++++++++------
  Documentation/networking/index.rst            |  1 +
- 2 files changed, 32 insertions(+), 15 deletions(-)
- rename Documentation/networking/{6pack.txt => 6pack.rst} (90%)
+ 2 files changed, 63 insertions(+), 24 deletions(-)
+ rename Documentation/networking/{generic-hdlc.txt => generic-hdlc.rst} (75%)
 
-diff --git a/Documentation/networking/6pack.txt b/Documentation/networking/6pack.rst
-similarity index 90%
-rename from Documentation/networking/6pack.txt
-rename to Documentation/networking/6pack.rst
-index 8f339428fdf4..bc5bf1f1a98f 100644
---- a/Documentation/networking/6pack.txt
-+++ b/Documentation/networking/6pack.rst
-@@ -1,27 +1,36 @@
+diff --git a/Documentation/networking/generic-hdlc.txt b/Documentation/networking/generic-hdlc.rst
+similarity index 75%
+rename from Documentation/networking/generic-hdlc.txt
+rename to Documentation/networking/generic-hdlc.rst
+index 4eb3cc40b702..1c3bb5cb98d4 100644
+--- a/Documentation/networking/generic-hdlc.txt
++++ b/Documentation/networking/generic-hdlc.rst
+@@ -1,14 +1,22 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+==============
-+6pack Protocol
-+==============
++==================
+ Generic HDLC layer
++==================
 +
- This is the 6pack-mini-HOWTO, written by
+ Krzysztof Halasa <khc@pm.waw.pl>
  
- Andreas Könsgen DG3KQ
--Internet: ajk@comnets.uni-bremen.de
--AMPR-net: dg3kq@db0pra.ampr.org
--AX.25:    dg3kq@db0ach.#nrw.deu.eu
+ 
+ Generic HDLC layer currently supports:
 +
-+:Internet: ajk@comnets.uni-bremen.de
-+:AMPR-net: dg3kq@db0pra.ampr.org
-+:AX.25:    dg3kq@db0ach.#nrw.deu.eu
- 
- Last update: April 7, 1998
- 
- 1. What is 6pack, and what are the advantages to KISS?
-+======================================================
- 
- 6pack is a transmission protocol for data exchange between the PC and
- the TNC over a serial line. It can be used as an alternative to KISS.
- 
- 6pack has two major advantages:
+ 1. Frame Relay (ANSI, CCITT, Cisco and no LMI)
 +
- - The PC is given full control over the radio
-   channel. Special control data is exchanged between the PC and the TNC so
-   that the PC knows at any time if the TNC is receiving data, if a TNC
-   buffer underrun or overrun has occurred, if the PTT is
-   set and so on. This control data is processed at a higher priority than
-   normal data, so a data stream can be interrupted at any time to issue an
--  important event. This helps to improve the channel access and timing 
--  algorithms as everything is computed in the PC. It would even be possible 
--  to experiment with something completely different from the known CSMA and 
-+  important event. This helps to improve the channel access and timing
-+  algorithms as everything is computed in the PC. It would even be possible
-+  to experiment with something completely different from the known CSMA and
-   DAMA channel access methods.
-   This kind of real-time control is especially important to supply several
-   TNCs that are connected between each other and the PC by a daisy chain
-@@ -36,6 +45,7 @@ More details about 6pack are described in the file 6pack.ps that is located
- in the doc directory of the AX.25 utilities package.
- 
- 2. Who has developed the 6pack protocol?
-+========================================
- 
- The 6pack protocol has been developed by Ekki Plicht DF4OR, Henning Rech
- DF9IC and Gunter Jost DK7WJ. A driver for 6pack, written by Gunter Jost and
-@@ -44,12 +54,14 @@ They have also written a firmware for TNCs to perform the 6pack
- protocol (see section 4 below).
- 
- 3. Where can I get the latest version of 6pack for LinuX?
-+=========================================================
- 
- At the moment, the 6pack stuff can obtained via anonymous ftp from
- db0bm.automation.fh-aachen.de. In the directory /incoming/dg3kq,
- there is a file named 6pack.tgz.
- 
- 4. Preparing the TNC for 6pack operation
-+========================================
- 
- To be able to use 6pack, a special firmware for the TNC is needed. The EPROM
- of a newly bought TNC does not contain 6pack, so you will have to
-@@ -75,12 +87,14 @@ and the status LED are lit for about a second if the firmware initialises
- the TNC correctly.
- 
- 5. Building and installing the 6pack driver
-+===========================================
- 
- The driver has been tested with kernel version 2.1.90. Use with older
- kernels may lead to a compilation error because the interface to a kernel
- function has been changed in the 2.1.8x kernels.
- 
- How to turn on 6pack support:
-+=============================
- 
- - In the linux kernel configuration program, select the code maturity level
-   options menu and turn on the prompting for development drivers.
-@@ -94,27 +108,28 @@ To use the driver, the kissattach program delivered with the AX.25 utilities
- has to be modified.
- 
- - Do a cd to the directory that holds the kissattach sources. Edit the
--  kissattach.c file. At the top, insert the following lines:
-+  kissattach.c file. At the top, insert the following lines::
- 
--  #ifndef N_6PACK
--  #define N_6PACK (N_AX25+1)
--  #endif
-+    #ifndef N_6PACK
-+    #define N_6PACK (N_AX25+1)
-+    #endif
- 
--  Then find the line
--   
--  int disc = N_AX25;
-+  Then find the line:
+    - Normal (routed) and Ethernet-bridged (Ethernet device emulation)
+      interfaces can share a single PVC.
+    - ARP support (no InARP support in the kernel - there is an
+      experimental InARP user-space daemon available on:
+      http://www.kernel.org/pub/linux/utils/net/hdlc/).
 +
-+    int disc = N_AX25;
+ 2. raw HDLC - either IP (IPv4) interface or Ethernet device emulation
+ 3. Cisco HDLC
+ 4. PPP
+@@ -24,19 +32,24 @@ with IEEE 802.1Q (VLANs) and 802.1D (Ethernet bridging).
+ Make sure the hdlc.o and the hardware driver are loaded. It should
+ create a number of "hdlc" (hdlc0 etc) network devices, one for each
+ WAN port. You'll need the "sethdlc" utility, get it from:
++
+ 	http://www.kernel.org/pub/linux/utils/net/hdlc/
  
-   and replace N_AX25 by N_6PACK.
+-Compile sethdlc.c utility:
++Compile sethdlc.c utility::
++
+ 	gcc -O2 -Wall -o sethdlc sethdlc.c
++
+ Make sure you're using a correct version of sethdlc for your kernel.
  
- - Recompile kissattach. Rename it to spattach to avoid confusions.
+ Use sethdlc to set physical interface, clock rate, HDLC mode used,
+ and add any required PVCs if using Frame Relay.
+-Usually you want something like:
++Usually you want something like::
  
- Installing the driver:
-+----------------------
+ 	sethdlc hdlc0 clock int rate 128000
+ 	sethdlc hdlc0 cisco interval 10 timeout 25
+-or
++
++or::
++
+ 	sethdlc hdlc0 rs232 clock ext
+ 	sethdlc hdlc0 fr lmi ansi
+ 	sethdlc hdlc0 create 99
+@@ -49,46 +62,63 @@ any IP address to it) before using pvc devices.
  
--- Do an insmod 6pack. Look at your /var/log/messages file to check if the 
-+- Do an insmod 6pack. Look at your /var/log/messages file to check if the
-   module has printed its initialization message.
+ Setting interface:
  
- - Do a spattach as you would launch kissattach when starting a KISS port.
--  Check if the kernel prints the message '6pack: TNC found'. 
-+  Check if the kernel prints the message '6pack: TNC found'.
+-* v35 | rs232 | x21 | t1 | e1 - sets physical interface for a given port
+-                                if the card has software-selectable interfaces
+-  loopback - activate hardware loopback (for testing only)
+-* clock ext - both RX clock and TX clock external
+-* clock int - both RX clock and TX clock internal
+-* clock txint - RX clock external, TX clock internal
+-* clock txfromrx - RX clock external, TX clock derived from RX clock
+-* rate - sets clock rate in bps (for "int" or "txint" clock only)
++* v35 | rs232 | x21 | t1 | e1
++    - sets physical interface for a given port
++      if the card has software-selectable interfaces
++  loopback
++    - activate hardware loopback (for testing only)
++* clock ext
++    - both RX clock and TX clock external
++* clock int
++    - both RX clock and TX clock internal
++* clock txint
++    - RX clock external, TX clock internal
++* clock txfromrx
++    - RX clock external, TX clock derived from RX clock
++* rate
++    - sets clock rate in bps (for "int" or "txint" clock only)
  
- - From here, everything should work as if you were setting up a KISS port.
-   The only difference is that the network device that represents
-@@ -138,6 +153,7 @@ from the PC to the TNC over the serial line, the status LED if data is
- sent to the PC.
  
- 6. Known problems
-+=================
+ Setting protocol:
  
- When testing the driver with 2.0.3x kernels and
- operating with data rates on the radio channel of 9600 Baud or higher,
+ * hdlc - sets raw HDLC (IP-only) mode
++
+   nrz / nrzi / fm-mark / fm-space / manchester - sets transmission code
++
+   no-parity / crc16 / crc16-pr0 (CRC16 with preset zeros) / crc32-itu
++
+   crc16-itu (CRC16 with ITU-T polynomial) / crc16-itu-pr0 - sets parity
+ 
+ * hdlc-eth - Ethernet device emulation using HDLC. Parity and encoding
+   as above.
+ 
+ * cisco - sets Cisco HDLC mode (IP, IPv6 and IPX supported)
++
+   interval - time in seconds between keepalive packets
++
+   timeout - time in seconds after last received keepalive packet before
+-            we assume the link is down
++	    we assume the link is down
+ 
+ * ppp - sets synchronous PPP mode
+ 
+ * x25 - sets X.25 mode
+ 
+ * fr - Frame Relay mode
++
+   lmi ansi / ccitt / cisco / none - LMI (link management) type
++
+   dce - Frame Relay DCE (network) side LMI instead of default DTE (user).
++
+   It has nothing to do with clocks!
+-  t391 - link integrity verification polling timer (in seconds) - user
+-  t392 - polling verification timer (in seconds) - network
+-  n391 - full status polling counter - user
+-  n392 - error threshold - both user and network
+-  n393 - monitored events count - both user and network
++
++  - t391 - link integrity verification polling timer (in seconds) - user
++  - t392 - polling verification timer (in seconds) - network
++  - n391 - full status polling counter - user
++  - n392 - error threshold - both user and network
++  - n393 - monitored events count - both user and network
+ 
+ Frame-Relay only:
++
+ * create n | delete n - adds / deletes PVC interface with DLCI #n.
+   Newly created interface will be named pvc0, pvc1 etc.
+ 
+@@ -101,26 +131,34 @@ Frame-Relay only:
+ Board-specific issues
+ ---------------------
+ 
+-n2.o and c101.o need parameters to work:
++n2.o and c101.o need parameters to work::
+ 
+ 	insmod n2 hw=io,irq,ram,ports[:io,irq,...]
+-example:
++
++example::
++
+ 	insmod n2 hw=0x300,10,0xD0000,01
+ 
+-or
++or::
++
+ 	insmod c101 hw=irq,ram[:irq,...]
+-example:
++
++example::
++
+ 	insmod c101 hw=9,0xdc000
+ 
+-If built into the kernel, these drivers need kernel (command line) parameters:
++If built into the kernel, these drivers need kernel (command line) parameters::
++
+ 	n2.hw=io,irq,ram,ports:...
+-or
++
++or::
++
+ 	c101.hw=irq,ram:...
+ 
+ 
+ 
+ If you have a problem with N2, C101 or PLX200SYN card, you can issue the
+-"private" command to see port's packet descriptor rings (in kernel logs):
++"private" command to see port's packet descriptor rings (in kernel logs)::
+ 
+ 	sethdlc hdlc0 private
+ 
 diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index cc34c06477eb..0b8b4848683d 100644
+index 538b9d3e838e..1f47d74fd33e 100644
 --- a/Documentation/networking/index.rst
 +++ b/Documentation/networking/index.rst
-@@ -35,6 +35,7 @@ Contents:
-    tls-offload
-    nfc
-    6lowpan
-+   6pack
+@@ -57,6 +57,7 @@ Contents:
+    filter
+    fore200e
+    framerelay
++   generic-hdlc
  
  .. only::  subproject and html
  
