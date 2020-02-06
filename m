@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECDC3C352A2
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC583C3B183
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A05B121741
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E7E0217BA
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002338;
-	bh=mQZRHGgdVvLMIcoGxVqCMTZK1mA7G34JtEjrZOhO5bM=;
+	s=default; t=1581002340;
+	bh=qwKDcgWLBL5k4OhB6tJ5BZ/qNrsET0nW/Sz8Xgu1xbM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EPMC7Y6OLcBAe8Kqj+UV78m2XQrnRB5LmOjn5+2k0kqSCI2dwtPDjwq8Xh6WMc0ft
-	 0PpXQlWSbvI5+DaleOg01LncfH8l7CYiDBuSXhCmaPhXR+sJjIJ7MsTcraOM4dituS
-	 B8nUeietQdaVdU2tjnpOyD+KUFm/GCYwqLzBp3dA=
+	b=HbjcHS5YTB0ppDN3gImk3l+dxkItMTJ7HClU20xCgdZ9vWpV0dQNx0sBbZ0q5ssxo
+	 e6VzbQqM0Oa67GQbxiyanr6kQHRb44YuaT+ZsG0oSs9XL3lU9SEDjCdnseRZ1ZrNm5
+	 +CLm3H3EMPws8wrBRtniZI4aQtFAk67GQzSj4ouY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727934AbgBFPSy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:18:54 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38064 "EHLO
+        id S1727924AbgBFPSx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:18:53 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38080 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727555AbgBFPR7 (ORCPT
+        with ESMTP id S1727567AbgBFPR7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:17:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=QzO6/2gZ5uYWa6wS0IdTJjswi7Eeixky+5DKJ93koog=; b=j4V3z//R7W/K6cOgmWlV6nmTXX
-        P/I9i5z4BhUo85IJplX7A7btJ6r+IFFtvOFeA32Hc9uAvSM/lD8AshS21mT18KvMs4UPwlqSburza
-        CP8acL7uoTvroxD4QMLWPnlpfFMK+bOFAeTcfVzSO15/IqXCe7hn0rzaBjuNfd+NixLhJJ25HoNPf
-        oGWm/PuMYjZc/BSE65p25CLiVLUycufotxmAUROYUnmU4uPawdmBdPR1LUpMW2+hQWx5IyHHliYrh
-        sWf6d74xWfU/6ICJ2y22oinEi02kp0g2e9ICA5cmsfjRlytl4lJCFGxdnSC9Y6uHmPLiAP6Gfj1Q4
-        2wlQOHFQ==;
+        bh=QgU2YXtK8JhIR8sXlz9vfHZraerok3TnGVbMXzCh8os=; b=TzbiuPkJqsGKqG8F7imLQjjC9B
+        yVa4lGO0gd7dsYvu+807KcFSRv7rqyVQwSAskmsOCRBSJ0NPleA1uTB8CVxFlPzENQFy5mJ+4Rok8
+        hhA1vgIbvXJ5VW9xenneNqdRhNrsBOfAk4ZmfOlAvDlwru3TXV09hqSENT9ow2IJCc31vNTiPT8lk
+        UA7MiUq6loUfx2+PvnhJ6Sv6MaztRvqX1iCsm5mxJdjXt72C+FIpnkPthM3uUySI/ATbVavUwjLko
+        19GEym0hL3C/ZwhJ2JKfu4TM+FLjYgzAtu2qODYzT4ZiFruljkrf9y43b/j9KJbsfautF/G2+X/UJ
+        sPy5eJTQ==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziuk-0005j4-2c; Thu, 06 Feb 2020 15:17:59 +0000
+        id 1iziuk-0005jM-WC; Thu, 06 Feb 2020 15:17:59 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziuc-002oV7-T5; Thu, 06 Feb 2020 16:17:50 +0100
+        id 1iziud-002oVR-6t; Thu, 06 Feb 2020 16:17:51 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -50,9 +50,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 06/28] docs: networking: convert arcnet.txt to ReST
-Date:   Thu,  6 Feb 2020 16:17:26 +0100
-Message-Id: <da77dc2fe57d2ec224c0a27330bf251c1fa85731.1581002063.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 11/28] docs: networking: convert cdc_mbim.txt to ReST
+Date:   Thu,  6 Feb 2020 16:17:31 +0100
+Message-Id: <f671aae2b28bd65a879e164d40fce9e52b96199a.1581002063.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
 References: <cover.1581002062.git.mchehab+huawei@kernel.org>
@@ -64,660 +64,227 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 - add SPDX header;
-- use document title markup;
-- add notes markups;
 - mark code blocks and literals as such;
-- mark tables as such;
+- use :field: markup;
 - adjust identation, whitespaces and blank lines;
 - add to networking/index.rst.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../networking/{arcnet.txt => arcnet.rst}     | 348 ++++++++++--------
- Documentation/networking/index.rst            |   1 +
- 2 files changed, 194 insertions(+), 155 deletions(-)
- rename Documentation/networking/{arcnet.txt => arcnet.rst} (76%)
+ .../networking/{cdc_mbim.txt => cdc_mbim.rst} | 76 +++++++++++--------
+ Documentation/networking/index.rst            |  1 +
+ 2 files changed, 47 insertions(+), 30 deletions(-)
+ rename Documentation/networking/{cdc_mbim.txt => cdc_mbim.rst} (88%)
 
-diff --git a/Documentation/networking/arcnet.txt b/Documentation/networking/arcnet.rst
-similarity index 76%
-rename from Documentation/networking/arcnet.txt
-rename to Documentation/networking/arcnet.rst
-index aff97f47c05c..e93d9820f0f1 100644
---- a/Documentation/networking/arcnet.txt
-+++ b/Documentation/networking/arcnet.rst
-@@ -1,11 +1,18 @@
------------------------------------------------------------------------------
--NOTE:  See also arcnet-hardware.txt in this directory for jumper-setting
--and cabling information if you're like many of us and didn't happen to get a
--manual with your ARCnet card.
------------------------------------------------------------------------------
+diff --git a/Documentation/networking/cdc_mbim.txt b/Documentation/networking/cdc_mbim.rst
+similarity index 88%
+rename from Documentation/networking/cdc_mbim.txt
+rename to Documentation/networking/cdc_mbim.rst
+index 4e68f0bc5dba..0048409c06b4 100644
+--- a/Documentation/networking/cdc_mbim.txt
++++ b/Documentation/networking/cdc_mbim.rst
+@@ -1,5 +1,8 @@
+-     cdc_mbim - Driver for CDC MBIM Mobile Broadband modems
+-    ========================================================
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+======
-+ARCnet
-+======
++======================================================
++cdc_mbim - Driver for CDC MBIM Mobile Broadband modems
++======================================================
+ 
+ The cdc_mbim driver supports USB devices conforming to the "Universal
+ Serial Bus Communications Class Subclass Specification for Mobile
+@@ -19,9 +22,9 @@ by a cdc_ncm driver parameter:
+ 
+ prefer_mbim
+ -----------
+-Type:          Boolean
+-Valid Range:   N/Y (0-1)
+-Default Value: Y (MBIM is preferred)
++:Type:          Boolean
++:Valid Range:   N/Y (0-1)
++:Default Value: Y (MBIM is preferred)
+ 
+ This parameter sets the system policy for NCM/MBIM functions.  Such
+ functions will be handled by either the cdc_ncm driver or the cdc_mbim
+@@ -44,11 +47,13 @@ userspace MBIM management application always is required to enable a
+ MBIM function.
+ 
+ Such userspace applications includes, but are not limited to:
 +
-+.. note::
+  - mbimcli (included with the libmbim [3] library), and
+  - ModemManager [4]
+ 
+ Establishing a MBIM IP session reequires at least these actions by the
+ management application:
 +
-+   See also arcnet-hardware.txt in this directory for jumper-setting
-+   and cabling information if you're like many of us and didn't happen to get a
-+   manual with your ARCnet card.
+  - open the control channel
+  - configure network connection settings
+  - connect to network
+@@ -76,7 +81,7 @@ complies with all the control channel requirements in [1].
  
- Since no one seems to listen to me otherwise, perhaps a poem will get your
--attention:
-+attention::
-+
- 		This driver's getting fat and beefy,
- 		But my cat is still named Fifi.
+ The cdc-wdmX device is created as a child of the MBIM control
+ interface USB device.  The character device associated with a specific
+-MBIM function can be looked up using sysfs.  For example:
++MBIM function can be looked up using sysfs.  For example::
  
-@@ -24,28 +31,21 @@ Come on, be a sport!  Send me a success report!
- (hey, that was even better than my original poem... this is getting bad!)
- 
- 
----------
--WARNING:
----------
-+.. warning::
- 
--If you don't e-mail me about your success/failure soon, I may be forced to
--start SINGING.  And we don't want that, do we?
-+   If you don't e-mail me about your success/failure soon, I may be forced to
-+   start SINGING.  And we don't want that, do we?
- 
--(You know, it might be argued that I'm pushing this point a little too much. 
--If you think so, why not flame me in a quick little e-mail?  Please also
--include the type of card(s) you're using, software, size of network, and
--whether it's working or not.)
-+   (You know, it might be argued that I'm pushing this point a little too much.
-+   If you think so, why not flame me in a quick little e-mail?  Please also
-+   include the type of card(s) you're using, software, size of network, and
-+   whether it's working or not.)
- 
--My e-mail address is: apenwarr@worldvisions.ca
-+   My e-mail address is: apenwarr@worldvisions.ca
- 
--
-----------------------------------------------------------------------------
--
--			
- These are the ARCnet drivers for Linux.
- 
--
--This new release (2.91) has been put together by David Woodhouse 
-+This new release (2.91) has been put together by David Woodhouse
- <dwmw2@infradead.org>, in an attempt to tidy up the driver after adding support
- for yet another chipset. Now the generic support has been separated from the
- individual chipset drivers, and the source files aren't quite so packed with
-@@ -62,12 +62,13 @@ included and seems to be working fine!
- Where do I discuss these drivers?
- ---------------------------------
- 
--Tomasz has been so kind as to set up a new and improved mailing list. 
-+Tomasz has been so kind as to set up a new and improved mailing list.
- Subscribe by sending a message with the BODY "subscribe linux-arcnet YOUR
- REAL NAME" to listserv@tichy.ch.uj.edu.pl.  Then, to submit messages to the
- list, mail to linux-arcnet@tichy.ch.uj.edu.pl.
- 
- There are archives of the mailing list at:
-+
- 	http://epistolary.org/mailman/listinfo.cgi/arcnet
- 
- The people on linux-net@vger.kernel.org (now defunct, replaced by
-@@ -80,17 +81,20 @@ Other Drivers and Info
- ----------------------
- 
- You can try my ARCNET page on the World Wide Web at:
--	http://www.qis.net/~jschmitz/arcnet/	
-+
-+	http://www.qis.net/~jschmitz/arcnet/
- 
- Also, SMC (one of the companies that makes ARCnet cards) has a WWW site you
- might be interested in, which includes several drivers for various cards
- including ARCnet.  Try:
-+
- 	http://www.smc.com/
--	
-+
- Performance Technologies makes various network software that supports
- ARCnet:
-+
- 	http://www.perftech.com/ or ftp to ftp.perftech.com.
--	
-+
- Novell makes a networking stack for DOS which includes ARCnet drivers.  Try
- FTPing to ftp.novell.com.
- 
-@@ -99,19 +103,20 @@ one you'll want to use with ARCnet cards) from
- oak.oakland.edu:/simtel/msdos/pktdrvr. It won't work perfectly on a 386+
- without patches, though, and also doesn't like several cards.  Fixed
- versions are available on my WWW page, or via e-mail if you don't have WWW
--access. 
-+access.
+  bjorn@nemi:~$ ls /sys/bus/usb/drivers/cdc_mbim/2-4:2.12/usbmisc
+  cdc-wdm0
+@@ -119,13 +124,15 @@ negotiated control message size.
  
  
- Installing the Driver
- ---------------------
- 
--All you will need to do in order to install the driver is:
-+All you will need to do in order to install the driver is::
-+
- 	make config
--		(be sure to choose ARCnet in the network devices 
-+		(be sure to choose ARCnet in the network devices
- 		and at least one chipset driver.)
- 	make clean
- 	make zImage
--	
-+
- If you obtained this ARCnet package as an upgrade to the ARCnet driver in
- your current kernel, you will need to first copy arcnet.c over the one in
- the linux/drivers/net directory.
-@@ -125,10 +130,12 @@ There are four chipset options:
- 
- This is the normal ARCnet card, which you've probably got. This is the only
- chipset driver which will autoprobe if not told where the card is.
--It following options on the command line:
-+It following options on the command line::
-+
-  com90xx=[<io>[,<irq>[,<shmem>]]][,<name>] | <name>
- 
--If you load the chipset support as a module, the options are:
-+If you load the chipset support as a module, the options are::
-+
-  io=<io> irq=<irq> shmem=<shmem> device=<name>
- 
- To disable the autoprobe, just specify "com90xx=" on the kernel command line.
-@@ -136,14 +143,17 @@ To specify the name alone, but allow autoprobe, just put "com90xx=<name>"
- 
-  2. ARCnet COM20020 chipset.
- 
--This is the new chipset from SMC with support for promiscuous mode (packet 
-+This is the new chipset from SMC with support for promiscuous mode (packet
- sniffing), extra diagnostic information, etc. Unfortunately, there is no
- sensible method of autoprobing for these cards. You must specify the I/O
- address on the kernel command line.
--The command line options are:
-+
-+The command line options are::
-+
-  com20020=<io>[,<irq>[,<node_ID>[,backplane[,CKP[,timeout]]]]][,name]
- 
--If you load the chipset support as a module, the options are:
-+If you load the chipset support as a module, the options are::
-+
-  io=<io> irq=<irq> node=<node_ID> backplane=<backplane> clock=<CKP>
-  timeout=<timeout> device=<name>
- 
-@@ -160,8 +170,10 @@ you have a card which doesn't support shared memory, or (strangely) in case
- you have so many ARCnet cards in your machine that you run out of shmem slots.
- If you don't give the IO address on the kernel command line, then the driver
- will not find the card.
--The command line options are:
-- com90io=<io>[,<irq>][,<name>] 
-+
-+The command line options are::
-+
-+ com90io=<io>[,<irq>][,<name>]
- 
- If you load the chipset support as a module, the options are:
-  io=<io> irq=<irq> device=<name>
-@@ -169,44 +181,49 @@ If you load the chipset support as a module, the options are:
-  4. ARCnet RIM I cards.
- 
- These are COM90xx chips which are _completely_ memory mapped. The support for
--these is not tested. If you have one, please mail the author with a success 
-+these is not tested. If you have one, please mail the author with a success
- report. All options must be specified, except the device name.
--Command line options:
-+Command line options::
-+
-  arcrimi=<shmem>,<irq>,<node_ID>[,<name>]
- 
--If you load the chipset support as a module, the options are:
-+If you load the chipset support as a module, the options are::
-+
-  shmem=<shmem> irq=<irq> node=<node_ID> device=<name>
- 
- 
- Loadable Module Support
- -----------------------
- 
--Configure and rebuild Linux.  When asked, answer 'm' to "Generic ARCnet 
-+Configure and rebuild Linux.  When asked, answer 'm' to "Generic ARCnet
- support" and to support for your ARCnet chipset if you want to use the
--loadable module. You can also say 'y' to "Generic ARCnet support" and 'm' 
-+loadable module. You can also say 'y' to "Generic ARCnet support" and 'm'
- to the chipset support if you wish.
+ /dev/cdc-wdmX ioctl()
+---------------------
++---------------------
+ IOCTL_WDM_MAX_COMMAND: Get Maximum Command Size
+ This ioctl returns the wMaxControlMessage field of the CDC MBIM
+ functional descriptor for MBIM devices.  This is intended as a
+ convenience, eliminating the need to parse the USB descriptors from
+ userspace.
  
 +::
 +
- 	make config
--	make clean	
-+	make clean
- 	make zImage
- 	make modules
--	
-+
- If you're using a loadable module, you need to use insmod to load it, and
- you can specify various characteristics of your card on the command
- line.  (In recent versions of the driver, autoprobing is much more reliable
- and works as a module, so most of this is now unnecessary.)
+ 	#include <stdio.h>
+ 	#include <fcntl.h>
+ 	#include <sys/ioctl.h>
+@@ -178,7 +185,7 @@ VLAN links prior to establishing MBIM IP sessions where the SessionId
+ is greater than 0. These links can be added by using the normal VLAN
+ kernel interfaces, either ioctl or netlink.
  
--For example:
-+For example::
-+
- 	cd /usr/src/linux/modules
- 	insmod arcnet.o
- 	insmod com90xx.o
- 	insmod com20020.o io=0x2e0 device=eth1
--	
-+
+-For example, adding a link for a MBIM IP session with SessionId 3:
++For example, adding a link for a MBIM IP session with SessionId 3::
  
- Using the Driver
- ----------------
+   ip link add link wwan0 name wwan0.3 type vlan id 3
  
--If you build your kernel with ARCnet COM90xx support included, it should 
-+If you build your kernel with ARCnet COM90xx support included, it should
- probe for your card automatically when you boot. If you use a different
- chipset driver complied into the kernel, you must give the necessary options
- on the kernel command line, as detailed above.
-@@ -224,69 +241,78 @@ Multiple Cards in One Computer
- ------------------------------
- 
- Linux has pretty good support for this now, but since I've been busy, the
--ARCnet driver has somewhat suffered in this respect. COM90xx support, if 
--compiled into the kernel, will (try to) autodetect all the installed cards. 
-+ARCnet driver has somewhat suffered in this respect. COM90xx support, if
-+compiled into the kernel, will (try to) autodetect all the installed cards.
- 
--If you have other cards, with support compiled into the kernel, then you can 
--just repeat the options on the kernel command line, e.g.:
--LILO: linux com20020=0x2e0 com20020=0x380 com90io=0x260
-+If you have other cards, with support compiled into the kernel, then you can
-+just repeat the options on the kernel command line, e.g.::
+@@ -207,6 +214,7 @@ the stream to the end user in an appropriate way for the stream type.
+ The network device ABI requires a dummy ethernet header for every DSS
+ data frame being transported.  The contents of this header is
+ arbitrary, with the following exceptions:
 +
-+	LILO: linux com20020=0x2e0 com20020=0x380 com90io=0x260
-+
-+If you have the chipset support built as a loadable module, then you need to
-+do something like this::
+  - TX frames using an IP protocol (0x0800 or 0x86dd) will be dropped
+  - RX frames will have the protocol field set to ETH_P_802_3 (but will
+    not be properly formatted 802.3 frames)
+@@ -218,7 +226,7 @@ adding the dummy ethernet header on TX and stripping it on RX.
  
--If you have the chipset support built as a loadable module, then you need to 
--do something like this:
- 	insmod -o arc0 com90xx
- 	insmod -o arc1 com20020 io=0x2e0
- 	insmod -o arc2 com90xx
-+
- The ARCnet drivers will now sort out their names automatically.
+ This is a simple example using tools commonly available, exporting
+ DssSessionId 5 as a pty character device pointed to by a /dev/nmea
+-symlink:
++symlink::
+ 
+   ip link add link wwan0 name wwan0.dss5 type vlan id 261
+   ip link set dev wwan0.dss5 up
+@@ -236,7 +244,7 @@ map frames to the correct DSS session and adding 18 byte VLAN ethernet
+ headers with the appropriate tag on TX.  In this case using a socket
+ filter is recommended, matching only the DSS VLAN subset. This avoid
+ unnecessary copying of unrelated IP session data to userspace.  For
+-example:
++example::
+ 
+   static struct sock_filter dssfilter[] = {
+ 	/* use special negative offsets to get VLAN tag */
+@@ -249,11 +257,11 @@ example:
+ 	BPF_JUMP(BPF_JMP|BPF_JGE|BPF_K, 512, 3, 0),	/* 511 is last DSS VLAN */
+ 
+ 	/* verify ethertype */
+-        BPF_STMT(BPF_LD|BPF_H|BPF_ABS, 2 * ETH_ALEN),
+-        BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, ETH_P_802_3, 0, 1),
++	BPF_STMT(BPF_LD|BPF_H|BPF_ABS, 2 * ETH_ALEN),
++	BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, ETH_P_802_3, 0, 1),
+ 
+-        BPF_STMT(BPF_RET|BPF_K, (u_int)-1),	/* accept */
+-        BPF_STMT(BPF_RET|BPF_K, 0),		/* ignore */
++	BPF_STMT(BPF_RET|BPF_K, (u_int)-1),	/* accept */
++	BPF_STMT(BPF_RET|BPF_K, 0),		/* ignore */
+   };
  
  
- How do I get it to work with...?
- --------------------------------
+@@ -266,6 +274,7 @@ network device.
  
--NFS: Should be fine linux->linux, just pretend you're using Ethernet cards. 
--        oak.oakland.edu:/simtel/msdos/nfs has some nice DOS clients.  There
--        is also a DOS-based NFS server called SOSS.  It doesn't multitask
--        quite the way Linux does (actually, it doesn't multitask AT ALL) but
--        you never know what you might need.
--        
--        With AmiTCP (and possibly others), you may need to set the following
--        options in your Amiga nfstab:  MD 1024 MR 1024 MW 1024
--        (Thanks to Christian Gottschling <ferksy@indigo.tng.oche.de>
-+NFS:
-+	Should be fine linux->linux, just pretend you're using Ethernet cards.
-+	oak.oakland.edu:/simtel/msdos/nfs has some nice DOS clients.  There
-+	is also a DOS-based NFS server called SOSS.  It doesn't multitask
-+	quite the way Linux does (actually, it doesn't multitask AT ALL) but
-+	you never know what you might need.
+ This mapping implies a few restrictions on multiplexed IPS and DSS
+ sessions, which may not always be practical:
 +
-+	With AmiTCP (and possibly others), you may need to set the following
-+	options in your Amiga nfstab:  MD 1024 MR 1024 MW 1024
-+	(Thanks to Christian Gottschling <ferksy@indigo.tng.oche.de>
- 	for this.)
--	
-+
- 	Probably these refer to maximum NFS data/read/write block sizes.  I
- 	don't know why the defaults on the Amiga didn't work; write to me if
- 	you know more.
+  - no IPS or DSS session can use a frame size greater than the MTU on
+    IP session 0
+  - no IPS or DSS session can be in the up state unless the network
+@@ -280,7 +289,7 @@ device.
  
--DOS: If you're using the freeware arcether.com, you might want to install
--        the driver patch from my web page.  It helps with PC/TCP, and also
--        can get arcether to load if it timed out too quickly during
--        initialization.  In fact, if you use it on a 386+ you REALLY need
--        the patch, really.
--	
--Windows:  See DOS :)  Trumpet Winsock works fine with either the Novell or
-+DOS:
-+	If you're using the freeware arcether.com, you might want to install
-+	the driver patch from my web page.  It helps with PC/TCP, and also
-+	can get arcether to load if it timed out too quickly during
-+	initialization.  In fact, if you use it on a 386+ you REALLY need
-+	the patch, really.
-+
-+Windows:
-+	See DOS :)  Trumpet Winsock works fine with either the Novell or
- 	Arcether client, assuming you remember to load winpkt of course.
+ Tip: It might be less confusing to the end user to name this VLAN
+ subdevice after the MBIM SessionID instead of the VLAN ID.  For
+-example:
++example::
  
--LAN Manager and Windows for Workgroups: These programs use protocols that
--        are incompatible with the Internet standard.  They try to pretend
--        the cards are Ethernet, and confuse everyone else on the network. 
--        
--        However, v2.00 and higher of the Linux ARCnet driver supports this
--        protocol via the 'arc0e' device.  See the section on "Multiprotocol
--        Support" for more information.
-+LAN Manager and Windows for Workgroups:
-+	These programs use protocols that
-+	are incompatible with the Internet standard.  They try to pretend
-+	the cards are Ethernet, and confuse everyone else on the network.
-+
-+	However, v2.00 and higher of the Linux ARCnet driver supports this
-+	protocol via the 'arc0e' device.  See the section on "Multiprotocol
-+	Support" for more information.
+   ip link add link wwan0 name wwan0.0 type vlan id 4094
  
- 	Using the freeware Samba server and clients for Linux, you can now
- 	interface quite nicely with TCP/IP-based WfWg or Lan Manager
- 	networks.
--	
--Windows 95: Tools are included with Win95 that let you use either the LANMAN
-+
-+Windows 95:
-+	Tools are included with Win95 that let you use either the LANMAN
- 	style network drivers (NDIS) or Novell drivers (ODI) to handle your
- 	ARCnet packets.  If you use ODI, you'll need to use the 'arc0'
--	device with Linux.  If you use NDIS, then try the 'arc0e' device. 
-+	device with Linux.  If you use NDIS, then try the 'arc0e' device.
- 	See the "Multiprotocol Support" section below if you need arc0e,
- 	you're completely insane, and/or you need to build some kind of
- 	hybrid network that uses both encapsulation types.
+@@ -290,7 +299,7 @@ VLAN mapping
  
--OS/2: I've been told it works under Warp Connect with an ARCnet driver from
-+OS/2:
-+	I've been told it works under Warp Connect with an ARCnet driver from
- 	SMC.  You need to use the 'arc0e' interface for this.  If you get
- 	the SMC driver to work with the TCP/IP stuff included in the
- 	"normal" Warp Bonus Pack, let me know.
-@@ -295,7 +321,8 @@ OS/2: I've been told it works under Warp Connect with an ARCnet driver from
- 	which should use the same protocol as WfWg does.  I had no luck
- 	installing it under Warp, however.  Please mail me with any results.
+ Summarizing the cdc_mbim driver mapping described above, we have this
+ relationship between VLAN tags on the wwanY network device and MBIM
+-sessions on the shared USB data channel:
++sessions on the shared USB data channel::
  
--NetBSD/AmiTCP: These use an old version of the Internet standard ARCnet
-+NetBSD/AmiTCP:
-+	These use an old version of the Internet standard ARCnet
- 	protocol (RFC1051) which is compatible with the Linux driver v2.10
- 	ALPHA and above using the arc0s device. (See "Multiprotocol ARCnet"
- 	below.)  ** Newer versions of NetBSD apparently support RFC1201.
-@@ -307,16 +334,17 @@ Using Multiprotocol ARCnet
- The ARCnet driver v2.10 ALPHA supports three protocols, each on its own
- "virtual network device":
+   VLAN ID       MBIM type   MBIM SessionID           Notes
+   ---------------------------------------------------------
+@@ -310,30 +319,37 @@ sessions on the shared USB data channel:
+ References
+ ==========
  
--	arc0  - RFC1201 protocol, the official Internet standard which just
--		happens to be 100% compatible with Novell's TRXNET driver. 
-+	======  ===============================================================
-+	arc0	RFC1201 protocol, the official Internet standard which just
-+		happens to be 100% compatible with Novell's TRXNET driver.
- 		Version 1.00 of the ARCnet driver supported _only_ this
- 		protocol.  arc0 is the fastest of the three protocols (for
- 		whatever reason), and allows larger packets to be used
--		because it supports RFC1201 "packet splitting" operations. 
-+		because it supports RFC1201 "packet splitting" operations.
- 		Unless you have a specific need to use a different protocol,
- 		I strongly suggest that you stick with this one.
--		
--	arc0e - "Ethernet-Encapsulation" which sends packets over ARCnet
+-[1] USB Implementers Forum, Inc. - "Universal Serial Bus
+-      Communications Class Subclass Specification for Mobile Broadband
+-      Interface Model", Revision 1.0 (Errata 1), May 1, 2013
++ 1) USB Implementers Forum, Inc. - "Universal Serial Bus
++    Communications Class Subclass Specification for Mobile Broadband
++    Interface Model", Revision 1.0 (Errata 1), May 1, 2013
 +
-+	arc0e	"Ethernet-Encapsulation" which sends packets over ARCnet
- 		that are actually a lot like Ethernet packets, including the
- 		6-byte hardware addresses.  This protocol is compatible with
- 		Microsoft's NDIS ARCnet driver, like the one in WfWg and
-@@ -328,8 +356,8 @@ The ARCnet driver v2.10 ALPHA supports three protocols, each on its own
- 		fit.  arc0e also works slightly more slowly than arc0, for
- 		reasons yet to be determined.  (Probably it's the smaller
- 		MTU that does it.)
--		
--	arc0s - The "[s]imple" RFC1051 protocol is the "previous" Internet
-+
-+	arc0s	The "[s]imple" RFC1051 protocol is the "previous" Internet
- 		standard that is completely incompatible with the new
- 		standard.  Some software today, however, continues to
- 		support the old standard (and only the old standard)
-@@ -338,9 +366,10 @@ The ARCnet driver v2.10 ALPHA supports three protocols, each on its own
- 		smaller than the Internet "requirement," so it's quite
- 		possible that you may run into problems.  It's also slower
- 		than RFC1201 by about 25%, for the same reason as arc0e.
--		
-+
- 		The arc0s support was contributed by Tomasz Motylewski
- 		and modified somewhat by me.  Bugs are probably my fault.
-+	======  ===============================================================
+       - http://www.usb.org/developers/docs/devclass_docs/
  
- You can choose not to compile arc0e and arc0s into the driver if you want -
- this will save you a bit of memory and avoid confusion when eg. trying to
-@@ -358,19 +387,21 @@ can set up your network then:
-    two available protocols.  As mentioned above, it's a good idea to use
-    only arc0 unless you have a good reason (like some other software, ie.
-    WfWg, that only works with arc0e).
--   
--   If you need only arc0, then the following commands should get you going:
--   	ifconfig arc0 MY.IP.ADD.RESS
--   	route add MY.IP.ADD.RESS arc0
--   	route add -net SUB.NET.ADD.RESS arc0
--   	[add other local routes here]
--   	
--   If you need arc0e (and only arc0e), it's a little different:
--   	ifconfig arc0 MY.IP.ADD.RESS
--   	ifconfig arc0e MY.IP.ADD.RESS
--   	route add MY.IP.ADD.RESS arc0e
--   	route add -net SUB.NET.ADD.RESS arc0e
--   
+-[2] USB Implementers Forum, Inc. - "Universal Serial Bus
+-      Communications Class Subclass Specifications for Network Control
+-      Model Devices", Revision 1.0 (Errata 1), November 24, 2010
++ 2) USB Implementers Forum, Inc. - "Universal Serial Bus
++    Communications Class Subclass Specifications for Network Control
++    Model Devices", Revision 1.0 (Errata 1), November 24, 2010
 +
-+   If you need only arc0, then the following commands should get you going::
-+
-+	ifconfig arc0 MY.IP.ADD.RESS
-+	route add MY.IP.ADD.RESS arc0
-+	route add -net SUB.NET.ADD.RESS arc0
-+	[add other local routes here]
-+
-+   If you need arc0e (and only arc0e), it's a little different::
-+
-+	ifconfig arc0 MY.IP.ADD.RESS
-+	ifconfig arc0e MY.IP.ADD.RESS
-+	route add MY.IP.ADD.RESS arc0e
-+	route add -net SUB.NET.ADD.RESS arc0e
-+
-    arc0s works much the same way as arc0e.
+       - http://www.usb.org/developers/docs/devclass_docs/
  
+-[3] libmbim - "a glib-based library for talking to WWAN modems and
+-      devices which speak the Mobile Interface Broadband Model (MBIM)
+-      protocol"
++ 3) libmbim - "a glib-based library for talking to WWAN modems and
++    devices which speak the Mobile Interface Broadband Model (MBIM)
++    protocol"
++
+       - http://www.freedesktop.org/wiki/Software/libmbim/
  
-@@ -391,29 +422,32 @@ can set up your network then:
-    XT (patience), however, does not have its own Internet IP address and so
-    I assigned it one on a "private subnet" (as defined by RFC1597).
+-[4] ModemManager - "a DBus-activated daemon which controls mobile
+-      broadband (2G/3G/4G) devices and connections"
++ 4) ModemManager - "a DBus-activated daemon which controls mobile
++    broadband (2G/3G/4G) devices and connections"
++
+       - http://www.freedesktop.org/wiki/Software/ModemManager/
  
--   To start with, take a simple network with just insight and freedom. 
-+   To start with, take a simple network with just insight and freedom.
-    Insight needs to:
--   	- talk to freedom via RFC1201 (arc0) protocol, because I like it
+-[5] "MBIM (Mobile Broadband Interface Model) Registry"
++ 5) "MBIM (Mobile Broadband Interface Model) Registry"
 +
-+	- talk to freedom via RFC1201 (arc0) protocol, because I like it
- 	  more and it's faster.
- 	- use freedom as its Internet gateway.
--	
--   That's pretty easy to do.  Set up insight like this:
--   	ifconfig arc0 insight
--   	route add insight arc0
--   	route add freedom arc0	/* I would use the subnet here (like I said
-+
-+   That's pretty easy to do.  Set up insight like this::
-+
-+	ifconfig arc0 insight
-+	route add insight arc0
-+	route add freedom arc0	/* I would use the subnet here (like I said
- 					to to in "single protocol" above),
--   					but the rest of the subnet
--   					unfortunately lies across the PPP
--   					link on freedom, which confuses
--   					things. */
--   	route add default gw freedom
--   	
--   And freedom gets configured like so:
--   	ifconfig arc0 freedom
--   	route add freedom arc0
--   	route add insight arc0
--   	/* and default gateway is configured by pppd */
--   	
-+					but the rest of the subnet
-+					unfortunately lies across the PPP
-+					link on freedom, which confuses
-+					things. */
-+	route add default gw freedom
-+
-+   And freedom gets configured like so::
-+
-+	ifconfig arc0 freedom
-+	route add freedom arc0
-+	route add insight arc0
-+	/* and default gateway is configured by pppd */
-+
-    Great, now insight talks to freedom directly on arc0, and sends packets
-    to the Internet through freedom.  If you didn't know how to do the above,
-    you should probably stop reading this section now because it only gets
-@@ -425,7 +459,7 @@ can set up your network then:
-    Internet.  (Recall that patience has a "private IP address" which won't
-    work on the Internet; that's okay, I configured Linux IP masquerading on
-    freedom for this subnet).
--   
-+
-    So patience (necessarily; I don't have another IP number from my
-    provider) has an IP address on a different subnet than freedom and
-    insight, but needs to use freedom as an Internet gateway.  Worse, most
-@@ -435,53 +469,54 @@ can set up your network then:
-    insight, patience WILL send through its default gateway, regardless of
-    the fact that both freedom and insight (courtesy of the arc0e device)
-    could understand a direct transmission.
--   
--   I compensate by giving freedom an extra IP address - aliased 'gatekeeper'
--   - that is on my private subnet, the same subnet that patience is on.  I
-+
-+   I compensate by giving freedom an extra IP address - aliased 'gatekeeper' -
-+   that is on my private subnet, the same subnet that patience is on.  I
-    then define gatekeeper to be the default gateway for patience.
--   
--   To configure freedom (in addition to the commands above):
--   	ifconfig arc0e gatekeeper
--   	route add gatekeeper arc0e
--   	route add patience arc0e
--   
-+
-+   To configure freedom (in addition to the commands above)::
-+
-+	ifconfig arc0e gatekeeper
-+	route add gatekeeper arc0e
-+	route add patience arc0e
-+
-    This way, freedom will send all packets for patience through arc0e,
-    giving its IP address as gatekeeper (on the private subnet).  When it
-    talks to insight or the Internet, it will use its "freedom" Internet IP
-    address.
--   
--   You will notice that we haven't configured the arc0e device on insight. 
-+
-+   You will notice that we haven't configured the arc0e device on insight.
-    This would work, but is not really necessary, and would require me to
-    assign insight another special IP number from my private subnet.  Since
-    both insight and patience are using freedom as their default gateway, the
-    two can already talk to each other.
--   
-+
-    It's quite fortunate that I set things up like this the first time (cough
-    cough) because it's really handy when I boot insight into DOS.  There, it
--   runs the Novell ODI protocol stack, which only works with RFC1201 ARCnet. 
-+   runs the Novell ODI protocol stack, which only works with RFC1201 ARCnet.
-    In this mode it would be impossible for insight to communicate directly
-    with patience, since the Novell stack is incompatible with Microsoft's
-    Ethernet-Encap.  Without changing any settings on freedom or patience, I
-    simply set freedom as the default gateway for insight (now in DOS,
-    remember) and all the forwarding happens "automagically" between the two
-    hosts that would normally not be able to communicate at all.
--   
-+
-    For those who like diagrams, I have created two "virtual subnets" on the
--   same physical ARCnet wire.  You can picture it like this:
--   
--                                                    
--          [RFC1201 NETWORK]                   [ETHER-ENCAP NETWORK]
-+   same physical ARCnet wire.  You can picture it like this::
-+
-+
-+	  [RFC1201 NETWORK]                   [ETHER-ENCAP NETWORK]
-       (registered Internet subnet)           (RFC1597 private subnet)
--  
--                             (IP Masquerade)
--          /---------------\         *            /---------------\
--          |               |         *            |               |
--          |               +-Freedom-*-Gatekeeper-+               |
--          |               |    |    *            |               |
--          \-------+-------/    |    *            \-------+-------/
--                  |            |                         |
--               Insight         |                      Patience
--                           (Internet)
-+
-+			     (IP Masquerade)
-+	  /---------------\         *            /---------------\
-+	  |               |         *            |               |
-+	  |               +-Freedom-*-Gatekeeper-+               |
-+	  |               |    |    *            |               |
-+	  \-------+-------/    |    *            \-------+-------/
-+		  |            |                         |
-+	       Insight         |                      Patience
-+			   (Internet)
+        - http://compliance.usb.org/mbim/
  
- 
- 
-@@ -491,6 +526,7 @@ It works: what now?
- Send mail describing your setup, preferably including driver version, kernel
- version, ARCnet card model, CPU type, number of systems on your network, and
- list of software in use to me at the following address:
+-[6] "/sys/kernel/debug/usb/devices output format"
++ 6) "/sys/kernel/debug/usb/devices output format"
 +
- 	apenwarr@worldvisions.ca
+        - Documentation/driver-api/usb/usb.rst
  
- I do send (sometimes automated) replies to all messages I receive.  My email
-@@ -525,7 +561,7 @@ this, you should grab the pertinent RFCs. (some are listed near the top of
- arcnet.c).  arcdump assumes your card is at 0xD0000.  If it isn't, edit the
- script.
- 
--Buffers 0 and 1 are used for receiving, and Buffers 2 and 3 are for sending. 
-+Buffers 0 and 1 are used for receiving, and Buffers 2 and 3 are for sending.
- Ping-pong buffers are implemented both ways.
- 
- If your debug level includes D_DURING and you did NOT define SLOW_XMIT_COPY,
-@@ -535,9 +571,11 @@ decides that the driver is broken).  During a transmit, unused parts of the
- buffer will be cleared to 0x42 as well.  This is to make it easier to figure
- out which bytes are being used by a packet.
- 
--You can change the debug level without recompiling the kernel by typing:
-+You can change the debug level without recompiling the kernel by typing::
+-[7] "/sys/bus/usb/devices/.../descriptors"
++ 7) "/sys/bus/usb/devices/.../descriptors"
 +
- 	ifconfig arc0 down metric 1xxx
- 	/etc/rc.d/rc.inet1
-+
- where "xxx" is the debug level you want.  For example, "metric 1015" would put
- you at debug level 15.  Debug level 7 is currently the default.
- 
-@@ -546,7 +584,7 @@ combination of different debug flags; so debug level 7 is really 1+2+4 or
- D_NORMAL+D_EXTRA+D_INIT.  To include D_DURING, you would add 16 to this,
- resulting in debug level 23.
- 
--If you don't understand that, you probably don't want to know anyway. 
-+If you don't understand that, you probably don't want to know anyway.
- E-mail me about your problem.
- 
- 
+        - Documentation/ABI/stable/sysfs-bus-usb
 diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 29d30b31f032..fb35cfc5d0a0 100644
+index 26ea79cecb9d..ef13fa26b4df 100644
 --- a/Documentation/networking/index.rst
 +++ b/Documentation/networking/index.rst
-@@ -38,6 +38,7 @@ Contents:
-    6pack
-    altera_tse
-    arcnet-hardware
-+   arcnet
+@@ -43,6 +43,7 @@ Contents:
+    ax25
+    baycom
+    bonding
++   cdc_mbim
  
  .. only::  subproject and html
  
