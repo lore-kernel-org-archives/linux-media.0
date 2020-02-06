@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7066DC3F68F
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CB37C2D0B1
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 42AC12192A
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 735282469A
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002281;
-	bh=odCKWtv/SWdDnVOZ8K3NwMUnyZ6vFzPI7iJjB5BQqcs=;
+	s=default; t=1581002282;
+	bh=YcWEzxoi6XvebNyYQTHZDJZa1KQxF6cMSTpEZAjbyNk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uZdWaNHURh2E6ffKG6KES3+Kw98P7WPgldcjNi+ymMqEP3G8QYzUY8+T+aSS/vgef
-	 1ty9TebtotyHlAR1tpQJWfekA0qidevy55X7DKGGt51E4lCVADRUc58KMhe9+TxB53
-	 ZSsW7vXGzCjjtBJEokOO0rgjVzOyaBo4pGXDAibw=
+	b=tLvVySC26tLgqpdirqS5H9pLUkc84+WlKrlLA3LC+SdGW6X4OjVIm+s7PXXMsIF06
+	 nUSLZUxN1ANQ7u0vQM2V+5kJhBE520Gc0S7Cep5a1jdU2OsqDmbfk86pE5dqnDERf9
+	 yPFhelVrDoA46b8y2ereNotcfvuq8KaUQuge5g64=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727589AbgBFPSA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:18:00 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38044 "EHLO
+        id S1727649AbgBFPSB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 10:18:01 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38022 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727509AbgBFPR7 (ORCPT
+        with ESMTP id S1727398AbgBFPR7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:17:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=6ghnrczUbiTxVWJAgmJQ5rpf59adJVvftfVrvzy86wk=; b=frauZgFucusqMgiArZDApGhtfa
-        iZUYDSrEwmCEWMYdy3zoKtJgn72t2H0/GPy0Dit8qSTkJYjLL9QqEm1G46Jzw8H70ahX6x+O+wyRw
-        yGomEMR/XsqKbeN0ZAbaiUMFUF3RtJlIrxenwZyzXo+etyPNIOL5P7k0ehHDzgtiZu12Coc/eP1zp
-        zhQ9IVg/Ecr7WneylKF4QmCo5bZHW2c5l6hrz/hYN2Hez36JxrzBJ7vxmXU+SAYOYdNAvGFuveO1Q
-        iAMML9u0HbulAq4nydakboMkrxzG78vFYDeUv/B3GMP71QgdIc6IFSPZZTdfGciIcVF0YHnML5OHc
-        UVHoaj5g==;
+        bh=yBFv8aJbI4oYb9Rrvk3UXwfv0Yl1ScqGFr86JBwxikg=; b=r//LqI/jTIcnkcqMErLYF/XgNe
+        7dpcfp/3tAButvC4bpQhM0Rp1dSCOy7sSf3lfFRwqUFsA0jRecVnJSxQF3N14Fz7cosZR9XZoPBG0
+        CA2+81ODotuoxGLIxa57td1x8x0+B+c5TdDRY94zCY9r6swNOY4FeehE1k3QoaPUsqPjiFnI6imcm
+        WNFy4PGTBkvun9GnMqpBT/CZ7f7JomImND0Nye7G7z48GJ4ND8roKFu+Wf6krOKdP/nbuJsKFCVNJ
+        HkyVt/AnOnssJCp3g7LCNDtm/GVlN83IvB+Xhr3ZDZS+QIf9vNc+CN6+80zp68wT7BTT3o2RjIrVS
+        2CjCrs2Q==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziul-0005jH-3n; Thu, 06 Feb 2020 15:17:59 +0000
+        id 1iziuk-0005j7-W0; Thu, 06 Feb 2020 15:17:59 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziud-002oWU-VE; Thu, 06 Feb 2020 16:17:51 +0100
+        id 1iziud-002oWE-Rp; Thu, 06 Feb 2020 16:17:51 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -50,9 +50,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 26/28] docs: networking: convert generic_netlink.txt to ReST
-Date:   Thu,  6 Feb 2020 16:17:46 +0100
-Message-Id: <9ced7880be7805770ae9a44693c5e0132372a0b2.1581002063.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 23/28] docs: networking: convert fore200e.txt to ReST
+Date:   Thu,  6 Feb 2020 16:17:43 +0100
+Message-Id: <1e98e9d69a5f7e19086a536b806d8b39a7b4c37c.1581002063.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
 References: <cover.1581002062.git.mchehab+huawei@kernel.org>
@@ -63,45 +63,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Not much to be done here:
 - add SPDX header;
-- add a document title;
+- adjust title markup;
+- mark code blocks and literals as such;
+- adjust identation, whitespaces and blank lines;
 - add to networking/index.rst.
 
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../networking/{generic_netlink.txt => generic_netlink.rst} | 6 ++++++
- Documentation/networking/index.rst                          | 1 +
- 2 files changed, 7 insertions(+)
- rename Documentation/networking/{generic_netlink.txt => generic_netlink.rst} (64%)
+ Documentation/networking/{fore200e.txt => fore200e.rst} | 8 +++++---
+ Documentation/networking/index.rst                      | 1 +
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+ rename Documentation/networking/{fore200e.txt => fore200e.rst} (94%)
 
-diff --git a/Documentation/networking/generic_netlink.txt b/Documentation/networking/generic_netlink.rst
-similarity index 64%
-rename from Documentation/networking/generic_netlink.txt
-rename to Documentation/networking/generic_netlink.rst
-index 3e071115ca90..59e04ccf80c1 100644
---- a/Documentation/networking/generic_netlink.txt
-+++ b/Documentation/networking/generic_netlink.rst
-@@ -1,3 +1,9 @@
+diff --git a/Documentation/networking/fore200e.txt b/Documentation/networking/fore200e.rst
+similarity index 94%
+rename from Documentation/networking/fore200e.txt
+rename to Documentation/networking/fore200e.rst
+index 1f98f62b4370..55df9ec09ac8 100644
+--- a/Documentation/networking/fore200e.txt
++++ b/Documentation/networking/fore200e.rst
+@@ -1,6 +1,8 @@
 +.. SPDX-License-Identifier: GPL-2.0
-+
-+===============
-+Generic Netlink
-+===============
-+
- A wiki document on how to use Generic Netlink can be found here:
  
-  * http://www.linuxfoundation.org/collaborate/workgroups/networking/generic_netlink_howto
++=============================================
+ FORE Systems PCA-200E/SBA-200E ATM NIC driver
+----------------------------------------------
++=============================================
+ 
+ This driver adds support for the FORE Systems 200E-series ATM adapters
+ to the Linux operating system. It is based on the earlier PCA-200E driver
+@@ -27,8 +29,8 @@ in the linux/drivers/atm directory for details and restrictions.
+ Firmware Updates
+ ----------------
+ 
+-The FORE Systems 200E-series driver is shipped with firmware data being 
+-uploaded to the ATM adapters at system boot time or at module loading time. 
++The FORE Systems 200E-series driver is shipped with firmware data being
++uploaded to the ATM adapters at system boot time or at module loading time.
+ The supplied firmware images should work with all adapters.
+ 
+ However, if you encounter problems (the firmware doesn't start or the driver
 diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 1f47d74fd33e..bc2ee843df03 100644
+index 73b573739f67..022e0e895156 100644
 --- a/Documentation/networking/index.rst
 +++ b/Documentation/networking/index.rst
-@@ -58,6 +58,7 @@ Contents:
-    fore200e
-    framerelay
-    generic-hdlc
-+   generic_netlink
+@@ -55,6 +55,7 @@ Contents:
+    eql
+    fib_trie
+    filter
++   fore200e
  
  .. only::  subproject and html
  
