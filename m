@@ -2,70 +2,240 @@ Return-Path: <SRS0=0Sen=32=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4320C352A2
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 22:07:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16971C35247
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 22:47:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BF0D620658
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 22:07:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF2C021927
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 22:47:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1581029263;
+	bh=vtXNQJXJB9ateXQ/WieExGQjdAEyTsiB76vvp4vUGu4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=iXpXkqz4jNgQOPONoinY8FIHJKdUjjzqqio96qJfcBcoTpFVScM6FozBP54eJN7/E
+	 ZvNJ3DqVI8nvc8vDw8tg4LLkiDbuO2mHjyy6E5iBvnXt3Nlrs/zka47uN4cjohqG+z
+	 4V57yS+4+hJFJ3AWcwMqLBpFUeFOPnUWekEC9UgE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727557AbgBFWH0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 17:07:26 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:45024 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727502AbgBFWH0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 17:07:26 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 8F313294421
-From:   Helen Koike <helen.koike@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     dafna.hirschfeld@collabora.com, hverkuil@xs4all.nl,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Helen Koike <helen.koike@collabora.com>
-Subject: [PATCH] media: staging: rkisp1: use consistent bus_info string for media_dev
-Date:   Thu,  6 Feb 2020 19:07:08 -0300
-Message-Id: <20200206220712.1243438-1-helen.koike@collabora.com>
-X-Mailer: git-send-email 2.24.0
+        id S1727347AbgBFWrn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 17:47:43 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38854 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726536AbgBFWrm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 17:47:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description;
+        bh=X5g/vz2mielUqGgcMniEPqPAC4edakR71gQvCI0vZpA=; b=X4Hz7KTx6g2GH2KN/j6C8ln1l2
+        2UJ06yVeUOiv+YUUEblU3kx6TVrSMA7TrTGGgKoBRaagjBh+cF+BcPUvTDn3noHBeTx96dDce1Cna
+        TseAqqJA9Ze1EILMbnko3IsQSDqvInPvr4NqCjq+biMen9B9+8g3F+We1wFI2URJ3eCU+J0xIy4uD
+        BMTheP3l9x/gXkqH6IO07Lq+ulzi+29RQWmXVZtqDX2DSvV89C3Svn/Xe+EFwj4vgNUc4bnHwCru/
+        FQv9nrQtowcqGfk9cynnNM5oltGooiyIGDICqXzQvAHPkLzft2U6z2ZBLkWRe8JZ7ZhSzyiGgXz6x
+        SNQEl9LA==;
+Received: from [80.156.29.194] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1izpvw-0007dP-Ne; Thu, 06 Feb 2020 22:47:41 +0000
+Date:   Thu, 6 Feb 2020 23:47:36 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 21/27] docs: kvm: Convert locking.txt to ReST format
+Message-ID: <20200206234736.196ef417@kernel.org>
+In-Reply-To: <a17d6a27-0d3f-2020-7fc2-87ec20a6225f@redhat.com>
+References: <cover.1581000481.git.mchehab+huawei@kernel.org>
+        <1464d69fe780940cec6ecec4ac2505b9701a1e01.1581000481.git.mchehab+huawei@kernel.org>
+        <20200206171132.4f51f17a.cohuck@redhat.com>
+        <a17d6a27-0d3f-2020-7fc2-87ec20a6225f@redhat.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Media device is using a slightly different bus_info string
-"platform: rkisp1" (with a space) instead of "platform:rkisp1" used by
-the rest of rkisp1 code.
-This causes errors when using v4l2-util tools that uses the bus_info
-string to identify the device.
+Em Thu, 6 Feb 2020 22:57:39 +0100
+Paolo Bonzini <pbonzini@redhat.com> escreveu:
 
-Fixes: d65dd85281fb ("media: staging: rkisp1: add Rockchip ISP1 base driver")
+> On 06/02/20 17:11, Cornelia Huck wrote:
+> > On Thu,  6 Feb 2020 15:50:18 +0100
+> > Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+> >   
+> >> - Use document title and chapter markups;
+> >> - Add markups for literal blocks;
+> >> - use :field: for field descriptions;
+> >> - Add blank lines and adjust indentation.
+> >>
+> >> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> >> ---
+> >>  Documentation/virt/kvm/index.rst              |   1 +
+> >>  .../virt/kvm/{locking.txt => locking.rst}     | 111 ++++++++++--------
+> >>  2 files changed, 63 insertions(+), 49 deletions(-)
+> >>  rename Documentation/virt/kvm/{locking.txt => locking.rst} (78%)  
+> > 
+> > (...)
+> >   
+> >> @@ -48,19 +52,23 @@ restore the saved R/X bits if VMX_EPT_TRACK_ACCESS mask is set, or both. This
+> >>  is safe because whenever changing these bits can be detected by cmpxchg.
+> >>  
+> >>  But we need carefully check these cases:
+> >> -1): The mapping from gfn to pfn
+> >> +
+> >> +1) The mapping from gfn to pfn
+> >> +
+> >>  The mapping from gfn to pfn may be changed since we can only ensure the pfn
+> >>  is not changed during cmpxchg. This is a ABA problem, for example, below case
+> >>  will happen:
+> >>  
+> >> -At the beginning:
+> >> -gpte = gfn1
+> >> -gfn1 is mapped to pfn1 on host
+> >> -spte is the shadow page table entry corresponding with gpte and
+> >> -spte = pfn1
+> >> +At the beginning::
+> >>  
+> >> -   VCPU 0                           VCPU0
+> >> -on fast page fault path:
+> >> +	gpte = gfn1
+> >> +	gfn1 is mapped to pfn1 on host
+> >> +	spte is the shadow page table entry corresponding with gpte and
+> >> +	spte = pfn1
+> >> +
+> >> +	   VCPU 0                           VCPU0
+> >> +
+> >> +on fast page fault path::
+> >>  
+> >>     old_spte = *spte;
+> >>                                   pfn1 is swapped out:  
+> > 
+> > I'm wondering if that should rather be converted to a proper table.  
 
-Signed-off-by: Helen Koike <helen.koike@collabora.com>
+Converting into a table would require to escape the asterisk, e. g.:
+
+	old_spte = \*spte;
+
+or:
+
+	``old_spte = *spte;``
+
+	(and, for consistency, for all other stuff there)
+	
+
+So, yeah, the html/pdf output could be nicer, but it would be worse for those
+who read the .rst file.
+
+> 
+> Would be nicer but this is acceptable too I think.  Especially, the
+> monospaced font allows breaking the table and keeping the parts aligned.
+
+FYI, there's a way to setup monospaced font on a table by using a template.
+
+As I pointed a while ago, it would require to add something to the
+Sphinx theme:
+
+	diff --git a/Documentation/sphinx-static/theme_overrides.css b/Documentation/sphinx-static/theme_overrides.css
+	index e21e36cd6761..0948de6651f8 100644
+	--- a/Documentation/sphinx-static/theme_overrides.css
+	+++ b/Documentation/sphinx-static/theme_overrides.css
+	@@ -125,3 +125,7 @@ div[class^="highlight"] pre {
+	         color: inherit;
+	     }
+	 }
+	+
+	+table.monospaced {
+	+	font-family: monospace, monospace;
+	+}
+
+Then use, at locking.rst (or anywhere when a monospaced font is desired):
+
+	+.. cssclass:: monospaced
+
+	+ ==== ====== =====
+	+ Some Random Table
+	+ ==== ====== =====
+
+For completeness, a similar template class should also be needed at 
+latex_prefix setting at Documentation/conf.py, implementing the same
+feature for LaTeX and PDF output.
+
+IMHO, this would be too complex for not much gain.
+
+> 
+> But the two headers should be "CPU 0" and "CPU 1", and it's worth
+> changing that while we're at it.  Same for the table below.
+
+Ok.
+
+Maybe we could append the enclosed patch to this one. I suspect it would
+visually be better.
+
+Cheers,
+Mauro
+
 ---
- drivers/staging/media/rkisp1/rkisp1-dev.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-dev.c b/drivers/staging/media/rkisp1/rkisp1-dev.c
-index 558126e66465..9b47f41b36e9 100644
---- a/drivers/staging/media/rkisp1/rkisp1-dev.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-dev.c
-@@ -502,8 +502,7 @@ static int rkisp1_probe(struct platform_device *pdev)
- 	strscpy(rkisp1->media_dev.model, RKISP1_DRIVER_NAME,
- 		sizeof(rkisp1->media_dev.model));
- 	rkisp1->media_dev.dev = &pdev->dev;
--	strscpy(rkisp1->media_dev.bus_info,
--		"platform: " RKISP1_DRIVER_NAME,
-+	strscpy(rkisp1->media_dev.bus_info, RKISP1_BUS_INFO,
- 		sizeof(rkisp1->media_dev.bus_info));
- 	media_device_init(&rkisp1->media_dev);
+diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
+index 428cb3412ecc..82322a4c9fde 100644
+--- a/Documentation/virt/kvm/locking.rst
++++ b/Documentation/virt/kvm/locking.rst
+@@ -57,18 +57,18 @@ But we need carefully check these cases:
  
--- 
-2.24.0
-
+ The mapping from gfn to pfn may be changed since we can only ensure the pfn
+ is not changed during cmpxchg. This is a ABA problem, for example, below case
+-will happen:
++will happen::
+ 
+-At the beginning::
++  At the beginning:
+ 
+ 	gpte = gfn1
+ 	gfn1 is mapped to pfn1 on host
+ 	spte is the shadow page table entry corresponding with gpte and
+ 	spte = pfn1
+ 
+-	   VCPU 0                           VCPU0
++  On fast page fault path:
+ 
+-on fast page fault path::
++	   CPU 0                           CPU 1
+ 
+    old_spte = *spte;
+                                  pfn1 is swapped out:
+@@ -80,6 +80,7 @@ on fast page fault path::
+                                  gfn2 by the guest:
+                                     spte = pfn1;
+ 
++
+    if (cmpxchg(spte, old_spte, old_spte+W)
+ 	mark_page_dirty(vcpu->kvm, gfn1)
+              OOPS!!!
+@@ -107,16 +108,16 @@ spte is read-only and the Accessed bit has already been set since the
+ Accessed bit and Dirty bit can not be lost.
+ 
+ But it is not true after fast page fault since the spte can be marked
+-writable between reading spte and updating spte. Like below case:
++writable between reading spte and updating spte. Like below case::
+ 
+-At the beginning::
++  At the beginning:
+ 
+ 	spte.W = 0
+ 	spte.Accessed = 1
+ 
+-	   VCPU 0                                       VCPU0
++	   CPU 0                                       CPU 1
+ 
+-In mmu_spte_clear_track_bits()::
++  In mmu_spte_clear_track_bits():
+ 
+    old_spte = *spte;
+ 
