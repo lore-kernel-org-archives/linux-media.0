@@ -2,256 +2,379 @@ Return-Path: <SRS0=0Sen=32=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DECAC2D0B1
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 08:08:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20C31C33CAC
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 08:27:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 257B620720
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 08:08:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D121E217F4
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 08:26:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="e6y6Xc0C"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="uiUlt3ik"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727784AbgBFIIK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 03:08:10 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:44478 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727111AbgBFIIK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 03:08:10 -0500
-Received: by mail-wr1-f68.google.com with SMTP id m16so5926707wrx.11
-        for <linux-media@vger.kernel.org>; Thu, 06 Feb 2020 00:08:07 -0800 (PST)
+        id S1727543AbgBFI07 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 03:26:59 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:45017 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727936AbgBFI06 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 03:26:58 -0500
+Received: by mail-wr1-f66.google.com with SMTP id m16so5987402wrx.11
+        for <linux-media@vger.kernel.org>; Thu, 06 Feb 2020 00:26:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:autocrypt:organization:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TG5tj3645N85QhmNWU8D99xKObIizGYbAhAWICc+ygs=;
-        b=e6y6Xc0CKTFK7D8lnZI+oqP6txhyrqcYHKag2cJFvZTCEIr3SECDvQXDx3itQzDjB5
-         VcImhKBHPPvajvrhMq019JiXtDYI7rPkHENrWf+RlWoff8hhxIoqXAAGG539WvLMo9Wn
-         4D71P/luHvNXtl8DTwCvA3ORNz+HUOP5ZxL1UO5APiCaTC8/ZPNQzeTJ6hTbYrnu0n3f
-         ZaxlWdiXnlcIYCRRWCP4VcRWCxRH2Ckcf4JgKak0CIzSdjzVGZ18XYVyTCcb2Rg8OQIw
-         y+eDECeAol8gs70LYTttGQEDtfFZ6a61YDj707iOvZFeg4203wX2gX3bv4I2qHAf9rfB
-         JnBg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=V3exTGHebANiW1zaXQX343EHgiihrmvoNYFZJmclMTA=;
+        b=uiUlt3ikDINvrqggX1GpgNyu3rcqRLm7aXC1dA/mcDCByQBwB5aJPEWsaHep6J0tpL
+         3VhzUfpK7aKjW7pcDWLdepNGYAPcRr0rQnMPBeMMbczbCqQRTDOOkCetr1CRTRFZ7BNH
+         geIjB/RPMa80r/nhY4WGB/gzuvc1CSCsnTfz+8wWUWCdUcdsaNCO3Kwy1Y+4sWuO5UdB
+         KvBUv7hIUohYmnBTW3QiA4Gi4BNmEqoDVxlQkGbKEQnc3BpVBTP6LmR3YXRFDZ5SNoLL
+         614utQ2B5GRvvMNkcSE/W5eclv9dwiTDJiPNpjsjosCB+c83eEOqHjpnX8VJLNBxj9HQ
+         /ztA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :organization:message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=TG5tj3645N85QhmNWU8D99xKObIizGYbAhAWICc+ygs=;
-        b=G3/T++oNo/pLJzNij0cx5HXz0p4LBgwGqQLajByxbTiU2MoFfQwOsfPNFDPfpAKXeo
-         93LmTMFb3BdnOjDOjVFqbwlbWB4oZtR0yMC2wIfLTBxSc8K8b/19NCUkWBYXbjOXE5aU
-         b+t/yhuzbS0ajCz1FZyVbbPjpDmeGihC+0OkjFK1U46ZZ/ST1cbfPzg87VKAdzMhH6Ll
-         uLb+/Gu4IVytmB962zLdC2Hyhm/Ir/VQZvToh/3g4GkSGASvxwf2q90N+jc329fQNP5U
-         jL28B1cL8XKblA9DNpWuLHw9iOzicCKSAVzqWebmcXL8ixFW/2lcL398MQTro6p+6KYl
-         z6Ng==
-X-Gm-Message-State: APjAAAVH+0CVSul1ra/cV+73BJr9q2MBpFciUrt8KxqBjQn3uwKpealO
-        N03J6YLR/u+mheMAxwslECB/Vw==
-X-Google-Smtp-Source: APXvYqz9axYJCUH9PKldohM4SKpY8oaob9MbNHZHJR5bIvM99Z2dv6KBImKigANHI+cIqIl6FqvNTg==
-X-Received: by 2002:adf:c145:: with SMTP id w5mr2426249wre.205.1580976486971;
-        Thu, 06 Feb 2020 00:08:06 -0800 (PST)
-Received: from ?IPv6:2a01:e35:2ec0:82b0:7d33:17f7:8097:ecc7? ([2a01:e35:2ec0:82b0:7d33:17f7:8097:ecc7])
-        by smtp.gmail.com with ESMTPSA id o4sm3096110wrx.25.2020.02.06.00.08.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Feb 2020 00:08:06 -0800 (PST)
-Subject: Re: [PATCH v3 5/5] media: meson: vdec: add VP9 decoder support
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>, mchehab@kernel.org,
-        hans.verkuil@cisco.com
-Cc:     Maxime Jourdan <mjourdan@baylibre.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20200116133437.2443-1-narmstrong@baylibre.com>
- <20200116133437.2443-6-narmstrong@baylibre.com>
- <a4efcb4e1591ac9cf305742d34337335b6ff7f29.camel@ndufresne.ca>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=V3exTGHebANiW1zaXQX343EHgiihrmvoNYFZJmclMTA=;
+        b=AQH8MfI30yd7WynDSTbd0XE/B4ywhfAcNG5ecQYeDysHW4hTEbeL3hNHqQ7CwqhQ7X
+         t5Bb1o5HanC/r2Q4KMJ4t2S2mBL/1bH+Ph5QZ+NXsUiN37Ui9eTuVWTgNSnfzVUpaHh+
+         kJhOSFVQE8UmDE7ry1WcTSILxpQ9YHqFomKNuqC0U3DXn8Wawrnp5mcUI1gJYW3bGOq5
+         Z5mT5BRdGEBP6WU7zGlESIkttQUyFhv8IAE0XbqgAbJlyinq9fyAX9vJnww3etbddiiL
+         g2tzxV6zoyislsbum5oNutLfy5Zm03Qzh9XYFrg07FCl8h9z9RNjtTop5nlHSHE2lop1
+         xhzA==
+X-Gm-Message-State: APjAAAXyeBnlH6IZP/ucaM3cjIC8M0kyuU+sPHPdD/a4SMv6yx0VGDZs
+        fL+cdR7JHvbVxNy8nIS9u9HQHA==
+X-Google-Smtp-Source: APXvYqwFvI+NFupYcY1OOqs9YpXYPXOMSvKt5qXV9mtjsnO0i6Mn+W1Xz6qX/xTXVCU+F0n6wLhTjw==
+X-Received: by 2002:a5d:42c5:: with SMTP id t5mr2584565wrr.73.1580977614215;
+        Thu, 06 Feb 2020 00:26:54 -0800 (PST)
+Received: from bender.baylibre.local ([2a01:e35:2ec0:82b0:7d33:17f7:8097:ecc7])
+        by smtp.gmail.com with ESMTPSA id e16sm3148027wrs.73.2020.02.06.00.26.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2020 00:26:53 -0800 (PST)
 From:   Neil Armstrong <narmstrong@baylibre.com>
-Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
- 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
- BSwxi7g3Mu7u5kUByanqHyA=
-Organization: Baylibre
-Message-ID: <49e6168b-ffed-6011-3b1f-455224d3130b@baylibre.com>
-Date:   Thu, 6 Feb 2020 09:08:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+To:     mchehab@kernel.org, hans.verkuil@cisco.com
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Maxime Jourdan <mjourdan@baylibre.com>
+Subject: [PATCH v5 2/4] media: vicodec: use v4l2-mem2mem draining, stopped and next-buf-is-last states handling
+Date:   Thu,  6 Feb 2020 09:26:46 +0100
+Message-Id: <20200206082648.25184-3-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20200206082648.25184-1-narmstrong@baylibre.com>
+References: <20200206082648.25184-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <a4efcb4e1591ac9cf305742d34337335b6ff7f29.camel@ndufresne.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 03/02/2020 04:11, Nicolas Dufresne wrote:
-> Hi Neil,
-> 
-> Le jeudi 16 janvier 2020 à 14:34 +0100, Neil Armstrong a écrit :
->> From: Maxime Jourdan <mjourdan@baylibre.com>
->>
->> This adds VP9 decoding for the Amlogic GXL, G12A & SM1 SoCs, using
->> the commong "HEVC" HW decoder.
->>
->> For G12A & SM1, it uses the IOMMU support from the firmware.
->>
->> For 10bit decoding, the firmware can only decode in the proprietary
->> Amlogic Framebuffer Compression format, but can output in 8bit NV12
->> buffer while writing the decoded frame.
->>
->> Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
->> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->> ---
->>  drivers/staging/media/meson/vdec/Makefile     |    2 +-
->>  drivers/staging/media/meson/vdec/codec_vp9.c  | 2139 +++++++++++++++++
->>  drivers/staging/media/meson/vdec/codec_vp9.h  |   13 +
->>  drivers/staging/media/meson/vdec/hevc_regs.h  |    7 +
->>  drivers/staging/media/meson/vdec/vdec.c       |    5 +
->>  .../staging/media/meson/vdec/vdec_helpers.c   |    4 +
->>  .../staging/media/meson/vdec/vdec_platform.c  |   38 +
->>  7 files changed, 2207 insertions(+), 1 deletion(-)
->>  create mode 100644 drivers/staging/media/meson/vdec/codec_vp9.c
->>  create mode 100644 drivers/staging/media/meson/vdec/codec_vp9.h
->>
+Use the previously introduced v4l2-mem2mem core APIs to handle the drainig,
+stopped and next-buf-is-last states.
 
+With these changes, the v4l2-compliance still passes with the following
+commands :
+# v4l2-ctl --stream-mmap --stream-out-mmap --stream-to-hdr out.comp --stream-from in.yuv
+>>>><><><><><><><><><><><><><><><><>< 15.53 fps
+ 15.53 fps
+><><><><><><><><><><><><>< 13.99 fps
+ 13.99 fps
+><><><><><><><><><><><>< 13.52 fps
+ 13.52 fps
+><><><><><><><><><><><><>< 13.41 fps
+ 13.41 fps
+><><><><><><><><><><><><>< 13.21 fps
+ 13.21 fps
+><><><><><><><><><><><>< 13.09 fps
+ 13.09 fps
+><><><><><><><
+STOP ENCODER
+<<<
+EOS EVENT
+
+# v4l2-compliance --stream-from in.yuv -s
+v4l2-compliance SHA: 7ead0e1856b89f2e19369af452bb03fd0cd16793, 64 bits
 [...]
+Total for vicodec device /dev/video0: 50, Succeeded: 50, Failed: 0, Warnings: 0
 
->> diff --git a/drivers/staging/media/meson/vdec/vdec_platform.c b/drivers/staging/media/meson/vdec/vdec_platform.c
->> index e9356a46828f..72a833b1cebd 100644
->> --- a/drivers/staging/media/meson/vdec/vdec_platform.c
->> +++ b/drivers/staging/media/meson/vdec/vdec_platform.c
->> @@ -8,8 +8,10 @@
->>  #include "vdec.h"
->>  
->>  #include "vdec_1.h"
->> +#include "vdec_hevc.h"
->>  #include "codec_mpeg12.h"
->>  #include "codec_h264.h"
->> +#include "codec_vp9.h"
->>  
->>  static const struct amvdec_format vdec_formats_gxbb[] = {
->>  	{
->> @@ -51,6 +53,18 @@ static const struct amvdec_format vdec_formats_gxbb[] = {
->>  
->>  static const struct amvdec_format vdec_formats_gxl[] = {
->>  	{
->> +		.pixfmt = V4L2_PIX_FMT_VP9,
->> +		.min_buffers = 16,
->> +		.max_buffers = 24,
->> +		.max_width = 3840,
->> +		.max_height = 2160,
->> +		.vdec_ops = &vdec_hevc_ops,
->> +		.codec_ops = &codec_vp9_ops,
->> +		.firmware_path = "meson/vdec/gxl_vp9.bin",
-> 
-> Is there a pull request pending for this firmware ? I could not test as
-> this firmware was missing. Note that it could be nice to remove the
-> format from the enumeration in that case, as it's very confusing
-> initially.
+The full output is available at [1]
 
-It has been merged yesterday, sorry for the delay.
+# v4l2-compliance -d1 --stream-from-hdr out.comp -s
+v4l2-compliance SHA: 7ead0e1856b89f2e19369af452bb03fd0cd16793, 64 bits
+[...]
+Total for vicodec device /dev/video1: 50, Succeeded: 50, Failed: 0, Warnings: 0
 
-With maxime's patch, we tested it using ffmpeg master, mpv master with drm-prime
-rendering. We have a buildroot repo with the changed needed :
+The full output is available at [2]
 
-https://gitlab.com/baylibre/amlogic/atv/buildroot-yukawa
+No functional changes should be noticed.
 
-I will respin a v4 with the small fix from maxime.
+[1] https://termbin.com/25nn
+[2] https://termbin.com/dza4
 
-Neil
+Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
+Suggested-by: Maxime Jourdan <mjourdan@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/media/platform/vicodec/vicodec-core.c | 162 ++++++------------
+ 1 file changed, 52 insertions(+), 110 deletions(-)
 
-
-> 
->> +		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, 0 },
->> +		.flags = V4L2_FMT_FLAG_COMPRESSED |
->> +			 V4L2_FMT_FLAG_DYN_RESOLUTION,
->> +	}, {
->>  		.pixfmt = V4L2_PIX_FMT_H264,
->>  		.min_buffers = 2,
->>  		.max_buffers = 24,
->> @@ -127,6 +141,18 @@ static const struct amvdec_format vdec_formats_gxm[] = {
->>  
->>  static const struct amvdec_format vdec_formats_g12a[] = {
->>  	{
->> +		.pixfmt = V4L2_PIX_FMT_VP9,
->> +		.min_buffers = 16,
->> +		.max_buffers = 24,
->> +		.max_width = 3840,
->> +		.max_height = 2160,
->> +		.vdec_ops = &vdec_hevc_ops,
->> +		.codec_ops = &codec_vp9_ops,
->> +		.firmware_path = "meson/vdec/g12a_vp9.bin",
->> +		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, 0 },
->> +		.flags = V4L2_FMT_FLAG_COMPRESSED |
->> +			 V4L2_FMT_FLAG_DYN_RESOLUTION,
->> +	}, {
->>  		.pixfmt = V4L2_PIX_FMT_H264,
->>  		.min_buffers = 2,
->>  		.max_buffers = 24,
->> @@ -165,6 +191,18 @@ static const struct amvdec_format vdec_formats_g12a[] = {
->>  
->>  static const struct amvdec_format vdec_formats_sm1[] = {
->>  	{
->> +		.pixfmt = V4L2_PIX_FMT_VP9,
->> +		.min_buffers = 16,
->> +		.max_buffers = 24,
->> +		.max_width = 3840,
->> +		.max_height = 2160,
->> +		.vdec_ops = &vdec_hevc_ops,
->> +		.codec_ops = &codec_vp9_ops,
->> +		.firmware_path = "meson/vdec/g12a_vp9.bin",
->> +		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, 0 },
->> +		.flags = V4L2_FMT_FLAG_COMPRESSED |
->> +			 V4L2_FMT_FLAG_DYN_RESOLUTION,
->> +	}, {
->>  		.pixfmt = V4L2_PIX_FMT_H264,
->>  		.min_buffers = 2,
->>  		.max_buffers = 24,
-> 
+diff --git a/drivers/media/platform/vicodec/vicodec-core.c b/drivers/media/platform/vicodec/vicodec-core.c
+index 82350097503e..425c47216dae 100644
+--- a/drivers/media/platform/vicodec/vicodec-core.c
++++ b/drivers/media/platform/vicodec/vicodec-core.c
+@@ -117,15 +117,10 @@ struct vicodec_ctx {
+ 	struct vicodec_dev	*dev;
+ 	bool			is_enc;
+ 	bool			is_stateless;
+-	bool			is_draining;
+-	bool			next_is_last;
+-	bool			has_stopped;
+ 	spinlock_t		*lock;
+ 
+ 	struct v4l2_ctrl_handler hdl;
+ 
+-	struct vb2_v4l2_buffer *last_src_buf;
+-
+ 	/* Source and destination queue data */
+ 	struct vicodec_q_data   q_data[2];
+ 	struct v4l2_fwht_state	state;
+@@ -431,11 +426,11 @@ static void device_run(void *priv)
+ 	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, false);
+ 
+ 	spin_lock(ctx->lock);
+-	if (!ctx->comp_has_next_frame && src_buf == ctx->last_src_buf) {
++	if (!ctx->comp_has_next_frame &&
++	    v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx, src_buf)) {
+ 		dst_buf->flags |= V4L2_BUF_FLAG_LAST;
+ 		v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
+-		ctx->is_draining = false;
+-		ctx->has_stopped = true;
++		v4l2_m2m_mark_stopped(ctx->fh.m2m_ctx);
+ 	}
+ 	if (ctx->is_enc || ctx->is_stateless) {
+ 		src_buf->sequence = q_src->sequence++;
+@@ -586,8 +581,6 @@ static int job_ready(void *priv)
+ 	unsigned int max_to_copy;
+ 	unsigned int comp_frame_size;
+ 
+-	if (ctx->has_stopped)
+-		return 0;
+ 	if (ctx->source_changed)
+ 		return 0;
+ 	if (ctx->is_stateless || ctx->is_enc || ctx->comp_has_frame)
+@@ -607,7 +600,8 @@ static int job_ready(void *priv)
+ 	if (ctx->header_size < sizeof(struct fwht_cframe_hdr)) {
+ 		state = get_next_header(ctx, &p, p_src + sz - p);
+ 		if (ctx->header_size < sizeof(struct fwht_cframe_hdr)) {
+-			if (ctx->is_draining && src_buf == ctx->last_src_buf)
++			if (v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx,
++							      src_buf))
+ 				return 1;
+ 			job_remove_src_buf(ctx, state);
+ 			goto restart;
+@@ -636,7 +630,8 @@ static int job_ready(void *priv)
+ 		p += copy;
+ 		ctx->comp_size += copy;
+ 		if (ctx->comp_size < max_to_copy) {
+-			if (ctx->is_draining && src_buf == ctx->last_src_buf)
++			if (v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx,
++							      src_buf))
+ 				return 1;
+ 			job_remove_src_buf(ctx, state);
+ 			goto restart;
+@@ -1219,41 +1214,6 @@ static int vidioc_s_selection(struct file *file, void *priv,
+ 	return 0;
+ }
+ 
+-static int vicodec_mark_last_buf(struct vicodec_ctx *ctx)
+-{
+-	struct vb2_v4l2_buffer *next_dst_buf;
+-	int ret = 0;
+-
+-	spin_lock(ctx->lock);
+-	if (ctx->is_draining) {
+-		ret = -EBUSY;
+-		goto unlock;
+-	}
+-	if (ctx->has_stopped)
+-		goto unlock;
+-
+-	ctx->last_src_buf = v4l2_m2m_last_src_buf(ctx->fh.m2m_ctx);
+-	ctx->is_draining = true;
+-	if (ctx->last_src_buf)
+-		goto unlock;
+-
+-	next_dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+-	if (!next_dst_buf) {
+-		ctx->next_is_last = true;
+-		goto unlock;
+-	}
+-
+-	next_dst_buf->flags |= V4L2_BUF_FLAG_LAST;
+-	vb2_buffer_done(&next_dst_buf->vb2_buf, VB2_BUF_STATE_DONE);
+-	ctx->is_draining = false;
+-	ctx->has_stopped = true;
+-	v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
+-
+-unlock:
+-	spin_unlock(ctx->lock);
+-	return ret;
+-}
+-
+ static int vicodec_encoder_cmd(struct file *file, void *fh,
+ 			    struct v4l2_encoder_cmd *ec)
+ {
+@@ -1268,18 +1228,19 @@ static int vicodec_encoder_cmd(struct file *file, void *fh,
+ 	    !vb2_is_streaming(&ctx->fh.m2m_ctx->out_q_ctx.q))
+ 		return 0;
+ 
+-	if (ec->cmd == V4L2_ENC_CMD_STOP)
+-		return vicodec_mark_last_buf(ctx);
+-	ret = 0;
+-	spin_lock(ctx->lock);
+-	if (ctx->is_draining) {
+-		ret = -EBUSY;
+-	} else if (ctx->has_stopped) {
+-		ctx->has_stopped = false;
++	ret = v4l2_m2m_ioctl_encoder_cmd(file, fh, ec);
++	if (ret < 0)
++		return ret;
++
++	if (ec->cmd == V4L2_ENC_CMD_STOP &&
++	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
++		v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
++
++	if (ec->cmd == V4L2_ENC_CMD_START &&
++	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
+ 		vb2_clear_last_buffer_dequeued(&ctx->fh.m2m_ctx->cap_q_ctx.q);
+-	}
+-	spin_unlock(ctx->lock);
+-	return ret;
++
++	return 0;
+ }
+ 
+ static int vicodec_decoder_cmd(struct file *file, void *fh,
+@@ -1296,18 +1257,19 @@ static int vicodec_decoder_cmd(struct file *file, void *fh,
+ 	    !vb2_is_streaming(&ctx->fh.m2m_ctx->out_q_ctx.q))
+ 		return 0;
+ 
+-	if (dc->cmd == V4L2_DEC_CMD_STOP)
+-		return vicodec_mark_last_buf(ctx);
+-	ret = 0;
+-	spin_lock(ctx->lock);
+-	if (ctx->is_draining) {
+-		ret = -EBUSY;
+-	} else if (ctx->has_stopped) {
+-		ctx->has_stopped = false;
++	ret = v4l2_m2m_ioctl_decoder_cmd(file, fh, dc);
++	if (ret < 0)
++		return ret;
++
++	if (dc->cmd == V4L2_DEC_CMD_STOP &&
++	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
++		v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
++
++	if (dc->cmd == V4L2_DEC_CMD_START &&
++	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
+ 		vb2_clear_last_buffer_dequeued(&ctx->fh.m2m_ctx->cap_q_ctx.q);
+-	}
+-	spin_unlock(ctx->lock);
+-	return ret;
++
++	return 0;
+ }
+ 
+ static int vicodec_enum_framesizes(struct file *file, void *fh,
+@@ -1480,23 +1442,21 @@ static void vicodec_buf_queue(struct vb2_buffer *vb)
+ 		.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION,
+ 	};
+ 
+-	if (vb2_is_streaming(vq_cap)) {
+-		if (!V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type) &&
+-		    ctx->next_is_last) {
+-			unsigned int i;
++	if (!V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type) &&
++	    vb2_is_streaming(vb->vb2_queue) &&
++	    v4l2_m2m_dst_buf_is_last(ctx->fh.m2m_ctx)) {
++		unsigned int i;
+ 
+-			for (i = 0; i < vb->num_planes; i++)
+-				vb->planes[i].bytesused = 0;
+-			vbuf->flags = V4L2_BUF_FLAG_LAST;
+-			vbuf->field = V4L2_FIELD_NONE;
+-			vbuf->sequence = get_q_data(ctx, vb->vb2_queue->type)->sequence++;
+-			vb2_buffer_done(vb, VB2_BUF_STATE_DONE);
+-			ctx->is_draining = false;
+-			ctx->has_stopped = true;
+-			ctx->next_is_last = false;
+-			v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
+-			return;
+-		}
++		for (i = 0; i < vb->num_planes; i++)
++			vb->planes[i].bytesused = 0;
++
++		vbuf->field = V4L2_FIELD_NONE;
++		vbuf->sequence =
++			get_q_data(ctx, vb->vb2_queue->type)->sequence++;
++
++		v4l2_m2m_last_buffer_done(ctx->fh.m2m_ctx, vbuf);
++		v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
++		return;
+ 	}
+ 
+ 	/* buf_queue handles only the first source change event */
+@@ -1609,8 +1569,7 @@ static int vicodec_start_streaming(struct vb2_queue *q,
+ 	chroma_div = info->width_div * info->height_div;
+ 	q_data->sequence = 0;
+ 
+-	if (V4L2_TYPE_IS_OUTPUT(q->type))
+-		ctx->last_src_buf = NULL;
++	v4l2_m2m_start_streaming(ctx->fh.m2m_ctx, q);
+ 
+ 	state->gop_cnt = 0;
+ 
+@@ -1689,29 +1648,12 @@ static void vicodec_stop_streaming(struct vb2_queue *q)
+ 
+ 	vicodec_return_bufs(q, VB2_BUF_STATE_ERROR);
+ 
+-	if (V4L2_TYPE_IS_OUTPUT(q->type)) {
+-		if (ctx->is_draining) {
+-			struct vb2_v4l2_buffer *next_dst_buf;
+-
+-			spin_lock(ctx->lock);
+-			ctx->last_src_buf = NULL;
+-			next_dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+-			if (!next_dst_buf) {
+-				ctx->next_is_last = true;
+-			} else {
+-				next_dst_buf->flags |= V4L2_BUF_FLAG_LAST;
+-				vb2_buffer_done(&next_dst_buf->vb2_buf, VB2_BUF_STATE_DONE);
+-				ctx->is_draining = false;
+-				ctx->has_stopped = true;
+-				v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
+-			}
+-			spin_unlock(ctx->lock);
+-		}
+-	} else {
+-		ctx->is_draining = false;
+-		ctx->has_stopped = false;
+-		ctx->next_is_last = false;
+-	}
++	v4l2_m2m_stop_streaming(ctx->fh.m2m_ctx, q);
++
++	if (V4L2_TYPE_IS_OUTPUT(q->type) &&
++	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
++		v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
++
+ 	if (!ctx->is_enc && V4L2_TYPE_IS_OUTPUT(q->type))
+ 		ctx->first_source_change_sent = false;
+ 
+-- 
+2.22.0
 
