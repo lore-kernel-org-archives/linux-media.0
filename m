@@ -2,58 +2,59 @@ Return-Path: <SRS0=0Sen=32=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CEFEC352A2
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:51:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1366C352A2
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:51:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1EB1721775
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:51:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C058A20838
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:51:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581000690;
-	bh=5X2La3a5x7Cxk21OTJcv25o3pPeoJHOAlmOEaeD51Sw=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=2utjJ+y4UphV7RlWYaPau08DIH33K968pnCz2is/TG7bKQM3Ii+Sxvv5RW1xOSUNN
-	 H/hR4Ox9GB71qVUR0TNKlTn14mzj1VmFXBpc/cIouM7UZ53nzyxb+C4dsr5O5aEQjT
-	 4kiV1xiJ0A/vDREESMMAZOSS1EoweIgPY5Ot1q/s=
+	s=default; t=1581000694;
+	bh=mylKyYOCMH2opzKvVcnNxCLFGkOsR2hMN6SRW8Il3a4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=xMMqgui164nIvt981T56Gn1te4/s4C9ysDXMqUkoW/r3j2hnjBk0U8laCJ24roAp4
+	 hy2z64yKba+pvj/1uQ4CYBMDzJVYDIReXTnyJ5jHHYEZKkZzR1pfcSzwhZvfLngYQF
+	 NmpLqTKyqQq2tmRLQ9xKxdWMqzAEWWyB5BhyJ2uk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727541AbgBFOvX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Feb 2020 09:51:23 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:55410 "EHLO
+        id S1727884AbgBFOvc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Feb 2020 09:51:32 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:55362 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727542AbgBFOug (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 09:50:36 -0500
+        with ESMTP id S1726956AbgBFOuf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 09:50:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=CFTgqqR2acxHA5DJomm2PAamk9pZ/zM9hwGQ2WMtNfY=; b=JleqWJzuQMdqgilcjxy2q0YU3p
-        Zy28uGKU9tvzuIds0rI4IO7SfN6BFcLn7mfla3HzvwJyvHDa0Z9S/I3y6mqXg2Cb4C4MpyQO4SXuV
-        VGPacStQh+oUTjE84Go67+OqnGS0EQb72LpreKnq3Q6s4IuJCslUiuRvpefh8F5ki6MnOaGvyhGrq
-        k4jCcCAQJwtr4/Tm1UHsJaVWS2/UmhwRpr9ZTQZYS1E1hdrSN+IGybq22EQ30JQeH+R+pbA8QkhkY
-        oiM7tPwCaPDszRwwdkWS2S835N1xXc2SWyqaTczNHoaNMImot1L8MCNMCJAehSaC3mLW9TpQunedW
-        iA8lxqVw==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=W2TEM9K5krwWHu3V6Pmpbxn8qb5V0LOnOybj7d04Q5s=; b=ewnsLdph6Kx8fgV3UQNqbixry8
+        9bLXKmbwu5wU8rp1lf0075WjycFTGKUnRq698+bvhG8sRuwaDoUwuVRL6IclOTeRFwabqdSLovLg4
+        djEqE9xMHTGoebfyq9TMMbyl0eZoG1SLOJqyvS65UV2K0Zfar8W0fpcHJF7vLzJtF1qYTVoxDpxGa
+        TM1SHP4RAVCem9htn8N7OkUVvRCfpmSmFLQ/iKLr3n5R4S3y+YOPnzw2Pq3yKc8rr/ym/avBNZqEW
+        j96+GjUvWQkO8CqqmAq7l/4JiL/caEmayzu0l2eEro3mQRjQ8vgcWrpytQ8X3x98hXzZybDH5nf/r
+        gOJn2oYQ==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziUE-0004IX-QJ; Thu, 06 Feb 2020 14:50:34 +0000
+        id 1iziUE-0004Ih-AE; Thu, 06 Feb 2020 14:50:34 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziU6-002nKI-5y; Thu, 06 Feb 2020 15:50:26 +0100
+        id 1iziU6-002nLF-Nw; Thu, 06 Feb 2020 15:50:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-doc@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Richard Weinberger <richard@nod.at>,
-        Jeff Dike <jdike@addtoit.com>, kvm@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-um@lists.infradead.org
-Subject: [PATCH v2 00/27] docs: virt: manually convert text documents to ReST format
-Date:   Thu,  6 Feb 2020 15:49:57 +0100
-Message-Id: <cover.1581000481.git.mchehab+huawei@kernel.org>
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v2 15/27] docs: kvm: convert devices/xics.txt to ReST
+Date:   Thu,  6 Feb 2020 15:50:12 +0100
+Message-Id: <09762491d91f061cf1252e8d535f06bcba8209f7.1581000481.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <cover.1581000481.git.mchehab+huawei@kernel.org>
+References: <cover.1581000481.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -61,105 +62,102 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Manually convert the documentation under Documentation/virt to ReST,
-minimizing the usage of uneeded markups and preserving the documentation
-writer's style.
+- Use title markups;
+- adjust indentation and add blank lines as needed;
+- adjust tables to match ReST accepted formats;
+- use :field: markups.
 
-PS.: Patches are against linux-next tree (20200204).
-
-v2:
-
-- Solved a conflict with linux-next;
-- Added SPDX headers.
-
-Mauro Carvalho Chehab (27):
-  docs: kvm: add arm/pvtime.rst to index.rst
-  docs: virt: convert UML documentation to ReST
-  docs: virt: user_mode_linux.rst: update compiling instructions
-  docs: virt: user_mode_linux.rst: fix URL references
-  docs: virt: convert halt-polling.txt to ReST format
-  docs: virt: Convert msr.txt to ReST format
-  docs: kvm: devices/arm-vgic-its.txt to ReST format
-  docs: kvm: devices/arm-vgit-v3.txt to ReST
-  docs: kvm: convert devices/arm-vgit.txt to ReST
-  docs: kvm: convert devices/mpic.txt to ReST
-  docs: kvm: convert devices/s390_flic.txt to ReST
-  docs: kvm: convert devices/vcpu.txt to ReST
-  docs: kvm: convert devices/vcpu.txt to ReST
-  docs: kvm: convert devices/vm.txt to ReST
-  docs: kvm: convert devices/xics.txt to ReST
-  docs: kvm: convert devices/xive.txt to ReST
-  docs: kvm: Convert api.txt to ReST format
-  docs: kvm: convert arm/hyp-abi.txt to ReST
-  docs: kvm: arm/psci.txt: convert to ReST
-  docs: kvm: Convert hypercalls.txt to ReST format
-  docs: kvm: Convert locking.txt to ReST format
-  docs: kvm: Convert mmu.txt to ReST format
-  docs: kvm: Convert nested-vmx.txt to ReST format
-  docs: kvm: Convert ppc-pv.txt to ReST format
-  docs: kvm: Convert s390-diag.txt to ReST format
-  docs: kvm: Convert timekeeping.txt to ReST format
-  docs: kvm: review-checklist.txt: rename to ReST
-
- Documentation/virt/index.rst                  |    1 +
- Documentation/virt/kvm/{api.txt => api.rst}   | 3348 ++++++++++-------
- .../virt/kvm/arm/{hyp-abi.txt => hyp-abi.rst} |   28 +-
- Documentation/virt/kvm/arm/index.rst          |   12 +
- .../virt/kvm/arm/{psci.txt => psci.rst}       |   46 +-
- .../{arm-vgic-its.txt => arm-vgic-its.rst}    |  106 +-
- .../{arm-vgic-v3.txt => arm-vgic-v3.rst}      |  132 +-
- .../devices/{arm-vgic.txt => arm-vgic.rst}    |   89 +-
- Documentation/virt/kvm/devices/index.rst      |   19 +
- .../virt/kvm/devices/{mpic.txt => mpic.rst}   |   11 +-
- .../devices/{s390_flic.txt => s390_flic.rst}  |   70 +-
- Documentation/virt/kvm/devices/vcpu.rst       |  114 +
- Documentation/virt/kvm/devices/vcpu.txt       |   76 -
- .../virt/kvm/devices/{vfio.txt => vfio.rst}   |   25 +-
- .../virt/kvm/devices/{vm.txt => vm.rst}       |  206 +-
- .../virt/kvm/devices/{xics.txt => xics.rst}   |   28 +-
- .../virt/kvm/devices/{xive.txt => xive.rst}   |  148 +-
- .../{halt-polling.txt => halt-polling.rst}    |   86 +-
- .../kvm/{hypercalls.txt => hypercalls.rst}    |  129 +-
- Documentation/virt/kvm/index.rst              |   16 +
- .../virt/kvm/{locking.txt => locking.rst}     |  111 +-
- Documentation/virt/kvm/{mmu.txt => mmu.rst}   |   62 +-
- Documentation/virt/kvm/{msr.txt => msr.rst}   |  147 +-
- .../kvm/{nested-vmx.txt => nested-vmx.rst}    |   37 +-
- .../virt/kvm/{ppc-pv.txt => ppc-pv.rst}       |   26 +-
- ...iew-checklist.txt => review-checklist.rst} |    3 +
- .../virt/kvm/{s390-diag.txt => s390-diag.rst} |   13 +-
- .../kvm/{timekeeping.txt => timekeeping.rst}  |  221 +-
- ...odeLinux-HOWTO.txt => user_mode_linux.rst} | 1814 ++++-----
- 29 files changed, 4003 insertions(+), 3121 deletions(-)
- rename Documentation/virt/kvm/{api.txt => api.rst} (71%)
- rename Documentation/virt/kvm/arm/{hyp-abi.txt => hyp-abi.rst} (79%)
- create mode 100644 Documentation/virt/kvm/arm/index.rst
- rename Documentation/virt/kvm/arm/{psci.txt => psci.rst} (60%)
- rename Documentation/virt/kvm/devices/{arm-vgic-its.txt => arm-vgic-its.rst} (71%)
- rename Documentation/virt/kvm/devices/{arm-vgic-v3.txt => arm-vgic-v3.rst} (77%)
- rename Documentation/virt/kvm/devices/{arm-vgic.txt => arm-vgic.rst} (66%)
- create mode 100644 Documentation/virt/kvm/devices/index.rst
- rename Documentation/virt/kvm/devices/{mpic.txt => mpic.rst} (91%)
- rename Documentation/virt/kvm/devices/{s390_flic.txt => s390_flic.rst} (87%)
- create mode 100644 Documentation/virt/kvm/devices/vcpu.rst
- delete mode 100644 Documentation/virt/kvm/devices/vcpu.txt
- rename Documentation/virt/kvm/devices/{vfio.txt => vfio.rst} (72%)
- rename Documentation/virt/kvm/devices/{vm.txt => vm.rst} (61%)
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/virt/kvm/devices/index.rst      |  1 +
+ .../virt/kvm/devices/{xics.txt => xics.rst}   | 28 +++++++++++++++----
+ 2 files changed, 23 insertions(+), 6 deletions(-)
  rename Documentation/virt/kvm/devices/{xics.txt => xics.rst} (84%)
- rename Documentation/virt/kvm/devices/{xive.txt => xive.rst} (62%)
- rename Documentation/virt/kvm/{halt-polling.txt => halt-polling.rst} (64%)
- rename Documentation/virt/kvm/{hypercalls.txt => hypercalls.rst} (55%)
- rename Documentation/virt/kvm/{locking.txt => locking.rst} (78%)
- rename Documentation/virt/kvm/{mmu.txt => mmu.rst} (94%)
- rename Documentation/virt/kvm/{msr.txt => msr.rst} (74%)
- rename Documentation/virt/kvm/{nested-vmx.txt => nested-vmx.rst} (90%)
- rename Documentation/virt/kvm/{ppc-pv.txt => ppc-pv.rst} (91%)
- rename Documentation/virt/kvm/{review-checklist.txt => review-checklist.rst} (95%)
- rename Documentation/virt/kvm/{s390-diag.txt => s390-diag.rst} (90%)
- rename Documentation/virt/kvm/{timekeeping.txt => timekeeping.rst} (85%)
- rename Documentation/virt/uml/{UserModeLinux-HOWTO.txt => user_mode_linux.rst} (74%)
 
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index 29f8ecdf7fa0..63b61369d09b 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -15,3 +15,4 @@ Devices
+    vcpu
+    vfio
+    vm
++   xics
+diff --git a/Documentation/virt/kvm/devices/xics.txt b/Documentation/virt/kvm/devices/xics.rst
+similarity index 84%
+rename from Documentation/virt/kvm/devices/xics.txt
+rename to Documentation/virt/kvm/devices/xics.rst
+index 423332dda7bc..2d6927e0b776 100644
+--- a/Documentation/virt/kvm/devices/xics.txt
++++ b/Documentation/virt/kvm/devices/xics.rst
+@@ -1,20 +1,31 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=========================
+ XICS interrupt controller
++=========================
+ 
+ Device type supported: KVM_DEV_TYPE_XICS
+ 
+ Groups:
+   1. KVM_DEV_XICS_GRP_SOURCES
+-  Attributes: One per interrupt source, indexed by the source number.
++       Attributes:
+ 
++         One per interrupt source, indexed by the source number.
+   2. KVM_DEV_XICS_GRP_CTRL
+-  Attributes:
+-    2.1 KVM_DEV_XICS_NR_SERVERS (write only)
++       Attributes:
++
++         2.1 KVM_DEV_XICS_NR_SERVERS (write only)
++
+   The kvm_device_attr.addr points to a __u32 value which is the number of
+   interrupt server numbers (ie, highest possible vcpu id plus one).
++
+   Errors:
+-    -EINVAL: Value greater than KVM_MAX_VCPU_ID.
+-    -EFAULT: Invalid user pointer for attr->addr.
+-    -EBUSY:  A vcpu is already connected to the device.
++
++    =======  ==========================================
++    -EINVAL  Value greater than KVM_MAX_VCPU_ID.
++    -EFAULT  Invalid user pointer for attr->addr.
++    -EBUSY   A vcpu is already connected to the device.
++    =======  ==========================================
+ 
+ This device emulates the XICS (eXternal Interrupt Controller
+ Specification) defined in PAPR.  The XICS has a set of interrupt
+@@ -53,24 +64,29 @@ the interrupt source number.  The 64 bit state word has the following
+ bitfields, starting from the least-significant end of the word:
+ 
+ * Destination (server number), 32 bits
++
+   This specifies where the interrupt should be sent, and is the
+   interrupt server number specified for the destination vcpu.
+ 
+ * Priority, 8 bits
++
+   This is the priority specified for this interrupt source, where 0 is
+   the highest priority and 255 is the lowest.  An interrupt with a
+   priority of 255 will never be delivered.
+ 
+ * Level sensitive flag, 1 bit
++
+   This bit is 1 for a level-sensitive interrupt source, or 0 for
+   edge-sensitive (or MSI).
+ 
+ * Masked flag, 1 bit
++
+   This bit is set to 1 if the interrupt is masked (cannot be delivered
+   regardless of its priority), for example by the ibm,int-off RTAS
+   call, or 0 if it is not masked.
+ 
+ * Pending flag, 1 bit
++
+   This bit is 1 if the source has a pending interrupt, otherwise 0.
+ 
+ Only one XICS instance may be created per VM.
 -- 
 2.24.1
-
 
