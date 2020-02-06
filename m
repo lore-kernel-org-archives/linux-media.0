@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32D10C33CAC
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:50:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C179EC2D0B1
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:50:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E999520838
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:50:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 98849214AF
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 14:50:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581000647;
-	bh=T7avNdv6bDpQUSdVP3HEiZOhXrxhe2NGcsbOmseA+lA=;
+	s=default; t=1581000648;
+	bh=YRGdgCjgix+1tw4sGurDn/UhjAZCiY7/9b8wKdXoHRc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=c3++kZhLcWu5bU064Jw10SuEqRsW/mBg1YTnj8xV+xBL4k6VAcdrLBH2MMwWB59Nc
-	 u9h6oaTLHZ77dz/P6buP6jzH8sef9uxEklllzR8i/svLdiFYCtSk0i9efh4YcFRSjr
-	 DAvUh1JCmyexHwDG96VAw9aUnoDcDAHFmUZxGIRQ=
+	b=Z1ZC41MxW+J1cuwJIKevEGukc5ogl8W+Mv+GeMhPauwnoVBYlok9WK0vT5H2t3+iW
+	 6W9v2GRbLCkcy0uRgGOiBQkpzlEaT8ev/LtigNbfVal76gbpdwaE9Bv4+BNb/XLbWR
+	 JzHXeOyO3H3qy54gPWBG3uDIpvZauXuWLzG+YvyE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727663AbgBFOuk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727658AbgBFOuk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 6 Feb 2020 09:50:40 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:55578 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:55582 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727595AbgBFOuj (ORCPT
+        with ESMTP id S1727594AbgBFOuj (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 09:50:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=Xb2eNgwrC898oYbNqzuMV7ovBYhNc/yn4b5J/jn4QTY=; b=dGYyz5GfgFKIEyiHigh5cXYP1J
-        fVd5GKitRvzT67FNvqGS2fX2AO5F7ddD95DxNM9+EtWfaJ7TOHy0QDDfz0stUhRQLelU8kV4O9asN
-        u0Y+r2KmvNlaCUc1BO/qgh29bWjQkCY8f28n7EAidV5QHjV4RLod7u23vL8dAFVcm9JKUFXhjnZg0
-        txbGDkb9qs4ttvv3WYujw6y2lPxO4bg+yvt+T/ki7qTuwTqBtAilCKzV/xMHGW5asJUMLYqXlC9+k
-        Ds0i1WkAWzHnbfN5Tv1Tbxoq4p8nqYTsqKR1FMPNf/Rgkr118xur509Fk6uXjIuacqod2uZDvGdmD
-        VgdKLXAg==;
+        bh=Oubdpe6/C58Mfaf/vorfKBeZCdSFQ+I3zGJB/q18Nag=; b=SwDkiTm4fVlZhUrcHK7U3D+4ms
+        FQw7aia81K/wvukwEvoR98ywjQzZ4AhzLpOWurB9fkSIqVnwvk6LylKdYHmbCcq1aDoAJ5sTVmDzt
+        9aWMpkI7vCSa09K06xBoT0LRv36OspReP+wnqC+NrJmwIxYVdsZVNQ4ac9AJi7yZ1a+HkYQ9fbgGy
+        LikHNeEPDKejMvL+35pCLNrO/F98D6XTVuVO8dThD5JQfafHTvNO4ZkQ9ITfEkSRBac2IUGoTWkW3
+        znbRcqcLpQTOoAUfiIvkvnH5apSw4chPl9kG+edo9JC6Ink5jE0gVz9cQdLnkpcV8Xu9RRpLitl2Y
+        GTWrzLiA==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziUI-0004In-Tw; Thu, 06 Feb 2020 14:50:38 +0000
+        id 1iziUI-0004Iq-UJ; Thu, 06 Feb 2020 14:50:38 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziU7-002nMK-7u; Thu, 06 Feb 2020 15:50:27 +0100
+        id 1iziU6-002nL7-LM; Thu, 06 Feb 2020 15:50:26 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH v2 27/27] docs: kvm: review-checklist.txt: rename to ReST
-Date:   Thu,  6 Feb 2020 15:50:24 +0100
-Message-Id: <8efe2cb409b6aaea2f01f4167db3c13e816129c5.1581000481.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 13/27] docs: kvm: convert devices/vcpu.txt to ReST
+Date:   Thu,  6 Feb 2020 15:50:10 +0100
+Message-Id: <3c02c923c84af973f6a783c10d86d7312f16e6c5.1581000481.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581000481.git.mchehab+huawei@kernel.org>
 References: <cover.1581000481.git.mchehab+huawei@kernel.org>
@@ -62,45 +62,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This file is already in ReST compatible format.
-So, rename it and add to the kvm's index.rst.
-
-While here, use the standard conversion for document titles.
+- Use standard title markup;
+- adjust lists;
+- mark code blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/index.rst                               | 2 ++
- .../virt/kvm/{review-checklist.txt => review-checklist.rst}    | 3 +++
- 2 files changed, 5 insertions(+)
- rename Documentation/virt/kvm/{review-checklist.txt => review-checklist.rst} (95%)
+ Documentation/virt/kvm/devices/index.rst      |  1 +
+ .../virt/kvm/devices/{vfio.txt => vfio.rst}   | 25 +++++++++++--------
+ 2 files changed, 16 insertions(+), 10 deletions(-)
+ rename Documentation/virt/kvm/devices/{vfio.txt => vfio.rst} (72%)
 
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 7c1be8910837..774deaebf7fa 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -21,6 +21,8 @@ KVM
-    timekeeping
-    vcpu-requests
- 
-+   review-checklist
-+
-    arm/index
- 
-    devices/index
-diff --git a/Documentation/virt/kvm/review-checklist.txt b/Documentation/virt/kvm/review-checklist.rst
-similarity index 95%
-rename from Documentation/virt/kvm/review-checklist.txt
-rename to Documentation/virt/kvm/review-checklist.rst
-index 499af499e296..1f86a9d3f705 100644
---- a/Documentation/virt/kvm/review-checklist.txt
-+++ b/Documentation/virt/kvm/review-checklist.rst
-@@ -1,3 +1,6 @@
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index 5a61838f0e61..cbbadda080d0 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -13,3 +13,4 @@ Devices
+    mpic
+    s390_flic
+    vcpu
++   vfio
+diff --git a/Documentation/virt/kvm/devices/vfio.txt b/Documentation/virt/kvm/devices/vfio.rst
+similarity index 72%
+rename from Documentation/virt/kvm/devices/vfio.txt
+rename to Documentation/virt/kvm/devices/vfio.rst
+index 528c77c8022c..2d20dc561069 100644
+--- a/Documentation/virt/kvm/devices/vfio.txt
++++ b/Documentation/virt/kvm/devices/vfio.rst
+@@ -1,8 +1,12 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+================================
- Review checklist for kvm patches
- ================================
++===================
+ VFIO virtual device
+ ===================
  
+ Device types supported:
+-  KVM_DEV_TYPE_VFIO
++
++  - KVM_DEV_TYPE_VFIO
+ 
+ Only one VFIO instance may be created per VM.  The created device
+ tracks VFIO groups in use by the VM and features of those groups
+@@ -23,14 +27,15 @@ KVM_DEV_VFIO_GROUP attributes:
+ 	for the VFIO group.
+   KVM_DEV_VFIO_GROUP_SET_SPAPR_TCE: attaches a guest visible TCE table
+ 	allocated by sPAPR KVM.
+-	kvm_device_attr.addr points to a struct:
++	kvm_device_attr.addr points to a struct::
+ 
+-	struct kvm_vfio_spapr_tce {
+-		__s32	groupfd;
+-		__s32	tablefd;
+-	};
++		struct kvm_vfio_spapr_tce {
++			__s32	groupfd;
++			__s32	tablefd;
++		};
+ 
+-	where
+-	@groupfd is a file descriptor for a VFIO group;
+-	@tablefd is a file descriptor for a TCE table allocated via
+-		KVM_CREATE_SPAPR_TCE.
++	where:
++
++	- @groupfd is a file descriptor for a VFIO group;
++	- @tablefd is a file descriptor for a TCE table allocated via
++	  KVM_CREATE_SPAPR_TCE.
 -- 
 2.24.1
 
