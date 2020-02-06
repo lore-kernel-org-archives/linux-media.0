@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22EE7C352A5
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01BF6C33CAC
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E1A9A20838
-	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB5DF20838
+	for <linux-media@archiver.kernel.org>; Thu,  6 Feb 2020 15:19:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002358;
-	bh=7u3dNewqxSCrQftEON19eUEtrsneYhEgDE7Ybgfx3/4=;
+	s=default; t=1581002362;
+	bh=UW1jMmd+9uePqY3nkIMDLxJ00eviBjS7exyCRaaw6k4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=hvLMKIInLhKKiVlFdIVJ+PI8RzGp6enHJeWPdDLX7pOZYfcEKAX5chL52V4+VOehO
-	 xjHJBHFSIOWlbgPrOZi6EgRwO/ChWG4Hk0omN+DINuMZQnVz1s9ZIr/5zbuyLRl/QP
-	 T2Fd9RAJ1ippTZyCrRTcUQbq1FwEt/hwPFhVFuJ8=
+	b=L4E7KbbAKm2YuZVwxm9hlRCT2ydMesEd3Y4IrmKNG9SntTZ5Y6FVzYAnOzNPY5IY1
+	 C5ve36oGW5P/AT4ayUwdIFsIQ54lV8TIKsU918FDLVR+LiV2cHIRAUQ2GvxvrQQYTf
+	 mm0YmR89dToaoEHxoBa4eZ/xZhCuE69pxdXzfvJA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727965AbgBFPTQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727634AbgBFPTQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 6 Feb 2020 10:19:16 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38052 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:38058 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727532AbgBFPR7 (ORCPT
+        with ESMTP id S1727550AbgBFPR7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 6 Feb 2020 10:17:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=NzwrChhdVdmkKNT+nRpc6rp14kLWb+Gda2MByckmEbM=; b=lzDJ0b1XLeVkt+CTIQfeYr4KdV
-        JIWTXbXXIMc73L+Vq33hCcno0C8FPIZ9b1MdcWnL9BP+EOwByvirDz4hZxO96Xkb1TABSZAC8qRr3
-        pApb6AD90ozq4jz5lcikrKn0ATm5z+92XZC8BWIPHHqSB3pLiSDI71rjP+4Hc8e7r1j5jRkH0TLf7
-        ORaUr3UX4ITD1vZm1sCM/xmSzbgqUGZfFtDlJoH5f9eKZfiVXE71z59sCvwFpCGzZvZ2geR/R8ChR
-        IfiBpAVdhjvkrfnXQMQ8j4WoKVBRgqkp9G8GyiY0p8jud3GKNuKvf5VtkeblJHVgmppRSi3nYAFj5
-        nSBguW9Q==;
+        bh=xn1+ZBCwahWIeQZAzJiRDVozcz9pfwHWgQZ0V1jYyS4=; b=lkh0y2pOexVJ8XFV0CeJAfyTk1
+        KJf1OU924R9bSmyLyy12GHAEq3pOF68SOXbywLAngZfmFPjrgz/jTSRSQlmkx9Y52vySQTpts4JC8
+        TTc5mIzNkujGbNIKvhwKTb3j8OeHFIbPcs7u5Hi7irg2gF0E61Ved+UGpUuiELpeU7yDzwSFfFtd1
+        wDG/mpP/yIKheo7xzG7S95PZtCpRy3Xt54zaM1KN2wbf1BzYPk7FAAbav4Upjck5Fi+U5NNkspdp3
+        kIOVaDCnmUof3X/zJMoDyZ6IkgvdOwn8JHtedr/iFhgSSBTWVoIufV+w08bqSvUc3hHUbiFLSP33F
+        MZa8Xipg==;
 Received: from [179.95.15.160] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziul-0005jE-32; Thu, 06 Feb 2020 15:17:59 +0000
+        id 1iziul-0005jc-5D; Thu, 06 Feb 2020 15:17:59 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziue-002oWY-12; Thu, 06 Feb 2020 16:17:52 +0100
+        id 1iziud-002oVx-JY; Thu, 06 Feb 2020 16:17:51 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -50,9 +50,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 27/28] docs: networking: convert gen_stats.txt to ReST
-Date:   Thu,  6 Feb 2020 16:17:47 +0100
-Message-Id: <02eb7aaa43c6649123e1dac054bc6aa94e8d2e13.1581002063.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 19/28] docs: networking: convert driver.txt to ReST
+Date:   Thu,  6 Feb 2020 16:17:39 +0100
+Message-Id: <2a20446abe6e81d2ba1fa2a7b7f27cdf16c6a310.1581002063.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581002062.git.mchehab+huawei@kernel.org>
 References: <cover.1581002062.git.mchehab+huawei@kernel.org>
@@ -64,190 +64,95 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 - add SPDX header;
+- add a document title;
 - mark code blocks and literals as such;
-- mark tables as such;
-- mark lists as such;
 - adjust identation, whitespaces and blank lines;
 - add to networking/index.rst.
 
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../{gen_stats.txt => gen_stats.rst}          | 98 ++++++++++---------
+ .../networking/{driver.txt => driver.rst}     | 22 +++++++++++--------
  Documentation/networking/index.rst            |  1 +
- 2 files changed, 55 insertions(+), 44 deletions(-)
- rename Documentation/networking/{gen_stats.txt => gen_stats.rst} (60%)
+ 2 files changed, 14 insertions(+), 9 deletions(-)
+ rename Documentation/networking/{driver.txt => driver.rst} (85%)
 
-diff --git a/Documentation/networking/gen_stats.txt b/Documentation/networking/gen_stats.rst
-similarity index 60%
-rename from Documentation/networking/gen_stats.txt
-rename to Documentation/networking/gen_stats.rst
-index 179b18ce45ff..595a83b9a61b 100644
---- a/Documentation/networking/gen_stats.txt
-+++ b/Documentation/networking/gen_stats.rst
-@@ -1,67 +1,76 @@
+diff --git a/Documentation/networking/driver.txt b/Documentation/networking/driver.rst
+similarity index 85%
+rename from Documentation/networking/driver.txt
+rename to Documentation/networking/driver.rst
+index da59e2884130..c8f59dbda46f 100644
+--- a/Documentation/networking/driver.txt
++++ b/Documentation/networking/driver.rst
+@@ -1,4 +1,8 @@
+-Document about softnet driver issues
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+===============================================
- Generic networking statistics for netlink users
--======================================================================
-+===============================================
++=====================
++Softnet Driver Issues
++=====================
  
- Statistic counters are grouped into structs:
+ Transmit path guidelines:
  
-+==================== ===================== =====================
- Struct               TLV type              Description
------------------------------------------------------------------------
-+==================== ===================== =====================
- gnet_stats_basic     TCA_STATS_BASIC       Basic statistics
- gnet_stats_rate_est  TCA_STATS_RATE_EST    Rate estimator
- gnet_stats_queue     TCA_STATS_QUEUE       Queue statistics
- none                 TCA_STATS_APP         Application specific
-+==================== ===================== =====================
+@@ -8,7 +12,7 @@ Transmit path guidelines:
+    transmit function will become busy.
  
+    Instead it must maintain the queue properly.  For example,
+-   for a driver implementing scatter-gather this means:
++   for a driver implementing scatter-gather this means::
  
- Collecting:
- -----------
+ 	static netdev_tx_t drv_hard_start_xmit(struct sk_buff *skb,
+ 					       struct net_device *dev)
+@@ -38,25 +42,25 @@ Transmit path guidelines:
+ 		return NETDEV_TX_OK;
+ 	}
  
--Declare the statistic structs you need:
--struct mystruct {
--	struct gnet_stats_basic	bstats;
--	struct gnet_stats_queue	qstats;
--	...
--};
-+Declare the statistic structs you need::
+-   And then at the end of your TX reclamation event handling:
++   And then at the end of your TX reclamation event handling::
  
--Update statistics, in dequeue() methods only, (while owning qdisc->running)
--mystruct->tstats.packet++;
--mystruct->qstats.backlog += skb->pkt_len;
-+	struct mystruct {
-+		struct gnet_stats_basic	bstats;
-+		struct gnet_stats_queue	qstats;
-+		...
-+	};
-+
-+Update statistics, in dequeue() methods only, (while owning qdisc->running)::
-+
-+	mystruct->tstats.packet++;
-+	mystruct->qstats.backlog += skb->pkt_len;
+ 	if (netif_queue_stopped(dp->dev) &&
+-            TX_BUFFS_AVAIL(dp) > (MAX_SKB_FRAGS + 1))
++	    TX_BUFFS_AVAIL(dp) > (MAX_SKB_FRAGS + 1))
+ 		netif_wake_queue(dp->dev);
  
+-   For a non-scatter-gather supporting card, the three tests simply become:
++   For a non-scatter-gather supporting card, the three tests simply become::
  
- Export to userspace (Dump):
- ---------------------------
+ 		/* This is a hard error log it. */
+ 		if (TX_BUFFS_AVAIL(dp) <= 0)
  
--my_dumping_routine(struct sk_buff *skb, ...)
--{
--	struct gnet_dump dump;
-+::
+-   and:
++   and::
  
--	if (gnet_stats_start_copy(skb, TCA_STATS2, &mystruct->lock, &dump,
--				  TCA_PAD) < 0)
--		goto rtattr_failure;
-+    my_dumping_routine(struct sk_buff *skb, ...)
-+    {
-+	    struct gnet_dump dump;
+ 		if (TX_BUFFS_AVAIL(dp) == 0)
  
--	if (gnet_stats_copy_basic(&dump, &mystruct->bstats) < 0 ||
--	    gnet_stats_copy_queue(&dump, &mystruct->qstats) < 0 ||
--		gnet_stats_copy_app(&dump, &xstats, sizeof(xstats)) < 0)
--		goto rtattr_failure;
-+	    if (gnet_stats_start_copy(skb, TCA_STATS2, &mystruct->lock, &dump,
-+				    TCA_PAD) < 0)
-+		    goto rtattr_failure;
+-   and:
++   and::
  
--	if (gnet_stats_finish_copy(&dump) < 0)
--		goto rtattr_failure;
--	...
--}
-+	    if (gnet_stats_copy_basic(&dump, &mystruct->bstats) < 0 ||
-+		gnet_stats_copy_queue(&dump, &mystruct->qstats) < 0 ||
-+		    gnet_stats_copy_app(&dump, &xstats, sizeof(xstats)) < 0)
-+		    goto rtattr_failure;
-+
-+	    if (gnet_stats_finish_copy(&dump) < 0)
-+		    goto rtattr_failure;
-+	    ...
-+    }
+ 	if (netif_queue_stopped(dp->dev) &&
+-            TX_BUFFS_AVAIL(dp) > 0)
++	    TX_BUFFS_AVAIL(dp) > 0)
+ 		netif_wake_queue(dp->dev);
  
- TCA_STATS/TCA_XSTATS backward compatibility:
- --------------------------------------------
+ 2) An ndo_start_xmit method must not modify the shared parts of a
+@@ -86,7 +90,7 @@ Close/stop guidelines:
  
- Prior users of struct tc_stats and xstats can maintain backward
- compatibility by calling the compat wrappers to keep providing the
--existing TLV types.
-+existing TLV types::
+ 1) After the ndo_stop routine has been called, the hardware must
+    not receive or transmit any data.  All in flight packets must
+-   be aborted. If necessary, poll or wait for completion of 
++   be aborted. If necessary, poll or wait for completion of
+    any reset commands.
  
--my_dumping_routine(struct sk_buff *skb, ...)
--{
--    if (gnet_stats_start_copy_compat(skb, TCA_STATS2, TCA_STATS,
--				     TCA_XSTATS, &mystruct->lock, &dump,
--				     TCA_PAD) < 0)
--		goto rtattr_failure;
--	...
--}
-+    my_dumping_routine(struct sk_buff *skb, ...)
-+    {
-+	if (gnet_stats_start_copy_compat(skb, TCA_STATS2, TCA_STATS,
-+					TCA_XSTATS, &mystruct->lock, &dump,
-+					TCA_PAD) < 0)
-+		    goto rtattr_failure;
-+	    ...
-+    }
- 
- A struct tc_stats will be filled out during gnet_stats_copy_* calls
- and appended to the skb. TCA_XSTATS is provided if gnet_stats_copy_app
-@@ -77,7 +86,7 @@ are responsible for making sure that the lock is initialized.
- 
- 
- Rate Estimator:
----------------
-+---------------
- 
- 0) Prepare an estimator attribute. Most likely this would be in user
-    space. The value of this TLV should contain a tc_estimator structure.
-@@ -92,18 +101,19 @@ Rate Estimator:
-    TCA_RATE to your code in the kernel.
- 
- In the kernel when setting up:
-+
- 1) make sure you have basic stats and rate stats setup first.
- 2) make sure you have initialized stats lock that is used to setup such
-    stats.
--3) Now initialize a new estimator:
-+3) Now initialize a new estimator::
- 
--   int ret = gen_new_estimator(my_basicstats,my_rate_est_stats,
--       mystats_lock, attr_with_tcestimator_struct);
-+    int ret = gen_new_estimator(my_basicstats,my_rate_est_stats,
-+	mystats_lock, attr_with_tcestimator_struct);
- 
--   if ret == 0
--       success
--   else
--       failed
-+    if ret == 0
-+	success
-+    else
-+	failed
- 
- From now on, every time you dump my_rate_est_stats it will contain
- up-to-date info.
-@@ -115,5 +125,5 @@ are still valid (i.e still exist) at the time of making this call.
- 
- Authors:
- --------
--Thomas Graf <tgraf@suug.ch>
--Jamal Hadi Salim <hadi@cyberus.ca>
-+- Thomas Graf <tgraf@suug.ch>
-+- Jamal Hadi Salim <hadi@cyberus.ca>
+ 2) The ndo_stop routine will be called by unregister_netdevice
 diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index bc2ee843df03..548f8c281d01 100644
+index 68ddb023133c..b19188131d20 100644
 --- a/Documentation/networking/index.rst
 +++ b/Documentation/networking/index.rst
-@@ -59,6 +59,7 @@ Contents:
-    framerelay
-    generic-hdlc
-    generic_netlink
-+   gen_stats
+@@ -51,6 +51,7 @@ Contents:
+    decnet
+    defza
+    dns_resolver
++   driver
  
  .. only::  subproject and html
  
