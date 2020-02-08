@@ -1,68 +1,166 @@
-Return-Path: <SRS0=Zegy=33=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=kdm0=34=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C725FC04EB5
-	for <linux-media@archiver.kernel.org>; Fri,  7 Feb 2020 15:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 130F3C04EB5
+	for <linux-media@archiver.kernel.org>; Sat,  8 Feb 2020 04:58:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 983F1214AF
-	for <linux-media@archiver.kernel.org>; Fri,  7 Feb 2020 15:37:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C67D521741
+	for <linux-media@archiver.kernel.org>; Sat,  8 Feb 2020 04:58:01 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="pGHQZlmW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726974AbgBGPh2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Feb 2020 10:37:28 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:57240 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726956AbgBGPh2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 7 Feb 2020 10:37:28 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1j05fm-005vQV-DD; Fri, 07 Feb 2020 15:36:02 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1j05iO-0007is-F6; Fri, 07 Feb 2020 15:38:44 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT FIXES FOR v5.6] Fixes for v5.6
-Date:   Fri,  7 Feb 2020 15:38:44 +0000
-Message-Id: <20200207153844.29644-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <3ead2ec9-dc64-4a1a-e21f-341490b86061@xs4all.nl>
-References: 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727118AbgBHE6B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Feb 2020 23:58:01 -0500
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:50911 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726995AbgBHE6A (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 7 Feb 2020 23:58:00 -0500
+Received: from localhost ([IPv6:2001:983:e9a7:1:11c:6648:b51c:1bc2])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 0IBojudIoVuxO0IBpjiumr; Sat, 08 Feb 2020 05:57:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1581137877; bh=hPrO9GkVBuODxl4Pk0lhsXCYsW9nK1isKBNJnhB1JCs=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=pGHQZlmWQ82XKcuZMEou8CwybzfuLymsdTWoU64twkcoKGGuyp14oeuQIr+MtT2Bu
+         yQ3YwpWPXbXy8FtuiuW1fVAI4dCieLiaJsmhBItpEUiafHV9/853VRWk51o0CHxg6k
+         nxndpo1QqwzgCwKJsVOJGnxDd1gI03nKPLTCg/vrRm3JtWiGbBMYaaa7MtRDxQnHT5
+         B3lYPxaU7VeH+nxxFZ482oFBIruk7SBuGN0KHOiYGpqLclgSywBcCSPhDMVZWsOFXu
+         xBg8PrHpw7V1vwNe9w3BYFF9ciqk3arEco1vgpi8rZMhbKbCLXy6dcHLQxGpJorxRW
+         MoewR9S2yuUdw==
+Message-ID: <3c9387b7c1ef145105d7c6fdeb628f20@smtp-cloud7.xs4all.net>
+Date:   Sat, 08 Feb 2020 05:57:56 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfDrk80VeC35d61qbtRdPef0Te4xJYDVZ20wSfl+EqW5P7YwFiO6kvWkwD/Iri8e93pbzkiuOv95FABZAmQztnhYYrLpGVlOEQCdPe+cqJfFPCub5E4b1
+ YWTPD97Ca67GOU/dGANigd6WWIn/qVkw2zlB+0NdXZEQHyCvqVIdKXgSDub/W3bZxWuEuval8F9UaaszY64YbsJnmSIm11pAezXoTKZwKRUaBG6drflXQX5U
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Pull request: https://patchwork.linuxtv.org/patch/61559/
-Build log: https://builder.linuxtv.org/job/patchwork/37096/
-Build time: 00:08:34
-Link: https://lore.kernel.org/linux-media/3ead2ec9-dc64-4a1a-e21f-341490b86061@xs4all.nl
+Results of the daily build of media_tree:
 
-gpg: Signature made Fri 07 Feb 2020 03:22:17 PM UTC
-gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+date:			Sat Feb  8 05:00:13 CET 2020
+media-tree git hash:	1697d98124819aab09b86602978bd4f50e101e2d
+media_build git hash:	f64e126face0c642c414701adabb9fdc777b22fa
+v4l-utils git hash:	67962f1277b483060a16b80cbe79fac56d4e2cc6
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 3d3588941cf3abd517734f6448eeaeaa0c61a27f
+host hardware:		x86_64
+host os:		5.2.0-3-amd64
 
-Summary: 1 patches and/or PDF generation with issues, being 0 at build time
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: ERRORS
+linux-3.12.74-x86_64: ERRORS
+linux-3.13.11-i686: ERRORS
+linux-3.13.11-x86_64: ERRORS
+linux-3.14.79-i686: ERRORS
+linux-3.14.79-x86_64: ERRORS
+linux-3.15.10-i686: ERRORS
+linux-3.15.10-x86_64: ERRORS
+linux-3.16.81-i686: ERRORS
+linux-3.16.81-x86_64: ERRORS
+linux-3.17.8-i686: ERRORS
+linux-3.17.8-x86_64: ERRORS
+linux-3.18.136-i686: ERRORS
+linux-3.18.136-x86_64: ERRORS
+linux-3.19.8-i686: ERRORS
+linux-3.19.8-x86_64: ERRORS
+linux-4.0.9-i686: ERRORS
+linux-4.0.9-x86_64: ERRORS
+linux-4.1.52-i686: ERRORS
+linux-4.1.52-x86_64: ERRORS
+linux-4.2.8-i686: ERRORS
+linux-4.2.8-x86_64: ERRORS
+linux-4.3.6-i686: ERRORS
+linux-4.3.6-x86_64: ERRORS
+linux-4.4.212-i686: ERRORS
+linux-4.4.212-x86_64: ERRORS
+linux-4.5.7-i686: ERRORS
+linux-4.5.7-x86_64: ERRORS
+linux-4.6.7-i686: ERRORS
+linux-4.6.7-x86_64: ERRORS
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.212-i686: OK
+linux-4.9.212-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: ERRORS
+sparse: OK
+smatch: ERRORS
 
-Error/warnings:
+Logs weren't copied as they are too large (6892 kB)
 
+The Media Infrastructure API from this daily build is here:
 
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0002-v4l2-mem2mem.c-fix-broken-links.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0002-v4l2-mem2mem.c-fix-broken-links.patch
-patches/0002-v4l2-mem2mem.c-fix-broken-links.patch:7: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-patches/0002-v4l2-mem2mem.c-fix-broken-links.patch:30: CHECK: Alignment should match open parenthesis
-patches/0002-v4l2-mem2mem.c-fix-broken-links.patch:36: CHECK: Alignment should match open parenthesis
-
+http://www.xs4all.nl/~hverkuil/spec/index.html
