@@ -4,53 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AADBC3B18D
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC7E4C3B186
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:04:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CEF2424685
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 83E1921927
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581314604;
-	bh=qrSFIhXMQQyE2ijiNQgNxgOjRtILB8FazPr0GRSWFDQ=;
+	s=default; t=1581314643;
+	bh=P4LnyLZ65S8o8II+eEhSbCd4kvDsh7wLEYquFYAmk84=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=zKsSh9JPrlrgYsJO2EspgHU77Lh/50uKZliqOxo/k8s8vdvLz82jI8Y73Trou7h12
-	 gPe69EtB+0aM5dYzyC3p/+EV+zi4y9oDgCMKz81mfeL/QKs4yMSV5/NQy2cfxSQYhQ
-	 EvO08PbW9ECkAT7ZJ86P+Q9sHG0jng/YoWwhfoO8=
+	b=0q+HloVxXdQXbGfh4aJ9/dqVksuyH4Muc8Cqq7ZZ0aGbiXJqJdQ4lULavO/f/Asu5
+	 OVavQXvzjkQChJ1gzkD4GKUZNXi5rTNkMyePMdsI000QmGyY5WwyoWIw940p5BdjBO
+	 JRmNGj+KLlWQx7d36GLD/f3uBHLYpJUYM55Zmf/s=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727691AbgBJGDY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Feb 2020 01:03:24 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36470 "EHLO
+        id S1727731AbgBJGEC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Feb 2020 01:04:02 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:36326 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727588AbgBJGDN (ORCPT
+        with ESMTP id S1727507AbgBJGDM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Feb 2020 01:03:13 -0500
+        Mon, 10 Feb 2020 01:03:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=eNrFz6CRMRgHnFevqnlIWroPTSTbSy2UTpFunBlwins=; b=bpGtW2VUBD7wTMpbCAg9wfg/9T
-        yLcnBTXkANMXsexTKSTXOyzofS6JhqCM88G2oSdWdWmCsiC53Lt9Y01vTeNYMQLEJ0SKCaw2AzfXs
-        M0FfG0LuLGYQWSRAMkKEuqDvdN07NUzVITZyG65CGD7tw6dGy8h5S95cGeemSuV2XsnzMU4yv7eUf
-        sBUL9TqUNYNnS0/gEiC2VzhIpTtFhP8n5ET7O6c7dzHTmQOB5fxYv/hGka7FuRFyhnRYCW9crtDdx
-        ydAuixpAPiW9Ky2/PDhM9ht5o2RBKCdO1TCCUme9pKswyitgx5Wi7p9XC8TJEuwDm8qt88Txty+n2
-        dxAGdaCg==;
+        bh=CzvFNiYCk6rJkYqH7EYJZ58H6P3c8r/RaU40sj/CJoI=; b=jiQdTZs1FzJ+u4sw9+hMXi1vts
+        3xjm7DpEsDfx6YZ2JxgW4RwkKuLDQPo9nw9lHJLuq/ods7m1Rox/qZkbvlVGUAR2scP/EcWNQMc2L
+        +KgY/oDtPSyg0NvSN4Rfgay8B9ikbgajAtyxGgEYQAbQHu7vzD4XAtUQJId7odLXlaoUc8R5XASVI
+        ouVT8ydpv1Y93WdffHOTMkrzshHn7XLlKc4eSJBSR2KpgP9QDcYFddobNHi3UEm6lba05Xst1ARiy
+        rPSfdKqcqpXLBt6gkOQbEnXxkHwpvcKRwDVgg+fquhw3auEVuU7ZGboRdwhHZ5VWH+fM8s9q6tO5q
+        mzcVBOCg==;
 Received: from [80.156.29.194] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j12A5-0006V4-GB; Mon, 10 Feb 2020 06:03:13 +0000
+        id 1j12A4-0006Tt-39; Mon, 10 Feb 2020 06:03:12 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j12A3-00C2Wp-Qc; Mon, 10 Feb 2020 07:03:11 +0100
+        id 1j12A2-00C2W5-Dk; Mon, 10 Feb 2020 07:03:10 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 28/28] docs: virt: guest-halt-polling.txt convert to ReST
-Date:   Mon, 10 Feb 2020 07:03:06 +0100
-Message-Id: <f72a1d3e72274953932ef9827e5ad4def3d027b1.1581314317.git.mchehab+huawei@kernel.org>
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 19/28] docs: kvm: arm/psci.txt: convert to ReST
+Date:   Mon, 10 Feb 2020 07:02:57 +0100
+Message-Id: <fc2e287a392fefca192045854d91051bea297c1f.1581314317.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581314316.git.mchehab+huawei@kernel.org>
 References: <cover.1581314316.git.mchehab+huawei@kernel.org>
@@ -61,102 +63,102 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Due to some merge conflict, this file ended being alone under
-Documentation/virtual.
-
-The file itself is almost at ReST format. Just minor
-adjustments are needed:
-
-- Adjust title markup;
-- Adjust a list identation;
-- add a literal block markup;
-- Add some blank lines.
+- Add a title for the document;
+- Adjust whitespaces for it to be properly formatted after
+  parsed.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../guest-halt-polling.rst}                          | 12 +++++++++---
- Documentation/virt/index.rst                         |  1 +
- 2 files changed, 10 insertions(+), 3 deletions(-)
- rename Documentation/{virtual/guest-halt-polling.txt => virt/guest-halt-polling.rst} (91%)
+ Documentation/virt/kvm/arm/index.rst          |  1 +
+ .../virt/kvm/arm/{psci.txt => psci.rst}       | 46 +++++++++++++------
+ 2 files changed, 32 insertions(+), 15 deletions(-)
+ rename Documentation/virt/kvm/arm/{psci.txt => psci.rst} (60%)
 
-diff --git a/Documentation/virtual/guest-halt-polling.txt b/Documentation/virt/guest-halt-polling.rst
-similarity index 91%
-rename from Documentation/virtual/guest-halt-polling.txt
-rename to Documentation/virt/guest-halt-polling.rst
-index b3a2a294532d..b4e747942417 100644
---- a/Documentation/virtual/guest-halt-polling.txt
-+++ b/Documentation/virt/guest-halt-polling.rst
-@@ -1,9 +1,11 @@
-+==================
- Guest halt polling
- ==================
+diff --git a/Documentation/virt/kvm/arm/index.rst b/Documentation/virt/kvm/arm/index.rst
+index 134fa5fa77e5..3e2b2aba90fc 100644
+--- a/Documentation/virt/kvm/arm/index.rst
++++ b/Documentation/virt/kvm/arm/index.rst
+@@ -8,4 +8,5 @@ ARM
+    :maxdepth: 2
  
- The cpuidle_haltpoll driver, with the haltpoll governor, allows
- the guest vcpus to poll for a specified amount of time before
- halting.
+    hyp-abi
++   psci
+    pvtime
+diff --git a/Documentation/virt/kvm/arm/psci.txt b/Documentation/virt/kvm/arm/psci.rst
+similarity index 60%
+rename from Documentation/virt/kvm/arm/psci.txt
+rename to Documentation/virt/kvm/arm/psci.rst
+index 559586fc9d37..d52c2e83b5b8 100644
+--- a/Documentation/virt/kvm/arm/psci.txt
++++ b/Documentation/virt/kvm/arm/psci.rst
+@@ -1,3 +1,9 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
- This provides the following benefits to host side polling:
- 
- 	1) The POLL flag is set while polling is performed, which allows
-@@ -29,18 +31,21 @@ Module Parameters
- The haltpoll governor has 5 tunable module parameters:
- 
- 1) guest_halt_poll_ns:
++=========================================
++Power State Coordination Interface (PSCI)
++=========================================
 +
- Maximum amount of time, in nanoseconds, that polling is
- performed before halting.
+ KVM implements the PSCI (Power State Coordination Interface)
+ specification in order to provide services such as CPU on/off, reset
+ and power-off to the guest.
+@@ -30,32 +36,42 @@ The following register is defined:
+   - Affects the whole VM (even if the register view is per-vcpu)
  
- Default: 200000
- 
- 2) guest_halt_poll_shrink:
+ * KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1:
+-  Holds the state of the firmware support to mitigate CVE-2017-5715, as
+-  offered by KVM to the guest via a HVC call. The workaround is described
+-  under SMCCC_ARCH_WORKAROUND_1 in [1].
++    Holds the state of the firmware support to mitigate CVE-2017-5715, as
++    offered by KVM to the guest via a HVC call. The workaround is described
++    under SMCCC_ARCH_WORKAROUND_1 in [1].
 +
- Division factor used to shrink per-cpu guest_halt_poll_ns when
- wakeup event occurs after the global guest_halt_poll_ns.
- 
- Default: 2
- 
- 3) guest_halt_poll_grow:
+   Accepted values are:
+-    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_AVAIL: KVM does not offer
 +
- Multiplication factor used to grow per-cpu guest_halt_poll_ns
- when event occurs after per-cpu guest_halt_poll_ns
- but before global guest_halt_poll_ns.
-@@ -48,6 +53,7 @@ but before global guest_halt_poll_ns.
- Default: 2
++    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_AVAIL:
++      KVM does not offer
+       firmware support for the workaround. The mitigation status for the
+       guest is unknown.
+-    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_AVAIL: The workaround HVC call is
++    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_AVAIL:
++      The workaround HVC call is
+       available to the guest and required for the mitigation.
+-    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_REQUIRED: The workaround HVC call
++    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1_NOT_REQUIRED:
++      The workaround HVC call
+       is available to the guest, but it is not needed on this VCPU.
  
- 4) guest_halt_poll_grow_start:
+ * KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2:
+-  Holds the state of the firmware support to mitigate CVE-2018-3639, as
+-  offered by KVM to the guest via a HVC call. The workaround is described
+-  under SMCCC_ARCH_WORKAROUND_2 in [1].
++    Holds the state of the firmware support to mitigate CVE-2018-3639, as
++    offered by KVM to the guest via a HVC call. The workaround is described
++    under SMCCC_ARCH_WORKAROUND_2 in [1]_.
 +
- The per-cpu guest_halt_poll_ns eventually reaches zero
- in case of an idle system. This value sets the initial
- per-cpu guest_halt_poll_ns when growing. This can
-@@ -66,7 +72,7 @@ high once achieves global guest_halt_poll_ns value).
+   Accepted values are:
+-    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_AVAIL: A workaround is not
++
++    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_AVAIL:
++      A workaround is not
+       available. KVM does not offer firmware support for the workaround.
+-    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_UNKNOWN: The workaround state is
++    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_UNKNOWN:
++      The workaround state is
+       unknown. KVM does not offer firmware support for the workaround.
+-    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_AVAIL: The workaround is available,
++    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_AVAIL:
++      The workaround is available,
+       and can be disabled by a vCPU. If
+       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_ENABLED is set, it is active for
+       this vCPU.
+-    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED: The workaround is
+-      always active on this vCPU or it is not needed.
++    KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED:
++      The workaround is always active on this vCPU or it is not needed.
  
- Default: Y
- 
--The module parameters can be set from the debugfs files in:
-+The module parameters can be set from the debugfs files in::
- 
- 	/sys/module/haltpoll/parameters/
- 
-@@ -74,5 +80,5 @@ Further Notes
- =============
- 
- - Care should be taken when setting the guest_halt_poll_ns parameter as a
--large value has the potential to drive the cpu usage to 100% on a machine which
--would be almost entirely idle otherwise.
-+  large value has the potential to drive the cpu usage to 100% on a machine
-+  which would be almost entirely idle otherwise.
-diff --git a/Documentation/virt/index.rst b/Documentation/virt/index.rst
-index 0a8f7fda64ad..de1ab81df958 100644
---- a/Documentation/virt/index.rst
-+++ b/Documentation/virt/index.rst
-@@ -10,6 +10,7 @@ Linux Virtualization Support
-    kvm/index
-    uml/user_mode_linux
-    paravirt_ops
-+   guest-halt-polling
- 
- .. only:: html and subproject
- 
+-[1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmware_interfaces_for_mitigating_CVE-2017-5715.pdf
++.. [1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmware_interfaces_for_mitigating_CVE-2017-5715.pdf
 -- 
 2.24.1
 
