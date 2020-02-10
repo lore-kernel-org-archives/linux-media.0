@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACA2DC3B18E
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A426C3B192
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 82C7121927
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFA8D2467E
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581314636;
-	bh=AFD65OKSV1+A0vldGPtU8+SJqCThPuv3WOKajnC2d8U=;
+	s=default; t=1581314610;
+	bh=IpnvmWz/8um8W8M0uxPTXbCD1j74QgnZZdtgNPoA8hY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=h5jEoqmUNRuxeFs3rUnG3lPna9oZtNSEjTihaBQUU7vOGhT4XwcpMvYs5hnpgXzPR
-	 3ZSiv5oaDcCIv4rdFTJONmP1gwSL9WjLs2G8Ildz4eok/SgWQwKbNdKRbY4lxtkJIL
-	 8MVeaI1eAi+wilx3T1mkMNd438cEn5c2n/PxUG70=
+	b=WBka6Blo6zl/WQSCaD4+/pYPvAfnh0+ca5x5LILl4lhe+eiTFhOnrMFY6ww56fqVG
+	 gIEr2Hxrze2Dtq38KOpW96sNn1t/ef2tuYF4zkLMifzj2dEFcCjChVHZ9R66Te7lo3
+	 goqmyu/qISeDqtFddSxWV2MNgVyV//7/3Ypsj4UM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727772AbgBJGDq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Feb 2020 01:03:46 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36284 "EHLO
+        id S1727640AbgBJGDV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Feb 2020 01:03:21 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:36464 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbgBJGDM (ORCPT
+        with ESMTP id S1727584AbgBJGDN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Feb 2020 01:03:12 -0500
+        Mon, 10 Feb 2020 01:03:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=0NdNmLSXcScD8m9tuo9ayLdWPmuOQKKz8+PbS3hVgr4=; b=AehLxRuByn2NTpWRzi5Lsrv58y
-        h/vUmObZsTl0oCOSMDZ7nR+ERk8G2IanwYl3gS6H6K9SjIo8tlbiJP7kP4UasDpegSD5e5HdY7Zoo
-        fOGhWepAJsAkEvju3O52baDKzKc9ia80Cvu7TVrHtgg6u7jFU0QkjYQOll/o24H/Iz3vZfDy83Bye
-        sXVglEDV7XiOBn1xGnPZCBR1riVWCNC/A0fzK9zZpz9xZfUN7T36c2/KPhbkonnoILxIPmWzL1irA
-        vc9H0y3+bKFY/Uv3KydPqc09Qaq1zvycGYXokwTmOiuu3iecF/Z1FM/UAB1JrSO3k+ccJFfUz2dfe
-        qwYFlBqw==;
+        bh=3atzUbHUpUbwJ3lq7O6PizLnLBeHoo1f0Hi0KPfYLDo=; b=QJLxhPB5Y0ribOiXGII8xFfdQ8
+        sIE56jKaoX2Jeo0EjIORZIXvIbRmYWQlqbESHlKzzEJtOejy333Xs5pF0Z+6UIKTKPpntblRi2eD3
+        GUMuFq+Q0R94hY2UwMrje113SE3CrtFpiJL+fB32rpJ6W6UM9oF+08H0BpXCwMAxxsWLQuQRY1+M6
+        QNo08+EpRghAiKG1jGi+au9QlYtl5B/bUNFloD1CPQsAwMPP6s3hB8TsiWG8cR9WwgRZ0ERm7wCPy
+        LzuFo1XmnNhnHCm2+TsPNKhZmNnRpZBTYB7WijJJ4heBAVOkKJpEeqQLG3q0PGePCaTJUu/FzvUFt
+        AZl8F61Q==;
 Received: from [80.156.29.194] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j12A3-0006Tk-ON; Mon, 10 Feb 2020 06:03:11 +0000
+        id 1j12A5-0006V2-GP; Mon, 10 Feb 2020 06:03:13 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j12A2-00C2VM-2I; Mon, 10 Feb 2020 07:03:10 +0100
+        id 1j12A3-00C2Wk-Pa; Mon, 10 Feb 2020 07:03:11 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 10/28] docs: kvm: convert devices/mpic.txt to ReST
-Date:   Mon, 10 Feb 2020 07:02:48 +0100
-Message-Id: <74b5fdc29eb05c3215fd316caeafa88bb4760f7d.1581314317.git.mchehab+huawei@kernel.org>
+        linux-doc@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>
+Subject: [PATCH 27/28] docs: kvm: review-checklist.txt: rename to ReST
+Date:   Mon, 10 Feb 2020 07:03:05 +0100
+Message-Id: <fbd068ed7445d0ea51052cb50d66cd8983e39b08.1581314317.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581314316.git.mchehab+huawei@kernel.org>
 References: <cover.1581314316.git.mchehab+huawei@kernel.org>
@@ -63,63 +63,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This document is almost in ReST format. The only thing
-needed is to mark a list as such and to add an extra
-whitespace.
+This file is already in ReST compatible format.
+So, rename it and add to the kvm's index.rst.
 
-Yet, let's also use the standard document title markup,
-as it makes easier if anyone wants later to add sessions
-to it.
+While here, use the standard conversion for document titles.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
 ---
- Documentation/virt/kvm/devices/index.rst              |  1 +
- Documentation/virt/kvm/devices/{mpic.txt => mpic.rst} | 11 ++++++++---
- 2 files changed, 9 insertions(+), 3 deletions(-)
- rename Documentation/virt/kvm/devices/{mpic.txt => mpic.rst} (91%)
+ Documentation/virt/kvm/index.rst                               | 2 ++
+ .../virt/kvm/{review-checklist.txt => review-checklist.rst}    | 3 +++
+ 2 files changed, 5 insertions(+)
+ rename Documentation/virt/kvm/{review-checklist.txt => review-checklist.rst} (95%)
 
-diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
-index 7eabce80c61e..9e5586e371de 100644
---- a/Documentation/virt/kvm/devices/index.rst
-+++ b/Documentation/virt/kvm/devices/index.rst
-@@ -10,3 +10,4 @@ Devices
-    arm-vgic-its
-    arm-vgic
-    arm-vgic-v3
-+   mpic
-diff --git a/Documentation/virt/kvm/devices/mpic.txt b/Documentation/virt/kvm/devices/mpic.rst
-similarity index 91%
-rename from Documentation/virt/kvm/devices/mpic.txt
-rename to Documentation/virt/kvm/devices/mpic.rst
-index 8257397adc3c..55cefe030d41 100644
---- a/Documentation/virt/kvm/devices/mpic.txt
-+++ b/Documentation/virt/kvm/devices/mpic.rst
-@@ -1,9 +1,13 @@
+diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
+index 7c1be8910837..774deaebf7fa 100644
+--- a/Documentation/virt/kvm/index.rst
++++ b/Documentation/virt/kvm/index.rst
+@@ -21,6 +21,8 @@ KVM
+    timekeeping
+    vcpu-requests
+ 
++   review-checklist
++
+    arm/index
+ 
+    devices/index
+diff --git a/Documentation/virt/kvm/review-checklist.txt b/Documentation/virt/kvm/review-checklist.rst
+similarity index 95%
+rename from Documentation/virt/kvm/review-checklist.txt
+rename to Documentation/virt/kvm/review-checklist.rst
+index 499af499e296..1f86a9d3f705 100644
+--- a/Documentation/virt/kvm/review-checklist.txt
++++ b/Documentation/virt/kvm/review-checklist.rst
+@@ -1,3 +1,6 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+=========================
- MPIC interrupt controller
- =========================
++================================
+ Review checklist for kvm patches
+ ================================
  
- Device types supported:
--  KVM_DEV_TYPE_FSL_MPIC_20     Freescale MPIC v2.0
--  KVM_DEV_TYPE_FSL_MPIC_42     Freescale MPIC v4.2
-+
-+  - KVM_DEV_TYPE_FSL_MPIC_20     Freescale MPIC v2.0
-+  - KVM_DEV_TYPE_FSL_MPIC_42     Freescale MPIC v4.2
- 
- Only one MPIC instance, of any type, may be instantiated.  The created
- MPIC will act as the system interrupt controller, connecting to each
-@@ -11,7 +15,8 @@ vcpu's interrupt inputs.
- 
- Groups:
-   KVM_DEV_MPIC_GRP_MISC
--  Attributes:
-+   Attributes:
-+
-     KVM_DEV_MPIC_BASE_ADDR (rw, 64-bit)
-       Base address of the 256 KiB MPIC register space.  Must be
-       naturally aligned.  A value of zero disables the mapping.
 -- 
 2.24.1
 
