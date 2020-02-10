@@ -6,83 +6,92 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AFCDC352A3
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 16:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2656C352A3
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 17:07:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3BE8420842
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 16:56:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91FE820870
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 17:07:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727895AbgBJQ4Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Feb 2020 11:56:25 -0500
-Received: from sauhun.de ([88.99.104.3]:43618 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727499AbgBJQ4Z (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Feb 2020 11:56:25 -0500
-Received: from localhost (p54B33161.dip0.t-ipconnect.de [84.179.49.97])
-        by pokefinder.org (Postfix) with ESMTPSA id 524EE2C07F3;
-        Mon, 10 Feb 2020 17:56:23 +0100 (CET)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-media@vger.kernel.org
-Cc:     linux-i2c@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH V2 RESEND] media: v4l2-core: convert to new API with ERRPTR
-Date:   Mon, 10 Feb 2020 17:56:21 +0100
-Message-Id: <20200210165621.5189-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
+        id S1728008AbgBJRHT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Feb 2020 12:07:19 -0500
+Received: from mailoutvs42.siol.net ([185.57.226.233]:47112 "EHLO
+        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727998AbgBJRHS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 10 Feb 2020 12:07:18 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.siol.net (Postfix) with ESMTP id DB565521B09;
+        Mon, 10 Feb 2020 18:07:15 +0100 (CET)
+X-Virus-Scanned: amavisd-new at psrvmta09.zcs-production.pri
+Received: from mail.siol.net ([127.0.0.1])
+        by localhost (psrvmta09.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id poTaMWmvvD3k; Mon, 10 Feb 2020 18:07:15 +0100 (CET)
+Received: from mail.siol.net (localhost [127.0.0.1])
+        by mail.siol.net (Postfix) with ESMTPS id 9271C521B82;
+        Mon, 10 Feb 2020 18:07:15 +0100 (CET)
+Received: from localhost.localdomain (cpe-194-152-20-232.static.triera.net [194.152.20.232])
+        (Authenticated sender: 031275009)
+        by mail.siol.net (Postfix) with ESMTPSA id ECC8A521AFF;
+        Mon, 10 Feb 2020 18:07:12 +0100 (CET)
+From:   Jernej Skrabec <jernej.skrabec@siol.net>
+To:     mripard@kernel.org, wens@csie.org
+Cc:     mchehab@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com
+Subject: [PATCH v2 2/5] clk: sunxi-ng: a64: Export MBUS clock
+Date:   Mon, 10 Feb 2020 18:06:53 +0100
+Message-Id: <20200210170656.82265-3-jernej.skrabec@siol.net>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200210170656.82265-1-jernej.skrabec@siol.net>
+References: <20200210170656.82265-1-jernej.skrabec@siol.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the new APIs instead of the deprecated ones.
+MBUS clock will be referenced in MBUS controller node.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Export it.
+
+Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
 ---
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.h      | 4 ----
+ include/dt-bindings/clock/sun50i-a64-ccu.h | 2 +-
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
-Resent from proper email address. Sorry for the confusion!
-
- drivers/media/v4l2-core/v4l2-i2c.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/media/v4l2-core/v4l2-i2c.c b/drivers/media/v4l2-core/v4l2-i2c.c
-index 5bf99e7c0c09..b4acca75644b 100644
---- a/drivers/media/v4l2-core/v4l2-i2c.c
-+++ b/drivers/media/v4l2-core/v4l2-i2c.c
-@@ -74,10 +74,10 @@ struct v4l2_subdev
- 
- 	/* Create the i2c client */
- 	if (info->addr == 0 && probe_addrs)
--		client = i2c_new_probed_device(adapter, info, probe_addrs,
--					       NULL);
-+		client = i2c_new_scanned_device(adapter, info, probe_addrs,
-+						NULL);
- 	else
--		client = i2c_new_device(adapter, info);
-+		client = i2c_new_client_device(adapter, info);
- 
- 	/*
- 	 * Note: by loading the module first we are certain that c->driver
-@@ -88,7 +88,7 @@ struct v4l2_subdev
- 	 * want to use the i2c device, so explicitly loading the module
- 	 * is the best alternative.
- 	 */
--	if (!client || !client->dev.driver)
-+	if (!i2c_client_has_driver(client))
- 		goto error;
- 
- 	/* Lock the module so we can safely get the v4l2_subdev pointer */
-@@ -110,7 +110,7 @@ struct v4l2_subdev
- 	 * If we have a client but no subdev, then something went wrong and
- 	 * we must unregister the client.
- 	 */
--	if (client && !sd)
-+	if (!IS_ERR(client) && !sd)
- 		i2c_unregister_device(client);
- 	return sd;
- }
--- 
-2.20.1
+diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-a64.h b/drivers/clk/sunxi-ng=
+/ccu-sun50i-a64.h
+index 116e6f826d04..54d1f96f4b68 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
++++ b/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
+@@ -55,10 +55,6 @@
+=20
+ /* All the DRAM gates are exported */
+=20
+-/* Some more module clocks are exported */
+-
+-#define CLK_MBUS			112
+-
+ /* And the DSI and GPU module clock is exported */
+=20
+ #define CLK_NUMBER			(CLK_GPU + 1)
+diff --git a/include/dt-bindings/clock/sun50i-a64-ccu.h b/include/dt-bind=
+ings/clock/sun50i-a64-ccu.h
+index e512a1c9b0fc..318eb15c414c 100644
+--- a/include/dt-bindings/clock/sun50i-a64-ccu.h
++++ b/include/dt-bindings/clock/sun50i-a64-ccu.h
+@@ -131,7 +131,7 @@
+ #define CLK_AVS			109
+ #define CLK_HDMI		110
+ #define CLK_HDMI_DDC		111
+-
++#define CLK_MBUS		112
+ #define CLK_DSI_DPHY		113
+ #define CLK_GPU			114
+=20
+--=20
+2.25.0
 
