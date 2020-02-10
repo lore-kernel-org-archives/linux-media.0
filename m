@@ -7,54 +7,52 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 565C7C3B18C
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 582DEC3B18E
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 21E2924680
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 222A621927
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581314604;
-	bh=CCB9J07T/80+IsrntbbRDukpQNpe71X8YA4l6vdAkPk=;
+	s=default; t=1581314617;
+	bh=GeNTq8Ib30C29iPt/Ha8uLjw7D0/RugAMZJjMF0ErXs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Z7Wkf5skSlK84y/vCGpP1yWxoP55FZlKLIRJGrNLTJHgpxZfB3ZrNkgq5N2Jpda1x
-	 lTrObEvLEnD2j8lXNFMMS04ZfbCI/OSj+tBlr1uswheNMLnYFpuPUy4QVBRQEmYVKV
-	 qHckfY8nulVUZ9FSDYgzPFnJMzMB0kQGQwrqeMfc=
+	b=bhzuXdA94e7vxNKRoH7jhK+tAjpFblKCEgPjJdx2m4/TLVPt24pjXmGZScO5nJeqq
+	 FUWQyCVpAWdgQym7m9VB+zRFo0wr/1xdA3/RK9OYZMqodbOuIY4U7i2zC2+VS1YAHM
+	 sDmDod0VDQjA8IPrfL9S2RWi690oa4nII7fnKsLY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727675AbgBJGDX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Feb 2020 01:03:23 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36456 "EHLO
+        id S1727690AbgBJGDd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Feb 2020 01:03:33 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:36294 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727581AbgBJGDN (ORCPT
+        with ESMTP id S1727436AbgBJGDM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Feb 2020 01:03:13 -0500
+        Mon, 10 Feb 2020 01:03:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=5C1Pl5mrdwkmC0Ibs5rVWyWq5pet5BdrcnU/u0rt7EY=; b=A/TznRQXNYBxeegModDRxPmZwR
-        QV0mWYWmotsCWAt8meRxLlJmp58JE2I41Mlbzdv7CvMLsNkFR4bA+AJ2creD0EVk5E9aDcKAO5wX0
-        KKK7O90S0fOHHLCkbd0cWfsvQfrHSWLJn3Fj7M6GYcU08+fLZuT5+ZrL5EZWNuF3ckfaBkVgYxvMB
-        WGCtLYbGsNAOhWLT/JAqdu44xv6HQuGwDw+e5Eb8iiFSpxBkc/OWjwT9hyYoz9dYmhKXkGAD5llAi
-        nxUpAyEsFg30W0TER7lk0Xq83OTlYE67V1zhaMGia341DM2CMVcz7LyHTj+y06M/cLuEStrG2dydL
-        c6HvShnw==;
+        bh=UoVoTfeqJAIn1DpUiVy/iSRc5XPT39jOF0FCEyMWDLs=; b=dV5tIkA3WQzanAgcull5UTsR+I
+        ChuUYSBe1bz5gKlrB9q2wOVKYUaZTF1HxcGyRiRVKRDekvpEt8eQpY8UtzKuOjqU4c94dHKgilt+z
+        gXFAp97JbXpH2mFniBLyue1PJJ3MEtBQUqbtgetSc6Cy9bDSKp+HvrdHge8S3BAA5SDjSHMl7EhqA
+        egRaBMVWMF22I06uZtqazKadnXwLYkr6IhsTlo6CiEQfBXKezOsfGE+FSL8SRP//HmWWevGLyfD/+
+        5D4Sl1QdQBUWGB+XitVS3CvpVPxAZ+KG1fgEckG2VUm6o+NinaCnn1WnCPaCHl/2+VTEydwBOXCBR
+        930j1qaA==;
 Received: from [80.156.29.194] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j12A3-0006Td-GC; Mon, 10 Feb 2020 06:03:11 +0000
+        id 1j12A3-0006Tj-MK; Mon, 10 Feb 2020 06:03:11 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j12A1-00C2Un-Qx; Mon, 10 Feb 2020 07:03:09 +0100
+        id 1j12A2-00C2VH-1M; Mon, 10 Feb 2020 07:03:10 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-um@lists.infradead.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 03/28] docs: virt: user_mode_linux.rst: update compiling instructions
-Date:   Mon, 10 Feb 2020 07:02:41 +0100
-Message-Id: <b678c16fb34280d844c278b8acfb2f53124f50ab.1581314316.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 09/28] docs: kvm: convert devices/arm-vgit.txt to ReST
+Date:   Mon, 10 Feb 2020 07:02:47 +0100
+Message-Id: <1a49c2b2088952f56c317f2ec533f45e6801f2b1.1581314317.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581314316.git.mchehab+huawei@kernel.org>
 References: <cover.1581314316.git.mchehab+huawei@kernel.org>
@@ -65,125 +63,176 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of pointing for a pre-2.4 and a seaparate patch,
-update it to match current upstream, as UML was merged
-a long time ago.
+- Use title markups;
+- change indent to match ReST syntax;
+- use proper table markups;
+- use literal block markups.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/uml/user_mode_linux.rst | 62 ++++------------------
- 1 file changed, 9 insertions(+), 53 deletions(-)
+ .../devices/{arm-vgic.txt => arm-vgic.rst}    | 89 ++++++++++++-------
+ Documentation/virt/kvm/devices/index.rst      |  1 +
+ 2 files changed, 60 insertions(+), 30 deletions(-)
+ rename Documentation/virt/kvm/devices/{arm-vgic.txt => arm-vgic.rst} (66%)
 
-diff --git a/Documentation/virt/uml/user_mode_linux.rst b/Documentation/virt/uml/user_mode_linux.rst
-index 6085d2c0f8a8..e0632d80753e 100644
---- a/Documentation/virt/uml/user_mode_linux.rst
-+++ b/Documentation/virt/uml/user_mode_linux.rst
-@@ -5,7 +5,7 @@ User Mode Linux HOWTO
- =====================
+diff --git a/Documentation/virt/kvm/devices/arm-vgic.txt b/Documentation/virt/kvm/devices/arm-vgic.rst
+similarity index 66%
+rename from Documentation/virt/kvm/devices/arm-vgic.txt
+rename to Documentation/virt/kvm/devices/arm-vgic.rst
+index 97b6518148f8..40bdeea1d86e 100644
+--- a/Documentation/virt/kvm/devices/arm-vgic.txt
++++ b/Documentation/virt/kvm/devices/arm-vgic.rst
+@@ -1,8 +1,12 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++==================================================
+ ARM Virtual Generic Interrupt Controller v2 (VGIC)
+ ==================================================
  
- :Author:  User Mode Linux Core Team
--:Last-updated: Mon Nov 18 14:16:16 EST 2002
-+:Last-updated: Sat Jan 25 16:07:55 CET 2020
+ Device types supported:
+-  KVM_DEV_TYPE_ARM_VGIC_V2     ARM Generic Interrupt Controller v2.0
++
++  - KVM_DEV_TYPE_ARM_VGIC_V2     ARM Generic Interrupt Controller v2.0
  
- This document describes the use and abuse of Jeff Dike's User Mode
- Linux: a port of the Linux kernel as a normal Intel Linux process.
-@@ -223,23 +223,15 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
+ Only one VGIC instance may be instantiated through either this API or the
+ legacy KVM_CREATE_IRQCHIP API.  The created VGIC will act as the VM interrupt
+@@ -17,7 +21,8 @@ create both a GICv3 and GICv2 device on the same VM.
  
+ Groups:
+   KVM_DEV_ARM_VGIC_GRP_ADDR
+-  Attributes:
++   Attributes:
++
+     KVM_VGIC_V2_ADDR_TYPE_DIST (rw, 64-bit)
+       Base address in the guest physical address space of the GIC distributor
+       register mappings. Only valid for KVM_DEV_TYPE_ARM_VGIC_V2.
+@@ -27,19 +32,25 @@ Groups:
+       Base address in the guest physical address space of the GIC virtual cpu
+       interface register mappings. Only valid for KVM_DEV_TYPE_ARM_VGIC_V2.
+       This address needs to be 4K aligned and the region covers 4 KByte.
++
+   Errors:
+-    -E2BIG:  Address outside of addressable IPA range
+-    -EINVAL: Incorrectly aligned address
+-    -EEXIST: Address already configured
+-    -ENXIO:  The group or attribute is unknown/unsupported for this device
++
++    =======  =============================================================
++    -E2BIG   Address outside of addressable IPA range
++    -EINVAL  Incorrectly aligned address
++    -EEXIST  Address already configured
++    -ENXIO   The group or attribute is unknown/unsupported for this device
+              or hardware support is missing.
+-    -EFAULT: Invalid user pointer for attr->addr.
++    -EFAULT  Invalid user pointer for attr->addr.
++    =======  =============================================================
  
-   Compiling the user mode kernel is just like compiling any other
--  kernel.  Let's go through the steps, using 2.4.0-prerelease (current
--  as of this writing) as an example:
-+  kernel.
+   KVM_DEV_ARM_VGIC_GRP_DIST_REGS
+-  Attributes:
+-    The attr field of kvm_device_attr encodes two values:
+-    bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
+-    values:   |    reserved   | vcpu_index |      offset     |
++   Attributes:
++
++    The attr field of kvm_device_attr encodes two values::
++
++      bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
++      values:   |    reserved   | vcpu_index |      offset     |
  
+     All distributor regs are (rw, 32-bit)
  
--  1. Download the latest UML patch from
--     the download page <http://user-mode-linux.sourceforge.net/
--
--     In this example, the file is uml-patch-2.4.0-prerelease.bz2.
--
--
--  2. Download the matching kernel from your favourite kernel mirror,
-+  1. Download the latest kernel from your favourite kernel mirror,
-      such as:
+@@ -58,16 +69,22 @@ Groups:
+     KVM_DEV_ARM_VGIC_GRP_DIST_REGS and KVM_DEV_ARM_VGIC_GRP_CPU_REGS) to ensure
+     the expected behavior. Unless GICD_IIDR has been set from userspace, writes
+     to the interrupt group registers (GICD_IGROUPR) are ignored.
++
+   Errors:
+-    -ENXIO: Getting or setting this register is not yet supported
+-    -EBUSY: One or more VCPUs are running
+-    -EINVAL: Invalid vcpu_index supplied
++
++    =======  =====================================================
++    -ENXIO   Getting or setting this register is not yet supported
++    -EBUSY   One or more VCPUs are running
++    -EINVAL  Invalid vcpu_index supplied
++    =======  =====================================================
  
--     ftp://ftp.ca.kernel.org/pub/kernel/v2.4/linux-2.4.0-prerelease.tar.bz2
-+     https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.4.14.tar.xz
+   KVM_DEV_ARM_VGIC_GRP_CPU_REGS
+-  Attributes:
+-    The attr field of kvm_device_attr encodes two values:
+-    bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
+-    values:   |    reserved   | vcpu_index |      offset     |
++   Attributes:
++
++    The attr field of kvm_device_attr encodes two values::
++
++      bits:     | 63   ....  40 | 39 ..  32  |  31   ....    0 |
++      values:   |    reserved   | vcpu_index |      offset     |
  
--
--  3. Make a directory and unpack the kernel into it::
-+  2. Make a directory and unpack the kernel into it::
+     All CPU interface regs are (rw, 32-bit)
  
-        host%
-        mkdir ~/uml
-@@ -248,21 +240,10 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
-        cd ~/uml
+@@ -101,27 +118,39 @@ Groups:
+     value left by 3 places to obtain the actual priority mask level.
  
-        host%
--       tar -xzvf linux-2.4.0-prerelease.tar.bz2
-+       tar xvf linux-5.4.14.tar.xz
+   Errors:
+-    -ENXIO: Getting or setting this register is not yet supported
+-    -EBUSY: One or more VCPUs are running
+-    -EINVAL: Invalid vcpu_index supplied
++
++    =======  =====================================================
++    -ENXIO   Getting or setting this register is not yet supported
++    -EBUSY   One or more VCPUs are running
++    -EINVAL  Invalid vcpu_index supplied
++    =======  =====================================================
  
+   KVM_DEV_ARM_VGIC_GRP_NR_IRQS
+-  Attributes:
++   Attributes:
++
+     A value describing the number of interrupts (SGI, PPI and SPI) for
+     this GIC instance, ranging from 64 to 1024, in increments of 32.
  
--
--  4. Apply the patch using::
--
--       host%
--       cd ~/uml/linux
--
--       host%
--       bzcat uml-patch-2.4.0-prerelease.bz2 | patch -p1
--
--
--
--  5. Run your favorite config; ``make xconfig ARCH=um`` is the most
-+  3. Run your favorite config; ``make xconfig ARCH=um`` is the most
-      convenient.  ``make config ARCH=um`` and ``make menuconfig ARCH=um``
-      will work as well.  The defaults will give you a useful kernel.  If
-      you want to change something, go ahead, it probably won't hurt
-@@ -276,34 +257,9 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
+   Errors:
+-    -EINVAL: Value set is out of the expected range
+-    -EBUSY: Value has already be set, or GIC has already been initialized
+-            with default values.
++
++    =======  =============================================================
++    -EINVAL  Value set is out of the expected range
++    -EBUSY   Value has already be set, or GIC has already been initialized
++             with default values.
++    =======  =============================================================
  
+   KVM_DEV_ARM_VGIC_GRP_CTRL
+-  Attributes:
++   Attributes:
++
+     KVM_DEV_ARM_VGIC_CTRL_INIT
+       request the initialization of the VGIC or ITS, no additional parameter
+       in kvm_device_attr.addr.
++
+   Errors:
+-    -ENXIO: VGIC not properly configured as required prior to calling
+-     this attribute
+-    -ENODEV: no online VCPU
+-    -ENOMEM: memory shortage when allocating vgic internal data
++
++    =======  =========================================================
++    -ENXIO   VGIC not properly configured as required prior to calling
++             this attribute
++    -ENODEV  no online VCPU
++    -ENOMEM  memory shortage when allocating vgic internal data
++    =======  =========================================================
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index 80c1e0e225f4..7eabce80c61e 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -8,4 +8,5 @@ Devices
+    :maxdepth: 2
  
- 
--  6. Finish with ``make linux ARCH=um``: the result is a file called
-+  4. Finish with ``make linux ARCH=um``: the result is a file called
-      ``linux`` in the top directory of your source tree.
- 
--  Make sure that you don't build this kernel in /usr/src/linux.  On some
--  distributions, /usr/include/asm is a link into this pool.  The user-
--  mode build changes the other end of that link, and things that include
--  <asm/anything.h> stop compiling.
--
--  The sources are also available from cvs at the project's cvs page,
--  which has directions on getting the sources. You can also browse the
--  CVS pool from there.
--
--  If you get the CVS sources, you will have to check them out into an
--  empty directory. You will then have to copy each file into the
--  corresponding directory in the appropriate kernel pool.
--
--  If you don't have the latest kernel pool, you can get the
--  corresponding user-mode sources with::
--
--
--       host% cvs co -r v_2_3_x linux
--
--
--
--
--  where 'x' is the version in your pool. Note that you will not get the
--  bug fixes and enhancements that have gone into subsequent releases.
--
- 
- 2.2.  Compiling and installing kernel modules
- ---------------------------------------------
-@@ -416,7 +372,7 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
- 3.1.  Running UML
- -----------------
- 
--  It runs on 2.2.15 or later, and all 2.4 kernels.
-+  It runs on 2.2.15 or later, and all kernel versions since 2.4.
- 
- 
-   Booting UML is straightforward.  Simply run 'linux': it will try to
+    arm-vgic-its
++   arm-vgic
+    arm-vgic-v3
 -- 
 2.24.1
 
