@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25CB9C3B195
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B430C3B187
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E6F6A24680
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1298A24688
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581314613;
-	bh=N0OPd0iacFA/47RM0+QleZ2IobAGm95hjz/zZi9OeEU=;
+	s=default; t=1581314602;
+	bh=YK8FIkaO5ux/wXmCrRJ/AwyWFSwlbi8SGFxZRNZnDD0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Bx2tdTHxgBhUEFEb+KJOvAxc2MZAB17IGaeenOx4V2LJQ9Pb6gcAJ6y9I8jLTZ5jY
-	 NFy1tsqS7qI8dv9mjxsLcJOhWUPb3tYcaQYYEkT6Z0/Jaxk4N5dqDY4puwrDYjY1Wv
-	 9/iT8KneGKs8qu8Bgw7Yt9uCSzFTHozxzhEoNo8M=
+	b=eYxgKmdhxm774plyN6KctA5YoHhUpoj5geWNvoGu4P2FpWdwqAbs83mRNmxf9yQfW
+	 zJvw+2WUqIbksN+n2aXkLXWuLY1bO9smcxiCzMgPkUdeu31axBm34BK/pSbdpiYlSf
+	 tNCz35B2E1h/T1mL6WzAAcPR2paE4j0lI1LdpWwg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbgBJGDN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727570AbgBJGDN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 10 Feb 2020 01:03:13 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36318 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:36336 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727505AbgBJGDM (ORCPT
+        with ESMTP id S1727509AbgBJGDM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 10 Feb 2020 01:03:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=TMlBkOqOYR3ysxOJY5Cjd1qwRLlnNrloXMHDgT46IzQ=; b=J0fcXwq5l1R5uWl8/SEMWZJJ8v
-        nNl0eTaDibgD04bLAeJtc/Mc81ulP0DrINjWEbzorIZIXYNMnGhhqO7CHidTYHWMOI2gAdUzVJ4qD
-        Qd/qB+zvAuPc2oXEmoIHZKopbhTSA0h2NAH2RbRqNVAe/zIfEddY0jjR6xcHNe0JooOka0VVwsYo/
-        l2y+eUA57tE5mdycIaQ2OaE7OwWMrEz5YHF/5KA7Mdg9UY9qV7G1aRkPqLgj/oww2mRYGTKKSa6Jy
-        chXWhMLFb/dVdhOx5rzgZWR3z7aM+A5590MWPvT/uosYoa0IUj+jCHIVhyI5SrZI2O0YFth+NSLUw
-        MQ89wmqQ==;
+        bh=ncsM0xzARTSEa19oQa9XkTFMrAwUc3uVKUGgEy0y3l8=; b=YFUI6BTjJzMW979Q5ooq+9uCPE
+        YFyUFJ4bRumzkkLisDJRtvDv9+gN82LW1aQ4Ik6ZEfvUEhSuGhpQBCmigBfSjzxFCrYfpz/eoM+26
+        mmeOO/281qX8V0VtUYahWKrNs9fNsXb3WMP9PEcrv20SO41EbUAT6FIQRI/lWycPN1R3KUU3kFRYd
+        YoKwiHBiIgEqn5w8ezTrdlDW3+CDEs/yc4Crlrkr44G/QwP80m12Jw5JsjjWkk+7ifzlWHuItzTEw
+        KT4r36X5Mpys+8ROUJGcAD3mZJcVifCE3aq5z0WW8CA+C6iFoetoVSnZrzzxZW8we+uE931M+bU3q
+        e5Zc5W3w==;
 Received: from [80.156.29.194] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j12A3-0006Tm-QF; Mon, 10 Feb 2020 06:03:12 +0000
+        id 1j12A3-0006Tq-VY; Mon, 10 Feb 2020 06:03:12 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j12A2-00C2VW-4K; Mon, 10 Feb 2020 07:03:10 +0100
+        id 1j12A2-00C2Vq-9C; Mon, 10 Feb 2020 07:03:10 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -50,9 +50,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 12/28] docs: kvm: convert devices/vcpu.txt to ReST
-Date:   Mon, 10 Feb 2020 07:02:50 +0100
-Message-Id: <2096c62896f7cb2a8e636e1b68135f00c23a0672.1581314317.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 16/28] docs: kvm: convert devices/xive.txt to ReST
+Date:   Mon, 10 Feb 2020 07:02:54 +0100
+Message-Id: <b35f1d6366524884a81bbfdf6733bb3f2531fc61.1581314317.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581314316.git.mchehab+huawei@kernel.org>
 References: <cover.1581314316.git.mchehab+huawei@kernel.org>
@@ -66,229 +66,260 @@ X-Mailing-List: linux-media@vger.kernel.org
 - Use title markups;
 - adjust indentation and add blank lines as needed;
 - adjust tables to match ReST accepted formats;
-- use :field: markups;
 - mark code blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/devices/index.rst |   1 +
- Documentation/virt/kvm/devices/vcpu.rst  | 114 +++++++++++++++++++++++
- Documentation/virt/kvm/devices/vcpu.txt  |  76 ---------------
- 3 files changed, 115 insertions(+), 76 deletions(-)
- create mode 100644 Documentation/virt/kvm/devices/vcpu.rst
- delete mode 100644 Documentation/virt/kvm/devices/vcpu.txt
+ Documentation/virt/kvm/devices/index.rst      |   1 +
+ .../virt/kvm/devices/{xive.txt => xive.rst}   | 148 +++++++++++-------
+ 2 files changed, 96 insertions(+), 53 deletions(-)
+ rename Documentation/virt/kvm/devices/{xive.txt => xive.rst} (62%)
 
 diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
-index e6caccc36623..5a61838f0e61 100644
+index 63b61369d09b..192cda7405c8 100644
 --- a/Documentation/virt/kvm/devices/index.rst
 +++ b/Documentation/virt/kvm/devices/index.rst
-@@ -12,3 +12,4 @@ Devices
-    arm-vgic-v3
-    mpic
-    s390_flic
-+   vcpu
-diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
-new file mode 100644
-index 000000000000..9963e680770a
---- /dev/null
-+++ b/Documentation/virt/kvm/devices/vcpu.rst
-@@ -0,0 +1,114 @@
+@@ -16,3 +16,4 @@ Devices
+    vfio
+    vm
+    xics
++   xive
+diff --git a/Documentation/virt/kvm/devices/xive.txt b/Documentation/virt/kvm/devices/xive.rst
+similarity index 62%
+rename from Documentation/virt/kvm/devices/xive.txt
+rename to Documentation/virt/kvm/devices/xive.rst
+index f5d1d6b5af61..8bdf3dc38f01 100644
+--- a/Documentation/virt/kvm/devices/xive.txt
++++ b/Documentation/virt/kvm/devices/xive.rst
+@@ -1,8 +1,11 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+======================
-+Generic vcpu interface
-+======================
++===========================================================
+ POWER9 eXternal Interrupt Virtualization Engine (XIVE Gen1)
+-==========================================================
++===========================================================
+ 
+ Device types supported:
+-  KVM_DEV_TYPE_XIVE     POWER9 XIVE Interrupt Controller generation 1
++  - KVM_DEV_TYPE_XIVE     POWER9 XIVE Interrupt Controller generation 1
+ 
+ This device acts as a VM interrupt controller. It provides the KVM
+ interface to configure the interrupt sources of a VM in the underlying
+@@ -64,72 +67,100 @@ the legacy interrupt mode, referred as XICS (POWER7/8).
+ 
+ * Groups:
+ 
+-  1. KVM_DEV_XIVE_GRP_CTRL
+-  Provides global controls on the device
++1. KVM_DEV_XIVE_GRP_CTRL
++     Provides global controls on the device
 +
-+The virtual cpu "device" also accepts the ioctls KVM_SET_DEVICE_ATTR,
-+KVM_GET_DEVICE_ATTR, and KVM_HAS_DEVICE_ATTR. The interface uses the same struct
-+kvm_device_attr as other devices, but targets VCPU-wide settings and controls.
+   Attributes:
+     1.1 KVM_DEV_XIVE_RESET (write only)
+     Resets the interrupt controller configuration for sources and event
+     queues. To be used by kexec and kdump.
 +
-+The groups and attributes per virtual cpu, if any, are architecture specific.
+     Errors: none
+ 
+     1.2 KVM_DEV_XIVE_EQ_SYNC (write only)
+     Sync all the sources and queues and mark the EQ pages dirty. This
+     to make sure that a consistent memory state is captured when
+     migrating the VM.
 +
-+1. GROUP: KVM_ARM_VCPU_PMU_V3_CTRL
-+==================================
+     Errors: none
+ 
+     1.3 KVM_DEV_XIVE_NR_SERVERS (write only)
+     The kvm_device_attr.addr points to a __u32 value which is the number of
+     interrupt server numbers (ie, highest possible vcpu id plus one).
 +
-+:Architectures: ARM64
+     Errors:
+-      -EINVAL: Value greater than KVM_MAX_VCPU_ID.
+-      -EFAULT: Invalid user pointer for attr->addr.
+-      -EBUSY:  A vCPU is already connected to the device.
+ 
+-  2. KVM_DEV_XIVE_GRP_SOURCE (write only)
+-  Initializes a new source in the XIVE device and mask it.
++      =======  ==========================================
++      -EINVAL  Value greater than KVM_MAX_VCPU_ID.
++      -EFAULT  Invalid user pointer for attr->addr.
++      -EBUSY   A vCPU is already connected to the device.
++      =======  ==========================================
 +
-+1.1. ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_IRQ
-+---------------------------------------
++2. KVM_DEV_XIVE_GRP_SOURCE (write only)
++     Initializes a new source in the XIVE device and mask it.
 +
-+:Parameters: in kvm_device_attr.addr the address for PMU overflow interrupt is a
-+	     pointer to an int
+   Attributes:
+     Interrupt source number  (64-bit)
+-  The kvm_device_attr.addr points to a __u64 value:
+-  bits:     | 63   ....  2 |   1   |   0
+-  values:   |    unused    | level | type
 +
-+Returns:
++  The kvm_device_attr.addr points to a __u64 value::
 +
-+	 =======  ========================================================
-+	 -EBUSY   The PMU overflow interrupt is already set
-+	 -ENXIO   The overflow interrupt not set when attempting to get it
-+	 -ENODEV  PMUv3 not supported
-+	 -EINVAL  Invalid PMU overflow interrupt number supplied or
-+		  trying to set the IRQ number without using an in-kernel
-+		  irqchip.
-+	 =======  ========================================================
++    bits:     | 63   ....  2 |   1   |   0
++    values:   |    unused    | level | type
 +
-+A value describing the PMUv3 (Performance Monitor Unit v3) overflow interrupt
-+number for this vcpu. This interrupt could be a PPI or SPI, but the interrupt
-+type must be same for each vcpu. As a PPI, the interrupt number is the same for
-+all vcpus, while as an SPI it must be a separate number per vcpu.
+   - type:  0:MSI 1:LSI
+   - level: assertion level in case of an LSI.
 +
-+1.2 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_INIT
-+---------------------------------------
+   Errors:
+-    -E2BIG:  Interrupt source number is out of range
+-    -ENOMEM: Could not create a new source block
+-    -EFAULT: Invalid user pointer for attr->addr.
+-    -ENXIO:  Could not allocate underlying HW interrupt
+ 
+-  3. KVM_DEV_XIVE_GRP_SOURCE_CONFIG (write only)
+-  Configures source targeting
++    =======  ==========================================
++    -E2BIG   Interrupt source number is out of range
++    -ENOMEM  Could not create a new source block
++    -EFAULT  Invalid user pointer for attr->addr.
++    -ENXIO   Could not allocate underlying HW interrupt
++    =======  ==========================================
 +
-+:Parameters: no additional parameter in kvm_device_attr.addr
++3. KVM_DEV_XIVE_GRP_SOURCE_CONFIG (write only)
++     Configures source targeting
 +
-+Returns:
+   Attributes:
+     Interrupt source number  (64-bit)
+-  The kvm_device_attr.addr points to a __u64 value:
+-  bits:     | 63   ....  33 |  32  | 31 .. 3 |  2 .. 0
+-  values:   |    eisn       | mask |  server | priority
 +
-+	 =======  ======================================================
-+	 -ENODEV  PMUv3 not supported or GIC not initialized
-+	 -ENXIO   PMUv3 not properly configured or in-kernel irqchip not
-+		  configured as required prior to calling this attribute
-+	 -EBUSY   PMUv3 already initialized
-+	 =======  ======================================================
++  The kvm_device_attr.addr points to a __u64 value::
 +
-+Request the initialization of the PMUv3.  If using the PMUv3 with an in-kernel
-+virtual GIC implementation, this must be done after initializing the in-kernel
-+irqchip.
++    bits:     | 63   ....  33 |  32  | 31 .. 3 |  2 .. 0
++    values:   |    eisn       | mask |  server | priority
 +
+   - priority: 0-7 interrupt priority level
+   - server: CPU number chosen to handle the interrupt
+   - mask: mask flag (unused)
+   - eisn: Effective Interrupt Source Number
 +
-+2. GROUP: KVM_ARM_VCPU_TIMER_CTRL
-+=================================
+   Errors:
+-    -ENOENT: Unknown source number
+-    -EINVAL: Not initialized source number
+-    -EINVAL: Invalid priority
+-    -EINVAL: Invalid CPU number.
+-    -EFAULT: Invalid user pointer for attr->addr.
+-    -ENXIO:  CPU event queues not configured or configuration of the
+-             underlying HW interrupt failed
+-    -EBUSY:  No CPU available to serve interrupt
+ 
+-  4. KVM_DEV_XIVE_GRP_EQ_CONFIG (read-write)
+-  Configures an event queue of a CPU
++    =======  =======================================================
++    -ENOENT  Unknown source number
++    -EINVAL  Not initialized source number
++    -EINVAL  Invalid priority
++    -EINVAL  Invalid CPU number.
++    -EFAULT  Invalid user pointer for attr->addr.
++    -ENXIO   CPU event queues not configured or configuration of the
++	     underlying HW interrupt failed
++    -EBUSY   No CPU available to serve interrupt
++    =======  =======================================================
 +
-+:Architectures: ARM, ARM64
++4. KVM_DEV_XIVE_GRP_EQ_CONFIG (read-write)
++     Configures an event queue of a CPU
 +
-+2.1. ATTRIBUTES: KVM_ARM_VCPU_TIMER_IRQ_VTIMER, KVM_ARM_VCPU_TIMER_IRQ_PTIMER
-+-----------------------------------------------------------------------------
+   Attributes:
+     EQ descriptor identifier (64-bit)
+-  The EQ descriptor identifier is a tuple (server, priority) :
+-  bits:     | 63   ....  32 | 31 .. 3 |  2 .. 0
+-  values:   |    unused     |  server | priority
+-  The kvm_device_attr.addr points to :
 +
-+:Parameters: in kvm_device_attr.addr the address for the timer interrupt is a
-+	     pointer to an int
++  The EQ descriptor identifier is a tuple (server, priority)::
 +
-+Returns:
++    bits:     | 63   ....  32 | 31 .. 3 |  2 .. 0
++    values:   |    unused     |  server | priority
 +
-+	 =======  =================================
-+	 -EINVAL  Invalid timer interrupt number
-+	 -EBUSY   One or more VCPUs has already run
-+	 =======  =================================
++  The kvm_device_attr.addr points to::
 +
-+A value describing the architected timer interrupt number when connected to an
-+in-kernel virtual GIC.  These must be a PPI (16 <= intid < 32).  Setting the
-+attribute overrides the default values (see below).
+     struct kvm_ppc_xive_eq {
+ 	__u32 flags;
+ 	__u32 qshift;
+@@ -138,8 +169,9 @@ the legacy interrupt mode, referred as XICS (POWER7/8).
+ 	__u32 qindex;
+ 	__u8  pad[40];
+     };
 +
-+=============================  ==========================================
-+KVM_ARM_VCPU_TIMER_IRQ_VTIMER  The EL1 virtual timer intid (default: 27)
-+KVM_ARM_VCPU_TIMER_IRQ_PTIMER  The EL1 physical timer intid (default: 30)
-+=============================  ==========================================
+   - flags: queue flags
+-    KVM_XIVE_EQ_ALWAYS_NOTIFY (required)
++      KVM_XIVE_EQ_ALWAYS_NOTIFY (required)
+ 	forces notification without using the coalescing mechanism
+ 	provided by the XIVE END ESBs.
+   - qshift: queue size (power of 2)
+@@ -147,22 +179,31 @@ the legacy interrupt mode, referred as XICS (POWER7/8).
+   - qtoggle: current queue toggle bit
+   - qindex: current queue index
+   - pad: reserved for future use
 +
-+Setting the same PPI for different timers will prevent the VCPUs from running.
-+Setting the interrupt number on a VCPU configures all VCPUs created at that
-+time to use the number provided for a given timer, overwriting any previously
-+configured values on other VCPUs.  Userspace should configure the interrupt
-+numbers on at least one VCPU after creating all VCPUs and before running any
-+VCPUs.
+   Errors:
+-    -ENOENT: Invalid CPU number
+-    -EINVAL: Invalid priority
+-    -EINVAL: Invalid flags
+-    -EINVAL: Invalid queue size
+-    -EINVAL: Invalid queue address
+-    -EFAULT: Invalid user pointer for attr->addr.
+-    -EIO:    Configuration of the underlying HW failed
+ 
+-  5. KVM_DEV_XIVE_GRP_SOURCE_SYNC (write only)
+-  Synchronize the source to flush event notifications
++    =======  =========================================
++    -ENOENT  Invalid CPU number
++    -EINVAL  Invalid priority
++    -EINVAL  Invalid flags
++    -EINVAL  Invalid queue size
++    -EINVAL  Invalid queue address
++    -EFAULT  Invalid user pointer for attr->addr.
++    -EIO     Configuration of the underlying HW failed
++    =======  =========================================
 +
-+3. GROUP: KVM_ARM_VCPU_PVTIME_CTRL
-+==================================
++5. KVM_DEV_XIVE_GRP_SOURCE_SYNC (write only)
++     Synchronize the source to flush event notifications
 +
-+:Architectures: ARM64
+   Attributes:
+     Interrupt source number  (64-bit)
 +
-+3.1 ATTRIBUTE: KVM_ARM_VCPU_PVTIME_IPA
-+--------------------------------------
+   Errors:
+-    -ENOENT: Unknown source number
+-    -EINVAL: Not initialized source number
 +
-+:Parameters: 64-bit base address
++    =======  =============================
++    -ENOENT  Unknown source number
++    -EINVAL  Not initialized source number
++    =======  =============================
+ 
+ * VCPU state
+ 
+@@ -175,11 +216,12 @@ the legacy interrupt mode, referred as XICS (POWER7/8).
+   as it synthesizes the priorities of the pending interrupts. We
+   capture a bit more to report debug information.
+ 
+-  KVM_REG_PPC_VP_STATE (2 * 64bits)
+-  bits:     |  63  ....  32  |  31  ....  0  |
+-  values:   |   TIMA word0   |   TIMA word1  |
+-  bits:     | 127       ..........       64  |
+-  values:   |            unused              |
++  KVM_REG_PPC_VP_STATE (2 * 64bits)::
 +
-+Returns:
-+
-+	 =======  ======================================
-+	 -ENXIO   Stolen time not implemented
-+	 -EEXIST  Base address already set for this VCPU
-+	 -EINVAL  Base address not 64 byte aligned
-+	 =======  ======================================
-+
-+Specifies the base address of the stolen time structure for this VCPU. The
-+base address must be 64 byte aligned and exist within a valid guest memory
-+region. See Documentation/virt/kvm/arm/pvtime.txt for more information
-+including the layout of the stolen time structure.
-diff --git a/Documentation/virt/kvm/devices/vcpu.txt b/Documentation/virt/kvm/devices/vcpu.txt
-deleted file mode 100644
-index 6f3bd64a05b0..000000000000
---- a/Documentation/virt/kvm/devices/vcpu.txt
-+++ /dev/null
-@@ -1,76 +0,0 @@
--Generic vcpu interface
--====================================
--
--The virtual cpu "device" also accepts the ioctls KVM_SET_DEVICE_ATTR,
--KVM_GET_DEVICE_ATTR, and KVM_HAS_DEVICE_ATTR. The interface uses the same struct
--kvm_device_attr as other devices, but targets VCPU-wide settings and controls.
--
--The groups and attributes per virtual cpu, if any, are architecture specific.
--
--1. GROUP: KVM_ARM_VCPU_PMU_V3_CTRL
--Architectures: ARM64
--
--1.1. ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_IRQ
--Parameters: in kvm_device_attr.addr the address for PMU overflow interrupt is a
--            pointer to an int
--Returns: -EBUSY: The PMU overflow interrupt is already set
--         -ENXIO: The overflow interrupt not set when attempting to get it
--         -ENODEV: PMUv3 not supported
--         -EINVAL: Invalid PMU overflow interrupt number supplied or
--                  trying to set the IRQ number without using an in-kernel
--                  irqchip.
--
--A value describing the PMUv3 (Performance Monitor Unit v3) overflow interrupt
--number for this vcpu. This interrupt could be a PPI or SPI, but the interrupt
--type must be same for each vcpu. As a PPI, the interrupt number is the same for
--all vcpus, while as an SPI it must be a separate number per vcpu.
--
--1.2 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_INIT
--Parameters: no additional parameter in kvm_device_attr.addr
--Returns: -ENODEV: PMUv3 not supported or GIC not initialized
--         -ENXIO: PMUv3 not properly configured or in-kernel irqchip not
--                 configured as required prior to calling this attribute
--         -EBUSY: PMUv3 already initialized
--
--Request the initialization of the PMUv3.  If using the PMUv3 with an in-kernel
--virtual GIC implementation, this must be done after initializing the in-kernel
--irqchip.
--
--
--2. GROUP: KVM_ARM_VCPU_TIMER_CTRL
--Architectures: ARM,ARM64
--
--2.1. ATTRIBUTE: KVM_ARM_VCPU_TIMER_IRQ_VTIMER
--2.2. ATTRIBUTE: KVM_ARM_VCPU_TIMER_IRQ_PTIMER
--Parameters: in kvm_device_attr.addr the address for the timer interrupt is a
--            pointer to an int
--Returns: -EINVAL: Invalid timer interrupt number
--         -EBUSY:  One or more VCPUs has already run
--
--A value describing the architected timer interrupt number when connected to an
--in-kernel virtual GIC.  These must be a PPI (16 <= intid < 32).  Setting the
--attribute overrides the default values (see below).
--
--KVM_ARM_VCPU_TIMER_IRQ_VTIMER: The EL1 virtual timer intid (default: 27)
--KVM_ARM_VCPU_TIMER_IRQ_PTIMER: The EL1 physical timer intid (default: 30)
--
--Setting the same PPI for different timers will prevent the VCPUs from running.
--Setting the interrupt number on a VCPU configures all VCPUs created at that
--time to use the number provided for a given timer, overwriting any previously
--configured values on other VCPUs.  Userspace should configure the interrupt
--numbers on at least one VCPU after creating all VCPUs and before running any
--VCPUs.
--
--3. GROUP: KVM_ARM_VCPU_PVTIME_CTRL
--Architectures: ARM64
--
--3.1 ATTRIBUTE: KVM_ARM_VCPU_PVTIME_IPA
--Parameters: 64-bit base address
--Returns: -ENXIO:  Stolen time not implemented
--         -EEXIST: Base address already set for this VCPU
--         -EINVAL: Base address not 64 byte aligned
--
--Specifies the base address of the stolen time structure for this VCPU. The
--base address must be 64 byte aligned and exist within a valid guest memory
--region. See Documentation/virt/kvm/arm/pvtime.txt for more information
--including the layout of the stolen time structure.
++    bits:     |  63  ....  32  |  31  ....  0  |
++    values:   |   TIMA word0   |   TIMA word1  |
++    bits:     | 127       ..........       64  |
++    values:   |            unused              |
+ 
+ * Migration:
+ 
+@@ -196,7 +238,7 @@ the legacy interrupt mode, referred as XICS (POWER7/8).
+   3. Capture the state of the source targeting, the EQs configuration
+   and the state of thread interrupt context registers.
+ 
+-  Restore is similar :
++  Restore is similar:
+ 
+   1. Restore the EQ configuration. As targeting depends on it.
+   2. Restore targeting
 -- 
 2.24.1
 
