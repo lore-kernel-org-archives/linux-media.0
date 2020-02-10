@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DD49C3B185
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED70FC35250
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:04:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6AAED24655
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B92B621775
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:04:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581314628;
-	bh=cXBiFcaxvHE+98Do6xllRMxiS/qjPczxvEaHrAOu1F4=;
+	s=default; t=1581314653;
+	bh=beB/Xq2e5ZYKWruejeXMEAdqwZVMoHtzTi2sV7PiNOs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=C00m6jza9gJswlefyJmw0oy/6V3hbMlIoVTDCQ3rIRyxka732vtBBs7SyyMv4P1TJ
-	 EhwQXdLzc3GPBJQ86/OAfLW8zHeruNyFNbHfjnIvKj3Qpxg+i1aJEUgFRePdb0M1sG
-	 PYszfYnJPclPGYPA3A5mTe0vsnDZbpcE/pbn83jA=
+	b=T0i4LNkPku9yRAhNixfSPSVqqiNCPaKqO4lOMM2xwBqGArExNjmd+oCYj9ZtL/8Go
+	 Ui9OGUG2jOTY6TLwKCOV6jUZrE8v5xqLYdg+0GLyUA2AIXPTqT4eupGo8L0PxADZRG
+	 iQRncj36kfpVWJEs0Vuxe9i7I0ep/FtaHNFntmcM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbgBJGDr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Feb 2020 01:03:47 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36308 "EHLO
+        id S1727802AbgBJGEK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Feb 2020 01:04:10 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:36286 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727484AbgBJGDM (ORCPT
+        with ESMTP id S1726376AbgBJGDM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 10 Feb 2020 01:03:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=StBmkMxpMbI9C0C6LmmaNenTUA0wCJe7d2Ea3f4QLvQ=; b=W0IkyH58lX6Hj51tm4RaUJPqS4
-        7m2REERfu9k2dx1olH67UuqRMwXIe3UUMI3P77HSp2VlObdTqBULi6Q41xzMc3w6KyGOR75teBhQC
-        AZGJNsg5FLCxn3rF3otObLGDp/q8Vwr3ZtuOj9hr/yXKefa6xMPVy0KHdZFKPfiP+jhq03git9zDV
-        vpkOfpEPYIDgf++PKCcuk+SB3taFrcLjoklgjYO6VgAkffA0v6aqg9kugxG0XIy6oY1PjzZyinoKK
-        V0rIIpjT7faLsgUh7dIYOyMuNJkflRO6XRefecmRKXO3vZhf34Rygii55daE3vSyUe381KGlLpISB
-        4F4/tZgg==;
+        bh=VDWufxS1v8YBATfJuGUc8vM6jGy82+VrkVyMthw2XNA=; b=g6FpWmZvYn4j+gzfOlrxqCU77m
+        MnHEEgBSSLDmR08Pp5ZU49/KqtejgFB4bVsXJnSo8jctvAiqgp0HHZ8Cxx+OqIXKEQ/b9VjMlJi4M
+        07Rb9orVO9zRaRedJhEuIbSXrTgDOCGrah63jEho/d8hVpYKJN8z4ljKpbWIrhJQCP+61SS3GnVeP
+        U61T2MFDVQGdZktt8e33Umjyw/oZjq3Xi7KiIM6LoGYEGrHpjc7OUEWlRN9qk59jtC7i9WbMp9wy0
+        QWYMwi+i1hYekAkA71IsXftKEF7qpzokgrWDDv0pJtdvLkVglkLvhcGRusoemkwm6AtsmGLGkrxYi
+        hr04jZMw==;
 Received: from [80.156.29.194] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j12A3-0006Ti-Lj; Mon, 10 Feb 2020 06:03:11 +0000
+        id 1j12A3-0006Tf-II; Mon, 10 Feb 2020 06:03:11 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j12A2-00C2VC-0M; Mon, 10 Feb 2020 07:03:10 +0100
+        id 1j12A1-00C2Ux-Sx; Mon, 10 Feb 2020 07:03:09 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 08/28] docs: kvm: devices/arm-vgit-v3.txt to ReST
-Date:   Mon, 10 Feb 2020 07:02:46 +0100
-Message-Id: <cc116ed1381ff992573ba10e0852b9075881449f.1581314316.git.mchehab+huawei@kernel.org>
+        linux-doc@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>
+Subject: [PATCH 05/28] docs: virt: convert halt-polling.txt to ReST format
+Date:   Mon, 10 Feb 2020 07:02:43 +0100
+Message-Id: <c3de1c2b726a5df1e3616e53cb118a46025bc635.1581314316.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581314316.git.mchehab+huawei@kernel.org>
 References: <cover.1581314316.git.mchehab+huawei@kernel.org>
@@ -63,282 +63,147 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Use title markups;
-- change indent to match ReST syntax;
-- use proper table markups;
-- use literal block markups.
+- Fix document title to match ReST format
+- Convert the table to be properly recognized
+- Some indentation fixes to match ReST syntax.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
 ---
- .../{arm-vgic-v3.txt => arm-vgic-v3.rst}      | 132 ++++++++++++------
- Documentation/virt/kvm/devices/index.rst      |   1 +
- 2 files changed, 87 insertions(+), 46 deletions(-)
- rename Documentation/virt/kvm/devices/{arm-vgic-v3.txt => arm-vgic-v3.rst} (77%)
+ .../{halt-polling.txt => halt-polling.rst}    | 86 ++++++++++---------
+ Documentation/virt/kvm/index.rst              |  1 +
+ 2 files changed, 46 insertions(+), 41 deletions(-)
+ rename Documentation/virt/kvm/{halt-polling.txt => halt-polling.rst} (64%)
 
-diff --git a/Documentation/virt/kvm/devices/arm-vgic-v3.txt b/Documentation/virt/kvm/devices/arm-vgic-v3.rst
-similarity index 77%
-rename from Documentation/virt/kvm/devices/arm-vgic-v3.txt
-rename to Documentation/virt/kvm/devices/arm-vgic-v3.rst
-index ff290b43c8e5..5dd3bff51978 100644
---- a/Documentation/virt/kvm/devices/arm-vgic-v3.txt
-+++ b/Documentation/virt/kvm/devices/arm-vgic-v3.rst
-@@ -1,9 +1,12 @@
+diff --git a/Documentation/virt/kvm/halt-polling.txt b/Documentation/virt/kvm/halt-polling.rst
+similarity index 64%
+rename from Documentation/virt/kvm/halt-polling.txt
+rename to Documentation/virt/kvm/halt-polling.rst
+index 4f791b128dd2..4922e4a15f18 100644
+--- a/Documentation/virt/kvm/halt-polling.txt
++++ b/Documentation/virt/kvm/halt-polling.rst
+@@ -1,3 +1,6 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+==============================================================
- ARM Virtual Generic Interrupt Controller v3 and later (VGICv3)
- ==============================================================
++===========================
+ The KVM halt polling system
+ ===========================
  
+@@ -68,7 +71,8 @@ steady state polling interval but will only really do a good job for wakeups
+ which come at an approximately constant rate, otherwise there will be constant
+ adjustment of the polling interval.
  
- Device types supported:
--  KVM_DEV_TYPE_ARM_VGIC_V3     ARM Generic Interrupt Controller v3.0
-+  - KVM_DEV_TYPE_ARM_VGIC_V3     ARM Generic Interrupt Controller v3.0
+-[0] total block time: the time between when the halt polling function is
++[0] total block time:
++		      the time between when the halt polling function is
+ 		      invoked and a wakeup source received (irrespective of
+ 		      whether the scheduler is invoked within that function).
  
- Only one VGIC instance may be instantiated through this API.  The created VGIC
- will act as the VM interrupt controller, requiring emulated user-space devices
-@@ -15,7 +18,8 @@ Creating a guest GICv3 device requires a host GICv3 as well.
+@@ -81,31 +85,32 @@ shrunk. These variables are defined in include/linux/kvm_host.h and as module
+ parameters in virt/kvm/kvm_main.c, or arch/powerpc/kvm/book3s_hv.c in the
+ powerpc kvm-hv case.
  
- Groups:
-   KVM_DEV_ARM_VGIC_GRP_ADDR
--  Attributes:
-+   Attributes:
-+
-     KVM_VGIC_V3_ADDR_TYPE_DIST (rw, 64-bit)
-       Base address in the guest physical address space of the GICv3 distributor
-       register mappings. Only valid for KVM_DEV_TYPE_ARM_VGIC_V3.
-@@ -29,21 +33,25 @@ Groups:
-       This address needs to be 64K aligned.
+-Module Parameter	|   Description		    |	     Default Value
+---------------------------------------------------------------------------------
+-halt_poll_ns		| The global max polling    | KVM_HALT_POLL_NS_DEFAULT
+-			| interval which defines    |
+-			| the ceiling value of the  |
+-			| polling interval for      | (per arch value)
+-			| each vcpu.		    |
+---------------------------------------------------------------------------------
+-halt_poll_ns_grow	| The value by which the    | 2
+-			| halt polling interval is  |
+-			| multiplied in the	    |
+-			| grow_halt_poll_ns()	    |
+-			| function.		    |
+---------------------------------------------------------------------------------
+-halt_poll_ns_grow_start | The initial value to grow | 10000
+-			| to from zero in the	    |
+-			| grow_halt_poll_ns()	    |
+-			| function.		    |
+---------------------------------------------------------------------------------
+-halt_poll_ns_shrink	| The value by which the    | 0
+-			| halt polling interval is  |
+-			| divided in the	    |
+-			| shrink_halt_poll_ns()	    |
+-			| function.		    |
+---------------------------------------------------------------------------------
+++-----------------------+---------------------------+-------------------------+
++|Module Parameter	|   Description		    |	     Default Value    |
+++-----------------------+---------------------------+-------------------------+
++|halt_poll_ns		| The global max polling    | KVM_HALT_POLL_NS_DEFAULT|
++|			| interval which defines    |			      |
++|			| the ceiling value of the  |			      |
++|			| polling interval for      | (per arch value)	      |
++|			| each vcpu.		    |			      |
+++-----------------------+---------------------------+-------------------------+
++|halt_poll_ns_grow	| The value by which the    | 2			      |
++|			| halt polling interval is  |			      |
++|			| multiplied in the	    |			      |
++|			| grow_halt_poll_ns()	    |			      |
++|			| function.		    |			      |
+++-----------------------+---------------------------+-------------------------+
++|halt_poll_ns_grow_start| The initial value to grow | 10000		      |
++|			| to from zero in the	    |			      |
++|			| grow_halt_poll_ns()	    |			      |
++|			| function.		    |			      |
+++-----------------------+---------------------------+-------------------------+
++|halt_poll_ns_shrink	| The value by which the    | 0			      |
++|			| halt polling interval is  |			      |
++|			| divided in the	    |			      |
++|			| shrink_halt_poll_ns()	    |			      |
++|			| function.		    |			      |
+++-----------------------+---------------------------+-------------------------+
  
-     KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION (rw, 64-bit)
--      The attribute data pointed to by kvm_device_attr.addr is a __u64 value:
--      bits:     | 63   ....  52  |  51   ....   16 | 15 - 12  |11 - 0
--      values:   |     count      |       base      |  flags   | index
-+      The attribute data pointed to by kvm_device_attr.addr is a __u64 value::
-+
-+        bits:     | 63   ....  52  |  51   ....   16 | 15 - 12  |11 - 0
-+        values:   |     count      |       base      |  flags   | index
-+
-       - index encodes the unique redistributor region index
-       - flags: reserved for future use, currently 0
-       - base field encodes bits [51:16] of the guest physical base address
-         of the first redistributor in the region.
-       - count encodes the number of redistributors in the region. Must be
-         greater than 0.
-+
-       There are two 64K pages for each redistributor in the region and
-       redistributors are laid out contiguously within the region. Regions
-       are filled with redistributors in the index order. The sum of all
-       region count fields must be greater than or equal to the number of
-       VCPUs. Redistributor regions must be registered in the incremental
-       index order, starting from index 0.
-+
-       The characteristics of a specific redistributor region can be read
-       by presetting the index field in the attr data.
-       Only valid for KVM_DEV_TYPE_ARM_VGIC_V3.
-@@ -52,23 +60,27 @@ Groups:
-   KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION attributes.
+ These module parameters can be set from the debugfs files in:
  
-   Errors:
--    -E2BIG:  Address outside of addressable IPA range
--    -EINVAL: Incorrectly aligned address, bad redistributor region
-+
-+    =======  =============================================================
-+    -E2BIG   Address outside of addressable IPA range
-+    -EINVAL  Incorrectly aligned address, bad redistributor region
-              count/index, mixed redistributor region attribute usage
--    -EEXIST: Address already configured
--    -ENOENT: Attempt to read the characteristics of a non existing
-+    -EEXIST  Address already configured
-+    -ENOENT  Attempt to read the characteristics of a non existing
-              redistributor region
--    -ENXIO:  The group or attribute is unknown/unsupported for this device
-+    -ENXIO   The group or attribute is unknown/unsupported for this device
-              or hardware support is missing.
--    -EFAULT: Invalid user pointer for attr->addr.
-+    -EFAULT  Invalid user pointer for attr->addr.
-+    =======  =============================================================
+@@ -117,20 +122,19 @@ Note: that these module parameters are system wide values and are not able to
+ Further Notes
+ =============
  
+-- Care should be taken when setting the halt_poll_ns module parameter as a
+-large value has the potential to drive the cpu usage to 100% on a machine which
+-would be almost entirely idle otherwise. This is because even if a guest has
+-wakeups during which very little work is done and which are quite far apart, if
+-the period is shorter than the global max polling interval (halt_poll_ns) then
+-the host will always poll for the entire block time and thus cpu utilisation
+-will go to 100%.
++- Care should be taken when setting the halt_poll_ns module parameter as a large value
++  has the potential to drive the cpu usage to 100% on a machine which would be almost
++  entirely idle otherwise. This is because even if a guest has wakeups during which very
++  little work is done and which are quite far apart, if the period is shorter than the
++  global max polling interval (halt_poll_ns) then the host will always poll for the
++  entire block time and thus cpu utilisation will go to 100%.
  
--  KVM_DEV_ARM_VGIC_GRP_DIST_REGS
--  KVM_DEV_ARM_VGIC_GRP_REDIST_REGS
--  Attributes:
--    The attr field of kvm_device_attr encodes two values:
--    bits:     | 63   ....  32  |  31   ....    0 |
--    values:   |      mpidr     |      offset     |
-+  KVM_DEV_ARM_VGIC_GRP_DIST_REGS, KVM_DEV_ARM_VGIC_GRP_REDIST_REGS
-+   Attributes:
-+
-+    The attr field of kvm_device_attr encodes two values::
-+
-+      bits:     | 63   ....  32  |  31   ....    0 |
-+      values:   |      mpidr     |      offset     |
+-- Halt polling essentially presents a trade off between power usage and latency
+-and the module parameters should be used to tune the affinity for this. Idle
+-cpu time is essentially converted to host kernel time with the aim of decreasing
+-latency when entering the guest.
++- Halt polling essentially presents a trade off between power usage and latency and
++  the module parameters should be used to tune the affinity for this. Idle cpu time is
++  essentially converted to host kernel time with the aim of decreasing latency when
++  entering the guest.
  
-     All distributor regs are (rw, 32-bit) and kvm_device_attr.addr points to a
-     __u32 value.  64-bit registers must be accessed by separately accessing the
-@@ -93,7 +105,8 @@ Groups:
-     redistributor is accessed.  The mpidr is ignored for the distributor.
+-- Halt polling will only be conducted by the host when no other tasks are
+-runnable on that cpu, otherwise the polling will cease immediately and
+-schedule will be invoked to allow that other task to run. Thus this doesn't
+-allow a guest to denial of service the cpu.
++- Halt polling will only be conducted by the host when no other tasks are runnable on
++  that cpu, otherwise the polling will cease immediately and schedule will be invoked to
++  allow that other task to run. Thus this doesn't allow a guest to denial of service the
++  cpu.
+diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
+index 488c6370a447..b39f4894b61d 100644
+--- a/Documentation/virt/kvm/index.rst
++++ b/Documentation/virt/kvm/index.rst
+@@ -9,6 +9,7 @@ KVM
  
-     The mpidr encoding is based on the affinity information in the
--    architecture defined MPIDR, and the field is encoded as follows:
-+    architecture defined MPIDR, and the field is encoded as follows::
-+
-       | 63 .... 56 | 55 .... 48 | 47 .... 40 | 39 .... 32 |
-       |    Aff3    |    Aff2    |    Aff1    |    Aff0    |
+    amd-memory-encryption
+    cpuid
++   halt-polling
+    vcpu-requests
  
-@@ -148,24 +161,30 @@ Groups:
-     ignored.
- 
-   Errors:
--    -ENXIO: Getting or setting this register is not yet supported
--    -EBUSY: One or more VCPUs are running
-+
-+    ======  =====================================================
-+    -ENXIO  Getting or setting this register is not yet supported
-+    -EBUSY  One or more VCPUs are running
-+    ======  =====================================================
- 
- 
-   KVM_DEV_ARM_VGIC_GRP_CPU_SYSREGS
--  Attributes:
--    The attr field of kvm_device_attr encodes two values:
--    bits:     | 63      ....       32 | 31  ....  16 | 15  ....  0 |
--    values:   |         mpidr         |      RES     |    instr    |
-+   Attributes:
-+
-+    The attr field of kvm_device_attr encodes two values::
-+
-+      bits:     | 63      ....       32 | 31  ....  16 | 15  ....  0 |
-+      values:   |         mpidr         |      RES     |    instr    |
- 
-     The mpidr field encodes the CPU ID based on the affinity information in the
--    architecture defined MPIDR, and the field is encoded as follows:
-+    architecture defined MPIDR, and the field is encoded as follows::
-+
-       | 63 .... 56 | 55 .... 48 | 47 .... 40 | 39 .... 32 |
-       |    Aff3    |    Aff2    |    Aff1    |    Aff0    |
- 
-     The instr field encodes the system register to access based on the fields
-     defined in the A64 instruction set encoding for system register access
--    (RES means the bits are reserved for future use and should be zero):
-+    (RES means the bits are reserved for future use and should be zero)::
- 
-       | 15 ... 14 | 13 ... 11 | 10 ... 7 | 6 ... 3 | 2 ... 0 |
-       |   Op 0    |    Op1    |    CRn   |   CRm   |   Op2   |
-@@ -178,26 +197,35 @@ Groups:
- 
-     CPU interface registers access is not implemented for AArch32 mode.
-     Error -ENXIO is returned when accessed in AArch32 mode.
-+
-   Errors:
--    -ENXIO: Getting or setting this register is not yet supported
--    -EBUSY: VCPU is running
--    -EINVAL: Invalid mpidr or register value supplied
-+
-+    =======  =====================================================
-+    -ENXIO   Getting or setting this register is not yet supported
-+    -EBUSY   VCPU is running
-+    -EINVAL  Invalid mpidr or register value supplied
-+    =======  =====================================================
- 
- 
-   KVM_DEV_ARM_VGIC_GRP_NR_IRQS
--  Attributes:
-+   Attributes:
-+
-     A value describing the number of interrupts (SGI, PPI and SPI) for
-     this GIC instance, ranging from 64 to 1024, in increments of 32.
- 
-     kvm_device_attr.addr points to a __u32 value.
- 
-   Errors:
--    -EINVAL: Value set is out of the expected range
--    -EBUSY: Value has already be set.
-+
-+    =======  ======================================
-+    -EINVAL  Value set is out of the expected range
-+    -EBUSY   Value has already be set.
-+    =======  ======================================
- 
- 
-   KVM_DEV_ARM_VGIC_GRP_CTRL
--  Attributes:
-+   Attributes:
-+
-     KVM_DEV_ARM_VGIC_CTRL_INIT
-       request the initialization of the VGIC, no additional parameter in
-       kvm_device_attr.addr.
-@@ -205,20 +233,26 @@ Groups:
-       save all LPI pending bits into guest RAM pending tables.
- 
-       The first kB of the pending table is not altered by this operation.
-+
-   Errors:
--    -ENXIO: VGIC not properly configured as required prior to calling
--     this attribute
--    -ENODEV: no online VCPU
--    -ENOMEM: memory shortage when allocating vgic internal data
--    -EFAULT: Invalid guest ram access
--    -EBUSY:  One or more VCPUS are running
-+
-+    =======  ========================================================
-+    -ENXIO   VGIC not properly configured as required prior to calling
-+             this attribute
-+    -ENODEV  no online VCPU
-+    -ENOMEM  memory shortage when allocating vgic internal data
-+    -EFAULT  Invalid guest ram access
-+    -EBUSY   One or more VCPUS are running
-+    =======  ========================================================
- 
- 
-   KVM_DEV_ARM_VGIC_GRP_LEVEL_INFO
--  Attributes:
--    The attr field of kvm_device_attr encodes the following values:
--    bits:     | 63      ....       32 | 31   ....    10 | 9  ....  0 |
--    values:   |         mpidr         |      info       |   vINTID   |
-+   Attributes:
-+
-+    The attr field of kvm_device_attr encodes the following values::
-+
-+      bits:     | 63      ....       32 | 31   ....    10 | 9  ....  0 |
-+      values:   |         mpidr         |      info       |   vINTID   |
- 
-     The vINTID specifies which set of IRQs is reported on.
- 
-@@ -228,6 +262,7 @@ Groups:
-       VGIC_LEVEL_INFO_LINE_LEVEL:
- 	Get/Set the input level of the IRQ line for a set of 32 contiguously
- 	numbered interrupts.
-+
- 	vINTID must be a multiple of 32.
- 
- 	kvm_device_attr.addr points to a __u32 value which will contain a
-@@ -243,9 +278,14 @@ Groups:
-     reported with the same value regardless of the mpidr specified.
- 
-     The mpidr field encodes the CPU ID based on the affinity information in the
--    architecture defined MPIDR, and the field is encoded as follows:
-+    architecture defined MPIDR, and the field is encoded as follows::
-+
-       | 63 .... 56 | 55 .... 48 | 47 .... 40 | 39 .... 32 |
-       |    Aff3    |    Aff2    |    Aff1    |    Aff0    |
-+
-   Errors:
--    -EINVAL: vINTID is not multiple of 32 or
--     info field is not VGIC_LEVEL_INFO_LINE_LEVEL
-+
-+    =======  =============================================
-+    -EINVAL  vINTID is not multiple of 32 or info field is
-+	     not VGIC_LEVEL_INFO_LINE_LEVEL
-+    =======  =============================================
-diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
-index 2aad8d426097..80c1e0e225f4 100644
---- a/Documentation/virt/kvm/devices/index.rst
-+++ b/Documentation/virt/kvm/devices/index.rst
-@@ -8,3 +8,4 @@ Devices
-    :maxdepth: 2
- 
-    arm-vgic-its
-+   arm-vgic-v3
+    arm/index
 -- 
 2.24.1
 
