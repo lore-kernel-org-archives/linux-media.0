@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A426C3B192
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D209C35250
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:04:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DFA8D2467E
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35AF82465B
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:04:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581314610;
-	bh=IpnvmWz/8um8W8M0uxPTXbCD1j74QgnZZdtgNPoA8hY=;
+	s=default; t=1581314641;
+	bh=kza+nIaub/EO+u1abwbBpyZvce4UHjBfCCjb8bXTkqw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WBka6Blo6zl/WQSCaD4+/pYPvAfnh0+ca5x5LILl4lhe+eiTFhOnrMFY6ww56fqVG
-	 gIEr2Hxrze2Dtq38KOpW96sNn1t/ef2tuYF4zkLMifzj2dEFcCjChVHZ9R66Te7lo3
-	 goqmyu/qISeDqtFddSxWV2MNgVyV//7/3Ypsj4UM=
+	b=sxtUVIuPsh3pKSB5KOrBhnNnWZN4wo/jQDgsZah+zSOV7NPvN3nI+3bJcj/UTGc6x
+	 T8aBVTbJSUI+zWme2XvE72N7CoJ5RWiN3leG3yTc/dKTTJ6vj4Zc+XB+5VUyeGVL+Q
+	 Yca1O+AdGBZkhszjF1Ty24lNrucAKc+IE2GE9nhw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727640AbgBJGDV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Feb 2020 01:03:21 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36464 "EHLO
+        id S1727747AbgBJGDp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Feb 2020 01:03:45 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:36330 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727584AbgBJGDN (ORCPT
+        with ESMTP id S1727508AbgBJGDM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Feb 2020 01:03:13 -0500
+        Mon, 10 Feb 2020 01:03:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=3atzUbHUpUbwJ3lq7O6PizLnLBeHoo1f0Hi0KPfYLDo=; b=QJLxhPB5Y0ribOiXGII8xFfdQ8
-        sIE56jKaoX2Jeo0EjIORZIXvIbRmYWQlqbESHlKzzEJtOejy333Xs5pF0Z+6UIKTKPpntblRi2eD3
-        GUMuFq+Q0R94hY2UwMrje113SE3CrtFpiJL+fB32rpJ6W6UM9oF+08H0BpXCwMAxxsWLQuQRY1+M6
-        QNo08+EpRghAiKG1jGi+au9QlYtl5B/bUNFloD1CPQsAwMPP6s3hB8TsiWG8cR9WwgRZ0ERm7wCPy
-        LzuFo1XmnNhnHCm2+TsPNKhZmNnRpZBTYB7WijJJ4heBAVOkKJpEeqQLG3q0PGePCaTJUu/FzvUFt
-        AZl8F61Q==;
+        bh=p2YhU3jfC3+pZD58yyGjx9QrnEOyUsPJA0xSIIWllRk=; b=c9V4kU8saJN9Y9mvu0C3MA0dxc
+        2rNYXuRxjKsOO1gQZkbQyxByF2w2v6RHgT15ytnblAeVKkxTVLq62d49oRnZuR0PrGF8St9nlp+g8
+        bsAmfV0ch6BoCJVR6v+G7YPb6f6IWoKonrdKBGfbGrUpAOC4tvhjHjVEDKkwQhCciBlrgprgKp432
+        J07yMjFfnEWRAC4/SMnjBSHeqmTTvIN4hJeQ2JTNP+LeFzWs9JGrjW0H41dBcXhAo7W+sy38LO6kX
+        ojRYybOh2CCo52dlXCWD9zySo1lpkMhLvZYFv2aX9WVf0JBTNLJeiPEumzHtcP6mq3/wufxissrCS
+        hzjIDpeA==;
 Received: from [80.156.29.194] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j12A5-0006V2-GP; Mon, 10 Feb 2020 06:03:13 +0000
+        id 1j12A4-0006Ts-2b; Mon, 10 Feb 2020 06:03:12 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j12A3-00C2Wk-Pa; Mon, 10 Feb 2020 07:03:11 +0100
+        id 1j12A2-00C2W0-Cs; Mon, 10 Feb 2020 07:03:10 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>
-Subject: [PATCH 27/28] docs: kvm: review-checklist.txt: rename to ReST
-Date:   Mon, 10 Feb 2020 07:03:05 +0100
-Message-Id: <fbd068ed7445d0ea51052cb50d66cd8983e39b08.1581314317.git.mchehab+huawei@kernel.org>
+        linux-doc@vger.kernel.org
+Subject: [PATCH 18/28] docs: kvm: convert arm/hyp-abi.txt to ReST
+Date:   Mon, 10 Feb 2020 07:02:56 +0100
+Message-Id: <f0ecf7be020cb410ee29f506d440b32e549d569a.1581314317.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581314316.git.mchehab+huawei@kernel.org>
 References: <cover.1581314316.git.mchehab+huawei@kernel.org>
@@ -63,46 +63,85 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This file is already in ReST compatible format.
-So, rename it and add to the kvm's index.rst.
-
-While here, use the standard conversion for document titles.
+- Add proper markups for titles;
+- Adjust whitespaces and blank lines to match ReST
+  needs;
+- Mark literal blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
 ---
- Documentation/virt/kvm/index.rst                               | 2 ++
- .../virt/kvm/{review-checklist.txt => review-checklist.rst}    | 3 +++
- 2 files changed, 5 insertions(+)
- rename Documentation/virt/kvm/{review-checklist.txt => review-checklist.rst} (95%)
+ .../virt/kvm/arm/{hyp-abi.txt => hyp-abi.rst} | 28 +++++++++++++------
+ Documentation/virt/kvm/arm/index.rst          |  1 +
+ 2 files changed, 20 insertions(+), 9 deletions(-)
+ rename Documentation/virt/kvm/arm/{hyp-abi.txt => hyp-abi.rst} (79%)
 
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 7c1be8910837..774deaebf7fa 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -21,6 +21,8 @@ KVM
-    timekeeping
-    vcpu-requests
- 
-+   review-checklist
-+
-    arm/index
- 
-    devices/index
-diff --git a/Documentation/virt/kvm/review-checklist.txt b/Documentation/virt/kvm/review-checklist.rst
-similarity index 95%
-rename from Documentation/virt/kvm/review-checklist.txt
-rename to Documentation/virt/kvm/review-checklist.rst
-index 499af499e296..1f86a9d3f705 100644
---- a/Documentation/virt/kvm/review-checklist.txt
-+++ b/Documentation/virt/kvm/review-checklist.rst
-@@ -1,3 +1,6 @@
+diff --git a/Documentation/virt/kvm/arm/hyp-abi.txt b/Documentation/virt/kvm/arm/hyp-abi.rst
+similarity index 79%
+rename from Documentation/virt/kvm/arm/hyp-abi.txt
+rename to Documentation/virt/kvm/arm/hyp-abi.rst
+index a20a0bee268d..d1fc27d848e9 100644
+--- a/Documentation/virt/kvm/arm/hyp-abi.txt
++++ b/Documentation/virt/kvm/arm/hyp-abi.rst
+@@ -1,4 +1,8 @@
+-* Internal ABI between the kernel and HYP
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+================================
- Review checklist for kvm patches
- ================================
++=======================================
++Internal ABI between the kernel and HYP
++=======================================
  
+ This file documents the interaction between the Linux kernel and the
+ hypervisor layer when running Linux as a hypervisor (for example
+@@ -19,25 +23,31 @@ and only act on individual CPUs.
+ Unless specified otherwise, any built-in hypervisor must implement
+ these functions (see arch/arm{,64}/include/asm/virt.h):
+ 
+-* r0/x0 = HVC_SET_VECTORS
+-  r1/x1 = vectors
++* ::
++
++    r0/x0 = HVC_SET_VECTORS
++    r1/x1 = vectors
+ 
+   Set HVBAR/VBAR_EL2 to 'vectors' to enable a hypervisor. 'vectors'
+   must be a physical address, and respect the alignment requirements
+   of the architecture. Only implemented by the initial stubs, not by
+   Linux hypervisors.
+ 
+-* r0/x0 = HVC_RESET_VECTORS
++* ::
++
++    r0/x0 = HVC_RESET_VECTORS
+ 
+   Turn HYP/EL2 MMU off, and reset HVBAR/VBAR_EL2 to the initials
+   stubs' exception vector value. This effectively disables an existing
+   hypervisor.
+ 
+-* r0/x0 = HVC_SOFT_RESTART
+-  r1/x1 = restart address
+-  x2 = x0's value when entering the next payload (arm64)
+-  x3 = x1's value when entering the next payload (arm64)
+-  x4 = x2's value when entering the next payload (arm64)
++* ::
++
++    r0/x0 = HVC_SOFT_RESTART
++    r1/x1 = restart address
++    x2 = x0's value when entering the next payload (arm64)
++    x3 = x1's value when entering the next payload (arm64)
++    x4 = x2's value when entering the next payload (arm64)
+ 
+   Mask all exceptions, disable the MMU, move the arguments into place
+   (arm64 only), and jump to the restart address while at HYP/EL2. This
+diff --git a/Documentation/virt/kvm/arm/index.rst b/Documentation/virt/kvm/arm/index.rst
+index e039d9b1e076..134fa5fa77e5 100644
+--- a/Documentation/virt/kvm/arm/index.rst
++++ b/Documentation/virt/kvm/arm/index.rst
+@@ -7,4 +7,5 @@ ARM
+ .. toctree::
+    :maxdepth: 2
+ 
++   hyp-abi
+    pvtime
 -- 
 2.24.1
 
