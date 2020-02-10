@@ -2,208 +2,98 @@ Return-Path: <SRS0=NCVB=36=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED70FC35250
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:04:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EB70C352A1
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:10:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B92B621775
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:04:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DAD9B21739
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581314653;
-	bh=beB/Xq2e5ZYKWruejeXMEAdqwZVMoHtzTi2sV7PiNOs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=T0i4LNkPku9yRAhNixfSPSVqqiNCPaKqO4lOMM2xwBqGArExNjmd+oCYj9ZtL/8Go
-	 Ui9OGUG2jOTY6TLwKCOV6jUZrE8v5xqLYdg+0GLyUA2AIXPTqT4eupGo8L0PxADZRG
-	 iQRncj36kfpVWJEs0Vuxe9i7I0ep/FtaHNFntmcM=
+	s=default; t=1581315056;
+	bh=8g0hKppIhVXqTMKuYFDl3Cie2wyh70mX7s8ucWyEmP4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=zWisl0VgXgECnvjkG1p9CaDZWD6S/Si8w9F7Et1nLG6gO+QbZEJNlmDriEoVmxLYx
+	 KB5tQNP8HFxt4HvgIWh9t9PZEuCAqz39k8mD9s2nkGHsrJKuAoqCoRbNFsDAhIYe2K
+	 lrlwk9dpMkbm6MYCP/5Iw41Westl0ikM1yUmTfj8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727802AbgBJGEK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Feb 2020 01:04:10 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36286 "EHLO
+        id S1727496AbgBJGKz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Feb 2020 01:10:55 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:37068 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726376AbgBJGDM (ORCPT
+        with ESMTP id S1726188AbgBJGKz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Feb 2020 01:03:12 -0500
+        Mon, 10 Feb 2020 01:10:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=VDWufxS1v8YBATfJuGUc8vM6jGy82+VrkVyMthw2XNA=; b=g6FpWmZvYn4j+gzfOlrxqCU77m
-        MnHEEgBSSLDmR08Pp5ZU49/KqtejgFB4bVsXJnSo8jctvAiqgp0HHZ8Cxx+OqIXKEQ/b9VjMlJi4M
-        07Rb9orVO9zRaRedJhEuIbSXrTgDOCGrah63jEho/d8hVpYKJN8z4ljKpbWIrhJQCP+61SS3GnVeP
-        U61T2MFDVQGdZktt8e33Umjyw/oZjq3Xi7KiIM6LoGYEGrHpjc7OUEWlRN9qk59jtC7i9WbMp9wy0
-        QWYMwi+i1hYekAkA71IsXftKEF7qpzokgrWDDv0pJtdvLkVglkLvhcGRusoemkwm6AtsmGLGkrxYi
-        hr04jZMw==;
-Received: from [80.156.29.194] (helo=bombadil.infradead.org)
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description;
+        bh=goUY2avRCYVAek7mCPEP6D9VvLCgLAVwzsr5XSoA9jI=; b=fCcxVNrKPFdXDSKhgC67R9+Gay
+        OPRuRD3lNe+D7m3D1M+6TCJG3HdpOC960ObyRUJghTHBcs5tnFLz3O3/jHYR58G9IoCl4NUTrYzkL
+        f9Bzz+TWoY6hibjVzfc0OrEeUBOQDYobAQ80+PaPp4ySQ4ZJi/pHVF41MjEumEU3UJhTSvbqkxG5H
+        Qsg89Z+AqdUEBI5FLIfdYeG3X4IXYyjk1HBc78/GYWhQuV/tS0R+PGWaXofxlkWEBkCmOpC81/JPR
+        CEGJjzOxoijWHqxapJT/aEva0/UljFlkYIhiPL/QsDJ0p0W3I2vCUdwYQLF0EJ5LA6v/qFPPpnSF1
+        kdMGLLbw==;
+Received: from [80.156.29.194] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j12A3-0006Tf-II; Mon, 10 Feb 2020 06:03:11 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j12A1-00C2Ux-Sx; Mon, 10 Feb 2020 07:03:09 +0100
+        id 1j12HT-0000wc-Dz; Mon, 10 Feb 2020 06:10:52 +0000
+Date:   Mon, 10 Feb 2020 07:10:47 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+To:     Ben Boeckel <mathstuf@gmail.com>
+Cc:     list.lkml.keyrings@me.benboeckel.net,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>
-Subject: [PATCH 05/28] docs: virt: convert halt-polling.txt to ReST format
-Date:   Mon, 10 Feb 2020 07:02:43 +0100
-Message-Id: <c3de1c2b726a5df1e3616e53cb118a46025bc635.1581314316.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <cover.1581314316.git.mchehab+huawei@kernel.org>
-References: <cover.1581314316.git.mchehab+huawei@kernel.org>
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org
+Subject: Re: [PATCH 02/11] docs: crypto: convert asymmetric-keys.txt to ReST
+Message-ID: <20200210071047.0db3f3a6@kernel.org>
+In-Reply-To: <20200206200911.GA2830394@erythro.kitware.com>
+References: <cover.1581001737.git.mchehab+huawei@kernel.org>
+        <1b6cd1da02dda27a725a6c4214019a1e306a7927.1581001737.git.mchehab+huawei@kernel.org>
+        <20200206200911.GA2830394@erythro.kitware.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Fix document title to match ReST format
-- Convert the table to be properly recognized
-- Some indentation fixes to match ReST syntax.
+Em Thu, 6 Feb 2020 15:09:11 -0500
+Ben Boeckel <mathstuf@gmail.com> escreveu:
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
----
- .../{halt-polling.txt => halt-polling.rst}    | 86 ++++++++++---------
- Documentation/virt/kvm/index.rst              |  1 +
- 2 files changed, 46 insertions(+), 41 deletions(-)
- rename Documentation/virt/kvm/{halt-polling.txt => halt-polling.rst} (64%)
+> On Thu, Feb 06, 2020 at 16:11:21 +0100, Mauro Carvalho Chehab wrote:
+> > - (1) If the criterion string is of the form "id:<hexdigits>" then the =
+match
+> > +  1) If the criterion string is of the form "id:<hexdigits>" then the =
+match =20
+>=20
+> This update was followed in all the enumeration changes except=E2=80=A6
+>=20
+> > - (2) If the criterion string is of the form "<subtype>:<hexdigits>" th=
+en the
+> > + 2) If the criterion string is of the form "<subtype>:<hexdigits>" the=
+n the =20
+>=20
+> The whitespace here doesn't match up. Which is preferred?
 
-diff --git a/Documentation/virt/kvm/halt-polling.txt b/Documentation/virt/kvm/halt-polling.rst
-similarity index 64%
-rename from Documentation/virt/kvm/halt-polling.txt
-rename to Documentation/virt/kvm/halt-polling.rst
-index 4f791b128dd2..4922e4a15f18 100644
---- a/Documentation/virt/kvm/halt-polling.txt
-+++ b/Documentation/virt/kvm/halt-polling.rst
-@@ -1,3 +1,6 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+===========================
- The KVM halt polling system
- ===========================
- 
-@@ -68,7 +71,8 @@ steady state polling interval but will only really do a good job for wakeups
- which come at an approximately constant rate, otherwise there will be constant
- adjustment of the polling interval.
- 
--[0] total block time: the time between when the halt polling function is
-+[0] total block time:
-+		      the time between when the halt polling function is
- 		      invoked and a wakeup source received (irrespective of
- 		      whether the scheduler is invoked within that function).
- 
-@@ -81,31 +85,32 @@ shrunk. These variables are defined in include/linux/kvm_host.h and as module
- parameters in virt/kvm/kvm_main.c, or arch/powerpc/kvm/book3s_hv.c in the
- powerpc kvm-hv case.
- 
--Module Parameter	|   Description		    |	     Default Value
----------------------------------------------------------------------------------
--halt_poll_ns		| The global max polling    | KVM_HALT_POLL_NS_DEFAULT
--			| interval which defines    |
--			| the ceiling value of the  |
--			| polling interval for      | (per arch value)
--			| each vcpu.		    |
----------------------------------------------------------------------------------
--halt_poll_ns_grow	| The value by which the    | 2
--			| halt polling interval is  |
--			| multiplied in the	    |
--			| grow_halt_poll_ns()	    |
--			| function.		    |
----------------------------------------------------------------------------------
--halt_poll_ns_grow_start | The initial value to grow | 10000
--			| to from zero in the	    |
--			| grow_halt_poll_ns()	    |
--			| function.		    |
----------------------------------------------------------------------------------
--halt_poll_ns_shrink	| The value by which the    | 0
--			| halt polling interval is  |
--			| divided in the	    |
--			| shrink_halt_poll_ns()	    |
--			| function.		    |
----------------------------------------------------------------------------------
-++-----------------------+---------------------------+-------------------------+
-+|Module Parameter	|   Description		    |	     Default Value    |
-++-----------------------+---------------------------+-------------------------+
-+|halt_poll_ns		| The global max polling    | KVM_HALT_POLL_NS_DEFAULT|
-+|			| interval which defines    |			      |
-+|			| the ceiling value of the  |			      |
-+|			| polling interval for      | (per arch value)	      |
-+|			| each vcpu.		    |			      |
-++-----------------------+---------------------------+-------------------------+
-+|halt_poll_ns_grow	| The value by which the    | 2			      |
-+|			| halt polling interval is  |			      |
-+|			| multiplied in the	    |			      |
-+|			| grow_halt_poll_ns()	    |			      |
-+|			| function.		    |			      |
-++-----------------------+---------------------------+-------------------------+
-+|halt_poll_ns_grow_start| The initial value to grow | 10000		      |
-+|			| to from zero in the	    |			      |
-+|			| grow_halt_poll_ns()	    |			      |
-+|			| function.		    |			      |
-++-----------------------+---------------------------+-------------------------+
-+|halt_poll_ns_shrink	| The value by which the    | 0			      |
-+|			| halt polling interval is  |			      |
-+|			| divided in the	    |			      |
-+|			| shrink_halt_poll_ns()	    |			      |
-+|			| function.		    |			      |
-++-----------------------+---------------------------+-------------------------+
- 
- These module parameters can be set from the debugfs files in:
- 
-@@ -117,20 +122,19 @@ Note: that these module parameters are system wide values and are not able to
- Further Notes
- =============
- 
--- Care should be taken when setting the halt_poll_ns module parameter as a
--large value has the potential to drive the cpu usage to 100% on a machine which
--would be almost entirely idle otherwise. This is because even if a guest has
--wakeups during which very little work is done and which are quite far apart, if
--the period is shorter than the global max polling interval (halt_poll_ns) then
--the host will always poll for the entire block time and thus cpu utilisation
--will go to 100%.
-+- Care should be taken when setting the halt_poll_ns module parameter as a large value
-+  has the potential to drive the cpu usage to 100% on a machine which would be almost
-+  entirely idle otherwise. This is because even if a guest has wakeups during which very
-+  little work is done and which are quite far apart, if the period is shorter than the
-+  global max polling interval (halt_poll_ns) then the host will always poll for the
-+  entire block time and thus cpu utilisation will go to 100%.
- 
--- Halt polling essentially presents a trade off between power usage and latency
--and the module parameters should be used to tune the affinity for this. Idle
--cpu time is essentially converted to host kernel time with the aim of decreasing
--latency when entering the guest.
-+- Halt polling essentially presents a trade off between power usage and latency and
-+  the module parameters should be used to tune the affinity for this. Idle cpu time is
-+  essentially converted to host kernel time with the aim of decreasing latency when
-+  entering the guest.
- 
--- Halt polling will only be conducted by the host when no other tasks are
--runnable on that cpu, otherwise the polling will cease immediately and
--schedule will be invoked to allow that other task to run. Thus this doesn't
--allow a guest to denial of service the cpu.
-+- Halt polling will only be conducted by the host when no other tasks are runnable on
-+  that cpu, otherwise the polling will cease immediately and schedule will be invoked to
-+  allow that other task to run. Thus this doesn't allow a guest to denial of service the
-+  cpu.
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 488c6370a447..b39f4894b61d 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -9,6 +9,7 @@ KVM
- 
-    amd-memory-encryption
-    cpuid
-+   halt-polling
-    vcpu-requests
- 
-    arm/index
--- 
-2.24.1
+That was a mistake.
 
+>=20
+> > - (1) Signature verification.
+> > +1) Signature verification. =20
+>=20
+> Here, the indentation was lost too. Is this intentional?
+
+Both ways would work. I'll keep the original indentation for the next
+version. Thanks for pointing it.
+
+Cheers,
+Mauro
