@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3E75C3B188
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 217FCC3B193
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:04:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9790724655
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E575B21927
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581314639;
-	bh=60RSXW44yNEj8FiDNv1QrFsi8MaCSUjBdmEwFNfoauE=;
+	s=default; t=1581314644;
+	bh=ArAUkNUQ/vF/uez6+ESqcEZUEceHpZziK7NIyODV0XA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=SheGns/fnDYHKl2+RuFT0e7iqhJQtNpfNTZcoYf5uPd82/H2eNSvUeWHSji0U3ObQ
-	 Uy61b0rp5NZHSF0KLF4ivbxexxbOe9xnLBSjb3cSSc7TPvjsMAoNNDCAykvqiFCBUx
-	 zisynTjywvsnRnRwxvRSMtCjsuxM0S+EiClrnvHM=
+	b=i8dNwoQAorywRLOAXU2mAwbgu4YATE7RO3lnadeDky3K9sBxUJ7E2llZNqeehP+L4
+	 mPi0+awletRnGQGDhSUE/G4jT/6T40fATNZrTC/+naz+cddKHYdJfQhG1+bUzmy8E1
+	 FOQe9StjXLqmydyhjyI/dxc10ODfu/VqToMEzfL8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727755AbgBJGDp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Feb 2020 01:03:45 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36348 "EHLO
+        id S1727767AbgBJGED (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Feb 2020 01:04:03 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:36310 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727529AbgBJGDM (ORCPT
+        with ESMTP id S1727496AbgBJGDM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 10 Feb 2020 01:03:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=XosaEvF5KfBIIrC0UH6xsRambxzgg5W02cFwNp6pBOU=; b=ST/AVNVep2gTSjVNM1k6xoRsXb
-        YJ7sxMVLtwo4IBHdyiooEdTgEY4vO/BpPXpGyZ1GxFYvGyIzv6j2682/DiKEGq3iLf1XwXwYUbp2W
-        JzysTJ1SLJv4JSOC4WnYYQlpHWQs7k8zH6A69S2Eq76MFbydjVGDies0jRT2gqxUqNBTl3tgRVZYz
-        QqqTfC5a7ZB4GVIpB2WQrzHlubpA3yJvp8/QBmJeD+bsToi1o/HZAzz1x8iY3i2m05+EefQzx3g3A
-        DnlmOZeOMH7581pai+1fWHCqyJw6gW1KjbZuPJKL2SfZ7BLZXB9/4Q1F4KLSPitxAzIvrvQbyDGGd
-        8qYJJ5iA==;
+        bh=8GfzltQhS3v+ZlAaDJGjOA5DZ8pCcqwOMokM0PKMq0I=; b=UV5Hfzhxx/q9CXwJ+S2gPVFR02
+        xGVsRspuI/Hs7JhCor9wCkWak8R55BUoiltwJ1+jX9DiIOVGiZEdCyHWQnpDk2v6Dkw0+wzykaalF
+        nAVy5puQLGx7oI95Uuysare59M228Eu8OujSw27zXYa2ge9hDvj5qY86TpNcZEVZzASoMRLH/SAoO
+        CBK7oJtUrbNDW94baXHod6TgkaqSGe3BUMFHo1PshH8lBLNS40A+iPs1h0vdLrwbs6NgqhIEnU2+d
+        1MnJuaUHE+XsHBfLJ78JhcdoSd43SXOJBCCO3Jlf8qDswHhG5e6na0f7DEB6SbkscAtlWQKfulaOO
+        AAX0I/Kw==;
 Received: from [80.156.29.194] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j12A4-0006Tx-AV; Mon, 10 Feb 2020 06:03:12 +0000
+        id 1j12A3-0006Tn-R8; Mon, 10 Feb 2020 06:03:11 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j12A2-00C2WQ-KM; Mon, 10 Feb 2020 07:03:10 +0100
+        id 1j12A2-00C2Vb-63; Mon, 10 Feb 2020 07:03:10 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 23/28] docs: kvm: Convert nested-vmx.txt to ReST format
-Date:   Mon, 10 Feb 2020 07:03:01 +0100
-Message-Id: <9ca9ada5133bd9c10208f78eafc34f263ceecb7d.1581314317.git.mchehab+huawei@kernel.org>
+        linux-doc@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>
+Subject: [PATCH 13/28] docs: kvm: convert devices/vfio.txt to ReST
+Date:   Mon, 10 Feb 2020 07:02:51 +0100
+Message-Id: <b3c9acd041a6097fb246aa5337737127e9c014a3.1581314317.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581314316.git.mchehab+huawei@kernel.org>
 References: <cover.1581314316.git.mchehab+huawei@kernel.org>
@@ -63,105 +63,73 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This file is almost in ReST format. Just a small set of
-changes were needed:
-
-    - Add markups for lists;
-    - Add markups for a literal block;
-    - Adjust whitespaces.
-
-While here, use the standard markup for the document title.
+- Use standard title markup;
+- adjust lists;
+- mark code blocks as such.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
 ---
- Documentation/virt/kvm/index.rst              |  1 +
- .../kvm/{nested-vmx.txt => nested-vmx.rst}    | 37 +++++++++++--------
- 2 files changed, 22 insertions(+), 16 deletions(-)
- rename Documentation/virt/kvm/{nested-vmx.txt => nested-vmx.rst} (90%)
+ Documentation/virt/kvm/devices/index.rst      |  1 +
+ .../virt/kvm/devices/{vfio.txt => vfio.rst}   | 25 +++++++++++--------
+ 2 files changed, 16 insertions(+), 10 deletions(-)
+ rename Documentation/virt/kvm/devices/{vfio.txt => vfio.rst} (72%)
 
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 95e2487d38f4..123385d0a74a 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -15,6 +15,7 @@ KVM
-    locking
-    mmu
-    msr
-+   nested-vmx
-    vcpu-requests
- 
-    arm/index
-diff --git a/Documentation/virt/kvm/nested-vmx.txt b/Documentation/virt/kvm/nested-vmx.rst
-similarity index 90%
-rename from Documentation/virt/kvm/nested-vmx.txt
-rename to Documentation/virt/kvm/nested-vmx.rst
-index 97eb1353e962..592b0ab6970b 100644
---- a/Documentation/virt/kvm/nested-vmx.txt
-+++ b/Documentation/virt/kvm/nested-vmx.rst
-@@ -1,3 +1,6 @@
+diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
+index 5a61838f0e61..cbbadda080d0 100644
+--- a/Documentation/virt/kvm/devices/index.rst
++++ b/Documentation/virt/kvm/devices/index.rst
+@@ -13,3 +13,4 @@ Devices
+    mpic
+    s390_flic
+    vcpu
++   vfio
+diff --git a/Documentation/virt/kvm/devices/vfio.txt b/Documentation/virt/kvm/devices/vfio.rst
+similarity index 72%
+rename from Documentation/virt/kvm/devices/vfio.txt
+rename to Documentation/virt/kvm/devices/vfio.rst
+index 528c77c8022c..2d20dc561069 100644
+--- a/Documentation/virt/kvm/devices/vfio.txt
++++ b/Documentation/virt/kvm/devices/vfio.rst
+@@ -1,8 +1,12 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+==========
- Nested VMX
- ==========
++===================
+ VFIO virtual device
+ ===================
  
-@@ -41,9 +44,9 @@ No modifications are required to user space (qemu). However, qemu's default
- emulated CPU type (qemu64) does not list the "VMX" CPU feature, so it must be
- explicitly enabled, by giving qemu one of the following options:
- 
--     -cpu host              (emulated CPU has all features of the real CPU)
-+     - cpu host              (emulated CPU has all features of the real CPU)
- 
--     -cpu qemu64,+vmx       (add just the vmx feature to a named CPU type)
-+     - cpu qemu64,+vmx       (add just the vmx feature to a named CPU type)
- 
- 
- ABIs
-@@ -75,6 +78,8 @@ of this structure changes, this can break live migration across KVM versions.
- VMCS12_REVISION (from vmx.c) should be changed if struct vmcs12 or its inner
- struct shadow_vmcs is ever changed.
- 
-+::
+ Device types supported:
+-  KVM_DEV_TYPE_VFIO
 +
- 	typedef u64 natural_width;
- 	struct __packed vmcs12 {
- 		/* According to the Intel spec, a VMCS region must start with
-@@ -220,21 +225,21 @@ Authors
- -------
++  - KVM_DEV_TYPE_VFIO
  
- These patches were written by:
--     Abel Gordon, abelg <at> il.ibm.com
--     Nadav Har'El, nyh <at> il.ibm.com
--     Orit Wasserman, oritw <at> il.ibm.com
--     Ben-Ami Yassor, benami <at> il.ibm.com
--     Muli Ben-Yehuda, muli <at> il.ibm.com
-+    - Abel Gordon, abelg <at> il.ibm.com
-+    - Nadav Har'El, nyh <at> il.ibm.com
-+    - Orit Wasserman, oritw <at> il.ibm.com
-+    - Ben-Ami Yassor, benami <at> il.ibm.com
-+    - Muli Ben-Yehuda, muli <at> il.ibm.com
+ Only one VFIO instance may be created per VM.  The created device
+ tracks VFIO groups in use by the VM and features of those groups
+@@ -23,14 +27,15 @@ KVM_DEV_VFIO_GROUP attributes:
+ 	for the VFIO group.
+   KVM_DEV_VFIO_GROUP_SET_SPAPR_TCE: attaches a guest visible TCE table
+ 	allocated by sPAPR KVM.
+-	kvm_device_attr.addr points to a struct:
++	kvm_device_attr.addr points to a struct::
  
- With contributions by:
--     Anthony Liguori, aliguori <at> us.ibm.com
--     Mike Day, mdday <at> us.ibm.com
--     Michael Factor, factor <at> il.ibm.com
--     Zvi Dubitzky, dubi <at> il.ibm.com
-+    - Anthony Liguori, aliguori <at> us.ibm.com
-+    - Mike Day, mdday <at> us.ibm.com
-+    - Michael Factor, factor <at> il.ibm.com
-+    - Zvi Dubitzky, dubi <at> il.ibm.com
+-	struct kvm_vfio_spapr_tce {
+-		__s32	groupfd;
+-		__s32	tablefd;
+-	};
++		struct kvm_vfio_spapr_tce {
++			__s32	groupfd;
++			__s32	tablefd;
++		};
  
- And valuable reviews by:
--     Avi Kivity, avi <at> redhat.com
--     Gleb Natapov, gleb <at> redhat.com
--     Marcelo Tosatti, mtosatti <at> redhat.com
--     Kevin Tian, kevin.tian <at> intel.com
--     and others.
-+    - Avi Kivity, avi <at> redhat.com
-+    - Gleb Natapov, gleb <at> redhat.com
-+    - Marcelo Tosatti, mtosatti <at> redhat.com
-+    - Kevin Tian, kevin.tian <at> intel.com
-+    - and others.
+-	where
+-	@groupfd is a file descriptor for a VFIO group;
+-	@tablefd is a file descriptor for a TCE table allocated via
+-		KVM_CREATE_SPAPR_TCE.
++	where:
++
++	- @groupfd is a file descriptor for a VFIO group;
++	- @tablefd is a file descriptor for a TCE table allocated via
++	  KVM_CREATE_SPAPR_TCE.
 -- 
 2.24.1
 
