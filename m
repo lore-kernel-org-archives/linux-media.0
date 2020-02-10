@@ -2,117 +2,107 @@ Return-Path: <SRS0=NCVB=36=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA851C352A3
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 11:23:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A350AC3B186
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 14:13:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E7C220842
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 11:23:46 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="EyfxWd6c"
+	by mail.kernel.org (Postfix) with ESMTP id 8378E208C3
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 14:13:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727369AbgBJLXq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Feb 2020 06:23:46 -0500
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:58689 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726796AbgBJLXp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Feb 2020 06:23:45 -0500
-Received: from [IPv6:2001:983:e9a7:1:59b:9f2a:47ac:4926]
- ([IPv6:2001:983:e9a7:1:59b:9f2a:47ac:4926])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 17AEj9ksjn7E517AFjl1qs; Mon, 10 Feb 2020 12:23:43 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1581333823; bh=JYwpin1MXjDDDa83dsQF04utXRrnUiqC0jirKc80Q6g=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=EyfxWd6cLQHXx7n7ssRiXtR+08vh9lbmSh+tlrbjtGwLumrGw5ygvc6UhPbdrKTd3
-         4/E7aCyizDgDsfeGLYYS6Fb1niaXJqeUe7SWhJl4NpTJMaraIYia0ZoNDCKp+d7n25
-         QTH4efxCnz5UCPHa1pbaJUsqGeJevzwz0QiE/S6UnY0JYUWU1WIbOMeBFnOLjoAdHW
-         ITIA+35TiEwRiYwwTUrlwqVsLUJ4Nevie1A8YopQqtL+OmsPImnIaBu1JGo17HyqqF
-         XjqYgGCvv3ZqzMVxiMZEFm52pS3VF3st7YpEDBiSJGabsV6dwS07sCxij5adJSedIl
-         WeCvGYHdivqfw==
-Subject: Re: [PATCH 1/2] edid-decode: add function to enable usage as a
- library
-To:     Ilia Mirkin <imirkin@alum.mit.edu>, linux-media@vger.kernel.org
-References: <20200209174937.22844-1-imirkin@alum.mit.edu>
- <20200209174937.22844-2-imirkin@alum.mit.edu>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <3e56402b-9841-99a3-730c-b1fd2bc2cc5d@xs4all.nl>
-Date:   Mon, 10 Feb 2020 12:23:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <20200209174937.22844-2-imirkin@alum.mit.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S1728646AbgBJONd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Feb 2020 09:13:33 -0500
+Received: from mx2.suse.de ([195.135.220.15]:39664 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727481AbgBJONc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 10 Feb 2020 09:13:32 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id C6A6DAE2A;
+        Mon, 10 Feb 2020 14:13:30 +0000 (UTC)
+Message-ID: <1581344006.26936.7.camel@suse.de>
+Subject: Re: KASAN: use-after-free Read in uvc_probe
+From:   Oliver Neukum <oneukum@suse.de>
+To:     syzbot <syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Date:   Mon, 10 Feb 2020 15:13:26 +0100
+In-Reply-To: <000000000000780999059c048dfc@google.com>
+References: <000000000000780999059c048dfc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfNoFjWowKspPq0WDjig/d7Y80TJTVaLUS/09etQsaVVJ4g1jrRZptLGIjcw8et2Ea23x1b86Nmsw+PAONLwcM7HmhKy/eCTmNEz90c2SKYewT5xtYqeB
- kUOqOGbuHH6NtR9FGJEaleUJOLxKQDg5waEhpSw3Wjyvb9UIEiTG8kw0GyTJDPUJX13TTR2vTJ1zlUNegVdg1BtE4ypAp4f+6+TOtX2iabVxdAgWBJVfcGpU
- 23pNsQ5n7OKITV2ihCLpyAqgjp+QqAnjw47qJ/IRRKGZsS+xivG+Ew3a12jkJPqJfJ3FvfTERUgZG9vKKso6Kw==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ilia,
-
-I pushed my patch to initialize edid_state in the constructor to the
-edid-decode git repo.
-
-I've also split off the 'write to a file' part from edid_from_file into
-a separate edid_to_file function, so you'll have to rebase your patch.
-
-Two comments below:
-
-On 2/9/20 6:49 PM, Ilia Mirkin wrote:
-> This is helpful for an emscripten setup, as there's no great way to
-> reinitialize the object from scratch.
+Am Montag, den 13.01.2020, 04:24 -0800 schrieb syzbot:
+> Hello,
 > 
-> Signed-off-by: Ilia Mirkin <imirkin@alum.mit.edu>
-> ---
->  edid-decode.cpp | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+> syzbot found the following crash on:
 > 
-> diff --git a/edid-decode.cpp b/edid-decode.cpp
-> index ef50da2..fd17bc6 100644
-> --- a/edid-decode.cpp
-> +++ b/edid-decode.cpp
-> @@ -1005,3 +1005,21 @@ int main(int argc, char **argv)
->  		return edid_from_file(argv[optind], argv[optind + 1], out_fmt);
->  	return ret ? ret : state.parse_edid();
->  }
-> +
-> +#ifdef __EMSCRIPTEN__
-> +/*
-> + * The surrounding JavaScript implementation will call this function
-> + * each time it wants to decode an EDID. So this should reset all the
-> + * state and start over.
-> + */
-> +extern "C" int parse_edid(const char *input) {
-
-'{' should start on the next line. Let's keep the coding style consistent.
-
-> +	for (unsigned i = 0; i < EDID_MAX_BLOCKS + 1; i++) {
-> +		s_msgs[i][0].clear();
-> +		s_msgs[i][1].clear();
-> +	}
-
-I'm pretty sure that this for loop is not necessary. Can you drop this
-for loop and see if it works?
-
-> +	options[OptCheck] = 1;
-> +	state = edid_state();
-> +	int ret = edid_from_file(input, NULL, OUT_FMT_DEFAULT);
-> +	return ret ? ret : state.parse_edid();
-> +}
-> +#endif
+> HEAD commit:    ae179410 usb: gadget: add raw-gadget interface
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=132223fee00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d751a3a72ae57
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9a48339b077c5a80b869
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16857325e00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=142e069ee00000
 > 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com
+> 
+> usb 1-1: New USB device found, idVendor=0bd3, idProduct=0555,  
+> bcdDevice=69.6a
+> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> usb 1-1: config 0 descriptor??
+> usb 1-1: string descriptor 0 read error: -71
+> uvcvideo: Found UVC 0.00 device <unnamed> (0bd3:0555)
+> ==================================================================
+> BUG: KASAN: use-after-free in uvc_register_terms  
+> drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
+> BUG: KASAN: use-after-free in uvc_register_chains  
+> drivers/media/usb/uvc/uvc_driver.c:2070 [inline]
+> BUG: KASAN: use-after-free in uvc_probe.cold+0x2193/0x29de  
+> drivers/media/usb/uvc/uvc_driver.c:2201
+> Read of size 2 at addr ffff8881d4f1bc2e by task kworker/1:2/94
 
-Regards,
+#syz test: https://github.com/google/kasan.git ae179410
 
-	Hans
+From db844641a5e30f3cfc0ce9cde156b3cc356b6c0c Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Mon, 10 Feb 2020 15:10:36 +0100
+Subject: [PATCH] UVC: deal with unnamed streams
+
+The pointer can be NULL
+
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/media/usb/uvc/uvc_driver.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 99883550375e..26558a89f2fe 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2069,7 +2069,8 @@ static int uvc_register_terms(struct uvc_device *dev,
+ 		stream = uvc_stream_by_id(dev, term->id);
+ 		if (stream == NULL) {
+ 			uvc_printk(KERN_INFO, "No streaming interface found "
+-				   "for terminal %u.", term->id);
++				   "for terminal %u.",
++				   term->id ? term->id : "(Unnamed)");
+ 			continue;
+ 		}
+ 
+-- 
+2.16.4
+
