@@ -7,52 +7,54 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D32CC35250
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80EA9C3B18B
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E2E0A21927
-	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B2862467E
+	for <linux-media@archiver.kernel.org>; Mon, 10 Feb 2020 06:03:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581314628;
-	bh=mylKyYOCMH2opzKvVcnNxCLFGkOsR2hMN6SRW8Il3a4=;
+	s=default; t=1581314603;
+	bh=AxDvjIpCQVaSrVfyS6ikPPKeZ49TRpNm9YByYGVJhF0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TzARfidkFR8r2VVAD7wq4BRcdRsAZhpHZyvO+ffbC+XLM6cfu6qaHEPK/DCGmxH3p
-	 vvPXTh6urnL+igCTLdBxHJs6ZGRm8In9nksXPTMXEiamr0LGR0MDu3lAdggVvqeHHg
-	 aEPj8+7l+J2M1pPfHbNbbFrp6VK5nAXwoXWPlwxY=
+	b=FuRzQGBSwp/XLk9FlJcUxvbX9MszX4Lof8zCKik52V9iKs8zJTTiRHH3Sb+TJ8flu
+	 mlQ1LRe/A4yARwdG1De3IjSA3XVm4SagRH6g5cOdlpLQjje9wMy6l+i91D6onRDE9V
+	 ybQT+vMe1Y8RhDifC4brBrpVeDW7xBZUS9TMyF74=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727782AbgBJGDr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Feb 2020 01:03:47 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36302 "EHLO
+        id S1727658AbgBJGDW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Feb 2020 01:03:22 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:36468 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727481AbgBJGDM (ORCPT
+        with ESMTP id S1727587AbgBJGDN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Feb 2020 01:03:12 -0500
+        Mon, 10 Feb 2020 01:03:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=W2TEM9K5krwWHu3V6Pmpbxn8qb5V0LOnOybj7d04Q5s=; b=Ef/2ashQ1HkLybV2TXUuG+xln/
-        ZRHYNevYqV/lW3eLq7MgiuoUoZhBSyd3tD5sTiGbHZh4h06Uv6knSTdUAkk12f5QZ4767vBbqNpSt
-        Pkx7jTwcgWM8VuekehhxOYP9z6JwAAkkQ+9noqlDC5WMARNEhnI6cwmnr1A3OFKcfpNYouqDfV+00
-        h4ZN/Y3qHw1cK1NawlPHvT43RVV0w1uy5N+yPGIYzps9GFsd5Mtfj+sMCJmajZpUIc87+wRUW/qti
-        jCe8b0O9OnbHAmSIoV0Ts1QWQkL5BriWjdjOLaBAKvIUjmOVoB3MZFeVLdfaH5iFYYimz3hqz0xMV
-        hUKWIv6w==;
+        bh=AkWGbYs/Tc4L0PtFVpG/Hbx8MoKG1TWn2p2YU4gP5Hs=; b=T+OSy4/BQbpbvYYJVqqVzGgFc7
+        EbSaxJYsEYGOUXGr4aJ7+1NR44DLaKiiXsQGvhSY1VcJYy4iXDn3vXzqIrdg62oKFtpMP35z06/SV
+        xVISb1XYNBpLeZFrQW8Dhef4pvgMUr5Uhpc6u2/c50AMWouWx75hEuN75Mqo0h+wH3QmWP64MdIPl
+        VAY4ot5OXzcYt+9YC1K7JH7iWl0FdktEo063k9hLTukRI3wCmXAo2GZnqjQpt2oNcPH29p8xGUEFZ
+        MNeWpMJivroKyOIpCGenTRnwaRtbARnnQudb8Hz9bYhN6u0CSzow1FmfOlunqhO8baX2gnNK+ycNK
+        v5Q68VbA==;
 Received: from [80.156.29.194] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j12A3-0006Tp-TR; Mon, 10 Feb 2020 06:03:11 +0000
+        id 1j12A3-0006Te-HC; Mon, 10 Feb 2020 06:03:11 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j12A2-00C2Vl-8E; Mon, 10 Feb 2020 07:03:10 +0100
+        id 1j12A1-00C2Us-Ry; Mon, 10 Feb 2020 07:03:09 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-um@lists.infradead.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH 15/28] docs: kvm: convert devices/xics.txt to ReST
-Date:   Mon, 10 Feb 2020 07:02:53 +0100
-Message-Id: <3877e3c13e91f355b1e3337c76e735c8a24d4e40.1581314317.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 04/28] docs: virt: user_mode_linux.rst: fix URL references
+Date:   Mon, 10 Feb 2020 07:02:42 +0100
+Message-Id: <7703891859ba5dae121fa9fa21914512ba3d3fbb.1581314316.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1581314316.git.mchehab+huawei@kernel.org>
 References: <cover.1581314316.git.mchehab+huawei@kernel.org>
@@ -63,102 +65,212 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-- Use title markups;
-- adjust indentation and add blank lines as needed;
-- adjust tables to match ReST accepted formats;
-- use :field: markups.
+Several URLs are pointing to outdated places.
+
+Update the references for the URLs whose contents still exists,
+removing the others.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/virt/kvm/devices/index.rst      |  1 +
- .../virt/kvm/devices/{xics.txt => xics.rst}   | 28 +++++++++++++++----
- 2 files changed, 23 insertions(+), 6 deletions(-)
- rename Documentation/virt/kvm/devices/{xics.txt => xics.rst} (84%)
+ Documentation/virt/uml/user_mode_linux.rst | 71 +++++++++-------------
+ 1 file changed, 29 insertions(+), 42 deletions(-)
 
-diff --git a/Documentation/virt/kvm/devices/index.rst b/Documentation/virt/kvm/devices/index.rst
-index 29f8ecdf7fa0..63b61369d09b 100644
---- a/Documentation/virt/kvm/devices/index.rst
-+++ b/Documentation/virt/kvm/devices/index.rst
-@@ -15,3 +15,4 @@ Devices
-    vcpu
-    vfio
-    vm
-+   xics
-diff --git a/Documentation/virt/kvm/devices/xics.txt b/Documentation/virt/kvm/devices/xics.rst
-similarity index 84%
-rename from Documentation/virt/kvm/devices/xics.txt
-rename to Documentation/virt/kvm/devices/xics.rst
-index 423332dda7bc..2d6927e0b776 100644
---- a/Documentation/virt/kvm/devices/xics.txt
-+++ b/Documentation/virt/kvm/devices/xics.rst
-@@ -1,20 +1,31 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=========================
- XICS interrupt controller
-+=========================
+diff --git a/Documentation/virt/uml/user_mode_linux.rst b/Documentation/virt/uml/user_mode_linux.rst
+index e0632d80753e..de0f0b2c9d5b 100644
+--- a/Documentation/virt/uml/user_mode_linux.rst
++++ b/Documentation/virt/uml/user_mode_linux.rst
+@@ -321,7 +321,7 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
+   as modules, especially filesystems and network protocols and filters,
+   so most symbols which need to be exported probably already are.
+   However, if you do find symbols that need exporting, let  us
+-  <http://user-mode-linux.sourceforge.net/>  know, and
++  know at http://user-mode-linux.sourceforge.net/, and
+   they'll be "taken care of".
  
- Device type supported: KVM_DEV_TYPE_XICS
  
- Groups:
-   1. KVM_DEV_XICS_GRP_SOURCES
--  Attributes: One per interrupt source, indexed by the source number.
-+       Attributes:
+@@ -383,9 +383,9 @@ Linux: a port of the Linux kernel as a normal Intel Linux process.
  
-+         One per interrupt source, indexed by the source number.
-   2. KVM_DEV_XICS_GRP_CTRL
--  Attributes:
--    2.1 KVM_DEV_XICS_NR_SERVERS (write only)
-+       Attributes:
-+
-+         2.1 KVM_DEV_XICS_NR_SERVERS (write only)
-+
-   The kvm_device_attr.addr points to a __u32 value which is the number of
-   interrupt server numbers (ie, highest possible vcpu id plus one).
-+
-   Errors:
--    -EINVAL: Value greater than KVM_MAX_VCPU_ID.
--    -EFAULT: Invalid user pointer for attr->addr.
--    -EBUSY:  A vcpu is already connected to the device.
-+
-+    =======  ==========================================
-+    -EINVAL  Value greater than KVM_MAX_VCPU_ID.
-+    -EFAULT  Invalid user pointer for attr->addr.
-+    -EBUSY   A vcpu is already connected to the device.
-+    =======  ==========================================
  
- This device emulates the XICS (eXternal Interrupt Controller
- Specification) defined in PAPR.  The XICS has a set of interrupt
-@@ -53,24 +64,29 @@ the interrupt source number.  The 64 bit state word has the following
- bitfields, starting from the least-significant end of the word:
+   You will need a filesystem to boot UML from.  There are a number
+-  available for download from  here  <http://user-mode-
+-  linux.sourceforge.net/> .  There are also  several tools
+-  <http://user-mode-linux.sourceforge.net/>  which can be
++  available for download from http://user-mode-linux.sourceforge.net.
++  There are also  several tools at
++  http://user-mode-linux.sourceforge.net/  which can be
+   used to generate UML-compatible filesystem images from media.
+   The kernel will boot up and present you with a login prompt.
  
- * Destination (server number), 32 bits
-+
-   This specifies where the interrupt should be sent, and is the
-   interrupt server number specified for the destination vcpu.
+@@ -464,10 +464,9 @@ Note:
  
- * Priority, 8 bits
-+
-   This is the priority specified for this interrupt source, where 0 is
-   the highest priority and 255 is the lowest.  An interrupt with a
-   priority of 255 will never be delivered.
+   Here are some examples of UML in action:
  
- * Level sensitive flag, 1 bit
-+
-   This bit is 1 for a level-sensitive interrupt source, or 0 for
-   edge-sensitive (or MSI).
+-  -  A login session <http://user-mode-linux.sourceforge.net/login.html>
+-
+-  -  A virtual network <http://user-mode-linux.sourceforge.net/net.html>
++  -  A login session http://user-mode-linux.sourceforge.net/old/login.html
  
- * Masked flag, 1 bit
-+
-   This bit is set to 1 if the interrupt is masked (cannot be delivered
-   regardless of its priority), for example by the ibm,int-off RTAS
-   call, or 0 if it is not masked.
++  -  A virtual network http://user-mode-linux.sourceforge.net/old/net.html
  
- * Pending flag, 1 bit
-+
-   This bit is 1 if the source has a pending interrupt, otherwise 0.
  
- Only one XICS instance may be created per VM.
+ 
+@@ -1132,11 +1131,6 @@ Note:
+ 
+ 
+ 
+-
+-  Harald's original README is here <http://user-mode-linux.source-
+-  forge.net/>  and explains these in detail, as well as
+-  some other issues.
+-
+   There is also a related point-to-point only "ucast" transport.
+   This is useful when your network does not support multicast, and
+   all network connections are simple point to point links.
+@@ -1219,8 +1213,7 @@ Note:
+   make sure that /usr/src/linux points to the headers for the running
+   kernel.
+ 
+-  These were pointed out by Tim Robinson <timro at trkr dot net> in
+-  <http://www.geocrawler.com/> name="this uml-user post"> .
++  These were pointed out by Tim Robinson <timro at trkr dot net> in the past.
+ 
+ 
+ 
+@@ -1914,8 +1907,8 @@ Note:
+ 
+   uml_moo is installed with the UML deb and RPM.  If you didn't install
+   UML from one of those packages, you can also get it from the UML
+-  utilities <http://user-mode-linux.sourceforge.net/
+-  utilities>  tar file in tools/moo.
++  utilities http://user-mode-linux.sourceforge.net/utilities tar file
++  in tools/moo.
+ 
+ 
+ 
+@@ -3709,18 +3702,15 @@ Note:
+ 
+ 
+   This is a syslogd bug.  There's a race between a parent process
+-  installing a signal handler and its child sending the signal.  See
+-  this uml-devel post <http://www.geocrawler.com/lists/3/Source-
+-  Forge/709/0/6612801>  for the details.
++  installing a signal handler and its child sending the signal.
+ 
+ 
+ 
+ 13.8.  TUN/TAP networking doesn't work on a 2.4 host
+ ----------------------------------------------------
+ 
+-  There are a couple of problems which were
+-  <http://www.geocrawler.com/lists/3/SourceForge/597/0/> name="pointed
+-  out">  by Tim Robinson <timro at trkr dot net>
++  There are a couple of problems which were reported by
++  Tim Robinson <timro at trkr dot net>
+ 
+   -  It doesn't work on hosts running 2.4.7 (or thereabouts) or earlier.
+      The fix is to upgrade to something more recent and then read the
+@@ -3763,7 +3753,7 @@ Note:
+ 
+ 
+   Documentation on IP Masquerading, and SNAT, can be found at
+-  www.netfilter.org  <http://www.netfilter.org> .
++  http://www.netfilter.org.
+ 
+ 
+   If you can reach the local net, but not the outside Internet, then
+@@ -4113,14 +4103,14 @@ Note:
+ 
+   Rusty Russell <rusty at linuxcare.com.au>  -
+ 
+-  -  wrote the  HOWTO <http://user-mode-
+-     linux.sourceforge.net/UserModeLinux-HOWTO.html>
++  -  wrote the  HOWTO
++     http://user-mode-linux.sourceforge.net/old/UserModeLinux-HOWTO.html
+ 
+   -  prodded me into making this project official and putting it on
+      SourceForge
+ 
+-  -  came up with the way cool UML logo <http://user-mode-
+-     linux.sourceforge.net/uml-small.png>
++  -  came up with the way cool UML logo
++     http://user-mode-linux.sourceforge.net/uml-small.png
+ 
+   -  redid the config process
+ 
+@@ -4148,17 +4138,15 @@ Note:
+   Jim Leu <jleu at mindspring.com>  - Wrote the virtual ethernet driver
+   and associated usermode tools
+ 
+-  Lars Brinkhoff <http://lars.nocrew.org/>  - Contributed the ptrace
+-  proxy from his own  project <http://a386.nocrew.org/> to allow easier
+-  kernel debugging
++  Lars Brinkhoff http://lars.nocrew.org/  - Contributed the ptrace
++  proxy from his own  project to allow easier kernel debugging
+ 
+ 
+   Andrea Arcangeli <andrea at suse.de>  - Redid some of the early boot
+   code so that it would work on machines with Large File Support
+ 
+ 
+-  Chris Emerson <http://www.chiark.greenend.org.uk/~cemerson/>  - Did
+-  the first UML port to Linux/ppc
++  Chris Emerson - Did the first UML port to Linux/ppc
+ 
+ 
+   Harald Welte <laforge at gnumonks.org>  - Wrote the multicast
+@@ -4173,7 +4161,7 @@ Note:
+   wrote the iomem emulation support
+ 
+ 
+-  Henrik Nordstrom <http://hem.passagen.se/hno/>  - Provided a variety
++  Henrik Nordstrom http://hem.passagen.se/hno/  - Provided a variety
+   of patches, fixes, and clues
+ 
+ 
+@@ -4208,16 +4196,15 @@ Note:
+   submitted patches for the slip transport and lots of other things.
+ 
+ 
+-  David Coulson <http://davidcoulson.net>  -
++  David Coulson http://davidcoulson.net  -
+ 
+-  -  Set up the usermodelinux.org <http://usermodelinux.org>  site,
++  -  Set up the http://usermodelinux.org  site,
+      which is a great way of keeping the UML user community on top of
+      UML goings-on.
+ 
+   -  Site documentation and updates
+ 
+   -  Nifty little UML management daemon  UMLd
+-     <http://uml.openconsultancy.com/umld/>
+ 
+   -  Lots of testing and bug reports
+ 
+@@ -4390,12 +4377,12 @@ Note:
+   work with RH 6.2.
+ 
+   Michael Jennings <mikejen at hevanet.com>  sent in some material which
+-  is now gracing the top of the  index  page <http://user-mode-
+-  linux.sourceforge.net/>  of this site.
++  is now gracing the top of the  index  page
++  http://user-mode-linux.sourceforge.net/  of this site.
+ 
+-  SGI <http://www.sgi.com>  (and more specifically Ralf Baechle <ralf at
+-  uni-koblenz.de> ) gave me an account on oss.sgi.com
+-  <http://www.oss.sgi.com> .  The bandwidth there made it possible to
++  SGI (and more specifically Ralf Baechle <ralf at
++  uni-koblenz.de> ) gave me an account on oss.sgi.com.
++  The bandwidth there made it possible to
+   produce most of the filesystems available on the project download
+   page.
+ 
+@@ -4412,5 +4399,5 @@ Note:
+ 
+   Chris Reahard built a specialized root filesystem for running a DNS
+   server jailed inside UML.  It's available from the download
+-  <http://user-mode-linux.sourceforge.net/dl-sf.html>  page in the Jail
++  http://user-mode-linux.sourceforge.net/old/dl-sf.html  page in the Jail
+   Filesystems section.
 -- 
 2.24.1
 
