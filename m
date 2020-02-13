@@ -2,111 +2,142 @@ Return-Path: <SRS0=OLWu=4B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCE5FC3B18B
-	for <linux-media@archiver.kernel.org>; Thu, 13 Feb 2020 11:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E95E7C3B189
+	for <linux-media@archiver.kernel.org>; Thu, 13 Feb 2020 12:50:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 954412465D
-	for <linux-media@archiver.kernel.org>; Thu, 13 Feb 2020 11:39:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vhJsYVsb"
+	by mail.kernel.org (Postfix) with ESMTP id C9FC424649
+	for <linux-media@archiver.kernel.org>; Thu, 13 Feb 2020 12:50:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729913AbgBMLjI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Feb 2020 06:39:08 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:33994 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729801AbgBMLjI (ORCPT
+        id S1729801AbgBMMuq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Feb 2020 07:50:46 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60576 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729673AbgBMMup (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 13 Feb 2020 06:39:08 -0500
-Received: by mail-qk1-f195.google.com with SMTP id c20so5333719qkm.1
-        for <linux-media@vger.kernel.org>; Thu, 13 Feb 2020 03:39:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=726BAxzODrIm31Pwz78wMNNyFma50KrMtEFODthUrc8=;
-        b=vhJsYVsbDl+QK5Sj7at6S2xur4CiPSWPAGEkDk6Tkyj5w/LjYJB8uxIFhiK2zG12Dx
-         vndBR8lP0fStSPMlKE+lK/ob9G4AqzgNlkdRIeWWOCsUvEEiu3xXlXFZ6LkciGa2oE1k
-         WfGuovyuC4eztDj4WbWVLu7S0zbJ37MPZ/b1olLndyJFqkTbqF3Kbnf1i8k/SUetZh4r
-         fm5bEicmeI9ad1d7ucNdePaNWPA6pdPFBWo1EepHiBvQ0BlH9u6eDi+Bw/HePcQCoBat
-         WqjlVtl+1azNHg62wWCYliHevzuLzByPXLZTQR5T0TYGn01ySsf45Nri4oIDPzageCg7
-         9t4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=726BAxzODrIm31Pwz78wMNNyFma50KrMtEFODthUrc8=;
-        b=bQkpG7A6Vf5fM3mao8oATEODbHO+zE9mzXNh1qdVBITsyvFoLNx8dEzuswWJQsIx0o
-         0BOwoBrwzmJb0IkqKaBQSl/X+K8SbYt+m3nX7ixrXM3DkBXxMg/C5Ye/YuPrR4KPv8ZT
-         6wl5FKsFcJqdjeKC+ZeWH37d77ZnqSgMBp8NUEWE7Ld1n8K27lsDh1ZF6oz/64yIB2FY
-         vNVcM6lQu/D8YjIY76MisgHUwUmcQ8xZ2XDXbJ6yEVy/sCkwPBALVddo7z6EicexEB1P
-         Cejj0CF7hWHIpqLkMn9k8+tFbTg02y03orx4fJ3RcKr71m1WsGT+xJtEHGJGQcIEJ61H
-         dWWg==
-X-Gm-Message-State: APjAAAV5BWbev186oWBuLTixgYibMdBrQ0OjOHgjtZwryW9JlwKQuem+
-        Qzk2WUjpl+JJumNM7lSDPPmqoPY2AXQ=
-X-Google-Smtp-Source: APXvYqwgkCuJzwSQ+i74DgScnYMcWNFsi2MK2DfjKI8LiPEy3ps5RQHobCJbanWIrhX4RDF28xBv8g==
-X-Received: by 2002:a37:a642:: with SMTP id p63mr15639579qke.85.1581593945564;
-        Thu, 13 Feb 2020 03:39:05 -0800 (PST)
-Received: from athos.hellosponsor.com (pool-173-68-201-69.nycmny.fios.verizon.net. [173.68.201.69])
-        by smtp.gmail.com with ESMTPSA id v125sm1123854qkb.52.2020.02.13.03.39.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2020 03:39:04 -0800 (PST)
-From:   Ilia Mirkin <imirkin@alum.mit.edu>
-To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     Ilia Mirkin <imirkin@alum.mit.edu>
-Subject: [PATCH v2 1/2] edid-decode: add function to enable usage as a library
-Date:   Thu, 13 Feb 2020 06:39:02 -0500
-Message-Id: <20200213113903.23994-1-imirkin@alum.mit.edu>
-X-Mailer: git-send-email 2.24.1
+        Thu, 13 Feb 2020 07:50:45 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id 4200629515E
+Subject: Re: [PATCH v8 05/14] media: rkisp1: add Rockchip ISP1 subdev driver
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Helen Koike <helen.koike@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        eddie.cai.linux@gmail.com, mchehab@kernel.org, heiko@sntech.de,
+        jacob2.chen@rock-chips.com, jeffy.chen@rock-chips.com,
+        zyc@rock-chips.com, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org, hans.verkuil@cisco.com,
+        laurent.pinchart@ideasonboard.com, kernel@collabora.com,
+        ezequiel@collabora.com, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, zhengsq@rock-chips.com,
+        Jacob Chen <cc@rock-chips.com>,
+        Allon Huang <allon.huang@rock-chips.com>,
+        Dafna Hirschfeld <dafna3@gmail.com>
+References: <20190730184256.30338-1-helen.koike@collabora.com>
+ <20190730184256.30338-6-helen.koike@collabora.com>
+ <20190808091406.GQ21370@paasikivi.fi.intel.com>
+ <da6c1d01-e3f6-ad73-db55-145d7832a665@collabora.com>
+ <20190815082422.GM6133@paasikivi.fi.intel.com>
+ <20190815131748.GS6133@paasikivi.fi.intel.com>
+ <78856358-1afd-31a7-86dd-22f7d6d7fb05@collabora.com>
+ <20200212211317.GD3087@kekkonen.localdomain>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Message-ID: <3bc90001-8ebc-c55f-06b5-bbd6b58fa3cd@collabora.com>
+Date:   Thu, 13 Feb 2020 13:50:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200212211317.GD3087@kekkonen.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is helpful for an emscripten setup, as there's no great way to
-reinitialize the object from scratch.
 
-Signed-off-by: Ilia Mirkin <imirkin@alum.mit.edu>
----
 
-v2: rebase, move opening brace to new line
+On 12.02.20 22:13, Sakari Ailus wrote:
+> Hi Dafna,
+> 
+> Apologies for the late reply. I learned the mail had got lost due to mail
+> server issues.
+> 
+np:)
 
- edid-decode.cpp | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+> On Fri, Jan 31, 2020 at 08:38:34PM +0100, Dafna Hirschfeld wrote:
+>> Hi,
+>> I (Dafna Hirschfeld) will work in following months with Helen Koike to fix the issues
+>> in the TODO file of this driver: drivers/staging/media/rkisp1/TODO
+>>
+>> On 15.08.19 15:17, Sakari Ailus wrote:
+>>> On Thu, Aug 15, 2019 at 11:24:22AM +0300, Sakari Ailus wrote:
+>>>> Hi Helen,
+>>>>
+>>>> On Wed, Aug 14, 2019 at 09:58:05PM -0300, Helen Koike wrote:
+>>>>
+>>>> ...
+>>>>
+>>>>>>> +static int rkisp1_isp_sd_set_fmt(struct v4l2_subdev *sd,
+>>>>>>> +				 struct v4l2_subdev_pad_config *cfg,
+>>>>>>> +				 struct v4l2_subdev_format *fmt)
+>>>>>>> +{
+>>>>>>> +	struct rkisp1_device *isp_dev = sd_to_isp_dev(sd);
+>>>>>>> +	struct rkisp1_isp_subdev *isp_sd = &isp_dev->isp_sdev;
+>>>>>>> +	struct v4l2_mbus_framefmt *mf = &fmt->format;
+>>>>>>> +
+>>>>>>
+>>>>>> Note that for sub-device nodes, the driver is itself responsible for
+>>>>>> serialising the access to its data structures.
+>>>>>
+>>>>> But looking at subdev_do_ioctl_lock(), it seems that it serializes the
+>>>>> ioctl calls for subdevs, no? Or I'm misunderstanding something (which is
+>>>>> most probably) ?
+>>>>
+>>>> Good question. I had missed this change --- subdev_do_ioctl_lock() is
+>>>> relatively new. But setting that lock is still not possible as the struct
+>>
+>> 'the struct' - do you mean the 'vdev' struct allocated in
+>> 'v4l2_device_register_subdev_nodes' ?
+> 
+> Yes.
+> 
+>>
+>>>> is allocated in the framework and the device is registered before the
+>>
+>>>> driver gets hold of it. It's a good idea to provide the same serialisation
+>>>> for subdevs as well.
+>>>>
+>>>> I'll get back to this later.
+>>>
+>>> The main reason is actually that these ops are also called through the
+>>> sub-device kAPI, not only through the uAPI, and the locks are only taken
+>>> through the calls via uAPI.
+>>
+>> actually it seems that although 'subdev_do_ioctl_lock' exit, I wonder if
+>> any subdevice uses that vdev->lock in  subdev_do_ioctl_lock.
+>> It is not initialized in v4l2_device_register_subdev_nodes where the vdev is allocated
+>> and I wonder if any subdevice actually initialize it somewhere else. For example it is null in this
+>> driver and in vimc.
+> 
+> It needs to be set before the video device is registered, so indeed, it
+> seems no driver can make use it.
+> 
+>>
+>>>
+>>> So adding the locks to uAPI calls alone would not address the issue.
+>>
+>> What I can do is add a mutex to every struct of a subdevice and lock it
+>> at the beginning of each subdevice operation.
+>> Is this an acceptable solution?
+> 
+> Please do. That's what other drivers do at the moment as well.
+> 
+I already sent it as the patchset "media: staging: rkisp1: add serialization to the isp and resizer ops"
 
-diff --git a/edid-decode.cpp b/edid-decode.cpp
-index 47135a9..0473bbf 100644
---- a/edid-decode.cpp
-+++ b/edid-decode.cpp
-@@ -1214,3 +1214,22 @@ int main(int argc, char **argv)
- 
- 	return ret ? ret : state.parse_edid();
- }
-+
-+#ifdef __EMSCRIPTEN__
-+/*
-+ * The surrounding JavaScript implementation will call this function
-+ * each time it wants to decode an EDID. So this should reset all the
-+ * state and start over.
-+ */
-+extern "C" int parse_edid(const char *input)
-+{
-+	for (unsigned i = 0; i < EDID_MAX_BLOCKS + 1; i++) {
-+		s_msgs[i][0].clear();
-+		s_msgs[i][1].clear();
-+	}
-+	options[OptCheck] = 1;
-+	state = edid_state();
-+	int ret = edid_from_file(input);
-+	return ret ? ret : state.parse_edid();
-+}
-+#endif
--- 
-2.24.1
-
+Thanks,
+Dafna
