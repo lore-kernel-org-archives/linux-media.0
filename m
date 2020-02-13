@@ -2,164 +2,109 @@ Return-Path: <SRS0=OLWu=4B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 599DEC2BA83
-	for <linux-media@archiver.kernel.org>; Thu, 13 Feb 2020 10:58:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 396AEC2BA83
+	for <linux-media@archiver.kernel.org>; Thu, 13 Feb 2020 11:39:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E29F82073C
-	for <linux-media@archiver.kernel.org>; Thu, 13 Feb 2020 10:58:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D400217F4
+	for <linux-media@archiver.kernel.org>; Thu, 13 Feb 2020 11:39:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A6HLDUcp"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J8/hzRd6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729721AbgBMK6b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Feb 2020 05:58:31 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:42839 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726232AbgBMK6b (ORCPT
+        id S1729854AbgBMLjH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Feb 2020 06:39:07 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:35918 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729428AbgBMLjH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 13 Feb 2020 05:58:31 -0500
-Received: by mail-ed1-f66.google.com with SMTP id e10so6263329edv.9
-        for <linux-media@vger.kernel.org>; Thu, 13 Feb 2020 02:58:28 -0800 (PST)
+        Thu, 13 Feb 2020 06:39:07 -0500
+Received: by mail-qk1-f196.google.com with SMTP id w25so5330768qki.3
+        for <linux-media@vger.kernel.org>; Thu, 13 Feb 2020 03:39:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:from:to:references:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=hKmIyTZckPM3C4c4BZyMsyokvXvSDkspuvtCgm1Af20=;
-        b=A6HLDUcpnOVfAx6z+vgeLNHY0hCB9L8CoQtJQjxGy1MUnqPOPS6xIPG5XsVP/dVaAw
-         VGBIenN4Rs0tPva66uc4ZjoxsqigZyMzh/M+zN8u2DgTfH2ZG2IT4HCe7GXOkvp/LBsE
-         f9Q3Hur2IHGiaMu9NhXIhvaj0keVminNdLsrQ4LSuH2aqt21lolfG6lB/uw8tycEwaNo
-         Es0kPfkU8IQM2QlfaKaLsyhNqjIrr9idxAuyy3NMHjm/FpA1ciWYmb6WUcjrYrnRF3gN
-         J5qlMJFJQERsm1W79K7NRPT07tEnv3+4rH9p6yZGYbQIcIr0ctfgTROrqnC89Pf054sN
-         GdgQ==
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Vtb9eIKcbPoSEKTomO0TCS7RPzPWQCmDk06xrCb8upo=;
+        b=J8/hzRd6Y7M47AJKUzTXL1iLrpJom6v/fjdoI9JBCAnKqxvU0VTwbOUtKDVS69ZbGy
+         jE1wqHbVAcsITTYJq/llTU9U760wVj40oZsQXjWFi214eIOilDAPNIpTcembrc01ZG/W
+         Zr1hOloFR5kjzzX7gFvSOLT5O0Upsq+xoT7hOZu2AgR9fU39fRm72Oi2EsEgys+WQgnX
+         9XXhIw5dm3Je3pYeweKGciFC6PZlYvmWcmufMI00AdwtXQJWVnF+jmKpdff6QPIygov3
+         leXKGz7tI9F/FHECM/e0fbfH4gEqveHE1qkZ6IQ+Gruj58s0VR/UvyRPPUA+Ya1wG18B
+         dK0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hKmIyTZckPM3C4c4BZyMsyokvXvSDkspuvtCgm1Af20=;
-        b=T5YbYv9jjdUhn8YLDywBdM3vjcak7cZpBhhGUG37r7yBBrZfyogFWKHcCWRtp6ihUE
-         djQNPl3f6ExpNaVaeedrr6/7ocSJKyATHuTG6rbg27eCLjn6TVL+Oo40FTSMpSZbuzGm
-         aUqdvs3U62D0YkVTeNBQURxXf82/kUyREADfvEu1ImSUtjkCV/etUAWDddGvcg1Vvx4l
-         K7idgt4J/nAoi5GuLm07wBsTpHk2+WeKnxXPy65B39oHB54gW0qrEk98i3iTTTWYvN06
-         UYf94KTUHDK8uUdu92wuth9hbp/yk1mHkeg98g4BBBRyh0+Ld7/MarCiK5f0LDXNto1Q
-         5dBA==
-X-Gm-Message-State: APjAAAVHcTwDWMlyOuQqBJuEvnbvBRnp1Y/vUQlde03bkkA7sZnHmcMv
-        ThX5JYq1CxNilWFHxjwh3ad/hQ==
-X-Google-Smtp-Source: APXvYqy6qHw0vLFjuteMoULu99J0Mj7Y7NfACCh2+aD0Lsv92P7wLsA2QhKG3+U6RCFBQEjb4OTqGg==
-X-Received: by 2002:a17:906:f10a:: with SMTP id gv10mr15144150ejb.260.1581591507766;
-        Thu, 13 Feb 2020 02:58:27 -0800 (PST)
-Received: from [192.168.27.209] ([94.155.124.210])
-        by smtp.googlemail.com with ESMTPSA id q18sm170794eds.7.2020.02.13.02.58.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Feb 2020 02:58:27 -0800 (PST)
-Subject: Re: [GIT PULL for v5.6] Venus updates
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20200110144017.16648-1-stanimir.varbanov@linaro.org>
-Message-ID: <96897fba-6952-886b-6374-3bc6f698f06d@linaro.org>
-Date:   Thu, 13 Feb 2020 12:58:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=Vtb9eIKcbPoSEKTomO0TCS7RPzPWQCmDk06xrCb8upo=;
+        b=b90yXHGA0vZx9g7UMoQ19aiCBU7Nqc/Yk1F3NfzJWx2d5hZubEd2gXRNVs1VKVlVxV
+         PNNbFExCjQVHS5CKXsdJ2VBipG4yRdZ3I9FzQu0KeIjlUZPG6iFGxlXEnczKE2/x1+IA
+         +ej1iXH7Pw//LQI4ZIPVrNKBizPRY4ShjBpnv0f2K2WaVew98Hyhba1SU7jLBeQe8dCe
+         cP+CLUsBvtI4BprMUi/3QjwhbytHo9a4JL/8kyPR+SmArSzVK57z4dparkFHaJHmpPoA
+         dOk440JqAfNdZcpJr7I5m4RWF5OODpob7bhWRCln8sU0g9bU6weYPTfvZKiFYWaDw94Q
+         rCeQ==
+X-Gm-Message-State: APjAAAVhtOmp9hXnnZEvHIA4oLQ4Btu37eb+Ik5cVk/XF+8TTMrINNo/
+        5PaDnruWm2nEQtdUbTBzyiYXhyrCvBY=
+X-Google-Smtp-Source: APXvYqw6Dwbvb744x8zgJC5aYwe88JYmTDiC0fmIV7lWNJA7VKn850k8pVSmorDKKxxA9VmONigx2w==
+X-Received: by 2002:a05:620a:1383:: with SMTP id k3mr10678036qki.252.1581593946288;
+        Thu, 13 Feb 2020 03:39:06 -0800 (PST)
+Received: from athos.hellosponsor.com (pool-173-68-201-69.nycmny.fios.verizon.net. [173.68.201.69])
+        by smtp.gmail.com with ESMTPSA id v125sm1123854qkb.52.2020.02.13.03.39.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2020 03:39:05 -0800 (PST)
+From:   Ilia Mirkin <imirkin@alum.mit.edu>
+To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl
+Cc:     Ilia Mirkin <imirkin@alum.mit.edu>
+Subject: [PATCH v2 2/2] edid-decode: add build rule for emscripten output
+Date:   Thu, 13 Feb 2020 06:39:03 -0500
+Message-Id: <20200213113903.23994-2-imirkin@alum.mit.edu>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200213113903.23994-1-imirkin@alum.mit.edu>
+References: <20200213113903.23994-1-imirkin@alum.mit.edu>
 MIME-Version: 1.0
-In-Reply-To: <20200110144017.16648-1-stanimir.varbanov@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+All I can really say is that this works in my current setup. This
+current setup was not the first setup I tried, with lots of random
+flailing around emscripten and binaryen versions to be compatible with
+my LLVM version. Perhaps later emscripten needs slightly different flags
+to export functions, who knows.
 
-As this PR did not get merged, I will send a new one for v5.7 with some
-more commits when the media_tree master is updated to v5.6-rc1.
+Signed-off-by: Ilia Mirkin <imirkin@alum.mit.edu>
+---
+ Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-On 1/10/20 4:40 PM, Stanimir Varbanov wrote:
-> Hi Mauro,
-> 
-> The Venus driver updates include:
->  - re-design pm-domain and clocks handling
->  - added core assingment for Venus IPs with more than one vcodec pipeline
->  - dt-binding convertion to yaml DT schema
->  - added decoder handling of 10bit bitstreams
->  - few fixes
-> 
-> Please pull.
-> 
-> regards,
-> Stan
-> 
-> The following changes since commit 2a0a0bc7020ef7e66c9569d8229d79fa72e3d659:
-> 
->   media: MAINTAINERS: add entry for Rockchip ISP1 driver (2020-01-09 16:45:01 +0100)
-> 
-> are available in the Git repository at:
-> 
->   git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-v5.6
-> 
-> for you to fetch changes up to e91ebb35b94ef8cf5988cfb2f4802422fbd5f4ec:
-> 
->   dt-bindings: media: venus: delete old binding document (2020-01-10 12:37:29 +0200)
-> 
-> ----------------------------------------------------------------
-> Venus updates for v5.6
-> 
-> ----------------------------------------------------------------
-> Andy Shevchenko (1):
->       media: venus: firmware: Use %pR to print IO resource
-> 
-> Aniket Masule (2):
->       media: venus: introduce core selection
->       media: venus: vdec: handle 10bit bitstreams
-> 
-> Stanimir Varbanov (8):
->       venus: redesign clocks and pm domains control
->       venus: venc: blacklist two encoder properties
->       dt-bindings: media: venus: Convert msm8916 to DT schema
->       dt-bindings: media: venus: Convert msm8996 to DT schema
->       dt-bindings: media: venus: Convert sdm845 to DT schema
->       dt-bindings: media: venus: Add sdm845v2 DT schema
->       venus: core: add sdm845-v2 DT compatible and resource struct
->       dt-bindings: media: venus: delete old binding document
-> 
-> Stephan Gerhold (1):
->       media: venus: hfi_parser: Ignore HEVC encoding for V1
-> 
->  .../bindings/media/qcom,msm8916-venus.yaml         | 119 +++
->  .../bindings/media/qcom,msm8996-venus.yaml         | 153 ++++
->  .../bindings/media/qcom,sdm845-venus-v2.yaml       | 140 +++
->  .../bindings/media/qcom,sdm845-venus.yaml          | 156 ++++
->  .../devicetree/bindings/media/qcom,venus.txt       | 120 ---
->  drivers/media/platform/qcom/venus/Makefile         |   2 +-
->  drivers/media/platform/qcom/venus/core.c           | 122 ++-
->  drivers/media/platform/qcom/venus/core.h           |  31 +-
->  drivers/media/platform/qcom/venus/firmware.c       |   3 +-
->  drivers/media/platform/qcom/venus/helpers.c        | 437 +++-------
->  drivers/media/platform/qcom/venus/helpers.h        |   4 -
->  drivers/media/platform/qcom/venus/hfi_cmds.c       |   2 +
->  drivers/media/platform/qcom/venus/hfi_helper.h     |   6 +
->  drivers/media/platform/qcom/venus/hfi_parser.c     |   1 +
->  drivers/media/platform/qcom/venus/hfi_parser.h     |   5 +
->  drivers/media/platform/qcom/venus/pm_helpers.c     | 964 +++++++++++++++++++++
->  drivers/media/platform/qcom/venus/pm_helpers.h     |  65 ++
->  drivers/media/platform/qcom/venus/vdec.c           |  84 +-
->  drivers/media/platform/qcom/venus/venc.c           |  75 +-
->  19 files changed, 1854 insertions(+), 635 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
->  create mode 100644 Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
->  create mode 100644 Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
->  create mode 100644 Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
->  delete mode 100644 Documentation/devicetree/bindings/media/qcom,venus.txt
->  create mode 100644 drivers/media/platform/qcom/venus/pm_helpers.c
->  create mode 100644 drivers/media/platform/qcom/venus/pm_helpers.h
-> 
-
+diff --git a/Makefile b/Makefile
+index 6db6386..49ad39b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,6 +1,8 @@
+ bindir ?= /usr/bin
+ mandir ?= /usr/share/man
+ 
++EMXX ?= em++
++
+ SOURCES = edid-decode.cpp parse-base-block.cpp parse-cta-block.cpp \
+ 	  parse-displayid-block.cpp parse-ls-ext-block.cpp \
+ 	  parse-di-ext-block.cpp parse-vtb-ext-block.cpp
+@@ -13,6 +15,9 @@ sha = -DSHA=$(shell if [ -d .git ]; then git rev-parse HEAD ; else printf '"not
+ edid-decode: $(SOURCES) edid-decode.h Makefile
+ 	$(CXX) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(WARN_FLAGS) -g $(sha) -o $@ $(SOURCES) -lm
+ 
++edid-decode.js: $(SOURCES) edid-decode.h Makefile
++	$(EMXX) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(WARN_FLAGS) $(sha) -s EXPORTED_FUNCTIONS='["_parse_edid"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' -o $@ $(SOURCES) -lm
++
+ clean:
+ 	rm -f edid-decode
+ 
 -- 
-regards,
-Stan
+2.24.1
+
