@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 203C9C3B1AF
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:36:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC737C2BA83
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:44:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F081C2067D
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:36:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97096206B6
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:44:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581701764;
-	bh=pisCp0L8OYluLdVr5lRE1PQQni0pQHeVSXt5Ghx26zE=;
+	s=default; t=1581702292;
+	bh=UePCY4BqtIvlghuVOYlkGyqEl9Oi9N2cZL5RSM9Ehrc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aPuOq90OCifxq1F8vBy7LAKCsgklkV3HbVewwIo9DWwhppy2KsyJSCa9jb/3skEc6
-	 Lup30zC6e8SGR9PnILDyFbDrM9cnYOMvsvjXxI5vKGSG+6W0hNEPC3BsS8bZvmT7mE
-	 xCJEE1C2Wu8ElNvu7RhZPGY2tQ1Q8cbEkwdGo1+s=
+	b=pJ3kI1G98+Itw2IvHRXnDRD2/GOOFMsE7J81NfoFyMm9PMAnTaWT1t9C2l5TdOo44
+	 tzKTXPHWBUJ9ajYD7vDESHNasXUQktaR2MtZ/sBLM4cPqeAnjDwV6D9/0hNJ88W29q
+	 7xv3Ugox9TXyhLIyAOWY1jhapblArJkGqUx1lM0c=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390221AbgBNQFo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:05:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55790 "EHLO mail.kernel.org"
+        id S2389488AbgBNQC4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:02:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49692 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390216AbgBNQFo (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:05:44 -0500
+        id S2389492AbgBNQC4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:02:56 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 15B942067D;
-        Fri, 14 Feb 2020 16:05:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CDF1724681;
+        Fri, 14 Feb 2020 16:02:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696343;
-        bh=pisCp0L8OYluLdVr5lRE1PQQni0pQHeVSXt5Ghx26zE=;
+        s=default; t=1581696175;
+        bh=UePCY4BqtIvlghuVOYlkGyqEl9Oi9N2cZL5RSM9Ehrc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JWs8+6/bhBV1urDUXDSOXDLXlX2M3+PZWIDphTzVlxBFv3hy9OTxl+/imxBmpiLm/
-         hpQA9cAU3Y2KFLDScRs+y0tdJS1TmC72v4o9P4CqpfLyCEjHjubekcNNIhWK/LJt5o
-         Z9a7tLnlrOBW9PiAlIOfKyF2jVIueC6IVxuH9y5g=
+        b=y939bBz1MDDiWlcYj5L//e+9DBPaQPwIVUEJgYL7AUD9ntKD6AthkFXww5jFXXgiO
+         3lVjjkXPV7iTFBTBtLKneB7JxW6QqSXOkZ8gQApguNRycosgS10AAT0Qv2PlP06PLF
+         mNQ/3q8csXzIqYZXjyaJgHp2WrdWkCTNWTp5MOaY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Forest Crossman <cyrozap@gmail.com>,
+Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 178/459] media: cx23885: Add support for AVerMedia CE310B
-Date:   Fri, 14 Feb 2020 10:57:08 -0500
-Message-Id: <20200214160149.11681-178-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 048/459] media: sti: bdisp: fix a possible sleep-in-atomic-context bug in bdisp_device_run()
+Date:   Fri, 14 Feb 2020 10:54:58 -0500
+Message-Id: <20200214160149.11681-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
 References: <20200214160149.11681-1-sashal@kernel.org>
@@ -59,111 +60,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Forest Crossman <cyrozap@gmail.com>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit dc4cac67e13515835ed8081d510aa507aacb013b ]
+[ Upstream commit bb6d42061a05d71dd73f620582d9e09c8fbf7f5b ]
 
-The AVerMedia CE310B is a simple composite + S-Video + stereo audio
-capture card, and uses only the CX23888 to perform all of these
-functions.
+The driver may sleep while holding a spinlock.
+The function call path (from bottom to top) in Linux 4.19 is:
 
-I've tested both video inputs and the audio interface and confirmed that
-they're all working. However, there are some issues:
+drivers/media/platform/sti/bdisp/bdisp-hw.c, 385:
+    msleep in bdisp_hw_reset
+drivers/media/platform/sti/bdisp/bdisp-v4l2.c, 341:
+    bdisp_hw_reset in bdisp_device_run
+drivers/media/platform/sti/bdisp/bdisp-v4l2.c, 317:
+    _raw_spin_lock_irqsave in bdisp_device_run
 
-* Sometimes when I switch inputs the video signal turns black and can't
-  be recovered until the system is rebooted. I haven't been able to
-  determine the cause of this behavior, nor have I found a solution to
-  fix it or any workarounds other than rebooting.
-* The card sometimes seems to have trouble syncing to the video signal,
-  and some of the VBI data appears as noise at the top of the frame, but
-  I assume that to be a result of my very noisy RF environment and the
-  card's unshielded input traces rather than a configuration issue.
+To fix this bug, msleep() is replaced with udelay().
 
-Signed-off-by: Forest Crossman <cyrozap@gmail.com>
+This bug is found by a static analysis tool STCheck written by myself.
+
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Reviewed-by: Fabien Dessenne <fabien.dessenne@st.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx23885/cx23885-cards.c | 24 +++++++++++++++++++++++
- drivers/media/pci/cx23885/cx23885-video.c |  3 ++-
- drivers/media/pci/cx23885/cx23885.h       |  1 +
- 3 files changed, 27 insertions(+), 1 deletion(-)
+ drivers/media/platform/sti/bdisp/bdisp-hw.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/cx23885/cx23885-cards.c b/drivers/media/pci/cx23885/cx23885-cards.c
-index 8644205d3cd33..8e5a2c580821e 100644
---- a/drivers/media/pci/cx23885/cx23885-cards.c
-+++ b/drivers/media/pci/cx23885/cx23885-cards.c
-@@ -801,6 +801,25 @@ struct cx23885_board cx23885_boards[] = {
- 		.name		= "Hauppauge WinTV-Starburst2",
- 		.portb		= CX23885_MPEG_DVB,
- 	},
-+	[CX23885_BOARD_AVERMEDIA_CE310B] = {
-+		.name		= "AVerMedia CE310B",
-+		.porta		= CX23885_ANALOG_VIDEO,
-+		.force_bff	= 1,
-+		.input          = {{
-+			.type   = CX23885_VMUX_COMPOSITE1,
-+			.vmux   = CX25840_VIN1_CH1 |
-+				  CX25840_NONE_CH2 |
-+				  CX25840_NONE0_CH3,
-+			.amux   = CX25840_AUDIO7,
-+		}, {
-+			.type   = CX23885_VMUX_SVIDEO,
-+			.vmux   = CX25840_VIN8_CH1 |
-+				  CX25840_NONE_CH2 |
-+				  CX25840_VIN7_CH3 |
-+				  CX25840_SVIDEO_ON,
-+			.amux   = CX25840_AUDIO7,
-+		} },
-+	},
- };
- const unsigned int cx23885_bcount = ARRAY_SIZE(cx23885_boards);
+diff --git a/drivers/media/platform/sti/bdisp/bdisp-hw.c b/drivers/media/platform/sti/bdisp/bdisp-hw.c
+index 4372abbb5950f..a74e9fd652389 100644
+--- a/drivers/media/platform/sti/bdisp/bdisp-hw.c
++++ b/drivers/media/platform/sti/bdisp/bdisp-hw.c
+@@ -14,8 +14,8 @@
+ #define MAX_SRC_WIDTH           2048
  
-@@ -1124,6 +1143,10 @@ struct cx23885_subid cx23885_subids[] = {
- 		.subvendor = 0x0070,
- 		.subdevice = 0xf02a,
- 		.card      = CX23885_BOARD_HAUPPAUGE_STARBURST2,
-+	}, {
-+		.subvendor = 0x1461,
-+		.subdevice = 0x3100,
-+		.card      = CX23885_BOARD_AVERMEDIA_CE310B,
- 	},
- };
- const unsigned int cx23885_idcount = ARRAY_SIZE(cx23885_subids);
-@@ -2348,6 +2371,7 @@ void cx23885_card_setup(struct cx23885_dev *dev)
- 	case CX23885_BOARD_DVBSKY_T982:
- 	case CX23885_BOARD_VIEWCAST_260E:
- 	case CX23885_BOARD_VIEWCAST_460E:
-+	case CX23885_BOARD_AVERMEDIA_CE310B:
- 		dev->sd_cx25840 = v4l2_i2c_new_subdev(&dev->v4l2_dev,
- 				&dev->i2c_bus[2].i2c_adap,
- 				"cx25840", 0x88 >> 1, NULL);
-diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
-index 8098b15493de9..7fc408ee4934f 100644
---- a/drivers/media/pci/cx23885/cx23885-video.c
-+++ b/drivers/media/pci/cx23885/cx23885-video.c
-@@ -257,7 +257,8 @@ static int cx23885_video_mux(struct cx23885_dev *dev, unsigned int input)
- 		(dev->board == CX23885_BOARD_MYGICA_X8507) ||
- 		(dev->board == CX23885_BOARD_AVERMEDIA_HC81R) ||
- 		(dev->board == CX23885_BOARD_VIEWCAST_260E) ||
--		(dev->board == CX23885_BOARD_VIEWCAST_460E)) {
-+		(dev->board == CX23885_BOARD_VIEWCAST_460E) ||
-+		(dev->board == CX23885_BOARD_AVERMEDIA_CE310B)) {
- 		/* Configure audio routing */
- 		v4l2_subdev_call(dev->sd_cx25840, audio, s_routing,
- 			INPUT(input)->amux, 0, 0);
-diff --git a/drivers/media/pci/cx23885/cx23885.h b/drivers/media/pci/cx23885/cx23885.h
-index a95a2e4c6a0d3..c472498e57c4e 100644
---- a/drivers/media/pci/cx23885/cx23885.h
-+++ b/drivers/media/pci/cx23885/cx23885.h
-@@ -101,6 +101,7 @@
- #define CX23885_BOARD_HAUPPAUGE_STARBURST2     59
- #define CX23885_BOARD_HAUPPAUGE_QUADHD_DVB_885 60
- #define CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC_885 61
-+#define CX23885_BOARD_AVERMEDIA_CE310B         62
+ /* Reset & boot poll config */
+-#define POLL_RST_MAX            50
+-#define POLL_RST_DELAY_MS       20
++#define POLL_RST_MAX            500
++#define POLL_RST_DELAY_MS       2
  
- #define GPIO_0 0x00000001
- #define GPIO_1 0x00000002
+ enum bdisp_target_plan {
+ 	BDISP_RGB,
+@@ -382,7 +382,7 @@ int bdisp_hw_reset(struct bdisp_dev *bdisp)
+ 	for (i = 0; i < POLL_RST_MAX; i++) {
+ 		if (readl(bdisp->regs + BLT_STA1) & BLT_STA1_IDLE)
+ 			break;
+-		msleep(POLL_RST_DELAY_MS);
++		udelay(POLL_RST_DELAY_MS * 1000);
+ 	}
+ 	if (i == POLL_RST_MAX)
+ 		dev_err(bdisp->dev, "Reset timeout\n");
 -- 
 2.20.1
 
