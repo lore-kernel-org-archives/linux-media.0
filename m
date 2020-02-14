@@ -7,47 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15CF6C3B1B0
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:45:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C645C3B1AF
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:46:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E74B8206B6
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:45:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68B93206D7
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:46:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581702336;
-	bh=uTLnBEJERTGry/cuDv6VzwuoL0a2YHXZt5HbDHNk0wA=;
+	s=default; t=1581702403;
+	bh=HDNfsmOpb9MK1yv2aN+/E97lXV9iDVXQh3D1EFAviJE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=pVKf8LNbP1f3+YFlwIBzvv8eEy1yYD/jPROoIp/1/3/p0k/cTqFbWzPhqcZ3dngF/
-	 x2YRXO1aIUxA7Fmuokovh9iVzcDY37GKE53Bcw4pbOx9z1LxVTuNBqgTACoJW15N1M
-	 fbqCkWqCgqLcVEW6c5hnCZ0vEbXJsr/EYFSZgqH8=
+	b=d48ilBL8ZNc0cGoX/S98opjaJQEmTkJ9ko0cbQfOxvn60+MaOEJZenQo1oZ0BMW8k
+	 pEEDUKT6CBUHsVrVUbn2Ggx/4bM0YBObxas+Zo/W6LZ8orxr/ozvvOXWMJlmpitA0A
+	 8Tm123kqwdQJQLkdyfNhgNqtQuvXbqnirjAfv49M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389414AbgBNRpe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Feb 2020 12:45:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49278 "EHLO mail.kernel.org"
+        id S2389275AbgBNQCN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:02:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48322 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389431AbgBNQCl (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:02:41 -0500
+        id S2389265AbgBNQCL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:02:11 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2095524685;
-        Fri, 14 Feb 2020 16:02:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9C4B024676;
+        Fri, 14 Feb 2020 16:02:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696161;
-        bh=uTLnBEJERTGry/cuDv6VzwuoL0a2YHXZt5HbDHNk0wA=;
+        s=default; t=1581696130;
+        bh=HDNfsmOpb9MK1yv2aN+/E97lXV9iDVXQh3D1EFAviJE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fes3Tk3NJlNz8kIVIt8siUkdJl/8u9TZFKVbWLjilW3JS24lj5/2R3eI4MRPwqqgQ
-         Gc6RHyvW1KOaMA/PDaxV6lbaq/r/9VCc18JpBJu7WeeuI8VgZ5wpHkVO5uQab3r8Kh
-         /9HM6ZabFfurOu0YBm0aeam6DKDuVs3TklFhxpkQ=
+        b=nCeP60jhUGVvFg+8vLNWolMx7SIrbn2HxbQKN5BzRWlP/8Kw/Uts61Tcsm/XVi3iO
+         pPFhJSsLqPnpW2WD/ozY94wtFflbVGLsfkmpq224GOocSGdZxtN6F73tbG5L/1rdCs
+         weoyd/ubyLDYNWSWN3MzPqXIyn+mpuvgkTR204MU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 038/459] media: sun4i-csi: Fix data sampling polarity handling
-Date:   Fri, 14 Feb 2020 10:54:48 -0500
-Message-Id: <20200214160149.11681-38-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 015/459] media: meson: add missing allocation failure check on new_buf
+Date:   Fri, 14 Feb 2020 10:54:25 -0500
+Message-Id: <20200214160149.11681-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
 References: <20200214160149.11681-1-sashal@kernel.org>
@@ -60,43 +62,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Chen-Yu Tsai <wens@csie.org>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit cf9e6d5dbdd56ef2aa72f28c806711c4293c8848 ]
+[ Upstream commit 11e0e167d071a28288a7a0a211d48c571d19b56f ]
 
-The CLK_POL field specifies whether data is sampled on the falling or
-rising edge of PCLK, not whether the data lines are active high or low.
-Evidence of this can be found in the timing diagram labeled "horizontal
-size setting and pixel clock timing".
+Currently if the allocation of new_buf fails then a null pointer
+dereference occurs when assiging new_buf->vb. Avoid this by returning
+early on a memory allocation failure as there is not much more can
+be done at this point.
 
-Fix the setting by checking the correct flag, V4L2_MBUS_PCLK_SAMPLE_RISING.
-While at it, reorder the three polarity flag checks so HSYNC and VSYNC
-are grouped together.
+Addresses-Coverity: ("Dereference null return")
 
-Fixes: 577bbf23b758 ("media: sunxi: Add A10 CSI driver")
-Signed-off-by: Chen-Yu Tsai <wens@csie.org>
-Acked-by: Maxime Ripard <mripard@kernel.org>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Fixes: 3e7f51bd9607 ("media: meson: add v4l2 m2m video decoder driver")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/meson/vdec/vdec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-index d6979e11a67b2..8b567d0f019bf 100644
---- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-+++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-@@ -279,8 +279,8 @@ static int sun4i_csi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	       csi->regs + CSI_WIN_CTRL_H_REG);
+diff --git a/drivers/staging/media/meson/vdec/vdec.c b/drivers/staging/media/meson/vdec/vdec.c
+index 0a1a04fd5d13d..8dd1396909d7e 100644
+--- a/drivers/staging/media/meson/vdec/vdec.c
++++ b/drivers/staging/media/meson/vdec/vdec.c
+@@ -133,6 +133,8 @@ vdec_queue_recycle(struct amvdec_session *sess, struct vb2_buffer *vb)
+ 	struct amvdec_buffer *new_buf;
  
- 	hsync_pol = !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH);
--	pclk_pol = !!(bus->flags & V4L2_MBUS_DATA_ACTIVE_HIGH);
- 	vsync_pol = !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH);
-+	pclk_pol = !!(bus->flags & V4L2_MBUS_PCLK_SAMPLE_RISING);
- 	writel(CSI_CFG_INPUT_FMT(csi_fmt->input) |
- 	       CSI_CFG_OUTPUT_FMT(csi_fmt->output) |
- 	       CSI_CFG_VSYNC_POL(vsync_pol) |
+ 	new_buf = kmalloc(sizeof(*new_buf), GFP_KERNEL);
++	if (!new_buf)
++		return;
+ 	new_buf->vb = vb;
+ 
+ 	mutex_lock(&sess->bufs_recycle_lock);
 -- 
 2.20.1
 
