@@ -2,122 +2,101 @@ Return-Path: <SRS0=VTLG=4C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A449C3B1A4
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 16:58:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35CBAC2BA83
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:07:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 73FAD2082F
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 16:58:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581699502;
-	bh=8sqCPZQbHgG0+crtLnvdav5mlOwK/qn5XMgbdTOn95I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aRaOA/m+rX83N2aZ7OabFH29+ou01rR9+Vqc0tcKiwn7eiiy4c/f9+eyRxkLJwYdm
-	 NTPZ2oqe+WrcRaCtQL61KbpUUn6JwGNEdg0lH6mYWjar+oAX+CG+xc7Tm3xA4dHtOl
-	 dtlFLpT4pPToX0nCA74ELc6uJRM9992kwQaecB9E=
+	by mail.kernel.org (Postfix) with ESMTP id 16F0320637
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:07:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404438AbgBNQRZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:17:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48630 "EHLO mail.kernel.org"
+        id S2392017AbgBNRHO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Feb 2020 12:07:14 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:53474 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392707AbgBNQRY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:17:24 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E5A6D24691;
-        Fri, 14 Feb 2020 16:17:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697043;
-        bh=8sqCPZQbHgG0+crtLnvdav5mlOwK/qn5XMgbdTOn95I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SRHUhRDbEE20+ChELuqaLNTWH8cu2xyVFkKq46hDLqMm1OcMTI7btdVMrlmxSqPwq
-         W1Ty7AjfxhCJsgE6xcvJnJXc3w3Lr2fesBCRfUivykyRjqDsDZUMy2hh65hUaP4iQb
-         mews/3hFbuhfF8y84QNOSQgsYNuWS9s1x1ojneOs=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.14 005/186] media: i2c: adv748x: Fix unsafe macros
-Date:   Fri, 14 Feb 2020 11:14:14 -0500
-Message-Id: <20200214161715.18113-5-sashal@kernel.org>
+        id S2392338AbgBNQOg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:14:36 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1j2daQ-00EhCX-Rd; Fri, 14 Feb 2020 16:13:02 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1j2ddD-00021l-RG; Fri, 14 Feb 2020 16:15:55 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL for v5.7] Venus updates
+Date:   Fri, 14 Feb 2020 16:15:55 +0000
+Message-Id: <20200214161555.7752-1-jenkins@linuxtv.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
-References: <20200214161715.18113-1-sashal@kernel.org>
+In-Reply-To: <20200214160706.2467-1-stanimir.varbanov@linaro.org>
+References: 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+From: builder@linuxtv.org
 
-[ Upstream commit 0d962e061abcf1b9105f88fb850158b5887fbca3 ]
+Pull request: https://patchwork.linuxtv.org/patch/61652/
+Build log: https://builder.linuxtv.org/job/patchwork/38108/
+Build time: 00:05:47
+Link: https://lore.kernel.org/linux-media/20200214160706.2467-1-stanimir.varbanov@linaro.org
 
-Enclose multiple macro parameters in parentheses in order to
-make such macros safer and fix the Clang warning below:
+gpg: Signature made Fri 14 Feb 2020 03:35:57 PM UTC
+gpg:                using RSA key E1558C2497CE3CCC2B5AA30F25B55FC81B7035F2
+gpg: Good signature from "Stanimir Varbanov <stanimir.varbanov@linaro.org>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 34CF E039 8A16 AD93 18FD  D5E8 A6D0 26D8 E358 14D4
+     Subkey fingerprint: E155 8C24 97CE 3CCC 2B5A  A30F 25B5 5FC8 1B70 35F2
 
-drivers/media/i2c/adv748x/adv748x-afe.c:452:12: warning: operator '?:'
-has lower precedence than '|'; '|' will be evaluated first
-[-Wbitwise-conditional-parentheses]
+Summary: 9 patches and/or PDF generation with issues, being 0 at build time
 
-ret = sdp_clrset(state, ADV748X_SDP_FRP, ADV748X_SDP_FRP_MASK, enable
-? ctrl->val - 1 : 0);
+Error/warnings:
 
-Fixes: 3e89586a64df ("media: i2c: adv748x: add adv748x driver")
-Reported-by: Dmitry Vyukov <dvyukov@google.com>
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/i2c/adv748x/adv748x.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/adv748x/adv748x.h b/drivers/media/i2c/adv748x/adv748x.h
-index 296c5f8a8c633..1991c22be51a9 100644
---- a/drivers/media/i2c/adv748x/adv748x.h
-+++ b/drivers/media/i2c/adv748x/adv748x.h
-@@ -372,10 +372,10 @@ int adv748x_write_block(struct adv748x_state *state, int client_page,
- 
- #define io_read(s, r) adv748x_read(s, ADV748X_PAGE_IO, r)
- #define io_write(s, r, v) adv748x_write(s, ADV748X_PAGE_IO, r, v)
--#define io_clrset(s, r, m, v) io_write(s, r, (io_read(s, r) & ~m) | v)
-+#define io_clrset(s, r, m, v) io_write(s, r, (io_read(s, r) & ~(m)) | (v))
- 
- #define hdmi_read(s, r) adv748x_read(s, ADV748X_PAGE_HDMI, r)
--#define hdmi_read16(s, r, m) (((hdmi_read(s, r) << 8) | hdmi_read(s, r+1)) & m)
-+#define hdmi_read16(s, r, m) (((hdmi_read(s, r) << 8) | hdmi_read(s, (r)+1)) & (m))
- #define hdmi_write(s, r, v) adv748x_write(s, ADV748X_PAGE_HDMI, r, v)
- 
- #define repeater_read(s, r) adv748x_read(s, ADV748X_PAGE_REPEATER, r)
-@@ -383,11 +383,11 @@ int adv748x_write_block(struct adv748x_state *state, int client_page,
- 
- #define sdp_read(s, r) adv748x_read(s, ADV748X_PAGE_SDP, r)
- #define sdp_write(s, r, v) adv748x_write(s, ADV748X_PAGE_SDP, r, v)
--#define sdp_clrset(s, r, m, v) sdp_write(s, r, (sdp_read(s, r) & ~m) | v)
-+#define sdp_clrset(s, r, m, v) sdp_write(s, r, (sdp_read(s, r) & ~(m)) | (v))
- 
- #define cp_read(s, r) adv748x_read(s, ADV748X_PAGE_CP, r)
- #define cp_write(s, r, v) adv748x_write(s, ADV748X_PAGE_CP, r, v)
--#define cp_clrset(s, r, m, v) cp_write(s, r, (cp_read(s, r) & ~m) | v)
-+#define cp_clrset(s, r, m, v) cp_write(s, r, (cp_read(s, r) & ~(m)) | (v))
- 
- #define txa_read(s, r) adv748x_read(s, ADV748X_PAGE_TXA, r)
- #define txb_read(s, r) adv748x_read(s, ADV748X_PAGE_TXB, r)
--- 
-2.20.1
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0005-venus-cache-vb-payload-to-be-used-by-clock-scaling.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0005-venus-cache-vb-payload-to-be-used-by-clock-scaling.patch
+patches/0005-venus-cache-vb-payload-to-be-used-by-clock-scaling.patch:26: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0006-venus-redesign-clocks-and-pm-domains-control.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0006-venus-redesign-clocks-and-pm-domains-control.patch
+patches/0006-venus-redesign-clocks-and-pm-domains-control.patch:674: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0009-dt-bindings-media-venus-Convert-msm8916-to-DT-schema.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0009-dt-bindings-media-venus-Convert-msm8916-to-DT-schema.patch
+patches/0009-dt-bindings-media-venus-Convert-msm8916-to-DT-schema.patch:16: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0010-dt-bindings-media-venus-Convert-msm8996-to-DT-schema.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0010-dt-bindings-media-venus-Convert-msm8996-to-DT-schema.patch
+patches/0010-dt-bindings-media-venus-Convert-msm8996-to-DT-schema.patch:16: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0011-dt-bindings-media-venus-Convert-sdm845-to-DT-schema.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0011-dt-bindings-media-venus-Convert-sdm845-to-DT-schema.patch
+patches/0011-dt-bindings-media-venus-Convert-sdm845-to-DT-schema.patch:16: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0012-dt-bindings-media-venus-Add-sdm845v2-DT-schema.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0012-dt-bindings-media-venus-Add-sdm845v2-DT-schema.patch
+patches/0012-dt-bindings-media-venus-Add-sdm845v2-DT-schema.patch:16: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0014-dt-bindings-media-venus-delete-old-binding-document.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0014-dt-bindings-media-venus-delete-old-binding-document.patch
+patches/0014-dt-bindings-media-venus-delete-old-binding-document.patch:17: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+patches/0014-dt-bindings-media-venus-delete-old-binding-document.patch:20: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.txt
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0015-venus-core-add-sc7180-DT-compatible-and-resource-str.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0015-venus-core-add-sc7180-DT-compatible-and-resource-str.patch
+patches/0015-venus-core-add-sc7180-DT-compatible-and-resource-str.patch:71: WARNING: DT compatible string "qcom,sc7180-venus" appears un-documented -- check ./Documentation/devicetree/bindings/
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0016-dt-bindings-media-venus-Add-sc7180-DT-schema.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0016-dt-bindings-media-venus-Add-sc7180-DT-schema.patch
+patches/0016-dt-bindings-media-venus-Add-sc7180-DT-schema.patch:17: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
 
