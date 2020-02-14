@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 093CCC3B19F
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 16:12:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C88F3C2BA83
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 16:17:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D3A1A24680
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 16:12:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A9F024691
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 16:17:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581696730;
-	bh=Vpm/cz36dyRSQNVKx2X+LFRPRQifTpcBfMITrEp7/fw=;
+	s=default; t=1581697059;
+	bh=hLfZr2lTPwLVvls4QJKmwnrEt7LV1L6ytSfteOuLPOI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=oEUo9AVZyzxeMO/32cxwFYsgsKAzDHlLt5MWwe29Z8AdyMuAeyUhy6FUpPyUob1Gt
-	 67RTwZ8BpNl8dNcb0uEfYY8bJEh+hQHO7KVwNTF+mUTOYVDSuJFi7tubD9UCDYgeCs
-	 8OUD9Uyu+dl6z6L1Ndf6bVzqr63VQu0u+Y/JD38E=
+	b=PJHslGChND6qCXze3BE6QRARfsufI9xduZD+Tx7Wb4g6Oc7DbT7FubmHZJZM4z7zM
+	 A6HDdV8gJMN+Nle/VB7pp3ku0WbGtC1d7KlD/YKIW5fp2XDI3XiUy/Wr7mOq3bxCeF
+	 eqrITgfVQDAyt6xU4gfZ4W9xClo/D2CEQWhuJHPo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403770AbgBNQMJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:12:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39374 "EHLO mail.kernel.org"
+        id S2404516AbgBNQRh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:17:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49006 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403763AbgBNQMJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:12:09 -0500
+        id S2388168AbgBNQRg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:17:36 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 42DE3246BA;
-        Fri, 14 Feb 2020 16:12:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1AB9D24691;
+        Fri, 14 Feb 2020 16:17:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696728;
-        bh=Vpm/cz36dyRSQNVKx2X+LFRPRQifTpcBfMITrEp7/fw=;
+        s=default; t=1581697056;
+        bh=hLfZr2lTPwLVvls4QJKmwnrEt7LV1L6ytSfteOuLPOI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o4h+s8l0Fi0Jl9ft+//IJVL/Qv8R9wCwNOPeljiYyrnX6+qHygQuUFgpQTAlTarDL
-         WjDG3HOEv1Q2Q/e2um70nK9JkcCymR1gb3Ws9TtGja2nla26nvDgQKsyD0vHzyL6xz
-         oVyAN9HfzGD2xcvhinavl7gtsXsA1KMOJzm88uzc=
+        b=ZpS/OumccjRzaZUIoahWD3vEq555GepqwQ6myJGNOprLPh/lSJ+n+czAkiyj+iJe+
+         vDdpj3srLjSGaKQy3nzyQXKflD4X9pBl108PNWG2A/uzWZs/m5OVqFewtYneLg/1Vn
+         sR2GLQldv0Jn10bFpbB9sF7/YGgCUZeKovhoK9KA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Eugen Hristev <eugen.hristev@microchip.com>,
@@ -46,12 +46,12 @@ Cc:     Eugen Hristev <eugen.hristev@microchip.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 015/252] media: i2c: mt9v032: fix enum mbus codes and frame sizes
-Date:   Fri, 14 Feb 2020 11:07:50 -0500
-Message-Id: <20200214161147.15842-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 015/186] media: i2c: mt9v032: fix enum mbus codes and frame sizes
+Date:   Fri, 14 Feb 2020 11:14:24 -0500
+Message-Id: <20200214161715.18113-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
-References: <20200214161147.15842-1-sashal@kernel.org>
+In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
+References: <20200214161715.18113-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -86,10 +86,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/mt9v032.c b/drivers/media/i2c/mt9v032.c
-index f74730d24d8fe..04788692c9ff4 100644
+index 8a430640c85d5..1a20d0d558d3e 100644
 --- a/drivers/media/i2c/mt9v032.c
 +++ b/drivers/media/i2c/mt9v032.c
-@@ -431,10 +431,12 @@ static int mt9v032_enum_mbus_code(struct v4l2_subdev *subdev,
+@@ -423,10 +423,12 @@ static int mt9v032_enum_mbus_code(struct v4l2_subdev *subdev,
  				  struct v4l2_subdev_pad_config *cfg,
  				  struct v4l2_subdev_mbus_code_enum *code)
  {
@@ -103,7 +103,7 @@ index f74730d24d8fe..04788692c9ff4 100644
  	return 0;
  }
  
-@@ -442,7 +444,11 @@ static int mt9v032_enum_frame_size(struct v4l2_subdev *subdev,
+@@ -434,7 +436,11 @@ static int mt9v032_enum_frame_size(struct v4l2_subdev *subdev,
  				   struct v4l2_subdev_pad_config *cfg,
  				   struct v4l2_subdev_frame_size_enum *fse)
  {
