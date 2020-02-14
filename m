@@ -2,292 +2,151 @@ Return-Path: <SRS0=VTLG=4C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D41EDC2BA83
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:20:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EED8C2BA83
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:35:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A2BDA206CC
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:20:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="a2KZ6Tqz"
+	by mail.kernel.org (Postfix) with ESMTP id 3C564206CC
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:35:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1581701745;
+	bh=JgJdL0BFnsR0Jb/1/9CkhRAzvlV9Y2mCo/X46u5JkZ4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=PotRsavpeaMrZ/NbYTn407/MhVkcIWcJUb01kOqKo7Hp6L02Eh7HFxBgdO1tO1C+2
+	 JDb/ArXsG3RTmVO8AXw33aKBP/JP14bVWhuXcE/n8rgBKP3LOueBVYs+b3acQfflwR
+	 18dlX8uwboTCJARz7fnQiSmGH06ls2yMUTHI8pwA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405138AbgBNRUS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Feb 2020 12:20:18 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:8605 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390987AbgBNRUR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Feb 2020 12:20:17 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e46d6b20000>; Fri, 14 Feb 2020 09:19:46 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 14 Feb 2020 09:20:16 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 14 Feb 2020 09:20:16 -0800
-Received: from [10.2.163.245] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 14 Feb
- 2020 17:20:15 +0000
-Subject: Re: Re: [RFC PATCH v2 4/6] media: tegra: Add Tegra210 Video input
- driver
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <helen.koike@collabora.com>, <sboyd@kernel.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1580937806-17376-1-git-send-email-skomatineni@nvidia.com>
- <1580937806-17376-5-git-send-email-skomatineni@nvidia.com>
- <20200214164642.GA1310813@ulmo>
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-Message-ID: <ccb32c83-2cd8-fb26-658c-6bc11f460336@nvidia.com>
-Date:   Fri, 14 Feb 2020 09:20:16 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1730637AbgBNRfj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Feb 2020 12:35:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56006 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390238AbgBNQFv (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:05:51 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9741D2187F;
+        Fri, 14 Feb 2020 16:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581696350;
+        bh=JgJdL0BFnsR0Jb/1/9CkhRAzvlV9Y2mCo/X46u5JkZ4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=1RgJajr8DgCkgW2AIDUVEw8mEwfO2VKTZ041rJiRBtVRZ2jX6d+najK5bHcurx1RV
+         iEKzKXTumhqNQ9soEC9L0qIJhdCFPb1/Gr7DVLijUJGHS7h8zBfKeHDf2L2zsAz+jr
+         SVwSpKn9H8WHYLZ20tIuEiQWl6FirT0+LcsQPTNs=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.4 184/459] media: v4l2-device.h: Explicitly compare grp{id,mask} to zero in v4l2_device macros
+Date:   Fri, 14 Feb 2020 10:57:14 -0500
+Message-Id: <20200214160149.11681-184-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
+References: <20200214160149.11681-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200214164642.GA1310813@ulmo>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1581700786; bh=0TgSKDENwvoW0ZWqchiqORNoTXWv77shXNuxZ0wmLyk=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=a2KZ6TqzvYmI5spWyZVsGHn4FV3GYIlZzpNIYztBWq1kqasdrzeh5VcTXb6OtladD
-         1wIJ7m0ifFFiehE0r7TIm+vXXFnSgwo7L7gdILyhSIdFDPPe/dwQsiZt6TL9US8qzn
-         Izt/M7UQqoMSSPMDVzhCLWnpnkPwSh32BbyHe9tTQcYRNSHKpgkkTjD3IsQJ4zeU8d
-         1rY2FERgcFl/7UupdHzh07GEaXUH8Y8nlfUF643cpoEvmgg4wOBksyjSVnSgOSCfvN
-         mezLsmbs9FtXYD5Yl09pSbVMmVYNlO2x8V5Q2b77ynGOcHrqCP3POz+Jdr1J3q/Gg9
-         97ImdADcsFUJg==
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+From: Nathan Chancellor <natechancellor@gmail.com>
 
-On 2/14/20 8:46 AM, Thierry Reding wrote:
-> On Wed, Feb 05, 2020 at 01:23:24PM -0800, Sowjanya Komatineni wrote:
-> [...]
->> +static int tegra_channel_capture_frame(struct tegra_vi_channel *chan,
->> +				       struct tegra_channel_buffer *buf)
->> +{
->> +	int err = 0;
->> +	u32 thresh, value, frame_start;
->> +	int bytes_per_line = chan->format.bytesperline;
->> +
->> +	/* program buffer address by using surface 0 */
->> +	vi_csi_write(chan, TEGRA_VI_CSI_SURFACE0_OFFSET_MSB, 0x0);
->> +	vi_csi_write(chan, TEGRA_VI_CSI_SURFACE0_OFFSET_LSB, buf->addr);
->> +	vi_csi_write(chan, TEGRA_VI_CSI_SURFACE0_STRIDE, bytes_per_line);
->> +
->> +	/* increase syncpoint max */
->> +	thresh = host1x_syncpt_incr_max(chan->sp, 1);
->> +
->> +	/* program syncpoint */
->> +	frame_start = VI_CSI_PP_FRAME_START(chan->portno);
->> +	value = VI_CFG_VI_INCR_SYNCPT_COND(frame_start) |
->> +		host1x_syncpt_id(chan->sp);
->> +	tegra_vi_write(chan, TEGRA_VI_CFG_VI_INCR_SYNCPT, value);
-> Okay, so this programs the VI to increment the given syncpoint upon
-> frame start? What is that VI_CSI_PP_FRAME_START(chan->portno) exactly?
-This programs thresh for FS event. VI_CSI_PP_FRAME_START is frame start 
-condition for corresponding port PPA that we program in INVR_SYNCPT to 
-raise event for this condition.
->
->> +
->> +	vi_csi_write(chan, TEGRA_VI_CSI_SINGLE_SHOT, SINGLE_SHOT_CAPTURE);
-> And now we start capturing in single-shot mode.
-We set thres to have it raise event when it sees FS and we issue single 
-shot which initiates capture with FS first and at end of frame capture 
-we should see MW_ACK which confirms frame buffer memory write done.
->
->> +
->> +	/* move buffer to capture done queue */
->> +	spin_lock(&chan->done_lock);
->> +	list_add_tail(&buf->queue, &chan->done);
->> +	spin_unlock(&chan->done_lock);
->> +
->> +	/* wait up kthread for capture done */
->> +	wake_up_interruptible(&chan->done_wait);
-> But this I don't understand. You wake up the kthread...
+[ Upstream commit afb34781620274236bd9fc9246e22f6963ef5262 ]
 
-On issuing single start this wakes up other thread which checks for MW_ACK.
+When building with Clang + -Wtautological-constant-compare, several of
+the ivtv and cx18 drivers warn along the lines of:
 
-So one thread checks for FS and other checks for MW_ACK.
+ drivers/media/pci/cx18/cx18-driver.c:1005:21: warning: converting the
+ result of '<<' to a boolean always evaluates to true
+ [-Wtautological-constant-compare]
+                         cx18_call_hw(cx, CX18_HW_GPIO_RESET_CTRL,
+                                         ^
+ drivers/media/pci/cx18/cx18-cards.h:18:37: note: expanded from macro
+ 'CX18_HW_GPIO_RESET_CTRL'
+ #define CX18_HW_GPIO_RESET_CTRL         (1 << 6)
+                                           ^
+ 1 warning generated.
 
-I do see race condition with this, so I had change in v3 where same 
-capture thread sets both FS COND SYncpoint and also MW_aCK and once it 
-see FS syncpt then only it wakes up other thread for MW_ACK otherwise it 
-just returns buffer with error state.
+This warning happens because the shift operation is implicitly converted
+to a boolean in v4l2_device_mask_call_all before being negated. This can
+be solved by just comparing the mask result to 0 explicitly so that
+there is no boolean conversion. The ultimate goal is to enable
+-Wtautological-compare globally because there are several subwarnings
+that would be helpful to have.
 
+For visual consistency and avoidance of these warnings in the future,
+all of the implicitly boolean conversions in the v4l2_device macros
+are converted to explicit ones as well.
 
->
->> +
->> +	/* use syncpoint to wake up */
->> +	err = host1x_syncpt_wait(chan->sp, thresh,
->> +				 TEGRA_VI_SYNCPT_WAIT_TIMEOUT, &value);
-> ... and then wait for the syncpoint to reach the given threshold? Isn't
-> that the wrong way around? Don't we need to wait for the syncpoint
-> increment *before* we wake up the kthread that will return the buffer
-> to userspace?
-V3 has change to check for MW_ACK only on successful FS. Will send out 
-v3 soon.
->> +	if (err) {
->> +		dev_err(&chan->video.dev,
->> +			"frame start syncpt timeout: %d\n", err);
->> +		tegra_channel_capture_error_status(chan);
->> +	}
->> +
->> +	return err;
->> +}
->> +
->> +static int tegra_channel_capture_done(struct tegra_vi_channel *chan,
->> +				      struct tegra_channel_buffer *buf)
->> +{
->> +	struct vb2_v4l2_buffer *vb = &buf->buf;
->> +	u32 thresh, value, mw_ack_done;
->> +	int ret = 0;
->> +
->> +	/* increase syncpoint max */
->> +	thresh = host1x_syncpt_incr_max(chan->sp, 1);
->> +
->> +	/* program syncpoint */
->> +	mw_ack_done = VI_CSI_MW_ACK_DONE(chan->portno);
->> +	value = VI_CFG_VI_INCR_SYNCPT_COND(mw_ack_done) |
->> +		host1x_syncpt_id(chan->sp);
->> +	tegra_vi_write(chan, TEGRA_VI_CFG_VI_INCR_SYNCPT, value);
->> +
->> +	if (!vi_csi_read(chan, TEGRA_VI_CSI_SINGLE_SHOT))
->> +		vi_csi_write(chan, TEGRA_VI_CSI_SINGLE_SHOT,
->> +			     SINGLE_SHOT_CAPTURE);
->> +
->> +	/* use syncpoint to wake up */
->> +	ret = host1x_syncpt_wait(chan->sp, thresh,
->> +				 TEGRA_VI_SYNCPT_WAIT_TIMEOUT, &value);
->> +	if (ret)
->> +		dev_err(&chan->video.dev,
->> +			"MW_ACK_DONE syncpoint timeout: %d\n", ret);
-> Actually... there's another syncpoint wait here, so I guess this will
-> stall until VI has actually completed writing the captured frame to
-> memory.
+Link: https://github.com/ClangBuiltLinux/linux/issues/752
 
-Yes with v2 it will wait till it sees MW_ACK before returning buffer.
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/media/v4l2-device.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-But as mentioned above, to avoid possible race condition moved 
-programming both threshold for same frame in capture thread and only on 
-receiving FS it wakes other thread to wait for MW_ACK and return buffer.
-
-
->> +
->> +	/* captured one frame */
->> +	vb->sequence = chan->sequence++;
->> +	vb->field = V4L2_FIELD_NONE;
->> +	vb->vb2_buf.timestamp = ktime_get_ns();
->> +	vb2_buffer_done(&vb->vb2_buf,
->> +			ret < 0 ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE);
-> So it's really only at this point that we return the buffer to
-> userspace, which should be after the hardware is done writing to the
-> buffer, so this should be fine.
->
-> That said, I'm wondering if host1x_syncpt_wait() is a good interface
-> for this use-case. We don't really have anything else right now, but
-> I think we may be able to add something to have a function called in
-> case the syncpoint reaches a threshold. Having to spawn two separate
-> threads with wait queues seems a bit overkill for this.
->
-> It's fine to leave this as it is for now, but maybe something to
-> consider as improvement in the future.
->
->> +	return ret;
->> +}
->> +
->> +static int chan_capture_kthread_start(void *data)
->> +{
->> +	struct tegra_vi_channel *chan = data;
->> +	struct tegra_channel_buffer *buf;
->> +	int err = 0;
->> +
->> +	set_freezable();
->> +
->> +	while (1) {
->> +		try_to_freeze();
->> +
->> +		wait_event_interruptible(chan->start_wait,
->> +					 !list_empty(&chan->capture) ||
->> +					 kthread_should_stop());
->> +		if (kthread_should_stop())
->> +			break;
->> +
->> +		if (err)
->> +			continue;
->> +
->> +		spin_lock(&chan->start_lock);
->> +		if (list_empty(&chan->capture)) {
->> +			spin_unlock(&chan->start_lock);
->> +			continue;
->> +		}
->> +
->> +		buf = list_entry(chan->capture.next,
->> +				 struct tegra_channel_buffer, queue);
->> +		list_del_init(&buf->queue);
->> +		spin_unlock(&chan->start_lock);
->> +		err = tegra_channel_capture_frame(chan, buf);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int chan_capture_kthread_done(void *data)
->> +{
->> +	struct tegra_vi_channel *chan = data;
->> +	struct tegra_channel_buffer *buf;
->> +	int err = 0;
->> +
->> +	set_freezable();
->> +
->> +	while (1) {
->> +		try_to_freeze();
->> +
->> +		wait_event_interruptible(chan->done_wait,
->> +					 !list_empty(&chan->done) ||
->> +					 kthread_should_stop());
->> +
->> +		if (kthread_should_stop())
->> +			break;
->> +
->> +		spin_lock(&chan->done_lock);
->> +		if (list_empty(&chan->done)) {
->> +			spin_unlock(&chan->done_lock);
->> +			continue;
->> +		}
->> +
->> +		buf = list_entry(chan->done.next, struct tegra_channel_buffer,
->> +				 queue);
->> +		if (!buf)
->> +			continue;
->> +
->> +		list_del_init(&buf->queue);
->> +		spin_unlock(&chan->done_lock);
->> +		err = tegra_channel_capture_done(chan, buf);
-> What's with the error here? I think we should either handle it in some
-> way, or just avoid even returning an error if we're not going to deal
-> with it anyway.
->
-> Thierry
-
-
-v3 has proper implementation where on no frame start which happens when 
-source is not streaming, we keep thread in wait till kthread stops and 
-we dont dequeue buffers.
-
-Once we see kthread stop then we return all buffers.
+diff --git a/include/media/v4l2-device.h b/include/media/v4l2-device.h
+index e0b8f2602670d..a0e93f0ef62a1 100644
+--- a/include/media/v4l2-device.h
++++ b/include/media/v4l2-device.h
+@@ -371,7 +371,7 @@ static inline bool v4l2_device_supports_requests(struct v4l2_device *v4l2_dev)
+ 		struct v4l2_subdev *__sd;				\
+ 									\
+ 		__v4l2_device_call_subdevs_p(v4l2_dev, __sd,		\
+-			!(grpid) || __sd->grp_id == (grpid), o, f ,	\
++			(grpid) == 0 || __sd->grp_id == (grpid), o, f ,	\
+ 			##args);					\
+ 	} while (0)
+ 
+@@ -403,7 +403,7 @@ static inline bool v4l2_device_supports_requests(struct v4l2_device *v4l2_dev)
+ ({									\
+ 	struct v4l2_subdev *__sd;					\
+ 	__v4l2_device_call_subdevs_until_err_p(v4l2_dev, __sd,		\
+-			!(grpid) || __sd->grp_id == (grpid), o, f ,	\
++			(grpid) == 0 || __sd->grp_id == (grpid), o, f ,	\
+ 			##args);					\
+ })
+ 
+@@ -431,8 +431,8 @@ static inline bool v4l2_device_supports_requests(struct v4l2_device *v4l2_dev)
+ 		struct v4l2_subdev *__sd;				\
+ 									\
+ 		__v4l2_device_call_subdevs_p(v4l2_dev, __sd,		\
+-			!(grpmsk) || (__sd->grp_id & (grpmsk)), o, f ,	\
+-			##args);					\
++			(grpmsk) == 0 || (__sd->grp_id & (grpmsk)), o,	\
++			f , ##args);					\
+ 	} while (0)
+ 
+ /**
+@@ -462,8 +462,8 @@ static inline bool v4l2_device_supports_requests(struct v4l2_device *v4l2_dev)
+ ({									\
+ 	struct v4l2_subdev *__sd;					\
+ 	__v4l2_device_call_subdevs_until_err_p(v4l2_dev, __sd,		\
+-			!(grpmsk) || (__sd->grp_id & (grpmsk)), o, f ,	\
+-			##args);					\
++			(grpmsk) == 0 || (__sd->grp_id & (grpmsk)), o,	\
++			f , ##args);					\
+ })
+ 
+ 
+-- 
+2.20.1
 
