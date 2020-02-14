@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC737C2BA83
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:44:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F8C1C3B1B0
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:45:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 97096206B6
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:44:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE0AA206B6
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:45:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581702292;
-	bh=UePCY4BqtIvlghuVOYlkGyqEl9Oi9N2cZL5RSM9Ehrc=;
+	s=default; t=1581702324;
+	bh=5bJSGcisAMQ6ge9lH5Vmo9G0UmVONpbBRcpK/946w5k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=pJ3kI1G98+Itw2IvHRXnDRD2/GOOFMsE7J81NfoFyMm9PMAnTaWT1t9C2l5TdOo44
-	 tzKTXPHWBUJ9ajYD7vDESHNasXUQktaR2MtZ/sBLM4cPqeAnjDwV6D9/0hNJ88W29q
-	 7xv3Ugox9TXyhLIyAOWY1jhapblArJkGqUx1lM0c=
+	b=X/dCDuKy0lFJ459jfyJvLqYhYM4w12u+du90Elf6PfMqF0SHA4Z+ugCK5+90jCTm0
+	 XDQI5nI//8yp8Jdh/tZRbOa2zIHG3VNLooiffNUyn6Q4TN8vGFy/x/O/tkmfiU4wzt
+	 Dq7Uv0+wMeM18PHs9r4iqp5WAqTfxVoUVZfe5NJM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389488AbgBNQC4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:02:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49692 "EHLO mail.kernel.org"
+        id S2389546AbgBNRpX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Feb 2020 12:45:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49354 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389492AbgBNQC4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:02:56 -0500
+        id S2389442AbgBNQCp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:02:45 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CDF1724681;
-        Fri, 14 Feb 2020 16:02:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E5E4E217F4;
+        Fri, 14 Feb 2020 16:02:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696175;
-        bh=UePCY4BqtIvlghuVOYlkGyqEl9Oi9N2cZL5RSM9Ehrc=;
+        s=default; t=1581696164;
+        bh=5bJSGcisAMQ6ge9lH5Vmo9G0UmVONpbBRcpK/946w5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y939bBz1MDDiWlcYj5L//e+9DBPaQPwIVUEJgYL7AUD9ntKD6AthkFXww5jFXXgiO
-         3lVjjkXPV7iTFBTBtLKneB7JxW6QqSXOkZ8gQApguNRycosgS10AAT0Qv2PlP06PLF
-         mNQ/3q8csXzIqYZXjyaJgHp2WrdWkCTNWTp5MOaY=
+        b=uqTRatt8/q8Pke2EGVaMAWO3EXTNbfCuB8+aAiFdZa/IT8b5v7H/i/z8S+G5wIMOG
+         L8/hiWRlT1mocMkRERNIPL4UZgCnVll0LeTG/cOjoAztD7TNesDQVLeEyXzbmVqwSO
+         gKBO8W2dC5GTgwFxrT6nqux9nZ5+8Fl7MVY5oW0I=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Fabien Dessenne <fabien.dessenne@st.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <mripard@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 048/459] media: sti: bdisp: fix a possible sleep-in-atomic-context bug in bdisp_device_run()
-Date:   Fri, 14 Feb 2020 10:54:58 -0500
-Message-Id: <20200214160149.11681-48-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.4 040/459] media: sun4i-csi: Fix [HV]sync polarity handling
+Date:   Fri, 14 Feb 2020 10:54:50 -0500
+Message-Id: <20200214160149.11681-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
 References: <20200214160149.11681-1-sashal@kernel.org>
@@ -60,57 +60,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Chen-Yu Tsai <wens@csie.org>
 
-[ Upstream commit bb6d42061a05d71dd73f620582d9e09c8fbf7f5b ]
+[ Upstream commit 1948dcf0f928b8bcdca57ca3fba8545ba380fc29 ]
 
-The driver may sleep while holding a spinlock.
-The function call path (from bottom to top) in Linux 4.19 is:
+The Allwinner camera sensor interface has a different definition of
+[HV]sync. While the timing diagram uses the names HSYNC and VSYNC,
+the note following the diagram and register names use HREF and VREF.
+Combined they imply the hardware uses either [HV]REF or inverted
+[HV]SYNC. There are also registers to set horizontal skip lengths
+in pixels and vertical skip lengths in lines, also known as back
+porches.
 
-drivers/media/platform/sti/bdisp/bdisp-hw.c, 385:
-    msleep in bdisp_hw_reset
-drivers/media/platform/sti/bdisp/bdisp-v4l2.c, 341:
-    bdisp_hw_reset in bdisp_device_run
-drivers/media/platform/sti/bdisp/bdisp-v4l2.c, 317:
-    _raw_spin_lock_irqsave in bdisp_device_run
+Fix the polarity handling by using the opposite polarity flag for
+the checks. Also rename `[hv]sync_pol` to `[hv]ref_pol` to better
+match the hardware register description.
 
-To fix this bug, msleep() is replaced with udelay().
-
-This bug is found by a static analysis tool STCheck written by myself.
-
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Reviewed-by: Fabien Dessenne <fabien.dessenne@st.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 577bbf23b758 ("media: sunxi: Add A10 CSI driver")
+Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+Acked-by: Maxime Ripard <mripard@kernel.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sti/bdisp/bdisp-hw.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../media/platform/sunxi/sun4i-csi/sun4i_csi.h |  4 ++--
+ .../media/platform/sunxi/sun4i-csi/sun4i_dma.c | 18 +++++++++++++-----
+ 2 files changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/sti/bdisp/bdisp-hw.c b/drivers/media/platform/sti/bdisp/bdisp-hw.c
-index 4372abbb5950f..a74e9fd652389 100644
---- a/drivers/media/platform/sti/bdisp/bdisp-hw.c
-+++ b/drivers/media/platform/sti/bdisp/bdisp-hw.c
-@@ -14,8 +14,8 @@
- #define MAX_SRC_WIDTH           2048
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h
+index 001c8bde006ce..88d39b3554c4b 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h
++++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h
+@@ -22,8 +22,8 @@
+ #define CSI_CFG_INPUT_FMT(fmt)			((fmt) << 20)
+ #define CSI_CFG_OUTPUT_FMT(fmt)			((fmt) << 16)
+ #define CSI_CFG_YUV_DATA_SEQ(seq)		((seq) << 8)
+-#define CSI_CFG_VSYNC_POL(pol)			((pol) << 2)
+-#define CSI_CFG_HSYNC_POL(pol)			((pol) << 1)
++#define CSI_CFG_VREF_POL(pol)			((pol) << 2)
++#define CSI_CFG_HREF_POL(pol)			((pol) << 1)
+ #define CSI_CFG_PCLK_POL(pol)			((pol) << 0)
  
- /* Reset & boot poll config */
--#define POLL_RST_MAX            50
--#define POLL_RST_DELAY_MS       20
-+#define POLL_RST_MAX            500
-+#define POLL_RST_DELAY_MS       2
+ #define CSI_CPT_CTRL_REG		0x08
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
+index 8b567d0f019bf..78fa1c535ac64 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
++++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
+@@ -228,7 +228,7 @@ static int sun4i_csi_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	struct sun4i_csi *csi = vb2_get_drv_priv(vq);
+ 	struct v4l2_fwnode_bus_parallel *bus = &csi->bus;
+ 	const struct sun4i_csi_format *csi_fmt;
+-	unsigned long hsync_pol, pclk_pol, vsync_pol;
++	unsigned long href_pol, pclk_pol, vref_pol;
+ 	unsigned long flags;
+ 	unsigned int i;
+ 	int ret;
+@@ -278,13 +278,21 @@ static int sun4i_csi_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	writel(CSI_WIN_CTRL_H_ACTIVE(csi->fmt.height),
+ 	       csi->regs + CSI_WIN_CTRL_H_REG);
  
- enum bdisp_target_plan {
- 	BDISP_RGB,
-@@ -382,7 +382,7 @@ int bdisp_hw_reset(struct bdisp_dev *bdisp)
- 	for (i = 0; i < POLL_RST_MAX; i++) {
- 		if (readl(bdisp->regs + BLT_STA1) & BLT_STA1_IDLE)
- 			break;
--		msleep(POLL_RST_DELAY_MS);
-+		udelay(POLL_RST_DELAY_MS * 1000);
- 	}
- 	if (i == POLL_RST_MAX)
- 		dev_err(bdisp->dev, "Reset timeout\n");
+-	hsync_pol = !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH);
+-	vsync_pol = !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH);
++	/*
++	 * This hardware uses [HV]REF instead of [HV]SYNC. Based on the
++	 * provided timing diagrams in the manual, positive polarity
++	 * equals active high [HV]REF.
++	 *
++	 * When the back porch is 0, [HV]REF is more or less equivalent
++	 * to [HV]SYNC inverted.
++	 */
++	href_pol = !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_LOW);
++	vref_pol = !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_LOW);
+ 	pclk_pol = !!(bus->flags & V4L2_MBUS_PCLK_SAMPLE_RISING);
+ 	writel(CSI_CFG_INPUT_FMT(csi_fmt->input) |
+ 	       CSI_CFG_OUTPUT_FMT(csi_fmt->output) |
+-	       CSI_CFG_VSYNC_POL(vsync_pol) |
+-	       CSI_CFG_HSYNC_POL(hsync_pol) |
++	       CSI_CFG_VREF_POL(vref_pol) |
++	       CSI_CFG_HREF_POL(href_pol) |
+ 	       CSI_CFG_PCLK_POL(pclk_pol),
+ 	       csi->regs + CSI_CFG_REG);
+ 
 -- 
 2.20.1
 
