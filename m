@@ -2,54 +2,51 @@ Return-Path: <SRS0=VTLG=4C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08BFAC47409
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 185B6C3B1A1
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:10:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D36CE20656
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:09:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E505C24649
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 17:10:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581700183;
-	bh=wq7lxjt7cRlqyFc4oM2xYceah9Pd7LC/X/ok4YEThvs=;
+	s=default; t=1581700205;
+	bh=3NpJQF7sZ1rITlgoBsr5kQbSK6labd42PMgCJEzJibE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=CRjPY6JvfqFEqsJvRDMbjunSABllzS5gHyu9Xhfn1n709puqP4yafzU0MTeaaUZC/
-	 NgqFD4vLIqom5MS8dJwqoPWXuYAQ5QdF54/Wdp8CvXtuBmwvtUTNR0Ct54PbeiALhh
-	 C6GSktqLvGqt/hyC1ZjJ53FlVXudAPjwvzYtySjU=
+	b=G8f7hF29Ly6LEyDBE1dk7h/wMOPq0eIzmFX8ivV/Y091KSPETfMj1qbO785DUSkzx
+	 28h5gG0w/vRXo5chmdMIw9K9VQT734Lgb6GLh1bqWA3JP5/LlQghvNoBqleLyH9SCy
+	 sxTf79EWIKoHatiMIc3mXcoGk+61NE+aAK2F6a1I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394462AbgBNRJj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Feb 2020 12:09:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42944 "EHLO mail.kernel.org"
+        id S2394508AbgBNRJv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Feb 2020 12:09:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42782 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392215AbgBNQNu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:13:50 -0500
+        id S2403929AbgBNQNr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:13:47 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 98030246C6;
-        Fri, 14 Feb 2020 16:13:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 15F41246AA;
+        Fri, 14 Feb 2020 16:13:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696829;
-        bh=wq7lxjt7cRlqyFc4oM2xYceah9Pd7LC/X/ok4YEThvs=;
+        s=default; t=1581696825;
+        bh=3NpJQF7sZ1rITlgoBsr5kQbSK6labd42PMgCJEzJibE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MtyflCFnVZxuXfPgXlw7iLJ7NeWT5CRLIflrAFDmADDyJ0FBdG7lVGr1RUYTgohKb
-         QgNFTFX1ubZvSa+uw11fqgn0bKPznLFYbAxs6eGbms5zHzT1caeWaRl1nFMjKa7i/X
-         yI/GeRegQy+16XtQswyfVk4+b0IXMP3OAYJ6oOFQ=
+        b=tT6attobAmlhPLSsB908+SVPoGl9L1sDEfz2pOltbbLFkT+rHsrBWHMz6aQds/yZb
+         NJnKuvNVjuUQo9GSwMoe4zWNg6ygD9v3Ag/bQLPsKZqxhT0jXHIBGFnsEp5ulR2PDg
+         kwtkMcik1R0pnirn2+qOjPOXHUk277Uwk/HBR6CM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+Cc:     Forest Crossman <cyrozap@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.19 095/252] media: v4l2-device.h: Explicitly compare grp{id,mask} to zero in v4l2_device macros
-Date:   Fri, 14 Feb 2020 11:09:10 -0500
-Message-Id: <20200214161147.15842-95-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 092/252] media: cx23885: Add support for AVerMedia CE310B
+Date:   Fri, 14 Feb 2020 11:09:07 -0500
+Message-Id: <20200214161147.15842-92-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
 References: <20200214161147.15842-1-sashal@kernel.org>
@@ -62,91 +59,111 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+From: Forest Crossman <cyrozap@gmail.com>
 
-[ Upstream commit afb34781620274236bd9fc9246e22f6963ef5262 ]
+[ Upstream commit dc4cac67e13515835ed8081d510aa507aacb013b ]
 
-When building with Clang + -Wtautological-constant-compare, several of
-the ivtv and cx18 drivers warn along the lines of:
+The AVerMedia CE310B is a simple composite + S-Video + stereo audio
+capture card, and uses only the CX23888 to perform all of these
+functions.
 
- drivers/media/pci/cx18/cx18-driver.c:1005:21: warning: converting the
- result of '<<' to a boolean always evaluates to true
- [-Wtautological-constant-compare]
-                         cx18_call_hw(cx, CX18_HW_GPIO_RESET_CTRL,
-                                         ^
- drivers/media/pci/cx18/cx18-cards.h:18:37: note: expanded from macro
- 'CX18_HW_GPIO_RESET_CTRL'
- #define CX18_HW_GPIO_RESET_CTRL         (1 << 6)
-                                           ^
- 1 warning generated.
+I've tested both video inputs and the audio interface and confirmed that
+they're all working. However, there are some issues:
 
-This warning happens because the shift operation is implicitly converted
-to a boolean in v4l2_device_mask_call_all before being negated. This can
-be solved by just comparing the mask result to 0 explicitly so that
-there is no boolean conversion. The ultimate goal is to enable
--Wtautological-compare globally because there are several subwarnings
-that would be helpful to have.
+* Sometimes when I switch inputs the video signal turns black and can't
+  be recovered until the system is rebooted. I haven't been able to
+  determine the cause of this behavior, nor have I found a solution to
+  fix it or any workarounds other than rebooting.
+* The card sometimes seems to have trouble syncing to the video signal,
+  and some of the VBI data appears as noise at the top of the frame, but
+  I assume that to be a result of my very noisy RF environment and the
+  card's unshielded input traces rather than a configuration issue.
 
-For visual consistency and avoidance of these warnings in the future,
-all of the implicitly boolean conversions in the v4l2_device macros
-are converted to explicit ones as well.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/752
-
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Signed-off-by: Forest Crossman <cyrozap@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/media/v4l2-device.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/media/pci/cx23885/cx23885-cards.c | 24 +++++++++++++++++++++++
+ drivers/media/pci/cx23885/cx23885-video.c |  3 ++-
+ drivers/media/pci/cx23885/cx23885.h       |  1 +
+ 3 files changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/include/media/v4l2-device.h b/include/media/v4l2-device.h
-index b330e4a08a6b8..40840fec337ca 100644
---- a/include/media/v4l2-device.h
-+++ b/include/media/v4l2-device.h
-@@ -372,7 +372,7 @@ static inline void v4l2_subdev_notify(struct v4l2_subdev *sd,
- 		struct v4l2_subdev *__sd;				\
- 									\
- 		__v4l2_device_call_subdevs_p(v4l2_dev, __sd,		\
--			!(grpid) || __sd->grp_id == (grpid), o, f ,	\
-+			(grpid) == 0 || __sd->grp_id == (grpid), o, f ,	\
- 			##args);					\
- 	} while (0)
+diff --git a/drivers/media/pci/cx23885/cx23885-cards.c b/drivers/media/pci/cx23885/cx23885-cards.c
+index ed3210dc50bc2..642aefdbb7bb6 100644
+--- a/drivers/media/pci/cx23885/cx23885-cards.c
++++ b/drivers/media/pci/cx23885/cx23885-cards.c
+@@ -811,6 +811,25 @@ struct cx23885_board cx23885_boards[] = {
+ 		.name		= "Hauppauge WinTV-Starburst2",
+ 		.portb		= CX23885_MPEG_DVB,
+ 	},
++	[CX23885_BOARD_AVERMEDIA_CE310B] = {
++		.name		= "AVerMedia CE310B",
++		.porta		= CX23885_ANALOG_VIDEO,
++		.force_bff	= 1,
++		.input          = {{
++			.type   = CX23885_VMUX_COMPOSITE1,
++			.vmux   = CX25840_VIN1_CH1 |
++				  CX25840_NONE_CH2 |
++				  CX25840_NONE0_CH3,
++			.amux   = CX25840_AUDIO7,
++		}, {
++			.type   = CX23885_VMUX_SVIDEO,
++			.vmux   = CX25840_VIN8_CH1 |
++				  CX25840_NONE_CH2 |
++				  CX25840_VIN7_CH3 |
++				  CX25840_SVIDEO_ON,
++			.amux   = CX25840_AUDIO7,
++		} },
++	},
+ };
+ const unsigned int cx23885_bcount = ARRAY_SIZE(cx23885_boards);
  
-@@ -404,7 +404,7 @@ static inline void v4l2_subdev_notify(struct v4l2_subdev *sd,
- ({									\
- 	struct v4l2_subdev *__sd;					\
- 	__v4l2_device_call_subdevs_until_err_p(v4l2_dev, __sd,		\
--			!(grpid) || __sd->grp_id == (grpid), o, f ,	\
-+			(grpid) == 0 || __sd->grp_id == (grpid), o, f ,	\
- 			##args);					\
- })
+@@ -1134,6 +1153,10 @@ struct cx23885_subid cx23885_subids[] = {
+ 		.subvendor = 0x0070,
+ 		.subdevice = 0xf02a,
+ 		.card      = CX23885_BOARD_HAUPPAUGE_STARBURST2,
++	}, {
++		.subvendor = 0x1461,
++		.subdevice = 0x3100,
++		.card      = CX23885_BOARD_AVERMEDIA_CE310B,
+ 	},
+ };
+ const unsigned int cx23885_idcount = ARRAY_SIZE(cx23885_subids);
+@@ -2358,6 +2381,7 @@ void cx23885_card_setup(struct cx23885_dev *dev)
+ 	case CX23885_BOARD_DVBSKY_T982:
+ 	case CX23885_BOARD_VIEWCAST_260E:
+ 	case CX23885_BOARD_VIEWCAST_460E:
++	case CX23885_BOARD_AVERMEDIA_CE310B:
+ 		dev->sd_cx25840 = v4l2_i2c_new_subdev(&dev->v4l2_dev,
+ 				&dev->i2c_bus[2].i2c_adap,
+ 				"cx25840", 0x88 >> 1, NULL);
+diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
+index f8a3deadc77a1..2a20c7165e1e8 100644
+--- a/drivers/media/pci/cx23885/cx23885-video.c
++++ b/drivers/media/pci/cx23885/cx23885-video.c
+@@ -268,7 +268,8 @@ static int cx23885_video_mux(struct cx23885_dev *dev, unsigned int input)
+ 		(dev->board == CX23885_BOARD_MYGICA_X8507) ||
+ 		(dev->board == CX23885_BOARD_AVERMEDIA_HC81R) ||
+ 		(dev->board == CX23885_BOARD_VIEWCAST_260E) ||
+-		(dev->board == CX23885_BOARD_VIEWCAST_460E)) {
++		(dev->board == CX23885_BOARD_VIEWCAST_460E) ||
++		(dev->board == CX23885_BOARD_AVERMEDIA_CE310B)) {
+ 		/* Configure audio routing */
+ 		v4l2_subdev_call(dev->sd_cx25840, audio, s_routing,
+ 			INPUT(input)->amux, 0, 0);
+diff --git a/drivers/media/pci/cx23885/cx23885.h b/drivers/media/pci/cx23885/cx23885.h
+index cf965efabe666..7bbd62cc993ef 100644
+--- a/drivers/media/pci/cx23885/cx23885.h
++++ b/drivers/media/pci/cx23885/cx23885.h
+@@ -111,6 +111,7 @@
+ #define CX23885_BOARD_HAUPPAUGE_STARBURST2     59
+ #define CX23885_BOARD_HAUPPAUGE_QUADHD_DVB_885 60
+ #define CX23885_BOARD_HAUPPAUGE_QUADHD_ATSC_885 61
++#define CX23885_BOARD_AVERMEDIA_CE310B         62
  
-@@ -432,8 +432,8 @@ static inline void v4l2_subdev_notify(struct v4l2_subdev *sd,
- 		struct v4l2_subdev *__sd;				\
- 									\
- 		__v4l2_device_call_subdevs_p(v4l2_dev, __sd,		\
--			!(grpmsk) || (__sd->grp_id & (grpmsk)), o, f ,	\
--			##args);					\
-+			(grpmsk) == 0 || (__sd->grp_id & (grpmsk)), o,	\
-+			f , ##args);					\
- 	} while (0)
- 
- /**
-@@ -463,8 +463,8 @@ static inline void v4l2_subdev_notify(struct v4l2_subdev *sd,
- ({									\
- 	struct v4l2_subdev *__sd;					\
- 	__v4l2_device_call_subdevs_until_err_p(v4l2_dev, __sd,		\
--			!(grpmsk) || (__sd->grp_id & (grpmsk)), o, f ,	\
--			##args);					\
-+			(grpmsk) == 0 || (__sd->grp_id & (grpmsk)), o,	\
-+			f , ##args);					\
- })
- 
- 
+ #define GPIO_0 0x00000001
+ #define GPIO_1 0x00000002
 -- 
 2.20.1
 
