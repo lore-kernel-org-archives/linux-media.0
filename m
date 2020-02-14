@@ -7,49 +7,52 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A613CC3B1A1
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 16:10:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2C78C3B1A1
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 16:11:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D30524698
-	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 16:10:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA818246A6
+	for <linux-media@archiver.kernel.org>; Fri, 14 Feb 2020 16:11:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581696603;
-	bh=A5M/b60pryRVMCK7wWtj9FXnrBwc8azvr0jEhFC4aWQ=;
+	s=default; t=1581696717;
+	bh=KcmnulXej6XgTmboJX/Yo76IHAYu9ieXcZsiWl31o5o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NkplNRp2ePu2jkxZhf9Rq7dSWNoGicGGZZ25IohWFKOq69D66G742p97OWOnWrYVX
-	 4rsV0Tl6dyVAB+WZ4zx3Y2NNGRWviRPmHmhTQ+5p3/5AgtWSxmRgFAfwZdO9yMMpBD
-	 IIhh25MQltBv0l461iRiIhRF3Jhmb72Dw/JeNYTs=
+	b=JVlFZbWyk3+zrl20hTHANCD3K/h8g9BS5DUipPN5C77rlesQuzjDSuzeCzW66Y2qF
+	 w8FNWKEuw2IJeSs3PkzkuvkTsm7QvOoVxNPwItxhJFueZuiQqtJbImq4neN9eHOpAT
+	 iso5jsfiIF6gbO2tFyrclm2uvEA9uvC3E/Hm85ss=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391383AbgBNQKA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:10:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35122 "EHLO mail.kernel.org"
+        id S2391881AbgBNQL5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:11:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391302AbgBNQKA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:10:00 -0500
+        id S2391603AbgBNQL4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:11:56 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 051C622314;
-        Fri, 14 Feb 2020 16:09:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 542EA246B2;
+        Fri, 14 Feb 2020 16:11:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696598;
-        bh=A5M/b60pryRVMCK7wWtj9FXnrBwc8azvr0jEhFC4aWQ=;
+        s=default; t=1581696715;
+        bh=KcmnulXej6XgTmboJX/Yo76IHAYu9ieXcZsiWl31o5o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XSef138qM1m5BY2cR+WB1YnsuxvGtrL3Q1fSUP75BrKR9P7aF+EWY4oXFEgFraV3v
-         anOhANTZALuAWWy6F7h9uyEnv8LaFJruSs6eey5uSM+3YzUcuzwAaLTczlaQWFFr6f
-         Tvx7V2BmvK74IjlrZ+OCBVFLHc5MnBB03O+DXI64=
+        b=MVAE82qoqgCGnhEVv7y/zI1CJQxycgXIq3ZIaWUXsl8Iyk5U1rLobyzx0/0R0Wz5D
+         vKabHLeVerVH2G5KEfkCGlRuRuPYEHgpeo513sXvaFgblzRHJ4mGkS1kvWjuhJYHqH
+         nK+vZ4w9ULoX/sAPkhZeEE2NMsroedkg2XUhJdc8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sergey Zakharchenko <szakharchenko@digital-loggers.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 384/459] media: uvcvideo: Add a quirk to force GEO GC6500 Camera bits-per-pixel value
-Date:   Fri, 14 Feb 2020 11:00:34 -0500
-Message-Id: <20200214160149.11681-384-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 4.19 005/252] media: i2c: adv748x: Fix unsafe macros
+Date:   Fri, 14 Feb 2020 11:07:40 -0500
+Message-Id: <20200214161147.15842-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
-References: <20200214160149.11681-1-sashal@kernel.org>
+In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
+References: <20200214161147.15842-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,82 +62,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sergey Zakharchenko <szakharchenko@digital-loggers.com>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
 
-[ Upstream commit 1dd2e8f942574e2be18374ebb81751082d8d467c ]
+[ Upstream commit 0d962e061abcf1b9105f88fb850158b5887fbca3 ]
 
-This device does not function correctly in raw mode in kernel
-versions validating buffer sizes in bulk mode. It erroneously
-announces 16 bits per pixel instead of 12 for NV12 format, so it
-needs this quirk to fix computed frame size and avoid legitimate
-frames getting discarded.
+Enclose multiple macro parameters in parentheses in order to
+make such macros safer and fix the Clang warning below:
 
-[Move info and div variables to local scope]
+drivers/media/i2c/adv748x/adv748x-afe.c:452:12: warning: operator '?:'
+has lower precedence than '|'; '|' will be evaluated first
+[-Wbitwise-conditional-parentheses]
 
-Signed-off-by: Sergey Zakharchenko <szakharchenko@digital-loggers.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+ret = sdp_clrset(state, ADV748X_SDP_FRP, ADV748X_SDP_FRP_MASK, enable
+? ctrl->val - 1 : 0);
+
+Fixes: 3e89586a64df ("media: i2c: adv748x: add adv748x driver")
+Reported-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 25 +++++++++++++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h   |  1 +
- 2 files changed, 26 insertions(+)
+ drivers/media/i2c/adv748x/adv748x.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 2b688cc39bb81..99883550375e9 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -497,6 +497,22 @@ static int uvc_parse_format(struct uvc_device *dev,
- 			}
- 		}
+diff --git a/drivers/media/i2c/adv748x/adv748x.h b/drivers/media/i2c/adv748x/adv748x.h
+index 1cf46c401664d..9cc5672e4148a 100644
+--- a/drivers/media/i2c/adv748x/adv748x.h
++++ b/drivers/media/i2c/adv748x/adv748x.h
+@@ -361,10 +361,10 @@ int adv748x_write_block(struct adv748x_state *state, int client_page,
  
-+		/* Some devices report bpp that doesn't match the format. */
-+		if (dev->quirks & UVC_QUIRK_FORCE_BPP) {
-+			const struct v4l2_format_info *info =
-+				v4l2_format_info(format->fcc);
-+
-+			if (info) {
-+				unsigned int div = info->hdiv * info->vdiv;
-+
-+				n = info->bpp[0] * div;
-+				for (i = 1; i < info->comp_planes; i++)
-+					n += info->bpp[i];
-+
-+				format->bpp = DIV_ROUND_UP(8 * n, div);
-+			}
-+		}
-+
- 		if (buffer[2] == UVC_VS_FORMAT_UNCOMPRESSED) {
- 			ftype = UVC_VS_FRAME_UNCOMPRESSED;
- 		} else {
-@@ -2874,6 +2890,15 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= (kernel_ulong_t)&uvc_quirk_force_y8 },
-+	/* GEO Semiconductor GC6500 */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x29fe,
-+	  .idProduct		= 0x4d53,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
- 	/* Intel RealSense D4M */
- 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index c7c1baa90dea8..24e3d8c647e77 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -198,6 +198,7 @@
- #define UVC_QUIRK_RESTRICT_FRAME_RATE	0x00000200
- #define UVC_QUIRK_RESTORE_CTRLS_ON_INIT	0x00000400
- #define UVC_QUIRK_FORCE_Y8		0x00000800
-+#define UVC_QUIRK_FORCE_BPP		0x00001000
+ #define io_read(s, r) adv748x_read(s, ADV748X_PAGE_IO, r)
+ #define io_write(s, r, v) adv748x_write(s, ADV748X_PAGE_IO, r, v)
+-#define io_clrset(s, r, m, v) io_write(s, r, (io_read(s, r) & ~m) | v)
++#define io_clrset(s, r, m, v) io_write(s, r, (io_read(s, r) & ~(m)) | (v))
  
- /* Format flags */
- #define UVC_FMT_FLAG_COMPRESSED		0x00000001
+ #define hdmi_read(s, r) adv748x_read(s, ADV748X_PAGE_HDMI, r)
+-#define hdmi_read16(s, r, m) (((hdmi_read(s, r) << 8) | hdmi_read(s, r+1)) & m)
++#define hdmi_read16(s, r, m) (((hdmi_read(s, r) << 8) | hdmi_read(s, (r)+1)) & (m))
+ #define hdmi_write(s, r, v) adv748x_write(s, ADV748X_PAGE_HDMI, r, v)
+ 
+ #define repeater_read(s, r) adv748x_read(s, ADV748X_PAGE_REPEATER, r)
+@@ -372,11 +372,11 @@ int adv748x_write_block(struct adv748x_state *state, int client_page,
+ 
+ #define sdp_read(s, r) adv748x_read(s, ADV748X_PAGE_SDP, r)
+ #define sdp_write(s, r, v) adv748x_write(s, ADV748X_PAGE_SDP, r, v)
+-#define sdp_clrset(s, r, m, v) sdp_write(s, r, (sdp_read(s, r) & ~m) | v)
++#define sdp_clrset(s, r, m, v) sdp_write(s, r, (sdp_read(s, r) & ~(m)) | (v))
+ 
+ #define cp_read(s, r) adv748x_read(s, ADV748X_PAGE_CP, r)
+ #define cp_write(s, r, v) adv748x_write(s, ADV748X_PAGE_CP, r, v)
+-#define cp_clrset(s, r, m, v) cp_write(s, r, (cp_read(s, r) & ~m) | v)
++#define cp_clrset(s, r, m, v) cp_write(s, r, (cp_read(s, r) & ~(m)) | (v))
+ 
+ #define txa_read(s, r) adv748x_read(s, ADV748X_PAGE_TXA, r)
+ #define txb_read(s, r) adv748x_read(s, ADV748X_PAGE_TXB, r)
 -- 
 2.20.1
 
