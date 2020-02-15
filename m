@@ -2,178 +2,95 @@ Return-Path: <SRS0=vndH=4D=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9765AC3F68F
-	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 05:00:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78BC5C4741C
+	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 15:15:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 269B82086A
-	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 05:00:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 535B420718
+	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 15:15:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="LYH18e3y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ob1M+dVQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725774AbgBOFAo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Feb 2020 00:00:44 -0500
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:49921 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725271AbgBOFAo (ORCPT
+        id S1726211AbgBOPPP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Feb 2020 10:15:15 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:38622 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726143AbgBOPPP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Feb 2020 00:00:44 -0500
-Received: from localhost ([IPv6:2001:983:e9a7:1:bd23:d5c7:5f0e:7bef])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 2pZIjTRTNP9a92pZJjMW7c; Sat, 15 Feb 2020 06:00:41 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1581742841; bh=sGD4sYzkS12bVtj8r3DUBvwtmO8oVswKHe1rIGePx/w=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=LYH18e3ysSZaAXCDyeIr8OUwoZnhbMVmNzdOFYZutCQrBt8TECufli29I1ZLVFx3C
-         yz7A+4MI+DldMGcNmyGT7zNKRxIHZDR371/Psb3QBcbrEuB1KT+MLs0cnr78bRVXfm
-         4/Z5x3fNB3vBiVA0ivAtZevDzbSHyAtPRUupzgAQhCbQMnBx9CcF7M0d1rhcyDXgI2
-         YRe/l0ud/begzMpzse39nubZ2QEtc/F/tHricyeAammXbJLGSZH69taMNnO9vl9X5/
-         NXUG9AjD2bmvbeGJ4WMjlBXoM4zQAS9caBTEtMSu7NCT+NC5AMlDT9AYHmxwEr0oy7
-         5hydsSkhn4Giw==
-Message-ID: <91070efe03a2a00e2504ce4ed7307f33@smtp-cloud7.xs4all.net>
-Date:   Sat, 15 Feb 2020 06:00:40 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: ERRORS
-X-CMAE-Envelope: MS4wfP5nfjJLFb8BX3AI+ZA4fkWuBtPQ9Z8d01yE+Mii34WrVfRgEJiSsenUBsR1ImrIME+eiayN4oBGeO4ye6fL5yj021ohq93eM/NiXbAo+yzgrPOYCteH
- m4s4ran16AALpVZmsxxoQ9EpbLIox/CteEe8EjmwFXjo4ODJqJRrQ+64+hgO+venZONYcYn9cp/G4YCN99AoiacsivMHq1rbUA6bLOkNbQlgQGAYBR6aqWfB
+        Sat, 15 Feb 2020 10:15:15 -0500
+Received: by mail-qk1-f193.google.com with SMTP id z19so12145154qkj.5;
+        Sat, 15 Feb 2020 07:15:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=uWzLjbBp8aRsVSLKA91aPxd7wXiz/npdTaFsiixqRhM=;
+        b=ob1M+dVQyL97DzvdG6/rS1nbpt+LYfpjmAUF7JHhdbEl9u6fZrcYi8ZKLRxYs10wm+
+         hbURUmByVSIB8x+5qdjbXtXCOgb+lKBqJwd+iyfL/Z+NhKrCm7ZD4H/5pTsS+R34P4Df
+         CcMLOB0B0Tg7vQFawFdDQk1GlYgSWAF8lsGvMdJpQ7E+M1P3gFvJyvm6aMkpTHV5y1v2
+         0hW9uDFk6pOIKTy5AN7tDMjhNwJpVcaU3dc5E/mefQCz+s89pVzmyt0LY/4WFnjstOYy
+         a6aubSK0jx/Oj7sKE0Qbog7f84HUDCiCKKcS3HhaBnUeb1KmcMzMRJLBt+y6LoInnpil
+         oVjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=uWzLjbBp8aRsVSLKA91aPxd7wXiz/npdTaFsiixqRhM=;
+        b=Tdnm/t0Hel2XJHTuxM0s2lXCfu0y60pLtAORMGTRDlI2LElE1dWcMeCZJSjSUlL+FG
+         TO67enMRzgrlexUdb7+WrgsJv8ZGTKwKTzgYcVQ1o5J2vKltP3qETrQpfsk+tNKvrLyV
+         LT63qrcBVGVJcR5JATA2/qAPYzFKiIREDGDLuiJJ7KAbhZ8FH/XyMhxRoMkfcR6wbzMf
+         dtN9PFZkef9g3gXF4CdM/N8Yf6E7juQFq1zoqodaSEzAKYsNsAG+jdr7fIuS6HilVHy+
+         j+MZG8pfGH6HSaCgP/Trq/LnTrX4wypzzL0kUG3kAJ/kwmwRyD104ch8VWx30uRv03vw
+         Wn8Q==
+X-Gm-Message-State: APjAAAUQRK0LCtJ4YEqCKMdSTS1on6RtyYl6nU8aJDmiyasYM18AK9AS
+        mfws4Z3MwFYFak/gieUCAPE=
+X-Google-Smtp-Source: APXvYqxpvAHSD/naM2yaCHrG1MA+Xkos4kcUo2nI3mT+HBKkPxDMv80TmBa+NMdsC9D3tFlp12ooAQ==
+X-Received: by 2002:a37:47c4:: with SMTP id u187mr7502718qka.165.1581779712998;
+        Sat, 15 Feb 2020 07:15:12 -0800 (PST)
+Received: from ?IPv6:2804:14d:72b1:8920:a2ce:f815:f14d:bfac? ([2804:14d:72b1:8920:a2ce:f815:f14d:bfac])
+        by smtp.gmail.com with ESMTPSA id d16sm1487549qkc.132.2020.02.15.07.15.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Feb 2020 07:15:12 -0800 (PST)
+Subject: Re: [PATCH v5] media: dvb_dummy_tuner: implement driver skeleton
+To:     Nathan Chancellor <natechancellor@gmail.com>
+Cc:     mchehab@kernel.org, sean@mess.org, tglx@linutronix.de,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+References: <20200210154102.118166-1-dwlsalmeida@gmail.com>
+ <20200214050813.GA37036@ubuntu-m2-xlarge-x86>
+From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
+Message-ID: <886c816b-65a4-9cd9-4c94-f8025b63de4c@gmail.com>
+Date:   Sat, 15 Feb 2020 12:15:07 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200214050813.GA37036@ubuntu-m2-xlarge-x86>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Hi Nathan,
 
-Results of the daily build of media_tree:
+> This patch and another one that you have [1] cause a ton of build
+> warnings with clang, as reported by the 0day bot, because of the
+> implicit conversions from floating points to integer. Is this
+> intentional? Would you mind taking a look at them and addressing them if
+> you do another revision?
 
-date:			Sat Feb 15 05:00:11 CET 2020
-media-tree git hash:	bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9
-media_build git hash:	c19c9d0d270d64a158c41764125deef059b7acbc
-v4l-utils git hash:	b62d322d4401e6b6e5cbd78cedad9eb69dac1324
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 9.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.1-rc1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 0a0399d66d361fec135a2dc184bd8d12148f35ad
-host hardware:		x86_64
-host os:		5.4.0-3-amd64
+Sorry I did not catch that back then. I'll fix it in a future revision.
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.81-i686: OK
-linux-3.16.81-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.212-i686: OK
-linux-4.4.212-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.212-i686: OK
-linux-4.9.212-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.169-i686: OK
-linux-4.14.169-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.101-i686: OK
-linux-4.19.101-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4.17-i686: OK
-linux-5.4.17-x86_64: OK
-linux-5.5.1-i686: OK
-linux-5.5.1-x86_64: OK
-linux-5.6-rc1-i686: OK
-linux-5.6-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: ERRORS: Final Summary: 2943, Succeeded: 2939, Failed: 4, Warnings: 0
-sparse: OK
-smatch: OK
+Thank you for letting me know.
 
-Detailed results are available here:
 
-http://www.xs4all.nl/~hverkuil/logs/Saturday.log
+- Daniel.
 
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
