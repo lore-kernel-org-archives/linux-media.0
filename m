@@ -8,53 +8,53 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1704C352A3
-	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 19:42:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6520BC7114D
+	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 19:43:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E9F92082F
-	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 19:42:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 361D32084E
+	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 19:43:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k3GIXKvW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nKDR2CfF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727972AbgBOTmk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Feb 2020 14:42:40 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:35596 "EHLO
+        id S1728034AbgBOTm5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Feb 2020 14:42:57 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:51784 "EHLO
         mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727958AbgBOTmh (ORCPT
+        with ESMTP id S1726462AbgBOTmy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Feb 2020 14:42:37 -0500
-Received: by mail-pj1-f67.google.com with SMTP id q39so5500517pjc.0;
-        Sat, 15 Feb 2020 11:42:37 -0800 (PST)
+        Sat, 15 Feb 2020 14:42:54 -0500
+Received: by mail-pj1-f67.google.com with SMTP id fa20so5447340pjb.1;
+        Sat, 15 Feb 2020 11:42:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=nw6qFQx6S/L6ma/0AlsKxKIDrQ4PZDVJaM1fr3Im7gQ=;
-        b=k3GIXKvWft0N1NbpenDUFg5zblDqcbUwzZDit6j5Lnn/XVvhgo5upPEa6pf+6EAMEz
-         Xt3hbI7ZN7uQ3ZpDboF8dsqWS8SmiaQmTx7VTEHl/ogj+jq5hURSLNGK4VHhyJZj/Qus
-         +bYF9uSPWj7Z8BwAyKR14ry4FKmhnTxJnPRiFZM9Vq4XZLEY9Al273TDUbppvZnGanEN
-         XgsTT3BtOW7qp0sc+wDR8OgJhZGQ16Af0TNYgqSPglzYcYGIUZbTkO3OohkZb/hBFwDh
-         v72JbltSB5enu0WPMOhZW9Ko/dsfsGdL+Qu6goM7QvrgD4+O2up1IqK+TKGYEk2J8ha6
-         rYcA==
+        bh=rpOa6ZNketVlDD1fVg7Q22Hn4Eag+44bEMCsUONO9O8=;
+        b=nKDR2CfF6RrgkcLnn63uYsZxcW77AmH8l4sxM7DwuSPDobUhKmcRG/TGLwFzziD2XJ
+         m0RpfI1jb7nTB2DtiG+2RKuVBeHXgRXEUk0ykiklAN2hjthxfiqa4I5a4RT6nwUxqfmt
+         3Uaq5pDz8OjKGOfOiWC8L0NHygd/vMzr+WfVZ/yO9lqOFpYp51v6WtVlyHh0cvYOHKK3
+         Y8bTVhtC690S2fPTR0I0f3KkTn8wY1Kyje0AbpA13T0ETiJ10XP7pM1EOZSbb4Il0dKP
+         uhdvzcPVQ8YTCamR27pyTduRPRdk912YTOo9NMIpKJzkkyuFfcAXlEV9zWTlmRq78hKE
+         TFSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=nw6qFQx6S/L6ma/0AlsKxKIDrQ4PZDVJaM1fr3Im7gQ=;
-        b=l859wukbdJLfS4auFUVmfBk5i7Ge2CcaUtmJxSasK8B2fOT2HhiNF7Xj50nds9rzxt
-         yRUPFffVC3XWIEcxz0NsTi6fWZ5kfT1Jl5l9mOVthBajldgESc+CNuq8aOf8lgEJHVLu
-         khXR3xJw1XFM8BPXs+OqHLtducOz/Ovwx030gkN2O4F5lDDpMLTn8SNTDqZXRRulYC+x
-         MOBo9z/l7dE86BTxpJ+tsO6QrIIKxPC78yL4ske96c8KnLLTG8vllg318kpq73m3lOZi
-         nbcbzvs4zWuD3JWGb72km4JSE0pQYx7JscXGNLSiFRJcTl/M2sp7ZPqFkk6CRN6pdtnG
-         /Pig==
-X-Gm-Message-State: APjAAAVmV5sufEsyTkqaQSWvoF/zAF6Zw9gAnfuuESGsl/KNsJo/Mb0C
-        CoC/7sIiaKkdLHEwwxyfgPahQcwA8Us=
-X-Google-Smtp-Source: APXvYqzkUXyKopzlHELwFuMNAOIllbGui1hUS/4slzE0JVfp8tA7A3yD2KKHvzv5nTeYgrIuLTwJ1w==
-X-Received: by 2002:a17:902:5ace:: with SMTP id g14mr8946961plm.311.1581795756922;
-        Sat, 15 Feb 2020 11:42:36 -0800 (PST)
+        bh=rpOa6ZNketVlDD1fVg7Q22Hn4Eag+44bEMCsUONO9O8=;
+        b=iK2Aopz9oT5V893Lpa6uCM+6YGhuxonZ4IG5r7o1zvinbaW5LxBxR3hKsQoBsqpj1J
+         JNgvwrnoee5zLKv50bPGSdQ5SdRZYOr1t5rQW8+0SFDYyyjnrNHGiebOUWRULsEiZt9E
+         evly4f8pQyu/NBYXYBnGqrVvWFZMyuCsqjkKZ9tNdmq5pBwCEkWB758NhFtK3zU4Y7Ic
+         fAlsaoulIFAaHMfCWRtIDZzd0QZ0VTdLZEfALdTzoS0i53MsVMA1wkbRHlvH0aMhyYK+
+         J0qZdI2jLBxQVnTlmx6ZjRX7PYIagnRR1OHeG64xZ/uUh91BVYLdVVmv/7uc2FcHb/Oq
+         mTkA==
+X-Gm-Message-State: APjAAAWhLfWLL4vewTfVbVFSZ+PC9O3rlXfGcFYSHNIxuJetzHfmDEp+
+        JtdMuv1qYKaGpuUK4nf6XyAf/1X4iVo=
+X-Google-Smtp-Source: APXvYqztop9U0pT2U3t3Oc5/2L3GdOytArOUtcGT+g2w7GTRTohiGs0EUjeIy7TbV+D0iGBfeKUnAA==
+X-Received: by 2002:a17:902:6948:: with SMTP id k8mr9034740plt.223.1581795773871;
+        Sat, 15 Feb 2020 11:42:53 -0800 (PST)
 Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id q4sm11802751pfl.175.2020.02.15.11.42.35
+        by smtp.googlemail.com with ESMTPSA id q4sm11802751pfl.175.2020.02.15.11.42.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Feb 2020 11:42:36 -0800 (PST)
+        Sat, 15 Feb 2020 11:42:53 -0800 (PST)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
@@ -66,13 +66,14 @@ Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
         linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
         / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Subject: [RESEND PATCH v3 11/17] media: imx: csi: Embed notifier in struct csi_priv
-Date:   Sat, 15 Feb 2020 11:41:30 -0800
-Message-Id: <20200215194136.10131-12-slongerbeam@gmail.com>
+Subject: [RESEND PATCH v3 14/17] media: imx: csi: Lookup upstream endpoint with imx_media_get_pad_fwnode
+Date:   Sat, 15 Feb 2020 11:41:33 -0800
+Message-Id: <20200215194136.10131-15-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200215194136.10131-1-slongerbeam@gmail.com>
 References: <20200215194136.10131-1-slongerbeam@gmail.com>
@@ -81,83 +82,167 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Embed the notifier in 'struct csi_priv', instead of dynamically allocating
-it, to make it possible to retrieve csi_priv in a notifier callback op.
+Fix the 1:1 port-id:pad-index assumption for the upstream subdevice, by
+searching the upstream subdevice's endpoints for one that maps to the
+pad's index. This is carried out by a new reverse mapping function
+imx_media_get_pad_fwnode().
 
 Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
 ---
- drivers/staging/media/imx/imx-media-csi.c | 25 +++++++++--------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+ drivers/staging/media/imx/imx-media-csi.c   | 22 ++++----------
+ drivers/staging/media/imx/imx-media-utils.c | 33 +++++++++++++++++++++
+ drivers/staging/media/imx/imx-media.h       |  1 +
+ drivers/staging/media/imx/imx7-media-csi.c  | 25 +++++-----------
+ 4 files changed, 47 insertions(+), 34 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
-index dc5fe25fe7b8..3e2afdd59276 100644
+index 2a8f01375f78..7d4c1c9640dd 100644
 --- a/drivers/staging/media/imx/imx-media-csi.c
 +++ b/drivers/staging/media/imx/imx-media-csi.c
-@@ -58,6 +58,8 @@ struct csi_priv {
- 	struct ipu_soc *ipu;
- 	struct v4l2_subdev sd;
- 	struct media_pad pad[CSI_NUM_PADS];
-+	struct v4l2_async_notifier notifier;
-+
- 	/* the video device at IDMAC output pad */
- 	struct imx_media_video_dev *vdev;
- 	struct imx_media_fim *fim;
-@@ -1896,31 +1898,28 @@ static int imx_csi_parse_endpoint(struct device *dev,
- 
- static int imx_csi_async_register(struct csi_priv *priv)
+@@ -164,7 +164,7 @@ static inline bool requires_passthrough(struct v4l2_fwnode_endpoint *ep,
+ static int csi_get_upstream_endpoint(struct csi_priv *priv,
+ 				     struct v4l2_fwnode_endpoint *ep)
  {
--	struct v4l2_async_notifier *notifier;
- 	struct fwnode_handle *fwnode;
- 	unsigned int port;
- 	int ret;
+-	struct device_node *endpoint, *port;
++	struct fwnode_handle *endpoint;
+ 	struct media_entity *src;
+ 	struct v4l2_subdev *sd;
+ 	struct media_pad *pad;
+@@ -203,23 +203,13 @@ static int csi_get_upstream_endpoint(struct csi_priv *priv,
+ 	if (!pad)
+ 		return -ENODEV;
  
--	notifier = kzalloc(sizeof(*notifier), GFP_KERNEL);
--	if (!notifier)
--		return -ENOMEM;
+-	sd = media_entity_to_v4l2_subdev(pad->entity);
++	endpoint = imx_media_get_pad_fwnode(pad);
++	if (IS_ERR(endpoint))
++		return PTR_ERR(endpoint);
+ 
+-	/*
+-	 * NOTE: this assumes an OF-graph port id is the same as a
+-	 * media pad index.
+-	 */
+-	port = of_graph_get_port_by_id(sd->dev->of_node, pad->index);
+-	if (!port)
+-		return -ENODEV;
 -
--	v4l2_async_notifier_init(notifier);
-+	v4l2_async_notifier_init(&priv->notifier);
+-	endpoint = of_get_next_child(port, NULL);
+-	of_node_put(port);
+-	if (!endpoint)
+-		return -ENODEV;
++	v4l2_fwnode_endpoint_parse(endpoint, ep);
  
- 	fwnode = dev_fwnode(priv->dev);
+-	v4l2_fwnode_endpoint_parse(of_fwnode_handle(endpoint), ep);
+-	of_node_put(endpoint);
++	fwnode_handle_put(endpoint);
  
- 	/* get this CSI's port id */
- 	ret = fwnode_property_read_u32(fwnode, "reg", &port);
- 	if (ret < 0)
--		goto out_free;
-+		return ret;
- 
- 	ret = v4l2_async_notifier_parse_fwnode_endpoints_by_port(
--		priv->dev->parent, notifier, sizeof(struct v4l2_async_subdev),
-+		priv->dev->parent, &priv->notifier,
-+		sizeof(struct v4l2_async_subdev),
- 		port, imx_csi_parse_endpoint);
- 	if (ret < 0)
- 		goto out_cleanup;
- 
--	ret = v4l2_async_subdev_notifier_register(&priv->sd, notifier);
-+	ret = v4l2_async_subdev_notifier_register(&priv->sd,
-+						  &priv->notifier);
- 	if (ret < 0)
- 		goto out_cleanup;
- 
-@@ -1928,16 +1927,12 @@ static int imx_csi_async_register(struct csi_priv *priv)
- 	if (ret < 0)
- 		goto out_unregister;
- 
--	priv->sd.subdev_notifier = notifier;
--
  	return 0;
+ }
+diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+index 87152bd9af22..61752c6b074d 100644
+--- a/drivers/staging/media/imx/imx-media-utils.c
++++ b/drivers/staging/media/imx/imx-media-utils.c
+@@ -1007,6 +1007,39 @@ imx_media_pipeline_video_device(struct media_entity *start_entity,
+ }
+ EXPORT_SYMBOL_GPL(imx_media_pipeline_video_device);
  
- out_unregister:
--	v4l2_async_notifier_unregister(notifier);
-+	v4l2_async_notifier_unregister(&priv->notifier);
- out_cleanup:
--	v4l2_async_notifier_cleanup(notifier);
--out_free:
--	kfree(notifier);
-+	v4l2_async_notifier_cleanup(&priv->notifier);
++/*
++ * Find a fwnode endpoint that maps to the given subdevice's pad.
++ * If there are multiple endpoints that map to the pad, only the
++ * first endpoint encountered is returned.
++ *
++ * On success the refcount of the returned fwnode endpoint is
++ * incremented.
++ */
++struct fwnode_handle *imx_media_get_pad_fwnode(struct media_pad *pad)
++{
++	struct fwnode_handle *endpoint;
++	struct v4l2_subdev *sd;
++
++	if (!is_media_entity_v4l2_subdev(pad->entity))
++		return ERR_PTR(-ENODEV);
++
++	sd = media_entity_to_v4l2_subdev(pad->entity);
++
++	fwnode_graph_for_each_endpoint(dev_fwnode(sd->dev), endpoint) {
++		int pad_idx = media_entity_get_fwnode_pad(&sd->entity,
++							  endpoint,
++							  pad->flags);
++		if (pad_idx < 0)
++			continue;
++
++		if (pad_idx == pad->index)
++			return endpoint;
++	}
++
++	return ERR_PTR(-ENODEV);
++}
++EXPORT_SYMBOL_GPL(imx_media_get_pad_fwnode);
++
+ /*
+  * Turn current pipeline streaming on/off starting from entity.
+  */
+diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+index f90a65ba4ced..5f23d852122f 100644
+--- a/drivers/staging/media/imx/imx-media.h
++++ b/drivers/staging/media/imx/imx-media.h
+@@ -205,6 +205,7 @@ imx_media_pipeline_subdev(struct media_entity *start_entity, u32 grp_id,
+ struct video_device *
+ imx_media_pipeline_video_device(struct media_entity *start_entity,
+ 				enum v4l2_buf_type buftype, bool upstream);
++struct fwnode_handle *imx_media_get_pad_fwnode(struct media_pad *pad);
  
- 	return ret;
+ struct imx_media_dma_buf {
+ 	void          *virt;
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index cf9f675c53a3..f2ed13aca2b0 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -439,9 +439,8 @@ static int imx7_csi_get_upstream_endpoint(struct imx7_csi *csi,
+ 					  struct v4l2_fwnode_endpoint *ep,
+ 					  bool skip_mux)
+ {
+-	struct device_node *endpoint, *port;
++	struct fwnode_handle *endpoint;
+ 	struct media_entity *src;
+-	struct v4l2_subdev *sd;
+ 	struct media_pad *pad;
+ 
+ 	if (!csi->src_sd)
+@@ -463,29 +462,19 @@ static int imx7_csi_get_upstream_endpoint(struct imx7_csi *csi,
+ 	if (!pad)
+ 		return -ENODEV;
+ 
+-	sd = media_entity_to_v4l2_subdev(pad->entity);
+-
+ 	/* To get bus type we may need to skip video mux */
+ 	if (skip_mux && src->function == MEDIA_ENT_F_VID_MUX) {
+-		src = &sd->entity;
++		src = pad->entity;
+ 		goto skip_video_mux;
+ 	}
+ 
+-	/*
+-	 * NOTE: this assumes an OF-graph port id is the same as a
+-	 * media pad index.
+-	 */
+-	port = of_graph_get_port_by_id(sd->dev->of_node, pad->index);
+-	if (!port)
+-		return -ENODEV;
++	endpoint = imx_media_get_pad_fwnode(pad);
++	if (IS_ERR(endpoint))
++		return PTR_ERR(endpoint);
+ 
+-	endpoint = of_get_next_child(port, NULL);
+-	of_node_put(port);
+-	if (!endpoint)
+-		return -ENODEV;
++	v4l2_fwnode_endpoint_parse(endpoint, ep);
+ 
+-	v4l2_fwnode_endpoint_parse(of_fwnode_handle(endpoint), ep);
+-	of_node_put(endpoint);
++	fwnode_handle_put(endpoint);
+ 
+ 	return 0;
  }
 -- 
 2.17.1
