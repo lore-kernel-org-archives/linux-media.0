@@ -8,63 +8,70 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 543E5C352A3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD73DC7114E
 	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 19:43:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3090B2082F
+	by mail.kernel.org (Postfix) with ESMTP id AA4452082F
 	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 19:43:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FLPaTXT+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TGhkM8Hh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727868AbgBOTmV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Feb 2020 14:42:21 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:34141 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727842AbgBOTmU (ORCPT
+        id S1727772AbgBOTmL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Feb 2020 14:42:11 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:45062 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726340AbgBOTmK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Feb 2020 14:42:20 -0500
-Received: by mail-pl1-f194.google.com with SMTP id j7so5156068plt.1;
-        Sat, 15 Feb 2020 11:42:19 -0800 (PST)
+        Sat, 15 Feb 2020 14:42:10 -0500
+Received: by mail-pf1-f193.google.com with SMTP id 2so6737045pfg.12;
+        Sat, 15 Feb 2020 11:42:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=0UeHl1Dd9diRnbI2rT7HKFn8mPPNQOcd6CGGZuCp63s=;
-        b=FLPaTXT+5fXwsRnzm6pWutS5dn35cQJLM/byRk2a7jjOXFIi/727ypMvJDYDmUzvmU
-         MGYDjaKJZPTuwHqQbeEYjbO0i+djMLSkswvH/7zCfUayqh78R+fdUvrfcV1sb9JDCBnq
-         kpP389t3XWiqBJUutYQ+FvdKnE/7FYIqom4uwsy72ErdzkhER8A6+EKo/Cl0gqo+OISC
-         7HFd7/XdhTzkV+DslU+duQDGvCSYPlWFbzCv12LxTjkQczDhRQhDbx3DOpBIFo8iLz6p
-         +J9TT+PB9Qxt9jbwtkoZifV2o1xz6acHzUOxEzcMI1dZl698c61Cng2QQ4yk50A9sNuG
-         e6ZQ==
+        bh=GoHwA/NUt6bdmcBWMk3GrpTBSbEsSYQ8eBgsnOl6FH8=;
+        b=TGhkM8HhZmjY6DuPQb4msMGHcL2dzou1bD6wb1KGAftp1o3QHahLkCxh3w2vLkJLAW
+         L+KiqIFB35nAHd5eUFpbR9RaqzFZwb8ZAC/atCwwXQM0Tnje/D2Z4++AprA6vSkwa8js
+         8buim4rd11xf7othSwdH1CR9PwauFkp23Iiwv8R62DtUJ65ngGFaZjyaR0i2I+2r9fkv
+         lHQdo2tWRyANKH8czra1L2U/nMnigwRTlv7vgR/ovAXu4Q3+roMzvJ9aupaOhLpwPizY
+         cO+n85XdHuwByzNr5GPH3/8RZTJYXoLOvvvVoUjCl1A7kix84J9ysgVv04C9X5UiGD3S
+         nUXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=0UeHl1Dd9diRnbI2rT7HKFn8mPPNQOcd6CGGZuCp63s=;
-        b=DVL7YxQFf25NYCPU1wmKUPQzhEjmJlIsaSDov8y3bI1uCLRB6c9FDOtR4Uiv6/PYf7
-         AyPzXVLGoMQmVxecf5R5m3IN4vbW1YhR2wmoBarkL5qbYuDiCYT11VdMIZqoRk1aEeeu
-         sqWVmd3prUhmDe4aLJLQSg5mwkuD+3IwOkDMYiHa/JfafnyTB9waJim91/NqlEzoIa2K
-         cNFruJItDROMzrMzwp4qMjSg6XrLBCBGfXG8vHevuJAnwWjmhhD8R5mFHERb1Ws28Ljy
-         O0ymFXraPIxImSSE8zU6rgv5VKyqcp/GRihH1xfl/yJSa1ZoUsK73PzemQ+y6MifcBq8
-         eOuA==
-X-Gm-Message-State: APjAAAVbAHWpDmX500jErhVBDeYG+mLATk5DzwUC4aPVjJmGr5TLmX/0
-        4Kz+Bw7Q4AdGd0mIOoOc2s0zoIPvKLM=
-X-Google-Smtp-Source: APXvYqzVw6J8XDN5DZSI2aW4QhNFB9oBUYbcgLa7oI0q9/9u6zF7yWQ9KVCdY+aCnbCfN9zmydU4LA==
-X-Received: by 2002:a17:902:523:: with SMTP id 32mr9281345plf.148.1581795738885;
-        Sat, 15 Feb 2020 11:42:18 -0800 (PST)
+        bh=GoHwA/NUt6bdmcBWMk3GrpTBSbEsSYQ8eBgsnOl6FH8=;
+        b=prk0NiyODiQvKhSSpGgYiulqc+RNq4GoH1iYpKDcTbhdIVaT589KhSnumuj1yhZLCy
+         fMkrwloQlUzGbpPD/h2Z4uPwQVUUwi67obLlrarij4ULUWAHLRGTfYZSPeFFI8zr3UkM
+         Ou+5j2rnJzTcgOR4OZOdQzPeu/hyljJ027szG+j0mNr2jTXlMnMNlPeSfxnf+QdHuDJU
+         EU9B1MolIDK1kuIC6d5lMDVmq6gwCsrePvN53G2MM2yar+NX+5y+hgbTGG5+g68GDWjm
+         /e2HHtRQ6caicoTykCXoKIsh6YwSPxwr/xf19YtAPyndZ8X2rRXgfAVj8cv5+xSvw7sA
+         qvOw==
+X-Gm-Message-State: APjAAAWOasZv2gjuqv4ZdN/nF1X1yq48u2ko/3W7ALJ86Ad4wPkCBSnB
+        KzaLDo6/aSI8Aa5K6rweZ5x0sdo/LAs=
+X-Google-Smtp-Source: APXvYqykL2GsAy4uDFniQNsQVMLOFN4GwHeH/9K6Btq7YRMenUHjMOgBREWJ9t33xXFT+4LdznuKdw==
+X-Received: by 2002:aa7:8654:: with SMTP id a20mr9407051pfo.88.1581795729527;
+        Sat, 15 Feb 2020 11:42:09 -0800 (PST)
 Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id q4sm11802751pfl.175.2020.02.15.11.42.18
+        by smtp.googlemail.com with ESMTPSA id q4sm11802751pfl.175.2020.02.15.11.42.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Feb 2020 11:42:18 -0800 (PST)
+        Sat, 15 Feb 2020 11:42:09 -0800 (PST)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RESEND PATCH v3 07/17] media: video-mux: Create media links in bound notifier
-Date:   Sat, 15 Feb 2020 11:41:26 -0800
-Message-Id: <20200215194136.10131-8-slongerbeam@gmail.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
+        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
+Subject: [RESEND PATCH v3 04/17] media: imx: mipi csi-2: Implement get_fwnode_pad op
+Date:   Sat, 15 Feb 2020 11:41:23 -0800
+Message-Id: <20200215194136.10131-5-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200215194136.10131-1-slongerbeam@gmail.com>
 References: <20200215194136.10131-1-slongerbeam@gmail.com>
@@ -73,135 +80,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Implement a notifier bound op to register media links from the remote
-sub-device's source pad(s) to the video-mux sink pad(s).
+Implement get_fwnode_pad operation. If the endpoint is owned by the MIPI
+CSI-2 receiver, return the endpoint's port number. The MIPI CSI-2 receiver
+maps port numbers and pad indexes 1:1.
 
 Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
 ---
-Changes in v3:
-- this version does the work inline. The previous version called
-  a media_create_fwnode_links() which is removed in v3.
----
- drivers/media/platform/video-mux.c | 92 ++++++++++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+ drivers/staging/media/imx/imx6-mipi-csi2.c | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/drivers/media/platform/video-mux.c b/drivers/media/platform/video-mux.c
-index c1c477e4e33f..a6b09a79fbe3 100644
---- a/drivers/media/platform/video-mux.c
-+++ b/drivers/media/platform/video-mux.c
-@@ -36,6 +36,12 @@ static const struct v4l2_mbus_framefmt video_mux_format_mbus_default = {
- 	.field = V4L2_FIELD_NONE,
- };
- 
-+static inline struct video_mux *
-+notifier_to_video_mux(struct v4l2_async_notifier *n)
-+{
-+	return container_of(n, struct video_mux, notifier);
-+}
-+
- static inline struct video_mux *v4l2_subdev_to_video_mux(struct v4l2_subdev *sd)
- {
- 	return container_of(sd, struct video_mux, subdev);
-@@ -372,6 +378,90 @@ static int video_mux_parse_endpoint(struct device *dev,
- 	return fwnode_device_is_available(asd->match.fwnode) ? 0 : -ENOTCONN;
+diff --git a/drivers/staging/media/imx/imx6-mipi-csi2.c b/drivers/staging/media/imx/imx6-mipi-csi2.c
+index c1d1afeea53a..e27a342751fc 100644
+--- a/drivers/staging/media/imx/imx6-mipi-csi2.c
++++ b/drivers/staging/media/imx/imx6-mipi-csi2.c
+@@ -507,9 +507,37 @@ static int csi2_registered(struct v4l2_subdev *sd)
+ 				      640, 480, 0, V4L2_FIELD_NONE, NULL);
  }
  
-+static int video_mux_notify_bound(struct v4l2_async_notifier *notifier,
-+				  struct v4l2_subdev *sd,
-+				  struct v4l2_async_subdev *asd)
++static int csi2_get_fwnode_pad(struct media_entity *entity,
++			       struct fwnode_endpoint *endpoint)
 +{
-+	struct video_mux *vmux = notifier_to_video_mux(notifier);
-+	struct fwnode_handle *vmux_fwnode = dev_fwnode(vmux->subdev.dev);
-+	struct fwnode_handle *sd_fwnode = dev_fwnode(sd->dev);
-+	struct fwnode_handle *vmux_ep;
++	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
++	struct csi2_dev *csi2 = sd_to_dev(sd);
++	struct fwnode_handle *csi2_ep;
 +
-+	fwnode_graph_for_each_endpoint(vmux_fwnode, vmux_ep) {
-+		struct fwnode_handle *remote_ep, *sd_ep;
-+		struct media_pad *src_pad, *sink_pad;
-+		struct fwnode_endpoint fwep;
-+		int src_idx, sink_idx, ret;
-+		bool remote_ep_belongs;
++	/*
++	 * If the endpoint is one of ours, return the endpoint's port
++	 * number. This device maps port numbers and pad indexes 1:1.
++	 */
++	fwnode_graph_for_each_endpoint(dev_fwnode(csi2->dev), csi2_ep) {
++		if (endpoint->local_fwnode == csi2_ep) {
++			struct fwnode_endpoint fwep;
++			int ret;
 +
-+		ret = fwnode_graph_parse_endpoint(vmux_ep, &fwep);
-+		if (ret)
-+			continue;
++			ret = fwnode_graph_parse_endpoint(csi2_ep, &fwep);
 +
-+		/* only create links to the vmux sink pads */
-+		if (fwep.port >= vmux->subdev.entity.num_pads - 1)
-+			continue;
++			fwnode_handle_put(csi2_ep);
 +
-+		sink_idx = fwep.port;
-+		sink_pad = &vmux->subdev.entity.pads[sink_idx];
-+
-+		remote_ep = fwnode_graph_get_remote_endpoint(vmux_ep);
-+		if (!remote_ep)
-+			continue;
-+
-+		/*
-+		 * verify that this remote endpoint is owned by the
-+		 * sd, in case the sd does not check for that in its
-+		 * .get_fwnode_pad operation or does not implement it.
-+		 */
-+		remote_ep_belongs = false;
-+		fwnode_graph_for_each_endpoint(sd_fwnode, sd_ep) {
-+			if (sd_ep == remote_ep) {
-+				remote_ep_belongs = true;
-+				fwnode_handle_put(sd_ep);
-+				break;
-+			}
++			return ret ? ret : fwep.port;
 +		}
-+		if (!remote_ep_belongs)
-+			continue;
-+
-+		src_idx = media_entity_get_fwnode_pad(&sd->entity, remote_ep,
-+						      MEDIA_PAD_FL_SOURCE);
-+		fwnode_handle_put(remote_ep);
-+
-+		if (src_idx < 0)
-+			continue;
-+
-+		src_pad = &sd->entity.pads[src_idx];
-+
-+		/* skip this link if it already exists */
-+		if (media_entity_find_link(src_pad, sink_pad))
-+			continue;
-+
-+		ret = media_create_pad_link(&sd->entity, src_idx,
-+					    &vmux->subdev.entity,
-+					    sink_idx, 0);
-+		if (ret) {
-+			dev_err(vmux->subdev.dev,
-+				"%s:%d -> %s:%d failed with %d\n",
-+				sd->entity.name, src_idx,
-+				vmux->subdev.entity.name, sink_idx, ret);
-+			fwnode_handle_put(vmux_ep);
-+			return ret;
-+		}
-+
-+		dev_dbg(vmux->subdev.dev, "%s:%d -> %s:%d\n",
-+			sd->entity.name, src_idx,
-+			vmux->subdev.entity.name, sink_idx);
 +	}
 +
-+	return 0;
++	return -ENXIO;
 +}
 +
-+static const struct v4l2_async_notifier_operations video_mux_notify_ops = {
-+	.bound = video_mux_notify_bound,
-+};
-+
- static int video_mux_async_register(struct video_mux *vmux,
- 				    unsigned int num_input_pads)
- {
-@@ -386,6 +476,8 @@ static int video_mux_async_register(struct video_mux *vmux,
+ static const struct media_entity_operations csi2_entity_ops = {
+ 	.link_setup = csi2_link_setup,
+ 	.link_validate = v4l2_subdev_link_validate,
++	.get_fwnode_pad = csi2_get_fwnode_pad,
+ };
  
- 	v4l2_async_notifier_init(&vmux->notifier);
- 
-+	vmux->notifier.ops = &video_mux_notify_ops;
-+
- 	ret = v4l2_async_register_fwnode_subdev(
- 		&vmux->subdev, &vmux->notifier,
- 		sizeof(struct v4l2_async_subdev),
+ static const struct v4l2_subdev_video_ops csi2_video_ops = {
 -- 
 2.17.1
 
