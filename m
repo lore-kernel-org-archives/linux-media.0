@@ -1,141 +1,66 @@
-Return-Path: <SRS0=vndH=4D=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=2aLt=4E=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2601C352A3
-	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 19:43:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2C55C2BA83
+	for <linux-media@archiver.kernel.org>; Sun, 16 Feb 2020 09:22:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CCBBD2086A
-	for <linux-media@archiver.kernel.org>; Sat, 15 Feb 2020 19:43:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kkZaNiMC"
+	by mail.kernel.org (Postfix) with ESMTP id 78D3120857
+	for <linux-media@archiver.kernel.org>; Sun, 16 Feb 2020 09:22:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727800AbgBOTnK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Feb 2020 14:43:10 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:33158 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728079AbgBOTnJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Feb 2020 14:43:09 -0500
-Received: by mail-pl1-f194.google.com with SMTP id ay11so5155503plb.0;
-        Sat, 15 Feb 2020 11:43:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=xWXrdZ90Rqh6QAAhxL2MMK6jyJVUDs2rWHZG2jR0834=;
-        b=kkZaNiMCto9qboPG3KkfEyftLRjsCxbl8VSUXkTJe9GEcR1BQGxAyCQUN6xEN28bxj
-         eAmsr9FJEhMlSJNyo1C6i1PTpvt61cE7ChxwwOjF3947YQZiTLOJ+1wwb9aiPJzEBxTU
-         pFvupsyWt271rQ8iAW8UNOfUwaPumWatdBAlFagootQZ/anSpW/tTAaF5HpG24ndm5eR
-         IxxgrUxOC6iMI5wVTVycFocSUEyYwlOWQ3ompnUuNLYx0Su30UfbKoJRox1ot0VS/iYw
-         Z/nmhfIEhgIJX99NkoWppTkbQwjYVLs0uDRApAGBR184SuqxZk0hiY/eL2K3bIBogWiO
-         EufQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=xWXrdZ90Rqh6QAAhxL2MMK6jyJVUDs2rWHZG2jR0834=;
-        b=UgwIqscw66tYsNAWitZ1ptsvP3N0kGzo0YoNS5KzXMIyT0nr5v3k5L2vg8n+nbv3Oa
-         4XCCTHZLKeh9sUIALmdHm05paBmuxzqJfke1zqqLCGUrShZEHUCc/ucccYMJsll9nxPl
-         /65jJhS5+/34LZGS3zGCxZmaJa9cjD4UYCOM0weMuLJafoqIVapVeAt9w5Yz5tJP3VO9
-         2B3BYSRfM4B1f7/kEOUgFdTHmjLv0X5JvJuFmFIwCgEnZoDYy6bg4PL0vLE35FJ5VVgK
-         b9fhjasaU2EJQi55CXz09PyS+zLcbVg4hQt5pvy5f53F8HvJdWn0MVLccshppYk1U/qV
-         Z0Cg==
-X-Gm-Message-State: APjAAAUcmS5ySfdkf3lo9/IenRnoh/GbviQcG/ej5hjvjL8mOEwYeBh4
-        pSPy+Wo6/jcrbVRvIwtj2oPEu6ks1Bo=
-X-Google-Smtp-Source: APXvYqwzjKJzHTQI7d9t9TLy5kd0/CNhq95OAzyw4PDTakvup3633irweQWCqYwCy5uD7iB0l1GPVw==
-X-Received: by 2002:a17:90a:608:: with SMTP id j8mr11070072pjj.85.1581795788407;
-        Sat, 15 Feb 2020 11:43:08 -0800 (PST)
-Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id q4sm11802751pfl.175.2020.02.15.11.43.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Feb 2020 11:43:07 -0800 (PST)
-From:   Steve Longerbeam <slongerbeam@gmail.com>
+        id S1726009AbgBPJSl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 16 Feb 2020 04:18:41 -0500
+Received: from gofer.mess.org ([88.97.38.141]:56183 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725951AbgBPJSl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 16 Feb 2020 04:18:41 -0500
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id A2F45C6383; Sun, 16 Feb 2020 09:18:39 +0000 (GMT)
+From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Subject: [RESEND PATCH v3 16/17] media: imx: silence a couple debug messages
-Date:   Sat, 15 Feb 2020 11:41:35 -0800
-Message-Id: <20200215194136.10131-17-slongerbeam@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200215194136.10131-1-slongerbeam@gmail.com>
-References: <20200215194136.10131-1-slongerbeam@gmail.com>
+Subject: [PATCH v4l-utils] Fix build failure on s390x
+Date:   Sun, 16 Feb 2020 09:18:39 +0000
+Message-Id: <20200216091839.31183-1-sean@mess.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert to dev_dbg the "subdev bound" and IPU-internal media-link
-creation messages.
+See: https://bugzilla.redhat.com/show_bug.cgi?id=1800228
 
-Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
+/usr/bin/ld: .libs/libdvbv5_la-dvb-fe.o:(.bss+0x8): multiple definition of `delivery_system_name'; .libs/libdvbv5_la-dvb-v5.o:/builddir/build/BUILD/v4l-utils-1.18.0/lib/libdvbv5/dvb-v5.h:29: first defined here
+/usr/bin/ld: .libs/libdvbv5_la-dvb-fe.o:(.bss+0xa8): multiple definition of `dvb_v5_name'; .libs/libdvbv5_la-dvb-v5.o:/builddir/build/BUILD/v4l-utils-1.18.0/lib/libdvbv5/dvb-v5.h:28: first defined here
+/usr/bin/ld: .libs/libdvbv5_la-dvb-fe.o:(.rodata+0x3ec): multiple definition of `fe_bandwidth_name'; .libs/libdvbv5_la-dvb-v5.o:/builddir/build/BUILD/v4l-utils-1.18.0/lib/libdvbv5/dvb-v5.h:20: first defined here
+
+delivery_system_name etc are being defined both in lib/libdvbv5/dvb-v5.c and
+lib/libdvbv5/dvb-v5.h.
+
+Signed-off-by: Sean Young <sean@mess.org>
 ---
- drivers/staging/media/imx/imx-media-dev-common.c  | 4 +++-
- drivers/staging/media/imx/imx-media-dev.c         | 2 +-
- drivers/staging/media/imx/imx-media-internal-sd.c | 6 +++---
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ lib/libdvbv5/gen_dvb_structs.pl | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/staging/media/imx/imx-media-dev-common.c b/drivers/staging/media/imx/imx-media-dev-common.c
-index f7ad3cbbeec2..b23bbfab388a 100644
---- a/drivers/staging/media/imx/imx-media-dev-common.c
-+++ b/drivers/staging/media/imx/imx-media-dev-common.c
-@@ -24,7 +24,9 @@ static int imx_media_subdev_bound(struct v4l2_async_notifier *notifier,
- 				  struct v4l2_subdev *sd,
- 				  struct v4l2_async_subdev *asd)
- {
--	v4l2_info(sd->v4l2_dev, "subdev %s bound\n", sd->name);
-+	struct imx_media_dev *imxmd = notifier2dev(notifier);
-+
-+	dev_dbg(imxmd->md.dev, "subdev %s bound\n", sd->name);
+diff --git a/lib/libdvbv5/gen_dvb_structs.pl b/lib/libdvbv5/gen_dvb_structs.pl
+index 7e1d645c..d15d1fc3 100755
+--- a/lib/libdvbv5/gen_dvb_structs.pl
++++ b/lib/libdvbv5/gen_dvb_structs.pl
+@@ -419,6 +419,9 @@ sub output_arrays($$$$$)
+     }
+     printf OUT " %s[%i]", $name, $size;
+   } else {
++    if ($decl) {
++      printf OUT "extern ";
++    }
+     printf OUT "const %s%s[%i]", $type, $name, $size + 1;
+   }
  
- 	return 0;
- }
-diff --git a/drivers/staging/media/imx/imx-media-dev.c b/drivers/staging/media/imx/imx-media-dev.c
-index 2c3c2adca683..6d2205461e56 100644
---- a/drivers/staging/media/imx/imx-media-dev.c
-+++ b/drivers/staging/media/imx/imx-media-dev.c
-@@ -32,7 +32,7 @@ static int imx_media_subdev_bound(struct v4l2_async_notifier *notifier,
- 			return ret;
- 	}
- 
--	v4l2_info(&imxmd->v4l2_dev, "subdev %s bound\n", sd->name);
-+	dev_dbg(imxmd->md.dev, "subdev %s bound\n", sd->name);
- 
- 	return 0;
- }
-diff --git a/drivers/staging/media/imx/imx-media-internal-sd.c b/drivers/staging/media/imx/imx-media-internal-sd.c
-index d4237e1a4241..da4109b2fd13 100644
---- a/drivers/staging/media/imx/imx-media-internal-sd.c
-+++ b/drivers/staging/media/imx/imx-media-internal-sd.c
-@@ -142,9 +142,9 @@ static int create_internal_link(struct imx_media_dev *imxmd,
- 				   &sink->entity.pads[link->remote_pad]))
- 		return 0;
- 
--	v4l2_info(&imxmd->v4l2_dev, "%s:%d -> %s:%d\n",
--		  src->name, link->local_pad,
--		  sink->name, link->remote_pad);
-+	dev_dbg(imxmd->md.dev, "%s:%d -> %s:%d\n",
-+		src->name, link->local_pad,
-+		sink->name, link->remote_pad);
- 
- 	ret = media_create_pad_link(&src->entity, link->local_pad,
- 				    &sink->entity, link->remote_pad, 0);
 -- 
-2.17.1
+2.24.1
 
