@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DD33C34021
-	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26DA1C34025
+	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E65F3214D8
-	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F0D26208C4
+	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726401AbgBQPOD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Feb 2020 10:14:03 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58969 "EHLO
+        id S1728228AbgBQPOE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Feb 2020 10:14:04 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36869 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726646AbgBQPOC (ORCPT
+        with ESMTP id S1728059AbgBQPOE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Feb 2020 10:14:02 -0500
+        Mon, 17 Feb 2020 10:14:04 -0500
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1j3i5x-0005W7-5Z; Mon, 17 Feb 2020 16:14:01 +0100
+        id 1j3i5x-0005WH-Ch; Mon, 17 Feb 2020 16:14:01 +0100
 Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1j3i5w-0001a0-8k; Mon, 17 Feb 2020 16:14:00 +0100
+        id 1j3i5w-0001ai-Cv; Mon, 17 Feb 2020 16:14:00 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
         Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH 04/18] media: allegro: remove unknown39 field from create_channel
-Date:   Mon, 17 Feb 2020 16:13:44 +0100
-Message-Id: <20200217151358.5695-5-m.tretter@pengutronix.de>
+Subject: [PATCH 14/18] media: allegro: handle dependency of bitrate and bitrate_peak
+Date:   Mon, 17 Feb 2020 16:13:54 +0100
+Message-Id: <20200217151358.5695-15-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200217151358.5695-1-m.tretter@pengutronix.de>
 References: <20200217151358.5695-1-m.tretter@pengutronix.de>
@@ -48,42 +48,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The subframe_latency and lda_control_mode fields directly follow
-freq_golden_ref field and there is no unknown field in between. The
-unknown field it at the end of the message.
-
-Reorder the fields accordingly. This further allows to drop the hard
-coded value from the lda_control_mode field and set the mode to 0.
+The peak bitrate must not be smaller than the configured bitrate. Update
+the other control whenever one of the controls changes to reflect this
+dependency.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- drivers/staging/media/allegro-dvt/allegro-core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/staging/media/allegro-dvt/allegro-core.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
-index 1ff58683e782..c93b3ba39391 100644
+index 8c26158eab93..cedb09ea649f 100644
 --- a/drivers/staging/media/allegro-dvt/allegro-core.c
 +++ b/drivers/staging/media/allegro-dvt/allegro-core.c
-@@ -397,10 +397,9 @@ struct mcu_msg_create_channel {
- 	u8 num_b;
- 	u8 freq_golden_ref;
- 
--	u32 unknown39;
--
- 	u32 subframe_latency;
- 	u32 lda_control_mode;
-+	u32 unknown41;
- } __attribute__ ((__packed__));
- 
- struct mcu_msg_create_channel_response {
-@@ -1121,7 +1120,6 @@ static int allegro_mcu_send_create_channel(struct allegro_dev *dev,
- 	msg.gdr_mode = 0x00000000;
- 	msg.gop_length = channel->gop_size;
- 	msg.subframe_latency = 0x00000000;
--	msg.lda_control_mode = 0x700d0000;
- 
- 	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
- 	allegro_mcu_interrupt(dev);
+@@ -2403,9 +2403,15 @@ static int allegro_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		break;
+ 	case V4L2_CID_MPEG_VIDEO_BITRATE:
+ 		channel->bitrate = ctrl->val;
++		if (channel->bitrate > channel->bitrate_peak)
++			__v4l2_ctrl_s_ctrl(channel->mpeg_video_bitrate_peak,
++					   channel->bitrate);
+ 		break;
+ 	case V4L2_CID_MPEG_VIDEO_BITRATE_PEAK:
+ 		channel->bitrate_peak = ctrl->val;
++		if (channel->bitrate_peak < channel->bitrate)
++			__v4l2_ctrl_s_ctrl(channel->mpeg_video_bitrate,
++					   channel->bitrate_peak);
+ 		break;
+ 	case V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE:
+ 		channel->cpb_size = ctrl->val;
 -- 
 2.20.1
 
