@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7352C34021
-	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3905C34024
+	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 90EE1214D8
-	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84FD420801
+	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728413AbgBQPOJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Feb 2020 10:14:09 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:55361 "EHLO
+        id S1727488AbgBQPOK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Feb 2020 10:14:10 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54501 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727503AbgBQPOD (ORCPT
+        with ESMTP id S1728024AbgBQPOD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 17 Feb 2020 10:14:03 -0500
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1j3i5x-0005WJ-BJ; Mon, 17 Feb 2020 16:14:01 +0100
+        id 1j3i5x-0005WB-98; Mon, 17 Feb 2020 16:14:01 +0100
 Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1j3i5w-0001aq-Dp; Mon, 17 Feb 2020 16:14:00 +0100
+        id 1j3i5w-0001aD-AT; Mon, 17 Feb 2020 16:14:00 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
         Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH 16/18] media: allegro: pass buffers through firmware
-Date:   Mon, 17 Feb 2020 16:13:56 +0100
-Message-Id: <20200217151358.5695-17-m.tretter@pengutronix.de>
+Subject: [PATCH 08/18] media: allegro: extract mcu and codec address calculation
+Date:   Mon, 17 Feb 2020 16:13:48 +0100
+Message-Id: <20200217151358.5695-9-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200217151358.5695-1-m.tretter@pengutronix.de>
 References: <20200217151358.5695-1-m.tretter@pengutronix.de>
@@ -48,222 +48,103 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As we know which buffers are processed by the codec from the address in
-the ENCODE_FRAME response, we can queue multiple buffers in the firmware
-and retrieve the buffer from the response of the firmware. This enables
-the firmware to use the internal scheduling the codec and avoids round
-trips through the driver when fetching the next frame.
+The mcu and the codec use 32 bit addresses which are sent via the
+firmware messages. Add helper functions for this address calculation to
+make it obvious which address is used in the message.
 
-Remove buffers that have been passed to the firmware from the m2m buffer
-queue and put them into a shadow queue for tracking the buffer in the
-driver. When we receive a ENCODE_FRAME response from the firmware, get
-the buffer from the shadow queue and finish the buffer.
-
-Furthermore, it is necessary to finish the job straight after passing
-the buffer to the firmware to allow the V4L2 framework to send further
-buffers to the driver.
+As the mcu and the codec have a limited address space, print warnings if
+the addresses are outside the respective address space.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- .../staging/media/allegro-dvt/allegro-core.c  | 104 +++++++++++++++---
- 1 file changed, 89 insertions(+), 15 deletions(-)
+ .../staging/media/allegro-dvt/allegro-core.c  | 44 ++++++++++++++-----
+ 1 file changed, 33 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
-index 4f525920c194..80d3383b84f8 100644
+index 3366e3605cf5..c0b3a6858b27 100644
 --- a/drivers/staging/media/allegro-dvt/allegro-core.c
 +++ b/drivers/staging/media/allegro-dvt/allegro-core.c
-@@ -226,6 +226,10 @@ struct allegro_channel {
- 	struct list_head buffers_reference;
- 	struct list_head buffers_intermediate;
+@@ -532,6 +532,29 @@ union mcu_msg_response {
+ 	struct mcu_msg_encode_frame_response encode_frame;
+ };
  
-+	struct list_head source_shadow_list;
-+	struct list_head stream_shadow_list;
-+	struct mutex shadow_list_lock;
-+
- 	struct list_head list;
- 	struct completion completion;
- 
-@@ -247,6 +251,14 @@ allegro_get_state(struct allegro_channel *channel)
- 	return channel->state;
- }
- 
-+struct allegro_m2m_buffer {
-+	struct v4l2_m2m_buffer buf;
-+	struct list_head head;
-+};
-+
-+#define to_allegro_m2m_buffer(__buf) \
-+	container_of(__buf, struct allegro_m2m_buffer, buf)
-+
- struct fw_info {
- 	unsigned int id;
- 	unsigned int id_codec;
-@@ -1570,6 +1582,43 @@ static void allegro_channel_buf_done(struct allegro_channel *channel,
- 	v4l2_m2m_buf_done(buf, state);
- }
- 
-+static u64 allegro_put_buffer(struct allegro_channel *channel,
-+			      struct list_head *list,
-+			      struct vb2_v4l2_buffer *buffer)
++static inline u32 to_mcu_addr(struct allegro_dev *dev, dma_addr_t phys)
 +{
-+	struct v4l2_m2m_buffer *b = container_of(buffer,
-+						 struct v4l2_m2m_buffer, vb);
-+	struct allegro_m2m_buffer *shadow = to_allegro_m2m_buffer(b);
++	if (upper_32_bits(phys) || (lower_32_bits(phys) & MCU_CACHE_OFFSET))
++		v4l2_warn(&dev->v4l2_dev,
++			  "address %pad is outside mcu window\n", &phys);
 +
-+	mutex_lock(&channel->shadow_list_lock);
-+	list_add_tail(&shadow->head, list);
-+	mutex_unlock(&channel->shadow_list_lock);
-+
-+	return (u64) buffer;
++	return lower_32_bits(phys) | MCU_CACHE_OFFSET;
 +}
 +
-+static struct vb2_v4l2_buffer *allegro_get_buffer(struct allegro_channel *channel,
-+						  struct list_head *list,
-+						  u64 handle)
++static inline u32 to_mcu_size(struct allegro_dev *dev, size_t size)
 +{
-+	struct allegro_dev *dev = channel->dev;
-+	struct allegro_m2m_buffer *shadow;
-+	u64 found;
-+
-+	mutex_lock(&channel->shadow_list_lock);
-+	shadow = list_first_entry(list, struct allegro_m2m_buffer, head);
-+	list_del_init(&shadow->head);
-+	mutex_unlock(&channel->shadow_list_lock);
-+
-+	found = (u64) (&shadow->buf.vb);
-+	if (handle != found)
-+		v4l2_warn(&dev->v4l2_dev,
-+			  "channel %d: output buffer mismatch 0x%llx, expected 0x%llx\n",
-+			  channel->mcu_channel_id, handle, found);
-+
-+	return &shadow->buf.vb;
++	return lower_32_bits(size);
 +}
 +
- static void allegro_channel_finish_frame(struct allegro_channel *channel,
- 		struct mcu_msg_encode_frame_response *msg)
- {
-@@ -1585,13 +1634,17 @@ static void allegro_channel_finish_frame(struct allegro_channel *channel,
- 	ssize_t len;
- 	ssize_t free;
- 
--	src_buf = v4l2_m2m_src_buf_remove(channel->fh.m2m_ctx);
--	dst_buf = v4l2_m2m_dst_buf_remove(channel->fh.m2m_ctx);
-+	src_buf = allegro_get_buffer(channel, &channel->source_shadow_list, msg->src_handle);
-+	if (!src_buf)
++static inline u32 to_codec_addr(struct allegro_dev *dev, dma_addr_t phys)
++{
++	if (upper_32_bits(phys))
 +		v4l2_warn(&dev->v4l2_dev,
-+			  "channel %d: invalid source buffer\n",
-+			  channel->mcu_channel_id);
- 
--	if ((u64)src_buf != msg->src_handle || (u64)dst_buf != msg->stream_id)
--		v4l2_err(&dev->v4l2_dev,
--			 "channel %d: check failed\n",
--			 channel->mcu_channel_id);
-+	dst_buf = allegro_get_buffer(channel, &channel->stream_shadow_list, msg->stream_id);
-+	if (!dst_buf)
-+		v4l2_warn(&dev->v4l2_dev,
-+			  "channel %d: invalid stream buffer\n",
-+			  channel->mcu_channel_id);
- 
- 	dst_buf->sequence = channel->csequence++;
- 
-@@ -1718,8 +1771,6 @@ static void allegro_channel_finish_frame(struct allegro_channel *channel,
- 	v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
- 
- 	allegro_channel_buf_done(channel, dst_buf, state);
--
--	v4l2_m2m_job_finish(dev->m2m_dev, channel->fh.m2m_ctx);
- }
- 
- static int allegro_handle_init(struct allegro_dev *dev,
-@@ -2312,16 +2363,31 @@ static void allegro_stop_streaming(struct vb2_queue *q)
- 	struct allegro_channel *channel = vb2_get_drv_priv(q);
- 	struct allegro_dev *dev = channel->dev;
- 	struct vb2_v4l2_buffer *buffer;
-+	struct allegro_m2m_buffer *shadow, *tmp;
- 
- 	v4l2_dbg(2, debug, &dev->v4l2_dev,
- 		 "%s: stop streaming\n",
- 		 V4L2_TYPE_IS_OUTPUT(q->type) ? "output" : "capture");
- 
- 	if (V4L2_TYPE_IS_OUTPUT(q->type)) {
-+		mutex_lock(&channel->shadow_list_lock);
-+		list_for_each_entry_safe(shadow, tmp, &channel->source_shadow_list, head) {
-+			list_del(&shadow->head);
-+			v4l2_m2m_buf_done(&shadow->buf.vb, VB2_BUF_STATE_ERROR);
-+		}
-+		mutex_unlock(&channel->shadow_list_lock);
++			  "address %pad cannot be used by codec\n", &phys);
 +
- 		allegro_set_state(channel, ALLEGRO_STATE_STOPPED);
- 		while ((buffer = v4l2_m2m_src_buf_remove(channel->fh.m2m_ctx)))
- 			v4l2_m2m_buf_done(buffer, VB2_BUF_STATE_ERROR);
- 	} else if (q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
-+		mutex_lock(&channel->shadow_list_lock);
-+		list_for_each_entry_safe(shadow, tmp, &channel->stream_shadow_list, head) {
-+			list_del(&shadow->head);
-+			v4l2_m2m_buf_done(&shadow->buf.vb, VB2_BUF_STATE_ERROR);
-+		}
-+		mutex_unlock(&channel->shadow_list_lock);
++	return lower_32_bits(phys);
++}
 +
- 		allegro_destroy_channel(channel);
- 		while ((buffer = v4l2_m2m_dst_buf_remove(channel->fh.m2m_ctx)))
- 			v4l2_m2m_buf_done(buffer, VB2_BUF_STATE_ERROR);
-@@ -2352,7 +2418,7 @@ static int allegro_queue_init(void *priv,
- 	src_vq->drv_priv = channel;
- 	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
- 	src_vq->ops = &allegro_queue_ops;
--	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
-+	src_vq->buf_struct_size = sizeof(struct allegro_m2m_buffer);
- 	src_vq->lock = &channel->dev->lock;
- 	err = vb2_queue_init(src_vq);
- 	if (err)
-@@ -2365,7 +2431,7 @@ static int allegro_queue_init(void *priv,
- 	dst_vq->drv_priv = channel;
- 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
- 	dst_vq->ops = &allegro_queue_ops;
--	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
-+	dst_vq->buf_struct_size = sizeof(struct allegro_m2m_buffer);
- 	dst_vq->lock = &channel->dev->lock;
- 	err = vb2_queue_init(dst_vq);
- 	if (err)
-@@ -2457,6 +2523,9 @@ static int allegro_open(struct file *file)
- 	v4l2_fh_add(&channel->fh);
+ /* Helper functions for channel and user operations */
  
- 	init_completion(&channel->completion);
-+	INIT_LIST_HEAD(&channel->source_shadow_list);
-+	INIT_LIST_HEAD(&channel->stream_shadow_list);
-+	mutex_init(&channel->shadow_list_lock);
+ static unsigned long allegro_next_user_id(struct allegro_dev *dev)
+@@ -947,8 +970,8 @@ static void allegro_mcu_send_init(struct allegro_dev *dev,
+ 	msg.header.type = MCU_MSG_TYPE_INIT;
+ 	msg.header.length = sizeof(msg) - sizeof(msg.header);
  
- 	channel->dev = dev;
+-	msg.suballoc_dma = lower_32_bits(suballoc_dma) | MCU_CACHE_OFFSET;
+-	msg.suballoc_size = suballoc_size;
++	msg.suballoc_dma = to_mcu_addr(dev, suballoc_dma);
++	msg.suballoc_size = to_mcu_size(dev, suballoc_size);
  
-@@ -2957,18 +3026,23 @@ static void allegro_device_run(void *priv)
- 	dma_addr_t src_uv;
- 	dma_addr_t dst_addr;
- 	unsigned long dst_size;
-+	u64 src_handle;
-+	u64 dst_handle;
+ 	/* disable L2 cache */
+ 	msg.l2_cache[0] = -1;
+@@ -1158,8 +1181,8 @@ static int allegro_mcu_send_put_stream_buffer(struct allegro_dev *dev,
+ 	msg.header.length = sizeof(msg) - sizeof(msg.header);
  
--	dst_buf = v4l2_m2m_next_dst_buf(channel->fh.m2m_ctx);
-+	dst_buf = v4l2_m2m_dst_buf_remove(channel->fh.m2m_ctx);
- 	dst_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
- 	dst_size = vb2_plane_size(&dst_buf->vb2_buf, 0);
--	allegro_mcu_send_put_stream_buffer(dev, channel, dst_addr, dst_size, (u64)dst_buf);
-+	dst_handle = allegro_put_buffer(channel, &channel->stream_shadow_list, dst_buf);
-+	allegro_mcu_send_put_stream_buffer(dev, channel, dst_addr, dst_size, dst_handle);
+ 	msg.channel_id = channel->mcu_channel_id;
+-	msg.dma_addr = paddr;
+-	msg.mcu_addr = paddr | MCU_CACHE_OFFSET;
++	msg.dma_addr = to_codec_addr(dev, paddr);
++	msg.mcu_addr = to_mcu_addr(dev, paddr);
+ 	msg.size = size;
+ 	msg.offset = ENCODER_STREAM_OFFSET;
+ 	msg.stream_id = 0; /* copied to mcu_msg_encode_frame_response */
+@@ -1186,11 +1209,11 @@ static int allegro_mcu_send_encode_frame(struct allegro_dev *dev,
+ 	msg.pps_qp = 26; /* qp are relative to 26 */
+ 	msg.user_param = 0; /* copied to mcu_msg_encode_frame_response */
+ 	msg.src_handle = 0; /* copied to mcu_msg_encode_frame_response */
+-	msg.src_y = src_y;
+-	msg.src_uv = src_uv;
++	msg.src_y = to_codec_addr(dev, src_y);
++	msg.src_uv = to_codec_addr(dev, src_uv);
+ 	msg.stride = channel->stride;
+ 	msg.ep2 = 0x0;
+-	msg.ep2_v = msg.ep2 | MCU_CACHE_OFFSET;
++	msg.ep2_v = to_mcu_addr(dev, msg.ep2);
  
--	src_buf = v4l2_m2m_next_src_buf(channel->fh.m2m_ctx);
-+	src_buf = v4l2_m2m_src_buf_remove(channel->fh.m2m_ctx);
- 	src_buf->sequence = channel->osequence++;
--
- 	src_y = vb2_dma_contig_plane_dma_addr(&src_buf->vb2_buf, 0);
- 	src_uv = src_y + (channel->stride * channel->height);
--	allegro_mcu_send_encode_frame(dev, channel, src_y, src_uv, (u64)src_buf);
-+	src_handle = allegro_put_buffer(channel, &channel->source_shadow_list, src_buf);
-+	allegro_mcu_send_encode_frame(dev, channel, src_y, src_uv, src_handle);
-+
-+	v4l2_m2m_job_finish(dev->m2m_dev, channel->fh.m2m_ctx);
- }
+ 	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+ 	allegro_mcu_interrupt(dev);
+@@ -1249,10 +1272,9 @@ static int allegro_mcu_push_buffer_internal(struct allegro_channel *channel,
  
- static const struct v4l2_m2m_ops allegro_m2m_ops = {
+ 	buffer = msg->buffer;
+ 	list_for_each_entry(al_buffer, list, head) {
+-		buffer->dma_addr = lower_32_bits(al_buffer->paddr);
+-		buffer->mcu_addr =
+-		    lower_32_bits(al_buffer->paddr) | MCU_CACHE_OFFSET;
+-		buffer->size = al_buffer->size;
++		buffer->dma_addr = to_codec_addr(dev, al_buffer->paddr);
++		buffer->mcu_addr = to_mcu_addr(dev, al_buffer->paddr);
++		buffer->size = to_mcu_size(dev, al_buffer->size);
+ 		buffer++;
+ 	}
+ 
 -- 
 2.20.1
 
