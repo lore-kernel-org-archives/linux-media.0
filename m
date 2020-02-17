@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19221C34029
-	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2AF0C34028
+	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE9F120801
-	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D615220801
+	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728395AbgBQPON (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Feb 2020 10:14:13 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58225 "EHLO
+        id S1728457AbgBQPOL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Feb 2020 10:14:11 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:42277 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727161AbgBQPOD (ORCPT
+        with ESMTP id S1727926AbgBQPOD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 17 Feb 2020 10:14:03 -0500
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1j3i5x-0005WI-C6; Mon, 17 Feb 2020 16:14:01 +0100
+        id 1j3i5x-0005W9-45; Mon, 17 Feb 2020 16:14:01 +0100
 Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1j3i5w-0001al-DS; Mon, 17 Feb 2020 16:14:00 +0100
+        id 1j3i5w-0001a6-9X; Mon, 17 Feb 2020 16:14:00 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
         Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH 15/18] media: allegro: verify source and destination buffer in VCU response
-Date:   Mon, 17 Feb 2020 16:13:55 +0100
-Message-Id: <20200217151358.5695-16-m.tretter@pengutronix.de>
+Subject: [PATCH 06/18] media: allegro: fix calculation of CPB size
+Date:   Mon, 17 Feb 2020 16:13:46 +0100
+Message-Id: <20200217151358.5695-7-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200217151358.5695-1-m.tretter@pengutronix.de>
 References: <20200217151358.5695-1-m.tretter@pengutronix.de>
@@ -48,91 +48,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The PUT_STREAM_BUFFER and ENCODE_FRAME request have fields that allow to
-pass arbitrary 64 bit values through the firmware to the ENCODE_FRAME
-response. Use these values to verify that the buffers when finishing the
-frame are actually the same buffers that have been sent for encoding a
-frame.
+The cpb_size is given in kilobytes, but the bitrate is given in bits per
+second. Therefore, the calculation of the initial removal delay and the
+cpb size for the firmware were wrong.
+
+Convert the bitrate to kilobytes before calculating the cpb size in 90
+kHz units for sending it to the firmware. Also reuse the result for the
+initial removal delay, to make it obvious that we are setting the
+initial removal delay to the maximum value.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- .../staging/media/allegro-dvt/allegro-core.c  | 21 ++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/staging/media/allegro-dvt/allegro-core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
-index cedb09ea649f..4f525920c194 100644
+index b04ded8ae06b..383a5fe07d64 100644
 --- a/drivers/staging/media/allegro-dvt/allegro-core.c
 +++ b/drivers/staging/media/allegro-dvt/allegro-core.c
-@@ -1198,7 +1198,8 @@ static int allegro_mcu_send_destroy_channel(struct allegro_dev *dev,
- static int allegro_mcu_send_put_stream_buffer(struct allegro_dev *dev,
- 					      struct allegro_channel *channel,
- 					      dma_addr_t paddr,
--					      unsigned long size)
-+					      unsigned long size,
-+					      u64 stream_id)
- {
- 	struct mcu_msg_put_stream_buffer msg;
+@@ -5,6 +5,7 @@
+  * Allegro DVT video encoder driver
+  */
  
-@@ -1212,7 +1213,7 @@ static int allegro_mcu_send_put_stream_buffer(struct allegro_dev *dev,
- 	msg.mcu_addr = to_mcu_addr(dev, paddr);
- 	msg.size = size;
- 	msg.offset = ENCODER_STREAM_OFFSET;
--	msg.stream_id = 0; /* copied to mcu_msg_encode_frame_response */
-+	msg.stream_id = stream_id; /* copied to mcu_msg_encode_frame_response */
++#include <linux/bits.h>
+ #include <linux/firmware.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+@@ -1094,12 +1095,11 @@ static int allegro_mcu_send_create_channel(struct allegro_dev *dev,
  
- 	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
- 	allegro_mcu_interrupt(dev);
-@@ -1222,7 +1223,8 @@ static int allegro_mcu_send_put_stream_buffer(struct allegro_dev *dev,
- 
- static int allegro_mcu_send_encode_frame(struct allegro_dev *dev,
- 					 struct allegro_channel *channel,
--					 dma_addr_t src_y, dma_addr_t src_uv)
-+					 dma_addr_t src_y, dma_addr_t src_uv,
-+					 u64 src_handle)
- {
- 	struct mcu_msg_encode_frame msg;
- 
-@@ -1235,7 +1237,7 @@ static int allegro_mcu_send_encode_frame(struct allegro_dev *dev,
- 	msg.encoding_options = AL_OPT_FORCE_LOAD;
- 	msg.pps_qp = 26; /* qp are relative to 26 */
- 	msg.user_param = 0; /* copied to mcu_msg_encode_frame_response */
--	msg.src_handle = 0; /* copied to mcu_msg_encode_frame_response */
-+	msg.src_handle = src_handle; /* copied to mcu_msg_encode_frame_response */
- 	msg.src_y = to_codec_addr(dev, src_y);
- 	msg.src_uv = to_codec_addr(dev, src_uv);
- 	msg.stride = channel->stride;
-@@ -1584,8 +1586,13 @@ static void allegro_channel_finish_frame(struct allegro_channel *channel,
- 	ssize_t free;
- 
- 	src_buf = v4l2_m2m_src_buf_remove(channel->fh.m2m_ctx);
--
- 	dst_buf = v4l2_m2m_dst_buf_remove(channel->fh.m2m_ctx);
-+
-+	if ((u64)src_buf != msg->src_handle || (u64)dst_buf != msg->stream_id)
-+		v4l2_err(&dev->v4l2_dev,
-+			 "channel %d: check failed\n",
-+			 channel->mcu_channel_id);
-+
- 	dst_buf->sequence = channel->csequence++;
- 
- 	if (msg->error_code & AL_ERROR) {
-@@ -2954,14 +2961,14 @@ static void allegro_device_run(void *priv)
- 	dst_buf = v4l2_m2m_next_dst_buf(channel->fh.m2m_ctx);
- 	dst_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
- 	dst_size = vb2_plane_size(&dst_buf->vb2_buf, 0);
--	allegro_mcu_send_put_stream_buffer(dev, channel, dst_addr, dst_size);
-+	allegro_mcu_send_put_stream_buffer(dev, channel, dst_addr, dst_size, (u64)dst_buf);
- 
- 	src_buf = v4l2_m2m_next_src_buf(channel->fh.m2m_ctx);
- 	src_buf->sequence = channel->osequence++;
- 
- 	src_y = vb2_dma_contig_plane_dma_addr(&src_buf->vb2_buf, 0);
- 	src_uv = src_y + (channel->stride * channel->height);
--	allegro_mcu_send_encode_frame(dev, channel, src_y, src_uv);
-+	allegro_mcu_send_encode_frame(dev, channel, src_y, src_uv, (u64)src_buf);
- }
- 
- static const struct v4l2_m2m_ops allegro_m2m_ops = {
+ 	msg.rate_control_mode =
+ 		v4l2_bitrate_mode_to_mcu_mode(channel->bitrate_mode);
+-	/* Shall be ]0;cpb_size in 90 kHz units]. Use maximum value. */
+-	msg.initial_rem_delay =
+-		((channel->cpb_size * 1000) / channel->bitrate_peak) * 90000;
+ 	/* Encoder expects cpb_size in units of a 90 kHz clock. */
+ 	msg.cpb_size =
+-		((channel->cpb_size * 1000) / channel->bitrate_peak) * 90000;
++		(channel->cpb_size * 90000) / (channel->bitrate_peak / 1000 / BITS_PER_BYTE);
++	/* Shall be ]0;cpb_size in 90 kHz units]. Use maximum value. */
++	msg.initial_rem_delay = msg.cpb_size;
+ 	msg.framerate = 25;
+ 	msg.clk_ratio = 1000;
+ 	msg.target_bitrate = channel->bitrate;
 -- 
 2.20.1
 
