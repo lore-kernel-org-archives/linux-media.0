@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38747C34024
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DD33C34021
 	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B0F722525
-	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E65F3214D8
+	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:14:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728138AbgBQPOD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726401AbgBQPOD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 17 Feb 2020 10:14:03 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:44945 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:58969 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726911AbgBQPOC (ORCPT
+        with ESMTP id S1726646AbgBQPOC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 17 Feb 2020 10:14:02 -0500
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1j3i5x-0005W4-44; Mon, 17 Feb 2020 16:14:01 +0100
+        id 1j3i5x-0005W7-5Z; Mon, 17 Feb 2020 16:14:01 +0100
 Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1j3i5w-0001Zq-7M; Mon, 17 Feb 2020 16:14:00 +0100
+        id 1j3i5w-0001a0-8k; Mon, 17 Feb 2020 16:14:00 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
         Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH 01/18] media: allegro: print message on mcu error
-Date:   Mon, 17 Feb 2020 16:13:41 +0100
-Message-Id: <20200217151358.5695-2-m.tretter@pengutronix.de>
+Subject: [PATCH 04/18] media: allegro: remove unknown39 field from create_channel
+Date:   Mon, 17 Feb 2020 16:13:44 +0100
+Message-Id: <20200217151358.5695-5-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200217151358.5695-1-m.tretter@pengutronix.de>
 References: <20200217151358.5695-1-m.tretter@pengutronix.de>
@@ -48,102 +48,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The codec firmware uses error codes to report errors during the
-configuration of a channel or while encoding a frame. Translate them
-into human readable strings for debugging.
+The subframe_latency and lda_control_mode fields directly follow
+freq_golden_ref field and there is no unknown field in between. The
+unknown field it at the end of the message.
+
+Reorder the fields accordingly. This further allows to drop the hard
+coded value from the lda_control_mode field and set the mode to 0.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- .../staging/media/allegro-dvt/allegro-core.c  | 62 +++++++++++++++++--
- 1 file changed, 58 insertions(+), 4 deletions(-)
+ drivers/staging/media/allegro-dvt/allegro-core.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
-index 3be41698df4c..c400559637e9 100644
+index 1ff58683e782..c93b3ba39391 100644
 --- a/drivers/staging/media/allegro-dvt/allegro-core.c
 +++ b/drivers/staging/media/allegro-dvt/allegro-core.c
-@@ -572,6 +572,56 @@ static inline bool channel_exists(struct allegro_channel *channel)
- 	return channel->mcu_channel_id != -1;
- }
+@@ -397,10 +397,9 @@ struct mcu_msg_create_channel {
+ 	u8 num_b;
+ 	u8 freq_golden_ref;
  
-+#define AL_ERROR			0x80
-+#define AL_ERR_INIT_FAILED		0x81
-+#define AL_ERR_NO_FRAME_DECODED		0x82
-+#define AL_ERR_RESOLUTION_CHANGE	0x85
-+#define AL_ERR_NO_MEMORY		0x87
-+#define AL_ERR_STREAM_OVERFLOW		0x88
-+#define AL_ERR_TOO_MANY_SLICES		0x89
-+#define AL_ERR_BUF_NOT_READY		0x8c
-+#define AL_ERR_NO_CHANNEL_AVAILABLE	0x8d
-+#define AL_ERR_RESOURCE_UNAVAILABLE	0x8e
-+#define AL_ERR_NOT_ENOUGH_CORES		0x8f
-+#define AL_ERR_REQUEST_MALFORMED	0x90
-+#define AL_ERR_CMD_NOT_ALLOWED		0x91
-+#define AL_ERR_INVALID_CMD_VALUE	0x92
-+
-+static inline const char *allegro_err_to_string(unsigned int err)
-+{
-+	switch (err) {
-+	case AL_ERR_INIT_FAILED:
-+		return "initialization failed";
-+	case AL_ERR_NO_FRAME_DECODED:
-+		return "no frame decoded";
-+	case AL_ERR_RESOLUTION_CHANGE:
-+		return "resolution change";
-+	case AL_ERR_NO_MEMORY:
-+		return "out of memory";
-+	case AL_ERR_STREAM_OVERFLOW:
-+		return "stream buffer overflow";
-+	case AL_ERR_TOO_MANY_SLICES:
-+		return "too many slices";
-+	case AL_ERR_BUF_NOT_READY:
-+		return "buffer not ready";
-+	case AL_ERR_NO_CHANNEL_AVAILABLE:
-+		return "no channel available";
-+	case AL_ERR_RESOURCE_UNAVAILABLE:
-+		return "resource unavailable";
-+	case AL_ERR_NOT_ENOUGH_CORES:
-+		return "not enough cores";
-+	case AL_ERR_REQUEST_MALFORMED:
-+		return "request malformed";
-+	case AL_ERR_CMD_NOT_ALLOWED:
-+		return "command not allowed";
-+	case AL_ERR_INVALID_CMD_VALUE:
-+		return "invalid command value";
-+	case AL_ERROR:
-+	default:
-+		return "unknown error";
-+	}
-+}
-+
- static unsigned int estimate_stream_size(unsigned int width,
- 					 unsigned int height)
- {
-@@ -1488,8 +1538,10 @@ static void allegro_channel_finish_frame(struct allegro_channel *channel,
+-	u32 unknown39;
+-
+ 	u32 subframe_latency;
+ 	u32 lda_control_mode;
++	u32 unknown41;
+ } __attribute__ ((__packed__));
  
- 	if (msg->error_code) {
- 		v4l2_err(&dev->v4l2_dev,
--			 "channel %d: error while encoding frame: %x\n",
--			 channel->mcu_channel_id, msg->error_code);
-+			 "channel %d: failed to encode frame: %s (%x)\n",
-+			 channel->mcu_channel_id,
-+			 allegro_err_to_string(msg->error_code),
-+			 msg->error_code);
- 		goto err;
- 	}
+ struct mcu_msg_create_channel_response {
+@@ -1121,7 +1120,6 @@ static int allegro_mcu_send_create_channel(struct allegro_dev *dev,
+ 	msg.gdr_mode = 0x00000000;
+ 	msg.gop_length = channel->gop_size;
+ 	msg.subframe_latency = 0x00000000;
+-	msg.lda_control_mode = 0x700d0000;
  
-@@ -1632,8 +1684,10 @@ allegro_handle_create_channel(struct allegro_dev *dev,
- 
- 	if (msg->error_code) {
- 		v4l2_err(&dev->v4l2_dev,
--			 "user %d: mcu failed to create channel: error %x\n",
--			 channel->user_id, msg->error_code);
-+			 "user %d: mcu failed to create channel: %s (%x)\n",
-+			 channel->user_id,
-+			 allegro_err_to_string(msg->error_code),
-+			 msg->error_code);
- 		err = -EIO;
- 		goto out;
- 	}
+ 	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+ 	allegro_mcu_interrupt(dev);
 -- 
 2.20.1
 
