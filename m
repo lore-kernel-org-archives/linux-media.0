@@ -2,69 +2,72 @@ Return-Path: <SRS0=MHKF=4F=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3A97C34021
-	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7249C34024
+	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:45:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 88E6B22B48
-	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:45:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0BC824670
+	for <linux-media@archiver.kernel.org>; Mon, 17 Feb 2020 15:45:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WNljljO+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LhUrZ5r+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729365AbgBQPpP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Feb 2020 10:45:15 -0500
-Received: from mail-wm1-f52.google.com ([209.85.128.52]:38896 "EHLO
-        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729347AbgBQPpO (ORCPT
+        id S1729376AbgBQPpQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Feb 2020 10:45:16 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:34297 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729347AbgBQPpP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Feb 2020 10:45:14 -0500
-Received: by mail-wm1-f52.google.com with SMTP id a9so18968811wmj.3
-        for <linux-media@vger.kernel.org>; Mon, 17 Feb 2020 07:45:13 -0800 (PST)
+        Mon, 17 Feb 2020 10:45:15 -0500
+Received: by mail-wm1-f66.google.com with SMTP id s144so179349wme.1
+        for <linux-media@vger.kernel.org>; Mon, 17 Feb 2020 07:45:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=bk8Dl3EQzDBZc3sM1wqRJRPyzqsxBh5vDspKM3eX+so=;
-        b=WNljljO+oZOXHPT7G8/wHmDUc7eXCeRSjJN8mxEjNsMl+i0BlqXbfsBXehXwW8ZRhg
-         rdjDOipfVokQakn64+MAv8N/06JhT6QG37nbzXo3AZqFBVcFdrVdOSpBFx4MclIowRkC
-         zCHJMXoAa+Z+cLcFx0xVXSHQWu1eBtX1ryb4a2IaEKCUJshNH4aMNPHIisVqV83gcmz+
-         yYNHQpGdltRdpnxkrld/kOSYBw2HgWC8+GOBvC5myqitz4rr7o81oPlP458v13dHoFCL
-         rP5KGvBVt0UUYY/PfAPy/pGhKSnuRWTPWID83uqc69GI2+V5EzuihwhO4XR90FPr2rvt
-         8DCg==
+        bh=+IMDOmFylD8uY29srTPJeuhzvALvSmjHT6oldeZvGlc=;
+        b=LhUrZ5r+Hh5Ypw/NTckBaw4la+jkk5dnSovmwQ+mxJTUPxUWl9t9MbKSZCKcJ9+cbe
+         y/5m8Pd/y4d83Uy8NeOKeuAGy1f68QeJgKox2UdF6yQ2fGjibOGs6Jp/CbEA94CuJLc5
+         0Y1cy/wJYUqSgjmJ7R9qLH0AAB5RTdn9YBV2Nn0DnxBNvsIEeEYZLMkiEkyG1Hfdc+gW
+         ohE8fDd0+DI7boKQxErueU/hgpGFkwAHhZ4KdjWei5dQqE9lF5o2EY/uJTdpU96qzjnl
+         pF3N8zsowUplkELdewoc3gv5u261pIZGZG4zCdfhRoJawy3ja0O9L+pMLpnMXh6CQj++
+         8VbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bk8Dl3EQzDBZc3sM1wqRJRPyzqsxBh5vDspKM3eX+so=;
-        b=IyT+NTI3OPwNUtoKr/D4FGiFjOy9PieMy6Es7lfFWyfiB2MI7iI38Wp+HLUZ7qjHcI
-         C7atNMFjI9mOdCnhl62I3W8dOcby629JaiyvhRaiLF3yk3APswxjJMNac5RTKxUVMWXa
-         QnGfC1zLH0RgynwaD55q04tLEKVN7IUva2Mvv3twtnLR0cxpBy+8YBXeHxn81e/4o6aP
-         90bXz8FF4G6OzPzRlOOBXUK88470XIssKi0JFO1iAeRQhKrNsorA7lz1/pzBDvZ1bBNG
-         fWpuAVmimyzDUbasl8pWyWjWu6d5Hw7rewYfmOhOf9oGZqKBNojoMoZD1KjvdZcP6oEC
-         Ilig==
-X-Gm-Message-State: APjAAAVg4762Sm5+Kg82VAmrvrOGq847mRmQPilIrOsLecNlgU8YjcBh
-        LSLfrEbkEfAivNQN7ZhJdLreFlyK
-X-Google-Smtp-Source: APXvYqxsNPkGShSg1gX/ncCQ6dLNr0YQg7ZPft5wm9SohggaPkW0AhZe8qWm+XdqGRvs6lUVE4JxwQ==
-X-Received: by 2002:a1c:4008:: with SMTP id n8mr22840668wma.121.1581954312699;
-        Mon, 17 Feb 2020 07:45:12 -0800 (PST)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+IMDOmFylD8uY29srTPJeuhzvALvSmjHT6oldeZvGlc=;
+        b=K8rlT9aD0Ua+vhA9obbiSyEbfNf6CJtIF8euHwsI+JfGPoirpjfswkWZj+4cmLe2Pp
+         PFwHjrGQyvxIg+koiSmiixC7Q+XFjUD+rYZMy0gH7sCFXmBAIJi7H+aL1BqJlvbpQUpL
+         Nf0kgVx5SEueWHBD/sjOA3dPTkyx68CMyy7ypXhUIx/AaKET8ZVpHJ4EP9WS+ZkLuy/c
+         NEVu8SSeHx1FO7On9jChU3npoy3K4zxmkqzir6JFcoklEHvXWEeZf35+MxUzLq2e9Cc0
+         Zfqkjp/AP/uII81pq14YP9q+gZjA3fK9J9oWG/GCdPGA8GAHn2upiw/NQ0XTy+v7g39j
+         JkSQ==
+X-Gm-Message-State: APjAAAWQxlbbS/SrMOtXy8PbRHpZ+z+bwetft0PaZWqHuGkd3HtftFSm
+        ECQ2Hmt7MQWyFL52i79/Srs=
+X-Google-Smtp-Source: APXvYqzwzcqOuX6mDbw5hwvhy07pOTJEJrMbcblybJM071pMDEkY0YwtF2pDWB7YbLXWi2/ItUl3fA==
+X-Received: by 2002:a05:600c:211:: with SMTP id 17mr22731033wmi.60.1581954314747;
+        Mon, 17 Feb 2020 07:45:14 -0800 (PST)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:180d:d2d6:6ff9:a6cb])
-        by smtp.gmail.com with ESMTPSA id r6sm1372658wrq.92.2020.02.17.07.45.11
+        by smtp.gmail.com with ESMTPSA id r6sm1372658wrq.92.2020.02.17.07.45.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2020 07:45:12 -0800 (PST)
+        Mon, 17 Feb 2020 07:45:14 -0800 (PST)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
         linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org,
         daniel@ffwll.ch
-Subject: RFC: Unpinned DMA-buf handling
-Date:   Mon, 17 Feb 2020 16:45:04 +0100
-Message-Id: <20200217154509.2265-1-christian.koenig@amd.com>
+Subject: [PATCH 2/5] drm/ttm: remove the backing store if no placement is given
+Date:   Mon, 17 Feb 2020 16:45:06 +0100
+Message-Id: <20200217154509.2265-3-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200217154509.2265-1-christian.koenig@amd.com>
+References: <20200217154509.2265-1-christian.koenig@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -73,15 +76,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi everyone,
+Pipeline removal of the BOs backing store when no placement is given
+during validation.
 
-hopefully the last iteration of those patches.
+Signed-off-by: Christian König <christian.koenig@amd.com>
+---
+ drivers/gpu/drm/ttm/ttm_bo.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-For now I've addressed the issue of unmapping imported BOs from the amdgpu page tables immediately by locking the page tables in place.
-
-For HMM handling we are getting the ability to invalidate BOs without locking the VM anyway, so this last TODO will probably go away rather soon.
-
-Place comment,
-Christian.
-
+diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+index 229205e499db..a56cb2a2b4ad 100644
+--- a/drivers/gpu/drm/ttm/ttm_bo.c
++++ b/drivers/gpu/drm/ttm/ttm_bo.c
+@@ -1225,6 +1225,18 @@ int ttm_bo_validate(struct ttm_buffer_object *bo,
+ 	uint32_t new_flags;
+ 
+ 	dma_resv_assert_held(bo->base.resv);
++
++	/*
++	 * Remove the backing store if no placement is given.
++	 */
++	if (!placement->num_placement && !placement->num_busy_placement) {
++		ret = ttm_bo_pipeline_gutting(bo);
++		if (ret)
++			return ret;
++
++		return ttm_tt_create(bo, false);
++	}
++
+ 	/*
+ 	 * Check whether we need to move buffer.
+ 	 */
+-- 
+2.17.1
 
