@@ -2,199 +2,158 @@ Return-Path: <SRS0=ePHU=4G=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA137C34047
-	for <linux-media@archiver.kernel.org>; Tue, 18 Feb 2020 20:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8753AC3404C
+	for <linux-media@archiver.kernel.org>; Tue, 18 Feb 2020 20:31:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A92072173E
-	for <linux-media@archiver.kernel.org>; Tue, 18 Feb 2020 20:23:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=shipmail.org header.i=@shipmail.org header.b="awz6Nlzx"
+	by mail.kernel.org (Postfix) with ESMTP id 5EB4424670
+	for <linux-media@archiver.kernel.org>; Tue, 18 Feb 2020 20:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1582057918;
+	bh=oh7trNinL5HnQ47vhaNDfdVl4Rcr0N6EQQ6S3MAkd/o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=aHhau/iMiRvLY6QPtoK9ZlPdKOZrw6zoLWSBK4pmKeq8VHbGpK0V5BH5qUn5aGm0/
+	 vmt8oX0DfK/qfwkKdEyr+nNX3bs9BKRTel55EKXjQdUI42EeyA0odrpW8jti65dbVE
+	 BnjB6RKKmruRhSO/V9N/pOnKTB/dCsYVgMQXGjSk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbgBRUXW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Feb 2020 15:23:22 -0500
-Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:56017 "EHLO
-        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726352AbgBRUXV (ORCPT
+        id S1726558AbgBRUbz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Feb 2020 15:31:55 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:37102 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726283AbgBRUby (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Feb 2020 15:23:21 -0500
-X-Greylist: delayed 343 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Feb 2020 15:23:20 EST
-Received: from localhost (localhost [127.0.0.1])
-        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id BB8753F6F6;
-        Tue, 18 Feb 2020 21:17:35 +0100 (CET)
-Authentication-Results: ste-pvt-msa1.bahnhof.se;
-        dkim=pass (1024-bit key; unprotected) header.d=shipmail.org header.i=@shipmail.org header.b=awz6Nlzx;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id VYDjpg6r_H54; Tue, 18 Feb 2020 21:17:33 +0100 (CET)
-Received: from mail1.shipmail.org (h-205-35.A357.priv.bahnhof.se [155.4.205.35])
-        (Authenticated sender: mb878879)
-        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id B7AEA3F6AD;
-        Tue, 18 Feb 2020 21:17:31 +0100 (CET)
-Received: from localhost.localdomain (h-205-35.A357.priv.bahnhof.se [155.4.205.35])
-        by mail1.shipmail.org (Postfix) with ESMTPSA id E43C0360025;
-        Tue, 18 Feb 2020 21:17:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
-        t=1582057050; bh=T/0IhugGOXdMY231ZCsQ33ivWJGd9t4TirGOuljarRk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=awz6NlzxdZ1un1usEw0tUfz9oqWOgfdqIfwXhrNtw7xYFW2vnZqaK0a0oiUyvSu9q
-         zLsNHZs+rhF90tl2uH6dgrUpZwQ8EvjG+8tBRDKK7A1bAbeymmEawJQKbzczdj9oxh
-         pYYk9qb2OvFAmSRDCG/F1Ar9/taCOde9lZ9qFK8c=
-Subject: Re: [PATCH 5/5] drm/amdgpu: implement amdgpu_gem_prime_move_notify v2
-To:     Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-References: <20200217154509.2265-1-christian.koenig@amd.com>
- <20200217154509.2265-6-christian.koenig@amd.com>
- <20200217175518.GL2363188@phenom.ffwll.local>
-From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28VMware=29?= 
-        <thomas_os@shipmail.org>
-Organization: VMware Inc.
-Message-ID: <f8ac7cbc-7c90-7119-735c-9f55adb6fa7f@shipmail.org>
-Date:   Tue, 18 Feb 2020 21:17:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Tue, 18 Feb 2020 15:31:54 -0500
+Received: by mail-oi1-f195.google.com with SMTP id q84so21512439oic.4;
+        Tue, 18 Feb 2020 12:31:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=J/VxJ3xiwdS6/BWNfUPWpgIlaLG5DINnCPtjKZgxKdM=;
+        b=to4rJbzvx2eabws6ZIqorBVPxeBvz1PRGBHQrRNnzrPBYB9b8OtUIAGxg4nWCQvMh7
+         Rt8zwcB1IjXcMtjJOkSvnwixmoP5lXTe7dnq6PgDXuv7UdXa9/lHhejQ7syN7BJY7FN4
+         BQ/ToBs3tzaw3CDnjWyBmxo7RJy2dMPsy3gFcDMgwKDHoxvQ2gOya3UH3ZKHQcN+kqDp
+         /qJuZ9B/itpHUcm9eeJ+NtPRyW4kzjukHbbK+T75Ng53AQoI0hfmvlDRZfTVa+vkFisz
+         X+LUEYdfRF0GNjrAYSmSg+GKKD07IAPNE83gX4L/aemV4gCsQBYAeP7lLPYB9aA5QTuO
+         MzKg==
+X-Gm-Message-State: APjAAAUgxRk/6MgwUq8bRHtb/oAIeiVFfzzXXo76aoBpC+h/oR0Q2abI
+        KFJw2OG2osp5nhOJRgaXtQ==
+X-Google-Smtp-Source: APXvYqz4+tMO0xRMFlD+Nj7EMFcqW+z3eblcWmDWok4aK303S3lbrgXPLQt5ovOmoCv1EkypuhWhDA==
+X-Received: by 2002:aca:af50:: with SMTP id y77mr2515745oie.8.1582057913671;
+        Tue, 18 Feb 2020 12:31:53 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id y25sm1716518oto.27.2020.02.18.12.31.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Feb 2020 12:31:52 -0800 (PST)
+Received: (nullmailer pid 19094 invoked by uid 1000);
+        Tue, 18 Feb 2020 20:31:51 -0000
+Date:   Tue, 18 Feb 2020 14:31:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     matthias.bgg@kernel.org
+Cc:     mark.rutland@arm.com, ck.hu@mediatek.com, p.zabel@pengutronix.de,
+        airlied@linux.ie, mturquette@baylibre.com, sboyd@kernel.org,
+        ulrich.hecht+renesas@gmail.com, laurent.pinchart@ideasonboard.com,
+        enric.balletbo@collabora.com, devicetree@vger.kernel.org,
+        drinkcat@chromium.org, frank-w@public-files.de,
+        sean.wang@mediatek.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, wens@csie.org,
+        linux-mediatek@lists.infradead.org, rdunlap@infradead.org,
+        hsinyi@chromium.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        Matthias Brugger <mbrugger@suse.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v7 02/13] dt-bindings: display: mediatek: Add mmsys
+ binding description
+Message-ID: <20200218203151.GA15948@bogus>
+References: <20200213201953.15268-1-matthias.bgg@kernel.org>
+ <20200213201953.15268-3-matthias.bgg@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200217175518.GL2363188@phenom.ffwll.local>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200213201953.15268-3-matthias.bgg@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2/17/20 6:55 PM, Daniel Vetter wrote:
-> On Mon, Feb 17, 2020 at 04:45:09PM +0100, Christian König wrote:
->> Implement the importer side of unpinned DMA-buf handling.
->>
->> v2: update page tables immediately
->>
->> Signed-off-by: Christian König <christian.koenig@amd.com>
->> ---
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c | 66 ++++++++++++++++++++-
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_object.c  |  6 ++
->>   2 files changed, 71 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
->> index 770baba621b3..48de7624d49c 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
->> @@ -453,7 +453,71 @@ amdgpu_dma_buf_create_obj(struct drm_device *dev, struct dma_buf *dma_buf)
->>   	return ERR_PTR(ret);
->>   }
->>   
->> +/**
->> + * amdgpu_dma_buf_move_notify - &attach.move_notify implementation
->> + *
->> + * @attach: the DMA-buf attachment
->> + *
->> + * Invalidate the DMA-buf attachment, making sure that the we re-create the
->> + * mapping before the next use.
->> + */
->> +static void
->> +amdgpu_dma_buf_move_notify(struct dma_buf_attachment *attach)
->> +{
->> +	struct drm_gem_object *obj = attach->importer_priv;
->> +	struct ww_acquire_ctx *ticket = dma_resv_locking_ctx(obj->resv);
->> +	struct amdgpu_bo *bo = gem_to_amdgpu_bo(obj);
->> +	struct amdgpu_device *adev = amdgpu_ttm_adev(bo->tbo.bdev);
->> +	struct ttm_operation_ctx ctx = { false, false };
->> +	struct ttm_placement placement = {};
->> +	struct amdgpu_vm_bo_base *bo_base;
->> +	int r;
->> +
->> +	if (bo->tbo.mem.mem_type == TTM_PL_SYSTEM)
->> +		return;
->> +
->> +	r = ttm_bo_validate(&bo->tbo, &placement, &ctx);
->> +	if (r) {
->> +		DRM_ERROR("Failed to invalidate DMA-buf import (%d))\n", r);
->> +		return;
->> +	}
->> +
->> +	for (bo_base = bo->vm_bo; bo_base; bo_base = bo_base->next) {
->> +		struct amdgpu_vm *vm = bo_base->vm;
->> +		struct dma_resv *resv = vm->root.base.bo->tbo.base.resv;
->> +
->> +		if (ticket) {
-> Yeah so this is kinda why I've been a total pain about the exact semantics
-> of the move_notify hook. I think we should flat-out require that importers
-> _always_ have a ticket attach when they call this, and that they can cope
-> with additional locks being taken (i.e. full EDEADLCK) handling.
->
-> Simplest way to force that contract is to add a dummy 2nd ww_mutex lock to
-> the dma_resv object, which we then can take #ifdef
-> CONFIG_WW_MUTEX_SLOWPATH_DEBUG. Plus mabye a WARN_ON(!ticket).
->
-> Now the real disaster is how we handle deadlocks. Two issues:
->
-> - Ideally we'd keep any lock we've taken locked until the end, it helps
->    needless backoffs. I've played around a bit with that but not even poc
->    level, just an idea:
->
-> https://cgit.freedesktop.org/~danvet/drm/commit/?id=b1799c5a0f02df9e1bb08d27be37331255ab7582
->
->    Idea is essentially to track a list of objects we had to lock as part of
->    the ttm_bo_validate of the main object.
->
-> - Second one is if we get a EDEADLCK on one of these sublocks (like the
->    one here). We need to pass that up the entire callchain, including a
->    temporary reference (we have to drop locks to do the ww_mutex_lock_slow
->    call), and need a custom callback to drop that temporary reference
->    (since that's all driver specific, might even be internal ww_mutex and
->    not anything remotely looking like a normal dma_buf). This probably
->    needs the exec util helpers from ttm, but at the dma_resv level, so that
->    we can do something like this:
->
-> struct dma_resv_ticket {
-> 	struct ww_acquire_ctx base;
->
-> 	/* can be set by anyone (including other drivers) that got hold of
-> 	 * this ticket and had to acquire some new lock. This lock might
-> 	 * protect anything, including driver-internal stuff, and isn't
-> 	 * required to be a dma_buf or even just a dma_resv. */
-> 	struct ww_mutex *contended_lock;
->
-> 	/* callback which the driver (which might be a dma-buf exporter
-> 	 * and not matching the driver that started this locking ticket)
-> 	 * sets together with @contended_lock, for the main driver to drop
-> 	 * when it calls dma_resv_unlock on the contended_lock. */
-> 	void (drop_ref*)(struct ww_mutex *contended_lock);
-> };
->
-> This is all supremely nasty (also ttm_bo_validate would need to be
-> improved to handle these sublocks and random new objects that could force
-> a ww_mutex_lock_slow).
->
-Just a short comment on this:
+On Thu, Feb 13, 2020 at 09:19:42PM +0100, matthias.bgg@kernel.org wrote:
+> From: Matthias Brugger <mbrugger@suse.com>
+> 
+> The MediaTek DRM has a block called mmsys, which sets
+> the routing and enables the different blocks.
+> This patch adds one line for the mmsys bindings description and changes
+> the mmsys description to use the generic form of referring to a specific
+> Soc.
+> 
+> Signed-off-by: Matthias Brugger <mbrugger@suse.com>
+> 
+> ---
+> 
+> Changes in v7:
+> - add hint to the mmsys binding document
+> - make mmsys description generic
+> - fix typo in commit message
+> 
+> Changes in v6: None
+> Changes in v5: None
+> Changes in v4: None
+> Changes in v3: None
+> Changes in v2: None
+> 
+>  .../bindings/display/mediatek/mediatek,disp.txt          | 3 +++
+>  .../bindings/display/mediatek/mediatek,mmsys.txt         | 9 +--------
+>  2 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
+> index b91e709db7a4..8e453026ef78 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
+> @@ -24,6 +24,7 @@ connected to.
+>  For a description of the display interface sink function blocks, see
+>  Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt and
+>  Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.txt.
+> +Documentation/devicetree/bindings/display/mediatek/mediatek,mmsys.txt.
+>  
+>  Required properties (all function blocks):
+>  - compatible: "mediatek,<chip>-disp-<function>", one of
+> @@ -43,7 +44,9 @@ Required properties (all function blocks):
+>  	"mediatek,<chip>-dpi"        		- DPI controller, see mediatek,dpi.txt
+>  	"mediatek,<chip>-disp-mutex" 		- display mutex
+>  	"mediatek,<chip>-disp-od"    		- overdrive
+> +	"mediatek,<chip>-mmsys", "syscon"	- provide clocks and components management
+>    the supported chips are mt2701, mt2712 and mt8173.
+> +
+>  - reg: Physical base address and length of the function block register space
+>  - interrupts: The interrupt signal from the function block (required, except for
+>    merge and split function blocks).
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mmsys.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,mmsys.txt
+> index 301eefbe1618..7bbadee820e3 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,mmsys.txt
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mmsys.txt
+> @@ -5,14 +5,7 @@ The Mediatek mmsys controller provides various clocks to the system.
+>  
+>  Required Properties:
+>  
+> -- compatible: Should be one of:
+> -	- "mediatek,mt2701-mmsys", "syscon"
+> -	- "mediatek,mt2712-mmsys", "syscon"
+> -	- "mediatek,mt6779-mmsys", "syscon"
+> -	- "mediatek,mt6797-mmsys", "syscon"
+> -	- "mediatek,mt7623-mmsys", "mediatek,mt2701-mmsys", "syscon"
 
-Neither the currently used wait-die or the wound-wait algorithm 
-*strictly* requires a slow lock on the contended lock. For wait-die it's 
-just very convenient since it makes us sleep instead of spinning with 
--EDEADLK on the contended lock. For wound-wait IIRC one could just 
-immediately restart the whole locking transaction after an -EDEADLK, and 
-the transaction would automatically end up waiting on the contended 
-lock, provided the mutex lock stealing is not allowed. There is however 
-a possibility that the transaction will be wounded again on another 
-lock, taken before the contended lock, but I think there are ways to 
-improve the wound-wait algorithm to reduce that probability.
+You've lost this information about the fallback...
 
-So in short, choosing the wound-wait algorithm instead of wait-die and 
-perhaps modifying the ww mutex code somewhat would probably help passing 
-an -EDEADLK up the call chain without requiring passing the contended 
-lock, as long as each locker releases its own locks when receiving an 
--EDEADLK.
+> -	- "mediatek,mt8173-mmsys", "syscon"
+> -	- "mediatek,mt8183-mmsys", "syscon"
+> +- compatible: "mediatek,<chip>-mmsys"
 
-/Thomas
+You are just going to have to add these all back when this is converted 
+to schema.
 
-
-
-
+Rob
