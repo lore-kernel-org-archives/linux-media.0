@@ -2,158 +2,95 @@ Return-Path: <SRS0=ePHU=4G=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8753AC3404C
-	for <linux-media@archiver.kernel.org>; Tue, 18 Feb 2020 20:31:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4B04C34047
+	for <linux-media@archiver.kernel.org>; Tue, 18 Feb 2020 20:33:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5EB4424670
-	for <linux-media@archiver.kernel.org>; Tue, 18 Feb 2020 20:31:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582057918;
-	bh=oh7trNinL5HnQ47vhaNDfdVl4Rcr0N6EQQ6S3MAkd/o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=aHhau/iMiRvLY6QPtoK9ZlPdKOZrw6zoLWSBK4pmKeq8VHbGpK0V5BH5qUn5aGm0/
-	 vmt8oX0DfK/qfwkKdEyr+nNX3bs9BKRTel55EKXjQdUI42EeyA0odrpW8jti65dbVE
-	 BnjB6RKKmruRhSO/V9N/pOnKTB/dCsYVgMQXGjSk=
+	by mail.kernel.org (Postfix) with ESMTP id 98D1A2067D
+	for <linux-media@archiver.kernel.org>; Tue, 18 Feb 2020 20:33:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgBRUbz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Feb 2020 15:31:55 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:37102 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726283AbgBRUby (ORCPT
+        id S1726558AbgBRUd1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Feb 2020 15:33:27 -0500
+Received: from plasma4.jpberlin.de ([80.241.57.33]:47871 "EHLO
+        plasma4.jpberlin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726283AbgBRUd1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Feb 2020 15:31:54 -0500
-Received: by mail-oi1-f195.google.com with SMTP id q84so21512439oic.4;
-        Tue, 18 Feb 2020 12:31:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=J/VxJ3xiwdS6/BWNfUPWpgIlaLG5DINnCPtjKZgxKdM=;
-        b=to4rJbzvx2eabws6ZIqorBVPxeBvz1PRGBHQrRNnzrPBYB9b8OtUIAGxg4nWCQvMh7
-         Rt8zwcB1IjXcMtjJOkSvnwixmoP5lXTe7dnq6PgDXuv7UdXa9/lHhejQ7syN7BJY7FN4
-         BQ/ToBs3tzaw3CDnjWyBmxo7RJy2dMPsy3gFcDMgwKDHoxvQ2gOya3UH3ZKHQcN+kqDp
-         /qJuZ9B/itpHUcm9eeJ+NtPRyW4kzjukHbbK+T75Ng53AQoI0hfmvlDRZfTVa+vkFisz
-         X+LUEYdfRF0GNjrAYSmSg+GKKD07IAPNE83gX4L/aemV4gCsQBYAeP7lLPYB9aA5QTuO
-         MzKg==
-X-Gm-Message-State: APjAAAUgxRk/6MgwUq8bRHtb/oAIeiVFfzzXXo76aoBpC+h/oR0Q2abI
-        KFJw2OG2osp5nhOJRgaXtQ==
-X-Google-Smtp-Source: APXvYqz4+tMO0xRMFlD+Nj7EMFcqW+z3eblcWmDWok4aK303S3lbrgXPLQt5ovOmoCv1EkypuhWhDA==
-X-Received: by 2002:aca:af50:: with SMTP id y77mr2515745oie.8.1582057913671;
-        Tue, 18 Feb 2020 12:31:53 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y25sm1716518oto.27.2020.02.18.12.31.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2020 12:31:52 -0800 (PST)
-Received: (nullmailer pid 19094 invoked by uid 1000);
-        Tue, 18 Feb 2020 20:31:51 -0000
-Date:   Tue, 18 Feb 2020 14:31:51 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     matthias.bgg@kernel.org
-Cc:     mark.rutland@arm.com, ck.hu@mediatek.com, p.zabel@pengutronix.de,
-        airlied@linux.ie, mturquette@baylibre.com, sboyd@kernel.org,
-        ulrich.hecht+renesas@gmail.com, laurent.pinchart@ideasonboard.com,
-        enric.balletbo@collabora.com, devicetree@vger.kernel.org,
-        drinkcat@chromium.org, frank-w@public-files.de,
-        sean.wang@mediatek.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, wens@csie.org,
-        linux-mediatek@lists.infradead.org, rdunlap@infradead.org,
-        hsinyi@chromium.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        Matthias Brugger <mbrugger@suse.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v7 02/13] dt-bindings: display: mediatek: Add mmsys
- binding description
-Message-ID: <20200218203151.GA15948@bogus>
-References: <20200213201953.15268-1-matthias.bgg@kernel.org>
- <20200213201953.15268-3-matthias.bgg@kernel.org>
+        Tue, 18 Feb 2020 15:33:27 -0500
+X-Greylist: delayed 310 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Feb 2020 15:33:25 EST
+Received: from spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122])
+        by plasma.jpberlin.de (Postfix) with ESMTP id 189D8C2DDA;
+        Tue, 18 Feb 2020 21:28:11 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from plasma.jpberlin.de ([80.241.56.68])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id 0SmNjoT8MvK2; Tue, 18 Feb 2020 21:28:07 +0100 (CET)
+Received: from webmail.opensynergy.com (unknown [217.66.60.5])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "webmail.opensynergy.com", Issuer "GeoTrust EV RSA CA 2018" (not verified))
+        (Authenticated sender: opensynergy@jpberlin.de)
+        by plasma.jpberlin.de (Postfix) with ESMTPSA id BCAA9C2DDC;
+        Tue, 18 Feb 2020 21:28:06 +0100 (CET)
+Received: from os-lin-dmo.localdomain (10.25.255.1) by MXS01.open-synergy.com
+ (10.25.10.17) with Microsoft SMTP Server (TLS) id 14.3.468.0; Tue, 18 Feb
+ 2020 21:28:06 +0100
+From:   Dmitry Sepp <dmitry.sepp@opensynergy.com>
+To:     <linux-media@vger.kernel.org>
+CC:     <virtio-dev@lists.oasis-open.org>, <acourbot@chromium.org>,
+        <alexlau@chromium.org>, <daniel@ffwll.ch>, <dgreid@chromium.org>,
+        <dstaessens@chromium.org>, <egranata@google.com>,
+        <fziglio@redhat.com>, <hverkuil@xs4all.nl>,
+        <keiichiw@chromium.org>, <kraxel@redhat.com>,
+        <marcheu@chromium.org>, <posciak@chromium.org>,
+        <spice-devel@lists.freedesktop.org>, <stevensd@chromium.org>,
+        <tfiga@chromium.org>, <uril@redhat.com>,
+        <samiullah.khawaja@opensynergy.com>, <kiran.pawar@opensynergy.com>
+Subject: [PATCH v2 0/1] Virtio Video V4L2 driver 
+Date:   Tue, 18 Feb 2020 21:27:52 +0100
+Message-ID: <20200218202753.652093-1-dmitry.sepp@opensynergy.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200213201953.15268-3-matthias.bgg@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.25.255.1]
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 09:19:42PM +0100, matthias.bgg@kernel.org wrote:
-> From: Matthias Brugger <mbrugger@suse.com>
-> 
-> The MediaTek DRM has a block called mmsys, which sets
-> the routing and enables the different blocks.
-> This patch adds one line for the mmsys bindings description and changes
-> the mmsys description to use the generic form of referring to a specific
-> Soc.
-> 
-> Signed-off-by: Matthias Brugger <mbrugger@suse.com>
-> 
-> ---
-> 
-> Changes in v7:
-> - add hint to the mmsys binding document
-> - make mmsys description generic
-> - fix typo in commit message
-> 
-> Changes in v6: None
-> Changes in v5: None
-> Changes in v4: None
-> Changes in v3: None
-> Changes in v2: None
-> 
->  .../bindings/display/mediatek/mediatek,disp.txt          | 3 +++
->  .../bindings/display/mediatek/mediatek,mmsys.txt         | 9 +--------
->  2 files changed, 4 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
-> index b91e709db7a4..8e453026ef78 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
-> @@ -24,6 +24,7 @@ connected to.
->  For a description of the display interface sink function blocks, see
->  Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt and
->  Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.txt.
-> +Documentation/devicetree/bindings/display/mediatek/mediatek,mmsys.txt.
->  
->  Required properties (all function blocks):
->  - compatible: "mediatek,<chip>-disp-<function>", one of
-> @@ -43,7 +44,9 @@ Required properties (all function blocks):
->  	"mediatek,<chip>-dpi"        		- DPI controller, see mediatek,dpi.txt
->  	"mediatek,<chip>-disp-mutex" 		- display mutex
->  	"mediatek,<chip>-disp-od"    		- overdrive
-> +	"mediatek,<chip>-mmsys", "syscon"	- provide clocks and components management
->    the supported chips are mt2701, mt2712 and mt8173.
-> +
->  - reg: Physical base address and length of the function block register space
->  - interrupts: The interrupt signal from the function block (required, except for
->    merge and split function blocks).
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mmsys.txt b/Documentation/devicetree/bindings/display/mediatek/mediatek,mmsys.txt
-> index 301eefbe1618..7bbadee820e3 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,mmsys.txt
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mmsys.txt
-> @@ -5,14 +5,7 @@ The Mediatek mmsys controller provides various clocks to the system.
->  
->  Required Properties:
->  
-> -- compatible: Should be one of:
-> -	- "mediatek,mt2701-mmsys", "syscon"
-> -	- "mediatek,mt2712-mmsys", "syscon"
-> -	- "mediatek,mt6779-mmsys", "syscon"
-> -	- "mediatek,mt6797-mmsys", "syscon"
-> -	- "mediatek,mt7623-mmsys", "mediatek,mt2701-mmsys", "syscon"
+Hi all,
 
-You've lost this information about the fallback...
+This is a v4l2 virtio video driver for the virtio-video device
+specification v3 [1].
 
-> -	- "mediatek,mt8173-mmsys", "syscon"
-> -	- "mediatek,mt8183-mmsys", "syscon"
-> +- compatible: "mediatek,<chip>-mmsys"
+The first version of the driver was introduced here [2].
 
-You are just going to have to add these all back when this is converted 
-to schema.
+Changes v1 -> v2:
+* support the v3 spec (mostly)
+* add a module parameter to ask for pages from ZONE_DMA
 
-Rob
+What is not implemented:
+* Plane layout flags should be used to propagate number of planes to
+  user-space
+* There is no real use of stream creation with bitstream format in the
+  parameter list. The driver just uses the first bitstream format from
+  the list.
+* Setting bitrate is done in a different way compared to the spec. This
+  is because it has been already agreed on that the way the spec
+  currently describes it requires changes.
+
+Potential improvements:
+* Do not send stream_create from open. Use corresponding state machine
+  condition to do this.
+* Do not send stream_destroy from close. Do it in reqbufs(0).
+* Cache format and control settings. Reduce calls to the device.
+
+Best regards,
+Dmitry.
+
+[1] https://markmail.org/message/dmw3pr4fuajvarth
+[2] https://markmail.org/message/wnnv6r6myvgb5at6
+
+
