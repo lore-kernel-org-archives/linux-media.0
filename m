@@ -2,146 +2,137 @@ Return-Path: <SRS0=BWRz=4H=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E4D8C34047
-	for <linux-media@archiver.kernel.org>; Wed, 19 Feb 2020 12:59:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C636AC34050
+	for <linux-media@archiver.kernel.org>; Wed, 19 Feb 2020 13:57:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E9BEE20801
-	for <linux-media@archiver.kernel.org>; Wed, 19 Feb 2020 12:59:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D7092176D
+	for <linux-media@archiver.kernel.org>; Wed, 19 Feb 2020 13:57:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J4WuRD16"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sWeSfpFG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727581AbgBSM7U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Feb 2020 07:59:20 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:40443 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726622AbgBSM7T (ORCPT
+        id S1727597AbgBSN5H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Feb 2020 08:57:07 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:34254 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726725AbgBSN5H (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Feb 2020 07:59:19 -0500
-Received: by mail-wr1-f68.google.com with SMTP id t3so405767wru.7
-        for <linux-media@vger.kernel.org>; Wed, 19 Feb 2020 04:59:17 -0800 (PST)
+        Wed, 19 Feb 2020 08:57:07 -0500
+Received: by mail-ot1-f68.google.com with SMTP id j16so214136otl.1
+        for <linux-media@vger.kernel.org>; Wed, 19 Feb 2020 05:57:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=8j5/kNs2THmmZJqIvqiDhfvU0TM48N+fj+MtL6vI19M=;
-        b=J4WuRD16ngxEYmlnmMZAPVtqDQR3v1UPhrNxwbM3kx6kfUAbP95toCxkG26rF22r/A
-         YmWIuME+ClLuCKh3VUUGQHNXuoVNeMLjhQ3yCWwMufYEqHLYewCUfvRPiixifWVrdyqp
-         qvhDZFNyGX+oZGNyvsWiMVYNRPPSbEdUTtnNMMpBlirxuT1XVmB6wd2iR4o3LfHQRQGK
-         bIYXaasns0YTpZocppiC1WLyLOXpuUMNAiJsaPilNu1edG+BnBwkQC3hlQgnzerG7r6r
-         wYD+UG1ftj33FpQVURyyfcaqSCo1VzofJmgTodBOCOFi71nOnEbG3trCNbmjhMsExJs+
-         SLJQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j8vovJNm85f5usRJ1zcPBGMV6jnEx/0KxRYN+gnAQ+M=;
+        b=sWeSfpFGruDVn86qR+hCqpqBGNLZZx5Ph0QBUt4bcsFc0tzS5U/AbhqIXyoS+JQfoZ
+         HrmUnapjD0UL++fI2dmE/qJEkCECxyj//5I4MazefjyAgWbbJ1eyiO4XA0+JkqVMcGWQ
+         Y5MZjm1KWzu9+RiNNXAgTp8KGpmjDAgdTuHcfTVzISUhOjPxXjLuRcQErd3iSgaiIpze
+         4n7NStpwrhTCtjwFfDgZ9d9V2oB44EawnMZcaUcgiz2rxUz22Qb1nga0yjVi6GaE1JQM
+         VhhTsKfzwt0faqsEm93hldVBz/D2L2GcZ67t/knGkDweK3piMtMZd5OETk4v3rnCnwah
+         vekQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8j5/kNs2THmmZJqIvqiDhfvU0TM48N+fj+MtL6vI19M=;
-        b=iJ9Coy5ZlK7DgQWigGJfvbz3fBpbiAOWUyZoyUHK1hg8BaDVapJaALVzF6iD6anxcv
-         sCkTtPrMf7MSt9kWGhGUq6U3PuSIvjHdAoD7jMK7+4rXRcJIDTj6cT/m+iXWG/HHE3dn
-         Qz4o9bsSl/q+wNw0m0d+Hb3ww5O7CnfbHHZHVMlAk5gS5xCZnGGoWBnFd9Ow3LT2CdKm
-         koLaCDtIaMaxI08l/8DO9JByx6tC8osy5C1yNs4gJKVv6HoUtzRClZGgrr4E8csjpeOc
-         QzjpTLSdLE8eZQZxbyYjXSFAGrUZ2+IT60Qlx241EyjOhK2/2d5YsePPRdOwYclNiiiD
-         ab/w==
-X-Gm-Message-State: APjAAAXK/yGTqJWU56Y+eFHBaKCh4qmXt70OeUyiIocgsAtcA6DPt3BJ
-        tRp4weHNEhIUq8AsZJj5Lnc=
-X-Google-Smtp-Source: APXvYqyccjbJFlo0ApV1/Ph6tQqkttn13pN8Qrc+oUbYn50TU/Ft80EhI7pYqS8u1nGZCY4dlwAULw==
-X-Received: by 2002:a5d:4a89:: with SMTP id o9mr34478332wrq.32.1582117156928;
-        Wed, 19 Feb 2020 04:59:16 -0800 (PST)
-Received: from abel.fritz.box ([2a02:908:1252:fb60:90ea:9d7:18a3:895e])
-        by smtp.gmail.com with ESMTPSA id h2sm3079024wrt.45.2020.02.19.04.59.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 04:59:16 -0800 (PST)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        daniel@ffwll.ch
-Subject: [PATCH 7/7] dma-buf: make move_notify mandatory if importer_ops are provided
-Date:   Wed, 19 Feb 2020 13:59:10 +0100
-Message-Id: <20200219125910.89147-7-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200219125910.89147-1-christian.koenig@amd.com>
-References: <20200219125910.89147-1-christian.koenig@amd.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j8vovJNm85f5usRJ1zcPBGMV6jnEx/0KxRYN+gnAQ+M=;
+        b=EdoFr3MxHVPJ+NxwbocmDmTox+wR2ItLIGLdZmplfkJ0tpUZUmFImV9eJfArQ79c0H
+         pC20ctesSwQMyk1nDfj03/wz1SDry9FHYzLzz987X0Gvf1rxXqGb2NCumO38E+sW+5qk
+         smN4ikonp7b3o3KvN6rD7mOxMO7VovGZpIdro2Ak3lV5MrUeF3mf6/me5+vSW6EvXdJ8
+         BSxVVe65O4k8pYlLlqS9VmmZqfPOx0yb+dIe0yi45LcoFQ66nOL59LmC0hzOJukb3JLS
+         Bnd/LawswkGDU0bmsQ2kWIi0kihrB8SGBLYe8w61RKx8n1RVnXp7Q5cbRrxTioc6bKyH
+         BueQ==
+X-Gm-Message-State: APjAAAVqmFbwRODQ9kYhmwWeAuQ/zLFw5IqimGiID6mtBjasEbSedYVQ
+        8DcU4xXywpcT34ZfDMjK+AZ2RC6ZlQLySLy6Is0=
+X-Google-Smtp-Source: APXvYqxobnzqgBR/e8PcDr4UtJBmbiIcf1koeAjfRvRXQpVMjv0sBo/r0Koh2tq5Hw9XfirY5kkDRQ5O76+4MCO41f4=
+X-Received: by 2002:a9d:64ca:: with SMTP id n10mr19765073otl.325.1582120626053;
+ Wed, 19 Feb 2020 05:57:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <CA+V-a8tnsxJP2CfwgrkPum6mYQEEP9+0=Fap4dFu-3x+fXdadw@mail.gmail.com>
+ <20200219120808.GA5070@pendragon.ideasonboard.com> <CA+V-a8ux+8=PzWupMnpNRZsZCwG4VvVfN+dYayhEG=x927SWFg@mail.gmail.com>
+ <20200219123247.GA9960@pendragon.ideasonboard.com>
+In-Reply-To: <20200219123247.GA9960@pendragon.ideasonboard.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 19 Feb 2020 13:56:39 +0000
+Message-ID: <CA+V-a8vcJiXwT5L2G8+HyrrxQOSJt0Zz+TeT4AbmQqcqxe7feg@mail.gmail.com>
+Subject: Re: [Query] : DT: Adding mezzanine board
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This makes the move_notify callback mandatory when the importer_ops are
-provided. Since amdgpu is now migrated it doesn't make much sense
-anymore to allow this.
+Hi Laurent,
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
----
- drivers/dma-buf/dma-buf.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+On Wed, Feb 19, 2020 at 12:33 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Prabhakar,
+>
+> On Wed, Feb 19, 2020 at 12:25:37PM +0000, Lad, Prabhakar wrote:
+> > On Wed, Feb 19, 2020 at 12:08 PM Laurent Pinchart wrote:
+> > > On Wed, Feb 19, 2020 at 11:42:42AM +0000, Lad, Prabhakar wrote:
+> > > > Hi,
+> > > >
+> > > > I am working Renesas RZ/Gx platforms, these boards have support for
+> > > > connecting MIPI adapter mezzanine board [1]. To enable this support I
+> > > > am planning to create a dtsi which will include the board file and
+> > > > enable the necessary VIN/CSI and the camera endpoint.
+> > > >
+> > > > For example: to add support for G2E board I would create a file named
+> > > > r8a774c0-cat874-mipi-adapter.dtsi which will include the board file
+> > > > r8a774c0.dtsi and enable necessary VIN/CSI/Camera endpoint and when
+> > > > user wants to enable this support for the G2E board he could just
+> > > > include r8a774c0-cat874-mipi-adapter.dtsi to r8a774c0-cat874.dts
+> > > >
+> > > > Would this be a good approach or is there an alternative way which I am missing.
+> > >
+> > > DT overlays are another option. They can't be applied on a running
+> > > system though. It doesn't seem like the mezzanine boards can be detected
+> > > by the boot loader, so overlays can't be applied automatically before
+> > > the kernel is started. One option would still be to provide them to
+> > > U-Boot and apply a selected overlay based on environment variables.
+> > > Another option would be to apply overlays as part of the build process,
+> > > which shouldn't require modifying the DT sources to #include the .dtsi
+> > > file for the mezzanine board.
+> >
+> > Thank you for the insight, overlay is something which I wanted to
+> > avoid and have the dtb as part of kernel itself. How about just
+> > creating r8a774c0-cat874-mipi-adapter.dts which would include
+> > r8a774c0-cat874.dts file and enable the VIN/CSI/Camera endpoint, so
+> > the user would just use r8a774c0-cat874-mipi-adapter.dtb file when the
+> > mipi adapter is connected ?
+>
+> That would restrict usage of the mezzanine board to a particular base
+> board, while in the general case there could be different types of base
+> boards compatible with a set of mezzanines.
+>
+> The reason why I mentioned overlay isn't really to apply them
+> dynamically, but for the set of tools around them. Bootloaders can apply
+> overlays, and we can also apply overlays to a DTB as part of a build
+> process, without patching the source. Is there a particular reason why
+> you would prefer avoiding them ?
+>
+Just didnt wanted to maintain to the DT overlay separately, but looks like
+overlay itself would be a way to go.
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 6d0a82d1b23d..f4ace9af2191 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -677,10 +677,12 @@ dma_buf_dynamic_attach(struct dma_buf *dmabuf, struct device *dev,
- 	struct dma_buf_attachment *attach;
- 	int ret;
- 
--	/* TODO: make move_notify mandatory if importer_ops are provided. */
- 	if (WARN_ON(!dmabuf || !dev))
- 		return ERR_PTR(-EINVAL);
- 
-+	if (WARN_ON(importer_ops && !importer_ops->move_notify))
-+		return ERR_PTR(-EINVAL);
-+
- 	attach = kzalloc(sizeof(*attach), GFP_KERNEL);
- 	if (!attach)
- 		return ERR_PTR(-ENOMEM);
-@@ -877,8 +879,7 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
- 
- 	if (dma_buf_is_dynamic(attach->dmabuf)) {
- 		dma_resv_assert_held(attach->dmabuf->resv);
--		if (!attach->importer_ops->move_notify ||
--		    !IS_ENABLED(CONFIG_DMABUF_MOVE_NOTIFY)) {
-+		if (!IS_ENABLED(CONFIG_DMABUF_MOVE_NOTIFY)) {
- 			r = dma_buf_pin(attach);
- 			if (r)
- 				return ERR_PTR(r);
-@@ -890,8 +891,7 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
- 		sg_table = ERR_PTR(-ENOMEM);
- 
- 	if (IS_ERR(sg_table) && dma_buf_is_dynamic(attach->dmabuf) &&
--	    (!attach->importer_ops->move_notify ||
--	     !IS_ENABLED(CONFIG_DMABUF_MOVE_NOTIFY)))
-+	     !IS_ENABLED(CONFIG_DMABUF_MOVE_NOTIFY))
- 		dma_buf_unpin(attach);
- 
- 	if (!IS_ERR(sg_table) && attach->dmabuf->ops->cache_sgt_mapping) {
-@@ -934,8 +934,7 @@ void dma_buf_unmap_attachment(struct dma_buf_attachment *attach,
- 	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table, direction);
- 
- 	if (dma_buf_is_dynamic(attach->dmabuf) &&
--	    (!attach->importer_ops->move_notify ||
--	     !IS_ENABLED(CONFIG_DMABUF_MOVE_NOTIFY)))
-+	    !IS_ENABLED(CONFIG_DMABUF_MOVE_NOTIFY))
- 		dma_buf_unpin(attach);
- }
- EXPORT_SYMBOL_GPL(dma_buf_unmap_attachment);
-@@ -955,7 +954,7 @@ void dma_buf_move_notify(struct dma_buf *dmabuf)
- 	dma_resv_assert_held(dmabuf->resv);
- 
- 	list_for_each_entry(attach, &dmabuf->attachments, node)
--		if (attach->importer_ops && attach->importer_ops->move_notify)
-+		if (attach->importer_ops)
- 			attach->importer_ops->move_notify(attach);
- }
- EXPORT_SYMBOL_GPL(dma_buf_move_notify);
--- 
-2.17.1
+Thank you for the inputs.
 
+Cheers,
+--Prabhakar
+
+> > > > [1] https://github.com/Kevin-WSCU/96Boards-Camera/blob/master/AISTARVISION%20MIPI%20Adapter%20V2.1/AISTARVISION%20MIPI%20Adapter%20V2.1.pdf
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
