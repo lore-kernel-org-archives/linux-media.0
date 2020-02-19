@@ -2,106 +2,111 @@ Return-Path: <SRS0=BWRz=4H=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 254A1C34047
-	for <linux-media@archiver.kernel.org>; Wed, 19 Feb 2020 12:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC912C34047
+	for <linux-media@archiver.kernel.org>; Wed, 19 Feb 2020 12:59:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F28092465D
-	for <linux-media@archiver.kernel.org>; Wed, 19 Feb 2020 12:33:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 88FD324670
+	for <linux-media@archiver.kernel.org>; Wed, 19 Feb 2020 12:59:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vc+hyEXO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BczVt1wh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbgBSMdI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Feb 2020 07:33:08 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:35068 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727295AbgBSMdH (ORCPT
+        id S1727487AbgBSM7P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Feb 2020 07:59:15 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:41710 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbgBSM7O (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Feb 2020 07:33:07 -0500
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 80C7D2F9;
-        Wed, 19 Feb 2020 13:33:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1582115585;
-        bh=uYte+tEM0KDg6MWtqZZYY2Gopp4CM8rVVlnj/B+TRzI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vc+hyEXOzp41+uOMlFnbaZlPR3CUFbFBcLGCNBVPw4YOO9EYYjKyoM7OHcLvjoDJc
-         T0oV5aOMiaquE5yrdegfjlHGFFokoTus3pc93aNPcFwD2aFLQG2LLmZ+IJR20cvy9b
-         SBpBSYi+JZ6v5gNnhtN5UtXjQMHPEqH+0erp38xY=
-Date:   Wed, 19 Feb 2020 14:32:47 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media <linux-media@vger.kernel.org>
-Subject: Re: [Query] : DT: Adding mezzanine board
-Message-ID: <20200219123247.GA9960@pendragon.ideasonboard.com>
-References: <CA+V-a8tnsxJP2CfwgrkPum6mYQEEP9+0=Fap4dFu-3x+fXdadw@mail.gmail.com>
- <20200219120808.GA5070@pendragon.ideasonboard.com>
- <CA+V-a8ux+8=PzWupMnpNRZsZCwG4VvVfN+dYayhEG=x927SWFg@mail.gmail.com>
+        Wed, 19 Feb 2020 07:59:14 -0500
+Received: by mail-wr1-f67.google.com with SMTP id c9so397933wrw.8
+        for <linux-media@vger.kernel.org>; Wed, 19 Feb 2020 04:59:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=b9sG/TVUs3caIZcWR+Lmy0efYoTEJOYELaU+bfIHgUY=;
+        b=BczVt1wh4yOLL+NES9v6gwV+e7nrjQnzp32Q0cvAzrgUlq1BHY/jBVFW6YH1lHaOS4
+         kQ4Zfz2ihORvysfmVySDXrPoeD4x72TIQ5ofaNGJvGnsARiGsDT5Ep7S7k6x/m+UyluQ
+         JtJZoUC/XOaTKOTStZ3iLES8rlQnaN1n6hz3yndLdtw7Y/Dg5VctpGIXCgXHYLr2O9qX
+         7R6SIUs5YLI2IUFbkL5W9j6F8JI4sU2abcPGHYfXb6aOSv1oWMUXnfnV1FMBMfX2dQEB
+         voxDApdjW6RG+5Uun8xrj8YKTrAk/Wku5hesyzb2/UaA0QUJyGtXufvpRy/IVH18KpYK
+         flmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=b9sG/TVUs3caIZcWR+Lmy0efYoTEJOYELaU+bfIHgUY=;
+        b=sk46W9M/twex/7nrHpHzx41i1MOIr0xYztXTkqmL5nMAgcnHCDBUlZI1urK4FXhhNc
+         b8XBo8tzZSvAPBULIVns50X1xsVpT+gylWs8yyqGR5ZJvxiKP0HDnbqfAAWOziJeXn4p
+         PwpWOgPEs+dgAazL6GJzwDIICtkuIwsRKXVVqQXdoh74kkyZskzjbauS/HHbMiuDdg55
+         nfbx6Uhv/c8EIHZZaQmBRDfJqWdXiP6BOHKkdJ3LADQaOx4zrc3lkJGtvIv5fKNqzojD
+         IflBoojm7694Daj7qSLGMWwOOV1XGXBPN2cU2dkye0P5PkM5ja9JpYY8tVX0761Tp4g8
+         7fbA==
+X-Gm-Message-State: APjAAAWTT3+cvHLG3hSvtfcrd3800FoHrCqdDsuJzZkyhbRJSOMDEa9d
+        E6pYO2kMTyV9hUq97PE+xFI=
+X-Google-Smtp-Source: APXvYqwom957kiBmODyKGlAOBy2ygX5dnAzUraiYqWa6AE5CXwi1ie+woKdaH2fubFeTbqA1kvR3+A==
+X-Received: by 2002:adf:de0b:: with SMTP id b11mr34937028wrm.89.1582117152687;
+        Wed, 19 Feb 2020 04:59:12 -0800 (PST)
+Received: from abel.fritz.box ([2a02:908:1252:fb60:90ea:9d7:18a3:895e])
+        by smtp.gmail.com with ESMTPSA id h2sm3079024wrt.45.2020.02.19.04.59.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2020 04:59:12 -0800 (PST)
+From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
+        <ckoenig.leichtzumerken@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+To:     dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        daniel@ffwll.ch
+Subject: [PATCH 2/7] drm/ttm: remove the backing store if no placement is given
+Date:   Wed, 19 Feb 2020 13:59:05 +0100
+Message-Id: <20200219125910.89147-2-christian.koenig@amd.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200219125910.89147-1-christian.koenig@amd.com>
+References: <20200219125910.89147-1-christian.koenig@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8ux+8=PzWupMnpNRZsZCwG4VvVfN+dYayhEG=x927SWFg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Prabhakar,
+Pipeline removal of the BOs backing store when no placement is given
+during validation.
 
-On Wed, Feb 19, 2020 at 12:25:37PM +0000, Lad, Prabhakar wrote:
-> On Wed, Feb 19, 2020 at 12:08 PM Laurent Pinchart wrote:
-> > On Wed, Feb 19, 2020 at 11:42:42AM +0000, Lad, Prabhakar wrote:
-> > > Hi,
-> > >
-> > > I am working Renesas RZ/Gx platforms, these boards have support for
-> > > connecting MIPI adapter mezzanine board [1]. To enable this support I
-> > > am planning to create a dtsi which will include the board file and
-> > > enable the necessary VIN/CSI and the camera endpoint.
-> > >
-> > > For example: to add support for G2E board I would create a file named
-> > > r8a774c0-cat874-mipi-adapter.dtsi which will include the board file
-> > > r8a774c0.dtsi and enable necessary VIN/CSI/Camera endpoint and when
-> > > user wants to enable this support for the G2E board he could just
-> > > include r8a774c0-cat874-mipi-adapter.dtsi to r8a774c0-cat874.dts
-> > >
-> > > Would this be a good approach or is there an alternative way which I am missing.
-> >
-> > DT overlays are another option. They can't be applied on a running
-> > system though. It doesn't seem like the mezzanine boards can be detected
-> > by the boot loader, so overlays can't be applied automatically before
-> > the kernel is started. One option would still be to provide them to
-> > U-Boot and apply a selected overlay based on environment variables.
-> > Another option would be to apply overlays as part of the build process,
-> > which shouldn't require modifying the DT sources to #include the .dtsi
-> > file for the mezzanine board.
->
-> Thank you for the insight, overlay is something which I wanted to
-> avoid and have the dtb as part of kernel itself. How about just
-> creating r8a774c0-cat874-mipi-adapter.dts which would include
-> r8a774c0-cat874.dts file and enable the VIN/CSI/Camera endpoint, so
-> the user would just use r8a774c0-cat874-mipi-adapter.dtb file when the
-> mipi adapter is connected ?
+Signed-off-by: Christian König <christian.koenig@amd.com>
+---
+ drivers/gpu/drm/ttm/ttm_bo.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-That would restrict usage of the mezzanine board to a particular base
-board, while in the general case there could be different types of base
-boards compatible with a set of mezzanines.
-
-The reason why I mentioned overlay isn't really to apply them
-dynamically, but for the set of tools around them. Bootloaders can apply
-overlays, and we can also apply overlays to a DTB as part of a build
-process, without patching the source. Is there a particular reason why
-you would prefer avoiding them ?
-
-> > > [1] https://github.com/Kevin-WSCU/96Boards-Camera/blob/master/AISTARVISION%20MIPI%20Adapter%20V2.1/AISTARVISION%20MIPI%20Adapter%20V2.1.pdf
-
+diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+index 151edfd8de77..6d1e91be9c78 100644
+--- a/drivers/gpu/drm/ttm/ttm_bo.c
++++ b/drivers/gpu/drm/ttm/ttm_bo.c
+@@ -1196,6 +1196,18 @@ int ttm_bo_validate(struct ttm_buffer_object *bo,
+ 	uint32_t new_flags;
+ 
+ 	dma_resv_assert_held(bo->base.resv);
++
++	/*
++	 * Remove the backing store if no placement is given.
++	 */
++	if (!placement->num_placement && !placement->num_busy_placement) {
++		ret = ttm_bo_pipeline_gutting(bo);
++		if (ret)
++			return ret;
++
++		return ttm_tt_create(bo, false);
++	}
++
+ 	/*
+ 	 * Check whether we need to move buffer.
+ 	 */
 -- 
-Regards,
+2.17.1
 
-Laurent Pinchart
