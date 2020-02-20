@@ -2,173 +2,143 @@ Return-Path: <SRS0=i8LN=4I=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URI_HEX,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6EF9C11D15
-	for <linux-media@archiver.kernel.org>; Thu, 20 Feb 2020 17:22:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD8ADC11D0C
+	for <linux-media@archiver.kernel.org>; Thu, 20 Feb 2020 17:29:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A46324672
-	for <linux-media@archiver.kernel.org>; Thu, 20 Feb 2020 17:22:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 85C852467A
+	for <linux-media@archiver.kernel.org>; Thu, 20 Feb 2020 17:29:16 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="pbYRTskJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728802AbgBTRWA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Feb 2020 12:22:00 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48646 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726959AbgBTRWA (ORCPT
+        id S1728639AbgBTR3N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Feb 2020 12:29:13 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:15099 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728115AbgBTR3M (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Feb 2020 12:22:00 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id CCF2F29527F
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     robh+dt@kernel.org, mark.rutland@arm.com, ck.hu@mediatek.com,
-        p.zabel@pengutronix.de, airlied@linux.ie, mturquette@baylibre.com,
-        sboyd@kernel.org, ulrich.hecht+renesas@gmail.com,
-        laurent.pinchart@ideasonboard.com
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, rdunlap@infradead.org,
-        dri-devel@lists.freedesktop.org, Weiyi Lu <weiyi.lu@mediatek.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        linux-clk@vger.kernel.org,
-        Collabora Kernel ML <kernel@collabora.com>,
-        mtk01761 <wendell.lin@mediatek.com>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>, wens@csie.org,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        sean.wang@mediatek.com, frank-w@public-files.de,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org, hsinyi@chromium.org,
-        Matthias Brugger <mbrugger@suse.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Richard Fontana <rfontana@redhat.com>,
-        linux-kernel@vger.kernel.org, matthias.bgg@kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Fabien Parent <fparent@baylibre.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Owen Chen <owen.chen@mediatek.com>
-Subject: [PATCH v8 0/6] arm/arm64: mediatek: Fix mmsys device probing
-Date:   Thu, 20 Feb 2020 18:21:41 +0100
-Message-Id: <20200220172147.919996-1-enric.balletbo@collabora.com>
-X-Mailer: git-send-email 2.25.0
+        Thu, 20 Feb 2020 12:29:12 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e4ec1c60001>; Thu, 20 Feb 2020 09:28:38 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 20 Feb 2020 09:29:11 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 20 Feb 2020 09:29:11 -0800
+Received: from [10.2.163.58] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 20 Feb
+ 2020 17:29:11 +0000
+Subject: Re: [RFC PATCH v3 4/6] media: tegra: Add Tegra210 Video input driver
+To:     Hans Verkuil <hverkuil@xs4all.nl>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>,
+        <helen.koike@collabora.com>, <sboyd@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1581704608-31219-1-git-send-email-skomatineni@nvidia.com>
+ <1581704608-31219-5-git-send-email-skomatineni@nvidia.com>
+ <b301c247-537d-d78e-b057-a3225b10de7e@xs4all.nl>
+ <dc592f29-3109-d10c-7df7-ffdb2755ade0@xs4all.nl>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <9dc0a5a6-af2c-f84f-298f-2c16a9c2bb0c@nvidia.com>
+Date:   Thu, 20 Feb 2020 09:29:19 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <dc592f29-3109-d10c-7df7-ffdb2755ade0@xs4all.nl>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1582219718; bh=nx1Sr0EKixZLUgshUzVM6e0KzOAURHBiDUNPYMB5sPg=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=pbYRTskJJUref7EGSEcJ5K6ZVOYBkfwD6fMc5PvkRHqFuwhLUgsJcn4GohE+n+0PA
+         XHZS+2g3WsaeWmYw+KZUtB27sSmKAyblJklinJ0xC8Vur8mhKHD4P77+2ISw7EctDC
+         hn6W0P/nW8JFbN0wD9QogBUUBFyd4yPPfQKsXCxZZmboKeQuL4IPaNj4JSnzhX5fkC
+         cTIIUgBSVlDzDyYB0DUaPwlFZthH76lova4BBZ9HOPzVA5mM4rI7XYnd/m6Xg4sIN7
+         OawXFq4rArM2BpbyzZwSUAjGScZCbKLudOx9B2j6kpwhjo+ntQNt9nKXZJkqYq2cmi
+         XFiYMN/H6QWdA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear all,
+Sure, Will update in v4.
 
-Those patches are intended to solve an old standing issue on some
-Mediatek devices (mt8173, mt2701 and mt2712) in a slightly different way
-to the precedent series.
-
-Up to now both drivers, clock and drm are probed with the same device tree
-compatible. But only the first driver get probed, which in effect breaks
-graphics on those devices.
-
-The version eight of the series tries to solve the problem with a
-different approach than the previous series but similar to how is solved
-on other Mediatek devices.
-
-The MMSYS (Multimedia subsystem) in Mediatek SoCs has some registers to
-control clock gates (which is used in the clk driver) and some registers
-to set the routing and enable the differnet blocks of the display
-and MDP (Media Data Path) subsystem. On this series the clk driver is
-not a pure clock controller but a system controller that can provide
-access to the shared registers between the different drivers that need
-it (mediatek-drm and mediatek-mdp). And the biggest change is, that in
-this version, clk driver is the entry point (parent) which will trigger
-the probe of the corresponding mediatek-drm driver and pass its MMSYS
-platform data for display configuration.
-
-All this series was tested on the Acer R13 Chromebook only.
-
-For reference, here are the links to the old discussions:
-
-* v7: https://patchwork.kernel.org/project/linux-mediatek/list/?series=241217
-* v6: https://patchwork.kernel.org/project/linux-mediatek/list/?series=213219
-* v5: https://patchwork.kernel.org/project/linux-mediatek/list/?series=44063
-* v4:
-  * https://patchwork.kernel.org/patch/10530871/
-  * https://patchwork.kernel.org/patch/10530883/
-  * https://patchwork.kernel.org/patch/10530885/
-  * https://patchwork.kernel.org/patch/10530911/
-  * https://patchwork.kernel.org/patch/10530913/
-* v3:
-  * https://patchwork.kernel.org/patch/10367857/
-  * https://patchwork.kernel.org/patch/10367861/
-  * https://patchwork.kernel.org/patch/10367877/
-  * https://patchwork.kernel.org/patch/10367875/
-  * https://patchwork.kernel.org/patch/10367885/
-  * https://patchwork.kernel.org/patch/10367883/
-  * https://patchwork.kernel.org/patch/10367889/
-  * https://patchwork.kernel.org/patch/10367907/
-  * https://patchwork.kernel.org/patch/10367909/
-  * https://patchwork.kernel.org/patch/10367905/
-* v2: No relevant discussion, see v3
-* v1:
-  * https://patchwork.kernel.org/patch/10016497/
-  * https://patchwork.kernel.org/patch/10016499/
-  * https://patchwork.kernel.org/patch/10016505/
-  * https://patchwork.kernel.org/patch/10016507/
-
-Best regards,
- Enric
-
-Changes in v8:
-- Be a builtin_platform_driver like other mediatek mmsys drivers.
-- New patches introduced in this series.
-
-Changes in v7:
-- Add R-by from CK
-- Add R-by from CK
-- Fix check of return value of of_clk_get
-- Fix identation
-- Free clk_data->clks as well
-- Get rid of private data structure
-
-Enric Balletbo i Serra (2):
-  drm/mediatek: Move MMSYS configuration to include/linux/platform_data
-  clk/drm: mediatek: Fix mediatek-drm device probing
-
-Matthias Brugger (4):
-  drm/mediatek: Use regmap for register access
-  drm/mediatek: Omit warning on probe defers
-  media: mtk-mdp: Check return value of of_clk_get
-  clk: mediatek: mt8173: Switch MMSYS to platform driver
-
- drivers/clk/mediatek/Kconfig                  |   6 +
- drivers/clk/mediatek/Makefile                 |   1 +
- drivers/clk/mediatek/clk-mt2701-mm.c          |  30 +++
- drivers/clk/mediatek/clk-mt2712-mm.c          |  44 +++++
- drivers/clk/mediatek/clk-mt8173-mm.c          | 172 ++++++++++++++++++
- drivers/clk/mediatek/clk-mt8173.c             | 104 -----------
- drivers/gpu/drm/mediatek/mtk_disp_color.c     |   5 +-
- drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |   5 +-
- drivers/gpu/drm/mediatek/mtk_disp_rdma.c      |   5 +-
- drivers/gpu/drm/mediatek/mtk_dpi.c            |  12 +-
- drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |   4 +-
- drivers/gpu/drm/mediatek/mtk_drm_ddp.c        |  53 +++---
- drivers/gpu/drm/mediatek/mtk_drm_ddp.h        |   4 +-
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |  56 +-----
- drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 113 +-----------
- drivers/gpu/drm/mediatek/mtk_drm_drv.h        |  13 +-
- drivers/gpu/drm/mediatek/mtk_dsi.c            |   8 +-
- drivers/gpu/drm/mediatek/mtk_hdmi.c           |   4 +-
- drivers/media/platform/mtk-mdp/mtk_mdp_comp.c |   6 +
- include/linux/platform_data/mtk_mmsys.h       |  73 ++++++++
- 20 files changed, 401 insertions(+), 317 deletions(-)
- create mode 100644 drivers/clk/mediatek/clk-mt8173-mm.c
- create mode 100644 include/linux/platform_data/mtk_mmsys.h
-
--- 
-2.25.0
-
+On 2/20/20 5:33 AM, Hans Verkuil wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> (Replying to myself so I can explain this a bit more)
+>
+> On 2/20/20 1:44 PM, Hans Verkuil wrote:
+>>> +
+>>> +static int tegra_csi_tpg_channels_alloc(struct tegra_csi *csi)
+>>> +{
+>>> +    struct device_node *node = csi->dev->of_node;
+>>> +    unsigned int port_num;
+>>> +    int ret;
+>>> +    struct tegra_csi_channel *item;
+>>> +    unsigned int tpg_channels = csi->soc->csi_max_channels;
+>>> +
+>>> +    /* allocate CSI channel for each CSI x2 ports */
+>>> +    for (port_num = 0; port_num < tpg_channels; port_num++) {
+>>> +            item = devm_kzalloc(csi->dev, sizeof(*item), GFP_KERNEL);
+>> Using devm_*alloc can be dangerous. If someone unbinds the driver, then
+>> all memory allocated with devm_ is immediately freed. But if an application
+>> still has a filehandle open, then when it closes it it might still reference
+>> this already-freed memory.
+>>
+>> I recommend that you avoid using devm_*alloc for media drivers.
+> A good test is to unbind & bind the driver:
+>
+> cd /sys/devices/platform/50000000.host1x/54080000.vi/driver
+> echo -n 54080000.vi >unbind
+> echo -n 54080000.vi >bind
+>
+> First just do this without the driver being used. That already
+> gives me 'list_del corruption' kernel messages (list debugging
+> is turned on in my kernel).
+>
+> Note that this first test is basically identical to a rmmod/modprobe
+> of the driver. But when I compiled the driver as a module it didn't
+> create any video device nodes! Nor did I see any errors in the kernel
+> log. I didn't pursue this, and perhaps I did something wrong, but it's
+> worth taking a look at.
+>
+> The next step would be to have a video node open with:
+>
+> v4l2-ctl --sleep 10
+>
+> then while it is sleeping unbind the driver and see what happens
+> when v4l2-ctl exits.
+>
+> Worst case is when you are streaming:
+>
+> v4l2-ctl --stream-mmap
+>
+> and then unbind.
+>
+> In general, the best way to get this to work correctly is:
+>
+> 1) don't use devm_*alloc
+> 2) set the release callback of struct v4l2_device and do all freeing there.
+> 3) in the platform remove() callback you call media_device_unregister()
+>     and video_unregister_device().
+>
+> It's worth getting this right in this early stage, rather than fixing it
+> in the future.
+>
+> Regards,
+>
+>          Hans
