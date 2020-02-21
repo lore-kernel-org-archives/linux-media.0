@@ -2,109 +2,86 @@ Return-Path: <SRS0=VFmn=4J=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD4BBC35640
-	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:45:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8046C35643
+	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:45:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9FE02206DB
-	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:45:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A453524670
+	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:45:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="ZqWrAPNW"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="pEWEegUK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730021AbgBUIpi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730033AbgBUIpi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 21 Feb 2020 03:45:38 -0500
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:44701 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728655AbgBUIph (ORCPT
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:58991 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729996AbgBUIpi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Feb 2020 03:45:37 -0500
+        Fri, 21 Feb 2020 03:45:38 -0500
 Received: from tschai.fritz.box ([46.9.235.248])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 53wBjunHFPKvK53wFjhWPF; Fri, 21 Feb 2020 09:45:35 +0100
+        id 53wBjunHFPKvK53wFjhWPP; Fri, 21 Feb 2020 09:45:36 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1582274735; bh=YkSxFacioWkeeQ0ZcNHWP17TqrGk527fezHzGzYnPIA=;
+        t=1582274736; bh=ojgQQaEIwncKVTy3TuQA9MeN5hIWMTyIWhX1eyfTFMg=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=ZqWrAPNWc9JkUIGdEgu6TVL66Oh1aJY7hGdx5oNGcFI1Bj6VxQssMlWdjJ7MQPyNT
-         5Ksy7wJw19gHIn3ucZQuVY2hCM0VJ31iNV79gg4zqGJTDOK8wUHmwwcAM19Hy43RvY
-         25/x0lubJgIn56cH0ql9xFdGNgEkUrXZY3pkdatKy3sCWRWMHl85ppuIzuV2V/mbHg
-         eefNGs6sAx50SQXiAYPKAzhoRbRjA3RRepYU0W2uYWaMRFVZKWSe5MW1yC90ZCO5ea
-         X+f9PziUB1TlhdPPrIB8I/9yK6T59kBfTUDtVqdo+AHo/1Odm7m1F3zEoUnLVzVJZ0
-         okOrAeAZDYgiw==
+        b=pEWEegUKdCSSOSNdi8rQmGTy+FA8G6ZZMpSyT+khpSJko2Ej1Ij4cgig3ty3oMC4w
+         9Fx7tEbpu/A2aNpNFGHM2T/PxERll4fu+4aT497Ylgbv+EelBD1or9SrNFihauQAj1
+         wv1zyuMndUTEB9aZ6tFzPl4MFL3S71AOKA719BMW+cXyZFieDP9bxFkAfHEfNZYFuU
+         h9WPcfy6XuxzksyDNqByWPNO3C9Wh+XDLOPgPR+345/C1DPjnDIZZSMk4XuohHw7Dp
+         ojW06VC2xYvll1TFLe8DCII1bYTs6gytL9U1oqtV8fLEvhxw5I6E1RD5Ca7KUpiNg/
+         sFlFp3IG9SaOg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: [RFC PATCH 0/9] Drop VB2_USERPTR + dma-contig combo
-Date:   Fri, 21 Feb 2020 09:45:22 +0100
-Message-Id: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [RFC PATCH 3/9] m2m-deinterlace: drop VB2_USERPTR
+Date:   Fri, 21 Feb 2020 09:45:25 +0100
+Message-Id: <20200221084531.576156-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
+References: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfAjnkLiP7q4gZpqplTpKO1fI2iBbMeQqXKDivYFuayAtK838oEK2l/w7lRMJCTMEnYgxY3oatVhS7EIvQ5k6wuKVuM+AgLt+sWUGhSm8h1c85bacquQJ
- La1mzHvPUThJhtPJbjqoTFoIS3B7oeReC6NXvlamzWTdbfL1ZgNWUyhV4ynwOTdutPxXyjjwxBSsWg==
+X-CMAE-Envelope: MS4wfGcgdw4u9Rg0DAWnSUTC0QvuVZRsy30RtBoXNufPK0a4jLMYJ/tgTtT8XLz8u0/37Ughovra1jev9eIJPG2MfC/phhjbuUY5B9uNBd2N+FfHCbYmRpPD
+ N8RGlmMLvOuWatgRKA+lrvnCjmpBhSBNfmUlcaxT+Lt7iaQKNKWNQEZqKZbwGYfaboAp27fr8+yAQwLlYX0A/dmJ6dIVFFAJ+1DZNoAEHlpg1VOmLvtDOfTf
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The user of VB2_USERPTR with vb2_dma_contig_memops makes no sense
-since it requires that the user pointer buffer is in contiguous
-memory. This was required with old hacks in the past, but these
-days we have DMABUF to take that role.
+The combination of VB2_USERPTR and dma-contig makes no sense for
+this device, drop it.
 
-This RFC series drops VB2_USERPTR from any vb2_queue that uses
-vb2_dma_contig_memops.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/platform/m2m-deinterlace.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Note that this series depends on a patch that adds VB2_DMABUF
-to any driver that didn't have that:
-
-https://patchwork.linuxtv.org/patch/61782/
-
-And for the rkisp1 a patch to remove VB2_USERPTR has already
-been posted:
-
-https://patchwork.linuxtv.org/patch/61780/
-
-Regards,
-
-	Hans
-
-Hans Verkuil (9):
-  mtk-vcodec: drop VB2_USERPTR
-  solo6x10: drop VB2_USERPTR
-  m2m-deinterlace: drop VB2_USERPTR
-  mcam-core: drop VB2_USERPTR
-  sh_veu: drop VB2_USERPTR
-  mx2_emmaprp: drop VB2_USERPTR
-  davinci: drop VB2_USERPTR
-  exynos/s3c/s5p: drop VB2_USERPTR
-  omap3isp/rcar_fdp1/vsp1/xilinx: drop VB2_USERPTR
-
- drivers/media/pci/solo6x10/solo6x10-v4l2.c         | 2 +-
- drivers/media/platform/davinci/vpbe_display.c      | 2 +-
- drivers/media/platform/davinci/vpif_capture.c      | 2 +-
- drivers/media/platform/davinci/vpif_display.c      | 2 +-
- drivers/media/platform/exynos-gsc/gsc-m2m.c        | 4 ++--
- drivers/media/platform/exynos4-is/fimc-capture.c   | 2 +-
- drivers/media/platform/exynos4-is/fimc-isp-video.c | 2 +-
- drivers/media/platform/exynos4-is/fimc-lite.c      | 2 +-
- drivers/media/platform/exynos4-is/fimc-m2m.c       | 4 ++--
- drivers/media/platform/m2m-deinterlace.c           | 4 ++--
- drivers/media/platform/marvell-ccic/mcam-core.c    | 2 +-
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c | 9 ++-------
- drivers/media/platform/mx2_emmaprp.c               | 4 ++--
- drivers/media/platform/omap3isp/ispvideo.c         | 2 +-
- drivers/media/platform/rcar_fdp1.c                 | 4 ++--
- drivers/media/platform/s3c-camif/camif-capture.c   | 2 +-
- drivers/media/platform/s5p-g2d/g2d.c               | 4 ++--
- drivers/media/platform/s5p-jpeg/jpeg-core.c        | 4 ++--
- drivers/media/platform/s5p-mfc/s5p_mfc.c           | 6 ++----
- drivers/media/platform/sh_veu.c                    | 4 ++--
- drivers/media/platform/vsp1/vsp1_video.c           | 2 +-
- drivers/media/platform/xilinx/xilinx-dma.c         | 2 +-
- 22 files changed, 32 insertions(+), 39 deletions(-)
-
+diff --git a/drivers/media/platform/m2m-deinterlace.c b/drivers/media/platform/m2m-deinterlace.c
+index 9ad24c86c5ab..ed2b36bb47e4 100644
+--- a/drivers/media/platform/m2m-deinterlace.c
++++ b/drivers/media/platform/m2m-deinterlace.c
+@@ -799,7 +799,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+ 	int ret;
+ 
+ 	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+-	src_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
++	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+ 	src_vq->drv_priv = ctx;
+ 	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
+ 	src_vq->ops = &deinterlace_qops;
+@@ -818,7 +818,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+ 		return ret;
+ 
+ 	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+-	dst_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
++	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+ 	dst_vq->drv_priv = ctx;
+ 	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
+ 	dst_vq->ops = &deinterlace_qops;
 -- 
 2.25.0
 
