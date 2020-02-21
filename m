@@ -7,81 +7,128 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F2CCC35644
-	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59A89C35641
+	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:46:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5C3622073A
-	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:46:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 301642073A
+	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:46:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="GW6MTCGZ"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="mzmPGzu+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732546AbgBUIqs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Feb 2020 03:46:48 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:56623 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729567AbgBUIql (ORCPT
+        id S1729033AbgBUIqq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Feb 2020 03:46:46 -0500
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:42709 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732173AbgBUIqm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Feb 2020 03:46:41 -0500
+        Fri, 21 Feb 2020 03:46:42 -0500
 Received: from tschai.fritz.box ([46.9.235.248])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 53xEjunXDPKvK53xHjhWWG; Fri, 21 Feb 2020 09:46:40 +0100
+        id 53xEjunXDPKvK53xIjhWWV; Fri, 21 Feb 2020 09:46:41 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1582274800; bh=O7jgYuGfAnKmBteKeix1dNFCsEIyToRc5U4bcG07CAs=;
+        t=1582274801; bh=D4+T0ApITA2GnAc1FSzoFEKd/Br2iwQI5OXqIc8UrsI=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=GW6MTCGZQ7qVKpFSuX2/Wis64xM2coOVbKDKp0uFyllizz0lrAbyCYCyY8EfAa3wH
-         etQS150I8dFdOXXlUmkztKeyphWUuXR0Ek4ty51e4apzUCV6OBbS+2UtRbyKbJtRmo
-         89xMsqTHDfZ1CpwqP9X0w1ab3rDYsdBohvKkwLQ8g/uKQtYo9Jj0vZmQ2GxcoKdKlQ
-         gbMTKeltLyjVwGZna+LoEr4DejB0HnjQ7PWetZWgWO0sUHIcrp014Vg38gHyqN7Nb3
-         UR/hfhOz67FEtpfECn2n76zupXhQeWl6qE8sYQTtgihfRjZ0JDA8Rhf4qOLT0/xyv4
-         EOknWMXIhXGwA==
+        b=mzmPGzu+L0jO1x1w8jjL6O3+ojrHAKGpqsT4BqKABgORb5NBr/uRyAnRK7FkfLPS2
+         M/TCgx5hf9A8n3R0by7yvvMNq4eUpnCCrbBEocZUbtDyglvx3wcjQd+ScHvxziyYIf
+         geW/PXRxdal/3zjbHHMNxF++yjk6GiYlMQfdN1NLthgt4BkHG5MxNeoGWlcC/Jf+X0
+         QApaclmrhWzs7qSpKbyfLmJWCCKyvL++EjSJO9iwLuNoQT2qHehzx0wNCghi+H1QoU
+         aER8sKtuMlfwM1OkqEvDnXO60OUl6Kmdfu1DlSTnWuihLMmtS0w1KAFZmjwwcEyJXq
+         aIrCFXzRXPaNQ==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [RFC PATCH 6/9] mx2_emmaprp: drop VB2_USERPTR
-Date:   Fri, 21 Feb 2020 09:45:28 +0100
-Message-Id: <20200221084531.576156-7-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Subject: [RFC PATCH 9/9] omap3isp/rcar_fdp1/vsp1/xilinx: drop VB2_USERPTR
+Date:   Fri, 21 Feb 2020 09:45:31 +0100
+Message-Id: <20200221084531.576156-10-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
 References: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfO7GlvQYMSL3MXpQ22kDKPL4eYxS2tdiyqRWr9VUDSTGtnwKTjpOhmLvBLlcbeerwSN2n1GCZrlmlbL3+a4Ixldw95R+RKBpfWqU4M/v0L1PJh1nCqA7
- BeCkt2g+WHPiGJyWIjEuEYrqxMyqBquZ4bjaLeHKYvKtii3ggCsNW5lwiZRWdTCw5Hd1smhRTMBqYsIwSm+8MG7Rqu/q+GAcZn2MziCNma2QQWveBZQck5Oe
+X-CMAE-Envelope: MS4wfMlT3jBRH0fIECehYm5BjDXaXOKjYeKFACb/SadxlwQpmYNchemC5p0rF3Jor9VnhNvmqzVDufMePX+Wt9SnnLvcWVW5YwcXdGwHiI1JN0VbVUuRCum9
+ RPrCocxIrwzvYYP37royfmQPfDC4Db/b+vrLJ+l+G04IK6JBhVu+T3BEtFRnG8CPta4ZkUVZPrcbYv+laydoK6YY/XcVpPVOl0XqrSk0/Jzq1XFky71WOho8
+ afKc1eJFZjYItXbNkxGuJbY6rLpvvlTIUnBDJobQBraTPCDibzcmcsAMSTqsjyIkI9KwnxI4Shd8AAszAAn/PrvvWq05saiaQJ6u71OjUTs=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 The combination of VB2_USERPTR and dma-contig makes no sense for
-this device, drop it.
+these devices, drop it.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 ---
- drivers/media/platform/mx2_emmaprp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/omap3isp/ispvideo.c | 2 +-
+ drivers/media/platform/rcar_fdp1.c         | 4 ++--
+ drivers/media/platform/vsp1/vsp1_video.c   | 2 +-
+ drivers/media/platform/xilinx/xilinx-dma.c | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/mx2_emmaprp.c b/drivers/media/platform/mx2_emmaprp.c
-index 27779b75df54..832871c08a21 100644
---- a/drivers/media/platform/mx2_emmaprp.c
-+++ b/drivers/media/platform/mx2_emmaprp.c
-@@ -688,7 +688,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+diff --git a/drivers/media/platform/omap3isp/ispvideo.c b/drivers/media/platform/omap3isp/ispvideo.c
+index e8c46ff1aeb4..1104654ba438 100644
+--- a/drivers/media/platform/omap3isp/ispvideo.c
++++ b/drivers/media/platform/omap3isp/ispvideo.c
+@@ -1319,7 +1319,7 @@ static int isp_video_open(struct file *file)
+ 
+ 	queue = &handle->queue;
+ 	queue->type = video->type;
+-	queue->io_modes = VB2_MMAP | VB2_DMABUF | VB2_USERPTR;
++	queue->io_modes = VB2_MMAP | VB2_DMABUF;
+ 	queue->drv_priv = handle;
+ 	queue->ops = &isp_video_queue_ops;
+ 	queue->mem_ops = &vb2_dma_contig_memops;
+diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
+index 97bed45360f0..df081f66575f 100644
+--- a/drivers/media/platform/rcar_fdp1.c
++++ b/drivers/media/platform/rcar_fdp1.c
+@@ -2047,7 +2047,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
  	int ret;
  
- 	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+ 	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
 -	src_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
 +	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
  	src_vq->drv_priv = ctx;
- 	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
- 	src_vq->ops = &emmaprp_qops;
-@@ -702,7 +702,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+ 	src_vq->buf_struct_size = sizeof(struct fdp1_buffer);
+ 	src_vq->ops = &fdp1_qops;
+@@ -2061,7 +2061,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
  		return ret;
  
- 	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+ 	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
 -	dst_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
 +	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
  	dst_vq->drv_priv = ctx;
- 	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
- 	dst_vq->ops = &emmaprp_qops;
+ 	dst_vq->buf_struct_size = sizeof(struct fdp1_buffer);
+ 	dst_vq->ops = &fdp1_qops;
+diff --git a/drivers/media/platform/vsp1/vsp1_video.c b/drivers/media/platform/vsp1/vsp1_video.c
+index 5e59ed2c3614..112e2092f6d3 100644
+--- a/drivers/media/platform/vsp1/vsp1_video.c
++++ b/drivers/media/platform/vsp1/vsp1_video.c
+@@ -1300,7 +1300,7 @@ struct vsp1_video *vsp1_video_create(struct vsp1_device *vsp1,
+ 	video_set_drvdata(&video->video, video);
+ 
+ 	video->queue.type = video->type;
+-	video->queue.io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
++	video->queue.io_modes = VB2_MMAP | VB2_DMABUF;
+ 	video->queue.lock = &video->lock;
+ 	video->queue.drv_priv = video;
+ 	video->queue.buf_struct_size = sizeof(struct vsp1_vb2_buffer);
+diff --git a/drivers/media/platform/xilinx/xilinx-dma.c b/drivers/media/platform/xilinx/xilinx-dma.c
+index b211380a11f2..57e52ad720dd 100644
+--- a/drivers/media/platform/xilinx/xilinx-dma.c
++++ b/drivers/media/platform/xilinx/xilinx-dma.c
+@@ -708,7 +708,7 @@ int xvip_dma_init(struct xvip_composite_device *xdev, struct xvip_dma *dma,
+ 	 * instead of 'cat' isn't really a drawback.
+ 	 */
+ 	dma->queue.type = type;
+-	dma->queue.io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
++	dma->queue.io_modes = VB2_MMAP | VB2_DMABUF;
+ 	dma->queue.lock = &dma->lock;
+ 	dma->queue.drv_priv = dma;
+ 	dma->queue.buf_struct_size = sizeof(struct xvip_dma_buffer);
 -- 
 2.25.0
 
