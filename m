@@ -7,72 +7,84 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F11E3C35640
-	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:45:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD7D1C35641
+	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:45:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BDB9B206DB
-	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:45:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA29C206DB
+	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:45:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="O8y2n3xI"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="CD/x78ic"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730347AbgBUIpk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Feb 2020 03:45:40 -0500
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:50813 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729994AbgBUIph (ORCPT
+        id S1730461AbgBUIpl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Feb 2020 03:45:41 -0500
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:42819 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729731AbgBUIph (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 21 Feb 2020 03:45:37 -0500
 Received: from tschai.fritz.box ([46.9.235.248])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 53wBjunHFPKvK53wGjhWPV; Fri, 21 Feb 2020 09:45:36 +0100
+        id 53wBjunHFPKvK53wFjhWPI; Fri, 21 Feb 2020 09:45:35 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1582274736; bh=F0BcfgjXmB5Dq9o20oQkpuO3OvUaODzAj+fLpSI7jX8=;
+        t=1582274735; bh=6r3JdgwIE2PSKQiGn/76VxWQeu7sf1Oyj29zt6+NQFw=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=O8y2n3xI2IhcF0hcxoTRMKje6/fgW+cWgA90ig7lGsrRS+V7avxO9SksutB1PcYm9
-         r43iAwpnbmDxLo3MuMGjyGIhRm+roP/3kjSfP3CXZ30bHV1dFSfPmmD03RvbqBqVrA
-         kaYV+HDrayDnZfpwJ2LOcHDLpUOyRf2iKrW6FwyBmTCIdMMXFJKI6Bn0pcsv+WnO03
-         3Rn3pUz/X04OkIGKgrWsNpWo3Kq68Da/xgY89g/HPkKo/i7ZYqR88rhRfOhaSRTenf
-         JAdWJdEDWQxXM1t8kCs6Vd/zhi0S1e9P89NqTwV+tfIQjxrAnl50ldJr4awpUdL6Pr
-         P6CCpeI3+WBJg==
+        b=CD/x78icKF/m8De7t/EBrdJKxlSA461gK0xxcmJhEPbDlXB7OOotv+vVUdqEW99M0
+         OzHw9sUfHXzBY2m8tWM3kirNAnqfaWlscUbhT6BxV8pOJF8fLK3kr6QF6YTcwYlYdN
+         2xg+U4wGDBndA7MNOe71xLaW47Rm2b2Krh5pkiHCmURMw6ySHTfyTvTnJkz/tUMwk2
+         WNS1OP2g6dAIcZEcvxESIlC/2Zpilu4iaqtsAXElCrg8x9GoYR9Edpn84okt6YfbMN
+         Sm7yWCSReWIFjZMsaGBhto7yJR897LUk94KM7APiTTFqlqeOyyToxsgY5EsXEqlczP
+         U75V+It1gJK0A==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [RFC PATCH 4/9] mcam-core: drop VB2_USERPTR
-Date:   Fri, 21 Feb 2020 09:45:26 +0100
-Message-Id: <20200221084531.576156-5-hverkuil-cisco@xs4all.nl>
+Subject: [RFC PATCH 1/9] mtk-vcodec: drop VB2_USERPTR
+Date:   Fri, 21 Feb 2020 09:45:23 +0100
+Message-Id: <20200221084531.576156-2-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
 References: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfGcgdw4u9Rg0DAWnSUTC0QvuVZRsy30RtBoXNufPK0a4jLMYJ/tgTtT8XLz8u0/37Ughovra1jev9eIJPG2MfC/phhjbuUY5B9uNBd2N+FfHCbYmRpPD
- N8RGlmMLvOuWatgRKA+lrvnCjmpBhSBNfmUlcaxT+Lt7iaQKNKWNQEZqKZbwGYfaboAp27fr8+yAQwLlYX0A/dmJ6dIVFFAJ+1DZNoAEHlpg1VOmLvtDOfTf
+X-CMAE-Envelope: MS4wfAjnkLiP7q4gZpqplTpKO1fI2iBbMeQqXKDivYFuayAtK838oEK2l/w7lRMJCTMEnYgxY3oatVhS7EIvQ5k6wuKVuM+AgLt+sWUGhSm8h1c85bacquQJ
+ La1mzHvPUThJhvxp4DbeWijT4sjk+MVbD4hL64WkyK3N7ExcLR4+6czkr9xhqlXm5Y2q189fe+0kmURrEfjzTt4os+u6kEmC0swWuvJB9/PGEl40COs+yBEh
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The combination of VB2_USERPTR and dma-contig makes no sense for
-this device, drop it.
-
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/platform/marvell-ccic/mcam-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
-index 803baf97f06e..4450307ae654 100644
---- a/drivers/media/platform/marvell-ccic/mcam-core.c
-+++ b/drivers/media/platform/marvell-ccic/mcam-core.c
-@@ -1300,7 +1300,7 @@ static int mcam_setup_vb2(struct mcam_camera *cam)
- 	vq->drv_priv = cam;
- 	vq->lock = &cam->s_mutex;
- 	vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--	vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF | VB2_READ;
-+	vq->io_modes = VB2_MMAP | VB2_DMABUF | VB2_READ;
- 	vq->buf_struct_size = sizeof(struct mcam_vb_buffer);
- 	vq->dev = cam->dev;
- 	INIT_LIST_HEAD(&cam->buffers);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+index d469ff6464b2..910228922791 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+@@ -1274,13 +1274,8 @@ int mtk_vcodec_enc_queue_init(void *priv, struct vb2_queue *src_vq,
+ 	struct mtk_vcodec_ctx *ctx = priv;
+ 	int ret;
+ 
+-	/* Note: VB2_USERPTR works with dma-contig because mt8173
+-	 * support iommu
+-	 * https://patchwork.kernel.org/patch/8335461/
+-	 * https://patchwork.kernel.org/patch/7596181/
+-	 */
+ 	src_vq->type		= V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+-	src_vq->io_modes	= VB2_DMABUF | VB2_MMAP | VB2_USERPTR;
++	src_vq->io_modes	= VB2_DMABUF | VB2_MMAP;
+ 	src_vq->drv_priv	= ctx;
+ 	src_vq->buf_struct_size = sizeof(struct mtk_video_enc_buf);
+ 	src_vq->ops		= &mtk_venc_vb2_ops;
+@@ -1294,7 +1289,7 @@ int mtk_vcodec_enc_queue_init(void *priv, struct vb2_queue *src_vq,
+ 		return ret;
+ 
+ 	dst_vq->type		= V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+-	dst_vq->io_modes	= VB2_DMABUF | VB2_MMAP | VB2_USERPTR;
++	dst_vq->io_modes	= VB2_DMABUF | VB2_MMAP;
+ 	dst_vq->drv_priv	= ctx;
+ 	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
+ 	dst_vq->ops		= &mtk_venc_vb2_ops;
 -- 
 2.25.0
 
