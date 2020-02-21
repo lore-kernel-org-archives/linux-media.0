@@ -2,108 +2,105 @@ Return-Path: <SRS0=VFmn=4J=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92856C35645
-	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:46:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC1A5C35642
+	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:48:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6AB5E2073A
-	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:46:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="StlfeQMi"
+	by mail.kernel.org (Postfix) with ESMTP id ADD9F2071E
+	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:48:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729567AbgBUIqt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Feb 2020 03:46:49 -0500
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:36575 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732150AbgBUIql (ORCPT
+        id S1728757AbgBUHqi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Feb 2020 02:46:38 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:54898 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726940AbgBUHqh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Feb 2020 03:46:41 -0500
-Received: from tschai.fritz.box ([46.9.235.248])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 53xEjunXDPKvK53xIjhWWI; Fri, 21 Feb 2020 09:46:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1582274800; bh=Ir3SG54ewrC24zHJSgOPKuEy0d1rLMRdT4ArhF90fZU=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=StlfeQMigvin3O+d2KJM73F0rbaYlnR/NwE0SuPT14o6NLPSXTNIioTGyAiNyKi/N
-         nPfVoNTI2Pg0xmidtXMVuEz5160+TjILlaETqpG1cbZwiqbC8ieqbmoZ9s1DH4crN7
-         Amtvfbe3pYLPU820Wt3Rcsvdutab/DhaiSFlpo11Gf7toNtYIZjkW4VSvjzv3lpFt1
-         SGIHErBPxwjeaBdHrm1dEVlX3mHk9ncWM5X8EAz9wycmONbw/BcqDpGnpME7io6dbi
-         uH21enwQPgJckR2PUbgEZD8GccHeh0TM4CcU4RuKWelGiIux/ztXgejynm8PvTE5Eg
-         bUlyDNxN4vzMA==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>
-Subject: [RFC PATCH 7/9] davinci: drop VB2_USERPTR
-Date:   Fri, 21 Feb 2020 09:45:29 +0100
-Message-Id: <20200221084531.576156-8-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
-References: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
+        Fri, 21 Feb 2020 02:46:37 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id 8BF432904EA
+Subject: Re: [PATCH v8 1/6] drm/mediatek: Use regmap for register access
+To:     Randy Dunlap <rdunlap@infradead.org>, robh+dt@kernel.org,
+        mark.rutland@arm.com, ck.hu@mediatek.com, p.zabel@pengutronix.de,
+        airlied@linux.ie, mturquette@baylibre.com, sboyd@kernel.org,
+        ulrich.hecht+renesas@gmail.com, laurent.pinchart@ideasonboard.com
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        dri-devel@lists.freedesktop.org, Weiyi Lu <weiyi.lu@mediatek.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        linux-clk@vger.kernel.org,
+        Collabora Kernel ML <kernel@collabora.com>,
+        mtk01761 <wendell.lin@mediatek.com>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>, wens@csie.org,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        sean.wang@mediatek.com, frank-w@public-files.de,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        linux-mediatek@lists.infradead.org, hsinyi@chromium.org,
+        Matthias Brugger <mbrugger@suse.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Richard Fontana <rfontana@redhat.com>,
+        linux-kernel@vger.kernel.org, matthias.bgg@kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>
+References: <20200220172147.919996-1-enric.balletbo@collabora.com>
+ <20200220172147.919996-2-enric.balletbo@collabora.com>
+ <0b2046b9-90de-c894-7502-993b5df12e7a@infradead.org>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <5c19af7a-170b-2cd1-da98-e4125504eb34@collabora.com>
+Date:   Fri, 21 Feb 2020 08:46:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfO7GlvQYMSL3MXpQ22kDKPL4eYxS2tdiyqRWr9VUDSTGtnwKTjpOhmLvBLlcbeerwSN2n1GCZrlmlbL3+a4Ixldw95R+RKBpfWqU4M/v0L1PJh1nCqA7
- BeCkt2g+WHPiGOo2HO6ci9ASSwtzXRytOZdhNj2xdvRf6oXpDhHKBy43CJ2AU99eR8c2PYoFaLZHjC+zm20yrHkOhMFJU86pcu48OIUNSmYJrnKkU9xDmele
- 0hAIwSuBpWQcvc8eZf3OBkvZN/37/NFCjOt4EcHtsiQ=
+In-Reply-To: <0b2046b9-90de-c894-7502-993b5df12e7a@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The combination of VB2_USERPTR and dma-contig makes no sense for
-these devices, drop it.
+Hi Randy,
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Lad Prabhakar <prabhakar.csengg@gmail.com>
----
- drivers/media/platform/davinci/vpbe_display.c | 2 +-
- drivers/media/platform/davinci/vpif_capture.c | 2 +-
- drivers/media/platform/davinci/vpif_display.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+On 21/2/20 0:48, Randy Dunlap wrote:
+> On 2/20/20 9:21 AM, Enric Balletbo i Serra wrote:
+>> From: Matthias Brugger <mbrugger@suse.com>
+>>
+>> The mmsys memory space is shared between the drm and the
+>> clk driver. Use regmap to access it.
+>>
+>> Signed-off-by: Matthias Brugger <mbrugger@suse.com>
+>> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+>> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+>> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+>> ---
+>>
+>> Changes in v8: None
+>> Changes in v7:
+>> - Add R-by from CK
+>>
+>>  drivers/gpu/drm/mediatek/mtk_drm_crtc.c |  4 +-
+>>  drivers/gpu/drm/mediatek/mtk_drm_ddp.c  | 50 +++++++++++--------------
+>>  drivers/gpu/drm/mediatek/mtk_drm_ddp.h  |  4 +-
+>>  drivers/gpu/drm/mediatek/mtk_drm_drv.c  | 13 ++-----
+>>  drivers/gpu/drm/mediatek/mtk_drm_drv.h  |  2 +-
+>>  5 files changed, 30 insertions(+), 43 deletions(-)
+> 
+> Hi. Just a quick question:
+> 
+> Do you need to select REGMAP or one of its derivatives to make sure
+> that the proper interfaces are available for this driver?
+> 
 
-diff --git a/drivers/media/platform/davinci/vpbe_display.c b/drivers/media/platform/davinci/vpbe_display.c
-index ae419958e420..2641973998fe 100644
---- a/drivers/media/platform/davinci/vpbe_display.c
-+++ b/drivers/media/platform/davinci/vpbe_display.c
-@@ -1426,7 +1426,7 @@ static int vpbe_display_probe(struct platform_device *pdev)
- 		q = &disp_dev->dev[i]->buffer_queue;
- 		memset(q, 0, sizeof(*q));
- 		q->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
--		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
-+		q->io_modes = VB2_MMAP | VB2_DMABUF;
- 		q->drv_priv = disp_dev->dev[i];
- 		q->ops = &video_qops;
- 		q->mem_ops = &vb2_dma_contig_memops;
-diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
-index 71f4fe882d13..9c8b05f7fc29 100644
---- a/drivers/media/platform/davinci/vpif_capture.c
-+++ b/drivers/media/platform/davinci/vpif_capture.c
-@@ -1435,7 +1435,7 @@ static int vpif_probe_complete(void)
- 		/* Initialize vb2 queue */
- 		q = &common->buffer_queue;
- 		q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
--		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
-+		q->io_modes = VB2_MMAP | VB2_DMABUF;
- 		q->drv_priv = ch;
- 		q->ops = &video_qops;
- 		q->mem_ops = &vb2_dma_contig_memops;
-diff --git a/drivers/media/platform/davinci/vpif_display.c b/drivers/media/platform/davinci/vpif_display.c
-index abbdbac08e6f..ee6f1fd2baac 100644
---- a/drivers/media/platform/davinci/vpif_display.c
-+++ b/drivers/media/platform/davinci/vpif_display.c
-@@ -1181,7 +1181,7 @@ static int vpif_probe_complete(void)
- 		/* Initialize vb2 queue */
- 		q = &common->buffer_queue;
- 		q->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
--		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
-+		q->io_modes = VB2_MMAP | VB2_DMABUF;
- 		q->drv_priv = ch;
- 		q->ops = &video_qops;
- 		q->mem_ops = &vb2_dma_contig_memops;
--- 
-2.25.0
+Right, I will fix this in next version.
 
+> thanks.
+> 
