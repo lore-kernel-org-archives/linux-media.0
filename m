@@ -7,81 +7,103 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 179E0C35643
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92856C35645
 	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:46:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D2DC82073A
-	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:46:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AB5E2073A
+	for <linux-media@archiver.kernel.org>; Fri, 21 Feb 2020 08:46:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="kXHB7C4J"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="StlfeQMi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732565AbgBUIqt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1729567AbgBUIqt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 21 Feb 2020 03:46:49 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:54399 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728761AbgBUIql (ORCPT
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:36575 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732150AbgBUIql (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 21 Feb 2020 03:46:41 -0500
 Received: from tschai.fritz.box ([46.9.235.248])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id 53xEjunXDPKvK53xHjhWWE; Fri, 21 Feb 2020 09:46:39 +0100
+        id 53xEjunXDPKvK53xIjhWWI; Fri, 21 Feb 2020 09:46:40 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1582274799; bh=ra+c3Ufy0VWHCHsRdQ0qpxgmqP9MAJxEIIWCMzUQw1k=;
+        t=1582274800; bh=Ir3SG54ewrC24zHJSgOPKuEy0d1rLMRdT4ArhF90fZU=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=kXHB7C4JJOnYFsFOZsw46a+TNFj/FVodNYP+wRsJGkd3jIawtPEzsPjyJ5vvfVhki
-         Qr+QiSbwoOucoEDXrWWkvmECAS8nGJv0uoJBBegYpV10DfF2Vq2W7fN3VEndFW8LDi
-         lJHqJu9vSm1IjiTk3WN6utmt2s0caSiwzS5sTwUPXptdLyuJ6aEqlGzLtdgcAvzu7w
-         7IGpZ/9Oby/iGAO+3y7REetOPAlJWrJigRjas3aqinqwsy0rjUR85rtEzuG50MioJb
-         graw3wgTZ5bHfZhGu25Rwwu2qx80bw3kgB7t6lOx1o/R3YzzfGy9Y4gCUX2dHhzMkp
-         zq7q2I9XT1EiQ==
+        b=StlfeQMigvin3O+d2KJM73F0rbaYlnR/NwE0SuPT14o6NLPSXTNIioTGyAiNyKi/N
+         nPfVoNTI2Pg0xmidtXMVuEz5160+TjILlaETqpG1cbZwiqbC8ieqbmoZ9s1DH4crN7
+         Amtvfbe3pYLPU820Wt3Rcsvdutab/DhaiSFlpo11Gf7toNtYIZjkW4VSvjzv3lpFt1
+         SGIHErBPxwjeaBdHrm1dEVlX3mHk9ncWM5X8EAz9wycmONbw/BcqDpGnpME7io6dbi
+         uH21enwQPgJckR2PUbgEZD8GccHeh0TM4CcU4RuKWelGiIux/ztXgejynm8PvTE5Eg
+         bUlyDNxN4vzMA==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [RFC PATCH 5/9] sh_veu: drop VB2_USERPTR
-Date:   Fri, 21 Feb 2020 09:45:27 +0100
-Message-Id: <20200221084531.576156-6-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>
+Subject: [RFC PATCH 7/9] davinci: drop VB2_USERPTR
+Date:   Fri, 21 Feb 2020 09:45:29 +0100
+Message-Id: <20200221084531.576156-8-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
 References: <20200221084531.576156-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfGQ+Mz8+eZr5l5sM+8r0tyCOWMT7xuPVNkC5DPZcqNik9UQFVALGO13aRtxJP1vlp0W18Sf2BT+113CCmru7kQedIHxgLQIl6z2pnfjqhJrsVEFPX6ji
- vJ+XY9ceKuByj8ko38YD3GZeP/kgusdXcR/vLXOCMXnWq7ImMaFq7OqC00JDEY99ap6HroSo334ca/CHjKv5GdhMnlB+XUdWqtvH5DtEzB9E6dNIJu7jk4vR
+X-CMAE-Envelope: MS4wfO7GlvQYMSL3MXpQ22kDKPL4eYxS2tdiyqRWr9VUDSTGtnwKTjpOhmLvBLlcbeerwSN2n1GCZrlmlbL3+a4Ixldw95R+RKBpfWqU4M/v0L1PJh1nCqA7
+ BeCkt2g+WHPiGOo2HO6ci9ASSwtzXRytOZdhNj2xdvRf6oXpDhHKBy43CJ2AU99eR8c2PYoFaLZHjC+zm20yrHkOhMFJU86pcu48OIUNSmYJrnKkU9xDmele
+ 0hAIwSuBpWQcvc8eZf3OBkvZN/37/NFCjOt4EcHtsiQ=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 The combination of VB2_USERPTR and dma-contig makes no sense for
-this device, drop it.
+these devices, drop it.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Lad Prabhakar <prabhakar.csengg@gmail.com>
 ---
- drivers/media/platform/sh_veu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/davinci/vpbe_display.c | 2 +-
+ drivers/media/platform/davinci/vpif_capture.c | 2 +-
+ drivers/media/platform/davinci/vpif_display.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/sh_veu.c b/drivers/media/platform/sh_veu.c
-index b95a7e2ede55..fc5b31da6f83 100644
---- a/drivers/media/platform/sh_veu.c
-+++ b/drivers/media/platform/sh_veu.c
-@@ -924,7 +924,7 @@ static int sh_veu_queue_init(void *priv, struct vb2_queue *src_vq,
- 
- 	memset(src_vq, 0, sizeof(*src_vq));
- 	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
--	src_vq->io_modes = VB2_MMAP | VB2_DMABUF | VB2_USERPTR;
-+	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
- 	src_vq->drv_priv = veu;
- 	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
- 	src_vq->ops = &sh_veu_qops;
-@@ -939,7 +939,7 @@ static int sh_veu_queue_init(void *priv, struct vb2_queue *src_vq,
- 
- 	memset(dst_vq, 0, sizeof(*dst_vq));
- 	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
--	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF | VB2_USERPTR;
-+	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
- 	dst_vq->drv_priv = veu;
- 	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
- 	dst_vq->ops = &sh_veu_qops;
+diff --git a/drivers/media/platform/davinci/vpbe_display.c b/drivers/media/platform/davinci/vpbe_display.c
+index ae419958e420..2641973998fe 100644
+--- a/drivers/media/platform/davinci/vpbe_display.c
++++ b/drivers/media/platform/davinci/vpbe_display.c
+@@ -1426,7 +1426,7 @@ static int vpbe_display_probe(struct platform_device *pdev)
+ 		q = &disp_dev->dev[i]->buffer_queue;
+ 		memset(q, 0, sizeof(*q));
+ 		q->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+-		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
++		q->io_modes = VB2_MMAP | VB2_DMABUF;
+ 		q->drv_priv = disp_dev->dev[i];
+ 		q->ops = &video_qops;
+ 		q->mem_ops = &vb2_dma_contig_memops;
+diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
+index 71f4fe882d13..9c8b05f7fc29 100644
+--- a/drivers/media/platform/davinci/vpif_capture.c
++++ b/drivers/media/platform/davinci/vpif_capture.c
+@@ -1435,7 +1435,7 @@ static int vpif_probe_complete(void)
+ 		/* Initialize vb2 queue */
+ 		q = &common->buffer_queue;
+ 		q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+-		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
++		q->io_modes = VB2_MMAP | VB2_DMABUF;
+ 		q->drv_priv = ch;
+ 		q->ops = &video_qops;
+ 		q->mem_ops = &vb2_dma_contig_memops;
+diff --git a/drivers/media/platform/davinci/vpif_display.c b/drivers/media/platform/davinci/vpif_display.c
+index abbdbac08e6f..ee6f1fd2baac 100644
+--- a/drivers/media/platform/davinci/vpif_display.c
++++ b/drivers/media/platform/davinci/vpif_display.c
+@@ -1181,7 +1181,7 @@ static int vpif_probe_complete(void)
+ 		/* Initialize vb2 queue */
+ 		q = &common->buffer_queue;
+ 		q->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+-		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
++		q->io_modes = VB2_MMAP | VB2_DMABUF;
+ 		q->drv_priv = ch;
+ 		q->ops = &video_qops;
+ 		q->mem_ops = &vb2_dma_contig_memops;
 -- 
 2.25.0
 
