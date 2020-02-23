@@ -1,204 +1,179 @@
-Return-Path: <SRS0=nUH2=4K=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=9BIB=4L=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 590B4C35672
-	for <linux-media@archiver.kernel.org>; Sat, 22 Feb 2020 16:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8BEBC35670
+	for <linux-media@archiver.kernel.org>; Sun, 23 Feb 2020 04:57:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 31AAB206E2
-	for <linux-media@archiver.kernel.org>; Sat, 22 Feb 2020 16:16:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20F05208C3
+	for <linux-media@archiver.kernel.org>; Sun, 23 Feb 2020 04:57:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="l8WCK+5C"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="hGOr8D1+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727979AbgBVQQy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 22 Feb 2020 11:16:54 -0500
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:33091 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727339AbgBVQQx (ORCPT
+        id S1727103AbgBWE5v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 22 Feb 2020 23:57:51 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:60573 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727093AbgBWE5v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 22 Feb 2020 11:16:53 -0500
-Received: by mail-qt1-f196.google.com with SMTP id d5so3608663qto.0
-        for <linux-media@vger.kernel.org>; Sat, 22 Feb 2020 08:16:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=h6y2l7r0SZzY2frtObGMYDh0KWzbGps/82ggmwwCBNU=;
-        b=l8WCK+5CmLy5GxaEj672sypZsWaZst47IfXTmIMT3jwQwDoF5dmJMAMSFApHrBe/vx
-         XGVsmI2tE8uN/avIDYUejQhcvv2DlSBgNj3Nu7CAjqC8BHEFc+ZqPrHuikiucQrJe3cH
-         KvL6dWnYsjYwLJhfhkj8o/khuygOtbtpkpKPDXAaiBSUoF6XrjZpowJgQQDXWNt8GMuQ
-         tNaH5e+VSzVJCUyRzsMH/VpjQt+ngdQG9iTo4jsEW5TShrd5Fyo1xMCO8v2YztS2ZBr/
-         iSB+q48q/AaZ99cDTgeK81W+rzl70mSM0ns9u43k/AmsuEqX5bK3Wpcowvp3B3tc/hSL
-         NhEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=h6y2l7r0SZzY2frtObGMYDh0KWzbGps/82ggmwwCBNU=;
-        b=IQuReJ7gKZdNJHTrMYqfdTd6FoX2F2YYWToGZ0mg0eVgb9XL7aqi++pOx9/quFCDSO
-         Q1HEWMIzFkBgwBIjGdYGcO6pW+D759x2mYn+jenjOOeGV41wrI1NPzcO0+4wFz0+a7vJ
-         Ki7qZXXND2ebfiHxt/YJbdTO6ycu8p4bfyTC1nEAlROb9o+2js0S9L47LCUSw8NFp6W6
-         47SDVsP7hVtiWM0qr2xp0qt6T0s7mwq1oPuf41Vn0uIbdLs/aOO4m2WTQ2v6YF8kEKBN
-         diJdstGS8/V/Vt9MS4CsVF7krtdQ4B+EUPMxAvd5uZexkFzwee5KpUTTmVZB2qzfszsJ
-         /uTA==
-X-Gm-Message-State: APjAAAUbxAa/0CCVasqvGX2es7yVJU2tScvM3ROGHBrGd1K79G/2Mlvg
-        uWbr7bebCLz2dgPEwMUBllDOVw==
-X-Google-Smtp-Source: APXvYqzQJnMO/hL2UK6T7a8bbIuqQvjAjtSztWQGUDkp1eVnf0G8f7mkFf2gMNoTg3IbX7cYk0csDQ==
-X-Received: by 2002:ac8:6645:: with SMTP id j5mr39444299qtp.167.1582388211225;
-        Sat, 22 Feb 2020 08:16:51 -0800 (PST)
-Received: from ?IPv6:127.0.0.1? ([2605:8d80:525:7910:3770:2d4d:77b5:eea])
-        by smtp.gmail.com with ESMTPSA id k37sm3309147qtf.70.2020.02.22.08.16.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 22 Feb 2020 08:16:50 -0800 (PST)
-Date:   Sat, 22 Feb 2020 16:16:48 +0000 (UTC)
-From:   +1 514-466-1652 <nicolas@ndufresne.ca>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        ezequiel@collabora.com, mchehab@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>, s.hauer@pengutronix.de,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        linux-media@vger.kernel.org
-Message-ID: <00366512-0bc7-4b06-a282-e8e60517c2b0@localhost>
-In-Reply-To: <b30ab10a43c80e9096e45a6d52d125c1e297f021.camel@pengutronix.de>
-References: <ce102c01-74b1-628d-2192-9d5cb7baa616@puri.sm> <b30ab10a43c80e9096e45a6d52d125c1e297f021.camel@pengutronix.de>
-Subject: Re: video decoding on imx8mq vpu via v4l2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <00366512-0bc7-4b06-a282-e8e60517c2b0@localhost>
+        Sat, 22 Feb 2020 23:57:51 -0500
+Received: from localhost ([IPv6:2001:983:e9a7:1:94e:9281:27be:100a])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 5jKtjlrarjmHT5jKujPbLK; Sun, 23 Feb 2020 05:57:49 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1582433869; bh=JSwJDzJNXEFLgnJRpBxc9Dr5YZPYvM4bY4QVvE7aXnQ=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=hGOr8D1+AH+llLGuwmmspTnq6euRfEE5cxCyXm14qFF73j6QdVZQ8aEabdTFThUaF
+         BDu/AqtoKu3sBAGzvIQrzSTLxJ+yN+N+pQYnf3ViVsX/oi7wemYQOS2/SKjiHWdK6N
+         oOARyC/OroP2euo01KO+4BU4kN5j/4aGtO35itfRq2aqE3WHyLhyHBcIsTMdqaKjj2
+         EXeCu9nbu1O3gC+rkB+qZULXfV6waMz+fIvNWDeWSLHK5nG57wLkr6k7OFDcvBeaF1
+         Dxt4iNliaPcwOJTj53KSNJTTqjyBdmIKqyxoWX26/Ay/BRvdDkDPw4v7xK5OwlGCvN
+         39ezx7Sq95wPQ==
+Message-ID: <b054854d3960df0b35296608702a14a2@smtp-cloud7.xs4all.net>
+Date:   Sun, 23 Feb 2020 05:57:47 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfB/XoTzdCO+E4+0yVN/13/KR56vm8Glsb7FMJEk4bAGYMhS4mSyJZtGJ5aGd4+JCN3+0GamglOiaeiB0KBpIi3Si8W1TR348CtqStQw8YfbGM2I6VCe5
+ wmSgxhX0MJkj+OJLG71XHl0hI2Nfn9abG/TKiWGlhOPe/5ndMOrSXtrsplBTxf+xQ8ww29Qfn/YScJf5tEsKee6dkm5/PKDapnGdp1llwq57M40zbHnYO+Iz
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
+Results of the daily build of media_tree:
 
-14 f=C3=A9vr. 2020 08:50:16 Philipp Zabel :
+date:			Sun Feb 23 05:00:12 CET 2020
+media-tree git hash:	bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9
+media_build git hash:	c19c9d0d270d64a158c41764125deef059b7acbc
+v4l-utils git hash:	e8dca9e7be75ff4433425108237922dc4b7d8f4d
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 0a0399d66d361fec135a2dc184bd8d12148f35ad
+host hardware:		x86_64
+host os:		5.4.0-3-amd64
 
-> Hi Martin,
->
-> On Fri, 2020-02-14 at 12:46 +0100, Martin Kepplinger wrote:
->
-> > Hi,
-> >
-> > I'd like to test decoding an mpeg2 or h264 video file on imx8mq, using
-> > its vpu:
-> >
-> > I use Philipp's changes for imx8m from
-> > https://git.pengutronix.de/cgit/pza/linux/log/?h=3Dhantro/imx8m-wip in =
-my
-> > tree:
-> >
-> > https://source.puri.sm/martin.kepplinger/linux-next/commits/5.6-rc1/lib=
-rem5__integration
-> >
-> > and play around with gstreamer, taking notes at
-> > https://source.puri.sm/Librem5/linux-next/issues/74
-> >
-> > The driver probes fine and v4l2 appearently sees the MEM2MEM decoder:
-> >
-> > $ v4l2-ctl --list-devices
-> > nxp,imx8mq-vpu-dec (platform: hantro-vpu):
-> > /dev/video0
-> >
-> >
-> > AFAIK gstreamer should provide a "v4l2videodec" element which it doesn'=
-t:
-> >
->
-> The GStreamer V4L2 decoder elements are only implemented for the
-> stateful codec API [1] so far.
->
-> [1] https://linuxtv.org/downloads/v4l-dvb-apis-new/uapi/v4l/dev-decoder.h=
-tml
->
-> There are plans to add direct support for stateless codecs [2] to
-> GStreamer, but that will still be a bit of work as far as I understand.
->
-> [added Nicolas to Cc:]
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.212-i686: OK
+linux-4.4.212-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.212-i686: OK
+linux-4.9.212-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6-rc1-i686: OK
+linux-5.6-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: ERRORS: Final Summary: 2943, Succeeded: 2939, Failed: 4, Warnings: 12
+sparse: OK
+smatch: OK
 
-That is correct. I have a WIP branch here, than decode some H264, forward, =
-assuming no queues after the decoder. So still need to be polished. It is a=
-lso limited to Hantro driver, as I didn't fully implemented the slice data =
-and the reference lists needed by Cedrus on Allwinner.
+Detailed results are available here:
 
-https://gitlab.freedesktop.org/ndufresne/gst-plugins-bad/commits/v4l2codecs=
--hantro
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
 
+Detailed regression test results are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
 
->
-> [2] https://linuxtv.org/downloads/v4l-dvb-apis-new/uapi/v4l/dev-stateless=
--decoder.html
->
-> In the interim, I have plugged together a GStreamer VA-API stack based
-> on Bootlin's libva-v4l2-request backend. See below.
->
->
-> > $ gst-inspect-1.0|grep -i v4l
-> > video4linux2: v4l2deviceprovider (GstDeviceProviderFactory)
-> > video4linux2: v4l2radio: Radio (video4linux2) Tuner
-> > video4linux2: v4l2sink: Video (video4linux2) Sink
-> > video4linux2: v4l2src: Video (video4linux2) Source
-> >
-> > First: Philipp, do you plan to continue working on supporting hantro fo=
-r
-> > imx8m upstream?
-> >
->
-> Yes. We need to sort out the i.MX8MM power domain bindings / drivers,
-> and I have to test that the Hantro G1 kernel patches work on i.MX8MM as
-> well, to make sure we got the DT bindings right. I'll then resend the
-> series for both i.MX8MQ and i.MX8MM.
->
->
-> > Then: What codec would be appropriate to test decoding now? It seems
-> > like h264 is supposed to be implemented. How do you test?
-> >
->
-> There is a patched FFmpeg floating around that can drive the Hantro
-> driver. I'm using a patched libva-v4l2-request [3] / libva [4] /
-> GStreamer VA-API [5,6] stack to test.
->
-> [3] https://github.com/bootlin/libva-v4l2-request/pull/29
-> [4] https://github.com/intel/libva/pull/332
-> [5] https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/merge_reques=
-ts/729
-> [6] https://gitlab.freedesktop.org/gstreamer/gstreamer-vaapi/merge_reques=
-ts/171
->
->
-> > And finally: What could be missing here? I use debian's gstreamer
-> > package, but in this case it can't really be a config/build issue in
-> > gstreamer, right?
-> >
->
-> None of this was merged in 1.16.2. The GStreamer VA-API changes depend
-> on API changes in libva, which currently add Hantro-specifics to a
-> generic API, and all this is based on a still unstable kernel API.
+Full logs are available here:
 
-I've tested Philipp patch against VA driver, and that worked well for me. T=
-hough it requires patches on so many components that it's quite challenging=
- to package. Notably you need to backport some parser work and its comes wi=
-th a new VA API. I think it's very unlikely this will be merged upstream. T=
-o make things worst, no one, including me, wants to maintain such a userspa=
-ce driver.
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
 
-And that's why I wrote a new one that does not use an abstraction. It still=
- depends on new API in the parser. This is something we might revisit kerne=
-l, as these parameters are very HW specific. On GStreamer side, I'm sharing=
- code with MS DxVA support, and hope we can bring more accelerator around t=
-his in the future. It's the model FFMPEG and Chromium have adopted, and wha=
-t makes it more mature today. About Chromium, there is a branch using the n=
-ew driver, but I can't find it at the moment.
+The Media Infrastructure API from this daily build is here:
 
->
-> regards
-> Philipp
->
-
-
+http://www.xs4all.nl/~hverkuil/spec/index.html
