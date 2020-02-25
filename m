@@ -2,109 +2,132 @@ Return-Path: <SRS0=oIBZ=4N=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B95EEC35E0E
-	for <linux-media@archiver.kernel.org>; Tue, 25 Feb 2020 20:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 234FDC4BA01
+	for <linux-media@archiver.kernel.org>; Tue, 25 Feb 2020 22:31:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7FE2B21744
-	for <linux-media@archiver.kernel.org>; Tue, 25 Feb 2020 20:45:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7FAE222C2
+	for <linux-media@archiver.kernel.org>; Tue, 25 Feb 2020 22:31:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qaiVU/um"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hs/vGgUC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729442AbgBYUpH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Feb 2020 15:45:07 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34303 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727624AbgBYUpH (ORCPT
+        id S1727778AbgBYWbf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Feb 2020 17:31:35 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:40174 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727227AbgBYWbf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Feb 2020 15:45:07 -0500
-Received: by mail-pf1-f194.google.com with SMTP id i6so193833pfc.1;
-        Tue, 25 Feb 2020 12:45:07 -0800 (PST)
+        Tue, 25 Feb 2020 17:31:35 -0500
+Received: by mail-qk1-f194.google.com with SMTP id b7so795730qkl.7
+        for <linux-media@vger.kernel.org>; Tue, 25 Feb 2020 14:31:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rTrYdgShUxjhTgN/M+5vDyiCIj0nQYIb/LpyI8hkLng=;
-        b=qaiVU/umPhZpHouJrJKxTpm7lGWegiVkyARizWMrBascabBG7bhdKuD5gXNY0Lxf+C
-         Tw8SNBSWfUJVIb60Yl/iHWZI7+fSaA/nfIjuPo2KO//ezjPHPK783YjWvZD/fqAScKTS
-         pduUK/KUxzQO0mqeX11wj3YfM03olD8Rm9wSCfNSNYpCeibRLkVX9407/W+o3DHFoqEL
-         Bozx4v2hVD/aEFJyfM7E4UXpDupBznLQNVJ/zgIcee0QEq794v1OTHQz43gavHOl3RJi
-         Svdh9kFemOS+j3gyKYfDt9AK7ra+N3epuUToyoq9YkVhPM67JKbkyXXzYTEuZW+tikNH
-         uNzQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ubIf9KgBPhrMTZsMsrUhZaH8of9jm8OARnjdieWkpqc=;
+        b=hs/vGgUCZVANL6eNCkLfJBo/qB12HTrQoO0o4CSqsNYd1mNNI++5+bKjXeqTs5xnQD
+         wwbKyv7ZRGKb+239Ns0Gxt+UF6dkL65yZKwif9okP8yXphOteGoIMFj6FuV8Ba0wwbrZ
+         qCma7HQRyeTGvlCCeb1ATWwmQLvPX4BxZtzMUZm6BeJQ0TJXZFqmN+dTRdc0jxS2gKHh
+         tsiVv+o/5f98tK41gyL6uCHDS2+ItS0gaWSW7ibsAyxerOYiE12YbWXnDgom4yyAdicW
+         0CbcZLmBkPFj6MCwOvDY4f7JPD7YtoTuGMQxLMOQ3sB4mFvJ4f0+poQLUMv4Mc0LCjAI
+         in7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rTrYdgShUxjhTgN/M+5vDyiCIj0nQYIb/LpyI8hkLng=;
-        b=q2sgamDCPi6nmM/cKryz1pHJi6SZh3sJUsfmFbZTeBK1tC3oZ/0SOaPBP19LBnFDwE
-         EmjJaB/7JiQoNNdiiCQ8EiGF8yV1bOoBEqDyM4E2p/u+jIASdLvcK426PQr51AlJ0Ghq
-         6VD0ynnvGH0taxrbbsUyGys95yhd3qPNUcphHy3rUnMYMkSQY+RFLwyd2YmJ/vY8GUh9
-         LXuXkUCLilcv9RPW3/Zt08GsW23MRRQ4JYxecNp9R/Eu4dCqaZA5qvox/U6yK9QLi6e1
-         83HGvyYrw0y6+hkdDYPK2a/eRGd/2A0u3ecr4PSAUO3uHoV058qYTZFlgJK+TsIIS4Xm
-         TNaA==
-X-Gm-Message-State: APjAAAWL8Fzfw0JIjuh6dIr/oTquTfYCkoFSB5Lz/FGzeVB6JaCOCkJz
-        JJeiCX+1Fkcoa7lAnhACPCpy6h/YmFM=
-X-Google-Smtp-Source: APXvYqyGvajkwKcLRMSWOmO2kJ/LSy6jL5WbReeJGFI6FCRLEOWLDc8sBXYbmFRvsoP8IHmCn35vOQ==
-X-Received: by 2002:a63:3d44:: with SMTP id k65mr327215pga.349.1582663506812;
-        Tue, 25 Feb 2020 12:45:06 -0800 (PST)
-Received: from tw-172-25-31-76.office.twttr.net ([8.25.197.24])
-        by smtp.gmail.com with ESMTPSA id e2sm4047954pjs.25.2020.02.25.12.45.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2020 12:45:06 -0800 (PST)
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        syzbot+b2098bc44728a4efb3e9@syzkaller.appspotmail.com,
-        Chenbo Feng <fengc@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH] dma-buf: free dmabuf->name in dma_buf_release()
-Date:   Tue, 25 Feb 2020 12:44:46 -0800
-Message-Id: <20200225204446.11378-1-xiyou.wangcong@gmail.com>
-X-Mailer: git-send-email 2.21.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ubIf9KgBPhrMTZsMsrUhZaH8of9jm8OARnjdieWkpqc=;
+        b=LcfyWvxfWP0z0ttWB2UQoez3uZ8IYteftIW5fSbhWAJXLvWyX3gtvD+Li1IB0BP8iO
+         SvssQWmzsvXlBPrARppNDHjGJt0uiG2L4ARdkvWt7frRM8o3QbCqowOG26V/uSa6orEP
+         WL9MVqbmmU0YDWoBvOHegKFfbAyqZD10LFKO7vgFhqUR3nIncorWcd5LLCVaYpq4jt0F
+         9Rwa+ebIfg9Gg43/qC0z98wJzmyV+GGhm6EHG7tYOzINgawdbyFsoVhqa6MG4cbWln9r
+         SshSxENY+zjNwizSgYzEXdqK/a8imMEht3y2oqRvCTThhiHKhlgJ/bFLAW2NEBbS7eVS
+         R63w==
+X-Gm-Message-State: APjAAAXDdNm/xFXZR4yYd2NAb8U5im0G3DsbsZsHNP5AbGSxdrvkpcNI
+        2jA+J29r9XuRo91P8N0kQ7a5wIT51KmjE1upI2c=
+X-Google-Smtp-Source: APXvYqzkR2qPJK3/WqlQIrK1EzcZfNxVH52ieLkz9bas5Q9ZI+sIujlCIzdVX0l43BSPhAgNPfi4Ofu//GGZe+eNjvc=
+X-Received: by 2002:a37:b86:: with SMTP id 128mr1376039qkl.159.1582669894087;
+ Tue, 25 Feb 2020 14:31:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAA85sZu_5=mP2zn2h_8aY+n=UM+fXOKgym9yNAvwxcc+6R_-jA@mail.gmail.com>
+ <20200225075117.GI5379@paasikivi.fi.intel.com> <CAA85sZvCxyi9n0dmCfb3q4EwnMu1dp6vsh3eHWyAeZ2aX+J0Pw@mail.gmail.com>
+ <20200225100824.GM5379@paasikivi.fi.intel.com>
+In-Reply-To: <20200225100824.GM5379@paasikivi.fi.intel.com>
+From:   Ian Kumlien <ian.kumlien@gmail.com>
+Date:   Tue, 25 Feb 2020 23:31:01 +0100
+Message-ID: <CAA85sZtkQVGzQq65EiBYnFmVOWUnzYD1k+7Whv6e7-20yegWRg@mail.gmail.com>
+Subject: Re: [RFC] Buildfailure due to mising "select REGMAP_I2C"
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     hverkuil-cisco@xs4all.nl, petrcvekcz@gmail.com,
+        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
+        leonl@leopardimaging.com, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-dma-buff name can be set via DMA_BUF_SET_NAME ioctl, but once set
-it never gets freed.
+On Tue, Feb 25, 2020 at 11:08 AM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> On Tue, Feb 25, 2020 at 08:56:34AM +0100, Ian Kumlien wrote:
+> > On Tue, Feb 25, 2020 at 8:51 AM Sakari Ailus
 
-Free it in dma_buf_release().
+[... 8< ..]
 
-Fixes: bb2bb9030425 ("dma-buf: add DMA_BUF_SET_NAME ioctls")
-Reported-by: syzbot+b2098bc44728a4efb3e9@syzkaller.appspotmail.com
-Acked-by: Chenbo Feng <fengc@google.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Cong Wang <xiyou.wangcong@gmail.com>
----
- drivers/dma-buf/dma-buf.c | 1 +
- 1 file changed, 1 insertion(+)
+> > Yep, like this one:
+>
+> Yes, like that one.
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index d4097856c86b..c343c7c10b4c 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -108,6 +108,7 @@ static int dma_buf_release(struct inode *inode, struct file *file)
- 		dma_resv_fini(dmabuf->resv);
- 
- 	module_put(dmabuf->owner);
-+	kfree(dmabuf->name);
- 	kfree(dmabuf);
- 	return 0;
- }
--- 
-2.21.1
+Anything more you need from me? or is this it? ;)
 
+> > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> > index c68e002d26ea..1d1170de8c98 100644
+> > --- a/drivers/media/i2c/Kconfig
+> > +++ b/drivers/media/i2c/Kconfig
+> > @@ -238,6 +238,7 @@ config VIDEO_ADV7604
+> >         tristate "Analog Devices ADV7604 decoder"
+> >         depends on VIDEO_V4L2 && I2C && VIDEO_V4L2_SUBDEV_API
+> >         depends on GPIOLIB || COMPILE_TEST
+> > +       select REGMAP_I2C
+> >         select HDMI
+> >         select V4L2_FWNODE
+> >         help
+> > @@ -379,6 +380,7 @@ config VIDEO_TVP5150
+> >         tristate "Texas Instruments TVP5150 video decoder"
+> >         depends on VIDEO_V4L2 && I2C
+> >         select V4L2_FWNODE
+> > +       select REGMAP_I2C
+> >         help
+> >           Support for the Texas Instruments TVP5150 video decoder.
+> >
+> > @@ -584,6 +586,7 @@ config VIDEO_IMX214
+> >         tristate "Sony IMX214 sensor support"
+> >         depends on GPIOLIB && I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+> >         depends on V4L2_FWNODE
+> > +       select REGMAP_I2C
+> >         help
+> >           This is a Video4Linux2 sensor driver for the Sony
+> >           IMX214 camera.
+> > @@ -612,6 +615,7 @@ config VIDEO_IMX274
+> >  config VIDEO_IMX290
+> >         tristate "Sony IMX290 sensor support"
+> >         depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+> > +       select REGMAP_I2C
+> >         select V4L2_FWNODE
+> >         help
+> >           This is a Video4Linux2 sensor driver for the Sony
+> > @@ -804,6 +808,7 @@ config VIDEO_OV7670
+> >  config VIDEO_OV7740
+> >         tristate "OmniVision OV7740 sensor support"
+> >         depends on I2C && VIDEO_V4L2
+> > +       select REGMAP_I2C
+> >         help
+> >           This is a Video4Linux2 sensor driver for the OmniVision
+> >           OV7740 VGA camera sensor.
+>
+> --
+> Sakari Ailus
