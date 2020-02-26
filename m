@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B7AFC4BA0B
-	for <linux-media@archiver.kernel.org>; Wed, 26 Feb 2020 11:16:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B32F5C4BA10
+	for <linux-media@archiver.kernel.org>; Wed, 26 Feb 2020 11:16:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2141C24685
-	for <linux-media@archiver.kernel.org>; Wed, 26 Feb 2020 11:16:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8734D2469A
+	for <linux-media@archiver.kernel.org>; Wed, 26 Feb 2020 11:16:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SUEP5H4I"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="drOYBsxY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728321AbgBZLQU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Feb 2020 06:16:20 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:37528 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728298AbgBZLQS (ORCPT
+        id S1728373AbgBZLQa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Feb 2020 06:16:30 -0500
+Received: from mail-pf1-f180.google.com ([209.85.210.180]:42295 "EHLO
+        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728370AbgBZLQ3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Feb 2020 06:16:18 -0500
-Received: by mail-pj1-f66.google.com with SMTP id m13so1145740pjb.2
-        for <linux-media@vger.kernel.org>; Wed, 26 Feb 2020 03:16:15 -0800 (PST)
+        Wed, 26 Feb 2020 06:16:29 -0500
+Received: by mail-pf1-f180.google.com with SMTP id 4so1292809pfz.9
+        for <linux-media@vger.kernel.org>; Wed, 26 Feb 2020 03:16:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=n1tFCzw75kCxqGljRqUUqQ24ppDX2CtviVmHlh9ZwXI=;
-        b=SUEP5H4If0hedHG+d1NujE25rC/qeuZmRHTrnVGnP0EIN3aaxg3mNjZGx2NZLg0L6w
-         BOjyNWvn6w5PLu3+1thwu2S39c0ZMJOEpiV0jIh63SUKGnK9wzObCjQpy3nyaVXE/y7/
-         lSqKT+KAtiRGykb+8CKaOgFHqGlbBk78g480U=
+        bh=CxsIIu+/8DSr9yF0CIvvdp+l+R1SqYNd7xvzR+EPPKE=;
+        b=drOYBsxYOXn2Xeb56l6caTledM7axnNRIci8lv/j5g0baIJWB2DvjJbjzDaydlaz2L
+         8PMa4wUDNdoQrnRBx6edGr6JU/YzLzA7uRqCV24MS4D09M+Fp7JXOB1OalwDH0Scu9Zh
+         3Le4Sjj4Akni+tjxM0v6nRkRPGUUYyP90oACM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=n1tFCzw75kCxqGljRqUUqQ24ppDX2CtviVmHlh9ZwXI=;
-        b=L38lwbV1SesKi2Rc5PkPbi4rO4+yApuhtQkGxSx09yTDdR1ShlnSRJg2RG+kowJtGi
-         JYlphfS8JQOpHkj+U4oj58N1v1ihX0x8lXulglOUU8mRKa8HLTBfQcKEo3Jw3/75IDU5
-         6lpeMk6XZVBHIf1OotU+RlNfZw0KJRdPZ5dJy5XSLCPpF1GOamkrSaL8n6BODyx6q8K4
-         7oxgPMFdYUNtB/6iTwgAlH8ZcgA4X6L2arqfroHD9qYotO5/DN5Wz1B5faBtvJTzFH7Z
-         4SFqZ2e6klyWRcOkk757fu0qyb+skA7n+q76m0WCRRCSMw2OBpavNattuhvPy6jlKjEd
-         RLTQ==
-X-Gm-Message-State: APjAAAWydUpVYabUIdl13NN4fQcRgQbFcPMFSYln6utVngGSsLUubiad
-        qw+1Jwc5zh5HsenGjDjMxmpBblNRH/M=
-X-Google-Smtp-Source: APXvYqzyt+rpfyMZ4RL10CxYR7SLP1N/LsYvlz4aIcvuEf9JypIqMqdBTCcFIPRxhcL3Oo1KRvY9oQ==
-X-Received: by 2002:a17:90b:94c:: with SMTP id dw12mr4482184pjb.13.1582715775331;
-        Wed, 26 Feb 2020 03:16:15 -0800 (PST)
+        bh=CxsIIu+/8DSr9yF0CIvvdp+l+R1SqYNd7xvzR+EPPKE=;
+        b=YaBwoiLkckwhrILHGj9U6lE+9Xh9RslIys6Hkb5OkpyDdqoHnighq5ig6y7mGeMI3E
+         2Ck/P+XFcnL/1Y8F5iwNSZ8KEbOE2/RTvRauN/RxkvB1Qjl/6X9CZG4hj5CX6OjNsHSb
+         p9o6WA7+h8emzNKga+fmUbKizjePTIPRtJmQTi+sGv1j0i2++xlKs+uoUn8MneCT1BG4
+         liIddUHrOccLQCeelXs9wr0WpyGPARXnGZnBPoPkFFFonSfQ19g83wo8VHFm9uDv4U66
+         34jqGwtcAkNagZlqZ2tZp+PzxhQxMq0nKn94Usm4qk9YUXejoKFIM3pJIszYwvGpqFx/
+         vEdQ==
+X-Gm-Message-State: APjAAAV1FTpX6K8PraMYeb0Gzp4nzNFtz0BfoYva9b2OrvQjqPFvG8vS
+        rgNBAhh1mMWDvwWIT7MzA+yR0A==
+X-Google-Smtp-Source: APXvYqw7geSaJHKQXNxHd+nJsVEm3hH3f9VMmmCHh3bRl9MgtjuMWJBqY01Dt28pW7thPsYChjxijA==
+X-Received: by 2002:a62:25c6:: with SMTP id l189mr3901463pfl.136.1582715788057;
+        Wed, 26 Feb 2020 03:16:28 -0800 (PST)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:5bbb:c872:f2b1:f53b])
-        by smtp.gmail.com with ESMTPSA id o22sm2429993pgj.58.2020.02.26.03.16.12
+        by smtp.gmail.com with ESMTPSA id o22sm2429993pgj.58.2020.02.26.03.16.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 03:16:14 -0800 (PST)
+        Wed, 26 Feb 2020 03:16:27 -0800 (PST)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Hans Verkuil <hans.verkuil@cisco.com>,
         Tomasz Figa <tfiga@chromium.org>
@@ -63,9 +63,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Pawel Osciak <posciak@chromium.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv3 08/11] videobuf2: check ->synced flag in prepare() and finish()
-Date:   Wed, 26 Feb 2020 20:15:26 +0900
-Message-Id: <20200226111529.180197-9-senozhatsky@chromium.org>
+Subject: [PATCHv3 11/11] videobuf2: don't test db_attach in dma-contig prepare and finish
+Date:   Wed, 26 Feb 2020 20:15:29 +0900
+Message-Id: <20200226111529.180197-12-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.25.0.265.gbab2e86ba0-goog
 In-Reply-To: <20200226111529.180197-1-senozhatsky@chromium.org>
 References: <20200226111529.180197-1-senozhatsky@chromium.org>
@@ -76,48 +76,73 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This simplifies the code a tiny bit and let's us to avoid
-unneeded ->prepare()/->finish() calls.
+We moved cache management decision making to the upper layer and
+rely on buffer's need_cache_sync flags and videobuf2 core. If the
+upper layer (core) has decided to invoke ->prepare() or ->finish()
+then we must sync.
+
+For DMABUF ->need_cache_sync_on_prepare and ->need_cache_sync_on_flush
+are always false so videobuf core does not call ->prepare() and
+->finish() on such buffers.
+
+Additionally, scratch the DMABUF comment.
 
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- drivers/media/common/videobuf2/videobuf2-core.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/common/videobuf2/videobuf2-dma-contig.c | 6 ++----
+ drivers/media/common/videobuf2/videobuf2-dma-sg.c     | 8 --------
+ 2 files changed, 2 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index 988e8796de4f..7f637e3a50ab 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -304,6 +304,9 @@ static void __vb2_buf_mem_prepare(struct vb2_buffer *vb)
- {
- 	unsigned int plane;
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index a387260fb321..6ea0961149d7 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -100,8 +100,7 @@ static void vb2_dc_prepare(void *buf_priv)
+ 	struct vb2_dc_buf *buf = buf_priv;
+ 	struct sg_table *sgt = buf->dma_sgt;
  
-+	if (vb->synced)
-+		return;
-+
- 	if (vb->need_cache_sync_on_prepare) {
- 		for (plane = 0; plane < vb->num_planes; ++plane)
- 			call_void_memop(vb, prepare,
-@@ -320,6 +323,9 @@ static void __vb2_buf_mem_finish(struct vb2_buffer *vb)
- {
- 	unsigned int plane;
+-	/* DMABUF exporter will flush the cache for us */
+-	if (!sgt || buf->db_attach)
++	if (!sgt)
+ 		return;
  
-+	if (!vb->synced)
-+		return;
-+
- 	if (vb->need_cache_sync_on_finish) {
- 		for (plane = 0; plane < vb->num_planes; ++plane)
- 			call_void_memop(vb, finish,
-@@ -1991,8 +1997,7 @@ static void __vb2_queue_cancel(struct vb2_queue *q)
- 				call_void_vb_qop(vb, buf_request_complete, vb);
- 		}
+ 	dma_sync_sg_for_device(buf->dev, sgt->sgl, sgt->orig_nents,
+@@ -113,8 +112,7 @@ static void vb2_dc_finish(void *buf_priv)
+ 	struct vb2_dc_buf *buf = buf_priv;
+ 	struct sg_table *sgt = buf->dma_sgt;
  
--		if (vb->synced)
--			__vb2_buf_mem_finish(vb);
-+		__vb2_buf_mem_finish(vb);
+-	/* DMABUF exporter will flush the cache for us */
+-	if (!sgt || buf->db_attach)
++	if (!sgt)
+ 		return;
  
- 		if (vb->prepared) {
- 			call_void_vb_qop(vb, buf_finish, vb);
+ 	dma_sync_sg_for_cpu(buf->dev, sgt->sgl, sgt->orig_nents, buf->dma_dir);
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+index ddc67c9aaedb..2a01bc567321 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+@@ -204,10 +204,6 @@ static void vb2_dma_sg_prepare(void *buf_priv)
+ 	struct vb2_dma_sg_buf *buf = buf_priv;
+ 	struct sg_table *sgt = buf->dma_sgt;
+ 
+-	/* DMABUF exporter will flush the cache for us */
+-	if (buf->db_attach)
+-		return;
+-
+ 	dma_sync_sg_for_device(buf->dev, sgt->sgl, sgt->orig_nents,
+ 			       buf->dma_dir);
+ }
+@@ -217,10 +213,6 @@ static void vb2_dma_sg_finish(void *buf_priv)
+ 	struct vb2_dma_sg_buf *buf = buf_priv;
+ 	struct sg_table *sgt = buf->dma_sgt;
+ 
+-	/* DMABUF exporter will flush the cache for us */
+-	if (buf->db_attach)
+-		return;
+-
+ 	dma_sync_sg_for_cpu(buf->dev, sgt->sgl, sgt->orig_nents, buf->dma_dir);
+ }
+ 
 -- 
 2.25.0.265.gbab2e86ba0-goog
 
