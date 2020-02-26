@@ -2,80 +2,63 @@ Return-Path: <SRS0=hlfS=4O=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16E53C4BA13
-	for <linux-media@archiver.kernel.org>; Wed, 26 Feb 2020 15:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5643DC4BA13
+	for <linux-media@archiver.kernel.org>; Wed, 26 Feb 2020 15:49:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E7E6D21556
-	for <linux-media@archiver.kernel.org>; Wed, 26 Feb 2020 15:48:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 361C820637
+	for <linux-media@archiver.kernel.org>; Wed, 26 Feb 2020 15:49:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728501AbgBZPsL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Feb 2020 10:48:11 -0500
-Received: from retiisi.org.uk ([95.216.213.190]:46172 "EHLO
+        id S1728377AbgBZPtU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Feb 2020 10:49:20 -0500
+Received: from retiisi.org.uk ([95.216.213.190]:46210 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728018AbgBZPsK (ORCPT
+        by vger.kernel.org with ESMTP id S1728244AbgBZPtU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Feb 2020 10:48:10 -0500
+        Wed, 26 Feb 2020 10:49:20 -0500
 Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 94214634C89;
-        Wed, 26 Feb 2020 17:46:57 +0200 (EET)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 24F67634C87;
+        Wed, 26 Feb 2020 17:48:07 +0200 (EET)
 Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
         (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1j6ytm-0002Kc-13; Wed, 26 Feb 2020 17:46:58 +0200
-Date:   Wed, 26 Feb 2020 17:46:58 +0200
+        id 1j6yut-0002Ki-NW; Wed, 26 Feb 2020 17:48:07 +0200
+Date:   Wed, 26 Feb 2020 17:48:07 +0200
 From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Sean Young <sean@mess.org>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH v4l-utils] Fix build failure on s390x
-Message-ID: <20200226154657.GM5023@valkosipuli.retiisi.org.uk>
-References: <20200216091839.31183-1-sean@mess.org>
+To:     Eugen Hristev <eugen.hristev@microchip.com>
+Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: v4l2-core: fix entity initialization in
+ device_register_subdev
+Message-ID: <20200226154807.GN5023@valkosipuli.retiisi.org.uk>
+References: <20200226152816.31557-1-eugen.hristev@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200216091839.31183-1-sean@mess.org>
+In-Reply-To: <20200226152816.31557-1-eugen.hristev@microchip.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sean,
+On Wed, Feb 26, 2020 at 05:28:16PM +0200, Eugen Hristev wrote:
+> The entity variable was being initialized in the wrong place, before the
+> parameters have been checked.
+> To solve this, completely removed the entity variable and replaced it
+> with the initialization value : &sd->entity.
+> This will avoid dereferencing 'sd' pointer before it's being checked if
+> it's NULL.
+> 
+> Fixes: 61f5db549dde ("[media] v4l: Make v4l2_subdev inherit from media_entity")
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 
-On Sun, Feb 16, 2020 at 09:18:39AM +0000, Sean Young wrote:
-> See: https://bugzilla.redhat.com/show_bug.cgi?id=1800228
-> 
-> /usr/bin/ld: .libs/libdvbv5_la-dvb-fe.o:(.bss+0x8): multiple definition of `delivery_system_name'; .libs/libdvbv5_la-dvb-v5.o:/builddir/build/BUILD/v4l-utils-1.18.0/lib/libdvbv5/dvb-v5.h:29: first defined here
-> /usr/bin/ld: .libs/libdvbv5_la-dvb-fe.o:(.bss+0xa8): multiple definition of `dvb_v5_name'; .libs/libdvbv5_la-dvb-v5.o:/builddir/build/BUILD/v4l-utils-1.18.0/lib/libdvbv5/dvb-v5.h:28: first defined here
-> /usr/bin/ld: .libs/libdvbv5_la-dvb-fe.o:(.rodata+0x3ec): multiple definition of `fe_bandwidth_name'; .libs/libdvbv5_la-dvb-v5.o:/builddir/build/BUILD/v4l-utils-1.18.0/lib/libdvbv5/dvb-v5.h:20: first defined here
-> 
-> delivery_system_name etc are being defined both in lib/libdvbv5/dvb-v5.c and
-> lib/libdvbv5/dvb-v5.h.
-> 
-> Signed-off-by: Sean Young <sean@mess.org>
-> ---
->  lib/libdvbv5/gen_dvb_structs.pl | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/lib/libdvbv5/gen_dvb_structs.pl b/lib/libdvbv5/gen_dvb_structs.pl
-> index 7e1d645c..d15d1fc3 100755
-> --- a/lib/libdvbv5/gen_dvb_structs.pl
-> +++ b/lib/libdvbv5/gen_dvb_structs.pl
-> @@ -419,6 +419,9 @@ sub output_arrays($$$$$)
->      }
->      printf OUT " %s[%i]", $name, $size;
->    } else {
-> +    if ($decl) {
-> +      printf OUT "extern ";
-> +    }
->      printf OUT "const %s%s[%i]", $type, $name, $size + 1;
->    }
->  
+Thanks!
 
 Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
