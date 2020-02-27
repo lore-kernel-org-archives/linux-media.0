@@ -2,57 +2,71 @@ Return-Path: <SRS0=OAEN=4P=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE8FCC35E1F
-	for <linux-media@archiver.kernel.org>; Thu, 27 Feb 2020 18:09:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98401C11D3D
+	for <linux-media@archiver.kernel.org>; Thu, 27 Feb 2020 18:10:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C4CAB246B7
-	for <linux-media@archiver.kernel.org>; Thu, 27 Feb 2020 18:09:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72361246A5
+	for <linux-media@archiver.kernel.org>; Thu, 27 Feb 2020 18:10:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KrJU7X7E"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729399AbgB0SJJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Feb 2020 13:09:09 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40778 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729232AbgB0SJJ (ORCPT
+        id S1729563AbgB0SKF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Feb 2020 13:10:05 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:43408 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729385AbgB0SKE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Feb 2020 13:09:09 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 255672963D9
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     robh+dt@kernel.org, mark.rutland@arm.com, ck.hu@mediatek.com,
-        p.zabel@pengutronix.de, airlied@linux.ie, mturquette@baylibre.com,
-        sboyd@kernel.org, ulrich.hecht+renesas@gmail.com,
-        laurent.pinchart@ideasonboard.com
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, rdunlap@infradead.org,
-        dri-devel@lists.freedesktop.org, Weiyi Lu <weiyi.lu@mediatek.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        linux-clk@vger.kernel.org,
-        Collabora Kernel ML <kernel@collabora.com>,
-        mtk01761 <wendell.lin@mediatek.com>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>, wens@csie.org,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        sean.wang@mediatek.com, frank-w@public-files.de,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org, hsinyi@chromium.org,
-        Matthias Brugger <mbrugger@suse.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Richard Fontana <rfontana@redhat.com>,
-        linux-kernel@vger.kernel.org, matthias.bgg@kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: [PATCH v10 0/5] arm/arm64: mediatek: Fix mt8173 mmsys device probing
-Date:   Thu, 27 Feb 2020 19:08:53 +0100
-Message-Id: <20200227180858.1514157-1-enric.balletbo@collabora.com>
-X-Mailer: git-send-email 2.25.0
+        Thu, 27 Feb 2020 13:10:04 -0500
+Received: by mail-lj1-f196.google.com with SMTP id e3so225135lja.10;
+        Thu, 27 Feb 2020 10:10:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JGTvTC5n1dMFf5hqfM1JJ/BZi1c+ZQ0aixXc9pKVWyk=;
+        b=KrJU7X7EIvMKlUEtbUymzld9J6xlBT5wJtUGvAAIKW08mCZFRtSfx8xOROqfuexZjm
+         JgzdQMJpcoKGAr9Sz0TRp3hECEd10uyGdfVINUEuFhgyEKnBX9Q9acsGmO0XTXw/D6Y0
+         GYZwtvYYoQslELF2RcyKz7DfbPy0XW2QIJ8gF4gokZGJp1fHhMyvKVOyRsERN8IJIVRU
+         IHkV/XDshgvI537t6WLPZnMMYSFkLkpFiBmmM8E+LRQmqRD0fDSL4yKDt20D3tRmK3sP
+         p4jIXT6QFwM5U/myoCIPV5M3bcSJKp8O/zr3UOuVSQQo+sKXF59tPU52HlPpgGkFPRd2
+         4t/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JGTvTC5n1dMFf5hqfM1JJ/BZi1c+ZQ0aixXc9pKVWyk=;
+        b=PPluVwlod+vuM5zQoqDcZ6Ac4P4qvVDiz8liXdm3d9ap91e7ZVjQvX0y+7jPrauUoH
+         sL6sAmeBWHt6xItcHjlevS383rLjqeVFNcN9ybmdUmLPnrIJX2OaWpeJ0EXmA67qOsji
+         r6YqFwBv9InOaykGmNUYbO/BxGOgbCD9edJYXdwS9s1bsiFJvQEMbDNJOCnyO9bUCKM+
+         hZLHadFfVyBRkexwQwaJRMH90Q8JWnKj+q/tw0zC71Innv/FU214Pj7qu58LWO9djh1n
+         hOJQRc0xpLKdxGvu5v8iKrlu8alFmCUg6ykGTnayZWza20xvJKjc831YutEDbbnypC5n
+         ZmCw==
+X-Gm-Message-State: ANhLgQ0lTz6/58iUOUkT07q2q/zwjr2wBjESAVAf09Me4KQDmYpods0I
+        2id7R0OqboTjG0gGdgU89EA=
+X-Google-Smtp-Source: ADFU+vt7VurT8NSU0ruym6CjuKGiA65tRemHtqoeZ3SAziIhDR/LByjtv7S5fyvspcm5O9WPA2qWbQ==
+X-Received: by 2002:a2e:9748:: with SMTP id f8mr208065ljj.178.1582827002155;
+        Thu, 27 Feb 2020 10:10:02 -0800 (PST)
+Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.gmail.com with ESMTPSA id t6sm3222170lfe.47.2020.02.27.10.10.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2020 10:10:01 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] media: staging: tegra-vde: Use devm_platform_ioremap_resource_byname()
+Date:   Thu, 27 Feb 2020 21:09:15 +0300
+Message-Id: <20200227180915.9541-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -60,112 +74,110 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear all,
+This helps to make code cleaner a tad.
 
-Those patches are intended to solve an old standing issue on some
-Mediatek devices (mt8173, mt2701 and mt2712 are affected by this issue).
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/staging/media/tegra-vde/vde.c | 55 +++++----------------------
+ 1 file changed, 9 insertions(+), 46 deletions(-)
 
-Up to now both drivers, clock and drm are probed with the same device tree
-compatible. But only the first driver gets probed, which in effect breaks
-graphics on those devices.
-
-The MMSYS (Multimedia subsystem) in Mediatek SoCs has some registers to
-control clock gates (which is used in the clk driver) and some registers
-to set the routing and enable the differnet blocks of the display
-and MDP (Media Data Path) subsystem. On this series the clk driver is
-not a pure clock controller but a system controller that can provide
-access to the shared registers between the different drivers that need
-it (mediatek-drm and mediatek-mdp). Hence the MMSYS clk driver was moved
-to drivers/soc/mediatek and is the entry point (parent) which will trigger
-the probe of the corresponding mediatek-drm driver.
-
-**IMPORTANT** This series only fixes the issue on mt8173 to make it
-simple and as is the only platform I can test. Similar changes should be
-applied for mt2701 and mt2712 to have display working.
-
-For reference, here are the links to the old discussions:
-* v9: https://patchwork.kernel.org/project/linux-clk/list/?series=247591
-* v8: https://patchwork.kernel.org/project/linux-mediatek/list/?series=244891
-* v7: https://patchwork.kernel.org/project/linux-mediatek/list/?series=241217
-* v6: https://patchwork.kernel.org/project/linux-mediatek/list/?series=213219
-* v5: https://patchwork.kernel.org/project/linux-mediatek/list/?series=44063
-* v4:
-  * https://patchwork.kernel.org/patch/10530871/
-  * https://patchwork.kernel.org/patch/10530883/
-  * https://patchwork.kernel.org/patch/10530885/
-  * https://patchwork.kernel.org/patch/10530911/
-  * https://patchwork.kernel.org/patch/10530913/
-* v3:
-  * https://patchwork.kernel.org/patch/10367857/
-  * https://patchwork.kernel.org/patch/10367861/
-  * https://patchwork.kernel.org/patch/10367877/
-  * https://patchwork.kernel.org/patch/10367875/
-  * https://patchwork.kernel.org/patch/10367885/
-  * https://patchwork.kernel.org/patch/10367883/
-  * https://patchwork.kernel.org/patch/10367889/
-  * https://patchwork.kernel.org/patch/10367907/
-  * https://patchwork.kernel.org/patch/10367909/
-  * https://patchwork.kernel.org/patch/10367905/
-* v2: No relevant discussion, see v3
-* v1:
-  * https://patchwork.kernel.org/patch/10016497/
-  * https://patchwork.kernel.org/patch/10016499/
-  * https://patchwork.kernel.org/patch/10016505/
-  * https://patchwork.kernel.org/patch/10016507/
-
-Best regards,
- Enric
-
-Changes in v10:
-- Update the binding documentation for the mmsys system controller.
-- Renamed to be generic mtk-mmsys
-- Add driver data support to be able to support diferent SoCs
-- Introduced a new patch to move routing control into mmsys driver.
-- Removed the patch to use regmap as is not needed anymore.
-- Match driver data to get display routing.
-
-Changes in v9:
-- Move mmsys to drivers/soc/mediatek (CK)
-- Do not move the display routing from the drm driver (CK)
-
-Changes in v8:
-- Be a builtin_platform_driver like other mediatek mmsys drivers.
-- New patch introduced in this series.
-
-Changes in v7:
-- Free clk_data->clks as well
-- Get rid of private data structure
-
-Enric Balletbo i Serra (3):
-  dt-bindings: mediatek: Update mmsys binding to reflect it is a system
-    controller
-  soc / drm: mediatek: Move routing control to mmsys device
-  soc / drm: mediatek: Fix mediatek-drm device probing
-
-Matthias Brugger (2):
-  drm/mediatek: Omit warning on probe defers
-  soc: mediatek: Move mt8173 MMSYS to platform driver
-
- .../bindings/arm/mediatek/mediatek,mmsys.txt  |   7 +-
- drivers/clk/mediatek/clk-mt8173.c             | 104 -----
- drivers/gpu/drm/mediatek/mtk_disp_color.c     |   5 +-
- drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |   5 +-
- drivers/gpu/drm/mediatek/mtk_disp_rdma.c      |   5 +-
- drivers/gpu/drm/mediatek/mtk_dpi.c            |  12 +-
- drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |  13 +-
- drivers/gpu/drm/mediatek/mtk_drm_ddp.c        | 259 +----------
- drivers/gpu/drm/mediatek/mtk_drm_ddp.h        |   7 -
- drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  44 +-
- drivers/gpu/drm/mediatek/mtk_dsi.c            |   8 +-
- drivers/gpu/drm/mediatek/mtk_hdmi.c           |   4 +-
- drivers/soc/mediatek/Kconfig                  |   7 +
- drivers/soc/mediatek/Makefile                 |   1 +
- drivers/soc/mediatek/mtk-mmsys.c              | 435 ++++++++++++++++++
- include/linux/soc/mediatek/mtk-mmsys.h        |  19 +
- 16 files changed, 529 insertions(+), 406 deletions(-)
- create mode 100644 drivers/soc/mediatek/mtk-mmsys.c
- create mode 100644 include/linux/soc/mediatek/mtk-mmsys.h
-
+diff --git a/drivers/staging/media/tegra-vde/vde.c b/drivers/staging/media/tegra-vde/vde.c
+index e18fd48981da..d3e63512a765 100644
+--- a/drivers/staging/media/tegra-vde/vde.c
++++ b/drivers/staging/media/tegra-vde/vde.c
+@@ -949,7 +949,6 @@ static int tegra_vde_runtime_resume(struct device *dev)
+ static int tegra_vde_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct resource *regs;
+ 	struct tegra_vde *vde;
+ 	int irq, err;
+ 
+@@ -959,75 +958,39 @@ static int tegra_vde_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, vde);
+ 
+-	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sxe");
+-	if (!regs)
+-		return -ENODEV;
+-
+-	vde->sxe = devm_ioremap_resource(dev, regs);
++	vde->sxe = devm_platform_ioremap_resource_byname(pdev, "sxe");
+ 	if (IS_ERR(vde->sxe))
+ 		return PTR_ERR(vde->sxe);
+ 
+-	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "bsev");
+-	if (!regs)
+-		return -ENODEV;
+-
+-	vde->bsev = devm_ioremap_resource(dev, regs);
++	vde->bsev = devm_platform_ioremap_resource_byname(pdev, "bsev");
+ 	if (IS_ERR(vde->bsev))
+ 		return PTR_ERR(vde->bsev);
+ 
+-	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mbe");
+-	if (!regs)
+-		return -ENODEV;
+-
+-	vde->mbe = devm_ioremap_resource(dev, regs);
++	vde->mbe = devm_platform_ioremap_resource_byname(pdev, "mbe");
+ 	if (IS_ERR(vde->mbe))
+ 		return PTR_ERR(vde->mbe);
+ 
+-	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ppe");
+-	if (!regs)
+-		return -ENODEV;
+-
+-	vde->ppe = devm_ioremap_resource(dev, regs);
++	vde->ppe = devm_platform_ioremap_resource_byname(pdev, "ppe");
+ 	if (IS_ERR(vde->ppe))
+ 		return PTR_ERR(vde->ppe);
+ 
+-	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mce");
+-	if (!regs)
+-		return -ENODEV;
+-
+-	vde->mce = devm_ioremap_resource(dev, regs);
++	vde->mce = devm_platform_ioremap_resource_byname(pdev, "mce");
+ 	if (IS_ERR(vde->mce))
+ 		return PTR_ERR(vde->mce);
+ 
+-	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "tfe");
+-	if (!regs)
+-		return -ENODEV;
+-
+-	vde->tfe = devm_ioremap_resource(dev, regs);
++	vde->tfe = devm_platform_ioremap_resource_byname(pdev, "tfe");
+ 	if (IS_ERR(vde->tfe))
+ 		return PTR_ERR(vde->tfe);
+ 
+-	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ppb");
+-	if (!regs)
+-		return -ENODEV;
+-
+-	vde->ppb = devm_ioremap_resource(dev, regs);
++	vde->ppb = devm_platform_ioremap_resource_byname(pdev, "ppb");
+ 	if (IS_ERR(vde->ppb))
+ 		return PTR_ERR(vde->ppb);
+ 
+-	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "vdma");
+-	if (!regs)
+-		return -ENODEV;
+-
+-	vde->vdma = devm_ioremap_resource(dev, regs);
++	vde->vdma = devm_platform_ioremap_resource_byname(pdev, "vdma");
+ 	if (IS_ERR(vde->vdma))
+ 		return PTR_ERR(vde->vdma);
+ 
+-	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "frameid");
+-	if (!regs)
+-		return -ENODEV;
+-
+-	vde->frameid = devm_ioremap_resource(dev, regs);
++	vde->frameid = devm_platform_ioremap_resource_byname(pdev, "frameid");
+ 	if (IS_ERR(vde->frameid))
+ 		return PTR_ERR(vde->frameid);
+ 
 -- 
-2.25.0
+2.24.0
 
