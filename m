@@ -5,68 +5,70 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E80EDC3F2D2
-	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 16:41:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD53FC3F2D3
+	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 16:50:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BC68F2468D
-	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 16:41:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4B20246A0
+	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 16:50:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="czUtcTbX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OCYRuizE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgB1Qle (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Feb 2020 11:41:34 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:53706 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725928AbgB1Qld (ORCPT
+        id S1726954AbgB1QuS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Feb 2020 11:50:18 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:40141 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725877AbgB1QuS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Feb 2020 11:41:33 -0500
-Received: by mail-wm1-f66.google.com with SMTP id f15so3844030wml.3;
-        Fri, 28 Feb 2020 08:41:31 -0800 (PST)
+        Fri, 28 Feb 2020 11:50:18 -0500
+Received: by mail-wr1-f67.google.com with SMTP id r17so3700119wrj.7;
+        Fri, 28 Feb 2020 08:50:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X5lwKhEkYPb9uFlg3S0kiEOPjUxyOuwawAZ72KaGw1I=;
-        b=czUtcTbXEvp4mZ7wtGwtLvOLqcZDZlcZuz3vhgz+v/+rlvyULWIomKGtLHqP8fikwu
-         g83gvPCTOCs5rTKZgRIL6gVLYZggOrS5iRFJmwgwj5iIISr9NRYe3v7hdocYspriLyOx
-         zQ0xYB9h0wlpxsoi0pb/IMf/O+nB/jgyii3rlke9Hlgn7k3pBu0uGLW/i/11iKeTscB0
-         Roghbmt5MLisRFksRBXU6TGaUQfpebPc5oBID2VTurhw3Wglf7nVzXv0+j0kgJLI5bNq
-         1eXN0OSorz7i52T937g+ngq+oIh2jMPqLT/316e443cQip13YNuFNi/+/QOoDsIzZcIh
-         bD+A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=uYDEPkQwfnUjgPnuuoScpuqFDu5JOLaJrAD58Hc9G7M=;
+        b=OCYRuizE3lNV5LfCdbqRbcZToo/GEaDbb8IJk7GvatwGCUzowHV3jpGK7MWfeTJHQV
+         5Ka11XAOJDRz3n13LiLjtoMbOKcK3HycLmmN25/RGnsYbOju1uhxf/XqfpW3GzPAI6Rz
+         u2aEiewkBkI21A9i7guw+mdzPKt1iSy7RsZtbMZCYQIG3KW10PnWWKLQ+Snmj0B1DlnD
+         BF47ytLJGwIXMwAdbRGdIw0SUjxh4ecNTrnRVxUs3jeKpTcdaKE4/ALa1mc0kWjTo3F4
+         lsmte4Oss0fq8o6xmJbfNWgW3f5c8vST916aPr8ly4/qqgNZ4f4K0hvMcmmTkWr3uyuv
+         ci+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X5lwKhEkYPb9uFlg3S0kiEOPjUxyOuwawAZ72KaGw1I=;
-        b=C8p6n2Ekn4YBljw7ZtkpzHvkkYsXi3Jz+noe3vpgobHMasS2Y4RBRkk+1Mkm/Rwk3W
-         6H/UDDjAlrjttAUYipoN8EaZd7U8uCMKE9GrusYor13+DiuY9Qtg4ZnkiDs4TBsT8qp2
-         XgO+30H3gyHnel1ftUOvLrbuDnThvp+9wNTe2khUt65WApDR9f/s3JBXNT7zpueHbJ7a
-         gk1WVP82rsA+RjeROjiwuPWzZpI60MYg/DXbzz2czfacKoYuNg/iKZWLGmuoW5DWdytU
-         OZkc931htUQjKykfDh3+YpH/pD4gWm5J6Y4btpECbANCZvyyZPG1BpTmwvjIMw7YnmGW
-         PHhQ==
-X-Gm-Message-State: APjAAAWfS2jt8eaeb/GflR2ENcTzh3HOoZ1gcHdmLnv8yvPzdpcNrikt
-        JVhb8/Rci1GdR+XjpE36Aec=
-X-Google-Smtp-Source: APXvYqzocoSmWjrOQ3OYNBEyzBu4M21vN1njgPy+5EDu+DImCvi/+Wkhc/Ch9Qtn3ou8YPNSaZfcIA==
-X-Received: by 2002:a1c:a9d1:: with SMTP id s200mr5766137wme.181.1582908091322;
-        Fri, 28 Feb 2020 08:41:31 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=uYDEPkQwfnUjgPnuuoScpuqFDu5JOLaJrAD58Hc9G7M=;
+        b=MOvSRMLv6H8NcjhaA7kH4h91OED/2mDW12jA2un5t3+VP84dW89IVjnJCjVm4zamd4
+         eCo9UgP7znIMXta/NQ3VwhA8tCK+elmZlGSk/UQVOk+lIbnTRsbe1ZemkXqZMp4W8Hwp
+         sAVW2BRWKkAaVH0j9hybFadc+x2DPi5SQOkF85cmxBs3omQX/+kPs5Ihu7zZvEDe1Y5T
+         +TGWBx2FyOXaBAMVzZDecEmawkQY2NG1Mzi7qQw9mTiHLZgv8MD0SIDrkRlzun5ICAux
+         u4LcQNb7uVX7HL3yJKcVpg8yqlAMbxt/8dD9PoQ01hdjtGwIwPeCGbzxnW3Lp/s9fmyq
+         MocA==
+X-Gm-Message-State: APjAAAXljOAS92ob9nxux+H6hq30RNgvP8+6OWA/g6fZXR7mugQcevAJ
+        AXQbrhYMQlXnEcauLuylopY=
+X-Google-Smtp-Source: APXvYqxou3okKCY78l/xXF0q4ljsGL5Ukzt7MiTypHyHS1lCEQFEyXTDMTV+CY8JI4XEkrNV/riuIQ==
+X-Received: by 2002:a5d:4b82:: with SMTP id b2mr5617141wrt.102.1582908616341;
+        Fri, 28 Feb 2020 08:50:16 -0800 (PST)
 Received: from prasmi.home ([2a00:23c8:2510:d000:3855:fd13:6b76:a11b])
-        by smtp.gmail.com with ESMTPSA id t187sm3028493wmt.25.2020.02.28.08.41.30
+        by smtp.gmail.com with ESMTPSA id h2sm13263408wrt.45.2020.02.28.08.50.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2020 08:41:30 -0800 (PST)
+        Fri, 28 Feb 2020 08:50:15 -0800 (PST)
 From:   Lad Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Fabio Estevam <festevam@gmail.com>
+        Niklas <niklas.soderlund@ragnatech.se>
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] media: i2c: ov5645: Add virtual_channel module parameter
-Date:   Fri, 28 Feb 2020 16:41:26 +0000
-Message-Id: <20200228164126.17517-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 1/2] media: rcar-csi2: Fix registering camera endpoint to VIN
+Date:   Fri, 28 Feb 2020 16:50:10 +0000
+Message-Id: <20200228165011.17898-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200228165011.17898-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20200228165011.17898-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -74,74 +76,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-OV5645 can operate in virtual channel 0-3 in CSI2 interfaces, this patch
-adds support for module parameter virtual_channel to select the required
-channel. By default OV5645 operates in virtual channel 0.
+CSI2 registers camera/sensor as v4l2 async sub device with fwnode is
+remote endpoint and the camera/sensor register itself as v4l2 sub device
+with fwnode is remote device as a result the match.fwnode should be
+fwnode_graph_get_remote_port_parent and not
+fwnode_graph_get_remote_endpoint.
+
+This patch makes use of v4l2 helper function
+v4l2_async_notifier_add_fwnode_remote_subdev() which uses
+fwnode_graph_get_remote_port_parent as match.fwnode fixing the issue
+of registering camera endpoint to the driver.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/media/i2c/ov5645.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/media/platform/rcar-vin/rcar-csi2.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
-index a6c17d15d754..0a0671164623 100644
---- a/drivers/media/i2c/ov5645.c
-+++ b/drivers/media/i2c/ov5645.c
-@@ -54,6 +54,7 @@
- #define OV5645_TIMING_TC_REG21		0x3821
- #define		OV5645_SENSOR_MIRROR		BIT(1)
- #define OV5645_MIPI_CTRL00		0x4800
-+#define OV5645_REG_DEBUG_MODE		0x4814
- #define OV5645_PRE_ISP_TEST_SETTING_1	0x503d
- #define		OV5645_TEST_PATTERN_MASK	0x3
- #define		OV5645_SET_TEST_PATTERN(x)	((x) & OV5645_TEST_PATTERN_MASK)
-@@ -61,6 +62,11 @@
- #define OV5645_SDE_SAT_U		0x5583
- #define OV5645_SDE_SAT_V		0x5584
+diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+index faa9fb23a2e9..5b04e4768eb1 100644
+--- a/drivers/media/platform/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+@@ -833,20 +833,18 @@ static int rcsi2_parse_dt(struct rcar_csi2 *priv)
+ 		return ret;
+ 	}
  
-+static u8 virtual_channel;
-+module_param(virtual_channel, byte, 0644);
-+MODULE_PARM_DESC(virtual_channel,
-+		 "MIPI CSI-2 virtual channel (0..3), default 0");
-+
- /* regulator supplies */
- static const char * const ov5645_supply_name[] = {
- 	"vdddo", /* Digital I/O (1.8V) supply */
-@@ -983,12 +989,34 @@ static int ov5645_get_selection(struct v4l2_subdev *sd,
- 	return 0;
- }
+-	priv->asd.match.fwnode =
+-		fwnode_graph_get_remote_endpoint(of_fwnode_handle(ep));
+-	priv->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+-
+-	of_node_put(ep);
+-
+ 	v4l2_async_notifier_init(&priv->notifier);
  
-+static int ov5645_set_virtual_channel(struct ov5645 *ov5645)
-+{
-+	u8 temp, channel = virtual_channel;
-+	int ret;
-+
-+	if (channel > 3)
-+		return -EINVAL;
-+
-+	ret = ov5645_read_reg(ov5645, OV5645_REG_DEBUG_MODE, &temp);
-+	if (ret)
-+		return ret;
-+
-+	temp &= ~(3 << 6);
-+	temp |= (channel << 6);
-+
-+	return ov5645_write_reg(ov5645, OV5645_REG_DEBUG_MODE, temp);
-+}
-+
- static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
- {
- 	struct ov5645 *ov5645 = to_ov5645(subdev);
- 	int ret;
+-	ret = v4l2_async_notifier_add_subdev(&priv->notifier, &priv->asd);
++	ret = v4l2_async_notifier_add_fwnode_remote_subdev(&priv->notifier,
++							   of_fwnode_handle(ep),
++							   &priv->asd);
+ 	if (ret) {
+-		fwnode_handle_put(priv->asd.match.fwnode);
++		of_node_put(ep);
+ 		return ret;
+ 	}
  
- 	if (enable) {
-+		ret = ov5645_set_virtual_channel(ov5645);
-+		if (ret < 0)
-+			return ret;
++	of_node_put(ep);
 +
- 		ret = ov5645_set_register_array(ov5645,
- 					ov5645->current_mode->data,
- 					ov5645->current_mode->data_size);
+ 	priv->notifier.ops = &rcar_csi2_notify_ops;
+ 
+ 	dev_dbg(priv->dev, "Found '%pOF'\n",
 -- 
 2.20.1
 
