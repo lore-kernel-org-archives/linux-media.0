@@ -2,89 +2,108 @@ Return-Path: <SRS0=r8kb=4Q=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41ABEC3F2CD
-	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 16:55:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C635C3F2CD
+	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 17:31:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0C2672469C
-	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 16:55:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31DD024699
+	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 17:31:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OW1UGJHX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Je24LAfs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726951AbgB1QzJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Feb 2020 11:55:09 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:37088 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726765AbgB1QzI (ORCPT
+        id S1725886AbgB1RbW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Feb 2020 12:31:22 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:33176 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgB1RbW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Feb 2020 11:55:08 -0500
-Received: by mail-wr1-f67.google.com with SMTP id l5so3743472wrx.4;
-        Fri, 28 Feb 2020 08:55:07 -0800 (PST)
+        Fri, 28 Feb 2020 12:31:22 -0500
+Received: by mail-lf1-f67.google.com with SMTP id n25so2717447lfl.0;
+        Fri, 28 Feb 2020 09:31:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8Xxx3Qqb0dtnL6NDUmFvuivQTJNpJqeohkC3WvUa0gU=;
-        b=OW1UGJHXN3wEyt0gFoFs1F0xM5wtl4/sNFB8A0if1rM06Go/3Vel70CebFwzbshV12
-         e1FjcCrm630adccf9UdRmL58R//T3U46Qqkj5gGWuE7y8+1+RkjarS6sy9M4FvrAXjy0
-         TtQgfIV9eVNdRz541PzHENVU3DyVMCjW2eQnckHVxH+NFsWtuJC+CCf/3i0XDbKol4+p
-         h5DS/PG03qOCuQYCSDE8p5KuFTr8Kmxpjfo/ct5Sc/LMccd4A8JW4DGeFyHIWoI4NqAh
-         xb0fRFQipa6mlBSaXh5nfPrLgjkAG5QB46+tKXBJyxQ65LQsIVzgxre6pygdQ0Nxw5vO
-         4gnQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kDMJgw4k/0TVmBJKgQCKTtnqqdoZnRz+8hLD+C3oQEU=;
+        b=Je24LAfsRFRYBbBIONtjE5FMXXLVtAf9UgF8iZMPYyZrH49+egQjYO4heaUEcCrbZo
+         RVTrbxjmbH9uLttafjP/cgLGjwXkrELCN93m4FLZkD2+4OD+khynAn+uDUn34/sgqZpa
+         UZbRiuoj5gDONEP65txSciDg5HK100J3x50pvGIbXYfABZ5Rab57nN82xhLv5l9eVcZO
+         A0YgG5oFjtIly25ZuBwVc7VyUHyRYgsXUdpegASyEDEIhOdAXpgoeHtFRXpJ/AYjGkOL
+         J/7FJAuKr4chpaBgx1hg6yv0ItZhwTp+NQQROB4azSfnUb/2TaUyBwzQg+iOAWsNQUp9
+         QuEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8Xxx3Qqb0dtnL6NDUmFvuivQTJNpJqeohkC3WvUa0gU=;
-        b=UWikZT2yL20erhl/uZTMVAzjRP7hfFR7NpAifSxAES+9DdyrfDBwGQ9aRD+oRmSi9y
-         Q0f/UpOGuq7u5HJ35512rgE3nFcQoXvZVxaFzEnGbKT+O3gGec0w90VHGWCCPhXr3WJa
-         XUd//pVQoLranUH2ndw1odub2V8sPsuj4k5HaHkf9RuSROoMAIukwPbWb4Nnfv114up8
-         LnHehmh51dyj3Rnzqu6Cjc7uYVjsY26IR2IkFt8t+tJ29ys3c/rfjG5/0jzMG8kgQMNN
-         ock1AxqCdjtTJoMb7vbHGpcX339oKD1P9Gdk1si920J+ykH1+05gM+ISOhK72sHZnpdJ
-         1uTg==
-X-Gm-Message-State: APjAAAXXylkuSPjLNogT1pGsYIt8ZYNTp6bnzXKErjmLpTxu7/+bPKpq
-        cK9GCAOV/mxOCxMYIpkrYXo=
-X-Google-Smtp-Source: APXvYqz5+s2KcoOfysGF++FSqbAnNfBGGG/8rRM0bPYVnipfHUtyC4iaUsAdG9Om2tO0TAEyYnsGYQ==
-X-Received: by 2002:a5d:538e:: with SMTP id d14mr5885593wrv.358.1582908906472;
-        Fri, 28 Feb 2020 08:55:06 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2510:d000:3855:fd13:6b76:a11b])
-        by smtp.gmail.com with ESMTPSA id s1sm13300071wro.66.2020.02.28.08.55.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2020 08:55:05 -0800 (PST)
-From:   Lad Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 0/3] media: i2c: imx219: Feature enhancements
-Date:   Fri, 28 Feb 2020 16:55:00 +0000
-Message-Id: <20200228165503.18054-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kDMJgw4k/0TVmBJKgQCKTtnqqdoZnRz+8hLD+C3oQEU=;
+        b=sy8bmbZ4QkZA7ndipa4Gr1SMBAZZRJWiK7FSxPI6syR0mnVza5a8NpOORWleS0Gpx5
+         h78KT9eC80h6ToMiMOWDzeS6PqmG/QfhZLuDHTiyVPHQEoqtCwQM/uLm8RmQvbdrYN/P
+         MrzTEmnJ3uHdOQVtF05TsDuZHSybjgTn3wq2CMhMpq7OabMIht6QUOrZJP3BdDnAQTvm
+         9c/6eyRfLQVlSPOjuMQli7OcExTNLfr9ydaDgk5+1+qHJCsP/qyg4TbVTUWQuxS0r3sK
+         JtAN4OWJqfeFGbC6F/h6/mTa6ILyVm7S82Mg2DeqKr+XX/3yNExlCIMzIN7ZJn2suDH9
+         sDNQ==
+X-Gm-Message-State: ANhLgQ2ckt8hO5mq9UrGvNeHn9SYVpfl6linuLsBcL38cTjo9NFNLKLb
+        ZAGhAd6vFnyHMIlaMBav4h9qaiJf97/xoSzwA3M=
+X-Google-Smtp-Source: ADFU+vvGH48fioku6g05fhccnwY9e2yjBmAxiKU0CwTO/bF0fEBjjVNtgB4YwJQSZwwVt4LXWJYhaonZXkOqhzLRouA=
+X-Received: by 2002:a05:6512:10d4:: with SMTP id k20mr3268284lfg.70.1582911079950;
+ Fri, 28 Feb 2020 09:31:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200228164126.17517-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20200228164126.17517-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Fri, 28 Feb 2020 14:31:08 -0300
+Message-ID: <CAOMZO5AP65Upj8v=KaPLzS10DNdwrz20gJGbwbcJfCDqZBx71Q@mail.gmail.com>
+Subject: Re: [PATCH] media: i2c: ov5645: Add virtual_channel module parameter
+To:     Lad Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series does the following:
-1: Makes sure the sensor is LP11 state on power up
-2: Adds support for RAW8
-3: Adds support for 640x480 resolution
+Hi Lad,
 
-Lad Prabhakar (3):
-  media: i2c: imx219: Fix power sequence
-  media: i2c: imx219: Add support for SRGGB8_1X8 format
-  media: i2c: imx219: Add support 640x480
+On Fri, Feb 28, 2020 at 1:41 PM Lad Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+>
+> OV5645 can operate in virtual channel 0-3 in CSI2 interfaces, this patch
+> adds support for module parameter virtual_channel to select the required
+> channel. By default OV5645 operates in virtual channel 0.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/media/i2c/ov5645.c | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>
+> diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+> index a6c17d15d754..0a0671164623 100644
+> --- a/drivers/media/i2c/ov5645.c
+> +++ b/drivers/media/i2c/ov5645.c
+> @@ -54,6 +54,7 @@
+>  #define OV5645_TIMING_TC_REG21         0x3821
+>  #define                OV5645_SENSOR_MIRROR            BIT(1)
+>  #define OV5645_MIPI_CTRL00             0x4800
+> +#define OV5645_REG_DEBUG_MODE          0x4814
+>  #define OV5645_PRE_ISP_TEST_SETTING_1  0x503d
+>  #define                OV5645_TEST_PATTERN_MASK        0x3
+>  #define                OV5645_SET_TEST_PATTERN(x)      ((x) & OV5645_TEST_PATTERN_MASK)
+> @@ -61,6 +62,11 @@
+>  #define OV5645_SDE_SAT_U               0x5583
+>  #define OV5645_SDE_SAT_V               0x5584
+>
+> +static u8 virtual_channel;
+> +module_param(virtual_channel, byte, 0644);
+> +MODULE_PARM_DESC(virtual_channel,
+> +                "MIPI CSI-2 virtual channel (0..3), default 0");
 
- drivers/media/i2c/imx219.c | 225 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 199 insertions(+), 26 deletions(-)
-
--- 
-2.20.1
-
+Should this be a device tree property instead?
