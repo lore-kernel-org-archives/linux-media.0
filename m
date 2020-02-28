@@ -2,72 +2,69 @@ Return-Path: <SRS0=r8kb=4Q=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AE55C3F2D3
-	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 16:55:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41ABEC3F2CD
+	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 16:55:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 72D33246A0
-	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 16:55:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C2672469C
+	for <linux-media@archiver.kernel.org>; Fri, 28 Feb 2020 16:55:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/MYdSTF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OW1UGJHX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgB1QzP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Feb 2020 11:55:15 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:38425 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727011AbgB1QzO (ORCPT
+        id S1726951AbgB1QzJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Feb 2020 11:55:09 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:37088 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726765AbgB1QzI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Feb 2020 11:55:14 -0500
-Received: by mail-wm1-f66.google.com with SMTP id n64so2635039wme.3;
-        Fri, 28 Feb 2020 08:55:13 -0800 (PST)
+        Fri, 28 Feb 2020 11:55:08 -0500
+Received: by mail-wr1-f67.google.com with SMTP id l5so3743472wrx.4;
+        Fri, 28 Feb 2020 08:55:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=casrlj1Hqx5LF5+z91d1KG1nSFyqQK6E1q8wczBteSc=;
-        b=T/MYdSTF77UGkyKWECcieIpTI1iM2awpa/dkwRRpuEuANpfwC9Phjc7/EY2h6Fbxkg
-         sWl3xD+WbCVOU6l+xYB469AM9XaziUWaQ72SzVMmqkaVg+A9dTy7DKe+9mCiujjK2kPI
-         Ira+3tHjBYTnJKXybKy+lq5W6t1mxcykeCivGWwdHLAoRpwwspapXRwyXyi4YT4XrMd2
-         80eikQsion726w0tCiDLmPaSYD4ZIcZ/JNmM66FjUU9UjwFlYUxwuElLA6WtLhunhs4U
-         gEGCcI/C5nRFolLtFwIPz5EA56tmNJH2lQyRTL38xXHVvJwaJ/D+UrJQNHG0Sp0d6nG6
-         TIPA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Xxx3Qqb0dtnL6NDUmFvuivQTJNpJqeohkC3WvUa0gU=;
+        b=OW1UGJHXN3wEyt0gFoFs1F0xM5wtl4/sNFB8A0if1rM06Go/3Vel70CebFwzbshV12
+         e1FjcCrm630adccf9UdRmL58R//T3U46Qqkj5gGWuE7y8+1+RkjarS6sy9M4FvrAXjy0
+         TtQgfIV9eVNdRz541PzHENVU3DyVMCjW2eQnckHVxH+NFsWtuJC+CCf/3i0XDbKol4+p
+         h5DS/PG03qOCuQYCSDE8p5KuFTr8Kmxpjfo/ct5Sc/LMccd4A8JW4DGeFyHIWoI4NqAh
+         xb0fRFQipa6mlBSaXh5nfPrLgjkAG5QB46+tKXBJyxQ65LQsIVzgxre6pygdQ0Nxw5vO
+         4gnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=casrlj1Hqx5LF5+z91d1KG1nSFyqQK6E1q8wczBteSc=;
-        b=PKdEHda4OozeRq3P1A6+n5plCryPB6wOyMTpGwJmbzC8aUfZDILxOHZG8nPSV9DE/J
-         cWYwZFHWBdvGJ2d7Zx2Wzs14JzdN38FVYGR8mi9heQtBfC3n89C9z/pB9w3dzbFjDM/P
-         KFG5KyKefexSegD62VqmFYgMIQaZZQQaUoNmlYftlo4S8WdOO3mB9CfEiqdjTpA1dC76
-         OrbsAyLJXLZAr076aVOKLVkuBaVdTit+YK9NQoip5UoDJQ4/nYOZ9WLTWybtIs8kdEce
-         G4Vs9nQImCS1W7rJq8gO4arEivT6lfZYDTCZl/ft6Yl162idxS9g5IKXKtM1OeAjai9k
-         zrzA==
-X-Gm-Message-State: APjAAAUZbz0jBXKbG3qlDQ46F3LJZ50X9huqMdz8Hz4eGG9T7rGT5WxJ
-        GtdVueBSPquF7zNQ6ll4o3A=
-X-Google-Smtp-Source: APXvYqzQCjwWAxyxs7x4WoHMBibiEKhdb4HfRyEGj4RtvGJupfpjHBlowkQQfcuwMFFc2v/f7rcnQg==
-X-Received: by 2002:a1c:9c4c:: with SMTP id f73mr5449538wme.125.1582908912646;
-        Fri, 28 Feb 2020 08:55:12 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Xxx3Qqb0dtnL6NDUmFvuivQTJNpJqeohkC3WvUa0gU=;
+        b=UWikZT2yL20erhl/uZTMVAzjRP7hfFR7NpAifSxAES+9DdyrfDBwGQ9aRD+oRmSi9y
+         Q0f/UpOGuq7u5HJ35512rgE3nFcQoXvZVxaFzEnGbKT+O3gGec0w90VHGWCCPhXr3WJa
+         XUd//pVQoLranUH2ndw1odub2V8sPsuj4k5HaHkf9RuSROoMAIukwPbWb4Nnfv114up8
+         LnHehmh51dyj3Rnzqu6Cjc7uYVjsY26IR2IkFt8t+tJ29ys3c/rfjG5/0jzMG8kgQMNN
+         ock1AxqCdjtTJoMb7vbHGpcX339oKD1P9Gdk1si920J+ykH1+05gM+ISOhK72sHZnpdJ
+         1uTg==
+X-Gm-Message-State: APjAAAXXylkuSPjLNogT1pGsYIt8ZYNTp6bnzXKErjmLpTxu7/+bPKpq
+        cK9GCAOV/mxOCxMYIpkrYXo=
+X-Google-Smtp-Source: APXvYqz5+s2KcoOfysGF++FSqbAnNfBGGG/8rRM0bPYVnipfHUtyC4iaUsAdG9Om2tO0TAEyYnsGYQ==
+X-Received: by 2002:a5d:538e:: with SMTP id d14mr5885593wrv.358.1582908906472;
+        Fri, 28 Feb 2020 08:55:06 -0800 (PST)
 Received: from prasmi.home ([2a00:23c8:2510:d000:3855:fd13:6b76:a11b])
-        by smtp.gmail.com with ESMTPSA id s1sm13300071wro.66.2020.02.28.08.55.11
+        by smtp.gmail.com with ESMTPSA id s1sm13300071wro.66.2020.02.28.08.55.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2020 08:55:12 -0800 (PST)
+        Fri, 28 Feb 2020 08:55:05 -0800 (PST)
 From:   Lad Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 3/3] media: i2c: imx219: Add support 640x480
-Date:   Fri, 28 Feb 2020 16:55:03 +0000
-Message-Id: <20200228165503.18054-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 0/3] media: i2c: imx219: Feature enhancements
+Date:   Fri, 28 Feb 2020 16:55:00 +0000
+Message-Id: <20200228165503.18054-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200228165503.18054-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20200228165503.18054-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -75,108 +72,19 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds support to 640x480 cropped resolution for the sensor
+This patch series does the following:
+1: Makes sure the sensor is LP11 state on power up
+2: Adds support for RAW8
+3: Adds support for 640x480 resolution
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/media/i2c/imx219.c | 70 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+Lad Prabhakar (3):
+  media: i2c: imx219: Fix power sequence
+  media: i2c: imx219: Add support for SRGGB8_1X8 format
+  media: i2c: imx219: Add support 640x480
 
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index 1388c9bc00bb..232ebf41063a 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -54,6 +54,7 @@
- #define IMX219_VTS_15FPS		0x0dc6
- #define IMX219_VTS_30FPS_1080P		0x06e3
- #define IMX219_VTS_30FPS_BINNED		0x06e3
-+#define IMX219_VTS_30FPS_640x480	0x0239
- #define IMX219_VTS_MAX			0xffff
- 
- #define IMX219_VBLANK_MIN		4
-@@ -329,6 +330,65 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
- 	{0x0163, 0x78},
- };
- 
-+static const struct imx219_reg mode_640_480_regs[] = {
-+	{0x0100, 0x00},
-+	{0x30eb, 0x0c},
-+	{0x30eb, 0x05},
-+	{0x300a, 0xff},
-+	{0x300b, 0xff},
-+	{0x30eb, 0x05},
-+	{0x30eb, 0x09},
-+	{0x0114, 0x01},
-+	{0x0128, 0x01},
-+	{0x012a, 0x18},
-+	{0x012b, 0x00},
-+	{0x0162, 0x0d},
-+	{0x0163, 0xe7},
-+	{0x0164, 0x03},
-+	{0x0165, 0xe8},
-+	{0x0166, 0x08},
-+	{0x0167, 0xe7},
-+	{0x0168, 0x02},
-+	{0x0169, 0xf0},
-+	{0x016a, 0x06},
-+	{0x016b, 0xaf},
-+	{0x016c, 0x02},
-+	{0x016d, 0x80},
-+	{0x016e, 0x01},
-+	{0x016f, 0xe0},
-+	{0x0170, 0x01},
-+	{0x0171, 0x01},
-+	{0x0172, 0x00},
-+	{0x0174, 0x03},
-+	{0x0175, 0x03},
-+	{0x0301, 0x05},
-+	{0x0303, 0x01},
-+	{0x0304, 0x03},
-+	{0x0305, 0x03},
-+	{0x0306, 0x00},
-+	{0x0307, 0x39},
-+	{0x0309, 0x08},
-+	{0x030b, 0x01},
-+	{0x030c, 0x00},
-+	{0x030d, 0x72},
-+	{0x0624, 0x06},
-+	{0x0625, 0x68},
-+	{0x0626, 0x04},
-+	{0x0627, 0xd0},
-+	{0x455e, 0x00},
-+	{0x471e, 0x4b},
-+	{0x4767, 0x0f},
-+	{0x4750, 0x14},
-+	{0x4540, 0x00},
-+	{0x47b4, 0x14},
-+	{0x4713, 0x30},
-+	{0x478b, 0x10},
-+	{0x478f, 0x10},
-+	{0x4793, 0x10},
-+	{0x4797, 0x0e},
-+	{0x479b, 0x0e},
-+};
-+
- static const char * const imx219_test_pattern_menu[] = {
- 	"Disabled",
- 	"Color Bars",
-@@ -414,6 +474,16 @@ static const struct imx219_mode supported_modes[] = {
- 			.regs = mode_1640_1232_regs,
- 		},
- 	},
-+	{
-+		/* 640x480 30fps mode */
-+		.width = 640,
-+		.height = 480,
-+		.vts_def = IMX219_VTS_30FPS_640x480,
-+		.reg_list = {
-+			.num_of_regs = ARRAY_SIZE(mode_640_480_regs),
-+			.regs = mode_640_480_regs,
-+		},
-+	},
- };
- 
- struct imx219 {
+ drivers/media/i2c/imx219.c | 225 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 199 insertions(+), 26 deletions(-)
+
 -- 
 2.20.1
 
