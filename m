@@ -2,178 +2,117 @@ Return-Path: <SRS0=IKb/=4T=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEB16C3F2D1
-	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 04:45:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6A23C3F2D4
+	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 07:19:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 792A3246B9
-	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 04:45:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9AD2824699
+	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 07:19:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="soj1sjYr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VaRCakMk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726859AbgCBEpC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 1 Mar 2020 23:45:02 -0500
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:51763 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726811AbgCBEpB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 1 Mar 2020 23:45:01 -0500
-Received: from localhost ([IPv6:2001:983:e9a7:1:9ee:be12:9325:898a])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 8cwsjZ9NGEE3q8cwtjrsUn; Mon, 02 Mar 2020 05:44:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1583124299; bh=JPz94A4SrZ/JmUp9phEoIEeoPJp4N+iizdbmzc0CrQ8=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=soj1sjYrkOlyJBNqoOVwKaKv0rCdPmN/EmmCqApNHl0zZt+oJIl1oW+GkR/MmyfzS
-         2wD+VQNaQaJmR8FZSnGqhgVDKMhUjmCLqnbJ9bGmXQdJlQg9s2CmVUMH9M1+GMm2Ki
-         YDOM3MxTSbxLhfrkUjG+iXWmasvAh/79O044XqfHA1R3IZZ9iVzYtb2XyKM9z/vkqy
-         zyrDleGsBjSGJIVR9+SDLKSEYRFekIO/mdWd8WUVhPZRsZOkgUaMIOnwcnAG78h4MM
-         CoyXvsLgD7NvfmZOsPHIzFcCElRjyHDGQsEjWpwqEfbFXodyFnDG9TpuZq1CVDNSfe
-         qsG73L7GolYHQ==
-Message-ID: <8c3538dc1d6a9ab74de9132a5c3d121a@smtp-cloud7.xs4all.net>
-Date:   Mon, 02 Mar 2020 05:44:58 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: ERRORS
-X-CMAE-Envelope: MS4wfJpbP2k5c35x8AIh9t2vONUxEISNHvstdhPGXhrGlPbj2aYVx/pTHO33konaxRMf2tfa1bIZn+9MYWWRj0+lHvmMpdqMLlDhxUuZON4yopYvnJxQUoUd
- NfURllytGXMmS8/KcPS7b0bhvcA+M+jpbaWuVexMStJ1dcoclRJE+sfTcwoRNJI7MzNvAnvSDTZg970QUR3/zmmAoUBQgbsq0oOjH1uvqzJNj5QRtdh/OvVd
+        id S1726751AbgCBHTG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Mar 2020 02:19:06 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:42265 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726694AbgCBHTG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Mar 2020 02:19:06 -0500
+Received: by mail-oi1-f195.google.com with SMTP id l12so9313472oil.9;
+        Sun, 01 Mar 2020 23:19:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pCiMbDoks/6zcnPq60yjRnfndV8SA+UORO6ejiuKYFI=;
+        b=VaRCakMktqQndfftu+QA+aIpP/MvxHJ6G2GE8VvnTKUPLc65ynuUU8nWteTQ+5/s42
+         1C5ttGFj3/ss/c7V71bjRIjCXkn8ipP9IN1CnjsoqqWGVwBn9m3/Nk2klbMkLIyaXYGK
+         EHWDcr752bxjinWLky93t4VamSEuhQ9XgZrLtWcxq4MHzCfNpCoCoM0P9XBaPd9cVmoW
+         Qi0uwSYrf9SqL3oKvVNoVewmKNnqMSw8Dd4riPfQifi9HRc1yRvaxheEkPmGeXtez/q0
+         sax9BArSKYz+V72D5Wiq4r7f49nrplpCqWXp+NMnevvAXbKGbISc8BEP1xF0mdt4nwr0
+         FPvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pCiMbDoks/6zcnPq60yjRnfndV8SA+UORO6ejiuKYFI=;
+        b=lLeOIwAG/xMhS5EWVgzCfTB/11L2USTcj3lFccYNFymRGuwNRd3722A+QeLzJbD5zS
+         frmd4u8B6yXYwkqrrNfMyWqL6jnGFF7Z1rdK33SWQehf8drIJVocxVfTpBeMtznMqYVE
+         La53hiZbttC8DxoViRSkiePH1gXOZiKpWv0ebgYjbVg9ZjMj5t4IveUqY3f1vyvukGJr
+         +oCN4sQM7nsOr7s4UEHI6IfBBAvptw2yvv8hZTE3SdZE3JRv0BOcxFxL5O8B4mr2T9Ig
+         XY/JsI3wR3i/ZYzOeqatsx7ZFODxT9HfHpFAZljxEPdSgWBzY2uLllA8rzJFrPJExm8P
+         u+zw==
+X-Gm-Message-State: ANhLgQ32L0PMGNvUfoLbtzSHkmxoMalSR+XEpLDcX4oYboZbzesoXWw+
+        FB3Pu6IWB1deQUd15K0Vw2/PiXz6Dy60+bfqchE=
+X-Google-Smtp-Source: ADFU+vuZhLGAOSIskS5UQ891cH1JVpFKxVkNbjzn8QCXQg0pyhZs0OILiw9px+nc7e25l94DOkVkyLsatuAx6Y13TFI=
+X-Received: by 2002:aca:524a:: with SMTP id g71mr2564396oib.7.1583133544993;
+ Sun, 01 Mar 2020 23:19:04 -0800 (PST)
+MIME-Version: 1.0
+References: <20200228164126.17517-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAOMZO5AP65Upj8v=KaPLzS10DNdwrz20gJGbwbcJfCDqZBx71Q@mail.gmail.com>
+In-Reply-To: <CAOMZO5AP65Upj8v=KaPLzS10DNdwrz20gJGbwbcJfCDqZBx71Q@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 2 Mar 2020 07:18:38 +0000
+Message-ID: <CA+V-a8s_d3Atp9J5KM=x4z2z_iAY8+9vcSHFUTyQ3XZ9HCCS3g@mail.gmail.com>
+Subject: Re: [PATCH] media: i2c: ov5645: Add virtual_channel module parameter
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Hi Fabio,
 
-Results of the daily build of media_tree:
+Thank you for the review.
 
-date:			Mon Mar  2 05:00:16 CET 2020
-media-tree git hash:	bd59f412d17f81a41e35c884d3caacf34c9e4940
-media_build git hash:	e3e7c2632a298bb886608a95da5ec40bdb54fd92
-v4l-utils git hash:	4e555017a19834db66d4772f62c5b382fb374dea
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 9.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.1-rc1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 3fc59a2ca2e30c46ffc01ef267e1098f330678c7
-host hardware:		x86_64
-host os:		5.4.0-4-amd64
+On Fri, Feb 28, 2020 at 5:31 PM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> Hi Lad,
+>
+> On Fri, Feb 28, 2020 at 1:41 PM Lad Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> >
+> > OV5645 can operate in virtual channel 0-3 in CSI2 interfaces, this patch
+> > adds support for module parameter virtual_channel to select the required
+> > channel. By default OV5645 operates in virtual channel 0.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  drivers/media/i2c/ov5645.c | 28 ++++++++++++++++++++++++++++
+> >  1 file changed, 28 insertions(+)
+> >
+> > diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+> > index a6c17d15d754..0a0671164623 100644
+> > --- a/drivers/media/i2c/ov5645.c
+> > +++ b/drivers/media/i2c/ov5645.c
+> > @@ -54,6 +54,7 @@
+> >  #define OV5645_TIMING_TC_REG21         0x3821
+> >  #define                OV5645_SENSOR_MIRROR            BIT(1)
+> >  #define OV5645_MIPI_CTRL00             0x4800
+> > +#define OV5645_REG_DEBUG_MODE          0x4814
+> >  #define OV5645_PRE_ISP_TEST_SETTING_1  0x503d
+> >  #define                OV5645_TEST_PATTERN_MASK        0x3
+> >  #define                OV5645_SET_TEST_PATTERN(x)      ((x) & OV5645_TEST_PATTERN_MASK)
+> > @@ -61,6 +62,11 @@
+> >  #define OV5645_SDE_SAT_U               0x5583
+> >  #define OV5645_SDE_SAT_V               0x5584
+> >
+> > +static u8 virtual_channel;
+> > +module_param(virtual_channel, byte, 0644);
+> > +MODULE_PARM_DESC(virtual_channel,
+> > +                "MIPI CSI-2 virtual channel (0..3), default 0");
+>
+> Should this be a device tree property instead?
+I did give a thought about it, but making this as DT property would
+make it more stiff.
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: ERRORS
-linux-3.10.108-x86_64: ERRORS
-linux-3.11.10-i686: ERRORS
-linux-3.11.10-x86_64: ERRORS
-linux-3.12.74-i686: ERRORS
-linux-3.12.74-x86_64: ERRORS
-linux-3.13.11-i686: ERRORS
-linux-3.13.11-x86_64: ERRORS
-linux-3.14.79-i686: ERRORS
-linux-3.14.79-x86_64: ERRORS
-linux-3.15.10-i686: ERRORS
-linux-3.15.10-x86_64: ERRORS
-linux-3.16.81-i686: ERRORS
-linux-3.16.81-x86_64: ERRORS
-linux-3.17.8-i686: ERRORS
-linux-3.17.8-x86_64: ERRORS
-linux-3.18.136-i686: ERRORS
-linux-3.18.136-x86_64: ERRORS
-linux-3.19.8-i686: ERRORS
-linux-3.19.8-x86_64: ERRORS
-linux-4.0.9-i686: ERRORS
-linux-4.0.9-x86_64: ERRORS
-linux-4.1.52-i686: ERRORS
-linux-4.1.52-x86_64: ERRORS
-linux-4.2.8-i686: ERRORS
-linux-4.2.8-x86_64: ERRORS
-linux-4.3.6-i686: ERRORS
-linux-4.3.6-x86_64: ERRORS
-linux-4.4.212-i686: ERRORS
-linux-4.4.212-x86_64: ERRORS
-linux-4.5.7-i686: ERRORS
-linux-4.5.7-x86_64: ERRORS
-linux-4.6.7-i686: ERRORS
-linux-4.6.7-x86_64: ERRORS
-linux-4.7.10-i686: ERRORS
-linux-4.7.10-x86_64: ERRORS
-linux-4.8.17-i686: ERRORS
-linux-4.8.17-x86_64: ERRORS
-linux-4.9.212-i686: ERRORS
-linux-4.9.212-x86_64: ERRORS
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.169-i686: OK
-linux-4.14.169-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.101-i686: OK
-linux-4.19.101-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4.17-i686: OK
-linux-5.4.17-x86_64: OK
-linux-5.5.1-i686: OK
-linux-5.5.1-x86_64: OK
-linux-5.6-rc1-i686: OK
-linux-5.6-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 0
-sparse: OK
-smatch: WARNINGS
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Monday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+Cheers,
+--Prabhakar
