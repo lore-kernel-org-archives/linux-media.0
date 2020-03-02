@@ -2,158 +2,59 @@ Return-Path: <SRS0=IKb/=4T=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F0CC3F2D7
-	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 11:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E4FBC3F2D2
+	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 11:09:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 678652080C
-	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 11:07:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EAF4C2080C
+	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 11:09:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbgCBLHU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Mar 2020 06:07:20 -0500
-Received: from mga17.intel.com ([192.55.52.151]:46200 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726448AbgCBLHU (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 2 Mar 2020 06:07:20 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Mar 2020 03:07:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,506,1574150400"; 
-   d="scan'208";a="318972571"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga001.jf.intel.com with ESMTP; 02 Mar 2020 03:07:15 -0800
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1j8iuq-00675X-Ti; Mon, 02 Mar 2020 13:07:16 +0200
-Date:   Mon, 2 Mar 2020 13:07:16 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     mchehab@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        sakari.ailus@linux.intel.com, drinkcat@chromium.org,
-        tfiga@chromium.org, matthias.bgg@gmail.com, bingbu.cao@intel.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, sj.huang@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        louis.kuo@mediatek.com, shengnan.wang@mediatek.com
-Subject: Re: [V3, 2/2] media: i2c: Add DW9768 VCM driver
-Message-ID: <20200302110716.GR1224808@smile.fi.intel.com>
-References: <20200228155958.20657-1-dongchun.zhu@mediatek.com>
- <20200228155958.20657-3-dongchun.zhu@mediatek.com>
+        id S1726806AbgCBLJf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Mar 2020 06:09:35 -0500
+Received: from retiisi.org.uk ([95.216.213.190]:45066 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726470AbgCBLJf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 2 Mar 2020 06:09:35 -0500
+Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1001])
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 541B3634C87
+        for <linux-media@vger.kernel.org>; Mon,  2 Mar 2020 13:09:19 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH 1/1] mailmap: Add entry for my @iki.fi address
+Date:   Mon,  2 Mar 2020 13:07:01 +0200
+Message-Id: <20200302110701.13495-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200228155958.20657-3-dongchun.zhu@mediatek.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 11:59:58PM +0800, Dongchun Zhu wrote:
-> This patch adds a V4L2 sub-device driver for DW9768 lens voice coil,
-> and provides control to set the desired focus via I2C serial interface.
+Add entry for my @iki.fi e-mail address to the mailmap.
 
-...
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
 
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5139,6 +5139,7 @@ M:	Dongchun Zhu <dongchun.zhu@mediatek.com>
->  L:	linux-media@vger.kernel.org
->  T:	git git://linuxtv.org/media_tree.git
->  S:	Maintained
-> +F:	drivers/media/i2c/dw9768.c
->  F:	Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml
-
-Had you run parse-maintainers.pl?
-
-I believe the order is wrong here.
-
-...
-
-> +#define DW9768_MAX_FOCUS_POS			1023
-
-Is this value being dictated by amount of bits available in the hardware?
-If so, I would rather put it in a form (1024 - 1) or alike to show that it has
-10 bit resolution.
-
-...
-
-> +static int dw9768_set_dac(struct dw9768 *dw9768, u16 val)
-> +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&dw9768->sd);
-> +
-> +	/* Write VCM position to registers */
-> +	return i2c_smbus_write_word_data(client, DW9768_MSB_ADDR,
-> +					 swab16(val));
-
-i2c_smbus_write_word_swapped() ?
-
-> +}
-
-...
-
-> +static int dw9768_release(struct dw9768 *dw9768)
-> +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&dw9768->sd);
-> +	int ret, val;
-> +
-
-> +	for (val = round_down(dw9768->focus->val, DW9768_MOVE_STEPS);
-> +	     val >= 0; val -= DW9768_MOVE_STEPS) {
-
-Perhaps
-
-	val = round_down(dw9768->focus->val, DW9768_MOVE_STEPS);
-	for ( ; val >= 0; val -= DW9768_MOVE_STEPS) {
-
-> +		ret = dw9768_set_dac(dw9768, val);
-> +		if (ret) {
-
-> +			dev_err(&client->dev, "%s I2C failure: %d",
-> +				__func__, ret);
-
-Do you need __func__? What for?
-
-> +			return ret;
-> +		}
-
-> +		usleep_range(DW9768_MOVE_DELAY_US,
-> +			     DW9768_MOVE_DELAY_US + 1000);
-
-It's exactly one line. Perhaps you have to check your editor settings.
-And check entire code for a such.
-
-> +	}
-> +
-> +	/*
-> +	 * Wait for the motor to stabilize after the last movement
-> +	 * to prevent the motor from shaking.
-> +	 */
-> +	usleep_range(DW9768_STABLE_TIME_US - DW9768_MOVE_DELAY_US,
-> +		     DW9768_STABLE_TIME_US - DW9768_MOVE_DELAY_US + 1000);
-> +
-> +	ret = i2c_smbus_write_byte_data(client, DW9768_RING_PD_CONTROL_REG,
-> +					DW9768_PD_MODE_EN);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/*
-> +	 * DW9769 requires waiting delay time of t_OPR
-> +	 * after PD reset takes place.
-> +	 */
-> +	usleep_range(DW9768_T_OPR_US, DW9768_T_OPR_US + 100);
-> +
-> +	return 0;
-> +}
-
+diff --git a/.mailmap b/.mailmap
+index ffb8f28290c7..5e650fb097ca 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -243,6 +243,7 @@ Santosh Shilimkar <ssantosh@kernel.org>
+ Santosh Shilimkar <santosh.shilimkar@oracle.org>
+ Sascha Hauer <s.hauer@pengutronix.de>
+ S.Çağlar Onur <caglar@pardus.org.tr>
++Sakari Ailus <sakari.ailus@linux.intel.com> <sakari.ailus@iki.fi>
+ Sean Nyekjaer <sean@geanix.com> <sean.nyekjaer@prevas.dk>
+ Sebastian Reichel <sre@kernel.org> <sre@debian.org>
+ Sebastian Reichel <sre@kernel.org> <sebastian.reichel@collabora.co.uk>
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.20.1
 
