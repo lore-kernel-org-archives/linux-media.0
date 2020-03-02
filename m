@@ -2,124 +2,173 @@ Return-Path: <SRS0=IKb/=4T=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D022C3F2D1
-	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 15:22:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1B1DC3F2CD
+	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 15:24:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D71EF20848
-	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 15:22:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B5C4021739
+	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 15:24:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="EIMWrRJP"
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="ZF1JAjbn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727199AbgCBPWi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Mar 2020 10:22:38 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:36374 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726390AbgCBPWi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Mar 2020 10:22:38 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 022Evu5U086099;
-        Mon, 2 Mar 2020 15:22:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
- message-id : date : from : to : cc : subject : references : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=G/kvItGwy0v2Fs3ftwbEd0rVlgOOyAgL4aj7wJ7qNZM=;
- b=EIMWrRJPFCTSlxyodnP+JR3GxBOUIuWyd7a2GHh2qEZGyIOK7tm6Es2IRnu9+UxIr0/W
- BgUDOve59skYLmTgSRy8qJCz3QhHJhtuHbJEw09tVHV5EpjjCiNAUu/k7jFlFIngxAN1
- 7/w0Zd9Jegr7vONcmgo5Y7tPkFkJPZcl9dhAFNh2EphBQ4Upnp7awxmdBagwPOAXLt89
- vOwvyZ8ZZrtoBxNaSNVinZaQDGSVUNczekNjAE68JjpLr3Eb8P0MF+2zASrFZbbkF5cK
- PR/RNoBxs/qsmBlDZ0WF4qx5xYr0yfFxV2T5P+gZkGPIAl30ACTI8T6ZU0AhmaR5nbsE Qw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2yffwqgbv0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 02 Mar 2020 15:22:30 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 022FKxk9001574;
-        Mon, 2 Mar 2020 15:22:29 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 2yg1eh83un-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 02 Mar 2020 15:22:29 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 022FMRdO021370;
-        Mon, 2 Mar 2020 15:22:27 GMT
-Received: from kadam (/129.205.23.165) by default (Oracle Beehive Gateway
- v4.0) with ESMTP ; Mon, 02 Mar 2020 07:21:23 -0800
-USER-AGENT: Mutt/1.9.4 (2018-02-28)
+        id S1727070AbgCBPYS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Mar 2020 10:24:18 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:40568 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726751AbgCBPYS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Mar 2020 10:24:18 -0500
+Received: by mail-wr1-f68.google.com with SMTP id r17so141584wrj.7
+        for <linux-media@vger.kernel.org>; Mon, 02 Mar 2020 07:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6/CIkWNCwNaImmXlS8dDLwAcR6sRgPxwGGxRlcKCoVs=;
+        b=ZF1JAjbnFfIgiCw6NX8mgzBabbjZJRZ4pT7T3b0Z7AbuYhSseXIOObM0JlCuObWu+Q
+         jsc2U3owHmjYwWLA9kG8h9lVtxNutsF4FQA5TPXf6psBmNT7GUs6OM+0kIQv083y0i+a
+         yXE70XLBvDPTe+WfDAmBf52LvcXEVoRFkb+AzcOr8/bNEH5GhckOIO4p/nCwvrpeiVIA
+         p+mWJyS9xTFDzaV9RmEc2AU1N4+XE97vlAhV3KGI/EBGNILL+WxiS9ZVxxEvzML36cpP
+         VHXh2ql3saT3JJyFFAwbcplIvcGUTD/JkVJ68613fQSE55NaDAIl6iHWYGaOHqJOkBv3
+         Ik5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6/CIkWNCwNaImmXlS8dDLwAcR6sRgPxwGGxRlcKCoVs=;
+        b=Qt1A/Gu2iXMutvpKwsv4hus+jxseJ0UqSEk5/Vyx7SuHhxSspit55d0DlTuXYOhREu
+         gX0dLU6dukBjCgzZ8Y5yaT2aYyCKoA+iERobipGperig2bE73QjIKpYBMxaz+jHuGN47
+         7TL0a+F5R9PZlh26X1C5v9kgxBoCh2WWKJ/vVTVeAAoIFk4+zfaZst8yZwBrfxuU0t0T
+         stHelOLpXSp+Nzhn+cwRBqHMMmP6oQvgVxaN5OJe6Nx70BEEXstIcj3Mqy3/LmPae6p3
+         C3b4amnCIzhFFLi57LauSy+G4ZT6XFQswJQEptzI40GOfguOeS9ez52NYfa4AYZ52sGw
+         nOWw==
+X-Gm-Message-State: ANhLgQ1c648+p0RuqNnvNYNtUby6ylGpzTofEDUzBoWzDMF/ft6rJYPA
+        lOA9GHN0TADOc60rqhye8ocx1YakA1O+feOj2nMX4A==
+X-Google-Smtp-Source: ADFU+vvibXAAaRXVSYO3pfwNHCZglN+HZMDcfhsGZWm7NVOMxOJvAA9oxubzIxeaxzXnvUeM97Z2+XnC+/da8ZEZbGk=
+X-Received: by 2002:adf:e542:: with SMTP id z2mr160388wrm.150.1583162656640;
+ Mon, 02 Mar 2020 07:24:16 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <20200302152058.GB24372@kadam>
-Date:   Mon, 2 Mar 2020 07:20:58 -0800 (PST)
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-tegra@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v1] media: staging: tegra-vde: Use
- devm_platform_ioremap_resource_byname()
-References: <20200227180915.9541-1-digetx@gmail.com>
- <20200302080456.GD4140@kadam>
- <d748bf2c-e38c-dabb-59ad-39e14813e40a@gmail.com>
-In-Reply-To: <d748bf2c-e38c-dabb-59ad-39e14813e40a@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9547 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
- mlxlogscore=999 malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2003020110
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9547 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0 suspectscore=0
- phishscore=0 clxscore=1015 bulkscore=0 adultscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2003020110
+References: <20200228165503.18054-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20200228165503.18054-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20200228165503.18054-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Mon, 2 Mar 2020 15:24:01 +0000
+Message-ID: <CAPY8ntBbm2d4b1p__FdyZS52sBV6CtfGKaVrg74Q=3aKeby1nQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] media: i2c: imx219: Fix power sequence
+To:     Lad Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Mar 02, 2020 at 06:04:20PM +0300, Dmitry Osipenko wrote:
-> 02.03.2020 11:04, Dan Carpenter пишет:
-> > On Thu, Feb 27, 2020 at 09:09:15PM +0300, Dmitry Osipenko wrote:
-> >> This helps to make code cleaner a tad.
-> > 
-> > Please don't start the commit message in the middle of a sentence.
-> 
-> Could you please clarify what do you mean by the "middle of a sentence"?
-> The commit's message doesn't sound "middle" to me at all.
-> 
-> > It looks like this for some of us:
-> > 
-> > https://marc.info/?l=linux-driver-devel&m=158282701430176&w=2
-> 
-> This link points to this patch, I don't quite understand what you're
-> trying to convey here.
-> 
-> > I generally read the subject or the full commit message but seldom
-> > both.
-> 
-> The commit's title describes the change briefly, while the message gives
-> a rational for the change. Usually reviewer should consult the code
-> changes themselves for more details.
-> 
-> Do you have some kind of a email filter that shows only the commit's
-> message? Otherwise I'm not sure what's the problem.
+Hi Lad.
 
+Thanks again for the patch.
 
-The commit message just says "This helps to make code cleaner a tad."
-but it doesn't mention devm_platform_ioremap_resource_byname().  That
-information is there in the subject but not in the commit message itself.
-Take a look at the link I sent you and try to find the subject.  It's
-far away from the commit message.
+On Fri, 28 Feb 2020 at 16:55, Lad Prabhakar <prabhakar.csengg@gmail.com> wrote:
+>
+> When supporting Rpi Camera v2 Module on the RZ/G2E, found the driver had
+> some issues with rcar mipi-csi driver. The sesnosr never entered into LP-11
 
-regards,
-dan carpenter
+s/sesnosr/sensor
 
+> state.
+>
+> The powerup sequence in the datasheet[1] shows the sensor entering into
+> LP-11 in streaming mode, so to fix this issue transitions are performed
+> from "standby -> streaming -> standby" in the probe().
+>
+> With this commit the sensor is able to enter LP-11 mode during power up,
+> as expected by some CSI-2 controllers.
+
+I guess I'm lucky that the CSI2 receiver I deal with doesn't care on this front.
+The datasheet does seem to imply that the line is left in what appears
+to be LP-00 after power up, but this feels like a huge amount of stuff
+to do.
+
+> [1] https://publiclab.org/system/images/photos/000/023/294/original/
+> RASPBERRY_PI_CAMERA_V2_DATASHEET_IMX219PQH5_7.0.0_Datasheet_XXX.PDF
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/media/i2c/imx219.c | 33 +++++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>
+> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+> index f1effb5a5f66..8b48e148f2d0 100644
+> --- a/drivers/media/i2c/imx219.c
+> +++ b/drivers/media/i2c/imx219.c
+> @@ -1171,6 +1171,7 @@ static int imx219_check_hwcfg(struct device *dev)
+>
+>  static int imx219_probe(struct i2c_client *client)
+>  {
+> +       const struct imx219_reg_list *reg_list;
+>         struct device *dev = &client->dev;
+>         struct imx219 *imx219;
+>         int ret;
+> @@ -1224,6 +1225,38 @@ static int imx219_probe(struct i2c_client *client)
+>         /* Set default mode to max resolution */
+>         imx219->mode = &supported_modes[0];
+>
+> +       /* sensor doesn't enter to LP-11 state upon power up until and unless
+
+Remove "to"
+
+> +        * streaming is started, so upon power up set the default format and
+> +        * switch the modes: standby -> streaming -> standby
+> +        */
+> +       /* getting sensor out of sleep */
+> +       ret = imx219_write_reg(imx219, IMX219_REG_MODE_SELECT,
+> +                              IMX219_REG_VALUE_08BIT, IMX219_MODE_STANDBY);
+
+The datasheet says the default for IMX219_REG_MODE_SELECT is already 0
+/ STANDY, so this should be unnecessary as we've only just powered up.
+
+> +       if (ret < 0)
+> +               goto error_power_off;
+> +       usleep_range(100, 110);
+> +
+> +       reg_list = &imx219->mode->reg_list;
+> +       ret = imx219_write_regs(imx219, reg_list->regs, reg_list->num_of_regs);
+> +       if (ret) {
+> +               dev_err(&client->dev, "%s failed to default mode\n", __func__);
+> +               goto error_power_off;
+> +       }
+
+Seeing as we don't want the images produced, and we're about to power
+the sensor back down again, do the default register settings do enough
+to allow the shift to LP-11? ie can we drop writing any mode setup
+registers here, and just got to STREAMING and back to STANDBY?
+
+> +       /* getting sensor out of sleep */
+
+We already did that above. This is standby->streaming.
+
+> +       ret = imx219_write_reg(imx219, IMX219_REG_MODE_SELECT,
+> +                              IMX219_REG_VALUE_08BIT, IMX219_MODE_STREAMING);
+> +       if (ret < 0)
+> +               goto error_power_off;
+> +       usleep_range(100, 110);
+> +
+> +       /* put sensor back to standby mode */
+> +       ret = imx219_write_reg(imx219, IMX219_REG_MODE_SELECT,
+> +                              IMX219_REG_VALUE_08BIT, IMX219_MODE_STANDBY);
+> +       if (ret < 0)
+> +               goto error_power_off;
+> +       usleep_range(100, 110);
+> +
+>         ret = imx219_init_controls(imx219);
+>         if (ret)
+>                 goto error_power_off;
+> --
+> 2.20.1
+
+Cheers,
+  Dave
