@@ -7,95 +7,114 @@ X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B984C3F2D1
-	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 18:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D1F6C3F2CD
+	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 23:40:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D7B5A20873
-	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 18:54:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4318D2465E
+	for <linux-media@archiver.kernel.org>; Mon,  2 Mar 2020 23:40:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583175264;
-	bh=rQbL1gk6X5k+abVI61zVd20+DkfRzBKipXCOoEhZVZQ=;
+	s=default; t=1583192430;
+	bh=7F6YZaYUo+bFsyPu/iD1rssKpwVVUWfNFhyXmJyZjKg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=Ye9yBXYoBFQ7Z78YOm2ZzaoDWmdIBlatHHXa3hieBu6C8O/EzweaJrsxu01ske4vu
-	 Fg2kO9wqcYhS2bb1nJid2tlNZ2t7RzTIq34VADlp7cy9s6zQ/SsBqrO1zIHHdovkxS
-	 2wcI/4MxKpyTMv+FcMWnt/CRY8PWm5FwSLwgpQ00=
+	b=QVe6xarOdU3I98Wm9knCD+b3Uy+dPuzTfjVLNCqNBujZVAFBhyg+HFd4AM09D5UfV
+	 DsDs2oKKFOrBtvw2QkQMPfSl7SwlzusctHNyYd5dhp78aN8faXnSC3Rq+6YJtoN/1R
+	 AayaMcYwS2oiqXs1ZDUuRU9dW2I75mpcfqxWK0X8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727316AbgCBSyY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 Mar 2020 13:54:24 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:42314 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726451AbgCBSyX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Mar 2020 13:54:23 -0500
-Received: by mail-oi1-f195.google.com with SMTP id l12so269415oil.9;
-        Mon, 02 Mar 2020 10:54:23 -0800 (PST)
+        id S1726898AbgCBXk1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 Mar 2020 18:40:27 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:38738 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726752AbgCBXk0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 Mar 2020 18:40:26 -0500
+Received: by mail-oi1-f194.google.com with SMTP id 2so1121823oiz.5;
+        Mon, 02 Mar 2020 15:40:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=azLo3QGLGJyP5HRfRWmkTZHyFOBCcHiq0HFCES3HCjQ=;
-        b=RO7MaPdMZVds3iVXLaeuknpCHBgfy8nSrynfcikpHKy2LsNtld9ptvjW2e66TfQIDd
-         NCDXNRKDABENeAP6O3iuzGSgc5pJZSvxnL500AQdhOW7ObK/TcYT2EJbzkdM+2s+iz10
-         EDCAcDOc4+sggPkW9E3f5BHvEfTrb7TN4EHe5N8zvrEkxS5ALkh8LmvPRtvtljEMQqKp
-         0nKWnyw/r6VVJcdaJm4aMON4JBQHhO7Vxzcnr4IPhrCQ+Gqq+umugK4d2cpgTbzF2yZ0
-         6OEIM7oge2EWbEt+f7PzX6d4vzPDLD56jXTXZAxYk4g8Ny7YGJr5P0SVXr7SUgNVQDoX
-         C1Hw==
-X-Gm-Message-State: ANhLgQ1HBDHfi2YqUUoXMF8Q0xV3wc0DatpYFxAQc5KId+SCCBAhmp7r
-        tBXSCWvbSMCrjKTWBkBbAw==
-X-Google-Smtp-Source: ADFU+vvfubqUlzmH5eWYI1D5Jft/lIpMtECPbLNGVBuawGuLFLFxvD3bdyL1NoKnop7MocC44hue/Q==
-X-Received: by 2002:a54:4011:: with SMTP id x17mr1020oie.35.1583175263204;
-        Mon, 02 Mar 2020 10:54:23 -0800 (PST)
+        bh=9vV5PavoKMjDsMnqHBiR5ea2gdjD5MmrYM/2QvxafIs=;
+        b=dgq6O59wi5Y+WWE1ipZbc5pgbf9qBCAoZh7bRG6hnKFT54cnmn3q+VNLvrO2CrXGx2
+         0P8zan3yQ/mEo7Yva3ICpK4rLIRU35fo/IaYoogb93Hteen8CZ5sYZ8evAzJorpmlj/Z
+         sXwEF5zZVIgpWhtH1S6O7gWldE0iFviujigXJ8TLgJ4l90sCSilqkW3fEx9hrq5Xbjwx
+         EdXbJNMVYyLIgWOI0l/FXZB0Gu88Cb0pJtPLqO0d494+wJYiNcbYvpOUIBVwEWNRvC61
+         49X5bfHMEp+tKFWt8m45VFribaNeEV5KCrXzPTq2fp6RXJevQM/1cIq0R2Gk1XB/4JNu
+         UhQQ==
+X-Gm-Message-State: ANhLgQ3hbACVlRPOks4Xk49Intgx3TOPvGr3UQnyp5ph9+xoj7nVyF0N
+        6akUKM8Oa6MjyyC1EAr3yA==
+X-Google-Smtp-Source: ADFU+vtgcYVuJTNmsDp6or+nYg6nhWTDc+Rs/i0JWWu7H1wds1V1X0/hmCpu4JSt66QSVVmXpfJv+w==
+X-Received: by 2002:aca:c709:: with SMTP id x9mr609649oif.130.1583192425557;
+        Mon, 02 Mar 2020 15:40:25 -0800 (PST)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id u3sm6838355ote.50.2020.03.02.10.54.21
+        by smtp.gmail.com with ESMTPSA id j4sm3556682otr.30.2020.03.02.15.40.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2020 10:54:22 -0800 (PST)
-Received: (nullmailer pid 32444 invoked by uid 1000);
-        Mon, 02 Mar 2020 18:54:21 -0000
-Date:   Mon, 2 Mar 2020 12:54:21 -0600
+        Mon, 02 Mar 2020 15:40:24 -0800 (PST)
+Received: (nullmailer pid 20489 invoked by uid 1000);
+        Mon, 02 Mar 2020 23:40:22 -0000
+Date:   Mon, 2 Mar 2020 17:40:22 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     mchehab@kernel.org, andriy.shevchenko@linux.intel.com,
-        robh+dt@kernel.org, mark.rutland@arm.com,
-        sakari.ailus@linux.intel.com, drinkcat@chromium.org,
-        tfiga@chromium.org, matthias.bgg@gmail.com, bingbu.cao@intel.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, sj.huang@mediatek.com,
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, ck.hu@mediatek.com,
+        p.zabel@pengutronix.de, airlied@linux.ie, mturquette@baylibre.com,
+        sboyd@kernel.org, ulrich.hecht+renesas@gmail.com,
+        laurent.pinchart@ideasonboard.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        rdunlap@infradead.org, dri-devel@lists.freedesktop.org,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        linux-clk@vger.kernel.org,
+        Collabora Kernel ML <kernel@collabora.com>,
+        mtk01761 <wendell.lin@mediatek.com>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>, wens@csie.org,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        louis.kuo@mediatek.com, shengnan.wang@mediatek.com,
-        dongchun.zhu@mediatek.com
-Subject: Re: [V3, 1/2] media: i2c: dw9768: Add DT support and MAINTAINERS
- entry
-Message-ID: <20200302185421.GA31928@bogus>
-References: <20200228155958.20657-1-dongchun.zhu@mediatek.com>
- <20200228155958.20657-2-dongchun.zhu@mediatek.com>
+        sean.wang@mediatek.com, frank-w@public-files.de,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        linux-mediatek@lists.infradead.org, hsinyi@chromium.org,
+        Matthias Brugger <mbrugger@suse.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Richard Fontana <rfontana@redhat.com>,
+        linux-kernel@vger.kernel.org, matthias.bgg@kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH v11 2/5] dt-bindings: mediatek: Update mmsys binding to
+ reflect it is a system controller
+Message-ID: <20200302234022.GA20424@bogus>
+References: <20200302110128.2664251-1-enric.balletbo@collabora.com>
+ <20200302110128.2664251-3-enric.balletbo@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200228155958.20657-2-dongchun.zhu@mediatek.com>
+In-Reply-To: <20200302110128.2664251-3-enric.balletbo@collabora.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 28 Feb 2020 23:59:57 +0800, Dongchun Zhu wrote:
-> This patch is to add the Devicetree binding documentation and
-> MAINTAINERS entry for dw9768 actuator.
+On Mon,  2 Mar 2020 12:01:25 +0100, Enric Balletbo i Serra wrote:
+> The mmsys system controller is not only a pure clock controller, so
+> update the binding documentation to reflect that apart from providing
+> clocks, it also provides routing and miscellaneous control registers.
 > 
-> Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
+> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
 > ---
->  .../bindings/media/i2c/dongwoon,dw9768.yaml        | 55 ++++++++++++++++++++++
->  MAINTAINERS                                        |  7 +++
->  2 files changed, 62 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml
+> 
+> Changes in v11: None
+> Changes in v10:
+> - Update the binding documentation for the mmsys system controller.
+> 
+> Changes in v9: None
+> Changes in v8: None
+> Changes in v7: None
+> 
+>  .../devicetree/bindings/arm/mediatek/mediatek,mmsys.txt    | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-Documentation/devicetree/bindings/display/simple-framebuffer.example.dts:21.16-37.11: Warning (chosen_node_is_root): /example-0/chosen: chosen node must be at root node
-Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.example.dts:19.13-26: Warning (reg_format): /example-0/camera-lens@0c:reg: property has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
-Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.example.dt.yaml: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.example.dt.yaml: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.example.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-
-See https://patchwork.ozlabs.org/patch/1246607
-Please check and re-submit.
+Acked-by: Rob Herring <robh@kernel.org>
