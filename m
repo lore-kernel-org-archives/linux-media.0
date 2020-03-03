@@ -2,139 +2,81 @@ Return-Path: <SRS0=bGZa=4U=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABD8EC3F2C6
-	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 11:33:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9CE8C3F2C6
+	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 12:35:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 855B420863
-	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 11:33:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD597215A4
+	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 12:35:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HxJAwJ7R"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="JizWLdZl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728658AbgCCLdZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Mar 2020 06:33:25 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:37965 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727851AbgCCLdY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Mar 2020 06:33:24 -0500
-Received: by mail-pf1-f195.google.com with SMTP id q9so1324215pfs.5
-        for <linux-media@vger.kernel.org>; Tue, 03 Mar 2020 03:33:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bILEy4M1zqKRLZ2AS6oDJDEkUgcQ2pYShtMFa0Kale8=;
-        b=HxJAwJ7Rn9E5nXnIEbkQHHsQMZdICUd3rOlE5seSGGQAXY/5T40GiXveVVUMX+I+vX
-         3TmZpuKL8Ik7dcdotnVCc4I6HpHrESLIQsQskjpQkkSZvJLKmeX0zH0s/qd9cG/QchsZ
-         byi4wEUVKLfjxjFzTT/pQH6RgAoxjLXsqCmO8XNC7ftSE18RMIwJlVbgFvN4Vc9wBx4p
-         qRXJm/Os2W9L1/POGjqcA+z1mVN6R87GEPC1rBlaQ7PEzMGv5zIPrnFiB6L1uOb1Fhv3
-         G7MZom6byJfZxrhJqDZGH7617/E8e5yrqq6vjpKn3wREPDsKA+SD5cQSSAntWo1vpubo
-         Nafw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bILEy4M1zqKRLZ2AS6oDJDEkUgcQ2pYShtMFa0Kale8=;
-        b=XbJthCD7nkcRBTUy3xQC/04aZ2+YpxIv9tMHzsCh64rrZ7ARfRRB5oJygPSt69EzrK
-         27WBPS5thOJHnVoBur40nf9ljnBRaSHxr2zOW6XNVrMM8EpTkPwyEJYIyBXCj11qVNgE
-         kXjPvjh/wlxLhOtPPrvdVV2YWWu//MsAiyCRxp3F24SiMoFlC0G/H9tr5jk+tSXKCSGy
-         iRrmbYZ0cIEyWzz6DfveXVzlwG7skVxe1JYNc59ecZD2bu9DBCynLgJowE1tiRsVBiia
-         DEG2JL4Yf1od1C3365BrxOEBBqLcOrEXzWiEi/9l9q9ixzWvfO8VrxqeIWe8P+WVkmj/
-         /Qow==
-X-Gm-Message-State: ANhLgQ3T1z2FVWLHjHrVU1vbk5LYozC3rF2BuIyHxoJEsRlk79OnuZLZ
-        7y//Neuh2J7vBE6Ws0uBHRBg
-X-Google-Smtp-Source: ADFU+vvZI18gytC/evrv+FJmWH00iO0tFMxL2Mypbs/t9diE7LpovN/8zQ/47XNUxeK7aMuwmlrkaA==
-X-Received: by 2002:a63:4763:: with SMTP id w35mr3795434pgk.113.1583235203834;
-        Tue, 03 Mar 2020 03:33:23 -0800 (PST)
-Received: from mani ([103.59.133.81])
-        by smtp.gmail.com with ESMTPSA id d82sm7486573pfd.187.2020.03.03.03.33.21
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 03 Mar 2020 03:33:23 -0800 (PST)
-Date:   Tue, 3 Mar 2020 17:03:16 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Andrey Konovalov <andrey.konovalov@linaro.org>
-Cc:     mchehab@kernel.org, sakari.ailus@iki.fi,
-        linux-media@vger.kernel.org, peter.griffin@linaro.org
-Subject: Re: [PATCH 3/3] media: i2c: imx290: fix reset GPIO pin handling
-Message-ID: <20200303113316.GC16981@mani>
-References: <20200226215913.10631-1-andrey.konovalov@linaro.org>
- <20200226215913.10631-4-andrey.konovalov@linaro.org>
+        id S1729349AbgCCMfI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Mar 2020 07:35:08 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:25727 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727121AbgCCMfH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Mar 2020 07:35:07 -0500
+X-UUID: 553873c5fef840868644bdf38e09f7b5-20200303
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=8tqG320za0mW9RIagYkPiOg3CQwLqQXnwr9xDSmqpV8=;
+        b=JizWLdZlpPPNtQH32HMGhQpCj+5goKG9bCY2Qjd6sXz7kWaltL4m5yKL7ty6CBO2WhwOQacqmp7JWQbmFMUSTCfxVHXLrhRveS5qyoVMZRlpmTHytMKkswR/xdw6R6hAWjB5d4+iVHjS9CMgRoay07jjxtr+F+VIdjG3R3AEBQM=;
+X-UUID: 553873c5fef840868644bdf38e09f7b5-20200303
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <xia.jiang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1281166939; Tue, 03 Mar 2020 20:35:00 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 3 Mar 2020 20:34:07 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 3 Mar 2020 20:35:39 +0800
+From:   Xia Jiang <xia.jiang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rick Chang <rick.chang@mediatek.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        <srv_heupstream@mediatek.com>, Xia Jiang <xia.jiang@mediatek.com>
+Subject: [PATCH v7 03/11] media: platform: Improve s_selection flow for bug fixing
+Date:   Tue, 3 Mar 2020 20:34:38 +0800
+Message-ID: <20200303123446.20095-4-xia.jiang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20200303123446.20095-1-xia.jiang@mediatek.com>
+References: <20200303123446.20095-1-xia.jiang@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200226215913.10631-4-andrey.konovalov@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 12:59:13AM +0300, Andrey Konovalov wrote:
-> According to https://www.kernel.org/doc/Documentation/gpio/consumer.txt,
-> 
-> - all of the gpiod_set_value_xxx() functions operate with the *logical* value.
-> So in imx290_power_on() the reset signal should be cleared/de-asserted with
-> gpiod_set_value_cansleep(imx290->rst_gpio, 0), and in imx290_power_off() the
-> value of 1 must be used to apply/assert the reset to the sensor. In the device
-> tree the reset pin is described as GPIO_ACTIVE_LOW, and gpiod_set_value_xxx()
-> functions take this into account,
-> 
-> - when devm_gpiod_get_optional() is called with GPIOD_ASIS, the GPIO is not
-> initialized, and the direction must be set later; using a GPIO
-> without setting its direction first is illegal and will result in undefined
-> behavior. Fix this by using GPIOD_OUT_HIGH instead of GPIOD_ASIS (this asserts
-> the reset signal to the sensor initially).
-> 
+R2V0IGNvcnJlY3QgY29tcG9zZSB2YWx1ZSBpbiBtdGtfanBlZ19zX3NlbGVjdGlvbiBmdW5jdGlv
+bi4NCg0KU2lnbmVkLW9mZi1ieTogWGlhIEppYW5nIDx4aWEuamlhbmdAbWVkaWF0ZWsuY29tPg0K
+LS0tDQogZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstanBlZy9tdGtfanBlZ19jb3JlLmMgfCA0
+ICsrLS0NCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0K
+DQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstanBlZy9tdGtfanBlZ19j
+b3JlLmMgYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2NvcmUuYw0K
+aW5kZXggZGEwZGFlNGIwZmM5Li5mYjJjOGQwMjY1ODAgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL21l
+ZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2NvcmUuYw0KKysrIGIvZHJpdmVycy9tZWRp
+YS9wbGF0Zm9ybS9tdGstanBlZy9tdGtfanBlZ19jb3JlLmMNCkBAIC00OTIsOCArNDkyLDggQEAg
+c3RhdGljIGludCBtdGtfanBlZ19zX3NlbGVjdGlvbihzdHJ1Y3QgZmlsZSAqZmlsZSwgdm9pZCAq
+cHJpdiwNCiAJY2FzZSBWNEwyX1NFTF9UR1RfQ09NUE9TRToNCiAJCXMtPnIubGVmdCA9IDA7DQog
+CQlzLT5yLnRvcCA9IDA7DQotCQlzLT5yLndpZHRoID0gY3R4LT5vdXRfcS53Ow0KLQkJcy0+ci5o
+ZWlnaHQgPSBjdHgtPm91dF9xLmg7DQorCQljdHgtPm91dF9xLncgPSBzLT5yLndpZHRoOw0KKwkJ
+Y3R4LT5vdXRfcS5oID0gcy0+ci5oZWlnaHQ7DQogCQlicmVhazsNCiAJZGVmYXVsdDoNCiAJCXJl
+dHVybiAtRUlOVkFMOw0KLS0gDQoyLjE4LjANCg==
 
-I didn't catch this issue since I've been using IMX290 board on top of Sensors
-mezzanine which has the pullup on that pin. But this fix LGTM.
-
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Thanks,
-Mani
-
-> Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
-> ---
->  drivers/media/i2c/imx290.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> index d0322f9a8856..7b1de1f0c8b7 100644
-> --- a/drivers/media/i2c/imx290.c
-> +++ b/drivers/media/i2c/imx290.c
-> @@ -628,7 +628,7 @@ static int imx290_power_on(struct device *dev)
->  	}
->  
->  	usleep_range(1, 2);
-> -	gpiod_set_value_cansleep(imx290->rst_gpio, 1);
-> +	gpiod_set_value_cansleep(imx290->rst_gpio, 0);
->  	usleep_range(30000, 31000);
->  
->  	return 0;
-> @@ -641,7 +641,7 @@ static int imx290_power_off(struct device *dev)
->  	struct imx290 *imx290 = to_imx290(sd);
->  
->  	clk_disable_unprepare(imx290->xclk);
-> -	gpiod_set_value_cansleep(imx290->rst_gpio, 0);
-> +	gpiod_set_value_cansleep(imx290->rst_gpio, 1);
->  	regulator_bulk_disable(IMX290_NUM_SUPPLIES, imx290->supplies);
->  
->  	return 0;
-> @@ -757,7 +757,8 @@ static int imx290_probe(struct i2c_client *client)
->  		goto free_err;
->  	}
->  
-> -	imx290->rst_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_ASIS);
-> +	imx290->rst_gpio = devm_gpiod_get_optional(dev, "reset",
-> +						   GPIOD_OUT_HIGH);
->  	if (IS_ERR(imx290->rst_gpio)) {
->  		dev_err(dev, "Cannot get reset gpio\n");
->  		ret = PTR_ERR(imx290->rst_gpio);
-> -- 
-> 2.17.1
-> 
