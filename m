@@ -2,67 +2,71 @@ Return-Path: <SRS0=bGZa=4U=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1E04C3F2C6
-	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 14:37:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E65DC3F2C6
+	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 14:37:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 78BCC2086A
-	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 14:37:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A9AB20848
+	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 14:37:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="O3w2nmNb"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="nxLcwmlS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729148AbgCCOhg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Mar 2020 09:37:36 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:44999 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728482AbgCCOhg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Mar 2020 09:37:36 -0500
-Received: by mail-wr1-f65.google.com with SMTP id n7so4573478wrt.11
-        for <linux-media@vger.kernel.org>; Tue, 03 Mar 2020 06:37:34 -0800 (PST)
+        id S1729568AbgCCOhl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Mar 2020 09:37:41 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:33210 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728560AbgCCOhk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Mar 2020 09:37:40 -0500
+Received: by mail-wr1-f67.google.com with SMTP id x7so4678466wrr.0
+        for <linux-media@vger.kernel.org>; Tue, 03 Mar 2020 06:37:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7MF00UM1fpa9HYHO8SBKlNjIg6Uws9RTRAOVGceQtR8=;
-        b=O3w2nmNbOLHD0dzkSkWcx5e9MJIEXF8iFDrNGPDdENYEf5c8COTTMrdAiz2v+6M/uj
-         3HjvkAhoW+W119bQq5vs3WQxVLhlbC1w+kPU9KsHxb+acISCE3moVUT5E9tPS9TSMigU
-         1PekqKjGH8DdqTFOUhxnjEPC/DuibMhKlIQCy0seWnGvDJ/fnJpafc/orCRqroSNivPf
-         95aaQEcFZCdxgBYt5TxM1vjukEFlLFv4gXBbMHUIIJJueHdvAH6htuAGbeGfiqoDGztL
-         y5eOb11H18S+JQGE0TmVcvt6I0xyxR2ge+/jV7bHpVpbrgmHxhi2WFH5MVWqlhdRyN6S
-         85UA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=I21Kq4omIiuvyI+q1sEWfUXp3zFBaxsCmxFd55nT6Nc=;
+        b=nxLcwmlSwzbT9LjOoX3uevnYPtP2GITTh8LVaVdm6+RT3dnCxKjfFh8kyPnMpwiOxM
+         5uss3JhQqj46EyDXlUg0TVsrPdBxi2quB02VHNy/TymVj5XdZLnMmz+LZ1pBgGeH4FPu
+         LcJyK1iz5U5bqtSMJ85zECaQL51uk1TCsfnL8e17vQX4HZlf+jnWI2w2GxlAvk2TNJmU
+         jUncowMn3vqHnJ+DPD2FOV4GhP496L2uej+ESflr3VXxXQ2OXC4psjVsfwQrlwTyozmd
+         QN6hIUzvYX1L9oaYO69VDdkuw5Nvvgjafghzqluhjkk6RDsdJeWuqKI5PlB01BfXUIw4
+         pM2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7MF00UM1fpa9HYHO8SBKlNjIg6Uws9RTRAOVGceQtR8=;
-        b=BOhwqcx6bFtFJ+Z9CoSDc/ganGjLgf4RN1O542sOTaltTvRNNjuaiPrPVX3htMG3v+
-         tpjDtzQiiVsAN4vfSZo4ueNokwRMgpzuTJtDKynaYDQTP392qUZP4fz5EnS0G9pQkvph
-         piTT97Xcax/PHrdrep8NznbEMB29h2+7T9+gAvMEtrOJP/qfCQd2xfZMgThWgGEbyBQs
-         Hk3/NXNcT+7c6u6Mp/KDu9CiGsn+lzP1+F6aifzJIdkJoSg/T/PSWPQZ/0HypwZ58cPY
-         skuCIYXqyMPf8t46axFhkSix6lXsZBefFDUcAGHW2tr/IiTHPFkx+tetOHhXovNwtX94
-         RHwA==
-X-Gm-Message-State: ANhLgQ3K5nZwAEVEvPJcvlBc+mI/akwo0kj+wXCLja7sreD8alIDBMrC
-        2TzmjFsOqtESWdCQbOjR1udMQg==
-X-Google-Smtp-Source: ADFU+vvkG1fb/9A+OhoWopvEk1zn76yLqEIQOFhMmPMWuOlablVctjBKII82igUKoHXooRTdN2G4gg==
-X-Received: by 2002:adf:ffd0:: with SMTP id x16mr5758258wrs.346.1583246254028;
-        Tue, 03 Mar 2020 06:37:34 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=I21Kq4omIiuvyI+q1sEWfUXp3zFBaxsCmxFd55nT6Nc=;
+        b=O0/12Ra980a12Kn4ndxVlSh3v1F5X6gRK5CPrYVvEapWZiQY5pohxsnxMOyEXJAYlh
+         AfWORMgc9T1y+T+a7Y/y2y6/sQJ44Ru2BRYUaCwYjRRmbIFXYjyYFCFcOikPDb+97AVb
+         c1kuS0HGNN+wtInSEfAEK+giQTgrhC7nXMa5BTUosq3fEk33r2H4EGw01p6kL4GDjtQG
+         ha0fjr5vF/bSpYN89UA3KLVScdvO8o5+61DIeXjc8SLrfGBMcczhVBO14+fpRbSTLPgI
+         gauX72hxl4RFdzpxRrEBD8JU6nyBEt+Q/hIrFOk+anRkRRxREBzziHcuw3U246VGwPoB
+         yoBg==
+X-Gm-Message-State: ANhLgQ1IaArgqbCJhQ0cwmacwn1Cbrg/addzgr48EKo45GxzJ/kejoeH
+        xIhNrPM5eY6+1/ZB9SeRJLCsJw==
+X-Google-Smtp-Source: ADFU+vuzU3GnUXN5a1eci6HLf/AkGr33SXxzdBrH1IuW/OcmGXvPDrI1vY6qHt9b8dYQSQ1N/uq20Q==
+X-Received: by 2002:adf:c445:: with SMTP id a5mr5752925wrg.14.1583246258140;
+        Tue, 03 Mar 2020 06:37:38 -0800 (PST)
 Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id l4sm4652779wmf.38.2020.03.03.06.37.33
+        by smtp.gmail.com with ESMTPSA id l4sm4652779wmf.38.2020.03.03.06.37.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 06:37:33 -0800 (PST)
+        Tue, 03 Mar 2020 06:37:37 -0800 (PST)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     mchehab@kernel.org, hans.verkuil@cisco.com
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+Cc:     Maxime Jourdan <mjourdan@baylibre.com>,
         linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 0/5] media: meson: vdec: Add VP9 decoding support
-Date:   Tue,  3 Mar 2020 15:37:27 +0100
-Message-Id: <20200303143732.762-1-narmstrong@baylibre.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Subject: [PATCH v6 4/5] media: meson: vdec: add VP9 input support
+Date:   Tue,  3 Mar 2020 15:37:31 +0100
+Message-Id: <20200303143732.762-5-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20200303143732.762-1-narmstrong@baylibre.com>
+References: <20200303143732.762-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -70,195 +74,217 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+From: Maxime Jourdan <mjourdan@baylibre.com>
 
-This patchset aims to bring VP9 decoding support to Amlogic GXL, G12A & SM1
-platforms for the amlogic stateful video decoder driver.
+Amlogic VP9 decoder requires an additional 16-byte payload before every
+frame header.
 
-With this, it passes v4l2-compliance with streaming on Amlogic G12A and
-Amlogic SM1 SoCs successfully using the stream at [1] with a fixed
-pyv4l2compliance script for VP9 at [2].
+The source buffer is updated in-place, then given to the Parser FIFO DMA.
 
-The original script kept the IVF headers in the stream, confusing the
-decoder. The fixed script only extracts the payload from the IVF container.
+The FIFO DMA copies the blocks into the 16MiB parser ring buffer, then parses
+and copies the slice into the decoder "workspace".
 
-The decoder has been tested using the Google CTS TestVectorsIttiam VP9 yuv420
-samples and the VP9 Decoder Performance streams at [5], decoding all streams from
-Profile 0 and 2 up to Level 4.1, with 10bit downsampling to 8bit.
+Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Tested-by: Kevin Hilman <khilman@baylibre.com>
+---
+ drivers/staging/media/meson/vdec/esparser.c | 150 +++++++++++++++++++-
+ 1 file changed, 146 insertions(+), 4 deletions(-)
 
-This patchset depends on :
-- H.264 and compliance v7 at [4]
-
-Changes since v5 at [9]:
-- Fixed sparse warnings in codec_hevc_common.h/codec_vp9.c/vdec_hevc.c
-- No smatch warnings issued
-
-Changes since v4 at [8]:
-- Fixes checkpatch warning on patches 3 & 5
-
-Changes since v3 at [7]:
-- fixes necessary spare ref buffer handling in parser
-- added a comment to indicate how it's handled
-- fix VP9 on SM1, was working with G12A firmware, but needed some changed with SM1 specific firmware
-- pushed (gxl) and switched to missing (sm1) vp9 firmwares to linux-firmware repo
-
-Changes since v2 at [6]:
-- Rebased on H.264 and compliance at [4]
-
-Changes since v1 at [3]:
-- Fixed compliance for delta frame resize, but proper ref keeping is broken
-- Added warns for delta frame resize, to be fixed in a following patchset
-- Added VP9 probabilities parsing and transformation support to decore the VP9 performance streams
-- Fixed refs keeping, avoid deleting necessary refs for next frame
-- Properly used the kernel clamp_val() macros
-- Zeroed the workspace to avoid refs handling glitches
-- Add lock around the flush & stop to avoid race between IRQ and drain/stop
-
-[1] https://github.com/superna9999/pyv4l2compliance/raw/tests/output/Jellyfish_1080_10s_5MB.vp9.hdr
-[2] https://github.com/superna9999/pyv4l2compliance
-[3] https://lore.kernel.org/linux-media/20191205092454.26075-1-narmstrong@baylibre.com
-[4] https://lore.kernel.org/linux-media/20200303143320.32562-1-narmstrong@baylibre.com
-[5] https://www.webmproject.org/vp9/levels/
-[6] https://lore.kernel.org/linux-media/20191217111939.10387-1-narmstrong@baylibre.com
-[7] https://lore.kernel.org/linux-media/20200116133437.2443-1-narmstrong@baylibre.com
-[8] https://lore.kernel.org/linux-media/20200206084152.7070-1-narmstrong@baylibre.com
-[9] https://lore.kernel.org/linux-media/20200219140958.23542-1-narmstrong@baylibre.com
-
-The compliance log is:
-# v4l2-compliance --stream-from-hdr Jellyfish_1080_10s_5MB.vp9.hdr -s 200
-v4l2-compliance SHA: 7ead0e1856b89f2e19369af452bb03fd0cd16793, 64 bits
-
-Compliance test for meson-vdec device /dev/video0:
-
-Driver Info:
-	Driver name      : meson-vdec
-	Card type        : Amlogic Video Decoder
-	Bus info         : platform:meson-vdec
-	Driver version   : 5.5.0
-	Capabilities     : 0x84204000
-		Video Memory-to-Memory Multiplanar
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04204000
-		Video Memory-to-Memory Multiplanar
-		Streaming
-		Extended Pix Format
-	Detected Stateful Decoder
-
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-	test second /dev/video0 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 2 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Test input 0:
-
-Streaming ioctls:
-	test read/write: OK (Not Supported)
-	test blocking wait: OK
-	Video Capture Multiplanar: Captured 198 buffers   
-	test MMAP (select): OK
-	Video Capture Multiplanar: Captured 198 buffers   
-	test MMAP (epoll): OK
-	test USERPTR (select): OK (Not Supported)
-	test DMABUF: Cannot test, specify --expbuf-device
-
-Total for meson-vdec device /dev/video0: 49, Succeeded: 49, Failed: 0, Warnings: 0
-
-Maxime Jourdan (4):
-  media: meson: vdec: add helpers for lossless framebuffer compression
-    buffers
-  media: meson: vdec: add common HEVC decoder support
-  media: meson: vdec: add VP9 input support
-  media: meson: vdec: add VP9 decoder support
-
-Neil Armstrong (1):
-  media: meson: vdec: align stride on 32 bytes
-
- drivers/staging/media/meson/vdec/Makefile     |    4 +-
- .../media/meson/vdec/codec_hevc_common.c      |  284 +++
- .../media/meson/vdec/codec_hevc_common.h      |   80 +
- drivers/staging/media/meson/vdec/codec_vp9.c  | 2141 +++++++++++++++++
- drivers/staging/media/meson/vdec/codec_vp9.h  |   13 +
- drivers/staging/media/meson/vdec/esparser.c   |  150 +-
- drivers/staging/media/meson/vdec/hevc_regs.h  |  218 ++
- drivers/staging/media/meson/vdec/vdec.c       |   15 +-
- .../staging/media/meson/vdec/vdec_helpers.c   |   35 +-
- .../staging/media/meson/vdec/vdec_helpers.h   |    4 +
- drivers/staging/media/meson/vdec/vdec_hevc.c  |  231 ++
- drivers/staging/media/meson/vdec/vdec_hevc.h  |   13 +
- .../staging/media/meson/vdec/vdec_platform.c  |   38 +
- 13 files changed, 3213 insertions(+), 13 deletions(-)
- create mode 100644 drivers/staging/media/meson/vdec/codec_hevc_common.c
- create mode 100644 drivers/staging/media/meson/vdec/codec_hevc_common.h
- create mode 100644 drivers/staging/media/meson/vdec/codec_vp9.c
- create mode 100644 drivers/staging/media/meson/vdec/codec_vp9.h
- create mode 100644 drivers/staging/media/meson/vdec/hevc_regs.h
- create mode 100644 drivers/staging/media/meson/vdec/vdec_hevc.c
- create mode 100644 drivers/staging/media/meson/vdec/vdec_hevc.h
-
+diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
+index adc5c1e81a4c..4a9aad3fafeb 100644
+--- a/drivers/staging/media/meson/vdec/esparser.c
++++ b/drivers/staging/media/meson/vdec/esparser.c
+@@ -52,6 +52,7 @@
+ #define PARSER_VIDEO_HOLE	0x90
+ 
+ #define SEARCH_PATTERN_LEN	512
++#define VP9_HEADER_SIZE		16
+ 
+ static DECLARE_WAIT_QUEUE_HEAD(wq);
+ static int search_done;
+@@ -74,14 +75,121 @@ static irqreturn_t esparser_isr(int irq, void *dev)
+ 	return IRQ_HANDLED;
+ }
+ 
++/**
++ * VP9 frame headers need to be appended by a 16-byte long
++ * Amlogic custom header
++ */
++static int vp9_update_header(struct amvdec_core *core, struct vb2_buffer *buf)
++{
++	u8 *dp;
++	u8 marker;
++	int dsize;
++	int num_frames, cur_frame;
++	int cur_mag, mag, mag_ptr;
++	int frame_size[8], tot_frame_size[8];
++	int total_datasize = 0;
++	int new_frame_size;
++	unsigned char *old_header = NULL;
++
++	dp = (uint8_t *)vb2_plane_vaddr(buf, 0);
++	dsize = vb2_get_plane_payload(buf, 0);
++
++	if (dsize == vb2_plane_size(buf, 0)) {
++		dev_warn(core->dev, "%s: unable to update header\n", __func__);
++		return 0;
++	}
++
++	marker = dp[dsize - 1];
++	if ((marker & 0xe0) == 0xc0) {
++		num_frames = (marker & 0x7) + 1;
++		mag = ((marker >> 3) & 0x3) + 1;
++		mag_ptr = dsize - mag * num_frames - 2;
++		if (dp[mag_ptr] != marker)
++			return 0;
++
++		mag_ptr++;
++		for (cur_frame = 0; cur_frame < num_frames; cur_frame++) {
++			frame_size[cur_frame] = 0;
++			for (cur_mag = 0; cur_mag < mag; cur_mag++) {
++				frame_size[cur_frame] |=
++					(dp[mag_ptr] << (cur_mag * 8));
++				mag_ptr++;
++			}
++			if (cur_frame == 0)
++				tot_frame_size[cur_frame] =
++					frame_size[cur_frame];
++			else
++				tot_frame_size[cur_frame] =
++					tot_frame_size[cur_frame - 1] +
++					frame_size[cur_frame];
++			total_datasize += frame_size[cur_frame];
++		}
++	} else {
++		num_frames = 1;
++		frame_size[0] = dsize;
++		tot_frame_size[0] = dsize;
++		total_datasize = dsize;
++	}
++
++	new_frame_size = total_datasize + num_frames * VP9_HEADER_SIZE;
++
++	if (new_frame_size >= vb2_plane_size(buf, 0)) {
++		dev_warn(core->dev, "%s: unable to update header\n", __func__);
++		return 0;
++	}
++
++	for (cur_frame = num_frames - 1; cur_frame >= 0; cur_frame--) {
++		int framesize = frame_size[cur_frame];
++		int framesize_header = framesize + 4;
++		int oldframeoff = tot_frame_size[cur_frame] - framesize;
++		int outheaderoff =  oldframeoff + cur_frame * VP9_HEADER_SIZE;
++		u8 *fdata = dp + outheaderoff;
++		u8 *old_framedata = dp + oldframeoff;
++
++		memmove(fdata + VP9_HEADER_SIZE, old_framedata, framesize);
++
++		fdata[0] = (framesize_header >> 24) & 0xff;
++		fdata[1] = (framesize_header >> 16) & 0xff;
++		fdata[2] = (framesize_header >> 8) & 0xff;
++		fdata[3] = (framesize_header >> 0) & 0xff;
++		fdata[4] = ((framesize_header >> 24) & 0xff) ^ 0xff;
++		fdata[5] = ((framesize_header >> 16) & 0xff) ^ 0xff;
++		fdata[6] = ((framesize_header >> 8) & 0xff) ^ 0xff;
++		fdata[7] = ((framesize_header >> 0) & 0xff) ^ 0xff;
++		fdata[8] = 0;
++		fdata[9] = 0;
++		fdata[10] = 0;
++		fdata[11] = 1;
++		fdata[12] = 'A';
++		fdata[13] = 'M';
++		fdata[14] = 'L';
++		fdata[15] = 'V';
++
++		if (!old_header) {
++			/* nothing */
++		} else if (old_header > fdata + 16 + framesize) {
++			dev_dbg(core->dev, "%s: data has gaps, setting to 0\n",
++				__func__);
++			memset(fdata + 16 + framesize, 0,
++			       (old_header - fdata + 16 + framesize));
++		} else if (old_header < fdata + 16 + framesize) {
++			dev_err(core->dev, "%s: data overwritten\n", __func__);
++		}
++		old_header = fdata;
++	}
++
++	return new_frame_size;
++}
++
+ /* Pad the packet to at least 4KiB bytes otherwise the VDEC unit won't trigger
+  * ISRs.
+  * Also append a start code 000001ff at the end to trigger
+  * the ESPARSER interrupt.
+  */
+-static u32 esparser_pad_start_code(struct amvdec_core *core, struct vb2_buffer *vb)
++static u32 esparser_pad_start_code(struct amvdec_core *core,
++				   struct vb2_buffer *vb,
++				   u32 payload_size)
+ {
+-	u32 payload_size = vb2_get_plane_payload(vb, 0);
+ 	u32 pad_size = 0;
+ 	u8 *vaddr = vb2_plane_vaddr(vb, 0);
+ 
+@@ -186,13 +294,35 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
+ 	int ret;
+ 	struct vb2_buffer *vb = &vbuf->vb2_buf;
+ 	struct amvdec_core *core = sess->core;
++	struct amvdec_codec_ops *codec_ops = sess->fmt_out->codec_ops;
+ 	u32 payload_size = vb2_get_plane_payload(vb, 0);
+ 	dma_addr_t phy = vb2_dma_contig_plane_dma_addr(vb, 0);
++	u32 num_dst_bufs = 0;
+ 	u32 offset;
+ 	u32 pad_size;
+ 
+-	if (esparser_vififo_get_free_space(sess) < payload_size)
++	/*
++	 * When max ref frame is held by VP9, this should be -= 3 to prevent a
++	 * shortage of CAPTURE buffers on the decoder side.
++	 * For the future, a good enhancement of the way this is handled could
++	 * be to notify new capture buffers to the decoding modules, so that
++	 * they could pause when there is no capture buffer available and
++	 * resume on this notification.
++	 */
++	if (sess->fmt_out->pixfmt == V4L2_PIX_FMT_VP9) {
++		if (codec_ops->num_pending_bufs)
++			num_dst_bufs = codec_ops->num_pending_bufs(sess);
++
++		num_dst_bufs += v4l2_m2m_num_dst_bufs_ready(sess->m2m_ctx);
++		if (sess->fmt_out->pixfmt == V4L2_PIX_FMT_VP9)
++			num_dst_bufs -= 3;
++
++		if (esparser_vififo_get_free_space(sess) < payload_size ||
++		    atomic_read(&sess->esparser_queued_bufs) >= num_dst_bufs)
++			return -EAGAIN;
++	} else if (esparser_vififo_get_free_space(sess) < payload_size) {
+ 		return -EAGAIN;
++	}
+ 
+ 	v4l2_m2m_src_buf_remove_by_buf(sess->m2m_ctx, vbuf);
+ 
+@@ -206,7 +336,19 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
+ 	vbuf->field = V4L2_FIELD_NONE;
+ 	vbuf->sequence = sess->sequence_out++;
+ 
+-	pad_size = esparser_pad_start_code(core, vb);
++	if (sess->fmt_out->pixfmt == V4L2_PIX_FMT_VP9) {
++		payload_size = vp9_update_header(core, vb);
++
++		/* If unable to alter buffer to add headers */
++		if (payload_size == 0) {
++			amvdec_remove_ts(sess, vb->timestamp);
++			v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
++
++			return 0;
++		}
++	}
++
++	pad_size = esparser_pad_start_code(core, vb, payload_size);
+ 	ret = esparser_write_data(core, phy, payload_size + pad_size);
+ 
+ 	if (ret <= 0) {
 -- 
 2.22.0
 
