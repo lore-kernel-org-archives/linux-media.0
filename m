@@ -2,121 +2,362 @@ Return-Path: <SRS0=bGZa=4U=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D45BBC3F2C6
-	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 17:22:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6AF1C3F2C6
+	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 19:03:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ACA9120CC7
-	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 17:22:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ACFC720866
+	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 19:03:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="v7cg1KPn"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=jlekstrand-net.20150623.gappssmtp.com header.i=@jlekstrand-net.20150623.gappssmtp.com header.b="wypGM/Sf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729862AbgCCRWM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Mar 2020 12:22:12 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:35948 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729570AbgCCRWM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Mar 2020 12:22:12 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 023HMBTi113154;
-        Tue, 3 Mar 2020 11:22:11 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1583256131;
-        bh=SBRUU+j3XyFM6R2K8Qs7x9a1C38P7C+RT5tCbBFb0hI=;
-        h=From:To:CC:Subject:Date;
-        b=v7cg1KPn7IPdLZAVsY8/27/RR2l/nN/JHJRMrmyrf+EvYnjV8LHzuUAqDypAq5NQ+
-         U5M37Me3JuTQ+RqasRWnfiGIJJei/PY1n0I2SrZIT19bIbPQ0afRfGFO3Apd6e4KN/
-         oLSJ87u3nPajtUs3837qNK5DNjfYtJDlXqpYWiGs=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 023HMBKj077381
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 3 Mar 2020 11:22:11 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 3 Mar
- 2020 11:22:10 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 3 Mar 2020 11:22:10 -0600
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 023HMAq0014433;
-        Tue, 3 Mar 2020 11:22:10 -0600
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-CC:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>,
-        <stable@vger.kernel.org>
-Subject: [Patch] media: ti-vpe: cal: fix a kernel oops when unloading module
-Date:   Tue, 3 Mar 2020 11:26:29 -0600
-Message-ID: <20200303172629.21339-1-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728787AbgCCTDk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Mar 2020 14:03:40 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:47056 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727993AbgCCTDj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Mar 2020 14:03:39 -0500
+Received: by mail-pg1-f195.google.com with SMTP id y30so1951943pga.13
+        for <linux-media@vger.kernel.org>; Tue, 03 Mar 2020 11:03:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jlekstrand-net.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ZcNjNR9eap06LKLBmYe4Bn+IxnxQJa41GvGAvg2pHUo=;
+        b=wypGM/Sf6QDidpinJcsOgBV3n4OJ+udQJKWhNcW5mW0+HnsAVCsYlTmlTNye7dOAFt
+         Vx+Wlb1EMDGYSSbG1eb11BP1Y3qJOxz8mq3H7GdPUPHs4SkcRYCdVyXo5tgXzpTnm4TL
+         lsRIWjSLwkHBnPtmN9XnYceW+qGwJbN8acHQ72DHa8YRiiLkDf4IajMVzh0ICw6ODtGA
+         fJ+0FPrRemh9PRURdc/pwyKZToTJnfiFrkj/2/2h3/bIku4iXH2zf8XL+9KMP/nEuGGo
+         KGYe2MuDICD3f6U5uwTSJUtI7qgk8FK2yoSiN7y2ld/A4Y80NCg94Ca3Xk0Fq5oNXL9u
+         uIng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZcNjNR9eap06LKLBmYe4Bn+IxnxQJa41GvGAvg2pHUo=;
+        b=iPhg3r2PvAFjM/Z44Z4a+NCzVXwcnoh5rkBGQp+gwiSIRQu1MfiPKEKW25o1mBNiok
+         86BokuXIjb1dQav+yHaX7qKUOWwBe86bqPHDi1qEjC6PcVSCmxw46N+nHE6I85/RIlwi
+         CpPKFIeNY5B9nTy2ZubaNN6VpfDFFl/6ZVt7P5NDlMubroFVB242iIQOUbBtIwfc+3m1
+         CucqeCVuo8Ccp1gBFH+1kmKFvQrdip4d8uSspoIL9RLfqIDeidpk1olnkPub8b9gEndh
+         pHBGs68QNYj1LKbcP5fXK+O/k7UZFNzMzkEZ5W6EC1oBbBZPLiOtDg3r7Z7nv5bADdJc
+         d/DA==
+X-Gm-Message-State: ANhLgQ3nSGNIfqtHH5BxA4cx+ux638Fx9Wdu7QDwxZFM3rhnQ5K9khk4
+        sjQt2+lin3CqXTQURBrJ0eF3YQ==
+X-Google-Smtp-Source: ADFU+vvva4bHtyoXKpEMnmYH5AvGg9vla+sal5g4PwgWDeli6nHCQocQ6ABV1JODStdxy4jxHqMSiA==
+X-Received: by 2002:aa7:8426:: with SMTP id q6mr5387748pfn.221.1583262217581;
+        Tue, 03 Mar 2020 11:03:37 -0800 (PST)
+Received: from omlet.com ([2605:6000:1026:c273::faf])
+        by smtp.gmail.com with ESMTPSA id x3sm8034pjq.5.2020.03.03.11.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2020 11:03:36 -0800 (PST)
+From:   Jason Ekstrand <jason@jlekstrand.net>
+Cc:     airlied@redhat.com, christian.koenig@amd.com, jessehall@google.com,
+        jajones@nvidia.com, daniels@collabora.com, hoegsberg@google.com,
+        daniel.vetter@ffwll.ch, bas@basnieuwenhuizen.nl,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Chenbo Feng <fengc@google.com>,
+        Greg Hackmann <ghackmann@google.com>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] RFC: dma-buf: Add an API for importing and exporting sync files (v3)
+Date:   Tue,  3 Mar 2020 13:03:16 -0600
+Message-Id: <20200303190318.522103-1-jason@jlekstrand.net>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200226180937.106875-1-jason@jlekstrand.net>
+References: <20200226180937.106875-1-jason@jlekstrand.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-After the switch to use v4l2_async_notifier_add_subdev() and
-v4l2_async_notifier_cleanup(), unloading the ti_cal module would casue a
-kernel oops.
+Explicit synchronization is the future.  At least, that seems to be what
+most userspace APIs are agreeing on at this point.  However, most of our
+Linux APIs (both userspace and kernel UAPI) are currently built around
+implicit synchronization with dma-buf.  While work is ongoing to change
+many of the userspace APIs and protocols to an explicit synchronization
+model, switching over piecemeal is difficult due to the number of
+potential components involved.  On the kernel side, many drivers use
+dma-buf including GPU (3D/compute), display, v4l, and others.  In
+userspace, we have X11, several Wayland compositors, 3D drivers, compute
+drivers (OpenCL etc.), media encode/decode, and the list goes on.
 
-This was root cause to the fact that v4l2_async_notifier_cleanup() tries
-to kfree the asd pointer passed into v4l2_async_notifier_add_subdev().
+This patch provides a path forward by allowing userspace to manually
+manage the fences attached to a dma-buf.  Alternatively, one can think
+of this as making dma-buf's implicit synchronization simply a carrier
+for an explicit fence.  This is accomplished by adding two IOCTLs to
+dma-buf for importing and exporting a sync file to/from the dma-buf.
+This way a userspace component which is uses explicit synchronization,
+such as a Vulkan driver, can manually set the write fence on a buffer
+before handing it off to an implicitly synchronized component such as a
+Wayland compositor or video encoder.  In this way, each of the different
+components can be upgraded to an explicit synchronization model one at a
+time as long as the userspace pieces connecting them are aware of it and
+import/export fences at the right times.
 
-In our case the asd reference was from a statically allocated struct.
-So in effect v4l2_async_notifier_cleanup() was trying to free a pointer
-that was not kalloc.
+There is a potential race condition with this API if userspace is not
+careful.  A typical use case for implicit synchronization is to wait for
+the dma-buf to be ready, use it, and then signal it for some other
+component.  Because a sync_file cannot be created until it is guaranteed
+to complete in finite time, userspace can only signal the dma-buf after
+it has already submitted the work which uses it to the kernel and has
+received a sync_file back.  There is no way to atomically submit a
+wait-use-signal operation.  This is not, however, really a problem with
+this API so much as it is a problem with explicit synchronization
+itself.  The way this is typically handled is to have very explicit
+ownership transfer points in the API or protocol which ensure that only
+one component is using it at any given time.  Both X11 (via the PRESENT
+extension) and Wayland provide such ownership transfer points via
+explicit present and idle messages.
 
-So here we switch to using a kzalloc struct instead of a static one.
+The decision was intentionally made in this patch to make the import and
+export operations IOCTLs on the dma-buf itself rather than as a DRM
+IOCTL.  This makes it the import/export operation universal across all
+components which use dma-buf including GPU, display, v4l, and others.
+It also means that a userspace component can do the import/export
+without access to the DRM fd which may be tricky to get in cases where
+the client communicates with DRM via a userspace API such as OpenGL or
+Vulkan.  At a future date we may choose to add direct import/export APIs
+to components such as drm_syncobj to avoid allocating a file descriptor
+and going through two ioctls.  However, that seems to be something of a
+micro-optimization as import/export operations are likely to happen at a
+rate of a few per frame of rendered or decoded video.
 
-Fixes: d079f94c9046 ("media: platform: Switch to v4l2_async_notifier_add_subdev")
+v2 (Jason Ekstrand):
+ - Use a wrapper dma_fence_array of all fences including the new one
+   when importing an exclusive fence.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
+v3 (Jason Ekstrand):
+ - Lock around setting shared fences as well as exclusive
+ - Mark SIGNAL_SYNC_FILE as a read-write ioctl.
+ - Initialize ret to 0 in dma_buf_wait_sync_file
+
+Signed-off-by: Jason Ekstrand <jason@jlekstrand.net>
 ---
- drivers/media/platform/ti-vpe/cal.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/dma-buf/dma-buf.c    | 164 +++++++++++++++++++++++++++++++++++
+ include/uapi/linux/dma-buf.h |  13 ++-
+ 2 files changed, 175 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 6d4cbb8782ed..18fe2cb9dd17 100644
---- a/drivers/media/platform/ti-vpe/cal.c
-+++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -372,8 +372,6 @@ struct cal_ctx {
- 	struct v4l2_subdev	*sensor;
- 	struct v4l2_fwnode_endpoint	endpoint;
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index d4097856c86b..2c4608bae3c2 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -20,6 +20,7 @@
+ #include <linux/debugfs.h>
+ #include <linux/module.h>
+ #include <linux/seq_file.h>
++#include <linux/sync_file.h>
+ #include <linux/poll.h>
+ #include <linux/dma-resv.h>
+ #include <linux/mm.h>
+@@ -348,6 +349,163 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
+ 	return ret;
+ }
  
--	struct v4l2_async_subdev asd;
--
- 	struct v4l2_fh		fh;
- 	struct cal_dev		*dev;
- 	struct cc_data		*cc;
-@@ -2032,7 +2030,6 @@ static int of_cal_create_instance(struct cal_ctx *ctx, int inst)
- 
- 	parent = pdev->dev.of_node;
- 
--	asd = &ctx->asd;
- 	endpoint = &ctx->endpoint;
- 
- 	ep_node = NULL;
-@@ -2040,6 +2037,10 @@ static int of_cal_create_instance(struct cal_ctx *ctx, int inst)
- 	sensor_node = NULL;
- 	ret = -EINVAL;
- 
-+	asd = kzalloc(sizeof(*asd), GFP_KERNEL);
-+	if (!asd)
-+		goto cleanup_exit;
++/* This function takes a ref to add_fence on success.  The caller still
++ * owns its ref and has to dma_fence_put it.
++ */
++static struct dma_fence *dma_buf_get_unified_fence(struct dma_buf *dmabuf,
++						   struct dma_fence *add_fence)
++{
++	struct dma_fence **fences = NULL;
++	struct dma_fence_array *array;
++	unsigned i, num_fences = 0;
++	int ret;
 +
- 	ctx_dbg(3, ctx, "Scanning Port node for csi2 port: %d\n", inst);
- 	for (index = 0; index < CAL_NUM_CSI2_PORTS; index++) {
- 		port = of_get_next_port(parent, port);
++	ret = dma_resv_get_fences_rcu(dmabuf->resv, NULL,
++				      &num_fences, &fences);
++	if (ret)
++		return NULL; /* ret can only be 0 or -ENOMEM */
++
++	if (num_fences == 0) {
++		if (add_fence) {
++			return add_fence;
++		} else {
++			return dma_fence_get_stub();
++		}
++	} else if (num_fences == 1 && (!add_fence || add_fence == fences[0])) {
++		struct dma_fence *fence = fences[0];
++		kfree(fences);
++		return fence;
++	}
++
++	if (add_fence) {
++		struct dma_fence **nfences;
++		size_t sz;
++
++		/* Get a ref to add_fence so that we have a ref to every
++		 * fence we are going to put in the array.
++		 */
++		dma_fence_get(add_fence);
++
++		sz = (num_fences + 1) * sizeof(*fences);
++		nfences = krealloc(fences, sz, GFP_NOWAIT | __GFP_NOWARN);
++		if (!nfences)
++			goto err_put_fences;
++
++		nfences[num_fences++] = add_fence;
++	}
++
++	array = dma_fence_array_create(num_fences, fences,
++				       dma_fence_context_alloc(1),
++				       1, false);
++	if (!array)
++		goto err_put_fences;
++
++	/* The fence array now owns fences_arr and our references to each
++	 * of the individual fences.  We only own a reference to the one
++	 * array fence.
++	 */
++
++	return &array->base;
++
++err_put_fences:
++	for (i = 0; i < num_fences; i++)
++		dma_fence_put(fences[0]);
++	dma_fence_put(add_fence);
++	kfree(fences);
++	return NULL;
++}
++
++static long dma_buf_wait_sync_file(struct dma_buf *dmabuf,
++				   const void __user *user_data)
++{
++	struct dma_buf_sync_file arg;
++	struct dma_fence *fence, *unified_fence;
++	int ret = 0;
++
++	if (copy_from_user(&arg, user_data, sizeof(arg)))
++		return -EFAULT;
++
++	if (arg.flags != 0 && arg.flags != DMA_BUF_SYNC_FILE_SYNC_WRITE)
++		return -EINVAL;
++
++	fence = sync_file_get_fence(arg.fd);
++	if (!fence)
++		return -EINVAL;
++
++	dma_resv_lock(dmabuf->resv, NULL);
++
++	if (arg.flags & DMA_BUF_SYNC_FILE_SYNC_WRITE) {
++		unified_fence = dma_buf_get_unified_fence(dmabuf, fence);
++		if (unified_fence)
++			dma_resv_add_excl_fence(dmabuf->resv, fence);
++		else
++			ret = -ENOMEM;
++	} else {
++		dma_resv_add_shared_fence(dmabuf->resv, fence);
++	}
++
++	dma_resv_unlock(dmabuf->resv);
++
++	dma_fence_put(fence);
++
++	return ret;
++}
++
++static long dma_buf_signal_sync_file(struct dma_buf *dmabuf,
++				     void __user *user_data)
++{
++	struct dma_buf_sync_file arg;
++	struct dma_fence *fence = NULL;
++	struct sync_file *sync_file;
++	int fd, ret;
++
++	if (copy_from_user(&arg, user_data, sizeof(arg)))
++		return -EFAULT;
++
++	if (arg.flags != 0 && arg.flags != DMA_BUF_SYNC_FILE_SYNC_WRITE)
++		return -EINVAL;
++
++	fd = get_unused_fd_flags(O_CLOEXEC);
++	if (fd < 0)
++		return fd;
++
++	if (arg.flags & DMA_BUF_SYNC_FILE_SYNC_WRITE) {
++		/* We need to include both the exclusive fence and all of
++		 * the shared fences in our fence.
++		 */
++		fence = dma_buf_get_unified_fence(dmabuf, NULL);
++		if (!fence) {
++			ret = -ENOMEM;
++			goto err_put_fd;
++		}
++	} else {
++		fence = dma_resv_get_excl_rcu(dmabuf->resv);
++		if (!fence)
++			fence = dma_fence_get_stub();
++	}
++
++	sync_file = sync_file_create(fence);
++
++	dma_fence_put(fence);
++
++	if (!sync_file) {
++		ret = -EINVAL;
++		goto err_put_fd;
++	}
++
++	fd_install(fd, sync_file->file);
++
++	arg.fd = fd;
++	if (copy_to_user(user_data, &arg, sizeof(arg)))
++		return -EFAULT;
++
++	return 0;
++
++err_put_fd:
++	put_unused_fd(fd);
++	return ret;
++}
++
+ static long dma_buf_ioctl(struct file *file,
+ 			  unsigned int cmd, unsigned long arg)
+ {
+@@ -390,6 +548,12 @@ static long dma_buf_ioctl(struct file *file,
+ 	case DMA_BUF_SET_NAME:
+ 		return dma_buf_set_name(dmabuf, (const char __user *)arg);
+ 
++	case DMA_BUF_IOCTL_WAIT_SYNC_FILE:
++		return dma_buf_wait_sync_file(dmabuf, (const void __user *)arg);
++
++	case DMA_BUF_IOCTL_SIGNAL_SYNC_FILE:
++		return dma_buf_signal_sync_file(dmabuf, (void __user *)arg);
++
+ 	default:
+ 		return -ENOTTY;
+ 	}
+diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
+index dbc7092e04b5..86e07acca90c 100644
+--- a/include/uapi/linux/dma-buf.h
++++ b/include/uapi/linux/dma-buf.h
+@@ -37,8 +37,17 @@ struct dma_buf_sync {
+ 
+ #define DMA_BUF_NAME_LEN	32
+ 
++struct dma_buf_sync_file {
++	__u32 flags;
++	__s32 fd;
++};
++
++#define DMA_BUF_SYNC_FILE_SYNC_WRITE	(1 << 0)
++
+ #define DMA_BUF_BASE		'b'
+-#define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
+-#define DMA_BUF_SET_NAME	_IOW(DMA_BUF_BASE, 1, const char *)
++#define DMA_BUF_IOCTL_SYNC	    _IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
++#define DMA_BUF_SET_NAME	    _IOW(DMA_BUF_BASE, 1, const char *)
++#define DMA_BUF_IOCTL_WAIT_SYNC_FILE	_IOW(DMA_BUF_BASE, 2, struct dma_buf_sync)
++#define DMA_BUF_IOCTL_SIGNAL_SYNC_FILE	_IOWR(DMA_BUF_BASE, 3, struct dma_buf_sync)
+ 
+ #endif
 -- 
-2.17.1
+2.24.1
 
