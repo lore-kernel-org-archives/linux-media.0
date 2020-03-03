@@ -2,379 +2,337 @@ Return-Path: <SRS0=bGZa=4U=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1487DC3F2CD
-	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 14:33:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F71AC3F2C6
+	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 14:35:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D53A620838
-	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 14:33:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2EDC20714
+	for <linux-media@archiver.kernel.org>; Tue,  3 Mar 2020 14:35:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="hdN5kkHJ"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="bsh5IeYr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729690AbgCCOdm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Mar 2020 09:33:42 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:44287 "EHLO
+        id S1729437AbgCCOfz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Mar 2020 09:35:55 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:46571 "EHLO
         mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727725AbgCCOd2 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Mar 2020 09:33:28 -0500
-Received: by mail-wr1-f67.google.com with SMTP id n7so4553197wrt.11
-        for <linux-media@vger.kernel.org>; Tue, 03 Mar 2020 06:33:26 -0800 (PST)
+        with ESMTP id S1727199AbgCCOfy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Mar 2020 09:35:54 -0500
+Received: by mail-wr1-f67.google.com with SMTP id j7so4549318wrp.13
+        for <linux-media@vger.kernel.org>; Tue, 03 Mar 2020 06:35:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3VGF7+anCkNIaI4jrqb1fl7mLTSXOxlU1sRtYByO5rI=;
-        b=hdN5kkHJ9bNY3Jmw6gU1GDV5RZqSAlspi4tMmZQqB4ifN6PiG/yj4JT2SRXl9Q2FYw
-         KpOgD78fpVV/wadrNeavaExx18Ttp1A8HD624BH9rgRHx3ijXIS08hTMnuvtJElvFI+S
-         p2xUqI8R9lTlJvrZV0T4823dgP4BRK+YOBV8ZvWew6JEhOeFfF5GKdhvpL0jt1jMUnDe
-         zhlLLYQF3mIYdAK3hxOKCPQA+OLZzQFjIRMEDMD1hPzqJDSHqoQeFQ8KlyxQKonycjaG
-         e5EPhaBc4GXoCpwTCuTqcRu0kOdXML3fb/K8I1u3c+E6mwDmvbC3FyRfLxijYDifFiGa
-         C4uA==
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IcBfE81t30YXSylUJVvPsQH0T2vjWGEg3RyBPM5VReI=;
+        b=bsh5IeYrtkOu7qBildKpR6fOc/61GfSbt5ZgQNC/T/pP6dwfMKDfCkziy//I030UGp
+         gWAyn4PS/OCQKudh8Y2YbG/WhXWCaJt6NFr2JUanVziQLFMckpjcOeoN7xGuzsb7Mhgg
+         7VIUh820OIZdKV4N4i0RX7YT47zrzexqxC7U7PQKLeFcMb3U7QsZwbnDd7+qjcngL39+
+         qk3fL+chwOtvkC3FP/ggoXfgmikYhMxdJulvbpe0WGC1XsYo0YhHVHS1hg3CitzlQuB1
+         C2fdpd3jw9cDgl4aXk5Or6yD9xqpw+wgUUQ6YKnL9gui2A8YkQlXNxgG+uCvuAungGxp
+         aYfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3VGF7+anCkNIaI4jrqb1fl7mLTSXOxlU1sRtYByO5rI=;
-        b=n/c5Y82Gpk9VxF1bD2E5x5JbmUZRehnnbvHvmgV9ZwtM1X3kzjq2paMBC6PT7qXEmR
-         GRwkcrppI767hix8rc/LBkaqdQ7V5W2FA3xYBuKq0cNomKhHA9cVWrCP2XeikpcdA9A4
-         7GIzIitwRT4Gbd9JjXAounvlhrKRedngyG1N7bshwzsFFAnwZ2FqKxllKJTkxR30Dqkf
-         u+JcTzslrcxO40fOoTh8EJtY1GLet5UPEY5qx+Bl+vID2VUgjY6ol0OgphkoXu8FCTy/
-         G88+T6xzwJrvuakJkA5wlgKhCk6eaSvO0mOMXZZ7CLn+T+zskpgMvTKRfDGw+OzRBj2+
-         QKig==
-X-Gm-Message-State: ANhLgQ3lIBOgLiK5ITWerXtvMJgTpsDxSwIYFvSCH6fVYKPJonQ3HlqT
-        tJhGxNUlF2E8bqGCwI5Fyu6LBw==
-X-Google-Smtp-Source: ADFU+vs/3kSg3tj5AIY1odXcI1ZsBmmMJfQED/Kcza8gjnCn4VOarnV1d6bZ1hNiiLovr8J5oVZJnw==
-X-Received: by 2002:adf:f2ca:: with SMTP id d10mr6054534wrp.247.1583246005644;
-        Tue, 03 Mar 2020 06:33:25 -0800 (PST)
-Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id g7sm30120065wrm.72.2020.03.03.06.33.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 06:33:25 -0800 (PST)
-From:   Neil Armstrong <narmstrong@baylibre.com>
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=IcBfE81t30YXSylUJVvPsQH0T2vjWGEg3RyBPM5VReI=;
+        b=gwmbBq1dLeRpxRrCuDNXsz3DERPy5P92HGG9mwAnyMKMzASBvX3QCORtWY0KyVeMzC
+         ewlkAqHBOYr5tk7EJKWcCYyZi5vTAi5JFYXk+7FodQ88Bi8exQAGbVfGi4vfpLm4cQ5/
+         F4cjmZqzTNCvvUT+JwQPsL7LB9KyjLfKspDBmm6V5qqZ0aN86GvRN9L2iPCqS/h6iF47
+         JPnuAOsCblE3P3oWgFM5jRJv5Ec9G7su8yHrbcVwNOjgQlAPjphhm1ADWZLPzMWjMHi5
+         hj0Qm0RQ7G6dJxojCLnJMKaB5kmShlmrs/IUQIKGNsf91OXHP7DMIOtSFY/gMNVpVgw1
+         zMlg==
+X-Gm-Message-State: ANhLgQ1syfjhYrzHys4QH1sGm7ska9NmlP2UvYFA7ME2RUt8pDhi2fdy
+        J05Pxg+0c3kk/Dnd6pyZTXL9sjV7C2+pQA==
+X-Google-Smtp-Source: ADFU+vsc+za1YUKcFmoDDPXVITxS3WGSbmHMSZQDPog93vz58j+OfyqFBmFfrkNUvE7faImzGW2EXg==
+X-Received: by 2002:adf:f747:: with SMTP id z7mr5965890wrp.2.1583246151007;
+        Tue, 03 Mar 2020 06:35:51 -0800 (PST)
+Received: from [10.1.3.173] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id b12sm5820091wro.66.2020.03.03.06.35.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Mar 2020 06:35:50 -0800 (PST)
+Subject: Re: [PATCH v7 0/4] media: meson: vdec: Add compliant H264 support
 To:     mchehab@kernel.org, hans.verkuil@cisco.com
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Maxime Jourdan <mjourdan@baylibre.com>
-Subject: [PATCH v7 2/4] media: vicodec: use v4l2-mem2mem draining, stopped and next-buf-is-last states handling
-Date:   Tue,  3 Mar 2020 15:33:18 +0100
-Message-Id: <20200303143320.32562-3-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200303143320.32562-1-narmstrong@baylibre.com>
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20200303143320.32562-1-narmstrong@baylibre.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ BSwxi7g3Mu7u5kUByanqHyA=
+Organization: Baylibre
+Message-ID: <ee565ff5-5c1e-b7ef-36f8-98565e3c14d3@baylibre.com>
+Date:   Tue, 3 Mar 2020 15:35:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200303143320.32562-1-narmstrong@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the previously introduced v4l2-mem2mem core APIs to handle the drainig,
-stopped and next-buf-is-last states.
+On 03/03/2020 15:33, Neil Armstrong wrote:
+> Hello,
+> 
+> This patch series aims to bring H.264 support as well as compliance update
+> to the amlogic stateful video decoder driver.
+> 
+> The issue in the V1 patchset at [1] is solved by patch #1 following comments
+> and requirements from hans. It moves the full draining & stopped state tracking
+> and handling from vicodec to core v4l2-mem2mem.
+> 
+> The vicodec changes still passes the v4l2-utils "media-test" tests, log at [5]:
+> [...]
+> vicodec media controller compliance tests
+> 
+> Thu Jan 16 13:00:56 UTC 2020
+> v4l2-compliance SHA: 7ead0e1856b89f2e19369af452bb03fd0cd16793, 64 bits
+> [...]
+> Summary:
+> 
+> Total for vicodec device /dev/media3: 7, Succeeded: 7, Failed: 0, Warnings: 0
+> Total for vicodec device /dev/video13: 51, Succeeded: 51, Failed: 0, Warnings: 0
+> Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+> Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+> Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+> Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+> Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+> Total for vicodec device /dev/video14: 51, Succeeded: 51, Failed: 0, Warnings: 0
+> 
+> Final Summary: 364, Succeeded: 364, Failed: 0, Warnings: 0
+> Thu Jan 16 13:02:59 UTC 2020
+> 
+> With this, it also passes vdec v4l2-compliance with H264 streaming on Amlogic G12A
+> and Amlogic SM1 SoCs successfully.
+> 
+> The compliance log is:
+> # v4l2-compliance --stream-from-hdr test-25fps.h264.hdr -s
+> v4l2-compliance SHA: 7ead0e1856b89f2e19369af452bb03fd0cd16793, 64 bits
+> 
+> Compliance test for meson-vdec device /dev/video0:
+> 
+> Driver Info:
+> 	Driver name      : meson-vdec
+> 	Card type        : Amlogic Video Decoder
+> 	Bus info         : platform:meson-vdec
+> 	Driver version   : 5.5.0
+> 	Capabilities     : 0x84204000
+> 		Video Memory-to-Memory Multiplanar
+> 		Streaming
+> 		Extended Pix Format
+> 		Device Capabilities
+> 	Device Caps      : 0x04204000
+> 		Video Memory-to-Memory Multiplanar
+> 		Streaming
+> 		Extended Pix Format
+> 	Detected Stateful Decoder
+> 
+> Required ioctls:
+> 	test VIDIOC_QUERYCAP: OK
+> 
+> Allow for multiple opens:
+> 	test second /dev/video19 open: OK
+> 	test VIDIOC_QUERYCAP: OK
+> 	test VIDIOC_G/S_PRIORITY: OK
+> 	test for unlimited opens: OK
+> 
+> Debug ioctls:
+> 	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+> 	test VIDIOC_LOG_STATUS: OK (Not Supported)
+> 
+> Input ioctls:
+> 	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+> 	Inputs: 0 Audio Inputs: 0 Tuners: 0
+> 
+> Output ioctls:
+> 	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+> 	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+> 	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+> 	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+> 	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+> 	Outputs: 0 Audio Outputs: 0 Modulators: 0
+> 
+> Input/Output configuration ioctls:
+> 	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+> 	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+> 	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+> 	test VIDIOC_G/S_EDID: OK (Not Supported)
+> 
+> Control ioctls:
+> 	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+> 	test VIDIOC_QUERYCTRL: OK
+> 	test VIDIOC_G/S_CTRL: OK
+> 	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+> 	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+> 	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+> 	Standard Controls: 2 Private Controls: 0
+> 
+> Format ioctls:
+> 	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+> 	test VIDIOC_G/S_PARM: OK (Not Supported)
+> 	test VIDIOC_G_FBUF: OK (Not Supported)
+> 	test VIDIOC_G_FMT: OK
+> 	test VIDIOC_TRY_FMT: OK
+> 	test VIDIOC_S_FMT: OK
+> 	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+> 	test Cropping: OK (Not Supported)
+> 	test Composing: OK (Not Supported)
+> 	test Scaling: OK (Not Supported)
+> 
+> Codec ioctls:
+> 	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+> 	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+> 	test VIDIOC_(TRY_)DECODER_CMD: OK
+> 
+> Buffer ioctls:
+> 	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+> 	test VIDIOC_EXPBUF: OK
+> 	test Requests: OK (Not Supported)
+> 
+> Test input 0:
+> 
+> Streaming ioctls:
+> 	test read/write: OK (Not Supported)
+> 	test blocking wait: OK
+> 	Video Capture Multiplanar: Captured 60 buffers    
+> 	test MMAP (select): OK
+> 	Video Capture Multiplanar: Captured 60 buffers    
+> 	test MMAP (epoll): OK
+> 	test USERPTR (select): OK (Not Supported)
+> 	test DMABUF: Cannot test, specify --expbuf-device
+> 
+> Total for meson-vdec device /dev/video0: 49, Succeeded: 49, Failed: 0, Warnings: 0
+> 
+> Changes since v6 at [7]:
+> - Fixed sparse warning in codec_h264.c
+> - No smatch issues reported
+> 
+> Changes since v5 at [6]:
+> - Changed name of v4l2_m2m_start/stop_streaming to v4l2_m2m_update_start/stop_streaming_state
+> - Changed name of v4l2_mark_last_buf to v4l2_update_last_buf_state
+> - Added comment in code to describe usage and use-case
+> - Added comment in header for helpers
+> - Updated vicodec with v4l2_m2m_start/stop_streaming renaming in patch 2
+> - Fixes htmldoc warnings in patch 4
+> 
+> Changes since v4 at [5]:
+> - Squashed "don't resume instantly if not streaming capture" and "fix OUTPUT buffer size configuration" fixes from maxime
+> 
+> Changes since v3 at [3]:
+> - Fixed vicodec compliance
+> - Fixed vdec compliance with v4l2 state management
+> - fixed doc errors for v4l2-mem2mem.h
+> 
+> Changes since v2 at [2]:
+> - Move full draining & stopped state tracking into core v4l2-mem2mem
+> - Adapt vicodec to use the core v4l2-mem2mem draining & stopped state tracking
+> 
+> Changes since v1 at [1]:
+> - fixed output_size is never used reported by hans
+> - rebased on G12A and SM1 patches
+> - added handling of qbuf after STREAMON and STOP before enought buffer queued
+> 
+> [1] https://lore.kernel.org/linux-media/20191007145909.29979-1-mjourdan@baylibre.com
+> [2] https://lore.kernel.org/linux-media/20191126093733.32404-1-narmstrong@baylibre.com
+> [3] https://lore.kernel.org/linux-media/20191209122028.13714-1-narmstrong@baylibre.com
+> [4] https://people.freedesktop.org/~narmstrong/vicodec-compliance-7ead0e1856b89f2e19369af452bb03fd0cd16793-20200116.log
+> [5] https://lore.kernel.org/linux-media/20200116133025.1903-1-narmstrong@baylibre.com
+> [6] https://lore.kernel.org/linux-media/20200206082648.25184-1-narmstrong@baylibre.com
+> [7] https://lore.kernel.org/linux-media/20200219140156.22893-1-narmstrong@baylibre.com
+> 
+> Maxime Jourdan (2):
+>   media: meson: vdec: bring up to compliance
+>   media: meson: vdec: add H.264 decoding support
+> 
+> Neil Armstrong (2):
+>   media: v4l2-mem2mem: handle draining, stopped and next-buf-is-last
+>     states
+>   media: vicodec: use v4l2-mem2mem draining, stopped and
+>     next-buf-is-last states handling
+> 
+>  drivers/media/platform/vicodec/vicodec-core.c | 162 ++----
+>  drivers/media/v4l2-core/v4l2-mem2mem.c        | 221 +++++++-
+>  drivers/staging/media/meson/vdec/Makefile     |   2 +-
+>  drivers/staging/media/meson/vdec/codec_h264.c | 485 ++++++++++++++++++
+>  drivers/staging/media/meson/vdec/codec_h264.h |  14 +
+>  drivers/staging/media/meson/vdec/esparser.c   |  58 +--
+>  drivers/staging/media/meson/vdec/vdec.c       |  90 ++--
+>  drivers/staging/media/meson/vdec/vdec.h       |  14 +-
+>  .../staging/media/meson/vdec/vdec_helpers.c   |  88 ++--
+>  .../staging/media/meson/vdec/vdec_helpers.h   |   6 +-
+>  .../staging/media/meson/vdec/vdec_platform.c  |  71 +++
+>  include/media/v4l2-mem2mem.h                  | 133 +++++
+>  12 files changed, 1114 insertions(+), 230 deletions(-)
+>  create mode 100644 drivers/staging/media/meson/vdec/codec_h264.c
+>  create mode 100644 drivers/staging/media/meson/vdec/codec_h264.h
+> 
 
-With these changes, the v4l2-compliance still passes with the following
-commands :
-# v4l2-ctl --stream-mmap --stream-out-mmap --stream-to-hdr out.comp --stream-from in.yuv
->>>><><><><><><><><><><><><><><><><>< 15.53 fps
- 15.53 fps
-><><><><><><><><><><><><>< 13.99 fps
- 13.99 fps
-><><><><><><><><><><><>< 13.52 fps
- 13.52 fps
-><><><><><><><><><><><><>< 13.41 fps
- 13.41 fps
-><><><><><><><><><><><><>< 13.21 fps
- 13.21 fps
-><><><><><><><><><><><>< 13.09 fps
- 13.09 fps
-><><><><><><><
-STOP ENCODER
-<<<
-EOS EVENT
+Forgot to keep:
 
-# v4l2-compliance --stream-from in.yuv -s
-v4l2-compliance SHA: 7ead0e1856b89f2e19369af452bb03fd0cd16793, 64 bits
-[...]
-Total for vicodec device /dev/video0: 50, Succeeded: 50, Failed: 0, Warnings: 0
+Tested on meson-sm1-sei610.
 
-The full output is available at [1]
+Tested-by: Kevin Hilman <khilman@baylibre.com>
 
-# v4l2-compliance -d1 --stream-from-hdr out.comp -s
-v4l2-compliance SHA: 7ead0e1856b89f2e19369af452bb03fd0cd16793, 64 bits
-[...]
-Total for vicodec device /dev/video1: 50, Succeeded: 50, Failed: 0, Warnings: 0
+from v6.
 
-The full output is available at [2]
-
-No functional changes should be noticed.
-
-[1] https://termbin.com/25nn
-[2] https://termbin.com/dza4
-
-Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
-Suggested-by: Maxime Jourdan <mjourdan@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- drivers/media/platform/vicodec/vicodec-core.c | 162 ++++++------------
- 1 file changed, 52 insertions(+), 110 deletions(-)
-
-diff --git a/drivers/media/platform/vicodec/vicodec-core.c b/drivers/media/platform/vicodec/vicodec-core.c
-index 82350097503e..d85ae7010b50 100644
---- a/drivers/media/platform/vicodec/vicodec-core.c
-+++ b/drivers/media/platform/vicodec/vicodec-core.c
-@@ -117,15 +117,10 @@ struct vicodec_ctx {
- 	struct vicodec_dev	*dev;
- 	bool			is_enc;
- 	bool			is_stateless;
--	bool			is_draining;
--	bool			next_is_last;
--	bool			has_stopped;
- 	spinlock_t		*lock;
- 
- 	struct v4l2_ctrl_handler hdl;
- 
--	struct vb2_v4l2_buffer *last_src_buf;
--
- 	/* Source and destination queue data */
- 	struct vicodec_q_data   q_data[2];
- 	struct v4l2_fwht_state	state;
-@@ -431,11 +426,11 @@ static void device_run(void *priv)
- 	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, false);
- 
- 	spin_lock(ctx->lock);
--	if (!ctx->comp_has_next_frame && src_buf == ctx->last_src_buf) {
-+	if (!ctx->comp_has_next_frame &&
-+	    v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx, src_buf)) {
- 		dst_buf->flags |= V4L2_BUF_FLAG_LAST;
- 		v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
--		ctx->is_draining = false;
--		ctx->has_stopped = true;
-+		v4l2_m2m_mark_stopped(ctx->fh.m2m_ctx);
- 	}
- 	if (ctx->is_enc || ctx->is_stateless) {
- 		src_buf->sequence = q_src->sequence++;
-@@ -586,8 +581,6 @@ static int job_ready(void *priv)
- 	unsigned int max_to_copy;
- 	unsigned int comp_frame_size;
- 
--	if (ctx->has_stopped)
--		return 0;
- 	if (ctx->source_changed)
- 		return 0;
- 	if (ctx->is_stateless || ctx->is_enc || ctx->comp_has_frame)
-@@ -607,7 +600,8 @@ static int job_ready(void *priv)
- 	if (ctx->header_size < sizeof(struct fwht_cframe_hdr)) {
- 		state = get_next_header(ctx, &p, p_src + sz - p);
- 		if (ctx->header_size < sizeof(struct fwht_cframe_hdr)) {
--			if (ctx->is_draining && src_buf == ctx->last_src_buf)
-+			if (v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx,
-+							      src_buf))
- 				return 1;
- 			job_remove_src_buf(ctx, state);
- 			goto restart;
-@@ -636,7 +630,8 @@ static int job_ready(void *priv)
- 		p += copy;
- 		ctx->comp_size += copy;
- 		if (ctx->comp_size < max_to_copy) {
--			if (ctx->is_draining && src_buf == ctx->last_src_buf)
-+			if (v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx,
-+							      src_buf))
- 				return 1;
- 			job_remove_src_buf(ctx, state);
- 			goto restart;
-@@ -1219,41 +1214,6 @@ static int vidioc_s_selection(struct file *file, void *priv,
- 	return 0;
- }
- 
--static int vicodec_mark_last_buf(struct vicodec_ctx *ctx)
--{
--	struct vb2_v4l2_buffer *next_dst_buf;
--	int ret = 0;
--
--	spin_lock(ctx->lock);
--	if (ctx->is_draining) {
--		ret = -EBUSY;
--		goto unlock;
--	}
--	if (ctx->has_stopped)
--		goto unlock;
--
--	ctx->last_src_buf = v4l2_m2m_last_src_buf(ctx->fh.m2m_ctx);
--	ctx->is_draining = true;
--	if (ctx->last_src_buf)
--		goto unlock;
--
--	next_dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
--	if (!next_dst_buf) {
--		ctx->next_is_last = true;
--		goto unlock;
--	}
--
--	next_dst_buf->flags |= V4L2_BUF_FLAG_LAST;
--	vb2_buffer_done(&next_dst_buf->vb2_buf, VB2_BUF_STATE_DONE);
--	ctx->is_draining = false;
--	ctx->has_stopped = true;
--	v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
--
--unlock:
--	spin_unlock(ctx->lock);
--	return ret;
--}
--
- static int vicodec_encoder_cmd(struct file *file, void *fh,
- 			    struct v4l2_encoder_cmd *ec)
- {
-@@ -1268,18 +1228,19 @@ static int vicodec_encoder_cmd(struct file *file, void *fh,
- 	    !vb2_is_streaming(&ctx->fh.m2m_ctx->out_q_ctx.q))
- 		return 0;
- 
--	if (ec->cmd == V4L2_ENC_CMD_STOP)
--		return vicodec_mark_last_buf(ctx);
--	ret = 0;
--	spin_lock(ctx->lock);
--	if (ctx->is_draining) {
--		ret = -EBUSY;
--	} else if (ctx->has_stopped) {
--		ctx->has_stopped = false;
-+	ret = v4l2_m2m_ioctl_encoder_cmd(file, fh, ec);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ec->cmd == V4L2_ENC_CMD_STOP &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
-+		v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
-+
-+	if (ec->cmd == V4L2_ENC_CMD_START &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
- 		vb2_clear_last_buffer_dequeued(&ctx->fh.m2m_ctx->cap_q_ctx.q);
--	}
--	spin_unlock(ctx->lock);
--	return ret;
-+
-+	return 0;
- }
- 
- static int vicodec_decoder_cmd(struct file *file, void *fh,
-@@ -1296,18 +1257,19 @@ static int vicodec_decoder_cmd(struct file *file, void *fh,
- 	    !vb2_is_streaming(&ctx->fh.m2m_ctx->out_q_ctx.q))
- 		return 0;
- 
--	if (dc->cmd == V4L2_DEC_CMD_STOP)
--		return vicodec_mark_last_buf(ctx);
--	ret = 0;
--	spin_lock(ctx->lock);
--	if (ctx->is_draining) {
--		ret = -EBUSY;
--	} else if (ctx->has_stopped) {
--		ctx->has_stopped = false;
-+	ret = v4l2_m2m_ioctl_decoder_cmd(file, fh, dc);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (dc->cmd == V4L2_DEC_CMD_STOP &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
-+		v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
-+
-+	if (dc->cmd == V4L2_DEC_CMD_START &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
- 		vb2_clear_last_buffer_dequeued(&ctx->fh.m2m_ctx->cap_q_ctx.q);
--	}
--	spin_unlock(ctx->lock);
--	return ret;
-+
-+	return 0;
- }
- 
- static int vicodec_enum_framesizes(struct file *file, void *fh,
-@@ -1480,23 +1442,21 @@ static void vicodec_buf_queue(struct vb2_buffer *vb)
- 		.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION,
- 	};
- 
--	if (vb2_is_streaming(vq_cap)) {
--		if (!V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type) &&
--		    ctx->next_is_last) {
--			unsigned int i;
-+	if (!V4L2_TYPE_IS_OUTPUT(vb->vb2_queue->type) &&
-+	    vb2_is_streaming(vb->vb2_queue) &&
-+	    v4l2_m2m_dst_buf_is_last(ctx->fh.m2m_ctx)) {
-+		unsigned int i;
- 
--			for (i = 0; i < vb->num_planes; i++)
--				vb->planes[i].bytesused = 0;
--			vbuf->flags = V4L2_BUF_FLAG_LAST;
--			vbuf->field = V4L2_FIELD_NONE;
--			vbuf->sequence = get_q_data(ctx, vb->vb2_queue->type)->sequence++;
--			vb2_buffer_done(vb, VB2_BUF_STATE_DONE);
--			ctx->is_draining = false;
--			ctx->has_stopped = true;
--			ctx->next_is_last = false;
--			v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
--			return;
--		}
-+		for (i = 0; i < vb->num_planes; i++)
-+			vb->planes[i].bytesused = 0;
-+
-+		vbuf->field = V4L2_FIELD_NONE;
-+		vbuf->sequence =
-+			get_q_data(ctx, vb->vb2_queue->type)->sequence++;
-+
-+		v4l2_m2m_last_buffer_done(ctx->fh.m2m_ctx, vbuf);
-+		v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
-+		return;
- 	}
- 
- 	/* buf_queue handles only the first source change event */
-@@ -1609,8 +1569,7 @@ static int vicodec_start_streaming(struct vb2_queue *q,
- 	chroma_div = info->width_div * info->height_div;
- 	q_data->sequence = 0;
- 
--	if (V4L2_TYPE_IS_OUTPUT(q->type))
--		ctx->last_src_buf = NULL;
-+	v4l2_m2m_update_start_streaming_state(ctx->fh.m2m_ctx, q);
- 
- 	state->gop_cnt = 0;
- 
-@@ -1689,29 +1648,12 @@ static void vicodec_stop_streaming(struct vb2_queue *q)
- 
- 	vicodec_return_bufs(q, VB2_BUF_STATE_ERROR);
- 
--	if (V4L2_TYPE_IS_OUTPUT(q->type)) {
--		if (ctx->is_draining) {
--			struct vb2_v4l2_buffer *next_dst_buf;
--
--			spin_lock(ctx->lock);
--			ctx->last_src_buf = NULL;
--			next_dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
--			if (!next_dst_buf) {
--				ctx->next_is_last = true;
--			} else {
--				next_dst_buf->flags |= V4L2_BUF_FLAG_LAST;
--				vb2_buffer_done(&next_dst_buf->vb2_buf, VB2_BUF_STATE_DONE);
--				ctx->is_draining = false;
--				ctx->has_stopped = true;
--				v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
--			}
--			spin_unlock(ctx->lock);
--		}
--	} else {
--		ctx->is_draining = false;
--		ctx->has_stopped = false;
--		ctx->next_is_last = false;
--	}
-+	v4l2_m2m_update_stop_streaming_state(ctx->fh.m2m_ctx, q);
-+
-+	if (V4L2_TYPE_IS_OUTPUT(q->type) &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
-+		v4l2_event_queue_fh(&ctx->fh, &vicodec_eos_event);
-+
- 	if (!ctx->is_enc && V4L2_TYPE_IS_OUTPUT(q->type))
- 		ctx->first_source_change_sent = false;
- 
--- 
-2.22.0
+Neil
 
