@@ -2,146 +2,136 @@ Return-Path: <SRS0=npss=4V=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06639C3F2D1
-	for <linux-media@archiver.kernel.org>; Wed,  4 Mar 2020 09:46:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07CBCC3F2D1
+	for <linux-media@archiver.kernel.org>; Wed,  4 Mar 2020 10:08:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D12E520848
-	for <linux-media@archiver.kernel.org>; Wed,  4 Mar 2020 09:46:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CDB6120870
+	for <linux-media@archiver.kernel.org>; Wed,  4 Mar 2020 10:08:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="2SE/62ff"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TZXZrMKk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387790AbgCDJq4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Mar 2020 04:46:56 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:44510 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729148AbgCDJqf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Mar 2020 04:46:35 -0500
-Received: by mail-wr1-f67.google.com with SMTP id n7so1505911wrt.11
-        for <linux-media@vger.kernel.org>; Wed, 04 Mar 2020 01:46:33 -0800 (PST)
+        id S2387398AbgCDKIQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Mar 2020 05:08:16 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:33876 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726860AbgCDKIQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Mar 2020 05:08:16 -0500
+Received: by mail-ot1-f67.google.com with SMTP id j16so1470917otl.1
+        for <linux-media@vger.kernel.org>; Wed, 04 Mar 2020 02:08:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=K5hjg1G3VFJLeuZ62RXxBnJp53DPSao1yCpZ+ZBtBN8=;
-        b=2SE/62ffNoNovHiDs1k+u5cTld9gBWOVjpxlimiyMzuGDcXNO7DUxt9Y14hP9n3+eL
-         NH+9A+7QJG3kGP10lLckXdEVA97WpRjF9zy0NHjXZmq7Jc4bmR3ep3dxqbaMwqx7CHRU
-         usGM+s3jBF5hjJA11vy0AStb7wZVycGK89BWs8Pqqs0InWE3NVc5febUgjUoOo4lRCcj
-         +LxhnmvycnOEXSWQf57tEgS0Q4nn8FMOhSDh4vwtVXySqWhzaS1mZB7NSDyea7/Q8+Yy
-         6DIqNuLQwsNnqxuD0BT0LZWAZWKogGUIAS3hvuN0Daa6hf4lk0GPyxZygHBsYWv6GZrG
-         VnIg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sFNlb303vXOf6uZAl3GT6yPk8PlWh22iQZBwvfdvj2E=;
+        b=TZXZrMKkk758Lg6vVCtng+mEVA184wncNb5kAMpPaKfHqEc1s1uj6+BnwhazveLDgO
+         bre0e/8i580ATLM2J9xKYX2EQrsNmcqGQpciJTgyE6LzmGkipaP1ebJ+AHJQJ9hvS/ye
+         hsOCZMrwH/1kwmFuTRtWp2zYMcle0qxqoEhZQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=K5hjg1G3VFJLeuZ62RXxBnJp53DPSao1yCpZ+ZBtBN8=;
-        b=qLlS9pgsnVG59rnRk5xjAW+y1auX5pAP6G82hUBVrMrkk6/Iq1Z5iCbhK9kLT/RSqW
-         xDQh0TWuVb1IQtNatEGtlLGAr9pRq7oHIyrrhWbpveY4SqaFPe6VwYviiCVHVll/iEkL
-         +gCS7QdozX21eumhFUDHDR3JLDL4PfWVabVObOapmYXz4KkT402vRFatSbk9IZNpV8oH
-         Y26+qm7WwHtpPdHly23sxhJ7PcgvHD2k/6e3H4pxUce28NpAac6qx/JyOSOrxQMNzXgI
-         ZVomAfqDUade7dOL9tRb8IoltNSoZXyDj16TK649YIwiTnW/d6IF8LKxmuGfeSowYvab
-         rqYw==
-X-Gm-Message-State: ANhLgQ3XjyJPD9nHcGddfJ9PnCoqTgvOXfjm8kFTcoabECoIngNSrw/W
-        8T+Y15UDWJP1+CYYTmzJ4AJifw==
-X-Google-Smtp-Source: ADFU+vsmHI8XwQXXfnDZR562BoFU7zrqmPglShefMhkAEPAr3dqW+fmq4C1hsmjfc+4oVh7WFI4DFQ==
-X-Received: by 2002:adf:f604:: with SMTP id t4mr3308460wrp.96.1583315192881;
-        Wed, 04 Mar 2020 01:46:32 -0800 (PST)
-Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id b10sm38696107wrw.61.2020.03.04.01.46.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 01:46:32 -0800 (PST)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     mchehab@kernel.org, hans.verkuil@cisco.com
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>
-Subject: [PATCH v7 1/5] media: meson: vdec: align stride on 32 bytes
-Date:   Wed,  4 Mar 2020 10:46:21 +0100
-Message-Id: <20200304094625.2257-2-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200304094625.2257-1-narmstrong@baylibre.com>
-References: <20200304094625.2257-1-narmstrong@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sFNlb303vXOf6uZAl3GT6yPk8PlWh22iQZBwvfdvj2E=;
+        b=VyC+x4owbF0TwQRVUQ4EfORVmdX4jURrkpYiByduXae8svuJyfi5Q2xVEyznJPfihi
+         YG7DOeYSumXM5otUH+UGzCaRoMKLG8Hj3gJ4PnxPfljpy1vrRerS42RQ8pNl5CfZjIo+
+         KJqwJcg87Fsl65Kr084iJmOCD/1Sy1P0XKPQNDJk6lz3GDYFdUICkC+CNpnmeU2Bsq2q
+         cXLCI8GCNBWxtwyn0I0D8PVD3c7xyUgnWPmOSbq8OdGgATVr61dPbDFbPVgHzTEF0DHT
+         I0/c19DTYWntZYbB8hKXM7Kbexf6VUc23nDZHvueOKKG3+H+T4QtSqKmfW8hQizkTlK3
+         ZIzA==
+X-Gm-Message-State: ANhLgQ0gOuQzQsg0tGlw2cpRk4Nu+FO2nlLwaPKOUIhWsF00akjGQq+K
+        CSsBT3mkEnUafuR4fnKj0PsdoeDCPBye6Q==
+X-Google-Smtp-Source: ADFU+vstxZLzd5m6OdUqgA7cKXR1BM3cBIsJVXpUW2FXEvguOq7VvVRZkqXmmKEbZrPeAW48qLin7w==
+X-Received: by 2002:a05:6830:22d8:: with SMTP id q24mr1810515otc.0.1583316493166;
+        Wed, 04 Mar 2020 02:08:13 -0800 (PST)
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
+        by smtp.gmail.com with ESMTPSA id u62sm4591270oif.49.2020.03.04.02.08.11
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Mar 2020 02:08:12 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id f21so1410223otp.12
+        for <linux-media@vger.kernel.org>; Wed, 04 Mar 2020 02:08:11 -0800 (PST)
+X-Received: by 2002:a9d:5cc4:: with SMTP id r4mr1721385oti.33.1583316490692;
+ Wed, 04 Mar 2020 02:08:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200206102058.247258-1-keiichiw@chromium.org>
+ <20200206102058.247258-2-keiichiw@chromium.org> <20200225095956.7rtwugfru4dbjj7q@sirius.home.kraxel.org>
+ <CAD90VcaTJh5MTRggpOmCK2LAryMHha2+7nPkFVTT8N8S06tf-A@mail.gmail.com>
+ <20200227092856.p4kuh5dhh2tk3nnf@sirius.home.kraxel.org> <CAPBb6MWwBbNULCfMxN_KLt_Zd8kmmNy2JPi6XjLF1YgxxCPydw@mail.gmail.com>
+ <20200304064251.zzkhevqgth6uets6@sirius.home.kraxel.org>
+In-Reply-To: <20200304064251.zzkhevqgth6uets6@sirius.home.kraxel.org>
+From:   Alexandre Courbot <acourbot@chromium.org>
+Date:   Wed, 4 Mar 2020 19:07:58 +0900
+X-Gmail-Original-Message-ID: <CAPBb6MVPjgLkbVjOY6O3srywNm8Zb1pMR2pGM1NinByhgFaZ_A@mail.gmail.com>
+Message-ID: <CAPBb6MVPjgLkbVjOY6O3srywNm8Zb1pMR2pGM1NinByhgFaZ_A@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] virtio-video: Add virtio video device specification
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Keiichi Watanabe <keiichiw@chromium.org>,
+        virtio-dev@lists.oasis-open.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Alex Lau <alexlau@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dylan Reid <dgreid@chromium.org>,
+        David Staessens <dstaessens@chromium.org>,
+        Dmitry Sepp <dmitry.sepp@opensynergy.com>,
+        Enrico Granata <egranata@google.com>,
+        Frediano Ziglio <fziglio@redhat.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        =?UTF-8?Q?St=C3=A9phane_Marchesin?= <marcheu@chromium.org>,
+        Pawel Osciak <posciak@chromium.org>,
+        spice-devel@lists.freedesktop.org,
+        David Stevens <stevensd@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>, uril@redhat.com,
+        Samiullah Khawaja <samiullah.khawaja@opensynergy.com>,
+        Kiran Pawar <kiran.pawar@opensynergy.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The HEVC/VP9 aligns the plane stride on 32, so align the planes stride
-for all codecs to 32 to satisfy HEVC/VP9 decoding using the "HEVC" HW.
+On Wed, Mar 4, 2020 at 3:43 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
+>
+>   Hi,
+>
+> > > With a feature flag both driver and device can choose whenever they want
+> > > support v1 or v2 or both.  With a version config field this is more
+> > > limited, the device can't decide to support both.  So the bonus points
+> > > for a smooth transition go to the feature flags not the version field ;)
+> >
+> > I agree that feature flags would be preferable in general, but I'm
+> > concerned by the fact that there is (IIUC) a limited number of them.
+>
+> We have 64 total, some reserved, 24 are available to devices right now,
+> see https://www.kraxel.org/virtio/virtio-v1.1-cs01-video-v3.html#x1-130002
+>
+> > Video tends to change significantly over time, and to have optional
+> > features that would also be presented as feature flags. After a while
+> > we may run out of them, while a new protocol version would allow us to
+> > extend the config struct with some new flags. Or am I missing
+> > something?
+>
+> Not everything needs a feature flag.  For example we have
+> VIRTIO_VIDEO_CMD_QUERY_CAPABILITY, and we can add new video formats
+> without needing a feature flag.  Maybe it is a good idea to explicitly
+> say in the specs that this can happen and that the driver should simply
+> ignore any unknown format returned by the device.
+>
+> > I also wonder how "support v1 or v2 or both" would work with feature
+> > flags. In order to make it possible to opt out of v1, I guess we would
+> > need "v1 supported" flag to begin with?
+>
+> The driver can ignore any device without v2 feature flag set.
+> The device can refuse to accept a driver without v2 support (don't allow
+> setting the FEATURES_OK bit).
 
-This fixes VP9 decoding of streams with following (not limited) widths:
-- 264
- -288
-- 350
-- 352
-- 472
-- 480
-- 528
-- 600
-- 720
-- 800
-- 848
-- 1440
+That should work as long as we want to add features. I had deprecation
+of old features in mind, but maybe the more reasonable answer to that
+is "always remain backward compatible". :)
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Tested-by: Kevin Hilman <khilman@baylibre.com>
----
- drivers/staging/media/meson/vdec/vdec.c         | 10 +++++-----
- drivers/staging/media/meson/vdec/vdec_helpers.c |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/staging/media/meson/vdec/vdec.c b/drivers/staging/media/meson/vdec/vdec.c
-index 92f0258868b1..bfca4c82aa56 100644
---- a/drivers/staging/media/meson/vdec/vdec.c
-+++ b/drivers/staging/media/meson/vdec/vdec.c
-@@ -528,20 +528,20 @@ vdec_try_fmt_common(struct amvdec_session *sess, u32 size,
- 		memset(pfmt[1].reserved, 0, sizeof(pfmt[1].reserved));
- 		if (pixmp->pixelformat == V4L2_PIX_FMT_NV12M) {
- 			pfmt[0].sizeimage = output_size;
--			pfmt[0].bytesperline = ALIGN(pixmp->width, 64);
-+			pfmt[0].bytesperline = ALIGN(pixmp->width, 32);
- 
- 			pfmt[1].sizeimage = output_size / 2;
--			pfmt[1].bytesperline = ALIGN(pixmp->width, 64);
-+			pfmt[1].bytesperline = ALIGN(pixmp->width, 32);
- 			pixmp->num_planes = 2;
- 		} else if (pixmp->pixelformat == V4L2_PIX_FMT_YUV420M) {
- 			pfmt[0].sizeimage = output_size;
--			pfmt[0].bytesperline = ALIGN(pixmp->width, 64);
-+			pfmt[0].bytesperline = ALIGN(pixmp->width, 32);
- 
- 			pfmt[1].sizeimage = output_size / 4;
--			pfmt[1].bytesperline = ALIGN(pixmp->width, 64) / 2;
-+			pfmt[1].bytesperline = ALIGN(pixmp->width, 32) / 2;
- 
- 			pfmt[2].sizeimage = output_size / 2;
--			pfmt[2].bytesperline = ALIGN(pixmp->width, 64) / 2;
-+			pfmt[2].bytesperline = ALIGN(pixmp->width, 32) / 2;
- 			pixmp->num_planes = 3;
- 		}
- 	}
-diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
-index a4970ec1bf2e..3f7929c54dc6 100644
---- a/drivers/staging/media/meson/vdec/vdec_helpers.c
-+++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
-@@ -154,8 +154,8 @@ int amvdec_set_canvases(struct amvdec_session *sess,
- {
- 	struct v4l2_m2m_buffer *buf;
- 	u32 pixfmt = sess->pixfmt_cap;
--	u32 width = ALIGN(sess->width, 64);
--	u32 height = ALIGN(sess->height, 64);
-+	u32 width = ALIGN(sess->width, 32);
-+	u32 height = ALIGN(sess->height, 32);
- 	u32 reg_cur = reg_base[0];
- 	u32 reg_num_cur = 0;
- 	u32 reg_base_cur = 0;
--- 
-2.22.0
-
+As for the 24 feature flags, I guess that should we run out of them we
+can always use the last one to signal that more flags can be found at
+the end of the device configuration space.
