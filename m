@@ -1,212 +1,437 @@
-Return-Path: <SRS0=npss=4V=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=1Klz=4W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B15CCC3F2D1
-	for <linux-media@archiver.kernel.org>; Wed,  4 Mar 2020 20:55:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49308C3F2D1
+	for <linux-media@archiver.kernel.org>; Thu,  5 Mar 2020 01:01:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 805B520842
-	for <linux-media@archiver.kernel.org>; Wed,  4 Mar 2020 20:55:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech-se.20150623.gappssmtp.com header.i=@ragnatech-se.20150623.gappssmtp.com header.b="tOkMJEqC"
+	by mail.kernel.org (Postfix) with ESMTP id 174B1214D8
+	for <linux-media@archiver.kernel.org>; Thu,  5 Mar 2020 01:01:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388302AbgCDUzW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Mar 2020 15:55:22 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:42565 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388295AbgCDUzV (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Mar 2020 15:55:21 -0500
-Received: by mail-lj1-f195.google.com with SMTP id q19so3582914ljp.9
-        for <linux-media@vger.kernel.org>; Wed, 04 Mar 2020 12:55:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=N8TMoVnGizDGjD4F+oBcA8gM1V3wB7c/2Mybba8wb0M=;
-        b=tOkMJEqCwb18LfVUT8bCabUDthEP/rfNZr/z/EUZfIKF6gCJ5031XaOtiydhCJjwhF
-         NdJwlOOQr7CQ4/lap7BYu5U4cQmsWI219S8uL0KMsYJ+Gvap3V2CoCwyIk+klfmTMal1
-         AQTL8BXPwhUv36T4Z6U+HI1rHHRQAj0n4DUJ3UxuDvIDVKctGeOQKzhCDdyQLz4q9iv/
-         dIRI0UHxVwuRaxx8yPdJ8a++afV3hhVUk6GG6bp1rJDPydaQTNfWb6LYhvMngtWHamDW
-         rjWWUaG1zDDcwmXlRSw3jAfzkvFDdb4buppmA2OW1NVA0eC89R1DFEL+M2qPZ2AvaQ7z
-         pb0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=N8TMoVnGizDGjD4F+oBcA8gM1V3wB7c/2Mybba8wb0M=;
-        b=WM/91R4vOHH890b7yZh2JHdKqrgk7lNEqTllEBlxul9VqNn8likX3WenaAWawPTtgg
-         OjVCUvGZL4xTC4WRfHvTPKwJj4C41/uYZAfs6wem52qsscOtvF6eZD8MLlk5q5sUDw0c
-         hrwWEvd7tAZyWgpS61ffSVRdhANMOGH4z/QID8GZ/x2frLGR6DGVLfFJ0RTtssjZKjdR
-         XQKjEYbGH3jejmKpZfMfewjHfs2SRcrLsOGaJqMmhyOr7dp5eO2OO/Hi4lB/lbZ8ocW4
-         XBKIG/j/Yl1//lsNHWmo4cgxS2Hlgs/QO1kARYbDsTSEn8DcPKKgOvO9KLY2t1dhTq+q
-         OYkA==
-X-Gm-Message-State: ANhLgQ2qWbLCNZrzSU5oDK22rODBB95Uw8MqWm36iXHZYbwgb3L0hd9i
-        4Pvf2NAr3gkXhMnWQKxRn8ho+Q==
-X-Google-Smtp-Source: ADFU+vvGT8h9y5D5IP2yuhAd5w4BRZjij5dQKsXZveJYJfXMfBouDMsJyUJyTrGN7XomFrl9MAxJGA==
-X-Received: by 2002:a2e:8250:: with SMTP id j16mr3024159ljh.274.1583355317967;
-        Wed, 04 Mar 2020 12:55:17 -0800 (PST)
-Received: from localhost (h-200-138.A463.priv.bahnhof.se. [176.10.200.138])
-        by smtp.gmail.com with ESMTPSA id f19sm3794523ljc.37.2020.03.04.12.55.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 12:55:17 -0800 (PST)
-Date:   Wed, 4 Mar 2020 21:55:16 +0100
-From:   Niklas <niklas.soderlund@ragnatech.se>
-To:     Lad Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 2/2] media: rcar-vin: Add support for SRGGB8_1X8
-Message-ID: <20200304205516.GD1791497@oden.dyn.berto.se>
-References: <20200228165011.17898-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200228165011.17898-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1725774AbgCEBBM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Mar 2020 20:01:12 -0500
+Received: from gofer.mess.org ([88.97.38.141]:58623 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725308AbgCEBBM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 4 Mar 2020 20:01:12 -0500
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 0EF55C6345; Thu,  5 Mar 2020 01:01:10 +0000 (GMT)
+Date:   Thu, 5 Mar 2020 01:01:10 +0000
+From:   Sean Young <sean@mess.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linux-media@vger.kernel.org,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: Re: [PATCH v2] media: rc: make scancodes 64 bit
+Message-ID: <20200305010110.GA21235@gofer.mess.org>
+References: <20200129115419.8456-1-sean@mess.org>
+ <20200129115419.8456-2-sean@mess.org>
+ <20200302103127.0eff8aa4@coco.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200228165011.17898-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20200302103127.0eff8aa4@coco.lan>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Lad,
+Hi Mauro,
 
-Thanks for your work.
+On Mon, Mar 02, 2020 at 10:31:27AM +0100, Mauro Carvalho Chehab wrote:
+> Hi Sean,
+> Sean Young <sean@mess.org> escreveu:
+> 
+> > There are many protocols that encode more than 32 bit. We want 64 bit
+> > support so that BPF IR decoders can decode more than 32 bit. None of
+> > the existing kernel IR decoders/encoders support 64 bit, for now.
+> 
+> Since the beginning, the goal were to support longer scancodes. When we
+> designed the RC subsystem, we were even expecting longer codes[1].
+> 
+> [1] RC6 mode 6A scancode may have, according to the specs, up to 128 bits.
+> At the time we added the RC subsystem, RC6 were brand new, so we opted
+> to be more conservative. That's said, I never found myself any 
+> implementation with more than 64 bits for scancodes.
+> 
+> That's why we added the EVIOCGKEYCODE_V2, with uses:
+> 
+> struct input_keymap_entry {
+> #define INPUT_KEYMAP_BY_INDEX	(1 << 0)
+> 	__u8  flags;
+> 	__u8  len;
+> 	__u16 index;
+> 	__u32 keycode;
+> 	__u8  scancode[32];
+> };
+> 
+> capable of storing scancodes up to 256 bits. The way the code is
+> written at the Kernel, is even possible to extend it further if ever
+> needed.
+> 
+> The reason why we don't properly support 64 bits yet [2] is that it requires 
+> some changes in order to provide a backward-compatible set of functions.
 
-On 2020-02-28 16:50:11 +0000, Lad Prabhakar wrote:
-> Most of the RZ/G2x boards can support capturing frames in SRGGB8_1X8
-> format, add support for this with a runtime check that the running
-> hardware supports it.
+I'm not sure what you mean. ir_setkeycode() requires the len to be set
+accurately; previously it would not work if the len is 8, now it does.
 
-Where is the runtime check for supported hardware? Also out of curiosity 
-which boars can't support SRGGB and what setup are you using to test 
-SRGGB capture?
+ir_getcodekey() is more problematic, and I may have cheated a bit. The
+existing user-space applications do not look a the len, so changing the
+len does not affect them. On little endian, if you write a u64 to memory
+the lower u32 will be written first, so this works magically. The
+set of bigendian systems with old userspace using IR and someone reading
+back scancodes must be a small set (so running ir-keytable -r).
+
+What I should have done is write a u32 if the scancode fits into a u32
+and a u64 if not. That way, nothing changes on either endian systems
+until a 64 bit keymap is loaded, which would need new userspace anyway.
+
+> [2] Actually, I guess we have one driver with has 64 bits scancodes.
+> 
+> A proper patchset should likely modify also the code under drivers/input,
+> and needs to be submitted against input/evdev tree.
+
+I'm not sure why.
+
+> > The MSC_SCAN event can only contain 32 bit scancodes, so we no longer
+> > generate these input events. The full 64 bit scancode can be read from
+> > the lirc chardev.
+> 
+> For example, if all possible scancodes are <= 32 bit, it should still
+> generate MSC_SCAN, as otherwise existing tools that rely on it will 
+> break.
+
+v1.16 ir-keytable -t gets the scancodes from the lirc deivce. Just generating
+MSC_SCAN for 32 bit scancodes is a bit confusing when a 64 bit scancode comes
+along.
+
+Thanks for the review,
+
+Sean
 
 > 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  drivers/media/platform/rcar-vin/rcar-core.c |  1 +
->  drivers/media/platform/rcar-vin/rcar-csi2.c |  1 +
->  drivers/media/platform/rcar-vin/rcar-dma.c  | 14 ++++++++++++--
->  drivers/media/platform/rcar-vin/rcar-v4l2.c |  4 ++++
-
-This patch shall be split in two. One which touches rcar-csi2.c and one 
-for the other files as they are two different drivers.
-
->  4 files changed, 18 insertions(+), 2 deletions(-)
+> > 
+> > Signed-off-by: Sean Young <sean@mess.org>
+> > ---
+> >  drivers/media/rc/bpf-lirc.c |  5 ---
+> >  drivers/media/rc/lirc_dev.c |  7 +---
+> >  drivers/media/rc/rc-main.c  | 77 ++++++++++++++++++++++++-------------
+> >  include/media/rc-core.h     |  8 ++--
+> >  include/media/rc-map.h      |  4 +-
+> >  5 files changed, 58 insertions(+), 43 deletions(-)
+> > 
+> > diff --git a/drivers/media/rc/bpf-lirc.c b/drivers/media/rc/bpf-lirc.c
+> > index 0a0ce620e4a2..0f3417d161b8 100644
+> > --- a/drivers/media/rc/bpf-lirc.c
+> > +++ b/drivers/media/rc/bpf-lirc.c
+> > @@ -35,11 +35,6 @@ static const struct bpf_func_proto rc_repeat_proto = {
+> >  	.arg1_type = ARG_PTR_TO_CTX,
+> >  };
+> >  
+> > -/*
+> > - * Currently rc-core does not support 64-bit scancodes, but there are many
+> > - * known protocols with more than 32 bits. So, define the interface as u64
+> > - * as a future-proof.
+> > - */
+> >  BPF_CALL_4(bpf_rc_keydown, u32*, sample, u32, protocol, u64, scancode,
+> >  	   u32, toggle)
+> >  {
+> > diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
+> > index 9a8c1cf54ac4..583e4f32a0da 100644
+> > --- a/drivers/media/rc/lirc_dev.c
+> > +++ b/drivers/media/rc/lirc_dev.c
+> > @@ -269,12 +269,7 @@ static ssize_t ir_lirc_transmit_ir(struct file *file, const char __user *buf,
+> >  			goto out_unlock;
+> >  		}
+> >  
+> > -		/*
+> > -		 * The scancode field in lirc_scancode is 64-bit simply
+> > -		 * to future-proof it, since there are IR protocols encode
+> > -		 * use more than 32 bits. For now only 32-bit protocols
+> > -		 * are supported.
+> > -		 */
+> > +		/* We only have encoders for 32-bit protocols. */
+> >  		if (scan.scancode > U32_MAX ||
+> >  		    !rc_validate_scancode(scan.rc_proto, scan.scancode)) {
+> >  			ret = -EINVAL;
+> > diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+> > index 6f80c251f641..047b079c37eb 100644
+> > --- a/drivers/media/rc/rc-main.c
+> > +++ b/drivers/media/rc/rc-main.c
+> > @@ -163,6 +163,41 @@ static struct rc_map_list empty_map = {
+> >  	}
+> >  };
+> >  
+> > +/**
+> > + * scancode_to_u64() - converts scancode in &struct input_keymap_entry
+> > + * @ke: keymap entry containing scancode to be converted.
+> > + * @scancode: pointer to the location where converted scancode should
+> > + *	be stored.
+> > + *
+> > + * This function is a version of input_scancode_to_scalar specialized for
+> > + * rc-core.
+> > + */
+> > +static int scancode_to_u64(const struct input_keymap_entry *ke, u64 *scancode)
+> > +{
+> > +	switch (ke->len) {
+> > +	case 1:
+> > +		*scancode = *((u8 *)ke->scancode);
+> > +		break;
+> > +
+> > +	case 2:
+> > +		*scancode = *((u16 *)ke->scancode);
+> > +		break;
+> > +
+> > +	case 4:
+> > +		*scancode = *((u32 *)ke->scancode);
+> > +		break;
+> > +
+> > +	case 8:
+> > +		*scancode = *((u64 *)ke->scancode);
+> > +		break;
+> > +
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  /**
+> >   * ir_create_table() - initializes a scancode table
+> >   * @dev:	the rc_dev device
+> > @@ -285,13 +320,13 @@ static unsigned int ir_update_mapping(struct rc_dev *dev,
+> >  
+> >  	/* Did the user wish to remove the mapping? */
+> >  	if (new_keycode == KEY_RESERVED || new_keycode == KEY_UNKNOWN) {
+> > -		dev_dbg(&dev->dev, "#%d: Deleting scan 0x%04x\n",
+> > +		dev_dbg(&dev->dev, "#%d: Deleting scan 0x%04llx\n",
+> >  			index, rc_map->scan[index].scancode);
+> >  		rc_map->len--;
+> >  		memmove(&rc_map->scan[index], &rc_map->scan[index+ 1],
+> >  			(rc_map->len - index) * sizeof(struct rc_map_table));
+> >  	} else {
+> > -		dev_dbg(&dev->dev, "#%d: %s scan 0x%04x with key 0x%04x\n",
+> > +		dev_dbg(&dev->dev, "#%d: %s scan 0x%04llx with key 0x%04x\n",
+> >  			index,
+> >  			old_keycode == KEY_RESERVED ? "New" : "Replacing",
+> >  			rc_map->scan[index].scancode, new_keycode);
+> > @@ -334,8 +369,7 @@ static unsigned int ir_update_mapping(struct rc_dev *dev,
+> >   */
+> >  static unsigned int ir_establish_scancode(struct rc_dev *dev,
+> >  					  struct rc_map *rc_map,
+> > -					  unsigned int scancode,
+> > -					  bool resize)
+> > +					  u64 scancode, bool resize)
+> >  {
+> >  	unsigned int i;
+> >  
+> > @@ -394,7 +428,7 @@ static int ir_setkeycode(struct input_dev *idev,
+> >  	struct rc_dev *rdev = input_get_drvdata(idev);
+> >  	struct rc_map *rc_map = &rdev->rc_map;
+> >  	unsigned int index;
+> > -	unsigned int scancode;
+> > +	u64 scancode;
+> >  	int retval = 0;
+> >  	unsigned long flags;
+> >  
+> > @@ -407,7 +441,7 @@ static int ir_setkeycode(struct input_dev *idev,
+> >  			goto out;
+> >  		}
+> >  	} else {
+> > -		retval = input_scancode_to_scalar(ke, &scancode);
+> > +		retval = scancode_to_u64(ke, &scancode);
+> >  		if (retval)
+> >  			goto out;
+> >  
+> > @@ -434,8 +468,7 @@ static int ir_setkeycode(struct input_dev *idev,
+> >   *
+> >   * return:	-ENOMEM if all keycodes could not be inserted, otherwise zero.
+> >   */
+> > -static int ir_setkeytable(struct rc_dev *dev,
+> > -			  const struct rc_map *from)
+> > +static int ir_setkeytable(struct rc_dev *dev, const struct rc_map *from)
+> >  {
+> >  	struct rc_map *rc_map = &dev->rc_map;
+> >  	unsigned int i, index;
+> > @@ -466,7 +499,7 @@ static int ir_setkeytable(struct rc_dev *dev,
+> >  
+> >  static int rc_map_cmp(const void *key, const void *elt)
+> >  {
+> > -	const unsigned int *scancode = key;
+> > +	const u64 *scancode = key;
+> >  	const struct rc_map_table *e = elt;
+> >  
+> >  	if (*scancode < e->scancode)
+> > @@ -487,7 +520,7 @@ static int rc_map_cmp(const void *key, const void *elt)
+> >   * return:	index in the table, -1U if not found
+> >   */
+> >  static unsigned int ir_lookup_by_scancode(const struct rc_map *rc_map,
+> > -					  unsigned int scancode)
+> > +					  u64 scancode)
+> >  {
+> >  	struct rc_map_table *res;
+> >  
+> > @@ -516,7 +549,7 @@ static int ir_getkeycode(struct input_dev *idev,
+> >  	struct rc_map_table *entry;
+> >  	unsigned long flags;
+> >  	unsigned int index;
+> > -	unsigned int scancode;
+> > +	u64 scancode;
+> >  	int retval;
+> >  
+> >  	spin_lock_irqsave(&rc_map->lock, flags);
+> > @@ -524,7 +557,7 @@ static int ir_getkeycode(struct input_dev *idev,
+> >  	if (ke->flags & INPUT_KEYMAP_BY_INDEX) {
+> >  		index = ke->index;
+> >  	} else {
+> > -		retval = input_scancode_to_scalar(ke, &scancode);
+> > +		retval = scancode_to_u64(ke, &scancode);
+> >  		if (retval)
+> >  			goto out;
+> >  
+> > @@ -538,7 +571,6 @@ static int ir_getkeycode(struct input_dev *idev,
+> >  		ke->keycode = entry->keycode;
+> >  		ke->len = sizeof(entry->scancode);
+> >  		memcpy(ke->scancode, &entry->scancode, sizeof(entry->scancode));
+> > -
+> >  	} else if (!(ke->flags & INPUT_KEYMAP_BY_INDEX)) {
+> >  		/*
+> >  		 * We do not really know the valid range of scancodes
+> > @@ -570,7 +602,7 @@ static int ir_getkeycode(struct input_dev *idev,
+> >   *
+> >   * return:	the corresponding keycode, or KEY_RESERVED
+> >   */
+> > -u32 rc_g_keycode_from_table(struct rc_dev *dev, u32 scancode)
+> > +u32 rc_g_keycode_from_table(struct rc_dev *dev, u64 scancode)
+> >  {
+> >  	struct rc_map *rc_map = &dev->rc_map;
+> >  	unsigned int keycode;
+> > @@ -586,7 +618,7 @@ u32 rc_g_keycode_from_table(struct rc_dev *dev, u32 scancode)
+> >  	spin_unlock_irqrestore(&rc_map->lock, flags);
+> >  
+> >  	if (keycode != KEY_RESERVED)
+> > -		dev_dbg(&dev->dev, "%s: scancode 0x%04x keycode 0x%02x\n",
+> > +		dev_dbg(&dev->dev, "%s: scancode 0x%04llx keycode 0x%02x\n",
+> >  			dev->device_name, scancode, keycode);
+> >  
+> >  	return keycode;
+> > @@ -719,9 +751,6 @@ void rc_repeat(struct rc_dev *dev)
+> >  
+> >  	spin_lock_irqsave(&dev->keylock, flags);
+> >  
+> > -	input_event(dev->input_dev, EV_MSC, MSC_SCAN, dev->last_scancode);
+> > -	input_sync(dev->input_dev);
+> > -
+> >  	if (dev->keypressed) {
+> >  		dev->keyup_jiffies = jiffies + timeout;
+> >  		mod_timer(&dev->timer_keyup, dev->keyup_jiffies);
+> > @@ -743,7 +772,7 @@ EXPORT_SYMBOL_GPL(rc_repeat);
+> >   * called with keylock held.
+> >   */
+> >  static void ir_do_keydown(struct rc_dev *dev, enum rc_proto protocol,
+> > -			  u32 scancode, u32 keycode, u8 toggle)
+> > +			  u64 scancode, u32 keycode, u8 toggle)
+> >  {
+> >  	bool new_event = (!dev->keypressed		 ||
+> >  			  dev->last_protocol != protocol ||
+> > @@ -761,8 +790,6 @@ static void ir_do_keydown(struct rc_dev *dev, enum rc_proto protocol,
+> >  	if (new_event && dev->keypressed)
+> >  		ir_do_keyup(dev, false);
+> >  
+> > -	input_event(dev->input_dev, EV_MSC, MSC_SCAN, scancode);
+> > -
+> >  	dev->last_protocol = protocol;
+> >  	dev->last_scancode = scancode;
+> >  	dev->last_toggle = toggle;
+> > @@ -772,7 +799,7 @@ static void ir_do_keydown(struct rc_dev *dev, enum rc_proto protocol,
+> >  		/* Register a keypress */
+> >  		dev->keypressed = true;
+> >  
+> > -		dev_dbg(&dev->dev, "%s: key down event, key 0x%04x, protocol 0x%04x, scancode 0x%08x\n",
+> > +		dev_dbg(&dev->dev, "%s: key down event, key 0x%04x, protocol 0x%04x, scancode 0x%08llx\n",
+> >  			dev->device_name, keycode, protocol, scancode);
+> >  		input_report_key(dev->input_dev, keycode, 1);
+> >  
+> > @@ -809,7 +836,7 @@ static void ir_do_keydown(struct rc_dev *dev, enum rc_proto protocol,
+> >   * This routine is used to signal that a key has been pressed on the
+> >   * remote control.
+> >   */
+> > -void rc_keydown(struct rc_dev *dev, enum rc_proto protocol, u32 scancode,
+> > +void rc_keydown(struct rc_dev *dev, enum rc_proto protocol, u64 scancode,
+> >  		u8 toggle)
+> >  {
+> >  	unsigned long flags;
+> > @@ -840,7 +867,7 @@ EXPORT_SYMBOL_GPL(rc_keydown);
+> >   * remote control. The driver must manually call rc_keyup() at a later stage.
+> >   */
+> >  void rc_keydown_notimeout(struct rc_dev *dev, enum rc_proto protocol,
+> > -			  u32 scancode, u8 toggle)
+> > +			  u64 scancode, u8 toggle)
+> >  {
+> >  	unsigned long flags;
+> >  	u32 keycode = rc_g_keycode_from_table(dev, scancode);
+> > @@ -1769,8 +1796,6 @@ static int rc_prepare_rx_device(struct rc_dev *dev)
+> >  	/* Keyboard events */
+> >  	set_bit(EV_KEY, dev->input_dev->evbit);
+> >  	set_bit(EV_REP, dev->input_dev->evbit);
+> > -	set_bit(EV_MSC, dev->input_dev->evbit);
+> > -	set_bit(MSC_SCAN, dev->input_dev->mscbit);
+> >  
+> >  	/* Pointer/mouse events */
+> >  	set_bit(INPUT_PROP_POINTING_STICK, dev->input_dev->propbit);
+> > diff --git a/include/media/rc-core.h b/include/media/rc-core.h
+> > index 1f695d9c200a..d3f85df64bb2 100644
+> > --- a/include/media/rc-core.h
+> > +++ b/include/media/rc-core.h
+> > @@ -192,7 +192,7 @@ struct rc_dev {
+> >  	struct timer_list		timer_repeat;
+> >  	u32				last_keycode;
+> >  	enum rc_proto			last_protocol;
+> > -	u32				last_scancode;
+> > +	u64				last_scancode;
+> >  	u8				last_toggle;
+> >  	u32				timeout;
+> >  	u32				min_timeout;
+> > @@ -284,12 +284,12 @@ int devm_rc_register_device(struct device *parent, struct rc_dev *dev);
+> >  void rc_unregister_device(struct rc_dev *dev);
+> >  
+> >  void rc_repeat(struct rc_dev *dev);
+> > -void rc_keydown(struct rc_dev *dev, enum rc_proto protocol, u32 scancode,
+> > +void rc_keydown(struct rc_dev *dev, enum rc_proto protocol, u64 scancode,
+> >  		u8 toggle);
+> >  void rc_keydown_notimeout(struct rc_dev *dev, enum rc_proto protocol,
+> > -			  u32 scancode, u8 toggle);
+> > +			  u64 scancode, u8 toggle);
+> >  void rc_keyup(struct rc_dev *dev);
+> > -u32 rc_g_keycode_from_table(struct rc_dev *dev, u32 scancode);
+> > +u32 rc_g_keycode_from_table(struct rc_dev *dev, u64 scancode);
+> >  
+> >  /*
+> >   * From rc-raw.c
+> > diff --git a/include/media/rc-map.h b/include/media/rc-map.h
+> > index d22810dcd85c..0ce896f10202 100644
+> > --- a/include/media/rc-map.h
+> > +++ b/include/media/rc-map.h
+> > @@ -85,11 +85,11 @@
+> >  /**
+> >   * struct rc_map_table - represents a scancode/keycode pair
+> >   *
+> > - * @scancode: scan code (u32)
+> > + * @scancode: scan code (u64)
+> >   * @keycode: Linux input keycode
+> >   */
+> >  struct rc_map_table {
+> > -	u32	scancode;
+> > +	u64	scancode;
+> >  	u32	keycode;
+> >  };
+> >  
 > 
-> diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-> index 7440c8965d27..76daf2fe5bcd 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-core.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-core.c
-> @@ -469,6 +469,7 @@ static int rvin_parallel_subdevice_attach(struct rvin_dev *vin,
->  		case MEDIA_BUS_FMT_UYVY8_2X8:
->  		case MEDIA_BUS_FMT_UYVY10_2X10:
->  		case MEDIA_BUS_FMT_RGB888_1X24:
-> +		case MEDIA_BUS_FMT_SRGGB8_1X8:
->  			vin->mbus_code = code.code;
->  			vin_dbg(vin, "Found media bus format for %s: %d\n",
->  				subdev->name, vin->mbus_code);
-> diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-> index 5b04e4768eb1..97e4886f63f0 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-> @@ -320,6 +320,7 @@ static const struct rcar_csi2_format rcar_csi2_formats[] = {
->  	{ .code = MEDIA_BUS_FMT_YUYV8_1X16,	.datatype = 0x1e, .bpp = 16 },
->  	{ .code = MEDIA_BUS_FMT_UYVY8_2X8,	.datatype = 0x1e, .bpp = 16 },
->  	{ .code = MEDIA_BUS_FMT_YUYV10_2X10,	.datatype = 0x1e, .bpp = 20 },
-> +	{ .code = MEDIA_BUS_FMT_SRGGB8_1X8,     .datatype = 0x2a, .bpp = 8 },
->  };
->  
->  static const struct rcar_csi2_format *rcsi2_code_to_fmt(unsigned int code)
-> diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
-> index 1a30cd036371..63709b4bbf7a 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-dma.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-dma.c
-> @@ -85,6 +85,7 @@
->  #define VNMC_INF_YUV8_BT601	(1 << 16)
->  #define VNMC_INF_YUV10_BT656	(2 << 16)
->  #define VNMC_INF_YUV10_BT601	(3 << 16)
-> +#define VNMC_INF_RAW8		(4 << 16)
->  #define VNMC_INF_YUV16		(5 << 16)
->  #define VNMC_INF_RGB888		(6 << 16)
->  #define VNMC_VUP		(1 << 10)
-> @@ -587,13 +588,15 @@ void rvin_crop_scale_comp(struct rvin_dev *vin)
->  	rvin_write(vin, vin->crop.top, VNSLPRC_REG);
->  	rvin_write(vin, vin->crop.top + vin->crop.height - 1, VNELPRC_REG);
->  
-> -
->  	/* TODO: Add support for the UDS scaler. */
->  	if (vin->info->model != RCAR_GEN3)
->  		rvin_crop_scale_comp_gen2(vin);
->  
->  	fmt = rvin_format_from_pixel(vin, vin->format.pixelformat);
-> -	stride = vin->format.bytesperline / fmt->bpp;
-> +	if (vin->format.pixelformat == V4L2_PIX_FMT_SRGGB8)
-> +		stride = ALIGN(vin->format.bytesperline / 2, 0x10);
-> +	else
-> +		stride = vin->format.bytesperline / fmt->bpp;
-
-This does not look right, you should to move this logic into 
-rvin_format_bytesperline().
-
->  	rvin_write(vin, stride, VNIS_REG);
->  }
->  
-> @@ -676,6 +679,9 @@ static int rvin_setup(struct rvin_dev *vin)
->  
->  		input_is_yuv = true;
->  		break;
-> +	case MEDIA_BUS_FMT_SRGGB8_1X8:
-> +		vnmc |= VNMC_INF_RAW8;
-> +		break;
->  	default:
->  		break;
->  	}
-> @@ -737,6 +743,9 @@ static int rvin_setup(struct rvin_dev *vin)
->  	case V4L2_PIX_FMT_ABGR32:
->  		dmr = VNDMR_A8BIT(vin->alpha) | VNDMR_EXRGB | VNDMR_DTMD_ARGB;
->  		break;
-> +	case V4L2_PIX_FMT_SRGGB8:
-> +		dmr = 0;
-> +		break;
->  	default:
->  		vin_err(vin, "Invalid pixelformat (0x%x)\n",
->  			vin->format.pixelformat);
-> @@ -1110,6 +1119,7 @@ static int rvin_mc_validate_format(struct rvin_dev *vin, struct v4l2_subdev *sd,
->  	case MEDIA_BUS_FMT_UYVY8_2X8:
->  	case MEDIA_BUS_FMT_UYVY10_2X10:
->  	case MEDIA_BUS_FMT_RGB888_1X24:
-> +	case MEDIA_BUS_FMT_SRGGB8_1X8:
->  		vin->mbus_code = fmt.format.code;
->  		break;
->  	default:
-> diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> index b12b3f88836a..d56cf85ba065 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> @@ -66,6 +66,10 @@ static const struct rvin_video_format rvin_formats[] = {
->  		.fourcc			= V4L2_PIX_FMT_ABGR32,
->  		.bpp			= 4,
->  	},
-> +	{
-> +		.fourcc			= V4L2_PIX_FMT_SRGGB8,
-> +		.bpp			= 1,
-> +	},
->  };
->  
->  const struct rvin_video_format *rvin_format_from_pixel(struct rvin_dev *vin,
-> -- 
-> 2.20.1
 > 
-
--- 
-Regards,
-Niklas Söderlund
+> Thanks,
+> Mauro
