@@ -2,92 +2,114 @@ Return-Path: <SRS0=busD=42=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC2FC10F27
-	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 07:39:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A08EC18E5B
+	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 08:59:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E74052083E
-	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 07:39:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02CFB21775
+	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 08:59:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HbwpAGiE"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="U3WN25EU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgCIHjN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Mar 2020 03:39:13 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:34594 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbgCIHjN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Mar 2020 03:39:13 -0400
-Received: by mail-pg1-f194.google.com with SMTP id t3so4335505pgn.1
-        for <linux-media@vger.kernel.org>; Mon, 09 Mar 2020 00:39:12 -0700 (PDT)
+        id S1726721AbgCII7M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Mar 2020 04:59:12 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:41525 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726449AbgCII7L (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Mar 2020 04:59:11 -0400
+Received: by mail-ed1-f66.google.com with SMTP id m25so11089397edq.8
+        for <linux-media@vger.kernel.org>; Mon, 09 Mar 2020 01:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=lDh2YIDb9vMSkZayjdTws9M7um4cCCRB3gf7x+Y/aVA=;
-        b=HbwpAGiECfiJ5QIVoV/10COWkjpuf99URX3VmiBIs7WlpfDfrNcDSGvGrxu4C+BMvX
-         ICRCaO8wT0g5mqLVYD6KM2z6mAD4grC6imeiHScgqESSeubx3qB5svp64w5UOhVveK/0
-         scZqsFzHua+ATFWvHml42xQhj6gHTEAmBaM+0=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MG0G5ZM/wX8CaZyeU/fpD8KUA94fOQlRfkktDxmU/VY=;
+        b=U3WN25EUkAWvSE7VElZWdqDN1xMk931nL+jwh0Mxcx7ZGNsLo1O5NJnEK1z/saX/rF
+         bz/nkRI4IXFZ//hrWk3qJepb99x37E1NoKKNl4gGRVIVYWxKF3iSpDy8XcJZXetfkuOm
+         2SdDtBgZydtf4zE950KJH13R3NbSb2ncv1qkA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lDh2YIDb9vMSkZayjdTws9M7um4cCCRB3gf7x+Y/aVA=;
-        b=ah6k/gippbagrGy9KoitiC3pRCGEMvYfxkl/1wLQ6MVfLvR5G6Fk8nZ+aP673jRiHm
-         VKZQcfMyR1VEW7wGCn0qbnhxoPZ8KSDfzF0v5LGTv2pmN0Hj4+kxxRjaq9U1QUUe9rEX
-         L+5/V9gF1Q7kQGCu3KGwsciaOXif4VPmP2fMNIZAbp3NDTMLwn01n7P+DRUwgaLLFaj2
-         06O5r/6gYWASuuCQ7Nx+hAyLin7/DqiOlTWHYvW7NjlTLyttVmgS1ldiVtwl1U/cECTg
-         np4afnFR6Kad9bfsJWJ4Ct38ZE8yZ/OiYXlu9P8AvFsrPjIsy/5FqegPLLREK9nERA1j
-         4UEA==
-X-Gm-Message-State: ANhLgQ1fmmRFTMENuJ3tmf8SjO0Z3SwS9Ja8erHeR7MtjoD4EacUIEW4
-        Ns2wtVs2fTcOU7YNiC4vXZ0/iUiSHvs=
-X-Google-Smtp-Source: ADFU+vthv985z4nPWRmO2LaLZGEbzt3++VV0/U9D9ZGX4USNRSTBj/3XlD4hcF5vxbHlhQGjgaFyIQ==
-X-Received: by 2002:a63:a062:: with SMTP id u34mr15571753pgn.286.1583739552043;
-        Mon, 09 Mar 2020 00:39:12 -0700 (PDT)
-Received: from localhost ([2401:fa00:8f:203:5bbb:c872:f2b1:f53b])
-        by smtp.gmail.com with ESMTPSA id x4sm38021917pgi.76.2020.03.09.00.39.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 00:39:11 -0700 (PDT)
-Date:   Mon, 9 Mar 2020 16:39:09 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MG0G5ZM/wX8CaZyeU/fpD8KUA94fOQlRfkktDxmU/VY=;
+        b=OFyLn9byXOCoAg2Fp1XeDaK3qlO4lFXMgS3AmOslRgUYnN/7/1RfZHW4MjuqXLp+OB
+         bHXfvSJmyb6pRcJG5rHldIKUXRn4TfPpzhFUXXClmsuof7AAG26L9qHJy5noM4QidUus
+         vk0ceAKVtBZ9WmbL1O0QsmoTzOCDj4uIE50K4gCP2FCjuB0NlhhwXCMqwp+5IIhqW8x7
+         TQrEn6kDHY3U2+h1KQiiWhOqcdeci9N8nDELPPRC9AoIBfgv10rU2PR0y6np7X9XWTS9
+         09BA9dlmHVb6CLVqUZLqbRyRDjjYqawQaDCu7/Ynxmlu8PMNSmtRkPXtlJCk8s4X5VVy
+         yKBw==
+X-Gm-Message-State: ANhLgQ0xZWSSumshS1BNIMC7suiHg2HeynttBDTPGneA7zsqrzrLWg0H
+        ppQtWyrr1LbGIHZEeEcYBLx1N6QK6z4=
+X-Google-Smtp-Source: ADFU+vtMOWJuf8KplRwSRosmK+8KUq4r1UdwOIDpiOQO1wQqKbHQDak8mlx7I+fxzY/r1rEZS93VaQ==
+X-Received: by 2002:aa7:c594:: with SMTP id g20mr16105806edq.192.1583744349506;
+        Mon, 09 Mar 2020 01:59:09 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id ba29sm3677552edb.47.2020.03.09.01.59.07
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Mar 2020 01:59:07 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id a132so8864685wme.1
+        for <linux-media@vger.kernel.org>; Mon, 09 Mar 2020 01:59:07 -0700 (PDT)
+X-Received: by 2002:a7b:c3cf:: with SMTP id t15mr3188338wmj.183.1583744346889;
+ Mon, 09 Mar 2020 01:59:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200302041213.27662-1-senozhatsky@chromium.org>
+ <20200302041213.27662-2-senozhatsky@chromium.org> <17060663-9c30-de5e-da58-0c847b93e4d3@xs4all.nl>
+ <20200307094634.GB29464@google.com> <6f5916dd-63f6-5d19-13f4-edd523205a1f@xs4all.nl>
+ <20200307112838.GA125961@google.com> <a4d85ac3-0eea-bc19-cd44-0c8f5b71f6bc@xs4all.nl>
+ <20200309032707.GA9460@google.com> <40cd09d9-49a6-2159-3c50-825732151221@xs4all.nl>
+ <20200309072526.GC46830@google.com> <e31197b6-5d22-0c3a-cc77-e9506136ada5@xs4all.nl>
+In-Reply-To: <e31197b6-5d22-0c3a-cc77-e9506136ada5@xs4all.nl>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Mon, 9 Mar 2020 17:58:54 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5Ajopb019HZmtNJfDZmZbssDHfztmT0BvAD07QttXmZ1g@mail.gmail.com>
+Message-ID: <CAAFQd5Ajopb019HZmtNJfDZmZbssDHfztmT0BvAD07QttXmZ1g@mail.gmail.com>
+Subject: Re: [PATCHv4 01/11] videobuf2: add cache management members
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
-        Tomasz Figa <tfiga@chromium.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Sakari Ailus <sakari.ailus@iki.fi>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Pawel Osciak <posciak@chromium.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Subject: Re: [PATCHv4 01/11] videobuf2: add cache management members
-Message-ID: <20200309073909.GD46830@google.com>
-References: <20200302041213.27662-2-senozhatsky@chromium.org>
- <17060663-9c30-de5e-da58-0c847b93e4d3@xs4all.nl>
- <20200307094634.GB29464@google.com>
- <6f5916dd-63f6-5d19-13f4-edd523205a1f@xs4all.nl>
- <20200307112838.GA125961@google.com>
- <a4d85ac3-0eea-bc19-cd44-0c8f5b71f6bc@xs4all.nl>
- <20200309032707.GA9460@google.com>
- <40cd09d9-49a6-2159-3c50-825732151221@xs4all.nl>
- <20200309072526.GC46830@google.com>
- <e31197b6-5d22-0c3a-cc77-e9506136ada5@xs4all.nl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e31197b6-5d22-0c3a-cc77-e9506136ada5@xs4all.nl>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On (20/03/09 08:28), Hans Verkuil wrote:
+On Mon, Mar 9, 2020 at 4:28 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>
+> On 3/9/20 8:25 AM, Sergey Senozhatsky wrote:
+> > On (20/03/09 08:21), Hans Verkuil wrote:
+> >> On 3/9/20 4:27 AM, Sergey Senozhatsky wrote:
+> >>> On (20/03/07 12:47), Hans Verkuil wrote:
+> >>>>
+> >>>> Create those tests in v4l2-compliance: that's where they belong.
+> >>>>
+> >>>> You need these tests:
+> >>>>
+> >>>> For non-MMAP modes:
+> >>>>
+> >>>> 1) test that V4L2_BUF_CAP_SUPPORTS_CACHE_HINTS is never set.
+> >>>>
+> >>>> If V4L2_BUF_CAP_SUPPORTS_CACHE_HINTS is not set, then:
+> >>>>
+> >>>> 1) attempting to use V4L2_FLAG_MEMORY_NON_CONSISTENT will clear the flag
+> >>>>    upon return (test with both reqbufs and create_bufs).
+> >>>> 2) attempting to use V4L2_BUF_FLAG_NO_CACHE_INVALIDATE or V4L2_BUF_FLAG_NO_CACHE_CLEAN
+> >>>>    will clear those flags upon return (do we actually do that in the patch series?).
+> >
+> > [..]
+> >
 > >>> I'm looking into it. Will it work if I patch the vivid test driver to
 > >>> enable/disable ->allow_cache_hints bit per-node and include the patch
 > >>> into the series. So then v4l2 tests can create some nodes with
@@ -97,17 +119,17 @@ On (20/03/09 08:28), Hans Verkuil wrote:
 > >> whether cache hints should be set or not for each instance. It would be useful
 > >> to have this in vivid. Don't forget to update Documentation/media/v4l-drivers/vivid.rst
 > >> as well.
-> > 
+> >
 > > I see. Hmm, how do I do "test that V4L2_BUF_CAP_SUPPORTS_CACHE_HINTS
 > > is never set" then?
-> 
+>
 > Not sure I understand your question. When requesting buffers for non-MMAP memory,
 > this capability must never be returned. That has nothing to do with a cache_hints
 > module option.
 
-OK. What I thought was that not every MMAP memory node can have cache
-hints enabled, so it should be verified that only MMAP nodes which were
-configured to allow_cache_hints should report that CAP, the rest of MMAP
-nodes (if any) should have that CAP bit clear.
+Have we decided that we explicitly don't want to support this for
+USERPTR memory, even though technically possible and without much
+extra code needed?
 
-	-ss
+Best regards,
+Tomasz
