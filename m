@@ -2,42 +2,40 @@ Return-Path: <SRS0=busD=42=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9639EC2BB58
-	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 10:14:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF4AEC2BB8B
+	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 10:14:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 77DE620866
-	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 10:14:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D22FB22525
+	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 10:14:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgCIKOu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Mar 2020 06:14:50 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:40741 "EHLO
+        id S1726656AbgCIKOv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Mar 2020 06:14:51 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:34873 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726533AbgCIKOt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Mar 2020 06:14:49 -0400
+        with ESMTP id S1726569AbgCIKOs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Mar 2020 06:14:48 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1jBFQm-0003mn-Qs; Mon, 09 Mar 2020 11:14:40 +0100
+        id 1jBFQj-0003mK-6T; Mon, 09 Mar 2020 11:14:37 +0100
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1jBFQg-0001mH-V5; Mon, 09 Mar 2020 11:14:34 +0100
+        id 1jBFQg-0001lc-KL; Mon, 09 Mar 2020 11:14:34 +0100
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
         linux-media@vger.kernel.org
-Subject: [PATCH v12 14/19] media: tvp5150: add v4l2-event support
-Date:   Mon,  9 Mar 2020 11:14:23 +0100
-Message-Id: <20200309101428.15267-15-m.felsch@pengutronix.de>
+Subject: [PATCH v12 00/19] TVP5150 Features and Fixes
+Date:   Mon,  9 Mar 2020 11:14:09 +0100
+Message-Id: <20200309101428.15267-1-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200309101428.15267-1-m.felsch@pengutronix.de>
-References: <20200309101428.15267-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
@@ -49,71 +47,80 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently the driver notifies internal subdevs if the signal is locked
-or not. This information is also useful for userpace applications e.g. to
-switch to another input device upon a signal lost event.
+Hi all,
 
-This commit adds the support for the userspace to subscribe to the
-V4L2_EVENT_SOURCE_CHANGE and V4L2_EVENT_CTRL events.
+here is the new and _hopefully_ last version :) This version contains
+the discussion results with Sakari and some minor fixes from the v11.
 
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
-v12:
-- new patch
+Each patch has a dedicate log, so I avoid the details here and give only
+an overview.
 
- drivers/media/i2c/tvp5150.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+Patch 1-2:
+Those where previously one patch.
 
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index 313d2a43d79e..9bad3192358d 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -17,6 +17,7 @@
- #include <linux/regmap.h>
- #include <media/v4l2-async.h>
- #include <media/v4l2-device.h>
-+#include <media/v4l2-event.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-fwnode.h>
- #include <media/v4l2-mc.h>
-@@ -1526,6 +1527,19 @@ static int tvp5150_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_regi
- }
- #endif
- 
-+static int tvp5150_subscribe_event(struct v4l2_subdev *sd, struct v4l2_fh *fh,
-+				   struct v4l2_event_subscription *sub)
-+{
-+	switch (sub->type) {
-+	case V4L2_EVENT_SOURCE_CHANGE:
-+		return v4l2_src_change_event_subdev_subscribe(sd, fh, sub);
-+	case V4L2_EVENT_CTRL:
-+		return v4l2_ctrl_subdev_subscribe_event(sd, fh, sub);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
- static int tvp5150_g_tuner(struct v4l2_subdev *sd, struct v4l2_tuner *vt)
- {
- 	int status = tvp5150_read(sd, 0x88);
-@@ -1617,6 +1631,8 @@ static const struct v4l2_subdev_core_ops tvp5150_core_ops = {
- 	.g_register = tvp5150_g_register,
- 	.s_register = tvp5150_s_register,
- #endif
-+	.subscribe_event = tvp5150_subscribe_event,
-+	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
- };
- 
- static const struct v4l2_subdev_tuner_ops tvp5150_tuner_ops = {
-@@ -2045,7 +2061,7 @@ static int tvp5150_probe(struct i2c_client *c)
- 	sd = &core->sd;
- 	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
- 	sd->internal_ops = &tvp5150_internal_ops;
--	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
- 
- 	if (IS_ENABLED(CONFIG_OF) && np) {
- 		res = tvp5150_parse_dt(core, np);
+Patch 3-6:
+Prepare and implement the common v4l2-fwnode parsing code. I changed the
+code from a single parse_and_add_links/free to parse/add_links/free. I
+did the split to allow adding multiple links from different devices to a
+_maybe_ coming global connector device. 
+
+Patch 8:
+I converted the parsing code to the new v4l2-fwnode-connector parsing
+behaviour and fixed a two bugs during remove()
+
+Patch 13:
+This one is new due to the switch from the s_power() to the pm_runtime
+as Sakari suggested.
+
+Patch 14:
+Also a new patch.
+
+Patch 15:
+New patch..
+
+I've tested the series on a custom imx6-based board which uses the chip
+directly (no-usb). I would appreciate if someone with a usb device can
+test this too.
+
+Regards,
+  Marco
+
+Javier Martinez Canillas (1):
+  partial revert of "[media] tvp5150: add HW input connectors support"
+
+Marco Felsch (17):
+  dt-bindings: connector: analog: add sdtv standards property
+  dt-bindings: display: add sdtv-standards defines
+  media: v4l: link dt-bindings and uapi
+  media: v4l2-fwnode: add endpoint id field to v4l2_fwnode_link
+  media: v4l2-fwnode: add v4l2_fwnode_connector
+  media: v4l2-fwnode: add initial connector parsing support
+  media: tvp5150: add input source selection of_graph support
+  media: dt-bindings: tvp5150: Add input port connectors DT bindings
+  media: tvp5150: fix set_selection rectangle handling
+  media: tvp5150: add FORMAT_TRY support for get/set selection handlers
+  media: tvp5150: move irq en-/disable into runtime-pm ops
+  media: tvp5150: add v4l2-event support
+  media: tvp5150: add subdev open/close callbacks
+  media: dt-bindings: tvp5150: cleanup bindings stlye
+  media: dt-bindings: tvp5150: add optional sdtv standards documentation
+  media: tvp5150: add support to limit sdtv standards
+  media: tvp5150: make debug output more readable
+
+Michael Tretter (1):
+  media: tvp5150: initialize subdev before parsing device tree
+
+ .../display/connector/analog-tv-connector.txt |   6 +
+ .../devicetree/bindings/media/i2c/tvp5150.txt | 146 +++-
+ drivers/media/i2c/tvp5150.c                   | 802 ++++++++++++++----
+ drivers/media/v4l2-core/v4l2-fwnode.c         | 166 ++++
+ include/dt-bindings/display/sdtv-standards.h  |  76 ++
+ include/dt-bindings/media/tvp5150.h           |   2 -
+ include/media/v4l2-fwnode.h                   | 143 ++++
+ include/uapi/linux/videodev2.h                |   4 +
+ 8 files changed, 1146 insertions(+), 199 deletions(-)
+ create mode 100644 include/dt-bindings/display/sdtv-standards.h
+
 -- 
 2.20.1
 
