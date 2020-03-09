@@ -2,84 +2,66 @@ Return-Path: <SRS0=busD=42=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCFA2C10F27
-	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 11:46:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A752FC10F29
+	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 11:46:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8F6AE20409
-	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 11:46:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 877D720873
+	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 11:46:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgCILqm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Mar 2020 07:46:42 -0400
-Received: from gofer.mess.org ([88.97.38.141]:56507 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725796AbgCILqm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 9 Mar 2020 07:46:42 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 86F34C63FC; Mon,  9 Mar 2020 11:46:40 +0000 (GMT)
-Date:   Mon, 9 Mar 2020 11:46:40 +0000
-From:   Sean Young <sean@mess.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linux-media@vger.kernel.org,
-        Frank Wunderlich <frank-w@public-files.de>
-Subject: Re: [PATCH v2] media: rc: make scancodes 64 bit
-Message-ID: <20200309114640.GA9321@gofer.mess.org>
-References: <20200129115419.8456-1-sean@mess.org>
- <20200129115419.8456-2-sean@mess.org>
- <20200302103127.0eff8aa4@coco.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200302103127.0eff8aa4@coco.lan>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726475AbgCILqp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Mar 2020 07:46:45 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:43551 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726428AbgCILqp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 9 Mar 2020 07:46:45 -0400
+X-IronPort-AV: E=Sophos;i="5.70,533,1574089200"; 
+   d="scan'208";a="41388051"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 09 Mar 2020 20:46:43 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id B8986421A427;
+        Mon,  9 Mar 2020 20:46:39 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 0/2] media: i2c: ov5645: Switch to assigned-clock-rates
+Date:   Mon,  9 Mar 2020 11:46:11 +0000
+Message-Id: <1583754373-16510-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+This patch series adds support for using assigned-clock-rates for
+specifying clock rates for ov5645 driver
 
-On Mon, Mar 02, 2020 at 10:31:27AM +0100, Mauro Carvalho Chehab wrote:
-> Em Wed, 29 Jan 2020 11:54:16 +0000
-> Sean Young <sean@mess.org> escreveu:
-> 
-> > There are many protocols that encode more than 32 bit. We want 64 bit
-> > support so that BPF IR decoders can decode more than 32 bit. None of
-> > the existing kernel IR decoders/encoders support 64 bit, for now.
-> 
-> The reason why we don't properly support 64 bits yet [2] is that it requires 
-> some changes in order to provide a backward-compatible set of functions.
+Lad Prabhakar (2):
+  media: dt-bindings: media: i2c: Switch to assigned-clock-rates
+  media: i2c: ov5645: Switch to assigned-clock-rates
 
-This should be supported.
+ Documentation/devicetree/bindings/media/i2c/ov5645.txt | 4 ++--
+ arch/arm/boot/dts/imx6qdl-wandboard.dtsi               | 3 ++-
+ drivers/media/i2c/ov5645.c                             | 9 ++-------
+ 3 files changed, 6 insertions(+), 10 deletions(-)
 
-> [2] Actually, I guess we have one driver with has 64 bits scancodes.
+-- 
+2.7.4
 
-Which one is that?
-
-> > The MSC_SCAN event can only contain 32 bit scancodes, so we no longer
-> > generate these input events. The full 64 bit scancode can be read from
-> > the lirc chardev.
-> 
-> For example, if all possible scancodes are <= 32 bit, it should still
-> generate MSC_SCAN, as otherwise existing tools that rely on it will 
-> break.
-
-The scancodes are generated from the driver, and even if there is no
-keymap loaded, scancodes are still generated. Therefore I don't think it
-makes sense to switch on whether there are any 64 bit scancodes in the
-current keymap.
-
-We don't know if a driver will produce 64 bit scancodes right now. Although
-BPF is the only route (currently) which can produce 64 bit scancodes,
-there is no way to see if a BPF program will generate 64 bit scancodes
-in advance.
-
-So, I've changed the code to generate MSC_SCANCODE if the scancode fits
-into 32 bits, reluctantly. However, I think this is the best we can do
-for compatibility. I will post a v2 shortly.
-
-Thanks
-Sean
