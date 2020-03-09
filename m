@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BFCEC33C87
-	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 10:15:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39820C18E5A
+	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 10:14:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5BCAB20828
-	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 10:15:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 181B92072A
+	for <linux-media@archiver.kernel.org>; Mon,  9 Mar 2020 10:14:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726680AbgCIKPB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Mar 2020 06:15:01 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59255 "EHLO
+        id S1726668AbgCIKOy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Mar 2020 06:14:54 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36465 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726571AbgCIKOs (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Mar 2020 06:14:48 -0400
+        with ESMTP id S1726635AbgCIKOv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Mar 2020 06:14:51 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1jBFQm-0003n0-Rs; Mon, 09 Mar 2020 11:14:40 +0100
+        id 1jBFQj-0003mN-63; Mon, 09 Mar 2020 11:14:37 +0100
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1jBFQh-0001mX-31; Mon, 09 Mar 2020 11:14:35 +0100
+        id 1jBFQg-0001lk-MG; Mon, 09 Mar 2020 11:14:34 +0100
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-media@vger.kernel.org, Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v12 19/19] media: tvp5150: make debug output more readable
-Date:   Mon,  9 Mar 2020 11:14:28 +0100
-Message-Id: <20200309101428.15267-20-m.felsch@pengutronix.de>
+        linux-media@vger.kernel.org
+Subject: [PATCH v12 03/19] media: v4l: link dt-bindings and uapi
+Date:   Mon,  9 Mar 2020 11:14:12 +0100
+Message-Id: <20200309101428.15267-4-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200309101428.15267-1-m.felsch@pengutronix.de>
 References: <20200309101428.15267-1-m.felsch@pengutronix.de>
@@ -49,40 +49,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The debug output for tvp5150_selmux() isn't really intuitive. Register
-values are printed decimal formatted and the input/output driver states
-are printed as enum. Even more the "normal" output enum mapps to zero so
-a active output will printing output=0 and a inactive output=1.
-
-Change this by brinting the register values hex formatted and the states
-as more readable string.
+Since we expose the definition to the dt-bindings we need to keep those
+definitions in sync. To address this the patch adds a simple cross
+reference to the dt-bindings.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/tvp5150.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+Changelog:
 
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index fb24581e86c1..26eaed4500d4 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -302,9 +302,12 @@ static void tvp5150_selmux(struct v4l2_subdev *sd)
- 		break;
- 	}
+v11:
+- new patch since the split https://patchwork.linuxtv.org/patch/58491/
+
+v2-v10:
+- nothing
+---
+ include/uapi/linux/videodev2.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 5f9357dcb060..f48e47e230c3 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1242,6 +1242,10 @@ struct v4l2_selection {
  
--	dev_dbg_lvl(sd->dev, 1, debug, "Selecting video route: route input=%i, output=%i => tvp5150 input=%i, opmode=%i\n",
--			decoder->input, decoder->output,
--			input, opmode);
-+	dev_dbg_lvl(sd->dev, 1, debug,
-+		    "Selecting video route: route input=%s, output=%s => tvp5150 input=0x%02x, opmode=0x%02x\n",
-+		    decoder->input == 0 ? "aip1a" :
-+		    decoder->input == 2 ? "aip1b" : "svideo",
-+		    decoder->output == 0 ? "normal" : "black-frame-gen",
-+		    input, opmode);
+ typedef __u64 v4l2_std_id;
  
- 	regmap_write(decoder->regmap, TVP5150_OP_MODE_CTL, opmode);
- 	regmap_write(decoder->regmap, TVP5150_VD_IN_SRC_SEL_1, input);
++/*
++ * Attention: Keep the V4L2_STD_* bit definitions in sync with
++ * include/dt-bindings/display/sdtv-standards.h SDTV_STD_* bit definitions.
++ */
+ /* one bit for each */
+ #define V4L2_STD_PAL_B          ((v4l2_std_id)0x00000001)
+ #define V4L2_STD_PAL_B1         ((v4l2_std_id)0x00000002)
 -- 
 2.20.1
 
