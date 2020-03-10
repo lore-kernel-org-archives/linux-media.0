@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 774F3C18E5B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 16:06:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86225C18E5A
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 16:06:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 407C1222C3
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 16:06:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B985222D9
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 16:06:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="HTMYhkdr"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Ssw4HGN+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbgCJQGq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Mar 2020 12:06:46 -0400
+        id S1727113AbgCJQGr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Mar 2020 12:06:47 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:55140 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727063AbgCJQGp (ORCPT
+        with ESMTP id S1727075AbgCJQGq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Mar 2020 12:06:45 -0400
+        Tue, 10 Mar 2020 12:06:46 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1C3D7580;
-        Tue, 10 Mar 2020 17:06:43 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1CA485F;
+        Tue, 10 Mar 2020 17:06:44 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1583856403;
-        bh=+Ow796cILhn1WLb8qVyTtmNe/AxiuvndMbFfvaH18kY=;
+        s=mail; t=1583856404;
+        bh=KQZ1vwcGrZ0kV6oV5/PjsdL2VHZRY637TyI8/iCBwr0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HTMYhkdrO9DSxTnY4ZRPQFPlkSXGk5RbhaBtkOm6yv7nhyENfVThQQ+25aWAZvO2d
-         K7BRAbtPZHsxTk08kVESPc8lqo9cmfiFB9C1pwAM8Fo3gkmIOatcCX+GB9bNiDAyn+
-         GKUV20BZumpFro1pUTwV0EfoxKWmfOPvGEfbirbI=
+        b=Ssw4HGN+qumP3XUzVYN3cvsOkEhdjoIJsj9JbJLAwb4AMrLPqoYNKSlt76Z5SJuN7
+         Q4uS8zPODtFDV5zUU9S0fHGQOft5bqdIozHnLesDASTp9V9ssLKEju+BUeBJw0TdBV
+         FfCfrW0P/1MqWgo97OU1wEuQQeOFgoaqH2n/lGOg=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH v2 06/10] media: imx: imx7-media-csi: Fix video field handling
-Date:   Tue, 10 Mar 2020 18:06:29 +0200
-Message-Id: <20200310160633.950-7-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 08/10] media: imx: imx6-media-csi: Support clamping Y10 and Y12 to Y8
+Date:   Tue, 10 Mar 2020 18:06:31 +0200
+Message-Id: <20200310160633.950-9-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200310160633.950-1-laurent.pinchart@ideasonboard.com>
 References: <20200310160633.950-1-laurent.pinchart@ideasonboard.com>
@@ -50,47 +50,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit 4791bd7d6adc ("media: imx: Try colorimetry at both sink and
-source pads") reworked the way that formats are set on the sink pad of
-the CSI subdevice, and accidentally removed video field handling.
-Restore it by defaulting to V4L2_FIELD_NONE if the field value isn't
-supported, with the only two supported value being V4L2_FIELD_NONE and
-V4L2_FIELD_INTERLACED.
+10-bit and 12-bit greyscale input data to the CSI can be written as
+8-bit data to memory. Support this.
 
-Fixes: 4791bd7d6adc ("media: imx: Try colorimetry at both sink and source pads")
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
-Changes since v1:
+ drivers/staging/media/imx/imx-media-utils.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-- Fix commit message to mention V4L2_FIELD_INTERLACED instead of
-  V4L2_FIELD_ALTERNATE
----
- drivers/staging/media/imx/imx7-media-csi.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 2f665e4b8c40..706c47741a3c 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1009,6 +1009,7 @@ static int imx7_csi_try_fmt(struct imx7_csi *csi,
- 		sdformat->format.width = in_fmt->width;
- 		sdformat->format.height = in_fmt->height;
- 		sdformat->format.code = in_fmt->code;
-+		sdformat->format.field = in_fmt->field;
- 		*cc = in_cc;
- 
- 		sdformat->format.colorspace = in_fmt->colorspace;
-@@ -1023,6 +1024,9 @@ static int imx7_csi_try_fmt(struct imx7_csi *csi,
- 							 false);
- 			sdformat->format.code = (*cc)->codes[0];
- 		}
-+
-+		if (sdformat->format.field != V4L2_FIELD_INTERLACED)
-+			sdformat->format.field = V4L2_FIELD_NONE;
- 		break;
- 	default:
- 		return -EINVAL;
+diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+index bc20fcc88267..fae981698c49 100644
+--- a/drivers/staging/media/imx/imx-media-utils.c
++++ b/drivers/staging/media/imx/imx-media-utils.c
+@@ -161,7 +161,11 @@ static const struct imx_media_pixfmt rgb_formats[] = {
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_GREY,
+-		.codes = {MEDIA_BUS_FMT_Y8_1X8},
++		.codes = {
++			MEDIA_BUS_FMT_Y8_1X8,
++			MEDIA_BUS_FMT_Y10_1X10,
++			MEDIA_BUS_FMT_Y12_1X12,
++		},
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 8,
+ 		.bayer  = true,
 -- 
 Regards,
 
