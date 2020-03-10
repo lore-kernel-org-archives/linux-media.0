@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA39AC2BB8B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE2B7C18E5A
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:44:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8091D24655
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:44:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B527020675
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:44:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583847883;
-	bh=haisXx7Fkzh8TLhrGRECQWNhHUxca5nMU7XrwHj6PW0=;
+	s=default; t=1583847884;
+	bh=OPGYmieXKETcyEj5QfTyd0VUv6QXCI4OfGbmwHtuc8g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Vm1QZr7JX6vLZcQkQkI0ptDAdyEqQlf17ItNHa8Hh4RpwMTTMI7dd3DvBkpdZjlzD
-	 SDWYytN0xsQDRSOG02tg3KH2iOyV3RVys2UrWNnX7SptLKt8wJTl8KOz3UEZVzocsM
-	 R2B2tSP0T5n3EJW3C7uCgxJ+RRdRu+8viw0nsY00=
+	b=n6ms43OT7QUuR1e9ESHxuxQfvt5VsFFhgpz7fpJiWtVdDnuMO+t6Lo84ihs78knpA
+	 4Tm0J9YAiHBiWsshtImez7OdQJxzQZoQ2ZhCSgXzkw8sYVo4p9qXsfxDAjY0OCdsFd
+	 2W1dycxbuCdNGamyWzbZqTxjm58EgZK2IAppOMag=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727359AbgCJNnT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Mar 2020 09:43:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37668 "EHLO mail.kernel.org"
+        id S1726520AbgCJNon (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Mar 2020 09:44:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37698 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726551AbgCJNnT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1727231AbgCJNnT (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 10 Mar 2020 09:43:19 -0400
 Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3C51724697;
+        by mail.kernel.org (Postfix) with ESMTPSA id 8DE5C246B4;
         Tue, 10 Mar 2020 13:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1583847797;
-        bh=haisXx7Fkzh8TLhrGRECQWNhHUxca5nMU7XrwHj6PW0=;
+        bh=OPGYmieXKETcyEj5QfTyd0VUv6QXCI4OfGbmwHtuc8g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ICPNSTIeCkHDIldBa3n2osVmMKjH5bg6XMYsBmK2xpbgtKA0xlD0EMXEhO9TDbn0g
-         y82k/9hT7Npalsq1NvHgr5wo2Ezhbqv8xkmeXbDGkynE2dTcoOJgUcCbsbfxm3oZ0K
-         QZfBb361OiPPkGpQPXTQzhvFKxFCgqgTGkdNk7Fo=
+        b=CLlCgW1Q8yWm9KWqJYC58YsnWKUiBdlfHL1hbcGw/RVrU4qf5e7t+1/IM/DtD+x9w
+         2OUXVxZvCX/FLVVZTdQXndK7UQZh1am2knD5GytB+l0XSUUjstz6I9BDypM5Y5c1G4
+         YDD1uUUjfS0VP5ecwdq1+zeSy0BuUkIx2eoB1LG8=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jBfAB-0005wB-CI; Tue, 10 Mar 2020 14:43:15 +0100
+        id 1jBfAB-0005wt-PU; Tue, 10 Mar 2020 14:43:15 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         linux-media@vger.kernel.org
-Subject: [PATCH v2 13/22] media: docs: split uAPI info from saa7134-devel.rst
-Date:   Tue, 10 Mar 2020 14:43:04 +0100
-Message-Id: <b29aa35ac3639d2f75344cdd2b32bb4a834fae11.1583847556.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 22/22] media: docs: get rid of Documentation/media/
+Date:   Tue, 10 Mar 2020 14:43:13 +0100
+Message-Id: <50b933ab1f2e42e6905c72be6bd53dc1c30621d3.1583847557.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1583847556.git.mchehab+huawei@kernel.org>
 References: <cover.1583847556.git.mchehab+huawei@kernel.org>
@@ -59,168 +59,82 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This file contains both driver develompent documentation and
-userspace API.
-
-Split on two, as they're usually read by different audiences.
+Now that everything got moved, we can get rid of the
+old media directory.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/media/v4l-drivers/index.rst     |  1 +
- .../media/v4l-drivers/saa7134-devel.rst       | 67 +++++++++++++++++++
- Documentation/media/v4l-drivers/saa7134.rst   | 54 ---------------
- 3 files changed, 68 insertions(+), 54 deletions(-)
- create mode 100644 Documentation/media/v4l-drivers/saa7134-devel.rst
+ Documentation/driver-api/index.rst    |  1 +
+ Documentation/index.rst               |  1 -
+ Documentation/media/index.rst         | 23 -----------------------
+ Documentation/userspace-api/index.rst |  1 +
+ 4 files changed, 2 insertions(+), 24 deletions(-)
+ delete mode 100644 Documentation/media/index.rst
 
-diff --git a/Documentation/media/v4l-drivers/index.rst b/Documentation/media/v4l-drivers/index.rst
-index adf72937b119..6fdfd9a41913 100644
---- a/Documentation/media/v4l-drivers/index.rst
-+++ b/Documentation/media/v4l-drivers/index.rst
-@@ -71,6 +71,7 @@ For more details see the file COPYING in the source distribution of Linux.
- 	cx88-devel
- 	davinci-vpbe-devel
- 	fimc-devel
-+	saa7134-devel
- 	vimc-devel
+diff --git a/Documentation/driver-api/index.rst b/Documentation/driver-api/index.rst
+index 0ebe205efd0c..92c2570277ac 100644
+--- a/Documentation/driver-api/index.rst
++++ b/Documentation/driver-api/index.rst
+@@ -62,6 +62,7 @@ available subsections can be seen below.
+    pinctl
+    gpio/index
+    md/index
++   media/index
+    misc_devices
+    nfc/index
+    dmaengine/index
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index e99d0bd2589d..7139190f1c01 100644
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -108,7 +108,6 @@ needed).
+    isdn/index
+    infiniband/index
+    leds/index
+-   media/index
+    netlabel/index
+    networking/index
+    pcmcia/index
+diff --git a/Documentation/media/index.rst b/Documentation/media/index.rst
+deleted file mode 100644
+index e93fd88881af..000000000000
+--- a/Documentation/media/index.rst
++++ /dev/null
+@@ -1,23 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-Linux Media Subsystem Documentation
+-===================================
+-
+-.. only:: html
+-
+-   .. class:: toc-title
+-
+-        Table of Contents
+-
+-.. toctree::
+-   :maxdepth: 2
+-
+-   ../userspace-api/media/index
+-   ../driver-api/media/index
+-
+-.. only:: html and subproject
+-
+-   Indices
+-   =======
+-
+-   * :ref:`genindex`
+diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
+index e983488b48b1..69fc5167e648 100644
+--- a/Documentation/userspace-api/index.rst
++++ b/Documentation/userspace-api/index.rst
+@@ -22,6 +22,7 @@ place where this information is gathered.
+    spec_ctrl
+    accelerators/ocxl
+    ioctl/index
++   media/index
  
- 	cx2341x-uapi
-diff --git a/Documentation/media/v4l-drivers/saa7134-devel.rst b/Documentation/media/v4l-drivers/saa7134-devel.rst
-new file mode 100644
-index 000000000000..167fd729bc8c
---- /dev/null
-+++ b/Documentation/media/v4l-drivers/saa7134-devel.rst
-@@ -0,0 +1,67 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+The saa7134 driver
-+==================
-+
-+Author Gerd Hoffmann
-+
-+
-+Card Variations:
-+----------------
-+
-+Cards can use either of these two crystals (xtal):
-+
-+- 32.11 MHz -> .audio_clock=0x187de7
-+- 24.576MHz -> .audio_clock=0x200000 (xtal * .audio_clock = 51539600)
-+
-+Some details about 30/34/35:
-+
-+- saa7130 - low-price chip, doesn't have mute, that is why all those
-+  cards should have .mute field defined in their tuner structure.
-+
-+- saa7134 - usual chip
-+
-+- saa7133/35 - saa7135 is probably a marketing decision, since all those
-+  chips identifies itself as 33 on pci.
-+
-+LifeView GPIOs
-+--------------
-+
-+This section was authored by: Peter Missel <peter.missel@onlinehome.de>
-+
-+- LifeView FlyTV Platinum FM (LR214WF)
-+
-+    - GP27    MDT2005 PB4 pin 10
-+    - GP26    MDT2005 PB3 pin 9
-+    - GP25    MDT2005 PB2 pin 8
-+    - GP23    MDT2005 PB1 pin 7
-+    - GP22    MDT2005 PB0 pin 6
-+    - GP21    MDT2005 PB5 pin 11
-+    - GP20    MDT2005 PB6 pin 12
-+    - GP19    MDT2005 PB7 pin 13
-+    - nc      MDT2005 PA3 pin 2
-+    - Remote  MDT2005 PA2 pin 1
-+    - GP18    MDT2005 PA1 pin 18
-+    - nc      MDT2005 PA0 pin 17 strap low
-+    - GP17    Strap "GP7"=High
-+    - GP16    Strap "GP6"=High
-+
-+	- 0=Radio 1=TV
-+	- Drives SA630D ENCH1 and HEF4052 A1 pinsto do FM radio through
-+	  SIF input
-+
-+    - GP15    nc
-+    - GP14    nc
-+    - GP13    nc
-+    - GP12    Strap "GP5" = High
-+    - GP11    Strap "GP4" = High
-+    - GP10    Strap "GP3" = High
-+    - GP09    Strap "GP2" = Low
-+    - GP08    Strap "GP1" = Low
-+    - GP07.00 nc
-+
-+Credits
-+-------
-+
-+andrew.stevens@philips.com + werner.leeb@philips.com for providing
-+saa7134 hardware specs and sample board.
-diff --git a/Documentation/media/v4l-drivers/saa7134.rst b/Documentation/media/v4l-drivers/saa7134.rst
-index 15d06facdbc1..c84246dd81c0 100644
---- a/Documentation/media/v4l-drivers/saa7134.rst
-+++ b/Documentation/media/v4l-drivers/saa7134.rst
-@@ -54,60 +54,6 @@ Known Problems
-   default might not work for you depending on which version you have.
-   There is a tuner= insmod option to override the driver's default.
- 
--Card Variations:
------------------
--
--Cards can use either of these two crystals (xtal):
--
--- 32.11 MHz -> .audio_clock=0x187de7
--- 24.576MHz -> .audio_clock=0x200000 (xtal * .audio_clock = 51539600)
--
--Some details about 30/34/35:
--
--- saa7130 - low-price chip, doesn't have mute, that is why all those
--  cards should have .mute field defined in their tuner structure.
--
--- saa7134 - usual chip
--
--- saa7133/35 - saa7135 is probably a marketing decision, since all those
--  chips identifies itself as 33 on pci.
--
--LifeView GPIOs
----------------
--
--This section was authored by: Peter Missel <peter.missel@onlinehome.de>
--
--- LifeView FlyTV Platinum FM (LR214WF)
--
--    - GP27    MDT2005 PB4 pin 10
--    - GP26    MDT2005 PB3 pin 9
--    - GP25    MDT2005 PB2 pin 8
--    - GP23    MDT2005 PB1 pin 7
--    - GP22    MDT2005 PB0 pin 6
--    - GP21    MDT2005 PB5 pin 11
--    - GP20    MDT2005 PB6 pin 12
--    - GP19    MDT2005 PB7 pin 13
--    - nc      MDT2005 PA3 pin 2
--    - Remote  MDT2005 PA2 pin 1
--    - GP18    MDT2005 PA1 pin 18
--    - nc      MDT2005 PA0 pin 17 strap low
--    - GP17    Strap "GP7"=High
--    - GP16    Strap "GP6"=High
--
--	- 0=Radio 1=TV
--	- Drives SA630D ENCH1 and HEF4052 A1 pinsto do FM radio through
--	  SIF input
--
--    - GP15    nc
--    - GP14    nc
--    - GP13    nc
--    - GP12    Strap "GP5" = High
--    - GP11    Strap "GP4" = High
--    - GP10    Strap "GP3" = High
--    - GP09    Strap "GP2" = Low
--    - GP08    Strap "GP1" = Low
--    - GP07.00 nc
--
- Credits
- -------
+ .. only::  subproject and html
  
 -- 
 2.24.1
