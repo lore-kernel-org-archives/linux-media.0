@@ -2,378 +2,320 @@ Return-Path: <SRS0=PJJM=43=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE29BC18E5C
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:44:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58785C18E5C
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:45:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A400424655
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:44:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2659120675
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:45:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583847880;
-	bh=Wco8Lrt6IWo3LhWvojV2+XjOxrfkIusfjVYlvpSsUeE=;
+	s=default; t=1583847900;
+	bh=//FvkYJTvYKf9u3X9i55i0Czwblru6XHdyLbwPOvSyQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=W7GcYGhFwdmE7o+e13fxEs9O7Fo7gJ6IyrZfJvhObRpjmCAmFnJsQUGlRYxZ2LHSD
-	 6ZYUGSBAeN4gKGyu4lnN6ei8PLB0WFlxQVtMWbiYo/t0cucgMDYhFFyRydHtAzw6Zz
-	 Vsh2J/bh5qVuFJZoUE8kruYu1qfXyFPGL7G7FTyo=
+	b=K/ysNgxmWhdZ/1SCs2lFoA9FJa/zn+CNtRGDHFKTQD2AjwLGueNIpxXT/AMK17IPO
+	 KkL7JHmHnT2aBNhMg4/OWtwb1mtao1SkpiWz981vhD2L1Gj2K77duide8XlPauqBiG
+	 61PTI+j0vGEubdxvAwTI0NQpbLXMJuSnzPK1URbI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727866AbgCJNoM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Mar 2020 09:44:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37596 "EHLO mail.kernel.org"
+        id S1727572AbgCJNon (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Mar 2020 09:44:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37588 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727280AbgCJNnT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726998AbgCJNnT (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 10 Mar 2020 09:43:19 -0400
 Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 73417246AD;
+        by mail.kernel.org (Postfix) with ESMTPSA id 11E772468C;
         Tue, 10 Mar 2020 13:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1583847797;
-        bh=Wco8Lrt6IWo3LhWvojV2+XjOxrfkIusfjVYlvpSsUeE=;
+        bh=//FvkYJTvYKf9u3X9i55i0Czwblru6XHdyLbwPOvSyQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gIJJ/pizUq9t1HsweRGhncII2VfYDeQjW8zKo9gQGYreFl7/svIn87zakwUOJYE5S
-         dgClc6KJzz2NU8AIiP5Qi+T3NMY8HhV+Yg3kffTDGILJDCYPcR9MFzcYGA5DaC+gsj
-         xve/gXdeyF8SLGSr1vKKHYq6p+aCxkzvYJS1EeeU=
+        b=zcybpOb9GNIYdyAkHJKkFp9Z0Mck9tXZD77of8AB18CP3ggyoBf13pnuK0j/DyMcY
+         YgdDOBwzlxI4ZwsGmtMuSyY0SfLjGgB7cHahKyJmnTmVdzcjJcFOTFGHETKjiX4Mnu
+         PbCUYwOHE+N2aVpm21c9AnCVHJMoDhUD1umsofv8=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jBfAB-0005wW-Hr; Tue, 10 Mar 2020 14:43:15 +0100
+        id 1jBfAB-0005vn-6e; Tue, 10 Mar 2020 14:43:15 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Harry Wei <harryxiyou@gmail.com>,
-        Alex Shi <alex.shi@linux.alibaba.com>
-Subject: [PATCH v2 17/22] media: docs: kAPI docs: move them to driver-api
-Date:   Tue, 10 Mar 2020 14:43:08 +0100
-Message-Id: <5bffe1ff2266f81062f37dde9c93f71ed17ae5fd.1583847557.git.mchehab+huawei@kernel.org>
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 08/22] media: docs: split development info from cx88.rst
+Date:   Tue, 10 Mar 2020 14:42:59 +0100
+Message-Id: <597a62027b5b9e65990fdcde83f6a4f7cf309f93.1583847556.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1583847556.git.mchehab+huawei@kernel.org>
 References: <cover.1583847556.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-All those documents describe the media driver API. So, move
-them to the right place within the Kernel documentation.
+This file contains both	admin and development stuff. Split on
+two, as	they're	usually	read by	different audiences.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../{media/kapi => driver-api/media}/cec-core.rst    |  0
- .../{media/kapi => driver-api/media}/csi2.rst        |  0
- .../{media/kapi => driver-api/media}/dtv-ca.rst      |  0
- .../{media/kapi => driver-api/media}/dtv-common.rst  |  0
- .../{media/kapi => driver-api/media}/dtv-core.rst    |  0
- .../{media/kapi => driver-api/media}/dtv-demux.rst   |  0
- .../kapi => driver-api/media}/dtv-frontend.rst       |  0
- .../{media/kapi => driver-api/media}/dtv-net.rst     |  0
- .../media_kapi.rst => driver-api/media/index.rst}    | 12 ++++++------
- .../{media/kapi => driver-api/media}/mc-core.rst     |  0
- .../{media/kapi => driver-api/media}/rc-core.rst     |  0
- .../{media/kapi => driver-api/media}/v4l2-async.rst  |  0
- .../{media/kapi => driver-api/media}/v4l2-clocks.rst |  0
- .../{media/kapi => driver-api/media}/v4l2-common.rst |  0
- .../kapi => driver-api/media}/v4l2-controls.rst      |  0
- .../{media/kapi => driver-api/media}/v4l2-core.rst   |  0
- .../{media/kapi => driver-api/media}/v4l2-dev.rst    |  0
- .../{media/kapi => driver-api/media}/v4l2-device.rst |  0
- .../kapi => driver-api/media}/v4l2-dv-timings.rst    |  0
- .../{media/kapi => driver-api/media}/v4l2-event.rst  |  0
- .../{media/kapi => driver-api/media}/v4l2-fh.rst     |  0
- .../media}/v4l2-flash-led-class.rst                  |  0
- .../{media/kapi => driver-api/media}/v4l2-fwnode.rst |  0
- .../{media/kapi => driver-api/media}/v4l2-intro.rst  |  0
- .../{media/kapi => driver-api/media}/v4l2-mc.rst     |  0
- .../kapi => driver-api/media}/v4l2-mediabus.rst      |  0
- .../kapi => driver-api/media}/v4l2-mem2mem.rst       |  0
- .../{media/kapi => driver-api/media}/v4l2-rect.rst   |  0
- .../{media/kapi => driver-api/media}/v4l2-subdev.rst |  0
- .../{media/kapi => driver-api/media}/v4l2-tuner.rst  |  0
- .../kapi => driver-api/media}/v4l2-tveeprom.rst      |  0
- .../kapi => driver-api/media}/v4l2-videobuf.rst      |  0
- .../kapi => driver-api/media}/v4l2-videobuf2.rst     |  0
- Documentation/media/index.rst                        |  2 +-
- Documentation/media/v4l-drivers/max2175.rst          |  2 +-
- .../zh_CN/video4linux/v4l2-framework.txt             |  6 +++---
- MAINTAINERS                                          |  4 +++-
- 37 files changed, 14 insertions(+), 12 deletions(-)
- rename Documentation/{media/kapi => driver-api/media}/cec-core.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/csi2.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/dtv-ca.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/dtv-common.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/dtv-core.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/dtv-demux.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/dtv-frontend.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/dtv-net.rst (100%)
- rename Documentation/{media/media_kapi.rst => driver-api/media/index.rst} (89%)
- rename Documentation/{media/kapi => driver-api/media}/mc-core.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/rc-core.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-async.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-clocks.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-common.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-controls.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-core.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-dev.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-device.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-dv-timings.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-event.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-fh.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-flash-led-class.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-fwnode.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-intro.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-mc.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-mediabus.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-mem2mem.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-rect.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-subdev.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-tuner.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-tveeprom.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-videobuf.rst (100%)
- rename Documentation/{media/kapi => driver-api/media}/v4l2-videobuf2.rst (100%)
+ .../media/v4l-drivers/cx88-devel.rst          | 113 ++++++++++++++++++
+ Documentation/media/v4l-drivers/cx88.rst      | 107 -----------------
+ Documentation/media/v4l-drivers/index.rst     |   1 +
+ 3 files changed, 114 insertions(+), 107 deletions(-)
+ create mode 100644 Documentation/media/v4l-drivers/cx88-devel.rst
 
-diff --git a/Documentation/media/kapi/cec-core.rst b/Documentation/driver-api/media/cec-core.rst
-similarity index 100%
-rename from Documentation/media/kapi/cec-core.rst
-rename to Documentation/driver-api/media/cec-core.rst
-diff --git a/Documentation/media/kapi/csi2.rst b/Documentation/driver-api/media/csi2.rst
-similarity index 100%
-rename from Documentation/media/kapi/csi2.rst
-rename to Documentation/driver-api/media/csi2.rst
-diff --git a/Documentation/media/kapi/dtv-ca.rst b/Documentation/driver-api/media/dtv-ca.rst
-similarity index 100%
-rename from Documentation/media/kapi/dtv-ca.rst
-rename to Documentation/driver-api/media/dtv-ca.rst
-diff --git a/Documentation/media/kapi/dtv-common.rst b/Documentation/driver-api/media/dtv-common.rst
-similarity index 100%
-rename from Documentation/media/kapi/dtv-common.rst
-rename to Documentation/driver-api/media/dtv-common.rst
-diff --git a/Documentation/media/kapi/dtv-core.rst b/Documentation/driver-api/media/dtv-core.rst
-similarity index 100%
-rename from Documentation/media/kapi/dtv-core.rst
-rename to Documentation/driver-api/media/dtv-core.rst
-diff --git a/Documentation/media/kapi/dtv-demux.rst b/Documentation/driver-api/media/dtv-demux.rst
-similarity index 100%
-rename from Documentation/media/kapi/dtv-demux.rst
-rename to Documentation/driver-api/media/dtv-demux.rst
-diff --git a/Documentation/media/kapi/dtv-frontend.rst b/Documentation/driver-api/media/dtv-frontend.rst
-similarity index 100%
-rename from Documentation/media/kapi/dtv-frontend.rst
-rename to Documentation/driver-api/media/dtv-frontend.rst
-diff --git a/Documentation/media/kapi/dtv-net.rst b/Documentation/driver-api/media/dtv-net.rst
-similarity index 100%
-rename from Documentation/media/kapi/dtv-net.rst
-rename to Documentation/driver-api/media/dtv-net.rst
-diff --git a/Documentation/media/media_kapi.rst b/Documentation/driver-api/media/index.rst
-similarity index 89%
-rename from Documentation/media/media_kapi.rst
-rename to Documentation/driver-api/media/index.rst
-index 1389998c90f7..d2842f300bbd 100644
---- a/Documentation/media/media_kapi.rst
-+++ b/Documentation/driver-api/media/index.rst
-@@ -30,9 +30,9 @@ For more details see the file COPYING in the source distribution of Linux.
-     :maxdepth: 5
-     :numbered:
+diff --git a/Documentation/media/v4l-drivers/cx88-devel.rst b/Documentation/media/v4l-drivers/cx88-devel.rst
+new file mode 100644
+index 000000000000..cfe7c03f4930
+--- /dev/null
++++ b/Documentation/media/v4l-drivers/cx88-devel.rst
+@@ -0,0 +1,113 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++The cx88 driver
++===============
++
++Author:  Gerd Hoffmann
++
++Documentation missing at the cx88 datasheet
++-------------------------------------------
++
++MO_OUTPUT_FORMAT (0x310164)
++
++.. code-block:: none
++
++  Previous default from DScaler: 0x1c1f0008
++  Digit 8: 31-28
++  28: PREVREMOD = 1
++
++  Digit 7: 27-24 (0xc = 12 = b1100 )
++  27: COMBALT = 1
++  26: PAL_INV_PHASE
++    (DScaler apparently set this to 1, resulted in sucky picture)
++
++  Digits 6,5: 23-16
++  25-16: COMB_RANGE = 0x1f [default] (9 bits -> max 512)
++
++  Digit 4: 15-12
++  15: DISIFX = 0
++  14: INVCBF = 0
++  13: DISADAPT = 0
++  12: NARROWADAPT = 0
++
++  Digit 3: 11-8
++  11: FORCE2H
++  10: FORCEREMD
++  9: NCHROMAEN
++  8: NREMODEN
++
++  Digit 2: 7-4
++  7-6: YCORE
++  5-4: CCORE
++
++  Digit 1: 3-0
++  3: RANGE = 1
++  2: HACTEXT
++  1: HSFMT
++
++0x47 is the sync byte for MPEG-2 transport stream packets.
++Datasheet incorrectly states to use 47 decimal. 188 is the length.
++All DVB compliant frontends output packets with this start code.
++
++Hauppauge WinTV cx88 IR information
++-----------------------------------
++
++The controls for the mux are GPIO [0,1] for source, and GPIO 2 for muting.
++
++====== ======== =================================================
++GPIO0  GPIO1
++====== ======== =================================================
++  0        0    TV Audio
++  1        0    FM radio
++  0        1    Line-In
++  1        1    Mono tuner bypass or CD passthru (tuner specific)
++====== ======== =================================================
++
++GPIO 16(I believe) is tied to the IR port (if present).
++
++
++From the data sheet:
++
++- Register 24'h20004  PCI Interrupt Status
++
++ - bit [18]  IR_SMP_INT Set when 32 input samples have been collected over
++ - gpio[16] pin into GP_SAMPLE register.
++
++What's missing from the data sheet:
++
++- Setup 4KHz sampling rate (roughly 2x oversampled; good enough for our RC5
++  compat remote)
++- set register 0x35C050 to  0xa80a80
++- enable sampling
++- set register 0x35C054 to 0x5
++- enable the IRQ bit 18 in the interrupt mask register (and
++  provide for a handler)
++
++GP_SAMPLE register is at 0x35C058
++
++Bits are then right shifted into the GP_SAMPLE register at the specified
++rate; you get an interrupt when a full DWORD is received.
++You need to recover the actual RC5 bits out of the (oversampled) IR sensor
++bits. (Hint: look for the 0/1and 1/0 crossings of the RC5 bi-phase data)  An
++actual raw RC5 code will span 2-3 DWORDS, depending on the actual alignment.
++
++I'm pretty sure when no IR signal is present the receiver is always in a
++marking state(1); but stray light, etc can cause intermittent noise values
++as well.  Remember, this is a free running sample of the IR receiver state
++over time, so don't assume any sample starts at any particular place.
++
++Additional info
++~~~~~~~~~~~~~~~
++
++This data sheet (google search) seems to have a lovely description of the
++RC5 basics:
++http://www.atmel.com/dyn/resources/prod_documents/doc2817.pdf
++
++This document has more data:
++http://www.nenya.be/beor/electronics/rc5.htm
++
++This document has a  how to decode a bi-phase data stream:
++http://www.ee.washington.edu/circuit_archive/text/ir_decode.txt
++
++This document has still more info:
++http://www.xs4all.nl/~sbp/knowledge/ir/rc5.htm
+diff --git a/Documentation/media/v4l-drivers/cx88.rst b/Documentation/media/v4l-drivers/cx88.rst
+index 698c73ea2e36..e4badb18199d 100644
+--- a/Documentation/media/v4l-drivers/cx88.rst
++++ b/Documentation/media/v4l-drivers/cx88.rst
+@@ -56,110 +56,3 @@ the driver.  What to do then?
+        trial-and-error using the tuner=<n> insmod option.  If you
+        know which one the card has you can also have a look at the
+        list in CARDLIST.tuner
+-
+-Documentation missing at the cx88 datasheet
+--------------------------------------------
+-
+-MO_OUTPUT_FORMAT (0x310164)
+-
+-.. code-block:: none
+-
+-  Previous default from DScaler: 0x1c1f0008
+-  Digit 8: 31-28
+-  28: PREVREMOD = 1
+-
+-  Digit 7: 27-24 (0xc = 12 = b1100 )
+-  27: COMBALT = 1
+-  26: PAL_INV_PHASE
+-    (DScaler apparently set this to 1, resulted in sucky picture)
+-
+-  Digits 6,5: 23-16
+-  25-16: COMB_RANGE = 0x1f [default] (9 bits -> max 512)
+-
+-  Digit 4: 15-12
+-  15: DISIFX = 0
+-  14: INVCBF = 0
+-  13: DISADAPT = 0
+-  12: NARROWADAPT = 0
+-
+-  Digit 3: 11-8
+-  11: FORCE2H
+-  10: FORCEREMD
+-  9: NCHROMAEN
+-  8: NREMODEN
+-
+-  Digit 2: 7-4
+-  7-6: YCORE
+-  5-4: CCORE
+-
+-  Digit 1: 3-0
+-  3: RANGE = 1
+-  2: HACTEXT
+-  1: HSFMT
+-
+-0x47 is the sync byte for MPEG-2 transport stream packets.
+-Datasheet incorrectly states to use 47 decimal. 188 is the length.
+-All DVB compliant frontends output packets with this start code.
+-
+-Hauppauge WinTV cx88 IR information
+------------------------------------
+-
+-The controls for the mux are GPIO [0,1] for source, and GPIO 2 for muting.
+-
+-====== ======== =================================================
+-GPIO0  GPIO1
+-====== ======== =================================================
+-  0        0    TV Audio
+-  1        0    FM radio
+-  0        1    Line-In
+-  1        1    Mono tuner bypass or CD passthru (tuner specific)
+-====== ======== =================================================
+-
+-GPIO 16(I believe) is tied to the IR port (if present).
+-
+-
+-From the data sheet:
+-
+-- Register 24'h20004  PCI Interrupt Status
+-
+- - bit [18]  IR_SMP_INT Set when 32 input samples have been collected over
+- - gpio[16] pin into GP_SAMPLE register.
+-
+-What's missing from the data sheet:
+-
+-- Setup 4KHz sampling rate (roughly 2x oversampled; good enough for our RC5
+-  compat remote)
+-- set register 0x35C050 to  0xa80a80
+-- enable sampling
+-- set register 0x35C054 to 0x5
+-- enable the IRQ bit 18 in the interrupt mask register (and
+-  provide for a handler)
+-
+-GP_SAMPLE register is at 0x35C058
+-
+-Bits are then right shifted into the GP_SAMPLE register at the specified
+-rate; you get an interrupt when a full DWORD is received.
+-You need to recover the actual RC5 bits out of the (oversampled) IR sensor
+-bits. (Hint: look for the 0/1and 1/0 crossings of the RC5 bi-phase data)  An
+-actual raw RC5 code will span 2-3 DWORDS, depending on the actual alignment.
+-
+-I'm pretty sure when no IR signal is present the receiver is always in a
+-marking state(1); but stray light, etc can cause intermittent noise values
+-as well.  Remember, this is a free running sample of the IR receiver state
+-over time, so don't assume any sample starts at any particular place.
+-
+-Additional info
+-~~~~~~~~~~~~~~~
+-
+-This data sheet (google search) seems to have a lovely description of the
+-RC5 basics:
+-http://www.atmel.com/dyn/resources/prod_documents/doc2817.pdf
+-
+-This document has more data:
+-http://www.nenya.be/beor/electronics/rc5.htm
+-
+-This document has a  how to decode a bi-phase data stream:
+-http://www.ee.washington.edu/circuit_archive/text/ir_decode.txt
+-
+-This document has still more info:
+-http://www.xs4all.nl/~sbp/knowledge/ir/rc5.htm
+diff --git a/Documentation/media/v4l-drivers/index.rst b/Documentation/media/v4l-drivers/index.rst
+index 52d7c8d14ee7..dfc878c050da 100644
+--- a/Documentation/media/v4l-drivers/index.rst
++++ b/Documentation/media/v4l-drivers/index.rst
+@@ -68,6 +68,7 @@ For more details see the file COPYING in the source distribution of Linux.
  
--    kapi/v4l2-core
--    kapi/dtv-core
--    kapi/rc-core
--    kapi/mc-core
--    kapi/cec-core
--    kapi/csi2
-+    v4l2-core
-+    dtv-core
-+    rc-core
-+    mc-core
-+    cec-core
-+    csi2
-diff --git a/Documentation/media/kapi/mc-core.rst b/Documentation/driver-api/media/mc-core.rst
-similarity index 100%
-rename from Documentation/media/kapi/mc-core.rst
-rename to Documentation/driver-api/media/mc-core.rst
-diff --git a/Documentation/media/kapi/rc-core.rst b/Documentation/driver-api/media/rc-core.rst
-similarity index 100%
-rename from Documentation/media/kapi/rc-core.rst
-rename to Documentation/driver-api/media/rc-core.rst
-diff --git a/Documentation/media/kapi/v4l2-async.rst b/Documentation/driver-api/media/v4l2-async.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-async.rst
-rename to Documentation/driver-api/media/v4l2-async.rst
-diff --git a/Documentation/media/kapi/v4l2-clocks.rst b/Documentation/driver-api/media/v4l2-clocks.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-clocks.rst
-rename to Documentation/driver-api/media/v4l2-clocks.rst
-diff --git a/Documentation/media/kapi/v4l2-common.rst b/Documentation/driver-api/media/v4l2-common.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-common.rst
-rename to Documentation/driver-api/media/v4l2-common.rst
-diff --git a/Documentation/media/kapi/v4l2-controls.rst b/Documentation/driver-api/media/v4l2-controls.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-controls.rst
-rename to Documentation/driver-api/media/v4l2-controls.rst
-diff --git a/Documentation/media/kapi/v4l2-core.rst b/Documentation/driver-api/media/v4l2-core.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-core.rst
-rename to Documentation/driver-api/media/v4l2-core.rst
-diff --git a/Documentation/media/kapi/v4l2-dev.rst b/Documentation/driver-api/media/v4l2-dev.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-dev.rst
-rename to Documentation/driver-api/media/v4l2-dev.rst
-diff --git a/Documentation/media/kapi/v4l2-device.rst b/Documentation/driver-api/media/v4l2-device.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-device.rst
-rename to Documentation/driver-api/media/v4l2-device.rst
-diff --git a/Documentation/media/kapi/v4l2-dv-timings.rst b/Documentation/driver-api/media/v4l2-dv-timings.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-dv-timings.rst
-rename to Documentation/driver-api/media/v4l2-dv-timings.rst
-diff --git a/Documentation/media/kapi/v4l2-event.rst b/Documentation/driver-api/media/v4l2-event.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-event.rst
-rename to Documentation/driver-api/media/v4l2-event.rst
-diff --git a/Documentation/media/kapi/v4l2-fh.rst b/Documentation/driver-api/media/v4l2-fh.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-fh.rst
-rename to Documentation/driver-api/media/v4l2-fh.rst
-diff --git a/Documentation/media/kapi/v4l2-flash-led-class.rst b/Documentation/driver-api/media/v4l2-flash-led-class.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-flash-led-class.rst
-rename to Documentation/driver-api/media/v4l2-flash-led-class.rst
-diff --git a/Documentation/media/kapi/v4l2-fwnode.rst b/Documentation/driver-api/media/v4l2-fwnode.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-fwnode.rst
-rename to Documentation/driver-api/media/v4l2-fwnode.rst
-diff --git a/Documentation/media/kapi/v4l2-intro.rst b/Documentation/driver-api/media/v4l2-intro.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-intro.rst
-rename to Documentation/driver-api/media/v4l2-intro.rst
-diff --git a/Documentation/media/kapi/v4l2-mc.rst b/Documentation/driver-api/media/v4l2-mc.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-mc.rst
-rename to Documentation/driver-api/media/v4l2-mc.rst
-diff --git a/Documentation/media/kapi/v4l2-mediabus.rst b/Documentation/driver-api/media/v4l2-mediabus.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-mediabus.rst
-rename to Documentation/driver-api/media/v4l2-mediabus.rst
-diff --git a/Documentation/media/kapi/v4l2-mem2mem.rst b/Documentation/driver-api/media/v4l2-mem2mem.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-mem2mem.rst
-rename to Documentation/driver-api/media/v4l2-mem2mem.rst
-diff --git a/Documentation/media/kapi/v4l2-rect.rst b/Documentation/driver-api/media/v4l2-rect.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-rect.rst
-rename to Documentation/driver-api/media/v4l2-rect.rst
-diff --git a/Documentation/media/kapi/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-subdev.rst
-rename to Documentation/driver-api/media/v4l2-subdev.rst
-diff --git a/Documentation/media/kapi/v4l2-tuner.rst b/Documentation/driver-api/media/v4l2-tuner.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-tuner.rst
-rename to Documentation/driver-api/media/v4l2-tuner.rst
-diff --git a/Documentation/media/kapi/v4l2-tveeprom.rst b/Documentation/driver-api/media/v4l2-tveeprom.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-tveeprom.rst
-rename to Documentation/driver-api/media/v4l2-tveeprom.rst
-diff --git a/Documentation/media/kapi/v4l2-videobuf.rst b/Documentation/driver-api/media/v4l2-videobuf.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-videobuf.rst
-rename to Documentation/driver-api/media/v4l2-videobuf.rst
-diff --git a/Documentation/media/kapi/v4l2-videobuf2.rst b/Documentation/driver-api/media/v4l2-videobuf2.rst
-similarity index 100%
-rename from Documentation/media/kapi/v4l2-videobuf2.rst
-rename to Documentation/driver-api/media/v4l2-videobuf2.rst
-diff --git a/Documentation/media/index.rst b/Documentation/media/index.rst
-index 8118c2d001ff..308f6a396d1c 100644
---- a/Documentation/media/index.rst
-+++ b/Documentation/media/index.rst
-@@ -13,7 +13,7 @@ Linux Media Subsystem Documentation
-    :maxdepth: 2
+ 	bttv-devel
+ 	cpia2_devel
++	cx88-devel
+ 	vimc-devel
  
-    ../userspace-api/media/index
--   media_kapi
-+   ../driver-api/media/index
-    dvb-drivers/index
-    v4l-drivers/index
-    cec-drivers/index
-diff --git a/Documentation/media/v4l-drivers/max2175.rst b/Documentation/media/v4l-drivers/max2175.rst
-index a5e35059d98d..35d3c4b41fc7 100644
---- a/Documentation/media/v4l-drivers/max2175.rst
-+++ b/Documentation/media/v4l-drivers/max2175.rst
-@@ -9,7 +9,7 @@ The MAX2175 driver implements the following driver-specific controls:
- -------------------------------
-     Enable/Disable I2S output of the tuner. This is a private control
-     that can be accessed only using the subdev interface.
--    Refer to Documentation/media/kapi/v4l2-controls.rst for more details.
-+    Refer to Documentation/driver-api/media/v4l2-controls.rst for more details.
- 
- .. flat-table::
-     :header-rows:  0
-diff --git a/Documentation/translations/zh_CN/video4linux/v4l2-framework.txt b/Documentation/translations/zh_CN/video4linux/v4l2-framework.txt
-index 9c39ee58ea50..4d2af480a112 100644
---- a/Documentation/translations/zh_CN/video4linux/v4l2-framework.txt
-+++ b/Documentation/translations/zh_CN/video4linux/v4l2-framework.txt
-@@ -1,4 +1,4 @@
--Chinese translated version of Documentation/media/media_kapi.rst
-+Chinese translated version of Documentation/driver-api/media/index.rst
- 
- If you have any comment or update to the content, please contact the
- original document maintainer directly.  However, if you have a problem
-@@ -9,7 +9,7 @@ or if there is a problem with the translation.
- Maintainer: Mauro Carvalho Chehab <mchehab@kernel.org>
- Chinese maintainer: Fu Wei <tekkamanninja@gmail.com>
- ---------------------------------------------------------------------
--Documentation/media/media_kapi.rst 的中文翻译
-+Documentation/driver-api/media/index.rst 的中文翻译
- 
- 如果想评论或更新本文的内容，请直接联系原文档的维护者。如果你使用英文
- 交流有困难的话，也可以向中文版维护者求助。如果本翻译更新不及时或者翻
-@@ -777,7 +777,7 @@ v4l2 核心 API 提供了一个处理视频缓冲的标准方法(称为“videob
- 线性 DMA(videobuf-dma-contig)以及大多用于 USB 设备的用 vmalloc
- 分配的缓冲(videobuf-vmalloc)。
- 
--请参阅 Documentation/media/kapi/v4l2-videobuf.rst，以获得更多关于 videobuf
-+请参阅 Documentation/driver-api/media/v4l2-videobuf.rst，以获得更多关于 videobuf
- 层的使用信息。
- 
- v4l2_fh 结构体
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0ce0a1c93961..b5af1feb5ba1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3853,7 +3853,7 @@ L:	linux-media@vger.kernel.org
- T:	git git://linuxtv.org/media_tree.git
- W:	http://linuxtv.org
- S:	Supported
--F:	Documentation/media/kapi/cec-core.rst
-+F:	Documentation/driver-api/media/cec-core.rst
- F:	Documentation/userspace-api/media/cec
- F:	drivers/media/cec/
- F:	drivers/media/rc/keymaps/rc-cec.c
-@@ -5109,6 +5109,7 @@ X:	Documentation/devicetree/
- X:	Documentation/i2c/
- X:	Documentation/media/
- X:	Documentation/userspace-api/media/
-+X:	Documentation/driver-api/media/
- X:	Documentation/power/
- X:	Documentation/spi/
- T:	git git://git.lwn.net/linux.git docs-next
-@@ -10489,6 +10490,7 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/media/
- F:	Documentation/media/
- F:	Documentation/userspace-api/media/
-+F:	Documentation/driver-api/media/
- F:	drivers/media/
- F:	drivers/staging/media/
- F:	include/linux/platform_data/media/
+ 	meye-uapi
 -- 
 2.24.1
 
