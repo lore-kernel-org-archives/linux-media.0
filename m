@@ -2,258 +2,98 @@ Return-Path: <SRS0=PJJM=43=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9E95C18E5B
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:46:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E447C10F27
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:57:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B854C20637
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:46:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7811524684
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:57:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rXeiEXfd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oxgQQEls"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727186AbgCJNqL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Mar 2020 09:46:11 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:37805 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726390AbgCJNqL (ORCPT
+        id S1726697AbgCJN5e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Mar 2020 09:57:34 -0400
+Received: from mail-lf1-f53.google.com ([209.85.167.53]:45589 "EHLO
+        mail-lf1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726380AbgCJN5e (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Mar 2020 09:46:11 -0400
-Received: by mail-wm1-f66.google.com with SMTP id a141so1419024wme.2
-        for <linux-media@vger.kernel.org>; Tue, 10 Mar 2020 06:46:09 -0700 (PDT)
+        Tue, 10 Mar 2020 09:57:34 -0400
+Received: by mail-lf1-f53.google.com with SMTP id b13so10926726lfb.12;
+        Tue, 10 Mar 2020 06:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5NwK13KieE3g1pIeISpKvFgafrteuLKq6QKuAvKr48w=;
-        b=rXeiEXfdr7tjum0cLwUO3W6F2kslF/2sogUyrT2+BzLXOSZ5FDRTKKnUxD/2OnR4KU
-         QhGF45RfRZrsJX3jzztasXZvdaRCYT7jXLEhYv0228ryhXtrVKPfEefIYRpee0hfwaSW
-         3zHp8m60zHbsae3fzH/X7rkoXOdHXwZ05Vvs3WJ38yuOruHMfb2JhQLoaIb17Ppxu/gX
-         ZnTx2S9+esDpmKekZGJWHeR6tYipahZfAjzHWIIGfgOBlcH8aOeDfho3nenzVHF90NHM
-         iQpyHOjQc7oQLYpAvRXAbKU/OQZDmzuTLgdbITfCUb0uIGHeOwo3g1OrsDjr6PXa1QkN
-         TN8w==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a1V7f1F0LQmjo7Lwkhxv0H2OITNt4DTANxKKHcaVDpM=;
+        b=oxgQQElsrxUHhCc9YjPXkd1tmnpRDKrP2gylnsR6DYAg5/FRO3tM2yHIDEpDIRRHKv
+         v0mTqFr60upqjPDGSSgbTNZVGy0Gtrw8tXRTiZGWUVmbozdhWNpOY8YHW41xpBJ5pKog
+         iuw9inydwR+1ITq+9XwPniSknR7N6dgNcY00owCmIPBUEMaBZ34u13knQFEBk1pYHORI
+         cuaBSUXFPqhyYWzjjFA7/DMcAucFdHw06PYnD+Qdc8fzDQxUQcqx0AAquECXRp8b2pJM
+         9hFcj8+CdlmAcmbzAsksu3YLBO0ycaSiFHW/9jahGY5H6SUqkt40jAn+DQhELgWlqRq5
+         zqww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5NwK13KieE3g1pIeISpKvFgafrteuLKq6QKuAvKr48w=;
-        b=O0tyUHzWxD/DHuMLnxBthL5fW3izdA2C5wPRcJYX+w8KwyjG3Wc8PQMdtQNLRaaS6B
-         ScCAyr/025SHgLph9+oiXwdQhqiupLuuaiqTgxvbQAaaZCU0h332dK9ZOUUmuMXHLj1f
-         2THcxYFm2fyhVV1Hy8+pJWRADZdgu+HfqyVEdb7ljBMXkb01gtJRgrevA3cPew2K6vvO
-         BGIaIsna5mIFpy+i+0/pux5gZtMQWvCb0ZCi3fJKEYJKFZ6TW8ruG8osH8pECtk0b1qj
-         LRm28sHKvEX+ZGygGvksTS1UvY0k3LTUzRhJi/pvOpgMNkl6+UcxTbiMBpNptuDN2WlZ
-         cV9A==
-X-Gm-Message-State: ANhLgQ1bJaocglMKvnOMsFZnAmCJv+aKxHICu+f1J9T2UhlLk4ls/Bj7
-        ei/Od1EaWcIITjTTlNFhHMWM9Ds3NNPNyQ==
-X-Google-Smtp-Source: ADFU+vvWt6YpCG/aVLT7zR8itYjJEPxmlt7m0lDbV7z3qHBNn7BGYYp5d5wuRM+Dt+u1OBEAV74Yew==
-X-Received: by 2002:a1c:4d13:: with SMTP id o19mr2306219wmh.186.1583847968866;
-        Tue, 10 Mar 2020 06:46:08 -0700 (PDT)
-Received: from xps7590.local ([2a02:2450:102f:13b8:e50c:c780:9a1:8b61])
-        by smtp.gmail.com with ESMTPSA id d63sm4074009wmd.44.2020.03.10.06.46.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 06:46:08 -0700 (PDT)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     ben.kao@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, matthias.bgg@gmail.com, davem@davemloft.net,
-        gregkh@linuxfoundation.org, Jonathan.Cameron@huawei.com,
-        andriy.shevchenko@linux.intel.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>
-Subject: [v1 1/3] media: dt-bindings: ov8856: Document YAML bindings
-Date:   Tue, 10 Mar 2020 14:46:01 +0100
-Message-Id: <20200310134603.30260-2-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200310134603.30260-1-robert.foss@linaro.org>
-References: <20200310134603.30260-1-robert.foss@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a1V7f1F0LQmjo7Lwkhxv0H2OITNt4DTANxKKHcaVDpM=;
+        b=ce02AJPdZXga8U4aw0X5YN1rMSLCN747mmGrfDjgM3Rv1JFHQl2Jb/yAVPhqiq0c1b
+         k6TBSEYRpVEpoxrc1hhF6ahIk+SIJ+1fqw+vl1T1N0fYEBOF2eQdN3ME/+yhnRmY+UFJ
+         Mq0bBxj+qgXAOBJXlLVD17dg0hw2cgjuUt338/VVIvmFZY8hWjk9rH856DjiFhSyM2QW
+         bGxNlDshkuNSrL3KfNNPuspKBal0i2IE/mDxuzwPijf4lXAKR9M1gCv74eAL22GPk1ZH
+         KjnoO1j7f+/BR2XfMAj3NHQ0GbJ5CEXHDBPO9TJ0z6h0oPINqkK2dnh41NIPVEpoo4to
+         Pi2g==
+X-Gm-Message-State: ANhLgQ3d/yHLsB5/TFifhNW6FMCR0VHkFLMeXmSX7yWgjgNOkS/JtsTR
+        K90nIv2kW9SahMhbyoljjkHzMflzBagELPV1ooM=
+X-Google-Smtp-Source: ADFU+vsInh8fH3rOKgWvw4Sp1i/c3pYIMP6oFihYh35j+7wlxleB92/F9wsbHoy+4eLgsGT19IloKcl8gLA6bIcetZk=
+X-Received: by 2002:a05:6512:1054:: with SMTP id c20mr12605269lfb.69.1583848651279;
+ Tue, 10 Mar 2020 06:57:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200310134603.30260-1-robert.foss@linaro.org> <20200310134603.30260-2-robert.foss@linaro.org>
+In-Reply-To: <20200310134603.30260-2-robert.foss@linaro.org>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 10 Mar 2020 10:57:22 -0300
+Message-ID: <CAOMZO5C9Oj+SmTroE+bSsGcOPpz6se+WOqw1qJU9x6TrzbzZKw@mail.gmail.com>
+Subject: Re: [v1 1/3] media: dt-bindings: ov8856: Document YAML bindings
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     ben.kao@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan.Cameron@huawei.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Tomasz Figa <tfiga@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dongchun Zhu <dongchun.zhu@mediatek.com>
+Hi Robert,
 
-This patch adds documentation of device tree in YAML schema for the
-OV8856 CMOS image sensor.
+On Tue, Mar 10, 2020 at 10:46 AM Robert Foss <robert.foss@linaro.org> wrote:
 
-Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
----
+> +    ov8856: camera-sensor@10 {
+> +        compatible = "ovti,ov8856";
+> +        reg = <0x10>;
+> +        reset-gpios = <&pio 111 GPIO_ACTIVE_HIGH>;
 
-- Changes since v3:
-  * robher: Fix syntax error
-  * robher: Removed maxItems
-  * Fixes yaml 'make dt-binding-check' errors
+Could you double check this is correct? Other OmniVision sensors have
+reset-gpios as active low.
 
-- Changes since v2:
-  Fixes comments from from Andy, Tomasz, Sakari, Rob.
-  * Convert text documentation to YAML schema.
+I suspect that the driver has also an inverted logic, so that's why it works.
 
-- Changes since v1:
-  Fixes comments from Sakari, Tomasz
-  * Add clock-frequency and link-frequencies in DT
-
- .../devicetree/bindings/media/i2c/ov8856.yaml | 129 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 130 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-
-diff --git a/Documentation/devicetree/bindings/media/i2c/ov8856.yaml b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-new file mode 100644
-index 000000000000..c8099ccab1d9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-@@ -0,0 +1,129 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (c) 2019 MediaTek Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ov8856.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Omnivision OV8856 CMOS Sensor Device Tree Bindings
-+
-+maintainers:
-+  - Ben Kao <ben.kao@intel.com>
-+  - Dongchun Zhu <dongchun.zhu@mediatek.com>
-+
-+description: |-
-+  The Omnivision OV8856 is a high performance, 1/4-inch, 8 megapixel, CMOS
-+  image sensor that delivers 3264x2448 at 30fps. It provides full-frame,
-+  sub-sampled, and windowed 10-bit MIPI images in various formats via the
-+  Serial Camera Control Bus (SCCB) interface. This chip is programmable
-+  through I2C and two-wire SCCB. The sensor output is available via CSI-2
-+  serial data output (up to 4-lane).
-+
-+properties:
-+  compatible:
-+    const: ovti,ov8856
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    description:
-+      Input clock for the sensor.
-+    items:
-+      - const: xvclk
-+
-+  clock-frequency:
-+    description:
-+      Frequency of the xvclk clock in Hertz.
-+
-+  dovdd-supply:
-+    description:
-+      Definition of the regulator used as interface power supply.
-+
-+  avdd-supply:
-+    description:
-+      Definition of the regulator used as analog power supply.
-+
-+  dvdd-supply:
-+    description:
-+      Definition of the regulator used as digital power supply.
-+
-+  reset-gpios:
-+    description:
-+      The phandle and specifier for the GPIO that controls sensor reset.
-+
-+  port:
-+    type: object
-+    additionalProperties: false
-+    description:
-+      A node containing input and output port nodes with endpoint definitions
-+      as documented in
-+      Documentation/devicetree/bindings/media/video-interfaces.txt
-+
-+    properties:
-+      endpoint:
-+        type: object
-+
-+        properties:
-+          clock-lanes:
-+            maxItems: 1
-+
-+          data-lanes:
-+            maxItems: 1
-+
-+          remote-endpoint: true
-+
-+        required:
-+          - clock-lanes
-+          - data-lanes
-+          - remote-endpoint
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - clock-frequency
-+  - dovdd-supply
-+  - avdd-supply
-+  - dvdd-supply
-+  - reset-gpios
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    ov8856: camera-sensor@10 {
-+        compatible = "ovti,ov8856";
-+        reg = <0x10>;
-+        reset-gpios = <&pio 111 GPIO_ACTIVE_HIGH>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&clk_24m_cam>;
-+
-+        clocks = <&cru SCLK_TESTCLKOUT1>;
-+        clock-names = "xvclk";
-+        clock-frequency = <19200000>;
-+
-+        avdd-supply = <&mt6358_vcama2_reg>;
-+        dvdd-supply = <&mt6358_vcamd_reg>;
-+        dovdd-supply = <&mt6358_vcamio_reg>;
-+
-+        port {
-+            wcam_out: endpoint {
-+                remote-endpoint = <&mipi_in_wcam>;
-+                data-lanes = <1 2 3 4>;
-+                link-frequencies = /bits/ 64 <360000000 180000000>;
-+            };
-+        };
-+    };
-+
-+...
-\ No newline at end of file
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a6fbdf354d34..0f99e863978a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12355,6 +12355,7 @@ L:	linux-media@vger.kernel.org
- T:	git git://linuxtv.org/media_tree.git
- S:	Maintained
- F:	drivers/media/i2c/ov8856.c
-+F:	Documentation/devicetree/bindings/media/i2c/ov8856.yaml
- 
- OMNIVISION OV9650 SENSOR DRIVER
- M:	Sakari Ailus <sakari.ailus@linux.intel.com>
--- 
-2.20.1
-
+I don't have access to the datasheet though, so I am just guessing.
