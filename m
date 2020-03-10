@@ -2,360 +2,178 @@ Return-Path: <SRS0=PJJM=43=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF86C18E5A
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:17:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EAB2C18E5A
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:32:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 49ADC20873
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:17:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 258E224681
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:32:08 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=renesasgroup.onmicrosoft.com header.i=@renesasgroup.onmicrosoft.com header.b="Dqk65sEm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731647AbgCJNRt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Mar 2020 09:17:49 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:48830 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731440AbgCJNRl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Mar 2020 09:17:41 -0400
-X-IronPort-AV: E=Sophos;i="5.70,537,1574089200"; 
-   d="scan'208";a="41284254"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 10 Mar 2020 22:17:40 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 542CB4290414;
-        Tue, 10 Mar 2020 22:17:38 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v4 2/3] media: i2c: imx219: Add support for RAW8 bit bayer format
-Date:   Tue, 10 Mar 2020 13:17:08 +0000
-Message-Id: <1583846229-6799-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1583846229-6799-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1583846229-6799-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1728915AbgCJNcG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Mar 2020 09:32:06 -0400
+Received: from mail-eopbgr1410101.outbound.protection.outlook.com ([40.107.141.101]:33513
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728218AbgCJNcG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Mar 2020 09:32:06 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lgCkZmy26pUqI/3EoyysuCzSCIVjsB1fNPypMc+fj8f0pfqeTi2+C5Bc9IUYWa8sYhYoHMHPccd0h8Tkv7pcL2Asa0LN2WEk+ipETGmZDxME4Sa5t71dhgeY2+Vrnr0PnfjTEtL6cZtJ7SSIon5W/BMGsPhD0KTVB7rEe1G4Qx+de8fEzQUCIsZGEtER/7SCKZgkRj6XTLZKLhmPiYvwGbJWR7uU7NmPNfrpDCaCbPey5KRBZU0BdxVTQxzp8j5mk3/toyKiF8tdfKI211cSb7XdZK5XL2Cnf4A6gv1mJ6ktfBkMhW7+5Qr3HAIjKHvNmMMuunkVzDTsuDra2j4odA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p4NY/WWErLq5lZkjl2MizQht6hx1KXOP1yGn0Kwd/DE=;
+ b=OkshEY/zPHLab2K0obFn7Ar1GSoh/FWj3i/QlT38c76Jz2RZ/C91kRsmrKXBc/PGwDVYcjUBCdZuum3Q69rX/fqtCx6SABoLg/lC8Yrp2TtNKp/avHrPFZKwkdPSjtMzGqbTvqDb4X23H9xJ2WGi6L3HZGRumguD2v9bz9V29B00H3Q6TuzsL+4yD0XdhV9umzCeBpID6uQwTztHq6dqHgxAmLv6NdGgbbsz6w665/3SdUFqCmBiQx+r8lCns7J9mfW8Cs+lCFoFN+2UvVF1QkiAvD+1sDCN4JNlFiLDg1Q22av6rfXPdbtCzijRhVh00UqpvjuIKIQB4Qc3SzpR9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p4NY/WWErLq5lZkjl2MizQht6hx1KXOP1yGn0Kwd/DE=;
+ b=Dqk65sEmNhDRsF0qqqhaFJSWdDuC8Yu1ZggYn4lx458XJjbxuS5CfYHs9CD6J/cSNxFrE3NM0svLqg4ZGaJx9BuoWJNJE0GC1HD/6ZlS8pQokraHqscs1SPNbs8tlgw1pW4HW+x3bnGvxCc7XH0TNk3F9S6wZRf+D0caKdbvF6I=
+Received: from OSBPR01MB3590.jpnprd01.prod.outlook.com (20.178.97.80) by
+ OSBPR01MB3318.jpnprd01.prod.outlook.com (20.178.5.147) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2793.14; Tue, 10 Mar 2020 13:32:01 +0000
+Received: from OSBPR01MB3590.jpnprd01.prod.outlook.com
+ ([fe80::6df0:eb47:a259:b94b]) by OSBPR01MB3590.jpnprd01.prod.outlook.com
+ ([fe80::6df0:eb47:a259:b94b%7]) with mapi id 15.20.2793.018; Tue, 10 Mar 2020
+ 13:32:00 +0000
+From:   Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Niklas <niklas.soderlund@ragnatech.se>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>
+Subject: RE: [PATCH v2 3/3] media: rcar-vin: rcar-csi2: Add support for
+ MEDIA_BUS_FMT_SRGGB8_1X8 format
+Thread-Topic: [PATCH v2 3/3] media: rcar-vin: rcar-csi2: Add support for
+ MEDIA_BUS_FMT_SRGGB8_1X8 format
+Thread-Index: AQHV9swB6r3pn+oA/0Oe+3GvBSYM56hBxt8AgAAL0eA=
+Date:   Tue, 10 Mar 2020 13:32:00 +0000
+Message-ID: <OSBPR01MB3590DD80FE95AEFC8CAAB32DAAFF0@OSBPR01MB3590.jpnprd01.prod.outlook.com>
+References: <1583838364-12932-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1583838364-12932-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200310124844.GP2975348@oden.dyn.berto.se>
+In-Reply-To: <20200310124844.GP2975348@oden.dyn.berto.se>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=prabhakar.mahadev-lad.rj@bp.renesas.com; 
+x-originating-ip: [193.141.220.21]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: e905f176-60be-44e1-0056-08d7c4f769c9
+x-ms-traffictypediagnostic: OSBPR01MB3318:
+x-microsoft-antispam-prvs: <OSBPR01MB33188A819E5BA3609D676725AAFF0@OSBPR01MB3318.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 033857D0BD
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(39860400002)(136003)(376002)(396003)(366004)(189003)(199004)(54906003)(71200400001)(6916009)(9686003)(55016002)(478600001)(5660300002)(66476007)(81166006)(7696005)(52536014)(66556008)(4326008)(8936002)(86362001)(186003)(66446008)(26005)(64756008)(53546011)(316002)(6506007)(66574012)(66946007)(76116006)(8676002)(2906002)(33656002)(81156014);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB3318;H:OSBPR01MB3590.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:0;
+received-spf: None (protection.outlook.com: bp.renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: f/8ILCJhjUv0qC7yQ2tcfkZafN2wSDSDPxvZvu5JZ52oDXpYUTTm1HjjSvlW4vWke5wV8DyKUl+b4JM+RBmp8uSL+J8mhO3Aqp2IGpoM6ts+GIpixIN4wL3vCftBhRSU64fF5u69srb+dlpDlJKUvyZpge/bdAlqu9G7NyzD1Za5mQQ1M/mJYFp5vlP2Uf5ykkkfsVjuAiu8PxvpVqSbeSk9zs3L2XY0cmi7/0tKMRFLr/8hdtHySCy3SIMJFZsOfFQ72Mrdcy6tOCh2hzNMuPdxCTkWKlP1PVjNYUlEWtd0jStxBUhNJ5yUwaryQM7iIQTf9y0cMX9GB5jiwNAQNmlrPfLe7GYoEjdDV1QUaYP3o4RP2IQ6lZQRTaC+/2ZhAA9Eirs35jb+ZltrBN1pCLep31f8qfdKYVPppnlIiU+q+PRTIkHjnDqbfjQXRNzV
+x-ms-exchange-antispam-messagedata: w3D9WLHRTlLnp9RgRkgALCgdbMhGqoYfMPdRC6TUQuZGpPruDq/8302EdO/3Shx1vqlNVOnPdFUX008WYYfD+zMNgR0FLNac+69bEjCfbfIvbP3+I6ZENl38F2TKbzglJATpyz+FbQmYskoD+9P7Jg==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e905f176-60be-44e1-0056-08d7c4f769c9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2020 13:32:00.2543
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: unsPvuuOGE7CVgpisryLuIAz5w7NHssDHWHkzXSnxz6QiFG6S7WAvP1Mgw5xYTUsq0Xk9+PyWrwtlT9oGVNaxr/e/KRvGtL+XQl7DVPVIfwcZmyPkrmyw0QlnsqUj+Wi
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB3318
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-IMX219 sensor is capable for RAW8/RAW10 modes. This commit adds support
-for RAW8 bayer format.
+Hi Niklas,
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
----
- drivers/media/i2c/imx219.c | 148 +++++++++++++++++++++++++++++++++++----------
- 1 file changed, 116 insertions(+), 32 deletions(-)
+Thank you for the review.
 
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index 16010ca..3207487 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -168,15 +168,12 @@ static const struct imx219_reg mode_3280x2464_regs[] = {
- 	{0x0171, 0x01},
- 	{0x0174, 0x00},
- 	{0x0175, 0x00},
--	{0x018c, 0x0a},
--	{0x018d, 0x0a},
- 	{0x0301, 0x05},
- 	{0x0303, 0x01},
- 	{0x0304, 0x03},
- 	{0x0305, 0x03},
- 	{0x0306, 0x00},
- 	{0x0307, 0x39},
--	{0x0309, 0x0a},
- 	{0x030b, 0x01},
- 	{0x030c, 0x00},
- 	{0x030d, 0x72},
-@@ -230,15 +227,12 @@ static const struct imx219_reg mode_1920_1080_regs[] = {
- 	{0x0171, 0x01},
- 	{0x0174, 0x00},
- 	{0x0175, 0x00},
--	{0x018c, 0x0a},
--	{0x018d, 0x0a},
- 	{0x0301, 0x05},
- 	{0x0303, 0x01},
- 	{0x0304, 0x03},
- 	{0x0305, 0x03},
- 	{0x0306, 0x00},
- 	{0x0307, 0x39},
--	{0x0309, 0x0a},
- 	{0x030b, 0x01},
- 	{0x030c, 0x00},
- 	{0x030d, 0x72},
-@@ -290,15 +284,12 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
- 	{0x0171, 0x01},
- 	{0x0174, 0x01},
- 	{0x0175, 0x01},
--	{0x018c, 0x0a},
--	{0x018d, 0x0a},
- 	{0x0301, 0x05},
- 	{0x0303, 0x01},
- 	{0x0304, 0x03},
- 	{0x0305, 0x03},
- 	{0x0306, 0x00},
- 	{0x0307, 0x39},
--	{0x0309, 0x0a},
- 	{0x030b, 0x01},
- 	{0x030c, 0x00},
- 	{0x030d, 0x72},
-@@ -322,6 +313,18 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
- 	{0x0163, 0x78},
- };
- 
-+static const struct imx219_reg raw8_framefmt_regs[] = {
-+	{0x018c, 0x08},
-+	{0x018d, 0x08},
-+	{0x0309, 0x08},
-+};
-+
-+static const struct imx219_reg raw10_framefmt_regs[] = {
-+	{0x018c, 0x0a},
-+	{0x018d, 0x0a},
-+	{0x0309, 0x0a},
-+};
-+
- static const char * const imx219_test_pattern_menu[] = {
- 	"Disabled",
- 	"Color Bars",
-@@ -349,6 +352,27 @@ static const char * const imx219_supply_name[] = {
- #define IMX219_NUM_SUPPLIES ARRAY_SIZE(imx219_supply_name)
- 
- /*
-+ * The supported formats.
-+ * This table MUST contain 4 entries per format, to cover the various flip
-+ * combinations in the order
-+ * - no flip
-+ * - h flip
-+ * - v flip
-+ * - h&v flips
-+ */
-+static const u32 codes[] = {
-+	MEDIA_BUS_FMT_SRGGB10_1X10,
-+	MEDIA_BUS_FMT_SGRBG10_1X10,
-+	MEDIA_BUS_FMT_SGBRG10_1X10,
-+	MEDIA_BUS_FMT_SBGGR10_1X10,
-+
-+	MEDIA_BUS_FMT_SRGGB8_1X8,
-+	MEDIA_BUS_FMT_SGRBG8_1X8,
-+	MEDIA_BUS_FMT_SGBRG8_1X8,
-+	MEDIA_BUS_FMT_SBGGR8_1X8,
-+};
-+
-+/*
-  * Initialisation delay between XCLR low->high and the moment when the sensor
-  * can start capture (i.e. can leave software stanby) must be not less than:
-  *   t4 + max(t5, t6 + <time to initialize the sensor register over I2C>)
-@@ -413,6 +437,8 @@ struct imx219 {
- 	struct v4l2_subdev sd;
- 	struct media_pad pad;
- 
-+	struct v4l2_mbus_framefmt fmt;
-+
- 	struct clk *xclk; /* system clock to IMX219 */
- 	u32 xclk_freq;
- 
-@@ -519,19 +545,40 @@ static int imx219_write_regs(struct imx219 *imx219,
- }
- 
- /* Get bayer order based on flip setting. */
--static u32 imx219_get_format_code(struct imx219 *imx219)
-+static u32 imx219_get_format_code(struct imx219 *imx219, u32 code)
- {
--	/*
--	 * Only one bayer order is supported.
--	 * It depends on the flip settings.
--	 */
--	static const u32 codes[2][2] = {
--		{ MEDIA_BUS_FMT_SRGGB10_1X10, MEDIA_BUS_FMT_SGRBG10_1X10, },
--		{ MEDIA_BUS_FMT_SGBRG10_1X10, MEDIA_BUS_FMT_SBGGR10_1X10, },
--	};
-+	unsigned int i;
- 
- 	lockdep_assert_held(&imx219->mutex);
--	return codes[imx219->vflip->val][imx219->hflip->val];
-+
-+	for (i = 0; i < ARRAY_SIZE(codes); i++)
-+		if (codes[i] == code)
-+			break;
-+
-+	if (i >= ARRAY_SIZE(codes))
-+		i = 0;
-+
-+	i = (i & ~3) | (imx219->vflip->val ? 2 : 0) |
-+	    (imx219->hflip->val ? 1 : 0);
-+
-+	return codes[i];
-+}
-+
-+static void imx219_set_default_format(struct imx219 *imx219)
-+{
-+	struct v4l2_mbus_framefmt *fmt;
-+
-+	fmt = &imx219->fmt;
-+	fmt->code = MEDIA_BUS_FMT_SRGGB10_1X10;
-+	fmt->colorspace = V4L2_COLORSPACE_SRGB;
-+	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
-+	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
-+							  fmt->colorspace,
-+							  fmt->ycbcr_enc);
-+	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
-+	fmt->width = supported_modes[0].width;
-+	fmt->height = supported_modes[0].height;
-+	fmt->field = V4L2_FIELD_NONE;
- }
- 
- static int imx219_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
-@@ -545,7 +592,8 @@ static int imx219_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 	/* Initialize try_fmt */
- 	try_fmt->width = supported_modes[0].width;
- 	try_fmt->height = supported_modes[0].height;
--	try_fmt->code = imx219_get_format_code(imx219);
-+	try_fmt->code = imx219_get_format_code(imx219,
-+					       MEDIA_BUS_FMT_SRGGB10_1X10);
- 	try_fmt->field = V4L2_FIELD_NONE;
- 
- 	mutex_unlock(&imx219->mutex);
-@@ -648,14 +696,10 @@ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
- {
- 	struct imx219 *imx219 = to_imx219(sd);
- 
--	/*
--	 * Only one bayer order is supported (though it depends on the flip
--	 * settings)
--	 */
--	if (code->index > 0)
-+	if (code->index >= (ARRAY_SIZE(codes) / 4))
- 		return -EINVAL;
- 
--	code->code = imx219_get_format_code(imx219);
-+	code->code = imx219_get_format_code(imx219, codes[code->index * 4]);
- 
- 	return 0;
- }
-@@ -669,7 +713,7 @@ static int imx219_enum_frame_size(struct v4l2_subdev *sd,
- 	if (fse->index >= ARRAY_SIZE(supported_modes))
- 		return -EINVAL;
- 
--	if (fse->code != imx219_get_format_code(imx219))
-+	if (fse->code != imx219_get_format_code(imx219, imx219->fmt.code))
- 		return -EINVAL;
- 
- 	fse->min_width = supported_modes[fse->index].width;
-@@ -696,9 +740,7 @@ static void imx219_update_pad_format(struct imx219 *imx219,
- {
- 	fmt->format.width = mode->width;
- 	fmt->format.height = mode->height;
--	fmt->format.code = imx219_get_format_code(imx219);
- 	fmt->format.field = V4L2_FIELD_NONE;
--
- 	imx219_reset_colorspace(&fmt->format);
- }
- 
-@@ -710,10 +752,12 @@ static int __imx219_get_pad_format(struct imx219 *imx219,
- 		struct v4l2_mbus_framefmt *try_fmt =
- 			v4l2_subdev_get_try_format(&imx219->sd, cfg, fmt->pad);
- 		/* update the code which could change due to vflip or hflip: */
--		try_fmt->code = imx219_get_format_code(imx219);
-+		try_fmt->code = imx219_get_format_code(imx219, try_fmt->code);
- 		fmt->format = *try_fmt;
- 	} else {
- 		imx219_update_pad_format(imx219, imx219->mode, fmt);
-+		fmt->format.code = imx219_get_format_code(imx219,
-+							  imx219->fmt.code);
- 	}
- 
- 	return 0;
-@@ -741,11 +785,18 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 	const struct imx219_mode *mode;
- 	struct v4l2_mbus_framefmt *framefmt;
- 	int exposure_max, exposure_def, hblank;
-+	unsigned int i;
- 
- 	mutex_lock(&imx219->mutex);
- 
-+	for (i = 0; i < ARRAY_SIZE(codes); i++)
-+		if (codes[i] == fmt->format.code)
-+			break;
-+	if (i >= ARRAY_SIZE(codes))
-+		i = 0;
-+
- 	/* Bayer order varies with flips */
--	fmt->format.code = imx219_get_format_code(imx219);
-+	fmt->format.code = imx219_get_format_code(imx219, codes[i]);
- 
- 	mode = v4l2_find_nearest_size(supported_modes,
- 				      ARRAY_SIZE(supported_modes),
-@@ -755,7 +806,9 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
- 		framefmt = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
- 		*framefmt = fmt->format;
--	} else if (imx219->mode != mode) {
-+	} else if (imx219->mode != mode ||
-+		   imx219->fmt.code != fmt->format.code) {
-+		imx219->fmt = fmt->format;
- 		imx219->mode = mode;
- 		/* Update limits and set FPS to default */
- 		__v4l2_ctrl_modify_range(imx219->vblank, IMX219_VBLANK_MIN,
-@@ -786,6 +839,27 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
-+static int imx219_set_framefmt(struct imx219 *imx219)
-+{
-+	switch (imx219->fmt.code) {
-+	case MEDIA_BUS_FMT_SRGGB8_1X8:
-+	case MEDIA_BUS_FMT_SGRBG8_1X8:
-+	case MEDIA_BUS_FMT_SGBRG8_1X8:
-+	case MEDIA_BUS_FMT_SBGGR8_1X8:
-+		return imx219_write_regs(imx219, raw8_framefmt_regs,
-+					ARRAY_SIZE(raw8_framefmt_regs));
-+
-+	case MEDIA_BUS_FMT_SRGGB10_1X10:
-+	case MEDIA_BUS_FMT_SGRBG10_1X10:
-+	case MEDIA_BUS_FMT_SGBRG10_1X10:
-+	case MEDIA_BUS_FMT_SBGGR10_1X10:
-+		return imx219_write_regs(imx219, raw10_framefmt_regs,
-+					ARRAY_SIZE(raw10_framefmt_regs));
-+	}
-+
-+	return -EINVAL;
-+}
-+
- static int imx219_start_streaming(struct imx219 *imx219)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
-@@ -800,6 +874,13 @@ static int imx219_start_streaming(struct imx219 *imx219)
- 		return ret;
- 	}
- 
-+	ret = imx219_set_framefmt(imx219);
-+	if (ret) {
-+		dev_err(&client->dev, "%s failed to set frame format: %d\n",
-+			__func__, ret);
-+		return ret;
-+	}
-+
- 	/* Apply customized values from user */
- 	ret =  __v4l2_ctrl_handler_setup(imx219->sd.ctrl_handler);
- 	if (ret)
-@@ -1253,6 +1334,9 @@ static int imx219_probe(struct i2c_client *client)
- 	/* Initialize source pad */
- 	imx219->pad.flags = MEDIA_PAD_FL_SOURCE;
- 
-+	/* Initialize default format */
-+	imx219_set_default_format(imx219);
-+
- 	ret = media_entity_pads_init(&imx219->sd.entity, 1, &imx219->pad);
- 	if (ret) {
- 		dev_err(dev, "failed to init entity pads: %d\n", ret);
--- 
-2.7.4
+> -----Original Message-----
+> From: Niklas <niklas.soderlund@ragnatech.se>
+> Sent: 10 March 2020 12:49
+> To: Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>; linux-
+> media@vger.kernel.org; linux-renesas-soc@vger.kernel.org; linux-
+> kernel@vger.kernel.org; Lad Prabhakar <prabhakar.csengg@gmail.com>
+> Subject: Re: [PATCH v2 3/3] media: rcar-vin: rcar-csi2: Add support for
+> MEDIA_BUS_FMT_SRGGB8_1X8 format
+>
+> Hi Lad,
+>
+> Thanks for your work.
+>
+> On 2020-03-10 11:06:04 +0000, Lad Prabhakar wrote:
+> > This patch adds support for MEDIA_BUS_FMT_SRGGB8_1X8 format for
+> CSI2
+> > input.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-
+> lad.rj@bp.renesas.com>
+>
+> Small nit, you can drop rcar-vin from the subject as this patch is for th=
+e rcar-
+> csi2 driver. With this fixed,
+>
+Sure will update it for next iteration.
 
+Cheers,
+--Prabhakar
+
+> Reviewed-by: Niklas S=F6derlund <niklas.soderlund+renesas@ragnatech.se>
+>
+> > ---
+> >  drivers/media/platform/rcar-vin/rcar-csi2.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c
+> > b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> > index 39e1639..b030ef6 100644
+> > --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
+> > +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> > @@ -320,6 +320,7 @@ static const struct rcar_csi2_format
+> rcar_csi2_formats[] =3D {
+> >  { .code =3D MEDIA_BUS_FMT_YUYV8_1X16,.datatype =3D 0x1e,
+> .bpp =3D 16 },
+> >  { .code =3D MEDIA_BUS_FMT_UYVY8_2X8,.datatype =3D 0x1e,
+> .bpp =3D 16 },
+> >  { .code =3D MEDIA_BUS_FMT_YUYV10_2X10,.datatype =3D 0x1e,
+> .bpp =3D 20 },
+> > +{ .code =3D MEDIA_BUS_FMT_SRGGB8_1X8,     .datatype =3D 0x2a, .bpp =3D
+> 8 },
+> >  };
+> >
+> >  static const struct rcar_csi2_format *rcsi2_code_to_fmt(unsigned int
+> > code)
+> > --
+> > 2.7.4
+> >
+>
+> --
+> Regards,
+> Niklas S=F6derlund
+
+
+Renesas Electronics Europe GmbH, Geschaeftsfuehrer/President: Carsten Jauch=
+, Sitz der Gesellschaft/Registered office: Duesseldorf, Arcadiastrasse 10, =
+40472 Duesseldorf, Germany, Handelsregister/Commercial Register: Duesseldor=
+f, HRB 3708 USt-IDNr./Tax identification no.: DE 119353406 WEEE-Reg.-Nr./WE=
+EE reg. no.: DE 14978647
