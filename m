@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81104C10F27
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 16:06:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 054C2C18E5C
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 16:06:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4F964215A4
+	by mail.kernel.org (Postfix) with ESMTP id C0AB6215A4
 	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 16:06:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="IRe8rIXi"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="P5EQItPQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726861AbgCJQGs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727123AbgCJQGs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 10 Mar 2020 12:06:48 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:55140 "EHLO
+Received: from perceval.ideasonboard.com ([213.167.242.64]:55128 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727063AbgCJQGr (ORCPT
+        with ESMTP id S1727061AbgCJQGq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Mar 2020 12:06:47 -0400
+        Tue, 10 Mar 2020 12:06:46 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 97811D09;
-        Tue, 10 Mar 2020 17:06:44 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 968EAAC3;
+        Tue, 10 Mar 2020 17:06:43 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1583856404;
-        bh=Nb6OGfEJt7hIR2HArIumUmKdxv80Zt4MuRbJSN3ndAA=;
+        s=mail; t=1583856403;
+        bh=UABPsoFkIBRcv6iWcleJ4LS/4me2cSyfh2TaYtK0oRs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IRe8rIXijvw8msTqcMait7AqIO95BvvS9mWqjBor4YSAplHy153VH2Keyvi4oBZBN
-         78En0e4+wOUbm5tqYNhYT8D2p89MzO+tmoJQeQWE2H/rB0SGtIaxziVXQqNxbiTTB2
-         BPtdx/zK2YeAlKGZgGvhPnY83u+ootgvhWJ4mLFU=
+        b=P5EQItPQPl1nDJO1Fx+qZOmI00r7HKMpgG+IyFeI4u8mWVbaJeGO/DrSlObmvnaJC
+         vzpt5QwPIw+orestT+HucW4M6ayjqR46oudUt4TWKUa3eR0aS0cBPli9Jh7OKYd0Lo
+         mnxCB8AqsT1GnfMhQy95e1uUyHhNPQIxi0aCzDhw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH v2 09/10] media: imx: imx7-media-csi: Add Y10 and Y12 formats support
-Date:   Tue, 10 Mar 2020 18:06:32 +0200
-Message-Id: <20200310160633.950-10-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 07/10] media: imx: imx6-media-csi: Replace Y16 with Y10 and Y12
+Date:   Tue, 10 Mar 2020 18:06:30 +0200
+Message-Id: <20200310160633.950-8-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200310160633.950-1-laurent.pinchart@ideasonboard.com>
 References: <20200310160633.950-1-laurent.pinchart@ideasonboard.com>
@@ -50,33 +50,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Support capturing the 10- and 12-bit greyscale formats.
+The driver doesn't really support V4L2_PIX_FMT_Y16, as there's no 16-bit
+greyscale media bus code defined by the kernel. It (ab)uses the format
+to capture 10-bit and 12-bit greyscale formats. Fix it to properly
+support MEDIA_BUS_FMT_Y10_1X10 and MEDIA_BUS_FMT_Y12_1X12 instead.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- drivers/staging/media/imx/imx7-media-csi.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/staging/media/imx/imx-media-csi.c   |  3 ++-
+ drivers/staging/media/imx/imx-media-utils.c | 13 ++++++++-----
+ 2 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 706c47741a3c..e85202255168 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -804,6 +804,14 @@ static int imx7_csi_configure(struct imx7_csi *csi)
- 	case V4L2_PIX_FMT_YUYV:
- 		cr18 |= BIT_MIPI_DATA_FORMAT_YUV422_8B;
- 		break;
+diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+index b60ed4f22f6d..f4abac93c0e4 100644
+--- a/drivers/staging/media/imx/imx-media-csi.c
++++ b/drivers/staging/media/imx/imx-media-csi.c
+@@ -457,7 +457,8 @@ static int csi_idmac_setup_channel(struct csi_priv *priv)
+ 	case V4L2_PIX_FMT_SGBRG16:
+ 	case V4L2_PIX_FMT_SGRBG16:
+ 	case V4L2_PIX_FMT_SRGGB16:
+-	case V4L2_PIX_FMT_Y16:
 +	case V4L2_PIX_FMT_Y10:
-+		cr18 |= BIT_MIPI_DATA_FORMAT_RAW10;
-+		cr1 |= BIT_PIXEL_BIT;
-+		break;
 +	case V4L2_PIX_FMT_Y12:
-+		cr18 |= BIT_MIPI_DATA_FORMAT_RAW12;
-+		cr1 |= BIT_PIXEL_BIT;
-+		break;
- 	case V4L2_PIX_FMT_SBGGR8:
- 		cr18 |= BIT_MIPI_DATA_FORMAT_RAW8;
+ 		burst_size = 8;
+ 		passthrough_bits = 16;
  		break;
+diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+index 0788a1874557..bc20fcc88267 100644
+--- a/drivers/staging/media/imx/imx-media-utils.c
++++ b/drivers/staging/media/imx/imx-media-utils.c
+@@ -166,11 +166,14 @@ static const struct imx_media_pixfmt rgb_formats[] = {
+ 		.bpp    = 8,
+ 		.bayer  = true,
+ 	}, {
+-		.fourcc = V4L2_PIX_FMT_Y16,
+-		.codes = {
+-			MEDIA_BUS_FMT_Y10_1X10,
+-			MEDIA_BUS_FMT_Y12_1X12,
+-		},
++		.fourcc = V4L2_PIX_FMT_Y10,
++		.codes = {MEDIA_BUS_FMT_Y10_1X10},
++		.cs     = IPUV3_COLORSPACE_RGB,
++		.bpp    = 16,
++		.bayer  = true,
++	}, {
++		.fourcc = V4L2_PIX_FMT_Y12,
++		.codes = {MEDIA_BUS_FMT_Y12_1X12},
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 16,
+ 		.bayer  = true,
 -- 
 Regards,
 
