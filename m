@@ -2,195 +2,265 @@ Return-Path: <SRS0=PJJM=43=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FDD0C18E5C
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:43:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEFEDC1975A
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:43:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E2D0420675
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:43:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCF8120675
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 13:43:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583847828;
-	bh=5q/CzOOsYllK0uZT25tyGHbJBrmagjGBbvBIeR7M0w8=;
+	s=default; t=1583847829;
+	bh=5PlHhPzSK+0l2GtUGdprWuSb0TB3BTurH4keibjpyJM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=s1e8H/fHjLMdv3xC7pEafrDGG8TmhZ+sbrhKSd170h2YOwlCWcxkKXfneMgPZJD55
-	 IAnEzgrFoB8Iu7StXkyh+1GR9QUXPiUB7oOpv8QaNZsINFf47mY4fmMVIl+U3PXPQv
-	 1cAsyHXvtVOm3hSDt0vD/Sg2/m/TC2zRX/9bA5y0=
+	b=yn8xjeXJLd0Ni74K6hSJd6uvUTaE4isi1Nxs52n+YdGMxda4dymiwWEXn4izTZ0D3
+	 5IltEUF73czDZEvqZSGAj+996lKUq6Cr+w0Hn6SNbFt716gmntV+gfCConyR6/3Rue
+	 2f3szCOLB31kDG9dWcUuKpvOeKqbg81o91Mz0B0Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727450AbgCJNnU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Mar 2020 09:43:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37578 "EHLO mail.kernel.org"
+        id S1727252AbgCJNns (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Mar 2020 09:43:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37716 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726779AbgCJNnT (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Mar 2020 09:43:19 -0400
+        id S1727304AbgCJNnU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Mar 2020 09:43:20 -0400
 Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0E75924685;
+        by mail.kernel.org (Postfix) with ESMTPSA id AF5B8246BB;
         Tue, 10 Mar 2020 13:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1583847797;
-        bh=5q/CzOOsYllK0uZT25tyGHbJBrmagjGBbvBIeR7M0w8=;
+        bh=5PlHhPzSK+0l2GtUGdprWuSb0TB3BTurH4keibjpyJM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=koyWg2VW4qb+jhP25yJa09C7jYYheRvIL1Y72h6YbVpKr5H2AnKJRkrj3HlcN3seM
-         eLjDc2cJNZpbZlLMueFb2uYFXsJS9db3Cr/ekShdwwws8o7NUL3pLMMS5I7AN/UNF3
-         VVcay0NG+SdLRBiNAfuGxSgf05t7IznnkDDjfeF4=
+        b=wmFV3lvweOaILFZqknun7j+8CoR8I/MGrnJJKsNcNuyiCJXCnUW2Y3yR2JpMjEELP
+         j24EIT55wol3D/NdfnIl6HHHWbB+X2LUaGATA4ZAn4Mh40hi/h9Dupt25XftTcXPfK
+         JuJtn6+0hYM26qlxxA3VBmMCdWbERLYKlfxXTGxM=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jBfAB-0005vY-3D; Tue, 10 Mar 2020 14:43:15 +0100
+        id 1jBfAB-0005wo-OR; Tue, 10 Mar 2020 14:43:15 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 05/22] media: docs: split meye.rst into admin and uAPI docs
-Date:   Tue, 10 Mar 2020 14:42:56 +0100
-Message-Id: <c16f22752f9c8b0e1cb9ddc26b4a46b3bc7b4ed6.1583847556.git.mchehab+huawei@kernel.org>
+        linux-media@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 21/22] media: docs: add an uAPI chapter for driver-specific stuff
+Date:   Tue, 10 Mar 2020 14:43:12 +0100
+Message-Id: <eb09422f4292b1462978abc02acf41e7630c698c.1583847557.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1583847556.git.mchehab+huawei@kernel.org>
 References: <cover.1583847556.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of placing both info from admin PoV and uAPI at the
-same place, split into two separate documents.
+There are some uAPI stuff that are driver-specific. Add them
+to the main media uAPI body.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/media/v4l-drivers/index.rst     |  1 +
- Documentation/media/v4l-drivers/meye-uapi.rst | 53 +++++++++++++++++++
- Documentation/media/v4l-drivers/meye.rst      | 41 --------------
- 3 files changed, 54 insertions(+), 41 deletions(-)
- create mode 100644 Documentation/media/v4l-drivers/meye-uapi.rst
+ Documentation/media/index.rst                              | 2 --
+ .../media/drivers}/cx2341x-uapi.rst                        | 0
+ .../media/drivers}/imx-uapi.rst                            | 0
+ .../v4l-drivers => userspace-api/media/drivers}/index.rst  | 7 +++----
+ .../media/drivers}/max2175.rst                             | 0
+ .../media/drivers}/meye-uapi.rst                           | 0
+ .../media/drivers}/omap3isp-uapi.rst                       | 0
+ .../media/drivers}/uvcvideo.rst                            | 0
+ Documentation/userspace-api/media/index.rst                | 2 ++
+ Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst   | 2 +-
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst  | 2 +-
+ Documentation/userspace-api/media/v4l/pixfmt-reserved.rst  | 2 +-
+ MAINTAINERS                                                | 4 ++--
+ drivers/media/i2c/max2175.c                                | 6 +++---
+ 14 files changed, 13 insertions(+), 14 deletions(-)
+ rename Documentation/{media/v4l-drivers => userspace-api/media/drivers}/cx2341x-uapi.rst (100%)
+ rename Documentation/{media/v4l-drivers => userspace-api/media/drivers}/imx-uapi.rst (100%)
+ rename Documentation/{media/v4l-drivers => userspace-api/media/drivers}/index.rst (97%)
+ rename Documentation/{media/v4l-drivers => userspace-api/media/drivers}/max2175.rst (100%)
+ rename Documentation/{media/v4l-drivers => userspace-api/media/drivers}/meye-uapi.rst (100%)
+ rename Documentation/{media/v4l-drivers => userspace-api/media/drivers}/omap3isp-uapi.rst (100%)
+ rename Documentation/{media/v4l-drivers => userspace-api/media/drivers}/uvcvideo.rst (100%)
 
-diff --git a/Documentation/media/v4l-drivers/index.rst b/Documentation/media/v4l-drivers/index.rst
-index 72fbb394f6a2..5a87bd1da9bd 100644
+diff --git a/Documentation/media/index.rst b/Documentation/media/index.rst
+index a5cd600e0b04..e93fd88881af 100644
+--- a/Documentation/media/index.rst
++++ b/Documentation/media/index.rst
+@@ -15,8 +15,6 @@ Linux Media Subsystem Documentation
+    ../userspace-api/media/index
+    ../driver-api/media/index
+ 
+-   v4l-drivers/index
+-
+ .. only:: html and subproject
+ 
+    Indices
+diff --git a/Documentation/media/v4l-drivers/cx2341x-uapi.rst b/Documentation/userspace-api/media/drivers/cx2341x-uapi.rst
+similarity index 100%
+rename from Documentation/media/v4l-drivers/cx2341x-uapi.rst
+rename to Documentation/userspace-api/media/drivers/cx2341x-uapi.rst
+diff --git a/Documentation/media/v4l-drivers/imx-uapi.rst b/Documentation/userspace-api/media/drivers/imx-uapi.rst
+similarity index 100%
+rename from Documentation/media/v4l-drivers/imx-uapi.rst
+rename to Documentation/userspace-api/media/drivers/imx-uapi.rst
+diff --git a/Documentation/media/v4l-drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
+similarity index 97%
+rename from Documentation/media/v4l-drivers/index.rst
+rename to Documentation/userspace-api/media/drivers/index.rst
+index ee7faff88a33..05a82f8c0c99 100644
 --- a/Documentation/media/v4l-drivers/index.rst
-+++ b/Documentation/media/v4l-drivers/index.rst
-@@ -67,3 +67,4 @@ For more details see the file COPYING in the source distribution of Linux.
- 	zr364xx
++++ b/Documentation/userspace-api/media/drivers/index.rst
+@@ -2,7 +2,7 @@
  
- 	cpia2_devel
-+	meye-uapi
-diff --git a/Documentation/media/v4l-drivers/meye-uapi.rst b/Documentation/media/v4l-drivers/meye-uapi.rst
-new file mode 100644
-index 000000000000..66b1c142f920
---- /dev/null
-+++ b/Documentation/media/v4l-drivers/meye-uapi.rst
-@@ -0,0 +1,53 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. include:: <isonum.txt>
-+
-+Vaio Picturebook Motion Eye Camera Driver
-+=========================================
-+
-+Copyright |copy| 2001-2004 Stelian Pop <stelian@popies.net>
-+
-+Copyright |copy| 2001-2002 Alcôve <www.alcove.com>
-+
-+Copyright |copy| 2000 Andrew Tridgell <tridge@samba.org>
-+
-+Private API
-+-----------
-+
-+The driver supports frame grabbing with the video4linux API,
-+so all video4linux tools (like xawtv) should work with this driver.
-+
-+Besides the video4linux interface, the driver has a private interface
-+for accessing the Motion Eye extended parameters (camera sharpness,
-+agc, video framerate), the snapshot and the MJPEG capture facilities.
-+
-+This interface consists of several ioctls (prototypes and structures
-+can be found in include/linux/meye.h):
-+
-+MEYEIOC_G_PARAMS and MEYEIOC_S_PARAMS
-+	Get and set the extended parameters of the motion eye camera.
-+	The user should always query the current parameters with
-+	MEYEIOC_G_PARAMS, change what he likes and then issue the
-+	MEYEIOC_S_PARAMS call (checking for -EINVAL). The extended
-+	parameters are described by the meye_params structure.
-+
-+
-+MEYEIOC_QBUF_CAPT
-+	Queue a buffer for capture (the buffers must have been
-+	obtained with a VIDIOCGMBUF call and mmap'ed by the
-+	application). The argument to MEYEIOC_QBUF_CAPT is the
-+	buffer number to queue (or -1 to end capture). The first
-+	call to MEYEIOC_QBUF_CAPT starts the streaming capture.
-+
-+MEYEIOC_SYNC
-+	Takes as an argument the buffer number you want to sync.
-+	This ioctl blocks until the buffer is filled and ready
-+	for the application to use. It returns the buffer size.
-+
-+MEYEIOC_STILLCAPT and MEYEIOC_STILLJCAPT
-+	Takes a snapshot in an uncompressed or compressed jpeg format.
-+	This ioctl blocks until the snapshot is done and returns (for
-+	jpeg snapshot) the size of the image. The image data is
-+	available from the first mmap'ed buffer.
-+
-+Look at the 'motioneye' application code for an actual example.
-diff --git a/Documentation/media/v4l-drivers/meye.rst b/Documentation/media/v4l-drivers/meye.rst
-index dc57a6a91b43..9098a1e65f8b 100644
---- a/Documentation/media/v4l-drivers/meye.rst
-+++ b/Documentation/media/v4l-drivers/meye.rst
-@@ -87,47 +87,6 @@ Usage:
- 	motioneye (<http://popies.net/meye/>)
- 		for getting ppm or jpg snapshots, mjpeg video
+ .. include:: <isonum.txt>
  
--Private API
-------------
--
--The driver supports frame grabbing with the video4linux API,
--so all video4linux tools (like xawtv) should work with this driver.
--
--Besides the video4linux interface, the driver has a private interface
--for accessing the Motion Eye extended parameters (camera sharpness,
--agc, video framerate), the snapshot and the MJPEG capture facilities.
--
--This interface consists of several ioctls (prototypes and structures
--can be found in include/linux/meye.h):
--
--MEYEIOC_G_PARAMS and MEYEIOC_S_PARAMS
--	Get and set the extended parameters of the motion eye camera.
--	The user should always query the current parameters with
--	MEYEIOC_G_PARAMS, change what he likes and then issue the
--	MEYEIOC_S_PARAMS call (checking for -EINVAL). The extended
--	parameters are described by the meye_params structure.
--
--
--MEYEIOC_QBUF_CAPT
--	Queue a buffer for capture (the buffers must have been
--	obtained with a VIDIOCGMBUF call and mmap'ed by the
--	application). The argument to MEYEIOC_QBUF_CAPT is the
--	buffer number to queue (or -1 to end capture). The first
--	call to MEYEIOC_QBUF_CAPT starts the streaming capture.
--
--MEYEIOC_SYNC
--	Takes as an argument the buffer number you want to sync.
--	This ioctl blocks until the buffer is filled and ready
--	for the application to use. It returns the buffer size.
--
--MEYEIOC_STILLCAPT and MEYEIOC_STILLJCAPT
--	Takes a snapshot in an uncompressed or compressed jpeg format.
--	This ioctl blocks until the snapshot is done and returns (for
--	jpeg snapshot) the size of the image. The image data is
--	available from the first mmap'ed buffer.
--
--Look at the 'motioneye' application code for an actual example.
--
- Bugs / Todo
- -----------
+-.. _v4l-drivers:
++.. _v4l-drivers_uapi:
  
+ ################################################
+ Video4Linux (V4L)  driver-specific documentation
+@@ -31,10 +31,9 @@ For more details see the file COPYING in the source distribution of Linux.
+ 	:maxdepth: 5
+ 	:numbered:
+ 
+-	max2175
+-	uvcvideo
+-
+ 	cx2341x-uapi
+ 	imx-uapi
++	max2175
+ 	meye-uapi
+ 	omap3isp-uapi
++	uvcvideo
+diff --git a/Documentation/media/v4l-drivers/max2175.rst b/Documentation/userspace-api/media/drivers/max2175.rst
+similarity index 100%
+rename from Documentation/media/v4l-drivers/max2175.rst
+rename to Documentation/userspace-api/media/drivers/max2175.rst
+diff --git a/Documentation/media/v4l-drivers/meye-uapi.rst b/Documentation/userspace-api/media/drivers/meye-uapi.rst
+similarity index 100%
+rename from Documentation/media/v4l-drivers/meye-uapi.rst
+rename to Documentation/userspace-api/media/drivers/meye-uapi.rst
+diff --git a/Documentation/media/v4l-drivers/omap3isp-uapi.rst b/Documentation/userspace-api/media/drivers/omap3isp-uapi.rst
+similarity index 100%
+rename from Documentation/media/v4l-drivers/omap3isp-uapi.rst
+rename to Documentation/userspace-api/media/drivers/omap3isp-uapi.rst
+diff --git a/Documentation/media/v4l-drivers/uvcvideo.rst b/Documentation/userspace-api/media/drivers/uvcvideo.rst
+similarity index 100%
+rename from Documentation/media/v4l-drivers/uvcvideo.rst
+rename to Documentation/userspace-api/media/drivers/uvcvideo.rst
+diff --git a/Documentation/userspace-api/media/index.rst b/Documentation/userspace-api/media/index.rst
+index 614310f82395..bcfdd1a5caa0 100644
+--- a/Documentation/userspace-api/media/index.rst
++++ b/Documentation/userspace-api/media/index.rst
+@@ -31,3 +31,5 @@ entitled "GNU Free Documentation License".
+     cec/cec-api
+     gen-errors
+     fdl-appendix
++
++    drivers/index
+diff --git a/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst b/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst
+index 751c6590e774..dd0b6646beb5 100644
+--- a/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst
++++ b/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst
+@@ -438,7 +438,7 @@ MPEG stream.
+ *Historical context*: This format specification originates from a
+ custom, embedded, sliced VBI data format used by the ``ivtv`` driver.
+ This format has already been informally specified in the kernel sources
+-in the file ``Documentation/media/v4l-drivers/cx2341x-uapi.rst`` . The
++in the file ``Documentation/userspace-api/media/drivers/cx2341x-uapi.rst`` . The
+ maximum size of the payload and other aspects of this format are driven
+ by the CX23415 MPEG decoder's capabilities and limitations with respect
+ to extracting, decoding, and displaying sliced VBI data embedded within
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index f81016c97a0d..9b48338fb783 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -116,7 +116,7 @@ enum v4l2_mpeg_stream_vbi_fmt -
+     * - ``V4L2_MPEG_STREAM_VBI_FMT_IVTV``
+       - VBI in private packets, IVTV format (documented in the kernel
+ 	sources in the file
+-	``Documentation/media/v4l-drivers/cx2341x-uapi.rst``)
++	``Documentation/userspace-api/media/drivers/cx2341x-uapi.rst``)
+ 
+ 
+ 
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+index dbdcf6c9f072..59b9e7238f90 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+@@ -58,7 +58,7 @@ please make a proposal on the linux-media mailing list.
+       - YUV 4:2:0 format used by the IVTV driver.
+ 
+ 	The format is documented in the kernel sources in the file
+-	``Documentation/media/v4l-drivers/cx2341x-uapi.rst``
++	``Documentation/userspace-api/media/drivers/cx2341x-uapi.rst``
+     * .. _V4L2-PIX-FMT-CPIA1:
+ 
+       - ``V4L2_PIX_FMT_CPIA1``
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf4fd454e053..a883c2e53b86 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10135,7 +10135,7 @@ L:	linux-media@vger.kernel.org
+ T:	git git://linuxtv.org/media_tree.git
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/i2c/max2175.txt
+-F:	Documentation/media/v4l-drivers/max2175.rst
++F:	Documentation/userspace-api/media/drivers/max2175.rst
+ F:	drivers/media/i2c/max2175*
+ F:	include/uapi/linux/max2175.h
+ 
+@@ -11251,7 +11251,7 @@ F:	kernel/module.c
+ MOTION EYE VAIO PICTUREBOOK CAMERA DRIVER
+ W:	http://popies.net/meye/
+ S:	Orphan
+-F:	Documentation/media/v4l-drivers/meye*
++F:	Documentation/userspace-api/media/drivers/meye*
+ F:	drivers/media/pci/meye/
+ F:	include/uapi/linux/meye.h
+ 
+diff --git a/drivers/media/i2c/max2175.c b/drivers/media/i2c/max2175.c
+index 506a30e69ced..03b4ed3a61b8 100644
+--- a/drivers/media/i2c/max2175.c
++++ b/drivers/media/i2c/max2175.c
+@@ -1194,7 +1194,7 @@ static const struct v4l2_ctrl_ops max2175_ctrl_ops = {
+ 
+ /*
+  * I2S output enable/disable configuration. This is a private control.
+- * Refer to Documentation/media/v4l-drivers/max2175.rst for more details.
++ * Refer to Documentation/userspace-api/media/drivers/max2175.rst for more details.
+  */
+ static const struct v4l2_ctrl_config max2175_i2s_en = {
+ 	.ops = &max2175_ctrl_ops,
+@@ -1210,7 +1210,7 @@ static const struct v4l2_ctrl_config max2175_i2s_en = {
+ 
+ /*
+  * HSLS value control LO freq adjacent location configuration.
+- * Refer to Documentation/media/v4l-drivers/max2175.rst for more details.
++ * Refer to Documentation/userspace-api/media/drivers/max2175.rst for more details.
+  */
+ static const struct v4l2_ctrl_config max2175_hsls = {
+ 	.ops = &max2175_ctrl_ops,
+@@ -1226,7 +1226,7 @@ static const struct v4l2_ctrl_config max2175_hsls = {
+ /*
+  * Rx modes below are a set of preset configurations that decides the tuner's
+  * sck and sample rate of transmission. They are separate for EU & NA regions.
+- * Refer to Documentation/media/v4l-drivers/max2175.rst for more details.
++ * Refer to Documentation/userspace-api/media/drivers/max2175.rst for more details.
+  */
+ static const char * const max2175_ctrl_eu_rx_modes[] = {
+ 	[MAX2175_EU_FM_1_2]	= "EU FM 1.2",
 -- 
 2.24.1
 
