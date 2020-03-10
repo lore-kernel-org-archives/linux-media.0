@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 227EDC18E5B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A88DDC1975A
 	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 16:06:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E7A24215A4
-	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 16:06:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71CC5215A4
+	for <linux-media@archiver.kernel.org>; Tue, 10 Mar 2020 16:06:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Qceh14ss"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Hf827eF3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727079AbgCJQGo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Mar 2020 12:06:44 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:55128 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727063AbgCJQGn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S1727070AbgCJQGn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 10 Mar 2020 12:06:43 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:55120 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726283AbgCJQGm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 10 Mar 2020 12:06:42 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 172D25F;
-        Tue, 10 Mar 2020 17:06:42 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8D7A8580;
+        Tue, 10 Mar 2020 17:06:40 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1583856402;
-        bh=eTLv9evwq1hclFQkt0ctn8B9AB20PyR+QlzvsKMUw3s=;
+        s=mail; t=1583856400;
+        bh=CvQ1gjp4Q8xTZ/5RZSFeYsWlgifcm4JozA1PNNjp/8I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qceh14ssTICpQxIMOccAWiLe7YBA6/KmQf8t0AgNYKwVPxZlYxIDtb6OoQIwy2V7L
-         3xUVfTrDSvI0D1eDPX8LeiL4uAMNaZ5pRfTr+hA0CJNrMTbtVhqruzF1DOyb2gecEY
-         pkFpKu9OqDXJt25X8k8Pg1gjTLgewcKGeMdJ76J4=
+        b=Hf827eF33usGlNYKWfLF8QLICfzofMIeTUUwRzp3qREmcwahH4aTaVaUsTPzObzWC
+         EIl7Lv9VBeOl9GEREWCafaPJisL+2NUXbioMBAOe01i2r8tqqioyoSVOs6T82tBLGp
+         U7o1ikkbITlrQneNYjX2HlE9Jqo37pT4QDr3kU5o=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH v2 04/10] media: imx: imx7-mipi-csis: Filter on CSI-2 data type
-Date:   Tue, 10 Mar 2020 18:06:27 +0200
-Message-Id: <20200310160633.950-5-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 01/10] media: imx: imx7_mipi_csis: Power off the source when stopping streaming
+Date:   Tue, 10 Mar 2020 18:06:24 +0200
+Message-Id: <20200310160633.950-2-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200310160633.950-1-laurent.pinchart@ideasonboard.com>
 References: <20200310160633.950-1-laurent.pinchart@ideasonboard.com>
@@ -50,29 +50,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enable filtering based on CSI-2 data type. Otherwise sources that send
-multiple data types (such as sensors that send embedded data) will not
-be properly supported. They will both result in additional non-image
-lines being captured, and in the receiver being confused as it doesn't
-resynchronise on vsync.
+The .s_stream() implementation incorrectly powers on the source when
+stopping the stream. Power it off instead.
 
+Fixes: 7807063b862b ("media: staging/imx7: add MIPI CSI-2 receiver subdev for i.MX7")
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 1 +
- 1 file changed, 1 insertion(+)
+Changes since v1:
+
+- Added Fixes: tag
+---
+ drivers/staging/media/imx/imx7-mipi-csis.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 2dd0b02e98b7..de17a1d22873 100644
+index 383abecb3bec..0053e8b0b88e 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -430,6 +430,7 @@ static void mipi_csis_set_params(struct csi_state *state)
- 	val = mipi_csis_read(state, MIPI_CSIS_CMN_CTRL);
- 	val &= ~MIPI_CSIS_CMN_CTRL_LANE_NR_MASK;
- 	val |= (lanes - 1) << MIPI_CSIS_CMN_CTRL_LANE_NR_OFFSET;
-+	val |= MIPI_CSIS_CMN_CTRL_INTER_MODE;
- 	mipi_csis_write(state, MIPI_CSIS_CMN_CTRL, val);
- 
- 	__mipi_csis_set_format(state);
+@@ -577,7 +577,7 @@ static int mipi_csis_s_stream(struct v4l2_subdev *mipi_sd, int enable)
+ 		state->flags |= ST_STREAMING;
+ 	} else {
+ 		v4l2_subdev_call(state->src_sd, video, s_stream, 0);
+-		ret = v4l2_subdev_call(state->src_sd, core, s_power, 1);
++		ret = v4l2_subdev_call(state->src_sd, core, s_power, 0);
+ 		mipi_csis_stop_stream(state);
+ 		state->flags &= ~ST_STREAMING;
+ 		if (state->debug)
 -- 
 Regards,
 
