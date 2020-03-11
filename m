@@ -2,56 +2,56 @@ Return-Path: <SRS0=T/3t=44=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA7F2C10F27
-	for <linux-media@archiver.kernel.org>; Wed, 11 Mar 2020 11:20:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE094C18E5C
+	for <linux-media@archiver.kernel.org>; Wed, 11 Mar 2020 11:20:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BF83D208E4
-	for <linux-media@archiver.kernel.org>; Wed, 11 Mar 2020 11:20:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF34D21655
+	for <linux-media@archiver.kernel.org>; Wed, 11 Mar 2020 11:20:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fBOA7Z4/"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="BLZlM4Vs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbgCKLUT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Mar 2020 07:20:19 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:33946 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725834AbgCKLUT (ORCPT
+        id S1729146AbgCKLUa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Mar 2020 07:20:30 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:40726 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729138AbgCKLU3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Mar 2020 07:20:19 -0400
-Received: by mail-pf1-f193.google.com with SMTP id 23so1159691pfj.1
-        for <linux-media@vger.kernel.org>; Wed, 11 Mar 2020 04:20:18 -0700 (PDT)
+        Wed, 11 Mar 2020 07:20:29 -0400
+Received: by mail-pl1-f194.google.com with SMTP id h11so950837plk.7
+        for <linux-media@vger.kernel.org>; Wed, 11 Mar 2020 04:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KxW/JHv7DCd6LJdHZguy7LpVn/rmry23ZMXy1XI084k=;
-        b=fBOA7Z4/VSkvDegFBNVqp2pLUAlgBxRv5RhOTNT8p2xHiAPXkjWsHMTxUl1BPV00zJ
-         vMY5dhyEKkfjXmFfYLzpD5a73p+KDdMSaC4nhV9dQ1R32BqiNxXeCSXBpA7Ii2Wer4pC
-         VDfF4BA+tuEYJwFmE32LvvNq/AN2GVAmGN3hs=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HbNivqIBs4pO6i4JqhZUJefImajxMHo9WsbKwRa5KuU=;
+        b=BLZlM4VsvKYHd4VLsroG9x3pc9BkKgFIdNxhZjBjjm/+j1sEDSnWY3afVjyUu7R6PM
+         bisd04NTMJZyGDEK6+/B/pplIvIEPM5REXLbhgmATI7bvqLjrR1V4s3Oo7De/j21DCt2
+         p3alVM4+Krbfjf5UHngcmpJiWwKY/s217aLkA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KxW/JHv7DCd6LJdHZguy7LpVn/rmry23ZMXy1XI084k=;
-        b=D8NACIJxaLb05fxWhVxwMRJpRlhS+oFr+CR+IMf1kG8rkQJcQEERDCTONJYXOG/2Y8
-         pXOzruXgL67YYeVpMiwSKmFt4DFKAagX1G/l+lyyxq7m9s0UrUFOL/3QpfkH8Bs1Pfvf
-         LMVnQ96Lq1oNIKPsSuw/VLk7zyUDZSMMMCGu18LS17WKYI5I9rXMZM/VmmfEGTO3ZaD2
-         6OxMoP9iTnt6CQtvAsWKe3QB5YAyBPapiL730YgvdVWk8RvmdLyYzEUBHh7pQdfOeazY
-         bDWXVpApvLM9SHJ+ito6AQt4ZlHpYw5U+6bzYYvMI26VOhsZLXUuFc8osYuXYg0eIbvm
-         qB3g==
-X-Gm-Message-State: ANhLgQ11w+HTg5+gYUZQdj6B8blDS/hmfzyI89Q1fXPt6d3tA22TXvPp
-        HlQ8lsqXYoEIQeUeI4d86TK79Q==
-X-Google-Smtp-Source: ADFU+vvUUJsm4mKY+53aHHx0GkxoPfHJ2XfB3hmp2HvE1iN3ACnAA15TuK1aSNIfg+893OuM9NF9eQ==
-X-Received: by 2002:a63:4d6:: with SMTP id 205mr2392870pge.10.1583925617855;
-        Wed, 11 Mar 2020 04:20:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HbNivqIBs4pO6i4JqhZUJefImajxMHo9WsbKwRa5KuU=;
+        b=Eyyr0g70gsD93IrNU5xfclhd8JuTaCmZiSarjU8o8/L+Lgn+OI4gRt7vPDe3eR+n/R
+         sOBzOjjqSGqeq+g+q5Fz1QBpgYaFZGDP534ggUWVNnDn37WzVbztca4HhaP/jgje0lg6
+         J0YhpYVd/Ph/FbPf3Fmls2sEbTW1IWRFzwBZN82x5oUAJ2IQSzkaqg8ij7HIJJt6zpAm
+         Q4mBAeqNWvO3rPWPLqzD90v7WYAzKYIYBGYOtJbv+4/bSjQ0MwaM0l7PF6J3zrJVIlQR
+         wO0v5syjtjycaGcbhME6oPW5bQgH9gkZ7smH8NEdcnmPZQtiXfQwPZGpyOU/GC3VV1MR
+         HIsQ==
+X-Gm-Message-State: ANhLgQ0I6L/+FpxX2mTKSg5vHpFVPbFHmoAUA/Fgkp88/9hV8QEvHhUs
+        s5+En7BWQy6RCwFMT3y0JHlXJg==
+X-Google-Smtp-Source: ADFU+vtvpxb5f2yDL72gUW/DV61OyipUNCKf7TWHyZgzhYWvjtGBXk+7g0gih+9tvtIh3gj1Ol64hA==
+X-Received: by 2002:a17:902:aa44:: with SMTP id c4mr2543611plr.73.1583925628333;
+        Wed, 11 Mar 2020 04:20:28 -0700 (PDT)
 Received: from localhost ([2401:fa00:8f:203:30f2:7a9c:387e:6c7])
-        by smtp.gmail.com with ESMTPSA id e12sm35842384pff.168.2020.03.11.04.20.14
+        by smtp.gmail.com with ESMTPSA id i72sm23110641pgd.88.2020.03.11.04.20.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Mar 2020 04:20:17 -0700 (PDT)
+        Wed, 11 Mar 2020 04:20:27 -0700 (PDT)
 From:   David Stevens <stevensd@chromium.org>
 To:     Gerd Hoffmann <kraxel@redhat.com>, David Airlie <airlied@linux.ie>
 Cc:     Daniel Vetter <daniel@ffwll.ch>,
@@ -66,10 +66,12 @@ Cc:     Daniel Vetter <daniel@ffwll.ch>,
         virtualization@lists.linux-foundation.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
         virtio-dev@lists.oasis-open.org
-Subject: [PATCH v3 0/4] Support virtio cross-device resources
-Date:   Wed, 11 Mar 2020 20:20:00 +0900
-Message-Id: <20200311112004.47138-1-stevensd@chromium.org>
+Subject: [PATCH v3 2/4] drm/prime: add support for virtio exported objects
+Date:   Wed, 11 Mar 2020 20:20:02 +0900
+Message-Id: <20200311112004.47138-3-stevensd@chromium.org>
 X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
+In-Reply-To: <20200311112004.47138-1-stevensd@chromium.org>
+References: <20200311112004.47138-1-stevensd@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -77,41 +79,83 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patchset implements the current proposal for virtio cross-device
-resource sharing [1], with minor changes based on recent comments. It
-is expected that this will be used to import virtio resources into the
-virtio-video driver currently under discussion [2].
+This change exposes dma-buf's get_uuid callback to PRIME drivers.
 
-This patchset adds a new hook to dma-buf, for querying the dma-buf's
-underlying virtio UUID. This hook is then plumbed through DRM PRIME
-buffers, and finally implemented in virtgpu.
+Signed-off-by: David Stevens <stevensd@chromium.org>
+---
+ drivers/gpu/drm/drm_prime.c | 23 +++++++++++++++++++++++
+ include/drm/drm_drv.h       | 10 ++++++++++
+ 2 files changed, 33 insertions(+)
 
-[1] https://markmail.org/thread/jsaoqy7phrqdcpqu
-[2] https://markmail.org/thread/p5d3k566srtdtute
-
-v2 -> v3 changes:
- - Remove ifdefs.
- - Simplify virtgpu_gem_prime_export as it can only be called once.
- - Use virtio_gpu_vbuffer's objs field instead of abusing data_buf.
-
-David Stevens (4):
-  dma-buf: add support for virtio exported objects
-  drm/prime: add support for virtio exported objects
-  virtio-gpu: add VIRTIO_GPU_F_RESOURCE_UUID feature
-  drm/virtio: Support virtgpu exported resources
-
- drivers/dma-buf/dma-buf.c              | 12 ++++++
- drivers/gpu/drm/drm_prime.c            | 23 +++++++++++
- drivers/gpu/drm/virtio/virtgpu_drv.c   |  3 ++
- drivers/gpu/drm/virtio/virtgpu_drv.h   | 18 +++++++++
- drivers/gpu/drm/virtio/virtgpu_kms.c   |  4 ++
- drivers/gpu/drm/virtio/virtgpu_prime.c | 41 +++++++++++++++++--
- drivers/gpu/drm/virtio/virtgpu_vq.c    | 55 ++++++++++++++++++++++++++
- include/drm/drm_drv.h                  | 10 +++++
- include/linux/dma-buf.h                | 18 +++++++++
- include/uapi/linux/virtio_gpu.h        | 19 +++++++++
- 10 files changed, 200 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+index 86d9b0e45c8c..50fed8497d3c 100644
+--- a/drivers/gpu/drm/drm_prime.c
++++ b/drivers/gpu/drm/drm_prime.c
+@@ -779,6 +779,28 @@ int drm_gem_dmabuf_mmap(struct dma_buf *dma_buf, struct vm_area_struct *vma)
+ }
+ EXPORT_SYMBOL(drm_gem_dmabuf_mmap);
+ 
++/**
++ * drm_gem_dmabuf_get_uuid - dma_buf get_uuid implementation for GEM
++ * @dma_buf: buffer to query
++ * @uuid: uuid outparam
++ *
++ * Queries the buffer's virtio UUID. This can be used as the
++ * &dma_buf_ops.get_uuid callback. Calls into &drm_driver.gem_prime_get_uuid.
++ *
++ * Returns 0 on success or a negative error code on failure.
++ */
++int drm_gem_dmabuf_get_uuid(struct dma_buf *dma_buf, uuid_t *uuid)
++{
++	struct drm_gem_object *obj = dma_buf->priv;
++	struct drm_device *dev = obj->dev;
++
++	if (!dev->driver->gem_prime_get_uuid)
++		return -ENODEV;
++
++	return dev->driver->gem_prime_get_uuid(obj, uuid);
++}
++EXPORT_SYMBOL(drm_gem_dmabuf_get_uuid);
++
+ static const struct dma_buf_ops drm_gem_prime_dmabuf_ops =  {
+ 	.cache_sgt_mapping = true,
+ 	.attach = drm_gem_map_attach,
+@@ -789,6 +811,7 @@ static const struct dma_buf_ops drm_gem_prime_dmabuf_ops =  {
+ 	.mmap = drm_gem_dmabuf_mmap,
+ 	.vmap = drm_gem_dmabuf_vmap,
+ 	.vunmap = drm_gem_dmabuf_vunmap,
++	.get_uuid = drm_gem_dmabuf_get_uuid,
+ };
+ 
+ /**
+diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
+index 77685ed7aa65..61e3ff341844 100644
+--- a/include/drm/drm_drv.h
++++ b/include/drm/drm_drv.h
+@@ -29,6 +29,7 @@
+ 
+ #include <linux/list.h>
+ #include <linux/irqreturn.h>
++#include <linux/uuid.h>
+ 
+ #include <drm/drm_device.h>
+ 
+@@ -639,6 +640,15 @@ struct drm_driver {
+ 	int (*gem_prime_mmap)(struct drm_gem_object *obj,
+ 				struct vm_area_struct *vma);
+ 
++	/**
++	 * @gem_prime_get_uuid
++	 *
++	 * get_uuid hook for GEM drivers. Retrieves the virtio uuid of the
++	 * given GEM buffer.
++	 */
++	int (*gem_prime_get_uuid)(struct drm_gem_object *obj,
++				  uuid_t *uuid);
++
+ 	/**
+ 	 * @dumb_create:
+ 	 *
 -- 
 2.25.1.481.gfbce0eb801-goog
 
