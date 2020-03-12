@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B209C4CECE
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DB0EC10DCE
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 44D1D206F7
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A16E206FA
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="i8qVeiir"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="eSDycGCX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbgCLXrk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Mar 2020 19:47:40 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:34486 "EHLO
+        id S1727053AbgCLXrl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Mar 2020 19:47:41 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:34488 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726986AbgCLXrj (ORCPT
+        with ESMTP id S1727027AbgCLXrk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Mar 2020 19:47:39 -0400
+        Thu, 12 Mar 2020 19:47:40 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 11B1F144E;
-        Fri, 13 Mar 2020 00:47:36 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1FF02134B;
+        Fri, 13 Mar 2020 00:47:37 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1584056856;
-        bh=IkSi/y206ethh5aFrlCqWo0gaCVsIzdna/RtffOdjSQ=;
+        s=mail; t=1584056857;
+        bh=Z297vDytqdP9lkVnl7CgvG3IzCVlQAabrm6SIcDcmL4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i8qVeiir/DCJsx11N6hP4AR3wYhOdhTC+H9mEgD5ojPFCNf23PHJcHLi+dkwwTfJJ
-         ePXQGJ7W0fjJqKpCjCK12FUaWxadwCAv6tKqhVtuN7C6OE20/AD5bCpmuR2lkakszo
-         G/v2ZxF1fGog44p4ar/emRHWkCLqczqCLoyyZtsI=
+        b=eSDycGCXAGFmY4kf0cj6Vp9sTdq301lkN563CLn0RbfG89jMSbE8LEzY3D4L4iaUS
+         CPTPbvtwW6p4Lu9zd71nJN6dPhZnWM07iv1I339abDDLAYkVgucrsVTVzXyNRS8rBA
+         QihgfRAt9GFT+lr59M77kGu1anDPjhpjU6NdrUBo=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH 09/14] media: imx: imx7-mipi-csis: Never set MIPI_CSIS_ISPCFG_ALIGN_32BIT
-Date:   Fri, 13 Mar 2020 01:47:17 +0200
-Message-Id: <20200312234722.23483-10-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 11/14] media: imx: imx7-mipi-csis: Remove link setup on source pad
+Date:   Fri, 13 Mar 2020 01:47:19 +0200
+Message-Id: <20200312234722.23483-12-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200312234722.23483-1-laurent.pinchart@ideasonboard.com>
 References: <20200312234722.23483-1-laurent.pinchart@ideasonboard.com>
@@ -50,45 +50,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The MIPI_CSIS_ISPCFG_ALIGN_32BIT bit enables output of 32-bit data. The
-driver sets it based on the select format, but no format uses a 32-bit
-bus width, so the bit is never set in practice. This isn't likely to
-change any time soon, as the CSI IP core connected at the output of the
-CSIS doesn't support 32-bit data width. Hardcode the bit to 0.
+The driver rejects enablement of multiple links on its source pad. This
+isn't needed, as the CSIS doesn't care. Drop it.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index ef5fabfcdada..922657b856b6 100644
+index 40004a98f801..7112969d1cf4 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -464,7 +464,8 @@ static void __mipi_csis_set_format(struct csi_state *state)
+@@ -254,7 +254,6 @@ struct csi_state {
  
- 	/* Color format */
- 	val = mipi_csis_read(state, MIPI_CSIS_ISPCONFIG_CH0);
--	val = (val & ~MIPI_CSIS_ISPCFG_FMT_MASK) | state->csis_fmt->fmt_reg;
-+	val &= ~(MIPI_CSIS_ISPCFG_ALIGN_32BIT | MIPI_CSIS_ISPCFG_FMT_MASK);
-+	val |= state->csis_fmt->fmt_reg;
- 	mipi_csis_write(state, MIPI_CSIS_ISPCONFIG_CH0, val);
+ 	struct csis_hw_reset hw_reset;
+ 	struct regulator *mipi_phy_regulator;
+-	bool sink_linked;
+ };
  
- 	/* Pixel resolution */
-@@ -496,13 +497,6 @@ static void mipi_csis_set_params(struct csi_state *state)
+ struct csis_pix_format {
+@@ -675,17 +674,7 @@ static int mipi_csis_link_setup(struct media_entity *entity,
  
- 	mipi_csis_set_hsync_settle(state, state->hs_settle);
+ 	mutex_lock(&state->lock);
  
--	val = mipi_csis_read(state, MIPI_CSIS_ISPCONFIG_CH0);
--	if (state->csis_fmt->width == 32)
--		val |= MIPI_CSIS_ISPCFG_ALIGN_32BIT;
--	else
--		val &= ~MIPI_CSIS_ISPCFG_ALIGN_32BIT;
--	mipi_csis_write(state, MIPI_CSIS_ISPCONFIG_CH0, val);
--
- 	val = (0 << MIPI_CSIS_ISPSYNC_HSYNC_LINTV_OFFSET) |
- 		(0 << MIPI_CSIS_ISPSYNC_VSYNC_SINTV_OFFSET) |
- 		(0 << MIPI_CSIS_ISPSYNC_VSYNC_EINTV_OFFSET);
+-	if (local_pad->flags & MEDIA_PAD_FL_SOURCE) {
+-		if (flags & MEDIA_LNK_FL_ENABLED) {
+-			if (state->sink_linked) {
+-				ret = -EBUSY;
+-				goto out;
+-			}
+-			state->sink_linked = true;
+-		} else {
+-			state->sink_linked = false;
+-		}
+-	} else {
++	if (local_pad->flags & MEDIA_PAD_FL_SINK) {
+ 		if (flags & MEDIA_LNK_FL_ENABLED) {
+ 			if (state->src_sd) {
+ 				ret = -EBUSY;
 -- 
 Regards,
 
