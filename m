@@ -2,189 +2,348 @@ Return-Path: <SRS0=Lc/z=45=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B02C9C10DCE
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 15:46:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96AA1C10DCE
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 15:57:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 928392067C
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 15:46:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 55F032067C
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 15:57:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=jlekstrand-net.20150623.gappssmtp.com header.i=@jlekstrand-net.20150623.gappssmtp.com header.b="WLT7lfY1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727906AbgCLPqg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Mar 2020 11:46:36 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44024 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727526AbgCLPqg (ORCPT
+        id S1727192AbgCLP5v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Mar 2020 11:57:51 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:41884 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727059AbgCLP5v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Mar 2020 11:46:36 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id DAF34296A85
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
-        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com
-Subject: [PATCH v2 2/2] media: staging: rkisp1: replace the call to v4l2_async_notifier_parse_fwnode_endpoints_by_port
-Date:   Thu, 12 Mar 2020 16:46:04 +0100
-Message-Id: <20200312154604.24996-3-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200312154604.24996-1-dafna.hirschfeld@collabora.com>
-References: <20200312154604.24996-1-dafna.hirschfeld@collabora.com>
+        Thu, 12 Mar 2020 11:57:51 -0400
+Received: by mail-ed1-f67.google.com with SMTP id m25so8060482edq.8
+        for <linux-media@vger.kernel.org>; Thu, 12 Mar 2020 08:57:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jlekstrand-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KFoqHlKe9Gz1nlNRRZBNdmBmwauPKFbN5aYg7hDMwdo=;
+        b=WLT7lfY1Zqf5BYzaQ3nByDF7r8CnBHJmE8k2xiyOm5ryCtZVvF3kqw9VEgPERQ3doW
+         jl7Zbji/5as/viceoo72pqyg9iLh0ho5veyGgzrYbGSJO0lnMBIIrg01a7TcN1aCzZu9
+         oHn0i+nC7jlLU/VstInQEF3vfZfmEClUdqxjySThnoXB3dANG2jVLqiKWLY9QEr6A34u
+         7KZehc4ThmcKDtfbR/oCwHgiC+NBBryX9pDxL262/x6dHtJOU6ZrgNOmxsUccM+F3zkE
+         idCpGSxw+0v0vYwIC+IarVC5vhHEcniYv9Hos0h/Z0H8O90meja4D03QH47TzZqw0xrI
+         MOyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KFoqHlKe9Gz1nlNRRZBNdmBmwauPKFbN5aYg7hDMwdo=;
+        b=au0moMMZECd84TB6Hes/sEPoNIML1gmL1cLmf9j2ypvrZuM5RqTz7O5dM7uCPyGoli
+         7RIrBvrZSRgKnJq/235dYNGgqJTsTXlcU37uwCXtpTjijDNuTswi0lymBqMg5Y1lBAyG
+         gUq/tkfz90+ydSTtdk83rmNCcqXm9S4jQqGMke3aUFQbFbWBQ7t3sE8pqlGyMZWNIid8
+         hI/yxfjnF6uKVjZLYPEbepdebL9prS4D6xKD/Tkhl9k7FjWgbzDLO53ZC8193zq1hjZA
+         U0B/HIHzQ9ZY8yHy8eSXivyuSDloDubrjdUYXC40ipw97+7RXSwaqU1wgxVCSiKgDT3v
+         sVxQ==
+X-Gm-Message-State: ANhLgQ3yAllIMgK6XXVMBaP0Vc1x1nT6TQsWD/ZnBxMASb/shdsW+JSA
+        dBwW8XMO0IZbF8CTX0Q4pVILPaHlvwTZOvfuHBwmCQ==
+X-Google-Smtp-Source: ADFU+vtrhhYk6GUgRImv9L/MfX6bT3C6fKT+3UCMlb5umWq+7s3Q85gXhMXy72HAwJfbPATR6JHEwoaAgknMk5a0RPc=
+X-Received: by 2002:a50:9998:: with SMTP id m24mr8165526edb.98.1584028669210;
+ Thu, 12 Mar 2020 08:57:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200303190318.522103-1-jason@jlekstrand.net> <20200311034351.1275197-1-jason@jlekstrand.net>
+ <20200311034351.1275197-3-jason@jlekstrand.net> <bcd22ed3-c1fe-c018-5cb2-a077562eb1ff@amd.com>
+In-Reply-To: <bcd22ed3-c1fe-c018-5cb2-a077562eb1ff@amd.com>
+From:   Jason Ekstrand <jason@jlekstrand.net>
+Date:   Thu, 12 Mar 2020 10:57:37 -0500
+Message-ID: <CAOFGe96gbU03odF2OoLMnA7t7UgM6XrscogOD75dk62=hVFRmA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] RFC: dma-buf: Add an API for importing and exporting
+ sync files (v4)
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Dave Airlie <airlied@redhat.com>,
+        Jesse Hall <jessehall@google.com>,
+        James Jones <jajones@nvidia.com>,
+        Daniel Stone <daniels@collabora.com>,
+        =?UTF-8?Q?Kristian_H=C3=B8gsberg?= <hoegsberg@google.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Greg Hackmann <ghackmann@google.com>,
+        Chenbo Feng <fengc@google.com>, linux-media@vger.kernel.org,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, linaro-mm-sig@lists.linaro.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-don't call 'v4l2_async_notifier_parse_fwnode_endpoints_by_port'
-in order to register async subdevices. Instead call
-'v4l2_fwnode_endpoint_parse' to parse the remote endpoints
-and then register each async subdev with
-'v4l2_async_notifier_add_fwnode_remote_subdev'
+On Wed, Mar 11, 2020 at 8:18 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 11.03.20 um 04:43 schrieb Jason Ekstrand:
+> > Explicit synchronization is the future.  At least, that seems to be wha=
+t
+> > most userspace APIs are agreeing on at this point.  However, most of ou=
+r
+> > Linux APIs (both userspace and kernel UAPI) are currently built around
+> > implicit synchronization with dma-buf.  While work is ongoing to change
+> > many of the userspace APIs and protocols to an explicit synchronization
+> > model, switching over piecemeal is difficult due to the number of
+> > potential components involved.  On the kernel side, many drivers use
+> > dma-buf including GPU (3D/compute), display, v4l, and others.  In
+> > userspace, we have X11, several Wayland compositors, 3D drivers, comput=
+e
+> > drivers (OpenCL etc.), media encode/decode, and the list goes on.
+> >
+> > This patch provides a path forward by allowing userspace to manually
+> > manage the fences attached to a dma-buf.  Alternatively, one can think
+> > of this as making dma-buf's implicit synchronization simply a carrier
+> > for an explicit fence.  This is accomplished by adding two IOCTLs to
+> > dma-buf for importing and exporting a sync file to/from the dma-buf.
+> > This way a userspace component which is uses explicit synchronization,
+> > such as a Vulkan driver, can manually set the write fence on a buffer
+> > before handing it off to an implicitly synchronized component such as a
+> > Wayland compositor or video encoder.  In this way, each of the differen=
+t
+> > components can be upgraded to an explicit synchronization model one at =
+a
+> > time as long as the userspace pieces connecting them are aware of it an=
+d
+> > import/export fences at the right times.
+> >
+> > There is a potential race condition with this API if userspace is not
+> > careful.  A typical use case for implicit synchronization is to wait fo=
+r
+> > the dma-buf to be ready, use it, and then signal it for some other
+> > component.  Because a sync_file cannot be created until it is guarantee=
+d
+> > to complete in finite time, userspace can only signal the dma-buf after
+> > it has already submitted the work which uses it to the kernel and has
+> > received a sync_file back.  There is no way to atomically submit a
+> > wait-use-signal operation.  This is not, however, really a problem with
+> > this API so much as it is a problem with explicit synchronization
+> > itself.  The way this is typically handled is to have very explicit
+> > ownership transfer points in the API or protocol which ensure that only
+> > one component is using it at any given time.  Both X11 (via the PRESENT
+> > extension) and Wayland provide such ownership transfer points via
+> > explicit present and idle messages.
+> >
+> > The decision was intentionally made in this patch to make the import an=
+d
+> > export operations IOCTLs on the dma-buf itself rather than as a DRM
+> > IOCTL.  This makes it the import/export operation universal across all
+> > components which use dma-buf including GPU, display, v4l, and others.
+> > It also means that a userspace component can do the import/export
+> > without access to the DRM fd which may be tricky to get in cases where
+> > the client communicates with DRM via a userspace API such as OpenGL or
+> > Vulkan.  At a future date we may choose to add direct import/export API=
+s
+> > to components such as drm_syncobj to avoid allocating a file descriptor
+> > and going through two ioctls.  However, that seems to be something of a
+> > micro-optimization as import/export operations are likely to happen at =
+a
+> > rate of a few per frame of rendered or decoded video.
+> >
+> > v2 (Jason Ekstrand):
+> >   - Use a wrapper dma_fence_array of all fences including the new one
+> >     when importing an exclusive fence.
+> >
+> > v3 (Jason Ekstrand):
+> >   - Lock around setting shared fences as well as exclusive
+> >   - Mark SIGNAL_SYNC_FILE as a read-write ioctl.
+> >   - Initialize ret to 0 in dma_buf_wait_sync_file
+> >
+> > v4 (Jason Ekstrand):
+> >   - Use the new dma_resv_get_singleton helper
+> >
+> > Signed-off-by: Jason Ekstrand <jason@jlekstrand.net>
+> > ---
+> >   drivers/dma-buf/dma-buf.c    | 96 +++++++++++++++++++++++++++++++++++=
++
+> >   include/uapi/linux/dma-buf.h | 13 ++++-
+> >   2 files changed, 107 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> > index d4097856c86b..09973c689866 100644
+> > --- a/drivers/dma-buf/dma-buf.c
+> > +++ b/drivers/dma-buf/dma-buf.c
+> > @@ -20,6 +20,7 @@
+> >   #include <linux/debugfs.h>
+> >   #include <linux/module.h>
+> >   #include <linux/seq_file.h>
+> > +#include <linux/sync_file.h>
+> >   #include <linux/poll.h>
+> >   #include <linux/dma-resv.h>
+> >   #include <linux/mm.h>
+> > @@ -348,6 +349,95 @@ static long dma_buf_set_name(struct dma_buf *dmabu=
+f, const char __user *buf)
+> >       return ret;
+> >   }
+> >
+> > +static long dma_buf_wait_sync_file(struct dma_buf *dmabuf,
+> > +                                const void __user *user_data)
+> > +{
+> > +     struct dma_buf_sync_file arg;
+> > +     struct dma_fence *fence;
+> > +     int ret =3D 0;
+> > +
+> > +     if (copy_from_user(&arg, user_data, sizeof(arg)))
+> > +             return -EFAULT;
+> > +
+> > +     if (arg.flags !=3D 0 && arg.flags !=3D DMA_BUF_SYNC_FILE_SYNC_WRI=
+TE)
+> > +             return -EINVAL;
+> > +
+> > +     fence =3D sync_file_get_fence(arg.fd);
+> > +     if (!fence)
+> > +             return -EINVAL;
+> > +
+> > +     dma_resv_lock(dmabuf->resv, NULL);
+> > +
+> > +     if (arg.flags & DMA_BUF_SYNC_FILE_SYNC_WRITE) {
+> > +             struct dma_fence *singleton =3D NULL;
+> > +             ret =3D dma_resv_get_singleton(dmabuf->resv, fence, &sing=
+leton);
+> > +             if (!ret && singleton)
+> > +                     dma_resv_add_excl_fence(dmabuf->resv, singleton);
+> > +     } else {
+> > +             dma_resv_add_shared_fence(dmabuf->resv, fence);
+> > +     }
+>
+> You also need to create a singleton when adding a shared fences.
+>
+> The problem is that shared fences must always signal after exclusive
+> ones and you can't guarantee that for the fence you add here.
 
-Also remove the relevant item in the TODO file
+I'm beginning to think that I should just drop the flags and always
+wait on all fences and always take what's currently the "write" path.
+Otherwise, something's going to get it wrong somewhere.  Thoughts?
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
----
- drivers/staging/media/rkisp1/TODO         |  3 -
- drivers/staging/media/rkisp1/rkisp1-dev.c | 94 +++++++++++++----------
- 2 files changed, 55 insertions(+), 42 deletions(-)
+Also, Michelle (added to CC) commented on IRC today that amdgpu does
+something with implicit sync fences where it sorts out the fences
+which affect one queue vs. others.  He thought that stuffing fences in
+the dma-buf in this way might cause that to not work.  Thoughts?
 
-diff --git a/drivers/staging/media/rkisp1/TODO b/drivers/staging/media/rkisp1/TODO
-index 0aa9877dd64a..1aa3bb9fd6cb 100644
---- a/drivers/staging/media/rkisp1/TODO
-+++ b/drivers/staging/media/rkisp1/TODO
-@@ -1,6 +1,3 @@
--* Don't use v4l2_async_notifier_parse_fwnode_endpoints_by_port().
--e.g. isp_parse_of_endpoints in drivers/media/platform/omap3isp/isp.c
--cio2_parse_firmware in drivers/media/pci/intel/ipu3/ipu3-cio2.c.
- * Fix pad format size for statistics and parameters entities.
- * Use threaded interrupt for rkisp1_stats_isr(), remove work queue.
- * Fix checkpatch errors.
-diff --git a/drivers/staging/media/rkisp1/rkisp1-dev.c b/drivers/staging/media/rkisp1/rkisp1-dev.c
-index d2186856bb24..1035a39f3e49 100644
---- a/drivers/staging/media/rkisp1/rkisp1-dev.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-dev.c
-@@ -233,35 +233,6 @@ static int rkisp1_subdev_notifier_complete(struct v4l2_async_notifier *notifier)
- 	return 0;
- }
- 
--static int rkisp1_fwnode_parse(struct device *dev,
--			       struct v4l2_fwnode_endpoint *vep,
--			       struct v4l2_async_subdev *asd)
--{
--	struct rkisp1_sensor_async *s_asd =
--			container_of(asd, struct rkisp1_sensor_async, asd);
--
--	if (vep->bus_type != V4L2_MBUS_CSI2_DPHY) {
--		dev_err(dev, "Only CSI2 bus type is currently supported\n");
--		return -EINVAL;
--	}
--
--	if (vep->base.port != 0) {
--		dev_err(dev, "The ISP has only port 0\n");
--		return -EINVAL;
--	}
--
--	s_asd->mbus_type = vep->bus_type;
--	s_asd->lanes = vep->bus.mipi_csi2.num_data_lanes;
--
--	/* Parallel bus is currently not supported */
--	s_asd->parallel_bus_flags = 0;
--
--	if (s_asd->lanes < 1 || s_asd->lanes > 4)
--		return -EINVAL;
--
--	return 0;
--}
--
- static const struct v4l2_async_notifier_operations rkisp1_subdev_notifier_ops = {
- 	.bound = rkisp1_subdev_notifier_bound,
- 	.unbind = rkisp1_subdev_notifier_unbind,
-@@ -271,23 +242,68 @@ static const struct v4l2_async_notifier_operations rkisp1_subdev_notifier_ops =
- static int rkisp1_subdev_notifier(struct rkisp1_device *rkisp1)
- {
- 	struct v4l2_async_notifier *ntf = &rkisp1->notifier;
--	struct device *dev = rkisp1->dev;
-+	int next_id = 0;
- 	int ret;
- 
- 	v4l2_async_notifier_init(ntf);
- 
--	ret = v4l2_async_notifier_parse_fwnode_endpoints_by_port(dev, ntf,
--					sizeof(struct rkisp1_sensor_async),
--					0, rkisp1_fwnode_parse);
--	if (ret)
--		return ret;
-+	while (1) {
-+		struct v4l2_fwnode_endpoint vep = {
-+			.bus_type = V4L2_MBUS_CSI2_DPHY
-+		};
-+		struct rkisp1_sensor_async *rk_asd = NULL;
-+		struct fwnode_handle *ep;
- 
--	if (list_empty(&ntf->asd_list))
--		return -ENODEV;
-+		ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(rkisp1->dev),
-+			0, next_id, FWNODE_GRAPH_ENDPOINT_NEXT);
- 
--	ntf->ops = &rkisp1_subdev_notifier_ops;
-+		if (!ep)
-+			break;
-+
-+		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-+		if (ret)
-+			goto err_parse;
-+
-+		rk_asd = kzalloc(sizeof(*rk_asd), GFP_KERNEL);
-+		if (!rk_asd) {
-+			ret = -ENOMEM;
-+			goto err_parse;
-+		}
-+
-+		rk_asd->lanes = vep.bus.mipi_csi2.num_data_lanes;
-+		rk_asd->mbus_type = vep.bus_type;
-+
-+		/* Parallel bus is currently not supported */
-+		rk_asd->parallel_bus_flags = 0;
-+		ret = v4l2_async_notifier_add_fwnode_remote_subdev(ntf, ep,
-+								   &rk_asd->asd);
-+		if (ret)
-+			goto err_parse;
-+
-+		dev_dbg(rkisp1->dev, "registered ep id %d with %d lanes\n",
-+			vep.base.id, rk_asd->lanes);
-+
-+		next_id = vep.base.id + 1;
-+
-+		fwnode_handle_put(ep);
- 
--	return v4l2_async_notifier_register(&rkisp1->v4l2_dev, ntf);
-+		continue;
-+err_parse:
-+		fwnode_handle_put(ep);
-+		kfree(rk_asd);
-+		v4l2_async_notifier_cleanup(ntf);
-+		return ret;
-+	}
-+
-+	if (next_id == 0)
-+		dev_warn(rkisp1->dev, "no remote subdevice found\n");
-+	ntf->ops = &rkisp1_subdev_notifier_ops;
-+	ret = v4l2_async_notifier_register(&rkisp1->v4l2_dev, ntf);
-+	if (ret) {
-+		v4l2_async_notifier_cleanup(ntf);
-+		return ret;
-+	}
-+	return 0;
- }
- 
- /* ----------------------------------------------------------------------------
--- 
-2.17.1
+--Jason
 
+
+> Regards,
+> Christian.
+>
+> > +
+> > +     dma_resv_unlock(dmabuf->resv);
+> > +
+> > +     dma_fence_put(fence);
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +static long dma_buf_signal_sync_file(struct dma_buf *dmabuf,
+> > +                                  void __user *user_data)
+> > +{
+> > +     struct dma_buf_sync_file arg;
+> > +     struct dma_fence *fence =3D NULL;
+> > +     struct sync_file *sync_file;
+> > +     int fd, ret;
+> > +
+> > +     if (copy_from_user(&arg, user_data, sizeof(arg)))
+> > +             return -EFAULT;
+> > +
+> > +     if (arg.flags !=3D 0 && arg.flags !=3D DMA_BUF_SYNC_FILE_SYNC_WRI=
+TE)
+> > +             return -EINVAL;
+> > +
+> > +     fd =3D get_unused_fd_flags(O_CLOEXEC);
+> > +     if (fd < 0)
+> > +             return fd;
+> > +
+> > +     if (arg.flags & DMA_BUF_SYNC_FILE_SYNC_WRITE) {
+> > +             /* We need to include both the exclusive fence and all of
+> > +              * the shared fences in our fence.
+> > +              */
+> > +             ret =3D dma_resv_get_singleton(dmabuf->resv, NULL, &fence=
+);
+> > +             if (ret)
+> > +                     goto err_put_fd;
+> > +     } else {
+> > +             fence =3D dma_resv_get_excl_rcu(dmabuf->resv);
+> > +     }
+> > +
+> > +     if (!fence)
+> > +             fence =3D dma_fence_get_stub();
+> > +
+> > +     sync_file =3D sync_file_create(fence);
+> > +
+> > +     dma_fence_put(fence);
+> > +
+> > +     if (!sync_file) {
+> > +             ret =3D -EINVAL;
+> > +             goto err_put_fd;
+> > +     }
+> > +
+> > +     fd_install(fd, sync_file->file);
+> > +
+> > +     arg.fd =3D fd;
+> > +     if (copy_to_user(user_data, &arg, sizeof(arg)))
+> > +             return -EFAULT;
+> > +
+> > +     return 0;
+> > +
+> > +err_put_fd:
+> > +     put_unused_fd(fd);
+> > +     return ret;
+> > +}
+> > +
+> >   static long dma_buf_ioctl(struct file *file,
+> >                         unsigned int cmd, unsigned long arg)
+> >   {
+> > @@ -390,6 +480,12 @@ static long dma_buf_ioctl(struct file *file,
+> >       case DMA_BUF_SET_NAME:
+> >               return dma_buf_set_name(dmabuf, (const char __user *)arg)=
+;
+> >
+> > +     case DMA_BUF_IOCTL_WAIT_SYNC_FILE:
+> > +             return dma_buf_wait_sync_file(dmabuf, (const void __user =
+*)arg);
+> > +
+> > +     case DMA_BUF_IOCTL_SIGNAL_SYNC_FILE:
+> > +             return dma_buf_signal_sync_file(dmabuf, (void __user *)ar=
+g);
+> > +
+> >       default:
+> >               return -ENOTTY;
+> >       }
+> > diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.=
+h
+> > index dbc7092e04b5..86e07acca90c 100644
+> > --- a/include/uapi/linux/dma-buf.h
+> > +++ b/include/uapi/linux/dma-buf.h
+> > @@ -37,8 +37,17 @@ struct dma_buf_sync {
+> >
+> >   #define DMA_BUF_NAME_LEN    32
+> >
+> > +struct dma_buf_sync_file {
+> > +     __u32 flags;
+> > +     __s32 fd;
+> > +};
+> > +
+> > +#define DMA_BUF_SYNC_FILE_SYNC_WRITE (1 << 0)
+> > +
+> >   #define DMA_BUF_BASE                'b'
+> > -#define DMA_BUF_IOCTL_SYNC   _IOW(DMA_BUF_BASE, 0, struct dma_buf_sync=
+)
+> > -#define DMA_BUF_SET_NAME     _IOW(DMA_BUF_BASE, 1, const char *)
+> > +#define DMA_BUF_IOCTL_SYNC       _IOW(DMA_BUF_BASE, 0, struct dma_buf_=
+sync)
+> > +#define DMA_BUF_SET_NAME         _IOW(DMA_BUF_BASE, 1, const char *)
+> > +#define DMA_BUF_IOCTL_WAIT_SYNC_FILE _IOW(DMA_BUF_BASE, 2, struct dma_=
+buf_sync)
+> > +#define DMA_BUF_IOCTL_SIGNAL_SYNC_FILE       _IOWR(DMA_BUF_BASE, 3, st=
+ruct dma_buf_sync)
+> >
+> >   #endif
+>
