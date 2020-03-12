@@ -2,135 +2,206 @@ Return-Path: <SRS0=Lc/z=45=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 095D1C5AD46
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:32:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C463C10DCE
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:37:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E34EC2071B
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:32:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0FAD206BE
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:37:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Dab3J+8R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727000AbgCLKcp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Mar 2020 06:32:45 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36013 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726669AbgCLKc0 (ORCPT
+        id S1726567AbgCLKhH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Mar 2020 06:37:07 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:53159 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726028AbgCLKhH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Mar 2020 06:32:26 -0400
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1jCL8T-0002xm-BD; Thu, 12 Mar 2020 11:32:17 +0100
-Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1jCL8R-0001Jp-Ar; Thu, 12 Mar 2020 11:32:15 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
-        robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
-Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-media@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH v13 01/21] dt-bindings: connector: analog: add sdtv standards property
-Date:   Thu, 12 Mar 2020 11:31:36 +0100
-Message-Id: <20200312103156.3178-2-m.felsch@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200312103156.3178-1-m.felsch@pengutronix.de>
-References: <20200312103156.3178-1-m.felsch@pengutronix.de>
+        Thu, 12 Mar 2020 06:37:07 -0400
+Received: from [192.168.2.10] ([46.9.234.233])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id CLD2jwVkXhVf8CLD5jME1m; Thu, 12 Mar 2020 11:37:04 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1584009424; bh=aGrg7qZfZCYGh0cHGrNmxeV1OrTKKhJ8HGddZQHHCWE=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=Dab3J+8Rfm555gsj5nHTYvT6ydnuJfdCEE6gzVrhm9jErKAifpchNrIHoxFKxCuu1
+         JxPfk+W/4hMK6T9PWaLHxertQCthJvr/kHr7sIw4fFKffp5FYtZMqtLnyZK7sMb80J
+         cr7cCHlywKAOI8i57zRhdumCKVqpK4ZCfmzmSevOsSCqTn6wrvchttQkqR6o3riAXg
+         8WJSP++tbOe7WmXGTnhnT+oRw8yDAolGpIbIKdIl7iwKFMNmL34S7rAC93mLJ6Iczj
+         xr/fvbQKwRuKKVIcVSlkBm6k3eUc5E6YsetiRGwrBsayuu0fC6rZVCQACe9qCAC47T
+         /vSMPrv6pnp2w==
+Subject: Re: [PATCH v2 0/1] Virtio Video V4L2 driver
+To:     Dmitry Sepp <dmitry.sepp@opensynergy.com>,
+        Keiichi Watanabe <keiichiw@chromium.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        virtio-dev@lists.oasis-open.org,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Alex Lau <alexlau@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dylan Reid <dgreid@chromium.org>,
+        David Staessens <dstaessens@chromium.org>,
+        Enrico Granata <egranata@google.com>,
+        Frediano Ziglio <fziglio@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        =?UTF-8?Q?St=c3=a9phane_Marchesin?= <marcheu@chromium.org>,
+        Pawel Osciak <posciak@chromium.org>,
+        spice-devel@lists.freedesktop.org,
+        David Stevens <stevensd@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>, uril@redhat.com,
+        Samiullah Khawaja <samiullah.khawaja@opensynergy.com>,
+        Kiran Pawar <kiran.pawar@opensynergy.com>
+References: <20200218202753.652093-1-dmitry.sepp@opensynergy.com>
+ <CAD90VcZUqU0nVQEn1vNOQkcicR5GA+HzBGd+M7O_b69f2BCUxA@mail.gmail.com>
+ <1ac18708-262f-c751-d955-267931270028@xs4all.nl>
+ <1799967.VLH7GnMWUR@os-lin-dmo>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <645df052-7fbb-386a-d620-9d1908773896@xs4all.nl>
+Date:   Thu, 12 Mar 2020 11:37:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
+In-Reply-To: <1799967.VLH7GnMWUR@os-lin-dmo>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+X-CMAE-Envelope: MS4wfHKnbDE2aNxmEnKvUaMCZpBjREJu2qNDYIaZrBjcvZSOSjjYFNMFZ9vBFnf3EGl9r9eE5QSwfA7lPfPpy8t8voZ3Ms88iRo79ekoBExt6+oS+y+77vkm
+ nHd/2dCiQJAXJSGjp8LUpp+X6ViPP7H/B7ltslbB7wQfBnKUwWUT1QZE+Gx7IVknVh9dzOSGX7+BTMs60HCuPuJ51m0FZaGbxgOqzRPnbP4SsHqFjX9dTD43
+ LcMZu82Uj+d4G/vLXD773+ATCAFO5vo4mu2ZuZHMsM9vPBFSw0iQhDrT7C1lhbwWLOK/L5LmD1o1x3v9VbAV3bXlMhZe59iXCNwAj7xXgQshokhsmNF3unTM
+ m2uxRlQdNJSETeGRr6B3HtC27OKtwG7AVUXgEywldshREm/RPoPUKrGxY7p3c8fIBzV3Ej/yBqPN+8PVLLOYJpWTHJggjhD6BCUrRQjm0Sb/vg+3gqIaYV5F
+ VfhAA1R7hpO4c5w7ogVYukUeZrKcVLpJOGp51Y6wk/wRYGqqIvejcrwnIlBvpxOaHXkgd5QNJC7x/9REwVM5l8f2DwYvMNbdNAUFX7dCn8P89vVE7eoMEmaD
+ FYH8X/rfSvaJuEHSsSvMaHYnZRLVb+9UdvocSRjZ3Opq+9ClCY13aRS/00zApuDEiCJD83B6el9cvhmDoEIYMC++XQQewZ3JATufBtNw2dGGvp8zQrwmBzZr
+ +/FKh2IoQ7M5IudHmXguSQNcihDEG4Fm0VnK9zAgMUCgUPQJW+vJJHY3uXbC0nT/BTJ2qmFzk9hP3nKt8zMVGS8EPrMtlN6K8Az8GWg/84s5BjHqWdRhzAK/
+ /v2jVQwJVLBVr2Tm3TQ=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some connectors no matter if in- or output supports only a limited
-range of sdtv standards. It doesn't matter if the hardware behind that
-connector supports more than the listed formats since the users are
-restriced by a label e.g. to plug only a camera into this connector
-which uses the PAL format.
+On 3/12/20 11:29 AM, Dmitry Sepp wrote:
+> Hi Hans,
+> 
+> I'm not sure about crosvm, for us it is probably still feasible to implement 
+> FWHT in the device (but it is unfortunately not supposed to be upstreamed 
+> yet).
+> 
+> The main question is what would be the proper user-space tool to test that? Is 
+> v4l2-ctl OK for that? As for gstreamer, AFAIK it does not respect the v4l2 
+> Video Decoder Interface Spec and we have seen some issues with it.
 
-This patch adds the capability to describe such limitation within the
-firmware. There are no format restrictions if the property isn't
-present, so it's completely backward compatible.
+A combo of v4l2-ctl and v4l2-compliance. In v4l-utils you find a test-media
+script in contrib/test that tests the various virtual v4l2 drivers, including
+vicodec.
 
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
-[1] https://patchwork.kernel.org/cover/10794703/
+Basically you want to run the same (or at least as much as possible) vicodec
+tests for this virtio driver in a linux guest VM.
 
-v12:
-- split patch https://patchwork.linuxtv.org/patch/58491/
+The script uses the vicodec encoder to create test streams, but in the VM you
+can also load vicodec and use it to do the same thing, which can then be fed
+to the virtio driver who passes it to the vicodec instance running on the host,
+and the result goes back to the VM.
 
-v10:
-- fix typo s/TV_STD_*/SDTV_STD_*/
+It would be a great setup to check the corner cases and verify the results of
+the codec. And it can be added to kernel-ci and my own daily regression test.
 
-v8:
-Hi Rob,
+Regards,
 
-I dropped your r b tag becuase of the changes I made in this version.
-Please can you have look on it again? Luckily this would be the last
-time ;-)
+	Hans
 
-- move definition to include/dt-bindings/display
-- rename tvnorms.h to sdtv-standards.h
-- TVORMS_* -> SDTV_STD_*
-- add sync comments
-- adapt commit message
-- fix bindings documentation
-
-v7:
-I kept Robs r b tag because I only changed the example and extended
-TVNORM_* macros.
-
-- fix some style issues
-- add TVNORM_NTSC, TVNORM_525_60 and TVNORM_625_50
-
-v6:
-- tvnorms.h: use tabs instead of spaces
-- tvnorms.h: add TVNORM_PAL and TVNORM_SECAM
-- tvnorms.h: drop rarely used TVNORM_ATSC_* norms
-
-v2-v4:
-- nothing since the patch was squashed from series [1] into this
-  series.
----
- .../bindings/display/connector/analog-tv-connector.txt      | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt b/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
-index 0c0970c210ab..883bcb2604c7 100644
---- a/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
-+++ b/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
-@@ -6,16 +6,22 @@ Required properties:
- 
- Optional properties:
- - label: a symbolic name for the connector
-+- sdtv-standards: limit the supported TV standards on a connector to the given
-+                  ones. If not specified all TV standards are allowed.
-+                  Possible TV standards are defined in
-+                  include/dt-bindings/display/sdtv-standards.h.
- 
- Required nodes:
- - Video port for TV input
- 
- Example
- -------
-+#include <dt-bindings/display/sdtv-standards.h>
- 
- tv: connector {
- 	compatible = "composite-video-connector";
- 	label = "tv";
-+	sdtv-standards = <(SDTV_STD_PAL | SDTV_STD_NTSC)>;
- 
- 	port {
- 		tv_connector_in: endpoint {
--- 
-2.20.1
+> 
+> Best regards,
+> Dmitry.
+> 
+> On Donnerstag, 12. März 2020 10:54:35 CET Hans Verkuil wrote:
+>> On 3/12/20 10:49 AM, Keiichi Watanabe wrote:
+>>> Hi Hans,
+>>>
+>>> On Wed, Mar 11, 2020 at 10:26 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>>>> Hi Dmitry,
+>>>>
+>>>> On 2/18/20 9:27 PM, Dmitry Sepp wrote:
+>>>>> Hi all,
+>>>>>
+>>>>> This is a v4l2 virtio video driver for the virtio-video device
+>>>>> specification v3 [1].
+>>>>>
+>>>>> The first version of the driver was introduced here [2].
+>>>>>
+>>>>> Changes v1 -> v2:
+>>>>> * support the v3 spec (mostly)
+>>>>> * add a module parameter to ask for pages from ZONE_DMA
+>>>>>
+>>>>> What is not implemented:
+>>>>> * Plane layout flags should be used to propagate number of planes to
+>>>>>
+>>>>>   user-space
+>>>>>
+>>>>> * There is no real use of stream creation with bitstream format in the
+>>>>>
+>>>>>   parameter list. The driver just uses the first bitstream format from
+>>>>>   the list.
+>>>>>
+>>>>> * Setting bitrate is done in a different way compared to the spec. This
+>>>>>
+>>>>>   is because it has been already agreed on that the way the spec
+>>>>>   currently describes it requires changes.
+>>>>>
+>>>>> Potential improvements:
+>>>>> * Do not send stream_create from open. Use corresponding state machine
+>>>>>
+>>>>>   condition to do this.
+>>>>>
+>>>>> * Do not send stream_destroy from close. Do it in reqbufs(0).
+>>>>> * Cache format and control settings. Reduce calls to the device.
+>>>>
+>>>> Some general notes:
+>>>>
+>>>> Before this can be merged it needs to pass v4l2-compliance.
+>>>>
+>>>> I also strongly recommend adding support for V4L2_PIX_FMT_FWHT to
+>>>> allow testing with the vicodec emulation driver. This will also
+>>>> allow testing all sorts of corner cases without requiring special
+>>>> hardware.
+>>>
+>>> I agree that it's great if we could test virtio-video with vicodec,
+>>> but I wonder if supporting FWHT is actually needed for the initial
+>>> patch.
+>>> Though it wouldn't be difficult to support FWHT in the driver, we also
+>>> needs to support it in the host's hypervisor to test it. It's not easy
+>>> for our hypervisor to support FWHT, as it doesn't talk to v4l2 driver
+>>> directly.
+>>> Without the host-side implementation, it makes no sense to support it.
+>>> Also, if we support FWHT, we should have the format in a list of
+>>> supported formats in the virtio specification. However, I'm not sure
+>>> if FWHT is a general codec enough to be added in the spec, which
+>>> shouldn't be specific to Linux.
+>>
+>> Good point, I didn't know that.
+>>
+>> Is it possible to add support for FWHT under a linux debug/test option?
+>>
+>> It's really the main reason for having this, since you would never use
+>> this in production code. But it is so nice to have for regression testing.
+>>
+>> Regards,
+>>
+>> 	Hans
+>>
+>>> Best regards,
+>>> Keiichi
+>>>
+>>>> Regards,
+>>>>
+>>>>         Hans
+>>>>>
+>>>>> Best regards,
+>>>>> Dmitry.
+>>>>>
+>>>>> [1] https://markmail.org/message/dmw3pr4fuajvarth
+>>>>> [2] https://markmail.org/message/wnnv6r6myvgb5at6
+> 
+> 
 
