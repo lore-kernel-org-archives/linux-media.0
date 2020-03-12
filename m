@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E35DAC4CECE
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4546C1975A
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B89BD206F7
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6FE25206F7
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="JvremsbT"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Nbl08/2V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbgCLXrf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Mar 2020 19:47:35 -0400
+        id S1726930AbgCLXrg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Mar 2020 19:47:36 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:34486 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726895AbgCLXre (ORCPT
+        with ESMTP id S1726895AbgCLXrf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Mar 2020 19:47:34 -0400
+        Thu, 12 Mar 2020 19:47:35 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 543B1134B;
-        Fri, 13 Mar 2020 00:47:32 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 635E41467;
+        Fri, 13 Mar 2020 00:47:33 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1584056852;
-        bh=zF47wBqlDAv+1UOCTn/dpU2OibiCIwXx91pnbMpoBPo=;
+        s=mail; t=1584056853;
+        bh=7zQVQFam5QC44AhNw796afY5BC9QPgQuRv5u77igIhs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JvremsbTxrZHoz6quW/yq65UitlfdwCzSRtztC3oI7H89/rJXKbLE9hLYKD7R191+
-         8b1sS7Otb9oBkGHtm06aCf7Mwq7oamLdmIs7loyi2mp5vtzHXj2DqKVN0i4m/sRsvx
-         SQpEp4EnH/k1kvbBaNHaVuuLsrNa0dc/9d/f5iSE=
+        b=Nbl08/2VCg6npv5+kTJiV6eK16OkPCCwc5YcSUlK9iE3AeO6nPh0yEQcJIn+y14Mr
+         ag0a71kV0CG7CiuSZEHEoaNGVU0xDRi1A94iuRj5rIUqv/rGyJdGiZcYZmfVWCUifF
+         vU9Bq1EJ8UO/5hglD0RtZHXxqF+hKdRNhOwB8nwk=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH 02/14] media: imx: imx7-mipi-csis: Centralize initialization of pad formats
-Date:   Fri, 13 Mar 2020 01:47:10 +0200
-Message-Id: <20200312234722.23483-3-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 04/14] media: imx: imx7-mipi-csis: Expose correct YUV formats
+Date:   Fri, 13 Mar 2020 01:47:12 +0200
+Message-Id: <20200312234722.23483-5-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200312234722.23483-1-laurent.pinchart@ideasonboard.com>
 References: <20200312234722.23483-1-laurent.pinchart@ideasonboard.com>
@@ -50,100 +50,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Pad formats for the active configuration are manually initialized in
-mipi_csis_subdev_init(), while pad formats for the TRY configurations
-are initialized by the subdev .init_cfg() operation. This creates a risk
-of the two configurations not being synchronized. Fix it by initializing
-formats in the .init_cfg() operation only, and calling it from
-mipi_csis_subdev_init().
+The imx7-mipi-csis driver claims to support MEDIA_BUS_FMT_VYUY8_2X8 and
+MEDIA_BUS_FMT_YUYV8_2X8, but this is not correct. When receiving
+YUV 4:2:2 data on the CSI-2 bus, the output format is
+MEDIA_BUS_FMT_UYVY8_2X8. Fix this.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 56 ++++++++++++----------
- 1 file changed, 32 insertions(+), 24 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 25017ab78095..52d59047ee36 100644
+index dec144d327b5..7515f1022271 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -649,26 +649,6 @@ static int mipi_csis_link_setup(struct media_entity *entity,
- 	return ret;
- }
- 
--static int mipi_csis_init_cfg(struct v4l2_subdev *mipi_sd,
--			      struct v4l2_subdev_pad_config *cfg)
--{
--	struct v4l2_mbus_framefmt *mf;
--	unsigned int i;
--	int ret;
--
--	for (i = 0; i < CSIS_PADS_NUM; i++) {
--		mf = v4l2_subdev_get_try_format(mipi_sd, cfg, i);
--
--		ret = imx_media_init_mbus_fmt(mf, MIPI_CSIS_DEF_PIX_HEIGHT,
--					      MIPI_CSIS_DEF_PIX_WIDTH, 0,
--					      V4L2_FIELD_NONE, NULL);
--		if (ret < 0)
--			return ret;
--	}
--
--	return 0;
--}
--
- static struct v4l2_mbus_framefmt *
- mipi_csis_get_format(struct csi_state *state,
- 		     struct v4l2_subdev_pad_config *cfg,
-@@ -681,6 +661,37 @@ mipi_csis_get_format(struct csi_state *state,
- 	return &state->format_mbus;
- }
- 
-+static int mipi_csis_init_cfg(struct v4l2_subdev *mipi_sd,
-+			      struct v4l2_subdev_pad_config *cfg)
-+{
-+	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
-+	struct v4l2_mbus_framefmt *fmt_sink;
-+	struct v4l2_mbus_framefmt *fmt_source;
-+	enum v4l2_subdev_format_whence which;
-+	int ret;
-+
-+	which = cfg ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
-+	fmt_sink = mipi_csis_get_format(state, cfg, which, CSIS_PAD_SINK);
-+	ret = imx_media_init_mbus_fmt(fmt_sink, MIPI_CSIS_DEF_PIX_WIDTH,
-+				      MIPI_CSIS_DEF_PIX_HEIGHT, 0,
-+				      V4L2_FIELD_NONE, NULL);
-+	if (ret < 0)
-+		return ret;
-+
-+	/*
-+	 * When called from mipi_csis_subdev_init() to initialize the active
-+	 * configuration, cfg is NULL, which indicates there's no source pad
-+	 * configuration to set.
-+	 */
-+	if (!cfg)
-+		return 0;
-+
-+	fmt_source = mipi_csis_get_format(state, cfg, which, CSIS_PAD_SOURCE);
-+	*fmt_source = *fmt_sink;
-+
-+	return 0;
-+}
-+
- static int mipi_csis_get_fmt(struct v4l2_subdev *mipi_sd,
- 			     struct v4l2_subdev_pad_config *cfg,
- 			     struct v4l2_subdev_format *sdformat)
-@@ -875,10 +886,7 @@ static int mipi_csis_subdev_init(struct v4l2_subdev *mipi_sd,
- 	mipi_sd->dev = &pdev->dev;
- 
- 	state->csis_fmt = &mipi_csis_formats[0];
--	state->format_mbus.code = mipi_csis_formats[0].code;
--	state->format_mbus.width = MIPI_CSIS_DEF_PIX_WIDTH;
--	state->format_mbus.height = MIPI_CSIS_DEF_PIX_HEIGHT;
--	state->format_mbus.field = V4L2_FIELD_NONE;
-+	mipi_csis_init_cfg(mipi_sd, NULL);
- 
- 	v4l2_set_subdevdata(mipi_sd, &pdev->dev);
- 
+@@ -267,11 +267,7 @@ struct csis_pix_format {
+ static const struct csis_pix_format mipi_csis_formats[] = {
+ 	/* YUV formats. */
+ 	{
+-		.code = MEDIA_BUS_FMT_VYUY8_2X8,
+-		.fmt_reg = MIPI_CSIS_ISPCFG_FMT_YCBCR422_8BIT,
+-		.data_alignment = 16,
+-	}, {
+-		.code = MEDIA_BUS_FMT_YUYV8_2X8,
++		.code = MEDIA_BUS_FMT_UYVY8_2X8,
+ 		.fmt_reg = MIPI_CSIS_ISPCFG_FMT_YCBCR422_8BIT,
+ 		.data_alignment = 16,
+ 	},
 -- 
 Regards,
 
