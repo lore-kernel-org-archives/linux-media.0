@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46494C2BB1D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00120C4CECE
 	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B394206F7
+	by mail.kernel.org (Postfix) with ESMTP id C5A38206F7
 	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ZNS13aW2"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="gJnj5Nq3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727061AbgCLXrm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727064AbgCLXrm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 12 Mar 2020 19:47:42 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:34486 "EHLO
+Received: from perceval.ideasonboard.com ([213.167.242.64]:34488 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727033AbgCLXrl (ORCPT
+        with ESMTP id S1726986AbgCLXrl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 12 Mar 2020 19:47:41 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A2CDF5F;
-        Fri, 13 Mar 2020 00:47:37 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2C9479D3;
+        Fri, 13 Mar 2020 00:47:38 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
         s=mail; t=1584056858;
-        bh=UV03CJRAHAF1RgvWtdbZbxP2sSEj8KlgaU6QJImCRbw=;
+        bh=PgzUbQYsCfH+UKSj5FNYBE8oSE5L5wAXt6bNsexz5Ew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZNS13aW2hcuMsadX38G2e3YkrnKpZpyTm1hx6uXNUZli+tJgUIV4lPWdZOBjTezMH
-         P9ElqWRX6rXy3beTexy8lqo9zsVJ8xiE4tFbwFoXhTIqN10LJmXwxoY6lzDmP6tbXB
-         7G96I3+pwYnltZuJ7SsTGo5p6ut3qrBvkCHYao68=
+        b=gJnj5Nq3Dr4L47EiDPi8FwHzXNrcnRkG16pLJEAhq5+mcRVA/FLYjvQnMmrxCPxp6
+         yzdXRySMKGT3d7ZjeHOOw6n67iUCNpH3i3HVbLyMmoJKaj0I6+1cZQtHNEtqkgqTr0
+         rJq6yQ3HRScxdFKTHu9PLeMfS7G8xBQLv6U+wfLc=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH 12/14] media: imx: imx7-mipi-csis: Cleanup includes
-Date:   Fri, 13 Mar 2020 01:47:20 +0200
-Message-Id: <20200312234722.23483-13-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 13/14] media: imx: imx7-mipi-csis: Don't use imx-media-utils helpers
+Date:   Fri, 13 Mar 2020 01:47:21 +0200
+Message-Id: <20200312234722.23483-14-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200312234722.23483-1-laurent.pinchart@ideasonboard.com>
 References: <20200312234722.23483-1-laurent.pinchart@ideasonboard.com>
@@ -50,36 +50,58 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove unneeded includes, add needed ones, and sort them alphabetically.
+The imx7-mipi-csis only uses the imx_media_init_mbus_fmt() function from
+the imx-media-utils helpers. The helpers don't support all the media bus
+formats used by this driver, and are thus a bad fit. As the MIPI CSIS is
+a standalone IP core that could be integrated in other SoCs, let's not
+use the helper.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 7112969d1cf4..0829980d7af5 100644
+index 0829980d7af5..66ff73919371 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -14,15 +14,14 @@
- #include <linux/errno.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
--#include <linux/irq.h>
- #include <linux/kernel.h>
--#include <linux/mfd/syscon.h>
- #include <linux/module.h>
--#include <linux/of_graph.h>
-+#include <linux/mutex.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
--#include <linux/reset.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/reset.h>
- #include <linux/spinlock.h>
+@@ -28,8 +28,6 @@
+ #include <media/v4l2-fwnode.h>
+ #include <media/v4l2-subdev.h>
  
- #include <media/v4l2-device.h>
+-#include "imx-media.h"
+-
+ #define CSIS_DRIVER_NAME			"imx7-mipi-csis"
+ #define CSIS_SUBDEV_NAME			CSIS_DRIVER_NAME
+ 
+@@ -709,15 +707,21 @@ static int mipi_csis_init_cfg(struct v4l2_subdev *mipi_sd,
+ 	struct v4l2_mbus_framefmt *fmt_sink;
+ 	struct v4l2_mbus_framefmt *fmt_source;
+ 	enum v4l2_subdev_format_whence which;
+-	int ret;
+ 
+ 	which = cfg ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
+ 	fmt_sink = mipi_csis_get_format(state, cfg, which, CSIS_PAD_SINK);
+-	ret = imx_media_init_mbus_fmt(fmt_sink, MIPI_CSIS_DEF_PIX_WIDTH,
+-				      MIPI_CSIS_DEF_PIX_HEIGHT, 0,
+-				      V4L2_FIELD_NONE, NULL);
+-	if (ret < 0)
+-		return ret;
++
++	fmt_sink->code = MEDIA_BUS_FMT_UYVY8_2X8;
++	fmt_sink->width = MIPI_CSIS_DEF_PIX_WIDTH;
++	fmt_sink->height = MIPI_CSIS_DEF_PIX_HEIGHT;
++	fmt_sink->field = V4L2_FIELD_NONE;
++
++	fmt_sink->colorspace = V4L2_COLORSPACE_SMPTE170M;
++	fmt_sink->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt_sink->colorspace);
++	fmt_sink->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt_sink->colorspace);
++	fmt_sink->quantization =
++		V4L2_MAP_QUANTIZATION_DEFAULT(false, fmt_sink->colorspace,
++					      fmt_sink->ycbcr_enc);
+ 
+ 	/*
+ 	 * When called from mipi_csis_subdev_init() to initialize the active
 -- 
 Regards,
 
