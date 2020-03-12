@@ -2,174 +2,135 @@ Return-Path: <SRS0=Lc/z=45=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2D19C10DCE
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:29:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17425C2BB1D
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:31:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7CAC9206BE
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:29:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1D2F2071C
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:31:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="4P/1ikVJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726731AbgCLK3q convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Mar 2020 06:29:46 -0400
-Received: from plasma4.jpberlin.de ([80.241.57.33]:58259 "EHLO
-        plasma4.jpberlin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726023AbgCLK3q (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Mar 2020 06:29:46 -0400
-Received: from spamfilter02.heinlein-hosting.de (spamfilter02.heinlein-hosting.de [80.241.56.116])
-        by plasma.jpberlin.de (Postfix) with ESMTP id EF12EBBF62;
-        Thu, 12 Mar 2020 11:29:40 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from plasma.jpberlin.de ([80.241.56.68])
-        by spamfilter02.heinlein-hosting.de (spamfilter02.heinlein-hosting.de [80.241.56.116]) (amavisd-new, port 10030)
-        with ESMTP id gHerBSLszxZn; Thu, 12 Mar 2020 11:29:39 +0100 (CET)
-Received: from webmail.opensynergy.com (unknown [217.66.60.5])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "webmail.opensynergy.com", Issuer "GeoTrust EV RSA CA 2018" (not verified))
-        (Authenticated sender: opensynergy@jpberlin.de)
-        by plasma.jpberlin.de (Postfix) with ESMTPSA id 478A4BD71D;
-        Thu, 12 Mar 2020 11:29:39 +0100 (CET)
-Received: from os-lin-dmo.localnet (10.25.255.1) by MXS02.open-synergy.com
- (10.25.10.18) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 12 Mar
- 2020 11:29:38 +0100
-From:   Dmitry Sepp <dmitry.sepp@opensynergy.com>
-To:     Keiichi Watanabe <keiichiw@chromium.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-CC:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        <virtio-dev@lists.oasis-open.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Alex Lau <alexlau@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dylan Reid <dgreid@chromium.org>,
-        David Staessens <dstaessens@chromium.org>,
-        Enrico Granata <egranata@google.com>,
-        Frediano Ziglio <fziglio@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        =?ISO-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>,
-        Pawel Osciak <posciak@chromium.org>,
-        <spice-devel@lists.freedesktop.org>,
-        David Stevens <stevensd@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>, <uril@redhat.com>,
-        Samiullah Khawaja <samiullah.khawaja@opensynergy.com>,
-        Kiran Pawar <kiran.pawar@opensynergy.com>
-Subject: Re: [PATCH v2 0/1] Virtio Video V4L2 driver
-Date:   Thu, 12 Mar 2020 11:29:38 +0100
-Message-ID: <1799967.VLH7GnMWUR@os-lin-dmo>
-Organization: OpenSynergy
-In-Reply-To: <1ac18708-262f-c751-d955-267931270028@xs4all.nl>
-References: <20200218202753.652093-1-dmitry.sepp@opensynergy.com> <CAD90VcZUqU0nVQEn1vNOQkcicR5GA+HzBGd+M7O_b69f2BCUxA@mail.gmail.com> <1ac18708-262f-c751-d955-267931270028@xs4all.nl>
+        id S1726299AbgCLKbp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Mar 2020 06:31:45 -0400
+Received: from mail-bn7nam10on2040.outbound.protection.outlook.com ([40.107.92.40]:6065
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725978AbgCLKbp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 12 Mar 2020 06:31:45 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aPUh0J4gkBP7lk7Vziw2GMC2riD2hSOjrgeAv7oSw6AblP3sbKJA5Zv4DHvx/WCAHIt6HGq66XDzokxGrLzkcSFaqzVz4KCIIvlV8/sYsenCp8gelW9h3ECZWTs/0q/mlXlXb1Wwgu1M/jJnQRnLFQvdr9Z9J+t09nbtDEylOcfhrR3resLfU2w+vo7FLgjS+F2j0ooeTWzAnzPCohQwfQJ7jZBHzLeef7pYtW58QiDhcv4SFEpUJQbNhq8j4MvLS4bDaSGsH8yV2VdVCNmZ9kKjWY4nRU/RnHzt09giz4Wh4gqt3vGZcRp9jKRrZhnLIyDaWgDmlZaWzRwDtt9Vow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hA90Oj6Ub3TqtzkvkB3GgE7rC0jM1iftaVn90Vn+TOw=;
+ b=g9iF4X0S483mn6/OvQPfZWrqKclpEE2uQZ43JPgsUhzTSbRfj0frRKE8ipYhOvCLJnQJzaYkjX5MjUBoiwVyQCuErH9kHIjAb/Ffvp3y3I0ge0/AZj4He93M3lLdmHtcwwowuwJjhtx3MdUSljgENTGPKW6rwGFIlcNoq9XH9ZsZ6x0kh07noSNnxQC70lK0dnbuOparx8TRNQnyjPsQDxBgbT3HNMj99XYp+4v9AFy0xIxM6HgwaTUqFh7Ptf16b2N8GBqYeJ2ueT8hbfqHWkQAbXhtwM0lxOKJMzeAmkERJaOrAlpahX+hOP54SAUqg1+A+tdpvka1JEcsYmkV2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hA90Oj6Ub3TqtzkvkB3GgE7rC0jM1iftaVn90Vn+TOw=;
+ b=4P/1ikVJlPaFk7aCsdanMJi7FbmN20+BgTBeUMGR7jLv6mn5Ba210knAQv+efjBaZcdeUL7nb70yAuYSTA8OWOCKL3Uf4Ds/vGJ9kEfAcBaxi0ieTREV8TqubrdCCetc809/c/MaUs1YXUn7ommQbpJLZLk0EaeyLIx9fpxQv7U=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=Christian.Koenig@amd.com; 
+Received: from DM5PR12MB1705.namprd12.prod.outlook.com (2603:10b6:3:10c::22)
+ by DM5PR12MB2342.namprd12.prod.outlook.com (2603:10b6:4:ba::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.17; Thu, 12 Mar
+ 2020 10:31:41 +0000
+Received: from DM5PR12MB1705.namprd12.prod.outlook.com
+ ([fe80::d40e:7339:8605:bc92]) by DM5PR12MB1705.namprd12.prod.outlook.com
+ ([fe80::d40e:7339:8605:bc92%11]) with mapi id 15.20.2793.018; Thu, 12 Mar
+ 2020 10:31:41 +0000
+Subject: Re: [PATCH 1/6] lib/scatterlist: add sg_set_dma_addr() function
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     David1.Zhou@amd.com, jgg@ziepe.ca, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org
+References: <20200311135158.3310-1-christian.koenig@amd.com>
+ <20200311135158.3310-2-christian.koenig@amd.com>
+ <20200311152838.GA24280@infradead.org>
+ <f2b46f49-a8d0-9d43-3120-e1ed36fc3a80@gmail.com>
+ <20200312101943.GA14618@infradead.org>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Message-ID: <b5db44eb-1dde-1671-feb0-9e47d120f172@amd.com>
+Date:   Thu, 12 Mar 2020 11:31:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+In-Reply-To: <20200312101943.GA14618@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-ClientProxiedBy: AM0PR07CA0027.eurprd07.prod.outlook.com
+ (2603:10a6:208:ac::40) To DM5PR12MB1705.namprd12.prod.outlook.com
+ (2603:10b6:3:10c::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Originating-IP: [10.25.255.1]
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM0PR07CA0027.eurprd07.prod.outlook.com (2603:10a6:208:ac::40) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2814.9 via Frontend Transport; Thu, 12 Mar 2020 10:31:39 +0000
+X-Originating-IP: [2a02:908:1252:fb60:be8a:bd56:1f94:86e7]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 2c641981-85e3-44de-36c0-08d7c6708d30
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2342:|DM5PR12MB2342:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM5PR12MB2342CE177E2B0507E6E9954283FD0@DM5PR12MB2342.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-Forefront-PRVS: 0340850FCD
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(366004)(376002)(39860400002)(136003)(346002)(199004)(86362001)(31696002)(4326008)(8676002)(81166006)(81156014)(8936002)(316002)(6666004)(52116002)(6486002)(2906002)(31686004)(36756003)(478600001)(66556008)(66476007)(66946007)(5660300002)(186003)(6916009)(16526019)(2616005);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR12MB2342;H:DM5PR12MB1705.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
+Received-SPF: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Lr9viplUrcl6DhI0HkvDRmRaA4VjKDutJAyezSDXpC4yEiT54rPCQRyJvjlimLM9OLGahIQF4XZsaB0BvyrhXcn/hTKjpvpQhysIurNfGOqBDRzsVJHL4M7hpQSA9eYKAoGoNh5sdyss+4U+oPywugQ/4LRwtFAX6t1CfSOQKVLhPVcdVYzXqkA/exWMjBzUnXzYbRX80lIdNQ0Y3vmVe202eAnEUoTJQQ7nkn1oLhlELDHI8VwWHGhaXX9eFyJuL+vjv3+hCCPHTWVgPh10JUqeCvD6WSgKtQIiBmBFVifSIwNRMgDMjF4+v+gO2aFrjqeeVF3sCy9Hxzy6ZuGo6+WVNerx6s+LwNe1RRhLYoKoR8owROOnvxpE9/0zL6V/MREE3o65/2lwZGiPfTerJPDI9iN/YvelHtg9L+pJt+8WbcjjJKJBtu+d6g0r0qey
+X-MS-Exchange-AntiSpam-MessageData: dCBqD0fN+EqLU6Qcdb9WCET67m44AjVsK1Mc6a9h2Dmfd7YhDo/RGsW8NZkiWNM6DaOK79/JsHybXA40IcEelmDt5jfjA2VklgAtRnEtL/biSCNlHAd4d7ITs+0AAmTLzPwZzyfjmtZbmdCA/k2plKbL1sWcFef4HUGeOc8GQ7xgtFXul0jV4FMqLhALgF4P9RqmS0PtbNsLXGq8p0gSvQ==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c641981-85e3-44de-36c0-08d7c6708d30
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2020 10:31:40.7456
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hmtKYFAHlo4VD8p2VkqlSb8jJ9dY9Jodal+8HXec4H0fEL2HFC72bJF1hQe2dpqT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2342
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Am 12.03.20 um 11:19 schrieb Christoph Hellwig:
+> On Thu, Mar 12, 2020 at 11:14:22AM +0100, Christian KÃ¶nig wrote:
+>>>> The page pointer is set to NULL and only the DMA address,
+>>>> length and offset values are valid.
+>>> NAK.  The only valid way to fill DMA address in scatterlists is
+>>> dma_map_sg / dma_map_sg_attr.
+>> How can we then map PCIe BARs into an scatterlist which are not backed by
+>> struct pages?
+> You can't.  scatterlists by definition map memory backed by a struct
+> page.  If you want to map something else struct scatterlist is the
+> wrong structure and you need to use something else (which you should
+> anyway as struct scatterlist is a bad design patter, and the above
+> is only one of the many issues with it).
 
-I'm not sure about crosvm, for us it is probably still feasible to implement 
-FWHT in the device (but it is unfortunately not supposed to be upstreamed 
-yet).
+But how should we then deal with all the existing interfaces which 
+already take a scatterlist/sg_table ?
 
-The main question is what would be the proper user-space tool to test that? Is 
-v4l2-ctl OK for that? As for gstreamer, AFAIK it does not respect the v4l2 
-Video Decoder Interface Spec and we have seen some issues with it.
+The whole DMA-buf design and a lot of drivers are build around 
+scatterlist/sg_table and to me that actually makes quite a lot of sense.
 
-Best regards,
-Dmitry.
+For TTM I'm also trying for quite a while to just nuke the manual 
+dma_address arrays we have and switch over to scatterlist/sg_table.
 
-On Donnerstag, 12. März 2020 10:54:35 CET Hans Verkuil wrote:
-> On 3/12/20 10:49 AM, Keiichi Watanabe wrote:
-> > Hi Hans,
-> > 
-> > On Wed, Mar 11, 2020 at 10:26 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
-> >> Hi Dmitry,
-> >> 
-> >> On 2/18/20 9:27 PM, Dmitry Sepp wrote:
-> >>> Hi all,
-> >>> 
-> >>> This is a v4l2 virtio video driver for the virtio-video device
-> >>> specification v3 [1].
-> >>> 
-> >>> The first version of the driver was introduced here [2].
-> >>> 
-> >>> Changes v1 -> v2:
-> >>> * support the v3 spec (mostly)
-> >>> * add a module parameter to ask for pages from ZONE_DMA
-> >>> 
-> >>> What is not implemented:
-> >>> * Plane layout flags should be used to propagate number of planes to
-> >>> 
-> >>>   user-space
-> >>> 
-> >>> * There is no real use of stream creation with bitstream format in the
-> >>> 
-> >>>   parameter list. The driver just uses the first bitstream format from
-> >>>   the list.
-> >>> 
-> >>> * Setting bitrate is done in a different way compared to the spec. This
-> >>> 
-> >>>   is because it has been already agreed on that the way the spec
-> >>>   currently describes it requires changes.
-> >>> 
-> >>> Potential improvements:
-> >>> * Do not send stream_create from open. Use corresponding state machine
-> >>> 
-> >>>   condition to do this.
-> >>> 
-> >>> * Do not send stream_destroy from close. Do it in reqbufs(0).
-> >>> * Cache format and control settings. Reduce calls to the device.
-> >> 
-> >> Some general notes:
-> >> 
-> >> Before this can be merged it needs to pass v4l2-compliance.
-> >> 
-> >> I also strongly recommend adding support for V4L2_PIX_FMT_FWHT to
-> >> allow testing with the vicodec emulation driver. This will also
-> >> allow testing all sorts of corner cases without requiring special
-> >> hardware.
-> > 
-> > I agree that it's great if we could test virtio-video with vicodec,
-> > but I wonder if supporting FWHT is actually needed for the initial
-> > patch.
-> > Though it wouldn't be difficult to support FWHT in the driver, we also
-> > needs to support it in the host's hypervisor to test it. It's not easy
-> > for our hypervisor to support FWHT, as it doesn't talk to v4l2 driver
-> > directly.
-> > Without the host-side implementation, it makes no sense to support it.
-> > Also, if we support FWHT, we should have the format in a list of
-> > supported formats in the virtio specification. However, I'm not sure
-> > if FWHT is a general codec enough to be added in the spec, which
-> > shouldn't be specific to Linux.
-> 
-> Good point, I didn't know that.
-> 
-> Is it possible to add support for FWHT under a linux debug/test option?
-> 
-> It's really the main reason for having this, since you would never use
-> this in production code. But it is so nice to have for regression testing.
-> 
-> Regards,
-> 
-> 	Hans
-> 
-> > Best regards,
-> > Keiichi
-> > 
-> >> Regards,
-> >> 
-> >>         Hans
-> >>> 
-> >>> Best regards,
-> >>> Dmitry.
-> >>> 
-> >>> [1] https://markmail.org/message/dmw3pr4fuajvarth
-> >>> [2] https://markmail.org/message/wnnv6r6myvgb5at6
+I mean we could come up with a new structure for this, but to me that 
+just looks like reinventing the wheel. Especially since drivers need to 
+be able to handle both I/O to system memory and I/O to PCIe BARs.
+
+Regards,
+Christian.
 
 
