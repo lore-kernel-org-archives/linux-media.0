@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 608BAC10DCE
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3214DC4CECE
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2A957206F7
+	by mail.kernel.org (Postfix) with ESMTP id F277D206FA
 	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 23:47:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Uj43drhQ"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="apllMm4U"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726971AbgCLXrh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Mar 2020 19:47:37 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:34486 "EHLO
+        id S1726980AbgCLXri (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Mar 2020 19:47:38 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:34488 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726932AbgCLXrg (ORCPT
+        with ESMTP id S1726954AbgCLXrh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Mar 2020 19:47:36 -0400
+        Thu, 12 Mar 2020 19:47:37 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E3BE75F;
-        Fri, 13 Mar 2020 00:47:33 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7171F9D3;
+        Fri, 13 Mar 2020 00:47:34 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
         s=mail; t=1584056854;
-        bh=omzJrI6tu+a2ojE6Q8F3su+bHhsYtPJYUMNdTQY3MKo=;
+        bh=CaY4A+FgGEet0rOQkL1VnJh54rMU0STURAJDE5ABAow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uj43drhQ28BQs+p027WG18KwgnI0Ozb5HT7mh0FAZeFPXgEKiFRliIiByJpjSXKIZ
-         X/qfuOuWFqKORuaSF84Ho7qRdhrW1F5EsLAZvf2pVie6m6jnwNJcpgkiBiAVVzUlhR
-         cVAKw2bNM42Tv8EskjU8YYFzon0RnCaO2APy2+Is=
+        b=apllMm4URzIYDEQBGRNTtKPqltDjLgETBhkN/vN1uNjHub2VV3QaboMTxHbF2e7Jq
+         t2ldSe5BGnRsc1dsCdNtOCB1LDMi0ZEFDTna1a3H9LHfBaPwUCMCoLfwJIfnMhhmVY
+         xsE4W72hVD6CSIkcqtCOZVPkJKALjOgQ48gS9giQ=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH 05/14] media: imx: imx7-mipi-csis: Fix MEDIA_BUS_FMT_UYVY8_2X8 data alignment
-Date:   Fri, 13 Mar 2020 01:47:13 +0200
-Message-Id: <20200312234722.23483-6-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 06/14] media: imx: imx7-mipi-csis: Add MEDIA_BUS_FMT_UYVY10_2X10 support
+Date:   Fri, 13 Mar 2020 01:47:14 +0200
+Message-Id: <20200312234722.23483-7-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200312234722.23483-1-laurent.pinchart@ideasonboard.com>
 References: <20200312234722.23483-1-laurent.pinchart@ideasonboard.com>
@@ -50,24 +50,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The MEDIA_BUS_FMT_UYVY8_2X8 format reports a data alignment of 16 bits,
-which isn't correct as it is output on an 8-bit bus. Fix it.
+Add support for 10-bit YUV 4:2:2.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 7515f1022271..ffb1c87532f1 100644
+index ffb1c87532f1..d8521e2b8a4f 100644
 --- a/drivers/staging/media/imx/imx7-mipi-csis.c
 +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -269,7 +269,7 @@ static const struct csis_pix_format mipi_csis_formats[] = {
- 	{
+@@ -270,6 +270,10 @@ static const struct csis_pix_format mipi_csis_formats[] = {
  		.code = MEDIA_BUS_FMT_UYVY8_2X8,
  		.fmt_reg = MIPI_CSIS_ISPCFG_FMT_YCBCR422_8BIT,
--		.data_alignment = 16,
-+		.data_alignment = 8,
+ 		.data_alignment = 8,
++	}, {
++		.code = MEDIA_BUS_FMT_UYVY10_2X10,
++		.fmt_reg = MIPI_CSIS_ISPCFG_FMT_YCBCR422_8BIT,
++		.data_alignment = 10,
  	},
  	/* RAW (Bayer and greyscale) formats. */
  	{
