@@ -2,135 +2,229 @@ Return-Path: <SRS0=Lc/z=45=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17425C2BB1D
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:31:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6582C4CECE
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:32:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E1D2F2071C
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:31:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="4P/1ikVJ"
+	by mail.kernel.org (Postfix) with ESMTP id ADFA420749
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:32:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbgCLKbp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Mar 2020 06:31:45 -0400
-Received: from mail-bn7nam10on2040.outbound.protection.outlook.com ([40.107.92.40]:6065
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725978AbgCLKbp (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Mar 2020 06:31:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aPUh0J4gkBP7lk7Vziw2GMC2riD2hSOjrgeAv7oSw6AblP3sbKJA5Zv4DHvx/WCAHIt6HGq66XDzokxGrLzkcSFaqzVz4KCIIvlV8/sYsenCp8gelW9h3ECZWTs/0q/mlXlXb1Wwgu1M/jJnQRnLFQvdr9Z9J+t09nbtDEylOcfhrR3resLfU2w+vo7FLgjS+F2j0ooeTWzAnzPCohQwfQJ7jZBHzLeef7pYtW58QiDhcv4SFEpUJQbNhq8j4MvLS4bDaSGsH8yV2VdVCNmZ9kKjWY4nRU/RnHzt09giz4Wh4gqt3vGZcRp9jKRrZhnLIyDaWgDmlZaWzRwDtt9Vow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hA90Oj6Ub3TqtzkvkB3GgE7rC0jM1iftaVn90Vn+TOw=;
- b=g9iF4X0S483mn6/OvQPfZWrqKclpEE2uQZ43JPgsUhzTSbRfj0frRKE8ipYhOvCLJnQJzaYkjX5MjUBoiwVyQCuErH9kHIjAb/Ffvp3y3I0ge0/AZj4He93M3lLdmHtcwwowuwJjhtx3MdUSljgENTGPKW6rwGFIlcNoq9XH9ZsZ6x0kh07noSNnxQC70lK0dnbuOparx8TRNQnyjPsQDxBgbT3HNMj99XYp+4v9AFy0xIxM6HgwaTUqFh7Ptf16b2N8GBqYeJ2ueT8hbfqHWkQAbXhtwM0lxOKJMzeAmkERJaOrAlpahX+hOP54SAUqg1+A+tdpvka1JEcsYmkV2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hA90Oj6Ub3TqtzkvkB3GgE7rC0jM1iftaVn90Vn+TOw=;
- b=4P/1ikVJlPaFk7aCsdanMJi7FbmN20+BgTBeUMGR7jLv6mn5Ba210knAQv+efjBaZcdeUL7nb70yAuYSTA8OWOCKL3Uf4Ds/vGJ9kEfAcBaxi0ieTREV8TqubrdCCetc809/c/MaUs1YXUn7ommQbpJLZLk0EaeyLIx9fpxQv7U=
-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=Christian.Koenig@amd.com; 
-Received: from DM5PR12MB1705.namprd12.prod.outlook.com (2603:10b6:3:10c::22)
- by DM5PR12MB2342.namprd12.prod.outlook.com (2603:10b6:4:ba::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.17; Thu, 12 Mar
- 2020 10:31:41 +0000
-Received: from DM5PR12MB1705.namprd12.prod.outlook.com
- ([fe80::d40e:7339:8605:bc92]) by DM5PR12MB1705.namprd12.prod.outlook.com
- ([fe80::d40e:7339:8605:bc92%11]) with mapi id 15.20.2793.018; Thu, 12 Mar
- 2020 10:31:41 +0000
-Subject: Re: [PATCH 1/6] lib/scatterlist: add sg_set_dma_addr() function
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     David1.Zhou@amd.com, jgg@ziepe.ca, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org
-References: <20200311135158.3310-1-christian.koenig@amd.com>
- <20200311135158.3310-2-christian.koenig@amd.com>
- <20200311152838.GA24280@infradead.org>
- <f2b46f49-a8d0-9d43-3120-e1ed36fc3a80@gmail.com>
- <20200312101943.GA14618@infradead.org>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <b5db44eb-1dde-1671-feb0-9e47d120f172@amd.com>
-Date:   Thu, 12 Mar 2020 11:31:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-In-Reply-To: <20200312101943.GA14618@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: AM0PR07CA0027.eurprd07.prod.outlook.com
- (2603:10a6:208:ac::40) To DM5PR12MB1705.namprd12.prod.outlook.com
- (2603:10b6:3:10c::22)
+        id S1726752AbgCLKcZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Mar 2020 06:32:25 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:39155 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726385AbgCLKcZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 12 Mar 2020 06:32:25 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1jCL8T-0002xw-BC; Thu, 12 Mar 2020 11:32:17 +0100
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1jCL8R-0001KM-Hs; Thu, 12 Mar 2020 11:32:15 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
+        robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
+        linux-media@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v13 11/21] media: dt-bindings: tvp5150: Add input port connectors DT bindings
+Date:   Thu, 12 Mar 2020 11:31:46 +0100
+Message-Id: <20200312103156.3178-12-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200312103156.3178-1-m.felsch@pengutronix.de>
+References: <20200312103156.3178-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM0PR07CA0027.eurprd07.prod.outlook.com (2603:10a6:208:ac::40) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2814.9 via Frontend Transport; Thu, 12 Mar 2020 10:31:39 +0000
-X-Originating-IP: [2a02:908:1252:fb60:be8a:bd56:1f94:86e7]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 2c641981-85e3-44de-36c0-08d7c6708d30
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2342:|DM5PR12MB2342:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM5PR12MB2342CE177E2B0507E6E9954283FD0@DM5PR12MB2342.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-Forefront-PRVS: 0340850FCD
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(366004)(376002)(39860400002)(136003)(346002)(199004)(86362001)(31696002)(4326008)(8676002)(81166006)(81156014)(8936002)(316002)(6666004)(52116002)(6486002)(2906002)(31686004)(36756003)(478600001)(66556008)(66476007)(66946007)(5660300002)(186003)(6916009)(16526019)(2616005);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR12MB2342;H:DM5PR12MB1705.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-Received-SPF: None (protection.outlook.com: amd.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Lr9viplUrcl6DhI0HkvDRmRaA4VjKDutJAyezSDXpC4yEiT54rPCQRyJvjlimLM9OLGahIQF4XZsaB0BvyrhXcn/hTKjpvpQhysIurNfGOqBDRzsVJHL4M7hpQSA9eYKAoGoNh5sdyss+4U+oPywugQ/4LRwtFAX6t1CfSOQKVLhPVcdVYzXqkA/exWMjBzUnXzYbRX80lIdNQ0Y3vmVe202eAnEUoTJQQ7nkn1oLhlELDHI8VwWHGhaXX9eFyJuL+vjv3+hCCPHTWVgPh10JUqeCvD6WSgKtQIiBmBFVifSIwNRMgDMjF4+v+gO2aFrjqeeVF3sCy9Hxzy6ZuGo6+WVNerx6s+LwNe1RRhLYoKoR8owROOnvxpE9/0zL6V/MREE3o65/2lwZGiPfTerJPDI9iN/YvelHtg9L+pJt+8WbcjjJKJBtu+d6g0r0qey
-X-MS-Exchange-AntiSpam-MessageData: dCBqD0fN+EqLU6Qcdb9WCET67m44AjVsK1Mc6a9h2Dmfd7YhDo/RGsW8NZkiWNM6DaOK79/JsHybXA40IcEelmDt5jfjA2VklgAtRnEtL/biSCNlHAd4d7ITs+0AAmTLzPwZzyfjmtZbmdCA/k2plKbL1sWcFef4HUGeOc8GQ7xgtFXul0jV4FMqLhALgF4P9RqmS0PtbNsLXGq8p0gSvQ==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c641981-85e3-44de-36c0-08d7c6708d30
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2020 10:31:40.7456
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hmtKYFAHlo4VD8p2VkqlSb8jJ9dY9Jodal+8HXec4H0fEL2HFC72bJF1hQe2dpqT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2342
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 12.03.20 um 11:19 schrieb Christoph Hellwig:
-> On Thu, Mar 12, 2020 at 11:14:22AM +0100, Christian König wrote:
->>>> The page pointer is set to NULL and only the DMA address,
->>>> length and offset values are valid.
->>> NAK.  The only valid way to fill DMA address in scatterlists is
->>> dma_map_sg / dma_map_sg_attr.
->> How can we then map PCIe BARs into an scatterlist which are not backed by
->> struct pages?
-> You can't.  scatterlists by definition map memory backed by a struct
-> page.  If you want to map something else struct scatterlist is the
-> wrong structure and you need to use something else (which you should
-> anyway as struct scatterlist is a bad design patter, and the above
-> is only one of the many issues with it).
+The TVP5150/1 decoders support different video input sources to their
+AIP1A/B pins.
 
-But how should we then deal with all the existing interfaces which 
-already take a scatterlist/sg_table ?
+Possible configurations are as follows:
+  - Analog Composite signal connected to AIP1A.
+  - Analog Composite signal connected to AIP1B.
+  - Analog S-Video Y (luminance) and C (chrominance)
+    signals connected to AIP1A and AIP1B respectively.
 
-The whole DMA-buf design and a lot of drivers are build around 
-scatterlist/sg_table and to me that actually makes quite a lot of sense.
+This patch extends the device tree bindings documentation to describe
+how the input connectors for these devices should be defined in a DT.
 
-For TTM I'm also trying for quite a while to just nuke the manual 
-dma_address arrays we have and switch over to scatterlist/sg_table.
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+Changelog:
 
-I mean we could come up with a new structure for this, but to me that 
-just looks like reinventing the wheel. Especially since drivers need to 
-be able to handle both I/O to system memory and I/O to PCIe BARs.
+v7:
+Hi Rob,
+I droped your r b tag because I changed the bindings in this
+patch version. Please can you have a look on it again?
 
-Regards,
-Christian.
+- fix missing AIP1B svideo connection (description and examples)
 
+v3:
+- remove examples for one and two inputs
+- replace space by tabs
+
+v2:
+- adapt port layout in accordance with
+  https://www.spinics.net/lists/linux-media/msg138546.html with the
+  svideo-connector deviation (use only one endpoint)
+---
+ .../devicetree/bindings/media/i2c/tvp5150.txt | 112 ++++++++++++++++--
+ 1 file changed, 105 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+index 8c0fc1a26bf0..28b64ad149ef 100644
+--- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
++++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+@@ -12,11 +12,32 @@ Optional Properties:
+ - pdn-gpios: phandle for the GPIO connected to the PDN pin, if any.
+ - reset-gpios: phandle for the GPIO connected to the RESETB pin, if any.
+ 
+-The device node must contain one 'port' child node for its digital output
+-video port, in accordance with the video interface bindings defined in
+-Documentation/devicetree/bindings/media/video-interfaces.txt.
++The device node must contain one 'port' child node per device physical input
++and output port, in accordance with the video interface bindings defined in
++Documentation/devicetree/bindings/media/video-interfaces.txt. The port nodes
++are numbered as follows
+ 
+-Required Endpoint Properties for parallel synchronization:
++	  Name		Type		Port
++	--------------------------------------
++	  AIP1A		sink		0
++	  AIP1B		sink		1
++	  Y-OUT		src		2
++
++The device node must contain at least one sink port and the src port. Each input
++port must be linked to an endpoint defined in
++Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt. The
++port/connector layout is as follows
++
++tvp-5150 port@0 (AIP1A)
++	endpoint@0 -----------> Comp0-Con  port
++	endpoint@1 ------+----> Svideo-Con port
++tvp-5150 port@1 (AIP1B)  |
++	endpoint@1 ------+
++	endpoint@0 -----------> Comp1-Con  port
++tvp-5150 port@2
++	endpoint (video bitstream output at YOUT[0-7] parallel bus)
++
++Required Endpoint Properties for parallel synchronization on output port:
+ 
+ - hsync-active: active state of the HSYNC signal. Must be <1> (HIGH).
+ - vsync-active: active state of the VSYNC signal. Must be <1> (HIGH).
+@@ -26,17 +47,94 @@ Required Endpoint Properties for parallel synchronization:
+ If none of hsync-active, vsync-active and field-even-active is specified,
+ the endpoint is assumed to use embedded BT.656 synchronization.
+ 
+-Example:
++Example - three input sources:
++
++comp_connector_0 {
++	compatible = "composite-video-connector";
++	label = "Composite0";
++
++	port {
++		composite0_to_tvp5150: endpoint {
++			remote-endpoint = <&tvp5150_to_composite0>;
++		};
++	};
++};
++
++comp_connector_1 {
++	compatible = "composite-video-connector";
++	label = "Composite1";
++
++	port {
++		composite1_to_tvp5150: endpoint {
++			remote-endpoint = <&tvp5150_to_composite1>;
++		};
++	};
++};
++
++svideo_connector {
++	compatible = "svideo-connector";
++	label = "S-Video";
++
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		svideo_luma_to_tvp5150: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&tvp5150_to_svideo_luma>;
++		};
++
++		svideo_chroma_to_tvp5150: endpoint@1 {
++			reg = <1>;
++			remote-endpoint = <&tvp5150_to_svideo_chroma>;
++		};
++	};
++};
+ 
+ &i2c2 {
+-	...
+ 	tvp5150@5c {
+ 		compatible = "ti,tvp5150";
+ 		reg = <0x5c>;
+ 		pdn-gpios = <&gpio4 30 GPIO_ACTIVE_LOW>;
+ 		reset-gpios = <&gpio6 7 GPIO_ACTIVE_LOW>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++
++			tvp5150_to_composite0: endpoint@0 {
++				reg = <0>;
++				remote-endpoint = <&composite0_to_tvp5150>;
++			};
++
++			tvp5150_to_svideo_luma: endpoint@1 {
++				reg = <1>;
++				remote-endpoint = <&svideo_luma_to_tvp5150>;
++			};
++		};
++
++		port@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++
++			tvp5150_to_composite1: endpoint@0 {
++				reg = <0>;
++                                remote-endpoint = <&composite1_to_tvp5150>;
++			};
++
++			tvp5150_to_svideo_chroma: endpoint@1 {
++				reg = <1>;
++				remote-endpoint = <&svideo_chroma_to_tvp5150>;
++			};
++		};
++
++		port@2 {
++			reg = <2>;
+ 
+-		port {
+ 			tvp5150_1: endpoint {
+ 				remote-endpoint = <&ccdc_ep>;
+ 			};
+-- 
+2.20.1
 
