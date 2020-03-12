@@ -4,38 +4,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7612EC5ACC0
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAA33C5AD47
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:32:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5269D2071C
-	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:32:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1E4B20739
+	for <linux-media@archiver.kernel.org>; Thu, 12 Mar 2020 10:32:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbgCLKck (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Mar 2020 06:32:40 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:41053 "EHLO
+        id S1726892AbgCLKcn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Mar 2020 06:32:43 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:39159 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726913AbgCLKc1 (ORCPT
+        with ESMTP id S1726871AbgCLKc1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 12 Mar 2020 06:32:27 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1jCL8T-0002xp-At; Thu, 12 Mar 2020 11:32:17 +0100
+        id 1jCL8X-0002y7-Ll; Thu, 12 Mar 2020 11:32:21 +0100
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1jCL8R-0001Jy-CL; Thu, 12 Mar 2020 11:32:15 +0100
+        id 1jCL8R-0001Kq-R6; Thu, 12 Mar 2020 11:32:15 +0100
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-media@vger.kernel.org
-Subject: [PATCH v13 04/21] media: v4l2-fwnode: fix v4l2_fwnode_parse_link handling
-Date:   Thu, 12 Mar 2020 11:31:39 +0100
-Message-Id: <20200312103156.3178-5-m.felsch@pengutronix.de>
+        linux-media@vger.kernel.org, Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v13 21/21] media: tvp5150: make debug output more readable
+Date:   Thu, 12 Mar 2020 11:31:56 +0100
+Message-Id: <20200312103156.3178-22-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200312103156.3178-1-m.felsch@pengutronix.de>
 References: <20200312103156.3178-1-m.felsch@pengutronix.de>
@@ -50,31 +50,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently the driver differentiate the port number property handling for
-ACPI and DT. This is wrong as because ACPI should use the "reg" val too
-[1].
+The debug output for tvp5150_selmux() isn't really intuitive. Register
+values are printed decimal formatted and the input/output driver states
+are printed as enum. Even more the "normal" output enum mapps to zero so
+a active output will printing output=0 and a inactive output=1.
 
-[1] https://patchwork.kernel.org/patch/11421985/
+Change this by brinting the register values hex formatted and the states
+as more readable string.
 
-Fixes: ca50c197bd96 ("[media] v4l: fwnode: Support generic fwnode for parsing standardised properties")
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/v4l2-core/v4l2-fwnode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/tvp5150.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-index 6ece4320e1d2..d56eee9c09b8 100644
---- a/drivers/media/v4l2-core/v4l2-fwnode.c
-+++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-@@ -560,7 +560,7 @@ EXPORT_SYMBOL_GPL(v4l2_fwnode_endpoint_alloc_parse);
- int v4l2_fwnode_parse_link(struct fwnode_handle *__fwnode,
- 			   struct v4l2_fwnode_link *link)
- {
--	const char *port_prop = is_of_node(__fwnode) ? "reg" : "port";
-+	const char *port_prop = "reg";
- 	struct fwnode_handle *fwnode;
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index edf0c695bbee..eb39cf5ea089 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -302,9 +302,12 @@ static void tvp5150_selmux(struct v4l2_subdev *sd)
+ 		break;
+ 	}
  
- 	memset(link, 0, sizeof(*link));
+-	dev_dbg_lvl(sd->dev, 1, debug, "Selecting video route: route input=%i, output=%i => tvp5150 input=%i, opmode=%i\n",
+-			decoder->input, decoder->output,
+-			input, opmode);
++	dev_dbg_lvl(sd->dev, 1, debug,
++		    "Selecting video route: route input=%s, output=%s => tvp5150 input=0x%02x, opmode=0x%02x\n",
++		    decoder->input == 0 ? "aip1a" :
++		    decoder->input == 2 ? "aip1b" : "svideo",
++		    decoder->output == 0 ? "normal" : "black-frame-gen",
++		    input, opmode);
+ 
+ 	regmap_write(decoder->regmap, TVP5150_OP_MODE_CTL, opmode);
+ 	regmap_write(decoder->regmap, TVP5150_VD_IN_SRC_SEL_1, input);
 -- 
 2.20.1
 
