@@ -2,265 +2,172 @@ Return-Path: <SRS0=xw2a=46=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F84BC2BB1D
-	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 11:04:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9A14C10DCE
+	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 11:12:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5A43B20724
-	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 11:04:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8DD4C206E2
+	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 11:12:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="o7+OtpJ4"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="M5rpR3t9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbgCMLEX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Mar 2020 07:04:23 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:33371 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726636AbgCMLEM (ORCPT
+        id S1726491AbgCMLMI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Mar 2020 07:12:08 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:42106 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726455AbgCMLMI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Mar 2020 07:04:12 -0400
-Received: by mail-wr1-f68.google.com with SMTP id a25so11552931wrd.0
-        for <linux-media@vger.kernel.org>; Fri, 13 Mar 2020 04:04:10 -0700 (PDT)
+        Fri, 13 Mar 2020 07:12:08 -0400
+Received: by mail-ed1-f67.google.com with SMTP id b21so1011810edy.9
+        for <linux-media@vger.kernel.org>; Fri, 13 Mar 2020 04:12:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ncw+eyWjRsQTeyJkRY9efqnjsTYXp1B+wwJAeTaYAUY=;
-        b=o7+OtpJ4HguHvdXj6h/irlmhIyldJOZUxqelnNp1uJAiYtI0Ye/qKEhlAJSp5BT1/B
-         g43HgPrOPFnot+78wWNNYRZEc0EuOxsOqVIXa7h4HRTSWvKcE8R7eBsdsW4+CPHqozSn
-         hgfOpvGOZfScg4cuaOcJ04DB9E/PQX31nOumHbEprYeJp4rVEpOfrzhINOrQtuMzKC7h
-         b/NozewPPpE2p2O43oW055R2XztYhoXJU0QhOilo5YppbcU4o/9brcU91NJlqzUaf/Ew
-         XJ5D82lDLYQXm+TFlAYunv2VJwInnlKQTWhNYxINQZ0MgowfBPfTQsO/1ITq/cRmng1X
-         JI+Q==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ghIpRGiQVwJbhKxwoqlN1gAo19Cr4ajPPSiWPX3Momc=;
+        b=M5rpR3t9vw3aAFdk8Rj95LtJ5sdgab5t7hG3QQY1cQx8F6TpGcySH69iNNDmyOFJwn
+         bjAjxQP4Jb4pmlP2X6mySwbIFdvBHNLEavP/vaUjs8YuL5NkNiaY/p6l1oCma3UFzgr6
+         LAWZAn3XL4+z1UW4dkwxcHsNmUphcTi0sQa9c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ncw+eyWjRsQTeyJkRY9efqnjsTYXp1B+wwJAeTaYAUY=;
-        b=OExvEp2lpvhd501VU5SrlAVywoJ34mTtGCqzMQqklSDot5+YMqSBRO55vJbXh+7jRA
-         g34/3ULYeS7xW0PdecLq1nYr5QfBsFCprw/qqvByJrPlZAJk9SBRGWUobp2ZmejIzwzs
-         DqD+9c1BXNTu36IGU/hdATJZTLaynwKqQ4chhYnH6dUfwcxdTva7QyCdnOWBYlZeqFs4
-         3x/6CQoLWnlHIFmoDXaZhjZGmW9tR8eAqy24DxnmMvw7HnYGhjk9KoPEO8fstljJLm2+
-         XgwNEwLGYSbMVblCVwjwEB/JAKXBtC72RBV9ptOPQVPDxpB6q0SRZYR9AKZ718u6MU9d
-         vRng==
-X-Gm-Message-State: ANhLgQ0HAmpkz2ggkmxcXL6rBkRqfDKRDqw7lsJHCK0zZX8lisHDqvc2
-        IoMGo+48wM8bWvdHEXZ1lSpRmA==
-X-Google-Smtp-Source: ADFU+vv07bRZwHFbQJV+QSjjmMIWLyvDlox4QCBogfbwZ9y18BLQBMA3c1lpCF+57gtUxJY4G2IWVQ==
-X-Received: by 2002:adf:9d8d:: with SMTP id p13mr12131719wre.360.1584097449459;
-        Fri, 13 Mar 2020 04:04:09 -0700 (PDT)
-Received: from xps7590.local ([2a02:2450:102f:13b8:c814:5be4:577e:3bd5])
-        by smtp.gmail.com with ESMTPSA id r23sm23578052wrr.93.2020.03.13.04.04.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2020 04:04:08 -0700 (PDT)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Robert Foss <robert.foss@linaro.org>
-Subject: [v2 1/3] media: dt-bindings: ov8856: Document YAML bindings
-Date:   Fri, 13 Mar 2020 12:03:48 +0100
-Message-Id: <20200313110350.10864-2-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200313110350.10864-1-robert.foss@linaro.org>
-References: <20200313110350.10864-1-robert.foss@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ghIpRGiQVwJbhKxwoqlN1gAo19Cr4ajPPSiWPX3Momc=;
+        b=azMO1ovqguf9hn2q8AmOBISIs/hhX3GkvgXktEvZyGL+XbjTHmLyBrg/3hjNj4MrYi
+         VPjN4e9F7gzj/hYyqsdTJIjQ4mYGaE5d07v1xBI3sOZw4gDGjC9XIZQh93ZGgdz/26D0
+         KWdGdvVrfNnrD8dEQyAxP+iAoCBSLPoWmtEQa0rlMTIczjZidbQQsQbEjnXo3rdPQBPe
+         nqrfADTmpzr/CM3XzpEg/KVSPmtm/xU6yzxOibwhmdv1r6Kc/RbeBt2nRgPwFc83Iu04
+         hzf37eoKBUpqgxweiK0Y9ECoZuydRBtZ0D6YwxtCemYQLgHTRKYWz6eT/rRv7V5zjOnp
+         doCQ==
+X-Gm-Message-State: ANhLgQ041xsATc/skJe8EcjM0noJUCebyEN1RREr2XMwJBCcgM9F9ZLt
+        rQcA5Avp3chxcYMp27U7MjbZNHvfUqzvnw==
+X-Google-Smtp-Source: ADFU+vvCzBvJsycFJ5GN0uTmM7t9OJuYXqZQxhNXFQry+16peJHfuRWZqZ7p5K3VN3sjFhjJo9kOhw==
+X-Received: by 2002:a50:d901:: with SMTP id t1mr7914197edj.34.1584097925241;
+        Fri, 13 Mar 2020 04:12:05 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id y4sm3189481ejm.77.2020.03.13.04.12.03
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Mar 2020 04:12:04 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id v11so11561201wrm.9
+        for <linux-media@vger.kernel.org>; Fri, 13 Mar 2020 04:12:03 -0700 (PDT)
+X-Received: by 2002:adf:f545:: with SMTP id j5mr17149866wrp.295.1584097923138;
+ Fri, 13 Mar 2020 04:12:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200218202753.652093-1-dmitry.sepp@opensynergy.com>
+ <12620787.dW097sEU6C@os-lin-dmo> <CAAFQd5BdS2oT+vgM3Qg64wPqWdPRi1uE6ZmOPwXwudv==3JQVA@mail.gmail.com>
+ <6194402.K2JlShyGXD@os-lin-dmo>
+In-Reply-To: <6194402.K2JlShyGXD@os-lin-dmo>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Fri, 13 Mar 2020 12:11:51 +0100
+X-Gmail-Original-Message-ID: <CAAFQd5A-ZaTkx8YEdq=Q_KpbmzZ4kGxJ1ju8shXMot9WMytd=w@mail.gmail.com>
+Message-ID: <CAAFQd5A-ZaTkx8YEdq=Q_KpbmzZ4kGxJ1ju8shXMot9WMytd=w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] video_video: Add the Virtio Video V4L2 driver
+To:     Dmitry Sepp <dmitry.sepp@opensynergy.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        virtio-dev@lists.oasis-open.org,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Alex Lau <alexlau@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dylan Reid <dgreid@chromium.org>, dstaessens@chromium.org,
+        Enrico Granata <egranata@google.com>,
+        Frediano Ziglio <fziglio@redhat.com>,
+        Keiichi Watanabe <keiichiw@chromium.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        =?UTF-8?Q?St=C3=A9phane_Marchesin?= <marcheu@chromium.org>,
+        Pawel Osciak <posciak@chromium.org>,
+        spice-devel@lists.freedesktop.org,
+        David Stevens <stevensd@chromium.org>, uril@redhat.com,
+        samiullah.khawaja@opensynergy.com, kiran.pawar@opensynergy.com,
+        Nikolay Martyanov <Nikolay.Martyanov@opensynergy.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dongchun Zhu <dongchun.zhu@mediatek.com>
+On Fri, Mar 13, 2020 at 11:27 AM Dmitry Sepp
+<dmitry.sepp@opensynergy.com> wrote:
+>
+> Hi Tomasz,
+>
+> On Freitag, 13. M=C3=A4rz 2020 11:05:35 CET Tomasz Figa wrote:
+> > On Thu, Mar 12, 2020 at 12:48 PM Dmitry Sepp
+> >
+> > <dmitry.sepp@opensynergy.com> wrote:
+> > > Hi Hans,
+> > >
+> > > One more thing:
+> > > > GFP_DMA? That's unusual. I'd expect GFP_DMA32. All V4L2 drivers use
+> > > > that.
+> > >
+> > > GFP_DMA32 had no effect for me on arm64. Probably I need to recheck.
+> >
+> > What's the reason to use any specific GFP flags at all? GFP_DMA(32)
+> > memory in the guest would typically correspond to host pages without
+> > any specific location guarantee.
+> >
+>
+> Typically, but not always, especially for non x86. Say, some platforms do=
+n't
+> have IOMMUs for codec devices and those devices require physically contig=
+ low
+> memory. We had to find a way to handle that.
 
-This patch adds documentation of device tree in YAML schema for the
-OV8856 CMOS image sensor.
+So basically your hypervisor guarantees that the guest pages inside
+the GFP_DMA zone are contiguous and DMA-able on the host as well?
+Given the Linux-specific aspect of GFP flags and differences in the
+implementation across architectures, perhaps it would be a better idea
+to use the DMA mask instead? That wouldn't currently affect vb2_dma_sg
+allocations, but in that case the host decoder would have some IOMMU
+anyway, right?
 
-Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
----
-
-- Changes since v4:
-  * Fabio: Change reset-gpio to GPIO_ACTIVE_LOW, explain in description
-  * Add clock-lanes property to example
-  * robher: Fix syntax error in devicetree example
-
-- Changes since v3:
-  * robher: Fix syntax error
-  * robher: Removed maxItems
-  * Fixes yaml 'make dt-binding-check' errors
-
-- Changes since v2:
-  Fixes comments from from Andy, Tomasz, Sakari, Rob.
-  * Convert text documentation to YAML schema.
-
-- Changes since v1:
-  Fixes comments from Sakari, Tomasz
-  * Add clock-frequency and link-frequencies in DT
-
- .../devicetree/bindings/media/i2c/ov8856.yaml | 133 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 134 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-
-diff --git a/Documentation/devicetree/bindings/media/i2c/ov8856.yaml b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-new file mode 100644
-index 000000000000..f5cb9add9277
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-@@ -0,0 +1,133 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (c) 2019 MediaTek Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ov8856.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Omnivision OV8856 CMOS Sensor Device Tree Bindings
-+
-+maintainers:
-+  - Ben Kao <ben.kao@intel.com>
-+  - Dongchun Zhu <dongchun.zhu@mediatek.com>
-+
-+description: |-
-+  The Omnivision OV8856 is a high performance, 1/4-inch, 8 megapixel, CMOS
-+  image sensor that delivers 3264x2448 at 30fps. It provides full-frame,
-+  sub-sampled, and windowed 10-bit MIPI images in various formats via the
-+  Serial Camera Control Bus (SCCB) interface. This chip is programmable
-+  through I2C and two-wire SCCB. The sensor output is available via CSI-2
-+  serial data output (up to 4-lane).
-+
-+properties:
-+  compatible:
-+    const: ovti,ov8856
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    description:
-+      Input clock for the sensor.
-+    items:
-+      - const: xvclk
-+
-+  clock-frequency:
-+    description:
-+      Frequency of the xvclk clock in Hertz.
-+
-+  dovdd-supply:
-+    description:
-+      Definition of the regulator used as interface power supply.
-+
-+  avdd-supply:
-+    description:
-+      Definition of the regulator used as analog power supply.
-+
-+  dvdd-supply:
-+    description:
-+      Definition of the regulator used as digital power supply.
-+
-+  reset-gpios:
-+    description:
-+      The phandle and specifier for the GPIO that controls sensor reset.
-+      This corresponds to the hardware pin XSHUTDOWN which is physically
-+      active low.
-+
-+  port:
-+    type: object
-+    additionalProperties: false
-+    description:
-+      A node containing input and output port nodes with endpoint definitions
-+      as documented in
-+      Documentation/devicetree/bindings/media/video-interfaces.txt
-+
-+    properties:
-+      endpoint:
-+        type: object
-+
-+        properties:
-+          clock-lanes:
-+            maxItems: 1
-+
-+          data-lanes:
-+            maxItems: 1
-+
-+          remote-endpoint: true
-+
-+        required:
-+          - clock-lanes
-+          - data-lanes
-+          - remote-endpoint
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - clock-frequency
-+  - dovdd-supply
-+  - avdd-supply
-+  - dvdd-supply
-+  - reset-gpios
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/clock/qcom,camcc-sdm845.h>
-+
-+    ov8856: camera-sensor@10 {
-+        compatible = "ovti,ov8856";
-+        reg = <0x10>;
-+        reset-gpios = <&pio 111 GPIO_ACTIVE_LOW>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&clk_24m_cam>;
-+
-+        clocks = <&clock_camcc CAM_CC_MCLK0_CLK>;
-+        clock-names = "xvclk";
-+        clock-frequency = <19200000>;
-+
-+        avdd-supply = <&mt6358_vcama2_reg>;
-+        dvdd-supply = <&mt6358_vcamd_reg>;
-+        dovdd-supply = <&mt6358_vcamio_reg>;
-+
-+        port {
-+            wcam_out: endpoint {
-+                remote-endpoint = <&mipi_in_wcam>;
-+                clock-lanes = <0>;
-+                data-lanes = <1 2 3 4>;
-+                link-frequencies = /bits/ 64 <360000000 180000000>;
-+            };
-+        };
-+    };
-+
-+...
-\ No newline at end of file
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a6fbdf354d34..0f99e863978a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12355,6 +12355,7 @@ L:	linux-media@vger.kernel.org
- T:	git git://linuxtv.org/media_tree.git
- S:	Maintained
- F:	drivers/media/i2c/ov8856.c
-+F:	Documentation/devicetree/bindings/media/i2c/ov8856.yaml
- 
- OMNIVISION OV9650 SENSOR DRIVER
- M:	Sakari Ailus <sakari.ailus@linux.intel.com>
--- 
-2.20.1
-
+>
+> Best regards,
+> Dmitry.
+>
+> > Best regards,
+> > Tomasz
+> >
+> > > Best regards,
+> > > Dmitry.
+> > >
+> > > On Donnerstag, 12. M=C3=A4rz 2020 11:18:26 CET Hans Verkuil wrote:
+> > > > On 3/12/20 11:15 AM, Dmitry Sepp wrote:
+> > > > > Hi Hans,
+> > > > >
+> > > > > Thank you for your great detailed review!
+> > > > >
+> > > > > I won't provide inline answers as your comments totally make sens=
+e.
+> > > > > There
+> > > > > is>
+> > > > >
+> > > > > only one thing I want to mention:
+> > > > >>> + struct video_plane_format plane_format[VIRTIO_VIDEO_MAX_PLANE=
+S];
+> > > > >>
+> > > > >> Why is this virtio specific? Any reason for not using
+> > > > >> VIDEO_MAX_PLANES?
+> > > > >
+> > > > > I'd say this is because VIDEO_MAX_PLANES does not exist outside o=
+f the
+> > > > > Linux OS, so for whatever other system we need a virtio specific
+> > > > > definition.
+> > > >
+> > > > OK, good reason :-)
+> > > >
+> > > > It's probably a good thing to add a comment where
+> > > > VIRTIO_VIDEO_MAX_PLANES is defined that explains this.
+> > > >
+> > > > Regards,
+> > > >
+> > > >       Hans
+>
+>
