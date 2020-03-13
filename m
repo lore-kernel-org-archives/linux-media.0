@@ -2,58 +2,59 @@ Return-Path: <SRS0=xw2a=46=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BE71C2BB1D
-	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 11:04:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71EACC4CECE
+	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 11:04:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 71EDD206E2
-	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 11:04:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 421072074A
+	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 11:04:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Vjrkrms1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cMGjOfX2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbgCMLEL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Mar 2020 07:04:11 -0400
-Received: from mail-wm1-f51.google.com ([209.85.128.51]:54039 "EHLO
-        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726610AbgCMLEI (ORCPT
+        id S1726676AbgCMLEN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Mar 2020 07:04:13 -0400
+Received: from mail-wm1-f45.google.com ([209.85.128.45]:55525 "EHLO
+        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726643AbgCMLEN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Mar 2020 07:04:08 -0400
-Received: by mail-wm1-f51.google.com with SMTP id 25so9443215wmk.3
-        for <linux-media@vger.kernel.org>; Fri, 13 Mar 2020 04:04:06 -0700 (PDT)
+        Fri, 13 Mar 2020 07:04:13 -0400
+Received: by mail-wm1-f45.google.com with SMTP id 6so9433324wmi.5
+        for <linux-media@vger.kernel.org>; Fri, 13 Mar 2020 04:04:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w2E4KEZKaVDRYwIZNq87wG0kGHEBrb12/0HT+rY65w0=;
-        b=Vjrkrms13ezAAsNBrf4Aw3643PvilA7lHREO2Rje7EPz5HKIhn6PK7nFyIG10khzhI
-         gjQgVYI8w2j/TCZmWE4/qsTEYFwgLErPxhhX893U8Qg0gq9D23tV/AanxjmUS6mGI7Nu
-         dJ4WZmX8l5nPI005siYUimKql3oZc062Ruvly56AaIpSlKikWM42Xx1/SNfXR456D2Uy
-         4Nm2keDF+/LIPRvjYhJV2u7oMLrc19xBe1vjw15IUjIYCoZo/T3dhg3wCCaCvMqdJ7vK
-         loIGsgKy0neWEonPTWCs9EQ/OXPNeJ3yGblU/tp9iKqPmCNVyYHyg23E0FwcfUVKbe7H
-         A4gA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=7yj7gQmza3O1dl8IfzXzptt6zWblAsleJR4kdEFCwBM=;
+        b=cMGjOfX2oWshVuzTKHR7RoEvOlRcGzgyxtqRukdKNyktfEgSZsEuS6V3RDPa3v5U5C
+         wi7M6qljaXECrvozHR+ig7l3GGo2GAGl0oHTsfDeVUmIxiDSU4Wm6XVVIseLrJuiX7s0
+         N9lHp47mejEjVfMBoAlThknnf7KhKEvf1uiv/XvFwAMgpzbiX7of5xs+qxGReF+718TZ
+         NdGZSY6UAEfZxdrCBZfy1W+NSPBJyFSxznI6CtTO8sUvVYIud3BWd6qKhLA0xjPNINAR
+         bNn8rnSHF4zg0ZsyVAssELGxy49/+ubb2dhpHCMu6qnXux91boaGSsEZNzXrkbXY40px
+         PCGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w2E4KEZKaVDRYwIZNq87wG0kGHEBrb12/0HT+rY65w0=;
-        b=df2oaZNhulAAQ74ed+hqGOav1RkXUyPZZ1sKAPxVZiDGIuesWo4jeRlqrGPQl3k1Le
-         r/R5j8NWwUmnIeVN/jXxen8n/fYxwblhqCDVEvH0g3vumDUfA4uPJjqb05GwyEB5BXOw
-         oQRswg5UcQ59DbPYg5RG3VMlNhvxqQMrqL+gUai0nuEwlC3EH3gftup5cafGZO6VS51L
-         sGAQQbxoCLgetKsATcTJUaxUVYDvVe1tAFIeIjw2dsVMnFs9jmdLBvLsULiMOjWPon2u
-         LyFCw/HA4EHaTipKY5NMXE8kT4Zez1j5EoRDSV7td0MDSrsyGiepbHhyDW63OBPBKLd9
-         XDhw==
-X-Gm-Message-State: ANhLgQ1oU4VUd/Ez4IJPn285UpN7XiJzaRKypyYDjbOMEOuFNqt3gS1V
-        BH/SI/LLzTEGtZGd+YAKnmDyCEMayC4=
-X-Google-Smtp-Source: ADFU+vt0bW6bGGlAkijDQUDmrP+c49Qo/GdKOBADGoqQJMl248Gzb6VsDZxp8+EgPXENT81KeoRFXw==
-X-Received: by 2002:a1c:4f:: with SMTP id 76mr10541710wma.28.1584097446011;
-        Fri, 13 Mar 2020 04:04:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=7yj7gQmza3O1dl8IfzXzptt6zWblAsleJR4kdEFCwBM=;
+        b=KCcaIeNkfnyko372lWAm1g8CtUE72BN3CNEghshzZHLDytk5gpSr3XdX+xROq5l+L9
+         j73xyE58zXwiVco9JgPKPIk3m+8YL3yn2kpIeqbQWRpU2+YmATDgS7qagnH3Bh3bCZ27
+         q/AoKDQoQ5bepbwLi9zW8RLgPFvsiIzOu8rn7vQ9e2Fbp2slwCjjX4OsxHARFe1d32Et
+         Cwr9ITBS17EKUbjx3hMl9v8OcEgFOl8wiswoqI8rG9BER0MBSZ2MojW1eCSYqgS3BaHQ
+         U05Ap94LsUj5tD6mGperGYdNTO7sbcXQE0GHSO/woEmQk57GvNKxGJNvBTiTz6vqno8t
+         ZWxQ==
+X-Gm-Message-State: ANhLgQ3Ddx9PRwWkMmTecxgssD6UWBjy/DovjsdaYgpGP+85lWlTJKc0
+        JJKzvarhFeSMi9h0iVkpuZu4Vw==
+X-Google-Smtp-Source: ADFU+vuObq0lodVi4ARGspzGIPX4J5aHG9SJWTNgJ1qUzzHy0b5UCAPLdUrbX67/tl6sWOgy5s9lzg==
+X-Received: by 2002:a1c:f21a:: with SMTP id s26mr10327528wmc.39.1584097450815;
+        Fri, 13 Mar 2020 04:04:10 -0700 (PDT)
 Received: from xps7590.local ([2a02:2450:102f:13b8:c814:5be4:577e:3bd5])
-        by smtp.gmail.com with ESMTPSA id r23sm23578052wrr.93.2020.03.13.04.04.04
+        by smtp.gmail.com with ESMTPSA id r23sm23578052wrr.93.2020.03.13.04.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2020 04:04:05 -0700 (PDT)
+        Fri, 13 Mar 2020 04:04:10 -0700 (PDT)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
         Fabio Estevam <festevam@gmail.com>,
@@ -63,10 +64,12 @@ To:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Robert Foss <robert.foss@linaro.org>
-Subject: [v2 0/3] media: ov8856: Add devicetree support
-Date:   Fri, 13 Mar 2020 12:03:47 +0100
-Message-Id: <20200313110350.10864-1-robert.foss@linaro.org>
+Subject: [v2 2/3] media: ov8856: Add devicetree support
+Date:   Fri, 13 Mar 2020 12:03:49 +0100
+Message-Id: <20200313110350.10864-3-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200313110350.10864-1-robert.foss@linaro.org>
+References: <20200313110350.10864-1-robert.foss@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -74,23 +77,212 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This adds devicetree support to the ov8856 driver.
-In order to to aid debugging and enable future sensor
-modes to be supported, module revision detection is also added.
+Add devicetree match table, and enable ov8856_probe()
+to initialize power, clocks and reset pins.
 
-Dongchun Zhu (1):
-  media: dt-bindings: ov8856: Document YAML bindings
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+---
 
-Robert Foss (2):
-  media: ov8856: Add devicetree support
-  media: ov8856: Implement sensor module revision identification
+- Changes since v1:
+  * Fabio: Change n_shutdown_gpio name to reset_gpio
+  * Fabio: Invert reset_gpio due to GPIO_ACTIVE_HIGH -> GPIO_ACTIVE_LOW change
+  * Fabio: Remove empty line
+  * Fabio: Remove real error from devm_gpiod_get() failures
+  * Andy & Sakari: Make XVCLK optional since to not break ACPI
+  * Sakari: ARRAY_SIZE() directly instead of through OV8856_NUM_SUPPLIES
+  * Sakari: Use XVCLK rate as provided by DT
 
- .../devicetree/bindings/media/i2c/ov8856.yaml | 133 +++++++++++++++
- MAINTAINERS                                   |   1 +
- drivers/media/i2c/ov8856.c                    | 151 +++++++++++++++++-
- 3 files changed, 283 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ov8856.yaml
+ drivers/media/i2c/ov8856.c | 109 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 107 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
+index 8655842af275..db61eed223e8 100644
+--- a/drivers/media/i2c/ov8856.c
++++ b/drivers/media/i2c/ov8856.c
+@@ -3,10 +3,13 @@
+ 
+ #include <asm/unaligned.h>
+ #include <linux/acpi.h>
++#include <linux/clk.h>
+ #include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/pm_runtime.h>
++#include <linux/regulator/consumer.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-fwnode.h>
+@@ -19,6 +22,8 @@
+ #define OV8856_LINK_FREQ_180MHZ		180000000ULL
+ #define OV8856_SCLK			144000000ULL
+ #define OV8856_MCLK			19200000
++#define OV8856_XVCLK_19_2		19200000
++#define OV8856_XVCLK_24			24000000
+ #define OV8856_DATA_LANES		4
+ #define OV8856_RGB_DEPTH		10
+ 
+@@ -64,6 +69,12 @@
+ 
+ #define to_ov8856(_sd)			container_of(_sd, struct ov8856, sd)
+ 
++static const char * const ov8856_supply_names[] = {
++	"dovdd",	/* Digital I/O power */
++	"avdd",		/* Analog power */
++	"dvdd",		/* Digital core power */
++};
++
+ enum {
+ 	OV8856_LINK_FREQ_720MBPS,
+ 	OV8856_LINK_FREQ_360MBPS,
+@@ -566,6 +577,10 @@ struct ov8856 {
+ 	struct media_pad pad;
+ 	struct v4l2_ctrl_handler ctrl_handler;
+ 
++	struct clk		*xvclk;
++	struct gpio_desc	*reset_gpio;
++	struct regulator_bulk_data supplies[ARRAY_SIZE(ov8856_supply_names)];
++
+ 	/* V4L2 Controls */
+ 	struct v4l2_ctrl *link_freq;
+ 	struct v4l2_ctrl *pixel_rate;
+@@ -908,6 +923,46 @@ static int ov8856_set_stream(struct v4l2_subdev *sd, int enable)
+ 	return ret;
+ }
+ 
++static int __ov8856_power_on(struct ov8856 *ov8856)
++{
++	struct i2c_client *client = v4l2_get_subdevdata(&ov8856->sd);
++	int ret;
++
++	ret = clk_prepare_enable(ov8856->xvclk);
++	if (ret < 0) {
++		dev_err(&client->dev, "failed to enable xvclk\n");
++		return ret;
++	}
++
++	gpiod_set_value_cansleep(ov8856->reset_gpio, GPIOD_OUT_HIGH);
++
++	ret = regulator_bulk_enable(ARRAY_SIZE(ov8856_supply_names),
++				    ov8856->supplies);
++	if (ret < 0) {
++		dev_err(&client->dev, "failed to enable regulators\n");
++		goto disable_clk;
++	}
++
++	gpiod_set_value_cansleep(ov8856->reset_gpio, GPIOD_OUT_LOW);
++
++	usleep_range(1500, 1800);
++
++	return 0;
++
++disable_clk:
++	clk_disable_unprepare(ov8856->xvclk);
++
++	return ret;
++}
++
++static void __ov8856_power_off(struct ov8856 *ov8856)
++{
++	gpiod_set_value_cansleep(ov8856->reset_gpio, GPIOD_OUT_HIGH);
++	regulator_bulk_disable(ARRAY_SIZE(ov8856_supply_names),
++			       ov8856->supplies);
++	clk_disable_unprepare(ov8856->xvclk);
++}
++
+ static int __maybe_unused ov8856_suspend(struct device *dev)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+@@ -1175,7 +1230,7 @@ static int ov8856_remove(struct i2c_client *client)
+ static int ov8856_probe(struct i2c_client *client)
+ {
+ 	struct ov8856 *ov8856;
+-	int ret;
++	int i, ret;
+ 
+ 	ret = ov8856_check_hwcfg(&client->dev);
+ 	if (ret) {
+@@ -1189,10 +1244,50 @@ static int ov8856_probe(struct i2c_client *client)
+ 		return -ENOMEM;
+ 
+ 	v4l2_i2c_subdev_init(&ov8856->sd, client, &ov8856_subdev_ops);
++	ov8856->xvclk = devm_clk_get(&client->dev, "xvclk");
++	if (PTR_ERR(ov8856->xvclk) == -ENOENT) {
++		dev_info(&client->dev, "xvclk clock not defined, continuing...\n");
++		ov8856->xvclk = NULL;
++	} else if (IS_ERR(ov8856->xvclk)) {
++		dev_err(&client->dev, "could not get xvclk clock (%ld)\n",
++			PTR_ERR(ov8856->xvclk));
++		return PTR_ERR(ov8856->xvclk);
++	}
++
++	ret = clk_set_rate(ov8856->xvclk, OV8856_XVCLK_24);
++	if (ret < 0) {
++		dev_err(&client->dev, "failed to set xvclk rate (24MHz)\n");
++		return ret;
++	}
++
++	ov8856->reset_gpio = devm_gpiod_get(&client->dev, "reset",
++					       GPIOD_OUT_HIGH);
++	if (IS_ERR(ov8856->reset_gpio)) {
++		dev_err(&client->dev, "failed to get reset-gpios\n");
++		return PTR_ERR(ov8856->reset_gpio);
++	}
++
++	for (i = 0; i < ARRAY_SIZE(ov8856_supply_names); i++)
++		ov8856->supplies[i].supply = ov8856_supply_names[i];
++
++	ret = devm_regulator_bulk_get(&client->dev,
++				      ARRAY_SIZE(ov8856_supply_names),
++				      ov8856->supplies);
++	if (ret) {
++		dev_warn(&client->dev, "failed to get regulators\n");
++		return ret;
++	}
++
++	ret = __ov8856_power_on(ov8856);
++	if (ret) {
++		dev_warn(&client->dev, "failed to power on\n");
++		return ret;
++	}
++
+ 	ret = ov8856_identify_module(ov8856);
+ 	if (ret) {
+ 		dev_err(&client->dev, "failed to find sensor: %d", ret);
+-		return ret;
++		goto probe_power_off;
+ 	}
+ 
+ 	mutex_init(&ov8856->mutex);
+@@ -1238,6 +1333,9 @@ static int ov8856_probe(struct i2c_client *client)
+ 	v4l2_ctrl_handler_free(ov8856->sd.ctrl_handler);
+ 	mutex_destroy(&ov8856->mutex);
+ 
++probe_power_off:
++	__ov8856_power_off(ov8856);
++
+ 	return ret;
+ }
+ 
+@@ -1254,11 +1352,18 @@ static const struct acpi_device_id ov8856_acpi_ids[] = {
+ MODULE_DEVICE_TABLE(acpi, ov8856_acpi_ids);
+ #endif
+ 
++static const struct of_device_id ov8856_of_match[] = {
++	{ .compatible = "ovti,ov8856" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, ov8856_of_match);
++
+ static struct i2c_driver ov8856_i2c_driver = {
+ 	.driver = {
+ 		.name = "ov8856",
+ 		.pm = &ov8856_pm_ops,
+ 		.acpi_match_table = ACPI_PTR(ov8856_acpi_ids),
++		.of_match_table = ov8856_of_match,
+ 	},
+ 	.probe_new = ov8856_probe,
+ 	.remove = ov8856_remove,
 -- 
 2.20.1
 
