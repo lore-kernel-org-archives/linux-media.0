@@ -4,72 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79D67C10DCE
-	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 18:39:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B14AC2BB1D
+	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 21:12:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5C28C20663
-	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 18:39:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6EF1C2074E
+	for <linux-media@archiver.kernel.org>; Fri, 13 Mar 2020 21:12:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbgCMSj2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Mar 2020 14:39:28 -0400
-Received: from mga05.intel.com ([192.55.52.43]:11667 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726557AbgCMSj2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Mar 2020 14:39:28 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Mar 2020 11:39:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,549,1574150400"; 
-   d="scan'208";a="246763975"
-Received: from stinkbox.fi.intel.com (HELO stinkbox) ([10.237.72.174])
-  by orsmga006.jf.intel.com with SMTP; 13 Mar 2020 11:39:25 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Fri, 13 Mar 2020 20:39:24 +0200
-From:   Ville Syrjala <ville.syrjala@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: [PATCH] edid-decode: Fix decoing of DispID physical enclosure bit
-Date:   Fri, 13 Mar 2020 20:39:24 +0200
-Message-Id: <20200313183924.10820-1-ville.syrjala@linux.intel.com>
-X-Mailer: git-send-email 2.24.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S1727367AbgCMVMt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Mar 2020 17:12:49 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:8667 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726681AbgCMVMt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 13 Mar 2020 17:12:49 -0400
+X-IronPort-AV: E=Sophos;i="5.70,550,1574089200"; 
+   d="scan'208";a="41620048"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 14 Mar 2020 06:12:47 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 79AFD40E09D5;
+        Sat, 14 Mar 2020 06:12:43 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 1/4] media: dt-bindings: media: i2c: Switch to assigned-clock-rates
+Date:   Fri, 13 Mar 2020 21:12:31 +0000
+Message-Id: <1584133954-6953-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1584133954-6953-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <1584133954-6953-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Use assigned-clock-rates to specify the clock rate. Also mark
+clock-frequency property as deprecated.
 
-The interpretation of the physucal enclosure bit is backwards.
-Fix it to match the spec.
-
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- parse-displayid-block.cpp | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/media/i2c/ov5645.txt | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/parse-displayid-block.cpp b/parse-displayid-block.cpp
-index e6c8d95dcaa1..b436f343fa63 100644
---- a/parse-displayid-block.cpp
-+++ b/parse-displayid-block.cpp
-@@ -913,9 +913,9 @@ static void parse_displayid_tiled_display_topology(const unsigned char *x, bool
- 	default: printf("Reserved\n"); break;
- 	}
- 	if (caps & 0x80)
--		printf("    Tiled display consists of multiple physical display enclosures\n");
--	else
- 		printf("    Tiled display consists of a single physical display enclosure\n");
-+	else
-+		printf("    Tiled display consists of multiple physical display enclosures\n");
- 	printf("    Num horizontal tiles: %u Num vertical tiles: %u\n",
- 	       num_h_tile + 1, num_v_tile + 1);
- 	printf("    Tile location: %u, %u\n", tile_h_location, tile_v_location);
+diff --git a/Documentation/devicetree/bindings/media/i2c/ov5645.txt b/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+index 72ad992..e62fe82 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ov5645.txt
++++ b/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+@@ -8,7 +8,7 @@ Required Properties:
+ - compatible: Value should be "ovti,ov5645".
+ - clocks: Reference to the xclk clock.
+ - clock-names: Should be "xclk".
+-- clock-frequency: Frequency of the xclk clock.
++- clock-frequency (deprecated): Frequency of the xclk clock.
+ - enable-gpios: Chip enable GPIO. Polarity is GPIO_ACTIVE_HIGH. This corresponds
+   to the hardware pin PWDNB which is physically active low.
+ - reset-gpios: Chip reset GPIO. Polarity is GPIO_ACTIVE_LOW. This corresponds to
+@@ -37,7 +37,8 @@ Example:
+ 
+ 			clocks = <&clks 200>;
+ 			clock-names = "xclk";
+-			clock-frequency = <24000000>;
++			assigned-clocks = <&clks 200>;
++			assigned-clock-rates = <24000000>;
+ 
+ 			vdddo-supply = <&camera_dovdd_1v8>;
+ 			vdda-supply = <&camera_avdd_2v8>;
 -- 
-2.24.1
+2.7.4
 
