@@ -2,325 +2,153 @@ Return-Path: <SRS0=MyIm=5A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEAEAC1975A
-	for <linux-media@archiver.kernel.org>; Sun, 15 Mar 2020 01:51:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64DA2C1975A
+	for <linux-media@archiver.kernel.org>; Sun, 15 Mar 2020 02:07:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9FFA4206D5
-	for <linux-media@archiver.kernel.org>; Sun, 15 Mar 2020 01:51:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 360012051A
+	for <linux-media@archiver.kernel.org>; Sun, 15 Mar 2020 02:07:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ZD5yt9c9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NLG2toN+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727275AbgCOBvf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 14 Mar 2020 21:51:35 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:35696 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726643AbgCOBvf (ORCPT
+        id S1727650AbgCOCHW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 14 Mar 2020 22:07:22 -0400
+Received: from mail-qv1-f68.google.com ([209.85.219.68]:46937 "EHLO
+        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726689AbgCOCHW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 14 Mar 2020 21:51:35 -0400
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BC19B2D6;
-        Sat, 14 Mar 2020 12:44:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1584186254;
-        bh=tN10r2mGOybezvd5yxvvVbz2xZcUgWHw5M3M0WRovos=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZD5yt9c9NZslIYCTEVS9b3dA4tuW/i7wkdVvmzXDTr34FjpMyZN4BdcTu5lVL0N+x
-         vSV+Psags/404wL1NLvgHRr9X3nUBj16BQtvfj+P7DFfhacgE/DSb6KO24bj4D4+sf
-         e159x4SOt59P+9jZ5Z051wi+jyHtU8/TOnqPbvhg=
-Date:   Sat, 14 Mar 2020 13:44:10 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH/RFC] media: v4l2: Extend VIDIOC_ENUM_FMT to support
- MC-centric devices
-Message-ID: <20200314114410.GA5320@pendragon.ideasonboard.com>
-References: <20200313152406.13347-1-laurent.pinchart@ideasonboard.com>
- <efd9202bc0c0a64ff88c3339fdbac5a026842700.camel@ndufresne.ca>
- <20200313172532.GI4751@pendragon.ideasonboard.com>
- <22d39f6da12cf0cc318d6e6476cf0ae851ebb477.camel@ndufresne.ca>
+        Sat, 14 Mar 2020 22:07:22 -0400
+Received: by mail-qv1-f68.google.com with SMTP id m2so6892952qvu.13
+        for <linux-media@vger.kernel.org>; Sat, 14 Mar 2020 19:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=26fQMwgOmUVjg2NR4Ril0ENTtqR6i1LeAMUYZjFOB2w=;
+        b=NLG2toN++mXrz6ifcb54qpsHQReXH2h6NAYLiWbMCxI9xFntGkpkhSiGa+yuX4vNzY
+         VF1MhIqNy/a24ZJsGytfPMhcPDMn8S9Se7oHwaapuJrj60Xb0Kha6y386xsGmPX+irfh
+         L3rh3sGcJFDePELs7MRzgltmBsVAGzrWTQcpHodKHav0yq07q5KkVfkTC0/p7FrJCtNe
+         JA/lNuIvlGV5s+mUNbfOotOSdog3L68ee/htGHlCeHO3evQEA8ZoU1PNGFq0V64lKDj7
+         e9ff3XEhw3BJcCwRik0jWOrI+y7IYe8iKPlBSjMEaSfIEMVQ/otyQrmv70HeMi3MQ1Sf
+         RqJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=26fQMwgOmUVjg2NR4Ril0ENTtqR6i1LeAMUYZjFOB2w=;
+        b=WYEj6+Amk/TCSvhvcEXHh6avg07Q4i7PheJMgCjZ5LuM8GXBXC25OC+7Rcb6BG4Xbg
+         3FkL2fcaiSzgSMR0OSwJ9NcOJAeNveOeTs20rrfNRQX3msuC/UxLldkXH7B40cmjE9Ux
+         cmIz2XyGezMjiDS9yTQGJIdjZ3FGAPdGMbyvs2YTut0KbgLyyST6YIL6e5VVB/ujeC3s
+         UbMbIghffTKAxsV1bkgU4cG1sbP6j7Old7GDk+AL7t+qHPBRBYXrwz/9V180Hwzp1psO
+         dF9f+x+6ZbyiwZGvtLJ2/4NQLrr3ytQ1YOVvxGRXxdj0zFn6VcJ90vbxTMEy0pWWD6ZA
+         ih3g==
+X-Gm-Message-State: ANhLgQ2OffG2HMKBQXjNxfKtsrf7B/LvP4/E9bJepd1fhVteAv8wpTeX
+        DR9iSkeVZ1YTAIvzLDr/6OpB2T2sshs=
+X-Google-Smtp-Source: ADFU+vvpRGeLjzT6r6SqaCYQvpXDe0AxNcj6BJEup4MolBFuQumaihuOuC8LD5ukwQRp4Z8dT6/Cfg==
+X-Received: by 2002:aa7:94b5:: with SMTP id a21mr18646039pfl.290.1584225056216;
+        Sat, 14 Mar 2020 15:30:56 -0700 (PDT)
+Received: from ?IPv6:2605:e000:d445:6a00:bd03:a881:a59:15cb? ([2605:e000:d445:6a00:bd03:a881:a59:15cb])
+        by smtp.gmail.com with ESMTPSA id g6sm12154169pjv.13.2020.03.14.15.30.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 Mar 2020 15:30:55 -0700 (PDT)
+Subject: Re: [PATCH 0/8] media: imx: Miscalleanous format-related cleanups
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rui Miguel Silva <rmfrfs@gmail.com>
+References: <20200310161845.1588-1-laurent.pinchart@ideasonboard.com>
+ <5b773016-8a71-9739-237d-69c0dc8bd349@gmail.com>
+ <20200312004735.GG1639@pendragon.ideasonboard.com>
+From:   Steve Longerbeam <slongerbeam@gmail.com>
+Message-ID: <1a10d9b2-3e5b-4cbd-d703-5012fa8fa6ad@gmail.com>
+Date:   Sat, 14 Mar 2020 15:30:53 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <22d39f6da12cf0cc318d6e6476cf0ae851ebb477.camel@ndufresne.ca>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200312004735.GG1639@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Nicolas,
+Hi Laurent,
 
-On Sat, Mar 14, 2020 at 07:26:40AM -0400, Nicolas Dufresne wrote:
-> Le vendredi 13 mars 2020 à 19:25 +0200, Laurent Pinchart a écrit :
-> > On Fri, Mar 13, 2020 at 01:22:26PM -0400, Nicolas Dufresne wrote:
-> > > Le vendredi 13 mars 2020 à 17:24 +0200, Laurent Pinchart a écrit :
-> > > > The VIDIOC_ENUM_FMT ioctl enumerates all formats supported by a video
-> > > > node. For MC-centric devices, its behaviour has always been ill-defined,
-> > > > with drivers implementing one of the following behaviours:
-> > > > 
-> > > > - No support for VIDIOC_ENUM_FMT at all
-> > > > - Enumerating all formats supported by the video node, regardless of the
-> > > >   configuration of the pipeline
-> > > > - Enumerating formats supported by the video node for the active
-> > > >   configuration of the connected subdevice
-> > > > 
-> > > > The first behaviour is obviously useless for applications. The second
-> > > > behaviour provides the most information, but doesn't offer a way to find
-> > > > what formats are compatible with a given pipeline configuration. The
-> > > > third behaviour fixes that, but with the drawback that applications
-> > > > can't enumerate all supported formats anymore, and have to modify the
-> > > > active configuration of the pipeline to enumerate formats.
-> > > > 
-> > > > The situation is messy as none of the implemented behaviours are ideal,
-> > > > and userspace can't predict what will happen as the behaviour is
-> > > > driver-specific.
-> > > > 
-> > > > To fix this, let's extend the VIDIOC_ENUM_FMT with a missing capability:
-> > > > enumerating pixel formats for a given media bus code. The media bus code
-> > > > is passed through the v4l2_fmtdesc structure in a new mbus_code field
-> > > > (repurposed from the reserved fields), and an additional flag is added
-> > > > to report if the driver supports this API extension. With this
-> > > > capability in place, applications can enumerate pixel formats for a
-> > > > given media bus code without modifying the active configuration of the
-> > > > device.
-> > > > 
-> > > > The current behaviour of the ioctl is preserved when the new mbus_code
-> > > > field is set to 0, ensuring compatibility with existing userspace. This
-> > > > behaviour is now documented as mandatory for MC-centric devices as well
-> > > > as the traditional video node-centric devices. This allows applications
-> > > > to query MC-centric devices for all the supported pixel formats, as well
-> > > > as for the pixel formats corresponding to a given media bus code.
-> > > > 
-> > > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > > ---
-> > > > Hello,
-> > > > 
-> > > > This API extension comes from a need I encountered when working on a
-> > > > simple pipeline handler for libcamera. The pipeline handlers we have so
-> > > > far are device-specific, and hardcode knowledge about the device drivers
-> > > > in their implementation, such as the mapping from media bus codes to
-> > > > pixel formats. For "simple" devices (currently defined as linear
-> > > > pipelines with no processing, which we will probably extend to include
-> > > > basic processing such as scaling and format conversion in the future),
-> > > > we want to have a single pipeline handler that will auto-configure the
-> > > > pipeline based on information retrieved from the kernel. I thus need an
-> > > > API to extract the mapping from media bus code to pixel format.
-> > > > 
-> > > > Once Niklas patches that add V4L2_CAP_IO_MC land in master, I think this
-> > > > patch should be rebased, and specify that this API is mandatory for
-> > > > drivers that expose V4L2_CAP_IO_MC and invalid otherwise. It would be a
-> > > > good step towards correctly specifying the behaviour of video nodes for
-> > > > MC-centric devices.
-> > > > 
-> > > > I will of course provide patches for v4l2-ctrl to support this
-> > > > extension, as well as for v4l2-compliance, but I would like feedback on
-> > > > the API first.
-> > > > 
-> > > >  .../media/uapi/v4l/vidioc-enum-fmt.rst        | 40 +++++++++++++------
-> > > >  drivers/media/v4l2-core/v4l2-ioctl.c          | 10 ++++-
-> > > >  include/uapi/linux/videodev2.h                |  4 +-
-> > > >  3 files changed, 38 insertions(+), 16 deletions(-)
-> > > > 
-> > > > diff --git a/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst b/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
-> > > > index 8ca6ab701e4a..60cac7eef76c 100644
-> > > > --- a/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
-> > > > +++ b/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
-> > > > @@ -39,19 +39,26 @@ Arguments
-> > > >  Description
-> > > >  ===========
-> > > >  
-> > > > -To enumerate image formats applications initialize the ``type`` and
-> > > > -``index`` field of struct :c:type:`v4l2_fmtdesc` and call
-> > > > -the :ref:`VIDIOC_ENUM_FMT` ioctl with a pointer to this structure. Drivers
-> > > > -fill the rest of the structure or return an ``EINVAL`` error code. All
-> > > > -formats are enumerable by beginning at index zero and incrementing by
-> > > > -one until ``EINVAL`` is returned. If applicable, drivers shall return
-> > > > -formats in preference order, where preferred formats are returned before
-> > > > -(that is, with lower ``index`` value) less-preferred formats.
-> > > > -
-> > > > -.. note::
-> > > > -
-> > > > -   After switching input or output the list of enumerated image
-> > > > -   formats may be different.
-> > > > +To enumerate image formats applications initialize the ``type``, ``index`` and
-> > > > +``mbus_code`` fields of struct :c:type:`v4l2_fmtdesc` and call the
-> > > 
-> > > This re-phrase suggests that not setting the mbus_code is a fault,
-> > > which pretty much all existing userspace code will do. It's of course
-> > > set to zero, as it was a reserved field before, but I'd like that text
-> > > to be improved. For someone programming a video device, the presence of
-> > > a mbus_code parameter will be very confusing, as the developer may not
-> > > even be aware what an mbus is.
-> > 
-> > I agree with you, I'll improve this.
-> > 
-> > > > +:ref:`VIDIOC_ENUM_FMT` ioctl with a pointer to this structure. Drivers fill the
-> > > > +rest of the structure or return an ``EINVAL`` error code. All formats are
-> > > > +enumerable by beginning at index zero and incrementing by one until ``EINVAL``
-> > > > +is returned. If applicable, drivers shall return formats in preference order,
-> > > > +where preferred formats are returned before (that is, with lower ``index``
-> > > > +value) less-preferred formats.
-> > > > +
-> > > > +If the ``mbus_code`` is set to zero, drivers shall enumerate all image formats
-> > > > +supported by the device. For video node-centric devices, the enumerated formats
-> > > > +may depend on the active input or output of the device. For MC-centric devices,
-> > > > +the enumerated formats shall not depend on the active configuration of the
-> > > > +device.
-> > > > +
-> > > > +If the ``mbus_code`` field is set to a non-zero value, drivers shall restrict
-> > > > +enumeration to only the image formats that can be produced from that media bus
-> > > > +code, and set the ``V4L2_FMT_FLAG_MBUS_CODE`` flag in the ``flags`` field. The
-> > > > +enumerated imge formats shall not depend on the active configuration of the
-> > > 
-> > > s/imge/image
-> > > 
-> > > > +device. Enumeration shall otherwise operate as previously described.
-> > > 
-> > > I think we need to step back a little. This is not only a problem for
-> > > MC subdevices, it's a generic problem. As an example, in codecs, the
-> > > enumeration of CAPTURE format is restricted by the configuration on the
-> > > OTUPUT queue. As we must have a default configuration on the OUTPUT
-> > > queue, it means it's not really possible to sort out what the HW can do
-> > > globally. This one can be solved by setting formata on the OUTPUT and
-> > > enumerating, but seems rather difficult.
-> > > 
-> > > So I think if that mechanism was slightly more generic, this could be
-> > > solved elsewhere too. That being said, maybe a format flag is entirely
-> > > sufficient for video nodes.
-> > 
-> > Do you have an idea on how this mechanism could be made more generic ?
-> 
-> So thinking about it, the case of M2M Encoder/Decoder (other M2M have
-> no spec in this regard), is slightly simpler. Most of the time we only
-> want the subset and, to be fair, we manage to make working userspace
-> thus far with that. And the second use-case is full list (regardless of
-> the other queue configuration), which could serve in early filtering
-> when a CODEC is being elected for the detected bitstream. Even though
-> we don't have a spec for that yet, it would be even more useful for M2M
-> colorspace converter.
-> 
-> Looking at the API, just like you mbus_code, we'd need a parameter to
-> tell that we want a full list. But mbus_code is not reusable. Maybe as
-> mbus_code does not make sense in this case we could opt for a anonymous
-> union and maybe add some enum_flags (or some better name) in the
-> future, and leave you case as "specialized".
+On 3/11/20 5:47 PM, Laurent Pinchart wrote:
+> Hi Steve,
+>
+> On Wed, Mar 11, 2020 at 05:16:49PM -0700, Steve Longerbeam wrote:
+>> Hi Laurent,
+>>
+>> I agree that the find/enum format code in imx-utils needs cleanup, it's
+>> too confusing. I will be ready to give my ack to the imx-utils patches
+>> once I do some smoke testing on a sabre target when I return from vacation.
+>>
+>> Note that Phillip also submitted a fixup patch to the find/enum format
+>> code, IIRC it did more consolidating of the imx_media_pixfmt tables. I
+>> can't find it and it has gotten lost, but I tested and provided a
+>> reviewed-by at the time.
+> I've found them in the mail archive. There were 3 patches, Hans said he
+> would take the first two, but only the first one got merged. I'll take
+> the two others and build on top of them, fixing the issues pointed out
+> by the kbuild robot and addressing Hans concerns.
 
-There's a flags field in v4l2_fmtdesc, maybe you could define a new
-V4L2_FMT_FLAG_FULL for this use case ? This wouldn't require turning
-mbus_code into a union.
+I found the thread finally. In fact I did some work on this set already, 
+I fixed the kbuild warnings as well as added some function headers 
+describing all the format search criteria arguments. Also changed a 
+local var in enum_formats() to better document the enum algorithm.
 
-The thing that bothers me a bit is that it's not possible, with M2M
-devices, to enumerate formats on the dependent side of the device
-without modifying the active format on the other side first. There's no
-TRY semantics that can span both sides. It would be possible to reuse
-the mechanism I propose here, setting mbus_code to a pixel format (we
-would make it a union then) for a VIDIOC_ENUM_FMT call on the dependent
-side would enumerate only the pixel formats compatible with the give
-pixel format on the other side. However, this won't give you the full
-list, so we'd still need a separate API (such as V4L2_FMT_FLAG_FULL) to
-enumerate everything, as we can't change the default behaviour to
-enumerate everything without breaking userspace.
+Unless you've started on this work already, I will be returning from 
+vaca tomorrow and can pick this up again, merging in your patches, as 
+well as splitting up find|enum_formats() into find|enum_formats() and 
+find|enum_codes(), which is the remaining suggestion from Hans.
 
-How did we design all this so badly ? :-(
 
-> > > >  
-> > > >  
-> > > >  .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
-> > > > @@ -145,6 +152,13 @@ formats in preference order, where preferred formats are returned before
-> > > >  	parameters are detected. This flag can only be used in combination
-> > > >  	with the ``V4L2_FMT_FLAG_COMPRESSED`` flag, since this applies to
-> > > >  	compressed formats only. It is also only applies to stateful codecs.
-> > > > +    * - ``V4L2_FMT_FLAG_MBUS_CODE``
-> > > > +      - 0x0010
-> > > > +      - The ``mbus_code`` field has been taken into account and only formats
-> > > > +        compatible with the supplied media bus code are enumerated. This flag
-> > > > +        shall only be  set by drivers, and only when ``mbus_code`` is not zero.
-> > > 
-> > > s/  / /
-> > > (double space)
-> > > 
-> > > > +        Applications may read the flag to check if code-aware enumeration is
-> > > > +        supported by the driver.
-> > > >  
-> > > >  
-> > > >  Return Value
-> > > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > > index aaf83e254272..2d635a5f0797 100644
-> > > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > > @@ -264,12 +264,13 @@ static void v4l_print_fmtdesc(const void *arg, bool write_only)
-> > > >  {
-> > > >  	const struct v4l2_fmtdesc *p = arg;
-> > > >  
-> > > > -	pr_cont("index=%u, type=%s, flags=0x%x, pixelformat=%c%c%c%c, description='%.*s'\n",
-> > > > +	pr_cont("index=%u, type=%s, flags=0x%x, pixelformat=%c%c%c%c, mbus_code=0x%04x, description='%.*s'\n",
-> > > >  		p->index, prt_names(p->type, v4l2_type_names),
-> > > >  		p->flags, (p->pixelformat & 0xff),
-> > > >  		(p->pixelformat >>  8) & 0xff,
-> > > >  		(p->pixelformat >> 16) & 0xff,
-> > > >  		(p->pixelformat >> 24) & 0xff,
-> > > > +		p->mbus_code,
-> > > >  		(int)sizeof(p->description), p->description);
-> > > >  }
-> > > >  
-> > > > @@ -1416,12 +1417,17 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
-> > > >  	struct video_device *vdev = video_devdata(file);
-> > > >  	struct v4l2_fmtdesc *p = arg;
-> > > >  	int ret = check_fmt(file, p->type);
-> > > > +	u32 mbus_code;
-> > > >  	u32 cap_mask;
-> > > >  
-> > > >  	if (ret)
-> > > >  		return ret;
-> > > >  	ret = -EINVAL;
-> > > >  
-> > > > +	mbus_code = p->mbus_code;
-> > > > +	CLEAR_AFTER_FIELD(p, type);
-> > > > +	p->mbus_code = mbus_code;
-> > > > +
-> > > >  	switch (p->type) {
-> > > >  	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
-> > > >  	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
-> > > > @@ -2703,7 +2709,7 @@ DEFINE_V4L_STUB_FUNC(dv_timings_cap)
-> > > >  
-> > > >  static const struct v4l2_ioctl_info v4l2_ioctls[] = {
-> > > >  	IOCTL_INFO(VIDIOC_QUERYCAP, v4l_querycap, v4l_print_querycap, 0),
-> > > > -	IOCTL_INFO(VIDIOC_ENUM_FMT, v4l_enum_fmt, v4l_print_fmtdesc, INFO_FL_CLEAR(v4l2_fmtdesc, type)),
-> > > > +	IOCTL_INFO(VIDIOC_ENUM_FMT, v4l_enum_fmt, v4l_print_fmtdesc, 0),
-> > > >  	IOCTL_INFO(VIDIOC_G_FMT, v4l_g_fmt, v4l_print_format, 0),
-> > > >  	IOCTL_INFO(VIDIOC_S_FMT, v4l_s_fmt, v4l_print_format, INFO_FL_PRIO),
-> > > >  	IOCTL_INFO(VIDIOC_REQBUFS, v4l_reqbufs, v4l_print_requestbuffers, INFO_FL_PRIO | INFO_FL_QUEUE),
-> > > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> > > > index 5f9357dcb060..b13e54e196e3 100644
-> > > > --- a/include/uapi/linux/videodev2.h
-> > > > +++ b/include/uapi/linux/videodev2.h
-> > > > @@ -777,13 +777,15 @@ struct v4l2_fmtdesc {
-> > > >  	__u32               flags;
-> > > >  	__u8		    description[32];   /* Description string */
-> > > >  	__u32		    pixelformat;       /* Format fourcc      */
-> > > > -	__u32		    reserved[4];
-> > > > +	__u32		    mbus_code;		/* Media bus code    */
-> > > > +	__u32		    reserved[3];
-> > > >  };
-> > > >  
-> > > >  #define V4L2_FMT_FLAG_COMPRESSED		0x0001
-> > > >  #define V4L2_FMT_FLAG_EMULATED			0x0002
-> > > >  #define V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM	0x0004
-> > > >  #define V4L2_FMT_FLAG_DYN_RESOLUTION		0x0008
-> > > > +#define V4L2_FMT_FLAG_MBUS_CODE			0x0010
-> > > >  
-> > > >  	/* Frame Size and frame rate enumeration */
-> > > >  /*
+Steve
 
--- 
-Regards,
+>
+>> On 3/10/20 9:18 AM, Laurent Pinchart wrote:
+>>> Hello,
+>>>
+>>> This patch series started as an attempt to fix the format get and set
+>>> subdev operations on the i.MX7 CSI-2 receiver subdev, which it does in
+>>> patch 1/8. Patch 2/8 further cleans up the format-related code in that
+>>> subdev.
+>>>
+>>> Patches 3/8 to 8/8 pushes the cleanups further as I was attempting to
+>>> fix the format enumeration on the video node at the end of the pipeline.
+>>> I realized as part of that effort that there's more work than I
+>>> anticipated, and I'm currently evaluating the possible options.
+>>> Nonetheless, I think the cleanups make sense even without what I wanted
+>>> to build on top of them, so I'm sending them out already.
+>>>
+>>> Laurent Pinchart (8):
+>>>     media: imx: imx7-mipi-csis: Cleanup and fix subdev pad format handling
+>>>     media: imx: imx7-mipi-csis: Centralize initialization of pad formats
+>>>     media: imx: utils: Inline init_mbus_colorimetry() in its caller
+>>>     media: imx: utils: Handle Bayer format lookup through a selection flag
+>>>     media: imx: utils: Simplify IPU format lookup and enumeration
+>>>     media: imx: utils: Make imx_media_pixfmt handle variable number of
+>>>       codes
+>>>     media: imx: utils: Remove unneeded argument to (find|enum)_format()
+>>>     media: imx: utils: Rename format lookup and enumeration functions
+>>>
+>>>    drivers/staging/media/imx/imx-ic-prp.c        |   8 +-
+>>>    drivers/staging/media/imx/imx-ic-prpencvf.c   |   6 +-
+>>>    drivers/staging/media/imx/imx-media-capture.c |  22 +-
+>>>    .../staging/media/imx/imx-media-csc-scaler.c  |   2 +-
+>>>    drivers/staging/media/imx/imx-media-csi.c     |  26 +-
+>>>    drivers/staging/media/imx/imx-media-utils.c   | 313 ++++++++----------
+>>>    drivers/staging/media/imx/imx-media-vdic.c    |   6 +-
+>>>    drivers/staging/media/imx/imx-media.h         |  24 +-
+>>>    drivers/staging/media/imx/imx7-media-csi.c    |  15 +-
+>>>    drivers/staging/media/imx/imx7-mipi-csis.c    | 138 ++++----
+>>>    10 files changed, 271 insertions(+), 289 deletions(-)
 
-Laurent Pinchart
