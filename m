@@ -2,224 +2,167 @@ Return-Path: <SRS0=JFiv=5B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFC5CC0044D
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 15:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63784C0044D
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 15:33:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C74322051A
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 15:27:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30CAC20663
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 15:33:43 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D6F8C/Le"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731732AbgCPP1A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Mar 2020 11:27:00 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:51237 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731483AbgCPP0n (ORCPT
+        id S1731698AbgCPPdm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Mar 2020 11:33:42 -0400
+Received: from mail-ua1-f67.google.com ([209.85.222.67]:45255 "EHLO
+        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731505AbgCPPdm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Mar 2020 11:26:43 -0400
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1jDrdZ-0000lA-5Z; Mon, 16 Mar 2020 16:26:41 +0100
-Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1jDrdY-00054q-GK; Mon, 16 Mar 2020 16:26:40 +0100
-From:   Michael Tretter <m.tretter@pengutronix.de>
-To:     linux-media@vger.kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
-        Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH v2 00/18] media: allegro: fixes and new features
-Date:   Mon, 16 Mar 2020 16:26:20 +0100
-Message-Id: <20200316152638.19457-1-m.tretter@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
+        Mon, 16 Mar 2020 11:33:42 -0400
+Received: by mail-ua1-f67.google.com with SMTP id 9so6183200uav.12
+        for <linux-media@vger.kernel.org>; Mon, 16 Mar 2020 08:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=OOpKdMuO0bDghAl1po0Af4aim/SSjCkrie/0/cp73lU=;
+        b=D6F8C/Le+ytFWnA5GJQsHEBX1s5QJUr0lipoYlUvpDIB+X4tHiEePVLO7ijdzAFtWm
+         6LSWJOKxcds+uu8EBPDBt+MMxHn4WY2MaLonQj6aG+NLl7wPdMmM8WbUXrntHcq4oREC
+         0NisBi1WD/DhCldv5r8ruai4IQ1axDmbuuGTxVgKxKM5slvTB4A4Y4kYZD6gRJjPFhh/
+         xkkOtDT3VIXD0eiYFmBIJaZ9o38YGYQN5UjQqYP9/E3L/RLfiaZgR3L6cIfTnLXC3nf4
+         C5j5qvcYjRIxT91scOyAAIDfpC/PX4SJAnsZOu5BdvclR0AArEI/N78H4NG8XutqZblv
+         C1PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OOpKdMuO0bDghAl1po0Af4aim/SSjCkrie/0/cp73lU=;
+        b=hchhQ/hiwFZX4eKIG6JaF8pSyznpEwZ6WdSh9JIEv6q7YLPfP/PerjH4z+OJ7YX8Dt
+         EYBbg3zcRVOqdto0eMIDT75wZPjC3RLdHHpt6TTa82CLSQ7252QhDV+6hpwc3VvOlbXo
+         wYJtYnE+w3inOUEisGk+DPorxRk+D+6mduLMhJZNB/4bSEALPcNhbL5yz2dnd/MPuTda
+         UemeINmFLMOYIqZOWhL9aNnIhiL4Wa9gVhYRDC+dId5ZxWfjJfq/351uHI1ZvH+xn6EI
+         bOgJLBFAEQn56myLBvL8q/s8FSPhUzlaUFfigHS24m3ut56gC3bQgEc6QGNUD/sTlnpe
+         Th6Q==
+X-Gm-Message-State: ANhLgQ21pra4jHqO2bEXa9xmON44lZdJHT3JFIgROt2ZH/sN7qqPsaHr
+        C1OYkuZfTwY1xPtaYE8aq5nEup2SH9w+3KBcoJI=
+X-Google-Smtp-Source: ADFU+vtZY6VkseC6FahQXcXk0qPa9D2LLphky1tm/elWDs1+bnJKzR9jG0ocJHUh5/I1L+5gxTJQ/oWJB4D+Lcrdc8g=
+X-Received: by 2002:ab0:67:: with SMTP id 94mr427135uai.139.1584372820899;
+ Mon, 16 Mar 2020 08:33:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: mtr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+References: <CAOFGe94jy2VYDPbkMW8ZuNdAeM+HS8sM1OAYFGd9JKc1V7PVOQ@mail.gmail.com>
+ <CAOFGe97LnmEHVoitgKdo+hbw9rYacofkzkt3pPcQSaw9BaKyaA@mail.gmail.com>
+ <33d1749d876a83416c44671efcb37c74f87d1bd4.camel@ndufresne.ca>
+ <20200316102034.GA30883@pendragon.ideasonboard.com> <CAO1ALz=us11a8=M6MWGdLwXakeR3Ltd=iyAN4G5-GkvNXctGeA@mail.gmail.com>
+ <CAPj87rPnk6181unams0vBT3ZpdNY=gMM5iFf=E5iPuj=eG28yQ@mail.gmail.com>
+In-Reply-To: <CAPj87rPnk6181unams0vBT3ZpdNY=gMM5iFf=E5iPuj=eG28yQ@mail.gmail.com>
+From:   Tomek Bury <tomek.bury@gmail.com>
+Date:   Mon, 16 Mar 2020 15:33:29 +0000
+Message-ID: <CAO1ALzmghMQo31noEBW_0gVzJp=BZrNaNtXE+86TR0hR86Y1Jw@mail.gmail.com>
+Subject: Re: Plumbing explicit synchronization through the Linux ecosystem
+To:     Daniel Stone <daniel@fooishbar.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        xorg-devel <xorg-devel@lists.x.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        "wayland-devel @ lists . freedesktop . org" 
+        <wayland-devel@lists.freedesktop.org>,
+        Discussion of the development of and with GStreamer 
+        <gstreamer-devel@lists.freedesktop.org>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        ML mesa-dev <mesa-dev@lists.freedesktop.org>,
+        Dave Airlie <airlied@gmail.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+> GL and GLES are not relevant. What is relevant is EGL, which defines
+> interfaces to make things work on the native platform.
+Yes and no. This is what EGL spec says about sharing a texture between cont=
+exts:
 
-This is v2 of the series containing various patches for the allegro-dvt
-driver.
+"OpenGL and OpenGL ES makes no attempt to synchronize access to
+texture objects. If a texture object is bound to more than one
+context, then it is up to the programmer to ensure that the contents
+of the object are not being changed via one context while another
+context is using the texture object for rendering. The results of
+changing a texture object while another context is using it are
+undefined."
 
-I fixed the various errors/warnings/checks reported by checkpatch.pl. Except
-for a warning about a potential update in MAINTAINERS, which is not required,
-because I am already the maintainer for that directory, and a check for
-the alignment with an open parenthesis, which I ignored, because readability
-gets worse if I fix it, checkpatch.pl does not report any problems anymore.
+There are similar statements with regards to the lack of
+synchronisation guarantees for EGL images or between GL and native
+rendering, etc. But the main thing here is that EGL and Vulkan differ
+significantly. The eglSwapBuffers() is expected to post an unspecified
+"back buffer" to the display system using some internal driver magic.
+EGL driver is then expected to obtain another back buffer at some
+unspecified point in the future. Vulkan on the other hand is very
+specific and explicit. The vkQueuePresentKHR() is expected to post a
+specific vkImage with an explicit set of set of semaphores. Another
+image is obtained through vkAcquireNextImageKHR() and it's the
+application's decision whether it wants a fence, a semaphore, both or
+none with the acquired buffer. The implicit synchronisation doesn't
+mix well with Vulkan drivers and requires a lot of extra plumbing  in
+the WSI code.
 
-I combined the BITRATE_MODE, BITRATE and BITRATE_PEAK controls into a control
-cluster, which ensures that BITRATE_PEAK is always at least BITRATE.
+> If you are using EGL_WL_bind_wayland_display, then one of the things
+> it is explicitly allowed/expected to do is to create a Wayland
+> protocol interface between client and compositor, which can be used to
+> pass buffer handles and metadata in a platform-specific way. Adding
+> synchronisation is also possible.
+Only one-way synchronisation is possible with this mechanism. There's
+a standard protocol for recycling buffers - wl_buffer_release() so
+buffer hand-over from the compositor to client remains unsynchronised
+- see below.
 
-I fixed a build warning due to casting pointers to u64. Since I need the u64
-in the messages that are passed to the firmware, I properly convert the
-pointers to u64 now.
+> > The most troublesome part was Wayland buffer release mechanism, as it o=
+nly involves a CPU signalling over Wayland IPC, without any 3D driver invol=
+vement. The choices were: explicit synchronisation extension or a buffer co=
+py in the compositor (i.e. compositor textures from the copy, so the client=
+ can re-write the original), or some implicit synchronisation in kernel spa=
+ce (but that wasn't an option in Broadcom driver).
+>
+> You can add your own explicit synchronisation extension.
+I could but that requires implementing in in the driver and in a
+number of compositors, therefore a standard extension
+zwp_linux_explicit_synchronization_v1 is much better choice here than
+a custom one.
 
-Finally, I changed the functions to retrieve buffers from the shadows lists to
-return NULL if a buffer cannot be found to be able to handle errors in the
-allegro_channel_finish_frame() function. I also fixed a bug, which resulted in
-the last but one buffer to be marked as the last buffer, because the driver
-missed a check if there are any buffers still in the source shadow list.
+> In every cross-process and cross-subsystem usecase, synchronisation is
+> obviously required. The two options for this are to implement kernel
+> support for implicit synchronisation (as everyone else has done),
+That would require major changes in driver architecture or a 2nd
+mechanisms doing the same thing but in kernel space - both are
+non-starters.
 
-v4l2-compliance still produces a warning, because I implemented s_parm, but
-don't support enum_frameintervals. However, once I implement
-enum_frameintervals, it produces a failure, because I don't implement s_parm
-on OUTPUT _and_ CAPTURE, but I am understanding, that s_parm for setting the
-framerate should be only implemented on OUTPUT. I am not sure what to do with
-that.
+> or implement generic support for explicit synchronisation (as we have
+> been working on with implementations inside Weston and Exosphere at
+> least),
+The zwp_linux_explicit_synchronization_v1 is a good step forward. I'm
+using this extension as a main synchronisation mechanism in EGL and
+Vulkan driver whenever available. I remember that Gustavo Padovan was
+working on explicit sync support in the display system some time ago.
+I hope it got merged into kernel by now, but I don't know to what
+extend it's actually being used.
 
-Michael
+> or implement private support for explicit synchronisation,
+If everything else fails, that would be the last resort scenario, but
+far from ideal and very costly in terms of implementation and
+maintenance as it would require maintaining custom patches for various
+3rd party components or littering them with multiple custom explicit
+synchronisation schemes.
 
-This is the v4l-compliance test result:
+> or do nothing and then be surprised at the lack of synchronisation.
+Thank you, but no, thank you :)
 
-v4l2-compliance SHA: 0b239af2ca93726b63dfa9c64a8622644f898a25, 64 bits, 64-bit time_t
-
-Compliance test for allegro device /dev/video3:
-
-Driver Info:
-	Driver name      : allegro
-	Card type        : Allegro DVT Video Encoder
-	Bus info         : platform:a0009000.video-codec
-	Driver version   : 5.6.0
-	Capabilities     : 0x84208000
-		Video Memory-to-Memory
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04208000
-		Video Memory-to-Memory
-		Streaming
-		Extended Pix Format
-	Detected Stateful Encoder
-
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-	test second /dev/video3 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-	test invalid ioctls: OK
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 16 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-		warn: v4l2-test-formats.cpp(1329): S_PARM is supported for buftype 2, but not for ENUM_FRAMEINTERVALS
-	test VIDIOC_G/S_PARM: OK
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Test input 0:
-
-Streaming ioctls:
-	test read/write: OK (Not Supported)
-	test blocking wait: OK
-	Video Capture: Captured 60 buffers
-	test MMAP (select): OK
-	Video Capture: Captured 60 buffers
-	test MMAP (epoll): OK
-	test USERPTR (select): OK (Not Supported)
-	test DMABUF: Cannot test, specify --expbuf-device
-
-Total for allegro device /dev/video3: 50, Succeeded: 50, Failed: 0, Warnings: 1
-
-Changelog:
-
-v1 -> v2:
-- Fix checkpatch.pl errors/warnings/checks
-- Use control cluster for bitrate controls
-- Fix build warnings of ptr casts to u64
-- Fix handling of errors on shadow lists
-
-Michael Tretter (18):
-  media: allegro: print message on mcu error
-  media: allegro: fail encoding only on actual errors
-  media: allegro: fix type of gop_length in channel_create message
-  media: allegro: remove unknown39 field from create_channel
-  media: allegro: start a GOP with an IDR frame
-  media: allegro: fix calculation of CPB size
-  media: allegro: fix reset if WAKEUP has not been set properly
-  media: allegro: extract mcu and codec address calculation
-  media: allegro: warn if response message has an unexpected size
-  media: allegro: skip filler data if possible
-  media: allegro: make frame rate configurable
-  media: allegro: make QP configurable
-  media: allegro: read bitrate mode directly from control
-  media: allegro: handle dependency of bitrate and bitrate_peak
-  media: allegro: verify source and destination buffer in VCU response
-  media: allegro: pass buffers through firmware
-  media: allegro: move mail definitions to separate file
-  media: allegro: create new struct for channel parameters
-
- drivers/staging/media/allegro-dvt/Makefile    |   2 +-
- .../staging/media/allegro-dvt/allegro-core.c  | 905 ++++++++++--------
- .../staging/media/allegro-dvt/allegro-mail.c  |  37 +
- .../staging/media/allegro-dvt/allegro-mail.h  | 267 ++++++
- 4 files changed, 824 insertions(+), 387 deletions(-)
- create mode 100644 drivers/staging/media/allegro-dvt/allegro-mail.c
- create mode 100644 drivers/staging/media/allegro-dvt/allegro-mail.h
-
--- 
-2.20.1
-
+Cheers,
+Tomek
