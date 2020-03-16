@@ -2,98 +2,87 @@ Return-Path: <SRS0=JFiv=5B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59591C0044D
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 10:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A3CEC0044D
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 10:12:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3732C2071C
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 10:07:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0AEF2071C
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 10:11:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="crxAk4dZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730493AbgCPKHc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Mar 2020 06:07:32 -0400
-Received: from mail.netline.ch ([148.251.143.178]:40175 "EHLO
-        netline-mail3.netline.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730430AbgCPKHc (ORCPT
+        id S1730491AbgCPKL7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Mar 2020 06:11:59 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:53946 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730468AbgCPKL7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Mar 2020 06:07:32 -0400
-X-Greylist: delayed 582 seconds by postgrey-1.27 at vger.kernel.org; Mon, 16 Mar 2020 06:07:31 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by netline-mail3.netline.ch (Postfix) with ESMTP id 104992A6042;
-        Mon, 16 Mar 2020 10:57:48 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at netline-mail3.netline.ch
-Received: from netline-mail3.netline.ch ([127.0.0.1])
-        by localhost (netline-mail3.netline.ch [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id 2PtkzY5dlS6y; Mon, 16 Mar 2020 10:57:47 +0100 (CET)
-Received: from thor (252.80.76.83.dynamic.wline.res.cust.swisscom.ch [83.76.80.252])
-        by netline-mail3.netline.ch (Postfix) with ESMTPSA id 8F0442A6016;
-        Mon, 16 Mar 2020 10:57:47 +0100 (CET)
-Received: from localhost ([::1])
-        by thor with esmtp (Exim 4.93)
-        (envelope-from <michel@daenzer.net>)
-        id 1jDmVH-000X4G-3f; Mon, 16 Mar 2020 10:57:47 +0100
-Subject: Re: [Mesa-dev] Plumbing explicit synchronization through the Linux
- ecosystem
-To:     =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        Jason Ekstrand <jason@jlekstrand.net>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        xorg-devel <xorg-devel@lists.x.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        "wayland-devel @ lists . freedesktop . org" 
-        <wayland-devel@lists.freedesktop.org>,
-        Discussion of the development of and with GStreamer 
-        <gstreamer-devel@lists.freedesktop.org>,
-        ML mesa-dev <mesa-dev@lists.freedesktop.org>,
-        linux-media@vger.kernel.org
-References: <CAOFGe94jy2VYDPbkMW8ZuNdAeM+HS8sM1OAYFGd9JKc1V7PVOQ@mail.gmail.com>
- <CAAxE2A4q9sZDz8vSLAvT0HH4BGukf8Ug68eqSV1ojqrm_5uFFg@mail.gmail.com>
- <170e13edbb0.27ad.c6988b7ea6112e3e892765a0d4287e0c@jlekstrand.net>
- <CAAxE2A6hMs2Ngd4zEv+hEJnEUKmPDuXmeWUaUU-4YCTRHNzr1w@mail.gmail.com>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>
-Message-ID: <e470a1d0-cf91-5811-d280-322e005888a8@daenzer.net>
-Date:   Mon, 16 Mar 2020 10:57:47 +0100
+        Mon, 16 Mar 2020 06:11:59 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02GABtrn013117;
+        Mon, 16 Mar 2020 05:11:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1584353515;
+        bh=yNmvgpYn7ogOdwoQm4MkrQ2aTuMpR7B0uJW101hOLmc=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=crxAk4dZe4d2+Xh6pR9inq1qps90cOZ0O3vO/XA+kE13rvpicl9yYarZaHUemFwaC
+         rOiZ/uguAYAXEB8VuGDvaDUosgY2adZxfa8S+76oXkrMNo1hdvD8qa4OMxXiBT45Qt
+         Wk+NB3P/icbkHYHUIbXvn5Om3rAyi4WDoynZMw6A=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02GABto8045247
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 16 Mar 2020 05:11:55 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 16
+ Mar 2020 05:11:55 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Mon, 16 Mar 2020 05:11:55 -0500
+Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02GABp5o028467;
+        Mon, 16 Mar 2020 05:11:52 -0500
+Subject: Re: [PATCH 14/16] media: ti-vpe: cal: improve wait for CIO resetdone
+To:     Hans Verkuil <hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
+        Benoit Parrot <bparrot@ti.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20200313114121.32182-1-tomi.valkeinen@ti.com>
+ <20200313114121.32182-14-tomi.valkeinen@ti.com>
+ <1da1aa0c-ac99-bfcb-d341-452be9997611@xs4all.nl>
+From:   Tomi Valkeinen <tomi.valkeinen@ti.com>
+Message-ID: <bc9e71c8-5aea-3c7c-98e6-c6e2f0adaff7@ti.com>
+Date:   Mon, 16 Mar 2020 12:11:50 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CAAxE2A6hMs2Ngd4zEv+hEJnEUKmPDuXmeWUaUU-4YCTRHNzr1w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1da1aa0c-ac99-bfcb-d341-452be9997611@xs4all.nl>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2020-03-16 4:50 a.m., Marek Olšák wrote:
-> The synchronization works because the Mesa driver waits for idle (drains
-> the GFX pipeline) at the end of command buffers and there is only 1
-> graphics queue, so everything is ordered.
+On 16/03/2020 12:05, Hans Verkuil wrote:
+> On 3/13/20 12:41 PM, Tomi Valkeinen wrote:
+>> Sometimes waiting for ComplexIO resetdone timeouts.
 > 
-> The GFX pipeline runs asynchronously to the command buffer, meaning the
-> command buffer only starts draws and doesn't wait for completion. If the
-> Mesa driver didn't wait at the end of the command buffer, the command
-> buffer would finish and a different process could start execution of its
-> own command buffer while shaders of the previous process are still running.
+> This sentence is hard to read. You probably mean:
 > 
-> If the Mesa driver submits a command buffer internally (because it's full),
-> it doesn't wait, so the GFX pipeline doesn't notice that a command buffer
-> ended and a new one started.
-> 
-> The waiting at the end of command buffers happens only when the flush is
-> external (Swap buffers, glFlush).
-> 
-> It's a performance problem, because the GFX queue is blocked until the GFX
-> pipeline is drained at the end of every frame at least.
-> 
-> So explicit fences for SwapBuffers would help.
+> Sometimes there is a timeout when waiting for the 'ComplexIO Reset Done'.
 
-Not sure what difference it would make, since the same thing needs to be
-done for explicit fences as well, doesn't it?
+Ah, indeed, it's confusing. And same with the next patch. I'll update the desc.
 
+  Tomi
 
 -- 
-Earthling Michel Dänzer               |               https://redhat.com
-Libre software enthusiast             |             Mesa and X developer
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
