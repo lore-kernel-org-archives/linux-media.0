@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C8DC0044D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC164C3F2CE
 	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 15:26:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2362C2051A
+	by mail.kernel.org (Postfix) with ESMTP id CD1B120663
 	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 15:26:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731789AbgCPP0n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Mar 2020 11:26:43 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:50827 "EHLO
+        id S1731800AbgCPP0o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Mar 2020 11:26:44 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:56901 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731571AbgCPP0n (ORCPT
+        with ESMTP id S1731762AbgCPP0n (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 16 Mar 2020 11:26:43 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1jDrdZ-0000lB-5a; Mon, 16 Mar 2020 16:26:41 +0100
+        id 1jDrdZ-0000lI-Nk; Mon, 16 Mar 2020 16:26:41 +0100
 Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1jDrdY-00054s-Gy; Mon, 16 Mar 2020 16:26:40 +0100
+        id 1jDrdY-00055D-La; Mon, 16 Mar 2020 16:26:40 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
         Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH v2 01/18] media: allegro: print message on mcu error
-Date:   Mon, 16 Mar 2020 16:26:21 +0100
-Message-Id: <20200316152638.19457-2-m.tretter@pengutronix.de>
+Subject: [PATCH v2 08/18] media: allegro: extract mcu and codec address calculation
+Date:   Mon, 16 Mar 2020 16:26:28 +0100
+Message-Id: <20200316152638.19457-9-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200316152638.19457-1-m.tretter@pengutronix.de>
 References: <20200316152638.19457-1-m.tretter@pengutronix.de>
@@ -48,9 +48,12 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The codec firmware uses error codes to report errors during the
-configuration of a channel or while encoding a frame. Translate them
-into human readable strings for debugging.
+The mcu and the codec use 32 bit addresses which are sent via the
+firmware messages. Add helper functions for this address calculation to
+make it obvious which address is used in the message.
+
+As the mcu and the codec have a limited address space, print warnings if
+the addresses are outside the respective address space.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
@@ -58,96 +61,94 @@ Changelog:
 
 v1 -> v2: None
 ---
- .../staging/media/allegro-dvt/allegro-core.c  | 62 +++++++++++++++++--
- 1 file changed, 58 insertions(+), 4 deletions(-)
+ .../staging/media/allegro-dvt/allegro-core.c  | 44 ++++++++++++++-----
+ 1 file changed, 33 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
-index 3c949090e8d2..74e84395db4e 100644
+index de50405ba907..6c2237d4a674 100644
 --- a/drivers/staging/media/allegro-dvt/allegro-core.c
 +++ b/drivers/staging/media/allegro-dvt/allegro-core.c
-@@ -572,6 +572,56 @@ static inline bool channel_exists(struct allegro_channel *channel)
- 	return channel->mcu_channel_id != -1;
- }
+@@ -532,6 +532,29 @@ union mcu_msg_response {
+ 	struct mcu_msg_encode_frame_response encode_frame;
+ };
  
-+#define AL_ERROR			0x80
-+#define AL_ERR_INIT_FAILED		0x81
-+#define AL_ERR_NO_FRAME_DECODED		0x82
-+#define AL_ERR_RESOLUTION_CHANGE	0x85
-+#define AL_ERR_NO_MEMORY		0x87
-+#define AL_ERR_STREAM_OVERFLOW		0x88
-+#define AL_ERR_TOO_MANY_SLICES		0x89
-+#define AL_ERR_BUF_NOT_READY		0x8c
-+#define AL_ERR_NO_CHANNEL_AVAILABLE	0x8d
-+#define AL_ERR_RESOURCE_UNAVAILABLE	0x8e
-+#define AL_ERR_NOT_ENOUGH_CORES		0x8f
-+#define AL_ERR_REQUEST_MALFORMED	0x90
-+#define AL_ERR_CMD_NOT_ALLOWED		0x91
-+#define AL_ERR_INVALID_CMD_VALUE	0x92
-+
-+static inline const char *allegro_err_to_string(unsigned int err)
++static inline u32 to_mcu_addr(struct allegro_dev *dev, dma_addr_t phys)
 +{
-+	switch (err) {
-+	case AL_ERR_INIT_FAILED:
-+		return "initialization failed";
-+	case AL_ERR_NO_FRAME_DECODED:
-+		return "no frame decoded";
-+	case AL_ERR_RESOLUTION_CHANGE:
-+		return "resolution change";
-+	case AL_ERR_NO_MEMORY:
-+		return "out of memory";
-+	case AL_ERR_STREAM_OVERFLOW:
-+		return "stream buffer overflow";
-+	case AL_ERR_TOO_MANY_SLICES:
-+		return "too many slices";
-+	case AL_ERR_BUF_NOT_READY:
-+		return "buffer not ready";
-+	case AL_ERR_NO_CHANNEL_AVAILABLE:
-+		return "no channel available";
-+	case AL_ERR_RESOURCE_UNAVAILABLE:
-+		return "resource unavailable";
-+	case AL_ERR_NOT_ENOUGH_CORES:
-+		return "not enough cores";
-+	case AL_ERR_REQUEST_MALFORMED:
-+		return "request malformed";
-+	case AL_ERR_CMD_NOT_ALLOWED:
-+		return "command not allowed";
-+	case AL_ERR_INVALID_CMD_VALUE:
-+		return "invalid command value";
-+	case AL_ERROR:
-+	default:
-+		return "unknown error";
-+	}
++	if (upper_32_bits(phys) || (lower_32_bits(phys) & MCU_CACHE_OFFSET))
++		v4l2_warn(&dev->v4l2_dev,
++			  "address %pad is outside mcu window\n", &phys);
++
++	return lower_32_bits(phys) | MCU_CACHE_OFFSET;
 +}
 +
- static unsigned int estimate_stream_size(unsigned int width,
- 					 unsigned int height)
- {
-@@ -1488,8 +1538,10 @@ static void allegro_channel_finish_frame(struct allegro_channel *channel,
++static inline u32 to_mcu_size(struct allegro_dev *dev, size_t size)
++{
++	return lower_32_bits(size);
++}
++
++static inline u32 to_codec_addr(struct allegro_dev *dev, dma_addr_t phys)
++{
++	if (upper_32_bits(phys))
++		v4l2_warn(&dev->v4l2_dev,
++			  "address %pad cannot be used by codec\n", &phys);
++
++	return lower_32_bits(phys);
++}
++
+ /* Helper functions for channel and user operations */
  
- 	if (msg->error_code) {
- 		v4l2_err(&dev->v4l2_dev,
--			 "channel %d: error while encoding frame: %x\n",
--			 channel->mcu_channel_id, msg->error_code);
-+			 "channel %d: failed to encode frame: %s (%x)\n",
-+			 channel->mcu_channel_id,
-+			 allegro_err_to_string(msg->error_code),
-+			 msg->error_code);
- 		goto err;
+ static unsigned long allegro_next_user_id(struct allegro_dev *dev)
+@@ -947,8 +970,8 @@ static void allegro_mcu_send_init(struct allegro_dev *dev,
+ 	msg.header.type = MCU_MSG_TYPE_INIT;
+ 	msg.header.length = sizeof(msg) - sizeof(msg.header);
+ 
+-	msg.suballoc_dma = lower_32_bits(suballoc_dma) | MCU_CACHE_OFFSET;
+-	msg.suballoc_size = suballoc_size;
++	msg.suballoc_dma = to_mcu_addr(dev, suballoc_dma);
++	msg.suballoc_size = to_mcu_size(dev, suballoc_size);
+ 
+ 	/* disable L2 cache */
+ 	msg.l2_cache[0] = -1;
+@@ -1173,8 +1196,8 @@ static int allegro_mcu_send_put_stream_buffer(struct allegro_dev *dev,
+ 	msg.header.length = sizeof(msg) - sizeof(msg.header);
+ 
+ 	msg.channel_id = channel->mcu_channel_id;
+-	msg.dma_addr = paddr;
+-	msg.mcu_addr = paddr | MCU_CACHE_OFFSET;
++	msg.dma_addr = to_codec_addr(dev, paddr);
++	msg.mcu_addr = to_mcu_addr(dev, paddr);
+ 	msg.size = size;
+ 	msg.offset = ENCODER_STREAM_OFFSET;
+ 	msg.stream_id = 0; /* copied to mcu_msg_encode_frame_response */
+@@ -1201,11 +1224,11 @@ static int allegro_mcu_send_encode_frame(struct allegro_dev *dev,
+ 	msg.pps_qp = 26; /* qp are relative to 26 */
+ 	msg.user_param = 0; /* copied to mcu_msg_encode_frame_response */
+ 	msg.src_handle = 0; /* copied to mcu_msg_encode_frame_response */
+-	msg.src_y = src_y;
+-	msg.src_uv = src_uv;
++	msg.src_y = to_codec_addr(dev, src_y);
++	msg.src_uv = to_codec_addr(dev, src_uv);
+ 	msg.stride = channel->stride;
+ 	msg.ep2 = 0x0;
+-	msg.ep2_v = msg.ep2 | MCU_CACHE_OFFSET;
++	msg.ep2_v = to_mcu_addr(dev, msg.ep2);
+ 
+ 	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+ 	allegro_mcu_interrupt(dev);
+@@ -1264,10 +1287,9 @@ static int allegro_mcu_push_buffer_internal(struct allegro_channel *channel,
+ 
+ 	buffer = msg->buffer;
+ 	list_for_each_entry(al_buffer, list, head) {
+-		buffer->dma_addr = lower_32_bits(al_buffer->paddr);
+-		buffer->mcu_addr =
+-		    lower_32_bits(al_buffer->paddr) | MCU_CACHE_OFFSET;
+-		buffer->size = al_buffer->size;
++		buffer->dma_addr = to_codec_addr(dev, al_buffer->paddr);
++		buffer->mcu_addr = to_mcu_addr(dev, al_buffer->paddr);
++		buffer->size = to_mcu_size(dev, al_buffer->size);
+ 		buffer++;
  	}
  
-@@ -1632,8 +1684,10 @@ allegro_handle_create_channel(struct allegro_dev *dev,
- 
- 	if (msg->error_code) {
- 		v4l2_err(&dev->v4l2_dev,
--			 "user %d: mcu failed to create channel: error %x\n",
--			 channel->user_id, msg->error_code);
-+			 "user %d: mcu failed to create channel: %s (%x)\n",
-+			 channel->user_id,
-+			 allegro_err_to_string(msg->error_code),
-+			 msg->error_code);
- 		err = -EIO;
- 		goto out;
- 	}
 -- 
 2.20.1
 
