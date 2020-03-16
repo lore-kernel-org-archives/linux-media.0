@@ -2,115 +2,358 @@ Return-Path: <SRS0=JFiv=5B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E44FAC18E5B
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 22:43:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14839C0044D
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 23:39:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BC05A20663
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 22:43:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C845220409
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 23:39:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="xJqpOXfN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HpJuxcyV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732852AbgCPWnH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Mar 2020 18:43:07 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:40034 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732791AbgCPWnH (ORCPT
+        id S1733014AbgCPXjc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Mar 2020 19:39:32 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:44366 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732930AbgCPXjc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Mar 2020 18:43:07 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584398586; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=8RXmUUdj99K0SeMhBlE3eAxq4g+Jx7OU47A7A+eN1IM=; b=xJqpOXfNPWwxZGznKjrSXlU8Ndh7Coeaxc7/tS26GpkMa+DaDQsj+kOTfLk4fEez2U6iO0a+
- 6jRgQ+gadcpINC5FXE7P61J4a7IydSpnuAcqINV557OEEp1MdlMGlNhonU9PZHSvoMd9vDuf
- /YNMN3v2x9mMnUFTvIBjflgi7Oc=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e7000f2.7f4415630ab0-smtp-out-n03;
- Mon, 16 Mar 2020 22:42:58 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 594E9C433D2; Mon, 16 Mar 2020 22:42:58 +0000 (UTC)
-Received: from majja-linux1.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: majja)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9149DC433CB;
-        Mon, 16 Mar 2020 22:42:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9149DC433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=majja@codeaurora.org
-From:   Maheshwar Ajja <majja@codeaurora.org>
-To:     mchehab@kernel.org
-Cc:     Maheshwar Ajja <majja@codeaurora.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] media: v4l2-ctrl: Add H264 profile and levels
-Date:   Mon, 16 Mar 2020 15:42:30 -0700
-Message-Id: <1584398550-19727-1-git-send-email-majja@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
+        Mon, 16 Mar 2020 19:39:32 -0400
+Received: by mail-il1-f196.google.com with SMTP id j69so18353301ila.11
+        for <linux-media@vger.kernel.org>; Mon, 16 Mar 2020 16:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8QGPaFUD2cvNFVcORLjGpJvbfVbFJLU8MbBNokDs+A4=;
+        b=HpJuxcyVqahcWR6kvLai/Fuh39wdmcWuNdGGMlMcYAOSTfaou3H00df5r5Z7C0+NvB
+         frOs/WSPvKZvmIr6lD/Bi+r1ZXFrohZBHSHu+j1eWP5Ds2PsfYMR4a/mNfdpSntEqYSL
+         5pKfIS3yvSSmhb7TxSU2UH5YZATWMjNbDDWc+YeYGFvP1bV5fO2UiqVpjmDnXCC2o4fV
+         229Df7l5hkFau0lSZhaMi6hvN5HUmYTIb5XL26RDty7kt2v4PL3g2bauHLiFbmOWRT3Z
+         vZ0SDwRRkp4f9SgheF6Wzez/jXeeK1T1wPa9C5tjkhLCigJ4d6Te/QKpZ0ynBwRccHxD
+         3VbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8QGPaFUD2cvNFVcORLjGpJvbfVbFJLU8MbBNokDs+A4=;
+        b=JhCoYCyiqlNKeYz6KXsYKf9owTl2zxyNIwmCgqatkqZ17Ojv06sJlf5zHmPvsTcuWB
+         BgyUJ9bm5FINvmc6ij4geQbz+MsRV27NXuHkCoqRkSS7AURsntuDQPjm4/kNTH11jqNh
+         bKW+vMI42sw6njP1AKfTsVhNFGv6b1oZhJXVMbFVJxqlkXBUpTDirc+Q8E4HTpohakNF
+         RaxbBnfop3kns5fzQreInQaDD/nMKuRT7EtWBw2/jq0Scj8gdO5vQG+wfgrDflZFvodT
+         X83+AavexO+ZnBryjER2Hlh595jw2ih1SXfFu3aQM8t86u/N/EXIGPs/eDi39xI1HPwu
+         roiA==
+X-Gm-Message-State: ANhLgQ1l6C5zvVWE53GCMXLQRyqrUrHBcxAYWbCIjDEWfVL9nbJ5QVnU
+        UCq2QqASgxYMlkWrPUJLA7entUQACl8lPcmYDl0=
+X-Google-Smtp-Source: ADFU+vvW7VUJSX1H7NguH89ivTAhsuq6Qf4GfNMeFvWM3pLLDPRGldFLSTxijnKtNURW9kpwnDeVcPm6Npff47WXO4g=
+X-Received: by 2002:a92:da51:: with SMTP id p17mr2343524ilq.254.1584401970350;
+ Mon, 16 Mar 2020 16:39:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAOFGe94jy2VYDPbkMW8ZuNdAeM+HS8sM1OAYFGd9JKc1V7PVOQ@mail.gmail.com>
+ <CAOFGe97LnmEHVoitgKdo+hbw9rYacofkzkt3pPcQSaw9BaKyaA@mail.gmail.com>
+In-Reply-To: <CAOFGe97LnmEHVoitgKdo+hbw9rYacofkzkt3pPcQSaw9BaKyaA@mail.gmail.com>
+From:   Roman Gilg <subdiff@gmail.com>
+Date:   Tue, 17 Mar 2020 00:41:29 +0100
+Message-ID: <CAJcyoys6FOsBmDe_rSeM8VSwPuB55a-v+3igaknQLyq=6aPa9A@mail.gmail.com>
+Subject: Re: Plumbing explicit synchronization through the Linux ecosystem
+To:     Jason Ekstrand <jason@jlekstrand.net>
+Cc:     ML mesa-dev <mesa-dev@lists.freedesktop.org>,
+        Discussion of the development of and with GStreamer 
+        <gstreamer-devel@lists.freedesktop.org>,
+        "wayland-devel @ lists . freedesktop . org" 
+        <wayland-devel@lists.freedesktop.org>,
+        xorg-devel <xorg-devel@lists.x.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, linux-media@vger.kernel.org,
+        Dave Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Daniel Stone <daniel@fooishbar.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add H264 profile "Contrained High" and H264 levels "5.2",
-"6.0", "6.1" and "6.2".
+On Wed, Mar 11, 2020 at 8:21 PM Jason Ekstrand <jason@jlekstrand.net> wrote:
+>
+> On Wed, Mar 11, 2020 at 12:31 PM Jason Ekstrand <jason@jlekstrand.net> wrote:
+> >
+> > All,
+> >
+> > Sorry for casting such a broad net with this one. I'm sure most people
+> > who reply will get at least one mailing list rejection.  However, this
+> > is an issue that affects a LOT of components and that's why it's
+> > thorny to begin with.  Please pardon the length of this e-mail as
+> > well; I promise there's a concrete point/proposal at the end.
+> >
+> >
+> > Explicit synchronization is the future of graphics and media.  At
+> > least, that seems to be the consensus among all the graphics people
+> > I've talked to.  I had a chat with one of the lead Android graphics
+> > engineers recently who told me that doing explicit sync from the start
+> > was one of the best engineering decisions Android ever made.  It's
+> > also the direction being taken by more modern APIs such as Vulkan.
+> >
+> >
+> > ## What are implicit and explicit synchronization?
+> >
+> > For those that aren't familiar with this space, GPUs, media encoders,
+> > etc. are massively parallel and synchronization of some form is
+> > required to ensure that everything happens in the right order and
+> > avoid data races.  Implicit synchronization is when bits of work (3D,
+> > compute, video encode, etc.) are implicitly based on the absolute
+> > CPU-time order in which API calls occur.  Explicit synchronization is
+> > when the client (whatever that means in any given context) provides
+> > the dependency graph explicitly via some sort of synchronization
+> > primitives.  If you're still confused, consider the following
+> > examples:
+> >
+> > With OpenGL and EGL, almost everything is implicit sync.  Say you have
+> > two OpenGL contexts sharing an image where one writes to it and the
+> > other textures from it.  The way the OpenGL spec works, the client has
+> > to make the API calls to render to the image before (in CPU time) it
+> > makes the API calls which texture from the image.  As long as it does
+> > this (and maybe inserts a glFlush?), the driver will ensure that the
+> > rendering completes before the texturing happens and you get correct
+> > contents.
+> >
+> > Implicit synchronization can also happen across processes.  Wayland,
+> > for instance, is currently built on implicit sync where the client
+> > does their rendering and then does a hand-off (via wl_surface::commit)
+> > to tell the compositor it's done at which point the compositor can now
+> > texture from the surface.  The hand-off ensures that the client's
+> > OpenGL API calls happen before the server's OpenGL API calls.
+> >
+> > A good example of explicit synchronization is the Vulkan API.  There,
+> > a client (or multiple clients) can simultaneously build command
+> > buffers in different threads where one of those command buffers
+> > renders to an image and the other textures from it and then submit
+> > both of them at the same time with instructions to the driver for
+> > which order to execute them in.  The execution order is described via
+> > the VkSemaphore primitive.  With the new VK_KHR_timeline_semaphore
+> > extension, you can even submit the work which does the texturing
+> > BEFORE the work which does the rendering and the driver will sort it
+> > out.
+> >
+> > The #1 problem with implicit synchronization (which explicit solves)
+> > is that it leads to a lot of over-synchronization both in client space
+> > and in driver/device space.  The client has to synchronize a lot more
+> > because it has to ensure that the API calls happen in a particular
+> > order.  The driver/device have to synchronize a lot more because they
+> > never know what is going to end up being a synchronization point as an
+> > API call on another thread/process may occur at any time.  As we move
+> > to more and more multi-threaded programming this synchronization (on
+> > the client-side especially) becomes more and more painful.
+> >
+> >
+> > ## Current status in Linux
+> >
+> > Implicit synchronization in Linux works via a the kernel's internal
+> > dma_buf and dma_fence data structures.  A dma_fence is a tiny object
+> > which represents the "done" status for some bit of work.  Typically,
+> > dma_fences are created as a by-product of someone submitting some bit
+> > of work (say, 3D rendering) to the kernel.  The dma_buf object has a
+> > set of dma_fences on it representing shared (read) and exclusive
+> > (write) access to the object.  When work is submitted which, for
+> > instance renders to the dma_buf, it's queued waiting on all the fences
+> > on the dma_buf and and a dma_fence is created representing the end of
+> > said rendering work and it's installed as the dma_buf's exclusive
+> > fence.  This way, the kernel can manage all its internal queues (3D
+> > rendering, display, video encode, etc.) and know which things to
+> > submit in what order.
+> >
+> > For the last few years, we've had sync_file in the kernel and it's
+> > plumbed into some drivers.  A sync_file is just a wrapper around a
+> > single dma_fence.  A sync_file is typically created as a by-product of
+> > submitting work (3D, compute, etc.) to the kernel and is signaled when
+> > that work completes.  When a sync_file is created, it is guaranteed by
+> > the kernel that it will become signaled in finite time and, once it's
+> > signaled, it remains signaled for the rest of time.  A sync_file is
+> > represented in UAPIs as a file descriptor and can be used with normal
+> > file APIs such as dup().  It can be passed into another UAPI which
+> > does some bit of queue'd work and the submitted work will wait for the
+> > sync_file to be triggered before executing.  A sync_file also supports
+> > poll() if  you want to wait on it manually.
+> >
+> > Unfortunately, sync_file is not broadly used and not all kernel GPU
+> > drivers support it.  Here's a very quick overview of my understanding
+> > of the status of various components (I don't know the status of
+> > anything in the media world):
+> >
+> >  - Vulkan: Explicit synchronization all the way but we have to go
+> > implicit as soon as we interact with a window-system.  Vulkan has APIs
+> > to import/export sync_files to/from it's VkSemaphore and VkFence
+> > synchronization primitives.
+> >  - OpenGL: Implicit all the way.  There are some EGL extensions to
+> > enable some forms of explicit sync via sync_file but OpenGL itself is
+> > still implicit.
+> >  - Wayland: Currently depends on implicit sync in the kernel (accessed
+> > via EGL/OpenGL).  There is an unstable extension to allow passing
+> > sync_files around but it's questionable how useful it is right now
+> > (more on that later).
+> >  - X11: With present, it has these "explicit" fence objects but
+> > they're always a shmfence which lets the X server and client do a
+> > userspace CPU-side hand-off without going over the socket (and
+> > round-tripping through the kernel).  However, the only thing that
+> > fence does is order the OpenGL API calls in the client and server and
+> > the real synchronization is still implicit.
+> >  - linux/i915/gem: Fully supports using sync_file or syncobj for explicit sync.
+> >  - linux/amdgpu: Supports sync_file and syncobj but it still
+> > implicitly syncs sometimes due to it's internal memory residency
+> > handling which can lead to over-synchronization.
+> >  - KMS: Implicit sync all the way.  There are no KMS APIs which take
+> > explicit sync primitives.
+>
+> Correction:  Apparently, I missed some things.  If you use atomic, KMS
+> does have explicit in- and out-fences.  Non-atomic users (e.g. X11)
+> are still in trouble but most Wayland compositors use atomic these
+> days
 
-Signed-off-by: Maheshwar Ajja <majja@codeaurora.org>
----
- drivers/media/v4l2-core/v4l2-ctrls.c | 5 +++++
- include/uapi/linux/v4l2-controls.h   | 5 +++++
- 2 files changed, 10 insertions(+)
+Hi Jason,
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 2928c5e..67ce711 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -336,6 +336,10 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		"4.2",
- 		"5",
- 		"5.1",
-+		"5.2",
-+		"6.0",
-+		"6.1",
-+		"6.2",
- 		NULL,
- 	};
- 	static const char * const h264_loop_filter[] = {
-@@ -362,6 +366,7 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		"Scalable High Intra",
- 		"Stereo High",
- 		"Multiview High",
-+		"Constrained High",
- 		NULL,
- 	};
- 	static const char * const vui_sar_idc[] = {
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 5a7bede..fbe3f82d 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -467,6 +467,10 @@ enum v4l2_mpeg_video_h264_level {
- 	V4L2_MPEG_VIDEO_H264_LEVEL_4_2	= 13,
- 	V4L2_MPEG_VIDEO_H264_LEVEL_5_0	= 14,
- 	V4L2_MPEG_VIDEO_H264_LEVEL_5_1	= 15,
-+	V4L2_MPEG_VIDEO_H264_LEVEL_5_2	= 16,
-+	V4L2_MPEG_VIDEO_H264_LEVEL_6_0	= 17,
-+	V4L2_MPEG_VIDEO_H264_LEVEL_6_1	= 18,
-+	V4L2_MPEG_VIDEO_H264_LEVEL_6_2	= 19,
- };
- #define V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA	(V4L2_CID_MPEG_BASE+360)
- #define V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA	(V4L2_CID_MPEG_BASE+361)
-@@ -495,6 +499,7 @@ enum v4l2_mpeg_video_h264_profile {
- 	V4L2_MPEG_VIDEO_H264_PROFILE_SCALABLE_HIGH_INTRA	= 14,
- 	V4L2_MPEG_VIDEO_H264_PROFILE_STEREO_HIGH		= 15,
- 	V4L2_MPEG_VIDEO_H264_PROFILE_MULTIVIEW_HIGH		= 16,
-+	V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH		= 17,
- };
- #define V4L2_CID_MPEG_VIDEO_H264_VUI_EXT_SAR_HEIGHT	(V4L2_CID_MPEG_BASE+364)
- #define V4L2_CID_MPEG_VIDEO_H264_VUI_EXT_SAR_WIDTH	(V4L2_CID_MPEG_BASE+365)
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+thanks for pushing this forward and the comprehensive explanation on
+what it is about.
+
+My question would be what exactly do you now need from Wayland compositor devs?
+I understood a Wayland compositor needs to:
+* do atomic page flips,
+* support [1].
+
+Is there something else? You described a mechanism to pull out and
+push in these sync_files to dma-bufs depending on what the client
+provides and what kind of output the compositor puts the final image
+onto. That's for now just an idea (plus your wip implementation in
+Vulkan/kernel) and there is not yet anything that can be done for this
+specifically in Wayland compositors, or is there?
+
+Thanks
+Roman
+
+[1] https://gitlab.freedesktop.org/wayland/wayland-protocols/blob/master/unstable/linux-explicit-synchronization/linux-explicit-synchronization-unstable-v1.xml
+
+
+> >  - v4l: ???
+> >  - gstreamer: ???
+> >  - Media APIs such as vaapi etc.:  ???
+> >
+> >
+> > ## Chicken and egg problems
+> >
+> > Ok, this is where it starts getting depressing.  I made the claim
+> > above that Wayland has an explicit synchronization protocol that's of
+> > questionable usefulness.  I would claim that basically any bit of
+> > plumbing we do through window systems is currently of questionable
+> > usefulness.  Why?
+> >
+> > From my perspective, as a Vulkan driver developer, I have to deal with
+> > the fact that Vulkan is an explicit sync API but Wayland and X11
+> > aren't.  Unfortunately, the Wayland extension solves zero problems for
+> > me because I can't really use it unless it's implemented in all of the
+> > compositors.  Until every Wayland compositor I care about my users
+> > being able to use (which is basically all of them) supports the
+> > extension, I have to continue carry around my pile of hacks to keep
+> > implicit sync and Vulkan working nicely together.
+> >
+> > From the perspective of a Wayland compositor (I used to play in this
+> > space), they'd love to implement the new explicit sync extension but
+> > can't.  Sure, they could wire up the extension, but the moment they go
+> > to flip a client buffer to the screen directly, they discover that KMS
+> > doesn't support any explicit sync APIs.
+>
+> As per the above correction, Wayland compositors aren't nearly as bad
+> off as I initially thought.  There may still be weird screen capture
+> cases but the normal cases of compositing and displaying via
+> KMS/atomic should be in reasonably good shape.
+>
+> > So, yes, they can technically
+> > implement the extension assuming the EGL stack they're running on has
+> > the sync_file extensions but any client buffers which come in using
+> > the explicit sync Wayland extension have to be composited and can't be
+> > scanned out directly.  As a 3D driver developer, I absolutely don't
+> > want compositors doing that because my users will complain about
+> > performance issues due to the extra blit.
+> >
+> > Ok, so let's say we get KMS wired up with implicit sync.  That solves
+> > all our problems, right?  It does, right up until someone decides that
+> > they wan to screen capture their Wayland session via some hardware
+> > media encoder that doesn't support explicit sync.  Now we have to
+> > plumb it all the way through the media stack, gstreamer, etc.  Great,
+> > so let's do that!  Oh, but gstreamer won't want to plumb it through
+> > until they're guaranteed that they can use explicit sync when
+> > displaying on X11 or Wayland.  Are you seeing the problem?
+> >
+> > To make matters worse, since most things are doing implicit
+> > synchronization today, it's really easy to get your explicit
+> > synchronization wrong and never notice.  If you forget to pass a
+> > sync_file into one place (say you never notice KMS doesn't support
+> > them), it will probably work anyway thanks to all the implicit sync
+> > that's going on elsewhere.
+> >
+> > So, clearly, we all need to go write piles of code that we can't
+> > actually properly test until everyone else has written their piece and
+> > then we use explicit sync if and only if all components support it.
+> > Really?  We're going to do multiple years of development and then just
+> > hope it works when we finally flip the switch?  That doesn't sound
+> > like a good plan to me.
+> >
+> >
+> > ## A proposal: Implicit and explicit sync together
+> >
+> > How to solve all these chicken-and-egg problems is something I've been
+> > giving quite a bit of thought (and talking with many others about) in
+> > the last couple of years.  One motivation for this is that we have to
+> > deal with a mismatch in Vulkan.  Another motivation is that I'm
+> > becoming increasingly unhappy with the way that synchronization,
+> > memory residency, and command submission are inherently intertwined in
+> > i915 and would like to break things apart.  Towards that end, I have
+> > an actual proposal.
+> >
+> > A couple weeks ago, I sent a series of patches to the dri-devel
+> > mailing list which adds a pair of new ioctls to dma-buf which allow
+> > userspace to manually import or export a sync_file from a dma-buf.
+> > The idea is that something like a Wayland compositor can switch to
+> > 100% explicit sync internally once the ioctl is available.  If it gets
+> > buffers in from a client that doesn't use the explicit sync extension,
+> > it can pull a sync_file from the dma-buf and use that exactly as it
+> > would a sync_file passed via the explicit sync extension.  When it
+> > goes to scan out a user buffer and discovers that KMS doesn't accept
+> > sync_files (or if it tries to use that pesky media encoder no one has
+> > converted), it can take it's sync_file for display and stuff it into
+> > the dma-buf before handing it to KMS.
+> >
+> > Along with the kernel patches, I've also implemented support for this
+> > in the Vulkan WSI code used by ANV and RADV.  With those patches, the
+> > only requirement on the Vulkan drivers is that you be able to export
+> > any VkSemaphore as a sync_file and temporarily import a sync_file into
+> > any VkFence or VkSemaphore.  As long as that works, the core Vulkan
+> > driver only ever sees explicit synchronization via sync_file.  The WSI
+> > code uses these new ioctls to translate the implicit sync of X11 and
+> > Wayland to the explicit sync the Vulkan driver wants.
+> >
+> > I'm hoping (and here's where I want a sanity check) that a simple API
+> > like this will allow us to finally start moving the Linux ecosystem
+> > over to explicit synchronization one piece at a time in a way that's
+> > actually correct.  (No Wayland explicit sync with compositors hoping
+> > KMS magically works even though it doesn't have a sync_file API.)
+> > Once some pieces in the ecosystem start moving, there will be
+> > motivation to start moving others and maybe we can actually build the
+> > momentum to get most everything converted.
+> >
+> > For reference, you can find the kernel RFC patches and mesa MR here:
+> >
+> > https://lists.freedesktop.org/archives/dri-devel/2020-March/258833.html
+> >
+> > https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4037
+> >
+> > At this point, I welcome your thoughts, comments, objections, and
+> > maybe even help/review. :-)
+> >
+> > --Jason Ekstrand
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
