@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91F0FC0044D
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 15:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3545CC5ACBF
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 15:26:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6E5C32051A
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 15:26:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F02920674
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 15:26:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731826AbgCPP0v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1731819AbgCPP0v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 16 Mar 2020 11:26:51 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59913 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:58555 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731780AbgCPP0n (ORCPT
+        with ESMTP id S1731778AbgCPP0n (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 16 Mar 2020 11:26:43 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1jDrdZ-0000lO-Tf; Mon, 16 Mar 2020 16:26:41 +0100
+        id 1jDrdZ-0000lK-QP; Mon, 16 Mar 2020 16:26:41 +0100
 Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1jDrdY-00055S-QE; Mon, 16 Mar 2020 16:26:40 +0100
+        id 1jDrdY-00055J-NY; Mon, 16 Mar 2020 16:26:40 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
         Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH v2 13/18] media: allegro: read bitrate mode directly from control
-Date:   Mon, 16 Mar 2020 16:26:33 +0100
-Message-Id: <20200316152638.19457-14-m.tretter@pengutronix.de>
+Subject: [PATCH v2 10/18] media: allegro: skip filler data if possible
+Date:   Mon, 16 Mar 2020 16:26:30 +0100
+Message-Id: <20200316152638.19457-11-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200316152638.19457-1-m.tretter@pengutronix.de>
 References: <20200316152638.19457-1-m.tretter@pengutronix.de>
@@ -48,75 +48,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is no need to copy the bitrate mode to a field in the channel and
-the value can be read directly from the control.
+The driver instructs the firmware to leave some space space in front of
+the coded frame data for SPS/PPS data. If the driver receives an IDR, it
+writes the SPS/PPS into that free space and fills the rest with filler
+data. However, if there is no additional data, the driver can use the
+plane offset to skip this space instead of adding filler data.
+
+As the size of the SPS/PPS is only available after writing it, keep the
+filler data between the SPS/PPS and the coded frame data.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
 Changelog:
 
 v1 -> v2:
-- Fix indentation
+- Fix indentation of messages
 ---
- drivers/staging/media/allegro-dvt/allegro-core.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ .../staging/media/allegro-dvt/allegro-core.c  | 25 +++++++++++--------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
-index 4d83a9f44e7e..6a492de52987 100644
+index 2392867b4270..4a87647749f3 100644
 --- a/drivers/staging/media/allegro-dvt/allegro-core.c
 +++ b/drivers/staging/media/allegro-dvt/allegro-core.c
-@@ -197,7 +197,6 @@ struct allegro_channel {
- 	unsigned int sizeimage_encoded;
- 	unsigned int csequence;
+@@ -1652,17 +1652,22 @@ static void allegro_channel_finish_frame(struct allegro_channel *channel,
+ 			 channel->mcu_channel_id, len);
+ 	}
  
--	enum v4l2_mpeg_video_bitrate_mode bitrate_mode;
- 	bool frame_rc_enable;
- 	unsigned int bitrate;
- 	unsigned int bitrate_peak;
-@@ -1119,6 +1118,7 @@ static int allegro_mcu_send_create_channel(struct allegro_dev *dev,
- 	int i_frame_qp = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_i_frame_qp);
- 	int p_frame_qp = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_p_frame_qp);
- 	int b_frame_qp = v4l2_ctrl_g_ctrl(channel->mpeg_video_h264_b_frame_qp);
-+	int bitrate_mode = v4l2_ctrl_g_ctrl(channel->mpeg_video_bitrate_mode);
+-	len = nal_h264_write_filler(&dev->plat_dev->dev, curr, free);
+-	if (len < 0) {
+-		v4l2_err(&dev->v4l2_dev,
+-			 "failed to write %zd filler data\n", free);
+-		goto err;
++	if (msg->slice_type != AL_ENC_SLICE_TYPE_I && !msg->is_idr) {
++		dst_buf->vb2_buf.planes[0].data_offset = free;
++		free = 0;
++	} else {
++		len = nal_h264_write_filler(&dev->plat_dev->dev, curr, free);
++		if (len < 0) {
++			v4l2_err(&dev->v4l2_dev,
++				 "failed to write %zd filler data\n", free);
++			goto err;
++		}
++		curr += len;
++		free -= len;
++		v4l2_dbg(2, debug, &dev->v4l2_dev,
++			 "channel %d: wrote %zd bytes filler nal unit\n",
++			 channel->mcu_channel_id, len);
+ 	}
+-	curr += len;
+-	free -= len;
+-	v4l2_dbg(2, debug, &dev->v4l2_dev,
+-		 "channel %d: wrote %zd bytes filler nal unit\n",
+-		 channel->mcu_channel_id, len);
  
- 	memset(&msg, 0, sizeof(msg));
- 
-@@ -1156,7 +1156,7 @@ static int allegro_mcu_send_create_channel(struct allegro_dev *dev,
- 
- 	if (channel->frame_rc_enable)
- 		msg.rate_control_mode =
--			v4l2_bitrate_mode_to_mcu_mode(channel->bitrate_mode);
-+			v4l2_bitrate_mode_to_mcu_mode(bitrate_mode);
- 	else
- 		msg.rate_control_mode = 0;
- 
-@@ -2224,7 +2224,6 @@ static void allegro_set_default_params(struct allegro_channel *channel)
- 	channel->sizeimage_encoded =
- 		estimate_stream_size(channel->width, channel->height);
- 
--	channel->bitrate_mode = V4L2_MPEG_VIDEO_BITRATE_MODE_CBR;
- 	channel->bitrate = maximum_bitrate(channel->level);
- 	channel->bitrate_peak = maximum_bitrate(channel->level);
- 	channel->cpb_size = maximum_cpb_size(channel->level);
-@@ -2422,9 +2421,6 @@ static int allegro_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
- 		channel->frame_rc_enable = ctrl->val;
- 		break;
--	case V4L2_CID_MPEG_VIDEO_BITRATE_MODE:
--		channel->bitrate_mode = ctrl->val;
--		break;
- 	case V4L2_CID_MPEG_VIDEO_BITRATE:
- 		channel->bitrate = ctrl->val;
- 		break;
-@@ -2518,7 +2514,7 @@ static int allegro_open(struct file *file)
- 			&allegro_ctrl_ops,
- 			V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
- 			V4L2_MPEG_VIDEO_BITRATE_MODE_CBR, 0,
--			channel->bitrate_mode);
-+			V4L2_MPEG_VIDEO_BITRATE_MODE_CBR);
- 	channel->mpeg_video_bitrate = v4l2_ctrl_new_std(handler,
- 			&allegro_ctrl_ops,
- 			V4L2_CID_MPEG_VIDEO_BITRATE,
+ 	if (free != 0) {
+ 		v4l2_err(&dev->v4l2_dev,
 -- 
 2.20.1
 
