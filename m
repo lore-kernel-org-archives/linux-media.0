@@ -2,143 +2,72 @@ Return-Path: <SRS0=JFiv=5B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EA60C0044D
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 09:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25427C1975A
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 09:36:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 72D5E206B1
+	by mail.kernel.org (Postfix) with ESMTP id EEDDE20658
 	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 09:36:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="oFdJs7zI"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="dtpGU0M3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730435AbgCPJgy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730436AbgCPJgy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 16 Mar 2020 05:36:54 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:44109 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730399AbgCPJgx (ORCPT
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:41671 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730056AbgCPJgy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Mar 2020 05:36:53 -0400
+        Mon, 16 Mar 2020 05:36:54 -0400
 Received: from tschai.fritz.box ([46.9.234.233])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id DmAyjwybrEE3qDmB2jdJxl; Mon, 16 Mar 2020 10:36:52 +0100
+        id DmAyjwybrEE3qDmB1jdJxD; Mon, 16 Mar 2020 10:36:52 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1584351412; bh=62wtZTAMZQK5YxBnvjxcBLohpDVUFML/waGFuLQ17Rg=;
+        t=1584351412; bh=S8gJjNg45/rBUz38ZnB9zRcEKuk4G/KNiRtJ3/FINP4=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=oFdJs7zIi1xTSdnjo870hh0nEHAfa+J7wIwuxn82yM1USA6o0qQURJFtXRJkVZckA
-         ZQFoWCFXL1A2yDr2x9o2v6pg9rdLSCYKjiVU40FhDp3a2ai9924X/C5LO1z2MpfFX3
-         uMBlApTjGlu4EuVcKlBmcA/LS6JtyQnDjb1IiPJIJk3Cp1mGbNjyD6vgWOme5IwmbQ
-         GoaHekzNCYG8lnipFBRxacyOYsa9yfs8bk//sV8BGE2873esruBKsiBNOBkM0m6ZRc
-         B9gKMpCbenDV0iL1vGi9qiO4t2znhqmnQRUYt4NtfmzNDwLLFw/2KZdY34y1tEnrF/
-         oniJgVuB47csw==
+        b=dtpGU0M35EjCujAEcv49g2VUB29yoTzu/nByPz5n8EYpy+m5G0M18Wj13re6OZMhd
+         yyXs7m4kjM7E3rj0jzMKe0dtf0fILnWex6meoSccS8OHM69J+hrKPLLO7bJH7kHsg/
+         Zjad+8/tZ41vZxqw+CYyNkJ2pyIfrGe1acHRSIf8S4iA25MXWiQ+s3sU7L/2zyFtR7
+         Sx6rINZ6L++OtLCVZX0kIDILDjaXTgNLh3tOEZwcP2lCMI61ucMWHWBQtajEljojzc
+         uBKNj5bdslYuIPDKlV2AQeWRcyYVfMypnShKiFvhU9DuNV5ElHTIS84mHDX5O7alUv
+         g41TUqNpOVTSQ==
 From:   Hans Verkuil <hverkuil@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 2/2] cec-notifier: make cec_notifier_get_conn() static
-Date:   Mon, 16 Mar 2020 10:36:48 +0100
-Message-Id: <20200316093648.1280689-3-hverkuil@xs4all.nl>
+Subject: [PATCH 0/2] cec: two small changes
+Date:   Mon, 16 Mar 2020 10:36:46 +0100
+Message-Id: <20200316093648.1280689-1-hverkuil@xs4all.nl>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200316093648.1280689-1-hverkuil@xs4all.nl>
-References: <20200316093648.1280689-1-hverkuil@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-CMAE-Envelope: MS4wfDaWk2F5em+x6HoDQRYP3KxlNC1sxz+oA7cj9QxTZRkXoC4KlafAsvkM1Os4fmzA27PVWvbqw7Acev1PcxDrSoMZOSZ1b02rpmn69xQFJLwQrm0idzkO
- LRox19YTfD6qAzeGNCYYEZqt8R/s9WZQCBMPiFivrUcSd8e61StoV/5L/1TityNE0SJNJJ5AlbHGltd4IGLnk6JAuWZtmUYAc9VovS3WJ5YkZGErjMRRmTuI
+ LRox19YTfD6qA3gqdDswWCtyirdoWXQDfmqZnAzCSzSGqbzEg7bZCsMomRf8Hf6/xBnxUqPv7ipRyg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Hans Verkuil <hans.verkuil@cisco.com>
 
-This function is no longer used by other drivers, so it can be
-made static.
+The first patch renames an argument to prepare for future work and
+the second makes cec_notifier_get_conn() static since drivers no longer
+call this function.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/cec/cec-notifier.c | 17 +++++++++++++++--
- include/media/cec-notifier.h     | 23 -----------------------
- 2 files changed, 15 insertions(+), 25 deletions(-)
+I have more patches pending but those need more testing.
 
-diff --git a/drivers/media/cec/cec-notifier.c b/drivers/media/cec/cec-notifier.c
-index 32a0828fbfe0..e748cd54b45d 100644
---- a/drivers/media/cec/cec-notifier.c
-+++ b/drivers/media/cec/cec-notifier.c
-@@ -32,7 +32,21 @@ struct cec_notifier {
- static LIST_HEAD(cec_notifiers);
- static DEFINE_MUTEX(cec_notifiers_lock);
- 
--struct cec_notifier *
-+/**
-+ * cec_notifier_get_conn - find or create a new cec_notifier for the given
-+ * device and connector tuple.
-+ * @hdmi_dev: device that sends the events.
-+ * @port_name: the connector name from which the event occurs
-+ *
-+ * If a notifier for device @dev already exists, then increase the refcount
-+ * and return that notifier.
-+ *
-+ * If it doesn't exist, then allocate a new notifier struct and return a
-+ * pointer to that new struct.
-+ *
-+ * Return NULL if the memory could not be allocated.
-+ */
-+static struct cec_notifier *
- cec_notifier_get_conn(struct device *hdmi_dev, const char *port_name)
- {
- 	struct cec_notifier *n;
-@@ -68,7 +82,6 @@ cec_notifier_get_conn(struct device *hdmi_dev, const char *port_name)
- 	mutex_unlock(&cec_notifiers_lock);
- 	return n;
- }
--EXPORT_SYMBOL_GPL(cec_notifier_get_conn);
- 
- static void cec_notifier_release(struct kref *kref)
- {
-diff --git a/include/media/cec-notifier.h b/include/media/cec-notifier.h
-index c4a7624c5f83..38956969fd12 100644
---- a/include/media/cec-notifier.h
-+++ b/include/media/cec-notifier.h
-@@ -19,23 +19,6 @@ struct cec_notifier;
- 
- #if IS_REACHABLE(CONFIG_CEC_CORE) && IS_ENABLED(CONFIG_CEC_NOTIFIER)
- 
--/**
-- * cec_notifier_get_conn - find or create a new cec_notifier for the given
-- * device and connector tuple.
-- * @dev: device that sends the events.
-- * @conn: the connector name from which the event occurs
-- *
-- * If a notifier for device @dev already exists, then increase the refcount
-- * and return that notifier.
-- *
-- * If it doesn't exist, then allocate a new notifier struct and return a
-- * pointer to that new struct.
-- *
-- * Return NULL if the memory could not be allocated.
-- */
--struct cec_notifier *cec_notifier_get_conn(struct device *dev,
--					   const char *conn);
--
- /**
-  * cec_notifier_conn_register - find or create a new cec_notifier for the given
-  * HDMI device and connector tuple.
-@@ -125,12 +108,6 @@ void cec_notifier_set_phys_addr_from_edid(struct cec_notifier *n,
- struct device *cec_notifier_parse_hdmi_phandle(struct device *dev);
- 
- #else
--static inline struct cec_notifier *cec_notifier_get_conn(struct device *dev,
--							 const char *conn)
--{
--	/* A non-NULL pointer is expected on success */
--	return (struct cec_notifier *)0xdeadfeed;
--}
- 
- static inline struct cec_notifier *
- cec_notifier_conn_register(struct device *hdmi_dev, const char *port_name,
+Regards,
+
+	Hans
+
+Hans Verkuil (2):
+  cec-notifier: rename conn_name to port_name
+  cec-notifier: make cec_notifier_get_conn() static
+
+ drivers/media/cec/cec-notifier.c | 41 +++++++++++++++++++++-----------
+ include/media/cec-notifier.h     | 39 +++++++-----------------------
+ 2 files changed, 35 insertions(+), 45 deletions(-)
+
 -- 
 2.25.1
 
