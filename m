@@ -2,112 +2,143 @@ Return-Path: <SRS0=JFiv=5B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EB60C0044D
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 09:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EA60C0044D
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 09:36:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DDEF20674
-	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 09:25:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72D5E206B1
+	for <linux-media@archiver.kernel.org>; Mon, 16 Mar 2020 09:36:54 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="oFdJs7zI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730218AbgCPJZi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Mar 2020 05:25:38 -0400
-Received: from gofer.mess.org ([88.97.38.141]:36433 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730056AbgCPJZh (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Mar 2020 05:25:37 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 4A01311A001; Mon, 16 Mar 2020 09:25:36 +0000 (GMT)
-Date:   Mon, 16 Mar 2020 09:25:36 +0000
-From:   Sean Young <sean@mess.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [RFC PATCH v4l-utils 0/1] Introduce the meson build system
-Message-ID: <20200316092536.GA10923@gofer.mess.org>
-References: <20200315205421.28797-1-ezequiel@collabora.com>
- <20200316085312.GN4732@pendragon.ideasonboard.com>
+        id S1730435AbgCPJgy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Mar 2020 05:36:54 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:44109 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730399AbgCPJgx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 16 Mar 2020 05:36:53 -0400
+Received: from tschai.fritz.box ([46.9.234.233])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id DmAyjwybrEE3qDmB2jdJxl; Mon, 16 Mar 2020 10:36:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1584351412; bh=62wtZTAMZQK5YxBnvjxcBLohpDVUFML/waGFuLQ17Rg=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=oFdJs7zIi1xTSdnjo870hh0nEHAfa+J7wIwuxn82yM1USA6o0qQURJFtXRJkVZckA
+         ZQFoWCFXL1A2yDr2x9o2v6pg9rdLSCYKjiVU40FhDp3a2ai9924X/C5LO1z2MpfFX3
+         uMBlApTjGlu4EuVcKlBmcA/LS6JtyQnDjb1IiPJIJk3Cp1mGbNjyD6vgWOme5IwmbQ
+         GoaHekzNCYG8lnipFBRxacyOYsa9yfs8bk//sV8BGE2873esruBKsiBNOBkM0m6ZRc
+         B9gKMpCbenDV0iL1vGi9qiO4t2znhqmnQRUYt4NtfmzNDwLLFw/2KZdY34y1tEnrF/
+         oniJgVuB47csw==
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 2/2] cec-notifier: make cec_notifier_get_conn() static
+Date:   Mon, 16 Mar 2020 10:36:48 +0100
+Message-Id: <20200316093648.1280689-3-hverkuil@xs4all.nl>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200316093648.1280689-1-hverkuil@xs4all.nl>
+References: <20200316093648.1280689-1-hverkuil@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200316085312.GN4732@pendragon.ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfDaWk2F5em+x6HoDQRYP3KxlNC1sxz+oA7cj9QxTZRkXoC4KlafAsvkM1Os4fmzA27PVWvbqw7Acev1PcxDrSoMZOSZ1b02rpmn69xQFJLwQrm0idzkO
+ LRox19YTfD6qAzeGNCYYEZqt8R/s9WZQCBMPiFivrUcSd8e61StoV/5L/1TityNE0SJNJJ5AlbHGltd4IGLnk6JAuWZtmUYAc9VovS3WJ5YkZGErjMRRmTuI
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ezequiel,
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-On Mon, Mar 16, 2020 at 10:53:12AM +0200, Laurent Pinchart wrote:
-> On Sun, Mar 15, 2020 at 05:54:20PM -0300, Ezequiel Garcia wrote:
-> > Here's a first step towards using meson:
-> > 
-> >     https://mesonbuild.com/
-> > 
-> > As you can see, this doesn't include all tools and libraries
-> > (are there any libv4l1 users?), but otherwise tries to cover
-> > as much as possible.
-> > 
-> > I'm sending this early patch, hoping to get some reviews
-> > and possibly some testing.
-> > 
-> > Let me know what you think.
-> 
-> I like the concept :-) Is there a plan to drop autotools support ?
+This function is no longer used by other drivers, so it can be
+made static.
 
-I think it's great. I've toyed with meson in the past and liked it a lot.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/cec/cec-notifier.c | 17 +++++++++++++++--
+ include/media/cec-notifier.h     | 23 -----------------------
+ 2 files changed, 15 insertions(+), 25 deletions(-)
 
-Long term, supporting both meson and autotools might be a maintenance
-burden.
+diff --git a/drivers/media/cec/cec-notifier.c b/drivers/media/cec/cec-notifier.c
+index 32a0828fbfe0..e748cd54b45d 100644
+--- a/drivers/media/cec/cec-notifier.c
++++ b/drivers/media/cec/cec-notifier.c
+@@ -32,7 +32,21 @@ struct cec_notifier {
+ static LIST_HEAD(cec_notifiers);
+ static DEFINE_MUTEX(cec_notifiers_lock);
+ 
+-struct cec_notifier *
++/**
++ * cec_notifier_get_conn - find or create a new cec_notifier for the given
++ * device and connector tuple.
++ * @hdmi_dev: device that sends the events.
++ * @port_name: the connector name from which the event occurs
++ *
++ * If a notifier for device @dev already exists, then increase the refcount
++ * and return that notifier.
++ *
++ * If it doesn't exist, then allocate a new notifier struct and return a
++ * pointer to that new struct.
++ *
++ * Return NULL if the memory could not be allocated.
++ */
++static struct cec_notifier *
+ cec_notifier_get_conn(struct device *hdmi_dev, const char *port_name)
+ {
+ 	struct cec_notifier *n;
+@@ -68,7 +82,6 @@ cec_notifier_get_conn(struct device *hdmi_dev, const char *port_name)
+ 	mutex_unlock(&cec_notifiers_lock);
+ 	return n;
+ }
+-EXPORT_SYMBOL_GPL(cec_notifier_get_conn);
+ 
+ static void cec_notifier_release(struct kref *kref)
+ {
+diff --git a/include/media/cec-notifier.h b/include/media/cec-notifier.h
+index c4a7624c5f83..38956969fd12 100644
+--- a/include/media/cec-notifier.h
++++ b/include/media/cec-notifier.h
+@@ -19,23 +19,6 @@ struct cec_notifier;
+ 
+ #if IS_REACHABLE(CONFIG_CEC_CORE) && IS_ENABLED(CONFIG_CEC_NOTIFIER)
+ 
+-/**
+- * cec_notifier_get_conn - find or create a new cec_notifier for the given
+- * device and connector tuple.
+- * @dev: device that sends the events.
+- * @conn: the connector name from which the event occurs
+- *
+- * If a notifier for device @dev already exists, then increase the refcount
+- * and return that notifier.
+- *
+- * If it doesn't exist, then allocate a new notifier struct and return a
+- * pointer to that new struct.
+- *
+- * Return NULL if the memory could not be allocated.
+- */
+-struct cec_notifier *cec_notifier_get_conn(struct device *dev,
+-					   const char *conn);
+-
+ /**
+  * cec_notifier_conn_register - find or create a new cec_notifier for the given
+  * HDMI device and connector tuple.
+@@ -125,12 +108,6 @@ void cec_notifier_set_phys_addr_from_edid(struct cec_notifier *n,
+ struct device *cec_notifier_parse_hdmi_phandle(struct device *dev);
+ 
+ #else
+-static inline struct cec_notifier *cec_notifier_get_conn(struct device *dev,
+-							 const char *conn)
+-{
+-	/* A non-NULL pointer is expected on success */
+-	return (struct cec_notifier *)0xdeadfeed;
+-}
+ 
+ static inline struct cec_notifier *
+ cec_notifier_conn_register(struct device *hdmi_dev, const char *port_name,
+-- 
+2.25.1
 
-
-Sean
-
-
-> 
-> > Ezequiel Garcia (1):
-> >   Add support for meson building
-> > 
-> >  gen-version.sh                      |  36 ++++++++++
-> >  lib/libdvbv5/meson.build            |  87 ++++++++++++++++++++++
-> >  lib/libv4l2/meson.build             |  43 +++++++++++
-> >  lib/libv4lconvert/meson.build       |  79 ++++++++++++++++++++
-> >  lib/meson.build                     |   6 ++
-> >  meson.build                         | 108 ++++++++++++++++++++++++++++
-> >  meson_options.txt                   |  19 +++++
-> >  utils/cec-compliance/meson.build    |  39 ++++++++++
-> >  utils/cec-ctl/meson.build           |  33 +++++++++
-> >  utils/cec-follower/meson.build      |  35 +++++++++
-> >  utils/gen_media_bus_format_codes.sh |   7 ++
-> >  utils/gen_media_bus_format_names.sh |   7 ++
-> >  utils/ir-ctl/meson.build            |  30 ++++++++
-> >  utils/libcecutil/meson.build        |  46 ++++++++++++
-> >  utils/media-ctl/meson.build         |  35 +++++++++
-> >  utils/meson.build                   |  32 +++++++++
-> >  utils/v4l2-compliance/meson.build   |  52 ++++++++++++++
-> >  utils/v4l2-ctl/meson.build          |  65 +++++++++++++++++
-> >  version.h.in                        |   1 +
-> >  19 files changed, 760 insertions(+)
-> >  create mode 100755 gen-version.sh
-> >  create mode 100644 lib/libdvbv5/meson.build
-> >  create mode 100644 lib/libv4l2/meson.build
-> >  create mode 100644 lib/libv4lconvert/meson.build
-> >  create mode 100644 lib/meson.build
-> >  create mode 100644 meson.build
-> >  create mode 100644 meson_options.txt
-> >  create mode 100644 utils/cec-compliance/meson.build
-> >  create mode 100644 utils/cec-ctl/meson.build
-> >  create mode 100644 utils/cec-follower/meson.build
-> >  create mode 100644 utils/gen_media_bus_format_codes.sh
-> >  create mode 100644 utils/gen_media_bus_format_names.sh
-> >  create mode 100644 utils/ir-ctl/meson.build
-> >  create mode 100644 utils/libcecutil/meson.build
-> >  create mode 100644 utils/media-ctl/meson.build
-> >  create mode 100644 utils/meson.build
-> >  create mode 100644 utils/v4l2-compliance/meson.build
-> >  create mode 100644 utils/v4l2-ctl/meson.build
-> >  create mode 100644 version.h.in
