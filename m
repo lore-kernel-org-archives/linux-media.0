@@ -2,52 +2,55 @@ Return-Path: <SRS0=F4fk=5C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEB8CC2BB1D
-	for <linux-media@archiver.kernel.org>; Tue, 17 Mar 2020 23:02:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0936C1975A
+	for <linux-media@archiver.kernel.org>; Tue, 17 Mar 2020 23:04:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B7A0E206EC
-	for <linux-media@archiver.kernel.org>; Tue, 17 Mar 2020 23:02:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A630206EC
+	for <linux-media@archiver.kernel.org>; Tue, 17 Mar 2020 23:04:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Af5IXSwh"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="OQyPMDPt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgCQXCo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Mar 2020 19:02:44 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59482 "EHLO
+        id S1726721AbgCQXEl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Mar 2020 19:04:41 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:59504 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726735AbgCQXCo (ORCPT
+        with ESMTP id S1726549AbgCQXEl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Mar 2020 19:02:44 -0400
+        Tue, 17 Mar 2020 19:04:41 -0400
 Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8384BF9;
-        Wed, 18 Mar 2020 00:02:42 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4C3FBF9;
+        Wed, 18 Mar 2020 00:04:38 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1584486162;
-        bh=prg73PH2p+bD0jIqhKqHG+Vsv4XYgaOh45UrICb51TE=;
+        s=mail; t=1584486278;
+        bh=DdAdb8ZUU2/ZUnpDDbM2QIE7bXtcmbyw6yhTln1Zh68=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Af5IXSwhJT40wq2w6FsLrUrrur/qavTFnEZH5xd3kL+BOXeBqJ3RrbehelggQqpdE
-         NUhgsSI92nc1bseUW1H4pU6Ocrcjd6I5rlEtXitWvFLro1C6Been9NYlaGfXGAWwaG
-         Ab/5WP18Nt0QwSFAeLAO7EBme1n9ZRm19+DMq+8o=
-Date:   Wed, 18 Mar 2020 01:02:37 +0200
+        b=OQyPMDPts83hWJImo2O0ukpZEBKoEYwD3z7/Mncle5IrtbvUxwAw2dpVp0e0xWHk2
+         9eBCOiE4d13SCfSRqJroYJnhLfz3nDEKbWiVyKXszcSWSuVZxzp4LTNXTTvaiPhldt
+         PQ27Sq999NyC7o03tnrdMuNcP6zAaPwM/fOIsvgg=
+Date:   Wed, 18 Mar 2020 01:04:32 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-Subject: Re: [PATCH/RFC] media: v4l2: Extend VIDIOC_ENUM_FMT to support
- MC-centric devices
-Message-ID: <20200317230237.GN2527@pendragon.ideasonboard.com>
-References: <20200313152406.13347-1-laurent.pinchart@ideasonboard.com>
- <20200317115854.h4oh2m2kipzjhmg3@uno.localdomain>
- <20200317130601.GI4864@pendragon.ideasonboard.com>
- <20200317220233.GE13878@kekkonen.localdomain>
+Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-media@vger.kernel.org,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH] media: v4l2-async: Accept endpoints and devices for
+ fwnode matching
+Message-ID: <20200317230432.GO2527@pendragon.ideasonboard.com>
+References: <20200315102724.26850-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200315125511.25756-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20200317124455.GC13878@kekkonen.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200317220233.GE13878@kekkonen.localdomain>
+In-Reply-To: <20200317124455.GC13878@kekkonen.localdomain>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -56,25 +59,95 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Sakari,
 
-On Wed, Mar 18, 2020 at 12:02:33AM +0200, Sakari Ailus wrote:
-> On Tue, Mar 17, 2020 at 03:06:01PM +0200, Laurent Pinchart wrote:
-> ...
-> > > I have not followed CAP_IO_MC closely, but I
-> > > wonder if that could help catching that situation in the core and
-> > > return an error earlier. Maybe there could be a way for drivers to
-> > > advertise support for that feature to the core and fail earlier if
-> > > mbus_code is set and they don't claim to support it ?
+On Tue, Mar 17, 2020 at 02:44:56PM +0200, Sakari Ailus wrote:
+> On Sun, Mar 15, 2020 at 02:55:11PM +0200, Laurent Pinchart wrote:
+> > fwnode matching was designed to match on nodes corresponding to a
+> > device. Some drivers, however, needed to match on endpoints, and have
+> > passed endpoint fwnodes to v4l2-async. This works when both the subdev
+> > and the notifier use the same fwnode types (endpoint or device), but
+> > makes drivers that use different types incompatible.
 > > 
-> > I was thinking of linking the two, making this extension mandatory for
-> > drivers that advertise CAP_IO_MC, in which case we could indeed drop the
-> > flag.
+> > Fix this by extending the fwnode match to handle fwnodes of different
+> > types. When the types (deduced from the node name) are different,
+> > retrieve the device fwnode for the side that provides an endpoint
+> > fwnode, and compare it with the device fwnode provided by the other
+> > side. This allows interoperability between all drivers, regardless of
+> > which type of fwnode they use for matching.
 > > 
-> > Hans, what's your preference ?
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> > ---
+> > This has been compile-tested only. Prabhakar, could you check if it
+> > fixes your issue ?
+> > 
+> >  drivers/media/v4l2-core/v4l2-async.c | 42 +++++++++++++++++++++++++++-
+> >  1 file changed, 41 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+> > index 8bde33c21ce4..995e5464cba7 100644
+> > --- a/drivers/media/v4l2-core/v4l2-async.c
+> > +++ b/drivers/media/v4l2-core/v4l2-async.c
+> > @@ -71,7 +71,47 @@ static bool match_devname(struct v4l2_subdev *sd,
+> >  
+> >  static bool match_fwnode(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
+> >  {
+> > -	return sd->fwnode == asd->match.fwnode;
+> > +	struct fwnode_handle *other_fwnode;
+> > +	struct fwnode_handle *dev_fwnode;
+> > +	bool asd_fwnode_is_ep;
+> > +	bool sd_fwnode_is_ep;
+> > +	const char *name;
+> > +
+> > +	/*
+> > +	 * Both the subdev and the async subdev can provide either an endpoint
+> > +	 * fwnode or a device fwnode. Start with the simple case of direct
+> > +	 * fwnode matching.
+> > +	 */
+> > +	if (sd->fwnode == asd->match.fwnode)
+> > +		return true;
+> > +
+> > +	/*
+> > +	 * Otherwise, check if the sd fwnode and the asd fwnode refer to an
+> > +	 * endpoint or a device. If they're of the same type, there's no match.
+> > +	 */
+> > +	name = fwnode_get_name(sd->fwnode);
+> > +	sd_fwnode_is_ep = name && strstarts(name, "endpoint");
+> > +	name = fwnode_get_name(asd->match.fwnode);
+> > +	asd_fwnode_is_ep = name && strstarts(name, "endpoint");
 > 
-> My mild preference would be towards binding this to CAP_IO_MC flag.
+> Apart from the fact that you're parsing graph node names here, this looks
+> good.
+> 
+> How about checking instead that calling
+> fwnode_graph_get_remote_endpoint(fwnode_graph_get_remote_endpoint()) yields
+> the same node? That would ensure you're dealing with endpoint nodes without
+> explicitly parsing the graph in any way.
 
-If that's Hans' preference too, I'll rework it that way. It however
-means that both will need to be merged in the same kernel release.
+Would it be simpler to check for the presence of an endpoint property ?
+
+> Just remember to drop the references.
+> 
+> > +
+> > +	if (sd_fwnode_is_ep == asd_fwnode_is_ep)
+> > +		return false;
+> > +
+> > +	/*
+> > +	 * The sd and asd fwnodes are of different types. Get the device fwnode
+> > +	 * parent of the endpoint fwnode, and compare it with the other fwnode.
+> > +	 */
+> > +	if (sd_fwnode_is_ep) {
+> > +		dev_fwnode = fwnode_graph_get_port_parent(sd->fwnode);
+> > +		other_fwnode = asd->match.fwnode;
+> > +	} else {
+> > +		dev_fwnode = fwnode_graph_get_port_parent(asd->match.fwnode);
+> > +		other_fwnode = sd->fwnode;
+> > +	}
+> > +
+> > +	fwnode_handle_put(dev_fwnode);
+> > +
+> > +	return dev_fwnode == other_fwnode;
+> >  }
+> >  
+> >  static bool match_custom(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
 
 -- 
 Regards,
