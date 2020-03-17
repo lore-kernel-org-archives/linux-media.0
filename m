@@ -6,21 +6,21 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E257C18E5B
-	for <linux-media@archiver.kernel.org>; Tue, 17 Mar 2020 09:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB7A3C5ACD8
+	for <linux-media@archiver.kernel.org>; Tue, 17 Mar 2020 09:41:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 81B1320714
-	for <linux-media@archiver.kernel.org>; Tue, 17 Mar 2020 09:41:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C058F20714
+	for <linux-media@archiver.kernel.org>; Tue, 17 Mar 2020 09:41:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727318AbgCQJl0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Mar 2020 05:41:26 -0400
-Received: from v6.sk ([167.172.42.174]:50908 "EHLO v6.sk"
+        id S1727279AbgCQJlX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Mar 2020 05:41:23 -0400
+Received: from v6.sk ([167.172.42.174]:50870 "EHLO v6.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727278AbgCQJlZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Mar 2020 05:41:25 -0400
+        id S1727266AbgCQJlW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 17 Mar 2020 05:41:22 -0400
 Received: from localhost (v6.sk [IPv6:::1])
-        by v6.sk (Postfix) with ESMTP id 42B8B61094;
-        Tue, 17 Mar 2020 09:41:23 +0000 (UTC)
+        by v6.sk (Postfix) with ESMTP id 48B316109F;
+        Tue, 17 Mar 2020 09:41:19 +0000 (UTC)
 From:   Lubomir Rintel <lkundrak@v3.sk>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -47,9 +47,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
         Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH 27/28] dt-bindings: timer: Convert mrvl,mmp-timer to json-schema
-Date:   Tue, 17 Mar 2020 10:39:21 +0100
-Message-Id: <20200317093922.20785-28-lkundrak@v3.sk>
+Subject: [PATCH 26/28] dt-bindings: spi: Convert spi-pxa2xx to json-schema
+Date:   Tue, 17 Mar 2020 10:39:20 +0100
+Message-Id: <20200317093922.20785-27-lkundrak@v3.sk>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200317093922.20785-1-lkundrak@v3.sk>
 References: <20200317093922.20785-1-lkundrak@v3.sk>
@@ -60,89 +60,114 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A straightforward conversion of the mrvl,mmp-timer binding to DT schema
+A straightforward conversion of the the spi-pxa2xx binding to DT schema
 format using json-schema.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- .../bindings/timer/mrvl,mmp-timer.txt         | 17 --------
- .../bindings/timer/mrvl,mmp-timer.yaml        | 43 +++++++++++++++++++
- 2 files changed, 43 insertions(+), 17 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
- create mode 100644 Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
+ .../bindings/spi/marvell,mmp2-ssp.yaml        | 58 +++++++++++++++++++
+ .../devicetree/bindings/spi/spi-pxa2xx.txt    | 27 ---------
+ 2 files changed, 58 insertions(+), 27 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/marvell,mmp2-ssp.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-pxa2xx.txt
 
-diff --git a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
-deleted file mode 100644
-index b8f02c6635219..0000000000000
---- a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
-+++ /dev/null
-@@ -1,17 +0,0 @@
--* Marvell MMP Timer controller
--
--Required properties:
--- compatible : Should be "mrvl,mmp-timer".
--- reg : Address and length of the register set of timer controller.
--- interrupts : Should be the interrupt number.
--
--Optional properties:
--- clocks : Should contain a single entry describing the clock input.
--
--Example:
--	timer0: timer@d4014000 {
--		compatible = "mrvl,mmp-timer";
--		reg = <0xd4014000 0x100>;
--		interrupts = <13>;
--		clocks = <&coreclk 2>;
--	};
-diff --git a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
+diff --git a/Documentation/devicetree/bindings/spi/marvell,mmp2-ssp.yaml b/Documentation/devicetree/bindings/spi/marvell,mmp2-ssp.yaml
 new file mode 100644
-index 0000000000000..ebee0b862d493
+index 0000000000000..de6b6a53b70d8
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
-@@ -0,0 +1,43 @@
++++ b/Documentation/devicetree/bindings/spi/marvell,mmp2-ssp.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
++# Copyright 2019,2020 Lubomir Rintel <lkundrak@v3.sk>
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/timer/mrvl,mmp-timer.yaml#
++$id: http://devicetree.org/schemas/spi/marvell,mmp2-ssp.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Marvell MMP Timer bindings
++title: PXA2xx SSP SPI Controller bindings
 +
 +maintainers:
-+  - devicetree@vger.kernel.org
++  - Lubomir Rintel <lkundrak@v3.sk>
++
++allOf:
++  - $ref: spi-controller.yaml#
 +
 +properties:
-+  $nodename:
-+    pattern: '^timer@[a-f0-9]+$'
-+
 +  compatible:
-+    const: mrvl,mmp-timer
-+
-+  reg:
-+    maxItems: 1
++    const: marvell,mmp2-ssp
 +
 +  interrupts:
 +    maxItems: 1
 +
++  reg:
++    maxItems: 1
++
 +  clocks:
++    maxItems: 1
++
++  ready-gpios:
++    description: |
++      GPIO used to signal a SPI master that the FIFO is filled and we're
++      ready to service a transfer. Only useful in slave mode.
 +    maxItems: 1
 +
 +required:
 +  - compatible
 +  - reg
 +  - interrupts
++  - clocks
++  - '#address-cells'
++  - '#size-cells'
 +
-+additionalProperties: false
++dependencies:
++  ready-gpios: [ spi-slave ]
 +
 +examples:
 +  - |
-+    timer@d4014000 {
-+        compatible = "mrvl,mmp-timer";
-+        reg = <0xd4014000 0x100>;
-+        interrupts = <13>;
-+        clocks = <&coreclk 2>;
++    #include <dt-bindings/clock/marvell,mmp2.h>
++    spi@d4035000 {
++        compatible = "marvell,mmp2-ssp";
++        #address-cells = <1>;
++        #size-cells = <0>;
++        reg = <0xd4035000 0x1000>;
++        clocks = <&soc_clocks MMP2_CLK_SSP0>;
++        interrupts = <0>;
 +    };
 +
 +...
+diff --git a/Documentation/devicetree/bindings/spi/spi-pxa2xx.txt b/Documentation/devicetree/bindings/spi/spi-pxa2xx.txt
+deleted file mode 100644
+index e30e0c2a4bce1..0000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-pxa2xx.txt
++++ /dev/null
+@@ -1,27 +0,0 @@
+-PXA2xx SSP SPI Controller
+-
+-Required properties:
+-- compatible: Must be "marvell,mmp2-ssp".
+-- reg: Offset and length of the device's register set.
+-- interrupts: Should be the interrupt number.
+-- clocks: Should contain a single entry describing the clock input.
+-- #address-cells:  Number of cells required to define a chip select address.
+-- #size-cells: Should be zero.
+-
+-Optional properties:
+-- cs-gpios: list of GPIO chip selects. See the SPI bus bindings,
+-  Documentation/devicetree/bindings/spi/spi-bus.txt
+-- spi-slave: Empty property indicating the SPI controller is used in slave mode.
+-- ready-gpios: GPIO used to signal a SPI master that the FIFO is filled
+-  and we're ready to service a transfer. Only useful in slave mode.
+-
+-Child nodes represent devices on the SPI bus
+-  See ../spi/spi-bus.txt
+-
+-Example:
+-	ssp1: spi@d4035000 {
+-		compatible = "marvell,mmp2-ssp";
+-		reg = <0xd4035000 0x1000>;
+-		clocks = <&soc_clocks MMP2_CLK_SSP0>;
+-		interrupts = <0>;
+-	};
 -- 
 2.25.1
 
