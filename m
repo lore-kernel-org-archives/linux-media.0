@@ -6,24 +6,24 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4F4EC4332E
-	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 20:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F8FAC4332D
+	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 20:48:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AB7BD2071C
-	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 20:48:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 421B3208CA
+	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 20:48:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727413AbgCRUsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Mar 2020 16:48:24 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:57865 "EHLO
+        id S1727269AbgCRUs1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Mar 2020 16:48:27 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:58113 "EHLO
         relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726596AbgCRUsW (ORCPT
+        with ESMTP id S1726893AbgCRUsR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Mar 2020 16:48:22 -0400
+        Wed, 18 Mar 2020 16:48:17 -0400
 X-Originating-IP: 2.224.242.101
 Received: from localhost.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 85B7620007;
-        Wed, 18 Mar 2020 20:48:19 +0000 (UTC)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id E5E8F20004;
+        Wed, 18 Mar 2020 20:48:12 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -33,9 +33,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE
         (V4L/DVB)), libcamera-devel@lists.libcamera.org
-Subject: [PATCH v7 11/11] media: i2c: ov13858: Parse and register properties
-Date:   Wed, 18 Mar 2020 21:50:34 +0100
-Message-Id: <20200318205034.949531-12-jacopo@jmondi.org>
+Subject: [PATCH v7 09/11] media: v4l2-ctrls: Add helper to register properties
+Date:   Wed, 18 Mar 2020 21:50:32 +0100
+Message-Id: <20200318205034.949531-10-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200318205034.949531-1-jacopo@jmondi.org>
 References: <20200318205034.949531-1-jacopo@jmondi.org>
@@ -46,50 +46,112 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Parse device properties and register controls for them using the newly
-introduced helpers.
+Add an helper function to v4l2-ctrls to register controls associated
+with a device property.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/ov13858.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/v4l2-core/v4l2-ctrls.c | 40 ++++++++++++++++++++++++++++
+ include/media/v4l2-ctrls.h           | 26 ++++++++++++++++++
+ 2 files changed, 66 insertions(+)
 
-diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
-index aac6f77afa0f..2ef5fb5cf519 100644
---- a/drivers/media/i2c/ov13858.c
-+++ b/drivers/media/i2c/ov13858.c
-@@ -7,6 +7,7 @@
- #include <linux/pm_runtime.h>
- #include <media/v4l2-ctrls.h>
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 4951a373015b..57433baa7b2c 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -16,6 +16,7 @@
+ #include <media/v4l2-dev.h>
  #include <media/v4l2-device.h>
+ #include <media/v4l2-event.h>
 +#include <media/v4l2-fwnode.h>
+ #include <media/v4l2-ioctl.h>
  
- #define OV13858_REG_VALUE_08BIT		1
- #define OV13858_REG_VALUE_16BIT		2
-@@ -1589,6 +1590,7 @@ static const struct v4l2_subdev_internal_ops ov13858_internal_ops = {
- static int ov13858_init_controls(struct ov13858 *ov13858)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&ov13858->sd);
-+	struct v4l2_fwnode_device_properties props;
- 	struct v4l2_ctrl_handler *ctrl_hdlr;
- 	s64 exposure_max;
- 	s64 vblank_def;
-@@ -1666,6 +1668,15 @@ static int ov13858_init_controls(struct ov13858 *ov13858)
- 		goto error;
- 	}
- 
-+	ret = v4l2_fwnode_device_parse(&client->dev, &props);
-+	if (ret)
-+		return ret;
-+
-+	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &ov13858_ctrl_ops,
-+					      &props);
-+	if (ret)
-+		return ret;
-+
- 	ov13858->sd.ctrl_handler = ctrl_hdlr;
- 
+ #define dprintk(vdev, fmt, arg...) do {					\
+@@ -4594,3 +4595,42 @@ __poll_t v4l2_ctrl_poll(struct file *file, struct poll_table_struct *wait)
  	return 0;
+ }
+ EXPORT_SYMBOL(v4l2_ctrl_poll);
++
++int v4l2_ctrl_new_fwnode_properties(struct v4l2_ctrl_handler *hdl,
++				    const struct v4l2_ctrl_ops *ctrl_ops,
++				    const struct v4l2_fwnode_device_properties *p)
++{
++	if (p->location != V4L2_FWNODE_PROPERTY_UNSET) {
++		u32 location_ctrl;
++
++		switch (p->location) {
++		case V4L2_FWNODE_LOCATION_FRONT:
++			location_ctrl = V4L2_LOCATION_FRONT;
++			break;
++		case V4L2_FWNODE_LOCATION_BACK:
++			location_ctrl = V4L2_LOCATION_BACK;
++			break;
++		case V4L2_FWNODE_LOCATION_EXTERNAL:
++			location_ctrl = V4L2_LOCATION_EXTERNAL;
++			break;
++		default:
++			return -EINVAL;
++		}
++		if (!v4l2_ctrl_new_std(hdl, ctrl_ops,
++				       V4L2_CID_CAMERA_SENSOR_LOCATION,
++				       location_ctrl, location_ctrl, 1,
++				       location_ctrl))
++			return hdl->error;
++	}
++
++	if (p->rotation != V4L2_FWNODE_PROPERTY_UNSET) {
++		if (!v4l2_ctrl_new_std(hdl, ctrl_ops,
++				       V4L2_CID_CAMERA_SENSOR_ROTATION,
++				       p->rotation, p->rotation, 1,
++				       p->rotation))
++			return hdl->error;
++	}
++
++	return hdl->error;
++}
++EXPORT_SYMBOL(v4l2_ctrl_new_fwnode_properties);
+diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+index cf59abafb0d9..409c800ab1f5 100644
+--- a/include/media/v4l2-ctrls.h
++++ b/include/media/v4l2-ctrls.h
+@@ -30,6 +30,7 @@ struct v4l2_ctrl;
+ struct v4l2_ctrl_handler;
+ struct v4l2_ctrl_helper;
+ struct v4l2_fh;
++struct v4l2_fwnode_device_properties;
+ struct v4l2_subdev;
+ struct v4l2_subscribed_event;
+ struct video_device;
+@@ -1417,4 +1418,29 @@ int v4l2_ctrl_subdev_subscribe_event(struct v4l2_subdev *sd, struct v4l2_fh *fh,
+  */
+ int v4l2_ctrl_subdev_log_status(struct v4l2_subdev *sd);
+ 
++/**
++ * v4l2_ctrl_new_fwnode_properties() - Register controls for the device
++ *				       properties
++ *
++ * @hdl: pointer to &struct v4l2_ctrl_handler to register controls on
++ * @ctrl_ops: pointer to &struct v4l2_ctrl_ops to register controls with
++ * @p: pointer to &struct v4l2_fwnode_device_properties
++ *
++ * This function registers controls associated to device properties, using the
++ * property values contained in @p parameter, if the property has been set to
++ * a value.
++ *
++ * Currently the following v4l2 controls are parsed and registered:
++ * - V4L2_CID_CAMERA_SENSOR_LOCATION;
++ * - V4L2_CID_CAMERA_SENSOR_ROTATION;
++ *
++ * Controls already registered by the caller with the @hdl control handler are
++ * not overwritten. Callers should register the controls they want to handle
++ * themselves before calling this function.
++ *
++ * Return: 0 on success, a negative error code on failure.
++ */
++int v4l2_ctrl_new_fwnode_properties(struct v4l2_ctrl_handler *hdl,
++				    const struct v4l2_ctrl_ops *ctrl_ops,
++				    const struct v4l2_fwnode_device_properties *p);
+ #endif
 -- 
 2.25.1
 
