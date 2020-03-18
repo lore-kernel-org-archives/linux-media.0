@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE3ECC10DCE
-	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 13:22:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B70D8C5ACD7
+	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 13:22:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BAD3E2076F
-	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 13:22:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 972902076F
+	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 13:22:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727088AbgCRNV6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Mar 2020 09:21:58 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44472 "EHLO
+        id S1727129AbgCRNWH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Mar 2020 09:22:07 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44508 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726638AbgCRNV5 (ORCPT
+        with ESMTP id S1726842AbgCRNWG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Mar 2020 09:21:57 -0400
+        Wed, 18 Mar 2020 09:22:06 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 72251296622
+        with ESMTPSA id 9E1E729661B
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
@@ -35,9 +35,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>,
         Jeffrey Kardatzke <jkardatzke@chromium.org>,
         Rob Herring <robh@kernel.org>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v2 2/8] hantro: Set buffers' zeroth plane payload in .buf_prepare
-Date:   Wed, 18 Mar 2020 10:21:02 -0300
-Message-Id: <20200318132108.21873-3-ezequiel@collabora.com>
+Subject: [PATCH v2 4/8] hantro: Remove unneeded hantro_dec_buf_finish
+Date:   Wed, 18 Mar 2020 10:21:04 -0300
+Message-Id: <20200318132108.21873-5-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200318132108.21873-1-ezequiel@collabora.com>
 References: <20200318132108.21873-1-ezequiel@collabora.com>
@@ -48,54 +48,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Buffers' zeroth plane payload size is calculated at format
-negotiation time, and so it can be set in .buf_prepare.
-
-Keep in mind that, to make this change easier, hantro_buf_prepare
-is refactored, using the cedrus driver as reference. This results
-in cleaner code as byproduct.
+Since now .buf_prepare takes care of setting the
+buffer payload size, we can get rid of this,
+at least for decoders.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/hantro/hantro_v4l2.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ drivers/staging/media/hantro/hantro_drv.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index f4ae2cee0f18..3142ab6697d5 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -608,7 +608,7 @@ hantro_queue_setup(struct vb2_queue *vq, unsigned int *num_buffers,
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index ec889d755cd6..bd204da6c669 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -80,15 +80,6 @@ hantro_enc_buf_finish(struct hantro_ctx *ctx, struct vb2_buffer *buf,
+ 	return 0;
  }
  
- static int
--hantro_buf_plane_check(struct vb2_buffer *vb, const struct hantro_fmt *vpu_fmt,
-+hantro_buf_plane_check(struct vb2_buffer *vb,
- 		       struct v4l2_pix_format_mplane *pixfmt)
- {
- 	unsigned int sz;
-@@ -630,12 +630,18 @@ static int hantro_buf_prepare(struct vb2_buffer *vb)
- {
- 	struct vb2_queue *vq = vb->vb2_queue;
- 	struct hantro_ctx *ctx = vb2_get_drv_priv(vq);
-+	struct v4l2_pix_format_mplane *pix_fmt;
-+	int ret;
- 
- 	if (V4L2_TYPE_IS_OUTPUT(vq->type))
--		return hantro_buf_plane_check(vb, ctx->vpu_src_fmt,
--						  &ctx->src_fmt);
+-static int
+-hantro_dec_buf_finish(struct hantro_ctx *ctx, struct vb2_buffer *buf,
+-		      unsigned int bytesused)
+-{
+-	/* For decoders set bytesused as per the output picture. */
+-	buf->planes[0].bytesused = ctx->dst_fmt.plane_fmt[0].sizeimage;
+-	return 0;
+-}
 -
--	return hantro_buf_plane_check(vb, ctx->vpu_dst_fmt, &ctx->dst_fmt);
-+		pix_fmt = &ctx->src_fmt;
-+	else
-+		pix_fmt = &ctx->dst_fmt;
-+	ret = hantro_buf_plane_check(vb, pix_fmt);
-+	if (ret)
-+		return ret;
-+	vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-+	return 0;
- }
- 
- static void hantro_buf_queue(struct vb2_buffer *vb)
+ static void hantro_job_finish(struct hantro_dev *vpu,
+ 			      struct hantro_ctx *ctx,
+ 			      unsigned int bytesused,
+@@ -422,7 +413,6 @@ static int hantro_open(struct file *filp)
+ 		ctx->buf_finish = hantro_enc_buf_finish;
+ 	} else if (func->id == MEDIA_ENT_F_PROC_VIDEO_DECODER) {
+ 		allowed_codecs = vpu->variant->codec & HANTRO_DECODERS;
+-		ctx->buf_finish = hantro_dec_buf_finish;
+ 	} else {
+ 		ret = -ENODEV;
+ 		goto err_ctx_free;
 -- 
 2.25.0
 
