@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88829C5ACDC
-	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 00:25:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27951C5ACDB
+	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 00:25:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5A2A62073E
+	by mail.kernel.org (Postfix) with ESMTP id DFD4120663
 	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 00:25:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="cJKrazMR"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ZjKxqJdP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727179AbgCRAZY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Mar 2020 20:25:24 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59890 "EHLO
+        id S1727210AbgCRAZZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Mar 2020 20:25:25 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:59906 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727041AbgCRAZY (ORCPT
+        with ESMTP id S1727190AbgCRAZZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Mar 2020 20:25:24 -0400
+        Tue, 17 Mar 2020 20:25:25 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DA15DD9B;
-        Wed, 18 Mar 2020 01:25:21 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3A7F51AF4;
+        Wed, 18 Mar 2020 01:25:23 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1584491122;
-        bh=AsZOXmDiLbgJ/+2+f7+NZq7I0JLo+kXl55wBUTjt9KA=;
+        s=mail; t=1584491123;
+        bh=F9fnX25PXHg69eh7lpuMOqNiq3h0+N0RLw+RaLbWWnw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cJKrazMRm9ZUkdvhwBkjY5LXNQOTni+shhTGKPPrLfldDIP7mMzxap8G0qxidqgG7
-         eLrr5x5OK4PPk965PenoycxUNERV2fKyvvvpjwoRH2pO0SLMxyY8kw8aoFGYBgEybj
-         p74FT9xdb+jBJ2oG2uFwj9d56w6m3JNLasPyGe1A=
+        b=ZjKxqJdPkq8HYXxvfCedlI4EVGRfUM0pNK/oLY9bpqhsdnWKTDcfk6hB9zVEgZ1yq
+         WBjjXrTiqN/Mjo+ciEGFFFu/vHmqw1j9sFF33pI9IEBMgTyYKfqfG1f8eYBg1kJt5b
+         BSsEOio4FAaJ29iKT7r1+yomyRZocADmoOSXCR7o=
 From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -40,9 +40,9 @@ Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Lad Prabhakar <prabhakar.csengg@gmail.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 2/4] media: v4l2-async: Pass notifier pointer to match functions
-Date:   Wed, 18 Mar 2020 02:25:05 +0200
-Message-Id: <20200318002507.30336-3-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH v2 4/4] media: v4l2-async: Don't check fwnode name to detect endpoint
+Date:   Wed, 18 Mar 2020 02:25:07 +0200
+Message-Id: <20200318002507.30336-5-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200318002507.30336-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20200318002507.30336-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -53,76 +53,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The notifier is useful to match functions to access information about
-the device matching a subdev. This will be used to print messages using
-the correct struct device and driver name.
+Use the presence of a "remote-endpoint" property to detect if a fwnode
+is an endpoint node, as checking the node name won't work on ACPI-based
+implementations.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-async.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ drivers/media/v4l2-core/v4l2-async.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
-index 995e5464cba7..224b39a7aeb1 100644
+index 9f393a7be455..a5f83ba502df 100644
 --- a/drivers/media/v4l2-core/v4l2-async.c
 +++ b/drivers/media/v4l2-core/v4l2-async.c
-@@ -50,7 +50,8 @@ static int v4l2_async_notifier_call_complete(struct v4l2_async_notifier *n)
- 	return n->ops->complete(n);
- }
+@@ -78,7 +78,6 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+ 	bool asd_fwnode_is_ep;
+ 	bool sd_fwnode_is_ep;
+ 	struct device *dev;
+-	const char *name;
  
--static bool match_i2c(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
-+static bool match_i2c(struct v4l2_async_notifier *notifier,
-+		      struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
- {
- #if IS_ENABLED(CONFIG_I2C)
- 	struct i2c_client *client = i2c_verify_client(sd->dev);
-@@ -63,13 +64,14 @@ static bool match_i2c(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
- #endif
- }
+ 	/*
+ 	 * Both the subdev and the async subdev can provide either an endpoint
+@@ -92,10 +91,10 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+ 	 * Otherwise, check if the sd fwnode and the asd fwnode refer to an
+ 	 * endpoint or a device. If they're of the same type, there's no match.
+ 	 */
+-	name = fwnode_get_name(sd->fwnode);
+-	sd_fwnode_is_ep = name && strstarts(name, "endpoint");
+-	name = fwnode_get_name(asd->match.fwnode);
+-	asd_fwnode_is_ep = name && strstarts(name, "endpoint");
++	sd_fwnode_is_ep = fwnode_property_present(sd->fwnode,
++						  "remote-endpoint");
++	asd_fwnode_is_ep = fwnode_property_present(asd->match.fwnode,
++						   "remote-endpoint");
  
--static bool match_devname(struct v4l2_subdev *sd,
--			  struct v4l2_async_subdev *asd)
-+static bool match_devname(struct v4l2_async_notifier *notifier,
-+			  struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
- {
- 	return !strcmp(asd->match.device_name, dev_name(sd->dev));
- }
- 
--static bool match_fwnode(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
-+static bool match_fwnode(struct v4l2_async_notifier *notifier,
-+			 struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
- {
- 	struct fwnode_handle *other_fwnode;
- 	struct fwnode_handle *dev_fwnode;
-@@ -114,7 +116,8 @@ static bool match_fwnode(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
- 	return dev_fwnode == other_fwnode;
- }
- 
--static bool match_custom(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
-+static bool match_custom(struct v4l2_async_notifier *notifier,
-+			 struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
- {
- 	if (!asd->match.custom.match)
- 		/* Match always */
-@@ -131,7 +134,8 @@ static struct v4l2_async_subdev *
- v4l2_async_find_match(struct v4l2_async_notifier *notifier,
- 		      struct v4l2_subdev *sd)
- {
--	bool (*match)(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd);
-+	bool (*match)(struct v4l2_async_notifier *notifier,
-+		      struct v4l2_subdev *sd, struct v4l2_async_subdev *asd);
- 	struct v4l2_async_subdev *asd;
- 
- 	list_for_each_entry(asd, &notifier->waiting, list) {
-@@ -156,7 +160,7 @@ v4l2_async_find_match(struct v4l2_async_notifier *notifier,
- 		}
- 
- 		/* match cannot be NULL here */
--		if (match(sd, asd))
-+		if (match(notifier, sd, asd))
- 			return asd;
- 	}
- 
+ 	if (sd_fwnode_is_ep == asd_fwnode_is_ep)
+ 		return false;
 -- 
 Regards,
 
