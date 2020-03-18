@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44FC4C5ACD8
-	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 00:25:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B11CC1975A
+	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 00:25:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B99020663
-	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 00:25:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D66EE20767
+	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 00:25:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="oQPUa8ni"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="K7mqSZQJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727166AbgCRAZX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Mar 2020 20:25:23 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59880 "EHLO
+        id S1727193AbgCRAZZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Mar 2020 20:25:25 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:59906 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727148AbgCRAZX (ORCPT
+        with ESMTP id S1727148AbgCRAZY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Mar 2020 20:25:23 -0400
+        Tue, 17 Mar 2020 20:25:24 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 37F9D504;
-        Wed, 18 Mar 2020 01:25:21 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 89787130D;
+        Wed, 18 Mar 2020 01:25:22 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1584491121;
-        bh=skEXzsL2tu5WrqhmZAQxofau2ZISmajSMYp+88epHKw=;
+        s=mail; t=1584491123;
+        bh=r6drN6vvFeLxBEjgbV7lLPzr3gKiF6W/cjDjK8JfyMk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oQPUa8niciD1Dkjg12LTGoVyVPJKhBC8j11BU4wJthnmQdyOalA4ZS28Ihv6VH8Mk
-         w2FG7LIcnEWN5tSXtYJTqcAHiCa4wEJQJhbe7zMCr+nCTqTGMJYapN/N2Md56OSSLy
-         6zCE3Zh1Y5isYg2ZZmr+A4+0nq5PPj8hV2ZwHK10=
+        b=K7mqSZQJpen1CANrSIXWe9XcswldTfhkKVYj9oQeHV4k+nvZ8ysjgm6F8E16r0IbY
+         YlugKF95R0uE91V1gQ5xyOX6IbS6ixsfQ8y64LCrtzorWO//2+mgcbDQuVLu/WDPFu
+         wbvqPheXlSuGFRV+KcDhDAN5x5CZ2M3jkxpSvX7g=
 From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -40,9 +40,9 @@ Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Lad Prabhakar <prabhakar.csengg@gmail.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 1/4] media: v4l2-async: Accept endpoints and devices for fwnode matching
-Date:   Wed, 18 Mar 2020 02:25:04 +0200
-Message-Id: <20200318002507.30336-2-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH v2 3/4] media: v4l2-async: Log message in case of heterogenous fwnode match
+Date:   Wed, 18 Mar 2020 02:25:06 +0200
+Message-Id: <20200318002507.30336-4-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200318002507.30336-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20200318002507.30336-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -53,79 +53,61 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-fwnode matching was designed to match on nodes corresponding to a
-device. Some drivers, however, needed to match on endpoints, and have
-passed endpoint fwnodes to v4l2-async. This works when both the subdev
-and the notifier use the same fwnode types (endpoint or device), but
-makes drivers that use different types incompatible.
-
-Fix this by extending the fwnode match to handle fwnodes of different
-types. When the types (deduced from the node name) are different,
-retrieve the device fwnode for the side that provides an endpoint
-fwnode, and compare it with the device fwnode provided by the other
-side. This allows interoperability between all drivers, regardless of
-which type of fwnode they use for matching.
+When a notifier supplies a device fwnode and a subdev supplies an
+endpoint fwnode, incorrect matches may occur if multiple subdevs
+correspond to the same device fwnode. This can't be handled
+transparently in the framework, and requires the notifier to switch to
+endpoint fwnodes. Log a message to notify of this problem. A second
+message is added to help accelerating the transition to endpoint
+matching.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-async.c | 42 +++++++++++++++++++++++++++-
- 1 file changed, 41 insertions(+), 1 deletion(-)
+ drivers/media/v4l2-core/v4l2-async.c | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
-index 8bde33c21ce4..995e5464cba7 100644
+index 224b39a7aeb1..9f393a7be455 100644
 --- a/drivers/media/v4l2-core/v4l2-async.c
 +++ b/drivers/media/v4l2-core/v4l2-async.c
-@@ -71,7 +71,47 @@ static bool match_devname(struct v4l2_subdev *sd,
+@@ -77,6 +77,7 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+ 	struct fwnode_handle *dev_fwnode;
+ 	bool asd_fwnode_is_ep;
+ 	bool sd_fwnode_is_ep;
++	struct device *dev;
+ 	const char *name;
  
- static bool match_fwnode(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
- {
--	return sd->fwnode == asd->match.fwnode;
-+	struct fwnode_handle *other_fwnode;
-+	struct fwnode_handle *dev_fwnode;
-+	bool asd_fwnode_is_ep;
-+	bool sd_fwnode_is_ep;
-+	const char *name;
-+
-+	/*
-+	 * Both the subdev and the async subdev can provide either an endpoint
-+	 * fwnode or a device fwnode. Start with the simple case of direct
-+	 * fwnode matching.
-+	 */
-+	if (sd->fwnode == asd->match.fwnode)
-+		return true;
-+
-+	/*
-+	 * Otherwise, check if the sd fwnode and the asd fwnode refer to an
-+	 * endpoint or a device. If they're of the same type, there's no match.
-+	 */
-+	name = fwnode_get_name(sd->fwnode);
-+	sd_fwnode_is_ep = name && strstarts(name, "endpoint");
-+	name = fwnode_get_name(asd->match.fwnode);
-+	asd_fwnode_is_ep = name && strstarts(name, "endpoint");
-+
-+	if (sd_fwnode_is_ep == asd_fwnode_is_ep)
+ 	/*
+@@ -113,7 +114,28 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+ 
+ 	fwnode_handle_put(dev_fwnode);
+ 
+-	return dev_fwnode == other_fwnode;
++	if (dev_fwnode != other_fwnode)
 +		return false;
 +
 +	/*
-+	 * The sd and asd fwnodes are of different types. Get the device fwnode
-+	 * parent of the endpoint fwnode, and compare it with the other fwnode.
++	 * We have an heterogenous match. Retrieve the struct device of the
++	 * side that matched on a device fwnode to print its driver name.
 +	 */
-+	if (sd_fwnode_is_ep) {
-+		dev_fwnode = fwnode_graph_get_port_parent(sd->fwnode);
-+		other_fwnode = asd->match.fwnode;
-+	} else {
-+		dev_fwnode = fwnode_graph_get_port_parent(asd->match.fwnode);
-+		other_fwnode = sd->fwnode;
++	if (sd_fwnode_is_ep)
++		dev = notifier->v4l2_dev ? notifier->v4l2_dev->dev
++		    : notifier->sd->dev;
++	else
++		dev = sd->dev;
++
++	if (dev && dev->driver) {
++		if (sd_fwnode_is_ep)
++			dev_info(dev, "Driver %s uses device fwnode, incorrect match may occur\n",
++				 dev->driver->name);
++		dev_info(dev, "Consider updating driver %s to match on endpoints\n",
++			 dev->driver->name);
 +	}
 +
-+	fwnode_handle_put(dev_fwnode);
-+
-+	return dev_fwnode == other_fwnode;
++	return true;
  }
  
- static bool match_custom(struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
+ static bool match_custom(struct v4l2_async_notifier *notifier,
 -- 
 Regards,
 
