@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DD08C10DCE
-	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 13:22:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F31AC10DCE
+	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 13:22:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4F68920775
-	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 13:22:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DD8A2076F
+	for <linux-media@archiver.kernel.org>; Wed, 18 Mar 2020 13:22:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbgCRNWC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Mar 2020 09:22:02 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44488 "EHLO
+        id S1727146AbgCRNWM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Mar 2020 09:22:12 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44520 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726842AbgCRNWC (ORCPT
+        with ESMTP id S1726842AbgCRNWL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Mar 2020 09:22:02 -0400
+        Wed, 18 Mar 2020 09:22:11 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 1330629661A
+        with ESMTPSA id 31F5629661C
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
@@ -35,9 +35,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>,
         Jeffrey Kardatzke <jkardatzke@chromium.org>,
         Rob Herring <robh@kernel.org>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v2 3/8] hantro: Use v4l2_m2m_buf_done_and_job_finish
-Date:   Wed, 18 Mar 2020 10:21:03 -0300
-Message-Id: <20200318132108.21873-4-ezequiel@collabora.com>
+Subject: [PATCH v2 5/8] hantro: Move H264 motion vector calculation to a helper
+Date:   Wed, 18 Mar 2020 10:21:05 -0300
+Message-Id: <20200318132108.21873-6-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200318132108.21873-1-ezequiel@collabora.com>
 References: <20200318132108.21873-1-ezequiel@collabora.com>
@@ -48,64 +48,119 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Let the core sort out the nuances of returning buffers
-to userspace, by using the v4l2_m2m_buf_done_and_job_finish
-helper.
-
-This change also removes usage of buffer sequence fields,
-which shouldn't have any meaning for stateless decoders.
+Move the extra bytes calculation that are needed for H264
+motion vector to a helper. This is just a cosmetic cleanup.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/hantro/hantro_drv.c | 27 ++++++++---------------
- 1 file changed, 9 insertions(+), 18 deletions(-)
+ drivers/staging/media/hantro/hantro.h      |  4 ---
+ drivers/staging/media/hantro/hantro_hw.h   | 31 ++++++++++++++++++++++
+ drivers/staging/media/hantro/hantro_v4l2.c | 25 ++---------------
+ 3 files changed, 33 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 0b1200fc0e1a..ec889d755cd6 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -94,32 +94,23 @@ static void hantro_job_finish(struct hantro_dev *vpu,
- 			      unsigned int bytesused,
- 			      enum vb2_buffer_state result)
- {
--	struct vb2_v4l2_buffer *src, *dst;
- 	int ret;
+diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+index 327ddef45345..2089f88a44a2 100644
+--- a/drivers/staging/media/hantro/hantro.h
++++ b/drivers/staging/media/hantro/hantro.h
+@@ -26,10 +26,6 @@
  
- 	pm_runtime_mark_last_busy(vpu->dev);
- 	pm_runtime_put_autosuspend(vpu->dev);
- 	clk_bulk_disable(vpu->variant->num_clocks, vpu->clocks);
+ #include "hantro_hw.h"
  
--	src = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
--	dst = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+-#define MB_DIM			16
+-#define MB_WIDTH(w)		DIV_ROUND_UP(w, MB_DIM)
+-#define MB_HEIGHT(h)		DIV_ROUND_UP(h, MB_DIM)
 -
--	if (WARN_ON(!src))
--		return;
--	if (WARN_ON(!dst))
--		return;
--
--	src->sequence = ctx->sequence_out++;
--	dst->sequence = ctx->sequence_cap++;
--
--	ret = ctx->buf_finish(ctx, &dst->vb2_buf, bytesused);
--	if (ret)
--		result = VB2_BUF_STATE_ERROR;
-+	if (ctx->buf_finish) {
-+		struct vb2_v4l2_buffer *dst;
+ struct hantro_ctx;
+ struct hantro_codec_ops;
  
--	v4l2_m2m_buf_done(src, result);
--	v4l2_m2m_buf_done(dst, result);
-+		dst = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
-+		ret = ctx->buf_finish(ctx, &dst->vb2_buf, bytesused);
-+		if (ret)
-+			result = VB2_BUF_STATE_ERROR;
-+	}
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 2398d4c1f207..435f30ae89fd 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -18,6 +18,10 @@
  
--	v4l2_m2m_job_finish(vpu->m2m_dev, ctx->fh.m2m_ctx);
-+	v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx,
-+					 result);
- }
+ #define DEC_8190_ALIGN_MASK	0x07U
  
- void hantro_irq_done(struct hantro_dev *vpu, unsigned int bytesused,
++#define MB_DIM			16
++#define MB_WIDTH(w)		DIV_ROUND_UP(w, MB_DIM)
++#define MB_HEIGHT(h)		DIV_ROUND_UP(h, MB_DIM)
++
+ struct hantro_dev;
+ struct hantro_ctx;
+ struct hantro_buf;
+@@ -175,6 +179,33 @@ void hantro_g1_h264_dec_run(struct hantro_ctx *ctx);
+ int hantro_h264_dec_init(struct hantro_ctx *ctx);
+ void hantro_h264_dec_exit(struct hantro_ctx *ctx);
+ 
++static inline size_t
++hantro_h264_mv_size(unsigned int width, unsigned int height)
++{
++	/*
++	 * A decoded 8-bit 4:2:0 NV12 frame may need memory for up to
++	 * 448 bytes per macroblock with additional 32 bytes on
++	 * multi-core variants.
++	 *
++	 * The H264 decoder needs extra space on the output buffers
++	 * to store motion vectors. This is needed for reference
++	 * frames and only if the format is non-post-processed NV12.
++	 *
++	 * Memory layout is as follow:
++	 *
++	 * +---------------------------+
++	 * | Y-plane   256 bytes x MBs |
++	 * +---------------------------+
++	 * | UV-plane  128 bytes x MBs |
++	 * +---------------------------+
++	 * | MV buffer  64 bytes x MBs |
++	 * +---------------------------+
++	 * | MC sync          32 bytes |
++	 * +---------------------------+
++	 */
++	return 64 * MB_WIDTH(width) * MB_WIDTH(height) + 32;
++}
++
+ void hantro_g1_mpeg2_dec_run(struct hantro_ctx *ctx);
+ void rk3399_vpu_mpeg2_dec_run(struct hantro_ctx *ctx);
+ void hantro_mpeg2_dec_copy_qtable(u8 *qtable,
+diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+index 3142ab6697d5..458b502ff01b 100644
+--- a/drivers/staging/media/hantro/hantro_v4l2.c
++++ b/drivers/staging/media/hantro/hantro_v4l2.c
+@@ -273,32 +273,11 @@ static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f,
+ 		/* Fill remaining fields */
+ 		v4l2_fill_pixfmt_mp(pix_mp, fmt->fourcc, pix_mp->width,
+ 				    pix_mp->height);
+-		/*
+-		 * A decoded 8-bit 4:2:0 NV12 frame may need memory for up to
+-		 * 448 bytes per macroblock with additional 32 bytes on
+-		 * multi-core variants.
+-		 *
+-		 * The H264 decoder needs extra space on the output buffers
+-		 * to store motion vectors. This is needed for reference
+-		 * frames and only if the format is non-post-processed NV12.
+-		 *
+-		 * Memory layout is as follow:
+-		 *
+-		 * +---------------------------+
+-		 * | Y-plane   256 bytes x MBs |
+-		 * +---------------------------+
+-		 * | UV-plane  128 bytes x MBs |
+-		 * +---------------------------+
+-		 * | MV buffer  64 bytes x MBs |
+-		 * +---------------------------+
+-		 * | MC sync          32 bytes |
+-		 * +---------------------------+
+-		 */
+ 		if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_H264_SLICE &&
+ 		    !hantro_needs_postproc(ctx, fmt))
+ 			pix_mp->plane_fmt[0].sizeimage +=
+-				64 * MB_WIDTH(pix_mp->width) *
+-				     MB_WIDTH(pix_mp->height) + 32;
++				hantro_h264_mv_size(pix_mp->width,
++						    pix_mp->height);
+ 	} else if (!pix_mp->plane_fmt[0].sizeimage) {
+ 		/*
+ 		 * For coded formats the application can specify
 -- 
 2.25.0
 
