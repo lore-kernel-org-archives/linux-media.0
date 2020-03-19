@@ -2,241 +2,228 @@ Return-Path: <SRS0=S52y=5E=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URI_HEX,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FDE0C43332
-	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 13:33:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E2BEC4332E
+	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 14:30:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4DE7820409
-	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 13:33:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A9E720782
+	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 14:30:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech-se.20150623.gappssmtp.com header.i=@ragnatech-se.20150623.gappssmtp.com header.b="UmhrWCo0"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="jOFwtFUm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727661AbgCSNdp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Mar 2020 09:33:45 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:36831 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728644AbgCSNNQ (ORCPT
+        id S1727318AbgCSO37 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Mar 2020 10:29:59 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:50335 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726892AbgCSO37 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Mar 2020 09:13:16 -0400
-Received: by mail-lj1-f194.google.com with SMTP id g12so2430085ljj.3
-        for <linux-media@vger.kernel.org>; Thu, 19 Mar 2020 06:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=lihn5FzD/6idQ4+0vgu8K5La8l3gtXOBL1sBTYbHOu8=;
-        b=UmhrWCo0xu/Iq1kPHHScxdzVFt26NhhlfDA3ZyotUREhHVnpR1ZlE+119e7SXfs/i4
-         S2Px3omtSK1ZeOlrOfuiNEHy9LgQciycw3xEN0+k7OhECVhpAP2SpiUh+j7yY7O8Sct4
-         8fiSr71XyQk3aT2MPv/nmE3kWZhUQk8LBp5y/HgQ9QZdsb9MGrsQHhfrfvouYnRX/lKE
-         RbQRZm41lBjPwKegDkYHW1D34ZO0HEGX8Sdy5QZYUgE+WSnZA7RJU/ws/M0hF3VI9zyx
-         PkNsTAQcL0U8dxztd9Xurhy9wZ0/2h5j+FClMG980PoPp85GgwVkGDLQWODB1rHY0dSC
-         CtLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=lihn5FzD/6idQ4+0vgu8K5La8l3gtXOBL1sBTYbHOu8=;
-        b=Yvjd4LAVHFFUYNM4ip3sz4SQwJD5W0zrmKeUSjoohpAyyXpCMK9wA/wWnbwYo72EV+
-         nymq8wKCRlto8bLOuutksqfyMrpB8hfdOP0raV3xp4+em2J758k9394u02eXeUPotd7l
-         WbBXYUENq7UzbJ4TuW8e40FeybbBvSWVKHgI5nsmGoWKIH2DtqIOaQv7mw3lCpBlYwnF
-         GTQMVCVQQnfZYkn7A0Q9vTjNAEw89tobKEZFULEkSiFQon5PDiyuAl1Z/52AmKrzogCS
-         DqVk7UMB0E5HUG3mlKxYKeFZa4Ssxie17xC88LpfkjayVnEE8Q1EeqaOwT0d+o6bDZvF
-         xpNg==
-X-Gm-Message-State: ANhLgQ144AYNLuFhzsUvqIsBzmTmkVUTni4aKE8FFWIdOfvktMY7AWuy
-        sP5LrXS0TzABlr8yWkz+xHfxKA==
-X-Google-Smtp-Source: ADFU+vvKmsJWPuEArtXUSGljtHsqGmwv3cSwtVkRt6RHNyyFzpUewTuRsRvpi/ruvaKboBgg/rFQRA==
-X-Received: by 2002:a2e:804b:: with SMTP id p11mr2185641ljg.50.1584623594050;
-        Thu, 19 Mar 2020 06:13:14 -0700 (PDT)
-Received: from localhost (h-200-138.A463.priv.bahnhof.se. [176.10.200.138])
-        by smtp.gmail.com with ESMTPSA id g20sm1523376lfj.88.2020.03.19.06.13.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 06:13:13 -0700 (PDT)
-Date:   Thu, 19 Mar 2020 14:13:12 +0100
-From:   Niklas <niklas.soderlund@ragnatech.se>
-To:     Lad Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v3 1/2] media: rcar-vin: Add support for
- MEDIA_BUS_FMT_SRGGB8_1X8 format
-Message-ID: <20200319131312.GA3192108@oden.dyn.berto.se>
-References: <20200318170638.18562-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200318170638.18562-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Thu, 19 Mar 2020 10:29:59 -0400
+Received: from [192.168.2.10] ([46.9.234.233])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id EwBEju89tfHuvEwBHjebZz; Thu, 19 Mar 2020 15:29:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1584628196; bh=YFXiHd7nWDR8UOAdHCahZXylHN8v3bMRrzPxH24YMOw=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=jOFwtFUm2SimQr5pRDhA3uZOoXMXUFDl8T8yftyxJb0WFm0BuwkePeBU2dqVXU/ho
+         OhvqzOwAZpp6DCBpUfwRlKtxafeguEre9qeUBaU7YoCt8822pUnaXBpuDJpKIScE7s
+         hgGkuprsCwIzsf7gppDvgrkBDhloDbXnLmMDLJ8gBWGwDaQax/IPKYFO/2Wi0DxjOn
+         Rn2RnNzcJCy9cMVfRUzMT5FGluDyxGLT7Jj+5Jon0oMa6jwsVUZjE9DkBrmIt0A9Tg
+         16FmogHkRI/RdeeJoBEaTmjXuum1zKK4rkhCZyt595YTElloT1ZKaX0ldv8S26jHMP
+         vY7NbAc+jY/kg==
+Subject: Re: [RFC PATCH v3 4/6] media: tegra: Add Tegra210 Video input driver
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
+        helen.koike@collabora.com, sboyd@kernel.org
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1581704608-31219-1-git-send-email-skomatineni@nvidia.com>
+ <1581704608-31219-5-git-send-email-skomatineni@nvidia.com>
+ <b301c247-537d-d78e-b057-a3225b10de7e@xs4all.nl>
+ <dc592f29-3109-d10c-7df7-ffdb2755ade0@xs4all.nl>
+ <b3933aa1-0717-183d-f00c-2d5fd6836a18@nvidia.com>
+ <12a36c2a-593c-e555-d44e-e2e6c4c1a562@nvidia.com>
+ <5f54c018-5670-8193-7c68-969f9bde92f6@xs4all.nl>
+ <19081d90-62cc-e6eb-0337-f108fb6ca9bc@nvidia.com>
+ <061eabf1-4b6f-83c0-6851-df8a193a84e8@nvidia.com>
+ <a5377068-3c70-1af4-6398-630d205e794b@nvidia.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <bc571308-93e5-e720-1cac-eb3effe1acdd@xs4all.nl>
+Date:   Thu, 19 Mar 2020 15:29:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <a5377068-3c70-1af4-6398-630d205e794b@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200318170638.18562-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-CMAE-Envelope: MS4wfOdH5QrWWNhCYCf6J6Ms7qEEUOvIuPOpGdiEdpDygypYOns4spRU2Aj0dAuvPhDC+BDT1lq8GsYvuk/kIzlLes33OwDag0s088KBeqkAx0pC6mxxdz39
+ JQdhpNkQ317FremVgnzudw4LeJEL8f+484+n/tkwD+9SvNRvFZkajP5AtVXye1nrvu/Y3tfWNxwSqC+VnpHEMjzNYvMODJQ/IhaZ01C3ZAWLsT36R7U0hlJY
+ mpe4oVm7x5qhF7iOBWLkxM+sMyBjScjDpBPMgjfhVEh3oBoQBzNLv9L5aBRr2LcUtRusu7bqumddUkd+9KML6WI8cjSlF4c6ncdF/vuCl5DEIrBkUqa52PfD
+ Xy2IsGIp4tQsihoRqZm4fxu3knnHYSx1GSYGqPKDV7CRNUB1aaahQnqiAVmCZDMr6uaWeEMxboqrGHEaKsa374lzMLWN1Nu/fLfCwMxwfwbCZ/fulrD2RCtI
+ H+ky69uhu/D0kC5LROwNGrnFy00qfvjw7bw3CnA2CiMunN820+qWwOYxjoy/+sHu+4nlegLbRyxzyAPL
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Prabhakar,
-
-Thanks for your work.
-
-On 2020-03-18 17:06:37 +0000, Lad Prabhakar wrote:
-> Add support for MEDIA_BUS_FMT_SRGGB8_1X8 format in rcar-vin by setting
-> format type to RAW8 in VNMC register and appropriately setting the
-> bpp, bytesperline to enable V4L2_PIX_FMT_SRGGB8.
-
-> For RAW8 format data is transferred by 4-Byte unit so VnIS register is
-> configured accordingly.
+On 3/18/20 6:17 PM, Sowjanya Komatineni wrote:
 > 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  drivers/media/platform/rcar-vin/rcar-core.c |  1 +
->  drivers/media/platform/rcar-vin/rcar-dma.c  | 11 ++++++++++-
->  drivers/media/platform/rcar-vin/rcar-v4l2.c |  4 ++++
->  3 files changed, 15 insertions(+), 1 deletion(-)
+> On 3/18/20 9:25 AM, Sowjanya Komatineni wrote:
+>>
+>> On 3/18/20 9:14 AM, Sowjanya Komatineni wrote:
+>>>
+>>> On 3/18/20 4:48 AM, Hans Verkuil wrote:
+>>>> External email: Use caution opening links or attachments
+>>>>
+>>>>
+>>>> On 2/24/20 5:45 AM, Sowjanya Komatineni wrote:
+>>>>> On 2/20/20 11:11 AM, Sowjanya Komatineni wrote:
+>>>>>> On 2/20/20 5:33 AM, Hans Verkuil wrote:
+>>>>>>> External email: Use caution opening links or attachments
+>>>>>>>
+>>>>>>>
+>>>>>>> (Replying to myself so I can explain this a bit more)
+>>>>>>>
+>>>>>>> On 2/20/20 1:44 PM, Hans Verkuil wrote:
+>>>>>>>>> +
+>>>>>>>>> +static int tegra_csi_tpg_channels_alloc(struct tegra_csi *csi)
+>>>>>>>>> +{
+>>>>>>>>> +    struct device_node *node = csi->dev->of_node;
+>>>>>>>>> +    unsigned int port_num;
+>>>>>>>>> +    int ret;
+>>>>>>>>> +    struct tegra_csi_channel *item;
+>>>>>>>>> +    unsigned int tpg_channels = csi->soc->csi_max_channels;
+>>>>>>>>> +
+>>>>>>>>> +    /* allocate CSI channel for each CSI x2 ports */
+>>>>>>>>> +    for (port_num = 0; port_num < tpg_channels; port_num++) {
+>>>>>>>>> +            item = devm_kzalloc(csi->dev, sizeof(*item), 
+>>>>>>>>> GFP_KERNEL);
+>>>>>>>> Using devm_*alloc can be dangerous. If someone unbinds the 
+>>>>>>>> driver, then
+>>>>>>>> all memory allocated with devm_ is immediately freed. But if an
+>>>>>>>> application
+>>>>>>>> still has a filehandle open, then when it closes it it might still
+>>>>>>>> reference
+>>>>>>>> this already-freed memory.
+>>>>>>>>
+>>>>>>>> I recommend that you avoid using devm_*alloc for media drivers.
+>>>>>>> A good test is to unbind & bind the driver:
+>>>>>>>
+>>>>>>> cd /sys/devices/platform/50000000.host1x/54080000.vi/driver
+>>>>>>> echo -n 54080000.vi >unbind
+>>>>>>> echo -n 54080000.vi >bind
+>>>>>>>
+>>>>>>> First just do this without the driver being used. That already
+>>>>>>> gives me 'list_del corruption' kernel messages (list debugging
+>>>>>>> is turned on in my kernel).
+>>>>> Will fix in v4 to use kzalloc and also proper release v4l2 to make 
+>>>>> sure
+>>>>> unbind/bind works properly.
+>>>>>
+>>>>> BTW, tegra vi and csi are registered as clients to host1x video 
+>>>>> driver.
+>>>>>
+>>>>> So, unbind and bind should be done with host1x video driver 
+>>>>> "tegra-video"
+>>>>>
+>>>>> cd /sys/devices/platform/50000000.host1x/tegra-video/driver
+>>>>> echo -n tegra-video > unbind
+>>>>> echo -n tegra-video > bind
+>>>> This still crashes with v4, at least if I am streaming with v4l2-ctl 
+>>>> --stream-mmap.
+>>>> Is that known?
+>>>>
+>>>> It's not a big deal at this moment, just want to know if this will 
+>>>> be looked
+>>>> at later.
+>>>>
+>>>> Regards,
+>>>>
+>>>>          Hans
+>>>
+>>> Weird, I tested streaming after unbind and bind as well and don't see 
+>>> crash. Did below steps and tried several times unbind/bind as well.
+>>>
+>>> ./v4l2-ctl --stream-mmap --stream-count=1 -d /dev/video3
+>>> cd /sys/devices/platform/50000000.host1x/tegra-video/driver
+>>> echo -n tegra-video > unbind
+>>> sleep 1
+>>> echo -n tegra-video > bind
+>>> cd /home/ubuntu
+>>> ./v4l2-ctl --stream-mmap --stream-count=1 -d /dev/video3
+>>>
+>>> Can you post call trace when you saw crash?
+>>
+>> Tried unbind when  node is open with v4l2-ctl --sleep 10 as well and 
+>> bind back.
+>>
+>> I don't see crash. Will confirm on doing unbind/bind with stream-mmap...
+>>
+> Able to repro when unbind/bind happens while stream-mmap.
+
+That's indeed what I did. I don't want to try it again since I'm working from home
+and the Jetson is in the office. And once it crashes I need someone in the office
+to press the reset button. I hope I can pick it up next week to keep it at home as
+that will make testing a lot easier.
+
 > 
-> diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-> index 7440c8965d27..76daf2fe5bcd 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-core.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-core.c
-> @@ -469,6 +469,7 @@ static int rvin_parallel_subdevice_attach(struct rvin_dev *vin,
->  		case MEDIA_BUS_FMT_UYVY8_2X8:
->  		case MEDIA_BUS_FMT_UYVY10_2X10:
->  		case MEDIA_BUS_FMT_RGB888_1X24:
-> +		case MEDIA_BUS_FMT_SRGGB8_1X8:
+> Will look and have fix in v5.
 
-This is wrong RAW formats are only supported on the CSI-2 interface and 
-not the parallel one. This line shall be dropped.
+Nice!
 
->  			vin->mbus_code = code.code;
->  			vin_dbg(vin, "Found media bus format for %s: %d\n",
->  				subdev->name, vin->mbus_code);
-> diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
-> index 1a30cd036371..ec7b49c0b281 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-dma.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-dma.c
-> @@ -85,6 +85,7 @@
->  #define VNMC_INF_YUV8_BT601	(1 << 16)
->  #define VNMC_INF_YUV10_BT656	(2 << 16)
->  #define VNMC_INF_YUV10_BT601	(3 << 16)
-> +#define VNMC_INF_RAW8		(4 << 16)
->  #define VNMC_INF_YUV16		(5 << 16)
->  #define VNMC_INF_RGB888		(6 << 16)
->  #define VNMC_VUP		(1 << 10)
-> @@ -587,13 +588,14 @@ void rvin_crop_scale_comp(struct rvin_dev *vin)
->  	rvin_write(vin, vin->crop.top, VNSLPRC_REG);
->  	rvin_write(vin, vin->crop.top + vin->crop.height - 1, VNELPRC_REG);
->  
-> -
->  	/* TODO: Add support for the UDS scaler. */
->  	if (vin->info->model != RCAR_GEN3)
->  		rvin_crop_scale_comp_gen2(vin);
->  
->  	fmt = rvin_format_from_pixel(vin, vin->format.pixelformat);
->  	stride = vin->format.bytesperline / fmt->bpp;
-> +	if (vin->format.pixelformat == V4L2_PIX_FMT_SRGGB8)
-> +		stride /= 2;
+Thank you,
 
-I'm sorry this makes no sens to me.
+	Hans
 
-- The width of the image is number of pixels in the raw format.
-- In memory each row is either is either RGRGRG... or GBGBGB...
-- The pixel size is 1 byte per pixel.
-- We calculate bytesperline as ALIGN(width, align) * bpp, where align is 
-  how much we need to "adjust" the width to match the VNIS_REG reg 
-  value.  We do this in rvin_format_bytesperline().
-- We then remove bpp from bytesperline and we have a unit in pixels 
-  which is our stride.
-
-I can't see why you need to cut the stride in half. In my view you 
-should add a check for V4L2_PIX_FMT_SRGGB8 in rvin_format_bytesperline() 
-and pick an alignment value that matches the restrictions.
-
-I might miss something, but then I wish to learn.
-
->  	rvin_write(vin, stride, VNIS_REG);
->  }
->  
-> @@ -676,6 +678,9 @@ static int rvin_setup(struct rvin_dev *vin)
->  
->  		input_is_yuv = true;
->  		break;
-> +	case MEDIA_BUS_FMT_SRGGB8_1X8:
-> +		vnmc |= VNMC_INF_RAW8;
-> +		break;
-
-Here and ...
-
->  	default:
->  		break;
->  	}
-> @@ -737,6 +742,9 @@ static int rvin_setup(struct rvin_dev *vin)
->  	case V4L2_PIX_FMT_ABGR32:
->  		dmr = VNDMR_A8BIT(vin->alpha) | VNDMR_EXRGB | VNDMR_DTMD_ARGB;
->  		break;
-> +	case V4L2_PIX_FMT_SRGGB8:
-> +		dmr = 0;
-> +		break;
-
-... here we have a new problem, sorry for not thinking of it before.
-
-Up until now the VIN was capable to convert any of its supported input 
-mbus formats to any of it's supported output pixel formats. With the 
-addition of RAW formats this is no longer true. This new restriction 
-needs to be added to the driver.
-
-Luck has it we can fix ...
-
->  	default:
->  		vin_err(vin, "Invalid pixelformat (0x%x)\n",
->  			vin->format.pixelformat);
-> @@ -1110,6 +1118,7 @@ static int rvin_mc_validate_format(struct rvin_dev *vin, struct v4l2_subdev *sd,
->  	case MEDIA_BUS_FMT_UYVY8_2X8:
->  	case MEDIA_BUS_FMT_UYVY10_2X10:
->  	case MEDIA_BUS_FMT_RGB888_1X24:
-> +	case MEDIA_BUS_FMT_SRGGB8_1X8:
->  		vin->mbus_code = fmt.format.code;
-
-... this here by changes this to
-
-        switch (fmt.format.code) {
-        case MEDIA_BUS_FMT_YUYV8_1X16:
-        case MEDIA_BUS_FMT_UYVY8_1X16:
-        case MEDIA_BUS_FMT_UYVY8_2X8:
-        case MEDIA_BUS_FMT_UYVY10_2X10:
-                break;
-        case MEDIA_BUS_FMT_RGB888_1X24:
-                if (vin->format.pixelformat != V4L2_PIX_FMT_SRGGB8)
-                    return -EPIPE:
-                break;
-        default:
-                return -EPIPE;
-	}
-
-        vin->mbus_code = fmt.format.code;
-
->  		break;
->  	default:
-> diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> index 5151a3cd8a6e..ca542219e8ae 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> @@ -66,6 +66,10 @@ static const struct rvin_video_format rvin_formats[] = {
->  		.fourcc			= V4L2_PIX_FMT_ABGR32,
->  		.bpp			= 4,
->  	},
-> +	{
-> +		.fourcc			= V4L2_PIX_FMT_SRGGB8,
-> +		.bpp			= 1,
-> +	},
->  };
->  
->  const struct rvin_video_format *rvin_format_from_pixel(struct rvin_dev *vin,
-> -- 
-> 2.20.1
 > 
+> Thanks Hans.
+> 
+>>>
+>>>>>>> Note that this first test is basically identical to a rmmod/modprobe
+>>>>>>> of the driver. But when I compiled the driver as a module it didn't
+>>>>>>> create any video device nodes! Nor did I see any errors in the 
+>>>>>>> kernel
+>>>>>>> log. I didn't pursue this, and perhaps I did something wrong, but 
+>>>>>>> it's
+>>>>>>> worth taking a look at.
+>>>>>>>
+>>>>>>> The next step would be to have a video node open with:
+>>>>>>>
+>>>>>>> v4l2-ctl --sleep 10
+>>>>>>>
+>>>>>>> then while it is sleeping unbind the driver and see what happens
+>>>>>>> when v4l2-ctl exits.
+>>>>>>>
+>>>>>>> Worst case is when you are streaming:
+>>>>>>>
+>>>>>>> v4l2-ctl --stream-mmap
+>>>>>>>
+>>>>>>> and then unbind.
+>>>>>>>
+>>>>>>> In general, the best way to get this to work correctly is:
+>>>>>>>
+>>>>>>> 1) don't use devm_*alloc
+>>>>>>> 2) set the release callback of struct v4l2_device and do all freeing
+>>>>>>> there.
+>>>>>>> 3) in the platform remove() callback you call 
+>>>>>>> media_device_unregister()
+>>>>>>>      and video_unregister_device().
+>>>>>> Reg 3, in current patch, media_device_unregister is called in
+>>>>>> host1x_video_remove
+>>>>>> video_unregister_device happens during host1x_video_remove ->
+>>>>>> host1x_device_exit -> tegra_vi_exit -> tegra_vi_channels_cleanup
+>>>>>>
+>>>>>>> It's worth getting this right in this early stage, rather than 
+>>>>>>> fixing it
+>>>>>>> in the future.
+>>>>>>>
+>>>>>>> Regards,
+>>>>>>>
+>>>>>>>           Hans
 
--- 
-Regards,
-Niklas S�derlund
