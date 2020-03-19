@@ -3,41 +3,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE9AC43332
-	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 17:42:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2BCEC4332E
+	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 17:43:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CD342208C3
-	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 17:42:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A372A2071C
+	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 17:43:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728714AbgCSRmz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Mar 2020 13:42:55 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:46013 "EHLO
+        id S1728747AbgCSRnZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Mar 2020 13:43:25 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:38713 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728707AbgCSRmy (ORCPT
+        with ESMTP id S1727253AbgCSRnY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Mar 2020 13:42:54 -0400
+        Thu, 19 Mar 2020 13:43:24 -0400
 Received: from mail.cetitecgmbh.com ([87.190.42.90]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MirfG-1jklAo0rRs-00ewy3; Thu, 19 Mar 2020 18:42:38 +0100
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MK3a4-1j0Btp0v5q-00LWgz; Thu, 19 Mar 2020 18:43:11 +0100
 Received: from pflvmailgateway.corp.cetitec.com (unknown [127.0.0.1])
-        by mail.cetitecgmbh.com (Postfix) with ESMTP id C8F7D65021B;
-        Thu, 19 Mar 2020 17:42:37 +0000 (UTC)
+        by mail.cetitecgmbh.com (Postfix) with ESMTP id 9CA6865021B;
+        Thu, 19 Mar 2020 17:43:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at cetitec.com
 Received: from mail.cetitecgmbh.com ([127.0.0.1])
         by pflvmailgateway.corp.cetitec.com (pflvmailgateway.corp.cetitec.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id rCQ0aGqQS6Qb; Thu, 19 Mar 2020 18:42:37 +0100 (CET)
+        with ESMTP id p8hR5X3iJEyc; Thu, 19 Mar 2020 18:43:10 +0100 (CET)
 Received: from pfwsexchange.corp.cetitec.com (unknown [10.10.1.99])
-        by mail.cetitecgmbh.com (Postfix) with ESMTPS id 5154864FCB4;
-        Thu, 19 Mar 2020 18:42:37 +0100 (CET)
+        by mail.cetitecgmbh.com (Postfix) with ESMTPS id 4936364FD07;
+        Thu, 19 Mar 2020 18:43:10 +0100 (CET)
 Received: from pflmari.corp.cetitec.com (10.8.5.52) by
  PFWSEXCHANGE.corp.cetitec.com (10.10.1.99) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 19 Mar 2020 18:42:37 +0100
+ id 15.0.1497.2; Thu, 19 Mar 2020 18:43:10 +0100
 Received: by pflmari.corp.cetitec.com (Postfix, from userid 1000)
-        id 97D288050C; Thu, 19 Mar 2020 18:42:36 +0100 (CET)
-Date:   Thu, 19 Mar 2020 18:42:36 +0100
+        id A7F9A8051E; Thu, 19 Mar 2020 18:43:09 +0100 (CET)
+Date:   Thu, 19 Mar 2020 18:43:09 +0100
 From:   Alex Riesen <alexander.riesen@cetitec.com>
 To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
 CC:     Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -50,9 +50,9 @@ CC:     Geert Uytterhoeven <geert@linux-m68k.org>,
         <devel@driverdev.osuosl.org>, <linux-media@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-renesas-soc@vger.kernel.org>
-Subject: [PATCH v2 07/10] dt-bindings: adv748x: add information about serial
- audio interface (I2S/TDM)
-Message-ID: <c9ff553f804f178a247dca356306948e971432fb.1584639664.git.alexander.riesen@cetitec.com>
+Subject: [PATCH v2 10/10] media: adv748x: allow the HDMI sub-device to accept
+ EDID
+Message-ID: <f7387c96eee7f434cd5b86707b386015878ba9b7.1584639664.git.alexander.riesen@cetitec.com>
 Mail-Followup-To: Alex Riesen <alexander.riesen@cetitec.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -75,91 +75,78 @@ X-ClientProxiedBy: PFWSEXCHANGE.corp.cetitec.com (10.10.1.99) To
  PFWSEXCHANGE.corp.cetitec.com (10.10.1.99)
 X-EsetResult: clean, is OK
 X-EsetId: 37303A290D7F536A6D7762
-X-Provags-ID: V03:K1:SGVgOTMTxP8wV9Ot+30RlSw7fUNFAugQDlIO/7tEF1SXcAopXJE
- wktuyPMUjQKDIsNRJGZNbl6u1wyyQ6BjIv0YhH+3oroTIs9ax+cyQHbtdWCcUpzX+vkYKEP
- SWaIOdGCG4oO6nHj0+jPhoadhOCYDoRJNpXTJPasbuOjyg57TCR3Jh54ej2kfYruGCM9Rgt
- 63WKAm3xGBK1z1Jj62HyQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:iJv2zxx1E/c=:vlETZON/2o5onOAbEdzExv
- IJHdpFjICIu6p/oBKMlmAzxWH4+PWlA/AmYYTT2uRqNHd52CZ+aS2E5t9Y1eKL/0mNLjf6OSV
- gJXHU9/Eai55eeH2y+MAPlmtgBYo1/JdpnKgaBa80rSBc6p42w68FpkPRdjzBGFrCa+J9a220
- xmLqdRlAoh3kXqV8CpY27gRupnPnN9CEobkScjEdJeWH9K6DHzke9X1JteIyB3deIIEvO/lkx
- LJm1CWEM+3Gg8EkRECT7snx0GwqqS5FYHa6ga84ATmyK80Jpeiam8P8n+wjior6soUd2GUAmL
- cFsQR93PkWATrAS6LqtsQmwotyPPi5kEAIrfS+h4xJNKjwIC8vnIbuV5/RcXRAXDD3rB4kQOw
- sN8mKLrNB3EhhXeg6A6oBUB6aT1j/xzfYQY/86DfXvnyV+d7DAyi5iaqm5Q5SeoZqMkVBENIv
- GbXGZOs6G35+PDj9psmVMavJTOoofj2nh1xwHScNtEYpNrWSb6BlGyTTXMkUKtfitztqXcYWo
- Ao/UMAHD1GWMnLRWv6PZqlRgCydqAacRM2Lovqai9YlxKSvrr70yBSbExrk3YfPoSBO5hMyvJ
- XpEYz+hVGji4dJnswSTNb4XAYgT57nTrFSNdcAbbD77rUk3bOYG7cdNa2MaoNaDTscToSp7ls
- fHLg6mxG5dUPA6PFZsFhQhlWTpey96h+J+ChIAc8GH7+KzjGG7Nq/RBIxTgZeVpX2uwtcz3tz
- xxtqZQth+y2Y53PFA0BmTgST4y9lJfnIVAUuyd8Ln5qQuPGseMs3EzYM3UdWQId0qreTK3KFE
- 3C9tjLuk4kcVdwidMuw4ug1bQTXGAsRd73kMcyZhgL3dqMOhoG4jM2jQZLye433UNs4n1vx
+X-Provags-ID: V03:K1:vr4OYoDjE9YrB9RjEXN80k6NQqQMP6ayMOLmGmMd2czOi/8NORG
+ QhXwNDMbeIpUTsh/cqAfcVH0MtX10uqhqfYv0usEthLSrClXXxwHR+aCYFrK7iFxY9ruW2l
+ uUyeC8j99rXpyqcCQ52/fHkY2UxVaXlZQoBCEb86BkAkAjUYmFROO0mVBjHpb2ZIkAWmyc1
+ hGIstBqGANg/b7AdL6aBA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:I28fkQ/FN/M=:g6yKcXLfdT0TQAiIY/F69V
+ TCD6zrM0+g8dkqtcjye84MGHpt+HuF6B9iAzayBA3QUmQNXPxAhE4CdTUK3DMRiBIrXTzoyJL
+ Lyt30EXhRkOn1U+VsMYj8DR+kUNxX0C3rKl0uYMMmDttuGkBoVQkgvX4KC5ax4PKhktClS7qo
+ Vknpv4q7kUPOhwlvnKlHyAlLrJoFh4XRzPvsXbGt9bWCwjE5Yg4ea655A3ZyUEbd0kfvQCcNP
+ vdmfrrWVZ04iEQ9Rl5Qo951OdGm5qiHufch0UYEr1MnJ+mtu+pcTLZ4bruDd14CwDauP/cPL2
+ 8fsbYrCbSYsm4YDH25ZokuJA0prJ0QuDQ0v98utyDgMAmHQADkA5DYKeq68qBUJqpzvQ1YRRv
+ IDU3sTlU4ltw0F+g3guBogtpYv95AbbmZO2TeehI9WPYdAIoSm30UNUQryCZHz3LieyGo9w4W
+ KU80AWvHo7vwv2pCQrqitJkEPsPla2v6Y6fTRbqSu4aeFJ/FTeN/ciVvSG0pYfLFZaGnL9VvY
+ YteXeZpahCIaId2bLNg4XH8DHGGlf0fXWHkpbPGjsKx6m5g/RE4d+pObXlzvpEwbcxh+Tg6PD
+ tomKb6bJVZ7HeKzwkIX1Bod2/gaXLfIOHKTDxAmTK3eW9ggPb7tGa2iPwniLrYWV+zK9C47qa
+ PqLGhuMFlGUloJmyUa0UgqIolAooc7CUGow75XX9uKhzi6ObeVuUjLXnuknNAcFbK73+0ubcn
+ XZcxOVmttSSKnlRDnSu3uVgDo71pvASEk/BgG9Pjo5F/lnA+MHAc/69sk4lp8z4xYZ3sQ/eTj
+ 9uQYAGP8AAYBWV/3BYY5o0H0Mg59XBeYAkYKsjMJG4qtPL8o0atK3wvQe7aZTGULKuKiaLy
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As the driver has some support for the audio interface of the device,
-the bindings file should mention it.
+This makes it possible to load a EDID reported by the device
+with v4l2-ctl utility:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+  vdev=/dev/$(grep -l '^adv748x.*hdmi$' /sys/class/video4linux/v4l-subdev*/name |cut -d/ -f5-5)
+  v4l2-ctl -d $vdev --set-edid=pad=0,file=/etc/adv7482.edid
+
 Signed-off-by: Alexander Riesen <alexander.riesen@cetitec.com>
 ---
- .../devicetree/bindings/media/i2c/adv748x.txt    | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ drivers/media/i2c/adv748x/adv748x-hdmi.c | 27 ++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/adv748x.txt b/Documentation/devicetree/bindings/media/i2c/adv748x.txt
-index 4f91686e54a6..7d6db052c294 100644
---- a/Documentation/devicetree/bindings/media/i2c/adv748x.txt
-+++ b/Documentation/devicetree/bindings/media/i2c/adv748x.txt
-@@ -2,7 +2,9 @@
+diff --git a/drivers/media/i2c/adv748x/adv748x-hdmi.c b/drivers/media/i2c/adv748x/adv748x-hdmi.c
+index 7655d817ceb6..88e309de3d56 100644
+--- a/drivers/media/i2c/adv748x/adv748x-hdmi.c
++++ b/drivers/media/i2c/adv748x/adv748x-hdmi.c
+@@ -775,7 +775,34 @@ static int adv748x_hdmi_log_status(struct v4l2_subdev *sd)
+ 	return 0;
+ }
  
- The ADV7481 and ADV7482 are multi format video decoders with an integrated
- HDMI receiver. They can output CSI-2 on two independent outputs TXA and TXB
--from three input sources HDMI, analog and TTL.
-+from three input sources HDMI, analog and TTL. There is also support for an
-+I2S compatible interface connected to the audio processor of the HDMI decoder.
-+The interface has TDM capability (8 slots, 32 bits, left or right justified).
- 
- Required Properties:
- 
-@@ -16,6 +18,8 @@ Required Properties:
-     slave device on the I2C bus. The main address is mandatory, others are
-     optional and remain at default values if not specified.
- 
-+  - #clock-cells: must be <0> if the I2S port is used
++static long adv748x_hdmi_querycap(struct adv748x_hdmi *hdmi,
++				  struct v4l2_capability *cap)
++{
++	struct adv748x_state *state = adv748x_hdmi_to_state(hdmi);
 +
- Optional Properties:
- 
-   - interrupt-names: Should specify the interrupts as "intrq1", "intrq2" and/or
-@@ -47,6 +51,7 @@ are numbered as follows.
- 	  TTL		sink		9
- 	  TXA		source		10
- 	  TXB		source		11
-+	  I2S		source		12
- 
- The digital output port nodes, when present, shall contain at least one
- endpoint. Each of those endpoints shall contain the data-lanes property as
-@@ -72,6 +77,7 @@ Example:
- 
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-+		#clock-cells = <0>;
- 
- 		interrupt-parent = <&gpio6>;
- 		interrupt-names = "intrq1", "intrq2";
-@@ -113,4 +119,12 @@ Example:
- 				remote-endpoint = <&csi20_in>;
- 			};
- 		};
++	cap->version = LINUX_VERSION_CODE;
++	strlcpy(cap->driver, state->dev->driver->name, sizeof(cap->driver));
++	strlcpy(cap->card, "hdmi", sizeof(cap->card));
++	snprintf(cap->bus_info, sizeof(cap->bus_info), "i2c:%d-%04x",
++		 i2c_adapter_id(state->client->adapter),
++		 state->client->addr);
++	cap->device_caps = V4L2_CAP_AUDIO | V4L2_CAP_VIDEO_CAPTURE;
++	cap->capabilities = V4L2_CAP_DEVICE_CAPS;
++	return 0;
++}
 +
-+		port@c {
-+			reg = <12>;
++static long adv748x_hdmi_ioctl(struct v4l2_subdev *sd,
++			       unsigned int cmd, void *arg)
++{
++	struct adv748x_hdmi *hdmi = adv748x_sd_to_hdmi(sd);
 +
-+			adv7482_i2s: endpoint {
-+				remote-endpoint = <&i2s_in>;
-+			};
-+		};
- 	};
++	if (cmd == VIDIOC_QUERYCAP)
++		return adv748x_hdmi_querycap(hdmi, arg);
++	return -ENOTTY;
++}
++
+ static const struct v4l2_subdev_core_ops adv748x_core_ops_hdmi = {
++	.ioctl = adv748x_hdmi_ioctl,
+ 	.log_status = adv748x_hdmi_log_status,
+ };
+ 
 -- 
 2.25.1.25.g9ecbe7eb18
-
 
