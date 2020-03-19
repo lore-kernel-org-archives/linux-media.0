@@ -2,86 +2,116 @@ Return-Path: <SRS0=S52y=5E=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 625A2C4332D
-	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 20:50:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 566CBC4332B
+	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 21:59:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3936720774
-	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 20:50:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C8C42076E
+	for <linux-media@archiver.kernel.org>; Thu, 19 Mar 2020 21:59:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="kjCFhLmw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727232AbgCSUuU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Mar 2020 16:50:20 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:14450 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725787AbgCSUuU (ORCPT
+        id S1727340AbgCSV7W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Mar 2020 17:59:22 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:59566 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727257AbgCSV7W (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Mar 2020 16:50:20 -0400
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 19 Mar 2020 13:50:19 -0700
-Received: from gurus-linux.qualcomm.com ([10.46.162.81])
-  by ironmsg05-sd.qualcomm.com with ESMTP; 19 Mar 2020 13:50:18 -0700
-Received: by gurus-linux.qualcomm.com (Postfix, from userid 383780)
-        id B9A0A4B48; Thu, 19 Mar 2020 13:50:18 -0700 (PDT)
-From:   Guru Das Srinagesh <gurus@codeaurora.org>
-To:     linux-pwm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Subbaraman Narayanamurthy <subbaram@codeaurora.org>,
-        linux-kernel@vger.kernel.org,
-        Guru Das Srinagesh <gurus@codeaurora.org>,
+        Thu, 19 Mar 2020 17:59:22 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02JLxIPT102792;
+        Thu, 19 Mar 2020 16:59:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1584655158;
+        bh=AaDhPtzcI2QtHObcb78aZzBxAWoChbArkw0aB0Abv4w=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=kjCFhLmwgsfNbF/Uspzz8QIpMtsfzWQVIx5jV5vJqLLo8Ge8imOdix+hkGyeCsOX8
+         XqURNC0dR99NoROSSv3kNBw8ZgkkTOH03pYx4z6IYlkyPmLOQilwet3tJwIaGkzuAG
+         5p2glgaeeLk+Z5hViBaxVVA+s4U+9EE3Ayi9CYr8=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02JLxIwm023878;
+        Thu, 19 Mar 2020 16:59:18 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 19
+ Mar 2020 16:59:18 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 19 Mar 2020 16:59:17 -0500
+Received: from [10.250.87.129] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02JLxHiA036297;
+        Thu, 19 Mar 2020 16:59:17 -0500
+Subject: Re: [PATCH v2] media: ov5640: fix use of destroyed mutex
+To:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Richard Fontana <rfontana@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v10 03/12] ir-rx51: Use 64-bit division macro
-Date:   Thu, 19 Mar 2020 13:50:06 -0700
-Message-Id: <c1d7722bdb6a6640cba64f430b81a67a95ab4204.1584650604.git.gurus@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <cover.1584650604.git.gurus@codeaurora.org>
-References: <cover.1584650604.git.gurus@codeaurora.org>
-In-Reply-To: <cover.1584650604.git.gurus@codeaurora.org>
-References: <cover.1584650604.git.gurus@codeaurora.org>
+        <linux-media@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC:     <stable@vger.kernel.org>
+References: <20200313082258.6930-1-tomi.valkeinen@ti.com>
+ <20200313131948.13803-1-tomi.valkeinen@ti.com>
+From:   Benoit Parrot <bparrot@ti.com>
+Message-ID: <1148f4ff-27a5-6b4b-125d-3bdabbe7aa6f@ti.com>
+Date:   Thu, 19 Mar 2020 16:59:17 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20200313131948.13803-1-tomi.valkeinen@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since the PWM framework is switching struct pwm_state.period's datatype
-to u64, prepare for this transition by using DIV_ROUND_CLOSEST_ULL to
-handle a 64-bit dividend.
+Reviewed-by: Benoit Parrot <bparrot@ti.com>
 
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Richard Fontana <rfontana@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Kate Stewart <kstewart@linuxfoundation.org>
-Cc: Allison Randal <allison@lohutok.net>
-Cc: linux-media@vger.kernel.org
-
-Signed-off-by: Guru Das Srinagesh <gurus@codeaurora.org>
----
- drivers/media/rc/ir-rx51.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/rc/ir-rx51.c b/drivers/media/rc/ir-rx51.c
-index 8574eda..9a5dfd7 100644
---- a/drivers/media/rc/ir-rx51.c
-+++ b/drivers/media/rc/ir-rx51.c
-@@ -241,7 +241,8 @@ static int ir_rx51_probe(struct platform_device *dev)
- 	}
- 
- 	/* Use default, in case userspace does not set the carrier */
--	ir_rx51.freq = DIV_ROUND_CLOSEST(pwm_get_period(pwm), NSEC_PER_SEC);
-+	ir_rx51.freq = DIV_ROUND_CLOSEST_ULL(pwm_get_period(pwm),
-+			NSEC_PER_SEC);
- 	pwm_put(pwm);
- 
- 	hrtimer_init(&ir_rx51.timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+On 3/13/20 8:19 AM, Tomi Valkeinen wrote:
+> v4l2_ctrl_handler_free() uses hdl->lock, which in ov5640 driver is set
+> to sensor's own sensor->lock. In ov5640_remove(), the driver destroys the
+> sensor->lock first, and then calls v4l2_ctrl_handler_free(), resulting
+> in the use of the destroyed mutex.
+> 
+> Fix this by calling moving the mutex_destroy() to the end of the cleanup
+> sequence, as there's no need to destroy the mutex as early as possible.
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/media/i2c/ov5640.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> index 854031f0b64a..2fe4a7ac0592 100644
+> --- a/drivers/media/i2c/ov5640.c
+> +++ b/drivers/media/i2c/ov5640.c
+> @@ -3093,8 +3093,8 @@ static int ov5640_probe(struct i2c_client *client)
+>  free_ctrls:
+>  	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
+>  entity_cleanup:
+> -	mutex_destroy(&sensor->lock);
+>  	media_entity_cleanup(&sensor->sd.entity);
+> +	mutex_destroy(&sensor->lock);
+>  	return ret;
+>  }
+>  
+> @@ -3104,9 +3104,9 @@ static int ov5640_remove(struct i2c_client *client)
+>  	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+>  
+>  	v4l2_async_unregister_subdev(&sensor->sd);
+> -	mutex_destroy(&sensor->lock);
+>  	media_entity_cleanup(&sensor->sd.entity);
+>  	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
+> +	mutex_destroy(&sensor->lock);
+>  
+>  	return 0;
+>  }
+> 
