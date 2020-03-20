@@ -2,84 +2,91 @@ Return-Path: <SRS0=12Uk=5F=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 348C9C4332E
-	for <linux-media@archiver.kernel.org>; Fri, 20 Mar 2020 11:13:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AAF6C4332D
+	for <linux-media@archiver.kernel.org>; Fri, 20 Mar 2020 13:13:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C022020754
-	for <linux-media@archiver.kernel.org>; Fri, 20 Mar 2020 11:13:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="BizCzDxm"
+	by mail.kernel.org (Postfix) with ESMTP id 0A58020754
+	for <linux-media@archiver.kernel.org>; Fri, 20 Mar 2020 13:13:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbgCTLNn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Mar 2020 07:13:43 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:48799 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726726AbgCTLNn (ORCPT
+        id S1727101AbgCTNNB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 Mar 2020 09:13:01 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51781 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726902AbgCTNNB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 Mar 2020 07:13:43 -0400
-Received: from [192.168.2.10] ([46.9.234.233])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id FFarj11w3fHuvFFaujhffg; Fri, 20 Mar 2020 12:13:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1584702820; bh=ukSmUBwf59Us7W6MbiboUT3fSy+kYLSXfefeS36JOWY=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=BizCzDxmmIQiqMlqoNtW3c9IbeEcaw5KwPVJGdmJTVLPTrHUfX33Za95sc5cFQ11Q
-         9umclj5Jgz56HNynsCQKuHuMcK7+K/ex7rlHYd+FSwrMbMYkfU/1AXU3MUCsqrx1eq
-         S323AyHcvjNpzb7wZgvXdakz/S8OF5If0Xb19xdz+DKUT2fH3+xsXBzbPVohJUg9c1
-         3sB2PCogKKWGR7jcsVMv8bmNtC1GF629rk2+K60x90oQ/MV/otm3wZZxFBFEpWjncO
-         LWGaQElLH7XdtT3YvKyo27BibpVHztQ6VDcFNc0ZcVUyBkFGbsssAuW9vd7WYpjxRH
-         RN/WV9QlwW0TA==
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Johan Korsnes <johan.korsnes@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH for v5.7] vivid: fix incorrect PA assignment to HDMI outputs
-Message-ID: <4fcb1ead-8b6e-8538-702a-f2293bb693f5@xs4all.nl>
-Date:   Fri, 20 Mar 2020 12:13:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Fri, 20 Mar 2020 09:13:01 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1jFHSO-0001XK-3z; Fri, 20 Mar 2020 14:13:00 +0100
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, kernel@pengutronix.de,
+        devicetree@vger.kernel.org
+Subject: [PATCH v6 0/4] Add initial i.MX8MQ support
+Date:   Fri, 20 Mar 2020 14:12:52 +0100
+Message-Id: <20200320131256.23294-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfOG8KzjcCB046+zlfHXf0QiGsS88uFVNCA2FYtN1A0Laehv6nSU/ZoLPHyQwDQk17ro31NU9pmiPCzxhUGPJFkiQjuvpgWh9hJALyAfcdbKvyx6V2asn
- ql1hHcmi1DElhlZ7hg1MFwLY3ARqcnEzDxnod2Bg12DcEePxhfp9osNCJjinzd9x89feh2duNQdlpxMJobNiWn3cC6G64nAyk0I=
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The initial physical address was one too low for the outputs.
-E.g. if 1.0.0.0 was expected, then it was set to 0.0.0.0, and
-2.0.0.0 became 1.0.0.0.
+With the i.MX8MQ decoders in active use and the i.MX8MM power domain
+support still up in the air, I think it makes sense to merge i.MX8MQ
+Hantro support now and accept that i.MX8MM may or may not require
+different bindings.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Johan Korsnes <johan.korsnes@gmail.com>
-Fixes: 4ee895e71abb ("media: vivid: reorder CEC allocation and control set-up")
----
- drivers/media/platform/vivid/vivid-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Patch 4 depends on [2] for the MAINTAINERS change.
 
-diff --git a/drivers/media/platform/vivid/vivid-core.c b/drivers/media/platform/vivid/vivid-core.c
-index c62c068b6b60..6c740e3e6999 100644
---- a/drivers/media/platform/vivid/vivid-core.c
-+++ b/drivers/media/platform/vivid/vivid-core.c
-@@ -1571,8 +1571,8 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
- 			}
- 			v4l2_info(&dev->v4l2_dev, "CEC adapter %s registered for HDMI output %d\n",
- 				  dev_name(&dev->cec_tx_adap[i]->devnode.dev), i);
--			if (i <= out_type_counter[HDMI])
--				cec_s_phys_addr(dev->cec_tx_adap[i], i << 12, false);
-+			if (i < out_type_counter[HDMI])
-+				cec_s_phys_addr(dev->cec_tx_adap[i], (i + 1) << 12, false);
- 			else
- 				cec_s_phys_addr(dev->cec_tx_adap[i], 0x1000, false);
- 		}
+Changes since v5 [1]:
+ - Drop merged patches
+ - Drop i.MX8MM bindings
+ - Change example node name to video-codec
+ - Convert i.MX8MQ bindings to YAML
+ - Drop i.MX8MM support
+ - Rebase onto media/master
+ - Enable h.264 and VP8 decoding
+ - Enable post-processing
+
+[1] https://lore.kernel.org/linux-media/20190612093915.18973-1-p.zabel@pengutronix.de
+[2] https://lore.kernel.org/linux-media/20200318132108.21873-9-ezequiel@collabora.com
+
+regards
+Philipp
+
+Philipp Zabel (4):
+  media: dt-bindings: Document i.MX8MQ VPU bindings
+  media: hantro: add initial i.MX8MQ support
+  arm64: dts: imx8mq: enable Hantro G1/G2 VPU
+  media: MAINTAINERS: add myself to co-maintain Hantro G1/G2 for i.MX8MQ
+
+ .../bindings/media/nxp,imx8mq-vpu.yaml        |  77 ++++++
+ MAINTAINERS                                   |   2 +
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  27 +++
+ drivers/staging/media/hantro/Kconfig          |  16 +-
+ drivers/staging/media/hantro/Makefile         |   3 +
+ drivers/staging/media/hantro/hantro_drv.c     |   3 +
+ drivers/staging/media/hantro/hantro_hw.h      |   1 +
+ drivers/staging/media/hantro/imx8m_vpu_hw.c   | 220 ++++++++++++++++++
+ 8 files changed, 345 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+ create mode 100644 drivers/staging/media/hantro/imx8m_vpu_hw.c
+
 -- 
-2.25.1
+2.20.1
 
