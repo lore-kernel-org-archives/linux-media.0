@@ -2,117 +2,78 @@ Return-Path: <SRS0=HLWw=5J=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E68AC43331
-	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 13:08:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B535C2BAEE
+	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 13:14:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E6645208C3
-	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 13:08:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Jf09rQzH"
+	by mail.kernel.org (Postfix) with ESMTP id 6A48E208D6
+	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 13:14:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727379AbgCXNIC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Mar 2020 09:08:02 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:50957 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726190AbgCXNIC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Mar 2020 09:08:02 -0400
-Received: from [192.168.2.10] ([46.9.234.233])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id GjHfjWGmyBr2bGjHjjCpNO; Tue, 24 Mar 2020 14:07:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1585055279; bh=8an7+sIdB7NJzPGkxiHi8p0RMo7NATo0kBQR6ciqnh8=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=Jf09rQzH10MRI9StFXWvkCxLlixFyo88EREHFVz5d3dkIHOAhYhvYRMX1WfmrjHi5
-         r8Gxe5nAqmLArCDFmGA2vcR7uqc3aJlSWqOIKfZCaUZP6H676e5TYl4yYc2enlxUWD
-         YyrooJxucW/JW2rvhn6irUjeGD4faTg4qazxaQKeFx8e6o1VLheIIwTE+ZOeySmHWQ
-         QLep0tV2OEbDN3+pnur4A0iunbpWMYIUU4TGOKLIjcIUX/KiTHsFFUngT0ae8JFCH6
-         ipMC9nlLaaiaEeFrv1JydYJDoE9t6g9SSaan3uWUlzSYNYZrM0ayPZ8EO8nBDR2XpS
-         qpEuqNGeoB77A==
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.7] Various fixes, add i.MX8MQ hantro support
-Message-ID: <270c0340-e052-7466-4a7b-2155a643d35f@xs4all.nl>
-Date:   Tue, 24 Mar 2020 14:07:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1728147AbgCXNOt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Mar 2020 09:14:49 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:45156 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728138AbgCXNOr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Mar 2020 09:14:47 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jGjM6-008dpr-64; Tue, 24 Mar 2020 13:12:30 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jGjPr-0001FZ-Ee; Tue, 24 Mar 2020 13:16:23 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.7] Various fixes, add i.MX8MQ hantro support (#62458)
+Date:   Tue, 24 Mar 2020 13:16:23 +0000
+Message-Id: <20200324131623.4764-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <270c0340-e052-7466-4a7b-2155a643d35f@xs4all.nl>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfJ952qqIbAWIhg2/rJkf9waDFO6tal8SwObCrLlHeAIpxB8rCuF1UCeEO5wM2Ed8UCOJN2HvxuQuxw+zr0yBaWcX9axoFI4eD6OhdxTWZ7UdEdXJn90+
- tJ6bX/PZWyWa6lxm56QB3YbNicL9gTKaAjr4E6i6pUDF3MzD1JfQdjikgtoDds2bS5sOey9i4jxdvG5rbJNZDRbAHRX9tRZlBMIK9QQ7SgznuOcUtOy/8u6r
- 33OiTcEzZQr6XM4OPW9eMg==
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Various fixes that should go into v5.7.
+From: builder@linuxtv.org
 
-Also add hantro support for the i.MX8MQ. It's a bit late in the cycle, but it
-is similar to adding a card for a USB or PCI driver in that it doesn't touch
-the existing hardware that supports the hantro IP.
+Pull request: https://patchwork.linuxtv.org/patch/62458/
+Build log: https://builder.linuxtv.org/job/patchwork/43704/
+Build time: 00:06:13
+Link: https://lore.kernel.org/linux-media/270c0340-e052-7466-4a7b-2155a643d35f@xs4all.nl
 
-Regards,
+gpg: Signature made Tue 24 Mar 2020 01:02:38 PM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
 
-	Hans
+Summary: 4 patches and/or PDF generation with issues, being 0 at build time
 
-The following changes since commit af72bc8cd6ab32be2105129f05eb4502f45577df:
+Error/warnings:
 
-  media: siano: Use scnprintf() for avoiding potential buffer overflow (2020-03-20 16:28:07 +0100)
 
-are available in the Git repository at:
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0003-vivid-fix-incorrect-PA-assignment-to-HDMI-outputs.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0003-vivid-fix-incorrect-PA-assignment-to-HDMI-outputs.patch
+patches/0003-vivid-fix-incorrect-PA-assignment-to-HDMI-outputs.patch:28: WARNING: line over 80 characters
 
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.7m
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0004-media-dt-bindings-Document-i.MX8MQ-VPU-bindings.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0004-media-dt-bindings-Document-i.MX8MQ-VPU-bindings.patch
+patches/0004-media-dt-bindings-Document-i.MX8MQ-VPU-bindings.patch:17: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
 
-for you to fetch changes up to 2bcbf79e4823f48c2546251271fd7b86bc38107c:
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0005-media-hantro-add-initial-i.MX8MQ-support.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0005-media-hantro-add-initial-i.MX8MQ-support.patch
+patches/0005-media-hantro-add-initial-i.MX8MQ-support.patch:45: WARNING: please write a paragraph that describes the config symbol fully
+patches/0005-media-hantro-add-initial-i.MX8MQ-support.patch:97: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
 
-  media: mtk-vpu: load vpu firmware from the new location (2020-03-24 13:50:59 +0100)
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0007-media-i2c-video-i2c-fix-build-errors-due-to-imply-hw.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0007-media-i2c-video-i2c-fix-build-errors-due-to-imply-hw.patch
+patches/0007-media-i2c-video-i2c-fix-build-errors-due-to-imply-hw.patch:12: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
 
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Ezequiel Garcia (1):
-      hantro: Add linux-rockchip mailing list to MAINTAINERS
-
-Hans Verkuil (1):
-      vivid: fix incorrect PA assignment to HDMI outputs
-
-Jernej Skrabec (1):
-      media: cedrus: h264: Fix 4K decoding on H6
-
-Matt Ranostay (1):
-      media: i2c: video-i2c: fix build errors due to 'imply hwmon'
-
-Philipp Zabel (3):
-      media: dt-bindings: Document i.MX8MQ VPU bindings
-      media: hantro: add initial i.MX8MQ support
-      media: MAINTAINERS: add myself to co-maintain Hantro G1/G2 for i.MX8MQ
-
-Rui Wang (1):
-      media: mtk-vpu: load vpu firmware from the new location
-
- Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml |  77 +++++++++++++++
- MAINTAINERS                                                 |   3 +
- drivers/media/i2c/video-i2c.c                               |   2 +-
- drivers/media/platform/mtk-vpu/mtk_vpu.c                    |  16 ++-
- drivers/media/platform/vivid/vivid-core.c                   |   4 +-
- drivers/staging/media/hantro/Kconfig                        |  16 ++-
- drivers/staging/media/hantro/Makefile                       |   3 +
- drivers/staging/media/hantro/hantro_drv.c                   |   3 +
- drivers/staging/media/hantro/hantro_hw.h                    |   1 +
- drivers/staging/media/hantro/imx8m_vpu_hw.c                 | 220 +++++++++++++++++++++++++++++++++++++++++
- drivers/staging/media/sunxi/cedrus/cedrus_h264.c            |   6 +-
- 11 files changed, 340 insertions(+), 11 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
- create mode 100644 drivers/staging/media/hantro/imx8m_vpu_hw.c
