@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CF04C41621
-	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 14:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3A75C43331
+	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 14:26:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DF01620788
+	by mail.kernel.org (Postfix) with ESMTP id 7C37820788
 	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 14:26:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585059999;
-	bh=Wn32YEXlsFeyH0U1lHQAPIpXDBsqxsEtcqAGcnsGtIA=;
+	s=default; t=1585059998;
+	bh=KtgJAxR58+iyYhu/eeIY2qJxXV//i43mYb7/aiW9CN4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=1OA86EVNJsRVBgxWyan4pzi7gagu641usZXgmnwEkR6X3icSi/Vcfe3wcvY9qVNug
-	 SixsuLE9zfe9vBww7eoE0GHy1m18khY+iJ+mh9GY1cCe3HbJycGBOiZUCvq0wzrK9Q
-	 8FodBvHedCA8/OSG/8CfQd/9KCY4mTGDdrRMsfhA=
+	b=KaWGG3s9YmR8Yfzxrjb4aIsWbIcO0BCFAnkIrMt1GS82HrdZoZuhVpNY4z1sGtkpA
+	 ulz4Ef3id+S4xt/vpaz2usSaROP9Ea9cr1feTto8WpwT+HLASCc9noVDF7ZpQPICZk
+	 1U4boTIZup1gPE4RoPxXCauxq1BdYMvvIkyneVIE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728786AbgCXO0h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728643AbgCXO0h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 24 Mar 2020 10:26:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35808 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:35810 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727530AbgCXO00 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1727930AbgCXO00 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 24 Mar 2020 10:26:26 -0400
 Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7D2C820BED;
+        by mail.kernel.org (Postfix) with ESMTPSA id 9388221473;
         Tue, 24 Mar 2020 14:26:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585059985;
-        bh=Wn32YEXlsFeyH0U1lHQAPIpXDBsqxsEtcqAGcnsGtIA=;
+        bh=KtgJAxR58+iyYhu/eeIY2qJxXV//i43mYb7/aiW9CN4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fihTGl90BKi+65Fzmf7DFqZlEO3aGNIa40bKpITjIjISSNmUYylROagHhISTGIZbp
-         7o4hZ8ATFf77BLNAkGlSuxSZtGsEZv/liY4S5BVX5ckufFHC7U3ZCH0PzCVdw493+b
-         nSS7+073w3GscAeJ+Oo6eHVk6VsHTFbYl/+O5dWM=
+        b=rAH0LzIDFh5eLS3+/JJ/obSS4vopeKSzigeWUVe86La5D9ZFoB6siWdLeF+p+L0Rk
+         p3/Tmi+PP8/PZ5ywh7t4zxJ+91QUZep/hL5H7stN170oCdTULt9Slj6ij8lEdZSqVK
+         dmXAXvpKf0VXHQGgbz3vJ+eSfMZJsaPempFxuHMg=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jGkVb-00266t-O5; Tue, 24 Mar 2020 15:26:23 +0100
+        id 1jGkVb-002673-R6; Tue, 24 Mar 2020 15:26:23 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v2 07/20] media: Kconfig: add an option to filter in/out the embedded drivers
-Date:   Tue, 24 Mar 2020 15:26:08 +0100
-Message-Id: <23242586947faec259eabc545415592a5ea9ac92.1585059896.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 09/20] media: Kconfig: make filtering devices optional
+Date:   Tue, 24 Mar 2020 15:26:10 +0100
+Message-Id: <751a1be8d03e1c30d5af17cfd659ffc6a5721a35.1585059897.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1585059896.git.mchehab+huawei@kernel.org>
 References: <cover.1585059896.git.mchehab+huawei@kernel.org>
@@ -57,49 +57,122 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Most systems don't need support for those, while others only
-need those, instead of the others.
+The per-device option selection is a feature that some
+developers love, while others hate...
 
-So, add an option to filter in/out the SoC specific drivers.
+So, let's make both happy by making it optional.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/Kconfig | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/media/Kconfig | 32 +++++++++++++++++++++++++++-----
+ 1 file changed, 27 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index e266d1afa912..a57e2198b2db 100644
+index 4c06728a4ab7..e372029ac41f 100644
 --- a/drivers/media/Kconfig
 +++ b/drivers/media/Kconfig
-@@ -88,6 +88,14 @@ config MEDIA_CEC_SUPPORT
- 	  Say Y when you have an HDMI receiver, transmitter or a USB CEC
- 	  adapter that supports HDMI CEC.
+@@ -25,14 +25,32 @@ menuconfig MEDIA_SUPPORT
+ 	  Additional info and docs are available on the web at
+ 	  <https://linuxtv.org>
  
-+config MEDIA_EMBEDDED_SUPPORT
-+	bool "Embedded devices (SoC)"
+-menu "Types of devices to be supported"
++if MEDIA_SUPPORT
++
++config MEDIA_SUPPORT_FILTER
++	bool "Filter devices by their types"
+ 	depends on MEDIA_SUPPORT
 +	help
-+	  Enable support for complex cameras, codecs, and other hardware
-+	  found on Embedded hardware (SoC).
++	   Configuring the media subsystem can be complex, as there are
++	   hundreds of drivers and other config options.
 +
-+	  Say Y when you have a software defined radio device.
++	   This menu offers option that will help the Kernel's config
++	   system to hide drivers that are out of the scope of the
++	   user needs, and disabling core support for unused APIs.
 +
- endmenu # media support types
- 
- if MEDIA_SUPPORT
-@@ -177,9 +185,13 @@ source "drivers/media/radio/Kconfig"
- 
- # Common driver options
- source "drivers/media/common/Kconfig"
++	   If not selected, all non-optional media core functionality
++	   needed to support media drivers will be enabled. Also, all
++	   media device drivers should be shown.
 +
-+if MEDIA_EMBEDDED_SUPPORT
-+
- source "drivers/media/platform/Kconfig"
- source "drivers/media/mmc/Kconfig"
++menu "Media device types"
++	visible if MEDIA_SUPPORT_FILTER
  
-+endif # MEDIA_EMBEDDED_SUPPORT
+ #
+ # Multimedia support - automatically enable V4L2 and DVB core
+ #
+ config MEDIA_CAMERA_SUPPORT
+ 	bool "Cameras and video grabbers"
++	default y if !MEDIA_SUPPORT_FILTER
+ 	help
+ 	  Enable support for webcams and video grabbers.
  
- comment "FireWire (IEEE 1394) Adapters"
- 	depends on DVB_CORE && FIREWIRE
+@@ -40,6 +58,7 @@ config MEDIA_CAMERA_SUPPORT
+ 
+ config MEDIA_ANALOG_TV_SUPPORT
+ 	bool "Analog TV"
++	default y if !MEDIA_SUPPORT_FILTER
+ 	help
+ 	  Enable analog TV support.
+ 
+@@ -52,6 +71,7 @@ config MEDIA_ANALOG_TV_SUPPORT
+ 
+ config MEDIA_DIGITAL_TV_SUPPORT
+ 	bool "Digital TV"
++	default y if !MEDIA_SUPPORT_FILTER
+ 	help
+ 	  Enable digital TV support.
+ 
+@@ -60,6 +80,7 @@ config MEDIA_DIGITAL_TV_SUPPORT
+ 
+ config MEDIA_RADIO_SUPPORT
+ 	bool "AM/FM radio receivers/transmitters"
++	default y if !MEDIA_SUPPORT_FILTER
+ 	help
+ 	  Enable AM/FM radio support.
+ 
+@@ -74,6 +95,7 @@ config MEDIA_RADIO_SUPPORT
+ 
+ config MEDIA_SDR_SUPPORT
+ 	bool "Software defined radio"
++	default y if !MEDIA_SUPPORT_FILTER
+ 	help
+ 	  Enable software defined radio support.
+ 
+@@ -81,6 +103,7 @@ config MEDIA_SDR_SUPPORT
+ 
+ config MEDIA_CEC_SUPPORT
+ 	bool "HDMI CEC support"
++	default y if !MEDIA_SUPPORT_FILTER
+ 	help
+ 	  Enable support for HDMI CEC (Consumer Electronics Control),
+ 	  which is an optional HDMI feature.
+@@ -90,6 +113,7 @@ config MEDIA_CEC_SUPPORT
+ 
+ config MEDIA_EMBEDDED_SUPPORT
+ 	bool "Embedded devices (SoC)"
++	default y if !MEDIA_SUPPORT_FILTER
+ 	help
+ 	  Enable support for complex cameras, codecs, and other hardware
+ 	  found on Embedded hardware (SoC).
+@@ -98,6 +122,7 @@ config MEDIA_EMBEDDED_SUPPORT
+ 
+ config MEDIA_TEST_SUPPORT
+ 	bool "Test drivers"
++	default y if !MEDIA_SUPPORT_FILTER
+ 	help
+ 	  Those drivers should not be used on production Kernels, but
+ 	  can be useful on debug ones. It enables several dummy drivers
+@@ -106,10 +131,7 @@ config MEDIA_TEST_SUPPORT
+ 	  have regressions.
+ 
+ 	  Say Y when you have a software defined radio device.
+-
+-endmenu # media support types
+-
+-if MEDIA_SUPPORT
++endmenu # media device types
+ 
+ comment "Media core options"
+ 
 -- 
 2.24.1
 
