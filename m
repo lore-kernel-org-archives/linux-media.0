@@ -2,177 +2,188 @@ Return-Path: <SRS0=HLWw=5J=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3A75C43331
-	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 14:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB7BFC54FCF
+	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 15:40:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7C37820788
-	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 14:26:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585059998;
-	bh=KtgJAxR58+iyYhu/eeIY2qJxXV//i43mYb7/aiW9CN4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=KaWGG3s9YmR8Yfzxrjb4aIsWbIcO0BCFAnkIrMt1GS82HrdZoZuhVpNY4z1sGtkpA
-	 ulz4Ef3id+S4xt/vpaz2usSaROP9Ea9cr1feTto8WpwT+HLASCc9noVDF7ZpQPICZk
-	 1U4boTIZup1gPE4RoPxXCauxq1BdYMvvIkyneVIE=
+	by mail.kernel.org (Postfix) with ESMTP id 78A0120788
+	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 15:40:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=cerno.tech header.i=@cerno.tech header.b="TixMqDr3";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BjBkNffj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728643AbgCXO0h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Mar 2020 10:26:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35810 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727930AbgCXO00 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Mar 2020 10:26:26 -0400
-Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9388221473;
-        Tue, 24 Mar 2020 14:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585059985;
-        bh=KtgJAxR58+iyYhu/eeIY2qJxXV//i43mYb7/aiW9CN4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rAH0LzIDFh5eLS3+/JJ/obSS4vopeKSzigeWUVe86La5D9ZFoB6siWdLeF+p+L0Rk
-         p3/Tmi+PP8/PZ5ywh7t4zxJ+91QUZep/hL5H7stN170oCdTULt9Slj6ij8lEdZSqVK
-         dmXAXvpKf0VXHQGgbz3vJ+eSfMZJsaPempFxuHMg=
-Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jGkVb-002673-R6; Tue, 24 Mar 2020 15:26:23 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v2 09/20] media: Kconfig: make filtering devices optional
-Date:   Tue, 24 Mar 2020 15:26:10 +0100
-Message-Id: <751a1be8d03e1c30d5af17cfd659ffc6a5721a35.1585059897.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <cover.1585059896.git.mchehab+huawei@kernel.org>
-References: <cover.1585059896.git.mchehab+huawei@kernel.org>
+        id S1728436AbgCXPkt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Mar 2020 11:40:49 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:49655 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727510AbgCXPkt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Mar 2020 11:40:49 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 6EC37580187;
+        Tue, 24 Mar 2020 11:40:47 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 24 Mar 2020 11:40:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=lR0eBIanF6SDCnxFLTSyE8ziSKg
+        i9ZA+hhtsHfD2qAA=; b=TixMqDr3fI806sOY6xWM1xXk/HuR5Sl4JafhqvNyYCh
+        B0WnbHWQLOO/1xO3PFhETsvKzKyyEM88a0AaojKb7Z7jEAY7iBfwNSPkX7HeNFhP
+        EpVoSgsuZtGVDGoBCmKTFfXrDkcnCGOxzvDPtk7CplrnmncsR3pI089wwgutQyOl
+        r9c4STe+YabsAQZyWWaej1FAM3C2S7RoT2JjIigyyOE4sFLStzFrVqAlujo5Y7Vu
+        duNNH6cgHIIj02nefyBxBJcAJneMRe7HJ+0/UkxGCKKLuzYUEBgya224oMv9FJQ8
+        hfkxFh4t20pQdpM7EhYCvXT2s9wHPi5dnalEcb5Rayg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=lR0eBI
+        anF6SDCnxFLTSyE8ziSKgi9ZA+hhtsHfD2qAA=; b=BjBkNffjGWUc/5jO4przwO
+        m59Z+khlWSZ+YRhAy0e926I4p4hSBXhtqDoIV/ttcdvFNvFP7jrBppP4f8ENR3fy
+        x1uQbKV6JcLOBipoIyP3jrVTNTedqJHP4cSabAQ/rYi8ndXBL33kHLHOjodHgE6D
+        Fnqe3JIsYpplYmQHIuQ6PIKdNyDshuUMRlWDC/n4fsQ9ElI1YNkfeiIVkoZ4Q8vp
+        fQDoCqp7yY3eY7AHpOL/ZNL5CBDO8jHaulswREydapxFOLUDBt+Hh+HyqJq4RhAn
+        q6eymUBCE4G0MWyZYWMxTTJNsdGOtrkVqk7c0stXqR13ZtgqmC9VVNcaRhkKph6w
+        ==
+X-ME-Sender: <xms:_il6Xt4ksL-jhcvZmkMCViNSBNo_RZcE01s0-7JRpOaAC5BY7DBs2Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudehuddggeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecukfhppeeltd
+    drkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghi
+    lhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:_il6XrOD7fk_9C_XwgCcc_S_KP163e5_Z8_eD_LWJkl0VBKflvYB0Q>
+    <xmx:_il6XopYb_SZOG4texGiaC00k_z4vPuvlVbEHFAJ4hOcMuQW7FPmEQ>
+    <xmx:_il6XtKI1PhRtOFQ3CLV-Slek7_CFFK3anEYIZsnEFTNFkZcbvKM3A>
+    <xmx:_yl6XjBaAJpG6w4gxocQIXvtVa5yNQPAsyZ6cZubr3X6ZjCqfUjYGQ>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 1E4E63280064;
+        Tue, 24 Mar 2020 11:40:46 -0400 (EDT)
+Date:   Tue, 24 Mar 2020 16:40:45 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Fabio Estevam <festevam@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        linux-media <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v3 1/4] media: dt-bindings: media: i2c: Switch to
+ assigned-clock-rates
+Message-ID: <20200324154045.whiy6uvlg2mrjv5a@gilmour.lan>
+References: <1584133954-6953-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1584133954-6953-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200319124452.3yfcvq754vi4q2rv@gilmour.lan>
+ <20200319130348.GC4872@pendragon.ideasonboard.com>
+ <CA+V-a8s-GZsYuBLyGnzURZfGD42f0c+QEan6FSwb2ew1=7Gj3g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="766st27slgtqfmag"
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8s-GZsYuBLyGnzURZfGD42f0c+QEan6FSwb2ew1=7Gj3g@mail.gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The per-device option selection is a feature that some
-developers love, while others hate...
 
-So, let's make both happy by making it optional.
+--766st27slgtqfmag
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/Kconfig | 32 +++++++++++++++++++++++++++-----
- 1 file changed, 27 insertions(+), 5 deletions(-)
+On Thu, Mar 19, 2020 at 01:17:51PM +0000, Lad, Prabhakar wrote:
+> Hi Laurent,
+>
+> On Thu, Mar 19, 2020 at 1:04 PM Laurent Pinchart
+> <laurent.pinchart@ideasonboard.com> wrote:
+> >
+> > Hi Maxime,
+> >
+> > On Thu, Mar 19, 2020 at 01:44:52PM +0100, Maxime Ripard wrote:
+> > > On Fri, Mar 13, 2020 at 09:12:31PM +0000, Lad Prabhakar wrote:
+> > > > Use assigned-clock-rates to specify the clock rate. Also mark
+> > > > clock-frequency property as deprecated.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/media/i2c/ov5645.txt | 5 +++--
+> > > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/media/i2c/ov5645.txt b/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+> > > > index 72ad992..e62fe82 100644
+> > > > --- a/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+> > > > +++ b/Documentation/devicetree/bindings/media/i2c/ov5645.txt
+> > > > @@ -8,7 +8,7 @@ Required Properties:
+> > > >  - compatible: Value should be "ovti,ov5645".
+> > > >  - clocks: Reference to the xclk clock.
+> > > >  - clock-names: Should be "xclk".
+> > > > -- clock-frequency: Frequency of the xclk clock.
+> > > > +- clock-frequency (deprecated): Frequency of the xclk clock.
+> > > >  - enable-gpios: Chip enable GPIO. Polarity is GPIO_ACTIVE_HIGH. This corresponds
+> > > >    to the hardware pin PWDNB which is physically active low.
+> > > >  - reset-gpios: Chip reset GPIO. Polarity is GPIO_ACTIVE_LOW. This corresponds to
+> > > > @@ -37,7 +37,8 @@ Example:
+> > > >
+> > > >                     clocks = <&clks 200>;
+> > > >                     clock-names = "xclk";
+> > > > -                   clock-frequency = <24000000>;
+> > > > +                   assigned-clocks = <&clks 200>;
+> > > > +                   assigned-clock-rates = <24000000>;
+> > > >
+> > > >                     vdddo-supply = <&camera_dovdd_1v8>;
+> > > >                     vdda-supply = <&camera_avdd_2v8>;
+> > >
+> > > clock-frequency is quite different from assigned-clock-rates though,
+> > > semantically speaking. clock-frequency is only about what the clock
+> > > frequency is, while assigned-clock-rates will change the rate as well,
+> > > and you have no idea how long it will last.
+> >
+> > The driver currently reads the clock-frequency property and then calls
+> > clk_set_rate(). I agree tht assigned-clock-rates isn't a panacea, but I
+> > think it's less of a hack than what we currently have.
+> >
+> > As discussed on IRC, maybe the best option in this specific case is to
+> > drop clock-frequency and assigned-clok-rates, and call clk_set_rate()
+> > with a hardcoded frequency of 24MHz in the driver, as that's the only
+> > frequency the driver supports.
+> >
+> Does this mean any driver which has a fixed clock requirement shouldn't be a
+> DT property and should be just handled by the drivers internally ?
 
-diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index 4c06728a4ab7..e372029ac41f 100644
---- a/drivers/media/Kconfig
-+++ b/drivers/media/Kconfig
-@@ -25,14 +25,32 @@ menuconfig MEDIA_SUPPORT
- 	  Additional info and docs are available on the web at
- 	  <https://linuxtv.org>
- 
--menu "Types of devices to be supported"
-+if MEDIA_SUPPORT
-+
-+config MEDIA_SUPPORT_FILTER
-+	bool "Filter devices by their types"
- 	depends on MEDIA_SUPPORT
-+	help
-+	   Configuring the media subsystem can be complex, as there are
-+	   hundreds of drivers and other config options.
-+
-+	   This menu offers option that will help the Kernel's config
-+	   system to hide drivers that are out of the scope of the
-+	   user needs, and disabling core support for unused APIs.
-+
-+	   If not selected, all non-optional media core functionality
-+	   needed to support media drivers will be enabled. Also, all
-+	   media device drivers should be shown.
-+
-+menu "Media device types"
-+	visible if MEDIA_SUPPORT_FILTER
- 
- #
- # Multimedia support - automatically enable V4L2 and DVB core
- #
- config MEDIA_CAMERA_SUPPORT
- 	bool "Cameras and video grabbers"
-+	default y if !MEDIA_SUPPORT_FILTER
- 	help
- 	  Enable support for webcams and video grabbers.
- 
-@@ -40,6 +58,7 @@ config MEDIA_CAMERA_SUPPORT
- 
- config MEDIA_ANALOG_TV_SUPPORT
- 	bool "Analog TV"
-+	default y if !MEDIA_SUPPORT_FILTER
- 	help
- 	  Enable analog TV support.
- 
-@@ -52,6 +71,7 @@ config MEDIA_ANALOG_TV_SUPPORT
- 
- config MEDIA_DIGITAL_TV_SUPPORT
- 	bool "Digital TV"
-+	default y if !MEDIA_SUPPORT_FILTER
- 	help
- 	  Enable digital TV support.
- 
-@@ -60,6 +80,7 @@ config MEDIA_DIGITAL_TV_SUPPORT
- 
- config MEDIA_RADIO_SUPPORT
- 	bool "AM/FM radio receivers/transmitters"
-+	default y if !MEDIA_SUPPORT_FILTER
- 	help
- 	  Enable AM/FM radio support.
- 
-@@ -74,6 +95,7 @@ config MEDIA_RADIO_SUPPORT
- 
- config MEDIA_SDR_SUPPORT
- 	bool "Software defined radio"
-+	default y if !MEDIA_SUPPORT_FILTER
- 	help
- 	  Enable software defined radio support.
- 
-@@ -81,6 +103,7 @@ config MEDIA_SDR_SUPPORT
- 
- config MEDIA_CEC_SUPPORT
- 	bool "HDMI CEC support"
-+	default y if !MEDIA_SUPPORT_FILTER
- 	help
- 	  Enable support for HDMI CEC (Consumer Electronics Control),
- 	  which is an optional HDMI feature.
-@@ -90,6 +113,7 @@ config MEDIA_CEC_SUPPORT
- 
- config MEDIA_EMBEDDED_SUPPORT
- 	bool "Embedded devices (SoC)"
-+	default y if !MEDIA_SUPPORT_FILTER
- 	help
- 	  Enable support for complex cameras, codecs, and other hardware
- 	  found on Embedded hardware (SoC).
-@@ -98,6 +122,7 @@ config MEDIA_EMBEDDED_SUPPORT
- 
- config MEDIA_TEST_SUPPORT
- 	bool "Test drivers"
-+	default y if !MEDIA_SUPPORT_FILTER
- 	help
- 	  Those drivers should not be used on production Kernels, but
- 	  can be useful on debug ones. It enables several dummy drivers
-@@ -106,10 +131,7 @@ config MEDIA_TEST_SUPPORT
- 	  have regressions.
- 
- 	  Say Y when you have a software defined radio device.
--
--endmenu # media support types
--
--if MEDIA_SUPPORT
-+endmenu # media device types
- 
- comment "Media core options"
- 
--- 
-2.24.1
+It's hard to give a generic policy, but here, the hardware is pretty
+flexible since it can deal with anything between 6MHz to 50-something
+MHz, it's the driver that chooses to enforce a 24MHz and be pedantic
+about it, so it's up to the driver to enforce that policy, not to the
+DT since it's essentially a software limitation, not a hardware one.
 
+Maxime
+
+--766st27slgtqfmag
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXnop/QAKCRDj7w1vZxhR
+xUp3AQC4CpS3+gKsDPAnZm8pakj0NLuoi+oYlCsyVqEEtPSmBQD/W0Fnywv9KUiq
+QETeY979lVRzXw6cNCOb1qDBjB9TGQE=
+=nwfk
+-----END PGP SIGNATURE-----
+
+--766st27slgtqfmag--
