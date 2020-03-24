@@ -2,40 +2,54 @@ Return-Path: <SRS0=HLWw=5J=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B535C2BAEE
-	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 13:14:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAF0DC43331
+	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 14:26:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6A48E208D6
-	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 13:14:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 770F720B80
+	for <linux-media@archiver.kernel.org>; Tue, 24 Mar 2020 14:26:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1585059987;
+	bh=PMZLvau6l0DTq6hZbaVXDrSebT6xY40VOvUd+dhMy3g=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=b4/ae7L/ZhwprjLiBA1zZ+L90PAGes+5g6+5CDholdY8JqL5xp9O6JZTGh3dckmJp
+	 rZccJ7hEAqQTWEqRgn68Wo5icyqNVthDlMvz3+OmnHai8wub9SzHVDA4zldZsZvSA7
+	 imjM1AE8z6nCIJPWURReQ9W3aHm4G9NYu2vBFU80=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728147AbgCXNOt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Mar 2020 09:14:49 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:45156 "EHLO www.linuxtv.org"
+        id S1728227AbgCXO00 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Mar 2020 10:26:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35676 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728138AbgCXNOr (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Mar 2020 09:14:47 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1jGjM6-008dpr-64; Tue, 24 Mar 2020 13:12:30 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1jGjPr-0001FZ-Ee; Tue, 24 Mar 2020 13:16:23 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.7] Various fixes, add i.MX8MQ hantro support (#62458)
-Date:   Tue, 24 Mar 2020 13:16:23 +0000
-Message-Id: <20200324131623.4764-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <270c0340-e052-7466-4a7b-2155a643d35f@xs4all.nl>
-References: 
+        id S1727708AbgCXO0Z (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Mar 2020 10:26:25 -0400
+Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 507712080C;
+        Tue, 24 Mar 2020 14:26:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585059985;
+        bh=PMZLvau6l0DTq6hZbaVXDrSebT6xY40VOvUd+dhMy3g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KEfGxndlwReoMWinWpkgMISRaygsaKm0Q4pXckZY232Qw7a9aiyD8xWq1fdN02G12
+         Q0vrbrTB/0QygkF2lrr1O+4VG8CtYAjhTNTYAz4sGMtQyRwPIGHDHGkBL/gKNjC7Y9
+         VA/EhXz2L1GR+E9cxdtPmtoaDyOm3gA9qyXYLcfA=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jGkVb-00266T-HL; Tue, 24 Mar 2020 15:26:23 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH v2 02/20] media: Kconfig: not all V4L2 platform drivers are for camera
+Date:   Tue, 24 Mar 2020 15:26:03 +0100
+Message-Id: <e39e656c49c05829f0cf9affd7918818351d09e6.1585059896.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <cover.1585059896.git.mchehab+huawei@kernel.org>
+References: <cover.1585059896.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -43,37 +57,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+When the platform drivers got added, they were all part of
+complex camera support. This is not the case anymore, as we
+now have codecs and other stuff there too.
 
-Pull request: https://patchwork.linuxtv.org/patch/62458/
-Build log: https://builder.linuxtv.org/job/patchwork/43704/
-Build time: 00:06:13
-Link: https://lore.kernel.org/linux-media/270c0340-e052-7466-4a7b-2155a643d35f@xs4all.nl
+So, fix the dependencies, in order to not require users to
+manually select something that it doesn't make sense.
 
-gpg: Signature made Tue 24 Mar 2020 01:02:38 PM UTC
-gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/Kconfig          | 3 +--
+ drivers/media/platform/Kconfig | 1 -
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-Summary: 4 patches and/or PDF generation with issues, being 0 at build time
-
-Error/warnings:
-
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0003-vivid-fix-incorrect-PA-assignment-to-HDMI-outputs.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0003-vivid-fix-incorrect-PA-assignment-to-HDMI-outputs.patch
-patches/0003-vivid-fix-incorrect-PA-assignment-to-HDMI-outputs.patch:28: WARNING: line over 80 characters
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0004-media-dt-bindings-Document-i.MX8MQ-VPU-bindings.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0004-media-dt-bindings-Document-i.MX8MQ-VPU-bindings.patch
-patches/0004-media-dt-bindings-Document-i.MX8MQ-VPU-bindings.patch:17: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0005-media-hantro-add-initial-i.MX8MQ-support.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0005-media-hantro-add-initial-i.MX8MQ-support.patch
-patches/0005-media-hantro-add-initial-i.MX8MQ-support.patch:45: WARNING: please write a paragraph that describes the config symbol fully
-patches/0005-media-hantro-add-initial-i.MX8MQ-support.patch:97: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0007-media-i2c-video-i2c-fix-build-errors-due-to-imply-hw.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0007-media-i2c-video-i2c-fix-build-errors-due-to-imply-hw.patch
-patches/0007-media-i2c-video-i2c-fix-build-errors-due-to-imply-hw.patch:12: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
+index 9dfea5c4b6ab..4af21fa73fcf 100644
+--- a/drivers/media/Kconfig
++++ b/drivers/media/Kconfig
+@@ -99,8 +99,7 @@ source "drivers/media/mc/Kconfig"
+ config VIDEO_DEV
+ 	tristate
+ 	depends on MEDIA_SUPPORT
+-	depends on MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_RADIO_SUPPORT || MEDIA_SDR_SUPPORT
+-	default y
++	default MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_RADIO_SUPPORT || MEDIA_SDR_SUPPORT || V4L_PLATFORM_DRIVERS
+ 
+ config VIDEO_V4L2_SUBDEV_API
+ 	bool "V4L2 sub-device userspace API"
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index e01bbb9dd1c1..34f40c2c8c45 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -5,7 +5,6 @@
+ 
+ menuconfig V4L_PLATFORM_DRIVERS
+ 	bool "V4L platform devices"
+-	depends on MEDIA_CAMERA_SUPPORT
+ 	help
+ 	  Say Y here to enable support for platform-specific V4L drivers.
+ 
+-- 
+2.24.1
 
