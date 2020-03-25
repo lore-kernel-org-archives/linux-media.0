@@ -2,178 +2,151 @@ Return-Path: <SRS0=oTdG=5K=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 228D0C2D0E7
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 21:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50C14C2D0EF
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 22:05:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E19F720838
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 21:52:36 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nkNMTRqQ"
+	by mail.kernel.org (Postfix) with ESMTP id 295E22082F
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 22:05:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1585173954;
+	bh=h1JIaMJ7tQpgNRXO467p+V4j+52rJvNdy3dnEJ2ewrs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=zl3HGs1N3I8pDXfN8S7JLRlGDbZAtcTOC+3Zi12sVuD1SCsF9InG63FQlw0e3HPBy
+	 wRXGcCPZ9H62Tgl9K4XKHQ6qEt8wfUU4YPR86LGiuSEsC6YbFbB2DjTKdhY9hC13mS
+	 OeXuwnNL3S3Nap1i5jQerOxPLjesms7hLkeFpcVg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727399AbgCYVwd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Mar 2020 17:52:33 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:36392 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726081AbgCYVwd (ORCPT
+        id S1727639AbgCYWFw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Mar 2020 18:05:52 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:42329 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726081AbgCYWFt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Mar 2020 17:52:33 -0400
-Received: by mail-oi1-f194.google.com with SMTP id k18so3665257oib.3;
-        Wed, 25 Mar 2020 14:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QpLQfLACDAI5Uwkm+eP7UpguGefdvlXbhKdJDjEQTmA=;
-        b=nkNMTRqQhaFfQGLpH84h7Vb2cSQt2qMH5rYjL1EjXbTqkj1gYy/jeefNn5V/GRB41J
-         3JseCw2FRy+v359OZdF7/WrkZSvl5FKPK6PvwxkHsFpFj5q0807yBa5LEND5Yi/V+uIJ
-         UgPLECDpmaTBRbQnkU5L25l7CSmB8VRX6yxGQ73fiMN2zuw7d1kC2RhLeMDGbz6wg/v8
-         0VdQB7onLpyihmfY6oRo/EvYNfQun75wU913a98Zfv2yzTFyD741aIqe9jXvr0t/V0rJ
-         +0hL1y91Hepv2WHh6mqREvu78/rb6/aUWw2U685nvVDmNiLkAz7simG2NmeF/erOMWsM
-         soVQ==
+        Wed, 25 Mar 2020 18:05:49 -0400
+Received: by mail-il1-f196.google.com with SMTP id f16so3470280ilj.9;
+        Wed, 25 Mar 2020 15:05:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QpLQfLACDAI5Uwkm+eP7UpguGefdvlXbhKdJDjEQTmA=;
-        b=lUK5/O/GR8w8QYimZv5WbKEjGBLkoeGm8tYR/arKRqx99ubO63e9Ok8idXw9A9Dnon
-         82win2Dm2YsKKG83WqxeT2u7Zhmsued/wfS11WltD+lHUhX22izA0jfl/aWUpqbgpRbF
-         NpvZUujGL2E1IVGOaWvl7oS/pL/iZlLI/8EUwuDjaoIXJDLxl2KXRSRGEK8O+ANzi0qI
-         BmLpZvPESTIraDhKB9C3Uze033phMKNFzMuDLUUnFsVQSXyP+dCv3TODrOCpQPVq3xnB
-         9/eszBAuCjHkTfkWN19g/7vw6XFgXvUbR4LD5TF2kMGXSEIRUDCcQOUk0ew4413S81vE
-         MicQ==
-X-Gm-Message-State: ANhLgQ2lp6dzirKvKWrqYWgMaN2nDGXK4dH0t0enCalkq7hyfjvz7NWs
-        lKgRihT1K+umq7nuLvpj+ZtbJtOVS/EYB1JveoA=
-X-Google-Smtp-Source: ADFU+vt678gX2VsVQQpCTNMxR/ZEy9sOGed2BFdU0XnvfqmjfHdK180DMJmfexTYtkXu+tyuQ3CLR9198ESyMdFsYk0=
-X-Received: by 2002:aca:5444:: with SMTP id i65mr3865876oib.101.1585173152034;
- Wed, 25 Mar 2020 14:52:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <1584133954-6953-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1584133954-6953-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200319124452.3yfcvq754vi4q2rv@gilmour.lan> <20200319130348.GC4872@pendragon.ideasonboard.com>
- <CA+V-a8s-GZsYuBLyGnzURZfGD42f0c+QEan6FSwb2ew1=7Gj3g@mail.gmail.com>
- <20200324154045.whiy6uvlg2mrjv5a@gilmour.lan> <CA+V-a8tMVoJOdgM_S0sJ0WEGhwBirCC4mi-TtxLCn1SKVXXiBQ@mail.gmail.com>
- <20200324161221.GA27805@pendragon.ideasonboard.com>
-In-Reply-To: <20200324161221.GA27805@pendragon.ideasonboard.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 25 Mar 2020 21:52:05 +0000
-Message-ID: <CA+V-a8uL+VQysPTj6m=W=Y7_eK-p4HOY0a16-F=v3q3KyvCX_g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] media: dt-bindings: media: i2c: Switch to assigned-clock-rates
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=7Ulr9pBC4SUbqUU5FsVEbaY1gpVe/0DQ9QLWI1PPgfQ=;
+        b=h8lmGFQZlK5QIMgUBSRohVsWI+SzJs+RRumzyzMs4lTHl9FL+n4P1U7I/z+M/2Cc46
+         xvnHGLo8n1XWvYmEZOuGa3lRxstQLgXiWfyYEiIEyLN4ybSNpLNAp9ALKqbJ5tedforT
+         ZprOTWErdxUVlI7kmKreDbdtCQA+fCofh4uloll27G7t7ma6DzTmmdX8V7UHOoClVBO1
+         YpC+Viz0nBDstmgAU8CaAD/XDDoEdajrfvnLm4AqehtzF+lcxYYv9UgMLuehwcGSJ4uF
+         x8Pj3UBuzXGAXtropwvHDHnNifpyyPfyIR3HEw8mbYRRNwIYe4gD9X1yBgYzQQql6daT
+         bn5w==
+X-Gm-Message-State: ANhLgQ0mIqnH4zuwPZrs3JINLpMitAtKylmVqXrGnayRlsNHJ34P+s0w
+        KYU5ujb1zUWGsePVJvfmoMsb9JU=
+X-Google-Smtp-Source: ADFU+vue8Vxmky7PF9etOIHQcfy9dQqZ6AbqyS9J6TatHClhkfnl2UGT86/bcc6UGlxsmE61Cop/rw==
+X-Received: by 2002:a92:6e11:: with SMTP id j17mr5689060ilc.249.1585173946547;
+        Wed, 25 Mar 2020 15:05:46 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.250])
+        by smtp.googlemail.com with ESMTPSA id v8sm102390ioh.40.2020.03.25.15.05.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2020 15:05:45 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Brian Masney <masneyb@onstation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        NXP Linux Team <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Zhang Rui <rui.zhang@intel.com>,
+        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 1/4] dt-bindings: iio/accel: Drop duplicate adi,adxl345/6 from trivial-devices.yaml
+Date:   Wed, 25 Mar 2020 16:05:38 -0600
+Message-Id: <20200325220542.19189-2-robh@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200325220542.19189-1-robh@kernel.org>
+References: <20200325220542.19189-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+The 'adi,adxl345' definition is a duplicate as there's a full binding in:
+Documentation/devicetree/bindings/iio/accel/adi,adxl345.yaml
 
-On Tue, Mar 24, 2020 at 4:12 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Prabhakar,
->
-> On Tue, Mar 24, 2020 at 04:04:43PM +0000, Lad, Prabhakar wrote:
-> > On Tue, Mar 24, 2020 at 3:40 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> > > On Thu, Mar 19, 2020 at 01:17:51PM +0000, Lad, Prabhakar wrote:
-> > > > On Thu, Mar 19, 2020 at 1:04 PM Laurent Pinchart wrote:
-> > > > > On Thu, Mar 19, 2020 at 01:44:52PM +0100, Maxime Ripard wrote:
-> > > > > > On Fri, Mar 13, 2020 at 09:12:31PM +0000, Lad Prabhakar wrote:
-> > > > > > > Use assigned-clock-rates to specify the clock rate. Also mark
-> > > > > > > clock-frequency property as deprecated.
-> > > > > > >
-> > > > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > > > ---
-> > > > > > >  Documentation/devicetree/bindings/media/i2c/ov5645.txt | 5 +++--
-> > > > > > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/Documentation/devicetree/bindings/media/i2c/ov5645.txt b/Documentation/devicetree/bindings/media/i2c/ov5645.txt
-> > > > > > > index 72ad992..e62fe82 100644
-> > > > > > > --- a/Documentation/devicetree/bindings/media/i2c/ov5645.txt
-> > > > > > > +++ b/Documentation/devicetree/bindings/media/i2c/ov5645.txt
-> > > > > > > @@ -8,7 +8,7 @@ Required Properties:
-> > > > > > >  - compatible: Value should be "ovti,ov5645".
-> > > > > > >  - clocks: Reference to the xclk clock.
-> > > > > > >  - clock-names: Should be "xclk".
-> > > > > > > -- clock-frequency: Frequency of the xclk clock.
-> > > > > > > +- clock-frequency (deprecated): Frequency of the xclk clock.
-> > > > > > >  - enable-gpios: Chip enable GPIO. Polarity is GPIO_ACTIVE_HIGH. This corresponds
-> > > > > > >    to the hardware pin PWDNB which is physically active low.
-> > > > > > >  - reset-gpios: Chip reset GPIO. Polarity is GPIO_ACTIVE_LOW. This corresponds to
-> > > > > > > @@ -37,7 +37,8 @@ Example:
-> > > > > > >
-> > > > > > >                     clocks = <&clks 200>;
-> > > > > > >                     clock-names = "xclk";
-> > > > > > > -                   clock-frequency = <24000000>;
-> > > > > > > +                   assigned-clocks = <&clks 200>;
-> > > > > > > +                   assigned-clock-rates = <24000000>;
-> > > > > > >
-> > > > > > >                     vdddo-supply = <&camera_dovdd_1v8>;
-> > > > > > >                     vdda-supply = <&camera_avdd_2v8>;
-> > > > > >
-> > > > > > clock-frequency is quite different from assigned-clock-rates though,
-> > > > > > semantically speaking. clock-frequency is only about what the clock
-> > > > > > frequency is, while assigned-clock-rates will change the rate as well,
-> > > > > > and you have no idea how long it will last.
-> > > > >
-> > > > > The driver currently reads the clock-frequency property and then calls
-> > > > > clk_set_rate(). I agree tht assigned-clock-rates isn't a panacea, but I
-> > > > > think it's less of a hack than what we currently have.
-> > > > >
-> > > > > As discussed on IRC, maybe the best option in this specific case is to
-> > > > > drop clock-frequency and assigned-clok-rates, and call clk_set_rate()
-> > > > > with a hardcoded frequency of 24MHz in the driver, as that's the only
-> > > > > frequency the driver supports.
-> > > > >
-> > > > Does this mean any driver which has a fixed clock requirement shouldn't be a
-> > > > DT property and should be just handled by the drivers internally ?
-> > >
-> > > It's hard to give a generic policy, but here, the hardware is pretty
-> > > flexible since it can deal with anything between 6MHz to 50-something
-> > > MHz, it's the driver that chooses to enforce a 24MHz and be pedantic
-> > > about it, so it's up to the driver to enforce that policy, not to the
-> > > DT since it's essentially a software limitation, not a hardware one.
-> >
-> > Thank you for the clarification, Ill drop patches 1-4 from this series.
->
-> That's the whole series... :-) I think you should keep patch 1/4 but
-> just remove the clock-frequency from the bindings, then remove it from
-> the DT files, and patch the driver to set the clock rate to 24MHz
-> unconditionally in patch 4/4.
->
-My bad I was referring to v4 series patch 5/5 which converts dt
-bindings to json schema.
-I'll shall post a v5 as suggested above.
+The trivial-devices binding doesn't capture that 'adi,adxl346' has a
+fallback compatible 'adi,adxl345', so let's add it to adi,adxl345.yaml.
 
-Cheers,
---Prabhakar
+Cc: Michael Hennerich <michael.hennerich@analog.com>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Hartmut Knaack <knaack.h@gmx.de>
+Cc: Lars-Peter Clausen <lars@metafoo.de>
+Cc: Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+Cc: linux-iio@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/iio/accel/adi,adxl345.yaml     | 10 +++++++---
+ Documentation/devicetree/bindings/trivial-devices.yaml |  4 ----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-> --
-> Regards,
->
-> Laurent Pinchart
+diff --git a/Documentation/devicetree/bindings/iio/accel/adi,adxl345.yaml b/Documentation/devicetree/bindings/iio/accel/adi,adxl345.yaml
+index c602b6fe1c0c..d124eba1ce54 100644
+--- a/Documentation/devicetree/bindings/iio/accel/adi,adxl345.yaml
++++ b/Documentation/devicetree/bindings/iio/accel/adi,adxl345.yaml
+@@ -17,9 +17,13 @@ description: |
+ 
+ properties:
+   compatible:
+-    enum:
+-      - adi,adxl345
+-      - adi,adxl375
++    oneOf:
++      - items:
++          - const: adi,adxl346
++          - const: adi,adxl345
++      - enum:
++          - adi,adxl345
++          - adi,adxl375
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 978de7d37c66..51d1f6e43c02 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -42,10 +42,6 @@ properties:
+           - adi,adt7476
+             # +/-1C TDM Extended Temp Range I.C
+           - adi,adt7490
+-            # Three-Axis Digital Accelerometer
+-          - adi,adxl345
+-            # Three-Axis Digital Accelerometer (backward-compatibility value "adi,adxl345" must be listed too)
+-          - adi,adxl346
+             # AMS iAQ-Core VOC Sensor
+           - ams,iaq-core
+             # i2c serial eeprom  (24cxx)
+-- 
+2.20.1
+
