@@ -6,76 +6,106 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A871C2D0E7
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 21:27:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53CFCC43331
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 21:35:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 016D32082D
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 21:27:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34EBF2070A
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 21:35:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727504AbgCYV1Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Mar 2020 17:27:25 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39680 "EHLO
+        id S1727461AbgCYVe4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Mar 2020 17:34:56 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:39822 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727357AbgCYV1P (ORCPT
+        with ESMTP id S1726081AbgCYVe4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Mar 2020 17:27:15 -0400
+        Wed, 25 Mar 2020 17:34:56 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 06C51293A21
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org, dafna.hirschfeld@collabora.com,
-        helen.koike@collabora.com, ezequiel@collabora.com,
-        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
-        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
-        mchehab@kernel.org, laurent.pinchart@ideasonboard.com
-Subject: [PATCH 0/2] media: staging: rkisp1: Fix formats for metadata pads
-Date:   Wed, 25 Mar 2020 22:27:02 +0100
-Message-Id: <20200325212704.29862-1-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id DA42F293EA8
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v3 0/7] hantro: set of small cleanups and fixes
+Date:   Wed, 25 Mar 2020 18:34:31 -0300
+Message-Id: <20200325213439.16509-1-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.26.0.rc2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are 4 pads between the entities
-rkisp1_isp, rkisp1_params, rkisp1_stats that transmit
-metadata. Since metadata has no dimensions, it makes
-sense to set the width and height of these pads to 0.
-The problem is that it makes the v4l-compliance tests fail.
-Currently, in order to silent the tests, the width
-and height are set to RKISP1_DEFAULT_*
+Hi all,
 
-This patchset sets the dimensions to 0 and solves the
-compliance error by introducing a new flag
-MEDIA_PAD_FL_METADATA in media.h and setting
-this flag to those pads.
-Then the v4l2-compliance tests can skip the
-dimensions test if this flag is set.
+Cleanups and fixes, third iteration.
 
-This is just a suggested implementation from Laurent,
-a better documentation is probably needed.
-Another possible solution suggested by Verkuil
-is to add a new media bus format: MEDIA_BUS_FMT_FIXED_METADATA.
+The main idea here is to address two issues, and while
+at it, clean the driver a bit.
 
-- patch 1: introduces the the flag
-- patch 2: set the flag to the pads and removes a related TODO item
+The first issue can be found in Patch 1, when the Request
+API is used, the CAPTURE buffer should be returned _before_
+the OUTPUT buffer, to avoid waking up userspace prematurely.
 
-A corresponding patch to v4l-utils will be sent.
+I noticed this issue while working on the rkvdec driver,
+but this time I've decided to tackle it at the core,
+in v4l2_m2m_buf_done_and_job_finish().
 
+The second issue is a simple compliance issue, which is solved
+by refactoring the driver, dealing with internal set format
+properly.
 
-Dafna Hirschfeld (2):
-  media: media.h: Add a pad flag MEDIA_PAD_FL_METADATA
-  media: staging: rkisp1: add the flag MEDIA_PAD_FL_METADATA to the
-    metadata pads
+Note that patch 7 still needs reviews from device tree maintainers.
 
- Documentation/media/uapi/mediactl/media-types.rst |  4 ++++
- drivers/staging/media/rkisp1/TODO                 |  1 -
- drivers/staging/media/rkisp1/rkisp1-isp.c         | 10 ++++++----
- drivers/staging/media/rkisp1/rkisp1-params.c      |  2 +-
- drivers/staging/media/rkisp1/rkisp1-stats.c       |  2 +-
- include/uapi/linux/media.h                        |  1 +
- 6 files changed, 13 insertions(+), 7 deletions(-)
+Changes v3:
+
+* Rebased media master.
+
+* Revert buffer sequence removal change.
+
+Changes v2:
+
+* Fix compile warning introduced by patch 6.
+
+* I'm adding two additional patches this time.
+  Patch 7 converts the binding to json-schema,
+  and patch 8 puts linux-rockchip mailing list in MAINTAINERS. 
+
+Thanks,
+Ezequiel
+
+Ezequiel Garcia (7):
+  v4l2-mem2mem: return CAPTURE buffer first
+  hantro: Set buffers' zeroth plane payload in .buf_prepare
+  hantro: Use v4l2_m2m_buf_done_and_job_finish
+  hantro: Remove unneeded hantro_dec_buf_finish
+  hantro: Move H264 motion vector calculation to a helper
+  hantro: Refactor for V4L2 API spec compliancy
+  dt-bindings: rockchip-vpu: Convert bindings to json-schema
+
+ .../bindings/media/rockchip-vpu.txt           |  43 -------
+ .../bindings/media/rockchip-vpu.yaml          |  82 +++++++++++++
+ MAINTAINERS                                   |   2 +-
+ drivers/media/v4l2-core/v4l2-mem2mem.c        |  11 +-
+ drivers/staging/media/hantro/hantro.h         |   7 +-
+ drivers/staging/media/hantro/hantro_drv.c     |  28 ++---
+ drivers/staging/media/hantro/hantro_hw.h      |  31 +++++
+ drivers/staging/media/hantro/hantro_v4l2.c    | 111 +++++++++---------
+ 8 files changed, 193 insertions(+), 122 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/rockchip-vpu.txt
+ create mode 100644 Documentation/devicetree/bindings/media/rockchip-vpu.yaml
 
 -- 
-2.17.1
+2.26.0.rc2
 
