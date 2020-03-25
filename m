@@ -2,123 +2,85 @@ Return-Path: <SRS0=oTdG=5K=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38030C54FCF
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 15:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DA4DC1975A
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 16:04:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 151D62077D
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 15:37:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57EC520409
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 16:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585150631;
-	bh=oFXULYKX2minzKx5vxHtI63XAdjYTOaBbYv6XpZTy8U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=gJan+RYoxE1a099a2q/SVGgqk90dUOu6blZLBC9fmKD6VxOxXqU5C+EWkGBOCxzPq
-	 sXTyKSECfF+Z13I3RWLIfNMV/K1iIvojU30cZGYNUk4KNS7n9xse8w/Dt2Pf9vz3aC
-	 AsVB+BKS1FvnYSOPuTD8wLtiB+xgbCpVVi+0+lRw=
+	s=default; t=1585152242;
+	bh=0OrqQVURmIfTXMZYOFnLj+Igl8DvlJdPmwTyYoCWlo8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=xbrB8G9smRulqtESyxMEvrtzAV7I/VHiOv1WbMoLMeqeHCST83jzMZ0cOfa7PRnUR
+	 vuYG89bDWXtFcgoZ82GiyTMnBGDiSGOvtHlAWDRCdArxbZML4CyYEq/K07j88Q4Sm8
+	 wfd53qWhB83kGgPqXFIfYPar6rh2I+OXh4O1ByXo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727703AbgCYPhI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Mar 2020 11:37:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42216 "EHLO mail.kernel.org"
+        id S1728022AbgCYQEB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Mar 2020 12:04:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53246 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727598AbgCYPhH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Mar 2020 11:37:07 -0400
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1727843AbgCYQEB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 25 Mar 2020 12:04:01 -0400
+Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B7E3F207FC;
-        Wed, 25 Mar 2020 15:37:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EBD8220409;
+        Wed, 25 Mar 2020 16:04:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585150627;
-        bh=oFXULYKX2minzKx5vxHtI63XAdjYTOaBbYv6XpZTy8U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EmXJ2ROEV4uIH8BVYnhJow+4A1BNHgFJhRUt9XQCD6kAaBxpBQ9HUZgP/XrSHK5bj
-         h411zoPSO8xwuCbPMBajeLkGTqC6LflkOK0k89zrhsMNcNwB79zSWQ8gkX1NCxcuMl
-         UqyaakkDQgHMStjvRjvEPxTPWKjs7WOVKBmfOH8Y=
-Received: by mail-ed1-f51.google.com with SMTP id de14so2921639edb.4;
-        Wed, 25 Mar 2020 08:37:06 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ2B6uIAJpvwbNRha58/NuFm5VlXCKDbgu5vvcB5/RS7aFH/4A1p
-        DyGGDf1Arg9V3t+2FrsEm2zNB5UlbiHqWXnaZg==
-X-Google-Smtp-Source: ADFU+vvSoNJiU20ECt+7uu1vArut7MOjxMslvG/4PUR+3ZtOhd8DgCxmMnQcFYZJdkJa/fK+7IMDcrBp7ZaC6D/3Es4=
-X-Received: by 2002:a50:9f07:: with SMTP id b7mr3556024edf.148.1585150625023;
- Wed, 25 Mar 2020 08:37:05 -0700 (PDT)
+        s=default; t=1585152241;
+        bh=0OrqQVURmIfTXMZYOFnLj+Igl8DvlJdPmwTyYoCWlo8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=H5RJP+LW5AC4zaNBoUKz801vKPvthyccL/jILpApM61sl9SMDiAgEC5yFNyPYzSxz
+         AXlGL8FRcpTgdT0caOAVGv2JMvLAnFn9TX24RkTCimeHoMQAR8BprbG3CjCAvH6Dip
+         Cq3WaadQgIOsmi/jkeFcD8okymJFJNUVx72weAik=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jH8Va-003MJB-L9; Wed, 25 Mar 2020 17:03:58 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 1/4] media: dvb-core: Kconfig: default to use dynamic minors
+Date:   Wed, 25 Mar 2020 17:03:54 +0100
+Message-Id: <630569cfba15fb7c35eb5092c1eebb8467b33908.1585151701.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1585151701.git.mchehab+huawei@kernel.org>
+References: <cover.1585151701.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-References: <20200311165322.1594233-1-enric.balletbo@collabora.com>
- <20200311165322.1594233-4-enric.balletbo@collabora.com> <158474603935.125146.14986079780178656133@swboyd.mtv.corp.google.com>
-In-Reply-To: <158474603935.125146.14986079780178656133@swboyd.mtv.corp.google.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Wed, 25 Mar 2020 23:36:52 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_8jPkOrdUx7iH=q7kTH2+nPE8igX5-p6ZzwC7aHkQwF+A@mail.gmail.com>
-Message-ID: <CAAOTY_8jPkOrdUx7iH=q7kTH2+nPE8igX5-p6ZzwC7aHkQwF+A@mail.gmail.com>
-Subject: Re: [PATCH v12 3/5] clk / soc: mediatek: Move mt8173 MMSYS to
- platform driver
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        David Airlie <airlied@linux.ie>, CK Hu <ck.hu@mediatek.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mark Rutland <mark.rutland@arm.com>, mturquette@baylibre.com,
-        p.zabel@pengutronix.de, Rob Herring <robh+dt@kernel.org>,
-        ulrich.hecht+renesas@gmail.com,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        James Liao <jamesjj.liao@mediatek.com>,
-        hat.com@freedesktop.org,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        linux-clk@vger.kernel.org, Nicolas Boichat <drinkcat@chromium.org>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>, wens@csie.org,
-        Allison Randal <allison@lohutok.net>,
-        mtk01761 <wendell.lin@mediatek.com>,
-        Owen Chen <owen.chen@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        frank-w@public-files.de, Seiya Wang <seiya.wang@mediatek.com>,
-        sean.wang@mediatek.com, Houlong Wei <houlong.wei@mediatek.com>,
-        linux-mediatek@lists.infradead.org, hsinyi@chromium.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <mbrugger@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rdunlap@infradead.org, linux-kernel@vger.kernel.org,
-        matthias.bgg@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Stephen Boyd <sboyd@kernel.org> =E6=96=BC 2020=E5=B9=B43=E6=9C=8821=E6=97=
-=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=887:14=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Quoting Enric Balletbo i Serra (2020-03-11 09:53:20)
-> > From: Matthias Brugger <mbrugger@suse.com>
-> >
-> > There is no strong reason for this to use CLK_OF_DECLARE instead of
-> > being a platform driver. Plus, MMSYS provides clocks but also a shared
-> > register space for the mediatek-drm and the mediatek-mdp
-> > driver. So move the MMSYS clocks to a new platform driver and also
-> > create a new MMSYS platform driver in drivers/soc/mediatek that
-> > instantiates the clock driver.
-> >
-> > Signed-off-by: Matthias Brugger <mbrugger@suse.com>
-> > Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-> > Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> > ---
->
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
->
-> Unless you want me to pick this up by itself?
+All modern Linux distributions nowadays use udev or some
+alternative (like systemd). So, it makes sense to change
+the default to use dynamic minors.
 
-I would like Matthias to pick up this series together.
+Please notice that this default doesn't enable any code.
+It just changes the dvb-core behavior.
 
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/dvb-core/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/dvb-core/Kconfig b/drivers/media/dvb-core/Kconfig
+index 0f8e53692b86..6ffac618417b 100644
+--- a/drivers/media/dvb-core/Kconfig
++++ b/drivers/media/dvb-core/Kconfig
+@@ -45,6 +45,7 @@ config DVB_MAX_ADAPTERS
+ config DVB_DYNAMIC_MINORS
+ 	bool "Dynamic DVB minor allocation"
+ 	depends on DVB_CORE
++	default y
+ 	help
+ 	  If you say Y here, the DVB subsystem will use dynamic minor
+ 	  allocation for any device that uses the DVB major number.
+-- 
+2.25.1
+
