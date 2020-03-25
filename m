@@ -2,92 +2,118 @@ Return-Path: <SRS0=oTdG=5K=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D09D3C43331
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9AC0C43331
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 10:01:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A677F20772
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585129796;
-	bh=R4LeXKJmWoxNGqE9gv1Ffj2oozVctx25bmwjWUMmnuQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jGFQtJemIwKLU74ubDEdrh4dxmtGGb8L+EbBxb5LkznD1LSfJggvkN6Q+Cd57hv0T
-	 K+JlUy0OGaxX9Mf6RKM8X1rWrZq3ZOReG1MB7bDhu/zMST925qXCxgt22WAiHXPyAL
-	 7wLcugE7OS+Jq/JCfdWSc8icw/W2BClQDNT7iLYc=
+	by mail.kernel.org (Postfix) with ESMTP id 875AB206F6
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 10:01:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727566AbgCYJty (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Mar 2020 05:49:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51354 "EHLO mail.kernel.org"
+        id S1726206AbgCYKBF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Mar 2020 06:01:05 -0400
+Received: from mga17.intel.com ([192.55.52.151]:47002 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727332AbgCYJtl (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Mar 2020 05:49:41 -0400
-Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0CE9E208D6;
-        Wed, 25 Mar 2020 09:49:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585129780;
-        bh=R4LeXKJmWoxNGqE9gv1Ffj2oozVctx25bmwjWUMmnuQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sb631vI7YAWFrXqSAUCxxdq2M8RsmuFgcJPgbjLcUr0LMCXBs1WPrqnMkS9MDhaDH
-         VWf0biyMIU3CquANztSyHz061Ox8eR/K+42dAn+zjde4MH1LjI3l4xbWiodllbqiVa
-         IYst2lDbahV0gf7fZpbB6qflUeHFtIx3KruFls8o=
-Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jH2fK-003HTt-Ab; Wed, 25 Mar 2020 10:49:38 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v3 11/22] media: Kconfig: move comment to siano include
-Date:   Wed, 25 Mar 2020 10:49:25 +0100
-Message-Id: <e53e5a630adddbf734f449f528eff550ba9b022e.1585129041.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1585129041.git.mchehab+huawei@kernel.org>
+        id S1726109AbgCYKBE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 25 Mar 2020 06:01:04 -0400
+IronPort-SDR: 7mK8EBfLFXsA0WT1iipMo+vWnlAOhEj37KeHdZOnuRtQGjeygLRi3oGsKgdDPeOo23DOcJR629
+ pS/SOOepDjog==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 03:01:04 -0700
+IronPort-SDR: Df9BL9YhXrQ6Iw5Q8oGdllynI4X3BnmYveyWadwicvs13Eq3qdC5+K8g18sKtdJmokOSnwiEkm
+ 0JTheD4/42DQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,303,1580803200"; 
+   d="scan'208";a="250364172"
+Received: from lduhem-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.249.35.162])
+  by orsmga006.jf.intel.com with ESMTP; 25 Mar 2020 03:01:02 -0700
+Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
+        id 254EC21F8C; Wed, 25 Mar 2020 12:01:00 +0200 (EET)
+Date:   Wed, 25 Mar 2020 12:00:59 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v3 15/22] media: Kconfig: move media controller core
+ select to main Kconfig
+Message-ID: <20200325100059.GB22904@kekkonen.localdomain>
 References: <cover.1585129041.git.mchehab+huawei@kernel.org>
+ <ac58d0e580d93a190e44c79507dd4969679ecb36.1585129041.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac58d0e580d93a190e44c79507dd4969679ecb36.1585129041.git.mchehab+huawei@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Showing this comment without showing the Siano mmc option
-is very weird! Place the option together, and make it
-visible only when showing Siano configuration.
+Hi Mauro,
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/mmc/Kconfig       | 1 -
- drivers/media/mmc/siano/Kconfig | 2 ++
- 2 files changed, 2 insertions(+), 1 deletion(-)
+On Wed, Mar 25, 2020 at 10:49:29AM +0100, Mauro Carvalho Chehab wrote:
+> Let's place the main API selections at the media/Kconfig file,
+> as this way we can better organize things.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  drivers/media/Kconfig    | 9 +++++++++
+>  drivers/media/mc/Kconfig | 9 ---------
+>  2 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
+> index d6766085c91b..3872e46545e6 100644
+> --- a/drivers/media/Kconfig
+> +++ b/drivers/media/Kconfig
+> @@ -144,6 +144,15 @@ config VIDEO_DEV
+>  	depends on MEDIA_SUPPORT
+>  	default MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_RADIO_SUPPORT || MEDIA_SDR_SUPPORT || MEDIA_PLATFORM_SUPPORT
+>  
+> +config MEDIA_CONTROLLER
+> +	bool "Media Controller API"
+> +	depends on MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_DIGITAL_TV_SUPPORT
+> +	help
+> +	  Enable the media controller API used to query media devices internal
+> +	  topology and configure it dynamically.
+> +
+> +	  This API is mostly used by camera interfaces in embedded platforms.
+> +
+>  source "drivers/media/v4l2-core/Kconfig"
+>  
+>  #
+> diff --git a/drivers/media/mc/Kconfig b/drivers/media/mc/Kconfig
+> index 3b9795cfcb36..b3579d6c9e32 100644
+> --- a/drivers/media/mc/Kconfig
+> +++ b/drivers/media/mc/Kconfig
+> @@ -3,15 +3,6 @@
+>  #	Selectable only for webcam/grabbers, as other drivers don't use it
+>  #
+>  
+> -config MEDIA_CONTROLLER
+> -	bool "Media Controller API"
+> -	depends on MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_DIGITAL_TV_SUPPORT
+> -	help
+> -	  Enable the media controller API used to query media devices internal
+> -	  topology and configure it dynamically.
+> -
+> -	  This API is mostly used by camera interfaces in embedded platforms.
+> -
+>  config MEDIA_CONTROLLER_DVB
+>  	bool "Enable Media controller for DVB (EXPERIMENTAL)"
+>  	depends on MEDIA_CONTROLLER && DVB_CORE
 
-diff --git a/drivers/media/mmc/Kconfig b/drivers/media/mmc/Kconfig
-index 5217f5bd205e..75aa6de08d53 100644
---- a/drivers/media/mmc/Kconfig
-+++ b/drivers/media/mmc/Kconfig
-@@ -1,3 +1,2 @@
- # SPDX-License-Identifier: GPL-2.0-only
--comment "MMC/SDIO adapters"
- source "drivers/media/mmc/siano/Kconfig"
-diff --git a/drivers/media/mmc/siano/Kconfig b/drivers/media/mmc/siano/Kconfig
-index 1919f6fea8b1..570696019a9e 100644
---- a/drivers/media/mmc/siano/Kconfig
-+++ b/drivers/media/mmc/siano/Kconfig
-@@ -2,6 +2,8 @@
- #
- # Siano Mobile Silicon Digital TV device configuration
- #
-+comment "MMC/SDIO DVB adapters"
-+	depends on DVB_CORE && HAS_DMA && MMC
- 
- config SMS_SDIO_DRV
- 	tristate "Siano SMS1xxx based MDTV via SDIO interface"
+This moves the main MC configuration out of the directory but leaves the
+rest of the MC configuration under the mc directory. All MC related
+configuration is currently in a single place, which makes sense.
+
+I guess you can always have arguments for and against, but my preference is
+keeping it as-is.
+
 -- 
-2.25.1
+Kind regards,
 
+Sakari Ailus
