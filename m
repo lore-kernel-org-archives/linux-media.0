@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09A45C1975A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E59B9C54FD5
 	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D5E9F20772
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B295C20772
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585129794;
-	bh=jKk8NJkL8qKsao2SH+PCcYFQbx6OBkK9bW1uRkwhuSQ=;
+	s=default; t=1585129795;
+	bh=b7F4ManG231nLhGoUOlm5eaq1cStjMJuBexokf885pU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WjkHDLugiVUVnZzJv4X+hwOa939HUK5hfDb6EQ4P+RdXLPTASiRmy7uda8Efmby37
-	 qKbCkPGGIHRmGGJ6hOrOM6KCkVypDNCzPn7r68begHFJGywsr9PQTeqRyzfWycI9Uk
-	 gsr2/v7p/SgUfWEf7yhK1gFd2nl/tLJszPZhd6Ao=
+	b=CJyeHcmntRDqDsYVf9UhGX68BzWmTFf192yIMb4uwpHZgp3I8U5GKGx0TOw+nveGH
+	 /7oWObaQN+dN/vxny16M2QvnadfDnRhp6lBo7SMTE4DduOEy8RcWYAODSYCeOAtasv
+	 kBmWdRHXzQ0tTZzH3J1TGtK/f2/L1Xi9QmrOHJw4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727417AbgCYJtk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Mar 2020 05:49:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51230 "EHLO mail.kernel.org"
+        id S1727569AbgCYJty (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Mar 2020 05:49:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51210 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727332AbgCYJtk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726116AbgCYJtk (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 25 Mar 2020 05:49:40 -0400
 Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C2DD42077D;
+        by mail.kernel.org (Postfix) with ESMTPSA id C13A020775;
         Wed, 25 Mar 2020 09:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585129779;
-        bh=jKk8NJkL8qKsao2SH+PCcYFQbx6OBkK9bW1uRkwhuSQ=;
+        bh=b7F4ManG231nLhGoUOlm5eaq1cStjMJuBexokf885pU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=blreX2PushWRTrc+A5/Jutmpx+dMsdtixJuoU7Uef3UfIs70e67yN4SmxJkmTkT6L
-         22B5Ldn08imAlR9u6ecr7fzwOoj5lp0a9la3tGO+4GZjNhNYAti+F2v2GRXmjj9O83
-         sLddyXTgY+UOgmGXB/gGZTYdKUGw6TPhHlekVC+g=
+        b=l0WLByiwtOz+jCNURk3jd8sg9mQv/vZwpr4zDXaOL8GoeD69sTumYduBVmuFFBrUP
+         yhj/7S1DjWGuTitdrA3EtPanFVlW885CkadYAHF1b+kA8ZxzdQge9ImJve5YYz6c8H
+         t9w/OCr6Ql0swORpsVwZtM9OIGOotXgg23AJrnvM=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jH2fK-003HT5-0V; Wed, 25 Mar 2020 10:49:38 +0100
+        id 1jH2fK-003HTK-3j; Wed, 25 Mar 2020 10:49:38 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v3 01/22] media: dvb-usb: auto-select CYPRESS_FIRMWARE
-Date:   Wed, 25 Mar 2020 10:49:15 +0100
-Message-Id: <712ca59ba2e1185fc505b52eba9eb3575467f393.1585129041.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 04/22] media: pci: move VIDEO_PCI_SKELETON to a different Kconfig
+Date:   Wed, 25 Mar 2020 10:49:18 +0100
+Message-Id: <1e94c76fd735f806c486beb5c8365a17e43e0cd2.1585129041.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585129041.git.mchehab+huawei@kernel.org>
 References: <cover.1585129041.git.mchehab+huawei@kernel.org>
@@ -57,46 +57,58 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-At least some of the supported boards by dvb-usb
-driver need to load the cypress firmware, so select
-it, as otherwise missing dependencies may popup.
-
-Also, as the cypress firmware load routines are needed
-only by the dvb-usb, dvb-usb-v2 and go7007 drivers, and
-those all (now) select it, there's no need to ask the
-user for manually select it.
+The V4L2 PCI skeleton is not part of the V4L2 core. Move it
+to appear together with the other PCI drivers, at the end,
+as this is something that normal users don't even need to
+bother.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/common/Kconfig      | 2 +-
- drivers/media/usb/dvb-usb/Kconfig | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/pci/Kconfig       | 10 ++++++++++
+ drivers/media/v4l2-core/Kconfig | 10 ----------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/common/Kconfig b/drivers/media/common/Kconfig
-index 1990b7f09454..4ea03b7899a8 100644
---- a/drivers/media/common/Kconfig
-+++ b/drivers/media/common/Kconfig
-@@ -14,7 +14,7 @@ config VIDEO_TVEEPROM
- 	depends on I2C
+diff --git a/drivers/media/pci/Kconfig b/drivers/media/pci/Kconfig
+index dcb3719f440e..9336f8446cf0 100644
+--- a/drivers/media/pci/Kconfig
++++ b/drivers/media/pci/Kconfig
+@@ -56,5 +56,15 @@ endif
  
- config CYPRESS_FIRMWARE
--	tristate "Cypress firmware helper routines"
-+	tristate
- 	depends on USB
+ source "drivers/media/pci/intel/ipu3/Kconfig"
  
- source "drivers/media/common/videobuf2/Kconfig"
-diff --git a/drivers/media/usb/dvb-usb/Kconfig b/drivers/media/usb/dvb-usb/Kconfig
-index 1a3e5f965ae4..42334a02cdce 100644
---- a/drivers/media/usb/dvb-usb/Kconfig
-+++ b/drivers/media/usb/dvb-usb/Kconfig
-@@ -2,6 +2,7 @@
- config DVB_USB
- 	tristate "Support for various USB DVB devices"
- 	depends on DVB_CORE && USB && I2C && RC_CORE
-+	select CYPRESS_FIRMWARE
- 	help
- 	  By enabling this you will be able to choose the various supported
- 	  USB1.1 and USB2.0 DVB devices.
++config VIDEO_PCI_SKELETON
++	tristate "Skeleton PCI V4L2 driver"
++	depends on PCI
++	depends on SAMPLES
++	depends on VIDEO_V4L2 && VIDEOBUF2_CORE
++	depends on VIDEOBUF2_MEMOPS && VIDEOBUF2_DMA_CONTIG
++	help
++	  Enable build of the skeleton PCI driver, used as a reference
++	  when developing new drivers.
++
+ endif #MEDIA_PCI_SUPPORT
+ endif #PCI
+diff --git a/drivers/media/v4l2-core/Kconfig b/drivers/media/v4l2-core/Kconfig
+index 39e3fb30ba0b..26276b257eae 100644
+--- a/drivers/media/v4l2-core/Kconfig
++++ b/drivers/media/v4l2-core/Kconfig
+@@ -31,16 +31,6 @@ config VIDEO_FIXED_MINOR_RANGES
+ 
+ 	  When in doubt, say N.
+ 
+-config VIDEO_PCI_SKELETON
+-	tristate "Skeleton PCI V4L2 driver"
+-	depends on PCI
+-	depends on SAMPLES
+-	depends on VIDEO_V4L2 && VIDEOBUF2_CORE
+-	depends on VIDEOBUF2_MEMOPS && VIDEOBUF2_DMA_CONTIG
+-	help
+-	  Enable build of the skeleton PCI driver, used as a reference
+-	  when developing new drivers.
+-
+ # Used by drivers that need tuner.ko
+ config VIDEO_TUNER
+ 	tristate
 -- 
 2.25.1
 
