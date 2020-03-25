@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5449AC54FD4
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66276C43331
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2105A20775
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3254420775
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585129789;
-	bh=Ouxe/ibQ8S33uxJ8KBxRmDCNq+3QeSz9aFGkdkxkarY=;
+	s=default; t=1585129791;
+	bh=9bs5CyE3A61rn37W3zaGGw0XGX8Mce9wk38EDn97RLI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WUb9IXkqgrjm0u1BSxqS/YKjrJe7YFrnuTKM0DXZaTKDlylbmQBsDuGjoNIjPLcZo
-	 FvptS3J3W5m7WudABq+6AwYV8XAGH2Y/RDRL7LnLUihBeHbHcZuZdacMegiHZ/m9Gl
-	 KKsfhlptxyOBsDOnLvF7qHOQK1ZmLpvIG2W26kyc=
+	b=nnoZbTxDqXY7Znzw3yRBwTSf0QpOZ/QT2iBBTXmJGsHyc4Z8ttvy27ypTIQIH4qPF
+	 En98dLu9C3A7aXnv3GwtflkWVsAJl0XCX3Js6vSNFtYJdfyeDAn0lLahqaByFvcZXX
+	 TtdLhIU6+BHb4vmwugrioyomrlBscaIfGEOnyZ/Q=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727558AbgCYJts (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Mar 2020 05:49:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51384 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727492AbgCYJtl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1727504AbgCYJtl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 25 Mar 2020 05:49:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51326 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727392AbgCYJtk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 25 Mar 2020 05:49:40 -0400
 Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 537BC215A4;
-        Wed, 25 Mar 2020 09:49:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DC147207FC;
+        Wed, 25 Mar 2020 09:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585129780;
-        bh=Ouxe/ibQ8S33uxJ8KBxRmDCNq+3QeSz9aFGkdkxkarY=;
+        bh=9bs5CyE3A61rn37W3zaGGw0XGX8Mce9wk38EDn97RLI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v5N+JmvQ9LVroi5qBJaWH/ylF2rufuShbgpwdMQ3qL/i4XL1qGPVQMCFObZxloTBp
-         yiu+SWkIpsM/H4W9taHIsS1737GNd4mqFhnruWQsiGZPO2lP/ME++lUN/5AfWG2vtw
-         Eajp2EVOAGi7gt74se3rwXzPC/X2TazWIwwOSxXM=
+        b=1YNF6OipBe/KAzsbxva8pCIQOgsY+eHXv7nfYZFq3PsloKls4zcCE2ftedq0D64Zp
+         msztw6iZyNcK3dz+2qJ3yEMIxbkk95DVcwzHmGwottS/qvJtt5a52dDDBtJnr9YHb7
+         LQlelHGrXSCD9YyllhnHGel7HJB6FjuJflluf0Qw=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jH2fK-003HUc-Jh; Wed, 25 Mar 2020 10:49:38 +0100
+        id 1jH2fK-003HTU-5g; Wed, 25 Mar 2020 10:49:38 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v3 20/22] media: Kconfig: on !EMBEDDED && !EXPERT, enable driver filtering
-Date:   Wed, 25 Mar 2020 10:49:34 +0100
-Message-Id: <fa983f22f8e47a00339809b19b40ee803d62d889.1585129041.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 06/22] media: Kconfig: update the MEDIA_SUPPORT help message
+Date:   Wed, 25 Mar 2020 10:49:20 +0100
+Message-Id: <182141ac7ef16219111cb2460b9535f4cb7b544f.1585129041.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585129041.git.mchehab+huawei@kernel.org>
 References: <cover.1585129041.git.mchehab+huawei@kernel.org>
@@ -57,31 +57,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Advanced and embedded users know what to do, so, by default,
-they will likely want to be able to open the entire set of
-Kconfig media options.
-
-Normal "poor" users usually needs more help when setting
-stuff, so let's open an more simplified version to them by
-default.
+There are more things than just cameras and TV devices on
+media. Update the help message accordingly.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/Kconfig | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index efc46792e87f..c900263438a7 100644
+index e2023a268af9..6025442dca0d 100644
 --- a/drivers/media/Kconfig
 +++ b/drivers/media/Kconfig
-@@ -21,6 +21,7 @@ if MEDIA_SUPPORT
- config MEDIA_SUPPORT_FILTER
- 	bool "Filter devices by their types"
- 	depends on MEDIA_SUPPORT
-+	default y if !EMBEDDED && !EXPERT
+@@ -18,8 +18,10 @@ menuconfig MEDIA_SUPPORT
+ 	tristate "Multimedia support"
+ 	depends on HAS_IOMEM
  	help
- 	   Configuring the media subsystem can be complex, as there are
- 	   hundreds of drivers and other config options.
+-	  If you want to use Webcams, Video grabber devices and/or TV devices
+-	  enable this option and other options below.
++	  If you want to use media devices, including Webcams, Video grabber
++	  devices and/or TV devices, V4L2 codecs, etc, enable this option
++	  and other options below.
++
+ 	  Additional info and docs are available on the web at
+ 	  <https://linuxtv.org>
+ 
 -- 
 2.25.1
 
