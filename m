@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CFB6C54FD5
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5449AC54FD4
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F0AF020775
+	by mail.kernel.org (Postfix) with ESMTP id 2105A20775
 	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585129790;
-	bh=Z5S1EB/QqXW6mQ4V6orLYFonSYdg5iCS5jfsdn7yaJM=;
+	s=default; t=1585129789;
+	bh=Ouxe/ibQ8S33uxJ8KBxRmDCNq+3QeSz9aFGkdkxkarY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=AmStkw+nesaZYWiH2q8U2WhX8C7pg2ooppxRHen+dHp331gW+JZ6r46dshv2PkAb2
-	 8d7cSbD9EaCEgN3OizVhN/DVkXdNkkMN76IczzJWv+G11azpMmw327ZQbMIXm+oOps
-	 68EvQBN2j8IcYjegTYnVfssYO3Tsfc/e5pJcrtNM=
+	b=WUb9IXkqgrjm0u1BSxqS/YKjrJe7YFrnuTKM0DXZaTKDlylbmQBsDuGjoNIjPLcZo
+	 FvptS3J3W5m7WudABq+6AwYV8XAGH2Y/RDRL7LnLUihBeHbHcZuZdacMegiHZ/m9Gl
+	 KKsfhlptxyOBsDOnLvF7qHOQK1ZmLpvIG2W26kyc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727351AbgCYJts (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727558AbgCYJts (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 25 Mar 2020 05:49:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51326 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:51384 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727458AbgCYJtl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1727492AbgCYJtl (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 25 Mar 2020 05:49:41 -0400
 Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1FB5820936;
+        by mail.kernel.org (Postfix) with ESMTPSA id 537BC215A4;
         Wed, 25 Mar 2020 09:49:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585129780;
-        bh=Z5S1EB/QqXW6mQ4V6orLYFonSYdg5iCS5jfsdn7yaJM=;
+        bh=Ouxe/ibQ8S33uxJ8KBxRmDCNq+3QeSz9aFGkdkxkarY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cbt9BcGVN9yfRP3fFIOll/pcU//GnG3H4Xjjwa5gpaYWXQBW9hBLmQXerspMuyxnM
-         4nx+CtJOY85q3+0+CbCrTIYjU3fayYQKaKeIkOVFOABBted18tBFo6rVudLeoZYtgT
-         C++2KMtFvCjhWrPnBMDhauM7d/eYrV7DWNsD8x80=
+        b=v5N+JmvQ9LVroi5qBJaWH/ylF2rufuShbgpwdMQ3qL/i4XL1qGPVQMCFObZxloTBp
+         yiu+SWkIpsM/H4W9taHIsS1737GNd4mqFhnruWQsiGZPO2lP/ME++lUN/5AfWG2vtw
+         Eajp2EVOAGi7gt74se3rwXzPC/X2TazWIwwOSxXM=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jH2fK-003HU8-E1; Wed, 25 Mar 2020 10:49:38 +0100
+        id 1jH2fK-003HUc-Jh; Wed, 25 Mar 2020 10:49:38 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v3 14/22] media: Kconfig: move drivers-specific TTPCI_EEPROM Kconfig var
-Date:   Wed, 25 Mar 2020 10:49:28 +0100
-Message-Id: <334b4fe178ad07b07a488fb25006729f97205462.1585129041.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 20/22] media: Kconfig: on !EMBEDDED && !EXPERT, enable driver filtering
+Date:   Wed, 25 Mar 2020 10:49:34 +0100
+Message-Id: <fa983f22f8e47a00339809b19b40ee803d62d889.1585129041.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585129041.git.mchehab+huawei@kernel.org>
 References: <cover.1585129041.git.mchehab+huawei@kernel.org>
@@ -57,51 +57,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This option is used only by av7110 and by an USB driver. As
-the av7110 is the first DVB hardware, hardly found those
-days, let's opt to place it at usb/Kconfig, as the driver
-with needs it might have a longer lifetime.
+Advanced and embedded users know what to do, so, by default,
+they will likely want to be able to open the entire set of
+Kconfig media options.
+
+Normal "poor" users usually needs more help when setting
+stuff, so let's open an more simplified version to them by
+default.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/Kconfig     | 8 --------
- drivers/media/usb/Kconfig | 6 ++++++
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ drivers/media/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index b056976ebdee..d6766085c91b 100644
+index efc46792e87f..c900263438a7 100644
 --- a/drivers/media/Kconfig
 +++ b/drivers/media/Kconfig
-@@ -161,14 +161,6 @@ config DVB_CORE
- 
+@@ -21,6 +21,7 @@ if MEDIA_SUPPORT
+ config MEDIA_SUPPORT_FILTER
+ 	bool "Filter devices by their types"
+ 	depends on MEDIA_SUPPORT
++	default y if !EMBEDDED && !EXPERT
  	help
- 
--
--
--
--# This Kconfig option is used by both PCI and USB drivers
--config TTPCI_EEPROM
--	tristate
--	depends on I2C
--
- source "drivers/media/dvb-core/Kconfig"
- 
- comment "Media drivers"
-diff --git a/drivers/media/usb/Kconfig b/drivers/media/usb/Kconfig
-index e678d3d11467..bf08393e38d1 100644
---- a/drivers/media/usb/Kconfig
-+++ b/drivers/media/usb/Kconfig
-@@ -1,4 +1,10 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+# This Kconfig option is also used by the legacy av7110 driver
-+config TTPCI_EEPROM
-+	tristate
-+	depends on I2C
-+
- if USB && MEDIA_SUPPORT
- 
- menuconfig MEDIA_USB_SUPPORT
+ 	   Configuring the media subsystem can be complex, as there are
+ 	   hundreds of drivers and other config options.
 -- 
 2.25.1
 
