@@ -2,117 +2,88 @@ Return-Path: <SRS0=oTdG=5K=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D13B0C2D0E5
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 21:00:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9D93C2D0E8
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 21:27:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9BAAD2082D
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 21:00:47 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PUYS5dBe"
+	by mail.kernel.org (Postfix) with ESMTP id 9B97D20857
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 21:27:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727306AbgCYVAr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Mar 2020 17:00:47 -0400
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:40249 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727253AbgCYVAq (ORCPT
+        id S1727508AbgCYV1R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Mar 2020 17:27:17 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:39694 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727358AbgCYV1Q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Mar 2020 17:00:46 -0400
-Received: by mail-pj1-f68.google.com with SMTP id kx8so1514674pjb.5
-        for <linux-media@vger.kernel.org>; Wed, 25 Mar 2020 14:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=7qG8lGXQdD19+kMVRM9ERbSMuU/dDvdJ9LSC92xP7XU=;
-        b=PUYS5dBeAUc2FPkdbManfGHspdUyta8P6yKt7k0mf+s+UD4AddwgqJFWaO/xavTOVH
-         RMWSis9oFwDaBI4CCx3ZG1qTtlxTVkNVaSF0Ot6PtaYaGFI8F43MqIufGCqUmxBufyY7
-         2kqzfj4PIrbZoAy6NuKWusJqqRQGIJPDk+FZn0Gzgw9usxzytjFl+2HiljU59e5CeuKS
-         nB35VhJlQoq0oUealatfEG/u59JoP2bdJ1ju7+Kzq0+9CDMIeit7UzJAgElOsI6PCjMr
-         CzLDXdag7xkofI3WxProcwcq+oJm7wvmEJtPUNsSL3b7VgDV/vloi0oxyOOHaltH1Dwn
-         S2/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=7qG8lGXQdD19+kMVRM9ERbSMuU/dDvdJ9LSC92xP7XU=;
-        b=eoqvBtj9uCFnwkEET5WJ2F84iVxmMuGKYr8/j3fuwGUuQUinN970GeoidBWAqOrk6Q
-         KTfhWAjvhzk6o6CxWCaLhoF4fvSKHyN/SRbA1wW5+XLvHGVcX8N2HEvpzyxmYSNmBTBy
-         0zrRU5k94a/Bjps3MvNcb5oFJDeEjGyt3I2iYtPVaMvo4xyZY/jnZCWNt0FothL0/ER+
-         4089iJDGIQKiL0DP6biOzb14CJUzt47JXuOZDq0VBQp8E+Wm9B/YX/Hp2crLEQ2h+V5u
-         Pz7gJn01hW/j2LxyQtahOzyv3ohyYOER5E1ElNAEAEPqz7ubMkjGxRpUpMAx/px77BS+
-         H7rw==
-X-Gm-Message-State: ANhLgQ0RngNm1aw8tUNehZXvv80dk9wKtOlg0VgKGsXGl+qarCliIeL2
-        YFWn+1FA4eyQ3dMkADw0oeo=
-X-Google-Smtp-Source: ADFU+vsWHkCyRcMBkbObzThKZI7tGHFZRdViAf+QUwYf5A4LsniNRlCcIJLYp4E8L7ujE/4GHfa6lg==
-X-Received: by 2002:a17:90a:b003:: with SMTP id x3mr5718639pjq.140.1585170045555;
-        Wed, 25 Mar 2020 14:00:45 -0700 (PDT)
-Received: from deeUbuntu ([103.228.147.248])
-        by smtp.gmail.com with ESMTPSA id l5sm52902pgt.10.2020.03.25.14.00.43
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 25 Mar 2020 14:00:45 -0700 (PDT)
-Date:   Thu, 26 Mar 2020 02:30:40 +0530
-From:   Deepak R Varma <mh12gx2825@gmail.com>
-To:     outreachy-kernel@googlegroups.com, gregkh@linuxfoundation.org,
-        daniel.baluta@gmail.com, kieran.bingham@ideasonboard.com
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: [PATCH] media: staging/intel-ipu3: Simplify single goto jump
-Message-ID: <20200325210036.GA31405@deeUbuntu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        Wed, 25 Mar 2020 17:27:16 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id 8C2D2293A25
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org, dafna.hirschfeld@collabora.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, laurent.pinchart@ideasonboard.com
+Subject: [PATCH 1/2] media: media.h: Add a pad flag MEDIA_PAD_FL_METADATA
+Date:   Wed, 25 Mar 2020 22:27:03 +0100
+Message-Id: <20200325212704.29862-2-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200325212704.29862-1-dafna.hirschfeld@collabora.com>
+References: <20200325212704.29862-1-dafna.hirschfeld@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On successful node setup, the code jumps to a cleanup label to perform
-nodes cleanup. This only call to cleanup using goto label can be
-included in the for / if blocks to make it look more associated.
+Add a flag to the flags field of 'struct media_pad_desc'
+that indicates that the data transmitted by the pad is
+metadata.
 
-Signed-off-by: Deepak R Varma <mh12gx2825@gmail.com>
-Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
-
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
+ Documentation/media/uapi/mediactl/media-types.rst | 4 ++++
+ include/uapi/linux/media.h                        | 1 +
+ 2 files changed, 5 insertions(+)
 
-NOTE: Patch being resent. Adding linux-media list as suggested by Sakari
-Ailus. No changes since last version.
-
- drivers/staging/media/ipu3/ipu3-v4l2.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
-index e8f33539a217..bd8cb7571038 100644
---- a/drivers/staging/media/ipu3/ipu3-v4l2.c
-+++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
-@@ -1295,15 +1295,13 @@ static int imgu_v4l2_nodes_setup_pipe(struct imgu_device *imgu, int pipe)
+diff --git a/Documentation/media/uapi/mediactl/media-types.rst b/Documentation/media/uapi/mediactl/media-types.rst
+index 3af6a414b501..4ca902478971 100644
+--- a/Documentation/media/uapi/mediactl/media-types.rst
++++ b/Documentation/media/uapi/mediactl/media-types.rst
+@@ -361,6 +361,7 @@ Types and flags used to represent the media graph elements
+ .. _MEDIA-PAD-FL-SINK:
+ .. _MEDIA-PAD-FL-SOURCE:
+ .. _MEDIA-PAD-FL-MUST-CONNECT:
++.. _MEDIA-PAD-FL-METADATA:
  
- 	for (i = 0; i < IMGU_NODE_NUM; i++) {
- 		r = imgu_v4l2_node_setup(imgu, pipe, i);
--		if (r)
--			goto cleanup;
-+		if (r) {
-+			imgu_v4l2_nodes_cleanup_pipe(imgu, pipe, i);
-+			return r;
-+		}
- 	}
+ .. flat-table:: Media pad flags
+     :header-rows:  0
+@@ -381,6 +382,9 @@ Types and flags used to represent the media graph elements
+ 	  configuration dependent) for the pad to need enabled links even
+ 	  when this flag isn't set; the absence of the flag doesn't imply
+ 	  there is none.
++    *  -  ``MEDIA_PAD_FL_METADATA``
++       -  This flag indicates that the data transmitted by the pad is of
++          type metadata.
  
- 	return 0;
--
--cleanup:
--	imgu_v4l2_nodes_cleanup_pipe(imgu, pipe, i);
--	return r;
- }
  
- static void imgu_v4l2_subdev_cleanup(struct imgu_device *imgu, unsigned int i)
+ One and only one of ``MEDIA_PAD_FL_SINK`` and ``MEDIA_PAD_FL_SOURCE``
+diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
+index 383ac7b7d8f0..ae37226eb5c9 100644
+--- a/include/uapi/linux/media.h
++++ b/include/uapi/linux/media.h
+@@ -210,6 +210,7 @@ struct media_entity_desc {
+ #define MEDIA_PAD_FL_SINK			(1 << 0)
+ #define MEDIA_PAD_FL_SOURCE			(1 << 1)
+ #define MEDIA_PAD_FL_MUST_CONNECT		(1 << 2)
++#define MEDIA_PAD_FL_METADATA			(1 << 3)
+ 
+ struct media_pad_desc {
+ 	__u32 entity;		/* entity ID */
 -- 
 2.17.1
 
