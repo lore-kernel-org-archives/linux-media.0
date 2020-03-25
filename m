@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E59B9C54FD5
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D09D3C43331
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B295C20772
-	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A677F20772
+	for <linux-media@archiver.kernel.org>; Wed, 25 Mar 2020 09:49:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585129795;
-	bh=b7F4ManG231nLhGoUOlm5eaq1cStjMJuBexokf885pU=;
+	s=default; t=1585129796;
+	bh=R4LeXKJmWoxNGqE9gv1Ffj2oozVctx25bmwjWUMmnuQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=CJyeHcmntRDqDsYVf9UhGX68BzWmTFf192yIMb4uwpHZgp3I8U5GKGx0TOw+nveGH
-	 /7oWObaQN+dN/vxny16M2QvnadfDnRhp6lBo7SMTE4DduOEy8RcWYAODSYCeOAtasv
-	 kBmWdRHXzQ0tTZzH3J1TGtK/f2/L1Xi9QmrOHJw4=
+	b=jGFQtJemIwKLU74ubDEdrh4dxmtGGb8L+EbBxb5LkznD1LSfJggvkN6Q+Cd57hv0T
+	 K+JlUy0OGaxX9Mf6RKM8X1rWrZq3ZOReG1MB7bDhu/zMST925qXCxgt22WAiHXPyAL
+	 7wLcugE7OS+Jq/JCfdWSc8icw/W2BClQDNT7iLYc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727569AbgCYJty (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727566AbgCYJty (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 25 Mar 2020 05:49:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51210 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:51354 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726116AbgCYJtk (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Mar 2020 05:49:40 -0400
+        id S1727332AbgCYJtl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 25 Mar 2020 05:49:41 -0400
 Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C13A020775;
-        Wed, 25 Mar 2020 09:49:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0CE9E208D6;
+        Wed, 25 Mar 2020 09:49:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585129779;
-        bh=b7F4ManG231nLhGoUOlm5eaq1cStjMJuBexokf885pU=;
+        s=default; t=1585129780;
+        bh=R4LeXKJmWoxNGqE9gv1Ffj2oozVctx25bmwjWUMmnuQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l0WLByiwtOz+jCNURk3jd8sg9mQv/vZwpr4zDXaOL8GoeD69sTumYduBVmuFFBrUP
-         yhj/7S1DjWGuTitdrA3EtPanFVlW885CkadYAHF1b+kA8ZxzdQge9ImJve5YYz6c8H
-         t9w/OCr6Ql0swORpsVwZtM9OIGOotXgg23AJrnvM=
+        b=Sb631vI7YAWFrXqSAUCxxdq2M8RsmuFgcJPgbjLcUr0LMCXBs1WPrqnMkS9MDhaDH
+         VWf0biyMIU3CquANztSyHz061Ox8eR/K+42dAn+zjde4MH1LjI3l4xbWiodllbqiVa
+         IYst2lDbahV0gf7fZpbB6qflUeHFtIx3KruFls8o=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jH2fK-003HTK-3j; Wed, 25 Mar 2020 10:49:38 +0100
+        id 1jH2fK-003HTt-Ab; Wed, 25 Mar 2020 10:49:38 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v3 04/22] media: pci: move VIDEO_PCI_SKELETON to a different Kconfig
-Date:   Wed, 25 Mar 2020 10:49:18 +0100
-Message-Id: <1e94c76fd735f806c486beb5c8365a17e43e0cd2.1585129041.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 11/22] media: Kconfig: move comment to siano include
+Date:   Wed, 25 Mar 2020 10:49:25 +0100
+Message-Id: <e53e5a630adddbf734f449f528eff550ba9b022e.1585129041.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585129041.git.mchehab+huawei@kernel.org>
 References: <cover.1585129041.git.mchehab+huawei@kernel.org>
@@ -57,58 +57,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The V4L2 PCI skeleton is not part of the V4L2 core. Move it
-to appear together with the other PCI drivers, at the end,
-as this is something that normal users don't even need to
-bother.
+Showing this comment without showing the Siano mmc option
+is very weird! Place the option together, and make it
+visible only when showing Siano configuration.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/pci/Kconfig       | 10 ++++++++++
- drivers/media/v4l2-core/Kconfig | 10 ----------
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ drivers/media/mmc/Kconfig       | 1 -
+ drivers/media/mmc/siano/Kconfig | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/Kconfig b/drivers/media/pci/Kconfig
-index dcb3719f440e..9336f8446cf0 100644
---- a/drivers/media/pci/Kconfig
-+++ b/drivers/media/pci/Kconfig
-@@ -56,5 +56,15 @@ endif
+diff --git a/drivers/media/mmc/Kconfig b/drivers/media/mmc/Kconfig
+index 5217f5bd205e..75aa6de08d53 100644
+--- a/drivers/media/mmc/Kconfig
++++ b/drivers/media/mmc/Kconfig
+@@ -1,3 +1,2 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-comment "MMC/SDIO adapters"
+ source "drivers/media/mmc/siano/Kconfig"
+diff --git a/drivers/media/mmc/siano/Kconfig b/drivers/media/mmc/siano/Kconfig
+index 1919f6fea8b1..570696019a9e 100644
+--- a/drivers/media/mmc/siano/Kconfig
++++ b/drivers/media/mmc/siano/Kconfig
+@@ -2,6 +2,8 @@
+ #
+ # Siano Mobile Silicon Digital TV device configuration
+ #
++comment "MMC/SDIO DVB adapters"
++	depends on DVB_CORE && HAS_DMA && MMC
  
- source "drivers/media/pci/intel/ipu3/Kconfig"
- 
-+config VIDEO_PCI_SKELETON
-+	tristate "Skeleton PCI V4L2 driver"
-+	depends on PCI
-+	depends on SAMPLES
-+	depends on VIDEO_V4L2 && VIDEOBUF2_CORE
-+	depends on VIDEOBUF2_MEMOPS && VIDEOBUF2_DMA_CONTIG
-+	help
-+	  Enable build of the skeleton PCI driver, used as a reference
-+	  when developing new drivers.
-+
- endif #MEDIA_PCI_SUPPORT
- endif #PCI
-diff --git a/drivers/media/v4l2-core/Kconfig b/drivers/media/v4l2-core/Kconfig
-index 39e3fb30ba0b..26276b257eae 100644
---- a/drivers/media/v4l2-core/Kconfig
-+++ b/drivers/media/v4l2-core/Kconfig
-@@ -31,16 +31,6 @@ config VIDEO_FIXED_MINOR_RANGES
- 
- 	  When in doubt, say N.
- 
--config VIDEO_PCI_SKELETON
--	tristate "Skeleton PCI V4L2 driver"
--	depends on PCI
--	depends on SAMPLES
--	depends on VIDEO_V4L2 && VIDEOBUF2_CORE
--	depends on VIDEOBUF2_MEMOPS && VIDEOBUF2_DMA_CONTIG
--	help
--	  Enable build of the skeleton PCI driver, used as a reference
--	  when developing new drivers.
--
- # Used by drivers that need tuner.ko
- config VIDEO_TUNER
- 	tristate
+ config SMS_SDIO_DRV
+ 	tristate "Siano SMS1xxx based MDTV via SDIO interface"
 -- 
 2.25.1
 
