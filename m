@@ -6,30 +6,29 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6E4FC2D0E9
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:12:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5EE3C43331
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:12:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B404C20722
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:12:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7ECE720719
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:12:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728055AbgCZVMb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Mar 2020 17:12:31 -0400
-Received: from sauhun.de ([88.99.104.3]:54342 "EHLO pokefinder.org"
+        id S1727708AbgCZVJw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Mar 2020 17:09:52 -0400
+Received: from sauhun.de ([88.99.104.3]:54286 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726496AbgCZVJx (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Mar 2020 17:09:53 -0400
+        id S1726496AbgCZVJv (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 26 Mar 2020 17:09:51 -0400
 Received: from localhost (p54B3331F.dip0.t-ipconnect.de [84.179.51.31])
-        by pokefinder.org (Postfix) with ESMTPSA id B20A02C1F84;
-        Thu, 26 Mar 2020 22:09:51 +0100 (CET)
+        by pokefinder.org (Postfix) with ESMTPSA id 7694F2C1F88;
+        Thu, 26 Mar 2020 22:09:49 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mike Isely <isely@pobox.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] media: usb: pvrusb2: convert to use i2c_new_client_device()
-Date:   Thu, 26 Mar 2020 22:09:46 +0100
-Message-Id: <20200326210947.12747-7-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 2/6] media: pci: saa7134: convert to use i2c_new_client_device()
+Date:   Thu, 26 Mar 2020 22:09:42 +0100
+Message-Id: <20200326210947.12747-3-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200326210947.12747-1-wsa+renesas@sang-engineering.com>
 References: <20200326210947.12747-1-wsa+renesas@sang-engineering.com>
@@ -44,31 +43,22 @@ Move away from the deprecated API.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/pci/saa7134/saa7134-input.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
-index 275394bafe7d..63db04fe12d3 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
-@@ -564,7 +564,7 @@ static void pvr2_i2c_register_ir(struct pvr2_hdw *hdw)
- 		strscpy(info.type, "ir_video", I2C_NAME_SIZE);
- 		pvr2_trace(PVR2_TRACE_INFO, "Binding %s to i2c address 0x%02x.",
- 			   info.type, info.addr);
--		i2c_new_device(&hdw->i2c_adap, &info);
-+		i2c_new_client_device(&hdw->i2c_adap, &info);
- 		break;
- 	case PVR2_IR_SCHEME_ZILOG:     /* HVR-1950 style */
- 	case PVR2_IR_SCHEME_24XXX_MCE: /* 24xxx MCE device */
-@@ -579,7 +579,7 @@ static void pvr2_i2c_register_ir(struct pvr2_hdw *hdw)
- 		strscpy(info.type, "ir_z8f0811_haup", I2C_NAME_SIZE);
- 		pvr2_trace(PVR2_TRACE_INFO, "Binding %s to i2c address 0x%02x.",
- 			   info.type, info.addr);
--		i2c_new_device(&hdw->i2c_adap, &info);
-+		i2c_new_client_device(&hdw->i2c_adap, &info);
- 		break;
- 	default:
- 		/* The device either doesn't support I2C-based IR or we
+diff --git a/drivers/media/pci/saa7134/saa7134-input.c b/drivers/media/pci/saa7134/saa7134-input.c
+index 9aea7c30380b..8610eb473b39 100644
+--- a/drivers/media/pci/saa7134/saa7134-input.c
++++ b/drivers/media/pci/saa7134/saa7134-input.c
+@@ -982,7 +982,7 @@ void saa7134_probe_i2c_ir(struct saa7134_dev *dev)
+ 
+ 	if (dev->init_data.name)
+ 		info.platform_data = &dev->init_data;
+-	i2c_new_device(&dev->i2c_adap, &info);
++	i2c_new_client_device(&dev->i2c_adap, &info);
+ }
+ 
+ static int saa7134_raw_decode_irq(struct saa7134_dev *dev)
 -- 
 2.20.1
 
