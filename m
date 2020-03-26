@@ -2,216 +2,187 @@ Return-Path: <SRS0=KtNH=5L=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 161FCC2D0E8
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 08:39:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D849C43331
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 09:12:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DA42620772
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 08:39:30 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="J5gCYRRb"
+	by mail.kernel.org (Postfix) with ESMTP id 2779E2070A
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 09:12:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727683AbgCZIjZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Mar 2020 04:39:25 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:40185 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727600AbgCZIjY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Mar 2020 04:39:24 -0400
-Received: by mail-wr1-f65.google.com with SMTP id u10so6625798wro.7
-        for <linux-media@vger.kernel.org>; Thu, 26 Mar 2020 01:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:autocrypt:organization:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TLKfrWP8AcWMfXeFe+OL6HzlrP4WSBWNABjm4srbTno=;
-        b=J5gCYRRbYEj1hCUaEBVlU8bi9gpdFIkdCjjUKomRB01ovaQLmGoZezSV4UymD5J3Vk
-         UAQxUniYX12deWTkW2AoIfX8E0qqGRlViNFjELQqjswB0Ky5fe73mKF7U2oK3f+87AGk
-         apIJUNtPXDBW+DXgBlYQQ8G2wNlz5goRvUYS2XlnXUNWPg/ZkWNo6JPPdnEam/DLwCQo
-         lcizhqwTuoW7QH+u8TPnsYPhxgo0kuYLCsz+05OmYvB080/4lnQthTrOeNgwUYsfHhuY
-         V82r7rl7iMbh/wAzhsNyWZYchZdm8rEWBKL/b9eIdJLE9vEG7Zgqfl5mTb1K50VXGdJJ
-         UVew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :organization:message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=TLKfrWP8AcWMfXeFe+OL6HzlrP4WSBWNABjm4srbTno=;
-        b=f6pcgvex+ior1MrKT0MPtreEjpUVFfjqWM+ZRFbrkhiybSJ0blskNVceJh1wnTQr+R
-         0//2DgkA4/c2Bo4y5kGlZBzolRdCgI1bvLw73Dyol/r0V/N3AwVmVHA2gaJtF9mTpHwd
-         xtA7tgtzc53J92ozkrHbJTmUWkO6hiZ9XJMILUiH81U34kNwQFN6Kl0NJGpbNGAMZh1A
-         DRHBuLovNCEGju6SeA71pcsayJHUla49Y+2+ocMPrMk6n83FkmRqiau7CU0EMj9R82i7
-         bBcCnQ5+N3dV0Mb38/ldGj0Nb8ezUeqw+G1tBCPPv5Ix7tM++SOTXKbcD6OLqQF0QNXb
-         uRtA==
-X-Gm-Message-State: ANhLgQ1MmkkwYUB21Fx8+SqpPBY+BqcZ60icqcU2uvTzOrzINDh8Q0kF
-        pbQHBIRHo7ZC9hbIawJ5Ojm/Sg==
-X-Google-Smtp-Source: ADFU+vvzuQ4QxVS/s0ibmVMZp4jdcmJoedPChELBVbuKyTFcPAB+5OcyntAwpr9Tl9sZS9yiTvZRQg==
-X-Received: by 2002:adf:c587:: with SMTP id m7mr8354429wrg.64.1585211961242;
-        Thu, 26 Mar 2020 01:39:21 -0700 (PDT)
-Received: from ?IPv6:2a01:e35:2ec0:82b0:25f2:833f:2a30:1344? ([2a01:e35:2ec0:82b0:25f2:833f:2a30:1344])
-        by smtp.gmail.com with ESMTPSA id l4sm1317884wru.1.2020.03.26.01.39.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Mar 2020 01:39:20 -0700 (PDT)
-Subject: Re: [PATCH 3/4] dt-bindings: Clean-up schema errors due to missing
- 'addtionalProperties: false'
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zhang Rui <rui.zhang@intel.com>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20200325220542.19189-1-robh@kernel.org>
- <20200325220542.19189-4-robh@kernel.org>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
- 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
- BSwxi7g3Mu7u5kUByanqHyA=
-Organization: Baylibre
-Message-ID: <e60df575-c70d-a194-6c54-32b5ae69a041@baylibre.com>
-Date:   Thu, 26 Mar 2020 09:39:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <20200325220542.19189-4-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1727729AbgCZJMz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Mar 2020 05:12:55 -0400
+Received: from mga06.intel.com ([134.134.136.31]:45684 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726318AbgCZJMz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 26 Mar 2020 05:12:55 -0400
+IronPort-SDR: Sib9+aQ9oZuifg/4gU4qMZssMeoQnbYmmcD9Q7PdpvOpOrCl77PoN+w7wDb6SQAicAGmDLpYjl
+ 1efpQ4iPc20A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 02:12:55 -0700
+IronPort-SDR: kHzOeCPYUo+tfH+GkGmrjSpApAHx+gDW4AkG0n8zfPH2N51F0OZlPo2pVGX8vSkFse6Z6qyioi
+ GepWSjZKhSaA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,307,1580803200"; 
+   d="scan'208";a="282434658"
+Received: from ipu5-build.bj.intel.com ([10.238.232.196])
+  by fmsmga002.fm.intel.com with ESMTP; 26 Mar 2020 02:12:52 -0700
+From:   Bingbu Cao <bingbu.cao@intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     sakari.ailus@linux.intel.com, tfiga@chromium.org,
+        laurent.pinchart@ideasonboard.com, rajmohan.mani@intel.com,
+        bingbu.cao@intel.com, bingbu.cao@linux.intel.com
+Subject: [PATCH v2] media: staging/intel-ipu3: Implement lock for stream on/off operations
+Date:   Thu, 26 Mar 2020 17:16:30 +0800
+Message-Id: <1585214190-30310-1-git-send-email-bingbu.cao@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 25/03/2020 23:05, Rob Herring wrote:
-> Numerous schemas are missing 'additionalProperties: false' statements which
-> ensures a binding doesn't have any extra undocumented properties or child
-> nodes. Fixing this reveals various missing properties, so let's fix all
-> those occurrences.
-> 
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Hartmut Knaack <knaack.h@gmx.de>
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: Peter Meerwald-Stadler <pmeerw@pmeerw.net>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Guillaume La Roque <glaroque@baylibre.com>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-amlogic@lists.infradead.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/clock/fsl,plldig.yaml |  3 +++
->  .../gpio/socionext,uniphier-gpio.yaml         |  2 ++
->  .../bindings/gpu/arm,mali-bifrost.yaml        |  6 ++---
->  .../bindings/gpu/arm,mali-midgard.yaml        |  3 +++
->  .../bindings/iio/adc/adi,ad7192.yaml          |  1 -
->  .../bindings/iio/pressure/bmp085.yaml         |  3 +++
->  .../media/amlogic,meson-gx-ao-cec.yaml        |  9 +++++---
->  .../bindings/mfd/rohm,bd71828-pmic.yaml       |  3 +++
->  .../bindings/net/ti,cpsw-switch.yaml          | 23 ++++++++++++-------
->  .../regulator/max77650-regulator.yaml         |  2 +-
->  .../bindings/thermal/amlogic,thermal.yaml     |  2 ++
->  .../bindings/timer/arm,arch_timer_mmio.yaml   |  2 ++
->  12 files changed, 43 insertions(+), 16 deletions(-)
-> 
+Currently concurrent stream off operations on ImgU nodes are not
+synchronized, leading to use-after-free bugs (as reported by KASAN).
 
-For:
-  .../bindings/gpu/arm,mali-bifrost.yaml        |  6 ++---
-  .../bindings/gpu/arm,mali-midgard.yaml        |  3 +++
-  .../media/amlogic,meson-gx-ao-cec.yaml        |  9 +++++---
-  .../bindings/thermal/amlogic,thermal.yaml     |  2 ++
+[  250.090724] BUG: KASAN: use-after-free in
+ipu3_dmamap_free+0xc5/0x116 [ipu3_imgu]
+[  250.090726] Read of size 8 at addr ffff888127b29bc0 by task
+yavta/18836
+[  250.090731] Hardware name: HP Soraka/Soraka, BIOS
+Google_Soraka.10431.17.0 03/22/2018
+[  250.090732] Call Trace:
+[  250.090735]  dump_stack+0x6a/0xb1
+[  250.090739]  print_address_description+0x8e/0x279
+[  250.090743]  ? ipu3_dmamap_free+0xc5/0x116 [ipu3_imgu]
+[  250.090746]  kasan_report+0x260/0x28a
+[  250.090750]  ipu3_dmamap_free+0xc5/0x116 [ipu3_imgu]
+[  250.090754]  ipu3_css_pool_cleanup+0x24/0x37 [ipu3_imgu]
+[  250.090759]  ipu3_css_pipeline_cleanup+0x61/0xb9 [ipu3_imgu]
+[  250.090763]  ipu3_css_stop_streaming+0x1f2/0x321 [ipu3_imgu]
+[  250.090768]  imgu_s_stream+0x94/0x443 [ipu3_imgu]
+[  250.090772]  ? ipu3_vb2_buf_queue+0x280/0x280 [ipu3_imgu]
+[  250.090775]  ? vb2_dma_sg_unmap_dmabuf+0x16/0x6f [videobuf2_dma_sg]
+[  250.090778]  ? vb2_buffer_in_use+0x36/0x58 [videobuf2_common]
+[  250.090782]  ipu3_vb2_stop_streaming+0xf9/0x135 [ipu3_imgu]
 
+Implemented a lock to synchronize imgu stream on / off operations and
+the modification of streaming flag (in struct imgu_device), to prevent
+these issues.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Reported-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Rajmohan Mani <rajmohan.mani@intel.com>
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+---
+ drivers/staging/media/ipu3/ipu3-v4l2.c | 9 +++++++++
+ drivers/staging/media/ipu3/ipu3.c      | 3 +++
+ drivers/staging/media/ipu3/ipu3.h      | 4 ++++
+ 3 files changed, 16 insertions(+)
+
+diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
+index 09c8ede1457c..0358d0998314 100644
+--- a/drivers/staging/media/ipu3/ipu3-v4l2.c
++++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+@@ -367,8 +367,10 @@ static void imgu_vb2_buf_queue(struct vb2_buffer *vb)
+ 
+ 	vb2_set_plane_payload(vb, 0, need_bytes);
+ 
++	mutex_lock(&imgu->streaming_lock);
+ 	if (imgu->streaming)
+ 		imgu_queue_buffers(imgu, false, node->pipe);
++	mutex_unlock(&imgu->streaming_lock);
+ 
+ 	dev_dbg(&imgu->pci_dev->dev, "%s for pipe %u node %u", __func__,
+ 		node->pipe, node->id);
+@@ -468,10 +470,12 @@ static int imgu_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	dev_dbg(dev, "%s node name %s pipe %u id %u", __func__,
+ 		node->name, node->pipe, node->id);
+ 
++	mutex_lock(&imgu->streaming_lock);
+ 	if (imgu->streaming) {
+ 		r = -EBUSY;
+ 		goto fail_return_bufs;
+ 	}
++	mutex_unlock(&imgu->streaming_lock);
+ 
+ 	if (!node->enabled) {
+ 		dev_err(dev, "IMGU node is not enabled");
+@@ -498,9 +502,11 @@ static int imgu_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 
+ 	/* Start streaming of the whole pipeline now */
+ 	dev_dbg(dev, "IMGU streaming is ready to start");
++	mutex_lock(&imgu->streaming_lock);
+ 	r = imgu_s_stream(imgu, true);
+ 	if (!r)
+ 		imgu->streaming = true;
++	mutex_unlock(&imgu->streaming_lock);
+ 
+ 	return 0;
+ 
+@@ -532,6 +538,7 @@ static void imgu_vb2_stop_streaming(struct vb2_queue *vq)
+ 		dev_err(&imgu->pci_dev->dev,
+ 			"failed to stop subdev streaming\n");
+ 
++	mutex_lock(&imgu->streaming_lock);
+ 	/* Was this the first node with streaming disabled? */
+ 	if (imgu->streaming && imgu_all_nodes_streaming(imgu, node)) {
+ 		/* Yes, really stop streaming now */
+@@ -542,6 +549,8 @@ static void imgu_vb2_stop_streaming(struct vb2_queue *vq)
+ 	}
+ 
+ 	imgu_return_all_buffers(imgu, node, VB2_BUF_STATE_ERROR);
++	mutex_unlock(&imgu->streaming_lock);
++
+ 	media_pipeline_stop(&node->vdev.entity);
+ }
+ 
+diff --git a/drivers/staging/media/ipu3/ipu3.c b/drivers/staging/media/ipu3/ipu3.c
+index 4d53aad31483..a25a997cfd7e 100644
+--- a/drivers/staging/media/ipu3/ipu3.c
++++ b/drivers/staging/media/ipu3/ipu3.c
+@@ -675,6 +675,7 @@ static int imgu_pci_probe(struct pci_dev *pci_dev,
+ 		return r;
+ 
+ 	mutex_init(&imgu->lock);
++	mutex_init(&imgu->streaming_lock);
+ 	atomic_set(&imgu->qbuf_barrier, 0);
+ 	init_waitqueue_head(&imgu->buf_drain_wq);
+ 
+@@ -738,6 +739,7 @@ static int imgu_pci_probe(struct pci_dev *pci_dev,
+ out_css_powerdown:
+ 	imgu_css_set_powerdown(&pci_dev->dev, imgu->base);
+ out_mutex_destroy:
++	mutex_destroy(&imgu->streaming_lock);
+ 	mutex_destroy(&imgu->lock);
+ 
+ 	return r;
+@@ -755,6 +757,7 @@ static void imgu_pci_remove(struct pci_dev *pci_dev)
+ 	imgu_css_set_powerdown(&pci_dev->dev, imgu->base);
+ 	imgu_dmamap_exit(imgu);
+ 	imgu_mmu_exit(imgu->mmu);
++	mutex_destroy(&imgu->streaming_lock);
+ 	mutex_destroy(&imgu->lock);
+ }
+ 
+diff --git a/drivers/staging/media/ipu3/ipu3.h b/drivers/staging/media/ipu3/ipu3.h
+index 73b123b2b8a2..8cd6a0077d99 100644
+--- a/drivers/staging/media/ipu3/ipu3.h
++++ b/drivers/staging/media/ipu3/ipu3.h
+@@ -146,6 +146,10 @@ struct imgu_device {
+ 	 * vid_buf.list and css->queue
+ 	 */
+ 	struct mutex lock;
++
++	/* Lock to protect writes to streaming flag in this struct */
++	struct mutex streaming_lock;
++
+ 	/* Forbid streaming and buffer queuing during system suspend. */
+ 	atomic_t qbuf_barrier;
+ 	/* Indicate if system suspend take place while imgu is streaming. */
+-- 
+2.7.4
 
