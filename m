@@ -7,46 +7,54 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE913C43331
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 15:21:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06C5FC2D0EF
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 15:21:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8CAA42076A
+	by mail.kernel.org (Postfix) with ESMTP id D535B20775
 	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 15:21:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1585236098;
-	bh=UMtfIGx6fdWu311hAWHW7bkLL7PvRCE4kFcKr4hh+c4=;
+	bh=1TfvecVNsnrRPGYjwIJib8LOYw3hNDQWOsABSBfYq1k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NYt71M7yysKpKMfVusB5hnyKb6aGWnvnFZvPFmemBWuCh8C7KUtyLUe+9KpoqqmYn
-	 DhvC2J5Xsy+uzUIb02kHvYpemjV1A9/O4YMDDQCf2oYM5r7WG5gyBISd659x4AsQOe
-	 /2TDn76e6+SKA7cdYsN4JOVftQi0qoEmhSGCpiHc=
+	b=GIEYauJbtM+TZvs0r0svhwTkSRgYcroeQlr7XHZ9+znrsLZIJE6Od6dE1RDziXILO
+	 UURl1oeSzw6qNRo1rW/TlgYgKOTsWKm6HCcWkwAOJojbY1UBomehERHjo0cUyrumY5
+	 1aiD7SKIcnS3Q82umZuxxI0fkFbr17RjXcf8n484=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727878AbgCZPVi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727889AbgCZPVi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 26 Mar 2020 11:21:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40504 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:40532 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727547AbgCZPVg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1727717AbgCZPVg (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 26 Mar 2020 11:21:36 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6F3A62076A;
+        by mail.kernel.org (Postfix) with ESMTPSA id 883B92078B;
         Thu, 26 Mar 2020 15:21:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585236095;
-        bh=UMtfIGx6fdWu311hAWHW7bkLL7PvRCE4kFcKr4hh+c4=;
+        bh=1TfvecVNsnrRPGYjwIJib8LOYw3hNDQWOsABSBfYq1k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u1Uek547uCCHiUothbggu0uDCqldxv4YobnED0ZyBkO8/jdAkZC3kV4qr8kZyplZD
-         n2/DC7wya+PM9tPzRgBtkcohKgbEGiJ1BZZWuga4PL0XghjDTL6daxX0IJ015jgSu6
-         xL2bvDv+2zad/qw0f7PVVhAcPGEHO4/Af4IqFGQU=
+        b=c+j0D6dfQY7bS74yuW2Bw7xfSzXqji7LPRfi3QcqZiUT8c8Lsgw2f+XGKodXRyJiM
+         JMyl5Ly4vLDhnHvnx6HXK+bGgzkZKxV6iId1TViWPTbioCLGlYChWy695zigrPGynQ
+         wAV2/4JkCsO1tCBXXzb65Qc6MELEKQUFm5Ic9mlk=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jHUK5-003dii-Mw; Thu, 26 Mar 2020 16:21:33 +0100
+        id 1jHUK5-003dj8-Rf; Thu, 26 Mar 2020 16:21:33 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 2/7] media: Kconfig: mark other drivers as test drivers
-Date:   Thu, 26 Mar 2020 16:21:27 +0100
-Message-Id: <11575cad9a4fe2b4d6b929f29c6eaec6f978fbc1.1585235736.git.mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org
+Subject: [PATCH 7/7] media: add SPDX headers on Kconfig and Makefile files
+Date:   Thu, 26 Mar 2020 16:21:32 +0100
+Message-Id: <3016f7ee1b738f7a61705816963ca315a1c9bc63.1585235736.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585235736.git.mchehab+huawei@kernel.org>
 References: <cover.1585235736.git.mchehab+huawei@kernel.org>
@@ -57,48 +65,100 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Neither the PCI skeleton nor the DVB dummy driver are real
-drivers. They're there just as an example for a driver
-writter.
-
-Distros should not enable those drivers. So, hide them if
-MEDIA_TEST_SUPPORT is not selected.
+Most of media Kconfig/Makefile files already has SPDX,
+but there are a few ones still missing. Add it to them.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/dvb-frontends/Kconfig | 4 ++++
- drivers/media/pci/Kconfig           | 1 +
- 2 files changed, 5 insertions(+)
+ drivers/media/dvb-frontends/Kconfig             | 2 ++
+ drivers/media/mc/Kconfig                        | 2 ++
+ drivers/media/platform/sunxi/Kconfig            | 2 ++
+ drivers/media/platform/sunxi/Makefile           | 2 ++
+ drivers/media/platform/sunxi/sun4i-csi/Kconfig  | 2 ++
+ drivers/media/platform/sunxi/sun4i-csi/Makefile | 2 ++
+ drivers/staging/media/hantro/Makefile           | 2 ++
+ drivers/staging/media/rkisp1/Makefile           | 2 ++
+ 8 files changed, 16 insertions(+)
 
 diff --git a/drivers/media/dvb-frontends/Kconfig b/drivers/media/dvb-frontends/Kconfig
-index a29e9ddf9c82..932fd88fdc12 100644
+index 1f45808d94da..aa24506257b3 100644
 --- a/drivers/media/dvb-frontends/Kconfig
 +++ b/drivers/media/dvb-frontends/Kconfig
-@@ -944,8 +944,12 @@ config DVB_SP2
- 	  CIMaX SP2/SP2HF Common Interface module.
+@@ -1,3 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
+ if MEDIA_DIGITAL_TV_SUPPORT
  
- comment "Tools to develop new frontends"
-+	depends on MEDIA_TEST_SUPPORT
+ comment "DVB Frontend drivers hidden by 'Autoselect ancillary drivers'"
+diff --git a/drivers/media/mc/Kconfig b/drivers/media/mc/Kconfig
+index b3579d6c9e32..002a918c4c75 100644
+--- a/drivers/media/mc/Kconfig
++++ b/drivers/media/mc/Kconfig
+@@ -1,3 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
+ #
+ # Media controller
+ #	Selectable only for webcam/grabbers, as other drivers don't use it
+diff --git a/drivers/media/platform/sunxi/Kconfig b/drivers/media/platform/sunxi/Kconfig
+index 71808e93ac2e..7151cc249afa 100644
+--- a/drivers/media/platform/sunxi/Kconfig
++++ b/drivers/media/platform/sunxi/Kconfig
+@@ -1,2 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0
++
+ source "drivers/media/platform/sunxi/sun4i-csi/Kconfig"
+ source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
+diff --git a/drivers/media/platform/sunxi/Makefile b/drivers/media/platform/sunxi/Makefile
+index ff0993f70dc3..fc537c9f5ca9 100644
+--- a/drivers/media/platform/sunxi/Makefile
++++ b/drivers/media/platform/sunxi/Makefile
+@@ -1,3 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
+ obj-y		+= sun4i-csi/
+ obj-y		+= sun6i-csi/
+ obj-y		+= sun8i-di/
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/Kconfig b/drivers/media/platform/sunxi/sun4i-csi/Kconfig
+index 5054e7b0d1ac..903c6152f6e8 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/Kconfig
++++ b/drivers/media/platform/sunxi/sun4i-csi/Kconfig
+@@ -1,3 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
+ config VIDEO_SUN4I_CSI
+ 	tristate "Allwinner A10 CMOS Sensor Interface Support"
+ 	depends on VIDEO_V4L2 && COMMON_CLK  && HAS_DMA
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/Makefile b/drivers/media/platform/sunxi/sun4i-csi/Makefile
+index 7c790a57f5ee..5062b006d63e 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/Makefile
++++ b/drivers/media/platform/sunxi/sun4i-csi/Makefile
+@@ -1,3 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
+ sun4i-csi-y += sun4i_csi.o
+ sun4i-csi-y += sun4i_dma.o
+ sun4i-csi-y += sun4i_v4l2.o
+diff --git a/drivers/staging/media/hantro/Makefile b/drivers/staging/media/hantro/Makefile
+index 496b30c3c396..a558cb0623dc 100644
+--- a/drivers/staging/media/hantro/Makefile
++++ b/drivers/staging/media/hantro/Makefile
+@@ -1,3 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
+ obj-$(CONFIG_VIDEO_HANTRO) += hantro-vpu.o
  
- config DVB_DUMMY_FE
- 	tristate "Dummy frontend driver"
- 	depends on DVB_CORE
-+	depends on MEDIA_TEST_SUPPORT
-+	help
-+	  Dummy skeleton frontend driver.
- endmenu
-diff --git a/drivers/media/pci/Kconfig b/drivers/media/pci/Kconfig
-index 21ee43fd7d8e..348da044ec78 100644
---- a/drivers/media/pci/Kconfig
-+++ b/drivers/media/pci/Kconfig
-@@ -65,6 +65,7 @@ source "drivers/media/pci/intel/ipu3/Kconfig"
- 
- config VIDEO_PCI_SKELETON
- 	tristate "Skeleton PCI V4L2 driver"
-+	depends on MEDIA_TEST_SUPPORT
- 	depends on PCI
- 	depends on SAMPLES
- 	depends on VIDEO_V4L2 && VIDEOBUF2_CORE
+ hantro-vpu-y += \
+diff --git a/drivers/staging/media/rkisp1/Makefile b/drivers/staging/media/rkisp1/Makefile
+index 69ca59c7ef34..ab32a77db8f7 100644
+--- a/drivers/staging/media/rkisp1/Makefile
++++ b/drivers/staging/media/rkisp1/Makefile
+@@ -1,3 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
+ obj-$(CONFIG_VIDEO_ROCKCHIP_ISP1) += rockchip-isp1.o
+ rockchip-isp1-objs += 	rkisp1-capture.o \
+ 			rkisp1-common.o \
 -- 
 2.25.1
 
