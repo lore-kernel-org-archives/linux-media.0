@@ -2,44 +2,47 @@ Return-Path: <SRS0=KtNH=5L=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97DD6C43331
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF95EC43331
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:08:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6705520714
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:08:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2DCB2073E
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:08:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="M3tSoyIY"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="OWNsL3KB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726359AbgCZWIx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Mar 2020 18:08:53 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:42034 "EHLO
+        id S1727026AbgCZWIz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Mar 2020 18:08:55 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:42046 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbgCZWIw (ORCPT
+        with ESMTP id S1726260AbgCZWIz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Mar 2020 18:08:52 -0400
+        Thu, 26 Mar 2020 18:08:55 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3E1512DC;
-        Thu, 26 Mar 2020 23:08:51 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4FD0CA4C;
+        Thu, 26 Mar 2020 23:08:52 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1585260531;
-        bh=vYAuRcgBzXEkRHZRmuVEqirbDDuEhrLt7jQNeOvXygk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=M3tSoyIYxMiHseJAHqgFNvVPCM6SN+bIZZLDIFRCk0/tDHPahyTQ3iCZ4uvxFmKU7
-         qMMGNj+DFKt7/kEER2s5PXjRwH94aMUNGa/GY68cjuJsTogPnGN2aE2/GB1hcIueJS
-         WlCz+B8zKFy5oFytp4hxP+gAz663SGh4H9roWxGE=
+        s=mail; t=1585260532;
+        bh=pdWiSgMdR/ujrICO3oBpx9WUrbEs31vCJvWAa9jSrFw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OWNsL3KBhbZZldHQO9DkXPKonXPrkBrlbp88kFkXazi8ZDbSujSV4TAXSyuiOMlcD
+         Qcr72Z1baWFQyY44UN8ouvCN/XTI1E+UoPr2u1dIsB9wMbeVLw9XSkaZkf4u75htTj
+         DYHAner3ZACHPMhBQ5E7oisGi/magQt6sHQFmu9I=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH v2 00/11] media: imx: Miscalleanous format-related cleanups
-Date:   Fri, 27 Mar 2020 00:08:29 +0200
-Message-Id: <20200326220840.18540-1-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 02/11] media: imx: fix media bus format enumeration
+Date:   Fri, 27 Mar 2020 00:08:31 +0200
+Message-Id: <20200326220840.18540-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200326220840.18540-1-laurent.pinchart@ideasonboard.com>
+References: <20200326220840.18540-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -47,65 +50,118 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+From: Philipp Zabel <p.zabel@pengutronix.de>
 
-This patch series started as an attempt to fix the format get and set
-subdev operations on the i.MX7 CSI-2 receiver subdev, which have been
-merged already. This is the second version of the drive-by cleanups that
-I have implemented on top.
+Iterate over all media bus formats, not just over the first format in
+each imx_media_pixfmt entry.
 
-Compared to v1, I have included Philipp's pixel and media bus format
-enumeration fixes and cleanups in patches 01/11 and 02/11. Patches 03/11
-to 08/11 push the cleanups further as I was attempting to fix the format
-enumeration on the video node at the end of the pipeline.
+Before:
 
-Patches 09/11 to 11/11 are new in this series, and patch 11/11 in
-particular introduces a new feature that isn't used yet, and thus
-doesn't need to be merged yet. I have nonetheless included it to give
-context to patches 09/11 and 10/11.
+  $ v4l2-ctl -d $(media-ctl -e ipu1_csi0) --list-subdev-mbus-codes 0
+  ioctl: VIDIOC_SUBDEV_ENUM_MBUS_CODE (pad=0)
+	0x2006: MEDIA_BUS_FMT_UYVY8_2X8
+	0x2008: MEDIA_BUS_FMT_YUYV8_2X8
+	0x1008: MEDIA_BUS_FMT_RGB565_2X8_LE
+	0x100a: MEDIA_BUS_FMT_RGB888_1X24
+	0x100d: MEDIA_BUS_FMT_ARGB8888_1X32
+	0x3001: MEDIA_BUS_FMT_SBGGR8_1X8
+	0x3013: MEDIA_BUS_FMT_SGBRG8_1X8
+	0x3002: MEDIA_BUS_FMT_SGRBG8_1X8
+	0x3014: MEDIA_BUS_FMT_SRGGB8_1X8
+	0x3007: MEDIA_BUS_FMT_SBGGR10_1X10
+	0x300e: MEDIA_BUS_FMT_SGBRG10_1X10
+	0x300a: MEDIA_BUS_FMT_SGRBG10_1X10
+	0x300f: MEDIA_BUS_FMT_SRGGB10_1X10
+	0x2001: MEDIA_BUS_FMT_Y8_1X8
+	0x200a: MEDIA_BUS_FMT_Y10_1X10
 
-Steve, I'm aware this conflicts with your "[PATCH 00/10] media: imx:
-Miscellaneous format-related cleanups" series. I have no issue with
-merging your patches instead, but I wanted to post this to ensure that
-no change would fall between the cracks, and that the feature
-implemented in patch 11/11 is doable on top of your series.
+After:
 
-To give some context to that new feature, it will be used to implement
-the extension to VIDIOC_ENUM_FMT proposed in "media: v4l2: Extend
-VIDIOC_ENUM_FMT to support MC-centric devices". I have a large patch
-series that refactors imx-media-capture.c to make that possible, I will
-rebase it on top of the cleanups that will be merged (from Steve series
-and/or from mine) and submit it.
+  $ v4l2-ctl -d $(media-ctl -e ipu1_csi0) --list-subdev-mbus-codes 0
+  ioctl: VIDIOC_SUBDEV_ENUM_MBUS_CODE (pad=0)
+	0x2006: MEDIA_BUS_FMT_UYVY8_2X8
+	0x200f: MEDIA_BUS_FMT_UYVY8_1X16
+	0x2008: MEDIA_BUS_FMT_YUYV8_2X8
+	0x2011: MEDIA_BUS_FMT_YUYV8_1X16
+	0x1008: MEDIA_BUS_FMT_RGB565_2X8_LE
+	0x100a: MEDIA_BUS_FMT_RGB888_1X24
+	0x100c: MEDIA_BUS_FMT_RGB888_2X12_LE
+	0x100d: MEDIA_BUS_FMT_ARGB8888_1X32
+	0x3001: MEDIA_BUS_FMT_SBGGR8_1X8
+	0x3013: MEDIA_BUS_FMT_SGBRG8_1X8
+	0x3002: MEDIA_BUS_FMT_SGRBG8_1X8
+	0x3014: MEDIA_BUS_FMT_SRGGB8_1X8
+	0x3007: MEDIA_BUS_FMT_SBGGR10_1X10
+	0x3008: MEDIA_BUS_FMT_SBGGR12_1X12
+	0x3019: MEDIA_BUS_FMT_SBGGR14_1X14
+	0x301d: MEDIA_BUS_FMT_SBGGR16_1X16
+	0x300e: MEDIA_BUS_FMT_SGBRG10_1X10
+	0x3010: MEDIA_BUS_FMT_SGBRG12_1X12
+	0x301a: MEDIA_BUS_FMT_SGBRG14_1X14
+	0x301e: MEDIA_BUS_FMT_SGBRG16_1X16
+	0x300a: MEDIA_BUS_FMT_SGRBG10_1X10
+	0x3011: MEDIA_BUS_FMT_SGRBG12_1X12
+	0x301b: MEDIA_BUS_FMT_SGRBG14_1X14
+	0x301f: MEDIA_BUS_FMT_SGRBG16_1X16
+	0x300f: MEDIA_BUS_FMT_SRGGB10_1X10
+	0x3012: MEDIA_BUS_FMT_SRGGB12_1X12
+	0x301c: MEDIA_BUS_FMT_SRGGB14_1X14
+	0x3020: MEDIA_BUS_FMT_SRGGB16_1X16
+	0x2001: MEDIA_BUS_FMT_Y8_1X8
+	0x200a: MEDIA_BUS_FMT_Y10_1X10
+	0x2013: MEDIA_BUS_FMT_Y12_1X12
 
-Laurent Pinchart (9):
-  media: imx: utils: Inline init_mbus_colorimetry() in its caller
-  media: imx: utils: Handle Bayer format lookup through a selection flag
-  media: imx: utils: Simplify IPU format lookup and enumeration
-  media: imx: utils: Make imx_media_pixfmt handle variable number of
-    codes
-  media: imx: utils: Remove unneeded argument to (find|enum)_format()
-  media: imx: utils: Rename format lookup and enumeration functions
-  media: imx: utils: Constify mbus argument to
-    imx_media_mbus_fmt_to_pix_fmt
-  media: imx: utils: Decouple mbus- and pixel-based format lookup and
-    enum
-  media: imx: utils: Add ability to filter pixel formats by mbus code
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+[Decrement index to replace loop counter k]
+[Return directly from within the loops]
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/staging/media/imx/imx-media-utils.c | 23 +++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-Philipp Zabel (2):
-  media: imx: fix and simplify pixel format enumeration
-  media: imx: fix media bus format enumeration
-
- drivers/staging/media/imx/imx-ic-prp.c        |   8 +-
- drivers/staging/media/imx/imx-ic-prpencvf.c   |   6 +-
- drivers/staging/media/imx/imx-media-capture.c |  23 +-
- .../staging/media/imx/imx-media-csc-scaler.c  |   2 +-
- drivers/staging/media/imx/imx-media-csi.c     |  26 +-
- drivers/staging/media/imx/imx-media-utils.c   | 530 ++++++++----------
- drivers/staging/media/imx/imx-media-vdic.c    |   6 +-
- drivers/staging/media/imx/imx-media.h         |  26 +-
- drivers/staging/media/imx/imx7-media-csi.c    |  15 +-
- 9 files changed, 299 insertions(+), 343 deletions(-)
-
+diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+index afd62be51e87..d08dcc674555 100644
+--- a/drivers/staging/media/imx/imx-media-utils.c
++++ b/drivers/staging/media/imx/imx-media-utils.c
+@@ -270,6 +270,7 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
+ 	for (i = 0; i < ARRAY_SIZE(pixel_formats); i++) {
+ 		const struct imx_media_pixfmt *fmt = &pixel_formats[i];
+ 		enum codespace_sel fmt_cs_sel;
++		unsigned int j;
+ 
+ 		fmt_cs_sel = fmt->cs == IPUV3_COLORSPACE_YUV
+ 			   ? CS_SEL_YUV : CS_SEL_RGB;
+@@ -279,14 +280,24 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
+ 		    (!allow_bayer && fmt->bayer))
+ 			continue;
+ 
+-		if (index == 0) {
+-			if (fourcc)
+-				*fourcc = fmt->fourcc;
+-			if (code)
+-				*code = fmt->codes[0];
++		if (fourcc && index == 0) {
++			*fourcc = fmt->fourcc;
++			return 0;
++		}
++
++		if (!code) {
++			index--;
++			continue;
+ 		}
+ 
+-		index--;
++		for (j = 0; j < ARRAY_SIZE(fmt->codes) && fmt->codes[j]; j++) {
++			if (index == 0) {
++				*code = fmt->codes[j];
++				return 0;
++			}
++
++			index--;
++		}
+ 	}
+ 
+ 	return -EINVAL;
 -- 
 Regards,
 
