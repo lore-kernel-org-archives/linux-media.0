@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0ECBC2D0EE
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 15:21:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE913C43331
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 15:21:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A730E2076A
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 15:21:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8CAA42076A
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 15:21:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585236097;
-	bh=Sr4EDHeWsoepxEEORnMb357aha/CxSRYyX13EtpsuhI=;
+	s=default; t=1585236098;
+	bh=UMtfIGx6fdWu311hAWHW7bkLL7PvRCE4kFcKr4hh+c4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=zY5kbYTWd4g7wRf0eJi9u9yMe4q8JWODzQeWaEiPo6CQU8qtX3IwnGqCAQG/oWkeo
-	 JoJeSRKoyalTu+B8bzFcQ0q2vGLZYke0D548aLRNWIzy5IJf0I2U3hWCw7YJUZ+lcA
-	 OtnyKawVf37VLCxbYHcJFSAlq/FukJFwR4vmCgN4=
+	b=NYt71M7yysKpKMfVusB5hnyKb6aGWnvnFZvPFmemBWuCh8C7KUtyLUe+9KpoqqmYn
+	 DhvC2J5Xsy+uzUIb02kHvYpemjV1A9/O4YMDDQCf2oYM5r7WG5gyBISd659x4AsQOe
+	 /2TDn76e6+SKA7cdYsN4JOVftQi0qoEmhSGCpiHc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727856AbgCZPVh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Mar 2020 11:21:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40498 "EHLO mail.kernel.org"
+        id S1727878AbgCZPVi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Mar 2020 11:21:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40504 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726067AbgCZPVg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1727547AbgCZPVg (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 26 Mar 2020 11:21:36 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D81420748;
+        by mail.kernel.org (Postfix) with ESMTPSA id 6F3A62076A;
         Thu, 26 Mar 2020 15:21:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585236095;
-        bh=Sr4EDHeWsoepxEEORnMb357aha/CxSRYyX13EtpsuhI=;
+        bh=UMtfIGx6fdWu311hAWHW7bkLL7PvRCE4kFcKr4hh+c4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M1jpzzkDDbcOHJDu1Pqx1NzLcXj1yX48ti3ttAycPW0DRo6N9Op982zHJnbO+UHeu
-         ME097Nx92jR/wI5sDOAfeAFIMMg9I6iJus0vLef0EyFTZCGaiiLQ0hjvW0NL+KBIlR
-         nxDEdAQjEb8Gf0DTh0ub2cvXD0hZdrb2Z8ry5MyQ=
+        b=u1Uek547uCCHiUothbggu0uDCqldxv4YobnED0ZyBkO8/jdAkZC3kV4qr8kZyplZD
+         n2/DC7wya+PM9tPzRgBtkcohKgbEGiJ1BZZWuga4PL0XghjDTL6daxX0IJ015jgSu6
+         xL2bvDv+2zad/qw0f7PVVhAcPGEHO4/Af4IqFGQU=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jHUK5-003dit-Os; Thu, 26 Mar 2020 16:21:33 +0100
+        id 1jHUK5-003dii-Mw; Thu, 26 Mar 2020 16:21:33 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4/7] media: ddbridge-dummy_fe: do some vars and function renames
-Date:   Thu, 26 Mar 2020 16:21:29 +0100
-Message-Id: <8c63553bac103e92f21738adf679a41ad0a13b3c.1585235736.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 2/7] media: Kconfig: mark other drivers as test drivers
+Date:   Thu, 26 Mar 2020 16:21:27 +0100
+Message-Id: <11575cad9a4fe2b4d6b929f29c6eaec6f978fbc1.1585235736.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585235736.git.mchehab+huawei@kernel.org>
 References: <cover.1585235736.git.mchehab+huawei@kernel.org>
@@ -57,378 +57,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As the name of this driver is now ddbridge-dummy, do some
-renames internally.
+Neither the PCI skeleton nor the DVB dummy driver are real
+drivers. They're there just as an example for a driver
+writter.
 
-No functional changes.
+Distros should not enable those drivers. So, hide them if
+MEDIA_TEST_SUPPORT is not selected.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../media/pci/ddbridge/ddbridge-dummy-fe.c    | 144 +++++++++---------
- .../media/pci/ddbridge/ddbridge-dummy-fe.h    |  22 +--
- 2 files changed, 83 insertions(+), 83 deletions(-)
+ drivers/media/dvb-frontends/Kconfig | 4 ++++
+ drivers/media/pci/Kconfig           | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/drivers/media/pci/ddbridge/ddbridge-dummy-fe.c b/drivers/media/pci/ddbridge/ddbridge-dummy-fe.c
-index 9ff1ebaa5e04..ebf4d9c30a55 100644
---- a/drivers/media/pci/ddbridge/ddbridge-dummy-fe.c
-+++ b/drivers/media/pci/ddbridge/ddbridge-dummy-fe.c
-@@ -11,15 +11,15 @@
- #include <linux/slab.h>
+diff --git a/drivers/media/dvb-frontends/Kconfig b/drivers/media/dvb-frontends/Kconfig
+index a29e9ddf9c82..932fd88fdc12 100644
+--- a/drivers/media/dvb-frontends/Kconfig
++++ b/drivers/media/dvb-frontends/Kconfig
+@@ -944,8 +944,12 @@ config DVB_SP2
+ 	  CIMaX SP2/SP2HF Common Interface module.
  
- #include <media/dvb_frontend.h>
--#include "dvb_dummy_fe.h"
-+#include "ddbridge-dummy-fe.h"
+ comment "Tools to develop new frontends"
++	depends on MEDIA_TEST_SUPPORT
  
+ config DVB_DUMMY_FE
+ 	tristate "Dummy frontend driver"
+ 	depends on DVB_CORE
++	depends on MEDIA_TEST_SUPPORT
++	help
++	  Dummy skeleton frontend driver.
+ endmenu
+diff --git a/drivers/media/pci/Kconfig b/drivers/media/pci/Kconfig
+index 21ee43fd7d8e..348da044ec78 100644
+--- a/drivers/media/pci/Kconfig
++++ b/drivers/media/pci/Kconfig
+@@ -65,6 +65,7 @@ source "drivers/media/pci/intel/ipu3/Kconfig"
  
--struct dvb_dummy_fe_state {
-+struct ddbridge_dummy_fe_state {
- 	struct dvb_frontend frontend;
- };
- 
- 
--static int dvb_dummy_fe_read_status(struct dvb_frontend *fe,
-+static int ddbridge_dummy_fe_read_status(struct dvb_frontend *fe,
- 				    enum fe_status *status)
- {
- 	*status = FE_HAS_SIGNAL
-@@ -31,26 +31,26 @@ static int dvb_dummy_fe_read_status(struct dvb_frontend *fe,
- 	return 0;
- }
- 
--static int dvb_dummy_fe_read_ber(struct dvb_frontend *fe, u32 *ber)
-+static int ddbridge_dummy_fe_read_ber(struct dvb_frontend *fe, u32 *ber)
- {
- 	*ber = 0;
- 	return 0;
- }
- 
--static int dvb_dummy_fe_read_signal_strength(struct dvb_frontend *fe,
-+static int ddbridge_dummy_fe_read_signal_strength(struct dvb_frontend *fe,
- 					     u16 *strength)
- {
- 	*strength = 0;
- 	return 0;
- }
- 
--static int dvb_dummy_fe_read_snr(struct dvb_frontend *fe, u16 *snr)
-+static int ddbridge_dummy_fe_read_snr(struct dvb_frontend *fe, u16 *snr)
- {
- 	*snr = 0;
- 	return 0;
- }
- 
--static int dvb_dummy_fe_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
-+static int ddbridge_dummy_fe_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
- {
- 	*ucblocks = 0;
- 	return 0;
-@@ -61,13 +61,13 @@ static int dvb_dummy_fe_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
-  * Also, it should check for the locks, in order to avoid report wrong data
-  * to userspace.
-  */
--static int dvb_dummy_fe_get_frontend(struct dvb_frontend *fe,
-+static int ddbridge_dummy_fe_get_frontend(struct dvb_frontend *fe,
- 				     struct dtv_frontend_properties *p)
- {
- 	return 0;
- }
- 
--static int dvb_dummy_fe_set_frontend(struct dvb_frontend *fe)
-+static int ddbridge_dummy_fe_set_frontend(struct dvb_frontend *fe)
- {
- 	if (fe->ops.tuner_ops.set_params) {
- 		fe->ops.tuner_ops.set_params(fe);
-@@ -78,102 +78,102 @@ static int dvb_dummy_fe_set_frontend(struct dvb_frontend *fe)
- 	return 0;
- }
- 
--static int dvb_dummy_fe_sleep(struct dvb_frontend *fe)
-+static int ddbridge_dummy_fe_sleep(struct dvb_frontend *fe)
- {
- 	return 0;
- }
- 
--static int dvb_dummy_fe_init(struct dvb_frontend *fe)
-+static int ddbridge_dummy_fe_init(struct dvb_frontend *fe)
- {
- 	return 0;
- }
- 
--static int dvb_dummy_fe_set_tone(struct dvb_frontend *fe,
-+static int ddbridge_dummy_fe_set_tone(struct dvb_frontend *fe,
- 				 enum fe_sec_tone_mode tone)
- {
- 	return 0;
- }
- 
--static int dvb_dummy_fe_set_voltage(struct dvb_frontend *fe,
-+static int ddbridge_dummy_fe_set_voltage(struct dvb_frontend *fe,
- 				    enum fe_sec_voltage voltage)
- {
- 	return 0;
- }
- 
--static void dvb_dummy_fe_release(struct dvb_frontend *fe)
-+static void ddbridge_dummy_fe_release(struct dvb_frontend *fe)
- {
--	struct dvb_dummy_fe_state *state = fe->demodulator_priv;
-+	struct ddbridge_dummy_fe_state *state = fe->demodulator_priv;
- 
- 	kfree(state);
- }
- 
--static const struct dvb_frontend_ops dvb_dummy_fe_ofdm_ops;
-+static const struct dvb_frontend_ops ddbridge_dummy_fe_ofdm_ops;
- 
--struct dvb_frontend *dvb_dummy_fe_ofdm_attach(void)
-+struct dvb_frontend *ddbridge_dummy_fe_ofdm_attach(void)
- {
--	struct dvb_dummy_fe_state *state = NULL;
-+	struct ddbridge_dummy_fe_state *state = NULL;
- 
- 	/* allocate memory for the internal state */
--	state = kzalloc(sizeof(struct dvb_dummy_fe_state), GFP_KERNEL);
-+	state = kzalloc(sizeof(struct ddbridge_dummy_fe_state), GFP_KERNEL);
- 	if (!state)
- 		return NULL;
- 
- 	/* create dvb_frontend */
- 	memcpy(&state->frontend.ops,
--	       &dvb_dummy_fe_ofdm_ops,
-+	       &ddbridge_dummy_fe_ofdm_ops,
- 	       sizeof(struct dvb_frontend_ops));
- 
- 	state->frontend.demodulator_priv = state;
- 	return &state->frontend;
- }
--EXPORT_SYMBOL(dvb_dummy_fe_ofdm_attach);
-+EXPORT_SYMBOL(ddbridge_dummy_fe_ofdm_attach);
- 
--static const struct dvb_frontend_ops dvb_dummy_fe_qpsk_ops;
-+static const struct dvb_frontend_ops ddbridge_dummy_fe_qpsk_ops;
- 
--struct dvb_frontend *dvb_dummy_fe_qpsk_attach(void)
-+struct dvb_frontend *ddbridge_dummy_fe_qpsk_attach(void)
- {
--	struct dvb_dummy_fe_state *state = NULL;
-+	struct ddbridge_dummy_fe_state *state = NULL;
- 
- 	/* allocate memory for the internal state */
--	state = kzalloc(sizeof(struct dvb_dummy_fe_state), GFP_KERNEL);
-+	state = kzalloc(sizeof(struct ddbridge_dummy_fe_state), GFP_KERNEL);
- 	if (!state)
- 		return NULL;
- 
- 	/* create dvb_frontend */
- 	memcpy(&state->frontend.ops,
--	       &dvb_dummy_fe_qpsk_ops,
-+	       &ddbridge_dummy_fe_qpsk_ops,
- 	       sizeof(struct dvb_frontend_ops));
- 
- 	state->frontend.demodulator_priv = state;
- 	return &state->frontend;
- }
--EXPORT_SYMBOL(dvb_dummy_fe_qpsk_attach);
-+EXPORT_SYMBOL(ddbridge_dummy_fe_qpsk_attach);
- 
--static const struct dvb_frontend_ops dvb_dummy_fe_qam_ops;
-+static const struct dvb_frontend_ops ddbridge_dummy_fe_qam_ops;
- 
--struct dvb_frontend *dvb_dummy_fe_qam_attach(void)
-+struct dvb_frontend *ddbridge_dummy_fe_qam_attach(void)
- {
--	struct dvb_dummy_fe_state *state = NULL;
-+	struct ddbridge_dummy_fe_state *state = NULL;
- 
- 	/* allocate memory for the internal state */
--	state = kzalloc(sizeof(struct dvb_dummy_fe_state), GFP_KERNEL);
-+	state = kzalloc(sizeof(struct ddbridge_dummy_fe_state), GFP_KERNEL);
- 	if (!state)
- 		return NULL;
- 
- 	/* create dvb_frontend */
- 	memcpy(&state->frontend.ops,
--	       &dvb_dummy_fe_qam_ops,
-+	       &ddbridge_dummy_fe_qam_ops,
- 	       sizeof(struct dvb_frontend_ops));
- 
- 	state->frontend.demodulator_priv = state;
- 	return &state->frontend;
- }
--EXPORT_SYMBOL(dvb_dummy_fe_qam_attach);
-+EXPORT_SYMBOL(ddbridge_dummy_fe_qam_attach);
- 
--static const struct dvb_frontend_ops dvb_dummy_fe_ofdm_ops = {
-+static const struct dvb_frontend_ops ddbridge_dummy_fe_ofdm_ops = {
- 	.delsys = { SYS_DVBT },
- 	.info = {
--		.name			= "Dummy DVB-T",
-+		.name			= "ddbridge dummy DVB-T",
- 		.frequency_min_hz	= 0,
- 		.frequency_max_hz	= 863250 * kHz,
- 		.frequency_stepsize_hz	= 62500,
-@@ -194,25 +194,25 @@ static const struct dvb_frontend_ops dvb_dummy_fe_ofdm_ops = {
- 			FE_CAN_HIERARCHY_AUTO,
- 	},
- 
--	.release = dvb_dummy_fe_release,
-+	.release = ddbridge_dummy_fe_release,
- 
--	.init = dvb_dummy_fe_init,
--	.sleep = dvb_dummy_fe_sleep,
-+	.init = ddbridge_dummy_fe_init,
-+	.sleep = ddbridge_dummy_fe_sleep,
- 
--	.set_frontend = dvb_dummy_fe_set_frontend,
--	.get_frontend = dvb_dummy_fe_get_frontend,
-+	.set_frontend = ddbridge_dummy_fe_set_frontend,
-+	.get_frontend = ddbridge_dummy_fe_get_frontend,
- 
--	.read_status = dvb_dummy_fe_read_status,
--	.read_ber = dvb_dummy_fe_read_ber,
--	.read_signal_strength = dvb_dummy_fe_read_signal_strength,
--	.read_snr = dvb_dummy_fe_read_snr,
--	.read_ucblocks = dvb_dummy_fe_read_ucblocks,
-+	.read_status = ddbridge_dummy_fe_read_status,
-+	.read_ber = ddbridge_dummy_fe_read_ber,
-+	.read_signal_strength = ddbridge_dummy_fe_read_signal_strength,
-+	.read_snr = ddbridge_dummy_fe_read_snr,
-+	.read_ucblocks = ddbridge_dummy_fe_read_ucblocks,
- };
- 
--static const struct dvb_frontend_ops dvb_dummy_fe_qam_ops = {
-+static const struct dvb_frontend_ops ddbridge_dummy_fe_qam_ops = {
- 	.delsys = { SYS_DVBC_ANNEX_A },
- 	.info = {
--		.name			= "Dummy DVB-C",
-+		.name			= "ddbridge dummy DVB-C",
- 		.frequency_min_hz	=  51 * MHz,
- 		.frequency_max_hz	= 858 * MHz,
- 		.frequency_stepsize_hz	= 62500,
-@@ -228,25 +228,25 @@ static const struct dvb_frontend_ops dvb_dummy_fe_qam_ops = {
- 			FE_CAN_INVERSION_AUTO
- 	},
- 
--	.release = dvb_dummy_fe_release,
-+	.release = ddbridge_dummy_fe_release,
- 
--	.init = dvb_dummy_fe_init,
--	.sleep = dvb_dummy_fe_sleep,
-+	.init = ddbridge_dummy_fe_init,
-+	.sleep = ddbridge_dummy_fe_sleep,
- 
--	.set_frontend = dvb_dummy_fe_set_frontend,
--	.get_frontend = dvb_dummy_fe_get_frontend,
-+	.set_frontend = ddbridge_dummy_fe_set_frontend,
-+	.get_frontend = ddbridge_dummy_fe_get_frontend,
- 
--	.read_status = dvb_dummy_fe_read_status,
--	.read_ber = dvb_dummy_fe_read_ber,
--	.read_signal_strength = dvb_dummy_fe_read_signal_strength,
--	.read_snr = dvb_dummy_fe_read_snr,
--	.read_ucblocks = dvb_dummy_fe_read_ucblocks,
-+	.read_status = ddbridge_dummy_fe_read_status,
-+	.read_ber = ddbridge_dummy_fe_read_ber,
-+	.read_signal_strength = ddbridge_dummy_fe_read_signal_strength,
-+	.read_snr = ddbridge_dummy_fe_read_snr,
-+	.read_ucblocks = ddbridge_dummy_fe_read_ucblocks,
- };
- 
--static const struct dvb_frontend_ops dvb_dummy_fe_qpsk_ops = {
-+static const struct dvb_frontend_ops ddbridge_dummy_fe_qpsk_ops = {
- 	.delsys = { SYS_DVBS },
- 	.info = {
--		.name			= "Dummy DVB-S",
-+		.name			= "ddbridge dummy DVB-S",
- 		.frequency_min_hz	=  950 * MHz,
- 		.frequency_max_hz	= 2150 * MHz,
- 		.frequency_stepsize_hz	= 250 * kHz,
-@@ -263,24 +263,24 @@ static const struct dvb_frontend_ops dvb_dummy_fe_qpsk_ops = {
- 			FE_CAN_QPSK
- 	},
- 
--	.release = dvb_dummy_fe_release,
-+	.release = ddbridge_dummy_fe_release,
- 
--	.init = dvb_dummy_fe_init,
--	.sleep = dvb_dummy_fe_sleep,
-+	.init = ddbridge_dummy_fe_init,
-+	.sleep = ddbridge_dummy_fe_sleep,
- 
--	.set_frontend = dvb_dummy_fe_set_frontend,
--	.get_frontend = dvb_dummy_fe_get_frontend,
-+	.set_frontend = ddbridge_dummy_fe_set_frontend,
-+	.get_frontend = ddbridge_dummy_fe_get_frontend,
- 
--	.read_status = dvb_dummy_fe_read_status,
--	.read_ber = dvb_dummy_fe_read_ber,
--	.read_signal_strength = dvb_dummy_fe_read_signal_strength,
--	.read_snr = dvb_dummy_fe_read_snr,
--	.read_ucblocks = dvb_dummy_fe_read_ucblocks,
-+	.read_status = ddbridge_dummy_fe_read_status,
-+	.read_ber = ddbridge_dummy_fe_read_ber,
-+	.read_signal_strength = ddbridge_dummy_fe_read_signal_strength,
-+	.read_snr = ddbridge_dummy_fe_read_snr,
-+	.read_ucblocks = ddbridge_dummy_fe_read_ucblocks,
- 
--	.set_voltage = dvb_dummy_fe_set_voltage,
--	.set_tone = dvb_dummy_fe_set_tone,
-+	.set_voltage = ddbridge_dummy_fe_set_voltage,
-+	.set_tone = ddbridge_dummy_fe_set_tone,
- };
- 
--MODULE_DESCRIPTION("DVB DUMMY Frontend");
-+MODULE_DESCRIPTION("ddbridge dummy Frontend");
- MODULE_AUTHOR("Emard");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/media/pci/ddbridge/ddbridge-dummy-fe.h b/drivers/media/pci/ddbridge/ddbridge-dummy-fe.h
-index 463abf5ebd56..811c203539e2 100644
---- a/drivers/media/pci/ddbridge/ddbridge-dummy-fe.h
-+++ b/drivers/media/pci/ddbridge/ddbridge-dummy-fe.h
-@@ -5,32 +5,32 @@
-  *  Written by Emard <emard@softhome.net>
-  */
- 
--#ifndef DVB_DUMMY_FE_H
--#define DVB_DUMMY_FE_H
-+#ifndef DDBRIDGE_DUMMY_FE_H
-+#define DDBRIDGE_DUMMY_FE_H
- 
- #include <linux/dvb/frontend.h>
- #include <media/dvb_frontend.h>
- 
--#if IS_REACHABLE(CONFIG_DVB_DUMMY_FE)
--struct dvb_frontend *dvb_dummy_fe_ofdm_attach(void);
--struct dvb_frontend *dvb_dummy_fe_qpsk_attach(void);
--struct dvb_frontend *dvb_dummy_fe_qam_attach(void);
-+#if IS_REACHABLE(CONFIG_DDBRIDGE_DUMMY_FE)
-+struct dvb_frontend *ddbridge_dummy_fe_ofdm_attach(void);
-+struct dvb_frontend *ddbridge_dummy_fe_qpsk_attach(void);
-+struct dvb_frontend *ddbridge_dummy_fe_qam_attach(void);
- #else
--static inline struct dvb_frontend *dvb_dummy_fe_ofdm_attach(void)
-+static inline struct dvb_frontend *ddbridge_dummy_fe_ofdm_attach(void)
- {
- 	pr_warn("%s: driver disabled by Kconfig\n", __func__);
- 	return NULL;
- }
--static inline struct dvb_frontend *dvb_dummy_fe_qpsk_attach(void)
-+static inline struct dvb_frontend *ddbridge_dummy_fe_qpsk_attach(void)
- {
- 	pr_warn("%s: driver disabled by Kconfig\n", __func__);
- 	return NULL;
- }
--static inline struct dvb_frontend *dvb_dummy_fe_qam_attach(void)
-+static inline struct dvb_frontend *ddbridge_dummy_fe_qam_attach(void)
- {
- 	pr_warn("%s: driver disabled by Kconfig\n", __func__);
- 	return NULL;
- }
--#endif /* CONFIG_DVB_DUMMY_FE */
-+#endif /* CONFIG_DDBRIDGE_DUMMY_FE */
- 
--#endif // DVB_DUMMY_FE_H
-+#endif // DDBRIDGE_DUMMY_FE_H
+ config VIDEO_PCI_SKELETON
+ 	tristate "Skeleton PCI V4L2 driver"
++	depends on MEDIA_TEST_SUPPORT
+ 	depends on PCI
+ 	depends on SAMPLES
+ 	depends on VIDEO_V4L2 && VIDEOBUF2_CORE
 -- 
 2.25.1
 
