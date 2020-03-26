@@ -6,29 +6,30 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5EE3C43331
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:12:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DF76C43331
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:12:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7ECE720719
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:12:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3810A20719
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:12:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727708AbgCZVJw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Mar 2020 17:09:52 -0400
-Received: from sauhun.de ([88.99.104.3]:54286 "EHLO pokefinder.org"
+        id S1728237AbgCZVMj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Mar 2020 17:12:39 -0400
+Received: from sauhun.de ([88.99.104.3]:54296 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726496AbgCZVJv (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726954AbgCZVJv (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 26 Mar 2020 17:09:51 -0400
 Received: from localhost (p54B3331F.dip0.t-ipconnect.de [84.179.51.31])
-        by pokefinder.org (Postfix) with ESMTPSA id 7694F2C1F88;
+        by pokefinder.org (Postfix) with ESMTPSA id 04E232C1F89;
         Thu, 26 Mar 2020 22:09:49 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] media: pci: saa7134: convert to use i2c_new_client_device()
-Date:   Thu, 26 Mar 2020 22:09:42 +0100
-Message-Id: <20200326210947.12747-3-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 3/6] media: marvell-ccic: convert to use i2c_new_client_device()
+Date:   Thu, 26 Mar 2020 22:09:43 +0100
+Message-Id: <20200326210947.12747-4-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200326210947.12747-1-wsa+renesas@sang-engineering.com>
 References: <20200326210947.12747-1-wsa+renesas@sang-engineering.com>
@@ -39,26 +40,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move away from the deprecated API.
+Move away from the deprecated API and return the shiny new ERRPTR where
+useful.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/media/pci/saa7134/saa7134-input.c | 2 +-
+ drivers/media/platform/marvell-ccic/cafe-driver.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/saa7134/saa7134-input.c b/drivers/media/pci/saa7134/saa7134-input.c
-index 9aea7c30380b..8610eb473b39 100644
---- a/drivers/media/pci/saa7134/saa7134-input.c
-+++ b/drivers/media/pci/saa7134/saa7134-input.c
-@@ -982,7 +982,7 @@ void saa7134_probe_i2c_ir(struct saa7134_dev *dev)
+diff --git a/drivers/media/platform/marvell-ccic/cafe-driver.c b/drivers/media/platform/marvell-ccic/cafe-driver.c
+index 37fdcc53a1c4..9a09a10a3631 100644
+--- a/drivers/media/platform/marvell-ccic/cafe-driver.c
++++ b/drivers/media/platform/marvell-ccic/cafe-driver.c
+@@ -556,7 +556,7 @@ static int cafe_pci_probe(struct pci_dev *pdev,
+ 	clkdev_create(mcam->mclk, "xclk", "%d-%04x",
+ 		i2c_adapter_id(cam->i2c_adapter), ov7670_info.addr);
  
- 	if (dev->init_data.name)
- 		info.platform_data = &dev->init_data;
--	i2c_new_device(&dev->i2c_adap, &info);
-+	i2c_new_client_device(&dev->i2c_adap, &info);
- }
- 
- static int saa7134_raw_decode_irq(struct saa7134_dev *dev)
+-	if (i2c_new_device(cam->i2c_adapter, &ov7670_info)) {
++	if (!IS_ERR(i2c_new_client_device(cam->i2c_adapter, &ov7670_info))) {
+ 		cam->registered = 1;
+ 		return 0;
+ 	}
 -- 
 2.20.1
 
