@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E158FC2D0ED
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6527EC43331
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:09:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B52A820714
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:09:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A90520714
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:09:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="mNr1RhXP"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KL/WebyW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727548AbgCZWI7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Mar 2020 18:08:59 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:42046 "EHLO
+        id S1727585AbgCZWJA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Mar 2020 18:09:00 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:42062 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbgCZWI7 (ORCPT
+        with ESMTP id S1727505AbgCZWJA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Mar 2020 18:08:59 -0400
+        Thu, 26 Mar 2020 18:09:00 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EF9E3A48;
-        Thu, 26 Mar 2020 23:08:54 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0B2E2A4C;
+        Thu, 26 Mar 2020 23:08:55 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1585260535;
-        bh=IFCqj9m1Hx7CeSn1WjDd2awqXSk2wQ/KIFB8VBN/Lqc=;
+        s=mail; t=1585260536;
+        bh=XKAM1thYt6evx0tN+HkAX2G2XSGfilT0Q/Gqcz+bukA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mNr1RhXPFPTddLjNNdLQhxsPyfmVRIC6cx4aMSS8hgc+OaW+3GskkaHL1yBJnV4s7
-         zS26sTJVbP9/tHb/+d0UfLMkvVRwYjv+t7/MLrkxfJV41VHpfXYWAuB+6fWmK52rcQ
-         Moz1lYANagt3ucXGUjMel0v6pfoau27Pm+1Nv6qU=
+        b=KL/WebyWbHqpePN49b9yPClgr4D35qIpv+z93K7thOjGXPYQ2torM9mB5DhH3/iKa
+         9F9V1OJ33tk7P1egLrXeTOAUDf9/3OwKj68DnzoEMgEnt2QMgHWgw0V/7sXqSM1BC7
+         8UtK4GjmnJ95WGBa1WBkhmPOUW8c0l+1df1sYX+8=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH v2 07/11] media: imx: utils: Remove unneeded argument to (find|enum)_format()
-Date:   Fri, 27 Mar 2020 00:08:36 +0200
-Message-Id: <20200326220840.18540-8-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 09/11] media: imx: utils: Constify mbus argument to imx_media_mbus_fmt_to_pix_fmt
+Date:   Fri, 27 Mar 2020 00:08:38 +0200
+Message-Id: <20200326220840.18540-10-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200326220840.18540-1-laurent.pinchart@ideasonboard.com>
 References: <20200326220840.18540-1-laurent.pinchart@ideasonboard.com>
@@ -50,90 +50,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The find_format() and enum_format() functions take an argument that
-tells whether to take into account formats that don't have associated
-media bus codes. The same information can be deduced from the fourcc
-argument passed to these functions. Remove the allow_non_mbus argument
-and use fourcc instead internally.
+The imx_media_mbus_fmt_to_pix_fmt() function doesn't need to modify its
+mbus argument. Make it const.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx-media-utils.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+ drivers/staging/media/imx/imx-media-utils.c | 2 +-
+ drivers/staging/media/imx/imx-media.h       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-index 2dcb6285a6c0..cbf441716cab 100644
+index 5c096f631236..c22e222866e8 100644
 --- a/drivers/staging/media/imx/imx-media-utils.c
 +++ b/drivers/staging/media/imx/imx-media-utils.c
-@@ -196,8 +196,7 @@ static const struct imx_media_pixfmt pixel_formats[] = {
- static const
- struct imx_media_pixfmt *find_format(u32 fourcc,
- 				     u32 code,
--				     enum codespace_sel cs_sel,
--				     bool allow_non_mbus)
-+				     enum codespace_sel cs_sel)
+@@ -506,7 +506,7 @@ void imx_media_try_colorimetry(struct v4l2_mbus_framefmt *tryfmt,
+ EXPORT_SYMBOL_GPL(imx_media_try_colorimetry);
+ 
+ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
+-				  struct v4l2_mbus_framefmt *mbus,
++				  const struct v4l2_mbus_framefmt *mbus,
+ 				  const struct imx_media_pixfmt *cc)
  {
- 	bool allow_bayer = cs_sel & CS_SEL_BAYER;
- 	unsigned int i;
-@@ -213,7 +212,7 @@ struct imx_media_pixfmt *find_format(u32 fourcc,
- 			   ? CS_SEL_YUV : CS_SEL_RGB;
- 
- 		if ((cs_sel != CS_SEL_ANY && fmt_cs_sel != cs_sel) ||
--		    (!allow_non_mbus && !fmt->codes) ||
-+		    (!fourcc && !fmt->codes) ||
- 		    (!allow_bayer && fmt->bayer))
- 			continue;
- 
-@@ -233,8 +232,7 @@ struct imx_media_pixfmt *find_format(u32 fourcc,
- }
- 
- static int enum_format(u32 *fourcc, u32 *code, u32 index,
--		       enum codespace_sel cs_sel,
--		       bool allow_non_mbus)
-+		       enum codespace_sel cs_sel)
- {
- 	bool allow_bayer = cs_sel & CS_SEL_BAYER;
- 	unsigned int i;
-@@ -250,7 +248,7 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
- 			   ? CS_SEL_YUV : CS_SEL_RGB;
- 
- 		if ((cs_sel != CS_SEL_ANY && fmt_cs_sel != cs_sel) ||
--		    (!allow_non_mbus && !fmt->codes) ||
-+		    (!fourcc && !fmt->codes) ||
- 		    (!allow_bayer && fmt->bayer))
- 			continue;
- 
-@@ -280,26 +278,26 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
- const struct imx_media_pixfmt *
- imx_media_find_format(u32 fourcc, enum codespace_sel cs_sel)
- {
--	return find_format(fourcc, 0, cs_sel, true);
-+	return find_format(fourcc, 0, cs_sel);
- }
- EXPORT_SYMBOL_GPL(imx_media_find_format);
- 
- int imx_media_enum_format(u32 *fourcc, u32 index, enum codespace_sel cs_sel)
- {
--	return enum_format(fourcc, NULL, index, cs_sel, true);
-+	return enum_format(fourcc, NULL, index, cs_sel);
- }
- EXPORT_SYMBOL_GPL(imx_media_enum_format);
- 
- const struct imx_media_pixfmt *
- imx_media_find_mbus_format(u32 code, enum codespace_sel cs_sel)
- {
--	return find_format(0, code, cs_sel, false);
-+	return find_format(0, code, cs_sel);
- }
- EXPORT_SYMBOL_GPL(imx_media_find_mbus_format);
- 
- int imx_media_enum_mbus_format(u32 *code, u32 index, enum codespace_sel cs_sel)
- {
--	return enum_format(NULL, code, index, cs_sel, false);
-+	return enum_format(NULL, code, index, cs_sel);
- }
- EXPORT_SYMBOL_GPL(imx_media_enum_mbus_format);
- 
+ 	u32 width;
+diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+index cd80f1c59a5c..bb73a76eea84 100644
+--- a/drivers/staging/media/imx/imx-media.h
++++ b/drivers/staging/media/imx/imx-media.h
+@@ -177,7 +177,7 @@ int imx_media_init_cfg(struct v4l2_subdev *sd,
+ void imx_media_try_colorimetry(struct v4l2_mbus_framefmt *tryfmt,
+ 			       bool ic_route);
+ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
+-				  struct v4l2_mbus_framefmt *mbus,
++				  const struct v4l2_mbus_framefmt *mbus,
+ 				  const struct imx_media_pixfmt *cc);
+ int imx_media_mbus_fmt_to_ipu_image(struct ipu_image *image,
+ 				    struct v4l2_mbus_framefmt *mbus);
 -- 
 Regards,
 
