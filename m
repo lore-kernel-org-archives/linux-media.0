@@ -4,31 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2E0AC43331
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:09:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2603C43331
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:12:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BF63A2078C
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:09:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC0482073E
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 21:12:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727740AbgCZVJy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727766AbgCZVJy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 26 Mar 2020 17:09:54 -0400
-Received: from sauhun.de ([88.99.104.3]:54328 "EHLO pokefinder.org"
+Received: from sauhun.de ([88.99.104.3]:54332 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727473AbgCZVJw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Mar 2020 17:09:52 -0400
+        id S1726034AbgCZVJx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 26 Mar 2020 17:09:53 -0400
 Received: from localhost (p54B3331F.dip0.t-ipconnect.de [84.179.51.31])
-        by pokefinder.org (Postfix) with ESMTPSA id 87EE82C1F8A;
-        Thu, 26 Mar 2020 22:09:50 +0100 (CET)
+        by pokefinder.org (Postfix) with ESMTPSA id 234122C1F8B;
+        Thu, 26 Mar 2020 22:09:51 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] media: usb: cx231xx: convert to use i2c_new_client_device()
-Date:   Thu, 26 Mar 2020 22:09:44 +0100
-Message-Id: <20200326210947.12747-5-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 5/6] media: usb: hdpvr: convert to use i2c_new_client_device()
+Date:   Thu, 26 Mar 2020 22:09:45 +0100
+Message-Id: <20200326210947.12747-6-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200326210947.12747-1-wsa+renesas@sang-engineering.com>
 References: <20200326210947.12747-1-wsa+renesas@sang-engineering.com>
@@ -39,36 +40,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move away from the deprecated API and make use of the fact that
-unregistering devices is NULL- and ERR_PTR-safe.
+Move away from the deprecated API and return the shiny new ERRPTR where
+useful.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/media/usb/cx231xx/cx231xx-input.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/usb/hdpvr/hdpvr-core.c | 4 ++--
+ drivers/media/usb/hdpvr/hdpvr-i2c.c  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/cx231xx/cx231xx-input.c b/drivers/media/usb/cx231xx/cx231xx-input.c
-index 9f88c640ec2b..8149702bcf89 100644
---- a/drivers/media/usb/cx231xx/cx231xx-input.c
-+++ b/drivers/media/usb/cx231xx/cx231xx-input.c
-@@ -88,7 +88,7 @@ int cx231xx_ir_init(struct cx231xx *dev)
- 	ir_i2c_bus = cx231xx_boards[dev->model].ir_i2c_master;
- 	dev_dbg(dev->dev, "Trying to bind ir at bus %d, addr 0x%02x\n",
- 		ir_i2c_bus, info.addr);
--	dev->ir_i2c_client = i2c_new_device(
-+	dev->ir_i2c_client = i2c_new_client_device(
- 		cx231xx_get_i2c_adap(dev, ir_i2c_bus), &info);
+diff --git a/drivers/media/usb/hdpvr/hdpvr-core.c b/drivers/media/usb/hdpvr/hdpvr-core.c
+index b75c18a012a7..52e05a69c46e 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-core.c
++++ b/drivers/media/usb/hdpvr/hdpvr-core.c
+@@ -363,9 +363,9 @@ static int hdpvr_probe(struct usb_interface *interface,
+ 	}
  
- 	return 0;
-@@ -96,7 +96,6 @@ int cx231xx_ir_init(struct cx231xx *dev)
+ 	client = hdpvr_register_ir_i2c(dev);
+-	if (!client) {
++	if (IS_ERR(client)) {
+ 		v4l2_err(&dev->v4l2_dev, "i2c IR device register failed\n");
+-		retval = -ENODEV;
++		retval = PTR_ERR(client);
+ 		goto reg_fail;
+ 	}
+ #endif
+diff --git a/drivers/media/usb/hdpvr/hdpvr-i2c.c b/drivers/media/usb/hdpvr/hdpvr-i2c.c
+index 785c8508a46e..070559b01b01 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-i2c.c
++++ b/drivers/media/usb/hdpvr/hdpvr-i2c.c
+@@ -44,7 +44,7 @@ struct i2c_client *hdpvr_register_ir_i2c(struct hdpvr_device *dev)
+ 	init_data->polling_interval = 405; /* ms, duplicated from Windows */
+ 	info.platform_data = init_data;
  
- void cx231xx_ir_exit(struct cx231xx *dev)
- {
--	if (dev->ir_i2c_client)
--		i2c_unregister_device(dev->ir_i2c_client);
-+	i2c_unregister_device(dev->ir_i2c_client);
- 	dev->ir_i2c_client = NULL;
+-	return i2c_new_device(&dev->i2c_adapter, &info);
++	return i2c_new_client_device(&dev->i2c_adapter, &info);
  }
+ 
+ static int hdpvr_i2c_read(struct hdpvr_device *dev, int bus,
 -- 
 2.20.1
 
