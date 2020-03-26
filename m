@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC63AC2D0ED
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEE20C43331
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:08:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9513120714
-	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:08:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EE6B20714
+	for <linux-media@archiver.kernel.org>; Thu, 26 Mar 2020 22:08:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="rprPq3mm"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="kX4uN6Fc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727352AbgCZWI4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Mar 2020 18:08:56 -0400
+        id S1727393AbgCZWI5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Mar 2020 18:08:57 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:42062 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726281AbgCZWIz (ORCPT
+        with ESMTP id S1727347AbgCZWI5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Mar 2020 18:08:55 -0400
+        Thu, 26 Mar 2020 18:08:57 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D0805134B;
-        Thu, 26 Mar 2020 23:08:52 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DF3A71467;
+        Thu, 26 Mar 2020 23:08:53 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1585260533;
-        bh=zuwPaYeBJyt40BUT2Usm/MpFIeBtMY4oKUJxqU2o8ck=;
+        s=mail; t=1585260534;
+        bh=UsQCkAUumjc6wPYHUE8Ls9UDasxUNc6eWQeMIKItgE4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rprPq3mmTvPQpN4toGgYF77YOzRo+Qai02tqnVCw3jR2FcLSjPyj4weS8NkSMoNh/
-         5WGHPvywHUs7vft4v421ghgb/dnfTGwimesWYhNhevgK9unDEcbgvWWtn7TNyjXsS5
-         8Gp+gRJHHjhRztpZjxTz5nsqWbUmxjjhuXodbi58=
+        b=kX4uN6FcypDC2WlfyDxJgbgY5UuE3jYfTgxYcqhg1oaV3tLrM4QBMqBWeocKqdqZz
+         vDCg8omHI4xzD1xPJdsSbimRRUbfBqH8J7FXX05kU52z+VddKVXpSRTcwB5h8iVoKl
+         FwDlRRyQdyUrExkxoaOVlpi+f8mUCWjgKYuVyhEM=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH v2 03/11] media: imx: utils: Inline init_mbus_colorimetry() in its caller
-Date:   Fri, 27 Mar 2020 00:08:32 +0200
-Message-Id: <20200326220840.18540-4-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 05/11] media: imx: utils: Simplify IPU format lookup and enumeration
+Date:   Fri, 27 Mar 2020 00:08:34 +0200
+Message-Id: <20200326220840.18540-6-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200326220840.18540-1-laurent.pinchart@ideasonboard.com>
 References: <20200326220840.18540-1-laurent.pinchart@ideasonboard.com>
@@ -50,56 +50,179 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The init_mbus_colorimetry() function is small and used in a single
-place. The code becomes easier to follow if it gets inline in its
-caller. Do so.
+The IPU formats are stored in two separate tables, one for YUV and one
+for RGB formats. This complicates the lookup and enumeration function
+without really increasing efficiency, as both tables contain a single
+element. Merge the two tables and simplify the functions, and move the
+resulting table next to the functions that use it.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx-media-utils.c | 24 +++++++++------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
+ drivers/staging/media/imx/imx-media-utils.c | 128 ++++++++------------
+ 1 file changed, 50 insertions(+), 78 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-index d08dcc674555..d0ad42b478a9 100644
+index ff1dd4f0a8c6..490f743c4e77 100644
 --- a/drivers/staging/media/imx/imx-media-utils.c
 +++ b/drivers/staging/media/imx/imx-media-utils.c
-@@ -210,19 +210,6 @@ static const struct imx_media_pixfmt ipu_rgb_formats[] = {
+@@ -186,30 +186,6 @@ static const struct imx_media_pixfmt pixel_formats[] = {
+ 	},
+ };
  
- #define NUM_IPU_RGB_FORMATS ARRAY_SIZE(ipu_rgb_formats)
- 
--static void init_mbus_colorimetry(struct v4l2_mbus_framefmt *mbus,
--				  const struct imx_media_pixfmt *fmt)
--{
--	mbus->colorspace = (fmt->cs == IPUV3_COLORSPACE_RGB) ?
--		V4L2_COLORSPACE_SRGB : V4L2_COLORSPACE_SMPTE170M;
--	mbus->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(mbus->colorspace);
--	mbus->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(mbus->colorspace);
--	mbus->quantization =
--		V4L2_MAP_QUANTIZATION_DEFAULT(fmt->cs == IPUV3_COLORSPACE_RGB,
--					      mbus->colorspace,
--					      mbus->ycbcr_enc);
--}
+-static const struct imx_media_pixfmt ipu_yuv_formats[] = {
+-	{
+-		.fourcc = V4L2_PIX_FMT_YUV32,
+-		.codes  = {MEDIA_BUS_FMT_AYUV8_1X32},
+-		.cs     = IPUV3_COLORSPACE_YUV,
+-		.bpp    = 32,
+-		.ipufmt = true,
+-	},
+-};
+-
+-#define NUM_IPU_YUV_FORMATS ARRAY_SIZE(ipu_yuv_formats)
+-
+-static const struct imx_media_pixfmt ipu_rgb_formats[] = {
+-	{
+-		.fourcc	= V4L2_PIX_FMT_XRGB32,
+-		.codes  = {MEDIA_BUS_FMT_ARGB8888_1X32},
+-		.cs     = IPUV3_COLORSPACE_RGB,
+-		.bpp    = 32,
+-		.ipufmt = true,
+-	},
+-};
+-
+-#define NUM_IPU_RGB_FORMATS ARRAY_SIZE(ipu_rgb_formats)
 -
  static const
  struct imx_media_pixfmt *find_format(u32 fourcc,
  				     u32 code,
-@@ -424,7 +411,16 @@ int imx_media_init_mbus_fmt(struct v4l2_mbus_framefmt *mbus,
+@@ -320,77 +296,73 @@ int imx_media_enum_mbus_format(u32 *code, u32 index, enum codespace_sel cs_sel)
+ }
+ EXPORT_SYMBOL_GPL(imx_media_enum_mbus_format);
+ 
++/* -----------------------------------------------------------------------------
++ * IPU Formats Lookup and Enumeration
++ */
++
++static const struct imx_media_pixfmt ipu_formats[] = {
++	{
++		.fourcc = V4L2_PIX_FMT_YUV32,
++		.codes  = {MEDIA_BUS_FMT_AYUV8_1X32},
++		.cs     = IPUV3_COLORSPACE_YUV,
++		.bpp    = 32,
++		.ipufmt = true,
++	}, {
++		.fourcc	= V4L2_PIX_FMT_XRGB32,
++		.codes  = {MEDIA_BUS_FMT_ARGB8888_1X32},
++		.cs     = IPUV3_COLORSPACE_RGB,
++		.bpp    = 32,
++		.ipufmt = true,
++	},
++};
++
+ const struct imx_media_pixfmt *
+ imx_media_find_ipu_format(u32 code, enum codespace_sel cs_sel)
+ {
+-	const struct imx_media_pixfmt *array, *fmt, *ret = NULL;
+-	u32 array_size;
+-	int i, j;
+-
+-	switch (cs_sel) {
+-	case CS_SEL_YUV:
+-		array_size = NUM_IPU_YUV_FORMATS;
+-		array = ipu_yuv_formats;
+-		break;
+-	case CS_SEL_RGB:
+-		array_size = NUM_IPU_RGB_FORMATS;
+-		array = ipu_rgb_formats;
+-		break;
+-	case CS_SEL_ANY:
+-		array_size = NUM_IPU_YUV_FORMATS + NUM_IPU_RGB_FORMATS;
+-		array = ipu_yuv_formats;
+-		break;
+-	default:
++	bool accept_yuv = cs_sel & CS_SEL_YUV;
++	bool accept_rgb = cs_sel & CS_SEL_RGB;
++	unsigned int i, j;
++
++	if (!code)
+ 		return NULL;
+-	}
+ 
+-	for (i = 0; i < array_size; i++) {
+-		if (cs_sel == CS_SEL_ANY && i >= NUM_IPU_YUV_FORMATS)
+-			fmt = &ipu_rgb_formats[i - NUM_IPU_YUV_FORMATS];
+-		else
+-			fmt = &array[i];
++	for (i = 0; i < ARRAY_SIZE(ipu_formats); i++) {
++		const struct imx_media_pixfmt *fmt = &ipu_formats[i];
+ 
+-		for (j = 0; code && fmt->codes[j]; j++) {
+-			if (code == fmt->codes[j]) {
+-				ret = fmt;
+-				goto out;
+-			}
++		if ((!accept_yuv && fmt->cs == IPUV3_COLORSPACE_YUV) ||
++		    (!accept_rgb && fmt->cs == IPUV3_COLORSPACE_RGB))
++			continue;
++
++		for (j = 0; fmt->codes[j]; j++) {
++			if (code == fmt->codes[j])
++				return fmt;
+ 		}
  	}
  
- 	mbus->code = code;
--	init_mbus_colorimetry(mbus, lcc);
+-out:
+-	return ret;
++	return NULL;
+ }
+ EXPORT_SYMBOL_GPL(imx_media_find_ipu_format);
+ 
+ int imx_media_enum_ipu_format(u32 *code, u32 index, enum codespace_sel cs_sel)
+ {
+-	switch (cs_sel) {
+-	case CS_SEL_YUV:
+-		if (index >= NUM_IPU_YUV_FORMATS)
+-			return -EINVAL;
+-		*code = ipu_yuv_formats[index].codes[0];
+-		break;
+-	case CS_SEL_RGB:
+-		if (index >= NUM_IPU_RGB_FORMATS)
+-			return -EINVAL;
+-		*code = ipu_rgb_formats[index].codes[0];
+-		break;
+-	case CS_SEL_ANY:
+-		if (index >= NUM_IPU_YUV_FORMATS + NUM_IPU_RGB_FORMATS)
+-			return -EINVAL;
+-		if (index >= NUM_IPU_YUV_FORMATS) {
+-			index -= NUM_IPU_YUV_FORMATS;
+-			*code = ipu_rgb_formats[index].codes[0];
+-		} else {
+-			*code = ipu_yuv_formats[index].codes[0];
++	bool accept_yuv = cs_sel & CS_SEL_YUV;
++	bool accept_rgb = cs_sel & CS_SEL_RGB;
++	unsigned int i;
 +
-+	mbus->colorspace = (lcc->cs == IPUV3_COLORSPACE_RGB)
-+			? V4L2_COLORSPACE_SRGB : V4L2_COLORSPACE_SMPTE170M;
-+	mbus->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(mbus->colorspace);
-+	mbus->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(mbus->colorspace);
-+	mbus->quantization =
-+		V4L2_MAP_QUANTIZATION_DEFAULT(lcc->cs == IPUV3_COLORSPACE_RGB,
-+					      mbus->colorspace,
-+					      mbus->ycbcr_enc);
++	for (i = 0; i < ARRAY_SIZE(ipu_formats); i++) {
++		const struct imx_media_pixfmt *fmt = &ipu_formats[i];
 +
- 	if (cc)
- 		*cc = lcc;
++		if ((!accept_yuv && fmt->cs == IPUV3_COLORSPACE_YUV) ||
++		    (!accept_rgb && fmt->cs == IPUV3_COLORSPACE_RGB))
++			continue;
++
++		if (index-- == 0) {
++			*code = fmt->codes[0];
++			return 0;
+ 		}
+-		break;
+-	default:
+-		return -EINVAL;
+ 	}
+ 
+-	return 0;
++	return -EINVAL;
+ }
+ EXPORT_SYMBOL_GPL(imx_media_enum_ipu_format);
  
 -- 
 Regards,
