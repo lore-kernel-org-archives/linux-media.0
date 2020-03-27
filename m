@@ -2,188 +2,119 @@ Return-Path: <SRS0=3PrV=5M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E46D9C43331
-	for <linux-media@archiver.kernel.org>; Fri, 27 Mar 2020 11:34:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 025EFC2D0E5
+	for <linux-media@archiver.kernel.org>; Fri, 27 Mar 2020 13:37:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B0E6C2073B
-	for <linux-media@archiver.kernel.org>; Fri, 27 Mar 2020 11:34:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="g9mIfMvD"
+	by mail.kernel.org (Postfix) with ESMTP id CA58520838
+	for <linux-media@archiver.kernel.org>; Fri, 27 Mar 2020 13:37:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbgC0Lez (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Mar 2020 07:34:55 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:39618 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726360AbgC0Ley (ORCPT
+        id S1727345AbgC0Nh3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Mar 2020 09:37:29 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:45640 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726275AbgC0Nh3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Mar 2020 07:34:54 -0400
-Received: by mail-ed1-f65.google.com with SMTP id a43so10633075edf.6
-        for <linux-media@vger.kernel.org>; Fri, 27 Mar 2020 04:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+HBDIdNbauUzWWpYygi2C8elHABQwqvtXozjKK9jHI8=;
-        b=g9mIfMvDXBJf9IKXU+ep7HNuIrcACmkCAlfPqrOeebATZu/zp+1kFgDcYwIlwtarnT
-         uGHcciMeUHiOiCf9zVFQo8SK+++7ueQJZcS0YbeFeq49y5a+IbMjk7Bhnm8v5+wj16ow
-         nSVG6bfxiVbsBcMTQ9hRdH+zTtM7PL50EsVYs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+HBDIdNbauUzWWpYygi2C8elHABQwqvtXozjKK9jHI8=;
-        b=cCpsKTGbqnBtmHUMrlIF3Ebhnz8q+O0vuX0ZeBk4aPO+WQusL1s+hS3rNUgBxT6v83
-         tewXELpdeuTmf986/XX4ux64yCT/agGwFaRI7e4fWK4EdlWTZwnV1tCiKjRLg6QLJPTQ
-         aJ84KJTkqnkpWkhr4gexT+l0qdYRDO6p0YbNskfuAbauNwWBNDXY7ZNOTi0xCHWbdida
-         41Zy8GfarYPE9cQLHujpSsOy4tCnu2GfS+WvumII76WjUV2tmW96BxWC7jzoZ80HviyF
-         Rqde4N1UxGOKNA/2eqjcXrxRfHGPiooV+ZccpECpLtRRihFaAGb2+IK56rr/mamVo7I5
-         wWRQ==
-X-Gm-Message-State: ANhLgQ0+shvq6TJ9RvKBuD0bkuH25oSalWpBTWdOERDybtrjg1sQc327
-        xsTEaYtpAw27tvMaxuDZyVVssipuYrc7VQ==
-X-Google-Smtp-Source: ADFU+vudhwRzzCFkVdObyUZCWkukVLPhs8EaOKutiYkDu03uNOoVR0AmE/C5Eh/h/iByXcZ0z9Rorg==
-X-Received: by 2002:a17:906:18a1:: with SMTP id c1mr11714210ejf.344.1585308892082;
-        Fri, 27 Mar 2020 04:34:52 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id h22sm640372edw.34.2020.03.27.04.34.51
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Mar 2020 04:34:51 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id i7so5686874edq.3
-        for <linux-media@vger.kernel.org>; Fri, 27 Mar 2020 04:34:51 -0700 (PDT)
-X-Received: by 2002:adf:f0c5:: with SMTP id x5mr14731096wro.415.1585308473751;
- Fri, 27 Mar 2020 04:27:53 -0700 (PDT)
+        Fri, 27 Mar 2020 09:37:29 -0400
+Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 14E41634C90;
+        Fri, 27 Mar 2020 15:37:06 +0200 (EET)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1jHpAX-0000og-4s; Fri, 27 Mar 2020 15:37:05 +0200
+Date:   Fri, 27 Mar 2020 15:37:05 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [v2 2/3] media: ov8856: Add devicetree support
+Message-ID: <20200327133705.GC2394@valkosipuli.retiisi.org.uk>
+References: <20200313110350.10864-1-robert.foss@linaro.org>
+ <20200313110350.10864-3-robert.foss@linaro.org>
+ <20200313121746.GC5730@valkosipuli.retiisi.org.uk>
+ <CAG3jFytpx8_+DKhUVZnUFeMYK82Z1hFWcEnbyD0=4a8p3ojteg@mail.gmail.com>
+ <20200326144725.GA2394@valkosipuli.retiisi.org.uk>
+ <CAG3jFyu=HOsWNeRFC2t4HjzYrFrLjsbXzAm4+zD50Xq48mqzcw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20200302041213.27662-1-senozhatsky@chromium.org>
- <20200302041213.27662-5-senozhatsky@chromium.org> <6e4fc7f9-0068-92ff-77d7-9c77c047f3db@collabora.com>
- <20200324023909.GA201720@google.com> <1187a3f660b092d8a9d5437445155edfc0744a4f.camel@collabora.com>
- <20200325023248.GA241329@google.com>
-In-Reply-To: <20200325023248.GA241329@google.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 27 Mar 2020 12:27:41 +0100
-X-Gmail-Original-Message-ID: <CAAFQd5BhDLcKHR1aO2U5Lf6EBhoqtBJbg6LzWDQd7XkDJ1YUaw@mail.gmail.com>
-Message-ID: <CAAFQd5BhDLcKHR1aO2U5Lf6EBhoqtBJbg6LzWDQd7XkDJ1YUaw@mail.gmail.com>
-Subject: Re: [PATCHv4 04/11] videobuf2: add queue memory consistency parameter
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pawel Osciak <posciak@chromium.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        nicolas.dufresne@collabora.co.uk
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG3jFyu=HOsWNeRFC2t4HjzYrFrLjsbXzAm4+zD50Xq48mqzcw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Mar 25, 2020 at 3:32 AM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (20/03/24 07:17), Ezequiel Garcia wrote:
-> [..]
-> > > > > +static void set_queue_consistency(struct vb2_queue *q, bool consistent_mem)
-> > > > > +{
-> > > > > +       if (!vb2_queue_allows_cache_hints(q))
-> > > > > +               return;
-> > > > > +
-> > > > > +       if (consistent_mem)
-> > > > > +               q->dma_attrs &= ~DMA_ATTR_NON_CONSISTENT;
-> > > > > +       else
-> > > > > +               q->dma_attrs |= DMA_ATTR_NON_CONSISTENT;
-> > > > > +}
-> > > > > +
-> > > > >   int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
-> > > > > -               unsigned int *count)
-> > > > > +               bool consistent_mem, unsigned int *count)
-> > > > You extended the vb2_core_reqbufs accepting a new boolean that
-> > > > is decided according to the setting of the V4L2_FLAG_MEMORY_NON_CONSISTENT
-> > > > but in the future some other flags might be added, and so I think it
-> > > > is better to replace the boolean with a u32 consisting of all the flags.
-> > >
-> > > Don't have any objections. Can change the `bool' to `u32'.
-> > >
+Hi Robert,
+
+On Fri, Mar 27, 2020 at 11:32:29AM +0100, Robert Foss wrote:
+> On Thu, 26 Mar 2020 at 15:47, Sakari Ailus <sakari.ailus@iki.fi> wrote:
 > >
-> > or maybe an enum instead? That would help get a cleaner
-> > interface.
->
-> Hmm, interesting.
->
-> The flags in question can be from different, unrelated groups
-> (types), controlling various parts of the stack. Not necessarily
-> all of them are memory_consistency related. We can, for instance,
-> pass some additional flags to underlying memory allocators (contig,
-> sg), etc.
->
-> E.g.
->
->         enum MEMORY_ATTR {
->                 MEM_NON_CONSISTENT,
->                 ...
->         };
->
->         enum VMALLOC_ALLOCATOR_ATTR {
->                 DO_A_BARREL_ROLL,
->                 ...
->         };
->
->         enum DMA_SG_ALLOCATOR_ATTR {
->                 WRITEBACK_TO_TAPE_DEVICE,
->                 ...
->         };
->
->         enum DMA_CONTIG_ALLOCATOR_ATTR {
->                 PREFER_HTTPS,
->                 ...
->         };
->
-> and so on. We maybe can keep all of those in one enum (umm, what should
-> be the name?), and then either make sure that all of them are proper powers
-> of two
->
->         enum AUX_FLAGS {
->                 MEM_NON_CONSISTENT              = (1 << 0),
->                 DO_A_BARREL_ROLL                = (1 << 1),
->                 WRITEBACK_TO_TAPE_DEVICE        = (1 << 2),
->                 PREFER_HTTPS                    = (1 << 3),
->         };
->
-> or
->         enum AUX_FLAGS {
->                 MEM_NON_CONSISTENT              = 0,
->                 DO_A_BARREL_ROLL,
->                 WRITEBACK_TO_TAPE_DEVICE,
->                 PREFER_HTTPS,
->         };
->
-> and make sure that those are not flags, but bits.
-> IOW, if (flags & BIT(MEM_NON_CONSISTENT)).
->
->
-> What do others think?
+> > Hi Robert,
+> >
+> > On Thu, Mar 26, 2020 at 12:56:37PM +0100, Robert Foss wrote:
+> > ...
+> > > > > +static int __ov8856_power_on(struct ov8856 *ov8856)
+> > > > > +{
+> > > > > +     struct i2c_client *client = v4l2_get_subdevdata(&ov8856->sd);
+> > > > > +     int ret;
+> > > > > +
+> > > > > +     ret = clk_prepare_enable(ov8856->xvclk);
+> > > > > +     if (ret < 0) {
+> > > > > +             dev_err(&client->dev, "failed to enable xvclk\n");
+> > > > > +             return ret;
+> > > > > +     }
+> > > > > +
+> > > > > +     gpiod_set_value_cansleep(ov8856->reset_gpio, GPIOD_OUT_HIGH);
+> > > > > +
+> > > > > +     ret = regulator_bulk_enable(ARRAY_SIZE(ov8856_supply_names),
+> > > > > +                                 ov8856->supplies);
+> > > > > +     if (ret < 0) {
+> > > > > +             dev_err(&client->dev, "failed to enable regulators\n");
+> > > > > +             goto disable_clk;
+> > > > > +     }
+> > > > > +
+> > > > > +     gpiod_set_value_cansleep(ov8856->reset_gpio, GPIOD_OUT_LOW);
+> > > > > +
+> > > > > +     usleep_range(1500, 1800);
+> > > >
+> > > > I think you could omit the delay on ACPI based systems. Or just bail out
+> > > > early in that case.
+> > >
+> > > I'll add a check for reset_gpio being NULL, and skip the sleep for that case.
+> >
+> > There could also be a regulator but no GPIO.
+> >
+> > I think if you don't have either, then certainly there's no need for a
+> > delay.
+> 
+> Removing the delay if no action is taken makes sense, but I'm not sure
+> how best to do it.
+> If there are no regulators dummy ones are created automatically, which
+> makes distinguishing between a little bit cumbersome. The regulator
+> structs could of course all be inspected, and if all are dummy ones,
+> the delay could be skipped. But is there a neater way of doing this?
+> Manually inspecting the regs strikes me as a bit inelegant.
 
-My feeling is that there it's a bit of an abuse of the language
-construct. Enum is expected to be an enumeration type, where the value
-is always one and only one of the defined values at the same time.
-Making a bitwise OR of several values makes the resulting value
-outside of the enum specification.
+I guess the cleanest, easy way to make this right, albeit slightly
+unoptimal in very rare cases where you have none of the above resources in
+a DT system, is to bail out if you're running on an ACPI based system.
 
-AFAICT, the typical approach in the kernel is to just have a block of
-#define statements to define the flags and have the flag names
-prefixed with some consistent prefix, e.g. VB2_QUEUE_FLAG_. The flags
-itself would be defined using BIT() so they can be used directly in
-the bitwise arithmetics.
+I.e. checking for e.g. is_acpi_node(dev->fwnode).
 
-Best regards,
-Tomasz
+-- 
+Sakari Ailus
