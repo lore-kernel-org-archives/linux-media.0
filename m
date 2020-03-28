@@ -8,62 +8,61 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15FEFC2D0ED
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56B06C43331
 	for <linux-media@archiver.kernel.org>; Sat, 28 Mar 2020 23:10:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D5FE5206F2
-	for <linux-media@archiver.kernel.org>; Sat, 28 Mar 2020 23:10:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 211E7206F2
+	for <linux-media@archiver.kernel.org>; Sat, 28 Mar 2020 23:10:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jOUmvJ65"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C0z6xjWE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727797AbgC1XK0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727801AbgC1XK0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 28 Mar 2020 19:10:26 -0400
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:33469 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727506AbgC1XKZ (ORCPT
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:50648 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727725AbgC1XK0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Mar 2020 19:10:25 -0400
-Received: by mail-pj1-f68.google.com with SMTP id jz1so5340227pjb.0
-        for <linux-media@vger.kernel.org>; Sat, 28 Mar 2020 16:10:25 -0700 (PDT)
+        Sat, 28 Mar 2020 19:10:26 -0400
+Received: by mail-pj1-f66.google.com with SMTP id v13so5732745pjb.0
+        for <linux-media@vger.kernel.org>; Sat, 28 Mar 2020 16:10:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=rlGQd07hYQ4jOoVjLagH/BqY8mPdrgQV3Nmqy310vig=;
-        b=jOUmvJ65cxclAVxVxbJiLnZDg9aVWXiNY7oQOCbph2/vc0VobcZOjm7eFodP8wAkYF
-         jppcPBwBAlE16MzFuQr4q/CMSqVNk6aa3DrPx/vIUjLMaCsYIrUU/2OsSTRLioEgE6VM
-         0LvoPox2B/X1zvZ3wbaek4sP8kgLbqoMt3obH9bljbQz+ib5cIealJHqlrrphemU+alj
-         8q/DHcShCANGPBvqACUBy1XHnmfmh1QHJ55mTY3Vjtcp4l9FCbhyFamy9vO5f5vwHQ1t
-         NW3beAhJGpZppnPZoG6kempbUvA1RRwMc16UXePvMAy1Ip37lOSx2hr/MW7wOAHaVQBJ
-         PODg==
+        bh=cux4DklEFWIT57sTLXAkS/5MG6rGPZDIgDkQLle/cxY=;
+        b=C0z6xjWEWxwDkkoF0KH/uddY687WN93P/tq9cdOHd0d0gSTCdyHcdzwQoYb9RV1pO2
+         wCyyXNuK10aZiBuuwIXHjfKp9a550wPszjBUDwpH+wQ21zZNO0VbIK4mmveFFkhHygYd
+         7E8L/Cf4odsjJzQQf1/PU1kVnQyutmADiqXX9l9hvtA2o9HEc1/WX9g0e1KkVnNa6dM/
+         Yo6vBlFBy8chOT43z9hmpCRe0ebNIS0oGQI2D73CaEUzDHhiDF5TMr7KpFLjhRxEPq/p
+         enjHRlTnRf5qQI1OspAhIwfh2BofcVyvuQHlWC9VkaFean35l2gQ5O98rhplaU1MQukY
+         etZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=rlGQd07hYQ4jOoVjLagH/BqY8mPdrgQV3Nmqy310vig=;
-        b=QZDDdm5I9Hj62iAmj2QIa45rrdPnDcD6CB+k8ynsLcy4TWEbxWafpwcx1h8FDfMaLw
-         QJfBgwuJFZyI2rXpBsdOQBZAiyzUVlq3KCdKp9JeSEu15lq91SB6MnbKM1XO357Imdw3
-         /SDJu9hluQLgTC3vEegSJQYJaDUVJyFpTjJ/4656s9rbBFQpGHg77E1kITdGxzJui1m1
-         DJU1rMIrcu6y69QUPuvXboigB/aSBQweeSESF7vQarB8egi1dNuGn4zDGHRXlso0sH4Y
-         oJqsxzzZA4/ST6zEAaTJSQdaF0i7FWcjjj6YOldX86DP9sA3fFKLmri+LuqRm5Jhs+CR
-         QuhA==
-X-Gm-Message-State: ANhLgQ0pS4GzkJmq6mepbnmZjCdknjY9dbqUSfzNPEinvs1zaSeh+C7T
-        SydFv83ProDqaGk59Xv3iVNhp7kflHU=
-X-Google-Smtp-Source: ADFU+vvJb0TUzFGhV/olzHHHqJiYxNVvSFFyJz++/66AMv5w8C8TY90hdnwcEHlzgCCV2QCDH1YXaw==
-X-Received: by 2002:a17:90a:1acd:: with SMTP id p71mr7688100pjp.112.1585437024392;
-        Sat, 28 Mar 2020 16:10:24 -0700 (PDT)
+        bh=cux4DklEFWIT57sTLXAkS/5MG6rGPZDIgDkQLle/cxY=;
+        b=b2d5IiIWkNfK+ii3kBBR4a2K3CmmCJx8KPb4BUwXhn/6zKX1REtHZ/nmpqHWbHqxE7
+         A8YbdA3UgxB0qWNb3AG7qQCHtCAabmKBgL1/1ysTJa3dc/WGoGA2cL/reTngI51uj7zV
+         ml1B3nrVL/9JKH58bcSF4PA/MEhVTM3ruKB58gi7dkoLrJ+ciFx+hvST7zx6h2TDk8NZ
+         uK8Y8AQW/Ez3shqNvMZdPr0RKpfz35kkalM82n7TNovhb3wlkZYk4E2dc/DH7HH15c39
+         56+osdxqlxxaYdzxNBSk0xrxFcc7i/coR56v0HtUPjmI7AHdozQIT4Ut+jAIoA/uIhm+
+         9A0Q==
+X-Gm-Message-State: ANhLgQ3FSAVP2WPEwZvCOzG5wZgP8jPU3L0S598TGuHIryua8WI3mpYF
+        56Yx7Qs7ESZJce+Wju8+EVCZt+L4GGo=
+X-Google-Smtp-Source: ADFU+vuEyfhjEy7EjNUkM+2DVLZP5jb2x1g14gmXMgX91p385Ie1+maOCeiCGIqbi6GxWQjzF+MLCg==
+X-Received: by 2002:a17:902:561:: with SMTP id 88mr6022309plf.78.1585437021956;
+        Sat, 28 Mar 2020 16:10:21 -0700 (PDT)
 Received: from mappy.nv.charter.com ([2600:6c4e:200:e053:3081:8132:c81a:db99])
-        by smtp.gmail.com with ESMTPSA id w74sm3978602pfd.112.2020.03.28.16.10.23
+        by smtp.gmail.com with ESMTPSA id w74sm3978602pfd.112.2020.03.28.16.10.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2020 16:10:24 -0700 (PDT)
+        Sat, 28 Mar 2020 16:10:21 -0700 (PDT)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>
-Subject: [PATCH v2 10/10] media: imx: utils: Split find|enum_format into fourcc and mbus functions
-Date:   Sat, 28 Mar 2020 16:10:02 -0700
-Message-Id: <20200328231002.649-11-slongerbeam@gmail.com>
+        Rui Miguel Silva <rmfrfs@gmail.com>
+Subject: [PATCH v2 08/10] media: imx: utils: Rename format lookup and enumeration functions
+Date:   Sat, 28 Mar 2020 16:10:00 -0700
+Message-Id: <20200328231002.649-9-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200328231002.649-1-slongerbeam@gmail.com>
 References: <20200328231002.649-1-slongerbeam@gmail.com>
@@ -72,206 +71,402 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To make the code easier to follow, split up find_format() into separate
-search functions for pixel formats and media-bus codes. In the process
-inline the code into the exported functions imx_media_find_pixel_format()
-and imx_media_find_mbus_format(). Do the equivalent for enum_formats().
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Also add comment blocks for the exported find|enum functions.
+Rename the format lookup and enumeration functions according to their
+usage:
 
-Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
+- Rename imx_media_(find|enum)_format() to *_pixel_format() to
+  explicitly state on what formats the functions operate. This aligns
+  the naming scheme with the media bus and IPU format functions that
+  already end with *_mbus_format() and *_ipu_formats().
+
+- Rename all enumeration functions to pluralize 'formats' at the end, as
+  they enumerate multiple formats.
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx-media-utils.c | 131 +++++++++++++-------
- 1 file changed, 88 insertions(+), 43 deletions(-)
+ drivers/staging/media/imx/imx-ic-prp.c        |  8 ++---
+ drivers/staging/media/imx/imx-ic-prpencvf.c   |  8 ++---
+ drivers/staging/media/imx/imx-media-capture.c | 16 +++++-----
+ .../staging/media/imx/imx-media-csc-scaler.c  |  3 +-
+ drivers/staging/media/imx/imx-media-csi.c     | 15 +++++----
+ drivers/staging/media/imx/imx-media-utils.c   | 31 ++++++++++---------
+ drivers/staging/media/imx/imx-media-vdic.c    |  6 ++--
+ drivers/staging/media/imx/imx-media.h         | 11 ++++---
+ drivers/staging/media/imx/imx7-media-csi.c    |  6 ++--
+ 9 files changed, 54 insertions(+), 50 deletions(-)
 
+diff --git a/drivers/staging/media/imx/imx-ic-prp.c b/drivers/staging/media/imx/imx-ic-prp.c
+index 9c1f723972e4..50471541f4bc 100644
+--- a/drivers/staging/media/imx/imx-ic-prp.c
++++ b/drivers/staging/media/imx/imx-ic-prp.c
+@@ -106,8 +106,8 @@ static int prp_enum_mbus_code(struct v4l2_subdev *sd,
+ 
+ 	switch (code->pad) {
+ 	case PRP_SINK_PAD:
+-		ret = imx_media_enum_ipu_format(&code->code, code->index,
+-						CS_SEL_YUV_RGB);
++		ret = imx_media_enum_ipu_formats(&code->code, code->index,
++						 CS_SEL_YUV_RGB);
+ 		break;
+ 	case PRP_SRC_PAD_PRPENC:
+ 	case PRP_SRC_PAD_PRPVF:
+@@ -182,7 +182,7 @@ static int prp_set_fmt(struct v4l2_subdev *sd,
+ 		cc = imx_media_find_ipu_format(sdformat->format.code,
+ 					       CS_SEL_YUV_RGB);
+ 		if (!cc) {
+-			imx_media_enum_ipu_format(&code, 0, CS_SEL_YUV);
++			imx_media_enum_ipu_formats(&code, 0, CS_SEL_YUV);
+ 			cc = imx_media_find_ipu_format(code, CS_SEL_YUV);
+ 			sdformat->format.code = cc->codes[0];
+ 		}
+@@ -438,7 +438,7 @@ static int prp_registered(struct v4l2_subdev *sd)
+ 	priv->frame_interval.denominator = 30;
+ 
+ 	/* set a default mbus format  */
+-	imx_media_enum_ipu_format(&code, 0, CS_SEL_YUV);
++	imx_media_enum_ipu_formats(&code, 0, CS_SEL_YUV);
+ 	return imx_media_init_mbus_fmt(&priv->format_mbus, 640, 480, code,
+ 				       V4L2_FIELD_NONE, NULL);
+ }
+diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
+index 5a22cdc7378a..003ace29ccaf 100644
+--- a/drivers/staging/media/imx/imx-ic-prpencvf.c
++++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
+@@ -850,8 +850,8 @@ static int prp_enum_mbus_code(struct v4l2_subdev *sd,
+ 	if (code->pad >= PRPENCVF_NUM_PADS)
+ 		return -EINVAL;
+ 
+-	return imx_media_enum_ipu_format(&code->code, code->index,
+-					 CS_SEL_YUV_RGB);
++	return imx_media_enum_ipu_formats(&code->code, code->index,
++					  CS_SEL_YUV_RGB);
+ }
+ 
+ static int prp_get_fmt(struct v4l2_subdev *sd,
+@@ -890,7 +890,7 @@ static void prp_try_fmt(struct prp_priv *priv,
+ 	if (!*cc) {
+ 		u32 code;
+ 
+-		imx_media_enum_ipu_format(&code, 0, CS_SEL_YUV);
++		imx_media_enum_ipu_formats(&code, 0, CS_SEL_YUV);
+ 		*cc = imx_media_find_ipu_format(code, CS_SEL_YUV);
+ 		sdformat->format.code = (*cc)->codes[0];
+ 	}
+@@ -1249,7 +1249,7 @@ static int prp_registered(struct v4l2_subdev *sd)
+ 	u32 code;
+ 
+ 	/* set a default mbus format  */
+-	imx_media_enum_ipu_format(&code, 0, CS_SEL_YUV);
++	imx_media_enum_ipu_formats(&code, 0, CS_SEL_YUV);
+ 	for (i = 0; i < PRPENCVF_NUM_PADS; i++) {
+ 		ret = imx_media_init_mbus_fmt(&priv->format_mbus[i],
+ 					      640, 480, code, V4L2_FIELD_NONE,
+diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+index d60b49ec4fa4..1ff992eb4d96 100644
+--- a/drivers/staging/media/imx/imx-media-capture.c
++++ b/drivers/staging/media/imx/imx-media-capture.c
+@@ -91,7 +91,7 @@ static int capture_enum_framesizes(struct file *file, void *fh,
+ 	};
+ 	int ret;
+ 
+-	cc = imx_media_find_format(fsize->pixel_format, CS_SEL_ANY);
++	cc = imx_media_find_pixel_format(fsize->pixel_format, CS_SEL_ANY);
+ 	if (!cc)
+ 		return -EINVAL;
+ 
+@@ -133,7 +133,7 @@ static int capture_enum_frameintervals(struct file *file, void *fh,
+ 	};
+ 	int ret;
+ 
+-	cc = imx_media_find_format(fival->pixel_format, CS_SEL_ANY);
++	cc = imx_media_find_pixel_format(fival->pixel_format, CS_SEL_ANY);
+ 	if (!cc)
+ 		return -EINVAL;
+ 
+@@ -172,7 +172,7 @@ static int capture_enum_fmt_vid_cap(struct file *file, void *fh,
+ 		u32 cs_sel = (cc_src->cs == IPUV3_COLORSPACE_YUV) ?
+ 			CS_SEL_YUV : CS_SEL_RGB;
+ 
+-		ret = imx_media_enum_format(&fourcc, f->index, cs_sel);
++		ret = imx_media_enum_pixel_formats(&fourcc, f->index, cs_sel);
+ 		if (ret)
+ 			return ret;
+ 	} else {
+@@ -217,10 +217,10 @@ static int __capture_try_fmt_vid_cap(struct capture_priv *priv,
+ 			CS_SEL_YUV : CS_SEL_RGB;
+ 		fourcc = f->fmt.pix.pixelformat;
+ 
+-		cc = imx_media_find_format(fourcc, cs_sel);
++		cc = imx_media_find_pixel_format(fourcc, cs_sel);
+ 		if (!cc) {
+-			imx_media_enum_format(&fourcc, 0, cs_sel);
+-			cc = imx_media_find_format(fourcc, cs_sel);
++			imx_media_enum_pixel_formats(&fourcc, 0, cs_sel);
++			cc = imx_media_find_pixel_format(fourcc, cs_sel);
+ 		}
+ 	} else {
+ 		cc_src = imx_media_find_mbus_format(fmt_src->format.code,
+@@ -789,8 +789,8 @@ int imx_media_capture_device_register(struct imx_media_video_dev *vdev)
+ 				      &fmt_src.format, NULL);
+ 	vdev->compose.width = fmt_src.format.width;
+ 	vdev->compose.height = fmt_src.format.height;
+-	vdev->cc = imx_media_find_format(vdev->fmt.fmt.pix.pixelformat,
+-					 CS_SEL_ANY);
++	vdev->cc = imx_media_find_pixel_format(vdev->fmt.fmt.pix.pixelformat,
++					       CS_SEL_ANY);
+ 
+ 	v4l2_info(sd, "Registered %s as /dev/%s\n", vfd->name,
+ 		  video_device_node_name(vfd));
+diff --git a/drivers/staging/media/imx/imx-media-csc-scaler.c b/drivers/staging/media/imx/imx-media-csc-scaler.c
+index 3e1c88938e7d..0aa2493cfc47 100644
+--- a/drivers/staging/media/imx/imx-media-csc-scaler.c
++++ b/drivers/staging/media/imx/imx-media-csc-scaler.c
+@@ -164,7 +164,8 @@ static int ipu_csc_scaler_enum_fmt(struct file *file, void *fh,
+ 	u32 fourcc;
+ 	int ret;
+ 
+-	ret = imx_media_enum_format(&fourcc, f->index, CS_SEL_YUV_RGB);
++	ret = imx_media_enum_pixel_formats(&fourcc, f->index,
++					   CS_SEL_YUV_RGB);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+index 298294b95293..caab4d0cd5ce 100644
+--- a/drivers/staging/media/imx/imx-media-csi.c
++++ b/drivers/staging/media/imx/imx-media-csi.c
+@@ -1238,8 +1238,8 @@ static int csi_enum_mbus_code(struct v4l2_subdev *sd,
+ 
+ 	switch (code->pad) {
+ 	case CSI_SINK_PAD:
+-		ret = imx_media_enum_mbus_format(&code->code, code->index,
+-						 CS_SEL_ANY);
++		ret = imx_media_enum_mbus_formats(&code->code, code->index,
++						  CS_SEL_ANY);
+ 		break;
+ 	case CSI_SRC_PAD_DIRECT:
+ 	case CSI_SRC_PAD_IDMAC:
+@@ -1258,9 +1258,8 @@ static int csi_enum_mbus_code(struct v4l2_subdev *sd,
+ 		} else {
+ 			u32 cs_sel = (incc->cs == IPUV3_COLORSPACE_YUV) ?
+ 				CS_SEL_YUV : CS_SEL_RGB;
+-			ret = imx_media_enum_ipu_format(&code->code,
+-							code->index,
+-							cs_sel);
++			ret = imx_media_enum_ipu_formats(&code->code,
++							 code->index, cs_sel);
+ 		}
+ 		break;
+ 	default:
+@@ -1448,7 +1447,7 @@ static void csi_try_fmt(struct csi_priv *priv,
+ 			*cc = imx_media_find_ipu_format(sdformat->format.code,
+ 							cs_sel);
+ 			if (!*cc) {
+-				imx_media_enum_ipu_format(&code, 0, cs_sel);
++				imx_media_enum_ipu_formats(&code, 0, cs_sel);
+ 				*cc = imx_media_find_ipu_format(code, cs_sel);
+ 				sdformat->format.code = (*cc)->codes[0];
+ 			}
+@@ -1471,7 +1470,7 @@ static void csi_try_fmt(struct csi_priv *priv,
+ 		*cc = imx_media_find_mbus_format(sdformat->format.code,
+ 						 CS_SEL_ANY);
+ 		if (!*cc) {
+-			imx_media_enum_mbus_format(&code, 0, CS_SEL_ANY);
++			imx_media_enum_mbus_formats(&code, 0, CS_SEL_ANY);
+ 			*cc = imx_media_find_mbus_format(code, CS_SEL_ANY);
+ 			sdformat->format.code = (*cc)->codes[0];
+ 		}
+@@ -1758,7 +1757,7 @@ static int csi_registered(struct v4l2_subdev *sd)
+ 	for (i = 0; i < CSI_NUM_PADS; i++) {
+ 		code = 0;
+ 		if (i != CSI_SINK_PAD)
+-			imx_media_enum_ipu_format(&code, 0, CS_SEL_YUV);
++			imx_media_enum_ipu_formats(&code, 0, CS_SEL_YUV);
+ 
+ 		/* set a default mbus format  */
+ 		ret = imx_media_init_mbus_fmt(&priv->format_mbus[i],
 diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-index 54f6ded0f7c6..c9783b06bdde 100644
+index 33c874668ad4..5198af5d17d6 100644
 --- a/drivers/staging/media/imx/imx-media-utils.c
 +++ b/drivers/staging/media/imx/imx-media-utils.c
-@@ -192,28 +192,58 @@ static const struct imx_media_pixfmt pixel_formats[] = {
- 	},
- };
+@@ -225,8 +225,8 @@ static const struct imx_media_pixfmt *find_format(u32 fourcc,
+ 	return NULL;
+ }
  
--static const struct imx_media_pixfmt *find_format(u32 fourcc,
--						  u32 code,
--						  enum codespace_sel cs_sel)
-+/*
-+ * Search for and return an entry in the pixel_formats[] array that matches
-+ * the requested search criteria.
-+ *
-+ * @fourcc: Search for an entry with the given fourcc pixel format.
-+ * @cs_sel: Search for entries with the given codespace encodings
-+ *          (YUV, RGB, and/or BAYER).
-+ */
-+const struct imx_media_pixfmt *
-+imx_media_find_pixel_format(u32 fourcc, enum codespace_sel cs_sel)
+-static int enum_format(u32 *fourcc, u32 *code, u32 index,
+-		       enum codespace_sel cs_sel)
++static int enum_formats(u32 *fourcc, u32 *code, u32 index,
++			enum codespace_sel cs_sel)
  {
  	unsigned int i;
  
- 	for (i = 0; i < ARRAY_SIZE(pixel_formats); i++) {
- 		const struct imx_media_pixfmt *fmt = &pixel_formats[i];
- 		enum codespace_sel fmt_cs_sel;
--		unsigned int j;
- 
- 		fmt_cs_sel = fmt->bayer ? CS_SEL_BAYER :
- 			((fmt->cs == IPUV3_COLORSPACE_YUV) ?
- 			 CS_SEL_YUV : CS_SEL_RGB);
- 
--		if (!(fmt_cs_sel & cs_sel) || (!fourcc && !fmt->codes))
--			continue;
--
--		if (fourcc && fmt->fourcc == fourcc)
-+		if ((fmt_cs_sel & cs_sel) && fmt->fourcc == fourcc)
- 			return fmt;
-+	}
-+
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(imx_media_find_pixel_format);
-+
-+/*
-+ * Search for and return an entry in the pixel_formats[] array that matches
-+ * the requested search criteria.
-+ *
-+ * @code: Search for an entry with the given media-bus code.
-+ * @cs_sel: Search for entries with the given codespace encodings
-+ *          (YUV, RGB, and/or BAYER).
-+ */
-+const struct imx_media_pixfmt *
-+imx_media_find_mbus_format(u32 code, enum codespace_sel cs_sel)
-+{
-+	unsigned int i;
- 
--		if (!code || !fmt->codes)
-+	for (i = 0; i < ARRAY_SIZE(pixel_formats); i++) {
-+		const struct imx_media_pixfmt *fmt = &pixel_formats[i];
-+		enum codespace_sel fmt_cs_sel;
-+		unsigned int j;
-+
-+		fmt_cs_sel = fmt->bayer ? CS_SEL_BAYER :
-+			((fmt->cs == IPUV3_COLORSPACE_YUV) ?
-+			 CS_SEL_YUV : CS_SEL_RGB);
-+
-+		if (!(fmt_cs_sel & cs_sel) || !fmt->codes)
- 			continue;
- 
- 		for (j = 0; fmt->codes[j]; j++) {
-@@ -224,33 +254,74 @@ static const struct imx_media_pixfmt *find_format(u32 fourcc,
- 
- 	return NULL;
+@@ -266,17 +266,18 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
  }
-+EXPORT_SYMBOL_GPL(imx_media_find_mbus_format);
  
--static int enum_formats(u32 *fourcc, u32 *code, u32 index,
--			enum codespace_sel cs_sel)
-+/*
-+ * Enumerate entries in the pixel_formats[] array that match the
-+ * requested search criteria. Returns the fourcc that matches the
-+ * search criteria at the requested match index.
-+ *
-+ * @fourcc: The returned fourcc that matches the search criteria at
-+ *          the requested match index.
-+ * @index: The requested match index.
-+ * @cs_sel: Include in the enumeration entries with the given codespace
-+ *          encodings (YUV, RGB, and/or BAYER).
-+ */
+ const struct imx_media_pixfmt *
+-imx_media_find_format(u32 fourcc, enum codespace_sel cs_sel)
++imx_media_find_pixel_format(u32 fourcc, enum codespace_sel cs_sel)
+ {
+ 	return find_format(fourcc, 0, cs_sel);
+ }
+-EXPORT_SYMBOL_GPL(imx_media_find_format);
++EXPORT_SYMBOL_GPL(imx_media_find_pixel_format);
+ 
+-int imx_media_enum_format(u32 *fourcc, u32 index, enum codespace_sel cs_sel)
 +int imx_media_enum_pixel_formats(u32 *fourcc, u32 index,
 +				 enum codespace_sel cs_sel)
  {
- 	unsigned int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(pixel_formats); i++) {
- 		const struct imx_media_pixfmt *fmt = &pixel_formats[i];
- 		enum codespace_sel fmt_cs_sel;
--		unsigned int j;
- 
- 		fmt_cs_sel = fmt->bayer ? CS_SEL_BAYER :
- 			((fmt->cs == IPUV3_COLORSPACE_YUV) ?
- 			 CS_SEL_YUV : CS_SEL_RGB);
- 
--		if (!(fmt_cs_sel & cs_sel) || (!fourcc && !fmt->codes))
-+		if (!(fmt_cs_sel & cs_sel))
- 			continue;
- 
--		if (fourcc && index == 0) {
-+		if (index == 0) {
- 			*fourcc = fmt->fourcc;
- 			return 0;
- 		}
- 
--		if (!code) {
--			index--;
-+		index--;
-+	}
-+
-+	return -EINVAL;
-+}
+-	return enum_format(fourcc, NULL, index, cs_sel);
++	return enum_formats(fourcc, NULL, index, cs_sel);
+ }
+-EXPORT_SYMBOL_GPL(imx_media_enum_format);
 +EXPORT_SYMBOL_GPL(imx_media_enum_pixel_formats);
-+
-+/*
-+ * Enumerate entries in the pixel_formats[] array that match the
-+ * requested search criteria. Returns the media-bus code that matches
-+ * the search criteria at the requested match index.
-+ *
-+ * @code: The returned media-bus code that matches the search criteria at
-+ *        the requested match index.
-+ * @index: The requested match index.
-+ * @cs_sel: Include in the enumeration entries with the given codespace
-+ *          encodings (YUV, RGB, and/or BAYER).
-+ */
-+int imx_media_enum_mbus_formats(u32 *code, u32 index,
-+				enum codespace_sel cs_sel)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(pixel_formats); i++) {
-+		const struct imx_media_pixfmt *fmt = &pixel_formats[i];
-+		enum codespace_sel fmt_cs_sel;
-+		unsigned int j;
-+
-+		fmt_cs_sel = fmt->bayer ? CS_SEL_BAYER :
-+			((fmt->cs == IPUV3_COLORSPACE_YUV) ?
-+			 CS_SEL_YUV : CS_SEL_RGB);
-+
-+		if (!(fmt_cs_sel & cs_sel) || !fmt->codes)
- 			continue;
--		}
  
- 		for (j = 0; fmt->codes[j]; j++) {
- 			if (index == 0) {
-@@ -264,32 +335,6 @@ static int enum_formats(u32 *fourcc, u32 *code, u32 index,
+ const struct imx_media_pixfmt *
+ imx_media_find_mbus_format(u32 code, enum codespace_sel cs_sel)
+@@ -285,11 +286,11 @@ imx_media_find_mbus_format(u32 code, enum codespace_sel cs_sel)
+ }
+ EXPORT_SYMBOL_GPL(imx_media_find_mbus_format);
+ 
+-int imx_media_enum_mbus_format(u32 *code, u32 index, enum codespace_sel cs_sel)
++int imx_media_enum_mbus_formats(u32 *code, u32 index, enum codespace_sel cs_sel)
+ {
+-	return enum_format(NULL, code, index, cs_sel);
++	return enum_formats(NULL, code, index, cs_sel);
+ }
+-EXPORT_SYMBOL_GPL(imx_media_enum_mbus_format);
++EXPORT_SYMBOL_GPL(imx_media_enum_mbus_formats);
+ 
+ /* -----------------------------------------------------------------------------
+  * IPU Formats Lookup and Enumeration
+@@ -342,7 +343,7 @@ imx_media_find_ipu_format(u32 code, enum codespace_sel cs_sel)
+ }
+ EXPORT_SYMBOL_GPL(imx_media_find_ipu_format);
+ 
+-int imx_media_enum_ipu_format(u32 *code, u32 index, enum codespace_sel cs_sel)
++int imx_media_enum_ipu_formats(u32 *code, u32 index, enum codespace_sel cs_sel)
+ {
+ 	bool accept_yuv = cs_sel & CS_SEL_YUV;
+ 	bool accept_rgb = cs_sel & CS_SEL_RGB;
+@@ -371,7 +372,7 @@ int imx_media_enum_ipu_format(u32 *code, u32 index, enum codespace_sel cs_sel)
  
  	return -EINVAL;
  }
--
--const struct imx_media_pixfmt *
--imx_media_find_pixel_format(u32 fourcc, enum codespace_sel cs_sel)
--{
--	return find_format(fourcc, 0, cs_sel);
--}
--EXPORT_SYMBOL_GPL(imx_media_find_pixel_format);
--
--int imx_media_enum_pixel_formats(u32 *fourcc, u32 index,
--				 enum codespace_sel cs_sel)
--{
--	return enum_formats(fourcc, NULL, index, cs_sel);
--}
--EXPORT_SYMBOL_GPL(imx_media_enum_pixel_formats);
--
--const struct imx_media_pixfmt *
--imx_media_find_mbus_format(u32 code, enum codespace_sel cs_sel)
--{
--	return find_format(0, code, cs_sel);
--}
--EXPORT_SYMBOL_GPL(imx_media_find_mbus_format);
--
--int imx_media_enum_mbus_formats(u32 *code, u32 index, enum codespace_sel cs_sel)
--{
--	return enum_formats(NULL, code, index, cs_sel);
--}
- EXPORT_SYMBOL_GPL(imx_media_enum_mbus_formats);
+-EXPORT_SYMBOL_GPL(imx_media_enum_ipu_format);
++EXPORT_SYMBOL_GPL(imx_media_enum_ipu_formats);
  
- /* -----------------------------------------------------------------------------
+ int imx_media_init_mbus_fmt(struct v4l2_mbus_framefmt *mbus,
+ 			    u32 width, u32 height, u32 code, u32 field,
+@@ -383,7 +384,7 @@ int imx_media_init_mbus_fmt(struct v4l2_mbus_framefmt *mbus,
+ 	mbus->height = height;
+ 	mbus->field = field;
+ 	if (code == 0)
+-		imx_media_enum_mbus_format(&code, 0, CS_SEL_YUV);
++		imx_media_enum_mbus_formats(&code, 0, CS_SEL_YUV);
+ 	lcc = imx_media_find_mbus_format(code, CS_SEL_ANY);
+ 	if (!lcc) {
+ 		lcc = imx_media_find_ipu_format(code, CS_SEL_ANY);
+@@ -522,7 +523,7 @@ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
+ 	if (cc->ipufmt && cc->cs == IPUV3_COLORSPACE_YUV) {
+ 		u32 code;
+ 
+-		imx_media_enum_mbus_format(&code, 0, CS_SEL_YUV);
++		imx_media_enum_mbus_formats(&code, 0, CS_SEL_YUV);
+ 		cc = imx_media_find_mbus_format(code, CS_SEL_YUV);
+ 	}
+ 
+@@ -574,7 +575,7 @@ int imx_media_ipu_image_to_mbus_fmt(struct v4l2_mbus_framefmt *mbus,
+ {
+ 	const struct imx_media_pixfmt *fmt;
+ 
+-	fmt = imx_media_find_format(image->pix.pixelformat, CS_SEL_ANY);
++	fmt = imx_media_find_pixel_format(image->pix.pixelformat, CS_SEL_ANY);
+ 	if (!fmt)
+ 		return -EINVAL;
+ 
+diff --git a/drivers/staging/media/imx/imx-media-vdic.c b/drivers/staging/media/imx/imx-media-vdic.c
+index 0d83c2c41606..9dbf63796806 100644
+--- a/drivers/staging/media/imx/imx-media-vdic.c
++++ b/drivers/staging/media/imx/imx-media-vdic.c
+@@ -548,7 +548,7 @@ static int vdic_enum_mbus_code(struct v4l2_subdev *sd,
+ 	if (code->pad >= VDIC_NUM_PADS)
+ 		return -EINVAL;
+ 
+-	return imx_media_enum_ipu_format(&code->code, code->index, CS_SEL_YUV);
++	return imx_media_enum_ipu_formats(&code->code, code->index, CS_SEL_YUV);
+ }
+ 
+ static int vdic_get_fmt(struct v4l2_subdev *sd,
+@@ -587,7 +587,7 @@ static void vdic_try_fmt(struct vdic_priv *priv,
+ 	if (!*cc) {
+ 		u32 code;
+ 
+-		imx_media_enum_ipu_format(&code, 0, CS_SEL_YUV);
++		imx_media_enum_ipu_formats(&code, 0, CS_SEL_YUV);
+ 		*cc = imx_media_find_ipu_format(code, CS_SEL_YUV);
+ 		sdformat->format.code = (*cc)->codes[0];
+ 	}
+@@ -850,7 +850,7 @@ static int vdic_registered(struct v4l2_subdev *sd)
+ 	for (i = 0; i < VDIC_NUM_PADS; i++) {
+ 		code = 0;
+ 		if (i != VDIC_SINK_PAD_IDMAC)
+-			imx_media_enum_ipu_format(&code, 0, CS_SEL_YUV);
++			imx_media_enum_ipu_formats(&code, 0, CS_SEL_YUV);
+ 
+ 		/* set a default mbus format  */
+ 		ret = imx_media_init_mbus_fmt(&priv->format_mbus[i],
+diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+index 917b4db02985..67983a26e5ff 100644
+--- a/drivers/staging/media/imx/imx-media.h
++++ b/drivers/staging/media/imx/imx-media.h
+@@ -159,14 +159,17 @@ enum codespace_sel {
+ 
+ /* imx-media-utils.c */
+ const struct imx_media_pixfmt *
+-imx_media_find_format(u32 fourcc, enum codespace_sel cs_sel);
+-int imx_media_enum_format(u32 *fourcc, u32 index, enum codespace_sel cs_sel);
++imx_media_find_pixel_format(u32 fourcc, enum codespace_sel cs_sel);
++int imx_media_enum_pixel_formats(u32 *fourcc, u32 index,
++				 enum codespace_sel cs_sel);
+ const struct imx_media_pixfmt *
+ imx_media_find_mbus_format(u32 code, enum codespace_sel cs_sel);
+-int imx_media_enum_mbus_format(u32 *code, u32 index, enum codespace_sel cs_sel);
++int imx_media_enum_mbus_formats(u32 *code, u32 index,
++				enum codespace_sel cs_sel);
+ const struct imx_media_pixfmt *
+ imx_media_find_ipu_format(u32 code, enum codespace_sel cs_sel);
+-int imx_media_enum_ipu_format(u32 *code, u32 index, enum codespace_sel cs_sel);
++int imx_media_enum_ipu_formats(u32 *code, u32 index, enum codespace_sel cs_sel);
++
+ int imx_media_init_mbus_fmt(struct v4l2_mbus_framefmt *mbus,
+ 			    u32 width, u32 height, u32 code, u32 field,
+ 			    const struct imx_media_pixfmt **cc);
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index a469dc76a787..df4dd41b23de 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -958,8 +958,8 @@ static int imx7_csi_enum_mbus_code(struct v4l2_subdev *sd,
+ 
+ 	switch (code->pad) {
+ 	case IMX7_CSI_PAD_SINK:
+-		ret = imx_media_enum_mbus_format(&code->code, code->index,
+-						 CS_SEL_ANY);
++		ret = imx_media_enum_mbus_formats(&code->code, code->index,
++						  CS_SEL_ANY);
+ 		break;
+ 	case IMX7_CSI_PAD_SRC:
+ 		if (code->index != 0) {
+@@ -1036,7 +1036,7 @@ static int imx7_csi_try_fmt(struct imx7_csi *csi,
+ 		*cc = imx_media_find_mbus_format(sdformat->format.code,
+ 						 CS_SEL_ANY);
+ 		if (!*cc) {
+-			imx_media_enum_mbus_format(&code, 0, CS_SEL_ANY);
++			imx_media_enum_mbus_formats(&code, 0, CS_SEL_ANY);
+ 			*cc = imx_media_find_mbus_format(code, CS_SEL_ANY);
+ 			sdformat->format.code = (*cc)->codes[0];
+ 		}
 -- 
 2.17.1
 
