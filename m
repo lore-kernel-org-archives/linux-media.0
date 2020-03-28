@@ -8,62 +8,61 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24511C43331
-	for <linux-media@archiver.kernel.org>; Sat, 28 Mar 2020 23:10:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2636BC2D0ED
+	for <linux-media@archiver.kernel.org>; Sat, 28 Mar 2020 23:10:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D54DF2073B
-	for <linux-media@archiver.kernel.org>; Sat, 28 Mar 2020 23:10:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E51952073B
+	for <linux-media@archiver.kernel.org>; Sat, 28 Mar 2020 23:10:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TnFrT42c"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n4MphPQe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727588AbgC1XKT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 28 Mar 2020 19:10:19 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46991 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727417AbgC1XKS (ORCPT
+        id S1727620AbgC1XKV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 28 Mar 2020 19:10:21 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40299 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727506AbgC1XKU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 28 Mar 2020 19:10:18 -0400
-Received: by mail-pg1-f196.google.com with SMTP id k191so6667530pgc.13
-        for <linux-media@vger.kernel.org>; Sat, 28 Mar 2020 16:10:17 -0700 (PDT)
+        Sat, 28 Mar 2020 19:10:20 -0400
+Received: by mail-pl1-f196.google.com with SMTP id h11so5060124plk.7
+        for <linux-media@vger.kernel.org>; Sat, 28 Mar 2020 16:10:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=XqyZ8zUVuzNWJxJzzLA7mPwlsD8pN5hvx+oOen4DW78=;
-        b=TnFrT42coKpy9660N4uRz6y4C5E/wLeP4gLhpj6OhpNNej2Rf6AmTH0wXzIf07usre
-         hWnzehg+VNKi7N1yNsPA/DvPmpTH80SsIWFrE2iE2vJYVSbcLDtLpZuT3tjc4UM2ixbg
-         F+aeuC1HsT+y0F7WbRLNExb7UgYkR2/TPqseykbRiKVxNTooxT2jhrrrOTbtxWzBVVeJ
-         5DSuiVWxZE+Dg1wdWFsPqFwkgV8AyZSW6akqoO0E3ejBBFOkUMQLYoanMr0Cjo2aXeFd
-         cCxsUI1Ao8q1uLW5iGqpGcOPQQz02abbwg/gdIorvuvEOcuOg2igU9oIyqs6Y9BJLgK8
-         eBog==
+        bh=4wDBpf2VgaVayCY8YAUcbDDSNWf1nPlDGIitFBAhbgU=;
+        b=n4MphPQeSbXu+tWqFxfikIb8D+YF/kcvJfKbFti14dKe7wnEshnmuKtR7h1xv8YTN/
+         ILZJlrty8QYYnEvAPgX0j1CaMMzmwHFeT9nqSKPBBCCsNkrRHLUlJfLGlFBnOCqLwREo
+         /73kTmeJzuDn+30WExXjaIkadsuLRcfculyVvEzm/VXOXN9WXLh5/mCXDjgE2J928/VW
+         Tf5M7gNW0HFyjt/9akpFY/jPR3htni0atkhZ20qEEs8csM8J38kAg42UynTkJ5EccRps
+         fFiVt8YF2JoPAdrfVeUAiB/SCWaVXrPYR6vFvmaZzvufPI0cj8+FCG8mlI1KbRkf63Tk
+         q7vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=XqyZ8zUVuzNWJxJzzLA7mPwlsD8pN5hvx+oOen4DW78=;
-        b=WbfcqvWO0jq1xTKBP5m8baVTDBYwfkK/kbXYlj5qHhBJdF6wR1HAa28UwmX22VTt71
-         tlGmfAg9GnkV4vBpKxUXIvQ5Q2eVm+KpE8MyNQHs8FADG6DDhRJpk0H79k3oy1GAVibS
-         Lqz/V/CTyGQY6wMTkgX2Eg6ksT89+YiqTTbG600M6o1REZ6+WCK+tUPAnSjUEgg9l8P3
-         LBCSznPLLakhyBX/po6aNKRZcHHN0XAc7CL5OUQeJQwTuLjviryLp6PXO8WnCdDhOmD0
-         bOD1k14KfEWT1KIonu2fOF9Kq4dsJPk3fnseS151wmQoXE2UoRxOG+MPK4W+lLm7Qn+X
-         HcDg==
-X-Gm-Message-State: ANhLgQ1uH/n6YBGbFarM+kbG1L355yNvqBxnSICSig7XuxJhSpnOiHit
-        zKF834GPG/C7+f1O649nsQSzMaD0Ubo=
-X-Google-Smtp-Source: ADFU+vsD9CBKWNsOhwUoSbuGmac8ZRB3v1mzsvrBZNWoaVC/NHPy5EFGkuVqedFHce3aPPDXY8kJ2Q==
-X-Received: by 2002:aa7:96ae:: with SMTP id g14mr5893923pfk.216.1585437016409;
-        Sat, 28 Mar 2020 16:10:16 -0700 (PDT)
+        bh=4wDBpf2VgaVayCY8YAUcbDDSNWf1nPlDGIitFBAhbgU=;
+        b=ElIlJ8UHhEOzoTWgzfMpRx8FNDtShgibFfK6YBGaZFPpKD/UMTEFnfxZPHuJjCQl3Z
+         SEw99De+wJpyu0Bvb/YfZyVS3qW5P3V8fq/ZNgc8yMItFoqXib5f/ckmp3DyJORVE42k
+         O+WM5lA5jTh5UV9k+npbnJvf43mO7DSvwNsPZOSTuk5DnbsLZb/UQ+GMM2nWYxx1vRPw
+         gN4dRaYc8wxb5tz+ut7yengg05Vv4UrjWk6W79dYntGAOYuDCqxNKh11ozhNbFEFBHo8
+         7P7+qo3PH+dDW2W2ca0DAoKWZKPU1hh0wWTWx3KVORS/ZVdAQR4we/mwQFnKDLSMw0E6
+         khTA==
+X-Gm-Message-State: ANhLgQ23+//gSp3A7MVtfIsikq2KCMKqjuVZ2HZDnDGUoQNau6PYqOod
+        xV47G2P7auoijA7AGqbYDrooXt+lhaA=
+X-Google-Smtp-Source: ADFU+vvnLpumH9s86yubhKP63yzZgn/bK77sFiPrZepKh2Mp+VoYA+YUevcHuwEXwsKmeR2eojWPhw==
+X-Received: by 2002:a17:902:c595:: with SMTP id p21mr5864951plx.17.1585437019469;
+        Sat, 28 Mar 2020 16:10:19 -0700 (PDT)
 Received: from mappy.nv.charter.com ([2600:6c4e:200:e053:3081:8132:c81a:db99])
-        by smtp.gmail.com with ESMTPSA id w74sm3978602pfd.112.2020.03.28.16.10.14
+        by smtp.gmail.com with ESMTPSA id w74sm3978602pfd.112.2020.03.28.16.10.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2020 16:10:15 -0700 (PDT)
+        Sat, 28 Mar 2020 16:10:19 -0700 (PDT)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>
-Subject: [PATCH v2 04/10] media: imx: utils: Handle Bayer format lookup through a selection flag
-Date:   Sat, 28 Mar 2020 16:09:56 -0700
-Message-Id: <20200328231002.649-5-slongerbeam@gmail.com>
+        Rui Miguel Silva <rmfrfs@gmail.com>
+Subject: [PATCH v2 06/10] media: imx: utils: Make imx_media_pixfmt handle variable number of codes
+Date:   Sat, 28 Mar 2020 16:09:58 -0700
+Message-Id: <20200328231002.649-7-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200328231002.649-1-slongerbeam@gmail.com>
 References: <20200328231002.649-1-slongerbeam@gmail.com>
@@ -74,476 +73,294 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-The format lookup (and enumeration) functions take a boolean flag to
-tell if Bayer formats should be considered. This leads to hard to read
-lines such as
+The imx_media_pixfmt structures includes a codes member that stores
+media bus codes as a fixed array of 4 integers. The functions dealing
+with the imx_media_pixfmt structures assume that the array of codes is
+terminated by a 0 elements. This mechanism is fragile, as demonstrated
+by several instances of the structure contained 4 non-zero codes.
 
-	return enum_format(fourcc, NULL, index, cs_sel, true, false);
-
-where the boolean parameters can easily be mixed. To make the code
-clearer, add a CS_SEL_BAYER flag that can be passed through the
-codespace_sel parameter of the lookup functions to replace the bool
-parameter.
+Fix this by turning the array into a pointer, and providing an
+IMX_BUS_FMTS macro to initialize the codes member with a guaranteed 0
+element at the end.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-[Instead of declaring CS_SEL_ANY as a bitfield containing only
- CS_SEL_YUV | CS_SEL_RGB, declare CS_SEL_ANY as all of the above
- (YUV, RGB, BAYER). A new enum is declared for the YUV | RGB selection
- as CS_SEL_YUV_RGB, and that is used by sub-devices that don't support
- BAYER and only allow selecting and enumerating YUV or RGB encodings.
- CS_SEL_ANY is now only used by the CSI sub-devices and the attached
- capture interfaces, since only those devices support BAYER formats.]
-Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
 ---
- drivers/staging/media/imx/imx-ic-prp.c        |  8 +--
- drivers/staging/media/imx/imx-ic-prpencvf.c   |  9 +--
- drivers/staging/media/imx/imx-media-capture.c | 14 ++--
- .../staging/media/imx/imx-media-csc-scaler.c  |  2 +-
- drivers/staging/media/imx/imx-media-csi.c     | 15 ++--
- drivers/staging/media/imx/imx-media-utils.c   | 68 +++++++++----------
- drivers/staging/media/imx/imx-media.h         | 16 ++---
- drivers/staging/media/imx/imx7-media-csi.c    | 12 ++--
- 8 files changed, 70 insertions(+), 74 deletions(-)
+ drivers/staging/media/imx/imx-media-utils.c | 86 ++++++++++++---------
+ drivers/staging/media/imx/imx-media.h       |  2 +-
+ 2 files changed, 50 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx-ic-prp.c b/drivers/staging/media/imx/imx-ic-prp.c
-index 2a4f77e83ed3..9c1f723972e4 100644
---- a/drivers/staging/media/imx/imx-ic-prp.c
-+++ b/drivers/staging/media/imx/imx-ic-prp.c
-@@ -107,7 +107,7 @@ static int prp_enum_mbus_code(struct v4l2_subdev *sd,
- 	switch (code->pad) {
- 	case PRP_SINK_PAD:
- 		ret = imx_media_enum_ipu_format(&code->code, code->index,
--						CS_SEL_ANY);
-+						CS_SEL_YUV_RGB);
- 		break;
- 	case PRP_SRC_PAD_PRPENC:
- 	case PRP_SRC_PAD_PRPVF:
-@@ -180,10 +180,10 @@ static int prp_set_fmt(struct v4l2_subdev *sd,
- 				      MIN_H, MAX_H, H_ALIGN, S_ALIGN);
- 
- 		cc = imx_media_find_ipu_format(sdformat->format.code,
--					       CS_SEL_ANY);
-+					       CS_SEL_YUV_RGB);
- 		if (!cc) {
--			imx_media_enum_ipu_format(&code, 0, CS_SEL_ANY);
--			cc = imx_media_find_ipu_format(code, CS_SEL_ANY);
-+			imx_media_enum_ipu_format(&code, 0, CS_SEL_YUV);
-+			cc = imx_media_find_ipu_format(code, CS_SEL_YUV);
- 			sdformat->format.code = cc->codes[0];
- 		}
- 
-diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
-index 09c4e3f33807..5a22cdc7378a 100644
---- a/drivers/staging/media/imx/imx-ic-prpencvf.c
-+++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
-@@ -850,7 +850,8 @@ static int prp_enum_mbus_code(struct v4l2_subdev *sd,
- 	if (code->pad >= PRPENCVF_NUM_PADS)
- 		return -EINVAL;
- 
--	return imx_media_enum_ipu_format(&code->code, code->index, CS_SEL_ANY);
-+	return imx_media_enum_ipu_format(&code->code, code->index,
-+					 CS_SEL_YUV_RGB);
- }
- 
- static int prp_get_fmt(struct v4l2_subdev *sd,
-@@ -885,12 +886,12 @@ static void prp_try_fmt(struct prp_priv *priv,
- {
- 	struct v4l2_mbus_framefmt *infmt;
- 
--	*cc = imx_media_find_ipu_format(sdformat->format.code, CS_SEL_ANY);
-+	*cc = imx_media_find_ipu_format(sdformat->format.code, CS_SEL_YUV_RGB);
- 	if (!*cc) {
- 		u32 code;
- 
--		imx_media_enum_ipu_format(&code, 0, CS_SEL_ANY);
--		*cc = imx_media_find_ipu_format(code, CS_SEL_ANY);
-+		imx_media_enum_ipu_format(&code, 0, CS_SEL_YUV);
-+		*cc = imx_media_find_ipu_format(code, CS_SEL_YUV);
- 		sdformat->format.code = (*cc)->codes[0];
- 	}
- 
-diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index d37b776ff86d..d60b49ec4fa4 100644
---- a/drivers/staging/media/imx/imx-media-capture.c
-+++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -91,7 +91,7 @@ static int capture_enum_framesizes(struct file *file, void *fh,
- 	};
- 	int ret;
- 
--	cc = imx_media_find_format(fsize->pixel_format, CS_SEL_ANY, true);
-+	cc = imx_media_find_format(fsize->pixel_format, CS_SEL_ANY);
- 	if (!cc)
- 		return -EINVAL;
- 
-@@ -133,7 +133,7 @@ static int capture_enum_frameintervals(struct file *file, void *fh,
- 	};
- 	int ret;
- 
--	cc = imx_media_find_format(fival->pixel_format, CS_SEL_ANY, true);
-+	cc = imx_media_find_format(fival->pixel_format, CS_SEL_ANY);
- 	if (!cc)
- 		return -EINVAL;
- 
-@@ -177,7 +177,7 @@ static int capture_enum_fmt_vid_cap(struct file *file, void *fh,
- 			return ret;
- 	} else {
- 		cc_src = imx_media_find_mbus_format(fmt_src.format.code,
--						    CS_SEL_ANY, true);
-+						    CS_SEL_ANY);
- 		if (WARN_ON(!cc_src))
- 			return -EINVAL;
- 
-@@ -217,14 +217,14 @@ static int __capture_try_fmt_vid_cap(struct capture_priv *priv,
- 			CS_SEL_YUV : CS_SEL_RGB;
- 		fourcc = f->fmt.pix.pixelformat;
- 
--		cc = imx_media_find_format(fourcc, cs_sel, false);
-+		cc = imx_media_find_format(fourcc, cs_sel);
- 		if (!cc) {
- 			imx_media_enum_format(&fourcc, 0, cs_sel);
--			cc = imx_media_find_format(fourcc, cs_sel, false);
-+			cc = imx_media_find_format(fourcc, cs_sel);
- 		}
- 	} else {
- 		cc_src = imx_media_find_mbus_format(fmt_src->format.code,
--						    CS_SEL_ANY, true);
-+						    CS_SEL_ANY);
- 		if (WARN_ON(!cc_src))
- 			return -EINVAL;
- 
-@@ -790,7 +790,7 @@ int imx_media_capture_device_register(struct imx_media_video_dev *vdev)
- 	vdev->compose.width = fmt_src.format.width;
- 	vdev->compose.height = fmt_src.format.height;
- 	vdev->cc = imx_media_find_format(vdev->fmt.fmt.pix.pixelformat,
--					 CS_SEL_ANY, false);
-+					 CS_SEL_ANY);
- 
- 	v4l2_info(sd, "Registered %s as /dev/%s\n", vfd->name,
- 		  video_device_node_name(vfd));
-diff --git a/drivers/staging/media/imx/imx-media-csc-scaler.c b/drivers/staging/media/imx/imx-media-csc-scaler.c
-index 2cc77f6e84b6..3e1c88938e7d 100644
---- a/drivers/staging/media/imx/imx-media-csc-scaler.c
-+++ b/drivers/staging/media/imx/imx-media-csc-scaler.c
-@@ -164,7 +164,7 @@ static int ipu_csc_scaler_enum_fmt(struct file *file, void *fh,
- 	u32 fourcc;
- 	int ret;
- 
--	ret = imx_media_enum_format(&fourcc, f->index, CS_SEL_ANY);
-+	ret = imx_media_enum_format(&fourcc, f->index, CS_SEL_YUV_RGB);
- 	if (ret)
- 		return ret;
- 
-diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
-index e76a6a85baa3..298294b95293 100644
---- a/drivers/staging/media/imx/imx-media-csi.c
-+++ b/drivers/staging/media/imx/imx-media-csi.c
-@@ -1234,12 +1234,12 @@ static int csi_enum_mbus_code(struct v4l2_subdev *sd,
- 	mutex_lock(&priv->lock);
- 
- 	infmt = __csi_get_fmt(priv, cfg, CSI_SINK_PAD, code->which);
--	incc = imx_media_find_mbus_format(infmt->code, CS_SEL_ANY, true);
-+	incc = imx_media_find_mbus_format(infmt->code, CS_SEL_ANY);
- 
- 	switch (code->pad) {
- 	case CSI_SINK_PAD:
- 		ret = imx_media_enum_mbus_format(&code->code, code->index,
--						 CS_SEL_ANY, true);
-+						 CS_SEL_ANY);
- 		break;
- 	case CSI_SRC_PAD_DIRECT:
- 	case CSI_SRC_PAD_IDMAC:
-@@ -1433,8 +1433,7 @@ static void csi_try_fmt(struct csi_priv *priv,
- 	switch (sdformat->pad) {
- 	case CSI_SRC_PAD_DIRECT:
- 	case CSI_SRC_PAD_IDMAC:
--		incc = imx_media_find_mbus_format(infmt->code,
--						  CS_SEL_ANY, true);
-+		incc = imx_media_find_mbus_format(infmt->code, CS_SEL_ANY);
- 
- 		sdformat->format.width = compose->width;
- 		sdformat->format.height = compose->height;
-@@ -1470,12 +1469,10 @@ static void csi_try_fmt(struct csi_priv *priv,
- 				      MIN_H, MAX_H, H_ALIGN, S_ALIGN);
- 
- 		*cc = imx_media_find_mbus_format(sdformat->format.code,
--						 CS_SEL_ANY, true);
-+						 CS_SEL_ANY);
- 		if (!*cc) {
--			imx_media_enum_mbus_format(&code, 0,
--						   CS_SEL_ANY, false);
--			*cc = imx_media_find_mbus_format(code,
--							 CS_SEL_ANY, false);
-+			imx_media_enum_mbus_format(&code, 0, CS_SEL_ANY);
-+			*cc = imx_media_find_mbus_format(code, CS_SEL_ANY);
- 			sdformat->format.code = (*cc)->codes[0];
- 		}
- 
 diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-index cf0aba8d53ba..6a3b0b737e5f 100644
+index 981a8b540a3c..0904b6479577 100644
 --- a/drivers/staging/media/imx/imx-media-utils.c
 +++ b/drivers/staging/media/imx/imx-media-utils.c
-@@ -213,8 +213,7 @@ static const struct imx_media_pixfmt ipu_rgb_formats[] = {
- static const struct imx_media_pixfmt *find_format(u32 fourcc,
- 						  u32 code,
- 						  enum codespace_sel cs_sel,
--						  bool allow_non_mbus,
--						  bool allow_bayer)
-+						  bool allow_non_mbus)
- {
- 	unsigned int i;
+@@ -7,6 +7,12 @@
+ #include <linux/module.h>
+ #include "imx-media.h"
  
-@@ -223,12 +222,12 @@ static const struct imx_media_pixfmt *find_format(u32 fourcc,
- 		enum codespace_sel fmt_cs_sel;
- 		unsigned int j;
++#define IMX_BUS_FMTS(fmts...)	\
++	(const u32[]) {		\
++		fmts,		\
++		0		\
++	}
++
+ /*
+  * List of supported pixel formats for the subdevs.
+  */
+@@ -14,18 +20,18 @@ static const struct imx_media_pixfmt pixel_formats[] = {
+ 	/*** YUV formats start here ***/
+ 	{
+ 		.fourcc	= V4L2_PIX_FMT_UYVY,
+-		.codes  = {
++		.codes  = IMX_BUS_FMTS(
+ 			MEDIA_BUS_FMT_UYVY8_2X8,
+ 			MEDIA_BUS_FMT_UYVY8_1X16
+-		},
++		),
+ 		.cs     = IPUV3_COLORSPACE_YUV,
+ 		.bpp    = 16,
+ 	}, {
+ 		.fourcc	= V4L2_PIX_FMT_YUYV,
+-		.codes  = {
++		.codes  = IMX_BUS_FMTS(
+ 			MEDIA_BUS_FMT_YUYV8_2X8,
+ 			MEDIA_BUS_FMT_YUYV8_1X16
+-		},
++		),
+ 		.cs     = IPUV3_COLORSPACE_YUV,
+ 		.bpp    = 16,
+ 	}, {
+@@ -57,16 +63,16 @@ static const struct imx_media_pixfmt pixel_formats[] = {
+ 	/*** RGB formats start here ***/
+ 	{
+ 		.fourcc	= V4L2_PIX_FMT_RGB565,
+-		.codes  = {MEDIA_BUS_FMT_RGB565_2X8_LE},
++		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_RGB565_2X8_LE),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 16,
+ 		.cycles = 2,
+ 	}, {
+ 		.fourcc	= V4L2_PIX_FMT_RGB24,
+-		.codes  = {
++		.codes  = IMX_BUS_FMTS(
+ 			MEDIA_BUS_FMT_RGB888_1X24,
+ 			MEDIA_BUS_FMT_RGB888_2X12_LE
+-		},
++		),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 24,
+ 	}, {
+@@ -75,7 +81,7 @@ static const struct imx_media_pixfmt pixel_formats[] = {
+ 		.bpp    = 24,
+ 	}, {
+ 		.fourcc	= V4L2_PIX_FMT_XRGB32,
+-		.codes  = {MEDIA_BUS_FMT_ARGB8888_1X32},
++		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_ARGB8888_1X32),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 32,
+ 		.ipufmt = true,
+@@ -95,91 +101,91 @@ static const struct imx_media_pixfmt pixel_formats[] = {
+ 	/*** raw bayer and grayscale formats start here ***/
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_SBGGR8,
+-		.codes  = {MEDIA_BUS_FMT_SBGGR8_1X8},
++		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SBGGR8_1X8),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 8,
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_SGBRG8,
+-		.codes  = {MEDIA_BUS_FMT_SGBRG8_1X8},
++		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGBRG8_1X8),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 8,
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_SGRBG8,
+-		.codes  = {MEDIA_BUS_FMT_SGRBG8_1X8},
++		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGRBG8_1X8),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 8,
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_SRGGB8,
+-		.codes  = {MEDIA_BUS_FMT_SRGGB8_1X8},
++		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SRGGB8_1X8),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 8,
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_SBGGR16,
+-		.codes  = {
++		.codes  = IMX_BUS_FMTS(
+ 			MEDIA_BUS_FMT_SBGGR10_1X10,
+ 			MEDIA_BUS_FMT_SBGGR12_1X12,
+ 			MEDIA_BUS_FMT_SBGGR14_1X14,
+ 			MEDIA_BUS_FMT_SBGGR16_1X16
+-		},
++		),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 16,
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_SGBRG16,
+-		.codes  = {
++		.codes  = IMX_BUS_FMTS(
+ 			MEDIA_BUS_FMT_SGBRG10_1X10,
+ 			MEDIA_BUS_FMT_SGBRG12_1X12,
+ 			MEDIA_BUS_FMT_SGBRG14_1X14,
+-			MEDIA_BUS_FMT_SGBRG16_1X16,
+-		},
++			MEDIA_BUS_FMT_SGBRG16_1X16
++		),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 16,
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_SGRBG16,
+-		.codes  = {
++		.codes  = IMX_BUS_FMTS(
+ 			MEDIA_BUS_FMT_SGRBG10_1X10,
+ 			MEDIA_BUS_FMT_SGRBG12_1X12,
+ 			MEDIA_BUS_FMT_SGRBG14_1X14,
+-			MEDIA_BUS_FMT_SGRBG16_1X16,
+-		},
++			MEDIA_BUS_FMT_SGRBG16_1X16
++		),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 16,
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_SRGGB16,
+-		.codes  = {
++		.codes  = IMX_BUS_FMTS(
+ 			MEDIA_BUS_FMT_SRGGB10_1X10,
+ 			MEDIA_BUS_FMT_SRGGB12_1X12,
+ 			MEDIA_BUS_FMT_SRGGB14_1X14,
+-			MEDIA_BUS_FMT_SRGGB16_1X16,
+-		},
++			MEDIA_BUS_FMT_SRGGB16_1X16
++		),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 16,
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_GREY,
+-		.codes = {
++		.codes = IMX_BUS_FMTS(
+ 			MEDIA_BUS_FMT_Y8_1X8,
+ 			MEDIA_BUS_FMT_Y10_1X10,
+-			MEDIA_BUS_FMT_Y12_1X12,
+-		},
++			MEDIA_BUS_FMT_Y12_1X12
++		),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 8,
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_Y10,
+-		.codes = {MEDIA_BUS_FMT_Y10_1X10},
++		.codes = IMX_BUS_FMTS(MEDIA_BUS_FMT_Y10_1X10),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 16,
+ 		.bayer  = true,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_Y12,
+-		.codes = {MEDIA_BUS_FMT_Y12_1X12},
++		.codes = IMX_BUS_FMTS(MEDIA_BUS_FMT_Y12_1X12),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 16,
+ 		.bayer  = true,
+@@ -203,16 +209,16 @@ static const struct imx_media_pixfmt *find_format(u32 fourcc,
+ 			 CS_SEL_YUV : CS_SEL_RGB);
  
--		fmt_cs_sel = (fmt->cs == IPUV3_COLORSPACE_YUV) ?
--			CS_SEL_YUV : CS_SEL_RGB;
-+		fmt_cs_sel = fmt->bayer ? CS_SEL_BAYER :
-+			((fmt->cs == IPUV3_COLORSPACE_YUV) ?
-+			 CS_SEL_YUV : CS_SEL_RGB);
- 
--		if ((cs_sel != CS_SEL_ANY && fmt_cs_sel != cs_sel) ||
--		    (!allow_non_mbus && !fmt->codes[0]) ||
--		    (!allow_bayer && fmt->bayer))
-+		if (!(fmt_cs_sel & cs_sel) ||
-+		    (!allow_non_mbus && !fmt->codes[0]))
+ 		if (!(fmt_cs_sel & cs_sel) ||
+-		    (!allow_non_mbus && !fmt->codes[0]))
++		    (!allow_non_mbus && !fmt->codes))
  			continue;
  
  		if (fourcc && fmt->fourcc == fourcc)
-@@ -248,8 +247,7 @@ static const struct imx_media_pixfmt *find_format(u32 fourcc,
+ 			return fmt;
  
- static int enum_format(u32 *fourcc, u32 *code, u32 index,
- 		       enum codespace_sel cs_sel,
--		       bool allow_non_mbus,
--		       bool allow_bayer)
-+		       bool allow_non_mbus)
- {
- 	unsigned int i;
+-		if (!code)
++		if (!code || !fmt->codes)
+ 			continue;
  
-@@ -258,12 +256,12 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
- 		enum codespace_sel fmt_cs_sel;
- 		unsigned int j;
+-		for (j = 0; j < ARRAY_SIZE(fmt->codes) && fmt->codes[j]; j++) {
++		for (j = 0; fmt->codes[j]; j++) {
+ 			if (code == fmt->codes[j])
+ 				return fmt;
+ 		}
+@@ -237,7 +243,7 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
+ 			 CS_SEL_YUV : CS_SEL_RGB);
  
--		fmt_cs_sel = (fmt->cs == IPUV3_COLORSPACE_YUV) ?
--			CS_SEL_YUV : CS_SEL_RGB;
-+		fmt_cs_sel = fmt->bayer ? CS_SEL_BAYER :
-+			((fmt->cs == IPUV3_COLORSPACE_YUV) ?
-+			 CS_SEL_YUV : CS_SEL_RGB);
- 
--		if ((cs_sel != CS_SEL_ANY && fmt_cs_sel != cs_sel) ||
--		    (!allow_non_mbus && !fmt->codes[0]) ||
--		    (!allow_bayer && fmt->bayer))
-+		if (!(fmt_cs_sel & cs_sel) ||
-+		    (!allow_non_mbus && !fmt->codes[0]))
+ 		if (!(fmt_cs_sel & cs_sel) ||
+-		    (!allow_non_mbus && !fmt->codes[0]))
++		    (!allow_non_mbus && !fmt->codes))
  			continue;
  
  		if (fourcc && index == 0) {
-@@ -290,30 +288,28 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
- }
- 
- const struct imx_media_pixfmt *
--imx_media_find_format(u32 fourcc, enum codespace_sel cs_sel, bool allow_bayer)
-+imx_media_find_format(u32 fourcc, enum codespace_sel cs_sel)
- {
--	return find_format(fourcc, 0, cs_sel, true, allow_bayer);
-+	return find_format(fourcc, 0, cs_sel, true);
- }
- EXPORT_SYMBOL_GPL(imx_media_find_format);
- 
- int imx_media_enum_format(u32 *fourcc, u32 index, enum codespace_sel cs_sel)
- {
--	return enum_format(fourcc, NULL, index, cs_sel, true, false);
-+	return enum_format(fourcc, NULL, index, cs_sel, true);
- }
- EXPORT_SYMBOL_GPL(imx_media_enum_format);
- 
- const struct imx_media_pixfmt *
--imx_media_find_mbus_format(u32 code, enum codespace_sel cs_sel,
--			   bool allow_bayer)
-+imx_media_find_mbus_format(u32 code, enum codespace_sel cs_sel)
- {
--	return find_format(0, code, cs_sel, false, allow_bayer);
-+	return find_format(0, code, cs_sel, false);
- }
- EXPORT_SYMBOL_GPL(imx_media_find_mbus_format);
- 
--int imx_media_enum_mbus_format(u32 *code, u32 index, enum codespace_sel cs_sel,
--			       bool allow_bayer)
-+int imx_media_enum_mbus_format(u32 *code, u32 index, enum codespace_sel cs_sel)
- {
--	return enum_format(NULL, code, index, cs_sel, false, allow_bayer);
-+	return enum_format(NULL, code, index, cs_sel, false);
- }
- EXPORT_SYMBOL_GPL(imx_media_enum_mbus_format);
- 
-@@ -324,6 +320,8 @@ imx_media_find_ipu_format(u32 code, enum codespace_sel cs_sel)
- 	u32 array_size;
- 	int i, j;
- 
-+	cs_sel &= ~CS_SEL_BAYER;
-+
- 	switch (cs_sel) {
- 	case CS_SEL_YUV:
- 		array_size = NUM_IPU_YUV_FORMATS;
-@@ -333,7 +331,7 @@ imx_media_find_ipu_format(u32 code, enum codespace_sel cs_sel)
- 		array_size = NUM_IPU_RGB_FORMATS;
- 		array = ipu_rgb_formats;
- 		break;
--	case CS_SEL_ANY:
-+	case CS_SEL_YUV_RGB:
- 		array_size = NUM_IPU_YUV_FORMATS + NUM_IPU_RGB_FORMATS;
- 		array = ipu_yuv_formats;
- 		break;
-@@ -342,7 +340,7 @@ imx_media_find_ipu_format(u32 code, enum codespace_sel cs_sel)
- 	}
- 
- 	for (i = 0; i < array_size; i++) {
--		if (cs_sel == CS_SEL_ANY && i >= NUM_IPU_YUV_FORMATS)
-+		if (cs_sel == CS_SEL_YUV_RGB && i >= NUM_IPU_YUV_FORMATS)
- 			fmt = &ipu_rgb_formats[i - NUM_IPU_YUV_FORMATS];
- 		else
- 			fmt = &array[i];
-@@ -362,6 +360,8 @@ EXPORT_SYMBOL_GPL(imx_media_find_ipu_format);
- 
- int imx_media_enum_ipu_format(u32 *code, u32 index, enum codespace_sel cs_sel)
- {
-+	cs_sel &= ~CS_SEL_BAYER;
-+
- 	switch (cs_sel) {
- 	case CS_SEL_YUV:
- 		if (index >= NUM_IPU_YUV_FORMATS)
-@@ -373,7 +373,7 @@ int imx_media_enum_ipu_format(u32 *code, u32 index, enum codespace_sel cs_sel)
- 			return -EINVAL;
- 		*code = ipu_rgb_formats[index].codes[0];
- 		break;
--	case CS_SEL_ANY:
-+	case CS_SEL_YUV_RGB:
- 		if (index >= NUM_IPU_YUV_FORMATS + NUM_IPU_RGB_FORMATS)
- 			return -EINVAL;
- 		if (index >= NUM_IPU_YUV_FORMATS) {
-@@ -401,8 +401,8 @@ int imx_media_init_mbus_fmt(struct v4l2_mbus_framefmt *mbus,
- 	mbus->height = height;
- 	mbus->field = field;
- 	if (code == 0)
--		imx_media_enum_mbus_format(&code, 0, CS_SEL_YUV, false);
--	lcc = imx_media_find_mbus_format(code, CS_SEL_ANY, false);
-+		imx_media_enum_mbus_format(&code, 0, CS_SEL_YUV);
-+	lcc = imx_media_find_mbus_format(code, CS_SEL_ANY);
- 	if (!lcc) {
- 		lcc = imx_media_find_ipu_format(code, CS_SEL_ANY);
- 		if (!lcc)
-@@ -473,7 +473,7 @@ void imx_media_try_colorimetry(struct v4l2_mbus_framefmt *tryfmt,
- 	const struct imx_media_pixfmt *cc;
- 	bool is_rgb = false;
- 
--	cc = imx_media_find_mbus_format(tryfmt->code, CS_SEL_ANY, true);
-+	cc = imx_media_find_mbus_format(tryfmt->code, CS_SEL_ANY);
- 	if (!cc)
- 		cc = imx_media_find_ipu_format(tryfmt->code, CS_SEL_ANY);
- 	if (cc && cc->cs == IPUV3_COLORSPACE_RGB)
-@@ -527,8 +527,8 @@ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
- 	if (!cc) {
- 		cc = imx_media_find_ipu_format(mbus->code, CS_SEL_ANY);
- 		if (!cc)
--			cc = imx_media_find_mbus_format(mbus->code, CS_SEL_ANY,
--							true);
-+			cc = imx_media_find_mbus_format(mbus->code,
-+							CS_SEL_ANY);
- 		if (!cc)
- 			return -EINVAL;
- 	}
-@@ -540,8 +540,8 @@ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
- 	if (cc->ipufmt && cc->cs == IPUV3_COLORSPACE_YUV) {
- 		u32 code;
- 
--		imx_media_enum_mbus_format(&code, 0, CS_SEL_YUV, false);
--		cc = imx_media_find_mbus_format(code, CS_SEL_YUV, false);
-+		imx_media_enum_mbus_format(&code, 0, CS_SEL_YUV);
-+		cc = imx_media_find_mbus_format(code, CS_SEL_YUV);
- 	}
- 
- 	/* Round up width for minimum burst size */
-@@ -592,7 +592,7 @@ int imx_media_ipu_image_to_mbus_fmt(struct v4l2_mbus_framefmt *mbus,
- {
- 	const struct imx_media_pixfmt *fmt;
- 
--	fmt = imx_media_find_format(image->pix.pixelformat, CS_SEL_ANY, true);
-+	fmt = imx_media_find_format(image->pix.pixelformat, CS_SEL_ANY);
- 	if (!fmt)
- 		return -EINVAL;
- 
-diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-index 11861191324a..652673a703cd 100644
---- a/drivers/staging/media/imx/imx-media.h
-+++ b/drivers/staging/media/imx/imx-media.h
-@@ -150,20 +150,20 @@ struct imx_media_dev {
- };
- 
- enum codespace_sel {
--	CS_SEL_YUV = 0,
--	CS_SEL_RGB,
--	CS_SEL_ANY,
-+	CS_SEL_YUV = BIT(0),
-+	CS_SEL_RGB = BIT(1),
-+	CS_SEL_BAYER = BIT(2),
-+	CS_SEL_YUV_RGB = CS_SEL_YUV | CS_SEL_RGB,
-+	CS_SEL_ANY = CS_SEL_YUV | CS_SEL_RGB | CS_SEL_BAYER,
- };
- 
- /* imx-media-utils.c */
- const struct imx_media_pixfmt *
--imx_media_find_format(u32 fourcc, enum codespace_sel cs_sel, bool allow_bayer);
-+imx_media_find_format(u32 fourcc, enum codespace_sel cs_sel);
- int imx_media_enum_format(u32 *fourcc, u32 index, enum codespace_sel cs_sel);
- const struct imx_media_pixfmt *
--imx_media_find_mbus_format(u32 code, enum codespace_sel cs_sel,
--			   bool allow_bayer);
--int imx_media_enum_mbus_format(u32 *code, u32 index, enum codespace_sel cs_sel,
--			       bool allow_bayer);
-+imx_media_find_mbus_format(u32 code, enum codespace_sel cs_sel);
-+int imx_media_enum_mbus_format(u32 *code, u32 index, enum codespace_sel cs_sel);
- const struct imx_media_pixfmt *
- imx_media_find_ipu_format(u32 code, enum codespace_sel cs_sel);
- int imx_media_enum_ipu_format(u32 *code, u32 index, enum codespace_sel cs_sel);
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index acbdffb77668..a469dc76a787 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -959,7 +959,7 @@ static int imx7_csi_enum_mbus_code(struct v4l2_subdev *sd,
- 	switch (code->pad) {
- 	case IMX7_CSI_PAD_SINK:
- 		ret = imx_media_enum_mbus_format(&code->code, code->index,
--						 CS_SEL_ANY, true);
-+						 CS_SEL_ANY);
- 		break;
- 	case IMX7_CSI_PAD_SRC:
- 		if (code->index != 0) {
-@@ -1019,8 +1019,7 @@ static int imx7_csi_try_fmt(struct imx7_csi *csi,
- 
- 	switch (sdformat->pad) {
- 	case IMX7_CSI_PAD_SRC:
--		in_cc = imx_media_find_mbus_format(in_fmt->code, CS_SEL_ANY,
--						   true);
-+		in_cc = imx_media_find_mbus_format(in_fmt->code, CS_SEL_ANY);
- 
- 		sdformat->format.width = in_fmt->width;
- 		sdformat->format.height = in_fmt->height;
-@@ -1035,11 +1034,10 @@ static int imx7_csi_try_fmt(struct imx7_csi *csi,
- 		break;
- 	case IMX7_CSI_PAD_SINK:
- 		*cc = imx_media_find_mbus_format(sdformat->format.code,
--						 CS_SEL_ANY, true);
-+						 CS_SEL_ANY);
- 		if (!*cc) {
--			imx_media_enum_mbus_format(&code, 0, CS_SEL_ANY, false);
--			*cc = imx_media_find_mbus_format(code, CS_SEL_ANY,
--							 false);
-+			imx_media_enum_mbus_format(&code, 0, CS_SEL_ANY);
-+			*cc = imx_media_find_mbus_format(code, CS_SEL_ANY);
- 			sdformat->format.code = (*cc)->codes[0];
+@@ -250,7 +256,7 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
+ 			continue;
  		}
  
+-		for (j = 0; j < ARRAY_SIZE(fmt->codes) && fmt->codes[j]; j++) {
++		for (j = 0; fmt->codes[j]; j++) {
+ 			if (index == 0) {
+ 				*code = fmt->codes[j];
+ 				return 0;
+@@ -296,13 +302,13 @@ EXPORT_SYMBOL_GPL(imx_media_enum_mbus_format);
+ static const struct imx_media_pixfmt ipu_formats[] = {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_YUV32,
+-		.codes  = {MEDIA_BUS_FMT_AYUV8_1X32},
++		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_AYUV8_1X32),
+ 		.cs     = IPUV3_COLORSPACE_YUV,
+ 		.bpp    = 32,
+ 		.ipufmt = true,
+ 	}, {
+ 		.fourcc	= V4L2_PIX_FMT_XRGB32,
+-		.codes  = {MEDIA_BUS_FMT_ARGB8888_1X32},
++		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_ARGB8888_1X32),
+ 		.cs     = IPUV3_COLORSPACE_RGB,
+ 		.bpp    = 32,
+ 		.ipufmt = true,
+@@ -327,7 +333,10 @@ imx_media_find_ipu_format(u32 code, enum codespace_sel cs_sel)
+ 		    (!accept_rgb && fmt->cs == IPUV3_COLORSPACE_RGB))
+ 			continue;
+ 
+-		for (j = 0; j < ARRAY_SIZE(fmt->codes) && fmt->codes[j]; j++) {
++		if (!fmt->codes)
++			continue;
++
++		for (j = 0; fmt->codes[j]; j++) {
+ 			if (code == fmt->codes[j])
+ 				return fmt;
+ 		}
+@@ -351,7 +360,10 @@ int imx_media_enum_ipu_format(u32 *code, u32 index, enum codespace_sel cs_sel)
+ 		    (!accept_rgb && fmt->cs == IPUV3_COLORSPACE_RGB))
+ 			continue;
+ 
+-		for (j = 0; j < ARRAY_SIZE(fmt->codes) && fmt->codes[j]; j++) {
++		if (!fmt->codes)
++			continue;
++
++		for (j = 0; fmt->codes[j]; j++) {
+ 			if (index == 0) {
+ 				*code = fmt->codes[j];
+ 				return 0;
+diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+index 652673a703cd..917b4db02985 100644
+--- a/drivers/staging/media/imx/imx-media.h
++++ b/drivers/staging/media/imx/imx-media.h
+@@ -69,7 +69,7 @@ enum {
+ 
+ struct imx_media_pixfmt {
+ 	u32     fourcc;
+-	u32     codes[4];
++	const u32 *codes;
+ 	int     bpp;     /* total bpp */
+ 	/* cycles per pixel for generic (bayer) formats for the parallel bus */
+ 	int	cycles;
 -- 
 2.17.1
 
