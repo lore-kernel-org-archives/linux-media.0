@@ -2,142 +2,189 @@ Return-Path: <SRS0=qCPn=5O=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0250C43331
-	for <linux-media@archiver.kernel.org>; Sun, 29 Mar 2020 20:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9813DC43331
+	for <linux-media@archiver.kernel.org>; Sun, 29 Mar 2020 20:59:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 85A0420658
-	for <linux-media@archiver.kernel.org>; Sun, 29 Mar 2020 20:59:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62FD020658
+	for <linux-media@archiver.kernel.org>; Sun, 29 Mar 2020 20:59:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N+m6kSZe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pw39nN5X"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728670AbgC2U72 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 29 Mar 2020 16:59:28 -0400
-Received: from mail-pl1-f180.google.com ([209.85.214.180]:40487 "EHLO
-        mail-pl1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728475AbgC2U72 (ORCPT
+        id S1728752AbgC2U7a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 29 Mar 2020 16:59:30 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40587 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728747AbgC2U7a (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 29 Mar 2020 16:59:28 -0400
-Received: by mail-pl1-f180.google.com with SMTP id h11so5880798plk.7
-        for <linux-media@vger.kernel.org>; Sun, 29 Mar 2020 13:59:27 -0700 (PDT)
+        Sun, 29 Mar 2020 16:59:30 -0400
+Received: by mail-pf1-f196.google.com with SMTP id c20so5020447pfi.7
+        for <linux-media@vger.kernel.org>; Sun, 29 Mar 2020 13:59:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ci5S4VfxSeBgJz6ubD2FKWcDvQuosbtKi3C7PM4y9k4=;
-        b=N+m6kSZeFZZ7tcsN62LKfkQMm53YkUyg8meXQUcxQr81h3znHhAWH3z2QuGyPgqVeH
-         fXLQqin3nBWTNnYRIZYL4bcTEyXESXJezBK+ruAuVnnvs9VqfQ8en0ZckkElZ9Rx9BRr
-         xiGncp7u4tFziCUHjgPy23fXCMwjrIP7x2oIvbpEXAztj5mdu1A1yB/7zXw7AaYDC2M6
-         xpkbyU0b3x6GhkScvNEu+aiRzdokEzd1Yk+6DymVNme01DuEsO/G3fQjk+DyqpNRl8EA
-         KBA8K6UIP7QuQ+M8p4MGC9bv6OCMbSW5BR7WLSAaaiXm/i89pcQaXVXBwI9PVsU+RobV
-         qmpg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=qYBkInbfk4Je9+caiy8b4edch0lbPftvhGVf+jVJIDU=;
+        b=Pw39nN5XRXyNMQFHOdu2NUIqyzgW+s/v+426mFbeIAjsZoSJRyWx1FDjsBrmNsnIPv
+         cmgEFUoHa2cT5tiAe7MdBXmwSxO2kKuQzDJRXysXpH8BfIaN4Lia0wjdbhASxGZwI7Rq
+         svYm/P6kSwToMrpn8jzS7G7/irrJ/Rw9XjVYNm+4F2rx3cjON7jEp/PwN9T1mRlja2xh
+         kpgcUHvONMYLcwVVA04025Bqt42BdqChD5Q0TgPiK9uC56lBktLL5op9XUwX+Tj9h2DK
+         3fwQbkdhFWGZgfZDYehfXY9vti29nmp4xSJ7M8F3+8HK8ETBwxAqzWtD6WzBHsUgHeos
+         QvJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ci5S4VfxSeBgJz6ubD2FKWcDvQuosbtKi3C7PM4y9k4=;
-        b=K/H7ZXsC9D4pyPEpe7XjX3uFwZWzGs2jCY/EcPUv3PdF1GPob9akNLrMyHHDPRTvnS
-         v5h1LTZz8OXrYFBRluzrqNgT/hWgzkAT51y9EbdyrVKgaoxblR0wJE2veSoqcuhs5QlK
-         MwBvUWqL9rG5noW2Y6Llcj96xVpVPNg4WZcxmxd/FStPAYwiDtmjXR3aDV4dJD0fho4y
-         jX0N0aXRavAiTvIcoJvmHeZP0O0bQIYaEWa3IW7Lluwt6TzXwuwHd6dC5260Q9gjG37b
-         6HVO0yfdS2tDIyBUMXBgxtirFm2k66B/2TQDqoJ5QPBBNJVUUvC8l2GzxhFXD/UqborG
-         cSSg==
-X-Gm-Message-State: ANhLgQ017T7XuE55Hex0tpSv+Dogb3ra1EYl2vInoM8JQctcaj8VlKYD
-        WIQ6XXHUuj3WEyQPZk7t4+OA30nNRf0=
-X-Google-Smtp-Source: ADFU+vtCLDzymHKf++7+lAA3OlXgFPNooBkYojEDvp4YoFIDUolwbWxKXomOuCim1FQGBVIYzozObQ==
-X-Received: by 2002:a17:902:8492:: with SMTP id c18mr9972995plo.147.1585515566813;
-        Sun, 29 Mar 2020 13:59:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=qYBkInbfk4Je9+caiy8b4edch0lbPftvhGVf+jVJIDU=;
+        b=aPaQ5F9MiJK5rg+OsuZBpg1fUL7GxCcQ2HGoMLU5WyrZ1Bb+66OAsDIxe60TkEhW4F
+         7eR7QpFdUV9u2gxcw16zesbHYZZ2o6y8Uyow2HqJebirlGEvlkeHUupK9SrzqHquPJtU
+         LNAJBkF4TD/o0AFdfD8SoIGxggWv7csvxM2qBvx48mA8ix9CYawhzZTbi2UeyPqommts
+         V/IfNBjJ6CRUhxR0JzdqoUdZCteugTtM+tWh2Ib2rwC++lCJmnzUgAedgsVHatjIcBuF
+         oqiN56/tdyv39kYqKnAaYpmQKvJDDG/b2myj8BLcySWvJNCkr2ck77Xb30+0Y6wi4iW1
+         nwzw==
+X-Gm-Message-State: ANhLgQ2930ZJBn83TpfGpKizcjwKQ0fa6orOZYjuP72IVsWHXDNfukgD
+        aAYSkLfABf5r/BvZkGSSUAa0oROa4mE=
+X-Google-Smtp-Source: ADFU+vtWRdYtKO4yw+LgO7Hd7Awq/3gsjunv0PPlZuidgTLMCCJI84PwpS8p0BoDBLaNnp1u05OnQA==
+X-Received: by 2002:aa7:949d:: with SMTP id z29mr10089088pfk.111.1585515569233;
+        Sun, 29 Mar 2020 13:59:29 -0700 (PDT)
 Received: from mappy.nv.charter.com ([2600:6c4e:200:e053:a0c5:5fbc:c28e:f91f])
-        by smtp.gmail.com with ESMTPSA id 15sm8606049pfu.186.2020.03.29.13.59.25
+        by smtp.gmail.com with ESMTPSA id 15sm8606049pfu.186.2020.03.29.13.59.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2020 13:59:26 -0700 (PDT)
+        Sun, 29 Mar 2020 13:59:28 -0700 (PDT)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Steve Longerbeam <slongerbeam@gmail.com>
-Subject: [PATCH v4 00/11] media: imx: Miscellaneous format-related cleanups
-Date:   Sun, 29 Mar 2020 13:59:09 -0700
-Message-Id: <20200329205920.20118-1-slongerbeam@gmail.com>
+Subject: [PATCH v4 02/11] media: imx: utils: fix media bus format enumeration
+Date:   Sun, 29 Mar 2020 13:59:11 -0700
+Message-Id: <20200329205920.20118-3-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200329205920.20118-1-slongerbeam@gmail.com>
+References: <20200329205920.20118-1-slongerbeam@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series picks up Laurent Pinchart's series:
+From: Philipp Zabel <p.zabel@pengutronix.de>
 
-[PATCH 0/8] media: imx: Miscalleanous format-related cleanups
+Iterate over all media bus formats, not just over the first format in
+each imx_media_pixfmt entry.
 
-with a merge of two patches from Philipp Zabel's series:
+Before:
 
-[PATCH 1/3] media: imx: enable V4L2_PIX_FMT_XBGR32, _BGRX32, and _RGBX32
+  $ v4l2-ctl -d $(media-ctl -e ipu1_csi0) --list-subdev-mbus-codes 0
+  ioctl: VIDIOC_SUBDEV_ENUM_MBUS_CODE (pad=0)
+	0x2006: MEDIA_BUS_FMT_UYVY8_2X8
+	0x2008: MEDIA_BUS_FMT_YUYV8_2X8
+	0x1008: MEDIA_BUS_FMT_RGB565_2X8_LE
+	0x100a: MEDIA_BUS_FMT_RGB888_1X24
+	0x100d: MEDIA_BUS_FMT_ARGB8888_1X32
+	0x3001: MEDIA_BUS_FMT_SBGGR8_1X8
+	0x3013: MEDIA_BUS_FMT_SGBRG8_1X8
+	0x3002: MEDIA_BUS_FMT_SGRBG8_1X8
+	0x3014: MEDIA_BUS_FMT_SRGGB8_1X8
+	0x3007: MEDIA_BUS_FMT_SBGGR10_1X10
+	0x300e: MEDIA_BUS_FMT_SGBRG10_1X10
+	0x300a: MEDIA_BUS_FMT_SGRBG10_1X10
+	0x300f: MEDIA_BUS_FMT_SRGGB10_1X10
+	0x2001: MEDIA_BUS_FMT_Y8_1X8
+	0x200a: MEDIA_BUS_FMT_Y10_1X10
 
-with an additional patch at the end that splits up the find_enum_format()
-functions into separate functions for in-memory fourcc codes and mbus
-codes, as requested by Hans Verkuil in the series from Philipp.
+After:
 
-History:
+  $ v4l2-ctl -d $(media-ctl -e ipu1_csi0) --list-subdev-mbus-codes 0
+  ioctl: VIDIOC_SUBDEV_ENUM_MBUS_CODE (pad=0)
+	0x2006: MEDIA_BUS_FMT_UYVY8_2X8
+	0x200f: MEDIA_BUS_FMT_UYVY8_1X16
+	0x2008: MEDIA_BUS_FMT_YUYV8_2X8
+	0x2011: MEDIA_BUS_FMT_YUYV8_1X16
+	0x1008: MEDIA_BUS_FMT_RGB565_2X8_LE
+	0x100a: MEDIA_BUS_FMT_RGB888_1X24
+	0x100c: MEDIA_BUS_FMT_RGB888_2X12_LE
+	0x100d: MEDIA_BUS_FMT_ARGB8888_1X32
+	0x3001: MEDIA_BUS_FMT_SBGGR8_1X8
+	0x3013: MEDIA_BUS_FMT_SGBRG8_1X8
+	0x3002: MEDIA_BUS_FMT_SGRBG8_1X8
+	0x3014: MEDIA_BUS_FMT_SRGGB8_1X8
+	0x3007: MEDIA_BUS_FMT_SBGGR10_1X10
+	0x3008: MEDIA_BUS_FMT_SBGGR12_1X12
+	0x3019: MEDIA_BUS_FMT_SBGGR14_1X14
+	0x301d: MEDIA_BUS_FMT_SBGGR16_1X16
+	0x300e: MEDIA_BUS_FMT_SGBRG10_1X10
+	0x3010: MEDIA_BUS_FMT_SGBRG12_1X12
+	0x301a: MEDIA_BUS_FMT_SGBRG14_1X14
+	0x301e: MEDIA_BUS_FMT_SGBRG16_1X16
+	0x300a: MEDIA_BUS_FMT_SGRBG10_1X10
+	0x3011: MEDIA_BUS_FMT_SGRBG12_1X12
+	0x301b: MEDIA_BUS_FMT_SGRBG14_1X14
+	0x301f: MEDIA_BUS_FMT_SGRBG16_1X16
+	0x300f: MEDIA_BUS_FMT_SRGGB10_1X10
+	0x3012: MEDIA_BUS_FMT_SRGGB12_1X12
+	0x301c: MEDIA_BUS_FMT_SRGGB14_1X14
+	0x3020: MEDIA_BUS_FMT_SRGGB16_1X16
+	0x2001: MEDIA_BUS_FMT_Y8_1X8
+	0x200a: MEDIA_BUS_FMT_Y10_1X10
+	0x2013: MEDIA_BUS_FMT_Y12_1X12
 
-v4:
-- Constify mbus arg to imx_media_mbus_fmt_to_ipu_image().
-- Constify ipu_image arg to imx_media_ipu_image_to_mbus_fmt().
-- Return -EINVAL in imx_media_ipu_image_to_mbus_fmt() if given
-  image pixelformat does not have mbus codes.
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-v3:
-- fixed derefencing a NULL cc->codes on return from imx_media_find_format()
-  in several places.
+[Decrement index to replace loop counter k]
+[Return directly from within the loops]
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/staging/media/imx/imx-media-utils.c | 22 +++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-v2:
-- fixed a bug:
-  "for (j=0; j < fmt->codes[j]; j++)" should be
-  "for (j=0; fmt->codes[j]; j++)", in the mbus format enum functions.
-  Caught by Laurent.
-- move some local vars under the pixel_formats[] loop. Suggested by Laurent.
-- decrement the index passed to the enum functions, instead of introducing
-  a match_index local var. Suggested by Laurent.
-
-
-Laurent Pinchart (7):
-  media: imx: utils: Inline init_mbus_colorimetry() in its caller
-  media: imx: utils: Handle Bayer format lookup through a selection flag
-  media: imx: utils: Simplify IPU format lookup and enumeration
-  media: imx: utils: Make imx_media_pixfmt handle variable number of
-    codes
-  media: imx: utils: Remove unneeded argument to (find|enum)_format()
-  media: imx: utils: Rename format lookup and enumeration functions
-  media: imx: utils: Constify mbus argument to imx_media_mbus_fmt_to_*
-
-Philipp Zabel (2):
-  media: imx: utils: fix and simplify pixel format enumeration
-  media: imx: utils: fix media bus format enumeration
-
-Steve Longerbeam (2):
-  media: imx: utils: Constify ipu_image argument to
-    imx_media_ipu_image_to_mbus_fmt()
-  media: imx: utils: Split find|enum_format into fourcc and mbus
-    functions
-
- drivers/staging/media/imx/imx-ic-prp.c        |  12 +-
- drivers/staging/media/imx/imx-ic-prpencvf.c   |  11 +-
- drivers/staging/media/imx/imx-media-capture.c |  24 +-
- .../staging/media/imx/imx-media-csc-scaler.c  |   3 +-
- drivers/staging/media/imx/imx-media-csi.c     |  26 +-
- drivers/staging/media/imx/imx-media-utils.c   | 545 ++++++++----------
- drivers/staging/media/imx/imx-media-vdic.c    |   6 +-
- drivers/staging/media/imx/imx-media.h         |  31 +-
- drivers/staging/media/imx/imx7-media-csi.c    |  14 +-
- 9 files changed, 315 insertions(+), 357 deletions(-)
-
+diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+index 39469031e510..00a71f01786c 100644
+--- a/drivers/staging/media/imx/imx-media-utils.c
++++ b/drivers/staging/media/imx/imx-media-utils.c
+@@ -269,6 +269,7 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
+ 	for (i = 0; i < ARRAY_SIZE(pixel_formats); i++) {
+ 		const struct imx_media_pixfmt *fmt = &pixel_formats[i];
+ 		enum codespace_sel fmt_cs_sel;
++		unsigned int j;
+ 
+ 		fmt_cs_sel = (fmt->cs == IPUV3_COLORSPACE_YUV) ?
+ 			CS_SEL_YUV : CS_SEL_RGB;
+@@ -278,15 +279,24 @@ static int enum_format(u32 *fourcc, u32 *code, u32 index,
+ 		    (!allow_bayer && fmt->bayer))
+ 			continue;
+ 
+-		if (index == 0) {
+-			if (fourcc)
+-				*fourcc = fmt->fourcc;
+-			if (code)
+-				*code = fmt->codes[0];
++		if (fourcc && index == 0) {
++			*fourcc = fmt->fourcc;
+ 			return 0;
+ 		}
+ 
+-		index--;
++		if (!code) {
++			index--;
++			continue;
++		}
++
++		for (j = 0; j < ARRAY_SIZE(fmt->codes) && fmt->codes[j]; j++) {
++			if (index == 0) {
++				*code = fmt->codes[j];
++				return 0;
++			}
++
++			index--;
++		}
+ 	}
+ 
+ 	return -EINVAL;
 -- 
 2.17.1
 
