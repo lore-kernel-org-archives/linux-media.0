@@ -2,98 +2,70 @@ Return-Path: <SRS0=22p4=5P=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4B13C43331
-	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 21:24:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79CB7C2D0F1
+	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 21:55:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AC75120733
-	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 21:24:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EOcpW0bv"
+	by mail.kernel.org (Postfix) with ESMTP id 5077220A8B
+	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 21:55:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1585605307;
+	bh=c2amDIMYQ29mFgURLqMfYuUXWuNx3BDS4WVL4bSInME=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
+	b=d2J1h2X+JfSzUqbfeiXTPA1J6yCJC0vptOilXhlfl1q9fhHfY8cwx1rPC1elmrXB1
+	 TvJ4cOOGhi5fzpwWtaeUBkIewpen2Btg+YY5maX2w2NDThen42eLTxgGzIoYm8kpIH
+	 iUqGbyqvVZx1dHmEfHNFpY6jHveeUD/q/loG1TyU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728471AbgC3VYk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Mar 2020 17:24:40 -0400
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:53287 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728393AbgC3VYk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Mar 2020 17:24:40 -0400
-Received: by mail-pj1-f68.google.com with SMTP id l36so159361pjb.3
-        for <linux-media@vger.kernel.org>; Mon, 30 Mar 2020 14:24:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v5z9J8Mvhxd+OavBUuQDZYy/tbOuDQYWMwNmOJ3hwKs=;
-        b=EOcpW0bvXhufAh/QO5H6oyQoe4zNqGePtn3HvAfYrzNLck564t2TJ/fKlYwGKGsBlk
-         71LTrseEcduNTgbhGxyJ6z9Q71xlZmuaDNfQbcH34XScSl3zdktohxsD70eyYeTSja+c
-         2Ayodhk5W/CzTUtZKPXa34cHxx37/Qs6vIKOg8+5EBZxNl/WLAvVy2covZZ4qUbVMcxt
-         2db41+5VZ3HJvw0MB8HI22y9ZFxOKpWaQU9RtXEYL8rCXBBGsoW4LSYVypWVD4ck6PB5
-         D5BmkGUtyMj7r9M2uGyIJpQ1VQJ7+UXWWRfu5bgcFs4XYujBSpswZqOv5b98RWvzZPFd
-         O3sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v5z9J8Mvhxd+OavBUuQDZYy/tbOuDQYWMwNmOJ3hwKs=;
-        b=tGYCgUXSLiSzcBzxai0kzWxuH4Usc1vKW9bBoNhP+2NSTu/4dUyZi7XiDpkHMMJNAn
-         vGn5re/fYiu6R1+jppIiVtfBpv9y5TVE40jFT+4Z+Zu2QH0Biv1oAp7CG9RMybZ5Eov0
-         w1sLdyNt+/XN2bcZfzln+s03e5Np6OT0FPjpUuHUxRC8WVGqLqmroY0RXutgzneQBNho
-         CwYegx95eXNFZc3bD+JcRGBWD3hRiAzTuHwqp4K3H6WubGnCJpu8Ih/jisP80PuMbtdw
-         D0Dytzh/Ps+F0mawEapFdL22OfXZ0zEGOsdLA1iFrf7x3DLoEtjTvvbxJlwzP+p7xIPt
-         Od0A==
-X-Gm-Message-State: ANhLgQ1+yr0nAB0Rqkr+l5jMPCOCEj17+4e913jHdvLjYUxDiPM258+0
-        mv4vjK4ok0OzMzfx3fv7Kx97tokasz4=
-X-Google-Smtp-Source: ADFU+vsqB2LtHvuS8KQJI+MAzqOz+d50zYA+5odcbB1eGyPHiZ3d11cj2083FIxdYCr0y9p1hequeA==
-X-Received: by 2002:a17:902:59c1:: with SMTP id d1mr14880715plj.215.1585603476678;
-        Mon, 30 Mar 2020 14:24:36 -0700 (PDT)
-Received: from mangix-trapnet.lan (astound-69-42-19-227.ca.astound.net. [69.42.19.227])
-        by smtp.gmail.com with ESMTPSA id mm18sm388140pjb.39.2020.03.30.14.24.35
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 14:24:36 -0700 (PDT)
-From:   Rosen Penev <rosenp@gmail.com>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH] keytable: use input_event properly
-Date:   Mon, 30 Mar 2020 14:24:34 -0700
-Message-Id: <20200330212434.10155-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1729768AbgC3VzD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Mar 2020 17:55:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39406 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729750AbgC3VzD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 30 Mar 2020 17:55:03 -0400
+Subject: Re: [GIT PULL for v5.7-rc1] media updates
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585605303;
+        bh=c2amDIMYQ29mFgURLqMfYuUXWuNx3BDS4WVL4bSInME=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=ku8zHL/ntABqOo6cYRPC8Z3N5WpEdFqevEuI4pF9kK03bs3vyGl0HljWeodDvQFOc
+         MKd9vZgsJpYHcbxGgP/4fbLkv8cs0k/hPhw9GGN9R51W97nlW3i6Ch/I4ceJA2WSar
+         FiNW2bua8cgORSkOM9Cu9eTzhZb9IinxkE4xAuQU=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200330114824.46773eee@coco.lan>
+References: <20200330114824.46773eee@coco.lan>
+X-PR-Tracked-List-Id: <linux-media.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200330114824.46773eee@coco.lan>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media
+ tags/media/v5.7-1
+X-PR-Tracked-Commit-Id: 2632e7b618a7730969f9782593c29ca53553aa22
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 063d1942247668eb0bb800aef5afbbef337344be
+Message-Id: <158560530314.23211.10552256266311366350.pr-tracker-bot@kernel.org>
+Date:   Mon, 30 Mar 2020 21:55:03 +0000
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It does not use time_t under musl when time_t is 64-bit. The struct has
-compatibility defines. Instead of using time_t directly, use those
-defines.
+The pull request you sent on Mon, 30 Mar 2020 11:48:24 +0200:
 
-Fixes compilation under musl 1.2.0 under 32-bit OSes.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.7-1
 
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- utils/keytable/keytable.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/063d1942247668eb0bb800aef5afbbef337344be
 
-diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
-index aad993ea..bc890394 100644
---- a/utils/keytable/keytable.c
-+++ b/utils/keytable/keytable.c
-@@ -1551,7 +1551,7 @@ static void test_event(struct rc_device *rc_dev, int fd)
- 
- 		for (i = 0; i < rd / sizeof(struct input_event); i++) {
- 			printf(_("%ld.%06ld: event type %s(0x%02x)"),
--				ev[i].time.tv_sec, ev[i].time.tv_usec,
-+				ev[i].input_event_sec, ev[i].input_event_usec,
- 				get_event_name(events_type, ev[i].type), ev[i].type);
- 
- 			switch (ev[i].type) {
+Thank you!
+
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
