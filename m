@@ -2,131 +2,148 @@ Return-Path: <SRS0=22p4=5P=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 468C5C2D0EE
-	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 07:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9443EC43331
+	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 07:46:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 011AE2073B
-	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 07:30:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585553402;
-	bh=w+OyByBV+I5A3BslKozLHEBsFhvZMzyxKsx/Uvrczsg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=N4EV7YzwHccQuVk6ilNF3lUzJ0qQAuC3AWEZshdfB6QW64YyZKup9o8u7YnBVi6LY
-	 ygKdTkHrqQcI4Nim5t/ODn5gkc3+wycGKUtOSucvaWnD3gNjCT50bJy60lyJdmmGwa
-	 D0sxWqLXne/S0wPRnjJxOEleGqwk4kD8qkBdC6K0=
+	by mail.kernel.org (Postfix) with ESMTP id 6F5112073B
+	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 07:46:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729424AbgC3HaB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Mar 2020 03:30:01 -0400
-Received: from condef-02.nifty.com ([202.248.20.67]:41104 "EHLO
-        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729197AbgC3HaA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Mar 2020 03:30:00 -0400
-X-Greylist: delayed 833 seconds by postgrey-1.27 at vger.kernel.org; Mon, 30 Mar 2020 03:29:58 EDT
-Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-02.nifty.com with ESMTP id 02U7AC7C000608;
-        Mon, 30 Mar 2020 16:10:12 +0900
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 02U79xvR024938;
-        Mon, 30 Mar 2020 16:10:00 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 02U79xvR024938
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1585552200;
-        bh=ln1CQt+YaUVnJf/8SbMK3iPTVvG1KE5EE/FUul8MWQc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=1sthGaoHw8qoSp3F/D3eH8NqZjk++zLNoSrFExAge5M5k4o6izC7znUZmDsjrR95d
-         3LRi45OyZDxUKTfu4A/3P4aV5+yY39DtCxwP5T2nox/GAPp7PJ3ZaF7u226D4E6kMs
-         pxp3tchjSZY1dsGYXfpp7Fyf63ssOrWN+V8tr3iI8kkkZhdSc6hQrcCJehpowCH1tV
-         t5Ybjs0wWAwMh0SzhZruoB9o66WBYJD1t+qP7ZqRNrr7efxFSXjCoLMubpsREjCj3w
-         uh2OG10xugvGzdVuKY1o+FeM5bjbz3bVeCv27FcaCEJ6WsaSLhERu5H58t5BiMZ2Xi
-         G3vbpTZyiHDew==
-X-Nifty-SrcIP: [209.85.217.45]
-Received: by mail-vs1-f45.google.com with SMTP id z125so10303326vsb.13;
-        Mon, 30 Mar 2020 00:09:59 -0700 (PDT)
-X-Gm-Message-State: AGi0PuaxIQ01k2OIzzRmX0pmP4+GKnL2dKkEkaAhViRjVhNEthRWBKXc
-        iLGdsfopkiPxzS20T9vORC2VKBgWqZ276l6JheA=
-X-Google-Smtp-Source: APiQypLmGnB9GmkGFIr7L8MQtdRTKDMNPR3ere0jKX6O5/r2adqpWFQ5TPcwWpLgYxRGXDf4dZ6YCv27RE8dCFz54+s=
-X-Received: by 2002:a67:2d55:: with SMTP id t82mr7452280vst.215.1585552198446;
- Mon, 30 Mar 2020 00:09:58 -0700 (PDT)
+        id S1729473AbgC3Hq7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Mar 2020 03:46:59 -0400
+Received: from mga03.intel.com ([134.134.136.65]:49457 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729420AbgC3Hq6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 30 Mar 2020 03:46:58 -0400
+IronPort-SDR: ZMoDgXt4VlQCyzjdQxQItoM+P9qhHYPsL2tvI7BZSY8R7E8eKMXvwiJVpZ2jE4tPEqBxc/B7K0
+ 4DbSE02ZpVEw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 00:46:57 -0700
+IronPort-SDR: 9ULmXjXRTB4l9jWIgw0brFshLPgrRupUdLWpd0luUnWFodBFitCe9s8iGU+yHsColgI3S15csF
+ 7cwH+CQVU+SA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,323,1580803200"; 
+   d="scan'208";a="248622489"
+Received: from unknown (HELO kekkonen.fi.intel.com) ([10.252.36.158])
+  by orsmga003.jf.intel.com with ESMTP; 30 Mar 2020 00:46:56 -0700
+Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
+        id 0E6C921E9E; Mon, 30 Mar 2020 10:46:52 +0300 (EEST)
+Date:   Mon, 30 Mar 2020 10:46:52 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v3 15/22] media: Kconfig: move media controller core
+ select to main Kconfig
+Message-ID: <20200330074652.GC26969@kekkonen.localdomain>
+References: <cover.1585129041.git.mchehab+huawei@kernel.org>
+ <ac58d0e580d93a190e44c79507dd4969679ecb36.1585129041.git.mchehab+huawei@kernel.org>
+ <20200325100059.GB22904@kekkonen.localdomain>
+ <20200325110834.1e204e20@coco.lan>
+ <20200325112129.5579ef45@coco.lan>
 MIME-Version: 1.0
-References: <20200325220542.19189-1-robh@kernel.org> <20200325220542.19189-5-robh@kernel.org>
-In-Reply-To: <20200325220542.19189-5-robh@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 30 Mar 2020 16:09:22 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARJn4uugHxcjK+WOWBs0gPVZQsCu4y6M8hkNK1U5FehRA@mail.gmail.com>
-Message-ID: <CAK7LNARJn4uugHxcjK+WOWBs0gPVZQsCu4y6M8hkNK1U5FehRA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: Add missing 'additionalProperties: false'
-To:     Rob Herring <robh@kernel.org>
-Cc:     DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zhang Rui <rui.zhang@intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200325112129.5579ef45@coco.lan>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Mar 26, 2020 at 7:06 AM Rob Herring <robh@kernel.org> wrote:
->
-> Setting 'additionalProperties: false' is frequently omitted, but is
-> important in order to check that there aren't extra undocumented
-> properties in a binding.
->
-> Ideally, we'd just add this automatically and make this the default, but
-> there's some cases where it doesn't work. For example, if a common
-> schema is referenced, then properties in the common schema aren't part
-> of what's considered for 'additionalProperties'. Also, sometimes there
-> are bus specific properties such as 'spi-max-frequency' that go into
-> bus child nodes, but aren't defined in the child node's schema.
->
-> So let's stick with the json-schema defined default and add
-> 'additionalProperties: false' where needed. This will be a continual
-> review comment and game of wack-a-mole.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+On Wed, Mar 25, 2020 at 11:21:29AM +0100, Mauro Carvalho Chehab wrote:
+> Em Wed, 25 Mar 2020 11:08:34 +0100
+> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
+> 
+> > Em Wed, 25 Mar 2020 12:00:59 +0200
+> > Sakari Ailus <sakari.ailus@linux.intel.com> escreveu:
+> > 
+> > > Hi Mauro,
+> > > 
+> > > On Wed, Mar 25, 2020 at 10:49:29AM +0100, Mauro Carvalho Chehab wrote:
+> > > > Let's place the main API selections at the media/Kconfig file,
+> > > > as this way we can better organize things.
+> > > > 
+> > > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > > > ---
+> > > >  drivers/media/Kconfig    | 9 +++++++++
+> > > >  drivers/media/mc/Kconfig | 9 ---------
+> > > >  2 files changed, 9 insertions(+), 9 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
+> > > > index d6766085c91b..3872e46545e6 100644
+> > > > --- a/drivers/media/Kconfig
+> > > > +++ b/drivers/media/Kconfig
+> > > > @@ -144,6 +144,15 @@ config VIDEO_DEV
+> > > >  	depends on MEDIA_SUPPORT
+> > > >  	default MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_RADIO_SUPPORT || MEDIA_SDR_SUPPORT || MEDIA_PLATFORM_SUPPORT
+> > > >  
+> > > > +config MEDIA_CONTROLLER
+> > > > +	bool "Media Controller API"
+> > > > +	depends on MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_DIGITAL_TV_SUPPORT
+> > > > +	help
+> > > > +	  Enable the media controller API used to query media devices internal
+> > > > +	  topology and configure it dynamically.
+> > > > +
+> > > > +	  This API is mostly used by camera interfaces in embedded platforms.
+> > > > +
+> > > >  source "drivers/media/v4l2-core/Kconfig"
+> > > >  
+> > > >  #
+> > > > diff --git a/drivers/media/mc/Kconfig b/drivers/media/mc/Kconfig
+> > > > index 3b9795cfcb36..b3579d6c9e32 100644
+> > > > --- a/drivers/media/mc/Kconfig
+> > > > +++ b/drivers/media/mc/Kconfig
+> > > > @@ -3,15 +3,6 @@
+> > > >  #	Selectable only for webcam/grabbers, as other drivers don't use it
+> > > >  #
+> > > >  
+> > > > -config MEDIA_CONTROLLER
+> > > > -	bool "Media Controller API"
+> > > > -	depends on MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_DIGITAL_TV_SUPPORT
+> > > > -	help
+> > > > -	  Enable the media controller API used to query media devices internal
+> > > > -	  topology and configure it dynamically.
+> > > > -
+> > > > -	  This API is mostly used by camera interfaces in embedded platforms.
+> > > > -
+> > > >  config MEDIA_CONTROLLER_DVB
+> > > >  	bool "Enable Media controller for DVB (EXPERIMENTAL)"
+> > > >  	depends on MEDIA_CONTROLLER && DVB_CORE  
+> > > 
+> > > This moves the main MC configuration out of the directory but leaves the
+> > > rest of the MC configuration under the mc directory. All MC related
+> > > configuration is currently in a single place, which makes sense.
+> > > 
+> > > I guess you can always have arguments for and against, but my preference is
+> > > keeping it as-is.
+> > 
+> > Well, the advantage (after applying the entire series), is that it can now
+> > present two separate menus:
+> > 
+> > the first one with the core stuff (MC, V4L and DVB), and a second one
+> > with the extra features for those three.
+> > 
+> > Btw, it just occurred to me that perhaps we could map it on a different way,
+> > using a menu for MC, another one for V4L and a third one for DVB.
+> 
+> What occurred to me is shown at the patch below (applied after this patch
+> series).
+> 
+> IMHO, it is a way better to present things like that.
 
+Ok; makes sense. I only thought of this Kconfig organisation point of view,
+in terms of files.
 
->  .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml      | 2 ++
-
-
-You may have already queue this up, but just in case.
-
-Acked-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+It seems there's a more active discussion going on elsewhere, and perhaps
+it's better to continue there.
 
 -- 
-Best Regards
-Masahiro Yamada
+Kind regards,
+
+Sakari Ailus
