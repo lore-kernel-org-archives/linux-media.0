@@ -2,70 +2,72 @@ Return-Path: <SRS0=22p4=5P=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79CB7C2D0F1
-	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 21:55:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 409D0C43331
+	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 22:29:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5077220A8B
-	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 21:55:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585605307;
-	bh=c2amDIMYQ29mFgURLqMfYuUXWuNx3BDS4WVL4bSInME=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=d2J1h2X+JfSzUqbfeiXTPA1J6yCJC0vptOilXhlfl1q9fhHfY8cwx1rPC1elmrXB1
-	 TvJ4cOOGhi5fzpwWtaeUBkIewpen2Btg+YY5maX2w2NDThen42eLTxgGzIoYm8kpIH
-	 iUqGbyqvVZx1dHmEfHNFpY6jHveeUD/q/loG1TyU=
+	by mail.kernel.org (Postfix) with ESMTP id 1796E20733
+	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 22:29:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729768AbgC3VzD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Mar 2020 17:55:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39406 "EHLO mail.kernel.org"
+        id S1729223AbgC3W3b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Mar 2020 18:29:31 -0400
+Received: from gofer.mess.org ([88.97.38.141]:59273 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729750AbgC3VzD (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Mar 2020 17:55:03 -0400
-Subject: Re: [GIT PULL for v5.7-rc1] media updates
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585605303;
-        bh=c2amDIMYQ29mFgURLqMfYuUXWuNx3BDS4WVL4bSInME=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=ku8zHL/ntABqOo6cYRPC8Z3N5WpEdFqevEuI4pF9kK03bs3vyGl0HljWeodDvQFOc
-         MKd9vZgsJpYHcbxGgP/4fbLkv8cs0k/hPhw9GGN9R51W97nlW3i6Ch/I4ceJA2WSar
-         FiNW2bua8cgORSkOM9Cu9eTzhZb9IinxkE4xAuQU=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200330114824.46773eee@coco.lan>
-References: <20200330114824.46773eee@coco.lan>
-X-PR-Tracked-List-Id: <linux-media.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200330114824.46773eee@coco.lan>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media
- tags/media/v5.7-1
-X-PR-Tracked-Commit-Id: 2632e7b618a7730969f9782593c29ca53553aa22
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 063d1942247668eb0bb800aef5afbbef337344be
-Message-Id: <158560530314.23211.10552256266311366350.pr-tracker-bot@kernel.org>
-Date:   Mon, 30 Mar 2020 21:55:03 +0000
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1728987AbgC3W3b (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 30 Mar 2020 18:29:31 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 962AFC635C; Mon, 30 Mar 2020 23:29:29 +0100 (BST)
+Date:   Mon, 30 Mar 2020 23:29:29 +0100
+From:   Sean Young <sean@mess.org>
+To:     Rosen Penev <rosenp@gmail.com>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [PATCH] keytable: use input_event properly
+Message-ID: <20200330222929.GA7631@gofer.mess.org>
+References: <20200330212434.10155-1-rosenp@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200330212434.10155-1-rosenp@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pull request you sent on Mon, 30 Mar 2020 11:48:24 +0200:
+On Mon, Mar 30, 2020 at 02:24:34PM -0700, Rosen Penev wrote:
+> It does not use time_t under musl when time_t is 64-bit. The struct has
+> compatibility defines. Instead of using time_t directly, use those
+> defines.
+> 
+> Fixes compilation under musl 1.2.0 under 32-bit OSes.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.7-1
+Looks good, merged.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/063d1942247668eb0bb800aef5afbbef337344be
+Thanks,
 
-Thank you!
+Sean
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+> 
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
+>  utils/keytable/keytable.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
+> index aad993ea..bc890394 100644
+> --- a/utils/keytable/keytable.c
+> +++ b/utils/keytable/keytable.c
+> @@ -1551,7 +1551,7 @@ static void test_event(struct rc_device *rc_dev, int fd)
+>  
+>  		for (i = 0; i < rd / sizeof(struct input_event); i++) {
+>  			printf(_("%ld.%06ld: event type %s(0x%02x)"),
+> -				ev[i].time.tv_sec, ev[i].time.tv_usec,
+> +				ev[i].input_event_sec, ev[i].input_event_usec,
+>  				get_event_name(events_type, ev[i].type), ev[i].type);
+>  
+>  			switch (ev[i].type) {
+> -- 
+> 2.25.1
