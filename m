@@ -2,164 +2,94 @@ Return-Path: <SRS0=22p4=5P=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2245C43331
-	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 08:38:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA317C43331
+	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 09:01:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A479420776
-	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 08:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585557496;
-	bh=BkHx8NFiQ75YGJGHV3YLzUBEEQCGCQ6ZgXds5RE21G4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=iEeIl8BCLKkDTCp68G2ef+VFiOq8WuHLf4DYF1pd1o2jiZDUCvajJ01Ihsz9slrIL
-	 gYb75dLViqxfefPJH5LYAf/kYG9WpFuVD3HBtZCr39OGSyiCpoE660+uTCn+vAJhEk
-	 eWJkF3IC4/VQ3txfZsELjOHk/fGiMlFU+BTJMVa0=
+	by mail.kernel.org (Postfix) with ESMTP id 8E12620658
+	for <linux-media@archiver.kernel.org>; Mon, 30 Mar 2020 09:01:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729663AbgC3IiM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Mar 2020 04:38:12 -0400
-Received: from conssluserg-01.nifty.com ([210.131.2.80]:56073 "EHLO
-        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726017AbgC3IiM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Mar 2020 04:38:12 -0400
-X-Greylist: delayed 5280 seconds by postgrey-1.27 at vger.kernel.org; Mon, 30 Mar 2020 04:38:09 EDT
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 02U8bmN8026273;
-        Mon, 30 Mar 2020 17:37:49 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 02U8bmN8026273
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1585557470;
-        bh=PxRmu3HuDIYTqEJxiJ5PqE2LXmQuo3D9zlavzY5jVI4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=brVEPKJScKZunXMPy14SQD8gmdtXfD/Z7CL8ZRWvjqvg8UYOEXDjY45m6LQp+Upry
-         SgIqRIt+Vbfvxsnbg1Sa4ESbah6Ht4e+ygLsb2zMtFxzxi6m+CL+3akLM9W4IRUtrC
-         8IrkWOugyFCF6k+q9DWaJ/RylMYkLVAXmcO1Y053y79in1DJ1SYDKl6QryZcJvymZW
-         zhUI92s1QDExgPzlgqMqS+2VzRW+Hf/0CueUJkv89pUXdRGkEy/yT1U57PQSLpZHL5
-         dpuemg5XzFyFNtnhwxT9TEaThfuk/wESfJfRmQy4YDPJPK/eWz1pRIvn+23Xa8wREx
-         iiOBT5PkS+9Hg==
-X-Nifty-SrcIP: [209.85.222.47]
-Received: by mail-ua1-f47.google.com with SMTP id r47so5951861uad.11;
-        Mon, 30 Mar 2020 01:37:49 -0700 (PDT)
-X-Gm-Message-State: AGi0PuYfI1t4jOABvMJbBeheO5K31RVjKrp+v3PMdlyhGrfyx/pJ5lj8
-        56rX/6bnMc6mi60tJtnMdm1005lbsmAaPgRPoO8=
-X-Google-Smtp-Source: APiQypJeTOypTow5s/orWLiqA+luxDBNhpwR1xE86uZ7tA8NnJnWdBsJgIswlbl89EaZoapGrF/J2WDHqcRU1fH6V1M=
-X-Received: by 2002:a9f:28c5:: with SMTP id d63mr6911883uad.25.1585557468135;
- Mon, 30 Mar 2020 01:37:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200325220542.19189-1-robh@kernel.org> <20200325220542.19189-5-robh@kernel.org>
- <CAK7LNARJn4uugHxcjK+WOWBs0gPVZQsCu4y6M8hkNK1U5FehRA@mail.gmail.com>
-In-Reply-To: <CAK7LNARJn4uugHxcjK+WOWBs0gPVZQsCu4y6M8hkNK1U5FehRA@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 30 Mar 2020 17:37:11 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARXj3=1VPWL4kFmGkZuvV=yKb7gVaX2nbeiO54f-zWeHQ@mail.gmail.com>
-Message-ID: <CAK7LNARXj3=1VPWL4kFmGkZuvV=yKb7gVaX2nbeiO54f-zWeHQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: Add missing 'additionalProperties: false'
-To:     Rob Herring <robh@kernel.org>
-Cc:     DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zhang Rui <rui.zhang@intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729828AbgC3JBf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Mar 2020 05:01:35 -0400
+Received: from mga12.intel.com ([192.55.52.136]:39025 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729704AbgC3JBf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 30 Mar 2020 05:01:35 -0400
+IronPort-SDR: hgu5gAFrnsjPJgxyQqiXSKTU3dFyv5m8SGuSsZLPw+kbpfZlr+IvVxfMszxG/Q1kpoTHTOgzAa
+ 0dadGoeGuUBw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 02:01:35 -0700
+IronPort-SDR: 2iotQe0EytwfOoKVD70lxUGNBAzRb9uPtnKBqOuzAnxM+8HbwZH2cUMwzXZbwUtxCEZxddymO4
+ SSgaHWIBqCig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,323,1580803200"; 
+   d="scan'208";a="448199670"
+Received: from ipu5-build.bj.intel.com ([10.238.232.196])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Mar 2020 02:01:34 -0700
+From:   Bingbu Cao <bingbu.cao@intel.com>
+To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     sakari.ailus@linux.intel.com, tfiga@google.com,
+        bingbu.cao@linux.intel.com, bingbu.cao@intel.com
+Subject: [PATCH] media: doc-rst: add yavta test example in ipu3 docs
+Date:   Mon, 30 Mar 2020 17:05:14 +0800
+Message-Id: <1585559114-25762-1-git-send-email-bingbu.cao@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rob,
+This patch add yavta test command in ipu3.rst as an example on how to
+run simple ImgU test using yavta.
 
-On Mon, Mar 30, 2020 at 4:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Thu, Mar 26, 2020 at 7:06 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> > Setting 'additionalProperties: false' is frequently omitted, but is
-> > important in order to check that there aren't extra undocumented
-> > properties in a binding.
-> >
-> > Ideally, we'd just add this automatically and make this the default, but
-> > there's some cases where it doesn't work. For example, if a common
-> > schema is referenced, then properties in the common schema aren't part
-> > of what's considered for 'additionalProperties'. Also, sometimes there
-> > are bus specific properties such as 'spi-max-frequency' that go into
-> > bus child nodes, but aren't defined in the child node's schema.
-> >
-> > So let's stick with the json-schema defined default and add
-> > 'additionalProperties: false' where needed. This will be a continual
-> > review comment and game of wack-a-mole.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
->
->
-> >  .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml      | 2 ++
->
->
-> You may have already queue this up, but just in case.
->
-> Acked-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+---
+ Documentation/media/v4l-drivers/ipu3.rst | 13 +++++++++++++
+ drivers/staging/media/ipu3/TODO          |  2 --
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-
-
-I take back Ack for socionext,uniphier-gpio.yaml
-
-
-
-Now "make dt_binding_check" produces a new warning.
-
-gpio@55000000: 'interrupt-parent' does not match any of the regexes:
-'pinctrl-[0-9]+'
-
-
-This binding uses 'interrupt-parent'
-without 'interrupts'.
-
-Instead, the mapping of the interrupt numbers
-is specified by the vendor-specific property
-socionext,interrupt-ranges
-
-
-
-I cannot add   "interrupt-parent: true" because
-dt-schema/meta-schemas/interrupts.yaml
-has "interrupt-parent: false".
-
-
-Is there any solution?
-
-
-
+diff --git a/Documentation/media/v4l-drivers/ipu3.rst b/Documentation/media/v4l-drivers/ipu3.rst
+index a694f49491f9..35417567417e 100644
+--- a/Documentation/media/v4l-drivers/ipu3.rst
++++ b/Documentation/media/v4l-drivers/ipu3.rst
+@@ -363,6 +363,19 @@ v4l2n --pipe=4 --load=/tmp/frame-#.bin --open=/dev/video4
+ --output=/tmp/frames.3A --fmt=type:META_CAPTURE,?
+ --reqbufs=count:1,type:META_CAPTURE --pipe=1,2,3,4 --stream=5
+ 
++You can also use yavta [#f2]_ command to do same thing as above:
++
++.. code-block:: none
++
++	yavta --data-prefix -Bcapture-mplane -c10 -n5 -I -s2592x1944 \
++	--file=frame-#.out-f NV12 /dev/video5 & \
++	yavta --data-prefix -Bcapture-mplane -c10 -n5 -I -s2592x1944 \
++	--file=frame-#.vf -f NV12 /dev/video6 & \
++	yavta --data-prefix -Bmeta-capture -c10 -n5 -I \
++	--file=frame-#.3a /dev/video7 & \
++	yavta --data-prefix -Boutput-mplane -c10 -n5 -I -s2592x1944 \
++	--file=/tmp/frame-in.cio2 -f IPU3_SGRBG10 /dev/video4
++
+ where /dev/video4, /dev/video5, /dev/video6 and /dev/video7 devices point to
+ input, output, viewfinder and 3A statistics video nodes respectively.
+ 
+diff --git a/drivers/staging/media/ipu3/TODO b/drivers/staging/media/ipu3/TODO
+index 52063b651810..4bcb665cb5f7 100644
+--- a/drivers/staging/media/ipu3/TODO
++++ b/drivers/staging/media/ipu3/TODO
+@@ -8,8 +8,6 @@ staging directory.
+ - IPU3 driver documentation (Laurent)
+   Comments on configuring v4l2 subdevs for CIO2 and ImgU.
+ 
+-- Switch to yavta from v4l2n in driver docs.
+-
+ - Elaborate the functionality of different selection rectangles in driver
+   documentation. This may require driver changes as well.
+ 
 -- 
-Best Regards
-Masahiro Yamada
+2.7.4
+
