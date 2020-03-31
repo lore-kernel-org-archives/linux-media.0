@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CE0BC2BABC
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1807DC43331
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 29992208E0
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFE02208E0
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585653161;
-	bh=5b8/husZDb2f9SszVvpguwS14cJy1XWj19PL+VLn3vc=;
+	s=default; t=1585653142;
+	bh=KeQkR9wDH5eMFc0ynrS4FJg9WqIqItWZvn2kIG/4+Rk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ykmpUVZ4BGx2UXdTDWNO07hUIyHvsb9FzecRlcQ7YFA84IafF+Z/vc++pCOqGZ4ti
-	 l0lmBH3xkViRTLPGOJIQOSK+btNWiUTt2+59/9q0yoyxszLt4q53ImFBliBRvCgHD9
-	 PDwaQehxGVbFUeTWW9cDqus9JNx5RiiZWB1OtC/8=
+	b=h5MjYnJTKqlAbtrTaWgfXq5AqHIKWNcM4p/4aEfLQsZgrHq5fjEyfSfl3UBbyFaUp
+	 GNxmxPGJvc8O+KlsDmeVIQiekuUMMa4yoKbvv5FbUEKGt1ECsxPpCVjURz7rTechL/
+	 tY4jdKLACDOjcXM6g3nbMifI6cROW22/wDg1Y7So=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730708AbgCaLMk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Mar 2020 07:12:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57900 "EHLO mail.kernel.org"
+        id S1730672AbgCaLMQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Mar 2020 07:12:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57938 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730574AbgCaLMO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Mar 2020 07:12:14 -0400
+        id S1730629AbgCaLMP (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 31 Mar 2020 07:12:15 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4E77B21556;
+        by mail.kernel.org (Postfix) with ESMTPSA id 8D50A21D6C;
         Tue, 31 Mar 2020 11:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585653133;
-        bh=5b8/husZDb2f9SszVvpguwS14cJy1XWj19PL+VLn3vc=;
+        bh=KeQkR9wDH5eMFc0ynrS4FJg9WqIqItWZvn2kIG/4+Rk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X/0WdSsHwR/EqFschBD/ivgPfoiVFnHWfHt/yqUNLeP04FSpSocufGLOkIl7ncYrH
-         4lWKSQOEJmRONps5q6M37cZGfJNVEXlBLHgAfh7JfiGm6CCPQta8/vxmqDkywb7rC2
-         vcq4TiHGocI1B8d8HX9glYPfMP2h+nTlmcHoEB+k=
+        b=CCj+bhviShRLaznsXsDRIl2wP1pQvzggHOzQ0zISr/ikR7RtcFBJaaaTkSs4V1xFz
+         9TvBukO0Qe7Pmlt68pE9riou2MKBp4VMA+9AJX42Bm1MzoWg0x0wbsNvwvcs0lmr8w
+         XkAe2yZpBmPcLLivM4PXyjejG7RTSTp1gLnTGpIE=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jJEoV-002bqC-4w; Tue, 31 Mar 2020 13:12:11 +0200
+        id 1jJEoV-002bro-Qx; Tue, 31 Mar 2020 13:12:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v4 05/33] media: Kconfig: update the MEDIA_SUPPORT help message
-Date:   Tue, 31 Mar 2020 13:11:41 +0200
-Message-Id: <f35673b7dd282c7fc1510f2846c9f01a6907bd6c.1585651678.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v4 25/33] media: Kconfig: move DVB-specific options to dvb-core/Kconfig
+Date:   Tue, 31 Mar 2020 13:12:01 +0200
+Message-Id: <081caf33c73f9cf6f76b5c7aa83ff7b4cca2e087.1585651678.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585651678.git.mchehab+huawei@kernel.org>
 References: <cover.1585651678.git.mchehab+huawei@kernel.org>
@@ -57,31 +57,88 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are more things than just cameras and TV devices on
-media. Update the help message accordingly.
+In order to cleanup the main media Kconfig, move the DVB-core
+specific options to dvb-core/Kconfig.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/Kconfig | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/Kconfig          | 21 ---------------------
+ drivers/media/dvb-core/Kconfig | 26 ++++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 21 deletions(-)
 
 diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index 31fbdb2a8d41..72d4f3e0b081 100644
+index 9cc528e0b120..dda449556f22 100644
 --- a/drivers/media/Kconfig
 +++ b/drivers/media/Kconfig
-@@ -18,8 +18,10 @@ menuconfig MEDIA_SUPPORT
- 	tristate "Multimedia support"
- 	depends on HAS_IOMEM
- 	help
--	  If you want to use Webcams, Video grabber devices and/or TV devices
--	  enable this option and other options below.
-+	  If you want to use media devices, including Webcams, Video grabber
-+	  devices and/or TV devices, V4L2 codecs, etc, enable this option
-+	  and other options below.
-+
- 	  Additional info and docs are available on the web at
- 	  <https://linuxtv.org>
+@@ -161,31 +161,10 @@ config DVB_CORE
+ 	default y
+ 	select CRC32
  
+-config DVB_MMAP
+-	bool "Enable DVB memory-mapped API (EXPERIMENTAL)"
+-	depends on DVB_CORE
+-	depends on VIDEO_V4L2=y || VIDEO_V4L2=DVB_CORE
+-	select VIDEOBUF2_VMALLOC
+ 	help
+-	  This option enables DVB experimental memory-mapped API, which
+-	  reduces the number of context switches to read DVB buffers, as
+-	  the buffers can use mmap() syscalls.
+ 
+-	  Support for it is experimental. Use with care. If unsure,
+-	  say N.
+ 
+-config DVB_NET
+-	bool "DVB Network Support"
+-	default (NET && INET)
+-	depends on NET && INET && DVB_CORE
+-	help
+-	  This option enables DVB Network Support which is a part of the DVB
+-	  standard. It is used, for example, by automatic firmware updates used
+-	  on Set-Top-Boxes. It can also be used to access the Internet via the
+-	  DVB card, if the network provider supports it.
+ 
+-	  You may want to disable the network support on embedded devices. If
+-	  unsure say Y.
+ 
+ source "drivers/media/v4l2-core/Kconfig"
+ source "drivers/media/mc/Kconfig"
+diff --git a/drivers/media/dvb-core/Kconfig b/drivers/media/dvb-core/Kconfig
+index 61f9e1ce99cb..6ffac618417b 100644
+--- a/drivers/media/dvb-core/Kconfig
++++ b/drivers/media/dvb-core/Kconfig
+@@ -3,6 +3,32 @@
+ # DVB device configuration
+ #
+ 
++config DVB_MMAP
++	bool "Enable DVB memory-mapped API (EXPERIMENTAL)"
++	depends on DVB_CORE
++	depends on VIDEO_V4L2=y || VIDEO_V4L2=DVB_CORE
++	select VIDEOBUF2_VMALLOC
++	help
++	  This option enables DVB experimental memory-mapped API, which
++	  reduces the number of context switches to read DVB buffers, as
++	  the buffers can use mmap() syscalls.
++
++	  Support for it is experimental. Use with care. If unsure,
++	  say N.
++
++config DVB_NET
++	bool "DVB Network Support"
++	default (NET && INET)
++	depends on NET && INET && DVB_CORE
++	help
++	  This option enables DVB Network Support which is a part of the DVB
++	  standard. It is used, for example, by automatic firmware updates used
++	  on Set-Top-Boxes. It can also be used to access the Internet via the
++	  DVB card, if the network provider supports it.
++
++	  You may want to disable the network support on embedded devices. If
++	  unsure say Y.
++
+ config DVB_MAX_ADAPTERS
+ 	int "maximum number of DVB/ATSC adapters"
+ 	depends on DVB_CORE
 -- 
 2.25.1
 
