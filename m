@@ -2,302 +2,170 @@ Return-Path: <SRS0=pkrO=5Q=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B531C43331
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 15:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BFEEC2D0EE
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 15:35:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 69F6620781
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 15:13:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7A0F2137B
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 15:35:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730528AbgCaPNI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Mar 2020 11:13:08 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57205 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726526AbgCaPNI (ORCPT
+        id S1730950AbgCaPfI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Mar 2020 11:35:08 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46840 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730760AbgCaPfH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Mar 2020 11:13:08 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1jJIZZ-0004xt-9e; Tue, 31 Mar 2020 17:13:01 +0200
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1jJIZR-00038u-QY; Tue, 31 Mar 2020 17:12:53 +0200
-Date:   Tue, 31 Mar 2020 17:12:53 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 1/3] media: dt-bindings: ov8856: Document YAML bindings
-Message-ID: <20200331151253.q6ody3erhvsabznz@pengutronix.de>
-References: <20200331133346.372517-1-robert.foss@linaro.org>
- <20200331133346.372517-2-robert.foss@linaro.org>
+        Tue, 31 Mar 2020 11:35:07 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id 217F12980F2
+Subject: Re: [v6, 1/5] media: dt-bindings: mt8183: Added camera ISP Pass 1
+To:     Jungo Lin <jungo.lin@mediatek.com>, tfiga@chromium.org,
+        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
+        matthias.bgg@gmail.com, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        srv_heupstream@mediatek.com, ddavenport@chromium.org,
+        robh@kernel.org, Sean.Cheng@mediatek.com, sj.huang@mediatek.com,
+        frederic.chen@mediatek.com, Jerry-ch.Chen@mediatek.com,
+        frankie.chiu@mediatek.com, ryan.yu@mediatek.com,
+        Rynn.Wu@mediatek.com, yuzhao@chromium.org, zwisler@chromium.org,
+        shik@chromium.org, suleiman@chromium.org
+References: <Jungo Lin <jungo.lin@mediatek.com>
+ <20191219054930.29513-1-jungo.lin@mediatek.com>
+ <20191219054930.29513-2-jungo.lin@mediatek.com>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <77afc8e7-26b8-471d-0ec0-c77a9c379433@collabora.com>
+Date:   Tue, 31 Mar 2020 12:34:51 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200331133346.372517-2-robert.foss@linaro.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 16:59:20 up 137 days,  6:17, 160 users,  load average: 0.00, 0.03,
- 0.03
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <20191219054930.29513-2-jungo.lin@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Robert,
+Hi Jungo,
 
-On 20-03-31 15:33, Robert Foss wrote:
-> From: Dongchun Zhu <dongchun.zhu@mediatek.com>
+On 12/19/19 3:49 AM, Jungo Lin wrote:
+> This patch adds DT binding document for the Pass 1 (P1) unit
+> in Mediatek's camera ISP system. The Pass 1 unit grabs the sensor
+> data out from the sensor interface, applies ISP image effects
+> from tuning data and outputs the image data or statistics data to DRAM.
 > 
-> This patch adds documentation of device tree in YAML schema for the
-> OV8856 CMOS image sensor.
-> 
-> Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Jungo Lin <jungo.lin@mediatek.com>
 > ---
-> 
-> - Changes since v5:
->   * Add assigned-clocks and assigned-clock-rates
->   * robher: dt-schema errors
-> 
-> - Changes since v4:
->   * Fabio: Change reset-gpio to GPIO_ACTIVE_LOW, explain in description
->   * Add clock-lanes property to example
->   * robher: Fix syntax error in devicetree example
-> 
-> - Changes since v3:
->   * robher: Fix syntax error
->   * robher: Removed maxItems
->   * Fixes yaml 'make dt-binding-check' errors
-> 
-> - Changes since v2:
->   Fixes comments from from Andy, Tomasz, Sakari, Rob.
->   * Convert text documentation to YAML schema.
-> 
-> - Changes since v1:
->   Fixes comments from Sakari, Tomasz
->   * Add clock-frequency and link-frequencies in DT
-> 
->  .../devicetree/bindings/media/i2c/ov8856.yaml | 150 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 151 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ov8856.yaml b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-> new file mode 100644
-> index 000000000000..beeddfbb8709
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-> @@ -0,0 +1,150 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (c) 2019 MediaTek Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/i2c/ov8856.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Omnivision OV8856 CMOS Sensor Device Tree Bindings
-> +
-> +maintainers:
-> +  - Ben Kao <ben.kao@intel.com>
-> +  - Dongchun Zhu <dongchun.zhu@mediatek.com>
-> +
-> +description: |-
-> +  The Omnivision OV8856 is a high performance, 1/4-inch, 8 megapixel, CMOS
-> +  image sensor that delivers 3264x2448 at 30fps. It provides full-frame,
-> +  sub-sampled, and windowed 10-bit MIPI images in various formats via the
-> +  Serial Camera Control Bus (SCCB) interface. This chip is programmable
-> +  through I2C and two-wire SCCB. The sensor output is available via CSI-2
-> +  serial data output (up to 4-lane).
-> +
-> +properties:
-> +  compatible:
-> +    const: ovti,ov8856
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    description:
-> +      Input clock for the sensor.
-> +    items:
-> +      - const: xvclk
-> +
-> +  clock-frequency:
-> +    description:
-> +      Frequency of the xvclk clock in Hertz.
+> Changes from v6:
+>  - Add port node description in the dt-binding document.
+> ---
+>  .../bindings/media/mediatek,camisp.txt        | 83 +++++++++++++++++++
 
-Why do we need this here?
+It would be really nice to convert this to yaml.
 
-> +  assigned-clocks:
-> +    description:
-> +      Input clock for the sensor.
-> +
-> +  assigned-clock-rates:
-> +    description:
-> +      Frequency of the xvclk clock in Hertz.
-
-Also this isn't related to the chip. You need this because you are using
-a qcom platform which provides the clock.
-
-IMHO you only need to specify the clock. You can get the frequency with
-the clk_get_rate() function.
-
-> +  dovdd-supply:
-> +    description:
-> +      Definition of the regulator used as interface power supply.
-
-Phandle to the interface power supply regulator?
-
-> +
-> +  avdd-supply:
-> +    description:
-> +      Definition of the regulator used as analog power supply.
-> +
-> +  dvdd-supply:
-> +    description:
-> +      Definition of the regulator used as digital power supply.
-> +
-> +  reset-gpios:
-> +    description:
-> +      The phandle and specifier for the GPIO that controls sensor reset.
-> +      This corresponds to the hardware pin XSHUTDOWN which is physically
-> +      active low.
-> +
-> +  port:
-> +    type: object
-> +    additionalProperties: false
-> +    description:
-> +      A node containing input and output port nodes with endpoint definitions
-> +      as documented in
-> +      Documentation/devicetree/bindings/media/video-interfaces.txt
-> +
-> +    properties:
-> +      endpoint:
-> +        type: object
-> +
-> +        properties:
-> +          clock-lanes:
-> +            maxItems: 1
-> +
-> +          data-lanes:
-> +            maxItems: 1
-> +
-> +          remote-endpoint: true
-> +
-> +        required:
-> +          - clock-lanes
-> +          - data-lanes
-> +          - remote-endpoint
-> +
-> +    required:
-> +      - endpoint
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - clock-frequency
-> +  - assigned-clocks
-> +  - assigned-clock-rates
-> +  - dovdd-supply
-> +  - avdd-supply
-> +  - dvdd-supply
-> +  - reset-gpios
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/clock/qcom,camcc-sdm845.h>
-
-IMHO we should avoid examples with hardware specific includes.
-
-> +
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ov8856: camera@10 {
-> +            compatible = "ovti,ov8856";
-> +            reg = <0x10>;
-> +
-> +            reset-gpios = <&pio 111 GPIO_ACTIVE_LOW>;
-> +            pinctrl-names = "default";
-> +            pinctrl-0 = <&clk_24m_cam>;
-> +
-> +            clocks = <&clock_camcc CAM_CC_MCLK0_CLK>;
-> +            clock-names = "xvclk";
-> +            clock-frequency = <19200000>;
-> +            assigned-clocks = <&clock_camcc CAM_CC_MCLK0_CLK>;
-> +            assigned-clock-rates = <19200000>;
-> +
-> +            avdd-supply = <&mt6358_vcama2_reg>;
-> +            dvdd-supply = <&mt6358_vcamd_reg>;
-> +            dovdd-supply = <&mt6358_vcamio_reg>;
-> +
-> +            port {
-> +                wcam_out: endpoint {
-> +                    remote-endpoint = <&mipi_in_wcam>;
-> +                    clock-lanes = <0>;
-> +                    data-lanes = <1 2 3 4>;
-> +                    link-frequencies = /bits/ 64 <360000000 180000000>;
-
-Should we add the link-frequencies as optional param?
+For reference: https://lwn.net/Articles/771621/
 
 Regards,
-  Marco
+Helen
 
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-> \ No newline at end of file
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a6fbdf354d34..0f99e863978a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12355,6 +12355,7 @@ L:	linux-media@vger.kernel.org
->  T:	git git://linuxtv.org/media_tree.git
->  S:	Maintained
->  F:	drivers/media/i2c/ov8856.c
-> +F:	Documentation/devicetree/bindings/media/i2c/ov8856.yaml
->  
->  OMNIVISION OV9650 SENSOR DRIVER
->  M:	Sakari Ailus <sakari.ailus@linux.intel.com>
-> -- 
-> 2.25.1
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,camisp.txt
 > 
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,camisp.txt b/Documentation/devicetree/bindings/media/mediatek,camisp.txt
+> new file mode 100644
+> index 000000000000..a85f37c0b87d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/mediatek,camisp.txt
+> @@ -0,0 +1,83 @@
+> +* Mediatek Image Signal Processor Pass 1 (ISP P1)
+> +
+> +The Pass 1 unit of Mediatek's camera ISP system grabs the sensor data out
+> +from the sensor interface, applies ISP effects from tuning data and outputs
+> +the image data and statistics data to DRAM. Furthermore, Pass 1 unit has
+> +the ability to output two different resolutions frames at the same time to
+> +increase the performance of the camera application.
+> +
+> +Required properties:
+> +- compatible: Must be "mediatek,mt8183-camisp" for MT8183.
+> +- reg: Physical base address of the camera function block register and
+> +  length of memory mapped region. Must contain an entry for each entry
+> +  in reg-names.
+> +- reg-names: Must include the following entries:
+> +  "cam_sys": Camera base function block
+> +  "cam_uni": Camera UNI function block
+> +  "cam_a": Camera ISP P1 hardware unit A
+> +  "cam_b": Camera ISP P1 hardware unit B
+> +  "cam_c": Camera ISP P1 hardware unit C
+> +- interrupts: Must contain an entry for each entry in interrupt-names.
+> +- interrupt-names : Must include the following entries:
+> +  "cam_uni": Camera UNI interrupt
+> +  "cam_a": Camera unit A interrupt
+> +  "cam_b": Camera unit B interrupt
+> +  "cam_c": Camera unit C interrupt
+> +- iommus: Shall point to the respective IOMMU block with master port
+> +  as argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+> +  for details.
+> +- clocks: A list of phandle and clock specifier pairs as listed
+> +  in clock-names property, see
+> +  Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
+> +- clock-names: Must be "camsys_cam_cgpdn" and "camsys_camtg_cgpdn".
+> +- mediatek,larb: Must contain the local arbiters in the current SoCs, see
+> +  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
+> +  for details.
+> +- power-domains: a phandle to the power domain, see
+> +  Documentation/devicetree/bindings/power/power_domain.txt for details.
+> +- mediatek,scp: The node of system control processor (SCP), see
+> +  Documentation/devicetree/bindings/remoteproc/mtk,scp.txt for details.
+> +- port: child port node corresponding to the data input, in accordance with
+> +  the video interface bindings defined in
+> +  Documentation/devicetree/bindings/media/video-interfaces.txt. The port
+> +  node must contain at least one endpoint.
+> +
+> +Example:
+> +SoC specific DT entry:
+> +
+> +	camisp: camisp@1a000000 {
+> +		compatible = "mediatek,mt8183-camisp";
+> +		reg = <0 0x1a000000 0 0x1000>,
+> +				<0 0x1a003000 0 0x1000>,
+> +				<0 0x1a004000 0 0x2000>,
+> +				<0 0x1a006000 0 0x2000>,
+> +				<0 0x1a008000 0 0x2000>;
+> +		reg-names = "cam_sys",
+> +				"cam_uni",
+> +				"cam_a",
+> +				"cam_b",
+> +				"cam_c";
+> +		interrupts = <GIC_SPI 253 IRQ_TYPE_LEVEL_LOW>,
+> +				<GIC_SPI 254 IRQ_TYPE_LEVEL_LOW>,
+> +				<GIC_SPI 255 IRQ_TYPE_LEVEL_LOW>,
+> +				<GIC_SPI 256 IRQ_TYPE_LEVEL_LOW>;
+> +		interrupt-names = "cam_uni",
+> +				"cam_a",
+> +				"cam_b",
+> +				"cam_c";
+> +		iommus = <&iommu M4U_PORT_CAM_IMGO>;
+> +		clocks = <&camsys CLK_CAM_CAM>,
+> +				<&camsys CLK_CAM_CAMTG>;
+> +		clock-names = "camsys_cam_cgpdn",
+> +				"camsys_camtg_cgpdn";
+> +		mediatek,larb = <&larb3>,
+> +				<&larb6>;
+> +		power-domains = <&scpsys MT8183_POWER_DOMAIN_CAM>;
+> +		mediatek,scp = <&scp>;
+> +
+> +		port {
+> +			camisp_endpoint: endpoint {
+> +				remote-endpoint = <&seninf_camisp_endpoint>;
+> +			};
+> +		};
+> +	};
 > 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
