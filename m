@@ -7,48 +7,46 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BCEFC2BA16
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0D3CC2BA80
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F2C7520838
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7BFF214D8
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585653154;
-	bh=xbGgqzx6a1TZbgIEHC0Dp1LOeRQ5xVEkHRRNAfTGXMk=;
+	s=default; t=1585653158;
+	bh=zg6rBd91deaVKuBg20dIpD31vHBCT3WC5qRTg87Lsc0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cKVk3iA5lJXKIWYd8Hu91NqntIAKliSk/+l1BWl3SvvhHLuq2w1tP/5am9K35YDNA
-	 GjNI0xKDETuo1UpJP2N5NjbQW0Cl3ResVX8o/wdTk5WIByUQ8dV+HysVgI+AVi17F1
-	 alD9+/Dw+rVWG2zZX0tFsi0LOLGLxv5rP0ZBGVK8=
+	b=dx/8Qoxm+Uqg3fq6f3MYRbnpSe/gDFzrsN+QcaEqtfkAkh60GZadEN1vIO6eyyXiD
+	 4xJZ120GL8JR8vvvvtXmMqR93Wu4s5dW+kBe8aaLvjcRExqif3Bw6prDpUZsu1lXkB
+	 bAfZBx2p4xuac5Nk8xyklC4AjE22jMnQEMn4DZdU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730704AbgCaLMc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Mar 2020 07:12:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57974 "EHLO mail.kernel.org"
+        id S1730592AbgCaLMi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Mar 2020 07:12:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57912 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730631AbgCaLMP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Mar 2020 07:12:15 -0400
+        id S1730595AbgCaLMO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 31 Mar 2020 07:12:14 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9E21C21D80;
+        by mail.kernel.org (Postfix) with ESMTPSA id 58A302166E;
         Tue, 31 Mar 2020 11:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585653133;
-        bh=xbGgqzx6a1TZbgIEHC0Dp1LOeRQ5xVEkHRRNAfTGXMk=;
+        bh=zg6rBd91deaVKuBg20dIpD31vHBCT3WC5qRTg87Lsc0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NaGTvpZCiDPzlHM/JxY9DoK85nnTN9NW4cRT7eBGWv4cxhEl18HHKdjT8OMUDp69F
-         jX4u+ydoOFGZc5F/IaS//LPeUme1TS1dyPk5GfpnoyRyy6cF6RLF8BDnXykgHhVh0Y
-         /t5JOYrBT/ILKz49tLt0a2rb7fQtnGa0lclv/6n8=
+        b=D3ORYg4H0nbEtybN/SBuBcjeivKgZNlZUK/sxN2eQvvt2KmftP3Xce4y8E6LFh1HR
+         FNGWrw0dDZhM1+bDvc+EVSZhyQLt8Cc+fSc7DK8vAgO4Q0Vw4wBMfwoGD8TJksKmHu
+         qMXiA46KVEEndjR98aVu5jdqLmtDcp9M7aNeqaHs=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jJEoV-002bry-Sr; Tue, 31 Mar 2020 13:12:11 +0200
+        id 1jJEoV-002bpw-1Q; Tue, 31 Mar 2020 13:12:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v4 27/33] media: Kconfig: move media controller core select to main Kconfig
-Date:   Tue, 31 Mar 2020 13:12:03 +0200
-Message-Id: <03284418f076a78b47f6cf3d7bbf2970f98b4f6f.1585651678.git.mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH v4 02/33] media: Kconfig: add an option to filter in/out platform drivers
+Date:   Tue, 31 Mar 2020 13:11:38 +0200
+Message-Id: <b08314fa734f681e7f808e5b487ec8ba186dd2a0.1585651678.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585651678.git.mchehab+huawei@kernel.org>
 References: <cover.1585651678.git.mchehab+huawei@kernel.org>
@@ -59,55 +57,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Let's place the main API selections at the media/Kconfig file,
-as this way we can better organize things.
+Most systems don't need support for those, while others only
+need those, instead of the others.
+
+So, add an option to filter in/out platform drivers.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/Kconfig    | 9 +++++++++
- drivers/media/mc/Kconfig | 9 ---------
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ drivers/media/Kconfig | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index f14b583c9ee1..9c1de28ef070 100644
+index 9dfea5c4b6ab..2b6ea8beb919 100644
 --- a/drivers/media/Kconfig
 +++ b/drivers/media/Kconfig
-@@ -136,6 +136,15 @@ config VIDEO_DEV
- 	prompt "Video4Linux core" if !(MEDIA_HYBRID_USB || MEDIA_HYBRID_PCI)
- 	default MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_RADIO_SUPPORT || MEDIA_SDR_SUPPORT || MEDIA_PLATFORM_SUPPORT || MEDIA_TEST_SUPPORT || MEDIA_HYBRID_USB || MEDIA_HYBRID_PCI
+@@ -87,6 +87,18 @@ config MEDIA_CEC_SUPPORT
+ 	  Say Y when you have an HDMI receiver, transmitter or a USB CEC
+ 	  adapter that supports HDMI CEC.
  
-+config MEDIA_CONTROLLER
-+	bool "Media Controller API"
-+	default MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_DIGITAL_TV_SUPPORT || MEDIA_PLATFORM_SUPPORT
++config MEDIA_PLATFORM_SUPPORT
++	bool "Platform-specific devices support"
 +	help
-+	  Enable the media controller API used to query media devices internal
-+	  topology and configure it dynamically.
++	  Enable support for complex cameras, codecs, and other hardware
++	  that are integrated at the CPU, GPU or on Image Signalling Processor
++	  and don't use PCI, USB or Firewire buses.
 +
-+	  This API is mostly used by camera interfaces in embedded platforms.
++	  This is found on Embedded hardware (SoC), on V4L2 codecs and
++	  on some GPU and newer CPU chipsets.
 +
- #
- # DVB Core
- #	Only enables if one of DTV is selected
-diff --git a/drivers/media/mc/Kconfig b/drivers/media/mc/Kconfig
-index e740ace54d7f..002a918c4c75 100644
---- a/drivers/media/mc/Kconfig
-+++ b/drivers/media/mc/Kconfig
-@@ -5,15 +5,6 @@
- #	Selectable only for webcam/grabbers, as other drivers don't use it
- #
++	  Say Y when you want to be able so see such devices.
++
+ source "drivers/media/cec/Kconfig"
  
--config MEDIA_CONTROLLER
--	bool "Media Controller API"
--	default MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_DIGITAL_TV_SUPPORT || MEDIA_PLATFORM_SUPPORT
--	help
--	  Enable the media controller API used to query media devices internal
--	  topology and configure it dynamically.
+ source "drivers/media/mc/Kconfig"
+@@ -161,15 +173,14 @@ source "drivers/media/dvb-core/Kconfig"
+ 
+ comment "Media drivers"
+ 
+-#
+-# V4L platform/mem2mem drivers
+-#
 -
--	  This API is mostly used by camera interfaces in embedded platforms.
--
- config MEDIA_CONTROLLER_DVB
- 	bool "Enable Media controller for DVB (EXPERIMENTAL)"
- 	depends on MEDIA_CONTROLLER && DVB_CORE
+ source "drivers/media/usb/Kconfig"
+ source "drivers/media/pci/Kconfig"
++source "drivers/media/radio/Kconfig"
++
++if MEDIA_PLATFORM_SUPPORT
+ source "drivers/media/platform/Kconfig"
+ source "drivers/media/mmc/Kconfig"
+-source "drivers/media/radio/Kconfig"
++endif
+ 
+ comment "Supported FireWire (IEEE 1394) Adapters"
+ 	depends on DVB_CORE && FIREWIRE
 -- 
 2.25.1
 
