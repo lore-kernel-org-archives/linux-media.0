@@ -2,190 +2,113 @@ Return-Path: <SRS0=pkrO=5Q=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E59E1C2D0E8
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:11:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4E25C43331
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BD15620838
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:11:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93A05208FE
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1585653134;
+	bh=b7F4ManG231nLhGoUOlm5eaq1cStjMJuBexokf885pU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=bfSHoFOCXXfUPeR1Ww2Kg7vJiX87bYsSbXiBxEBI05yiVL+OEbkhhD32PVImlozXC
+	 f2IeLGOtaoHY4HK0seYtfmv2BvopdHt1aNbGg9V61Jv6LF1Fa7B1xtULqsMjCn+Ra8
+	 D6pu5eOOrX1LBVctawlbIVQo5rPNJM5OFEx2LrmA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730521AbgCaLK7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Mar 2020 07:10:59 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:48552 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730380AbgCaLK7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Mar 2020 07:10:59 -0400
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1730577AbgCaLMO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Mar 2020 07:12:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57802 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730541AbgCaLMN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 31 Mar 2020 07:12:13 -0400
+Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id BD454634C89;
-        Tue, 31 Mar 2020 14:10:19 +0300 (EEST)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1jJEmg-0001HJ-Pk; Tue, 31 Mar 2020 14:10:18 +0300
-Date:   Tue, 31 Mar 2020 14:10:18 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
-        helen.koike@collabora.com, digetx@gmail.com, sboyd@kernel.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, laurent.pinchart@ideasonboard.com
-Subject: Re: [RFC PATCH v5 6/9] media: tegra: Add Tegra210 Video input driver
-Message-ID: <20200331111018.GJ2394@valkosipuli.retiisi.org.uk>
-References: <1584985955-19101-1-git-send-email-skomatineni@nvidia.com>
- <1584985955-19101-7-git-send-email-skomatineni@nvidia.com>
- <20200325110358.GB853@valkosipuli.retiisi.org.uk>
- <8bc44545-7d1e-0e37-db27-d37784679574@xs4all.nl>
- <20200331103215.GI2394@valkosipuli.retiisi.org.uk>
- <ba37eb84-392c-3767-57f6-d297b0ab79a3@xs4all.nl>
+        by mail.kernel.org (Postfix) with ESMTPSA id 4456D20B80;
+        Tue, 31 Mar 2020 11:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585653133;
+        bh=b7F4ManG231nLhGoUOlm5eaq1cStjMJuBexokf885pU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bmbf+yYbl343naSXLoDFZcwrCzcTAJFtFPxHNnHtkB3qG0h1UwyScNesGJVr/HstG
+         wtAUEdVXkRhTi8bvVQBT20A6LrhAVVUY1Aj46XfHwTB3H6knsUmzvibdQ9+/2cJl5Y
+         pfCeJLNhDbH3n2OtWjMJKThd9tGmlLqdJpIbm1w0=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jJEoV-002bq4-3R; Tue, 31 Mar 2020 13:12:11 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH v4 04/33] media: pci: move VIDEO_PCI_SKELETON to a different Kconfig
+Date:   Tue, 31 Mar 2020 13:11:40 +0200
+Message-Id: <e5b9c09273223b7a9c4b9b94fc4919b216c8e15b.1585651678.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1585651678.git.mchehab+huawei@kernel.org>
+References: <cover.1585651678.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ba37eb84-392c-3767-57f6-d297b0ab79a3@xs4all.nl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+The V4L2 PCI skeleton is not part of the V4L2 core. Move it
+to appear together with the other PCI drivers, at the end,
+as this is something that normal users don't even need to
+bother.
 
-On Tue, Mar 31, 2020 at 12:56:57PM +0200, Hans Verkuil wrote:
-> On 3/31/20 12:32 PM, Sakari Ailus wrote:
-> > Hi Hans,
-> > 
-> > On Mon, Mar 30, 2020 at 12:59:15PM +0200, Hans Verkuil wrote:
-> >> On 3/25/20 12:03 PM, Sakari Ailus wrote:
-> >>> Hi Sowjanya,
-> >>>
-> >>> Thanks for the patchset.
-> >>>
-> >>> On Mon, Mar 23, 2020 at 10:52:32AM -0700, Sowjanya Komatineni wrote:
-> >>>> Tegra210 contains a powerful Video Input (VI) hardware controller
-> >>>> which can support up to 6 MIPI CSI camera sensors.
-> >>>>
-> >>>> Each Tegra CSI port can be one-to-one mapped to VI channel and can
-> >>>> capture from an external camera sensor connected to CSI or from
-> >>>> built-in test pattern generator.
-> >>>>
-> >>>> Tegra210 supports built-in test pattern generator from CSI to VI.
-> >>>>
-> >>>> This patch adds a V4L2 media controller and capture driver support
-> >>>> for Tegra210 built-in CSI to VI test pattern generator.
-> >>>>
-> >>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> >>>> ---
-> >>>>  drivers/staging/media/Kconfig              |    2 +
-> >>>>  drivers/staging/media/Makefile             |    1 +
-> >>>>  drivers/staging/media/tegra/Kconfig        |   10 +
-> >>>>  drivers/staging/media/tegra/Makefile       |    8 +
-> >>>>  drivers/staging/media/tegra/TODO           |   10 +
-> >>>>  drivers/staging/media/tegra/tegra-common.h |  263 +++++++
-> >>>>  drivers/staging/media/tegra/tegra-csi.c    |  522 ++++++++++++++
-> >>>>  drivers/staging/media/tegra/tegra-csi.h    |  118 ++++
-> >>>>  drivers/staging/media/tegra/tegra-vi.c     | 1058 ++++++++++++++++++++++++++++
-> >>>>  drivers/staging/media/tegra/tegra-vi.h     |   83 +++
-> >>>>  drivers/staging/media/tegra/tegra-video.c  |  129 ++++
-> >>>>  drivers/staging/media/tegra/tegra-video.h  |   32 +
-> >>>>  drivers/staging/media/tegra/tegra210.c     |  754 ++++++++++++++++++++
-> >>>>  drivers/staging/media/tegra/tegra210.h     |  192 +++++
-> >>>
-> >>> Why staging? Are there reasons not to aim this to the kernel proper right
-> >>> away? If you only support TPG, the driver may not have too many (if any)
-> >>> real users anyway.
-> >>>
-> >>>>  14 files changed, 3182 insertions(+)
-> >>>>  create mode 100644 drivers/staging/media/tegra/Kconfig
-> >>>>  create mode 100644 drivers/staging/media/tegra/Makefile
-> >>>>  create mode 100644 drivers/staging/media/tegra/TODO
-> >>>>  create mode 100644 drivers/staging/media/tegra/tegra-common.h
-> >>>>  create mode 100644 drivers/staging/media/tegra/tegra-csi.c
-> >>>>  create mode 100644 drivers/staging/media/tegra/tegra-csi.h
-> >>>>  create mode 100644 drivers/staging/media/tegra/tegra-vi.c
-> >>>>  create mode 100644 drivers/staging/media/tegra/tegra-vi.h
-> >>>>  create mode 100644 drivers/staging/media/tegra/tegra-video.c
-> >>>>  create mode 100644 drivers/staging/media/tegra/tegra-video.h
-> >>>>  create mode 100644 drivers/staging/media/tegra/tegra210.c
-> >>>>  create mode 100644 drivers/staging/media/tegra/tegra210.h
-> >>>>
-> >>
-> >> <snip>
-> >>
-> >>>> +static int tegra_channel_g_input(struct file *file, void *priv,
-> >>>> +				 unsigned int *i)
-> >>>> +{
-> >>>> +	*i = 0;
-> >>>> +	return 0;
-> >>>> +}
-> >>>> +
-> >>>> +static int tegra_channel_s_input(struct file *file, void *priv,
-> >>>> +				 unsigned int input)
-> >>>> +{
-> >>>> +	if (input > 0)
-> >>>> +		return -EINVAL;
-> >>>> +
-> >>>> +	return 0;
-> >>>> +}
-> >>>
-> >>> Please see patchset on topic "v4l2-dev/ioctl: Add V4L2_CAP_IO_MC" on
-> >>> linux-media; it's relevant here, too.
-> >>
-> >> No, it isn't. The pipeline is controlled by the driver, not by userspace.
-> >> This is a regular video capture driver, not an ISP driver.
-> > 
-> > I don't think that really makes a difference, whether a device is an ISP or
-> > not, but instead what does is whether there is something to control in its
-> > pipeline that cannot be generally done through the regular V4L2 interface.
-> > Even plain CSI-2 receiver drivers should be media device centric these days
-> > as doing otherwise excludes using a range of sensor drivers with them,
-> > including any possible future support for e.g. sensor embedded data.
-> > 
-> 
-> We've been back and forth on this before for this driver. I see no reason to make things
-> complicated, these are simple video pipelines for video capture. Making this media
-> device centric means that existing software using the BSP version of this driver require
-> a full rewrite, which is not desirable.
-> 
-> If we are going to require CSI receiver drivers to be media centric, then that's a
-> major departure of existing practice. And something that needs to be discussed first,
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/pci/Kconfig       | 10 ++++++++++
+ drivers/media/v4l2-core/Kconfig | 10 ----------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-I'd be happy to discuss that.
-
-Either way, the current design is problematic as it excludes a range of
-camera sensors being used with the driver --- addressing of which requires
-converting the driver MC centric. If the driver is merged to mainline, then
-the user might face a Kconfig option or a module parameter to choose
-between the two --- this defines uAPI behaviour after all.
-
-The only way to avoid that in the future is to make it MC-centric right
-away.
-
-> since that will require that support for each csi receiver driver is added to libcamera.
-> Is libcamera ready for that? Are common applications using libcamera yet?
-> 
-> Obviously, if NVIDIA decides that this is worth the effort, then I have no objection.
-> But I don't think it is something we should require at this stage.
-
-Works for me. But in that case NVIDIA should also be aware that doing so
-has consequences.
-
-We also haven't discussed what to do with old V4L2-centric drivers which
-you'd use with sensors that expose their own subdevs. The proportion of all
-sensors might not be large currently but it is almost certainly bound to
-grow in the future.
-
-FWIW, Intel ipu3-cio2 CSI-2 receiver driver is MC-centric e.g. for the
-above reasons. Libcamera supports it currently. I'll let Laurent (cc'd)
-comment on the details.
-
+diff --git a/drivers/media/pci/Kconfig b/drivers/media/pci/Kconfig
+index dcb3719f440e..9336f8446cf0 100644
+--- a/drivers/media/pci/Kconfig
++++ b/drivers/media/pci/Kconfig
+@@ -56,5 +56,15 @@ endif
+ 
+ source "drivers/media/pci/intel/ipu3/Kconfig"
+ 
++config VIDEO_PCI_SKELETON
++	tristate "Skeleton PCI V4L2 driver"
++	depends on PCI
++	depends on SAMPLES
++	depends on VIDEO_V4L2 && VIDEOBUF2_CORE
++	depends on VIDEOBUF2_MEMOPS && VIDEOBUF2_DMA_CONTIG
++	help
++	  Enable build of the skeleton PCI driver, used as a reference
++	  when developing new drivers.
++
+ endif #MEDIA_PCI_SUPPORT
+ endif #PCI
+diff --git a/drivers/media/v4l2-core/Kconfig b/drivers/media/v4l2-core/Kconfig
+index 39e3fb30ba0b..26276b257eae 100644
+--- a/drivers/media/v4l2-core/Kconfig
++++ b/drivers/media/v4l2-core/Kconfig
+@@ -31,16 +31,6 @@ config VIDEO_FIXED_MINOR_RANGES
+ 
+ 	  When in doubt, say N.
+ 
+-config VIDEO_PCI_SKELETON
+-	tristate "Skeleton PCI V4L2 driver"
+-	depends on PCI
+-	depends on SAMPLES
+-	depends on VIDEO_V4L2 && VIDEOBUF2_CORE
+-	depends on VIDEOBUF2_MEMOPS && VIDEOBUF2_DMA_CONTIG
+-	help
+-	  Enable build of the skeleton PCI driver, used as a reference
+-	  when developing new drivers.
+-
+ # Used by drivers that need tuner.ko
+ config VIDEO_TUNER
+ 	tristate
 -- 
-Kind regards,
+2.25.1
 
-Sakari Ailus
