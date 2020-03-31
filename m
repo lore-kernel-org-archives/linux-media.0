@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 641BFC2D0E8
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E78E4C2D0E8
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 31BD221473
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE5A9208E4
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585653136;
-	bh=g9SDFwMCOXN9T+MEybGY91gbGwYdIY6mnu3Zi0N22aE=;
+	s=default; t=1585653138;
+	bh=C9Z7EepmBd0K/UNQM/LApQwNvjG+IdQVaZgzbAJl5hU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vnv6G0LhZ5/RMn2pF5yShBS2rSTmOinZHt39xm5T/ha5Astv549YPv3VvEbitSojy
-	 AMSAW4JEOQkhzU52shmh4FN1WLHWo9YacVo08DGQacgCKKxUXqRDUDMY2HH/9qqmb3
-	 B5LIbKMowVwuCfUiu+eVMfGu/aztJlhPmNt6MRFc=
+	b=vynWpc+/dKXuRiwPzzboCVqPIWqSSvRNGiZFJckyeUpGBTWo4cQ2juVnKh5BElW2w
+	 /ssKAfidaEzAl7ADC1oI3NCwL+TDR91kYf0OKYb1bpgxNzyTSXGg0EnGJhDYHL7eBK
+	 tOL8wCD4+xiGecMaYcX6gf/Jn5XpUDnxkA574mXU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730644AbgCaLMP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Mar 2020 07:12:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57912 "EHLO mail.kernel.org"
+        id S1730681AbgCaLMR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Mar 2020 07:12:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57978 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730628AbgCaLMP (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1730635AbgCaLMP (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 31 Mar 2020 07:12:15 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 898AB21973;
+        by mail.kernel.org (Postfix) with ESMTPSA id A937C21D91;
         Tue, 31 Mar 2020 11:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585653133;
-        bh=g9SDFwMCOXN9T+MEybGY91gbGwYdIY6mnu3Zi0N22aE=;
+        bh=C9Z7EepmBd0K/UNQM/LApQwNvjG+IdQVaZgzbAJl5hU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g2iyM3a+BlmRq4EvBsTdV3uYqyOMBPhlxuu5nxHyqLyrQcNX/AeRPV8/XQx8xXv6I
-         vaIoPAv33QNE1rUZM8qqEn6RD7HySB9BcFajiAag3D5Ua/W5XiWJwoKo88ZAC305QC
-         2taeA7q8VKl8qQh1yA2Ob4vOJtiihVFsZNn/4OS8=
+        b=LLbUi3RZVicbhlIskwDi2ia/S4wk72HJWTvte71sxzmqgGPcJXgZZqrGoRvNoHIYt
+         yyJcxn511OayQbMrX+j5vY7yLw7brccaGMK01VPdg6BMmIIdE2dxTSA0j9W0EL0Yzj
+         KqeWZuuacS4Ltkiu4iC/bYBlcDkV2y0QSL+UUt4E=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jJEoV-002bri-Q3; Tue, 31 Mar 2020 13:12:11 +0200
+        id 1jJEoV-002bs8-V0; Tue, 31 Mar 2020 13:12:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH v4 24/33] media: Kconfig: move CEC-specific options to cec/Kconfig
-Date:   Tue, 31 Mar 2020 13:12:00 +0200
-Message-Id: <9821a9a3f733336f8b30a5a8fade3a4b126543ea.1585651678.git.mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH v4 29/33] media: Kconfig: move the position of sub-driver autoselection
+Date:   Tue, 31 Mar 2020 13:12:05 +0200
+Message-Id: <f173e2f6917289a184cf57aba876aebe51438806.1585651678.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585651678.git.mchehab+huawei@kernel.org>
 References: <cover.1585651678.git.mchehab+huawei@kernel.org>
@@ -58,57 +57,92 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There's no need to have the CEC definitions inside the
-media Kconfig, as the Kconfig parser doesn't require
-symbols to be declared before their usages.
-
-With that, the main Kconfig menu becomes cleaner.
+Let's place the sub-driver-autoselection option just below
+the device filtering one, as it also controls a filter menu,
+with is not even visible if !EXPERT && !EMBEDDED.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/Kconfig     |  9 ---------
- drivers/media/cec/Kconfig | 10 ++++++++++
- 2 files changed, 10 insertions(+), 9 deletions(-)
+ drivers/media/Kconfig | 50 +++++++++++++++++++++----------------------
+ 1 file changed, 25 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index 79aa83a966db..9cc528e0b120 100644
+index c95b534c5d40..db918a89e40e 100644
 --- a/drivers/media/Kconfig
 +++ b/drivers/media/Kconfig
-@@ -3,15 +3,6 @@
- # Multimedia device configuration
+@@ -33,6 +33,28 @@ config MEDIA_SUPPORT_FILTER
+ 	   needed to support media drivers will be enabled. Also, all
+ 	   media device drivers should be shown.
+ 
++config MEDIA_SUBDRV_AUTOSELECT
++	bool "Autoselect ancillary drivers (tuners, sensors, i2c, spi, frontends)"
++	depends on HAS_IOMEM
++	select I2C
++	select I2C_MUX
++	default y if MEDIA_SUPPORT_FILTER
++	help
++	  By default, a media driver auto-selects all possible ancillary
++	  devices such as tuners, sensors, video encoders/decoders and
++	  frontends, that are used by any of the supported devices.
++
++	  This is generally the right thing to do, except when there
++	  are strict constraints with regards to the kernel size,
++	  like on embedded systems.
++
++	  Use this option with care, as deselecting ancillary drivers which
++	  are, in fact, necessary will result in the lack of the needed
++	  functionality for your device (it may not tune or may not have
++	  the needed demodulators).
++
++	  If unsure say Y.
++
+ menu "Media device types"
+ 	visible if MEDIA_SUPPORT_FILTER
+ 
+@@ -197,40 +219,18 @@ source "drivers/media/firewire/Kconfig"
+ 
+ endmenu
+ 
+-menu "Media ancillary drivers (tuners, sensors, i2c, spi, frontends)"
+-
+ #
+ # Ancillary drivers (tuners, i2c, spi, frontends)
  #
  
--config CEC_CORE
--	tristate
+-config MEDIA_SUBDRV_AUTOSELECT
+-	bool "Autoselect ancillary drivers (tuners, sensors, i2c, spi, frontends)"
+-	depends on MEDIA_ANALOG_TV_SUPPORT || MEDIA_DIGITAL_TV_SUPPORT || MEDIA_CAMERA_SUPPORT || MEDIA_SDR_SUPPORT
+-	depends on HAS_IOMEM
+-	select I2C
+-	select I2C_MUX
+-	default y if !EMBEDDED
+-	help
+-	  By default, a media driver auto-selects all possible ancillary
+-	  devices such as tuners, sensors, video encoders/decoders and
+-	  frontends, that are used by any of the supported devices.
 -
--config CEC_NOTIFIER
--	bool
+-	  This is generally the right thing to do, except when there
+-	  are strict constraints with regards to the kernel size,
+-	  like on embedded systems.
 -
--config CEC_PIN
--	bool
+-	  Use this option with care, as deselecting ancillary drivers which
+-	  are, in fact, necessary will result in the lack of the needed
+-	  functionality for your device (it may not tune or may not have
+-	  the needed demodulators).
 -
- source "drivers/media/rc/Kconfig"
+-	  If unsure say Y.
+-
+ config MEDIA_HIDE_ANCILLARY_SUBDRV
+ 	bool
+ 	depends on MEDIA_SUBDRV_AUTOSELECT && !COMPILE_TEST && !EXPERT
+ 	default y
  
- menuconfig MEDIA_SUPPORT
-diff --git a/drivers/media/cec/Kconfig b/drivers/media/cec/Kconfig
-index c01919713ab9..31417feaa213 100644
---- a/drivers/media/cec/Kconfig
-+++ b/drivers/media/cec/Kconfig
-@@ -1,4 +1,14 @@
- # SPDX-License-Identifier: GPL-2.0-only
++menu "Media ancillary drivers"
++	visible if !MEDIA_HIDE_ANCILLARY_SUBDRV
 +
-+config CEC_CORE
-+	tristate
-+
-+config CEC_NOTIFIER
-+	bool
-+
-+config CEC_PIN
-+	bool
-+
- config MEDIA_CEC_RC
- 	bool "HDMI CEC RC integration"
- 	depends on CEC_CORE && RC_CORE
+ config MEDIA_ATTACH
+ 	bool
+ 	depends on MEDIA_ANALOG_TV_SUPPORT || MEDIA_DIGITAL_TV_SUPPORT || MEDIA_RADIO_SUPPORT
 -- 
 2.25.1
 
