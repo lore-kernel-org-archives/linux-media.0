@@ -7,46 +7,48 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D2A3C2D0E8
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F2BCC2BA18
 	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E88AB214D8
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6702B20838
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1585653160;
-	bh=DALzt/FJfquJVMbS1+ZsDlPO6AUGLZN1JoXKZscQY/w=;
+	bh=rnaWp91KUyfBVUu+eVZ8F5K5c1i5KXQ1a2DX5ze5FoA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=z9W1D0ggHutNoyzhJ1tULijx1699U7tCeq2orBGrOlmmZJCQXmZvh5c3zccLZKxyw
-	 hjOThVMZxP46j63rA4N0RMV3DEe3Wg6+QaGy9RcZRUCzs+2YPzrmEYT9y06XXPIhjy
-	 HNfCEgMd69zYWpiStJqR4YWJEf1VBEZDrT5kCLHs=
+	b=N4IgoT3VM/9tM7VwV/heuKvASRBeJ4m2YUDUN32MtDsgmS0oXeL6SDES66vl8lege
+	 R2UnfY/m+4lFy4gqdpd/THBRMfkL2juDxqR3IrMmpoAHND18/j8td/P74M0HxketKT
+	 fCEIo+YjEQK5OCoElM2YR8KLVLVlhf0zf2Sppofk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730607AbgCaLMi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Mar 2020 07:12:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57934 "EHLO mail.kernel.org"
+        id S1730706AbgCaLMj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Mar 2020 07:12:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57906 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730598AbgCaLMO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1730580AbgCaLMO (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 31 Mar 2020 07:12:14 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5599721655;
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C9CD214D8;
         Tue, 31 Mar 2020 11:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585653133;
-        bh=DALzt/FJfquJVMbS1+ZsDlPO6AUGLZN1JoXKZscQY/w=;
+        bh=rnaWp91KUyfBVUu+eVZ8F5K5c1i5KXQ1a2DX5ze5FoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y1K5Yd+H3KLgver58wNIGGRtc6/neEUwv2clYcYzpXFIIXMfuGGJWzeXIRfxirqQf
-         n/UmTbR/imLXyhXCev1zJKD5xk/IGD5WaDHWSamtGyergBZZjztrnDa8PYODrgmErt
-         M/xYxmXabMEPSDnXj851GQzZhyQPTB6BLPxMGGok=
+        b=k8GqThGJkyk64k49hbMvMXNHE9Ff1CdcaWWi/z1PxQTSZ7U2oIcXUY4snKLqpjO5K
+         4hYyOZl0cLJ3koIiaiHPOx8f/6tQru74fxdF8UHe8ogVio/6LZWQMCqophlXwMoN4s
+         ELYFBPHKSPw12UXQfvWKEx7HycYUZhQuSa1bW7+U=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jJEoV-002bqv-FE; Tue, 31 Mar 2020 13:12:11 +0200
+        id 1jJEoV-002bqW-9i; Tue, 31 Mar 2020 13:12:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v4 14/33] media: Kconfig: simplify some dependencies
-Date:   Tue, 31 Mar 2020 13:11:50 +0200
-Message-Id: <9b0c6c97a54e471e3d773256cd42fbc0e53ee368.1585651678.git.mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        linux1394-devel@lists.sourceforge.net
+Subject: [PATCH v4 09/33] media: Kconfig: mode firewire comment to firewire/Kconfig
+Date:   Tue, 31 Mar 2020 13:11:45 +0200
+Message-Id: <29dd262e7aba56b69a774e85c64b7ea0b729cadb.1585651678.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585651678.git.mchehab+huawei@kernel.org>
 References: <cover.1585651678.git.mchehab+huawei@kernel.org>
@@ -57,36 +59,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-both DVB_CORE and VIDEO_DEV already depends on MEDIA_SUPPORT,
-as they're below an if block.
-
-So, remove this double dependency.
+This comment should only be visible if the DVB_FIREDTV
+config will show.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/Kconfig | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/Kconfig          | 2 --
+ drivers/media/firewire/Kconfig | 5 ++++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index dc0cc42d48ad..f6763d02f1be 100644
+index f37c0c26fa65..dc0cc42d48ad 100644
 --- a/drivers/media/Kconfig
 +++ b/drivers/media/Kconfig
-@@ -125,7 +125,6 @@ source "drivers/media/mc/Kconfig"
+@@ -192,8 +192,6 @@ source "drivers/media/test_drivers/Kconfig"
+ source "drivers/media/mmc/Kconfig"
+ endif
  
- config VIDEO_DEV
- 	tristate
--	depends on MEDIA_SUPPORT
- 	default MEDIA_CAMERA_SUPPORT || MEDIA_ANALOG_TV_SUPPORT || MEDIA_RADIO_SUPPORT || MEDIA_SDR_SUPPORT || MEDIA_PLATFORM_SUPPORT
+-comment "Supported FireWire (IEEE 1394) Adapters"
+-	depends on DVB_CORE && FIREWIRE
+ source "drivers/media/firewire/Kconfig"
  
- config VIDEO_V4L2_SUBDEV_API
-@@ -146,7 +145,6 @@ source "drivers/media/v4l2-core/Kconfig"
+ # Common driver options
+diff --git a/drivers/media/firewire/Kconfig b/drivers/media/firewire/Kconfig
+index e7837da5905b..0c1f326f581f 100644
+--- a/drivers/media/firewire/Kconfig
++++ b/drivers/media/firewire/Kconfig
+@@ -1,7 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++if DVB_CORE && FIREWIRE
++comment "FireWire (IEEE 1394) Adapters"
++
+ config DVB_FIREDTV
+ 	tristate "FireDTV and FloppyDTV"
+-	depends on DVB_CORE && FIREWIRE
+ 	help
+ 	  Support for DVB receivers from Digital Everywhere
+ 	  which are connected via IEEE 1394 (FireWire).
+@@ -18,3 +20,4 @@ config DVB_FIREDTV_INPUT
+ 	def_bool INPUT = y || (INPUT = m && DVB_FIREDTV = m)
  
- config DVB_CORE
- 	tristate
--	depends on MEDIA_SUPPORT
- 	depends on MEDIA_DIGITAL_TV_SUPPORT
- 	depends on (I2C || I2C=n)
- 	default y
+ endif # DVB_FIREDTV
++endif # DVB_CORE && FIREWIRE
 -- 
 2.25.1
 
