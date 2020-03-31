@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E78E4C2D0E8
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9514AC2D0F4
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BE5A9208E4
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C381208E4
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585653138;
-	bh=C9Z7EepmBd0K/UNQM/LApQwNvjG+IdQVaZgzbAJl5hU=;
+	s=default; t=1585653140;
+	bh=/aAgcjSIop8glFXprRxhOmTmMcrZBQWFbThIdkc1ZFc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vynWpc+/dKXuRiwPzzboCVqPIWqSSvRNGiZFJckyeUpGBTWo4cQ2juVnKh5BElW2w
-	 /ssKAfidaEzAl7ADC1oI3NCwL+TDR91kYf0OKYb1bpgxNzyTSXGg0EnGJhDYHL7eBK
-	 tOL8wCD4+xiGecMaYcX6gf/Jn5XpUDnxkA574mXU=
+	b=Bpb5kt6zayz/4ZBm90Jz5xeH9h4/M7AGTvJSDAIs1fVYIpQriIEOv4BJugppaA82p
+	 YPO3TLMGApyso/QaTZcGlG0MuMKoEUsYP8lEg93zkoc4BqFpxOvNcXudQHacwiTTHp
+	 unVnriomFGEv2GZUpUokkVsI/oX2uSNyio64gT0k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730681AbgCaLMR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730677AbgCaLMR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 31 Mar 2020 07:12:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57978 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:57984 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730635AbgCaLMP (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1730636AbgCaLMP (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 31 Mar 2020 07:12:15 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A937C21D91;
+        by mail.kernel.org (Postfix) with ESMTPSA id B9CD6221EA;
         Tue, 31 Mar 2020 11:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585653133;
-        bh=C9Z7EepmBd0K/UNQM/LApQwNvjG+IdQVaZgzbAJl5hU=;
+        bh=/aAgcjSIop8glFXprRxhOmTmMcrZBQWFbThIdkc1ZFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LLbUi3RZVicbhlIskwDi2ia/S4wk72HJWTvte71sxzmqgGPcJXgZZqrGoRvNoHIYt
-         yyJcxn511OayQbMrX+j5vY7yLw7brccaGMK01VPdg6BMmIIdE2dxTSA0j9W0EL0Yzj
-         KqeWZuuacS4Ltkiu4iC/bYBlcDkV2y0QSL+UUt4E=
+        b=AjrGuCH7zYGC3ZpiSRDAzTXvkbX7VoF4kDH/xRHPJ7VptaV85JGIEhdWg2UDpEkRO
+         w9cKwrqWpNgQEwTczwYxnmX0C5QJKAMwjZgTmDGFUadb+/ky5+HW1W6YYwMDdi+E3p
+         ZpIDaYLmouyBGzlPXylycJq+gHUfvTbY7JGlrfN4=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jJEoV-002bs8-V0; Tue, 31 Mar 2020 13:12:11 +0200
+        id 1jJEoW-002bsI-0k; Tue, 31 Mar 2020 13:12:12 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v4 29/33] media: Kconfig: move the position of sub-driver autoselection
-Date:   Tue, 31 Mar 2020 13:12:05 +0200
-Message-Id: <f173e2f6917289a184cf57aba876aebe51438806.1585651678.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v4 31/33] media: Kconfig: Better organize the per-API options
+Date:   Tue, 31 Mar 2020 13:12:07 +0200
+Message-Id: <0bf342ef48f5676b61e98baed192af9e9822d4fa.1585651678.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585651678.git.mchehab+huawei@kernel.org>
 References: <cover.1585651678.git.mchehab+huawei@kernel.org>
@@ -57,92 +57,73 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Let's place the sub-driver-autoselection option just below
-the device filtering one, as it also controls a filter menu,
-with is not even visible if !EXPERT && !EMBEDDED.
+After this change, the menu is displayed like above.
+
+1) When filtering is not active:
+
+    --- Multimedia support
+        [ ]   Filter devices by their types
+        [*]   Autoselect ancillary drivers (tuners, sensors, i2c, spi, frontends)
+              Media core support  --->
+              Video4Linux options  --->
+              Media controller options  --->
+              Digital TV options  --->
+              HDMI CEC options  --->
+              Media drivers  --->
+
+2) When filtering is active:
+
+    --- Multimedia support
+        [*]   Filter devices by their types
+        [*]   Autoselect ancillary drivers (tuners, sensors, i2c, spi, frontends)
+              Media device types  --->
+              Video4Linux options  --->
+              Media controller options  --->
+              Digital TV options  --->
+              HDMI CEC options  --->
+              Media drivers  --->
+
+The per-API menu will only be displayed if the corresponding
+core support is enabled.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/Kconfig | 50 +++++++++++++++++++++----------------------
- 1 file changed, 25 insertions(+), 25 deletions(-)
+ drivers/media/Kconfig | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index c95b534c5d40..db918a89e40e 100644
+index 913903c8e942..382366b8ab46 100644
 --- a/drivers/media/Kconfig
 +++ b/drivers/media/Kconfig
-@@ -33,6 +33,28 @@ config MEDIA_SUPPORT_FILTER
- 	   needed to support media drivers will be enabled. Also, all
- 	   media device drivers should be shown.
+@@ -191,10 +191,27 @@ endmenu # Media core support
+ #
+ # Extra per-media API core functionality
  
-+config MEDIA_SUBDRV_AUTOSELECT
-+	bool "Autoselect ancillary drivers (tuners, sensors, i2c, spi, frontends)"
-+	depends on HAS_IOMEM
-+	select I2C
-+	select I2C_MUX
-+	default y if MEDIA_SUPPORT_FILTER
-+	help
-+	  By default, a media driver auto-selects all possible ancillary
-+	  devices such as tuners, sensors, video encoders/decoders and
-+	  frontends, that are used by any of the supported devices.
+-menu "Media core additional options"
++menu "Video4Linux options"
++	visible if VIDEO_DEV
 +
-+	  This is generally the right thing to do, except when there
-+	  are strict constraints with regards to the kernel size,
-+	  like on embedded systems.
+ source "drivers/media/v4l2-core/Kconfig"
++endmenu
 +
-+	  Use this option with care, as deselecting ancillary drivers which
-+	  are, in fact, necessary will result in the lack of the needed
-+	  functionality for your device (it may not tune or may not have
-+	  the needed demodulators).
++menu "Media controller options"
++	visible if MEDIA_CONTROLLER
 +
-+	  If unsure say Y.
+ source "drivers/media/mc/Kconfig"
++endmenu
 +
- menu "Media device types"
- 	visible if MEDIA_SUPPORT_FILTER
- 
-@@ -197,40 +219,18 @@ source "drivers/media/firewire/Kconfig"
- 
++menu "Digital TV options"
++	visible if DVB_CORE
++
+ source "drivers/media/dvb-core/Kconfig"
++endmenu
++
++menu "HDMI CEC options"
++	visible if CEC_CORE
++
+ source "drivers/media/cec/Kconfig"
  endmenu
  
--menu "Media ancillary drivers (tuners, sensors, i2c, spi, frontends)"
--
- #
- # Ancillary drivers (tuners, i2c, spi, frontends)
- #
- 
--config MEDIA_SUBDRV_AUTOSELECT
--	bool "Autoselect ancillary drivers (tuners, sensors, i2c, spi, frontends)"
--	depends on MEDIA_ANALOG_TV_SUPPORT || MEDIA_DIGITAL_TV_SUPPORT || MEDIA_CAMERA_SUPPORT || MEDIA_SDR_SUPPORT
--	depends on HAS_IOMEM
--	select I2C
--	select I2C_MUX
--	default y if !EMBEDDED
--	help
--	  By default, a media driver auto-selects all possible ancillary
--	  devices such as tuners, sensors, video encoders/decoders and
--	  frontends, that are used by any of the supported devices.
--
--	  This is generally the right thing to do, except when there
--	  are strict constraints with regards to the kernel size,
--	  like on embedded systems.
--
--	  Use this option with care, as deselecting ancillary drivers which
--	  are, in fact, necessary will result in the lack of the needed
--	  functionality for your device (it may not tune or may not have
--	  the needed demodulators).
--
--	  If unsure say Y.
--
- config MEDIA_HIDE_ANCILLARY_SUBDRV
- 	bool
- 	depends on MEDIA_SUBDRV_AUTOSELECT && !COMPILE_TEST && !EXPERT
- 	default y
- 
-+menu "Media ancillary drivers"
-+	visible if !MEDIA_HIDE_ANCILLARY_SUBDRV
-+
- config MEDIA_ATTACH
- 	bool
- 	depends on MEDIA_ANALOG_TV_SUPPORT || MEDIA_DIGITAL_TV_SUPPORT || MEDIA_RADIO_SUPPORT
 -- 
 2.25.1
 
