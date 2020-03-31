@@ -2,180 +2,207 @@ Return-Path: <SRS0=pkrO=5Q=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2609C43331
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 07:21:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 990BDC43331
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 07:51:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 760A920781
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 07:21:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5AE672072A
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 07:51:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="gbPi5YAr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r0NCjcuK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729682AbgCaHVB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Mar 2020 03:21:01 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:35897 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726174AbgCaHVA (ORCPT
+        id S1726595AbgCaHvN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Mar 2020 03:51:13 -0400
+Received: from mail-ua1-f41.google.com ([209.85.222.41]:39591 "EHLO
+        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727614AbgCaHvN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Mar 2020 03:21:00 -0400
-Received: from [192.168.2.10] ([46.9.234.233])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id JBCajz1YpLu1fJBCejHCjJ; Tue, 31 Mar 2020 09:20:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1585639258; bh=vFLAFhFQyb8gbOSDxO/VdFf8CdbtbKDUC1VbJ0Ed4G8=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=gbPi5YAr5hxI+IP+zZ+HYziBEXN0T2iw9gDqp91WtQMjptvSTPRUZ4z0w/kZoiQVU
-         nTPg0EUDN5XnbWKYt91gRC1SqYirOEb0PzZjNH8kmVbpHgjqc5fqvNZH+xv9oEHUrM
-         8Fq74/BqVf9GvIrRHdZ6wd0PZqhwu189HWHwc0FeF0z/WJq3i9KM67H+d24/7YI05m
-         ZRGhTqjpHabK7xpT7AGvDKqSkG70OMPqtVvDm8YmcP51AVqo24kMvAc4QLshzLPwyb
-         mIK+1byC+17cml41lF5WeDYxpjB2Lyu1c1H0IDXjFO8VXNLEHIrNffAWkt7Cp6S5C4
-         dBaiTUPDFMpwQ==
-Subject: Re: [PATCH] Update my email address in various drivers
-To:     Russell King <rmk+kernel@armlinux.org.uk>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org
-References: <E1jIV26-0005X3-RS@rmk-PC.armlinux.org.uk>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <4362392b-132d-c316-3a54-e6cc05cab659@xs4all.nl>
-Date:   Tue, 31 Mar 2020 09:20:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Tue, 31 Mar 2020 03:51:13 -0400
+Received: by mail-ua1-f41.google.com with SMTP id z7so2956903uai.6
+        for <linux-media@vger.kernel.org>; Tue, 31 Mar 2020 00:51:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=b4hdVdmrDQ8Sx6/rGCoBRwMFDZpcwR+ECN+61rfum10=;
+        b=r0NCjcuK8pFb2dLaS8WUbJIoxk2iVZPqq9+8qzLS06wnsghWrTXo8blA7/F3Ze9mpX
+         fIkB5zYJB/C9qND+2QheOCR/EL59hXqcsf3+wzpVcJs0rCQcQqPryDmm5o/Ls7dfpPIb
+         kKjbc67Ms7RPFXVF1fr/p7GI8mJFjRK9aWhBIsLqWqGQi67+N4TTnfgn2EnjHQdZDmCI
+         t7Q+xHkFybVKQANuGe/INhoq3zavDyBnCfgc2PwAWIXKMzRn/wRsDPplKN3EF0v8kZzA
+         U8SjKi60yoR5GYtYI9G+6/QbLDDWaUet04bPFF7OfmPZb1WcIDfWU9wdWt9Kes+mpeOY
+         n76g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=b4hdVdmrDQ8Sx6/rGCoBRwMFDZpcwR+ECN+61rfum10=;
+        b=YBaiQSCSdqpKLtu2s9CZvBqSzccCDJbwtvuk4pyF5ZfxZm0XLHueT7q2McQKRzge52
+         Wz64cISaycqtaOUqJb4DRGmE4tYJlKK5M1LFt9eG/a2H7iqIpmMg1Hcy2HLzxQWKXo/w
+         fYZaLUJ5FPgVqxEvE2cTFXkUlWETyBNI9S7jjNr3iGGIktUCMKj8zfx78t6JjbUCmU4Z
+         TIxJykz8kXK04Q1ZE6cV3jemyO1Mkf+5gedyh1f3fQAjpRffSdR7MypRswQ8KYzU2K5E
+         6Ch+WV4QeX4jlbrF3WYNIkcBxbm/NuMuAOfFRjNm4KKZCSUa7C1iEZNq22R0GxxdMw0j
+         Ux2A==
+X-Gm-Message-State: AGi0PuYA32rbzyDeAz4dXjHYjJb/+4JdPHLuWqL04hEfEThv0xLm06uR
+        J4gX6TaFBxDc3pgNpfAOJRrjzi65XPL4ClzpnQ7lmAPX
+X-Google-Smtp-Source: APiQypLVJ3Olx6GUwqGT2ExfgijsjA7HJZlkKvnnPk5cVu01u9dwMNxmIRI4DPTjiTxojYOCsE6PuFla27o9IvQ01KM=
+X-Received: by 2002:ab0:614c:: with SMTP id w12mr10336007uan.141.1585641071970;
+ Tue, 31 Mar 2020 00:51:11 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <E1jIV26-0005X3-RS@rmk-PC.armlinux.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfC+slg84mdYP89l6SxInCHeF3g0JtL9VqM18bDfdysIjAFPUT6OD/g1M51H/cR6bMpfTtDuuoFy2dHpRDp4BgyY7h7u/IYlu59Kzm59ciC0z0BN13Eck
- yvrPJVFXdzoYP9kSvXta9VQvTMgFCseEXD6rVcCWXpPZOQgglWaOkRsyeTyPEExASsJ0dsVWT5czOOo6QRfi98A61dWYBawRg5ZMBYvykkDfsKirYNYyFKiS
- QKu3aNNUfhNt4o/AVQIyaOrJW1dMLmCeEzSs9/6i8yuEm48Ujlgj4UFcrtKs/PoWFN9lhdpRpk0DsgNrRxH86vfJLfk8ZARnNOIHsVltDe1GpVhOmiWaLDVa
- JQOr1dWy9lf7MjKq4nytQgx0TC4zx3cCB50w2raxgFIwMCQpYGSv7Z7lCts2QwqZQbiycnNwIqPEl5Rcx2TpNJhThriuwOf78/PizDhwo+ONWCIPbnLy45bY
- GzB1iPXCx3Vx8bRwgISgeB76Au28GRYPu4vM9gSn/HCO3XgT5Y9sOoyvP3o9V/xvUWt9xD1I+mIRMWEPuqpM7K9rzChTmcSiFhDUL/4L7Q5+Y/thdbN2K9Yz
- QKIUh/odmDnuZrjkHboaA6eRZIhQMdXuX4X5hQmBf1Yxs/B3XJ1nuYfEVKWP7EFmTDAh2mv5OX8l4DFtS0gXCeCo6a/4WeJu75oCCCNw03x+8FHvapY1+4p/
- aK6S0f2dWLF2lwX7w1BCMa8wsjuxERLnsEIrkX8lhxzBaVsgA4N27FanHbO3RQHw48i7MvKZ9M/RDOgNkQLr4wt/J9fuPCJe
+From:   karthik poduval <karthik.poduval@gmail.com>
+Date:   Tue, 31 Mar 2020 00:51:01 -0700
+Message-ID: <CAFP0Ok8j-cMqtKAGfvOo89Zg=N2AXVW=AOZ2CYhRpxk2PfBg5Q@mail.gmail.com>
+Subject: [PATCH 1/4] media: staging: phy-rockchip-dphy-rx0: add rk3288 support
+ to DPHY driver
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 3/29/20 12:19 PM, Russell King wrote:
-> Globally update my email address in six files scattered through the
-> tree.
-> 
-> Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+add rk3288 support to Rockchip DPHY driver (ported over from
+https://github.com/TinkerBoard/debian_kernel.git)
 
-For media/cec files:
+Reported-by: Karthik Poduval <karthik.poduval@gmail.com>
+Signed-off-by: Karthik Poduval <karthik.poduval@gmail.com>
+---
+ .../bindings/phy/rockchip-mipi-dphy-rx0.yaml  |  1 +
+ .../phy-rockchip-dphy-rx0.c                   | 69 +++++++++++++++++++
+ 2 files changed, 70 insertions(+)
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+diff --git a/drivers/staging/media/phy-rockchip-dphy-rx0/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml
+b/drivers/staging/media/phy-rockchip-dphy-rx0/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml
+index 5dacece35702..8927c36de532 100644
+--- a/drivers/staging/media/phy-rockchip-dphy-rx0/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml
++++ b/drivers/staging/media/phy-rockchip-dphy-rx0/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml
+@@ -17,6 +17,7 @@ description: |
+ properties:
+   compatible:
+     const: rockchip,rk3399-mipi-dphy-rx0
++    const: rockchip,rk3288-mipi-dphy-rx0
 
-Regards,
+   reg:
+     maxItems: 1
+diff --git a/drivers/staging/media/phy-rockchip-dphy-rx0/phy-rockchip-dphy-rx0.c
+b/drivers/staging/media/phy-rockchip-dphy-rx0/phy-rockchip-dphy-rx0.c
+index 7c4df6d48c43..36fc1b1ee7ae 100644
+--- a/drivers/staging/media/phy-rockchip-dphy-rx0/phy-rockchip-dphy-rx0.c
++++ b/drivers/staging/media/phy-rockchip-dphy-rx0/phy-rockchip-dphy-rx0.c
+@@ -26,6 +26,15 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
 
-	Hans
++#define RK3288_GRF_SOC_CON6     0x025c
++#define RK3288_GRF_SOC_CON8     0x0264
++#define RK3288_GRF_SOC_CON9     0x0268
++#define RK3288_GRF_SOC_CON10    0x026c
++#define RK3288_GRF_SOC_CON14    0x027c
++#define RK3288_GRF_SOC_STATUS21 0x02d4
++#define RK3288_GRF_IO_VSEL      0x0380
++#define RK3288_GRF_SOC_CON15    0x03a4
++
+ #define RK3399_GRF_SOC_CON9        0x6224
+ #define RK3399_GRF_SOC_CON21        0x6254
+ #define RK3399_GRF_SOC_CON22        0x6258
+@@ -47,6 +56,19 @@ struct hsfreq_range {
+     u8 cfg_bit;
+ };
 
-> ---
->  drivers/gpu/drm/armada/armada_drv.c                 | 2 +-
->  drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c | 2 +-
->  drivers/gpu/drm/etnaviv/etnaviv_drv.c               | 2 +-
->  drivers/media/cec/cec-notifier.c                    | 2 +-
->  drivers/net/phy/swphy.c                             | 2 +-
->  include/media/cec-notifier.h                        | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/armada/armada_drv.c b/drivers/gpu/drm/armada/armada_drv.c
-> index 3df2dacf4c94..5a82a12cd105 100644
-> --- a/drivers/gpu/drm/armada/armada_drv.c
-> +++ b/drivers/gpu/drm/armada/armada_drv.c
-> @@ -389,7 +389,7 @@ static void __exit armada_drm_exit(void)
->  }
->  module_exit(armada_drm_exit);
->  
-> -MODULE_AUTHOR("Russell King <rmk+kernel@arm.linux.org.uk>");
-> +MODULE_AUTHOR("Russell King <rmk+kernel@armlinux.org.uk>");
->  MODULE_DESCRIPTION("Armada DRM Driver");
->  MODULE_LICENSE("GPL");
->  MODULE_ALIAS("platform:armada-drm");
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
-> index e8e3e9339ff9..f6f55776e43e 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
-> @@ -698,7 +698,7 @@ static struct platform_driver snd_dw_hdmi_driver = {
->  
->  module_platform_driver(snd_dw_hdmi_driver);
->  
-> -MODULE_AUTHOR("Russell King <rmk+kernel@arm.linux.org.uk>");
-> +MODULE_AUTHOR("Russell King <rmk+kernel@armlinux.org.uk>");
->  MODULE_DESCRIPTION("Synopsis Designware HDMI AHB ALSA interface");
->  MODULE_LICENSE("GPL v2");
->  MODULE_ALIAS("platform:" DRIVER_NAME);
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-> index 1f9c01be40d7..d6798f716b77 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-> @@ -739,7 +739,7 @@ static void __exit etnaviv_exit(void)
->  module_exit(etnaviv_exit);
->  
->  MODULE_AUTHOR("Christian Gmeiner <christian.gmeiner@gmail.com>");
-> -MODULE_AUTHOR("Russell King <rmk+kernel@arm.linux.org.uk>");
-> +MODULE_AUTHOR("Russell King <rmk+kernel@armlinux.org.uk>");
->  MODULE_AUTHOR("Lucas Stach <l.stach@pengutronix.de>");
->  MODULE_DESCRIPTION("etnaviv DRM Driver");
->  MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/media/cec/cec-notifier.c b/drivers/media/cec/cec-notifier.c
-> index 7cf42b133dbc..2d4f7dd7cef7 100644
-> --- a/drivers/media/cec/cec-notifier.c
-> +++ b/drivers/media/cec/cec-notifier.c
-> @@ -2,7 +2,7 @@
->  /*
->   * cec-notifier.c - notify CEC drivers of physical address changes
->   *
-> - * Copyright 2016 Russell King <rmk+kernel@arm.linux.org.uk>
-> + * Copyright 2016 Russell King.
->   * Copyright 2016-2017 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
->   */
->  
-> diff --git a/drivers/net/phy/swphy.c b/drivers/net/phy/swphy.c
-> index 53c214a22b95..774814714c82 100644
-> --- a/drivers/net/phy/swphy.c
-> +++ b/drivers/net/phy/swphy.c
-> @@ -2,7 +2,7 @@
->  /*
->   * Software PHY emulation
->   *
-> - * Code taken from fixed_phy.c by Russell King <rmk+kernel@arm.linux.org.uk>
-> + * Code taken from fixed_phy.c by Russell King.
->   *
->   * Author: Vitaly Bordug <vbordug@ru.mvista.com>
->   *         Anton Vorontsov <avorontsov@ru.mvista.com>
-> diff --git a/include/media/cec-notifier.h b/include/media/cec-notifier.h
-> index 985afea1ee36..e2b1b894aae7 100644
-> --- a/include/media/cec-notifier.h
-> +++ b/include/media/cec-notifier.h
-> @@ -2,7 +2,7 @@
->  /*
->   * cec-notifier.h - notify CEC drivers of physical address changes
->   *
-> - * Copyright 2016 Russell King <rmk+kernel@arm.linux.org.uk>
-> + * Copyright 2016 Russell King.
->   * Copyright 2016-2017 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
->   */
->  
-> 
++static const struct hsfreq_range rk3288_mipidphy_hsfreq_ranges[] = {
++    {  89, 0x00}, {  99, 0x10}, { 109, 0x20}, { 129, 0x01},
++    { 139, 0x11}, { 149, 0x21}, { 169, 0x02}, { 179, 0x12},
++    { 199, 0x22}, { 219, 0x03}, { 239, 0x13}, { 249, 0x23},
++    { 269, 0x04}, { 299, 0x14}, { 329, 0x05}, { 359, 0x15},
++    { 399, 0x25}, { 449, 0x06}, { 499, 0x16}, { 549, 0x07},
++    { 599, 0x17}, { 649, 0x08}, { 699, 0x18}, { 749, 0x09},
++    { 799, 0x19}, { 849, 0x29}, { 899, 0x39}, { 949, 0x0a},
++    { 999, 0x1a}, {1049, 0x2a}, {1099, 0x3a}, {1149, 0x0b},
++    {1199, 0x1b}, {1249, 0x2b}, {1299, 0x3b}, {1349, 0x0c},
++    {1399, 0x1c}, {1449, 0x2c}, {1500, 0x3c}
++};
++
+ static const struct hsfreq_range rk3399_mipidphy_hsfreq_ranges[] = {
+     {   89, 0x00 }, {   99, 0x10 }, {  109, 0x20 }, {  129, 0x01 },
+     {  139, 0x11 }, {  149, 0x21 }, {  169, 0x02 }, {  179, 0x12 },
+@@ -60,6 +82,11 @@ static const struct hsfreq_range
+rk3399_mipidphy_hsfreq_ranges[] = {
+     { 1399, 0x1c }, { 1449, 0x2c }, { 1500, 0x3c }
+ };
 
++static const char * const rk3288_mipidphy_clks[] = {
++    "dphy-ref",
++    "pclk",
++};
++
+ static const char * const rk3399_mipidphy_clks[] = {
+     "dphy-ref",
+     "dphy-cfg",
+@@ -109,6 +136,36 @@ struct dphy_reg {
+ #define PHY_REG(_offset, _width, _shift) \
+     { .offset = _offset, .mask = BIT(_width) - 1, .shift = _shift, }
+
++static const struct dphy_reg rk3288_grf_dphy_regs[] = {
++    [GRF_CON_DISABLE_ISP] = PHY_REG(RK3288_GRF_SOC_CON6, 1, 0),
++    [GRF_CON_ISP_DPHY_SEL] = PHY_REG(RK3288_GRF_SOC_CON6, 1, 1),
++    [GRF_DSI_CSI_TESTBUS_SEL] = PHY_REG(RK3288_GRF_SOC_CON6, 1, 14),
++    [GRF_DPHY_TX0_TURNDISABLE] = PHY_REG(RK3288_GRF_SOC_CON8, 4, 0),
++    [GRF_DPHY_TX0_FORCERXMODE] = PHY_REG(RK3288_GRF_SOC_CON8, 4, 4),
++    [GRF_DPHY_TX0_FORCETXSTOPMODE] = PHY_REG(RK3288_GRF_SOC_CON8, 4, 8),
++    [GRF_DPHY_TX1RX1_TURNDISABLE] = PHY_REG(RK3288_GRF_SOC_CON9, 4, 0),
++    [GRF_DPHY_TX1RX1_FORCERXMODE] = PHY_REG(RK3288_GRF_SOC_CON9, 4, 4),
++    [GRF_DPHY_TX1RX1_FORCETXSTOPMODE] = PHY_REG(RK3288_GRF_SOC_CON9, 4, 8),
++    [GRF_DPHY_TX1RX1_ENABLE] = PHY_REG(RK3288_GRF_SOC_CON9, 4, 12),
++    [GRF_DPHY_RX0_TURNDISABLE] = PHY_REG(RK3288_GRF_SOC_CON10, 4, 0),
++    [GRF_DPHY_RX0_FORCERXMODE] = PHY_REG(RK3288_GRF_SOC_CON10, 4, 4),
++    [GRF_DPHY_RX0_FORCETXSTOPMODE] = PHY_REG(RK3288_GRF_SOC_CON10, 4, 8),
++    [GRF_DPHY_RX0_ENABLE] = PHY_REG(RK3288_GRF_SOC_CON10, 4, 12),
++    [GRF_DPHY_RX0_TESTCLR] = PHY_REG(RK3288_GRF_SOC_CON14, 1, 0),
++    [GRF_DPHY_RX0_TESTCLK] = PHY_REG(RK3288_GRF_SOC_CON14, 1, 1),
++    [GRF_DPHY_RX0_TESTEN] = PHY_REG(RK3288_GRF_SOC_CON14, 1, 2),
++    [GRF_DPHY_RX0_TESTDIN] = PHY_REG(RK3288_GRF_SOC_CON14, 8, 3),
++    [GRF_DPHY_TX1RX1_ENABLECLK] = PHY_REG(RK3288_GRF_SOC_CON14, 1, 12),
++    [GRF_DPHY_RX1_SRC_SEL] = PHY_REG(RK3288_GRF_SOC_CON14, 1, 13),
++    [GRF_DPHY_TX1RX1_MASTERSLAVEZ] = PHY_REG(RK3288_GRF_SOC_CON14, 1, 14),
++    [GRF_DPHY_TX1RX1_BASEDIR] = PHY_REG(RK3288_GRF_SOC_CON14, 1, 15),
++    [GRF_DPHY_RX0_TURNREQUEST] = PHY_REG(RK3288_GRF_SOC_CON15, 4, 0),
++    [GRF_DPHY_TX1RX1_TURNREQUEST] = PHY_REG(RK3288_GRF_SOC_CON15, 4, 4),
++    [GRF_DPHY_TX0_TURNREQUEST] = PHY_REG(RK3288_GRF_SOC_CON15, 3, 8),
++    [GRF_DVP_V18SEL] = PHY_REG(RK3288_GRF_IO_VSEL, 1, 1),
++    [GRF_DPHY_RX0_TESTDOUT] = PHY_REG(RK3288_GRF_SOC_STATUS21, 8, 0),
++};
++
+ static const struct dphy_reg rk3399_grf_dphy_regs[] = {
+     [GRF_DPHY_RX0_TURNREQUEST] = PHY_REG(RK3399_GRF_SOC_CON9, 4, 0),
+     [GRF_DPHY_RX0_CLK_INV_SEL] = PHY_REG(RK3399_GRF_SOC_CON9, 1, 10),
+@@ -303,6 +360,14 @@ static const struct phy_ops rk_dphy_ops = {
+     .owner        = THIS_MODULE,
+ };
+
++static const struct rk_dphy_drv_data rk3288_mipidphy_drv_data = {
++    .clks = rk3288_mipidphy_clks,
++    .num_clks = ARRAY_SIZE(rk3288_mipidphy_clks),
++    .hsfreq_ranges = rk3288_mipidphy_hsfreq_ranges,
++    .num_hsfreq_ranges = ARRAY_SIZE(rk3288_mipidphy_hsfreq_ranges),
++    .regs = rk3288_grf_dphy_regs,
++};
++
+ static const struct rk_dphy_drv_data rk3399_mipidphy_drv_data = {
+     .clks = rk3399_mipidphy_clks,
+     .num_clks = ARRAY_SIZE(rk3399_mipidphy_clks),
+@@ -312,6 +377,10 @@ static const struct rk_dphy_drv_data
+rk3399_mipidphy_drv_data = {
+ };
+
+ static const struct of_device_id rk_dphy_dt_ids[] = {
++    {
++        .compatible = "rockchip,rk3288-mipi-dphy-rx0",
++        .data = &rk3288_mipidphy_drv_data,
++    },
+     {
+         .compatible = "rockchip,rk3399-mipi-dphy-rx0",
+         .data = &rk3399_mipidphy_drv_data,
+-- 
+2.17.1
