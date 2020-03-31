@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0D3CC2BA80
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9068C2D0EE
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B7BFF214D8
-	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBABF208E4
+	for <linux-media@archiver.kernel.org>; Tue, 31 Mar 2020 11:12:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585653158;
-	bh=zg6rBd91deaVKuBg20dIpD31vHBCT3WC5qRTg87Lsc0=;
+	s=default; t=1585653159;
+	bh=CDNkKT+WGBE8A+SIyPmXUKUa9zl4UOXgsgFGt7DDGMM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=dx/8Qoxm+Uqg3fq6f3MYRbnpSe/gDFzrsN+QcaEqtfkAkh60GZadEN1vIO6eyyXiD
-	 4xJZ120GL8JR8vvvvtXmMqR93Wu4s5dW+kBe8aaLvjcRExqif3Bw6prDpUZsu1lXkB
-	 bAfZBx2p4xuac5Nk8xyklC4AjE22jMnQEMn4DZdU=
+	b=lnYr1X58EjIq3rr9H4uEyyNVmp1CBOx/SwhI9dvdSxFg6rvyU78+FZ8TVBBgsbZ81
+	 xW/NgDWG2knZNTsXjChHl6pMbFafuqoUNGgUhpbDTJcoUQS9LC0FttG0WH1vf5da/Y
+	 PvtWn+WXGxYe6rTz+bJCKpmDxeWJh8a0OLGKn1zk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730592AbgCaLMi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Mar 2020 07:12:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57912 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730595AbgCaLMO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1730590AbgCaLMO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 31 Mar 2020 07:12:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57784 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730437AbgCaLMN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 31 Mar 2020 07:12:13 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58A302166E;
+        by mail.kernel.org (Postfix) with ESMTPSA id 441E720B1F;
         Tue, 31 Mar 2020 11:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585653133;
-        bh=zg6rBd91deaVKuBg20dIpD31vHBCT3WC5qRTg87Lsc0=;
+        bh=CDNkKT+WGBE8A+SIyPmXUKUa9zl4UOXgsgFGt7DDGMM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D3ORYg4H0nbEtybN/SBuBcjeivKgZNlZUK/sxN2eQvvt2KmftP3Xce4y8E6LFh1HR
-         FNGWrw0dDZhM1+bDvc+EVSZhyQLt8Cc+fSc7DK8vAgO4Q0Vw4wBMfwoGD8TJksKmHu
-         qMXiA46KVEEndjR98aVu5jdqLmtDcp9M7aNeqaHs=
+        b=Oe9B9Xa9yEMdBbOiR6v+pVaW6llgxzeMT0SKblwLs1bVgEMoSo0u2smM+w3aJ8E3N
+         J7kzvePf6TRYIKVtG8kBrvmnwwni5w9usul54XhG5IgQ4/JHfV7Q2vyFYU01xj4907
+         9kHBIhhDr5+QkzH9a8I5ZYWWpbzW33roXTsme+TU=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jJEoV-002bpw-1Q; Tue, 31 Mar 2020 13:12:11 +0200
+        id 1jJEoV-002bqM-7b; Tue, 31 Mar 2020 13:12:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v4 02/33] media: Kconfig: add an option to filter in/out platform drivers
-Date:   Tue, 31 Mar 2020 13:11:38 +0200
-Message-Id: <b08314fa734f681e7f808e5b487ec8ba186dd2a0.1585651678.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v4 07/33] media: Kconfig: move comment to siano include
+Date:   Tue, 31 Mar 2020 13:11:43 +0200
+Message-Id: <2bff806eab10fcf9fc6f6c865341d92f305f5d92.1585651678.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1585651678.git.mchehab+huawei@kernel.org>
 References: <cover.1585651678.git.mchehab+huawei@kernel.org>
@@ -57,59 +57,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Most systems don't need support for those, while others only
-need those, instead of the others.
-
-So, add an option to filter in/out platform drivers.
+Showing this comment without showing the Siano mmc option
+is very weird! Place the option together, and make it
+visible only when showing Siano configuration.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/Kconfig | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ drivers/media/mmc/Kconfig       | 1 -
+ drivers/media/mmc/siano/Kconfig | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index 9dfea5c4b6ab..2b6ea8beb919 100644
---- a/drivers/media/Kconfig
-+++ b/drivers/media/Kconfig
-@@ -87,6 +87,18 @@ config MEDIA_CEC_SUPPORT
- 	  Say Y when you have an HDMI receiver, transmitter or a USB CEC
- 	  adapter that supports HDMI CEC.
+diff --git a/drivers/media/mmc/Kconfig b/drivers/media/mmc/Kconfig
+index de0528c6994a..75aa6de08d53 100644
+--- a/drivers/media/mmc/Kconfig
++++ b/drivers/media/mmc/Kconfig
+@@ -1,3 +1,2 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-comment "Supported MMC/SDIO adapters"
+ source "drivers/media/mmc/siano/Kconfig"
+diff --git a/drivers/media/mmc/siano/Kconfig b/drivers/media/mmc/siano/Kconfig
+index 1919f6fea8b1..570696019a9e 100644
+--- a/drivers/media/mmc/siano/Kconfig
++++ b/drivers/media/mmc/siano/Kconfig
+@@ -2,6 +2,8 @@
+ #
+ # Siano Mobile Silicon Digital TV device configuration
+ #
++comment "MMC/SDIO DVB adapters"
++	depends on DVB_CORE && HAS_DMA && MMC
  
-+config MEDIA_PLATFORM_SUPPORT
-+	bool "Platform-specific devices support"
-+	help
-+	  Enable support for complex cameras, codecs, and other hardware
-+	  that are integrated at the CPU, GPU or on Image Signalling Processor
-+	  and don't use PCI, USB or Firewire buses.
-+
-+	  This is found on Embedded hardware (SoC), on V4L2 codecs and
-+	  on some GPU and newer CPU chipsets.
-+
-+	  Say Y when you want to be able so see such devices.
-+
- source "drivers/media/cec/Kconfig"
- 
- source "drivers/media/mc/Kconfig"
-@@ -161,15 +173,14 @@ source "drivers/media/dvb-core/Kconfig"
- 
- comment "Media drivers"
- 
--#
--# V4L platform/mem2mem drivers
--#
--
- source "drivers/media/usb/Kconfig"
- source "drivers/media/pci/Kconfig"
-+source "drivers/media/radio/Kconfig"
-+
-+if MEDIA_PLATFORM_SUPPORT
- source "drivers/media/platform/Kconfig"
- source "drivers/media/mmc/Kconfig"
--source "drivers/media/radio/Kconfig"
-+endif
- 
- comment "Supported FireWire (IEEE 1394) Adapters"
- 	depends on DVB_CORE && FIREWIRE
+ config SMS_SDIO_DRV
+ 	tristate "Siano SMS1xxx based MDTV via SDIO interface"
 -- 
 2.25.1
 
