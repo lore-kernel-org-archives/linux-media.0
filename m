@@ -6,37 +6,37 @@ X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E303FC2BA17
-	for <linux-media@archiver.kernel.org>; Thu,  2 Apr 2020 23:28:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40AB1C2BA17
+	for <linux-media@archiver.kernel.org>; Thu,  2 Apr 2020 23:30:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C1ED22072E
-	for <linux-media@archiver.kernel.org>; Thu,  2 Apr 2020 23:28:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E91D20787
+	for <linux-media@archiver.kernel.org>; Thu,  2 Apr 2020 23:30:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390055AbgDBX2L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Apr 2020 19:28:11 -0400
-Received: from smtprelay0216.hostedemail.com ([216.40.44.216]:36478 "EHLO
+        id S2390187AbgDBXaC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Apr 2020 19:30:02 -0400
+Received: from smtprelay0186.hostedemail.com ([216.40.44.186]:42506 "EHLO
         smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387919AbgDBX2L (ORCPT
+        by vger.kernel.org with ESMTP id S2390160AbgDBXaC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 2 Apr 2020 19:28:11 -0400
+        Thu, 2 Apr 2020 19:30:02 -0400
 Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id E4123182CED2A;
-        Thu,  2 Apr 2020 23:28:09 +0000 (UTC)
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 1E662180115BA;
+        Thu,  2 Apr 2020 23:30:01 +0000 (UTC)
 X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: horse36_cc82b9208349
-X-Filterd-Recvd-Size: 2399
+X-HE-Tag: ear56_1ce45487cda0f
+X-Filterd-Recvd-Size: 1599
 Received: from XPS-9350.home (unknown [47.151.136.130])
         (Authenticated sender: joe@perches.com)
-        by omf16.hostedemail.com (Postfix) with ESMTPA;
-        Thu,  2 Apr 2020 23:28:07 +0000 (UTC)
-Message-ID: <04bb934e551f43540d1daacd2759beacc0b3116a.camel@perches.com>
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Thu,  2 Apr 2020 23:29:58 +0000 (UTC)
+Message-ID: <f8847ea6b8af08eaa49f142bbefefe7a8e2229eb.camel@perches.com>
 Subject: Re: [PATCH 1/1] lib/vsprintf: Add support for printing V4L2 and DRM
  fourccs
 From:   Joe Perches <joe@perches.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     mchehab@kernel.org,
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         hverkuil@xs4all.nl,
@@ -47,10 +47,10 @@ Cc:     mchehab@kernel.org,
         linux-media@vger.kernel.org,
         Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
         <ville.syrjala@linux.intel.com>
-Date:   Thu, 02 Apr 2020 16:26:11 -0700
-In-Reply-To: <87eet6mgk7.fsf@intel.com>
+Date:   Thu, 02 Apr 2020 16:28:02 -0700
+In-Reply-To: <20200402155323.6866b5c9@coco.lan>
 References: <20200401140522.966-1-sakari.ailus@linux.intel.com>
-         <87eet6mgk7.fsf@intel.com>
+         <87eet6mgk7.fsf@intel.com> <20200402155323.6866b5c9@coco.lan>
 Content-Type: text/plain; charset="ISO-8859-1"
 User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
@@ -60,28 +60,11 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 2020-04-02 at 11:34 +0300, Jani Nikula wrote:
-> On Wed, 01 Apr 2020, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
-> > Add a printk modifier %ppf (for pixel format) for printing V4L2 and DRM
-> > pixel formats denoted by 4ccs. The 4cc encoding is the same for both so
-> > the same implementation can be used.
-> 
-> I'm not going to take a strong stand in one way or the other regarding
-> the patch at hand, but I do think at some point we have to draw a line
-> what should be included in printk formats. Arguably they should be
-> reserved to things that are generally useful across large parts of the
-> kernel, right?
+On Thu, 2020-04-02 at 15:53 +0200, Mauro Carvalho Chehab wrote:
 
-Definitely yes.
+> I liked one of the suggestions of using "%p4cc" (or maybe something
+> similar, if having a number there is a problem, like "%pAcc" or "%pfcc")
 
-> I think the more specialized you get, the more you should think about
-> just using the plain old %s, and your own helpers. Because frankly, the
-> kernel printk specifiers also start getting more than a little obscure.
-> 
-> Or could we conceive of a way to make this locally extensible yet safe,
-> letting callers use something like %{foo}, as well as providing a
-> locally relevant function to do the conversion?
-
-No.  printf validation would be broken.
+Using a number is not a problem.
 
 
