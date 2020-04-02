@@ -2,76 +2,92 @@ Return-Path: <SRS0=I9Bv=5S=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FDAEC43331
-	for <linux-media@archiver.kernel.org>; Thu,  2 Apr 2020 13:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D878CC2BA19
+	for <linux-media@archiver.kernel.org>; Thu,  2 Apr 2020 14:31:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 711622063A
-	for <linux-media@archiver.kernel.org>; Thu,  2 Apr 2020 13:59:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA7CA2074D
+	for <linux-media@archiver.kernel.org>; Thu,  2 Apr 2020 14:31:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732625AbgDBN7h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Apr 2020 09:59:37 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:43502 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727412AbgDBN7h (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Apr 2020 09:59:37 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id BE597280125
-Subject: Re: [PATCH 3/3] rkisp1: Fix wrong PHY config dependency
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel@collabora.com, Hans Verkuil <hverkuil@xs4all.nl>
-References: <20200401213721.24173-1-ezequiel@collabora.com>
- <20200401213721.24173-4-ezequiel@collabora.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <b0c9e734-7302-08e6-7bbf-79699d1d305e@collabora.com>
-Date:   Thu, 2 Apr 2020 10:59:29 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1732492AbgDBObT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Apr 2020 10:31:19 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:46710 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731715AbgDBObT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 2 Apr 2020 10:31:19 -0400
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <heiko@sntech.de>)
+        id 1jK0sC-00087G-L4; Thu, 02 Apr 2020 16:31:12 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     helen.koike@collabora.com, dafna.hirschfeld@collabora.com,
+        devel@driverdev.osuosl.org, devicetree@vger.kernel.org,
+        ezequiel@collabora.com, hverkuil-cisco@xs4all.nl,
+        karthik.poduval@gmail.com, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, mark.rutland@arm.com,
+        robh+dt@kernel.org
+Subject: Re: [PATCH 3/4] arm64: dts: rockchip: add rx0 mipi-phy for rk3399
+Date:   Thu, 02 Apr 2020 16:31:11 +0200
+Message-ID: <105956984.FXDh2DO4ZE@diego>
+In-Reply-To: <970b9e48-e38f-7e7a-3472-7dc5a4737e58@gmail.com>
+References: <20200402000234.226466-4-helen.koike@collabora.com> <970b9e48-e38f-7e7a-3472-7dc5a4737e58@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200401213721.24173-4-ezequiel@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Am Donnerstag, 2. April 2020, 15:48:02 CEST schrieb Johan Jonker:
+> Hi Helen,
+> 
+> > From: Helen Koike <helen.koike@collabora.com>
+> 
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> > index 33cc21fcf4c10..fc0295d2a65a1 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> > @@ -1394,6 +1394,17 @@ io_domains: io-domains {
+> >  			status = "disabled";
+> >  		};
+> >  
+> 
+> > +		mipi_dphy_rx0: mipi-dphy-rx0 {
+> 
+> For Heiko sort syscon@ff770000 subnodes alphabetical or reg value first?
+
+Similar to main nodes ... so things without reg alphabetical,
+the rest by reg address
 
 
-On 4/1/20 6:37 PM, Ezequiel Garcia wrote:
-> Instead of depending on the Rockchip PHY driver the ISP driver
-> should really depend on CONFIG_GENERIC_PHY_MIPI_DPHY,
-> given all it needs is the phy_mipi_dphy_get_default_config() symbol.
 > 
-> Fix it.
+> > +			compatible = "rockchip,rk3399-mipi-dphy-rx0";
+> > +			clocks = <&cru SCLK_MIPIDPHY_REF>,
 > 
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > +				<&cru SCLK_DPHY_RX0_CFG>,
+> > +				<&cru PCLK_VIO_GRF>;
+> 
+> Align                            ^
+> 
+> > +			clock-names = "dphy-ref", "dphy-cfg", "grf";
+> > +			power-domains = <&power RK3399_PD_VIO>;
+> > +			#phy-cells = <0>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> >  		u2phy0: usb2-phy@e450 {
+> >  			compatible = "rockchip,rk3399-usb2phy";
+> >  			reg = <0xe450 0x10>;
+> 
+> 
 
-Acked-by: Helen Koike <helen.koike@collabora.com>
 
-> ---
->  drivers/staging/media/rkisp1/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/media/rkisp1/Kconfig b/drivers/staging/media/rkisp1/Kconfig
-> index b859a493caba..e3ba6826fbb0 100644
-> --- a/drivers/staging/media/rkisp1/Kconfig
-> +++ b/drivers/staging/media/rkisp1/Kconfig
-> @@ -7,7 +7,7 @@ config VIDEO_ROCKCHIP_ISP1
->  	select VIDEOBUF2_DMA_CONTIG
->  	select VIDEOBUF2_VMALLOC
->  	select V4L2_FWNODE
-> -	select PHY_ROCKCHIP_DPHY_RX0
-> +	select GENERIC_PHY_MIPI_DPHY
->  	default n
->  	help
->  	  Enable this to support the Image Signal Processing (ISP) module
-> 
+
+
