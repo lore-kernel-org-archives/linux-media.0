@@ -2,86 +2,115 @@ Return-Path: <SRS0=MyIf=5T=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 189EFC43331
-	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 13:01:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E42E9C43331
+	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 13:06:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE7D2207FF
-	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 13:00:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B96AE2078C
+	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 13:06:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n4oq1vKl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390915AbgDCNA4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Apr 2020 09:00:56 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56274 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728235AbgDCNA4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Apr 2020 09:00:56 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id D2862297F04
-Subject: Re: [PATCH 1/4] dt-bindings: phy: phy-rockchip-dphy-rx0: move
- rockchip dphy rx0 bindings out of staging
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        robh+dt@kernel.org, heiko@sntech.de, hverkuil-cisco@xs4all.nl,
-        kernel@collabora.com, dafna.hirschfeld@collabora.com,
-        mark.rutland@arm.com, karthik.poduval@gmail.com
-References: <20200402000234.226466-1-helen.koike@collabora.com>
- <20200402000234.226466-2-helen.koike@collabora.com>
- <a86bfa69fef8eee428d7c89b1d4fe99728af2ab7.camel@collabora.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <be7f32a3-bd22-5a8e-6c2f-835bcb693d46@collabora.com>
-Date:   Fri, 3 Apr 2020 10:00:43 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <a86bfa69fef8eee428d7c89b1d4fe99728af2ab7.camel@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S2403834AbgDCNGS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Apr 2020 09:06:18 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:39718 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403802AbgDCNGS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Apr 2020 09:06:18 -0400
+Received: by mail-wr1-f67.google.com with SMTP id p10so8439339wrt.6;
+        Fri, 03 Apr 2020 06:06:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=4SOzz1DmBA7mljFUWMggCDnfrvoqqdJY//N8mPAQhYE=;
+        b=n4oq1vKlwlBna9oy0F1xJ+XJqlPWCBvFuIV8OwA5dMCdovlp8WWH0qxUaXFHiG3Ba7
+         EgbdcftsRMgnpFruqG84PWe1JpwfrIIvSLVW4UNQ8eeBGKW5gqoKKqGZYQBgtLiSr9aq
+         foQFVK4H7/mFGwRnMANlYBdNaEIFemBMpybVAi5Ab4Kz3d5caXNgwI9nnMkK/iZz9s+q
+         7TNJAa+qMqptwzD+DGoeI7lTSPGT0m1aXgomOFlMgYBBs7oEeH4E3fN+xUOt6DolnTUk
+         eV9IxiJe917H3X51DhnnlvpcUhIx7Pi0tsntSf3mGfdj8gTlMPgMoccczujiLOcfREtD
+         7hUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=4SOzz1DmBA7mljFUWMggCDnfrvoqqdJY//N8mPAQhYE=;
+        b=ETwHfRZigKcoeG9QJz4pd2rE+EN9jNYdOCYMmSzYeh4QOeSLyBReIgLqmNzxQGr12H
+         5+pLJkhzD7ALfRrbTLjh9UJD/Wn+Mmi4eDS3lPvxeHOweOrp9a13DczL9RQjZ8tPXAu2
+         inMSPaRExjbCUsJcGPDA22VWnOddbIJIh0XCYEn/yk1XiMyNzGBClf9TReNrO8QLqppT
+         +VcElAfS33IsVaScczLsUPyYCcU9zHh7qCBC75pBoGtUzeZ71bqu/ZkI9x5jMFFP81XH
+         M/esyqdb5EiNeYtO0LgRKyCjls4VXQGBcRq6dXAISuaXh/fVtaNVnjT/frVDUc32IKGh
+         wJXg==
+X-Gm-Message-State: AGi0PuaKdKa7RLw+VRxwgsw636rIwz+5VWnXnifNAObZ7H+/DYYortgZ
+        7zfZz0R4JIFscQlBV3sVqdw=
+X-Google-Smtp-Source: APiQypJxcRsi2W0wZr2Apx763AJcizS2Tq6i4fWAc5H1frqyVroHXfPYrCZUbCFO4LE17/gl19G4Tg==
+X-Received: by 2002:a5d:470b:: with SMTP id y11mr8767392wrq.282.1585919176335;
+        Fri, 03 Apr 2020 06:06:16 -0700 (PDT)
+Received: from debian.home (ip51ccf9cd.speed.planet.nl. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id o9sm7036093wru.29.2020.04.03.06.06.15
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 03 Apr 2020 06:06:15 -0700 (PDT)
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     jacob-chen@iotwrt.com
+Cc:     ezequiel@collabora.com, mchehab@kernel.org, robh+dt@kernel.org,
+        heiko@sntech.de, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/2] dt-bindings: media: rockchip-rga: add power-domains property
+Date:   Fri,  3 Apr 2020 15:06:07 +0200
+Message-Id: <20200403130607.6138-2-jbx6244@gmail.com>
+X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20200403130607.6138-1-jbx6244@gmail.com>
+References: <20200403130607.6138-1-jbx6244@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+In the old txt situation we add/describe only properties that are used
+by the driver/hardware itself. With yaml it also filters things in a
+node that are used by other drivers like 'power-domains' for rk3399,
+so add it to 'rockchip-rga.yaml'.
 
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ Documentation/devicetree/bindings/media/rockchip-rga.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-On 4/2/20 1:17 PM, Ezequiel Garcia wrote:
-> (+Kishon)
-> 
-> Hi Helen,
-> 
-> I was wondering if we couldn't also move the phy driver out of staging.
+diff --git a/Documentation/devicetree/bindings/media/rockchip-rga.yaml b/Documentation/devicetree/bindings/media/rockchip-rga.yaml
+index 3b110b574..dd645ddcc 100644
+--- a/Documentation/devicetree/bindings/media/rockchip-rga.yaml
++++ b/Documentation/devicetree/bindings/media/rockchip-rga.yaml
+@@ -39,6 +39,9 @@ properties:
+       - const: hclk
+       - const: sclk
+ 
++  power-domains:
++    maxItems: 1
++
+   resets:
+     maxItems: 3
+ 
+@@ -63,6 +66,7 @@ examples:
+   - |
+     #include <dt-bindings/clock/rk3399-cru.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/rk3399-power.h>
+     rga: rga@ff680000 {
+       compatible = "rockchip,rk3399-rga";
+       reg = <0xff680000 0x10000>;
+@@ -71,6 +75,7 @@ examples:
+                <&cru HCLK_RGA>,
+                <&cru SCLK_RGA_CORE>;
+       clock-names = "aclk", "hclk", "sclk";
++      power-domains = <&power RK3399_PD_RGA>;
+       resets = <&cru SRST_RGA_CORE>,
+                <&cru SRST_A_RGA>,
+                <&cru SRST_H_RGA>;
+-- 
+2.11.0
 
-I think we can, let's move it.
-
-Regards,
-Helen
-
-> 
-> Thanks,
-> Ezequiel
->  
-> On Wed, 2020-04-01 at 21:02 -0300, Helen Koike wrote:
->> Move phy-rockchip-dphy-rx0 bindings to Documentation/devicetree/bindings/phy
->>
->> Signed-off-by: Helen Koike <helen.koike@collabora.com>
->> ---
->>  .../devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml           | 0
->>  1 file changed, 0 insertions(+), 0 deletions(-)
->>  rename {drivers/staging/media/phy-rockchip-dphy-rx0/Documentation => Documentation}/devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml (100%)
->>
->> diff --git a/drivers/staging/media/phy-rockchip-dphy-rx0/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml
->> b/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml
->> similarity index 100%
->> rename from drivers/staging/media/phy-rockchip-dphy-rx0/Documentation/devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml
->> rename to Documentation/devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml
-> 
-> 
-> 
