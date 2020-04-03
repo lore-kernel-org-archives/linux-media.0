@@ -2,146 +2,69 @@ Return-Path: <SRS0=MyIf=5T=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AEF7C2BA1A
-	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 09:12:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 085F3C43331
+	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 09:27:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5991220787
-	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 09:12:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D615B2080C
+	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 09:27:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390609AbgDCJMA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Apr 2020 05:12:00 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:49912 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388221AbgDCJL7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 3 Apr 2020 05:11:59 -0400
-Received: from lanttu.localdomain (lanttu.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::c1:2])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id E54F6634C8B;
-        Fri,  3 Apr 2020 12:11:07 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-media@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
-        mchehab@kernel.org,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joe Perches <joe@perches.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: [PATCH v2 1/1] lib/vsprintf: Add support for printing V4L2 and DRM fourccs
-Date:   Fri,  3 Apr 2020 12:11:56 +0300
-Message-Id: <20200403091156.7814-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S2390440AbgDCJ1s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Apr 2020 05:27:48 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:53608 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727774AbgDCJ1s (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Apr 2020 05:27:48 -0400
+Received: from localhost.localdomain (unknown [IPv6:2a02:810a:1140:6758:20a2:167a:3b62:26be])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 92CEE2984F9;
+        Fri,  3 Apr 2020 10:27:46 +0100 (BST)
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org, dafna.hirschfeld@collabora.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        laurent.pinchart@ideasonboard.com,
+        linux-rockchip@lists.infradead.org, sakari.ailus@linux.intel.com
+Subject: [PATCH v2 0/2] use enum v4l2_pixel_encoding instead of rkisp1_fmt_pix_type
+Date:   Fri,  3 Apr 2020 11:27:36 +0200
+Message-Id: <20200403092738.29831-1-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a printk modifier %ppf (for pixel format) for printing V4L2 and DRM
-pixel formats denoted by 4ccs. The 4cc encoding is the same for both so
-the same implementation can be used.
+The enum v4l2_pixel_encoding can be used instead of rkisp1_fmt_pix_type.
+This allows cleanup of the enum rkisp1_fmt_pix_type. Also, since the
+v4l2_pixel_encoding can be retrieved from the info->pixel_enc of the
+capture formats, the field fmt_type can be dropped from the struct
+rkisp1_capture_fmt_cfg.
 
-Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
-since v1:
+Patch 1: replace rkisp1_fmt_pix_type with v4l2_pixel_encoding
+Patch 2: drop the field fmt_type from the struct rkisp1_capture_fmt_cfg
 
-- Improve documentation (add -BE suffix, refer to "FourCC".
+Changes from v1:
+v1 was a single patch that only drops the fmt_type from the struct
+rkisp1_capture_fmt_cfg and adds a function rkisp1_pixel_enc_to_fmt_pix
+which is in v2 not needed.
 
-- Use '%p4cc' conversion specifier instead of '%ppf'.
+Dafna Hirschfeld (2):
+  media: staging: rkisp1: replace rkisp1_fmt_pix_type with
+    v4l2_pixel_encoding
+  media: staging: rkisp1: cap: remove field fmt_type from struct
+    rkisp1_capture_fmt_cfg
 
-- Fix 31st bit handling in printing FourCC codes.
+ drivers/staging/media/rkisp1/rkisp1-capture.c | 51 +------------------
+ drivers/staging/media/rkisp1/rkisp1-common.h  | 11 +---
+ drivers/staging/media/rkisp1/rkisp1-isp.c     | 42 +++++++--------
+ drivers/staging/media/rkisp1/rkisp1-resizer.c |  8 +--
+ 4 files changed, 29 insertions(+), 83 deletions(-)
 
-- Use string() correctly, to allow e.g. proper field width handling.
-
-- Remove loop, use put_unaligned_le32() instead.
-
- Documentation/core-api/printk-formats.rst | 12 +++++++++++
- lib/vsprintf.c                            | 25 +++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
-
-diff --git a/Documentation/core-api/printk-formats.rst b/Documentation/core-api/printk-formats.rst
-index 8ebe46b1af39..550568520ab6 100644
---- a/Documentation/core-api/printk-formats.rst
-+++ b/Documentation/core-api/printk-formats.rst
-@@ -545,6 +545,18 @@ For printing netdev_features_t.
- 
- Passed by reference.
- 
-+V4L2 and DRM FourCC code (pixel format)
-+---------------------------------------
-+
-+::
-+
-+	%p4cc
-+
-+Print a FourCC code used by V4L2 or DRM. The "-BE" suffix is added on big endian
-+formats.
-+
-+Passed by reference.
-+
- Thanks
- ======
- 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 7c488a1ce318..93eea6a320da 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1721,6 +1721,28 @@ char *netdev_bits(char *buf, char *end, const void *addr,
- 	return special_hex_number(buf, end, num, size);
- }
- 
-+static noinline_for_stack
-+char *fourcc_string(char *buf, char *end, const u32 *fourcc,
-+		    struct printf_spec spec, const char *fmt)
-+{
-+#define FOURCC_STRING_BE	"-BE"
-+	char s[sizeof(*fourcc) + sizeof(FOURCC_STRING_BE)] = { 0 };
-+
-+	if (check_pointer(&buf, end, fourcc, spec))
-+		return buf;
-+
-+	if (fmt[1] != 'c' || fmt[2] != 'c')
-+		return error_string(buf, end, "(%p4?)", spec);
-+
-+	put_unaligned_le32(*fourcc & ~BIT(31), s);
-+
-+	if (*fourcc & BIT(31))
-+		strscpy(s + sizeof(*fourcc), FOURCC_STRING_BE,
-+			sizeof(FOURCC_STRING_BE));
-+
-+	return string(buf, end, s, spec);
-+}
-+
- static noinline_for_stack
- char *address_val(char *buf, char *end, const void *addr,
- 		  struct printf_spec spec, const char *fmt)
-@@ -2131,6 +2153,7 @@ char *fwnode_string(char *buf, char *end, struct fwnode_handle *fwnode,
-  *       correctness of the format string and va_list arguments.
-  * - 'K' For a kernel pointer that should be hidden from unprivileged users
-  * - 'NF' For a netdev_features_t
-+ * - '4cc' V4L2 or DRM FourCC code, with "-BE" suffix on big endian formats.
-  * - 'h[CDN]' For a variable-length buffer, it prints it as a hex string with
-  *            a certain separator (' ' by default):
-  *              C colon
-@@ -2223,6 +2246,8 @@ char *pointer(const char *fmt, char *buf, char *end, void *ptr,
- 		return restricted_pointer(buf, end, ptr, spec);
- 	case 'N':
- 		return netdev_bits(buf, end, ptr, spec, fmt);
-+	case '4':
-+		return fourcc_string(buf, end, ptr, spec, fmt);
- 	case 'a':
- 		return address_val(buf, end, ptr, spec, fmt);
- 	case 'd':
 -- 
-2.20.1
+2.17.1
 
