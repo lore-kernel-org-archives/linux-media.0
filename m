@@ -2,40 +2,38 @@ Return-Path: <SRS0=MyIf=5T=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B683DC2BA19
-	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 23:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EC56C43331
+	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 23:57:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8C00D20737
-	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 23:36:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E4E420737
+	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 23:57:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726028AbgDCXgx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Apr 2020 19:36:53 -0400
-Received: from mga09.intel.com ([134.134.136.24]:15425 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725268AbgDCXgx (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 3 Apr 2020 19:36:53 -0400
-IronPort-SDR: wul7Grj97ctJgWVDPpkAt33TNRH/By7ZUpVcRePuApakKfWiASpzMfoDFsoP5QeWfuyBUvNVH0
- hxV7woaUfkFw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2020 16:36:52 -0700
-IronPort-SDR: 6oIBtUZ/jmWrjUZs9IVm41LQ6enIuxRukYfcqqTujn4cCSOT7/E2wfrxgroRoXoU4i5Akc1Oo8
- NI0IgVxlrsMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,341,1580803200"; 
-   d="scan'208";a="360673902"
-Received: from lskarbek-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.249.39.121])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Apr 2020 16:36:49 -0700
-Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
-        id 8311721E34; Sat,  4 Apr 2020 02:36:47 +0300 (EEST)
-Date:   Sat, 4 Apr 2020 02:36:47 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Joe Perches <joe@perches.com>
+        id S1726271AbgDCX5Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Apr 2020 19:57:24 -0400
+Received: from smtprelay0173.hostedemail.com ([216.40.44.173]:43072 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726060AbgDCX5Y (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 3 Apr 2020 19:57:24 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 874B2837F24C;
+        Fri,  3 Apr 2020 23:57:23 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: book21_232a483c7e13a
+X-Filterd-Recvd-Size: 1743
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf02.hostedemail.com (Postfix) with ESMTPA;
+        Fri,  3 Apr 2020 23:57:21 +0000 (UTC)
+Message-ID: <cabfb02bf36b50463ebfe850ba642025ebeb88b2.camel@perches.com>
+Subject: Re: [PATCH v2 1/1] lib/vsprintf: Add support for printing V4L2 and
+ DRM fourccs
+From:   Joe Perches <joe@perches.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Petr Mladek <pmladek@suse.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -46,55 +44,32 @@ Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH v2 1/1] lib/vsprintf: Add support for printing V4L2 and
- DRM fourccs
-Message-ID: <20200403233647.GA4394@kekkonen.localdomain>
+Date:   Fri, 03 Apr 2020 16:55:24 -0700
+In-Reply-To: <20200403233647.GA4394@kekkonen.localdomain>
 References: <20200403091156.7814-1-sakari.ailus@linux.intel.com>
- <20200403102449.GB4882@pendragon.ideasonboard.com>
- <20200403104701.GC3172@kekkonen.localdomain>
- <e44e41317719727ea12aee4ff1e210dea796dd2f.camel@perches.com>
+         <20200403102449.GB4882@pendragon.ideasonboard.com>
+         <20200403104701.GC3172@kekkonen.localdomain>
+         <e44e41317719727ea12aee4ff1e210dea796dd2f.camel@perches.com>
+         <20200403233647.GA4394@kekkonen.localdomain>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e44e41317719727ea12aee4ff1e210dea796dd2f.camel@perches.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Joe,
+On Sat, 2020-04-04 at 02:36 +0300, Sakari Ailus wrote:
+> Hi Joe,
 
-On Fri, Apr 03, 2020 at 11:38:29AM -0700, Joe Perches wrote:
-> On Fri, 2020-04-03 at 13:47 +0300, Sakari Ailus wrote:
-> > On Fri, Apr 03, 2020 at 01:24:49PM +0300, Laurent Pinchart wrote:
-> > > On Fri, Apr 03, 2020 at 12:11:56PM +0300, Sakari Ailus wrote:
-> > > > Add a printk modifier %ppf (for pixel format) for printing V4L2 and DRM
-> > > > pixel formats denoted by 4ccs. The 4cc encoding is the same for both so
-> > > > the same implementation can be used.
-> []
-> > > > diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> []
-> > > > +static noinline_for_stack
-> > > > +char *fourcc_string(char *buf, char *end, const u32 *fourcc,
-> > > > +		    struct printf_spec spec, const char *fmt)
-> []
-> > > > +	if (fmt[1] != 'c' || fmt[2] != 'c')
-> 
-> This could check outside a format string if
-> the %p4 is at the end of the format string.
-> 
-> 	printk("%p4", fourcc)
-> 
-> So this should verify
-> 
-> 	if (!(fmt[1] == 'c' && fmt[2] == 'c'))
+Hi Sakari.
 
-How would these be different in functionality? fmt[2] won't be accessed if
-fmt[1] is not 'c' (including '\0'), just like on the line above. I find the
-original easier to read.
+> How would these be different in functionality? fmt[2] won't be accessed if
+> fmt[1] is not 'c' (including '\0'), just like on the line above. I find the
+> original easier to read.
 
--- 
-Regards,
+Oops. You are right of course.
 
-Sakari Ailus
+cheers, Joe
+
