@@ -2,98 +2,88 @@ Return-Path: <SRS0=MyIf=5T=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 897A1C2BA16
-	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 16:27:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D617C43331
+	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 16:58:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 60E78207FF
-	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 16:27:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03427206F6
+	for <linux-media@archiver.kernel.org>; Fri,  3 Apr 2020 16:58:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404135AbgDCQ1d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Apr 2020 12:27:33 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:57094 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404022AbgDCQ1d (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 3 Apr 2020 12:27:33 -0400
-Received: from p5b127fb0.dip0.t-ipconnect.de ([91.18.127.176] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <heiko@sntech.de>)
-        id 1jKPAF-00065N-VY; Fri, 03 Apr 2020 18:27:27 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: Re: [PATCH 3/3] arm64: dts: rockchip: Add the camera interface description of the PX30
-Date:   Fri, 03 Apr 2020 18:27:27 +0200
-Message-ID: <4068915.k80quj1ed4@phil>
-In-Reply-To: <20200403142122.297283-4-maxime.chevallier@bootlin.com>
-References: <20200403142122.297283-1-maxime.chevallier@bootlin.com> <20200403142122.297283-4-maxime.chevallier@bootlin.com>
+        id S1728133AbgDCQ6n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Apr 2020 12:58:43 -0400
+Received: from smtprelay0129.hostedemail.com ([216.40.44.129]:39372 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726087AbgDCQ6m (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 3 Apr 2020 12:58:42 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 8995D1801EEB1;
+        Fri,  3 Apr 2020 16:58:41 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: blood31_115de04d83516
+X-Filterd-Recvd-Size: 2242
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf12.hostedemail.com (Postfix) with ESMTPA;
+        Fri,  3 Apr 2020 16:58:39 +0000 (UTC)
+Message-ID: <b1e6213ba9f67da8278dd5c5f5e4def8ab927c83.camel@perches.com>
+Subject: Re: [PATCH v2 1/1] lib/vsprintf: Add support for printing V4L2 and
+ DRM fourccs
+From:   Joe Perches <joe@perches.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-media@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
+        mchehab@kernel.org,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Date:   Fri, 03 Apr 2020 09:56:42 -0700
+In-Reply-To: <1105bfe5-88f1-040e-db40-54d7761747d5@rasmusvillemoes.dk>
+References: <20200403091156.7814-1-sakari.ailus@linux.intel.com>
+         <1105bfe5-88f1-040e-db40-54d7761747d5@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am Freitag, 3. April 2020, 16:21:22 CEST schrieb Maxime Chevallier:
-> The PX30 has a camera interface, supporting CSI2, BT656 and Parallel
-> modes. Add a DT description for this interface.
+On Fri, 2020-04-03 at 14:10 +0200, Rasmus Villemoes wrote:
+> On 03/04/2020 11.11, Sakari Ailus wrote:
+> > Add a printk modifier %ppf (for pixel format) for printing V4L2 and DRM
+> > pixel formats denoted by 4ccs. The 4cc encoding is the same for both so
+> > the same implementation can be used.
 > 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> ---
->  arch/arm64/boot/dts/rockchip/px30.dtsi | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+> This seems quite niche to me, I'm not sure that belongs in vsprintf.c.
+> What's wrong with having a
 > 
-> diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
-> index 3e1f51a66daf..38ed35bc9b7a 100644
-> --- a/arch/arm64/boot/dts/rockchip/px30.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
-> @@ -1058,6 +1058,18 @@ dsi_in_vopl: endpoint@1 {
->  		};
->  	};
->  
-> +	cif: cif@ff490000 {
-
-nit: please sort by register address, so @ff490000 is definitly
-somewhere after that ff460000 of the vopb ;-)
-
-> +		compatible = "rockchip,px30-cif";
-> +		reg = <0x0 0xff490000 0x0 0x200>;
-> +		interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-> +		clocks = <&cru ACLK_CIF>, <&cru HCLK_CIF>, <&cru PCLK_CIF>, <&cru SCLK_CIF_OUT>;
-> +		clock-names = "aclk_cif", "hclk_cif", "pclk_cif", "cif_out";
-> +		resets = <&cru SRST_CIF_A>, <&cru SRST_CIF_H>, <&cru SRST_CIF_PCLKIN>;
-> +		reset-names = "rst_cif_a", "rst_cif_h", "rst_cif_pclkin";
-> +		power-domains = <&power PX30_PD_VI>;
-
-nit: while doing the above, ideally just move the power-domains above resets
-everthing else is sorted nicely.
-
-
-Thanks
-Heiko
-
-> +		status = "disabled";
-> +	};
-> +
->  	vopb: vop@ff460000 {
->  		compatible = "rockchip,px30-vop-big";
->  		reg = <0x0 0xff460000 0x0 0xefc>;
+> char *fourcc_string(char *buf, u32 x)
 > 
+> that formats x into buf and returns buf, so it can be used in a
+> 
+> char buf[8];
+> pr_debug("bla: %s\n", fourcc_string(buf, x))
 
+Nothing really, it's a number of uses question.
 
+For networking code,  print_mac was used before %pM.
+
+After Linus floated the idea of %p<foo>, %pM was
+introduced and all the DECLARE_MAC_BUF/print_mac
+calls were converted.
+
+%pM did reduce overall object size a fair amount.
+
+How many instances of %p4cc could there be?
 
 
