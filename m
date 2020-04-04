@@ -2,116 +2,107 @@ Return-Path: <SRS0=d4En=5U=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31F79C2BA19
-	for <linux-media@archiver.kernel.org>; Sat,  4 Apr 2020 00:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3401C2BA1A
+	for <linux-media@archiver.kernel.org>; Sat,  4 Apr 2020 01:25:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 09B722080C
-	for <linux-media@archiver.kernel.org>; Sat,  4 Apr 2020 00:22:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAD9620737
+	for <linux-media@archiver.kernel.org>; Sat,  4 Apr 2020 01:25:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vYWyy3ee"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="nynG8ud/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726302AbgDDAV6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Apr 2020 20:21:58 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:53728 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726170AbgDDAV6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Apr 2020 20:21:58 -0400
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 42F24321;
-        Sat,  4 Apr 2020 02:21:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1585959716;
-        bh=yISGOexUXpRvRg7Jt5xQI1yOLeEob8QXDDqtcGTJvyo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vYWyy3eeKnYr9FAklrONkxYQAFjBLYd7UyMzBgv6dN8niEc4/SKwnSgcD+mlBhNbs
-         COoXW/6KLF3K+2D6YCvDN1y4z2UsaLo68L0Wk3AW0WWgH6AdCguyS3MHG6OcaBWQSD
-         zmgDovrDYEkZQpqgZhwFsa0ta13nownChq1TxE6Y=
-Date:   Sat, 4 Apr 2020 03:21:47 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH v2 1/1] lib/vsprintf: Add support for printing V4L2 and
- DRM fourccs
-Message-ID: <20200404002147.GG9690@pendragon.ideasonboard.com>
-References: <20200403091156.7814-1-sakari.ailus@linux.intel.com>
- <1105bfe5-88f1-040e-db40-54d7761747d5@rasmusvillemoes.dk>
- <b1e6213ba9f67da8278dd5c5f5e4def8ab927c83.camel@perches.com>
- <20200403193242.38611906@coco.lan>
- <2751400ae13b25d8259a8a9d7b36caf98ec2d367.camel@perches.com>
- <CAHp75Vf+m_qzOwZb38dObLpKV2N27-J_7beqffhFVoSHaNV2vg@mail.gmail.com>
- <20200404001425.GC4394@kekkonen.localdomain>
+        id S1726365AbgDDBZS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Apr 2020 21:25:18 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:9125 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726620AbgDDBZQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Apr 2020 21:25:16 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e87e1980000>; Fri, 03 Apr 2020 18:23:36 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 03 Apr 2020 18:25:15 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 03 Apr 2020 18:25:15 -0700
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 4 Apr
+ 2020 01:25:15 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Sat, 4 Apr 2020 01:25:15 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.164.193]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e87e1fa0000>; Fri, 03 Apr 2020 18:25:14 -0700
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v6 4/9] clk: tegra: Add Tegra210 CSI TPG clock gate
+Date:   Fri, 3 Apr 2020 18:25:02 -0700
+Message-ID: <1585963507-12610-5-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1585963507-12610-1-git-send-email-skomatineni@nvidia.com>
+References: <1585963507-12610-1-git-send-email-skomatineni@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200404001425.GC4394@kekkonen.localdomain>
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1585963416; bh=/06MYnopqzjyrf2N0nRAUhGBnkcd6r/kBjlHyehzo9I=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=nynG8ud/22Fkty41DAxBdfnGLZBOJybm/lSHq+7gvgpWlKqOTpKU5N4ktEhDNrNER
+         /5bPXKBFYIt0dQ/+fuTuJ9MpfIEsroGeLvOnje1YF0DPLNe0a4NOEWDPhuXqjjBh/K
+         GTrcYDTtMnPeMg+OJK9FaCmgEUU62h+VNyQ5qOJCVrAoWQZxIVSV9+i4roxMKpN2hy
+         Y3TXu/R++le3VUSLdANXfz8CrjSu6iZ8yetgV3f92X2jOD8+Wp1wbGRafg0IEIlZl3
+         u4x3vBDzMYGY0TcDT9U3MZwJYCQLCyTrIGc/v7gTF7DUNXHB3KkOokirdC1Qhz57T/
+         017hplxreqNtQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+Tegra210 CSI hardware internally uses PLLD for internal test pattern
+generator logic.
 
-On Sat, Apr 04, 2020 at 03:14:25AM +0300, Sakari Ailus wrote:
-> On Fri, Apr 03, 2020 at 09:32:42PM +0300, Andy Shevchenko wrote:
-> > On Fri, Apr 3, 2020 at 8:54 PM Joe Perches <joe@perches.com> wrote:
-> > > On Fri, 2020-04-03 at 19:32 +0200, Mauro Carvalho Chehab wrote:
-> > > > Em Fri, 03 Apr 2020 09:56:42 -0700
-> > > > Joe Perches <joe@perches.com> escreveu:
-> > 
-> > > It _might_ be useful to use a CONFIG_MEDIA_SUPPORT guard
-> > > in lib/vsprintf for this.
-> > 
-> > No need. FourCC, if Sakari makes it more generic, can be used for
-> > other purposes, e.g. printing component names from the chips (not
-> > related to media at all).
-> 
-> Could you elaborate?
-> 
-> This could be already used on DRM, presumably, and that does not depend on
-> CONFIG_MEDIA_SUPPORT. I don't know how much there would be a need for that,
-> though, but this remains a possibility.
+PLLD_BASE register in CAR has a bit CSI_CLK_SOURCE to enable PLLD
+out to CSI during TPG mode.
 
-/**
- * drm_get_format_name - fill a string with a drm fourcc format's name
- * @format: format to compute name of
- * @buf: caller-supplied buffer
- */
-const char *drm_get_format_name(uint32_t format, struct drm_format_name_buf *buf)
-{
-	snprintf(buf->str, sizeof(buf->str),
-		 "%c%c%c%c %s-endian (0x%08x)",
-		 printable_char(format & 0xff),
-		 printable_char((format >> 8) & 0xff),
-		 printable_char((format >> 16) & 0xff),
-		 printable_char((format >> 24) & 0x7f),
-		 format & DRM_FORMAT_BIG_ENDIAN ? "big" : "little",
-		 format);
+This patch adds this CSI TPG clock gate to Tegra210 clock driver
+to allow Tegra video driver to ungate CSI TPG clock during TPG mode
+and gate during non TPG mode.
 
-	return buf->str;
-}
-EXPORT_SYMBOL(drm_get_format_name);
+Acked-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+---
+ drivers/clk/tegra/clk-tegra210.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-I'm not advocating for one approach or the other in this case, but we
-should standardize 4CC printing between the two subsystems.
-
+diff --git a/drivers/clk/tegra/clk-tegra210.c b/drivers/clk/tegra/clk-tegra210.c
+index defe3b7..81a879b 100644
+--- a/drivers/clk/tegra/clk-tegra210.c
++++ b/drivers/clk/tegra/clk-tegra210.c
+@@ -3035,6 +3035,13 @@ static __init void tegra210_periph_clk_init(void __iomem *clk_base,
+ 					     periph_clk_enb_refcnt);
+ 	clks[TEGRA210_CLK_DSIB] = clk;
+ 
++	/* csi_tpg */
++	clk = clk_register_gate(NULL, "csi_tpg", "pll_d",
++				CLK_SET_RATE_PARENT, clk_base + PLLD_BASE,
++				23, 0, &pll_d_lock);
++	clk_register_clkdev(clk, "csi_tpg", NULL);
++	clks[TEGRA210_CLK_CSI_TPG] = clk;
++
+ 	/* la */
+ 	clk = tegra_clk_register_periph("la", la_parents,
+ 			ARRAY_SIZE(la_parents), &tegra210_la, clk_base,
 -- 
-Regards,
+2.7.4
 
-Laurent Pinchart
