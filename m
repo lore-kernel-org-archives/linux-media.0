@@ -2,100 +2,133 @@ Return-Path: <SRS0=MSVy=5W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3DB2C2BA18
-	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 07:30:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05CEBC2BA1B
+	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 07:30:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8B036206F5
+	by mail.kernel.org (Postfix) with ESMTP id D1DCD20672
 	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 07:30:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NUpweMU/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ruz5H+af"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbgDFHah (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Apr 2020 03:30:37 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:46427 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726543AbgDFHah (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Apr 2020 03:30:37 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q3so7098103pff.13
-        for <linux-media@vger.kernel.org>; Mon, 06 Apr 2020 00:30:35 -0700 (PDT)
+        id S1726543AbgDFHai (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Apr 2020 03:30:38 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:36895 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726582AbgDFHai (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Apr 2020 03:30:38 -0400
+Received: by mail-pj1-f66.google.com with SMTP id k3so6087143pjj.2
+        for <linux-media@vger.kernel.org>; Mon, 06 Apr 2020 00:30:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=aYyDu5xo6XXrzmH4tjf4pOWN9FZQnxXMDt3z3mrVzPg=;
-        b=NUpweMU/2ZWQ9Wf1b7JP0hf2isQFuhhbak5HRJIE6E8VZ7TTj/FeVgi2ELgHqmWeFr
-         OzzfW6wEUmReg7E0Ivtn0qyYKx7ZtoIgmDJyh8Sm5ZrbLY1weWeRpW5GDAgECiypAKhY
-         PTJA6A89ThKZTwdhwvRpWWXSjCAcQPxyeUVxQjJZvR+y4s+s8wOB6bVZGiYT2etxF8jW
-         F+YrNf08is18Hx3Uacs/Nw4GqQ/BAsE9ZU2tTJlfFNe3+II0TrX5jtoF2qmxediT7aNP
-         EoRHgVmuH5mw8/NsNupb1knetL5WbrmT2hJgztrBG7mYu3ymLZ99GNcDmGu5sfoOGDNk
-         QBVA==
+        bh=pG/RazX9Sl3A3pCDkZw0apl899O9yG3jRB1KPgFB0T4=;
+        b=ruz5H+afm8ZmWj28zZzEW6ZicA4AcWTHwW2wYMWiCxzQ6w6IOQ/h9AbgOWVzZx1yZQ
+         ikRIavLY1bMu7LDvI8xuk6SKvimQjCQ8qv2GB1EP32YUZAXWFNpzBjMZ2k3SKjqZDbSK
+         GJ4sZobxTK/Y3qSJrzeTgTx/6nC7ab4yVMQAnzd0rUBorANJ7NSP95JSPvj5i2BpCKCd
+         JwjkzKABK0ecm2hJ87d7/WL6Oc3xSJZUNPoihF9vMt0Hjpsg/SbWmFMPGkU+RwxBYufx
+         b1ZQDKHfNclgy3CmCq4YQCCDbhS84ghJcFOftOg6Qw86R0dsPMHSeyewnRQ4x19BWs2K
+         vftw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=aYyDu5xo6XXrzmH4tjf4pOWN9FZQnxXMDt3z3mrVzPg=;
-        b=Uknyh7oWtgjyMzF4eiiaTYS+iYTWfy4BPI2OX6zLxV1c62PCuJHHhZicpYth2vPZGc
-         PE0tVQbuUdx58WkwmYtDRh2EfS6JA45OPXQmauAKn/DEkk8/hlHtZDRewxsIVAgWPzDj
-         KOecsvDh77kKbtL2W4RhGhVJ4BBT/tCGrMMgX8ojDyeQCrJIgU4uezOSu5e0w/TAqYeY
-         PoZtG9b+I6wrzs11tf4jZmOnCJHmcAr4VdnFbsW6ZHJ5dfHc6AH10TvXc00sHErF9uHk
-         0Nr7O/m8v/wsYElo2qm6g04h4FWUVgIM1jYoXELg0E9A1OGaiNQTZVQ/AVsH2uoLnU7Y
-         V8Tg==
-X-Gm-Message-State: AGi0PubJaiYriyl0D5ggfctEWwq0UBE/kQWGUX9l/2FcYAiePbaoueJF
-        2hl4nSWYSReHpqmWsMET/dBwxm9M
-X-Google-Smtp-Source: APiQypLjWvcGpnQl7cXxtZskVM+8ZJK/vn7B88fH/6dAgvpPIs12SnhxmXaECqH8S02ItujFN8C9Nw==
-X-Received: by 2002:a63:7a07:: with SMTP id v7mr10154205pgc.302.1586158235086;
-        Mon, 06 Apr 2020 00:30:35 -0700 (PDT)
+        bh=pG/RazX9Sl3A3pCDkZw0apl899O9yG3jRB1KPgFB0T4=;
+        b=TzpFvGunIdnnQsipIkx6j+T8TdRV5Y78HURyg61nCwPTwEHWCGe/G3Fiv5EEzDcnTZ
+         /MAAeEvevbgMl8aY4vRJ/+EWVDla8kyGWnQrYh/6pPsrp8MVEIFVfPLg+8XBqwrGR+e7
+         KMrEgQSdK+h1KFZqnVJFxsM+o8CK/7Tw1TukyFqqr1rVejrBj/n1nBQ4sTjOykMWknhB
+         h2qZeYJN+bmK4/i7d4BTcvpkp0JW18AVQ6H+46mj9ltCCcXGM2dccIiJhzP9Jlrc8bh6
+         dhlWN7oS6uv+nnGmidSzKnXsPZr/E2r7yto06WmWToTO2l/Mm+tv+s5+dfNsTDVFBbge
+         N9hg==
+X-Gm-Message-State: AGi0PuZTrVVqqyydddP9eB8AHDNtPs6iDZAElBiZkKwpwSrDO2SIoZrZ
+        RIO6soyToniLfLBoShqOINn0NbyU
+X-Google-Smtp-Source: APiQypJb0rBTogkwmlQLRYglLBp5zKJCM27uYYuFoqCaFY/qIljDYVqcVnYaHRrKDSDtWKPdRo14EA==
+X-Received: by 2002:a17:902:107:: with SMTP id 7mr18639285plb.302.1586158236696;
+        Mon, 06 Apr 2020 00:30:36 -0700 (PDT)
 Received: from localhost.localdomain (c-24-4-174-82.hsd1.ca.comcast.net. [24.4.174.82])
-        by smtp.googlemail.com with ESMTPSA id z6sm10170179pgg.39.2020.04.06.00.30.34
+        by smtp.googlemail.com with ESMTPSA id z6sm10170179pgg.39.2020.04.06.00.30.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2020 00:30:34 -0700 (PDT)
+        Mon, 06 Apr 2020 00:30:36 -0700 (PDT)
 From:   Karthik Poduval <karthik.poduval@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Karthik Poduval <karthik.poduval@gmail.com>
-Subject: [PATCH v2 0/3] Add Rockchip RK3288 support
-Date:   Mon,  6 Apr 2020 00:30:14 -0700
-Message-Id: <20200406073017.19462-1-karthik.poduval@gmail.com>
+Subject: [PATCH v2 2/3] media: staging: rkisp1: add rk3288 support
+Date:   Mon,  6 Apr 2020 00:30:16 -0700
+Message-Id: <20200406073017.19462-3-karthik.poduval@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <karthik.poduval@gmail.com>
+In-Reply-To: <20200406073017.19462-1-karthik.poduval@gmail.com>
 References: <karthik.poduval@gmail.com>
+ <20200406073017.19462-1-karthik.poduval@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Here are the series of patches adding Rockchip RK3288 chipset support to the
-Rockchip ISP1 driver and Rockchip MIPI DPHY RX0 driver. These patches have been
-worked by referring to tinkerbaord debian kernel posted at:-
-https://github.com/TinkerBoard/debian_kernel.git
+Add rk3288 support to the rkisp1 driver.
 
-They have been tested on the tinkerbaord using a ov5647 camera
-Example test command (libcamera test tool):
+tested on tinkerbaord with ov5647 using command
 cam -c 1 -C -F cap
 
-Some modifications were required to the ov5647 driver to make it work with
-libcamera which were derived from git://gitlab.collabora.com/koike/linux.git
-rockchip/isp/v12 branch.
+Reported-by: Karthik Poduval <karthik.poduval@gmail.com>
+Signed-off-by: Karthik Poduval <karthik.poduval@gmail.com>
+---
+ .../bindings/media/rockchip-isp1.yaml          |  1 +
+ drivers/staging/media/rkisp1/rkisp1-dev.c      | 18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+)
 
-Those ov5647 driver changes are not a part of this patch series.
-
-Karthik Poduval (3):
-  media: staging: phy-rockchip-dphy-rx0: add rk3288 support to DPHY
-    driver
-  media: staging: rkisp1: add rk3288 support
-  ARM: dts: rockchip: add rk3288 ISP and DPHY
-
- arch/arm/boot/dts/rk3288.dtsi                 | 25 +++++++
- .../bindings/phy/rockchip-mipi-dphy-rx0.yaml  |  1 +
- .../phy-rockchip-dphy-rx0.c                   | 69 +++++++++++++++++++
- .../bindings/media/rockchip-isp1.yaml         |  1 +
- drivers/staging/media/rkisp1/rkisp1-dev.c     | 18 +++++
- 5 files changed, 114 insertions(+)
-
+diff --git a/drivers/staging/media/rkisp1/Documentation/devicetree/bindings/media/rockchip-isp1.yaml b/drivers/staging/media/rkisp1/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+index af246b71eac6..4c31294cf14b 100644
+--- a/drivers/staging/media/rkisp1/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
++++ b/drivers/staging/media/rkisp1/Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+@@ -16,6 +16,7 @@ description: |
+ properties:
+   compatible:
+     const: rockchip,rk3399-cif-isp
++    const: rockchip,rk3288-rkisp1
+ 
+   reg:
+     maxItems: 1
+diff --git a/drivers/staging/media/rkisp1/rkisp1-dev.c b/drivers/staging/media/rkisp1/rkisp1-dev.c
+index b1b3c058e957..1df4f5906fd0 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-dev.c
++++ b/drivers/staging/media/rkisp1/rkisp1-dev.c
+@@ -403,6 +403,20 @@ static irqreturn_t rkisp1_isr(int irq, void *ctx)
+ 	return IRQ_HANDLED;
+ }
+ 
++
++static const char * const rk3288_isp_clks[] = {
++	"clk_isp",
++	"aclk_isp",
++	"hclk_isp",
++	"pclk_isp_in",
++	"sclk_isp_jpe",
++};
++
++static const struct rkisp1_match_data rk3288_isp_clk_data = {
++	.clks = rk3288_isp_clks,
++	.size = ARRAY_SIZE(rk3288_isp_clks),
++};
++
+ static const char * const rk3399_isp_clks[] = {
+ 	"clk_isp",
+ 	"aclk_isp",
+@@ -417,6 +431,10 @@ static const struct rkisp1_match_data rk3399_isp_clk_data = {
+ };
+ 
+ static const struct of_device_id rkisp1_of_match[] = {
++	{
++		.compatible = "rockchip,rk3288-rkisp1",
++		.data = &rk3288_isp_clk_data,
++	},
+ 	{
+ 		.compatible = "rockchip,rk3399-cif-isp",
+ 		.data = &rk3399_isp_clk_data,
 -- 
 2.17.1
 
