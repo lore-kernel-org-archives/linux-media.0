@@ -2,248 +2,108 @@ Return-Path: <SRS0=MSVy=5W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72CF7C2BA19
-	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 13:37:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CAD9C2BA19
+	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 14:41:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 26B4F23356
-	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 13:37:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46ABF2465E
+	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 14:41:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GckHuiQL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mfr+TXU7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728542AbgDFNhg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Apr 2020 09:37:36 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:33558 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728528AbgDFNhg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Apr 2020 09:37:36 -0400
-Received: by mail-oi1-f195.google.com with SMTP id m14so13096059oic.0
-        for <linux-media@vger.kernel.org>; Mon, 06 Apr 2020 06:37:35 -0700 (PDT)
+        id S1728699AbgDFOlM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Apr 2020 10:41:12 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:34589 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728684AbgDFOlM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Apr 2020 10:41:12 -0400
+Received: by mail-lj1-f195.google.com with SMTP id p10so14995031ljn.1
+        for <linux-media@vger.kernel.org>; Mon, 06 Apr 2020 07:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6L3aORYHMbwwCq3SCrpWJ+tXaNPgCZaZOcLf7iItFoM=;
-        b=GckHuiQLusEfuz7m7kL2bfmJegj7H8mS9QM9fAP1xyMvKgqdKEty3fg6OwV6T9jPxN
-         bnSCYkeHIMVM01Rvpbr1MuFU1p0UJtWWSVscCydH/L5qbZhASReOaOo7gET1/zbaj+QI
-         c8FrHwThgqlaZMx5YZ70coYm1NXAZsfG0LiFzFrp7pg/iBBWNnhQ4Gdr8484Bz972VYC
-         4eWwQ3NZXWZI47TzKQShY+n5EuG4xi/gjs5tMzzocKEuJ0zxJTCbKSIXsQjdz5uITfqO
-         QkeBGOgQyANa82d9UCdl+C2qQHvztpu0qmTYLDWqH4o5vQik3FHeO8BdvkSDaaNpSlTG
-         DZzA==
+        bh=QMRUCn8rsO+bPjKn1qdcEfpo/bYh1EFDH0NFxh4JbbE=;
+        b=mfr+TXU78iDq73NbT7sj0j0S0+Vl+r2prJC1kOrZfRdJodNJFZybhVcUvj/QrRSOKb
+         uKbSw6WqyLZb57ys+pjUvlcPndXyEzsHhqIkcjMIOFU+BfPcXa76zabIga3r4Sq5meVv
+         XTd9G66jY5EjwimjkiElBE550hxLVkIk4qQ6P/kZwKXgk+kXG2JN77XCFj2mu9Nng4by
+         uAniCzgqTzL8tmFFUp7Hij3jQMdAcXWv6O/3yKtw9/OjXKe5LlJl2CTj1+QScqrt+W6+
+         4X/z5W/0PqBrEGDVx31YRRhOpyHpUvY5Tzx2Rb8eWGNASkPo1ow5CifyGqBXuazNgoeT
+         6gxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6L3aORYHMbwwCq3SCrpWJ+tXaNPgCZaZOcLf7iItFoM=;
-        b=tV0w7zOpUFYPn9ugQKxBvBwJrkK5Uq2+wQWaAcdqMPJln7hMU9nXdHAFXr5X7WSpit
-         goSU1Fg7oID+5ZdFRm2pbX4tw/Q/GyV5HHbDP4yRxGzvjpc1gYjHYL9/HITDjlloaCHy
-         Gc5Z+k9IZcKRTQxDDA6tqerwUdPGTj4GST4K2cjoqgbmKJj048txlaDBQmCeLu3Y0ZTC
-         RE2TgcEsMV9LeT16HMaT6q/KqiHgquDB8WqIP2FMKxuwhJ+Vp3lx34XgunQ0s/+R7NJi
-         EGQFGRlM/PiowF+OasiWxV/KylemybgJzIKNvXtsiJR/Wi1vSyVelCBu5Jsa3rliy+Fz
-         rckw==
-X-Gm-Message-State: AGi0PuZ7tNTmj1F3x0J2y4Aw89Yn/Noo5MoXl0oNT13dj7PWYdD8qwya
-        MOvJ6mvFrxt3onMrRV0vcgPr+5Qa+ZSJISv6WUSyNg==
-X-Google-Smtp-Source: APiQypKD7wVcZWhoSfKhnnMOWHbZfY+YnnpAAJPlZzKefOLNi4hmZpG97WRWAolZBV2nqJ5aYs8hHESeS5eTQm5YhZ4=
-X-Received: by 2002:aca:fcd8:: with SMTP id a207mr13378081oii.56.1586180255395;
- Mon, 06 Apr 2020 06:37:35 -0700 (PDT)
+        bh=QMRUCn8rsO+bPjKn1qdcEfpo/bYh1EFDH0NFxh4JbbE=;
+        b=rH3jG+qvJ+DowzDfAZ7xW2iiw6+xILrBPwKNONYoGwDpqe72IuHqz7aVBQLYdXUWZa
+         85xdNcxxRfoNxbEotKJXPWBVg2prYfesA4fUGycPyfpfiDIiCsh9nw4S6BCQ3FWA46pj
+         JuvOTSIPovqJIiXsvrJCQcWRzH8PTozTEACNJpm5FyfLq/81hF5nGNCgjs6XuaWagrrr
+         tdMjw7o+0pKuPbnrDtWN40z9evs8ozre/+wTE7tmrxtvgwv8iyIIq8MKI4Vc0k3YbsKf
+         A5C2V1i3ygqT6Pjccb7i3RHknS0E5atvliqrkt8M1dEaAegWTC1TLdjxLGkbjtOAiSsz
+         qLKQ==
+X-Gm-Message-State: AGi0Pua7XbYAaN4tDymTpynVP68+IJlp3OxKYOE43jpSVA8vutUvOzX6
+        iRMFH4KRafSfRsArOT4UlDpWFfmOECbCSk0dunc=
+X-Google-Smtp-Source: APiQypJ188rU6svptxJ91HlyWVWl94vuFQDl3ZXSyggPk3lDRguh8+3XLXQVsPseFRjh0psdTHQS9LkZfvtcVBykjnk=
+X-Received: by 2002:a2e:9819:: with SMTP id a25mr4177482ljj.288.1586184070321;
+ Mon, 06 Apr 2020 07:41:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200331133346.372517-1-robert.foss@linaro.org>
- <20200331133346.372517-3-robert.foss@linaro.org> <CAHp75VfFKY6nzb8aEWmop73v2haZ0P5+aTsKDEU8M=uUPn0u3g@mail.gmail.com>
-In-Reply-To: <CAHp75VfFKY6nzb8aEWmop73v2haZ0P5+aTsKDEU8M=uUPn0u3g@mail.gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 6 Apr 2020 15:37:24 +0200
-Message-ID: <CAG3jFyuH5Kad16R7Oit-c_7RasiEfPycOpA68JYLVopbyQ749w@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] media: ov8856: Add devicetree support
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+References: <CAOMZO5BQEHA-+pMmKzQj8kteNgMACYP==ezFdz_oYhJYFWKXSw@mail.gmail.com>
+In-Reply-To: <CAOMZO5BQEHA-+pMmKzQj8kteNgMACYP==ezFdz_oYhJYFWKXSw@mail.gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 6 Apr 2020 11:41:33 -0300
+Message-ID: <CAOMZO5CUf5aqaqzTJDjQa1scK1vKQR5YJb40a+TET7dzVRJDLQ@mail.gmail.com>
+Subject: Re: imx6: Cannot register mem2mem
+To:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     linux-media <linux-media@vger.kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hey Andy,
+On Mon, Apr 6, 2020 at 10:37 AM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> Hi,
+>
+> I am running kernel 5.6.2 on an imx6qp sabresd, but I cannot get the
+> mem2mem element from imx-media-csc-scaler.c to probe.
+>
+> I don't see imx6_media_probe_complete() getting called, hence
+> imx_media_csc_scaler_device_init() is never called and no mem2mem
+> element is registered.
+>
+> Any ideas as to how to get mem2mem registered on i.MX6?
 
-Thanks for the review, it is much appreciated!
+It seems that v4l2_async_notifier_can_complete() is always false, so
+v4l2_async_notifier_call_complete() is never called.
 
-On Tue, 31 Mar 2020 at 16:01, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Mar 31, 2020 at 4:36 PM Robert Foss <robert.foss@linaro.org> wrote:
-> >
-> > Add devicetree match table, and enable ov8856_probe()
-> > to initialize power, clocks and reset pins.
->
-> ...
->
-> > +static int __ov8856_power_on(struct ov8856 *ov8856)
-> > +{
-> > +       struct i2c_client *client = v4l2_get_subdevdata(&ov8856->sd);
-> > +       int ret;
-> > +
-> > +       ret = clk_prepare_enable(ov8856->xvclk);
-> > +       if (ret < 0) {
-> > +               dev_err(&client->dev, "failed to enable xvclk\n");
-> > +               return ret;
-> > +       }
-> > +
->
-> > +       if (is_acpi_node(ov8856->dev->fwnode))
->
-> Use dev_fwnode().
+If I change it like this:
 
-Ack.
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -213,10 +213,6 @@ v4l2_async_notifier_try_complete(struct
+v4l2_async_notifier *notifier)
+        if (!notifier->v4l2_dev)
+                return 0;
 
->
-> > +               return 0;
-> > +
-> > +       if (ov8856->reset_gpio) {
->
-> > +               gpiod_set_value_cansleep(ov8856->reset_gpio, GPIOD_OUT_HIGH);
->
-> This is wrong. You have to fix it to use either 0 or 1.
+-       /* Is everything ready? */
+-       if (!v4l2_async_notifier_can_complete(notifier))
+-               return 0;
+-
+        return v4l2_async_notifier_call_complete(notifier);
+ }
 
-I've changed all gpiod_set_value_cansleep() calls to use 0/1.
+Then the mem2mem driver can be successfully probed:
 
->
-> > +               usleep_range(1000, 2000);
-> > +       }
-> > +
-> > +       ret = regulator_bulk_enable(ARRAY_SIZE(ov8856_supply_names),
-> > +                                   ov8856->supplies);
->
-> > +       if (ret < 0) {
->
-> Do you need all ' < 0' parts all over the series?
+[    4.601350] imx-media: Registered ipu_ic_pp csc/scaler as /dev/video11
 
-Some checks are needed due to ACPI and DT support co-existing.
-Maybe it would be better to just split the probing into an ACPI path
-and a DT path.
+Any suggestions?
 
-I'll have a look through the series for redundant retval checks.
-
->
-> > +               dev_err(&client->dev, "failed to enable regulators\n");
-> > +               goto disable_clk;
-> > +       }
->
-> ...
->
-> > +       gpiod_set_value_cansleep(ov8856->reset_gpio, GPIOD_OUT_LOW);
->
-> Ditto.
-
-Ack.
-
->
-> ...
->
-> > +       gpiod_set_value_cansleep(ov8856->reset_gpio, GPIOD_OUT_HIGH);
->
-> Ditto.
-
-Ack.
-
->
-> ...
->
-> > +       gpiod_set_value_cansleep(ov8856->reset_gpio, GPIOD_OUT_HIGH);
->
-> Ditto.
-
-Ack.
-
->
-> ...
->
-> > -       ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
-> > -       if (ret)
-> > -               return ret;
->
-> Where is it gone? Why?
-
-It was replaced by a clk_get_rate call, which as Sakari pointed out,
-isn't correct.
-I'll rework the clock handling for v4.
-
->
-> > +       ov8856->xvclk = devm_clk_get_optional(dev, "xvclk");
-> > +       if (IS_ERR(ov8856->xvclk)) {
->
-> > +               dev_err(dev, "could not get xvclk clock (%ld)\n",
-> > +                       PTR_ERR(ov8856->xvclk));
->
-> Also you may use %pe here and in similar cases.
-
-Weirdly checkpatch complains about this.
-But it builds and runs cleanly, so I'll add it in v4.
-
->
-> > +               return PTR_ERR(ov8856->xvclk);
-> > +       }
->
-> > +       ov8856->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-> > +               GPIOD_OUT_HIGH);
->
-> Here parameter is correct. The question is, what the value should be
-> HIGH or LOW?
-> Basically HIGH means to assert the signal.
-
-Ack, I'll invert the logic.
-
->
-> > +       if (IS_ERR(ov8856->reset_gpio)) {
->
-> > +               dev_dbg(dev, "failed to get reset-gpio\n");
->
-> Noise.
-> Enable GPIO debug to see this kind of messages.
-
-Ack.
-
->
-> > +               return PTR_ERR(ov8856->reset_gpio);
-> > +       }
->
-> ...
->
-> > +       ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ov8856_supply_names),
-> > +                                     ov8856->supplies);
-> > +       if (ret) {
->
-> > +               dev_warn(dev, "failed to get regulators\n");
->
-> If it's a warning, why we return from here?
-> Same question to all other places with same issue.
-
-The issue I was seeing was the driver having to return a EDEFER here,
-so this warning sheds some light on which exact component is returning
-an EDEFER.
-
-[   15.962623] ov8856 16-0010: Dropping the link to regulator.29
-[   15.968464] ov8856 16-0010: failed to get regulators
-[   15.973493] ov8856 16-0010: failed to get HW configuration: -517
-[   15.979591] ov8856 16-0010: removing from PM domain titan_top_gdsc
-[   15.985855] ov8856 16-0010: genpd_remove_device()
-[   15.990672] i2c 16-0010: Driver ov8856 requests probe deferral
-
-Personally I found it helpful to speed up debugging, but I'll happily
-remove it if you prefer no warning.
-
->
-> > +               return ret;
-> >         }
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+Thanks
