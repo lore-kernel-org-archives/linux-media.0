@@ -2,341 +2,107 @@ Return-Path: <SRS0=MSVy=5W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EB02C2BA17
-	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 18:52:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE85AC2BA1B
+	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 18:59:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4E64B20719
-	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 18:52:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8FC1206B8
+	for <linux-media@archiver.kernel.org>; Mon,  6 Apr 2020 18:59:06 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="lAjFBTu4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726303AbgDFSwn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Apr 2020 14:52:43 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57722 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725928AbgDFSwm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Apr 2020 14:52:42 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 640BE296B37
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
-        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com
-Subject: [PATCH v3 2/3] media: staging: rkisp1: cap: remove field fmt_type from struct rkisp1_capture_fmt_cfg
-Date:   Mon,  6 Apr 2020 20:52:34 +0200
-Message-Id: <20200406185235.21238-3-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200406185235.21238-1-dafna.hirschfeld@collabora.com>
-References: <20200406185235.21238-1-dafna.hirschfeld@collabora.com>
+        id S1726269AbgDFS7D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Apr 2020 14:59:03 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:12884 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbgDFS7D (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Apr 2020 14:59:03 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e8b7b910000>; Mon, 06 Apr 2020 11:57:21 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 06 Apr 2020 11:59:02 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 06 Apr 2020 11:59:02 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 6 Apr
+ 2020 18:59:02 +0000
+Received: from [10.2.164.193] (172.20.13.39) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 6 Apr 2020
+ 18:58:58 +0000
+Subject: Re: [RFC PATCH v6 6/9] media: tegra: Add Tegra210 Video input driver
+To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
+CC:     <sboyd@kernel.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1585963507-12610-1-git-send-email-skomatineni@nvidia.com>
+ <1585963507-12610-7-git-send-email-skomatineni@nvidia.com>
+ <ca9a792f-ff5e-c82b-c2bc-32c4875e558d@gmail.com>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <a972950d-5860-2b77-b5ad-90044b8deb94@nvidia.com>
+Date:   Mon, 6 Apr 2020 11:58:55 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <ca9a792f-ff5e-c82b-c2bc-32c4875e558d@gmail.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1586199441; bh=o2YOjNGwEALpzr6ldAL/EJ7+Mp70+nUIZNI7t+BCnl0=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=lAjFBTu4nKWpTL7Ihnm6Da8jZ0JDs32OAPpY+hl9+SriQG/IP60ClPGUFhp0tAlsn
+         mw9+/7mDCmyF+oMZmKxcPvD48Juz8wnz7dWYi3BmO+eyqvsGmIbk/NNmoGL9+EEwkA
+         hDERDaQC8s93mz86g6HRIwsQrkGixY86AYTodhDl4f1bPU03k8TnUF+orTq+mgt0MA
+         huJtbijFv8134PZXaZZZ9MrPXWfXSTpKoPLcNNhBgahW+mUtTlHoAWPiemQWr9BlBP
+         LKDbRUgrHEUopI8G59NWQeD+nYCWagN2tIW2s9lmJ9pHu1/GZGVxr4kK4f0IbudJ/p
+         OPp9GiRkUvFww==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pixel encoding can be retrieved from the cap->pix.info.
-Therefore the field fmt_type can be removed from the
-struct rkisp1_capture_fmt_cfg.
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
----
- drivers/staging/media/rkisp1/rkisp1-capture.c | 51 +------------------
- 1 file changed, 2 insertions(+), 49 deletions(-)
+On 4/5/20 12:37 PM, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> 04.04.2020 04:25, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> ...
+>> +static int tegra_csi_init(struct host1x_client *client)
+>> +{
+>> +     struct tegra_csi *csi =3D host1x_client_to_csi(client);
+>> +     struct tegra_video_device *vid =3D dev_get_drvdata(client->host);
+>> +     int ret;
+>> +
+>> +     vid->csi =3D csi;
+>> +
+>> +     INIT_LIST_HEAD(&csi->csi_chans);
+>> +
+>> +     if (pm_runtime_enabled(csi->dev)) {
+>> +             ret =3D pm_runtime_get_sync(csi->dev);
+>> +             if (ret < 0) {
+>> +                     dev_err(csi->dev,
+>> +                             "failed to get runtime PM: %d\n", ret);
+>> +                     pm_runtime_put_noidle(csi->dev);
+>> +                     return ret;
+>> +             }
+>> +     } else {
+> RPM is supposed to be always available on Tegra nowadays.
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
-index 8e8ea7ed8de3..0bef5faf068e 100644
---- a/drivers/staging/media/rkisp1/rkisp1-capture.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
-@@ -52,7 +52,6 @@ enum rkisp1_plane {
-  */
- struct rkisp1_capture_fmt_cfg {
- 	u32 fourcc;
--	u8 fmt_type;
- 	u8 uv_swap;
- 	u32 write_format;
- 	u32 output_format;
-@@ -87,133 +86,106 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_mp_fmts[] = {
- 	/* yuv422 */
- 	{
- 		.fourcc = V4L2_PIX_FMT_YUYV,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVYU,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_VYUY,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUV422P,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV16,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV61,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVU422M,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
- 	},
- 	/* yuv420 */
- 	{
- 		.fourcc = V4L2_PIX_FMT_NV21,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV12,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV21M,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV12M,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUV420,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVU420,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
- 	},
- 	/* yuv444 */
- 	{
- 		.fourcc = V4L2_PIX_FMT_YUV444M,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
- 	},
- 	/* yuv400 */
- 	{
- 		.fourcc = V4L2_PIX_FMT_GREY,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
- 	},
- 	/* raw */
- 	{
- 		.fourcc = V4L2_PIX_FMT_SRGGB8,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGRBG8,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGBRG8,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SBGGR8,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SRGGB10,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGRBG10,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGBRG10,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SBGGR10,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SRGGB12,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGRBG12,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGBRG12,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SBGGR12,
--		.fmt_type = V4L2_PIXEL_ENC_BAYER,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
- 	},
- };
-@@ -222,43 +194,36 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
- 	/* yuv422 */
- 	{
- 		.fourcc = V4L2_PIX_FMT_YUYV,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVYU,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_VYUY,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUV422P,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV16,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV61,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVU422M,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
-@@ -266,37 +231,31 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
- 	/* yuv420 */
- 	{
- 		.fourcc = V4L2_PIX_FMT_NV21,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV12,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV21M,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV12M,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUV420,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVU420,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
-@@ -304,7 +263,6 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
- 	/* yuv444 */
- 	{
- 		.fourcc = V4L2_PIX_FMT_YUV444M,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV444,
-@@ -312,7 +270,6 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
- 	/* yuv400 */
- 	{
- 		.fourcc = V4L2_PIX_FMT_GREY,
--		.fmt_type = V4L2_PIXEL_ENC_YUV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV400,
-@@ -320,17 +277,14 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
- 	/* rgb */
- 	{
- 		.fourcc = V4L2_PIX_FMT_RGB24,
--		.fmt_type = V4L2_PIXEL_ENC_RGB,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_RGB888,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_RGB565,
--		.fmt_type = V4L2_PIXEL_ENC_RGB,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_RGB565,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_BGR666,
--		.fmt_type = V4L2_PIXEL_ENC_RGB,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_RGB666,
- 	},
-@@ -504,13 +458,12 @@ static void rkisp1_sp_disable(struct rkisp1_capture *cap)
- 
- static void rkisp1_mp_enable(struct rkisp1_capture *cap)
- {
--	const struct rkisp1_capture_fmt_cfg *isp_fmt = cap->pix.cfg;
- 	u32 mi_ctrl;
- 
- 	rkisp1_mp_disable(cap);
- 
- 	mi_ctrl = rkisp1_read(cap->rkisp1, RKISP1_CIF_MI_CTRL);
--	if (isp_fmt->fmt_type == V4L2_PIXEL_ENC_BAYER)
-+	if (v4l2_is_format_bayer(cap->pix.info))
- 		mi_ctrl |= RKISP1_CIF_MI_CTRL_RAW_ENABLE;
- 	/* YUV */
- 	else
-@@ -1265,7 +1218,7 @@ static int rkisp1_capture_link_validate(struct media_link *link)
- 		return -EPIPE;
- 	}
- 
--	if (cap->pix.cfg->fmt_type != isp->src_fmt->fmt_type) {
-+	if (cap->pix.info->pixel_enc != isp->src_fmt->fmt_type) {
- 		dev_err(cap->rkisp1->dev,
- 			"format type mismatch in link '%s:%d->%s:%d'\n",
- 			link->source->entity->name, link->source->index,
--- 
-2.20.1
+Sorry I was not sure if its all the time enabled, so added in v6.
+
+Will remove check and explicit runtime calls...
 
