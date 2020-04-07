@@ -2,169 +2,188 @@ Return-Path: <SRS0=K/Uv=5X=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6F8DC2BA2B
-	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 14:10:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AF99C2BB55
+	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 14:36:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EDC9B207FF
-	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 14:10:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="unknown key version" (0-bit key) header.d=smtpservice.net header.i=@smtpservice.net header.b="WuonCiGc";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=blazebox.homeip.net header.i=@blazebox.homeip.net header.b="L9gaPg2W"
+	by mail.kernel.org (Postfix) with ESMTP id 68C5E2075E
+	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 14:36:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729003AbgDGOKV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Apr 2020 10:10:21 -0400
-Received: from a1i135.smtp2go.com ([43.228.184.135]:49301 "EHLO
-        a1i135.smtp2go.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728970AbgDGOKV (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Apr 2020 10:10:21 -0400
-X-Greylist: delayed 439 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Apr 2020 10:10:20 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=smtpservice.net; s=m6sda0.a1-4.dyn; x=1586269520; h=Feedback-ID:
-        X-Smtpcorp-Track:Date:Message-ID:From:To:Subject:Reply-To:Sender:
-        List-Unsubscribe; bh=szH0dr7fGk6BBGPp1cSodMSc7V+G/xJTo4qB/FSZIWo=; b=WuonCiGc
-        zlhP+i7OUN0aktLGhcYf2D+WcEq55q+QycUprNbWfChrEuktBZSGbI7XLxoHEKDex4cBLndt5BIpv
-        Sf6oIsK0UiQqM3FVuKdKvfH7mnZEuiiByik208wWdiACKMQm+DabCRyL/8pHm+XhffLYQvTRvGYfF
-        XTCT/e8Abp+wJCR6bWLo3cVYI9/oNyWdG9UJKLAKwM/Z8bn9Ht4JJ6M6ZsENrpGvejzlnznU3ZJCg
-        IodoJSgK125Qff6OtL+MazTFzOgI3WXVyYGemucKkTCtKITCClUMerIUDxVCfRjVgqD47+o51zNpl
-        PQqxBmSqPkBaOZcjmZNHp00lKQ==;
-Received: from [10.45.79.71] (helo=SmtpCorp)
- by smtpcorp.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.92-S2G) (envelope-from <paulb@blazebox.homeip.net>)
- id 1jLooa-NaPSnZ-G0; Tue, 07 Apr 2020 14:02:56 +0000
-Received: from [10.162.83.196] (helo=mail.blazebox.homeip.net)
- by smtpcorp.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.92-S2G) (envelope-from <paulb@blazebox.homeip.net>)
- id 1jLooZ-Duuf7a-Ed; Tue, 07 Apr 2020 14:02:55 +0000
-Received: from blazebox.homeip.net (localhost [127.0.0.1])
- by mail.blazebox.homeip.net (Postfix) with ESMTP id CBCAE61D014;
- Tue,  7 Apr 2020 10:02:53 -0400 (EDT)
-X-Virus-Scanned: amavisd-new at blazebox.homeip.net
-Received: from mail.blazebox.homeip.net ([127.0.0.1])
- by blazebox.homeip.net (mail.blazebox.homeip.net [127.0.0.1]) (amavisd-new,
- port 10024)
- with LMTP id MulWGe1yJD6Q; Tue,  7 Apr 2020 10:02:48 -0400 (EDT)
-Received: from [IPv6:2001:470:1f07:a3a:dc8:1e2:a6b:6125] (blaze
- [IPv6:2001:470:1f07:a3a:dc8:1e2:a6b:6125])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (Client did not present a certificate)
- by mail.blazebox.homeip.net (Postfix) with ESMTPSA id B022761D013;
- Tue,  7 Apr 2020 10:02:47 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=blazebox.homeip.net;
- s=mail; t=1586268167;
- bh=szH0dr7fGk6BBGPp1cSodMSc7V+G/xJTo4qB/FSZIWo=;
- h=Subject:To:References:From:Cc:Date:In-Reply-To;
- b=L9gaPg2WGH1BFpzsUgiKda2b6R5JxRCyY1n5R4CYLd+e4k8i8eJZ5oR5BHUNqJF/2
- ETFVhahigpAxxweOWEBVySKB95RpluLWjlqkLZXO6bzX9ozQiIOhTjLe6SM5UZsu7z
- e6pLnNuqBvgMG5Kz4HeOtMFxwWtufFQelZc2xuYuMUsLLIjDNMEUB1jwoF7GjFdOLS
- WNIviZ+CP16sv25jbNehbSzXy5CHZNdbo7Ny14h3g1yA67vhOPOQsX7JSFVRIySn6G
- uyqW/aI/Ap0Cpqvdq4ATjZpaqr8y9tZLHeNHFCl59+tTuviWL+/m9njnA75V+UKCuG
- NwocOdOZ1IXaw==
-Subject: Re: [PATCH] drivers/dma-buf/Kconfig: correct typo in description
-To:     Sumit Semwal <sumit.semwal@linaro.org>
-References: <20200403183334.11440-1-paulb@blazebox.homeip.net>
- <CAO_48GEmjXyA0eEpJbHoeiHjLzYvnzhorWz2t+0o4B++HMH6AQ@mail.gmail.com>
-From:   Paul Blazejowski <paulb@blazebox.homeip.net>
-Autocrypt: addr=paulb@blazebox.homeip.net; prefer-encrypt=mutual; keydata=
- mQGiBEHIcSARBACppxS/Z8rEhKfsuYzIiwiiwH9q45OYqBTYQ1ODkTsGDk4UxD5yZysFTIuW
- 2S3Sn+e1EckzI7Ks3hcw5Li2I2ujImovtFRXWRQlbndptKXllmxoCBHTwDX+wdvefR4d51N4
- KCxEAJCc84udtbEW7MorND/7hRUr1DlChV0sdGrDAwCgoqohbRpJSPT72H/DX/LUkrz27pUD
- /R8S2eUoaVhM3xEPVw+mZmjvrQpC1Ks6nyehIrQ3JmrTPD4X8TXWxEd6ZvxADkSFFrIaQh1H
- nEJSw1ZN31peicsi9WKSclsiY1qkGDvYrg1fEMJawpMqarcuYpBKEUXmHOMuAjGJyYImnhQc
- xzpDQcq0/HfBZTIDpETaWwyCKu+QBACSt/DCOLDB1/rfYQsezQU9PpF7nS+24D2ZMsB9RBXB
- xaEPQS/YzH8+ZFmlyNQ16VGWUOBkVC0+ZEkiDg3lOFTwpWzI82ZMuAYDl6VH6GKxfKYUW0K8
- JsMDYdkFzR77sVYulPbNnTofKvuDLYjQaS0a0QeBjrz6X+ynNDCtBtxomLQ1UGF1bCBCbGF6
- ZWpvd3NraSAoRGlmZmllKSA8cGF1bGJAYmxhemVib3guaG9tZWlwLm5ldD6IfgQTEQIAPgIb
- AwYLCQgHAwIDFQIDAxYCAQIeAQIXgAIZARYhBKazQONwZ4ALgSvlbMLuTZodz7IjBQJeZ/vq
- BQke1i1jAAoJEMLuTZodz7IjYAMAn2bD1TpGHT1FEfBKTcaaNr4njsjtAJ4rlAfjOhof09iS
- QaBQRi8chFEUt7kCDQRByHEjEAgAoR2oPZkLHDuYieLWce7+x2EN5q/LfOphxEkYDimz4apf
- hjEFZLQVG3jSA0kuYHWvdhn5JnIvpD131XDQ2rL+jXca2ilVoqmlSQbcVCf1jjFSvGR5pfik
- EljQqS7QGwJ75otZYHxOdcStdbY0lmd3qQx3ONd8hiJ43+/vlmCD9icLj39fYr7GpE1Kx6wa
- Gud8ViSC4aCoO361fjLvF6y7ikKPOeiIqcEMcalmZo6QH5PXEFx/lt3tbmpPZ7BOq0PqJxlt
- 96uVs9SiWtOMlwtxyz3RuDOUwQyIW6g7zMgcaS3f+4olgQXAhs9goMWvwBvVar/KYfd/Hp/+
- rQtyUCaEgwADBgf9HX3aE5OU4iWU9a8T4ArJ9AmxgU1v7wH34AxJ7oLJcEAhN+3gbCehp9Bd
- B1gyDAVjkhQCAD3YrmMYDqQ1L/sVUYt2Efzbxp9JPgeswK0oPkxheFjumZ2ySdaP5+6Uid3p
- Em344ldGWDK8EUxptY71ABP0/5YmEQWQIH3e8rnyoo281KayJG4qg3G/iFdq59EeKAL4IaQt
- F0+ZDXXEmTnY5YntdD1QQ1X1Uv5QbJ7k1jCd7OFeA7MB+1MYB19uFgtGid2mGJgf0vDs226T
- 45Mtahn1s4u300Y5bGy0nVd3KGoYk+baCXQTP4zfSId0dJYCiTOcFht+vRiUfOAt1/YT04hm
- BBgRAgAmAhsMFiEEprNA43BngAuBK+Vswu5Nmh3PsiMFAl5n/EAFCR7WLWEACgkQwu5Nmh3P
- siP3DACfZWB2q1msgya9L+DrIKWWs1vIifUAoJTW5hMOIIlGKcaK/Fa+5nF1pusO
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
-Message-ID: <9acaaa5e-ef08-8a56-abdf-dc0026c67c80@blazebox.homeip.net>
-Date:   Tue, 7 Apr 2020 10:03:08 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1729306AbgDGOf6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Apr 2020 10:35:58 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:41454 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729287AbgDGOf4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Apr 2020 10:35:56 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 9F442295A6A
+Message-ID: <5c417620e1baeed7ec4ac750ab481366df2aa590.camel@collabora.com>
+Subject: Re: [PATCH v8 4/5] media: rkvdec: Add the rkvdec driver
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     DVB_Linux_Media <linux-media@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Date:   Tue, 07 Apr 2020 11:35:45 -0300
+In-Reply-To: <CAKQmDh_pCX_s2Ze7b1YBqgvEZHNrgzDUfcjPos8_GZq8x6=5Ng@mail.gmail.com>
+References: <20200403221345.16702-1-ezequiel@collabora.com>
+         <20200403221345.16702-5-ezequiel@collabora.com>
+         <CAKQmDh_pCX_s2Ze7b1YBqgvEZHNrgzDUfcjPos8_GZq8x6=5Ng@mail.gmail.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.0-1 
 MIME-Version: 1.0
-In-Reply-To: <CAO_48GEmjXyA0eEpJbHoeiHjLzYvnzhorWz2t+0o4B++HMH6AQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Smtpcorp-Track: 1MLooZDIIf7aEd.Mugu8iqbK
-Feedback-ID: 316702m:316702a3jAEqy:316702sHm0ryzyui
-X-Report-Abuse: Please forward a copy of this message, including all headers,
- to <abuse-report@smtp2go.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/7/20 7:54 AM, Sumit Semwal wrote:
-> Hello Paul,
-
-Hi Sumit,
-
+On Mon, 2020-04-06 at 16:27 -0400, Nicolas Dufresne wrote:
+> Le ven. 3 avr. 2020 à 18:14, Ezequiel Garcia <ezequiel@collabora.com> a écrit :
+> > From: Boris Brezillon <boris.brezillon@collabora.com>
+> > 
+> > The rockchip vdec block is a stateless decoder that's able to decode
+> > H264, HEVC and VP9 content. This commit adds the core infrastructure
+> > and the H264 backend. Support for VP9 and HEVS will be added later on.
+> > 
+> > Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 > 
-> On Sat, 4 Apr 2020 at 00:03, Paul Blazejowski <paulb@blazebox.homeip.net> wrote:
->>
->> While running `make oldconfig` CONFIG_DMABUF_MOVE_NOTIFY
->> has a typo in Kconfig description, correct it.
+> Sorry for the late feedback (got a comment lower) ...
 > 
-> Thanks for your patch.
-> 
-> May I request you to please run scripts/get_maintainer.pl while
-> submitting patches? This allows all interested people to be able to
-> review the patches.
+> Tested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 > 
 
-You got it! I will send a new patch, fixing another misspelling ... thanks!
+Nice, thank you.
 
->>
->> Signed-off-by: Paul Blazejowski <paulb@blazebox.homeip.net>
->> ---
->>  drivers/dma-buf/Kconfig | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/dma-buf/Kconfig b/drivers/dma-buf/Kconfig
->> index ef73b678419c..04dd09b1667b 100644
->> --- a/drivers/dma-buf/Kconfig
->> +++ b/drivers/dma-buf/Kconfig
->> @@ -43,10 +43,10 @@ config DMABUF_MOVE_NOTIFY
->>         bool "Move notify between drivers (EXPERIMENTAL)"
->>         default n
->>         help
->> -         Don''t pin buffers if the dynamic DMA-buf interface is available on both the
->> +         Don't pin buffers if the dynamic DMA-buf interface is available on both the
->>           exporter as well as the importer. This fixes a security problem where
->>           userspace is able to pin unrestricted amounts of memory through DMA-buf.
->> -         But marked experimental because we don''t jet have a consistent execution
->> +         But marked experimental because we don't jet have a consistent execution
->>           context and memory management between drivers.
->>
->>  config DMABUF_SELFTESTS
->> --
->> 2.26.0
->>
+> > --
+> > v8:
+> > * Fix kfree and style changes, as suggested by Andriy.
+> > v7:
+> > * hverkuil-cisco@xs4all.nl: replaced VFL_TYPE_GRABBER by _VIDEO
+> > * Use macros and ARRAY_SIZE instead of magic numbers,
+> >   as suggested by Mauro.
+> > * Renamed M_N macro, suggested by Mauro.
+> > * Use v4l2_m2m_buf_done_and_job_finish.
+> > * Set buffers' zeroth plane payload in .buf_prepare
+> > * Refactor try/s_fmt for spec compliance.
+> > ---
+> >  MAINTAINERS                                |    7 +
+> >  drivers/staging/media/Kconfig              |    2 +
+> >  drivers/staging/media/Makefile             |    1 +
+> >  drivers/staging/media/rkvdec/Kconfig       |   15 +
+> >  drivers/staging/media/rkvdec/Makefile      |    3 +
+> >  drivers/staging/media/rkvdec/TODO          |   11 +
+> >  drivers/staging/media/rkvdec/rkvdec-h264.c | 1156 ++++++++++++++++++++
+> >  drivers/staging/media/rkvdec/rkvdec-regs.h |  223 ++++
+> >  drivers/staging/media/rkvdec/rkvdec.c      | 1103 +++++++++++++++++++
+> >  drivers/staging/media/rkvdec/rkvdec.h      |  121 ++
+> >  10 files changed, 2642 insertions(+)
+> >  create mode 100644 drivers/staging/media/rkvdec/Kconfig
+> >  create mode 100644 drivers/staging/media/rkvdec/Makefile
+> >  create mode 100644 drivers/staging/media/rkvdec/TODO
+> >  create mode 100644 drivers/staging/media/rkvdec/rkvdec-h264.c
+> >  create mode 100644 drivers/staging/media/rkvdec/rkvdec-regs.h
+> >  create mode 100644 drivers/staging/media/rkvdec/rkvdec.c
+> >  create mode 100644 drivers/staging/media/rkvdec/rkvdec.h
+> > 
 > 
-> Best,
-> Sumit.
+[..]
+> > +
+> > +static void set_ps_field(u32 *buf, struct rkvdec_ps_field field, u32 value)
+> > +{
+> > +       u8 bit = field.offset % 32, word = field.offset / 32;
+> > +       u64 mask = GENMASK_ULL(bit + field.len - 1, bit);
+> > +       u64 val = ((u64)value << bit) & mask;
+> > +
+> > +       buf[word] &= ~mask;
+> > +       buf[word] |= val;
+> > +       if (bit + field.len > 32) {
+> > +               buf[word + 1] &= ~(mask >> 32);
+> > +               buf[word + 1] |= val >> 32;
+> > +       }
+> > +}
+> > +
+> > +static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+> > +                           struct rkvdec_h264_run *run)
+> > +{
+> > +       struct rkvdec_h264_ctx *h264_ctx = ctx->priv;
+> > +       const struct v4l2_ctrl_h264_sps *sps = run->sps;
+> > +       const struct v4l2_ctrl_h264_pps *pps = run->pps;
+> > +       const struct v4l2_ctrl_h264_decode_params *dec_params = run->decode_params;
+> > +       const struct v4l2_h264_dpb_entry *dpb = dec_params->dpb;
+> > +       struct rkvdec_h264_priv_tbl *priv_tbl = h264_ctx->priv_tbl.cpu;
+> > +       struct rkvdec_sps_pps_packet *hw_ps;
+> > +       dma_addr_t scaling_list_address;
+> > +       u32 scaling_distance;
+> > +       u32 i;
+> > +
+> > +       /*
+> > +        * HW read the SPS/PPS information from PPS packet index by PPS id.
+> > +        * offset from the base can be calculated by PPS_id * 32 (size per PPS
+> > +        * packet unit). so the driver copy SPS/PPS information to the exact PPS
+> > +        * packet unit for HW accessing.
+> > +        */
+> > +       hw_ps = &priv_tbl->param_set[pps->pic_parameter_set_id];
+> > +       memset(hw_ps, 0, sizeof(*hw_ps));
+> > +
+> > +#define WRITE_PPS(value, field) set_ps_field(hw_ps->info, field, value)
+> > +       /* write sps */
+> > +       WRITE_PPS(0xf, SEQ_PARAMETER_SET_ID);
+> > +       WRITE_PPS(0xff, PROFILE_IDC);
+> > +       WRITE_PPS(1, CONSTRAINT_SET3_FLAG);
+> 
+> At first I found that part rather interesting, but I see this
+> hardcoding matches what Rockchip do.
+> 
+> https://github.com/rockchip-linux/mpp/blob/release/mpp/hal/rkdec/h264d/hal_h264d_rkv_reg.c#L266
+> 
+> > +       WRITE_PPS(sps->chroma_format_idc, CHROMA_FORMAT_IDC);
+> 
+> But here's it's not so great. This driver does not implement any kind
+> of validation. In fact, if I pass 3
+> here  (YCbCr 4:4:4) it will accept it, and kind of decode some frames,
+> but eventually with crash and
+> reboot is needed. We should (as defined in the Statelss CODEC spec)
+> validate the SPS and refuse if
+> an unsupported profile idc, chroma idc, luma/chroma depth or coded
+> size is requested.
+
+Perhaps we could validate that at request_validate time,
+or maybe ops.try_ctrl is better.
+
+</thinking_out_loud>
+
+> Validating the
+> S_FMT is not sufficient as one can trick the driver in allocating
+> buffers that are too small.
 > 
 
-Cheers!
--paul
+I am not sure I follow you: how do you think the driver
+can be tricked like this?
+
+> What I suspect is that we need to be careful with this HW, as it seems
+> to be a bit half backed, which
+> means it might be supporting more features then supported by the TRM
+> or reference code, and we
+> must disable this with software.
+> 
+> (p.s. I can provide a stream to reproduce the 4:4:4 driver failure)
+> 
+
+Thanks,
+Ezequiel
+
