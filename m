@@ -2,131 +2,182 @@ Return-Path: <SRS0=K/Uv=5X=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD819C2BB54
-	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 13:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73858C2BB55
+	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 14:05:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7FBAF206F7
-	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 13:30:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47AE520719
+	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 14:05:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="lqs5NYs1"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="BoMvFf/V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728643AbgDGNaK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Apr 2020 09:30:10 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55551 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728482AbgDGNaK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Apr 2020 09:30:10 -0400
-Received: by mail-wm1-f65.google.com with SMTP id e26so1737702wmk.5
-        for <linux-media@vger.kernel.org>; Tue, 07 Apr 2020 06:30:08 -0700 (PDT)
+        id S1729028AbgDGOFt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Apr 2020 10:05:49 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:36577 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728861AbgDGOFt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Apr 2020 10:05:49 -0400
+Received: by mail-ot1-f68.google.com with SMTP id l23so3238454otf.3
+        for <linux-media@vger.kernel.org>; Tue, 07 Apr 2020 07:05:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UOi57oHr5s/5E0FnEyTsvZU+8lzzIWA8Vs7n3i5sOy8=;
-        b=lqs5NYs1YiLhL8UYGIe9i385jAjKdLyTNCC0mcSp8NXYVc3B3fKruAFL7KGE5997nk
-         AU0NOF6D1n0vf9dPE/x6VuROP+Kk/iTWwRUXo7Z7h38U6gNJLzwFX7IHoiTG1s18TFcw
-         z0AOpuGJ1dDsRgYdXKmlWbNw4BQQf3H5w4pXk=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1NdsvHQeHu5QTk7zrN8HxtBhQoh7MwqSb5UgLwBlUkg=;
+        b=BoMvFf/VkDwYpMORHYEN6VhZl9zkCF1rwYWePM3AbCC/5ff6rDQ6ThJrNVEODSt+bj
+         C9hPTShy6YVufNgRs01+mvvOpfYGjOhTMAVGjrFoHQ/daQJ5oJwp2XokTIqZS1ksJFln
+         pU3ISmF/3RY5/iz70Bp+Eer6w1lT14oepTW34=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UOi57oHr5s/5E0FnEyTsvZU+8lzzIWA8Vs7n3i5sOy8=;
-        b=Savz2g7kFkvq3mZvrpZUczumudlMfp6Gz3djdoUiqpPnt5fwxYLMWR/jzCh3qTphfD
-         1RlAtLVNTwkt2zNHBtwhFpuJHWlhCZHAj3WUAZ+61zHmdN+tg60Csp2fpgnMKkZ1bD8a
-         hFoJtsoSl8me9Ui5tvqsv+ieh1Y2vPMk/wJDxEUSHTQ/LiEFaDQR+EhWauYHCyIZxK4x
-         wnea+52rEHTcJkPZPwxfXuhnpkCrjYP73ksCFOHOo2HQNsmMU4ZNLLJCEyzKftHw0ou2
-         hMyOOvFKrLZa0OvRaM0kncPfbTLS8rrG6PtWvgLr0zh6b6sUSqXWPy8EaTYLFiVYBbMF
-         +04A==
-X-Gm-Message-State: AGi0PuY101KU93eHNTstP2YgBTgCYXRwD04JNTnSLE/fNeM+MtQFPULX
-        J+b3RVxcDVkzuam34086Xhh+zw==
-X-Google-Smtp-Source: APiQypLvHOdwXjsCrF5+Tv9IInpboZOwQ/KzmNwLIRILJMk/8AWfgULjQ2vlsEce0SADJExSiixc9g==
-X-Received: by 2002:a1c:e1c1:: with SMTP id y184mr2451445wmg.143.1586266207750;
-        Tue, 07 Apr 2020 06:30:07 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id j11sm2446877wmi.33.2020.04.07.06.30.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2020 06:30:07 -0700 (PDT)
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-To:     DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Chenbo Feng <fengc@google.com>,
-        Greg Hackmann <ghackmann@google.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        minchan@kernel.org, surenb@google.com, jenhaochen@google.com,
-        Martin Liu <liumartin@google.com>,
-        Daniel Vetter <daniel.vetter@intel.com>
-Subject: [PATCH] dma-buf: Fix SET_NAME ioctl uapi
-Date:   Tue,  7 Apr 2020 15:30:02 +0200
-Message-Id: <20200407133002.3486387-1-daniel.vetter@ffwll.ch>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1NdsvHQeHu5QTk7zrN8HxtBhQoh7MwqSb5UgLwBlUkg=;
+        b=Dbx+M13ZOXFTNvpjeC2Y1SekiJAkYecEyWKipV3AmsH06DesM/DCoUrfmEbF+k8V1G
+         69GVkS2Kzoj3UEZCRz1WIZBy6D4Nu1ZHnV+9uk2MRMbI0oo6J35wTqsbkJN1DamweR7p
+         k1PFQ+K87VuxJudMGq69m3QRZwQj1QgvNqlpq/bmV5t8rxRhrPoVQmaKpWD69vlrYhnw
+         sJzAisdUOYQiKaUTm8+ap3/VpH72KMOOVnYoOltDgLmdQsuIv6+8sPI3xqnhzhR0iuUu
+         aNey24DIhiKbNGrHmztn0q9/VtW5CiMmGwPNYWofP4tPSkpi7cJC/v46fVIjTQJm8mwS
+         xfjg==
+X-Gm-Message-State: AGi0PubkYF2UlON8RZ2Irxecf22/ZtGVQeviUiO+MX/UGVqOt7JrdjB1
+        hMq2Fc3bagMqZkQXFf3DZqL1vWw/M2GxRlIpCS4/aQ==
+X-Google-Smtp-Source: APiQypL/RlVT2i69RdrWi7CstJmXxSmQgsRErYEyJetTK19b3yru1qFqr6NV0uNNQhhnA48y6Mo8ViTg31pruJQoNjs=
+X-Received: by 2002:a05:6830:15d4:: with SMTP id j20mr1666775otr.303.1586268346055;
+ Tue, 07 Apr 2020 07:05:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200114134101.159194-1-liumartin@google.com> <20200224033941.GB211610@google.com>
+ <CAO_48GEPKk64uepCqZEc=6XGiv4tZnPHv=RZdwzKPuUqOxjpow@mail.gmail.com>
+In-Reply-To: <CAO_48GEPKk64uepCqZEc=6XGiv4tZnPHv=RZdwzKPuUqOxjpow@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Tue, 7 Apr 2020 16:05:34 +0200
+Message-ID: <CAKMK7uH9gxp79VPfG+yMp+65_-+=U2iV1UH-SfzRnOc=9T4cPw@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf: support 32bit DMA_BUF_SET_NAME ioctl
+To:     Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     Martin Liu <liumartin@google.com>,
+        Minchan Kim <minchan@kernel.org>, surenb@google.com,
+        Wei Wang <wvw@google.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        DRI mailing list <dri-devel@lists.freedesktop.org>,
+        Linaro MM SIG <linaro-mm-sig@lists.linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, jenhaochen@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The uapi is the same on 32 and 64 bit, but the number isnt. Everyone
-who botched this please re-read:
+On Tue, Apr 7, 2020 at 3:26 PM Sumit Semwal <sumit.semwal@linaro.org> wrote=
+:
+>
+> Hello,
+>
+> Daniel, your comments here, please?
 
-https://www.kernel.org/doc/html/v5.4-preprc-cpu/ioctl/botching-up-ioctls.html
+Don't :-)
 
-Also, the type argument for the ioctl macros is for the type the void
-__user *arg pointer points at, which in this case would be the
-variable-sized char[] of a 0 terminated string. So this was botched in
-more than just the usual ways.
+I mean rule of thumb you should never need a compat_ioctl for a new
+ioctl, that's just failure to read
+https://www.kernel.org/doc/html/v5.4-preprc-cpu/ioctl/botching-up-ioctls.ht=
+ml
 
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Chenbo Feng <fengc@google.com>
-Cc: Greg Hackmann <ghackmann@google.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: minchan@kernel.org
-Cc: surenb@google.com
-Cc: jenhaochen@google.com
-Cc: Martin Liu <liumartin@google.com>
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
----
- drivers/dma-buf/dma-buf.c    | 3 ++-
- include/uapi/linux/dma-buf.h | 4 ++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+Specifically the char * pointer in the ioctl definition is the
+problem. Now we're somewhat lucky here, since the actual layout of the
+data isn't different between 32 and 64 bit, it's only the ioctl. Which
+is the 2nd issue, the type in there should be the type of the data in
+userspace, not the type of the _pointer_ to the stuff in userspace. So
+here actually variable-sized char[] array, which also doesn't work
+really.
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 570c923023e6..1d923b8e4c59 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -388,7 +388,8 @@ static long dma_buf_ioctl(struct file *file,
- 
- 		return ret;
- 
--	case DMA_BUF_SET_NAME:
-+	case DMA_BUF_SET_NAME_A:
-+	case DMA_BUF_SET_NAME_B:
- 		return dma_buf_set_name(dmabuf, (const char __user *)arg);
- 
- 	default:
-diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
-index dbc7092e04b5..21dfac815dc0 100644
---- a/include/uapi/linux/dma-buf.h
-+++ b/include/uapi/linux/dma-buf.h
-@@ -39,6 +39,10 @@ struct dma_buf_sync {
- 
- #define DMA_BUF_BASE		'b'
- #define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
-+/* 32/64bitness of this uapi was botched in android, there's no difference
-+ * between them in actual uapi, they're just different numbers. */
- #define DMA_BUF_SET_NAME	_IOW(DMA_BUF_BASE, 1, const char *)
-+#define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, u32)
-+#define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, u64)
- 
- #endif
--- 
-2.25.1
+Anyway I've created a quick patch to have distinct ioctl number
+defines and handle both in the main handler, that should work. Cc'ed
+everyone from this thread, please test.
+-Daniel
 
+>
+> On Mon, 24 Feb 2020 at 09:09, Martin Liu <liumartin@google.com> wrote:
+> >
+> > On Tue, Jan 14, 2020 at 09:41:01PM +0800, Martin Liu wrote:
+> >
+> > CC more MLs for winder review.
+> >
+> > > This commit adds SET_NAME ioctl coversion to
+> > > support 32 bit ioctl.
+> > >
+> > > Signed-off-by: Martin Liu <liumartin@google.com>
+> > > ---
+> > >  drivers/dma-buf/dma-buf.c | 22 +++++++++++++++++++++-
+> > >  1 file changed, 21 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> > > index ce41cd9b758a..a73048b34843 100644
+> > > --- a/drivers/dma-buf/dma-buf.c
+> > > +++ b/drivers/dma-buf/dma-buf.c
+> > > @@ -25,6 +25,7 @@
+> > >  #include <linux/mm.h>
+> > >  #include <linux/mount.h>
+> > >  #include <linux/pseudo_fs.h>
+> > > +#include <linux/compat.h>
+> > >
+> > >  #include <uapi/linux/dma-buf.h>
+> > >  #include <uapi/linux/magic.h>
+> > > @@ -409,13 +410,32 @@ static void dma_buf_show_fdinfo(struct seq_file=
+ *m, struct file *file)
+> > >       dma_resv_unlock(dmabuf->resv);
+> > >  }
+> > >
+> > > +#ifdef CONFIG_COMPAT
+> > > +static long dma_buf_ioctl_compat(struct file *file, unsigned int cmd=
+,
+> > > +                              unsigned long arg)
+> > > +{
+> > > +     switch (_IOC_NR(cmd)) {
+> > > +     case _IOC_NR(DMA_BUF_SET_NAME):
+> > > +             /* Fix up pointer size*/
+> > > +             if (_IOC_SIZE(cmd) =3D=3D sizeof(compat_uptr_t)) {
+> > > +                     cmd &=3D ~IOCSIZE_MASK;
+> > > +                     cmd |=3D sizeof(void *) << IOCSIZE_SHIFT;
+> > > +             }
+> > > +             break;
+> > > +     }
+> > > +     return dma_buf_ioctl(file, cmd, (unsigned long)compat_ptr(arg))=
+;
+> > > +}
+> > > +#endif
+> > > +
+> > >  static const struct file_operations dma_buf_fops =3D {
+> > >       .release        =3D dma_buf_release,
+> > >       .mmap           =3D dma_buf_mmap_internal,
+> > >       .llseek         =3D dma_buf_llseek,
+> > >       .poll           =3D dma_buf_poll,
+> > >       .unlocked_ioctl =3D dma_buf_ioctl,
+> > > -     .compat_ioctl   =3D compat_ptr_ioctl,
+> > > +#ifdef CONFIG_COMPAT
+> > > +     .compat_ioctl   =3D dma_buf_ioctl_compat,
+> > > +#endif
+> > >       .show_fdinfo    =3D dma_buf_show_fdinfo,
+> > >  };
+> > >
+> > > --
+> > > 2.25.0.rc1.283.g88dfdc4193-goog
+> > >
+>
+>
+>
+> --
+> Thanks and regards,
+>
+> Sumit Semwal
+> Linaro Consumer Group - Kernel Team Lead
+> Linaro.org =E2=94=82 Open source software for ARM SoCs
+
+
+
+--=20
+Daniel Vetter
+Software Engineer, Intel Corporation
++41 (0) 79 365 57 48 - http://blog.ffwll.ch
