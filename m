@@ -2,94 +2,57 @@ Return-Path: <SRS0=K/Uv=5X=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F3E2C2BA16
-	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 07:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6FDEC2BA16
+	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 07:34:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4EC9C2064A
-	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 07:27:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4B442074F
+	for <linux-media@archiver.kernel.org>; Tue,  7 Apr 2020 07:34:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbgDGH1S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Apr 2020 03:27:18 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:47538 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726591AbgDGH1S (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 7 Apr 2020 03:27:18 -0400
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id BB43D634C89
-        for <linux-media@vger.kernel.org>; Tue,  7 Apr 2020 10:26:10 +0300 (EEST)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1jLicb-0002Iw-RR
-        for linux-media@vger.kernel.org; Tue, 07 Apr 2020 10:26:09 +0300
-Date:   Tue, 7 Apr 2020 10:26:09 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for 5.8] ImgU and sensor driver patches
-Message-ID: <20200407072609.GH6127@valkosipuli.retiisi.org.uk>
+        id S1727003AbgDGHeT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Apr 2020 03:34:19 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:59246 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726030AbgDGHeT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 7 Apr 2020 03:34:19 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jLihm-009m4N-5L; Tue, 07 Apr 2020 07:31:30 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jLim8-0005BY-GD; Tue, 07 Apr 2020 07:36:00 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL for 5.8] ImgU and sensor driver patches (#62897)
+Date:   Tue,  7 Apr 2020 07:36:00 +0000
+Message-Id: <20200407073600.19891-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200407072609.GH6127@valkosipuli.retiisi.org.uk>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+From: builder@linuxtv.org
 
-Here's a set of ImgU and sensor driver patches.
+Pull request: https://patchwork.linuxtv.org/patch/62897/
+Build log: https://builder.linuxtv.org/job/patchwork/45686/
+Build time: 00:05:46
+Link: https://lore.kernel.org/linux-media/20200407072609.GH6127@valkosipuli.retiisi.org.uk
 
-Please pull.
+gpg: Signature made Mon 06 Apr 2020 09:42:14 AM UTC
+gpg:                using DSA key F0D0377A0D4F25A79238EFE56D40361B6E28C193
+gpg:                issuer "sakari.ailus@linux.intel.com"
+gpg: Good signature from "Sakari Ailus <sakari.ailus@linux.intel.com>" [full]
 
-
-The following changes since commit 2632e7b618a7730969f9782593c29ca53553aa22:
-
-  media: venus: firmware: Ignore secure call error on first resume (2020-03-30 11:28:18 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/sailus/media_tree.git tags/for-5.8-1-signed
-
-for you to fetch changes up to 20ec71010d5cc887a4436c2b3f39d6f1d9c92817:
-
-  media: staging: imgu: do not hold spinlock during freeing mmu page table (2020-04-06 12:18:36 +0300)
-
-----------------------------------------------------------------
-ImgU and sensor driver fixes and cleanups
-
-----------------------------------------------------------------
-Bingbu Cao (4):
-      media: staging/intel-ipu3: Implement lock for stream on/off operations
-      media: doc-rst: add yavta test example in ipu3 docs
-      media: ipu3.rst: add yuv-downscaling into pipeline diagram
-      media: staging: imgu: do not hold spinlock during freeing mmu page table
-
-Deepak R Varma (3):
-      media: staging/intel-ipu3: css: simplify expression
-      media: staging/intel-ipu3: Remove extra blank lines
-      media: staging/intel-ipu3: Simplify single goto jump
-
-Tomi Valkeinen (1):
-      media: ov5640: fix use of destroyed mutex
-
- Documentation/media/v4l-drivers/ipu3.rst     | 29 ++++++++++++++++++++--------
- drivers/media/i2c/ov5640.c                   |  4 ++--
- drivers/staging/media/ipu3/TODO              |  2 --
- drivers/staging/media/ipu3/ipu3-css-params.c | 14 ++++++--------
- drivers/staging/media/ipu3/ipu3-mmu.c        | 10 ++++++----
- drivers/staging/media/ipu3/ipu3-v4l2.c       | 28 ++++++++++++++++-----------
- drivers/staging/media/ipu3/ipu3.c            |  3 +++
- drivers/staging/media/ipu3/ipu3.h            |  4 ++++
- 8 files changed, 59 insertions(+), 35 deletions(-)
-
--- 
-Sakari Ailus
+Summary: no issues
