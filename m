@@ -2,132 +2,67 @@ Return-Path: <SRS0=54rz=5Y=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C5BEC2D0F4
-	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 17:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9744C2D0F4
+	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 17:27:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 170D02082D
-	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 17:23:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJnPqtCD"
+	by mail.kernel.org (Postfix) with ESMTP id 9E40420771
+	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 17:27:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728533AbgDHRXn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Apr 2020 13:23:43 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:43221 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727327AbgDHRXn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Apr 2020 13:23:43 -0400
-Received: by mail-lj1-f193.google.com with SMTP id g27so8456041ljn.10
-        for <linux-media@vger.kernel.org>; Wed, 08 Apr 2020 10:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0bb2nrCy5pm0c8i9XlYnnzT0iDevSHTFfOkwmC+DgLA=;
-        b=lJnPqtCDl6nLt69QJWktgMVEaFpUHij/siKE6HsAQ8/xboEvtd2Ih/hcHeZn73/TPR
-         bCwSi9gtJCPKRpQBYLHsU9NntLkrY0+EKiA6UjHZ1pfyxJr4dqep1mHK/JaFu7/4jE8A
-         L53m7YJ4uqtvo41kh71qptPh9drIKPxjYEkJNxYayOwvY7zCpE3Co93NGo3+FP3sy3D2
-         h4yzoSwjQNbGpi7lwACsLqiOVayTyV74fx9SVEtu3dFbZYUJVQwMTB+Z7WqNajRKFYc2
-         LQe6nXoRFgeeT51hcixPqClH1vD5q7y8K8966cGkRnFt2MoJ69mfH5P4EQ8HE9ab4uxS
-         X4Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0bb2nrCy5pm0c8i9XlYnnzT0iDevSHTFfOkwmC+DgLA=;
-        b=n1Wa3q/wAOI1pa30U5TqghYjURbRdqLcvbV6j6KfswzE0azjQPOXSO7ubIXHdB2zl6
-         Kx673TKwhN+qRPPb6jkCCP+z9wGvrptKY/u5prJB9UMdUoFiDL4RFirsXY99f+W6kC//
-         REnBtuu1TR018o2fU3cmYg/ZQ/6kT9j7KcZv869Q2JmpigoQugcm1LyEzY3cAQT07iuh
-         kcIc+9P7RtXjEkEb9F9fFNgHe4eG9nqw1sjdAJUlnK8ls8J+B99W5k31loLHVwqWB9HE
-         Ey3Qn6raGmaplCXjCZ5TOng12eAO6ZRgrISl5d0nlXfjEUAF7wGIF054kBXLb29XFM4K
-         Z2OA==
-X-Gm-Message-State: AGi0PuaMvsthqKbuBRpgdQgjV6vIzMCRhpOJvc40zl3zVyx2b8+xleht
-        CdBcGTb96gYHnfQTpqnoGyNgGsF3WsD4IMofJqI=
-X-Google-Smtp-Source: APiQypLMbKN6pNSgHfpev1qxD4ITT4/U2npDi95TL7Ej6JbVCIMryw2Un/1r10hzZ3t/3z6iP8Z8AWeKNEtudqVtvJ8=
-X-Received: by 2002:a05:651c:30b:: with SMTP id a11mr5570771ljp.164.1586366621533;
- Wed, 08 Apr 2020 10:23:41 -0700 (PDT)
+        id S1730573AbgDHR1G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Apr 2020 13:27:06 -0400
+Received: from turbocat.net ([88.99.82.50]:33410 "EHLO mail.turbocat.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730538AbgDHR1F (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 8 Apr 2020 13:27:05 -0400
+X-Greylist: delayed 444 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Apr 2020 13:27:05 EDT
+Received: from hps2020.home.selasky.org (unknown [62.141.129.235])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.turbocat.net (Postfix) with ESMTPSA id 3BC6B260306
+        for <linux-media@vger.kernel.org>; Wed,  8 Apr 2020 19:19:39 +0200 (CEST)
+To:     linux-media@vger.kernel.org
+From:   Hans Petter Selasky <hps@selasky.org>
+Subject: [PATCH] Fix broken for loop in libv4l
+Message-ID: <3fc9b235-4763-546d-c9f6-5ac928a1bcff@selasky.org>
+Date:   Wed, 8 Apr 2020 19:17:42 +0200
+User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-References: <20200408123215.2531-1-festevam@gmail.com> <c069af02-af3c-9527-eed4-839681c73ce6@gmail.com>
-In-Reply-To: <c069af02-af3c-9527-eed4-839681c73ce6@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 8 Apr 2020 14:24:07 -0300
-Message-ID: <CAOMZO5BN6igxVGRnOnftv=PGZWi=2Qb2Th0fhBon93Fk-zWj+w@mail.gmail.com>
-Subject: Re: [PATCH 1/4] media: imx.rst: Fix the MIPI CSI-2 virtual channel
-To:     Steve Longerbeam <slongerbeam@gmail.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-media <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Steve,
+Hi,
 
-On Wed, Apr 8, 2020 at 1:35 PM Steve Longerbeam <slongerbeam@gmail.com> wrote:
+This is one in a series of patches. Is this the right place to post 
+patches for libv4l ?
 
-> change to:
->
-> media-ctl -V "'ipu1_ic_prpenc':1 [fmt:ARGB8888_1X32/800x600]"
+Signed-off-by: Hans Petter Selasky <hps@selasky.org>
+---
+  lib/libv4lconvert/rgbyuv.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-If I make this change I get:
+diff --git a/lib/libv4lconvert/rgbyuv.c b/lib/libv4lconvert/rgbyuv.c
+index 79bc0bdb..b54b4577 100644
+--- a/lib/libv4lconvert/rgbyuv.c
++++ b/lib/libv4lconvert/rgbyuv.c
+@@ -893,7 +893,7 @@ void v4lconvert_nv12_to_yuv420(const unsigned char 
+*src, unsigned char *dest,
+  	}
 
-# v4l2-ctl --stream-mmap -d /dev/video1
-[  501.143012] ipu1_ic_prpenc: capture format not valid
-                VIDIOC_STREAMON returned -1 (Invalid argument)
-
-Going back to the original example:
-
-#  media-ctl -V "'ipu1_ic_prpenc':1 [fmt:AYUV32/640x480]"
-# v4l2-ctl --stream-mmap -d /dev/video1
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 30.03 fps
-
-Changing only the resolution:
-
-#  media-ctl -V "'ipu1_ic_prpenc':1 [fmt:AYUV32/800x600]"
-# v4l2-ctl --stream-mmap -d /dev/video1
-[  658.358246] ipu1_ic_prpenc: capture format not valid
-                VIDIOC_STREAMON returned -1 (Invalid argument)
-
-Any ideas?
-
-These are the lines I am currently using as per your feedback:
-
-   # Setup links
-   media-ctl -l "'ov5640 1-003c':0 -> 'imx6-mipi-csi2':0[1]"
-   media-ctl -l "'imx6-mipi-csi2':1 -> 'ipu1_csi0_mux':0[1]"
-   media-ctl -l "'ipu1_csi0_mux':2 -> 'ipu1_csi0':0[1]"
-   media-ctl -l "'ipu1_csi0':1 -> 'ipu1_ic_prp':0[1]"
-   media-ctl -l "'ipu1_ic_prp':1 -> 'ipu1_ic_prpenc':0[1]"
-   media-ctl -l "'ipu1_ic_prpenc':1 -> 'ipu1_ic_prpenc capture':0[1]"
-   # Configure pads
-   media-ctl -V "'ov5640 1-003c':0 [fmt:UYVY2X8/640x480]"
-   media-ctl -V "'imx6-mipi-csi2':1 [fmt:UYVY2X8/640x480]"
-   media-ctl -V "'ipu1_csi0_mux':2 [fmt:UYVY2X8/640x480]"
-   media-ctl -V "'ipu1_csi0':1 [fmt:AYUV32/640x480]"
-   media-ctl -V "'ipu1_ic_prp':1 [fmt:AYUV32/640x480]"
-   media-ctl -V "'ipu1_ic_prpenc':1 [fmt:ARGB8888_1X32/800x600]"
-
-Thanks,
-
-Fabio Estevam
-
-   # Setup links
-   media-ctl -l "'ov5640 1-003c':0 -> 'imx6-mipi-csi2':0[1]"
-   media-ctl -l "'imx6-mipi-csi2':1 -> 'ipu1_csi0_mux':0[1]"
-   media-ctl -l "'ipu1_csi0_mux':2 -> 'ipu1_csi0':0[1]"
-   media-ctl -l "'ipu1_csi0':1 -> 'ipu1_ic_prp':0[1]"
-   media-ctl -l "'ipu1_ic_prp':1 -> 'ipu1_ic_prpenc':0[1]"
-   media-ctl -l "'ipu1_ic_prpenc':1 -> 'ipu1_ic_prpenc capture':0[1]"
-   # Configure pads
-   media-ctl -V "'ov5640 1-003c':0 [fmt:UYVY2X8/640x480]"
-   media-ctl -V "'imx6-mipi-csi2':1 [fmt:UYVY2X8/640x480]"
-   media-ctl -V "'ipu1_csi0_mux':2 [fmt:UYVY2X8/640x480]"
-   media-ctl -V "'ipu1_csi0':1 [fmt:AYUV32/640x480]"
-   media-ctl -V "'ipu1_ic_prp':1 [fmt:AYUV32/640x480]"
-   media-ctl -V "'ipu1_ic_prpenc':1 [fmt:ARGB8888_1X32/800x600]"
+  	for (i = 0; i < height; i++)
+-		for (j = 0; i < width; j++) {
++		for (j = 0; j < width; j++) {
+  			*ydst++ = *ysrc++;
+  			if (((i % 2) == 0) && ((j % 2) == 0)) {
+  				*udst++ = *uvsrc++;
+-- 
+2.25.0
