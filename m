@@ -2,161 +2,132 @@ Return-Path: <SRS0=54rz=5Y=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 905A1C2D0F4
-	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 16:42:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C5BEC2D0F4
+	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 17:23:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5A7F820769
-	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 16:42:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 170D02082D
+	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 17:23:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AJ69LVkC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJnPqtCD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728567AbgDHQmg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Apr 2020 12:42:36 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:51011 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729029AbgDHQmf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Apr 2020 12:42:35 -0400
-Received: by mail-wm1-f68.google.com with SMTP id x25so139519wmc.0
-        for <linux-media@vger.kernel.org>; Wed, 08 Apr 2020 09:42:34 -0700 (PDT)
+        id S1728533AbgDHRXn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Apr 2020 13:23:43 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:43221 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727327AbgDHRXn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Apr 2020 13:23:43 -0400
+Received: by mail-lj1-f193.google.com with SMTP id g27so8456041ljn.10
+        for <linux-media@vger.kernel.org>; Wed, 08 Apr 2020 10:23:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=8AJiiMBDjB0IxB2FyEVG9I0E0SIyliCvOOXROSWPU9o=;
-        b=AJ69LVkCR18iHG4bBm44mLBosfvOcGEd4DsTHNVoO9dYa3xUh/ejwStxbOnkhzMhEA
-         8hWAMAicl8SsYRt9CSxffLESia9SwKl0UdsJtq3sMuJjpq7PLKCx4KbRjO+Yx/ld9bGF
-         JXfN1/hhDxP7YosEVMZjKX6zfaUKGtcXiRcx1ynmmrgYSjbDcPvYTJfsB19+QocqjDrf
-         +DVVe8OPNUYzm+NIbH/G1qeaXFZtLCDkLAuE/0HaP+IKzh9K51zKJvhO/4GZM+ncU7n1
-         eQ0W+cs1XI4+wjZ5ew7Z1EMlWJ6sZC9BbNCLdDd4jj8rOXl3+eO7fgeoWmm6Lm/0T85W
-         KqyA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0bb2nrCy5pm0c8i9XlYnnzT0iDevSHTFfOkwmC+DgLA=;
+        b=lJnPqtCDl6nLt69QJWktgMVEaFpUHij/siKE6HsAQ8/xboEvtd2Ih/hcHeZn73/TPR
+         bCwSi9gtJCPKRpQBYLHsU9NntLkrY0+EKiA6UjHZ1pfyxJr4dqep1mHK/JaFu7/4jE8A
+         L53m7YJ4uqtvo41kh71qptPh9drIKPxjYEkJNxYayOwvY7zCpE3Co93NGo3+FP3sy3D2
+         h4yzoSwjQNbGpi7lwACsLqiOVayTyV74fx9SVEtu3dFbZYUJVQwMTB+Z7WqNajRKFYc2
+         LQe6nXoRFgeeT51hcixPqClH1vD5q7y8K8966cGkRnFt2MoJ69mfH5P4EQ8HE9ab4uxS
+         X4Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=8AJiiMBDjB0IxB2FyEVG9I0E0SIyliCvOOXROSWPU9o=;
-        b=W6SxylQ3ay+m0h/VDwGNGo55xTV7/c6Cc20IOtbPdJbHto7nsu1Wq96iikFEgHMe+x
-         41X056IoJ956E4ph93KcSXIINKIeafC0fI3xGT/WC2PrVStwwmxTAQKHk+mi0Y+7+vKQ
-         WJ9XKsydQ1PISEm2ZSH/HIc6+nCccvcvRNbOZ2kUsql4hFdneVR7RlXeCegsHO07750q
-         VwJgJ7WVGMUL7GJPI/EUzwL38Oao2WBFvQJjj7VngmFvVffZim/r3k9NUFMkdhsUxxUp
-         sgJeC6fZ45TRnfiHnoHOsTAwuGKwWUEAifSRTfESb4TD3BNfPyVU4u0LuBXveVUihrZo
-         X/Xg==
-X-Gm-Message-State: AGi0PuZIPZOKTx+XQqRUF+9sRogDSIFRu9LVwaTuSIfDL+/7qafMvwUL
-        Ex3XDlhefnvIJLpYKihiq0YwOXlzj1U=
-X-Google-Smtp-Source: APiQypIIa3XAbj332dzN+4FWyGYmdCbEWWhlKt4Wsd3FeSWSKfFiN537cuuvNG9aW/JVFWxiYmO7ng==
-X-Received: by 2002:a7b:c5c6:: with SMTP id n6mr5407723wmk.74.1586364153557;
-        Wed, 08 Apr 2020 09:42:33 -0700 (PDT)
-Received: from [172.30.89.104] (sjewanfw1-nat.mentorg.com. [139.181.7.34])
-        by smtp.gmail.com with ESMTPSA id w18sm13808053wrn.55.2020.04.08.09.42.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Apr 2020 09:42:33 -0700 (PDT)
-Subject: Re: [PATCH 4/4] media: imx.rst: Provide streaming examples for
- imx6q-sabresd
-To:     Fabio Estevam <festevam@gmail.com>, hverkuil-cisco@xs4all.nl
-Cc:     p.zabel@pengutronix.de, linux-media@vger.kernel.org
-References: <20200408123215.2531-1-festevam@gmail.com>
- <20200408123215.2531-4-festevam@gmail.com>
-From:   Steve Longerbeam <slongerbeam@gmail.com>
-Message-ID: <fa7db6c5-5f76-7621-412f-97f67f48e303@gmail.com>
-Date:   Wed, 8 Apr 2020 09:42:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0bb2nrCy5pm0c8i9XlYnnzT0iDevSHTFfOkwmC+DgLA=;
+        b=n1Wa3q/wAOI1pa30U5TqghYjURbRdqLcvbV6j6KfswzE0azjQPOXSO7ubIXHdB2zl6
+         Kx673TKwhN+qRPPb6jkCCP+z9wGvrptKY/u5prJB9UMdUoFiDL4RFirsXY99f+W6kC//
+         REnBtuu1TR018o2fU3cmYg/ZQ/6kT9j7KcZv869Q2JmpigoQugcm1LyEzY3cAQT07iuh
+         kcIc+9P7RtXjEkEb9F9fFNgHe4eG9nqw1sjdAJUlnK8ls8J+B99W5k31loLHVwqWB9HE
+         Ey3Qn6raGmaplCXjCZ5TOng12eAO6ZRgrISl5d0nlXfjEUAF7wGIF054kBXLb29XFM4K
+         Z2OA==
+X-Gm-Message-State: AGi0PuaMvsthqKbuBRpgdQgjV6vIzMCRhpOJvc40zl3zVyx2b8+xleht
+        CdBcGTb96gYHnfQTpqnoGyNgGsF3WsD4IMofJqI=
+X-Google-Smtp-Source: APiQypLMbKN6pNSgHfpev1qxD4ITT4/U2npDi95TL7Ej6JbVCIMryw2Un/1r10hzZ3t/3z6iP8Z8AWeKNEtudqVtvJ8=
+X-Received: by 2002:a05:651c:30b:: with SMTP id a11mr5570771ljp.164.1586366621533;
+ Wed, 08 Apr 2020 10:23:41 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200408123215.2531-4-festevam@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20200408123215.2531-1-festevam@gmail.com> <c069af02-af3c-9527-eed4-839681c73ce6@gmail.com>
+In-Reply-To: <c069af02-af3c-9527-eed4-839681c73ce6@gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 8 Apr 2020 14:24:07 -0300
+Message-ID: <CAOMZO5BN6igxVGRnOnftv=PGZWi=2Qb2Th0fhBon93Fk-zWj+w@mail.gmail.com>
+Subject: Re: [PATCH 1/4] media: imx.rst: Fix the MIPI CSI-2 virtual channel
+To:     Steve Longerbeam <slongerbeam@gmail.com>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-media <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Steve,
 
+On Wed, Apr 8, 2020 at 1:35 PM Steve Longerbeam <slongerbeam@gmail.com> wrote:
 
-On 4/8/20 5:32 AM, Fabio Estevam wrote:
-> Improve the documentation by providing examples on how to test camera
-> capture on imx6q-sabresd via v4l2-ctl and Gstreamer.
+> change to:
 >
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->   Documentation/media/v4l-drivers/imx.rst | 42 +++++++++++++++++++++++++
->   1 file changed, 42 insertions(+)
->
-> diff --git a/Documentation/media/v4l-drivers/imx.rst b/Documentation/media/v4l-drivers/imx.rst
-> index 37b944f12d93..c872cc84d9fc 100644
-> --- a/Documentation/media/v4l-drivers/imx.rst
-> +++ b/Documentation/media/v4l-drivers/imx.rst
-> @@ -670,6 +670,28 @@ Streaming can then begin on "ipu1_ic_prpenc capture" node. The v4l2-ctl
->   tool can be used to select any supported YUV or RGB pixelformat on the
->   capture device node.
->   
-> +In order to determine what is the /dev/video node correspondent to
-> +"ipu1_ic_prpenc":
-> +
-> +.. code-block:: none
-> +
-> +   # dmesg | grep ipu1_ic_prpenc | grep Registered
+> media-ctl -V "'ipu1_ic_prpenc':1 [fmt:ARGB8888_1X32/800x600]"
 
-A better way is to use "media-ctl -e":
+If I make this change I get:
 
-# media-ctl -e "ipu1_ic_prpenc capture"
-/dev/video1
+# v4l2-ctl --stream-mmap -d /dev/video1
+[  501.143012] ipu1_ic_prpenc: capture format not valid
+                VIDIOC_STREAMON returned -1 (Invalid argument)
 
-Grepping from dmesg can fail when the log fills up and pushes out the 
-boot "Registered ..." messages.
+Going back to the original example:
 
-Steve
+#  media-ctl -V "'ipu1_ic_prpenc':1 [fmt:AYUV32/640x480]"
+# v4l2-ctl --stream-mmap -d /dev/video1
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 30.03 fps
 
-> +   ipu1_ic_prpenc: Registered ipu1_ic_prpenc capture as /dev/video1
-> +
-> +/dev/video1 is the streaming element in this case.
-> +
-> +Starting the streaming via v4l2-ctl:
-> +
-> +.. code-block:: none
-> +
-> +   v4l2-ctl --stream-mmap -d /dev/video1
-> +
-> +Starting the streaming via Gstreamer and sending the content to the display:
-> +
-> +.. code-block:: none
-> +
-> +   gst-launch-1.0 v4l2src device=/dev/video1 ! kmssink
-> +
->   The following example configures unprocessed video capture pipeline to
->   capture from the OV5640, transmitting on MIPI CSI-2 virtual channel 0:
->   
-> @@ -690,6 +712,26 @@ Streaming can then begin on "ipu1_csi0 capture" node. The v4l2-ctl
->   tool can be used to select any supported YUV or RGB pixelformat on the
->   capture device node.
->   
-> +In order to determine what is the /dev/video node correspondent to "ipu1_csi0":
-> +
-> +.. code-block:: none
-> +
-> +   # dmesg | grep ipu1_csi0 | grep Registered
-> +   ipu1_csi0: Registered ipu1_csi0 capture as /dev/video0
-> +
-> +/dev/video0 is the streaming element in this case.
-> +
-> +Starting the streaming via v4l2-ctl:
-> +
-> +.. code-block:: none
-> +
-> +   v4l2-ctl --stream-mmap -d /dev/video0
-> +
-> +Starting the streaming via Gstreamer and sending the content to the display:
-> +
-> +.. code-block:: none
-> +
-> +   gst-launch-1.0 v4l2src device=/dev/video0 ! kmssink
->   
->   Known Issues
->   ------------
+Changing only the resolution:
 
+#  media-ctl -V "'ipu1_ic_prpenc':1 [fmt:AYUV32/800x600]"
+# v4l2-ctl --stream-mmap -d /dev/video1
+[  658.358246] ipu1_ic_prpenc: capture format not valid
+                VIDIOC_STREAMON returned -1 (Invalid argument)
+
+Any ideas?
+
+These are the lines I am currently using as per your feedback:
+
+   # Setup links
+   media-ctl -l "'ov5640 1-003c':0 -> 'imx6-mipi-csi2':0[1]"
+   media-ctl -l "'imx6-mipi-csi2':1 -> 'ipu1_csi0_mux':0[1]"
+   media-ctl -l "'ipu1_csi0_mux':2 -> 'ipu1_csi0':0[1]"
+   media-ctl -l "'ipu1_csi0':1 -> 'ipu1_ic_prp':0[1]"
+   media-ctl -l "'ipu1_ic_prp':1 -> 'ipu1_ic_prpenc':0[1]"
+   media-ctl -l "'ipu1_ic_prpenc':1 -> 'ipu1_ic_prpenc capture':0[1]"
+   # Configure pads
+   media-ctl -V "'ov5640 1-003c':0 [fmt:UYVY2X8/640x480]"
+   media-ctl -V "'imx6-mipi-csi2':1 [fmt:UYVY2X8/640x480]"
+   media-ctl -V "'ipu1_csi0_mux':2 [fmt:UYVY2X8/640x480]"
+   media-ctl -V "'ipu1_csi0':1 [fmt:AYUV32/640x480]"
+   media-ctl -V "'ipu1_ic_prp':1 [fmt:AYUV32/640x480]"
+   media-ctl -V "'ipu1_ic_prpenc':1 [fmt:ARGB8888_1X32/800x600]"
+
+Thanks,
+
+Fabio Estevam
+
+   # Setup links
+   media-ctl -l "'ov5640 1-003c':0 -> 'imx6-mipi-csi2':0[1]"
+   media-ctl -l "'imx6-mipi-csi2':1 -> 'ipu1_csi0_mux':0[1]"
+   media-ctl -l "'ipu1_csi0_mux':2 -> 'ipu1_csi0':0[1]"
+   media-ctl -l "'ipu1_csi0':1 -> 'ipu1_ic_prp':0[1]"
+   media-ctl -l "'ipu1_ic_prp':1 -> 'ipu1_ic_prpenc':0[1]"
+   media-ctl -l "'ipu1_ic_prpenc':1 -> 'ipu1_ic_prpenc capture':0[1]"
+   # Configure pads
+   media-ctl -V "'ov5640 1-003c':0 [fmt:UYVY2X8/640x480]"
+   media-ctl -V "'imx6-mipi-csi2':1 [fmt:UYVY2X8/640x480]"
+   media-ctl -V "'ipu1_csi0_mux':2 [fmt:UYVY2X8/640x480]"
+   media-ctl -V "'ipu1_csi0':1 [fmt:AYUV32/640x480]"
+   media-ctl -V "'ipu1_ic_prp':1 [fmt:AYUV32/640x480]"
+   media-ctl -V "'ipu1_ic_prpenc':1 [fmt:ARGB8888_1X32/800x600]"
