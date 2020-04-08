@@ -2,94 +2,311 @@ Return-Path: <SRS0=54rz=5Y=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B406EC2BA2B
-	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 12:11:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE739C2BA1A
+	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 12:20:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E59820753
-	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 12:11:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Le1xWe34"
+	by mail.kernel.org (Postfix) with ESMTP id 9B6AC2083E
+	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 12:20:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbgDHMLw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Apr 2020 08:11:52 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59532 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgDHMLv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Apr 2020 08:11:51 -0400
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C1631522;
-        Wed,  8 Apr 2020 14:11:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1586347911;
-        bh=fNEHkv4xWj5my99Zm2nOYGlrKzbKQK6rzkcnqArw/pE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Le1xWe346japdrekjXGwc3WU9B8DnCFkULxYUXAE2JxZv+vKXcglsE3x22+nk97MT
-         QlYhC/ZjWGSFkbSkiPEH1LLMLQOXYHFmyQK4BP7OcF7Y4iQbMpHbHBhg7ebJnCgZqK
-         dd4HyG6pNwkoIZdkm1REfd/67kMPiOKsAZbQC6Xg=
-Date:   Wed, 8 Apr 2020 15:11:41 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     linux-media@vger.kernel.org, helen.koike@collabora.com,
-        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org
-Subject: Re: [PATCH v3 5/6] media: staging: rkisp1: cap: support uv swapped
- plane formats
-Message-ID: <20200408121141.GG4881@pendragon.ideasonboard.com>
-References: <20200408114822.27360-1-dafna.hirschfeld@collabora.com>
- <20200408114822.27360-6-dafna.hirschfeld@collabora.com>
+        id S1728533AbgDHMUo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Apr 2020 08:20:44 -0400
+Received: from mga04.intel.com ([192.55.52.120]:46344 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728530AbgDHMUn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 8 Apr 2020 08:20:43 -0400
+IronPort-SDR: 6RbGmhF8ppYBneAvGVWyZ5RJXzu+0ZSw35k1bGyqLUL/R2yBwXnYQ6Z3DVNUf1WvMEr7p5s3sx
+ NxenPNdHvnnA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2020 05:20:43 -0700
+IronPort-SDR: EsGpVrBICzA9yNIzcqsXym6EkBtvPGS4UmV6Eypp1AhLxdwvFieP3v3RbENjyQF/kaPW5r+tIe
+ 4ict1+hzKhdg==
+X-IronPort-AV: E=Sophos;i="5.72,358,1580803200"; 
+   d="scan'208";a="425120463"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2020 05:20:39 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 45DDC20364; Wed,  8 Apr 2020 15:20:37 +0300 (EEST)
+Date:   Wed, 8 Apr 2020 15:20:37 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
+Cc:     andriy.shevchenko@linux.intel.com, mchehab@kernel.org,
+        robh+dt@kernel.org, mark.rutland@arm.com, matthias.bgg@gmail.com,
+        bingbu.cao@intel.com, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, sj.huang@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        louis.kuo@mediatek.com, shengnan.wang@mediatek.com
+Subject: Re: [V6, 2/2] media: i2c: ov02a10: Add OV02A10 image sensor driver
+Message-ID: <20200408122037.GG5206@paasikivi.fi.intel.com>
+References: <20191211112849.16705-1-dongchun.zhu@mediatek.com>
+ <20191211112849.16705-3-dongchun.zhu@mediatek.com>
+ <20191211143640.GU32742@smile.fi.intel.com>
+ <faf3482d4127464195d04a17cae446b7@mtkmbs05n1.mediatek.inc>
+ <1586346824.8804.12.camel@mhfsdcap03>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200408114822.27360-6-dafna.hirschfeld@collabora.com>
+In-Reply-To: <1586346824.8804.12.camel@mhfsdcap03>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 01:48:21PM +0200, Dafna Hirschfeld wrote:
-> Plane formats with the u and v planes swapped can be
+Hi Dongchun,
 
-s/Plane/Planar/
-
-> supported by swapping the address of the cb and cr buffers.
+On Wed, Apr 08, 2020 at 07:53:44PM +0800, Dongchun Zhu wrote:
+> Hello Andy,
 > 
-> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> ---
->  drivers/staging/media/rkisp1/rkisp1-capture.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> Thanks for the review. Sorry for the late reply.
 > 
-> diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
-> index 257799a7d865..9f0a3c407286 100644
-> --- a/drivers/staging/media/rkisp1/rkisp1-capture.c
-> +++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
-> @@ -743,6 +743,14 @@ static void rkisp1_vb2_buf_queue(struct vb2_buffer *vb)
->  			rkisp1_pixfmt_comp_size(pixm, RKISP1_PLANE_CB);
->  	}
->  
-> +	/*
-> +	 * uv swap can be supported for plane formats by switching
+> On Mon, 2019-12-11 at 16:36 +0200, Andy Shevchenko wrote:
+> > On Wed, Dec 11, 2019 at 07:28:49PM +0800, Dongchun Zhu wrote:
+> > > Add a V4L2 sub-device driver for OV02A10 image sensor. The OV02A10 is
+> > > a 1/5" CMOS sensor from Omnivision, asupporting output format: 10-bit Raw.
+> > >
+> > > This chip has a single MIPI lane interface and use the I2C bus for
+> > > control and the CSI-2 bus for data.
+> > 
+> > ...
+> > 
+> > > +#define OV02A10_MASK_8_BITS                            0xff
+> > 
+> > Besides GENMASK() why do you need a definition here? What's the point?
+> > 
+> 
+> Fixed in next release.
+> 
+> > ...
+> > 
+> > > +static int ov02a10_entity_init_cfg(struct v4l2_subdev *sd,
+> > > +   struct v4l2_subdev_pad_config *cfg) {
+> > > +struct v4l2_subdev_format fmt = {
+> > > +.which = cfg ? V4L2_SUBDEV_FORMAT_TRY
+> > > +     : V4L2_SUBDEV_FORMAT_ACTIVE,
+> > > +.format = {
+> > > +.width = 1600,
+> > 
+> > > +.height = 1200
+> > 
+> > Leave comma here.
+> > 
+> 
+> Fixed in next release.
+> 
+> > > +}
+> > > +};
+> > > +
+> > > +ov02a10_set_fmt(sd, cfg, &fmt);
+> > > +
+> > > +return 0;
+> > > +}
+> > 
+> > ...
+> > 
+> > > +ret = i2c_smbus_write_byte_data(client, OV02A10_REG_GAIN,
+> > > +(val & OV02A10_MASK_8_BITS));
+> > 
+> > Too many parentheses.
+> > 
+> 
+> Fixed in next release.
+> 
+> > > +if (ret < 0)
+> > > +return ret;
+> > 
+> > ...
+> > 
+> > > +static int ov02a10_set_vblank(struct ov02a10 *ov02a10, int val) {
+> > > +struct i2c_client *client = v4l2_get_subdevdata(&ov02a10->subdev);
+> > 
+> > if you do
+> > 
+> > int vts = val + ov02a10->cur_mode->height - OV02A10_BASIC_LINE;
+> > 
+> > you may increase readability below...
+> > 
+> 
+> Thanks for the suggestion.
+> It seems better now.
+> 
+> > > +int ret;
+> > > +
+> > > +ret = i2c_smbus_write_byte_data(client, REG_PAGE_SWITCH, REG_ENABLE);
+> > > +if (ret < 0)
+> > > +return ret;
+> > > +
+> > > +ret = i2c_smbus_write_byte_data(client, OV02A10_REG_VTS_H,
+> > > +(((val + ov02a10->cur_mode->height -
+> > > +OV02A10_BASIC_LINE) >>
+> > > +OV02A10_VTS_SHIFT) &
+> > > +OV02A10_MASK_8_BITS));
+> > 
+> > ret = i2c_smbus_write_byte_data(client, OV02A10_REG_VTS_H,
+> > (vts >> OV02A10_VTS_SHIFT) &
+> > OV02A10_MASK_8_BITS));
+> > 
+> > And actually why do you need this mask here? Isn't enough to call
+> > 
+> > ret = i2c_smbus_write_byte_data(client, OV02A10_REG_VTS_H,
+> > vts >> OV02A10_VTS_SHIFT);
+> > 
+> > here...
+> > 
+> > 
+> 
+> Yes. Now we code like this.
+> 
+> > > +if (ret < 0)
+> > > +return ret;
+> > > +
+> > > +ret = i2c_smbus_write_byte_data(client, OV02A10_REG_VTS_L,
+> > > +((val + ov02a10->cur_mode->height -
+> > > +OV02A10_BASIC_LINE) &
+> > > +OV02A10_MASK_8_BITS));
+> > 
+> > ...and
+> > 
+> > ret = i2c_smbus_write_byte_data(client, OV02A10_REG_VTS_L, vts);
+> > 
+> > here?
+> > 
+> 
+> Yes. Fixed in next release.
+> 
+> > > +if (ret < 0)
+> > > +return ret;
+> > > +
+> > > +return i2c_smbus_write_byte_data(client, REG_GLOBAL_EFFECTIVE,
+> > > + REG_ENABLE);
+> > > +}
+> > 
+> > ...
+> > 
+> > > +static int ov02a10_check_hwcfg(struct device *dev, struct ov02a10
+> > > +*ov02a10) {
+> > > +struct fwnode_handle *ep;
+> > > +struct fwnode_handle *fwnode = dev_fwnode(dev);
+> > > +struct v4l2_fwnode_endpoint bus_cfg = {
+> > 
+> > > +.bus_type = V4L2_MBUS_CSI2_DPHY
+> > 
+> > Leave comma here.
+> > 
+> 
+> Fixed in next release.
+> 
+> > > +};
+> > > +unsigned int i, j;
+> > > +int ret;
+> > 
+> > > +if (!fwnode)
+> > > +return -ENXIO;
+> > 
+> > A bit strange error code here.
+> > 
+> 
+> This should be reported as -EINVAL.
+> Fixed in next release.
+> 
+> > > +
+> > > +ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+> > > +if (!ep)
+> > > +return -ENXIO;
+> > > +
+> > > +ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
+> > > +fwnode_handle_put(ep);
+> > > +if (ret)
+> > > +return ret;
+> > 
+> > > +if (!bus_cfg.nr_of_link_frequencies) {
+> > > +dev_err(dev, "no link frequencies defined");
+> > > +ret = -EINVAL;
+> > > +goto check_hwcfg_error;
+> > > +}
+> > 
+> > I still think it's redundant check, though it's up to maintainers.
+> > 
+> 
+> We still wanna keep this check.
+> Keep same as ov2659 and ov8856.
+> 
+> > > +
+> > > +for (i = 0; i < ARRAY_SIZE(link_freq_menu_items); i++) {
+> > > +for (j = 0; j < bus_cfg.nr_of_link_frequencies; j++) {
+> > > +if (link_freq_menu_items[i] ==
+> > > +bus_cfg.link_frequencies[j])
+> > > +break;
+> > > +}
+> > > +
+> > > +if (j == bus_cfg.nr_of_link_frequencies) {
+> > > +dev_err(dev, "no link frequency %lld supported",
+> > > +link_freq_menu_items[i]);
+> > > +ret = -EINVAL;
+> > > +goto check_hwcfg_error;
+> > > +}
+> > > +}
+> > > +
+> > > +check_hwcfg_error:
+> > > +v4l2_fwnode_endpoint_free(&bus_cfg);
+> > > +
+> > > +return ret;
+> > > +}
+> > 
+> > ...
+> > 
+> > > +static int ov02a10_probe(struct i2c_client *client) {
+> > 
+> > > +/* Optional indication of physical rotation of sensor */
+> > > +ret = fwnode_property_read_u32(dev_fwnode(dev), "rotation",
+> > > +&rotation);
+> > 
+> > > +if (!ret) {
+> > 
+> > Why not positive conditional?
+> > 
+> 
+> Okay. Fixed in next release.
+> 
+> > > +ov02a10->upside_down = rotation == 180;
+> > > +if (rotation == 180) {
+> > > +ov02a10->upside_down = true;
+> > > +ov02a10->fmt.code = MEDIA_BUS_FMT_SRGGB10_1X10;
+> > > +}
+> > > +} else {
+> > > +dev_warn(dev, "failed to get rotation\n");
+> > > +}
+> > > +
+> > > +/* Optional indication of mipi TX speed */
+> > > +ret = fwnode_property_read_u32(dev_fwnode(dev), "ovti,mipi-tx-speed",
+> > > +       &clock_lane_tx_speed);
+> > > +
+> > 
+> > > +if (!ret)
+> > 
+> > Ditto.
+> > 
+> 
+> As Sakari mentioned earlier, the property "ovti,mipi-tx-speed" is
+> optional that shouldn't warn it's missing when ret is 0.
+> So we would keep the condition like that, just removing else case.
 
-s/plane/planar/
+I don't remember discussing this, but could be because it was quite some
+time ago.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+It doesn't seem to be documented. What is it for?
 
-> +	 * the address of cb and cr
-> +	 */
-> +	if (cap->pix.info->comp_planes == 3 && cap->pix.cfg->uv_swap)
-> +		swap(ispbuf->buff_addr[RKISP1_PLANE_CR],
-> +		     ispbuf->buff_addr[RKISP1_PLANE_CB]);
-> +
->  	spin_lock_irqsave(&cap->buf.lock, flags);
->  
->  	/*
+> > *********************MEDIATEK Confidential/Internal Use*********************
+
+Is this intentional?
 
 -- 
 Regards,
 
-Laurent Pinchart
+Sakari Ailus
