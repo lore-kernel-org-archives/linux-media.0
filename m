@@ -2,67 +2,132 @@ Return-Path: <SRS0=54rz=5Y=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9744C2D0F4
-	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 17:27:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08A7FC2BA1A
+	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 17:45:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E40420771
-	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 17:27:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D84142082F
+	for <linux-media@archiver.kernel.org>; Wed,  8 Apr 2020 17:45:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="ZvHdKxmu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730573AbgDHR1G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Apr 2020 13:27:06 -0400
-Received: from turbocat.net ([88.99.82.50]:33410 "EHLO mail.turbocat.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730538AbgDHR1F (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 8 Apr 2020 13:27:05 -0400
-X-Greylist: delayed 444 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Apr 2020 13:27:05 EDT
-Received: from hps2020.home.selasky.org (unknown [62.141.129.235])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.turbocat.net (Postfix) with ESMTPSA id 3BC6B260306
-        for <linux-media@vger.kernel.org>; Wed,  8 Apr 2020 19:19:39 +0200 (CEST)
-To:     linux-media@vger.kernel.org
-From:   Hans Petter Selasky <hps@selasky.org>
-Subject: [PATCH] Fix broken for loop in libv4l
-Message-ID: <3fc9b235-4763-546d-c9f6-5ac928a1bcff@selasky.org>
-Date:   Wed, 8 Apr 2020 19:17:42 +0200
-User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1729468AbgDHRpo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Apr 2020 13:45:44 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:6896 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727028AbgDHRpo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Apr 2020 13:45:44 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e8e0dba0001>; Wed, 08 Apr 2020 10:45:30 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 08 Apr 2020 10:45:43 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 08 Apr 2020 10:45:43 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 8 Apr
+ 2020 17:45:43 +0000
+Received: from [10.2.171.241] (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 8 Apr 2020
+ 17:45:41 +0000
+Subject: Re: [RFC PATCH v6 6/9] media: tegra: Add Tegra210 Video input driver
+To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
+CC:     <sboyd@kernel.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1585963507-12610-1-git-send-email-skomatineni@nvidia.com>
+ <12a834ac-52b1-6dc0-7d3a-3e6a1fa85a2a@gmail.com>
+ <e3712e7b-b335-b35b-a94f-24eb85122dca@nvidia.com>
+ <b1726d33-0d35-9323-a747-407148d0104e@gmail.com>
+ <eb80178f-30f4-8f46-51cd-ea3f4914b81d@nvidia.com>
+ <dd16c560-ba8f-e7df-5dc4-5227e0043196@nvidia.com>
+ <fea4f0a1-4a20-34d4-9eda-e4a599eeeffc@nvidia.com>
+ <760d071e-0cbc-b3eb-9231-fb9f9ecb44a6@nvidia.com>
+ <9e317f65-8a02-3b15-cfec-8e0d8374130e@gmail.com>
+ <97b35910-4c93-123a-43a0-eb14476ed0f3@nvidia.com>
+ <84ad4e2d-6ac1-e1f4-1c55-5edaae850631@nvidia.com>
+ <15a879b3-8fb9-6821-3cdc-104ba583ac12@gmail.com>
+ <0c425505-347f-7418-af7e-d121fe0d06dc@nvidia.com>
+ <db7c7051-5674-cdb9-0aa4-ee94125b3024@gmail.com>
+ <1a31cd60-739f-0660-1c45-31487d2f2128@nvidia.com>
+ <603084a5-249a-4fe2-3646-e9335ef9ab43@nvidia.com>
+ <7895b9c6-f27d-8939-73d7-67d785e1a8b7@nvidia.com>
+ <ea60b489-990e-4b15-e215-d93381a1371e@nvidia.com>
+ <b2405c2a-73c0-ad69-ccea-0388caf8045c@gmail.com>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <15d8b525-67b5-b437-f7fd-89f80cd0d9f6@nvidia.com>
+Date:   Wed, 8 Apr 2020 10:45:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <b2405c2a-73c0-ad69-ccea-0388caf8045c@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1586367930; bh=C3x4vYXHJ49cie7cETLtHeDW7HBZDN9Aik/bGZg6QYs=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=ZvHdKxmuJM+G+XgaYTT347VCzFcHYhPRZYubc1sEmcwwkzb/6vxZLBQLs1qf0saEl
+         6g1DkgpIVIiIRIlPleTIEdK2W8I2QMcGy2gFG2lKwPYZgiRLIxi0EmbgIlQukDbNv9
+         pigO87uX7/ZwSLy8dG3gyc3pT4LPDU58fBAxEyr2dZVZzsVGZ4Ykcm7RGH7+mfYUqc
+         yTXwxcbAqAQbajJzvlygoSnbR7hCbHR8gTEFeLMRPrm9Q0QX9eRe9o6snDdVVBuPKh
+         +KG+dJrXb8paWXblRpjIQ4R72jZRDPT4WGHIk4zE78b2p0K1mSQdjW/2jUXCO/KQql
+         3om9KO0W/JBtg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
 
-This is one in a series of patches. Is this the right place to post 
-patches for libv4l ?
+On 4/8/20 7:21 AM, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> 08.04.2020 03:00, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> ...
+>>>>>> I suppose that taking a shot takes at least few milliseconds, which
+>>>>>> should be unacceptable to waste.
+>>>>> As long as buffers are in queue we have to keep processing each
+>>>>> buffer and between buffers obviously we have to wait for previous
+>>>>> frames to finish and this why we have separate thread for frame
+>>>>> finish where we can have next buffer capture ready and issue while
+>>>>> previous frame memory write happens
+>>> Also we specified numbers buffers as 3 to vb2 queue. So this is rare
+>>> case but to prevent issuing more than 2 at a time as VI HW is only
+>>> double buffered and syncpt fifo max depth is 2 added this to be safer.
+>> To be more clear, when more buffers are enqueued from userspace always
+>> capture list will be full and thread will be busy in capture till either
+>> error or stop stream request happens.
+>>
+> If kthreads take more than 1% of CPU time during capture (video) with
+> more than 2 buffers in queue, then it's not good and I think you should
+> do something about it. If kthreads stay at ~0%, then it should be okay
+> as-is.
 
-Signed-off-by: Hans Petter Selasky <hps@selasky.org>
----
-  lib/libv4lconvert/rgbyuv.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+VI outstanding requests max can only be 2=C2=A0 as syncpt fifo depth is 2=
+=C2=A0=20
+and waiting to issue next capture when already 2 captures are inflight=20
+happens only during beginning of streaming where buffers allocated go=20
+thru capture for first time after queuing.
 
-diff --git a/lib/libv4lconvert/rgbyuv.c b/lib/libv4lconvert/rgbyuv.c
-index 79bc0bdb..b54b4577 100644
---- a/lib/libv4lconvert/rgbyuv.c
-+++ b/lib/libv4lconvert/rgbyuv.c
-@@ -893,7 +893,7 @@ void v4lconvert_nv12_to_yuv420(const unsigned char 
-*src, unsigned char *dest,
-  	}
+same buffers are returned to userspace after capture and same allocated=20
+buffers will be queued back for subsequent captures.
 
-  	for (i = 0; i < height; i++)
--		for (j = 0; i < width; j++) {
-+		for (j = 0; j < width; j++) {
-  			*ydst++ = *ysrc++;
-  			if (((i % 2) == 0) && ((j % 2) == 0)) {
-  				*udst++ = *uvsrc++;
--- 
-2.25.0
+So this case of holding to issue single shot when already single shot is=20
+issue for 2 frames simultaneous happens only during beginning of start=20
+stream and also we set num_buffers to allocate for queue as 3 although 2=20
+is good enough where we will not hit this case even during streaming=20
+start with 2 buffers
+
