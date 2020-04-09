@@ -2,188 +2,109 @@ Return-Path: <SRS0=TSh+=5Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15562C2BA2B
-	for <linux-media@archiver.kernel.org>; Thu,  9 Apr 2020 13:52:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA9BAC2BA2B
+	for <linux-media@archiver.kernel.org>; Thu,  9 Apr 2020 14:50:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D5BEF2083E
-	for <linux-media@archiver.kernel.org>; Thu,  9 Apr 2020 13:52:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0FAE206E9
+	for <linux-media@archiver.kernel.org>; Thu,  9 Apr 2020 14:50:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=safeandsoundit.co.uk header.i=@safeandsoundit.co.uk header.b="JThtHkWi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmyAeQgY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726940AbgDINwg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Apr 2020 09:52:36 -0400
-Received: from reetspetit.info ([212.83.164.73]:41044 "EHLO reetspetit.info"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726582AbgDINwf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Apr 2020 09:52:35 -0400
-X-Greylist: delayed 401 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Apr 2020 09:52:34 EDT
-Received: (qmail 8885 invoked by uid 453); 9 Apr 2020 13:45:53 -0000
-X-Virus-Checked: by ClamAV 0.100.3 on reetspetit.info
-X-Virus-Found: No
-Authentication-Results: reetspetit.info; auth=pass (plain) smtp.auth=john
-Received: from 239.red-80-59-216.staticip.rima-tde.net (HELO home.reetspetit.net) (80.59.216.239)
- by reetspetit.info (qpsmtpd/0.96) with ESMTPSA (ECDHE-RSA-AES256-SHA encrypted); Thu, 09 Apr 2020 15:45:53 +0200
-Received: (qmail 12405 invoked by uid 453); 9 Apr 2020 13:45:50 -0000
-X-Virus-Checked: by ClamAV 0.100.2 on reetspetit.net
-X-Virus-Found: No
-Received: from xubuntu-8300-1.reetspetit.net (HELO xubuntu-8300-1) (192.168.10.147)
- by reetspetit.net (qpsmtpd/0.96) with ESMTPSA (ECDHE-RSA-AES256-GCM-SHA384 encrypted); Thu, 09 Apr 2020 15:45:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=safeandsoundit.co.uk; h=date:from:to:subject:message-id:mime-version:content-type; s=default; bh=jaoW1mktEIpbYzY4qfL5HXnDWrgafsMGuqxKp2horz4=; b=JThtHkWi1+fG7cJK8P+PPLPVg/RqP4bacaf6B4IO2TUjkSsU375gXoqhRZ3zwXEIAHNMyCoiZABOmdG2W/C21h0E/wtql/H9qDFxJ6Obqk1ZnwZ72ZzCnvC0RqBlUbCnUgfV9LIP25FoLQQhf+Ix/hGBKdy47DJ7ZpsESgaISECVFa3Z8PV9Ivme6IqP4SZni7/3hQRJne9sjoK/83RphKwzrv1dW3syk1s1GZDM+luHH58oFgKE37mmLpip+0jG/p/euT9u1G3tOLUV7I0aKbjpRFh0FvJLJQ3+Z5y/97iFMucWNDAYE40jxq7JiAafZX1esykfMCVDP58tmP8ZEg==
-Date:   Thu, 9 Apr 2020 15:45:49 +0200
-From:   John Crisp <jcrisp@safeandsoundit.co.uk>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Subject: ezCap startup options
-Message-ID: <20200409154549.70739e7d@xubuntu-8300-1>
-Organization: SafeAndSound
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1727703AbgDIOup (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Apr 2020 10:50:45 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44620 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726977AbgDIOuo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Apr 2020 10:50:44 -0400
+Received: by mail-lj1-f196.google.com with SMTP id z26so7632072ljz.11;
+        Thu, 09 Apr 2020 07:50:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Q4v9rUwodHK+n75mx+eCJ7ZwO8R88Mb5/tApAMFDSTo=;
+        b=dmyAeQgYSO/YZrU6CKasyEg8GJab178Tx6rckPt9JWLNY9a4QkaZM+cqAiqM9s1djC
+         DktV8Mn+KCvHzRA7EuCsF29x4HCJcZrTULzOwwfI0AOfwQZNUXuWPKn1KvHmGXhy+Pty
+         iQRnOr+a5uZabgG+xV4bAgW/XrpFmeVNuNduBk/4u73QF9WfPdC38tgHAtS1EbuNlDBG
+         57t//ZhHWTbnVyzm3wkVU3yRajomcKKsVbzQG3bkFPdb1jXLMspmn9QdN0/OEu+3vCcJ
+         ZFtqMHMMwjlkRX1Mw5KHvKkEZp3xJLEfcRMuOuPPKglrPVAQoKgUe5+k9i0y/Em9DfLn
+         d9dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Q4v9rUwodHK+n75mx+eCJ7ZwO8R88Mb5/tApAMFDSTo=;
+        b=Uq7+0zNPMUsGYeFxcB84PMXjGou22ZMVFMi3jS3zG9Uu4ljpXyWI8zjbSZNb86t7av
+         PGe7fRM+kfcIU5/RFz1uZiYmyD5RboYktthRuaLA/mCbV0IJmZgQneCHD4BEsbw1i16p
+         g/EhH4pgCflD1BE4NuzE4DLrHXIMVCGBtg0kYnVCP3AkbdegELHqTOonDJ/oCN49VhTm
+         wciUMQAXUIVLl97BdLkkYm0oZ78Bg2Wjn43YVWI+0hYptIktrnBMAFLTB1vidPyYROQH
+         IjEvnwe7o5E6X8sj1eo4ctK21qYhK6JL83fa5w68mkUYUltXwArb8Lls1jknoCN06jvc
+         1y6g==
+X-Gm-Message-State: AGi0PuYz34ZOIP8/X8phJBQA/iqqEVhBHSsRR/tzsyt+tUfYKPWmd55u
+        tdjYuiu+xS35Ug1QhrySsHGEPvsy
+X-Google-Smtp-Source: APiQypL5/qfqfNmB6bTHUaHBUEIWQAm5mk79vdrTxi98rxkD5Iz0Zf3V24CkGUlbnftqYsE/h8tanA==
+X-Received: by 2002:a2e:905a:: with SMTP id n26mr119665ljg.58.1586443840801;
+        Thu, 09 Apr 2020 07:50:40 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
+        by smtp.googlemail.com with ESMTPSA id u7sm1243199lfg.20.2020.04.09.07.50.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Apr 2020 07:50:40 -0700 (PDT)
+Subject: Re: [RFC PATCH v6 6/9] media: tegra: Add Tegra210 Video input driver
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
+        hverkuil@xs4all.nl, sakari.ailus@iki.fi, helen.koike@collabora.com
+Cc:     sboyd@kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1585963507-12610-1-git-send-email-skomatineni@nvidia.com>
+ <dd16c560-ba8f-e7df-5dc4-5227e0043196@nvidia.com>
+ <fea4f0a1-4a20-34d4-9eda-e4a599eeeffc@nvidia.com>
+ <760d071e-0cbc-b3eb-9231-fb9f9ecb44a6@nvidia.com>
+ <9e317f65-8a02-3b15-cfec-8e0d8374130e@gmail.com>
+ <97b35910-4c93-123a-43a0-eb14476ed0f3@nvidia.com>
+ <84ad4e2d-6ac1-e1f4-1c55-5edaae850631@nvidia.com>
+ <15a879b3-8fb9-6821-3cdc-104ba583ac12@gmail.com>
+ <0c425505-347f-7418-af7e-d121fe0d06dc@nvidia.com>
+ <db7c7051-5674-cdb9-0aa4-ee94125b3024@gmail.com>
+ <1a31cd60-739f-0660-1c45-31487d2f2128@nvidia.com>
+ <603084a5-249a-4fe2-3646-e9335ef9ab43@nvidia.com>
+ <7895b9c6-f27d-8939-73d7-67d785e1a8b7@nvidia.com>
+ <ea60b489-990e-4b15-e215-d93381a1371e@nvidia.com>
+ <b2405c2a-73c0-ad69-ccea-0388caf8045c@gmail.com>
+ <15d8b525-67b5-b437-f7fd-89f80cd0d9f6@nvidia.com>
+ <a638bb8e-bb50-7aa5-05a0-8de1c6207ba7@nvidia.com>
+ <ced73258-6f4b-e970-4ca5-ecdf1808a4c3@nvidia.com>
+ <ad646fde-2eed-eeeb-4d85-ec36d6613eb1@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <7288cacd-badc-cb01-1f4c-286dd024ca10@gmail.com>
+Date:   Thu, 9 Apr 2020 17:50:39 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
- boundary="Sig_/jCfSbsOnONcSB/e5l/EFdlP"; protocol="application/pgp-signature"
-Original-Authentication-Results: reetspetit.net; auth=pass (login) smtp.auth=jcrisp
+In-Reply-To: <ad646fde-2eed-eeeb-4d85-ec36d6613eb1@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
---Sig_/jCfSbsOnONcSB/e5l/EFdlP
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+09.04.2020 06:38, Sowjanya Komatineni пишет:
+...
+> Tested with 3 buffers and by checking outstanding buffers in process by
+> VI hw and holding to start capture till one outstanding buffer in
+> process by HW.
+> Also tested with 2 buffers without checking for outstanding buffers.
+> 
+> In both cases, I see same %CPU for the kthreads and is < 1%
+> 
 
-Hi,
-
-I have an old unbranded ezCap USB device and an old wifi infra red
-webcam and with some time on my hands I wanted to hook it up to a
-Pi/raspian to watch my swallows nesting :-)=20
-
-It has taken me a while to get it to automatically load the module and I
-am not sure I have done it the right way. There are various odd musings
-on the interwebs and I saw this on the mailing list:
-
-https://www.spinics.net/lists/linux-media/msg63928.html
-
-This seems to get it to load on start up.=20
-
-My question is, is there a better/cleaner way?
-
-/etc/modprode.d/em28xxoptions.conf
-options em28xx card=3D9
-
-rc.local:
-echo eb1a 5124 | tee /sys/bus/usb/drivers/em28xx/new_id
-
-card 64 throws an i2c error as below but seems to work.
-
-(I have not tested S-Video or sound)
-
-I did try a udev rule but that didn't seem to work.
-
-Any suggestions appreciated.
-
-B. Rgds
-John
-
-
-Initial boot:
-
-usb 1-1.5: new high-speed USB device number 4 using dwc_otg
-usb 1-1.5: config 1 interface 0 altsetting 1 endpoint 0x82 has invalid
-wMaxPacketSize 0=20
-usb 1-1.5: config 1 interface 0 altsetting 1 endpoint
-0x84 has invalid wMaxPacketSize 0=20
-usb 1-1.5: config 1 interface 0 altsetting 2 endpoint 0x84 has invalid
-wMaxPacketSize 0=20
-usb 1-1.5: config 1 interface 0 altsetting 3 endpoint 0x84 has invalid
-wMaxPacketSize 0=20
-usb 1-1.5: config 1 interface 0 altsetting 4 endpoint 0x84 has invalid
-wMaxPacketSize 0=20
-usb 1-1.5: config 1 interface 0 altsetting 5 endpoint 0x84 has invalid
-wMaxPacketSize 0=20
-usb 1-1.5: config 1 interface 0 altsetting 6 endpoint 0x84 has invalid
-wMaxPacketSize 0=20
-usb 1-1.5: config 1 interface 0 altsetting 7 endpoint 0x84 has invalid
-wMaxPacketSize 0=20
-usb 1-1.5: New USB device found, idVendor=3Deb1a, idProduct=3D5124,
-bcdDevice=3D 1.00=20
-usb 1-1.5: New USB device strings: Mfr=3D0, Product=3D1, SerialNumber=3D2=20
-usb 1-1.5: Product: USB VIDBOX FW Audio=20
-usb 1-1.5: SerialNumber: USB2.0 VIDBOX FW
-
-media: Linux media interface: v0.10
-videodev: Linux video capture interface: v2.00
-usbcore: registered new interface driver em28xx
-
-
-After tee in rc.local
-
-card=3D9
-em28xx 1-1.5:1.0: New device  USB VIDBOX FW Audio @ 480 Mbps
-(eb1a:5124, interface 0, class 0) em28xx 1-1.5:1.0: Video interface 0
-found: isoc em28xx 1-1.5:1.0: chip ID is em2860
-em28xx 1-1.5:1.0: EEPROM ID =3D 1a eb 67 95, EEPROM hash =3D 0x806f2156
-em28xx 1-1.5:1.0: EEPROM info:
-em28xx 1-1.5:1.0: 	AC97 audio (5 sample rates)
-em28xx 1-1.5:1.0: 	500mA max power
-em28xx 1-1.5:1.0: 	Table at offset 0x24, strings=3D0x288c, 0x226a,
-0x0000 em28xx 1-1.5:1.0: Identified as Pinnacle Dazzle DVC
-90/100/101/107 / Kaiser Baas Video to DVD maker / Kworld DVD Maker 2 /
-Plextor ConvertX PX-AV100U em28xx 1-1.5:1.0: analog set to isoc mode.
-em28xx 1-1.5:1.0: Registering V4L2 extension saa7115 3-0025: saa7113
-found @ 0x4a (1-1.5:1.0) em28xx 1-1.5:1.0: Config register raw data:
-0x50 em28xx 1-1.5:1.0: AC97 vendor ID =3D 0x83847652
-em28xx 1-1.5:1.0: AC97 features =3D 0x6a90
-em28xx 1-1.5:1.0: Sigmatel audio processor detected (stac 9752)
-em28xx 1-1.5:1.0: V4L2 video device registered as video0
-em28xx 1-1.5:1.0: V4L2 VBI device registered as vbi0
-em28xx 1-1.5:1.0: V4L2 extension successfully initialized
-em28xx: Registered (Em28xx v4l2 Extension) extension
-
-card=3D64
-
-em28xx 1-1.5:1.0: New device  USB VIDBOX FW Audio @ 480 Mbps
-(eb1a:5124, interface 0, class 0) em28xx 1-1.5:1.0: Video interface 0
-found: isoc em28xx 1-1.5:1.0: chip ID is em2860
-em28xx 1-1.5:1.0: EEPROM ID =3D 1a eb 67 95, EEPROM hash =3D 0x806f2156
-em28xx 1-1.5:1.0: EEPROM info:
-em28xx 1-1.5:1.0: 	AC97 audio (5 sample rates)
-em28xx 1-1.5:1.0: 	500mA max power
-em28xx 1-1.5:1.0: 	Table at offset 0x24, strings=3D0x288c, 0x226a,
-0x0000 em28xx 1-1.5:1.0: Identified as Easy Cap Capture DC-60 (card=3D64)
-em28xx 1-1.5:1.0: analog set to isoc mode.
-em28xx 1-1.5:1.0: Registering V4L2 extension
-em28xx 1-1.5:1.0: write to i2c device at 0x4a failed with unknown error
-(status=3D1) saa7115 3-0025: saa7113 found @ 0x4a (1-1.5:1.0)
-em28xx 1-1.5:1.0: Config register raw data: 0x50
-em28xx 1-1.5:1.0: AC97 vendor ID =3D 0x83847652
-em28xx 1-1.5:1.0: AC97 features =3D 0x6a90
-em28xx 1-1.5:1.0: Sigmatel audio processor detected (stac 9752)
-em28xx 1-1.5:1.0: V4L2 video device registered as video0
-em28xx 1-1.5:1.0: V4L2 VBI device registered as vbi0
-em28xx 1-1.5:1.0: V4L2 extension successfully initialized
-raspberrypi kernel: [  162.191774] em28xx: Registered (Em28xx v4l2
-Extension) extension
-
-
---=20
-John Crisp
-
---Sig_/jCfSbsOnONcSB/e5l/EFdlP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEjK6/QfNffar/UqviTxujxO/QWskFAl6PJw0ACgkQTxujxO/Q
-Wsng3Af/SPn6yHWjZcQGZbBYHh0iL+6CfyNJ6W8T8mpzCJNQ7cUcAmJlgbbIg/Vo
-aFw/l+Jyeju5LnaZD5lhpY4+XhNyBl+Az0CgxjQbbyDC+phvK9LAdazRlUAbZxWq
-yQ1fwux1XCUthfh1KZNhlBL8/mLcFaaciGG2uvUX0F66duB13AsLYfSwjC+lXXU/
-kB11m+Uixrwkk0UoHcY94WrFaFfGC8iSpSufvsG2hdL3Rbxk4UtkZzchuTPuOmzP
-CeViajtMjOYD10GJCtsNPug0xxGl+rdn5A0Okct18XSjsMBslhor5QUHeseeURCY
-1cwUOE2y7YQ1ny1+My+X6miirRMQmQ==
-=9wAd
------END PGP SIGNATURE-----
-
---Sig_/jCfSbsOnONcSB/e5l/EFdlP--
+I don't see where buffers queue max limit is set to 3 in the code, but
+should be okay if CPU isn't getting hogged. Looking forward to v7.
