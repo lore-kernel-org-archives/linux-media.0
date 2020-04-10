@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4522C2D0EC
-	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 03:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84AF3C2BB1D
+	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 03:59:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 729EF20CC7
-	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 03:58:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52CEF2082D
+	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 03:59:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586491132;
-	bh=MnuWYLFkdb1YHimhXS6d0CxSVI1WAlx/FlXUz917YfU=;
+	s=default; t=1586491153;
+	bh=r3EaPMwV0p6JcapleCkt9G0+Er8yoqBCX2k8wvPVHwc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=MQ4vzF2OQ/qockc5PJcVSPjnWiO3qRP7k7g2HqxCOR3I92Xzcl7rwiLyRX+ORe+1+
-	 TYk1KLzomG1ksrz2gHCAHlzBOoqnrGi3XC6+Wz9jpxAhPG8yvaYRYR2henG+Hc80N4
-	 xSJ2SR4PDLexlsbSrlFe30zNEj0gfFpNsnt8V7G8=
+	b=bRSVOvUudvJFybkWIsLJVz/MJb9J9OGS7iI1Jz2j6+fylRS0iyJQ3IB4ABiIrsRcX
+	 QCKgJHFW+QHTZhOoIm9O1lHP49ITqIj5cBTf8d+Ro6Y9qXwSGTJJpmB/mZDPtJXyFr
+	 fA5RqEyovDxxuuC73NB6xF0u/qXWENIHa/Q2R6/M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726909AbgDJDsi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Apr 2020 23:48:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60234 "EHLO mail.kernel.org"
+        id S1728230AbgDJD7K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Apr 2020 23:59:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60090 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728262AbgDJDsh (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:48:37 -0400
+        id S1728188AbgDJDsa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Apr 2020 23:48:30 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1659720CC7;
-        Fri, 10 Apr 2020 03:48:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0FC81214D8;
+        Fri, 10 Apr 2020 03:48:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490517;
-        bh=MnuWYLFkdb1YHimhXS6d0CxSVI1WAlx/FlXUz917YfU=;
+        s=default; t=1586490510;
+        bh=r3EaPMwV0p6JcapleCkt9G0+Er8yoqBCX2k8wvPVHwc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=olpJr6hyJ1ekMu/x/PyV3ZnYc3C0wx5KtNAI0inYKg//prFGp8CfOmSx7F6JrPYUF
-         tq5OxuUc4CIrHUDWd0MV4qh0uP2ryJGCXowSdRSGpyBt+GAiNlHrCL86+EnlFbDrak
-         /fCm1io47Bqo7N4idco/goUhiA/qJpWV5J41wGB8=
+        b=E0SXrltMnBi8Egu3vVqda/q4A5/Kuou4Pxtl2VsBGES+iiW8/GqT6NlyKtQ/JTJrp
+         7UDNUmVQaOhQJjG7V+RmdpLjAmLJZo8ceOsUuW21io3JJUpA99cdvJTqcf7pinoLaX
+         JhMI/Idqmkd0+zQLv/83IwvoiCM/z2wPGHtPQRrk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Matt Ranostay <matt.ranostay@konsulko.com>, rdunlap@infradead.org,
+Cc:     Michael Tretter <m.tretter@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 31/56] media: i2c: video-i2c: fix build errors due to 'imply hwmon'
-Date:   Thu,  9 Apr 2020 23:47:35 -0400
-Message-Id: <20200410034800.8381-31-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.5 25/56] media: allegro: fix type of gop_length in channel_create message
+Date:   Thu,  9 Apr 2020 23:47:29 -0400
+Message-Id: <20200410034800.8381-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200410034800.8381-1-sashal@kernel.org>
 References: <20200410034800.8381-1-sashal@kernel.org>
@@ -59,41 +60,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Matt Ranostay <matt.ranostay@konsulko.com>
+From: Michael Tretter <m.tretter@pengutronix.de>
 
-[ Upstream commit 64d4fc9926f09861a35d8f0f7d81f056e6d5af7b ]
+[ Upstream commit 8277815349327b8e65226eb58ddb680f90c2c0c0 ]
 
-Fix build fault when CONFIG_HWMON is a module, and CONFIG_VIDEO_I2C
-as builtin. This is due to 'imply hwmon' in the respective Kconfig.
+The gop_length field is actually only u16 and there are two more u8
+fields in the message:
 
-Issue build log:
+- the number of consecutive b-frames
+- frequency of golden frames
 
-ld: drivers/media/i2c/video-i2c.o: in function `amg88xx_hwmon_init':
-video-i2c.c:(.text+0x2e1): undefined reference to `devm_hwmon_device_register_with_info
+Fix the message and thus fix the configuration of the GOP length.
 
-Cc: rdunlap@infradead.org
-Fixes: acbea6798955 (media: video-i2c: add hwmon support for amg88xx)
-Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/video-i2c.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/allegro-dvt/allegro-core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
-index 078141712c887..0b977e73ceb29 100644
---- a/drivers/media/i2c/video-i2c.c
-+++ b/drivers/media/i2c/video-i2c.c
-@@ -255,7 +255,7 @@ static int amg88xx_set_power(struct video_i2c_data *data, bool on)
- 	return amg88xx_set_power_off(data);
- }
+diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
+index 6f0cd07847863..c5a262a12e401 100644
+--- a/drivers/staging/media/allegro-dvt/allegro-core.c
++++ b/drivers/staging/media/allegro-dvt/allegro-core.c
+@@ -393,7 +393,10 @@ struct mcu_msg_create_channel {
+ 	u32 freq_ird;
+ 	u32 freq_lt;
+ 	u32 gdr_mode;
+-	u32 gop_length;
++	u16 gop_length;
++	u8 num_b;
++	u8 freq_golden_ref;
++
+ 	u32 unknown39;
  
--#if IS_ENABLED(CONFIG_HWMON)
-+#if IS_REACHABLE(CONFIG_HWMON)
- 
- static const u32 amg88xx_temp_config[] = {
- 	HWMON_T_INPUT,
+ 	u32 subframe_latency;
 -- 
 2.20.1
 
