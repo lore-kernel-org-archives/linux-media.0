@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27CEAC2BB86
-	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 03:49:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBA2CC2BB1D
+	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 03:54:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0076521744
-	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 03:49:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4E5D20BED
+	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 03:54:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586490593;
-	bh=05uL3AfmLOd4vCKh5qhRusPGF7xL91Dt3P3g9f6M/k8=;
+	s=default; t=1586490845;
+	bh=T1GNoPyTHZ1PaVzQb4ooxNBlzo/+yHyLeyswMPyouKg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=YnLWT+5LaRT8az2OtkQGtoMNwsNveHcwNPM7ba/m4JpvaXbnxR6XWkBWL1H8cWzW9
-	 Aq6KyidyiYXCGEykx9PRBXnUKnNYlw8lK02wEmbB7qFm0PJbUn4V2O8kkzEmIMeaT2
-	 8tCouepO9hth3Fk4L6h/WJOutifXlad73UhBOmpA=
+	b=tTvqJTOsVmrFkWlzewQ5QTwnK2kLys+7nALxlMWO5MDkUfBUkXegbXABtL++NJixU
+	 VTj3WL2EITlHj1oqmaqYxzrTyBbJnIrppFvVRVABdV40dzTC6zom/DwJt034Mg+G8l
+	 4SHDRl97jGO0AFP2Sm8oDowiFb3qx1+8ERymQCt4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728696AbgDJDtv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Apr 2020 23:49:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33940 "EHLO mail.kernel.org"
+        id S1728979AbgDJDyD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Apr 2020 23:54:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35170 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728673AbgDJDtu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:49:50 -0400
+        id S1728913AbgDJDub (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Apr 2020 23:50:31 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 14BBC214D8;
-        Fri, 10 Apr 2020 03:49:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6361B20B1F;
+        Fri, 10 Apr 2020 03:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490590;
-        bh=05uL3AfmLOd4vCKh5qhRusPGF7xL91Dt3P3g9f6M/k8=;
+        s=default; t=1586490631;
+        bh=T1GNoPyTHZ1PaVzQb4ooxNBlzo/+yHyLeyswMPyouKg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cTCSl7Au4s8HLjDC8uw4YXqShYhDzM6jmy66KUqy30lmnpOWXkqYN4Kq6Y8ksGZ9h
-         zhbs8eR8bpw1ZX7JPnPN0CnYcHfzmZnEk6czVgoEzuGUoIhXaw9CA72cjLLhOqGW9x
-         C0zxpXmKWxX3Luf8uS9QcaXzW14Vg+xbYtJl7+rU=
+        b=jpSvAEwh7IX3Y4i180XoUZ4JptpEib2j1oHqTYScgY5YB6yUZn6NXdmthhUleEl4M
+         C2T1CZ7srsyiet/QfW6CHTYwrUquZ0x3vazcuYrXdUnqAMpkycou+AQNaNtqptcQZT
+         JmlDsawPTCGurbYOMDpDycuU4+xmqOW0mKTG2szM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
@@ -47,12 +47,12 @@ Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 34/46] media: i2c: ov5695: Fix power on and off sequences
-Date:   Thu,  9 Apr 2020 23:48:57 -0400
-Message-Id: <20200410034909.8922-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 22/32] media: i2c: ov5695: Fix power on and off sequences
+Date:   Thu,  9 Apr 2020 23:49:55 -0400
+Message-Id: <20200410035005.9371-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200410034909.8922-1-sashal@kernel.org>
-References: <20200410034909.8922-1-sashal@kernel.org>
+In-Reply-To: <20200410035005.9371-1-sashal@kernel.org>
+References: <20200410035005.9371-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -97,10 +97,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 31 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
-index 34b7046d97021..1adcd1ed16641 100644
+index 5d107c53364d6..be242bb8fefcd 100644
 --- a/drivers/media/i2c/ov5695.c
 +++ b/drivers/media/i2c/ov5695.c
-@@ -971,16 +971,9 @@ static int ov5695_s_stream(struct v4l2_subdev *sd, int on)
+@@ -974,16 +974,9 @@ static int ov5695_s_stream(struct v4l2_subdev *sd, int on)
  	return ret;
  }
  
@@ -118,7 +118,7 @@ index 34b7046d97021..1adcd1ed16641 100644
  	struct device *dev = &ov5695->client->dev;
  
  	ret = clk_prepare_enable(ov5695->xvclk);
-@@ -991,21 +984,28 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
+@@ -994,21 +987,28 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
  
  	gpiod_set_value_cansleep(ov5695->reset_gpio, 1);
  
@@ -155,7 +155,7 @@ index 34b7046d97021..1adcd1ed16641 100644
  	clk_disable_unprepare(ov5695->xvclk);
  
  	return ret;
-@@ -1013,9 +1013,22 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
+@@ -1016,9 +1016,22 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
  
  static void __ov5695_power_off(struct ov5695 *ov5695)
  {
@@ -179,7 +179,7 @@ index 34b7046d97021..1adcd1ed16641 100644
  }
  
  static int __maybe_unused ov5695_runtime_resume(struct device *dev)
-@@ -1285,7 +1298,7 @@ static int ov5695_probe(struct i2c_client *client,
+@@ -1288,7 +1301,7 @@ static int ov5695_probe(struct i2c_client *client,
  	if (clk_get_rate(ov5695->xvclk) != OV5695_XVCLK_FREQ)
  		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
  
