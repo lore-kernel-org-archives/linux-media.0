@@ -7,48 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D61D9C2D0EC
-	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 04:03:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD8EFC2BB85
+	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 04:03:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A20482082D
-	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 04:03:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 984BB20936
+	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 04:03:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586491401;
-	bh=UNXYY5nHx1oKv7D1DvC75seHCoQHrTodEf3J7c6UTf8=;
+	s=default; t=1586491413;
+	bh=YoydgxVY04JUElx6pTX1WVnIwMMo7Gnp01oStplhfd0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jRClbVMyCTimbxozrm6WgvOuytNgRsl4uZJmviejztikXO+yoddiksar68C6gDgaR
-	 r2CneXOoKlVmdTWa631IkVWg/2lkryWQuESUMH1t2l7oxnKrQdSoV28Yu4486sRle5
-	 4lTZvwc6SG3o9F5QuhJlOQ57xkJW3y6DF3tQ9UYY=
+	b=TBl2fbb7dQjhRGjtzFmoMMJszelFd+EPJRdPSOcG9LcvJBOP7R2mxvr3yCxevPbEf
+	 XC1RdLSqTW9uNNrDXL1s16XbrR17a0GSBU8qpw5loCemfDI+wwVmIob3byCAiXC/Ks
+	 ndw1KNJk4+USxCaUwOdSkVlMAJ2gL/mGTGaJ0tZ4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726783AbgDJDqq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Apr 2020 23:46:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56812 "EHLO mail.kernel.org"
+        id S1726707AbgDJDqm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Apr 2020 23:46:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56648 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726775AbgDJDqp (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:46:45 -0400
+        id S1726701AbgDJDql (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Apr 2020 23:46:41 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 85D9520936;
-        Fri, 10 Apr 2020 03:46:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A1B6520CC7;
+        Fri, 10 Apr 2020 03:46:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490405;
-        bh=UNXYY5nHx1oKv7D1DvC75seHCoQHrTodEf3J7c6UTf8=;
+        s=default; t=1586490401;
+        bh=YoydgxVY04JUElx6pTX1WVnIwMMo7Gnp01oStplhfd0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hfiUtdNunFDH6nqVmAUADcOH9PDrmjdsqm1HJ7RJv8iwp0WBjARR+9f7Ff0LwHe2D
-         jTJ2bwqd9sRPRfqxC91hXZl89xhwDmkVcqhtgIFImJHCJFChCJ++UHV7xbgA0Nq8Cw
-         rSWxYMjwhhkv4Mg1wXILTlPJAPh65JeR0ef+snPg=
+        b=QfDuU9ztnGp46tQbTvbJs1R/NhbP3red+60Z+ftBz6Jj27Wm38vPy2WRgHY/is9N9
+         awjIXbBdyoMnKoq8LnFHmcu7nWKNjfSnJPgM5BnnTnM8JoHa/l8Cmrx0q4RJ/SPJ1f
+         Bp/Q41qk/yZbsCEYV+h3grwED25Fx6BY6dyBKKi8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Helen Koike <helen.koike@collabora.com>,
-        Wojciech Zabolotny <wzab01@gmail.com>,
+Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Helen Koike <helen.koike@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org
-Subject: [PATCH AUTOSEL 5.6 08/68] media: staging: rkisp1: isp: do not set invalid mbus code for pad
-Date:   Thu,  9 Apr 2020 23:45:33 -0400
-Message-Id: <20200410034634.7731-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 05/68] media: vimc: streamer: fix memory leak in vimc subdevs if kthread_run fails
+Date:   Thu,  9 Apr 2020 23:45:30 -0400
+Message-Id: <20200410034634.7731-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200410034634.7731-1-sashal@kernel.org>
 References: <20200410034634.7731-1-sashal@kernel.org>
@@ -61,46 +60,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Helen Koike <helen.koike@collabora.com>
+From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 
-[ Upstream commit 100f720aabab3d5f58f67c508186041b3c797a9b ]
+[ Upstream commit ceeb2e6166dddf3c9757abbbf84032027e2fa2d2 ]
 
-When setting source pad, check if the given mbus code is indeed valid
-for source pad, if not, then set the default code.
-Same for sink pad.
+In case kthread_run fails, the vimc subdevices
+should be notified that streaming stopped so they can
+release the memory for the streaming. Also, kthread should be
+set to NULL.
 
-Fixes: d65dd85281fb ("media: staging: rkisp1: add Rockchip ISP1 base driver")
-Reported-by: Wojciech Zabolotny <wzab01@gmail.com>
-Signed-off-by: Helen Koike <helen.koike@collabora.com>
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Acked-by: Helen Koike <helen.koike@collabora.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/rkisp1/rkisp1-isp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/vimc/vimc-streamer.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
-index 328c7ea609717..db892620a5675 100644
---- a/drivers/staging/media/rkisp1/rkisp1-isp.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
-@@ -683,7 +683,7 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
+diff --git a/drivers/media/platform/vimc/vimc-streamer.c b/drivers/media/platform/vimc/vimc-streamer.c
+index cd6b55433c9ee..43e494df61d88 100644
+--- a/drivers/media/platform/vimc/vimc-streamer.c
++++ b/drivers/media/platform/vimc/vimc-streamer.c
+@@ -207,8 +207,13 @@ int vimc_streamer_s_stream(struct vimc_stream *stream,
+ 		stream->kthread = kthread_run(vimc_streamer_thread, stream,
+ 					      "vimc-streamer thread");
  
- 	src_fmt->code = format->code;
- 	mbus_info = rkisp1_isp_mbus_info_get(src_fmt->code);
--	if (!mbus_info) {
-+	if (!mbus_info || !(mbus_info->direction & RKISP1_DIR_SRC)) {
- 		src_fmt->code = RKISP1_DEF_SRC_PAD_FMT;
- 		mbus_info = rkisp1_isp_mbus_info_get(src_fmt->code);
- 	}
-@@ -767,7 +767,7 @@ static void rkisp1_isp_set_sink_fmt(struct rkisp1_isp *isp,
- 					  which);
- 	sink_fmt->code = format->code;
- 	mbus_info = rkisp1_isp_mbus_info_get(sink_fmt->code);
--	if (!mbus_info) {
-+	if (!mbus_info || !(mbus_info->direction & RKISP1_DIR_SINK)) {
- 		sink_fmt->code = RKISP1_DEF_SINK_PAD_FMT;
- 		mbus_info = rkisp1_isp_mbus_info_get(sink_fmt->code);
- 	}
+-		if (IS_ERR(stream->kthread))
+-			return PTR_ERR(stream->kthread);
++		if (IS_ERR(stream->kthread)) {
++			ret = PTR_ERR(stream->kthread);
++			dev_err(ved->dev, "kthread_run failed with %d\n", ret);
++			vimc_streamer_pipeline_terminate(stream);
++			stream->kthread = NULL;
++			return ret;
++		}
+ 
+ 	} else {
+ 		if (!stream->kthread)
 -- 
 2.20.1
 
