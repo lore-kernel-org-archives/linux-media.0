@@ -2,102 +2,92 @@ Return-Path: <SRS0=HwOa=52=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD8EFC2BB85
-	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 04:03:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9B78C2BB55
+	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 07:08:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 984BB20936
-	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 04:03:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586491413;
-	bh=YoydgxVY04JUElx6pTX1WVnIwMMo7Gnp01oStplhfd0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TBl2fbb7dQjhRGjtzFmoMMJszelFd+EPJRdPSOcG9LcvJBOP7R2mxvr3yCxevPbEf
-	 XC1RdLSqTW9uNNrDXL1s16XbrR17a0GSBU8qpw5loCemfDI+wwVmIob3byCAiXC/Ks
-	 ndw1KNJk4+USxCaUwOdSkVlMAJ2gL/mGTGaJ0tZ4=
+	by mail.kernel.org (Postfix) with ESMTP id 8C66C206F7
+	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 07:08:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgDJDqm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Apr 2020 23:46:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56648 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726701AbgDJDql (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:46:41 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A1B6520CC7;
-        Fri, 10 Apr 2020 03:46:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490401;
-        bh=YoydgxVY04JUElx6pTX1WVnIwMMo7Gnp01oStplhfd0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QfDuU9ztnGp46tQbTvbJs1R/NhbP3red+60Z+ftBz6Jj27Wm38vPy2WRgHY/is9N9
-         awjIXbBdyoMnKoq8LnFHmcu7nWKNjfSnJPgM5BnnTnM8JoHa/l8Cmrx0q4RJ/SPJ1f
-         Bp/Q41qk/yZbsCEYV+h3grwED25Fx6BY6dyBKKi8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Helen Koike <helen.koike@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 05/68] media: vimc: streamer: fix memory leak in vimc subdevs if kthread_run fails
-Date:   Thu,  9 Apr 2020 23:45:30 -0400
-Message-Id: <20200410034634.7731-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200410034634.7731-1-sashal@kernel.org>
-References: <20200410034634.7731-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1725861AbgDJHIF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Apr 2020 03:08:05 -0400
+Received: from alexa-out-blr-01.qualcomm.com ([103.229.18.197]:21196 "EHLO
+        alexa-out-blr-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725776AbgDJHIF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 10 Apr 2020 03:08:05 -0400
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by alexa-out-blr-01.qualcomm.com with ESMTP/TLS/AES256-SHA; 10 Apr 2020 12:37:12 +0530
+Received: from c-mansur-linux.qualcomm.com ([10.204.90.208])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 10 Apr 2020 12:37:04 +0530
+Received: by c-mansur-linux.qualcomm.com (Postfix, from userid 461723)
+        id B91CC218D0; Fri, 10 Apr 2020 12:37:03 +0530 (IST)
+From:   Mansur Alisha Shaik <mansur@codeaurora.org>
+To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org, mansur@codeaurora.org
+Subject: [PATCH] venus: core: remove CNOC voting while device suspend
+Date:   Fri, 10 Apr 2020 12:36:56 +0530
+Message-Id: <1586502416-15157-1-git-send-email-mansur@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+The Venus driver is voting Configuration NoC during .probe but not clear
+voting in .suspend. Because of this NoC is up during shutdown also. As a
+consequence the whole device could leak energy while in .suspend.
 
-[ Upstream commit ceeb2e6166dddf3c9757abbbf84032027e2fa2d2 ]
+So correct this by moving voting in .resume and unvoting
+in .suspend
 
-In case kthread_run fails, the vimc subdevices
-should be notified that streaming stopped so they can
-release the memory for the streaming. Also, kthread should be
-set to NULL.
-
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Acked-by: Helen Koike <helen.koike@collabora.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+signed-off-by: mansur alisha shaik <mansur@codeaurora.org>
 ---
- drivers/media/platform/vimc/vimc-streamer.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/platform/qcom/venus/core.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/vimc/vimc-streamer.c b/drivers/media/platform/vimc/vimc-streamer.c
-index cd6b55433c9ee..43e494df61d88 100644
---- a/drivers/media/platform/vimc/vimc-streamer.c
-+++ b/drivers/media/platform/vimc/vimc-streamer.c
-@@ -207,8 +207,13 @@ int vimc_streamer_s_stream(struct vimc_stream *stream,
- 		stream->kthread = kthread_run(vimc_streamer_thread, stream,
- 					      "vimc-streamer thread");
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 194b10b9..13fa507 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -242,10 +242,6 @@ static int venus_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
--		if (IS_ERR(stream->kthread))
--			return PTR_ERR(stream->kthread);
-+		if (IS_ERR(stream->kthread)) {
-+			ret = PTR_ERR(stream->kthread);
-+			dev_err(ved->dev, "kthread_run failed with %d\n", ret);
-+			vimc_streamer_pipeline_terminate(stream);
-+			stream->kthread = NULL;
-+			return ret;
-+		}
+-	ret = icc_set_bw(core->cpucfg_path, 0, kbps_to_icc(1000));
+-	if (ret)
+-		return ret;
+-
+ 	ret = hfi_create(core, &venus_core_ops);
+ 	if (ret)
+ 		return ret;
+@@ -350,6 +346,10 @@ static __maybe_unused int venus_runtime_suspend(struct device *dev)
+ 	if (ret)
+ 		return ret;
  
- 	} else {
- 		if (!stream->kthread)
++	ret = icc_set_bw(core->cpucfg_path, 0, 0);
++	if (ret)
++		return ret;
++
+ 	if (pm_ops->core_power)
+ 		ret = pm_ops->core_power(dev, POWER_OFF);
+ 
+@@ -368,6 +368,10 @@ static __maybe_unused int venus_runtime_resume(struct device *dev)
+ 			return ret;
+ 	}
+ 
++	ret = icc_set_bw(core->cpucfg_path, 0, kbps_to_icc(1000));
++	if (ret)
++		return ret;
++
+ 	return hfi_core_resume(core, false);
+ }
+ 
 -- 
-2.20.1
+2.7.4
 
