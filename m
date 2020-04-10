@@ -2,92 +2,107 @@ Return-Path: <SRS0=HwOa=52=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C105CC2BB86
-	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 07:17:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68D61C2BB85
+	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 07:58:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 97D2820692
-	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 07:17:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3ADF4206F7
+	for <linux-media@archiver.kernel.org>; Fri, 10 Apr 2020 07:58:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="HCaRMZW4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U97OPPtV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbgDJHRo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Apr 2020 03:17:44 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:55079 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726650AbgDJHRo (ORCPT
+        id S1725893AbgDJH6e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Apr 2020 03:58:34 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:36147 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725861AbgDJH6d (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Apr 2020 03:17:44 -0400
-X-UUID: f31927d3540146769e684233bfe988e4-20200410
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ygWe+eLtAFpl7pbb42yoKAd2QeY0+GuA6Di3Dh7DXzY=;
-        b=HCaRMZW4ivGsHsJ1BJ+bY+/A8A2Nb72V8QzlxhUuMredEpdQOg5hrcwcBFhmPPoTnZLFuF579QEHykwT73qfn6++1trN7FG7cFoD9+uZ6ZIwWkV7jFT1NtNlHlOc/c3waZ6FmSApCwObVqfVW6w4MXGHJv2IAZVaSqbvdSfbybc=;
-X-UUID: f31927d3540146769e684233bfe988e4-20200410
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
-        (envelope-from <louis.kuo@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1426561054; Fri, 10 Apr 2020 15:17:38 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 10 Apr 2020 15:17:30 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 10 Apr 2020 15:17:31 +0800
-From:   Louis Kuo <louis.kuo@mediatek.com>
-To:     <hans.verkuil@cisco.com>,
-        <laurent.pinchart+renesas@ideasonboard.com>, <tfiga@chromium.org>,
-        <keiichiw@chromium.org>, <matthias.bgg@gmail.com>,
-        <mchehab@kernel.org>
-CC:     <yuzhao@chromium.org>, <zwisler@chromium.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <Sean.Cheng@mediatek.com>,
-        <sj.huang@mediatek.com>, <christie.yu@mediatek.com>,
-        <louis.kuo@mediatek.com>, <frederic.chen@mediatek.com>,
-        <Jerry-ch.Chen@mediatek.com>, <jungo.lin@mediatek.com>,
-        <linux-media@vger.kernel.org>, <srv_heupstream@mediatek.com>,
-        <devicetree@vger.kernel.org>
-Subject: [RFC PATCH V6 3/3] dts: arm64: mt8183: Add sensor interface nodes
-Date:   Fri, 10 Apr 2020 15:17:23 +0800
-Message-ID: <20200410071723.19720-4-louis.kuo@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200410071723.19720-1-louis.kuo@mediatek.com>
-References: <20200410071723.19720-1-louis.kuo@mediatek.com>
+        Fri, 10 Apr 2020 03:58:33 -0400
+Received: by mail-wm1-f65.google.com with SMTP id a201so1505049wme.1
+        for <linux-media@vger.kernel.org>; Fri, 10 Apr 2020 00:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EVPFhIaLQy4jMpwt7Ws80UbGnhhDyDK/W85xuqU809A=;
+        b=U97OPPtVjY6bx3XpYlYW1qT0kdhs4PYoRiGkwjL1+CtHxOHHXtMluQtQK6r5t6vyDB
+         zHVCz+uYnsZzl5vK/4jsb4a7sygFIHs7AaqFkK5P8f4Dv/Jvl+MD04gO1SQCzgJsJiTG
+         jOB0gIX6V7Jdn+63vjG0PMifI8tkVljNAyJ5fakRjI8XTl+DpuWHxa4ng8k51UKoMH+O
+         uDrrkjcLZBEg+1yymdAnOohU5YA+XQXxfsbjqrNEiNuo1UQ+LyZ+DEQlSboivEUEyNRm
+         mfnjrXUCJCa5aA5ZkSQ+pDXVuYuSSrfZ3pjfdCuZ39DBke5mJJj4rGNibKw292ttU6sm
+         lTBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EVPFhIaLQy4jMpwt7Ws80UbGnhhDyDK/W85xuqU809A=;
+        b=UuBZFOlWSIJ7s710lq+1C2thPVzUjwQxb8JI9wCW3LGi4KQxclhrS2C3SHz/CsvRQe
+         WGmwBVu5hWk9Cf6CGj0zVlgoNCy3blH1goEok3xDA0q1ikTa6i0mD11wkhXkGSHTRBuJ
+         m/HhpqnBm/FkVZ2HOYW6H728ia8jTD4r0Na8fJBDOk+i+ME79POO79AaqFsWwe9DB68M
+         m7h3RhHKf0lzjw6mf9ESCDV94MlF3DpDcD9kkHBa+YhMo1DN0/d6V3gxSSdSDmOEd7eb
+         I5iXs6qw6bFHmhwsswx061G+U2woKBE/uYCatZqcalOeP1E/7IJyA1Ivy2tpv/7xx4XL
+         rqxA==
+X-Gm-Message-State: AGi0PubykMKfneO1GpXhiuFCKEHz5EfparibouOPfpmv7IFBbQ7K8nP6
+        jNo0AX/vhZj8chzKmSwJRNhPvA==
+X-Google-Smtp-Source: APiQypJruAvbbWmgTp7tYy6+69EWw4BLdixeZWDT+T26NIvRMylTqGC7sUIpEqVHULbRgcqvyIGi/g==
+X-Received: by 2002:a05:600c:2f17:: with SMTP id r23mr3681714wmn.81.1586505510682;
+        Fri, 10 Apr 2020 00:58:30 -0700 (PDT)
+Received: from [192.168.1.5] (212-5-158-142.ip.btc-net.bg. [212.5.158.142])
+        by smtp.googlemail.com with ESMTPSA id y2sm1907569wrh.90.2020.04.10.00.58.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Apr 2020 00:58:30 -0700 (PDT)
+Subject: Re: [PATCH V2] venus: core: remove CNOC voting while device suspend
+To:     Mansur Alisha Shaik <mansur@codeaurora.org>,
+        linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org
+References: <1586503045-18630-1-git-send-email-mansur@codeaurora.org>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <22207225-866b-a424-6937-ae88ff94d373@linaro.org>
+Date:   Fri, 10 Apr 2020 10:58:28 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <1586503045-18630-1-git-send-email-mansur@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-QWRkIG5vZGVzIGZvciBNZWRpYXRlaydzIHNlbnNvciBpbnRlcmZhY2UgZGV2aWNlLiBTZW5zb3Ig
-aW50ZXJmYWNlIG1vZHVsZQ0KZW1iZWRkZWQgaW4gTWVkaWF0ZWsgU09Dcywgd29ya3MgYXMgYSBI
-VyBjYW1lcmEgaW50ZXJmYWNlIGNvbnRyb2xsZXINCmludGVuZGVkIGZvciBpbWFnZSBhbmQgZGF0
-YSB0cmFuc21pc3Npb24gYmV0d2VlbiBjYW1lcmFzIGFuZCBob3N0IGRldmljZXMuDQoNClNpZ25l
-ZC1vZmYtYnk6IExvdWlzIEt1byA8bG91aXMua3VvQG1lZGlhdGVrLmNvbT4NCi0tLQ0KIGFyY2gv
-YXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLmR0c2kgfCAyNSArKysrKysrKysrKysrKysr
-KysrKysrKysNCiAxIGZpbGUgY2hhbmdlZCwgMjUgaW5zZXJ0aW9ucygrKQ0KDQpkaWZmIC0tZ2l0
-IGEvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMuZHRzaSBiL2FyY2gvYXJtNjQv
-Ym9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLmR0c2kNCmluZGV4IDQzM2M2MmVmYWIyZC4uNWM3YmVk
-NWE2ZjMyIDEwMDY0NA0KLS0tIGEvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMu
-ZHRzaQ0KKysrIGIvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMuZHRzaQ0KQEAg
-LTcxNSw1ICs3MTUsMzAgQEANCiAJCQlyZWcgPSA8MCAweDFhMDAwMDAwIDAgMHgxMDAwPjsNCiAJ
-CQkjY2xvY2stY2VsbHMgPSA8MT47DQogCQl9Ow0KKwkJc2VuaW5mOiBzZW5pbmZAMWEwNDAwMDAg
-ew0KKwkJCWNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4MTgzLXNlbmluZiI7DQorCQkJcmVnID0g
-PDAgMHgxYTA0MDAwMCAwIDB4ODAwMD4sDQorCQkJICAgICAgPDAgMHgxMWM4MDAwMCAwIDB4NjAw
-MD47DQorCQkJcmVnLW5hbWVzID0gImJhc2UiLCAicngiOw0KKwkJCWludGVycnVwdHMgPSA8R0lD
-X1NQSSAyNTEgSVJRX1RZUEVfTEVWRUxfTE9XPjsNCisJCQlwb3dlci1kb21haW5zID0gPCZzY3Bz
-eXMgTVQ4MTgzX1BPV0VSX0RPTUFJTl9DQU0+Ow0KKwkJCWNsb2NrcyA9IDwmY2Ftc3lzIENMS19D
-QU1fU0VOSU5GPiwNCisJCQkJIDwmdG9wY2tnZW4gQ0xLX1RPUF9NVVhfU0VOSU5GPjsNCisJCQlj
-bG9jay1uYW1lcyA9ICJjbGtfY2FtX3NlbmluZiIsICJjbGtfdG9wX211eF9zZW5pbmYiOw0KKwkJ
-CXN0YXR1cyA9ICJkaXNhYmxlZCI7DQorDQorCQkJcG9ydHMgew0KKwkJCQkjYWRkcmVzcy1jZWxs
-cyA9IDwxPjsNCisJCQkJI3NpemUtY2VsbHMgPSA8MD47DQorDQorCQkJCXBvcnRANCB7DQorCQkJ
-CQlyZWcgPSA8ND47DQorDQorCQkJCQlzZW5pbmZfY2FtaXNwX2VuZHBvaW50OiBlbmRwb2ludCB7
-DQorCQkJCQkJcmVtb3RlLWVuZHBvaW50ID0gPCZjYW1pc3BfZW5kcG9pbnQ+Ow0KKwkJCQkJfTsN
-CisJCQkJfTsNCisJCQl9Ow0KKwkJfTsNCiAJfTsNCiB9Ow0KLS0gDQoyLjE4LjANCg==
+Thanks Mansur,
 
+On 4/10/20 10:17 AM, Mansur Alisha Shaik wrote:
+> The Venus driver is voting Configuration NoC during .probe but not clear
+> voting in .suspend. Because of this NoC is up during shutdown also. As a
+> consequence the whole device could leak energy while in .suspend.
+> 
+> So correct this by moving voting in .resume and unvoting
+> in .suspend
+> 
+> signed-off-by: mansur alisha shaik <mansur@codeaurora.org>
+
+Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+
+Please configure git and use 'git commit -s' to sign off your commits
+next time. I will correct that when applying.
+
+> ---
+> Changes in V2:
+> - As per stanimir comment changed the commit message.
+> 
+>  drivers/media/platform/qcom/venus/core.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+
+-- 
+regards,
+Stan
