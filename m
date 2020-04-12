@@ -2,75 +2,130 @@ Return-Path: <SRS0=jTma=54=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E2E9C2BB86
-	for <linux-media@archiver.kernel.org>; Sun, 12 Apr 2020 12:05:19 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DC512206E9
-	for <linux-media@archiver.kernel.org>; Sun, 12 Apr 2020 12:05:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81368C2BB86
+	for <linux-media@archiver.kernel.org>; Sun, 12 Apr 2020 18:31:16 +0000 (UTC)
+Received: from vger.kernel.org (unknown [209.132.180.67])
+	by mail.kernel.org (Postfix) with ESMTP id 4EF79206E9
+	for <linux-media@archiver.kernel.org>; Sun, 12 Apr 2020 18:31:16 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hipBb+D/"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4EF79206E9
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org
+Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-media-owner@vger.kernel.org
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725909AbgDLMFR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 Apr 2020 08:05:17 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37310 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727006AbgDLMFP (ORCPT
+        id S1727575AbgDLSaH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 12 Apr 2020 14:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:43936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727561AbgDLSaG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 Apr 2020 08:05:15 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 9ECBA2A07A7
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org, dafna.hirschfeld@collabora.com,
-        helen.koike@collabora.com, ezequiel@collabora.com,
-        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
-        laurent.pinchart@ideasonboard.com,
-        linux-rockchip@lists.infradead.org, sakari.ailus@linux.intel.com
-Subject: [PATCH v2 3/4] media: staging: rkisp1: rsz: change (hv)div only if capture format is YUV
-Date:   Sun, 12 Apr 2020 14:05:03 +0200
-Message-Id: <20200412120504.6536-4-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200412120504.6536-1-dafna.hirschfeld@collabora.com>
-References: <20200412120504.6536-1-dafna.hirschfeld@collabora.com>
+        Sun, 12 Apr 2020 14:30:06 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A05C008778;
+        Sun, 12 Apr 2020 11:20:26 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id k21so6789590ljh.2;
+        Sun, 12 Apr 2020 11:20:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=did1T2/HwLMbYWYOlmzUGj6USB2Yk/B/7FfjOftQ9s8=;
+        b=hipBb+D/jP/qEHd5BxbwYSODqx8BortuRIMkzRERp+XNGiT4yk7To7/dmj1lelc1as
+         +0NSQvV64w2t/PnzKb1LJ3XbFzahoqefh/RWPrxsSegizIkWgg36JQCN7Pzo1nK5cvN0
+         lJGNzou6X3se3VQTxHXXbePUXVNBOzKlaBO7QS8ktk7UZG46dTbDykrRvVjsRkLAqgvJ
+         nurSgm8718ek6yzWafK9i7ZgFVeXqFJyZ81gy03GMLVQhUJHCwpBjnj6wwSdxV6cn8Pu
+         EsR5rTAsyO+knJtNRCnAFVxaQC0KxbtqlP0eGap3QBlcASp7GH3XKhXAjIACUV/Pci/X
+         cG2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=did1T2/HwLMbYWYOlmzUGj6USB2Yk/B/7FfjOftQ9s8=;
+        b=gqenxPtsgrVf+7cDgUvJRSYBykZox9GQcxSgrqgWMq2rHG5hQ3vld0g0QT1CJpYZNs
+         jlyzJI8LvdPxEMVPvgM6Jzua7cdEcs+PbUdhunVB3YqKImMxY34XiV7Ky9e5aFETeXup
+         hayTDMatHXjPNZImEyoXWhsh59m0z92qTu453ATRa/Y8mEbqJ8c6m4APNCGazw7mwNCy
+         wvxBeVz9SmCLgTQlBbpvcPhhIr5mOQgsnizv8QqlJtoic8twIVfKEXK6wI5+6f6zZkuR
+         h3tFkpQoTuvrdssRIS/13yxbIerGol3tE9mVqGKIukNEhaF4Uj1CldJuHjMw45AndQzJ
+         lHGw==
+X-Gm-Message-State: AGi0PuaVHQ7AK4XScHG5Fp2d4pn3anaeKq6ow7iHEpgwOls4JIBXqg3c
+        EFKKIP1e8NTcJ7uxpNto5l5whAEilMQ=
+X-Google-Smtp-Source: APiQypLW6zIR1umbR/uxwiVl6Mu1txVZ1wgbVD7efr/eOYIQSegWjWS1ZWxFJ0MQHCvZ9C0SrDDCRg==
+X-Received: by 2002:a2e:7d09:: with SMTP id y9mr8491929ljc.146.1586715624424;
+        Sun, 12 Apr 2020 11:20:24 -0700 (PDT)
+Received: from saturn.lan (18.158-248-194.customer.lyse.net. [158.248.194.18])
+        by smtp.gmail.com with ESMTPSA id m13sm6434394lfk.12.2020.04.12.11.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Apr 2020 11:20:23 -0700 (PDT)
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        dri-devel@lists.freedesktop.org
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: [PATCH v1 3/4] dt-bindings: media: add wiring property to video-interfaces
+Date:   Sun, 12 Apr 2020 20:20:11 +0200
+Message-Id: <20200412182012.27515-4-sam@ravnborg.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200412182012.27515-1-sam@ravnborg.org>
+References: <20200412182012.27515-1-sam@ravnborg.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-RGB formats in selfpath should receive input format as YUV422.
-The resizer input format is always YUV422 and therefore
-if the capture format is RGB, the resizer should not change
-the YUV rations.
+The wiring property is used to describe the wiring between
+the connector and the panel. The property can be used when the
+wiring is used to change the mode from for example
+BGR to RGB. The first users are the at91sam9 family where
+such a wiring trick is sometimes used.
+The possilbe values are so far limited to what is required
+by the at91sam9 family, but using "text" allows us to extend
+this in the future.
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+There exists similar properties today:
+ - display/tilcdc/tilcdc.txt: blue-and-red-wiring
+ - display/atmel,lcdc.txt: atmel,lcd-wiring-mode
+
+Neither of the above are defined as endpoint properties.
+
+The new property "wiring" has a more general name and
+is defined as an endpoint property.
+It will replace atmel,lcd-wiring-mode and may replace
+blue-and-red-wiring.
+
+Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: linux-media@vger.kernel.org
 ---
- drivers/staging/media/rkisp1/rkisp1-resizer.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/media/video-interfaces.txt | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-index c28919b9af44..d049374413dc 100644
---- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-@@ -394,9 +394,14 @@ static void rkisp1_rsz_config(struct rkisp1_resizer *rsz,
- 	 * but also to change the scale for YUV formats,
- 	 * (4:2:2 -> 4:2:0 for example). So the width/height of the CbCr
- 	 * streams should be set according to the pixel format in the capture.
-+	 * The resizer always gets the input as YUV422. If the capture format
-+	 * is RGB then the memory input should be YUV422 so we don't change the
-+	 * default hdiv, vdiv in that case.
- 	 */
--	hdiv = cap->pix.info->hdiv;
--	vdiv = cap->pix.info->vdiv;
-+	if (v4l2_is_format_yuv(cap->pix.info)) {
-+		hdiv = cap->pix.info->hdiv;
-+		vdiv = cap->pix.info->vdiv;
-+	}
- 
- 	src_c.width = src_y.width / hdiv;
- 	src_c.height = src_y.height / vdiv;
+diff --git a/Documentation/devicetree/bindings/media/video-interfaces.txt b/Documentation/devicetree/bindings/media/video-interfaces.txt
+index f884ada0bffc..c3bb87c5c9a9 100644
+--- a/Documentation/devicetree/bindings/media/video-interfaces.txt
++++ b/Documentation/devicetree/bindings/media/video-interfaces.txt
+@@ -141,6 +141,9 @@ Optional endpoint properties
+ - link-frequencies: Allowed data bus frequencies. For MIPI CSI-2, for
+   instance, this is the actual frequency of the bus, not bits per clock per
+   lane value. An array of 64-bit unsigned integers.
++- wiring: Wiring of data lines to display.
++  "straight" - normal wiring.
++  "red-blue-reversed" - red and blue lines reversed.
+ - lane-polarities: an array of polarities of the lanes starting from the clock
+   lane and followed by the data lanes in the same order as in data-lanes.
+   Valid values are 0 (normal) and 1 (inverted). The length of the array
 -- 
-2.17.1
+2.20.1
 
