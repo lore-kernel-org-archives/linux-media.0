@@ -2,64 +2,65 @@ Return-Path: <SRS0=jTma=54=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC69CC2BBC7
-	for <linux-media@archiver.kernel.org>; Sun, 12 Apr 2020 18:31:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 267F2C352B6
+	for <linux-media@archiver.kernel.org>; Sun, 12 Apr 2020 18:31:17 +0000 (UTC)
 Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BA2EA206E9
+	by mail.kernel.org (Postfix) with ESMTP id F39EC20692
 	for <linux-media@archiver.kernel.org>; Sun, 12 Apr 2020 18:31:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ROGEJ/Ca"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org BA2EA206E9
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O3gdcKnk"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F39EC20692
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-media-owner@vger.kernel.org
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727576AbgDLSaI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 Apr 2020 14:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:43938 "EHLO
+        id S1727580AbgDLSaJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 12 Apr 2020 14:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727562AbgDLSaH (ORCPT
+        with ESMTP id S1727566AbgDLSaI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 Apr 2020 14:30:07 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA78C0A3BF2;
-        Sun, 12 Apr 2020 11:20:22 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 198so4990415lfo.7;
-        Sun, 12 Apr 2020 11:20:22 -0700 (PDT)
+        Sun, 12 Apr 2020 14:30:08 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54314C0086C2;
+        Sun, 12 Apr 2020 11:20:27 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id r17so4995808lff.2;
+        Sun, 12 Apr 2020 11:20:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tY4gV3mbBh6YlZ2Mos/NaX4/rY14UmtFD7+t3Jb3dMw=;
-        b=ROGEJ/CaGdsXBF+PbMesBFoHnpYqw7ZVM6SOtq5GVNwVH7JNVbYjZLzv1ohpJM5FKi
-         9yji4QogiO9wbeUziw3EMOSYGKDXOyQSuxnXSkto+8bG4DRbKQ9+kRMivEUZnc8Q41vj
-         GW+0MfxC5jUQX0SOEmjR7I9I57AVGTbYZEERr17C44weIY/7oc6XSfrJZYiHq+qPxkgm
-         MY0XEfA7eiuPrSoRWtWrIJHVaAACeP/rdLUMOSzIsppr8S9ACK4KdOp5t00VwhaYAxvG
-         vLWCdoJOe0/vqTEvmyYBmkEN0O2qtTmQ3g5EYShAMySr+h1z6SNs7YkoiBOoqp+VLysR
-         wCPA==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=s7PyP7wM+hSmqY+Nl4dhHB6/+lR7BTTva1Z1R03Oe1A=;
+        b=O3gdcKnk6nH6vW/0o9T/tib9LsIjIxtq7DG8LrEag2qjwgCdtswUsLnNipTw+jT4mP
+         e6cbPPRL2CNlRKZQh2uOMyQo8DyoWKT/QaNU20nlUtHfdcRUNBK4L6HBlspqSom+34R3
+         j5TopCMaCD4NhkoQu4G+WM7fTFuXOdCPJ4KUsfEo9ysytuqSgn7sMNY/2udkVmdpe+Sq
+         E6lHiaVugK/D0cp8oht8TJynVaMa1uDkGVpjyHYgwvMMhfaYM0BhWCdi9naledajb1/J
+         HXbSROWbXH982peXfJctgLkwg1M88T2iLbE70T8ApVkffnPJ8+xumdNgXwejrBbJmrne
+         2Cog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=tY4gV3mbBh6YlZ2Mos/NaX4/rY14UmtFD7+t3Jb3dMw=;
-        b=bsrFWwtYiZEPWhv2M/LC9J0Ue+Pg4+T4DdgKT5PBbEJoinbqM/wElgjlmMWb63bvYO
-         GTnkqKCy/XAjKgRbBySXpk4Vm4+50UsTP8k4qvwZ8d53qf1U7RvJXVMrofHjDTumEJ9I
-         P5k1vaun5EaSufRUAdrwzREvFHIkCuqbqOuPclnAVC6CoRrkzJFxWyL+XwDKAz83Ybi6
-         48kbqEggdJD2GsB6cTUmhfiYr1zMxRrOsp01cB5yX5Nld5UvGJp53Th3rFtQP00YkKqr
-         VwkZj+ljOCbjT8EkNVtel9beCnq/cNSC5ZQ0ePvzqdLzOGA2uXvWKwQfb4Yl8zxkNluP
-         7Q2g==
-X-Gm-Message-State: AGi0PuZcz0KGTkIeH8eMyxSb99zbbYs9wtVyNyzh8+bavR2M1u7blexB
-        Y0FTzLZv/o2+pMHXi4RjpeP0j8w3ni8=
-X-Google-Smtp-Source: APiQypIxqPYcw7sG0yOL2g9KSN6dtoshvVOHq2rXNtGX+hzY3j3+hLYI18RMgDenrT3GLFgvbP7kjQ==
-X-Received: by 2002:a05:6512:1c5:: with SMTP id f5mr8183363lfp.138.1586715620757;
-        Sun, 12 Apr 2020 11:20:20 -0700 (PDT)
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=s7PyP7wM+hSmqY+Nl4dhHB6/+lR7BTTva1Z1R03Oe1A=;
+        b=WuCqlVAHLVb9xjw+AnScpKBk8gbwKqUIWZjww3Jxc1tHtd1K/zvkjkBsrQAXnDRRih
+         KTaFTv1XTFGWsmLP+QHoKMJA7o/67L38DaNpOY4ILyBUfcdcJb00msU4XEKJHkM7kwju
+         46lzJ78RuaRCd9w9nUAqHSU996/ZETHuqFW4yUSE9lbUXl9xiVnT0WkBbDEO5LhxKPrv
+         x6OXPI2bDpzWe4V0/ov+eyMlN7Qew9G28eNQVlk3TMeRpjd1JSCWJL/lvZ1w0c+xSV2u
+         TfBjM/9LpcT/dNQ0bpPkdgpl06SQTdazPIqClA1WT/E0fHT1AffEPJONamJuRt0jzcoQ
+         tWhw==
+X-Gm-Message-State: AGi0PuZqDZ2qWonX5J66+PFTgCxjX22Op4WDX+r5ueFqZOolByu2e7hz
+        UtDRqDRnVsLPN/Sti1WJ1Ji2sdznhN8=
+X-Google-Smtp-Source: APiQypJSXZxot3B6tsVUM4YKg3cHraXKHQBplcVR54rLr6Cr3IwsfjmqDogPJQNAHRKGcEqAoTxaPg==
+X-Received: by 2002:a05:6512:10c9:: with SMTP id k9mr8379271lfg.183.1586715625482;
+        Sun, 12 Apr 2020 11:20:25 -0700 (PDT)
 Received: from saturn.lan (18.158-248-194.customer.lyse.net. [158.248.194.18])
-        by smtp.gmail.com with ESMTPSA id m13sm6434394lfk.12.2020.04.12.11.20.19
+        by smtp.gmail.com with ESMTPSA id m13sm6434394lfk.12.2020.04.12.11.20.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Apr 2020 11:20:20 -0700 (PDT)
+        Sun, 12 Apr 2020 11:20:25 -0700 (PDT)
 From:   Sam Ravnborg <sam@ravnborg.org>
 To:     devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
         dri-devel@lists.freedesktop.org
@@ -67,11 +68,14 @@ Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Boris Brezillon <bbrezillon@kernel.org>,
         Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v1 0/4] dt-bindings: DT Schema variants of atmel lcdc, hlcdc
-Date:   Sun, 12 Apr 2020 20:20:08 +0200
-Message-Id: <20200412182012.27515-1-sam@ravnborg.org>
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: [PATCH v1 4/4] dt-bindings: display: add port support to atmel lcdc
+Date:   Sun, 12 Apr 2020 20:20:12 +0200
+Message-Id: <20200412182012.27515-5-sam@ravnborg.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200412182012.27515-1-sam@ravnborg.org>
+References: <20200412182012.27515-1-sam@ravnborg.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -79,53 +83,154 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The following four patches update the bindings for Atmel
-LCDC, HLCDC display controllers to DT Schema.
+Update the Atmel LCDC binding to include:
+- pwm. Used for backlight
+- endpoints using port node
+  Used for handle to panel
+- Added wiring property that is used to describe
+  the wiring between the LCDC and the panel
 
-The bindings were re-written in DT Schema format,
-and examples adjusted/updated to fit.
+Existing properties that should not be used in new
+bindings are deprecated.
 
-This patch-set introduces a new endpoint property in video-interfaces
-used to tell if red and blue wiring is reversed.
-Red and blue wires are reversed as the LCDC IP natively supports BGR
-whereas most SW expects RGB. With the wires reversed the SW thinks
-the IP supports RGB.
-See more details in the changelog of the patch.
+Updated example to include the updated way to specify panel etc.
 
-The Atmel lcdc binding deprecate a lot of properties in other
-to update it to an up-to-date binding. There are no users of the
-updated binding, thats something I work on.
+Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+---
+ .../bindings/display/atmel/lcdc.yaml          | 94 ++++++++++++++++++-
+ 1 file changed, 93 insertions(+), 1 deletion(-)
 
-Note a big difference between LCDC and HLCDC.
-LCDC has all in one binding (interrupts, pwm, display controller).
-HLCDC has individual sub-nodes for the PWM and the display contoller.
-
-When posting an update on the old atmel,lcdc.txt file the feedback
-was back then that we did not want the split like done for hlcdc.
-And it makes for a simpler binding in this way - so feedback looks right.
-
-Despite that Microchip has purchased Atmel, the atmel name is kept.
-Also the files are placed in a directory named atmel/.
-
-Feedback welcome!
-
-	Sam
-
-Sam Ravnborg (4):
-      dt-bindings: display: convert atmel-hlcdc to DT Schema
-      dt-bindings: display: convert atmel lcdc to DT Schema
-      dt-bindings: media: add wiring property to video-interfaces
-      dt-bindings: display: add port support to atmel lcdc
-
- .../devicetree/bindings/display/atmel,lcdc.txt     |  88 --------
- .../devicetree/bindings/display/atmel/hlcdc-dc.txt |  75 -------
- .../bindings/display/atmel/hlcdc-dc.yaml           | 102 +++++++++
- .../devicetree/bindings/display/atmel/lcdc.yaml    | 229 +++++++++++++++++++++
- .../devicetree/bindings/media/video-interfaces.txt |   3 +
- .../devicetree/bindings/mfd/atmel-hlcdc.txt        |  55 -----
- .../devicetree/bindings/mfd/atmel-hlcdc.yaml       |  78 +++++++
- .../devicetree/bindings/pwm/atmel-hlcdc-pwm.txt    |  29 ---
- .../devicetree/bindings/pwm/atmel-hlcdc-pwm.yaml   |  39 ++++
- 9 files changed, 451 insertions(+), 247 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/display/atmel/lcdc.yaml b/Documentation/devicetree/bindings/display/atmel/lcdc.yaml
+index 7dcb9a4d5902..b5c2628f7805 100644
+--- a/Documentation/devicetree/bindings/display/atmel/lcdc.yaml
++++ b/Documentation/devicetree/bindings/display/atmel/lcdc.yaml
+@@ -28,6 +28,7 @@ properties:
+ 
+   "#address-cells":
+     const: 1
++
+   "#size-cells":
+     const: 0
+ 
+@@ -43,13 +44,84 @@ properties:
+   lcd-supply:
+     description: Regulator for LCD supply voltage.
+ 
++  "#pwm-cells":
++    description:
++      This PWM chip use the default 3 cells bindings
++      defined in ../../pwm/pwm.yaml.
++    const: 3
++
++  clocks:
++    maxItems: 2
++
++  clock-names:
++    maxItems: 2
++    items:
++      - const: lcdc_clk
++      - const: hclk
++
++  port@0:
++    type: object
++    description: Endpoints of the display controller
++
++    properties:
++
++      reg:
++        const: 0
++
++      "#address-cells":
++        const: 1
++
++      "#size-cells":
++        const: 0
++
++      endpoint@0:
++        type: object
++        description: endpoint node that include phandle to panel
++
++        properties:
++
++          reg:
++            const: 0
++
++          wiring:
++            enum:
++              - straight
++              - red-blue-reversed
++            description: |
++              The LCDC is based on a blue-green-red configuration but to adapt
++              to SW only supporting red-green-blue the data lines for red and blue
++              may be reversed.
++              See details in: http://ww1.microchip.com/downloads/en/AppNotes/doc6300.pdf
++              "straight" - default value. Data lines are not reversed, uses BGR
++              "red-blue-reversed" - red and green are reversed, uses RGB
++
++          remote-endpoint:
++            $ref: /schemas/types.yaml#/definitions/phandle
++            description:
++              phandle to the panel node
++
++        required:
++          - reg
++          - remote-endpoint
++
++        additionalProperties: false
++
++    required:
++      - "#address-cells"
++      - "#size-cells"
++      - reg
++
++    additionalProperties: false
++
+   display:
+     $ref: /schemas/types.yaml#/definitions/phandle
++    deprecated: true
+     description: phandle to display node
+ 
+ patternProperties:
+   "^display[0-9]$":
+     type: object
++    deprecated: true
+     description: |
+       Display node is required to initialize the lcd panel.
+       This should be in the board dts
+@@ -107,12 +179,32 @@ required:
+ 
+ examples:
+   - |
++    #include <dt-bindings/clock/at91.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
+     fb {
+         compatible = "atmel,at91sam9263-lcdc";
+         reg = <0x00700000 0x1000>;
+-        interrupts = <23 3 0>;
++        interrupts = <26 IRQ_TYPE_LEVEL_HIGH 3>;
++        clocks = <&pmc PMC_TYPE_PERIPHERAL 26>, <&pmc PMC_TYPE_PERIPHERAL 26>;
++        clock-names = "lcdc_clk", "hclk";
++
++        /* pwm for backlight */
++        #pwm-cells = <3>;
++
+         #address-cells = <1>;
+         #size-cells = <0>;
++
++        port@0 {
++            reg = <0>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++            endpoint@0 {
++                reg = <0>;
++                wiring = "red-blue-reversed";
++                remote-endpoint = <&panel_input>;
++            };
++        };
+     };
+ 
+   - |
+-- 
+2.20.1
 
