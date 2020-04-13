@@ -1,77 +1,53 @@
-Return-Path: <SRS0=jTma=54=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=YRPh=55=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD022C2D0EC
-	for <linux-media@archiver.kernel.org>; Sun, 12 Apr 2020 20:59:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 585EFC2BB85
+	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 01:14:38 +0000 (UTC)
 Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9162E206E5
-	for <linux-media@archiver.kernel.org>; Sun, 12 Apr 2020 20:59:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0FC3C2063A
+	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 01:14:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ONB8qeJZ"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9162E206E5
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="oCiKBesU"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0FC3C2063A
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-media-owner@vger.kernel.org
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728185AbgDLU7c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 Apr 2020 16:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:42326 "EHLO
+        id S1726921AbgDMBOg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 12 Apr 2020 21:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728180AbgDLU7b (ORCPT
+        with ESMTP id S1726879AbgDMBOg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 Apr 2020 16:59:31 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C685C0A3BF5;
-        Sun, 12 Apr 2020 13:59:31 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id x2so5839726qtr.0;
-        Sun, 12 Apr 2020 13:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+oGha8BwVFGHyeSdF+xfvU5jDMPO0lkkRHjX1TTo+IA=;
-        b=ONB8qeJZxdZc5aoz+PTkxRUemiWREghJiaggCxQbAyBsJ0sUzzzOf3b3yJXTaqZLAF
-         IjSIwe2ipOslb4icX98h/FJCd6VPxwTY8FnMXutHj/BBKIDBWKjKKHHLuFbpoy29+5QS
-         OdcsNAY3LtPooiVgJFrhLvUFL5NNs5jkZfJbvTiCk/Na0egCKMgLHZpoUMDHu9U5yx/p
-         t6IIP0Rix0soutpv8mA+n3PAmBwMCZnfux8mmr8oznAmVp/OkFxQju7592ONfsEkFl3o
-         jHnSRYqvGLl0a3sLIuBEI5TmoBlYQ1Pp6ethlWpxnWnPh87DuTmrf+NAy7GsBh+4+T34
-         EIcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+oGha8BwVFGHyeSdF+xfvU5jDMPO0lkkRHjX1TTo+IA=;
-        b=FOx9swuZQ/bEZKsiErXw0OglFZsipT0WjjV2mv3UPkZVFCiLTxjCj5lRQ/rrcztLQj
-         mnDn0k8YcUudIER8PBWcwjMXHRM/IShhEe405zVmVC6NfMiFqUbSZFxCQ4DD0vk2h0sI
-         7/xialtiN37mgCRB8AwY+p3//wsIujwr4TrRy53UYb0uCpTS6GGzeRNFVdTVIIsfiRNF
-         lQ7hGswfYkkLKH59Dxi7MkkUOy8ElCMG44HsVC0uieE0mwy1mHeVeTXASeku2AmfpIfR
-         RDxnZ2V9diSkL7u1WlToEdF0tPCyT4ziO/LNSqeB41NagSep5aOOg/qlhkYg6eFQKrA0
-         W7sQ==
-X-Gm-Message-State: AGi0PuYIzH/pR8MqsnU79cAUaEuU2Wo7XK7xGl9IKE9MYv/4jfUR+CQh
-        +xDKkoGGzz48s4wPgHJPtlRraA2m
-X-Google-Smtp-Source: APiQypJoEAfUIeLBNG56MDLayNIOgrC4o0T/bEWonL57Vi3Sh+/SgqAJ1asxT3R5slMoYG45RdqkVA==
-X-Received: by 2002:ac8:728b:: with SMTP id v11mr1524147qto.108.1586725170421;
-        Sun, 12 Apr 2020 13:59:30 -0700 (PDT)
-Received: from localhost.localdomain ([2804:431:c7f0:399e:5739:49e3:a0ab:5902])
-        by smtp.gmail.com with ESMTPSA id g14sm7190108qtb.24.2020.04.12.13.59.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Apr 2020 13:59:29 -0700 (PDT)
-From:   "Carlos E. C. Barbosa" <barbosa.carlos.ec@gmail.com>
-To:     Helen Koike <helen.koike@collabora.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lkcamp@lists.libreplanetbr.org
-Subject: [PATCH v4] media: vimc: get pixformat info from v4l2_format_info
-Date:   Sun, 12 Apr 2020 17:59:16 -0300
-Message-Id: <20200412205916.3333547-1-barbosa.carlos.ec@gmail.com>
-X-Mailer: git-send-email 2.26.0
+        Sun, 12 Apr 2020 21:14:36 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6506C008778
+        for <linux-media@vger.kernel.org>; Sun, 12 Apr 2020 18:14:36 -0700 (PDT)
+Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EC4E351A;
+        Mon, 13 Apr 2020 03:14:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1586740473;
+        bh=2DDJy70JoYarpdN7XHs4DMndJoOb0+fyT3lDUEjxP3A=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oCiKBesUZzDufzPWJUNpMnAmT+cxPUMJEvA1+nit9+81Boaucq0TsJWlFguCeFfrS
+         IFPnHVFbZMqamPH+fpG6nv/x7Va2fdh38HSWHWlYEzYETnM+cBUa3nmFDlndsGQVEM
+         JZFh6vaD5Z/rVqDcoDg6UmrymiPvHkXHfdgQ9w4U=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH 1/2] media: staging/imx: Don't assume OF port id equals pad index
+Date:   Mon, 13 Apr 2020 04:14:15 +0300
+Message-Id: <20200413011416.2355-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200413011416.2355-1-laurent.pinchart@ideasonboard.com>
+References: <20200413011416.2355-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -79,355 +55,133 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: "Carlos E.C. Barbosa" <barbosa.carlos.ec@gmail.com>
+When parsing the graph and linking entities, the driver assumes that an
+OF port if is always equal to the entity pad index. This isn't a valid
+assumption, as for instance a CSI-2 source could be a SMIA++-compatible
+sensor that creates two or more subdevs but has a single DT node.
 
-There is overlapping code over two distinct lists. This repurposes
-vimc_pix_map for mapping formats and remaps the calls to the matching
-v4l2_format_info.
+Media entities should provide an operation to map port ids to pad
+indexes. Until this is available, work around the issue locally by
+picking the first pad that has the expected direction if the pad pointed
+to by the port id doesn't have the right direction.
 
-Signed-off-by: Carlos E. C. Barbosa <barbosa.carlos.ec@gmail.com>
-
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
+ drivers/staging/media/imx/imx-media-csi.c | 10 ++++-
+ drivers/staging/media/imx/imx-media-of.c  | 52 ++++++++++++++++++++---
+ 2 files changed, 53 insertions(+), 9 deletions(-)
 
-Changes in v2:
-As advised by Helen Koike and Hans Verkuil, the const qualifiers are
-not
-removed, the bayer flag is kept and the unnecessary changes are not
-made.
-
-Changes in v3:
-Change declaration order of variables and some minor style changes.
-
-Changes in v4:
-Unused variables were removed.
-
-v4l2-compliance -m /dev/media0 output:
-https://pastebin.com/F98792eW
----
- drivers/media/platform/vimc/vimc-capture.c | 14 ++++++++-----
- drivers/media/platform/vimc/vimc-common.c  | 23 ----------------------
- drivers/media/platform/vimc/vimc-common.h  |  2 --
- drivers/media/platform/vimc/vimc-debayer.c |  7 +++++--
- drivers/media/platform/vimc/vimc-scaler.c  |  8 ++++++--
- drivers/media/platform/vimc/vimc-sensor.c  |  9 +++++++--
- 6 files changed, 27 insertions(+), 36 deletions(-)
-
-diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
-index 23e740c1c5c0..4f85e0bb8f27 100644
---- a/drivers/media/platform/vimc/vimc-capture.c
-+++ b/drivers/media/platform/vimc/vimc-capture.c
-@@ -85,6 +85,7 @@ static int vimc_cap_try_fmt_vid_cap(struct file *file, void *priv,
- 				    struct v4l2_format *f)
- {
- 	struct v4l2_pix_format *format = &f->fmt.pix;
-+	const struct v4l2_format_info *vinfo;
- 	const struct vimc_pix_map *vpix;
+diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+index 66468326bcbc..d275decc79be 100644
+--- a/drivers/staging/media/imx/imx-media-csi.c
++++ b/drivers/staging/media/imx/imx-media-csi.c
+@@ -199,10 +199,16 @@ static int csi_get_upstream_endpoint(struct csi_priv *priv,
+ 	sd = media_entity_to_v4l2_subdev(pad->entity);
  
- 	format->width = clamp_t(u32, format->width, VIMC_FRAME_MIN_WIDTH,
-@@ -94,12 +95,13 @@ static int vimc_cap_try_fmt_vid_cap(struct file *file, void *priv,
+ 	/*
+-	 * NOTE: this assumes an OF-graph port id is the same as a
+-	 * media pad index.
++	 * Find the port corresponding to the pad. Start by assuming that the
++	 * port id is equal to the pad index. If there's no such port, use the
++	 * first port.
++	 *
++	 * FIXME: Media entities should provide an operation to translate from
++	 * pad index to fwnode port id.
+ 	 */
+ 	port = of_graph_get_port_by_id(sd->dev->of_node, pad->index);
++	if (!port)
++		port = of_graph_get_port_by_id(sd->dev->of_node, 0);
+ 	if (!port)
+ 		return -ENODEV;
  
- 	/* Don't accept a pixelformat that is not on the table */
- 	vpix = vimc_pix_map_by_pixelformat(format->pixelformat);
--	if (!vpix) {
-+	if (!vpix)
- 		format->pixelformat = fmt_default.pixelformat;
--		vpix = vimc_pix_map_by_pixelformat(format->pixelformat);
--	}
-+
-+	vinfo = v4l2_format_info(format->pixelformat);
-+
- 	/* TODO: Add support for custom bytesperline values */
--	format->bytesperline = format->width * vpix->bpp;
-+	format->bytesperline = format->width * vinfo->bpp[0];
- 	format->sizeimage = format->bytesperline * format->height;
- 
- 	if (format->field == V4L2_FIELD_ANY)
-@@ -386,6 +388,7 @@ struct vimc_ent_device *vimc_cap_add(struct vimc_device *vimc,
- 				     const char *vcfg_name)
- {
- 	struct v4l2_device *v4l2_dev = &vimc->v4l2_dev;
-+	const struct v4l2_format_info *vinfo;
- 	const struct vimc_pix_map *vpix;
- 	struct vimc_cap_device *vcap;
- 	struct video_device *vdev;
-@@ -435,7 +438,8 @@ struct vimc_ent_device *vimc_cap_add(struct vimc_device *vimc,
- 	/* Set default frame format */
- 	vcap->format = fmt_default;
- 	vpix = vimc_pix_map_by_pixelformat(vcap->format.pixelformat);
--	vcap->format.bytesperline = vcap->format.width * vpix->bpp;
-+	vinfo = v4l2_format_info(vpix->pixelformat);
-+	vcap->format.bytesperline = vcap->format.width * vinfo->bpp[0];
- 	vcap->format.sizeimage = vcap->format.bytesperline *
- 				 vcap->format.height;
- 
-diff --git a/drivers/media/platform/vimc/vimc-common.c b/drivers/media/platform/vimc/vimc-common.c
-index c95c17c048f2..fc881daee627 100644
---- a/drivers/media/platform/vimc/vimc-common.c
-+++ b/drivers/media/platform/vimc/vimc-common.c
-@@ -21,19 +21,16 @@ static const struct vimc_pix_map vimc_pix_map_list[] = {
- 	{
- 		.code = MEDIA_BUS_FMT_BGR888_1X24,
- 		.pixelformat = V4L2_PIX_FMT_BGR24,
--		.bpp = 3,
- 		.bayer = false,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_RGB888_1X24,
- 		.pixelformat = V4L2_PIX_FMT_RGB24,
--		.bpp = 3,
- 		.bayer = false,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_ARGB8888_1X32,
- 		.pixelformat = V4L2_PIX_FMT_ARGB32,
--		.bpp = 4,
- 		.bayer = false,
- 	},
- 
-@@ -41,49 +38,41 @@ static const struct vimc_pix_map vimc_pix_map_list[] = {
- 	{
- 		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SBGGR8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SGBRG8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SGRBG8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SRGGB8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
- 		.pixelformat = V4L2_PIX_FMT_SBGGR10,
--		.bpp = 2,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
- 		.pixelformat = V4L2_PIX_FMT_SGBRG10,
--		.bpp = 2,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
- 		.pixelformat = V4L2_PIX_FMT_SGRBG10,
--		.bpp = 2,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
- 		.pixelformat = V4L2_PIX_FMT_SRGGB10,
--		.bpp = 2,
- 		.bayer = true,
- 	},
- 
-@@ -91,25 +80,21 @@ static const struct vimc_pix_map vimc_pix_map_list[] = {
- 	{
- 		.code = MEDIA_BUS_FMT_SBGGR10_ALAW8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SBGGR10ALAW8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SGBRG10_ALAW8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SGBRG10ALAW8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SGRBG10_ALAW8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SGRBG10ALAW8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SRGGB10_ALAW8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SRGGB10ALAW8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 
-@@ -117,49 +102,41 @@ static const struct vimc_pix_map vimc_pix_map_list[] = {
- 	{
- 		.code = MEDIA_BUS_FMT_SBGGR10_DPCM8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SBGGR10DPCM8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SGBRG10_DPCM8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SGBRG10DPCM8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SGRBG10_DPCM8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SGRBG10DPCM8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SRGGB10_DPCM8_1X8,
- 		.pixelformat = V4L2_PIX_FMT_SRGGB10DPCM8,
--		.bpp = 1,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SBGGR12_1X12,
- 		.pixelformat = V4L2_PIX_FMT_SBGGR12,
--		.bpp = 2,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SGBRG12_1X12,
- 		.pixelformat = V4L2_PIX_FMT_SGBRG12,
--		.bpp = 2,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SGRBG12_1X12,
- 		.pixelformat = V4L2_PIX_FMT_SGRBG12,
--		.bpp = 2,
- 		.bayer = true,
- 	},
- 	{
- 		.code = MEDIA_BUS_FMT_SRGGB12_1X12,
- 		.pixelformat = V4L2_PIX_FMT_SRGGB12,
--		.bpp = 2,
- 		.bayer = true,
- 	},
- };
-diff --git a/drivers/media/platform/vimc/vimc-common.h b/drivers/media/platform/vimc/vimc-common.h
-index 616d5a6b0754..838d5df7b9ed 100644
---- a/drivers/media/platform/vimc/vimc-common.h
-+++ b/drivers/media/platform/vimc/vimc-common.h
-@@ -62,7 +62,6 @@ do {									\
-  * struct vimc_pix_map - maps media bus code with v4l2 pixel format
+diff --git a/drivers/staging/media/imx/imx-media-of.c b/drivers/staging/media/imx/imx-media-of.c
+index 2d3efd2a6dde..f07bd05b8fa5 100644
+--- a/drivers/staging/media/imx/imx-media-of.c
++++ b/drivers/staging/media/imx/imx-media-of.c
+@@ -78,9 +78,8 @@ EXPORT_SYMBOL_GPL(imx_media_add_of_subdevs);
+ /*
+  * Create a single media link to/from sd using a fwnode link.
   *
-  * @code:		media bus format code defined by MEDIA_BUS_FMT_* macros
-- * @bbp:		number of bytes each pixel occupies
-  * @pixelformat:	pixel format devined by V4L2_PIX_FMT_* macros
-  *
-  * Struct which matches the MEDIA_BUS_FMT_* codes with the corresponding
-@@ -70,7 +69,6 @@ do {									\
+- * NOTE: this function assumes an OF port node is equivalent to
+- * a media pad (port id equal to media pad index), and that an
+- * OF endpoint node is equivalent to a media link.
++ * NOTE: this function assumes that an OF endpoint node is equivalent to a
++ * media link.
   */
- struct vimc_pix_map {
- 	unsigned int code;
--	unsigned int bpp;
- 	u32 pixelformat;
- 	bool bayer;
- };
-diff --git a/drivers/media/platform/vimc/vimc-debayer.c b/drivers/media/platform/vimc/vimc-debayer.c
-index baf6bf9f65b5..c141a307851c 100644
---- a/drivers/media/platform/vimc/vimc-debayer.c
-+++ b/drivers/media/platform/vimc/vimc-debayer.c
-@@ -303,6 +303,7 @@ static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
- 	struct vimc_deb_device *vdeb = v4l2_get_subdevdata(sd);
- 
- 	if (enable) {
-+		const struct v4l2_format_info *vinfo;
- 		const struct vimc_pix_map *vpix;
- 		unsigned int frame_size;
- 
-@@ -311,12 +312,14 @@ static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
- 
- 		/* Calculate the frame size of the source pad */
- 		vpix = vimc_pix_map_by_code(vdeb->src_code);
-+		vinfo = v4l2_format_info(vpix->pixelformat);
- 		frame_size = vdeb->sink_fmt.width * vdeb->sink_fmt.height *
--				vpix->bpp;
-+				vinfo->bpp[0];
- 
- 		/* Save the bytes per pixel of the sink */
- 		vpix = vimc_pix_map_by_code(vdeb->sink_fmt.code);
--		vdeb->sink_bpp = vpix->bpp;
-+		vinfo = v4l2_format_info(vpix->pixelformat);
-+		vdeb->sink_bpp = vinfo->bpp[0];
- 
- 		/* Get the corresponding pixel map from the table */
- 		vdeb->sink_pix_map =
-diff --git a/drivers/media/platform/vimc/vimc-scaler.c b/drivers/media/platform/vimc/vimc-scaler.c
-index 7521439747c5..9429aeea9cee 100644
---- a/drivers/media/platform/vimc/vimc-scaler.c
-+++ b/drivers/media/platform/vimc/vimc-scaler.c
-@@ -180,8 +180,10 @@ static void vimc_sca_adjust_sink_fmt(struct v4l2_mbus_framefmt *fmt)
- 
- 	/* Only accept code in the pix map table in non bayer format */
- 	vpix = vimc_pix_map_by_code(fmt->code);
--	if (!vpix || vpix->bayer)
-+	if (!vpix || vpix->bayer) {
- 		fmt->code = sink_fmt_default.code;
-+		vpix = vimc_pix_map_by_code(fmt->code);
-+	}
- 
- 	fmt->width = clamp_t(u32, fmt->width, VIMC_FRAME_MIN_WIDTH,
- 			     VIMC_FRAME_MAX_WIDTH) & ~1;
-@@ -331,6 +333,7 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
- 	struct vimc_sca_device *vsca = v4l2_get_subdevdata(sd);
- 
- 	if (enable) {
-+		const struct v4l2_format_info *vinfo;
- 		const struct vimc_pix_map *vpix;
- 		unsigned int frame_size;
- 
-@@ -339,7 +342,8 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
- 
- 		/* Save the bytes per pixel of the sink */
- 		vpix = vimc_pix_map_by_code(vsca->sink_fmt.code);
--		vsca->bpp = vpix->bpp;
-+		vinfo = v4l2_format_info(vpix->pixelformat);
-+		vsca->bpp = vinfo->bpp[0];
- 
- 		/* Calculate the width in bytes of the src frame */
- 		vsca->src_line_size = vsca->crop_rect.width *
-diff --git a/drivers/media/platform/vimc/vimc-sensor.c b/drivers/media/platform/vimc/vimc-sensor.c
-index 92daee58209e..fac2260b939f 100644
---- a/drivers/media/platform/vimc/vimc-sensor.c
-+++ b/drivers/media/platform/vimc/vimc-sensor.c
-@@ -102,10 +102,13 @@ static void vimc_sen_tpg_s_format(struct vimc_sen_device *vsen)
+ static int create_of_link(struct imx_media_dev *imxmd,
+ 			  struct v4l2_subdev *sd,
+@@ -88,6 +87,8 @@ static int create_of_link(struct imx_media_dev *imxmd,
  {
- 	const struct vimc_pix_map *vpix =
- 				vimc_pix_map_by_code(vsen->mbus_format.code);
-+	const struct v4l2_format_info *vinfo =
-+				v4l2_format_info(vpix->pixelformat);
+ 	struct v4l2_subdev *remote, *src, *sink;
+ 	int src_pad, sink_pad;
++	int remote_pad;
++	u32 pad_flags;
  
- 	tpg_reset_source(&vsen->tpg, vsen->mbus_format.width,
- 			 vsen->mbus_format.height, vsen->mbus_format.field);
--	tpg_s_bytesperline(&vsen->tpg, 0, vsen->mbus_format.width * vpix->bpp);
-+	tpg_s_bytesperline(&vsen->tpg, 0,
-+			   vsen->mbus_format.width * vinfo->bpp[0]);
- 	tpg_s_buf_height(&vsen->tpg, vsen->mbus_format.height);
- 	tpg_s_fourcc(&vsen->tpg, vpix->pixelformat);
- 	/* TODO: add support for V4L2_FIELD_ALTERNATE */
-@@ -198,12 +201,14 @@ static int vimc_sen_s_stream(struct v4l2_subdev *sd, int enable)
- 				container_of(sd, struct vimc_sen_device, sd);
+ 	if (link->local_port >= sd->entity.num_pads)
+ 		return -EINVAL;
+@@ -96,19 +97,56 @@ static int create_of_link(struct imx_media_dev *imxmd,
+ 	if (!remote)
+ 		return 0;
  
- 	if (enable) {
-+		const struct v4l2_format_info *vinfo;
- 		const struct vimc_pix_map *vpix;
- 		unsigned int frame_size;
+-	if (sd->entity.pads[link->local_port].flags & MEDIA_PAD_FL_SINK) {
++	/*
++	 * Find the remote pad. Try the pad corresponding to the fwnode port id
++	 * first. If its direction doesn't correspond to what we expect, use the
++	 * first pad that has the right direction.
++	 *
++	 * FIXME: Media entities should provide an operation to translate from
++	 * fwnode port id to pad index.
++	 */
++	pad_flags = sd->entity.pads[link->local_port].flags;
++	pad_flags = pad_flags & MEDIA_PAD_FL_SINK
++		  ? MEDIA_PAD_FL_SOURCE : MEDIA_PAD_FL_SINK;
++
++	if (link->remote_port < remote->entity.num_pads &&
++	    remote->entity.pads[link->remote_port].flags & pad_flags) {
++		remote_pad = link->remote_port;
++	} else {
++		unsigned int i;
++
++		remote_pad = -1;
++		for (i = 0; i < remote->entity.num_pads; ++i) {
++			if (remote->entity.pads[i].flags & pad_flags) {
++				remote_pad = i;
++				break;
++			}
++		}
++
++		if (remote_pad == -1) {
++			v4l2_err(sd->v4l2_dev,
++				 "remote entity %s has no %s pad\n",
++				 remote->name,
++				 pad_flags & MEDIA_PAD_FL_SOURCE ?
++				 "source" : "sink");
++			return -EINVAL;
++		}
++	}
++
++	/* Mad the local and remote entities to source and sink. */
++	if (pad_flags & MEDIA_PAD_FL_SOURCE) {
+ 		src = remote;
+-		src_pad = link->remote_port;
++		src_pad = remote_pad;
+ 		sink = sd;
+ 		sink_pad = link->local_port;
+ 	} else {
+ 		src = sd;
+ 		src_pad = link->local_port;
+ 		sink = remote;
+-		sink_pad = link->remote_port;
++		sink_pad = remote_pad;
+ 	}
  
- 		/* Calculate the frame size */
- 		vpix = vimc_pix_map_by_code(vsen->mbus_format.code);
--		frame_size = vsen->mbus_format.width * vpix->bpp *
-+		vinfo = v4l2_format_info(vpix->pixelformat);
-+		frame_size = vsen->mbus_format.width * vinfo->bpp[0] *
- 			     vsen->mbus_format.height;
- 
- 		/*
+-	/* make sure link doesn't already exist before creating */
++	/* Make sure link doesn't already exist before creating it. */
+ 	if (media_entity_find_link(&src->entity.pads[src_pad],
+ 				   &sink->entity.pads[sink_pad]))
+ 		return 0;
 -- 
-2.26.0
+Regards,
+
+Laurent Pinchart
 
