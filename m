@@ -2,189 +2,68 @@ Return-Path: <SRS0=YRPh=55=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E7FBC2BA19
-	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 10:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D057CC2BA19
+	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 10:31:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D35D2082E
-	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 10:29:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=globallogic.com header.i=@globallogic.com header.b="IGBO35OF"
+	by mail.kernel.org (Postfix) with ESMTP id B64192054F
+	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 10:31:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728279AbgDMJYw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Apr 2020 05:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728242AbgDMJYo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Apr 2020 05:24:44 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17703C00860E
-        for <linux-media@vger.kernel.org>; Mon, 13 Apr 2020 02:18:29 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id j14so680166lfg.9
-        for <linux-media@vger.kernel.org>; Mon, 13 Apr 2020 02:18:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=globallogic.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=Dazg0uCSqaIHQUhsMcqRqSvCcoSDDbmA2fiSqaBN9MM=;
-        b=IGBO35OFdsIktkEWxvs2u4uJJPxlcgyZgAtOmQLDnMg9+1yf2x6K4oow82u3Vlikj4
-         qyRasUsMsWEzeVunT6ep688hAfUTx3p1Ce7s93jQ+yNgHVwkPBClqTLofhCwfPw6Hc0C
-         L3tXbx24BUqaoG3IrXoDbIGfTt746UnzFEMJNf5RGfElay0pVSBBwKn5eWVnq3tPAj5+
-         2Y0yWyJpilbcfw6QMj5hxIP7rJcXmxpzi6TJDXMQ8ml0lpav44aUEbOtUYD2KK/U6e2p
-         BDP0Bk+FEb8MMXT3lYkvqBclo/Ov6Ki7F6DEXnOINF4F6fscfQdZZ1PJ8IiOAvGDp3JH
-         K0Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=Dazg0uCSqaIHQUhsMcqRqSvCcoSDDbmA2fiSqaBN9MM=;
-        b=nucLrBBXq9oe61tV5DIV4cm2P8ByUP545hITwBGy43GBR2rZk5jdTD/m1cprRKc84n
-         yVmCMwNg4Aj9XdSvRBys1w5CAFPK1KGpVDTzIV8HicP0Fx1oxgDwPvbh7nyrSzPqMuNW
-         48mseWCR0iD6CfLTTBH+lzt9tIG3yy2rB3CAe+d5Zw+/2I0c2mRXHfXIQPNnqhq2DGKH
-         EZwK7vZg+fIjLsxAbufrBw7CSh5ndh1/iv+qu6y049HtkgVlosaKD6DkIiiYn6ItZQYv
-         09PgCXYuJEZ1vEjmJR750gplRkrzvi40ZqwDpsTrfxiWNu2lOj+hml0+yhRsIxdWLt9b
-         hboQ==
-X-Gm-Message-State: AGi0PuYteljNEdxa6z+FNyUykaGXd6n2bcOoRzf0LrYbpHky0FtP15yI
-        8eG/2OmpeRSNAba+Wq6iwcv8wQ==
-X-Google-Smtp-Source: APiQypJtWZRgeuhBdwNVv/BYkC/v97z1lki6YGoNZ8np1IQMVGV5tfmu6geF0iOgUiJOhok3iuHfpQ==
-X-Received: by 2002:a19:114:: with SMTP id 20mr9943824lfb.169.1586769507484;
-        Mon, 13 Apr 2020 02:18:27 -0700 (PDT)
-Received: from localhost.localdomain ([159.224.5.60])
-        by smtp.googlemail.com with ESMTPSA id e16sm8339049ljh.18.2020.04.13.02.18.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 02:18:27 -0700 (PDT)
-From:   Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Luis Oliveira <lolivei@synopsys.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        Todor Tomov <todor.tomov@linaro.org>,
-        Suresh Udipi <sudipi@jp.adit-jv.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.org>,
-        Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
-Subject: [PATCH 2/4] media: ov5647: Add support for PWDN GPIO.
-Date:   Mon, 13 Apr 2020 12:17:45 +0300
-Message-Id: <f88b99899eb5e680607349b37eb3679dbd12433e.1586759968.git.roman.kovalivskyi@globallogic.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1586758372.git.roman.kovalivskyi@globallogic.com>
-References: <cover.1586758372.git.roman.kovalivskyi@globallogic.com>
-In-Reply-To: <cover.1586759968.git.roman.kovalivskyi@globallogic.com>
-References: <cover.1586759968.git.roman.kovalivskyi@globallogic.com>
+        id S1728656AbgDMKbk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Apr 2020 06:31:40 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:47326 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728004AbgDMKbi (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 13 Apr 2020 06:31:38 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jNwKY-0005qb-82; Mon, 13 Apr 2020 10:28:42 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jNwP4-0003LR-Gd; Mon, 13 Apr 2020 10:33:22 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL for v5.8] Venus updates (#63004)
+Date:   Mon, 13 Apr 2020 10:33:22 +0000
+Message-Id: <20200413103322.12816-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200413093000.5567-1-stanimir.varbanov@linaro.org>
+References: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.org>
+From: builder@linuxtv.org
 
-Add support for an optional GPIO connected to PWDN on the sensor. This
-allows the use of hardware standby mode where internal device clock
-and circuit activities are halted.
+Pull request: https://patchwork.linuxtv.org/patch/63004/
+Build log: https://builder.linuxtv.org/job/patchwork/46568/
+Build time: 00:03:04
+Link: https://lore.kernel.org/linux-media/20200413093000.5567-1-stanimir.varbanov@linaro.org
 
-Please nothe that power is off when PWDN is high.
+gpg: Signature made Mon 13 Apr 2020 09:13:46 AM UTC
+gpg:                using RSA key E1558C2497CE3CCC2B5AA30F25B55FC81B7035F2
+gpg: Good signature from "Stanimir Varbanov <stanimir.varbanov@linaro.org>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 34CF E039 8A16 AD93 18FD  D5E8 A6D0 26D8 E358 14D4
+     Subkey fingerprint: E155 8C24 97CE 3CCC 2B5A  A30F 25B5 5FC8 1B70 35F2
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
-Signed-off-by: Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
----
- drivers/media/i2c/ov5647.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+Summary: 1 patches and/or PDF generation with issues, being 0 at build time
 
-diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index 3e587eb0a30e..c39e3d20e3ef 100644
---- a/drivers/media/i2c/ov5647.c
-+++ b/drivers/media/i2c/ov5647.c
-@@ -21,6 +21,7 @@
- 
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/io.h>
-@@ -35,6 +36,13 @@
- 
- #define SENSOR_NAME "ov5647"
- 
-+/*
-+ * From the datasheet, "20ms after PWDN goes low or 20ms after RESETB goes
-+ * high if reset is inserted after PWDN goes high, host can access sensor's
-+ * SCCB to initialize sensor."
-+ */
-+#define PWDN_ACTIVE_DELAY_MS	20
-+
- #define MIPI_CTRL00_CLOCK_LANE_GATE		BIT(5)
- #define MIPI_CTRL00_BUS_IDLE			BIT(2)
- #define MIPI_CTRL00_CLOCK_LANE_DISABLE		BIT(0)
-@@ -86,6 +94,7 @@ struct ov5647 {
- 	unsigned int			height;
- 	int				power_count;
- 	struct clk			*xclk;
-+	struct gpio_desc		*pwdn;
- };
- 
- static inline struct ov5647 *to_state(struct v4l2_subdev *sd)
-@@ -355,6 +364,11 @@ static int ov5647_sensor_power(struct v4l2_subdev *sd, int on)
- 	if (on && !ov5647->power_count)	{
- 		dev_dbg(&client->dev, "OV5647 power on\n");
- 
-+		if (ov5647->pwdn) {
-+			gpiod_set_value(ov5647->pwdn, 0);
-+			msleep(PWDN_ACTIVE_DELAY_MS);
-+		}
-+
- 		ret = clk_prepare_enable(ov5647->xclk);
- 		if (ret < 0) {
- 			dev_err(&client->dev, "clk prepare enable failed\n");
-@@ -392,6 +406,8 @@ static int ov5647_sensor_power(struct v4l2_subdev *sd, int on)
- 			dev_dbg(&client->dev, "soft stby failed\n");
- 
- 		clk_disable_unprepare(ov5647->xclk);
-+
-+		gpiod_set_value(ov5647->pwdn, 1);
- 	}
- 
- 	/* Update the power count. */
-@@ -603,6 +619,10 @@ static int ov5647_probe(struct i2c_client *client)
- 		return -EINVAL;
- 	}
- 
-+	/* Request the power down GPIO asserted */
-+	sensor->pwdn = devm_gpiod_get_optional(&client->dev, "pwdn",
-+					       GPIOD_OUT_HIGH);
-+
- 	mutex_init(&sensor->lock);
- 
- 	sd = &sensor->sd;
-@@ -616,7 +636,15 @@ static int ov5647_probe(struct i2c_client *client)
- 	if (ret < 0)
- 		goto mutex_remove;
- 
-+	if (sensor->pwdn) {
-+		gpiod_set_value(sensor->pwdn, 0);
-+		msleep(PWDN_ACTIVE_DELAY_MS);
-+	}
-+
- 	ret = ov5647_detect(sd);
-+
-+	gpiod_set_value(sensor->pwdn, 1);
-+
- 	if (ret < 0)
- 		goto error;
- 
--- 
-2.17.1
+Error/warnings:
+
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0001-venus-vdec-Use-pmruntime-autosuspend.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0001-venus-vdec-Use-pmruntime-autosuspend.patch
+patches/0001-venus-vdec-Use-pmruntime-autosuspend.patch:57: CHECK: struct mutex definition without comment
 
