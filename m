@@ -2,412 +2,174 @@ Return-Path: <SRS0=YRPh=55=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD9BFC2BBC7
-	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 09:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95F06C2BA19
+	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 09:34:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9396420731
-	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 09:27:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586770049;
-	bh=8CZHOS+UhkRYTBjO5u8Zq3isna07O3wnyeFybVz/eVU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=0MzvZ4RFT0dtuSCSZwd6bUJ8gluhh5Dke5F3zTXe/lKxipJW259JrgcYGEzT4WWVv
-	 39uVyrXcufDYsWPuPvNjqhcgiNXJKW3C4X0YfWtlo3E9YzbBcl3zST377ryNKYMfvn
-	 BXsFxPNi+8PARsvDeHwfRnPz50ZQDbvTwzkOFvQ8=
+	by mail.kernel.org (Postfix) with ESMTP id 6CAB620732
+	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 09:34:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728357AbgDMJ12 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Apr 2020 05:27:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48784 "EHLO mail.kernel.org"
+        id S1728384AbgDMJei (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Apr 2020 05:34:38 -0400
+Received: from mga03.intel.com ([134.134.136.65]:43265 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728241AbgDMJ11 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Apr 2020 05:27:27 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2289D20732;
-        Mon, 13 Apr 2020 09:27:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586770046;
-        bh=8CZHOS+UhkRYTBjO5u8Zq3isna07O3wnyeFybVz/eVU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TL2JLF+eUca/3kKuQksG2H8F4gPBdwrQIdgbwXfQR0yyUqQBuxbA1ByBDvBfRsEK/
-         dDmsXEyqQNSS1Drc34Uvi+EN49Hhn1K9dXH8g8avXNIy7A4U7Nt6iwmlp0ep0ZOsOa
-         vTQENTu63rDtS9eV/rejSgyIQy2DiKx7VTW8aJNs=
-Received: by mail-ed1-f41.google.com with SMTP id e5so11234081edq.5;
-        Mon, 13 Apr 2020 02:27:26 -0700 (PDT)
-X-Gm-Message-State: AGi0PubUoRiNk6RGuQcIKKZCcKMykDAW7RMrfq6S6bFqKR2Ud5codCO8
-        fzh6X3b9yrcgJogubbf+U52JIKy4n2xzd//XFA==
-X-Google-Smtp-Source: APiQypIk5sel9+K2a6BQz6d5HbNIyXiTd91r8hRDEvDvPA+vRARK2bfsj3G8hPljcZ/EJmnVndA4Q2UkzJtzRUbvvJU=
-X-Received: by 2002:aa7:d585:: with SMTP id r5mr6048725edq.148.1586770044443;
- Mon, 13 Apr 2020 02:27:24 -0700 (PDT)
+        id S1728050AbgDMJeh (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 13 Apr 2020 05:34:37 -0400
+IronPort-SDR: BdTNnY34wRw48Zn3p80KWS9Rdmj20UfankRH2NW6xlWGK1eeqokplZsJ7w9axP82F8wYDtTDcm
+ 1v/Mw86PUcCg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2020 02:34:36 -0700
+IronPort-SDR: /CZzQ9NntPxfhQZZb9mFLal/uSUqW3loJd1graIFfe5qVa+8MQjYvuIQHgE1kIgeWbQImMbyH5
+ ar/7HYJRXzaw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,378,1580803200"; 
+   d="scan'208";a="276850248"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 13 Apr 2020 02:34:34 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jNvUA-0006kv-0i; Mon, 13 Apr 2020 17:34:34 +0800
+Date:   Mon, 13 Apr 2020 17:34:06 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH 1/2] media: staging/imx: Don't assume OF port id equals
+ pad index
+Message-ID: <202004131756.PwC6hvk8%lkp@intel.com>
+References: <20200413011416.2355-2-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-References: <20200410071723.19720-1-louis.kuo@mediatek.com>
- <20200410071723.19720-2-louis.kuo@mediatek.com> <CAAOTY_-=v4ZoPu63kPCUzGKyNFeV6S_=zM4P5_MAkrXB0b5Yew@mail.gmail.com>
- <d6776ac432794cb593c4db54b8a7a089@mtkmbs02n2.mediatek.inc>
-In-Reply-To: <d6776ac432794cb593c4db54b8a7a089@mtkmbs02n2.mediatek.inc>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 13 Apr 2020 17:27:12 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__N-OYkONB8He_H8WVVJ_3MrquaR_khvwdPd2v_c2Di3w@mail.gmail.com>
-Message-ID: <CAAOTY__N-OYkONB8He_H8WVVJ_3MrquaR_khvwdPd2v_c2Di3w@mail.gmail.com>
-Subject: Re: [RFC PATCH V6 1/3] media: platform: mtk-isp: Add Mediatek sensor
- interface driver
-To:     =?UTF-8?B?TG91aXMgS3VvICjpg63lvrflr6cp?= <louis.kuo@mediatek.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "hans.verkuil@cisco.com" <hans.verkuil@cisco.com>,
-        "laurent.pinchart+renesas@ideasonboard.com" 
-        <laurent.pinchart+renesas@ideasonboard.com>,
-        "tfiga@chromium.org" <tfiga@chromium.org>,
-        "keiichiw@chromium.org" <keiichiw@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?UTF-8?B?U2VhbiBDaGVuZyAo6YSt5piH5byYKQ==?= 
-        <Sean.Cheng@mediatek.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        =?UTF-8?B?SmVycnktY2ggQ2hlbiAo6Zmz5pWs5oayKQ==?= 
-        <Jerry-ch.Chen@mediatek.com>,
-        =?UTF-8?B?SnVuZ28gTGluICjmnpfmmI7kv4op?= <jungo.lin@mediatek.com>,
-        =?UTF-8?B?U2ogSHVhbmcgKOm7g+S/oeeSiyk=?= <sj.huang@mediatek.com>,
-        "yuzhao@chromium.org" <yuzhao@chromium.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "zwisler@chromium.org" <zwisler@chromium.org>,
-        =?UTF-8?B?Q2hyaXN0aWUgWXUgKOa4uOmbheaDoCk=?= 
-        <christie.yu@mediatek.com>,
-        =?UTF-8?B?RnJlZGVyaWMgQ2hlbiAo6Zmz5L+K5YWDKQ==?= 
-        <Frederic.Chen@mediatek.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200413011416.2355-2-laurent.pinchart@ideasonboard.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi, Louis:
+Hi Laurent,
 
-Louis Kuo (=E9=83=AD=E5=BE=B7=E5=AF=A7) <louis.kuo@mediatek.com> =E6=96=BC =
-2020=E5=B9=B44=E6=9C=8813=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8810:=
-04=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Hi Chun-Kuang,
->
-> The comment you mentioned,
-> I think the phy control part should be placed in drivers/phy/mediatek/. I=
-n [1], device csis point to a device mipi_phy.
-> csis' driver is in [2], and mipi_phy's driver is in [3]
->
-> I reply as below,
-> =3D>
-> Since Seninf module includes mipi-csi phy, top mux, mux ctrl parts, combi=
-ne all together into a v4l2-subdev
-> linking with v4l2 sensor drivers and v4l2 ISP driver backward and forward=
- to transmit and process image.
->
+I love your patch! Perhaps something to improve:
 
-It  seems that seninf is a mfd or syscon device. MMSYS  [1] is a
-system controller which control multiple functions. Its major driver
-is placed in [2], and its clock control function is placed in [3].
+[auto build test WARNING on linuxtv-media/master]
+[also build test WARNING on v5.7-rc1 next-20200413]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tre=
-e/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.txt?h=3Dnex=
-t-20200413
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tre=
-e/drivers/soc/mediatek/mtk-mmsys.c?h=3Dnext-20200413
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tre=
-e/drivers/clk/mediatek/clk-mt8173-mm.c?h=3Dnext-20200413
+url:    https://github.com/0day-ci/linux/commits/Laurent-Pinchart/media-imx6-Support-complex-external-topologies/20200413-091602
+base:   git://linuxtv.org/media_tree.git master
 
-> The data lanes and port settings is configured by v4l2 sensor drivers,
-> For control reason, it's a better way to let seninf mipi-csi part inside =
-seninf v4l2-subdev rather than an independent phy device in drivers/phy/med=
-iatek
->
-> There have similar design in omap4iss and Rkisp1-isp driver, they all in =
-staging step.
-> https://elixir.bootlin.com/linux/v5.6/source/drivers/staging/media/rkisp1
-> https://elixir.bootlin.com/linux/v5.6/source/drivers/staging/media/omap4i=
-ss
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kbuild test robot <lkp@intel.com>
 
-Staging driver means there are some things need to modify to move out
-of staging folder, so I think this is not a strong reason to keep phy
-control in drivers/media/ folder. You could move this driver to
-drivers/staging/media/ folder and I would have no comment about this.
 
-Regards,
-Chun-Kuang.
+cppcheck warnings: (new ones prefixed by >>)
 
->
-> BRs
-> Louis
->
-> -----Original Message-----
-> From: Chun-Kuang Hu [mailto:chunkuang.hu@kernel.org]
-> Sent: Saturday, April 11, 2020 8:17 AM
-> To: Louis Kuo (=E9=83=AD=E5=BE=B7=E5=AF=A7) <louis.kuo@mediatek.com>
-> Cc: hans.verkuil@cisco.com; laurent.pinchart+renesas@ideasonboard.com; tf=
-iga@chromium.org; keiichiw@chromium.org; Matthias Brugger <matthias.bgg@gma=
-il.com>; Mauro Carvalho Chehab <mchehab@kernel.org>; devicetree@vger.kernel=
-.org; Sean Cheng (=E9=84=AD=E6=98=87=E5=BC=98) <Sean.Cheng@mediatek.com>; s=
-rv_heupstream <srv_heupstream@mediatek.com>; Jerry-ch Chen (=E9=99=B3=E6=95=
-=AC=E6=86=B2) <Jerry-ch.Chen@mediatek.com>; Jungo Lin (=E6=9E=97=E6=98=8E=
-=E4=BF=8A) <jungo.lin@mediatek.com>; Sj Huang (=E9=BB=83=E4=BF=A1=E7=92=8B)=
- <sj.huang@mediatek.com>; yuzhao@chromium.org; moderated list:ARM/Mediatek =
-SoC support <linux-mediatek@lists.infradead.org>; zwisler@chromium.org; Chr=
-istie Yu (=E6=B8=B8=E9=9B=85=E6=83=A0) <christie.yu@mediatek.com>; Frederic=
- Chen (=E9=99=B3=E4=BF=8A=E5=85=83) <Frederic.Chen@mediatek.com>; Linux ARM=
- <linux-arm-kernel@lists.infradead.org>; linux-media@vger.kernel.org
-> Subject: Re: [RFC PATCH V6 1/3] media: platform: mtk-isp: Add Mediatek se=
-nsor interface driver
->
-> Hi, Louis:
->
-> Louis Kuo <louis.kuo@mediatek.com> =E6=96=BC 2020=E5=B9=B44=E6=9C=8810=E6=
-=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=883:18=E5=AF=AB=E9=81=93=EF=BC=9A
-> >
-> > This patch adds Mediatek's sensor interface driver. Sensor interface
-> > driver is a MIPI-CSI2 host driver, namely, a HW camera interface
-> > controller. It support a widely adopted, simple, high-speed protocol
-> > primarily intended for point-to-point image and video transmission
-> > between cameras and host devices. The mtk-isp directory will contain
-> > drivers for multiple IP blocks found in Mediatek ISP system. It will
-> > include ISP Pass 1 driver, sensor interface driver, DIP driver and face=
- detection driver.
-> >
-> > Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
-> > ---
-> >  drivers/media/platform/Makefile               |    1 +
-> >  drivers/media/platform/mtk-isp/Kconfig        |   18 +
-> >  drivers/media/platform/mtk-isp/Makefile       |    3 +
-> >  .../media/platform/mtk-isp/seninf/Makefile    |    5 +
-> >  drivers/media/platform/mtk-isp/seninf/TODO    |   18 +
-> >  .../platform/mtk-isp/seninf/mtk_seninf.c      | 1173 +++++++++++++
-> >  .../platform/mtk-isp/seninf/mtk_seninf_reg.h  | 1491 +++++++++++++++++
-> >  .../mtk-isp/seninf/mtk_seninf_rx_reg.h        | 1398 ++++++++++++++++
-> >  8 files changed, 4107 insertions(+)
-> >  create mode 100644 drivers/media/platform/mtk-isp/Kconfig
-> >  create mode 100644 drivers/media/platform/mtk-isp/Makefile
-> >  create mode 100644 drivers/media/platform/mtk-isp/seninf/Makefile
-> >  create mode 100644 drivers/media/platform/mtk-isp/seninf/TODO
-> >  create mode 100644 drivers/media/platform/mtk-isp/seninf/mtk_seninf.c
-> >  create mode 100644
-> > drivers/media/platform/mtk-isp/seninf/mtk_seninf_reg.h
-> >  create mode 100644
-> > drivers/media/platform/mtk-isp/seninf/mtk_seninf_rx_reg.h
-> >
->
-> [snip]
->
-> > +
-> > +static void mtk_seninf_set_dphy(struct mtk_seninf *priv, unsigned int
-> > +seninf) {
-> > +       void __iomem *pmipi_rx_base =3D priv->csi2_rx[CFG_CSI_PORT_0];
-> > +       unsigned int port =3D priv->port;
-> > +       void __iomem *pmipi_rx =3D priv->csi2_rx[port];
-> > +       void __iomem *pmipi_rx_conf =3D priv->base + 0x1000 * seninf;
-> > +
-> > +       /* Set analog phy mode to DPHY */
-> > +       if (is_cdphy_combo(port))
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A, RG_CSI0A_CPH=
-Y_EN, 0);
-> > +       /* 4D1C: MIPIRX_ANALOG_A_BASE =3D 0x00001A42 */
-> > +       if (is_4d1c(port)) {
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L0_CKMODE_EN, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L0_CKSEL, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L1_CKMODE_EN, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L1_CKSEL, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L2_CKMODE_EN, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L2_CKSEL, 1);
-> > +       } else {/* MIPIRX_ANALOG_BASE =3D 0x102 */
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L0_CKMODE_EN, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L0_CKSEL, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L1_CKMODE_EN, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L1_CKSEL, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L2_CKMODE_EN, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                           RG_CSI0A_DPHY_L2_CKSEL, 0);
-> > +       }
-> > +       if (is_cdphy_combo(port))
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > + RG_CSI0B_CPHY_EN, 0);
-> > +
-> > +       /* Only 4d1c need set CSIB: MIPIRX_ANALOG_B_BASE =3D 0x00001242=
- */
-> > +       if (is_4d1c(port)) {
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L0_CKMODE_EN, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L0_CKSEL, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L1_CKMODE_EN, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L1_CKSEL, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L2_CKMODE_EN, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L2_CKSEL, 1);
-> > +       } else {/* MIPIRX_ANALOG_BASE =3D 0x102 */
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L0_CKSEL, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L1_CKMODE_EN, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L1_CKSEL, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L2_CKMODE_EN, 0);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_DPHY_L2_CKSEL, 0);
-> > +       }
-> > +       /* Byte clock invert */
-> > +       SENINF_BITS(pmipi_rx, MIPI_RX_ANAA8_CSI0A,
-> > +                   RG_CSI0A_CDPHY_L0_T0_BYTECK_INVERT, 1);
-> > +       SENINF_BITS(pmipi_rx, MIPI_RX_ANAA8_CSI0A,
-> > +                   RG_CSI0A_DPHY_L1_BYTECK_INVERT, 1);
-> > +       SENINF_BITS(pmipi_rx, MIPI_RX_ANAA8_CSI0A,
-> > +                   RG_CSI0A_CDPHY_L2_T1_BYTECK_INVERT, 1);
-> > +
-> > +       if (is_4d1c(port)) {
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANAA8_CSI0B,
-> > +                           RG_CSI0B_CDPHY_L0_T0_BYTECK_INVERT, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANAA8_CSI0B,
-> > +                           RG_CSI0B_DPHY_L1_BYTECK_INVERT, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANAA8_CSI0B,
-> > +                           RG_CSI0B_CDPHY_L2_T1_BYTECK_INVERT, 1);
-> > +       }
-> > +
-> > +       /* Start ANA EQ tuning */
-> > +       if (is_cdphy_combo(port)) {
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI0A,
-> > +                           RG_CSI0A_L0_T0AB_EQ_IS, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI0A,
-> > +                           RG_CSI0A_L0_T0AB_EQ_BW, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA1C_CSI0A,
-> > +                           RG_CSI0A_L1_T1AB_EQ_IS, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA1C_CSI0A,
-> > +                           RG_CSI0A_L1_T1AB_EQ_BW, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA20_CSI0A,
-> > +                           RG_CSI0A_L2_T1BC_EQ_IS, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA20_CSI0A,
-> > +                           RG_CSI0A_L2_T1BC_EQ_BW, 1);
-> > +
-> > +               if (is_4d1c(port)) { /* 4d1c */
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI0B,
-> > +                                   RG_CSI0B_L0_T0AB_EQ_IS, 1);
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI0B,
-> > +                                   RG_CSI0B_L0_T0AB_EQ_BW, 1);
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA1C_CSI0B,
-> > +                                   RG_CSI0B_L1_T1AB_EQ_IS, 1);
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA1C_CSI0B,
-> > +                                   RG_CSI0B_L1_T1AB_EQ_BW, 1);
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA20_CSI0B,
-> > +                                   RG_CSI0B_L2_T1BC_EQ_IS, 1);
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA20_CSI0B,
-> > +                                   RG_CSI0B_L2_T1BC_EQ_BW, 1);
-> > +               }
-> > +       } else {
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI1A,
-> > +                           RG_CSI1A_L0_EQ_IS, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI1A,
-> > +                           RG_CSI1A_L0_EQ_BW, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI1A,
-> > +                           RG_CSI1A_L1_EQ_IS, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI1A,
-> > +                           RG_CSI1A_L1_EQ_BW, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA1C_CSI1A,
-> > +                           RG_CSI1A_L2_EQ_IS, 1);
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA1C_CSI1A,
-> > +                           RG_CSI1A_L2_EQ_BW, 1);
-> > +
-> > +               if (is_4d1c(port)) { /* 4d1c */
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI1B,
-> > +                                   RG_CSI1B_L0_EQ_IS, 1);
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI1B,
-> > +                                   RG_CSI1B_L0_EQ_BW, 1);
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI1B,
-> > +                                   RG_CSI1B_L1_EQ_IS, 1);
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA18_CSI1B,
-> > +                                   RG_CSI1B_L1_EQ_BW, 1);
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA1C_CSI1B,
-> > +                                   RG_CSI1B_L2_EQ_IS, 1);
-> > +                       SENINF_BITS(pmipi_rx, MIPI_RX_ANA1C_CSI1B,
-> > +                                   RG_CSI1B_L2_EQ_BW, 1);
-> > +               }
-> > +       }
-> > +
-> > +       /* End ANA EQ tuning */
-> > +       writel(0x90, pmipi_rx_base + MIPI_RX_ANA40_CSI0A);
-> > +       SENINF_BITS(pmipi_rx, MIPI_RX_ANA24_CSI0A,
-> > +                   RG_CSI0A_RESERVE, 0x40);
-> > +       if (is_4d1c(port))
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA24_CSI0B,
-> > +                           RG_CSI0B_RESERVE, 0x40);
-> > +       SENINF_BITS(pmipi_rx, MIPI_RX_WRAPPER80_CSI0A,
-> > +                   CSR_CSI_RST_MODE, 0);
-> > +       if (is_4d1c(port))
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_WRAPPER80_CSI0B,
-> > +                           CSR_CSI_RST_MODE, 0);
-> > +       /* ANA power on */
-> > +       SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                   RG_CSI0A_BG_CORE_EN, 1);
-> > +       if (is_4d1c(port))
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_BG_CORE_EN, 1);
-> > +       usleep_range(20, 40);
-> > +       SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0A,
-> > +                   RG_CSI0A_BG_LPF_EN, 1);
-> > +       if (is_4d1c(port))
-> > +               SENINF_BITS(pmipi_rx, MIPI_RX_ANA00_CSI0B,
-> > +                           RG_CSI0B_BG_LPF_EN, 1);
-> > +
-> > +       udelay(1);
-> > +       /* 4d1c: MIPIRX_CONFIG_CSI_BASE =3D 0xC9000000; */
-> > +       if (is_4d1c(port)) {
-> > +               SENINF_BITS(pmipi_rx_conf, MIPI_RX_CON24_CSI0,
-> > +                           CSI0_BIST_LN0_MUX, 1);
-> > +               SENINF_BITS(pmipi_rx_conf, MIPI_RX_CON24_CSI0,
-> > +                           CSI0_BIST_LN1_MUX, 2);
-> > +               SENINF_BITS(pmipi_rx_conf, MIPI_RX_CON24_CSI0,
-> > +                           CSI0_BIST_LN2_MUX, 0);
-> > +               SENINF_BITS(pmipi_rx_conf, MIPI_RX_CON24_CSI0,
-> > +                           CSI0_BIST_LN3_MUX, 3);
-> > +       } else { /* 2d1c: MIPIRX_CONFIG_CSI_BASE =3D 0xE4000000; */
-> > +               SENINF_BITS(pmipi_rx_conf, MIPI_RX_CON24_CSI0,
-> > +                           CSI0_BIST_LN0_MUX, 0);
-> > +               SENINF_BITS(pmipi_rx_conf, MIPI_RX_CON24_CSI0,
-> > +                           CSI0_BIST_LN1_MUX, 1);
-> > +               SENINF_BITS(pmipi_rx_conf, MIPI_RX_CON24_CSI0,
-> > +                           CSI0_BIST_LN2_MUX, 2);
-> > +               SENINF_BITS(pmipi_rx_conf, MIPI_RX_CON24_CSI0,
-> > +                           CSI0_BIST_LN3_MUX, 3);
-> > +       }
-> > +}
->
-> I think the phy control part should be placed in drivers/phy/mediatek/. I=
-n [1], device csis point to a device mipi_phy.
-> csis' driver is in [2], and mipi_phy's driver is in [3]
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/arch/arm/boot/dts/exynos4.dtsi?h=3Dv5.6
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/drivers/media/platform/exynos4-is/mipi-csis.c?h=3Dv5.6
-> [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/drivers/phy/samsung/phy-exynos-mipi-video.c?h=3Dv5.6
->
-> Regards,
-> Chun-Kuang.
+   drivers/staging/media/imx/imx-media-of.c:169:6: warning: The scope of the variable 'ret' can be reduced. [variableScope]
+    int ret;
+        ^
+>> drivers/staging/media/imx/imx-media-of.c:110:5: warning: Clarify calculation precedence for '&' and '?'. [clarifyCalculation]
+       ? MEDIA_PAD_FL_SOURCE : MEDIA_PAD_FL_SINK;
+       ^
+   drivers/staging/media/imx/imx-media-of.c:130:38: warning: Clarify calculation precedence for '&' and '?'. [clarifyCalculation]
+        pad_flags & MEDIA_PAD_FL_SOURCE ?
+                                        ^
+
+vim +110 drivers/staging/media/imx/imx-media-of.c
+
+    77	
+    78	/*
+    79	 * Create a single media link to/from sd using a fwnode link.
+    80	 *
+    81	 * NOTE: this function assumes that an OF endpoint node is equivalent to a
+    82	 * media link.
+    83	 */
+    84	static int create_of_link(struct imx_media_dev *imxmd,
+    85				  struct v4l2_subdev *sd,
+    86				  struct v4l2_fwnode_link *link)
+    87	{
+    88		struct v4l2_subdev *remote, *src, *sink;
+    89		int src_pad, sink_pad;
+    90		int remote_pad;
+    91		u32 pad_flags;
+    92	
+    93		if (link->local_port >= sd->entity.num_pads)
+    94			return -EINVAL;
+    95	
+    96		remote = imx_media_find_subdev_by_fwnode(imxmd, link->remote_node);
+    97		if (!remote)
+    98			return 0;
+    99	
+   100		/*
+   101		 * Find the remote pad. Try the pad corresponding to the fwnode port id
+   102		 * first. If its direction doesn't correspond to what we expect, use the
+   103		 * first pad that has the right direction.
+   104		 *
+   105		 * FIXME: Media entities should provide an operation to translate from
+   106		 * fwnode port id to pad index.
+   107		 */
+   108		pad_flags = sd->entity.pads[link->local_port].flags;
+   109		pad_flags = pad_flags & MEDIA_PAD_FL_SINK
+ > 110			  ? MEDIA_PAD_FL_SOURCE : MEDIA_PAD_FL_SINK;
+   111	
+   112		if (link->remote_port < remote->entity.num_pads &&
+   113		    remote->entity.pads[link->remote_port].flags & pad_flags) {
+   114			remote_pad = link->remote_port;
+   115		} else {
+   116			unsigned int i;
+   117	
+   118			remote_pad = -1;
+   119			for (i = 0; i < remote->entity.num_pads; ++i) {
+   120				if (remote->entity.pads[i].flags & pad_flags) {
+   121					remote_pad = i;
+   122					break;
+   123				}
+   124			}
+   125	
+   126			if (remote_pad == -1) {
+   127				v4l2_err(sd->v4l2_dev,
+   128					 "remote entity %s has no %s pad\n",
+   129					 remote->name,
+   130					 pad_flags & MEDIA_PAD_FL_SOURCE ?
+   131					 "source" : "sink");
+   132				return -EINVAL;
+   133			}
+   134		}
+   135	
+   136		/* Mad the local and remote entities to source and sink. */
+   137		if (pad_flags & MEDIA_PAD_FL_SOURCE) {
+   138			src = remote;
+   139			src_pad = remote_pad;
+   140			sink = sd;
+   141			sink_pad = link->local_port;
+   142		} else {
+   143			src = sd;
+   144			src_pad = link->local_port;
+   145			sink = remote;
+   146			sink_pad = remote_pad;
+   147		}
+   148	
+   149		/* Make sure link doesn't already exist before creating it. */
+   150		if (media_entity_find_link(&src->entity.pads[src_pad],
+   151					   &sink->entity.pads[sink_pad]))
+   152			return 0;
+   153	
+   154		v4l2_info(sd->v4l2_dev, "%s:%d -> %s:%d\n",
+   155			  src->name, src_pad, sink->name, sink_pad);
+   156	
+   157		return media_create_pad_link(&src->entity, src_pad,
+   158					     &sink->entity, sink_pad, 0);
+   159	}
+   160	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
