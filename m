@@ -2,114 +2,189 @@ Return-Path: <SRS0=YRPh=55=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D19C2C2BA19
-	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 10:23:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E7FBC2BA19
+	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 10:29:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B08C320732
-	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 10:23:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D35D2082E
+	for <linux-media@archiver.kernel.org>; Mon, 13 Apr 2020 10:29:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gpBXOQmv"
+	dkim=pass (2048-bit key) header.d=globallogic.com header.i=@globallogic.com header.b="IGBO35OF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbgDMKXe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Apr 2020 06:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
+        id S1728279AbgDMJYw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Apr 2020 05:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728416AbgDMJjr (ORCPT
+        by vger.kernel.org with ESMTP id S1728242AbgDMJYo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Apr 2020 05:39:47 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF845C008749
-        for <linux-media@vger.kernel.org>; Mon, 13 Apr 2020 02:30:46 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id y4so1888017ljn.7
-        for <linux-media@vger.kernel.org>; Mon, 13 Apr 2020 02:30:46 -0700 (PDT)
+        Mon, 13 Apr 2020 05:24:44 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17703C00860E
+        for <linux-media@vger.kernel.org>; Mon, 13 Apr 2020 02:18:29 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id j14so680166lfg.9
+        for <linux-media@vger.kernel.org>; Mon, 13 Apr 2020 02:18:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id;
-        bh=ZixBhzrJcAyOnyoJzh1q7blfE19WOYmijmH5Wvbza38=;
-        b=gpBXOQmvEM2xy6G3j4DSwv3GDdp7wR3g78LfqrmXDZKvNMunLVekU7/7N2yIWfChIL
-         BTTjTCbYwv1q0bTEy4BIG+8GINqc2dFSu2WvHSx2hzKsBCIbCWisgIWX9k16Gqim/Elp
-         MP04JeKN5MQP/JdJIe2Wff8zv/sCifPsgoRTyrm7HWTM8FuaiLwXLLtze6zDr054Af8x
-         yikzac8shHsTWIfHpTMzn7I9AKra7Tku9oAErlePfyns3k0HEYiFgvO1h3OXq1OS4UNb
-         9nEzvMrlLIK5XXkagmWsTicFzFzWd5t86/qrU8WYkJJRHES6qevD51uLrEVPpdviwRAC
-         9OfA==
+        d=globallogic.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :in-reply-to:references;
+        bh=Dazg0uCSqaIHQUhsMcqRqSvCcoSDDbmA2fiSqaBN9MM=;
+        b=IGBO35OFdsIktkEWxvs2u4uJJPxlcgyZgAtOmQLDnMg9+1yf2x6K4oow82u3Vlikj4
+         qyRasUsMsWEzeVunT6ep688hAfUTx3p1Ce7s93jQ+yNgHVwkPBClqTLofhCwfPw6Hc0C
+         L3tXbx24BUqaoG3IrXoDbIGfTt746UnzFEMJNf5RGfElay0pVSBBwKn5eWVnq3tPAj5+
+         2Y0yWyJpilbcfw6QMj5hxIP7rJcXmxpzi6TJDXMQ8ml0lpav44aUEbOtUYD2KK/U6e2p
+         BDP0Bk+FEb8MMXT3lYkvqBclo/Ov6Ki7F6DEXnOINF4F6fscfQdZZ1PJ8IiOAvGDp3JH
+         K0Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=ZixBhzrJcAyOnyoJzh1q7blfE19WOYmijmH5Wvbza38=;
-        b=WES3SKWUb00lGL8vm2Jb+2ruuG0CRU8y0ripXUQAHKbUKA2zBLLOAj/Fi3crYwM/91
-         fMOfPBuqzJthWNTlEO9kn2Dm4XcybBXpEBQ7izHtPmESIjq5yYRG9Ew0UXTPsiO/OkHA
-         GpruAJMBk8SkpXS9OTuAVdf0ZCA2RvcLkBa+ZgzS/m/OurM1x4S7ko0DcW0EheGiW20g
-         MhANN5eVFMWDAK2KvI5m+9gvE2DURMbncXXnZiJYzejcq3CZ994EVQpXDWtzRqycHm12
-         U8owY8rZQtcGq66rv5S+TYgRc38qhozuzbPOCq8PTxsLhynIrx+95l5nQ/URjgM0HuEa
-         LK9g==
-X-Gm-Message-State: AGi0PuY0N9k4Xaz9oFCUvSBJydulf+bGpMrXinfhO1sNj5ogpgnE11hV
-        OxIflZUYp4NqeI62vrT2kQReLjFCX1s=
-X-Google-Smtp-Source: APiQypJDlvjHjEKQ20Z88Uq3kHEnmbWDPuM7DvNXcqmHEy+BuYTSSxkxDpEqvaumQg0X4571Gz1gzg==
-X-Received: by 2002:a2e:a303:: with SMTP id l3mr3098302lje.166.1586770245069;
-        Mon, 13 Apr 2020 02:30:45 -0700 (PDT)
-Received: from localhost.localdomain (212-5-158-142.ip.btc-net.bg. [212.5.158.142])
-        by smtp.gmail.com with ESMTPSA id v18sm9412985lfd.0.2020.04.13.02.30.42
-        for <linux-media@vger.kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:in-reply-to:references;
+        bh=Dazg0uCSqaIHQUhsMcqRqSvCcoSDDbmA2fiSqaBN9MM=;
+        b=nucLrBBXq9oe61tV5DIV4cm2P8ByUP545hITwBGy43GBR2rZk5jdTD/m1cprRKc84n
+         yVmCMwNg4Aj9XdSvRBys1w5CAFPK1KGpVDTzIV8HicP0Fx1oxgDwPvbh7nyrSzPqMuNW
+         48mseWCR0iD6CfLTTBH+lzt9tIG3yy2rB3CAe+d5Zw+/2I0c2mRXHfXIQPNnqhq2DGKH
+         EZwK7vZg+fIjLsxAbufrBw7CSh5ndh1/iv+qu6y049HtkgVlosaKD6DkIiiYn6ItZQYv
+         09PgCXYuJEZ1vEjmJR750gplRkrzvi40ZqwDpsTrfxiWNu2lOj+hml0+yhRsIxdWLt9b
+         hboQ==
+X-Gm-Message-State: AGi0PuYteljNEdxa6z+FNyUykaGXd6n2bcOoRzf0LrYbpHky0FtP15yI
+        8eG/2OmpeRSNAba+Wq6iwcv8wQ==
+X-Google-Smtp-Source: APiQypJtWZRgeuhBdwNVv/BYkC/v97z1lki6YGoNZ8np1IQMVGV5tfmu6geF0iOgUiJOhok3iuHfpQ==
+X-Received: by 2002:a19:114:: with SMTP id 20mr9943824lfb.169.1586769507484;
+        Mon, 13 Apr 2020 02:18:27 -0700 (PDT)
+Received: from localhost.localdomain ([159.224.5.60])
+        by smtp.googlemail.com with ESMTPSA id e16sm8339049ljh.18.2020.04.13.02.18.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 02:30:43 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for v5.8] Venus updates
-Date:   Mon, 13 Apr 2020 12:30:00 +0300
-Message-Id: <20200413093000.5567-1-stanimir.varbanov@linaro.org>
+        Mon, 13 Apr 2020 02:18:27 -0700 (PDT)
+From:   Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Cc:     Luis Oliveira <lolivei@synopsys.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Michael Rodin <mrodin@de.adit-jv.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Adam Ford <aford173@gmail.com>,
+        Todor Tomov <todor.tomov@linaro.org>,
+        Suresh Udipi <sudipi@jp.adit-jv.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>,
+        Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
+Subject: [PATCH 2/4] media: ov5647: Add support for PWDN GPIO.
+Date:   Mon, 13 Apr 2020 12:17:45 +0300
+Message-Id: <f88b99899eb5e680607349b37eb3679dbd12433e.1586759968.git.roman.kovalivskyi@globallogic.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1586758372.git.roman.kovalivskyi@globallogic.com>
+References: <cover.1586758372.git.roman.kovalivskyi@globallogic.com>
+In-Reply-To: <cover.1586759968.git.roman.kovalivskyi@globallogic.com>
+References: <cover.1586759968.git.roman.kovalivskyi@globallogic.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-The Venus driver updates include:
+Add support for an optional GPIO connected to PWDN on the sensor. This
+allows the use of hardware standby mode where internal device clock
+and circuit activities are halted.
 
- - Added pm-runtime autosuspend for decoder.
- - Replace zero-length array with flexible-array member in hfi_cmds|msgs.
- - A fix for interconnect configuration NoC requests. 
+Please nothe that power is off when PWDN is high.
 
-Please pull.
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
+Signed-off-by: Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
+---
+ drivers/media/i2c/ov5647.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-regards,
-Stan
+diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
+index 3e587eb0a30e..c39e3d20e3ef 100644
+--- a/drivers/media/i2c/ov5647.c
++++ b/drivers/media/i2c/ov5647.c
+@@ -21,6 +21,7 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+@@ -35,6 +36,13 @@
+ 
+ #define SENSOR_NAME "ov5647"
+ 
++/*
++ * From the datasheet, "20ms after PWDN goes low or 20ms after RESETB goes
++ * high if reset is inserted after PWDN goes high, host can access sensor's
++ * SCCB to initialize sensor."
++ */
++#define PWDN_ACTIVE_DELAY_MS	20
++
+ #define MIPI_CTRL00_CLOCK_LANE_GATE		BIT(5)
+ #define MIPI_CTRL00_BUS_IDLE			BIT(2)
+ #define MIPI_CTRL00_CLOCK_LANE_DISABLE		BIT(0)
+@@ -86,6 +94,7 @@ struct ov5647 {
+ 	unsigned int			height;
+ 	int				power_count;
+ 	struct clk			*xclk;
++	struct gpio_desc		*pwdn;
+ };
+ 
+ static inline struct ov5647 *to_state(struct v4l2_subdev *sd)
+@@ -355,6 +364,11 @@ static int ov5647_sensor_power(struct v4l2_subdev *sd, int on)
+ 	if (on && !ov5647->power_count)	{
+ 		dev_dbg(&client->dev, "OV5647 power on\n");
+ 
++		if (ov5647->pwdn) {
++			gpiod_set_value(ov5647->pwdn, 0);
++			msleep(PWDN_ACTIVE_DELAY_MS);
++		}
++
+ 		ret = clk_prepare_enable(ov5647->xclk);
+ 		if (ret < 0) {
+ 			dev_err(&client->dev, "clk prepare enable failed\n");
+@@ -392,6 +406,8 @@ static int ov5647_sensor_power(struct v4l2_subdev *sd, int on)
+ 			dev_dbg(&client->dev, "soft stby failed\n");
+ 
+ 		clk_disable_unprepare(ov5647->xclk);
++
++		gpiod_set_value(ov5647->pwdn, 1);
+ 	}
+ 
+ 	/* Update the power count. */
+@@ -603,6 +619,10 @@ static int ov5647_probe(struct i2c_client *client)
+ 		return -EINVAL;
+ 	}
+ 
++	/* Request the power down GPIO asserted */
++	sensor->pwdn = devm_gpiod_get_optional(&client->dev, "pwdn",
++					       GPIOD_OUT_HIGH);
++
+ 	mutex_init(&sensor->lock);
+ 
+ 	sd = &sensor->sd;
+@@ -616,7 +636,15 @@ static int ov5647_probe(struct i2c_client *client)
+ 	if (ret < 0)
+ 		goto mutex_remove;
+ 
++	if (sensor->pwdn) {
++		gpiod_set_value(sensor->pwdn, 0);
++		msleep(PWDN_ACTIVE_DELAY_MS);
++	}
++
+ 	ret = ov5647_detect(sd);
++
++	gpiod_set_value(sensor->pwdn, 1);
++
+ 	if (ret < 0)
+ 		goto error;
+ 
+-- 
+2.17.1
 
-The following changes since commit 2632e7b618a7730969f9782593c29ca53553aa22:
-
-  media: venus: firmware: Ignore secure call error on first resume (2020-03-30 11:28:18 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-v5.8
-
-for you to fetch changes up to 0478a4dbb49856f941f1a2349d39000600f39821:
-
-  venus: core: remove CNOC voting while device suspend (2020-04-13 12:10:42 +0300)
-
-----------------------------------------------------------------
-Venus updates for v5.8
-
-----------------------------------------------------------------
-Gustavo A. R. Silva (2):
-      media: venus: hfi_cmds.h: Replace zero-length array with flexible-array member
-      media: venus: hfi_msgs.h: Replace zero-length array with flexible-array member
-
-Mansur Alisha Shaik (1):
-      venus: core: remove CNOC voting while device suspend
-
-Stanimir Varbanov (1):
-      venus: vdec: Use pmruntime autosuspend
-
- drivers/media/platform/qcom/venus/core.c     |  15 ++-
- drivers/media/platform/qcom/venus/core.h     |   2 +
- drivers/media/platform/qcom/venus/hfi_cmds.h |   2 +-
- drivers/media/platform/qcom/venus/hfi_msgs.h |  10 +-
- drivers/media/platform/qcom/venus/vdec.c     | 134 +++++++++++++++++++++++----
- 5 files changed, 133 insertions(+), 30 deletions(-)
