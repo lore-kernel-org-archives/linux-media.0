@@ -2,52 +2,52 @@ Return-Path: <SRS0=F69p=56=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDBB6C352B6
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62F36C2BB85
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C014E206E9
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A85B2072D
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586854279;
-	bh=KORHvO1IDCHSdvc9HLwPNskV7zu8NJdJvxQufH1OdCs=;
+	s=default; t=1586854281;
+	bh=WHC1EpFDxxTFXqV9Jv3iaMZBpBg6/HUx2mejUHyHxVI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=CE0XRdBUxhHknoIko/KL0bswqXQ3JuXiyg+M9CU8BtdihEA8ZdWnSJSTEq25ViD+2
-	 lUMOJPWG8hNxd8V3PQsdiaEqGOC94s+0KWDrUSrBI/e6l05pv7WoWUX0rLTmKbG0Ku
-	 7/Z69DpsJCx6OydOEpORpOyz4H9yobFObxzjt8xU=
+	b=TroG8y0YWbbOBQ0uX5TE/ApJ5QpWMb3O7oWrv8lin5gS3jIFjD/YxRDr0CcZAE4bV
+	 nY82pOVEbaaPWWuHni6mzPO0AaNp0tOP1Jn8s8s9K58KB9W38LO/DksWFSj/jrh7IX
+	 qbNQtDYsZXgs7X17oF22QDBujvtirsNvRE8IL858=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437114AbgDNIvS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Apr 2020 04:51:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52232 "EHLO mail.kernel.org"
+        id S2437117AbgDNIvT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Apr 2020 04:51:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52236 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728400AbgDNIvM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S2437074AbgDNIvM (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 14 Apr 2020 04:51:12 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E8F05208FE;
-        Tue, 14 Apr 2020 08:51:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0A33C2137B;
+        Tue, 14 Apr 2020 08:51:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1586854269;
-        bh=KORHvO1IDCHSdvc9HLwPNskV7zu8NJdJvxQufH1OdCs=;
+        bh=WHC1EpFDxxTFXqV9Jv3iaMZBpBg6/HUx2mejUHyHxVI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p1cZwtILqGr7k/5if1B3S3LmZLY3lv316vRZtwom22SLHN3X/M0qW/8q3oZAt9QlB
-         vK5qK02FGxTUdzosmNKSJ8Vx35Z6xjC+E71+ho+ss7PEuuLFUAvNnLh7pOuvh7jD5f
-         +yh/2nF0EUpP9sFxztBmkBp8d2FMIfOjpGUzy37s=
+        b=KVRrY3Mti/3gLKfNugPXh4ZANDxmI0DuQXrIX1zyR2Zs3+e2Qrt6RyDt+77cnvy9p
+         Fg4q/F4+a8amF/dHxgh8AW3mD4aF+PUCZgabDBTjPltfUULHa7b/mj5FrohN5uVVay
+         WNHx5JWuZQFrCfMqLd6p3L5sZaK7jMfvYVZ64X0E=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jOHHf-002wzQ-5s; Tue, 14 Apr 2020 10:51:07 +0200
+        id 1jOHHf-002wza-9f; Tue, 14 Apr 2020 10:51:07 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 09/19] media: docs: cpia2.rst: do some cleanups
-Date:   Tue, 14 Apr 2020 10:50:55 +0200
-Message-Id: <1ec31c995451d166d3ec9116a9802b4eaa10d072.1586854191.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 11/19] media: docs: saa7134.rst: update the documentation
+Date:   Tue, 14 Apr 2020 10:50:57 +0200
+Message-Id: <f2b4774a68e02a363ef94852c085d580642246ab.1586854191.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1586854191.git.mchehab+huawei@kernel.org>
 References: <cover.1586854191.git.mchehab+huawei@kernel.org>
@@ -58,49 +58,107 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Do some cleanups at the document in order to mark two
-literal blocks as such.
+There are several things here that are outdated, because this
+document was written a long time ago.
 
-While here, simplify two block markups, using the less
-verbose option (::).
+Update them to reflect the current status of the driver and
+the media subsystem.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/cpia2.rst | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ Documentation/admin-guide/media/saa7134.rst | 57 +++++++++++++++------
+ 1 file changed, 42 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/admin-guide/media/cpia2.rst b/Documentation/admin-guide/media/cpia2.rst
-index 6f4258aebbfe..f6ffef686462 100644
---- a/Documentation/admin-guide/media/cpia2.rst
-+++ b/Documentation/admin-guide/media/cpia2.rst
-@@ -51,7 +51,7 @@ available at compile time.
- Setup
- ~~~~~
+diff --git a/Documentation/admin-guide/media/saa7134.rst b/Documentation/admin-guide/media/saa7134.rst
+index c84246dd81c0..7ab9c70b9abe 100644
+--- a/Documentation/admin-guide/media/saa7134.rst
++++ b/Documentation/admin-guide/media/saa7134.rst
+@@ -7,8 +7,7 @@ Author Gerd Hoffmann
  
--Use 'modprobe cpia2' to load and 'modprobe -r cpia2' to unload. This
-+Use ``modprobe cpia2`` to load and ``modprobe -r cpia2`` to unload. This
- may be done automatically by your distribution.
  
- Driver options
-@@ -79,16 +79,12 @@ Setting the options
- ~~~~~~~~~~~~~~~~~~~
+ This is a v4l2/oss device driver for saa7130/33/34/35 based capture / TV
+-boards.  See http://www.semiconductors.philips.com/pip/saa7134hl for a
+-description.
++boards.
  
- If you are using modules, edit /etc/modules.conf and add an options
--line like this:
--
+ 
+ Status
+@@ -24,26 +23,54 @@ configuration info.
+ Build
+ -----
+ 
+-Pick up videodev + v4l2 patches from http://bytesex.org/patches/.
+-Configure, build, install + boot the new kernel.  You'll need at least
+-these config options:
++Once you pick up a Kernel source, you should configure, build,
++install and boot the new kernel.  You'll need at least
++these config options::
+ 
 -.. code-block:: none
-+line like this::
++    ./scripts/config -e PCI
++    ./scripts/config -e INPUT
++    ./scripts/config -m I2C
++    ./scripts/config -m MEDIA_SUPPORT
++    ./scripts/config -e MEDIA_PCI_SUPPORT
++    ./scripts/config -e MEDIA_ANALOG_TV_SUPPORT
++    ./scripts/config -e MEDIA_DIGITAL_TV_SUPPORT
++    ./scripts/config -e MEDIA_RADIO_SUPPORT
++    ./scripts/config -e RC_CORE
++    ./scripts/config -e MEDIA_SUBDRV_AUTOSELECT
++    ./scripts/config -m VIDEO_SAA7134
++    ./scripts/config -e SAA7134_ALSA
++    ./scripts/config -e VIDEO_SAA7134_RC
++    ./scripts/config -e VIDEO_SAA7134_DVB
++    ./scripts/config -e VIDEO_SAA7134_GO7007
  
- 	options cpia2 num_buffers=3 buffer_size=65535
+-	CONFIG_I2C=m
+-	CONFIG_VIDEO_DEV=m
++To build and install, you should run::
  
- If the driver is compiled into the kernel, at boot time specify them
--like this:
--
--.. code-block:: none
-+like this::
+-Type "make" to build the driver now.  "make install" installs the
+-driver.  "modprobe saa7134" should load it.  Depending on the card you
+-might have to pass card=<nr> as insmod option, check CARDLIST for
+-valid choices.
++    make && make modules_install && make install
++
++Once the new Kernel is booted, saa7134 driver should be loaded automatically.
++
++Depending on the card you might have to pass ``card=<nr>`` as insmod option.
++If so, please check :doc:`saa7134-cardlist` for valid choices.
++
++Once you have your card type number, you can pass a modules configuration
++via a file (usually, it is either ``/etc/modules.conf`` or some file at
++``/etc/modules-load.d/``, but the actual place depends on your
++distribution), with this content::
++
++    options saa7134 card=13 # Assuming that your card type is #13
  
- 	cpia2.num_buffers=3 cpia2.buffer_size=65535
  
+ Changes / Fixes
+ ---------------
+ 
+-Please mail me unified diffs ("diff -u") with your changes, and don't
+-forget to tell me what it changes / which problem it fixes / whatever
++Please mail to linux-media AT vger.kernel.org unified diffs against
++the linux media git tree:
++
++    https://git.linuxtv.org/media_tree.git/
++
++This is done by committing a patch at a clone of the git tree and
++submitting the patch using ``git send-email``. Don't forget to
++describe at the lots  what it changes / which problem it fixes / whatever
+ it is good for ...
+ 
+ 
+@@ -52,7 +79,7 @@ Known Problems
+ 
+ * The tuner for the flyvideos isn't detected automatically and the
+   default might not work for you depending on which version you have.
+-  There is a tuner= insmod option to override the driver's default.
++  There is a ``tuner=`` insmod option to override the driver's default.
+ 
+ Credits
+ -------
 -- 
 2.25.2
 
