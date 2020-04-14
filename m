@@ -6,35 +6,35 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E2EBC2BA19
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 12:02:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7774C2BA19
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 12:17:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CAFE2075E
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 12:02:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B52B12075E
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 12:17:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439785AbgDNMCi convert rfc822-to-8bit (ORCPT
+        id S2439976AbgDNMRh convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Apr 2020 08:02:38 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:55988 "EHLO www.linuxtv.org"
+        Tue, 14 Apr 2020 08:17:37 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:57816 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439780AbgDNMCg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Apr 2020 08:02:36 -0400
+        id S2439975AbgDNMRf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Apr 2020 08:17:35 -0400
 Received: from builder.linuxtv.org ([140.211.167.10])
         by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <jenkins@linuxtv.org>)
-        id 1jOKE4-001X0u-Vh; Tue, 14 Apr 2020 11:59:37 +0000
+        id 1jOKSa-001Xys-Gc; Tue, 14 Apr 2020 12:14:36 +0000
 Received: from [127.0.0.1] (helo=builder.linuxtv.org)
         by builder.linuxtv.org with esmtp (Exim 4.92)
         (envelope-from <jenkins@linuxtv.org>)
-        id 1jOKId-0008Au-5j; Tue, 14 Apr 2020 12:04:19 +0000
-Date:   Tue, 14 Apr 2020 12:04:19 +0000 (UTC)
+        id 1jOKX9-0008LA-6C; Tue, 14 Apr 2020 12:19:19 +0000
+Date:   Tue, 14 Apr 2020 12:19:19 +0000 (UTC)
 From:   Jenkins Builder Robot <jenkins@linuxtv.org>
 To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Message-ID: <333574583.10.1586865859168.JavaMail.jenkins@builder.linuxtv.org>
-In-Reply-To: <1676103756.9.1586859558560.JavaMail.jenkins@builder.linuxtv.org>
-References: <1676103756.9.1586859558560.JavaMail.jenkins@builder.linuxtv.org>
-Subject: Build failed in Jenkins: media-build #3040
+Message-ID: <2120061285.11.1586866759178.JavaMail.jenkins@builder.linuxtv.org>
+In-Reply-To: <333574583.10.1586865859168.JavaMail.jenkins@builder.linuxtv.org>
+References: <333574583.10.1586865859168.JavaMail.jenkins@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media-build #3041
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
@@ -47,11 +47,13 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/media-build/3040/display/redirect?page=changes>
+See <https://builder.linuxtv.org/job/media-build/3041/display/redirect?page=changes>
 
 Changes:
 
-[hverkuil-cisco] Add vdso/bits.h as possible source of the BIT macro
+[hverkuil-cisco] Add cpu_latency_qos_add/remove_request compat code
+
+[hverkuil-cisco] VIDEO_OV9650 needs devm_regmap_init_sccb
 
 
 ------------------------------------------
@@ -67,12 +69,12 @@ Fetching upstream changes from git://linuxtv.org/media_build.git
  > git fetch --tags --force --progress -- git://linuxtv.org/media_build.git +refs/heads/*:refs/remotes/origin/* # timeout=10
  > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
  > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
-Checking out Revision c5933d2dc722d15c46bd09d6eb37ca34f3e6829f (refs/remotes/origin/master)
+Checking out Revision 59218acf14c29acea3de658b724fa511b121ca7d (refs/remotes/origin/master)
  > git config core.sparsecheckout # timeout=10
- > git checkout -f c5933d2dc722d15c46bd09d6eb37ca34f3e6829f # timeout=10
-Commit message: "Add vdso/bits.h as possible source of the BIT macro"
- > git rev-list --no-walk 84696ba8420dead56840bf2448dfceec5dfa0aa9 # timeout=10
-[media-build] $ /bin/sh -xe /tmp/jenkins7264826822437994048.sh
+ > git checkout -f 59218acf14c29acea3de658b724fa511b121ca7d # timeout=10
+Commit message: "VIDEO_OV9650 needs devm_regmap_init_sccb"
+ > git rev-list --no-walk c5933d2dc722d15c46bd09d6eb37ca34f3e6829f # timeout=10
+[media-build] $ /bin/sh -xe /tmp/jenkins13583835184361722976.sh
 + ./build
 Checking if the needed tools for Debian GNU/Linux 10 (buster) are available
 Needed package dependencies are met.
@@ -103,20 +105,20 @@ From git://linuxtv.org/media_build
 Already up to date.
 make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
 wget http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 -O linux-media.tar.bz2.md5.tmp
---2020-04-14 12:03:00--  http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+--2020-04-14 12:18:00--  http://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
 Resolving linuxtv.org (linuxtv.org)... 130.149.80.248
 Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:80... connected.
 HTTP request sent, awaiting response... 301 Moved Permanently
 Location: https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5 [following]
---2020-04-14 12:03:00--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
+--2020-04-14 12:18:00--  https://linuxtv.org/downloads/drivers/linux-media-LATEST.tar.bz2.md5
 Connecting to linuxtv.org (linuxtv.org)|130.149.80.248|:443... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 105 [application/x-bzip2]
 Saving to: ‘linux-media.tar.bz2.md5.tmp’
 
-     0K                                                       100%  102M=0s
+     0K                                                       100%  162M=0s
 
-2020-04-14 12:03:01 (102 MB/s) - ‘linux-media.tar.bz2.md5.tmp’ saved [105/105]
+2020-04-14 12:18:01 (162 MB/s) - ‘linux-media.tar.bz2.md5.tmp’ saved [105/105]
 
 make: Leaving directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
 make: Entering directory '<https://builder.linuxtv.org/job/media-build/ws/linux'>
