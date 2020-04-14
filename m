@@ -2,128 +2,128 @@ Return-Path: <SRS0=F69p=56=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9F27C38A29
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 23:18:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E90E3C2BB1D
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 23:20:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2C6A2074D
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 23:18:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586906337;
-	bh=WdTCiKOB3OQ85f1rwfCljxgiziBMlr0YfV55qi2jrbo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=WkP3Csdvm2hB1nk6IiTway+Vgov/koTw1KLHldZljAM4kud6jEgayu62vHoeTJypG
-	 cQUf1UO1DIlHuWIuu9QbgAnI5LRV34AYTuVBTmQxeqSpn/kw3eMbIOcRBs+7kG2++a
-	 +CTjBrVTSK91OZeuhJEwhx32Mrle1cVCnU8HVKBg=
+	by mail.kernel.org (Postfix) with ESMTP id C453C20768
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 23:20:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392089AbgDNXSv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Apr 2020 19:18:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57582 "EHLO mail.kernel.org"
+        id S2392116AbgDNXUr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Apr 2020 19:20:47 -0400
+Received: from mga18.intel.com ([134.134.136.126]:10316 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392077AbgDNXRz (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Apr 2020 19:17:55 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A5A1F20774;
-        Tue, 14 Apr 2020 23:17:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586906274;
-        bh=WdTCiKOB3OQ85f1rwfCljxgiziBMlr0YfV55qi2jrbo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QloyWelBE71CmKIbD1RCzZaIo+K8lLUrkD6Mcj0n2X9sml82jxPgaTJNuPRGm1lYJ
-         wA+1NVjGQiyQFTyBGL7ZsCTywawls9BlRFoQYA86gQrC5Z+JsM3H1KL+bgbkSDG1Gm
-         vxFW0veMrMjt/N/+lnmEfUz2WZBXqi6c966yLDmk=
-Received: by mail-ed1-f53.google.com with SMTP id ca21so1951945edb.7;
-        Tue, 14 Apr 2020 16:17:54 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZ0NF5bezvuP8Xjmwzv1uxqg3SquMqPJSXRqmb/GZLyq04c3Lw6
-        kuPh3JGtRmxDMls0F8WR4QAae2sJUjZOG4mJdA==
-X-Google-Smtp-Source: APiQypJgoaBAyxL3iPSZCSNJxM8D8LE/eTLS0VKjjmKTYGy/LZGI8Teu7S9DiqAb6Y+rOQS+UJVF+JZSuJ74kPLs5ZE=
-X-Received: by 2002:a17:906:2ad4:: with SMTP id m20mr2521641eje.324.1586906273069;
- Tue, 14 Apr 2020 16:17:53 -0700 (PDT)
+        id S2392108AbgDNXUn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Apr 2020 19:20:43 -0400
+IronPort-SDR: 2wDFc5KhH5rSFHQlQ6M366HVep4MJvFPks30t9AyQdHOuc1L7P98Zr8Sa0JiusiudgVrphKAUo
+ 5i70LDZ8MdDg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 16:20:40 -0700
+IronPort-SDR: hqQRXADGhsMAtuXHElFoXh/CuBaZg4X9Mu4p2H9dVUXLro43Ha2lQ+1q4p9w+LT0ulotgH4nfm
+ dDdRf4eE8aTw==
+X-IronPort-AV: E=Sophos;i="5.72,384,1580803200"; 
+   d="scan'208";a="253344757"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 16:20:38 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 8C9C720528; Wed, 15 Apr 2020 02:20:36 +0300 (EEST)
+Date:   Wed, 15 Apr 2020 02:20:36 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v4 06/17] media: imx: mipi csi-2: Implement
+ get_fwnode_pad op
+Message-ID: <20200414232036.GB27762@paasikivi.fi.intel.com>
+References: <20200303234256.8928-1-slongerbeam@gmail.com>
+ <20200303234256.8928-7-slongerbeam@gmail.com>
+ <20200414230729.GC27621@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-References: <20200414030815.192104-1-hsinyi@chromium.org>
-In-Reply-To: <20200414030815.192104-1-hsinyi@chromium.org>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Wed, 15 Apr 2020 07:17:41 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__y81v6Ji5JBpmSeeh5J1kStzqEABcN7ReiM7OH5+gqtg@mail.gmail.com>
-Message-ID: <CAAOTY__y81v6Ji5JBpmSeeh5J1kStzqEABcN7ReiM7OH5+gqtg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: dts: mt8173: fix mdp aliases property name
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        devicetree@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200414230729.GC27621@pendragon.ideasonboard.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi, Hsin-Yi
+Hi Laurent,
 
-Hsin-Yi Wang <hsinyi@chromium.org> =E6=96=BC 2020=E5=B9=B44=E6=9C=8814=E6=
-=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8811:08=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> Fix warning:
-> Warning (alias_paths): /aliases: aliases property name must include only =
-lowercase and '-'
+On Wed, Apr 15, 2020 at 02:07:29AM +0300, Laurent Pinchart wrote:
+> Hi Steve,
+> 
+> Thank you for the patch.
+> 
+> On Tue, Mar 03, 2020 at 03:42:45PM -0800, Steve Longerbeam wrote:
+> > Implement get_fwnode_pad operation. If the endpoint is owned by the MIPI
+> > CSI-2 receiver, return the endpoint's port number. The MIPI CSI-2 receiver
+> > maps port numbers and pad indexes 1:1.
+> > 
+> > Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
+> > ---
+> >  drivers/staging/media/imx/imx6-mipi-csi2.c | 28 ++++++++++++++++++++++
+> >  1 file changed, 28 insertions(+)
+> > 
+> > diff --git a/drivers/staging/media/imx/imx6-mipi-csi2.c b/drivers/staging/media/imx/imx6-mipi-csi2.c
+> > index fdd763587e6c..8500207e5ea9 100644
+> > --- a/drivers/staging/media/imx/imx6-mipi-csi2.c
+> > +++ b/drivers/staging/media/imx/imx6-mipi-csi2.c
+> > @@ -507,9 +507,37 @@ static int csi2_registered(struct v4l2_subdev *sd)
+> >  				      640, 480, 0, V4L2_FIELD_NONE, NULL);
+> >  }
+> >  
+> > +static int csi2_get_fwnode_pad(struct media_entity *entity,
+> > +			       struct fwnode_endpoint *endpoint)
+> > +{
+> > +	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
+> > +	struct csi2_dev *csi2 = sd_to_dev(sd);
+> > +	struct fwnode_handle *csi2_ep;
+> > +
+> > +	/*
+> > +	 * If the endpoint is one of ours, return the endpoint's port
+> > +	 * number. This device maps port numbers and pad indexes 1:1.
+> > +	 */
+> > +	fwnode_graph_for_each_endpoint(dev_fwnode(csi2->dev), csi2_ep) {
+> > +		if (endpoint->local_fwnode == csi2_ep) {
+> > +			struct fwnode_endpoint fwep;
+> > +			int ret;
+> > +
+> > +			ret = fwnode_graph_parse_endpoint(csi2_ep, &fwep);
+> > +
+> > +			fwnode_handle_put(csi2_ep);
+> > +
+> > +			return ret ? ret : fwep.port;
+> > +		}
+> > +	}
+> > +
+> > +	return -ENXIO;
+> > +}
+> 
+> As the 1:1 mapping is the common case, would it make sense to modify
+> media_entity_get_fwnode_pad() accordingly when .get_fwnode_pad is not
+> set ? The current behaviour is to return the first pad that matches the
 
-Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+I also think this would make sense.
 
->
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> ---
->  arch/arm64/boot/dts/mediatek/mt8173.dtsi | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/d=
-ts/mediatek/mt8173.dtsi
-> index a212bf124e81..d1e9c41004b4 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> @@ -42,14 +42,14 @@ aliases {
->                 dpi0 =3D &dpi0;
->                 dsi0 =3D &dsi0;
->                 dsi1 =3D &dsi1;
-> -               mdp_rdma0 =3D &mdp_rdma0;
-> -               mdp_rdma1 =3D &mdp_rdma1;
-> -               mdp_rsz0 =3D &mdp_rsz0;
-> -               mdp_rsz1 =3D &mdp_rsz1;
-> -               mdp_rsz2 =3D &mdp_rsz2;
-> -               mdp_wdma0 =3D &mdp_wdma0;
-> -               mdp_wrot0 =3D &mdp_wrot0;
-> -               mdp_wrot1 =3D &mdp_wrot1;
-> +               mdp-rdma0 =3D &mdp_rdma0;
-> +               mdp-rdma1 =3D &mdp_rdma1;
-> +               mdp-rsz0 =3D &mdp_rsz0;
-> +               mdp-rsz1 =3D &mdp_rsz1;
-> +               mdp-rsz2 =3D &mdp_rsz2;
-> +               mdp-wdma0 =3D &mdp_wdma0;
-> +               mdp-wrot0 =3D &mdp_wrot0;
-> +               mdp-wrot1 =3D &mdp_wrot1;
->                 serial0 =3D &uart0;
->                 serial1 =3D &uart1;
->                 serial2 =3D &uart2;
-> --
-> 2.26.0.110.g2183baf09c-goog
->
->
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+> requested direction, which could be preserved as a second-level fallback
+> if the 1:1 mapping doesn't give the right direction (but I'm not sure
+> there's a use case for that, the 1:1 mapping seems to be all we need if
+> there's no specific .get_fwnode_pad implementation).
+
+I believe at least the smiapp driver breaks if you do that, so the current
+behaviour should be retained (secondary to the 1:1 mapping).
+
+-- 
+Regards,
+
+Sakari Ailus
