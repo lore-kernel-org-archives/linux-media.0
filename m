@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAEE8C2BB85
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84BC9C38A29
 	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 801AC2078A
+	by mail.kernel.org (Postfix) with ESMTP id 62C7E2074D
 	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1586854289;
-	bh=0O7EuouMBNaUibBD2/q3Xj6UeiHijaPvwbCPgphKh0Q=;
+	bh=yhXlg/zcc8kf336uIZ3JMI5px5bMxGaDX7kr2NCVb6k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=opWb7o7TlqXjafrCJePToBeaLSL5DN2IGBevnza1Tc+VJTWpPPbqcs0VgPjGA33DS
-	 KpB9D8JzeQ+CSC7HRrAA+f+NH+VtYnpvTGHz5YFjNxIo02hDsiLOhNgUpi1mub9v+J
-	 PaKe7wL7EL4WnVw73vvx2AlAVL+oPhAG2wiSbRtU=
+	b=CIcU8l2URhyTgtvanZwWW++FxAFLwOCndNPaWhy9djBFaGcVvQiTAbgUiBWAZU8HG
+	 jrxUNiHweuOXTrntmkES/bojTR6RK9HxTPiCTK0l+2IQC7OyB3E+7U9r8A4AkN6NQS
+	 TV0+QRM7G5/e5LajtRTOugiWEIZgcJt0iBmLCe98=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437125AbgDNIv1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Apr 2020 04:51:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52236 "EHLO mail.kernel.org"
+        id S2437126AbgDNIv2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Apr 2020 04:51:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52312 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437111AbgDNIvR (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Apr 2020 04:51:17 -0400
+        id S2437108AbgDNIvQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Apr 2020 04:51:16 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 524F82173E;
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F29521707;
         Tue, 14 Apr 2020 08:51:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1586854269;
-        bh=0O7EuouMBNaUibBD2/q3Xj6UeiHijaPvwbCPgphKh0Q=;
+        bh=yhXlg/zcc8kf336uIZ3JMI5px5bMxGaDX7kr2NCVb6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ah1Ai1MPiFInDFVHyMDpfz3DvLf84YDUXAqZLuIlqg7d6QeePmtLe7gADuRUQUfXB
-         1tj49YKYQAY41EzIfl71FWvxBG+BlaXKwDxY9mpGj3ZCdn+0I0V6433vYL5Wj6cFzj
-         xa9Nj1tkFktnz/IMPseJBJYIrEuMrrQivjoWwNb8=
+        b=xlCXvsO8jvAIfWL2oWveg2wB+7MVxhNr2qiKxGOD+H7/qXEnLoNukvY8pojsx0oOF
+         /aBFa5WKdm45E7gTf03kBl96AOPK2uM3iJ8WRXiNhbh3uxvMZkuH01NMJEHBHrjfqW
+         UnKJXsJa1JmGOIOyEwHupsQnRTUsZnSU6OS3wUd4=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jOHHf-002wzL-4H; Tue, 14 Apr 2020 10:51:07 +0200
+        id 1jOHHf-002x04-J8; Tue, 14 Apr 2020 10:51:07 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 08/19] media: docs: add a cardlist for cx18 boards
-Date:   Tue, 14 Apr 2020 10:50:54 +0200
-Message-Id: <06e5f2fec58c4aeed758a6a15580382ffaee6004.1586854191.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 17/19] media: docs: move copyrights to the end and update them
+Date:   Tue, 14 Apr 2020 10:51:03 +0200
+Message-Id: <09b08462b0bae0ac2c814ff554505d51a30d08f6.1586854191.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1586854191.git.mchehab+huawei@kernel.org>
 References: <cover.1586854191.git.mchehab+huawei@kernel.org>
@@ -58,51 +58,138 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There aren't many boards supported by this driver. So, add
-a list for it manually generated.
+The copyright info is not the most valuable information
+there. Move them to the end.
+
+While here, change the copyright to cover up to this
+year (2020).
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/cardlist.rst    |  1 +
- .../admin-guide/media/cx18-cardlist.rst         | 17 +++++++++++++++++
- 2 files changed, 18 insertions(+)
- create mode 100644 Documentation/admin-guide/media/cx18-cardlist.rst
+ Documentation/admin-guide/media/index.rst   | 25 +++++++++++++-------
+ Documentation/driver-api/media/index.rst    | 26 +++++++++++++--------
+ Documentation/userspace-api/media/index.rst | 16 ++++++++-----
+ 3 files changed, 42 insertions(+), 25 deletions(-)
 
-diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
-index 14249f47fbc2..5c9c3c97bcb2 100644
---- a/Documentation/admin-guide/media/cardlist.rst
-+++ b/Documentation/admin-guide/media/cardlist.rst
-@@ -8,6 +8,7 @@ Cards List
+diff --git a/Documentation/admin-guide/media/index.rst b/Documentation/admin-guide/media/index.rst
+index 04bc259f3325..eb1d82dffcc9 100644
+--- a/Documentation/admin-guide/media/index.rst
++++ b/Documentation/admin-guide/media/index.rst
+@@ -2,18 +2,9 @@
  
- 	au0828-cardlist
- 	bttv-cardlist
-+	cx18-cardlist
- 	cx23885-cardlist
- 	cx88-cardlist
- 	em28xx-cardlist
-diff --git a/Documentation/admin-guide/media/cx18-cardlist.rst b/Documentation/admin-guide/media/cx18-cardlist.rst
-new file mode 100644
-index 000000000000..26f2da9aa542
---- /dev/null
-+++ b/Documentation/admin-guide/media/cx18-cardlist.rst
-@@ -0,0 +1,17 @@
-+.. SPDX-License-Identifier: GPL-2.0
+ .. include:: <isonum.txt>
+ 
+-**Copyright** |copy| 1999-2020 : LinuxTV Developers
+ 
+-This documentation is free software; you can redistribute it and/or modify it
+-under the terms of the GNU General Public License as published by the Free
+-Software Foundation version 2 of the License.
+ 
+-This program is distributed in the hope that it will be useful, but WITHOUT
+-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+-FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+-more details.
+ 
+-For more details see the file COPYING in the source distribution of Linux.
+ 
+ .. _uapi-v4l-drivers:
+ 
+@@ -101,3 +92,19 @@ CEC driver-specific documentation
+ 	:numbered:
+ 
+ 	pulse8-cec
 +
-+CX18 cards list
-+===============
++**Copyright** |copy| 1999-2020 : LinuxTV Developers
 +
-+Those cards are supported by cx18 driver:
++::
 +
-+- Hauppauge HVR-1600 (ESMT memory)
-+- Hauppauge HVR-1600 (Samsung memory)
-+- Compro VideoMate H900
-+- Yuan MPC718 MiniPCI DVB-T/Analog
-+- Conexant Raptor PAL/SECAM
-+- Toshiba Qosmio DVB-T/Analog
-+- Leadtek WinFast PVR2100
-+- Leadtek WinFast DVR3100
-+- GoTView PCI DVD3 Hybrid
-+- Hauppauge HVR-1600 (s5h1411/tda18271)
++  This documentation is free software; you can redistribute it and/or modify it
++  under the terms of the GNU General Public License as published by the Free
++  Software Foundation; either version 2 of the License, or (at your option) any
++  later version.
++
++  This program is distributed in the hope that it will be useful, but WITHOUT
++  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
++  more details.
++
++  For more details see the file COPYING in the source distribution of Linux.
+diff --git a/Documentation/driver-api/media/index.rst b/Documentation/driver-api/media/index.rst
+index 57383df79bd3..5e9f67f34081 100644
+--- a/Documentation/driver-api/media/index.rst
++++ b/Documentation/driver-api/media/index.rst
+@@ -6,19 +6,9 @@
+ Media subsystem kernel internal API
+ ===================================
+ 
+-**Copyright** |copy| 2009-2016 : LinuxTV Developers
+ 
+-This documentation is free software; you can redistribute it and/or modify it
+-under the terms of the GNU General Public License as published by the Free
+-Software Foundation; either version 2 of the License, or (at your option) any
+-later version.
+ 
+-This program is distributed in the hope that it will be useful, but WITHOUT
+-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+-FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+-more details.
+ 
+-For more details see the file COPYING in the source distribution of Linux.
+ 
+ .. only:: html
+ 
+@@ -38,3 +28,19 @@ For more details see the file COPYING in the source distribution of Linux.
+     csi2
+ 
+     drivers/index
++
++**Copyright** |copy| 2009-2020 : LinuxTV Developers
++
++::
++
++  This documentation is free software; you can redistribute it and/or modify it
++  under the terms of the GNU General Public License as published by the Free
++  Software Foundation; either version 2 of the License, or (at your option) any
++  later version.
++
++  This program is distributed in the hope that it will be useful, but WITHOUT
++  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
++  more details.
++
++  For more details see the file COPYING in the source distribution of Linux.
+diff --git a/Documentation/userspace-api/media/index.rst b/Documentation/userspace-api/media/index.rst
+index bcfdd1a5caa0..2c2c96a6f146 100644
+--- a/Documentation/userspace-api/media/index.rst
++++ b/Documentation/userspace-api/media/index.rst
+@@ -6,13 +6,7 @@
+ Linux Media Infrastructure userspace API
+ ########################################
+ 
+-**Copyright** |copy| 2009-2016 : LinuxTV Developers
+ 
+-Permission is granted to copy, distribute and/or modify this document
+-under the terms of the GNU Free Documentation License, Version 1.1 or
+-any later version published by the Free Software Foundation, with no
+-Invariant Sections. A copy of the license is included in the chapter
+-entitled "GNU Free Documentation License".
+ 
+ .. only:: html
+ 
+@@ -33,3 +27,13 @@ entitled "GNU Free Documentation License".
+     fdl-appendix
+ 
+     drivers/index
++
++**Copyright** |copy| 2009-2020 : LinuxTV Developers
++
++::
++
++  Permission is granted to copy, distribute and/or modify this document
++  under the terms of the GNU Free Documentation License, Version 1.1 or
++  any later version published by the Free Software Foundation, with no
++  Invariant Sections. A copy of the license is included in the chapter
++  entitled "GNU Free Documentation License".
 -- 
 2.25.2
 
