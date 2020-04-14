@@ -2,53 +2,52 @@ Return-Path: <SRS0=F69p=56=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	URIBL_SBL,URIBL_SBL_A,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEF4FC3815B
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD516C352BE
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 89656206E9
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A4D3206E9
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586854296;
-	bh=LXT+f0za3eptyCW+DPyNs7MaHrWlm8zhDxhU4H6VBWU=;
+	s=default; t=1586854298;
+	bh=o2G3asvWsLABYQWZAtTrFIi+u6SVnR8zFgKNqXemdRk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=h2NG2l7Hyg3+osJWO1rmMXN69KrPWdMiOt4+6Ap3DWRsWFITdsgwCdZSciYIM+fWL
-	 gj5UoUMxf63jw1w5THdq0HUGUK9ALMdl27koQINO8VVMUKbfPjcXoRFqVhrV/atZjT
-	 foE2Kf6uVZzzHUDZe5MUwKSmEerJjfR5gKxhRXl0=
+	b=KRTlXvIn1A499g7yub/Du+4QcCReHCn5WLleIYKpNZhl43prOC0/y+zsAgUs3mvv/
+	 jRUNSYrlTjbc0GE19vH+gFdCX6T6aKcebDEU7itohFhduCKo6KSzS9umjrzwmIJ0JR
+	 QBFMU1vKDgWsIv1VkKC62oYAHtJcskT9WXCifZ58=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437130AbgDNIvf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Apr 2020 04:51:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52242 "EHLO mail.kernel.org"
+        id S2437132AbgDNIvh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Apr 2020 04:51:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52240 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437101AbgDNIvO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Apr 2020 04:51:14 -0400
+        id S2437050AbgDNIvN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Apr 2020 04:51:13 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F2F4F20CC7;
-        Tue, 14 Apr 2020 08:51:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22BD421582;
+        Tue, 14 Apr 2020 08:51:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1586854269;
-        bh=LXT+f0za3eptyCW+DPyNs7MaHrWlm8zhDxhU4H6VBWU=;
+        bh=o2G3asvWsLABYQWZAtTrFIi+u6SVnR8zFgKNqXemdRk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LwaefZVW5GDZpnkdcRuQ9t5+pd11EEGh5AzyIPPyWUghfgJmBg+6DA/qPc8zjJDA5
-         ctjZb14lFcAUKmbmagVvOzbOQBz7c6erkL+olo2v0fRYc8qZPImTcyDOjflSF5Zk5M
-         cCFKHfnt7965jZHTQVJFvag89ROzhLajgUe/ypu8=
+        b=pfYQyZt9+qkxhV+Om/10PqNVu6gmfN+aDIooOwvi6bA+wW8J5r5HHOgITLBPVmIlt
+         vkT56cb/0MN48OXwnL8zkOQ4YkxRvacC8W5naJxikV9myPYWUZI8yeWmYWBBzrNvM+
+         Awxk0Dl/BzIiSlbn0ZiBuAJy9nt38HvtSKxVUAh0=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jOHHf-002wzV-87; Tue, 14 Apr 2020 10:51:07 +0200
+        id 1jOHHf-002wzk-D8; Tue, 14 Apr 2020 10:51:07 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 10/19] media: docs: update Digital TV faq.rst
-Date:   Tue, 14 Apr 2020 10:50:56 +0200
-Message-Id: <62e6d7814f839366e9712ee680e6e9323e52eec4.1586854191.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 13/19] media: docs: get rid of obsoleted udev documentation
+Date:   Tue, 14 Apr 2020 10:50:59 +0200
+Message-Id: <c73f1a6e87bd9b6e7c7df839a367cf81715be547.1586854191.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1586854191.git.mchehab+huawei@kernel.org>
 References: <cover.1586854191.git.mchehab+huawei@kernel.org>
@@ -59,335 +58,118 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This file contains lots of obsoleted information. Update it
-to reflect the current status and tools used by Digital TV
-users and add pointers to the current locations and to
-LinuxTV wiki pages.
+This file is very old, and doesn't match the current udev
+behavior.
+
+I wanted to preserve it, because we'll need some udev
+description some day about how to keep names unique,
+but there's nothing here to help with that...
+
+So, be it: let's just discard this document, as it doesn't
+provide anything useful anymore.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/faq.rst | 253 ++++++++++++++----------
- 1 file changed, 150 insertions(+), 103 deletions(-)
+ Documentation/admin-guide/media/bt8xx.rst |  2 -
+ Documentation/admin-guide/media/index.rst |  1 -
+ Documentation/admin-guide/media/udev.rst  | 63 -----------------------
+ 3 files changed, 66 deletions(-)
+ delete mode 100644 Documentation/admin-guide/media/udev.rst
 
-diff --git a/Documentation/admin-guide/media/faq.rst b/Documentation/admin-guide/media/faq.rst
-index 52f153d18278..b63548b6f313 100644
---- a/Documentation/admin-guide/media/faq.rst
-+++ b/Documentation/admin-guide/media/faq.rst
-@@ -5,101 +5,143 @@ FAQ
+diff --git a/Documentation/admin-guide/media/bt8xx.rst b/Documentation/admin-guide/media/bt8xx.rst
+index 707919f29c86..a55f4f5af042 100644
+--- a/Documentation/admin-guide/media/bt8xx.rst
++++ b/Documentation/admin-guide/media/bt8xx.rst
+@@ -74,8 +74,6 @@ Exceptions are:
+ - Old TwinHan DST cards or clones with or without CA slot and not
+   containing an Eeprom.
  
- .. note::
- 
--   This documentation is outdated. Please check at the DVB wiki
--   at https://linuxtv.org/wiki for more updated info.
-+     1. With Digital TV, a single physical channel may have different
-+	contents inside it. The specs call each one as a *service*.
-+	This is what a TV user would call "channel". So, in order to
-+	avoid confusion, we're calling *transponders* as the physical
-+	channel on this FAQ, and *services* for the logical channel.
-+     2. The LinuxTV community maintains some Wiki pages with contain
-+        a lot of information related to the media subsystem. If you
-+        don't find an answer for your needs here, it is likely that
-+        you'll be able to get something useful there. It is hosted
-+	at:
- 
--Some very frequently asked questions about linuxtv-dvb
-+	https://www.linuxtv.org/wiki/
-+
-+Some very frequently asked questions about Linux Digital TV support
- 
- 1. The signal seems to die a few seconds after tuning.
- 
- 	It's not a bug, it's a feature. Because the frontends have
- 	significant power requirements (and hence get very hot), they
- 	are powered down if they are unused (i.e. if the frontend device
--	is closed). The dvb-core.o module parameter "dvb_shutdown_timeout"
-+	is closed). The ``dvb-core`` module parameter ``dvb_shutdown_timeout``
- 	allow you to change the timeout (default 5 seconds). Setting the
- 	timeout to 0 disables the timeout feature.
- 
- 2. How can I watch TV?
- 
--	The driver distribution includes some simple utilities which
--	are mainly intended for testing and to demonstrate how the
--	DVB API works.
+-People running udev please see :doc:`udev`.
 -
--	Depending on whether you have a DVB-S, DVB-C or DVB-T card, use
--	apps/szap/szap, czap or tzap. You must supply a channel list
--	in ~/.[sct]zap/channels.conf. If you are lucky you can just copy
--	one of the supplied channel lists, or you can create a new one
--	by running apps/scan/scan. If you run scan on an unknown network
--	you might have to supply some start data in apps/scan/initial.h.
+ In the following cases overriding the PCI type detection for bttv and
+ for dvb-bt8xx drivers by passing modprobe parameters may be necessary.
+ 
+diff --git a/Documentation/admin-guide/media/index.rst b/Documentation/admin-guide/media/index.rst
+index 11d01d681b57..04bc259f3325 100644
+--- a/Documentation/admin-guide/media/index.rst
++++ b/Documentation/admin-guide/media/index.rst
+@@ -84,7 +84,6 @@ Linux Digital TV driver-specific documentation
+ 	opera-firmware
+ 	technisat
+ 	ttusb-dec
+-	udev
+ 	zr364xx
+ 
+ #################################
+diff --git a/Documentation/admin-guide/media/udev.rst b/Documentation/admin-guide/media/udev.rst
+deleted file mode 100644
+index ca6c9c226902..000000000000
+--- a/Documentation/admin-guide/media/udev.rst
++++ /dev/null
+@@ -1,63 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
 -
--	If you have a card with a built-in hardware MPEG-decoder the
--	drivers create a video4linux device (/dev/v4l/video0) which
--	you can use to watch TV with any v4l application. xawtv is known
--	to work. Note that you cannot change channels with xawtv, you
--	have to zap using [sct]zap. If you want a nice application for
--	TV watching and record/playback, have a look at VDR.
+-UDEV rules for DVB
+-==================
 -
--	If your card does not have a hardware MPEG decoder you need
--	a software MPEG decoder. Mplayer or xine are known to work.
--	Newsflash: MythTV also has DVB support now.
--	Note: Only very recent versions of Mplayer and xine can decode.
--	MPEG2 transport streams (TS) directly. Then, run
--	'[sct]zap channelname -r' in one xterm, and keep it running,
--	and start 'mplayer - < /dev/dvb/adapter0/dvr0' or
--	'xine stdin://mpeg2 < /dev/dvb/adapter0/dvr0' in a second xterm.
--	That's all far from perfect, but it seems no one has written
--	a nice DVB application which includes a builtin software MPEG
--	decoder yet.
+-.. note::
 -
--	Newsflash: Newest xine directly supports DVB. Just copy your
--	channels.conf to ~/.xine and start 'xine dvb://', or select
--	the DVB button in the xine GUI. Channel switching works using the
--	numpad pgup/pgdown (NP9 / NP3) keys to scroll through the channel osd
--	menu and pressing numpad-enter to switch to the selected channel.
+-   #) This documentation is outdated. Udev on modern distributions auto-detect
+-      the DVB devices.
 -
--	Note: Older versions of xine and mplayer understand MPEG program
--	streams (PS) only, and can be used in conjunction with the
--	ts2ps tool from the Metzler Brother's dvb-mpegtools package.
+-   #) **TODO:** change this document to explain how to make DVB devices
+-      persistent, as, when a machine has multiple devices, they may be detected
+-      on different orders, which could cause apps that relies on the device
+-      numbers to fail.
 -
--3. Which other DVB applications exist?
+-The DVB subsystem currently registers to the sysfs subsystem using the
+-"class_simple" interface.
 -
--	http://www.cadsoft.de/people/kls/vdr/
-+	Together with the Linux Kernel, the Digital TV developers support
-+	some simple utilities which are mainly intended for testing
-+	and to demonstrate how the DVB API works. This is called DVB v5
-+	tools and are grouped together with the ``v4l-utils`` git repository:
-+
-+	    https://git.linuxtv.org/v4l-utils.git/
-+
-+	You can find more information at the LinuxTV wiki:
-+
-+	    https://www.linuxtv.org/wiki/index.php/DVBv5_Tools
-+
-+	The first step is to get a list of services that are transmitted.
-+
-+	This is done by using several existing tools. You can use
-+	for example the ``dvbv5-scan`` tool. You can find more information
-+	about it at:
-+
-+	    https://www.linuxtv.org/wiki/index.php/Dvbv5-scan
-+
-+	There are some other applications like ``w_scan`` [#]_ that do a
-+	blind scan, trying hard to find all possible channels, but
-+	those consumes a large amount of time to run.
-+
-+	.. [#] https://www.linuxtv.org/wiki/index.php/W_scan
-+
-+	Also, some applications like ``kaffeine`` have their own code
-+	to scan for services. So, you don't need to use an external
-+	application to obtain such list.
-+
-+	Most of such tools need a file containing a list of channel
-+	transponders available on your area. So, LinuxTV developers
-+	maintain tables of Digital TV channel transponders, receiving
-+	patches from the community to keep them updated.
-+
-+	This list is hosted at:
-+
-+	    https://git.linuxtv.org/dtv-scan-tables.git
-+
-+	And packaged on several distributions.
-+
-+	Kaffeine has some blind scan support for some terrestrial standards.
-+	It also relies on DTV scan tables, although it contains a copy
-+	of it internally (and, if requested by the user, it will download
-+	newer versions of it).
-+
-+	If you are lucky you can just use one of the supplied channel
-+	transponders. If not, you may need to seek for such info at
-+	the Internet and create a new file. There are several sites with
-+	contains physical channel lists. For cable and satellite, usually
-+	knowing how to tune into a single channel is enough for the
-+	scanning tool to identify the other channels. On some places,
-+	this could also work for terrestrial transmissions.
-+
-+	Once you have a transponders list, you need to generate a services
-+	list with a tool like ``dvbv5-scan``.
-+
-+	Almost all modern Digital TV cards don't have built-in hardware
-+	MPEG-decoders. So, it is up to the application to get a MPEG-TS
-+	stream provided by the board, split it into audio, video and other
-+	data and decode.
-+
-+3. Which Digital TV applications exist?
-+
-+	Several media player applications are capable of tuning into
-+	digital TV channels, including Kaffeine, Vlc, mplayer and MythTV.
-+
-+	Kaffeine aims to be very user-friendly, and it is maintained
-+	by one of the Kernel driver developers.
-+
-+	A comprehensive list of those and other apps can be found at:
-+
-+	    https://www.linuxtv.org/wiki/index.php/TV_Related_Software
-+
-+	Some of the most popular ones are linked below:
-+
-+	https://kde.org/applications/multimedia/org.kde.kaffeine
-+		KDE media player, focused on Digital TV support
-+
-+	https://www.linuxtv.org/vdrwiki/index.php/Main_Page
- 		Klaus Schmidinger's Video Disk Recorder
- 
--	http://www.metzlerbros.org/dvb/
--		Metzler Bros. DVB development; alternate drivers and
--		DVB utilities, include dvb-mpegtools and tuxzap.
-+	https://linuxtv.org/downloads and https://git.linuxtv.org/
-+		Digital TV and other media-related applications and
-+		Kernel drivers. The ``v4l-utils`` package there contains
-+		several swiss knife tools for using with Digital TV.
- 
- 	http://sourceforge.net/projects/dvbtools/
- 		Dave Chapman's dvbtools package, including
- 		dvbstream and dvbtune
- 
--	http://www.linuxdvb.tv/
--		Henning Holtschneider's site with many interesting
--		links and docs
+-This means that only the basic information like module loading parameters
+-are presented through sysfs. Other things that might be interesting are
+-currently **not** available.
 -
- 	http://www.dbox2.info/
- 		LinuxDVB on the dBox2
- 
--	http://www.tuxbox.org/ and http://cvs.tuxbox.org/
-+	http://www.tuxbox.org/
- 		the TuxBox CVS many interesting DVB applications and the dBox2
- 		DVB source
- 
--	https://linuxtv.org/downloads
--		DVB Swiss Army Knife library and utilities
+-Nevertheless it's now possible to add proper udev rules so that the
+-DVB device nodes are created automatically.
 -
- 	http://www.nenie.org/misc/mpsys/
- 		MPSYS: a MPEG2 system library and tools
- 
-+	https://www.videolan.org/vlc/index.pt.html
-+		Vlc
-+
- 	http://mplayerhq.hu/
--		mplayer
-+		MPlayer
- 
- 	http://xine.sourceforge.net/ and http://xinehq.de/
--		xine
-+		Xine
- 
- 	http://www.mythtv.org/
--		MythTV - analog TV PVR, but now with DVB support, too
--		(with software MPEG decode)
-+		MythTV - analog TV and digital TV PVR
- 
- 	http://dvbsnoop.sourceforge.net/
- 		DVB sniffer program to monitor, analyze, debug, dump
-@@ -108,62 +150,67 @@ Some very frequently asked questions about linuxtv-dvb
- 
- 4. Can't get a signal tuned correctly
- 
--	If you are using a Technotrend/Hauppauge DVB-C card *without* analog
--	module, you might have to use module parameter adac=-1 (dvb-ttpci.o).
-+	That could be due to a lot of problems. On my personal experience,
-+	usually TV cards need stronger signals than TV sets, and are more
-+	sensitive to noise. So, perhaps you just need a better antenna or
-+	cabling. Yet, it could also be some hardware or driver issue.
-+
-+	For example, if you are using a Technotrend/Hauppauge DVB-C card
-+	*without* analog module, you might have to use module parameter
-+	adac=-1 (dvb-ttpci.o).
-+
-+	Please see the FAQ page at linuxtv.org, as it could contain some
-+	valuable information:
-+
-+	    https://www.linuxtv.org/wiki/index.php/FAQ_%26_Troubleshooting
-+
-+	If that doesn't work, check at the linux-media ML archives, to
-+	see if someone else had a similar problem with your hardware
-+	and/or digital TV service provider:
-+
-+	    https://lore.kernel.org/linux-media/
-+
-+	If none of this works, you can try sending an e-mail to the
-+	linux-media ML and see if someone else could shed some light.
-+	The e-mail is linux-media AT vger.kernel.org.
- 
- 5. The dvb_net device doesn't give me any packets at all
- 
--	Run tcpdump on the dvb0_0 interface. This sets the interface
-+	Run ``tcpdump`` on the ``dvb0_0`` interface. This sets the interface
- 	into promiscuous mode so it accepts any packets from the PID
--	you have configured with the dvbnet utility. Check if there
-+	you have configured with the ``dvbnet`` utility. Check if there
- 	are any packets with the IP addr and MAC addr you have
--	configured with ifconfig.
-+	configured with ``ifconfig`` or with ``ip addr``.
- 
--	If tcpdump doesn't give you any output, check the statistics
--	which ifconfig outputs. (Note: If the MAC address is wrong,
--	dvb_net won't get any input; thus you have to run tcpdump
--	before checking the statistics.) If there are no packets at
--	all then maybe the PID is wrong. If there are error packets,
-+	If ``tcpdump`` doesn't give you any output, check the statistics
-+	which ``ifconfig`` or ``netstat -ni`` outputs. (Note: If the MAC
-+	address is wrong, ``dvb_net`` won't get any input; thus you have to
-+	run ``tcpdump`` before checking the statistics.) If there are no
-+	packets at all then maybe the PID is wrong. If there are error packets,
- 	then either the PID is wrong or the stream does not conform to
- 	the MPE standard (EN 301 192, http://www.etsi.org/). You can
--	use e.g. dvbsnoop for debugging.
-+	use e.g. ``dvbsnoop`` for debugging.
- 
--6. The dvb_net device doesn't give me any multicast packets
-+6. The ``dvb_net`` device doesn't give me any multicast packets
- 
- 	Check your routes if they include the multicast address range.
- 	Additionally make sure that "source validation by reversed path
--	lookup" is disabled:
+-We assume that you have udev already up and running and that have been
+-creating the DVB device nodes manually up to now due to the missing sysfs
+-support.
+-
+-0. Don't forget to disable your current method of creating the
+-device nodes manually.
+-
+-1. Unfortunately, you'll need a helper script to transform the kernel
+-sysfs device name into the well known dvb adapter / device naming scheme.
+-The script should be called "dvb.sh" and should be placed into a script
+-dir where udev can execute it, most likely /etc/udev/scripts/
+-
+-So, create a new file /etc/udev/scripts/dvb.sh and add the following:
 -
 -.. code-block:: none
-+	lookup" is disabled::
- 
- 	  $ "echo 0 > /proc/sys/net/ipv4/conf/dvb0/rp_filter"
- 
--7. What the hell are all those modules that need to be loaded?
-+7. What are all those modules that need to be loaded?
- 
--	For a dvb-ttpci av7110 based full-featured card the following
--	modules are loaded:
-+	In order to make it more flexible and support different hardware
-+	combinations, the media subsystem is written on a modular way.
- 
--	- videodev: Video4Linux core module. This is the base module that
--	  gives you access to the "analog" tv picture of the av7110 mpeg2
--	  decoder.
 -
--	- v4l2-common: common functions for Video4Linux-2 drivers
+-	#!/bin/sh
+-	/bin/echo $1 | /bin/sed -e 's,dvb\([0-9]\)\.\([^0-9]*\)\([0-9]\),dvb/adapter\1/\2\3,'
 -
--	- v4l1-compat: backward compatibility layer for Video4Linux-1 legacy
--	  applications
+-Don't forget to make the script executable with "chmod".
 -
--	- dvb-core: DVB core module. This provides you with the
--	  /dev/dvb/adapter entries
+-1. You need to create a proper udev rule that will create the device nodes
+-like you know them. All real distributions out there scan the /etc/udev/rules.d
+-directory for rule files. The main udev configuration file /etc/udev/udev.conf
+-will tell you the directory where the rules are, most likely it's /etc/udev/rules.d/
 -
--	- saa7146: SAA7146 core driver. This is need to access any SAA7146
--	  based card in your system.
+-Create a new rule file in that directory called "dvb.rule" and add the following line:
 -
--	- saa7146_vv: SAA7146 video and vbi functions. These are only needed
--	  for full-featured cards.
+-.. code-block:: none
 -
--	- videobuf-dma-sg: capture helper module for the saa7146_vv driver. This
--	  one is responsible to handle capture buffers.
+-	KERNEL="dvb*", PROGRAM="/etc/udev/scripts/dvb.sh %k", NAME="%c"
 -
--	- dvb-ttpci: The main driver for AV7110 based, full-featured
--	  DVB-S/C/T cards
-+	So, besides the Digital TV hardware module for the main chipset,
-+	it also needs to load a frontend driver, plus the Digital TV
-+	core. If the board also has remote controller, it will also
-+	need the remote controller core and the remote controller tables.
-+	The same happens if the board has support for analog TV: the
-+	core support for video4linux need to be loaded.
- 
-+	The actual module names are Linux-kernel version specific, as,
-+	from time to time, things change, in order to make the media
-+	support more flexible.
+-If you want more control over the device nodes (for example a special group membership)
+-have a look at "man udev".
+-
+-For every device that registers to the sysfs subsystem with a "dvb" prefix,
+-the helper script /etc/udev/scripts/dvb.sh is invoked, which will then
+-create the proper device node in your /dev/ directory.
 -- 
 2.25.2
 
