@@ -2,52 +2,52 @@ Return-Path: <SRS0=F69p=56=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62F36C2BB85
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D34EC2BA19
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3A85B2072D
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16EEE206E9
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586854281;
-	bh=WHC1EpFDxxTFXqV9Jv3iaMZBpBg6/HUx2mejUHyHxVI=;
+	s=default; t=1586854283;
+	bh=9Jh/pu02OHsj7midUde5xAfquT9YOkHW4TJYEZPvygg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TroG8y0YWbbOBQ0uX5TE/ApJ5QpWMb3O7oWrv8lin5gS3jIFjD/YxRDr0CcZAE4bV
-	 nY82pOVEbaaPWWuHni6mzPO0AaNp0tOP1Jn8s8s9K58KB9W38LO/DksWFSj/jrh7IX
-	 qbNQtDYsZXgs7X17oF22QDBujvtirsNvRE8IL858=
+	b=pTN82s/zNAO5M9o3wZqHkmr5w9B0a9ImHY26ACGTNOil/BcE6YXhd9LRmmHFBUjOx
+	 VCFLl3h8zzKsiK2HF5ySUPqw4ygso5BfzejJXQnI2xAiRPrGKJjCB7KMYFn5JiJU7G
+	 XNi2HdN2R14tl4KCTRf8bvx/9zr6iRDlsP/Ytpes=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437117AbgDNIvT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Apr 2020 04:51:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52236 "EHLO mail.kernel.org"
+        id S2437074AbgDNIvV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Apr 2020 04:51:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52228 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437074AbgDNIvM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1729427AbgDNIvM (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 14 Apr 2020 04:51:12 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0A33C2137B;
-        Tue, 14 Apr 2020 08:51:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CCF0A20857;
+        Tue, 14 Apr 2020 08:51:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1586854269;
-        bh=WHC1EpFDxxTFXqV9Jv3iaMZBpBg6/HUx2mejUHyHxVI=;
+        bh=9Jh/pu02OHsj7midUde5xAfquT9YOkHW4TJYEZPvygg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KVRrY3Mti/3gLKfNugPXh4ZANDxmI0DuQXrIX1zyR2Zs3+e2Qrt6RyDt+77cnvy9p
-         Fg4q/F4+a8amF/dHxgh8AW3mD4aF+PUCZgabDBTjPltfUULHa7b/mj5FrohN5uVVay
-         WNHx5JWuZQFrCfMqLd6p3L5sZaK7jMfvYVZ64X0E=
+        b=tA1t/G4CcNV3D1ctEMuGy4Uhre+qLJiqGtFVYxvLpREd0E+YTitfUjBRdiusu1C+y
+         CM9mQi10WSZHC5yh5FYFvLlnmsnwFDuqZ+SiMCNvTRwSlbniBBQdLl9sq6/VQjJDbB
+         czbktTEaUvRMzi150T+6FjpPA2NcqZAs3Gn0e228=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jOHHf-002wza-9f; Tue, 14 Apr 2020 10:51:07 +0200
+        id 1jOHHf-002wzB-1T; Tue, 14 Apr 2020 10:51:07 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 11/19] media: docs: saa7134.rst: update the documentation
-Date:   Tue, 14 Apr 2020 10:50:57 +0200
-Message-Id: <f2b4774a68e02a363ef94852c085d580642246ab.1586854191.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 06/19] media: docs: bt8xx.rst: update document info
+Date:   Tue, 14 Apr 2020 10:50:52 +0200
+Message-Id: <2c741c0e31b5f9931073f4cde8cacf718ad30325.1586854191.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1586854191.git.mchehab+huawei@kernel.org>
 References: <cover.1586854191.git.mchehab+huawei@kernel.org>
@@ -58,43 +58,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are several things here that are outdated, because this
-document was written a long time ago.
+This document is very outdated, and doesn't match the
+upstream current way.
 
-Update them to reflect the current status of the driver and
-the media subsystem.
+Update it, making some parts a little bit more generic.
+While the main focus of this document is digital TV
+cards, its content also may also help someone with just
+analog TV support.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/saa7134.rst | 57 +++++++++++++++------
- 1 file changed, 42 insertions(+), 15 deletions(-)
+ Documentation/admin-guide/media/bt8xx.rst | 136 ++++++++++++++--------
+ 1 file changed, 85 insertions(+), 51 deletions(-)
 
-diff --git a/Documentation/admin-guide/media/saa7134.rst b/Documentation/admin-guide/media/saa7134.rst
-index c84246dd81c0..7ab9c70b9abe 100644
---- a/Documentation/admin-guide/media/saa7134.rst
-+++ b/Documentation/admin-guide/media/saa7134.rst
-@@ -7,8 +7,7 @@ Author Gerd Hoffmann
+diff --git a/Documentation/admin-guide/media/bt8xx.rst b/Documentation/admin-guide/media/bt8xx.rst
+index d800f7791ada..707919f29c86 100644
+--- a/Documentation/admin-guide/media/bt8xx.rst
++++ b/Documentation/admin-guide/media/bt8xx.rst
+@@ -1,67 +1,95 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
++==================================
+ How to get the bt8xx cards working
+ ==================================
  
- This is a v4l2/oss device driver for saa7130/33/34/35 based capture / TV
--boards.  See http://www.semiconductors.philips.com/pip/saa7134hl for a
--description.
-+boards.
+-Authors: Richard Walker,
++Authors:
++	 Richard Walker,
+ 	 Jamie Honan,
+ 	 Michael Hunold,
+ 	 Manu Abraham,
+ 	 Uwe Bugla,
+ 	 Michael Krufky
  
+-.. note::
+-
+-   This documentation is outdated. Please check at the DVB wiki
+-   at https://linuxtv.org/wiki for more updated info.
+-
+ General information
+ -------------------
  
- Status
-@@ -24,26 +23,54 @@ configuration info.
- Build
- -----
+ This class of cards has a bt878a as the PCI interface, and require the bttv driver
+ for accessing the i2c bus and the gpio pins of the bt8xx chipset.
+-Please see Documentation/admin-guide/media/cards.rst => o Cards based on the Conexant Bt8xx PCI bridge:
  
--Pick up videodev + v4l2 patches from http://bytesex.org/patches/.
--Configure, build, install + boot the new kernel.  You'll need at least
--these config options:
-+Once you pick up a Kernel source, you should configure, build,
-+install and boot the new kernel.  You'll need at least
-+these config options::
+-Compiling kernel please enable:
++Please see :doc:`cards` for a complete list of Cards based on the
++Conexant Bt8xx PCI bridge supported by the Linux Kernel.
  
--.. code-block:: none
+-#) ``Device drivers`` => ``Multimedia devices`` => ``Video For Linux`` => ``Enable Video for Linux API 1 (DEPRECATED)``
+-#) ``Device drivers`` => ``Multimedia devices`` => ``Video For Linux`` => ``Video Capture Adapters`` => ``BT848 Video For Linux``
+-#) ``Device drivers`` => ``Multimedia devices`` => ``Digital Video Broadcasting Devices`` => ``DVB for Linux`` ``DVB Core Support`` ``Bt8xx based PCI Cards``
++In order to be able to compile the kernel, some config options should be
++enabled::
+ 
+-  Please use the following options with care as deselection of drivers which are in fact necessary may result in DVB devices that cannot be tuned due to lack of driver support:
+-  You can save RAM by deselecting every frontend module that your DVB card does not need.
 +    ./scripts/config -e PCI
 +    ./scripts/config -e INPUT
 +    ./scripts/config -m I2C
@@ -104,61 +124,166 @@ index c84246dd81c0..7ab9c70b9abe 100644
 +    ./scripts/config -e MEDIA_DIGITAL_TV_SUPPORT
 +    ./scripts/config -e MEDIA_RADIO_SUPPORT
 +    ./scripts/config -e RC_CORE
++    ./scripts/config -m VIDEO_BT848
++    ./scripts/config -m DVB_BT8XX
+ 
+-  First please remove the static dependency of DVB card drivers on all frontend modules for all possible card variants by enabling:
++If you want to automatically support all possible variants of the Bt8xx
++cards, you should also do::
+ 
+-#) ``Device drivers`` => ``Multimedia devices`` => ``Digital Video Broadcasting Devices`` => ``DVB for Linux`` ``DVB Core Support`` ``Load and attach frontend modules as needed``
 +    ./scripts/config -e MEDIA_SUBDRV_AUTOSELECT
-+    ./scripts/config -m VIDEO_SAA7134
-+    ./scripts/config -e SAA7134_ALSA
-+    ./scripts/config -e VIDEO_SAA7134_RC
-+    ./scripts/config -e VIDEO_SAA7134_DVB
-+    ./scripts/config -e VIDEO_SAA7134_GO7007
  
--	CONFIG_I2C=m
--	CONFIG_VIDEO_DEV=m
-+To build and install, you should run::
+-  If you know the frontend driver that your card needs please enable:
++.. note::
  
--Type "make" to build the driver now.  "make install" installs the
--driver.  "modprobe saa7134" should load it.  Depending on the card you
--might have to pass card=<nr> as insmod option, check CARDLIST for
--valid choices.
-+    make && make modules_install && make install
+-#) ``Device drivers`` => ``Multimedia devices`` => ``Digital Video Broadcasting Devices`` => ``DVB for Linux`` ``DVB Core Support`` ``Customise DVB Frontends`` => ``Customise the frontend modules to build``
++   Please use the following options with care as deselection of drivers which
++   are in fact necessary may result in DVB devices that cannot be tuned due
++   to lack of driver support.
 +
-+Once the new Kernel is booted, saa7134 driver should be loaded automatically.
++If your goal is to just support an specific board, you may, instead,
++disable MEDIA_SUBDRV_AUTOSELECT and manually select the frontend drivers
++required by your board. With that, you can save some RAM.
 +
-+Depending on the card you might have to pass ``card=<nr>`` as insmod option.
-+If so, please check :doc:`saa7134-cardlist` for valid choices.
++You can do that by calling make xconfig/qconfig/menuconfig and look at
++the options on those menu options (only enabled if
++``Autoselect ancillary drivers`` is disabled:
 +
-+Once you have your card type number, you can pass a modules configuration
-+via a file (usually, it is either ``/etc/modules.conf`` or some file at
-+``/etc/modules-load.d/``, but the actual place depends on your
-+distribution), with this content::
++#) ``Device drivers`` => ``Multimedia support`` => ``Customize TV tuners``
++#) ``Device drivers`` => ``Multimedia support`` => ``Customize DVB frontends``
 +
-+    options saa7134 card=13 # Assuming that your card type is #13
++Then, on each of the above menu, please select your card-specific
++frontend and tuner modules.
  
+- Then please select your card-specific frontend module.
  
- Changes / Fixes
+ Loading Modules
  ---------------
  
--Please mail me unified diffs ("diff -u") with your changes, and don't
--forget to tell me what it changes / which problem it fixes / whatever
-+Please mail to linux-media AT vger.kernel.org unified diffs against
-+the linux media git tree:
+-Regular case: If the bttv driver detects a bt8xx-based DVB card, all frontend and backend modules will be loaded automatically.
++Regular case: If the bttv driver detects a bt8xx-based DVB card, all
++frontend and backend modules will be loaded automatically.
 +
-+    https://git.linuxtv.org/media_tree.git/
+ Exceptions are:
+-- Old TwinHan DST cards or clones with or without CA slot and not containing an Eeprom.
+-People running udev please see Documentation/admin-guide/media/udev.rst.
+ 
+-In the following cases overriding the PCI type detection for dvb-bt8xx might be necessary:
++- Old TV cards without EEPROMs, sharing a common PCI ID;
++- Old TwinHan DST cards or clones with or without CA slot and not
++  containing an Eeprom.
 +
-+This is done by committing a patch at a clone of the git tree and
-+submitting the patch using ``git send-email``. Don't forget to
-+describe at the lots  what it changes / which problem it fixes / whatever
- it is good for ...
++People running udev please see :doc:`udev`.
++
++In the following cases overriding the PCI type detection for bttv and
++for dvb-bt8xx drivers by passing modprobe parameters may be necessary.
  
+ Running TwinHan and Clones
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~
  
-@@ -52,7 +79,7 @@ Known Problems
+-.. code-block:: none
++As shown at :doc:`bttv-cardlist`, TwinHan and
++clones use ``card=113`` modprobe parameter. So, in order to properly
++detect it for devices without EEPROM, you should use::
  
- * The tuner for the flyvideos isn't detected automatically and the
-   default might not work for you depending on which version you have.
--  There is a tuner= insmod option to override the driver's default.
-+  There is a ``tuner=`` insmod option to override the driver's default.
+ 	$ modprobe bttv card=113
+ 	$ modprobe dst
  
- Credits
- -------
+-Useful parameters for verbosity level and debugging the dst module:
+-
+-.. code-block:: none
++Useful parameters for verbosity level and debugging the dst module::
+ 
+ 	verbose=0:		messages are disabled
+ 		1:		only error messages are displayed
+@@ -70,55 +98,61 @@ Useful parameters for verbosity level and debugging the dst module:
+ 		4:		debug setting
+ 	dst_addons=0:		card is a free to air (FTA) card only
+ 		0x20:	card has a conditional access slot for scrambled channels
++	dst_algo=0:		(default) Software tuning algorithm
++	         1:		Hardware tuning algorithm
++
+ 
+ The autodetected values are determined by the cards' "response string".
++
+ In your logs see f. ex.: dst_get_device_id: Recognize [DSTMCI].
++
+ For bug reports please send in a complete log with verbose=4 activated.
+-Please also see Documentation/admin-guide/media/ci.rst.
++Please also see :doc:`ci`.
+ 
+ Running multiple cards
+ ~~~~~~~~~~~~~~~~~~~~~~
+ 
+-Examples of card ID's:
++See :doc:`bttv-cardlist` for a complete list of
++Card ID. Some examples:
+ 
+-.. code-block:: none
+-
+-	Pinnacle PCTV Sat:		 94
+-	Nebula Electronics Digi TV:	104
+-	pcHDTV HD-2000 TV:		112
+-	Twinhan DST and clones:		113
+-	Avermedia AverTV DVB-T 771:	123
+-	Avermedia AverTV DVB-T 761:	124
+-	DViCO FusionHDTV DVB-T Lite:	128
+-	DViCO FusionHDTV 5 Lite:	135
++	===========================	===
++	Brand name			ID
++	===========================	===
++	Pinnacle PCTV Sat		 94
++	Nebula Electronics Digi TV	104
++	pcHDTV HD-2000 TV		112
++	Twinhan DST and clones		113
++	Avermedia AverTV DVB-T 77:	123
++	Avermedia AverTV DVB-T 761	124
++	DViCO FusionHDTV DVB-T Lite	128
++	DViCO FusionHDTV 5 Lite		135
++	===========================	===
+ 
+ .. note::
+ 
+-   The order of the card ID should be uprising:
++   When you have multiple cards, the order of the card ID should
++   match the order where they're detected by the system. Please notice
++   that removing/inserting other PCI cards may change the detection
++   order.
+ 
+-   Example:
+-
+-   .. code-block:: none
++Example::
+ 
+ 	$ modprobe bttv card=113 card=135
+ 
+-For a full list of card ID's please see Documentation/admin-guide/media/bttv-cardlist.rst.
+-In case of further problems please subscribe and send questions to the mailing list: linux-dvb@linuxtv.org.
++In case of further problems please subscribe and send questions to
++the mailing list: linux-media@vger.kernel.org.
+ 
+ Probing the cards with broken PCI subsystem ID
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-There are some TwinHan cards that the EEPROM has become corrupted for some
+-reason. The cards do not have correct PCI subsystem ID. But we can force
+-probing the cards with broken PCI subsystem ID
+-
+-.. code-block:: none
++There are some TwinHan cards whose EEPROM has become corrupted for some
++reason. The cards do not have a correct PCI subsystem ID.
++Still, it is possible to force probing the cards with::
+ 
+ 	$ echo 109e 0878 $subvendor $subdevice > \
+ 		/sys/bus/pci/drivers/bt878/new_id
+ 
+-.. code-block:: none
++The two numbers there are::
+ 
+ 	109e: PCI_VENDOR_ID_BROOKTREE
+ 	0878: PCI_DEVICE_ID_BROOKTREE_878
+-
 -- 
 2.25.2
 
