@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84BC9C38A29
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2626FC2BA19
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62C7E2074D
-	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 002B5206E9
+	for <linux-media@archiver.kernel.org>; Tue, 14 Apr 2020 08:51:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586854289;
-	bh=yhXlg/zcc8kf336uIZ3JMI5px5bMxGaDX7kr2NCVb6k=;
+	s=default; t=1586854291;
+	bh=/ifeaDL4BrNJknQlHPAW9qNRsoNoUa9p55HHjDYHVCI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=CIcU8l2URhyTgtvanZwWW++FxAFLwOCndNPaWhy9djBFaGcVvQiTAbgUiBWAZU8HG
-	 jrxUNiHweuOXTrntmkES/bojTR6RK9HxTPiCTK0l+2IQC7OyB3E+7U9r8A4AkN6NQS
-	 TV0+QRM7G5/e5LajtRTOugiWEIZgcJt0iBmLCe98=
+	b=Qi1hcqPWtZGPntSovSk1fHrZtkNgmndeRxntxo1il0zTg66XY/eO0mcPR3G57AWi2
+	 5jFVocWY3mhUH1ub4ZaYk1EBS4CUkhpGVrl6AGPy//zUYBwdLO/IL91proVxIVi/Ht
+	 Z7BdcQQJFJMiVFrW/slJBUhfi9l3tuvuMlMqoqAE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437126AbgDNIv2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Apr 2020 04:51:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52312 "EHLO mail.kernel.org"
+        id S2437122AbgDNIv1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Apr 2020 04:51:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52238 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437108AbgDNIvQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Apr 2020 04:51:16 -0400
+        id S2437109AbgDNIvR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Apr 2020 04:51:17 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F29521707;
+        by mail.kernel.org (Postfix) with ESMTPSA id 64DE021835;
         Tue, 14 Apr 2020 08:51:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1586854269;
-        bh=yhXlg/zcc8kf336uIZ3JMI5px5bMxGaDX7kr2NCVb6k=;
+        bh=/ifeaDL4BrNJknQlHPAW9qNRsoNoUa9p55HHjDYHVCI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xlCXvsO8jvAIfWL2oWveg2wB+7MVxhNr2qiKxGOD+H7/qXEnLoNukvY8pojsx0oOF
-         /aBFa5WKdm45E7gTf03kBl96AOPK2uM3iJ8WRXiNhbh3uxvMZkuH01NMJEHBHrjfqW
-         UnKJXsJa1JmGOIOyEwHupsQnRTUsZnSU6OS3wUd4=
+        b=Z7PfZSgcaCQAHv/qK3qVgRu0yKS92Ny5Q0WMn7hBVsGs2LpkW5xAUR0SkWQw959jV
+         adWo9h8aOLu/RybOsNWy5FJMLp/JGNaFqn/JmwaaLYZAKM454pMl3ZinW2hkN9qFl9
+         Rk9I61Lh7pqzGurbRQJ+UfElxgScEShdWWBBA1So=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jOHHf-002x04-J8; Tue, 14 Apr 2020 10:51:07 +0200
+        id 1jOHHf-002x0E-M0; Tue, 14 Apr 2020 10:51:07 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 17/19] media: docs: move copyrights to the end and update them
-Date:   Tue, 14 Apr 2020 10:51:03 +0200
-Message-Id: <09b08462b0bae0ac2c814ff554505d51a30d08f6.1586854191.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 19/19] media: docs: add cros-references to the other media guides
+Date:   Tue, 14 Apr 2020 10:51:05 +0200
+Message-Id: <47cda41623dbb81d65fc22be92266df3efc1c328.1586854191.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1586854191.git.mchehab+huawei@kernel.org>
 References: <cover.1586854191.git.mchehab+huawei@kernel.org>
@@ -58,138 +58,85 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The copyright info is not the most valuable information
-there. Move them to the end.
-
-While here, change the copyright to cover up to this
-year (2020).
+In order to make easier for people to navigate between the
+three media guides, add cross-references between them
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/index.rst   | 25 +++++++++++++-------
- Documentation/driver-api/media/index.rst    | 26 +++++++++++++--------
- Documentation/userspace-api/media/index.rst | 16 ++++++++-----
- 3 files changed, 42 insertions(+), 25 deletions(-)
+ Documentation/admin-guide/media/index.rst   | 12 ++++++++++++
+ Documentation/driver-api/media/index.rst    |  8 ++++++++
+ Documentation/userspace-api/media/index.rst | 11 +++++++++++
+ 3 files changed, 31 insertions(+)
 
 diff --git a/Documentation/admin-guide/media/index.rst b/Documentation/admin-guide/media/index.rst
-index 04bc259f3325..eb1d82dffcc9 100644
+index eb1d82dffcc9..6e5e6bdb6d4b 100644
 --- a/Documentation/admin-guide/media/index.rst
 +++ b/Documentation/admin-guide/media/index.rst
-@@ -2,18 +2,9 @@
+@@ -2,9 +2,21 @@
  
  .. include:: <isonum.txt>
  
--**Copyright** |copy| 1999-2020 : LinuxTV Developers
++============================
++Media subsystem usage guides
++============================
  
--This documentation is free software; you can redistribute it and/or modify it
--under the terms of the GNU General Public License as published by the Free
--Software Foundation version 2 of the License.
++This section contains usage information about media subsystem and
++its supported drivers.
  
--This program is distributed in the hope that it will be useful, but WITHOUT
--ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
--FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
--more details.
++Please see:
  
--For more details see the file COPYING in the source distribution of Linux.
++- :doc:`/userspace-api/media/index`
++     for the userspace APIs used on media devices.
++
++- :doc:`/driver-api/media/index`
++     for driver development information and Kernel APIs used by
++     media devices;
  
  .. _uapi-v4l-drivers:
  
-@@ -101,3 +92,19 @@ CEC driver-specific documentation
- 	:numbered:
- 
- 	pulse8-cec
-+
-+**Copyright** |copy| 1999-2020 : LinuxTV Developers
-+
-+::
-+
-+  This documentation is free software; you can redistribute it and/or modify it
-+  under the terms of the GNU General Public License as published by the Free
-+  Software Foundation; either version 2 of the License, or (at your option) any
-+  later version.
-+
-+  This program is distributed in the hope that it will be useful, but WITHOUT
-+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-+  more details.
-+
-+  For more details see the file COPYING in the source distribution of Linux.
 diff --git a/Documentation/driver-api/media/index.rst b/Documentation/driver-api/media/index.rst
-index 57383df79bd3..5e9f67f34081 100644
+index 5e9f67f34081..328350924853 100644
 --- a/Documentation/driver-api/media/index.rst
 +++ b/Documentation/driver-api/media/index.rst
-@@ -6,19 +6,9 @@
+@@ -6,8 +6,16 @@
  Media subsystem kernel internal API
  ===================================
  
--**Copyright** |copy| 2009-2016 : LinuxTV Developers
++This section contains usage information about media subsystem and
++its supported drivers.
  
--This documentation is free software; you can redistribute it and/or modify it
--under the terms of the GNU General Public License as published by the Free
--Software Foundation; either version 2 of the License, or (at your option) any
--later version.
++Please see:
  
--This program is distributed in the hope that it will be useful, but WITHOUT
--ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
--FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
--more details.
++- :doc:`/admin-guide/media/index`
++    for usage information about media subsystem and supported drivers;
++
++- :doc:`/userspace-api/media/index`
++     for the userspace APIs used on media devices.
  
--For more details see the file COPYING in the source distribution of Linux.
  
  .. only:: html
- 
-@@ -38,3 +28,19 @@ For more details see the file COPYING in the source distribution of Linux.
-     csi2
- 
-     drivers/index
-+
-+**Copyright** |copy| 2009-2020 : LinuxTV Developers
-+
-+::
-+
-+  This documentation is free software; you can redistribute it and/or modify it
-+  under the terms of the GNU General Public License as published by the Free
-+  Software Foundation; either version 2 of the License, or (at your option) any
-+  later version.
-+
-+  This program is distributed in the hope that it will be useful, but WITHOUT
-+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-+  more details.
-+
-+  For more details see the file COPYING in the source distribution of Linux.
 diff --git a/Documentation/userspace-api/media/index.rst b/Documentation/userspace-api/media/index.rst
-index bcfdd1a5caa0..2c2c96a6f146 100644
+index b20010f414b3..70a3f3d73698 100644
 --- a/Documentation/userspace-api/media/index.rst
 +++ b/Documentation/userspace-api/media/index.rst
-@@ -6,13 +6,7 @@
+@@ -6,6 +6,17 @@
  Linux Media Infrastructure userspace API
  ########################################
  
--**Copyright** |copy| 2009-2016 : LinuxTV Developers
++This section contains the  driver development information and Kernel APIs
++used by media devices.
++
++Please see:
++
++- :doc:`/admin-guide/media/index`
++    for usage information about media subsystem and supported drivers;
++
++- :doc:`/driver-api/media/index`
++     for driver development information and Kernel APIs used by
++     media devices;
  
--Permission is granted to copy, distribute and/or modify this document
--under the terms of the GNU Free Documentation License, Version 1.1 or
--any later version published by the Free Software Foundation, with no
--Invariant Sections. A copy of the license is included in the chapter
--entitled "GNU Free Documentation License".
  
  .. only:: html
- 
-@@ -33,3 +27,13 @@ entitled "GNU Free Documentation License".
-     fdl-appendix
- 
-     drivers/index
-+
-+**Copyright** |copy| 2009-2020 : LinuxTV Developers
-+
-+::
-+
-+  Permission is granted to copy, distribute and/or modify this document
-+  under the terms of the GNU Free Documentation License, Version 1.1 or
-+  any later version published by the Free Software Foundation, with no
-+  Invariant Sections. A copy of the license is included in the chapter
-+  entitled "GNU Free Documentation License".
 -- 
 2.25.2
 
