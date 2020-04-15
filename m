@@ -2,102 +2,98 @@ Return-Path: <SRS0=J60C=57=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18048C2BA19
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 13:23:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EB9AC2BB55
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 13:36:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2CA62074F
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 13:23:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586957022;
-	bh=ic5MMHZntN33IMBrTIWsQVmdcrIefTFAyiQjjyVZ7jg=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=oxWcBn4LZXV7Fvl+E/ROEwv8LtHUKJ1naq0GQsdXpePkDYxsjR2AxOVFZS8HXkYfC
-	 DX/eNEA0WtzAFWa+H3N7jnXSMWUlGa2QDsyx9GkumxOeco4elrd8jErm3VCQ5NNWNp
-	 CHfJhNBl7cmP9GBHTX98y0pf8OyCjvUMvfCntlho=
+	by mail.kernel.org (Postfix) with ESMTP id F163D2076D
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 13:36:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408873AbgDOLe6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Apr 2020 07:34:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54288 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408860AbgDOLer (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:34:47 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7506520737;
-        Wed, 15 Apr 2020 11:34:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586950487;
-        bh=ic5MMHZntN33IMBrTIWsQVmdcrIefTFAyiQjjyVZ7jg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cM6GbIxiSTcsD0vtJWc6VQBGC1DcfVTWzf3Qa0GEW8FCzZ9eTdxmSCrXomBAs4b7T
-         NO50eLOJ00/T1d6lkQT7b3FjbVJ+EOKFllVyw+8Cshc1XFAFPX/OB6JC2jr5R5+2ws
-         ylGqOYTFy3mVNXuz+Vgt8X+rk/Hzqkh8pXC1yMMY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     xinhui pan <xinhui.pan@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Sasha Levin <sashal@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH AUTOSEL 5.6 001/129] drm/ttm: flush the fence on the bo after we individualize the reservation object
-Date:   Wed, 15 Apr 2020 07:32:36 -0400
-Message-Id: <20200415113445.11881-1-sashal@kernel.org>
+        id S2636125AbgDONg3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Apr 2020 09:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730130AbgDONg2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 15 Apr 2020 09:36:28 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B56C061A0C;
+        Wed, 15 Apr 2020 06:36:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id 5DC1B2A0920
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kernel@collabora.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] media: Kconfig: include test_drivers with MEDIA_TEST_SUPPORT
+Date:   Wed, 15 Apr 2020 14:35:52 +0100
+Message-Id: <20200415133552.26411-1-guillaume.tucker@collabora.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: xinhui pan <xinhui.pan@amd.com>
+Include test_drivers/Kconfig when MEDIA_TEST_SUPPORT is enabled rather
+than MEDIA_PLATFORM_SUPPORT.  Test drivers should not depend on
+platform drivers to be enabled.
 
-[ Upstream commit 1bbcf69e42fe7fd49b6f4339c970729d0e343753 ]
-
-As we move the ttm_bo_individualize_resv() upwards, we need flush the
-copied fence too. Otherwise the driver keeps waiting for fence.
-
-run&Kill kfdtest, then perf top.
-
-  25.53%  [ttm]                     [k] ttm_bo_delayed_delete
-  24.29%  [kernel]                  [k] dma_resv_test_signaled_rcu
-  19.72%  [kernel]                  [k] ww_mutex_lock
-
-Fix: 378e2d5b("drm/ttm: fix ttm_bo_cleanup_refs_or_queue once more")
-Signed-off-by: xinhui pan <xinhui.pan@amd.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Link: https://patchwork.freedesktop.org/series/72339/
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Fixes: 4b32216adb010 ("media: split test drivers from platform directory")
+Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
 ---
- drivers/gpu/drm/ttm/ttm_bo.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
-index 5df596fb0280c..fe420ca454e0a 100644
---- a/drivers/gpu/drm/ttm/ttm_bo.c
-+++ b/drivers/gpu/drm/ttm/ttm_bo.c
-@@ -498,8 +498,10 @@ static void ttm_bo_cleanup_refs_or_queue(struct ttm_buffer_object *bo)
+Notes:
+    v2: Drop redundant "if MEDIA_TEST_SUPPORT" in test_drivers/Kconfig
+
+ drivers/media/Kconfig              | 5 ++++-
+ drivers/media/test_drivers/Kconfig | 4 ----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
+index a8def1591352..d926c2603de2 100644
+--- a/drivers/media/Kconfig
++++ b/drivers/media/Kconfig
+@@ -238,10 +238,13 @@ source "drivers/media/common/Kconfig"
  
- 		dma_resv_unlock(bo->base.resv);
- 	}
--	if (bo->base.resv != &bo->base._resv)
-+	if (bo->base.resv != &bo->base._resv) {
-+		ttm_bo_flush_all_fences(bo);
- 		dma_resv_unlock(&bo->base._resv);
-+	}
+ if MEDIA_PLATFORM_SUPPORT
+ source "drivers/media/platform/Kconfig"
+-source "drivers/media/test_drivers/Kconfig"
+ source "drivers/media/mmc/Kconfig"
+ endif
  
- error:
- 	kref_get(&bo->list_kref);
++if MEDIA_TEST_SUPPORT
++source "drivers/media/test_drivers/Kconfig"
++endif
++
+ source "drivers/media/firewire/Kconfig"
+ 
+ endmenu
+diff --git a/drivers/media/test_drivers/Kconfig b/drivers/media/test_drivers/Kconfig
+index 9f4a9cfbacc9..e62abec030c3 100644
+--- a/drivers/media/test_drivers/Kconfig
++++ b/drivers/media/test_drivers/Kconfig
+@@ -1,7 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+-if MEDIA_TEST_SUPPORT
+-
+ menuconfig V4L_TEST_DRIVERS
+ 	bool "V4L test drivers"
+ 	depends on VIDEO_DEV
+@@ -24,5 +22,3 @@ config VIDEO_VIM2M
+ source "drivers/media/test_drivers/vicodec/Kconfig"
+ 
+ endif #V4L_TEST_DRIVERS
+-
+-endif #MEDIA_TEST_SUPPORT
 -- 
 2.20.1
 
