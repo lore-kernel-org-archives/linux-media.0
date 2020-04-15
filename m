@@ -2,94 +2,181 @@ Return-Path: <SRS0=J60C=57=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0814CC2BB1D
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 03:00:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B03CC2BA2B
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 03:37:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6C0520787
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 03:00:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7AFB2078B
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 03:37:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="J2JBgb+y"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="mTgb8gE8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393047AbgDOC76 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Apr 2020 22:59:58 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17557 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729107AbgDOC5w (ORCPT
+        id S2389614AbgDODhS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Apr 2020 23:37:18 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:56419 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389612AbgDODhR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Apr 2020 22:57:52 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e9678220000>; Tue, 14 Apr 2020 19:57:38 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 14 Apr 2020 19:57:51 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 14 Apr 2020 19:57:51 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 15 Apr
- 2020 02:57:51 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 15 Apr 2020 02:57:51 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.171.241]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e96782e0003>; Tue, 14 Apr 2020 19:57:50 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v7 8/9] dt-bindings: reset: Add ID for Tegra210 VI reset
-Date:   Tue, 14 Apr 2020 19:57:42 -0700
-Message-ID: <1586919463-30542-9-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1586919463-30542-1-git-send-email-skomatineni@nvidia.com>
-References: <1586919463-30542-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
-MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1586919458; bh=KEZ1lHNwQNYea9tamUq6xhOd3Wa4inGS2Z794lURij8=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=J2JBgb+yrKQXv+Yi2bb/8GZfYpN7N6EqfuuPZeCJoBwZhmTgFaNZJSmbo1nAD2t46
-         l8fS9e+JYRIPgkDUFzs4jfWdDqcF65GlCQgSexlEcUWHcQPyfeFCMrnVbm2UI8ACha
-         t7lbJ/Lm3gcvsAKMNdPH6PlhSlxMtIx3TKMh8j792UfbkLHF3ep3BqObHH0eaNfyS+
-         WXwWNIbt2YDLFclYTNRBT1F3Kc9sy013xiQu7GRvuGfYs7kywO++jCsfhpvmdLkJuh
-         JHBqHKVaWbWgSdLAMfbdDioy2PzgSt+FXSPgJDTetMoG/Y4IfsVBDq66mgRQUcyvnA
-         uA1w/+ySupKNw==
+        Tue, 14 Apr 2020 23:37:17 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id OYrPjlw4olKa1OYrQjHhcC; Wed, 15 Apr 2020 05:37:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1586921832; bh=08DsTQgTjEOl0mijW2+DuByNkup25KPFLMBh+AyKe0k=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=mTgb8gE8oNbkpIgW/5CENr9FzttMQFHNgyswdRvMmMR/N+BeqP6JJAc3KTUxVPW/E
+         kcWwA64cliVXxNdngwCuEXcD0GMQ6cOuDeHGXdcvtAk35MH0nQ2SVEwV1s4DHh3nT+
+         gMKQ9/YHZBisJqg4qbK/ZNLQumeh0lHqQUY0YaIVWhmtXopZipE91f76xIXNHgAxPO
+         j4CqcG67jWO9bbx1WKxQzFBCm+QFSM7CHvv33XpTZPw03Vn+ReJHNnzstnB0Mb6uYv
+         Y/xn9akZqUmf8kVooV/B0mrf8mOehWSgcQIYIAo25fcYWn+SbxqGDz/A3Ta7OLd/4X
+         jWS086fNcVbig==
+Message-ID: <f668bdb178905ca7db1ed1f874253e97@smtp-cloud8.xs4all.net>
+Date:   Wed, 15 Apr 2020 05:37:10 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfK5YVTM4/B2R7BzAoPYvzgCmUVLAwXNIdUloFssrh+SstPIbwiN0miv8dVF1qtfYXedH7H3bhUGTVC3vZX57WUzeZ65EHo/2AnJ43Xle0wiFw5x+p4lq
+ LR2t+jOkokqejg/IPY8WZEvCBeW3gIZIwk4RJXVdVEof46LHPnz/fhyfaXAeY6f1YSbZgMv+eeJc11ZHX2iUrfGaWoQXlRibEH9EsKo7CtF//ba/gsA9rzgW
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds ID for Tegra210 VI controller reset to use with
-device tree.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- include/dt-bindings/reset/tegra210-car.h | 1 +
- 1 file changed, 1 insertion(+)
+Results of the daily build of media_tree:
 
-diff --git a/include/dt-bindings/reset/tegra210-car.h b/include/dt-bindings/reset/tegra210-car.h
-index 9dc84ec..8755946 100644
---- a/include/dt-bindings/reset/tegra210-car.h
-+++ b/include/dt-bindings/reset/tegra210-car.h
-@@ -10,5 +10,6 @@
- #define TEGRA210_RESET(x)		(7 * 32 + (x))
- #define TEGRA210_RST_DFLL_DVCO		TEGRA210_RESET(0)
- #define TEGRA210_RST_ADSP		TEGRA210_RESET(1)
-+#define TEGRA210_RST_VI			20
- 
- #endif	/* _DT_BINDINGS_RESET_TEGRA210_CAR_H */
--- 
-2.7.4
+date:			Wed Apr 15 05:00:09 CEST 2020
+media-tree git hash:	860b511766a3d95308a942ac09a34e4d1839e706
+media_build git hash:	59218acf14c29acea3de658b724fa511b121ca7d
+v4l-utils git hash:	d59fa43a9b531f80ebdb971484da6ae80120e0ed
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 207731f0f2373bd930d923a23a304cafb5650efb
+host hardware:		x86_64
+host os:		5.4.0-4-amd64
 
+linux-git-sh: OK
+linux-git-arm-davinci: OK
+linux-git-arm-at91: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.212-i686: OK
+linux-4.4.212-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.212-i686: OK
+linux-4.9.212-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: ERRORS
+linux-4.18.20-x86_64: ERRORS
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6.1-i686: OK
+linux-5.6.1-x86_64: OK
+linux-5.7-rc1-i686: OK
+linux-5.7-rc1-x86_64: OK
+apps: OK
+spec-git: ERRORS
+virtme: OK: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 0
+virtme-32: ERRORS: Final Summary: 1, Succeeded: 0, Failed: 1, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
