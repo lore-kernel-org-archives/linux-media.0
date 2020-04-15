@@ -2,102 +2,166 @@ Return-Path: <SRS0=J60C=57=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC49C3815B
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 12:31:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82523C3815B
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 12:35:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A018F208FE
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 12:31:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586953888;
-	bh=5awcBRC1vnFsSufAGrSrHlTj08tl0RW0fzavbHxoj8o=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=1OMua+IcMFJ+Yw1LAoxxo9IZrjl+Rd0nS4JkGvY/uwJpZsQt5vc6ngp3e/pqTJ+2B
-	 5eWz5qiGkKykJtT27XPOmkjgVTDA7LH02bqi7xoQ7zVmBR7XRbriKu/nsxyDvh9JaR
-	 luRczHU7Rls1K32/s2/qRrd3ZYKJ0MP6LFbU7g3E=
+	by mail.kernel.org (Postfix) with ESMTP id 6108F20737
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 12:35:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S369570AbgDOMb1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Apr 2020 08:31:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37404 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409102AbgDOLou (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:44:50 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 25334206A2;
-        Wed, 15 Apr 2020 11:44:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586951083;
-        bh=5awcBRC1vnFsSufAGrSrHlTj08tl0RW0fzavbHxoj8o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hfbfNGOtui5TfQ0KAnEDcZWrDcHpB14TSOadzAIVmkDpUyN9+Dzj+qd++OAjCS3Jo
-         ozL4enx4HsVUVoLNxyHEpc8zT3dt/X2PgB901FidvwdeLhqIIrQ985c3IEYlNAvxEv
-         C1Y+SlyTA4+MVcDwZ/hA4hwIHRnzJuBjEzrPbays=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     xinhui pan <xinhui.pan@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Sasha Levin <sashal@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH AUTOSEL 5.4 01/84] drm/ttm: flush the fence on the bo after we individualize the reservation object
-Date:   Wed, 15 Apr 2020 07:43:18 -0400
-Message-Id: <20200415114442.14166-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        id S369825AbgDOMfy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Apr 2020 08:35:54 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:42363 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S369820AbgDOMfu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 15 Apr 2020 08:35:50 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 7A8631C0011;
+        Wed, 15 Apr 2020 12:35:37 +0000 (UTC)
+Date:   Wed, 15 Apr 2020 14:38:42 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Luis Oliveira <lolivei@synopsys.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Michael Rodin <mrodin@de.adit-jv.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Adam Ford <aford173@gmail.com>,
+        Todor Tomov <todor.tomov@linaro.org>,
+        Suresh Udipi <sudipi@jp.adit-jv.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>
+Subject: Re: [PATCH 2/4] media: ov5647: Add support for PWDN GPIO.
+Message-ID: <20200415123842.wiu5vs5lilxvqg7x@uno.localdomain>
+References: <cover.1586759968.git.roman.kovalivskyi@globallogic.com>
+ <f88b99899eb5e680607349b37eb3679dbd12433e.1586759968.git.roman.kovalivskyi@globallogic.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f88b99899eb5e680607349b37eb3679dbd12433e.1586759968.git.roman.kovalivskyi@globallogic.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: xinhui pan <xinhui.pan@amd.com>
+Hi Roman,
+   this patch requires the device bindings document to be updated
+to report an optional 'powerdown-gpios' property is available and that
+it's active HIGH.
 
-[ Upstream commit 1bbcf69e42fe7fd49b6f4339c970729d0e343753 ]
+On Mon, Apr 13, 2020 at 12:17:45PM +0300, Roman Kovalivskyi wrote:
+> From: Dave Stevenson <dave.stevenson@raspberrypi.org>
+>
+> Add support for an optional GPIO connected to PWDN on the sensor. This
+> allows the use of hardware standby mode where internal device clock
+> and circuit activities are halted.
+>
+> Please nothe that power is off when PWDN is high.
+>
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
+> Signed-off-by: Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
+> ---
+>  drivers/media/i2c/ov5647.c | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>
+> diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
+> index 3e587eb0a30e..c39e3d20e3ef 100644
+> --- a/drivers/media/i2c/ov5647.c
+> +++ b/drivers/media/i2c/ov5647.c
+> @@ -21,6 +21,7 @@
+>
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/init.h>
+>  #include <linux/io.h>
+> @@ -35,6 +36,13 @@
+>
+>  #define SENSOR_NAME "ov5647"
+>
+> +/*
+> + * From the datasheet, "20ms after PWDN goes low or 20ms after RESETB goes
+> + * high if reset is inserted after PWDN goes high, host can access sensor's
+> + * SCCB to initialize sensor."
+> + */
+> +#define PWDN_ACTIVE_DELAY_MS	20
+> +
+>  #define MIPI_CTRL00_CLOCK_LANE_GATE		BIT(5)
+>  #define MIPI_CTRL00_BUS_IDLE			BIT(2)
+>  #define MIPI_CTRL00_CLOCK_LANE_DISABLE		BIT(0)
+> @@ -86,6 +94,7 @@ struct ov5647 {
+>  	unsigned int			height;
+>  	int				power_count;
+>  	struct clk			*xclk;
+> +	struct gpio_desc		*pwdn;
+>  };
+>
+>  static inline struct ov5647 *to_state(struct v4l2_subdev *sd)
+> @@ -355,6 +364,11 @@ static int ov5647_sensor_power(struct v4l2_subdev *sd, int on)
+>  	if (on && !ov5647->power_count)	{
+>  		dev_dbg(&client->dev, "OV5647 power on\n");
+>
+> +		if (ov5647->pwdn) {
+> +			gpiod_set_value(ov5647->pwdn, 0);
+> +			msleep(PWDN_ACTIVE_DELAY_MS);
 
-As we move the ttm_bo_individualize_resv() upwards, we need flush the
-copied fence too. Otherwise the driver keeps waiting for fence.
+please use usleep_range() according to Documentation/timers/timers-howto.rst
 
-run&Kill kfdtest, then perf top.
-
-  25.53%  [ttm]                     [k] ttm_bo_delayed_delete
-  24.29%  [kernel]                  [k] dma_resv_test_signaled_rcu
-  19.72%  [kernel]                  [k] ww_mutex_lock
-
-Fix: 378e2d5b("drm/ttm: fix ttm_bo_cleanup_refs_or_queue once more")
-Signed-off-by: xinhui pan <xinhui.pan@amd.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Link: https://patchwork.freedesktop.org/series/72339/
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/gpu/drm/ttm/ttm_bo.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
-index f078036998092..abf165b2f64fc 100644
---- a/drivers/gpu/drm/ttm/ttm_bo.c
-+++ b/drivers/gpu/drm/ttm/ttm_bo.c
-@@ -517,8 +517,10 @@ static void ttm_bo_cleanup_refs_or_queue(struct ttm_buffer_object *bo)
- 
- 		dma_resv_unlock(bo->base.resv);
- 	}
--	if (bo->base.resv != &bo->base._resv)
-+	if (bo->base.resv != &bo->base._resv) {
-+		ttm_bo_flush_all_fences(bo);
- 		dma_resv_unlock(&bo->base._resv);
-+	}
- 
- error:
- 	kref_get(&bo->list_kref);
--- 
-2.20.1
-
+Thanks
+   j
+> +		}
+> +
+>  		ret = clk_prepare_enable(ov5647->xclk);
+>  		if (ret < 0) {
+>  			dev_err(&client->dev, "clk prepare enable failed\n");
+> @@ -392,6 +406,8 @@ static int ov5647_sensor_power(struct v4l2_subdev *sd, int on)
+>  			dev_dbg(&client->dev, "soft stby failed\n");
+>
+>  		clk_disable_unprepare(ov5647->xclk);
+> +
+> +		gpiod_set_value(ov5647->pwdn, 1);
+>  	}
+>
+>  	/* Update the power count. */
+> @@ -603,6 +619,10 @@ static int ov5647_probe(struct i2c_client *client)
+>  		return -EINVAL;
+>  	}
+>
+> +	/* Request the power down GPIO asserted */
+> +	sensor->pwdn = devm_gpiod_get_optional(&client->dev, "pwdn",
+> +					       GPIOD_OUT_HIGH);
+> +
+>  	mutex_init(&sensor->lock);
+>
+>  	sd = &sensor->sd;
+> @@ -616,7 +636,15 @@ static int ov5647_probe(struct i2c_client *client)
+>  	if (ret < 0)
+>  		goto mutex_remove;
+>
+> +	if (sensor->pwdn) {
+> +		gpiod_set_value(sensor->pwdn, 0);
+> +		msleep(PWDN_ACTIVE_DELAY_MS);
+> +	}
+> +
+>  	ret = ov5647_detect(sd);
+> +
+> +	gpiod_set_value(sensor->pwdn, 1);
+> +
+>  	if (ret < 0)
+>  		goto error;
+>
+> --
+> 2.17.1
+>
