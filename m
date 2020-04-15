@@ -2,73 +2,170 @@ Return-Path: <SRS0=J60C=57=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94D63C2BA19
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 09:46:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A993C2BA19
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 09:49:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 78E41206D9
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 09:46:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38B062078A
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 09:49:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1586944189;
+	bh=BMCAYOBEXBk7709Ogb1+PRVp1vR+ZXuSQgMdbDqEF2A=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=VCMsaq4Py1+/YAcAk1+6SDddDlALvrwYaB+fEIWAuj4fLPewUS0W6pLmU3B2yOO56
+	 tHQaEGQKYHa+QCoKLo55MGxdUMVRth0z00jDPuKg6bDtHgti/cefXwRNp0OcVY4tei
+	 Bo4eSkmFE1nlbErfKgH93j8MjvUoPc2n2bA3n4iM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895786AbgDOJqY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Apr 2020 05:46:24 -0400
-Received: from turbocat.net ([88.99.82.50]:60444 "EHLO mail.turbocat.net"
+        id S2895872AbgDOJtl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Apr 2020 05:49:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46394 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2895787AbgDOJqV (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Apr 2020 05:46:21 -0400
-Received: from hps2020.home.selasky.org (unknown [62.141.129.235])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        id S2895863AbgDOJtc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 15 Apr 2020 05:49:32 -0400
+Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.turbocat.net (Postfix) with ESMTPSA id C4129260282;
-        Wed, 15 Apr 2020 11:46:17 +0200 (CEST)
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 8E6A920775;
+        Wed, 15 Apr 2020 09:49:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586944170;
+        bh=BMCAYOBEXBk7709Ogb1+PRVp1vR+ZXuSQgMdbDqEF2A=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JxQfj4mEW6ybZNAqkINSATkXx7qyu38aUl7MkG0+b3HQWHHSsUUnuxvCXUe8a6A/v
+         kdkyx3sND48bNGP5581afrFmpgQb037m9JzXfhy3MBPb/GYlBCEqtjNT2aTLa5qe8C
+         BmT0aVShF2e6XfjcMm+7B2/EziMXPoMoKLrnqv1w=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jOefg-006WIO-1s; Wed, 15 Apr 2020 11:49:28 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-From:   Hans Petter Selasky <hps@selasky.org>
-Subject: [PATCH] [V4L-UTILS] Fix for mismatched class/struct tags
-Message-ID: <486af8b4-9feb-2f21-cfca-3f095db531f2@selasky.org>
-Date:   Wed, 15 Apr 2020 11:45:17 +0200
-User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+Subject: [PATCH 2/4] media: place CEC menu before MEDIA_SUPPORT
+Date:   Wed, 15 Apr 2020 11:49:25 +0200
+Message-Id: <32565659d6778e92bd9ac7d17622149bd95973c5.1586944045.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.25.2
+In-Reply-To: <cover.1586944045.git.mchehab+huawei@kernel.org>
+References: <cover.1586944045.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix for mismatched class/struct tags.
+The only item that opens at the CEC Kconfig menu is related
+to Remote Controller. Also, its support should not depend on
+media support, so it makes sense to keep both RC and CEC together.
 
-Signed-off-by: Hans Petter Selasky <hps@selasky.org>
+After this change, the main media menus that are visible
+under "Device Drivers" menu are:
 
-diff --git a/utils/v4l2-compliance/v4l2-test-buffers.cpp 
-b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-index 372bcfb8..a746410e 100644
---- a/utils/v4l2-compliance/v4l2-test-buffers.cpp
-+++ b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-@@ -49,8 +49,8 @@
-  #define VIVID_CID_QUEUE_ERROR		(VIVID_CID_VIVID_BASE + 70)
-  #define VIVID_CID_REQ_VALIDATE_ERROR	(VIVID_CID_VIVID_BASE + 72)
+	<*> Remote Controller support  --->
+	[ ] HDMI CEC RC integration (NEW)
+	< > HDMI CEC drivers
+	<M> Multimedia support  --->
 
--static struct cv4l_fmt cur_fmt;
--static struct cv4l_fmt cur_m2m_fmt;
-+static cv4l_fmt cur_fmt;
-+static cv4l_fmt cur_m2m_fmt;
-  static int stream_from_fd = -1;
-  static bool stream_use_hdr;
-  static unsigned max_bytesused[VIDEO_MAX_PLANES];
-@@ -357,7 +357,7 @@ int buffer::check(unsigned type, unsigned memory, 
-unsigned index,
-  	unsigned timestamp_src = g_timestamp_src();
-  	unsigned frame_types = 0;
-  	unsigned buf_states = 0;
--	const struct cv4l_fmt &fmt = is_m2m ? cur_m2m_fmt : cur_fmt;
-+	const cv4l_fmt &fmt = is_m2m ? cur_m2m_fmt : cur_fmt;
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/Kconfig     | 30 ++----------------------------
+ drivers/media/cec/Kconfig | 20 ++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 28 deletions(-)
 
-  	fail_on_test(g_type() != type);
-  	fail_on_test(g_memory() == 0);
+diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
+index e8bd354a0f75..8694e3c6d183 100644
+--- a/drivers/media/Kconfig
++++ b/drivers/media/Kconfig
+@@ -4,19 +4,10 @@
+ #
+ 
+ #
+-# NOTE: Those symbols can't depend on MEDIA_SUPPORT, as it would cause
+-# unmatched dependencies
++# NOTE: CEC and Remote Controller support should not depend on MEDIA_SUPPORT
+ #
+-config CEC_CORE
+-	tristate
+-
+-config CEC_NOTIFIER
+-	bool
+-
+-config CEC_PIN
+-	bool
+-
+ source "drivers/media/rc/Kconfig"
++source "drivers/media/cec/Kconfig"
+ 
+ menuconfig MEDIA_SUPPORT
+ 	tristate "Multimedia support"
+@@ -132,17 +123,6 @@ config MEDIA_SDR_SUPPORT
+ 
+ 	  Say Y when you have a software defined radio device.
+ 
+-config MEDIA_CEC_SUPPORT
+-	bool
+-	prompt "HDMI CEC support" if MEDIA_SUPPORT_FILTER
+-	default y if !MEDIA_SUPPORT_FILTER
+-	help
+-	  Enable support for HDMI CEC (Consumer Electronics Control),
+-	  which is an optional HDMI feature.
+-
+-	  Say Y when you have an HDMI receiver, transmitter or a USB CEC
+-	  adapter that supports HDMI CEC.
+-
+ config MEDIA_PLATFORM_SUPPORT
+ 	bool
+ 	prompt "Platform-specific devices" if MEDIA_SUPPORT_FILTER
+@@ -232,12 +212,6 @@ menu "Digital TV options"
+ source "drivers/media/dvb-core/Kconfig"
+ endmenu
+ 
+-menu "HDMI CEC options"
+-	visible if CEC_CORE
+-
+-source "drivers/media/cec/Kconfig"
+-endmenu
+-
+ menu "Media drivers"
+ 
+ comment "Drivers filtered as selected at 'Filter media drivers'"
+diff --git a/drivers/media/cec/Kconfig b/drivers/media/cec/Kconfig
+index c01919713ab9..1586dd899302 100644
+--- a/drivers/media/cec/Kconfig
++++ b/drivers/media/cec/Kconfig
+@@ -1,4 +1,13 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++config CEC_CORE
++	tristate
++
++config CEC_NOTIFIER
++	bool
++
++config CEC_PIN
++	bool
++
+ config MEDIA_CEC_RC
+ 	bool "HDMI CEC RC integration"
+ 	depends on CEC_CORE && RC_CORE
+@@ -11,3 +20,14 @@ config CEC_PIN_ERROR_INJ
+ 	depends on CEC_PIN && DEBUG_FS
+ 	help
+ 	  This option enables CEC error injection using debugfs.
++
++config MEDIA_CEC_SUPPORT
++	bool
++	prompt "HDMI CEC drivers"
++	default y if !MEDIA_SUPPORT_FILTER
++	help
++	  Enable support for HDMI CEC (Consumer Electronics Control),
++	  which is an optional HDMI feature.
++
++	  Say Y when you have an HDMI receiver, transmitter or a USB CEC
++	  adapter that supports HDMI CEC.
 -- 
-2.25.0
+2.25.2
+
