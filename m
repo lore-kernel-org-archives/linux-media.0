@@ -2,30 +2,30 @@ Return-Path: <SRS0=J60C=57=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE2AFC2BA19
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:45:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 364D2C2BA19
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:45:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E37E20737
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:45:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C84B20737
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:45:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896565AbgDOKpO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Apr 2020 06:45:14 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:22960 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2408512AbgDOKUI (ORCPT
+        id S2896575AbgDOKp2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Apr 2020 06:45:28 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:31291 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2896462AbgDOKUI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 15 Apr 2020 06:20:08 -0400
 X-IronPort-AV: E=Sophos;i="5.72,386,1580742000"; 
-   d="scan'208";a="44789389"
+   d="scan'208";a="44575661"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 15 Apr 2020 19:19:28 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 15 Apr 2020 19:19:18 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 9D2074007F4F;
-        Wed, 15 Apr 2020 19:19:26 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 0F1AE4004BB4;
+        Wed, 15 Apr 2020 19:19:16 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Niklas <niklas.soderlund@ragnatech.se>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -33,12 +33,10 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v4 3/3] media: rcar-csi2: Add support for MEDIA_BUS_FMT_SRGGB8_1X8 format
-Date:   Wed, 15 Apr 2020 11:19:08 +0100
-Message-Id: <1586945948-11026-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 0/3] media: rcar-vin: Enable MEDIA_BUS_FMT_SRGGB8_1X8 format
+Date:   Wed, 15 Apr 2020 11:19:05 +0100
+Message-Id: <1586945948-11026-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1586945948-11026-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1586945948-11026-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -47,27 +45,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds support for MEDIA_BUS_FMT_SRGGB8_1X8 format for CSI2
-input.
+Hi,
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/media/platform/rcar-vin/rcar-csi2.c | 1 +
- 1 file changed, 1 insertion(+)
+This patch series adds support for MEDIA_BUS_FMT_SRGGB8_1X8 format for vin
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index faa9fb23a2e9..3d1945d7996c 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -320,6 +320,7 @@ static const struct rcar_csi2_format rcar_csi2_formats[] = {
- 	{ .code = MEDIA_BUS_FMT_YUYV8_1X16,	.datatype = 0x1e, .bpp = 16 },
- 	{ .code = MEDIA_BUS_FMT_UYVY8_2X8,	.datatype = 0x1e, .bpp = 16 },
- 	{ .code = MEDIA_BUS_FMT_YUYV10_2X10,	.datatype = 0x1e, .bpp = 20 },
-+	{ .code = MEDIA_BUS_FMT_SRGGB8_1X8,     .datatype = 0x2a, .bpp = 8 },
- };
- 
- static const struct rcar_csi2_format *rcsi2_code_to_fmt(unsigned int code)
+Cheers,
+--Prabhakar
+
+Changed for v4:
+* patch 1/3 is new patch which adds a check for conversion from input to
+  output.
+* patch 2/3 added a comment while setting VNIS_REG for RAW format as
+  suggested by Niklas
+
+Changes for v3:
+* Dropped patch 1/1 from v2 as this handled neatly by patches
+  https://patchwork.linuxtv.org/project/linux-media/list/?series=1974
+* Included Ack from Niklas for patch 2/2
+* Updated commit message for patch 1/1.
+
+Changes for v2:
+* Added support for matching fwnode against endpoints/nodes.
+* Separated patch for rcar-vin and rcar-csi2.c which added
+  MEDIA_BUS_FMT_SRGGB8_1X8.
+
+Lad Prabhakar (3):
+  media: rcar-vin: Invalidate pipeline if conversion is not possible on
+    input formats
+  media: rcar-vin: Add support for MEDIA_BUS_FMT_SRGGB8_1X8 format
+  media: rcar-csi2: Add support for MEDIA_BUS_FMT_SRGGB8_1X8 format
+
+ drivers/media/platform/rcar-vin/rcar-csi2.c |  1 +
+ drivers/media/platform/rcar-vin/rcar-dma.c  | 21 +++++++++++++++++++--
+ drivers/media/platform/rcar-vin/rcar-v4l2.c |  4 ++++
+ 3 files changed, 24 insertions(+), 2 deletions(-)
+
 -- 
 2.20.1
 
