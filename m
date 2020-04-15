@@ -2,209 +2,127 @@ Return-Path: <SRS0=J60C=57=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C42B1C3815B
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 790B2C3815B
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:42:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CFC120784
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586947063;
-	bh=uRks2HYiRyRdiR4g4ENZwFdl3nuMvUwAgHch1gvWFtU=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=pXBrNOM6NDWlqoQq9m0H6n+nKsUh73SJEHdjU54h4mL3WC3gdwqq2kUbvIzzP97+c
-	 rEPFzam6K00D5/aDLXt55scNOFQL15yUcJAJvdaZykBEtgt7gCIOwfzzpKj1kylxEP
-	 lsVhzyPOPMbJtN7r0//KFCyez8h+VO4nk+K0/2Jg=
+	by mail.kernel.org (Postfix) with ESMTP id 6304120737
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:42:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406034AbgDOKcF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Apr 2020 06:32:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33674 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408641AbgDOKbm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Apr 2020 06:31:42 -0400
-Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCEED208FE;
-        Wed, 15 Apr 2020 10:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586946701;
-        bh=uRks2HYiRyRdiR4g4ENZwFdl3nuMvUwAgHch1gvWFtU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LjvFPPv18vTxu7vRGD7+5SofqLQC3JFt2Yh/g1J8TyUMrRbcnYNDjKFZXMbTvP+l2
-         2b6QydhAIOc5+m83jy/p6rLevh6dSKnSQATtz2x1JvYlUAG1VDGoiNvLGHpZQ7NVpv
-         YUWuwFJRmt04Jol1FBOsxz2sWmgBvn5JgZW8sQPg=
-Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jOfKV-006gM0-23; Wed, 15 Apr 2020 12:31:39 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Kukjin Kim <kgene@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Benson Leung <bleung@chromium.org>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-amlogic@lists.infradead.org,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-tegra@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Subject: [PATCH v2 0/6] Move CEC drivers and menu to be out of MEDIA_SUPPORT
-Date:   Wed, 15 Apr 2020 12:31:31 +0200
-Message-Id: <cover.1586946605.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.25.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S2408522AbgDOKYL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Apr 2020 06:24:11 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:35467 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2408508AbgDOKUI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 15 Apr 2020 06:20:08 -0400
+X-IronPort-AV: E=Sophos;i="5.72,386,1580742000"; 
+   d="scan'208";a="44789385"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 15 Apr 2020 19:19:26 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 924424007F4F;
+        Wed, 15 Apr 2020 19:19:24 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Niklas <niklas.soderlund@ragnatech.se>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 2/3] media: rcar-vin: Add support for MEDIA_BUS_FMT_SRGGB8_1X8 format
+Date:   Wed, 15 Apr 2020 11:19:07 +0100
+Message-Id: <1586945948-11026-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1586945948-11026-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <1586945948-11026-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CEC_CORE doesn't depend on MEDIA_SUPPORT. So, it doesn't make
-much sense to keep it under its menu.
+Add support for MEDIA_BUS_FMT_SRGGB8_1X8 format in rcar-vin by setting
+format type to RAW8 in VNMC register and appropriately setting the bpp
+and bytesperline to enable V4L2_PIX_FMT_SRGGB8.
 
-This series move it to be just after RC support. As a side effect, now
-dependencies like PCI and USB are now selected, making easier to
-enable CEC drivers.
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/media/platform/rcar-vin/rcar-dma.c  | 15 ++++++++++++++-
+ drivers/media/platform/rcar-vin/rcar-v4l2.c |  4 ++++
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
-- v2:
-  - move more CEC drivers from platform/
-  - rename kconfig options to be more coherent
-
-Mauro Carvalho Chehab (6):
-  media: cec: move the core to a separate directory
-  media: place CEC menu before MEDIA_SUPPORT
-  media: move CEC platform drivers to a separate directory
-  media: move CEC USB drivers to a separate directory
-  media: cec: rename CEC platform drivers config options
-  media: cec: rename USB config options
-
- arch/arm/configs/exynos_defconfig             |   2 +-
- arch/arm/configs/multi_v7_defconfig           |   2 +-
- drivers/media/Kconfig                         |  30 +----
- drivers/media/cec/Kconfig                     |  25 ++++
- drivers/media/cec/Makefile                    |  16 +--
- drivers/media/cec/core/Makefile               |  16 +++
- drivers/media/cec/{ => core}/cec-adap.c       |   0
- drivers/media/cec/{ => core}/cec-api.c        |   0
- drivers/media/cec/{ => core}/cec-core.c       |   0
- drivers/media/cec/{ => core}/cec-notifier.c   |   0
- .../media/cec/{ => core}/cec-pin-error-inj.c  |   0
- drivers/media/cec/{ => core}/cec-pin-priv.h   |   0
- drivers/media/cec/{ => core}/cec-pin.c        |   0
- drivers/media/cec/{ => core}/cec-priv.h       |   0
- drivers/media/cec/platform/Kconfig            | 121 +++++++++++++++++
- drivers/media/cec/platform/Makefile           |  14 ++
- .../{ => cec}/platform/cec-gpio/Makefile      |   0
- .../{ => cec}/platform/cec-gpio/cec-gpio.c    |   0
- drivers/media/cec/platform/cros-ec/Makefile   |   2 +
- .../platform/cros-ec}/cros-ec-cec.c           |   0
- drivers/media/cec/platform/meson/Makefile     |   3 +
- .../{ => cec}/platform/meson/ao-cec-g12a.c    |   0
- .../media/{ => cec}/platform/meson/ao-cec.c   |   0
- .../s5p-cec => cec/platform/s5p}/Makefile     |   2 +-
- .../platform/s5p}/exynos_hdmi_cec.h           |   0
- .../platform/s5p}/exynos_hdmi_cecctrl.c       |   0
- .../s5p-cec => cec/platform/s5p}/regs-cec.h   |   0
- .../s5p-cec => cec/platform/s5p}/s5p_cec.c    |   0
- .../s5p-cec => cec/platform/s5p}/s5p_cec.h    |   0
- drivers/media/cec/platform/seco/Makefile      |   2 +
- .../seco-cec => cec/platform/seco}/seco-cec.c |   2 +-
- .../seco-cec => cec/platform/seco}/seco-cec.h |   0
- drivers/media/cec/platform/sti/Makefile       |   2 +
- .../sti/cec => cec/platform/sti}/stih-cec.c   |   0
- drivers/media/cec/platform/stm32/Makefile     |   2 +
- .../{ => cec}/platform/stm32/stm32-cec.c      |   0
- drivers/media/cec/platform/tegra/Makefile     |   2 +
- .../platform/tegra}/tegra_cec.c               |   0
- .../platform/tegra}/tegra_cec.h               |   0
- drivers/media/cec/usb/Kconfig                 |   6 +
- drivers/media/cec/usb/Makefile                |   6 +
- .../pulse8-cec => cec/usb/pulse8}/Kconfig     |   5 +-
- drivers/media/cec/usb/pulse8/Makefile         |   2 +
- .../usb/pulse8}/pulse8-cec.c                  |   0
- .../usb/rainshadow}/Kconfig                   |   5 +-
- drivers/media/cec/usb/rainshadow/Makefile     |   2 +
- .../usb/rainshadow}/rainshadow-cec.c          |   0
- drivers/media/platform/Kconfig                | 125 ------------------
- drivers/media/platform/Makefile               |  12 --
- drivers/media/platform/cros-ec-cec/Makefile   |   2 -
- drivers/media/platform/meson/Makefile         |   3 -
- drivers/media/platform/seco-cec/Makefile      |   2 -
- drivers/media/platform/sti/cec/Makefile       |   2 -
- drivers/media/platform/stm32/Makefile         |   1 -
- drivers/media/platform/tegra-cec/Makefile     |   2 -
- drivers/media/usb/Kconfig                     |   6 -
- drivers/media/usb/Makefile                    |   2 -
- drivers/media/usb/pulse8-cec/Makefile         |   2 -
- drivers/media/usb/rainshadow-cec/Makefile     |   2 -
- 59 files changed, 218 insertions(+), 212 deletions(-)
- create mode 100644 drivers/media/cec/core/Makefile
- rename drivers/media/cec/{ => core}/cec-adap.c (100%)
- rename drivers/media/cec/{ => core}/cec-api.c (100%)
- rename drivers/media/cec/{ => core}/cec-core.c (100%)
- rename drivers/media/cec/{ => core}/cec-notifier.c (100%)
- rename drivers/media/cec/{ => core}/cec-pin-error-inj.c (100%)
- rename drivers/media/cec/{ => core}/cec-pin-priv.h (100%)
- rename drivers/media/cec/{ => core}/cec-pin.c (100%)
- rename drivers/media/cec/{ => core}/cec-priv.h (100%)
- create mode 100644 drivers/media/cec/platform/Kconfig
- create mode 100644 drivers/media/cec/platform/Makefile
- rename drivers/media/{ => cec}/platform/cec-gpio/Makefile (100%)
- rename drivers/media/{ => cec}/platform/cec-gpio/cec-gpio.c (100%)
- create mode 100644 drivers/media/cec/platform/cros-ec/Makefile
- rename drivers/media/{platform/cros-ec-cec => cec/platform/cros-ec}/cros-ec-cec.c (100%)
- create mode 100644 drivers/media/cec/platform/meson/Makefile
- rename drivers/media/{ => cec}/platform/meson/ao-cec-g12a.c (100%)
- rename drivers/media/{ => cec}/platform/meson/ao-cec.c (100%)
- rename drivers/media/{platform/s5p-cec => cec/platform/s5p}/Makefile (63%)
- rename drivers/media/{platform/s5p-cec => cec/platform/s5p}/exynos_hdmi_cec.h (100%)
- rename drivers/media/{platform/s5p-cec => cec/platform/s5p}/exynos_hdmi_cecctrl.c (100%)
- rename drivers/media/{platform/s5p-cec => cec/platform/s5p}/regs-cec.h (100%)
- rename drivers/media/{platform/s5p-cec => cec/platform/s5p}/s5p_cec.c (100%)
- rename drivers/media/{platform/s5p-cec => cec/platform/s5p}/s5p_cec.h (100%)
- create mode 100644 drivers/media/cec/platform/seco/Makefile
- rename drivers/media/{platform/seco-cec => cec/platform/seco}/seco-cec.c (99%)
- rename drivers/media/{platform/seco-cec => cec/platform/seco}/seco-cec.h (100%)
- create mode 100644 drivers/media/cec/platform/sti/Makefile
- rename drivers/media/{platform/sti/cec => cec/platform/sti}/stih-cec.c (100%)
- create mode 100644 drivers/media/cec/platform/stm32/Makefile
- rename drivers/media/{ => cec}/platform/stm32/stm32-cec.c (100%)
- create mode 100644 drivers/media/cec/platform/tegra/Makefile
- rename drivers/media/{platform/tegra-cec => cec/platform/tegra}/tegra_cec.c (100%)
- rename drivers/media/{platform/tegra-cec => cec/platform/tegra}/tegra_cec.h (100%)
- create mode 100644 drivers/media/cec/usb/Kconfig
- create mode 100644 drivers/media/cec/usb/Makefile
- rename drivers/media/{usb/pulse8-cec => cec/usb/pulse8}/Kconfig (86%)
- create mode 100644 drivers/media/cec/usb/pulse8/Makefile
- rename drivers/media/{usb/pulse8-cec => cec/usb/pulse8}/pulse8-cec.c (100%)
- rename drivers/media/{usb/rainshadow-cec => cec/usb/rainshadow}/Kconfig (85%)
- create mode 100644 drivers/media/cec/usb/rainshadow/Makefile
- rename drivers/media/{usb/rainshadow-cec => cec/usb/rainshadow}/rainshadow-cec.c (100%)
- delete mode 100644 drivers/media/platform/cros-ec-cec/Makefile
- delete mode 100644 drivers/media/platform/meson/Makefile
- delete mode 100644 drivers/media/platform/seco-cec/Makefile
- delete mode 100644 drivers/media/platform/sti/cec/Makefile
- delete mode 100644 drivers/media/platform/tegra-cec/Makefile
- delete mode 100644 drivers/media/usb/pulse8-cec/Makefile
- delete mode 100644 drivers/media/usb/rainshadow-cec/Makefile
-
+diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+index 48bd9bfc3948..3e8e29573e6d 100644
+--- a/drivers/media/platform/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+@@ -85,6 +85,7 @@
+ #define VNMC_INF_YUV8_BT601	(1 << 16)
+ #define VNMC_INF_YUV10_BT656	(2 << 16)
+ #define VNMC_INF_YUV10_BT601	(3 << 16)
++#define VNMC_INF_RAW8		(4 << 16)
+ #define VNMC_INF_YUV16		(5 << 16)
+ #define VNMC_INF_RGB888		(6 << 16)
+ #define VNMC_VUP		(1 << 10)
+@@ -587,13 +588,19 @@ void rvin_crop_scale_comp(struct rvin_dev *vin)
+ 	rvin_write(vin, vin->crop.top, VNSLPRC_REG);
+ 	rvin_write(vin, vin->crop.top + vin->crop.height - 1, VNELPRC_REG);
+ 
+-
+ 	/* TODO: Add support for the UDS scaler. */
+ 	if (vin->info->model != RCAR_GEN3)
+ 		rvin_crop_scale_comp_gen2(vin);
+ 
+ 	fmt = rvin_format_from_pixel(vin, vin->format.pixelformat);
+ 	stride = vin->format.bytesperline / fmt->bpp;
++
++	/* For RAW8 format bpp is 1, but the hardware process RAW8
++	 * format in 2 pixel unit hence configure VNIS_REG as stride / 2.
++	 */
++	if (vin->format.pixelformat == V4L2_PIX_FMT_SRGGB8)
++		stride /= 2;
++
+ 	rvin_write(vin, stride, VNIS_REG);
+ }
+ 
+@@ -676,6 +683,9 @@ static int rvin_setup(struct rvin_dev *vin)
+ 
+ 		input_is_yuv = true;
+ 		break;
++	case MEDIA_BUS_FMT_SRGGB8_1X8:
++		vnmc |= VNMC_INF_RAW8;
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -737,6 +747,9 @@ static int rvin_setup(struct rvin_dev *vin)
+ 	case V4L2_PIX_FMT_ABGR32:
+ 		dmr = VNDMR_A8BIT(vin->alpha) | VNDMR_EXRGB | VNDMR_DTMD_ARGB;
+ 		break;
++	case V4L2_PIX_FMT_SRGGB8:
++		dmr = 0;
++		break;
+ 	default:
+ 		vin_err(vin, "Invalid pixelformat (0x%x)\n",
+ 			vin->format.pixelformat);
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index 5151a3cd8a6e..ca542219e8ae 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -66,6 +66,10 @@ static const struct rvin_video_format rvin_formats[] = {
+ 		.fourcc			= V4L2_PIX_FMT_ABGR32,
+ 		.bpp			= 4,
+ 	},
++	{
++		.fourcc			= V4L2_PIX_FMT_SRGGB8,
++		.bpp			= 1,
++	},
+ };
+ 
+ const struct rvin_video_format *rvin_format_from_pixel(struct rvin_dev *vin,
 -- 
-2.25.2
-
+2.20.1
 
