@@ -2,106 +2,101 @@ Return-Path: <SRS0=J60C=57=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F683C2BA19
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:46:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 615FCC3815B
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:47:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0A41C20737
-	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:46:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B55520737
+	for <linux-media@archiver.kernel.org>; Wed, 15 Apr 2020 10:47:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896459AbgDOKSn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Apr 2020 06:18:43 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:55244 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2896413AbgDOKR3 (ORCPT
+        id S2896612AbgDOKrf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Apr 2020 06:47:35 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:54171 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2896604AbgDOKrX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Apr 2020 06:17:29 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id D6FEC2A0C93
-Subject: Re: [PATCH v7 6/6] vimc: Make use of V4L2_CAP_IO_MC
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Helen Koike <helen.koike@collabora.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org
-References: <20200413202351.1359754-1-niklas.soderlund+renesas@ragnatech.se>
- <20200413202351.1359754-7-niklas.soderlund+renesas@ragnatech.se>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <a1a0bea6-d19f-4948-df0e-4477684f1082@collabora.com>
-Date:   Wed, 15 Apr 2020 12:16:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 15 Apr 2020 06:47:23 -0400
+Received: from uno.homenet.telecomitalia.it (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id F23CF240003;
+        Wed, 15 Apr 2020 10:47:11 +0000 (UTC)
+From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        kieran.bingham@ideasonboard.com, dave.stevenson@raspberrypi.com,
+        hyun.kwon@xilinx.com, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 0/6] v4l2-subdev: Introduce get_mbus_format pad op
+Date:   Wed, 15 Apr 2020 12:49:57 +0200
+Message-Id: <20200415105004.2497356-1-jacopo+renesas@jmondi.org>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-In-Reply-To: <20200413202351.1359754-7-niklas.soderlund+renesas@ragnatech.se>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+v2 introduces two new patches that could be likely squashed in later to
+deprecate the g_mbus_config() operation in documentation and expand the newly
+introduced function documentation by popular demand.
 
+Will report again the use cases I'm trying to address here:
+------------------------------------------------------------------------------
+Quoting:
+https://patchwork.kernel.org/cover/10855919/
+"The use case this series cover is the following one:
+the Gen-3 R-Car boards include an ADV748x HDMI/CVBS to CSI-2 converter
+connected to its CSI-2 receivers. The ADV748x chip has recently gained support
+for routing both HDMI and analogue video streams through its 4 lanes TXA
+transmitter, specifically to support the Ebisu board that has a single CSI-2
+receiver, compared to all other Gen-3 board where the ADV748x TXes are connected
+to different CSI-2 receivers, and where analogue video is streamed out from the
+ADV748x single lane TXB transmitter.
+To properly support transmission of analogue video through TXA, the number of
+data lanes shall be dynamically reduced to 1, in order to comply with the MIPI
+CSI-2 minimum clock frequency requirements"
 
-On 13.04.20 22:23, Niklas Söderlund wrote:
-> Set the V4L2_CAP_IO_MC capability flag to report this vimc
-> inputs/outputs are controlled by the media graph.
-> 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
-> Changes since v5:
-> 
-> - Wrap line longer than 80 characters
-> - Implement mbus_code filtering for format enumeration
-> ---
->   drivers/media/platform/vimc/vimc-capture.c | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
-> index 747ea9cc1bd7cb12..dbc827fd1b9baebb 100644
-> --- a/drivers/media/platform/vimc/vimc-capture.c
-> +++ b/drivers/media/platform/vimc/vimc-capture.c
-> @@ -149,7 +149,12 @@ static int vimc_cap_s_fmt_vid_cap(struct file *file, void *priv,
->   static int vimc_cap_enum_fmt_vid_cap(struct file *file, void *priv,
->   				     struct v4l2_fmtdesc *f)
->   {
-> -	const struct vimc_pix_map *vpix = vimc_pix_map_by_index(f->index);
-> +	const struct vimc_pix_map *vpix;
-> +
-> +	if (f->mbus_code)
-> +		vpix = vimc_pix_map_by_code(f->mbus_code);
-Hi, if I understand correctly, the f->index should still tell us we should return the i'th format
-for the given mbus_code, right? if yes then since vimc support only one pixelformat for each mbus code
-there should be a code added here:
-if (f->index > 0)
-	return -EINVAL;
+During the discussion of the RFC, Dave reported another use case for media
+bus parameter negotiation on his platform:
+https://patchwork.kernel.org/patch/10855923/#22569149
 
-Thanks,
-Dafna
+Another possible use case is for parallel bus multiplexing, where multiple image
+sensor share the parallel bus lines and they get activated alternatively through
+an enable signal. While this might not be most clever design, it's often seen
+in the wild, and this operation allow receivers to re-configure their bus
+parameter in between streaming session.
 
-> +	else
-> +		vpix = vimc_pix_map_by_index(f->index);
->   
->   	if (!vpix)
->   		return -EINVAL;
-> @@ -450,7 +455,8 @@ struct vimc_ent_device *vimc_cap_add(struct vimc_device *vimc,
->   
->   	/* Initialize the video_device struct */
->   	vdev = &vcap->vdev;
-> -	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-> +	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING
-> +			  | V4L2_CAP_IO_MC;
->   	vdev->entity.ops = &vimc_cap_mops;
->   	vdev->release = video_device_release_empty;
->   	vdev->fops = &vimc_cap_fops;
-> 
+Hyun is now using this series to configure GMSL devices.
+------------------------------------------------------------------------------
+
+v1->v2:
+- Address Sakari's comment to use unsigned int in place of bools
+- Add two new patches to address documentation
+- Adjust rcar-csi2 patch as much as possible according to Niklas comments
+- Add Niklas's tags
+
+Jacopo Mondi (6):
+  media: v4l2-subdv: Introduce get_mbus_config pad op
+  media: v4l2-subdev: Deprecate g_mbus_config video op
+  media: v4l2-subdev: Expand get_mbus_config doc
+  media: i2c: adv748x: Adjust TXA data lanes number
+  media: i2c: adv748x: Implement get_mbus_config
+  media: rcar-csi2: Negotiate data lanes number
+
+ drivers/media/i2c/adv748x/adv748x-core.c    | 31 ++++++--
+ drivers/media/i2c/adv748x/adv748x-csi2.c    | 15 ++++
+ drivers/media/i2c/adv748x/adv748x.h         |  1 +
+ drivers/media/platform/rcar-vin/rcar-csi2.c | 53 ++++++++++++-
+ include/media/v4l2-subdev.h                 | 82 ++++++++++++++++++++-
+ 5 files changed, 171 insertions(+), 11 deletions(-)
+
+--
+2.26.0
+
