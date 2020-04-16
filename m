@@ -2,103 +2,123 @@ Return-Path: <SRS0=ht1n=6A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38ECFC352BE
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 06:53:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 561B4C352BE
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 07:02:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19B8B214D8
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 06:53:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3450D21556
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 07:02:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Aquf/QkD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437388AbgDPGxT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Apr 2020 02:53:19 -0400
-Received: from smtprelay0116.hostedemail.com ([216.40.44.116]:37100 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2436919AbgDPGwq (ORCPT
+        id S2437586AbgDPHCE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Apr 2020 03:02:04 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:57365 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2437541AbgDPHCB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Apr 2020 02:52:46 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 0A616100E7B43;
-        Thu, 16 Apr 2020 06:51:59 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: wheel34_84bb3b9f86d3c
-X-Filterd-Recvd-Size: 3344
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf07.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 16 Apr 2020 06:51:52 +0000 (UTC)
-Message-ID: <d93f90bbcc99967ed5ba458ba99d7e73de12e3b2.camel@perches.com>
-Subject: Re: [PATCH 2/2] dt-bindings: Remove cases of 'allOf' containing a
- '$ref'
-From:   Joe Perches <joe@perches.com>
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org
-Date:   Wed, 15 Apr 2020 23:49:40 -0700
-In-Reply-To: <20200416005549.9683-2-robh@kernel.org>
-References: <20200416005549.9683-1-robh@kernel.org>
-         <20200416005549.9683-2-robh@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+        Thu, 16 Apr 2020 03:02:01 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id OyX5jwusdlKa1OyX8jQDl4; Thu, 16 Apr 2020 09:01:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1587020519; bh=ZQThcD4YloQRMHhhyPRYHjQ3Tu11wmwaaQlmOSnGndM=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=Aquf/QkD27uisrsbZjO3+yZtbaQb38O9Id5T6FLP6qY2LV1sEZcPZxmngtRJFZcfW
+         oBtgXt5+Rl8i6R+Ac24YEbMztEzTOKVdpX2eAknNrXZljHVOuwjCNU0+YU84Dxwn7Y
+         1hYD0718PjoFmUbIBYlGqRdSMB+unHQ4FBkhUbgnqLx4z7ZHhgealgIu/E05dYPdmG
+         Cj1UnhFIzOkrjfSJFU7KrmLyzR93nRp5bpae/Ma87Au7DzAepshKjEMCqpDDnWyx2m
+         efezyOvPu9JQr2p0scAQUj8WrtpRvCGRl++L99lYzTQ2Xt+zXgZt9+xxj+m5n1G2hj
+         0GoICq2yw8LaQ==
+Subject: Re: Script to build the media documentation as if it were a single
+ book
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org
+References: <20200414153739.30b58bdc@coco.lan>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <e83dbd40-2a34-3bad-be5f-e451c3a5d020@xs4all.nl>
+Date:   Thu, 16 Apr 2020 09:01:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
+In-Reply-To: <20200414153739.30b58bdc@coco.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfNdrcCV8sRQcLS8YJhTlr9Q8iavPNfvpfVGxIeL4YR1mi0ZVAi6Lf1BRyrBMvSjay6GVGJNCSV3TZ17vJrdl/jvLmwTAnsaCQBafmvf4jEYFMrrkej4d
+ ZxZgcjqddqbEKUA36J2fZduBwlCrNW/kC8b4hOeQqo7N/eDSOiQ6AWkjYF7TQ9bjHQ2HPQo7cgAoezzthf7HQteA6FwKMscubcc=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 2020-04-15 at 19:55 -0500, Rob Herring wrote:
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords. The json-schema library doesn't yet support this, but the
-> tooling now does a fixup for this and either way works.
+On 14/04/2020 15:37, Mauro Carvalho Chehab wrote:
+> Hi,
 > 
-> This has been a constant source of review comments, so let's change this
-> treewide so everyone copies the simpler syntax.
+> In order for the media documentation to match the upstream rules, it was
+> split for 5.7 into 3 different books. This makes total sense for upstream.
+> 
+> Yet, people may still want to see it as a single book. So, I wrote a small
+> script (see enclosed) that does that.
+> 
+> I'm using a variant of it to produce the documentation output available at:
+> 	https://linuxtv.org/docs.php
+> 
+> (with is updated once per day).
+> 
+> Perhaps others could find this script useful. This script is under GPLv2,
+> but please notice that some media docs are under GFDL licensing.
+> 
+> Thanks,
+> Mauro
+> 
+> 
+> #!/bin/bash
+> 
+> git remote update
+> git reset --hard remotes/origin/$BRANCH
+> 
+> sed s,userspace-api/media,media/userspace-api, -i Documentation/Makefile
+> 
+> mkdir -p Documentation/media
+> 
+> cat <<END >Documentation/media/index.rst
+> .. SPDX-License-Identifier: GPL-2.0
+> 
+> .. include:: <isonum.txt>
+> 
+> **Copyright** |copy| 1991-: LinuxTV Developers
+> 
+> ================================
+> Linux Kernel Media Documentation
+> ================================
+> 
+> .. toctree::
+> 	:maxdepth: 4
+> 
+>         admin-guide/index
+>         driver-api/index
+>         userspace-api/index
 
-This is a large change.
+Wouldn't it make more sense to have the userspace-api before the admin-guide?
 
-Was this done manually or by some script?
-If it was done manually, how likely is it there are defects
-in the conversion?
+Regards,
 
+	Hans
+
+> END
+> 
+> rsync -vuza --delete Documentation/admin-guide/media/ Documentation/media/admin-guide
+> rsync -vuza --delete Documentation/driver-api/media/ Documentation/media/driver-api
+> rsync -vuza --delete Documentation/userspace-api/media/ Documentation/media/userspace-api
+> 
+> make SPHINXDIRS="media" htmldocs
+> make SPHINXDIRS="media" pdfdocs
+> make SPHINXDIRS="media" epubdocs
+> 
 
