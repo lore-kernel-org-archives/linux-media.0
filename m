@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8325FC2BB55
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 11:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 698D2C2BB85
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 11:37:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B7E321D94
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 11:37:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4705B21D7F
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 11:37:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587037034;
-	bh=lQO3kAMKr6AtQl0ZqTBoTW4VtHP9KHJ74hhT0K7cqcE=;
+	s=default; t=1587037041;
+	bh=oU9vHFsJgKh2goYQCM4HsG47VtXKYTeS6/Dj+CidDT8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=I25j162EeaxYKJyEdV1bmH51a05RpQjSX+ZMchAemuNVp9gI4gPoUsx81PewP/kcF
-	 Urx+0RI1aJ5jyd+s/ddXtdausrEgup4thHnrU4LkpE1FzEraBnrec6bqFs0LeeD5Xy
-	 Jn6obywAoY6nO5MPhZum07v+o8/s5oJ2df55OzqM=
+	b=fqgyGTUcQAsrjq6wkseD6zmsSNZKZHmT6cJNGRiq19P07Td47UV8+tFK7mDkxnF15
+	 Bnup7cNjdmiGV0WrC22qXYOWfzAy5owed5RUSNT3lPRzQNtYATNEDx8SN/RuRskO+6
+	 N1kqg0FseSh6zM3BeTPjbyaCRrUZoX2S5JPQIG/Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633627AbgDPLhM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Apr 2020 07:37:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38618 "EHLO mail.kernel.org"
+        id S2633628AbgDPLhQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Apr 2020 07:37:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38608 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2506443AbgDPLhB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S2506441AbgDPLhB (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 16 Apr 2020 07:37:01 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8FC89221EA;
+        by mail.kernel.org (Postfix) with ESMTPSA id 8ECC321D7F;
         Thu, 16 Apr 2020 11:36:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587037017;
-        bh=lQO3kAMKr6AtQl0ZqTBoTW4VtHP9KHJ74hhT0K7cqcE=;
+        bh=oU9vHFsJgKh2goYQCM4HsG47VtXKYTeS6/Dj+CidDT8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R9Sj+PPyTtf057DlkfHzcg8OPhAHDw3jRU9HTGZDVUe1Yt7zn2PFDsiAvJg3AjWbN
-         Dhe+bSl+3HBXSEvS3D/kRwEajMJKenWhlvB5XuO5IZSfyy+UvfNsGvKPgIRVaiWwnp
-         Kxjar2SELgu/ciQuu/wROVkYHnGtz0ofjYb9j96U=
+        b=SV7DGoz1d6/D2uX9zd+zPP1z/iS49p0rtq5AGVNe4gSHgEzyMfQA96r3oYHOr4vpb
+         L3SvGTl65NV9Y/fspFTxGGec13JdRBYZ0XJZdcgOb4EDVM9pqADngQGMK5uitNPQIM
+         4K69jZHTqt/VSUYpCpquHf1Fw+vhVL0dj1B5W7js=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jP2pD-007SZJ-3q; Thu, 16 Apr 2020 13:36:55 +0200
+        id 1jP2pD-007SZF-36; Thu, 16 Apr 2020 13:36:55 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 3/4] media: admin-guide: Add an introduction chapter
-Date:   Thu, 16 Apr 2020 13:36:52 +0200
-Message-Id: <73542a4587ad416b973bebc555fd6b93d40e5139.1587036920.git.mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 2/4] media: admin-guide: update em28xx cardlist
+Date:   Thu, 16 Apr 2020 13:36:51 +0200
+Message-Id: <9b47bca9c526e736c9a76fbfc8d2faf36e03cd74.1587036920.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1587036920.git.mchehab+huawei@kernel.org>
 References: <cover.1587036920.git.mchehab+huawei@kernel.org>
@@ -58,63 +57,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The media's admin guide is currently just a group of
-not-connected docs.
-
-Add an introduction chapter for it to start making sense
-to a random reader.
+A new em28xx card was added upstream. Update cards list
+accordingly.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/index.rst |  2 ++
- Documentation/admin-guide/media/intro.rst | 25 +++++++++++++++++++++++
- 2 files changed, 27 insertions(+)
- create mode 100644 Documentation/admin-guide/media/intro.rst
+ Documentation/admin-guide/media/em28xx-cardlist.rst | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/admin-guide/media/index.rst b/Documentation/admin-guide/media/index.rst
-index 6e5e6bdb6d4b..f79d4f1e05ba 100644
---- a/Documentation/admin-guide/media/index.rst
-+++ b/Documentation/admin-guide/media/index.rst
-@@ -34,6 +34,8 @@ Video4Linux (V4L)  driver-specific documentation
- 	:maxdepth: 5
- 	:numbered:
- 
-+	intro
-+
- 	cardlist
- 
- 	v4l-with-ir
-diff --git a/Documentation/admin-guide/media/intro.rst b/Documentation/admin-guide/media/intro.rst
-new file mode 100644
-index 000000000000..9b6399fd904f
---- /dev/null
-+++ b/Documentation/admin-guide/media/intro.rst
-@@ -0,0 +1,25 @@
-+============
-+Introduction
-+============
-+
-+The media subsystem consists on Linux support for several different types
-+of devices:
-+
-+- Audio and video grabbers;
-+- PC and Laptop Cameras;
-+- Complex cameras found on Embedded hardware;
-+- Analog and digital TV;
-+- HDMI Customer Electronics Control (CEC);
-+- Multi-touch input devices;
-+- Remote Controllers;
-+- Media encoders and decoders.
-+
-+Due to the diversity of devices, the subsystem provides several different
-+APIs:
-+
-+- Remote Controller API;
-+- HDMI CEC API;
-+- Video4Linux API;
-+- Media controller API;
-+- Video4Linux Request API (experimental);
-+- Digital TV API (also known as DVB API).
+diff --git a/Documentation/admin-guide/media/em28xx-cardlist.rst b/Documentation/admin-guide/media/em28xx-cardlist.rst
+index cb2e693a56a2..a5f0e6d22a1a 100644
+--- a/Documentation/admin-guide/media/em28xx-cardlist.rst
++++ b/Documentation/admin-guide/media/em28xx-cardlist.rst
+@@ -430,3 +430,7 @@ EM28xx cards list
+      - Magix USB Videowandler-2
+      - em2861
+      - 1b80:e349
++   * - 104
++     - PCTV DVB-S2 Stick (461e v2)
++     - em28178
++     - 2013:0461, 2013:0259
 -- 
 2.25.2
 
