@@ -2,123 +2,97 @@ Return-Path: <SRS0=ht1n=6A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0401AC2D0EF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:30:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 205CFC2BB85
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:31:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D5B2E2078B
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587025835;
-	bh=+AtB2qrsVxt1QWCAagtuBV0iMzA+FqM4hoS9ArXVBXI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=a+ZToFNdZL71+7RSHEbp/tpZC8pgCE4fF/zYkPEd7PzNzMuRaJVaZoGVlMCi7qejx
-	 inzo0isq6Awoak6hdG5n6lXoPQPxh3nqjWfGlaL0+7AvjGJrIpXcZWy4OFlvc84JZJ
-	 yL3c0dFGEWPgANxToHggQLUlES7cKLYGlfQtvpIs=
+	by mail.kernel.org (Postfix) with ESMTP id ED7AE21974
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:31:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="cd1yY1B1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502124AbgDPIa1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Apr 2020 04:30:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439552AbgDPILF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Apr 2020 04:11:05 -0400
-Received: from localhost (unknown [223.235.195.235])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D38A206B9;
-        Thu, 16 Apr 2020 08:07:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587024458;
-        bh=+AtB2qrsVxt1QWCAagtuBV0iMzA+FqM4hoS9ArXVBXI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2SDVAHMhpWjl2KgmMtDeMa4mCSN5E7syFhtD6nl+7e+uOtdm92iHSJh7of/HWeSKy
-         HDPx9eDy3/ziMPBERearhYxolH1rzEwouN2J1vLT/RYfJAdCvbbfyQVciDd7LjXhj3
-         Rm7XEVuyXLSwCmFC9enIFNjzAhrkqZPWIGTVc9wk=
-Date:   Thu, 16 Apr 2020 13:37:34 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: Remove cases of 'allOf' containing a
- '$ref'
-Message-ID: <20200416080734.GJ72691@vkoul-mobl>
-References: <20200416005549.9683-1-robh@kernel.org>
- <20200416005549.9683-2-robh@kernel.org>
+        id S2502230AbgDPIba (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Apr 2020 04:31:30 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:50567 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2502203AbgDPIbM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Apr 2020 04:31:12 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id OzqrjxiLilKa1OzqujQwe7; Thu, 16 Apr 2020 10:26:28 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1587025588; bh=vOrP83TK2KSk4bHbD4HwDZGwLWeosFdwUHuxV4437rE=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=cd1yY1B1kJ4LY+s3jvaLBBlcLZ+rXaGNnYsDpd16L6ZkNuwwudJWf67bz7ALkej3o
+         tJlM5hK12tUdJMyWlPSMmRixlGkFzQOkw8h9S+6Cq32YOeBEb3dmWvnMm7/xNPEL9x
+         9xn3mOavXjJpOMj0IpJVsRyqkarbKlOKf6o6tHgEpohv2GtHX4Xr9WX+pZ25WukRLi
+         C3UgotxI57uAStvDIzJlH1OLhE03FnYXs/aykHu4qBRNcQskN+gmi2MY8h1dRY+yO5
+         EjCqyNEIODitgYr/8qzwkiaTaDZTth5az0Aox2A7DnHVWpcCh8KcLiGdxhDK1vGoZX
+         ggr7gA+1BhyiQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH] Documentation/media: drop/fix vivi references
+Message-ID: <2f4218ef-b959-9ee5-5e81-ed1c05e0d9b0@xs4all.nl>
+Date:   Thu, 16 Apr 2020 10:26:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200416005549.9683-2-robh@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfFzzpD4pito8xOVJabsfAQvJ0wmNPu/F2dolOwPcnvL6S5qs5n9n+hTFcmy3NEsne5P31V0ntcEArlGDRh1Mi8QQNqWJyufvk0U8yHXX30ZyMlSprAvh
+ djjhWoxDwtLlSrL8kqGLPuTStv8CSoumSmtIZvgI+jzfDc2pSndrtyzu7OXx6fewI1SPKyK0pKba4w==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 15-04-20, 19:55, Rob Herring wrote:
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords. The json-schema library doesn't yet support this, but the
-> tooling now does a fixup for this and either way works.
-> 
-> This has been a constant source of review comments, so let's change this
-> treewide so everyone copies the simpler syntax.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/arm/cpus.yaml         |  81 +++---
->  .../devicetree/bindings/arm/l2c2x0.yaml       |  87 +++---
->  .../devicetree/bindings/arm/psci.yaml         |  15 +-
->  .../bindings/arm/samsung/exynos-chipid.yaml   |   5 +-
->  .../bus/allwinner,sun50i-a64-de2.yaml         |   5 +-
->  .../bindings/clock/fixed-factor-clock.yaml    |   5 +-
->  .../bindings/connector/usb-connector.yaml     |  28 +-
->  .../bindings/crypto/st,stm32-hash.yaml        |   9 +-
->  .../allwinner,sun4i-a10-display-engine.yaml   |   7 +-
->  .../display/allwinner,sun4i-a10-tcon.yaml     |   5 +-
->  .../bindings/display/panel/panel-common.yaml  |   5 +-
->  .../devicetree/bindings/dma/dma-common.yaml   |   3 +-
->  .../devicetree/bindings/dma/ti/k3-udma.yaml   |  18 +-
+The vivi.c driver has long gone, but v4l2-videobuf.rst still
+refers to it. Just drop that reference since it is no longer valid
+or relevant (videobuf is deprecated).
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+The QUERYCAP documentation also made a reference to is, but there
+vivi could just be replaced by vivid, the vivi successor.
 
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ Documentation/driver-api/media/v4l2-videobuf.rst          | 5 +----
+ Documentation/userspace-api/media/v4l/vidioc-querycap.rst | 2 +-
+ 2 files changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/driver-api/media/v4l2-videobuf.rst b/Documentation/driver-api/media/v4l2-videobuf.rst
+index 1a7756397b1a..4b1d84eefeb8 100644
+--- a/Documentation/driver-api/media/v4l2-videobuf.rst
++++ b/Documentation/driver-api/media/v4l2-videobuf.rst
+@@ -399,8 +399,5 @@ again.
+
+ Developers who are interested in more information can go into the relevant
+ header files; there are a few low-level functions declared there which have
+-not been talked about here.  Also worthwhile is the vivi driver
+-(drivers/media/platform/vivi.c), which is maintained as an example of how V4L2
+-drivers should be written.  Vivi only uses the vmalloc() API, but it's good
+-enough to get started with.  Note also that all of these calls are exported
++not been talked about here.  Note also that all of these calls are exported
+ GPL-only, so they will not be available to non-GPL kernel modules.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-querycap.rst b/Documentation/userspace-api/media/v4l/vidioc-querycap.rst
+index 4ce8f87bd54a..28e1f766128c 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-querycap.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-querycap.rst
+@@ -83,7 +83,7 @@ specification the ioctl returns an ``EINVAL`` error code.
+ 	string. For example: "PCI:0000:05:06.0". This information is
+ 	intended for users, to distinguish multiple identical devices. If
+ 	no such information is available the field must simply count the
+-	devices controlled by the driver ("platform:vivi-000"). The
++	devices controlled by the driver ("platform:vivid-000"). The
+ 	bus_info must start with "PCI:" for PCI boards, "PCIe:" for PCI
+ 	Express boards, "usb-" for USB devices, "I2C:" for i2c devices,
+ 	"ISA:" for ISA devices, "parport" for parallel port devices and
 -- 
-~Vinod
+2.25.1
+
