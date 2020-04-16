@@ -2,128 +2,162 @@ Return-Path: <SRS0=ht1n=6A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FE8BC2BB85
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 09:53:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94EDAC2BB85
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 10:52:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2929B21D7E
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 09:53:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22A7221D82
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 10:52:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TMxuolbg"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="g509MseQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504368AbgDPJxI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Apr 2020 05:53:08 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:35600 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503852AbgDPJxD (ORCPT
+        id S2505628AbgDPKuX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Apr 2020 06:50:23 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:41353 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2505547AbgDPKty (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Apr 2020 05:53:03 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03G9mLw6079677;
-        Thu, 16 Apr 2020 09:52:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=corp-2020-01-29;
- bh=ORNkJh0El/FiFaNrBZ35C8htJjikUv/QO8+cVqgjYns=;
- b=TMxuolbgxTh7AfZ1jZZNYK/K8B4EvLKcEvSHnOoKKE3pd1UpDP4SogboxBc+mCqK7hZY
- 70Ou+a/w2oeJ4XEf8CoIOK8aEmlQWrm1qaJFgp9rBKNNlhJYoZvru1FAtbcMpcO2lHLR
- jxYqtLx5vQ7eOy/ZKyzQkYa48fJQEJUf4bmDBNPRLdWTtJZeXgiZWuQj1HEqH3b4QjhA
- NI/dNbj5qNPYvvpA97aypERJf8lY7k112u8pn1YL2OU1CWz9xBLn5UztR93BPKzOjj9i
- IrdT4l/61lPvXDqZO+UZQybyNvoHFPloHpVc6oDTm8pmQ4wotBQSCgNiDnRLjkT+ovmn hA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 30e0aa5x1b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Apr 2020 09:52:30 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03G9l5h3106098;
-        Thu, 16 Apr 2020 09:50:30 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 30ememjd48-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Apr 2020 09:50:30 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03G9oAKA028024;
-        Thu, 16 Apr 2020 09:50:10 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 16 Apr 2020 02:50:10 -0700
-Date:   Thu, 16 Apr 2020 12:49:56 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     =?iso-8859-1?Q?=D8rjan?= Eide <orjan.eide@arm.com>
-Cc:     devel@driverdev.osuosl.org, nd@arm.com,
-        Todd Kjos <tkjos@android.com>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        john.stultz@linaro.org, anders.pedersen@arm.com,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Darren Hart (VMware)" <dvhart@infradead.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Martijn Coenen <maco@android.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Brauner <christian@brauner.io>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] staging: android: ion: Skip sync if not mapped
-Message-ID: <20200416094955.GM1163@kadam>
-References: <20200414134629.54567-1-orjan.eide@arm.com>
- <20200414141849.55654-1-orjan.eide@arm.com>
+        Thu, 16 Apr 2020 06:49:54 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id P25YjcGoR7xncP25bj7MPI; Thu, 16 Apr 2020 12:49:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1587034188; bh=boBh7/sNATu/tXrp65Y74oibJy1A6GIGH5IFK8uomHs=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=g509MseQHO6qnShgMJi9UqjHDXQfmbfonwOVwDPy4ceYxmHcdCaTaMHCMUVjuHHux
+         C/T0GzOTNaKKN+bcK8xnSflIXR8LAv/NpbAYpyFvCiIAEzHwsaJsXMmDovfMLLQbFn
+         64Tin+1Wp/85JfpANnrofsfY7OvnVGq6BaWWU/3z6Nme+tdC632jTzjnhfwHq65GuC
+         GqAmxgbO0p85lkrRKYj8Q8MKqmbKaXIVVcC1/UXtus35bbmv6fGK1Mh2HYOc3KEZBC
+         Li1vx61Vo5R8mipfwQ93Hi2W9NQFNv86D7CrEnNO4DhBcNPX1qBzQOqNID9jyGGpvy
+         HoXBSjJhd8WgQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Helen Koike <helen.koike@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [GIT PULL FOR v5.8] Various fixes/enhancements (mostly imx/rkisp1)
+Message-ID: <1fe4c654-1b2f-8d26-dd35-95031ccb713d@xs4all.nl>
+Date:   Thu, 16 Apr 2020 12:49:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200414141849.55654-1-orjan.eide@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9592 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 phishscore=0 spamscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2004160067
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9592 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1011
- impostorscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
- suspectscore=0 adultscore=0 spamscore=0 malwarescore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004160067
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfMVYv0h0cB1DrTIrtAtvKFpMn+xk5u3MTGvLjehu8PtrnStnKzXCjQbThSIYVDGC6k2yPo3WIA6ipkSCpRsUu0nKym1mLe+E9vR/4wEHY4ix7hIH+ufV
+ vtRaaqJOIu3IDUB9aSSh7M2y98pnfFUjlyFuonKw29594k4b32zTYa58xwUsx8KzAND2t7AlY7rhf8nINe+sD/Os8RIBQFJjC+aewExKHjM+LkG44tKBP6Xy
+ /72q4mSdDjM83yAhV+t+XrqS56znzovRCBluypLwWuGeZldWL/VCev0l+oL5EzZvK9VcMl4tC4xtKdo4AfqnLSOx9nO9RFhY9JMoK2HnHodLoNG4xGGUsI3Y
+ HGTqZdsB
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 04:18:47PM +0200, Ørjan Eide wrote:
-> @@ -238,6 +242,10 @@ static void ion_unmap_dma_buf(struct dma_buf_attachment *attachment,
->  			      struct sg_table *table,
->  			      enum dma_data_direction direction)
->  {
-> +	struct ion_dma_buf_attachment *a = attachment->priv;
-> +
-> +	a->mapped = false;
+The following changes since commit dacca5f0fa69f04c2e70aad9847e8250b459971c:
 
-Possibly a stupid question but here we're not holding a lock.  Is
-concurrency an issue?
+  media: media/test_drivers: rename to test-drivers (2020-04-16 10:38:31 +0200)
 
-> +
->  	dma_unmap_sg(attachment->dev, table->sgl, table->nents, direction);
->  }
->  
-> @@ -297,6 +305,8 @@ static int ion_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
->  
->  	mutex_lock(&buffer->lock);
->  	list_for_each_entry(a, &buffer->attachments, list) {
-> +		if (!a->mapped)
-> +			continue;
->  		dma_sync_sg_for_cpu(a->dev, a->table->sgl, a->table->nents,
->  				    direction);
->  	}
+are available in the Git repository at:
 
-regards,
-dan carpenter
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.8a
 
+for you to fetch changes up to 0ccb49f101be6e9e2ae36d4b424ed25d5010deb1:
 
+  media: v4l2-fh: define v4l2_fh struct regardless of condition (2020-04-16 12:08:50 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Colin Ian King (3):
+      media: davinci: remove redundant assignment to pointer 'common'
+      media: pwc-ctl: remove redundant assignment to variable ret
+      media: gspca: remove redundant assignment to variable status
+
+Dafna Hirschfeld (4):
+      media: staging: rkisp1: remove TODO item - uapi structs compatibility
+      media: staging: rkisp1: replace rkisp1_fmt_pix_type with v4l2_pixel_encoding
+      media: staging: rkisp1: cap: remove field fmt_type from struct rkisp1_capture_fmt_cfg
+      media: staging: rkisp1: change fields names from fmt_type to pixel_enc
+
+Dan Carpenter (1):
+      media: vicodec: Fix error codes in probe function
+
+Ezequiel Garcia (3):
+      rkisp1: Get rid of unused variable warning
+      phy-rockchip-dphy-rx0: Drop unneeded CONFIG_OF dependency
+      rkisp1: Fix wrong PHY config dependency
+
+Fabio Estevam (5):
+      media: imx-media-csc-scaler: Use a shorter name for driver
+      media: imx.rst: Fix the MIPI CSI-2 virtual channel
+      media: imx.rst: Provide an example for unprocessed video capture
+      media: imx.rst: Provide the OV560 module part number
+      media: imx.rst: Provide streaming examples for imx6q-sabresd
+
+Hsin-Yi Wang (1):
+      media: mtk-mdp: Use correct aliases name
+
+Kieran Bingham (1):
+      media: platform: fcp: Set appropriate DMA parameters
+
+Laurent Pinchart (5):
+      media: imx: utils: Inline init_mbus_colorimetry() in its caller
+      media: imx: utils: Handle Bayer format lookup through a selection flag
+      media: imx: utils: Make imx_media_pixfmt handle variable number of codes
+      media: imx: utils: Rename format lookup and enumeration functions
+      media: imx: utils: Constify some mbus and ipu_image arguments
+
+Maheshwar Ajja (2):
+      media: v4l2-ctrl: Add H264 profile and levels
+      media: uapi: h264: Add new profile and levels
+
+Philipp Zabel (2):
+      media: imx: utils: fix and simplify pixel format enumeration
+      media: imx: utils: fix media bus format enumeration
+
+Seungchul Kim (1):
+      media: v4l2-fh: define v4l2_fh struct regardless of condition
+
+Steve Longerbeam (4):
+      media: imx: Fix some pixel format selections
+      media: imx: utils: Rename pixel format selection enumeration
+      media: imx: utils: Introduce PIXFMT_SEL_IPU
+      media: imx: utils: Split find|enum_format into fourcc and mbus functions
+
+ Documentation/admin-guide/media/imx.rst                   |  96 ++++++--
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst |  10 +
+ drivers/media/platform/davinci/vpif_display.c             |   1 -
+ drivers/media/platform/mtk-mdp/mtk_mdp_comp.c             |   8 +-
+ drivers/media/platform/rcar-fcp.c                         |   5 +
+ drivers/media/test-drivers/vicodec/vicodec-core.c         |  15 +-
+ drivers/media/usb/gspca/mr97310a.c                        |   1 -
+ drivers/media/usb/pwc/pwc-ctrl.c                          |   2 +-
+ drivers/media/v4l2-core/v4l2-ctrls.c                      |   5 +
+ drivers/media/v4l2-core/v4l2-ioctl.c                      |   2 -
+ drivers/staging/media/imx/imx-ic-prp.c                    |  15 +-
+ drivers/staging/media/imx/imx-ic-prpencvf.c               |  14 +-
+ drivers/staging/media/imx/imx-media-capture.c             |  42 ++--
+ drivers/staging/media/imx/imx-media-csc-scaler.c          |  13 +-
+ drivers/staging/media/imx/imx-media-csi.c                 |  42 ++--
+ drivers/staging/media/imx/imx-media-utils.c               | 518 ++++++++++++++++++-------------------------
+ drivers/staging/media/imx/imx-media-vdic.c                |  12 +-
+ drivers/staging/media/imx/imx-media.h                     |  57 +++--
+ drivers/staging/media/imx/imx7-media-csi.c                |  17 +-
+ drivers/staging/media/phy-rockchip-dphy-rx0/Kconfig       |   2 +-
+ drivers/staging/media/rkisp1/Kconfig                      |   2 +-
+ drivers/staging/media/rkisp1/TODO                         |   3 -
+ drivers/staging/media/rkisp1/rkisp1-capture.c             |  51 +----
+ drivers/staging/media/rkisp1/rkisp1-common.h              |  11 +-
+ drivers/staging/media/rkisp1/rkisp1-dev.c                 |   8 +-
+ drivers/staging/media/rkisp1/rkisp1-isp.c                 |  42 ++--
+ drivers/staging/media/rkisp1/rkisp1-resizer.c             |  12 +-
+ include/media/v4l2-fh.h                                   |   2 -
+ include/uapi/linux/v4l2-controls.h                        |   5 +
+ 29 files changed, 496 insertions(+), 517 deletions(-)
