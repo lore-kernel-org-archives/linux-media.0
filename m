@@ -2,243 +2,197 @@ Return-Path: <SRS0=ht1n=6A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A5B9C2BB55
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 14:56:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E02A5C352BE
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 14:58:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19CAA2051A
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 14:56:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8E432051A
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 14:58:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406753AbgDPO4i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Apr 2020 10:56:38 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:41028 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394840AbgDPO4Q (ORCPT
+        id S1733067AbgDPO6N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Apr 2020 10:58:13 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:58899 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728330AbgDPNz0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Apr 2020 10:56:16 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 48E5D2A220A
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org, dafna.hirschfeld@collabora.com,
-        helen.koike@collabora.com, ezequiel@collabora.com,
-        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
-        laurent.pinchart@ideasonboard.com,
-        linux-rockchip@lists.infradead.org, sakari.ailus@linux.intel.com
-Subject: [RFC v3 2/2] media: staging: rkisp1: allow quantization conversion from userspace for isp source pad
-Date:   Thu, 16 Apr 2020 16:56:05 +0200
-Message-Id: <20200416145605.12399-2-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200416145605.12399-1-dafna.hirschfeld@collabora.com>
-References: <20200416145605.12399-1-dafna.hirschfeld@collabora.com>
+        Thu, 16 Apr 2020 09:55:26 -0400
+Received: from aptenodytes (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 491B2100006;
+        Thu, 16 Apr 2020 13:55:20 +0000 (UTC)
+Date:   Thu, 16 Apr 2020 15:55:19 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jacob Chen <jacob-chen@iotwrt.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Hans Verkuil <hansverk@cisco.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/4] arm64: dts: rockchip: Add RGA support to the PX30
+Message-ID: <20200416135519.GJ125838@aptenodytes>
+References: <20200416115047.233720-1-paul.kocialkowski@bootlin.com>
+ <20200416115047.233720-3-paul.kocialkowski@bootlin.com>
+ <478f0a8b-f819-62f4-83b8-27918c4c2431@gmail.com>
+ <20200416132442.GI125838@aptenodytes>
+ <f4ad8ea4-7904-1458-e564-2d20c87ed417@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="5me2qT3T17SWzdxI"
+Content-Disposition: inline
+In-Reply-To: <f4ad8ea4-7904-1458-e564-2d20c87ed417@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The isp entity has a hardware support to force full range quantization
-for YUV formats. Use the new API to indicate userspace that
-quantization conversion is supported by adding the flag
-V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION during media code enumeration.
-Then uppon s_fmt on the video source pad, we assign the
-quantization from userspace for YUV formats.
-Also in the capture and resizer entities we retrieve the colorspace
-from the isp entity.
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
----
- drivers/staging/media/rkisp1/rkisp1-capture.c | 28 ++++++-------
- drivers/staging/media/rkisp1/rkisp1-common.h  |  2 +
- drivers/staging/media/rkisp1/rkisp1-isp.c     | 39 +++++++++++++++++--
- drivers/staging/media/rkisp1/rkisp1-resizer.c | 13 +++++++
- 4 files changed, 65 insertions(+), 17 deletions(-)
+--5me2qT3T17SWzdxI
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
-index fbf62399fe3d..aca0f93bc772 100644
---- a/drivers/staging/media/rkisp1/rkisp1-capture.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
-@@ -1066,14 +1066,13 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
- 			   const struct v4l2_format_info **fmt_info)
- {
- 	const struct rkisp1_capture_config *config = cap->config;
--	struct rkisp1_capture *other_cap =
--			&cap->rkisp1->capture_devs[cap->id ^ 1];
- 	const struct rkisp1_capture_fmt_cfg *fmt;
- 	const struct v4l2_format_info *info;
- 	const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
- 					    RKISP1_RSZ_SP_SRC_MAX_WIDTH };
- 	const unsigned int max_heights[] = { RKISP1_RSZ_MP_SRC_MAX_HEIGHT,
- 					     RKISP1_RSZ_SP_SRC_MAX_HEIGHT};
-+	struct v4l2_subdev_format isp_sd_fmt;
- 
- 	fmt = rkisp1_find_fmt_cfg(cap, pixm->pixelformat);
- 	if (!fmt) {
-@@ -1081,24 +1080,27 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
- 		pixm->pixelformat = fmt->fourcc;
- 	}
- 
-+	rkisp1_get_isp_src_fmt(cap->rkisp1, &isp_sd_fmt);
-+	pixm->field = isp_sd_fmt.format.field;
-+	pixm->colorspace = isp_sd_fmt.format.colorspace;
-+	pixm->ycbcr_enc = isp_sd_fmt.format.ycbcr_enc;
-+	pixm->xfer_func = isp_sd_fmt.format.xfer_func;
-+
-+	/*
-+	 * isp has a feature to set full range quantization for yuv formats.
-+	 * so we need to get the format from the isp.
-+	 */
-+	pixm->quantization = isp_sd_fmt.format.quantization;
-+	if (!v4l2_is_format_yuv(cap->pix.info))
-+		pixm->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-+
- 	pixm->width = clamp_t(u32, pixm->width,
- 			      RKISP1_RSZ_SRC_MIN_WIDTH, max_widths[cap->id]);
- 	pixm->height = clamp_t(u32, pixm->height,
- 			       RKISP1_RSZ_SRC_MIN_HEIGHT, max_heights[cap->id]);
- 
--	pixm->field = V4L2_FIELD_NONE;
--	pixm->colorspace = V4L2_COLORSPACE_DEFAULT;
--	pixm->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
--
- 	info = rkisp1_fill_pixfmt(pixm, cap->id);
- 
--	/* can not change quantization when stream-on */
--	if (other_cap->is_streaming)
--		pixm->quantization = other_cap->pix.fmt.quantization;
--	/* output full range by default, take effect in params */
--	else if (!pixm->quantization ||
--		 pixm->quantization > V4L2_QUANTIZATION_LIM_RANGE)
--		pixm->quantization = V4L2_QUANTIZATION_FULL_RANGE;
- 
- 	if (fmt_cfg)
- 		*fmt_cfg = fmt;
-diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
-index 2d7b7e078636..7a5576fa14c9 100644
---- a/drivers/staging/media/rkisp1/rkisp1-common.h
-+++ b/drivers/staging/media/rkisp1/rkisp1-common.h
-@@ -300,6 +300,8 @@ int rkisp1_isp_register(struct rkisp1_device *rkisp1,
- 			struct v4l2_device *v4l2_dev);
- void rkisp1_isp_unregister(struct rkisp1_device *rkisp1);
- 
-+int rkisp1_get_isp_src_fmt(struct rkisp1_device *rkisp1,
-+			   struct v4l2_subdev_format *sd_fmt);
- const struct rkisp1_isp_mbus_info *rkisp1_isp_mbus_info_get(u32 mbus_code);
- 
- irqreturn_t rkisp1_isp_isr(struct rkisp1_device *rkisp1);
-diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
-index dee8e96f3900..6fdf5ed0b6b1 100644
---- a/drivers/staging/media/rkisp1/rkisp1-isp.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
-@@ -613,6 +613,10 @@ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
- 
- 		if (code->index == pos - 1) {
- 			code->code = fmt->mbus_code;
-+			if (fmt->pixel_enc == V4L2_PIXEL_ENC_YUV &&
-+			    dir == RKISP1_DIR_SRC)
-+				code->flags =
-+					V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION;
- 			return 0;
- 		}
- 	}
-@@ -639,12 +643,21 @@ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
- 	sink_crop->height = RKISP1_DEFAULT_HEIGHT;
- 	sink_crop->left = 0;
- 	sink_crop->top = 0;
-+	sink_fmt->colorspace = V4L2_COLORSPACE_SRGB;
-+	sink_fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(sink_fmt->colorspace);
-+	sink_fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(sink_fmt->colorspace);
-+	sink_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-+
- 
- 	src_fmt = v4l2_subdev_get_try_format(sd, cfg,
- 					     RKISP1_ISP_PAD_SOURCE_VIDEO);
- 	*src_fmt = *sink_fmt;
- 	src_fmt->code = RKISP1_DEF_SRC_PAD_FMT;
--	src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-+	src_fmt->colorspace = V4L2_COLORSPACE_SRGB;
-+	src_fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(src_fmt->colorspace);
-+	src_fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(src_fmt->colorspace);
-+	src_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE;
-+
- 
- 	src_crop = v4l2_subdev_get_try_crop(sd, cfg,
- 					    RKISP1_ISP_PAD_SOURCE_VIDEO);
-@@ -687,10 +700,17 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
- 		isp->src_fmt = mbus_info;
- 	src_fmt->width  = src_crop->width;
- 	src_fmt->height = src_crop->height;
--	src_fmt->quantization = format->quantization;
--	/* full range by default */
--	if (!src_fmt->quantization)
-+
-+	src_fmt->colorspace = V4L2_COLORSPACE_SRGB;
-+	src_fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(src_fmt->colorspace);
-+	src_fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(src_fmt->colorspace);
-+
-+	if (mbus_info->pixel_enc == V4L2_PIXEL_ENC_BAYER)
- 		src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-+	else if (format->quantization == V4L2_QUANTIZATION_DEFAULT)
-+		src_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE;
-+	else
-+		src_fmt->quantization = format->quantization;
- 
- 	*format = *src_fmt;
- }
-@@ -1068,6 +1088,17 @@ int rkisp1_isp_register(struct rkisp1_device *rkisp1,
- 	return ret;
- }
- 
-+int rkisp1_get_isp_src_fmt(struct rkisp1_device *rkisp1,
-+			   struct v4l2_subdev_format *sd_fmt)
-+{
-+	struct rkisp1_isp *isp = &rkisp1->isp;
-+
-+	sd_fmt->which = V4L2_SUBDEV_FORMAT_ACTIVE;
-+	sd_fmt->pad = RKISP1_ISP_PAD_SOURCE_VIDEO;
-+
-+	return v4l2_subdev_call(&isp->sd, pad, get_fmt, NULL, sd_fmt);
-+}
-+
- void rkisp1_isp_unregister(struct rkisp1_device *rkisp1)
- {
- 	struct v4l2_subdev *sd = &rkisp1->isp.sd;
-diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-index 7b6b7ddd4169..8705b133de68 100644
---- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-@@ -525,6 +525,7 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
- 	const struct rkisp1_isp_mbus_info *mbus_info;
- 	struct v4l2_mbus_framefmt *sink_fmt, *src_fmt;
- 	struct v4l2_rect *sink_crop;
-+	struct v4l2_subdev_format isp_sd_fmt;
- 
- 	sink_fmt = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SINK, which);
- 	src_fmt = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SRC, which);
-@@ -539,8 +540,20 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
- 	if (which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		rsz->pixel_enc = mbus_info->pixel_enc;
- 
-+	rkisp1_get_isp_src_fmt(rsz->rkisp1, &isp_sd_fmt);
-+
-+	sink_fmt->field = isp_sd_fmt.format.field;
-+	sink_fmt->colorspace = isp_sd_fmt.format.colorspace;
-+	sink_fmt->ycbcr_enc = isp_sd_fmt.format.ycbcr_enc;
-+	sink_fmt->xfer_func = isp_sd_fmt.format.xfer_func;
-+
- 	/* Propagete to source pad */
- 	src_fmt->code = sink_fmt->code;
-+	src_fmt->field = sink_fmt->field;
-+	src_fmt->colorspace = sink_fmt->colorspace;
-+	src_fmt->ycbcr_enc = sink_fmt->ycbcr_enc;
-+	src_fmt->xfer_func = sink_fmt->xfer_func;
-+	src_fmt->quantization = sink_fmt->quantization;
- 
- 	sink_fmt->width = clamp_t(u32, format->width,
- 				  rsz->config->min_rsz_width,
--- 
-2.17.1
+Hi,
 
+On Thu 16 Apr 20, 15:44, Johan Jonker wrote:
+> On 4/16/20 3:24 PM, Paul Kocialkowski wrote:
+> > Hi,
+> >=20
+> > On Thu 16 Apr 20, 15:02, Johan Jonker wrote:
+> >> Hi Paul,
+> >>
+> >> The conversion of rockchip-rga.txt to rockchip-rga.yaml by myself just
+> >> has been approved by robh.
+> >=20
+> > Huh, I looked around for ongoing related work but missed it.
+> > I'll definitely rebase on top of your series and use the yaml descripti=
+on
+> > instead. Thanks!
+> >=20
+> >> Maybe place dts patches at the end of a patch serie.
+> >> Could you include a &rga patch if your device is supported in mainline,
+> >> so we can test with:
+> >> make ARCH=3Darm64 dtbs_check
+> >> DT_SCHEMA_FILES=3DDocumentation/devicetree/bindings/media/rockchip-rga=
+=2Eyaml
+> >=20
+> > I tested with the PX30 EVB so I can surely add a node there if that tur=
+ns
+> > out necessary (see below).
+> >=20
+> >> Johan
+> >>
+> >> On 4/16/20 1:50 PM, Paul Kocialkowski wrote:
+> >>> The PX30 features a RGA block: add the necessary node to support it.
+> >>>
+> >>> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> >>> ---
+> >>>  arch/arm64/boot/dts/rockchip/px30.dtsi | 11 +++++++++++
+> >>>  1 file changed, 11 insertions(+)
+> >>>
+> >>> diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot=
+/dts/rockchip/px30.dtsi
+> >>> index 75908c587511..4bfbee9d4123 100644
+> >>> --- a/arch/arm64/boot/dts/rockchip/px30.dtsi
+> >>> +++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
+> >>> @@ -1104,6 +1104,17 @@ vopl_mmu: iommu@ff470f00 {
+> >>>  		status =3D "disabled";
+> >>>  	};
+> >>> =20
+> >>> +	rga: rga@ff480000 {
+> >>> +		compatible =3D "rockchip,px30-rga";
+> >>> +		reg =3D <0x0 0xff480000 0x0 0x10000>;
+> >>> +		interrupts =3D <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH 0>;
+> >>> +		clocks =3D <&cru ACLK_RGA>, <&cru HCLK_RGA>, <&cru SCLK_RGA_CORE>;
+> >>> +		clock-names =3D "aclk", "hclk", "sclk";
+> >>> +		resets =3D <&cru SRST_RGA>, <&cru SRST_RGA_A>, <&cru SRST_RGA_H>;
+> >>> +		reset-names =3D "core", "axi", "ahb";
+> >>> +		power-domains =3D <&power PX30_PD_VO>;
+> >>
+> >> 		status =3D "disabled";
+> >=20
+> > As of 5.6, the rk3399 has the node enabled by default. Did that change?
+>=20
+> 'status' disappeared during review for rk3399 between v2 and v3, but
+> doesn't mention the reason. If someone can give more info here?
+>=20
+> https://lore.kernel.org/lkml/1500101920-24039-5-git-send-email-jacob-chen=
+@iotwrt.com/
+>=20
+> https://lore.kernel.org/lkml/1501470460-12014-5-git-send-email-jacob-chen=
+@iotwrt.com/
+>=20
+> >=20
+> > Since it's a standalone block that has no I/O dependency, I don't reall=
+y see
+> > the point of disabling it by default.
+>=20
+> Vop, hdmi and other video devices are also disabled.
+> Follow the rest I think...
+
+Well, these blocks do have related I/O ports so it makes sense not to enable
+them by default because of pinmux, or because there might be no connector
+populated/routed.
+
+For a memory to memory internal block, I don't see any reason why.
+It's definitely not board-specific and having to add these nodes for every =
+board
+that has them is kind of a pain and might be overlooked. This will easily r=
+esult
+in the feature not being available for end users without having to change t=
+he
+dt.
+
+Also, the vpu node is always enabled on rockchip (and sunxi) platforms.
+I think these are better examples to follow.
+
+Cheers,
+
+Paul
+
+> >=20
+> > What do you think?
+> >=20
+> > Cheers,
+> >=20
+> > Paul
+> >=20
+> >>> +	};
+> >>> +
+> >>>  	qos_gmac: qos@ff518000 {
+> >>>  		compatible =3D "syscon";
+> >>>  		reg =3D <0x0 0xff518000 0x0 0x20>;
+> >>>
+> >>
+> >=20
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--5me2qT3T17SWzdxI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAl6YY8cACgkQ3cLmz3+f
+v9HFdQf/Ucl4BsyAk0vmxKBrLrYibjhWFadjBl0GYEQ9ZVUmMP+VemCFEYed3jWw
+HrmVkh1G/pdP3WesXwKxEJxhmfxJqdbD6MqyA9RIhGNOO36Mojbe2Q+xSA2UGVRA
+bvo3jg1Gb+DrWPDhYXrcTHWrGn6zdMXNYbzR9HHJvOFqbUHM2fBIWZBafuz2ph/T
+yzgVoCwWEuxfxAYcGdFn/qkm6F+Afq/DOmXxTjwk3t80f4lCsgzmRecXTZibktpV
+E5XjKumCb6FGHFOyKTROrY0y4sKbWygQNDdzZ7NIW3UIY3ViiudG3poAcxCjxL4Y
+LCHF/9ORJJ71RasTzUB+aDbe4OaBUA==
+=+2Ry
+-----END PGP SIGNATURE-----
+
+--5me2qT3T17SWzdxI--
