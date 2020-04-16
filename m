@@ -2,67 +2,538 @@ Return-Path: <SRS0=ht1n=6A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E977C2D0EF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:01:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7898DC352BE
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:18:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E91E206E9
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:01:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D04B206F9
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:18:55 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="bG+hsXCF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439948AbgDPIBz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Apr 2020 04:01:55 -0400
-Received: from gofer.mess.org ([88.97.38.141]:59437 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439931AbgDPIBy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Apr 2020 04:01:54 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 4D47F11A002; Thu, 16 Apr 2020 09:01:52 +0100 (BST)
-Date:   Thu, 16 Apr 2020 09:01:52 +0100
-From:   Sean Young <sean@mess.org>
-To:     Rosen Penev <rosenp@gmail.com>
-Cc:     Ariel D'Alessandro <ariel@vanguardiasur.com.ar>,
-        linux-media@vger.kernel.org, hverkuil@xs4all.nl,
-        p.zabel@pengutronix.de, laurent.pinchart@ideasonboard.com,
-        ezequiel@collabora.com, nicolas@ndufresne.ca,
-        kieran.bingham@ideasonboard.com
-Subject: Re: [RFC PATCH v2 1/1] Add support for meson building
-Message-ID: <20200416080152.GA12736@gofer.mess.org>
-References: <20200408195611.55421-1-ariel@vanguardiasur.com.ar>
- <20200408195611.55421-2-ariel@vanguardiasur.com.ar>
- <CAKxU2N9CN6N3p5kfpzhkpX0PWD=5ogr14qcPQ_p5qprm0z98=A@mail.gmail.com>
- <CAKxU2N_fTJ7gzLov3AsTPrCVB3xbXoJa6fuSqRvPxVa60V_+zQ@mail.gmail.com>
+        id S2441275AbgDPISd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Apr 2020 04:18:33 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:36563 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2440883AbgDPIST (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Apr 2020 04:18:19 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id Oziqjxd6hlKa1OzitjQrt7; Thu, 16 Apr 2020 10:18:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1587025091; bh=LyhH8QH0QUK55JXvGwFeDRtEFbdhTpMjuKO6MAr0Eus=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=bG+hsXCF3bB2l9a3qsyvlq+smAYReCfesDPtiNmxaZMUyP+90OhPz2zwiHeC9c6Ww
+         kYoxz67u6BRQUONYuCEHsnqsCZU/hii96bKaWDOFu+e5zbMujZRGV9Z6C0FjR9eBLa
+         7Nk/eQdMG/vPMXwVaUozXBi4WxbmNeBPJ53oLxavKZwI95rH+9OzxrC+5OmECS2rG5
+         FmCbZ4ey0AYmdo6W2HUklkdS8EM/4qaRETt5eTrhh+xT9Gf9engktjaX+8VcLXzc33
+         njiUKO0Z83dtoQo3UJWr3lvOeBHZjMAvWgF1DKyhjNAwoBp88LQsC8goc7pXq7VBK6
+         i5kop9DW2RjgQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH] media/test_drivers: rename to test-drivers
+Message-ID: <93d308ce-1912-4d08-3156-e5bb5c577ded@xs4all.nl>
+Date:   Thu, 16 Apr 2020 10:18:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKxU2N_fTJ7gzLov3AsTPrCVB3xbXoJa6fuSqRvPxVa60V_+zQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfFw4iKDjaVBMy3X+/Di7L3gYhClgstavrzhMYSNr7Fk/QSOWwFVUPBtBBuWlqtQZ4MReQl1SBFcRmuv4/mAspHw5+JF0ne/yVFTEhKrZyBo2Il+Z2tmf
+ MxRUKQD2LEot0JPkGY4qJPY54RTI6AK5M9zc65yTAp0tUvgkGciTfpFAEQz8LG18eN76cDCsYQBosQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 04:34:08PM -0700, Rosen Penev wrote:
-> On Fri, Apr 10, 2020 at 5:28 PM Rosen Penev <rosenp@gmail.com> wrote:
-> >
-> > On Wed, Apr 8, 2020 at 1:42 PM Ariel D'Alessandro
-> > <ariel@vanguardiasur.com.ar> wrote:
-> > >
-> > > Currently supports building libraries and tools found in lib/ and
-> > > utils/ directories.
-> > Excellent. This will make it easier to run the code against static
-> > code analyzers.
-> This is worse than I thought. v4l-utils fails to compile with clang
-> (and by extension clang-tidy as it uses nested functions.
+We never use _ in directory names in the media subsystem, so
+rename to test-drivers instead for consistency.
 
-That's down to some code I wrote. I was hoping clang was going to add
-nested function support at some point, but they haven't. 
+Also update MAINTAINERS with the new path.
 
-I've just sent a patch to the list removing the nested functions from
-v4l-utils. I don't think the code is improved by this, but I think being
-able to build with clang takes precendence.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ MAINTAINERS                                                 | 6 +++---
+ drivers/media/Kconfig                                       | 2 +-
+ drivers/media/Makefile                                      | 2 +-
+ drivers/media/{test_drivers => test-drivers}/Kconfig        | 6 +++---
+ drivers/media/{test_drivers => test-drivers}/Makefile       | 0
+ .../media/{test_drivers => test-drivers}/vicodec/Kconfig    | 0
+ .../media/{test_drivers => test-drivers}/vicodec/Makefile   | 0
+ .../{test_drivers => test-drivers}/vicodec/codec-fwht.c     | 0
+ .../{test_drivers => test-drivers}/vicodec/codec-fwht.h     | 0
+ .../vicodec/codec-v4l2-fwht.c                               | 0
+ .../vicodec/codec-v4l2-fwht.h                               | 0
+ .../{test_drivers => test-drivers}/vicodec/vicodec-core.c   | 0
+ drivers/media/{test_drivers => test-drivers}/vim2m.c        | 0
+ drivers/media/{test_drivers => test-drivers}/vimc/Kconfig   | 0
+ drivers/media/{test_drivers => test-drivers}/vimc/Makefile  | 0
+ .../{test_drivers => test-drivers}/vimc/vimc-capture.c      | 0
+ .../media/{test_drivers => test-drivers}/vimc/vimc-common.c | 0
+ .../media/{test_drivers => test-drivers}/vimc/vimc-common.h | 0
+ .../media/{test_drivers => test-drivers}/vimc/vimc-core.c   | 0
+ .../{test_drivers => test-drivers}/vimc/vimc-debayer.c      | 0
+ .../media/{test_drivers => test-drivers}/vimc/vimc-scaler.c | 0
+ .../media/{test_drivers => test-drivers}/vimc/vimc-sensor.c | 0
+ .../{test_drivers => test-drivers}/vimc/vimc-streamer.c     | 0
+ .../{test_drivers => test-drivers}/vimc/vimc-streamer.h     | 0
+ drivers/media/{test_drivers => test-drivers}/vivid/Kconfig  | 0
+ drivers/media/{test_drivers => test-drivers}/vivid/Makefile | 0
+ .../media/{test_drivers => test-drivers}/vivid/vivid-cec.c  | 0
+ .../media/{test_drivers => test-drivers}/vivid/vivid-cec.h  | 0
+ .../media/{test_drivers => test-drivers}/vivid/vivid-core.c | 0
+ .../media/{test_drivers => test-drivers}/vivid/vivid-core.h | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-ctrls.c      | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-ctrls.h      | 0
+ .../vivid/vivid-kthread-cap.c                               | 0
+ .../vivid/vivid-kthread-cap.h                               | 0
+ .../vivid/vivid-kthread-out.c                               | 0
+ .../vivid/vivid-kthread-out.h                               | 0
+ .../vivid/vivid-kthread-touch.c                             | 0
+ .../vivid/vivid-kthread-touch.h                             | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-meta-cap.c   | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-meta-cap.h   | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-meta-out.c   | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-meta-out.h   | 0
+ .../media/{test_drivers => test-drivers}/vivid/vivid-osd.c  | 0
+ .../media/{test_drivers => test-drivers}/vivid/vivid-osd.h  | 0
+ .../vivid/vivid-radio-common.c                              | 0
+ .../vivid/vivid-radio-common.h                              | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-radio-rx.c   | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-radio-rx.h   | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-radio-tx.c   | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-radio-tx.h   | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-rds-gen.c    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-rds-gen.h    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-sdr-cap.c    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-sdr-cap.h    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-touch-cap.c  | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-touch-cap.h  | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vbi-cap.c    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vbi-cap.h    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vbi-gen.c    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vbi-gen.h    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vbi-out.c    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vbi-out.h    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vid-cap.c    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vid-cap.h    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vid-common.c | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vid-common.h | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vid-out.c    | 0
+ .../{test_drivers => test-drivers}/vivid/vivid-vid-out.h    | 0
+ 68 files changed, 8 insertions(+), 8 deletions(-)
+ rename drivers/media/{test_drivers => test-drivers}/Kconfig (72%)
+ rename drivers/media/{test_drivers => test-drivers}/Makefile (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vicodec/Kconfig (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vicodec/Makefile (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vicodec/codec-fwht.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vicodec/codec-fwht.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vicodec/codec-v4l2-fwht.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vicodec/codec-v4l2-fwht.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vicodec/vicodec-core.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vim2m.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/Kconfig (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/Makefile (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/vimc-capture.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/vimc-common.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/vimc-common.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/vimc-core.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/vimc-debayer.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/vimc-scaler.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/vimc-sensor.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/vimc-streamer.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vimc/vimc-streamer.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/Kconfig (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/Makefile (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-cec.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-cec.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-core.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-core.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-ctrls.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-ctrls.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-kthread-cap.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-kthread-cap.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-kthread-out.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-kthread-out.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-kthread-touch.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-kthread-touch.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-meta-cap.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-meta-cap.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-meta-out.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-meta-out.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-osd.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-osd.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-radio-common.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-radio-common.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-radio-rx.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-radio-rx.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-radio-tx.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-radio-tx.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-rds-gen.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-rds-gen.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-sdr-cap.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-sdr-cap.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-touch-cap.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-touch-cap.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vbi-cap.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vbi-cap.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vbi-gen.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vbi-gen.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vbi-out.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vbi-out.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vid-cap.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vid-cap.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vid-common.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vid-common.h (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vid-out.c (100%)
+ rename drivers/media/{test_drivers => test-drivers}/vivid/vivid-vid-out.h (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3cb1b45a5624..297197b05562 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17803,7 +17803,7 @@ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+ T:	git git://linuxtv.org/media_tree.git
+-F:	drivers/media/platform/vicodec/*
++F:	drivers/media/test-drivers/vicodec/*
 
-Sean
+ VIDEO I2C POLLING DRIVER
+ M:	Matt Ranostay <matt.ranostay@konsulko.com>
+@@ -17834,7 +17834,7 @@ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+ T:	git git://linuxtv.org/media_tree.git
+-F:	drivers/media/test_drivers/vimc/*
++F:	drivers/media/test-drivers/vimc/*
+
+ VIRT LIB
+ M:	Alex Williamson <alex.williamson@redhat.com>
+@@ -18001,7 +18001,7 @@ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+ T:	git git://linuxtv.org/media_tree.git
+-F:	drivers/media/platform/vivid/*
++F:	drivers/media/test-drivers/vivid/*
+
+ VLYNQ BUS
+ M:	Florian Fainelli <f.fainelli@gmail.com>
+diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
+index ba24db7eb4d6..47638c620f24 100644
+--- a/drivers/media/Kconfig
++++ b/drivers/media/Kconfig
+@@ -230,7 +230,7 @@ source "drivers/media/mmc/Kconfig"
+ endif
+
+ if MEDIA_TEST_SUPPORT
+-source "drivers/media/test_drivers/Kconfig"
++source "drivers/media/test-drivers/Kconfig"
+ endif
+
+ source "drivers/media/firewire/Kconfig"
+diff --git a/drivers/media/Makefile b/drivers/media/Makefile
+index 693b3f0bf03e..d18357bf1346 100644
+--- a/drivers/media/Makefile
++++ b/drivers/media/Makefile
+@@ -29,6 +29,6 @@ obj-$(CONFIG_CEC_CORE) += cec/
+ # Finally, merge the drivers that require the core
+ #
+
+-obj-y += common/ platform/ pci/ usb/ mmc/ firewire/ spi/ test_drivers/
++obj-y += common/ platform/ pci/ usb/ mmc/ firewire/ spi/ test-drivers/
+ obj-$(CONFIG_VIDEO_DEV) += radio/
+
+diff --git a/drivers/media/test_drivers/Kconfig b/drivers/media/test-drivers/Kconfig
+similarity index 72%
+rename from drivers/media/test_drivers/Kconfig
+rename to drivers/media/test-drivers/Kconfig
+index e62abec030c3..c6fd235c575f 100644
+--- a/drivers/media/test_drivers/Kconfig
++++ b/drivers/media/test-drivers/Kconfig
+@@ -6,9 +6,9 @@ menuconfig V4L_TEST_DRIVERS
+
+ if V4L_TEST_DRIVERS
+
+-source "drivers/media/test_drivers/vimc/Kconfig"
++source "drivers/media/test-drivers/vimc/Kconfig"
+
+-source "drivers/media/test_drivers/vivid/Kconfig"
++source "drivers/media/test-drivers/vivid/Kconfig"
+
+ config VIDEO_VIM2M
+ 	tristate "Virtual Memory-to-Memory Driver"
+@@ -19,6 +19,6 @@ config VIDEO_VIM2M
+ 	  This is a virtual test device for the memory-to-memory driver
+ 	  framework.
+
+-source "drivers/media/test_drivers/vicodec/Kconfig"
++source "drivers/media/test-drivers/vicodec/Kconfig"
+
+ endif #V4L_TEST_DRIVERS
+diff --git a/drivers/media/test_drivers/Makefile b/drivers/media/test-drivers/Makefile
+similarity index 100%
+rename from drivers/media/test_drivers/Makefile
+rename to drivers/media/test-drivers/Makefile
+diff --git a/drivers/media/test_drivers/vicodec/Kconfig b/drivers/media/test-drivers/vicodec/Kconfig
+similarity index 100%
+rename from drivers/media/test_drivers/vicodec/Kconfig
+rename to drivers/media/test-drivers/vicodec/Kconfig
+diff --git a/drivers/media/test_drivers/vicodec/Makefile b/drivers/media/test-drivers/vicodec/Makefile
+similarity index 100%
+rename from drivers/media/test_drivers/vicodec/Makefile
+rename to drivers/media/test-drivers/vicodec/Makefile
+diff --git a/drivers/media/test_drivers/vicodec/codec-fwht.c b/drivers/media/test-drivers/vicodec/codec-fwht.c
+similarity index 100%
+rename from drivers/media/test_drivers/vicodec/codec-fwht.c
+rename to drivers/media/test-drivers/vicodec/codec-fwht.c
+diff --git a/drivers/media/test_drivers/vicodec/codec-fwht.h b/drivers/media/test-drivers/vicodec/codec-fwht.h
+similarity index 100%
+rename from drivers/media/test_drivers/vicodec/codec-fwht.h
+rename to drivers/media/test-drivers/vicodec/codec-fwht.h
+diff --git a/drivers/media/test_drivers/vicodec/codec-v4l2-fwht.c b/drivers/media/test-drivers/vicodec/codec-v4l2-fwht.c
+similarity index 100%
+rename from drivers/media/test_drivers/vicodec/codec-v4l2-fwht.c
+rename to drivers/media/test-drivers/vicodec/codec-v4l2-fwht.c
+diff --git a/drivers/media/test_drivers/vicodec/codec-v4l2-fwht.h b/drivers/media/test-drivers/vicodec/codec-v4l2-fwht.h
+similarity index 100%
+rename from drivers/media/test_drivers/vicodec/codec-v4l2-fwht.h
+rename to drivers/media/test-drivers/vicodec/codec-v4l2-fwht.h
+diff --git a/drivers/media/test_drivers/vicodec/vicodec-core.c b/drivers/media/test-drivers/vicodec/vicodec-core.c
+similarity index 100%
+rename from drivers/media/test_drivers/vicodec/vicodec-core.c
+rename to drivers/media/test-drivers/vicodec/vicodec-core.c
+diff --git a/drivers/media/test_drivers/vim2m.c b/drivers/media/test-drivers/vim2m.c
+similarity index 100%
+rename from drivers/media/test_drivers/vim2m.c
+rename to drivers/media/test-drivers/vim2m.c
+diff --git a/drivers/media/test_drivers/vimc/Kconfig b/drivers/media/test-drivers/vimc/Kconfig
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/Kconfig
+rename to drivers/media/test-drivers/vimc/Kconfig
+diff --git a/drivers/media/test_drivers/vimc/Makefile b/drivers/media/test-drivers/vimc/Makefile
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/Makefile
+rename to drivers/media/test-drivers/vimc/Makefile
+diff --git a/drivers/media/test_drivers/vimc/vimc-capture.c b/drivers/media/test-drivers/vimc/vimc-capture.c
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/vimc-capture.c
+rename to drivers/media/test-drivers/vimc/vimc-capture.c
+diff --git a/drivers/media/test_drivers/vimc/vimc-common.c b/drivers/media/test-drivers/vimc/vimc-common.c
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/vimc-common.c
+rename to drivers/media/test-drivers/vimc/vimc-common.c
+diff --git a/drivers/media/test_drivers/vimc/vimc-common.h b/drivers/media/test-drivers/vimc/vimc-common.h
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/vimc-common.h
+rename to drivers/media/test-drivers/vimc/vimc-common.h
+diff --git a/drivers/media/test_drivers/vimc/vimc-core.c b/drivers/media/test-drivers/vimc/vimc-core.c
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/vimc-core.c
+rename to drivers/media/test-drivers/vimc/vimc-core.c
+diff --git a/drivers/media/test_drivers/vimc/vimc-debayer.c b/drivers/media/test-drivers/vimc/vimc-debayer.c
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/vimc-debayer.c
+rename to drivers/media/test-drivers/vimc/vimc-debayer.c
+diff --git a/drivers/media/test_drivers/vimc/vimc-scaler.c b/drivers/media/test-drivers/vimc/vimc-scaler.c
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/vimc-scaler.c
+rename to drivers/media/test-drivers/vimc/vimc-scaler.c
+diff --git a/drivers/media/test_drivers/vimc/vimc-sensor.c b/drivers/media/test-drivers/vimc/vimc-sensor.c
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/vimc-sensor.c
+rename to drivers/media/test-drivers/vimc/vimc-sensor.c
+diff --git a/drivers/media/test_drivers/vimc/vimc-streamer.c b/drivers/media/test-drivers/vimc/vimc-streamer.c
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/vimc-streamer.c
+rename to drivers/media/test-drivers/vimc/vimc-streamer.c
+diff --git a/drivers/media/test_drivers/vimc/vimc-streamer.h b/drivers/media/test-drivers/vimc/vimc-streamer.h
+similarity index 100%
+rename from drivers/media/test_drivers/vimc/vimc-streamer.h
+rename to drivers/media/test-drivers/vimc/vimc-streamer.h
+diff --git a/drivers/media/test_drivers/vivid/Kconfig b/drivers/media/test-drivers/vivid/Kconfig
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/Kconfig
+rename to drivers/media/test-drivers/vivid/Kconfig
+diff --git a/drivers/media/test_drivers/vivid/Makefile b/drivers/media/test-drivers/vivid/Makefile
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/Makefile
+rename to drivers/media/test-drivers/vivid/Makefile
+diff --git a/drivers/media/test_drivers/vivid/vivid-cec.c b/drivers/media/test-drivers/vivid/vivid-cec.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-cec.c
+rename to drivers/media/test-drivers/vivid/vivid-cec.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-cec.h b/drivers/media/test-drivers/vivid/vivid-cec.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-cec.h
+rename to drivers/media/test-drivers/vivid/vivid-cec.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-core.c
+rename to drivers/media/test-drivers/vivid/vivid-core.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-core.h b/drivers/media/test-drivers/vivid/vivid-core.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-core.h
+rename to drivers/media/test-drivers/vivid/vivid-core.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-ctrls.c
+rename to drivers/media/test-drivers/vivid/vivid-ctrls.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-ctrls.h b/drivers/media/test-drivers/vivid/vivid-ctrls.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-ctrls.h
+rename to drivers/media/test-drivers/vivid/vivid-ctrls.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-kthread-cap.c b/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-kthread-cap.c
+rename to drivers/media/test-drivers/vivid/vivid-kthread-cap.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-kthread-cap.h b/drivers/media/test-drivers/vivid/vivid-kthread-cap.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-kthread-cap.h
+rename to drivers/media/test-drivers/vivid/vivid-kthread-cap.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-kthread-out.c b/drivers/media/test-drivers/vivid/vivid-kthread-out.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-kthread-out.c
+rename to drivers/media/test-drivers/vivid/vivid-kthread-out.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-kthread-out.h b/drivers/media/test-drivers/vivid/vivid-kthread-out.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-kthread-out.h
+rename to drivers/media/test-drivers/vivid/vivid-kthread-out.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-kthread-touch.c b/drivers/media/test-drivers/vivid/vivid-kthread-touch.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-kthread-touch.c
+rename to drivers/media/test-drivers/vivid/vivid-kthread-touch.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-kthread-touch.h b/drivers/media/test-drivers/vivid/vivid-kthread-touch.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-kthread-touch.h
+rename to drivers/media/test-drivers/vivid/vivid-kthread-touch.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-meta-cap.c b/drivers/media/test-drivers/vivid/vivid-meta-cap.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-meta-cap.c
+rename to drivers/media/test-drivers/vivid/vivid-meta-cap.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-meta-cap.h b/drivers/media/test-drivers/vivid/vivid-meta-cap.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-meta-cap.h
+rename to drivers/media/test-drivers/vivid/vivid-meta-cap.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-meta-out.c b/drivers/media/test-drivers/vivid/vivid-meta-out.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-meta-out.c
+rename to drivers/media/test-drivers/vivid/vivid-meta-out.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-meta-out.h b/drivers/media/test-drivers/vivid/vivid-meta-out.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-meta-out.h
+rename to drivers/media/test-drivers/vivid/vivid-meta-out.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-osd.c b/drivers/media/test-drivers/vivid/vivid-osd.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-osd.c
+rename to drivers/media/test-drivers/vivid/vivid-osd.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-osd.h b/drivers/media/test-drivers/vivid/vivid-osd.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-osd.h
+rename to drivers/media/test-drivers/vivid/vivid-osd.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-radio-common.c b/drivers/media/test-drivers/vivid/vivid-radio-common.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-radio-common.c
+rename to drivers/media/test-drivers/vivid/vivid-radio-common.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-radio-common.h b/drivers/media/test-drivers/vivid/vivid-radio-common.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-radio-common.h
+rename to drivers/media/test-drivers/vivid/vivid-radio-common.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-radio-rx.c b/drivers/media/test-drivers/vivid/vivid-radio-rx.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-radio-rx.c
+rename to drivers/media/test-drivers/vivid/vivid-radio-rx.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-radio-rx.h b/drivers/media/test-drivers/vivid/vivid-radio-rx.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-radio-rx.h
+rename to drivers/media/test-drivers/vivid/vivid-radio-rx.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-radio-tx.c b/drivers/media/test-drivers/vivid/vivid-radio-tx.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-radio-tx.c
+rename to drivers/media/test-drivers/vivid/vivid-radio-tx.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-radio-tx.h b/drivers/media/test-drivers/vivid/vivid-radio-tx.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-radio-tx.h
+rename to drivers/media/test-drivers/vivid/vivid-radio-tx.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-rds-gen.c b/drivers/media/test-drivers/vivid/vivid-rds-gen.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-rds-gen.c
+rename to drivers/media/test-drivers/vivid/vivid-rds-gen.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-rds-gen.h b/drivers/media/test-drivers/vivid/vivid-rds-gen.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-rds-gen.h
+rename to drivers/media/test-drivers/vivid/vivid-rds-gen.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-sdr-cap.c b/drivers/media/test-drivers/vivid/vivid-sdr-cap.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-sdr-cap.c
+rename to drivers/media/test-drivers/vivid/vivid-sdr-cap.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-sdr-cap.h b/drivers/media/test-drivers/vivid/vivid-sdr-cap.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-sdr-cap.h
+rename to drivers/media/test-drivers/vivid/vivid-sdr-cap.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-touch-cap.c b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-touch-cap.c
+rename to drivers/media/test-drivers/vivid/vivid-touch-cap.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-touch-cap.h b/drivers/media/test-drivers/vivid/vivid-touch-cap.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-touch-cap.h
+rename to drivers/media/test-drivers/vivid/vivid-touch-cap.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-vbi-cap.c b/drivers/media/test-drivers/vivid/vivid-vbi-cap.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vbi-cap.c
+rename to drivers/media/test-drivers/vivid/vivid-vbi-cap.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-vbi-cap.h b/drivers/media/test-drivers/vivid/vivid-vbi-cap.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vbi-cap.h
+rename to drivers/media/test-drivers/vivid/vivid-vbi-cap.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-vbi-gen.c b/drivers/media/test-drivers/vivid/vivid-vbi-gen.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vbi-gen.c
+rename to drivers/media/test-drivers/vivid/vivid-vbi-gen.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-vbi-gen.h b/drivers/media/test-drivers/vivid/vivid-vbi-gen.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vbi-gen.h
+rename to drivers/media/test-drivers/vivid/vivid-vbi-gen.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-vbi-out.c b/drivers/media/test-drivers/vivid/vivid-vbi-out.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vbi-out.c
+rename to drivers/media/test-drivers/vivid/vivid-vbi-out.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-vbi-out.h b/drivers/media/test-drivers/vivid/vivid-vbi-out.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vbi-out.h
+rename to drivers/media/test-drivers/vivid/vivid-vbi-out.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vid-cap.c
+rename to drivers/media/test-drivers/vivid/vivid-vid-cap.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-vid-cap.h b/drivers/media/test-drivers/vivid/vivid-vid-cap.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vid-cap.h
+rename to drivers/media/test-drivers/vivid/vivid-vid-cap.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-vid-common.c b/drivers/media/test-drivers/vivid/vivid-vid-common.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vid-common.c
+rename to drivers/media/test-drivers/vivid/vivid-vid-common.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-vid-common.h b/drivers/media/test-drivers/vivid/vivid-vid-common.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vid-common.h
+rename to drivers/media/test-drivers/vivid/vivid-vid-common.h
+diff --git a/drivers/media/test_drivers/vivid/vivid-vid-out.c b/drivers/media/test-drivers/vivid/vivid-vid-out.c
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vid-out.c
+rename to drivers/media/test-drivers/vivid/vivid-vid-out.c
+diff --git a/drivers/media/test_drivers/vivid/vivid-vid-out.h b/drivers/media/test-drivers/vivid/vivid-vid-out.h
+similarity index 100%
+rename from drivers/media/test_drivers/vivid/vivid-vid-out.h
+rename to drivers/media/test-drivers/vivid/vivid-vid-out.h
+-- 
+2.25.1
+
