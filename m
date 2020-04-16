@@ -2,559 +2,123 @@ Return-Path: <SRS0=ht1n=6A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D3B2C2BB85
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0401AC2D0EF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:30:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66F1E206F9
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:28:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5B2E2078B
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 08:30:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1587025835;
+	bh=+AtB2qrsVxt1QWCAagtuBV0iMzA+FqM4hoS9ArXVBXI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=a+ZToFNdZL71+7RSHEbp/tpZC8pgCE4fF/zYkPEd7PzNzMuRaJVaZoGVlMCi7qejx
+	 inzo0isq6Awoak6hdG5n6lXoPQPxh3nqjWfGlaL0+7AvjGJrIpXcZWy4OFlvc84JZJ
+	 yL3c0dFGEWPgANxToHggQLUlES7cKLYGlfQtvpIs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440228AbgDPIQh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Apr 2020 04:16:37 -0400
-Received: from gofer.mess.org ([88.97.38.141]:55945 "EHLO gofer.mess.org"
+        id S2502124AbgDPIa1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Apr 2020 04:30:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38708 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2441085AbgDPIQC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Apr 2020 04:16:02 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 2825411A002; Thu, 16 Apr 2020 09:15:22 +0100 (BST)
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH v4l-utils v2] Removed nested functions to support building with clang
-Date:   Thu, 16 Apr 2020 09:15:22 +0100
-Message-Id: <20200416081522.13880-1-sean@mess.org>
-X-Mailer: git-send-email 2.20.1
+        id S2439552AbgDPILF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Apr 2020 04:11:05 -0400
+Received: from localhost (unknown [223.235.195.235])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D38A206B9;
+        Thu, 16 Apr 2020 08:07:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587024458;
+        bh=+AtB2qrsVxt1QWCAagtuBV0iMzA+FqM4hoS9ArXVBXI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2SDVAHMhpWjl2KgmMtDeMa4mCSN5E7syFhtD6nl+7e+uOtdm92iHSJh7of/HWeSKy
+         HDPx9eDy3/ziMPBERearhYxolH1rzEwouN2J1vLT/RYfJAdCvbbfyQVciDd7LjXhj3
+         Rm7XEVuyXLSwCmFC9enIFNjzAhrkqZPWIGTVc9wk=
+Date:   Thu, 16 Apr 2020 13:37:34 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: Remove cases of 'allOf' containing a
+ '$ref'
+Message-ID: <20200416080734.GJ72691@vkoul-mobl>
+References: <20200416005549.9683-1-robh@kernel.org>
+ <20200416005549.9683-2-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200416005549.9683-2-robh@kernel.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- utils/common/ir-encode.c   | 336 +++++++++++++++++++------------------
- utils/ir-ctl/bpf_encoder.c |  40 ++---
- 2 files changed, 190 insertions(+), 186 deletions(-)
+On 15-04-20, 19:55, Rob Herring wrote:
+> json-schema versions draft7 and earlier have a weird behavior in that
+> any keywords combined with a '$ref' are ignored (silently). The correct
+> form was to put a '$ref' under an 'allOf'. This behavior is now changed
+> in the 2019-09 json-schema spec and '$ref' can be mixed with other
+> keywords. The json-schema library doesn't yet support this, but the
+> tooling now does a fixup for this and either way works.
+> 
+> This has been a constant source of review comments, so let's change this
+> treewide so everyone copies the simpler syntax.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/arm/cpus.yaml         |  81 +++---
+>  .../devicetree/bindings/arm/l2c2x0.yaml       |  87 +++---
+>  .../devicetree/bindings/arm/psci.yaml         |  15 +-
+>  .../bindings/arm/samsung/exynos-chipid.yaml   |   5 +-
+>  .../bus/allwinner,sun50i-a64-de2.yaml         |   5 +-
+>  .../bindings/clock/fixed-factor-clock.yaml    |   5 +-
+>  .../bindings/connector/usb-connector.yaml     |  28 +-
+>  .../bindings/crypto/st,stm32-hash.yaml        |   9 +-
+>  .../allwinner,sun4i-a10-display-engine.yaml   |   7 +-
+>  .../display/allwinner,sun4i-a10-tcon.yaml     |   5 +-
+>  .../bindings/display/panel/panel-common.yaml  |   5 +-
+>  .../devicetree/bindings/dma/dma-common.yaml   |   3 +-
+>  .../devicetree/bindings/dma/ti/k3-udma.yaml   |  18 +-
 
-diff --git a/utils/common/ir-encode.c b/utils/common/ir-encode.c
-index e4fde403..b3757e12 100644
---- a/utils/common/ir-encode.c
-+++ b/utils/common/ir-encode.c
-@@ -29,23 +29,24 @@
- 
- #define NS_TO_US(x) (((x)+500)/1000)
- 
-+static const int nec_unit = 562500;
-+
-+static void nec_add_byte(unsigned *buf, int *n, unsigned bits)
-+{
-+	int i;
-+	for (i=0; i<8; i++) {
-+		buf[(*n)++] = NS_TO_US(nec_unit);
-+		if (bits & (1 << i))
-+			buf[(*n)++] = NS_TO_US(nec_unit * 3);
-+		else
-+			buf[(*n)++] = NS_TO_US(nec_unit);
-+	}
-+}
-+
- static int nec_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
- {
--	const int nec_unit = 562500;
- 	int n = 0;
- 
--	void add_byte(unsigned bits)
--	{
--		int i;
--		for (i=0; i<8; i++) {
--			buf[n++] = NS_TO_US(nec_unit);
--			if (bits & (1 << i))
--				buf[n++] = NS_TO_US(nec_unit * 3);
--			else
--				buf[n++] = NS_TO_US(nec_unit);
--		}
--	}
--
- 	buf[n++] = NS_TO_US(nec_unit * 16);
- 	buf[n++] = NS_TO_US(nec_unit * 8);
- 
-@@ -53,22 +54,22 @@ static int nec_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
- 	default:
- 		return 0;
- 	case RC_PROTO_NEC:
--		add_byte(scancode >> 8);
--		add_byte(~(scancode >> 8));
--		add_byte(scancode);
--		add_byte(~scancode);
-+		nec_add_byte(buf, &n, scancode >> 8);
-+		nec_add_byte(buf, &n, ~(scancode >> 8));
-+		nec_add_byte(buf, &n, scancode);
-+		nec_add_byte(buf, &n, ~scancode);
- 		break;
- 	case RC_PROTO_NECX:
--		add_byte(scancode >> 16);
--		add_byte(scancode >> 8);
--		add_byte(scancode);
--		add_byte(~scancode);
-+		nec_add_byte(buf, &n, scancode >> 16);
-+		nec_add_byte(buf, &n, scancode >> 8);
-+		nec_add_byte(buf, &n, scancode);
-+		nec_add_byte(buf, &n, ~scancode);
- 		break;
- 	case RC_PROTO_NEC32:
--		add_byte(scancode >> 16);
--		add_byte(scancode >> 24);
--		add_byte(scancode);
--		add_byte(scancode >> 8);
-+		nec_add_byte(buf, &n, scancode >> 16);
-+		nec_add_byte(buf, &n, scancode >> 24);
-+		nec_add_byte(buf, &n, scancode);
-+		nec_add_byte(buf, &n, scancode >> 8);
- 		break;
- 	}
- 
-@@ -104,102 +105,103 @@ static int jvc_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
- 	return 35;
- }
- 
--static int sanyo_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
-+static const int sanyo_unit = 562500;
-+
-+static void sanyo_add_bits(unsigned **buf, int bits, int count)
- {
--	const int sanyo_unit = 562500;
--
--	void add_bits(int bits, int count)
--	{
--		int i;
--		for (i=0; i<count; i++) {
--			*buf++ = NS_TO_US(sanyo_unit);
--
--			if (bits & (1 << i))
--				*buf++ = NS_TO_US(sanyo_unit * 3);
--			else
--				*buf++ = NS_TO_US(sanyo_unit);
--		}
-+	int i;
-+	for (i=0; i<count; i++) {
-+		*(*buf)++ = NS_TO_US(sanyo_unit);
-+
-+		if (bits & (1 << i))
-+			*(*buf)++ = NS_TO_US(sanyo_unit * 3);
-+		else
-+			*(*buf)++ = NS_TO_US(sanyo_unit);
- 	}
-+}
- 
-+static int sanyo_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
-+{
- 	*buf++ = NS_TO_US(sanyo_unit * 16);
- 	*buf++ = NS_TO_US(sanyo_unit * 8);
- 
--	add_bits(scancode >> 8, 13);
--	add_bits(~(scancode >> 8), 13);
--	add_bits(scancode, 8);
--	add_bits(~scancode, 8);
-+	sanyo_add_bits(&buf, scancode >> 8, 13);
-+	sanyo_add_bits(&buf, ~(scancode >> 8), 13);
-+	sanyo_add_bits(&buf, scancode, 8);
-+	sanyo_add_bits(&buf, ~scancode, 8);
- 
- 	*buf = NS_TO_US(sanyo_unit);
- 
- 	return 87;
- }
- 
--static int sharp_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
-+static const int sharp_unit = 40000;
-+
-+static void sharp_add_bits(unsigned **buf, int bits, int count)
- {
--	const int sharp_unit = 40000;
--
--	void add_bits(int bits, int count)
--	{
--		int i;
--		for (i=0; i<count; i++) {
--			*buf++ = NS_TO_US(sharp_unit * 8);
--
--			if (bits & (1 << i))
--				*buf++ = NS_TO_US(sharp_unit * 50);
--			else
--				*buf++ = NS_TO_US(sharp_unit * 25);
--		}
-+	int i;
-+	for (i=0; i<count; i++) {
-+		*(*buf)++ = NS_TO_US(sharp_unit * 8);
-+
-+		if (bits & (1 << i))
-+			*(*buf)++ = NS_TO_US(sharp_unit * 50);
-+		else
-+			*(*buf)++ = NS_TO_US(sharp_unit * 25);
- 	}
-+}
- 
--	add_bits(scancode >> 8, 5);
--	add_bits(scancode, 8);
--	add_bits(1, 2);
-+static int sharp_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
-+{
-+	sharp_add_bits(&buf, scancode >> 8, 5);
-+	sharp_add_bits(&buf, scancode, 8);
-+	sharp_add_bits(&buf, 1, 2);
- 
- 	*buf++ = NS_TO_US(sharp_unit * 8);
- 	*buf++ = NS_TO_US(sharp_unit * 1000);
- 
--	add_bits(scancode >> 8, 5);
--	add_bits(~scancode, 8);
--	add_bits(~1, 2);
-+	sharp_add_bits(&buf, scancode >> 8, 5);
-+	sharp_add_bits(&buf, ~scancode, 8);
-+	sharp_add_bits(&buf, ~1, 2);
- 	*buf++ = NS_TO_US(sharp_unit * 8);
- 
- 	return (13 + 2) * 4 + 3;
- }
- 
--static int sony_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
--{
--	const int sony_unit = 600000;
--	int n = 0;
-+static const int sony_unit = 600000;
- 
--	void add_bits(int bits, int count)
--	{
--		int i;
--		for (i=0; i<count; i++) {
--			if (bits & (1 << i))
--				buf[n++] = NS_TO_US(sony_unit * 2);
--			else
--				buf[n++] = NS_TO_US(sony_unit);
-+static void sony_add_bits(unsigned *buf, int *n, int bits, int count)
-+{
-+	int i;
-+	for (i=0; i<count; i++) {
-+		if (bits & (1 << i))
-+			buf[(*n)++] = NS_TO_US(sony_unit * 2);
-+		else
-+			buf[(*n)++] = NS_TO_US(sony_unit);
- 
--			buf[n++] = NS_TO_US(sony_unit);
--		}
-+		buf[(*n)++] = NS_TO_US(sony_unit);
- 	}
-+}
-+
-+static int sony_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
-+{
-+	int n = 0;
- 
- 	buf[n++] = NS_TO_US(sony_unit * 4);
- 	buf[n++] = NS_TO_US(sony_unit);
- 
- 	switch (proto) {
- 	case RC_PROTO_SONY12:
--		add_bits(scancode, 7);
--		add_bits(scancode >> 16, 5);
-+		sony_add_bits(buf, &n, scancode, 7);
-+		sony_add_bits(buf, &n, scancode >> 16, 5);
- 		break;
- 	case RC_PROTO_SONY15:
--		add_bits(scancode, 7);
--		add_bits(scancode >> 16, 8);
-+		sony_add_bits(buf, &n, scancode, 7);
-+		sony_add_bits(buf, &n, scancode >> 16, 8);
- 		break;
- 	case RC_PROTO_SONY20:
--		add_bits(scancode, 7);
--		add_bits(scancode >> 16, 5);
--		add_bits(scancode >> 8, 8);
-+		sony_add_bits(buf, &n, scancode, 7);
-+		sony_add_bits(buf, &n, scancode >> 16, 5);
-+		sony_add_bits(buf, &n, scancode >> 8, 8);
- 		break;
- 	default:
- 		return 0;
-@@ -209,39 +211,40 @@ static int sony_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
- 	return n - 1;
- }
- 
--static int rc5_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
--{
--	const unsigned int rc5_unit = 888888;
--	unsigned n = 0;
-+static const unsigned int rc5_unit = 888888;
- 
--	void advance_space(unsigned length)
--	{
--		if (n % 2)
--			buf[n] += length;
--		else
--			buf[++n] = length;
--	}
-+static void rc5_advance_space(unsigned *buf, unsigned *n, unsigned length)
-+{
-+	if (*n % 2)
-+		buf[*n] += length;
-+	else
-+		buf[++(*n)] = length;
-+}
- 
--	void advance_pulse(unsigned length)
--	{
--		if (n % 2)
--			buf[++n] = length;
--		else
--			buf[n] += length;
--	}
-+static void rc5_advance_pulse(unsigned *buf, unsigned *n, unsigned length)
-+{
-+	if (*n % 2)
-+		buf[++(*n)] = length;
-+	else
-+		buf[*n] += length;
-+}
- 
--	void add_bits(int bits, int count)
--	{
--		while (count--) {
--			if (bits & (1 << count)) {
--				advance_space(NS_TO_US(rc5_unit));
--				advance_pulse(NS_TO_US(rc5_unit));
--			} else {
--				advance_pulse(NS_TO_US(rc5_unit));
--				advance_space(NS_TO_US(rc5_unit));
--			}
-+static void rc5_add_bits(unsigned *buf, unsigned *n, int bits, int count)
-+{
-+	while (count--) {
-+		if (bits & (1 << count)) {
-+			rc5_advance_space(buf, n, NS_TO_US(rc5_unit));
-+			rc5_advance_pulse(buf, n, NS_TO_US(rc5_unit));
-+		} else {
-+			rc5_advance_pulse(buf, n, NS_TO_US(rc5_unit));
-+			rc5_advance_space(buf, n, NS_TO_US(rc5_unit));
- 		}
- 	}
-+}
-+
-+static int rc5_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
-+{
-+	unsigned n = 0;
- 
- 	buf[n] = NS_TO_US(rc5_unit);
- 
-@@ -249,24 +252,24 @@ static int rc5_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
- 	default:
- 		return 0;
- 	case RC_PROTO_RC5:
--		add_bits(!(scancode & 0x40), 1);
--		add_bits(0, 1);
--		add_bits(scancode >> 8, 5);
--		add_bits(scancode, 6);
-+		rc5_add_bits(buf, &n, !(scancode & 0x40), 1);
-+		rc5_add_bits(buf, &n, 0, 1);
-+		rc5_add_bits(buf, &n, scancode >> 8, 5);
-+		rc5_add_bits(buf, &n, scancode, 6);
- 		break;
- 	case RC_PROTO_RC5_SZ:
--		add_bits(!!(scancode & 0x2000), 1);
--		add_bits(0, 1);
--		add_bits(scancode >> 6, 6);
--		add_bits(scancode, 6);
-+		rc5_add_bits(buf, &n, !!(scancode & 0x2000), 1);
-+		rc5_add_bits(buf, &n, 0, 1);
-+		rc5_add_bits(buf, &n, scancode >> 6, 6);
-+		rc5_add_bits(buf, &n, scancode, 6);
- 		break;
- 	case RC_PROTO_RC5X_20:
--		add_bits(!(scancode & 0x4000), 1);
--		add_bits(0, 1);
--		add_bits(scancode >> 16, 5);
--		advance_space(NS_TO_US(rc5_unit * 4));
--		add_bits(scancode >> 8, 6);
--		add_bits(scancode, 6);
-+		rc5_add_bits(buf, &n, !(scancode & 0x4000), 1);
-+		rc5_add_bits(buf, &n, 0, 1);
-+		rc5_add_bits(buf, &n, scancode >> 16, 5);
-+		rc5_advance_space(buf, &n, NS_TO_US(rc5_unit * 4));
-+		rc5_add_bits(buf, &n, scancode >> 8, 6);
-+		rc5_add_bits(buf, &n, scancode, 6);
- 		break;
- 	}
- 
-@@ -274,40 +277,41 @@ static int rc5_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
- 	return (n % 2) ? n : n + 1;
- }
- 
--static int rc6_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
--{
--	const unsigned int rc6_unit = 444444;
--	unsigned n = 0;
-+static const unsigned int rc6_unit = 444444;
- 
--	void advance_space(unsigned length)
--	{
--		if (n % 2)
--			buf[n] += length;
--		else
--			buf[++n] = length;
--	}
-+static void rc6_advance_space(unsigned *buf, unsigned *n, unsigned length)
-+{
-+	if (*n % 2)
-+		buf[*n] += length;
-+	else
-+		buf[++(*n)] = length;
-+}
- 
--	void advance_pulse(unsigned length)
--	{
--		if (n % 2)
--			buf[++n] = length;
--		else
--			buf[n] += length;
--	}
-+static void rc6_advance_pulse(unsigned *buf, unsigned *n, unsigned length)
-+{
-+	if (*n % 2)
-+		buf[++(*n)] = length;
-+	else
-+		buf[*n] += length;
-+}
- 
--	void add_bits(unsigned bits, unsigned count, unsigned length)
--	{
--		while (count--) {
--			if (bits & (1 << count)) {
--				advance_pulse(length);
--				advance_space(length);
--			} else {
--				advance_space(length);
--				advance_pulse(length);
--			}
-+static void rc6_add_bits(unsigned *buf, unsigned *n,
-+			 unsigned bits, unsigned count, unsigned length)
-+{
-+	while (count--) {
-+		if (bits & (1 << count)) {
-+			rc6_advance_pulse(buf, n, length);
-+			rc6_advance_space(buf, n, length);
-+		} else {
-+			rc6_advance_space(buf, n, length);
-+			rc6_advance_pulse(buf, n, length);
- 		}
- 	}
-+}
- 
-+static int rc6_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
-+{
-+	unsigned n = 0;
- 	buf[n++] = NS_TO_US(rc6_unit * 6);
- 	buf[n++] = NS_TO_US(rc6_unit * 2);
- 	buf[n] = 0;
-@@ -316,25 +320,25 @@ static int rc6_encode(enum rc_proto proto, unsigned scancode, unsigned *buf)
- 	default:
- 		return 0;
- 	case RC_PROTO_RC6_0:
--		add_bits(8, 4, NS_TO_US(rc6_unit));
--		add_bits(0, 1, NS_TO_US(rc6_unit * 2));
--		add_bits(scancode, 16, NS_TO_US(rc6_unit));
-+		rc6_add_bits(buf, &n, 8, 4, NS_TO_US(rc6_unit));
-+		rc6_add_bits(buf, &n, 0, 1, NS_TO_US(rc6_unit * 2));
-+		rc6_add_bits(buf, &n, scancode, 16, NS_TO_US(rc6_unit));
- 		break;
- 	case RC_PROTO_RC6_6A_20:
--		add_bits(14, 4, NS_TO_US(rc6_unit));
--		add_bits(0, 1, NS_TO_US(rc6_unit * 2));
--		add_bits(scancode, 20, NS_TO_US(rc6_unit));
-+		rc6_add_bits(buf, &n, 14, 4, NS_TO_US(rc6_unit));
-+		rc6_add_bits(buf, &n, 0, 1, NS_TO_US(rc6_unit * 2));
-+		rc6_add_bits(buf, &n, scancode, 20, NS_TO_US(rc6_unit));
- 		break;
- 	case RC_PROTO_RC6_6A_24:
--		add_bits(14, 4, NS_TO_US(rc6_unit));
--		add_bits(0, 1, NS_TO_US(rc6_unit * 2));
--		add_bits(scancode, 24, NS_TO_US(rc6_unit));
-+		rc6_add_bits(buf, &n, 14, 4, NS_TO_US(rc6_unit));
-+		rc6_add_bits(buf, &n, 0, 1, NS_TO_US(rc6_unit * 2));
-+		rc6_add_bits(buf, &n, scancode, 24, NS_TO_US(rc6_unit));
- 		break;
- 	case RC_PROTO_RC6_6A_32:
- 	case RC_PROTO_RC6_MCE:
--		add_bits(14, 4, NS_TO_US(rc6_unit));
--		add_bits(0, 1, NS_TO_US(rc6_unit * 2));
--		add_bits(scancode, 32, NS_TO_US(rc6_unit));
-+		rc6_add_bits(buf, &n, 14, 4, NS_TO_US(rc6_unit));
-+		rc6_add_bits(buf, &n, 0, 1, NS_TO_US(rc6_unit * 2));
-+		rc6_add_bits(buf, &n, scancode, 32, NS_TO_US(rc6_unit));
- 		break;
- 	}
- 
-diff --git a/utils/ir-ctl/bpf_encoder.c b/utils/ir-ctl/bpf_encoder.c
-index e3e705e7..1d075d94 100644
---- a/utils/ir-ctl/bpf_encoder.c
-+++ b/utils/ir-ctl/bpf_encoder.c
-@@ -81,35 +81,35 @@ static void encode_pulse_length(struct keymap *map, uint32_t scancode, int *buf,
- 	*length = len;
- }
- 
--static void encode_manchester(struct keymap *map, uint32_t scancode, int *buf, int *length)
-+static void manchester_advance_space(int *buf, int *len, unsigned length)
- {
--	int len = 0, bits, i;
-+	if (*len % 2)
-+		buf[*len] += length;
-+	else
-+		buf[++(*len)] = length;
-+}
- 
--	void advance_space(unsigned length)
--	{
--		if (len % 2)
--			buf[len] += length;
--		else
--			buf[++len] = length;
--	}
-+static void manchester_advance_pulse(int *buf, int *len, unsigned length)
-+{
-+	if (*len % 2)
-+		buf[++(*len)] = length;
-+	else
-+		buf[*len] += length;
-+}
- 
--	void advance_pulse(unsigned length)
--	{
--		if (len % 2)
--			buf[++len] = length;
--		else
--			buf[len] += length;
--	}
-+static void encode_manchester(struct keymap *map, uint32_t scancode, int *buf, int *length)
-+{
-+	int len = 0, bits, i;
- 
- 	bits = keymap_param(map, "bits", 14);
- 
- 	for (i = bits - 1; i >= 0; i--) {
- 		if (scancode & (1 << i)) {
--			advance_pulse(keymap_param(map, "one_pulse", 888));
--			advance_space(keymap_param(map, "one_space", 888));
-+			manchester_advance_pulse(buf, &len, keymap_param(map, "one_pulse", 888));
-+			manchester_advance_space(buf, &len, keymap_param(map, "one_space", 888));
- 		} else {
--			advance_space(keymap_param(map, "zero_space", 888));
--			advance_pulse(keymap_param(map, "zero_pulse", 888));
-+			manchester_advance_space(buf, &len, keymap_param(map, "zero_space", 888));
-+			manchester_advance_pulse(buf, &len, keymap_param(map, "zero_pulse", 888));
- 		}
- 	}
- 
+Acked-By: Vinod Koul <vkoul@kernel.org>
+
 -- 
-2.25.2
-
+~Vinod
