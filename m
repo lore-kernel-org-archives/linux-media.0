@@ -2,170 +2,115 @@ Return-Path: <SRS0=ht1n=6A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43E9AC2BB85
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 09:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9348FC2BB85
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 09:04:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FE05206B9
-	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 09:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587027796;
-	bh=lklmniicHQqU2dRj3nlOgj3Q5y6VhCBHRL82DuV/2+I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=X3alq1jKT8JmU7g5R3O4MwHW7spFMI6oXbJjVPQUvNgfQV8Fd9f1G4d6ysVN9m0pA
-	 ixlmEjmFdkMRMgLAbT6aMU8OyWtZtrySSk7n2vX3JitMd5cWnDJnQe3rJfniF50czz
-	 thi63KhVjh2cw8zg2qEzjRGerC7ChxzBUWFPKd3c=
+	by mail.kernel.org (Postfix) with ESMTP id 7003B206B9
+	for <linux-media@archiver.kernel.org>; Thu, 16 Apr 2020 09:04:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="DVK1/Z0U"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503094AbgDPJDM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Apr 2020 05:03:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34820 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2502790AbgDPJC4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Apr 2020 05:02:56 -0400
-Received: from coco.lan (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D05F206B9;
-        Thu, 16 Apr 2020 09:02:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587027775;
-        bh=lklmniicHQqU2dRj3nlOgj3Q5y6VhCBHRL82DuV/2+I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Cp4ZSLl0UuqOf8aaiJlWo3FBbXr1XwlhXuxdRtdzm4EgweU52BBIf4DjCb8lRIfJR
-         +cF7JqvgzfJx3I0dv3veysGPLIXy+ZkWuB55dYnMgNzi8GZQP9Dlom5gYLiuodbQwG
-         fuvNO9mFhk2SpTFV3l3G4zPTDKEGr9C/JBN1p1S4=
-Date:   Thu, 16 Apr 2020 11:02:51 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: Script to build the media documentation as if it were a single
- book
-Message-ID: <20200416110251.10b850e1@coco.lan>
-In-Reply-To: <a3236eb0-2328-266e-b5b2-167e37b56c7a@xs4all.nl>
-References: <20200414153739.30b58bdc@coco.lan>
-        <e83dbd40-2a34-3bad-be5f-e451c3a5d020@xs4all.nl>
-        <20200416092132.2cbfce7e@coco.lan>
-        <c55b5aae-ffb5-3ca0-b855-1df4a2da08f9@xs4all.nl>
-        <20200416095554.53566315@coco.lan>
-        <a3236eb0-2328-266e-b5b2-167e37b56c7a@xs4all.nl>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S2502813AbgDPIpd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Apr 2020 04:45:33 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:46625 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2502720AbgDPIom (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Apr 2020 04:44:42 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id P05fjxrLMlKa1P05ijR4UE; Thu, 16 Apr 2020 10:41:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1587026514; bh=nDiiDq5VxoANMFzKvaHDm5u5hBfjVUKYxuJ4Vl53I9E=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=DVK1/Z0UttgiZCFRsZ3bMTL/5GO0v6WyWPweVBM3xhNdgn7WUS+HvaQJIyfNoxg9U
+         nNMA8ToP6CIp+RnJG6vuaXWnYGzu+4NZuC049wgxmMcFTJ6H61SiS+GOG8hNSfOkx6
+         xmSi8LHOxShK0bj4hZPSQ1po5fP+AQxsladHKTrI4EkQEQdwY8BKsCTvQaspqDQn91
+         CoRtJJ1qmc9pgfQ+ptbFkflqY+rTeiV+nwm0DXh/aOR4p+0N2vR6d8QOuaM9Sh0Trb
+         g/4WO/y+nAfVLi5pNRzWWnVqQJAVIgbAOqLLJqQHnsqz4mSQqpmaw2aV22auz3T9GZ
+         JFfiyYkQ2rJmw==
+Subject: Re: [PATCH 1/2] arm64: dts: mt8173: fix mdp aliases property name
+To:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Cc:     Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+References: <20200414030815.192104-1-hsinyi@chromium.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <4e335bc7-a45d-4688-a578-1e9793a61229@xs4all.nl>
+Date:   Thu, 16 Apr 2020 10:41:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20200414030815.192104-1-hsinyi@chromium.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfMRXhIiwag2O6pLuQ2S1/m/UzBg8JrrSZagIUAA4xYEUDBHly1PbuCwb4LDhizYpEfFs3dPdy9Dod0YG8uUWitCPx80aF9uzvLyby9dTr2yyBl9eApiU
+ knu5VuVPUdx0VdZXYeZxUbWth/4x8GzHPCpbEJzaPjFfu5skGd+DYtgTCFmZ4f81p3BoDxc8zZyVUA0liIVCkfyRRoOutPpY2JRTvGu9ZSDr5KFwI+Ipp+qK
+ nn+itAIR5S/QaxpBjCv/Lh7OS7WDBzxQXCVv+lt/cfWaSXCk2W1VOEVdAIpUKW5cWCNH/QtxgFDsJvJEovCcrr0pnVR5gXahpCWXmXXMJXhD0N7BbIarJB/v
+ JcZ8XNAaMvoddbwLF601Bh41gLzgoKdUBBPdu/25m4Ytk/Y0wRakVq4TAfLixO/jJP3g1d5xP9QU7xFs4FE3W0sbvReAP0RLIILVohO6j0oTJSeqLsN3t0IY
+ HpBdwLonp7Vg7QIIxigMTh7YxYrvcWTU+KcgXWwRlh/EPv3dfBclZ/rX3x366N5BG2PUEP5mog2ms28P2nkpY2uueEIzsAFCNhA+tdcLbpmt/vqVNusF/xkk
+ wu/db57jEKXRh48AoAgObV4V
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Thu, 16 Apr 2020 10:06:28 +0200
-Hans Verkuil <hverkuil@xs4all.nl> escreveu:
-
-> On 16/04/2020 09:55, Mauro Carvalho Chehab wrote:
-> > Em Thu, 16 Apr 2020 09:29:45 +0200
-> > Hans Verkuil <hverkuil@xs4all.nl> escreveu:
-> >   
-> >> On 16/04/2020 09:21, Mauro Carvalho Chehab wrote:  
-> >>> Em Thu, 16 Apr 2020 09:01:55 +0200
-> >>> Hans Verkuil <hverkuil@xs4all.nl> escreveu:
-> >>>     
-> >>>> On 14/04/2020 15:37, Mauro Carvalho Chehab wrote:    
-> >>>     
-> >>>>> ================================
-> >>>>> Linux Kernel Media Documentation
-> >>>>> ================================
-> >>>>>
-> >>>>> .. toctree::
-> >>>>> 	:maxdepth: 4
-> >>>>>
-> >>>>>         admin-guide/index
-> >>>>>         driver-api/index
-> >>>>>         userspace-api/index      
-> >>>>
-> >>>> Wouldn't it make more sense to have the userspace-api before the admin-guide?    
-> >>>
-> >>> There, I just placed them on alphabetic order.
-> >>>
-> >>> But answering your question, that depends on the audience ;-)
-> >>>
-> >>> -
-> >>>
-> >>> Yet, assuming that we are doing a good job, I would expect a lot more
-> >>> users than developers[1].    
-> >>
-> >> If you want to see what it looks like with userspace-api on top:
-> >>
-> >> https://hverkuil.home.xs4all.nl/spec/index.html
-> >>
-> >> I think it makes more sense that way.  
-> > 
-> > With the current content, I fully agree with you. However, take a look
-> > at the RFC patch I just sent. It is just the start of something
-> > (and it is not aligned yet with the latest Kconfig changes).
-> > 
-> > Anyway, my plan is to add something that a random media user could
-> > find some useful information, and point to our Wiki pages where
-> > it would make sense.  
+On 14/04/2020 05:08, Hsin-Yi Wang wrote:
+> Fix warning:
+> Warning (alias_paths): /aliases: aliases property name must include only lowercase and '-'
 > 
-> But that's only useful for people who need to build their own kernel or do
-> other admin tasks. That's a small group and it is usually a one-off thing.
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8173.dtsi | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 
-Well, all Kernel developers need that. Also userspace developers that
-may want to build test drivers. So, the ones potentially interested
-on this chapter contains the group of people interested at the public
-API.
+I'll merge patch 2/2 for 5.8. I assume that this dtsi patch is merged through
+a mediatek subsystem?
 
-Granted, once some Kernel developer gets familiar with the stuff 
-contained there, the uAPI guide becomes a lot more interesting, but
-this is true for any technical book:
+Regards,
 
-at the beginning, the introductory chapters (with don't have much
-details) are the more relevant ones, as they explain the basic concepts
-that will be present at the rest of the book. Once you pass that, the
-other chapters will be a lot more interesting, and those are the ones 
-that people re-visit more often.
+	Hans
 
 > 
-> The vast majority is interested in the public APIs.
-> 
-> Regards,
-> 
-> 	Hans
-> 
-> >   
-> >>
-> >> Regards,
-> >>
-> >> 	Hans
-> >>  
-> >>>
-> >>> [1] Granted, there are lots of gaps there for it to be a generic guide
-> >>>     to media subsystem. I'm planning to improve the admin-guide in order
-> >>>     to make it more consistent and useful for media users.
-> >>>
-> >>> The order there, IMHO, doesn't matter much, as someone accessing it from
-> >>> LinuxTV.org would likely use this URL:
-> >>>
-> >>> 	https://linuxtv.org/docs.php
-> >>>
-> >>> Side note: I need to add a pointer to the admin guide there - and at the
-> >>> wiki pages.
-> >>>
-> >>> Thanks,
-> >>> Mauro
-> >>>     
-> >>  
-> > 
-> > 
-> > 
-> > Thanks,
-> > Mauro
-> >   
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> index a212bf124e81..d1e9c41004b4 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> @@ -42,14 +42,14 @@ aliases {
+>  		dpi0 = &dpi0;
+>  		dsi0 = &dsi0;
+>  		dsi1 = &dsi1;
+> -		mdp_rdma0 = &mdp_rdma0;
+> -		mdp_rdma1 = &mdp_rdma1;
+> -		mdp_rsz0 = &mdp_rsz0;
+> -		mdp_rsz1 = &mdp_rsz1;
+> -		mdp_rsz2 = &mdp_rsz2;
+> -		mdp_wdma0 = &mdp_wdma0;
+> -		mdp_wrot0 = &mdp_wrot0;
+> -		mdp_wrot1 = &mdp_wrot1;
+> +		mdp-rdma0 = &mdp_rdma0;
+> +		mdp-rdma1 = &mdp_rdma1;
+> +		mdp-rsz0 = &mdp_rsz0;
+> +		mdp-rsz1 = &mdp_rsz1;
+> +		mdp-rsz2 = &mdp_rsz2;
+> +		mdp-wdma0 = &mdp_wdma0;
+> +		mdp-wrot0 = &mdp_wrot0;
+> +		mdp-wrot1 = &mdp_wrot1;
+>  		serial0 = &uart0;
+>  		serial1 = &uart1;
+>  		serial2 = &uart2;
 > 
 
-
-
-Thanks,
-Mauro
