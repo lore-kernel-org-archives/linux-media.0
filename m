@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76CB6C2D0EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD768C38A2B
 	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5035322243
+	by mail.kernel.org (Postfix) with ESMTP id B463A22277
 	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1587142741;
-	bh=oU9vHFsJgKh2goYQCM4HsG47VtXKYTeS6/Dj+CidDT8=;
+	bh=VcB9xbzv+uBAo7c79L0MV66hoASXpQZqOjpsNKV3hgY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=PJ/+FsRP8N2o2RtAHIr2lnGqSlx1L4EDfLf2wumuqO/I4bFpfTiCo9LbPSf5g5FFK
-	 dPAc/0tcT/uopW+7JaUj/qZf/hh0ttvxgMxuPAyS35kg108s5gX2yy9hmfBYFD50ej
-	 WNbYTEJ1yAUnLTJeeUyys63aSTtXNt+/f2ZgL1jI=
+	b=YG/Qnok6d7N75p4reRGR5lDkIO5Nf5RyVgS/l9trVFXXvAHZQIjpG3KpOxvAAXSkR
+	 WYvi4/tNchZccx98BKL7o+N4WxH3DGnBRJWQYotL1DTcmCVG8t1fTigBQsLY7cvSFV
+	 Vrkrl/w9v2tF9lZpYIsbCVXBSTulwd4dcRdM6Q1k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727124AbgDQQ7A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 12:59:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46038 "EHLO mail.kernel.org"
+        id S1727805AbgDQQ7B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 12:59:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46032 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726709AbgDQQ7A (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726694AbgDQQ7A (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Fri, 17 Apr 2020 12:59:00 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B73B322202;
+        by mail.kernel.org (Postfix) with ESMTPSA id B82D32223D;
         Fri, 17 Apr 2020 16:58:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587142740;
-        bh=oU9vHFsJgKh2goYQCM4HsG47VtXKYTeS6/Dj+CidDT8=;
+        bh=VcB9xbzv+uBAo7c79L0MV66hoASXpQZqOjpsNKV3hgY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jLisvGYvPZB3mOVLafQ4uBIHSCCkGIdNOfZ+5uTOpjSHzSILe2boJ/kHsN1iD07eP
-         D5+99oYfb1Y3WukbLwx+785f7EqvuW2c6Vf3HaF3dkICrOuz5P4mQ1E3rNWZax6Zag
-         iqK5yFBbxaDkrDtxz/ThQQ9fCTVBv9brxp/YxjjM=
+        b=eQoRLF4FHR5WuIyyU5aQWPEbDRffMVqzWgbJvadr/Cl+Ls5MlG4ybShZHDBbupJ/c
+         AbZtILkarQtgLCZd7l1T3wssd7DB0tzGGgtJW3ARoLxNmLSU1jGRImLRMom30fDfM6
+         TuXhs2ZXz6AzXBlSQCmI4if729ozOpSy5GWWkspg=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPUKP-007wLX-5D; Fri, 17 Apr 2020 18:58:57 +0200
+        id 1jPUKP-007wL8-0a; Fri, 17 Apr 2020 18:58:57 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 06/15] media: admin-guide: update em28xx cardlist
-Date:   Fri, 17 Apr 2020 18:58:47 +0200
-Message-Id: <a2becbab596bb60f04540fe1b621e517bd6c64b3.1587142382.git.mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Antti Palosaari <crope@iki.fi>
+Subject: [PATCH 01/15] media: dvb-usb-ids.h: fix an USB PID name
+Date:   Fri, 17 Apr 2020 18:58:42 +0200
+Message-Id: <5d4d41abb8f85819f0004ff2786d955fc4a023b7.1587142382.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1587142382.git.mchehab+huawei@kernel.org>
 References: <cover.1587142382.git.mchehab+huawei@kernel.org>
@@ -57,26 +58,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A new em28xx card was added upstream. Update cards list
-accordingly.
+The USB_PID_ALINK_DTU is a Product ID, not a vendor ID.
+
+Fix that.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/em28xx-cardlist.rst | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/usb/dvb-usb-v2/gl861.c | 2 +-
+ include/media/dvb-usb-ids.h          | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/admin-guide/media/em28xx-cardlist.rst b/Documentation/admin-guide/media/em28xx-cardlist.rst
-index cb2e693a56a2..a5f0e6d22a1a 100644
---- a/Documentation/admin-guide/media/em28xx-cardlist.rst
-+++ b/Documentation/admin-guide/media/em28xx-cardlist.rst
-@@ -430,3 +430,7 @@ EM28xx cards list
-      - Magix USB Videowandler-2
-      - em2861
-      - 1b80:e349
-+   * - 104
-+     - PCTV DVB-S2 Stick (461e v2)
-+     - em28178
-+     - 2013:0461, 2013:0259
+diff --git a/drivers/media/usb/dvb-usb-v2/gl861.c b/drivers/media/usb/dvb-usb-v2/gl861.c
+index 42c3b8af0774..b7ca236174f3 100644
+--- a/drivers/media/usb/dvb-usb-v2/gl861.c
++++ b/drivers/media/usb/dvb-usb-v2/gl861.c
+@@ -550,7 +550,7 @@ static struct dvb_usb_device_properties friio_props = {
+ static const struct usb_device_id gl861_id_table[] = {
+ 	{ DVB_USB_DEVICE(USB_VID_MSI, USB_PID_MSI_MEGASKY580_55801,
+ 		&gl861_props, "MSI Mega Sky 55801 DVB-T USB2.0", NULL) },
+-	{ DVB_USB_DEVICE(USB_VID_ALINK, USB_VID_ALINK_DTU,
++	{ DVB_USB_DEVICE(USB_VID_ALINK, USB_PID_ALINK_DTU,
+ 		&gl861_props, "A-LINK DTU DVB-T USB2.0", NULL) },
+ 	{ DVB_USB_DEVICE(USB_VID_774, USB_PID_FRIIO_WHITE,
+ 		&friio_props, "774 Friio White ISDB-T USB2.0", NULL) },
+diff --git a/include/media/dvb-usb-ids.h b/include/media/dvb-usb-ids.h
+index 800d473b03c4..41f0bf122f53 100644
+--- a/include/media/dvb-usb-ids.h
++++ b/include/media/dvb-usb-ids.h
+@@ -96,7 +96,7 @@
+ #define USB_PID_AFATECH_AF9035_9035			0x9035
+ #define USB_PID_TREKSTOR_DVBT				0x901b
+ #define USB_PID_TREKSTOR_TERRES_2_0			0xC803
+-#define USB_VID_ALINK_DTU				0xf170
++#define USB_PID_ALINK_DTU				0xf170
+ #define USB_PID_ANSONIC_DVBT_USB			0x6000
+ #define USB_PID_ANYSEE					0x861f
+ #define USB_PID_AZUREWAVE_AD_TU700			0x3237
 -- 
 2.25.2
 
