@@ -2,54 +2,70 @@ Return-Path: <SRS0=fNsq=6B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C73F4C3A5A0
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A06B4C2BB1D
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 21:14:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A406920776
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587142750;
-	bh=lLr7gyHXd6gFqC8jEO3u2GKYh5Ii35IoFVuGyHyunVo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VlIzfrXOChcQMttgDKN1Sss+cty6wgAL26qzaEayHO/yQ8Z4B1eIC79/NAjI4WoZX
-	 yj0dssZZxWZqomaybL95ItQzlW0C5cSITeekt5fR/abGP9ZswXCFsVJeui3zNxPius
-	 vrkkbeFRt0dNSWLSF5ddk2utsCbtnj0EdzxajPa0=
+	by mail.kernel.org (Postfix) with ESMTP id 767682083E
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 21:14:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WVUQs1MK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728001AbgDQQ7K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 12:59:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46042 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726724AbgDQQ7A (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 12:59:00 -0400
-Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B8E6322243;
-        Fri, 17 Apr 2020 16:58:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587142740;
-        bh=lLr7gyHXd6gFqC8jEO3u2GKYh5Ii35IoFVuGyHyunVo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wHbJ8NdqPB0YFidjR8HnRmg+QfWaXBr6Cej59GeGrxBr7GmKFe1Ln9/RQCzqjYm5y
-         CRVpTdZt9yGqclji8Ti6iNn1qaDm4+e4axEKOY7j78GamYvEehGgXEw8m1f7N8Rmmz
-         42wdD50K4Yn/TsEy4Ngg2E08m8x/3QEt+gdNzn4E=
-Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jPUKP-007wM1-DR; Fri, 17 Apr 2020 18:58:57 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 12/15] media: admin-guide: add dibusb-mb and dibusb-mc card lists
-Date:   Fri, 17 Apr 2020 18:58:53 +0200
-Message-Id: <8699332aee78cdeed3941b36873c44b70708af76.1587142382.git.mchehab+huawei@kernel.org>
+        id S1727771AbgDQVOd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 17:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726396AbgDQVOd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 17 Apr 2020 17:14:33 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F398C061A0C
+        for <linux-media@vger.kernel.org>; Fri, 17 Apr 2020 14:14:33 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id ay1so1417598plb.0
+        for <linux-media@vger.kernel.org>; Fri, 17 Apr 2020 14:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N7oZ7Q6W/01Bcz3jas7FhpIEPe5zL7KRi4a1VsnzYVA=;
+        b=WVUQs1MKROA7790autdM07M/Q2xP+gMlYxrLsafyoPThrhBSK1uZ8ChwJ0U6MHAUYD
+         KhUvZ/Q3bdnldkbYjCUZOkSK4qpSDwT3eeDYmhrsEbH8mluv4GcimJCm+1hGXZUVuYOQ
+         oNAB6w7HoUzh5RtgXMXN6h1w3bXnv/l+IMnuUnxmXxXHhpeuseyt28F4W8HiY3Ud6TDp
+         ww4DeLcB6KGSaiSa0Q1dRpLAGgkskrqf0Fd8+qL7LgYsL0qII9EVmr0jgKxt/ayJbfP5
+         y+rk1HjpAdFWvONVCS7q4AMyhtO0U+LEdLOVNmDWAYq9G9Qz1oIbCdObcHwphWYdNEsl
+         DgEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N7oZ7Q6W/01Bcz3jas7FhpIEPe5zL7KRi4a1VsnzYVA=;
+        b=sKO4XgWmH9WLE+fcReKL78TN8ynZFBid5ObsZJpLYwWZA0Rc+9OKtjEWPCMAn32Q+M
+         gZsV/hRbTq1q7UJnlyrPYGE0G7ASy2TXx27GuLF1uf12wB39cBRYbcA4V6ZmAj1v/HO/
+         B6JVsAk3rsFFxFjELkgYq6H9m5fXcSVuPTN9tHIyAtPZJwOiUU/iWxqXoyESKaIK6jM2
+         ptpQbNK9ZNznBXQRyd4nmKwWqxpGJRiBxIVm0IXRi/05jlW+JWa5QrPyKQNOAbZOpxvk
+         Furgc6llG6rEcyfqpjl63T4KPRm+EbmvRai1CSBRSWY7P95Ustd7X2eTgg3qBGxkQnli
+         aZCQ==
+X-Gm-Message-State: AGi0PuYQsghoGpUjav9ktt9YcQ+AGE6WJwtIgoOQNppS+GpI66khG0V4
+        pMqjSUdarEKfnlIgJPdoInCORQTBwes=
+X-Google-Smtp-Source: APiQypIJxafGktSuz3ZyMz4kGLZTY/ncMcFAt+ZHsFyQUjRYP9HtuEM1m9yu0MIhRBswuBx2ItuDsA==
+X-Received: by 2002:a17:902:ed13:: with SMTP id b19mr5541188pld.254.1587158072453;
+        Fri, 17 Apr 2020 14:14:32 -0700 (PDT)
+Received: from localhost.localdomain (astound-69-42-19-227.ca.astound.net. [69.42.19.227])
+        by smtp.gmail.com with ESMTPSA id 22sm11028159pfb.132.2020.04.17.14.14.31
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2020 14:14:31 -0700 (PDT)
+From:   Rosen Penev <rosenp@gmail.com>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH] treewide: add extra {} to initialization
+Date:   Fri, 17 Apr 2020 14:14:30 -0700
+Message-Id: <20200417211430.4296-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.25.2
-In-Reply-To: <cover.1587142382.git.mchehab+huawei@kernel.org>
-References: <cover.1587142382.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -57,114 +73,74 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the supported dib0300 boards.
+Found with clang-tidy's clang-diagnostic-missing-braces
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- Documentation/admin-guide/media/cardlist.rst  |  2 +
- .../media/dvb-usb-dibusb-mb-cardlist.rst      | 42 +++++++++++++++++++
- .../media/dvb-usb-dibusb-mc-cardlist.rst      | 30 +++++++++++++
- 3 files changed, 74 insertions(+)
- create mode 100644 Documentation/admin-guide/media/dvb-usb-dibusb-mb-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-dibusb-mc-cardlist.rst
+ utils/cec-follower/cec-processing.cpp     | 12 ++++++------
+ utils/v4l2-compliance/v4l2-test-debug.cpp |  2 +-
+ utils/v4l2-ctl/v4l2-ctl-common.cpp        |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
-index c1c5530331a1..2b8b158b889f 100644
---- a/Documentation/admin-guide/media/cardlist.rst
-+++ b/Documentation/admin-guide/media/cardlist.rst
-@@ -56,6 +56,8 @@ settings for an specific product type.
- 	gspca-cardlist
+diff --git a/utils/cec-follower/cec-processing.cpp b/utils/cec-follower/cec-processing.cpp
+index df1d95c4..58af25a1 100644
+--- a/utils/cec-follower/cec-processing.cpp
++++ b/utils/cec-follower/cec-processing.cpp
+@@ -729,22 +729,22 @@ static void processMsg(struct node *node, struct cec_msg &msg, unsigned me)
+ 		const struct short_audio_desc supported_formats[] = {
+ 			{ 2, SAD_FMT_CODE_AC3,
+ 			  SAD_SAMPLE_FREQ_MASK_32 | SAD_SAMPLE_FREQ_MASK_44_1,
+-			  64, 0, 0 },
++			  {64}, 0, 0 },
+ 			{ 4, SAD_FMT_CODE_AC3,
+ 			  SAD_SAMPLE_FREQ_MASK_32,
+-			  32, 0, 0 },
++			  {32}, 0, 0 },
+ 			{ 4, SAD_FMT_CODE_ONE_BIT_AUDIO,
+ 			  SAD_SAMPLE_FREQ_MASK_48 | SAD_SAMPLE_FREQ_MASK_192,
+-			  123, 0, 0 },
++			  {123}, 0, 0 },
+ 			{ 8, SAD_FMT_CODE_EXTENDED,
+ 			  SAD_SAMPLE_FREQ_MASK_96,
+-			  0, 0, SAD_EXT_TYPE_DRA },
++			  {0}, 0, SAD_EXT_TYPE_DRA },
+ 			{ 2, SAD_FMT_CODE_EXTENDED,
+ 			  SAD_SAMPLE_FREQ_MASK_176_4,
+-			  SAD_FRAME_LENGTH_MASK_960 | SAD_FRAME_LENGTH_MASK_1024, 1, SAD_EXT_TYPE_MPEG4_HE_AAC_SURROUND },
++			  {SAD_FRAME_LENGTH_MASK_960 | SAD_FRAME_LENGTH_MASK_1024}, 1, SAD_EXT_TYPE_MPEG4_HE_AAC_SURROUND },
+ 			{ 2, SAD_FMT_CODE_EXTENDED,
+ 			  SAD_SAMPLE_FREQ_MASK_44_1,
+-			  SAD_BIT_DEPTH_MASK_16 | SAD_BIT_DEPTH_MASK_24, 0, SAD_EXT_TYPE_LPCM_3D_AUDIO },
++			  {SAD_BIT_DEPTH_MASK_16 | SAD_BIT_DEPTH_MASK_24}, 0, SAD_EXT_TYPE_LPCM_3D_AUDIO },
+ 		};
  
- 	dvb-usb-dib0700-cardlist
-+	dvb-usb-dibusb-mb-cardlist
-+	dvb-usb-dibusb-mc-cardlist
+ 		__u8 num_descriptors, audio_format_id[4], audio_format_code[4];
+diff --git a/utils/v4l2-compliance/v4l2-test-debug.cpp b/utils/v4l2-compliance/v4l2-test-debug.cpp
+index e7f375b6..3f43e661 100644
+--- a/utils/v4l2-compliance/v4l2-test-debug.cpp
++++ b/utils/v4l2-compliance/v4l2-test-debug.cpp
+@@ -37,7 +37,7 @@
+ int testRegister(struct node *node)
+ {
+ 	struct v4l2_dbg_register reg;
+-	struct v4l2_dbg_chip_info chip = { 0 };
++	struct v4l2_dbg_chip_info chip = {};
+ 	int ret;
+ 	int uid = getuid();
  
- 	dvb-usb-af9015-cardlist
- 	dvb-usb-af9035-cardlist
-diff --git a/Documentation/admin-guide/media/dvb-usb-dibusb-mb-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-dibusb-mb-cardlist.rst
-new file mode 100644
-index 000000000000..f25a54721f0d
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-dibusb-mb-cardlist.rst
-@@ -0,0 +1,42 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-dibusb-mb cards list
-+============================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - AVerMedia AverTV DVBT USB1.1
-+     - 14aa:0001, 14aa:0002
-+   * - Artec T1 USB1.1 TVBOX with AN2135
-+     - 05d8:8105, 05d8:8106
-+   * - Artec T1 USB1.1 TVBOX with AN2235
-+     - 05d8:8107, 05d8:8108
-+   * - Artec T1 USB1.1 TVBOX with AN2235 (faulty USB IDs)
-+     - 0547:2235
-+   * - Artec T1 USB2.0
-+     - 05d8:8109, 05d8:810a
-+   * - Compro Videomate DVB-U2000 - DVB-T USB1.1 (please confirm to linux-dvb)
-+     - 185b:d000, 145f:010c, 185b:d001
-+   * - DiBcom USB1.1 DVB-T reference design (MOD3000)
-+     - 10b8:0bb8, 10b8:0bb9
-+   * - Grandtec USB1.1 DVB-T
-+     - 5032:0fa0, 5032:0bb8, 5032:0fa1, 5032:0bb9
-+   * - KWorld V-Stream XPERT DTV - DVB-T USB1.1
-+     - eb1a:17de, eb1a:17df
-+   * - KWorld Xpert DVB-T USB2.0
-+     - eb2a:17de
-+   * - KWorld/ADSTech Instant DVB-T USB2.0
-+     - 06e1:a333, 06e1:a334
-+   * - TwinhanDTV USB-Ter USB1.1 / Magic Box I / HAMA USB1.1 DVB-T device
-+     - 13d3:3201, 1822:3201, 13d3:3202, 1822:3202
-+   * - Unknown USB1.1 DVB-T device ???? please report the name to the author
-+     - 1025:005e, 1025:005f
-+   * - VideoWalker DVB-T USB
-+     - 0458:701e, 0458:701f
-diff --git a/Documentation/admin-guide/media/dvb-usb-dibusb-mc-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-dibusb-mc-cardlist.rst
-new file mode 100644
-index 000000000000..8d03bae0e084
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-dibusb-mc-cardlist.rst
-@@ -0,0 +1,30 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-dibusb-mc cards list
-+============================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - Artec T1 USB2.0 TVBOX (please check the warm ID)
-+     - 05d8:8109, 05d8:810a
-+   * - Artec T14 - USB2.0 DVB-T
-+     - 05d8:810b, 05d8:810c
-+   * - DiBcom USB2.0 DVB-T reference design (MOD3000P)
-+     - 10b8:0bc6, 10b8:0bc7
-+   * - GRAND - USB2.0 DVB-T adapter
-+     - 5032:0bc6, 5032:0bc7
-+   * - Humax/Coex DVB-T USB Stick 2.0 High Speed
-+     - 10b9:5000, 10b9:5001
-+   * - LITE-ON USB2.0 DVB-T Tuner
-+     - 04ca:f000, 04ca:f001
-+   * - Leadtek - USB2.0 Winfast DTV dongle
-+     - 0413:6025, 0413:6026
-+   * - MSI Digivox Mini SL
-+     - eb1a:e360, eb1a:e361
+diff --git a/utils/v4l2-ctl/v4l2-ctl-common.cpp b/utils/v4l2-ctl/v4l2-ctl-common.cpp
+index aee2551b..e3c2602c 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-common.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-common.cpp
+@@ -924,7 +924,7 @@ void common_set(cv4l_fd &_fd)
+ 			    qc.flags & V4L2_CTRL_FLAG_UPDATE)
+ 				use_ext_ctrls = true;
+ 			if (qc.flags & V4L2_CTRL_FLAG_HAS_PAYLOAD) {
+-				struct v4l2_ext_controls ctrls = { 0, 1 };
++				struct v4l2_ext_controls ctrls = { {0}, 1 };
+ 				unsigned divide[V4L2_CTRL_MAX_DIMS] = { 0 };
+ 				ctrl_subset subset;
+ 				long long v;
 -- 
 2.25.2
 
