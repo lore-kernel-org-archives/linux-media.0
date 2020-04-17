@@ -2,80 +2,92 @@ Return-Path: <SRS0=fNsq=6B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E97F7C2BB55
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:33:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13575C2BB1D
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:34:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D457A214AF
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:33:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8EEC2087E
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1587108869;
+	bh=X6tskjtkbbD7eJmw+HYMlmuZZqatAbez8A/OwFmPCxw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=ejx/qQPKvcRhVyTv2RBS9Ek77G2nrLBfcR8i7w+phRmICc2B3FldVMwuIxLCppj/y
+	 CF3LKX/fvCSOmf8ed0If8sHaeZ8mjD2BSn+h5YGMaDP29wQupX7Pf38TGgdULcegqX
+	 MiwIrH0fK9DdrJ3QBJaW3nxzDBWVw/UCVsD1GvfI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728945AbgDQHdA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 03:33:00 -0400
-Received: from smtprelay0233.hostedemail.com ([216.40.44.233]:57740 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728419AbgDQHdA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 03:33:00 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 2884B180284E9;
-        Fri, 17 Apr 2020 07:32:59 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: food81_710b3da05d519
-X-Filterd-Recvd-Size: 2062
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf19.hostedemail.com (Postfix) with ESMTPA;
-        Fri, 17 Apr 2020 07:32:56 +0000 (UTC)
-Message-ID: <df23fe6083baad4781a2b79bcbd7d3db055eecd3.camel@perches.com>
-Subject: Re: [PATCH v2 7/9] media: MAINTAINERS: rkisp1: add path to
- dt-bindings
-From:   Joe Perches <joe@perches.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Helen Koike <helen.koike@collabora.com>,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        robh+dt@kernel.org, heiko@sntech.de, kernel@collabora.com,
-        dafna.hirschfeld@collabora.com, ezequiel@collabora.com,
-        mark.rutland@arm.com, karthik.poduval@gmail.com, jbx6244@gmail.com,
-        kishon@ti.com
-Date:   Fri, 17 Apr 2020 00:30:44 -0700
-In-Reply-To: <9a95d227-9592-2c5c-fe6d-dff9b84f4292@xs4all.nl>
-References: <20200403161538.1375908-1-helen.koike@collabora.com>
-         <20200403161538.1375908-8-helen.koike@collabora.com>
-         <9a95d227-9592-2c5c-fe6d-dff9b84f4292@xs4all.nl>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+        id S1729004AbgDQHe3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 03:34:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39674 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728419AbgDQHe3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 17 Apr 2020 03:34:29 -0400
+Received: from coco.lan (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A3B392054F;
+        Fri, 17 Apr 2020 07:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587108868;
+        bh=X6tskjtkbbD7eJmw+HYMlmuZZqatAbez8A/OwFmPCxw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CCAtm1P4qw2uv0uq82hOsfGayDbjL0JRne/7ux68afyxJNqOhi/sd4pQsTWPWyzUT
+         DZT4djebQTcYFbpttIndRig2r2T8WRKpbkQHUe5rs3AwBP0k9EozeJ2kfcOhhHQgUJ
+         JMzjQUMdAQE70glUdeLHkOfZCwVYSvgF82pEYP/0=
+Date:   Fri, 17 Apr 2020 09:34:24 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH 1/3] media: cec: don't select PCI & DMI
+Message-ID: <20200417093424.71ae0559@coco.lan>
+In-Reply-To: <CAMuHMdV1DdmrtexvMqEn3SBjgyG8eYbbgLsYV-862mKLt08qdw@mail.gmail.com>
+References: <6af5797c76c11d8c08ae1f5a73c3711fcf89ab6f.1587107273.git.mchehab+huawei@kernel.org>
+        <CAMuHMdV1DdmrtexvMqEn3SBjgyG8eYbbgLsYV-862mKLt08qdw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 2020-04-17 at 09:18 +0200, Hans Verkuil wrote:
-> On 03/04/2020 18:15, Helen Koike wrote:
-> > The Rockchip ISP bindings was moved out of staging.
-> > Update MAINTAINERS file with the new path.
+Em Fri, 17 Apr 2020 09:30:51 +0200
+Geert Uytterhoeven <geert@linux-m68k.org> escreveu:
+
+> Hi Mauro,
 > 
-> Shouldn't there be a reference to Documentation/devicetree/bindings/phy/rockchip-mipi-dphy-rx0.yaml
-> as well in MAINTAINERS?
+> On Fri, Apr 17, 2020 at 9:08 AM Mauro Carvalho Chehab
+> <mchehab+huawei@kernel.org> wrote:
+> > While select would be a great idea for most archs, this
+> > causes a breakage with s390:
+> >
+> >         "I don't think that's a good idea, as it suddenly enables selecting all PCI
+> >          drivers on platforms that do not have PCI.
+> >
+> >             WARNING: unmet direct dependencies detected for PCI
+> >               Depends on [n]: HAVE_PCI [=n]
+> >               Selected by [m]:
+> >               - CEC_SECO [=m] && MEDIA_CEC_SUPPORT [=y] && (X86 || IA64 || COMPILE_TEST [=y])
+> >
+> > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>  
+> 
+> Thanks for your patch!
+> 
+> Fixes: 4be5e8648b0c287a ("media: move CEC platform drivers to a
+> separate directory")
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-And please keep the file references F: fields in
-alphabetic order.
+Btw, I almost solved it on a different way, keeping the select and making
+it depends on HAVE_PCI.
 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-[]
-> > @@ -14303,6 +14303,7 @@ M:	Helen Koike <helen.koike@collabora.com>
-> >  L:	linux-media@vger.kernel.org
-> >  S:	Maintained
-> >  F:	drivers/staging/media/rkisp1/
-> > +F:	Documentation/devicetree/bindings/media/rockchip-isp1.yaml
-> >  
-> >  ROCKCHIP RASTER 2D GRAPHIC ACCELERATION UNIT DRIVER
-> >  M:	Jacob Chen <jacob-chen@iotwrt.com>
-> > 
+I ended by opting to do this change in order to try to avoid more
+Kconfig noise (and because "select PCI" is not popular those days).
 
+Thanks,
+Mauro
