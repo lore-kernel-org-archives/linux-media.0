@@ -7,183 +7,182 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85C5CC38A30
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD1C2C38A2F
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59A6420776
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFDBB20776
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587142750;
-	bh=jgEdbK8DASFi1sv+19D91lmZPgew0tzIufTfc/IJwEg=;
+	s=default; t=1587142749;
+	bh=LW0YChFmsMYi3A/jBnNiN8a7wkyl819k9zKt5G4Hj2s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=SKBXsHgPN0LwGBs0vP4izdQrKPohNAetD55PPKQMBcReNFyMG38ytyR2dCxh0nM73
-	 wFPNE+LdhUodetfaww9v2FT35N5dRTOQ1bV7Kfp7mvpaQKol0QOslh/NyAMqgN75Nk
-	 NDFtircWg+4iQT1l5vOkVKQVDi3hKXK/2Pg8uWrM=
+	b=rQqNvoaLrrgwWaZYUkkJ4+3fVQ6jU+t2XqpolWFrYfPL+YfFLE4bEkgBgMa3Hc4L7
+	 aGK/Tmzlpx6CYLCIK/NibT90gVJrEVfISm9ss8BnU1rPgqExmnoZ63ZQaQiSa7GZxn
+	 AVcQOZOGZXszyFwiTOfm279wAUGvpCMIMQU96OMk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727988AbgDQQ7J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 12:59:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46018 "EHLO mail.kernel.org"
+        id S1727948AbgDQQ7H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 12:59:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46116 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726644AbgDQQ7A (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 12:59:00 -0400
+        id S1727806AbgDQQ7B (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 17 Apr 2020 12:59:01 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5AFB20776;
+        by mail.kernel.org (Postfix) with ESMTPSA id B81C520771;
         Fri, 17 Apr 2020 16:58:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587142740;
-        bh=jgEdbK8DASFi1sv+19D91lmZPgew0tzIufTfc/IJwEg=;
+        bh=LW0YChFmsMYi3A/jBnNiN8a7wkyl819k9zKt5G4Hj2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wHHyMyJxvRh+/EtUMd+cU2ZIW2sGty08lwWwWZtscdeeTccnUNF7v3clcHwZkfgAw
-         bSZOkRZoih7kHjdccJo6rIJ7AC9e6eiTqFHIKe/pz89K6JeS6CX3A/rJ0qmLOdlYBM
-         ERmTjMbczJfLGKNEBr82EChDOY6Jp+qdT7NTd5Ds=
+        b=B7D6Oe6BLyqXb8+Mxr8AuGEhZYOd3bPjp5gWCjaEL0D51Dh6rBSZUr/FkGBgcgjX4
+         OemzXkyQqZAHrqnPesRIiP6qpxxhzRyBFUxw4B3PAiMolqKpGPOkwJ/5rMO5xQ+JnM
+         ZHZ0aT9BL7tZN85v1tJW1iTPstIPLpFcMfG8CfWQ=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPUKP-007wLQ-3j; Fri, 17 Apr 2020 18:58:57 +0200
+        id 1jPUKP-007wLm-9Y; Fri, 17 Apr 2020 18:58:57 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 05/15] media: admin-guide: add a card list for cx231xx boards
-Date:   Fri, 17 Apr 2020 18:58:46 +0200
-Message-Id: <9fce22d2a3b2cfdf4c47b864a07e7360fbf7792c.1587142382.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 09/15] media: admin-guide: improve cardlist.rst documentation
+Date:   Fri, 17 Apr 2020 18:58:50 +0200
+Message-Id: <824bb8013d308e4bce9da454ca564883806e4fb5.1587142382.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1587142382.git.mchehab+huawei@kernel.org>
 References: <cover.1587142382.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It is interesting to have a card list also for cx231xx
-driver, as it currently supports 27 different boards.
+The cardlist section is important for some boards, because they
+may require extra modprobe parameters.
+
+Improve the docs to mention that.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/cardlist.rst  |  1 +
- .../admin-guide/media/cx231xx-cardlist.rst    | 99 +++++++++++++++++++
- 2 files changed, 100 insertions(+)
- create mode 100644 Documentation/admin-guide/media/cx231xx-cardlist.rst
+ Documentation/admin-guide/media/cardlist.rst | 93 ++++++++++++++++++--
+ 1 file changed, 88 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
-index 5c9c3c97bcb2..527188ee9697 100644
+index 527188ee9697..f469bd759bea 100644
 --- a/Documentation/admin-guide/media/cardlist.rst
 +++ b/Documentation/admin-guide/media/cardlist.rst
-@@ -9,6 +9,7 @@ Cards List
+@@ -1,22 +1,105 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
++==========
+ Cards List
+ ==========
+ 
++The media subsystem provide support for lots of PCI and USB drivers, plus
++platform-specific drivers. It also contains several ancillary I²C drivers.
++
++The platform-specific drivers are usually present on embedded systems,
++or are supported by the main board. Usually, setting them is done via
++OpenFirmware or ACPI.
++
++The PCI and USB drivers, however, are independent of the system's board,
++and may be added/removed by the user.
++
++This section contains a list of supported PCI and USB boards.
++
++Please notice that this list is not exaustive.
++
++USB drivers
++===========
++
++The USB boards are identified by an identification called USB ID.
++
++The ``lsusb`` command allows identifying the USB IDs::
++
++    $ lsusb
++    ...
++    Bus 001 Device 015: ID 046d:082d Logitech, Inc. HD Pro Webcam C920
++    Bus 001 Device 074: ID 2040:b131 Hauppauge
++    Bus 001 Device 075: ID 2013:024f PCTV Systems nanoStick T2 290e
++    ...
++
++Newer camera devices use a standard way to expose themselves as such,
++via USB Video Class. Those cameras are automatically supported by the
++``uvc-driver``.
++
++Older cameras and TV USB devices uses USB Vendor Classes: each vendor
++defines its own way to access the device. This section contains
++card lists for such vendor-class devices.
++
++While this is not as common as on PCI, sometimes the same USB ID is used
++by different products. So, several media drivers allow passing a ``card=``
++parameter, in order to setup a card number that would match the correct
++settings for an specific product type.
++
+ .. toctree::
+ 	:maxdepth: 1
+ 
  	au0828-cardlist
++	cx231xx-cardlist
++	em28xx-cardlist
++	tm6000-cardlist
++	usbvision-cardlist
++	gspca-cardlist
++
++PCI drivers
++===========
++
++The PCI boards are identified by an identification called PCI ID.
++
++The ``lspci`` command allows identifying the PCI IDs::
++
++    $ lspci -nn
++    ...
++    00:0b.0 Multimedia video controller: Brooktree Corporation Bt878 Video Capture [1822:0026] (rev 11)
++    ...
++
++Unfortunately, sometimes the same PCI ID is used by different products.
++So, several media drivers allow passing a ``card=`` parameter, in order
++to setup a card number that would match the correct settings for an
++specific board.
++
++.. toctree::
++	:maxdepth: 1
++
  	bttv-cardlist
  	cx18-cardlist
-+	cx231xx-cardlist
+-	cx231xx-cardlist
  	cx23885-cardlist
  	cx88-cardlist
- 	em28xx-cardlist
-diff --git a/Documentation/admin-guide/media/cx231xx-cardlist.rst b/Documentation/admin-guide/media/cx231xx-cardlist.rst
-new file mode 100644
-index 000000000000..d374101be047
---- /dev/null
-+++ b/Documentation/admin-guide/media/cx231xx-cardlist.rst
-@@ -0,0 +1,99 @@
-+.. SPDX-License-Identifier: GPL-2.0
+-	em28xx-cardlist
+ 	ivtv-cardlist
+ 	saa7134-cardlist
+ 	saa7164-cardlist
+-	tm6000-cardlist
 +
-+cx231xx cards list
-+==================
++I²C drivers
++===========
 +
-+.. tabularcolumns:: |p{1.4cm}|p{10.0cm}|p{6.5cm}|
++The I²C (Inter-Integrated Circuit) bus is a three-wires bus used internally
++at the media cards for communication between different chips. While the bus
++is not visible to the Linux Kernel, drivers need to send and receive
++commands via the bus. The Linux Kernel driver abstraction has support to
++implement different drivers for each component inside an I²C bus, as if
++the bus were visible to the main system board.
 +
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 2 12 19
-+   :stub-columns: 0
++One of the problems with I²C devices is that sometimes the same device may
++work with different I²C hardware. This is common, for example, on devices
++that comes with a tuner for North America market, and another one for
++Europe. Some drivers have a ``tuner=`` modprobe parameter to allow using a
++different tuner number in order to address such issue.
 +
-+   * - Card number
-+     - Card name
-+     - USB IDs
-+   * - 0
-+     - Unknown CX231xx video grabber
-+     - 0572:5A3C
-+   * - 1
-+     - Conexant Hybrid TV - CARRAERA
-+     - 0572:58A2
-+   * - 2
-+     - Conexant Hybrid TV - SHELBY
-+     - 0572:58A1
-+   * - 3
-+     - Conexant Hybrid TV - RDE253S
-+     - 0572:58A4
-+   * - 4
-+     - Conexant Hybrid TV - RDU253S
-+     - 0572:58A5
-+   * - 5
-+     - Conexant VIDEO GRABBER
-+     - 0572:58A6, 07ca:c039
-+   * - 6
-+     - Conexant Hybrid TV - rde 250
-+     - 0572:589E
-+   * - 7
-+     - Conexant Hybrid TV - RDU 250
-+     - 0572:58A0
-+   * - 8
-+     - Hauppauge EXETER
-+     - 2040:b120, 2040:b140
-+   * - 9
-+     - Hauppauge USB Live 2
-+     - 2040:c200
-+   * - 10
-+     - Pixelview PlayTV USB Hybrid
-+     - 4000:4001
-+   * - 11
-+     - Pixelview Xcapture USB
-+     - 1D19:6109, 4000:4001
-+   * - 12
-+     - Kworld UB430 USB Hybrid
-+     - 1b80:e424
-+   * - 13
-+     - Iconbit Analog Stick U100 FM
-+     - 1f4d:0237
-+   * - 14
-+     - Hauppauge WinTV USB2 FM (PAL)
-+     - 2040:b110
-+   * - 15
-+     - Hauppauge WinTV USB2 FM (NTSC)
-+     - 2040:b111
-+   * - 16
-+     - Elgato Video Capture V2
-+     - 0fd9:0037
-+   * - 17
-+     - Geniatech OTG102
-+     - 1f4d:0102
-+   * - 18
-+     - Kworld UB445 USB Hybrid
-+     - 1b80:e421
-+   * - 19
-+     - Hauppauge WinTV 930C-HD (1113xx) / HVR-900H (111xxx) / PCTV QuatroStick 521e
-+     - 2040:b130, 2040:b138, 2013:0259
-+   * - 20
-+     - Hauppauge WinTV 930C-HD (1114xx) / HVR-901H (1114xx) / PCTV QuatroStick 522e
-+     - 2040:b131, 2040:b139, 2013:025e
-+   * - 21
-+     - Hauppauge WinTV-HVR-955Q (111401)
-+     - 2040:b123, 2040:b124
-+   * - 22
-+     - Terratec Grabby
-+     - 1f4d:0102
-+   * - 23
-+     - Evromedia USB Full Hybrid Full HD
-+     - 1b80:d3b2
-+   * - 24
-+     - Astrometa T2hybrid
-+     - 15f4:0135
-+   * - 25
-+     - The Imaging Source DFG/USB2pro
-+     - 199e:8002
-+   * - 26
-+     - Hauppauge WinTV-HVR-935C
-+     - 2040:b151
-+   * - 27
-+     - Hauppauge WinTV-HVR-975
-+     - 2040:b150
++.. toctree::
++	:maxdepth: 1
++
+ 	tuner-cardlist
+-	usbvision-cardlist
+-	gspca-cardlist
 -- 
 2.25.2
 
