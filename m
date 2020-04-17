@@ -7,182 +7,164 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD1C2C38A2F
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C73F4C3A5A0
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AFDBB20776
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A406920776
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587142749;
-	bh=LW0YChFmsMYi3A/jBnNiN8a7wkyl819k9zKt5G4Hj2s=;
+	s=default; t=1587142750;
+	bh=lLr7gyHXd6gFqC8jEO3u2GKYh5Ii35IoFVuGyHyunVo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=rQqNvoaLrrgwWaZYUkkJ4+3fVQ6jU+t2XqpolWFrYfPL+YfFLE4bEkgBgMa3Hc4L7
-	 aGK/Tmzlpx6CYLCIK/NibT90gVJrEVfISm9ss8BnU1rPgqExmnoZ63ZQaQiSa7GZxn
-	 AVcQOZOGZXszyFwiTOfm279wAUGvpCMIMQU96OMk=
+	b=VlIzfrXOChcQMttgDKN1Sss+cty6wgAL26qzaEayHO/yQ8Z4B1eIC79/NAjI4WoZX
+	 yj0dssZZxWZqomaybL95ItQzlW0C5cSITeekt5fR/abGP9ZswXCFsVJeui3zNxPius
+	 vrkkbeFRt0dNSWLSF5ddk2utsCbtnj0EdzxajPa0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727948AbgDQQ7H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 12:59:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46116 "EHLO mail.kernel.org"
+        id S1728001AbgDQQ7K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 12:59:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46042 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727806AbgDQQ7B (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 12:59:01 -0400
+        id S1726724AbgDQQ7A (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 17 Apr 2020 12:59:00 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B81C520771;
+        by mail.kernel.org (Postfix) with ESMTPSA id B8E6322243;
         Fri, 17 Apr 2020 16:58:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587142740;
-        bh=LW0YChFmsMYi3A/jBnNiN8a7wkyl819k9zKt5G4Hj2s=;
+        bh=lLr7gyHXd6gFqC8jEO3u2GKYh5Ii35IoFVuGyHyunVo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B7D6Oe6BLyqXb8+Mxr8AuGEhZYOd3bPjp5gWCjaEL0D51Dh6rBSZUr/FkGBgcgjX4
-         OemzXkyQqZAHrqnPesRIiP6qpxxhzRyBFUxw4B3PAiMolqKpGPOkwJ/5rMO5xQ+JnM
-         ZHZ0aT9BL7tZN85v1tJW1iTPstIPLpFcMfG8CfWQ=
+        b=wHbJ8NdqPB0YFidjR8HnRmg+QfWaXBr6Cej59GeGrxBr7GmKFe1Ln9/RQCzqjYm5y
+         CRVpTdZt9yGqclji8Ti6iNn1qaDm4+e4axEKOY7j78GamYvEehGgXEw8m1f7N8Rmmz
+         42wdD50K4Yn/TsEy4Ngg2E08m8x/3QEt+gdNzn4E=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPUKP-007wLm-9Y; Fri, 17 Apr 2020 18:58:57 +0200
+        id 1jPUKP-007wM1-DR; Fri, 17 Apr 2020 18:58:57 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 09/15] media: admin-guide: improve cardlist.rst documentation
-Date:   Fri, 17 Apr 2020 18:58:50 +0200
-Message-Id: <824bb8013d308e4bce9da454ca564883806e4fb5.1587142382.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 12/15] media: admin-guide: add dibusb-mb and dibusb-mc card lists
+Date:   Fri, 17 Apr 2020 18:58:53 +0200
+Message-Id: <8699332aee78cdeed3941b36873c44b70708af76.1587142382.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1587142382.git.mchehab+huawei@kernel.org>
 References: <cover.1587142382.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The cardlist section is important for some boards, because they
-may require extra modprobe parameters.
-
-Improve the docs to mention that.
+Document the supported dib0300 boards.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/cardlist.rst | 93 ++++++++++++++++++--
- 1 file changed, 88 insertions(+), 5 deletions(-)
+ Documentation/admin-guide/media/cardlist.rst  |  2 +
+ .../media/dvb-usb-dibusb-mb-cardlist.rst      | 42 +++++++++++++++++++
+ .../media/dvb-usb-dibusb-mc-cardlist.rst      | 30 +++++++++++++
+ 3 files changed, 74 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/dvb-usb-dibusb-mb-cardlist.rst
+ create mode 100644 Documentation/admin-guide/media/dvb-usb-dibusb-mc-cardlist.rst
 
 diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
-index 527188ee9697..f469bd759bea 100644
+index c1c5530331a1..2b8b158b889f 100644
 --- a/Documentation/admin-guide/media/cardlist.rst
 +++ b/Documentation/admin-guide/media/cardlist.rst
-@@ -1,22 +1,105 @@
- .. SPDX-License-Identifier: GPL-2.0
+@@ -56,6 +56,8 @@ settings for an specific product type.
+ 	gspca-cardlist
  
-+==========
- Cards List
- ==========
+ 	dvb-usb-dib0700-cardlist
++	dvb-usb-dibusb-mb-cardlist
++	dvb-usb-dibusb-mc-cardlist
  
-+The media subsystem provide support for lots of PCI and USB drivers, plus
-+platform-specific drivers. It also contains several ancillary I²C drivers.
+ 	dvb-usb-af9015-cardlist
+ 	dvb-usb-af9035-cardlist
+diff --git a/Documentation/admin-guide/media/dvb-usb-dibusb-mb-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-dibusb-mb-cardlist.rst
+new file mode 100644
+index 000000000000..f25a54721f0d
+--- /dev/null
++++ b/Documentation/admin-guide/media/dvb-usb-dibusb-mb-cardlist.rst
+@@ -0,0 +1,42 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+The platform-specific drivers are usually present on embedded systems,
-+or are supported by the main board. Usually, setting them is done via
-+OpenFirmware or ACPI.
++dvb-usb-dibusb-mb cards list
++============================
 +
-+The PCI and USB drivers, however, are independent of the system's board,
-+and may be added/removed by the user.
++.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
 +
-+This section contains a list of supported PCI and USB boards.
++.. flat-table::
++   :header-rows: 1
++   :widths: 7 13
++   :stub-columns: 0
 +
-+Please notice that this list is not exaustive.
++   * - Card name
++     - USB IDs
++   * - AVerMedia AverTV DVBT USB1.1
++     - 14aa:0001, 14aa:0002
++   * - Artec T1 USB1.1 TVBOX with AN2135
++     - 05d8:8105, 05d8:8106
++   * - Artec T1 USB1.1 TVBOX with AN2235
++     - 05d8:8107, 05d8:8108
++   * - Artec T1 USB1.1 TVBOX with AN2235 (faulty USB IDs)
++     - 0547:2235
++   * - Artec T1 USB2.0
++     - 05d8:8109, 05d8:810a
++   * - Compro Videomate DVB-U2000 - DVB-T USB1.1 (please confirm to linux-dvb)
++     - 185b:d000, 145f:010c, 185b:d001
++   * - DiBcom USB1.1 DVB-T reference design (MOD3000)
++     - 10b8:0bb8, 10b8:0bb9
++   * - Grandtec USB1.1 DVB-T
++     - 5032:0fa0, 5032:0bb8, 5032:0fa1, 5032:0bb9
++   * - KWorld V-Stream XPERT DTV - DVB-T USB1.1
++     - eb1a:17de, eb1a:17df
++   * - KWorld Xpert DVB-T USB2.0
++     - eb2a:17de
++   * - KWorld/ADSTech Instant DVB-T USB2.0
++     - 06e1:a333, 06e1:a334
++   * - TwinhanDTV USB-Ter USB1.1 / Magic Box I / HAMA USB1.1 DVB-T device
++     - 13d3:3201, 1822:3201, 13d3:3202, 1822:3202
++   * - Unknown USB1.1 DVB-T device ???? please report the name to the author
++     - 1025:005e, 1025:005f
++   * - VideoWalker DVB-T USB
++     - 0458:701e, 0458:701f
+diff --git a/Documentation/admin-guide/media/dvb-usb-dibusb-mc-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-dibusb-mc-cardlist.rst
+new file mode 100644
+index 000000000000..8d03bae0e084
+--- /dev/null
++++ b/Documentation/admin-guide/media/dvb-usb-dibusb-mc-cardlist.rst
+@@ -0,0 +1,30 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+USB drivers
-+===========
++dvb-usb-dibusb-mc cards list
++============================
 +
-+The USB boards are identified by an identification called USB ID.
++.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
 +
-+The ``lsusb`` command allows identifying the USB IDs::
++.. flat-table::
++   :header-rows: 1
++   :widths: 7 13
++   :stub-columns: 0
 +
-+    $ lsusb
-+    ...
-+    Bus 001 Device 015: ID 046d:082d Logitech, Inc. HD Pro Webcam C920
-+    Bus 001 Device 074: ID 2040:b131 Hauppauge
-+    Bus 001 Device 075: ID 2013:024f PCTV Systems nanoStick T2 290e
-+    ...
-+
-+Newer camera devices use a standard way to expose themselves as such,
-+via USB Video Class. Those cameras are automatically supported by the
-+``uvc-driver``.
-+
-+Older cameras and TV USB devices uses USB Vendor Classes: each vendor
-+defines its own way to access the device. This section contains
-+card lists for such vendor-class devices.
-+
-+While this is not as common as on PCI, sometimes the same USB ID is used
-+by different products. So, several media drivers allow passing a ``card=``
-+parameter, in order to setup a card number that would match the correct
-+settings for an specific product type.
-+
- .. toctree::
- 	:maxdepth: 1
- 
- 	au0828-cardlist
-+	cx231xx-cardlist
-+	em28xx-cardlist
-+	tm6000-cardlist
-+	usbvision-cardlist
-+	gspca-cardlist
-+
-+PCI drivers
-+===========
-+
-+The PCI boards are identified by an identification called PCI ID.
-+
-+The ``lspci`` command allows identifying the PCI IDs::
-+
-+    $ lspci -nn
-+    ...
-+    00:0b.0 Multimedia video controller: Brooktree Corporation Bt878 Video Capture [1822:0026] (rev 11)
-+    ...
-+
-+Unfortunately, sometimes the same PCI ID is used by different products.
-+So, several media drivers allow passing a ``card=`` parameter, in order
-+to setup a card number that would match the correct settings for an
-+specific board.
-+
-+.. toctree::
-+	:maxdepth: 1
-+
- 	bttv-cardlist
- 	cx18-cardlist
--	cx231xx-cardlist
- 	cx23885-cardlist
- 	cx88-cardlist
--	em28xx-cardlist
- 	ivtv-cardlist
- 	saa7134-cardlist
- 	saa7164-cardlist
--	tm6000-cardlist
-+
-+I²C drivers
-+===========
-+
-+The I²C (Inter-Integrated Circuit) bus is a three-wires bus used internally
-+at the media cards for communication between different chips. While the bus
-+is not visible to the Linux Kernel, drivers need to send and receive
-+commands via the bus. The Linux Kernel driver abstraction has support to
-+implement different drivers for each component inside an I²C bus, as if
-+the bus were visible to the main system board.
-+
-+One of the problems with I²C devices is that sometimes the same device may
-+work with different I²C hardware. This is common, for example, on devices
-+that comes with a tuner for North America market, and another one for
-+Europe. Some drivers have a ``tuner=`` modprobe parameter to allow using a
-+different tuner number in order to address such issue.
-+
-+.. toctree::
-+	:maxdepth: 1
-+
- 	tuner-cardlist
--	usbvision-cardlist
--	gspca-cardlist
++   * - Card name
++     - USB IDs
++   * - Artec T1 USB2.0 TVBOX (please check the warm ID)
++     - 05d8:8109, 05d8:810a
++   * - Artec T14 - USB2.0 DVB-T
++     - 05d8:810b, 05d8:810c
++   * - DiBcom USB2.0 DVB-T reference design (MOD3000P)
++     - 10b8:0bc6, 10b8:0bc7
++   * - GRAND - USB2.0 DVB-T adapter
++     - 5032:0bc6, 5032:0bc7
++   * - Humax/Coex DVB-T USB Stick 2.0 High Speed
++     - 10b9:5000, 10b9:5001
++   * - LITE-ON USB2.0 DVB-T Tuner
++     - 04ca:f000, 04ca:f001
++   * - Leadtek - USB2.0 Winfast DTV dongle
++     - 0413:6025, 0413:6026
++   * - MSI Digivox Mini SL
++     - eb1a:e360, eb1a:e361
 -- 
 2.25.2
 
