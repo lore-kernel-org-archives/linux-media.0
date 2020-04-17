@@ -2,109 +2,106 @@ Return-Path: <SRS0=fNsq=6B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04F62C3A5A0
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 10:35:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34A11C352BE
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 11:10:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6609221EA
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 10:35:09 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vph5Cck8"
+	by mail.kernel.org (Postfix) with ESMTP id 08B7B221EA
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 11:10:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1587121859;
+	bh=tCQquf491poUngMRJaQnlMBZ2MoJzib0aId2SU4OoXQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=rbGu7FykVDooFgYrWZT0CYc9W8h7c836+mj0ZenNKvSCjdEJL1KeMNU9qQ9IqsCDL
+	 dvEC1AMadJ/zF5n1zozQE64/uTPCx5ARy/xKQm7Dh3K+V2JQej4qaRdgu1tn36Pj1i
+	 tJ8aSqvRguuBHbORlOlhtZqxu1um3q1N0IhmcmBE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728714AbgDQKef (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 06:34:35 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:50064 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728557AbgDQKef (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 06:34:35 -0400
-Received: from Q.local (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EE1EC97D;
-        Fri, 17 Apr 2020 12:34:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1587119672;
-        bh=iXcDG3x21kdICT9LesiijNnKyq0L2S+OhNZgcyTtIVU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=vph5Cck8dFuT5oTpMHZx5b33eajjDp0m//Q9RI/wOro6iVUXQyL8bWBqTlDe909vw
-         xxrUIcXfvje9y247LOhMntKtaFvRk4lIlnNQq0qZqa3L3gJBdy+vModLZHoZg+jQdU
-         TLMx5C8GHmh7/ROLUpXIcH/akJRMmcmNSW/JWrCE=
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-To:     linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        sakari.ailus@iki.fi, Hans Verkuil <hverkuil@xs4all.nl>,
-        Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Subject: [PATCH v8 0/4] MAX9286 GMSL Support (+RDACM20)
-Date:   Fri, 17 Apr 2020 11:34:20 +0100
-Message-Id: <20200417103424.5875-1-kieran.bingham+renesas@ideasonboard.com>
-X-Mailer: git-send-email 2.20.1
+        id S1730208AbgDQLK6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 07:10:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39546 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730168AbgDQLK6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 17 Apr 2020 07:10:58 -0400
+Received: from coco.lan (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 99ED321D95;
+        Fri, 17 Apr 2020 11:10:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587121857;
+        bh=tCQquf491poUngMRJaQnlMBZ2MoJzib0aId2SU4OoXQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=2qpVqwL8UoxPk8oVmTt/ZQPjci/evr9BGLIMrPaChIMdyjS39CpYENNo9AGhM9wWu
+         scXrQUC32D/Rk3PEJ4y3W9GfkUiO9IhRmL2U9ShLoSgxiFXMCXuU8MSfDuE74OSa7j
+         CHMNHtqP9yhKkFE0mCCKzg+XJYvV3EwBMyJlFLJ8=
+Date:   Fri, 17 Apr 2020 13:10:53 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH 1/3] media: cec: don't select PCI & DMI
+Message-ID: <20200417131053.3cf1b86a@coco.lan>
+In-Reply-To: <CAMuHMdXQ-ahP1MhL-NEHAyoA_CxT2EWfJRF55S7w3uuF8vkvDQ@mail.gmail.com>
+References: <6af5797c76c11d8c08ae1f5a73c3711fcf89ab6f.1587107273.git.mchehab+huawei@kernel.org>
+        <CAMuHMdV1DdmrtexvMqEn3SBjgyG8eYbbgLsYV-862mKLt08qdw@mail.gmail.com>
+        <20200417093424.71ae0559@coco.lan>
+        <CAMuHMdXQ-ahP1MhL-NEHAyoA_CxT2EWfJRF55S7w3uuF8vkvDQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series provides a pair of drivers for the GMSL cameras on the R-Car ADAS
-platforms.
+Em Fri, 17 Apr 2020 09:52:02 +0200
+Geert Uytterhoeven <geert@linux-m68k.org> escreveu:
 
-These drivers originate from Cogent Embedded, and have been refactored to split
-the MAX9286 away from the RDACM20 drivers which were once very tightly coupled.
+> Hi Mauro,
+> 
+> On Fri, Apr 17, 2020 at 9:34 AM Mauro Carvalho Chehab
+> <mchehab+huawei@kernel.org> wrote:
+> > Em Fri, 17 Apr 2020 09:30:51 +0200
+> > Geert Uytterhoeven <geert@linux-m68k.org> escreveu:  
+> > > On Fri, Apr 17, 2020 at 9:08 AM Mauro Carvalho Chehab
+> > > <mchehab+huawei@kernel.org> wrote:  
+> > > > While select would be a great idea for most archs, this
+> > > > causes a breakage with s390:
+> > > >
+> > > >         "I don't think that's a good idea, as it suddenly enables selecting all PCI
+> > > >          drivers on platforms that do not have PCI.
+> > > >
+> > > >             WARNING: unmet direct dependencies detected for PCI
+> > > >               Depends on [n]: HAVE_PCI [=n]
+> > > >               Selected by [m]:
+> > > >               - CEC_SECO [=m] && MEDIA_CEC_SUPPORT [=y] && (X86 || IA64 || COMPILE_TEST [=y])
+> > > >
+> > > > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>  
+> > >
+> > > Thanks for your patch!
+> > >
+> > > Fixes: 4be5e8648b0c287a ("media: move CEC platform drivers to a
+> > > separate directory")
+> > > Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>  
+> >
+> > Btw, I almost solved it on a different way, keeping the select and making
+> > it depends on HAVE_PCI.  
+> 
+> Like you did for the similar change to USB?
 
-The MAX9286 is capable of capturing up to 4 streams simultaneously, and while
-the V4L2-Multiplexed streams series is not available, this works purely on the
-assumption that the receiver will correctly map each of the 4 VCs to separate
-video nodes, as the RCar-VIN does.
+Yes.
 
-This driver along with a camera driver for the RDACM20 and the
-associated platform support for the Renesas R-Car Salvator-X, and the Eagle-V3M
-can be found at:
+The thing is: there are several other drivers that already select USB
+(and one driver selecting USB_ACM). So, this didn't sound too risky.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git gmsl/v8
+On the other hand, there's currently nothing selecting "PCI". So,
+in order to avoid more (possible) Kconfig noise, I opted to be
+more conservative here.
 
-We're very much hoping that we can aim to get the max9286 into the next
-merge-window. Please let us know if there are any issues blocking this.
-
-Jacopo Mondi (2):
-  dt-bindings: media: i2c: Add bindings for IMI RDACM2x
-  media: i2c: Add RDACM20 driver
-
-Kieran Bingham (1):
-  media: i2c: Add MAX9286 driver
-
-Laurent Pinchart (1):
-  dt-bindings: media: i2c: Add bindings for Maxim Integrated MAX9286
-
- .../bindings/media/i2c/imi,rdacm2x-gmsl.yaml  |  161 ++
- .../bindings/media/i2c/maxim,max9286.yaml     |  287 ++++
- .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
- MAINTAINERS                                   |   22 +
- drivers/media/i2c/Kconfig                     |   25 +
- drivers/media/i2c/Makefile                    |    3 +
- drivers/media/i2c/max9271.c                   |  330 ++++
- drivers/media/i2c/max9271.h                   |  224 +++
- drivers/media/i2c/max9286.c                   | 1332 +++++++++++++++++
- drivers/media/i2c/rdacm20.c                   |  668 +++++++++
- 10 files changed, 3054 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/imi,rdacm2x-gmsl.yaml
- create mode 100644 Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
- create mode 100644 drivers/media/i2c/max9271.c
- create mode 100644 drivers/media/i2c/max9271.h
- create mode 100644 drivers/media/i2c/max9286.c
- create mode 100644 drivers/media/i2c/rdacm20.c
-
--- 
-2.20.1
-
+Thanks,
+Mauro
