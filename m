@@ -2,112 +2,93 @@ Return-Path: <SRS0=fNsq=6B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93C2EC2BB85
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72734C2BB1D
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:08:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B062221EC
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:01:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 478E32224E
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:08:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587106892;
-	bh=A6gsBqO/C5a7aGTcLYtMEYviXTXettEUMZQ5DBfDV8M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=BijkidCc9f7MKZaeDsOOaw/MOVgHgxXnrtmfjpwFDtYm291m2Udj9j6tKA1/ue0or
-	 MjK4L11rEoOBp+7D2oBJdP4DImePNPv5HZ8mgqyVlhgalZaGMxQxI1/gtfzjtDPed+
-	 eiEfYeFgbC8XHcP+XIb2/lIN/ImVi9iiHc/5AAsQ=
+	s=default; t=1587107283;
+	bh=/XXaXPntadrmVfiYdBRKhYb0xX0mWCqt/zmreOZQ3WY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=K4j+VXESNhzR0+KOselmcdAi7gIrTQlHASKLyUJArkY2J+kdmcjtn3gUjmIcIzk+8
+	 DYAJVqBP97chGdq/rBS3OJlihjQBBH/wzFoPxyKv0WH+aEJRmSmsRNbnHJw9W14wSs
+	 2+WmG5BZQmaaVUAlpNGZn9OqEIKVsIB0sbjdhlF8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728502AbgDQHB1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 03:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728466AbgDQHB0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 03:01:26 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473FBC061A0C;
-        Fri, 17 Apr 2020 00:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description;
-        bh=HVLDZVgokzWLzBs8K61qPV5biQljs7Uy59BS0iqfE0Q=; b=YO7SX7phIzs9cV/Zpf/QAQy6HD
-        fB/L442Hz6q/J8L44pykzCYyA7ekbxWv6YGEzwv1vvxmAkWOpRUV5cnR74lIH//lNIR3dfwppS5T8
-        K69yNUkJC0S+pBqWd9pCx7p6+0IhyOVd0XMlnsHBOEoGc+4TKcstgQdqNGYN5pfawgc6VHWvq8umF
-        W1q7GrbvLSCBbX+SKWQ83NXeIJi1Ay1KmB6dA2+rnXTZjAEAxwbqAbwiBMXPd6qgpf9YyI/gIMlvG
-        wUEdnR9xsMm5TK6+mI20dAXjIdSz/GJmP+UstscLOfjgTO1hnC4AdcjFht8wwDfTa+NQKQ6RWS2m4
-        zM0ApeQQ==;
-Received: from ip5f5ad4d8.dynamic.kabel-deutschland.de ([95.90.212.216] helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jPL05-000664-4K; Fri, 17 Apr 2020 07:01:21 +0000
-Date:   Fri, 17 Apr 2020 09:01:15 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: Re: linux-next: build warning after merge of the v4l-dvb tree
-Message-ID: <20200417090115.3cccc9bd@coco.lan>
-In-Reply-To: <7faaec92dc9b5870b33c6dbb440de0698b5a70e7.camel@collabora.com>
-References: <20200417102226.11d54815@canb.auug.org.au>
-        <7faaec92dc9b5870b33c6dbb440de0698b5a70e7.camel@collabora.com>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1728704AbgDQHIC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 03:08:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57322 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728693AbgDQHIC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 17 Apr 2020 03:08:02 -0400
+Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E2F52221E9;
+        Fri, 17 Apr 2020 07:08:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587107282;
+        bh=/XXaXPntadrmVfiYdBRKhYb0xX0mWCqt/zmreOZQ3WY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oz2UAfAqcnUD9JmcevTa8ynEgGiwWzrgc6h3y7vupY8vdwnVKzmQKxJCc5DZ1MsIA
+         G7D5dM8Ad/kTEWeMGaEYfAo9SAzJ2THgWq+tUF2iC8trpF+D72bRMNRakp5UH9fbA2
+         vM113S+/5+r+BStylJ33dxj0eNtKH4vw+/UHy4hE=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jPL6V-007ncB-Pq; Fri, 17 Apr 2020 09:07:59 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH 2/3] media: mc/Kconfig: remove staging dependency for request API
+Date:   Fri, 17 Apr 2020 09:07:58 +0200
+Message-Id: <e36b68ed273e12a4539b54d24bcdb929d94b68ba.1587107273.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.25.2
+In-Reply-To: <6af5797c76c11d8c08ae1f5a73c3711fcf89ab6f.1587107273.git.mchehab+huawei@kernel.org>
+References: <6af5797c76c11d8c08ae1f5a73c3711fcf89ab6f.1587107273.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Fri, 17 Apr 2020 02:13:47 -0300
-Ezequiel Garcia <ezequiel@collabora.com> escreveu:
+When the request API got merged, only drivers at staging were
+using it. As we wanted to be able to do future changes on it,
+we added an artificial depends on STAGING_MEDIA.
 
-> Hi Stephen,
-> 
-> On Fri, 2020-04-17 at 10:22 +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the v4l-dvb tree, today's linux-next build (arm
-> > multi_v7_defconfig) produced this warning:
-> > 
-> > WARNING: unmet direct dependencies detected for MEDIA_CONTROLLER_REQUEST_API
-> >   Depends on [n]: MEDIA_SUPPORT [=m] && MEDIA_CONTROLLER [=y] && STAGING_MEDIA [=n]
-> >   Selected by [m]:
-> >   - VIDEO_VIVID [=m] && MEDIA_SUPPORT [=m] && MEDIA_TEST_SUPPORT [=y] && V4L_TEST_DRIVERS [=y] && VIDEO_DEV [=m] && VIDEO_V4L2 [=m] && !SPARC32 &&
-> > !SPARC64 && FB [=y] && HAS_DMA [=y]
-> >   
-> 
-> Ugh, my bad. MEDIA_CONTROLLER_REQUEST_API can't
-> depend on staging, after this recently merged commit:
-> 
-> "media: Kconfig: Don't expose the Request API option"
-> 
-> So, we should fix that with:
-> 
-> diff --git a/drivers/media/mc/Kconfig b/drivers/media/mc/Kconfig
-> index 7c9628f37196..4815b9dde9af 100644
-> --- a/drivers/media/mc/Kconfig
-> +++ b/drivers/media/mc/Kconfig
-> @@ -14,7 +14,7 @@ config MEDIA_CONTROLLER_DVB
->  
->  config MEDIA_CONTROLLER_REQUEST_API
->         bool
-> -       depends on MEDIA_CONTROLLER && STAGING_MEDIA
-> +       depends on MEDIA_CONTROLLER
->         help
->           DO NOT ENABLE THIS OPTION UNLESS YOU KNOW WHAT YOU'RE DOING.
->  
-> Mauro what do you think?
+Yet, request API is there for quite some time now, and
+didn't suffer any API breakages during this time. So, drop
+this.
 
-Dropped the dependency and applied on media.
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Suggested-by: Ezequiel Garcia <ezequiel@collabora.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/mc/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I also addressed the "select PCI" issue, with causes troubles on
-s390 random configs (due to HAS_PCI=n on s390).
+diff --git a/drivers/media/mc/Kconfig b/drivers/media/mc/Kconfig
+index 7c9628f37196..4815b9dde9af 100644
+--- a/drivers/media/mc/Kconfig
++++ b/drivers/media/mc/Kconfig
+@@ -14,7 +14,7 @@ config MEDIA_CONTROLLER_DVB
+ 
+ config MEDIA_CONTROLLER_REQUEST_API
+ 	bool
+-	depends on MEDIA_CONTROLLER && STAGING_MEDIA
++	depends on MEDIA_CONTROLLER
+ 	help
+ 	  DO NOT ENABLE THIS OPTION UNLESS YOU KNOW WHAT YOU'RE DOING.
+ 
+-- 
+2.25.2
 
-Thanks,
-Mauro
