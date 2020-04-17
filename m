@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3240C38A2E
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85C5CC38A30
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FFC82054F
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 59A6420776
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587142749;
-	bh=UrL63n/nMfnYudN4rzsXwCxgGIz2Uc3lAckQleTKykk=;
+	s=default; t=1587142750;
+	bh=jgEdbK8DASFi1sv+19D91lmZPgew0tzIufTfc/IJwEg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=bR1GvLELoX8Vzk2CZeHIlmG9xwhl6/je23UrPDaUaUH4tSiahUydo1xBafwbvCJkw
-	 1hclnAhRFYfP6VilkR5ME8lqui0yek5nTYoy8SmHBDPFSs0SvVKU+R5Xe8KYaEERxF
-	 loOWrxHNIxWL6l97zXmoLC/6010xePuPT4u4lgYo=
+	b=SKBXsHgPN0LwGBs0vP4izdQrKPohNAetD55PPKQMBcReNFyMG38ytyR2dCxh0nM73
+	 wFPNE+LdhUodetfaww9v2FT35N5dRTOQ1bV7Kfp7mvpaQKol0QOslh/NyAMqgN75Nk
+	 NDFtircWg+4iQT1l5vOkVKQVDi3hKXK/2Pg8uWrM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727968AbgDQQ7I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 12:59:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46114 "EHLO mail.kernel.org"
+        id S1727988AbgDQQ7J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 12:59:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46018 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726694AbgDQQ7B (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 12:59:01 -0400
+        id S1726644AbgDQQ7A (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 17 Apr 2020 12:59:00 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B53DA2054F;
+        by mail.kernel.org (Postfix) with ESMTPSA id B5AFB20776;
         Fri, 17 Apr 2020 16:58:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587142740;
-        bh=UrL63n/nMfnYudN4rzsXwCxgGIz2Uc3lAckQleTKykk=;
+        bh=jgEdbK8DASFi1sv+19D91lmZPgew0tzIufTfc/IJwEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lJmRgGkglVX0yEJERlgc+8Df6O0Zwe+1Jj0NmoaXHc8M1tb9BgjHh5OGbuL9URZgB
-         HpNi1n0qowBQRbpL/e5DCOo1wVqMH3U3P119GjKAQt7QSGsGWnBQFqqjPTdp1bPEyJ
-         n7aXo76fQ7/5rud+Km7/srPDrxF2hKXgj6dFoMj8=
+        b=wHHyMyJxvRh+/EtUMd+cU2ZIW2sGty08lwWwWZtscdeeTccnUNF7v3clcHwZkfgAw
+         bSZOkRZoih7kHjdccJo6rIJ7AC9e6eiTqFHIKe/pz89K6JeS6CX3A/rJ0qmLOdlYBM
+         ERmTjMbczJfLGKNEBr82EChDOY6Jp+qdT7NTd5Ds=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPUKP-007wMG-I1; Fri, 17 Apr 2020 18:58:57 +0200
+        id 1jPUKP-007wLQ-3j; Fri, 17 Apr 2020 18:58:57 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 15/15] media: admin-guide: add a cardlist for all other USB cards
-Date:   Fri, 17 Apr 2020 18:58:56 +0200
-Message-Id: <5a030e06f9a87a05dba8c28d672861f9f68a8b74.1587142382.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 05/15] media: admin-guide: add a card list for cx231xx boards
+Date:   Fri, 17 Apr 2020 18:58:46 +0200
+Message-Id: <9fce22d2a3b2cfdf4c47b864a07e7360fbf7792c.1587142382.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1587142382.git.mchehab+huawei@kernel.org>
 References: <cover.1587142382.git.mchehab+huawei@kernel.org>
@@ -57,129 +57,133 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are several other USB cards. Most of them support just
-one device. The only exception is the "pwc" driver. But, as
-updates to it are not frequent, let's just place everything
-manually into a single file.
+It is interesting to have a card list also for cx231xx
+driver, as it currently supports 27 different boards.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/cardlist.rst  |  2 +
- .../admin-guide/media/other-usb-cardlist.rst  | 92 +++++++++++++++++++
- 2 files changed, 94 insertions(+)
- create mode 100644 Documentation/admin-guide/media/other-usb-cardlist.rst
+ Documentation/admin-guide/media/cardlist.rst  |  1 +
+ .../admin-guide/media/cx231xx-cardlist.rst    | 99 +++++++++++++++++++
+ 2 files changed, 100 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/cx231xx-cardlist.rst
 
 diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
-index e9fd26a55384..1a46df2a7bdb 100644
+index 5c9c3c97bcb2..527188ee9697 100644
 --- a/Documentation/admin-guide/media/cardlist.rst
 +++ b/Documentation/admin-guide/media/cardlist.rst
-@@ -95,6 +95,8 @@ settings for an specific product type.
- 	dvb-usb-rtl28xxu-cardlist
- 	dvb-usb-zd1301-cardlist
- 
-+	other-usb-cardlist
-+
- PCI drivers
- ===========
- 
-diff --git a/Documentation/admin-guide/media/other-usb-cardlist.rst b/Documentation/admin-guide/media/other-usb-cardlist.rst
+@@ -9,6 +9,7 @@ Cards List
+ 	au0828-cardlist
+ 	bttv-cardlist
+ 	cx18-cardlist
++	cx231xx-cardlist
+ 	cx23885-cardlist
+ 	cx88-cardlist
+ 	em28xx-cardlist
+diff --git a/Documentation/admin-guide/media/cx231xx-cardlist.rst b/Documentation/admin-guide/media/cx231xx-cardlist.rst
 new file mode 100644
-index 000000000000..bbfdb1389c18
+index 000000000000..d374101be047
 --- /dev/null
-+++ b/Documentation/admin-guide/media/other-usb-cardlist.rst
-@@ -0,0 +1,92 @@
++++ b/Documentation/admin-guide/media/cx231xx-cardlist.rst
+@@ -0,0 +1,99 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+Other USB cards list
-+====================
++cx231xx cards list
++==================
 +
-+================  ======================================  =====================
-+Driver            Card name                               USB IDs
-+================  ======================================  =====================
-+airspy		  Airspy				  1d50:60a1
-+dvb-as102	  Abilis Systems DVB-Titan		  1BA6:0001
-+dvb-as102	  PCTV Systems picoStick (74e)		  2013:0246
-+dvb-as102	  Elgato EyeTV DTT Deluxe		  0fd9:002c
-+dvb-as102	  nBox DVB-T Dongle			  0b89:0007
-+dvb-as102	  Sky IT Digital Key (green led)	  2137:0001
-+b2c2-flexcop-usb  Technisat/B2C2 FlexCop II/IIb/III	  0af7:0101
-+		  Digital TV
-+cpia2		  Vision's CPiA2 cameras		  0553:0100, 0553:0140,
-+		  such as the Digital Blue QX5		  0553:0151
-+go7007		  WIS GO7007 MPEG encoder		  1943:a250, 093b:a002,
-+							  093b:a004, 0eb1:6666,
-+							  0eb1:6668
-+hackrf		  HackRF Software Decoder Radio		  1d50:6089
-+hdpvr		  Hauppauge HD PVR			  2040:4900, 2040:4901,
-+							  2040:4902, 2040:4982,
-+							  2040:4903
-+msi2500		  Mirics MSi3101 SDR Dongle		  1df7:2500, 2040:d300
-+pvrusb2		  Hauppauge WinTV-PVR USB2		  2040:2900, 2040:2950,
-+							  2040:2400, 1164:0622,
-+							  1164:0602, 11ba:1003,
-+							  11ba:1001, 2040:7300,
-+							  2040:7500, 2040:7501,
-+							  0ccd:0039, 2040:7502,
-+							  2040:7510
-+pwc		  Creative Webcam 5			  041E:400C
-+pwc		  Creative Webcam Pro Ex		  041E:4011
-+pwc		  Logitech QuickCam 3000 Pro		  046D:08B0
-+pwc		  Logitech QuickCam Notebook Pro	  046D:08B1
-+pwc		  Logitech QuickCam 4000 Pro		  046D:08B2
-+pwc		  Logitech QuickCam Zoom (old model)	  046D:08B3
-+pwc		  Logitech QuickCam Zoom (new model)	  046D:08B4
-+pwc		  Logitech QuickCam Orbit/Sphere	  046D:08B5
-+pwc		  Logitech/Cisco VT Camera		  046D:08B6
-+pwc		  Logitech ViewPort AV 100		  046D:08B7
-+pwc		  Logitech QuickCam			  046D:08B8
-+pwc		  Philips PCA645VC			  0471:0302
-+pwc		  Philips PCA646VC			  0471:0303
-+pwc		  Askey VC010 type 2			  0471:0304
-+pwc		  Philips PCVC675K (Vesta)		  0471:0307
-+pwc		  Philips PCVC680K (Vesta Pro)		  0471:0308
-+pwc		  Philips PCVC690K (Vesta Pro Scan)	  0471:030C
-+pwc		  Philips PCVC730K (ToUCam Fun),	  0471:0310
-+		  PCVC830 (ToUCam II)
-+pwc		  Philips PCVC740K (ToUCam Pro),	  0471:0311
-+		  PCVC840 (ToUCam II)
-+pwc		  Philips PCVC750K (ToUCam Pro Scan)	  0471:0312
-+pwc		  Philips PCVC720K/40 (ToUCam XS)	  0471:0313
-+pwc		  Philips SPC 900NC			  0471:0329
-+pwc		  Philips SPC 880NC			  0471:032C
-+pwc		  Sotec Afina Eye			  04CC:8116
-+pwc		  Samsung MPC-C10			  055D:9000
-+pwc		  Samsung MPC-C30			  055D:9001
-+pwc		  Samsung SNC-35E (Ver3.0)		  055D:9002
-+pwc		  Askey VC010 type 1			  069A:0001
-+pwc		  AME Co. Afina Eye			  06BE:8116
-+pwc		  Visionite VCS-UC300			  0d81:1900
-+pwc		  Visionite VCS-UM100			  0d81:1910
-+s2255drv	  Sensoray 2255				  1943:2255, 1943:2257
-+stk1160		  STK1160 USB video capture dongle	  05e1:0408
-+stkwebcam	  Syntek DC1125				  174f:a311, 05e1:0501
-+dvb-ttusb-budget  Technotrend/Hauppauge Nova-USB devices  0b48:1003, 0b48:1004,
-+							  0b48:1005
-+dvb-ttusb_dec	  Technotrend/Hauppauge MPEG decoder	  0b48:1006
-+		  DEC3000-s
-+dvb-ttusb_dec	  Technotrend/Hauppauge MPEG decoder	  0b48:1007
-+dvb-ttusb_dec	  Technotrend/Hauppauge MPEG decoder	  0b48:1008
-+		  DEC2000-t
-+dvb-ttusb_dec	  Technotrend/Hauppauge MPEG decoder
-+		  DEC2540-t				  0b48:1009
-+usbtv		  Fushicai USBTV007 Audio-Video Grabber	  1b71:3002, 1f71:3301,
-+							  1f71:3306
-+zr364xx		  USB ZR364XX Camera			  08ca:0109, 041e:4024,
-+							  0d64:0108, 0546:3187,
-+							  0d64:3108, 0595:4343,
-+							  0bb0:500d, 0feb:2004,
-+							  055f:b500, 08ca:2062,
-+							  052b:1a18, 04c8:0729,
-+							  04f2:a208, 0784:0040,
-+							  06d6:0034, 0a17:0062,
-+							  06d6:003b, 0a17:004e,
-+							  041e:405d, 08ca:2102,
-+							  06d6:003d
-+================  ======================================  =====================
++.. tabularcolumns:: |p{1.4cm}|p{10.0cm}|p{6.5cm}|
++
++.. flat-table::
++   :header-rows: 1
++   :widths: 2 12 19
++   :stub-columns: 0
++
++   * - Card number
++     - Card name
++     - USB IDs
++   * - 0
++     - Unknown CX231xx video grabber
++     - 0572:5A3C
++   * - 1
++     - Conexant Hybrid TV - CARRAERA
++     - 0572:58A2
++   * - 2
++     - Conexant Hybrid TV - SHELBY
++     - 0572:58A1
++   * - 3
++     - Conexant Hybrid TV - RDE253S
++     - 0572:58A4
++   * - 4
++     - Conexant Hybrid TV - RDU253S
++     - 0572:58A5
++   * - 5
++     - Conexant VIDEO GRABBER
++     - 0572:58A6, 07ca:c039
++   * - 6
++     - Conexant Hybrid TV - rde 250
++     - 0572:589E
++   * - 7
++     - Conexant Hybrid TV - RDU 250
++     - 0572:58A0
++   * - 8
++     - Hauppauge EXETER
++     - 2040:b120, 2040:b140
++   * - 9
++     - Hauppauge USB Live 2
++     - 2040:c200
++   * - 10
++     - Pixelview PlayTV USB Hybrid
++     - 4000:4001
++   * - 11
++     - Pixelview Xcapture USB
++     - 1D19:6109, 4000:4001
++   * - 12
++     - Kworld UB430 USB Hybrid
++     - 1b80:e424
++   * - 13
++     - Iconbit Analog Stick U100 FM
++     - 1f4d:0237
++   * - 14
++     - Hauppauge WinTV USB2 FM (PAL)
++     - 2040:b110
++   * - 15
++     - Hauppauge WinTV USB2 FM (NTSC)
++     - 2040:b111
++   * - 16
++     - Elgato Video Capture V2
++     - 0fd9:0037
++   * - 17
++     - Geniatech OTG102
++     - 1f4d:0102
++   * - 18
++     - Kworld UB445 USB Hybrid
++     - 1b80:e421
++   * - 19
++     - Hauppauge WinTV 930C-HD (1113xx) / HVR-900H (111xxx) / PCTV QuatroStick 521e
++     - 2040:b130, 2040:b138, 2013:0259
++   * - 20
++     - Hauppauge WinTV 930C-HD (1114xx) / HVR-901H (1114xx) / PCTV QuatroStick 522e
++     - 2040:b131, 2040:b139, 2013:025e
++   * - 21
++     - Hauppauge WinTV-HVR-955Q (111401)
++     - 2040:b123, 2040:b124
++   * - 22
++     - Terratec Grabby
++     - 1f4d:0102
++   * - 23
++     - Evromedia USB Full Hybrid Full HD
++     - 1b80:d3b2
++   * - 24
++     - Astrometa T2hybrid
++     - 15f4:0135
++   * - 25
++     - The Imaging Source DFG/USB2pro
++     - 199e:8002
++   * - 26
++     - Hauppauge WinTV-HVR-935C
++     - 2040:b151
++   * - 27
++     - Hauppauge WinTV-HVR-975
++     - 2040:b150
 -- 
 2.25.2
 
