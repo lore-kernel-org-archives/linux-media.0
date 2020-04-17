@@ -2,124 +2,88 @@ Return-Path: <SRS0=fNsq=6B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB26FC2BB85
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:26:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A13CC2BB1D
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:31:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8986D214D8
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:26:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Ith6lgiR"
+	by mail.kernel.org (Postfix) with ESMTP id 36EDB214AF
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:31:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728924AbgDQH04 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 03:26:56 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:51721 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728419AbgDQH04 (ORCPT
+        id S1728845AbgDQHbD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 03:31:03 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:42726 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728419AbgDQHbD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 03:26:56 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id PLOjjhh2j7xncPLOmj9e23; Fri, 17 Apr 2020 09:26:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1587108414; bh=0rQphqpUpEj6S8K6pkWWdM3OHkGA0bZKp8ci2MlaJ1w=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=Ith6lgiR/EzmVT9mFt3PqenbD4g3b32WJGEOZYo0V2ril9lu9ycNDGfVwJYunjKQ7
-         syGhnLV0tMngI1P5ocwueGj6B77A+ZEDT/Z/6CMzV7xqMfISgvStakfxog6KBfoV+h
-         vaWFj6E3HLZDI6It+MfWNfXEplx2AyshkvWYTLe22kLNTA/ieIWTsQHlN6RVR33NMA
-         WfLODl2LHW3MxLP70gZ5ts8P0z2vJZhP7rn8iL4yuTxT2Yy9bafUsc4xouvGQva8gs
-         tJOqjQux73q2CSZuo2WM5dLyOcbBReKpo8H8E0IB5lEfnw+H+uGrimmUocOS47J0n8
-         UnglowuSMNy0A==
-Subject: Re: [PATCH] media: media/pci: prevent memory leak in bttv_probe
-To:     Xiaolong Huang <butterflyhuangxx@gmail.com>, mchehab@kernel.org,
-        tglx@linutronix.de, mpe@ellerman.id.au, allison@lohutok.net
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200325090122.9308-1-butterflyhuangxx@gmail.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <4149a5b4-c3f3-2902-84e2-eedc9ecc54f8@xs4all.nl>
-Date:   Fri, 17 Apr 2020 09:26:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Fri, 17 Apr 2020 03:31:03 -0400
+Received: by mail-ot1-f65.google.com with SMTP id m18so687980otq.9
+        for <linux-media@vger.kernel.org>; Fri, 17 Apr 2020 00:31:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p0n2/0Se1UgFPAApTRflNIGSMlCM93NKuFmmWzXeY0c=;
+        b=mgsaD5D/mgDE0pRP51NiO2xDAyR3RzjG9IVSF/zVhs4MAFMzooLyvim031yZWobjUp
+         wXC7qqGWwTpWtOdsrSmIXO7xpAeuMGko8QJ8CS5TlZfyO87KPxpIf3aNEkHYkfOm7Mgc
+         r4IfoNTsT/yO6Ff4NfHTQC5sOH3iubTAepPwQFTKi63c30qqCG6CQcv02iXqtl9RRpff
+         6S/CNSFkzrR40VlSBWnPYZWrcK2ZUxnppXHsMuAGeMWOCLWLF3ggwwhGzWCe52oMEIXJ
+         sE7tcdX7uEpN/STBZiALCFpvFZTDyeRO4HKA1l6rsrDQu0j+g1PVwKZ13w7mPRuXKRxS
+         HSuQ==
+X-Gm-Message-State: AGi0PuaxkPcqCbtvInKx/LcB7O3n+5ScC2LhVArTCncul17OORsHdTVI
+        pC7171bBhgYr8JNusmD+iCrEN5KCkShHaPZHjAz6wSDT
+X-Google-Smtp-Source: APiQypJY92jRzuFeNHYcuRYx7CX8rXUsCkf2G6s4LkWD7qCBCfmUIpIxslICYrQ5oAhpry5YQ5uPX6LO/cns2ZZ2++w=
+X-Received: by 2002:a9d:6299:: with SMTP id x25mr1453973otk.107.1587108662698;
+ Fri, 17 Apr 2020 00:31:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200325090122.9308-1-butterflyhuangxx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfHmFxzWw7R2b7uyOXMwz5IcZ9RzTNTP35T7uv3iZ11ES+RPFFQ4oCmwpffIVqjbP3GSpsahmReXNEqOCyOB01c8+GoIu5Qi0W0LNavCY/vBWNeMW7h7J
- ch5z0d0QPv0IGsOXwpU5NMcAoKXGA4bfjnZutB9sU+z9cbLkf3ZMGWwCJhlo36sp+J6zYELQL/E9P+xLLI7/mhM6vcpul7ksxhcZKEvX+f3dGIXETk6wK5yC
- dOVUfX0+kwED8ojAmsIebnPpEM8qH7UkL0dLtCHMaBAuIbxYWdbUnUCh/htDzyfYOMytakOLYgr00x8NSkeF7qhc9JkHTNzvyx+OQDQIuzo2eXDB96boxRs6
- GLWEsSWijiDjjhGdY2YKrGwywiF02Q==
+References: <6af5797c76c11d8c08ae1f5a73c3711fcf89ab6f.1587107273.git.mchehab+huawei@kernel.org>
+In-Reply-To: <6af5797c76c11d8c08ae1f5a73c3711fcf89ab6f.1587107273.git.mchehab+huawei@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 17 Apr 2020 09:30:51 +0200
+Message-ID: <CAMuHMdV1DdmrtexvMqEn3SBjgyG8eYbbgLsYV-862mKLt08qdw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] media: cec: don't select PCI & DMI
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 25/03/2020 10:01, Xiaolong Huang wrote:
-> In bttv_probe if some functions such as pci_enable_device,
-> pci_set_dma_mask and request_mem_region fails the allocated
->  memory for btv should be released.
-> 
-> Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
-> ---
->  drivers/media/pci/bt8xx/bttv-driver.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-> index a359da7773a9..37ac59110383 100644
-> --- a/drivers/media/pci/bt8xx/bttv-driver.c
-> +++ b/drivers/media/pci/bt8xx/bttv-driver.c
-> @@ -4013,10 +4013,14 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
->  	btv->id  = dev->device;
->  	if (pci_enable_device(dev)) {
->  		pr_warn("%d: Can't enable device\n", btv->c.nr);
-> +		bttvs[btv->c.nr] = NULL;
-> +		kfree(btv);
->  		return -EIO;
+Hi Mauro,
 
-Let's change this...
+On Fri, Apr 17, 2020 at 9:08 AM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+> While select would be a great idea for most archs, this
+> causes a breakage with s390:
+>
+>         "I don't think that's a good idea, as it suddenly enables selecting all PCI
+>          drivers on platforms that do not have PCI.
+>
+>             WARNING: unmet direct dependencies detected for PCI
+>               Depends on [n]: HAVE_PCI [=n]
+>               Selected by [m]:
+>               - CEC_SECO [=m] && MEDIA_CEC_SUPPORT [=y] && (X86 || IA64 || COMPILE_TEST [=y])
+>
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
->  	}
->  	if (pci_set_dma_mask(dev, DMA_BIT_MASK(32))) {
->  		pr_warn("%d: No suitable DMA available\n", btv->c.nr);
-> +		bttvs[btv->c.nr] = NULL;
-> +		kfree(btv);
->  		return -EIO;
+Thanks for your patch!
 
-this...
+Fixes: 4be5e8648b0c287a ("media: move CEC platform drivers to a
+separate directory")
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
->  	}
->  	if (!request_mem_region(pci_resource_start(dev,0),
-> @@ -4025,6 +4029,8 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
->  		pr_warn("%d: can't request iomem (0x%llx)\n",
->  			btv->c.nr,
->  			(unsigned long long)pci_resource_start(dev, 0));
-> +		bttvs[btv->c.nr] = NULL;
-> +		kfree(btv);
->  		return -EBUSY;
+Gr{oetje,eeting}s,
 
-and this to a goto free_mem.
+                        Geert
 
->  	}
->  	pci_set_master(dev);
-> @@ -4211,6 +4217,8 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
->  	release_mem_region(pci_resource_start(btv->c.pci,0),
->  			   pci_resource_len(btv->c.pci,0));
->  	pci_disable_device(btv->c.pci);
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-And add the free_mem: label here.
-
-> +	bttvs[btv->c.nr] = NULL;
-> +	kfree(btv);
->  	return result;
->  }
->  
-> 
-
-Regards,
-
-	Hans
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
