@@ -7,50 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CE90C38A2C
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29A42C2D0EF
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D6062054F
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01B982054F
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587142749;
-	bh=OEv8mhY7vzb5P9tEqEGaJZJoTs4ZmKbJwEh2Z7DF3ng=;
+	s=default; t=1587142748;
+	bh=kgsL+DqgOjfXsdE3QJs66+XEvILbyNRXFe1sF1Zid+8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ZwzpL+ecbMLfRD1oQ+heHd93expRVMRw29sGEIu9PHVOJEPZc/rJwGQnHfREI3fZ5
-	 sxq3yNRTxLU/kRjioLF+B9ez/nykGYRN7onB2thmwJjVRFFy5wi4S2RU9fRDbprAuT
-	 w0JLcHx83USNL7+zSfR4EI8x+E9UtEUazKPwbiXQ=
+	b=SWrLPizz0qwZ3v6zISuAhyfs5qHCAHtqUJpA7DXLWoDhtnvfwafxpLK8fIS23LuVL
+	 x6xelj+b2eCSO91M1rRxkSCZUeHHomfQeDG81u4rzw9Ej6mSSH3EtGi9djKBv+j46c
+	 1NdIczo+XIA6i5ueoAyq0hBzlJjXx1WuLd4SoTh8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727983AbgDQQ7I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 12:59:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46108 "EHLO mail.kernel.org"
+        id S1727946AbgDQQ7H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 12:59:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46064 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727798AbgDQQ7B (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 12:59:01 -0400
-Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
+        id S1727874AbgDQQ7C (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 17 Apr 2020 12:59:02 -0400
+Received: from mail.kernel.org (unknown [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B87CE2223F;
-        Fri, 17 Apr 2020 16:58:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A786B22276;
+        Fri, 17 Apr 2020 16:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587142740;
-        bh=OEv8mhY7vzb5P9tEqEGaJZJoTs4ZmKbJwEh2Z7DF3ng=;
+        s=default; t=1587142741;
+        bh=kgsL+DqgOjfXsdE3QJs66+XEvILbyNRXFe1sF1Zid+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VSN+u+T9rmGr7qw9PFIAa9IrSmYCl0irCBAl9Qhk7dYZCgi7+eCSHk4nF33JK0kEY
-         wJP8nQOose8aLr5DR/S73bHW+vKVp8iCulxGi4MDW/8hDJAuzQCR7w+2OtS4D7CNfJ
-         +l0554LIFV+r0nsBPT06W65E6BRd0IV9HROBx7m4=
+        b=PxrMgHlb+nrQ7XW5w6T/VKdwDRSe45rYi/XBfpBYfCe2a4Y2FP+7xzRmafgf1jOEW
+         QceaWb+x9pvwjgowQ2e5dsLheRMQdAgf5qIWBY0JvIWJxv016v3pw07Xij5ca9KUuT
+         X0DWc70meaF992NIqMApO/q7mFAn65jIuMm3QYIg=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPUKP-007wLG-26; Fri, 17 Apr 2020 18:58:57 +0200
+        id 1jPUKP-007wLw-Bv; Fri, 17 Apr 2020 18:58:57 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Allison Randal <allison@lohutok.net>
-Subject: [PATCH 03/15] media: pwc-if.c: Update comments about each pwc supported model
-Date:   Fri, 17 Apr 2020 18:58:44 +0200
-Message-Id: <8b92306b5d04a48b0a1bfe6af93a73fcab892d41.1587142382.git.mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 11/15] media: admin-guide: add cardlist for dib0700 driver
+Date:   Fri, 17 Apr 2020 18:58:52 +0200
+Message-Id: <ed731b5edd0d1d5f21245b859fd8f5127f29cc5c.1587142382.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1587142382.git.mchehab+huawei@kernel.org>
 References: <cover.1587142382.git.mchehab+huawei@kernel.org>
@@ -61,83 +57,196 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The USB_DEVICE() list contain some of the product names, but
-some are missing, and others are different than the message
-printed during device detection.
-
-Update the comments in order to match what the driver prints.
-
-That makes easier to discover what model matches what physical
-device.
+Document the cards supported by dib0700 driver.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/usb/pwc/pwc-if.c | 42 +++++++++++++++++-----------------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+ Documentation/admin-guide/media/cardlist.rst  |   2 +
+ .../media/dvb-usb-dib0700-cardlist.rst        | 162 ++++++++++++++++++
+ 2 files changed, 164 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/dvb-usb-dib0700-cardlist.rst
 
-diff --git a/drivers/media/usb/pwc/pwc-if.c b/drivers/media/usb/pwc/pwc-if.c
-index d57b8b786506..8270fb061bd6 100644
---- a/drivers/media/usb/pwc/pwc-if.c
-+++ b/drivers/media/usb/pwc/pwc-if.c
-@@ -71,37 +71,37 @@
+diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
+index 9317c033bc82..c1c5530331a1 100644
+--- a/Documentation/admin-guide/media/cardlist.rst
++++ b/Documentation/admin-guide/media/cardlist.rst
+@@ -55,6 +55,8 @@ settings for an specific product type.
+ 	usbvision-cardlist
+ 	gspca-cardlist
  
- /* hotplug device table support */
- static const struct usb_device_id pwc_device_table [] = {
--	{ USB_DEVICE(0x0471, 0x0302) }, /* Philips models */
--	{ USB_DEVICE(0x0471, 0x0303) },
--	{ USB_DEVICE(0x0471, 0x0304) },
--	{ USB_DEVICE(0x0471, 0x0307) },
--	{ USB_DEVICE(0x0471, 0x0308) },
--	{ USB_DEVICE(0x0471, 0x030C) },
--	{ USB_DEVICE(0x0471, 0x0310) },
--	{ USB_DEVICE(0x0471, 0x0311) }, /* Philips ToUcam PRO II */
--	{ USB_DEVICE(0x0471, 0x0312) },
--	{ USB_DEVICE(0x0471, 0x0313) }, /* the 'new' 720K */
--	{ USB_DEVICE(0x0471, 0x0329) }, /* Philips SPC 900NC PC Camera */
--	{ USB_DEVICE(0x0471, 0x032C) }, /* Philips SPC 880NC PC Camera */
--	{ USB_DEVICE(0x069A, 0x0001) }, /* Askey */
--	{ USB_DEVICE(0x046D, 0x08B0) }, /* Logitech QuickCam Pro 3000 */
-+	{ USB_DEVICE(0x0471, 0x0302) }, /* Philips PCA645VC */
-+	{ USB_DEVICE(0x0471, 0x0303) }, /* Philips PCA646VC */
-+	{ USB_DEVICE(0x0471, 0x0304) }, /* Askey VC010 type 2 */
-+	{ USB_DEVICE(0x0471, 0x0307) }, /* Philips PCVC675K (Vesta) */
-+	{ USB_DEVICE(0x0471, 0x0308) }, /* Philips PCVC680K (Vesta Pro) */
-+	{ USB_DEVICE(0x0471, 0x030C) }, /* Philips PCVC690K (Vesta Pro Scan) */
-+	{ USB_DEVICE(0x0471, 0x0310) }, /* Philips PCVC730K (ToUCam Fun)/PCVC830 (ToUCam II) */
-+	{ USB_DEVICE(0x0471, 0x0311) }, /* Philips PCVC740K (ToUCam Pro)/PCVC840 (ToUCam II) */
-+	{ USB_DEVICE(0x0471, 0x0312) }, /* Philips PCVC750K (ToUCam Pro Scan) */
-+	{ USB_DEVICE(0x0471, 0x0313) }, /* Philips PCVC720K/40 (ToUCam XS) */
-+	{ USB_DEVICE(0x0471, 0x0329) }, /* Philips SPC 900NC webcam */
-+	{ USB_DEVICE(0x0471, 0x032C) }, /* Philips SPC 880NC webcam */
-+	{ USB_DEVICE(0x069A, 0x0001) }, /* Askey VC010 type 1 */
-+	{ USB_DEVICE(0x046D, 0x08B0) }, /* Logitech QuickCam 3000 Pro */
- 	{ USB_DEVICE(0x046D, 0x08B1) }, /* Logitech QuickCam Notebook Pro */
--	{ USB_DEVICE(0x046D, 0x08B2) }, /* Logitech QuickCam Pro 4000 */
-+	{ USB_DEVICE(0x046D, 0x08B2) }, /* Logitech QuickCam 4000 Pro */
- 	{ USB_DEVICE(0x046D, 0x08B3) }, /* Logitech QuickCam Zoom (old model) */
- 	{ USB_DEVICE(0x046D, 0x08B4) }, /* Logitech QuickCam Zoom (new model) */
- 	{ USB_DEVICE(0x046D, 0x08B5) }, /* Logitech QuickCam Orbit/Sphere */
--	{ USB_DEVICE(0x046D, 0x08B6) }, /* Cisco VT Camera */
-+	{ USB_DEVICE(0x046D, 0x08B6) }, /* Logitech/Cisco VT Camera */
- 	{ USB_DEVICE(0x046D, 0x08B7) }, /* Logitech ViewPort AV 100 */
--	{ USB_DEVICE(0x046D, 0x08B8) }, /* Logitech (reserved) */
-+	{ USB_DEVICE(0x046D, 0x08B8) }, /* Logitech QuickCam */
- 	{ USB_DEVICE(0x055D, 0x9000) }, /* Samsung MPC-C10 */
- 	{ USB_DEVICE(0x055D, 0x9001) }, /* Samsung MPC-C30 */
- 	{ USB_DEVICE(0x055D, 0x9002) },	/* Samsung SNC-35E (Ver3.0) */
- 	{ USB_DEVICE(0x041E, 0x400C) }, /* Creative Webcam 5 */
- 	{ USB_DEVICE(0x041E, 0x4011) }, /* Creative Webcam Pro Ex */
--	{ USB_DEVICE(0x04CC, 0x8116) }, /* Afina Eye */
--	{ USB_DEVICE(0x06BE, 0x8116) }, /* new Afina Eye */
--	{ USB_DEVICE(0x0d81, 0x1910) }, /* Visionite */
--	{ USB_DEVICE(0x0d81, 0x1900) },
-+	{ USB_DEVICE(0x04CC, 0x8116) }, /* Sotec Afina Eye */
-+	{ USB_DEVICE(0x06BE, 0x8116) }, /* AME Co. Afina Eye */
-+	{ USB_DEVICE(0x0d81, 0x1900) }, /* Visionite VCS-UC300 */
-+	{ USB_DEVICE(0x0d81, 0x1910) }, /* Visionite VCS-UM100 */
- 	{ }
- };
- MODULE_DEVICE_TABLE(usb, pwc_device_table);
++	dvb-usb-dib0700-cardlist
++
+ 	dvb-usb-af9015-cardlist
+ 	dvb-usb-af9035-cardlist
+ 	dvb-usb-anysee-cardlist
+diff --git a/Documentation/admin-guide/media/dvb-usb-dib0700-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-dib0700-cardlist.rst
+new file mode 100644
+index 000000000000..4b76b6f1089b
+--- /dev/null
++++ b/Documentation/admin-guide/media/dvb-usb-dib0700-cardlist.rst
+@@ -0,0 +1,162 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++dvb-usb-dib0700 cards list
++==========================
++
++.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
++
++.. flat-table::
++   :header-rows: 1
++   :widths: 7 13
++   :stub-columns: 0
++
++   * - Card name
++     - USB IDs
++   * - ASUS My Cinema U3000 Mini DVBT Tuner
++     - 0b05:171f
++   * - ASUS My Cinema U3100 Mini DVBT Tuner
++     - 0b05:173f
++   * - AVerMedia AVerTV DVB-T Express
++     - 07ca:b568
++   * - AVerMedia AVerTV DVB-T Volar
++     - 07ca:a807, 07ca:b808
++   * - Artec T14BR DVB-T
++     - 05d8:810f
++   * - Asus My Cinema-U3000Hybrid
++     - 0b05:1736
++   * - Compro Videomate U500
++     - 185b:1e78, 185b:1e80
++   * - DiBcom NIM7090 reference design
++     - 10b8:1bb2
++   * - DiBcom NIM8096MD reference design
++     - 10b8:1fa8
++   * - DiBcom NIM9090MD reference design
++     - 10b8:2384
++   * - DiBcom STK7070P reference design
++     - 10b8:1ebc
++   * - DiBcom STK7070PD reference design
++     - 10b8:1ebe
++   * - DiBcom STK7700D reference design
++     - 10b8:1ef0
++   * - DiBcom STK7700P reference design
++     - 10b8:1e14, 10b8:1e78
++   * - DiBcom STK7770P reference design
++     - 10b8:1e80
++   * - DiBcom STK807xP reference design
++     - 10b8:1f90
++   * - DiBcom STK807xPVR reference design
++     - 10b8:1f98
++   * - DiBcom STK8096-PVR reference design
++     - 2013:1faa, 10b8:1faa
++   * - DiBcom STK8096GP reference design
++     - 10b8:1fa0
++   * - DiBcom STK9090M reference design
++     - 10b8:2383
++   * - DiBcom TFE7090PVR reference design
++     - 10b8:1bb4
++   * - DiBcom TFE7790P reference design
++     - 10b8:1e6e
++   * - DiBcom TFE8096P reference design
++     - 10b8:1f9C
++   * - Elgato EyeTV DTT
++     - 0fd9:0021
++   * - Elgato EyeTV DTT rev. 2
++     - 0fd9:003f
++   * - Elgato EyeTV Diversity
++     - 0fd9:0011
++   * - Elgato EyeTV Dtt Dlx PD378S
++     - 0fd9:0020
++   * - EvolutePC TVWay+
++     - 1e59:0002
++   * - Gigabyte U7000
++     - 1044:7001
++   * - Gigabyte U8000-RH
++     - 1044:7002
++   * - Hama DVB=T Hybrid USB Stick
++     - 147f:2758
++   * - Hauppauge ATSC MiniCard (B200)
++     - 2040:b200
++   * - Hauppauge ATSC MiniCard (B210)
++     - 2040:b210
++   * - Hauppauge Nova-T 500 Dual DVB-T
++     - 2040:9941, 2040:9950
++   * - Hauppauge Nova-T MyTV.t
++     - 2040:7080
++   * - Hauppauge Nova-T Stick
++     - 2040:7050, 2040:7060, 2040:7070
++   * - Hauppauge Nova-TD Stick (52009)
++     - 2040:5200
++   * - Hauppauge Nova-TD Stick/Elgato Eye-TV Diversity
++     - 2040:9580
++   * - Hauppauge Nova-TD-500 (84xxx)
++     - 2040:8400
++   * - Leadtek WinFast DTV Dongle H
++     - 0413:60f6
++   * - Leadtek Winfast DTV Dongle (STK7700P based)
++     - 0413:6f00, 0413:6f01
++   * - Medion CTX1921 DVB-T USB
++     - 1660:1921
++   * - Microsoft Xbox One Digital TV Tuner
++     - 045e:02d5
++   * - PCTV 2002e
++     - 2013:025c
++   * - PCTV 2002e SE
++     - 2013:025d
++   * - Pinnacle Expresscard 320cx
++     - 2304:022e
++   * - Pinnacle PCTV 2000e
++     - 2304:022c
++   * - Pinnacle PCTV 282e
++     - 2013:0248, 2304:0248
++   * - Pinnacle PCTV 340e HD Pro USB Stick
++     - 2304:023d
++   * - Pinnacle PCTV 72e
++     - 2304:0236
++   * - Pinnacle PCTV 73A
++     - 2304:0243
++   * - Pinnacle PCTV 73e
++     - 2304:0237
++   * - Pinnacle PCTV 73e SE
++     - 2013:0245, 2304:0245
++   * - Pinnacle PCTV DVB-T Flash Stick
++     - 2304:0228
++   * - Pinnacle PCTV Dual DVB-T Diversity Stick
++     - 2304:0229
++   * - Pinnacle PCTV HD Pro USB Stick
++     - 2304:023a
++   * - Pinnacle PCTV HD USB Stick
++     - 2304:023b
++   * - Pinnacle PCTV Hybrid Stick Solo
++     - 2304:023e
++   * - Prolink Pixelview SBTVD
++     - 1554:5010
++   * - Sony PlayTV
++     - 1415:0003
++   * - TechniSat AirStar TeleStick 2
++     - 14f7:0004
++   * - Terratec Cinergy DT USB XS Diversity/ T5
++     - 0ccd:0081, 0ccd:10a1
++   * - Terratec Cinergy DT XS Diversity
++     - 0ccd:005a
++   * - Terratec Cinergy HT Express
++     - 0ccd:0060
++   * - Terratec Cinergy HT USB XE
++     - 0ccd:0058
++   * - Terratec Cinergy T Express
++     - 0ccd:0062
++   * - Terratec Cinergy T USB XXS (HD)/ T3
++     - 0ccd:0078, 0ccd:10a0, 0ccd:00ab
++   * - Uniwill STK7700P based (Hama and others)
++     - 1584:6003
++   * - YUAN High-Tech DiBcom STK7700D
++     - 1164:1e8c
++   * - YUAN High-Tech MC770
++     - 1164:0871
++   * - YUAN High-Tech STK7700D
++     - 1164:1efc
++   * - YUAN High-Tech STK7700PH
++     - 1164:1f08
++   * - Yuan EC372S
++     - 1164:1edc
++   * - Yuan PD378S
++     - 1164:2edc
 -- 
 2.25.2
 
