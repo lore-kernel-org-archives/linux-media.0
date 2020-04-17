@@ -2,81 +2,112 @@ Return-Path: <SRS0=fNsq=6B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72F23C2D0EF
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 05:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93C2EC2BB85
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:01:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B96C2223C
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 05:14:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B062221EC
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 07:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1587106892;
+	bh=A6gsBqO/C5a7aGTcLYtMEYviXTXettEUMZQ5DBfDV8M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=BijkidCc9f7MKZaeDsOOaw/MOVgHgxXnrtmfjpwFDtYm291m2Udj9j6tKA1/ue0or
+	 MjK4L11rEoOBp+7D2oBJdP4DImePNPv5HZ8mgqyVlhgalZaGMxQxI1/gtfzjtDPed+
+	 eiEfYeFgbC8XHcP+XIb2/lIN/ImVi9iiHc/5AAsQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbgDQFN7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 01:13:59 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:47440 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbgDQFN6 (ORCPT
+        id S1728502AbgDQHB1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 03:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728466AbgDQHB0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 01:13:58 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 69C2E2A009E
-Message-ID: <7faaec92dc9b5870b33c6dbb440de0698b5a70e7.camel@collabora.com>
-Subject: Re: linux-next: build warning after merge of the v4l-dvb tree
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Fri, 17 Apr 2020 03:01:26 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473FBC061A0C;
+        Fri, 17 Apr 2020 00:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description;
+        bh=HVLDZVgokzWLzBs8K61qPV5biQljs7Uy59BS0iqfE0Q=; b=YO7SX7phIzs9cV/Zpf/QAQy6HD
+        fB/L442Hz6q/J8L44pykzCYyA7ekbxWv6YGEzwv1vvxmAkWOpRUV5cnR74lIH//lNIR3dfwppS5T8
+        K69yNUkJC0S+pBqWd9pCx7p6+0IhyOVd0XMlnsHBOEoGc+4TKcstgQdqNGYN5pfawgc6VHWvq8umF
+        W1q7GrbvLSCBbX+SKWQ83NXeIJi1Ay1KmB6dA2+rnXTZjAEAxwbqAbwiBMXPd6qgpf9YyI/gIMlvG
+        wUEdnR9xsMm5TK6+mI20dAXjIdSz/GJmP+UstscLOfjgTO1hnC4AdcjFht8wwDfTa+NQKQ6RWS2m4
+        zM0ApeQQ==;
+Received: from ip5f5ad4d8.dynamic.kabel-deutschland.de ([95.90.212.216] helo=coco.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jPL05-000664-4K; Fri, 17 Apr 2020 07:01:21 +0000
+Date:   Fri, 17 Apr 2020 09:01:15 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Date:   Fri, 17 Apr 2020 02:13:47 -0300
-In-Reply-To: <20200417102226.11d54815@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the v4l-dvb tree
+Message-ID: <20200417090115.3cccc9bd@coco.lan>
+In-Reply-To: <7faaec92dc9b5870b33c6dbb440de0698b5a70e7.camel@collabora.com>
 References: <20200417102226.11d54815@canb.auug.org.au>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.0-1 
+        <7faaec92dc9b5870b33c6dbb440de0698b5a70e7.camel@collabora.com>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Stephen,
+Em Fri, 17 Apr 2020 02:13:47 -0300
+Ezequiel Garcia <ezequiel@collabora.com> escreveu:
 
-On Fri, 2020-04-17 at 10:22 +1000, Stephen Rothwell wrote:
-> Hi all,
+> Hi Stephen,
 > 
-> After merging the v4l-dvb tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
+> On Fri, 2020-04-17 at 10:22 +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the v4l-dvb tree, today's linux-next build (arm
+> > multi_v7_defconfig) produced this warning:
+> > 
+> > WARNING: unmet direct dependencies detected for MEDIA_CONTROLLER_REQUEST_API
+> >   Depends on [n]: MEDIA_SUPPORT [=m] && MEDIA_CONTROLLER [=y] && STAGING_MEDIA [=n]
+> >   Selected by [m]:
+> >   - VIDEO_VIVID [=m] && MEDIA_SUPPORT [=m] && MEDIA_TEST_SUPPORT [=y] && V4L_TEST_DRIVERS [=y] && VIDEO_DEV [=m] && VIDEO_V4L2 [=m] && !SPARC32 &&
+> > !SPARC64 && FB [=y] && HAS_DMA [=y]
+> >   
 > 
-> WARNING: unmet direct dependencies detected for MEDIA_CONTROLLER_REQUEST_API
->   Depends on [n]: MEDIA_SUPPORT [=m] && MEDIA_CONTROLLER [=y] && STAGING_MEDIA [=n]
->   Selected by [m]:
->   - VIDEO_VIVID [=m] && MEDIA_SUPPORT [=m] && MEDIA_TEST_SUPPORT [=y] && V4L_TEST_DRIVERS [=y] && VIDEO_DEV [=m] && VIDEO_V4L2 [=m] && !SPARC32 &&
-> !SPARC64 && FB [=y] && HAS_DMA [=y]
+> Ugh, my bad. MEDIA_CONTROLLER_REQUEST_API can't
+> depend on staging, after this recently merged commit:
 > 
+> "media: Kconfig: Don't expose the Request API option"
+> 
+> So, we should fix that with:
+> 
+> diff --git a/drivers/media/mc/Kconfig b/drivers/media/mc/Kconfig
+> index 7c9628f37196..4815b9dde9af 100644
+> --- a/drivers/media/mc/Kconfig
+> +++ b/drivers/media/mc/Kconfig
+> @@ -14,7 +14,7 @@ config MEDIA_CONTROLLER_DVB
+>  
+>  config MEDIA_CONTROLLER_REQUEST_API
+>         bool
+> -       depends on MEDIA_CONTROLLER && STAGING_MEDIA
+> +       depends on MEDIA_CONTROLLER
+>         help
+>           DO NOT ENABLE THIS OPTION UNLESS YOU KNOW WHAT YOU'RE DOING.
+>  
+> Mauro what do you think?
 
-Ugh, my bad. MEDIA_CONTROLLER_REQUEST_API can't
-depend on staging, after this recently merged commit:
+Dropped the dependency and applied on media.
 
-"media: Kconfig: Don't expose the Request API option"
+I also addressed the "select PCI" issue, with causes troubles on
+s390 random configs (due to HAS_PCI=n on s390).
 
-So, we should fix that with:
-
-diff --git a/drivers/media/mc/Kconfig b/drivers/media/mc/Kconfig
-index 7c9628f37196..4815b9dde9af 100644
---- a/drivers/media/mc/Kconfig
-+++ b/drivers/media/mc/Kconfig
-@@ -14,7 +14,7 @@ config MEDIA_CONTROLLER_DVB
- 
- config MEDIA_CONTROLLER_REQUEST_API
-        bool
--       depends on MEDIA_CONTROLLER && STAGING_MEDIA
-+       depends on MEDIA_CONTROLLER
-        help
-          DO NOT ENABLE THIS OPTION UNLESS YOU KNOW WHAT YOU'RE DOING.
- 
-Mauro what do you think?
-
+Thanks,
+Mauro
