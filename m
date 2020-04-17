@@ -7,46 +7,50 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B32DC352BE
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CE90C38A2C
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58D722054F
-	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D6062054F
+	for <linux-media@archiver.kernel.org>; Fri, 17 Apr 2020 16:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587142747;
-	bh=ST0LVXj/FqCYOMYXD2ZyVBJskWgVwm1zBI/EJkjiIw8=;
+	s=default; t=1587142749;
+	bh=OEv8mhY7vzb5P9tEqEGaJZJoTs4ZmKbJwEh2Z7DF3ng=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ekbRAjqHmEmK4jNwz+B6R+OrRQDF3s4CeVjj28xKdWj0KKaQ1NjH0bowTXEgmqtep
-	 19Wm9+bzq6RnzEz8SCxSn0ihf9p+bPkvlWLrZ7GWSyq4aYcwhp2t8QiJe0YzJf9Iow
-	 oN0BTvyznRiW4xCbST3LPrbC7WW8pBoUIh5/UW/A=
+	b=ZwzpL+ecbMLfRD1oQ+heHd93expRVMRw29sGEIu9PHVOJEPZc/rJwGQnHfREI3fZ5
+	 sxq3yNRTxLU/kRjioLF+B9ez/nykGYRN7onB2thmwJjVRFFy5wi4S2RU9fRDbprAuT
+	 w0JLcHx83USNL7+zSfR4EI8x+E9UtEUazKPwbiXQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727936AbgDQQ7F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Apr 2020 12:59:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46156 "EHLO mail.kernel.org"
+        id S1727983AbgDQQ7I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Apr 2020 12:59:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46108 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727812AbgDQQ7C (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Apr 2020 12:59:02 -0400
+        id S1727798AbgDQQ7B (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 17 Apr 2020 12:59:01 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BE89A22247;
+        by mail.kernel.org (Postfix) with ESMTPSA id B87CE2223F;
         Fri, 17 Apr 2020 16:58:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587142740;
-        bh=ST0LVXj/FqCYOMYXD2ZyVBJskWgVwm1zBI/EJkjiIw8=;
+        bh=OEv8mhY7vzb5P9tEqEGaJZJoTs4ZmKbJwEh2Z7DF3ng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B3pAqQ+D7rNUKSIscXnhvLeDjOCxToCuPfCFwG7hIjW9t+Qm12zQVciIET6xCoIJM
-         ZKfpQFxf3Uosgdt1O7/D5vNOoEDoQj5NcsgKtvl6Guor6CcED2omkYYxqkwYEmKwis
-         xB9Y4IhHasKD+aUzdPReQZc7RICwTIW/sBGDCXyw=
+        b=VSN+u+T9rmGr7qw9PFIAa9IrSmYCl0irCBAl9Qhk7dYZCgi7+eCSHk4nF33JK0kEY
+         wJP8nQOose8aLr5DR/S73bHW+vKVp8iCulxGi4MDW/8hDJAuzQCR7w+2OtS4D7CNfJ
+         +l0554LIFV+r0nsBPT06W65E6BRd0IV9HROBx7m4=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPUKP-007wM6-Eu; Fri, 17 Apr 2020 18:58:57 +0200
+        id 1jPUKP-007wLG-26; Fri, 17 Apr 2020 18:58:57 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 13/15] media: admin-guide: add support for the remaining dvb-usb boards
-Date:   Fri, 17 Apr 2020 18:58:54 +0200
-Message-Id: <d5b64c88ef014539977795e9043000ac72402273.1587142382.git.mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>
+Subject: [PATCH 03/15] media: pwc-if.c: Update comments about each pwc supported model
+Date:   Fri, 17 Apr 2020 18:58:44 +0200
+Message-Id: <8b92306b5d04a48b0a1bfe6af93a73fcab892d41.1587142382.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1587142382.git.mchehab+huawei@kernel.org>
 References: <cover.1587142382.git.mchehab+huawei@kernel.org>
@@ -57,615 +61,83 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add documentation for the remaining dvb-usb boards.
+The USB_DEVICE() list contain some of the product names, but
+some are missing, and others are different than the message
+printed during device detection.
+
+Update the comments in order to match what the driver prints.
+
+That makes easier to discover what model matches what physical
+device.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/cardlist.rst  | 21 +++++++-
- .../media/dvb-usb-a800-cardlist.rst           | 16 ++++++
- .../media/dvb-usb-af9005-cardlist.rst         | 20 +++++++
- .../media/dvb-usb-az6027-cardlist.rst         | 24 +++++++++
- .../media/dvb-usb-cinergyT2-cardlist.rst      | 16 ++++++
- .../media/dvb-usb-cxusb-cardlist.rst          | 40 ++++++++++++++
- .../media/dvb-usb-digitv-cardlist.rst         | 16 ++++++
- .../media/dvb-usb-dtt200u-cardlist.rst        | 22 ++++++++
- .../media/dvb-usb-dtv5100-cardlist.rst        | 16 ++++++
- .../media/dvb-usb-dw2102-cardlist.rst         | 52 +++++++++++++++++++
- .../media/dvb-usb-gp8psk-cardlist.rst         | 22 ++++++++
- .../media/dvb-usb-m920x-cardlist.rst          | 26 ++++++++++
- .../media/dvb-usb-nova-t-usb2-cardlist.rst    | 16 ++++++
- .../media/dvb-usb-opera1-cardlist.rst         | 16 ++++++
- .../media/dvb-usb-pctv452e-cardlist.rst       | 20 +++++++
- .../media/dvb-usb-technisat-usb2-cardlist.rst | 16 ++++++
- .../media/dvb-usb-ttusb2-cardlist.rst         | 24 +++++++++
- .../media/dvb-usb-umt-010-cardlist.rst        | 16 ++++++
- .../media/dvb-usb-vp702x-cardlist.rst         | 16 ++++++
- .../media/dvb-usb-vp7045-cardlist.rst         | 18 +++++++
- 20 files changed, 432 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/admin-guide/media/dvb-usb-a800-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-af9005-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-az6027-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-cinergyT2-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-cxusb-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-digitv-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-dtt200u-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-dtv5100-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-dw2102-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-gp8psk-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-m920x-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-nova-t-usb2-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-opera1-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-pctv452e-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-technisat-usb2-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-ttusb2-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-umt-010-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-vp702x-cardlist.rst
- create mode 100644 Documentation/admin-guide/media/dvb-usb-vp7045-cardlist.rst
+ drivers/media/usb/pwc/pwc-if.c | 42 +++++++++++++++++-----------------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
 
-diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
-index 2b8b158b889f..860a254d96c8 100644
---- a/Documentation/admin-guide/media/cardlist.rst
-+++ b/Documentation/admin-guide/media/cardlist.rst
-@@ -59,13 +59,32 @@ settings for an specific product type.
- 	dvb-usb-dibusb-mb-cardlist
- 	dvb-usb-dibusb-mc-cardlist
+diff --git a/drivers/media/usb/pwc/pwc-if.c b/drivers/media/usb/pwc/pwc-if.c
+index d57b8b786506..8270fb061bd6 100644
+--- a/drivers/media/usb/pwc/pwc-if.c
++++ b/drivers/media/usb/pwc/pwc-if.c
+@@ -71,37 +71,37 @@
  
-+	dvb-usb-a800-cardlist
-+	dvb-usb-af9005-cardlist
-+	dvb-usb-az6027-cardlist
-+	dvb-usb-cinergyT2-cardlist
-+	dvb-usb-cxusb-cardlist
-+	dvb-usb-digitv-cardlist
-+	dvb-usb-dtt200u-cardlist
-+	dvb-usb-dtv5100-cardlist
-+	dvb-usb-dw2102-cardlist
-+	dvb-usb-gp8psk-cardlist
-+	dvb-usb-m920x-cardlist
-+	dvb-usb-nova-t-usb2-cardlist
-+	dvb-usb-opera1-cardlist
-+	dvb-usb-pctv452e-cardlist
-+	dvb-usb-technisat-usb2-cardlist
-+	dvb-usb-ttusb2-cardlist
-+	dvb-usb-umt-010-cardlist
-+	dvb-usb-vp702x-cardlist
-+	dvb-usb-vp7045-cardlist
-+
- 	dvb-usb-af9015-cardlist
- 	dvb-usb-af9035-cardlist
- 	dvb-usb-anysee-cardlist
- 	dvb-usb-au6610-cardlist
- 	dvb-usb-az6007-cardlist
- 	dvb-usb-ce6230-cardlist
--	dvb-usb-dib0700-cardlist
- 	dvb-usb-dvbsky-cardlist
- 	dvb-usb-ec168-cardlist
- 	dvb-usb-gl861-cardlist
-diff --git a/Documentation/admin-guide/media/dvb-usb-a800-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-a800-cardlist.rst
-new file mode 100644
-index 000000000000..2ec8bb8230ff
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-a800-cardlist.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-a800 cards list
-+=======================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - AVerMedia AverTV DVB-T USB 2.0 (A800)
-+     - 07ca:a800, 07ca:a801
-diff --git a/Documentation/admin-guide/media/dvb-usb-af9005-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-af9005-cardlist.rst
-new file mode 100644
-index 000000000000..285160ee82e8
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-af9005-cardlist.rst
-@@ -0,0 +1,20 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-af9005 cards list
-+=========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - Afatech DVB-T USB1.1 stick
-+     - 15a4:9020
-+   * - Ansonic DVB-T USB1.1 stick
-+     - 10b9:6000
-+   * - TerraTec Cinergy T USB XE
-+     - 0ccd:0055
-diff --git a/Documentation/admin-guide/media/dvb-usb-az6027-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-az6027-cardlist.rst
-new file mode 100644
-index 000000000000..6d8575e9d90c
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-az6027-cardlist.rst
-@@ -0,0 +1,24 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-az6027 cards list
-+=========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - AZUREWAVE DVB-S/S2 USB2.0 (AZ6027)
-+     - 13d3:3275
-+   * - Elgato EyeTV Sat
-+     - 0fd9:002a, 0fd9:0025, 0fd9:0036
-+   * - TERRATEC S7
-+     - 0ccd:10a4
-+   * - TERRATEC S7 MKII
-+     - 0ccd:10ac
-+   * - Technisat SkyStar USB 2 HD CI
-+     - 14f7:0001, 14f7:0002
-diff --git a/Documentation/admin-guide/media/dvb-usb-cinergyT2-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-cinergyT2-cardlist.rst
-new file mode 100644
-index 000000000000..0ee753929eca
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-cinergyT2-cardlist.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-cinergyT2 cards list
-+============================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - TerraTec/qanu USB2.0 Highspeed DVB-T Receiver
-+     - 0ccd:0x0038
-diff --git a/Documentation/admin-guide/media/dvb-usb-cxusb-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-cxusb-cardlist.rst
-new file mode 100644
-index 000000000000..a73f15d1acf5
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-cxusb-cardlist.rst
-@@ -0,0 +1,40 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-cxusb cards list
-+========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - AVerMedia AVerTVHD Volar (A868R)
-+     -
-+   * - Conexant DMB-TH Stick
-+     -
-+   * - DViCO FusionHDTV DVB-T Dual Digital 2
-+     -
-+   * - DViCO FusionHDTV DVB-T Dual Digital 4
-+     -
-+   * - DViCO FusionHDTV DVB-T Dual Digital 4 (rev 2)
-+     -
-+   * - DViCO FusionHDTV DVB-T Dual USB
-+     -
-+   * - DViCO FusionHDTV DVB-T NANO2
-+     -
-+   * - DViCO FusionHDTV DVB-T USB (LGZ201)
-+     -
-+   * - DViCO FusionHDTV DVB-T USB (TH7579)
-+     -
-+   * - DViCO FusionHDTV5 USB Gold
-+     -
-+   * - DigitalNow DVB-T Dual USB
-+     -
-+   * - Medion MD95700 (MDUSBTV-HYBRID)
-+     -
-+   * - Mygica D689 DMB-TH
-+     -
-diff --git a/Documentation/admin-guide/media/dvb-usb-digitv-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-digitv-cardlist.rst
-new file mode 100644
-index 000000000000..2b4d8325e8e9
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-digitv-cardlist.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-digitv cards list
-+=========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - Nebula Electronics uDigiTV DVB-T USB2.0)
-+     - 0547:0201
-diff --git a/Documentation/admin-guide/media/dvb-usb-dtt200u-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-dtt200u-cardlist.rst
-new file mode 100644
-index 000000000000..b4150a7bf31f
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-dtt200u-cardlist.rst
-@@ -0,0 +1,22 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-dtt200u cards list
-+==========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - WideView WT-220U PenType Receiver (Miglia)
-+     - 18f3:0220
-+   * - WideView WT-220U PenType Receiver (Typhoon/Freecom)
-+     - 14aa:0222, 14aa:0220, 14aa:0221, 14aa:0225, 14aa:0226
-+   * - WideView WT-220U PenType Receiver (based on ZL353)
-+     - 14aa:022a, 14aa:022b
-+   * - WideView/Yuan/Yakumo/Hama/Typhoon DVB-T USB2.0 (WT-200U)
-+     - 14aa:0201, 14aa:0301
-diff --git a/Documentation/admin-guide/media/dvb-usb-dtv5100-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-dtv5100-cardlist.rst
-new file mode 100644
-index 000000000000..91d6e35e6f9d
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-dtv5100-cardlist.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-dtv5100 cards list
-+==========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - AME DTV-5100 USB2.0 DVB-T
-+     - 0x06be:0xa232
-diff --git a/Documentation/admin-guide/media/dvb-usb-dw2102-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-dw2102-cardlist.rst
-new file mode 100644
-index 000000000000..f01f9df1e249
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-dw2102-cardlist.rst
-@@ -0,0 +1,52 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-dw2102 cards list
-+=========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - DVBWorld DVB-C 3101 USB2.0
-+     - 04b4:3101
-+   * - DVBWorld DVB-S 2101 USB2.0
-+     - 04b4:0x2101
-+   * - DVBWorld DVB-S 2102 USB2.0
-+     - 04b4:2102
-+   * - DVBWorld DW2104 USB2.0
-+     - 04b4:2104
-+   * - GOTVIEW Satellite HD
-+     - 0x1FE1:5456
-+   * - Geniatech T220 DVB-T/T2 USB2.0
-+     - 0x1f4d:0xD220
-+   * - SU3000HD DVB-S USB2.0
-+     - 0x1f4d:0x3000
-+   * - TeVii S482 (tuner 1)
-+     - 0x9022:0xd483
-+   * - TeVii S482 (tuner 2)
-+     - 0x9022:0xd484
-+   * - TeVii S630 USB
-+     - 0x9022:d630
-+   * - TeVii S650 USB2.0
-+     - 0x9022:d650
-+   * - TeVii S662
-+     - 0x9022:d662
-+   * - TechnoTrend TT-connect S2-4600
-+     - 0b48:3011
-+   * - TerraTec Cinergy S USB
-+     - 0ccd:0064
-+   * - Terratec Cinergy S2 USB BOX
-+     - 0ccd:0x0105
-+   * - Terratec Cinergy S2 USB HD
-+     - 0ccd:00a8
-+   * - Terratec Cinergy S2 USB HD Rev.2
-+     - 0ccd:00b0
-+   * - Terratec Cinergy S2 USB HD Rev.3
-+     - 0ccd:0102
-+   * - X3M TV SPC1400HD PCI
-+     - 0x1f4d:0x3100
-diff --git a/Documentation/admin-guide/media/dvb-usb-gp8psk-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-gp8psk-cardlist.rst
-new file mode 100644
-index 000000000000..150fa9f7810a
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-gp8psk-cardlist.rst
-@@ -0,0 +1,22 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-gp8psk cards list
-+=========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - Genpix 8PSK-to-USB2 Rev.1 DVB-S receiver
-+     - 09c0:0200, 09c0:0201
-+   * - Genpix 8PSK-to-USB2 Rev.2 DVB-S receiver
-+     - 09c0:0202
-+   * - Genpix SkyWalker-1 DVB-S receiver
-+     - 09c0:0203
-+   * - Genpix SkyWalker-2 DVB-S receiver
-+     - 09c0:0206
-diff --git a/Documentation/admin-guide/media/dvb-usb-m920x-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-m920x-cardlist.rst
-new file mode 100644
-index 000000000000..73145940b5c5
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-m920x-cardlist.rst
-@@ -0,0 +1,26 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-m920x cards list
-+========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - DTV-DVB UDTT7049
-+     - 13d3:3219
-+   * - Dposh DVB-T USB2.0
-+     - 1498:9206, 1498:a090
-+   * - LifeView TV Walker Twin DVB-T USB2.0
-+     - 10fd:0514, 10fd:0513
-+   * - MSI DIGI VOX mini II DVB-T USB2.0
-+     - 10fd:1513
-+   * - MSI Mega Sky 580 DVB-T USB2.0
-+     - 0db0:5580
-+   * - Pinnacle PCTV 310e
-+     - 13d3:3211
-diff --git a/Documentation/admin-guide/media/dvb-usb-nova-t-usb2-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-nova-t-usb2-cardlist.rst
-new file mode 100644
-index 000000000000..e295f912a585
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-nova-t-usb2-cardlist.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-nova-t-usb2 cards list
-+==============================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - Hauppauge WinTV-NOVA-T usb2
-+     - 2040:9300, 2040:9301
-diff --git a/Documentation/admin-guide/media/dvb-usb-opera1-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-opera1-cardlist.rst
-new file mode 100644
-index 000000000000..362245f5a46a
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-opera1-cardlist.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-opera1 cards list
-+=========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - Opera1 DVB-S USB2.0
-+     - 04b4:2830, 695c:3829
-diff --git a/Documentation/admin-guide/media/dvb-usb-pctv452e-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-pctv452e-cardlist.rst
-new file mode 100644
-index 000000000000..886d8cc18acb
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-pctv452e-cardlist.rst
-@@ -0,0 +1,20 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-pctv452e cards list
-+===========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - PCTV HDTV USB
-+     - 2304:021f
-+   * - Technotrend TT Connect S2-3600
-+     - 0b48:3007
-+   * - Technotrend TT Connect S2-3650-CI
-+     - 0b48:300a
-diff --git a/Documentation/admin-guide/media/dvb-usb-technisat-usb2-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-technisat-usb2-cardlist.rst
-new file mode 100644
-index 000000000000..30ee92ada134
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-technisat-usb2-cardlist.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-technisat-usb2 cards list
-+=================================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - Technisat SkyStar USB HD (DVB-S/S2)
-+     - 14f7:0500
-diff --git a/Documentation/admin-guide/media/dvb-usb-ttusb2-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-ttusb2-cardlist.rst
-new file mode 100644
-index 000000000000..faa78e5f3f5d
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-ttusb2-cardlist.rst
-@@ -0,0 +1,24 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-ttusb2 cards list
-+=========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - Pinnacle 400e DVB-S USB2.0
-+     - 2304:020f
-+   * - Pinnacle 450e DVB-S USB2.0
-+     - 2304:0222
-+   * - Technotrend TT-connect CT-3650
-+     - 0b48:300d
-+   * - Technotrend TT-connect S-2400
-+     - 0b48:3006
-+   * - Technotrend TT-connect S-2400 (8kB EEPROM)
-+     - 0b48:3009
-diff --git a/Documentation/admin-guide/media/dvb-usb-umt-010-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-umt-010-cardlist.rst
-new file mode 100644
-index 000000000000..ce7ce901b5ac
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-umt-010-cardlist.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-umt-010 cards list
-+==========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - Hanftek UMT-010 DVB-T USB2.0
-+     - 15f4:0001, 15f4:0015
-diff --git a/Documentation/admin-guide/media/dvb-usb-vp702x-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-vp702x-cardlist.rst
-new file mode 100644
-index 000000000000..101442434268
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-vp702x-cardlist.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-vp702x cards list
-+=========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - TwinhanDTV StarBox DVB-S USB2.0 (VP7021)
-+     - 13d3:3207
-diff --git a/Documentation/admin-guide/media/dvb-usb-vp7045-cardlist.rst b/Documentation/admin-guide/media/dvb-usb-vp7045-cardlist.rst
-new file mode 100644
-index 000000000000..2fc8fc4ecc32
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-usb-vp7045-cardlist.rst
-@@ -0,0 +1,18 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+dvb-usb-vp7045 cards list
-+=========================
-+
-+.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 7 13
-+   :stub-columns: 0
-+
-+   * - Card name
-+     - USB IDs
-+   * - DigitalNow TinyUSB 2 DVB-t Receiver
-+     - 13d3:3223, 13d3:3224
-+   * - Twinhan USB2.0 DVB-T receiver (TwinhanDTV Alpha/MagicBox II)
-+     - 13d3:3205, 13d3:3206
+ /* hotplug device table support */
+ static const struct usb_device_id pwc_device_table [] = {
+-	{ USB_DEVICE(0x0471, 0x0302) }, /* Philips models */
+-	{ USB_DEVICE(0x0471, 0x0303) },
+-	{ USB_DEVICE(0x0471, 0x0304) },
+-	{ USB_DEVICE(0x0471, 0x0307) },
+-	{ USB_DEVICE(0x0471, 0x0308) },
+-	{ USB_DEVICE(0x0471, 0x030C) },
+-	{ USB_DEVICE(0x0471, 0x0310) },
+-	{ USB_DEVICE(0x0471, 0x0311) }, /* Philips ToUcam PRO II */
+-	{ USB_DEVICE(0x0471, 0x0312) },
+-	{ USB_DEVICE(0x0471, 0x0313) }, /* the 'new' 720K */
+-	{ USB_DEVICE(0x0471, 0x0329) }, /* Philips SPC 900NC PC Camera */
+-	{ USB_DEVICE(0x0471, 0x032C) }, /* Philips SPC 880NC PC Camera */
+-	{ USB_DEVICE(0x069A, 0x0001) }, /* Askey */
+-	{ USB_DEVICE(0x046D, 0x08B0) }, /* Logitech QuickCam Pro 3000 */
++	{ USB_DEVICE(0x0471, 0x0302) }, /* Philips PCA645VC */
++	{ USB_DEVICE(0x0471, 0x0303) }, /* Philips PCA646VC */
++	{ USB_DEVICE(0x0471, 0x0304) }, /* Askey VC010 type 2 */
++	{ USB_DEVICE(0x0471, 0x0307) }, /* Philips PCVC675K (Vesta) */
++	{ USB_DEVICE(0x0471, 0x0308) }, /* Philips PCVC680K (Vesta Pro) */
++	{ USB_DEVICE(0x0471, 0x030C) }, /* Philips PCVC690K (Vesta Pro Scan) */
++	{ USB_DEVICE(0x0471, 0x0310) }, /* Philips PCVC730K (ToUCam Fun)/PCVC830 (ToUCam II) */
++	{ USB_DEVICE(0x0471, 0x0311) }, /* Philips PCVC740K (ToUCam Pro)/PCVC840 (ToUCam II) */
++	{ USB_DEVICE(0x0471, 0x0312) }, /* Philips PCVC750K (ToUCam Pro Scan) */
++	{ USB_DEVICE(0x0471, 0x0313) }, /* Philips PCVC720K/40 (ToUCam XS) */
++	{ USB_DEVICE(0x0471, 0x0329) }, /* Philips SPC 900NC webcam */
++	{ USB_DEVICE(0x0471, 0x032C) }, /* Philips SPC 880NC webcam */
++	{ USB_DEVICE(0x069A, 0x0001) }, /* Askey VC010 type 1 */
++	{ USB_DEVICE(0x046D, 0x08B0) }, /* Logitech QuickCam 3000 Pro */
+ 	{ USB_DEVICE(0x046D, 0x08B1) }, /* Logitech QuickCam Notebook Pro */
+-	{ USB_DEVICE(0x046D, 0x08B2) }, /* Logitech QuickCam Pro 4000 */
++	{ USB_DEVICE(0x046D, 0x08B2) }, /* Logitech QuickCam 4000 Pro */
+ 	{ USB_DEVICE(0x046D, 0x08B3) }, /* Logitech QuickCam Zoom (old model) */
+ 	{ USB_DEVICE(0x046D, 0x08B4) }, /* Logitech QuickCam Zoom (new model) */
+ 	{ USB_DEVICE(0x046D, 0x08B5) }, /* Logitech QuickCam Orbit/Sphere */
+-	{ USB_DEVICE(0x046D, 0x08B6) }, /* Cisco VT Camera */
++	{ USB_DEVICE(0x046D, 0x08B6) }, /* Logitech/Cisco VT Camera */
+ 	{ USB_DEVICE(0x046D, 0x08B7) }, /* Logitech ViewPort AV 100 */
+-	{ USB_DEVICE(0x046D, 0x08B8) }, /* Logitech (reserved) */
++	{ USB_DEVICE(0x046D, 0x08B8) }, /* Logitech QuickCam */
+ 	{ USB_DEVICE(0x055D, 0x9000) }, /* Samsung MPC-C10 */
+ 	{ USB_DEVICE(0x055D, 0x9001) }, /* Samsung MPC-C30 */
+ 	{ USB_DEVICE(0x055D, 0x9002) },	/* Samsung SNC-35E (Ver3.0) */
+ 	{ USB_DEVICE(0x041E, 0x400C) }, /* Creative Webcam 5 */
+ 	{ USB_DEVICE(0x041E, 0x4011) }, /* Creative Webcam Pro Ex */
+-	{ USB_DEVICE(0x04CC, 0x8116) }, /* Afina Eye */
+-	{ USB_DEVICE(0x06BE, 0x8116) }, /* new Afina Eye */
+-	{ USB_DEVICE(0x0d81, 0x1910) }, /* Visionite */
+-	{ USB_DEVICE(0x0d81, 0x1900) },
++	{ USB_DEVICE(0x04CC, 0x8116) }, /* Sotec Afina Eye */
++	{ USB_DEVICE(0x06BE, 0x8116) }, /* AME Co. Afina Eye */
++	{ USB_DEVICE(0x0d81, 0x1900) }, /* Visionite VCS-UC300 */
++	{ USB_DEVICE(0x0d81, 0x1910) }, /* Visionite VCS-UM100 */
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(usb, pwc_device_table);
 -- 
 2.25.2
 
