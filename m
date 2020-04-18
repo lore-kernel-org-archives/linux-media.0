@@ -2,54 +2,52 @@ Return-Path: <SRS0=Hp3j=6C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41FC4C2D0EF
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 10:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D760C352BE
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 10:36:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0875222202
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 10:36:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5030422202
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 10:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587206217;
-	bh=W74xYnqrQ0poiHD+2YrRZlrtHU0MYIFjCYEobpBZfO4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=QTM9frA8Hykq/ea4Su/JU2+ocoyTqDyBExcG1Hn52GRSuQGrIk4ex3mkoH59qM/jW
-	 wxnata7N8wYY5XttexpyzxSCydXEK9AWT8uMK9nrDrYpfXTCKssYz/yukeDGgelkWz
-	 et5j8YMDmBLPB/CcBWHGj11+nbvYuoH8I0uotDTk=
+	s=default; t=1587206218;
+	bh=BNHwS2MybjnfNhmgbySMKz3pG0msrDqgLlQ3XxWV4qw=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=g9BBkoj6o5tcamzNYsRQG73xLSSFOjVfhnKQT80ALgpuCM643CnmxgQoxl3qKElzV
+	 ZmTGbwAi1GnlvJhXfJaL552foZagdCjVMf6Qwo8nmavjglqd++F2SpRjNtQY2aqzKx
+	 +SRj0vxLFPiNajdPvCyvjE2QZ7YkfZhxecVs2d5U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725891AbgDRKg4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1725892AbgDRKg4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 18 Apr 2020 06:36:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40726 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:40744 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725857AbgDRKg4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1725879AbgDRKg4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 18 Apr 2020 06:36:56 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 95F6722202;
+        by mail.kernel.org (Postfix) with ESMTPSA id 963A82220A;
         Sat, 18 Apr 2020 10:36:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587206215;
-        bh=W74xYnqrQ0poiHD+2YrRZlrtHU0MYIFjCYEobpBZfO4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pIsocd9ULYLwvsDkg6kKyDuw0OLaliXJ34dDjHEkoGGEKDFQXONRo75zJFaXUr64p
-         hpgpjjIgmARU3c2HqN/H8Nlpf2CUPmTEhX9+i+6uBYDETS5Wt9BLa/yomPMbunXH/p
-         jDACucwSMyB/+GxXbc3ZpH+QpB/01wBOWhk6ZkUg=
+        bh=BNHwS2MybjnfNhmgbySMKz3pG0msrDqgLlQ3XxWV4qw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iKlvs36t+HJdhuz4Njstn7VbfjatGaLkd+mDGIvBvgGJpjlWtd3637ri8XxHKm0H8
+         GaB/OMklYlAzTg8ppbQzJF2U0g+RuPhAb3X3ml7Y1KTR09OQRJmV8fbJhtf7Sqrb9p
+         6hwJRaOG17cOxjyAYdV3Q9QIRBwxZxUdC95PoPEA=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPkqD-00838T-JO; Sat, 18 Apr 2020 12:36:53 +0200
+        id 1jPkqD-00838Q-IQ; Sat, 18 Apr 2020 12:36:53 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 1/3] media: admin-guide: bt8xx.rst: fix a broken cross-reference
-Date:   Sat, 18 Apr 2020 12:36:50 +0200
-Message-Id: <103cae7815c66d25c2b8df408b5cf5eaac84ff19.1587206071.git.mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 0/3] Reorg the media admin-guide
+Date:   Sat, 18 Apr 2020 12:36:49 +0200
+Message-Id: <cover.1587206071.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
-In-Reply-To: <cover.1587206071.git.mchehab+huawei@kernel.org>
-References: <cover.1587206071.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -57,28 +55,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The old cards.rst file doesn't exist anymore. Also, it is not
-the right reference there, as it should be pointing to the
-bttv-specific cardlist.
+Change numberation and chapter order at the media-admin guide,
+in order to place generic documents before driver-specific ones.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/admin-guide/media/bt8xx.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Mauro Carvalho Chehab (3):
+  media: admin-guide: bt8xx.rst: fix a broken cross-reference
+  media: admin-guide: reorganize the guide
+  media: admin-guide: split driver-specific indexes to new files
 
-diff --git a/Documentation/admin-guide/media/bt8xx.rst b/Documentation/admin-guide/media/bt8xx.rst
-index a55f4f5af042..d6cf81d83d61 100644
---- a/Documentation/admin-guide/media/bt8xx.rst
-+++ b/Documentation/admin-guide/media/bt8xx.rst
-@@ -18,7 +18,7 @@ General information
- This class of cards has a bt878a as the PCI interface, and require the bttv driver
- for accessing the i2c bus and the gpio pins of the bt8xx chipset.
- 
--Please see :doc:`cards` for a complete list of Cards based on the
-+Please see :doc:`bttv-cardlist` for a complete list of Cards based on the
- Conexant Bt8xx PCI bridge supported by the Linux Kernel.
- 
- In order to be able to compile the kernel, some config options should be
+ Documentation/admin-guide/media/bt8xx.rst     |  2 +-
+ .../admin-guide/media/cec-drivers.rst         | 10 +++
+ .../admin-guide/media/dvb-drivers.rst         | 16 ++++
+ Documentation/admin-guide/media/dvb.rst       | 12 +++
+ Documentation/admin-guide/media/index.rst     | 89 +++----------------
+ ...{v4l-with-ir.rst => remote-controller.rst} |  9 +-
+ .../admin-guide/media/v4l-drivers.rst         | 33 +++++++
+ 7 files changed, 90 insertions(+), 81 deletions(-)
+ create mode 100644 Documentation/admin-guide/media/cec-drivers.rst
+ create mode 100644 Documentation/admin-guide/media/dvb-drivers.rst
+ create mode 100644 Documentation/admin-guide/media/dvb.rst
+ rename Documentation/admin-guide/media/{v4l-with-ir.rst => remote-controller.rst} (96%)
+ create mode 100644 Documentation/admin-guide/media/v4l-drivers.rst
+
 -- 
 2.25.2
+
 
