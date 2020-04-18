@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B25C38A2C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C320C38A2B
 	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 10:36:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9296E22202
+	by mail.kernel.org (Postfix) with ESMTP id 763CE22240
 	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 10:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1587206218;
-	bh=vP5/Rck1WrDqozyC/lEJJiqm/CNCJjvW8McfYF02WvE=;
+	bh=/TpfpEBagqOsEJz0Tq71ISju0tA9g/bdf5UxUTpyUx4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=awq/Pw2TOSc6pUD+c1s58ZbwTNIIhhv1FrbNAjMxi0Ajpz+F1G7RTNozgEUuWZ6NJ
-	 DvYYMe6nFT/WzVncq32e/tqXGaYPbs2kcmPVrd4MATsqiHkUupYymNc23MZn/1IAl+
-	 T5vTyQ9Ue2z1M4fMcF7In3ClgrUpCRxX7eXKtj0M=
+	b=JjXGtWv4eoSFS34Dw5/mJPqRdfFI0SAHCZYRTKLvFu+r0uCXckf98SU5yPeszmfFN
+	 iI6eKe6/DTLFW5/Zu/0XOexkWg+L+8qYwwU0TGQerlHvZ65Nd4i2iIAtcofPoEZoVW
+	 Z5PxetY+SGpIn9yYR3eHtL5U+4GKMIZzbUok3bAY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725893AbgDRKg5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1725903AbgDRKg5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 18 Apr 2020 06:36:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40740 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:40736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725873AbgDRKg4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1725869AbgDRKg4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 18 Apr 2020 06:36:56 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9452221D79;
+        by mail.kernel.org (Postfix) with ESMTPSA id 95E59221F4;
         Sat, 18 Apr 2020 10:36:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587206215;
-        bh=vP5/Rck1WrDqozyC/lEJJiqm/CNCJjvW8McfYF02WvE=;
+        bh=/TpfpEBagqOsEJz0Tq71ISju0tA9g/bdf5UxUTpyUx4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tvBRs8F5jLA7qGs0rAMkuivMKfljxQkXYCIRjLGbH+zWrcnt2prm6q2HKzeuXhdld
-         Afuzecu/ked1OfxYuRK+SGYDyKyStNjB+ptlaUg7NaoyyCbNLEprbCuuL/EK3O3sH4
-         VzZel4F4Q08cGbyAglwT+G0FYw1SyeRtmETX6Z6g=
+        b=ZqgYfWE/8CKxXO/plonxY8pIWI43ryXJl2UhT9QzXcCdVZ855qDrQuXzcy09I10QF
+         ta7GJ/3WBcFGdDGX+Vp9sBPS6r9oj+JlUE9n5WB1c5MvBCtOLW4rASRU2lYYn6GGG8
+         p/gEzF9JhVMndkRI8RKWnU1sC/tV9VbtzLq6ORA0=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPkqD-00838b-M4; Sat, 18 Apr 2020 12:36:53 +0200
+        id 1jPkqD-00838X-KC; Sat, 18 Apr 2020 12:36:53 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 3/3] media: admin-guide: split driver-specific indexes to new files
-Date:   Sat, 18 Apr 2020 12:36:52 +0200
-Message-Id: <7f5d96c64d3c52fa222979e92bf030082492471e.1587206071.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 2/3] media: admin-guide: reorganize the guide
+Date:   Sat, 18 Apr 2020 12:36:51 +0200
+Message-Id: <885538809ae84c6dd1f54d061787bbc39175b279.1587206071.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1587206071.git.mchehab+huawei@kernel.org>
 References: <cover.1587206071.git.mchehab+huawei@kernel.org>
@@ -58,196 +58,180 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to better organize the main admin-guide index,
-place the driver-specific indexes on separate files.
-
-This ensures a more consistent numbering at the main index.
+Separate the generic documentation from the driver-specific
+parts, and use a better title for the documentation.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../admin-guide/media/cec-drivers.rst         | 10 +++
- .../admin-guide/media/dvb-drivers.rst         | 16 ++++
- Documentation/admin-guide/media/index.rst     | 79 +------------------
- .../admin-guide/media/v4l-drivers.rst         | 33 ++++++++
- 4 files changed, 63 insertions(+), 75 deletions(-)
- create mode 100644 Documentation/admin-guide/media/cec-drivers.rst
- create mode 100644 Documentation/admin-guide/media/dvb-drivers.rst
- create mode 100644 Documentation/admin-guide/media/v4l-drivers.rst
+ Documentation/admin-guide/media/dvb.rst       | 12 +++++
+ Documentation/admin-guide/media/index.rst     | 46 +++++++++++--------
+ ...{v4l-with-ir.rst => remote-controller.rst} |  9 ++--
+ 3 files changed, 44 insertions(+), 23 deletions(-)
+ create mode 100644 Documentation/admin-guide/media/dvb.rst
+ rename Documentation/admin-guide/media/{v4l-with-ir.rst => remote-controller.rst} (96%)
 
-diff --git a/Documentation/admin-guide/media/cec-drivers.rst b/Documentation/admin-guide/media/cec-drivers.rst
+diff --git a/Documentation/admin-guide/media/dvb.rst b/Documentation/admin-guide/media/dvb.rst
 new file mode 100644
-index 000000000000..8d9686c08df9
+index 000000000000..e5258bfa5cd9
 --- /dev/null
-+++ b/Documentation/admin-guide/media/cec-drivers.rst
-@@ -0,0 +1,10 @@
++++ b/Documentation/admin-guide/media/dvb.rst
+@@ -0,0 +1,12 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+=================================
-+CEC driver-specific documentation
-+=================================
++==========
++Digital TV
++==========
 +
 +.. toctree::
-+	:maxdepth: 2
 +
-+	pulse8-cec
-diff --git a/Documentation/admin-guide/media/dvb-drivers.rst b/Documentation/admin-guide/media/dvb-drivers.rst
-new file mode 100644
-index 000000000000..8df637c375f9
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb-drivers.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+========================================
-+Digital TV driver-specific documentation
-+========================================
-+
-+.. toctree::
-+	:maxdepth: 2
-+
-+	avermedia
-+	bt8xx
-+	lmedm04
-+	opera-firmware
-+	technisat
-+	ttusb-dec
-+	zr364xx
++	dvb_intro
++	ci
++	faq
++	dvb_references
 diff --git a/Documentation/admin-guide/media/index.rst b/Documentation/admin-guide/media/index.rst
-index 05ddd4930699..6e0d2bae7154 100644
+index dbe36e427e6b..05ddd4930699 100644
 --- a/Documentation/admin-guide/media/index.rst
 +++ b/Documentation/admin-guide/media/index.rst
-@@ -28,7 +28,7 @@ The media subsystem
-         Table of Contents
+@@ -2,9 +2,9 @@
  
- .. toctree::
--	:maxdepth: 5
-+	:maxdepth: 2
- 	:numbered:
+ .. include:: <isonum.txt>
  
- 	intro
-@@ -40,80 +40,9 @@ The media subsystem
+-============================
+-Media subsystem usage guides
+-============================
++====================================
++Media subsystem admin and user guide
++====================================
  
- 	cardlist
+ This section contains usage information about media subsystem and
+ its supported drivers.
+@@ -18,11 +18,8 @@ Please see:
+      for driver development information and Kernel APIs used by
+      media devices;
  
--
 -.. _uapi-v4l-drivers:
 -
--Video4Linux (V4L) driver-specific documentation
--===============================================
--
--.. only:: html
--
--    .. class:: toc-title
--
--        Table of Contents
--
--.. toctree::
--	:maxdepth: 5
--	:numbered:
--
--	bttv
--	cafe_ccic
--	cpia2
--	cx88
--	davinci-vpbe
--	fimc
--	imx
--	imx7
--	ipu3
--	ivtv
--	meye
--	omap3isp
--	omap4_camera
--	philips
--	qcom_camss
--	rcar-fdp1
--	saa7134
--	si470x
--	si4713
--	si476x
--	vimc
--	vivid
--
--Digital TV driver-specific documentation
--========================================
--
--.. only:: html
--
--    .. class:: toc-title
--
--        Table of Contents
--
--.. toctree::
--	:maxdepth: 5
--	:numbered:
--
--	avermedia
--	bt8xx
--	lmedm04
--	opera-firmware
--	technisat
--	ttusb-dec
--	zr364xx
--
--CEC driver-specific documentation
--=================================
--
--.. only:: html
--
--    .. class:: toc-title
--
--        Table of Contents
--
--.. toctree::
--	:maxdepth: 5
--	:numbered:
--
--	pulse8-cec
-+	v4l-drivers
-+	dvb-drivers
-+	cec-drivers
+-################################################
+-Video4Linux (V4L)  driver-specific documentation
+-################################################
++The media subsystem
++===================
  
- **Copyright** |copy| 1999-2020 : LinuxTV Developers
+ .. only:: html
  
-diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
-new file mode 100644
-index 000000000000..251cc4ede0b6
---- /dev/null
-+++ b/Documentation/admin-guide/media/v4l-drivers.rst
-@@ -0,0 +1,33 @@
-+.. SPDX-License-Identifier: GPL-2.0
+@@ -37,9 +34,27 @@ Video4Linux (V4L)  driver-specific documentation
+ 	intro
+ 	building
+ 
++	remote-controller
++
++	dvb
++
+ 	cardlist
+ 
+-	v4l-with-ir
 +
 +.. _uapi-v4l-drivers:
 +
-+===============================================
 +Video4Linux (V4L) driver-specific documentation
 +===============================================
 +
-+.. toctree::
-+	:maxdepth: 2
++.. only:: html
 +
-+	bttv
-+	cafe_ccic
-+	cpia2
-+	cx88
-+	davinci-vpbe
-+	fimc
-+	imx
-+	imx7
-+	ipu3
-+	ivtv
-+	meye
-+	omap3isp
-+	omap4_camera
-+	philips
-+	qcom_camss
-+	rcar-fdp1
-+	saa7134
-+	si470x
-+	si4713
-+	si476x
-+	vimc
-+	vivid
++    .. class:: toc-title
++
++        Table of Contents
++
++.. toctree::
++	:maxdepth: 5
++	:numbered:
+ 
+ 	bttv
+ 	cafe_ccic
+@@ -64,9 +79,8 @@ Video4Linux (V4L)  driver-specific documentation
+ 	vimc
+ 	vivid
+ 
+-##############################################
+-Linux Digital TV driver-specific documentation
+-##############################################
++Digital TV driver-specific documentation
++========================================
+ 
+ .. only:: html
+ 
+@@ -78,11 +92,6 @@ Linux Digital TV driver-specific documentation
+ 	:maxdepth: 5
+ 	:numbered:
+ 
+-	dvb_intro
+-	ci
+-	faq
+-	dvb_references
+-
+ 	avermedia
+ 	bt8xx
+ 	lmedm04
+@@ -91,9 +100,8 @@ Linux Digital TV driver-specific documentation
+ 	ttusb-dec
+ 	zr364xx
+ 
+-#################################
+ CEC driver-specific documentation
+-#################################
++=================================
+ 
+ .. only:: html
+ 
+diff --git a/Documentation/admin-guide/media/v4l-with-ir.rst b/Documentation/admin-guide/media/remote-controller.rst
+similarity index 96%
+rename from Documentation/admin-guide/media/v4l-with-ir.rst
+rename to Documentation/admin-guide/media/remote-controller.rst
+index ce23c8a7bc93..fa05410c3cd5 100644
+--- a/Documentation/admin-guide/media/v4l-with-ir.rst
++++ b/Documentation/admin-guide/media/remote-controller.rst
+@@ -1,12 +1,13 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
++======================================================
+ Infrared remote control support in video4linux drivers
+ ======================================================
+ 
+ Authors: Gerd Hoffmann, Mauro Carvalho Chehab
+ 
+ Basics
+-------
++======
+ 
+ Most analog and digital TV boards support remote controllers. Several of
+ them have a microprocessor that receives the IR carriers, convert into
+@@ -33,7 +34,7 @@ detected. However, for a few devices, you need to manually load the
+ ir-kbd-i2c module.
+ 
+ How it works
+-------------
++============
+ 
+ The modules register the remote as keyboard within the linux input
+ layer, i.e. you'll see the keys of the remote as normal key strokes
+@@ -55,7 +56,7 @@ the keymaps, like the input kbd utility.
+ 
+ 
+ Using with lircd
+-================
++----------------
+ 
+ The latest versions of the lircd daemon supports reading events from the
+ linux input layer (via event device). It also supports receiving IR codes
+@@ -63,7 +64,7 @@ in lirc mode.
+ 
+ 
+ Using without lircd
+-===================
++-------------------
+ 
+ Xorg recognizes several IR keycodes that have its numerical value lower
+ than 247. With the advent of Wayland, the input driver got updated too,
 -- 
 2.25.2
 
