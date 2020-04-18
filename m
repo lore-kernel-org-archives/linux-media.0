@@ -2,236 +2,123 @@ Return-Path: <SRS0=Hp3j=6C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C320C38A2B
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 10:36:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE9FC3A5A0
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 14:39:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 763CE22240
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 10:36:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587206218;
-	bh=/TpfpEBagqOsEJz0Tq71ISju0tA9g/bdf5UxUTpyUx4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=JjXGtWv4eoSFS34Dw5/mJPqRdfFI0SAHCZYRTKLvFu+r0uCXckf98SU5yPeszmfFN
-	 iI6eKe6/DTLFW5/Zu/0XOexkWg+L+8qYwwU0TGQerlHvZ65Nd4i2iIAtcofPoEZoVW
-	 Z5PxetY+SGpIn9yYR3eHtL5U+4GKMIZzbUok3bAY=
+	by mail.kernel.org (Postfix) with ESMTP id C545522260
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 14:39:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ULmZfJo9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725903AbgDRKg5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 18 Apr 2020 06:36:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40736 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725869AbgDRKg4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 18 Apr 2020 06:36:56 -0400
-Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 95E59221F4;
-        Sat, 18 Apr 2020 10:36:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587206215;
-        bh=/TpfpEBagqOsEJz0Tq71ISju0tA9g/bdf5UxUTpyUx4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZqgYfWE/8CKxXO/plonxY8pIWI43ryXJl2UhT9QzXcCdVZ855qDrQuXzcy09I10QF
-         ta7GJ/3WBcFGdDGX+Vp9sBPS6r9oj+JlUE9n5WB1c5MvBCtOLW4rASRU2lYYn6GGG8
-         p/gEzF9JhVMndkRI8RKWnU1sC/tV9VbtzLq6ORA0=
-Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jPkqD-00838X-KC; Sat, 18 Apr 2020 12:36:53 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 2/3] media: admin-guide: reorganize the guide
-Date:   Sat, 18 Apr 2020 12:36:51 +0200
-Message-Id: <885538809ae84c6dd1f54d061787bbc39175b279.1587206071.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.25.2
-In-Reply-To: <cover.1587206071.git.mchehab+huawei@kernel.org>
-References: <cover.1587206071.git.mchehab+huawei@kernel.org>
+        id S1726441AbgDROjc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 18 Apr 2020 10:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726398AbgDROjb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 18 Apr 2020 10:39:31 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C59BC061A0F
+        for <linux-media@vger.kernel.org>; Sat, 18 Apr 2020 07:39:29 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id g12so6019919wmh.3
+        for <linux-media@vger.kernel.org>; Sat, 18 Apr 2020 07:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=/XM7D8/7XhwSvcHIYzl1pU1WBQ38qKEnXn4Q45Zjmjs=;
+        b=ULmZfJo9mapZTe+vhjOkTNiElb3rH6q3Ti/y51lN9Dg4r6WAwOjbDXXG9ja63eJ2/O
+         1TT0DGFLa3sSFYcJBPfrzFlNFETbjV/w0oGLrMcc1R2uRKiJrvDOFy3zqEzrp3VTDK1y
+         VuR4hC2aSdTAASi7Dh3QsdLdj08UL04xprxEkDBr/SNy/OUDFEFBrEWwQ5JwvXkopGu4
+         SEG+xlZ1vm6L8//p+ctPbLJD2j8hcmivyB8SRVGVNTD9i0mLpbxhLWtN8wAeXzqbU31E
+         9AVdAGR89IwkRw8yyDXmVi2KGeiYSpLgb8Hi9utJpAi3QHowpfzPvLSROifyBzk2jWIt
+         m3ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=/XM7D8/7XhwSvcHIYzl1pU1WBQ38qKEnXn4Q45Zjmjs=;
+        b=dJUe9qUPE4nwpRqXUAbP344A3i5Q/0lh24hMSYC8iboFEWvBqQHS9vt389pOB9aS9r
+         iLtKUQY9KuJY6MYChMMIAAf1EyE6IeKhvyN/julXHhJWTIGCp7Tw+fgjRFiOrxVzsWXo
+         tXD8YJUf8cqUQ1SdxX7oupSggDSfBQaPaXb+bVtOTyqmsqILB6FZzr1Wbl4CeLb/2zko
+         MRiQGmolFkVLgY1kPvGpbK+nWZq8p+qVYbA2lKy4w62XdIxVbSYVE9KbfgnXpS9z/z4+
+         SHm+Q89zpEFDiL/Ag+9aOy3uxMamrOZ6eAfXv9Yx+FtkgqC1trVHYwwse2VDrlA5MIwc
+         agCA==
+X-Gm-Message-State: AGi0PuauxjGaoEDLQqYmvIP36nbcjCiNoDNrUj4d5dU2kWbIa86+jNul
+        KMyd3b1t4wUT35Y/QT0zgMG6L1FeeB4=
+X-Google-Smtp-Source: APiQypJw7V6hQ0tykrXuW3Q4f5rmR+bLZQb9kbT3TtFrj5idEat4ROr+8IBEpD8yc6TBLRjsV+Vxfg==
+X-Received: by 2002:a7b:c456:: with SMTP id l22mr8202691wmi.148.1587220767851;
+        Sat, 18 Apr 2020 07:39:27 -0700 (PDT)
+Received: from [192.168.0.104] (77-56-155-30.dclient.hispeed.ch. [77.56.155.30])
+        by smtp.gmail.com with ESMTPSA id r17sm25118628wrn.43.2020.04.18.07.39.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Apr 2020 07:39:26 -0700 (PDT)
+To:     linux-media@vger.kernel.org, mchehab@kernel.org
+From:   Patrik Gfeller <patrik.gfeller@gmail.com>
+Subject: atomisp kernel driver(s)
+Message-ID: <f3348096-1fb3-5368-ba66-f42a300bde8e@gmail.com>
+Date:   Sat, 18 Apr 2020 16:39:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Separate the generic documentation from the driver-specific
-parts, and use a better title for the documentation.
+Hello Mauro et al,
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/admin-guide/media/dvb.rst       | 12 +++++
- Documentation/admin-guide/media/index.rst     | 46 +++++++++++--------
- ...{v4l-with-ir.rst => remote-controller.rst} |  9 ++--
- 3 files changed, 44 insertions(+), 23 deletions(-)
- create mode 100644 Documentation/admin-guide/media/dvb.rst
- rename Documentation/admin-guide/media/{v4l-with-ir.rst => remote-controller.rst} (96%)
+I've recently switched to Linux, and I'm very impressed. Almost 
+everything thing works out of the box. Only the webcam on my device does 
+not. I did some digging and if I'm right an atomisp driver would be 
+required. Is this correct? Below the output of lspci:
 
-diff --git a/Documentation/admin-guide/media/dvb.rst b/Documentation/admin-guide/media/dvb.rst
-new file mode 100644
-index 000000000000..e5258bfa5cd9
---- /dev/null
-+++ b/Documentation/admin-guide/media/dvb.rst
-@@ -0,0 +1,12 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==========
-+Digital TV
-+==========
-+
-+.. toctree::
-+
-+	dvb_intro
-+	ci
-+	faq
-+	dvb_references
-diff --git a/Documentation/admin-guide/media/index.rst b/Documentation/admin-guide/media/index.rst
-index dbe36e427e6b..05ddd4930699 100644
---- a/Documentation/admin-guide/media/index.rst
-+++ b/Documentation/admin-guide/media/index.rst
-@@ -2,9 +2,9 @@
- 
- .. include:: <isonum.txt>
- 
--============================
--Media subsystem usage guides
--============================
-+====================================
-+Media subsystem admin and user guide
-+====================================
- 
- This section contains usage information about media subsystem and
- its supported drivers.
-@@ -18,11 +18,8 @@ Please see:
-      for driver development information and Kernel APIs used by
-      media devices;
- 
--.. _uapi-v4l-drivers:
--
--################################################
--Video4Linux (V4L)  driver-specific documentation
--################################################
-+The media subsystem
-+===================
- 
- .. only:: html
- 
-@@ -37,9 +34,27 @@ Video4Linux (V4L)  driver-specific documentation
- 	intro
- 	building
- 
-+	remote-controller
-+
-+	dvb
-+
- 	cardlist
- 
--	v4l-with-ir
-+
-+.. _uapi-v4l-drivers:
-+
-+Video4Linux (V4L) driver-specific documentation
-+===============================================
-+
-+.. only:: html
-+
-+    .. class:: toc-title
-+
-+        Table of Contents
-+
-+.. toctree::
-+	:maxdepth: 5
-+	:numbered:
- 
- 	bttv
- 	cafe_ccic
-@@ -64,9 +79,8 @@ Video4Linux (V4L)  driver-specific documentation
- 	vimc
- 	vivid
- 
--##############################################
--Linux Digital TV driver-specific documentation
--##############################################
-+Digital TV driver-specific documentation
-+========================================
- 
- .. only:: html
- 
-@@ -78,11 +92,6 @@ Linux Digital TV driver-specific documentation
- 	:maxdepth: 5
- 	:numbered:
- 
--	dvb_intro
--	ci
--	faq
--	dvb_references
--
- 	avermedia
- 	bt8xx
- 	lmedm04
-@@ -91,9 +100,8 @@ Linux Digital TV driver-specific documentation
- 	ttusb-dec
- 	zr364xx
- 
--#################################
- CEC driver-specific documentation
--#################################
-+=================================
- 
- .. only:: html
- 
-diff --git a/Documentation/admin-guide/media/v4l-with-ir.rst b/Documentation/admin-guide/media/remote-controller.rst
-similarity index 96%
-rename from Documentation/admin-guide/media/v4l-with-ir.rst
-rename to Documentation/admin-guide/media/remote-controller.rst
-index ce23c8a7bc93..fa05410c3cd5 100644
---- a/Documentation/admin-guide/media/v4l-with-ir.rst
-+++ b/Documentation/admin-guide/media/remote-controller.rst
-@@ -1,12 +1,13 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
-+======================================================
- Infrared remote control support in video4linux drivers
- ======================================================
- 
- Authors: Gerd Hoffmann, Mauro Carvalho Chehab
- 
- Basics
--------
-+======
- 
- Most analog and digital TV boards support remote controllers. Several of
- them have a microprocessor that receives the IR carriers, convert into
-@@ -33,7 +34,7 @@ detected. However, for a few devices, you need to manually load the
- ir-kbd-i2c module.
- 
- How it works
--------------
-+============
- 
- The modules register the remote as keyboard within the linux input
- layer, i.e. you'll see the keys of the remote as normal key strokes
-@@ -55,7 +56,7 @@ the keymaps, like the input kbd utility.
- 
- 
- Using with lircd
--================
-+----------------
- 
- The latest versions of the lircd daemon supports reading events from the
- linux input layer (via event device). It also supports receiving IR codes
-@@ -63,7 +64,7 @@ in lirc mode.
- 
- 
- Using without lircd
--===================
-+-------------------
- 
- Xorg recognizes several IR keycodes that have its numerical value lower
- than 247. With the advent of Wayland, the input driver got updated too,
--- 
-2.25.2
+00:00.0 Host bridge: Intel Corporation Atom/Celeron/Pentium Processor 
+x5-E8000/J3xxx/N3xxx Series SoC Transaction Register (rev 36) 00:02.0 
+VGA compatible controller: Intel Corporation Atom/Celeron/Pentium 
+Processor x5-E8000/J3xxx/N3xxx Integrated Graphics Controller (rev 36) 
+00:03.0 Multimedia controller: Intel Corporation Atom/Celeron/Pentium 
+Processor x5-E8000/J3xxx/N3xxx Series Imaging Unit (rev 36) 00:0a.0 
+Non-VGA unclassified device: Intel Corporation Device 22d8 (rev 36) 
+00:0b.0 Signal processing controller: Intel Corporation 
+Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series Power 
+Management Controller (rev 36) 00:14.0 USB controller: Intel Corporation 
+Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series USB xHCI 
+Controller (rev 36) 00:1a.0 Encryption controller: Intel Corporation 
+Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series Trusted 
+Execution Engine (rev 36) 00:1c.0 PCI bridge: Intel Corporation 
+Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series PCI Express 
+Port #1 (rev 36) 00:1f.0 ISA bridge: Intel Corporation 
+Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series PCU (rev 36) 
+01:00.0 Network controller: Qualcomm Atheros QCA9377 802.11ac Wireless 
+Network Adapter (rev 31)
+
+According to the history it looks like the driver was removed from the 
+kernel in 2018 and replaced with a dummy driver (to make sure power save 
+works).
+
+Is there a chance that the atomisp driver will return to the kernel? 
+There are quite a few older tablets and 2in1 devices that would benefit. 
+Unfortunately I do not understand the removed code (my coding skills are 
+very basic) and can thus not help to change what ever is necessary to 
+make it fit for the kernel :-( (does not sound like a beginner project). 
+However - I would be glad to help out to help testing an ISP driver.
+
+However - even without the cam it is a very impressing operating system 
+which I enjoy very much. I would like to thank all of you for your work 
+that benefits so many people!
+
+All the best and stay healthy.
+
+With kind regards,
+
+Patrik Gfeller <patrik.gfeller@gmail.com>
 
