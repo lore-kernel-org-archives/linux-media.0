@@ -2,121 +2,92 @@ Return-Path: <SRS0=Hp3j=6C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94DB1C38A2B
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84B2EC2D0EF
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74A27214D8
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:11:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XFsyyjgU"
+	by mail.kernel.org (Postfix) with ESMTP id 5E013221F4
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1587203074;
+	bh=nGE9OPCbyb+hqq7hmks8zOjg8Ql/B28QsRusWLKfgxg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=0pJ+HnWOFrKKrNmW9RGs+pAkPj0CAMfcVbeXKTL1CDnT1w9z0h1o7obS1z/Puo9hA
+	 u25DuruVxU5hMUjeGIUwAcx43MYGxjUsUA48mO29lJirEHZQuyPoMqJcbro0nV0Eba
+	 uDNJGYht4NKoOOeRlGW38DN1MS7hOHs9yUoAEAt4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbgDRJLY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 18 Apr 2020 05:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726009AbgDRJLY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 18 Apr 2020 05:11:24 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70E9C061A10
-        for <linux-media@vger.kernel.org>; Sat, 18 Apr 2020 02:11:23 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id y4so4485333ljn.7
-        for <linux-media@vger.kernel.org>; Sat, 18 Apr 2020 02:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=1+0lxBk92Z4FV+tuRf6x7090CWSvwjw8uGCZ8vNaets=;
-        b=XFsyyjgUyNwmjpheTqxW9aYsSQYJ0lDOzuKTUzlVAn2MmCPhJDf4AYtrnJ5n8dLHEQ
-         9SSh8T7G+R8Z7OIjaIVm3hDS/o1/b+2tE6Ae3uSkU4ARcNccdDvnK2YsELvKFu/CtRIE
-         Z0EPEbA1ZLdARCMDttcWceZMjCTreljTP02DMeUfoy3TFq55oSiT+5KkUGvuN17FmajN
-         Z5PI/PH6HrURbRxJ5u7UNS54wM+fIbG9r4lmRekbviiN0m5O+LyIyWsUmmGev+6rf8g7
-         9GYKz6YDH1wFHcVEimSZ7fyXizRVTMwaq2OqsiNK91LBcYzizguXPsKmwhM/XemtYWgM
-         vTUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1+0lxBk92Z4FV+tuRf6x7090CWSvwjw8uGCZ8vNaets=;
-        b=NuNTNUg5RS+gfJ//ZydVU4MvIdhS6Ao4ngUTNQO0BW84wKd+W+zSKYQpA6vmViTA6m
-         oAuFPsqlDsSlJq7uRxFOg31zBlJQDsqArOlbAKr8naTmzwdhKYLhRu3EZlwsBbeLn+eU
-         FiFBK1ySrYC3vBfUuJyeWQX1+MeqqcvqGFC9VWX3EGSnLu/+KAQZ1ca9HECidkoASSCp
-         0qJlKyZP6ip8MQ4lPeKF1ifDgfkk4BC0Lf+g0/6gILRMW/lo+cSid/XKyBpcirGyg9Ip
-         zgh/m9F/efjPT2WLoPB+16T+ssR7nQgqu4ouJCa2W6bYTgXwNtUIn6FUkcpx3qaCezCG
-         AKFw==
-X-Gm-Message-State: AGi0PubRUYJRHtHUTG40JqL1NBLbI0FqAqyX7eOVcA2/rlXL3yesDFZ0
-        W2zvPI/naghUiPikonfO4pzxLkcdaleOfQ==
-X-Google-Smtp-Source: APiQypK1l4oogJYB1BPqNzQ+g7PTmKPPdbmtyfUaVP+asaNbzm1SJrR5TaagxWdlGFz7rLKSu9ndtQ==
-X-Received: by 2002:a2e:6a0e:: with SMTP id f14mr4577280ljc.102.1587201081939;
-        Sat, 18 Apr 2020 02:11:21 -0700 (PDT)
-Received: from localhost.localdomain (212-5-158-142.ip.btc-net.bg. [212.5.158.142])
-        by smtp.gmail.com with ESMTPSA id 25sm20114469lft.68.2020.04.18.02.11.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Apr 2020 02:11:21 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH] venus: venc,vdec: Return EBUSY on S_FMT while streaming
-Date:   Sat, 18 Apr 2020 12:11:06 +0300
-Message-Id: <20200418091106.28370-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1725969AbgDRJod (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 18 Apr 2020 05:44:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57294 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725857AbgDRJod (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 18 Apr 2020 05:44:33 -0400
+Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CB6E222202;
+        Sat, 18 Apr 2020 09:44:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587203073;
+        bh=nGE9OPCbyb+hqq7hmks8zOjg8Ql/B28QsRusWLKfgxg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bP6NQQZgOavWdx6QhLxNR8QR0jFwJGTG5WsLd70xkBd2HjLDisVcF/XyWGR+lEk+g
+         JdzuIQ3JKBxIvr4ijpnd1LyjbgTFuMIzdUgBFAdhSBJ5J5a5R2nDNukCXwvzz1RCGW
+         NnxSfIyLjBBZtzzG0bfQZiJDJL43YtUGJUbG0axQ=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jPk1W-0081OK-BN; Sat, 18 Apr 2020 11:44:30 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 7/9] media: admin-guide: add SPI cards to platform drivers
+Date:   Sat, 18 Apr 2020 11:44:27 +0200
+Message-Id: <1c0e1fc6341bd416972a586213370bb8d2309adc.1587202259.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.25.2
+In-Reply-To: <cover.1587202259.git.mchehab+huawei@kernel.org>
+References: <cover.1587202259.git.mchehab+huawei@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-According to the v4l spec s_fmt must return EBUSY while the
-particular queue is streaming. Add such check in encoder and
-decoder s_fmt methods.
+The SPI cards are also under the concept of "platform" drivers
+as defined at the section introduction.
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+So, add a SPI card list there.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/venus/vdec.c | 8 ++++++++
- drivers/media/platform/qcom/venus/venc.c | 8 ++++++++
- 2 files changed, 16 insertions(+)
+ Documentation/admin-guide/media/cardlist.rst | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 527944c822b5..7c4c483d5438 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -276,6 +276,14 @@ static int vdec_s_fmt(struct file *file, void *fh, struct v4l2_format *f)
- 	const struct venus_format *fmt;
- 	struct v4l2_format format;
- 	u32 pixfmt_out = 0, pixfmt_cap = 0;
-+	struct vb2_queue *q;
-+
-+	q = v4l2_m2m_get_vq(inst->m2m_ctx, f->type);
-+	if (!q)
-+		return -EINVAL;
-+
-+	if (vb2_is_busy(q))
-+		return -EBUSY;
+diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
+index ec0e0afd8fb2..cd00154ea623 100644
+--- a/Documentation/admin-guide/media/cardlist.rst
++++ b/Documentation/admin-guide/media/cardlist.rst
+@@ -329,6 +329,15 @@ xilinx-video       Xilinx Video IP (EXPERIMENTAL)
+ xilinx-vtc         Xilinx Video Timing Controller
+ =================  ============================================================
  
- 	orig_pixmp = *pixmp;
- 
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 3d8431dc14c4..feed648550d1 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -357,6 +357,14 @@ static int venc_s_fmt(struct file *file, void *fh, struct v4l2_format *f)
- 	const struct venus_format *fmt;
- 	struct v4l2_format format;
- 	u32 pixfmt_out = 0, pixfmt_cap = 0;
-+	struct vb2_queue *q;
++MMC/SDIO DVB adapters
++---------------------
 +
-+	q = v4l2_m2m_get_vq(inst->m2m_ctx, f->type);
-+	if (!q)
-+		return -EINVAL;
++=======  ===========================================
++Driver   Name
++=======  ===========================================
++smssdio  Siano SMS1xxx based MDTV via SDIO interface
++=======  ===========================================
 +
-+	if (vb2_is_busy(q))
-+		return -EBUSY;
- 
- 	orig_pixmp = *pixmp;
+ I²C drivers
+ ===========
  
 -- 
-2.17.1
+2.25.2
 
