@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11950C38A2B
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12FB6C38A2C
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2B7F221F4
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5B2E21D93
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587203078;
-	bh=rEYUmceJmAylorTV7wxdDIp+HgR66n4L26PJm5r6pBA=;
+	s=default; t=1587203079;
+	bh=j8s6iCr+zOvvk6S+D4/YTsYl3OdiXirU9bXGlKFhDGw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vmDPMuKMHJWvDPO1yHvkTws9Rsru9driTcsC29sYoo/VE7fF9R/RUDiUQpKO571Nv
-	 TmexEwDVaMj4Gb5F0abFStgwISjFzSJ7y8DUjtSciw31MAWbv09xrPCamdCNMiG8d7
-	 mAEHeJu1WVJIUoY137dMfiGIxyChO2A9uaUNkbvA=
+	b=lbLNlJ/YT/4+OexjnFfC1xPI2SmdSOhGtVbHs7crMj89y47LibndJrx5Lq5W5gW8g
+	 kTMGBO2HguBH4GtnRVJhXkF98aawGC1lq0LZAd+ERQhyPTDxllIG9f48HqmwceCaIH
+	 SNijr3fFtslJtJ+PUasDXwnsn8mIEyum7IrCGWrU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725991AbgDRJoh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 18 Apr 2020 05:44:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57328 "EHLO mail.kernel.org"
+        id S1725994AbgDRJoj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 18 Apr 2020 05:44:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725856AbgDRJoe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 18 Apr 2020 05:44:34 -0400
+        id S1725879AbgDRJod (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 18 Apr 2020 05:44:33 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CFAEA22245;
+        by mail.kernel.org (Postfix) with ESMTPSA id C9F61221F4;
         Sat, 18 Apr 2020 09:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587203073;
-        bh=rEYUmceJmAylorTV7wxdDIp+HgR66n4L26PJm5r6pBA=;
+        bh=j8s6iCr+zOvvk6S+D4/YTsYl3OdiXirU9bXGlKFhDGw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N1oY8q9nmA4GlFIgSQjIKuwbb7tg6fzI89xiXgkMRd4pMSIOJc1zWPlVG64hatUrS
-         /as0ZhmgKGresJ+2Ax7c4rV/9tb2vSX1xujw/nhpCY/OBz5GIpoH/psbQL1OlVJ8U+
-         cZzU8DPQTVFlIutx5HA6lCX5jzQQipnEd5CtS98Q=
+        b=2eSmAWmS9fcdDviY6lpO2fuhuB/96gfdB4pZGLnWG4sHtjtIM9WqLXpHbhMRoVWvx
+         NmsIGcGBvOOIASDyITuFBhSjFOTPCQwNFkTRv8s8aTFC9dA5tYkYQcZwRX/DDg+kaj
+         F6GEOoEOkXp8NZ+e8Z22spGYKgMsN+sibpOOn5mI=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPk1W-0081Ny-6Z; Sat, 18 Apr 2020 11:44:30 +0200
+        id 1jPk1W-0081OA-8f; Sat, 18 Apr 2020 11:44:30 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 3/9] media: admin-guide: add a list of media PCI cards
-Date:   Sat, 18 Apr 2020 11:44:23 +0200
-Message-Id: <fa2b8942a7072a7f8a7414b548fdd68530e784a7.1587202259.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 5/9] media: admin-guide: add a list of platform drivers
+Date:   Sat, 18 Apr 2020 11:44:25 +0200
+Message-Id: <bf4b516a27cd6ae86ee5adc335c66ae10d265e53.1587202259.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1587202259.git.mchehab+huawei@kernel.org>
 References: <cover.1587202259.git.mchehab+huawei@kernel.org>
@@ -58,115 +58,125 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of listing "other" PCI card list, just add a list with
-the existing drivers (not including sub-drivers).
+There's no reason why to keep platform drivers out of the
+card list. Add them.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/cardlist.rst  | 50 ++++++++++++++++++-
- .../admin-guide/media/other-pci-cardlist.rst  | 25 ----------
- 2 files changed, 48 insertions(+), 27 deletions(-)
- delete mode 100644 Documentation/admin-guide/media/other-pci-cardlist.rst
+ Documentation/admin-guide/media/cardlist.rst | 86 ++++++++++++++++++--
+ 1 file changed, 81 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
-index 01d3290d7f77..93c3290ae9cc 100644
+index 62375bde4755..f29d103c68d7 100644
 --- a/Documentation/admin-guide/media/cardlist.rst
 +++ b/Documentation/admin-guide/media/cardlist.rst
-@@ -116,6 +116,54 @@ So, several media drivers allow passing a ``card=`` parameter, in order
- to setup a card number that would match the correct settings for an
- specific board.
+@@ -14,10 +14,8 @@ OpenFirmware or ACPI.
+ The PCI and USB drivers, however, are independent of the system's board,
+ and may be added/removed by the user.
  
-+The current supported PCI/PCIe cards (not including staging drivers) are
-+listed below\ [#]_.
-+
-+.. [#] some of the drivers have sub-drivers, not shown at this table
-+
-+================  ========================================================
-+Driver            Name
-+================  ========================================================
-+altera-ci         Altera FPGA based CI module
-+b2c2-flexcop-pci  Technisat/B2C2 Air/Sky/Cable2PC PCI
-+bt878             DVB/ATSC Support for bt878 based TV cards
-+bttv              BT8x8 Video For Linux
-+cobalt            Cisco Cobalt
-+cx18              Conexant cx23418 MPEG encoder
-+cx23885           Conexant cx23885 (2388x successor)
-+cx25821           Conexant cx25821
-+cx88xx            Conexant 2388x (bt878 successor)
-+ddbridge          Digital Devices bridge
-+dm1105            SDMC DM1105 based PCI cards
-+dt3155            DT3155 frame grabber
-+dvb-ttpci         AV7110 cards
-+earth-pt1         PT1 cards
-+earth-pt3         Earthsoft PT3 cards
-+hexium_gemini     Hexium Gemini frame grabber
-+hexium_orion      Hexium HV-PCI6 and Orion frame grabber
-+hopper            HOPPER based cards
-+ipu3-cio2         Intel ipu3-cio2 driver
-+ivtv              Conexant cx23416/cx23415 MPEG encoder/decoder
-+ivtvfb            Conexant cx23415 framebuffer
-+mantis            MANTIS based cards
-+meye              Sony Vaio Picturebook Motion Eye
-+mxb               Siemens-Nixdorf 'Multimedia eXtension Board'
-+netup-unidvb      NetUP Universal DVB card
-+ngene             Micronas nGene
-+pluto2            Pluto2 cards
-+saa7134           Philips SAA7134
-+saa7164           NXP SAA7164
-+smipcie           SMI PCIe DVBSky cards
-+solo6x10          Bluecherry / Softlogic 6x10 capture cards (MPEG-4/H.264)
-+sta2x11_vip       STA2X11 VIP Video For Linux
-+tw5864            Techwell TW5864 video/audio grabber and encoder
-+tw686x            Intersil/Techwell TW686x
-+tw68              Techwell tw68x Video For Linux
-+================  ========================================================
-+
-+Some of those drivers support multiple devices, as shown at the card
-+lists below:
-+
- .. toctree::
- 	:maxdepth: 1
+-This section contains a list of supported PCI and USB boards.
+-
+-Please notice that this list is not exhaustive. You may also take a
+-look at https://linuxtv.org/wiki/index.php/Hardware_Device_Information
++You may also take a look at
++https://linuxtv.org/wiki/index.php/Hardware_Device_Information
+ for more details about supported cards.
  
-@@ -127,8 +175,6 @@ specific board.
+ USB drivers
+@@ -57,7 +55,6 @@ listed below\ [#]_.
+    for cameras not supported by the USB Video Class (UVC) driver,
+    as shown at :doc:`gspca card list <gspca-cardlist>`.
+ 
+-
+ ======================  =========================================================
+ Driver                  Name
+ ======================  =========================================================
+@@ -253,6 +250,85 @@ lists below:
  	saa7134-cardlist
  	saa7164-cardlist
  
--	other-pci-cardlist
--
++Platform drivers
++================
++
++There are several drivers that are focused on providing support for
++functionality that are already included at the main board, and don't
++use neither USB nor PCI bus. Those drivers are called platform
++drivers, and are very popular on embedded devices.
++
++The current supported of platform drivers (not including staging drivers) are
++listed below
++
++=================  ============================================================
++Driver             Name
++=================  ============================================================
++am437x-vpfe        TI AM437x VPFE
++aspeed-video       Aspeed AST2400 and AST2500
++atmel-isc          ATMEL Image Sensor Controller (ISC)
++atmel-isi          ATMEL Image Sensor Interface (ISI)
++c8sectpfe          SDR platform devices
++c8sectpfe          SDR platform devices
++cafe_ccic          Marvell 88ALP01 (Cafe) CMOS Camera Controller
++cdns-csi2rx        Cadence MIPI-CSI2 RX Controller
++cdns-csi2tx        Cadence MIPI-CSI2 TX Controller
++coda-vpu           Chips&Media Coda multi-standard codec IP
++dm355_ccdc         TI DM355 CCDC video capture
++dm644x_ccdc        TI DM6446 CCDC video capture
++exynos-fimc-is     EXYNOS4x12 FIMC-IS (Imaging Subsystem)
++exynos-fimc-lite   EXYNOS FIMC-LITE camera interface
++exynos-gsc         Samsung Exynos G-Scaler
++exy                Samsung S5P/EXYNOS4 SoC series Camera Subsystem
++fsl-viu            Freescale VIU
++imx-pxp            i.MX Pixel Pipeline (PXP)
++isdf               TI DM365 ISIF video capture
++mmp_camera         Marvell Armada 610 integrated camera controller
++mtk_jpeg           Mediatek JPEG Codec
++mtk-mdp            Mediatek MDP
++mtk-vcodec-dec     Mediatek Video Codec
++mtk-vpu            Mediatek Video Processor Unit
++mx2_emmaprp        MX2 eMMa-PrP
++omap3-isp          OMAP 3 Camera
++omap-vout          OMAP2/OMAP3 V4L2-Display
++pxa_camera         PXA27x Quick Capture Interface
++qcom-camss         Qualcomm V4L2 Camera Subsystem
++rcar-csi2          R-Car MIPI CSI-2 Receiver
++rcar_drif          Renesas Digital Radio Interface (DRIF)
++rcar-fcp           Renesas Frame Compression Processor
++rcar_fdp1          Renesas Fine Display Processor
++rcar_jpu           Renesas JPEG Processing Unit
++rcar-vin           R-Car Video Input (VIN)
++renesas-ceu        Renesas Capture Engine Unit (CEU)
++rockchip-rga       Rockchip Raster 2d Graphic Acceleration Unit
++s3c-camif          Samsung S3C24XX/S3C64XX SoC Camera Interface
++s5p-csis           S5P/EXYNOS MIPI-CSI2 receiver (MIPI-CSIS)
++s5p-fimc           S5P/EXYNOS4 FIMC/CAMIF camera interface
++s5p-g2d            Samsung S5P and EXYNOS4 G2D 2d graphics accelerator
++s5p-jpeg           Samsung S5P/Exynos3250/Exynos4 JPEG codec
++s5p-mfc            Samsung S5P MFC Video Codec
++sh_veu             SuperH VEU mem2mem video processing
++sh_vou             SuperH VOU video output
++stm32-dcmi         STM32 Digital Camera Memory Interface (DCMI)
++sun4i-csi          Allwinner A10 CMOS Sensor Interface Support
++sun6i-csi          Allwinner V3s Camera Sensor Interface
++sun8i-di           Allwinner Deinterlace
++sun8i-rotate       Allwinner DE2 rotation
++ti-cal             TI Memory-to-memory multimedia devices
++ti-csc             TI DVB platform devices
++ti-vpe             TI VPE (Video Processing Engine)
++venus-enc          Qualcomm Venus V4L2 encoder/decoder
++via-camera         VIAFB camera controller
++video-mux          Video Multiplexer
++vpif_display       TI DaVinci VPIF V4L2-Display
++vpif_capture       TI DaVinci VPIF video capture
++vpss               TI DaVinci VPBE V4L2-Display
++vsp1               Renesas VSP1 Video Processing Engine
++xilinx-tpg         Xilinx Video Test Pattern Generator
++xilinx-video       Xilinx Video IP (EXPERIMENTAL)
++xilinx-vtc         Xilinx Video Timing Controller
++=================  ============================================================
++
  I²C drivers
  ===========
  
-diff --git a/Documentation/admin-guide/media/other-pci-cardlist.rst b/Documentation/admin-guide/media/other-pci-cardlist.rst
-deleted file mode 100644
-index 5ae65547add0..000000000000
---- a/Documentation/admin-guide/media/other-pci-cardlist.rst
-+++ /dev/null
-@@ -1,25 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0
--
--Other PCI Hardware supported by media subsystem
--===============================================
--
--Generally, media hardware manufacturers frequently change the ancillary
--drivers, like tuners and demodulator units used, usually without
--changing the product name, revision number or specs.
--
--- Cards based on the Phillips saa7146 multimedia PCI bridge chip:
--
--  - TI AV7110 based cards (i.e. with hardware MPEG decoder):
--    - Siemens/Technotrend/Hauppauge PCI DVB card revision 1.1, 1.3, 1.5, 1.6, 2.1 (aka Hauppauge Nexus)
--  - "budget" cards (i.e. without hardware MPEG decoder):
--    - Technotrend Budget / Hauppauge WinTV-Nova PCI Cards
--    - SATELCO Multimedia PCI
--    - KNC1 DVB-S, Typhoon DVB-S, Terratec Cinergy 1200 DVB-S (no CI support)
--    - Typhoon DVB-S budget
--    - Fujitsu-Siemens Activy DVB-S budget card
--
--- Cards based on the B2C2 Inc. FlexCopII/IIb/III:
--
--  - Technisat SkyStar2 PCI DVB card revision 2.3, 2.6B, 2.6C
--
--- Experimental support for the analog module of the Siemens DVB-C PCI card
 -- 
 2.25.2
 
