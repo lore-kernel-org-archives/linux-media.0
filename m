@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E141C2D0EF
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11950C38A2B
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E845C22202
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E2B7F221F4
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1587203078;
-	bh=S9tEXRagy6hIzzSnMdAO+x1A18XxBh8RKyaCmnVJMQk=;
+	bh=rEYUmceJmAylorTV7wxdDIp+HgR66n4L26PJm5r6pBA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=BK4LC+gZ1sGzHYtycHI3tRQ030B/FxZ8Wr+ZS40xg2YWvHWL3qazDa5pjukoarp0F
-	 yPMPSbNo7XA7Ruq2jpmpXJKm2gdoJzw31j732lf9/GTrClOw2YjiJrt7d63Bye0uu0
-	 4fklfwW4lAPoga3Mzt+mOgYXW3fNh7FzZxhoT/c4=
+	b=vmDPMuKMHJWvDPO1yHvkTws9Rsru9driTcsC29sYoo/VE7fF9R/RUDiUQpKO571Nv
+	 TmexEwDVaMj4Gb5F0abFStgwISjFzSJ7y8DUjtSciw31MAWbv09xrPCamdCNMiG8d7
+	 mAEHeJu1WVJIUoY137dMfiGIxyChO2A9uaUNkbvA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725990AbgDRJoh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1725991AbgDRJoh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 18 Apr 2020 05:44:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57334 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:57328 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725960AbgDRJof (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 18 Apr 2020 05:44:35 -0400
+        id S1725856AbgDRJoe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 18 Apr 2020 05:44:34 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D512B2224F;
+        by mail.kernel.org (Postfix) with ESMTPSA id CFAEA22245;
         Sat, 18 Apr 2020 09:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587203073;
-        bh=S9tEXRagy6hIzzSnMdAO+x1A18XxBh8RKyaCmnVJMQk=;
+        bh=rEYUmceJmAylorTV7wxdDIp+HgR66n4L26PJm5r6pBA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rfKRBkRKSAZmMkKj/j8jo+P2oLPw6iMPDrwRd5NvlZLbxFgQPCLD0J2ckuzEskWAT
-         EIVVfbpsJq79sW7A/ojP6SSFVjP14Jkaa1Lcin4HVVSF2AkqhF2JgiT0txaZGYCjKh
-         1ue4Ln2EOPkx2fpX23z6DTnVj8LV4yThl6vCf75I=
+        b=N1oY8q9nmA4GlFIgSQjIKuwbb7tg6fzI89xiXgkMRd4pMSIOJc1zWPlVG64hatUrS
+         /as0ZhmgKGresJ+2Ax7c4rV/9tb2vSX1xujw/nhpCY/OBz5GIpoH/psbQL1OlVJ8U+
+         cZzU8DPQTVFlIutx5HA6lCX5jzQQipnEd5CtS98Q=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPk1W-0081OF-9j; Sat, 18 Apr 2020 11:44:30 +0200
+        id 1jPk1W-0081Ny-6Z; Sat, 18 Apr 2020 11:44:30 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 6/9] media: admin-guide: add a list of I2C drivers
-Date:   Sat, 18 Apr 2020 11:44:26 +0200
-Message-Id: <4ae78ec7cb40f27cef8035e4a40993cc8fbb842f.1587202259.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 3/9] media: admin-guide: add a list of media PCI cards
+Date:   Sat, 18 Apr 2020 11:44:23 +0200
+Message-Id: <fa2b8942a7072a7f8a7414b548fdd68530e784a7.1587202259.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <cover.1587202259.git.mchehab+huawei@kernel.org>
 References: <cover.1587202259.git.mchehab+huawei@kernel.org>
@@ -58,291 +58,115 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For completeness, let's add a list of I2C drivers.
+Instead of listing "other" PCI card list, just add a list with
+the existing drivers (not including sub-drivers).
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/admin-guide/media/cardlist.rst | 267 +++++++++++++++++++
- 1 file changed, 267 insertions(+)
+ Documentation/admin-guide/media/cardlist.rst  | 50 ++++++++++++++++++-
+ .../admin-guide/media/other-pci-cardlist.rst  | 25 ----------
+ 2 files changed, 48 insertions(+), 27 deletions(-)
+ delete mode 100644 Documentation/admin-guide/media/other-pci-cardlist.rst
 
 diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
-index f29d103c68d7..ec0e0afd8fb2 100644
+index 01d3290d7f77..93c3290ae9cc 100644
 --- a/Documentation/admin-guide/media/cardlist.rst
 +++ b/Documentation/admin-guide/media/cardlist.rst
-@@ -345,6 +345,273 @@ that comes with a tuner for North America market, and another one for
- Europe. Some drivers have a ``tuner=`` modprobe parameter to allow using a
- different tuner number in order to address such issue.
+@@ -116,6 +116,54 @@ So, several media drivers allow passing a ``card=`` parameter, in order
+ to setup a card number that would match the correct settings for an
+ specific board.
  
-+The current supported of I²C drivers (not including staging drivers) are
-+listed below.
++The current supported PCI/PCIe cards (not including staging drivers) are
++listed below\ [#]_.
 +
-+Audio decoders, processors and mixers
-+-------------------------------------
++.. [#] some of the drivers have sub-drivers, not shown at this table
 +
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+cs3308        Cirrus Logic CS3308 audio ADC
-+cs5345        Cirrus Logic CS5345 audio ADC
-+cs53l32a      Cirrus Logic CS53L32A audio ADC
-+msp3400       Micronas MSP34xx audio decoders
-+sony-btf-mpx  Sony BTF's internal MPX
-+tda1997x      NXP TDA1997x HDMI receiver
-+tda7432       Philips TDA7432 audio processor
-+tda9840       Philips TDA9840 audio processor
-+tea6415c      Philips TEA6415C audio processor
-+tea6420       Philips TEA6420 audio processor
-+tlv320aic23b  Texas Instruments TLV320AIC23B audio codec
-+tvaudio       Simple audio decoder chips
-+uda1342       Philips UDA1342 audio codec
-+vp27smpx      Panasonic VP27's internal MPX
-+wm8739        Wolfson Microelectronics WM8739 stereo audio ADC
-+wm8775        Wolfson Microelectronics WM8775 audio ADC with input mixer
-+============  ==========================================================
++================  ========================================================
++Driver            Name
++================  ========================================================
++altera-ci         Altera FPGA based CI module
++b2c2-flexcop-pci  Technisat/B2C2 Air/Sky/Cable2PC PCI
++bt878             DVB/ATSC Support for bt878 based TV cards
++bttv              BT8x8 Video For Linux
++cobalt            Cisco Cobalt
++cx18              Conexant cx23418 MPEG encoder
++cx23885           Conexant cx23885 (2388x successor)
++cx25821           Conexant cx25821
++cx88xx            Conexant 2388x (bt878 successor)
++ddbridge          Digital Devices bridge
++dm1105            SDMC DM1105 based PCI cards
++dt3155            DT3155 frame grabber
++dvb-ttpci         AV7110 cards
++earth-pt1         PT1 cards
++earth-pt3         Earthsoft PT3 cards
++hexium_gemini     Hexium Gemini frame grabber
++hexium_orion      Hexium HV-PCI6 and Orion frame grabber
++hopper            HOPPER based cards
++ipu3-cio2         Intel ipu3-cio2 driver
++ivtv              Conexant cx23416/cx23415 MPEG encoder/decoder
++ivtvfb            Conexant cx23415 framebuffer
++mantis            MANTIS based cards
++meye              Sony Vaio Picturebook Motion Eye
++mxb               Siemens-Nixdorf 'Multimedia eXtension Board'
++netup-unidvb      NetUP Universal DVB card
++ngene             Micronas nGene
++pluto2            Pluto2 cards
++saa7134           Philips SAA7134
++saa7164           NXP SAA7164
++smipcie           SMI PCIe DVBSky cards
++solo6x10          Bluecherry / Softlogic 6x10 capture cards (MPEG-4/H.264)
++sta2x11_vip       STA2X11 VIP Video For Linux
++tw5864            Techwell TW5864 video/audio grabber and encoder
++tw686x            Intersil/Techwell TW686x
++tw68              Techwell tw68x Video For Linux
++================  ========================================================
 +
-+Audio/Video compression chips
-+-----------------------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+saa6752hs     Philips SAA6752HS MPEG-2 Audio/Video Encoder
-+============  ==========================================================
-+
-+Camera sensor devices
-+---------------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+et8ek8        ET8EK8 camera sensor
-+hi556         Hynix Hi-556 sensor
-+imx214        Sony IMX214 sensor
-+imx219        Sony IMX219 sensor
-+imx258        Sony IMX258 sensor
-+imx274        Sony IMX274 sensor
-+imx290        Sony IMX290 sensor
-+imx319        Sony IMX319 sensor
-+imx355        Sony IMX355 sensor
-+m5mols        Fujitsu M-5MOLS 8MP sensor
-+mt9m001       mt9m001
-+mt9m032       MT9M032 camera sensor
-+mt9m111       mt9m111, mt9m112 and mt9m131
-+mt9p031       Aptina MT9P031
-+mt9t001       Aptina MT9T001
-+mt9t112       Aptina MT9T111/MT9T112
-+mt9v011       Micron mt9v011 sensor
-+mt9v032       Micron MT9V032 sensor
-+mt9v111       Aptina MT9V111 sensor
-+noon010pc30   Siliconfile NOON010PC30 sensor
-+ov13858       OmniVision OV13858 sensor
-+ov2640        OmniVision OV2640 sensor
-+ov2659        OmniVision OV2659 sensor
-+ov2680        OmniVision OV2680 sensor
-+ov2685        OmniVision OV2685 sensor
-+ov5640        OmniVision OV5640 sensor
-+ov5645        OmniVision OV5645 sensor
-+ov5647        OmniVision OV5647 sensor
-+ov5670        OmniVision OV5670 sensor
-+ov5675        OmniVision OV5675 sensor
-+ov5695        OmniVision OV5695 sensor
-+ov6650        OmniVision OV6650 sensor
-+ov7251        OmniVision OV7251 sensor
-+ov7640        OmniVision OV7640 sensor
-+ov7670        OmniVision OV7670 sensor
-+ov772x        OmniVision OV772x sensor
-+ov7740        OmniVision OV7740 sensor
-+ov8856        OmniVision OV8856 sensor
-+ov9640        OmniVision OV9640 sensor
-+ov9650        OmniVision OV9650/OV9652 sensor
-+rj54n1cb0c    Sharp RJ54N1CB0C sensor
-+s5c73m3       Samsung S5C73M3 sensor
-+s5k4ecgx      Samsung S5K4ECGX sensor
-+s5k5baf       Samsung S5K5BAF sensor
-+s5k6a3        Samsung S5K6A3 sensor
-+s5k6aa        Samsung S5K6AAFX sensor
-+smiapp        SMIA++/SMIA sensor
-+sr030pc30     Siliconfile SR030PC30 sensor
-+vs6624        ST VS6624 sensor
-+============  ==========================================================
-+
-+Flash devices
-+-------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+adp1653       ADP1653 flash
-+lm3560        LM3560 dual flash driver
-+lm3646        LM3646 dual flash driver
-+============  ==========================================================
-+
-+IR I2C driver
-+-------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+ir-kbd-i2c    I2C module for IR
-+============  ==========================================================
-+
-+Lens drivers
-+------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+ad5820        AD5820 lens voice coil
-+ak7375        AK7375 lens voice coil
-+dw9714        DW9714 lens voice coil
-+dw9807-vcm    DW9807 lens voice coil
-+============  ==========================================================
-+
-+Miscellaneous helper chips
-+--------------------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+video-i2c     I2C transport video
-+m52790        Mitsubishi M52790 A/V switch
-+st-mipid02    STMicroelectronics MIPID02 CSI-2 to PARALLEL bridge
-+ths7303       THS7303/53 Video Amplifier
-+============  ==========================================================
-+
-+RDS decoders
-+------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+saa6588       SAA6588 Radio Chip RDS decoder
-+============  ==========================================================
-+
-+SDR tuner chips
-+---------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+max2175       Maxim 2175 RF to Bits tuner
-+============  ==========================================================
-+
-+Video and audio decoders
-+------------------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+cx25840       Conexant CX2584x audio/video decoders
-+saa717x       Philips SAA7171/3/4 audio/video decoders
-+============  ==========================================================
-+
-+Video decoders
-+--------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+adv7180       Analog Devices ADV7180 decoder
-+adv7183       Analog Devices ADV7183 decoder
-+adv748x       Analog Devices ADV748x decoder
-+adv7604       Analog Devices ADV7604 decoder
-+adv7842       Analog Devices ADV7842 decoder
-+bt819         BT819A VideoStream decoder
-+bt856         BT856 VideoStream decoder
-+bt866         BT866 VideoStream decoder
-+ks0127        KS0127 video decoder
-+ml86v7667     OKI ML86V7667 video decoder
-+saa7110       Philips SAA7110 video decoder
-+saa7115       Philips SAA7111/3/4/5 video decoders
-+tc358743      Toshiba TC358743 decoder
-+tvp514x       Texas Instruments TVP514x video decoder
-+tvp5150       Texas Instruments TVP5150 video decoder
-+tvp7002       Texas Instruments TVP7002 video decoder
-+tw2804        Techwell TW2804 multiple video decoder
-+tw9903        Techwell TW9903 video decoder
-+tw9906        Techwell TW9906 video decoder
-+tw9910        Techwell TW9910 video decoder
-+vpx3220       vpx3220a, vpx3216b & vpx3214c video decoders
-+============  ==========================================================
-+
-+Video encoders
-+--------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+ad9389b       Analog Devices AD9389B encoder
-+adv7170       Analog Devices ADV7170 video encoder
-+adv7175       Analog Devices ADV7175 video encoder
-+adv7343       ADV7343 video encoder
-+adv7393       ADV7393 video encoder
-+adv7511-v4l2  Analog Devices ADV7511 encoder
-+ak881x        AK8813/AK8814 video encoders
-+saa7127       Philips SAA7127/9 digital video encoders
-+saa7185       Philips SAA7185 video encoder
-+ths8200       Texas Instruments THS8200 video encoder
-+============  ==========================================================
-+
-+Video improvement chips
-+-----------------------
-+
-+============  ==========================================================
-+Driver        Name
-+============  ==========================================================
-+upd64031a     NEC Electronics uPD64031A Ghost Reduction
-+upd64083      NEC Electronics uPD64083 3-Dimensional Y/C separation
-+============  ==========================================================
-+
-+Tuner drivers
-+-------------
-+
-+============  ==================================================
-+Driver        Name
-+============  ==================================================
-+e4000         Elonics E4000 silicon tuner
-+fc0011        Fitipower FC0011 silicon tuner
-+fc0012        Fitipower FC0012 silicon tuner
-+fc0013        Fitipower FC0013 silicon tuner
-+fc2580        FCI FC2580 silicon tuner
-+it913x        ITE Tech IT913x silicon tuner
-+m88rs6000t    Montage M88RS6000 internal tuner
-+max2165       Maxim MAX2165 silicon tuner
-+mc44s803      Freescale MC44S803 Low Power CMOS Broadband tuners
-+msi001        Mirics MSi001
-+mt2060        Microtune MT2060 silicon IF tuner
-+mt2063        Microtune MT2063 silicon IF tuner
-+mt20xx        Microtune 2032 / 2050 tuners
-+mt2131        Microtune MT2131 silicon tuner
-+mt2266        Microtune MT2266 silicon tuner
-+mxl301rf      MaxLinear MxL301RF tuner
-+mxl5005s      MaxLinear MSL5005S silicon tuner
-+mxl5007t      MaxLinear MxL5007T silicon tuner
-+qm1d1b0004    Sharp QM1D1B0004 tuner
-+qm1d1c0042    Sharp QM1D1C0042 tuner
-+qt1010        Quantek QT1010 silicon tuner
-+r820t         Rafael Micro R820T silicon tuner
-+si2157        Silicon Labs Si2157 silicon tuner
-+tuner-types   Simple tuner support
-+tda18212      NXP TDA18212 silicon tuner
-+tda18218      NXP TDA18218 silicon tuner
-+tda18250      NXP TDA18250 silicon tuner
-+tda18271      NXP TDA18271 silicon tuner
-+tda827x       Philips TDA827X silicon tuner
-+tda8290       TDA 8290/8295 + 8275(a)/18271 tuner combo
-+tda9887       TDA 9885/6/7 analog IF demodulator
-+tea5761       TEA 5761 radio tuner
-+tea5767       TEA 5767 radio tuner
-+tua9001       Infineon TUA9001 silicon tuner
-+tuner-xc2028  XCeive xc2028/xc3028 tuners
-+xc4000        Xceive XC4000 silicon tuner
-+xc5000        Xceive XC5000 silicon tuner
-+============  ==================================================
++Some of those drivers support multiple devices, as shown at the card
++lists below:
 +
  .. toctree::
  	:maxdepth: 1
  
+@@ -127,8 +175,6 @@ specific board.
+ 	saa7134-cardlist
+ 	saa7164-cardlist
+ 
+-	other-pci-cardlist
+-
+ I²C drivers
+ ===========
+ 
+diff --git a/Documentation/admin-guide/media/other-pci-cardlist.rst b/Documentation/admin-guide/media/other-pci-cardlist.rst
+deleted file mode 100644
+index 5ae65547add0..000000000000
+--- a/Documentation/admin-guide/media/other-pci-cardlist.rst
++++ /dev/null
+@@ -1,25 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-Other PCI Hardware supported by media subsystem
+-===============================================
+-
+-Generally, media hardware manufacturers frequently change the ancillary
+-drivers, like tuners and demodulator units used, usually without
+-changing the product name, revision number or specs.
+-
+-- Cards based on the Phillips saa7146 multimedia PCI bridge chip:
+-
+-  - TI AV7110 based cards (i.e. with hardware MPEG decoder):
+-    - Siemens/Technotrend/Hauppauge PCI DVB card revision 1.1, 1.3, 1.5, 1.6, 2.1 (aka Hauppauge Nexus)
+-  - "budget" cards (i.e. without hardware MPEG decoder):
+-    - Technotrend Budget / Hauppauge WinTV-Nova PCI Cards
+-    - SATELCO Multimedia PCI
+-    - KNC1 DVB-S, Typhoon DVB-S, Terratec Cinergy 1200 DVB-S (no CI support)
+-    - Typhoon DVB-S budget
+-    - Fujitsu-Siemens Activy DVB-S budget card
+-
+-- Cards based on the B2C2 Inc. FlexCopII/IIb/III:
+-
+-  - Technisat SkyStar2 PCI DVB card revision 2.3, 2.6B, 2.6C
+-
+-- Experimental support for the analog module of the Siemens DVB-C PCI card
 -- 
 2.25.2
 
