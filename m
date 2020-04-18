@@ -2,84 +2,135 @@ Return-Path: <SRS0=Hp3j=6C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 336ADC352BE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0B1CC38A2C
 	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1401122202
+	by mail.kernel.org (Postfix) with ESMTP id 916FA2220A
 	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1587203075;
-	bh=CMBQFZwbjLmXIAcXmO3eaQpDCWT50kbSHGAweYwNzCg=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=xf04+vC1V+qLg9yfwzLNOvEFsJQFlg2tnm3lYR++HGP3jsDg082ce43K3i5v8iAab
-	 eKLcIPc2Dj0IJl1zYKa++n24FLWa6E/5478/5FIpx3TsWobJSg3xsjLtJViDJgH9yD
-	 ifqWFLRQsdhx8oHgWDK38jgyXZhq2++k+bYS4+xI=
+	bh=QZk2xlQqSFJH5vFVd8OdpuhfFsMpDoLSMQB4JhKcjcc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ISkPD7kPiOyKsKrNFiXBMoFLR22fUOqIIcXgCfh++rtC9UdDL3rATmm0hxLqqQnL7
+	 VZRVjRH2BPRAzsAzK06qBAfcr8IGa6Gt46WdDWFcQlHe5Me/L/2JluiB8qfcDy4CRH
+	 rg/S7a4sGprTkKK8zLkk0vf9SKnF1VqBUrtorReE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725982AbgDRJoe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1725983AbgDRJoe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 18 Apr 2020 05:44:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57306 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:57330 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725862AbgDRJod (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 18 Apr 2020 05:44:33 -0400
+        id S1725949AbgDRJoe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 18 Apr 2020 05:44:34 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C9F4421D93;
+        by mail.kernel.org (Postfix) with ESMTPSA id D6B8022250;
         Sat, 18 Apr 2020 09:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587203073;
-        bh=CMBQFZwbjLmXIAcXmO3eaQpDCWT50kbSHGAweYwNzCg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dOv9B9itdv7k3uZtrhZ/DSRyRltwbJJjTDbYI5wc4UPdPLCzjkxlAL+8+aWWefL86
-         W4of6nDOB68YU5YExAzgzK1QIYxQFw83jJd4+m0caJmJ5kQcjJzSRlRFZnOswakNTS
-         i/VMGA3vt+oN2tyCMAQAwe+44DfP1Z2SMOhtZB0c=
+        bh=QZk2xlQqSFJH5vFVd8OdpuhfFsMpDoLSMQB4JhKcjcc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EADDfDDf0YrWQSa1EXqZG/3eqzD4tt0LwXHHCqFBJwQwhRpQlIYPNQUsrbOjyazgs
+         LmI0H9kY5aqNVeQoY7a7tdXfjzzqoKC5GbnJTOFRX3xPws3/YZ5bbGPsRznSSCdHkq
+         csJILl3znX8byVj0Nry05SlUvHl3DhF8QOVObbfU=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPk1W-0081Nn-2O; Sat, 18 Apr 2020 11:44:30 +0200
+        id 1jPk1W-0081OP-CQ; Sat, 18 Apr 2020 11:44:30 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 0/9]  More media admin-guide documentation improvements (part 2)
-Date:   Sat, 18 Apr 2020 11:44:20 +0200
-Message-Id: <cover.1587202259.git.mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 8/9] media: admin-guide: add card lists for radio and firewire
+Date:   Sat, 18 Apr 2020 11:44:28 +0200
+Message-Id: <8daeb0a0a2f57252cd6032a0d1978514da38aa8b.1587202259.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
+In-Reply-To: <cover.1587202259.git.mchehab+huawei@kernel.org>
+References: <cover.1587202259.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series complement the series I sent on Friday, improving the media
-cards list.
+Document the supported radio devices, plus document the
+firewire driver.
 
-After this series, all non-staging main drivers should be documented there.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/admin-guide/media/cardlist.rst | 54 ++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-Mauro Carvalho Chehab (9):
-  media: admin-guide: split DVB cards.rst
-  media: admin-guide: replace the frontend drivers list
-  media: admin-guide: add a list of media PCI cards
-  media: admin-guide: add a table with USB drivers
-  media: admin-guide: add a list of platform drivers
-  media: admin-guide: add a list of I2C drivers
-  media: admin-guide: add SPI cards to platform drivers
-  media: admin-guide: add card lists for radio and firewire
-  media: admin-guide: add test-drivers
-
- Documentation/admin-guide/media/cardlist.rst  | 557 +++++++++++++++++-
- Documentation/admin-guide/media/cards.rst     | 146 -----
- .../admin-guide/media/frontend-cardlist.rst   | 226 +++++++
- Documentation/admin-guide/media/index.rst     |   1 -
- 4 files changed, 780 insertions(+), 150 deletions(-)
- delete mode 100644 Documentation/admin-guide/media/cards.rst
- create mode 100644 Documentation/admin-guide/media/frontend-cardlist.rst
-
+diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
+index cd00154ea623..99f6a43910b7 100644
+--- a/Documentation/admin-guide/media/cardlist.rst
++++ b/Documentation/admin-guide/media/cardlist.rst
+@@ -338,6 +338,60 @@ Driver   Name
+ smssdio  Siano SMS1xxx based MDTV via SDIO interface
+ =======  ===========================================
+ 
++Firewire driver
++===============
++
++The media subsystem also provides a firewire driver for digital TV:
++
++=======  =====================
++Driver   Name
++=======  =====================
++firedtv  FireDTV and FloppyDTV
++=======  =====================
++
++Radio drivers
++=============
++
++There is also support for pure AM/FM radio, and even for some FM radio
++transmitters:
++
++=====================  =========================================================
++Driver                 Name
++=====================  =========================================================
++si4713                 Silicon Labs Si4713 FM Radio Transmitter
++radio-aztech           Aztech/Packard Bell Radio
++radio-cadet            ADS Cadet AM/FM Tuner
++radio-gemtek           GemTek Radio card (or compatible)
++radio-maxiradio        Guillemot MAXI Radio FM 2000 radio
++radio-miropcm20        miroSOUND PCM20 radio
++radio-aimslab          AIMSlab RadioTrack (aka RadioReveal)
++radio-rtrack2          AIMSlab RadioTrack II
++saa7706h               SAA7706H Car Radio DSP
++radio-sf16fmi          SF16-FMI/SF16-FMP/SF16-FMD Radio
++radio-sf16fmr2         SF16-FMR2/SF16-FMD2 Radio
++radio-shark            Griffin radioSHARK USB radio receiver
++shark2                 Griffin radioSHARK2 USB radio receiver
++radio-si470x-common    Silicon Labs Si470x FM Radio Receiver
++radio-si476x           Silicon Laboratories Si476x I2C FM Radio
++radio-tea5764          TEA5764 I2C FM radio
++tef6862                TEF6862 Car Radio Enhanced Selectivity Tuner
++radio-terratec         TerraTec ActiveRadio ISA Standalone
++radio-timb             Enable the Timberdale radio driver
++radio-trust            Trust FM radio card
++radio-typhoon          Typhoon Radio (a.k.a. EcoRadio)
++radio-wl1273           Texas Instruments WL1273 I2C FM Radio
++fm_drv                 ISA radio devices
++fm_drv                 ISA radio devices
++radio-zoltrix          Zoltrix Radio
++dsbr100                D-Link/GemTek USB FM radio
++radio-keene            Keene FM Transmitter USB
++radio-ma901            Masterkit MA901 USB FM radio
++radio-mr800            AverMedia MR 800 USB FM radio
++radio-raremono         Thanko's Raremono AM/FM/SW radio
++radio-si470x-usb       Silicon Labs Si470x FM Radio Receiver support with USB
++radio-usb-si4713       Silicon Labs Si4713 FM Radio Transmitter support with USB
++=====================  =========================================================
++
+ I²C drivers
+ ===========
+ 
 -- 
 2.25.2
-
 
