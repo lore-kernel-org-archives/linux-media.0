@@ -2,161 +2,127 @@ Return-Path: <SRS0=Hp3j=6C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 415F5C352BE
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C13CC352BE
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:46:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2110A21D93
-	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:44:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587203081;
-	bh=aGpKm2WP2jVgdfoHCgHrXPe6qHp7TrvhJmRUNE7rGlc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=n56GKLBFF9j3j67LqXdqC4RQPKZdKexOYcA7SLMTkPfa7olR2SCBvnuI+Ys96O4Sj
-	 j8g/qc0w8xhEo3DNUf7OmZafuMlwHz/TKw2AoiHXmTZQE026c3rKuEFt9J3S7LurqP
-	 Qm//9I9quzUIKirrSI9w4WGTjL995ErO93A6U67g=
+	by mail.kernel.org (Postfix) with ESMTP id 1B9DC214D8
+	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 09:46:03 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YtK4TUya"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726006AbgDRJoj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 18 Apr 2020 05:44:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57314 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725869AbgDRJod (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 18 Apr 2020 05:44:33 -0400
-Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CBE5522240;
-        Sat, 18 Apr 2020 09:44:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587203073;
-        bh=aGpKm2WP2jVgdfoHCgHrXPe6qHp7TrvhJmRUNE7rGlc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JUdg+mDQxRZc9dLNY7vyAty7GjGlBCJlccv5u964yR8uzDNSxaRoMjMyZOnVbeWI4
-         nD5iCY0DJZT75LIWw5/IDWzsnDiDP//r8Dju8LMmjgUokb9m1GdNobFxKVsCX30EAX
-         n8K0trLsZOR6R8O4M7Wsxcj1IUl5uWWhiI5oXdIc=
-Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jPk1W-0081O5-7c; Sat, 18 Apr 2020 11:44:30 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4/9] media: admin-guide: add a table with USB drivers
-Date:   Sat, 18 Apr 2020 11:44:24 +0200
-Message-Id: <2a083f434130498140c875f6a3eb437c9a38d07c.1587202259.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.25.2
-In-Reply-To: <cover.1587202259.git.mchehab+huawei@kernel.org>
-References: <cover.1587202259.git.mchehab+huawei@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1725987AbgDRJp7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 18 Apr 2020 05:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725869AbgDRJp7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 18 Apr 2020 05:45:59 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A08EC061A0C;
+        Sat, 18 Apr 2020 02:45:59 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id y24so5463595wma.4;
+        Sat, 18 Apr 2020 02:45:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=0UEuFIPjoNbxDYPu32NzT8SOSNkovRtH6W5cOCdsS90=;
+        b=YtK4TUya4m/vtt85dkcu1lvnVB2s3OsUYcP6cX+GWKsuw2jUIBkPqolREhwLQ4za2K
+         rKioVN1zwUIT0dvmYhXY92Qcetc3U96S38I75jT0y9Re/ljjqMOev6er9P/uFwUsQ3t3
+         w47PTc0tZhT4GLFZJfIIZU23OhR3fvEWogygDBvQfFCv5gVWbbE/3Z9fC+RfvB+elGXO
+         MDpzX8ZP8vf3/cwpwdkbRL2FQ2AgQoHln3jm057pCkbqs+ojnOdwpnzk8EOKE9pwq+wb
+         SeP4+5DjeUk4x4c7tpXQq9oxmK2uvQhXiQVWb69H2uDvUrlQiayq1Y7GW5jCNZrdwcqz
+         AiMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=0UEuFIPjoNbxDYPu32NzT8SOSNkovRtH6W5cOCdsS90=;
+        b=CcZZmI4bqrUXVt0tCJCUOa/yjR8Zm6IxM6BOzPkgePyGjKi7VFA7FwR29KucTUjRDk
+         kiH2+n0U1qHqYfVXQCRjVeY7L9EX8hKcL7064ADgHJLboL4yowZspUbdUjGyyz7CE4Du
+         HpFaU1jFRUCovPuZfl12L7ZfASMb/toM48kOWg/GH1ysyiqrYGM7Q+7e1YeAfjOF22lD
+         dPJuy0GWP9a2gj0vCxeTKOR7tBfMruSykS2Sj50p6ei30gy561InXvmuceLrCVHdnz0W
+         ScgOHskypWUAElxnsINuAOukJQBB4praaF85PqJ6ODTvUGLcdDwGrt1Y24Mya3f8pjxf
+         52Pw==
+X-Gm-Message-State: AGi0Pua8LJ7sHqYk3H0WWELn4I0kdw6ISbLMMpjr8lfKZrY3Zo1ji56d
+        d6BD4E72sAvjgNtcVFKGh6I=
+X-Google-Smtp-Source: APiQypIyMO+4/quEJujpMCvgvclxIYY0si540fnIpBwrnWIVcZg7e3h0SnEd7u0Z+EkdgrrFIVzQhw==
+X-Received: by 2002:a05:600c:21d6:: with SMTP id x22mr7837208wmj.95.1587203157912;
+        Sat, 18 Apr 2020 02:45:57 -0700 (PDT)
+Received: from felia.fritz.box ([2001:16b8:2d7a:4700:391d:588b:ee8c:e294])
+        by smtp.gmail.com with ESMTPSA id z18sm28917997wrw.41.2020.04.18.02.45.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Apr 2020 02:45:57 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, Joe Perches <joe@perches.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: adjust entries to moving CEC USB drivers
+Date:   Sat, 18 Apr 2020 11:45:46 +0200
+Message-Id: <20200418094546.6742-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Having a table with a list of all USB drivers seems worth,
-and it comes almost for free, as we can just use Kconfig
-descriptions (with some adjustments).
+Commit a81068181aad ("media: move CEC USB drivers to a separate directory")
+moved drivers/media/usb/{pulse8,rainshadow}-cec to
+drivers/media/cec/usb/{rainshadow,pulse8}, but did not adjust the entries
+in MAINTAINERS.
 
-So, add a table for that.
+Since then, ./scripts/get_maintainer.pl --self-test=patterns complains:
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+  warning: no file matches F: drivers/media/usb/pulse8-cec/*
+  warning: no file matches F: drivers/media/usb/rainshadow-cec/*
+
+Update the MAINTAINERS entries to the new file locations.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- Documentation/admin-guide/media/cardlist.rst | 78 ++++++++++++++++++++
- 1 file changed, 78 insertions(+)
+Hans, please ack.
+Mauro, please pick this non-urgent minor clean-up patch on top of the
+CEC USB driver moves.
 
-diff --git a/Documentation/admin-guide/media/cardlist.rst b/Documentation/admin-guide/media/cardlist.rst
-index 93c3290ae9cc..62375bde4755 100644
---- a/Documentation/admin-guide/media/cardlist.rst
-+++ b/Documentation/admin-guide/media/cardlist.rst
-@@ -47,6 +47,84 @@ by different products. So, several media drivers allow passing a ``card=``
- parameter, in order to setup a card number that would match the correct
- settings for an specific product type.
+applies cleanly on next-20200417
+
+This is the 'minimal' patch to address the warning.
+
+Alternatively, we could simply merge the two entries into one entry
+CEC USB (RAINSHADOW/PULSE8) DRIVERS.
+
+
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e965e5467a4d..3083282134de 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13736,7 +13736,7 @@ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/admin-guide/media/pulse8-cec.rst
+-F:	drivers/media/usb/pulse8-cec/*
++F:	drivers/media/cec/usb/pulse8/
  
-+The current supported USB cards (not including staging drivers) are
-+listed below\ [#]_.
-+
-+.. [#]
-+
-+   some of the drivers have sub-drivers, not shown at this table.
-+   In particular, gspca driver has lots of sub-drivers,
-+   for cameras not supported by the USB Video Class (UVC) driver,
-+   as shown at :doc:`gspca card list <gspca-cardlist>`.
-+
-+
-+======================  =========================================================
-+Driver                  Name
-+======================  =========================================================
-+airspy                  AirSpy
-+au0828                  Auvitek AU0828
-+b2c2-flexcop-usb        Technisat/B2C2 Air/Sky/Cable2PC USB
-+cpia2                   CPiA2 Video For Linux
-+cx231xx                 Conexant cx231xx USB video capture
-+dvb-as102               Abilis AS102 DVB receiver
-+dvb-ttusb-budget        Technotrend/Hauppauge Nova - USB devices
-+dvb-usb-a800            AVerMedia AverTV DVB-T USB 2.0 (A800)
-+dvb-usb-af9005          Afatech AF9005 DVB-T USB1.1
-+dvb-usb-af9015          Afatech AF9015 DVB-T USB2.0
-+dvb-usb-af9035          Afatech AF9035 DVB-T USB2.0
-+dvb-usb-anysee          Anysee DVB-T/C USB2.0
-+dvb-usb-au6610          Alcor Micro AU6610 USB2.0
-+dvb-usb-az6007          AzureWave 6007 and clones DVB-T/C USB2.0
-+dvb-usb-az6027          Azurewave DVB-S/S2 USB2.0 AZ6027
-+dvb-usb-ce6230          Intel CE6230 DVB-T USB2.0
-+dvb-usb-cinergyT2       Terratec CinergyT2/qanu USB 2.0 DVB-T
-+dvb-usb-cxusb           Conexant USB2.0 hybrid
-+dvb-usb-dib0700         DiBcom DiB0700
-+dvb-usb-dibusb-common   DiBcom DiB3000M-B
-+dvb-usb-dibusb-mc       DiBcom DiB3000M-C/P
-+dvb-usb-digitv          Nebula Electronics uDigiTV DVB-T USB2.0
-+dvb-usb-dtt200u         WideView WT-200U and WT-220U (pen) DVB-T
-+dvb-usb-dtv5100         AME DTV-5100 USB2.0 DVB-T
-+dvb-usb-dvbsky          DVBSky USB
-+dvb-usb-dw2102          DvbWorld & TeVii DVB-S/S2 USB2.0
-+dvb-usb-ec168           E3C EC168 DVB-T USB2.0
-+dvb-usb-gl861           Genesys Logic GL861 USB2.0
-+dvb-usb-gp8psk          GENPIX 8PSK->USB module
-+dvb-usb-lmedm04         LME DM04/QQBOX DVB-S USB2.0
-+dvb-usb-m920x           Uli m920x DVB-T USB2.0
-+dvb-usb-nova-t-usb2     Hauppauge WinTV-NOVA-T usb2 DVB-T USB2.0
-+dvb-usb-opera           Opera1 DVB-S USB2.0 receiver
-+dvb-usb-pctv452e        Pinnacle PCTV HDTV Pro USB device/TT Connect S2-3600
-+dvb-usb-rtl28xxu        Realtek RTL28xxU DVB USB
-+dvb-usb-technisat-usb2  Technisat DVB-S/S2 USB2.0
-+dvb-usb-ttusb2          Pinnacle 400e DVB-S USB2.0
-+dvb-usb-umt-010         HanfTek UMT-010 DVB-T USB2.0
-+dvb_usb_v2              Support for various USB DVB devices v2
-+dvb-usb-vp702x          TwinhanDTV StarBox and clones DVB-S USB2.0
-+dvb-usb-vp7045          TwinhanDTV Alpha/MagicBoxII, DNTV tinyUSB2, Beetle USB2.0
-+em28xx                  Empia EM28xx USB devices
-+go7007                  WIS GO7007 MPEG encoder
-+gspca                   Drivers for several USB Cameras
-+hackrf                  HackRF
-+hdpvr                   Hauppauge HD PVR
-+msi2500                 Mirics MSi2500
-+mxl111sf-tuner          MxL111SF DTV USB2.0
-+pvrusb2                 Hauppauge WinTV-PVR USB2
-+pwc                     USB Philips Cameras
-+s2250                   Sensoray 2250/2251
-+s2255drv                USB Sensoray 2255 video capture device
-+smsusb                  Siano SMS1xxx based MDTV receiver
-+stkwebcam               USB Syntek DC1125 Camera
-+tm6000-alsa             TV Master TM5600/6000/6010 audio
-+tm6000-dvb              DVB Support for tm6000 based TV cards
-+tm6000                  TV Master TM5600/6000/6010 driver
-+ttusb_dec               Technotrend/Hauppauge USB DEC devices
-+usbtv                   USBTV007 video capture
-+uvcvideo                USB Video Class (UVC)
-+zd1301                  ZyDAS ZD1301
-+zr364xx                 USB ZR364XX Camera
-+======================  =========================================================
-+
- .. toctree::
- 	:maxdepth: 1
+ PVRUSB2 VIDEO4LINUX DRIVER
+ M:	Mike Isely <isely@pobox.com>
+@@ -14152,7 +14152,7 @@ M:	Hans Verkuil <hverkuil@xs4all.nl>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+-F:	drivers/media/usb/rainshadow-cec/*
++F:	drivers/media/cec/usb/rainshadow/
  
+ RALINK MIPS ARCHITECTURE
+ M:	John Crispin <john@phrozen.org>
 -- 
-2.25.2
+2.17.1
 
