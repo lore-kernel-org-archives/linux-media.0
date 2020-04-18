@@ -2,52 +2,55 @@ Return-Path: <SRS0=Hp3j=6C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D760C352BE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B25C38A2C
 	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 10:36:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5030422202
+	by mail.kernel.org (Postfix) with ESMTP id 9296E22202
 	for <linux-media@archiver.kernel.org>; Sat, 18 Apr 2020 10:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1587206218;
-	bh=BNHwS2MybjnfNhmgbySMKz3pG0msrDqgLlQ3XxWV4qw=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=g9BBkoj6o5tcamzNYsRQG73xLSSFOjVfhnKQT80ALgpuCM643CnmxgQoxl3qKElzV
-	 ZmTGbwAi1GnlvJhXfJaL552foZagdCjVMf6Qwo8nmavjglqd++F2SpRjNtQY2aqzKx
-	 +SRj0vxLFPiNajdPvCyvjE2QZ7YkfZhxecVs2d5U=
+	bh=vP5/Rck1WrDqozyC/lEJJiqm/CNCJjvW8McfYF02WvE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=awq/Pw2TOSc6pUD+c1s58ZbwTNIIhhv1FrbNAjMxi0Ajpz+F1G7RTNozgEUuWZ6NJ
+	 DvYYMe6nFT/WzVncq32e/tqXGaYPbs2kcmPVrd4MATsqiHkUupYymNc23MZn/1IAl+
+	 T5vTyQ9Ue2z1M4fMcF7In3ClgrUpCRxX7eXKtj0M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725892AbgDRKg4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 18 Apr 2020 06:36:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40744 "EHLO mail.kernel.org"
+        id S1725893AbgDRKg5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 18 Apr 2020 06:36:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725879AbgDRKg4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1725873AbgDRKg4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 18 Apr 2020 06:36:56 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 963A82220A;
+        by mail.kernel.org (Postfix) with ESMTPSA id 9452221D79;
         Sat, 18 Apr 2020 10:36:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1587206215;
-        bh=BNHwS2MybjnfNhmgbySMKz3pG0msrDqgLlQ3XxWV4qw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=iKlvs36t+HJdhuz4Njstn7VbfjatGaLkd+mDGIvBvgGJpjlWtd3637ri8XxHKm0H8
-         GaB/OMklYlAzTg8ppbQzJF2U0g+RuPhAb3X3ml7Y1KTR09OQRJmV8fbJhtf7Sqrb9p
-         6hwJRaOG17cOxjyAYdV3Q9QIRBwxZxUdC95PoPEA=
+        bh=vP5/Rck1WrDqozyC/lEJJiqm/CNCJjvW8McfYF02WvE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tvBRs8F5jLA7qGs0rAMkuivMKfljxQkXYCIRjLGbH+zWrcnt2prm6q2HKzeuXhdld
+         Afuzecu/ked1OfxYuRK+SGYDyKyStNjB+ptlaUg7NaoyyCbNLEprbCuuL/EK3O3sH4
+         VzZel4F4Q08cGbyAglwT+G0FYw1SyeRtmETX6Z6g=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jPkqD-00838Q-IQ; Sat, 18 Apr 2020 12:36:53 +0200
+        id 1jPkqD-00838b-M4; Sat, 18 Apr 2020 12:36:53 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 0/3] Reorg the media admin-guide
-Date:   Sat, 18 Apr 2020 12:36:49 +0200
-Message-Id: <cover.1587206071.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 3/3] media: admin-guide: split driver-specific indexes to new files
+Date:   Sat, 18 Apr 2020 12:36:52 +0200
+Message-Id: <7f5d96c64d3c52fa222979e92bf030082492471e.1587206071.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
+In-Reply-To: <cover.1587206071.git.mchehab+huawei@kernel.org>
+References: <cover.1587206071.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -55,29 +58,196 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Change numberation and chapter order at the media-admin guide,
-in order to place generic documents before driver-specific ones.
+In order to better organize the main admin-guide index,
+place the driver-specific indexes on separate files.
 
-Mauro Carvalho Chehab (3):
-  media: admin-guide: bt8xx.rst: fix a broken cross-reference
-  media: admin-guide: reorganize the guide
-  media: admin-guide: split driver-specific indexes to new files
+This ensures a more consistent numbering at the main index.
 
- Documentation/admin-guide/media/bt8xx.rst     |  2 +-
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
  .../admin-guide/media/cec-drivers.rst         | 10 +++
  .../admin-guide/media/dvb-drivers.rst         | 16 ++++
- Documentation/admin-guide/media/dvb.rst       | 12 +++
- Documentation/admin-guide/media/index.rst     | 89 +++----------------
- ...{v4l-with-ir.rst => remote-controller.rst} |  9 +-
- .../admin-guide/media/v4l-drivers.rst         | 33 +++++++
- 7 files changed, 90 insertions(+), 81 deletions(-)
+ Documentation/admin-guide/media/index.rst     | 79 +------------------
+ .../admin-guide/media/v4l-drivers.rst         | 33 ++++++++
+ 4 files changed, 63 insertions(+), 75 deletions(-)
  create mode 100644 Documentation/admin-guide/media/cec-drivers.rst
  create mode 100644 Documentation/admin-guide/media/dvb-drivers.rst
- create mode 100644 Documentation/admin-guide/media/dvb.rst
- rename Documentation/admin-guide/media/{v4l-with-ir.rst => remote-controller.rst} (96%)
  create mode 100644 Documentation/admin-guide/media/v4l-drivers.rst
 
+diff --git a/Documentation/admin-guide/media/cec-drivers.rst b/Documentation/admin-guide/media/cec-drivers.rst
+new file mode 100644
+index 000000000000..8d9686c08df9
+--- /dev/null
++++ b/Documentation/admin-guide/media/cec-drivers.rst
+@@ -0,0 +1,10 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=================================
++CEC driver-specific documentation
++=================================
++
++.. toctree::
++	:maxdepth: 2
++
++	pulse8-cec
+diff --git a/Documentation/admin-guide/media/dvb-drivers.rst b/Documentation/admin-guide/media/dvb-drivers.rst
+new file mode 100644
+index 000000000000..8df637c375f9
+--- /dev/null
++++ b/Documentation/admin-guide/media/dvb-drivers.rst
+@@ -0,0 +1,16 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++========================================
++Digital TV driver-specific documentation
++========================================
++
++.. toctree::
++	:maxdepth: 2
++
++	avermedia
++	bt8xx
++	lmedm04
++	opera-firmware
++	technisat
++	ttusb-dec
++	zr364xx
+diff --git a/Documentation/admin-guide/media/index.rst b/Documentation/admin-guide/media/index.rst
+index 05ddd4930699..6e0d2bae7154 100644
+--- a/Documentation/admin-guide/media/index.rst
++++ b/Documentation/admin-guide/media/index.rst
+@@ -28,7 +28,7 @@ The media subsystem
+         Table of Contents
+ 
+ .. toctree::
+-	:maxdepth: 5
++	:maxdepth: 2
+ 	:numbered:
+ 
+ 	intro
+@@ -40,80 +40,9 @@ The media subsystem
+ 
+ 	cardlist
+ 
+-
+-.. _uapi-v4l-drivers:
+-
+-Video4Linux (V4L) driver-specific documentation
+-===============================================
+-
+-.. only:: html
+-
+-    .. class:: toc-title
+-
+-        Table of Contents
+-
+-.. toctree::
+-	:maxdepth: 5
+-	:numbered:
+-
+-	bttv
+-	cafe_ccic
+-	cpia2
+-	cx88
+-	davinci-vpbe
+-	fimc
+-	imx
+-	imx7
+-	ipu3
+-	ivtv
+-	meye
+-	omap3isp
+-	omap4_camera
+-	philips
+-	qcom_camss
+-	rcar-fdp1
+-	saa7134
+-	si470x
+-	si4713
+-	si476x
+-	vimc
+-	vivid
+-
+-Digital TV driver-specific documentation
+-========================================
+-
+-.. only:: html
+-
+-    .. class:: toc-title
+-
+-        Table of Contents
+-
+-.. toctree::
+-	:maxdepth: 5
+-	:numbered:
+-
+-	avermedia
+-	bt8xx
+-	lmedm04
+-	opera-firmware
+-	technisat
+-	ttusb-dec
+-	zr364xx
+-
+-CEC driver-specific documentation
+-=================================
+-
+-.. only:: html
+-
+-    .. class:: toc-title
+-
+-        Table of Contents
+-
+-.. toctree::
+-	:maxdepth: 5
+-	:numbered:
+-
+-	pulse8-cec
++	v4l-drivers
++	dvb-drivers
++	cec-drivers
+ 
+ **Copyright** |copy| 1999-2020 : LinuxTV Developers
+ 
+diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
+new file mode 100644
+index 000000000000..251cc4ede0b6
+--- /dev/null
++++ b/Documentation/admin-guide/media/v4l-drivers.rst
+@@ -0,0 +1,33 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. _uapi-v4l-drivers:
++
++===============================================
++Video4Linux (V4L) driver-specific documentation
++===============================================
++
++.. toctree::
++	:maxdepth: 2
++
++	bttv
++	cafe_ccic
++	cpia2
++	cx88
++	davinci-vpbe
++	fimc
++	imx
++	imx7
++	ipu3
++	ivtv
++	meye
++	omap3isp
++	omap4_camera
++	philips
++	qcom_camss
++	rcar-fdp1
++	saa7134
++	si470x
++	si4713
++	si476x
++	vimc
++	vivid
 -- 
 2.25.2
-
 
