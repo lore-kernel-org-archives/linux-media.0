@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A61C3C3815B
-	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 12:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF57AC54FD2
+	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 12:56:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 779DE206D4
-	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 12:35:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4066C2078E
+	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 12:56:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="hMC5fPtH"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="GZVai+Le"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726720AbgDTMf3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 20 Apr 2020 08:35:29 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:44189 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726020AbgDTMf2 (ORCPT
+        id S1729742AbgDTM4s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 20 Apr 2020 08:56:48 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:43991 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728619AbgDTMos (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 20 Apr 2020 08:35:28 -0400
+        Mon, 20 Apr 2020 08:44:48 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id QVdyj1DbK7xncQVe1jHL0m; Mon, 20 Apr 2020 14:35:26 +0200
+        id QVn2j1Gon7xncQVn5jHMy6; Mon, 20 Apr 2020 14:44:47 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1587386126; bh=TYQaLelNi9MWGfI9Z7M5ED5ZfZMCmcNT26bG27WSM5Y=;
+        t=1587386687; bh=6V/RHokHlkqZC2wGhrEgZqhKv5p6/QpIW01iSKeg7Ag=;
         h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=hMC5fPtHNQejw/terlclkS13nA0iINFrrlBCmAyb8OMK7lbBOU1tCm/rzu/z92RQ6
-         LbJZOHr/wFBMV0x4mBT6uTjFoPMEz3AiVYHml5E2GrCbrK716QaggrWiG4iWTztYbJ
-         yG91ETfzpinJu1bppeD46qxb2pOBhOf0GxYcoLwXIKu0DCbc2/cA58sPN0pTa1vZNv
-         0riT3wzID4N8Gza+H8XsqL8Yz6J4AFzfEigCjWj95BXImRyXX1NJhFnY5TmnM1jhyE
-         UMiyESgfeuZL9GkkR3i7O/M5ErM0k2Dq8eOkaDKVadTJc7gtORZFDAAXpGYD6h2hEK
-         ZGUQkGHsFxL5w==
+        b=GZVai+LeMdDkPW/+0g4y1+VN6DJOhSHdhDfoBl/4MVN1PIEWUII4nYcGpy8Gz++81
+         LQkRSn2PG7IHOJWepdLHG8jhPAFLDYoinqgBshJoQT1s+VT/bM7tY0f1vmbUvkH4UR
+         veH4xWqRTWZj3j9E5mK8lSVGlKEOdHloq2HKJHUVpyzxr2rK7ArsHWsc/lU/1PqZ4Z
+         R7rawfbMB0l8Fq8wirmDJ7Plq5B4KwFpOvLS2DR+LlPjkd6An8pv4XpOwnz5nV3ugh
+         /JbbEVSoTFuXJd6NRMCzUf5MYncieQ5rF6Y5p/6MjlxR1ijlcsDklIj+GouIr+T6jJ
+         OB93MTKjtmv2A==
 Subject: Re: How about a v4l-utils-1.20 release?
 To:     Sean Young <sean@mess.org>, Gregor Jasny <gjasny@googlemail.com>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -43,8 +43,8 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
 References: <818465d4-3665-5af0-0136-2090edbb4eb1@googlemail.com>
  <20200420121942.GA22485@gofer.mess.org>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <f37d4c89-73cb-6efb-ce6b-21a6ae89c559@xs4all.nl>
-Date:   Mon, 20 Apr 2020 14:35:22 +0200
+Message-ID: <f6a2df46-75f8-1481-3a1c-fcd53032c89f@xs4all.nl>
+Date:   Mon, 20 Apr 2020 14:44:44 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
@@ -52,9 +52,9 @@ In-Reply-To: <20200420121942.GA22485@gofer.mess.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfKWU3hbY0xBPB++4ZMKWPHneHZA1ijf+wyvaLFYKn4GhVPPMt9qNYEAv8kUu+ghRwe1rpQTid2WBTUYxCcKTwKmHAoZFP63c9kaWiCUtnR9btffDWASn
- 9XdlWRmQX4cQzjmhE1PRjb65y9alfhXhIPauGni2qGQyrx/qQcyvtBXfR8heY6Dv8wh86nrE+0GApOEDudtyTHps7VA73JmgAZPfPSl97vmBf6b6gPyvMlAN
- idlsesN4w+6qARsVNannS0PMLEaWTzbZw30L1rwA05iIPmEdyRI4FO/kWtleYdvfmzs9MrYCK4EzWt7/efJiaCJXbfo4aDV3y59xp+RMCnk=
+X-CMAE-Envelope: MS4wfDfjThlSs7yJsLwVVCPWYGdzpy+yNFNvfuXj9ev2IuV3khcv7rAIEqsKTd7smDDOqNu/AB0TzD3TnpZyrqnNItQH0zqKxZvnBM3ty98Ohz4HMACevUQp
+ yj0xTQ924hd0nFpMNhvpJ3OddmtGTIie//3BXxIfSi5plyWIzrKykJ7Ik6FVk7fxBtahn8rnRY195m7mmoBXozZeigqBsOnAGSnJiU/g7zVX8I6S920lGLQD
+ LNvr+MEH1NpgeTBO06WlrtN9q08XTEUtI56EHHnQMXwXG6angO5iUduch5tWYRXu6rj7tTPsinA4lI09EV+ta8jl/TLLppELJxpdkp6M9LE=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -74,18 +74,15 @@ On 20/04/2020 14:19, Sean Young wrote:
 > There is nothing from me. There are few patches on the list from Rosen Penev,
 > cleaning up various stuff found with clang.
 
-Ah yes, let me look at those first. I'll do that today.
-
-> 
-> Otherwise I guess there is the meson build system, but I don't know how far
-> out that is.
-
-That needs more work.
+Merged this.
 
 Regards,
 
 	Hans
 
+> 
+> Otherwise I guess there is the meson build system, but I don't know how far
+> out that is.
 > 
 > Thanks,
 > 
