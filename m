@@ -7,95 +7,79 @@ X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 679C0C3815B
-	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 12:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E278C3815B
+	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 12:57:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 43AE0206DD
-	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 12:57:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4793206DD
+	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 12:57:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="BZ9BTNP2"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="o/vAOkzl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728593AbgDTMoe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 20 Apr 2020 08:44:34 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:43991 "EHLO
+        id S1728520AbgDTM5o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 20 Apr 2020 08:57:44 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:44303 "EHLO
         lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728578AbgDTMoa (ORCPT
+        by vger.kernel.org with ESMTP id S1728461AbgDTM5n (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 20 Apr 2020 08:44:30 -0400
+        Mon, 20 Apr 2020 08:57:43 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id QVmjj1GjW7xncQVmmjHMup; Mon, 20 Apr 2020 14:44:28 +0200
+        id QVzWj1LO47xncQVzZjHPwQ; Mon, 20 Apr 2020 14:57:42 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1587386668; bh=99Ly0Eh+cTwdb71NoygIFcYZRpxvSpXWdEEzrpxjpTY=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+        t=1587387462; bh=oyD9pM6t9PoIRmc9zSwyeEoXI879f9HMWGF4aWcHdpg=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=BZ9BTNP2y6Y6juxB/z4EhhckusiAWZJN5mFUjIWcmNMb8o2QGqPjVMPivi9DVmVHt
-         dZKmEbmzkcoPaAQup1mXnwrjTs6B6+5MXQdndPb/2KvBHdpeMW7QA1PvE82sFbUDx7
-         twOvu015zlycVLmlizwYBqqcwzTetofx4zOu8OjBOvhpHVFlADaDwqrgSbtolkXukr
-         QQ4uu2hz1Ufrw7RlntJi9a9lq+/9+P6eRwqgn6VVVOu2uYlYkpyRvZlLryOnZEGUx6
-         pYtAMxmnjDtVc8zZS5ngbcXYtFWomawgVPDlbsG5PVvFX/6M7yji1NtA59hfFnYdw3
-         rjhqY228q3uQw==
-Subject: Re: [PATCH] toml: fix misleading identation
-To:     Rosen Penev <rosenp@gmail.com>, linux-media@vger.kernel.org
-References: <20200417211641.4689-1-rosenp@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <08194043-cce9-e949-0078-ae9e12e0517f@xs4all.nl>
-Date:   Mon, 20 Apr 2020 14:44:25 +0200
+        b=o/vAOkzlVFIg0C7svkfnDhzk89tsVaizRr+2p6I06BtNMAbE9jm3P+keOMugwrV8e
+         aemzLyrhyZiFr/8HpUhujUg9Mm8VPU3ALNmUf9tMRTvRI05AH+8dR1Hlak1n1XBiwa
+         FiDL2BKZrXRPL0pJkMcgcRtD7/AYinJWvaXCnXfOPH9MOsknyPvF/x7mwErbvLnJ/+
+         p7iyvJJPSI7ayDfdhV/6KZj8AvHjJOin6sMw/gDhK5/0gPVYYElP+XB4aLfZ93IaJD
+         c1i+C4MbYgie5CXEnmWBUeLNfu8UVy8d75+i2woCVoMkV8bISicxez9xroX8juVXD9
+         Pxc3jUYCsxO7w==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH] vidioc-reqbufs/create-bufs.rst: fix typo
+Message-ID: <4f3d3be1-3e26-e920-79f1-faafb2246a5e@xs4all.nl>
+Date:   Mon, 20 Apr 2020 14:57:38 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200417211641.4689-1-rosenp@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfO/15qnmN6HljgNQAx+IFLRPgeZWUJFb3VtxyX5PDdVDG/0YG3FsnBnVfFrabWjPXA6Z87jveIVr4JGL5NG5CWDy9Xl/FFiHACjLVzDyEN4TfnrwCQMK
- dJ7ntqeZBj5jnyhZfCXiFVlc/o/SgcvVtqkrmsPYKkb6322jUc9gP1JFvNpPQ4xy1hSdDcLdCo54vswD/8QGD87rivvId0VVAPg=
+X-CMAE-Envelope: MS4wfBpmNsclfKmPzsjlU26NSrD/U8arBGfmRIi8/jUXLWQ6Wc3I1VxND+0x8fj9EUVjPXx+VCq9u7hanJdRP5WgsSNL77SSGccRfd2ZhQCxA0iBTBKlKUiB
+ vFLG5U5Xp2W5VaWYH7OuhYqbycliyGU5dMaxQCX3e0u6oZNN/+Mw3z/P385bKbA1uT/htksVouQP3Q==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 17/04/2020 23:16, Rosen Penev wrote:
-> Found with gcc's -Wmisleading-indentation
-> 
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+any others capabilities -> any other capabilities
 
-I've merged this with the '[PATCH] treewide: do not use return after else'
-patch.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst b/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
+index bd580232be10..e1afc5b504c2 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-create-bufs.rst
+@@ -113,7 +113,7 @@ than the number requested.
+       - Set by the driver. If 0, then the driver doesn't support
+         capabilities. In that case all you know is that the driver is
+ 	guaranteed to support ``V4L2_MEMORY_MMAP`` and *might* support
+-	other :c:type:`v4l2_memory` types. It will not support any others
++	other :c:type:`v4l2_memory` types. It will not support any other
+ 	capabilities. See :ref:`here <v4l2-buf-capabilities>` for a list of the
+ 	capabilities.
 
-I'll still mark it as Accepted in patchwork, though.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+index 79884bb4893b..b6d52083707b 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+@@ -104,7 +104,7 @@ aborting or finishing any DMA in progress, an implicit
+       - Set by the driver. If 0, then the driver doesn't support
+         capabilities. In that case all you know is that the driver is
+ 	guaranteed to support ``V4L2_MEMORY_MMAP`` and *might* support
+-	other :c:type:`v4l2_memory` types. It will not support any others
++	other :c:type:`v4l2_memory` types. It will not support any other
+ 	capabilities.
 
-Regards,
-
-	Hans
-
-> ---
->  utils/common/toml.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/utils/common/toml.c b/utils/common/toml.c
-> index dc9868a2..68cebef9 100644
-> --- a/utils/common/toml.c
-> +++ b/utils/common/toml.c
-> @@ -1697,7 +1697,8 @@ int toml_rtots(const char* src_, toml_timestamp_t* ret)
->          for (i = 0; i < 10; i++, p++) {
->              int xx = *p;
->              if (xx == '-') {
-> -                if (i == 4 || i == 7) continue; return -1;
-> +                if (i == 4 || i == 7) continue;
-> +                return -1;
->              }
->              if (! ('0' <= xx && xx <= '9')) return -1;
->              val = val * 10 + (xx - '0');
-> @@ -1724,7 +1725,8 @@ int toml_rtots(const char* src_, toml_timestamp_t* ret)
->      for (i = 0; i < 8; i++, p++) {
->          int xx = *p;
->          if (xx == ':') {
-> -            if (i == 2 || i == 5) continue; return -1;
-> +            if (i == 2 || i == 5) continue;
-> +            return -1;
->          }
->          if (! ('0' <= xx && xx <= '9')) return -1;
->          val = val * 10 + (xx - '0');
-> 
-
+ 	If you want to query the capabilities with a minimum of side-effects,
