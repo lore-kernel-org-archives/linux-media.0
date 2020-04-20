@@ -2,102 +2,91 @@ Return-Path: <SRS0=ZgJ+=6E=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E7E5C3A5A0
-	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 07:42:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADD00C3A5A0
+	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 07:53:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E19DF206B8
-	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 07:42:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D08D22251
+	for <linux-media@archiver.kernel.org>; Mon, 20 Apr 2020 07:53:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="k8HhJk73"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dJJMb3Aj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726036AbgDTHmB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 20 Apr 2020 03:42:01 -0400
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:1129 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725886AbgDTHmB (ORCPT
+        id S1726025AbgDTHxV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 20 Apr 2020 03:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725886AbgDTHxV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 20 Apr 2020 03:42:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1587368520; x=1618904520;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=diXxeA7g1XTByahSm1bZcJHQIm4bVeBMr5YsbeKB+8g=;
-  b=k8HhJk73yPzsd2uHAVrH7x6M4JrT5AHw9Tstv9h20jTnYLbb3ZY+60vE
-   WxoKjun8aDk1ZpZ+FKZWc51T4s2/QjQgaEbUlSdJ0x17/0wAv7wX/1wmn
-   qBE+4LKXB+Vl/bAn3RmldeH8G15A7jHpr/lFW5Xe9a+Cjsh15sd8AOOLy
-   k=;
-IronPort-SDR: AmsFB0BwD4OAWhfXLlxjCwyJV9epkON3aQtMBQZbecXGslCYlS6V1+aA3Q1QJU/BdPndTjo4D5
- 0YNf69AdKzVQ==
-X-IronPort-AV: E=Sophos;i="5.72,406,1580774400"; 
-   d="scan'208";a="27648254"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-6e2fc477.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 20 Apr 2020 07:41:46 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
-        by email-inbound-relay-2a-6e2fc477.us-west-2.amazon.com (Postfix) with ESMTPS id EE8A2A0716;
-        Mon, 20 Apr 2020 07:41:45 +0000 (UTC)
-Received: from EX13D19EUB001.ant.amazon.com (10.43.166.229) by
- EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Mon, 20 Apr 2020 07:41:45 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX13D19EUB001.ant.amazon.com (10.43.166.229) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Mon, 20 Apr 2020 07:41:44 +0000
-Received: from 8c85908914bf.ant.amazon.com (10.1.212.20) by
- mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Mon, 20 Apr 2020 07:41:40 +0000
-From:   Gal Pressman <galpress@amazon.com>
-To:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>
-CC:     <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-doc@vger.kernel.org>, Gal Pressman <galpress@amazon.com>
-Subject: [PATCH] dma-buf: Couple of documentation typo fixes
-Date:   Mon, 20 Apr 2020 10:41:15 +0300
-Message-ID: <20200420074115.23931-1-galpress@amazon.com>
-X-Mailer: git-send-email 2.26.1
+        Mon, 20 Apr 2020 03:53:21 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA34C061A0C;
+        Mon, 20 Apr 2020 00:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:To:From:Date:Sender:Reply-To:Cc:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QJwGCUa7wCPgPYyVZ5DxV4ZvIkEdmV2gQKXsGKf5JZQ=; b=dJJMb3AjgfQhbGxQCXFdtXxdQW
+        pviC+/spPzKPmWli8c91bVmHR1ta3wPHauydh5owdn5FYelLztA0ae/NRGI2z5/E2yPshZgW3VjWb
+        eWmvMZDFWi84/vpfvwL+SANKjL+iQPwnhq6f/Ja9udICcplbRj2oYKgcfcoKvUp8pIA7B6kaMC6FP
+        3T17B7Fh6NasRj4I2iiJBNqhDOIZkUo6O53jrB778YuYX71HOGkUFRCGbGsk5TYXmeq5lN9jGs3d6
+        vS+Nlg6rs7HUCOtxsHt7iwSDkGN4BHW29kjczenZdfXnjUho7Hx2L0WVRK8ngbRUeY9vfiSW431PQ
+        R7SS8Ywg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jQREs-0001zB-Bf; Mon, 20 Apr 2020 07:53:10 +0000
+Date:   Mon, 20 Apr 2020 00:53:10 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Stultz <john.stultz@linaro.org>,
+        driverdevel <devel@driverdev.osuosl.org>, nd <nd@arm.com>,
+        Todd Kjos <tkjos@android.com>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        lkml <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Anders Pedersen <anders.pedersen@arm.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Darren Hart (VMware)" <dvhart@infradead.org>,
+        =?iso-8859-1?Q?=D8rjan?= Eide <orjan.eide@arm.com>,
+        Laura Abbott <labbott@redhat.com>,
+        Martijn Coenen <maco@android.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Brauner <christian@brauner.io>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] staging: android: ion: Skip sync if not mapped
+Message-ID: <20200420075310.GA32592@infradead.org>
+References: <20200414134629.54567-1-orjan.eide@arm.com>
+ <20200414141849.55654-1-orjan.eide@arm.com>
+ <20200414142810.GA958163@kroah.com>
+ <CALAqxLX-SUhHPH6ewt-s9cEMc8DtMTgXem=JruAkLofuJf1syg@mail.gmail.com>
+ <20200416102508.GA820251@kroah.com>
+ <20200417150013.GN3456981@phenom.ffwll.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200417150013.GN3456981@phenom.ffwll.local>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix a couple of typos: "as" -> "has" and "int" -> "in".
+On Fri, Apr 17, 2020 at 05:00:13PM +0200, Daniel Vetter wrote:
+> > No one ever notices "depreciated" things, they only notice if the code
+> > is no longer there :)
+> > 
+> > So I'm all for just deleting it and seeing who even notices...
+> 
+> +1 on just deleting ion and watching if anyone notices. In case you're
+> typing that patch, here's my:
+> 
+> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-Signed-off-by: Gal Pressman <galpress@amazon.com>
----
- Documentation/driver-api/dma-buf.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+As ion ha sbeen a major pain for various tree wide changes also from me:
 
-diff --git a/Documentation/driver-api/dma-buf.rst b/Documentation/driver-api/dma-buf.rst
-index c78db28519f7..63dec76d1d8d 100644
---- a/Documentation/driver-api/dma-buf.rst
-+++ b/Documentation/driver-api/dma-buf.rst
-@@ -11,7 +11,7 @@ course not limited to GPU use cases.
- The three main components of this are: (1) dma-buf, representing a
- sg_table and exposed to userspace as a file descriptor to allow passing
- between devices, (2) fence, which provides a mechanism to signal when
--one device as finished access, and (3) reservation, which manages the
-+one device has finished access, and (3) reservation, which manages the
- shared or exclusive fence(s) associated with the buffer.
- 
- Shared DMA Buffers
-@@ -31,7 +31,7 @@ The exporter
-  - implements and manages operations in :c:type:`struct dma_buf_ops
-    <dma_buf_ops>` for the buffer,
-  - allows other users to share the buffer by using dma_buf sharing APIs,
-- - manages the details of buffer allocation, wrapped int a :c:type:`struct
-+ - manages the details of buffer allocation, wrapped in a :c:type:`struct
-    dma_buf <dma_buf>`,
-  - decides about the actual backing storage where this allocation happens,
-  - and takes care of any migration of scatterlist - for all (shared) users of
-
-base-commit: 8f3d9f354286745c751374f5f1fcafee6b3f3136
--- 
-2.26.1
-
+Acked-by: Christoph Hellwig <hch@lst.de>
