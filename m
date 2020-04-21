@@ -2,74 +2,108 @@ Return-Path: <SRS0=yO7E=6F=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4E19C54FC9
-	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 11:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E50FC54FC9
+	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 11:12:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C93382071C
-	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 11:10:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15CC22071C
+	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 11:12:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1587467571;
+	bh=bsU0LhyIipku/8tRzXhJp8uGL+PAuJZLNvNzvI7yCao=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=L9FSA3DL3dC6cm3kBxl9aNLmNC3xSmmcH16pqLwA6Q5i9PO7TJQnKwgtl8Q7R0rNn
+	 SXnH8bCRWdpaq2LLsB9K+GlM7yW5xlCF0bGVT25rm3ykofkITx9R1lZSdUYB0iQ+yo
+	 IkeKahPj5J0JBP9v7BcFFNOOXEf7G3RN2AWYXTT8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbgDULK3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Apr 2020 07:10:29 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:48316 "EHLO www.linuxtv.org"
+        id S1728510AbgDULMu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Apr 2020 07:12:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60218 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726018AbgDULK3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Apr 2020 07:10:29 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1jQqkO-00AQ9N-BZ; Tue, 21 Apr 2020 11:07:24 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1jQqp7-0000KH-76; Tue, 21 Apr 2020 11:12:17 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.8] analog support (#63131)
-Date:   Tue, 21 Apr 2020 11:12:17 +0000
-Message-Id: <20200421111217.1030-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200416140338.GA18975@gofer.mess.org>
-References: 
+        id S1726018AbgDULMt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 21 Apr 2020 07:12:49 -0400
+Received: from coco.lan (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF920206F4;
+        Tue, 21 Apr 2020 11:12:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587467569;
+        bh=bsU0LhyIipku/8tRzXhJp8uGL+PAuJZLNvNzvI7yCao=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DiXTKpdDtRJlrmxWgUU6YKSWGSjXEWSWCeTMrp8lAJ3Ta+C0fCIK+1KbqelORevvA
+         kv73wOte0xWtRpjVWU10HQNlOz34LSHClud3dxyEqeNoot4yQKU1yDp5U+kNGeGWoz
+         ZtwbqlKxw1YMHHbfPEuM/77dHyJSPe0bN+/HH/EI=
+Date:   Tue, 21 Apr 2020 13:12:44 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Steve Longerbeam <slongerbeam@gmail.com>
+Cc:     linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rui Miguel Silva <rmfrfs@gmail.com>
+Subject: Re: [PATCH v7 04/11] media: imx: utils: Handle Bayer format lookup
+ through a selection flag
+Message-ID: <20200421131244.763f82df@coco.lan>
+In-Reply-To: <20200406163905.24475-5-slongerbeam@gmail.com>
+References: <20200406163905.24475-1-slongerbeam@gmail.com>
+        <20200406163905.24475-5-slongerbeam@gmail.com>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Em Mon,  6 Apr 2020 09:38:58 -0700
+Steve Longerbeam <slongerbeam@gmail.com> escreveu:
 
-Pull request: https://patchwork.linuxtv.org/patch/63131/
-Build log: https://builder.linuxtv.org/job/patchwork/47607/
-Build time: 00:14:43
-Link: https://lore.kernel.org/linux-media/20200416140338.GA18975@gofer.mess.org
+> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> The format lookup (and enumeration) functions take a boolean flag to
+> tell if Bayer formats should be considered. This leads to hard to read
+> lines such as
+> 
+> 	return enum_format(fourcc, NULL, index, cs_sel, true, false);
+> 
+> where the boolean parameters can easily be mixed. To make the code
+> clearer, add a CS_SEL_BAYER flag that can be passed through the
+> codespace_sel parameter of the lookup functions to replace the bool
+> parameter.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> [Instead of declaring CS_SEL_ANY as a bitfield containing only
+>  CS_SEL_YUV | CS_SEL_RGB, declare CS_SEL_ANY as all of the above
+>  (YUV, RGB, BAYER). A new enum is declared for the YUV | RGB selection
+>  as CS_SEL_YUV_RGB, and that is used by sub-devices that don't support
+>  BAYER and only allow selecting and enumerating YUV or RGB encodings.
+>  CS_SEL_ANY is now only used by the CSI sub-devices and the attached
+>  capture interfaces, since only those devices support BAYER formats.]
 
-gpg: Signature made Thu 16 Apr 2020 12:17:16 PM UTC
-gpg:                using RSA key A624251A26084A9ED9E4C8B6425F639D3960FA9E
-gpg:                issuer "sean@mess.org"
-gpg: Good signature from "Sean Young <sean@mess.org>" [full]
+I'm assuming that the comments like the above on this patchset means
+that the Steve changed a patch from Laurent. The right markup
+(as stated at Documentation/process/submitting-patches.rst) is:
 
-Summary: 3 patches and/or PDF generation with issues, being 0 at build time
+	Signed-off-by: Random J Developer <random@developer.example.org>
+	[lucky@maintainer.example.org: struct foo moved from foo.c to foo.h]
+	Signed-off-by: Lucky K Maintainer <lucky@maintainer.example.org>
 
-Error/warnings:
+e. g. the above should be, instead: 
 
+	[slongerbeam@gmail.com: Instead of....]
 
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0006-media-si2157-module-debug-option-to-wait-on-signal-l.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0006-media-si2157-module-debug-option-to-wait-on-signal-l.patch
-patches/0006-media-si2157-module-debug-option-to-wait-on-signal-l.patch:83: WARNING: line over 80 characters
+Let's please stick with the standard meta-tag.
 
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0011-media-cx231xx-Add-i2c-device-analog-tuner-support.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0011-media-cx231xx-Add-i2c-device-analog-tuner-support.patch
-patches/0011-media-cx231xx-Add-i2c-device-analog-tuner-support.patch:52: CHECK: Alignment should match open parenthesis
-patches/0011-media-cx231xx-Add-i2c-device-analog-tuner-support.patch:56: CHECK: Alignment should match open parenthesis
+PS.: I'm also fixing other similar patterns on this patchset.
 
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0013-media-lgdt3306a-Add-CNR-v5-stat.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0013-media-lgdt3306a-Add-CNR-v5-stat.patch
-patches/0013-media-lgdt3306a-Add-CNR-v5-stat.patch:53: WARNING: line over 80 characters
+Regards,
+Mauro
 
+Thanks,
+Mauro
