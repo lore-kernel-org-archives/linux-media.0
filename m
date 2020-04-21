@@ -2,98 +2,104 @@ Return-Path: <SRS0=yO7E=6F=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAF6CC54FCC
-	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 00:12:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3303DC54FCB
+	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 02:59:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C127D20782
-	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 00:12:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="g7kRAz3s"
+	by mail.kernel.org (Postfix) with ESMTP id 1A59020782
+	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 02:59:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727889AbgDUAL4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 20 Apr 2020 20:11:56 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:9977 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726445AbgDUALV (ORCPT
+        id S1727019AbgDUC7s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 20 Apr 2020 22:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726793AbgDUC7r (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 20 Apr 2020 20:11:21 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e9e3a1c0001>; Mon, 20 Apr 2020 17:11:08 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 20 Apr 2020 17:11:21 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Mon, 20 Apr 2020 17:11:21 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 21 Apr
- 2020 00:11:21 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 21 Apr 2020 00:11:20 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.165.49]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e9e3a270001>; Mon, 20 Apr 2020 17:11:20 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v8 3/9] dt-bindings: clock: tegra: Add clk id for CSI TPG clock
-Date:   Mon, 20 Apr 2020 17:11:08 -0700
-Message-ID: <1587427874-3291-4-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1587427874-3291-1-git-send-email-skomatineni@nvidia.com>
-References: <1587427874-3291-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        Mon, 20 Apr 2020 22:59:47 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6AFC061A0E;
+        Mon, 20 Apr 2020 19:59:47 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id C6B722A11CD
+Message-ID: <2d1da0b9d857c5607c989be85a04c9d7d9d19b38.camel@collabora.com>
+Subject: Re: [PATCH v4] dt-bindings: rockchip-vpu: Convert bindings to
+ json-schema
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
+Cc:     devicetree@vger.kernel.org, hverkuil@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, mark.rutland@arm.com,
+        robh@kernel.org
+Date:   Mon, 20 Apr 2020 23:59:33 -0300
+In-Reply-To: <12f6d7cf-6af6-4f54-3188-65e73b703a72@gmail.com>
+References: <20200326191343.1989-1-ezequiel@collabora.com>
+         <12f6d7cf-6af6-4f54-3188-65e73b703a72@gmail.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.0-1 
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1587427868; bh=Aw2TIrfzrAVXZOn1lDfsAGIvwrb7U15QVjnSRgzRbvc=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=g7kRAz3s2CF/7se9rpbGBi6O60PjC6KsDDn7avSE63nUcIr58leTZfQutq7oDxkX9
-         sV1QZkBv98twWEOXilD6Ge7jURApiv8ioAZvQwStZci7eXAuD3SHbRwirJraFZd3V9
-         C+Uhy6Qz+Ivc4FFr6hngTltFXdtWpENfT7u5PI5rxgLL7ZYsQp526btKAEIy2GTZ2q
-         EaYxyrgfugLCIMcK7Qaud2CuvzHmpwBC4HbpQWLg6KVw9Uz5voKgznUcZa+sK+Z+1P
-         G7gOXSJOqnHbOK1b9ekRdd4B6CMaJgxlKhIOT0rVttJM9LBgYv9EOqg0EctyNvWMsW
-         OhfeqxotU+ixQ==
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Tegra210 uses PLLD out internally for CSI TPG.
+Hey Johan,
 
-This patch adds clk id for this CSI TPG clock from PLLD.
+On Mon, 2020-04-20 at 15:33 +0200, Johan Jonker wrote:
+> Hi Heiko,
+> 
+> This patch was applied by the media people Hans and Ezequil without note
+> and test I think.
+> 
 
-Acked-by: Rob Herring <robh@kernel.org>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- include/dt-bindings/clock/tegra210-car.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I did test it, but I guess something felt thru the cracks.
+If you'd be kind enough to submit a patch, that would be lovely.
 
-diff --git a/include/dt-bindings/clock/tegra210-car.h b/include/dt-bindings/clock/tegra210-car.h
-index 7a8f10b..d8909e0 100644
---- a/include/dt-bindings/clock/tegra210-car.h
-+++ b/include/dt-bindings/clock/tegra210-car.h
-@@ -351,7 +351,7 @@
- #define TEGRA210_CLK_PLL_P_OUT_XUSB 317
- #define TEGRA210_CLK_XUSB_SSP_SRC 318
- #define TEGRA210_CLK_PLL_RE_OUT1 319
--/* 320 */
-+#define TEGRA210_CLK_CSI_TPG 320
- /* 321 */
- #define TEGRA210_CLK_ISP 322
- #define TEGRA210_CLK_PLL_A_OUT_ADSP 323
--- 
-2.7.4
+Thanks!
+Ezequiel
+
+> make ARCH=arm64 dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+> 
+> Errors for example:
+> 
+>   DTC     arch/arm64/boot/dts/rockchip/rk3328-evb.dt.yaml
+>   CHECK   arch/arm64/boot/dts/rockchip/rk3328-evb.dt.yaml
+> arch/arm64/boot/dts/rockchip/rk3328-evb.dt.yaml: video-codec@ff350000:
+> interrupts: [[0, 9, 4]] is too short
+> arch/arm64/boot/dts/rockchip/rk3328-evb.dt.yaml: video-codec@ff350000:
+> interrupt-names: ['vdpu'] is too short
+> arch/arm64/boot/dts/rockchip/rk3328-evb.dt.yaml: video-codec@ff350000:
+> interrupt-names:0: 'vepu' was expected
+> 
+> See:
+> https://lore.kernel.org/lkml/20200403124316.5445-1-jbx6244@gmail.com/
+> 
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupt-names:
+> +    oneOf:
+> +      - const: vdpu
+> +      - items:
+> +        - const: vepu
+> +        - const: vdpu
+> 
+> Vs.:
+> 
+> 
+> +  interrupts:
+> +    maxItems: 2
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: vepu
+> +      - const: vdpu
+
 
