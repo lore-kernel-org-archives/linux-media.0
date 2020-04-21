@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C179C55183
-	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 13:58:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11A97C54FC9
+	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 13:58:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E1A3F20644
-	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 13:58:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EEE9C2071C
+	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 13:58:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729136AbgDUN6X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Apr 2020 09:58:23 -0400
-Received: from vsp-unauthed02.binero.net ([195.74.38.227]:37931 "EHLO
-        vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729017AbgDUN56 (ORCPT
+        id S1729163AbgDUN6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Apr 2020 09:58:33 -0400
+Received: from bin-mail-out-05.binero.net ([195.74.38.228]:37904 "EHLO
+        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728824AbgDUN54 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Apr 2020 09:57:58 -0400
-X-Halon-ID: 141dbeed-83d8-11ea-aeed-005056917f90
+        Tue, 21 Apr 2020 09:57:56 -0400
+X-Halon-ID: 126d7537-83d8-11ea-aeed-005056917f90
 Authorized-sender: niklas@soderlund.pp.se
 Received: from bismarck.berto.se (p4fca2392.dip0.t-ipconnect.de [79.202.35.146])
         by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
-        id 141dbeed-83d8-11ea-aeed-005056917f90;
-        Tue, 21 Apr 2020 15:57:46 +0200 (CEST)
+        id 126d7537-83d8-11ea-aeed-005056917f90;
+        Tue, 21 Apr 2020 15:57:44 +0200 (CEST)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Helen Koike <helen.koike@collabora.com>,
@@ -36,9 +36,9 @@ To:     Helen Koike <helen.koike@collabora.com>,
 Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v8 6/6] vimc: Make use of V4L2_CAP_IO_MC
-Date:   Tue, 21 Apr 2020 15:57:43 +0200
-Message-Id: <20200421135743.1381930-7-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v8 4/6] rcar-vin: Make use of V4L2_CAP_IO_MC
+Date:   Tue, 21 Apr 2020 15:57:41 +0200
+Message-Id: <20200421135743.1381930-5-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.26.0
 In-Reply-To: <20200421135743.1381930-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20200421135743.1381930-1-niklas.soderlund+renesas@ragnatech.se>
@@ -50,56 +50,92 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Set the V4L2_CAP_IO_MC capability flag to report this vimc
-inputs/outputs are controlled by the media graph.
+Set the V4L2_CAP_IO_MC capability flag and remove the driver specific
+vidioc_enum_input, vidioc_g_input and vidioc_s_input callbacks for the
+media controller enabled part of the driver. Also add support mbus_code
+filtering for format enumeration.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
-* Changes since v7:
-- Add check that index is not greater then 0 in
-  vimc_cap_enum_fmt_vid_cap().
-
-* Changes since v5:
-- Wrap line longer than 80 characters
+* Changes since v6
 - Implement mbus_code filtering for format enumeration
 ---
- drivers/media/test-drivers/vimc/vimc-capture.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-v4l2.c | 40 ++++++++++++---------
+ 1 file changed, 24 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vimc/vimc-capture.c b/drivers/media/test-drivers/vimc/vimc-capture.c
-index 20c2f5e281bc44ed..c63496b17b9a5370 100644
---- a/drivers/media/test-drivers/vimc/vimc-capture.c
-+++ b/drivers/media/test-drivers/vimc/vimc-capture.c
-@@ -149,7 +149,16 @@ static int vimc_cap_s_fmt_vid_cap(struct file *file, void *priv,
- static int vimc_cap_enum_fmt_vid_cap(struct file *file, void *priv,
- 				     struct v4l2_fmtdesc *f)
- {
--	const struct vimc_pix_map *vpix = vimc_pix_map_by_index(f->index);
-+	const struct vimc_pix_map *vpix;
-+
-+	if (f->mbus_code) {
-+		if (f->index > 0)
-+			return -EINVAL;
-+
-+		vpix = vimc_pix_map_by_code(f->mbus_code);
-+	} else {
-+		vpix = vimc_pix_map_by_index(f->index);
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index 5151a3cd8a6e6754..f421e25848756c97 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -343,6 +343,29 @@ static int rvin_enum_fmt_vid_cap(struct file *file, void *priv,
+ 	unsigned int i;
+ 	int matched;
+ 
++	/*
++	 * If mbus_code is set only enumerate supported pixel formats for that
++	 * bus code. Converting from YCbCr to RGB and RGB to YCbCr is possible
++	 * with VIN, so all supported YCbCr and RGB media bus codes can produce
++	 * all of the related pixel formats. If mbus_code is not set enumerate
++	 * all possible pixelformats.
++	 *
++	 * TODO: Once raw capture formats are added to the driver this needs
++	 * to be extended so raw media bus codes only result in raw pixel
++	 * formats.
++	 */
++	switch (f->mbus_code) {
++	case 0:
++	case MEDIA_BUS_FMT_YUYV8_1X16:
++	case MEDIA_BUS_FMT_UYVY8_1X16:
++	case MEDIA_BUS_FMT_UYVY8_2X8:
++	case MEDIA_BUS_FMT_UYVY10_2X10:
++	case MEDIA_BUS_FMT_RGB888_1X24:
++		break;
++	default:
++		return -EINVAL;
 +	}
++
+ 	matched = -1;
+ 	for (i = 0; i < ARRAY_SIZE(rvin_formats); i++) {
+ 		if (rvin_format_from_pixel(vin, rvin_formats[i].fourcc))
+@@ -767,18 +790,6 @@ static int rvin_mc_s_fmt_vid_cap(struct file *file, void *priv,
+ 	return 0;
+ }
  
- 	if (!vpix)
- 		return -EINVAL;
-@@ -450,7 +459,8 @@ static struct vimc_ent_device *vimc_cap_add(struct vimc_device *vimc,
+-static int rvin_mc_enum_input(struct file *file, void *priv,
+-			      struct v4l2_input *i)
+-{
+-	if (i->index != 0)
+-		return -EINVAL;
+-
+-	i->type = V4L2_INPUT_TYPE_CAMERA;
+-	strscpy(i->name, "Camera", sizeof(i->name));
+-
+-	return 0;
+-}
+-
+ static const struct v4l2_ioctl_ops rvin_mc_ioctl_ops = {
+ 	.vidioc_querycap		= rvin_querycap,
+ 	.vidioc_try_fmt_vid_cap		= rvin_mc_try_fmt_vid_cap,
+@@ -786,10 +797,6 @@ static const struct v4l2_ioctl_ops rvin_mc_ioctl_ops = {
+ 	.vidioc_s_fmt_vid_cap		= rvin_mc_s_fmt_vid_cap,
+ 	.vidioc_enum_fmt_vid_cap	= rvin_enum_fmt_vid_cap,
  
- 	/* Initialize the video_device struct */
- 	vdev = &vcap->vdev;
--	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-+	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING
-+			  | V4L2_CAP_IO_MC;
- 	vdev->entity.ops = &vimc_cap_mops;
- 	vdev->release = video_device_release_empty;
- 	vdev->fops = &vimc_cap_fops;
+-	.vidioc_enum_input		= rvin_mc_enum_input,
+-	.vidioc_g_input			= rvin_g_input,
+-	.vidioc_s_input			= rvin_s_input,
+-
+ 	.vidioc_reqbufs			= vb2_ioctl_reqbufs,
+ 	.vidioc_create_bufs		= vb2_ioctl_create_bufs,
+ 	.vidioc_querybuf		= vb2_ioctl_querybuf,
+@@ -961,6 +968,7 @@ int rvin_v4l2_register(struct rvin_dev *vin)
+ 	vin->format.colorspace = RVIN_DEFAULT_COLORSPACE;
+ 
+ 	if (vin->info->use_mc) {
++		vdev->device_caps |= V4L2_CAP_IO_MC;
+ 		vdev->ioctl_ops = &rvin_mc_ioctl_ops;
+ 	} else {
+ 		vdev->ioctl_ops = &rvin_ioctl_ops;
 -- 
 2.26.0
 
