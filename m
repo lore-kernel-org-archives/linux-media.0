@@ -2,99 +2,119 @@ Return-Path: <SRS0=yO7E=6F=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB504C54FCC
-	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 15:31:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1EECC54FC9
+	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 15:51:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66B38206D9
-	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 15:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587483066;
-	bh=B+qhYhs1NI+wK5JRTy+v09+PSidfojdfV0NzDFhRjS8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=QWvqSlJpGLk0V36o1qPG/Y6KeV10xViE/AV2alUkGr11hk4spn0xutEH7jnaxgON1
-	 3Zil+stfskVuLMlx04XeVVhmPzjjIoczXl47bxXXWlBdP1L7pf+lcELjMjvwmYmM5/
-	 nnR8GbfCorEMOgzRW/L04ZLc0w0eXZTarVGXdTBE=
+	by mail.kernel.org (Postfix) with ESMTP id 81013206E9
+	for <linux-media@archiver.kernel.org>; Tue, 21 Apr 2020 15:51:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/PyuREx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726115AbgDUPbG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Apr 2020 11:31:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39362 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725870AbgDUPbF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Apr 2020 11:31:05 -0400
-Received: from coco.lan (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 176B3206A2;
-        Tue, 21 Apr 2020 15:31:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587483065;
-        bh=B+qhYhs1NI+wK5JRTy+v09+PSidfojdfV0NzDFhRjS8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fWAdMORj8aSbjjUO652AJ50JpGZb1lT8NyKEcXIIFcVOKSpah64+up1BfJVlfcH5G
-         MpmBki76WcRDA8RJKhkUTv1hizP5EDdzZSYx6P2fyQLugwWRhnqJN3HGIrNNvGq+Y5
-         yiP5uI9CzLDhsaeiqYrQhdiuGm/BI9g2dKHQqVDU=
-Date:   Tue, 21 Apr 2020 17:31:00 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Subject: Re: [GIT PULL FOR v5.8] Various fixes/enhancements
-Message-ID: <20200421173100.2f1f9471@coco.lan>
-In-Reply-To: <6a56ccf7-4c26-b3ad-eb3a-0647944c2f95@xs4all.nl>
-References: <6a56ccf7-4c26-b3ad-eb3a-0647944c2f95@xs4all.nl>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1728287AbgDUPvl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Apr 2020 11:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725994AbgDUPvl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 21 Apr 2020 11:51:41 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3864C061A10;
+        Tue, 21 Apr 2020 08:51:40 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id x18so17050250wrq.2;
+        Tue, 21 Apr 2020 08:51:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=kcT8YhRThPhegOm3BQj7wUe66PuL6hDa8ErzC+LQvVA=;
+        b=T/PyuRExpYtl18m3qkte0wueAWmWWpHTRgZgK8uwu12i+5YbEWa0GkQnamXwmmz2ym
+         HnDhNv2mBoB9JSc/2zO24+fUuBTWzCT81vqx7x/beNBoW2Cd5JlP50LrNaiIDdARVTY8
+         9sOn3cfal5fmxmyBKT2JFMwIzpFqAgVi9hKyEoKy3wy+BNKyqoyxTn7bgh02qlQqm7RA
+         4jSQfhpNWkjxqAkY0QObUBLau0NXNyECQ6J7+J8P/AnZz/3VYvfv5HOxkawlcQ6q2RQF
+         wXBghlmE8m7LWE8EISO7TF1NwV3wItGrFtlorZhTzNRY/p0HaUCSteOWlgJzbn1FNE26
+         YtUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kcT8YhRThPhegOm3BQj7wUe66PuL6hDa8ErzC+LQvVA=;
+        b=cvNsezhPgw4mvaB58C6wJsgVjcFXx/uhyop07eo3U9GBKF1jCxmG2vbitadggrZE9k
+         OL2tHVFjAI/ak3JQK9MixRN47jL57r7U0Px+qmtXfwgXNClDu/yFnXXBa7U+uEXsmZ9h
+         OCD6gCzntN0Cn3uxCTmsb70GaSSANNZCfOGNZ9grqBAgCvGurG2aWoN4KQLqc9yXTLp0
+         rjzxHMLSgbAoU/8Wu4UWArqxVXyUIzERFT9thXEiNxC/UChD+EgRgqGfB9XWTXI6BiOX
+         elLRRPOw2iyvo/ClWHeyrRwdHfic/4vFPwphhEwGH4PxnvI0TJXVxY+7siREhI/H7S51
+         eeZA==
+X-Gm-Message-State: AGi0PuYS2oDcvQKB71NuQ1OUlFnezeGyOUpOHetmztZceJclIRbH6bn7
+        q8ohc4E0YzBdDUl8qOSsRfN6NgTR
+X-Google-Smtp-Source: APiQypLwxUr2g6yIkcRAqbgAzcYzXQ/xaGoq2pE5TKNjpKqN73rSSuaC3AUnTp3g8GDcaDbKPiJI/g==
+X-Received: by 2002:a5d:4cd0:: with SMTP id c16mr23192004wrt.98.1587484299782;
+        Tue, 21 Apr 2020 08:51:39 -0700 (PDT)
+Received: from debian.home (ip51ccf9cd.speed.planet.nl. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id v19sm4357664wra.57.2020.04.21.08.51.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 Apr 2020 08:51:38 -0700 (PDT)
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, mchehab@kernel.org, ezequiel@collabora.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: media: rockchip-vpu: fix interrupt-names
+Date:   Tue, 21 Apr 2020 17:51:31 +0200
+Message-Id: <20200421155131.5839-1-jbx6244@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Fri, 17 Apr 2020 10:18:44 +0200
-Hans Verkuil <hverkuil@xs4all.nl> escreveu:
+A test with the command below gives for example this error:
 
-> The following changes since commit ceab3ac1e60d70afb4e25147d60817c513f235f7:
-> 
->   media: dvb-frontends: DUMMY_FE should depends on DVB_CORE (2020-04-17 09:21:47 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.8c
-> 
-> for you to fetch changes up to 0f72df4db95844184f49bbdfeaae013919c12c1b:
-> 
->   dt-bindings: media: rockchip-rga: add power-domains property (2020-04-17 10:05:10 +0200)
-> 
-> ----------------------------------------------------------------
-> Tag branch
-> 
-> ----------------------------------------------------------------
-> Dafna Hirschfeld (8):
->       media: staging: rkisp1: remove mbus field from rkisp1_sensor_async
->       media: staging: rkisp1: replace the call to v4l2_async_notifier_parse_fwnode_endpoints_by_port
->       media: staging: rkisp1: cap: cleanup in mainpath config for uv swap format
->       media: staging: rkisp1: cap: fix value written to uv swap register in selfpath
->       media: staging: rkisp1: cap: change the logic for writing to uv swap register
->       media: staging: rkisp1: cap: support uv swap only for semiplanar formats
->       media: staging: rkisp1: cap: support uv swapped planar formats
+arch/arm64/boot/dts/rockchip/rk3328-evb.dt.yaml: video-codec@ff350000:
+interrupts: [[0, 9, 4]] is too short
+arch/arm64/boot/dts/rockchip/rk3328-evb.dt.yaml: video-codec@ff350000:
+interrupt-names: ['vdpu'] is too short
+arch/arm64/boot/dts/rockchip/rk3328-evb.dt.yaml: video-codec@ff350000:
+interrupt-names:0: 'vepu' was expected
 
-There were two merge conflicts on rksip1 patches. The first one was
-trivial, and I already addressed...
+With the conversion of rockchip-vpu.txt to yaml the correct
+'interrupt-names' for rk3328 was not included, so add them now.
+Also add 'minItems' to 'interrupts'for the completeness.
 
->       media: staging: rkisp1: cap: remove unsupported formats
+make ARCH=arm64 dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/media/rockchip-vpu.yaml
 
-But this one is not so trivial.
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Dafna,
+diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+index d7a42e6f9..27df18ad6 100644
+--- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
++++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
+@@ -24,12 +24,15 @@ properties:
+     maxItems: 1
+ 
+   interrupts:
++    minItems: 1
+     maxItems: 2
+ 
+   interrupt-names:
+-    items:
+-      - const: vepu
++    oneOf:
+       - const: vdpu
++      - items:
++        - const: vepu
++        - const: vdpu
+ 
+   clocks:
+     maxItems: 2
+-- 
+2.11.0
 
-Please rebase this patch on the top of upstream and re-submit.
-
-
-Thanks,
-Mauro
