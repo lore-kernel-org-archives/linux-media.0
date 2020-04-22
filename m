@@ -2,44 +2,45 @@ Return-Path: <SRS0=ldT+=6G=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77475C55185
-	for <linux-media@archiver.kernel.org>; Wed, 22 Apr 2020 14:19:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45535C5518B
+	for <linux-media@archiver.kernel.org>; Wed, 22 Apr 2020 14:45:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BD9921473
-	for <linux-media@archiver.kernel.org>; Wed, 22 Apr 2020 14:19:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BC3D2076E
+	for <linux-media@archiver.kernel.org>; Wed, 22 Apr 2020 14:45:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbgDVOT1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Apr 2020 10:19:27 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:46408 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725839AbgDVOT1 (ORCPT
+        id S1726604AbgDVOpF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Apr 2020 10:45:05 -0400
+Received: from smtprelay0106.hostedemail.com ([216.40.44.106]:45042 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726018AbgDVOpD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Apr 2020 10:19:27 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 7BCB82A1EA1
-Message-ID: <c61815a2872c5092c72ccbf9656a2bd6501810a4.camel@collabora.com>
+        Wed, 22 Apr 2020 10:45:03 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 543E94DB6;
+        Wed, 22 Apr 2020 14:45:02 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: wheel41_6607a0a47ab58
+X-Filterd-Recvd-Size: 1617
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf05.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 22 Apr 2020 14:45:01 +0000 (UTC)
+Message-ID: <a857bb9785f48dea47b4d04dd0b939b0172e6320.camel@perches.com>
 Subject: Re: [PATCH] media: MAINTAINERS: Fix Hantro, Rga and Rkvdec entries
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+From:   Joe Perches <joe@perches.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
         Johan Jonker <jbx6244@gmail.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
-Date:   Wed, 22 Apr 2020 11:19:17 -0300
-In-Reply-To: <20200422160631.74390a06@coco.lan>
+Date:   Wed, 22 Apr 2020 07:42:43 -0700
+In-Reply-To: <20200422111403.19114-1-ezequiel@collabora.com>
 References: <20200422111403.19114-1-ezequiel@collabora.com>
-         <73d3d8c1-1952-aeb1-5bc0-829503cf29bd@gmail.com>
-         <20200422160631.74390a06@coco.lan>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.0-1 
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
@@ -47,87 +48,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 2020-04-22 at 16:06 +0200, Mauro Carvalho Chehab wrote:
-> Em Wed, 22 Apr 2020 14:01:41 +0200
-> Johan Jonker <jbx6244@gmail.com> escreveu:
-> 
-> > Hi Ezequiel,
-> > 
-> > On 4/22/20 1:14 PM, Ezequiel Garcia wrote:
-> > > It seems recent merges introduced a couple issues
-> > > here, so let's fix them all. Also, reorder Rockchip
-> > > video decoder as per parse-maintainers.pl script
-> > > and add linux-rockchip mailing list.
-> > > 
-> > > Reported-by: Johan Jonker <jbx6244@gmail.com>
-> > > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> > > ---
-> > >  MAINTAINERS | 20 ++++++++++----------
-> > >  1 file changed, 10 insertions(+), 10 deletions(-)
-> > > 
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 09e0137df61d..4d5b06c6fe0f 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -7460,7 +7460,7 @@ L:	linux-media@vger.kernel.org
-> > >  L:	linux-rockchip@lists.infradead.org
-> > >  S:	Maintained
-> > >  F:	Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> > > -F:	Documentation/devicetree/bindings/media/rockchip-vpu.txt
-> > > +F:	Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> > >  F:	drivers/staging/media/hantro/
-> > >  
-> > >  HARD DRIVE ACTIVE PROTECTION SYSTEM (HDAPS) DRIVER
-> > > @@ -14465,13 +14465,6 @@ F:	Documentation/ABI/*/sysfs-driver-hid-roccat*
-> > >  F:	drivers/hid/hid-roccat*
-> > >  F:	include/linux/hid-roccat*
-> > >  
-> > > -ROCKCHIP VIDEO DECODER DRIVER
-> > > -M:	Ezequiel Garcia <ezequiel@collabora.com>
-> > > -L:	linux-media@vger.kernel.org
-> > > -S:	Maintained
-> > > -F:	drivers/staging/media/rkvdec/
-> > > -F:	Documentation/devicetree/bindings/media/rockchip,vdec.yaml
-> > > -
-> > >  ROCKCHIP ISP V1 DRIVER
-> > >  M:	Helen Koike <helen.koike@collabora.com>
-> > >  L:	linux-media@vger.kernel.org  
-> > 
-> > L:	linux-rockchip@lists.infradead.org
-> > 
-> > > @@ -14483,12 +14476,19 @@ ROCKCHIP RASTER 2D GRAPHIC ACCELERATION UNIT DRIVER
-> > >  M:	Jacob Chen <jacob-chen@iotwrt.com>
-> > >  M:	Ezequiel Garcia <ezequiel@collabora.com>
-> > >  L:	linux-media@vger.kernel.org
-> > > +L:	linux-rockchip@lists.infradead.org
-> > >  S:	Maintained
-> > > -F:	Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> > >  F:	Documentation/devicetree/bindings/media/rockchip-rga.yaml
-> > > -F:	Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> > >  F:	drivers/media/platform/rockchip/rga/
-> > >  
-> > > +ROCKCHIP VIDEO DECODER DRIVER
-> > > +M:	Ezequiel Garcia <ezequiel@collabora.com>
-> > > +L:	linux-media@vger.kernel.org
-> > > +L:	linux-rockchip@lists.infradead.org
-> > > +S:	Maintained  
-> > > +F:	drivers/staging/media/rkvdec/
-> > > +F:	Documentation/devicetree/bindings/media/rockchip,vdec.yaml  
-> > 
-> > When I look at the other entries 'drivers/' is sort below 'Documentation/'.
-> > 
-> > ./scripts/parse-maintainers.pl --input=MAINTAINERS --output=MAINTAINERS
-> > --order
-> 
-> Good point. It would be cool if checkpatch.pl could call it in order
-> to verify if MAKEFILE changes are at the right order.
-> 
-> As I noticed other fields that are out of the order on media,
-> due to some changes that didn't arrive upstream yet, I'll fix
-> them all on a single patch.
-> 
+On Wed, 2020-04-22 at 08:14 -0300, Ezequiel Garcia wrote:
+> It seems recent merges introduced a couple issues
+> here, so let's fix them all. Also, reorder Rockchip
+> video decoder as per parse-maintainers.pl script
+> and add linux-rockchip mailing list.
+[]
+> diff --git a/MAINTAINERS b/MAINTAINERS
+[]
+> +ROCKCHIP VIDEO DECODER DRIVER
+> +M:	Ezequiel Garcia <ezequiel@collabora.com>
+> +L:	linux-media@vger.kernel.org
+> +L:	linux-rockchip@lists.infradead.org
+> +S:	Maintained
+> +F:	drivers/staging/media/rkvdec/
+> +F:	Documentation/devicetree/bindings/media/rockchip,vdec.yaml
 
-Thanks for taking care of this.
+alphabetic case sensitive order please.
 
-Ezequiel
++F:	Documentation/devicetree/bindings/media/rockchip,vdec.yaml
++F:	drivers/staging/media/rkvdec/
+
 
