@@ -2,150 +2,127 @@ Return-Path: <SRS0=ldT+=6G=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E735C5518A
-	for <linux-media@archiver.kernel.org>; Wed, 22 Apr 2020 04:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A3C5C38A30
+	for <linux-media@archiver.kernel.org>; Wed, 22 Apr 2020 04:12:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D1E12072D
-	for <linux-media@archiver.kernel.org>; Wed, 22 Apr 2020 04:00:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 484DC20747
+	for <linux-media@archiver.kernel.org>; Wed, 22 Apr 2020 04:12:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sholland.org header.i=@sholland.org header.b="B8+Om/cE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fSiy5rqD"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="J4tOajzt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725787AbgDVEA3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Apr 2020 00:00:29 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:43577 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725308AbgDVEA2 (ORCPT
+        id S1726505AbgDVEMu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Apr 2020 00:12:50 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:2939 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725968AbgDVEMu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Apr 2020 00:00:28 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 86FFA58046D;
-        Wed, 22 Apr 2020 00:00:27 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 22 Apr 2020 00:00:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        from:to:cc:subject:date:message-id:mime-version:content-type
-        :content-transfer-encoding; s=fm2; bh=NGhpjRaVKhvDj8NJZcE5WLuEq1
-        CNGnmve/laehgEwX4=; b=B8+Om/cERAJzqqSD/dkvjzXMAGZb1DhcwnfESTrNOP
-        CRV2gFEXTkK1cMoziqFgjIq0iGbyicb4lXnoBlzi04YmL0BrkzcyuXsdDiHADt7P
-        wo9hQBeahsMIxZGLPaJydswh11yaBxZE2nA0WwPBimU21JtGnud9Fxbzt+ydJSJt
-        Tt30wPAn/NEl0mnsnlnUyxSW4uc2/Bv3g5wTUZhhZPXqRrLEXkuzSLlhvIvLFHfR
-        QOAXSwipzqUV3cnwyC+MmKZw8gTuHG3XMojx3M2ZpngrVU573GD5pgpyGhufwNED
-        77U8Axy6MtneVod4B2R5phRISgxLqcsdCwfoXLzbZl1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:message-id:mime-version:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=NGhpjR
-        aVKhvDj8NJZcE5WLuEq1CNGnmve/laehgEwX4=; b=fSiy5rqDHNA3ycHI+1ZqJ/
-        pT9NNV85dzLzo9HV0cXKr6b8m7Xr6/SSBpheGQRl7fA2OfvKWJy+fqCAs9lyfcFS
-        AN4B8+Ru5xLe5VyK9s9pHCWyalllHKY4//H5LQxrTdzXe9kNC77Kfromd4Ckh/LS
-        2saMLN1J+wTh984/BI3R4DMYJJf6WnnMxIx+B4+l2fWeIElBAozT0OzKi6ZSGcuM
-        7mLCpfvmdztHTkuCc1wFVpB8WPgS6iAfxyls2qzplTOyYarKhgkHJcTpCzwPkWRK
-        nYTqvxMDVNth8UeXZT3bl0i9i+nE+q7RDLfB9RQnyGSqE3ufL42Z36KpXMkpICBg
-        ==
-X-ME-Sender: <xms:WsGfXqGX_M0RQvr7pOxgpIBrH6Z7SZcUBp2EVHQ8RFIQptrzL-aBzQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrgeeigdejjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurghmuhgvlhcu
-    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucfkphepje
-    dtrddufeehrddugeekrdduhedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
-    pehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:WsGfXgXTWFEZF7yZxo43sFpt7mrJyKD8_xg5O-VmC-Ie3SwnNOsE5w>
-    <xmx:WsGfXlAecWoKoBHEEx6XCaVpS2onHarBEczGZjH3xLiZs0hQLi6wiQ>
-    <xmx:WsGfXp0L5BmC1OyMuOIzppbsFna3mIjMFej7wclpQCxQfE6p9hNgig>
-    <xmx:W8GfXhs2Qf3ZIDWqqsY2NEcAtNCudKR9pSDuuAN_bYjqIa_ITXkKRQ>
-Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id BC8803065CBF;
-        Wed, 22 Apr 2020 00:00:25 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-sunxi@googlegroups.com,
-        Samuel Holland <samuel@sholland.org>,
-        =?UTF-8?q?Jernej=20=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Subject: [PATCH v2 1/2] media: cedrus: Program output format during each run
-Date:   Tue, 21 Apr 2020 23:04:09 -0500
-Message-Id: <20200422040410.6251-1-samuel@sholland.org>
-X-Mailer: git-send-email 2.24.1
+        Wed, 22 Apr 2020 00:12:50 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e9fc4350001>; Tue, 21 Apr 2020 21:12:37 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 21 Apr 2020 21:12:50 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 21 Apr 2020 21:12:50 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 22 Apr
+ 2020 04:12:49 +0000
+Received: from [10.2.165.49] (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 22 Apr
+ 2020 04:12:48 +0000
+Subject: Re: Re: [RFC PATCH v8 0/9] Add Tegra driver for video capture
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+CC:     <jonathanh@nvidia.com>, <frankc@nvidia.com>, <sakari.ailus@iki.fi>,
+        <helen.koike@collabora.com>, <digetx@gmail.com>,
+        <sboyd@kernel.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1587427874-3291-1-git-send-email-skomatineni@nvidia.com>
+ <5c44beca-4016-6e4f-01bb-e38480bfc34b@xs4all.nl>
+ <20200421205032.GD3233341@ulmo>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <cfbd9954-6a89-3973-55f5-920b7a807774@nvidia.com>
+Date:   Tue, 21 Apr 2020 21:12:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200421205032.GD3233341@ulmo>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1587528757; bh=e1UDRc9LEWdDQqaH6RNlYU5o4VaoyIvF1ybwOVa69Y0=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=J4tOajztaOIXIOdr2cQJxAyPjXsnlchY3FCd7y0FRaKBWMCKFzfzbEFSh4uf6AbID
+         3zIouYXEl2IZ4TXHwg2+hlnhxjsfQe9J2Uu6do5hnn+FoofcNvcR2tB5FFyYcPrKO9
+         aycILuMg9uvUPxG647Kb082qLwc94hTDyznYVHQab4Fd6ti+s5RDenr52//WmL+g5K
+         kVy+cC29xWw5zT15mnze/LZnq72S6Hazek0o+k2FJuzSrBz0jAReohMGN87jqUo0gq
+         KtKQQr5zsAfMEb5eSr+Z7Z2YxNeOwEBUcCesIeDlNizzSdrtfLQjvxTxOGyNcI/U7z
+         dE7AH2VqS0NTg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Previously, the output format was programmed as part of the ioctl()
-handler. However, this has two problems:
 
-  1) If there are multiple active streams with different output
-     formats, the hardware will use whichever format was set last
-     for both streams. Similary, an ioctl() done in an inactive
-     context will wrongly affect other active contexts.
-  2) The registers are written while the device is not actively
-     streaming. To enable runtime PM tied to the streaming state,
-     all hardware access needs to be moved inside cedrus_device_run().
+On 4/21/20 1:50 PM, Thierry Reding wrote:
+> On Tue, Apr 21, 2020 at 01:09:50PM +0200, Hans Verkuil wrote:
+>> Hi Sowjanya,
+>>
+>> On 21/04/2020 02:11, Sowjanya Komatineni wrote:
+>>> This series adds Tegra210 VI and CSI driver for built-in test pattern
+>>> generator (TPG) capture.
+>>>
+>>> Tegra210 supports max 6 channels on VI and 6 ports on CSI where each
+>>> CSI port is one-to-one mapped to VI channel for video capture.
+>>>
+>>> This series has TPG support only where it creates hard media links
+>>> between CSI subdevice and VI video device without device graphs.
+>>>
+>>> v4l2-compliance results are available below the patch diff.
+>> I'm ready to merge this v8. Looking at the series I should only merge
+>> patches 6 and 7, all other patches go through different subsystems, right?
+> You could also pick up patch 5 because it adds the bindings that are
+> implemented by the driver in patch 6. But I can also pick that up into
+> the Tegra tree. In fact, I do have a set of patches to convert some
+> Tegra bindings to the new json-schema format and the host1x file is
+> among them. If I do get around to finish those up for v5.8 it might be
+> better for me to pick up patch 5 so that I can base my conversion patch
+> on top of that.
+>
+> Either way is fine with me, so I've acked the three patches. Take which
+> ones you want and I'll pick up the rest.
+>
+> Thanks again for your guidance on this patch set!
+>
+> Thierry
 
-The call to cedrus_dst_format_set() is now placed just before the
-codec-specific callback that programs the hardware.
+Hi Hans,
 
-Fixes: 50e761516f2b ("media: platform: Add Cedrus VPU decoder driver")
-Suggested-by: Jernej Škrabec <jernej.skrabec@gmail.com>
-Suggested-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+Would like to add a small fix to the driver for explicit check for vi 
+and csi availability before TPG setup and cleanup in case if video 
+driver is enabled without device tree support where vi and csi drivers 
+does not register.
 
-v2: added patch
+Although we are not enabling driver by default now, would be good to 
+have this in this series itself.
 
----
- drivers/staging/media/sunxi/cedrus/cedrus_dec.c   | 2 ++
- drivers/staging/media/sunxi/cedrus/cedrus_video.c | 3 ---
- 2 files changed, 2 insertions(+), 3 deletions(-)
+Will send out the updated version, please pick v9.
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
-index 4a2fc33a1d79..58c48e4fdfe9 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
-@@ -74,6 +74,8 @@ void cedrus_device_run(void *priv)
- 
- 	v4l2_m2m_buf_copy_metadata(run.src, run.dst, true);
- 
-+	cedrus_dst_format_set(dev, &ctx->dst_fmt);
-+
- 	dev->dec_ops[ctx->current_codec]->setup(ctx, &run);
- 
- 	/* Complete request(s) controls if needed. */
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-index 15cf1f10221b..ed3f511f066f 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-@@ -273,7 +273,6 @@ static int cedrus_s_fmt_vid_cap(struct file *file, void *priv,
- 				struct v4l2_format *f)
- {
- 	struct cedrus_ctx *ctx = cedrus_file2ctx(file);
--	struct cedrus_dev *dev = ctx->dev;
- 	struct vb2_queue *vq;
- 	int ret;
- 
-@@ -287,8 +286,6 @@ static int cedrus_s_fmt_vid_cap(struct file *file, void *priv,
- 
- 	ctx->dst_fmt = f->fmt.pix;
- 
--	cedrus_dst_format_set(dev, &ctx->dst_fmt);
--
- 	return 0;
- }
- 
--- 
-2.24.1
+Thanks
+
+Sowjanya
+
 
