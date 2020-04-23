@@ -2,44 +2,70 @@ Return-Path: <SRS0=iMag=6H=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96846C54FD0
-	for <linux-media@archiver.kernel.org>; Thu, 23 Apr 2020 20:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A21B0C54FCB
+	for <linux-media@archiver.kernel.org>; Thu, 23 Apr 2020 21:10:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 804E420767
-	for <linux-media@archiver.kernel.org>; Thu, 23 Apr 2020 20:10:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C1E72084D
+	for <linux-media@archiver.kernel.org>; Thu, 23 Apr 2020 21:10:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lnyVafeX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbgDWUJv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Apr 2020 16:09:51 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:59103 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726057AbgDWUJv (ORCPT
+        id S1727092AbgDWVKq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Apr 2020 17:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727065AbgDWVKq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Apr 2020 16:09:51 -0400
-X-Originating-IP: 93.29.109.196
-Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 0D029E000C;
-        Thu, 23 Apr 2020 20:09:46 +0000 (UTC)
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Hans Verkuil <hansverk@cisco.com>,
-        justin.swartz@risingedge.co.za, Johan Jonker <jbx6244@gmail.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v2 0/4] media: rockchip: rga: PX30 support and YUV2YUV fix
-Date:   Thu, 23 Apr 2020 22:09:33 +0200
-Message-Id: <20200423200937.1039257-1-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.26.0
+        Thu, 23 Apr 2020 17:10:46 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11ABBC09B044
+        for <linux-media@vger.kernel.org>; Thu, 23 Apr 2020 14:10:46 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id a31so1135664pje.1
+        for <linux-media@vger.kernel.org>; Thu, 23 Apr 2020 14:10:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WYxKCRpYcYJulfhpMhiVVDeFXV8YlPiKJygpdbe/abE=;
+        b=lnyVafeXM3v8E0R4lop6SK7FRVEIdJZpMwyFF8Q61z+vbTzaxIlYbaZuAa9kD76aSC
+         34rwgTN+09JaQOBKH5U6YwfghXjclKA+1Xs37rG+HY3GA9uS4CJnNHgb9+Nb9kb6ijvQ
+         mm/iIFvS87x+f9e+QtCGMl0nakWumLdLhW8SZ6jk5GeXxyczPit5unDlnunQNKuXA63v
+         CQSHTJ6Do+QNyozaCzV3nGXH87NWmxIlTE6lQJ3Y0pmUjnioSoLP5bVihIbVCCn0jKin
+         xdfg71faYWyXAz6RE7pp2rHTBLzNJZpSFQo09/slAcUjGBSQUinG+MwBXituwHQssHkS
+         WYCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WYxKCRpYcYJulfhpMhiVVDeFXV8YlPiKJygpdbe/abE=;
+        b=G5oq7lp8BAK1JRDOgy2pPRd2p3B45Av//iuEvfl2kekQAIAF3O5ikKwU6VAebk+w7E
+         14qSJuMgpdyErwjSFUHMs66eJskkedv48V+PActZ73O7XUm9HteV8hKoJffitcITm9WW
+         YV3e36zDEtvw5JBvlIb+2EXXxWhoI/VsMUpwMRaWfrtxNVn3kPtEw8gXVEPpT6x8KJta
+         qsIgHeKoHnIX2gdLim2PMILq19xnfSjZ3lcKrUqeeHnungR20yTN1UIf2cDfHdaOznxE
+         1ybXha+GM7KrDjviBrYNA4vI3BPdW5HQZjcRGXF9CP2/WK9bpUr9pOpBMMW7jAP8ZO1B
+         PSqw==
+X-Gm-Message-State: AGi0PuaNFaxA8Hzr1t3dLXPghfUSxa2vIpwP/pwv4Ni0e6huCktUvPwG
+        woMitgVTHUJssjSFH1GWxVusYatA
+X-Google-Smtp-Source: APiQypLmuPT9/DCxj+uVPKOS3oWsfAJC82LjJaSQAsXykwwJKBlxMPRmqgqvspf65uD/lD8kYnj7ZA==
+X-Received: by 2002:a17:90a:589:: with SMTP id i9mr2656907pji.156.1587676245174;
+        Thu, 23 Apr 2020 14:10:45 -0700 (PDT)
+Received: from localhost.localdomain (76-14-109-232.rk.wavecable.com. [76.14.109.232])
+        by smtp.gmail.com with ESMTPSA id f21sm3563630pfn.71.2020.04.23.14.10.44
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2020 14:10:44 -0700 (PDT)
+From:   Rosen Penev <rosenp@gmail.com>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH 1/5] utils: fix compilation with C++98
+Date:   Thu, 23 Apr 2020 14:10:36 -0700
+Message-Id: <20200423211040.14275-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.25.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -47,31 +73,61 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ utils/cec-compliance/cec-test.cpp | 4 ++--
+ utils/rds-ctl/rds-ctl.cpp         | 2 +-
+ utils/v4l2-ctl/v4l2-ctl-tuner.cpp | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-This series adds support for the Rockchip PX30 SoC in the V4L2 M2M RGA driver.
-It also contains a fix for the YUV2YUV case that was not properly handled.
-
-Changes since v1:
-- Rebased on media tree master (changed dt binding to yaml);
-- Removed spurious line removal.
-
-Cheers,
-
-Paul
-
-Paul Kocialkowski (4):
-  dt-bindings: rockchip-rga: Add PX30 compatible
-  arm64: dts: rockchip: Add RGA support to the PX30
-  media: rockchip: rga: Add support for the PX30 compatible
-  media: rockchip: rga: Only set output CSC mode for RGB input
-
- .../bindings/media/rockchip-rga.yaml           |  1 +
- arch/arm64/boot/dts/rockchip/px30.dtsi         | 11 +++++++++++
- drivers/media/platform/rockchip/rga/rga-hw.c   | 18 +++++++++++-------
- drivers/media/platform/rockchip/rga/rga.c      |  3 +++
- 4 files changed, 26 insertions(+), 7 deletions(-)
-
+diff --git a/utils/cec-compliance/cec-test.cpp b/utils/cec-compliance/cec-test.cpp
+index 032ff5ad..cc07998a 100644
+--- a/utils/cec-compliance/cec-test.cpp
++++ b/utils/cec-compliance/cec-test.cpp
+@@ -908,7 +908,7 @@ static int tuner_ctl_test(struct node *node, unsigned me, unsigned la, bool inte
+ 		cec_msg_give_tuner_device_status(&msg, true, CEC_OP_STATUS_REQ_ONCE);
+ 		fail_on_test(!transmit_timeout(node, &msg));
+ 		fail_on_test(timed_out_or_abort(&msg));
+-		info = {};
++		memset(&info, 0, sizeof(info));
+ 		cec_ops_tuner_device_status(&msg, &info);
+ 		if (!memcmp(&info, &info_vec[0], sizeof(info)))
+ 			break;
+@@ -935,7 +935,7 @@ static int tuner_ctl_test(struct node *node, unsigned me, unsigned la, bool inte
+ 		cec_msg_give_tuner_device_status(&msg, true, CEC_OP_STATUS_REQ_ONCE);
+ 		fail_on_test(!transmit_timeout(node, &msg));
+ 		fail_on_test(timed_out_or_abort(&msg));
+-		info = {};
++		memset(&info, 0, sizeof(info));
+ 		cec_ops_tuner_device_status(&msg, &info);
+ 		if (memcmp(&info, &(*iter), sizeof(info))) {
+ 			log_tuner_service(info);
+diff --git a/utils/rds-ctl/rds-ctl.cpp b/utils/rds-ctl/rds-ctl.cpp
+index 0511fe5d..0e497b2a 100644
+--- a/utils/rds-ctl/rds-ctl.cpp
++++ b/utils/rds-ctl/rds-ctl.cpp
+@@ -918,7 +918,7 @@ static void get_options(const int fd, const int capabilities, struct v4l2_freque
+ 				printf("\tFrequency range      : %.1f MHz - %.1f MHz\n",
+ 					 vt.rangelow / 16.0, vt.rangehigh / 16.0);
+ 			printf("\tSignal strength/AFC  : %ld%%/%d\n",
+-				std::lround(vt.signal / 655.35), vt.afc);
++				lround(vt.signal / 655.25), vt.afc);
+ 			printf("\tCurrent audio mode   : %s\n", audmode2s(vt.audmode));
+ 			printf("\tAvailable subchannels: %s\n",
+ 					rxsubchans2s(vt.rxsubchans).c_str());
+diff --git a/utils/v4l2-ctl/v4l2-ctl-tuner.cpp b/utils/v4l2-ctl/v4l2-ctl-tuner.cpp
+index bc397ec2..73dc323c 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-tuner.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-tuner.cpp
+@@ -423,7 +423,7 @@ void tuner_get(cv4l_fd &_fd)
+ 
+ 			if (vt.type != V4L2_TUNER_SDR && vt.type != V4L2_TUNER_RF) {
+ 				printf("\tSignal strength/AFC  : %ld%%/%d\n",
+-				       std::lround(vt.signal / 655.35), vt.afc);
++				       lround(vt.signal / 655.35), vt.afc);
+ 				printf("\tCurrent audio mode   : %s\n", audmode2s(vt.audmode));
+ 				printf("\tAvailable subchannels: %s\n", rxsubchans2s(vt.rxsubchans).c_str());
+ 			}
 -- 
-2.26.0
+2.25.3
 
