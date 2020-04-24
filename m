@@ -2,171 +2,77 @@ Return-Path: <SRS0=poVo=6I=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53C13C55186
-	for <linux-media@archiver.kernel.org>; Fri, 24 Apr 2020 01:08:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52806C2BA19
+	for <linux-media@archiver.kernel.org>; Fri, 24 Apr 2020 01:34:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F7982087E
-	for <linux-media@archiver.kernel.org>; Fri, 24 Apr 2020 01:08:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 057BB20704
+	for <linux-media@archiver.kernel.org>; Fri, 24 Apr 2020 01:34:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="KmrFXbTC"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="V/tWtr/Q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728320AbgDXBIa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Apr 2020 21:08:30 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:4284 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgDXBIa (ORCPT
+        id S1726060AbgDXBew (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Apr 2020 21:34:52 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:56640 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725884AbgDXBew (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Apr 2020 21:08:30 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ea23b980000>; Thu, 23 Apr 2020 18:06:32 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 23 Apr 2020 18:08:29 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 23 Apr 2020 18:08:29 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 24 Apr
- 2020 01:08:29 +0000
-Received: from [10.2.165.49] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 24 Apr
- 2020 01:08:28 +0000
-Subject: Re: [RFC PATCH v9 6/9] media: tegra: Add Tegra210 Video input driver
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
-CC:     <sboyd@kernel.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1587536339-4030-1-git-send-email-skomatineni@nvidia.com>
- <1587536339-4030-7-git-send-email-skomatineni@nvidia.com>
- <7e473fa9-0409-d868-e818-2e7928a8acca@gmail.com>
- <a83bfc89-35de-85b5-fe5f-71e62456f5e9@nvidia.com>
- <3691c4b5-1ecc-2ad3-23ed-72ef6b8d25fa@nvidia.com>
- <fce6dfbb-0b8d-319b-2d6f-976953a3c36c@gmail.com>
- <a2672be9-93c1-8363-6c0e-6d43c2bd59bc@nvidia.com>
- <492dafac-42aa-3caf-4d32-ba0e434b19c3@gmail.com>
- <39402a49-f39f-256c-31e7-afaa25d55664@nvidia.com>
-Message-ID: <8f01724e-95d4-e6d8-9e2d-bce4b8dd0177@nvidia.com>
-Date:   Thu, 23 Apr 2020 18:08:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Thu, 23 Apr 2020 21:34:52 -0400
+Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3E19B528;
+        Fri, 24 Apr 2020 03:34:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1587692090;
+        bh=kpMzRlNYHmFNrI0qa2iGgS11CSFwXHF5EpH4SwtFMfc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=V/tWtr/QwvgSJPRkx/QEOJuDsE4J+ErViZE1CR6nQpFwgykGyslLtL2aMNcPZVl3t
+         5Ca2cP9yCJDJz3pjHS/khFe4c/GeegZbTN2gPFv/uZJHAVHfWQTN5qAJUYjKWav1Iu
+         Xbmn7e31UuZQYlRzPRoJCPaRmGbGwkRCuSMuUVms=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Naushir Patuck <naush@raspberrypi.com>
+Subject: [PATCH 1/5] media: i2c: imx219: Set V4L2_SUBDEV_FL_HAS_EVENTS flag
+Date:   Fri, 24 Apr 2020 04:34:15 +0300
+Message-Id: <20200424013419.12954-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.25.3
+In-Reply-To: <20200424013419.12954-1-laurent.pinchart@ideasonboard.com>
+References: <20200424013419.12954-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <39402a49-f39f-256c-31e7-afaa25d55664@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1587690392; bh=0VcoRgXJ0ZnT5wCxcL+1oZjS8xuQ825bdiGOnGN6ldI=;
-        h=X-PGP-Universal:Subject:From:To:CC:References:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=KmrFXbTCpgHZzv0NUHaUfJjgUNF+0du/q8tLCI0Nu3o44g8QCH0DVWNGTie17IZC2
-         gajOyou6UNclIWBlJYhCTpwvpEVeibc4EtQ1IZm/Wua+r/qQZGDaZ92KnyUugqbCFB
-         qcpzhn0uoMW6fT0FYcVGipG1WoOu8KOhE7QkltxI9wJi3ynkD5SmSNQmhM8uJjgHLv
-         dzX+H3rmEHPBTFWf4kiswfWAkx47BpgPH+K+XdcUtvalBwEglpx9sQj2szf8xdfCNw
-         J7W4PVy83N1FNXByAPPJI62nUVR5Au9+tFUo1QtUX5Z58WsGiXVIVUryPodVGZ+ZQM
-         qsBPB2SEp79AQ==
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+The imx219 subdev can generate control events, set the
+V4L2_SUBDEV_FL_HAS_EVENTS flag.
 
-On 4/23/20 5:51 PM, Sowjanya Komatineni wrote:
->
-> On 4/23/20 5:42 PM, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> 24.04.2020 02:50, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>> On 4/23/20 4:25 PM, Dmitry Osipenko wrote:
->>>> External email: Use caution opening links or attachments
->>>>
->>>>
->>>> 24.04.2020 02:20, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>>>> On 4/23/20 4:19 PM, Sowjanya Komatineni wrote:
->>>>>> On 4/23/20 4:16 PM, Dmitry Osipenko wrote:
->>>>>>> External email: Use caution opening links or attachments
->>>>>>>
->>>>>>>
->>>>>>> 22.04.2020 09:18, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=
-=82:
->>>>>>>> +static int chan_capture_kthread_start(void *data)
->>>>>>>> +{
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 struct tegra_vi_channel *chan =3D data;
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 struct tegra_channel_buffer *buf;
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 int err =3D 0;
->>>>>>>> +
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 set_freezable();
->>>>>>>> +
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 while (1) {
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 try_to_freeze();
->>>>>>>> +
->>>>>>>> + wait_event_interruptible(chan->start_wait,
->>>>>>>> + !list_empty(&chan->capture) ||
->>>>>>>> + kthread_should_stop());
->>>>>>>> +
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 if (kthread_should_stop())
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
->>>>>>>> +
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 /*
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 * Source is not streaming if error is non-zero.
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 * So, do not dequeue buffers on capture error.
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 */
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 if (err)
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 continue;
->>>>>>> This will result in an endless loop, I suppose it wasn't the
->>>>>>> intention.
->>>>>> no it will not. on error we report vb2_queue_error which will do
->>>>>> streaming stop request.
->>>>>>
->>>>>> So thread will be stopped on streaming stop request thru kthread=20
->>>>>> stop
->>>>>> signal
->>>>> To be clear on error it reports vb2 queue error and waits for stop
->>>>> streaming to happen
->>>> If thread should exit on error, then it should do it on the actual
->>>> error. Otherwise it looks very error-prone.
->>> When v4l2 drivers indicate fatal error through vb2_queue_error, queue
->>> error flag=C2=A0 is set and wakes up all processes waiting on queue alo=
-ng
->>> with polling reporting=C2=A0 EPOLLERR and also reporting error for queu=
-ing
->>> and dequeuing buffers. Stream stop will surely happen which stops the
->>> thread.
->> This doesn't explain what is the point of continuing to loop instead of
->> exiting immediately on error.
->
-> We are using 2 threads and when capture start error happens, we can=20
-> stop capture_start thread immediately but capture_finish thread will=20
-> still run for any outstanding buffers.
->
-> So, as it makes no diff stopping both threads during stream stop which=20
-> will definitely happen on error and when we don't dequeue buffers
->
-Also there will be an issue if we break on error immediately during=20
-stop_streaming -> kthread_stop()
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/i2c/imx219.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-As stop streaming can happen any time, we do kthread_stop and in case of=20
-error if we stop thread and on stop streaming kthread_stop might crash=20
-as kthread_stop can only be called on running thread
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index cb03bdec1f9c..6e585c39a46a 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -1396,7 +1396,8 @@ static int imx219_probe(struct i2c_client *client)
+ 
+ 	/* Initialize subdev */
+ 	imx219->sd.internal_ops = &imx219_internal_ops;
+-	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
++	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE
++			 |  V4L2_SUBDEV_FL_HAS_EVENTS;
+ 	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 
+ 	/* Initialize source pad */
+-- 
+Regards,
+
+Laurent Pinchart
 
