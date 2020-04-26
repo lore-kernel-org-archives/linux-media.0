@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-9.5 required=3.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
 	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E367C55199
-	for <linux-media@archiver.kernel.org>; Sun, 26 Apr 2020 02:27:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2812C55186
+	for <linux-media@archiver.kernel.org>; Sun, 26 Apr 2020 02:27:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 78A4220706
-	for <linux-media@archiver.kernel.org>; Sun, 26 Apr 2020 02:27:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8E502071E
+	for <linux-media@archiver.kernel.org>; Sun, 26 Apr 2020 02:27:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726431AbgDZC1u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 25 Apr 2020 22:27:50 -0400
-Received: from mail-bn8nam11olkn2065.outbound.protection.outlook.com ([40.92.20.65]:18845
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S1726398AbgDZC1n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 25 Apr 2020 22:27:43 -0400
+Received: from mail-dm6nam11olkn2045.outbound.protection.outlook.com ([40.92.19.45]:14496
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726414AbgDZC1s (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 25 Apr 2020 22:27:48 -0400
+        id S1726374AbgDZC1k (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 25 Apr 2020 22:27:40 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ccp7Y2n/+SP9GIHpxnufbyN5KVUfXAd/Woo71dfp6oFOmGuU2YP7EIFc16agF2Le3IGpJWaAI8pY8xx6JbEecsxUCEQ/pKL/H9SrTzQ+LsrycFHNWBHmiea6VcgpjE5QJcYcyszxN+7d1V5XevWYQXoh/5r1KJ5npnAMQX5vBW3sNs5EAQVTOwqSNbRJm3JJPvdN9MCo+lU9wknkBY1ofJHEokFdmoK9PZ7ykNluXtoXox7MP4ycD4uqX83+ZaLmNp65wPjseR3s8whpnv6k356RSyg1DJLTuyhQNgoJI55POfLrCZSOyIjh756mKc25Q9iN+zF7R125c4/x96k/1Q==
+ b=RGk0v/MSdl+ay/dJntrpSPMryP/VNJG5/5mydAhLwrei9d6q0G+bUFBaABjAXoeEhYyWNNKanv0alviPtvSv2sB1Kyft0L4uecTfHU+hICTlGTnUBOGy7CGfq11OsYYsDtMCyX45K2Vn1QTd2sOyu5FQQ88i8oq0wlzGZMxSPtb5VxWOl08QJRiASfL9deey+0jKlffO6Rcx0MPISgXQMLwQSfafG2z+Hehr82bshS0cr+6E5p7u7nkOct8cCaQETxNTdVNvq1Boa93UXhqVZBFjUyDy3UyIWhgS6KORYPoAjONbk1ocNspUHf72e5el1abwzVNrmYyHJqlD3QaEdA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cqQmCHp8k6z6Z5zFHbV69ZkLYMboQr1394DjLen2RrA=;
- b=epCcOwYBE2QLeyrjXuugNjCfuXFgOPxgpmAR6hvNjQLnIy8msyiAVHczZEYr8tU710heKWgjTKb2xeU3qCYTiWuZRHgiNp1sRrgK3sUjLEn5A5qwiTuFtm0v6BFmwEo/z6Y/zCtDh6ti6ZXKJ4TFXU5+jtZ3pspEuKye1xkLyX9m1Sje4INXbSHFRmuUY1J3O1U1kxa9jtMcp2J+ah/edR7+2JFU1uHHOkVekW2r8+Wcx7ado0TQx4b9wi2bgrIPijg3NqCF+kPu+oDTV9Dz1f+G2pJnsicsVl6PnAZMvLwIvDR8qNOH0jzp7BU9crRdn6E2/6t7o5k7OOoQnE+Aow==
+ bh=STt9G9aXx2m0k28msa6mYVM4b3mtzWZVd+uMZo07GW0=;
+ b=U2K0/7ItzMucNEm1sXZNlZ1S1TEIwixGsNgF2Oufotpyhvr/8mKvb/abQ6MkAY7dNtLgpwUj30jXO5rVcbXyUF8w6+0gmEImnVcCTfrrV1nGVe/zPWlb62Fzmym3ZzGmtQYYj6rAi5WOpjDFewnN3Tuko+Wl1odcZQndxw3pfDi8PEDnjQCzzStHzTg12z7vo5pyI7Yqz2rfCmMbd3FAEJmPHfyV7bJxlg/qMpIEGidP2HO3U6EZpTsdFRvpl1xjeK2SNlFNRS1B8f6F/IQ/9tXKcvJh4j+CadhqR4KDB4UCOZoCtykdaO7Up/O+sic9Gs865F43XqzYNVRlYy2YVQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=live.ca; dmarc=pass action=none header.from=live.ca; dkim=pass
  header.d=live.ca; arc=none
 Received: from DM6NAM11FT041.eop-nam11.prod.protection.outlook.com
- (2a01:111:e400:fc4d::46) by
- DM6NAM11HT124.eop-nam11.prod.protection.outlook.com (2a01:111:e400:fc4d::163)
+ (2a01:111:e400:fc4d::51) by
+ DM6NAM11HT151.eop-nam11.prod.protection.outlook.com (2a01:111:e400:fc4d::256)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.15; Sun, 26 Apr
- 2020 02:27:46 +0000
+ 2020 02:27:39 +0000
 Received: from BN6PR04MB0660.namprd04.prod.outlook.com
  (2a01:111:e400:fc4d::4a) by DM6NAM11FT041.mail.protection.outlook.com
  (2a01:111:e400:fc4d::98) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.15 via Frontend
- Transport; Sun, 26 Apr 2020 02:27:46 +0000
-X-IncomingTopHeaderMarker: OriginalChecksum:9F16B53EB530B8F4AA21623F91F5805BC2154B56769B8FB9CC1E1BF60C9317A7;UpperCasedChecksum:C456189A47C3FF523D42548E67DD9EB00660FD6F0ADABC04B777C32F03677050;SizeAsReceived:7871;Count:50
+ Transport; Sun, 26 Apr 2020 02:27:39 +0000
+X-IncomingTopHeaderMarker: OriginalChecksum:4FD81664749873874A955408E98F71844CD3138907C587078C21BC0CFAC8A793;UpperCasedChecksum:C7C7C8FC91D6C4604FFEE68296F27E0B9564CADC161B338CD800998F240F5B67;SizeAsReceived:7854;Count:50
 Received: from BN6PR04MB0660.namprd04.prod.outlook.com
  ([fe80::ad10:4127:4bc8:76fc]) by BN6PR04MB0660.namprd04.prod.outlook.com
  ([fe80::ad10:4127:4bc8:76fc%6]) with mapi id 15.20.2937.020; Sun, 26 Apr 2020
- 02:27:46 +0000
+ 02:27:38 +0000
 From:   Jonathan Bakker <xc-racer2@live.ca>
 To:     kyungmin.park@samsung.com, s.nawrocki@samsung.com,
         mchehab@kernel.org, kgene@kernel.org, krzk@kernel.org,
         linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Jonathan Bakker <xc-racer2@live.ca>
-Subject: [PATCH 11/11] media: exynos4-is: Correct parallel port probing
-Date:   Sat, 25 Apr 2020 19:26:50 -0700
-Message-ID: <BN6PR04MB0660A14860692EAB2A658AEFA3AE0@BN6PR04MB0660.namprd04.prod.outlook.com>
+Subject: [PATCH 08/11] media: exynos4-is: Remove inh_sensor_ctrls
+Date:   Sat, 25 Apr 2020 19:26:47 -0700
+Message-ID: <BN6PR04MB0660F4263807BBE9EF1DA26BA3AE0@BN6PR04MB0660.namprd04.prod.outlook.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200426022650.10355-1-xc-racer2@live.ca>
 References: <20200426022650.10355-1-xc-racer2@live.ca>
@@ -63,106 +63,97 @@ Content-Type:   text/plain; charset=US-ASCII
 X-ClientProxiedBy: MWHPR17CA0086.namprd17.prod.outlook.com
  (2603:10b6:300:c2::24) To BN6PR04MB0660.namprd04.prod.outlook.com
  (2603:10b6:404:d9::21)
-X-Microsoft-Original-Message-ID: <20200426022650.10355-12-xc-racer2@live.ca>
+X-Microsoft-Original-Message-ID: <20200426022650.10355-9-xc-racer2@live.ca>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from jon-hp-6570b.telus (2001:569:fb67:7300:9f89:4b96:de0b:cd14) by MWHPR17CA0086.namprd17.prod.outlook.com (2603:10b6:300:c2::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.13 via Frontend Transport; Sun, 26 Apr 2020 02:27:44 +0000
+Received: from jon-hp-6570b.telus (2001:569:fb67:7300:9f89:4b96:de0b:cd14) by MWHPR17CA0086.namprd17.prod.outlook.com (2603:10b6:300:c2::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.13 via Frontend Transport; Sun, 26 Apr 2020 02:27:37 +0000
 X-Mailer: git-send-email 2.20.1
-X-Microsoft-Original-Message-ID: <20200426022650.10355-12-xc-racer2@live.ca>
-X-TMN:  [d1pbhGcOX0gErHKuF4yTox57by75oumk2nYR0eEHvuS91abl/QNQEoAZxJTXWQ/5]
+X-Microsoft-Original-Message-ID: <20200426022650.10355-9-xc-racer2@live.ca>
+X-TMN:  [afuhOH3yom0Mw3XhZEdhfLxKcXpi3s3HXLbveEKm2HRI/3tsD1YeFIPqARqgmx+5]
 X-MS-PublicTrafficType: Email
 X-IncomingHeaderCount: 50
 X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-Correlation-Id: 8f027384-48d8-411e-38ce-08d7e989680e
-X-MS-TrafficTypeDiagnostic: DM6NAM11HT124:
+X-MS-Office365-Filtering-Correlation-Id: d4528481-3f05-4eea-e604-08d7e9896388
+X-MS-TrafficTypeDiagnostic: DM6NAM11HT151:
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ke1eKLhxxd7nN15m+8rV5oTdyjVLgTmJuKevL/xvPO7La8WycAijYJCZpMXTKAkY6abicD7bQeXVKypLtZAZwhI1g0hy0KEIzPq08PR7c3gyJGvimZjeOKv8Axz9tpwmZj3Pd9AmR8qoKWL9gsnAYgn2i2V7AdCb+I6xaFuWQHZaHNaB5FlO/66oUaclnDzRxNJHxJzpZmAns4LtFq/Kyg==
+X-Microsoft-Antispam-Message-Info: 3QCJFZUQmBIndamlQZaN2HTn/K/NXESa4qSMm1qKSXUXQ6X2eBIrg6BMc+Q6JP1HI4bMeacNy7LbbJaKiLRIMS8K/SQTeRhoj9GhJcfNRP7UgAtQUXuoXDqKdYHR8i+paUW3I31gsvoDUOEulaK7+/Dwoum783/m0s6YE8uDsIE0TRfSq3o8/FPp3UUTz/pQgfdl9tLSY3ZFfd2Ebf/vgg==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:0;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR04MB0660.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:;DIR:OUT;SFP:1901;
-X-MS-Exchange-AntiSpam-MessageData: KLssGpEm1qIWktO2zFfir+nGfT9NBXzoVOoyjMKwP3PjKnpNO5juZoh1Ax7GNaFE7IR2H+tqND61/S+8nWMs4pLMwwWJFDK7JWa/gyn/pnjZ05sdfJENOaIpTJdpKwRm9/J2fVZ2UetjSHhZfsI+0/uqHg1paeR0ar9AgBQUX33rUexwfm6uf6pyYr/AhcBXlzk9L7fX3ppdrr53b+xC9w==
+X-MS-Exchange-AntiSpam-MessageData: +x/jkFwOmjSGlPmyxqc0XF981y4iZMwTv/xzZunV/CB+9i6xothNsLsbOTVObFQNUFK23G9Yd0AR18fWSpNIb0w6vhSHQLIdyv9YAVOkeDlhp4ph7iFvQY8PGKS5TywcaE8KlnKKQaYTGME9qbUdgaPOQY7FCDDVXezhRdibnYIsBjDk9nP5LaRosLcS91dpSAszSclGLOfKexZlmJo0rg==
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f027384-48d8-411e-38ce-08d7e989680e
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2020 02:27:46.5207
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4528481-3f05-4eea-e604-08d7e9896388
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2020 02:27:38.9111
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6NAM11HT124
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6NAM11HT151
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-According to the binding doc[1], port A should be reg = 0
-and port B reg = 1.  Unfortunately, the driver was treating 0
-as invalid and 1 as camera port A.  Match the binding doc and
-make 0=A and 1=B.
-
-[1] Documentation/devicetree/bindings/media/samsung-fimc.txt
+This is a no-op as it is never set and is a remnant from non-DT days
+that can be safely removed.
 
 Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
 ---
- drivers/media/platform/exynos4-is/media-dev.c | 18 +++++++++++++-----
- drivers/media/platform/exynos4-is/media-dev.h |  1 +
- include/media/drv-intf/exynos-fimc.h          |  2 +-
- 3 files changed, 15 insertions(+), 6 deletions(-)
+ drivers/media/platform/exynos4-is/fimc-capture.c | 13 +------------
+ drivers/media/platform/exynos4-is/fimc-core.h    |  3 ---
+ 2 files changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
-index a87ebd7913be..9c4fdf726b92 100644
---- a/drivers/media/platform/exynos4-is/media-dev.c
-+++ b/drivers/media/platform/exynos4-is/media-dev.c
-@@ -418,13 +418,21 @@ static int fimc_md_parse_port_node(struct fimc_md *fmd,
- 		return ret;
- 	}
+diff --git a/drivers/media/platform/exynos4-is/fimc-capture.c b/drivers/media/platform/exynos4-is/fimc-capture.c
+index 86c233e2f2c9..95d4a667bffb 100644
+--- a/drivers/media/platform/exynos4-is/fimc-capture.c
++++ b/drivers/media/platform/exynos4-is/fimc-capture.c
+@@ -492,17 +492,6 @@ static int fimc_capture_open(struct file *file)
  
--	if (WARN_ON(endpoint.base.port == 0) || *index >= FIMC_MAX_SENSORS) {
--		of_node_put(ep);
--		return -EINVAL;
-+	if (fimc_input_is_parallel(endpoint.base.port)) {
-+		if (WARN_ON(*index >= FIMC_MAX_PARALLEL)) {
-+			of_node_put(ep);
-+			return -EINVAL;
-+		}
-+		pd->mux_id = endpoint.base.port;
-+	} else {
-+		if (WARN_ON(endpoint.base.port == 0 ||
-+				*index >= FIMC_MAX_SENSORS)) {
-+			of_node_put(ep);
-+			return -EINVAL;
-+		}
-+		pd->mux_id = (endpoint.base.port - 1) & 0x1;
- 	}
+ 		ret = fimc_pipeline_call(ve, open, &ve->vdev.entity, true);
  
--	pd->mux_id = (endpoint.base.port - 1) & 0x1;
+-		if (ret == 0 && vc->user_subdev_api && vc->inh_sensor_ctrls) {
+-			/*
+-			 * Recreate controls of the the video node to drop
+-			 * any controls inherited from the sensor subdev.
+-			 */
+-			fimc_ctrls_delete(vc->ctx);
 -
- 	rem = of_graph_get_remote_port_parent(ep);
- 	of_node_put(ep);
- 	if (rem == NULL) {
-diff --git a/drivers/media/platform/exynos4-is/media-dev.h b/drivers/media/platform/exynos4-is/media-dev.h
-index 4b8f9ac52ebc..7bd93fd11b33 100644
---- a/drivers/media/platform/exynos4-is/media-dev.h
-+++ b/drivers/media/platform/exynos4-is/media-dev.h
-@@ -29,6 +29,7 @@
+-			ret = fimc_ctrls_create(vc->ctx);
+-			if (ret == 0)
+-				vc->inh_sensor_ctrls = false;
+-		}
+ 		if (ret == 0)
+ 			ve->vdev.entity.use_count++;
  
- #define PINCTRL_STATE_IDLE	"idle"
+@@ -1408,7 +1397,7 @@ static int fimc_link_setup(struct media_entity *entity,
  
-+#define FIMC_MAX_PARALLEL	2
- #define FIMC_MAX_SENSORS	4
- #define FIMC_MAX_CAMCLKS	2
- #define DEFAULT_SENSOR_CLK_FREQ	24000000U
-diff --git a/include/media/drv-intf/exynos-fimc.h b/include/media/drv-intf/exynos-fimc.h
-index 6b9ef631d6bb..5a07576c378b 100644
---- a/include/media/drv-intf/exynos-fimc.h
-+++ b/include/media/drv-intf/exynos-fimc.h
-@@ -44,7 +44,7 @@ enum fimc_bus_type {
- 	FIMC_BUS_TYPE_ISP_WRITEBACK = FIMC_BUS_TYPE_LCD_WRITEBACK_B,
+ 	vc->input = sd->grp_id;
+ 
+-	if (vc->user_subdev_api || vc->inh_sensor_ctrls)
++	if (vc->user_subdev_api)
+ 		return 0;
+ 
+ 	/* Inherit V4L2 controls from the image sensor subdev. */
+diff --git a/drivers/media/platform/exynos4-is/fimc-core.h b/drivers/media/platform/exynos4-is/fimc-core.h
+index d130f664a60b..31f81bcb8483 100644
+--- a/drivers/media/platform/exynos4-is/fimc-core.h
++++ b/drivers/media/platform/exynos4-is/fimc-core.h
+@@ -299,8 +299,6 @@ struct fimc_m2m_device {
+  * @input_index: input (camera sensor) index
+  * @input: capture input type, grp_id of the attached subdev
+  * @user_subdev_api: true if subdevs are not configured by the host driver
+- * @inh_sensor_ctrls: a flag indicating v4l2 controls are inherited from
+- *		      an image sensor subdev
+  */
+ struct fimc_vid_cap {
+ 	struct fimc_ctx			*ctx;
+@@ -322,7 +320,6 @@ struct fimc_vid_cap {
+ 	int				input_index;
+ 	u32				input;
+ 	bool				user_subdev_api;
+-	bool				inh_sensor_ctrls;
  };
  
--#define fimc_input_is_parallel(x) ((x) == 1 || (x) == 2)
-+#define fimc_input_is_parallel(x) ((x) == 0 || (x) == 1)
- #define fimc_input_is_mipi_csi(x) ((x) == 3 || (x) == 4)
- 
- /*
+ /**
 -- 
 2.20.1
 
