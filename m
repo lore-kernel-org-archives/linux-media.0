@@ -7,54 +7,55 @@ X-Spam-Status: No, score=-9.5 required=3.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
 	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B175C55191
-	for <linux-media@archiver.kernel.org>; Sun, 26 Apr 2020 02:28:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7151FC5519A
+	for <linux-media@archiver.kernel.org>; Sun, 26 Apr 2020 02:28:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F9BC2072B
-	for <linux-media@archiver.kernel.org>; Sun, 26 Apr 2020 02:28:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 581D520724
+	for <linux-media@archiver.kernel.org>; Sun, 26 Apr 2020 02:28:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726461AbgDZC2F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 25 Apr 2020 22:28:05 -0400
-Received: from mail-dm6nam11olkn2067.outbound.protection.outlook.com ([40.92.19.67]:15680
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        id S1726156AbgDZC10 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 25 Apr 2020 22:27:26 -0400
+Received: from mail-co1nam11olkn2044.outbound.protection.outlook.com ([40.92.18.44]:27936
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726186AbgDZC1h (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 25 Apr 2020 22:27:37 -0400
+        id S1726087AbgDZC1Z (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 25 Apr 2020 22:27:25 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=axeoXTnJqCBEo4TmUfkEhwKdgec5U1MRwAlFt21Oh6u5Hns5T6W6cV2/xQ2ik2Z9o7L1RO7WDmMzeavta+lCZ/ikmIWpAU6rGqEcIYhJ69WRCLxvtAk37ilCVrxtYQADuap/UyYRocMYvGaJ+L/B4SbwGBEXaLgswefJ+qwcA1O0K36C0WYBwy+koiUVjkCWdsBqUi86sYP8zOwMErzJW0cwb5HWbtmtxm/dUX9gTsPnv28thOxg01b+XwQ2QwMFvpSwhYuHImxJrUGgMu7rp7IQvYcqU9rwr7p8trkCFKyUHxVjYh+tJl9pCnJ6hK/rgOvOVSvvIuKZS0YkUKtFPA==
+ b=OWnsiCdyUzytcX4GrNtUcJGoqKvBfpgtEk2pnqi7BaoNP3nmS3fkEX5MDuBIjbuaVPHMEAyvhl/Uth4a/KstFh64/rPmv15mthsieqv3B1dpuTDG4pAUiPNvNgTnYj5yvkMs9/uK2Me54jAzg9b4j9zE4+z+jYdCNagsNLjVCnigEoWQ9xp2CdiTOJoaUusZhME96onu1P9cwJNgvSltan8E61rTzbDX1NPsCbLSDYC3Oj1podH9xuCSQCQNMKrKqltRT03d2qV5Q5cNZdd2dL1WqB1Zp+AWF796Sc1E3wkksYkub1jQysT8EUblZqHRVhdBe7bdKfUk9doC0ADmJw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OWrUgCZ/HEFpv6SpAV0Wh+fxnUYTb8+u4Kdk3p6nBbs=;
- b=D6EdOYrY7Asscp3pcCwk7AQCoEQW94pWCM1L1zQxwJ7NcqDunDk3Aw5VN51z2fgKy2fcOi9TnVWO73zgj2GYjefpAcXSyj/qOhQ9gBabSjyUtISPoqYkv5+EEGCguckmeh00HvsEfjG2A259Ieiae2wWgfxPUwFxS+G5XKAtvccxWFh59h7VtbihJKjz9DstY0DEAWmB2KTvP9RFc6SqjiR2ekNq9FyPMuOHkstrNij1oheg0dIGW2xUjmYxH5pBo5Re4I6MTceO9uFl7esGh2R24b9My9MNGHv4xh/S4EzP/WRcsYuM6FC0EmWEopKeP01NjqSEIi+6uy0gCY02RQ==
+ bh=nSs294RsueSv8t3XwPH3w3458B4RooPL11xssljNUYU=;
+ b=n4lcOn3kuCv6iSvKC/VR9tTWBwqv7wzNb3sf8Hlb4qFyCk36RWC5zFp/LPwgE8YU7nr6/V3RA+jbSKuNREuKw0YxJe5aejOeNvpb3Co/FBq9Qbr3wGyQSvZbIDoWzV/pK3nWjfmM4hbc2ghYlF5m/hAen23U2s/l5GBiQhqFB3ZCo/jnWKHYng0Rufxl6Fd+c+DZn0f6BbuiERuNebEtj7JWSB7mFO0WDwIBH9NBky302gtOm8VG/9EwlcEXI/Et5XoXmBobQgW8kPC5V85rLeqmBOj+kxqjHRF4fuMS2zSOUgzKAceGNaqvLyK1bBDgevUEFMZVsx3NSt6xS07qPw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=live.ca; dmarc=pass action=none header.from=live.ca; dkim=pass
  header.d=live.ca; arc=none
 Received: from DM6NAM11FT041.eop-nam11.prod.protection.outlook.com
  (2a01:111:e400:fc4d::51) by
- DM6NAM11HT151.eop-nam11.prod.protection.outlook.com (2a01:111:e400:fc4d::256)
+ DM6NAM11HT254.eop-nam11.prod.protection.outlook.com (2a01:111:e400:fc4d::152)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.15; Sun, 26 Apr
- 2020 02:27:36 +0000
+ 2020 02:27:23 +0000
 Received: from BN6PR04MB0660.namprd04.prod.outlook.com
  (2a01:111:e400:fc4d::4a) by DM6NAM11FT041.mail.protection.outlook.com
  (2a01:111:e400:fc4d::98) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.15 via Frontend
- Transport; Sun, 26 Apr 2020 02:27:36 +0000
-X-IncomingTopHeaderMarker: OriginalChecksum:77AAC2A11B984BCCA2B45863852769CF87DBC6623CDA8F98340850970B9ECFF2;UpperCasedChecksum:184ACF76DD85EF8AF484AABF6F748EB1BDB5080FAEEBF62DD1D087B8891CE458;SizeAsReceived:7875;Count:50
+ Transport; Sun, 26 Apr 2020 02:27:23 +0000
+X-IncomingTopHeaderMarker: OriginalChecksum:531B31765C167240FADAD33C2444280293575C44E3AA2CD8BEB47D2BFD6B721D;UpperCasedChecksum:382035105F016C51E8D78BD7EC922D9068D323520BD471630FCE1EAC17CCE74A;SizeAsReceived:7956;Count:50
 Received: from BN6PR04MB0660.namprd04.prod.outlook.com
  ([fe80::ad10:4127:4bc8:76fc]) by BN6PR04MB0660.namprd04.prod.outlook.com
  ([fe80::ad10:4127:4bc8:76fc%6]) with mapi id 15.20.2937.020; Sun, 26 Apr 2020
- 02:27:36 +0000
+ 02:27:23 +0000
 From:   Jonathan Bakker <xc-racer2@live.ca>
 To:     kyungmin.park@samsung.com, s.nawrocki@samsung.com,
         mchehab@kernel.org, kgene@kernel.org, krzk@kernel.org,
         linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jonathan Bakker <xc-racer2@live.ca>
-Subject: [PATCH 07/11] media: exynos4-is: Add support for multiple sensors on one port
-Date:   Sat, 25 Apr 2020 19:26:46 -0700
-Message-ID: <BN6PR04MB0660CE60DA8585C5E1DA9EB9A3AE0@BN6PR04MB0660.namprd04.prod.outlook.com>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Jonathan Bakker <xc-racer2@live.ca>
+Subject: [PATCH 02/11] media: exynos4-is: Request syscon only if ISP writeback is present
+Date:   Sat, 25 Apr 2020 19:26:41 -0700
+Message-ID: <BN6PR04MB066006C199A43996C0502B62A3AE0@BN6PR04MB0660.namprd04.prod.outlook.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200426022650.10355-1-xc-racer2@live.ca>
 References: <20200426022650.10355-1-xc-racer2@live.ca>
@@ -63,136 +64,67 @@ Content-Type:   text/plain; charset=US-ASCII
 X-ClientProxiedBy: MWHPR17CA0086.namprd17.prod.outlook.com
  (2603:10b6:300:c2::24) To BN6PR04MB0660.namprd04.prod.outlook.com
  (2603:10b6:404:d9::21)
-X-Microsoft-Original-Message-ID: <20200426022650.10355-8-xc-racer2@live.ca>
+X-Microsoft-Original-Message-ID: <20200426022650.10355-3-xc-racer2@live.ca>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from jon-hp-6570b.telus (2001:569:fb67:7300:9f89:4b96:de0b:cd14) by MWHPR17CA0086.namprd17.prod.outlook.com (2603:10b6:300:c2::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.13 via Frontend Transport; Sun, 26 Apr 2020 02:27:35 +0000
+Received: from jon-hp-6570b.telus (2001:569:fb67:7300:9f89:4b96:de0b:cd14) by MWHPR17CA0086.namprd17.prod.outlook.com (2603:10b6:300:c2::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.13 via Frontend Transport; Sun, 26 Apr 2020 02:27:21 +0000
 X-Mailer: git-send-email 2.20.1
-X-Microsoft-Original-Message-ID: <20200426022650.10355-8-xc-racer2@live.ca>
-X-TMN:  [miH5yeqLlI+WRBIESIzFByZYcL/hSNyoM+wsqWc+8Y8rCl0PKUKgO8x4d5gvMT04]
+X-Microsoft-Original-Message-ID: <20200426022650.10355-3-xc-racer2@live.ca>
+X-TMN:  [G7Cs4MM2yrwsmarBCCekGBrr73zkLHuucpIt+RpKrepKcQy9fHU6tvmtkdp/Egxy]
 X-MS-PublicTrafficType: Email
 X-IncomingHeaderCount: 50
 X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-Correlation-Id: 32777673-8530-483d-f3f9-08d7e9896235
-X-MS-TrafficTypeDiagnostic: DM6NAM11HT151:
+X-MS-Office365-Filtering-Correlation-Id: 420a6fac-6952-46ad-b221-08d7e9895a36
+X-MS-TrafficTypeDiagnostic: DM6NAM11HT254:
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hTo1zXR/VH/vy1QJK9RAJT1ERdrFXDFNHzIyigAhdWSePF74W8BlfOHUhx94Xm4evv27jHI8HQ7pMXqB9jNVJ8ILpiuKpG+pUcb0Aj6I22EHGukJpA14Bh1BNYB76txAaKqTcUupG9d8lHHaPfCpeaU7hYFGV9TBWgeYfWAZfp/c3z2tZ/3ye7Ti1s+cHJYz7NhB14UhF6CaRDjMUdIPqg==
+X-Microsoft-Antispam-Message-Info: 62/GSOfmLqQflkz9FXkbq35CipkjOYlc3CZH+XRgYPrm6oww5IzK4mosSsg0CXttynvgXLNjU8P0z4wVXEhK8YsfSG2f9VNg/yGFQl35G4CLLIxyTi403shc8/c0YGej4BBpUGwmK/gq5XzNOdv20RJrFByllTk3xVsaY//DH0k/Rz0jV5qHY9OUQzQgSZRI9V5a9aokLNXb/t5phKv26g==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:0;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR04MB0660.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:;DIR:OUT;SFP:1901;
-X-MS-Exchange-AntiSpam-MessageData: dG2g2LIxKVZa8/STSh2QO7LCoZfdwgASngEsAczxLbGnW9IIidMvxCTJY/ZqLtFTu5Y/15+JrDCiWn33DafTpnpSDDoREmydNtmTIxs947a2kYh004rdtJKSm0dgjnOz9MM2h4zGA3cO26ayRx85OZCW9dDeWZMByNuslOINeLsUFaTGZepSbzeN2yunZ3tGrlfr7g+o/SZ3zW9R7kwcpA==
+X-MS-Exchange-AntiSpam-MessageData: wG+zfM+P8LZZQwjk07Bk/6RaKDXdAHoL2zfQl5j13+CT1itEhCarHPg6NjoB9/7qLoIKZS0eTeEhnEr2lrSoQF1M1UMTasjHkcsBWfCMlhA0Ehpfmol4TkJYOG/RTaVNmRRZz4PpptP4WuMWiFosJZJc9quo+r3Ly/pNm3GsRuYJrmEbNAD3gOKyGl9CdCyHbNuFLziLBu1PO7DAkIUzGA==
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 32777673-8530-483d-f3f9-08d7e9896235
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2020 02:27:36.7067
+X-MS-Exchange-CrossTenant-Network-Message-Id: 420a6fac-6952-46ad-b221-08d7e9895a36
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2020 02:27:23.3808
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6NAM11HT151
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6NAM11HT254
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On some devices, there may be multiple camera sensors attached
-to the same port.  Make sure we probe all of them, not just the
-first one.
+From: Tomasz Figa <tomasz.figa@gmail.com>
 
+On FIMC variants which don't have writeback channel, there is no need to
+access system registers. This patch makes the driver request sysreg
+regmap conditionally depending on whether writeback is supported.
+
+Signed-off-by: Tomasz Figa <tomasz.figa@gmail.com>
 Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
 ---
- drivers/media/platform/exynos4-is/media-dev.c | 32 ++++++++++++-------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ drivers/media/platform/exynos4-is/fimc-core.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
-index b38445219c72..a87ebd7913be 100644
---- a/drivers/media/platform/exynos4-is/media-dev.c
-+++ b/drivers/media/platform/exynos4-is/media-dev.c
-@@ -397,25 +397,28 @@ static void fimc_md_pipelines_free(struct fimc_md *fmd)
- /* Parse port node and register as a sub-device any sensor specified there. */
- static int fimc_md_parse_port_node(struct fimc_md *fmd,
- 				   struct device_node *port,
--				   unsigned int index)
-+				   unsigned int *index)
- {
--	struct fimc_source_info *pd = &fmd->sensor[index].pdata;
-+	struct fimc_source_info *pd;
- 	struct device_node *rem, *ep, *np;
--	struct v4l2_fwnode_endpoint endpoint = { .bus_type = 0 };
-+	struct v4l2_fwnode_endpoint endpoint;
- 	int ret;
+diff --git a/drivers/media/platform/exynos4-is/fimc-core.c b/drivers/media/platform/exynos4-is/fimc-core.c
+index 2258f3bfc929..08d1f39a914c 100644
+--- a/drivers/media/platform/exynos4-is/fimc-core.c
++++ b/drivers/media/platform/exynos4-is/fimc-core.c
+@@ -954,9 +954,11 @@ static int fimc_probe(struct platform_device *pdev)
+ 	spin_lock_init(&fimc->slock);
+ 	mutex_init(&fimc->lock);
  
--	/* Assume here a port node can have only one endpoint node. */
- 	ep = of_get_next_child(port, NULL);
- 	if (!ep)
- 		return 0;
- 
-+parse_sensor:
-+	pd = &fmd->sensor[*index].pdata;
-+	endpoint.bus_type = 0;
-+
- 	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &endpoint);
- 	if (ret) {
- 		of_node_put(ep);
- 		return ret;
- 	}
- 
--	if (WARN_ON(endpoint.base.port == 0) || index >= FIMC_MAX_SENSORS) {
-+	if (WARN_ON(endpoint.base.port == 0) || *index >= FIMC_MAX_SENSORS) {
- 		of_node_put(ep);
- 		return -EINVAL;
- 	}
-@@ -462,16 +465,16 @@ static int fimc_md_parse_port_node(struct fimc_md *fmd,
- 		pd->fimc_bus_type = pd->sensor_bus_type;
- 	of_node_put(np);
- 
--	if (WARN_ON(index >= ARRAY_SIZE(fmd->sensor))) {
-+	if (WARN_ON(*index >= ARRAY_SIZE(fmd->sensor))) {
- 		of_node_put(rem);
- 		return -EINVAL;
- 	}
- 
--	fmd->sensor[index].asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
--	fmd->sensor[index].asd.match.fwnode = of_fwnode_handle(rem);
-+	fmd->sensor[*index].asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
-+	fmd->sensor[*index].asd.match.fwnode = of_fwnode_handle(rem);
- 
- 	ret = v4l2_async_notifier_add_subdev(&fmd->subdev_notifier,
--					     &fmd->sensor[index].asd);
-+					     &fmd->sensor[*index].asd);
- 	if (ret) {
- 		of_node_put(rem);
- 		return ret;
-@@ -479,6 +482,13 @@ static int fimc_md_parse_port_node(struct fimc_md *fmd,
- 
- 	fmd->num_sensors++;
- 
-+	/* Check for additional sensors on same port */
-+	ep = of_get_next_child(port, ep);
-+	if (ep) {
-+		(*index)++;
-+		goto parse_sensor;
+-	fimc->sysreg = fimc_get_sysreg_regmap(dev->of_node);
+-	if (IS_ERR(fimc->sysreg))
+-		return PTR_ERR(fimc->sysreg);
++	if (fimc->variant->has_isp_wb) {
++		fimc->sysreg = fimc_get_sysreg_regmap(dev->of_node);
++		if (IS_ERR(fimc->sysreg))
++			return PTR_ERR(fimc->sysreg);
 +	}
-+
- 	return 0;
- }
  
-@@ -515,7 +525,7 @@ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
- 		if (!port)
- 			continue;
- 
--		ret = fimc_md_parse_port_node(fmd, port, index);
-+		ret = fimc_md_parse_port_node(fmd, port, &index);
- 		of_node_put(port);
- 		if (ret < 0) {
- 			of_node_put(node);
-@@ -530,7 +540,7 @@ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
- 		goto rpm_put;
- 
- 	for_each_child_of_node(ports, node) {
--		ret = fimc_md_parse_port_node(fmd, node, index);
-+		ret = fimc_md_parse_port_node(fmd, node, &index);
- 		if (ret < 0) {
- 			of_node_put(node);
- 			goto cleanup;
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	fimc->regs = devm_ioremap_resource(dev, res);
 -- 
 2.20.1
 
