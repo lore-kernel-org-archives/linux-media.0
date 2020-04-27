@@ -2,122 +2,60 @@ Return-Path: <SRS0=Pmhz=6L=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7358AC55199
-	for <linux-media@archiver.kernel.org>; Mon, 27 Apr 2020 11:38:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA9E0C54FD0
+	for <linux-media@archiver.kernel.org>; Mon, 27 Apr 2020 11:49:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47CE7206B6
-	for <linux-media@archiver.kernel.org>; Mon, 27 Apr 2020 11:38:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="azkBHvQo"
+	by mail.kernel.org (Postfix) with ESMTP id 8F082206CD
+	for <linux-media@archiver.kernel.org>; Mon, 27 Apr 2020 11:49:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727087AbgD0LiH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Apr 2020 07:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbgD0LiH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Apr 2020 07:38:07 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B31BC0610D5
-        for <linux-media@vger.kernel.org>; Mon, 27 Apr 2020 04:38:07 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id r17so13514589lff.2
-        for <linux-media@vger.kernel.org>; Mon, 27 Apr 2020 04:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id;
-        bh=u7uyCRFUo4pcF2Qpz5gLQ+/JnITro+TE2p+35fbUNJY=;
-        b=azkBHvQoeF2tyPZ9ctsO20hKS5vZtJSQxA1JA/8O1n81pQN1pwNED1ErVF4+aPM6z9
-         7yiHIEg0zMXk3BdVVgMznnVOTi5ycveVRKG9EKS4WfWiAM+Es/0iw8tuZ7cFcersK2Ga
-         oUebCzjc5F8DQyjpRGlmFDPrNvytldDtznK2lDLtiFniYnr9cuWoQzSzrSBH1obCbzqM
-         b+FdFMTDrgKab22eo1sVBA9+VinxuWhBBKgXnBGFTnWe5IaMR7SwvXOl05ODPTz7VoBB
-         5UNduGmQIdHZo+WP1HE5fC0WrK2BNc2aWYt2Y0A0h5hedTMDSmwtsXFOX00aiDCAH43q
-         2aRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=u7uyCRFUo4pcF2Qpz5gLQ+/JnITro+TE2p+35fbUNJY=;
-        b=MehXBQVdT9KV9lOyfE66UIy1bqU0XSF2eJYbbns/1kKL1YAbGSSn7q9QprHR2h8Ifd
-         O3Bn952GUWkO4Zjyt0qlcK7hxlhH2GzQSI4oNqNStwOOkXIhy3iJxESb/cThYE9jWJBH
-         mD3aM4q3khDMh7nWy8UyQqrZh7Otl6bhQPpWUGAsM7CgiHv7jCTy36eez4m5II7mdy9H
-         3IWg+GKXzEc+uDz7tv2Ni2s66yb1fI2vbL7t0ywmQ+V2maDy64xDlMHWvDsrvixvi/bA
-         1gB/QVvrTwbxg/bAUOLPcxxvPGzhyg71tlWHxhzIZ/H172yHKxlihkPbv4uu91cskYGn
-         MYeA==
-X-Gm-Message-State: AGi0PuZBQ+KFFu02p+oug8vSDLGHjlxGQjJ/11DbagjHCsv6a0p7311o
-        0Tl5tFmzRfDJ3jF1uJcM/sXOTYHtpPZg+A==
-X-Google-Smtp-Source: APiQypJvFOavHoomErzIQDwiZ6lLYMhE8gWfBvT1azjcxrAeyHV3lGiVA5fAJJg/X/5R2yBNnwk+aA==
-X-Received: by 2002:a19:f806:: with SMTP id a6mr15307935lff.201.1587987485291;
-        Mon, 27 Apr 2020 04:38:05 -0700 (PDT)
-Received: from localhost.localdomain (212-5-158-103.ip.btc-net.bg. [212.5.158.103])
-        by smtp.gmail.com with ESMTPSA id k6sm10958587lfm.91.2020.04.27.04.38.03
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2020 04:38:04 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for v5.8] Venus updates - part2
-Date:   Mon, 27 Apr 2020 14:35:38 +0300
-Message-Id: <20200427113538.26489-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1726504AbgD0Ltr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Apr 2020 07:49:47 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:57030 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726260AbgD0Ltq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 27 Apr 2020 07:49:46 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jT2Db-000X7a-Mb; Mon, 27 Apr 2020 11:46:35 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jT2IT-0005d3-RQ; Mon, 27 Apr 2020 11:51:37 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL for v5.8] Venus updates - part2 (#63388)
+Date:   Mon, 27 Apr 2020 11:51:37 +0000
+Message-Id: <20200427115137.21596-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200427113538.26489-1-stanimir.varbanov@linaro.org>
+References: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+From: builder@linuxtv.org
 
-Venus driver updates for v5.8 part2 includes:
+Pull request: https://patchwork.linuxtv.org/patch/63388/
+Build log: https://builder.linuxtv.org/job/patchwork/48470/
+Build time: 00:11:17
+Link: https://lore.kernel.org/linux-media/20200427113538.26489-1-stanimir.varbanov@linaro.org
 
-  * Missing mutex destroy, reorder platform driver .remove
-    to avoid mutex usage after mutex destroy.
-  * Done buffers per queue and init registered list unconditionally - 
-    those fixes an issue with dynamic-resolution-change.
-  * Return EBUSY in S_FMT during streamon.
-  * Add a mechanism to mark LAST buffer from before resolution
-    change event.
+gpg: Signature made Sat 25 Apr 2020 03:16:03 PM UTC
+gpg:                using RSA key E1558C2497CE3CCC2B5AA30F25B55FC81B7035F2
+gpg: Good signature from "Stanimir Varbanov <stanimir.varbanov@linaro.org>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 34CF E039 8A16 AD93 18FD  D5E8 A6D0 26D8 E358 14D4
+     Subkey fingerprint: E155 8C24 97CE 3CCC 2B5A  A30F 25B5 5FC8 1B70 35F2
 
-Please pull.
-
-regards,
-Stan
-
-The following changes since commit 4bdbff4da40584ec2225bb429b7c66ad54d19cda:
-
-  media: tuners: Kconfig: add some missing VIDEO_V4L2 dependencies (2020-04-23 07:57:27 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/svarbanov/media_tree.git tags/venus-tag-for-v5.8-part2
-
-for you to fetch changes up to e95173a155cdb60a01b03d88f7b0c38f069e2dd0:
-
-  venus: venc,vdec: Return EBUSY on S_FMT while streaming (2020-04-25 16:25:28 +0300)
-
-----------------------------------------------------------------
-Venus updates for v5.8 part2
-
-----------------------------------------------------------------
-Stanimir Varbanov (8):
-      venus: core: Add missing mutex destroy
-      venus: core: Fix mutex destroy in remove
-      venus: core: Constify codec frequency data array
-      venus: helpers: Done buffers per queue type
-      venus: vdec: Mark flushed buffers with error state
-      venus: vdec: Init registered list unconditionally
-      venus: Mark last capture buffer
-      venus: venc,vdec: Return EBUSY on S_FMT while streaming
-
- drivers/media/platform/qcom/venus/core.c     |  6 ++-
- drivers/media/platform/qcom/venus/core.h     |  5 ++-
- drivers/media/platform/qcom/venus/helpers.c  | 18 +++++---
- drivers/media/platform/qcom/venus/helpers.h  |  2 +-
- drivers/media/platform/qcom/venus/hfi.c      | 10 +++--
- drivers/media/platform/qcom/venus/hfi.h      |  3 +-
- drivers/media/platform/qcom/venus/hfi_msgs.c |  2 +
- drivers/media/platform/qcom/venus/vdec.c     | 66 +++++++++++++++++++++++-----
- drivers/media/platform/qcom/venus/venc.c     | 10 ++++-
- 9 files changed, 96 insertions(+), 26 deletions(-)
+Summary: 1 patches and/or PDF generation with issues, being 0 at build time
