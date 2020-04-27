@@ -6,22 +6,26 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BAAAC55199
-	for <linux-media@archiver.kernel.org>; Mon, 27 Apr 2020 14:52:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7092BC54FCB
+	for <linux-media@archiver.kernel.org>; Mon, 27 Apr 2020 14:54:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0F5E206D9
-	for <linux-media@archiver.kernel.org>; Mon, 27 Apr 2020 14:52:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E3FE206D9
+	for <linux-media@archiver.kernel.org>; Mon, 27 Apr 2020 14:54:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbgD0Ov7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Apr 2020 10:51:59 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:53572 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727022AbgD0Ov7 (ORCPT
+        id S1728024AbgD0Oyv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Apr 2020 10:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727115AbgD0Oyv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Apr 2020 10:51:59 -0400
+        Mon, 27 Apr 2020 10:54:51 -0400
+X-Greylist: delayed 174 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Apr 2020 07:54:50 PDT
+Received: from hillosipuli.retiisi.org.uk (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A1EC0610D5;
+        Mon, 27 Apr 2020 07:54:50 -0700 (PDT)
 Received: from lanttu.localdomain (lanttu.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::c1:2])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 47D6A634C87;
-        Mon, 27 Apr 2020 17:51:02 +0300 (EEST)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 0542A634C8B;
+        Mon, 27 Apr 2020 17:53:58 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -34,9 +38,9 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Joe Perches <joe@perches.com>,
         Jani Nikula <jani.nikula@linux.intel.com>
-Subject: [PATCH 1/1] lib/vsprintf: Add support for printing V4L2 and DRM fourccs
-Date:   Mon, 27 Apr 2020 17:50:07 +0300
-Message-Id: <20200427145007.29736-1-sakari.ailus@linux.intel.com>
+Subject: [RESEND PATCH v3 1/1] lib/vsprintf: Add support for printing V4L2 and DRM fourccs
+Date:   Mon, 27 Apr 2020 17:53:03 +0300
+Message-Id: <20200427145303.29943-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -52,6 +56,25 @@ so the same implementation can be used.
 Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
+since v2:
+
+- Add comments to explain why things are being done
+
+- Print characters under 32 (space) as hexadecimals in parenthesis.
+
+- Do not print spaces in the fourcc codes.
+
+- Make use of a loop over the fourcc characters instead of
+  put_unaligned_le32(). This is necessary to omit spaces in the output.
+
+- Use DRM style format instead of V4L2. This provides the precise code as
+  a numerical value as well as explicit endianness information.
+
+- Added WARN_ON_ONCE() sanity checks. Comments on these are welcome; I'd
+  expect them mostly be covered by the tests.
+
+- Added tests for %p4cc in lib/test_printf.c
+
  Documentation/core-api/printk-formats.rst | 12 ++++
  lib/test_printf.c                         | 17 +++++
  lib/vsprintf.c                            | 86 +++++++++++++++++++++++
