@@ -2,113 +2,105 @@ Return-Path: <SRS0=SSLR=6M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D95EC83006
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 12:49:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43972C83006
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 12:50:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E9C3F206D6
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 12:49:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EE02206D6
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 12:50:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="pq7NBpxA"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="UsN7wtHW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726863AbgD1Mt5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Apr 2020 08:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S1727067AbgD1Muw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Apr 2020 08:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726787AbgD1Mt5 (ORCPT
+        by vger.kernel.org with ESMTP id S1726930AbgD1Muv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Apr 2020 08:49:57 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C502FC03C1A9
-        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 05:49:56 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id v4so2294222wme.1
-        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 05:49:56 -0700 (PDT)
+        Tue, 28 Apr 2020 08:50:51 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC8CC03C1AB
+        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 05:50:49 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id v4so2296164wme.1
+        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 05:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T0akXOU/T+phx4piiDIHlJgC6bgR8WnmW0DHmvs0oaU=;
-        b=pq7NBpxAJ0utSOg3DDUGFHb3Py1QF/TuUxV3wtcBYvHUb8VThifcz9Z5awmC1SD870
-         aErrSQ6QaOPEk8r23wMyT+m+5kbRUMfYUSMi2wd+Xrh7CuPUJ54W66YZ++IC4ASn+Ebb
-         agjkWE2LmxPv4LzbiGz90wUMWKPR91TsYXWJlO9btYUgOmGwEe/rcmiZ1E2gWjkcMvlE
-         qlaFki2OFS77Yv/YK5/gu4LwlOl05QLr5MnNfd8+o8y/lhbdOBRMOfukBXih4EDerVkY
-         vKMkZQGhTVhVTh6MCCU+J/8osOYGvefcngl6bL9OLK/TceJFnFyL2LbLwNt52ktErMAf
-         kM6w==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8anzHF+dcSSxDMelqgrQkASv+bLpdKTF9+EFoyjXFfw=;
+        b=UsN7wtHWwKfyL1O8DH1Sq3V3gztXpybUf4qG/ArSdLZDTdOJnV/OSfcBsiV7uoWAf9
+         GGQAMrwsmsFiBOvUwHCbgHFSIbRaHRb0TJfq7IBYy/Fdd1pP1fvOlEaboSAqZ5Yu2m6l
+         mTUQ9BwbHNFEvkVOenRDXWZmrBNeFLH0EI1h0isQbYqHuDi+llKondq+RcHPmur9IbrN
+         SbS1dvkN2rJNgd2G1amWbvc8w0s+EEsjgAL+jAlHjROjuXALLTBlu15anIrLEFTTYKBQ
+         ldQbNJnXQN1tjE8avdQ7tvbBoeF7W+j5O59HrEkFmFlAB34VLGVkPJFk49s8O7kjuU8w
+         ZFTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T0akXOU/T+phx4piiDIHlJgC6bgR8WnmW0DHmvs0oaU=;
-        b=pm32F/QNqDQW9ykkLYU+yYW3WbKDpTJQxZBZ43uPoOxaE6dRdprQ6hPgXIpq1doi8X
-         W+iF7Ur/WGb/KgNlSJTX0E/TZgp9Vt8IYJxzLZTSYzxsG4H3Z9kR77YUR5kl90cmTJcD
-         6BypJzwnSRTOnG4SZQFxubNimLOu6AWD/ItYArig7iWj0jLjBaoLGoE85zl7GOSi2bri
-         wSD/gopb6LWEbt05B93fe5MeokBVb8MnS/uLEshBtdo2Gft1X6qR5u+Quy3r1EpgrVyX
-         jxGLwt68yJPULZJ7+0A3GgqHShwhxwsk490GX8vxLy+qfkshAn+FnhiVeYEEyLOQMGg2
-         uQYA==
-X-Gm-Message-State: AGi0PuYmY7PejdBcuAiyso/QJhW+mo6oS6DdwEYmiQnpse+7F3nWFHYo
-        2uP/OirVqz7I7EUbd0btUEGOu35Y+UzvNbCiQvlkiQ==
-X-Google-Smtp-Source: APiQypL5Wc0x3ujuYNguZCyOPZVk5rJHty3L04qHuEpcmwL7U8Ae7z4/tG0kBt5TtWeIZhIoikLM9v+63HO10iiWf8I=
-X-Received: by 2002:a05:600c:1109:: with SMTP id b9mr4404814wma.116.1588078195551;
- Tue, 28 Apr 2020 05:49:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8anzHF+dcSSxDMelqgrQkASv+bLpdKTF9+EFoyjXFfw=;
+        b=s5r9PU1PqRPgmYudRykOG57nPxXqRwcc+KpFdhTIe0yRHP4JnRYhpOKKS8SZpTqqgA
+         X/Z78CGtHYX0gWccgx1FRwrrN9FAv9CUZ+gkKek7Lk1j30/nqy6CVy5Ir0Teu2rHeToP
+         e5DPlceBu2eti3TiLpJs1HohVH6AfY2qLaXw+ZZQLPImLuSPVJiJoV0kNqtdVl+18if+
+         MdO3p2d8nihkcDNW+J/WfOLAm3Lv1hmqePHNcR/b8+0uriGoh7EIY6FRCWV5xrgT8DMk
+         Kw7SEFIVudybKWdh3VRmaCupEbHNhOOpVxfmfwiMQ/Wl6ZE3X/LNCzlByZO+unlTCzDm
+         B2FQ==
+X-Gm-Message-State: AGi0PuY5yF9Li8Lcy+p0IqPLD5uCEolV1yoCkizmh360RMIbDgcjiEzO
+        OsUbPMg8P4gc1uRvVCsw1zeibpOKQtGKIw==
+X-Google-Smtp-Source: APiQypL2YZ2MBbSoNvS5Iov1MdtpqzDWil3z2ABheuAvBMkWKWYpV0eo2905q8DEJG+ftCWJ8Pd7+A==
+X-Received: by 2002:a7b:c4c9:: with SMTP id g9mr4367301wmk.171.1588078248287;
+        Tue, 28 Apr 2020 05:50:48 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e35:2ec0:82b0:4460:3fd3:382:4a71])
+        by smtp.gmail.com with ESMTPSA id q184sm3246115wma.25.2020.04.28.05.50.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2020 05:50:47 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl
+Cc:     linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: [PATCH 3/3] MAINTAINERS: update the Amlogic VDEC driver maintainer entry
+Date:   Tue, 28 Apr 2020 14:50:36 +0200
+Message-Id: <20200428125036.9401-4-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20200428125036.9401-1-narmstrong@baylibre.com>
+References: <20200428125036.9401-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
-References: <20200413155134.250243-1-purisame@spuri.io>
-In-Reply-To: <20200413155134.250243-1-purisame@spuri.io>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Tue, 28 Apr 2020 13:49:40 +0100
-Message-ID: <CAPY8ntAmdpB7xNYaunzxg8ZxguAyh+41U1KnyNC_w5OODU19sQ@mail.gmail.com>
-Subject: Re: [PATCH] media: i2c: imx219: remove redundant writes
-To:     Sameer Puri <purisame@spuri.io>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sameer
+Add myself as co-maintainer of the Amlogic VDEC driver, and add the
+missing vdec DT yaml bindings.
 
-Thanks for the patch.
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Mon, 13 Apr 2020 at 16:51, Sameer Puri <purisame@spuri.io> wrote:
->
-> These writes to 0x162, 0x163 already appear earlier in the struct for
-> the 1920x1080 mode and do not need to be repeated.
->
-> Signed-off-by: Sameer Puri <purisame@spuri.io>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d633a131dcd7..0c183f02d7fa 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11009,10 +11009,12 @@ F:	drivers/mtd/nand/raw/meson_*
+ 
+ MESON VIDEO DECODER DRIVER FOR AMLOGIC SOCS
+ M:	Maxime Jourdan <mjourdan@baylibre.com>
++M:	Neil Armstrong <narmstrong@baylibre.com>
+ L:	linux-media@vger.kernel.org
+ L:	linux-amlogic@lists.infradead.org
+ S:	Supported
+ T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
+ F:	drivers/staging/media/meson/vdec/
+ 
+ METHODE UDPU SUPPORT
+-- 
+2.22.0
 
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-
-If I was going to be fussy, it would be nice to have the writes to
-0x162/0x163 in a consistent place in the table, which is generally the
-end (I'm aware that the 640x480 mode has it in the middle). Personally
-I'm not overly worried, but others may prefer it.
-
-> ---
->  drivers/media/i2c/imx219.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> index cb03bdec1f9c..53dafb7f5f2c 100644
-> --- a/drivers/media/i2c/imx219.c
-> +++ b/drivers/media/i2c/imx219.c
-> @@ -253,8 +253,6 @@ static const struct imx219_reg mode_1920_1080_regs[] = {
->         {0x4793, 0x10},
->         {0x4797, 0x0e},
->         {0x479b, 0x0e},
-> -       {0x0162, 0x0d},
-> -       {0x0163, 0x78},
->  };
->
->  static const struct imx219_reg mode_1640_1232_regs[] = {
->
-> base-commit: 8f3d9f354286745c751374f5f1fcafee6b3f3136
-> --
-> 2.26.0
->
->
