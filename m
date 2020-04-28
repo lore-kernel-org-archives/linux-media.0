@@ -2,96 +2,143 @@ Return-Path: <SRS0=SSLR=6M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7969C83009
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 12:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65CF8C83008
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 13:37:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D478206D9
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 12:51:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Of8nBJdk"
+	by mail.kernel.org (Postfix) with ESMTP id 47502206D6
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 13:37:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726804AbgD1Mup (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Apr 2020 08:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726746AbgD1Mup (ORCPT
+        id S1726860AbgD1Nha (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Apr 2020 09:37:30 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:59323 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726846AbgD1Nha (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Apr 2020 08:50:45 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1B3C03C1AB
-        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 05:50:45 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id u127so2726816wmg.1
-        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 05:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ivk8pUd5yw65/sV/AvpRxYKjBbQZM0SLzoY/9d09xk4=;
-        b=Of8nBJdkQzrZsQ93VmweFQ2f0VW0tkBt7Arl73GPj7BJQBd1pGk3DpmZi+VE6ZKCHX
-         mlvXb5C9ntOqyF7vCz8Kc9H+FPam1W15Q+oJeHHfeWouz6oG5S6UayP8QY2GQdPUI0My
-         hCPus1kjcwzWMS6LHSUO8Wog5xotwmZfF1Rk01Vh41vN9/i9ZUSamwG/DgN4RGiguFnJ
-         CL8/TmhN+X02+qkqcOoIiXhiT7DosmretDlc6iCO+pUDDyq8V7kpnzS97PK51gjcfusD
-         ErWaiqPmUu5q3PfIhGwF/jg7w8G5VKmMGWvjKaRiugDR4+f7SzGsiWgqBo6832Lb49Tz
-         cGsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ivk8pUd5yw65/sV/AvpRxYKjBbQZM0SLzoY/9d09xk4=;
-        b=TRSKhgUw7KohWGW+2GGiO75L5wjmQS53xTODSyxQe8w1VQW7Y0IxYi0bLERSL+PLxN
-         C59KcObycp/98ZPvMgwN47dHP2Za7jGJUiFZs8xUjA8d+Q8uS9zG5SMc0l6Xl81rMh9W
-         TVKyF1jADRkatwJkuA6Kbdk9Bz0gzqt06e7HbdFm0nQYuC1Xo+wJobwRuFHbKxdA/XwH
-         BLUYjV8W/Z6prA0NEN0aTOM/keZG0RobpO0wMWb5f/Avx2RA0tiPrnp7MYcPzkeRE2QP
-         tgXs+Oc3s0Dilm/5A3PjZa+nr12GcHcJbdo2xnF9Dic0CWIJ8Fi1EX7q0LeXXD5FPOGt
-         /NnA==
-X-Gm-Message-State: AGi0PubPrGALP+DGod64ZlTo21b1CiVi6ckk787gEVJZW3pESY6QMD4b
-        zkQvRITsZA4S72JCytUC9Svv/ttsslLnqw==
-X-Google-Smtp-Source: APiQypJD/8l1OOW0+VgnggdRlxU6EJlqkaxBVKVmSTJRZwFIqdX2QpB1vmlCqT7Ad90mXIEuv/apuA==
-X-Received: by 2002:a1c:99d3:: with SMTP id b202mr4652138wme.126.1588078243182;
-        Tue, 28 Apr 2020 05:50:43 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e35:2ec0:82b0:4460:3fd3:382:4a71])
-        by smtp.gmail.com with ESMTPSA id q184sm3246115wma.25.2020.04.28.05.50.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 05:50:42 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH 0/3] meson: vdec: vp9 & MAINTAINERS fixes
-Date:   Tue, 28 Apr 2020 14:50:33 +0200
-Message-Id: <20200428125036.9401-1-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
+        Tue, 28 Apr 2020 09:37:30 -0400
+Received: from uno.localdomain (a-ur1-85.tin.it [212.216.150.148])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id D4C7310000D;
+        Tue, 28 Apr 2020 13:37:25 +0000 (UTC)
+Date:   Tue, 28 Apr 2020 15:40:36 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     dave.stevenson@raspberrypi.com, linux-media@vger.kernel.org,
+        mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hverkuil-cisco@xs4all.nl
+Subject: Re: [PATCH v2] media: i2c: imx219: Implement get_selection
+Message-ID: <20200428134036.askdjybit2lq47t6@uno.localdomain>
+References: <20200426205250.305320-1-jacopo@jmondi.org>
+ <20200426210548.GD31313@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200426210548.GD31313@pendragon.ideasonboard.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This serie fixes VP9 decoding :
-- enables the motion compensation reference cache controller
-- fixes buffer shortage on VP9 decoding
+Hi Laurent
 
-And update the MAINTAINERS entry to add myself ad co-maintainer and
-add the missing yaml DT bindings.
+On Mon, Apr 27, 2020 at 12:05:48AM +0300, Laurent Pinchart wrote:
+> Hi Jacopo,
+>
+> Thank you for the patch.
+>
 
-Maxime Jourdan (2):
-  media: meson: vdec: enable mcrcc for VP9
-  media: meson: vdec: fix another case of VP9 buffer shortage
+[snip]
 
-Neil Armstrong (1):
-  MAINTAINERS: update the Amlogic VDEC driver maintainer entry
+> > +
+> > +static int imx219_get_selection(struct v4l2_subdev *sd,
+> > +				struct v4l2_subdev_pad_config *cfg,
+> > +				struct v4l2_subdev_selection *sel)
+> > +{
+> > +	struct imx219 *imx219 = to_imx219(sd);
+> > +	const struct v4l2_rect *__crop;
+> > +
+> > +	if (sel->pad != 0)
+> > +		return -EINVAL;
+> > +
+> > +	mutex_lock(&imx219->mutex);
+> > +
+> > +	switch (sel->target) {
+> > +	case V4L2_SEL_TGT_NATIVE_SIZE:
+> > +		sel->r.top = 0;
+> > +		sel->r.left = 0;
+> > +		sel->r.width = IMX219_NATIVE_WIDTH;
+> > +		sel->r.height = IMX219_NATIVE_HEIGHT;
+> > +		mutex_unlock(&imx219->mutex);
+> > +
+> > +		return 0;
+> > +
+> > +	case V4L2_SEL_TGT_CROP_DEFAULT:
+> > +		sel->r.top = IMX219_PIXEL_ARRAY_TOP;
+> > +		sel->r.left = IMX219_PIXEL_ARRAY_LEFT;
+> > +		sel->r.width = IMX219_PIXEL_ARRAY_WIDTH;
+> > +		sel->r.height = IMX219_PIXEL_ARRAY_HEIGHT;
+> > +		mutex_unlock(&imx219->mutex);
+> > +
+> > +		return 0;
+> > +
+> > +	case V4L2_SEL_TGT_CROP:
+> > +		__crop = __imx219_get_pad_crop(imx219, cfg, sel->pad,
+> > +					       sel->which);
+> > +		sel->r = *__crop;
+> > +		mutex_unlock(&imx219->mutex);
+>
+> I should have thought about it before, but only this case requires
+> locking. Maybe
 
- MAINTAINERS                                  |  2 +
- drivers/staging/media/meson/vdec/codec_vp9.c | 72 ++++++++++++++++----
- drivers/staging/media/meson/vdec/esparser.c  | 24 +++----
- 3 files changed, 71 insertions(+), 27 deletions(-)
+I should have thought it better, yes
 
--- 
-2.22.0
+>
+> 		__crop = __imx219_get_pad_crop(imx219, cfg, sel->pad,
+> 					       sel->which);
+> 		mutex_lock(&imx219->mutex);
 
+Actually, retreiveing __crop should be protected too, as the crop
+rectangle is part of the imx219->mode, which is updated by the set_fmt
+operation.
+
+I'll wrap the whole case content in a critical session.
+
+Thanks
+  j
+
+> 		sel->r = *__crop;
+> 		mutex_unlock(&imx219->mutex);
+>
+> and removing the mutex_lock() at the beginning ?
+>
+> > +
+> > +		return 0;
+> > +	}
+> > +
+> > +	mutex_unlock(&imx219->mutex);
+> > +
+> > +	return -EINVAL;
+> > +}
+> > +
+> >  static int imx219_start_streaming(struct imx219 *imx219)
+> >  {
+> >  	struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
+> > @@ -1152,6 +1248,7 @@ static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
+> >  	.enum_mbus_code = imx219_enum_mbus_code,
+> >  	.get_fmt = imx219_get_pad_format,
+> >  	.set_fmt = imx219_set_pad_format,
+> > +	.get_selection = imx219_get_selection,
+> >  	.enum_frame_size = imx219_enum_frame_size,
+> >  };
+> >
+> > --
+> > 2.26.1
+> >
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
