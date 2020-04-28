@@ -2,142 +2,130 @@ Return-Path: <SRS0=SSLR=6M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E3A1C83001
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 16:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65AE0C83001
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 17:04:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B44A206D9
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 16:04:51 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aJpp4Gbs"
+	by mail.kernel.org (Postfix) with ESMTP id 4485D20B1F
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 17:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588093448;
+	bh=+BzuoEta3GpkJhXTYu0wLZOwyAEizrEkeMqnK9YrukY=;
+	h=Date:From:To:Cc:Subject:List-ID:From;
+	b=2KRmcuHj8y5qgbZNJS2925Gf6Po2pMshzQonH1WSVEixpkadcx6r/mPBdP4NwF6v2
+	 ljzfJmJgUGum2hT1ZEPLyAwbKx+njYtTVpwEbQAoAM7P/GZiT5Qb3dBUZfxKcRYxot
+	 xBsQEE/DnbiiS2xQVmd47dJ2Xg+N9sAe3vRpiXLc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728179AbgD1QEr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Apr 2020 12:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727985AbgD1QEr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Apr 2020 12:04:47 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E003FC03C1AB;
-        Tue, 28 Apr 2020 09:04:45 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id w20so22095925ljj.0;
-        Tue, 28 Apr 2020 09:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7mUYj4GA/1dIgbyNxbqxWEcPwwbVckITyPakRYctQPs=;
-        b=aJpp4Gbsa77D3CwVDtT/kYQST/DBrxv9rK0Cmb3AfK9jOlmBirwL/8H9udjnDy1uwC
-         OvVx+TPsWhWHJfN1JckNgwNrss927ul1AFg3fExe2Fy4TdkANKvM796IN2LlBBrIHp8x
-         5iLj7jc1kXxAzB5NhwGaq+g+dM/Z7WM6D+dzg7VedmfRtYkQqc9Pv9ynCj43PsNocGzo
-         25FPXPl6+tmpmPnBu0HmtVmrHtuyRJ8LY7pGFF56q3jtZgBgSX9+oFtOIhDi1Inc4+Zu
-         6rhSvD5jHBNcfYsEOOCYr5kQxYQ3YwkhzbXHZnj6ZvK5R6UGkMNrY5K3oxymw4rV66nN
-         GoHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7mUYj4GA/1dIgbyNxbqxWEcPwwbVckITyPakRYctQPs=;
-        b=iErlHJzu5kTsLBEOmKHPwZEEYO5a9Z6WPFOQwZUTszcgHflHUdE+GdSHhprUhqcqRz
-         PzSXLjtXIUFjfyyvWUmjr413W3BPt7VQxymMbq59qRwpSl0yCZxPlA7eKmbQi3poiwSK
-         U1w039t/IeK0zNJDWMh7DZ5ucRzwwzsHofLJDuAviM0HUDCdKG3igo93xh794Gk6tGj4
-         mms4oTLgXSTMEue2QFOg8zsXB+C+BlA7po/O/hofWUq76kWxhJAP17dy/7ii9kl6pqcA
-         fmHQJNaQcXNMFM4FlEz6m1uylV3UcHyYN/aUSVT3jYSi4B/mAkx8mZPK/kEN2mUaczBw
-         uxMw==
-X-Gm-Message-State: AGi0PuZbw4WerVq3ne2ZxrMjQucN9SFBRMDdSBdyjy7tCmJxmN47HMOq
-        RqKept0oqtPjcq0Tr3o5bdjmuvlY
-X-Google-Smtp-Source: APiQypIXNtHvVX8LwOfgEDM/DfnbP2+tEIeXxPj7WLF58KTKZ9BuBggQ1ApM3WiwWyk/G+ctJakpBg==
-X-Received: by 2002:a05:651c:1131:: with SMTP id e17mr19194200ljo.79.1588089883949;
-        Tue, 28 Apr 2020 09:04:43 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.googlemail.com with ESMTPSA id c19sm11233645lfj.18.2020.04.28.09.04.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Apr 2020 09:04:43 -0700 (PDT)
-Subject: Re: [RFC PATCH v1 3/5] media: tegra-video: Move PM runtime handle to
- streaming
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
-        hverkuil@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1588047650-29402-1-git-send-email-skomatineni@nvidia.com>
- <1588047650-29402-4-git-send-email-skomatineni@nvidia.com>
- <631390cb-9aff-0e3f-6c39-81d6c565987e@gmail.com>
- <3ef69413-a606-b475-f530-d5534760b73b@nvidia.com>
- <2b334095-fadb-bf0a-f7a8-62fc798c2bd2@gmail.com>
- <18a7b095-7f0f-7819-c786-7e011cfd14ed@nvidia.com>
- <ce31e273-f424-f13e-5cd6-0db2589a2a10@gmail.com>
- <5741d5d3-e474-e23c-4841-809df5760067@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <f6e34203-3e4b-b804-30a5-bf78445ab366@gmail.com>
-Date:   Tue, 28 Apr 2020 19:04:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1728399AbgD1REH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Apr 2020 13:04:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33574 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728089AbgD1REH (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 28 Apr 2020 13:04:07 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ACF6120730;
+        Tue, 28 Apr 2020 17:04:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588093447;
+        bh=+BzuoEta3GpkJhXTYu0wLZOwyAEizrEkeMqnK9YrukY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Px8EXGW46wQvZImhVdLaAEVzRsdigCFe9OPIo9u6BBPu/ji0c9Nmn9GKXDsiFrNTe
+         bgw6v7L30kMNrfoanY8ho7PFz56gIiyxHQg4W5dyrt7Mlmu45We4TAYZ4APiat7q/+
+         5m0a5zNLlhVK4v3UMaHDJXg3EP/cvyUTlHf4KEbU=
+Date:   Tue, 28 Apr 2020 19:04:05 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rui Miguel Silva <rmfrfs@gmail.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
+Subject: [PATCH] staging: media: imx: no need to check return value of
+ debugfs_create functions
+Message-ID: <20200428170405.GA1649098@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <5741d5d3-e474-e23c-4841-809df5760067@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-28.04.2020 18:22, Sowjanya Komatineni пишет:
-> 
-> On 4/28/20 8:15 AM, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> 28.04.2020 18:08, Sowjanya Komatineni пишет:
->>> On 4/28/20 7:59 AM, Dmitry Osipenko wrote:
->>>> External email: Use caution opening links or attachments
->>>>
->>>>
->>>> 28.04.2020 17:51, Sowjanya Komatineni пишет:
->>>>> On 4/28/20 6:59 AM, Dmitry Osipenko wrote:
->>>>>> External email: Use caution opening links or attachments
+When calling debugfs functions, there is no need to ever check the
+return value.  The function can work or not, but the code logic should
+never do something different based on this.
 
-Is it possible to disable this corporate-email message?
+Cc: Rui Miguel Silva <rmfrfs@gmail.com>
+Cc: Steve Longerbeam <slongerbeam@gmail.com>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: linux-media@vger.kernel.org
+Cc: devel@driverdev.osuosl.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/staging/media/imx/imx7-mipi-csis.c | 29 ++++------------------
+ 1 file changed, 5 insertions(+), 24 deletions(-)
 
->>>>>>
->>>>>>
->>>>>> 28.04.2020 07:20, Sowjanya Komatineni пишет:
->>>>>>> diff --git a/drivers/staging/media/tegra-video/csi.c
->>>>>>> b/drivers/staging/media/tegra-video/csi.c
->>>>>>> index b3dd0c3..29ccdae 100644
->>>>>>> --- a/drivers/staging/media/tegra-video/csi.c
->>>>>>> +++ b/drivers/staging/media/tegra-video/csi.c
->>>>>>> @@ -272,8 +272,25 @@ static int tegra_csi_s_stream(struct
->>>>>>> v4l2_subdev
->>>>>>> *subdev, int enable)
->>>>>>>          struct tegra_vi_channel *chan =
->>>>>>> v4l2_get_subdev_hostdata(subdev);
->>>>>>>          struct tegra_csi_channel *csi_chan = to_csi_chan(subdev);
->>>>>>>          struct tegra_csi *csi = csi_chan->csi;
->>>>>>> +     int ret;
->>>>>>> +
->>>>>>> +     if (enable && atomic_add_return(1, &csi->clk_refcnt) == 1) {
->>>>>>> +             ret = pm_runtime_get_sync(csi->dev);
->>>>>>> +             if (ret < 0) {
->>>>>>> +                     dev_err(csi->dev,
->>>>>>> +                             "failed to get runtime PM: %d\n",
->>>>>>> ret);
->>>>>>> +                     pm_runtime_put_noidle(csi->dev);
->> Why this pm_runtime_put_noidle() is needed? This should be wrong, please
->> remove it.
-> 
-> pm_runtime_get_sync() increments power.usage_count prior to rpm_resume
-> 
-> if rpm_resume fails it does not decrement usage_count.
-> 
-> So to balance count on failure, calling pm_runtime_put_noidle()
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index fbc1a924652a..d7c9e7343f1f 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -915,33 +915,14 @@ static int mipi_csis_dump_regs_show(struct seq_file *m, void *private)
+ }
+ DEFINE_SHOW_ATTRIBUTE(mipi_csis_dump_regs);
+ 
+-static int mipi_csis_debugfs_init(struct csi_state *state)
++static void mipi_csis_debugfs_init(struct csi_state *state)
+ {
+-	struct dentry *d;
+-
+-	if (!debugfs_initialized())
+-		return -ENODEV;
+-
+ 	state->debugfs_root = debugfs_create_dir(dev_name(state->dev), NULL);
+-	if (!state->debugfs_root)
+-		return -ENOMEM;
+-
+-	d = debugfs_create_bool("debug_enable", 0600, state->debugfs_root,
+-				&state->debug);
+-	if (!d)
+-		goto remove_debugfs;
+-
+-	d = debugfs_create_file("dump_regs", 0600, state->debugfs_root,
+-				state, &mipi_csis_dump_regs_fops);
+-	if (!d)
+-		goto remove_debugfs;
+-
+-	return 0;
+-
+-remove_debugfs:
+-	debugfs_remove_recursive(state->debugfs_root);
+ 
+-	return -ENOMEM;
++	debugfs_create_bool("debug_enable", 0600, state->debugfs_root,
++			    &state->debug);
++	debugfs_create_file("dump_regs", 0600, state->debugfs_root, state,
++			    &mipi_csis_dump_regs_fops);
+ }
+ 
+ static void mipi_csis_debugfs_exit(struct csi_state *state)
+-- 
+2.26.2
 
-Hmm.. maybe you're right. I'll need to take a more detailed look.
