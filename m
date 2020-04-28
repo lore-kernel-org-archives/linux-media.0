@@ -1,223 +1,107 @@
-Return-Path: <SRS0=Pmhz=6L=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=SSLR=6M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB244C82D81
-	for <linux-media@archiver.kernel.org>; Mon, 27 Apr 2020 23:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E11F2C83003
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 02:15:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 939C82078C
-	for <linux-media@archiver.kernel.org>; Mon, 27 Apr 2020 23:03:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD4C1206D9
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 02:15:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="sKaTKzVJ"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="U4Peu2w3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbgD0XDP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Apr 2020 19:03:15 -0400
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:57009 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726285AbgD0XDO (ORCPT
+        id S1726379AbgD1CPn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Apr 2020 22:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726262AbgD1CPm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Apr 2020 19:03:14 -0400
-Date:   Mon, 27 Apr 2020 23:03:08 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1588028590;
-        bh=/8jeaAYNHBTw1/iBeKysJVGgKhFBokWGnxJzXLaSc84=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=sKaTKzVJsVkTcPPtXdUFMFCSiWxQEa6pWHGAgKF2d10xoEVSHBlXVQfJRVIgCF5d1
-         HYMJsl5C/5aEwV6R6c3WHdc7uLLPxDfLBO/6L02EqP8rRFewHk5/YnSiUlab+fOGw0
-         p4WnSQaAL8demSwOS2OzHJgPV2ftn8jAW1yG6PmU=
-To:     linux-media@vger.kernel.org
-From:   =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
-        <nfraprado@protonmail.com>
-Cc:     Helen Koike <helen.koike@collabora.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        linux-kernel@vger.kernel.org, lkcamp@lists.libreplanetbr.org
-Reply-To: =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
-          <nfraprado@protonmail.com>
-Subject: [PATCH v3 3/3] media: vimc: deb: Add support for {RGB,BGR,GBR}888 bus formats on source pad
-Message-ID: <20200427230234.3114565-4-nfraprado@protonmail.com>
+        Mon, 27 Apr 2020 22:15:42 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3E0C03C1A8
+        for <linux-media@vger.kernel.org>; Mon, 27 Apr 2020 19:15:42 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id v18so9667410qvx.9
+        for <linux-media@vger.kernel.org>; Mon, 27 Apr 2020 19:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5qjpfbRytZyeo0NEeT7L64ywSvRr9/JiXyn8JtkVE5g=;
+        b=U4Peu2w3y+2zYOTOoHw3XWC+B1oefKr0deto2utH575i/QwhRJLZ4YHWI6JRy2LBVA
+         Ws6cyeuIcFw46pmzdkFfrvM8ErCQVa8TcFrp54foK4AqdagD1YGfZzp2bQ7GbXtG+05e
+         CKUca7uEm2uKXsl+UxDfa3/hkbYPWPLd6dVb8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5qjpfbRytZyeo0NEeT7L64ywSvRr9/JiXyn8JtkVE5g=;
+        b=UuGRBWK62VZEzf5kWiAMfxTOOC1oSI4/suqOWyuYvC9mpRJyte6jOqDa7iLaomLJz1
+         HyjxpClnrXrEWVsmHZmEl44nB9vRMYlOzSADn1Mp8DF8QdmCxSnvchJCufIRFO627gK6
+         9VQLnSWSMi/FyPlxWpNNoOV0hfZIEELkXpYrp11zA9q77vkg4mIVZx/+HdqxqZU9s7E2
+         CjsQpova8GsV5P2mygMLQRsaEC9niU22Oovu6z6fNlambuMwvbGTwBjeFW/YoMniNltD
+         GsKcbuoldo9HyWkztLfpiDxx6CsBInDZVAGYU0rt6eEXn7As65oW+AwySuKV0SXhpMyZ
+         oW0Q==
+X-Gm-Message-State: AGi0PuZF89drNHPA4dXuVBus58TYqg6I8ejCZjnYPqK8dHQHtuRKEp5I
+        SqDg1O/ylemKDYhp5U1Nq/JYno3tn+gO/iQJ6+mrFA==
+X-Google-Smtp-Source: APiQypI11PrfSdZV+AHi0vP5wMOtWWuPtxdnUDT7N+gy4iwKkfuUSHYvgLSde6jmWMAR3cyhI5lOBrMJqr8uUs4lYTw=
+X-Received: by 2002:ad4:45ae:: with SMTP id y14mr26110317qvu.145.1588040141593;
+ Mon, 27 Apr 2020 19:15:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20200319021823.57219-1-stevensd@chromium.org> <20200320064143.4b2kyskr5clxsczs@sirius.home.kraxel.org>
+In-Reply-To: <20200320064143.4b2kyskr5clxsczs@sirius.home.kraxel.org>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Tue, 28 Apr 2020 11:15:30 +0900
+Message-ID: <CAD=HUj4xUzNw67R233XM3ruaG2cqxF9nWv0xDgML27-CxwuHoQ@mail.gmail.com>
+Subject: [virtio-comment] Request vote for the patch: Cross-device resource sharing
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     virtio-comment@lists.oasis-open.org,
+        Dylan Reid <dgreid@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Zach Reizner <zachr@chromium.org>,
+        Keiichi Watanabe <keiichiw@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Alex Lau <alexlau@chromium.org>,
+        =?UTF-8?Q?St=C3=A9phane_Marchesin?= <marcheu@chromium.org>,
+        Pawel Osciak <posciak@chromium.org>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Stefan Hajnoczi <stefanha@gmail.com>,
+        qemu-devel <qemu-devel@nongnu.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for RGB888_*, BGR888_* and GBR888_* media bus formats on
-the source pad of debayer subdevices.
+Request for a vote.
 
-Co-developed-by: Vitor Massaru Iha <vitor@massaru.org>
-Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@protonmail.com>
----
+Fixes: https://github.com/oasis-tcs/virtio-spec/issues/76
 
-Changes in v3:
-- Rename vimc_deb_is_src_code_invalid() to vimc_deb_src_code_is_valid()
-- Change vimc_deb_src_code_is_valid() to return bool
+Thanks,
+David
 
-Changes in v2:
-- Change commit message to reflect v2 changes
-- Rename variables
-- Fix array formatting
-- Add vimc_deb_is_src_code_valid function
-- Add other BGR888 and RGB888 formats to debayer source pad supported
-  formats
-
- .../media/test-drivers/vimc/vimc-debayer.c    | 61 +++++++++++++++----
- 1 file changed, 49 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/media/test-drivers/vimc/vimc-debayer.c b/drivers/media=
-/test-drivers/vimc/vimc-debayer.c
-index d10aee9f84c4..7e87706d417e 100644
---- a/drivers/media/test-drivers/vimc/vimc-debayer.c
-+++ b/drivers/media/test-drivers/vimc/vimc-debayer.c
-@@ -51,6 +51,19 @@ static const struct v4l2_mbus_framefmt sink_fmt_default =
-=3D {
- =09.colorspace =3D V4L2_COLORSPACE_DEFAULT,
- };
-=20
-+static const u32 vimc_deb_src_mbus_codes[] =3D {
-+=09MEDIA_BUS_FMT_GBR888_1X24,
-+=09MEDIA_BUS_FMT_BGR888_1X24,
-+=09MEDIA_BUS_FMT_BGR888_3X8,
-+=09MEDIA_BUS_FMT_RGB888_1X24,
-+=09MEDIA_BUS_FMT_RGB888_2X12_BE,
-+=09MEDIA_BUS_FMT_RGB888_2X12_LE,
-+=09MEDIA_BUS_FMT_RGB888_3X8,
-+=09MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
-+=09MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA,
-+=09MEDIA_BUS_FMT_RGB888_1X32_PADHI,
-+};
-+
- static const struct vimc_deb_pix_map vimc_deb_pix_map_list[] =3D {
- =09{
- =09=09.code =3D MEDIA_BUS_FMT_SBGGR8_1X8,
-@@ -125,6 +138,17 @@ static const struct vimc_deb_pix_map *vimc_deb_pix_map=
-_by_code(u32 code)
- =09return NULL;
- }
-=20
-+static bool vimc_deb_src_code_is_valid(u32 code)
-+{
-+=09unsigned int i;
-+
-+=09for (i =3D 0; i < ARRAY_SIZE(vimc_deb_src_mbus_codes); i++)
-+=09=09if (vimc_deb_src_mbus_codes[i] =3D=3D code)
-+=09=09=09return true;
-+
-+=09return false;
-+}
-+
- static int vimc_deb_init_cfg(struct v4l2_subdev *sd,
- =09=09=09     struct v4l2_subdev_pad_config *cfg)
- {
-@@ -148,14 +172,11 @@ static int vimc_deb_enum_mbus_code(struct v4l2_subdev=
- *sd,
- =09=09=09=09   struct v4l2_subdev_pad_config *cfg,
- =09=09=09=09   struct v4l2_subdev_mbus_code_enum *code)
- {
--=09/* We only support one format for source pads */
- =09if (VIMC_IS_SRC(code->pad)) {
--=09=09struct vimc_deb_device *vdeb =3D v4l2_get_subdevdata(sd);
--
--=09=09if (code->index)
-+=09=09if (code->index >=3D ARRAY_SIZE(vimc_deb_src_mbus_codes))
- =09=09=09return -EINVAL;
-=20
--=09=09code->code =3D vdeb->src_code;
-+=09=09code->code =3D vimc_deb_src_mbus_codes[code->index];
- =09} else {
- =09=09if (code->index >=3D ARRAY_SIZE(vimc_deb_pix_map_list))
- =09=09=09return -EINVAL;
-@@ -170,8 +191,6 @@ static int vimc_deb_enum_frame_size(struct v4l2_subdev =
-*sd,
- =09=09=09=09    struct v4l2_subdev_pad_config *cfg,
- =09=09=09=09    struct v4l2_subdev_frame_size_enum *fse)
- {
--=09struct vimc_deb_device *vdeb =3D v4l2_get_subdevdata(sd);
--
- =09if (fse->index)
- =09=09return -EINVAL;
-=20
-@@ -181,7 +200,7 @@ static int vimc_deb_enum_frame_size(struct v4l2_subdev =
-*sd,
-=20
- =09=09if (!vpix)
- =09=09=09return -EINVAL;
--=09} else if (fse->code !=3D vdeb->src_code) {
-+=09} else if (!vimc_deb_src_code_is_valid(fse->code)) {
- =09=09return -EINVAL;
- =09}
-=20
-@@ -237,6 +256,7 @@ static int vimc_deb_set_fmt(struct v4l2_subdev *sd,
- {
- =09struct vimc_deb_device *vdeb =3D v4l2_get_subdevdata(sd);
- =09struct v4l2_mbus_framefmt *sink_fmt;
-+=09u32 *src_code;
-=20
- =09if (fmt->which =3D=3D V4L2_SUBDEV_FORMAT_ACTIVE) {
- =09=09/* Do not change the format while stream is on */
-@@ -244,8 +264,10 @@ static int vimc_deb_set_fmt(struct v4l2_subdev *sd,
- =09=09=09return -EBUSY;
-=20
- =09=09sink_fmt =3D &vdeb->sink_fmt;
-+=09=09src_code =3D &vdeb->src_code;
- =09} else {
- =09=09sink_fmt =3D v4l2_subdev_get_try_format(sd, cfg, 0);
-+=09=09src_code =3D &v4l2_subdev_get_try_format(sd, cfg, 1)->code;
- =09}
-=20
- =09/*
-@@ -253,9 +275,14 @@ static int vimc_deb_set_fmt(struct v4l2_subdev *sd,
- =09 * it is propagated from the sink
- =09 */
- =09if (VIMC_IS_SRC(fmt->pad)) {
-+=09=09u32 code =3D fmt->format.code;
-+
- =09=09fmt->format =3D *sink_fmt;
--=09=09/* TODO: Add support for other formats */
--=09=09fmt->format.code =3D vdeb->src_code;
-+
-+=09=09if (vimc_deb_src_code_is_valid(code))
-+=09=09=09*src_code =3D code;
-+
-+=09=09fmt->format.code =3D *src_code;
- =09} else {
- =09=09/* Set the new format in the sink pad */
- =09=09vimc_deb_adjust_sink_fmt(&fmt->format);
-@@ -291,11 +318,21 @@ static void vimc_deb_set_rgb_mbus_fmt_rgb888_1x24(str=
-uct vimc_deb_device *vdeb,
- =09=09=09=09=09=09  unsigned int col,
- =09=09=09=09=09=09  unsigned int rgb[3])
- {
-+=09const struct vimc_pix_map *vpix;
- =09unsigned int i, index;
-=20
-+=09vpix =3D vimc_pix_map_by_code(vdeb->src_code);
- =09index =3D VIMC_FRAME_INDEX(lin, col, vdeb->sink_fmt.width, 3);
--=09for (i =3D 0; i < 3; i++)
--=09=09vdeb->src_frame[index + i] =3D rgb[i];
-+=09for (i =3D 0; i < 3; i++) {
-+=09=09switch (vpix->pixelformat) {
-+=09=09case V4L2_PIX_FMT_RGB24:
-+=09=09=09vdeb->src_frame[index + i] =3D rgb[i];
-+=09=09=09break;
-+=09=09case V4L2_PIX_FMT_BGR24:
-+=09=09=09vdeb->src_frame[index + i] =3D rgb[2-i];
-+=09=09=09break;
-+=09=09}
-+=09}
- }
-=20
- static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
---=20
-2.26.1
-
-
+On Fri, Mar 20, 2020 at 3:41 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
+>
+> On Thu, Mar 19, 2020 at 11:18:21AM +0900, David Stevens wrote:
+> > Hi all,
+> >
+> > This is the next iteration of patches for adding support for sharing
+> > resources between different virtio devices. The corresponding Linux
+> > implementation is [1].
+> >
+> > In addition to these patches, the most recent virtio-video patchset
+> > includes a patch for importing objects into that device [2].
+>
+> Looks good to me.
+>
+> So, open a github issue to kick the TC vote process and get this merged?
+> (see virtio-spec/.github/PULL_REQUEST_TEMPLATE.md).
+>
+> cheers,
+>   Gerd
+>
