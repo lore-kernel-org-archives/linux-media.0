@@ -2,181 +2,122 @@ Return-Path: <SRS0=SSLR=6M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 386A2C83004
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 03:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C981C83006
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 04:21:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB9B5206D9
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 03:36:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 680792064C
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 04:21:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="XDnFpjeA"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="WETZNR5Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726345AbgD1DgX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Apr 2020 23:36:23 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:35807 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726047AbgD1DgX (ORCPT
+        id S1726402AbgD1EVv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Apr 2020 00:21:51 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:3113 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726397AbgD1EVu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Apr 2020 23:36:23 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id TH2hjiP7VlKa1TH2ijiqW2; Tue, 28 Apr 2020 05:36:20 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1588044980; bh=ls1tyq3PoeXzS8RupCmfPpKmi6N9Y4dlRRjVmvfVixI=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=XDnFpjeApyd5oDUbefZ9xp0fybGycrs/dOWeXsFgu5vE2aj1/5y5fK5CeZhapYWbj
-         lIxC9pkg7UaYrYhbZmwUtyv53tkW+Wxff8IM++fSMMvi1H3u0qsuFXnG0710Rk6LHZ
-         McU1MGw7zob4z/c8WOOUSlGWovFnyQFVT7g27bfLfwSym/kg6H+QCqcBgbEXJYK71E
-         T9cBxOJIPfqzFuv0kdqPwfcUyUvpZVki1vJ0oKtNadLqfwOjLSqlZtcQ64oDVcFJaM
-         9daKUL+QJen1LDXvOzZTS3lN95iwZI+JJTBqvzhxsAYd4egiQ1eYnjMj2u11DATv6t
-         DKkjUj6kImGEQ==
-Message-ID: <5ca2383266daba907ef2698ab4886294@smtp-cloud8.xs4all.net>
-Date:   Tue, 28 Apr 2020 05:36:19 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: ERRORS
-X-CMAE-Envelope: MS4wfJNwlRp5b+A8BiSVbT5bks5MxvNxx8KnK6c1rQb1rt6WKK55RlR+hW/zRbSOeLcDa6HBBdTVlgDK8wEQRVMFR3SEV/qgnwyt+UX/g0naQ1P5rkxarNOz
- dpF1q0gHvOLkK1uX7OTnfAuDJUKopMvUJ9qxzjBC9FyOya+wQitZb34SFmbo10OEJ4NJLJT9idRvd5k3JjT3xswM+JjOutzwCAfiQz1D0Z8JJHkIGtulSXbJ
+        Tue, 28 Apr 2020 00:21:50 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ea7af1c0001>; Mon, 27 Apr 2020 21:20:44 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 27 Apr 2020 21:21:50 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Mon, 27 Apr 2020 21:21:50 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 28 Apr
+ 2020 04:21:49 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 28 Apr 2020 04:21:49 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.165.152]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5ea7af5d0000>; Mon, 27 Apr 2020 21:21:49 -0700
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>
+CC:     <digetx@gmail.com>, <linux-media@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v1 5/5] media: tegra-video: Remove module macros for vi and csi driver
+Date:   Mon, 27 Apr 2020 21:20:50 -0700
+Message-ID: <1588047650-29402-6-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1588047650-29402-1-git-send-email-skomatineni@nvidia.com>
+References: <1588047650-29402-1-git-send-email-skomatineni@nvidia.com>
+X-NVConfidentiality: public
+MIME-Version: 1.0
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1588047644; bh=OlA/gRwqGqlJue2NSJ8mEveixy7HVEtrnvI4iKt/JNQ=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=WETZNR5Y89Pb68yT/jWCyKA0YPy1/48z16hIp3DOSSnw+tfzpeiHmgY3cnpoSFtkU
+         NShxkJuIYNTeA7m75gwYLrA5NmewsrWv49vD3Rc0vVRARiFbkT3wssOENmOrmjRM/+
+         ozDEL31510Bg1aoTo4p4zEpMI6nIAb76QMBaRfTM0oelUTewXFfEd0aCDLFUENBPtb
+         nncdf/3dseIVaq2bV98tMX9+e00QWX9Xu8WyD8LsgUvhZwxd1G6RpjdbXjkkpGPY12
+         bgaXTZP+lBeqfth6qjUjExAcdlvK/KvlYaWYnViCLObjgDxB7WpeyMMj5q9IfNwlMX
+         B7GuYPz6VScMQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+tegra-video driver is a single module and module license macros
+are in tegra-video driver and are not required in vi and csi driver.
 
-Results of the daily build of media_tree:
+So, this patch removes them.
 
-date:			Tue Apr 28 05:00:08 CEST 2020
-media-tree git hash:	4bdbff4da40584ec2225bb429b7c66ad54d19cda
-media_build git hash:	2f75e0d4330da180166ebcd104560d471a1599b6
-v4l-utils git hash:	b8e58b75b57b94378990cedb38459623c06fc3eb
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 9.3.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.1-rc1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 7bc5ca34b446a30a7e19688e9a1e68e905cb8ff4
-host hardware:		x86_64
-host os:		5.4.0-4-amd64
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+---
+ drivers/staging/media/tegra-video/csi.c | 5 -----
+ drivers/staging/media/tegra-video/vi.c  | 5 -----
+ 2 files changed, 10 deletions(-)
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-mips: OK
-linux-git-arm64: OK
-linux-git-powerpc64: OK
-linux-git-arm-multi: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.81-i686: OK
-linux-3.16.81-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.212-i686: OK
-linux-4.4.212-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.212-i686: OK
-linux-4.9.212-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.169-i686: OK
-linux-4.14.169-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.101-i686: OK
-linux-4.19.101-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4.17-i686: OK
-linux-5.4.17-x86_64: OK
-linux-5.5.1-i686: OK
-linux-5.5.1-x86_64: OK
-linux-5.6.1-i686: OK
-linux-5.6.1-x86_64: OK
-linux-5.7-rc1-i686: OK
-linux-5.7-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 3
-virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 1
-sparse: OK
-smatch: ERRORS
+diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
+index eda6a42..2536ff5 100644
+--- a/drivers/staging/media/tegra-video/csi.c
++++ b/drivers/staging/media/tegra-video/csi.c
+@@ -7,7 +7,6 @@
+ #include <linux/clk/tegra.h>
+ #include <linux/device.h>
+ #include <linux/host1x.h>
+-#include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+@@ -535,7 +534,3 @@ struct platform_driver tegra_csi_driver = {
+ 	.probe			= tegra_csi_probe,
+ 	.remove			= tegra_csi_remove,
+ };
+-
+-MODULE_AUTHOR("Sowjanya Komatineni <skomatineni@nvidia.com>");
+-MODULE_DESCRIPTION("NVIDIA Tegra CSI Device Driver");
+-MODULE_LICENSE("GPL v2");
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index bdf2560..397b6bc 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -9,7 +9,6 @@
+ #include <linux/host1x.h>
+ #include <linux/lcm.h>
+ #include <linux/list.h>
+-#include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+@@ -1081,7 +1080,3 @@ struct platform_driver tegra_vi_driver = {
+ 	.probe = tegra_vi_probe,
+ 	.remove = tegra_vi_remove,
+ };
+-
+-MODULE_AUTHOR("Sowjanya Komatineni <skomatineni@nvidia.com>");
+-MODULE_DESCRIPTION("NVIDIA Tegra Video Input Device Driver");
+-MODULE_LICENSE("GPL v2");
+-- 
+2.7.4
 
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
