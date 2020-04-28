@@ -2,162 +2,162 @@ Return-Path: <SRS0=SSLR=6M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 373BDC8300A
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 20:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DE48C83004
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 21:03:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C2D8214D8
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 20:58:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WIwrgocB"
+	by mail.kernel.org (Postfix) with ESMTP id 77AA820737
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 21:03:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726666AbgD1U6k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Apr 2020 16:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726661AbgD1U6j (ORCPT
+        id S1726878AbgD1VDH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Apr 2020 17:03:07 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:41567 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726849AbgD1VDG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Apr 2020 16:58:39 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E575C03C1AC
-        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 13:58:38 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id u127so301364wmg.1
-        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 13:58:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Fy0Mri3DDQ3BqqDpw5/rR7523O6oLN3hn9ttHJ8oMYE=;
-        b=WIwrgocBZAZWETOWe23sa/ybzkvhEk4ZLJSGaM55H//GpLGBUGmriS0D7WmX5I1ELw
-         AGLPYDwQmFKJneV/TBxXyKJ+YT0M8lcDY751G3UZ/5PUabFlcCZqdKIPFzm12kpgXts5
-         Bwu2ge0Re7c91nRazrkj3ChCcibJIvtzhTm5TywtQzZsU96yYqZg2BCDoOz0D+K8u8qM
-         cBL7uDKVEiusAjt9EBabe4M4O9Wnd/XOfzqeigi4CnAfL3dUtFG5vnAHKpL7mFGo2CUi
-         CBHzG/nsXxbyJD+3Mgu1BD+0k3nefuy6jaBbXqWwZIEAncOeNZmuL/mXaqoLvENEq8or
-         QUGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Fy0Mri3DDQ3BqqDpw5/rR7523O6oLN3hn9ttHJ8oMYE=;
-        b=PAmDc8U1jwrN1a4p3wbBNtSXU/jdnFIDXNXNbhh//VPjfVoN5HVflUk1757UhbsDC1
-         gNEjYoFwTvYymxuqoVmw1SriBx2Sht+2KOiT0mHkDoIKAW5C/gHXe+iKlvg9tAtXIxDx
-         N7UA96Z7Jrfqtl3KfZQIZjJYkmiMMfO2YH86dk0oOrH3mNfT3JDKAoVXdaayv1858dSB
-         74UGS+wpwhqGJ3wDyLdGfwrPI9i9j0u1L3+ATeAINJsnF/FUI7O/2aRoUf0t1wwAztWj
-         vYI40efJkD9luwFdlGlzbNRnk7rCEGNLqzjHgvQvm+CGmdeFZjrFpykRd9jyHEw3MsA9
-         db/A==
-X-Gm-Message-State: AGi0PuYDeoIZEPgCz+8H8gtsSDfqhRJTsS5ZJaXlv6AAjcNYql9Wv90G
-        p57dx9Hfymf5geY6tpNrTj98m+uC
-X-Google-Smtp-Source: APiQypIY1nXnuxrxzVd4QQ89AdAOLunLhbEfEeYnMqwIN51PdLCoQmDXD5PSISF3jHh4cgoJPiM8MA==
-X-Received: by 2002:a05:600c:2314:: with SMTP id 20mr6908369wmo.118.1588107516885;
-        Tue, 28 Apr 2020 13:58:36 -0700 (PDT)
-Received: from arch-thunder.localdomain (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id m14sm26749246wrs.76.2020.04.28.13.58.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 13:58:36 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 21:58:33 +0100
-From:   Rui Miguel Silva <rmfrfs@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
-Subject: Re: [PATCH] staging: media: imx: no need to check return value of
- debugfs_create functions
-Message-ID: <20200428205833.ape7kvi5pgrap3ps@arch-thunder.localdomain>
-References: <20200428170405.GA1649098@kroah.com>
+        Tue, 28 Apr 2020 17:03:06 -0400
+Received: from uno.lan (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id B972F200002;
+        Tue, 28 Apr 2020 21:03:01 +0000 (UTC)
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org
+Cc:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, sakari.ailus@linux.intel.com,
+        andrey.konovalov@linaro.org, laurent.pinchart@ideasonboard.com
+Subject: [PATCH v5 0/6]  media: Register read-only sub-dev devnode
+Date:   Tue, 28 Apr 2020 23:06:03 +0200
+Message-Id: <20200428210609.6793-1-jacopo@jmondi.org>
+X-Mailer: git-send-email 2.26.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200428170405.GA1649098@kroah.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Greg,
-Thanks for the cleanup.
+v5 addresses a few comments from Sakari and Laurent on documentation and
+introduces "media: v4l2-subdev: Assume V4L2_SUBDEV_API is selected"
+which removes checks for CONFIG_V4L2_SUBDEV_API from v4l2-subdev.c as
+the subdevice device node is only registered if that option was selected in
+first place.
 
-On Tue, Apr 28, 2020 at 07:04:05PM +0200, Greg Kroah-Hartman wrote:
-> When calling debugfs functions, there is no need to ever check the
-> return value.  The function can work or not, but the code logic should
-> never do something different based on this.
-> 
-> Cc: Rui Miguel Silva <rmfrfs@gmail.com>
-> Cc: Steve Longerbeam <slongerbeam@gmail.com>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: devel@driverdev.osuosl.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Copy of v4 and v3 cover letter is below reported
 
-Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
+-------------------------------------------------------------------------------
+v4 is now rebased on top of latest media master which has moved documentation
+around quite a bit.
 
+v4 includes two patches originally from Hans to add support for SUBDEV_QUERYCAP
+ioctl. Compared to its initial version only capabilities flags and version are
+reported.
+https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=subdev-querycap
 
-Cheers,
-     Rui
-> ---
->  drivers/staging/media/imx/imx7-mipi-csis.c | 29 ++++------------------
->  1 file changed, 5 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-> index fbc1a924652a..d7c9e7343f1f 100644
-> --- a/drivers/staging/media/imx/imx7-mipi-csis.c
-> +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-> @@ -915,33 +915,14 @@ static int mipi_csis_dump_regs_show(struct seq_file *m, void *private)
->  }
->  DEFINE_SHOW_ATTRIBUTE(mipi_csis_dump_regs);
->  
-> -static int mipi_csis_debugfs_init(struct csi_state *state)
-> +static void mipi_csis_debugfs_init(struct csi_state *state)
->  {
-> -	struct dentry *d;
-> -
-> -	if (!debugfs_initialized())
-> -		return -ENODEV;
-> -
->  	state->debugfs_root = debugfs_create_dir(dev_name(state->dev), NULL);
-> -	if (!state->debugfs_root)
-> -		return -ENOMEM;
-> -
-> -	d = debugfs_create_bool("debug_enable", 0600, state->debugfs_root,
-> -				&state->debug);
-> -	if (!d)
-> -		goto remove_debugfs;
-> -
-> -	d = debugfs_create_file("dump_regs", 0600, state->debugfs_root,
-> -				state, &mipi_csis_dump_regs_fops);
-> -	if (!d)
-> -		goto remove_debugfs;
-> -
-> -	return 0;
-> -
-> -remove_debugfs:
-> -	debugfs_remove_recursive(state->debugfs_root);
->  
-> -	return -ENOMEM;
-> +	debugfs_create_bool("debug_enable", 0600, state->debugfs_root,
-> +			    &state->debug);
-> +	debugfs_create_file("dump_regs", 0600, state->debugfs_root, state,
-> +			    &mipi_csis_dump_regs_fops);
->  }
->  
->  static void mipi_csis_debugfs_exit(struct csi_state *state)
-> -- 
-> 2.26.2
-> 
+I chose to report both the RO and RW capabilities flag to make it possible for
+userspace to test on both cases, as RW was the 'standard' so far, the flag could
+be removed if considered not necessary.
+
+Checkpatch reports:
+WARNING: LINUX_VERSION_CODE should be avoided, code should be for the version to which it is merged
+#44: FILE: drivers/media/v4l2-core/v4l2-subdev.c:344:
++		cap->version = LINUX_VERSION_CODE;
+
+but I see LINUX_VERSION_CODE being used to version the media controller as well,
+so I assume it's a false positive.
+
+-------------------------------------------------------------------------------
+Add new function v4l2_device_register_ro_subdev_nodes() to pair with
+v4l2_device_register_subdev_nodes() that allows a bridge driver to register the
+device node for its subdevices in read-only mode.
+
+Devnode-centric (aka non-MC) bridge drivers control their subdevices through
+direct calls to v4l2 subdev operations and do not want userspace to be able
+to control the subdevice configuration by calling ioctls on the sub-device
+devnode. For this reason, they usually refrain from registering any devnode at
+all for their subdevices.
+
+However it is sometimes required for userspace to access the sub-dev device
+nodes to collect information on the actual configuration, without changing
+the one currently applied to the device.
+
+This requirement became pressing while working on libcamera on devnode-centric
+platforms that do not expose any sub-device for their camera sensor to prevent
+userspace from changing their configuration. To allow them to register device
+node and being guaranteed to retain control of the subdevice configuration this
+series proposes a way to register device nodes in read-only to restrict
+access to all ioctls that could potentially affect the sub-dev configuration.
+-------------------------------------------------------------------------------
+
+Thanks
+   j
+
+v4->v5:
+- Add "media: v4l2-subdev: Assume V4L2_SUBDEV_API is selected"
+- Use BIT() instead of manual bitshifting
+- Use tabs in documentation in place of 8 spaces
+- minor documentation fixes
+
+v3->v4:
+- Rebase v3 on latest media master and new documentation layout
+- Add SUBDEV_QUERYCAP support
+
+v2->v3:
+- Add Sakari's ack to the series
+- Documentation:
+  - Address Sakari' and Hans suggestions
+- Implementation:
+  - Rename V4L2_FL_RO_DEVNODE to V4L2_FL_SUBDEV_RO_DEVNODE
+  - Limit the ability to register sub-device video device nodes to
+    driver claiming support for CONFIG_VIDEO_V4L2_SUBDEV_API
+
+v1->v2:
+- Documentation:
+  - Add a new patch using Laurent's suggestion to update the sub-device
+    userspace API introduction
+  - Take in some of Laurent's suggestions in v4l2-subdev.rst and add a new
+    section in dev-subdev.rst
+- Implementation:
+  - As noted by Andrey, V4L2_FL_* are meant to be used as bitmasks. Use
+    test_bit()/set_bit() as the rest of the v4l2 core does. It's a bit an
+    overkill compared to use plain BIT() as noted by Sakari but I preferred
+    consistency with the rest of the core
+  - Make v4l2_device_register_subdev_nodes() and
+    v4l2_device_register_ro_subdev_nodes() to v4l2-device.h and make them
+    inline functions. Documentation style has been copied from other functions
+    with similar implementations, such as __video_register_device() in
+    v4l2-dev.h
+
+Hans Verkuil (2):
+  v4l2-subdev: add VIDIOC_SUBDEV_QUERYCAP ioctl
+  v4l: document VIDIOC_SUBDEV_QUERYCAP
+
+Jacopo Mondi (4):
+  Documentation: media: Update sub-device API intro
+  Documentation: media: Document read-only subdevice
+  media: v4l2-dev: Add v4l2_device_register_ro_subdev_node()
+  media: v4l2-subdev: Assume V4L2_SUBDEV_API is selected
+
+ .../driver-api/media/v4l2-subdev.rst          |  53 +++++++-
+ .../userspace-api/media/v4l/dev-subdev.rst    |   5 +
+ .../userspace-api/media/v4l/user-func.rst     |   1 +
+ .../media/v4l/vidioc-g-dv-timings.rst         |   6 +
+ .../userspace-api/media/v4l/vidioc-g-std.rst  |   6 +
+ .../media/v4l/vidioc-subdev-g-crop.rst        |   9 ++
+ .../media/v4l/vidioc-subdev-g-fmt.rst         |   8 ++
+ .../v4l/vidioc-subdev-g-frame-interval.rst    |   8 ++
+ .../media/v4l/vidioc-subdev-g-selection.rst   |   8 ++
+ .../media/v4l/vidioc-subdev-querycap.rst      | 114 ++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-device.c         |   7 +-
+ drivers/media/v4l2-core/v4l2-subdev.c         |  41 +++++--
+ include/media/v4l2-dev.h                      |   7 ++
+ include/media/v4l2-device.h                   |  50 +++++++-
+ include/uapi/linux/v4l2-subdev.h              |  15 +++
+ 15 files changed, 322 insertions(+), 16 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/vidioc-subdev-querycap.rst
+
+--
+2.26.1
+
