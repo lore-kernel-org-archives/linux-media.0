@@ -2,287 +2,234 @@ Return-Path: <SRS0=SSLR=6M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99CFBC8300A
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 18:07:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E839AC83000
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 18:13:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A818208E0
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 18:07:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8F32208FE
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 18:13:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TLmz9BS/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pTcwlxCR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728585AbgD1SHY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Apr 2020 14:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
+        id S1728293AbgD1SNt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Apr 2020 14:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728555AbgD1SHX (ORCPT
+        with ESMTP id S1727827AbgD1SNs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Apr 2020 14:07:23 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66477C03C1AD
-        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 11:07:23 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id i10so25774137wrv.10
-        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 11:07:23 -0700 (PDT)
+        Tue, 28 Apr 2020 14:13:48 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A1AC03C1AB
+        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 11:13:48 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id f13so25754945wrm.13
+        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 11:13:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VPA3w2FdcezMr0VjYZPl3nlwaovVy4TaRn2qmUqyAi4=;
-        b=TLmz9BS/d2TYOsdIdUAD5o/Fp3XUwakv6RIGZZUA/4tYljrFh9j7d0DW/ISgTFgG/Z
-         1Ask2XFRkfmE2kunQsPwOEeyY2Yyy4y9HQch6RvVhQW2EWSrluFucZfkbRPFmxV84dJw
-         beIaRHbmse3RIiV7+JQl41EdEC/SzOgXPM5rWr4AdNijexqE//CX2nM+fP3OA1OP4RU0
-         4t8bpOFRD8TDtI4sIZHdchuA7+yYtWGk2cbJZt9Opc6nQNGsTiPLB6dHNcECM/fIVirv
-         jKA5yOjYxhCghMVIe7bxTHBaCT/dYBWz66+w7DAtyv2Qwvki5ydKbS0lrLOWL8rhk/9X
-         8Kbg==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=ydZ+8l4DpM7bKtj+eJw3Diy95hdWbwL2Psy3q6A85Ec=;
+        b=pTcwlxCRFq80JYO/oUe6UF2bR4jWQ9bdN5BoSMlxhcc3Re2Z/iuuHkIIXWrjQLlHhh
+         MNi0xHkkRtyOO8LTGn0iXsCvoCl9brCCvlkyDrokLySn43852/VjUNfBrV+HJatdn8bp
+         eUv5yEAJZOQv+7LaQVOvK+oymnzMx8MmvVlfKr8J+b43rO5eez/RaYiCqh8En/Cz/nU8
+         eHISa8z6Tgtis0ix5J6JQEh3OnwzPKj0jfi8d3zHppWCjoGYqTVaUFCUDh/VuUAkRuaM
+         WsoBQpAzAlYQBYf2pX4aKkBPBNbcd2t+82v3g8Vp0NX5byWXrg0TeH20sz+um8d0ysjA
+         7ZzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VPA3w2FdcezMr0VjYZPl3nlwaovVy4TaRn2qmUqyAi4=;
-        b=NdHqXIJpLoX1pOcs+pkC5oqUULql2RS6cXC24U0nOfDp1Ng+R8tqc38RPLwenP6KIK
-         OpivHLzQkU5ZRzoKvULhve55SmbxrmzRh89FuiylRz6dcWfNPNT1vHmPTdCq+ERzPLLq
-         HzwSTnUxyYOi6XoTy5SGlNh5txF9uKoxI5iDZgymCRSY9mTA9uN8BVYgsMbElxYAv/9z
-         cMgA4QY2iUiZbMpj+oImb6XcfGquK0bvlqhRgQ1jz0mhQg2+xm+05v8Mx5fWxsDC1d68
-         SnNQagUFNWCHqxm7UPDxJQUD1XXjEQmoI3+3IoyX9rmKHQpUTWE/2swzkE1XirAR1sm4
-         bZSw==
-X-Gm-Message-State: AGi0PuZEiLrzc9jPMQAjgPfkQ8nQ3kdlP+hWsrHSm8HDQ7ex3+w8l4Dj
-        FLHXCi8ozrg9/Xt7VQ5xK09r5w==
-X-Google-Smtp-Source: APiQypINfxdob9FO2QvTVw7sPiDBDVf4K2zUjDUnciTcfESlBOyJPryvyeFbi74J9/PMNz7LW2fubQ==
-X-Received: by 2002:a5d:6689:: with SMTP id l9mr33641451wru.261.1588097241896;
-        Tue, 28 Apr 2020 11:07:21 -0700 (PDT)
-Received: from xps7590.local ([37.120.81.28])
-        by smtp.gmail.com with ESMTPSA id m14sm26202789wrs.76.2020.04.28.11.07.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 11:07:21 -0700 (PDT)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Maxime Ripard <maxime@cerno.tech>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>
-Subject: [PATCH v8 v5 1/3] media: dt-bindings: ov8856: Document YAML bindings
-Date:   Tue, 28 Apr 2020 20:07:16 +0200
-Message-Id: <20200428180718.1609826-1-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=ydZ+8l4DpM7bKtj+eJw3Diy95hdWbwL2Psy3q6A85Ec=;
+        b=lkSU/4vtJ7smUIUhIBJAEUltmWdvof2GORVOOe4qL1iLcPE+pfJ5u5bkjIJ6S2IzpN
+         rtO6Xk2FDOU58ukpbVVM10deV1Qzlvrd1UI0pXTVtdMdpdjUI7BmQvRi3/oov8yD6hKN
+         kmKb9DaYzbA14HLnCdM7PEbBg6v4tWz5HFmTFR71COFnVEdhWsLcgWBwhr7B1dFh4kL8
+         Gxis3/OaJizvIlOGuU7tfbkoikgpY2M0xZ3wopO/A0bQaWVUAZ+4M5WwH4ex2k4qEi3+
+         S6bkqh7R6T5LI+M1SNZIHuLhb/YkmpLAteYPlLT8fx6LDlbCucbDsfg3aDXOIxTe+5FK
+         og5w==
+X-Gm-Message-State: AGi0Puaa/GEoiCBdWp7bZA/3o5K7D3oL+w8KfYCJnFW5DWMYfZmlo4RS
+        azUXJFQODQJV+h+YwkTDkIs=
+X-Google-Smtp-Source: APiQypJSVuhE8D0+4g5jWlq7jNEBgrTe+ePu1UnVkeRNP7oOaJAkraJ/HtCm6ZVxxcgcjaad6yICVA==
+X-Received: by 2002:adf:f10c:: with SMTP id r12mr35186302wro.409.1588097626692;
+        Tue, 28 Apr 2020 11:13:46 -0700 (PDT)
+Received: from [192.168.0.104] (77-56-155-30.dclient.hispeed.ch. [77.56.155.30])
+        by smtp.gmail.com with ESMTPSA id i17sm26279547wru.39.2020.04.28.11.13.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Apr 2020 11:13:46 -0700 (PDT)
+Subject: Re: atomisp kernel driver(s)
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
+        Sakari Ailus <sakari.ailus@iki.fi>
+References: <f3348096-1fb3-5368-ba66-f42a300bde8e@gmail.com>
+ <20200425023926.GA30200@pendragon.ideasonboard.com>
+ <8bda5543-100b-95f7-04a2-d7b302fc7833@gmail.com>
+ <20200426193318.GC31313@pendragon.ideasonboard.com>
+From:   Patrik Gfeller <patrik.gfeller@gmail.com>
+Message-ID: <b3204156-a7be-8f35-7799-377c0a6015f7@gmail.com>
+Date:   Tue, 28 Apr 2020 20:13:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200426193318.GC31313@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dongchun Zhu <dongchun.zhu@mediatek.com>
 
-This patch adds documentation of device tree in YAML schema for the
-OV8856 CMOS image sensor.
+On 26.04.20 21:33, Laurent Pinchart wrote:
+> Hi Patrik,
+>
+> On Sat, Apr 25, 2020 at 12:36:18PM +0200, Patrik Gfeller wrote:
+>> On 25.04.20 04:39, Laurent Pinchart wrote:
+>>> On Sat, Apr 18, 2020 at 04:39:25PM +0200, Patrik Gfeller wrote:
+>>>> Hello Mauro et al,
+>>>>
+>>>> I've recently switched to Linux, and I'm very impressed. Almost
+>>>> everything thing works out of the box. Only the webcam on my device does
+>>>> not. I did some digging and if I'm right an atomisp driver would be
+>>>> required. Is this correct? Below the output of lspci:
+>>>>
+>>>> 00:00.0 Host bridge: Intel Corporation Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series SoC Transaction Register (rev 36)
+>>>> 00:02.0 VGA compatible controller: Intel Corporation Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Integrated Graphics Controller (rev 36)
+>>>> 00:03.0 Multimedia controller: Intel Corporation Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series Imaging Unit (rev 36)
+>>>> 00:0a.0 Non-VGA unclassified device: Intel Corporation Device 22d8 (rev 36)
+>>>> 00:0b.0 Signal processing controller: Intel Corporation Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series Power Management Controller (rev 36)
+>>>> 00:14.0 USB controller: Intel Corporation Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series USB xHCI Controller (rev 36)
+>>>> 00:1a.0 Encryption controller: Intel Corporation Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series Trusted Execution Engine (rev 36)
+>>>> 00:1c.0 PCI bridge: Intel Corporation Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series PCI Express Port #1 (rev 36)
+>>>> 00:1f.0 ISA bridge: Intel Corporation Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx Series PCU (rev 36)
+>>>> 01:00.0 Network controller: Qualcomm Atheros QCA9377 802.11ac Wireless Network Adapter (rev 31)
+>>>>
+>>>> According to the history it looks like the driver was removed from the
+>>>> kernel in 2018 and replaced with a dummy driver (to make sure power save
+>>>> works).
+>>>>
+>>>> Is there a chance that the atomisp driver will return to the kernel?
+>>> As much as I'd like to say yes, I think this is unfortunately very
+>>> unlikely. There are a few obstacles to getting a working camera with
+>>> atomisp:
+>>>
+>>> - According to some reports, the driver doesn't work. That's the first
+>>>     thing that would need to be fixed, and without hardware documentation
+>>>     and support from Intel, that would be a difficult (to say the least)
+>>>     task.
+>>>
+>>> - Assuming we could fix the driver, we would need to make sure it
+>>>     supports your device. If the atomisp is anything like the IPU3 (a more
+>>>     recent ISP from Intel), there are two different and incompatible sets
+>>>     of ACPI data formats related to the device, one developed for Windows,
+>>>     and one developed for Linux. I expect the atomisp driver to support
+>>>     the latter but not the former. If your device was shipped with
+>>>     Windows, it uses the Windows-specific ACPI data format. Furthermore,
+>>>     it would in that case likely not encode all the information we would
+>>>     need in ACPI, as Windows drivers have the bad habit of hardcoding
+>>>     device-specific data in drivers. At the very least we would need to
+>>>     get the atomisp to support the Windows ACPI data format (which is most
+>>>     likely completely undocumented), and we would need to figure out how
+>>>     to retrieve data that are simply not there. This being said, maybe the
+>>>     atomisp ACPI design was better than the IPU3 and all (or part of)
+>>>     those issues don't exist, but I'd be surprised.
+>>>
+>>> - At this point you would (hopefully) have a driver that could capture
+>>>     RAW images. In order to use the camera as a webcam, those images would
+>>>     need to be processed by the ISP that is part of the atomisp. This
+>>>     requires complex image processing algorithm control code in userspace.
+>>>     Intel has not released any open version of such code for the atomisp
+>>>     (or any other platform) to my knowledge, so this would need to be
+>>>     implemented from scratch. The libcamera project could help there, as
+>>>     it provides a framework to host such code, but the atomisp-specific
+>>>     code would still need to be implemented. This is a complex task when
+>>>     the hardware is fully documented, without hardware documentation and
+>>>     thus without knowing how the hardware works, it gets extremely
+>>>     difficult. The task would be orders of magnitude more complex than
+>>>     reverse-engineering a GPU.
+>>>
+>>> - Finally, in order for the driver to be merged back in the upstream
+>>>     kernel, it would require massive cleanups, but that's the simplest
+>>>     task of all that is required here.
+>>>
+>>> I'm sorry for the bad news, we need to be more vocal blaming hardware
+>>> vendors for this type of mess.
+>> Bad news indeed, this doesn't sound promising at all. I can confirm that
+>> the driver does not work out of the box in its current state (many
+>> thanks to Mauro for making this test possible). With all those obstacles
+>> I'm surprised that work on such a driver was even started. My only hope
+>> is, that the ISP 2 is better documented and less complex than ISP 3 ...
+>>
+>> I'll try to get hold of hardware documentation from Intel, and check if
+>> there is any kind of community support program in place (it is at least
+>> worth a try :-) ) - that hopefully would allow to assess if there is a
+>> possibility to fix the driver and how much post processing would be
+>> needed in user space (what raw format that thing delivers).
+>> Unfortunately I would depend on others to do the judgment (I do not have
+>> the technical skills necessary). I'll also try to find out who initiated
+> It could also be an interesting project to acquire those technical
+> skills ;-) It's often said that the best way forward with free software
+> development is to scratch your own itch.
 
-Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
----
+That's definitely a true statement & I'll do my best to help. But 
+without C & Linux background I can not directly contribute to the code - 
+who knows, maybe some day. I try to read, learn and understand - first I 
+try to get used to the operating system and to be able to perform basic 
+tasks as collecting data, build kernel & learn about the utilities 
+required (didn't know modprobe, insmod, dmesg and alike a few weeks ago).
 
-- Changes since v7:
-  * Marco: Make 'port' property optional
-  * Maxime & Sakari: Add 'link-frequencies' property to dt binding
-  * robher: Improve description for 'port' property
-
-- Changes since v6:
-  * Marco: remove qcom specifics from DT example
-   
-- Changes since v5:
-  * Add assigned-clocks and assigned-clock-rates
-  * robher: dt-schema errors
-
-- Changes since v4:
-  * Fabio: Change reset-gpio to GPIO_ACTIVE_LOW, explain in description
-  * Add clock-lanes property to example
-  * robher: Fix syntax error in devicetree example
-
-- Changes since v3:
-  * robher: Fix syntax error
-  * robher: Removed maxItems
-  * Fixes yaml 'make dt-binding-check' errors
-
-- Changes since v2:
-  Fixes comments from from Andy, Tomasz, Sakari, Rob.
-  * Convert text documentation to YAML schema.
-
-- Changes since v1:
-  Fixes comments from Sakari, Tomasz
-  * Add clock-frequency and link-frequencies in DT
-
- .../devicetree/bindings/media/i2c/ov8856.yaml | 140 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 141 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-
-diff --git a/Documentation/devicetree/bindings/media/i2c/ov8856.yaml b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-new file mode 100644
-index 000000000000..f78d3eae81cb
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-@@ -0,0 +1,140 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (c) 2019 MediaTek Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ov8856.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Omnivision OV8856 CMOS Sensor Device Tree Bindings
-+
-+maintainers:
-+  - Ben Kao <ben.kao@intel.com>
-+  - Dongchun Zhu <dongchun.zhu@mediatek.com>
-+
-+description: |-
-+  The Omnivision OV8856 is a high performance, 1/4-inch, 8 megapixel, CMOS
-+  image sensor that delivers 3264x2448 at 30fps. It provides full-frame,
-+  sub-sampled, and windowed 10-bit MIPI images in various formats via the
-+  Serial Camera Control Bus (SCCB) interface. This chip is programmable
-+  through I2C and two-wire SCCB. The sensor output is available via CSI-2
-+  serial data output (up to 4-lane).
-+
-+properties:
-+  compatible:
-+    const: ovti,ov8856
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    description:
-+      Input clock for the sensor.
-+    items:
-+      - const: xvclk
-+
-+  clock-frequency:
-+    description:
-+      Frequency of the xvclk clock in Hertz.
-+
-+  dovdd-supply:
-+    description:
-+      Definition of the regulator used as interface power supply.
-+
-+  avdd-supply:
-+    description:
-+      Definition of the regulator used as analog power supply.
-+
-+  dvdd-supply:
-+    description:
-+      Definition of the regulator used as digital power supply.
-+
-+  reset-gpios:
-+    description:
-+      The phandle and specifier for the GPIO that controls sensor reset.
-+      This corresponds to the hardware pin XSHUTDOWN which is physically
-+      active low.
-+
-+  port:
-+    type: object
-+    additionalProperties: false
-+    description:
-+      A node containing an output port node with an endpoint definition
-+      as documented in
-+      Documentation/devicetree/bindings/media/video-interfaces.txt
-+
-+    properties:
-+      endpoint:
-+        type: object
-+
-+        properties:
-+          clock-lanes:
-+            maxItems: 1
-+
-+          data-lanes:
-+            maxItems: 1
-+
-+          link-frequencies:
-+            maxItems: 1
-+
-+          remote-endpoint: true
-+
-+        required:
-+          - clock-lanes
-+          - data-lanes
-+          - remote-endpoint
-+          - link-frequencies
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - clock-frequency
-+  - dovdd-supply
-+  - avdd-supply
-+  - dvdd-supply
-+  - reset-gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ov8856: camera@10 {
-+            compatible = "ovti,ov8856";
-+            reg = <0x10>;
-+
-+            reset-gpios = <&pio 111 GPIO_ACTIVE_LOW>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&clk_24m_cam>;
-+
-+            clocks = <&cam_osc>;
-+            clock-names = "xvclk";
-+            clock-frequency = <19200000>;
-+
-+            avdd-supply = <&mt6358_vcama2_reg>;
-+            dvdd-supply = <&mt6358_vcamd_reg>;
-+            dovdd-supply = <&mt6358_vcamio_reg>;
-+
-+            port {
-+                wcam_out: endpoint {
-+                    remote-endpoint = <&mipi_in_wcam>;
-+                    clock-lanes = <0>;
-+                    data-lanes = <1 2 3 4>;
-+                    link-frequencies = /bits/ 64 <360000000 180000000>;
-+                };
-+            };
-+        };
-+    };
-+...
-\ No newline at end of file
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 26f281d9f32a..84b262afd13d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12489,6 +12489,7 @@ L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
- F:	drivers/media/i2c/ov8856.c
-+F:	Documentation/devicetree/bindings/media/i2c/ov8856.yaml
- 
- OMNIVISION OV9640 SENSOR DRIVER
- M:	Petr Cvek <petrcvekcz@gmail.com>
--- 
-2.25.1
-
+>
+>> the original implementation to find out on what documentation it was
+>> based (or if it was all reverse engineering) and what was the rational
+>> to asses such an implementation as possible.
+>>
+>> What I've found already is a public document about the ISP2-Registers of
+>> the x5-Z8350:
+>>
+>> https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/atom-z8000-datasheet-vol-2.pdf
+>> (page 972 ff.) - not sure if this is of any help.
+>>
+>> What kind of documentation would be needed? What I understood so far is
+>> that details of ACPI format are important.
+> The ACPI format is important, and after a quick glance it seems that
+> some data at least is encoded in a readable way. There's however
+>
+> \_SB_.PCI0.I2C3.CAM1._DSM bothers me. It's a device-specific method that
+> returns device-specific data in an undocumented format. Some of it is
+> human-readable (the package returned when Arg0 is
+> dc2f6c4f-045b-4f1d-97b9-882a6860a4be for instance), but some of it isn't
+> (f486d39f-d657-484b-84a6-42a565712b92 for instance). I haven't seen any
+> call to the _DSM method in the atomisp driver, so we can't figure out
+> what it contains from the driver code. Maybe we won't need that data at
+> all. We also don't know whether we would need data that is not available
+> in the DSDT.
+>
+> Beside the ACPI format, we need to know how to communicate with the
+> device, and with its firmware. Documentation of hardware registers
+> helps, but I would expect most of that to already be handled in the
+> atomisp driver. The part that worries me the most is the communication
+> with the firmware. The firmware takes a very large number of ISP
+> configuration parameters at runtime. They are defined in
+> drivers/staging/media/atomisp/include/linux, but under-documented, so
+> it's not clear how most of them work.
+I understand. I'll approach Intel to see if there is any chance that we 
+get something useful in terms of documentation from them.
+>
+>> As already mentioned: I would also sponsor a device or two to developers
+>> with a reputation as you and Mauro have (preferably the same device I
+>> have :-), they are quite cheap today - and that is a way I could support
+>> the efforts).
+>>
+>>>> There are quite a few older tablets and 2in1 devices that would benefit.
+>>>> Unfortunately I do not understand the removed code (my coding skills are
+>>>> very basic) and can thus not help to change what ever is necessary to
+>>>> make it fit for the kernel :-( (does not sound like a beginner project).
+>>>> However - I would be glad to help out to help testing an ISP driver.
+>>>>
+>>>> However - even without the cam it is a very impressing operating system
+>>>> which I enjoy very much. I would like to thank all of you for your work
+>>>> that benefits so many people!
+>>> You're welcome. Your thanks are much appreciated :-)
