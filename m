@@ -2,130 +2,101 @@ Return-Path: <SRS0=SSLR=6M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65AE0C83001
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 17:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC1DAC83009
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 17:53:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4485D20B1F
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 17:04:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588093448;
-	bh=+BzuoEta3GpkJhXTYu0wLZOwyAEizrEkeMqnK9YrukY=;
-	h=Date:From:To:Cc:Subject:List-ID:From;
-	b=2KRmcuHj8y5qgbZNJS2925Gf6Po2pMshzQonH1WSVEixpkadcx6r/mPBdP4NwF6v2
-	 ljzfJmJgUGum2hT1ZEPLyAwbKx+njYtTVpwEbQAoAM7P/GZiT5Qb3dBUZfxKcRYxot
-	 xBsQEE/DnbiiS2xQVmd47dJ2Xg+N9sAe3vRpiXLc=
+	by mail.kernel.org (Postfix) with ESMTP id 8E6DD20757
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 17:53:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="btf9HJsI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728399AbgD1REH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Apr 2020 13:04:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33574 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728089AbgD1REH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Apr 2020 13:04:07 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ACF6120730;
-        Tue, 28 Apr 2020 17:04:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588093447;
-        bh=+BzuoEta3GpkJhXTYu0wLZOwyAEizrEkeMqnK9YrukY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Px8EXGW46wQvZImhVdLaAEVzRsdigCFe9OPIo9u6BBPu/ji0c9Nmn9GKXDsiFrNTe
-         bgw6v7L30kMNrfoanY8ho7PFz56gIiyxHQg4W5dyrt7Mlmu45We4TAYZ4APiat7q/+
-         5m0a5zNLlhVK4v3UMaHDJXg3EP/cvyUTlHf4KEbU=
-Date:   Tue, 28 Apr 2020 19:04:05 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        id S1728699AbgD1RxG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Apr 2020 13:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728420AbgD1RxG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 28 Apr 2020 13:53:06 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE297C03C1AB
+        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 10:53:04 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id b11so25716101wrs.6
+        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 10:53:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v7ZheI6bSLrba/+brpRVrq5vYClF+WQ9iVO178jEk78=;
+        b=btf9HJsIOuNOn/IaKbfEXolv40jSRzhjuA7EQllCso1sWwBvadsB7piU0hkDwFkkRG
+         LaY0rDWvMUKkER6yps4hDEpVnL0fVqydIPLDTQo63yH6uPIfFJNB8jGZBOdwRYZGKCYL
+         BSTV9m9vj4HDIWkBSOeFIYrD3pfTLjVSy0IjdrJvAlmOlyJE4bWWR0NSzr0dptFQ90zI
+         Uz55v2Aego1u6y92cVjuPpMztMf2e6mr0bHdHBFG22uDECmKCdAtU/l7wqJSuXnGifdz
+         9vJFSjsRbToibdoDhCJXMnWg4cJknVMhLuOw2zE/PKHpaBnwqYeyJtTbE2iGgsKdy1rc
+         +WEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v7ZheI6bSLrba/+brpRVrq5vYClF+WQ9iVO178jEk78=;
+        b=VG8AGoS33Vi3TuY9UptOklt6z6vyBhjtlhqEWixl6S4123mTFSXAYVAGH37EwHQzm2
+         C0GWtKXd52Pt6GM0AzYgTkod0m1khakwcvABLbKtEEUAX7sQ1WdRYDvTyo3AxRx1hx/D
+         fY3jpeUp8n6rzyDTSRrNOumy8y+BgmuJ83DUq+YNmGqO6ssWxJEGC+pA4TlTPw9ZUYoU
+         NgSEXe5oQCAyvcUgyGRO/4S7lQnoKuVDPEbkKlZHhusxEjeSaQtJ1zRgc1+JyPm+jAxS
+         E9niDALbUWKBLC5r/NlzLfk7HigOFeSWFnykuFn17fcatryFfI8i0Uux+bL1bRNp9RId
+         VJSA==
+X-Gm-Message-State: AGi0PubzoXh6dKruGNG0CHRvlEyKg5b0pgwXGFcsxvg9ARSP+19L26v6
+        g9PgcYpDZDcD3a54c+7mF//dCJVoILdC5A==
+X-Google-Smtp-Source: APiQypJBzvsMCtmM5SRHuXXkW8Kz57HKLHp0Lw/JQvJ56JGgP4HXd6+ek1foHwIi/20tTjW8a25S/g==
+X-Received: by 2002:adf:f784:: with SMTP id q4mr34356002wrp.102.1588096383541;
+        Tue, 28 Apr 2020 10:53:03 -0700 (PDT)
+Received: from xps7590.local ([37.120.81.28])
+        by smtp.gmail.com with ESMTPSA id k9sm27936467wrd.17.2020.04.28.10.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2020 10:53:02 -0700 (PDT)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Maxime Ripard <maxime@cerno.tech>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
         Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
-Subject: [PATCH] staging: media: imx: no need to check return value of
- debugfs_create functions
-Message-ID: <20200428170405.GA1649098@kroah.com>
+        Tomasz Figa <tfiga@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>
+Subject: [PATCH v5 v5 0/3] media: ov8856: Add devicetree support
+Date:   Tue, 28 Apr 2020 19:52:52 +0200
+Message-Id: <20200428175255.1608569-1-robert.foss@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When calling debugfs functions, there is no need to ever check the
-return value.  The function can work or not, but the code logic should
-never do something different based on this.
+This adds devicetree support to the ov8856 driver.
+In order to to aid debugging and enable future sensor
+modes to be supported, module revision detection is also added.
 
-Cc: Rui Miguel Silva <rmfrfs@gmail.com>
-Cc: Steve Longerbeam <slongerbeam@gmail.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-media@vger.kernel.org
-Cc: devel@driverdev.osuosl.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/staging/media/imx/imx7-mipi-csis.c | 29 ++++------------------
- 1 file changed, 5 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index fbc1a924652a..d7c9e7343f1f 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -915,33 +915,14 @@ static int mipi_csis_dump_regs_show(struct seq_file *m, void *private)
- }
- DEFINE_SHOW_ATTRIBUTE(mipi_csis_dump_regs);
- 
--static int mipi_csis_debugfs_init(struct csi_state *state)
-+static void mipi_csis_debugfs_init(struct csi_state *state)
- {
--	struct dentry *d;
--
--	if (!debugfs_initialized())
--		return -ENODEV;
--
- 	state->debugfs_root = debugfs_create_dir(dev_name(state->dev), NULL);
--	if (!state->debugfs_root)
--		return -ENOMEM;
--
--	d = debugfs_create_bool("debug_enable", 0600, state->debugfs_root,
--				&state->debug);
--	if (!d)
--		goto remove_debugfs;
--
--	d = debugfs_create_file("dump_regs", 0600, state->debugfs_root,
--				state, &mipi_csis_dump_regs_fops);
--	if (!d)
--		goto remove_debugfs;
--
--	return 0;
--
--remove_debugfs:
--	debugfs_remove_recursive(state->debugfs_root);
- 
--	return -ENOMEM;
-+	debugfs_create_bool("debug_enable", 0600, state->debugfs_root,
-+			    &state->debug);
-+	debugfs_create_file("dump_regs", 0600, state->debugfs_root, state,
-+			    &mipi_csis_dump_regs_fops);
- }
- 
- static void mipi_csis_debugfs_exit(struct csi_state *state)
+Dongchun Zhu (1):
+  media: dt-bindings: ov8856: Document YAML bindings
+
+Robert Foss (2):
+  media: ov8856: Add devicetree support
+  media: ov8856: Implement sensor module revision identification
+
+ .../devicetree/bindings/media/i2c/ov8856.yaml | 140 +++++++++++++
+ MAINTAINERS                                   |   1 +
+ drivers/media/i2c/ov8856.c                    | 192 ++++++++++++++++--
+ 3 files changed, 320 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ov8856.yaml
+
 -- 
-2.26.2
+2.25.1
 
