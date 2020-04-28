@@ -6,31 +6,32 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 890A3C83000
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 21:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAC4BC83008
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 21:03:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 72199206F0
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 21:03:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF8C3206F0
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 21:03:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgD1VDQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Apr 2020 17:03:16 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:42043 "EHLO
+        id S1726909AbgD1VDS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Apr 2020 17:03:18 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:34063 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726338AbgD1VDO (ORCPT
+        with ESMTP id S1726883AbgD1VDS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Apr 2020 17:03:14 -0400
+        Tue, 28 Apr 2020 17:03:18 -0400
 Received: from uno.lan (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id BA0ED20000C;
-        Tue, 28 Apr 2020 21:03:09 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 54D0D20000D;
+        Tue, 28 Apr 2020 21:03:14 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
         hverkuil-cisco@xs4all.nl, sakari.ailus@linux.intel.com,
-        andrey.konovalov@linaro.org, laurent.pinchart@ideasonboard.com
-Subject: [PATCH v5 3/6] media: v4l2-dev: Add v4l2_device_register_ro_subdev_node()
-Date:   Tue, 28 Apr 2020 23:06:06 +0200
-Message-Id: <20200428210609.6793-4-jacopo@jmondi.org>
+        andrey.konovalov@linaro.org, laurent.pinchart@ideasonboard.com,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Subject: [PATCH v5 5/6] v4l2-subdev: add VIDIOC_SUBDEV_QUERYCAP ioctl
+Date:   Tue, 28 Apr 2020 23:06:08 +0200
+Message-Id: <20200428210609.6793-6-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.26.1
 In-Reply-To: <20200428210609.6793-1-jacopo@jmondi.org>
 References: <20200428210609.6793-1-jacopo@jmondi.org>
@@ -41,214 +42,85 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add to the V4L2 core a function to register device nodes for video
-subdevices in read-only mode.
+From: Hans Verkuil <hans.verkuil@cisco.com>
 
-Registering a device node in read-only mode is useful to expose to
-userspace the current sub-device configuration, without allowing
-application to change it by using the V4L2 subdevice ioctls.
+While normal video/radio/vbi/swradio nodes have a proper QUERYCAP ioctl
+that apps can call to determine that it is indeed a V4L2 device, there
+is currently no equivalent for v4l-subdev nodes. Adding this ioctl will
+solve that, and it will allow utilities like v4l2-compliance to be used
+with these devices as well.
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+SUBDEV_QUERYCAP currently returns the version and subdev_caps of the
+subdevice. Define as the initial set of subdev_caps the read-only or
+read/write flags, to signal to userspace which set of IOCTLs are
+available on the subdevice.
+
+Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/v4l2-core/v4l2-device.c |  7 ++--
- drivers/media/v4l2-core/v4l2-subdev.c | 19 ++++++++++
- include/media/v4l2-dev.h              |  7 ++++
- include/media/v4l2-device.h           | 50 ++++++++++++++++++++++++---
- 4 files changed, 77 insertions(+), 6 deletions(-)
+ drivers/media/v4l2-core/v4l2-subdev.c | 12 ++++++++++++
+ include/uapi/linux/v4l2-subdev.h      | 15 +++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-device.c b/drivers/media/v4l2-core/v4l2-device.c
-index c69941214bb2..de4287251a89 100644
---- a/drivers/media/v4l2-core/v4l2-device.c
-+++ b/drivers/media/v4l2-core/v4l2-device.c
-@@ -186,7 +186,8 @@ static void v4l2_device_release_subdev_node(struct video_device *vdev)
- 	kfree(vdev);
- }
- 
--int v4l2_device_register_subdev_nodes(struct v4l2_device *v4l2_dev)
-+int __v4l2_device_register_subdev_nodes(struct v4l2_device *v4l2_dev,
-+					bool read_only)
- {
- 	struct video_device *vdev;
- 	struct v4l2_subdev *sd;
-@@ -215,6 +216,8 @@ int v4l2_device_register_subdev_nodes(struct v4l2_device *v4l2_dev)
- 		vdev->fops = &v4l2_subdev_fops;
- 		vdev->release = v4l2_device_release_subdev_node;
- 		vdev->ctrl_handler = sd->ctrl_handler;
-+		if (read_only)
-+			set_bit(V4L2_FL_SUBDEV_RO_DEVNODE, &vdev->flags);
- 		err = __video_register_device(vdev, VFL_TYPE_SUBDEV, -1, 1,
- 					      sd->owner);
- 		if (err < 0) {
-@@ -252,7 +255,7 @@ int v4l2_device_register_subdev_nodes(struct v4l2_device *v4l2_dev)
- 
- 	return err;
- }
--EXPORT_SYMBOL_GPL(v4l2_device_register_subdev_nodes);
-+EXPORT_SYMBOL_GPL(__v4l2_device_register_subdev_nodes);
- 
- void v4l2_device_unregister_subdev(struct v4l2_subdev *sd)
- {
 diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index a376b351135f..1dc263c2ca0a 100644
+index f3fe515b8ccb..b8c0071aa4d0 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -331,6 +331,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 	struct v4l2_fh *vfh = file->private_data;
- #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
- 	struct v4l2_subdev_fh *subdev_fh = to_v4l2_subdev_fh(vfh);
-+	bool ro_subdev = test_bit(V4L2_FL_SUBDEV_RO_DEVNODE, &vdev->flags);
- #endif
+@@ -15,6 +15,7 @@
+ #include <linux/types.h>
+ #include <linux/videodev2.h>
+ #include <linux/export.h>
++#include <linux/version.h>
+ 
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+@@ -331,6 +332,17 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
  	int rval;
  
-@@ -477,6 +478,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 	case VIDIOC_SUBDEV_S_FMT: {
- 		struct v4l2_subdev_format *format = arg;
- 
-+		if (format->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
-+			return -EPERM;
+ 	switch (cmd) {
++	case VIDIOC_SUBDEV_QUERYCAP: {
++		struct v4l2_subdev_capability *cap = arg;
 +
- 		memset(format->reserved, 0, sizeof(format->reserved));
- 		memset(format->format.reserved, 0, sizeof(format->format.reserved));
- 		return v4l2_subdev_call(sd, pad, set_fmt, subdev_fh->pad, format);
-@@ -504,6 +508,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 		struct v4l2_subdev_crop *crop = arg;
- 		struct v4l2_subdev_selection sel;
- 
-+		if (crop->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
-+			return -EPERM;
++		memset(cap, 0, sizeof(*cap));
++		cap->version = LINUX_VERSION_CODE;
++		cap->subdev_caps |= ro_subdev ? V4L2_SUBDEV_CAP_RO_SUBDEV
++					      : V4L2_SUBDEV_CAP_RW_SUBDEV;
 +
- 		memset(crop->reserved, 0, sizeof(crop->reserved));
- 		memset(&sel, 0, sizeof(sel));
- 		sel.which = crop->which;
-@@ -545,6 +552,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 	case VIDIOC_SUBDEV_S_FRAME_INTERVAL: {
- 		struct v4l2_subdev_frame_interval *fi = arg;
- 
-+		if (ro_subdev)
-+			return -EPERM;
++		return 0;
++	}
 +
- 		memset(fi->reserved, 0, sizeof(fi->reserved));
- 		return v4l2_subdev_call(sd, video, s_frame_interval, arg);
- 	}
-@@ -568,6 +578,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 	case VIDIOC_SUBDEV_S_SELECTION: {
- 		struct v4l2_subdev_selection *sel = arg;
- 
-+		if (sel->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
-+			return -EPERM;
-+
- 		memset(sel->reserved, 0, sizeof(sel->reserved));
- 		return v4l2_subdev_call(
- 			sd, pad, set_selection, subdev_fh->pad, sel);
-@@ -604,6 +617,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 		return v4l2_subdev_call(sd, video, g_dv_timings, arg);
- 
- 	case VIDIOC_SUBDEV_S_DV_TIMINGS:
-+		if (ro_subdev)
-+			return -EPERM;
-+
- 		return v4l2_subdev_call(sd, video, s_dv_timings, arg);
- 
- 	case VIDIOC_SUBDEV_G_STD:
-@@ -612,6 +628,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
- 	case VIDIOC_SUBDEV_S_STD: {
- 		v4l2_std_id *std = arg;
- 
-+		if (ro_subdev)
-+			return -EPERM;
-+
- 		return v4l2_subdev_call(sd, video, s_std, *std);
- 	}
- 
-diff --git a/include/media/v4l2-dev.h b/include/media/v4l2-dev.h
-index 4602c15ff878..ad2d41952442 100644
---- a/include/media/v4l2-dev.h
-+++ b/include/media/v4l2-dev.h
-@@ -82,11 +82,18 @@ struct v4l2_ctrl_handler;
-  *	but the old crop API will still work as expected in order to preserve
-  *	backwards compatibility.
-  *	Never set this flag for new drivers.
-+ * @V4L2_FL_SUBDEV_RO_DEVNODE:
-+ *	indicates that the video device node is registered in read-only mode.
-+ *	The flag only applies to device nodes registered for sub-devices, it is
-+ *	set by the core when the sub-devices device nodes are registered with
-+ *	v4l2_device_register_ro_subdev_nodes() and used by the sub-device ioctl
-+ *	handler to restrict access to some ioctl calls.
-  */
- enum v4l2_video_device_flags {
- 	V4L2_FL_REGISTERED		= 0,
- 	V4L2_FL_USES_V4L2_FH		= 1,
- 	V4L2_FL_QUIRK_INVERTED_CROP	= 2,
-+	V4L2_FL_SUBDEV_RO_DEVNODE	= 3,
+ 	case VIDIOC_QUERYCTRL:
+ 		/*
+ 		 * TODO: this really should be folded into v4l2_queryctrl (this
+diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+index 03970ce30741..89dc8f2ba6b3 100644
+--- a/include/uapi/linux/v4l2-subdev.h
++++ b/include/uapi/linux/v4l2-subdev.h
+@@ -155,9 +155,24 @@ struct v4l2_subdev_selection {
+ 	__u32 reserved[8];
  };
  
- /* Priority helper functions */
-diff --git a/include/media/v4l2-device.h b/include/media/v4l2-device.h
-index 7c912b7d2870..64ec4de948e9 100644
---- a/include/media/v4l2-device.h
-+++ b/include/media/v4l2-device.h
-@@ -174,14 +174,56 @@ int __must_check v4l2_device_register_subdev(struct v4l2_device *v4l2_dev,
- void v4l2_device_unregister_subdev(struct v4l2_subdev *sd);
- 
- /**
-- * v4l2_device_register_subdev_nodes - Registers device nodes for all subdevs
-- *	of the v4l2 device that are marked with
-- *	the %V4L2_SUBDEV_FL_HAS_DEVNODE flag.
-+ * __v4l2_device_register_ro_subdev_nodes - Registers device nodes for
-+ *      all subdevs of the v4l2 device that are marked with the
-+ *      %V4L2_SUBDEV_FL_HAS_DEVNODE flag.
-  *
-  * @v4l2_dev: pointer to struct v4l2_device
-+ * @read_only: subdevices read-only flag. True to register the subdevices
-+ *	device nodes in read-only mode, false to allow full access to the
-+ *	subdevice userspace API.
-  */
- int __must_check
--v4l2_device_register_subdev_nodes(struct v4l2_device *v4l2_dev);
-+__v4l2_device_register_subdev_nodes(struct v4l2_device *v4l2_dev,
-+				    bool read_only);
-+
 +/**
-+ * v4l2_device_register_subdev_nodes - Registers subdevices device nodes with
-+ *	unrestricted access to the subdevice userspace operations
-+ *
-+ * Internally calls __v4l2_device_register_subdev_nodes(). See its documentation
-+ * for more details.
-+ *
-+ * @v4l2_dev: pointer to struct v4l2_device
++ * struct v4l2_subdev_capability - subdev capabilities
++ * @device_caps: the subdev capabilities, see V4L2_SUBDEV_CAP_*.
 + */
-+static inline int __must_check
-+v4l2_device_register_subdev_nodes(struct v4l2_device *v4l2_dev)
-+{
-+#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
-+	return __v4l2_device_register_subdev_nodes(v4l2_dev, false);
-+#else
-+	return 0;
-+#endif
-+}
++struct v4l2_subdev_capability {
++	__u32 version;
++	__u32 subdev_caps;
++};
 +
-+/**
-+ * v4l2_device_register_ro_subdev_nodes - Registers subdevices device nodes
-+ *	in read-only mode
-+ *
-+ * Internally calls __v4l2_device_register_subdev_nodes(). See its documentation
-+ * for more details.
-+ *
-+ * @v4l2_dev: pointer to struct v4l2_device
-+ */
-+static inline int __must_check
-+v4l2_device_register_ro_subdev_nodes(struct v4l2_device *v4l2_dev)
-+{
-+#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
-+	return __v4l2_device_register_subdev_nodes(v4l2_dev, true);
-+#else
-+	return 0;
-+#endif
-+}
++/* The v4l2 sub-device video device node is registered in read-only mode. */
++#define V4L2_SUBDEV_CAP_RO_SUBDEV		BIT(0)
++/* The v4l2 sub-device video device node is registered in read/write mode. */
++#define V4L2_SUBDEV_CAP_RW_SUBDEV		BIT(1)
++
+ /* Backwards compatibility define --- to be removed */
+ #define v4l2_subdev_edid v4l2_edid
  
- /**
-  * v4l2_subdev_notify - Sends a notification to v4l2_device.
++#define VIDIOC_SUBDEV_QUERYCAP			_IOR('V',  0, struct v4l2_subdev_capability)
+ #define VIDIOC_SUBDEV_G_FMT			_IOWR('V',  4, struct v4l2_subdev_format)
+ #define VIDIOC_SUBDEV_S_FMT			_IOWR('V',  5, struct v4l2_subdev_format)
+ #define VIDIOC_SUBDEV_G_FRAME_INTERVAL		_IOWR('V', 21, struct v4l2_subdev_frame_interval)
 -- 
 2.26.1
 
