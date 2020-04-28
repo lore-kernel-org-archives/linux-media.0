@@ -2,74 +2,70 @@ Return-Path: <SRS0=SSLR=6M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6099CC83000
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 12:51:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7969C83009
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 12:51:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 40B16206D6
-	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 12:51:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D478206D9
+	for <linux-media@archiver.kernel.org>; Tue, 28 Apr 2020 12:51:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="b0KZlUDC"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Of8nBJdk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726922AbgD1MvF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Apr 2020 08:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
+        id S1726804AbgD1Mup (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Apr 2020 08:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726940AbgD1Mus (ORCPT
+        by vger.kernel.org with ESMTP id S1726746AbgD1Mup (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Apr 2020 08:50:48 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDEFC03C1AB
-        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 05:50:48 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id y24so2721009wma.4
-        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 05:50:48 -0700 (PDT)
+        Tue, 28 Apr 2020 08:50:45 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1B3C03C1AB
+        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 05:50:45 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id u127so2726816wmg.1
+        for <linux-media@vger.kernel.org>; Tue, 28 Apr 2020 05:50:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IJwZdm/27BG35A63f5QLfwSuwxh6v7svpz8baWGJ+rE=;
-        b=b0KZlUDCbPr3AGniEFxQ2PAfeUZ9+O09I7oVG1Y0/2PmPOuUg+IOA5fzL7hjognD46
-         mF5I8HnLNtnVp/Xwt9M3ow9HxqOG8lPKqx+nqKLEsWdJBEtL674YPRZmqLSth8OQbRgS
-         3atuukLZLleeVou50Xsd1VS1b3N7bjGdyGguJGj5q1AI2oT6IKAlwR2iFDW0gk7CBB7G
-         eYPqfDjjSto7GqeeUj8Bgmic6SuD4IpNMuHYcO20edQc/XlJB2zjPmHuhNxD4HkulThZ
-         r7IGiWPDVdjIsvulhCtc314fTKTMG/6DTE8SeG5D3Fu5hMeMrCbNdFPx9W5e2CPB8Mrx
-         AlWA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ivk8pUd5yw65/sV/AvpRxYKjBbQZM0SLzoY/9d09xk4=;
+        b=Of8nBJdkQzrZsQ93VmweFQ2f0VW0tkBt7Arl73GPj7BJQBd1pGk3DpmZi+VE6ZKCHX
+         mlvXb5C9ntOqyF7vCz8Kc9H+FPam1W15Q+oJeHHfeWouz6oG5S6UayP8QY2GQdPUI0My
+         hCPus1kjcwzWMS6LHSUO8Wog5xotwmZfF1Rk01Vh41vN9/i9ZUSamwG/DgN4RGiguFnJ
+         CL8/TmhN+X02+qkqcOoIiXhiT7DosmretDlc6iCO+pUDDyq8V7kpnzS97PK51gjcfusD
+         ErWaiqPmUu5q3PfIhGwF/jg7w8G5VKmMGWvjKaRiugDR4+f7SzGsiWgqBo6832Lb49Tz
+         cGsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IJwZdm/27BG35A63f5QLfwSuwxh6v7svpz8baWGJ+rE=;
-        b=s9lUtrTOOCdIlrXLj2vNo5OFLDjx659/rcfwt1OWT5VBrPU/DsK08SAJY2UQlsoXSp
-         +qQyyEjXuUJOtoDDB2V0G1oEa7vsmCp6sV7fbvz80sjCdlM6YpbAC4+9m0MKgqSbw2Xm
-         IcKWubsiRZp0LQ8rI0aCWx2igiyMrGR1VwTk7z4uF8KGmzVKz68lMP1mv/KhFVqh0EhD
-         ouUsx7LFRAHsmRxHnaFmJARnOMJ3NmIbxKMaD4gDXWSIxR4Lw32d7q/Y6RnpiM5/Gp3Y
-         5hLI7szA7/Mcw1sUz0uidNPYAtnajZLh28WG3Zhqa3r2j/g1PgdE9mDAaiIw6VPy9ij7
-         Qywg==
-X-Gm-Message-State: AGi0Puajo4kSW7CNSRTOCuVdzLUbbNhNWH7toxUruc47BPiQBwGpTVhu
-        P8O9LtsxjEjMY5HQ8hun5dbPYXS49e20Cg==
-X-Google-Smtp-Source: APiQypI4GXgVmhhEeQIBGhSJdIMiX55vtNCd8Ptr/2M2oTsu6SjPh/MuDhZHRFXFoTDrvI7aiFMEDA==
-X-Received: by 2002:a05:600c:1109:: with SMTP id b9mr4408443wma.116.1588078246765;
-        Tue, 28 Apr 2020 05:50:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ivk8pUd5yw65/sV/AvpRxYKjBbQZM0SLzoY/9d09xk4=;
+        b=TRSKhgUw7KohWGW+2GGiO75L5wjmQS53xTODSyxQe8w1VQW7Y0IxYi0bLERSL+PLxN
+         C59KcObycp/98ZPvMgwN47dHP2Za7jGJUiFZs8xUjA8d+Q8uS9zG5SMc0l6Xl81rMh9W
+         TVKyF1jADRkatwJkuA6Kbdk9Bz0gzqt06e7HbdFm0nQYuC1Xo+wJobwRuFHbKxdA/XwH
+         BLUYjV8W/Z6prA0NEN0aTOM/keZG0RobpO0wMWb5f/Avx2RA0tiPrnp7MYcPzkeRE2QP
+         tgXs+Oc3s0Dilm/5A3PjZa+nr12GcHcJbdo2xnF9Dic0CWIJ8Fi1EX7q0LeXXD5FPOGt
+         /NnA==
+X-Gm-Message-State: AGi0PubPrGALP+DGod64ZlTo21b1CiVi6ckk787gEVJZW3pESY6QMD4b
+        zkQvRITsZA4S72JCytUC9Svv/ttsslLnqw==
+X-Google-Smtp-Source: APiQypJD/8l1OOW0+VgnggdRlxU6EJlqkaxBVKVmSTJRZwFIqdX2QpB1vmlCqT7Ad90mXIEuv/apuA==
+X-Received: by 2002:a1c:99d3:: with SMTP id b202mr4652138wme.126.1588078243182;
+        Tue, 28 Apr 2020 05:50:43 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e35:2ec0:82b0:4460:3fd3:382:4a71])
-        by smtp.gmail.com with ESMTPSA id q184sm3246115wma.25.2020.04.28.05.50.45
+        by smtp.gmail.com with ESMTPSA id q184sm3246115wma.25.2020.04.28.05.50.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 05:50:46 -0700 (PDT)
+        Tue, 28 Apr 2020 05:50:42 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl
 Cc:     linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Maxime Jourdan <mjourdan@baylibre.com>,
         Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH 2/3] media: meson: vdec: fix another case of VP9 buffer shortage
-Date:   Tue, 28 Apr 2020 14:50:35 +0200
-Message-Id: <20200428125036.9401-3-narmstrong@baylibre.com>
+Subject: [PATCH 0/3] meson: vdec: vp9 & MAINTAINERS fixes
+Date:   Tue, 28 Apr 2020 14:50:33 +0200
+Message-Id: <20200428125036.9401-1-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200428125036.9401-1-narmstrong@baylibre.com>
-References: <20200428125036.9401-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -77,132 +73,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Maxime Jourdan <mjourdan@baylibre.com>
+This serie fixes VP9 decoding :
+- enables the motion compensation reference cache controller
+- fixes buffer shortage on VP9 decoding
 
-- Redo the logic where VP9 gets fresh CAPTURE buffers. The previous code
-  could lead to a hardlock.
-- Reserve 4 margin buffers instead of 3, as apparently there are corner
-  cases where 3 is not enough.
+And update the MAINTAINERS entry to add myself ad co-maintainer and
+add the missing yaml DT bindings.
 
-Fixes: e9a3eb4819ca ("media: meson: vdec: add VP9 input support")
-Fixes: 00c43088aa68 ("media: meson: vdec: add VP9 decoder support")
-Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- drivers/staging/media/meson/vdec/codec_vp9.c | 41 +++++++++++++-------
- drivers/staging/media/meson/vdec/esparser.c  | 24 ++++++------
- 2 files changed, 38 insertions(+), 27 deletions(-)
+Maxime Jourdan (2):
+  media: meson: vdec: enable mcrcc for VP9
+  media: meson: vdec: fix another case of VP9 buffer shortage
 
-diff --git a/drivers/staging/media/meson/vdec/codec_vp9.c b/drivers/staging/media/meson/vdec/codec_vp9.c
-index 897f5d7a6aad..28a7e62e7371 100644
---- a/drivers/staging/media/meson/vdec/codec_vp9.c
-+++ b/drivers/staging/media/meson/vdec/codec_vp9.c
-@@ -1185,6 +1185,29 @@ static void codec_vp9_set_mc(struct amvdec_session *sess,
- 	amvdec_write_dos(core, VP9D_MPP_REF_SCALE_ENBL, scale);
- }
- 
-+/*
-+ * Get a free VB2 buffer that isn't currently used.
-+ * VP9 references are held sometimes for so long that it's not really an option
-+ * to hold them until they're no longer referenced, as it would delay the
-+ * CAPTURE queue too much
-+ */
-+static struct vb2_v4l2_buffer *get_free_vbuf(struct amvdec_session *sess)
-+{
-+	struct codec_vp9 *vp9 = sess->priv;
-+	struct vb2_v4l2_buffer *vbuf = v4l2_m2m_dst_buf_remove(sess->m2m_ctx);
-+	struct vb2_v4l2_buffer *vbuf2;
-+
-+	if (!vbuf)
-+		return NULL;
-+
-+	if (!codec_vp9_get_frame_by_idx(vp9, vbuf->vb2_buf.index))
-+		return vbuf;
-+
-+	vbuf2 = get_free_vbuf(sess);
-+	v4l2_m2m_buf_queue(sess->m2m_ctx, vbuf);
-+	return vbuf2;
-+}
-+
- static struct vp9_frame *codec_vp9_get_new_frame(struct amvdec_session *sess)
- {
- 	struct codec_vp9 *vp9 = sess->priv;
-@@ -1196,25 +1219,13 @@ static struct vp9_frame *codec_vp9_get_new_frame(struct amvdec_session *sess)
- 	if (!new_frame)
- 		return NULL;
- 
--	vbuf = v4l2_m2m_dst_buf_remove(sess->m2m_ctx);
-+	vbuf = get_free_vbuf(sess);
- 	if (!vbuf) {
- 		dev_err(sess->core->dev, "No dst buffer available\n");
- 		kfree(new_frame);
- 		return NULL;
- 	}
- 
--	while (codec_vp9_get_frame_by_idx(vp9, vbuf->vb2_buf.index)) {
--		struct vb2_v4l2_buffer *old_vbuf = vbuf;
--
--		vbuf = v4l2_m2m_dst_buf_remove(sess->m2m_ctx);
--		v4l2_m2m_buf_queue(sess->m2m_ctx, old_vbuf);
--		if (!vbuf) {
--			dev_err(sess->core->dev, "No dst buffer available\n");
--			kfree(new_frame);
--			return NULL;
--		}
--	}
--
- 	new_frame->vbuf = vbuf;
- 	new_frame->index = vbuf->vb2_buf.index;
- 	new_frame->intra_only = param->p.intra_only;
-@@ -1267,8 +1278,10 @@ static void codec_vp9_process_frame(struct amvdec_session *sess)
- 		codec_vp9_rm_noshow_frame(sess);
- 
- 	vp9->cur_frame = codec_vp9_get_new_frame(sess);
--	if (!vp9->cur_frame)
-+	if (!vp9->cur_frame) {
-+		amvdec_abort(sess);
- 		return;
-+	}
- 
- 	pr_debug("frame %d: type: %08X; show_exist: %u; show: %u, intra_only: %u\n",
- 		 vp9->cur_frame->index,
-diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
-index db7022707ff8..814bb0587e3b 100644
---- a/drivers/staging/media/meson/vdec/esparser.c
-+++ b/drivers/staging/media/meson/vdec/esparser.c
-@@ -301,21 +301,19 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
- 	u32 offset;
- 	u32 pad_size;
- 
--	/*
--	 * When max ref frame is held by VP9, this should be -= 3 to prevent a
--	 * shortage of CAPTURE buffers on the decoder side.
--	 * For the future, a good enhancement of the way this is handled could
--	 * be to notify new capture buffers to the decoding modules, so that
--	 * they could pause when there is no capture buffer available and
--	 * resume on this notification.
--	 */
--	if (sess->fmt_out->pixfmt == V4L2_PIX_FMT_VP9) {
--		if (codec_ops->num_pending_bufs)
--			num_dst_bufs = codec_ops->num_pending_bufs(sess);
--
-+	if (codec_ops->num_pending_bufs) {
-+		num_dst_bufs = codec_ops->num_pending_bufs(sess);
- 		num_dst_bufs += v4l2_m2m_num_dst_bufs_ready(sess->m2m_ctx);
-+		/*
-+		 * When max ref frame is held by VP9, this should be -= 4
-+		 * to prevent a shortage of CAPTURE buffers on the decoder side.
-+		 * For the future, a good enhancement of the way this is handled
-+		 * could be to notify new capture buffers to the decoding
-+		 * modules, so that they could pause when there is no capture
-+		 * buffer available and resume on this notification.
-+		 */
- 		if (sess->fmt_out->pixfmt == V4L2_PIX_FMT_VP9)
--			num_dst_bufs -= 3;
-+			num_dst_bufs -= 4;
- 
- 		if (esparser_vififo_get_free_space(sess) < payload_size ||
- 		    atomic_read(&sess->esparser_queued_bufs) >= num_dst_bufs)
+Neil Armstrong (1):
+  MAINTAINERS: update the Amlogic VDEC driver maintainer entry
+
+ MAINTAINERS                                  |  2 +
+ drivers/staging/media/meson/vdec/codec_vp9.c | 72 ++++++++++++++++----
+ drivers/staging/media/meson/vdec/esparser.c  | 24 +++----
+ 3 files changed, 71 insertions(+), 27 deletions(-)
+
 -- 
 2.22.0
 
