@@ -2,109 +2,122 @@ Return-Path: <SRS0=Hru2=6N=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C56C7C8300C
-	for <linux-media@archiver.kernel.org>; Wed, 29 Apr 2020 22:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC000C83015
+	for <linux-media@archiver.kernel.org>; Wed, 29 Apr 2020 22:09:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9FF7F20757
-	for <linux-media@archiver.kernel.org>; Wed, 29 Apr 2020 22:02:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B5D1D21927
+	for <linux-media@archiver.kernel.org>; Wed, 29 Apr 2020 22:09:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="il2yvtid"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mbT0/nGl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727811AbgD2WB0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 Apr 2020 18:01:26 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:14821 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727057AbgD2WBZ (ORCPT
+        id S1728227AbgD2WJ0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 Apr 2020 18:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728021AbgD2WJZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 Apr 2020 18:01:25 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ea9f8f20000>; Wed, 29 Apr 2020 15:00:18 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 29 Apr 2020 15:01:24 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 29 Apr 2020 15:01:24 -0700
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 Apr
- 2020 22:01:24 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 29 Apr 2020 22:01:24 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.165.152]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5ea9f9330000>; Wed, 29 Apr 2020 15:01:23 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v11 1/9] arm64: tegra: Fix sor powergate clocks and reset
-Date:   Wed, 29 Apr 2020 14:59:58 -0700
-Message-ID: <1588197606-32124-2-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1588197606-32124-1-git-send-email-skomatineni@nvidia.com>
-References: <1588197606-32124-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        Wed, 29 Apr 2020 18:09:25 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E791FC03C1AE;
+        Wed, 29 Apr 2020 15:09:24 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id g14so3137869otg.10;
+        Wed, 29 Apr 2020 15:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8oqwTr93GONiIRzdNlX+cz19aB6zUtjVhJXAzceD5NI=;
+        b=mbT0/nGlQVzYagaookGp3cEt7WpHHYBvOZ0eg9smcL5aJUbT99dEyaKCU+lwAoXgpi
+         3XWCQanM4wWlKeU1lcb3ywJ046tsjFk0WKR2ctNr2fSHkzgR3Rchv3lQkOLxODyhgi7W
+         zdpySIQe8y3fRub9I9zVCXi362IIZXiEe+OR71DOkOHSpux73eGW9th2DUh4b7wqU9Fs
+         s/CdEqtDZSE0o+8lKUVxEA8+D84EcxNJbzeimiuaCUf3prxmEggk9gmRNSSVQDnbwyXs
+         WWzsP3h99/+yez6l4AhJBHTyVPBHNtzOtu6C/P+mI3kpV3VtW3NIxfcGr3FRNhvcrqlV
+         UdVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8oqwTr93GONiIRzdNlX+cz19aB6zUtjVhJXAzceD5NI=;
+        b=pIBCbyUQw2OWGo6wc0lNJtQi5JAqrhgtThExihwYKGV6RQhIJfgkJ7Rc5S0keXkimH
+         VaRhFOwiiCRh07HIgSD9zdZFEHAJsrVP2STm/treUV70iz3k12XUU81zo4wu51/K8fnx
+         CgrrTzCFybW6zQL+QInwv+0jRBcS3GAKkJcIlrAT0ncwnm6Xs61hdiwEV7drgctQA4cL
+         19wIKWPzamgvILy8wj2YpHH945SdveLo/3fITTyfXhNoc/AlOGtKU0uaTsUDk+0BegdW
+         VRCuJXWQTtf/xRxJ9aNgmlSy9Ub0pgiDLDNRZc/dX/+3P+piv4oO1pVjntyST57KvGxI
+         y2Lg==
+X-Gm-Message-State: AGi0PuZppdDoRbPUoiZMkuIurz0mom53ya3bwUd7C3dwADTHeHxCI9pu
+        DfaEeZBgKn4p1Lm4z/PSWBF2e9Km+1kdUbsIZeNRhk4j
+X-Google-Smtp-Source: APiQypKobiQJJqpqNRhFSNXeLIHjEz81s3WISBQksQoAKf9VSaGW8bghC6rpb+qGC5zWjSngm/v2nXCxiH0QCiwVw68=
+X-Received: by 2002:a9d:7390:: with SMTP id j16mr94578otk.43.1588198164341;
+ Wed, 29 Apr 2020 15:09:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1588197618; bh=PTc2SyRS9NP+68XdMh+c6cj6nLmKTNHZwxALx6dnzdM=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=il2yvtidICj4a5bjnABPyAna8tUFqg6pQdx0U6lnEm6+f6ivNFYU0iowbo4AIiVeu
-         mnguu6zmllUaEFO6L5f9CmktgavMQ9dX05USsqddZWOoRdh4nL+3K6zJX9+euWNpVT
-         fi7772XvA2p9XePJwFNCY1Knv3qpYf/OZUYudBrIOTTnxwi7Uf9q4JTp2cyBrTGXFz
-         FKQoYrKuZTptr0pJ5JI3JchEOm7i5fOxOvSFUY+nnSpkbi4LMK6kBnd3XBw143ylBe
-         LQQIRaZruaOpkMbPN6XyimQNbRf2HpwkWd3rSijVUDDgoGoFJN4OzsG8iuM7BCyctd
-         jXNAWISMppWtQ==
+References: <1586945948-11026-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1586945948-11026-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 29 Apr 2020 23:08:58 +0100
+Message-ID: <CA+V-a8s+rU8PV9nzERGSeiauxekP7MOgMXMOtx579OqnVmMHrA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] media: rcar-vin: Enable MEDIA_BUS_FMT_SRGGB8_1X8 format
+To:     Niklas <niklas.soderlund@ragnatech.se>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Tegra210 device tree lists csi clock and reset under SOR powergate
-node.
+Hi Niklas,
 
-But Tegra210 has csicil in SOR partition and csi in VENC partition.
+On Wed, Apr 15, 2020 at 11:19 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> Hi,
+>
+> This patch series adds support for MEDIA_BUS_FMT_SRGGB8_1X8 format for vin
+>
+> Cheers,
+> --Prabhakar
+>
+> Changed for v4:
+> * patch 1/3 is new patch which adds a check for conversion from input to
+>   output.
+> * patch 2/3 added a comment while setting VNIS_REG for RAW format as
+>   suggested by Niklas
+>
+> Changes for v3:
+> * Dropped patch 1/1 from v2 as this handled neatly by patches
+>   https://patchwork.linuxtv.org/project/linux-media/list/?series=1974
+> * Included Ack from Niklas for patch 2/2
+> * Updated commit message for patch 1/1.
+>
+> Changes for v2:
+> * Added support for matching fwnode against endpoints/nodes.
+> * Separated patch for rcar-vin and rcar-csi2.c which added
+>   MEDIA_BUS_FMT_SRGGB8_1X8.
+>
+> Lad Prabhakar (3):
+>   media: rcar-vin: Invalidate pipeline if conversion is not possible on
+>     input formats
+>   media: rcar-vin: Add support for MEDIA_BUS_FMT_SRGGB8_1X8 format
+>   media: rcar-csi2: Add support for MEDIA_BUS_FMT_SRGGB8_1X8 format
+>
+Gentle ping.
 
-So, this patch includes fix for sor powergate node.
+Cheers,
+--Prabhakar
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra210.dtsi | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-index 64c46ce..d0eff92 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-@@ -796,7 +796,9 @@
- 			pd_sor: sor {
- 				clocks = <&tegra_car TEGRA210_CLK_SOR0>,
- 					 <&tegra_car TEGRA210_CLK_SOR1>,
--					 <&tegra_car TEGRA210_CLK_CSI>,
-+					 <&tegra_car TEGRA210_CLK_CILAB>,
-+					 <&tegra_car TEGRA210_CLK_CILCD>,
-+					 <&tegra_car TEGRA210_CLK_CILE>,
- 					 <&tegra_car TEGRA210_CLK_DSIA>,
- 					 <&tegra_car TEGRA210_CLK_DSIB>,
- 					 <&tegra_car TEGRA210_CLK_DPAUX>,
-@@ -804,7 +806,6 @@
- 					 <&tegra_car TEGRA210_CLK_MIPI_CAL>;
- 				resets = <&tegra_car TEGRA210_CLK_SOR0>,
- 					 <&tegra_car TEGRA210_CLK_SOR1>,
--					 <&tegra_car TEGRA210_CLK_CSI>,
- 					 <&tegra_car TEGRA210_CLK_DSIA>,
- 					 <&tegra_car TEGRA210_CLK_DSIB>,
- 					 <&tegra_car TEGRA210_CLK_DPAUX>,
--- 
-2.7.4
-
+>  drivers/media/platform/rcar-vin/rcar-csi2.c |  1 +
+>  drivers/media/platform/rcar-vin/rcar-dma.c  | 21 +++++++++++++++++++--
+>  drivers/media/platform/rcar-vin/rcar-v4l2.c |  4 ++++
+>  3 files changed, 24 insertions(+), 2 deletions(-)
+>
+> --
+> 2.20.1
+>
