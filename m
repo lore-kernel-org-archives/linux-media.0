@@ -2,126 +2,94 @@ Return-Path: <SRS0=Hru2=6N=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 653BBC83000
-	for <linux-media@archiver.kernel.org>; Wed, 29 Apr 2020 21:14:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8658FC83000
+	for <linux-media@archiver.kernel.org>; Wed, 29 Apr 2020 22:01:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D66C2076B
-	for <linux-media@archiver.kernel.org>; Wed, 29 Apr 2020 21:14:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 55BF5214AF
+	for <linux-media@archiver.kernel.org>; Wed, 29 Apr 2020 22:01:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="SRxN1tAF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726889AbgD2VOI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 Apr 2020 17:14:08 -0400
-Received: from mga03.intel.com ([134.134.136.65]:8384 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726511AbgD2VOI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 Apr 2020 17:14:08 -0400
-IronPort-SDR: QCP7qbW/ICsbnz+kKgtnuqyu6VocGh+/l1SJPi4xMJNnYlmpeL1rPo1bsnvmyeF4kGOiJloKFY
- dyEJ8ENVbkWQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 14:14:08 -0700
-IronPort-SDR: /voPTyypNRjcr4YFqlz+Xfp9dFmdQmyDArVz8Zv595ery1S9IX7yTSaQdh8bvSMpVXi9QhvPHi
- 53PYg6jdh2zw==
-X-IronPort-AV: E=Sophos;i="5.73,333,1583222400"; 
-   d="scan'208";a="293334001"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 14:14:06 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 505812084B; Thu, 30 Apr 2020 00:14:04 +0300 (EEST)
-Date:   Thu, 30 Apr 2020 00:14:04 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Steve Longerbeam <slongerbeam@gmail.com>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v5 03/23] media: v4l2-subdev: add
- v4l2_subdev_get_fwnode_pad_default
-Message-ID: <20200429211404.GM9190@paasikivi.fi.intel.com>
-References: <20200420003930.11463-1-slongerbeam@gmail.com>
- <20200420003930.11463-4-slongerbeam@gmail.com>
- <20200429143946.GI9190@paasikivi.fi.intel.com>
- <62e91ae8-7099-6f1d-9c8a-9255d90c3db9@gmail.com>
+        id S1728052AbgD2WBf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 Apr 2020 18:01:35 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:6513 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727989AbgD2WBe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 29 Apr 2020 18:01:34 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ea9f8c20000>; Wed, 29 Apr 2020 14:59:30 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 29 Apr 2020 15:01:33 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 29 Apr 2020 15:01:33 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 Apr
+ 2020 22:01:33 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 29 Apr 2020 22:01:33 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.165.152]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5ea9f93b0001>; Wed, 29 Apr 2020 15:01:32 -0700
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v11 8/9] dt-bindings: reset: Add ID for Tegra210 VI reset
+Date:   Wed, 29 Apr 2020 15:00:05 -0700
+Message-ID: <1588197606-32124-9-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1588197606-32124-1-git-send-email-skomatineni@nvidia.com>
+References: <1588197606-32124-1-git-send-email-skomatineni@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62e91ae8-7099-6f1d-9c8a-9255d90c3db9@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1588197570; bh=KEZ1lHNwQNYea9tamUq6xhOd3Wa4inGS2Z794lURij8=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=SRxN1tAF8pPlJNtIV1thqZC51jZOSTXRr6Db2VCXSTLSsMPoCzLjlKzdvnf7qIDdY
+         sOB5wJ6mXSMrOk96Y/Ox+caXZdyHasYtqzsgRkbTwzSPV4UzVk1HDG2MILuCsN56xO
+         cg0e3Nslkveh7dHWLniRWRkNhsolh2h8fWcKJfOMqGfRqUNDyaXBNj3JbapK8K09z2
+         wq0onR2mwemUvSSEE4gtzz3OPJ+gGBq02R/l3ZV79QnPjU3nai8X9B0WrIvZElaE8U
+         fWCHGgfEPNLV1RkgL1JQrLRgPThnJ4w8fZt8Fmj1hOiZ4nQIfmPfm8oWzBBaSEbwpb
+         cF2hWi4AjXvtQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Steve,
+This patch adds ID for Tegra210 VI controller reset to use with
+device tree.
 
-On Wed, Apr 29, 2020 at 01:49:35PM -0700, Steve Longerbeam wrote:
-> Hi Sakari,
-> 
-> On 4/29/20 7:39 AM, Sakari Ailus wrote:
-> > Hi Steve,
-> > 
-> > On Sun, Apr 19, 2020 at 05:39:10PM -0700, Steve Longerbeam wrote:
-> > > Add a convenience function that can be used as the .get_fwnode_pad
-> > > operation for subdevices that map port numbers and pad indexes 1:1.
-> > > The function verifies the endpoint is owned by the subdevice, and if
-> > > so returns the endpoint port number.
-> > > 
-> > > Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
-> > > ---
-> > >   drivers/media/v4l2-core/v4l2-subdev.c | 25 +++++++++++++++++++++++++
-> > >   include/media/v4l2-subdev.h           | 17 +++++++++++++++++
-> > >   2 files changed, 42 insertions(+)
-> > > 
-> > > diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-> > > index a376b351135f..d5b5cd7a6049 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> > > @@ -696,6 +696,31 @@ const struct v4l2_file_operations v4l2_subdev_fops = {
-> > >   };
-> > >   #ifdef CONFIG_MEDIA_CONTROLLER
-> > > +
-> > > +int v4l2_subdev_get_fwnode_pad_default(struct media_entity *entity,
-> > > +				       struct fwnode_endpoint *endpoint)
-> > > +{
-> > > +	struct fwnode_handle *ep;
-> > > +	struct v4l2_subdev *sd;
-> > > +
-> > > +	if (!is_media_entity_v4l2_subdev(entity))
-> > > +		return -EINVAL;
-> > > +
-> > > +	sd = media_entity_to_v4l2_subdev(entity);
-> > > +
-> > > +	fwnode_graph_for_each_endpoint(dev_fwnode(sd->dev), ep) {
-> > > +		if (ep != endpoint->local_fwnode)
-> > > +			continue;
-> > If the purpose is just to check a given endpoint belongs to a device, could
-> > it be done in a more simple way? E.g.:
-> > 
-> > 	fwnode = fwnode_graph_get_port_parent(endpoint->local_fwnode);
-> > 	fwnode_handle_put(fwnode);
-> > 
-> > 	if (dev_fwnode(sd->dev) == fwnode)
-> > 		return endpoint->port;
-> > 
-> > 	return -ENXIO;
-> 
-> Sorry you are right, I was stuck on confirming the endpoint itself is one of
-> the devices endpoints, but yes, above is all that is needed to confirm the
-> endpoint is owned by the device, I'll make that change.
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+---
+ include/dt-bindings/reset/tegra210-car.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks.
-
-Could you calso call the function e.g. v4l2_subdev_get_fwnode_pad_1_to_1 or
-such? I presume there will be a few of these, and it depends on the device
-what suits it.
-
+diff --git a/include/dt-bindings/reset/tegra210-car.h b/include/dt-bindings/reset/tegra210-car.h
+index 9dc84ec..8755946 100644
+--- a/include/dt-bindings/reset/tegra210-car.h
++++ b/include/dt-bindings/reset/tegra210-car.h
+@@ -10,5 +10,6 @@
+ #define TEGRA210_RESET(x)		(7 * 32 + (x))
+ #define TEGRA210_RST_DFLL_DVCO		TEGRA210_RESET(0)
+ #define TEGRA210_RST_ADSP		TEGRA210_RESET(1)
++#define TEGRA210_RST_VI			20
+ 
+ #endif	/* _DT_BINDINGS_RESET_TEGRA210_CAR_H */
 -- 
-Regards,
+2.7.4
 
-Sakari Ailus
