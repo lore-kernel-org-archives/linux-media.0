@@ -2,173 +2,102 @@ Return-Path: <SRS0=S6e8=6O=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D577BC47253
-	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 19:10:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83E81C47247
+	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 19:25:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A6FD7208D6
-	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 19:10:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="WomAnelD"
+	by mail.kernel.org (Postfix) with ESMTP id 56DB9208C3
+	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 19:25:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588274720;
+	bh=+7YJ0F1f3t1J9sJB435G2DWcTRqHj08byBs/EBxxpUE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=ys64QXkYTVGzAdy8PyXAOOl5Hy+qb9wBR2isXIz8ntTOq8hyIhaMxCKg3laxRm8tT
+	 C1KGRAzrZjja4H1w5PomHUSvx33GOiOJFB3MKSk9V7Ux7S5v09sWheeRgIJKh1cOSS
+	 l1NCNGGc9QgxtUWX8o7933zeCooT3WbqlgrCseIk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgD3TKw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Apr 2020 15:10:52 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:11209 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbgD3TKw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Apr 2020 15:10:52 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5eab223f0000>; Thu, 30 Apr 2020 12:08:47 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 30 Apr 2020 12:10:51 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 30 Apr 2020 12:10:51 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 30 Apr
- 2020 19:10:51 +0000
-Received: from [10.2.165.152] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 30 Apr
- 2020 19:10:50 +0000
-Subject: Re: [RFC PATCH v11 6/9] media: tegra: Add Tegra210 Video input driver
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
-CC:     <sboyd@kernel.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1588197606-32124-1-git-send-email-skomatineni@nvidia.com>
- <1588197606-32124-7-git-send-email-skomatineni@nvidia.com>
- <bacc4308-4b95-f566-b80e-096ff96407b5@gmail.com>
- <4da289e6-036f-853b-beb4-379d6462adb0@gmail.com>
- <c6d54885-6f23-f60c-a17b-3481fc4d6adf@gmail.com>
- <b14b9dc5-7ac9-7735-d98d-eebc7e151cba@nvidia.com>
- <7d31d24f-f353-7e82-3ff9-cdba8b773d1e@nvidia.com>
- <06a4a067-8d54-4322-b2a6-14e82eaeda29@nvidia.com>
- <47873bbd-cf90-4595-5a99-7e9113327ecc@nvidia.com>
-Message-ID: <f6088e0f-4ac7-a6be-3ede-0233dc88ef2c@nvidia.com>
-Date:   Thu, 30 Apr 2020 12:09:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726691AbgD3TZQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Apr 2020 15:25:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47066 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726272AbgD3TZQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 30 Apr 2020 15:25:16 -0400
+Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7D8F52072A;
+        Thu, 30 Apr 2020 19:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588274715;
+        bh=+7YJ0F1f3t1J9sJB435G2DWcTRqHj08byBs/EBxxpUE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eLexogwtOcM4N+0UYjECMimdHQ1opWtbze6Dopj5VT/8YNtXib+uDpzQ+/j7L1wM7
+         gO7qJfjWBGp/EUqclA9T2dFbzn7epFKMoqif+CwAY1rvNnNdS9GaFG/7gci0ZG5mEH
+         gP89jPiJs/LD6qCbcNj9srmmHA07LUSjwbSMf6aM=
+Date:   Thu, 30 Apr 2020 21:25:11 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Subject: [PATCH RFC] Kbuild: Makefile: warn if auto.conf is obsolete
+Message-ID: <20200430212511.2115ed98@coco.lan>
+In-Reply-To: <20200430211009.3fef03f3@coco.lan>
+References: <20200430131715.32c1a1f6@coco.lan>
+        <CAK7LNASmVoZequqaj6MTimeZ0MG0fk7Wb5-9haFhgG03kDBpxg@mail.gmail.com>
+        <20200430184948.27191975@coco.lan>
+        <CAK7LNASx5qfV_6Wow-MVKsHXUX96m8yYvpeK1QVt+2i46FTMNg@mail.gmail.com>
+        <20200430211009.3fef03f3@coco.lan>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <47873bbd-cf90-4595-5a99-7e9113327ecc@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1588273727; bh=dOqhYhFFa7N2H5CvZpnGMF6qyNMlHRnVcxwPJYNk5s0=;
-        h=X-PGP-Universal:Subject:From:To:CC:References:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=WomAnelDH+mtKGSWgZPmyONNQwRSNKf0xS+2H8hQIu80Ewf1lwXxLYcs6h87wG7MW
-         sqQJVnqgdqPtq94/p1Qrk5Qr81/w6jgCh8XHOqeyAGVpUpdNMDXDktRbHvqoasqrr/
-         t/cAC/eRu4/wfZ8LvkFLzjshXGoox7NKWEHBDMU4HLYG/aOMsgdLcCYtoB0pRdcaTX
-         WNF4cQ9kLaAPE5b9J9xr6q6fKOEjLt7+Hfx+6gSqcexBwEeY8QWqeSW389SVwMlyuo
-         T9g0lqyu1wELpfEgN8uJQPPtEGbWWSPViEr8jw9iNfGtCH1i/Up+H1Nae2Ew2NEzRk
-         SJ0ncHypSsNhQ==
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+A new behavior on more recent kernels require to always call
+"make modules_prepare" after *any* Kconfig changes.
 
-On 4/30/20 11:18 AM, Sowjanya Komatineni wrote:
->
-> On 4/30/20 10:06 AM, Sowjanya Komatineni wrote:
->>
->> On 4/30/20 9:29 AM, Sowjanya Komatineni wrote:
->>>
->>> On 4/30/20 9:04 AM, Sowjanya Komatineni wrote:
->>>>
->>>> On 4/30/20 7:13 AM, Dmitry Osipenko wrote:
->>>>> 30.04.2020 17:02, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>>>>> 30.04.2020 16:56, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>>>>>> 30.04.2020 01:00, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=
-=82:
->>>>>>>> +static int chan_capture_kthread_finish(void *data)
->>>>>>>> +{
->>>>>>>> +=C2=A0=C2=A0=C2=A0 struct tegra_vi_channel *chan =3D data;
->>>>>>>> +=C2=A0=C2=A0=C2=A0 struct tegra_channel_buffer *buf;
->>>>>>>> +
->>>>>>>> +=C2=A0=C2=A0=C2=A0 set_freezable();
->>>>>>>> +
->>>>>>>> +=C2=A0=C2=A0=C2=A0 while (1) {
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 try_to_freeze();
->>>>>>> I guess it won't be great to freeze in the middle of a capture=20
->>>>>>> process, so:
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (list_empty(&chan->do=
-ne))
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-try_to_freeze();
->>>>>> And here should be some locking protection in order not race with=20
->>>>>> the
->>>>>> chan_capture_kthread_start because kthread_finish could freeze=20
->>>>>> before
->>>>>> kthread_start.
->>>>> Or maybe both start / finish threads should simply be allowed to=20
->>>>> freeze
->>>>> only when both capture and done lists are empty.
->>>>>
->>>>> if (list_empty(&chan->capture) &&
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0 list_empty(&chan->done))
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0try_to_freeze();
->>>>
->>>> good to freeze when not in middle of the frame capture but why=20
->>>> should we not allow freeze in between captures?
->>>>
->>>> Other drivers do allow freeze in between frame captures.
->>>>
->>>> I guess we can freeze before dequeue for capture and in finish=20
->>>> thread we can freeze after capture done. This also don't need to=20
->>>> check for list_empty with freeze to allow between frame captures.
->>>>
->>> Also if we add check for both lists empty, freeze is not allowed as=20
->>> long as streaming is going on and in case of continuous streaming=20
->>> freeze will never happen.
->>
-> To allow freeze b/w frames (but not in middle of a frame),
->
-> for capture_start thread, probably we can do unconditional=20
-> try_to_freeze()
->
-> for capture_finish thread, at end of capture done we can do=20
-> try_to_freeze() only when done list is empty
->
-My understanding is buffer updates/release should not happen after=20
-frozen state. So we should let frame capture of outstanding buffer to=20
-finish before freezing in capture_finish thread.
+This is not what a poor mortal would be expecting on a building
+system, as it should, IMHO, be able to detect and auto-run
+whatever is needed to use the newer setup.
 
-But for capture_start thread we can unconditionally freeze before=20
-dequeuing next buffer for capture.
+Yet, while this is not solved, let's at least stop the build
+and produce a warning, to notify the user about that.
 
-With this when both threads are in frozen state and no buffer=20
-updates/captures will happen after frozen state.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
 
-I think its not required to finish streaming of all frames completely to=20
-let threads to enter frozen state as streaming can be continuous as well.
+I would still prefer to call "make modules_prepare" directly,
+on such cases, but just calling "make -C . modules_prepare" doesn't
+work. So, the next best thing would be to at least print a message
+and don't try to do a build with a broken auto.conf file.
 
->> Hi Dmitry,
->>
->> Will update in v12 to not allow freeze in middle of a frame capture.
->>
->> Can you please confirm on above if you agree to allow freeze to=20
->> happen in b/w frame captures?
->>
->> Also as most feedback has been received from you by now, appreciate=20
->> if you can provide all in this v11 if you have anything else so we=20
->> will not have any new changes after v12.
->>
->> Thanks
->>
->> Sowjanya
->>
+ Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 70def4907036..492ee2396ab9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1632,6 +1632,11 @@ $(objtree)/Module.symvers:
+ build-dirs := $(KBUILD_EXTMOD)
+ PHONY += modules
+ modules: descend $(objtree)/Module.symvers
++	@if [ $(KCONFIG_CONFIG) -nt include/config/auto.conf ]; then \
++		echo "  WARNING: $(KCONFIG_CONFIG) was modified. Need to run:"; \
++		echo "           $(MAKE) modules_prepare"; \
++		exit -1; \
++	fi
+ 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
+ 
+ PHONY += modules_install
+-- 
+2.25.4
+
