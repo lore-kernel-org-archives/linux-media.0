@@ -2,174 +2,184 @@ Return-Path: <SRS0=S6e8=6O=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
+X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD0E8C4724C
-	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 22:25:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87070C4724C
+	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 22:28:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8914F2070B
-	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 22:25:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588285515;
-	bh=PVHQHhcGp1IbUmhBe/8piZ8ELOqI6YFayIIZMFj6Bl4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=W3pMAimwgPULy6n/b5RY/q+ave7U5NyOPAVwc3vL7cEOmsgiJE3tyBw55p0quUELa
-	 jS8tCTP9UbQ+x/BWTA2cGBKQ/TTRWI88dyJLSzaTO6eabvnosZoF9LdQuj7PthRxMy
-	 urcBlL+npPhAgxbESEN0QIXDr1Mnzc4NvRiI6SMw=
+	by mail.kernel.org (Postfix) with ESMTP id 5DA0F206D9
+	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 22:28:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="GHpzMcM9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbgD3WZP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Apr 2020 18:25:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60130 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726697AbgD3WZP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Apr 2020 18:25:15 -0400
-Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB83E206D9;
-        Thu, 30 Apr 2020 22:25:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588285514;
-        bh=PVHQHhcGp1IbUmhBe/8piZ8ELOqI6YFayIIZMFj6Bl4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0wpcQNWhC7R1oUmHj4AAGC03BV3J9Qo2BDQzamOUulXGb9JwPoxSfyizFMEaPWk4y
-         4p2d/5QfHuUpHEMooDbdmeJy/BbpczI6H7D02xi7ujdnbKV7/wu/2I8EiOMsaPhVQ6
-         wQmzhSGaT9gdk/PthD6eaz+nlYee4KzCiNUYzw7U=
-Date:   Fri, 1 May 2020 00:25:10 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Patrik Gfeller <patrik.gfeller@gmail.com>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: atomisp kernel driver(s)
-Message-ID: <20200501002510.0ead955d@coco.lan>
-In-Reply-To: <403b799e-6ae9-d62b-1f3a-a1b6b874071b@gmail.com>
-References: <f3348096-1fb3-5368-ba66-f42a300bde8e@gmail.com>
-        <20200420013109.65babb54@coco.lan>
-        <e45de3ea-4b5c-f2d0-0844-1233ca15a939@gmail.com>
-        <eb83f789-9595-55f0-d922-bab00ae85cff@gmail.com>
-        <20200420224750.28c0181d@coco.lan>
-        <dd8ab5df-31c7-f009-36e4-ca4fd0605e97@gmail.com>
-        <20200422211344.2ec3d93e@coco.lan>
-        <23b3a078-2a9a-5f50-a35e-9f40f5aa8a6e@gmail.com>
-        <86413836-e4b5-cb53-3ac0-1764c693ec7b@gmail.com>
-        <682558b0-a2cf-9fe2-6e54-20462ecccb5d@gmail.com>
-        <20200425132255.4bf872b2@coco.lan>
-        <131a4247-cef3-d651-a0ea-defd32b8bf20@gmail.com>
-        <20200426185007.1954885a@coco.lan>
-        <45817a6a-dd2f-13a6-835b-fd2b04ded23f@gmail.com>
-        <20200427235027.15cd4e03@coco.lan>
-        <d9ec5067-142c-66c9-c412-51ddf38e44f7@gmail.com>
-        <20200429011339.03af3c2a@coco.lan>
-        <3b7366b9-463d-c49b-0f2d-51a1d5475a9d@gmail.com>
-        <20200429201753.3b2d679b@coco.lan>
-        <6fffdf73-a0eb-1b1c-d894-e4799b8ef944@gmail.com>
-        <20200430125544.10a9830d@coco.lan>
-        <403b799e-6ae9-d62b-1f3a-a1b6b874071b@gmail.com>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1726817AbgD3W2M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Apr 2020 18:28:12 -0400
+Received: from gateway20.websitewelcome.com ([192.185.58.11]:33174 "EHLO
+        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726697AbgD3W2M (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 30 Apr 2020 18:28:12 -0400
+X-Greylist: delayed 1499 seconds by postgrey-1.27 at vger.kernel.org; Thu, 30 Apr 2020 18:28:11 EDT
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 5C0C4400C57E3
+        for <linux-media@vger.kernel.org>; Thu, 30 Apr 2020 15:24:38 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id UGwij1wGT1s2xUGwijcWgn; Thu, 30 Apr 2020 16:42:16 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=qsjMy7T38hExjF72AbAYAmnsKSYdgi4xV240NBm4wdc=; b=GHpzMcM97p9tjvA9yoILL9pxUr
+        XGqzqLAnobG0z4pcGyuFdJsznGUbeiqYPJ4TJY/SXcRg78wBXmTH+Mc/8bLluHEIZM05gGgFqJ5C0
+        S7amWx6i57zQX8RFlrcq5MJqgwGgLofX98kr5Fyyk2h7opgbVuTGQ3/SF3F+LmXdOi1qbh5vyZ1x7
+        JylHqgQ5cCHhXfvmB2YFcq3tNxIO0LOVduTe/pjjLa9vbBIjBuH1Vax37o92l4AAhGa+hIeKDReLI
+        XD/7Ea5h7glsMlqiCqatIiV0kEYxrko+ffL01a16/kGGMUSaTOUHg8C/1DnlSKRFVm6hDfESDI8bB
+        6P75CORA==;
+Received: from [189.207.59.248] (port=56346 helo=[192.168.15.9])
+        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1jUGwi-004DQP-AL; Thu, 30 Apr 2020 16:42:16 -0500
+Subject: Re: [PATCH 12/15] media: s5k5baf: avoid gcc-10 zero-length-bounds
+ warning
+To:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Mauro Carvalho Chehab <m.chehab@samsung.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        linux-media@vger.kernel.org, Kees Cook <keescook@chromium.org>
+References: <20200430213101.135134-1-arnd@arndb.de>
+ <20200430213101.135134-13-arnd@arndb.de>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Autocrypt: addr=gustavo@embeddedor.com; keydata=
+ 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
+ VtSixD1uOgytAP7RWS474w==
+Message-ID: <9ff27422-911a-c285-108c-f29908b68d19@embeddedor.com>
+Date:   Thu, 30 Apr 2020 16:46:37 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20200430213101.135134-13-arnd@arndb.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.207.59.248
+X-Source-L: No
+X-Exim-ID: 1jUGwi-004DQP-AL
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.15.9]) [189.207.59.248]:56346
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 23
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Thu, 30 Apr 2020 17:09:48 +0200
-Patrik Gfeller <patrik.gfeller@gmail.com> escreveu:
+Hi Arnd,
 
-> Am 4/30/2020 um 12:55 PM schrieb Mauro Carvalho Chehab:
-> > Em Thu, 30 Apr 2020 09:56:53 +0200
-> > Patrik Gfeller<patrik.gfeller@gmail.com>  escreveu:
-> >  
-> >> For my first test tried to re-compile to module, without the whole
-> >> kernel. That was a mistake, as I mixed something up, probably it loaded
-> >> an old version of the module ... to be on the save side the steps I used
-> >> this time (in case we see something unexpected and for my later reference):
-> >>
-> >> $ git log --oneline
-> >> 4c922df10252 (HEAD -> atomisp, origin/atomisp) media: atomisp2: get rid
-> >> of ia_css_sc_param.h version dependency
-> >> ...
-> >>
-> >> $ make -j4 clean
-> >> $ make -j4
-> >> $ sudo make modules_install INSTALL_MOD_STRIP=1
-> >> $ sudo make install  
-> > Please try to build from this branch:
-> >
-> > 	https://git.linuxtv.org/mchehab/experimental.git/log/?h=atomisp_v2
-> >
-> > You'll need to setup a new config var there. So, please run this before
-> > make clean. So, for building it, you will do:
-> >
-> > 	$ ./scripts/config -e CONFIG_VIDEO_ATOMISP_ISP2401 && make -j modules_prepare
-> > 	$ make -j4 clean && make -j4
-> > 	$ sudo make modules_install INSTALL_MOD_STRIP=1 && sudo make install
-> >
-> > This won't change the regulator detection, but it should hopefully use
-> > the ISP2401-specific code, with seems to be needed for your device.  
+On 4/30/20 16:30, Arnd Bergmann wrote:
+> gcc-10 warns about accessing a zero-length struct member:
 > 
-> I've updated to the latest source (git checkout atomisp_v2 && git pull) 
-> and compiled using the instructions above. Compilation worked well, but 
-> the linker had some problems (full log attached):
+> drivers/media/i2c/s5k5baf.c: In function 's5k5baf_load_setfile':
+> drivers/media/i2c/s5k5baf.c:390:13: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'struct <anonymous>[0]' [-Wzero-length-bounds]
+>   390 |   if (f->seq[i].offset + d <= end)
+>       |       ~~~~~~^~~
 > 
-> ...
-> ld: 
-> drivers/staging/media/atomisp/pci/css_2401_system/hive_isp_css_2401_system_generated/ia_css_isp_states.o:(.data+0x0): 
-> multiple definition of `ia_css_kernel_init_state'; 
-> drivers/staging/media/atomisp/pci/css_2401_csi2p_system/hive_isp_css_2401_system_csi2p_generated/ia_css_isp_states.o:(.data+0x0): 
-> first defined here
-> ...
-
-Ok. That's because there are two "hive" variants. the building system
-should use either one of them (but not both at the same time).
-
-I didn't get the error before because I was just building a module
-(that speeds up the development). Such errors only happen on a full 
-build.
-
-Fixed.
-
-As I did a git rebase (in order to have something that we could
-upstream later), you'll need to use this procedure to update:
-
-	$ git remote update
-	$ git reset --hard origin/atomisp_v2
-
-There's no need to clean your last build. Just run:
-
-	$ make -j4 
-
-And it should build fine this time.
-
+> This should really be a flexible-array member, but the structure
+> already has one. I experimentally confirmed that swapping the two
+> avoids the warning, as the 'data[]' array is not accessed like this.
 > 
-> Not sure if I can help with that. Sounds like we have to remove 
-> definitions - which I might be able to do. But I would need to know 
-> where the right place is to keep the definitions.
-
-> If a code generator is 
-> involved (one of the paths looks like it) it will be more difficult for 
-> me.
-
-Intel seems to use some code generator internally. Basically, for each
-specific device, it can remove/add/change things. Don't mind about that.
-
-For us, we're seeing just the generated code and working to simplify it
-and making it more generic.
-
-> But with some hints I'm of course willing to give it a shot. Please 
-> give me an example of a definition) and a hint in case we deal with 
-> generated code.
+> Fixes: 3ba225b506a2 ("treewide: Replace zero-length array with flexible-array member")
+> Fixes: 7d459937dc09 ("[media] Add driver for Samsung S5K5BAF camera sensor")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/media/i2c/s5k5baf.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> > Ah, when replying, could you please use an emailer that won't be breaking
-> > long lines? Your emailer is currently breaking lines longer than 80 columns,
-> > with is quite annoying when checking log results ;-)  
-> I changed the configuration of my mail client; a test message looked ok. 
-> Let me know if the problem persists.
+> diff --git a/drivers/media/i2c/s5k5baf.c b/drivers/media/i2c/s5k5baf.c
+> index 42584a088273..0b1ddedcf7dc 100644
+> --- a/drivers/media/i2c/s5k5baf.c
+> +++ b/drivers/media/i2c/s5k5baf.c
+> @@ -277,11 +277,11 @@ enum {
+>  
+>  struct s5k5baf_fw {
+>  	u16 count;
+> +	u16 data[0];
+>  	struct {
+>  		u16 id;
+>  		u16 offset;
+> -	} seq[0];
+> -	u16 data[];
+> +	} seq[];
+>  };
+>  
+>  struct s5k5baf {
+> 
 
-Yeah, is is fine now. Thanks!
+The treewide patch is an experimental change and, as this change only applies
+to my -next tree, I will carry this patch in it, so other people don't have
+to worry about this at all.
 
-Thanks,
-Mauro
+Thank you
+--
+Gustavo
