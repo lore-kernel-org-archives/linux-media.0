@@ -2,81 +2,169 @@ Return-Path: <SRS0=S6e8=6O=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BB25C47255
-	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 16:43:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8908FC4724C
+	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 16:43:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E82602070B
-	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 16:43:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 674F32070B
+	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 16:43:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbgD3QnB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Apr 2020 12:43:01 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:44045 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgD3QnA (ORCPT
+        id S1726435AbgD3Qnt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Apr 2020 12:43:49 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:58891 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbgD3Qns (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Apr 2020 12:43:00 -0400
+        Thu, 30 Apr 2020 12:43:48 -0400
 X-Originating-IP: 93.29.109.196
-Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
+Received: from aptenodytes (196.109.29.93.rev.sfr.net [93.29.109.196])
         (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 790D61C000B;
-        Thu, 30 Apr 2020 16:42:57 +0000 (UTC)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id CB8E11BF203;
+        Thu, 30 Apr 2020 16:43:43 +0000 (UTC)
+Date:   Thu, 30 Apr 2020 18:43:43 +0200
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Heiko Stuebner <heiko@sntech.de>,
         Hans Verkuil <hansverk@cisco.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v3 0/4] media: rockchip: rga: PX30 support and YUV2YUV fix
-Date:   Thu, 30 Apr 2020 18:42:41 +0200
-Message-Id: <20200430164245.1630174-1-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.26.0
+        justin.swartz@risingedge.co.za, Johan Jonker <jbx6244@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 4/4] media: rockchip: rga: Only set output CSC mode
+ for RGB input
+Message-ID: <20200430164343.GB1526319@aptenodytes>
+References: <20200423200937.1039257-1-paul.kocialkowski@bootlin.com>
+ <20200423200937.1039257-5-paul.kocialkowski@bootlin.com>
+ <c49a060e7f5da9564e375fdd47117d3f901e5d00.camel@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="eRtJSFbw+EEWtPj3"
+Content-Disposition: inline
+In-Reply-To: <c49a060e7f5da9564e375fdd47117d3f901e5d00.camel@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
 
-This series adds support for the Rockchip PX30 SoC in the V4L2 M2M RGA driver.
-It also contains a fix for the YUV2YUV case that was not properly handled.
+--eRtJSFbw+EEWtPj3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Changes since v2:
-- Used RK3288 compatible in PX30 dts, removed PX30 compatible from driver;
-- Added cleanup patch with format macros;
-- Added comment about CSC mode fix.
+Hi Ezequiel,
 
-Changes since v1:
-- Rebased on media tree master (changed dt binding to yaml);
-- Removed spurious line removal.
+On Sat 25 Apr 20, 10:46, Ezequiel Garcia wrote:
+> Hi Paul,
+>=20
+> Thanks a lot for the patch.
+>=20
+> I haven't had the chance to test this,
+> but I'd say you are fixing a long time issue here.
+>=20
+> I really appreciate that.
+>=20
+> On Thu, 2020-04-23 at 22:09 +0200, Paul Kocialkowski wrote:
+> > Setting the output CSC mode is required for a YUV output, but must not
+> > be set when the input is also YUV. Doing this (as tested with a YUV420P
+> > to YUV420P conversion) results in wrong colors.
+> >=20
+> > Adapt the logic to only set the CSC mode when the output is YUV and the
+> > input is RGB.
+> >=20
+> > Fixes: f7e7b48e6d79 ("[media] rockchip/rga: v4l2 m2m support")
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > ---
+> >  drivers/media/platform/rockchip/rga/rga-hw.c | 18 +++++++++++-------
+> >  1 file changed, 11 insertions(+), 7 deletions(-)
+> >=20
+> > diff --git a/drivers/media/platform/rockchip/rga/rga-hw.c b/drivers/med=
+ia/platform/rockchip/rga/rga-hw.c
+> > index 4be6dcf292ff..cbffcf986ccf 100644
+> > --- a/drivers/media/platform/rockchip/rga/rga-hw.c
+> > +++ b/drivers/media/platform/rockchip/rga/rga-hw.c
+> > @@ -216,13 +216,17 @@ static void rga_cmd_set_trans_info(struct rga_ctx=
+ *ctx)
+> >  	}
+> > =20
+> >  	if (ctx->out.fmt->hw_format >=3D RGA_COLOR_FMT_YUV422SP) {
+>=20
+> Since we are already here touching this code, would you mind
+> adding another patch, to do some cleaning first?
+>=20
+> First, replace the nested ifs with a boolean operator.
+> Then, introduce some IS_YUV (or IS_RGB) macro, making the above test
+> more like IS_YUV(out_hw_format).
+>=20
+> Finally, perhaps a comment along the lines of your commit message:
+>=20
+> """
+> Setting the output CSC mode is required for a YUV output,
+> but must not be set when the input is also YUV.
+> """
+>=20
+> Details up to you :-)
+>=20
+> After the clean-up patch, which would be just cosmetics,
+> your fix should be cleaner and more clear.
+
+All done in v3, thanks for the feedback :)
 
 Cheers,
 
 Paul
 
-Paul Kocialkowski (4):
-  dt-bindings: rockchip-rga: Add PX30 compatible
-  arm64: dts: rockchip: Add RGA support to the PX30
-  media: rockchip: rga: Introduce color fmt macros and refactor CSC mode
-    logic
-  media: rockchip: rga: Only set output CSC mode for RGB input
+> Thanks,
+> Ezequiel
+> =20
+> > -		switch (ctx->out.colorspace) {
+> > -		case V4L2_COLORSPACE_REC709:
+> > -			dst_info.data.csc_mode =3D RGA_SRC_CSC_MODE_BT709_R0;
+> > -			break;
+> > -		default:
+> > -			dst_info.data.csc_mode =3D RGA_DST_CSC_MODE_BT601_R0;
+> > -			break;
+> > +		if (ctx->in.fmt->hw_format < RGA_COLOR_FMT_YUV422SP) {
+> > +			switch (ctx->out.colorspace) {
+> > +			case V4L2_COLORSPACE_REC709:
+> > +				dst_info.data.csc_mode =3D
+> > +					RGA_SRC_CSC_MODE_BT709_R0;
+> > +				break;
+> > +			default:
+> > +				dst_info.data.csc_mode =3D
+> > +					RGA_DST_CSC_MODE_BT601_R0;
+> > +				break;
+> > +			}
+> >  		}
+> >  	}
+> > =20
+>=20
+>=20
 
- .../bindings/media/rockchip-rga.yaml          |  3 ++
- arch/arm64/boot/dts/rockchip/px30.dtsi        | 11 +++++++
- drivers/media/platform/rockchip/rga/rga-hw.c  | 29 ++++++++++---------
- drivers/media/platform/rockchip/rga/rga-hw.h  |  5 ++++
- 4 files changed, 35 insertions(+), 13 deletions(-)
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
--- 
-2.26.0
+--eRtJSFbw+EEWtPj3
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAl6rAD8ACgkQ3cLmz3+f
+v9EZUgf/ZXVht/wSchF8mkR6JIJf2Oywvx2GVKvvg/AmHfOt1XTsRKHpmGz8hQEH
+NbOjsdq8EVD+tGKnOgP/DyjN4cTtkpNFJj89Bi95hb+7AyBu+ixbDH25hV2jYija
+hYHjahA0/MqEN6hFxB4JKlYtd642n5RZ14NCxWqerWKha6LmfsLFT5tdytpQQ/8W
+2DTfATXGqnDr5Mmds+uFfRoXGhN9D9OxH+XLSmKsVOtsYurEShfPLIXscec00Mdn
+gjvMhqTTat/ttKD1OWnT6C3wuxAE0QrxHg0VvZ2LchjGq4VZbRdF/iQ+DJ4TlASi
+5NDfLWJCRezzUYzh000lLcAHVxOAQw==
+=2n7E
+-----END PGP SIGNATURE-----
+
+--eRtJSFbw+EEWtPj3--
