@@ -2,124 +2,147 @@ Return-Path: <SRS0=S6e8=6O=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8416C28CBC
-	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 14:02:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0414C47254
+	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 14:07:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C50AD21775
-	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 14:02:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XPLsH1OV"
+	by mail.kernel.org (Postfix) with ESMTP id A69E720774
+	for <linux-media@archiver.kernel.org>; Thu, 30 Apr 2020 14:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588255621;
+	bh=+QqqH5MT7BwEnbX5kEA/4xZ+tEoa0+EXodEJiUAAEBw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=Yy/BppEquJ1UI5yWTc/ItSUF5WX/Qh8zzV0WCBNK1jibmgbIbDVhpcLkBrc8LzeLw
+	 CZUQdRoRIoN1XZQXcsPSJ0t/te0oA+mSdNinZbZ2qjpVv124JJxD9hfy5wxLCEm/fC
+	 JrORUXDtF4eAWWam5mfm2kFqj7plRMvOeWhuO7fo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728978AbgD3OC2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Apr 2020 10:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729147AbgD3OCX (ORCPT
+        id S1728489AbgD3Nwo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Apr 2020 09:52:44 -0400
+Received: from conssluserg-06.nifty.com ([210.131.2.91]:26111 "EHLO
+        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728361AbgD3Nwo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Apr 2020 10:02:23 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37561C035494;
-        Thu, 30 Apr 2020 07:02:23 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id a21so6594391ljb.9;
-        Thu, 30 Apr 2020 07:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=N+Ht0CmfDxJVUU6J4yFlhD6kd2eTTrdGjBG9WTx/UyQ=;
-        b=XPLsH1OV1IK/7IHKpVHzrXqje08ez4AfmDTnVvgYOvBOy0FfpRqK+D9XYPlaE05rNQ
-         tbWt8gHkoewEz1ZUIHtmfsi6katLHTeLsDVuZdrrb/9kmBnnr7Nqg4uaZMHik+Lfx6bT
-         CnqceWSKVJEUN9qF/EyddjcmjwKe2GCmxEKpOxxTndVb9qiTjOzT0MYSxJFK+kGc+B1U
-         ss1n7PFEVRDR/o9znXtZsEQYylgNtoHQJBLwCePduH/UfxVLEX40B8VRVdyP8pEunGTV
-         kZTPfxQ4HNrinx9RBPk88XHaX88dN3YSuwQOdCnup6aHtdw0gsWv+BchoKbWH6xQEaEw
-         K0mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=N+Ht0CmfDxJVUU6J4yFlhD6kd2eTTrdGjBG9WTx/UyQ=;
-        b=s57I4YQgB+D0UXAnhqsItvyDVqjJNqarQ00pQ/nIAnEcQUg+rjc9mJVF93UqcRDv+9
-         BJ87PNUr0/ZI4c83Ey5jbxBj2bGsIVMNyhgaE6y+hK+iP/Rgdl8mi45QH1ifOfqMHM/e
-         8LA05IGc6tnnWLMKTksdCBgCrV0lZbTIKk615KkLmHnZA3p7NzgD7wwNss5AGMNC9aBr
-         ipGI3mPTSzrUjqgqnTI1atvcwF4OX2zHt9RPyIr6cfvr8jlMneUdXp5rOWtll0WfnJ0R
-         7R1pXHW4ODbWl9Jj4gayufqn+n+ojVz7fBATu53t+ARa27L5engxI6uLxZZ02rC5CCoh
-         g9cQ==
-X-Gm-Message-State: AGi0PubsdP8A1WQGp7T6pGEU46IiNbmVW5kRWUoRoj/KegF+QT8CReSj
-        a6/i9R+F0bzyEbMoozGwfXC8yt19
-X-Google-Smtp-Source: APiQypInaM7ORzF/CVsxNxUc0J9Cyf/Q6St4WH9tVfb2A8VygbMaxJllBH4AhcGid0vObbUWazuWjQ==
-X-Received: by 2002:a2e:87d9:: with SMTP id v25mr2275164ljj.241.1588255341268;
-        Thu, 30 Apr 2020 07:02:21 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.googlemail.com with ESMTPSA id v8sm4886684lfp.85.2020.04.30.07.02.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Apr 2020 07:02:20 -0700 (PDT)
-Subject: Re: [RFC PATCH v11 6/9] media: tegra: Add Tegra210 Video input driver
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
-        hverkuil@xs4all.nl, sakari.ailus@iki.fi, helen.koike@collabora.com
-Cc:     sboyd@kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1588197606-32124-1-git-send-email-skomatineni@nvidia.com>
- <1588197606-32124-7-git-send-email-skomatineni@nvidia.com>
- <bacc4308-4b95-f566-b80e-096ff96407b5@gmail.com>
-Message-ID: <4da289e6-036f-853b-beb4-379d6462adb0@gmail.com>
-Date:   Thu, 30 Apr 2020 17:02:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 30 Apr 2020 09:52:44 -0400
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 03UDqPGZ032676;
+        Thu, 30 Apr 2020 22:52:25 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 03UDqPGZ032676
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1588254745;
+        bh=9ltjNZ8e4vrC7cBbZIWrYc76JCI/RhItJRQkfkK98AE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R86dw4zvy/H/eesDgAJVTUk+Cc3K8OruRnFRIPPbqkF2uwBuu/wY+B+V4UjIWmLhN
+         BQFyZu3SzNgetMRDO4PIKfSKHbINrQWqRo3hNRs2MLPN3rFP519zMJ87heGncNA4o1
+         2BZbh2kq+XE44vTGGI1CD1F6ahvvJCL6kUuMqp+Jv8kSWC8WhxEr2FbhhY0x1eiR1y
+         Y6U1XLNZterOCcl9k5ZEgrBhTS8u/6Jq5QwrOkH8xwVn6qglGcc/Q1r25LRylvhKTB
+         z7HetM64+oxIMuFXv+euF7Q++/ouE4u8b274o+t26rFsiXltG005+jS/GUfObL905B
+         ywdYixoSH1poA==
+X-Nifty-SrcIP: [209.85.217.41]
+Received: by mail-vs1-f41.google.com with SMTP id e10so1273031vsp.12;
+        Thu, 30 Apr 2020 06:52:25 -0700 (PDT)
+X-Gm-Message-State: AGi0PuYjcm1oxK+UPt+X8xsEf1IA2SyrBwikPi9VuZyICQ5e/0Tj+Jul
+        GA8SSD4zn6GoyHT40duoD+pdBPPjESdRfGYrbLE=
+X-Google-Smtp-Source: APiQypIy9756CPvWD3ER84r/D6PmKnL8yZmjLBInKlAqsGjqLulysxLmU7+IFcPqJmEmIY/ijlBjOyjjXpQdbOHVeZc=
+X-Received: by 2002:a05:6102:240f:: with SMTP id j15mr3325751vsi.155.1588254744247;
+ Thu, 30 Apr 2020 06:52:24 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <bacc4308-4b95-f566-b80e-096ff96407b5@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200430131715.32c1a1f6@coco.lan>
+In-Reply-To: <20200430131715.32c1a1f6@coco.lan>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 30 Apr 2020 22:51:48 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASmVoZequqaj6MTimeZ0MG0fk7Wb5-9haFhgG03kDBpxg@mail.gmail.com>
+Message-ID: <CAK7LNASmVoZequqaj6MTimeZ0MG0fk7Wb5-9haFhgG03kDBpxg@mail.gmail.com>
+Subject: Re: bug: Kbuild seems to require "make prepare-objtool" in order to
+ use (some) new config vars
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-30.04.2020 16:56, Dmitry Osipenko пишет:
-> 30.04.2020 01:00, Sowjanya Komatineni пишет:
->> +static int chan_capture_kthread_finish(void *data)
->> +{
->> +	struct tegra_vi_channel *chan = data;
->> +	struct tegra_channel_buffer *buf;
->> +
->> +	set_freezable();
->> +
->> +	while (1) {
->> +		try_to_freeze();
-> 
-> I guess it won't be great to freeze in the middle of a capture process, so:
-> 		if (list_empty(&chan->done))
-> 			try_to_freeze();
+Hi Mauro,
 
-And here should be some locking protection in order not race with the
-chan_capture_kthread_start because kthread_finish could freeze before
-kthread_start.
 
->> +		wait_event_interruptible(chan->done_wait,
->> +					 !list_empty(&chan->done) ||
->> +					 kthread_should_stop());
->> +
->> +		/* dequeue buffers and finish capture */
->> +		buf = dequeue_buf_done(chan);
->> +		while (buf) {
->> +			tegra_channel_capture_done(chan, buf);
->> +			buf = dequeue_buf_done(chan);
->> +		}
->> +
->> +		if (kthread_should_stop())
->> +			break;
->> +	}
->> +
->> +	return 0;
->> +}
-> 
+On Thu, Apr 30, 2020 at 8:17 PM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> Hi Masahiro,
+>
+> Not sure if this was already reported (or eventually fixed) upstream.
+>
+> While doing a Kconfig reorg on media, I noticed a few weird things,
+> requiring me to call, on a few situations, "make modules_prepare"
+> manually after some changes.
+>
+> I'm now working on a patchset to yet to be merged upstream aiming to
+> resurrect a driver from staging. It is currently on this tree
+> (with is based at the media development tree, on the top of 5.7-rc1):
+>
+>         https://git.linuxtv.org/mchehab/experimental.git/log/?h=atomisp_v2
+>
+> There, I was able to identify a misbehavior that it is probably
+> what forced me to need calling "make modules_prepare".
+>
+> The atomisp driver is on a very bad shape. Among its problems, it has a
+> set of header definitions that should be different for two different
+> variants of the supported devices. In order to be able to compile for
+> either one of the variants, I added a new config var:
+> CONFIG_VIDEO_ATOMISP_ISP2401.
+>
+> The problem is that calling just
+>
+>         ./scripts/config -e CONFIG_VIDEO_ATOMISP_ISP2401
+>
+> or
+>         ./scripts/config -d CONFIG_VIDEO_ATOMISP_ISP2401
 
+
+scripts/config does not take the dependency into consideration
+at all.
+
+You need to enable/disable other options that it depends on.
+
+
+./scripts/config -e STAGING -e STAGING_MEDIA -e MEDIA_SUPPORT -e
+MEDIA_CONTROLLER -e INTEL_ATOMISP -e VIDEOBUF_VMALLOC -e VIDEO_ATOMISP
+-d MEDIA_SUPPORT_FILTER -e VIDEO_DEV -e VIDEO_V4L2 -e
+VIDEO_ATOMISP_ISP2401
+
+allows me to enable VIDEO_ATOMISP_ISP2401.
+
+
+It is painful to debug such complicated dependency graph, though.
+
+
+>
+> is not enough anymore for the build to actually use the new config value.
+>
+> It just keeps silently using the old config value.
+>
+> I double-checked it by adding this macro at the Makefile:
+>
+>         $(info ************ ISP2401: $(CONFIG_VIDEO_ATOMISP_ISP2401) ************)
+>
+> The Makefile doesn't see the change, except if I explicitly call
+> "make modules_prepare" or "make prepare-objtool".
+>
+> Even calling "make oldconfig" doesn't make it use the new CONFIG_*
+
+
+I do not know.
+
+I cannot look into it without detailed steps to reproduce it.
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
