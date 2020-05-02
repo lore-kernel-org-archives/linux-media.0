@@ -5,59 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA31BC47256
-	for <linux-media@archiver.kernel.org>; Sat,  2 May 2020 03:23:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C27CC4725B
+	for <linux-media@archiver.kernel.org>; Sat,  2 May 2020 03:23:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F9092184D
-	for <linux-media@archiver.kernel.org>; Sat,  2 May 2020 03:23:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46D3020731
+	for <linux-media@archiver.kernel.org>; Sat,  2 May 2020 03:23:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z+WF1l9+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="u28DUlFg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727919AbgEBDXF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 May 2020 23:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S1727963AbgEBDXQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 May 2020 23:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726439AbgEBDXE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 May 2020 23:23:04 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C139BC061A0C;
-        Fri,  1 May 2020 20:23:03 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id s9so8521086qkm.6;
-        Fri, 01 May 2020 20:23:03 -0700 (PDT)
+        with ESMTP id S1726439AbgEBDXN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 May 2020 23:23:13 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27554C061A0C;
+        Fri,  1 May 2020 20:23:13 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id c63so11238954qke.2;
+        Fri, 01 May 2020 20:23:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xlmbbLp+nOuTpXKJjXY1Ad93iVRGpa39h7/Cz7yx3ZI=;
-        b=Z+WF1l9+NGW/NOGnJaHcAa1Vw/EsEg5bZbWfBwmCZ3hELd8vG9EigBXb48vP5t/YXO
-         xZFdCuWTWuh7k8DmYgPTO5YGbaM4fTqHiI7Dv4aa7nmfCXhsHa0Ay2ldl4xf41UJsLmC
-         OsvAsABzpN/ZXS34npxaZdGwffXXt8VTCBgOgV3TSzQxGyRqAxkw7YdsN1XcOyJrBeos
-         WMhzSIMnlKibK9/71LoLdHCUSwRzT303ZnoCu+3fdmikEjmB5oRdxalDMt27AFGGPR6H
-         EEe1D9z5SR5qCKE/3ZA2SRk1TW144da4MoCRmyejd4d8iyqUw8mklxRvc45oUuy5C0WX
-         fegA==
+        bh=jDDEMN/30hOo7R+KjT+5XLDSXHeWUGBpj8iKrJCUbes=;
+        b=u28DUlFgeZpTA5mZ7FhVnopwhyhlF2X7IzIv5Wr3ZS1LJUjA/awBqZUo4R6eTYY8Qg
+         Lr8G3eENyTraRpbYGe89DcKsTb+ckp7Mfb+iLXymbcsYFE5xq7xcmygg0p2FEDr30nsp
+         YlYezN6b0X+WF3faakwAt8/HDUGleQqZvTEr+xCWlRhTrdIL20DHF5U5KYV9UG6S9Q2j
+         pNkw1D+OU5TBy2p3opJ2H9ChYhgej8iEQU6FOIZ+l3ckWqoW2sASuvONaIFhBH3kII9T
+         L6SD57aiRDmR1H0GFfLK+uYQthsrTD3/6yfIiylLTYvNygNuA6J6CDzfnxIAdFSp/dgF
+         WQwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xlmbbLp+nOuTpXKJjXY1Ad93iVRGpa39h7/Cz7yx3ZI=;
-        b=eKHLB+o755t82oEM29RRJDJz4GSiSPNra08Xh6DV+0ZId/A3u1M8N2xk66aRSXbjSm
-         BTeejxzHVQWpOelEajsia4aQ+xsYxoHiXimw6HKwllNkvDtfiEpt+Z2QRtGXyTUraKIa
-         4rLMzoKtWpqrCg3qZn49uRqRI+eOhqNWzxx7aa75TNbaXlflh30eZU6Jc9j2gHekZVZt
-         CCucvn9WM/Mcdnpcc+ZgpCxY4racgl03uMJRgkJhzzTAVN5V/nRFXSMzz1pBnzQcgxd8
-         jhJ+S6oyHYp6w4YiBSVMLhYtBQQWhPiejEw+GHo8dZota9NsftIlZvVygqoKiL8z54G+
-         G4Xw==
-X-Gm-Message-State: AGi0PuYIREZZQdYIJYmRgIndUT435COyKnTYYut7wGozb20C3uEPQIZX
-        OcIktowCJ+NQhI5OAjPWCK8=
-X-Google-Smtp-Source: APiQypKW7N0nrTt/2/1Abkw0sx2Ww5+Hv4B6PP2egYJzX13wiY49/xskipw+F68g/mn4OXd6PoWBoQ==
-X-Received: by 2002:a37:793:: with SMTP id 141mr6837272qkh.110.1588389782446;
-        Fri, 01 May 2020 20:23:02 -0700 (PDT)
+        bh=jDDEMN/30hOo7R+KjT+5XLDSXHeWUGBpj8iKrJCUbes=;
+        b=K42UTUxuyBQiUwn8Y1kHOolD6t9sMWTDC+75mgqKpfzs1SQQ4ej2g4MO7o9uMbbhBJ
+         BEETq68CqchfcgWWSiB9oKgxfKQwX+j3dHr1W861R/OdWKiBQBwi1b6ChFGlz5QveEH2
+         ZeJneFZl9swpnGPmYBw6cs43Qg39wi2KWo23yJSMiVvU5eNiC63f20QsXGIpUe5qcIE9
+         AuodTiIVt48y5zMCyoBUzN0bI/I0wI1wIHdRFFYLrryUwOFsQc2EjZNPyZZKFm7KMv8U
+         LGmJFsF7Olr0Ycg2v4Iqq0eZyx9BTiIXctdaOtOCReVWUBhct0ceVdGGssGcpBRIOa8g
+         uoBg==
+X-Gm-Message-State: AGi0PuY2hEX9l0dP5IfoQbDwgRFbHQQQdGtFr1B7QBFozTpCk7m/TZ/K
+        7HTOS3pd3CSpMRuhXwTPclg=
+X-Google-Smtp-Source: APiQypKmX6Rc0pjYe6fd4ShoOMcqQ1blU277a8iyzpX7HQCyUMdyCvjBq/wW7znTfeVS6n2XMnO2Jg==
+X-Received: by 2002:a37:8d85:: with SMTP id p127mr6730585qkd.44.1588389791830;
+        Fri, 01 May 2020 20:23:11 -0700 (PDT)
 Received: from localhost.localdomain ([2804:18:602b:723a:1b2a:57a1:a611:34ed])
-        by smtp.gmail.com with ESMTPSA id c41sm4410399qta.96.2020.05.01.20.22.57
+        by smtp.gmail.com with ESMTPSA id c41sm4410399qta.96.2020.05.01.20.23.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 May 2020 20:23:01 -0700 (PDT)
+        Fri, 01 May 2020 20:23:11 -0700 (PDT)
 From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 X-Google-Original-From: Daniel W. S. Almeida
 To:     mchehab+huawei@kernel.org, sean@mess.org,
@@ -67,9 +67,9 @@ Cc:     "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         linux-media@vger.kernel.org, skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC, WIP, v4 08/11] media: vidtv: implement a PSI generator
-Date:   Sat,  2 May 2020 00:22:13 -0300
-Message-Id: <20200502032216.197977-9-dwlsalmeida@gmail.com>
+Subject: [RFC, WIP, v4 10/11] media: vidtv: Implement a SMPTE 302M encoder
+Date:   Sat,  2 May 2020 00:22:15 -0300
+Message-Id: <20200502032216.197977-11-dwlsalmeida@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200502032216.197977-1-dwlsalmeida@gmail.com>
 References: <20200502032216.197977-1-dwlsalmeida@gmail.com>
@@ -82,1543 +82,878 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 
-PSI packets contain general information about a MPEG Transport Stream.
-A PSI generator is needed so userspace apps can retrieve information
-about the Transport Stream and eventually tune into a (dummy) channel.
+Implement a S302M encoder to make it possible to insert PCM audio data
+in the generated MPEG Transport Stream.
 
-Because the generator is implemented in a separate file, it can be
-reused elsewhere in the media subsystem.
-
-Currently this commit adds support for working with 3 PSI tables:
-PAT, PMT and SDT.
+This shall enable passing an audio signal into userspace so it can be
+decoded and played by media software.
 
 Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 ---
- drivers/media/test-drivers/vidtv/Makefile    |    2 +-
- drivers/media/test-drivers/vidtv/vidtv_psi.c | 1137 ++++++++++++++++++
- drivers/media/test-drivers/vidtv/vidtv_psi.h |  357 ++++++
- 3 files changed, 1495 insertions(+), 1 deletion(-)
- create mode 100644 drivers/media/test-drivers/vidtv/vidtv_psi.c
- create mode 100644 drivers/media/test-drivers/vidtv/vidtv_psi.h
+ drivers/media/test-drivers/vidtv/Makefile     |   3 +-
+ .../media/test-drivers/vidtv/vidtv_common.h   |   2 +
+ .../media/test-drivers/vidtv/vidtv_encoder.h  | 103 +++
+ .../media/test-drivers/vidtv/vidtv_s302m.c    | 608 ++++++++++++++++++
+ .../media/test-drivers/vidtv/vidtv_s302m.h    |  99 +++
+ 5 files changed, 814 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_encoder.h
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_s302m.c
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_s302m.h
 
 diff --git a/drivers/media/test-drivers/vidtv/Makefile b/drivers/media/test-drivers/vidtv/Makefile
-index 92001bc348615..e4f744aa53136 100644
+index e3a6540f50e87..c916eb19d73bb 100644
 --- a/drivers/media/test-drivers/vidtv/Makefile
 +++ b/drivers/media/test-drivers/vidtv/Makefile
-@@ -1,6 +1,6 @@
+@@ -1,6 +1,7 @@
  # SPDX-License-Identifier: GPL-2.0
  
  vidtv_demod-objs := vidtv_common.o
--vidtv_bridge-objs := vidtv_common.o vidtv_ts.o
-+vidtv_bridge-objs := vidtv_common.o vidtv_ts.o vidtv_psi.o
+-vidtv_bridge-objs := vidtv_common.o vidtv_ts.o vidtv_psi.o vidtv_pes.o
++vidtv_bridge-objs := vidtv_common.o vidtv_ts.o vidtv_psi.o vidtv_pes.o \
++		     vidtv_s302m.o
  
  obj-$(CONFIG_DVB_VIDTV)	+= vidtv_tuner.o vidtv_demod.o vidtv_bridge.o
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_common.h b/drivers/media/test-drivers/vidtv/vidtv_common.h
+index 3b68f95c5f6c8..170646497eb58 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_common.h
++++ b/drivers/media/test-drivers/vidtv/vidtv_common.h
+@@ -13,6 +13,8 @@
+ #include <linux/types.h>
+ #include <media/dvb_frontend.h>
+ 
++#define CLOCK_UNIT_90KHZ 90000
++
+ u32 vidtv_memcpy(void *to,
+ 		 const void *from,
+ 		 size_t len,
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_encoder.h b/drivers/media/test-drivers/vidtv/vidtv_encoder.h
 new file mode 100644
-index 0000000000000..191d37a248923
+index 0000000000000..f483200fd781c
 --- /dev/null
-+++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
-@@ -0,0 +1,1137 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/drivers/media/test-drivers/vidtv/vidtv_encoder.h
+@@ -0,0 +1,103 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * This file contains the logic to work with MPEG Program-Specific Information.
-+ * These are defined both in ISO/IEC 13818-1 (systems) and ETSI EN 300 468.
-+ * PSI is carried in the form of table structures, and although each table might
-+ * technically be broken into one or more sections, we do not do this here,
-+ * hence 'table' and 'section' are interchangeable for us.
++ * Vidtv serves as a reference DVB driver and helps validate the existing APIs
++ * in the media subsystem. It can also aid developers working on userspace
++ * applications.
 + *
-+ * This code currently supports three tables: PAT, PMT and SDT. These are the
-+ * bare minimum to get userspace to recognize our MPEG transport stream. It can
-+ * be extended to support more PSI tables in the future.
++ * This file contains a generic encoder type that can provide data for a stream
 + *
-+ * A note on endianness: MPEG layout is big-endian, therefore:
-+ * - All fields spanning more than a byte must undergo 'cpu_to_beXX()' before
-+ * serialization. These convertions are done in the *_write_into() functions.
-+ *
-+ * - All byte sized bitfields must have their ordering reversed if
-+ *  __LITTLE_ENDIAN_BITFIELD is defined.
-+ *
-+ * Written by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
++ * Written by Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 + */
 +
-+#include <linux/kernel.h>
++#ifndef VIDTV_ENCODER_H
++#define VIDTV_ENCODER_H
++
++#include <linux/types.h>
++
++enum vidtv_encoder_id {
++	/* add IDs here when implementing new encoders */
++	S302M,
++};
++
++struct vidtv_encoder {
++	/* so we can cast to a concrete implementation when needed */
++	enum vidtv_encoder_id id;
++	/* usually same as the stream name */
++	char *name;
++
++	/* the encoder's internal buffer for the access units */
++	u8 *encoder_buf;
++	/* the encoder buffer size, in bytes */
++	u32 encoder_buf_sz;
++
++	/* our byte position in the encoder buffer */
++	u32 encoder_buf_offset;
++
++	/* how many samples we have encoded in total */
++	u32 sample_count;
++
++	u32 previous_sample_count;
++
++	/* the number of access units ready */
++	u32 nunits;
++	/* the number of samples per access unit */
++	u32 *samples_per_unit;
++	/* pts array mapping pts[i] -> AU[i] */
++	u64 *pts;
++	/* dts array mapping dts[i] -> AU[i] */
++	u64 *dts;
++	/* array mapping how many bytes were written per AU */
++	u32 *nbytes;
++	/* array keeping track of AU offsets in buffer */
++	u32 *offsets;
++
++	/*
++	 * the source of raw data to be encoded, encoder might set a default
++	 * source if NULL
++	 */
++	void *src_buf;
++	/* the source buffer size, in bytes */
++	u32 src_buf_sz;
++
++	/* our byte position in the src buffer */
++	u32 src_buf_offset;
++
++	bool video; /* either video or audio */
++	void *ctx; /* encoder-specific state */
++
++	/* Examples: Audio streams (0xc0-0xdf), Video streams (0xe0-0xef) */
++	u16 stream_id;
++
++	/* the TS PID to use for the elementary stream in this encoder */
++	u16 es_pid;
++
++	/* prepare enough AUs for the given amount of time */
++	void *(*encode)(struct vidtv_encoder *e, u64 elapsed_time_usecs);
++
++	/* clear the encoder output */
++	u8 (*clear)(struct vidtv_encoder *e);
++
++	/* attempt to synchronize with the encoder below */
++	struct vidtv_encoder *sync;
++
++	u32 sampling_rate_hz; /* or fps, if video */
++
++	/* controls dynamic memory allocation for the arrays */
++	u8 access_unit_capacity;
++
++	/*
++	 * called when the encoder runs out of data
++	 * the encoder might optionally wrap around the src data if this is not
++	 * implemented
++	 * this is so the source can read data in a piecemeal fashion instead
++	 * of having to provide it all at once
++	 */
++	void (*last_sample_cb)(u32 sample_no);
++
++	/* destroy this encoder, freeing any allocated resources */
++	void (*destroy)(struct vidtv_encoder *e);
++
++	struct vidtv_encoder *next;
++};
++
++#endif /* VIDTV_ENCODER_H */
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+new file mode 100644
+index 0000000000000..b08bfff7b8f27
+--- /dev/null
++++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+@@ -0,0 +1,608 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Vidtv serves as a reference DVB driver and helps validate the existing APIs
++ * in the media subsystem. It can also aid developers working on userspace
++ * applications.
++ *
++ * This file contains the code for an AES3 (also known as AES/EBU) encoder.
++ * It is based on EBU Tech 3250 and SMPTE 302M technical documents.
++ *
++ * This encoder currently supports 16bit AES3 subframes using 16bit signed
++ * integers.
++ *
++ * Note: AU stands for Access Unit, and AAU stands for Audio Access Unit
++ *
++ * Written by Daniel W. S. Almeida <dwlsalmeida@gmail.com>
++ */
++
 +#include <linux/types.h>
 +#include <linux/slab.h>
 +#include <linux/crc32.h>
++#include <linux/vmalloc.h>
 +#include <linux/string.h>
-+#include <linux/printk.h>
++#include <linux/kernel.h>
++#include <linux/jiffies.h>
 +
-+#include "vidtv_psi.h"
++#include "vidtv_s302m.h"
++#include "vidtv_encoder.h"
 +#include "vidtv_common.h"
-+#include "vidtv_ts.h"
 +
-+#define CRC_SIZE_IN_BYTES 4
++#define S302M_SAMPLING_RATE_HZ 48000
 +
-+static u32 vidtv_psi_ts_psi_write_stuffing(void *to,
-+					   u32 len,
-+					   u32 offset,
-+					   u32 buf_sz)
-+{
-+	return vidtv_memset(to, 0xff, len, offset, buf_sz);
-+}
++/* see EBU Tech 3250 2004 clause 4 */
++#define CHANNEL_STATUS_BIT_LEN 92
 +
-+static u32
-+vidtv_psi_ts_psi_write_into(struct psi_write_args args)
-+{
-+	/*
-+	 * Packetize PSI sections into TS packets:
-+	 * push a TS header (4bytes) every 184 bytes
-+	 * manage the continuity_counter
-+	 * add stuffing after the CRC
-+	 */
++#define S302M_2CHANNELS 0
++#define S302M_BITS_PER_SAMPLE_16 0
 +
-+	u32  nbytes_past_boundary = (args.dest_offset % TS_PACKET_LEN);
-+	bool aligned              = nbytes_past_boundary == 0;
++/* see preamble definition in EBU Tech 3250 2004 clause 2.4 */
++#define PREAMBLE_X_F0 0xe2 /* sub-frame 1 */
++#define PREAMBLE_Y_F0 0xe4 /* sub-frame 2 */
++#define PREAMBLE_Z_F0 0xe8 /* sub-frame 1 + block start */
++/* F0 and F1 refer to whether the F bit was set in the previous sub-frame */
++#define PREAMBLE_X_F1 0x1d /* sub-frame 1 */
++#define PREAMBLE_Y_F1 0X1b /* sub-frame 2 */
++#define PREAMBLE_Z_F1 0x17 /* sub-frame 1 + block start */
 +
-+	/*
-+	 * whether we need to fragment the data into multiple ts packets
-+	 * if we are aligned we need to spare one byte for the pointer_field
-+	 */
-+	bool split = (aligned) ?
-+		     args.len > TS_PAYLOAD_LEN - 1 :
-+		     nbytes_past_boundary + args.len > TS_PACKET_LEN;
++#define S302M_BLOCK_SZ 192
++#define S302M_SIN_LUT_SZ 1024
 +
-+	/* how much we can write in this packet */
-+	u32 payload_write_len = (split) ?
-+				(aligned)     ? TS_PAYLOAD_LEN       :
-+				TS_PACKET_LEN - nbytes_past_boundary :
-+				args.len;
++static int s302m_sin_lut[S302M_SIN_LUT_SZ] = {
++	0x8000, 0x80c9, 0x8192, 0x825b, 0x8324, 0x83ed, 0x84b6, 0x857e,
++	0x8647, 0x8710, 0x87d9, 0x88a1, 0x896a, 0x8a32, 0x8afb, 0x8bc3,
++	0x8c8b, 0x8d53, 0x8e1b, 0x8ee3, 0x8fab, 0x9072, 0x9139, 0x9201,
++	0x92c7, 0x938e, 0x9455, 0x951b, 0x95e1, 0x96a7, 0x976d, 0x9833,
++	0x98f8, 0x99bd, 0x9a82, 0x9b47, 0x9c0b, 0x9ccf, 0x9d93, 0x9e56,
++	0x9f19, 0x9fdc, 0xa09f, 0xa161, 0xa223, 0xa2e5, 0xa3a6, 0xa467,
++	0xa527, 0xa5e8, 0xa6a7, 0xa767, 0xa826, 0xa8e5, 0xa9a3, 0xaa61,
++	0xab1f, 0xabdc, 0xac98, 0xad55, 0xae10, 0xaecc, 0xaf87, 0xb041,
++	0xb0fb, 0xb1b5, 0xb26e, 0xb326, 0xb3de, 0xb496, 0xb54d, 0xb603,
++	0xb6b9, 0xb76f, 0xb824, 0xb8d8, 0xb98c, 0xba3f, 0xbaf2, 0xbba4,
++	0xbc56, 0xbd07, 0xbdb7, 0xbe67, 0xbf17, 0xbfc5, 0xc073, 0xc121,
++	0xc1cd, 0xc279, 0xc325, 0xc3d0, 0xc47a, 0xc524, 0xc5cc, 0xc675,
++	0xc71c, 0xc7c3, 0xc869, 0xc90f, 0xc9b3, 0xca57, 0xcafb, 0xcb9d,
++	0xcc3f, 0xcce0, 0xcd81, 0xce20, 0xcebf, 0xcf5d, 0xcffb, 0xd097,
++	0xd133, 0xd1ce, 0xd268, 0xd302, 0xd39a, 0xd432, 0xd4c9, 0xd55f,
++	0xd5f5, 0xd689, 0xd71d, 0xd7b0, 0xd842, 0xd8d3, 0xd964, 0xd9f3,
++	0xda82, 0xdb0f, 0xdb9c, 0xdc28, 0xdcb3, 0xdd3d, 0xddc7, 0xde4f,
++	0xded7, 0xdf5d, 0xdfe3, 0xe068, 0xe0eb, 0xe16e, 0xe1f0, 0xe271,
++	0xe2f1, 0xe370, 0xe3ee, 0xe46b, 0xe4e8, 0xe563, 0xe5dd, 0xe656,
++	0xe6cf, 0xe746, 0xe7bc, 0xe831, 0xe8a6, 0xe919, 0xe98b, 0xe9fc,
++	0xea6d, 0xeadc, 0xeb4a, 0xebb7, 0xec23, 0xec8e, 0xecf8, 0xed61,
++	0xedc9, 0xee30, 0xee96, 0xeefa, 0xef5e, 0xefc1, 0xf022, 0xf083,
++	0xf0e2, 0xf140, 0xf19d, 0xf1f9, 0xf254, 0xf2ae, 0xf307, 0xf35e,
++	0xf3b5, 0xf40a, 0xf45f, 0xf4b2, 0xf504, 0xf555, 0xf5a5, 0xf5f3,
++	0xf641, 0xf68d, 0xf6d8, 0xf722, 0xf76b, 0xf7b3, 0xf7fa, 0xf83f,
++	0xf884, 0xf8c7, 0xf909, 0xf94a, 0xf989, 0xf9c8, 0xfa05, 0xfa41,
++	0xfa7c, 0xfab6, 0xfaee, 0xfb26, 0xfb5c, 0xfb91, 0xfbc5, 0xfbf8,
++	0xfc29, 0xfc59, 0xfc88, 0xfcb6, 0xfce3, 0xfd0e, 0xfd39, 0xfd62,
++	0xfd89, 0xfdb0, 0xfdd5, 0xfdfa, 0xfe1d, 0xfe3e, 0xfe5f, 0xfe7e,
++	0xfe9c, 0xfeb9, 0xfed5, 0xfeef, 0xff09, 0xff21, 0xff37, 0xff4d,
++	0xff61, 0xff74, 0xff86, 0xff97, 0xffa6, 0xffb4, 0xffc1, 0xffcd,
++	0xffd8, 0xffe1, 0xffe9, 0xfff0, 0xfff5, 0xfff9, 0xfffd, 0xfffe,
++	0xffff, 0xfffe, 0xfffd, 0xfff9, 0xfff5, 0xfff0, 0xffe9, 0xffe1,
++	0xffd8, 0xffcd, 0xffc1, 0xffb4, 0xffa6, 0xff97, 0xff86, 0xff74,
++	0xff61, 0xff4d, 0xff37, 0xff21, 0xff09, 0xfeef, 0xfed5, 0xfeb9,
++	0xfe9c, 0xfe7e, 0xfe5f, 0xfe3e, 0xfe1d, 0xfdfa, 0xfdd5, 0xfdb0,
++	0xfd89, 0xfd62, 0xfd39, 0xfd0e, 0xfce3, 0xfcb6, 0xfc88, 0xfc59,
++	0xfc29, 0xfbf8, 0xfbc5, 0xfb91, 0xfb5c, 0xfb26, 0xfaee, 0xfab6,
++	0xfa7c, 0xfa41, 0xfa05, 0xf9c8, 0xf989, 0xf94a, 0xf909, 0xf8c7,
++	0xf884, 0xf83f, 0xf7fa, 0xf7b3, 0xf76b, 0xf722, 0xf6d8, 0xf68d,
++	0xf641, 0xf5f3, 0xf5a5, 0xf555, 0xf504, 0xf4b2, 0xf45f, 0xf40a,
++	0xf3b5, 0xf35e, 0xf307, 0xf2ae, 0xf254, 0xf1f9, 0xf19d, 0xf140,
++	0xf0e2, 0xf083, 0xf022, 0xefc1, 0xef5e, 0xeefa, 0xee96, 0xee30,
++	0xedc9, 0xed61, 0xecf8, 0xec8e, 0xec23, 0xebb7, 0xeb4a, 0xeadc,
++	0xea6d, 0xe9fc, 0xe98b, 0xe919, 0xe8a6, 0xe831, 0xe7bc, 0xe746,
++	0xe6cf, 0xe656, 0xe5dd, 0xe563, 0xe4e8, 0xe46b, 0xe3ee, 0xe370,
++	0xe2f1, 0xe271, 0xe1f0, 0xe16e, 0xe0eb, 0xe068, 0xdfe3, 0xdf5d,
++	0xded7, 0xde4f, 0xddc7, 0xdd3d, 0xdcb3, 0xdc28, 0xdb9c, 0xdb0f,
++	0xda82, 0xd9f3, 0xd964, 0xd8d3, 0xd842, 0xd7b0, 0xd71d, 0xd689,
++	0xd5f5, 0xd55f, 0xd4c9, 0xd432, 0xd39a, 0xd302, 0xd268, 0xd1ce,
++	0xd133, 0xd097, 0xcffb, 0xcf5d, 0xcebf, 0xce20, 0xcd81, 0xcce0,
++	0xcc3f, 0xcb9d, 0xcafb, 0xca57, 0xc9b3, 0xc90f, 0xc869, 0xc7c3,
++	0xc71c, 0xc675, 0xc5cc, 0xc524, 0xc47a, 0xc3d0, 0xc325, 0xc279,
++	0xc1cd, 0xc121, 0xc073, 0xbfc5, 0xbf17, 0xbe67, 0xbdb7, 0xbd07,
++	0xbc56, 0xbba4, 0xbaf2, 0xba3f, 0xb98c, 0xb8d8, 0xb824, 0xb76f,
++	0xb6b9, 0xb603, 0xb54d, 0xb496, 0xb3de, 0xb326, 0xb26e, 0xb1b5,
++	0xb0fb, 0xb041, 0xaf87, 0xaecc, 0xae10, 0xad55, 0xac98, 0xabdc,
++	0xab1f, 0xaa61, 0xa9a3, 0xa8e5, 0xa826, 0xa767, 0xa6a7, 0xa5e8,
++	0xa527, 0xa467, 0xa3a6, 0xa2e5, 0xa223, 0xa161, 0xa09f, 0x9fdc,
++	0x9f19, 0x9e56, 0x9d93, 0x9ccf, 0x9c0b, 0x9b47, 0x9a82, 0x99bd,
++	0x98f8, 0x9833, 0x976d, 0x96a7, 0x95e1, 0x951b, 0x9455, 0x938e,
++	0x92c7, 0x9201, 0x9139, 0x9072, 0x8fab, 0x8ee3, 0x8e1b, 0x8d53,
++	0x8c8b, 0x8bc3, 0x8afb, 0x8a32, 0x896a, 0x88a1, 0x87d9, 0x8710,
++	0x8647, 0x857e, 0x84b6, 0x83ed, 0x8324, 0x825b, 0x8192, 0x80c9,
++	0x8000, 0x7f36, 0x7e6d, 0x7da4, 0x7cdb, 0x7c12, 0x7b49, 0x7a81,
++	0x79b8, 0x78ef, 0x7826, 0x775e, 0x7695, 0x75cd, 0x7504, 0x743c,
++	0x7374, 0x72ac, 0x71e4, 0x711c, 0x7054, 0x6f8d, 0x6ec6, 0x6dfe,
++	0x6d38, 0x6c71, 0x6baa, 0x6ae4, 0x6a1e, 0x6958, 0x6892, 0x67cc,
++	0x6707, 0x6642, 0x657d, 0x64b8, 0x63f4, 0x6330, 0x626c, 0x61a9,
++	0x60e6, 0x6023, 0x5f60, 0x5e9e, 0x5ddc, 0x5d1a, 0x5c59, 0x5b98,
++	0x5ad8, 0x5a17, 0x5958, 0x5898, 0x57d9, 0x571a, 0x565c, 0x559e,
++	0x54e0, 0x5423, 0x5367, 0x52aa, 0x51ef, 0x5133, 0x5078, 0x4fbe,
++	0x4f04, 0x4e4a, 0x4d91, 0x4cd9, 0x4c21, 0x4b69, 0x4ab2, 0x49fc,
++	0x4946, 0x4890, 0x47db, 0x4727, 0x4673, 0x45c0, 0x450d, 0x445b,
++	0x43a9, 0x42f8, 0x4248, 0x4198, 0x40e8, 0x403a, 0x3f8c, 0x3ede,
++	0x3e32, 0x3d86, 0x3cda, 0x3c2f, 0x3b85, 0x3adb, 0x3a33, 0x398a,
++	0x38e3, 0x383c, 0x3796, 0x36f0, 0x364c, 0x35a8, 0x3504, 0x3462,
++	0x33c0, 0x331f, 0x327e, 0x31df, 0x3140, 0x30a2, 0x3004, 0x2f68,
++	0x2ecc, 0x2e31, 0x2d97, 0x2cfd, 0x2c65, 0x2bcd, 0x2b36, 0x2aa0,
++	0x2a0a, 0x2976, 0x28e2, 0x284f, 0x27bd, 0x272c, 0x269b, 0x260c,
++	0x257d, 0x24f0, 0x2463, 0x23d7, 0x234c, 0x22c2, 0x2238, 0x21b0,
++	0x2128, 0x20a2, 0x201c, 0x1f97, 0x1f14, 0x1e91, 0x1e0f, 0x1d8e,
++	0x1d0e, 0x1c8f, 0x1c11, 0x1b94, 0x1b17, 0x1a9c, 0x1a22, 0x19a9,
++	0x1930, 0x18b9, 0x1843, 0x17ce, 0x1759, 0x16e6, 0x1674, 0x1603,
++	0x1592, 0x1523, 0x14b5, 0x1448, 0x13dc, 0x1371, 0x1307, 0x129e,
++	0x1236, 0x11cf, 0x1169, 0x1105, 0x10a1, 0x103e, 0xfdd, 0xf7c,
++	0xf1d, 0xebf, 0xe62, 0xe06, 0xdab, 0xd51, 0xcf8, 0xca1,
++	0xc4a, 0xbf5, 0xba0, 0xb4d, 0xafb, 0xaaa, 0xa5a, 0xa0c,
++	0x9be, 0x972, 0x927, 0x8dd, 0x894, 0x84c, 0x805, 0x7c0,
++	0x77b, 0x738, 0x6f6, 0x6b5, 0x676, 0x637, 0x5fa, 0x5be,
++	0x583, 0x549, 0x511, 0x4d9, 0x4a3, 0x46e, 0x43a, 0x407,
++	0x3d6, 0x3a6, 0x377, 0x349, 0x31c, 0x2f1, 0x2c6, 0x29d,
++	0x276, 0x24f, 0x22a, 0x205, 0x1e2, 0x1c1, 0x1a0, 0x181,
++	0x163, 0x146, 0x12a, 0x110, 0xf6, 0xde, 0xc8, 0xb2,
++	0x9e, 0x8b, 0x79, 0x68, 0x59, 0x4b, 0x3e, 0x32,
++	0x27, 0x1e, 0x16, 0xf, 0xa, 0x6, 0x2, 0x1,
++	0x0, 0x1, 0x2, 0x6, 0xa, 0xf, 0x16, 0x1e,
++	0x27, 0x32, 0x3e, 0x4b, 0x59, 0x68, 0x79, 0x8b,
++	0x9e, 0xb2, 0xc8, 0xde, 0xf6, 0x110, 0x12a, 0x146,
++	0x163, 0x181, 0x1a0, 0x1c1, 0x1e2, 0x205, 0x22a, 0x24f,
++	0x276, 0x29d, 0x2c6, 0x2f1, 0x31c, 0x349, 0x377, 0x3a6,
++	0x3d6, 0x407, 0x43a, 0x46e, 0x4a3, 0x4d9, 0x511, 0x549,
++	0x583, 0x5be, 0x5fa, 0x637, 0x676, 0x6b5, 0x6f6, 0x738,
++	0x77b, 0x7c0, 0x805, 0x84c, 0x894, 0x8dd, 0x927, 0x972,
++	0x9be, 0xa0c, 0xa5a, 0xaaa, 0xafb, 0xb4d, 0xba0, 0xbf5,
++	0xc4a, 0xca1, 0xcf8, 0xd51, 0xdab, 0xe06, 0xe62, 0xebf,
++	0xf1d, 0xf7c, 0xfdd, 0x103e, 0x10a1, 0x1105, 0x1169, 0x11cf,
++	0x1236, 0x129e, 0x1307, 0x1371, 0x13dc, 0x1448, 0x14b5, 0x1523,
++	0x1592, 0x1603, 0x1674, 0x16e6, 0x1759, 0x17ce, 0x1843, 0x18b9,
++	0x1930, 0x19a9, 0x1a22, 0x1a9c, 0x1b17, 0x1b94, 0x1c11, 0x1c8f,
++	0x1d0e, 0x1d8e, 0x1e0f, 0x1e91, 0x1f14, 0x1f97, 0x201c, 0x20a2,
++	0x2128, 0x21b0, 0x2238, 0x22c2, 0x234c, 0x23d7, 0x2463, 0x24f0,
++	0x257d, 0x260c, 0x269b, 0x272c, 0x27bd, 0x284f, 0x28e2, 0x2976,
++	0x2a0a, 0x2aa0, 0x2b36, 0x2bcd, 0x2c65, 0x2cfd, 0x2d97, 0x2e31,
++	0x2ecc, 0x2f68, 0x3004, 0x30a2, 0x3140, 0x31df, 0x327e, 0x331f,
++	0x33c0, 0x3462, 0x3504, 0x35a8, 0x364c, 0x36f0, 0x3796, 0x383c,
++	0x38e3, 0x398a, 0x3a33, 0x3adb, 0x3b85, 0x3c2f, 0x3cda, 0x3d86,
++	0x3e32, 0x3ede, 0x3f8c, 0x403a, 0x40e8, 0x4198, 0x4248, 0x42f8,
++	0x43a9, 0x445b, 0x450d, 0x45c0, 0x4673, 0x4727, 0x47db, 0x4890,
++	0x4946, 0x49fc, 0x4ab2, 0x4b69, 0x4c21, 0x4cd9, 0x4d91, 0x4e4a,
++	0x4f04, 0x4fbe, 0x5078, 0x5133, 0x51ef, 0x52aa, 0x5367, 0x5423,
++	0x54e0, 0x559e, 0x565c, 0x571a, 0x57d9, 0x5898, 0x5958, 0x5a17,
++	0x5ad8, 0x5b98, 0x5c59, 0x5d1a, 0x5ddc, 0x5e9e, 0x5f60, 0x6023,
++	0x60e6, 0x61a9, 0x626c, 0x6330, 0x63f4, 0x64b8, 0x657d, 0x6642,
++	0x6707, 0x67cc, 0x6892, 0x6958, 0x6a1e, 0x6ae4, 0x6baa, 0x6c71,
++	0x6d38, 0x6dfe, 0x6ec6, 0x6f8d, 0x7054, 0x711c, 0x71e4, 0x72ac,
++	0x7374, 0x743c, 0x7504, 0x75cd, 0x7695, 0x775e, 0x7826, 0x78ef,
++	0x79b8, 0x7a81, 0x7b49, 0x7c12, 0x7cdb, 0x7da4, 0x7e6d, 0x7f36
++};
 +
-+	struct psi_write_args new_args = {0};
-+	struct vidtv_mpeg_ts ts_header = {0};
-+
-+	u32 nbytes = 0;  /* number of bytes written by this function */
-+	u32 temp   = 0;
-+
-+	/* Just a sanity check, should not really happen because we stuff
-+	 * the packet when we finish a section, i.e. when we write the crc at
-+	 * the end. But if this happens then we have messed up the logic
-+	 * somewhere.
-+	 */
-+	WARN_ON(args.new_psi_section && !aligned);
-+
-+	if (aligned) {
-+		/* if at a packet boundary, write a new TS header */
-+		ts_header.sync_byte          = TS_SYNC_BYTE;
-+		ts_header.tei                = 0;
-+		ts_header.payload_start      = 1;
-+		ts_header.pid                = args.pid;
-+		ts_header.priority           = 0;
-+		ts_header.scrambling         = 0;
-+		ts_header.continuity_counter = *args.continuity_counter;
-+		ts_header.payload            = 1;
-+		/* no adaptation field */
-+		ts_header.adaptation_field = 0;
-+
-+		cpu_to_be16s(&ts_header.bitfield);
-+
-+		/* copy the header */
-+		nbytes += vidtv_memcpy(args.dest_buf +
-+				       args.dest_offset +
-+				       nbytes,
-+				       &ts_header,
-+				       sizeof(ts_header),
-+				       args.dest_offset + nbytes,
-+				       args.dest_buf_sz);
-+
-+		be16_to_cpus(&ts_header.bitfield);
-+
-+		/*
-+		 * increment the countinuity counter since we have started
-+		 * a new packet
-+		 */
-+		vidtv_ts_inc_cc(args.continuity_counter);
-+	}
-+
-+	if (args.new_psi_section) {
-+		/* write the pointer_field in the first byte of the payload */
-+		temp = vidtv_memset(args.dest_buf + args.dest_offset + nbytes,
-+				    0x0,
-+				    1,
-+				    args.dest_offset + nbytes,
-+				    args.dest_buf_sz);
-+		/* one byte was used by the pointer field*/
-+		nbytes += temp;
-+		if (payload_write_len == TS_PAYLOAD_LEN)
-+			payload_write_len -= temp;
-+	}
-+
-+	/* write as much of the payload as we possibly can */
-+	nbytes += vidtv_memcpy(args.dest_buf + args.dest_offset + nbytes,
-+			       args.from,
-+			       payload_write_len,
-+			       args.dest_offset + nbytes,
-+			       args.dest_buf_sz);
-+
-+	if (split) {
-+		/* 'payload_write_len' written from a total of 'len' requested*/
-+		args.len -= payload_write_len;
-+		/*
-+		 * recursively write the rest of the data until we do not
-+		 * need to split it anymore
-+		 */
-+		memcpy(&new_args, &args, sizeof(struct psi_write_args));
-+		new_args.from            = args.from + payload_write_len;
-+		new_args.dest_offset     = args.dest_offset + nbytes;
-+		new_args.new_psi_section = false;
-+
-+		nbytes += vidtv_psi_ts_psi_write_into(new_args);
-+	}
-+
-+	/*
-+	 * as the CRC is last in the section, stuff the rest of the
-+	 * packet if there is any remaining space in there
-+	 */
-+	if (args.is_crc)
-+		nbytes += vidtv_psi_ts_psi_write_stuffing(args.dest_buf +
-+							  args.dest_offset +
-+							  nbytes,
-+							  TS_PACKET_LEN -
-+							  payload_write_len,
-+							  args.dest_offset +
-+							  nbytes,
-+							  args.dest_buf_sz);
-+
-+	return nbytes;
-+}
-+
-+static u32 table_section_crc32_write_into(struct crc32_write_args args)
-+{
-+	/* the CRC is the last entry in the section */
-+	u32 nbytes = 0;
-+	u32 crc;
-+	struct psi_write_args psi_args = {0};
-+
-+	crc = crc32_be(0, args.dest_buf, args.dest_offset);
-+
-+	psi_args.dest_buf           = args.dest_buf;
-+	psi_args.from               = &crc;
-+	psi_args.len                = CRC_SIZE_IN_BYTES;
-+	psi_args.dest_offset        = args.dest_offset;
-+	psi_args.pid                = args.pid;
-+	psi_args.new_psi_section    = false;
-+	psi_args.continuity_counter = args.continuity_counter;
-+	psi_args.is_crc             = true;
-+	psi_args.dest_buf_sz        = args.dest_buf_sz;
-+
-+	cpu_to_be32s(&crc);
-+	nbytes += vidtv_psi_ts_psi_write_into(psi_args);
-+	be32_to_cpus(&crc);
-+
-+	return nbytes;
-+}
-+
-+struct vidtv_psi_desc *vidtv_psi_desc_init(struct vidtv_psi_desc *head,
-+					   u8 type,
-+					   u8 length)
-+{
-+	struct vidtv_psi_desc *desc;
-+
-+	/* alloc enough memory for the flexible array too */
-+	desc = kzalloc(sizeof(*desc) + length, GFP_KERNEL);
-+
-+	desc->type   = type;
-+	desc->length = length;
-+
-+	if (head) {
-+		while (head->next)
-+			head = head->next;
-+
-+		head->next = desc;
-+	}
-+
-+	return desc;
-+}
-+
-+void vidtv_psi_desc_destroy(struct vidtv_psi_desc *desc)
-+{
-+	struct vidtv_psi_desc *curr = desc;
-+	struct vidtv_psi_desc *tmp  = NULL;
-+
-+	while (curr) {
-+		tmp  = curr;
-+		curr = curr->next;
-+		kfree(tmp);
-+	}
-+}
-+
-+static u32
-+vidtv_psi_desc_comp_len(struct vidtv_psi_desc *desc)
-+{
-+	u32 length = 0;
-+
-+	if (!desc)
-+		return 0;
-+
-+	while (desc) {
-+		length += desc->length;
-+		desc    = desc->next;
-+	}
-+
-+	return length;
-+}
-+
-+void vidtv_psi_desc_assign(struct vidtv_psi_desc **to,
-+			   struct vidtv_psi_desc *desc)
++static void vidtv_s302m_compute_nunits(struct vidtv_encoder *e)
 +{
 +	/*
-+	 * Caller must recompute the section length afterwards at some point
-+	 * This function transfers ownedship of desc.
-+	 * Start by cleaning the old data
++	 * match the amount of video units if we are trying to sync with a video
++	 * encoder
 +	 */
-+	if (*to)
-+		vidtv_psi_desc_destroy(*to);
++	if (e->sync && e->sync->video) {
++		e->nunits = e->sync->nunits;
++		return;
++	}
 +
-+	*to = desc;  /* reassign pointer */
++	/* otherwise return enough samples for the timedelta in one AU */
++	e->nunits = 1;
 +}
 +
-+static void vidtv_psi_desc_to_be(struct vidtv_psi_desc *desc)
++static void
++vidtv_s302m_compute_sample_count_v(struct vidtv_encoder *e)
 +{
-+	/*
-+	 * Convert descriptor endianness to big-endian on a field-by-field basis
-+	 * where applicable
-+	 */
++	/* compute sample count for VAU[i] in 'sync' */
++	u32 vau_duration_usecs;
++	u32 sample_duration_usecs;
++	u32 i;
++	u32 sample_count;
++	u32 s;
 +
-+	switch (desc->type) {
-+	/* nothing do do */
-+	case SERVICE_DESCRIPTOR:
-+		break;
-+	case REGISTRATION_DESCRIPTOR:
-+		cpu_to_be32s(&((struct vidtv_psi_desc_registration *)
-+			     desc)->format_identifier);
-+		pr_alert("%s: descriptor type %d found\n",
-+			 __func__,
-+			 desc->type);
-+		pr_alert("%s: change 'additional_info' endianness before calling\n",
-+			 __func__);
-+		break;
-+	default:
-+		pr_err("%s: descriptor type %d not implemented, skipping\n",
-+		       __func__,
-+		       desc->type);
-+		break;
++	vau_duration_usecs    = USEC_PER_SEC / e->sync->sampling_rate_hz;
++	sample_duration_usecs = USEC_PER_SEC / e->sampling_rate_hz;
++
++	for (i = 0; i < e->sync->nunits; ++i) {
++		sample_count = e->samples_per_unit[i];
++		s = DIV_ROUND_UP(vau_duration_usecs, sample_duration_usecs);
++		e->samples_per_unit[i] = s;
 +	}
 +}
 +
-+static void vidtv_psi_desc_to_cpu(struct vidtv_psi_desc *desc)
++static void
++vidtv_s302m_compute_sample_count(struct vidtv_encoder *e,
++				 u64 elapsed_time_usecs)
 +{
-+	/*
-+	 * Convert descriptor endianness to native on a field-by-field basis
-+	 * where applicable
-+	 */
++	/* compute sample count for 'elapsed_time_usecs' */
++	u32 sample_duration_usecs = USEC_PER_SEC / e->sampling_rate_hz;
 +
-+	switch (desc->type) {
-+	/* nothing do do */
-+	case SERVICE_DESCRIPTOR:
-+		break;
-+	case REGISTRATION_DESCRIPTOR:
-+		be32_to_cpus(&((struct vidtv_psi_desc_registration *)
-+			     desc)->format_identifier);
-+		pr_alert("%s: descriptor type %d found\n",
-+			 __func__,
-+			 desc->type);
-+		pr_alert("%s: change 'additional_info' endianness before calling\n",
-+			 __func__);
-+		break;
-+	default:
-+		pr_err("%s: descriptor type %d not implemented, skipping\n",
-+		       __func__,
-+		       desc->type);
-+		break;
-+	}
++	e->samples_per_unit[0] = elapsed_time_usecs / sample_duration_usecs;
 +}
 +
-+static u32 vidtv_psi_desc_write_into(struct desc_write_args args)
++static void vidtv_s302m_compute_pts(struct vidtv_encoder *e)
 +{
-+	/* the number of bytes written by this function */
-+	u32    nbytes                  = 0;
-+	struct psi_write_args psi_args = {0};
-+
-+	psi_args.dest_buf = args.dest_buf;
-+	psi_args.from     = args.desc;
-+
-+	psi_args.len      = sizeof_field(struct vidtv_psi_desc, type) +
-+			    sizeof_field(struct vidtv_psi_desc, length);
-+
-+	psi_args.dest_offset        = args.dest_offset;
-+	psi_args.pid                = args.pid;
-+	psi_args.new_psi_section    = false;
-+	psi_args.continuity_counter = args.continuity_counter;
-+	psi_args.is_crc             = false;
-+	psi_args.dest_buf_sz        = args.dest_buf_sz;
-+
-+	vidtv_psi_desc_to_be(args.desc);
-+
-+	nbytes += vidtv_psi_ts_psi_write_into(psi_args);
-+
-+	/* move 'from' pointer to point to u8 data[] */
-+	psi_args.from = args.desc +
-+			sizeof_field(struct vidtv_psi_desc, type) +
-+			sizeof_field(struct vidtv_psi_desc, length) +
-+			sizeof(struct vidtv_psi_desc *);
-+
-+	psi_args.len         = args.desc->length;
-+	psi_args.dest_offset = args.dest_offset + nbytes;
-+
-+	nbytes += vidtv_psi_ts_psi_write_into(psi_args);
-+
-+	vidtv_psi_desc_to_cpu(args.desc);
-+
-+	return nbytes;
-+}
-+
-+static u32
-+vidtv_psi_table_header_write_into(struct header_write_args args)
-+{
-+	/* the number of bytes written by this function */
-+	u32    nbytes                  = 0;
-+	struct psi_write_args psi_args = {0};
-+
-+	psi_args.dest_buf           = args.dest_buf;
-+	psi_args.from               = args.h;
-+	psi_args.len                = sizeof(struct vidtv_psi_table_header);
-+	psi_args.dest_offset        = args.dest_offset;
-+	psi_args.pid                = args.pid;
-+	psi_args.new_psi_section    = true;
-+	psi_args.continuity_counter = args.continuity_counter;
-+	psi_args.is_crc             = false;
-+	psi_args.dest_buf_sz        = args.dest_buf_sz;
-+
-+	cpu_to_be16s(&args.h->bitfield);
-+	cpu_to_be16s(&args.h->id);
-+
-+	nbytes += vidtv_psi_ts_psi_write_into(psi_args);
-+
-+	be16_to_cpus(&args.h->bitfield);
-+	be16_to_cpus(&args.h->id);
-+
-+	return nbytes;
-+}
-+
-+void
-+vidtv_psi_pat_table_comp_sec_len(struct vidtv_psi_table_pat *pat)
-+{
-+	/* see ISO/IEC 13818-1 : 2000 p.43 */
-+	u16 length = 0;
++	u32 count = e->previous_sample_count;
 +	u32 i;
 +
-+	/* from immediately after 'section_length' until 'last_section_number'*/
-+	length += PAT_LEN_UNTIL_LAST_SECTION_NUMBER;
++	for (i = 0; i < e->nunits; ++i) {
++		count += e->samples_per_unit[i];
 +
-+	/* do not count the pointer */
-+	for (i = 0; i < pat->programs; ++i)
-+		length += sizeof(struct vidtv_psi_table_pat_program) -
-+			  sizeof(struct vidtv_psi_table_pat_program *);
-+
-+	length += CRC_SIZE_IN_BYTES;
-+
-+	WARN_ON(length > MAX_SECTION_LEN);
-+	pat->header.section_length = length;
-+}
-+
-+void vidtv_psi_pmt_table_comp_sec_len(struct vidtv_psi_table_pmt *pmt)
-+{
-+	/* see ISO/IEC 13818-1 : 2000 p.46 */
-+	u16    length                        = 0;
-+	struct vidtv_psi_table_pmt_stream *s = pmt->stream;
-+
-+	/* from immediately after 'section_length' until 'program_info_length'*/
-+	length += PMT_LEN_UNTIL_PROGRAM_INFO_LENGTH;
-+
-+	pmt->desc_length  = vidtv_psi_desc_comp_len(pmt->descriptor);
-+	length           += pmt->desc_length;
-+
-+	while (s) {
-+		/* skip both pointers at the end */
-+		length += sizeof(struct vidtv_psi_table_pmt_stream) -
-+			  sizeof(struct vidtv_psi_desc *) -
-+			  sizeof(struct vidtv_psi_table_pmt_stream *);
-+
-+		s->desc_length  = vidtv_psi_desc_comp_len(s->descriptor);
-+		length         += s->desc_length;
-+
-+		s = s->next;
++		e->pts[i] = count *
++			    CLOCK_UNIT_90KHZ / e->sampling_rate_hz;
 +	}
-+
-+	length += CRC_SIZE_IN_BYTES;
-+
-+	WARN_ON(length > MAX_SECTION_LEN);
-+	pmt->header.section_length = length;
 +}
 +
-+void vidtv_psi_sdt_table_comp_sec_len(struct vidtv_psi_table_sdt *sdt)
++static void vidtv_s302m_compute_pts_v(struct vidtv_encoder *e)
 +{
-+	/* see ETSI EN 300 468 V 1.10.1 p.24 */
-+	u16    length                         = 0;
-+	struct vidtv_psi_table_sdt_service *s = sdt->service;
++	u32 i;
 +
-+	/*
-+	 * from immediately after 'section_length' until
-+	 * 'reserved_for_future_use'
-+	 */
-+	length += SDT_LEN_UNTIL_RESERVED_FOR_FUTURE_USE;
-+
-+	while (s) {
-+		/* skip both pointers at the end */
-+		length += sizeof(struct vidtv_psi_table_sdt_service) -
-+			  sizeof(struct vidtv_psi_desc *) -
-+			  sizeof(struct vidtv_psi_table_sdt_service *);
-+
-+		s->desc_length  = vidtv_psi_desc_comp_len(s->descriptor);
-+		length         += s->desc_length;
-+
-+		s = s->next;
-+	}
-+
-+	length += CRC_SIZE_IN_BYTES;
-+
-+	WARN_ON(length > MAX_SECTION_LEN);
-+	sdt->header.section_length = length;
++	/* use the same pts for video */
++	for (i = 0; i < e->sync->nunits; ++i)
++		e->pts[i] = e->sync->pts[i];
 +}
 +
-+struct vidtv_psi_table_pat_program*
-+vidtv_psi_pat_program_init(struct vidtv_psi_table_pat_program *head,
-+			   u16 service_id,
-+			   u16 pid)
++static bool vidtv_s302m_get_c_bit(struct vidtv_encoder *e)
 +{
 +	/*
-+	 * if 'head' is attached to a table, caller should recompute
-+	 * the section length afterwards at some point
++	 * see EBU Tech 3250 2004 clause 5.2.1: minimal implementation of
++	 * channel status
 +	 */
-+	struct vidtv_psi_table_pat_program *program;
++	struct vidtv_s302m_ctx *ctx = e->ctx;
++	bool   start_was_z;
 +
-+	program = kzalloc(sizeof(*program), GFP_KERNEL);
++	start_was_z = ctx->last_start_preamble == PREAMBLE_Z_F0 ||
++		      ctx->last_start_preamble == PREAMBLE_Z_F1;
 +
-+	program->service_id = service_id;
-+	/* pid for the PMT section in the TS */
-+	program->pid        = pid;
-+	program->next       = NULL;
-+	program->reserved   = 0x7;
++	if (!start_was_z)
++		return false;
 +
-+	if (head) {
-+		while (head->next)
-+			head = head->next;
++	++ctx->current_c_bit;
 +
-+		head->next = program;
-+	}
-+
-+	return program;
++	/* set the bit only if it is the first C bit after a Z preamble */
++	return !(ctx->current_c_bit % CHANNEL_STATUS_BIT_LEN);
 +}
 +
-+void
-+vidtv_psi_pat_program_destroy(struct vidtv_psi_table_pat_program *p)
++static s16 vidtv_s302m_get_sample(struct vidtv_encoder *e)
 +{
-+	struct vidtv_psi_table_pat_program *curr = p;
-+	struct vidtv_psi_table_pat_program *tmp  = NULL;
++	s16 ret;
 +
-+	while (curr) {
-+		tmp  = curr;
-+		curr = curr->next;
-+		kfree(tmp);
-+	}
-+}
++	/* bug somewhere */
++	WARN_ON(e->src_buf_offset > e->src_buf_sz);
 +
-+void
-+vidtv_psi_pat_program_assign(struct vidtv_psi_table_pat *pat,
-+			     struct vidtv_psi_table_pat_program *p)
-+{
-+	/* This function transfers ownership of p to the table */
++	if (e->src_buf_offset >= e->src_buf_sz) {
++		/* let the source know we are out of data */
++		if (e->last_sample_cb)
++			e->last_sample_cb(e->sample_count);
 +
-+	u16    program_count                        = 0;
-+	struct vidtv_psi_table_pat_program *program = p;
-+	struct vidtv_psi_table_pat_program *temp    = pat->program;
-+
-+	while (program) {
-+		++program_count;
-+		program = program->next;
++		e->src_buf_offset = 0;
 +	}
 +
-+	pat->programs = program_count;
-+	pat->program  = p;
++	ret = *(s16 *)(e->src_buf + e->src_buf_offset);
 +
-+	/* Recompute section length */
-+	vidtv_psi_pat_table_comp_sec_len(pat);
++	e->sample_count++;
++	e->src_buf_offset += sizeof(s16);
 +
-+	/* reassign if the new size is too big */
-+	if (pat->header.section_length > MAX_SECTION_LEN)
-+		vidtv_psi_pat_program_assign(pat, temp);
-+	else
-+		vidtv_psi_pat_program_destroy(temp);
++	return ret;
 +}
 +
-+void vidtv_psi_pat_table_init(struct vidtv_psi_table_pat *pat,
-+			      bool update_version_num,
-+			      u16 transport_stream_id)
++static void vidtv_s302m_toggle_subframe(struct vidtv_encoder *e)
 +{
-+	static u8 pat_version;
++	struct vidtv_s302m_ctx *ctx = e->ctx;
 +
-+	pat->header.table_id = 0x0;
-+	pat->header.syntax   = 0x1;
-+	pat->header.zero     = 0x0;
-+	pat->header.one      = 0x03;
-+
-+	/* transport stream ID, at will */
-+	pat->header.id           = transport_stream_id;
-+	pat->header.current_next = 0x1;
-+
-+	/* ETSI 300 468: indicates changes in the TS described by this table*/
-+	if (update_version_num)
-+		++pat_version;
-+
-+	pat->header.version = pat_version;
-+
-+	pat->header.one2         = 0x03;
-+	pat->header.section_id   = 0x0;
-+	pat->header.last_section = 0x0;
-+
-+	pat->programs = 0;
-+
-+	vidtv_psi_pat_table_comp_sec_len(pat);
++	ctx->is_subframe_a = !ctx->is_subframe_a;
 +}
 +
-+u32 vidtv_psi_pat_write_into(char *buf,
-+			     u32 offset,
-+			     struct vidtv_psi_table_pat *pat,
-+			     u32 buf_sz,
-+			     u8 *continuity_counter)
++static bool vidtv_s302m_is_block_start(const struct vidtv_encoder *e)
 +{
-+	/* the number of bytes written by this function */
-+	u32   nbytes      = 0;
-+	const u16 pat_pid = VIDTV_PAT_PID;
++	return e->sample_count % S302M_BLOCK_SZ;
++}
 +
-+	struct vidtv_psi_table_pat_program *p = pat->program;
-+	struct header_write_args h_args       = {0};
-+	struct psi_write_args args            = {0};
-+	struct crc32_write_args c_args        = {0};
++static bool vidtv_s302m_get_f_bit(const struct vidtv_encoder *e)
++{
++	const struct vidtv_s302m_ctx *ctx = e->ctx;
 +
-+	vidtv_psi_pat_table_comp_sec_len(pat);
++	return vidtv_s302m_is_block_start(e) && ctx->is_subframe_a;
++}
 +
-+	h_args.dest_buf           = buf;
-+	h_args.dest_offset        = offset;
-+	h_args.h                  = &pat->header;
-+	h_args.pid                = pat_pid;
-+	h_args.continuity_counter = continuity_counter;
-+	h_args.dest_buf_sz        = buf_sz;
++static u8 vidtv_s302m_get_preamble(struct vidtv_encoder *e)
++{
++	/*
++	 * some codecs might disregard the preambles (e.g. ffmpeg s302m), but
++	 * we implement them according to the specs anyway, because some other
++	 * codecs might rely on them.
++	 */
 +
-+	nbytes += vidtv_psi_table_header_write_into(h_args);
++	struct vidtv_s302m_ctx *ctx = e->ctx;
 +
-+	/* note that the field 'u16 programs' is not really part of the PAT */
++	bool start_was_x = ctx->last_start_preamble == PREAMBLE_X_F0 ||
++			   ctx->last_start_preamble == PREAMBLE_X_F1;
 +
-+	args.dest_buf           = buf;
-+	args.pid                = pat_pid;
-+	args.new_psi_section    = false;
-+	args.continuity_counter = continuity_counter;
-+	args.is_crc             = false;
-+	args.dest_buf_sz        = buf_sz;
++	bool start_was_z = ctx->last_start_preamble == PREAMBLE_Z_F0 ||
++			   ctx->last_start_preamble == PREAMBLE_Z_F1;
 +
-+	while (p) {
-+		/* copy the PAT programs */
-+		cpu_to_be16s(&p->service_id);
-+		cpu_to_be16s(&p->bitfield);
++	bool is_block_start = vidtv_s302m_is_block_start(e);
 +
-+		args.from = p;
-+		/* skip the pointer */
-+		args.len = sizeof(*p) -
-+			   sizeof(struct vidtv_psi_table_pat_program *);
-+		args.dest_offset = offset + nbytes;
++	/* bug somewhere: a block always starts with an A subframe */
++	WARN_ON(!ctx->is_subframe_a && is_block_start);
 +
-+		nbytes += vidtv_psi_ts_psi_write_into(args);
++	if (!ctx->is_subframe_a)
++		return (ctx->last_f) ? PREAMBLE_Y_F1 : PREAMBLE_Y_F0;
 +
-+		be16_to_cpus(&p->service_id);
-+		be16_to_cpus(&p->bitfield);
++	if (start_was_x && is_block_start) {
++		if (ctx->last_f) {
++			ctx->last_start_preamble = PREAMBLE_Z_F0;
++			return PREAMBLE_Z_F0;
++		}
 +
-+		p = p->next;
++		ctx->last_start_preamble = PREAMBLE_Z_F1;
++		return PREAMBLE_Z_F1;
 +	}
 +
-+	c_args.dest_buf           = buf;
-+	c_args.dest_offset        = offset + nbytes;
-+	c_args.pid                = pat_pid;
-+	c_args.continuity_counter = continuity_counter;
-+	c_args.dest_buf_sz        = buf_sz;
++	if (start_was_z && is_block_start) {
++		if (ctx->last_f) {
++			ctx->last_start_preamble = PREAMBLE_X_F0;
++			return PREAMBLE_X_F0;
++		}
 +
-+	nbytes += table_section_crc32_write_into(c_args);
++		ctx->last_start_preamble = PREAMBLE_X_F1;
++		return PREAMBLE_X_F1;
++	}
++
++	return PREAMBLE_X_F0;
++}
++
++static u32 vidtv_s302m_write_subframe(struct vidtv_encoder *e,
++				      struct vidtv_s302m_subframe_16 *f)
++{
++	u32 nbytes = 0;
++
++	nbytes += vidtv_memcpy(e->encoder_buf + e->encoder_buf_offset,
++			       f,
++			       sizeof(*f),
++			       e->encoder_buf_offset,
++			       VIDTV_S302M_BUF_SZ);
++
++	e->encoder_buf_offset += nbytes;
 +
 +	return nbytes;
 +}
 +
-+void
-+vidtv_psi_pat_table_destroy(struct vidtv_psi_table_pat *p)
++static void vidtv_s302m_write_h(struct vidtv_encoder *e, u32 p_sz)
 +{
-+	vidtv_psi_pat_program_destroy(p->program);
++	struct vidtv_smpte_s302m_es h = {0};
++	u32    nbytes                 = 0;
++
++	h.bits_per_sample        = S302M_BITS_PER_SAMPLE_16;
++	h.channel_identification = 0;
++	h.num_channels           = S302M_2CHANNELS;
++	h.audio_packet_size      = p_sz;
++
++	cpu_to_be32s(&h.bitfield);
++
++	nbytes += vidtv_memcpy(e->encoder_buf + e->encoder_buf_offset,
++			       &h,
++			       sizeof(h),
++			       e->encoder_buf_offset,
++			       e->encoder_buf_sz);
++
++	be32_to_cpus(&h.bitfield);
++
++	e->encoder_buf_offset += nbytes;
 +}
 +
-+struct vidtv_psi_table_pmt_stream*
-+vidtv_psi_pmt_stream_init(struct vidtv_psi_table_pmt_stream *head,
-+			  enum vidtv_psi_stream_types stream_type,
-+			  u16 es_pid)
++static void vidtv_s302m_write_frames(struct vidtv_encoder *e)
 +{
-+	struct vidtv_psi_table_pmt_stream *stream;
++	u32    nbytes                    = 0;
++	u32    nbytes_per_unit           = 0;
++	u32    preamble_bit_num          = 0;
++	const  u8 preamble_bit_count     = 4;
++	u32    au_sz                     = 0;
++	struct vidtv_s302m_ctx *ctx      = e->ctx;
++	struct vidtv_s302m_subframe_16 a = {0};
++	struct vidtv_s302m_subframe_16 b = {0};
++	u8     preamble_a                = 0;
++	u8     preamble_b                = 0;
++	u8     aux                       = 0;
++	s16    sample                    = 0;
++	bool   v                         = true;
++	bool   u                         = false;
++	bool   c;
++	bool   f;
 +
-+	stream = kzalloc(sizeof(*stream), GFP_KERNEL);
++	u32    i;
++	u32    j;
 +
-+	stream->type           = stream_type;
-+	stream->elementary_pid = es_pid;
-+	stream->reserved       = 0x07;
++	ctx->is_subframe_a = true;
 +
-+	stream->desc_length = vidtv_psi_desc_comp_len(stream->descriptor);
++	for (i = 0; i < e->nunits; ++i) {
++		/* stereo: each sample will generate two subframes */
++		au_sz = e->samples_per_unit[i] *
++			sizeof(struct vidtv_s302m_subframe_16) *
++			2;
 +
-+	stream->zero      = 0x0;
-+	stream->reserved2 = 0x0f;
++		vidtv_s302m_write_h(e, au_sz);
 +
-+	if (head) {
-+		while (head->next)
-+			head = head->next;
++		for (j = 0; j < e->samples_per_unit[i]; ++j) {
++			/* keep this in this order */
++			preamble_a = vidtv_s302m_get_preamble(e);
++			sample     = cpu_to_le16(vidtv_s302m_get_sample(e));
++			c          = vidtv_s302m_get_c_bit(e);
++			f          = vidtv_s302m_get_f_bit(e);
 +
-+		head->next = stream;
-+	}
++			a.preamble = vidtv_extract_bits(preamble_a,
++							preamble_bit_num % 8,
++							preamble_bit_count);
++			a.aux       = aux;
++			a.data_word = sample;
++			a.v         = v;
++			a.u         = u;
++			a.c         = c;
++			a.f         = f;
 +
-+	return stream;
-+}
++			vidtv_s302m_toggle_subframe(e);
 +
-+void vidtv_psi_pmt_stream_destroy(struct vidtv_psi_table_pmt_stream *s)
-+{
-+	struct vidtv_psi_table_pmt_stream *curr_stream = s;
-+	struct vidtv_psi_table_pmt_stream *tmp_stream  = NULL;
++			preamble_b = vidtv_s302m_get_preamble(e);
++			c          = vidtv_s302m_get_c_bit(e);
++			f          = vidtv_s302m_get_f_bit(e);
 +
-+	while (curr_stream) {
-+		tmp_stream  = curr_stream;
-+		curr_stream = curr_stream->next;
-+		kfree(tmp_stream);
-+	}
-+}
++			b.preamble = vidtv_extract_bits(preamble_b,
++							preamble_bit_num % 8,
++							preamble_bit_count);
++			b.aux       = aux;
++			b.data_word = sample;
++			b.v         = v;
++			b.u         = u;
++			b.c         = c;
++			b.f         = f;
 +
-+void vidtv_psi_pmt_stream_assign(struct vidtv_psi_table_pmt *pmt,
-+				 struct vidtv_psi_table_pmt_stream *s)
-+{
-+	/* This function transfers ownership of s to the table */
-+	struct vidtv_psi_table_pmt_stream *stream = s;
-+	struct vidtv_psi_desc *desc               = s->descriptor;
-+	struct vidtv_psi_table_pmt_stream *temp   = pmt->stream;
++			preamble_bit_num += preamble_bit_count;
 +
-+	while (stream)
-+		stream = stream->next;
++			nbytes_per_unit += vidtv_s302m_write_subframe(e, &a);
++			nbytes_per_unit += vidtv_s302m_write_subframe(e, &b);
 +
-+	while (desc)
-+		desc = desc->next;
++			nbytes += nbytes_per_unit;
 +
-+	pmt->stream = s;
-+	/* Recompute section length */
-+	vidtv_psi_pmt_table_comp_sec_len(pmt);
-+
-+	/* reassign if the new size is too big */
-+	if (pmt->header.section_length > MAX_SECTION_LEN)
-+		vidtv_psi_pmt_stream_assign(pmt, temp);
-+	else
-+		vidtv_psi_pmt_stream_destroy(temp);
-+}
-+
-+u16 vidtv_psi_pmt_get_pid(struct vidtv_psi_table_pmt *section,
-+			  struct vidtv_psi_table_pat *pat)
-+{
-+	struct vidtv_psi_table_pat_program *program = pat->program;
-+
-+	/*
-+	 * service_id is the same as program_number in the
-+	 * corresponding program_map_section
-+	 * see ETSI EN 300 468 v1.15.1 p. 24
-+	 */
-+	while (program) {
-+		if (program->service_id == section->header.id)
-+			return pat->program->pid;
-+
-+		program = program->next;
-+	}
-+
-+	return TS_LAST_VALID_PID + 1; /* not found */
-+}
-+
-+void vidtv_psi_pmt_table_init(struct vidtv_psi_table_pmt *pmt,
-+			      bool update_version_num,
-+			      u16 program_number,
-+			      u16 pcr_pid)
-+{
-+	static u8 pmt_version;
-+
-+	pmt->header.table_id = 0x2;
-+	pmt->header.syntax   = 0x1;
-+	pmt->header.zero     = 0x0;
-+	pmt->header.one      = 0x3;
-+
-+	pmt->header.id           = program_number;
-+	pmt->header.current_next = 0x1;
-+
-+	/* ETSI 300 468: indicates changes in the TS described by this table*/
-+	if (update_version_num)
-+		++pmt_version;
-+
-+	pmt->header.version = pmt_version;
-+
-+	pmt->header.one2         = 0x3;
-+	pmt->header.section_id   = 0;
-+	pmt->header.last_section = 0;
-+
-+	pmt->pcr_pid   = (pcr_pid) ? pcr_pid : 0x1fff;
-+	pmt->reserved2 = 0x03;
-+
-+	pmt->reserved3 = 0x0f;
-+	pmt->zero3     = 0x0;
-+
-+	pmt->desc_length = vidtv_psi_desc_comp_len(pmt->descriptor);
-+
-+	vidtv_psi_pmt_table_comp_sec_len(pmt);
-+}
-+
-+u32 vidtv_psi_pmt_write_into(char *buf,
-+			     u32 offset,
-+			     struct vidtv_psi_table_pmt *pmt,
-+			     u16 pid,
-+			     u32 buf_sz,
-+			     u8 *continuity_counter)
-+{
-+	/* the number of bytes written by this function */
-+	u32    nbytes                             = 0;
-+	struct vidtv_psi_desc *table_descriptor   = pmt->descriptor;
-+	struct vidtv_psi_table_pmt_stream *stream = pmt->stream;
-+	struct vidtv_psi_desc *stream_descriptor  = (stream) ?
-+						    pmt->stream->descriptor :
-+						    NULL;
-+
-+	struct header_write_args h_args = {0};
-+	struct psi_write_args args      = {0};
-+	struct desc_write_args d_args   = {0};
-+	struct crc32_write_args c_args  = {0};
-+
-+	vidtv_psi_pmt_table_comp_sec_len(pmt);
-+
-+	h_args.dest_buf           = buf;
-+	h_args.dest_offset        = offset;
-+	h_args.h                  = &pmt->header;
-+	h_args.pid                = pid;
-+	h_args.continuity_counter = continuity_counter;
-+	h_args.dest_buf_sz        = buf_sz;
-+
-+	nbytes += vidtv_psi_table_header_write_into(h_args);
-+
-+	/* write the two bitfields */
-+	cpu_to_be16s(&pmt->bitfield);
-+	cpu_to_be16s(&pmt->bitfield2);
-+
-+	args.dest_buf = buf;
-+	args.from     = pmt + sizeof(struct vidtv_psi_table_header);
-+	args.len      = sizeof_field(struct vidtv_psi_table_pmt, bitfield) +
-+			sizeof_field(struct vidtv_psi_table_pmt, bitfield2);
-+	args.dest_offset        = offset + nbytes;
-+	args.pid                = pid;
-+	args.new_psi_section    = false;
-+	args.continuity_counter = continuity_counter;
-+	args.is_crc             = false;
-+	args.dest_buf_sz        = buf_sz;
-+
-+	nbytes += vidtv_psi_ts_psi_write_into(args);
-+
-+	be16_to_cpus(&pmt->bitfield);
-+	be16_to_cpus(&pmt->bitfield2);
-+
-+	while (table_descriptor) {
-+		/* write the descriptors, if any */
-+		d_args.dest_buf           = buf;
-+		d_args.dest_offset        = offset + nbytes;
-+		d_args.desc               = table_descriptor;
-+		d_args.pid                = pid;
-+		d_args.continuity_counter = continuity_counter;
-+		d_args.dest_buf_sz        = buf_sz;
-+
-+		vidtv_psi_desc_to_be(d_args.desc);
-+		nbytes += vidtv_psi_desc_write_into(d_args);
-+		vidtv_psi_desc_to_cpu(d_args.desc);
-+
-+		table_descriptor = table_descriptor->next;
-+	}
-+
-+	while (stream) {
-+		/* write the streams, if any */
-+		args.from = stream;
-+		args.len  = sizeof_field(struct vidtv_psi_table_pmt_stream,
-+					 type) +
-+			    sizeof_field(struct vidtv_psi_table_pmt_stream,
-+					 bitfield) +
-+			    sizeof_field(struct vidtv_psi_table_pmt_stream,
-+					 bitfield2);
-+		args.dest_offset = offset + nbytes;
-+
-+		cpu_to_be16s(&stream->bitfield);
-+		cpu_to_be16s(&stream->bitfield2);
-+
-+		nbytes += vidtv_psi_ts_psi_write_into(args);
-+
-+		be16_to_cpus(&stream->bitfield);
-+		be16_to_cpus(&stream->bitfield2);
-+
-+		while (stream_descriptor) {
-+			/* write the stream descriptors, if any */
-+			d_args.desc        = stream_descriptor;
-+			d_args.dest_offset = offset + nbytes;
-+
-+			vidtv_psi_desc_to_be(d_args.desc);
-+
-+			nbytes += vidtv_psi_desc_write_into(d_args);
-+
-+			vidtv_psi_desc_to_cpu(d_args.desc);
-+
-+			stream_descriptor = stream_descriptor->next;
++			vidtv_s302m_toggle_subframe(e);
 +		}
 +
-+		stream = stream->next;
-+	}
++		e->nbytes[i] = nbytes;
 +
-+	c_args.dest_buf           = buf;
-+	c_args.dest_offset        = offset + nbytes;
-+	c_args.pid                = pid;
-+	c_args.continuity_counter = continuity_counter;
-+	c_args.dest_buf_sz        = buf_sz;
++		/* did we write more bytes than we initially computed? */
++		WARN_ON(au_sz != nbytes_per_unit);
 +
-+	nbytes += table_section_crc32_write_into(c_args);
-+
-+	return nbytes;
-+}
-+
-+void vidtv_psi_pmt_table_destroy(struct vidtv_psi_table_pmt *pmt)
-+{
-+	struct vidtv_psi_desc *curr_desc = pmt->descriptor;
-+	struct vidtv_psi_desc *tmp_desc  = NULL;
-+
-+	while (curr_desc) {
-+		tmp_desc  = curr_desc;
-+		curr_desc = curr_desc->next;
-+		vidtv_psi_desc_destroy(tmp_desc);
-+		kfree(tmp_desc);
-+	}
-+
-+	vidtv_psi_pmt_stream_destroy(pmt->stream);
-+}
-+
-+void vidtv_psi_sdt_table_init(struct vidtv_psi_table_sdt *sdt,
-+			      bool update_version_num,
-+			      u16 transport_stream_id)
-+{
-+	static u8 sdt_version;
-+
-+	sdt->header.table_id = 0x42;
-+
-+	sdt->header.one  = 0x3;
-+	sdt->header.zero = 0x1;
-+	/*
-+	 * The PAT, PMT, and CAT all set this to 0.
-+	 * Other tables set this to 1.
-+	 */
-+	sdt->header.syntax = 0x1;
-+
-+	/*
-+	 * This is a 16-bit field which serves as a label for identification
-+	 * of the TS, about which the SDT informs, from any other multiplex
-+	 * within the delivery system.
-+	 */
-+	sdt->header.id           = transport_stream_id;
-+	sdt->header.current_next = 0x1;
-+
-+	/* ETSI 300 468: indicates changes in the TS described by this table*/
-+	if (update_version_num)
-+		++sdt_version;
-+
-+	sdt->header.version = sdt_version;
-+
-+	sdt->header.one2         = 0x3;
-+	sdt->header.section_id   = 0;
-+	sdt->header.last_section = 0;
-+
-+	sdt->network_id = transport_stream_id;
-+	sdt->reserved   = 0xff;
-+
-+	vidtv_psi_sdt_table_comp_sec_len(sdt);
-+}
-+
-+u32 vidtv_psi_sdt_write_into(char *buf,
-+			     u32 offset,
-+			     struct vidtv_psi_table_sdt *sdt,
-+			     u32 buf_sz,
-+			     u8 *continuity_counter)
-+{
-+	u32 nbytes  = 0;              /* the number of bytes written */
-+	u16 sdt_pid = VIDTV_SDT_PID;  /* see ETSI EN 300 468 v1.15.1 p. 11 */
-+
-+	struct vidtv_psi_table_sdt_service *service = sdt->service;
-+	struct vidtv_psi_desc *service_desc = (sdt->service) ?
-+					      sdt->service->descriptor :
-+					      NULL;
-+
-+	struct header_write_args h_args = {0};
-+	struct psi_write_args args      = {0};
-+	struct desc_write_args d_args   = {0};
-+	struct crc32_write_args c_args  = {0};
-+
-+	vidtv_psi_sdt_table_comp_sec_len(sdt);
-+
-+	h_args.dest_buf           = buf;
-+	h_args.dest_offset        = offset;
-+	h_args.h                  = &sdt->header;
-+	h_args.pid                = sdt_pid;
-+	h_args.continuity_counter = continuity_counter;
-+	h_args.dest_buf_sz        = buf_sz;
-+
-+	nbytes += vidtv_psi_table_header_write_into(h_args);
-+
-+	args.dest_buf = buf;
-+	args.from     = sdt + sizeof(struct vidtv_psi_table_header);
-+
-+	args.len      = sizeof_field(struct vidtv_psi_table_sdt, network_id) +
-+			sizeof_field(struct vidtv_psi_table_sdt, reserved);
-+
-+	args.dest_offset        = offset + nbytes;
-+	args.pid                = sdt_pid;
-+	args.new_psi_section    = false;
-+	args.continuity_counter = continuity_counter;
-+	args.is_crc             = false;
-+	args.dest_buf_sz        = buf_sz;
-+
-+	/* copy u16 network_id + u8 reserved)*/
-+	cpu_to_be16s(&sdt->network_id);
-+
-+	nbytes += vidtv_psi_ts_psi_write_into(args);
-+
-+	be16_to_cpus(&sdt->network_id);
-+
-+	while (service) {
-+		/* copy the services, if any */
-+		args.from = service;
-+		/* skip both pointers at the end */
-+		args.len = sizeof(struct vidtv_psi_table_sdt_service) -
-+			   sizeof(struct vidtv_psi_desc *) -
-+			   sizeof(struct vidtv_psi_table_sdt_service *);
-+		args.dest_offset = offset + nbytes;
-+
-+		cpu_to_be16s(&service->service_id);
-+		cpu_to_be16s(&service->bitfield);
-+
-+		nbytes += vidtv_psi_ts_psi_write_into(args);
-+
-+		be16_to_cpus(&service->service_id);
-+		be16_to_cpus(&service->bitfield);
-+
-+		while (service_desc) {
-+			/* copy the service descriptors, if any */
-+			d_args.dest_buf           = buf;
-+			d_args.dest_offset        = offset + nbytes;
-+			d_args.desc               = service_desc;
-+			d_args.pid                = sdt_pid;
-+			d_args.continuity_counter = continuity_counter;
-+			d_args.dest_buf_sz        = buf_sz;
-+
-+			vidtv_psi_desc_to_be(d_args.desc);
-+
-+			nbytes += vidtv_psi_desc_write_into(d_args);
-+
-+			vidtv_psi_desc_to_cpu(d_args.desc);
-+
-+			service_desc = service_desc->next;
-+		}
-+
-+		service = service->next;
-+	}
-+
-+	c_args.dest_buf           = buf;
-+	c_args.dest_offset        = offset + nbytes;
-+	c_args.pid                = sdt_pid;
-+	c_args.continuity_counter = continuity_counter;
-+	c_args.dest_buf_sz        = buf_sz;
-+
-+	nbytes += table_section_crc32_write_into(c_args);
-+
-+	return nbytes;
-+}
-+
-+void vidtv_psi_sdt_table_destroy(struct vidtv_psi_table_sdt *sdt)
-+{
-+	struct vidtv_psi_table_sdt_service *curr_service = sdt->service;
-+	struct vidtv_psi_table_sdt_service *tmp_service  = NULL;
-+	struct vidtv_psi_desc *curr_desc = (sdt->service) ?
-+					   sdt->service->descriptor : NULL;
-+	struct vidtv_psi_desc *tmp_desc = NULL;
-+
-+	while (curr_service) {
-+		curr_desc = curr_service->descriptor;
-+
-+		while (curr_desc) {
-+			/* clear all descriptors for the service */
-+			tmp_desc  = curr_desc;
-+			curr_desc = curr_desc->next;
-+			vidtv_psi_desc_destroy(tmp_desc);
-+			kfree(tmp_desc);
-+		}
-+
-+		/* then clear the current service */
-+		tmp_service  = curr_service;
-+		curr_service = curr_service->next;
-+		kfree(tmp_service);
++		e->offsets[i] = nbytes_per_unit;
++		nbytes_per_unit = 0;
 +	}
 +}
 +
-+struct vidtv_psi_table_sdt_service
-+*vidtv_psi_sdt_service_init(struct vidtv_psi_table_sdt_service *head,
-+			    u16 service_id)
++static void *vidtv_s302m_encode(struct vidtv_encoder *e, u64 elapsed_time)
 +{
 +	/*
-+	 * if 'head' is attached to a table, caller should recompute
-+	 * the section length afterwards at some point
++	 * According to SMPTE 302M, an audio access unit is specified as those
++	 * AES3 words that are associated with a corresponding video frame.
++	 * Therefore we should write one AAU for every VAU in the corresponding
++	 * video encoder ('sync'), using the same values for PTS as used by the
++	 * video encoder.
++	 *
++	 * I assume that it is also possible to send audio without any
++	 * associated video, as in a radio-like service. If this is the case,
++	 * we are sending only _one_ AAU with enough audio data for
++	 * 'elapsed_time' instead, computing the value for PTS manually.
 +	 */
-+	struct vidtv_psi_table_sdt_service *service;
 +
-+	service = kzalloc(sizeof(*service), GFP_KERNEL);
++	vidtv_s302m_compute_nunits(e);
 +
-+	/*
-+	 * ETSI 300 468: this is a 16bit field which serves as a label to
-+	 * identify this service from any other service within the TS.
-+	 * The service id is the same as the program number in the
-+	 * corresponding program_map_section
-+	 */
-+	service->service_id            = service_id;
-+	service->EIT_schedule          = 0x0;         /* TODO */
-+	service->EIT_present_following = 0x0;         /* TODO */
-+	service->reserved              = 0x3f;        /* all bits on */
-+	service->free_CA_mode          = 0x0;         /* not scrambled */
-+	service->running_status        = RUNNING;
-+
-+	if (head) {
-+		while (head->next)
-+			head = head->next;
-+
-+		head->next = service;
++	if (e->sync && e->sync->video) {
++		vidtv_s302m_compute_sample_count_v(e);
++		vidtv_s302m_compute_pts_v(e);
++	} else {
++		vidtv_s302m_compute_sample_count(e, elapsed_time);
++		vidtv_s302m_compute_pts(e);
 +	}
 +
-+	return service;
++	vidtv_s302m_write_frames(e);
++
++	return e->encoder_buf;
 +}
 +
-+void
-+vidtv_psi_sdt_service_destroy(struct vidtv_psi_table_sdt_service *service)
++static u8 vidtv_s302m_clear(struct vidtv_encoder *e)
 +{
-+	struct vidtv_psi_table_sdt_service *curr = service;
-+	struct vidtv_psi_table_sdt_service *tmp  = NULL;
++	u8 ret = e->nunits;
 +
-+	while (curr) {
-+		tmp  = curr;
-+		curr = curr->next;
-+		kfree(tmp);
++	e->nunits = 0;
++	memset(e->samples_per_unit, 0, e->access_unit_capacity);
++	memset(e->nbytes, 0, e->access_unit_capacity);
++	memset(e->offsets, 0, e->access_unit_capacity);
++	memset(e->pts, 0, e->access_unit_capacity);
++	memset(e->dts, 0, e->access_unit_capacity);
++
++	return ret;
++}
++
++struct vidtv_encoder
++*vidtv_s302m_encoder_init(struct vidtv_s302m_encoder_init_args args)
++{
++	struct vidtv_encoder *e = kzalloc(sizeof(e), GFP_KERNEL);
++	u32    priv_sz          = sizeof(struct vidtv_s302m_ctx);
++
++	if (args.sync)
++		args.access_unit_capacity = args.sync->access_unit_capacity;
++
++	e->id = S302M;
++
++	e->name = kzalloc(strlen(args.name), GFP_KERNEL);
++	strncpy(e->name, args.name, strlen(e->name));
++
++	e->encoder_buf        = vzalloc(VIDTV_S302M_BUF_SZ);
++	e->encoder_buf_sz     = VIDTV_S302M_BUF_SZ;
++	e->encoder_buf_offset = 0;
++
++	e->sample_count          = 0;
++	e->previous_sample_count = 0;
++	e->nunits                = 0;
++
++	e->samples_per_unit = kcalloc(args.access_unit_capacity,
++				      sizeof(u32),
++				      GFP_KERNEL);
++
++	e->pts = kcalloc(args.access_unit_capacity, sizeof(u64), GFP_KERNEL);
++	e->dts = kcalloc(args.access_unit_capacity, sizeof(u64), GFP_KERNEL);
++
++	e->nbytes  = kcalloc(args.access_unit_capacity,
++			     sizeof(u32),
++			     GFP_KERNEL);
++
++	e->offsets = kcalloc(args.access_unit_capacity,
++			     sizeof(u32),
++			     GFP_KERNEL);
++
++	e->src_buf        = (args.src_buf) ? args.src_buf : &s302m_sin_lut;
++	e->src_buf_sz     = (args.src_buf) ? args.src_buf_sz : S302M_SIN_LUT_SZ;
++	e->src_buf_offset = 0;
++
++	e->video = false;
++	e->ctx   = kzalloc(priv_sz, GFP_KERNEL);
++
++	e->encode = vidtv_s302m_encode;
++	e->clear  = vidtv_s302m_clear;
++
++	e->es_pid = args.es_pid;
++
++	e->sync                 = args.sync;
++	e->sampling_rate_hz     = S302M_SAMPLING_RATE_HZ;
++	e->access_unit_capacity = args.access_unit_capacity;
++
++	/* we will wrap around 'src' if this is NULL */
++	e->last_sample_cb = args.last_sample_cb;
++
++	e->destroy = vidtv_s302m_encoder_destroy;
++
++	if (args.head) {
++		while (args.head->next)
++			args.head = args.head->next;
++
++		args.head->next = e;
 +	}
++
++	e->next = NULL;
++
++	return e;
 +}
 +
-+void
-+vidtv_psi_sdt_service_assign(struct vidtv_psi_table_sdt *sdt,
-+			     struct vidtv_psi_table_sdt_service *service)
++void vidtv_s302m_encoder_destroy(struct vidtv_encoder *e)
 +{
-+	struct vidtv_psi_table_sdt_service *temp = sdt->service;
-+
-+	sdt->service = service;
-+
-+	/* recompute section length */
-+	vidtv_psi_sdt_table_comp_sec_len(sdt);
-+
-+	/* reassign if the new size is too big */
-+	if (sdt->header.section_length > MAX_SECTION_LEN)
-+		vidtv_psi_sdt_service_assign(sdt, temp);
-+	else
-+		vidtv_psi_sdt_service_destroy(temp);
++	WARN_ON(e->id != S302M);
++	kfree(e->name);
++	kfree(e->encoder_buf);
++	kfree(e->samples_per_unit);
++	kfree(e->pts);
++	kfree(e->dts);
++	kfree(e->nbytes);
++	kfree(e->offsets);
++	kfree(e->ctx);
++	kfree(e);
 +}
-+
-+void
-+vidtv_psi_pmt_create_sec_for_each_pat_entry(struct vidtv_psi_table_pat *pat,
-+					    struct vidtv_psi_table_pmt sec[])
-+
-+{
-+	/*
-+	 * PMTs contain information about programs. For each program,
-+	 * there is one PMT section. This function will create a section
-+	 * for each program found in the PAT
-+	 */
-+	struct vidtv_psi_table_pat_program *program = pat->program;
-+	u32    i                                    = 0;
-+
-+	while (program) {
-+		vidtv_psi_pmt_table_init(&sec[i],
-+					 false,
-+					 sec[i].header.id,
-+					 0);
-+
-+		++i;
-+		program = program->next;
-+	}
-+}
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.h b/drivers/media/test-drivers/vidtv/vidtv_psi.h
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.h b/drivers/media/test-drivers/vidtv/vidtv_s302m.h
 new file mode 100644
-index 0000000000000..c5c8c143f0e4a
+index 0000000000000..bfb8b0c80eddf
 --- /dev/null
-+++ b/drivers/media/test-drivers/vidtv/vidtv_psi.h
-@@ -0,0 +1,357 @@
++++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.h
+@@ -0,0 +1,99 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * This file contains the logic to work with MPEG Program-Specific Information.
-+ * These are defined both in ISO/IEC 13818-1 (systems) and ETSI EN 300 468.
-+ * PSI is carried in the form of table structures, and although each table might
-+ * technically be broken into one or more sections, we do not do this here,
-+ * hence 'table' and 'section' are interchangeable for us.
++ * Vidtv serves as a reference DVB driver and helps validate the existing APIs
++ * in the media subsystem. It can also aid developers working on userspace
++ * applications.
 + *
-+ * This code currently supports three tables: PAT, PMT and SDT. These are the
-+ * bare minimum to get userspace to recognize our MPEG transport stream. It can
-+ * be extended to support more PSI tables in the future.
++ * This file contains the code for an AES3 (also known as AES/EBU) encoder.
++ * It is based on EBU Tech 3250 and SMPTE 302M technical documents.
 + *
-+ * A note on endianness: MPEG layout is big-endian, therefore:
-+ * - All fields spanning more than a byte must undergo 'cpu_to_beXX()' before
-+ * serialization. These convertions are done in the *_write_into() functions.
++ * This encoder currently supports 16bit AES3 subframes using 16bit signed
++ * integers.
 + *
-+ * - All byte sized bitfields must have their ordering reversed if
-+ *  __LITTLE_ENDIAN_BITFIELD is defined.
++ * Note: AU stands for Access Unit, and AAU stands for Audio Access Unit
 + *
-+ * Written by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
++ * Written by Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 + */
 +
-+#ifndef VIDTV_PSI_H
-+#define VIDTV_PSI_H
++#ifndef VIDTV_S302M_H
++#define VIDTV_S302M_H
 +
 +#include <linux/types.h>
 +#include <asm/byteorder.h>
++#include "vidtv_encoder.h"
 +
-+/*
-+ * all section lengths start immediately after the 'section_length' field
-+ * see ISO/IEC 13818-1 : 2000 and ETSI EN 300 468 V 1.10.1 for
-+ * reference
-+ */
-+#define PAT_LEN_UNTIL_LAST_SECTION_NUMBER 5
-+#define PMT_LEN_UNTIL_PROGRAM_INFO_LENGTH 9
-+#define SDT_LEN_UNTIL_RESERVED_FOR_FUTURE_USE 8
-+#define MAX_SECTION_LEN 1021
-+#define VIDTV_PAT_PID 0
-+#define VIDTV_SDT_PID 0x0011
++/* see SMPTE 302M 2007 clause 7.3 */
++#define VIDTV_S302M_BUF_SZ 65024
 +
-+enum vidtv_psi_descriptors {
-+	REGISTRATION_DESCRIPTOR	= 0x05,
-+	SERVICE_DESCRIPTOR = 0x48,
++/* see ETSI TS 102 154 v.1.2.1 clause 7.3.5 */
++#define VIDTV_S302M_FORMAT_IDENTIFIER 0x42535344
++
++struct vidtv_s302m_ctx {
++	struct vidtv_encoder *enc;
++
++	/* whether the F bit was set for the last sub-frame */
++	bool last_f;
++	/* either X or Z */
++	u8 last_start_preamble;
++	/* are we writing an A subframe now? */
++	bool is_subframe_a;
++	/* we send a bit per subframe */
++	u8 current_c_bit;
 +};
 +
-+enum vidtv_psi_stream_types {
-+	/* see ISO/IEC 13818-1 2000 p. 48 */
-+	STREAM_PRIVATE_DATA = 0x06,
-+};
-+
-+struct vidtv_psi_desc {
-+	u8 type;
-+	u8 length;
-+	struct vidtv_psi_desc *next;
-+	u8 data[];
++struct vidtv_smpte_s302m_es {
++	union {
++		u32 bitfield;
++		struct {
++			u16 audio_packet_size:16;
++			u16 num_channels:2;
++			u16 channel_identification:8;
++			u16 bits_per_sample:2; /* 0x0 for 16bits */
++			u16 zero:4;
++		} __packed;
++	} __packed;
 +} __packed;
 +
-+struct vidtv_psi_desc_service {
-+	u8 type;
-+	u8 length;
-+	struct vidtv_psi_desc *next;
++struct vidtv_s302m_subframe_16 {
++#if defined(__LITTLE_ENDIAN_BITFIELD)
++	u8 f:1;
++	u8 c:1;
++	u8 u:1;
++	u8 v:1;
++	u16 data_word:16; /* little endian, use cpu_to_le before writing */
++	u8 zero:4;
++	u8 aux:4;
++	u8 preamble:4;
++#elif defined(__BIG_ENDIAN_BITFIELD)
++	u8 preamble:4;
++	u8 aux:4;
++	u8 zero:4;
++	u16 data_word:16; /* little endian */
++	u8 v:1;
++	u8 u:1;
++	u8 c:1;
++	u8 f:1;
++#else
++#error  "Please fix <asm/byteorder.h>"
++#endif
++}__packed;
 +
-+	u8 service_type;
++struct vidtv_s302m_encoder_init_args {
 +	char *name;
-+	char *name_emph;
-+	char *provider;
-+	char *provider_emph;
-+} __packed;
++	void *src_buf;
++	u32 src_buf_sz;
++	u16 es_pid;
++	struct vidtv_encoder *sync;
++	u8 access_unit_capacity;
++	void (*last_sample_cb)(u32 sample_no);
 +
-+struct vidtv_psi_desc_registration {
-+	u8 type;
-+	u8 length;
-+	struct vidtv_psi_desc *next;
-+
-+	/*
-+	 * The format_identifier is a 32-bit value obtained from a Registration
-+	 * Authority as designated by ISO/IEC JTC 1/SC 29.
-+	 */
-+	u32 format_identifier;
-+	/*
-+	 * The meaning of additional_identification_info bytes, if any, are
-+	 * defined by the assignee of that format_identifier, and once defined
-+	 * they shall not change.
-+	 */
-+	u8 additional_identification_info[];
-+} __packed;
-+
-+struct vidtv_psi_table_header {
-+	u8  table_id;
-+	union {
-+		u16 bitfield;
-+		struct {
-+			u8  syntax:1;
-+			u8  zero:1;
-+			u8  one:2;
-+			u16 section_length:12;
-+		} __packed;
-+	} __packed;
-+
-+	u16 id;			/* TS ID */
-+#if defined(__LITTLE_ENDIAN_BITFIELD)
-+	u8  current_next:1;
-+	u8  version:5;
-+	u8  one2:2;
-+#elif defined(__BIG_ENDIAN_BITFIELD)
-+	u8  one2:2;
-+	u8  version:5;
-+	u8  current_next:1;
-+#else
-+#error  "Please fix <asm/byteorder.h>"
-+#endif
-+	u8  section_id;		/* section_number */
-+	u8  last_section;		/* last_section_number */
-+} __packed;
-+
-+struct vidtv_psi_table_pat_program {
-+	u16 service_id;
-+	union {
-+		u16 bitfield;
-+		struct {
-+			u8  reserved:3;
-+			u16 pid:13;
-+		} __packed;
-+	} __packed;
-+	struct vidtv_psi_table_pat_program *next;
-+} __packed;
-+
-+struct vidtv_psi_table_pat {
-+	struct vidtv_psi_table_header header;
-+	u16 programs;
-+	struct vidtv_psi_table_pat_program *program;
-+} __packed;
-+
-+struct vidtv_psi_table_sdt_service {
-+	u16 service_id;
-+#if defined(__LITTLE_ENDIAN_BITFIELD)
-+	u8 EIT_present_following:1;
-+	u8 EIT_schedule:1;
-+	u8 reserved:6;
-+#elif defined(__BIG_ENDIAN_BITFIELD)
-+	u8 reserved:6;
-+	u8 EIT_schedule:1;
-+	u8 EIT_present_following:1;
-+#else
-+#error  "Please fix <asm/byteorder.h>"
-+#endif
-+	union {
-+		u16 bitfield;
-+		struct {
-+			u16 running_status:3;
-+			u16 free_CA_mode:1;
-+			u16 desc_length:12;
-+		} __packed;
-+	} __packed;
-+	struct vidtv_psi_desc *descriptor;
-+	struct vidtv_psi_table_sdt_service *next;
-+} __packed;
-+
-+struct vidtv_psi_table_sdt {
-+	struct vidtv_psi_table_header header;
-+	u16 network_id; /* original_network_id */
-+	u8  reserved;
-+	struct vidtv_psi_table_sdt_service *service;
-+} __packed;
-+
-+enum service_running_status {
-+	RUNNING,
++	/* optionally chain to this encoder */
++	struct vidtv_encoder *head;
 +};
 +
-+enum service_type {
-+	/* see ETSI EN 300 468 v1.15.1 p. 77 */
-+	DIGITAL_TELEVISION_SERVICE = 0x1,
-+};
++struct vidtv_encoder
++*vidtv_s302m_encoder_init(struct vidtv_s302m_encoder_init_args args);
 +
-+struct vidtv_psi_table_pmt_stream {
-+	u8 type;
-+	union {
-+		u16 bitfield;
-+		struct {
-+			u16 reserved:3;
-+			u16 elementary_pid:13;
-+		} __packed;
-+	} __packed;
-+	union {
-+		u16 bitfield2;
-+		struct {
-+			u16 reserved2:4;
-+			u16 zero:2;
-+			u16 desc_length:10;
-+		} __packed;
-+	} __packed;
-+	struct vidtv_psi_desc *descriptor;
-+	struct vidtv_psi_table_pmt_stream *next;
-+} __packed;
++void vidtv_s302m_encoder_destroy(struct vidtv_encoder *encoder);
 +
-+struct vidtv_psi_table_pmt {
-+	struct vidtv_psi_table_header header;
-+	union {
-+		u16 bitfield;
-+		struct {
-+			u16 reserved2:3;
-+			u16 pcr_pid:13;
-+		} __packed;
-+	} __packed;
-+
-+	union {
-+		u16 bitfield2;
-+		struct {
-+			u16 reserved3:4;
-+			u16 zero3:2;
-+			u16 desc_length:10; /* program_info_length */
-+		} __packed;
-+	} __packed;
-+	struct vidtv_psi_desc *descriptor;
-+	struct vidtv_psi_table_pmt_stream *stream;
-+} __packed;
-+
-+struct psi_write_args {
-+	void *dest_buf; /* the buffer to write into */
-+	void *from;
-+	size_t len; /* how much to write */
-+	u32 dest_offset; /* where to start writing in the buffer */
-+	u16 pid; /* TS packet ID */
-+	bool new_psi_section; /* set when starting a table section */
-+	u8 *continuity_counter; /* TS: incremented on every new packet */
-+	bool is_crc; /* set when writing the CRC at the end */
-+	u32 dest_buf_sz; /* protect against overflow if not zero */
-+};
-+
-+struct desc_write_args {
-+	void *dest_buf;
-+	u32 dest_offset;
-+	struct vidtv_psi_desc *desc;
-+	u16 pid;
-+	u8 *continuity_counter;
-+	u32 dest_buf_sz;
-+};
-+
-+struct crc32_write_args {
-+	void *dest_buf;
-+	u32 dest_offset;
-+	u16 pid;
-+	u8 *continuity_counter;
-+	u32 dest_buf_sz;
-+};
-+
-+struct header_write_args {
-+	void *dest_buf;
-+	u32 dest_offset;
-+	struct vidtv_psi_table_header *h;
-+	u16 pid;
-+	u8 *continuity_counter;
-+	u32 dest_buf_sz;
-+};
-+
-+struct vidtv_psi_desc *vidtv_psi_desc_init(struct vidtv_psi_desc *head,
-+					   u8 type,
-+					   u8 length);
-+
-+void vidtv_psi_pat_table_init(struct vidtv_psi_table_pat *pat,
-+			      bool update_version_num,
-+			      u16 transport_stream_id);
-+
-+struct vidtv_psi_table_pat_program*
-+vidtv_psi_pat_program_init(struct vidtv_psi_table_pat_program *head,
-+			   u16 service_id,
-+			   u16 pid);
-+
-+struct vidtv_psi_table_pmt_stream*
-+vidtv_psi_pmt_stream_init(struct vidtv_psi_table_pmt_stream *head,
-+			  enum vidtv_psi_stream_types stream_type,
-+			  u16 es_pid);
-+
-+void vidtv_psi_pmt_table_init(struct vidtv_psi_table_pmt *pmt,
-+			      bool update_version_num,
-+			      u16 program_number,
-+			      u16 pcr_pid);
-+
-+void
-+vidtv_psi_sdt_table_init(struct vidtv_psi_table_sdt *sdt,
-+			 bool update_version_num,
-+			 u16 transport_stream_id);
-+
-+struct vidtv_psi_table_sdt_service*
-+vidtv_psi_sdt_service_init(struct vidtv_psi_table_sdt_service *head,
-+			   u16 service_id);
-+
-+void
-+vidtv_psi_desc_destroy(struct vidtv_psi_desc *desc);
-+
-+void
-+vidtv_psi_pat_program_destroy(struct vidtv_psi_table_pat_program *p);
-+
-+void
-+vidtv_psi_pat_table_destroy(struct vidtv_psi_table_pat *p);
-+
-+void
-+vidtv_psi_pmt_stream_destroy(struct vidtv_psi_table_pmt_stream *s);
-+
-+void
-+vidtv_psi_pmt_table_destroy(struct vidtv_psi_table_pmt *pmt);
-+
-+void
-+vidtv_psi_sdt_table_destroy(struct vidtv_psi_table_sdt *sdt);
-+
-+void
-+vidtv_psi_sdt_service_destroy(struct vidtv_psi_table_sdt_service *service);
-+
-+void
-+vidtv_psi_desc_destroy(struct vidtv_psi_desc *desc);
-+
-+void
-+vidtv_psi_pat_program_destroy(struct vidtv_psi_table_pat_program *p);
-+
-+void
-+vidtv_psi_sdt_service_assign(struct vidtv_psi_table_sdt *sdt,
-+			     struct vidtv_psi_table_sdt_service *service);
-+
-+void vidtv_psi_desc_assign(struct vidtv_psi_desc **to,
-+			   struct vidtv_psi_desc *desc);
-+
-+void vidtv_psi_pat_program_assign(struct vidtv_psi_table_pat *pat,
-+				  struct vidtv_psi_table_pat_program *p);
-+
-+void vidtv_psi_pmt_stream_assign(struct vidtv_psi_table_pmt *pmt,
-+				 struct vidtv_psi_table_pmt_stream *s);
-+void
-+vidtv_psi_pmt_create_sec_for_each_pat_entry(struct vidtv_psi_table_pat *pat,
-+					    struct vidtv_psi_table_pmt *sec);
-+
-+u16 vidtv_psi_pmt_get_pid(struct vidtv_psi_table_pmt *section,
-+			  struct vidtv_psi_table_pat *pat);
-+
-+void vidtv_psi_pat_table_comp_sec_len(struct vidtv_psi_table_pat *pat);
-+void vidtv_psi_pmt_table_comp_sec_len(struct vidtv_psi_table_pmt *pmt);
-+void vidtv_psi_sdt_table_comp_sec_len(struct vidtv_psi_table_sdt *sdt);
-+
-+u32 vidtv_psi_pat_write_into(char *buf,
-+			     u32 offset,
-+			     struct vidtv_psi_table_pat *pat,
-+			     u32 buf_sz,
-+			     u8 *continuity_counter);
-+
-+u32 vidtv_psi_sdt_write_into(char *buf,
-+			     u32 offset,
-+			     struct vidtv_psi_table_sdt *sdt,
-+			     u32 buf_sz,
-+			     u8 *continuity_counter);
-+
-+u32 vidtv_psi_pmt_write_into(char *buf,
-+			     u32 offset,
-+			     struct vidtv_psi_table_pmt *pmt,
-+			     u16 pid,
-+			     u32 buf_sz,
-+			     u8 *continuity_counter);
-+
-+#endif // VIDTV_PSI_H
++#endif /* VIDTV_S302M_H */
 -- 
 2.26.2
 
