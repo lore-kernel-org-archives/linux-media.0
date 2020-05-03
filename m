@@ -2,181 +2,168 @@ Return-Path: <SRS0=4hbI=6R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D493C28CBC
-	for <linux-media@archiver.kernel.org>; Sun,  3 May 2020 03:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24A7BC47256
+	for <linux-media@archiver.kernel.org>; Sun,  3 May 2020 07:06:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CF6820752
-	for <linux-media@archiver.kernel.org>; Sun,  3 May 2020 03:37:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="ak8mv3sm"
+	by mail.kernel.org (Postfix) with ESMTP id 04B6D2075B
+	for <linux-media@archiver.kernel.org>; Sun,  3 May 2020 07:06:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588489607;
+	bh=/TuUmS/lUQz6LYPGZt4r8qNTCPIMydP+HbiwVJRqEwU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=OK1NMSDlLS5LinrG1dfxVLU3LY/Tlq618fkBcPQ0BKKE9VgGat9RkzcDmxhrtYBza
+	 iyp/9A4EGuL0ikRCEraesIw10AlRrFdPuTHr+88pYYnUWxZgJSl7Us+Nh8535L+0cN
+	 6dpZ0bSQpgittiAWyRrrKvcAAfz6IM+uG8BofiEw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726777AbgECDhK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 2 May 2020 23:37:10 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:44807 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726780AbgECDhK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 2 May 2020 23:37:10 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id V5RBjRqP9MYMvV5RDjBuLJ; Sun, 03 May 2020 05:37:07 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1588477027; bh=Xrhqs8gz+cxR4/b8d+IiS5PkoSFmx8aRoWTDLRuolhQ=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=ak8mv3smeKmsSj2pRRmGuKI4Gj6RRmipJpJqTA1V+ey21Sk1Ijza9ribWNfvDOioA
-         8hqTu4r+k32ZjzHAFixhelUKf5YTxyY35rvLWjMiI76uHQjsEjt03bZmZ0qbikOyN3
-         H4XshpLvPGjRsX8Fb2qXx3HdxSmMQTTTZgb0jghExEItQDjrAXwdEDRIlUMhbNl8K+
-         2SjjxZYxMsR0hbNFGOEhxEijP7CwpH6nhmNyNFxMNXwN4Poc7KjQeJdz0xpjI/Oaxb
-         cmk4NJdiF/mDksNvf8nfV6UGRYxWMgzr3M3vsul5TuAZ9Qucq3yXdClY1MydZ0Kvw/
-         I9ycWa74++kzQ==
-Message-ID: <7448e4653139c9f519bfb234e7cdcd8e@smtp-cloud8.xs4all.net>
-Date:   Sun, 03 May 2020 05:37:05 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfKZxEEH33Tmyu6VRUyml+vG4IhFAea0UrVkUVknXQ+3b9uoH7K/XZaF5panGOTW1yOjh4VGjC58EZ34kk8h2pmV+w8+q7el2CX7HgYJzWP5BH9OsPV3P
- 6OiYW59v574eUsp51RXrbImlnMH8uQMKsFAeHMOZyQKJJyi6v84PpUVVvU3rlztsImbh4OeGuG+91+6Pe12IR+hFG6nVT6Lv4wbg3/1rbV0g/H3+Mu7j+Kac
+        id S1727086AbgECHGn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 3 May 2020 03:06:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726937AbgECHGn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 3 May 2020 03:06:43 -0400
+Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CDB2B2078E;
+        Sun,  3 May 2020 07:06:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588489602;
+        bh=/TuUmS/lUQz6LYPGZt4r8qNTCPIMydP+HbiwVJRqEwU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V3K20RJQBclm2rGRYlqbbl+oI4pMRqrnprtrA6Lzsk+zeg3Pblf/zwoJy9LzLvjDV
+         avaSDWTPt5ML4bIeWqyvWUtPBy65X7VAsnE4lPcPGZgVoCmfurzS18xa5bK9QNBcl2
+         Ozix+BJU6JXbN1s9GV4CAvw9Y1wcaIoL5W0AS6To=
+Date:   Sun, 3 May 2020 09:06:34 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
+Cc:     sean@mess.org, kstewart@linuxfoundation.org, allison@lohutok.net,
+        tglx@linutronix.de, linux-media@vger.kernel.org,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC, WIP, v4 06/11] media: vidtv: add wrappers for memcpy and
+ memset
+Message-ID: <20200503090634.1b7ae548@coco.lan>
+In-Reply-To: <20200502084038.07c38c4b@coco.lan>
+References: <20200502032216.197977-1-dwlsalmeida@gmail.com>
+        <20200502032216.197977-7-dwlsalmeida@gmail.com>
+        <20200502084038.07c38c4b@coco.lan>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Em Sat, 2 May 2020 08:40:38 +0200
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
 
-Results of the daily build of media_tree:
+> Em Sat,  2 May 2020 00:22:11 -0300
+> "Daniel W. S. Almeida" <dwlsalmeida@gmail.com> escreveu:
+> 
 
-date:			Sun May  3 05:00:08 CEST 2020
-media-tree git hash:	e51759f56d314d28c25be7606b03791f048e44c7
-media_build git hash:	2f75e0d4330da180166ebcd104560d471a1599b6
-v4l-utils git hash:	f5b0fca142994b6ea3138704d5a013dd0fbca3cd
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 9.3.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.1-rc1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 7bc5ca34b446a30a7e19688e9a1e68e905cb8ff4
-host hardware:		x86_64
-host os:		5.4.0-4-amd64
+> > +u32 vidtv_memcpy(void *to,
+> > +		 const void *from,
+> > +		 size_t len,
+> > +		 u32 offset,
+> > +		 u32 buf_sz)
+> > +{
+> > +	if (buf_sz && offset + len > buf_sz) {
+> > +		pr_err("%s: overflow detected, skipping. Try increasing the buffer size",
+> > +		       __func__);
+> > +		return 0;  
+> 
+> shouldn't it return an error?
+> 
+> > +	}
+> > +
+> > +	memcpy(to, from, len);
+> > +	return len;
+> > +}
 
-linux-git-sh: OK
-linux-git-arm-davinci: OK
-linux-git-arm-at91: OK
-linux-git-powerpc64: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-mips: OK
-linux-git-arm64: OK
-linux-git-arm-multi: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.81-i686: OK
-linux-3.16.81-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.212-i686: OK
-linux-4.4.212-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.212-i686: OK
-linux-4.9.212-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.169-i686: OK
-linux-4.14.169-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.101-i686: OK
-linux-4.19.101-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4.17-i686: OK
-linux-5.4.17-x86_64: OK
-linux-5.5.1-i686: OK
-linux-5.5.1-x86_64: OK
-linux-5.6.1-i686: OK
-linux-5.6.1-x86_64: OK
-linux-5.7-rc1-i686: OK
-linux-5.7-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 3
-virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 2
-sparse: OK
-smatch: OK
+When trying to use your memset wrapper, I noticed a few issues there.
 
-Detailed results are available here:
+The first one is that you should not use __func__ directly at pr_* macros.
 
-http://www.xs4all.nl/~hverkuil/logs/Sunday.log
+Instead, just ensure that you have a pr_fmt() macro that ill be adding
+the driver's name and the function, e. g.:
 
-Detailed regression test results are available here:
+	#define pr_fmt(fmt) KBUILD_MODNAME ":%s: " fmt, __func__
 
-http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
+Besides that, the parameter order sounded weird:
 
-Full logs are available here:
+> > +u32 vidtv_memcpy(void *to,
+> > +		 const void *from,
+> > +		 size_t len,
+> > +		 u32 offset,
+> > +		 u32 buf_sz)
 
-http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+The "to", "offset" and "buf_sz" arguments refer to the "to" buffer,
+while "from" and "len" refers to what will be copied from the "from"
+into the "to" buffer. Please re-order it, placing first the "to"
+args, then "from" arg, and finally the argument that applies to both,
+e. g.: 
 
-The Media Infrastructure API from this daily build is here:
+	size_t vidtv_memcpy(void *to, size_t to_offset, size_t to_size,
+			    const void *from, size_t len)
 
-http://www.xs4all.nl/~hverkuil/spec/index.html
+(you should notice that I'm using size_t for all args there).
+
+The same is also valid for the memset.
+
+Finally, the places where this function is used require to pass twice
+the offset (from patch 08/11):
+
+> +		nbytes += vidtv_memcpy(args.dest_buf +
+> +				       args.dest_offset +
+> +				       nbytes,
+> +				       &ts_header,
+> +				       sizeof(ts_header),
+> +				       args.dest_offset + nbytes,
+> +				       args.dest_buf_sz);
+
+That doesn't make much sense. I mean, if the arguments are "buf + offset",
+one would expect that the "buf" would be the head of a buffer, and the
+function would be adding the offset internally.
+
+So, the best would be to re-define it like:
+
+	/**
+	 * vidtv_memcpy() - wrapper routine to be used by MPEG-TS
+	 *		    generator, in order to avoid going past the
+	 *		    output buffer.
+	 * @to:	Starting element to where a MPEG-TS packet will
+	 *		be copied.
+	 * @to_offset:	Starting position of the @to buffer to be filled.
+	 * @to_size:	Size of the @to buffer.
+	 * @from:	Starting element of the buffer to be copied.
+	 * @ten:	Number of elements to be copy from @from buffer
+	 *		into @to+ @to_offset buffer.
+	 *
+	 * Note:
+	 *	Real digital TV demod drivers should not have memcpy
+	 *	wrappers. We use it here just because emulating a MPEG-TS
+	 *	generation at kernelspace require some extra care.
+	 *
+	 * Return:
+	 *	Returns the number of bytes 
+	 */
+	size_t vidtv_memcpy(void *to, size_t to_offset, size_t to_size,
+			    const void *from, size_t len)
+	{
+		if unlikely(to_offset + len > to_size) {
+			pr_err_ratelimited("overflow detected, skipping. Try increasing the buffer size\n");
+			return 0;
+		}
+		memcpy(to + to_offset, from, len);
+		return len;
+	}
+
+Thanks,
+Mauro
