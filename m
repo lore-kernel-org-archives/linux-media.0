@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E02DC4725B
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A667C4725A
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 35D4D206B9
+	by mail.kernel.org (Postfix) with ESMTP id DEF72206B9
 	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ajzgpJ1O"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="NwY7Hf+q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728411AbgEDJ0q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 May 2020 05:26:46 -0400
+        id S1728413AbgEDJ0r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 May 2020 05:26:47 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:56776 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728401AbgEDJ0o (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 05:26:44 -0400
+        with ESMTP id S1728390AbgEDJ0q (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 05:26:46 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A3D0A18B4;
-        Mon,  4 May 2020 11:26:38 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E02D4304;
+        Mon,  4 May 2020 11:26:41 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1588584399;
-        bh=RTswVnVvkrphvGZQrtudfR0gweDjJJ+wd4T7jlg4Oh0=;
+        s=mail; t=1588584403;
+        bh=/RaRFa8mDihTo1e3nxmOzsrX/C1zqtEXblGZKnlGzS4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ajzgpJ1Ovu5pMLJwEds+7+ghgJUFKjFW3pdB+F+2+9n0fo71WlqSxfzB1ZX7fy57D
-         gkqDG3nOoXpzl6BFmexhufrATjaGt5529v7uy+/volmsvC4NS9qI1jo2/X60ptjWVz
-         tktJsTBw4UI8asPW5beweV+SbAuLJhXKg+wn9kP0=
+        b=NwY7Hf+qDg6lVICUFmLSTU085x6kIuz+ZSGDC3e4DtcbtbEpkfS2LRuP4X6gI2+cR
+         I3V5PCkep6ucc5Y6zaBdTrENOQKAIpeXpWGRI0lMwcwdE3X1LQ6BFCSU7YuNegVeLq
+         xbhE6T5WpT3vlddTlZIBujogqh+sTuVzOkpQC+0A=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
@@ -39,9 +39,9 @@ Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Naushir Patuck <naush@raspberrypi.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.org>
-Subject: [PATCH v2 21/34] staging: mmal-vchiq: Update mmal_parameters.h with recently defined params
-Date:   Mon,  4 May 2020 12:25:58 +0300
-Message-Id: <20200504092611.9798-22-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 23/34] staging: mmal-vchiq: Fix memory leak in error path
+Date:   Mon,  4 May 2020 12:26:00 +0300
+Message-Id: <20200504092611.9798-24-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
 References: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
@@ -54,59 +54,80 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-mmal_parameters.h hasn't been updated to reflect additions made
-over the last few years. Update it to reflect the currently
-supported parameters.
+On error, vchiq_mmal_component_init could leave the
+event context allocated for ports.
+Clean them up in the error path.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- .../vchiq-mmal/mmal-parameters.h              | 32 ++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
+ .../vc04_services/vchiq-mmal/mmal-vchiq.c     | 29 +++++++++++++------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-index 80a99128f5f3..926392d754c7 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-@@ -580,7 +580,37 @@ enum mmal_parameter_video_type {
- 	MMAL_PARAMETER_VIDEO_ENCODE_H264_LOW_DELAY_HRD_FLAG,
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+index 95437d9c519c..4c89bc0bec15 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+@@ -1842,9 +1842,26 @@ static void free_event_context(struct vchiq_mmal_port *port)
+ {
+ 	struct mmal_msg_context *ctx = port->event_context;
  
- 	/**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_VIDEO_ENCODE_INLINE_HEADER
-+	MMAL_PARAMETER_VIDEO_ENCODE_INLINE_HEADER,
++	if (!ctx)
++		return;
 +
-+	/**< Take a @ref MMAL_PARAMETER_BOOLEAN_T. */
-+	MMAL_PARAMETER_VIDEO_ENCODE_SEI_ENABLE,
+ 	kfree(ctx->u.bulk.buffer->buffer);
+ 	kfree(ctx->u.bulk.buffer);
+ 	release_msg_context(ctx);
++	port->event_context = NULL;
++}
 +
-+	/**< Take a @ref MMAL_PARAMETER_BOOLEAN_T. */
-+	MMAL_PARAMETER_VIDEO_ENCODE_INLINE_VECTORS,
++static void release_all_event_contexts(struct vchiq_mmal_component *component)
++{
++	int idx;
 +
-+	/**< Take a @ref MMAL_PARAMETER_VIDEO_RENDER_STATS_T. */
-+	MMAL_PARAMETER_VIDEO_RENDER_STATS,
-+
-+	/**< Take a @ref MMAL_PARAMETER_VIDEO_INTERLACE_TYPE_T. */
-+	MMAL_PARAMETER_VIDEO_INTERLACE_TYPE,
-+
-+	/**< Takes a @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_VIDEO_INTERPOLATE_TIMESTAMPS,
-+
-+	/**< Takes a @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_VIDEO_ENCODE_SPS_TIMING,
-+
-+	/**< Takes a @ref MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_VIDEO_MAX_NUM_CALLBACKS,
-+
-+	/**< Takes a @ref MMAL_PARAMETER_SOURCE_PATTERN_T */
-+	MMAL_PARAMETER_VIDEO_SOURCE_PATTERN,
-+
-+	/**< Takes a @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_VIDEO_ENCODE_SEPARATE_NAL_BUFS,
-+
-+	/**< Takes a @ref MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_VIDEO_DROPPABLE_PFRAME_LENGTH,
- };
++	for (idx = 0; idx < component->inputs; idx++)
++		free_event_context(&component->input[idx]);
++	for (idx = 0; idx < component->outputs; idx++)
++		free_event_context(&component->output[idx]);
++	for (idx = 0; idx < component->clocks; idx++)
++		free_event_context(&component->clock[idx]);
++	free_event_context(&component->control);
+ }
  
- /** Valid mirror modes */
+ /* Initialise a mmal component and its ports
+@@ -1942,6 +1959,7 @@ int vchiq_mmal_component_init(struct vchiq_mmal_instance *instance,
+ 
+ release_component:
+ 	destroy_component(instance, component);
++	release_all_event_contexts(component);
+ unlock:
+ 	if (component)
+ 		component->in_use = 0;
+@@ -1957,7 +1975,7 @@ EXPORT_SYMBOL_GPL(vchiq_mmal_component_init);
+ int vchiq_mmal_component_finalise(struct vchiq_mmal_instance *instance,
+ 				  struct vchiq_mmal_component *component)
+ {
+-	int ret, idx;
++	int ret;
+ 
+ 	if (mutex_lock_interruptible(&instance->vchiq_mutex))
+ 		return -EINTR;
+@@ -1969,14 +1987,7 @@ int vchiq_mmal_component_finalise(struct vchiq_mmal_instance *instance,
+ 
+ 	component->in_use = 0;
+ 
+-	for (idx = 0; idx < component->inputs; idx++)
+-		free_event_context(&component->input[idx]);
+-	for (idx = 0; idx < component->outputs; idx++)
+-		free_event_context(&component->output[idx]);
+-	for (idx = 0; idx < component->clocks; idx++)
+-		free_event_context(&component->clock[idx]);
+-
+-	free_event_context(&component->control);
++	release_all_event_contexts(component);
+ 
+ 	mutex_unlock(&instance->vchiq_mutex);
+ 
 -- 
 Regards,
 
