@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D87BC47258
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E672DC3A5A9
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45AD6206B9
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B88B3206B9
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ltVQBUsk"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="F+C7RpeD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728399AbgEDJ0n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 May 2020 05:26:43 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:56776 "EHLO
+        id S1728335AbgEDJ0p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 May 2020 05:26:45 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:56720 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728395AbgEDJ0n (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 05:26:43 -0400
+        with ESMTP id S1728395AbgEDJ0p (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 05:26:45 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C0AED122D;
-        Mon,  4 May 2020 11:26:36 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 140D94F7;
+        Mon,  4 May 2020 11:26:39 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1588584397;
-        bh=pcrrfsQlmR7SGkG1+Y+oygWKbVvk+y5ojBGVU0ZYFJA=;
+        s=mail; t=1588584401;
+        bh=LDVliL/PHYd5kyS/hZzNxXnIFRr/vN4pjrGIE4byH18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ltVQBUsknkLvRmLx5zTmapkNYE/b1XdY8hnrSL+sZGpo8B4cj79f1VnwGqxIzrzsm
-         0yC4wK+HKoEIo/ZVUeMrFz9EzqYjECMIoK6yW48kv9oOLhMlW5ReSmRlVGTLTOvBPE
-         Xt8AyXvpOavgKPNRdVv8vMrmobXFdUaQ/cWPeI0c=
+        b=F+C7RpeD3Gv11vmgfuqprB6zM5suvET9/PUzPmp7kTFmnV2AUUvKlhBpuirRbFLa+
+         UOeoCrRjs8/3RO7yjK4WtQVD1oiVCbjsrdv2i9gVxK1ATARJUtdSfOI6N/pXtxl9X1
+         NspMn8sSl2hZnex8Ikw3L+uQZ+Kzg03EnGkITNu8=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
@@ -39,9 +39,9 @@ Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Naushir Patuck <naush@raspberrypi.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.org>
-Subject: [PATCH v2 19/34] staging: mmal-vchiq: If the VPU returns an error, don't negate it
-Date:   Mon,  4 May 2020 12:25:56 +0300
-Message-Id: <20200504092611.9798-20-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 22/34] staging: mmal-vchiq: Free the event context for control ports
+Date:   Mon,  4 May 2020 12:25:59 +0300
+Message-Id: <20200504092611.9798-23-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
 References: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
@@ -54,32 +54,31 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-There is an enum for the errors that the VPU can return.
-port_parameter_get was negating that value, but also using -EINVAL
-from the Linux error codes.
-Pass the VPU error code as positive values. Should the function
-need to pass a Linux failure, then return that as negative.
+vchiq_mmal_component_init calls init_event_context for the
+control port, but vchiq_mmal_component_finalise didn't free
+it, causing a memory leak..
+
+Add the free call.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-index 5e7d4263e39b..4e559f88d828 100644
+index 9fc1a29f9f1a..95437d9c519c 100644
 --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
 +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-@@ -1395,7 +1395,8 @@ static int port_parameter_get(struct vchiq_mmal_instance *instance,
- 		goto release_msg;
- 	}
+@@ -1976,6 +1976,8 @@ int vchiq_mmal_component_finalise(struct vchiq_mmal_instance *instance,
+ 	for (idx = 0; idx < component->clocks; idx++)
+ 		free_event_context(&component->clock[idx]);
  
--	ret = -rmsg->u.port_parameter_get_reply.status;
-+	ret = rmsg->u.port_parameter_get_reply.status;
++	free_event_context(&component->control);
 +
- 	/* port_parameter_get_reply.size includes the header,
- 	 * whilst *value_size doesn't.
- 	 */
+ 	mutex_unlock(&instance->vchiq_mutex);
+ 
+ 	return ret;
 -- 
 Regards,
 
