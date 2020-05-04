@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3647C47257
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF6F1C47259
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5A28206B9
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FD81206B9
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="e5iyAC44"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="V9lef/1m"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728392AbgEDJ0l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 May 2020 05:26:41 -0400
+        id S1728404AbgEDJ0p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 May 2020 05:26:45 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:56720 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728388AbgEDJ0k (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 05:26:40 -0400
+        with ESMTP id S1728390AbgEDJ0n (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 05:26:43 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C4E891209;
-        Mon,  4 May 2020 11:26:34 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B6B8F121D;
+        Mon,  4 May 2020 11:26:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1588584395;
-        bh=E9H01W765i5eEsfdtVh7yWH+dX2/Uxq53FSkgDcRFoA=;
+        s=mail; t=1588584398;
+        bh=+brpwA1vXJHBDGowRYRV7Rb1SchHJJF7/qPiIvA6OVM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e5iyAC44YKufoFCdEUa1rb5vpv6zumV7c7bjJW5C0GnjmEBM1ObDtbXC7HYveMMzw
-         rsxBF/ogDmgOmj8JP3t5c6sIU92hwooBi4dh+wi2WzMd+5LFeOOsbkRlcaH+s8PG+q
-         LCVlyiiJSpTwqFuxCR5L7qmR4gU8TSOUzjpX858Q=
+        b=V9lef/1mAFk2Dd/QWwTecbXV+vUcn99+EETHDTawj6VzAKu3NqeTIusk1M4R908Fs
+         zF3BjSA6+4NSSGAAqYh4Jx/yTfZTAkXN0//R1CTa0HIbRibYnlPfJIDHMKG9OTu/HE
+         NvuySW4SrH5ickFiCV3owI/MiMWHevSsfXYcbos0=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
@@ -39,9 +39,9 @@ Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Naushir Patuck <naush@raspberrypi.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.org>
-Subject: [PATCH v2 16/34] staging: mmal-vchiq: Fix client_component for 64 bit kernel
-Date:   Mon,  4 May 2020 12:25:53 +0300
-Message-Id: <20200504092611.9798-17-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 20/34] staging: mmal-vchiq: Fix handling of VB2_MEMORY_DMABUF buffers
+Date:   Mon,  4 May 2020 12:25:57 +0300
+Message-Id: <20200504092611.9798-21-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
 References: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
@@ -54,73 +54,72 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-The MMAL client_component field is used with the event
-mechanism to allow the client to identify the component for
-which the event is generated.
-The field is only 32bits in size, therefore we can't use a
-pointer to the component in a 64 bit kernel.
+If the queue is configured as VB2_MEMORY_DMABUF then vb2_core_expbuf
+fails as it ensures the queue is defined as VB2_MEMORY_MMAP.
 
-Component handles are already held in an array per VCHI
-instance, so use the array index as the client_component handle
-to avoid having to create a new IDR for this purpose.
+Correct the handling so that we unmap the buffer from vcsm and the
+VPU on cleanup, and then correctly get the dma buf of the new buffer.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- .../staging/vc04_services/vchiq-mmal/mmal-vchiq.c    | 12 +++++++++---
- .../staging/vc04_services/vchiq-mmal/mmal-vchiq.h    |  1 +
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ .../vc04_services/vchiq-mmal/mmal-vchiq.c     | 21 +++++++++++++------
+ .../vc04_services/vchiq-mmal/mmal-vchiq.h     |  2 ++
+ 2 files changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-index c65c262cffbb..5872690b404d 100644
+index 4e559f88d828..9fc1a29f9f1a 100644
 --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
 +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-@@ -467,9 +467,9 @@ buffer_from_host(struct vchiq_mmal_instance *instance,
- static void event_to_host_cb(struct vchiq_mmal_instance *instance,
- 			     struct mmal_msg *msg, u32 msg_len)
+@@ -1779,13 +1779,9 @@ int mmal_vchi_buffer_init(struct vchiq_mmal_instance *instance,
+ }
+ EXPORT_SYMBOL_GPL(mmal_vchi_buffer_init);
+ 
+-int mmal_vchi_buffer_cleanup(struct mmal_buffer *buf)
++int mmal_vchi_buffer_unmap(struct mmal_buffer *buf)
  {
--	/* FIXME: Not going to work on 64 bit */
-+	int comp_idx = msg->u.event_to_host.client_component;
- 	struct vchiq_mmal_component *component =
--		(struct vchiq_mmal_component *)msg->u.event_to_host.client_component;
-+					&instance->component[comp_idx];
- 	struct vchiq_mmal_port *port = NULL;
- 	struct mmal_msg_context *msg_context;
- 	u32 port_num = msg->u.event_to_host.port_num;
-@@ -1068,7 +1068,7 @@ static int create_component(struct vchiq_mmal_instance *instance,
+-	struct mmal_msg_context *msg_context = buf->msg_context;
+-
+-	if (msg_context)
+-		release_msg_context(msg_context);
+-	buf->msg_context = NULL;
++	int ret = 0;
  
- 	/* build component create message */
- 	m.h.type = MMAL_MSG_TYPE_COMPONENT_CREATE;
--	m.u.component_create.client_component = (u32)(unsigned long)component;
-+	m.u.component_create.client_component = component->client_component;
- 	strncpy(m.u.component_create.name, name,
- 		sizeof(m.u.component_create.name));
- 
-@@ -1863,6 +1863,12 @@ int vchiq_mmal_component_init(struct vchiq_mmal_instance *instance,
- 		goto unlock;
+ 	if (buf->vcsm_handle) {
+ 		int ret;
+@@ -1797,6 +1793,19 @@ int mmal_vchi_buffer_cleanup(struct mmal_buffer *buf)
+ 			pr_err("%s: vcsm_free failed, ret %d\n", __func__, ret);
+ 		buf->vcsm_handle = 0;
  	}
- 
-+	/* We need a handle to reference back to our component structure.
-+	 * Use the array index in instance->component rather than rolling
-+	 * another IDR.
-+	 */
-+	component->client_component = idx;
++	return ret;
++}
++EXPORT_SYMBOL_GPL(mmal_vchi_buffer_unmap);
 +
- 	ret = create_component(instance, component, name);
- 	if (ret < 0) {
- 		pr_err("%s: failed to create component %d (Not enough GPU mem?)\n",
++int mmal_vchi_buffer_cleanup(struct mmal_buffer *buf)
++{
++	struct mmal_msg_context *msg_context = buf->msg_context;
++
++	if (msg_context)
++		release_msg_context(msg_context);
++	buf->msg_context = NULL;
++
++	mmal_vchi_buffer_unmap(buf);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(mmal_vchi_buffer_cleanup);
 diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
-index ae6c69ba16ee..247521fbcc1d 100644
+index 247521fbcc1d..0a75c96f6d58 100644
 --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
 +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
-@@ -97,6 +97,7 @@ struct vchiq_mmal_component {
- 	struct vchiq_mmal_port input[MAX_PORT_COUNT]; /* input ports */
- 	struct vchiq_mmal_port output[MAX_PORT_COUNT]; /* output ports */
- 	struct vchiq_mmal_port clock[MAX_PORT_COUNT]; /* clock ports */
-+	u32 client_component;	/* Used to ref back to client struct */
- };
+@@ -167,6 +167,8 @@ int vchiq_mmal_submit_buffer(struct vchiq_mmal_instance *instance,
+ 			     struct vchiq_mmal_port *port,
+ 			     struct mmal_buffer *buf);
  
- int vchiq_mmal_init(struct vchiq_mmal_instance **out_instance);
++int mmal_vchi_buffer_unmap(struct mmal_buffer *buf);
++
+ int mmal_vchi_buffer_init(struct vchiq_mmal_instance *instance,
+ 			  struct mmal_buffer *buf);
+ int mmal_vchi_buffer_cleanup(struct mmal_buffer *buf);
 -- 
 Regards,
 
