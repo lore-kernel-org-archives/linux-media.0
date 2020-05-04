@@ -7,40 +7,41 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C93B3C47257
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83BEDC4724C
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AAE8B206B9
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 61004206B9
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Rreg+TFq"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Lo/MRgkl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728353AbgEDJ0a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 May 2020 05:26:30 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:56720 "EHLO
+        id S1728360AbgEDJ0d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 May 2020 05:26:33 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:56776 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728335AbgEDJ03 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 05:26:29 -0400
+        with ESMTP id S1728354AbgEDJ0d (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 05:26:33 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5B68D304;
-        Mon,  4 May 2020 11:26:27 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DEC324F7;
+        Mon,  4 May 2020 11:26:29 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1588584387;
-        bh=RKPAmP7XWHNpx3GJUpasLkGICwp8lvQ7BhqDmWnWedw=;
+        s=mail; t=1588584390;
+        bh=5y8gL6TF9WoQOmxoBPKOcac7F/nYWm/EzcVyDIQHKHU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rreg+TFq33wtlSn4DpZBUxKz8//9qkaGSfpwSf/Cz8ZkbeWqMNMqMi9MA5UGuKm16
-         6GyTHry4F0jqCFC3DwuC1FLCfeINCcUt8v7bUxSxFkGUnfE+hT9jiuINbfIU/CpOp0
-         BV6UWo9Mfmqhgq3sqa6FpNUR26g6+oc1Mi0NmGBM=
+        b=Lo/MRgklnRHvFeP+4cmfFElTFGSDqXamzG62txfatvdQUzRCkl+uGxCvZXO/+oruM
+         ZvSL/czx3P6kAvET88VfseYdzuAcjws5u9Vysu/08eyTuAmqHZNiZtRKc4Uebc1+ca
+         /V+lMtIFU17vSS9pt7pG+UKcDho4lAWm+FzVEbcA=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Jacopo Mondi <jacopo@jmondi.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
         Naushir Patuck <naush@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 05/34] ARM: dts: bcm2711: Add Unicam DT nodes
-Date:   Mon,  4 May 2020 12:25:42 +0300
-Message-Id: <20200504092611.9798-6-laurent.pinchart@ideasonboard.com>
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>
+Subject: [PATCH v2 08/34] staging: mmal-vchiq: Allocate and free components as required
+Date:   Mon,  4 May 2020 12:25:45 +0300
+Message-Id: <20200504092611.9798-9-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
 References: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
@@ -51,76 +52,114 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Unicam IP cores are CSI-2/CCP2 receivers. They are part of VC4, but
-can be controlled directly from the operating system without going
-through the VPU firmware. Exposes them as DT nodes.
+From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+The existing code assumed that there would only ever be 4 components,
+and never freed the entries once used.
+Allow arbitrary creation and destruction of components.
+
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- arch/arm/boot/dts/bcm2711.dtsi | 43 ++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ .../vc04_services/vchiq-mmal/mmal-vchiq.c     | 29 ++++++++++++-------
+ .../vc04_services/vchiq-mmal/mmal-vchiq.h     |  1 +
+ 2 files changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-index a91cf68e3c4c..0a4d75a64e7c 100644
---- a/arch/arm/boot/dts/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/bcm2711.dtsi
-@@ -2,6 +2,7 @@
- #include "bcm283x.dtsi"
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+index cb3ffebb9ace..cf38ec78f77f 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+@@ -32,8 +32,11 @@
+ #define USE_VCHIQ_ARM
+ #include "interface/vchi/vchi.h"
  
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/power/raspberrypi-power.h>
- #include <dt-bindings/soc/bcm2835-pm.h>
+-/* maximum number of components supported */
+-#define VCHIQ_MMAL_MAX_COMPONENTS 4
++/*
++ * maximum number of components supported.
++ * This matches the maximum permitted by default on the VPU
++ */
++#define VCHIQ_MMAL_MAX_COMPONENTS 64
  
- / {
-@@ -244,6 +245,48 @@ pwm1: pwm@7e20c800 {
- 		hvs@7e400000 {
- 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
- 		};
-+
-+		csi0: csi@7e800000 {
-+			compatible = "brcm,bcm2835-unicam";
-+			reg = <0x7e800000 0x800>,
-+			      <0x7e802000 0x4>;
-+			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clocks BCM2835_CLOCK_CAM0>;
-+			clock-names = "lp";
-+			power-domains = <&power RPI_POWER_DOMAIN_UNICAM0>;
-+			brcm,num-data-lanes = <2>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#clock-cells = <1>;
-+			status = "disabled";
-+
-+			port {
-+				endpoint {
-+					data-lanes = <1 2>;
-+				};
-+			};
-+		};
-+
-+		csi1: csi@7e801000 {
-+			compatible = "brcm,bcm2835-unicam";
-+			reg = <0x7e801000 0x800>,
-+			      <0x7e802004 0x4>;
-+			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clocks BCM2835_CLOCK_CAM1>;
-+			clock-names = "lp";
-+			power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
-+			brcm,num-data-lanes = <4>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#clock-cells = <1>;
-+			status = "disabled";
-+
-+			port {
-+				endpoint {
-+					data-lanes = <1 2 3 4>;
-+				};
-+			};
-+		};
- 	};
+ /*#define FULL_MSG_DUMP 1*/
  
- 	/*
+@@ -168,8 +171,6 @@ struct vchiq_mmal_instance {
+ 	/* protect accesses to context_map */
+ 	struct mutex context_map_lock;
+ 
+-	/* component to use next */
+-	int component_idx;
+ 	struct vchiq_mmal_component component[VCHIQ_MMAL_MAX_COMPONENTS];
+ 
+ 	/* ordered workqueue to process all bulk operations */
+@@ -1626,18 +1627,24 @@ int vchiq_mmal_component_init(struct vchiq_mmal_instance *instance,
+ {
+ 	int ret;
+ 	int idx;		/* port index */
+-	struct vchiq_mmal_component *component;
++	struct vchiq_mmal_component *component = NULL;
+ 
+ 	if (mutex_lock_interruptible(&instance->vchiq_mutex))
+ 		return -EINTR;
+ 
+-	if (instance->component_idx == VCHIQ_MMAL_MAX_COMPONENTS) {
++	for (idx = 0; idx < VCHIQ_MMAL_MAX_COMPONENTS; idx++) {
++		if (!instance->component[idx].in_use) {
++			component = &instance->component[idx];
++			component->in_use = 1;
++			break;
++		}
++	}
++
++	if (!component) {
+ 		ret = -EINVAL;	/* todo is this correct error? */
+ 		goto unlock;
+ 	}
+ 
+-	component = &instance->component[instance->component_idx];
+-
+ 	ret = create_component(instance, component, name);
+ 	if (ret < 0) {
+ 		pr_err("%s: failed to create component %d (Not enough GPU mem?)\n",
+@@ -1688,8 +1695,6 @@ int vchiq_mmal_component_init(struct vchiq_mmal_instance *instance,
+ 			goto release_component;
+ 	}
+ 
+-	instance->component_idx++;
+-
+ 	*component_out = component;
+ 
+ 	mutex_unlock(&instance->vchiq_mutex);
+@@ -1699,6 +1704,8 @@ int vchiq_mmal_component_init(struct vchiq_mmal_instance *instance,
+ release_component:
+ 	destroy_component(instance, component);
+ unlock:
++	if (component)
++		component->in_use = 0;
+ 	mutex_unlock(&instance->vchiq_mutex);
+ 
+ 	return ret;
+@@ -1721,6 +1728,8 @@ int vchiq_mmal_component_finalise(struct vchiq_mmal_instance *instance,
+ 
+ 	ret = destroy_component(instance, component);
+ 
++	component->in_use = 0;
++
+ 	mutex_unlock(&instance->vchiq_mutex);
+ 
+ 	return ret;
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+index 47897e81ec58..4e34728d87e5 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+@@ -82,6 +82,7 @@ struct vchiq_mmal_port {
+ };
+ 
+ struct vchiq_mmal_component {
++	u32 in_use:1;
+ 	u32 enabled:1;
+ 	u32 handle;  /* VideoCore handle for component */
+ 	u32 inputs;  /* Number of input ports */
 -- 
 Regards,
 
