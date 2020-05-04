@@ -2,163 +2,164 @@ Return-Path: <SRS0=C6Fs=6S=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53C58C4725B
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 12:55:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FF93C3A5A9
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 13:36:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 295332071C
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 12:55:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E046D2078E
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 13:36:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ir4081WI"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="H7Q6n9wN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729051AbgEDMzD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 May 2020 08:55:03 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:59258 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728957AbgEDMyY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 08:54:24 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200504125422euoutp0294136744efcd03b566ad6273bf1ef079~L1G4VgU361839718397euoutp022
-        for <linux-media@vger.kernel.org>; Mon,  4 May 2020 12:54:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200504125422euoutp0294136744efcd03b566ad6273bf1ef079~L1G4VgU361839718397euoutp022
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1588596862;
-        bh=CdIMVqjLfPbr2jLLEe0ZicEok9i2dnM6rwDKcvTWky4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ir4081WIHDNEdYLg4QQXat83GvNdWyMVsjjxIo5mgXBQP53jUk0lKnAd5fE0kKFVg
-         CjqrOTI9r5hojh0X/vyA4mzZYMqM4XX/7uImsZWqVMvzUovGxJ7anG3cqoYuNgApH5
-         /43k0WWV1UfNNxRPnkB8uwEN1mlbeFjiJ+1VqhHE=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200504125422eucas1p2149cb7a79319eaa936ed12e8793cbc57~L1G38QOlQ0599805998eucas1p2E;
-        Mon,  4 May 2020 12:54:22 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 2B.12.60698.E7010BE5; Mon,  4
-        May 2020 13:54:22 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200504125421eucas1p12d5bd93de51ec15b9287e2e3bd2e2ee5~L1G3XaE_01031810318eucas1p1S;
-        Mon,  4 May 2020 12:54:21 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200504125421eusmtrp216a00ef14795ce4a4f976d14713b2fcb~L1G3Wwm592826928269eusmtrp2a;
-        Mon,  4 May 2020 12:54:21 +0000 (GMT)
-X-AuditID: cbfec7f5-a29ff7000001ed1a-5e-5eb0107e57de
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 2E.69.08375.D7010BE5; Mon,  4
-        May 2020 13:54:21 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200504125420eusmtip2440b7ec9272cefcb94b6bd200d1a54f5~L1G2mAM_U0241702417eusmtip2J;
-        Mon,  4 May 2020 12:54:20 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 17/21] drm: rcar-du: fix sg_table nents vs. orig_nents
- misuse
-Date:   Mon,  4 May 2020 14:53:55 +0200
-Message-Id: <20200504125359.5678-17-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200504125359.5678-1-m.szyprowski@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WSeUgUURzHeTM7s6PtyrQaPiwUFjohzRScsKILmaigAyI6zDWH1XJVdtU8
-        KBdN09WtLMH1wLay1ltbb8XyKDcTPBczc8kLPPDCC8pj23Gs/vt8v7/3e9/f7/EIVGTAHIiA
-        oFBGHiQJFOPWvKrWXx0HH5Jl3oeGVmwpdUcbQr3XlGKUuSoVpYzLcziVX/gZobQfPamFvmRA
-        JaXm8qkl4zBC6Uf7MKq3LhunUsoqMapychahij+Z+NQ7/RpCNc2PYSdIuiinCNANK1oenZWY
-        gdH6giScrl4ZwuifyQaELs+NoX9sjKL0i34doOu/K3H6SUUBoBf1jhcF162P+jGBAeGM3OW4
-        j7X/04J+fkibTYS6yoQqQY1ABawISLrDhMFkRAWsCRGZB2C3smtLLAHYWRuPcWIRwOyJDEuF
-        2GzpKvFju0WkDsDp3EscWxryKoNZxklXqJpR4SzbkfEAflEL2HtQcg2Fs6MqjC3YkpfhePkI
-        n2UeuRtqdA2bLCSPwUZjDuDGc4KFZY0om2tl8TPUezl7kg9LWqw4PgPnF0cQjm3hlKGCz/Eu
-        aK59ubkMJOMAHO4o5nMiBcDeWM1WgCcc7PiNswEouR+W1rlw9kn4uDsTcPvawP6Z7ayNWvB5
-        VTrK2UKYmCDiTu+BmYaSf7FNXT0oxzSsq+7ZesIWAIs6C3nPgFPm/zAtAAXAnglTyKSMwi2I
-        ue+skMgUYUFS5zvBMj2wfK/2DcNyDfiw5tsMSAKIBcJri6XeIkwSroiUNQNIoGI7Yc0jiyX0
-        k0RGMfLg2/KwQEbRDHYSPLG90O315C0RKZWEMvcYJoSR/60ihJWDEni0xGybMesdo7s6ByLO
-        e5xavxoXoDZFv/L2CtEkZ+ncG30Cxq6UiHQP+kPfXoo7cnfG/oYpq301cfi0dv1NWv23OdVN
-        wb5Is5dydVamHU01jEftyBcYTbr8KTMuNZK9PdkOGjx74KthfKH17Jiv9PCCz9j0uYp000Ra
-        dGzd9AUxT+EvcT2AyhWSP1K+y29aAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsVy+t/xe7q1AhviDDZP1rPoPXeSyWLjjPWs
-        Fv+3TWS2uPL1PZvFytVHmSwW7Le2+HStm9Gic+ISdosvVx4yWWx6fI3V4vKuOWwWPRu2slps
-        ffmOyWLtkbvsFss2/WGyOPjhCauDgMeaeWsYPfZ+W8DiMbtjJqvHplWdbB7bvz1g9bjffZzJ
-        Y/OSeo/b/x4ze0y+sZzRY/fNBjaPvi2rGD0+b5IL4InSsynKLy1JVcjILy6xVYo2tDDSM7S0
-        0DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy+hfdYO94CRfRe+2u8wNjDt4uhg5OCQETCQu
-        rEvpYuTiEBJYyihx6Mluxi5GTqC4jMTJaQ2sELawxJ9rXWwQRZ8YJZZeWsUGkmATMJToeguR
-        EBHoZJSY1v2RHcRhFmhhkejZ+JgFpEpYIEBi4Z43YKNYBFQlZizfyw5i8wrYShy4Mg9qnbzE
-        6g0HmEFO4gSKz+xVBwkLCeRL3H36j2UCI98CRoZVjCKppcW56bnFhnrFibnFpXnpesn5uZsY
-        gRG17djPzTsYL20MPsQowMGoxMMb8Xl9nBBrYllxZe4hRgkOZiUR3h0tQCHelMTKqtSi/Pii
-        0pzU4kOMpkA3TWSWEk3OB0Z7Xkm8oamhuYWlobmxubGZhZI4b4fAwRghgfTEktTs1NSC1CKY
-        PiYOTqkGxh6nJYmc270/5ht+PfVCPdqINzb89e8zoflHU/3fnTmY2nbZYJHGllebRK4VNqUf
-        /HpKY8uaN/rqhWcNr0ybMCvJbH7RnU0HJsaUX+2u2bpryfNz7xyy97jbsF+OuasntHXjOtHD
-        J33be7dO/TPxxcslThGbLWRt+/ZZnlU6LOm+TvrvtudsK+8osRRnJBpqMRcVJwIAi1FBsr4C
-        AAA=
-X-CMS-MailID: 20200504125421eucas1p12d5bd93de51ec15b9287e2e3bd2e2ee5
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200504125421eucas1p12d5bd93de51ec15b9287e2e3bd2e2ee5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200504125421eucas1p12d5bd93de51ec15b9287e2e3bd2e2ee5
-References: <20200504125017.5494-1-m.szyprowski@samsung.com>
-        <20200504125359.5678-1-m.szyprowski@samsung.com>
-        <CGME20200504125421eucas1p12d5bd93de51ec15b9287e2e3bd2e2ee5@eucas1p1.samsung.com>
+        id S1728035AbgEDNgt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 May 2020 09:36:49 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:35279 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726404AbgEDNgt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 4 May 2020 09:36:49 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id VbGzjO5j8hEkrVbH3jumWh; Mon, 04 May 2020 15:36:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1588599406; bh=gS3mEk/hXH4UjyuO6mtimQUI4NpdzupkxnK75I3D7NI=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=H7Q6n9wN/XxKZSj7GKH8sUVx7OnIgilHElfNHLzU1wQjA/zsP2aJ0p347Feo8bpto
+         hpxhCINw2ADmXch4db/K0mpsmhEisffQr6w2NiSMc7s4kBbJbN+gjNvXUvmXun8bkL
+         7NaCv32jrvCzp/miUgWeGhfU827wyQ11qix2DyKbCopwR4p07f46DExDA2iud9zW8q
+         bU79ThN3529ti8juDxbqH8W/G2d8n+Aeapmv4KmG0VWsVsVhEUfjVxWvcoCvEeFV0g
+         l8dnd7MoW2grJ9VB/wEe2jKXLeK7nGz1ODSL8drFKQtaB8rnknhcGOBgQ6b0YgqVUj
+         orL9PXY+Bym2Q==
+Subject: Re: [PATCH v2 32/34] media: videobuf2: Allow exporting of a struct
+ dmabuf
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Naushir Patuck <naush@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>
+References: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
+ <20200504092611.9798-33-laurent.pinchart@ideasonboard.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <75f625a4-947d-6af6-38cd-49b5cb2a58a9@xs4all.nl>
+Date:   Mon, 4 May 2020 15:36:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200504092611.9798-33-laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfA+TE3EIN9MJADF8uyauRRI8HH2oLVWf8jm9PwUH1fCSuhwwCEjFDOB5dvVd+0Dr2fTLb09EZQR1D2yRpKyPYlg+pgjgFhwBvDRSdo8NzUutw2t6jVfj
+ Zyqa7tMd71pWma+5VHOk0wc5x/vh6z0M+YArEyfqqjajY4GrMBzj295FOUvcQwe1UvJV/ohJf6MWWoQN/J1keM0hpzs+As6628QkPPQCVL2eW9GI6c9wpRBv
+ x4gkYqFjLIIdVvB0S4vaTjC8Wj4TOBd8/sCqSscV9tX6F+IELZKvYxLc20y2yVHqBZYs3UwCMp5zvJeH8/WRaVLrhEUtYj8K+cBTpZPlJkt5K2hV5iCUzaT8
+ 94tDFAgKP7l71XkoO81yyGhsnnooIuSvqPjWjDMm686FJH5igX9rONJwu7WH8cHU19sC9YUssEvwODPdRxNKji3GK5hGI5mdk+zF91geY211n03jHOk=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Documentation/DMA-API-HOWTO.txt states that dma_map_sg returns the
-numer of the created entries in the DMA address space. However the
-subsequent calls to dma_sync_sg_for_{device,cpu} and dma_unmap_sg must be
-called with the original number of entries passed to dma_map_sg. The
-sg_table->nents in turn holds the result of the dma_map_sg call as stated
-in include/linux/scatterlist.h. Adapt the code to obey those rules.
+On 04/05/2020 11:26, Laurent Pinchart wrote:
+> From: Dave Stevenson <dave.stevenson@raspberrypi.org>
+> 
+> videobuf2 only allowed exporting a dmabuf as a file descriptor,
+> but there are instances where having the struct dma_buf is
+> useful within the kernel.
+> 
+> Split the current implementation into two, one step which
+> exports a struct dma_buf, and the second which converts that
+> into an fd.
+> 
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
+> ---
+>  .../media/common/videobuf2/videobuf2-core.c   | 21 ++++++++++++++++---
+>  include/media/videobuf2-core.h                | 15 +++++++++++++
+>  2 files changed, 33 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+> index 44d65f5be845..befdc89983e2 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+> @@ -2073,12 +2073,12 @@ static int __find_plane_by_offset(struct vb2_queue *q, unsigned long off,
+>  	return -EINVAL;
+>  }
+>  
+> -int vb2_core_expbuf(struct vb2_queue *q, int *fd, unsigned int type,
+> -		unsigned int index, unsigned int plane, unsigned int flags)
+> +int vb2_core_expbuf_dmabuf(struct vb2_queue *q, unsigned int type,
+> +			   unsigned int index, unsigned int plane,
+> +			   unsigned int flags, struct dma_buf **dmabuf)
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
-For more information, see '[PATCH v2 00/21] DRM: fix struct sg_table nents
-vs. orig_nents misuse' thread: https://lkml.org/lkml/2020/5/4/373
----
- drivers/media/platform/vsp1/vsp1_drm.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Just returning struct dma_buf and using ERR_PTR() to report errors would
+be much more elegant.
 
-diff --git a/drivers/media/platform/vsp1/vsp1_drm.c b/drivers/media/platform/vsp1/vsp1_drm.c
-index a4a45d6..b54a30f 100644
---- a/drivers/media/platform/vsp1/vsp1_drm.c
-+++ b/drivers/media/platform/vsp1/vsp1_drm.c
-@@ -912,8 +912,9 @@ int vsp1_du_map_sg(struct device *dev, struct sg_table *sgt)
- 	 * skip cache sync. This will need to be revisited when support for
- 	 * non-coherent buffers will be added to the DU driver.
- 	 */
--	return dma_map_sg_attrs(vsp1->bus_master, sgt->sgl, sgt->nents,
--				DMA_TO_DEVICE, DMA_ATTR_SKIP_CPU_SYNC);
-+	sgt->nents = dma_map_sg_attrs(vsp1->bus_master, sgt->sgl,
-+			sgt->orig_nents, DMA_TO_DEVICE, DMA_ATTR_SKIP_CPU_SYNC);
-+	return sgt->nents;
- }
- EXPORT_SYMBOL_GPL(vsp1_du_map_sg);
- 
-@@ -921,7 +922,7 @@ void vsp1_du_unmap_sg(struct device *dev, struct sg_table *sgt)
- {
- 	struct vsp1_device *vsp1 = dev_get_drvdata(dev);
- 
--	dma_unmap_sg_attrs(vsp1->bus_master, sgt->sgl, sgt->nents,
-+	dma_unmap_sg_attrs(vsp1->bus_master, sgt->sgl, sgt->orig_nents,
- 			   DMA_TO_DEVICE, DMA_ATTR_SKIP_CPU_SYNC);
- }
- EXPORT_SYMBOL_GPL(vsp1_du_unmap_sg);
--- 
-1.9.1
+Otherwise this patch is fine.
+
+Regards,
+
+	Hans
+
+>  {
+>  	struct vb2_buffer *vb = NULL;
+>  	struct vb2_plane *vb_plane;
+> -	int ret;
+>  	struct dma_buf *dbuf;
+>  
+>  	if (q->memory != VB2_MEMORY_MMAP) {
+> @@ -2128,6 +2128,21 @@ int vb2_core_expbuf(struct vb2_queue *q, int *fd, unsigned int type,
+>  		return -EINVAL;
+>  	}
+>  
+> +	*dmabuf = dbuf;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(vb2_core_expbuf_dmabuf);
+> +
+> +int vb2_core_expbuf(struct vb2_queue *q, int *fd, unsigned int type,
+> +		    unsigned int index, unsigned int plane, unsigned int flags)
+> +{
+> +	struct dma_buf *dbuf;
+> +	int ret;
+> +
+> +	ret = vb2_core_expbuf_dmabuf(q, type, index, plane, flags, &dbuf);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ret = dma_buf_fd(dbuf, flags & ~O_ACCMODE);
+>  	if (ret < 0) {
+>  		dprintk(3, "buffer %d, plane %d failed to export (%d)\n",
+> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+> index f11b96514cf7..86920d3264ab 100644
+> --- a/include/media/videobuf2-core.h
+> +++ b/include/media/videobuf2-core.h
+> @@ -875,6 +875,21 @@ int vb2_core_streamon(struct vb2_queue *q, unsigned int type);
+>   */
+>  int vb2_core_streamoff(struct vb2_queue *q, unsigned int type);
+>  
+> +/**
+> + * vb2_core_expbuf_dmabuf() - Export a buffer as a dma_buf structure
+> + * @q:         videobuf2 queue
+> + * @type:      buffer type
+> + * @index:     id number of the buffer
+> + * @plane:     index of the plane to be exported, 0 for single plane queues
+> + * @flags:     flags for newly created file, currently only O_CLOEXEC is
+> + *             supported, refer to manual of open syscall for more details
+> + * @dmabuf:    Returns the dmabuf pointer
+> + *
+> + */
+> +int vb2_core_expbuf_dmabuf(struct vb2_queue *q, unsigned int type,
+> +			   unsigned int index, unsigned int plane,
+> +			   unsigned int flags, struct dma_buf **dmabuf);
+> +
+>  /**
+>   * vb2_core_expbuf() - Export a buffer as a file descriptor.
+>   * @q:		pointer to &struct vb2_queue with videobuf2 queue.
+> 
 
