@@ -2,120 +2,176 @@ Return-Path: <SRS0=C6Fs=6S=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68580C3A5A9
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:30:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DBD4C47257
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 10:45:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 499FA20752
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:30:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1149D2071C
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 10:45:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j7Ub+fll"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bqGOMNY+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728579AbgEDJas (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 May 2020 05:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S1728125AbgEDKpp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 May 2020 06:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728071AbgEDJar (ORCPT
+        by vger.kernel.org with ESMTP id S1726445AbgEDKpp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 4 May 2020 05:30:47 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F153C061A0E;
-        Mon,  4 May 2020 02:30:47 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id u127so8222286wmg.1;
-        Mon, 04 May 2020 02:30:47 -0700 (PDT)
+        Mon, 4 May 2020 06:45:45 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028C1C061A0E
+        for <linux-media@vger.kernel.org>; Mon,  4 May 2020 03:45:45 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id g13so20298470wrb.8
+        for <linux-media@vger.kernel.org>; Mon, 04 May 2020 03:45:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=phBt/DyXxj2WCUjN/7VIPZs2iVaLf/hvf4aH3FE3pS4=;
-        b=j7Ub+flln3YNhwj9yYp6wBol+TBlw1w6FXrudNdmpadgvX2kmnT6doDre9rBrwnxRx
-         oaR8uKfqIgUoJ1VMOeGOw9Y+KYStlDgM6IiLAKmgstsij9t5UPXO0wv4pHvWvKNrlpX/
-         AaZmZgCZlsUZskeawsKgB2KObhO/28CDfx9Qb5s+KzIryPocpNZo5H/EKg2JSVKugOqY
-         uuy1l5PU75/at575nM/4WqvZxxL4xDuF8W25MnA3vlJJRCq9dVDgFrBO2oawAqwJCGfX
-         UJ2SiWhC/YNvSBSSHxymASU+DtV7DjhFuoQ7fPH8iqnxd/8kj/sVOzja9jbEcxc7XLQ5
-         Dmag==
+        bh=CX/5Gfk06qaXTDfegOCHduy5CUjTjXi2kCJhlNaOOQg=;
+        b=bqGOMNY+r3L+ybu4Pj334dWOIXU4FTU9BLiu7Pyw6oSh3tSVCeMKJ+5+3H4C7+KKCY
+         WOcRHxWCPkZnpmYQ4lxQy4cKPqJUk2VneI8NkdILRl5OnKPGvDtAMXZ0WeNmIVwAHLOC
+         YiDkvti+GR5T2MXojP5MMQQIfdSCRPp+bJKfX6I6tSvxj+G7Z3WJ5xqL3cucmaK/bDQc
+         9VWr5M6rU94xDgbvQdLMWWQNEP56+tooAeiDkMz+ErLJIl5VyN+HfZ1Qu/UkWYe/FO5q
+         01gNo3lKHEPvFsMwoVOS8UZZVAF2JyOQhFowO8AV8ne7/4vgQRyg+s/T6UV8lfRpzkzf
+         nqTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=phBt/DyXxj2WCUjN/7VIPZs2iVaLf/hvf4aH3FE3pS4=;
-        b=ki7Ks1d/9i9iP5omKg7lrn2JNd3kw+XwAv5ryMMq6qUl6r1W8e5DIRRCHsDLnamYus
-         1gQwf6nMtakLkUIPHFICe3Hj1K252s2s4qKZBOiiAJCXxf6vd0t39ryw6jJHRIg9Vv9D
-         smPXDb5ofd6IoAhJ90Q9iVXnCL0XtH3amq8m2ktXWWhNcs9Rnpejk6XSTTdQfw0gjtxd
-         KkSSmv8ltv5Yp6E0xPjGPOyf823BdH580MPb1rpnbx8E5gHLaqFJbGdYltFU0ZrQ/rFo
-         MZsojaqedCIW1yjnE2ChZNXPve80n+2Fkx0E2MDBGhD37cBgoVa7+dnxAZf3N1KuKFey
-         3KjA==
-X-Gm-Message-State: AGi0Pua6z4IkPjyVT4D/yFqSgeIUIdONS+B2WCFe5vMk4wQIHw5GBH+r
-        z1ndviBAahM7XRPkDGUat/Y=
-X-Google-Smtp-Source: APiQypJS5Hd4YKWO6K+er1KaH05rOKwDvb8orjhGW/13qMHgW2kYeb5kLUuph8xfEkdVy+4SLf6EJA==
-X-Received: by 2002:a1c:c345:: with SMTP id t66mr14567380wmf.189.1588584645850;
-        Mon, 04 May 2020 02:30:45 -0700 (PDT)
-Received: from skynet.lan (246.red-83-44-9.dynamicip.rima-tde.net. [83.44.9.246])
-        by smtp.gmail.com with ESMTPSA id u12sm13075570wmu.25.2020.05.04.02.30.44
+        bh=CX/5Gfk06qaXTDfegOCHduy5CUjTjXi2kCJhlNaOOQg=;
+        b=ga1oGItDAeMWgslpDV+YjWwHa7fiQtoumAq/oJr95E3Tm7i54VxTqHuSlvOSHH5728
+         2l0wyEZ3FXfSy6EoZxQAq0iFlTGHkYc4GpttjU16xQqc3AHdb6BHoGkwp03ljzV65GMn
+         tw5MuFmpPpBTz9dTfxNncnv4iLK9x10sx3ctv6v3mWFcXz4M5hgl2Ke3hWj2fercKADb
+         ku29XoxZIjL0aDQ60X8arK5SQqCQdyRPWMvz+VuRcG55zNOfbp1G5/GQVM1sYYPyZddk
+         546ayMklQy+e5uW/qWMB5hCZTwIg5JZmY7S+2NgOIWWgemnUtlavGPCohTegN5MGkP9f
+         5Lpw==
+X-Gm-Message-State: AGi0Pubosh5Agx8sHxDYa4vqijqLsnWJDlga4IVf5Gl9+dzRfWQPECIV
+        wEpFxC8lMTfo1KYJCEco0vc=
+X-Google-Smtp-Source: APiQypJZH9kdJwk12qkqVewABu6d3b21Tge/MFgThngL2ehWEMXM9uGvA3BOxL+d+FOjfMCfFjHdEQ==
+X-Received: by 2002:a5d:5646:: with SMTP id j6mr19817507wrw.207.1588589143600;
+        Mon, 04 May 2020 03:45:43 -0700 (PDT)
+Received: from ASUS (77-56-155-30.dclient.hispeed.ch. [77.56.155.30])
+        by smtp.gmail.com with ESMTPSA id k14sm18033386wrp.53.2020.05.04.03.45.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2020 02:30:45 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     computersforpeace@gmail.com, kdasu.kdev@gmail.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        sumit.semwal@linaro.org, linux-mtd@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH 2/2] nand: brcmnand: fix BBI in hamming oob layout
-Date:   Mon,  4 May 2020 11:30:34 +0200
-Message-Id: <20200504093034.2739968-2-noltari@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200504093034.2739968-1-noltari@gmail.com>
-References: <20200504093034.2739968-1-noltari@gmail.com>
+        Mon, 04 May 2020 03:45:43 -0700 (PDT)
+Date:   Mon, 4 May 2020 12:45:39 +0200
+From:   Patrik Gfeller <patrik.gfeller@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Francescodario Cuzzocrea 
+        <francescodario.cuzzocrea@mail.polimi.it>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Subject: Re: [GIT PULL] Ressurect the atomisp staging driver
+Message-ID: <20200504124539.77eac397@ASUS>
+In-Reply-To: <20200504104934.7873cee3@coco.lan>
+References: <20200501215741.3be05695@coco.lan>
+        <3f551a8f87808ee7828dc03d41c7a23faac89f3c.camel@mail.polimi.it>
+        <20200503173213.78ae6aaa@coco.lan>
+        <CADnVkj96W0QfthukTKQ0a-i2fH1buooH3BEgfy22J9H9=_PcKA@mail.gmail.com>
+        <20200503180751.0b1e29c4@ASUS>
+        <20200504101628.0f632bf2@ASUS>
+        <20200504104934.7873cee3@coco.lan>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Small Page NAND uses byte 6 for BBI and Large Page NAND uses first 2 bytes.
+On Mon, 4 May 2020 10:49:34 +0200
+Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
----
- drivers/mtd/nand/raw/brcmnand/brcmnand.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+> Em Mon, 4 May 2020 10:16:28 +0200
+> Patrik Gfeller <patrik.gfeller@gmail.com> escreveu:
+>=20
+> > On Sun, 3 May 2020 18:07:51 +0200
+> > Patrik Gfeller <patrik.gfeller@gmail.com> wrote:
+> >   =20
+>  [...] =20
+> >=20
+> > I was not able yet to compile the kernel 4.4 successfully yet.  =20
+>=20
+> Yesterday, I imported only a subset of the yocto patches. I imported today
+> all 24 patches from it, as some patches depend on hacks on other upstream
+> stuff. You'll need to do a:
+>=20
+> 	$ git remote update && git reset --hard origin/yocto_intel_atom
+>=20
+> To update your local branch.
+>=20
+> > I get quite
+> > some warnings that are treated as errors. I assume that I can "resolve"
+> > this by removing the respective compiler flag (-Werror). =20
+>=20
+> Yeah, you may need to to that. There's a Kernel option with disables
+> -Werror. You may also change the Makefile to add things like:
+>=20
+> 	# HACK! While this driver is in bad shape, don't enable several warnings
+> 	#       that would be otherwise enabled with W=3D1
+> 	ccflags-y +=3D $(call cc-disable-warning, implicit-fallthrough)
+> 	ccflags-y +=3D $(call cc-disable-warning, missing-prototypes)
+> 	ccflags-y +=3D $(call cc-disable-warning, missing-declarations)
+> 	ccflags-y +=3D $(call cc-disable-warning, suggest-attribute=3Dformat)
+> 	ccflags-y +=3D $(call cc-disable-warning, unused-const-variable)
+> 	ccflags-y +=3D $(call cc-disable-warning, unused-but-set-variable)
+>=20
+> (this is what we do with the upstream version, as this driver is on
+> bad shape)
+>=20
+> > But there are a few things that will take more time for me to investiga=
+te:
+> >=20
+> > drivers/media/pci/atomisp//css2401a0_v21_build/../atomisp_driver/atomis=
+p_cmd.c:36:10: fatal error: linux/kct.h: No such file or directory
+> > include/media/v4l2-subdev.h:821:51: error: =E2=80=98const struct v4l2_s=
+ubdev_core_ops=E2=80=99 has no member named =E2=80=98g_chip_ident=E2=80=99
+> > include/media/v4l2-subdev.h:822:15: error: =E2=80=98const struct v4l2_s=
+ubdev_core_ops=E2=80=99 has no member named =E2=80=98g_chip_ident=E2=80=99
 
-diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-index 1bba309c7684..59c3241f4ea5 100644
---- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-+++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-@@ -1109,10 +1109,18 @@ static int brcmnand_hamming_ooblayout_free(struct mtd_info *mtd, int section,
- 	if (section < sectors)
- 		next += 6;
- 
--	if (section)
-+	if (section) {
- 		oobregion->offset = ((section - 1) * sas) + 9;
--	else
--		oobregion->offset = 1; /* BBI */
-+	} else {
-+		if (cfg->page_size == 512) {
-+			/* small page uses byte 6 for BBI */
-+			oobregion->offset = 0;
-+			next--;
-+		} else {
-+			/* large page uses first 2 bytes for BBI */
-+			oobregion->offset = 2;
-+		}
-+	}
- 
- 	oobregion->length = next - oobregion->offset;
- 
--- 
-2.26.2
+There are still errors when I try to build. I've found code like the
+one below:
+
+const struct v4l2_ioctl_ops atomisp_ioctl_ops =3D {
+	.vidioc_querycap =3D atomisp_querycap,
+#ifndef CONFIG_INTEL_MID_ISP
+	.vidioc_g_chip_ident =3D atomisp_g_chip_ident,
+#endif
+	.vidioc_enum_input =3D atomisp_enum_input,
+
+Therefore I've tried with "CONFIG_INTEL_MID_ISP=3Dy". Not sure if this is
+a good idea function wise - but it compiles. But the last step of the
+module build produces some scary warnings:
+
+WARNING: "cpu_tss" [drivers/media/pci/atomisp//css2401a0_v21_build/atomisp-=
+css2401a0_v21.ko] undefined!
+WARNING: "pv_lock_ops" [drivers/media/pci/atomisp//css2401a0_v21_build/atom=
+isp-css2401a0_v21.ko] undefined!
+WARNING: "__alloc_workqueue_key" [drivers/media/pci/atomisp//css2401a0_v21_=
+build/atomisp-css2401a0_v21.ko] undefined!
+WARNING: "v4l2_subdev_querymenu" [drivers/media/pci/atomisp//css2401a0_v21_=
+build/atomisp-css2401a0_v21.ko] undefined!
+WARNING: "intel_mid_msgbus_write32" [drivers/media/pci/atomisp//css2401a0_v=
+21_build/atomisp-css2401a0_v21.ko] undefined!
+...
+
+Maybe this is related to my partial build (only the module to test if
+it builds). I'll now do a full build of the kernel.
+
+> >=20
+> > I'll keep you updated. =20
+>=20
+> Maybe now with the other patches applied, this could have been solved.
+>=20
+> Thanks,
+> Mauro
+
+with kind regards,
+Patrik
 
