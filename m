@@ -2,197 +2,148 @@ Return-Path: <SRS0=C6Fs=6S=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FC50C3A5A9
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 17:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49562C47257
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 18:01:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6FACB20663
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 17:43:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="R+XA9Sly"
+	by mail.kernel.org (Postfix) with ESMTP id 3423620707
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 18:01:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730052AbgEDRnO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 May 2020 13:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S1731198AbgEDSBk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 May 2020 14:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729386AbgEDRnN (ORCPT
+        by vger.kernel.org with ESMTP id S1731196AbgEDSBk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 4 May 2020 13:43:13 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A47C061A0E
-        for <linux-media@vger.kernel.org>; Mon,  4 May 2020 10:43:13 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id z90so186671qtd.10
-        for <linux-media@vger.kernel.org>; Mon, 04 May 2020 10:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=H/Opovsqgl980RMnusXrKi/rPKCvnYLYTI09XWkUy9U=;
-        b=R+XA9SlyhAcehwF2Bt8ohO89qvIPSoF8h5JHYRA0XHxuLNnPlfh88sohdkvCwW0RWm
-         wPdrpnNVG+8EucbyhbiG+Gt2wuIRWcpnp6APVFFc2sTDBA9BB4DJgVsXpUy9h0N+x9qt
-         1m2xIph1h/qZsYLNAfEHWlpFhgtv7rVg9kKTuIB1WT0r7qfdGvz7gM6DrM+buE61Ll97
-         S4FsNQLTOMx30gbSCxbYBq7aJLjGDNg7p125V6DnaXEbroRlTTamCBMVG85ftsbxLXVX
-         t0jl4u38fTAKUa7Kcme+VT3BG9zWfmoBn3gdchE/Os7hJUUcaQ4Wz0uPNCS4YMqFgXmO
-         mSNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=H/Opovsqgl980RMnusXrKi/rPKCvnYLYTI09XWkUy9U=;
-        b=LBP8sRiHZodpTTD2YedNmrWHV4qvyV825jiCuw2VjxyI5RQ+npCpjDrON/eFdR9NBx
-         RJeDbLcQTJAV/Iit0DxIITDXjVtF+AK18WmkM/KZ2oWF3vhVZplXnyb/T4m92rZ6Srxn
-         IDdb6driSeMOCJBRF+vj3Ldlul9k30m4meVokao3Obh2bPGo8g5NgWHKKHS17ASG7AdH
-         73KjBSCvUtegkUDoyhA0e0lAblu6urE6Cnto30BHFNbrKuVV7NuDZuU6fNzbvdRvr8j+
-         QQiezH0qA3lk7A0wHr4LJRJREOH7BFfN8wRcX7mcmrKDh/yrg7aFfEMYThUxECa5gzAR
-         2zKw==
-X-Gm-Message-State: AGi0PuYhnbCoxSLq3AZkWU4c4dfTYfEtJPXAWhqeFMBiApegpOQTfKfs
-        mPn/N9zVfE/iOCgCAl2EBLLmGA==
-X-Google-Smtp-Source: APiQypJC8BLdxxgE2nPYrND9yR1BlJnYntyxU7Gc0/Jkpj45TnewhOCVUBSIDKdIwbLMcaEN5lTaeQ==
-X-Received: by 2002:aed:233d:: with SMTP id h58mr291006qtc.4.1588614192662;
-        Mon, 04 May 2020 10:43:12 -0700 (PDT)
-Received: from skullcanyon ([192.222.193.21])
-        by smtp.gmail.com with ESMTPSA id b19sm10717483qkg.72.2020.05.04.10.43.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2020 10:43:12 -0700 (PDT)
-Message-ID: <cfa5b20f9f545dba9c9aa21ad9ce24f96eece1a2.camel@ndufresne.ca>
-Subject: Re: [RFC] docs: dev-decoder: Add two more reasons for dynamic change
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Mon, 4 May 2020 14:01:40 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2274C061A0E;
+        Mon,  4 May 2020 11:01:39 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 73E842A0458
+Message-ID: <e53824aed3eeb27419e5399576cce028f0ba8203.camel@collabora.com>
+Subject: Re: [PATCH v2 2/3] media: uapi: Add VP9 stateless decoder controls
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reply-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Heiko Stuebner <heiko@sntech.de>,
         Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Date:   Mon, 04 May 2020 13:43:11 -0400
-In-Reply-To: <793c9c28-f922-d1fa-bfda-1709262d4d2c@linaro.org>
-References: <20200430113809.14872-1-stanimir.varbanov@linaro.org>
-         <d97b3c8e8a838d60d2d0d6058b77e624c0ee2fe1.camel@ndufresne.ca>
-         <793c9c28-f922-d1fa-bfda-1709262d4d2c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jeffrey Kardatzke <jkardatzke@chromium.org>
+Date:   Mon, 04 May 2020 14:01:32 -0400
+In-Reply-To: <db9fa91be8084fe9c87f263a4a97dc38d46f9bd1.camel@collabora.com>
+References: <20200410115113.31728-1-ezequiel@collabora.com>
+         <20200410115113.31728-3-ezequiel@collabora.com>
+         <9126475c-275d-71ab-0308-6ae85e22446b@xs4all.nl>
+         <bf475e70cca6f9ebf645aed51276e57668eaf43b.camel@collabora.com>
+         <20200502203707.402ea3cd@collabora.com>
+         <db9fa91be8084fe9c87f263a4a97dc38d46f9bd1.camel@collabora.com>
+Organization: Collabora
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+        boundary="=-OSiYpnCOHGwM5bzGy/T7"
 User-Agent: Evolution 3.36.1 (3.36.1-1.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le samedi 02 mai 2020 à 12:33 +0300, Stanimir Varbanov a écrit :
-> Hi Nicolas,
-> 
-> On 5/1/20 5:19 PM, Nicolas Dufresne wrote:
-> > Le jeudi 30 avril 2020 à 14:38 +0300, Stanimir Varbanov a écrit :
-> > > Here we add two more reasons for dynamic-resolution-change state
-> > > (I think the name is misleading espesially "resolution" word, maybe
-> > > dynamic-bitstream-change is better to describe).
-> > > 
-> > > The first one which could change in the middle of the stream is the
-> > > bit-depth. For worst example the stream is 8bit at the begging but
-> > > later in the bitstream it changes to 10bit. That change should be
-> > > propagated to the client so that it can take appropriate  action. In
-> > > this case most probably it has to stop the streaming on the capture
-> > > queue and re-negotiate the pixel format and start the streaming
-> > > again.
-> > > 
-> > > The second new reason is colorspace change. I'm not sure what action
-> > > client should take but at least it should be notified for such change.
-> > > One possible action is to notify the display entity that the colorspace
-> > > and its parameters (y'cbcr encoding and so on) has been changed.
-> > 
-> > Just to help with the use case, colorspace changes need to be
-> > communicated to the following HW or software in your media pipeline.
-> > Let's consider a V4L2 only use case:
-> > 
-> >   m2m decoder -> m2m color transform - >...
-> > 
-> > The userspace needs to be aware on time, so that it can reconfigure the
-> > color transformation parameters. The V4L2 event is a miss-fit though,
-> > as it does not tell exactly which buffer will start having this new
-> > colorspace. So in theory, one would have to:
-> > 
-> >   - drain
-> >   - send the new csc parameters
-> >   - resume
-> > 
-> > I'm not sure if our drivers implement resuming after CMD_STOP, do you
-> 
-> According to the spec, after implicit drain the decoder is stopping and
-> the client have two options:
-> 
-> 1. streamoff -> reconfigure queue -> streamon
-> 2. decoder command start
-> 
-> #2 would be the case with colorspace changes.
 
-Agreed, I just wanted to underline as as no userspace make any use of
-that, CMD_START might current be broken in many places. That being
-said, if we only use it in the context of a new event, it can't cause
-any harm.
+--=-OSiYpnCOHGwM5bzGy/T7
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> > have information about that ? We could also go through streamoff/on
-> > cycle in the mean time. Most codec won't allow changing these
-> > parameters on delta frames, as it would force the decoder doing CSC
-> > conversion of the reference frames in decode process, that seems
-> > unrealistically complex requirement.
-> 
-> Shouldn't such changes be preceded by IDR (or what is applicable for the
-> codec)?
+Le samedi 02 mai 2020 =C3=A0 19:55 -0300, Ezequiel Garcia a =C3=A9crit :
+> +Nicolas
+>=20
+> On Sat, 2020-05-02 at 20:37 +0200, Boris Brezillon wrote:
+> > On Fri, 01 May 2020 13:57:49 -0300
+> > Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> >=20
+> > > > > +
+> > > > > +.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
+> > > > > +
+> > > > > +.. flat-table:: enum v4l2_vp9_reset_frame_context
+> > > > > +    :header-rows:  0
+> > > > > +    :stub-columns: 0
+> > > > > +    :widths:       1 2
+> > > > > +
+> > > > > +    * - ``V4L2_VP9_RESET_FRAME_CTX_NONE``
+> > > > > +      - Do not reset any frame context.
+> > > > > +    * - ``V4L2_VP9_RESET_FRAME_CTX_NONE_ALT``
+> > > > > +      - Do not reset any frame context. This is an alternative v=
+alue for
+> > > > > +        V4L2_VP9_RESET_FRAME_CTX_NONE. =20
+> > > >=20
+> > > > Add `` around V4L2_VP9_RESET_FRAME_CTX_NONE.
+> > > >  =20
+> > >=20
+> > > Hm, now that I look closer, what's the point
+> > > of having the NONE_ALT in our uAPI if it
+> > > has same meaning as NONE?
+> > >=20
+> > > I think it can be removed.
+> >=20
+> > The intent was to match the spec so that one can pass the value
+> > extracted from the bitstream directly.
 
-VP9 does not have this limitation. So reference frames and the output
-frame can be of different size. It's likely unique to VP9. 
+reset_frame_contextspecifies whether the frame context should be reset
+to default values:
+  =E2=88=92 0 or 1 means do not reset any frame context
+  =E2=88=92 2 resets just the context specified in the frame header
+  =E2=88=92 3 resets all cont
 
-> 
-> > That being said, please keep in mind that in VP9, reference frames do
-> > not have to be of the same sizes. You can change the resolution at any
-> > point in time. No one managed to decode the related test vectors [0]
-> > with our current event base resolution change notification.
-> > 
-> > [0] FRM_RESIZE https://www.webmproject.org/vp9/levels/
-> 
-> I'd like to try those test streams.
+But aren't we going too far by making this an emum ? In Microsfot DXVA,
+we pass that value without interpreting it in userspace. For the
+following RKVDEC, it is (suspiciously ?) ignored. Maybe just passing
+over the value would make more sense, less work ?
 
-You might also want to be aware of:
+> >=20
+> > > > I got several smatch warnings:
+> > > >=20
+> > > > smatch: ERRORS
+> > > > drivers/media/v4l2-core/v4l2-ctrls.c:1880 validate_vp9_frame_decode=
+_params() warn: was && intended here instead of ||?
+> > > >=20
+> > > > (Commented on this ^^^ one above)
+> > > >=20
+> > > > drivers/staging/media/rkvdec/rkvdec-vp9.c:426 init_intra_only_probs=
+() error: buffer overflow 'ptr' 9 <=3D 69
+> > > > drivers/staging/media/rkvdec/rkvdec-vp9.c:1478 rkvdec_vp9_done() er=
+ror: potentially dereferencing uninitialized 'ctrl'.
+> > > > drivers/staging/media/rkvdec/rkvdec-vp9.c:1483 rkvdec_vp9_done() er=
+ror: uninitialized symbol 'dec_dst_buf'.
+> > > > drivers/staging/media/rkvdec/rkvdec-vp9.c:941:6: warning: variable =
+'ret' set but not used [-Wunused-but-set-variable]
+> > > > drivers/staging/media/rkvdec/rkvdec-vp9.c:1466:40: warning: variabl=
+e 'fctx' set but not used [-Wunused-but-set-variable]
+> > > >  =20
+> > >=20
+> > > Oh, I'll run smatch and fix them all.
+> >=20
+> > Oops!
+>=20
+>=20
 
-http://www.itu.int/net/itu-t/sigdb/spevideo/Hseries-s.htm
-https://chromium.googlesource.com/webm/vp8-test-vectors/
+--=-OSiYpnCOHGwM5bzGy/T7
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-Would be an nice and easy project to write a little runner for these
-compliance and integrate that into kernel CI. For stateful codecs it is
-trivial really. I'm working on GStreamer /GstValidate runners, as we
-want something generic across OS and CODEC APIs, but kernelci folks
-didn't seem very keen in having a framework on their rootfs (please
-correct me if I'm wrong on this).
+-----BEGIN PGP SIGNATURE-----
 
-> 
-> So, If I understood your comments correctly, the colorspace change event
-> in stateful decoder spec isn't needed?
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXrBYfAAKCRBxUwItrAao
+HEl0AKCsffGNkgR8IRMvRvpqEdfuIJofVACgwecGH6S4+u9ily9wRCE4jpdn++E=
+=ONvy
+-----END PGP SIGNATURE-----
 
-
-
-> 
-> > > Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-> > > ---
-> > >  Documentation/userspace-api/media/v4l/dev-decoder.rst | 6 +++++-
-> > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/Documentation/userspace-api/media/v4l/dev-decoder.rst b/Documentation/userspace-api/media/v4l/dev-decoder.rst
-> > > index 606b54947e10..bf10eda6125c 100644
-> > > --- a/Documentation/userspace-api/media/v4l/dev-decoder.rst
-> > > +++ b/Documentation/userspace-api/media/v4l/dev-decoder.rst
-> > > @@ -906,7 +906,11 @@ reflected by corresponding queries):
-> > >  
-> > >  * visible resolution (selection rectangles),
-> > >  
-> > > -* the minimum number of buffers needed for decoding.
-> > > +* the minimum number of buffers needed for decoding,
-> > > +
-> > > +* bit-depth of the bitstream has been changed,
-> > > +
-> > > +* colorspace (and its properties) has been changed.
-> > >  
-> > >  Whenever that happens, the decoder must proceed as follows:
-> > >  
+--=-OSiYpnCOHGwM5bzGy/T7--
 
