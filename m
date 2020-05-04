@@ -2,45 +2,46 @@ Return-Path: <SRS0=C6Fs=6S=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBD50C47257
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0358C4724C
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCC91206B9
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C079420746
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 09:26:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="caTj2A15"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="X9EzMyaZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728421AbgEDJ0r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 May 2020 05:26:47 -0400
+        id S1728427AbgEDJ0t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 May 2020 05:26:49 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:56720 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728408AbgEDJ0r (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 05:26:47 -0400
+        with ESMTP id S1728419AbgEDJ0s (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 May 2020 05:26:48 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 89C9011F9;
-        Mon,  4 May 2020 11:26:43 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E38701209;
+        Mon,  4 May 2020 11:26:44 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1588584404;
-        bh=HiWSCz2oAiDjpfm5bLqBamBEm9oEEJGcTPzVplhtRb8=;
+        s=mail; t=1588584405;
+        bh=ZDaZRct1RVy7xs8SPv417jYteulvJrltZo++xeluApo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=caTj2A15H/IlIeusnwoIwpnAchkMh6a4wYCw0dCN3tBberBUdfLzzEWAzMiWGDZnn
-         rSHnw6cd2Q+SaohOswW3CqEweNbiFdQo/R2UjztEqeJzcl9CHdZwPDWU9XwCG6Wdjm
-         +GczpdrXofxC2wjFuq7KjeBvBPEvn0UWO+WCrZyg=
+        b=X9EzMyaZO9E1/CyaameloyaYAVfGKnxD4o5bp0clvEkdOkMU4e976ZR30+MlQox3t
+         IObbuh2xmUOpXAhG3WxQhCdNZjxhGGLU//u8eowobqZxHQHfEQYLaL1+5ix/CQKQwm
+         ZeCe0Q99ngZ1JOCt4CL2o5PHcHQLYbZ8MSBDpiiw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Jacopo Mondi <jacopo@jmondi.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
         Naushir Patuck <naush@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH v2 24/34] staging: mmal-vchiq: Fix formatting errors in mmal_parameters.h
-Date:   Mon,  4 May 2020 12:26:01 +0300
-Message-Id: <20200504092611.9798-25-laurent.pinchart@ideasonboard.com>
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>
+Subject: [PATCH v2 26/34] staging: vchiq_arm: Set up dma ranges on child devices
+Date:   Mon,  4 May 2020 12:26:03 +0300
+Message-Id: <20200504092611.9798-27-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
 References: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
@@ -51,122 +52,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Naushir Patuck <naush@raspberrypi.com>
+From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-No functional changes in this commit.
+The VCHIQ driver now loads the audio, camera, codec, and vc-sm
+drivers as platform drivers. However they were not being given
+the correct DMA configuration.
 
-- Remove erroneous whitespace.
-- Remove _t postfix label on structs and enums.
+Call of_dma_configure with the parent (VCHIQ) parameters to be
+inherited by the child.
 
-Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- .../bcm2835-camera/bcm2835-camera.c           |  2 +-
- .../vchiq-mmal/mmal-parameters.h              | 46 +++++++++----------
- 2 files changed, 24 insertions(+), 24 deletions(-)
+ .../staging/vc04_services/interface/vchiq_arm/vchiq_arm.c   | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index 68a2260d88f5..613b04683dca 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -1497,7 +1497,7 @@ static int get_num_cameras(struct vchiq_mmal_instance *instance,
- {
- 	int ret;
- 	struct vchiq_mmal_component  *cam_info_component;
--	struct mmal_parameter_camera_info_t cam_info = {0};
-+	struct mmal_parameter_camera_info cam_info = {0};
- 	u32 param_size = sizeof(cam_info);
- 	int i;
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+index c5c7af28c1c8..15ccd624aaab 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+@@ -2733,6 +2733,12 @@ vchiq_register_child(struct platform_device *pdev, const char *name)
+ 		child = NULL;
+ 	}
  
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-index 926392d754c7..1793103b18fd 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-@@ -23,21 +23,21 @@
- #define MMAL_PARAMETERS_H
- 
- /** Common parameter ID group, used with many types of component. */
--#define MMAL_PARAMETER_GROUP_COMMON            (0 << 16)
-+#define MMAL_PARAMETER_GROUP_COMMON		(0 << 16)
- /** Camera-specific parameter ID group. */
--#define MMAL_PARAMETER_GROUP_CAMERA            (1 << 16)
-+#define MMAL_PARAMETER_GROUP_CAMERA		(1 << 16)
- /** Video-specific parameter ID group. */
--#define MMAL_PARAMETER_GROUP_VIDEO             (2 << 16)
-+#define MMAL_PARAMETER_GROUP_VIDEO		(2 << 16)
- /** Audio-specific parameter ID group. */
--#define MMAL_PARAMETER_GROUP_AUDIO             (3 << 16)
-+#define MMAL_PARAMETER_GROUP_AUDIO		(3 << 16)
- /** Clock-specific parameter ID group. */
--#define MMAL_PARAMETER_GROUP_CLOCK             (4 << 16)
-+#define MMAL_PARAMETER_GROUP_CLOCK		(4 << 16)
- /** Miracast-specific parameter ID group. */
--#define MMAL_PARAMETER_GROUP_MIRACAST       (5 << 16)
-+#define MMAL_PARAMETER_GROUP_MIRACAST		(5 << 16)
- 
- /* Common parameters */
- enum mmal_parameter_common_type {
--		/**< Never a valid parameter ID */
-+	/**< Never a valid parameter ID */
- 	MMAL_PARAMETER_UNUSED = MMAL_PARAMETER_GROUP_COMMON,
- 
- 		/**< MMAL_PARAMETER_ENCODING_T */
-@@ -341,7 +341,7 @@ enum mmal_parameter_imagefx {
- 	MMAL_PARAM_IMAGEFX_CARTOON,
- };
- 
--enum MMAL_PARAM_FLICKERAVOID_T {
-+enum MMAL_PARAM_FLICKERAVOID {
- 	MMAL_PARAM_FLICKERAVOID_OFF,
- 	MMAL_PARAM_FLICKERAVOID_AUTO,
- 	MMAL_PARAM_FLICKERAVOID_50HZ,
-@@ -753,15 +753,15 @@ struct mmal_parameter_imagefx_parameters {
- #define MMAL_PARAMETER_CAMERA_INFO_MAX_FLASHES 2
- #define MMAL_PARAMETER_CAMERA_INFO_MAX_STR_LEN 16
- 
--struct mmal_parameter_camera_info_camera_t {
--	u32    port_id;
--	u32    max_width;
--	u32    max_height;
--	u32    lens_present;
--	u8     camera_name[MMAL_PARAMETER_CAMERA_INFO_MAX_STR_LEN];
-+struct mmal_parameter_camera_info_camera {
-+	u32 port_id;
-+	u32 max_width;
-+	u32 max_height;
-+	u32 lens_present;
-+	u8 camera_name[MMAL_PARAMETER_CAMERA_INFO_MAX_STR_LEN];
- };
- 
--enum mmal_parameter_camera_info_flash_type_t {
-+enum mmal_parameter_camera_info_flash_type {
- 	/* Make values explicit to ensure they match values in config ini */
- 	MMAL_PARAMETER_CAMERA_INFO_FLASH_TYPE_XENON = 0,
- 	MMAL_PARAMETER_CAMERA_INFO_FLASH_TYPE_LED   = 1,
-@@ -769,16 +769,16 @@ enum mmal_parameter_camera_info_flash_type_t {
- 	MMAL_PARAMETER_CAMERA_INFO_FLASH_TYPE_MAX = 0x7FFFFFFF
- };
- 
--struct mmal_parameter_camera_info_flash_t {
--	enum mmal_parameter_camera_info_flash_type_t flash_type;
-+struct mmal_parameter_camera_info_flash {
-+	enum mmal_parameter_camera_info_flash_type flash_type;
- };
- 
--struct mmal_parameter_camera_info_t {
--	u32                            num_cameras;
--	u32                            num_flashes;
--	struct mmal_parameter_camera_info_camera_t
--				cameras[MMAL_PARAMETER_CAMERA_INFO_MAX_CAMERAS];
--	struct mmal_parameter_camera_info_flash_t
-+struct mmal_parameter_camera_info {
-+	u32 num_cameras;
-+	u32 num_flashes;
-+	struct mmal_parameter_camera_info_camera
-+		cameras[MMAL_PARAMETER_CAMERA_INFO_MAX_CAMERAS];
-+	struct mmal_parameter_camera_info_flash
- 				flashes[MMAL_PARAMETER_CAMERA_INFO_MAX_FLASHES];
- };
++	/*
++	 * We want the dma-ranges etc to be copied from the parent VCHIQ device
++	 * to be passed on to the children too.
++	 */
++	of_dma_configure(&new_dev->dev, pdev->dev.of_node, true);
++
+ 	return child;
+ }
  
 -- 
 Regards,
