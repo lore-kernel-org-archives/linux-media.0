@@ -2,148 +2,133 @@ Return-Path: <SRS0=C6Fs=6S=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49562C47257
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 18:01:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A613C3A5A9
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 18:02:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3423620707
-	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 18:01:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DB6C20721
+	for <linux-media@archiver.kernel.org>; Mon,  4 May 2020 18:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588615369;
+	bh=N4i6e4VsODP2CW1mwqCEy5GnptRmE9Pa1G3YDTPyGAc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=YZWVkbW4Gfg1Z/rtA7gnJIFVljFEybkm/tlpgqtSqFItBcNVw4cReBqg+zB0wL+6H
+	 MPIzUDBLQqoafuLX/yN+jVDSApA5XoAdy8eII93gDvmnRwhLvtmndh9yFoW+kmvXTQ
+	 36rxjfm9nP0eH9EslWA51OyDC4Eb3avTdqQZzzHU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731198AbgEDSBk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 May 2020 14:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731196AbgEDSBk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 4 May 2020 14:01:40 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2274C061A0E;
-        Mon,  4 May 2020 11:01:39 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 73E842A0458
-Message-ID: <e53824aed3eeb27419e5399576cce028f0ba8203.camel@collabora.com>
-Subject: Re: [PATCH v2 2/3] media: uapi: Add VP9 stateless decoder controls
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reply-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Jeffrey Kardatzke <jkardatzke@chromium.org>
-Date:   Mon, 04 May 2020 14:01:32 -0400
-In-Reply-To: <db9fa91be8084fe9c87f263a4a97dc38d46f9bd1.camel@collabora.com>
-References: <20200410115113.31728-1-ezequiel@collabora.com>
-         <20200410115113.31728-3-ezequiel@collabora.com>
-         <9126475c-275d-71ab-0308-6ae85e22446b@xs4all.nl>
-         <bf475e70cca6f9ebf645aed51276e57668eaf43b.camel@collabora.com>
-         <20200502203707.402ea3cd@collabora.com>
-         <db9fa91be8084fe9c87f263a4a97dc38d46f9bd1.camel@collabora.com>
-Organization: Collabora
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-OSiYpnCOHGwM5bzGy/T7"
-User-Agent: Evolution 3.36.1 (3.36.1-1.fc32) 
+        id S1731378AbgEDSCq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 May 2020 14:02:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59306 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731372AbgEDSCp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 4 May 2020 14:02:45 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2C16020721;
+        Mon,  4 May 2020 18:02:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588615364;
+        bh=N4i6e4VsODP2CW1mwqCEy5GnptRmE9Pa1G3YDTPyGAc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EwlF4hdQ2WhT+nZuqQc7NYW+8JqniJEeuMwf5SKAgaJUIwtgwn8UdxTLhiHJK0GXo
+         uC8vXdwSIhqBVjLcv5s8OKbbILyEP3auDAnUzeN9IKmzI/V7sYrF8pYnIkdxxzfBTw
+         sBjwTOHN8/CNy/TUIIoIIWhbI+KQLKsXGOBehyOA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>,
+        Chenbo Feng <fengc@google.com>,
+        Greg Hackmann <ghackmann@google.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        minchan@kernel.org, surenb@google.com, jenhaochen@google.com,
+        Martin Liu <liumartin@google.com>,
+        Daniel Vetter <daniel.vetter@intel.com>
+Subject: [PATCH 5.4 01/57] dma-buf: Fix SET_NAME ioctl uapi
+Date:   Mon,  4 May 2020 19:57:05 +0200
+Message-Id: <20200504165456.862815638@linuxfoundation.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200504165456.783676004@linuxfoundation.org>
+References: <20200504165456.783676004@linuxfoundation.org>
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+From: Daniel Vetter <daniel.vetter@intel.com>
 
---=-OSiYpnCOHGwM5bzGy/T7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+commit a5bff92eaac45bdf6221badf9505c26792fdf99e upstream.
 
-Le samedi 02 mai 2020 =C3=A0 19:55 -0300, Ezequiel Garcia a =C3=A9crit :
-> +Nicolas
->=20
-> On Sat, 2020-05-02 at 20:37 +0200, Boris Brezillon wrote:
-> > On Fri, 01 May 2020 13:57:49 -0300
-> > Ezequiel Garcia <ezequiel@collabora.com> wrote:
-> >=20
-> > > > > +
-> > > > > +.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-> > > > > +
-> > > > > +.. flat-table:: enum v4l2_vp9_reset_frame_context
-> > > > > +    :header-rows:  0
-> > > > > +    :stub-columns: 0
-> > > > > +    :widths:       1 2
-> > > > > +
-> > > > > +    * - ``V4L2_VP9_RESET_FRAME_CTX_NONE``
-> > > > > +      - Do not reset any frame context.
-> > > > > +    * - ``V4L2_VP9_RESET_FRAME_CTX_NONE_ALT``
-> > > > > +      - Do not reset any frame context. This is an alternative v=
-alue for
-> > > > > +        V4L2_VP9_RESET_FRAME_CTX_NONE. =20
-> > > >=20
-> > > > Add `` around V4L2_VP9_RESET_FRAME_CTX_NONE.
-> > > >  =20
-> > >=20
-> > > Hm, now that I look closer, what's the point
-> > > of having the NONE_ALT in our uAPI if it
-> > > has same meaning as NONE?
-> > >=20
-> > > I think it can be removed.
-> >=20
-> > The intent was to match the spec so that one can pass the value
-> > extracted from the bitstream directly.
+The uapi is the same on 32 and 64 bit, but the number isn't. Everyone
+who botched this please re-read:
 
-reset_frame_contextspecifies whether the frame context should be reset
-to default values:
-  =E2=88=92 0 or 1 means do not reset any frame context
-  =E2=88=92 2 resets just the context specified in the frame header
-  =E2=88=92 3 resets all cont
+https://www.kernel.org/doc/html/v5.4-preprc-cpu/ioctl/botching-up-ioctls.html
 
-But aren't we going too far by making this an emum ? In Microsfot DXVA,
-we pass that value without interpreting it in userspace. For the
-following RKVDEC, it is (suspiciously ?) ignored. Maybe just passing
-over the value would make more sense, less work ?
+Also, the type argument for the ioctl macros is for the type the void
+__user *arg pointer points at, which in this case would be the
+variable-sized char[] of a 0 terminated string. So this was botched in
+more than just the usual ways.
 
-> >=20
-> > > > I got several smatch warnings:
-> > > >=20
-> > > > smatch: ERRORS
-> > > > drivers/media/v4l2-core/v4l2-ctrls.c:1880 validate_vp9_frame_decode=
-_params() warn: was && intended here instead of ||?
-> > > >=20
-> > > > (Commented on this ^^^ one above)
-> > > >=20
-> > > > drivers/staging/media/rkvdec/rkvdec-vp9.c:426 init_intra_only_probs=
-() error: buffer overflow 'ptr' 9 <=3D 69
-> > > > drivers/staging/media/rkvdec/rkvdec-vp9.c:1478 rkvdec_vp9_done() er=
-ror: potentially dereferencing uninitialized 'ctrl'.
-> > > > drivers/staging/media/rkvdec/rkvdec-vp9.c:1483 rkvdec_vp9_done() er=
-ror: uninitialized symbol 'dec_dst_buf'.
-> > > > drivers/staging/media/rkvdec/rkvdec-vp9.c:941:6: warning: variable =
-'ret' set but not used [-Wunused-but-set-variable]
-> > > > drivers/staging/media/rkvdec/rkvdec-vp9.c:1466:40: warning: variabl=
-e 'fctx' set but not used [-Wunused-but-set-variable]
-> > > >  =20
-> > >=20
-> > > Oh, I'll run smatch and fix them all.
-> >=20
-> > Oops!
->=20
->=20
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Chenbo Feng <fengc@google.com>
+Cc: Greg Hackmann <ghackmann@google.com>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Cc: minchan@kernel.org
+Cc: surenb@google.com
+Cc: jenhaochen@google.com
+Cc: Martin Liu <liumartin@google.com>
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Tested-by: Martin Liu <liumartin@google.com>
+Reviewed-by: Martin Liu <liumartin@google.com>
+Signed-off-by: Sumit Semwal <sumit.semwal@linaro.org>
+  [sumits: updated some checkpatch fixes, corrected author email]
+Link: https://patchwork.freedesktop.org/patch/msgid/20200407133002.3486387-1-daniel.vetter@ffwll.ch
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
---=-OSiYpnCOHGwM5bzGy/T7
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+---
+ drivers/dma-buf/dma-buf.c    |    3 ++-
+ include/uapi/linux/dma-buf.h |    6 ++++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
------BEGIN PGP SIGNATURE-----
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -388,7 +388,8 @@ static long dma_buf_ioctl(struct file *f
+ 
+ 		return ret;
+ 
+-	case DMA_BUF_SET_NAME:
++	case DMA_BUF_SET_NAME_A:
++	case DMA_BUF_SET_NAME_B:
+ 		return dma_buf_set_name(dmabuf, (const char __user *)arg);
+ 
+ 	default:
+--- a/include/uapi/linux/dma-buf.h
++++ b/include/uapi/linux/dma-buf.h
+@@ -39,6 +39,12 @@ struct dma_buf_sync {
+ 
+ #define DMA_BUF_BASE		'b'
+ #define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
++
++/* 32/64bitness of this uapi was botched in android, there's no difference
++ * between them in actual uapi, they're just different numbers.
++ */
+ #define DMA_BUF_SET_NAME	_IOW(DMA_BUF_BASE, 1, const char *)
++#define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, u32)
++#define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, u64)
+ 
+ #endif
 
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXrBYfAAKCRBxUwItrAao
-HEl0AKCsffGNkgR8IRMvRvpqEdfuIJofVACgwecGH6S4+u9ily9wRCE4jpdn++E=
-=ONvy
------END PGP SIGNATURE-----
-
---=-OSiYpnCOHGwM5bzGy/T7--
 
