@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B28AEC4725A
-	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 15:48:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95C79C47247
+	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 15:49:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88DDE2073B
-	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 15:48:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76500206B9
+	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 15:49:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588693724;
+	s=default; t=1588693760;
 	bh=lK0n3cw9eJsjSZeXGUQU3srqEN79jlafNYd1tTTduSE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=OZxX5QFxkINXaf+n5iIB49790l4MyVSzJrABlMrXRdGkO3OIC0Qw3nWfK8CbVE8zZ
-	 Pw1sX1Nwt7jhX5XyEi/ZWjhar5kNiypszsI4PgrYd3EJOSxdDJcV3YwjxYerj6ARHL
-	 pnc9Ml2JgYIdXOUm61ApFeA/jzYsAPGFFC2zpflM=
+	b=Hw+sD5KbeQgKgFC/4sxK/CSio9yRvz/x8W/VxUutM6ar566YwmHh4m9L3zPKAfHVf
+	 ek67dIUFaSnoZPhVyWlj7VCzpSl7v3grN0Oh2LhzOWTUj5xKr9QRCCpuqFKJLf5qRJ
+	 YMVmQ3F+ufIvtAcYZ+uIHKK2S/otVq6dYRvkHKEY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730627AbgEEPsl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 May 2020 11:48:41 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:46361 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729828AbgEEPsl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 May 2020 11:48:41 -0400
-Received: by mail-ot1-f66.google.com with SMTP id z25so2006903otq.13;
-        Tue, 05 May 2020 08:48:39 -0700 (PDT)
+        id S1729668AbgEEPtR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 May 2020 11:49:17 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:39794 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729561AbgEEPtQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 May 2020 11:49:16 -0400
+Received: by mail-ot1-f65.google.com with SMTP id m13so2034529otf.6;
+        Tue, 05 May 2020 08:49:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
         bh=kCQr2A1yVRSlZqXHXQYGpMp329yMREeOZVsfc6fgXVk=;
-        b=tqaTX3W6aL8KJjYAEZlyzQWpnV1E+VBstXeVCv23HcTMgrbVh3OhHlHKHi5mq2GUdT
-         DzDnkiLvYJPNWYwUu+BZDdry5QYw2T/K2pFIbcJhNPQBbMXjlKtekYlDWf18tfQNj02w
-         TeeFol+/2JiLo0U0e2GxbwvpwC46HDocV+K9eYpSWVV+MGqaU9YzO5t4E32hh0wk8xnf
-         TQDY0Y811sajk3xmOszGlvY8UjTHVZvkg+ckS6MF3nEo9GM3X0g+tuNio5EF66Ln1Xwc
-         zdgJFgocVywcEOQHDUZDGDCT5VfEclgvBWEMBkCoPgKL4O5Bkv/WyJxyx2lNejF5XNtb
-         132w==
-X-Gm-Message-State: AGi0PubqxMFGTHxYVSVEqmBJqXe8glnlvWtCQb6JztjLSivtJqVNoWbo
-        ShLCMR08QIbrKYQSm82XIg==
-X-Google-Smtp-Source: APiQypJCQ6L9Z5niSmW5s26himlp5zzFw8N3HJiPoMh8Mhq/be6p7Kqv2MO27rDACBO141zFh4YN5A==
-X-Received: by 2002:a9d:a55:: with SMTP id 79mr2843947otg.295.1588693719487;
-        Tue, 05 May 2020 08:48:39 -0700 (PDT)
+        b=eqePmWvt89LzZQuFtpPydXt5hDiG1VXQJZ5CgTRRiwvss3j7e5WapBHTj2C8wGrvtD
+         YSWie4z5+C3GoiwA5e++jGIeH1nzytdVpvBpdE85kHS1pYxw9Sn86Xnpj3do8xZhs4qQ
+         D6p3f/jWJeweHScviEtRlqGN4gcVfrqnIRmaftytZpt5ImfFS/on6ULrJ/6qe0a0kg84
+         M8MQm91QJo5wQEXyFkMQ+miakVArbxoY4sps9kPLp+Hg3a6nLxZCvJAAOZwr7H9H3Fuz
+         1JcP0/HcSkxWmQpyQVgNR9gMkgsd0GI0GF50InUMD8S0d2ocuoisA1Un846c2i6X5kEj
+         1CIA==
+X-Gm-Message-State: AGi0Puac48way/KOzvGL4A9hcoehI0PpqiTktaLh61kN21SZCPUJUE3K
+        EaaiVP/ttpOPB+hnHQvSLg==
+X-Google-Smtp-Source: APiQypI+Ez39Hrf4Q/bsebTZ68LQuPy7DpmQgJdv0Xsn4eo11httcQIjp0lYLFxRt3XsSqKHyhk0yw==
+X-Received: by 2002:a9d:7858:: with SMTP id c24mr2655285otm.163.1588693755099;
+        Tue, 05 May 2020 08:49:15 -0700 (PDT)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id r6sm657754oom.26.2020.05.05.08.48.38
+        by smtp.gmail.com with ESMTPSA id i5sm629069oik.11.2020.05.05.08.49.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2020 08:48:38 -0700 (PDT)
-Received: (nullmailer pid 16464 invoked by uid 1000);
-        Tue, 05 May 2020 15:48:38 -0000
-Date:   Tue, 5 May 2020 10:48:38 -0500
+        Tue, 05 May 2020 08:49:14 -0700 (PDT)
+Received: (nullmailer pid 17500 invoked by uid 1000);
+        Tue, 05 May 2020 15:49:13 -0000
+Date:   Tue, 5 May 2020 10:49:13 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Robert Foss <robert.foss@linaro.org>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -66,7 +66,7 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Fabio Estevam <festevam@gmail.com>
 Subject: Re: [PATCH v10 1/3] media: dt-bindings: ov8856: Document YAML
  bindings
-Message-ID: <20200505154837.GA16403@bogus>
+Message-ID: <20200505154913.GA17438@bogus>
 References: <20200505100129.104673-1-robert.foss@linaro.org>
  <20200505100129.104673-2-robert.foss@linaro.org>
 MIME-Version: 1.0
