@@ -2,126 +2,126 @@ Return-Path: <SRS0=WufJ=6T=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96B55C47247
-	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 14:20:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5BB1C47257
+	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 14:22:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 76FC32073B
-	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 14:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588688414;
-	bh=hQaBKfpKqeZ1fxu1koHuFFwAPFXimKVr2qwWy4pH3Fc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=rZDmctdp/EXsTj04NhhS+GqqQbEzTHAx7Ui4gaLQyoTyeKrKmBOvSy54Jk88LvoA+
-	 SxBm4ptlLsytrm76CKzNeMJ/a1u6zaY14xdUmSCVj/rfn/NIO1zFaavE4kPwEzUx90
-	 n7zLZ9z4vSZTZMn4hewcGGempgI0POoeJ0+wwJDY=
+	by mail.kernel.org (Postfix) with ESMTP id 7A78A206FA
+	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 14:22:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cQe6rtuY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729979AbgEEOQE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 May 2020 10:16:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39962 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729986AbgEEOQA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 5 May 2020 10:16:00 -0400
-Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C68852083B;
-        Tue,  5 May 2020 14:15:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588688159;
-        bh=hQaBKfpKqeZ1fxu1koHuFFwAPFXimKVr2qwWy4pH3Fc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=2RvpUPtpckRL6M+orldQnp5MsEzNCr3zbE3BO5vBiJeea/pybACKTWuVs/OQ9hKuw
-         xdf72G/tgWNG6WNABpRIsMVh4QyxaH1C/gQEeKP+Y/TlXiXvxeX5fY56kyHMC/ccVm
-         hwN6AdyRtGUN6gAwhXtjRRWElqVXVtSUsaopTD4U=
-Date:   Tue, 5 May 2020 16:15:55 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [GIT PULL FOR v5.8] Add Tegra210 Video input driver
-Message-ID: <20200505161555.2c4ddfcc@coco.lan>
-In-Reply-To: <fa23e434-6a04-aa11-ad0d-ca546914a328@xs4all.nl>
-References: <c95abf33-bfd4-489f-2c20-536e76b848ce@xs4all.nl>
-        <20200505141735.53526ede@coco.lan>
-        <fa23e434-6a04-aa11-ad0d-ca546914a328@xs4all.nl>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1730256AbgEEOV4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 May 2020 10:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729256AbgEEOV4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 5 May 2020 10:21:56 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B45C061A0F;
+        Tue,  5 May 2020 07:21:56 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 207so1086068pgc.6;
+        Tue, 05 May 2020 07:21:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=cPehjVZlHj3aHIpwlaH11wYRizkllSVBKTyEpG1u9o8=;
+        b=cQe6rtuYwQupTWb2O+AmXwy/AngOD5Gs7e004xd9rHZ8q0lFfYjREUPKhrReYPNq+y
+         Y+LFSx278dRQWd4kuh6dz9PX70JoD+PBkFrX6cAgBKSl4eIl8dSUWj6XCkiKYL3aa9bC
+         Bcxyclf2McA4goDo32h13h1kKMPxHbcRadw7TI9B2ynWCS8Jn2urb3BxH0ZiShuakOh0
+         M0NZgA9Ejv2g1rHRUcvXf+CSBa16TUnzfCJeOOGNoqOPgvMAOb1ry/qz6qOe9fa45sDl
+         9LNqnq714nyPQ17T8yZ4QlvQRvh7rb5qewA3WdIXi01mf/9V7W/X1Vs3HopzbBLiKtrn
+         2baA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=cPehjVZlHj3aHIpwlaH11wYRizkllSVBKTyEpG1u9o8=;
+        b=QK82PuiXB3KVWcJwb8IbpPerj0OO0ragzm8yRVGpaBDy6QzJ7Fzche4GGlpy7kbteV
+         mqSE2E9hIahwu0UZFttXozbjEEEzXU2wG/2mcIRwDd5hAjuvHK/53HUswmxYoOJfnPu9
+         AHz/JCUbeHgYsj27APY/UhrxLCcGN0v6JI+5UB4KdimOgUPKM+anrW4aFQRC449s+ziM
+         CSQIbg0P+ofVMkelzWe1cCltP+iBMIDxejO0/0kB1rs/ns4lpCbEkw3cV8wT9Rf84RE6
+         ogE2jQpZ/xiC3boW7FmH/f/UGaqNDecrRROqoOuq6p1TeLDAMhQoUpdnPSrCEEESuCWy
+         LTKw==
+X-Gm-Message-State: AGi0PubosorSy67EL2Kp7o5ldTMDPR7RnVTN5dymRZlgGY3MF3JQWQ1D
+        LwslKdI5SR+zvL2vZSlsfuc=
+X-Google-Smtp-Source: APiQypLEf1iEWLOIV3zKy//l6iBpXlZXz4d2EO3uWFl2oLEiwZOq4ELIBlobuJS0yMohcdO7rPPZow==
+X-Received: by 2002:a63:8d4b:: with SMTP id z72mr2992726pgd.376.1588688515628;
+        Tue, 05 May 2020 07:21:55 -0700 (PDT)
+Received: from localhost.localdomain ([120.244.110.63])
+        by smtp.gmail.com with ESMTPSA id o63sm2235060pjb.40.2020.05.05.07.21.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 May 2020 07:21:55 -0700 (PDT)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     mchehab@kernel.org, kstewart@linuxfoundation.org,
+        tomasbortoli@gmail.com, gregkh@linuxfoundation.org, sean@mess.org,
+        allison@lohutok.net, tglx@linutronix.de
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] media: usb: ttusb-dec: avoid buffer overflow in ttusb_dec_handle_irq() when DMA failures/attacks occur
+Date:   Tue,  5 May 2020 22:21:10 +0800
+Message-Id: <20200505142110.7620-1-baijiaju1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Tue, 5 May 2020 14:24:22 +0200
-Hans Verkuil <hverkuil@xs4all.nl> escreveu:
+In ttusb_dec_init_usb():
+  dec->irq_buffer = usb_alloc_coherent(...)
 
-> On 05/05/2020 14:17, Mauro Carvalho Chehab wrote:
-> > Em Tue, 5 May 2020 10:33:00 +0200
-> > Hans Verkuil <hverkuil@xs4all.nl> escreveu:
-> >   
-> >> The following changes since commit e51759f56d314d28c25be7606b03791f048e44c7:
-> >>
-> >>   media: v4l2-ctrls.h: clarify the p_def argument of v4l2_ctrl_new_std_compound (2020-04-29 12:04:58 +0200)
-> >>
-> >> are available in the Git repository at:
-> >>
-> >>   git://linuxtv.org/hverkuil/media_tree.git tags/br-tegra
-> >>
-> >> for you to fetch changes up to 0bba0154ded02babccd59e21c6a27c5ad7d50faf:
-> >>
-> >>   MAINTAINERS: Add Tegra Video driver section (2020-05-05 10:26:05 +0200)
-> >>
-> >> ----------------------------------------------------------------
-> >> Tag branch
-> >>
-> >> ----------------------------------------------------------------
-> >> Sowjanya Komatineni (2):
-> >>       media: tegra: Add Tegra210 Video input driver
-> >>       MAINTAINERS: Add Tegra Video driver section  
-> > 
-> > 
-> > As pointed by checkpatch:
-> > 
-> > 	WARNING: DT compatible string "nvidia,tegra210-csi" appears un-documented -- check ./Documentation/devicetree/bindings/
-> > 	#628: FILE: drivers/staging/media/tegra-video/csi.c:521:
-> > 	+	{ .compatible = "nvidia,tegra210-csi", .data = &tegra210_csi_soc },
-> > 
-> > 	WARNING: DT compatible string "nvidia,tegra210-csi" appears un-documented -- check ./Documentation/devicetree/bindings/
-> > 	#3238: FILE: drivers/staging/media/tegra-video/video.c:106:
-> > 	+	{ .compatible = "nvidia,tegra210-csi", },
-> > 
-> > and double-checked with:
-> > 
-> > 	$ git grep "nvidia,tegra210-csi"
-> > 	drivers/staging/media/tegra-video/csi.c:        { .compatible = "nvidia,tegra210-csi", .data = &tegra210_csi_soc },
-> > 	drivers/staging/media/tegra-video/video.c:      { .compatible = "nvidia,tegra210-csi", },
-> > 
-> > The DT specs for this driver are missing. I even checked at linux-next:
-> > there's no DT bindings for this.  
-> 
-> Sorry, I should have mentioned this in the cover letter: the binding file
-> is here: https://patchwork.linuxtv.org/patch/63576/
-> 
-> But it will be merged via the tegra subsystem (Thierry Reding) since it is
-> part of the display bindings, not media bindings. Also, Thierry was planning
-> to convert it to yaml, so he offered to merge it instead.
+Thus, "dec->irq_buffer" is a DMA value, and it is assigned to "buffer"
+in ttusb_dec_handle_irq():
+  char *buffer = dec->irq_buffer;
 
-Ok. Please re-send the pull request (or just mark it as New on patchwork) 
-once the bindings arrive linux-next.
+When DMA failures or attacks occur, the value of buffer[4] can be
+changed at any time. In this case, "buffer[4] - 1 < ARRAY_SIZE(rc_keys)"
+can be first satisfied, and then the value of buffer[4] can be changed
+to a large number, causing a buffer-overflow vulnerability.
 
-Alternatively, I don't mind if those patches would also be merged via
-Tegra's tree, together with the bindings. On such case, feel free to 
-add, for both patches:
+To avoid the risk of this vulnerability, buffer[4] is assigned to a
+non-DMA local variable "index" at the beginning of
+ttusb_dec_handle_irq(), and then this variable replaces each use of
+buffer[4] in the function.
 
-Reviewed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+---
+ drivers/media/usb/ttusb-dec/ttusb_dec.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-Thanks,
-Mauro
+diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+index 3198f9624b7c..8543c552515b 100644
+--- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
++++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+@@ -250,6 +250,7 @@ static void ttusb_dec_handle_irq( struct urb *urb)
+ 	struct ttusb_dec *dec = urb->context;
+ 	char *buffer = dec->irq_buffer;
+ 	int retval;
++	u8 index = buffer[4];
+ 
+ 	switch(urb->status) {
+ 		case 0: /*success*/
+@@ -281,11 +282,11 @@ static void ttusb_dec_handle_irq( struct urb *urb)
+ 		 * this should/could be added later ...
+ 		 * for now lets report each signal as a key down and up
+ 		 */
+-		if (buffer[4] - 1 < ARRAY_SIZE(rc_keys)) {
+-			dprintk("%s:rc signal:%d\n", __func__, buffer[4]);
+-			input_report_key(dec->rc_input_dev, rc_keys[buffer[4] - 1], 1);
++		if (index - 1 < ARRAY_SIZE(rc_keys)) {
++			dprintk("%s:rc signal:%d\n", __func__, index);
++			input_report_key(dec->rc_input_dev, rc_keys[index - 1], 1);
+ 			input_sync(dec->rc_input_dev);
+-			input_report_key(dec->rc_input_dev, rc_keys[buffer[4] - 1], 0);
++			input_report_key(dec->rc_input_dev, rc_keys[index - 1], 0);
+ 			input_sync(dec->rc_input_dev);
+ 		}
+ 	}
+-- 
+2.17.1
+
