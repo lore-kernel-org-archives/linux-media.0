@@ -2,106 +2,230 @@ Return-Path: <SRS0=WufJ=6T=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E316C47247
-	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 12:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9C03C47254
+	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 12:21:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D4B820735
-	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 12:17:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588681061;
-	bh=K9pajpJQ6EekSPZj2ihes75zZ4jheVq+aLvL/UDDZDU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=fFwD4IE+7OmQ8ePaK57ChkSffGU8D/Wk2WBt9Gz+iVo8k0sm3ogS2gZWdBUCav9FW
-	 QHBUmdJDzVKGnJCVE0OzLU/u15cpUBlT2GjxYb8zzrn+9Es7oNcoYm4J/dj2l75VJm
-	 tFV4te7fvjmvd2ijLAID1XoHqjQwlynjFJedMrYU=
+	by mail.kernel.org (Postfix) with ESMTP id A00C020746
+	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 12:21:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="I7SKt9ox"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728810AbgEEMRk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 May 2020 08:17:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43568 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728627AbgEEMRk (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 5 May 2020 08:17:40 -0400
-Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA8F8206B8;
-        Tue,  5 May 2020 12:17:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588681060;
-        bh=K9pajpJQ6EekSPZj2ihes75zZ4jheVq+aLvL/UDDZDU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cheu0wapCGA9fHRsws6wr33MHYhvFjLOH83UFUXRGaoUDVQoVO61j9guIeZvDDPb5
-         qEbK6Q1brrBhYp4TiU3Dzk8E3DM2RQxv287fImXXCkztE65vtnAdIKoD0wuSLtOSEL
-         +C5fY/1u09ZgFzsGAdyprdfkjbDvA4NMqDhLGcgM=
-Date:   Tue, 5 May 2020 14:17:35 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [GIT PULL FOR v5.8] Add Tegra210 Video input driver
-Message-ID: <20200505141735.53526ede@coco.lan>
-In-Reply-To: <c95abf33-bfd4-489f-2c20-536e76b848ce@xs4all.nl>
-References: <c95abf33-bfd4-489f-2c20-536e76b848ce@xs4all.nl>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1728584AbgEEMVq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 May 2020 08:21:46 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:47219 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727090AbgEEMVq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 5 May 2020 08:21:46 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id VwZujUiXihEkrVwZxjxgSF; Tue, 05 May 2020 14:21:43 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1588681303; bh=VSlWp6YY5vmqNA0KvHBjNJgstMab0HWtn4YGAMMnP+E=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=I7SKt9ox17hU5a+tH7Yal7vNqAYfj9JJ9N4wF098LQRPS6e0FiaTju9InlpzZ9vS7
+         wmYaIxHHN9CDTFQdbQz9b5f5ziElG+i6HhjTR+w/IgO/m5CLjDlVMUidMpQ/TJ73El
+         iaBhqN/cPkRfwX94IkCFScWfsxZM1gZsS+Nk/ilHy1q4sHGva5zkjSHJ/MTcmCbpdS
+         9aVU4eVvK+252myKcZb5r8nhWN4LGE6vyuNsrXxcixZ+rxorZuxGYQx4+xlKO7w7AZ
+         /uuKSJMlJMviP78+mwvyxxH7WTnOnsAx3owuiQehXXwiUBCIbsEqeSaq2CBhbtSa3W
+         E9A1JmTaTGDVw==
+Subject: Re: [PATCH v9 02/11] media: v4l2-ctrl: Document
+ V4L2_CID_CAMERA_SENSOR_LOCATION
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        tfiga@google.com, pavel@ucw.cz,
+        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>, libcamera-devel@lists.libcamera.org
+References: <20200417124110.72313-1-jacopo@jmondi.org>
+ <20200417124110.72313-3-jacopo@jmondi.org> <20200505140206.589f54ae@coco.lan>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <a5d77790-5f98-650e-cfb9-a97b8701454d@xs4all.nl>
+Date:   Tue, 5 May 2020 14:21:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20200505140206.589f54ae@coco.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfJ2jDJbsB6hOechOyjEE0pn5Kt1dWq8hx0v9oUdDo5YhMH05mQ2JPsHEzse0mXMEEOLAK6GEUcZvRC4CqmgnwxDB0BJIGMlkQv6jc59LFr00cgmv85+G
+ yZJMgwtYXXceXLMSFMCTOoVCacwSr6QgXc03xH3L/L64mpCljAit5ptrfkBEjQZRWM7khWgCQaLxi9OweUkQNPiq5E2akyQSecRvEa1zESUDCdFKRswXaCwa
+ RhVk9vyxOhUFIaqtawVLavxQPIMMjU3Pyc5tN3krPGMtP1VLC3lf2OFDAsa160N7XYVepOc4KDn3s9G6nwojq2SfypCr0hsd9oiPS0ZP+e4SK3YHcds1qXRS
+ FTVnmWTauYIdVuIl24KurDi8K4vsau1J3YEmFMdZ1eMToiCkzhnyzkw37IeIcJt5YpywTJ/qnwjLEWfQeNXSX01MOzQcpA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Tue, 5 May 2020 10:33:00 +0200
-Hans Verkuil <hverkuil@xs4all.nl> escreveu:
-
-> The following changes since commit e51759f56d314d28c25be7606b03791f048e44c7:
+On 05/05/2020 14:02, Mauro Carvalho Chehab wrote:
+> Em Fri, 17 Apr 2020 14:41:01 +0200
+> Jacopo Mondi <jacopo@jmondi.org> escreveu:
 > 
->   media: v4l2-ctrls.h: clarify the p_def argument of v4l2_ctrl_new_std_compound (2020-04-29 12:04:58 +0200)
+>> Add documentation for the V4L2_CID_CAMERA_SENSOR_LOCATION camera
+>> control. The newly added read-only control reports the camera device
+>> mounting position.
+>>
+>> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+>> ---
+>>  .../media/v4l/ext-ctrls-camera.rst            | 32 +++++++++++++++++++
+>>  1 file changed, 32 insertions(+)
+>>
+>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+>> index e39f84d2447f..01a9042d53a6 100644
+>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+>> @@ -510,6 +510,38 @@ enum v4l2_scene_mode -
+>>      value down. A value of zero stops the motion if one is in progress
+>>      and has no effect otherwise.
+>>  
+>> +``V4L2_CID_CAMERA_SENSOR_LOCATION (integer)``
+>> +    This read-only control describes the camera sensor location by reporting
+>> +    its mounting position on the device where the camera is installed. The
+>> +    control value is constant and not modifiable by software. This control is
+>> +    particularly meaningful for devices which have a well defined orientation,
+>> +    such as phones, laptops and portable devices since the camera location is
+>> +    expressed as a position relative to the device's intended usage orientation.
+>> +    For example, a camera sensor installed on the user-facing side of a phone,
+>> +    a tablet or a laptop device is said to be installed in the
+>> +    ``V4L2_LOCATION_FRONT`` location while camera sensors installed on the side
+>> +    opposite the front one are said to be installed in the
+>> +    ``V4L2_LOCATION_BACK`` location. Camera sensors not directly attached to
+>> +    the device or attached in a way that allows them to move freely, such as
+>> +    webcams and digital cameras, are said to have the ``V4L2_LOCATION_EXTERNAL``
+>> +    location.
+>> +
+>> +
+>> +
+>> +.. flat-table::
+>> +    :header-rows:  0
+>> +    :stub-columns: 0
+>> +
+>> +    * - ``
+> ``
+>> +      - The camera sensor is located on the front side of the device.
+>> +    * - ``V4L2_LOCATION_BACK``
+>> +      - The camera sensor is located on the back side of the device.
+>> +    * - ``V4L2_LOCATION_EXTERNAL``
+>> +      - The camera sensor is not directly attached to the device and is
+>> +        freely movable.
 > 
-> are available in the Git repository at:
+> I guess I mentioned this already, but IMHO this ioctl is somewhat flawed,
+> for two reasons:
 > 
->   git://linuxtv.org/hverkuil/media_tree.git tags/br-tegra
+> 1) newer devices may all top of the line mobile devices now are coming
+>    with multiple camera sensors at the same side. So, just saying that
+>    the location is front or back is not enough. A location syscall would
+>    need have something more to better identify the location.
+>    It probably doesn't need to be something fancy, but, at least, on a
+>    device with 3 back sensors, I would call them as:
 > 
-> for you to fetch changes up to 0bba0154ded02babccd59e21c6a27c5ad7d50faf:
+> 	V4L2_LOCATION_BACK_1
+> 	V4L2_LOCATION_BACK_2
+> 	V4L2_LOCATION_BACK_3
 > 
->   MAINTAINERS: Add Tegra Video driver section (2020-05-05 10:26:05 +0200)
+>    And add some comment at the control documentation that would allow to
+>    uniquely number the other ones, like:
 > 
-> ----------------------------------------------------------------
-> Tag branch
+> 	"when multiple sensors are present at the same side, sensors
+> 	 will be numbered considering the ``(x,y)`` coordinates of the center
+> 	 of each sensor, starting from the topmost, leftmost position.
 > 
-> ----------------------------------------------------------------
-> Sowjanya Komatineni (2):
->       media: tegra: Add Tegra210 Video input driver
->       MAINTAINERS: Add Tegra Video driver section
+> 	 She first sensor will be the topmost sensor column at the leftmost
+> 	 side. The other sensors that will have the same ``y`` coordinate,
+> 	 counting from the left to the right, then increment the ``y`` and
+> 	 parse the next column again until all sensors are numbered."
 
+I think this isn't a good idea. In most cases you do not care about this.
 
-As pointed by checkpatch:
+And if you do care about this, then wouldn't it be better to do that through
+a new control where you provide the precise coordinates in e.g. mm?
 
-	WARNING: DT compatible string "nvidia,tegra210-csi" appears un-documented -- check ./Documentation/devicetree/bindings/
-	#628: FILE: drivers/staging/media/tegra-video/csi.c:521:
-	+	{ .compatible = "nvidia,tegra210-csi", .data = &tegra210_csi_soc },
+BACK_1/2/3 really doesn't tell you anything other than that there are three
+sensors on the back, but we knew that already.
 
-	WARNING: DT compatible string "nvidia,tegra210-csi" appears un-documented -- check ./Documentation/devicetree/bindings/
-	#3238: FILE: drivers/staging/media/tegra-video/video.c:106:
-	+	{ .compatible = "nvidia,tegra210-csi", },
+If we need support for the precise location in the future, then let's do that
+right and not try to shoehorn into something that wasn't meant for it.
 
-and double-checked with:
+> 
+> 2) There are also some devices that has a movable sensor, that can either
+>    be taking a picture from the front or from the back, like those:
+> 
+> 	https://www.youtube.com/watch?v=br6G7MrkRUc
+> 
+>    On such case, the control should not be read-only, as one may need to
+>    change this control in order to select if a sensor would either be on
+>    FRONT or on BACK position.
+> 
+>    For such kind of sensors (when we start supporting them), we could 
+>    for example call them like:
+> 
+> 	V4L2_LOCATION_MOVABLE_IN_BACK_POSITION_1
+> 	V4L2_LOCATION_MOVABLE_IN_BACK_POSITION_2
+> 	V4L2_LOCATION_MOVABLE_IN_FRONT_POSITION_1
+> 	V4L2_LOCATION_MOVABLE_IN_FRONT_POSITION_2
 
-	$ git grep "nvidia,tegra210-csi"
-	drivers/staging/media/tegra-video/csi.c:        { .compatible = "nvidia,tegra210-csi", .data = &tegra210_csi_soc },
-	drivers/staging/media/tegra-video/video.c:      { .compatible = "nvidia,tegra210-csi", },
+I don't like this. If the driver can tell when the position changes, then it
+can update the control's value (it's still read-only because userspace
+can't write to it, but that doesn't mean it can't be updated). So there is
+no need to call it 'MOVABLE', you just report the correct location. And with
+QUERYMENU you can tell that it is movable since multiple possible locations
+are reported (BACK and FRONT in this example). If it is fixed, then QUERYMENU
+will report only a single location.
 
-The DT specs for this driver are missing. I even checked at linux-next:
-there's no DT bindings for this.
+This might have some consequences for the DT bindings, though. Not sure
+how to represent this there.
 
-While the code sounds ok, I'll reject this PR. Please submit a new one
-together with the DT file properly reviewed by DT maintainers.
+If the driver cannot tell what the position is, then it makes no sense for
+the driver to expose this location control since it clearly is something that
+has to be hardcoded in userspace. I.e., there is no point for userspace to
+write to the control and then read back what it wrote :-)
 
-Thanks,
-Mauro
+So I disagree that there is a need for FIXED vs MOVABLE, this can be
+represented nicely with the current proposal.
+
+Regards,
+
+	Hans
+
+> 
+>    And add rename the other definitions to:
+> 
+> 	V4L2_LOCATION_FIXED_FRONT_1
+> 	V4L2_LOCATION_FIXED_BACK_1
+> 
+> Ok, nobody has yet attempted to upstream code for such devices,
+> so, we, for now, we don't need to add more than those 3 types.
+> 
+> But, IMO, we would change the sensors description in a way that it
+> would be easier to add support for more than one sensor per location
+> in the future, like:
+> 
+> 	* - ``V4L2_LOCATION_FIXED_FRONT_1``
+>           - The camera sensor is fixed, being the first sensor
+> 	    located on the front side of the device.
+> 	* - ``V4L2_LOCATION_FIXED_BACK_1``
+> 	  - The camera sensor is fixed, being the first sensor
+> 	    located on the back side of the device.
+> 	* - ``V4L2_LOCATION_EXTERNAL``
+>           - The camera sensor is not directly attached to the device
+> 	    and is freely movable.
+> 
+> 	.. note:: Please submit a patch upstream if you need to have
+> 		  more than one sensor either at front or back position.
+> 
+> This would make a lot easier when someone upstream patches requiring 
+> to locate more than one sensor location, or to support flipping
+> sensors.
+> 
+> Thanks,
+> Mauro
+> 
+
