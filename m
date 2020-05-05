@@ -2,169 +2,405 @@ Return-Path: <SRS0=WufJ=6T=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA54C47259
-	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 08:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51378C47247
+	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 08:53:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75FED206E6
-	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 08:47:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1857E206E6
+	for <linux-media@archiver.kernel.org>; Tue,  5 May 2020 08:53:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="aN+n9AU0"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="OeW34AoZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727931AbgEEIrb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 May 2020 04:47:31 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:52056 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728702AbgEEIqg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 May 2020 04:46:36 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200505084635euoutp02b6c65b3819fb9ce0222fd3f71c293c93~MFX0P6Tyy2638126381euoutp02U
-        for <linux-media@vger.kernel.org>; Tue,  5 May 2020 08:46:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200505084635euoutp02b6c65b3819fb9ce0222fd3f71c293c93~MFX0P6Tyy2638126381euoutp02U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1588668395;
-        bh=B21ieA9YMhUmpiZXxj4FSZPViD0ahaYsrF+5TUs6jmo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aN+n9AU0VoTdy0wLfZkU2wII1OVNcc+cenIlZU+s0RwUN/ecsTBUtn5NBHgVOI8mP
-         d6VPBl66sy37JwE17ywyjCTX9Zgm4s4M0sblV/LuwHXf4YDqMU85pVH/KFfdjusOcY
-         7PBHznx6MJLhE+YeYZniPPmL5FwjJ0mLsiButzvk=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200505084634eucas1p2f13263895e2ba3729986bd6357ca169d~MFXz1gw1L2338223382eucas1p2F;
-        Tue,  5 May 2020 08:46:34 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 90.42.60679.AE721BE5; Tue,  5
-        May 2020 09:46:34 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200505084634eucas1p1e0ea160dd77afbf6d2f7e6154ded40d0~MFXzSEDHK2423624236eucas1p18;
-        Tue,  5 May 2020 08:46:34 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200505084634eusmtrp126aba354bba07622efd7ab30120ded8d~MFXzRS61A0942309423eusmtrp1j;
-        Tue,  5 May 2020 08:46:34 +0000 (GMT)
-X-AuditID: cbfec7f4-0e5ff7000001ed07-4a-5eb127eab0cc
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 4D.21.07950.AE721BE5; Tue,  5
-        May 2020 09:46:34 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200505084633eusmtip1d32281152fa44131a67ab45c0c0a5134~MFXyomUX20309503095eusmtip1w;
-        Tue,  5 May 2020 08:46:33 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v3 18/25] drm: rcar-du: fix common struct sg_table related
- issues
-Date:   Tue,  5 May 2020 10:46:07 +0200
-Message-Id: <20200505084614.30424-18-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200505084614.30424-1-m.szyprowski@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0VSe0hTYRztu3f37ipOrtP0Q0Nr9CAhTY24spIkqUsFCv1RCGlLr1N0Uza1
-        VKJhKs5H+CCbFmHh++18lE7xgTZNGuELLR/TWaDhI2emIprzqv13fud3zu8cPj4C5fdh9kSY
-        NJqRSUURAtyc0/xpU3dh4Vx9wMX83ctUpq4foepVtRi125yNUsN/lnGqvLIXoQo7hNTqaDqg
-        lNlFXGpteAah1IZRjBpqfYNTGXVNGNU0v4RQ1T2TXKpEvY1QXStz2DWSrnpbBej29UIO/To1
-        H6PVFUqc/rCux+jpdC1CNxQ9o7/vGFA6d6wU0JpxBU6/aKwAtFHt6Gfhb34lmIkIi2Vkrl4P
-        zUNbNLeipsknwzlCBcizTANmBCQvwaSsUk4aMCf4ZBmAZQ3JODusAdhXn4yygxHA3hINfmjp
-        L9cfLEoBLFhqw44sFd9SuSYVTrrBtMW0fYcNmbx3K9PCJELJbRQm/TLdJQhr8i5sf+lgghzy
-        DGxJSTDJeaQX1I02ImyYE6ys60RN2GyPNwxO7NeD5BQXGhNrDhr5wE717AG2hgvaRi6LT8CB
-        3AwOa3gO4IyumssOGQAOJaoAqxLCCd0WbmqBkudhbasrS3vDlVnVPg1JSzi2aGWi0T2Y0/wK
-        ZWkeTE3hs+qzsEBbcxTb9XUQZTEN9fofgH2fXgCLN5XcLOBU8D+sEIAKYMfEyCViRu4uZR67
-        yEUSeYxU7BIUKVGDvf81sKNd+whatx91A5IAAgvefWNtAB8TxcrjJN0AEqjAhleyURfA5wWL
-        4uIZWWSgLCaCkXcDB4IjsON5vJ9/wCfFomgmnGGiGNnhFiHM7BWgSD+y4uPhu5TTjt5715eU
-        P1Ta/cVqcHq5JyTcc+TOcc0NR7/PsqncBJWz61OlU+DVk6ktUVnt7prQ28U1bTvW173H8m7a
-        i4OmV1ulc6ij0HemJyFjpuFnwVAAlM7ZbJ3KmTS62P6WbZxGbBVSjZUz8BQf84fxIVmgwzCu
-        dfor4MhDRW7OqEwu+gcVeaL4WwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsVy+t/xu7qv1DfGGay6I2LRe+4kk8XGGetZ
-        Lf5vm8hsceXrezaLlauPMlks2G9t8elaN6NF58Ql7BZfrjxkstj0+BqrxeVdc9gsejZsZbXY
-        +vIdk8XaI3fZLZZt+sNkcfDDE1YHAY8189Yweuz9toDFY3bHTFaPTas62Ty2f3vA6nG/+ziT
-        x+Yl9R63/z1m9ph8Yzmjx+6bDWwefVtWMXp83iQXwBOlZ1OUX1qSqpCRX1xiqxRtaGGkZ2hp
-        oWdkYqlnaGwea2VkqqRvZ5OSmpNZllqkb5egl7Fzt1fBfYGKK5OsGxin8XUxcnJICJhInFz5
-        gBnEFhJYyihxdz43RFxG4uS0BlYIW1jiz7Uuti5GLqCaT4wSd87eYQNJsAkYSnS9hUiICHQy
-        Skzr/sgO4jALtLBILO25DtYuLBAosa/7BJDNwcEioCqxs60aJMwrYCdx7toWJogN8hKrNxwA
-        u4ITKP74EsQCIYFCiQ/nv7NOYORbwMiwilEktbQ4Nz232EivODG3uDQvXS85P3cTIzCath37
-        uWUHY9e74EOMAhyMSjy8G76ujxNiTSwrrsw9xCjBwawkwrvsx4Y4Id6UxMqq1KL8+KLSnNTi
-        Q4ymQDdNZJYSTc4HRnpeSbyhqaG5haWhubG5sZmFkjhvh8DBGCGB9MSS1OzU1ILUIpg+Jg5O
-        qQbGa+t5C1pub5nEF8C18XKowK6j8Z3vvzgrnmne6rw3UzLh0Prw/tV+c6a4zbpyoeyix9t1
-        zVMcZicGHdw2JXjv5Hm2e6s+7n2jVOWZGXT41y7X/8b/eVOPftp2/sry255/tK0mKv47XZX9
-        YW97tP4Ei6PvhJZ3TYya/npHk19fuHloichtzzlb25RYijMSDbWYi4oTAS4gPqG8AgAA
-X-CMS-MailID: 20200505084634eucas1p1e0ea160dd77afbf6d2f7e6154ded40d0
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200505084634eucas1p1e0ea160dd77afbf6d2f7e6154ded40d0
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200505084634eucas1p1e0ea160dd77afbf6d2f7e6154ded40d0
-References: <20200505083926.28503-1-m.szyprowski@samsung.com>
-        <20200505084614.30424-1-m.szyprowski@samsung.com>
-        <CGME20200505084634eucas1p1e0ea160dd77afbf6d2f7e6154ded40d0@eucas1p1.samsung.com>
+        id S1728233AbgEEIx3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 May 2020 04:53:29 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:33887 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726337AbgEEIx3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 5 May 2020 04:53:29 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id VtKKjTXUUhEkrVtKPjx1WJ; Tue, 05 May 2020 10:53:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1588668805; bh=ctCJeV2nkRm24GOv6OUM85FNxyI3PfiCY2rIRwEWE9w=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=OeW34AoZVeLvLOYs2QNijKzXGk86f5Qs4yRU6ZYCDFL3l1NsSm2cK1EPjIekhGBc2
+         BrY3VC61seuBUjWwOg/LBGrUjMn12aY3jH8Zo1rX93H1MM44TDSlBeC+4TBIjJBRFp
+         gLbI2985XxotEX6KVMunMSROeAxgKzvIQ3+m4O3XHR8of0ZjlLQnWn8USb7mJ9cBgY
+         zjfB+nn0l45S9dR6OTHHEMXg6fMylP1j+jGw8UGQyy5D3nru6T3YgBwv64D1Eq4Dxm
+         XK9qq/IhxeJNlhm8It6ZVK7XP5aNCEfSVFfX9xifVfpDFx7wAFq6acSsTA1nB1bLhR
+         sAa+LSW/ACrfQ==
+Subject: Re: [PATCH 1/7] utils: replace strchr with std variant
+To:     Rosen Penev <rosenp@gmail.com>, linux-media@vger.kernel.org
+References: <20200429040627.27859-1-rosenp@gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <309f80c4-f7b0-f2ae-f4c9-752a6bacc9a4@xs4all.nl>
+Date:   Tue, 5 May 2020 10:53:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200429040627.27859-1-rosenp@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfM3jxjXx5D0Eva5+ZoD5fi0sJbKbA6k1zgAQQkPLipkqKphD7AJ6PjdtM3CoeR7HTNOoGA/6sjG8IIOa1C5P5aWyBVWuBZ8YbkTvXOG2oMgIPvCoy25R
+ XJndmPFUJ3VKW64qpd/kpSqmiwE8SFaWAiRY3UCsQ9peEthb8HIJ2wjkYQMoFBev+QAWTMSQG7YD80o7QRydl5VUjuQgdhEAeYw=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Documentation/DMA-API-HOWTO.txt states that dma_map_sg returns the
-numer of the created entries in the DMA address space. However the
-subsequent calls to dma_sync_sg_for_{device,cpu} and dma_unmap_sg must be
-called with the original number of the entries passed to dma_map_sg. The
-sg_table->nents in turn holds the result of the dma_map_sg call as stated
-in include/linux/scatterlist.h. A common mistake was to ignore a result
-of the dma_map_sg function and don't use the sg_table->orig_nents at all.
+Hi Rosen,
 
-To avoid such issues, lets use common dma-mapping wrappers operating
-directly on the struct sg_table objects and adjust references to the
-nents and orig_nents respectively.
+Why this change? The commit log is empty, so I have no idea what the reason
+is for making this change. Same for the next 3 patches.
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
-For more information, see '[PATCH v3 00/25] DRM: fix struct sg_table nents
-vs. orig_nents misuse' thread: https://lkml.org/lkml/2020/5/5/187
----
- drivers/media/platform/vsp1/vsp1_drm.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Regards,
 
-diff --git a/drivers/media/platform/vsp1/vsp1_drm.c b/drivers/media/platform/vsp1/vsp1_drm.c
-index a4a45d6..8a2624b 100644
---- a/drivers/media/platform/vsp1/vsp1_drm.c
-+++ b/drivers/media/platform/vsp1/vsp1_drm.c
-@@ -912,8 +912,9 @@ int vsp1_du_map_sg(struct device *dev, struct sg_table *sgt)
- 	 * skip cache sync. This will need to be revisited when support for
- 	 * non-coherent buffers will be added to the DU driver.
- 	 */
--	return dma_map_sg_attrs(vsp1->bus_master, sgt->sgl, sgt->nents,
--				DMA_TO_DEVICE, DMA_ATTR_SKIP_CPU_SYNC);
-+	return dma_map_sgtable_attrs(vsp1->bus_master, sgt, DMA_TO_DEVICE,
-+				     DMA_ATTR_SKIP_CPU_SYNC);
-+	return sgt->nents;
- }
- EXPORT_SYMBOL_GPL(vsp1_du_map_sg);
- 
-@@ -921,8 +922,8 @@ void vsp1_du_unmap_sg(struct device *dev, struct sg_table *sgt)
- {
- 	struct vsp1_device *vsp1 = dev_get_drvdata(dev);
- 
--	dma_unmap_sg_attrs(vsp1->bus_master, sgt->sgl, sgt->nents,
--			   DMA_TO_DEVICE, DMA_ATTR_SKIP_CPU_SYNC);
-+	dma_unmap_sgtable_attrs(vsp1->bus_master, sgt, DMA_TO_DEVICE,
-+				DMA_ATTR_SKIP_CPU_SYNC);
- }
- EXPORT_SYMBOL_GPL(vsp1_du_unmap_sg);
- 
--- 
-1.9.1
+	Hans
+
+On 29/04/2020 06:06, Rosen Penev wrote:
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
+>  utils/cec-compliance/cec-test.cpp         |  5 +++--
+>  utils/cec-ctl/cec-ctl.cpp                 | 13 +++++++------
+>  utils/cec-follower/cec-follower.cpp       |  5 +++--
+>  utils/libcecutil/cec-parse.cpp            |  4 ++--
+>  utils/v4l2-compliance/v4l2-compliance.cpp |  5 +++--
+>  utils/v4l2-ctl/v4l2-ctl-common.cpp        |  8 ++++----
+>  utils/v4l2-ctl/v4l2-ctl-edid.cpp          |  5 +++--
+>  utils/v4l2-ctl/v4l2-ctl-streaming.cpp     |  7 ++++---
+>  utils/v4l2-ctl/v4l2-ctl-vbi.cpp           |  5 +++--
+>  utils/v4l2-dbg/v4l2-dbg.cpp               |  4 ++--
+>  10 files changed, 34 insertions(+), 27 deletions(-)
+> 
+> diff --git a/utils/cec-compliance/cec-test.cpp b/utils/cec-compliance/cec-test.cpp
+> index 50d434b9..a84f83d3 100644
+> --- a/utils/cec-compliance/cec-test.cpp
+> +++ b/utils/cec-compliance/cec-test.cpp
+> @@ -3,10 +3,11 @@
+>   * Copyright 2016 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
+>   */
+>  
+> +#include <cstring>
+> +
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+> -#include <string.h>
+>  #include <inttypes.h>
+>  #include <sys/types.h>
+>  #include <sys/stat.h>
+> @@ -1530,7 +1531,7 @@ void listTests()
+>  
+>  int setExpectedResult(char *optarg, bool no_warnings)
+>  {
+> -	char *equal = strchr(optarg, '=');
+> +	char *equal = std::strchr(optarg, '=');
+>  
+>  	if (!equal || equal == optarg || !isdigit(equal[1]))
+>  		return 1;
+> diff --git a/utils/cec-ctl/cec-ctl.cpp b/utils/cec-ctl/cec-ctl.cpp
+> index b8edb105..7db7ca38 100644
+> --- a/utils/cec-ctl/cec-ctl.cpp
+> +++ b/utils/cec-ctl/cec-ctl.cpp
+> @@ -3,10 +3,11 @@
+>   * Copyright 2016 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
+>   */
+>  
+> +#include <cstring>
+> +
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+> -#include <string.h>
+>  #include <inttypes.h>
+>  #include <getopt.h>
+>  #include <sys/types.h>
+> @@ -1917,7 +1918,7 @@ int main(int argc, char **argv)
+>  		case OptIgnore: {
+>  			bool all_la = !strncmp(optarg, "all", 3);
+>  			bool all_opcodes = true;
+> -			const char *sep = strchr(optarg, ',');
+> +			const char *sep = std::strchr(optarg, ',');
+>  			unsigned la_mask = 0xffff, opcode, la = 0;
+>  
+>  			if (sep)
+> @@ -2068,7 +2069,7 @@ int main(int argc, char **argv)
+>  							size--;
+>  							break;
+>  						}
+> -						value = strchr(value, ':');
+> +						value = std::strchr(value, ':');
+>  						if (value == NULL)
+>  							break;
+>  						value++;
+> @@ -2109,7 +2110,7 @@ int main(int argc, char **argv)
+>  							size--;
+>  							break;
+>  						}
+> -						value = strchr(value, ':');
+> +						value = std::strchr(value, ':');
+>  						if (value == NULL)
+>  							break;
+>  						value++;
+> @@ -2150,7 +2151,7 @@ int main(int argc, char **argv)
+>  							size--;
+>  							break;
+>  						}
+> -						value = strchr(value, ':');
+> +						value = std::strchr(value, ':');
+>  						if (value == NULL)
+>  							break;
+>  						value++;
+> @@ -2184,7 +2185,7 @@ int main(int argc, char **argv)
+>  							size--;
+>  							break;
+>  						}
+> -						value = strchr(value, ':');
+> +						value = std::strchr(value, ':');
+>  						if (value == NULL)
+>  							break;
+>  						value++;
+> diff --git a/utils/cec-follower/cec-follower.cpp b/utils/cec-follower/cec-follower.cpp
+> index 7c8c044e..589426ec 100644
+> --- a/utils/cec-follower/cec-follower.cpp
+> +++ b/utils/cec-follower/cec-follower.cpp
+> @@ -3,10 +3,11 @@
+>   * Copyright 2016 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
+>   */
+>  
+> +#include <cstring>
+> +
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+> -#include <string.h>
+>  #include <inttypes.h>
+>  #include <getopt.h>
+>  #include <sys/types.h>
+> @@ -386,7 +387,7 @@ int main(int argc, char **argv)
+>  		case OptIgnore: {
+>  			bool all_la = !strncmp(optarg, "all", 3);
+>  			bool all_opcodes = true;
+> -			const char *sep = strchr(optarg, ',');
+> +			const char *sep = std::strchr(optarg, ',');
+>  			unsigned la_mask = 0xffff, opcode, la = 0;
+>  
+>  			if (sep)
+> diff --git a/utils/libcecutil/cec-parse.cpp b/utils/libcecutil/cec-parse.cpp
+> index 5fffcce7..8c869fec 100644
+> --- a/utils/libcecutil/cec-parse.cpp
+> +++ b/utils/libcecutil/cec-parse.cpp
+> @@ -6,7 +6,6 @@
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+> -#include <string.h>
+>  #include <inttypes.h>
+>  #include <getopt.h>
+>  #include <sys/types.h>
+> @@ -18,6 +17,7 @@
+>  #include <errno.h>
+>  #include <sys/ioctl.h>
+>  #include <stdarg.h>
+> +#include <cstring>
+>  #include <ctime>
+>  #include <cerrno>
+>  #include <string>
+> @@ -191,7 +191,7 @@ unsigned cec_parse_phys_addr(const char *value)
+>  {
+>  	unsigned p1, p2, p3, p4;
+>  
+> -	if (!strchr(value, '.'))
+> +	if (!std::strchr(value, '.'))
+>  		return strtoul(value, NULL, 0);
+>  	if (sscanf(value, "%x.%x.%x.%x", &p1, &p2, &p3, &p4) != 4) {
+>  		fprintf(stderr, "Expected a physical address of the form x.x.x.x\n");
+> diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp b/utils/v4l2-compliance/v4l2-compliance.cpp
+> index da8a7d10..5b715fa5 100644
+> --- a/utils/v4l2-compliance/v4l2-compliance.cpp
+> +++ b/utils/v4l2-compliance/v4l2-compliance.cpp
+> @@ -18,10 +18,11 @@
+>      Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA  02110-1335  USA
+>   */
+>  
+> +#include <cstring>
+> +
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+> -#include <string.h>
+>  #include <inttypes.h>
+>  #include <getopt.h>
+>  #include <sys/types.h>
+> @@ -1580,7 +1581,7 @@ int main(int argc, char **argv)
+>  			break;
+>  		case OptStreamFrom:
+>  		case OptStreamFromHdr: {
+> -			char *equal = strchr(optarg, '=');
+> +			char *equal = std::strchr(optarg, '=');
+>  			bool has_hdr = ch == OptStreamFromHdr;
+>  
+>  			if (equal == optarg)
+> diff --git a/utils/v4l2-ctl/v4l2-ctl-common.cpp b/utils/v4l2-ctl/v4l2-ctl-common.cpp
+> index bbd00e95..764d984a 100644
+> --- a/utils/v4l2-ctl/v4l2-ctl-common.cpp
+> +++ b/utils/v4l2-ctl/v4l2-ctl-common.cpp
+> @@ -1,7 +1,6 @@
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+> -#include <string.h>
+>  #include <inttypes.h>
+>  #include <getopt.h>
+>  #include <sys/types.h>
+> @@ -22,6 +21,7 @@
+>  #include <sys/klog.h>
+>  #endif
+>  
+> +#include <cstring>
+>  #include <list>
+>  #include <vector>
+>  #include <map>
+> @@ -741,7 +741,7 @@ static bool parse_subset(char *optarg)
+>  
+>  	memset(&subset, 0, sizeof(subset));
+>  	while (*optarg) {
+> -		p = strchr(optarg, ',');
+> +		p = std::strchr(optarg, ',');
+>  		if (p)
+>  			*p = 0;
+>  		if (optarg[0] == 0) {
+> @@ -808,7 +808,7 @@ void common_cmd(const std::string &media_bus_info, int ch, char *optarg)
+>  				common_usage();
+>  				std::exit(EXIT_FAILURE);
+>  			}
+> -			if (strchr(value, '=')) {
+> +			if (std::strchr(value, '=')) {
+>  				common_usage();
+>  				std::exit(EXIT_FAILURE);
+>  			}
+> @@ -824,7 +824,7 @@ void common_cmd(const std::string &media_bus_info, int ch, char *optarg)
+>  				common_usage();
+>  				std::exit(EXIT_FAILURE);
+>  			}
+> -			if (const char *equal = strchr(value, '=')) {
+> +			if (const char *equal = std::strchr(value, '=')) {
+>  				set_ctrls[std::string(value, (equal - value))] = equal + 1;
+>  			}
+>  			else {
+> diff --git a/utils/v4l2-ctl/v4l2-ctl-edid.cpp b/utils/v4l2-ctl/v4l2-ctl-edid.cpp
+> index a2df6089..b13d8209 100644
+> --- a/utils/v4l2-ctl/v4l2-ctl-edid.cpp
+> +++ b/utils/v4l2-ctl/v4l2-ctl-edid.cpp
+> @@ -1,7 +1,8 @@
+> +#include <cstring>
+> +
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+> -#include <string.h>
+>  #include <inttypes.h>
+>  #include <fcntl.h>
+>  #include <ctype.h>
+> @@ -710,7 +711,7 @@ static unsigned short parse_phys_addr(const char *value)
+>  {
+>  	unsigned p1, p2, p3, p4;
+>  
+> -	if (!strchr(value, '.'))
+> +	if (!std::strchr(value, '.'))
+>  		return strtoul(value, NULL, 0);
+>  	if (sscanf(value, "%x.%x.%x.%x", &p1, &p2, &p3, &p4) != 4) {
+>  		fprintf(stderr, "Expected a physical address of the form x.x.x.x\n");
+> diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> index 95ffe986..59783ff3 100644
+> --- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> +++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> @@ -1,7 +1,8 @@
+> +#include <cstring>
+> +
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+> -#include <string.h>
+>  #include <inttypes.h>
+>  #include <getopt.h>
+>  #include <sys/types.h>
+> @@ -1660,7 +1661,7 @@ static FILE *open_output_file(cv4l_fd &fd)
+>  	if (!host_to)
+>  		return NULL;
+>  
+> -	char *p = strchr(host_to, ':');
+> +	char *p = std::strchr(host_to, ':');
+>  	struct sockaddr_in serv_addr;
+>  	struct hostent *server;
+>  	struct v4l2_fract aspect;
+> @@ -1925,7 +1926,7 @@ static FILE *open_input_file(cv4l_fd &fd, __u32 type)
+>  	if (!host_from)
+>  		return NULL;
+>  
+> -	char *p = strchr(host_from, ':');
+> +	char *p = std::strchr(host_from, ':');
+>  	int listen_fd;
+>  	socklen_t clilen;
+>  	struct sockaddr_in serv_addr = {}, cli_addr;
+> diff --git a/utils/v4l2-ctl/v4l2-ctl-vbi.cpp b/utils/v4l2-ctl/v4l2-ctl-vbi.cpp
+> index 6a4f627f..ee55012f 100644
+> --- a/utils/v4l2-ctl/v4l2-ctl-vbi.cpp
+> +++ b/utils/v4l2-ctl/v4l2-ctl-vbi.cpp
+> @@ -1,7 +1,8 @@
+> +#include <cstring>
+> +
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+> -#include <string.h>
+>  #include <inttypes.h>
+>  #include <getopt.h>
+>  #include <sys/types.h>
+> @@ -98,7 +99,7 @@ void vbi_cmd(int ch, char *optarg)
+>  			std::exit(EXIT_FAILURE);
+>  		}
+>  		while (*optarg) {
+> -			subs = strchr(optarg, ',');
+> +			subs = std::strchr(optarg, ',');
+>  			if (subs)
+>  				*subs = 0;
+>  
+> diff --git a/utils/v4l2-dbg/v4l2-dbg.cpp b/utils/v4l2-dbg/v4l2-dbg.cpp
+> index f2fd8269..86266376 100644
+> --- a/utils/v4l2-dbg/v4l2-dbg.cpp
+> +++ b/utils/v4l2-dbg/v4l2-dbg.cpp
+> @@ -19,7 +19,6 @@
+>  #include <unistd.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+> -#include <string.h>
+>  #include <inttypes.h>
+>  #include <getopt.h>
+>  #include <sys/types.h>
+> @@ -43,6 +42,7 @@
+>  
+>  #include <linux/videodev2.h>
+>  
+> +#include <cstring>
+>  #include <list>
+>  #include <vector>
+>  #include <map>
+> @@ -731,7 +731,7 @@ int main(int argc, char **argv)
+>  			goto list_done;
+>  		}
+>  
+> -		p = strchr(chip_info.name, ' ');
+> +		p = std::strchr(chip_info.name, ' ');
+>  		if (p)
+>  			*p = '\0';
+>  		name = chip_info.name;
+> 
 
