@@ -2,119 +2,211 @@ Return-Path: <SRS0=xY1j=6U=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A094DC38A24
-	for <linux-media@archiver.kernel.org>; Wed,  6 May 2020 11:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DB54C28CBC
+	for <linux-media@archiver.kernel.org>; Wed,  6 May 2020 11:09:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 826022070B
-	for <linux-media@archiver.kernel.org>; Wed,  6 May 2020 11:07:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15F4F206D5
+	for <linux-media@archiver.kernel.org>; Wed,  6 May 2020 11:09:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588763249;
-	bh=uKEKqSAFW/aYJ2Fu+oNP2OG3gCFuq6s+Y3wl5j44KCE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=ili8EgqzGzDLQQXo0AVk75/CifDkKz0D9PCKHT9f1+MYSsYyhkHUd9Me2G9CEDrS8
-	 ChB3XjFkAA4EHLA3mvMfiXmLrOL3Yauvl3hQVOt5xw5FdLVXjWIxzFWlCzezEHFfLZ
-	 EBebdcLhyrxwYdolPsEnuBQKKES2cUhayRSs/o78=
+	s=default; t=1588763369;
+	bh=yCCavtnOg54kNpzndKDWYx2gejLduvI9cI/1KSNjh48=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=2gazVDThStDPSgOL/080hKXD7Qk/hBae9NngX631/v03b+ICLfSEp1VNcMZrCYSbf
+	 8v8r49dTFTfeyGv4wEXIobWOYdY0QIlegiqoejtXaSGfKz2zU/J7DixrtxEszxi2XN
+	 9dkePocOLDxld+NLDqNCAathMJKqyizuD7Dy6X1o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727918AbgEFLH0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 May 2020 07:07:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54584 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727102AbgEFLHZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 6 May 2020 07:07:25 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A715D2068E;
-        Wed,  6 May 2020 11:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588763245;
-        bh=uKEKqSAFW/aYJ2Fu+oNP2OG3gCFuq6s+Y3wl5j44KCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uWC3u5WjG91H2+dc4Bkf6aVXMcIZ0cAuEkHSQiBXupiDku785TgQK/8AchuZvCRSG
-         oLTZkJjYLiUNP+XKf6tsDH+yQkf+MqTseD2H85JSofiEwG1AEPIj9Uzs5ZCZ7I9PjY
-         /4W33vNyBVdBAqI3MwKPvoAUUXXrOumzYHYytn28=
-Date:   Wed, 6 May 2020 13:07:22 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     mchehab@kernel.org, kstewart@linuxfoundation.org,
-        tomasbortoli@gmail.com, sean@mess.org, allison@lohutok.net,
-        tglx@linutronix.de, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: usb: ttusb-dec: avoid buffer overflow in
- ttusb_dec_handle_irq() when DMA failures/attacks occur
-Message-ID: <20200506110722.GA2975410@kroah.com>
-References: <20200505142110.7620-1-baijiaju1990@gmail.com>
- <20200505181042.GD1199718@kroah.com>
- <0e4a86ee-8c4e-4ac3-8499-4e9a6ed7bd1e@gmail.com>
+        id S1727917AbgEFLJ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 May 2020 07:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727861AbgEFLJ2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 6 May 2020 07:09:28 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF3BC061A0F
+        for <linux-media@vger.kernel.org>; Wed,  6 May 2020 04:09:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description;
+        bh=tklJkt/qMJNRgdzu1RQc4mu57ElnC8FdgyYmjzia984=; b=bit31eS1mdznnVmStMpZfj95GT
+        uC9McBtkeUpQhcrdr2uTrmsEl9nZh35JRb2GrqF5siinKuC7kYZu7NZwJ+2KQie9Voxgq1BHXGeKP
+        n7iBRU4kx6YQ/mhD51fDGyUJFvxfYp6gOmVvdjQeBlV4D56IjJRFSwjVSwCCnikS1A/nNJ/vGfI+Y
+        EENGLHZ+qQSV/1nXAw7vWA46s/rp3Mh+nBfLPps3zRXce9uIfJDTwpyZdAy/870I1n4VB24A047ai
+        IVglKm/wErfGv6vhbsRauMGNlCXn20Ut7aytxwNZG/fs2dGUebyy5ACzWrzQM9vt2Csb1zBqJOBV1
+        MSLEi2hw==;
+Received: from ip5f5ad5c5.dynamic.kabel-deutschland.de ([95.90.213.197] helo=coco.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jWHvR-0005bJ-Ir; Wed, 06 May 2020 11:09:17 +0000
+Date:   Wed, 6 May 2020 13:09:13 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        tfiga@google.com, pavel@ucw.cz,
+        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>, libcamera-devel@lists.libcamera.org
+Subject: Re: [PATCH v9 02/11] media: v4l2-ctrl: Document
+ V4L2_CID_CAMERA_SENSOR_LOCATION
+Message-ID: <20200506130913.7df929ff@coco.lan>
+In-Reply-To: <20200506104723.l3wojjyefvazohpd@uno.localdomain>
+References: <20200417124110.72313-1-jacopo@jmondi.org>
+        <20200417124110.72313-3-jacopo@jmondi.org>
+        <20200505140206.589f54ae@coco.lan>
+        <a5d77790-5f98-650e-cfb9-a97b8701454d@xs4all.nl>
+        <20200506104723.l3wojjyefvazohpd@uno.localdomain>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0e4a86ee-8c4e-4ac3-8499-4e9a6ed7bd1e@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, May 06, 2020 at 06:13:01PM +0800, Jia-Ju Bai wrote:
-> Hi Greg,
+Em Wed, 6 May 2020 12:47:23 +0200
+Jacopo Mondi <jacopo@jmondi.org> escreveu:
+
+> Hello,
 > 
-> Thanks for the reply :)
+> On Tue, May 05, 2020 at 02:21:38PM +0200, Hans Verkuil wrote:
+> > On 05/05/2020 14:02, Mauro Carvalho Chehab wrote:  
+> > > Em Fri, 17 Apr 2020 14:41:01 +0200
+> > > Jacopo Mondi <jacopo@jmondi.org> escreveu:
+> > >  
+> > >> Add documentation for the V4L2_CID_CAMERA_SENSOR_LOCATION camera
+> > >> control. The newly added read-only control reports the camera device
+> > >> mounting position.
+> > >>
+> > >> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> > >> ---
+> > >>  .../media/v4l/ext-ctrls-camera.rst            | 32 +++++++++++++++++++
+> > >>  1 file changed, 32 insertions(+)
+> > >>
+> > >> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+> > >> index e39f84d2447f..01a9042d53a6 100644
+> > >> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+> > >> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+> > >> @@ -510,6 +510,38 @@ enum v4l2_scene_mode -
+> > >>      value down. A value of zero stops the motion if one is in progress
+> > >>      and has no effect otherwise.
+> > >>
+> > >> +``V4L2_CID_CAMERA_SENSOR_LOCATION (integer)``
+> > >> +    This read-only control describes the camera sensor location by reporting
+> > >> +    its mounting position on the device where the camera is installed. The
+> > >> +    control value is constant and not modifiable by software. This control is
+> > >> +    particularly meaningful for devices which have a well defined orientation,
+> > >> +    such as phones, laptops and portable devices since the camera location is
+> > >> +    expressed as a position relative to the device's intended usage orientation.
+> > >> +    For example, a camera sensor installed on the user-facing side of a phone,
+> > >> +    a tablet or a laptop device is said to be installed in the
+> > >> +    ``V4L2_LOCATION_FRONT`` location while camera sensors installed on the side
+> > >> +    opposite the front one are said to be installed in the
+> > >> +    ``V4L2_LOCATION_BACK`` location. Camera sensors not directly attached to
+> > >> +    the device or attached in a way that allows them to move freely, such as
+> > >> +    webcams and digital cameras, are said to have the ``V4L2_LOCATION_EXTERNAL``
+> > >> +    location.
+> > >> +
+> > >> +
+> > >> +
+> > >> +.. flat-table::
+> > >> +    :header-rows:  0
+> > >> +    :stub-columns: 0
+> > >> +
+> > >> +    * - ``  
+> > > ``  
+> > >> +      - The camera sensor is located on the front side of the device.
+> > >> +    * - ``V4L2_LOCATION_BACK``
+> > >> +      - The camera sensor is located on the back side of the device.
+> > >> +    * - ``V4L2_LOCATION_EXTERNAL``
+> > >> +      - The camera sensor is not directly attached to the device and is
+> > >> +        freely movable.  
+> > >
+> > > I guess I mentioned this already, but IMHO this ioctl is somewhat flawed,
+> > > for two reasons:
+> > >
+> > > 1) newer devices may all top of the line mobile devices now are coming
+> > >    with multiple camera sensors at the same side. So, just saying that
+> > >    the location is front or back is not enough. A location syscall would
+> > >    need have something more to better identify the location.
+> > >    It probably doesn't need to be something fancy, but, at least, on a
+> > >    device with 3 back sensors, I would call them as:
+> > >
+> > > 	V4L2_LOCATION_BACK_1
+> > > 	V4L2_LOCATION_BACK_2
+> > > 	V4L2_LOCATION_BACK_3
+> > >
+> > >    And add some comment at the control documentation that would allow to
+> > >    uniquely number the other ones, like:
+> > >
+> > > 	"when multiple sensors are present at the same side, sensors
+> > > 	 will be numbered considering the ``(x,y)`` coordinates of the center
+> > > 	 of each sensor, starting from the topmost, leftmost position.
+> > >
+> > > 	 She first sensor will be the topmost sensor column at the leftmost
+> > > 	 side. The other sensors that will have the same ``y`` coordinate,
+> > > 	 counting from the left to the right, then increment the ``y`` and
+> > > 	 parse the next column again until all sensors are numbered."  
+> >
+> > I think this isn't a good idea. In most cases you do not care about this.
+> >
+> > And if you do care about this, then wouldn't it be better to do that through
+> > a new control where you provide the precise coordinates in e.g. mm?
+> >
+> > BACK_1/2/3 really doesn't tell you anything other than that there are three
+> > sensors on the back, but we knew that already.
+> >
+> > If we need support for the precise location in the future, then let's do that
+> > right and not try to shoehorn into something that wasn't meant for it.  
 > 
-> On 2020/5/6 2:10, Greg KH wrote:
-> > On Tue, May 05, 2020 at 10:21:10PM +0800, Jia-Ju Bai wrote:
-> > > In this case, "buffer[4] - 1 < ARRAY_SIZE(rc_keys)"
-> > > can be first satisfied, and then the value of buffer[4] can be changed
-> > > to a large number, causing a buffer-overflow vulnerability.
-> > Um, maybe.  I agree testing and then using the value can cause problems
-> > when userspace provides you with that data and control, but for
-> > DMA-backed memory, we are in so much other trouble if that is the case.
-> > 
-> > > To avoid the risk of this vulnerability, buffer[4] is assigned to a
-> > > non-DMA local variable "index" at the beginning of
-> > > ttusb_dec_handle_irq(), and then this variable replaces each use of
-> > > buffer[4] in the function.
-> > I strongly doubt this is even possible.  Can you describe how you can
-> > modify DMA memory and if so, would you do something tiny like this?
-> > 
+> I think the best move forward to describe movable cameras and such
+> would be to provide a 3D rotation matrix, along the lines of what iio
+> has in the 'mount-matrix' property as suggested by Rob and Laurent in
+> the review of the series.
 > 
-> I have never modified DMA memory in the real world, but an attacker can use
-> a malicious device to do this.
-> There is a video that shows how to use the Inception tool to perform DMA
-> attacks and login in the Windows OS without password:
-> https://www.youtube.com/watch?v=HDhpy7RpUjM
-
-If you have control over the hardware, and can write to any DMA memory,
-again, there's almost nothing a kernel can do to protect from that.
-
-> Besides, the Windows OS resists against DMA attacks by disabling DMA of
-> external devices by default:
-> http://support.microsoft.com/kb/2516445
-
-So does Linux :)
-
-> Considering that this patch is for a USB media driver, I think that an
-> attacker can just insert a malicious USB device to modify DMA memory and
-> trigger this bug.
-
-USB devices do not touch DMA memory so they physically can not do things
-like what thunderbolt devices can do.
-
-> Besides, not related to this patch, some drivers use DMA to send/receive
-> data (such as the URB used in USB drivers and ring descriptors used in
-> network drivers). In this case, if the data is malicious and used as an
-> array index through DMA, security problems may occur.
+> Before going the 'easy' way with this proeprty that just allow to
+> enumerate fixed locations I considered the idea, but we're still
+> missing a unique definition for the device usage orientation that the
+> rotation matrix would be defined for.
 > 
-> In my opinion, similar to the data from userspace, the data from hardware
-> may be also malicious and should be checked.
-> 
-> Maybe we could discuss this issue with DMA driver developers?
+> This property implements a mechanism that covers most of devices out
+> there and all devices in mainline. The properties defined here are the
+> most basic ones, and could be combined and expanded to provide more
+> precise definition is someone needs to do so (expecially downstream),
+> but the important part is that the mechanism to retrieve the
+> information is in place.
 
-Sure, but I think that's outside the scope of this tiny patch :)
+I had some discussions with Laurent about that.
 
-thanks,
+Yeah, a 3D rotation matrix could work. Another option would be to
+name this as CID_LENS_FACING, use about the same definition as on
+Android:
 
-greg k-h
+ https://jmondi.org/android_metadata_tags/docs.html#static_android.lens.poseTranslation
+
+The definition there is arguable (as some devices may have back
+screens nowadays), but a name like that is what this control
+really does, as it doesn't neither provide a rotation matrix
+nor a camera location.
+
+Starting with a "read-only" control sound OK to me, but I would
+add some note about flippable changes that can be changed in
+runtime between back/front position.
+
+Something like:
+
+.. note:
+
+	Sensors that could have it side flipped is currently out
+	of the scope of this control. Some changes on the behavior
+	of this control may change when support for such kind of
+	devices would be added upstream.
+
+Thanks,
+Mauro
