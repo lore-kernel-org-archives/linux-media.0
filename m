@@ -2,41 +2,40 @@ Return-Path: <SRS0=aj5L=6W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03F92C47257
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 833FDC54E49
 	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 09:59:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E132E208DB
-	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 09:59:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B82A20870
+	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 09:59:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726904AbgEHJ7Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726906AbgEHJ7Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 8 May 2020 05:59:24 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:34749 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726091AbgEHJ7Y (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 May 2020 05:59:24 -0400
-X-Originating-IP: 2.224.242.101
-Received: from localhost.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 52D52FF806;
-        Fri,  8 May 2020 09:59:21 +0000 (UTC)
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE
-        (V4L/DVB)), libcamera-devel@lists.libcamera.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, tfiga@google.com, pavel@ucw.cz
-Subject: [PATCH v10 08/13] include: v4l2-ctrl: Sort forward declarations
-Date:   Fri,  8 May 2020 12:01:53 +0200
-Message-Id: <20200508100158.3437161-9-jacopo@jmondi.org>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20200508100158.3437161-1-jacopo@jmondi.org>
-References: <20200508100158.3437161-1-jacopo@jmondi.org>
+Received: from www.linuxtv.org ([130.149.80.248]:44234 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726897AbgEHJ7Y (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 May 2020 05:59:24 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jWzjc-00H91e-CC; Fri, 08 May 2020 09:56:00 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jWzom-0006o8-1b; Fri, 08 May 2020 10:01:20 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.8] Small fixes (#63674)
+Date:   Fri,  8 May 2020 10:01:19 +0000
+Message-Id: <20200508100119.26127-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200508094758.GC1214@gofer.mess.org>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -44,37 +43,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Before adding a new forward declaration to the v4l2-ctrls.h header file,
-sort the existing ones alphabetically.
+From: builder@linuxtv.org
 
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
----
- include/media/v4l2-ctrls.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Pull request: https://patchwork.linuxtv.org/patch/63674/
+Build log: https://builder.linuxtv.org/job/patchwork/50037/
+Build time: 00:11:00
+Link: https://lore.kernel.org/linux-media/20200508094758.GC1214@gofer.mess.org
 
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index 757a713bad412..224c10823bbff 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -25,14 +25,14 @@
- 
- /* forward references */
- struct file;
-+struct poll_table_struct;
-+struct v4l2_ctrl;
- struct v4l2_ctrl_handler;
- struct v4l2_ctrl_helper;
--struct v4l2_ctrl;
--struct video_device;
-+struct v4l2_fh;
- struct v4l2_subdev;
- struct v4l2_subscribed_event;
--struct v4l2_fh;
--struct poll_table_struct;
-+struct video_device;
- 
- /**
-  * union v4l2_ctrl_ptr - A pointer to a control value.
--- 
-2.26.1
+gpg: Signature made Fri 08 May 2020 08:29:18 AM UTC
+gpg:                using RSA key A624251A26084A9ED9E4C8B6425F639D3960FA9E
+gpg:                issuer "sean@mess.org"
+gpg: Good signature from "Sean Young <sean@mess.org>" [full]
+
+Summary: 2 patches and/or PDF generation with issues, being 0 at build time
+
+Error/warnings:
+
+
+Error #256 when running cat patches/0005-media-usb-ttusb-dec-reduce-the-number-of-memory-read.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0005-media-usb-ttusb-dec-reduce-the-number-of-memory-read.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:39: WARNING: line over 80 characters
+-:42: WARNING: line over 80 characters
 
