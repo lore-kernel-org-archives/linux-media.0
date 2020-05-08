@@ -7,50 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AE00C54E4A
-	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 13:10:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF352C47257
+	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 13:10:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4AD0F249EC
-	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 13:10:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B155B249DE
+	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 13:10:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588943445;
-	bh=HQV8+pfPplk0V+kgDADCRrsaL77q+O7ZgggINhSPIYU=;
+	s=default; t=1588943447;
+	bh=0V/wbv+b5jsi4lq2mG/sYRgYjKG8X51Xr2wTxp7q+Qg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=h+E9lGHDRWz/zQsweh0SnO6hSJ5XrvXlCyuiKL563p7T7hitQoOElIK9H1KR7Y0Na
-	 1vf/15va9+gDkrKJUTGjLYQV8QQ8iD7hxqoQsUmKw9E1slIWfj0bFfwOm2Zir8RB2/
-	 N2gVP3YmFe/NMTKMU12gt9zuzmZBTke5wvEjft+4=
+	b=nVZQiB/r8wbp1H7OGEUuIFtlgml9TQSAY+rB8JFj4YoezGJtUXwCeuTi+1TBZl1gU
+	 W3mbKO76AQrN+BE9aloJmttfotHGo9CdUPhhRccaTk9ag0Say0Yqdn5qcxsM+Eattp
+	 nIAWKLYsO3iWIE3WsGFc1fVZCaWOiv5W3WoKGTQ8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730547AbgEHNKm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 May 2020 09:10:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60446 "EHLO mail.kernel.org"
+        id S1728547AbgEHNKq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 May 2020 09:10:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60476 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730485AbgEHNKl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1730522AbgEHNKl (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Fri, 8 May 2020 09:10:41 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67A3B249AC;
+        by mail.kernel.org (Postfix) with ESMTPSA id 93AC0249DA;
         Fri,  8 May 2020 13:10:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1588943440;
-        bh=HQV8+pfPplk0V+kgDADCRrsaL77q+O7ZgggINhSPIYU=;
+        bh=0V/wbv+b5jsi4lq2mG/sYRgYjKG8X51Xr2wTxp7q+Qg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2D6szX+nH/r0SxIkIphIHV9s8ZSsnzPxtEMB8/VHYJqFSHiB8YPoK8wU5HpwvNf2n
-         c1IPVF+fgdX1cCLS/KFchwjWdTyYbK8I9NqKT5G/fbXybXV2xpdJkYIEP46P79NgjE
-         FMeAc6AIs1WhyXSipfD8Rp9kQL/XUQOlMVid3NSM=
+        b=rvtQFNRCvETARY1n2LhZTueLeZwztyCwecl41AlWdjNh+WBCXXV9OwEvRiBVH7F4o
+         pCVyDBOn0XiT/qOVcZP8p5bPKvw9pEJfu+UA2VjLquiUJmfTUrl7V6lLAqm4i3VGLs
+         HslqvTykytEA5z9OG+NIkLl8JGyBpOBvlD4UzpMo=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jX2ly-000Z95-DD; Fri, 08 May 2020 15:10:38 +0200
+        id 1jX2ly-000Z9H-GL; Fri, 08 May 2020 15:10:38 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>
-Subject: [PATCH v9 1/5] media: open.rst: better document device node naming
-Date:   Fri,  8 May 2020 15:10:33 +0200
-Message-Id: <dac0e7a2b8511e9fc3499dbf92abebe3eb6eb6da.1588943181.git.mchehab+huawei@kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH v9 4/5] media: glossary.rst: add terms for MC-centric video-node-centric
+Date:   Fri,  8 May 2020 15:10:36 +0200
+Message-Id: <0c083fffe63499a9ce49d30f3c907668299401f1.1588943181.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1588943181.git.mchehab+huawei@kernel.org>
 References: <cover.1588943181.git.mchehab+huawei@kernel.org>
@@ -62,80 +61,92 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Right now, only kAPI documentation describes the device naming.
-However, such description is needed at the uAPI too. Add it,
-and describe how to get an unique identify for a given device.
+Now that we have a chapter describing hardware control, let's
+add the terms used there to the glossary.
 
-Acked-by: Hans Verkuil <hans.verkuil@cisco.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../userspace-api/media/v4l/open.rst          | 43 +++++++++++++++++--
- 1 file changed, 40 insertions(+), 3 deletions(-)
+ .../userspace-api/media/glossary.rst          | 42 ++++++++++++++++---
+ 1 file changed, 37 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/open.rst b/Documentation/userspace-api/media/v4l/open.rst
-index 38046ef20141..86816b247a17 100644
---- a/Documentation/userspace-api/media/v4l/open.rst
-+++ b/Documentation/userspace-api/media/v4l/open.rst
-@@ -14,12 +14,14 @@ Opening and Closing Devices
- ***************************
+diff --git a/Documentation/userspace-api/media/glossary.rst b/Documentation/userspace-api/media/glossary.rst
+index 18a1ace00159..8cdb7900e994 100644
+--- a/Documentation/userspace-api/media/glossary.rst
++++ b/Documentation/userspace-api/media/glossary.rst
+@@ -69,6 +69,20 @@ Glossary
  
+ 	See https://en.wikipedia.org/wiki/Field-programmable_gate_array.
  
--Device Naming
--=============
-+.. _v4l2_device_naming:
++    Hardware Component
++	A subset of the :term:`media hardware`. For example an :term:`I²C` or
++	:term:`SPI` device, or an :term:`IP block` inside a
++	:term:`SoC` or :term:`FPGA`.
 +
-+V4L2 Device Node Naming
-+=======================
++    Hardware Peripheral
++	A group of :term:`hardware components <hardware component>` that
++	together make a larger user-facing functional peripheral. For
++	instance the :term:`SoC` :term:`ISP` :term:`IP	block <ip block>`
++	and external camera sensors together make a camera hardware
++	peripheral.
++
++	Also known as :term:`peripheral`.
++
+     I²C
+ 	**Inter-Integrated Circuit**
  
- V4L2 drivers are implemented as kernel modules, loaded manually by the
- system administrator or automatically when a device is first discovered.
--The driver modules plug into the "videodev" kernel module. It provides
-+The driver modules plug into the ``videodev`` kernel module. It provides
- helper functions and a common application interface specified in this
- document.
+@@ -126,6 +140,14 @@ Glossary
  
-@@ -30,6 +32,41 @@ option CONFIG_VIDEO_FIXED_MINOR_RANGES. In that case minor numbers
- are allocated in ranges depending on the device node type (video, radio,
- etc.).
+ 	See :ref:`media_controller`.
  
-+The device nodes supported by the Video4Linux subsystem are:
++    MC-Centric
++	:term:`V4L2 hardware` that requires a :term:`MC API`.
 +
-+======================== ======================================================
-+Default device node name Usage
-+======================== ======================================================
-+``/dev/videoX``		 Video input/output devices
-+``/dev/vbiX``		 Vertical blank data (i.e. closed captions, teletext)
-+``/dev/radioX``		 Radio tuners and modulators
-+``/dev/swradioX``	 Software Defined Radio tuners and modulators
-+``/dev/v4l-touchX``	 Touch sensors
-+``/dev/v4l-sudevX``	 Video sub-devices (used by sensors and other I2C
-+			 devices)\ [#]_
-+======================== ======================================================
++	Such hardware have ``V4L2_CAP_IO_MC`` device_caps field unset
++	(see :ref:`VIDIOC_QUERYCAP`).
 +
-+Where ``X`` is a non-negative number.
++	See :ref:`v4l2_hardware_control` for more details.
 +
-+.. note::
+     Media Hardware
+ 	Subset of the hardware that is supported by the Linux Media API.
+ 
+@@ -139,6 +161,9 @@ Glossary
+ 	control and input/output (I/O) operations specified by the
+ 	instructions on a single integrated circuit.
+ 
++    Peripheral
++	The same as :term:`hardware peripheral`.
 +
-+   1. The actual device node name is system-dependent, as udev rules may apply.
-+   2. There is no guarantee that ``X`` will remain the same for the same
-+      device, as the number depends on the device driver's probe order.
-+      If you need an unique name, udev default rules produce
-+      ``/dev/v4l/by-id/`` and ``/dev/v4l/by-path/`` directories containing
-+      links that can be used uniquely to identify a V4L2 device node::
+     RC API
+ 	**Remote Controller API**
+ 
+@@ -168,15 +193,22 @@ Glossary
+ 	The userspace API defined in :ref:`v4l2spec`, which is used to
+ 	control a V4L2 hardware.
+ 
++    V4L2 Device Node
++	A :term:`device node` that is associated to a V4L driver.
 +
-+	$ tree /dev/v4l
-+	/dev/v4l
-+	├── by-id
-+	│   └── usb-OmniVision._USB_Camera-B4.04.27.1-video-index0 -> ../../video0
-+	└── by-path
-+	    └── pci-0000:00:14.0-usb-0:2:1.0-video-index0 -> ../../video0
++	The V4L2 device node naming is specified at :ref:`v4l2_device_naming`.
 +
-+.. [#] **V4L2 sub-device nodes** (e. g. ``/dev/v4l-sudevX``) use a different
-+       set of system calls, as covered at :ref:`subdev`.
+     V4L2 Hardware
+ 	Part of a media hardware with is supported by the :term:`V4L2 API`.
+ 
+     V4L2 Sub-device
+ 	V4L2 hardware components that aren't controlled by a
+-	:term:`bridge driver`.
++	:term:`bridge driver`. See :ref:`subdev`.
+ 
+-    V4L2 Sub-device API
+-	Part of the :term:`V4L2 API` which control
+-	:term:`V4L2 sub-devices <V4L2 Sub-device>`.
++    Video-node-Centric
++	V4L2 hardware that doesn't require a media controller to be used.
+ 
+-	See :ref:`subdev`.
++	Such hardware have ``V4L2_CAP_IO_MC`` device_caps field unset
++	(see :ref:`VIDIOC_QUERYCAP`).
 +
- Many drivers support "video_nr", "radio_nr" or "vbi_nr" module
- options to select specific video/radio/vbi node numbers. This allows the
- user to request that the device node is named e.g. /dev/video5 instead
++	See :ref:`v4l2_hardware_control` for more details.
 -- 
 2.26.2
 
