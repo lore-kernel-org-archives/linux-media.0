@@ -2,278 +2,94 @@ Return-Path: <SRS0=aj5L=6W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2927C38A2A
-	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 13:10:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 314C2C47254
+	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 13:10:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D1AF249C2
-	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 13:10:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07455208CA
+	for <linux-media@archiver.kernel.org>; Fri,  8 May 2020 13:10:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588943447;
-	bh=e7rJiIVGerWaSbbKSKZf+aeRycboyDyabwzwVgJTOTQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vwC0MO51H9jYYgYu5JNNva1Q+9vNvfh3JF3qTnGOJKejYqdpz3uhU74OCaSmKEQ+b
-	 kAFNiqVC3lclF87yGcdcigT2teqhkV9px+26x3WPkHaqt6I1nwbcIKz+V61zG2kPNA
-	 P773A2Udz/0X2hKnfqF+Re5QfwgZyG/XIleN2vUo=
+	s=default; t=1588943449;
+	bh=UW8DuYVVRVoZ1XUUiSEuEKuXAM525Y2bUrvJ6cD4fME=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=Hx5Y68SDJQPOYRzUMJgUxs4SjoB2o11cFVFdk/EN9IgKKdbjT042YXNl0itEmu/Dy
+	 bG39EFsrS1bob2xphGL1Ebt6ZwChlELMdsG+jpgwPJLcO1URgX8DmN/g8aaplYHEMb
+	 rtHy0/qJeOakBL3a8I/VkfVjjX4SaDmHnr26zXDQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728193AbgEHNKq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 May 2020 09:10:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60454 "EHLO mail.kernel.org"
+        id S1729418AbgEHNKr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 May 2020 09:10:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60440 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730521AbgEHNKl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1730480AbgEHNKl (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Fri, 8 May 2020 09:10:41 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7A1EE249C2;
+        by mail.kernel.org (Postfix) with ESMTPSA id 64D4F208CA;
         Fri,  8 May 2020 13:10:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1588943440;
-        bh=e7rJiIVGerWaSbbKSKZf+aeRycboyDyabwzwVgJTOTQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nnLgSjQy1aVaX1gyo22Ij6hINSICot5QxPbpLZMiOgnKZfNAjSyxGxn5/Y8YBchDc
-         gaRAk0eUMKeBLwhhHpyNkMpy91w+a3AMiXaMqj2TAqAjXpNF5B59H5T6yQpSEvlBxe
-         M+vYQszyWLqZ8iJAgxRD1LW5H+WRcZGcwLrEhscE=
+        bh=UW8DuYVVRVoZ1XUUiSEuEKuXAM525Y2bUrvJ6cD4fME=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cejWJAvNnyYuzYq/ytGFzDdGXVu8gWDLRgH8wRkoowJtUXoYt6dtSp8CaC9iMVM2w
+         7emn0PXBgurIqK25dqXlgUv8xFm6MdpmI/O+NeryZQoOkfaJXdJk9qbsU3/cnt3tMv
+         Iw4DIqyzh3vT71Jm8SmswvBRdPzauAHkHr1xnF80=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jX2ly-000Z9D-FJ; Fri, 08 May 2020 15:10:38 +0200
+        id 1jX2ly-000Z92-Bn; Fri, 08 May 2020 15:10:38 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH v9 3/5] media: docs: add glossary.rst with common terms used at V4L2 spec
-Date:   Fri,  8 May 2020 15:10:35 +0200
-Message-Id: <03ae8cfd780924080f48154569c7fa26b6e92ab3.1588943181.git.mchehab+huawei@kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Subject: [PATCH v9 0/5] Add a glossary for the media subsystem
+Date:   Fri,  8 May 2020 15:10:32 +0200
+Message-Id: <cover.1588943181.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1588943181.git.mchehab+huawei@kernel.org>
-References: <cover.1588943181.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a glossary of terms used within the media userspace API
-documentation, as several concepts are complex enough to cause
-misunderstandings.
+There are too many technical terms at the media subsystem, and sometimes
+the same thing is refered differently at the documentation and on the ML
+and IRC discussions.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- .../userspace-api/media/glossary.rst          | 182 ++++++++++++++++++
+Let's add a glossary to the uAPI documentation, in order to start using
+a common vocabulary at the subsystem's discussion and to let things
+clearer for people trying to understand the subsystem.
+
+I'm pretty sure that this document doesn't cover everything, but it can
+(and should) be improved overtime.
+
+At version 9 (and hopefully the final version), I simplified how things were
+described, avoiding to define things that may not be needed for this
+initial version, in order to try reach a consensus when merging.
+
+If something is not ok, or other terms need to be added, feel free to
+submit other patches addressing it.
+
+Mauro Carvalho Chehab (5):
+  media: open.rst: better document device node naming
+  media: open.rst: remove the minor number range
+  media: docs: add glossary.rst with common terms used at V4L2 spec
+  media: glossary.rst: add terms for MC-centric video-node-centric
+  media: open.rst: document mc-centric and video-node-centric
+
+ .../userspace-api/media/glossary.rst          | 214 ++++++++++++++++++
  Documentation/userspace-api/media/index.rst   |   3 +
- 2 files changed, 185 insertions(+)
+ .../userspace-api/media/v4l/open.rst          | 106 +++++++--
+ 3 files changed, 309 insertions(+), 14 deletions(-)
  create mode 100644 Documentation/userspace-api/media/glossary.rst
 
-diff --git a/Documentation/userspace-api/media/glossary.rst b/Documentation/userspace-api/media/glossary.rst
-new file mode 100644
-index 000000000000..18a1ace00159
---- /dev/null
-+++ b/Documentation/userspace-api/media/glossary.rst
-@@ -0,0 +1,182 @@
-+.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-or-later
-+
-+.. For GPL-2.0, see LICENSES/preferred/GPL-2.0
-+..
-+.. For GFDL-1.1-or-later, see:
-+..
-+.. Permission is granted to copy, distribute and/or modify this document
-+.. under the terms of the GNU Free Documentation License, Version 1.1 or
-+.. any later version published by the Free Software Foundation, with no
-+.. Invariant Sections, no Front-Cover Texts and no Back-Cover Texts.
-+.. A copy of the license is included at
-+.. Documentation/userspace-api/media/fdl-appendix.rst.
-+
-+========
-+Glossary
-+========
-+
-+.. note::
-+
-+   This goal of this section is to standardize the terms used within the media
-+   userspace API documentation. It is written incrementally as they are
-+   standardized in the media documentation.
-+
-+   So, it is a Work In Progress.
-+
-+.. Please keep the glossary entries in alphabetical order
-+
-+.. glossary::
-+
-+    Bridge Driver
-+	A :term:`device driver` that implements the main logic to talk with
-+	media hardware.
-+
-+    CEC API
-+	**Consumer Electronics Control API**
-+
-+	An API designed to receive and transmit data via an HDMI
-+	CEC interface.
-+
-+	See :ref:`cec`.
-+
-+    Device Driver
-+	Part of the Linux Kernel that implements support for a hardware
-+	component.
-+
-+    Device Node
-+	A character device node in the file system used to control and
-+	ransfer data in and out of a Kernel driver.
-+
-+    Digital TV API
-+	**Previously known as DVB API**
-+
-+	An API designed to control a subset of the :term:`Media Hardware`
-+	that implements	digital TV.
-+
-+	See :ref:`dvbapi`.
-+
-+    DSP
-+        **Digital Signal Processor**
-+
-+	A specialized :term:`Microprocessor`, with its architecture
-+	optimized for the operational needs of digital signal processing.
-+
-+    FPGA
-+	**Field-programmable Gate Array**
-+
-+	An :term:`IC` circuit designed to be configured by a customer or
-+	a designer after manufacturing.
-+
-+	See https://en.wikipedia.org/wiki/Field-programmable_gate_array.
-+
-+    I²C
-+	**Inter-Integrated Circuit**
-+
-+	A  multi-master, multi-slave, packet switched, single-ended,
-+	serial computer bus used to control some hardware components
-+	like sub-device hardware components.
-+
-+	See http://www.nxp.com/docs/en/user-guide/UM10204.pdf.
-+
-+    IC
-+	**Integrated circuit**
-+
-+	A set of electronic circuits on one small flat piece of
-+	semiconductor material, normally silicon.
-+
-+	Also known as chip.
-+
-+    IP Block
-+	**Intellectual property core**
-+
-+	In electronic design a semiconductor intellectual property core,
-+	is a reusable unit of logic, cell, or integrated circuit layout
-+	design that is the intellectual property of one party.
-+	IP Blocks may be licensed to another party or can be owned
-+	and used by a single party alone.
-+
-+	See https://en.wikipedia.org/wiki/Semiconductor_intellectual_property_core).
-+
-+    ISP
-+	**Image Signal Processor**
-+
-+	A specialized processor that implements a set of algorithms for
-+	processing image data. ISPs may implement algorithms for lens
-+	shading correction, demosaicing, scaling and pixel format conversion
-+	as well as produce statistics for the use of the control
-+	algorithms (e.g. automatic exposure, white balance and focus).
-+
-+    Media API
-+	A set of userspace APIs used to control the media hardware. It is
-+	composed by:
-+
-+	  - :term:`CEC API`;
-+	  - :term:`Digital TV API`;
-+	  - :term:`MC API`;
-+	  - :term:`RC API`; and
-+	  - :term:`V4L2 API`.
-+
-+	See :doc:`v4l/v4l2`.
-+
-+    MC API
-+	**Media Controller API**
-+
-+	An API designed to expose and control the relationships between
-+	devices and sub-devices.
-+
-+	See :ref:`media_controller`.
-+
-+    Media Hardware
-+	Subset of the hardware that is supported by the Linux Media API.
-+
-+	This includes audio and video capture and playback hardware,
-+	digital and analog TV, camera sensors, ISPs, remote controllers,
-+	codecs, HDMI Consumer Electronics Control, HDMI capture, etc.
-+
-+    Microprocessor
-+	Electronic circuitry that carries out the instructions of a
-+	computer program by performing the basic arithmetic, logical,
-+	control and input/output (I/O) operations specified by the
-+	instructions on a single integrated circuit.
-+
-+    RC API
-+	**Remote Controller API**
-+
-+	An API designed to receive and transmit data from remote
-+	controllers.
-+
-+	See :ref:`remote_controllers`.
-+
-+    SMBus
-+	A subset of I²C, which defines a stricter usage of the bus.
-+
-+    SPI
-+	**Serial Peripheral Interface Bus**
-+
-+	Synchronous serial communication interface specification used for
-+	short distance communication, primarily in embedded systems.
-+
-+    SoC
-+	**System on a Chip**
-+
-+	An integrated circuit that integrates all components of a computer
-+	or other electronic systems.
-+
-+    V4L2 API
-+	**V4L2 userspace API**
-+
-+	The userspace API defined in :ref:`v4l2spec`, which is used to
-+	control a V4L2 hardware.
-+
-+    V4L2 Hardware
-+	Part of a media hardware with is supported by the :term:`V4L2 API`.
-+
-+    V4L2 Sub-device
-+	V4L2 hardware components that aren't controlled by a
-+	:term:`bridge driver`.
-+
-+    V4L2 Sub-device API
-+	Part of the :term:`V4L2 API` which control
-+	:term:`V4L2 sub-devices <V4L2 Sub-device>`.
-+
-+	See :ref:`subdev`.
-diff --git a/Documentation/userspace-api/media/index.rst b/Documentation/userspace-api/media/index.rst
-index 70a3f3d73698..7f42f83b9f59 100644
---- a/Documentation/userspace-api/media/index.rst
-+++ b/Documentation/userspace-api/media/index.rst
-@@ -35,6 +35,9 @@ Please see:
-     mediactl/media-controller
-     cec/cec-api
-     gen-errors
-+
-+    glossary
-+
-     fdl-appendix
- 
-     drivers/index
 -- 
 2.26.2
+
 
