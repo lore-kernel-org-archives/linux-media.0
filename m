@@ -2,46 +2,46 @@ Return-Path: <SRS0=lP+6=6Y=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0576CC54E8D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78038C54E8E
 	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 22:31:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D781C208DB
-	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 22:31:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4DB502071C
+	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 22:31:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="j77ITH4Y"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="tl0GcR/j"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729106AbgEJWbN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 10 May 2020 18:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729022AbgEJWbN (ORCPT
+        id S1729241AbgEJWbO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 10 May 2020 18:31:14 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:49456 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728660AbgEJWbN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 10 May 2020 18:31:13 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87D9C061A0C
-        for <linux-media@vger.kernel.org>; Sun, 10 May 2020 15:31:12 -0700 (PDT)
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E9BF7304;
-        Mon, 11 May 2020 00:31:08 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EB0C8E1E;
+        Mon, 11 May 2020 00:31:09 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1589149869;
-        bh=j/ePAMygMzKHjH+X1o5blZwL3i7ve1s6LKl8RRRF0mY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=j77ITH4YL2HVrb1nt7ilCYp4g3qG9VIJOHhuSNvvvd327/1iGRRr4iN7hQeF0rDPd
-         M1eonQOiPK4bzY7DmFRbVrSoHvj2nFS5yriTvOc9dV549vBsV1BWXyZHUY3gw8zGgo
-         V52BAdNoF91C3UoVTf9PXsfHkh+50eWt8fdiUP0Q=
+        s=mail; t=1589149870;
+        bh=x9sqqFATuF0EGiB9McPBfVlV3ECwwpepMytVPgloLOk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tl0GcR/jEdkBgPxNMcGn1ngXiGCl3T9gdwAYrwCZdQMauxnjlCS89vwXskCrf+DsZ
+         KViQA7/SE1/GAiUg/u3TQXpVWs7fg20Ga3iHyAt+5PPQaNhJmTyUKs5lFe543pBVnE
+         y11vs7HzknGIw3J4kfOUbqFsg38edu5OsSBPNM0w=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-imx@nxp.com, kernel@pengutronix.de,
         Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH 0/2] media: imx-pxp: Fix operation on i.MX7
-Date:   Mon, 11 May 2020 01:30:58 +0300
-Message-Id: <20200510223100.11641-1-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 2/2] media: imx-pxp: Disable LUT and Rotation 0 blocks
+Date:   Mon, 11 May 2020 01:31:00 +0300
+Message-Id: <20200510223100.11641-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200510223100.11641-1-laurent.pinchart@ideasonboard.com>
+References: <20200510223100.11641-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -49,30 +49,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The i.MX7 includes a PXP that is an evolution from the i.MX6 version. It
-offers more processing block in its pipeline, and by default operates in
-legacy mode for i.MX6 compatibility.
+The LUT block is configured in bypass mode, and the Rotation 0 block has
+a harcoded 0 degrees rotation. Disable those two blocks, and update
+routing accordingly.
 
-To enable the extra processing blocks, the i.MX7 PXP has two extra
-registers to configure routing in the internal pipeline. The values
-currently programmed in these registers don't match the blocks enabled
-by the driver, which makes the PXP hang without producing any frame.
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/imx-pxp.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-This patch series fixes the issue. Patch 1/2 fixes the routing
-configuration, and patch 2/2 disables unused blocks and configures
-routing accordingly. The first patch is enough to use the PXP on i.MX7,
-but the second patch may offer additional power saving.
-
-The patches have been tested on an i.MX7D. Philipp, would you be able to
-give them a try on i.MX6 ?
-
-Laurent Pinchart (2):
-  media: imx-pxp: Fix routing configuration for i.MX7
-  media: imx-pxp: Disable LUT and Rotation 0 blocks
-
- drivers/media/platform/imx-pxp.c | 37 ++++++++++++++++++--------------
- 1 file changed, 21 insertions(+), 16 deletions(-)
-
+diff --git a/drivers/media/platform/imx-pxp.c b/drivers/media/platform/imx-pxp.c
+index 53e3f8c8435f..f34317e4a6ed 100644
+--- a/drivers/media/platform/imx-pxp.c
++++ b/drivers/media/platform/imx-pxp.c
+@@ -919,12 +919,12 @@ static int pxp_start(struct pxp_ctx *ctx, struct vb2_v4l2_buffer *in_vb,
+ 	 */
+ 	pxp_write(dev, HW_PXP_DATA_PATH_CTRL0,
+ 		  BF_PXP_DATA_PATH_CTRL0_MUX15_SEL(3)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX14_SEL(0)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX14_SEL(1)|
+ 		  BF_PXP_DATA_PATH_CTRL0_MUX13_SEL(3)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX12_SEL(1)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX11_SEL(0)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX12_SEL(3)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX11_SEL(1)|
+ 		  BF_PXP_DATA_PATH_CTRL0_MUX10_SEL(3)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX9_SEL(1)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX9_SEL(3)|
+ 		  BF_PXP_DATA_PATH_CTRL0_MUX8_SEL(0)|
+ 		  BF_PXP_DATA_PATH_CTRL0_MUX7_SEL(3)|
+ 		  BF_PXP_DATA_PATH_CTRL0_MUX6_SEL(1)|
+@@ -944,7 +944,6 @@ static int pxp_start(struct pxp_ctx *ctx, struct vb2_v4l2_buffer *in_vb,
+ 	pxp_write(dev, HW_PXP_CTRL_SET, BM_PXP_CTRL_IRQ_ENABLE);
+ 	pxp_write(dev, HW_PXP_CTRL_SET,
+ 		  BM_PXP_CTRL_ENABLE | BM_PXP_CTRL_ENABLE_CSC2 |
+-		  BM_PXP_CTRL_ENABLE_LUT | BM_PXP_CTRL_ENABLE_ROTATE0 |
+ 		  BM_PXP_CTRL_ENABLE_PS_AS_OUT);
+ 
+ 	return 0;
 -- 
 Regards,
 
