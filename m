@@ -2,46 +2,46 @@ Return-Path: <SRS0=lP+6=6Y=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1A0C38A2A
-	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 22:31:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0576CC54E8D
+	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 22:31:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C4CF52071C
-	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 22:31:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D781C208DB
+	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 22:31:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="WzVrjaWo"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="j77ITH4Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728974AbgEJWbM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 10 May 2020 18:31:12 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:49444 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728660AbgEJWbM (ORCPT
+        id S1729106AbgEJWbN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 10 May 2020 18:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729022AbgEJWbN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 10 May 2020 18:31:12 -0400
+        Sun, 10 May 2020 18:31:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87D9C061A0C
+        for <linux-media@vger.kernel.org>; Sun, 10 May 2020 15:31:12 -0700 (PDT)
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6F57173E;
-        Mon, 11 May 2020 00:31:09 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E9BF7304;
+        Mon, 11 May 2020 00:31:08 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
         s=mail; t=1589149869;
-        bh=8SWOGUg7re6P5qqPLUuxUEQTEcbRo6uxH3p4dAgRbkU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WzVrjaWoq09c4N+7JNQi5OOXx4QJdwOF23ItSYgqJvqM9gp6kkVnPp+hjvzeGjYvh
-         oT9jHIK2fhk/vmL2JnqyUd38bci50lOrtH40DZydrz9uu4Vt4BCnjT5nS6Hpz0ViIg
-         norNdrYceX/Xe0rtn4njtSPNuabJWFDI4gZfVknU=
+        bh=j/ePAMygMzKHjH+X1o5blZwL3i7ve1s6LKl8RRRF0mY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=j77ITH4YL2HVrb1nt7ilCYp4g3qG9VIJOHhuSNvvvd327/1iGRRr4iN7hQeF0rDPd
+         M1eonQOiPK4bzY7DmFRbVrSoHvj2nFS5yriTvOc9dV549vBsV1BWXyZHUY3gw8zGgo
+         V52BAdNoF91C3UoVTf9PXsfHkh+50eWt8fdiUP0Q=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-imx@nxp.com, kernel@pengutronix.de,
         Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH 1/2] media: imx-pxp: Fix routing configuration for i.MX7
-Date:   Mon, 11 May 2020 01:30:59 +0300
-Message-Id: <20200510223100.11641-2-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 0/2] media: imx-pxp: Fix operation on i.MX7
+Date:   Mon, 11 May 2020 01:30:58 +0300
+Message-Id: <20200510223100.11641-1-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200510223100.11641-1-laurent.pinchart@ideasonboard.com>
-References: <20200510223100.11641-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -49,76 +49,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The PXP hangs without producing any frame on the i.MX7. This is caused
-by a mismatch between the routing configuration and the modules
-configuration. Fix the routing configuration by
+The i.MX7 includes a PXP that is an evolution from the i.MX6 version. It
+offers more processing block in its pipeline, and by default operates in
+legacy mode for i.MX6 compatibility.
 
-- Selecting Composite Alpha Blending/Color Key 0 (main path) as the
-  input to CSC2 (MUX6).
-- Connecting the Rotation 0 block in the pipeline by feeding it with
-  data (MUX12) and selecting its output (MUX14).
-- Disabling all other muxes () by selecting the "no output" option. The
-  datasheet doesn't explicitly require this, but the PXP has been
-  noticed to hang after several hundreds frames when testing routing
-  with the LUT disabled and the LUT input mux (MUX9) set to MUX8. It's
-  thus safer to explicitly disable all unused paths.
+To enable the extra processing blocks, the i.MX7 PXP has two extra
+registers to configure routing in the internal pipeline. The values
+currently programmed in these registers don't match the blocks enabled
+by the driver, which makes the PXP hang without producing any frame.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/platform/imx-pxp.c | 34 +++++++++++++++++++-------------
- 1 file changed, 20 insertions(+), 14 deletions(-)
+This patch series fixes the issue. Patch 1/2 fixes the routing
+configuration, and patch 2/2 disables unused blocks and configures
+routing accordingly. The first patch is enough to use the PXP on i.MX7,
+but the second patch may offer additional power saving.
 
-diff --git a/drivers/media/platform/imx-pxp.c b/drivers/media/platform/imx-pxp.c
-index 74e16011fc09..53e3f8c8435f 100644
---- a/drivers/media/platform/imx-pxp.c
-+++ b/drivers/media/platform/imx-pxp.c
-@@ -911,26 +911,32 @@ static int pxp_start(struct pxp_ctx *ctx, struct vb2_v4l2_buffer *in_vb,
- 	/* bypass LUT */
- 	pxp_write(dev, HW_PXP_LUT_CTRL, BM_PXP_LUT_CTRL_BYPASS);
- 
-+	/*
-+	 * Configure routing, disabling all paths that are not used by
-+	 * selecting the "no output" (3) option. The datasheet doesn't
-+	 * explicitly require this, but the PXP has been seen to hand after
-+	 * processing a few hundreds of frames otherwise.
-+	 */
- 	pxp_write(dev, HW_PXP_DATA_PATH_CTRL0,
--		  BF_PXP_DATA_PATH_CTRL0_MUX15_SEL(0)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX14_SEL(1)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX13_SEL(0)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX12_SEL(0)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX15_SEL(3)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX14_SEL(0)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX13_SEL(3)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX12_SEL(1)|
- 		  BF_PXP_DATA_PATH_CTRL0_MUX11_SEL(0)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX10_SEL(0)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX10_SEL(3)|
- 		  BF_PXP_DATA_PATH_CTRL0_MUX9_SEL(1)|
- 		  BF_PXP_DATA_PATH_CTRL0_MUX8_SEL(0)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX7_SEL(0)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX6_SEL(0)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX5_SEL(0)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX4_SEL(0)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX7_SEL(3)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX6_SEL(1)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX5_SEL(3)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX4_SEL(3)|
- 		  BF_PXP_DATA_PATH_CTRL0_MUX3_SEL(0)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX2_SEL(0)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX1_SEL(0)|
--		  BF_PXP_DATA_PATH_CTRL0_MUX0_SEL(0));
-+		  BF_PXP_DATA_PATH_CTRL0_MUX2_SEL(3)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX1_SEL(3)|
-+		  BF_PXP_DATA_PATH_CTRL0_MUX0_SEL(3));
- 	pxp_write(dev, HW_PXP_DATA_PATH_CTRL1,
--		  BF_PXP_DATA_PATH_CTRL1_MUX17_SEL(1) |
--		  BF_PXP_DATA_PATH_CTRL1_MUX16_SEL(1));
-+		  BF_PXP_DATA_PATH_CTRL1_MUX17_SEL(3) |
-+		  BF_PXP_DATA_PATH_CTRL1_MUX16_SEL(3));
- 
- 	pxp_write(dev, HW_PXP_IRQ_MASK, 0xffff);
- 
+The patches have been tested on an i.MX7D. Philipp, would you be able to
+give them a try on i.MX6 ?
+
+Laurent Pinchart (2):
+  media: imx-pxp: Fix routing configuration for i.MX7
+  media: imx-pxp: Disable LUT and Rotation 0 blocks
+
+ drivers/media/platform/imx-pxp.c | 37 ++++++++++++++++++--------------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
+
 -- 
 Regards,
 
