@@ -2,104 +2,125 @@ Return-Path: <SRS0=lP+6=6Y=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B27EC54E4B
-	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 15:39:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1A0C38A2A
+	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 22:31:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2AA3520735
-	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 15:39:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4CF52071C
+	for <linux-media@archiver.kernel.org>; Sun, 10 May 2020 22:31:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s4FTilbc"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="WzVrjaWo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728681AbgEJPjc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 10 May 2020 11:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726104AbgEJPjc (ORCPT
+        id S1728974AbgEJWbM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 10 May 2020 18:31:12 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:49444 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728660AbgEJWbM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 10 May 2020 11:39:32 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8B5C061A0C;
-        Sun, 10 May 2020 08:39:32 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id w65so3516679pfc.12;
-        Sun, 10 May 2020 08:39:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=seBRUeC3dXeweg1N46JHOrRIXAJ2J/eJ5PgpRDXu7Xc=;
-        b=s4FTilbcUE8qHtABX9tC1pNRpLYSHM1TMUlKxdLHfC5Tof1lVZLrrpHEv2HJURUQAt
-         gOqR0S6tdssLEU8p+wfY3407Y7n55X6ZgOiSWOYBr3SW7vwyDWMeXdxrGbFvIvTEKK8M
-         FUxjaYGr2auuqB8f99EyUk5Eo7XSa1/dZc5OnGudxkdFz5beN77mjR7VSeXtEO8+G4y1
-         URSuKE3HIbfwgkv/ma0LxIZF9/TwzVBUHO28l1oHJuKxu1bRlQYBtHpFvy6Qd290+Chv
-         SSJwqDx3X/p7oMekjkjXbZrakW5q0inyzqjAfWSP+dub16WBR639QzqdIKuJgV4pEiDj
-         MAmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=seBRUeC3dXeweg1N46JHOrRIXAJ2J/eJ5PgpRDXu7Xc=;
-        b=qSz5Mq5brMM+/2I+3e6MuoWc8h9ONlBd+v4In8bQUCSzy05CcTgqe0xNCn9tM+6Ufe
-         uBHSg9vvm5LMeqwM1Iuck+graRSAwcbMF8gqRPmtvJ13Nu99ThxdymwD29MrIjhDuYho
-         gGJoyXeQrD9kMJdzOiZ1OxQ7jHrS3+2AmqbdpnBna7JPa6PGvwt7/lNaQ+AHFeHmlCvl
-         gMfDEjKOod2NyLP/TcekIhVsWY7K8404STshiO7V4hWqFW/v3vnG2QfLRREOREc/999t
-         vfl84YyF98Jv5aoEtEu7w+eLTCvKWkrjJfKquM/Zbgofaa5cGbo3d+1e2EVUn9mzDp8e
-         64Uw==
-X-Gm-Message-State: AGi0PubzWF9KodfRaI0GTND+0NJdpnbDFH93MrkKSQhEUwZZekTJ5zgK
-        GdBRJkQJ2EcrJ2dwyG8qG18=
-X-Google-Smtp-Source: APiQypJCzqQ1G38MUBlHGJNY+XRYSsDfA3QS/iaiPMPTtOCZltcGYKqYDBQ/vmE4+rvfmkAA0ntZVg==
-X-Received: by 2002:aa7:9432:: with SMTP id y18mr12463677pfo.82.1589125171929;
-        Sun, 10 May 2020 08:39:31 -0700 (PDT)
-Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
-        by smtp.gmail.com with ESMTPSA id s136sm7208036pfc.29.2020.05.10.08.39.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 May 2020 08:39:31 -0700 (PDT)
-Subject: Re: [PATCH 3/3] nand: brcmnand: support v2.1-v2.2 controllers
-To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        computersforpeace@gmail.com, kdasu.kdev@gmail.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        sumit.semwal@linaro.org, linux-mtd@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-References: <20200510151406.2527856-1-noltari@gmail.com>
- <20200510151406.2527856-3-noltari@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <e0b9365b-f22c-ac56-481b-ab21490a3409@gmail.com>
-Date:   Sun, 10 May 2020 08:39:29 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.8.0
+        Sun, 10 May 2020 18:31:12 -0400
+Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6F57173E;
+        Mon, 11 May 2020 00:31:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1589149869;
+        bh=8SWOGUg7re6P5qqPLUuxUEQTEcbRo6uxH3p4dAgRbkU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WzVrjaWoq09c4N+7JNQi5OOXx4QJdwOF23ItSYgqJvqM9gp6kkVnPp+hjvzeGjYvh
+         oT9jHIK2fhk/vmL2JnqyUd38bci50lOrtH40DZydrz9uu4Vt4BCnjT5nS6Hpz0ViIg
+         norNdrYceX/Xe0rtn4njtSPNuabJWFDI4gZfVknU=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     linux-imx@nxp.com, kernel@pengutronix.de,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH 1/2] media: imx-pxp: Fix routing configuration for i.MX7
+Date:   Mon, 11 May 2020 01:30:59 +0300
+Message-Id: <20200510223100.11641-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200510223100.11641-1-laurent.pinchart@ideasonboard.com>
+References: <20200510223100.11641-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <20200510151406.2527856-3-noltari@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+The PXP hangs without producing any frame on the i.MX7. This is caused
+by a mismatch between the routing configuration and the modules
+configuration. Fix the routing configuration by
 
+- Selecting Composite Alpha Blending/Color Key 0 (main path) as the
+  input to CSC2 (MUX6).
+- Connecting the Rotation 0 block in the pipeline by feeding it with
+  data (MUX12) and selecting its output (MUX14).
+- Disabling all other muxes () by selecting the "no output" option. The
+  datasheet doesn't explicitly require this, but the PXP has been
+  noticed to hang after several hundreds frames when testing routing
+  with the LUT disabled and the LUT input mux (MUX9) set to MUX8. It's
+  thus safer to explicitly disable all unused paths.
 
-On 5/10/2020 8:14 AM, Álvaro Fernández Rojas wrote:
-> Tested on Netgear DGND3700v2 (BCM6362 with v2.2 controller).
-> 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/imx-pxp.c | 34 +++++++++++++++++++-------------
+ 1 file changed, 20 insertions(+), 14 deletions(-)
 
-Can you fix a couple of things for your future submissions:
-
-- for patch count > 1, please provide a cover letter introducing your
-patches
-
-- for this specific patch, you are missing a Device Tree binding
-document update with the new compatible strings you are adding
-
-Thank you!
+diff --git a/drivers/media/platform/imx-pxp.c b/drivers/media/platform/imx-pxp.c
+index 74e16011fc09..53e3f8c8435f 100644
+--- a/drivers/media/platform/imx-pxp.c
++++ b/drivers/media/platform/imx-pxp.c
+@@ -911,26 +911,32 @@ static int pxp_start(struct pxp_ctx *ctx, struct vb2_v4l2_buffer *in_vb,
+ 	/* bypass LUT */
+ 	pxp_write(dev, HW_PXP_LUT_CTRL, BM_PXP_LUT_CTRL_BYPASS);
+ 
++	/*
++	 * Configure routing, disabling all paths that are not used by
++	 * selecting the "no output" (3) option. The datasheet doesn't
++	 * explicitly require this, but the PXP has been seen to hand after
++	 * processing a few hundreds of frames otherwise.
++	 */
+ 	pxp_write(dev, HW_PXP_DATA_PATH_CTRL0,
+-		  BF_PXP_DATA_PATH_CTRL0_MUX15_SEL(0)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX14_SEL(1)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX13_SEL(0)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX12_SEL(0)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX15_SEL(3)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX14_SEL(0)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX13_SEL(3)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX12_SEL(1)|
+ 		  BF_PXP_DATA_PATH_CTRL0_MUX11_SEL(0)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX10_SEL(0)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX10_SEL(3)|
+ 		  BF_PXP_DATA_PATH_CTRL0_MUX9_SEL(1)|
+ 		  BF_PXP_DATA_PATH_CTRL0_MUX8_SEL(0)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX7_SEL(0)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX6_SEL(0)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX5_SEL(0)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX4_SEL(0)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX7_SEL(3)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX6_SEL(1)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX5_SEL(3)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX4_SEL(3)|
+ 		  BF_PXP_DATA_PATH_CTRL0_MUX3_SEL(0)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX2_SEL(0)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX1_SEL(0)|
+-		  BF_PXP_DATA_PATH_CTRL0_MUX0_SEL(0));
++		  BF_PXP_DATA_PATH_CTRL0_MUX2_SEL(3)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX1_SEL(3)|
++		  BF_PXP_DATA_PATH_CTRL0_MUX0_SEL(3));
+ 	pxp_write(dev, HW_PXP_DATA_PATH_CTRL1,
+-		  BF_PXP_DATA_PATH_CTRL1_MUX17_SEL(1) |
+-		  BF_PXP_DATA_PATH_CTRL1_MUX16_SEL(1));
++		  BF_PXP_DATA_PATH_CTRL1_MUX17_SEL(3) |
++		  BF_PXP_DATA_PATH_CTRL1_MUX16_SEL(3));
+ 
+ 	pxp_write(dev, HW_PXP_IRQ_MASK, 0xffff);
+ 
 -- 
-Florian
+Regards,
+
+Laurent Pinchart
+
