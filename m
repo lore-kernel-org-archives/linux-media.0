@@ -2,62 +2,62 @@ Return-Path: <SRS0=exgP=6Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-14.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AE4AC54E8E
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:04:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0FC4C47255
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:04:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 100C820736
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:04:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9880720736
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:04:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xdDwNe5D"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zE2VjVQP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728402AbgEKLEN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 May 2020 07:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S1728808AbgEKLEO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 May 2020 07:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729358AbgEKLEA (ORCPT
+        by vger.kernel.org with ESMTP id S1729232AbgEKLD5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 May 2020 07:04:00 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15474C05BD0B
-        for <linux-media@vger.kernel.org>; Mon, 11 May 2020 04:04:00 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id e16so10389047wra.7
-        for <linux-media@vger.kernel.org>; Mon, 11 May 2020 04:04:00 -0700 (PDT)
+        Mon, 11 May 2020 07:03:57 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF4FC05BD0C
+        for <linux-media@vger.kernel.org>; Mon, 11 May 2020 04:03:57 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id j5so10401539wrq.2
+        for <linux-media@vger.kernel.org>; Mon, 11 May 2020 04:03:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wjZQiljUYlD33LUnV3Lrp+SSxrgP5GGsdxa2mXlVN0s=;
-        b=xdDwNe5DKWOSnokNVlxSSaAnAn266MNyPB8XQaRemI+qdXulB4pdAf40Bg3E1gwDRI
-         dQhKll9HDozQBuxfeDGq6EWaolwfXMZzPx7fA2TjrT3kRjs8XxP9lmkX4zpbULq+dQNC
-         7pF8Sle/eXAB6Qq/49xffk93p0ro+TrQVx6tjhM4XgRadzOTETgc9VMYa8UCEDW+e9Dh
-         n84T1xae73+FCY0nGSwktrencqzRwfULUUdSWa7sPkByONIhik3tIf2dQc05SuUMszlY
-         AQ+z08mcQYVp73wDhNxRuoL7LZ0oNqrZ6sDdUtDQoHA7j0Bnf+Cr0Q4Oo5Bv9nDx19Or
-         8WOA==
+        bh=DobvbOIJ0Ny/Azu4lbmYUEV5G36fxaAQJQNlH7Irv/k=;
+        b=zE2VjVQPVoijUCn6QX26Z84S90RVPpRS8YArACMsFB/7rN+AxFUYwWLB8DTGtmt5AG
+         Psmp9/HGzFtHaxmNCCm/hV+jCrT+7n2GKkjVtilmue2vupuTx9VeytZhdQd1Ix2b2qdA
+         rHPIMh4hTWvjNE9a3PfB4fYgpOgi2jtfTONL+eBewkTuRE6zzD0jp6GVlzMC8tu48XFW
+         qeTuMSPKJ3LNyYlcCNEJLgvGa/nuvGI9Ex6rnEzCd/qs0e5vdD+P2gnDC0SOVe+EkUWP
+         svrqbc/dx7ESHWBkxS83Ics2i8Z8dpdyRaOsVlOGpV0GYKRs6mdVeQUGeId4dj5Kvs9Z
+         5L6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wjZQiljUYlD33LUnV3Lrp+SSxrgP5GGsdxa2mXlVN0s=;
-        b=c1j4wgOq+MKeAYLxVAw1pA2h9TqNTN9BGXraYQCSuUJY970JWM9jE6qNt3/6UR8SiT
-         xv8XbB6h7ZuEyrzxUQQ6Q6s+AAeZ/dwBFUQiWRRw9UalgH5+EatkyXC/hF+uPHM5Hy0x
-         geykbdA8MQb5uWmFfOc5q35BFFAHVUhbpKZnn9yrL50h9sY3bXZrEemGHksiprvV3MEW
-         iKOowgmavY7zuIhusS3r+y2Uo9ToRYsPpTvLWdO3Rb2syksLdd/YZZctbc4Z+lDtv4Ax
-         v/xwruQ0e8eVEj/CMmFqHOgEZq1EjbwaV6qezIDDVk7tk//D672ZU3ihIJVjRGI42ZEI
-         uOEQ==
-X-Gm-Message-State: AGi0PuYkiViRi/ka77Y0ligIy0EcmEzH9+OYV46RkwHjmtuWXQwAd1pZ
-        fnTBWvOULse2wk7+Dmn4PAsAtg==
-X-Google-Smtp-Source: APiQypLkuk0QguA4T+0yy7di/0ztJ/wpeDgCX7kAIsO9jmlBqjYPQS9nKV5nkRg7LCJvi4UP3hIJDQ==
-X-Received: by 2002:a5d:4389:: with SMTP id i9mr18918350wrq.374.1589195038813;
-        Mon, 11 May 2020 04:03:58 -0700 (PDT)
+        bh=DobvbOIJ0Ny/Azu4lbmYUEV5G36fxaAQJQNlH7Irv/k=;
+        b=hgFG790ZHbTTllTL6dJPXm0DYVgrUf3Af3n+6etG7xVjY14ULs6O++pP3nb3OISGfu
+         /CP+LgWepJX+cIUYxRdU7BN2aSQVlLxuUZzVgDHFdSEhYCWj3D1czkpqVfyCtyo5W11n
+         ravTwk4BYW7UOuU/on0pvLJPZj1wmMB4O3XsuEgg1/KS9CMzia9R/vTGKjYRrZfSY4AX
+         bUNVIHcqX5rd2rSvnVKoeeeYzO8RxYEF+VMH6bFX8Q7LT7NcFvwU5sikTEmDKYezfF+S
+         atpYczGS/y7BK7SpBgyBeA8cCzCknsldPQ8tmjbofinSI4BU2kWXikQFIsVbenwMo/+G
+         i2FA==
+X-Gm-Message-State: AGi0PubTk78m3Vb2jHwM/DmJPglpTnFDjJf/5eDeBscRQDVFMW08j4dp
+        aJNbXBBDIEVtkm62wf/Z6sEXTg==
+X-Google-Smtp-Source: APiQypLOtdH5GRhhx9sdfUYBDCUzc0bjhEN3oi9FISPZzcC7spq4t9pT02r0wsZMkB8ho1Wb06AbAw==
+X-Received: by 2002:adf:ff89:: with SMTP id j9mr18377360wrr.245.1589195036102;
+        Mon, 11 May 2020 04:03:56 -0700 (PDT)
 Received: from localhost.localdomain ([37.120.63.158])
-        by smtp.gmail.com with ESMTPSA id z18sm7046584wmk.46.2020.05.11.04.03.57
+        by smtp.gmail.com with ESMTPSA id z18sm7046584wmk.46.2020.05.11.04.03.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 04:03:58 -0700 (PDT)
+        Mon, 11 May 2020 04:03:55 -0700 (PDT)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sakari Ailus <sakari.ailus@iki.fi>,
@@ -68,10 +68,12 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
         Fabio Estevam <festevam@gmail.com>,
         Tomasz Figa <tfiga@chromium.org>, Ben Kao <ben.kao@intel.com>,
-        Robert Foss <robert.foss@linaro.org>
-Subject: [PATCH v8 3/3] media: ov8856: Implement sensor module revision identification
-Date:   Mon, 11 May 2020 13:03:50 +0200
-Message-Id: <20200511110350.11565-4-robert.foss@linaro.org>
+        Robert Foss <robert.foss@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v11 1/3] media: dt-bindings: ov8856: Document YAML bindings
+Date:   Mon, 11 May 2020 13:03:48 +0200
+Message-Id: <20200511110350.11565-2-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200511110350.11565-1-robert.foss@linaro.org>
 References: <20200511110350.11565-1-robert.foss@linaro.org>
@@ -82,99 +84,234 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Query the sensor for its module revision, and compare it
-to known revisions.
+From: Dongchun Zhu <dongchun.zhu@mediatek.com>
 
-Currently 2A and 1B revision indentification is supported.
+This patch adds documentation of device tree in YAML schema for the
+OV8856 CMOS image sensor.
 
+Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
 Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 
+- Changes since v10:
+  * Dongchun: Sort by maintainers entry by file name
+  * Rob: Added r-b
+  * Sakari: List Dongchun as the maintainer
+
+
+- Changes since v9:
+  * Remove remote-endpoint property
+  * Marco: Make port property required again
+  * Sakari: Remove Ben as a maintainer
+  * Sakari: Replace data-lanes with const items
+  * Sakari: Remove clock-lanes property
+  * Sakari & Rob Herring: Change type of link-frequency
+    work around dt-schema bug
+
+- Changes since v8:
+  * Maxime: Added r-b
+
 - Changes since v7:
-  * Marco: Align broken line
+  * Marco: Make 'port' property optional
+  * Maxime & Sakari: Add 'link-frequencies' property to dt binding
+  * Rob: Improve description for 'port' property
+
+- Changes since v6:
+  * Marco: remove qcom specifics from DT example
+   
+- Changes since v5:
+  * Add assigned-clocks and assigned-clock-rates
+  * Rob: dt-schema errors
+
+- Changes since v4:
+  * Fabio: Change reset-gpio to GPIO_ACTIVE_LOW, explain in description
+  * Add clock-lanes property to example
+  * Rob: Fix syntax error in devicetree example
 
 - Changes since v3:
-  * Actually add module revision 2A
+  * robher: Fix syntax error
+  * robher: Removed maxItems
+  * Fixes yaml 'make dt-binding-check' errors
 
 - Changes since v2:
-  * Add module revision 2A
-  * Sakari: Remove ov8856_check_revision()
-  * Sakari: Stop EEPROM streaming mode
 
- drivers/media/i2c/ov8856.c | 53 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+- Changes since v1:
+  Fixes comments from Sakari, Tomasz
+  * Add clock-frequency and link-frequencies in DT
 
-diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
-index 68cf2d6c5804..1657e03d9a9d 100644
---- a/drivers/media/i2c/ov8856.c
-+++ b/drivers/media/i2c/ov8856.c
-@@ -32,6 +32,19 @@
- #define OV8856_MODE_STANDBY		0x00
- #define OV8856_MODE_STREAMING		0x01
+ .../devicetree/bindings/media/i2c/ov8856.yaml | 142 ++++++++++++++++++
+ MAINTAINERS                                   |   3 +-
+ 2 files changed, 144 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ov8856.yaml
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/ov8856.yaml b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
+new file mode 100644
+index 000000000000..d6af685ad3ca
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
+@@ -0,0 +1,142 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (c) 2019 MediaTek Inc.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ov8856.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Omnivision OV8856 CMOS Sensor Device Tree Bindings
++
++maintainers:
++  - Dongchun Zhu <dongchun.zhu@mediatek.com>
++
++description: |-
++  The Omnivision OV8856 is a high performance, 1/4-inch, 8 megapixel, CMOS
++  image sensor that delivers 3264x2448 at 30fps. It provides full-frame,
++  sub-sampled, and windowed 10-bit MIPI images in various formats via the
++  Serial Camera Control Bus (SCCB) interface. This chip is programmable
++  through I2C and two-wire SCCB. The sensor output is available via CSI-2
++  serial data output (up to 4-lane).
++
++properties:
++  compatible:
++    const: ovti,ov8856
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    description:
++      Input clock for the sensor.
++    items:
++      - const: xvclk
++
++  clock-frequency:
++    description:
++      Frequency of the xvclk clock in Hertz.
++
++  dovdd-supply:
++    description:
++      Definition of the regulator used as interface power supply.
++
++  avdd-supply:
++    description:
++      Definition of the regulator used as analog power supply.
++
++  dvdd-supply:
++    description:
++      Definition of the regulator used as digital power supply.
++
++  reset-gpios:
++    description:
++      The phandle and specifier for the GPIO that controls sensor reset.
++      This corresponds to the hardware pin XSHUTDOWN which is physically
++      active low.
++
++  port:
++    type: object
++    additionalProperties: false
++    description:
++      A node containing an output port node with an endpoint definition
++      as documented in
++      Documentation/devicetree/bindings/media/video-interfaces.txt
++
++    properties:
++      endpoint:
++        type: object
++
++        properties:
++          data-lanes:
++            description: |-
++              The driver only supports four-lane operation.
++            items:
++              - const: 1
++              - const: 2
++              - const: 3
++              - const: 4
++
++          link-frequencies:
++            allOf:
++              - $ref: /schemas/types.yaml#/definitions/uint64-array
++            description:
++              Allowed data bus frequencies. 360000000, 180000000 Hz or both
++              are supported by the driver.
++
++
++        required:
++          - link-frequencies
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - clock-frequency
++  - dovdd-supply
++  - avdd-supply
++  - dvdd-supply
++  - reset-gpios
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ov8856: camera@10 {
++            compatible = "ovti,ov8856";
++            reg = <0x10>;
++
++            reset-gpios = <&pio 111 GPIO_ACTIVE_LOW>;
++            pinctrl-names = "default";
++            pinctrl-0 = <&clk_24m_cam>;
++
++            clocks = <&cam_osc>;
++            clock-names = "xvclk";
++            clock-frequency = <19200000>;
++
++            avdd-supply = <&mt6358_vcama2_reg>;
++            dvdd-supply = <&mt6358_vcamd_reg>;
++            dovdd-supply = <&mt6358_vcamio_reg>;
++
++            port {
++                wcam_out: endpoint {
++                    remote-endpoint = <&mipi_in_wcam>;
++                    data-lanes = <1 2 3 4>;
++                    link-frequencies = /bits/ 64 <360000000>;
++                };
++            };
++        };
++    };
++...
+\ No newline at end of file
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 26f281d9f32a..2bc8555a980e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12484,10 +12484,11 @@ F:	Documentation/devicetree/bindings/media/i2c/ov7740.txt
+ F:	drivers/media/i2c/ov7740.c
  
-+/* module revisions */
-+#define OV8856_2A_MODULE		0x01
-+#define OV8856_1B_MODULE		0x02
-+
-+/* the OTP read-out buffer is at 0x7000 and 0xf is the offset
-+ * of the byte in the OTP that means the module revision
-+ */
-+#define OV8856_MODULE_REVISION		0x700f
-+#define OV8856_OTP_MODE_CTRL		0x3d84
-+#define OV8856_OTP_LOAD_CTRL		0x3d81
-+#define OV8856_OTP_MODE_AUTO		0x00
-+#define OV8856_OTP_LOAD_CTRL_ENABLE	BIT(0)
-+
- /* vertical-timings from sensor */
- #define OV8856_REG_VTS			0x380e
- #define OV8856_VTS_MAX			0x7fff
-@@ -1156,6 +1169,46 @@ static int ov8856_identify_module(struct ov8856 *ov8856)
- 		return -ENXIO;
- 	}
+ OMNIVISION OV8856 SENSOR DRIVER
+-M:	Ben Kao <ben.kao@intel.com>
++M:	Dongchun Zhu <dongchun.zhu@mediatek.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/ov8856.yaml
+ F:	drivers/media/i2c/ov8856.c
  
-+	ret = ov8856_write_reg(ov8856, OV8856_REG_MODE_SELECT,
-+			       OV8856_REG_VALUE_08BIT, OV8856_MODE_STREAMING);
-+	if (ret)
-+		return ret;
-+
-+	ret = ov8856_write_reg(ov8856, OV8856_OTP_MODE_CTRL,
-+			       OV8856_REG_VALUE_08BIT, OV8856_OTP_MODE_AUTO);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to set otp mode");
-+		return ret;
-+	}
-+
-+	ret = ov8856_write_reg(ov8856, OV8856_OTP_LOAD_CTRL,
-+			       OV8856_REG_VALUE_08BIT,
-+			       OV8856_OTP_LOAD_CTRL_ENABLE);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to enable load control");
-+		return ret;
-+	}
-+
-+	ret = ov8856_read_reg(ov8856, OV8856_MODULE_REVISION,
-+			      OV8856_REG_VALUE_08BIT, &val);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to read module revision");
-+		return ret;
-+	}
-+
-+	dev_info(&client->dev, "OV8856 revision %x (%s) at address 0x%02x\n",
-+		 val,
-+		 val == OV8856_2A_MODULE ? "2A" :
-+		 val == OV8856_1B_MODULE ? "1B" : "unknown revision",
-+		 client->addr);
-+
-+	ret = ov8856_write_reg(ov8856, OV8856_REG_MODE_SELECT,
-+			       OV8856_REG_VALUE_08BIT, OV8856_MODE_STANDBY);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to exit streaming mode");
-+		return ret;
-+	}
-+
- 	return 0;
- }
- 
+ OMNIVISION OV9640 SENSOR DRIVER
 -- 
 2.25.1
 
