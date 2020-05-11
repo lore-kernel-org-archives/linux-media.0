@@ -2,316 +2,182 @@ Return-Path: <SRS0=exgP=6Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0FC4C47255
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C730C47255
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:06:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9880720736
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:04:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6E20206F9
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:06:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zE2VjVQP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uxgmj0gC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728808AbgEKLEO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 May 2020 07:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
+        id S1728402AbgEKLGd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 May 2020 07:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729232AbgEKLD5 (ORCPT
+        by vger.kernel.org with ESMTP id S1728341AbgEKLGb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 May 2020 07:03:57 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF4FC05BD0C
-        for <linux-media@vger.kernel.org>; Mon, 11 May 2020 04:03:57 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id j5so10401539wrq.2
-        for <linux-media@vger.kernel.org>; Mon, 11 May 2020 04:03:57 -0700 (PDT)
+        Mon, 11 May 2020 07:06:31 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DC4C061A0C
+        for <linux-media@vger.kernel.org>; Mon, 11 May 2020 04:06:30 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id a9so7127075lfb.8
+        for <linux-media@vger.kernel.org>; Mon, 11 May 2020 04:06:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DobvbOIJ0Ny/Azu4lbmYUEV5G36fxaAQJQNlH7Irv/k=;
-        b=zE2VjVQPVoijUCn6QX26Z84S90RVPpRS8YArACMsFB/7rN+AxFUYwWLB8DTGtmt5AG
-         Psmp9/HGzFtHaxmNCCm/hV+jCrT+7n2GKkjVtilmue2vupuTx9VeytZhdQd1Ix2b2qdA
-         rHPIMh4hTWvjNE9a3PfB4fYgpOgi2jtfTONL+eBewkTuRE6zzD0jp6GVlzMC8tu48XFW
-         qeTuMSPKJ3LNyYlcCNEJLgvGa/nuvGI9Ex6rnEzCd/qs0e5vdD+P2gnDC0SOVe+EkUWP
-         svrqbc/dx7ESHWBkxS83Ics2i8Z8dpdyRaOsVlOGpV0GYKRs6mdVeQUGeId4dj5Kvs9Z
-         5L6w==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KSdV8YwHmMgDkf6Pwl9t/927NVpXsj0ABhibj8ETPcM=;
+        b=uxgmj0gCX3b4PO/vmNX6t36IpMRSSmdEYZ/bwLOrf+zPWMLomjBbAXedUAIynSIYpW
+         07CdCOpDEYoBiFHG83tpDzrIPh+fzWpl5BraatflAYDIZ8gDAIZUSLSpxQV5Ekui5Eky
+         F8ov4qwzXnd9wKT1L2DQGojk4DLsx/A6vK8y6JhZiLXwNculi3W8HWtYHhaW/uiCl//z
+         5rew024meoeqkW7zFvCQk52AAjsCur1KOw3Db7eBxsJV8kSN2kJaGRuRILcIuD+TjV2c
+         0wJr7hXP3grSf5nXkgsWaNZJTzYtXyHeW0hVnwH6fCi88zfhNdsmtahPmi6mPxFz7/9s
+         bGGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DobvbOIJ0Ny/Azu4lbmYUEV5G36fxaAQJQNlH7Irv/k=;
-        b=hgFG790ZHbTTllTL6dJPXm0DYVgrUf3Af3n+6etG7xVjY14ULs6O++pP3nb3OISGfu
-         /CP+LgWepJX+cIUYxRdU7BN2aSQVlLxuUZzVgDHFdSEhYCWj3D1czkpqVfyCtyo5W11n
-         ravTwk4BYW7UOuU/on0pvLJPZj1wmMB4O3XsuEgg1/KS9CMzia9R/vTGKjYRrZfSY4AX
-         bUNVIHcqX5rd2rSvnVKoeeeYzO8RxYEF+VMH6bFX8Q7LT7NcFvwU5sikTEmDKYezfF+S
-         atpYczGS/y7BK7SpBgyBeA8cCzCknsldPQ8tmjbofinSI4BU2kWXikQFIsVbenwMo/+G
-         i2FA==
-X-Gm-Message-State: AGi0PubTk78m3Vb2jHwM/DmJPglpTnFDjJf/5eDeBscRQDVFMW08j4dp
-        aJNbXBBDIEVtkm62wf/Z6sEXTg==
-X-Google-Smtp-Source: APiQypLOtdH5GRhhx9sdfUYBDCUzc0bjhEN3oi9FISPZzcC7spq4t9pT02r0wsZMkB8ho1Wb06AbAw==
-X-Received: by 2002:adf:ff89:: with SMTP id j9mr18377360wrr.245.1589195036102;
-        Mon, 11 May 2020 04:03:56 -0700 (PDT)
-Received: from localhost.localdomain ([37.120.63.158])
-        by smtp.gmail.com with ESMTPSA id z18sm7046584wmk.46.2020.05.11.04.03.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 04:03:55 -0700 (PDT)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Maxime Ripard <maxime@cerno.tech>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>, Ben Kao <ben.kao@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v11 1/3] media: dt-bindings: ov8856: Document YAML bindings
-Date:   Mon, 11 May 2020 13:03:48 +0200
-Message-Id: <20200511110350.11565-2-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200511110350.11565-1-robert.foss@linaro.org>
-References: <20200511110350.11565-1-robert.foss@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KSdV8YwHmMgDkf6Pwl9t/927NVpXsj0ABhibj8ETPcM=;
+        b=H2ziHxUZDqoqpKddriyas8sugh67CPSGGTaO01nBL5XgQZ44ONAKTgx/e4il7zG0X9
+         fmQFIs2hh9LZx6XGtXoFi7r/9sS96mqfuRgs0jOZvdXPTYvVMly/+Vxw0LKgh2fCia+2
+         vIly02q2/77qqQ7/0iRLmhruGK5q115+mQT4wJy1a9P5m9PjP0q1Rb9LjQRGxVZekcgI
+         +Qc6CPuXVG8Fx4YVQM4/yZFWI695HfcelMZwiDEum7LOIA+soxXsToUBnzKqoIhDt9jo
+         3JLPqQf9OMR0InSQtIz7tpZZQDlnr4OiWXQmzgLeowuaw5qqjcB+Lpo8KSTX/QwB02cy
+         DZ1g==
+X-Gm-Message-State: AOAM5337QAQ6kUvpiYcJpIG9m4EUcnL5hKPqpiegr7RXCrQh+KIa335e
+        OJU2p9ay8etDa1XL+1A+h2bdtEKpDapuJ46cTmuBN/y6e8h00w==
+X-Google-Smtp-Source: ABdhPJwT39ClB4Ia2auEe6RFV5Mc/FVxWsDEMw16ZLKiZfalWxA3rYein0AC/ZeGa5OELIYcCKgIanksOJres51V2a0=
+X-Received: by 2002:ac2:50d8:: with SMTP id h24mr11144039lfm.63.1589195188918;
+ Mon, 11 May 2020 04:06:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAK25hWN3kJcW-dcpryFrvZ50t7Y0Z=MZM66-8NMuhwjRpNo2aQ@mail.gmail.com>
+ <CAK25hWMj5PyQFZVN5AToHjdySvi6iZ4zjZeUJQR85jNgoeLeAw@mail.gmail.com>
+ <CAK25hWOPS1wGORXgtv8hUNu9-mLO+5C_k3Cj=8pnoFWmjuhJdg@mail.gmail.com>
+ <2405792.XL1faGB9W5@os-lin-dmo> <CAD90Vcb-x1KV++fWrmx+fLV5eNc2DiTtn8=OjQi7aUf7B0ULdA@mail.gmail.com>
+In-Reply-To: <CAD90Vcb-x1KV++fWrmx+fLV5eNc2DiTtn8=OjQi7aUf7B0ULdA@mail.gmail.com>
+From:   Saket Sinha <saket.sinha89@gmail.com>
+Date:   Mon, 11 May 2020 13:05:53 +0200
+Message-ID: <CAK25hWM-hLdk=MSKgceumOUo9ZNBrrmM8qSe7MvTUAPGmur_HQ@mail.gmail.com>
+Subject: Re: [virtio-dev] Re: Fwd: Qemu Support for Virtio Video V4L2 driver
+To:     Keiichi Watanabe <keiichiw@chromium.org>
+Cc:     Dmitry Sepp <dmitry.sepp@opensynergy.com>,
+        Kiran Pawar <Kiran.Pawar@opensynergy.com>,
+        Samiullah Khawaja <samiullah.khawaja@opensynergy.com>,
+        qemu-devel@nongnu.org, virtio-dev@lists.oasis-open.org,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Alex Lau <alexlau@chromium.org>,
+        Pawel Osciak <posciak@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dongchun Zhu <dongchun.zhu@mediatek.com>
+Hi Keiichi,
 
-This patch adds documentation of device tree in YAML schema for the
-OV8856 CMOS image sensor.
+I do not support the approach of  QEMU implementation forwarding
+requests to the host's vicodec module since  this can limit the scope
+of the virtio-video device only for testing, which instead can be used
+with multiple use cases such as -
 
-Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Reviewed-by: Maxime Ripard <mripard@kernel.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
+1. VM gets access to paravirtualized  camera devices which shares the
+video frames input through actual HW camera attached to Host.
 
-- Changes since v10:
-  * Dongchun: Sort by maintainers entry by file name
-  * Rob: Added r-b
-  * Sakari: List Dongchun as the maintainer
+2. If Host has multiple video devices (especially in ARM SOCs over
+MIPI interfaces or USB), different VM can be started or hotplugged
+with selective video streams from actual HW video devices.
 
+Also instead of using libraries like Gstreamer in Host userspace, they
+can also be used inside the VM userspace after getting access to
+paravirtualized HW camera devices .
 
-- Changes since v9:
-  * Remove remote-endpoint property
-  * Marco: Make port property required again
-  * Sakari: Remove Ben as a maintainer
-  * Sakari: Replace data-lanes with const items
-  * Sakari: Remove clock-lanes property
-  * Sakari & Rob Herring: Change type of link-frequency
-    work around dt-schema bug
+Regards,
+Saket Sinha
 
-- Changes since v8:
-  * Maxime: Added r-b
-
-- Changes since v7:
-  * Marco: Make 'port' property optional
-  * Maxime & Sakari: Add 'link-frequencies' property to dt binding
-  * Rob: Improve description for 'port' property
-
-- Changes since v6:
-  * Marco: remove qcom specifics from DT example
-   
-- Changes since v5:
-  * Add assigned-clocks and assigned-clock-rates
-  * Rob: dt-schema errors
-
-- Changes since v4:
-  * Fabio: Change reset-gpio to GPIO_ACTIVE_LOW, explain in description
-  * Add clock-lanes property to example
-  * Rob: Fix syntax error in devicetree example
-
-- Changes since v3:
-  * robher: Fix syntax error
-  * robher: Removed maxItems
-  * Fixes yaml 'make dt-binding-check' errors
-
-- Changes since v2:
-
-- Changes since v1:
-  Fixes comments from Sakari, Tomasz
-  * Add clock-frequency and link-frequencies in DT
-
- .../devicetree/bindings/media/i2c/ov8856.yaml | 142 ++++++++++++++++++
- MAINTAINERS                                   |   3 +-
- 2 files changed, 144 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-
-diff --git a/Documentation/devicetree/bindings/media/i2c/ov8856.yaml b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-new file mode 100644
-index 000000000000..d6af685ad3ca
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ov8856.yaml
-@@ -0,0 +1,142 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (c) 2019 MediaTek Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ov8856.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Omnivision OV8856 CMOS Sensor Device Tree Bindings
-+
-+maintainers:
-+  - Dongchun Zhu <dongchun.zhu@mediatek.com>
-+
-+description: |-
-+  The Omnivision OV8856 is a high performance, 1/4-inch, 8 megapixel, CMOS
-+  image sensor that delivers 3264x2448 at 30fps. It provides full-frame,
-+  sub-sampled, and windowed 10-bit MIPI images in various formats via the
-+  Serial Camera Control Bus (SCCB) interface. This chip is programmable
-+  through I2C and two-wire SCCB. The sensor output is available via CSI-2
-+  serial data output (up to 4-lane).
-+
-+properties:
-+  compatible:
-+    const: ovti,ov8856
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    description:
-+      Input clock for the sensor.
-+    items:
-+      - const: xvclk
-+
-+  clock-frequency:
-+    description:
-+      Frequency of the xvclk clock in Hertz.
-+
-+  dovdd-supply:
-+    description:
-+      Definition of the regulator used as interface power supply.
-+
-+  avdd-supply:
-+    description:
-+      Definition of the regulator used as analog power supply.
-+
-+  dvdd-supply:
-+    description:
-+      Definition of the regulator used as digital power supply.
-+
-+  reset-gpios:
-+    description:
-+      The phandle and specifier for the GPIO that controls sensor reset.
-+      This corresponds to the hardware pin XSHUTDOWN which is physically
-+      active low.
-+
-+  port:
-+    type: object
-+    additionalProperties: false
-+    description:
-+      A node containing an output port node with an endpoint definition
-+      as documented in
-+      Documentation/devicetree/bindings/media/video-interfaces.txt
-+
-+    properties:
-+      endpoint:
-+        type: object
-+
-+        properties:
-+          data-lanes:
-+            description: |-
-+              The driver only supports four-lane operation.
-+            items:
-+              - const: 1
-+              - const: 2
-+              - const: 3
-+              - const: 4
-+
-+          link-frequencies:
-+            allOf:
-+              - $ref: /schemas/types.yaml#/definitions/uint64-array
-+            description:
-+              Allowed data bus frequencies. 360000000, 180000000 Hz or both
-+              are supported by the driver.
-+
-+
-+        required:
-+          - link-frequencies
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - clock-frequency
-+  - dovdd-supply
-+  - avdd-supply
-+  - dvdd-supply
-+  - reset-gpios
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ov8856: camera@10 {
-+            compatible = "ovti,ov8856";
-+            reg = <0x10>;
-+
-+            reset-gpios = <&pio 111 GPIO_ACTIVE_LOW>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&clk_24m_cam>;
-+
-+            clocks = <&cam_osc>;
-+            clock-names = "xvclk";
-+            clock-frequency = <19200000>;
-+
-+            avdd-supply = <&mt6358_vcama2_reg>;
-+            dvdd-supply = <&mt6358_vcamd_reg>;
-+            dovdd-supply = <&mt6358_vcamio_reg>;
-+
-+            port {
-+                wcam_out: endpoint {
-+                    remote-endpoint = <&mipi_in_wcam>;
-+                    data-lanes = <1 2 3 4>;
-+                    link-frequencies = /bits/ 64 <360000000>;
-+                };
-+            };
-+        };
-+    };
-+...
-\ No newline at end of file
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 26f281d9f32a..2bc8555a980e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12484,10 +12484,11 @@ F:	Documentation/devicetree/bindings/media/i2c/ov7740.txt
- F:	drivers/media/i2c/ov7740.c
- 
- OMNIVISION OV8856 SENSOR DRIVER
--M:	Ben Kao <ben.kao@intel.com>
-+M:	Dongchun Zhu <dongchun.zhu@mediatek.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/i2c/ov8856.yaml
- F:	drivers/media/i2c/ov8856.c
- 
- OMNIVISION OV9640 SENSOR DRIVER
--- 
-2.25.1
-
+On Mon, May 11, 2020 at 12:20 PM Keiichi Watanabe <keiichiw@chromium.org> wrote:
+>
+> Hi Dmitry,
+>
+> On Mon, May 11, 2020 at 6:40 PM Dmitry Sepp <dmitry.sepp@opensynergy.com> wrote:
+> >
+> > Hi Saket and all,
+> >
+> > As we are working with automotive platforms, unfortunately we don't plan any
+> > Qemu reference implementation so far.
+> >
+> > Of course we are ready to support the community if any help is needed. Is
+> > there interest in support for the FWHT format only for testing purpose or you
+> > want a full-featured implementation on the QEMU side?
+>
+> I guess we don't need to implement the codec algorithm in QEMU.
+> Rather, QEMU forwards virtio-video requests to the host video device
+> or a software library such as GStreamer or ffmpeg.
+> So, what we need to implement in QEMU is a kind of API translation,
+> which shouldn't care about actual video formats so much.
+>
+> Regarding the FWHT format discussed in the patch thread [1], in my
+> understanding, Hans suggested to have QEMU implementation forwarding
+> requests to the host's vicodec module [2].
+> Then, we'll be able to test the virtio-video driver on QEMU on Linux
+> even if the host Linux has no hardware video decoder.
+> (Please correct me if I'm wrong.)
+>
+> Let me add Hans and Linux media ML in CC.
+>
+> [1]  https://patchwork.linuxtv.org/patch/61717/
+> [2] https://lwn.net/Articles/760650/
+>
+> Best regards,
+> Keiichi
+>
+> >
+> > Please note that the spec is not finalized yet and a major update is now
+> > discussed with upstream and the Chrome OS team, which is also interested and
+> > deeply involved in the process. The update mostly implies some rewording and
+> > reorganization of data structures, but for sure will require a driver rework.
+> >
+> > Best regards,
+> > Dmitry.
+> >
+> > On Samstag, 9. Mai 2020 16:11:43 CEST Saket Sinha wrote:
+> > > Hi,
+> > >
+> > > As suggested on #qemu-devel IRC channel, I am including virtio-dev, Gerd and
+> > > Michael to point in the right direction how to move forward with Qemu
+> > > support for Virtio Video V4L2 driver
+> > > posted in [1].
+> > >
+> > > [1]: https://patchwork.linuxtv.org/patch/61717/
+> > >
+> > > Regards,
+> > > Saket Sinha
+> > >
+> > > On Sat, May 9, 2020 at 1:09 AM Saket Sinha <saket.sinha89@gmail.com> wrote:
+> > > > Hi ,
+> > > >
+> > > > This is to inquire about Qemu support for Virtio Video V4L2 driver
+> > > > posted in [1].
+> > > > I am currently not aware of any upstream effort for Qemu reference
+> > > > implementation and would like to discuss how to proceed with the same.
+> > > >
+> > > > [1]: https://patchwork.linuxtv.org/patch/61717/
+> > > >
+> > > > Regards,
+> > > > Saket Sinha
+> >
+> >
+> >
+> > ---------------------------------------------------------------------
+> > To unsubscribe, e-mail: virtio-dev-unsubscribe@lists.oasis-open.org
+> > For additional commands, e-mail: virtio-dev-help@lists.oasis-open.org
+> >
