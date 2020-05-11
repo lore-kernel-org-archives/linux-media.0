@@ -2,130 +2,134 @@ Return-Path: <SRS0=exgP=6Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A9BFC54E8D
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 21:01:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2209BC47255
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 21:01:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1440A24964
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 21:01:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E1FB20836
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 21:01:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732294AbgEKVBb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 May 2020 17:01:31 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:36866 "EHLO www.linuxtv.org"
+        id S1732345AbgEKVBq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 May 2020 17:01:46 -0400
+Received: from v6.sk ([167.172.42.174]:52586 "EHLO v6.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732285AbgEKVB1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 May 2020 17:01:27 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1jYFUr-004EwX-Lk; Mon, 11 May 2020 20:57:57 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1jYFa6-0006Rl-92; Mon, 11 May 2020 21:03:22 +0000
-Date:   Mon, 11 May 2020 21:03:22 +0000 (UTC)
-From:   Jenkins Builder Robot <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        libcamera-devel@lists.libcamera.org
-Message-ID: <2081683680.23.1589231002255.JavaMail.jenkins@builder.linuxtv.org>
-Subject: Build failed in Jenkins: libcamera #172
+        id S1732333AbgEKVBp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 11 May 2020 17:01:45 -0400
+Received: from localhost (v6.sk [IPv6:::1])
+        by v6.sk (Postfix) with ESMTP id 37505610CF;
+        Mon, 11 May 2020 21:01:43 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>
+Subject: [PATCH 04/11] ASoC: mmp-sspa: Get rid of dma_params and phys_base
+Date:   Mon, 11 May 2020 23:01:27 +0200
+Message-Id: <20200511210134.1224532-5-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200511210134.1224532-1-lkundrak@v3.sk>
+References: <20200511210134.1224532-1-lkundrak@v3.sk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
-X-Jenkins-Job: libcamera
-X-Jenkins-Result: FAILURE
-Auto-submitted: auto-generated
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/libcamera/172/display/redirect?page=changes>
+This makes things simpler. There's no reason not to just embed the struct
+snd_dmaengine_dai_dma_data in struct sspa_priv and do away with an
+unnecessary kmalloc(). While at that, we can initialize the
+snd_dmaengine_dai_dma_data structures earlier.
 
-Changes:
+Let's also stop offsetting the source/destination of the DMA transfer by
+phys_base. Firstly, it's never set and is always zero. Secondly, the
+hardware actually ignores it, at least on a MMP2 and MMP3.
 
-[laurent.pinchart] LICENSES: Add BSD-2-Clause license
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+---
+ sound/soc/pxa/mmp-sspa.c | 25 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
 
-[laurent.pinchart] include: uapi: Add header definitions for BCM2835 Unicam and ISP blocks
+diff --git a/sound/soc/pxa/mmp-sspa.c b/sound/soc/pxa/mmp-sspa.c
+index 90a9bc81be80..421ffa9fa7b1 100644
+--- a/sound/soc/pxa/mmp-sspa.c
++++ b/sound/soc/pxa/mmp-sspa.c
+@@ -29,7 +29,8 @@
+  */
+ struct sspa_priv {
+ 	struct ssp_device *sspa;
+-	struct snd_dmaengine_dai_dma_data *dma_params;
++	struct snd_dmaengine_dai_dma_data playback_dma_data;
++	struct snd_dmaengine_dai_dma_data capture_dma_data;
+ 	struct clk *audio_clk;
+ 	struct clk *sysclk;
+ 	int dai_fmt;
+@@ -250,11 +251,8 @@ static int mmp_sspa_hw_params(struct snd_pcm_substream *substream,
+ 			       struct snd_pcm_hw_params *params,
+ 			       struct snd_soc_dai *dai)
+ {
+-	struct snd_soc_pcm_runtime *rtd = substream->private_data;
+-	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
+ 	struct sspa_priv *sspa_priv = snd_soc_dai_get_drvdata(dai);
+ 	struct ssp_device *sspa = sspa_priv->sspa;
+-	struct snd_dmaengine_dai_dma_data *dma_params;
+ 	u32 sspa_ctrl;
+ 
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+@@ -293,11 +291,6 @@ static int mmp_sspa_hw_params(struct snd_pcm_substream *substream,
+ 		mmp_sspa_write_reg(sspa, SSPA_RXFIFO_UL, 0x0);
+ 	}
+ 
+-	dma_params = &sspa_priv->dma_params[substream->stream];
+-	dma_params->addr = substream->stream == SNDRV_PCM_STREAM_PLAYBACK ?
+-				(sspa->phys_base + SSPA_TXD) :
+-				(sspa->phys_base + SSPA_RXD);
+-	snd_soc_dai_set_dma_data(cpu_dai, substream, dma_params);
+ 	return 0;
+ }
+ 
+@@ -351,6 +344,10 @@ static int mmp_sspa_probe(struct snd_soc_dai *dai)
+ {
+ 	struct sspa_priv *priv = dev_get_drvdata(dai->dev);
+ 
++	snd_soc_dai_init_dma_data(dai,
++				&priv->playback_dma_data,
++				&priv->capture_dma_data);
++
+ 	snd_soc_dai_set_drvdata(dai, priv);
+ 	return 0;
+ 
+@@ -407,12 +404,6 @@ static int asoc_mmp_sspa_probe(struct platform_device *pdev)
+ 	if (priv->sspa == NULL)
+ 		return -ENOMEM;
+ 
+-	priv->dma_params = devm_kcalloc(&pdev->dev,
+-			2, sizeof(struct snd_dmaengine_dai_dma_data),
+-			GFP_KERNEL);
+-	if (priv->dma_params == NULL)
+-		return -ENOMEM;
+-
+ 	priv->sspa->mmio_base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(priv->sspa->mmio_base))
+ 		return PTR_ERR(priv->sspa->mmio_base);
+@@ -434,6 +425,10 @@ static int asoc_mmp_sspa_probe(struct platform_device *pdev)
+ 	priv->dai_fmt = (unsigned int) -1;
+ 	platform_set_drvdata(pdev, priv);
+ 
++	/* You know, these addresses are actually ignored. */
++	priv->playback_dma_data.addr = SSPA_TXD;
++	priv->capture_dma_data.addr = SSPA_RXD;
++
+ 	return devm_snd_soc_register_component(&pdev->dev, &mmp_sspa_component,
+ 					       &mmp_sspa_dai, 1);
+ }
+-- 
+2.26.2
 
-[laurent.pinchart] libcamera: pipeline: Raspberry Pi pipeline handler
-
-[laurent.pinchart] libcamera: ipa: Raspberry Pi IPA
-
-[laurent.pinchart] libcamera: utils: Raspberry Pi Camera Tuning Tool
-
-[laurent.pinchart] libcamera: raspberrypi: Add components to meson build
-
-
-------------------------------------------
-Started by an SCM change
-Running as SYSTEM
-Building remotely on slave2 in workspace <https://builder.linuxtv.org/job/libcamera/ws/>
-No credentials specified
- > git rev-parse --is-inside-work-tree # timeout=10
-Fetching changes from the remote Git repository
- > git config remote.origin.url git://linuxtv.org/libcamera.git # timeout=10
-Fetching upstream changes from git://linuxtv.org/libcamera.git
- > git --version # timeout=10
- > git fetch --tags --force --progress -- git://linuxtv.org/libcamera.git +refs/heads/*:refs/remotes/origin/* # timeout=10
- > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
- > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
-Checking out Revision 4bb5b1f60248ada4a26e1114940d1bff1cae5bfc (refs/remotes/origin/master)
- > git config core.sparsecheckout # timeout=10
- > git checkout -f 4bb5b1f60248ada4a26e1114940d1bff1cae5bfc # timeout=10
-Commit message: "libcamera: raspberrypi: Add components to meson build"
- > git rev-list --no-walk 019a145068b714482bbf791c0f296abd06ec0dc1 # timeout=10
-[libcamera] $ /bin/sh -xe /tmp/jenkins4639663244990242363.sh
-+ meson setup --wipe build
-Traceback (most recent call last):
-  File "/usr/lib/python3/dist-packages/mesonbuild/mesonmain.py", line 112, in run
-    return options.run_func(options)
-  File "/usr/lib/python3/dist-packages/mesonbuild/msetup.py", line 229, in run
-    app = MesonApp(options)
-  File "/usr/lib/python3/dist-packages/mesonbuild/msetup.py", line 82, in __init__
-    mesonlib.windows_proof_rmtree(l)
-  File "/usr/lib/python3/dist-packages/mesonbuild/mesonlib.py", line 1116, in windows_proof_rmtree
-    shutil.rmtree(f)
-  File "/usr/lib/python3.7/shutil.py", line 501, in rmtree
-    onerror(os.path.islink, path, sys.exc_info())
-  File "/usr/lib/python3.7/shutil.py", line 499, in rmtree
-    raise OSError("Cannot call rmtree on a symbolic link")
-OSError: Cannot call rmtree on a symbolic link
-+ true
-+ meson configure build
-
-ERROR: No such build data file as "'<https://builder.linuxtv.org/job/libcamera/ws/build/meson-private/build.dat'".>
-+ meson build
-The Meson build system
-Version: 0.49.2
-Source dir: <https://builder.linuxtv.org/job/libcamera/ws/>
-Build dir: <https://builder.linuxtv.org/job/libcamera/ws/build>
-Build type: native build
-Project name: libcamera
-Project version: 0.0.0
-Native C compiler: ccache cc (gcc 8.3.0 "cc (Debian 8.3.0-6) 8.3.0")
-Native C++ compiler: ccache c++ (gcc 8.3.0 "c++ (Debian 8.3.0-6) 8.3.0")
-Build machine cpu family: x86_64
-Build machine cpu: x86_64
-Header <execinfo.h> has symbol "backtrace" : YES
-Header <stdlib.h> has symbol "secure_getenv" : YES
-Compiler for C supports arguments -Wno-c99-designator -Wc99-designator: NO
-Configuring version.h using configuration
-Program openssl found: YES (/usr/bin/openssl)
-Library atomic found: YES
-Library dl found: YES
-Library gnutls found: YES
-Found pkg-config: /usr/bin/pkg-config (0.29)
-Dependency libudev found: YES 241
-Dependency threads found: YES 
-Dependency Boost found: NO 
-
-src/ipa/raspberrypi/meson.build:3:0: ERROR:  Dependency "boost" not found
-
-A full log can be found at <https://builder.linuxtv.org/job/libcamera/ws/build/meson-logs/meson-log.txt>
-Build step 'Execute shell' marked build as failure
