@@ -2,72 +2,108 @@ Return-Path: <SRS0=exgP=6Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C0A7C54E4B
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 09:12:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6B81C47255
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 09:29:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02F062075E
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 09:12:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8DA5620722
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 09:29:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="JtOdx00O"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729160AbgEKJMW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 May 2020 05:12:22 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:4388 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727873AbgEKJMW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 May 2020 05:12:22 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 0D9E13C41AA2920C32B9;
-        Mon, 11 May 2020 17:12:19 +0800 (CST)
-Received: from linux-ibm.site (10.175.102.37) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.487.0; Mon, 11 May 2020 17:12:11 +0800
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-To:     <laurent.pinchart@ideasonboard.com>, <mchehab@kernel.org>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wangxiongfeng2@huawei.com>
-Subject: [PATCH] media: uvcvideo: add a missing newline when printing parameter 'clock'
-Date:   Mon, 11 May 2020 17:06:10 +0800
-Message-ID: <1589187970-39851-1-git-send-email-wangxiongfeng2@huawei.com>
-X-Mailer: git-send-email 1.7.12.4
+        id S1726287AbgEKJ3o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 May 2020 05:29:44 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:44549 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725790AbgEKJ3o (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 11 May 2020 05:29:44 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id Y4kmj9o81hEkrY4knjFozN; Mon, 11 May 2020 11:29:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1589189382; bh=xFvyyrWYxH6Qmyya4EjMcLwgC/PXvwYMJBP6pqQh8iQ=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=JtOdx00O/Typm6wUT0EgDt12T4rlIMRp8lBNpqG/0XXvx6te5ChzNT1XcD+7vw3Jp
+         097K1O9oAPjvULkDZgQKbixPhzbF2SjnUNstaWDT5YzRoBmrwqzCh4bgt9b+0Kqn9l
+         eUAg+VdTh2Teuqb67SILhKbXTL0y67dA/PaKE/LoJTO0UIIAVjsAbARU1eKDWe9OBH
+         B+4u3i7Sji8lCE7/9UWxAGGmy00FsGujuvVZaLvdKRvf9yKTmxDMTSOTJscFQaaeqR
+         OfiCrDyDRcbVlY9vU1tcd1qqWuOodHSMrJQlspodDEFq1BwsRdnA16e56IqfCv3cui
+         G3GyKrBImLDKQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.8] Report camera properties
+Message-ID: <6ad6a156-8a13-d093-b554-7edb1012ad2f@xs4all.nl>
+Date:   Mon, 11 May 2020 11:29:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.102.37]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfLtLn8bL6mmbeTdkJT8T35otQkl7hocAPQkTseDid07ZFoMfRDy27QxkZUmP+RmNpc5gphFyoTkO4wgyzzrLv7PpHp24q5ZBKgOYyZJGhN4OC11D5UAH
+ 617F9LTkUVbgcbIkHdPayh2dCEPpqcT6WBCGLYdtfGjEcvRY42Wn0T5blIraLU2kYEaSDTtN09XPZWfHS8hkWeY/EAprdnVt5dqpcMdLiMid17NTb9NszfZ5
+ krdXp3ex+XGikH7J/Ws8ELlEelTFpJjJuFBUNYFjYoTAfzf7hxp/crVz9AC2bw9NBi6NdA9aNiFBHSGyZKEd8w==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When I cat module parameter 'clock' by sysfs, it displays as follows. It
-is better to add a newline for easy reading.
+This merges v11 of this patch series:
 
-[root@hulk-202 ~]# cat /sys/module/uvcvideo/parameters/clock
-CLOCK_MONOTONIC[root@hulk-202 ~]#
+https://patchwork.linuxtv.org/cover/63700/
 
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
----
- drivers/media/usb/uvc/uvc_driver.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+with the exception of the last patch ("dt-bindings: Add media properties")
+which is independent of the other patches and which needs more work.
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 431d86e..e4d2334 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2356,9 +2356,9 @@ static int uvc_reset_resume(struct usb_interface *intf)
- static int uvc_clock_param_get(char *buffer, const struct kernel_param *kp)
- {
- 	if (uvc_clock_param == CLOCK_MONOTONIC)
--		return sprintf(buffer, "CLOCK_MONOTONIC");
-+		return sprintf(buffer, "CLOCK_MONOTONIC\n");
- 	else
--		return sprintf(buffer, "CLOCK_REALTIME");
-+		return sprintf(buffer, "CLOCK_REALTIME\n");
- }
- 
- static int uvc_clock_param_set(const char *val, const struct kernel_param *kp)
--- 
-1.7.12.4
+Regards,
 
+	Hans
+
+The following changes since commit 5b9f8e4ac9473962fa0e824fd1f04138600d459d:
+
+  media: ipu3.rst: fix a build warning (2020-05-06 14:49:41 +0200)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.8h
+
+for you to fetch changes up to e1bf50999c26223bba8df1fcd595ba11f9aa0948:
+
+  media: i2c: imx219: Parse and register properties (2020-05-11 09:24:47 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Jacopo Mondi (12):
+      dt-bindings: video-interfaces: Document 'orientation' property
+      dt-bindings: video-interface: Replace 'rotation' description
+      media: v4l2-ctrl: Document V4L2_CID_CAMERA_ORIENTATION
+      media: v4l2-ctrl: Document V4L2_CID_CAMERA_SENSOR_ROTATION
+      media: v4l2-ctrls: Add camera orientation and rotation
+      media: v4l2-fwnode: Add helper to parse device properties
+      include: v4l2-ctrl: Sort forward declarations
+      media: v4l2-ctrls: Sort includes alphabetically
+      media: v4l2-ctrls: Add helper to register properties
+      media: i2c: ov5670: Parse and register properties
+      media: i2c: ov13858: Parse and register properties
+      media: i2c: imx219: Parse and register properties
+
+ Documentation/devicetree/bindings/media/video-interfaces.txt | 372 ++++++++++++++++++++++++++++++++++++++++++-
+ Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst   | 151 ++++++++++++++++++
+ drivers/media/i2c/imx219.c                                   |  12 +-
+ drivers/media/i2c/ov13858.c                                  |  13 +-
+ drivers/media/i2c/ov5670.c                                   |  14 +-
+ drivers/media/v4l2-core/v4l2-ctrls.c                         |  61 ++++++-
+ drivers/media/v4l2-core/v4l2-fwnode.c                        |  42 +++++
+ include/media/v4l2-ctrls.h                                   |  34 +++-
+ include/media/v4l2-fwnode.h                                  |  47 ++++++
+ include/uapi/linux/v4l2-controls.h                           |   7 +
+ 10 files changed, 738 insertions(+), 15 deletions(-)
