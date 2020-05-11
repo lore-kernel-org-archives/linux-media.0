@@ -2,30 +2,29 @@ Return-Path: <SRS0=exgP=6Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B62BC54E8E
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 17:03:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E52B0C47255
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 17:40:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0ABFD206CC
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 17:03:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C5E38206D6
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 17:40:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730878AbgEKRD1 convert rfc822-to-8bit (ORCPT
+        id S1730303AbgEKRkW convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 May 2020 13:03:27 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:61445 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730743AbgEKRD0 (ORCPT
+        Mon, 11 May 2020 13:40:22 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:52433 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729658AbgEKRkW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 May 2020 13:03:26 -0400
-X-Originating-IP: 91.224.148.103
+        Mon, 11 May 2020 13:40:22 -0400
 Received: from xps13 (unknown [91.224.148.103])
         (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 55DAB240005;
-        Mon, 11 May 2020 17:03:22 +0000 (UTC)
-Date:   Mon, 11 May 2020 19:03:21 +0200
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 2CF3A200003;
+        Mon, 11 May 2020 17:40:19 +0000 (UTC)
+Date:   Mon, 11 May 2020 19:40:17 +0200
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6?= Rojas <noltari@gmail.com>
 Cc:     computersforpeace@gmail.com, kdasu.kdev@gmail.com, richard@nod.at,
@@ -35,7 +34,7 @@ Cc:     computersforpeace@gmail.com, kdasu.kdev@gmail.com, richard@nod.at,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
 Subject: Re: [PATCH 1/3] nand: brcmnand: rename v4 registers
-Message-ID: <20200511190321.1091bbf2@xps13>
+Message-ID: <20200511194017.313c2881@xps13>
 In-Reply-To: <20200510151406.2527856-1-noltari@gmail.com>
 References: <20200510151406.2527856-1-noltari@gmail.com>
 Organization: Bootlin
@@ -57,34 +56,8 @@ Hi Álvaro,
 > 
 > Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 > ---
->  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> index e4e3ceeac38f..6a08dd07b058 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> @@ -338,8 +338,8 @@ enum brcmnand_reg {
->  	BRCMNAND_FC_BASE,
->  };
->  
-> -/* BRCMNAND v4.0 */
-> -static const u16 brcmnand_regs_v40[] = {
-> +/* BRCMNAND v3.3-v4.0 */
-> +static const u16 brcmnand_regs_v33[] = {
->  	[BRCMNAND_CMD_START]		=  0x04,
->  	[BRCMNAND_CMD_EXT_ADDRESS]	=  0x08,
->  	[BRCMNAND_CMD_ADDRESS]		=  0x0c,
-> @@ -591,8 +591,8 @@ static int brcmnand_revision_init(struct brcmnand_controller *ctrl)
->  		ctrl->reg_offsets = brcmnand_regs_v60;
->  	else if (ctrl->nand_version >= 0x0500)
->  		ctrl->reg_offsets = brcmnand_regs_v50;
-> -	else if (ctrl->nand_version >= 0x0400)
-> -		ctrl->reg_offsets = brcmnand_regs_v40;
-> +	else if (ctrl->nand_version >= 0x0303)
-> +		ctrl->reg_offsets = brcmnand_regs_v33;
->  
->  	/* Chip-select stride */
->  	if (ctrl->nand_version >= 0x0701)
 
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+BTW, all your titles should start with "mtd: rawnand: brcmnand: "
+
+Thanks,
+Miquèl
