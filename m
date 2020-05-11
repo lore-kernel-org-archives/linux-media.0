@@ -2,95 +2,250 @@ Return-Path: <SRS0=exgP=6Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26374C54E90
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 18:27:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FF19C47255
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 18:43:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00A622070B
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 18:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1589221677;
-	bh=i6rT7pl3y5+c7jnQO1HiG2tm/O2Q7yeQE9ybHkbIVYw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=g0GZGZU63yS5DOqJTzLpxMFu2Bgs50XZl9W/++917OGG0k8JBk1NDWMuhT9rj8HcF
-	 O3eYHG7yr87gJYTixTOqMy3IP0YeEE4P9gum1M7xz+PsgaKLBmhCyHT1HVwUzXnJ5U
-	 FqHeEMCGDU69FPfEAfcGu6sfbTpFcalKxSp5Iqbo=
+	by mail.kernel.org (Postfix) with ESMTP id 524A420736
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 18:43:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731222AbgEKS1z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 May 2020 14:27:55 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:43139 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731152AbgEKS1e (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 May 2020 14:27:34 -0400
-Received: by mail-oi1-f195.google.com with SMTP id j16so15937733oih.10;
-        Mon, 11 May 2020 11:27:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Ht1Yf4e3ictsVLLZDtTllL6POw3JDfrc6LvgmlTwd+o=;
-        b=mAYz3DgRHLLxHH9EjPJ9fuWZExW19xggotQ6nRqwQC66QRf17sPxmjsPYML2o1L2V4
-         jTN5Y9FMgVUU6Hvjove4sH1lJVNsa88OFJhOurp3AHXI7UPWo9OO7yYuUDf+EAhqjHsC
-         1bNoJ3q3GArSB/rCSAJxur6MBXSojzgwLdZevQ5+YXI96x03O21q+vtMPVdncIqY8whQ
-         dzvyYfZULYovvJUkDpq75ADvR3/QKvh6IL/OSJwRMOzNGQo/L483RU4G1KiK++9H82nh
-         aDFydlcDDR/C+vVig82noUMk2mg+PAWeyjVXqzV63CMsqtxWUXL68eR0Ro/kkshxjmEa
-         DU/w==
-X-Gm-Message-State: AGi0PuZZK1lCSIvZ9Kvzi8VXcfWW5UdvjZZmvuG9+OjbII6WlfpLYU+c
-        uOWSQ3GjjYmWBLYwt4M+Wg==
-X-Google-Smtp-Source: APiQypJJVdhVDIiyV5MQ9hMeG4fzb2BeRMre1Xb8Vy85SfElqigqNr0E3HRoq3Ps/CZug9SB6xEXZg==
-X-Received: by 2002:aca:acd0:: with SMTP id v199mr19934761oie.82.1589221653219;
-        Mon, 11 May 2020 11:27:33 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id n16sm2980243oop.23.2020.05.11.11.27.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 11:27:32 -0700 (PDT)
-Received: (nullmailer pid 26196 invoked by uid 1000);
-        Mon, 11 May 2020 17:20:08 -0000
-Date:   Mon, 11 May 2020 12:20:08 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     libcamera-devel@lists.libcamera.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        devicetree@vger.kernel.org, pavel@ucw.cz, tfiga@google.com,
-        "open list:MEDIA INPUT INFRASTRUCTURE V4L/DVB" 
-        <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v10 01/13] dt-bindings: video-interfaces: Document
- 'orientation' property
-Message-ID: <20200511172008.GA25628@bogus>
-References: <20200508100158.3437161-1-jacopo@jmondi.org>
- <20200508100158.3437161-2-jacopo@jmondi.org>
+        id S1731163AbgEKSnB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 May 2020 14:43:01 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55876 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729727AbgEKSnB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 11 May 2020 14:43:01 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id E10ABAC40;
+        Mon, 11 May 2020 18:43:01 +0000 (UTC)
+Message-ID: <9b42ad8c4c39ac3873e7c3ea2951bea1caef8bd1.camel@suse.de>
+Subject: Re: [PATCH v2 06/34] staging: vc04_services: Add new vc-sm-cma
+ driver
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        Naushir Patuck <naush@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>
+Date:   Mon, 11 May 2020 20:42:57 +0200
+In-Reply-To: <20200504092611.9798-7-laurent.pinchart@ideasonboard.com>
+References: <20200504092611.9798-1-laurent.pinchart@ideasonboard.com>
+         <20200504092611.9798-7-laurent.pinchart@ideasonboard.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-wPP+hY/a92Z3c3Ov9kaN"
+User-Agent: Evolution 3.36.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200508100158.3437161-2-jacopo@jmondi.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri,  8 May 2020 12:01:46 +0200, Jacopo Mondi wrote:
-> Add the 'orientation' device property, used to specify the device mounting
-> position. The property is particularly meaningful for mobile devices
-> with a well defined usage orientation.
-> 
+
+--=-wPP+hY/a92Z3c3Ov9kaN
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Dave,
+some questions/comments.
+
+On Mon, 2020-05-04 at 12:25 +0300, Laurent Pinchart wrote:
+> From: Dave Stevenson <dave.stevenson@raspberrypi.org>
+>=20
+> Add Broadcom VideoCore Shared Memory support.
+>=20
+> This new driver allows contiguous memory blocks to be imported
+> into the VideoCore VPU memory map, and manages the lifetime of
+> those objects, only releasing the source dmabuf once the VPU has
+> confirmed it has finished with it.
+>=20
+> Driver upported from the RaspberryPi BSP at revision:
+> 890691d1c996 ("staging: vc04_services: Fix vcsm overflow bug when countin=
+g
+> transactions")
+> forward ported to recent mainline kernel version.
+>=20
+> Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 > ---
->  .../devicetree/bindings/media/video-interfaces.txt    | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
+
+[...]
+
+> +
+> +/* Import a dma_buf to be shared with VC. */
+> +int
+> +vc_sm_cma_import_dmabuf_internal(struct vc_sm_privdata_t *private,
+> +				 struct dma_buf *dma_buf,
+> +				 int fd,
+> +				 struct dma_buf **imported_buf)
+> +{
+> +	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+> +	struct vc_sm_buffer *buffer =3D NULL;
+> +	struct vc_sm_import import =3D { };
+> +	struct vc_sm_import_result result =3D { };
+> +	struct dma_buf_attachment *attach =3D NULL;
+> +	struct sg_table *sgt =3D NULL;
+> +	dma_addr_t dma_addr;
+> +	int ret =3D 0;
+> +	int status;
+> +
+> +	/* Setup our allocation parameters */
+> +	pr_debug("%s: importing dma_buf %p/fd %d\n", __func__, dma_buf, fd);
+> +
+> +	if (fd < 0)
+> +		get_dma_buf(dma_buf);
+> +	else
+> +		dma_buf =3D dma_buf_get(fd);
+> +
+> +	if (!dma_buf)
+> +		return -EINVAL;
+> +
+> +	attach =3D dma_buf_attach(dma_buf, &sm_state->pdev->dev);
+> +	if (IS_ERR(attach)) {
+> +		ret =3D PTR_ERR(attach);
+> +		goto error;
+> +	}
+> +
+> +	sgt =3D dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
+> +	if (IS_ERR(sgt)) {
+> +		ret =3D PTR_ERR(sgt);
+> +		goto error;
+> +	}
+> +
+> +	/* Verify that the address block is contiguous */
+> +	if (sgt->nents !=3D 1) {
+> +		ret =3D -ENOMEM;
+> +		goto error;
+> +	}
+> +
+> +	/* Allocate local buffer to track this allocation. */
+> +	buffer =3D kzalloc(sizeof(*buffer), GFP_KERNEL);
+> +	if (!buffer) {
+> +		ret =3D -ENOMEM;
+> +		goto error;
+> +	}
+> +
+> +	import.type =3D VC_SM_ALLOC_NON_CACHED;
+> +	dma_addr =3D sg_dma_address(sgt->sgl);
+> +	import.addr =3D (u32)dma_addr;
+> +	if ((import.addr & 0xC0000000) !=3D 0xC0000000) {
+> +		pr_err("%s: Expecting an uncached alias for dma_addr %pad\n",
+> +		       __func__, &dma_addr);
+> +		import.addr |=3D 0xC0000000;
+> +	}
+
+Just so we don't forget about it, this shouldn't be needed once dma-ranges =
+are
+fixed.
+
+> +	import.size =3D sg_dma_len(sgt->sgl);
+> +	import.allocator =3D current->tgid;
+> +	import.kernel_id =3D get_kernel_id(buffer);
+> +
+> +	memcpy(import.name, VC_SM_RESOURCE_NAME_DEFAULT,
+> +	       sizeof(VC_SM_RESOURCE_NAME_DEFAULT));
+> +
+> +	pr_debug("[%s]: attempt to import \"%s\" data - type %u, addr %pad, siz=
+e
+> %u.\n",
+> +		 __func__, import.name, import.type, &dma_addr, import.size);
+> +
+> +	/* Allocate the videocore buffer. */
+> +	status =3D vc_sm_cma_vchi_import(sm_state->sm_handle, &import, &result,
+> +				       &sm_state->int_trans_id);
+> +	if (status =3D=3D -EINTR) {
+> +		pr_debug("[%s]: requesting import memory action restart
+> (trans_id: %u)\n",
+> +			 __func__, sm_state->int_trans_id);
+> +		ret =3D -ERESTARTSYS;
+> +		private->restart_sys =3D -EINTR;
+> +		private->int_action =3D VC_SM_MSG_TYPE_IMPORT;
+> +		goto error;
+> +	} else if (status || !result.res_handle) {
+> +		pr_debug("[%s]: failed to import memory on videocore (status:
+> %u, trans_id: %u)\n",
+> +			 __func__, status, sm_state->int_trans_id);
+> +		ret =3D -ENOMEM;
+> +		goto error;
+> +	}
+> +
+> +	mutex_init(&buffer->lock);
+> +	INIT_LIST_HEAD(&buffer->attachments);
+> +	memcpy(buffer->name, import.name,
+> +	       min(sizeof(buffer->name), sizeof(import.name) - 1));
+> +
+> +	/* Keep track of the buffer we created. */
+> +	buffer->private =3D private;
+> +	buffer->vc_handle =3D result.res_handle;
+> +	buffer->size =3D import.size;
+> +	buffer->vpu_state =3D VPU_MAPPED;
+> +
+> +	buffer->imported =3D 1;
+> +	buffer->import.dma_buf =3D dma_buf;
+> +
+> +	buffer->import.attach =3D attach;
+> +	buffer->import.sgt =3D sgt;
+> +	buffer->dma_addr =3D dma_addr;
+> +	buffer->in_use =3D 1;
+> +	buffer->kernel_id =3D import.kernel_id;
+> +
+> +	/*
+> +	 * We're done - we need to export a new dmabuf chaining through most
+> +	 * functions, but enabling us to release our own internal references
+> +	 * here.
+> +	 */
+> +	exp_info.ops =3D &dma_buf_import_ops;
+> +	exp_info.size =3D import.size;
+> +	exp_info.flags =3D O_RDWR;
+> +	exp_info.priv =3D buffer;
+> +
+> +	buffer->dma_buf =3D dma_buf_export(&exp_info);
+
+Could you comment on the need for this second dma_buf? I've only reviewed c=
+ode
+related to mmal-vchiq imports, but it seems to me that it would be saner to=
+ do
+the unmapping and unattaching explicitly as opposed to having this second
+buffer refcount hit 0. Although, I can imagine this being needed for the
+userspace interface.
+
+When you talk about moving to dmabuf heaps, I've pictured a specific dmabuf
+heap for vc4 that takes care of all the importing and unimporting (aside fr=
+om
+cma allocations). Am I right? If so, I'm pretty confident we can do away wi=
+th
+this.
+
+Regards,
+Nicolas
 
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
 
-If a tag was not added on purpose, please state why and what changed.
+
+--=-wPP+hY/a92Z3c3Ov9kaN
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl65nLEACgkQlfZmHno8
+x/463Af/dRfeXnCddovM+WKzVax26zXVGLOanGufICRAiOr8eMtHM1kbik272KJD
++yE0d0qpOEEE3vM4MsY4cuk/3JHDCg13Wk3l2vVZZJbXYJ1bd5QcvFvmrjUFKZW0
+9bH5ZdsfD4721aoJBmutCOe0R29waFMYtj61Mj272/0QtJqtLP0BxsEtq10KBlpv
+ScoJ1clXOt8eqG4q/0zTU8ph/wBdu3GGyyWAXUTto8bTSKHcqLKv/DMwAOImYuDa
+jf+XRv0wAiCAw8CSuvj1CA1eEzJClovtByh+abOl5aM8MU2Ej77JFSkoQRlUS6i+
+yh0pATzZ+8hWAQSfa5D1dQeHtwIMRA==
+=EgzJ
+-----END PGP SIGNATURE-----
+
+--=-wPP+hY/a92Z3c3Ov9kaN--
 
