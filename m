@@ -2,242 +2,130 @@ Return-Path: <SRS0=exgP=6Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4299C54E4B
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 20:21:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A9BFC54E8D
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 21:01:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 817882075E
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 20:21:36 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="GLVXxx+m"
+	by mail.kernel.org (Postfix) with ESMTP id 1440A24964
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 21:01:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731534AbgEKUVg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 May 2020 16:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729801AbgEKUVf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 May 2020 16:21:35 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769A2C061A0C;
-        Mon, 11 May 2020 13:21:35 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5681233E;
-        Mon, 11 May 2020 22:21:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1589228492;
-        bh=t3ALYW3YQI31iQVpmappm/UKQKZai6YWp9ttwMJPFlA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GLVXxx+mPSAWsXveNClkeu4GDBAWhBdOTGg0naVb1RSdRljzJwEhKWnt/GZ1xZg9F
-         JcQe0cCDkuYMADiCi+Giuf/Ylfsjoe9tLn5ZnmAJQgLW8wGSzi/eubYAG+jvd2Gv15
-         c+WgiI8Y6eIqKu3iX7X1yEV4hneeOdDHmcynnNu8=
-Date:   Mon, 11 May 2020 23:21:26 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, niklas.soderlund+renesas@ragnatech.se,
-        kieran.bingham@ideasonboard.com, dave.stevenson@raspberrypi.com,
-        hyun.kwon@xilinx.com, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] media: v4l2-subdv: Introduce get_mbus_config pad
- op
-Message-ID: <20200511202126.GE5830@pendragon.ideasonboard.com>
-References: <20200415105004.2497356-1-jacopo+renesas@jmondi.org>
- <20200415105004.2497356-2-jacopo+renesas@jmondi.org>
- <20200420014457.GA15673@pendragon.ideasonboard.com>
- <20200429135430.GH9190@paasikivi.fi.intel.com>
- <20200511113239.dlbmr5gi7itjz6g4@uno.localdomain>
- <20200511200354.GH11272@paasikivi.fi.intel.com>
+        id S1732294AbgEKVBb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 May 2020 17:01:31 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:36866 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732285AbgEKVB1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 11 May 2020 17:01:27 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jYFUr-004EwX-Lk; Mon, 11 May 2020 20:57:57 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jYFa6-0006Rl-92; Mon, 11 May 2020 21:03:22 +0000
+Date:   Mon, 11 May 2020 21:03:22 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        libcamera-devel@lists.libcamera.org
+Message-ID: <2081683680.23.1589231002255.JavaMail.jenkins@builder.linuxtv.org>
+Subject: Build failed in Jenkins: libcamera #172
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200511200354.GH11272@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: libcamera
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+See <https://builder.linuxtv.org/job/libcamera/172/display/redirect?page=changes>
 
-On Mon, May 11, 2020 at 11:03:54PM +0300, Sakari Ailus wrote:
-> On Mon, May 11, 2020 at 01:32:39PM +0200, Jacopo Mondi wrote:
-> > On Wed, Apr 29, 2020 at 04:54:30PM +0300, Sakari Ailus wrote:
-> > > On Mon, Apr 20, 2020 at 04:44:57AM +0300, Laurent Pinchart wrote:
-> > > > On Wed, Apr 15, 2020 at 12:49:58PM +0200, Jacopo Mondi wrote:
-> > > > > Introduce a new pad operation to allow retrieving the media bus
-> > > > > configuration on a subdevice pad.
-> > > > >
-> > > > > The newly introduced operation reassembles the s/g_mbus_config video
-> > > > > operation, which have been on their way to be deprecated since a long
-> > > > > time.
-> > > > >
-> > > > > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> > > > > ---
-> > > > >  include/media/v4l2-subdev.h | 69 +++++++++++++++++++++++++++++++++++++
-> > > > >  1 file changed, 69 insertions(+)
-> > > > >
-> > > > > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-> > > > > index a4848de59852..fc16af578471 100644
-> > > > > --- a/include/media/v4l2-subdev.h
-> > > > > +++ b/include/media/v4l2-subdev.h
-> > > > > @@ -350,6 +350,71 @@ struct v4l2_mbus_frame_desc {
-> > > > >  	unsigned short num_entries;
-> > > > >  };
-> > > > >
-> > > > > +/**
-> > > > > + * struct v4l2_mbus_parallel_config - parallel mbus configuration
-> > > > > + * @hsync_active: hsync active state: 1 for high, 0 for low
-> > > > > + * @vsync_active: vsync active state: 1 for high, 0 for low
-> > > > > + * @pclk_rising: pixel clock active edge: 1 for rising, 0 for falling
-> > > >
-> > > > Is this for the driving side or the sampling side ?
-> > >
-> > > Is there a difference? I'd expect the configuration needs to be the same on
-> > > both sides.
-> > 
-> > I was puzzled as well by this question, mostly because I never found
-> > anything like this in the existing documentation, but actually yes,
-> > the driving side clocks out data on one edge, sampling side samples on
-> > the opposite one ? Is this what you meant Laurent ?
+Changes:
 
-Yes, that's what I meant, sorry for the confusion.
+[laurent.pinchart] LICENSES: Add BSD-2-Clause license
 
-> > To me this has always been about sampling side though, and the setting
-> > should match on both endpoints of course.
+[laurent.pinchart] include: uapi: Add header definitions for BCM2835 Unicam and ISP blocks
 
-Can we make it explicit ? How about naming the field pclk_sample_edge,
-and adding macros name *_RISING and *_FALLING ? See
-include/drm/drm_connector.h for an example (DRM_BUS_FLAG_PIXDATA_*).
+[laurent.pinchart] libcamera: pipeline: Raspberry Pi pipeline handler
 
-> > > > > + * @data_active: data lines active state: 1 for high, 0 for low
-> > > >
-> > > > I wonder, is there any system with active low data lines ?
-> > 
-> > As this is part of the standard DT properties for video interfaces, I
-> > added it here.
-> > 
-> > > > > + */
-> > > > > +struct v4l2_mbus_parallel_config {
-> > > >
-> > > > Is this intended to cover BT.656 too ? Either way I think it should be
-> > > > documented.
-> > >
-> > > I think we should replace what directly refers to Bt.601 with something
-> > > that refers to that, and not "parallel". Both are parallel after all. I
-> > > think the naming is in line with that, assuming this covers both.
-> > 
-> > Currently in v4l2-fwnode BT.656 is selected if no vertical/horizontal
-> > synch and field flags are specified. This implies the following DT
-> > properties are shared between BT.601 and BT.656:
-> > - pclk-sample
-> > - data-active
-> > - slave-mode
-> > - bus-width
-> > - data-shift
-> > - sync-on-green-active
+[laurent.pinchart] libcamera: ipa: Raspberry Pi IPA
 
-Isn't this a property of analog signals ?
+[laurent.pinchart] libcamera: utils: Raspberry Pi Camera Tuning Tool
 
-> > - data-enable-active
+[laurent.pinchart] libcamera: raspberrypi: Add components to meson build
 
-Does BT.656 have a data enable signal ?
 
-> > 
-> > with
-> > - hsync-active
-> > - vsync-active
-> > - field-even-active
-> > being BT.601 only.
-> > 
-> > We could do here do the same and mention which flags apply to 601
-> > only, or more clearly split the config structure by keeping a generic
-> > 'parallel' flag structure, with a sub-structure which is 601 specific.
-> > I'm not sure it's worth the extra layer of indirection though.
+------------------------------------------
+Started by an SCM change
+Running as SYSTEM
+Building remotely on slave2 in workspace <https://builder.linuxtv.org/job/libcamera/ws/>
+No credentials specified
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url git://linuxtv.org/libcamera.git # timeout=10
+Fetching upstream changes from git://linuxtv.org/libcamera.git
+ > git --version # timeout=10
+ > git fetch --tags --force --progress -- git://linuxtv.org/libcamera.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+Checking out Revision 4bb5b1f60248ada4a26e1114940d1bff1cae5bfc (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 4bb5b1f60248ada4a26e1114940d1bff1cae5bfc # timeout=10
+Commit message: "libcamera: raspberrypi: Add components to meson build"
+ > git rev-list --no-walk 019a145068b714482bbf791c0f296abd06ec0dc1 # timeout=10
+[libcamera] $ /bin/sh -xe /tmp/jenkins4639663244990242363.sh
++ meson setup --wipe build
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/mesonbuild/mesonmain.py", line 112, in run
+    return options.run_func(options)
+  File "/usr/lib/python3/dist-packages/mesonbuild/msetup.py", line 229, in run
+    app = MesonApp(options)
+  File "/usr/lib/python3/dist-packages/mesonbuild/msetup.py", line 82, in __init__
+    mesonlib.windows_proof_rmtree(l)
+  File "/usr/lib/python3/dist-packages/mesonbuild/mesonlib.py", line 1116, in windows_proof_rmtree
+    shutil.rmtree(f)
+  File "/usr/lib/python3.7/shutil.py", line 501, in rmtree
+    onerror(os.path.islink, path, sys.exc_info())
+  File "/usr/lib/python3.7/shutil.py", line 499, in rmtree
+    raise OSError("Cannot call rmtree on a symbolic link")
+OSError: Cannot call rmtree on a symbolic link
++ true
++ meson configure build
 
-Possibly not, I would be fine with just documenting the structure and
-fields in details.
+ERROR: No such build data file as "'<https://builder.linuxtv.org/job/libcamera/ws/build/meson-private/build.dat'".>
++ meson build
+The Meson build system
+Version: 0.49.2
+Source dir: <https://builder.linuxtv.org/job/libcamera/ws/>
+Build dir: <https://builder.linuxtv.org/job/libcamera/ws/build>
+Build type: native build
+Project name: libcamera
+Project version: 0.0.0
+Native C compiler: ccache cc (gcc 8.3.0 "cc (Debian 8.3.0-6) 8.3.0")
+Native C++ compiler: ccache c++ (gcc 8.3.0 "c++ (Debian 8.3.0-6) 8.3.0")
+Build machine cpu family: x86_64
+Build machine cpu: x86_64
+Header <execinfo.h> has symbol "backtrace" : YES
+Header <stdlib.h> has symbol "secure_getenv" : YES
+Compiler for C supports arguments -Wno-c99-designator -Wc99-designator: NO
+Configuring version.h using configuration
+Program openssl found: YES (/usr/bin/openssl)
+Library atomic found: YES
+Library dl found: YES
+Library gnutls found: YES
+Found pkg-config: /usr/bin/pkg-config (0.29)
+Dependency libudev found: YES 241
+Dependency threads found: YES 
+Dependency Boost found: NO 
 
-> > > > > +	unsigned int hsync_active : 1;
-> > > > > +	unsigned int vsync_active : 1;
-> > > > > +	unsigned int pclk_rising : 1;
-> > > > > +	unsigned int data_active : 1;
-> > > >
-> > > > Shouldn't we reuse the V4L2_MBUS_* flags, given that they're also used
-> > > > in v4l2_fwnode_bus_parallel ? While the v4l2_mbus_config structure is
-> > >
-> > > I'd think it's easier to work with fields in drivers than the flags. This
-> > 
-> > I find it easier and less error prone to work with fields as well,
-> > provided the space occupation is the same as working with flags.
+src/ipa/raspberrypi/meson.build:3:0: ERROR:  Dependency "boost" not found
 
-I'm probably influenced by DRM_BUS_FLAG_* here :-) Especially for the
-signal polarity, being able to say
-
-	->flags = DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE;
-
-in the driver the transmitter driver, and
-
-	if (->flags & DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE)
-		...
-
-in the receiver driver is very nice. I won't push for it though.
-
-> > > isn't uAPI so we don't need to think the ABI. The change could also be done
-> > > to struct v4l2_fwnode_bus_parallel.
-> > >
-> > > > getting deprecated, it doesn't mean we can reuse the same flags if they
-> > > > make sense. Otherwise we'll have to translate between
-> > > > v4l2_fwnode_bus_parallel.flags and the fields here. Ideally
-> > 
-> > Right, I agree this is not desirable. Every driver should inspect the
-> > fwnode properties and translate to this new config when queryed
-> > through get_mbus_format.
-
-Do you mean with a helper function ?
-
-> > > > v4l2_fwnode_bus_parallel should be replaced with
-> > > > v4l2_mbus_parallel_config (once we add additional fields).
-> > 
-> > I like this idea
-> > 
-> > We could indeed expand the .flags structure of v4l2_fwnode_bus_parallel
-> > 
-> > struct v4l2_fwnode_bus_parallel {
-> > 	unsigned int flags;
-> > 	unsigned char bus_width;
-> > 	unsigned char data_shift;
-> > };
-> > 
-> > but then we should replace the whole structure.
-> > 
-> > All in all, working with the same set of flags is the less disruptive
-> > change and would not require translations in drivers... I'm not a fan,
-> > but currently seems the easiest way forward...
-> > 
-> > What do you think ?
-> 
-> Could we use a struct instead, say:
-> 
-> struct v4l2_parallel_flags {
-> 	unsigned int hsync_active:1;
-> 	/* and so on */
-> };
-> 
-> And then you'd add this to struct v4l2_fwnode_bus_parallel as a field. No
-> defines would be needed this way, and it'd be slightly safer because you
-> get types checked by the compilter.
-> 
-> I don't have strong opinion either way. Both would work just fine.
-
-That's fine with me. As I wrote above I think flags can increase
-readability in some cases, but I won't insist.
-
--- 
-Regards,
-
-Laurent Pinchart
+A full log can be found at <https://builder.linuxtv.org/job/libcamera/ws/build/meson-logs/meson-log.txt>
+Build step 'Execute shell' marked build as failure
