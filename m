@@ -2,25 +2,25 @@ Return-Path: <SRS0=exgP=6Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E39FDC54E8D
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 21:02:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B1F8C54E8D
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 21:02:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF4E32078A
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 21:02:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5816620836
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 21:02:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732326AbgEKVBm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1729661AbgEKVBm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 11 May 2020 17:01:42 -0400
-Received: from v6.sk ([167.172.42.174]:52550 "EHLO v6.sk"
+Received: from v6.sk ([167.172.42.174]:52536 "EHLO v6.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732313AbgEKVBl (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 May 2020 17:01:41 -0400
+        id S1732306AbgEKVBj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 11 May 2020 17:01:39 -0400
 Received: from localhost (v6.sk [IPv6:::1])
-        by v6.sk (Postfix) with ESMTP id B7D67610CF;
-        Mon, 11 May 2020 21:01:38 +0000 (UTC)
+        by v6.sk (Postfix) with ESMTP id 421F1610A9;
+        Mon, 11 May 2020 21:01:37 +0000 (UTC)
 From:   Lubomir Rintel <lkundrak@v3.sk>
 To:     Liam Girdwood <lgirdwood@gmail.com>
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -28,13 +28,11 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH 01/11] ASoC: mmp-sspa: Flip SNDRV_PCM_FMTBIT_S24_3LE on
-Date:   Mon, 11 May 2020 23:01:24 +0200
-Message-Id: <20200511210134.1224532-2-lkundrak@v3.sk>
+        linux-media@vger.kernel.org
+Subject: [PATCH 00/11] Make sound work on DT-based MMP2 machines
+Date:   Mon, 11 May 2020 23:01:23 +0200
+Message-Id: <20200511210134.1224532-1-lkundrak@v3.sk>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200511210134.1224532-1-lkundrak@v3.sk>
-References: <20200511210134.1224532-1-lkundrak@v3.sk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -42,27 +40,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The hw_params() callback handles the 3-byte format, not
-SNDRV_PCM_FMTBIT_S24_LE.
+Hi,
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
----
- sound/soc/pxa/mmp-sspa.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+this patch set reworks the mmp-sspa driver to work on a device
+tree based MMP2 machines. My motivation is to make sound work on
+a MMP2-based OLPC XO-1.75 laptop.
 
-diff --git a/sound/soc/pxa/mmp-sspa.c b/sound/soc/pxa/mmp-sspa.c
-index 3548a2634a63..1ca6afe464c4 100644
---- a/sound/soc/pxa/mmp-sspa.c
-+++ b/sound/soc/pxa/mmp-sspa.c
-@@ -362,7 +362,7 @@ static int mmp_sspa_probe(struct snd_soc_dai *dai)
- #define MMP_SSPA_RATES SNDRV_PCM_RATE_8000_192000
- #define MMP_SSPA_FORMATS (SNDRV_PCM_FMTBIT_S8 | \
- 		SNDRV_PCM_FMTBIT_S16_LE | \
--		SNDRV_PCM_FMTBIT_S24_LE | \
-+		SNDRV_PCM_FMTBIT_S24_3LE | \
- 		SNDRV_PCM_FMTBIT_S32_LE)
- 
- static const struct snd_soc_dai_ops mmp_sspa_dai_ops = {
--- 
-2.26.2
+Note that currently the driver is pretty much orphaned -- it is not used by
+any boards and nothing in tree provides the necessary clocks. This means
+that risks of regressions are effectively zero; even though my test
+configuration is not exhaustive and do not possess the datasheet.
+
+I'm actually not convinced it would've worked too well if it was hooked
+on (due to what patches 01/11, 02/11 and perhaps 09/11).
+
+I've tested this on a XO-1.75 along with clk-audio driver that was
+submitted separately ("MMP2 Audio clock controller driver" [1]),
+mmp_tdma driver (with changes queued in linux-next), the rt5631 codec
+and audio-graph-card.
+
+[1] https://lore.kernel.org/lkml/20200511195534.1207927-1-lkundrak@v3.sk/
+
+Thank you,
+Lubo
+
 
