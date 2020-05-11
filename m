@@ -6,60 +6,60 @@ X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
 	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F134C47255
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DF61C54E4B
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:34:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5790420736
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:32:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0754920708
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:34:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a1JUtGHh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dmn+gDFU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729743AbgEKLcv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 May 2020 07:32:51 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:55617 "EHLO
+        id S1729641AbgEKLe4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 May 2020 07:34:56 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:33451 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729633AbgEKLcv (ORCPT
+        by vger.kernel.org with ESMTP id S1728776AbgEKLe4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 May 2020 07:32:51 -0400
+        Mon, 11 May 2020 07:34:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1589196768;
+        s=mimecast20190719; t=1589196893;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=e1jXsjLDgxxDL3WPWWIYZi3LkILVb4BgCfucYuGiTE4=;
-        b=a1JUtGHhIVTl7x2Y8iapV85/7YrVKXbrgFNdijd4iE3hZF5DpDFuCrLLmUDtmVwKchre+U
-        LqG0WNuyvgJoT5o4bVDd7uATlkz89PhboADzPlgby6VshSyVZGZEXGVZwLXopDJDHGtfyc
-        kHBxvadltmQR+dZxprPfIt73uWvCZ4A=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-333-rdm98mV4MEe48l3UBUzZVg-1; Mon, 11 May 2020 07:32:32 -0400
-X-MC-Unique: rdm98mV4MEe48l3UBUzZVg-1
-Received: by mail-wr1-f70.google.com with SMTP id z5so5072141wrt.17
-        for <linux-media@vger.kernel.org>; Mon, 11 May 2020 04:32:32 -0700 (PDT)
+        bh=eiIw/GYlFotp6RclmORvcQ8g8kH2kGGUsqY/lzLOzlU=;
+        b=dmn+gDFUO8SsGyPyVW3zndfndVUVgYyNtSB/tHUsbm0bcHYZsgbS5pctZy4UoTO2rcjQVN
+        9zJrEN5a9hzNk1JyJcZGVKAm2WqOk18AAuR3w83dz+y+7W5XRWpCBLkP+lCuKgY1NSHsvw
+        3VAj2PZNDkdTimh+8bijoBxhHrAmbDI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-324-C5HY6kanMsuFW-70ONMDgQ-1; Mon, 11 May 2020 07:34:51 -0400
+X-MC-Unique: C5HY6kanMsuFW-70ONMDgQ-1
+Received: by mail-wr1-f71.google.com with SMTP id h12so5108480wrr.19
+        for <linux-media@vger.kernel.org>; Mon, 11 May 2020 04:34:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=e1jXsjLDgxxDL3WPWWIYZi3LkILVb4BgCfucYuGiTE4=;
-        b=dQevBjwe72f0EzfGVDEfgi48kewHL2j4kMKnb3DuBAxNnYH3mpMSxzegWufTHpFUvk
-         r+IOW55qm9eRk2mDgpKCzuVapVSzsT+pVvWjfGz4fqleCZ8BZTPtQOOT05paGnrzMivX
-         0GKjY2ulnFiIVDeiGCPfcXIKUWMHFFsCsIBynS6/kvbiurerHFg46YQWxMG9zASSa7Sb
-         pREN3gXKJ6m4Ykgaqk63sRYDkPmUSNlJD4P7DAKaTeU3RUiQeBQ+xp5Zzo97myoGbQI9
-         CmGitCDRb0pCEOaMQFp+XT/mynf4szWGbMsEbVGCCdBQJFdbNEsRDOxFjXcsSl+vXWI/
-         NgpQ==
-X-Gm-Message-State: AGi0PuZ0Ebht/sbP78klAfgVvTYDV3a0tdihgawlLrQOhHq33pSWLnoB
-        cclOZqmng/bXFIizQ/rzZe6IM19cYi5/TFUfEj3A69wFfkgvNLQMyfvRvi5DPjNfGKK4ioKaUmR
-        qbXBuW4juDokAxg34Mtsufdw=
-X-Received: by 2002:a5d:6702:: with SMTP id o2mr12408288wru.231.1589196751251;
-        Mon, 11 May 2020 04:32:31 -0700 (PDT)
-X-Google-Smtp-Source: APiQypKA9n3K0ELkFktaIlu98BryncK5bEhJy6F4YwSdJ/XxV3R5g1GD3Bw9Uvvc/yh06uG9G61XXw==
-X-Received: by 2002:a5d:6702:: with SMTP id o2mr12408253wru.231.1589196750820;
-        Mon, 11 May 2020 04:32:30 -0700 (PDT)
+        bh=eiIw/GYlFotp6RclmORvcQ8g8kH2kGGUsqY/lzLOzlU=;
+        b=lgXEgzOiAZGCuJ3ih2wndg9IoOq2s+JRAdOjTlH1Hjdl18o//qhbFL1Ku5YGQGn4tJ
+         X5Adu+f2GGJsgAgsoiEnu7jVG7OchGTIHtNe9+tsVTpjwTlk58cp0A7rW1wDnUXWmsWV
+         0p3ce/a8RBDhkAcuHcCF3ypH9Y89ZazOGfvEk4qXiflxun+ja9Tau9ehx+hfEP7WBNPh
+         WJpgk1kJxSNiycwUFjnHr7+HAnp2u3oB3DRTtTvv8pTcazPDT2lg+X/AcQlFOGmg5bbD
+         Z7Ht4S5NpshSy/oll/p0+gNIxCjhHqTI2wxPL6aCiR4rpLg5kEmg82toDdFdGyp/+6sS
+         OKNA==
+X-Gm-Message-State: AGi0PuY5mnM99RpB7Cjsxr7cDNyDgxX2L9onQdfGOUKiMCHuaIBIuzMy
+        XFw/+4O9h+hOBz0My09hR49s4/umhIyxF2ScZ5cQmHRrZ4iKvXmqANMTvV9/cNzaP4KGLH/w3uG
+        JM7gA7Hqj5Da6Kab3MjyQZus=
+X-Received: by 2002:a7b:cbc5:: with SMTP id n5mr15428984wmi.110.1589196890578;
+        Mon, 11 May 2020 04:34:50 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKyBWwxj/9b2ZHY5bPRGi2XfOKP8X4m/HsGGG2sV5u/SojFeY0G5z8fRdAhuRLIPCKS3cfuGw==
+X-Received: by 2002:a7b:cbc5:: with SMTP id n5mr15428958wmi.110.1589196890333;
+        Mon, 11 May 2020 04:34:50 -0700 (PDT)
 Received: from redhat.com (bzq-79-179-68-225.red.bezeqint.net. [79.179.68.225])
-        by smtp.gmail.com with ESMTPSA id s11sm17053819wrp.79.2020.05.11.04.32.28
+        by smtp.gmail.com with ESMTPSA id u16sm17244263wrq.17.2020.05.11.04.34.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 04:32:30 -0700 (PDT)
-Date:   Mon, 11 May 2020 07:32:27 -0400
+        Mon, 11 May 2020 04:34:49 -0700 (PDT)
+Date:   Mon, 11 May 2020 07:34:47 -0400
 From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     Dmitry Sepp <dmitry.sepp@opensynergy.com>
 Cc:     Saket Sinha <saket.sinha89@gmail.com>,
@@ -75,7 +75,7 @@ Cc:     Saket Sinha <saket.sinha89@gmail.com>,
         Alex Lau <alexlau@chromium.org>,
         Pawel Osciak <posciak@chromium.org>
 Subject: Re: [virtio-dev] Re: Fwd: Qemu Support for Virtio Video V4L2 driver
-Message-ID: <20200511073049-mutt-send-email-mst@kernel.org>
+Message-ID: <20200511073251-mutt-send-email-mst@kernel.org>
 References: <CAK25hWN3kJcW-dcpryFrvZ50t7Y0Z=MZM66-8NMuhwjRpNo2aQ@mail.gmail.com>
  <CAD90Vcb-x1KV++fWrmx+fLV5eNc2DiTtn8=OjQi7aUf7B0ULdA@mail.gmail.com>
  <CAK25hWM-hLdk=MSKgceumOUo9ZNBrrmM8qSe7MvTUAPGmur_HQ@mail.gmail.com>
@@ -111,10 +111,7 @@ On Mon, May 11, 2020 at 01:25:23PM +0200, Dmitry Sepp wrote:
 > made upstream that camera should be implemented as separate device type. We 
 > still plan to implement a simple frame capture capability as a downstream 
 > patch though.
-
-You want to spec out what's in the field, spec-wise internal up/down
-stream distinctions are not important.
-
+> 
 > > 
 > > 2. If Host has multiple video devices (especially in ARM SOCs over
 > > MIPI interfaces or USB), different VM can be started or hotplugged
@@ -123,7 +120,15 @@ stream distinctions are not important.
 > We do support this in our device implementation. But spec in general has no 
 > requirements or instructions regarding this. And it is in fact flexible enough 
 > to provide abstraction on top of several HW devices.
-> 
+
+Hmm I agree if it's just for pass-through of host devices that's a very
+limited usecase. Not out of scope for virtio, but let's make
+it clear it's pass-through in the device name, so that if
+people want to create a virtualizeable interface down the road
+they don't feel blocked.
+
+
+
 > > 
 > > Also instead of using libraries like Gstreamer in Host userspace, they
 > > can also be used inside the VM userspace after getting access to
