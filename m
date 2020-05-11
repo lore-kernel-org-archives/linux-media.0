@@ -2,191 +2,197 @@ Return-Path: <SRS0=exgP=6Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3601C47255
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67E38C54E8D
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:29:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E62C2082E
-	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:28:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5077420735
+	for <linux-media@archiver.kernel.org>; Mon, 11 May 2020 11:29:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729662AbgEKLZe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 May 2020 07:25:34 -0400
-Received: from plasma4.jpberlin.de ([80.241.57.33]:59897 "EHLO
-        plasma4.jpberlin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729572AbgEKLZd (ORCPT
+        id S1729732AbgEKL33 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 May 2020 07:29:29 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:38711 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729610AbgEKL33 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 May 2020 07:25:33 -0400
-Received: from hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172])
-        by plasma.jpberlin.de (Postfix) with ESMTP id EACD8BCC98;
-        Mon, 11 May 2020 13:25:25 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from plasma.jpberlin.de ([91.198.250.140])
-        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
-        with ESMTP id Gde9B_1XPwG2; Mon, 11 May 2020 13:25:24 +0200 (CEST)
-Received: from webmail.opensynergy.com (unknown [217.66.60.5])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "webmail.opensynergy.com", Issuer "GeoTrust EV RSA CA 2018" (not verified))
-        (Authenticated sender: opensynergy@jpberlin.de)
-        by plasma.jpberlin.de (Postfix) with ESMTPSA id DD4B9B9C86;
-        Mon, 11 May 2020 13:25:23 +0200 (CEST)
-Received: from os-lin-dmo.localnet (10.25.255.1) by MXS01.open-synergy.com
- (10.25.10.17) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 11 May
- 2020 13:25:23 +0200
-From:   Dmitry Sepp <dmitry.sepp@opensynergy.com>
-To:     Saket Sinha <saket.sinha89@gmail.com>
-CC:     Keiichi Watanabe <keiichiw@chromium.org>,
-        Kiran Pawar <Kiran.Pawar@opensynergy.com>,
-        Samiullah Khawaja <samiullah.khawaja@opensynergy.com>,
-        <qemu-devel@nongnu.org>, <virtio-dev@lists.oasis-open.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Alex Lau <alexlau@chromium.org>,
-        Pawel Osciak <posciak@chromium.org>
-Subject: Re: [virtio-dev] Re: Fwd: Qemu Support for Virtio Video V4L2 driver
-Date:   Mon, 11 May 2020 13:25:23 +0200
-Message-ID: <2515515.r9knKAEANn@os-lin-dmo>
-Organization: OpenSynergy
-In-Reply-To: <CAK25hWM-hLdk=MSKgceumOUo9ZNBrrmM8qSe7MvTUAPGmur_HQ@mail.gmail.com>
-References: <CAK25hWN3kJcW-dcpryFrvZ50t7Y0Z=MZM66-8NMuhwjRpNo2aQ@mail.gmail.com> <CAD90Vcb-x1KV++fWrmx+fLV5eNc2DiTtn8=OjQi7aUf7B0ULdA@mail.gmail.com> <CAK25hWM-hLdk=MSKgceumOUo9ZNBrrmM8qSe7MvTUAPGmur_HQ@mail.gmail.com>
+        Mon, 11 May 2020 07:29:29 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id DE5671C0007;
+        Mon, 11 May 2020 11:29:23 +0000 (UTC)
+Date:   Mon, 11 May 2020 13:32:39 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, niklas.soderlund+renesas@ragnatech.se,
+        kieran.bingham@ideasonboard.com, dave.stevenson@raspberrypi.com,
+        hyun.kwon@xilinx.com, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] media: v4l2-subdv: Introduce get_mbus_config pad
+ op
+Message-ID: <20200511113239.dlbmr5gi7itjz6g4@uno.localdomain>
+References: <20200415105004.2497356-1-jacopo+renesas@jmondi.org>
+ <20200415105004.2497356-2-jacopo+renesas@jmondi.org>
+ <20200420014457.GA15673@pendragon.ideasonboard.com>
+ <20200429135430.GH9190@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [10.25.255.1]
-X-Rspamd-Queue-Id: EACD8BCC98
-X-Rspamd-Score: -5.33 / 15.00 / 200.00
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200429135430.GH9190@paasikivi.fi.intel.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Saket,
+Hi Sakari, Laurent,
 
-On Montag, 11. Mai 2020 13:05:53 CEST Saket Sinha wrote:
-> Hi Keiichi,
-> 
-> I do not support the approach of  QEMU implementation forwarding
-> requests to the host's vicodec module since  this can limit the scope
-> of the virtio-video device only for testing,
+On Wed, Apr 29, 2020 at 04:54:30PM +0300, Sakari Ailus wrote:
+> Hi Laurent,
+>
+> On Mon, Apr 20, 2020 at 04:44:57AM +0300, Laurent Pinchart wrote:
+> > Hi Jacopo,
+> >
+> > Thank you for the patch.
+> >
+> > On Wed, Apr 15, 2020 at 12:49:58PM +0200, Jacopo Mondi wrote:
+> > > Introduce a new pad operation to allow retrieving the media bus
+> > > configuration on a subdevice pad.
+> > >
+> > > The newly introduced operation reassembles the s/g_mbus_config video
+> > > operation, which have been on their way to be deprecated since a long
+> > > time.
+> > >
+> > > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > > ---
+> > >  include/media/v4l2-subdev.h | 69 +++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 69 insertions(+)
+> > >
+> > > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> > > index a4848de59852..fc16af578471 100644
+> > > --- a/include/media/v4l2-subdev.h
+> > > +++ b/include/media/v4l2-subdev.h
+> > > @@ -350,6 +350,71 @@ struct v4l2_mbus_frame_desc {
+> > >  	unsigned short num_entries;
+> > >  };
+> > >
+> > > +/**
+> > > + * struct v4l2_mbus_parallel_config - parallel mbus configuration
+> > > + * @hsync_active: hsync active state: 1 for high, 0 for low
+> > > + * @vsync_active: vsync active state: 1 for high, 0 for low
+> > > + * @pclk_rising: pixel clock active edge: 1 for rising, 0 for falling
+> >
+> > Is this for the driving side or the sampling side ?
+>
+> Is there a difference? I'd expect the configuration needs to be the same on
+> both sides.
 
-That was my understanding as well.
+I was puzzled as well by this question, mostly because I never found
+anything like this in the existing documentation, but actually yes,
+the driving side clocks out data on one edge, sampling side samples on
+the opposite one ? Is this what you meant Laurent ?
 
-> which instead can be used with multiple use cases such as -
-> 
-> 1. VM gets access to paravirtualized  camera devices which shares the
-> video frames input through actual HW camera attached to Host.
+To me this has always been about sampling side though, and the setting
+should match on both endpoints of course.
 
-This use-case is out of the scope of virtio-video. Initially I had a plan to 
-support capture-only streams like camera as well, but later the decision was 
-made upstream that camera should be implemented as separate device type. We 
-still plan to implement a simple frame capture capability as a downstream 
-patch though.
+>
+> >
+> > > + * @data_active: data lines active state: 1 for high, 0 for low
+> >
+> > I wonder, is there any system with active low data lines ?
 
-> 
-> 2. If Host has multiple video devices (especially in ARM SOCs over
-> MIPI interfaces or USB), different VM can be started or hotplugged
-> with selective video streams from actual HW video devices.
+As this is part of the standard DT properties for video interfaces, I
+added it here.
 
-We do support this in our device implementation. But spec in general has no 
-requirements or instructions regarding this. And it is in fact flexible enough 
-to provide abstraction on top of several HW devices.
+> >
+> > > + */
+> > > +struct v4l2_mbus_parallel_config {
+> >
+> > Is this intended to cover BT.656 too ? Either way I think it should be
+> > documented.
+>
+> I think we should replace what directly refers to Bt.601 with something
+> that refers to that, and not "parallel". Both are parallel after all. I
+> think the naming is in line with that, assuming this covers both.
+>
 
-> 
-> Also instead of using libraries like Gstreamer in Host userspace, they
-> can also be used inside the VM userspace after getting access to
-> paravirtualized HW camera devices .
-> 
+Currently in v4l2-fwnode BT.656 is selected if no vertical/horizontal
+synch and field flags are specified. This implies the following DT
+properties are shared between BT.601 and BT.656:
+- pclk-sample
+- data-active
+- slave-mode
+- bus-width
+- data-shift
+- sync-on-green-active
+- data-enable-active
 
-Regarding the cameras, unfortunately same as above.
+with
+- hsync-active
+- vsync-active
+- field-even-active
+being BT.601 only.
 
-Best regards,
-Dmitry.
-
-> Regards,
-> Saket Sinha
-> 
-> On Mon, May 11, 2020 at 12:20 PM Keiichi Watanabe <keiichiw@chromium.org> 
-wrote:
-> > Hi Dmitry,
-> > 
-> > On Mon, May 11, 2020 at 6:40 PM Dmitry Sepp <dmitry.sepp@opensynergy.com> 
-wrote:
-> > > Hi Saket and all,
-> > > 
-> > > As we are working with automotive platforms, unfortunately we don't plan
-> > > any Qemu reference implementation so far.
-> > > 
-> > > Of course we are ready to support the community if any help is needed.
-> > > Is
-> > > there interest in support for the FWHT format only for testing purpose
-> > > or you want a full-featured implementation on the QEMU side?
-> > 
-> > I guess we don't need to implement the codec algorithm in QEMU.
-> > Rather, QEMU forwards virtio-video requests to the host video device
-> > or a software library such as GStreamer or ffmpeg.
-> > So, what we need to implement in QEMU is a kind of API translation,
-> > which shouldn't care about actual video formats so much.
-> > 
-> > Regarding the FWHT format discussed in the patch thread [1], in my
-> > understanding, Hans suggested to have QEMU implementation forwarding
-> > requests to the host's vicodec module [2].
-> > Then, we'll be able to test the virtio-video driver on QEMU on Linux
-> > even if the host Linux has no hardware video decoder.
-> > (Please correct me if I'm wrong.)
-> > 
-> > Let me add Hans and Linux media ML in CC.
-> > 
-> > [1]  https://patchwork.linuxtv.org/patch/61717/
-> > [2] https://lwn.net/Articles/760650/
-> > 
-> > Best regards,
-> > Keiichi
-> > 
-> > > Please note that the spec is not finalized yet and a major update is now
-> > > discussed with upstream and the Chrome OS team, which is also interested
-> > > and deeply involved in the process. The update mostly implies some
-> > > rewording and reorganization of data structures, but for sure will
-> > > require a driver rework.
-> > > 
-> > > Best regards,
-> > > Dmitry.
-> > > 
-> > > On Samstag, 9. Mai 2020 16:11:43 CEST Saket Sinha wrote:
-> > > > Hi,
-> > > > 
-> > > > As suggested on #qemu-devel IRC channel, I am including virtio-dev,
-> > > > Gerd and Michael to point in the right direction how to move forward
-> > > > with Qemu support for Virtio Video V4L2 driver
-> > > > posted in [1].
-> > > > 
-> > > > [1]: https://patchwork.linuxtv.org/patch/61717/
-> > > > 
-> > > > Regards,
-> > > > Saket Sinha
-> > > > 
-> > > > On Sat, May 9, 2020 at 1:09 AM Saket Sinha <saket.sinha89@gmail.com> 
-wrote:
-> > > > > Hi ,
-> > > > > 
-> > > > > This is to inquire about Qemu support for Virtio Video V4L2 driver
-> > > > > posted in [1].
-> > > > > I am currently not aware of any upstream effort for Qemu reference
-> > > > > implementation and would like to discuss how to proceed with the
-> > > > > same.
-> > > > > 
-> > > > > [1]: https://patchwork.linuxtv.org/patch/61717/
-> > > > > 
-> > > > > Regards,
-> > > > > Saket Sinha
-> > > 
-> > > ---------------------------------------------------------------------
-> > > To unsubscribe, e-mail: virtio-dev-unsubscribe@lists.oasis-open.org
-> > > For additional commands, e-mail: virtio-dev-help@lists.oasis-open.org
+We could do here do the same and mention which flags apply to 601
+only, or more clearly split the config structure by keeping a generic
+'parallel' flag structure, with a sub-structure which is 601 specific.
+I'm not sure it's worth the extra layer of indirection though.
 
 
+> >
+> > > +	unsigned int hsync_active : 1;
+> > > +	unsigned int vsync_active : 1;
+> > > +	unsigned int pclk_rising : 1;
+> > > +	unsigned int data_active : 1;
+> >
+> > Shouldn't we reuse the V4L2_MBUS_* flags, given that they're also used
+> > in v4l2_fwnode_bus_parallel ? While the v4l2_mbus_config structure is
+>
+> I'd think it's easier to work with fields in drivers than the flags. This
+
+I find it easier and less error prone to work with fields as well,
+provided the space occupation is the same as working with flags.
+
+> isn't uAPI so we don't need to think the ABI. The change could also be done
+> to struct v4l2_fwnode_bus_parallel.
+>
+> > getting deprecated, it doesn't mean we can reuse the same flags if they
+> > make sense. Otherwise we'll have to translate between
+> > v4l2_fwnode_bus_parallel.flags and the fields here. Ideally
+
+Right, I agree this is not desirable. Every driver should inspect the
+fwnode properties and translate to this new config when queryed
+through get_mbus_format.
+
+> > v4l2_fwnode_bus_parallel should be replaced with
+> > v4l2_mbus_parallel_config (once we add additional fields).
+
+I like this idea
+
+We could indeed expand the .flags structure of v4l2_fwnode_bus_parallel
+
+struct v4l2_fwnode_bus_parallel {
+	unsigned int flags;
+	unsigned char bus_width;
+	unsigned char data_shift;
+};
+
+but then we should replace the whole structure.
+
+All in all, working with the same set of flags is the less disruptive
+change and would not require translations in drivers... I'm not a fan,
+but currently seems the easiest way forward...
+
+What do you think ?
+
+>
+> ...
+>
+> --
+> Kind regards,
+>
+> Sakari Ailus
