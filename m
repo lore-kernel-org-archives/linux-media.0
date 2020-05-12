@@ -2,126 +2,80 @@ Return-Path: <SRS0=+THy=62=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EF6CC54E8D
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:16:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 111D3C54E8D
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:18:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58B7F206D6
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:16:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E508420675
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:18:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728890AbgELHQm convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 May 2020 03:16:42 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:47429 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725889AbgELHQm (ORCPT
+        id S1726187AbgELHSL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 May 2020 03:18:11 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:47529 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725889AbgELHSK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 May 2020 03:16:42 -0400
-X-Originating-IP: 91.224.148.103
-Received: from xps13 (unknown [91.224.148.103])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 2B8632000C;
-        Tue, 12 May 2020 07:16:38 +0000 (UTC)
-Date:   Tue, 12 May 2020 09:16:37 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6?= Rojas <noltari@gmail.com>
-Cc:     computersforpeace@gmail.com, kdasu.kdev@gmail.com, richard@nod.at,
-        vigneshr@ti.com, sumit.semwal@linaro.org,
-        linux-mtd@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v3] mtd: rawnand: brcmnand: correctly verify erased
- pages
-Message-ID: <20200512091637.198dd0c2@xps13>
-In-Reply-To: <20200512065111.716801-1-noltari@gmail.com>
-References: <20200505082055.2843847-1-noltari@gmail.com>
-        <20200512065111.716801-1-noltari@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 12 May 2020 03:18:10 -0400
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 7A7DB200008;
+        Tue, 12 May 2020 07:18:05 +0000 (UTC)
+Date:   Tue, 12 May 2020 09:21:18 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     libcamera-devel@lists.libcamera.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        devicetree@vger.kernel.org, pavel@ucw.cz, tfiga@google.com,
+        "open list:MEDIA INPUT INFRASTRUCTURE V4L/DVB" 
+        <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v10 01/13] dt-bindings: video-interfaces: Document
+ 'orientation' property
+Message-ID: <20200512072118.y7rhkhkdfvnmhkpn@uno.localdomain>
+References: <20200508100158.3437161-1-jacopo@jmondi.org>
+ <20200508100158.3437161-2-jacopo@jmondi.org>
+ <20200511172008.GA25628@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200511172008.GA25628@bogus>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Álvaro,
+Hi Rob,
 
-Álvaro Fernández Rojas <noltari@gmail.com> wrote on Tue, 12 May 2020
-08:51:11 +0200:
+On Mon, May 11, 2020 at 12:20:08PM -0500, Rob Herring wrote:
+> On Fri,  8 May 2020 12:01:46 +0200, Jacopo Mondi wrote:
+> > Add the 'orientation' device property, used to specify the device mounting
+> > position. The property is particularly meaningful for mobile devices
+> > with a well defined usage orientation.
+> >
+> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> > ---
+> >  .../devicetree/bindings/media/video-interfaces.txt    | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> >
+>
+>
+> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+> there's no need to repost patches *only* to add the tags. The upstream
+> maintainer will do that for acks received on the version they apply.
+>
 
-> The current code checks that the whole OOB area is erased.
-> This is a problem when JFFS2 cleanmarkers are added to the OOB, since it will
-> fail due to the usable OOB bytes not being 0xff.
-> Correct this by only checking that data and ECC bytes aren't 0xff.
-> 
-> Fixes: 02b88eea9f9c ("mtd: brcmnand: Add check for erased page bitflips")
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> ---
->  v3: Fix commit log and merge nand_check_erased_ecc_chunk calls.
->  v2: Add Fixes tag
-> 
->  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> index e4e3ceeac38f..80fe01f03516 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> @@ -2018,8 +2018,9 @@ static int brcmnand_read_by_pio(struct mtd_info *mtd, struct nand_chip *chip,
->  static int brcmstb_nand_verify_erased_page(struct mtd_info *mtd,
->  		  struct nand_chip *chip, void *buf, u64 addr)
->  {
-> +	struct mtd_oob_region oobecc;
->  	int i, sas;
-> -	void *oob = chip->oob_poi;
-> +	void *oob;
->  	int bitflips = 0;
->  	int page = addr >> chip->page_shift;
->  	int ret;
-> @@ -2035,11 +2036,19 @@ static int brcmstb_nand_verify_erased_page(struct mtd_info *mtd,
->  	if (ret)
->  		return ret;
->  
-> -	for (i = 0; i < chip->ecc.steps; i++, oob += sas) {
-> +	for (i = 0; i < chip->ecc.steps; i++) {
->  		ecc_chunk = buf + chip->ecc.size * i;
-> -		ret = nand_check_erased_ecc_chunk(ecc_chunk,
-> -						  chip->ecc.size,
-> -						  oob, sas, NULL, 0,
-> +
-> +		if (mtd->ooblayout->ecc(mtd, i, &oobecc)) {
+Yours and Tomasz's tags are back in v11, for which Hans has sent a
+pull request.
 
-Please use the mtdcore.c's helpers
-(mtd_ooblayout_set/get_data/free/ecc/bytes).
+Sorry I've missed them in v10, not sure what happened :)
 
-Also, what are you trying to discriminate with the return code of the
-function? Shouldn't this function "always" work?
+Thanks
+   j
 
-> +			oob = NULL;
-> +			oobecc.length = 0;
-> +		} else {
-> +			oob = chip->oob_poi + oobecc.offset;
-> +		}
-> +
-> +		ret = nand_check_erased_ecc_chunk(ecc_chunk, chip->ecc.size,
-> +						  oob, oobecc.length,
-> +						  NULL, 0,
->  						  chip->ecc.strength);
-
-As I told you, this helper takes "maid data" then "spare area" then
-"ecc bytes". The names are pretty important here as you want to avoid
-checking the spare OOB bytes on purpose, so maybe you could have more
-meaningful names and call "ecc" instead of "oob" the ecc region?
- 
->  		if (ret < 0)
->  			return ret;
-
-
-Thanks,
-Miquèl
+> If a tag was not added on purpose, please state why and what changed.
+>
