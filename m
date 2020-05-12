@@ -5,60 +5,60 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA5EAC54E8B
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:34:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B54C4C54E8D
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:34:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8A48207FF
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:34:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 942832137B
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:34:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AaC+PLz4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sMw5Ou1D"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729086AbgELHeA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 May 2020 03:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S1728924AbgELHdg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 May 2020 03:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729008AbgELHdk (ORCPT
+        with ESMTP id S1727859AbgELHdf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 May 2020 03:33:40 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73F0C061A0F;
-        Tue, 12 May 2020 00:33:39 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id m24so10962888wml.2;
-        Tue, 12 May 2020 00:33:39 -0700 (PDT)
+        Tue, 12 May 2020 03:33:35 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953E9C061A0C;
+        Tue, 12 May 2020 00:33:35 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id n5so7174195wmd.0;
+        Tue, 12 May 2020 00:33:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wKq0OblocqgUWBq4FWdZOwAZXIyc1/tnZx0SSOmf9GY=;
-        b=AaC+PLz40PrYk1QteaLXTxbS33yMEGk2kdK9ESxDU17sZXwVCgmJ/MhsfJT+PDC0GP
-         OJ90A9e3bNFgSaTkyjgkoJU50p/FofrEmIqAsMqPgyxEG4/Qp/SbxmFR7DNxs3OKZuUC
-         Bp4L78a8pijD3F7VtK4VzCKTo4DQn4Sd3v9gPX/Yf8gygv8nUtuSCxtvQzgwvf5PJ7Hx
-         dET4SQmz8nm7aUAiB+/Xr7XscRQ9F4JRD6ILitJAz7yUw+HSA7i4XruGCMHt+R+mxyio
-         JaGFxlHQbm0hGE8FINJl9W5pkPbB6nVLur3SYeefLaGZHkjQwLTSFcPp59Gp/3ufUvIO
-         ulFw==
+        bh=jqkgqmkJOKoKq9LVMSsdUKqLeUylhGstfJdiNW1m0pU=;
+        b=sMw5Ou1DxQ0gDVShwnb+r0jVY9OgvPxlTdxCYMUjeHxnjkdnMZEHlB/ETLFPEyrQTV
+         f3UPUtvn02e8incuNsrA11dODEo8ERiZctXWIS9t+3PUT1b2uMacgCg3/Ld5pqCI6iSS
+         jHNB9PxINIhrl5lkZjVJuurycwFhX7NfNY5F1P7ObmQLDN6gOj+iBSUkifaxIlHcgIaV
+         R3TvhWGCzwiwQ8CDEHA0GKqkXovGyr1DhUAs93B7lppeobuG6EQ+WncjtZN1nOtfxt01
+         F1pfYC+jfYvXSiySnTpWSwVxAj0mPGkNxduwk6Jgf4NEyPx2ePn7ttz4TKL+dz5uhjQq
+         pAzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wKq0OblocqgUWBq4FWdZOwAZXIyc1/tnZx0SSOmf9GY=;
-        b=LkHRi3Xvq7WNn2DSAnZecCZCefiFp/sZkc/pEPAVrVsJf+jz8ovLBBuTeqlHerCPPW
-         kxGqVQQNTYnXCYxnO7SFCMdsmYzlaPp0830kG0M2/YsmUO7fikwJamngfMNS4zB2io3w
-         YTq/znawTj1usrCRgwDA9Dlo/JhvYxNivgH5cffVqkOMcPAIXFzrxYQ7b3lmaTeRC6yl
-         p2LFr7KxG3/Fkeg00eO/RklmrBrjO3yvC0NyGJ0ZD7ET9jhrImBr8kZlSrTH6oyDjTFt
-         1WS92OxdR8nY/rUa8pkTdlfNF13GXyAfcqHmS9JRvtlzWGSFci91eG2AEpJxG8mFAjIt
-         UQcg==
-X-Gm-Message-State: AGi0PuYee+aAZPWieGhXGuCdZmPsNVJZz6PPS3OpToldAMDuz0AwDc1C
-        nrQ8P1R14ijtl6Fsv/hibsQ=
-X-Google-Smtp-Source: APiQypKpQU+sRBnu4YugVLYHjTcTRmLyX7V4CIuyHUXUHwnJzx9zFlbWQdFPuVC8uZJ2zsgvyvFG2w==
-X-Received: by 2002:a1c:108:: with SMTP id 8mr13028297wmb.148.1589268818521;
-        Tue, 12 May 2020 00:33:38 -0700 (PDT)
+        bh=jqkgqmkJOKoKq9LVMSsdUKqLeUylhGstfJdiNW1m0pU=;
+        b=hNDZAGuAPuUgEAy741Xw+F4AP0e8XZj33tyFEIFZL88aAlVtsnxmTMmkYLe3eFgVbf
+         741Rwy8Nb/2EPjCEuoI7TvQWlOZAPZjXI/yoK9gVz0hQzn5ym35IXpXkQOMGqc32Np3U
+         ea47R387xxvW2GWAnfTGTwmIHCeFSHL61IoDXIgFjxJOYk4ecISv2KfYOmX0jHMoLuvR
+         c0WwdQv6hgxxH+dcmdu5bIugxKg3RDsoT8ibwlhyyr4iRlOKAQzmqMROir+8B4WwqP9k
+         dkSf1IL88mGTbfIMjzDVZU8eYIdI8USXpXodO1aJfmLW8z4QeifrumH3bD9BdAbxd2c2
+         5Ggw==
+X-Gm-Message-State: AGi0PubwujMnRYfafDGeQqx/5lBAMWZ2nTcPK3oYw5J0KlaonS4Az6BN
+        b/q35YYXIMBxIp7StlQo63E=
+X-Google-Smtp-Source: APiQypLLSffxSVovV7tqZUrpdXOgAzbPqHBnVWM76vtOVvD70huOXD6rxYEtuZXYxJgRz4MPLxVK8w==
+X-Received: by 2002:a7b:c74d:: with SMTP id w13mr34531649wmk.36.1589268814233;
+        Tue, 12 May 2020 00:33:34 -0700 (PDT)
 Received: from skynet.lan (198.red-83-49-57.dynamicip.rima-tde.net. [83.49.57.198])
-        by smtp.gmail.com with ESMTPSA id d9sm5961197wmd.10.2020.05.12.00.33.37
+        by smtp.gmail.com with ESMTPSA id d9sm5961197wmd.10.2020.05.12.00.33.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 00:33:38 -0700 (PDT)
+        Tue, 12 May 2020 00:33:33 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     computersforpeace@gmail.com, kdasu.kdev@gmail.com,
@@ -69,9 +69,9 @@ To:     computersforpeace@gmail.com, kdasu.kdev@gmail.com,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH v2 4/5] dt: bindings: brcmnand: add v2.1 and v2.2 support
-Date:   Tue, 12 May 2020 09:33:28 +0200
-Message-Id: <20200512073329.742893-5-noltari@gmail.com>
+Subject: [PATCH v2 1/5] mtd: rawnand: brcmnand: rename v4 registers
+Date:   Tue, 12 May 2020 09:33:25 +0200
+Message-Id: <20200512073329.742893-2-noltari@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200512073329.742893-1-noltari@gmail.com>
 References: <20200510151406.2527856-1-noltari@gmail.com>
@@ -84,29 +84,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Added brcm,brcmnand-v2.1 and brcm,brcmnand-v2.2 as possible compatible
-strings to support brcmnand controllers v2.1 and v2.2.
+These registers are also used on v3.3.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- v2: add new patch
+ v2: fix commit title.
 
- Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt
-index 05651a654c66..44335a4f8bfb 100644
---- a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt
-+++ b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt
-@@ -20,6 +20,8 @@ Required properties:
-                      "brcm,brcmnand" and an appropriate version compatibility
-                      string, like "brcm,brcmnand-v7.0"
-                      Possible values:
-+                         brcm,brcmnand-v2.1
-+                         brcm,brcmnand-v2.2
-                          brcm,brcmnand-v4.0
-                          brcm,brcmnand-v5.0
-                          brcm,brcmnand-v6.0
+diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+index e4e3ceeac38f..6a08dd07b058 100644
+--- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
++++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+@@ -338,8 +338,8 @@ enum brcmnand_reg {
+ 	BRCMNAND_FC_BASE,
+ };
+ 
+-/* BRCMNAND v4.0 */
+-static const u16 brcmnand_regs_v40[] = {
++/* BRCMNAND v3.3-v4.0 */
++static const u16 brcmnand_regs_v33[] = {
+ 	[BRCMNAND_CMD_START]		=  0x04,
+ 	[BRCMNAND_CMD_EXT_ADDRESS]	=  0x08,
+ 	[BRCMNAND_CMD_ADDRESS]		=  0x0c,
+@@ -591,8 +591,8 @@ static int brcmnand_revision_init(struct brcmnand_controller *ctrl)
+ 		ctrl->reg_offsets = brcmnand_regs_v60;
+ 	else if (ctrl->nand_version >= 0x0500)
+ 		ctrl->reg_offsets = brcmnand_regs_v50;
+-	else if (ctrl->nand_version >= 0x0400)
+-		ctrl->reg_offsets = brcmnand_regs_v40;
++	else if (ctrl->nand_version >= 0x0303)
++		ctrl->reg_offsets = brcmnand_regs_v33;
+ 
+ 	/* Chip-select stride */
+ 	if (ctrl->nand_version >= 0x0701)
 -- 
 2.26.2
 
