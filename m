@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B8EC8182B
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:00:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F755C81827
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:01:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32447206A3
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:00:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2A05218AC
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:01:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="GdZJjNq2"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="bjQj5zUo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729437AbgELJAx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 May 2020 05:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
+        id S1729407AbgELJBH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 May 2020 05:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729428AbgELJAK (ORCPT
+        by vger.kernel.org with ESMTP id S1729374AbgELJAF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 May 2020 05:00:10 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9AFC061A0F
-        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 02:00:08 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id m24so11242659wml.2
-        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 02:00:08 -0700 (PDT)
+        Tue, 12 May 2020 05:00:05 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBD4C05BD09
+        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 02:00:05 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id h17so5459047wrc.8
+        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 02:00:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=r5PRcG/JtprEwCOUf2/ZPMLqKS9RbW1APrGVc2im3Nw=;
-        b=GdZJjNq28F9KcRJyjlTagS8E3fkL1j9MVdiS32+c3J3oz4My0gpMGd7IrjrVwziyZj
-         3INpjpPYeyhbD4+NwUOkIx7M0B6lMTqDeQsZGgAtFaTLfzA0CcV9W86y8Gzd1CxGRleL
-         BXUlHw6StLiPmKsmxJLvaFWoCXKd6BPsYXKG0=
+        bh=9rtZPjL4qCIHg+K9tvyoRbu8glhfJrL+U886kKa9MgQ=;
+        b=bjQj5zUoHFxr/SGM4dy27f04NAwPFLqit1mjhUpVM48tJB0DvrtAI/QUt4Uq4fHY11
+         5zIrzzFoaYD8bqvQgrOwaiqaU/6WtYEiZX2CakVoxiDZFsrz5WjYusAXBDM7dzkZzpGs
+         nwDoH4Vjs2gY1QwHAO2mv8pc5dm8xpRypRhzw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=r5PRcG/JtprEwCOUf2/ZPMLqKS9RbW1APrGVc2im3Nw=;
-        b=XlYRMV8RdH1XINQS1YQer1Uc61hlocpwLmxcl/rlgfrPHuNlZvLIIWBKXQYQ+qM31B
-         6QhRJGvqxumn13FnxjAI8H+DX2emAK64CUm5cuV7LFNKuGGZb36JQqfQ71V8sDby2fuR
-         logIjCxXHGAgCm0EK7Ejf+badeN7DwNDYAr/Cc6xpZFFvTep0rYfdU31tuHe1Gej7nL2
-         1Xi0hJNv+/sJ/rrFX4cR5MUnyh2wOMMx9wOwun51W2zSctkCbvPtNsAFDyRu8G2rmahr
-         7X1CUFz+Vj8/IktD/0hj315JNgPgfO0FCh5Q5/xroto4eXiFP6/M/N1HY9mzCrxo2Ysl
-         z+Ng==
-X-Gm-Message-State: AGi0PublpwcjOwm82MVuDnKBaj40cmuzyHVJU6FcmB64mGMELJVlhzuK
-        TIL1idvn7gWBkObuDOImnPSgOQ==
-X-Google-Smtp-Source: APiQypLn0gzMJwxb1G5NuhzTlxFQ4Fcx0V6C0P/n0rDCyjAZoEVClTf3ENM81ku64jmXd4+qf9UzyQ==
-X-Received: by 2002:a05:600c:2055:: with SMTP id p21mr13224168wmg.127.1589274007383;
-        Tue, 12 May 2020 02:00:07 -0700 (PDT)
+        bh=9rtZPjL4qCIHg+K9tvyoRbu8glhfJrL+U886kKa9MgQ=;
+        b=QOnT3gmr2nieJ/uDeIiik00mbWoYmh0QiWB+0LZJSb55SDzWLVdoxHUlMM5OO6Kvgn
+         T+RwBT9bkLPrEAZT2vDSUxhVDfmVveoChP56+X+MmhvPesjW5tQDtpJd6+IVilI4ud9m
+         Oupa5tvAmGZOWx7RVu9JUw+MbjPYuNB07lg2Uy3nOVyMb3hU8hMXSaptM4D4dlxlP9UB
+         1R4AkTw8EYVRyULJcwXfPBoXJszONmmFNMMr7fQ9hHVxL/VsMbehfv//oG/ce6uIWsIe
+         6p3hguVPIEHt2DYdQaaRnnwyxEG/OJ28R1pZ+bPBZPi15tmDEIeieR7ttP5qZltdYJkC
+         ztBA==
+X-Gm-Message-State: AGi0PuYcnrIiQVNv4pae242vLMCUGv4Tq/eUF/5x9lvgOYnn4vyitLPg
+        5dzyg73F4d+VgqidknUI1Kaong==
+X-Google-Smtp-Source: APiQypJ4sp6ae2VxawQXYuyWMb/LII0NAOyrZR4XJi9uK+LfraVsh0bXQKwL7UmDORgQR8hkYHBnZA==
+X-Received: by 2002:adf:ec88:: with SMTP id z8mr22394542wrn.44.1589274004220;
+        Tue, 12 May 2020 02:00:04 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id y10sm18845457wrd.95.2020.05.12.02.00.06
+        by smtp.gmail.com with ESMTPSA id y10sm18845457wrd.95.2020.05.12.02.00.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 02:00:06 -0700 (PDT)
+        Tue, 12 May 2020 02:00:03 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -66,9 +66,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Daniel Vetter <daniel.vetter@intel.com>
-Subject: [RFC 10/17] drm/amdgpu: s/GFP_KERNEL/GFP_ATOMIC in scheduler code
-Date:   Tue, 12 May 2020 10:59:37 +0200
-Message-Id: <20200512085944.222637-11-daniel.vetter@ffwll.ch>
+Subject: [RFC 07/17] drm/amdgpu: add dma-fence annotations to atomic commit path
+Date:   Tue, 12 May 2020 10:59:34 +0200
+Message-Id: <20200512085944.222637-8-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200512085944.222637-1-daniel.vetter@ffwll.ch>
 References: <20200512085944.222637-1-daniel.vetter@ffwll.ch>
@@ -80,46 +80,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-My dma-fence lockdep annotations caught an inversion because we
-allocate memory where we really shouldn't:
-
-	kmem_cache_alloc+0x2b/0x6d0
-	amdgpu_fence_emit+0x30/0x330 [amdgpu]
-	amdgpu_ib_schedule+0x306/0x550 [amdgpu]
-	amdgpu_job_run+0x10f/0x260 [amdgpu]
-	drm_sched_main+0x1b9/0x490 [gpu_sched]
-	kthread+0x12e/0x150
-
-Trouble right now is that lockdep only validates against GFP_FS, which
-would be good enough for shrinkers. But for mmu_notifiers we actually
-need !GFP_ATOMIC, since they can be called from any page laundering,
-even if GFP_NOFS or GFP_NOIO are set.
-
-I guess we should improve the lockdep annotations for
-fs_reclaim_acquire/release.
-
-Ofc real fix is to properly preallocate this fence and stuff it into
-the amdgpu job structure. But GFP_ATOMIC gets the lockdep splat out of
-the way.
-
-v2: Two more allocations in scheduler paths.
-
-Frist one:
-
-	__kmalloc+0x58/0x720
-	amdgpu_vmid_grab+0x100/0xca0 [amdgpu]
-	amdgpu_job_dependency+0xf9/0x120 [amdgpu]
-	drm_sched_entity_pop_job+0x3f/0x440 [gpu_sched]
-	drm_sched_main+0xf9/0x490 [gpu_sched]
-
-Second one:
-
-	kmem_cache_alloc+0x2b/0x6d0
-	amdgpu_sync_fence+0x7e/0x110 [amdgpu]
-	amdgpu_vmid_grab+0x86b/0xca0 [amdgpu]
-	amdgpu_job_dependency+0xf9/0x120 [amdgpu]
-	drm_sched_entity_pop_job+0x3f/0x440 [gpu_sched]
-	drm_sched_main+0xf9/0x490 [gpu_sched]
+I need a canary in a ttm-based atomic driver to make sure the
+dma_fence_begin/end_signalling annotations actually work.
 
 Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
@@ -131,49 +93,39 @@ Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 Cc: Christian König <christian.koenig@amd.com>
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c   | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-index d878fe7fee51..055b47241bb1 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-@@ -143,7 +143,7 @@ int amdgpu_fence_emit(struct amdgpu_ring *ring, struct dma_fence **f,
- 	uint32_t seq;
- 	int r;
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index ea0e039a667a..4469a8c96b08 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -57,6 +57,7 @@
  
--	fence = kmem_cache_alloc(amdgpu_fence_slab, GFP_KERNEL);
-+	fence = kmem_cache_alloc(amdgpu_fence_slab, GFP_ATOMIC);
- 	if (fence == NULL)
- 		return -ENOMEM;
+ #include "ivsrcid/ivsrcid_vislands30.h"
  
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c
-index fe92dcd94d4a..fdcd6659f5ad 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c
-@@ -208,7 +208,7 @@ static int amdgpu_vmid_grab_idle(struct amdgpu_vm *vm,
- 	if (ring->vmid_wait && !dma_fence_is_signaled(ring->vmid_wait))
- 		return amdgpu_sync_fence(sync, ring->vmid_wait, false);
++#include <linux/module.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+ #include <linux/version.h>
+@@ -7109,6 +7110,9 @@ static void amdgpu_dm_atomic_commit_tail(struct drm_atomic_state *state)
+ 	struct drm_connector_state *old_con_state, *new_con_state;
+ 	struct dm_crtc_state *dm_old_crtc_state, *dm_new_crtc_state;
+ 	int crtc_disable_count = 0;
++	bool fence_cookie;
++
++	fence_cookie = dma_fence_begin_signalling();
  
--	fences = kmalloc_array(sizeof(void *), id_mgr->num_ids, GFP_KERNEL);
-+	fences = kmalloc_array(sizeof(void *), id_mgr->num_ids, GFP_ATOMIC);
- 	if (!fences)
- 		return -ENOMEM;
+ 	drm_atomic_helper_update_legacy_modeset_state(dev, state);
  
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-index b87ca171986a..330476cc0c86 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-@@ -168,7 +168,7 @@ int amdgpu_sync_fence(struct amdgpu_sync *sync, struct dma_fence *f,
- 	if (amdgpu_sync_add_later(sync, f, explicit))
- 		return 0;
+@@ -7389,6 +7393,8 @@ static void amdgpu_dm_atomic_commit_tail(struct drm_atomic_state *state)
+ 	/* Signal HW programming completion */
+ 	drm_atomic_helper_commit_hw_done(state);
  
--	e = kmem_cache_alloc(amdgpu_sync_slab, GFP_KERNEL);
-+	e = kmem_cache_alloc(amdgpu_sync_slab, GFP_ATOMIC);
- 	if (!e)
- 		return -ENOMEM;
++	dma_fence_end_signalling(fence_cookie);
++
+ 	if (wait_for_vblank)
+ 		drm_atomic_helper_wait_for_flip_done(dev, state);
  
 -- 
 2.26.2
