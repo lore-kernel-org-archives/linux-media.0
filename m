@@ -2,100 +2,134 @@ Return-Path: <SRS0=+THy=62=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C05BFC54E8F
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C43EC54E4A
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 08:13:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DE7E20A8B
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:57:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1AE772078E
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 08:13:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tgGYet/6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B3m+V+H5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726193AbgELH5j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 May 2020 03:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725823AbgELH5j (ORCPT
+        id S1726193AbgELINn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 May 2020 04:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725889AbgELINn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 May 2020 03:57:39 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BBDC061A0C;
-        Tue, 12 May 2020 00:57:38 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id f134so8468074wmf.1;
-        Tue, 12 May 2020 00:57:38 -0700 (PDT)
+        Tue, 12 May 2020 04:13:43 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25701C061A0E
+        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 01:13:43 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id j4so9795848otr.11
+        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 01:13:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NFX2G/ycRyFJ8XJ2cgub1Gt1QA023juIjxGeZbPNvjA=;
-        b=tgGYet/6aC3qdCyAWGYnA/0YcF3Xpfy3K9R+OyMsK8oSwxfmw0VTuExfGwvlifxeQF
-         T4fnh8wGTU2fz6co0KMZzcTy16xAnvthGS4r0e8BDykVAzaRoRLZ8AMls7SOZf+pG+tY
-         9ZLkxh8eFWpz37ZTaoec6w5j68dnz7VuU3QlJrCi8WFtDI9akFw3ZRc3sIsSbixpZhDG
-         rcNOdBKR9WynexcAM4DveRv08SHG7UnFMGKvkfLgI2oBuIoItAypvrGkflaUL2KQrcA6
-         abZwAl9G3mfIXD5C7nWH+o8h4DOnDSghfC0E+ufRANXk+0sOMahvza6J4Hxo+Hg8tQXV
-         NR7A==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+/M7ttbizVNgiq3E6e56DHlLpnfL10dXQ3P0u57oqQo=;
+        b=B3m+V+H5gTjtrCKtwwO492HjhFTr38Y7VLdRIx8Tr0JsnUUVuJfvLNFpAjkYVRe/MU
+         OGhuxIOgscPAJlStLNeONC5jnNM98kozL2u0pPS16qB774cjwhRApsJJSSoWukr1lnGH
+         ndMSRfj/B/LQ6dcNI82uqbQkLohbgmAyXx7d4L3tgQ3l3nihXM9IjQ28IC8EK2tj/GD9
+         iHnOYCeOgJr/UT9aaWtYgPY3TJC7SJd+g13SZ9TH5FPj9pe98IZSRDzO8BHktwFWhKDd
+         X1cRshj6SP1m+RsHrtI3l2vN5q2jx7wmf8L2tcm6zsUJnPybnwRmro6/JKHf/oSS9sVT
+         GmXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NFX2G/ycRyFJ8XJ2cgub1Gt1QA023juIjxGeZbPNvjA=;
-        b=LpmLULJ5KYEhFT5YKNYJFUxZpvkQsf/uj5F4p/NzFF6WhUs55EYje2x33BlI9dSbKC
-         osuDJkwDUARsqnUVfs/pTn6lrLNb5qVjyRlKRwj+edJMRYHi1njjE66p+jmsp7DwP8p4
-         buY9qz2BvdE1iCiAA6F1BgwJbSPTKMxasM2L39zG2o+BWTU7mcQodngfCIqjun+dx5cg
-         ssVNLintrEO5zuZP2Te07mwrRUi9eO7taeJCR+xxvGuDPzo+njfTn/0fh4upQ3lybR37
-         y5UuwvR7Dfr1kmQFpuhMAZ6B3uWymEPjp2wymt5P0TBjhmoGyRnBLP9zSRjUqd/NG99o
-         VKRA==
-X-Gm-Message-State: AGi0PuYV1eCOm0NfORS2Dz1kRNNokrE1JymmXkvqb6jIEpwYrJ5uYxKy
-        QlztCTv2pnYaCy/bZ6dXPJ8=
-X-Google-Smtp-Source: APiQypJS/4uzww2NZhrNqojJOpiIOHrot4eMxoh5tB9WHsGpFGZj2hqvWq2bEXNKrCeG8QMcM73jjw==
-X-Received: by 2002:a1c:e2c5:: with SMTP id z188mr25111209wmg.35.1589270257495;
-        Tue, 12 May 2020 00:57:37 -0700 (PDT)
-Received: from skynet.lan (198.red-83-49-57.dynamicip.rima-tde.net. [83.49.57.198])
-        by smtp.gmail.com with ESMTPSA id p8sm25946618wma.45.2020.05.12.00.57.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 00:57:37 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     computersforpeace@gmail.com, kdasu.kdev@gmail.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        sumit.semwal@linaro.org, linux-mtd@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH v4 0/2] mtd: rawnand: brcmnand: improve hamming oob layout
-Date:   Tue, 12 May 2020 09:57:31 +0200
-Message-Id: <20200512075733.745374-1-noltari@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200512060023.684871-1-noltari@gmail.com>
-References: <20200512060023.684871-1-noltari@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+/M7ttbizVNgiq3E6e56DHlLpnfL10dXQ3P0u57oqQo=;
+        b=XoB73pmcPKZXksMg63JNF56gfyJrtAxBOp0JbOjtmuy0/FPTT90kzi1uMM57Yx0mmx
+         6C2m0AznlUk5OSxRxTIkQC4GbR7odGwm7aiklRJkq2b87ttw21UfBvm1n60LzPukZlS1
+         6tmxuDlQ/1Vi3vAkFKPPwjOxMTAKnULoehK5BOSc0MpABbIuPWo1jaFVDcjFVpssyV00
+         zHlxUUriTYwm2j7GP7Fn6CpnYxp8z+vnRPUA46Od8VzJxobpDv0IMjUUJGNe91BANgtV
+         V1ClgeOdM3F6QuCP2nF8bDKJP5erhYAMQX7gk7738aMhFm3yc8vYf7VsFbUR3LANDYlG
+         l71Q==
+X-Gm-Message-State: AGi0PuaAEJ1y39s4xfM/yE4zrsDDs0zuGjQCNk/1FJNA9F0sWqNn6jYh
+        qkXVBxW7QL694kdHTU82Ev3qYX5tYKHC1v3os62q4A==
+X-Google-Smtp-Source: APiQypLADIaeTtFDiDZj0oHRCnE87JDFcA3KKjn9my/GbFnCnkWw5321wESGx5JUU0FJwwNUrkgSoNw73WHvEVtCGSA=
+X-Received: by 2002:a9d:3462:: with SMTP id v89mr15637311otb.68.1589271222321;
+ Tue, 12 May 2020 01:13:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20200511110350.11565-1-robert.foss@linaro.org>
+ <20200511110350.11565-3-robert.foss@linaro.org> <20200512002518.GX867@valkosipuli.retiisi.org.uk>
+In-Reply-To: <20200512002518.GX867@valkosipuli.retiisi.org.uk>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 12 May 2020 10:13:31 +0200
+Message-ID: <CAG3jFytw+GH4bXsUpS-=En52F67_1iPmOtOTo36ujE69j-9h3g@mail.gmail.com>
+Subject: Re: [PATCH v8 2/3] media: ov8856: Add devicetree support
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>, Ben Kao <ben.kao@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-These patches improve the OOB hamming layout by reducing the number of oob
-sections and correctly reserving first two bytes for large page NANDs.
+On Tue, 12 May 2020 at 02:26, Sakari Ailus <sakari.ailus@iki.fi> wrote:
+>
+> Hi Robert,
+>
+> On Mon, May 11, 2020 at 01:03:49PM +0200, Robert Foss wrote:
+> > Add match table, enable ov8856_probe() to support
+> > both ACPI and DT modes.
+> >
+> > ACPI and DT modes are primarily distinguished from
+> > by checking for ACPI mode and by having resource like
+> > be NULL.
+> >
+> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
+>
+> Applied with this small diff --- please check with checkpatch.pl on the
+> next time. Thanks!
 
-v4: clarify small/large pages comment.
-v3: invert patch order.
-v2: extend original comment and correctly skip byte 6 for small-page.
+Thanks Sakari, I appreciate it!
 
-Álvaro Fernández Rojas (2):
-  mtd: rawnand: brcmnand: fix hamming oob layout
-  mtd: rawnand: brcmnand: improve hamming oob layout
-
- drivers/mtd/nand/raw/brcmnand/brcmnand.c | 34 +++++++++++++-----------
- 1 file changed, 18 insertions(+), 16 deletions(-)
-
--- 
-2.26.2
-
+>
+> diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
+> index 1657e03d9a9d..4ca27675cc5a 100644
+> --- a/drivers/media/i2c/ov8856.c
+> +++ b/drivers/media/i2c/ov8856.c
+> @@ -1226,8 +1226,7 @@ static int ov8856_get_hwcfg(struct ov8856 *ov8856, struct device *dev)
+>         if (!fwnode)
+>                 return -ENXIO;
+>
+> -       ret = fwnode_property_read_u32(fwnode, "clock-frequency",
+> -               &xvclk_rate);
+> +       ret = fwnode_property_read_u32(fwnode, "clock-frequency", &xvclk_rate);
+>         if (ret)
+>                 return ret;
+>
+> @@ -1244,10 +1243,11 @@ static int ov8856_get_hwcfg(struct ov8856 *ov8856, struct device *dev)
+>         }
+>
+>         if (xvclk_rate != OV8856_XVCLK_19_2)
+> -               dev_warn(dev, "external clock rate %d is unsupported", xvclk_rate);
+> +               dev_warn(dev, "external clock rate %u is unsupported",
+> +                        xvclk_rate);
+>
+>         ov8856->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+> -               GPIOD_OUT_LOW);
+> +                                                    GPIOD_OUT_LOW);
+>         if (IS_ERR(ov8856->reset_gpio))
+>                 return PTR_ERR(ov8856->reset_gpio);
+>
+> --
+> Kind regards,
+>
+> Sakari Ailus
