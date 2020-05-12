@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2778C55185
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 987DBC54E8F
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:04:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B2F0820714
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:03:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 789F520714
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:04:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="XMONIu5D"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="CLBPuhz5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729340AbgELJAC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 May 2020 05:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
+        id S1729386AbgELJD5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 May 2020 05:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729243AbgELJAA (ORCPT
+        by vger.kernel.org with ESMTP id S1729270AbgELJAB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 May 2020 05:00:00 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97998C061A0C
-        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 01:59:58 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id m24so11242065wml.2
-        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 01:59:58 -0700 (PDT)
+        Tue, 12 May 2020 05:00:01 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64E9C05BD0D
+        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 02:00:00 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id m12so15932238wmc.0
+        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 02:00:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kLx974NIZMqcTtktEjSZjvXzGFT/sN3zaOFqis6ynJ4=;
-        b=XMONIu5DP+HMrApNuuxLBjrSt037rXZt2ZOk8MGJnrPXZwZxjQNgepQNY5FaUlHKzp
-         NnpLCK27EuKk1i4zc5dJBZgXUUO+sBRUwyP2QJzh8l+TxbAyY+2UG2eYiOM+AqnUuE2h
-         cBEWsoEqk///Vn/WtO2wLLNhQxn15H9TRBZ1g=
+        bh=NZNungkfzjrpX3wvUKHqphES4AQA2BjvgdkrK2cjuiE=;
+        b=CLBPuhz5g03xplqY3Lp/3c6jCI7cBpGlK2yI20bsQjZlk+Y0DSRAAzM7Uk0yJ/74fT
+         qODjSJnOacCEhx0BQuKhrp9xCJljtl7WlTp/enOv9Yf5zmkcwWAQwPHdsOTS6iInjswc
+         E2mZfpyZhXG3pjjGV03WLfeasYqdUTvXYUfyk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kLx974NIZMqcTtktEjSZjvXzGFT/sN3zaOFqis6ynJ4=;
-        b=ETZJoa+4uIEckhG10K/WIZodhNb5W+oQVnqla4vMgCUsQTymx4FH4SC6fVFYn3RVi/
-         dQCAAMOkQJnY46+rVUmjIVhl7tHUhlOS9is0//8fLrjJAzA+WyBL67P0anXlB7xQR4Fh
-         d5dfu/mwOef5weYsg3MxM6aOF38of2hiBsJHqs95e4DjVXnLKZQ36nYYwv3lCzZxZ5Kq
-         RjxV+6ZnYxuWnSzpXU9H9ghmaw9Fpj9H5z1+4Ovf5WPkleP1+yLlRJff+D9ZmIfOkyG8
-         1FRq+8ckk6Fgxxk5AJ0CVYrg5+9FCVv8tiQQmoIB1rhK9c2wzwPgMM/YW2SYpdDySRT4
-         OwkA==
-X-Gm-Message-State: AGi0PuY/qYFlhk/hzrYva60UKeiW6fQ6bHgT85rf7zm/n3i0P4bZXFgP
-        L68ASY+Dx+yk2YkQbEJYS3hCFsY9fMM=
-X-Google-Smtp-Source: APiQypLaGju2WZXVsNW4k3kb0cNDedDZi8kpgkf+bDmSvA+Y9bm9G0CROCbMCdeWzLKRHchbjRrBkQ==
-X-Received: by 2002:a05:600c:2dda:: with SMTP id e26mr27240272wmh.42.1589273997304;
-        Tue, 12 May 2020 01:59:57 -0700 (PDT)
+        bh=NZNungkfzjrpX3wvUKHqphES4AQA2BjvgdkrK2cjuiE=;
+        b=isat1JYgb8Q0hNwgQSv+5TdfWe2K2BoWbu7avBNq0oxFwTqJ0Gr32COONAM5sQaHbS
+         1HZ1HlUewnLtfDAiCvAeDDi/0+BMJIGHfvYCjeWLxAwYMf1Mi6XiPz3zjX0438EMwvYY
+         ztF/xpOKqC6xEkVNoFCrfxl9PWKib5rXhCua4VNK27qU7zNhKQki7RsjIVj3TkZwLtIM
+         +hoUgBLDpGcPS4DzELhMT2rvYI3qgXPTc5lMskRh8bY8jHkIXNf7baPl4CijpkBC/VLW
+         4VDWdDYEzQZUWU+8/4zabRVDcEW3ME0eb/jvZQMJdMVdYiz/n2lFggO5cD+YLzHmAYSO
+         6rHg==
+X-Gm-Message-State: AGi0Pubagt5FLQCHEfNFhrsz6gQRsAniV8gUGuRWQrWc6Fu62s1d/YFs
+        JECJOk5bchfmcgKM2aE76mDRzg==
+X-Google-Smtp-Source: APiQypKft08OoGrIYtbiSYRYQwvgFtVy2fvk5tEE2SUvyg8qKyVKerp+e40UsbcgCmUWXpSeXbccUQ==
+X-Received: by 2002:a05:600c:2055:: with SMTP id p21mr13223418wmg.127.1589273999661;
+        Tue, 12 May 2020 01:59:59 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id y10sm18845457wrd.95.2020.05.12.01.59.56
+        by smtp.gmail.com with ESMTPSA id y10sm18845457wrd.95.2020.05.12.01.59.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 01:59:56 -0700 (PDT)
+        Tue, 12 May 2020 01:59:59 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -66,9 +66,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Daniel Vetter <daniel.vetter@intel.com>
-Subject: [RFC 01/17] dma-fence: add might_sleep annotation to _wait()
-Date:   Tue, 12 May 2020 10:59:28 +0200
-Message-Id: <20200512085944.222637-2-daniel.vetter@ffwll.ch>
+Subject: [RFC 03/17] dma-fence: prime lockdep annotations
+Date:   Tue, 12 May 2020 10:59:30 +0200
+Message-Id: <20200512085944.222637-4-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200512085944.222637-1-daniel.vetter@ffwll.ch>
 References: <20200512085944.222637-1-daniel.vetter@ffwll.ch>
@@ -80,12 +80,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-But only for non-zero timeout, to avoid false positives.
+Two in one go:
+- it is allowed to call dma_fence_wait() while holding a
+  dma_resv_lock(). This is fundamental to how eviction works with ttm,
+  so required.
 
-One question here is whether the might_sleep should be unconditional,
-or only for real timeouts. I'm not sure, so went with the more
-defensive option. But in the interest of locking down the cross-driver
-dma_fence rules we might want to be more aggressive.
+- it is allowed to call dma_fence_wait() from memory reclaim contexts,
+  specifically from shrinker callbacks (which i915 does), and from mmu
+  notifier callbacks (which amdgpu does, and which i915 sometimes also
+  does, and probably always should, but that's kinda a debate). Also
+  for stuff like HMM we really need to be able to do this, or things
+  get real dicey.
+
+Consequence is that any critical path necessary to get to a
+dma_fence_signal for a fence must never a) call dma_resv_lock nor b)
+allocate memory with GFP_KERNEL. Also by implication of
+dma_resv_lock(), no userspace faulting allowed. That's some supremely
+obnoxious limitations, which is why we need to sprinkle the right
+annotations to all relevant paths.
+
+The one big locking context we're leaving out here is mmu notifiers,
+added in
+
+commit 23b68395c7c78a764e8963fc15a7cfd318bf187f
+Author: Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Mon Aug 26 22:14:21 2019 +0200
+
+    mm/mmu_notifiers: add a lockdep map for invalidate_range_start/end
+
+that one covers a lot of other callsites, and it's also allowed to
+wait on dma-fences from mmu notifiers. But there's no ready-made
+functions exposed to prime this, so I've left it out for now.
 
 Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
@@ -97,23 +122,34 @@ Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 Cc: Christian König <christian.koenig@amd.com>
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 ---
- drivers/dma-buf/dma-fence.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/dma-buf/dma-resv.c | 1 +
+ include/linux/dma-fence.h  | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
-index 052a41e2451c..6802125349fb 100644
---- a/drivers/dma-buf/dma-fence.c
-+++ b/drivers/dma-buf/dma-fence.c
-@@ -208,6 +208,9 @@ dma_fence_wait_timeout(struct dma_fence *fence, bool intr, signed long timeout)
- 	if (WARN_ON(timeout < 0))
- 		return -EINVAL;
- 
-+	if (timeout > 0)
-+		might_sleep();
-+
- 	trace_dma_fence_wait_start(fence);
- 	if (fence->ops->wait)
- 		ret = fence->ops->wait(fence, intr, timeout);
+diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+index 99c0a33c918d..392c336f0732 100644
+--- a/drivers/dma-buf/dma-resv.c
++++ b/drivers/dma-buf/dma-resv.c
+@@ -115,6 +115,7 @@ static int __init dma_resv_lockdep(void)
+ 	if (ret == -EDEADLK)
+ 		dma_resv_lock_slow(&obj, &ctx);
+ 	fs_reclaim_acquire(GFP_KERNEL);
++	__dma_fence_might_wait();
+ 	fs_reclaim_release(GFP_KERNEL);
+ 	ww_mutex_unlock(&obj.lock);
+ 	ww_acquire_fini(&ctx);
+diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+index 3f288f7db2ef..09e23adb351d 100644
+--- a/include/linux/dma-fence.h
++++ b/include/linux/dma-fence.h
+@@ -360,6 +360,7 @@ dma_fence_get_rcu_safe(struct dma_fence __rcu **fencep)
+ #ifdef CONFIG_LOCKDEP
+ bool dma_fence_begin_signalling(void);
+ void dma_fence_end_signalling(bool cookie);
++void __dma_fence_might_wait(void);
+ #else
+ static inline bool dma_fence_begin_signalling(void)
+ {
 -- 
 2.26.2
 
