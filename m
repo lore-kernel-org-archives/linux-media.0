@@ -2,87 +2,91 @@ Return-Path: <SRS0=+THy=62=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0AD7C54E4A
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 12:10:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB1BBC54E8B
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 12:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9787D20674
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 12:10:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA1712075E
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 12:45:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1589287526;
+	bh=B8EsQkIZ4mWzMFetp7c3r9TqEBFzsY2l1zuTizTYPB4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=OrZbzSOqNz/57sS33ahegsyd5qs/5866vCV4tvpQMmhwhv2d1D/RLNssoxXreeCz3
+	 cZi1dc7bEvGsMjBvrMhGvU3t+5S07fyitiCArfLdusgRIQrCOosZqYXJMbTcC8TqOV
+	 Frn3v8PaNfaq9bwR2kFHgEdn0stxZ1tOc4cEy+X8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729597AbgELMKc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 May 2020 08:10:32 -0400
-Received: from plasma4.jpberlin.de ([80.241.57.33]:57325 "EHLO
-        plasma4.jpberlin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726891AbgELMKb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 May 2020 08:10:31 -0400
-Received: from spamfilter03.heinlein-hosting.de (spamfilter03.heinlein-hosting.de [80.241.56.117])
-        by plasma.jpberlin.de (Postfix) with ESMTP id B5C41AAD56;
-        Tue, 12 May 2020 14:10:22 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from plasma.jpberlin.de ([80.241.56.68])
-        by spamfilter03.heinlein-hosting.de (spamfilter03.heinlein-hosting.de [80.241.56.117]) (amavisd-new, port 10030)
-        with ESMTP id eNaeXbqYB0iV; Tue, 12 May 2020 14:10:21 +0200 (CEST)
-Received: from webmail.opensynergy.com (unknown [217.66.60.5])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "webmail.opensynergy.com", Issuer "GeoTrust EV RSA CA 2018" (not verified))
-        (Authenticated sender: opensynergy@jpberlin.de)
-        by plasma.jpberlin.de (Postfix) with ESMTPSA id 242FCBC243;
-        Tue, 12 May 2020 14:10:21 +0200 (CEST)
-Received: from os-lin-dmo.localnet (10.25.255.1) by MXS01.open-synergy.com
- (10.25.10.17) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 12 May
- 2020 14:10:20 +0200
-From:   Dmitry Sepp <dmitry.sepp@opensynergy.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC:     Keiichi Watanabe <keiichiw@chromium.org>,
-        Saket Sinha <saket.sinha89@gmail.com>,
-        Samiullah Khawaja <samiullah.khawaja@opensynergy.com>,
-        <virtio-dev@lists.oasis-open.org>,
-        "Alex Lau" <alexlau@chromium.org>,
-        Kiran Pawar <Kiran.Pawar@opensynergy.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>, <qemu-devel@nongnu.org>,
-        <libcamera-devel@lists.libcamera.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Pawel Osciak <posciak@chromium.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Subject: Re: [libcamera-devel] [virtio-dev] Re: Fwd: Qemu Support for Virtio Video V4L2 driver
-Date:   Tue, 12 May 2020 14:10:20 +0200
-Message-ID: <64045565.OWohDWQxgf@os-lin-dmo>
-Organization: OpenSynergy
-In-Reply-To: <20200511143136.GC5830@pendragon.ideasonboard.com>
-References: <CAK25hWN3kJcW-dcpryFrvZ50t7Y0Z=MZM66-8NMuhwjRpNo2aQ@mail.gmail.com> <CAD90VcYJe7+R256RdOQKxFQciq54+PwbyDRF1cynjOzdQBrq-g@mail.gmail.com> <20200511143136.GC5830@pendragon.ideasonboard.com>
+        id S1729570AbgELMpY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 May 2020 08:45:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53848 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727783AbgELMpX (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 12 May 2020 08:45:23 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BE13A20674;
+        Tue, 12 May 2020 12:45:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589287523;
+        bh=B8EsQkIZ4mWzMFetp7c3r9TqEBFzsY2l1zuTizTYPB4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mez8boHcMnR+mev15Qse9ch6E4/Ezv+JCkJDwFG9E8tW1tilmUDFKHY1Ah04d6BaH
+         Aig7VFji0wMpoH0NpnAqDOuDS+tTWi+z3cieLPwzSxsc04qLUd8ixLtn+9mb0jgCzN
+         BryR2K1An27QybVGN8qEiBY50g9twxf+3cLm4pH0=
+Date:   Tue, 12 May 2020 13:45:20 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 07/11] ASoC: mmp-sspa: Prepare/unprepare the clocks
+Message-ID: <20200512124520.GH5110@sirena.org.uk>
+References: <20200511210134.1224532-1-lkundrak@v3.sk>
+ <20200511210134.1224532-8-lkundrak@v3.sk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [10.25.255.1]
-X-Rspamd-Queue-Id: B5C41AAD56
-X-Rspamd-Score: 1.14 / 15.00 / 200.00
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="smOfPzt+Qjm5bNGJ"
+Content-Disposition: inline
+In-Reply-To: <20200511210134.1224532-8-lkundrak@v3.sk>
+X-Cookie: The only perfect science is hind-sight.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
 
-On Montag, 11. Mai 2020 16:31:36 CEST Laurent Pinchart wrote:
-> 
-> I don't think this would be the right level of abstraction. The V4L2 API
-> is way too low-level when it comes to camera paravirtualization (and may
-> not be the only API we'll have in the future). I thus recommend
-> virtualizing cameras with a higher-level API, more or less on top of
-> libcamera or the Android camera HAL (they both sit at the same level in
-> the camera stack). Anything lower than that won't be practical.
-> 
+--smOfPzt+Qjm5bNGJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I think the the main thing to do first would be to define the logic of such 
-virtio-camera device and the set of mandatory features. Host-side API is a bit 
-of a side topic. But libcamera fits the best though.
+On Mon, May 11, 2020 at 11:01:30PM +0200, Lubomir Rintel wrote:
+> The driver enables the clocks without preparing them and disables
+> without unpreparing afterwards. Fix that.
 
-Best regards,
-Dmitry.
+This fix should've been earlier in the series so it could be sent as a
+fix.
 
+--smOfPzt+Qjm5bNGJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl66ml8ACgkQJNaLcl1U
+h9CzLgf+Jh8LwbiE+tnUKFZaCx9Xvm8TpBqizolD7ds1chpXzCKwvsCD05D6xK1c
++pHm2YbWUn9S8j1WfrsfjyVqFVs04kBNbEl4gN4zNhNfT+t8bZ96c8MJLaJDBNO8
+8rjXWZwanFpNCHI3PMqZ9mtMMZciEnKCzvxOfh0Cf//nPoExjVNYu6RkdRlxhOYB
+gxWXMJhfDryXdkfiCpigwLeePjFdME9Pwfdt+i02oKnLZKGZJXJyEmzHxdWa66Wp
+7XMKQYf81z5vDKteF4X4osscnFuMDKtcbW/Jmy6PRYz00zsJF6pnrfe47bRxOSmy
+i75Py2lUbkbyLBjn/oBevQ1588aDlw==
+=3JaX
+-----END PGP SIGNATURE-----
+
+--smOfPzt+Qjm5bNGJ--
