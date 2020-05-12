@@ -2,154 +2,134 @@ Return-Path: <SRS0=+THy=62=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 987DBC54E8F
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:04:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93DA2C54E8B
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:07:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 789F520714
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:04:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="CLBPuhz5"
+	by mail.kernel.org (Postfix) with ESMTP id 7E78920736
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 09:07:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729386AbgELJD5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 May 2020 05:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
+        id S1729157AbgELJH3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 May 2020 05:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729270AbgELJAB (ORCPT
+        by vger.kernel.org with ESMTP id S1728854AbgELJH2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 May 2020 05:00:01 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64E9C05BD0D
-        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 02:00:00 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id m12so15932238wmc.0
-        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 02:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NZNungkfzjrpX3wvUKHqphES4AQA2BjvgdkrK2cjuiE=;
-        b=CLBPuhz5g03xplqY3Lp/3c6jCI7cBpGlK2yI20bsQjZlk+Y0DSRAAzM7Uk0yJ/74fT
-         qODjSJnOacCEhx0BQuKhrp9xCJljtl7WlTp/enOv9Yf5zmkcwWAQwPHdsOTS6iInjswc
-         E2mZfpyZhXG3pjjGV03WLfeasYqdUTvXYUfyk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NZNungkfzjrpX3wvUKHqphES4AQA2BjvgdkrK2cjuiE=;
-        b=isat1JYgb8Q0hNwgQSv+5TdfWe2K2BoWbu7avBNq0oxFwTqJ0Gr32COONAM5sQaHbS
-         1HZ1HlUewnLtfDAiCvAeDDi/0+BMJIGHfvYCjeWLxAwYMf1Mi6XiPz3zjX0438EMwvYY
-         ztF/xpOKqC6xEkVNoFCrfxl9PWKib5rXhCua4VNK27qU7zNhKQki7RsjIVj3TkZwLtIM
-         +hoUgBLDpGcPS4DzELhMT2rvYI3qgXPTc5lMskRh8bY8jHkIXNf7baPl4CijpkBC/VLW
-         4VDWdDYEzQZUWU+8/4zabRVDcEW3ME0eb/jvZQMJdMVdYiz/n2lFggO5cD+YLzHmAYSO
-         6rHg==
-X-Gm-Message-State: AGi0Pubagt5FLQCHEfNFhrsz6gQRsAniV8gUGuRWQrWc6Fu62s1d/YFs
-        JECJOk5bchfmcgKM2aE76mDRzg==
-X-Google-Smtp-Source: APiQypKft08OoGrIYtbiSYRYQwvgFtVy2fvk5tEE2SUvyg8qKyVKerp+e40UsbcgCmUWXpSeXbccUQ==
-X-Received: by 2002:a05:600c:2055:: with SMTP id p21mr13223418wmg.127.1589273999661;
-        Tue, 12 May 2020 01:59:59 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id y10sm18845457wrd.95.2020.05.12.01.59.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 01:59:59 -0700 (PDT)
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-To:     DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@intel.com>
-Subject: [RFC 03/17] dma-fence: prime lockdep annotations
-Date:   Tue, 12 May 2020 10:59:30 +0200
-Message-Id: <20200512085944.222637-4-daniel.vetter@ffwll.ch>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200512085944.222637-1-daniel.vetter@ffwll.ch>
-References: <20200512085944.222637-1-daniel.vetter@ffwll.ch>
+        Tue, 12 May 2020 05:07:28 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84648C061A0C
+        for <linux-media@vger.kernel.org>; Tue, 12 May 2020 02:07:28 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 09A1EC63B0; Tue, 12 May 2020 10:07:24 +0100 (BST)
+Date:   Tue, 12 May 2020 10:07:24 +0100
+From:   Sean Young <sean@mess.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 2/3] input: serio: allow more than one byte to be sent at
+ once
+Message-ID: <20200512090724.GA31990@gofer.mess.org>
+References: <20200507135337.2343-1-sean@mess.org>
+ <20200507135337.2343-2-sean@mess.org>
+ <20200507202546.GM89269@dtor-ws>
+ <20200507205918.GA13370@gofer.mess.org>
+ <20200511065118.GA1293993@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200511065118.GA1293993@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Two in one go:
-- it is allowed to call dma_fence_wait() while holding a
-  dma_resv_lock(). This is fundamental to how eviction works with ttm,
-  so required.
+On Mon, May 11, 2020 at 08:51:18AM +0200, Greg KH wrote:
+> On Thu, May 07, 2020 at 09:59:18PM +0100, Sean Young wrote:
+> > On Thu, May 07, 2020 at 01:25:46PM -0700, Dmitry Torokhov wrote:
+> > > On Thu, May 07, 2020 at 02:53:36PM +0100, Sean Young wrote:
+> > > > serio drivers can only send one byte at a time. If the underlying tty
+> > > > is a usb serial port, then each byte will be put into separate usb
+> > > > urbs, which is not efficient.
+> > > > 
+> > > > Additionally, the Infrared Toy device refuses to transmit IR if the
+> > > > IR data is sent one byte at a time. IR data is formatted in u16 values,
+> > > > and the firmware expects complete u16 values in the packet.
+> > > > 
+> > > > https://github.com/DangerousPrototypes/USB_IR_Toy/blob/master/Firmware-main/IRs.c#L240
+> > > 
+> > > Ummm, serial protocol data size is at most 9 bits so I have no earthly
+> > > idea how they expect to get 16.
+> > 
+> > serio is a layer on top several serial protocols, including ttys. ttys allow
+> > more than one byte to be written at a time, see struct tty_operations:
+> > 
+> >         int  (*write)(struct tty_struct * tty,
+> >                       const unsigned char *buf, int count);
+> > 
+> > ttys would be very inefficient if you could only write one byte at a time,
+> > and they are very serial.
+> > 
+> > This patch exposes the underlying tty write() functionality to serio. When
+> > the underlying tty is a usb serial port this makes for far fewer usb packets
+> > being used to send the same data, and fixes my driver problem, and it
+> > would reduce the number of calls in a few other cases too.
+> > 
+> > I'm happy to rework the patch if there are comments on the style or
+> > approach.
+> 
+> Why not just use the ir-usb.c driver for this device instead?
 
-- it is allowed to call dma_fence_wait() from memory reclaim contexts,
-  specifically from shrinker callbacks (which i915 does), and from mmu
-  notifier callbacks (which amdgpu does, and which i915 sometimes also
-  does, and probably always should, but that's kinda a debate). Also
-  for stuff like HMM we really need to be able to do this, or things
-  get real dicey.
+So this device is the infrared kind which rc-core (in drivers/media/rc/)
+supports, remotes and such things (not for serial IR). So by using a 
+rc-core driver, it can use kernel IR decoding, BPF decoding, lirc chardev
+and rc keymaps, etc.
 
-Consequence is that any critical path necessary to get to a
-dma_fence_signal for a fence must never a) call dma_resv_lock nor b)
-allocate memory with GFP_KERNEL. Also by implication of
-dma_resv_lock(), no userspace faulting allowed. That's some supremely
-obnoxious limitations, which is why we need to sprinkle the right
-annotations to all relevant paths.
+This device is a PIC18F2550 type device, which is a usb serial port
+microcontroller type with some firmware and IR diodes:
+	http://dangerousprototypes.com/docs/USB_IR_Toy_v2
 
-The one big locking context we're leaving out here is mmu notifiers,
-added in
+serio supports a whole bunch of usb serial devices which can be attached
+via inputattach(1). Not all of these are input devices, for example there
+are two cec devices too.
 
-commit 23b68395c7c78a764e8963fc15a7cfd318bf187f
-Author: Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Mon Aug 26 22:14:21 2019 +0200
+Now, in many of these drivers, multiple bytes need to be written to the
+device in order to send it a command, for example in
+drivers/input/touchscreen/elo.c:
 
-    mm/mmu_notifiers: add a lockdep map for invalidate_range_start/end
+        for (i = 0; i < ELO10_PACKET_LEN; i++) {
+                csum += packet[i];
+                if (serio_write(elo->serio, packet[i]))
+                        goto out;
+        }
 
-that one covers a lot of other callsites, and it's also allowed to
-wait on dma-fences from mmu notifiers. But there's no ready-made
-functions exposed to prime this, so I've left it out for now.
+So if serio had an interface for sending a buffer, that would be less
+call overhead. In fact, if the underlying serio is a serial usb port,
+that would much more efficient on the usb layer too (one usb roundtrips in
+stead of ELO10_PACKET_LEN roundtrips), like so:
 
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: linux-rdma@vger.kernel.org
-Cc: amd-gfx@lists.freedesktop.org
-Cc: intel-gfx@lists.freedesktop.org
-Cc: Chris Wilson <chris@chris-wilson.co.uk>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Christian König <christian.koenig@amd.com>
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
----
- drivers/dma-buf/dma-resv.c | 1 +
- include/linux/dma-fence.h  | 1 +
- 2 files changed, 2 insertions(+)
+	serio_write_buf(elo->serio, packet, ELO10_PACKET_LEN);
 
-diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
-index 99c0a33c918d..392c336f0732 100644
---- a/drivers/dma-buf/dma-resv.c
-+++ b/drivers/dma-buf/dma-resv.c
-@@ -115,6 +115,7 @@ static int __init dma_resv_lockdep(void)
- 	if (ret == -EDEADLK)
- 		dma_resv_lock_slow(&obj, &ctx);
- 	fs_reclaim_acquire(GFP_KERNEL);
-+	__dma_fence_might_wait();
- 	fs_reclaim_release(GFP_KERNEL);
- 	ww_mutex_unlock(&obj.lock);
- 	ww_acquire_fini(&ctx);
-diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-index 3f288f7db2ef..09e23adb351d 100644
---- a/include/linux/dma-fence.h
-+++ b/include/linux/dma-fence.h
-@@ -360,6 +360,7 @@ dma_fence_get_rcu_safe(struct dma_fence __rcu **fencep)
- #ifdef CONFIG_LOCKDEP
- bool dma_fence_begin_signalling(void);
- void dma_fence_end_signalling(bool cookie);
-+void __dma_fence_might_wait(void);
- #else
- static inline bool dma_fence_begin_signalling(void)
- {
--- 
-2.26.2
+So what I'm suggesting is extending the serio interface to allow sending
+a buffer of bytes. Of course serio isn't just usb serial ports. There quite
+a few instances of serio_register_port() in the kernel. Many of them
+can be extended to support sending a buffer rather than a single byte,
+if this makes sense. For example the ps2 serio port takes a mutex for every
+byte, so this could be more efficient by reducing it to one mutex lock
+per buffer.
 
+Now it would be nice to have a discussion about this rather than being
+dismissed with:
+
+> > > Ummm, serial protocol data size is at most 9 bits so I have no earthly
+> > > idea how they expect to get 16.
+
+Which is just a tad insulting.
+
+
+Sean
