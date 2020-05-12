@@ -5,60 +5,60 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC4EC54E8D
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA5EAC54E8B
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:34:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E1FD20A8B
-	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:33:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8A48207FF
+	for <linux-media@archiver.kernel.org>; Tue, 12 May 2020 07:34:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CFFfkHPe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AaC+PLz4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729016AbgELHdm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 May 2020 03:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S1729086AbgELHeA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 May 2020 03:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728986AbgELHdh (ORCPT
+        with ESMTP id S1729008AbgELHdk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 May 2020 03:33:37 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49D5C061A0C;
-        Tue, 12 May 2020 00:33:36 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id n5so7174267wmd.0;
-        Tue, 12 May 2020 00:33:36 -0700 (PDT)
+        Tue, 12 May 2020 03:33:40 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73F0C061A0F;
+        Tue, 12 May 2020 00:33:39 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id m24so10962888wml.2;
+        Tue, 12 May 2020 00:33:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qQ8y/gqu4ixgcZle26aEK4aRfb9gxDM111a2MEV0O/g=;
-        b=CFFfkHPeWAA6BWb6cFCjifEnJfjfyW8vqr5uZuCntCcA6PiJplULoRvFSupY7gbk2i
-         W/hBRBIDIDH8dYhGpppydhOGeeDHR6G0rfEeKwaZFNtZkfRrv2i4wd2Yt3gpmA1PtbCL
-         A/bzbOJbOehSlzuI9ZfXvQMrdgvMKWAVpz6SUyd6+ToP7RIds6fmAkDcyK6KMGsLwOev
-         DaY3NTsrFW0bpILRbx64bx4W20dks7qPpLulwCNdFvtWrsJgyZaRSsNMJdzpjStm0YOJ
-         PpvK2VVOruCqRzQxSoI93rCkDeoDEkhhyF1NLfWqV3L/plT/67JGqKsRayNoI0vMuJay
-         BSdA==
+        bh=wKq0OblocqgUWBq4FWdZOwAZXIyc1/tnZx0SSOmf9GY=;
+        b=AaC+PLz40PrYk1QteaLXTxbS33yMEGk2kdK9ESxDU17sZXwVCgmJ/MhsfJT+PDC0GP
+         OJ90A9e3bNFgSaTkyjgkoJU50p/FofrEmIqAsMqPgyxEG4/Qp/SbxmFR7DNxs3OKZuUC
+         Bp4L78a8pijD3F7VtK4VzCKTo4DQn4Sd3v9gPX/Yf8gygv8nUtuSCxtvQzgwvf5PJ7Hx
+         dET4SQmz8nm7aUAiB+/Xr7XscRQ9F4JRD6ILitJAz7yUw+HSA7i4XruGCMHt+R+mxyio
+         JaGFxlHQbm0hGE8FINJl9W5pkPbB6nVLur3SYeefLaGZHkjQwLTSFcPp59Gp/3ufUvIO
+         ulFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qQ8y/gqu4ixgcZle26aEK4aRfb9gxDM111a2MEV0O/g=;
-        b=s1/tgiv/cf6PmNtG/sigyouBzEI69u4EC/hhIw4qBi0XQ6tIq+9Kjp51l0bNgM3wdJ
-         RO2UYwaCUGHExyM7W8gpKMMaMLFutNUxvaMoyBLVB6Yhnoc8Iw2t9TMcydTfBD+hLFQ6
-         EFnU8GI37XM6QwWToR3T02pvkrqUe5SexRvjWstk10hY0WmFy4iTxSzm7cCsgK8iNNBC
-         jGwYd7VjkJYgvJ3Kpc59dWNj1WxmMPdBJ0vyZGw5opPoZwNDvqjkc7zqt9vzFcusPkTY
-         gWtOmQi/GfUnD2ULio1kKgLHbdM9n7pJjz8Z3lc7HY2L2e3Zrx0mzCUpoxeHRtf6OBmh
-         3/9Q==
-X-Gm-Message-State: AGi0PuZetWYH64ADhdRMUrCmm+VYJJw/Idb/kUUmFSibUFspcYM1eCkx
-        AzXd8CJG9vGvZO4x6akECh8=
-X-Google-Smtp-Source: APiQypJHlU7E9KgvyqCnZSJ9eLmQdj13uPEZz/FURvTrOPOTv+arPqj9HTfqURAv8oZpNu18CNr2DQ==
-X-Received: by 2002:a1c:9ac3:: with SMTP id c186mr5172702wme.150.1589268815649;
-        Tue, 12 May 2020 00:33:35 -0700 (PDT)
+        bh=wKq0OblocqgUWBq4FWdZOwAZXIyc1/tnZx0SSOmf9GY=;
+        b=LkHRi3Xvq7WNn2DSAnZecCZCefiFp/sZkc/pEPAVrVsJf+jz8ovLBBuTeqlHerCPPW
+         kxGqVQQNTYnXCYxnO7SFCMdsmYzlaPp0830kG0M2/YsmUO7fikwJamngfMNS4zB2io3w
+         YTq/znawTj1usrCRgwDA9Dlo/JhvYxNivgH5cffVqkOMcPAIXFzrxYQ7b3lmaTeRC6yl
+         p2LFr7KxG3/Fkeg00eO/RklmrBrjO3yvC0NyGJ0ZD7ET9jhrImBr8kZlSrTH6oyDjTFt
+         1WS92OxdR8nY/rUa8pkTdlfNF13GXyAfcqHmS9JRvtlzWGSFci91eG2AEpJxG8mFAjIt
+         UQcg==
+X-Gm-Message-State: AGi0PuYee+aAZPWieGhXGuCdZmPsNVJZz6PPS3OpToldAMDuz0AwDc1C
+        nrQ8P1R14ijtl6Fsv/hibsQ=
+X-Google-Smtp-Source: APiQypKpQU+sRBnu4YugVLYHjTcTRmLyX7V4CIuyHUXUHwnJzx9zFlbWQdFPuVC8uZJ2zsgvyvFG2w==
+X-Received: by 2002:a1c:108:: with SMTP id 8mr13028297wmb.148.1589268818521;
+        Tue, 12 May 2020 00:33:38 -0700 (PDT)
 Received: from skynet.lan (198.red-83-49-57.dynamicip.rima-tde.net. [83.49.57.198])
-        by smtp.gmail.com with ESMTPSA id d9sm5961197wmd.10.2020.05.12.00.33.34
+        by smtp.gmail.com with ESMTPSA id d9sm5961197wmd.10.2020.05.12.00.33.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 00:33:35 -0700 (PDT)
+        Tue, 12 May 2020 00:33:38 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     computersforpeace@gmail.com, kdasu.kdev@gmail.com,
@@ -69,9 +69,9 @@ To:     computersforpeace@gmail.com, kdasu.kdev@gmail.com,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH v2 2/5] mtd: rawnand: brcmnand: fix CS0 layout
-Date:   Tue, 12 May 2020 09:33:26 +0200
-Message-Id: <20200512073329.742893-3-noltari@gmail.com>
+Subject: [PATCH v2 4/5] dt: bindings: brcmnand: add v2.1 and v2.2 support
+Date:   Tue, 12 May 2020 09:33:28 +0200
+Message-Id: <20200512073329.742893-5-noltari@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200512073329.742893-1-noltari@gmail.com>
 References: <20200510151406.2527856-1-noltari@gmail.com>
@@ -84,33 +84,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Only v3.3-v5.0 have a different CS0 layout.
-Controllers before v3.3 use the same layout for every CS.
+Added brcm,brcmnand-v2.1 and brcm,brcmnand-v2.2 as possible compatible
+strings to support brcmnand controllers v2.1 and v2.2.
 
-Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom STB NAND controller")
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 ---
- v2: fix commit log.
+ v2: add new patch
 
- drivers/mtd/nand/raw/brcmnand/brcmnand.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-index 6a08dd07b058..72b268d8e3a4 100644
---- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-+++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-@@ -606,8 +606,9 @@ static int brcmnand_revision_init(struct brcmnand_controller *ctrl)
- 	} else {
- 		ctrl->cs_offsets = brcmnand_cs_offsets;
- 
--		/* v5.0 and earlier has a different CS0 offset layout */
--		if (ctrl->nand_version <= 0x0500)
-+		/* v3.3-5.0 have a different CS0 offset layout */
-+		if (ctrl->nand_version >= 0x0303 &&
-+		    ctrl->nand_version <= 0x0500)
- 			ctrl->cs0_offsets = brcmnand_cs_offsets_cs0;
- 	}
- 
+diff --git a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt
+index 05651a654c66..44335a4f8bfb 100644
+--- a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt
++++ b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt
+@@ -20,6 +20,8 @@ Required properties:
+                      "brcm,brcmnand" and an appropriate version compatibility
+                      string, like "brcm,brcmnand-v7.0"
+                      Possible values:
++                         brcm,brcmnand-v2.1
++                         brcm,brcmnand-v2.2
+                          brcm,brcmnand-v4.0
+                          brcm,brcmnand-v5.0
+                          brcm,brcmnand-v6.0
 -- 
 2.26.2
 
