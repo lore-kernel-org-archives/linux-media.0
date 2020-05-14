@@ -2,115 +2,136 @@ Return-Path: <SRS0=Nyay=64=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C698C433E0
-	for <linux-media@archiver.kernel.org>; Thu, 14 May 2020 10:05:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47C23C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 14 May 2020 10:13:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E9DD206B6
-	for <linux-media@archiver.kernel.org>; Thu, 14 May 2020 10:05:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="l3JU6WsA"
+	by mail.kernel.org (Postfix) with ESMTP id 33FC42065D
+	for <linux-media@archiver.kernel.org>; Thu, 14 May 2020 10:13:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726066AbgENKFe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 May 2020 06:05:34 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:60988 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725955AbgENKFe (ORCPT
+        id S1726073AbgENKNc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 May 2020 06:13:32 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:52475 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725999AbgENKNc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 May 2020 06:05:34 -0400
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E2ECC9A8;
-        Thu, 14 May 2020 12:05:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1589450732;
-        bh=HIFwH/zOaG31nesCn5CYtH8UsMJVPfM9hl/t5q8ugGw=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=l3JU6WsAtFYJQ0oW0AMxTQpL7yuv2VFOn2B78j+H5oRrMUCN8EywMz11LKmckgDGQ
-         WTQ5EKNg372EPCC1DFcy161FEDQCIdL/LANgmeGPK/THbUe9E5ZqT1QOeM2RRW3lIu
-         ygToiBIb6KqYFH8FtHADBrUwhlK2rA8kU+2RTeM4=
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-Subject: Re: [PATCH v9 2/4] media: i2c: Add MAX9286 driver
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        sakari.ailus@iki.fi, Hans Verkuil <hverkuil@xs4all.nl>,
-        Hyun Kwon <hyunk@xilinx.com>, Rob Herring <robh+dt@kernel.org>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-References: <20200512155105.1068064-1-kieran.bingham+renesas@ideasonboard.com>
- <20200512155105.1068064-3-kieran.bingham+renesas@ideasonboard.com>
- <20200512174056.GH5526@Mani-XPS-13-9360>
- <e07af762-2db1-920c-5ab8-5528bdcfc2ce@ideasonboard.com>
- <20200514095948.GE2877@Mani-XPS-13-9360>
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Organization: Ideas on Board
-Message-ID: <92d53749-4ba4-503c-f7c2-386d32d2876d@ideasonboard.com>
-Date:   Thu, 14 May 2020 11:05:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 14 May 2020 06:13:32 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 902F2FF808;
+        Thu, 14 May 2020 10:13:27 +0000 (UTC)
+Date:   Thu, 14 May 2020 12:16:43 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, mchehab@kernel.org,
+        niklas.soderlund+renesas@ragnatech.se,
+        kieran.bingham@ideasonboard.com, dave.stevenson@raspberrypi.com,
+        hyun.kwon@xilinx.com, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] media: v4l2-subdev: Deprecate g_mbus_config video
+ op
+Message-ID: <20200514101643.6a4xqhdiegukmltk@uno.localdomain>
+References: <20200415105004.2497356-1-jacopo+renesas@jmondi.org>
+ <20200415105004.2497356-3-jacopo+renesas@jmondi.org>
+ <20200420014846.GB15673@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <20200514095948.GE2877@Mani-XPS-13-9360>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20200420014846.GB15673@pendragon.ideasonboard.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mani,
+Hi Laurent, Hans, Sakari
 
-On 14/05/2020 10:59, Manivannan Sadhasivam wrote:
-> On Thu, May 14, 2020 at 10:53:00AM +0100, Kieran Bingham wrote:
->> Hi Mani,
->>>> +static int max9286_set_fmt(struct v4l2_subdev *sd,
->>>> +			   struct v4l2_subdev_pad_config *cfg,
->>>> +			   struct v4l2_subdev_format *format)
->>>> +{
->>>> +	struct max9286_priv *priv = sd_to_max9286(sd);
->>>> +	struct v4l2_mbus_framefmt *cfg_fmt;
->>>> +
->>>> +	if (format->pad >= MAX9286_SRC_PAD)
->>>> +		return -EINVAL;
->>>> +
->>>> +	/* Refuse non YUV422 formats as we hardcode DT to 8 bit YUV422 */
->>>> +	switch (format->format.code) {
->>>> +	case MEDIA_BUS_FMT_UYVY8_2X8:
->>>> +	case MEDIA_BUS_FMT_VYUY8_2X8:
->>>> +	case MEDIA_BUS_FMT_YUYV8_2X8:
->>>> +	case MEDIA_BUS_FMT_YVYU8_2X8:
->>>> +		break;
->>>> +	default:
->>>> +		format->format.code = MEDIA_BUS_FMT_YUYV8_2X8;
->>>
->>> Is there any reason for not setting default format to MEDIA_BUS_FMT_UYVY8_2X8?
->>>
->>
->>
->> No good reason no, and I see that in max9286_enum_mbus_code(), we
->> currently code to MEDIA_BUS_FMT_YUYV8_2X8, and that's the value that we
->> init to, so that would be a better default indeed.
->>
-> 
-> max9286_enum_mbus_code() returns MEDIA_BUS_FMT_UYVY8_2X8, no?
+On Mon, Apr 20, 2020 at 04:48:46AM +0300, Laurent Pinchart wrote:
+> Hi Jacopo,
+>
+> Thank you for the patch.
+>
+> On Wed, Apr 15, 2020 at 12:49:59PM +0200, Jacopo Mondi wrote:
+> > Deprecate 'g_mbus_config' video operation in favor of the newly
+> > introduced 'get_mbus_config' pad operation.
+> >
+> > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>
+> Not necessarily a blocker for this series, but it would be nice to
+> convert the handful of users of this API (you can leave soc-camera
+> untouched as it's on its way out of the kernel).
 
-Argh, sorry - yet anther typo or copy/paste error.
+I'm trying to, but I'm having an hard time fixing the new operations
+semantic, specifically on set_mbus_config, as if I have to deprecate
+the existing users, a replacement for s_mbus_config is required.
 
-Indeed, I have changed this locally to ...
-   <double checks> MEDIA_BUS_FMT_UYVY8_2X8 </double checks>
-as suggested. ;-)
+In particular, the old API seems to work as follows:
+1) Report all supported config options through g_mbus_config
+2) Apply the requested ones (assumed to be in the set of configurable
+ones) though s_mbus_config.
 
+There is no mention of how to treat unsupported configuration
+parameters, no mention of how handle configuration errors, if
+s_mbus_config should behave like set_fmt (update the received
+configuration to reflect the current status and don't fail if the
+configuration cannot be applied).
 
-> 
-> Thanks,
-> Mani
+The new operation has a different semantic (which still has to be
+defined) particularly:
+1) get_mbus_config() reports the -current- media bus configuration, not the
+list of supported options that could be tweaked.
+2) set_mbus_config() has the following behavior specified:
+  - Do not fail if received config is unsupported, update it to
+    reflect the current configuration
+  - Apply changes to the supported configuration options, ignore the
+    non supported one, but do not fail.
+
+I'm still trying to understand if a new set_mbus_config() is actually
+welcome or not, but apart from this, I think porting existing users to
+the new API, even if it could be made to compile successfully will
+change quite some behaviour, and honestly I'm not sure we want to go
+that way, or keep both the existing operations and only deprecate the
+existing one in the documentation.
+
+For reference ov6650.c is the only mainline user of s_mbus_config I
+can see as well pxa_camera is the only platform driver using
+g_mbus_config. Porting both to the new API would require testing I
+cannot perform probably, or would you be ok with just compile testing
+it ?
+
+Thanks
+   j
+
+>
+> > ---
+> >  include/media/v4l2-subdev.h | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> > index d1a5e9d1ea63..9bf14c41626d 100644
+> > --- a/include/media/v4l2-subdev.h
+> > +++ b/include/media/v4l2-subdev.h
+> > @@ -466,7 +466,9 @@ struct v4l2_mbus_pad_config {
+> >   *
+> >   * @query_dv_timings: callback for VIDIOC_QUERY_DV_TIMINGS() ioctl handler code.
+> >   *
+> > - * @g_mbus_config: get supported mediabus configurations
+> > + * @g_mbus_config: get supported mediabus configurations. This operation is
+> > + *		   deprecated in favour of the get_mbus_config() pad operation
+> > + *		   and should not be used by new software.
+> >   *
+> >   * @s_mbus_config: set a certain mediabus configuration. This operation is added
+> >   *	for compatibility with soc-camera drivers and should not be used by new
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
