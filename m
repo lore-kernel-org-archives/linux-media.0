@@ -5,60 +5,60 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B57E2C433E1
-	for <linux-media@archiver.kernel.org>; Thu, 14 May 2020 16:02:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FC14C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 14 May 2020 16:02:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F0AC206DC
-	for <linux-media@archiver.kernel.org>; Thu, 14 May 2020 16:02:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12ECD206F1
+	for <linux-media@archiver.kernel.org>; Thu, 14 May 2020 16:02:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cWM6Cil1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lRqw0d77"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727939AbgENQCP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 May 2020 12:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
+        id S1727991AbgENQC0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 May 2020 12:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbgENQCO (ORCPT
+        with ESMTP id S1726037AbgENQCZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 May 2020 12:02:14 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7B1C061A0C;
-        Thu, 14 May 2020 09:02:13 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id ms17so12639127pjb.0;
-        Thu, 14 May 2020 09:02:13 -0700 (PDT)
+        Thu, 14 May 2020 12:02:25 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C8DC061A0C;
+        Thu, 14 May 2020 09:02:25 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id q24so12632266pjd.1;
+        Thu, 14 May 2020 09:02:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PnRbc31NNtJk9tFYJKwcEqOlUSl+vuVKarKs0i2/PM0=;
-        b=cWM6Cil1GSYHTo1M0pZ3oFkajjBsCJZsgLupozV/22XkpDN9n+dwxVACbGKEcRqwzG
-         +IeR5qCbzhTXmsl4QhGPB3Njp5wnk+N9OHbNtWlAg4szvy2F5DsmeoF3WOXseT7Gygez
-         LWNBa6oBN7+0ASqRQRNHFyp0WjzLLuejUZ1gGhmoTVvPMZ+J/rsbYLdauwMF4d+F0tuN
-         s3i/t/HR/pcKAl/CKFI1WhmFIe55w6/9yYullim+UwmFTgyYxiFY+cUoyfDJTvXC72s/
-         JFAfGMBAMpMoBE4Q2lopRNRhZT1G6gbXy5E1o75ZBtikglp1mZJAOWj9Arizxlxd6PYt
-         zaeQ==
+        bh=41prVte/MxVN8rT+cmjF7KZHxVdpTKw2jaomXqXMCyU=;
+        b=lRqw0d77o9muuAsv8JueEdBc6yKJguOWybb38kOfsH0nzbIvkE6P/9iWdqpiWdkXHx
+         /rKosYlqF3qIHV6+Z0FNHQtOXLBlDiv1VfdT3hud+dcQ3alFJsx0I/kPv5vQMvy2+4J9
+         4tS//m12+q8HT2XBLBGuncrubZenDjOnXtrUfaVc5CUvq8M8yC1BslVIzWF3heYlpwfv
+         LJzHOGz/w1PV+dKesR0/J7M5/QNLyuoaHgtKhXcNGv/1RguQW9rTvGQPRmvG9EMBm/09
+         hADfkWPivNa9W5lBpGVgVE2Sk1moQCNIXfuHMEC3cw6HDpeick/c88NH/hawN5vah8dt
+         udcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PnRbc31NNtJk9tFYJKwcEqOlUSl+vuVKarKs0i2/PM0=;
-        b=DSg+zeZ1T/nIoeEgPTiZofkl6D1Kw1roe2V7AVcyVgbOiTvE61VEh1gNVqrHPmdKKH
-         6MF/IHL2MCZZRNnE/o2jVcGzsJK4qwaS/gBdEajs46Gm5Suktm1kl950Id63uX/R1SMI
-         e1+Uz0AsHnJ4mh+CR79fI6M/2PZi4LB45/66O7++KQc7QZnlnepwYS+zZOU1QppY4+9q
-         AugcSGzI5JLgtRa+hTRTY1Y3vGdfeMaQwRZdKLZVHsc8/mxAks1N7TByuNvjyvsdRJBk
-         be2I95OZwb4l3rYqkspb/iFmJflQiBjlOq2J2yIDrDG0+aTtwjof5GD5nZDea0ui+4zp
-         qxwQ==
-X-Gm-Message-State: AOAM531HxP1BPvNuWCFeDZV8OD5S9uvPbjFhOhxAg1ZAP0S4o6XRLpFb
-        HLozRxejlZP4Bzzz/h7TfDw=
-X-Google-Smtp-Source: ABdhPJyEOpXzs7cbcSVjDSlUeR6mxqwNO0lH+67oQUTKg3KFm9trgf8wKVG2yFGUh1xOHbnS7mllRw==
-X-Received: by 2002:a17:902:c406:: with SMTP id k6mr4492717plk.203.1589472132868;
-        Thu, 14 May 2020 09:02:12 -0700 (PDT)
+        bh=41prVte/MxVN8rT+cmjF7KZHxVdpTKw2jaomXqXMCyU=;
+        b=LZU2ojZWldvcCoVD5HY2u5r80a5XHk8ErUmPiw523Ky98ZEHb6Xzo5jN84+nO8vzPN
+         VT8eJd7XHNNzAW+p+32xEhzQZbLhhOfkv5YxRzwZtplASClSuyYoAsA7bR/1h21r869m
+         cbr6LmvsMkWe8bwdFPhQQvv3ssAh4V9lGmzcaYML3fJADeFHIB5XhXkcANu5dFJKdQur
+         hSQVINWvNgITF9oxpLVolU132V0B1HUF4KDveSEzTzkeWpNbhx1E5OzCh/RsyKjU8I6K
+         /d6say8WXkKdz3jCgs0YCYMgECVuLBmp+Xzl8hfBQBjbgeNzpE62tm4tseQzNS0h/1jR
+         aQww==
+X-Gm-Message-State: AGi0PuagklUL+3xQ/Q32bf0Cyxx+YXv5H4EqbaNo36D9P5ilLRMCrpw8
+        CkwkC+vA7ZOkbR1A+M+CtlU=
+X-Google-Smtp-Source: APiQypJGgmTimL53ZkCV6wwX/kVYUC0a8lhrbE67Otd0R0B3TgxnPneBqMKTGLvkMCgRnw7hJaAvMg==
+X-Received: by 2002:a17:90a:6283:: with SMTP id d3mr42602547pjj.18.1589472145175;
+        Thu, 14 May 2020 09:02:25 -0700 (PDT)
 Received: from localhost.localdomain ([2409:10:2e40:5100:6e29:95ff:fe2d:8f34])
-        by smtp.gmail.com with ESMTPSA id y6sm18178691pjw.15.2020.05.14.09.02.08
+        by smtp.gmail.com with ESMTPSA id y6sm18178691pjw.15.2020.05.14.09.02.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2020 09:02:11 -0700 (PDT)
+        Thu, 14 May 2020 09:02:23 -0700 (PDT)
 From:   Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
 To:     Hans Verkuil <hans.verkuil@cisco.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -66,9 +66,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH v6 01/14] videobuf2: use explicit unsigned int in vb2_queue
-Date:   Fri, 15 May 2020 01:01:40 +0900
-Message-Id: <20200514160153.3646-2-sergey.senozhatsky@gmail.com>
+Subject: [PATCH v6 03/14] videobuf2: handle V4L2 buffer cache flags
+Date:   Fri, 15 May 2020 01:01:42 +0900
+Message-Id: <20200514160153.3646-4-sergey.senozhatsky@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200514160153.3646-1-sergey.senozhatsky@gmail.com>
 References: <20200514160153.3646-1-sergey.senozhatsky@gmail.com>
@@ -81,43 +81,108 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Sergey Senozhatsky <senozhatsky@chromium.org>
 
-Switch from 'unsigned' to 'unsigned int' so that checkpatch doesn't
-complain.
+Set video buffer cache management flags corresponding to V4L2 cache
+flags.
+
+Both ->prepare() and ->finish() cache management hints should be
+passed during this stage (buffer preparation), because there is
+no other way for user-space to tell V4L2 to avoid ->finish() cache
+flush.
 
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- include/media/videobuf2-core.h | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ .../media/common/videobuf2/videobuf2-v4l2.c   | 48 +++++++++++++++++++
+ include/media/videobuf2-core.h                | 11 +++++
+ 2 files changed, 59 insertions(+)
 
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index eb5d5db96552..f13851212cc8 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -337,6 +337,53 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
+ 	return 0;
+ }
+ 
++static void set_buffer_cache_hints(struct vb2_queue *q,
++				   struct vb2_buffer *vb,
++				   struct v4l2_buffer *b)
++{
++	/*
++	 * DMA exporter should take care of cache syncs, so we can avoid
++	 * explicit ->prepare()/->finish() syncs. For other ->memory types
++	 * we always need ->prepare() or/and ->finish() cache sync.
++	 */
++	if (q->memory == VB2_MEMORY_DMABUF) {
++		vb->need_cache_sync_on_finish = 0;
++		vb->need_cache_sync_on_prepare = 0;
++		return;
++	}
++
++	/*
++	 * Cache sync/invalidation flags are set by default in order to
++	 * preserve existing behaviour for old apps/drivers.
++	 */
++	vb->need_cache_sync_on_prepare = 1;
++	vb->need_cache_sync_on_finish = 1;
++
++	if (!vb2_queue_allows_cache_hints(q)) {
++		/*
++		 * Clear buffer cache flags if queue does not support user
++		 * space hints. That's to indicate to userspace that these
++		 * flags won't work.
++		 */
++		b->flags &= ~V4L2_BUF_FLAG_NO_CACHE_INVALIDATE;
++		b->flags &= ~V4L2_BUF_FLAG_NO_CACHE_CLEAN;
++		return;
++	}
++
++	/*
++	 * ->finish() cache sync can be avoided when queue direction is
++	 * TO_DEVICE.
++	 */
++	if (q->dma_dir == DMA_TO_DEVICE)
++		vb->need_cache_sync_on_finish = 0;
++
++	if (b->flags & V4L2_BUF_FLAG_NO_CACHE_INVALIDATE)
++		vb->need_cache_sync_on_finish = 0;
++
++	if (b->flags & V4L2_BUF_FLAG_NO_CACHE_CLEAN)
++		vb->need_cache_sync_on_prepare = 0;
++}
++
+ static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
+ 				    struct v4l2_buffer *b, bool is_prepare,
+ 				    struct media_request **p_req)
+@@ -381,6 +428,7 @@ static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *md
+ 	}
+ 
+ 	if (!vb->prepared) {
++		set_buffer_cache_hints(q, vb, b);
+ 		/* Copy relevant information provided by the userspace */
+ 		memset(vbuf->planes, 0,
+ 		       sizeof(vbuf->planes[0]) * vb->num_planes);
 diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index f11b96514cf7..9e522bd2acc7 100644
+index 7f39d9fffc8c..ccc5c498d3e3 100644
 --- a/include/media/videobuf2-core.h
 +++ b/include/media/videobuf2-core.h
-@@ -558,15 +558,15 @@ struct vb2_queue {
- 	unsigned int			io_modes;
- 	struct device			*dev;
- 	unsigned long			dma_attrs;
--	unsigned			bidirectional:1;
--	unsigned			fileio_read_once:1;
--	unsigned			fileio_write_immediately:1;
--	unsigned			allow_zero_bytesused:1;
--	unsigned		   quirk_poll_must_check_waiting_for_buffers:1;
--	unsigned			supports_requests:1;
--	unsigned			requires_requests:1;
--	unsigned			uses_qbuf:1;
--	unsigned			uses_requests:1;
-+	unsigned int			bidirectional:1;
-+	unsigned int			fileio_read_once:1;
-+	unsigned int			fileio_write_immediately:1;
-+	unsigned int			allow_zero_bytesused:1;
-+	unsigned int		   quirk_poll_must_check_waiting_for_buffers:1;
-+	unsigned int			supports_requests:1;
-+	unsigned int			requires_requests:1;
-+	unsigned int			uses_qbuf:1;
-+	unsigned int			uses_requests:1;
+@@ -635,6 +635,17 @@ struct vb2_queue {
+ #endif
+ };
  
- 	struct mutex			*lock;
- 	void				*owner;
++/**
++ * vb2_queue_allows_cache_hints() - Return true if the queue allows cache
++ * and memory consistency hints.
++ *
++ * @q:		pointer to &struct vb2_queue with videobuf2 queue
++ */
++static inline bool vb2_queue_allows_cache_hints(struct vb2_queue *q)
++{
++	return q->allow_cache_hints && q->memory == VB2_MEMORY_MMAP;
++}
++
+ /**
+  * vb2_plane_vaddr() - Return a kernel virtual address of a given plane.
+  * @vb:		pointer to &struct vb2_buffer to which the plane in
 -- 
 2.26.2
 
