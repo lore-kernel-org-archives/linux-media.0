@@ -4,41 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 622D3C433E0
-	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03815C433E5
+	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DC0020671
-	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C595820671
+	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KRm7B569"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="d7ytcSFw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728270AbgEOBYw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 May 2020 21:24:52 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54656 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728228AbgEOBYw (ORCPT
+        id S1728277AbgEOBYy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 May 2020 21:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728272AbgEOBYw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 14 May 2020 21:24:52 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F08DC061A0C;
+        Thu, 14 May 2020 18:24:52 -0700 (PDT)
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B098BA24;
-        Fri, 15 May 2020 03:24:46 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9CFCDA4F;
+        Fri, 15 May 2020 03:24:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
         s=mail; t=1589505887;
-        bh=3Yje2hcQgIpc6nSo15FfU+b7I6MM2KT2k9pL8zJHcAE=;
+        bh=idy06uM6JXug0XSMozTyP8lOuGqiGAQ0bai/3HSKMvQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KRm7B569e4u1RDjj8aUcLZO1Lwt8i+xfO3Zn/tnhjJxXrQ44vCR52CT5b2b2iHrnu
-         qKpYkSBk/x2uCFJ54eHXsYCnGHP2LFjwmleAbNIEToNqngdSzeTSP5X8Yf3oORMPir
-         Dodr4rRMzL83hQ+BBoosnzVMNe6NdDobR68sWj1Q=
+        b=d7ytcSFwhOGYuypAWviNvgF4QrIB5IMKlnfTElUZs/v6V7+fFOMmHKCvKXJRa26fQ
+         Le43Vjzv3VJpEPfg4yp4U8fnrR1ViHLMurwgYimwrm688/+Du39BC9xbr9Dnrwr2dp
+         7V4xyhyI+3fhFpOZmP9BvZj7n+HdRMC7bAg7e95s=
 From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH 4/8] dt-bindings: media: renesas,fdp1: Convert binding to YAML
-Date:   Fri, 15 May 2020 04:24:28 +0300
-Message-Id: <20200515012432.31326-5-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH 6/8] dt-bindings: media: renesas,fdp1: Add resets property
+Date:   Fri, 15 May 2020 04:24:30 +0300
+Message-Id: <20200515012432.31326-7-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200515012432.31326-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20200515012432.31326-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -49,128 +52,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the Renesas R-Car FDP1 text binding to YAML.
+The resets property ise used in DT sources in the kernel tree. Document
+it and make it mandatory.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- .../bindings/media/renesas,fdp1.txt           | 37 -----------
- .../bindings/media/renesas,fdp1.yaml          | 63 +++++++++++++++++++
- 2 files changed, 63 insertions(+), 37 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/renesas,fdp1.txt
- create mode 100644 Documentation/devicetree/bindings/media/renesas,fdp1.yaml
+ Documentation/devicetree/bindings/media/renesas,fdp1.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/renesas,fdp1.txt b/Documentation/devicetree/bindings/media/renesas,fdp1.txt
-deleted file mode 100644
-index 8dd1007bb573..000000000000
---- a/Documentation/devicetree/bindings/media/renesas,fdp1.txt
-+++ /dev/null
-@@ -1,37 +0,0 @@
--Renesas R-Car Fine Display Processor (FDP1)
---------------------------------------------
--
--The FDP1 is a de-interlacing module which converts interlaced video to
--progressive video. It is capable of performing pixel format conversion between
--YCbCr/YUV formats and RGB formats. Only YCbCr/YUV formats are supported as
--an input to the module.
--
--Required properties:
--
-- - compatible: must be "renesas,fdp1"
-- - reg: the register base and size for the device registers
-- - interrupts : interrupt specifier for the FDP1 instance
-- - clocks: reference to the functional clock
--
--Optional properties:
--
-- - power-domains: reference to the power domain that the FDP1 belongs to, if
--                  any.
-- - renesas,fcp: a phandle referencing the FCP that handles memory accesses
--                for the FDP1. Not needed on Gen2, mandatory on Gen3.
--
--Please refer to the binding documentation for the clock and/or power domain
--providers for more details.
--
--
--Device node example
---------------------
--
--	fdp1@fe940000 {
--		compatible = "renesas,fdp1";
--		reg = <0 0xfe940000 0 0x2400>;
--		interrupts = <GIC_SPI 262 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 119>;
--		power-domains = <&sysc R8A7795_PD_A3VP>;
--		renesas,fcp = <&fcpf0>;
--	};
 diff --git a/Documentation/devicetree/bindings/media/renesas,fdp1.yaml b/Documentation/devicetree/bindings/media/renesas,fdp1.yaml
-new file mode 100644
-index 000000000000..f4db96a1f53c
---- /dev/null
+index 39184bd21a27..2a27a7296fea 100644
+--- a/Documentation/devicetree/bindings/media/renesas,fdp1.yaml
 +++ b/Documentation/devicetree/bindings/media/renesas,fdp1.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/renesas,fdp1.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas R-Car Fine Display Processor (FDP1)
-+
-+maintainers:
-+  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-+
-+description:
-+  The FDP1 is a de-interlacing module which converts interlaced video to
-+  progressive video. It is capable of performing pixel format conversion
-+  between YCbCr/YUV formats and RGB formats. Only YCbCr/YUV formats are
-+  supported as an input to the module.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - renesas,fdp1
-+
-+  reg:
+@@ -32,6 +32,9 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
++  resets:
 +    maxItems: 1
 +
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  renesas,fcp:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      A phandle referencing the FCP that handles memory accesses for the FDP1.
-+      Not allowed on R-Car Gen2, mandatory on R-Car Gen3.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/renesas-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7795-sysc.h>
-+
-+    fdp1@fe940000 {
-+        compatible = "renesas,fdp1";
-+        reg = <0xfe940000 0x2400>;
-+        interrupts = <GIC_SPI 262 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&cpg CPG_MOD 119>;
-+        power-domains = <&sysc R8A7795_PD_A3VP>;
-+        renesas,fcp = <&fcpf0>;
-+    };
-+...
+   renesas,fcp:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+@@ -44,6 +47,7 @@ required:
+   - interrupts
+   - clocks
+   - power-domains
++  - resets
+ 
+ additionalProperties: false
+ 
+@@ -59,6 +63,7 @@ examples:
+         interrupts = <GIC_SPI 262 IRQ_TYPE_LEVEL_HIGH>;
+         clocks = <&cpg CPG_MOD 119>;
+         power-domains = <&sysc R8A7795_PD_A3VP>;
++        resets = <&cpg 119>;
+         renesas,fcp = <&fcpf0>;
+     };
+ ...
 -- 
 Regards,
 
