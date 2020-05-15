@@ -5,43 +5,40 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03815C433E5
-	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D394BC433E6
+	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C595820671
-	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9BD420671
+	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="d7ytcSFw"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="E4s5IF0Q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728277AbgEOBYy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 May 2020 21:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728272AbgEOBYw (ORCPT
+        id S1728287AbgEOBYz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 May 2020 21:24:55 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:54678 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728228AbgEOBYy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 May 2020 21:24:52 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F08DC061A0C;
-        Thu, 14 May 2020 18:24:52 -0700 (PDT)
+        Thu, 14 May 2020 21:24:54 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9CFCDA4F;
-        Fri, 15 May 2020 03:24:47 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 871339C5;
+        Fri, 15 May 2020 03:24:48 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1589505887;
-        bh=idy06uM6JXug0XSMozTyP8lOuGqiGAQ0bai/3HSKMvQ=;
+        s=mail; t=1589505888;
+        bh=ar8B5Xez/Hz/EUg7PRIHf5/uMtm6g8ntgLFGbVcFHWs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d7ytcSFwhOGYuypAWviNvgF4QrIB5IMKlnfTElUZs/v6V7+fFOMmHKCvKXJRa26fQ
-         Le43Vjzv3VJpEPfg4yp4U8fnrR1ViHLMurwgYimwrm688/+Du39BC9xbr9Dnrwr2dp
-         7V4xyhyI+3fhFpOZmP9BvZj7n+HdRMC7bAg7e95s=
+        b=E4s5IF0QvJhsBjelrC0qxPcnnhCstfRgzkJGmQsrpmzSCtUNc4UcZF/DkKXXcRUI6
+         rQGf7zQsCNCj7rVfWrrQWtt3SWrIkcoZv73rHUijrH93hQJAijQoWsDboy1Qm98map
+         CfyR9UUj6WCjURzpI52gu1QySFHsMMRYAk9KuKRo=
 From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH 6/8] dt-bindings: media: renesas,fdp1: Add resets property
-Date:   Fri, 15 May 2020 04:24:30 +0300
-Message-Id: <20200515012432.31326-7-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH 8/8] dt-bindings: media: renesas,vsp1: Add power-domains and resets
+Date:   Fri, 15 May 2020 04:24:32 +0300
+Message-Id: <20200515012432.31326-9-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200515012432.31326-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20200515012432.31326-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -52,44 +49,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The resets property ise used in DT sources in the kernel tree. Document
-it and make it mandatory.
+The power-domains and resets properties are used in all DT sources in
+the kernel but are absent from the bindings. Document them and make them
+mandatory.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- Documentation/devicetree/bindings/media/renesas,fdp1.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../devicetree/bindings/media/renesas,vsp1.yaml    | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/renesas,fdp1.yaml b/Documentation/devicetree/bindings/media/renesas,fdp1.yaml
-index 39184bd21a27..2a27a7296fea 100644
---- a/Documentation/devicetree/bindings/media/renesas,fdp1.yaml
-+++ b/Documentation/devicetree/bindings/media/renesas,fdp1.yaml
-@@ -32,6 +32,9 @@ properties:
-   power-domains:
+diff --git a/Documentation/devicetree/bindings/media/renesas,vsp1.yaml b/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
+index 54b130de3ae2..ed52888baa4d 100644
+--- a/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
++++ b/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
+@@ -29,6 +29,12 @@ properties:
+   clocks:
      maxItems: 1
  
++  power-domains:
++    maxItems: 1
++
 +  resets:
 +    maxItems: 1
 +
    renesas,fcp:
      $ref: /schemas/types.yaml#/definitions/phandle
      description:
-@@ -44,6 +47,7 @@ required:
+@@ -39,6 +45,8 @@ required:
+   - reg
    - interrupts
    - clocks
-   - power-domains
++  - power-domains
 +  - resets
  
  additionalProperties: false
  
-@@ -59,6 +63,7 @@ examples:
-         interrupts = <GIC_SPI 262 IRQ_TYPE_LEVEL_HIGH>;
-         clocks = <&cpg CPG_MOD 119>;
-         power-domains = <&sysc R8A7795_PD_A3VP>;
-+        resets = <&cpg 119>;
-         renesas,fcp = <&fcpf0>;
+@@ -59,24 +67,30 @@ examples:
+   - |
+     #include <dt-bindings/clock/renesas-cpg-mssr.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/r8a7790-sysc.h>
+ 
+     vsp@fe928000 {
+         compatible = "renesas,vsp1";
+         reg = <0xfe928000 0x8000>;
+         interrupts = <GIC_SPI 267 IRQ_TYPE_LEVEL_HIGH>;
+         clocks = <&cpg CPG_MOD 131>;
++        power-domains = <&sysc R8A7790_PD_ALWAYS_ON>;
++        resets = <&cpg 131>;
      };
- ...
+ 
+   # R8A77951 (R-Car H3) VSP2-BC
+   - |
+     #include <dt-bindings/clock/renesas-cpg-mssr.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/r8a7795-sysc.h>
+ 
+     vsp@fe920000 {
+         compatible = "renesas,vsp2";
+         reg = <0xfe920000 0x8000>;
+         interrupts = <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>;
+         clocks = <&cpg CPG_MOD 624>;
++        power-domains = <&sysc R8A7795_PD_A3VP>;
++        resets = <&cpg 624>;
+ 
+         renesas,fcp = <&fcpvb1>;
+     };
 -- 
 Regards,
 
