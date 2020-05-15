@@ -7,38 +7,41 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D04AEC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35300C433E5
+	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE6D5206B6
-	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05D7D20671
+	for <linux-media@archiver.kernel.org>; Fri, 15 May 2020 01:24:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="cumggNLR"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="QfokATFf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728201AbgEOBYs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 May 2020 21:24:48 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54610 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727799AbgEOBYr (ORCPT
+        id S1728230AbgEOBYu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 May 2020 21:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727799AbgEOBYt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 May 2020 21:24:47 -0400
+        Thu, 14 May 2020 21:24:49 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC71C061A0C;
+        Thu, 14 May 2020 18:24:49 -0700 (PDT)
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D5B079C5;
-        Fri, 15 May 2020 03:24:44 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3978C9D3;
+        Fri, 15 May 2020 03:24:46 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1589505885;
-        bh=a2HFcLZAoRMx4SY/FmPDndHpSCMfzSNRyltMegzXPpM=;
+        s=mail; t=1589505886;
+        bh=68H8688PuZ554YOJAt+oXC0cWRE0EAHzcF1P96dMHlc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cumggNLR72QiVqjsEEuWtCJmXJe5Fp17vvHxvDM96InEC+nHMqWtZsr32ghM3BAwd
-         QcvPLnMKDgdBeesbtzbgps5fLFgT6TGsQ88e31J3LCeLAFFI2QJUh/8wpgqIYW3Psi
-         mP+dFDLIJuBU77WMZMPRqEvuuKmX7GaXqw+JvtkA=
+        b=QfokATFfjsutpu8tNVdg3Cw23EAZHVjnMOzDkoDMsBxXZrja4+mn+7lEQBIutGqJV
+         MHkabzfJLGxTAhB+UTmedCj4f8AoSM8cedeDOzj7fDnTHDQmxPjAnFa8SE8XEMKbA5
+         XJfV72dHVMq0uZZMRGb6ep8MFmlE/pSooeVmyik8=
 From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH 1/8] dt-bindings: media: renesas,fcp: Convert binding to YAML
-Date:   Fri, 15 May 2020 04:24:25 +0300
-Message-Id: <20200515012432.31326-2-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH 3/8] dt-bindings: media: renesas,fcp: Add resets and iommus properties
+Date:   Fri, 15 May 2020 04:24:27 +0300
+Message-Id: <20200515012432.31326-4-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200515012432.31326-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20200515012432.31326-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -49,118 +52,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert the Renesas R-Car FCP text binding to YAML.
+The resets and iommus properties are used in DT sources in the kernel
+tree. Document them, and make resets mandatory. The iommus property is
+optional as not all platforms wire the FCP to a functional IOMMU.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- .../devicetree/bindings/media/renesas,fcp.txt | 34 -----------
- .../bindings/media/renesas,fcp.yaml           | 56 +++++++++++++++++++
- 2 files changed, 56 insertions(+), 34 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/renesas,fcp.txt
- create mode 100644 Documentation/devicetree/bindings/media/renesas,fcp.yaml
+ Documentation/devicetree/bindings/media/renesas,fcp.yaml | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/renesas,fcp.txt b/Documentation/devicetree/bindings/media/renesas,fcp.txt
-deleted file mode 100644
-index 79c37395b396..000000000000
---- a/Documentation/devicetree/bindings/media/renesas,fcp.txt
-+++ /dev/null
-@@ -1,34 +0,0 @@
--Renesas R-Car Frame Compression Processor (FCP)
-------------------------------------------------
--
--The FCP is a companion module of video processing modules in the Renesas R-Car
--Gen3 and RZ/G2 SoCs. It provides data compression and decompression, data
--caching, and conversion of AXI transactions in order to reduce the memory
--bandwidth.
--
--There are three types of FCP: FCP for Codec (FCPC), FCP for VSP (FCPV) and FCP
--for FDP (FCPF). Their configuration and behaviour depend on the module they
--are paired with. These DT bindings currently support the FCPV and FCPF.
--
-- - compatible: Must be one or more of the following
--
--   - "renesas,fcpv" for generic compatible 'FCP for VSP'
--   - "renesas,fcpf" for generic compatible 'FCP for FDP'
--
-- - reg: the register base and size for the device registers
-- - clocks: Reference to the functional clock
--
--Optional properties:
-- - power-domains : power-domain property defined with a power domain specifier
--		   to respective power domain.
--
--
--Device node example
---------------------
--
--	fcpvd1: fcp@fea2f000 {
--		compatible = "renesas,fcpv";
--		reg = <0 0xfea2f000 0 0x200>;
--		clocks = <&cpg CPG_MOD 602>;
--		power-domains = <&sysc R8A7795_PD_A3VP>;
--	};
 diff --git a/Documentation/devicetree/bindings/media/renesas,fcp.yaml b/Documentation/devicetree/bindings/media/renesas,fcp.yaml
-new file mode 100644
-index 000000000000..be085fb398fd
---- /dev/null
+index 041c05467b46..9f830bd95071 100644
+--- a/Documentation/devicetree/bindings/media/renesas,fcp.yaml
 +++ b/Documentation/devicetree/bindings/media/renesas,fcp.yaml
-@@ -0,0 +1,56 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/renesas,fcp.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas R-Car Frame Compression Processor (FCP)
-+
-+maintainers:
-+  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-+
-+description: |
-+  The FCP is a companion module of video processing modules in the Renesas
-+  R-Car Gen3 and RZ/G2 SoCs. It provides data compression and decompression,
-+  data caching, and conversion of AXI transactions in order to reduce the
-+  memory bandwidth.
-+
-+  There are three types of FCP: FCP for Codec (FCPC), FCP for VSP (FCPV) and
-+  FCP for FDP (FCPF). Their configuration and behaviour depend on the module
-+  they are paired with. These DT bindings currently support the FCPV and FCPF.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - renesas,fcpv # for 'FCP for VSP'
-+      - renesas,fcpf # for 'FCP for FDP'
-+
-+  reg:
+@@ -31,14 +31,21 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  iommus:
 +    maxItems: 1
 +
-+  clocks:
+   power-domains:
+     maxItems: 1
+ 
++  resets:
 +    maxItems: 1
 +
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  # R8A7790 (R-Car H2) VSP1-S
-+  - |
-+    #include <dt-bindings/clock/renesas-cpg-mssr.h>
-+    #include <dt-bindings/power/r8a7795-sysc.h>
-+
-+    fcp@fea2f000 {
-+        compatible = "renesas,fcpv";
-+        reg = <0xfea2f000 0x200>;
-+        clocks = <&cpg CPG_MOD 602>;
-+        power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+    };
-+...
+ required:
+   - compatible
+   - reg
+   - clocks
+   - power-domains
++  - resets
+ 
+ additionalProperties: false
+ 
+@@ -53,5 +60,7 @@ examples:
+         reg = <0xfea2f000 0x200>;
+         clocks = <&cpg CPG_MOD 602>;
+         power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
++        resets = <&cpg 602>;
++        iommus = <&ipmmu_vi0 9>;
+     };
+ ...
 -- 
 Regards,
 
