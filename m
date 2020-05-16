@@ -2,103 +2,284 @@ Return-Path: <SRS0=fmwn=66=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CA51C433DF
-	for <linux-media@archiver.kernel.org>; Sat, 16 May 2020 13:10:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDBE3C433DF
+	for <linux-media@archiver.kernel.org>; Sat, 16 May 2020 14:28:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 322E220727
-	for <linux-media@archiver.kernel.org>; Sat, 16 May 2020 13:10:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9EB44206F4
+	for <linux-media@archiver.kernel.org>; Sat, 16 May 2020 14:28:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbgEPNKB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 16 May 2020 09:10:01 -0400
-Received: from gofer.mess.org ([88.97.38.141]:51641 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726341AbgEPNKB (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 16 May 2020 09:10:01 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id DA2F9C636B; Sat, 16 May 2020 14:09:59 +0100 (BST)
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Cc:     Ralf Schmidt <rds2@gmx.de>
-Subject: [PATCH v4l-utils] keytable: "-p all" should not attempt BPF decodes that don't exist
-Date:   Sat, 16 May 2020 14:09:59 +0100
-Message-Id: <20200516130959.2593-1-sean@mess.org>
-X-Mailer: git-send-email 2.20.1
+        id S1726416AbgEPO2z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 16 May 2020 10:28:55 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:44541 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726402AbgEPO2z (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 16 May 2020 10:28:55 -0400
+X-Originating-IP: 82.54.229.221
+Received: from uno.localdomain (host221-229-dynamic.54-82-r.retail.telecomitalia.it [82.54.229.221])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 9A0D624000A;
+        Sat, 16 May 2020 14:28:51 +0000 (UTC)
+Date:   Sat, 16 May 2020 16:32:08 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH 1/2] media: dt-bindings: media: i2c: Add MT9M114 camera
+ sensor binding
+Message-ID: <20200516143208.p2vvnrltlyejs2w5@uno.localdomain>
+References: <20200511233456.9722-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200511233456.9722-1-laurent.pinchart@ideasonboard.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently we only have a BPF decoder for xbox_dvd. Other decoders
-should not be attempted.
+Hi Laurent
 
-Reported-by: Ralf Schmidt <rds2@gmx.de>
-Signed-off-by: Sean Young <sean@mess.org>
----
- utils/keytable/keytable.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+On Tue, May 12, 2020 at 02:34:55AM +0300, Laurent Pinchart wrote:
 
-diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
-index 4db91267..3df5fcf2 100644
---- a/utils/keytable/keytable.c
-+++ b/utils/keytable/keytable.c
-@@ -945,12 +945,21 @@ static struct sysfs_names *find_device(char *name)
- 	return names;
- }
- 
-+/*
-+ * If an rcdev does not have a decoder for a protocol, try to load a bpf
-+ * replacement.
-+ */
- static enum sysfs_protocols load_bpf_for_unsupported(enum sysfs_protocols protocols, enum sysfs_protocols supported)
- {
- 	const struct protocol_map_entry *pme;
- 	struct bpf_protocol *b;
- 
- 	for (pme = protocol_map; pme->name; pme++) {
-+		// So far, we only have a replacement for the xbox_dvd
-+		// protocol
-+		if (pme->sysfs_protocol != SYSFS_XBOX_DVD)
-+			continue;
-+
- 		if (!(protocols & pme->sysfs_protocol) ||
- 		    (supported & pme->sysfs_protocol))
- 			continue;
-@@ -1156,7 +1165,7 @@ static int v2_set_protocols(struct rc_device *rc_dev)
- 
- 	if (!stat(name, &st) && !(st.st_mode & 0222)) {
- 		fprintf(stderr, _("Protocols for device can not be changed\n"));
--		return 0;
-+		return EINVAL;
- 	}
- 
- 	fp = fopen(name, "w");
-@@ -1323,8 +1332,7 @@ static int set_proto(struct rc_device *rc_dev)
- 	int rc = 0;
- 
- 	if (rc_dev->version == VERSION_2) {
--		rc = v2_set_protocols(rc_dev);
--		return rc;
-+		return v2_set_protocols(rc_dev);
- 	}
- 
- 	rc_dev->current &= rc_dev->supported;
-@@ -2151,9 +2159,7 @@ int main(int argc, char *argv[])
- 
- 		rc_dev.current = load_bpf_for_unsupported(ch_proto, rc_dev.supported);
- 
--		if (set_proto(&rc_dev))
--			fprintf(stderr, _("Couldn't change the IR protocols\n"));
--		else {
-+		if (!set_proto(&rc_dev)) {
- 			fprintf(stderr, _("Protocols changed to "));
- 			write_sysfs_protocols(rc_dev.current, stderr, "%s ");
- 			fprintf(stderr, "\n");
--- 
-2.26.2
+> Add device tree binding for the ON Semiconductor MT9M114 CMOS camera
+> sensor.
+>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>  .../bindings/media/i2c/onnn,mt9m114.yaml      | 188 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  2 files changed, 195 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml b/Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml
+> new file mode 100644
+> index 000000000000..2c3c691aacfd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml
+> @@ -0,0 +1,188 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/onnn,mt9m114.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ON Semiconductor 1/6-inch 720p CMOS Digital Image Sensor
+> +
+> +maintainers:
+> +  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> +
+> +description: |-
+> +  The ON Semiconductor MT9M114 is a 1/6-inch 720p (1.26 Mp) CMOS digital image
+> +  sensor with an active pixel-array size of 1296H x 976V. It is programmable
+> +  through an I2C interface and outputs image data over a 8-bit parallel or
+> +  1-lane MIPI CSI-2 connection.
+> +
+> +properties:
+> +  compatible:
+> +    const: onnn,mt9m114
+> +
+> +  reg:
+> +    description: I2C device address
+> +    enum:
+> +      - 0x48
+> +      - 0x5d
+> +
+> +  clocks:
+> +    description: EXTCLK clock signal
+> +    maxItems: 1
+> +
+> +  vdd-supply:
+> +    description:
+> +      Core digital voltage supply, 1.8V
+> +
+> +  vddio-supply:
+> +    description:
+> +      I/O digital voltage supply, 1.8V or 2.8V
+> +
+> +  vaa-supply:
+> +    description:
+> +      Analog voltage supply, 2.8V
+> +
+> +  reset-gpios:
+> +    description: |-
+> +      Reference to the GPIO connected to the RESET_BAR pin, if any (active
+> +      low).
+> +
+> +  # See ../video-interfaces.txt for more details
+> +  port:
+> +    type: object
+> +    properties:
+> +      endpoint:
+> +        type: object
+> +        properties:
+> +          bus-type:
+> +            enum: [4, 5, 6]
+> +
+> +          clock-lanes:
+> +            items:
+> +              - const: 0
+> +
+> +          data-lanes:
+> +            items:
+> +              - const: 1
 
+Does it make sense with a single data lane ?
+> +
+> +          bus-width:
+> +            items:
+> +              - const: 8
+
+Same question if the bus width is fixed to 8.
+
+> +
+> +          hsync-active:
+> +            items:
+> +              - const: 1
+> +
+> +          vsync-active:
+> +            items:
+> +              - const: 1
+> +
+> +        required:
+> +          - bus-type
+> +
+> +        allOf:
+> +          - if:
+> +              properties:
+> +                bus-type:
+> +                  const: 4
+> +            then:
+> +              properties:
+> +                bus-width: false
+> +                hsync-active: false
+> +                vsync-active: false
+> +
+> +          - if:
+> +              properties:
+> +                bus-type:
+> +                  const: 5
+> +            then:
+> +              properties:
+> +                clock-lanes: false
+> +                data-lanes: false
+> +
+> +          - if:
+> +              properties:
+> +                bus-type:
+> +                  const: 6
+> +            then:
+> +              properties:
+> +                clock-lanes: false
+> +                data-lanes: false
+> +                hsync-active: false
+> +                vsync-active: false
+> +
+> +        unevaluatedProperties: false
+
+    required:
+      endpoint
+?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - vdd-supply
+> +  - vddio-supply
+> +  - vaa-supply
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    i2c0 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        sensor@48 {
+> +            compatible = "onnn,mt9m114";
+> +            reg = <0x48>;
+> +
+> +            clocks = <&clk24m 0>;
+> +
+> +            reset-gpios = <&gpio5 21 GPIO_ACTIVE_LOW>;
+> +
+> +            vddio-supply = <&reg_cam_1v8>;
+> +            vdd-supply = <&reg_cam_1v8>;
+> +            vaa-supply = <&reg_2p8v>;
+> +
+> +            port {
+> +                endpoint {
+> +                    bus-type = <4>;
+> +                    clock-lanes = <0>;
+> +                    data-lanes = <1>;
+> +                    remote-endpoint = <&mipi_csi_in>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    i2c0 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        sensor@5d {
+> +            compatible = "onnn,mt9m114";
+> +            reg = <0x5d>;
+> +
+> +            clocks = <&clk24m 0>;
+> +
+> +            reset-gpios = <&gpio5 21 GPIO_ACTIVE_LOW>;
+> +
+> +            vddio-supply = <&reg_cam_1v8>;
+> +            vdd-supply = <&reg_cam_1v8>;
+> +            vaa-supply = <&reg_2p8v>;
+> +
+> +            port {
+> +                endpoint {
+> +                    bus-type = <5>;
+> +                    bus-width = <8>;
+> +                    hsync-active = <1>;
+> +                    vsync-active = <1>;
+> +                    remote-endpoint = <&parallel_in>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 091ec22c1a23..61d2fb6d049e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11457,6 +11457,13 @@ T:	git git://linuxtv.org/media_tree.git
+>  F:	drivers/media/i2c/mt9m032.c
+>  F:	include/media/i2c/mt9m032.h
+>
+> +MT9M114 ON SEMICONDUCTOR SENSOR DRIVER
+> +M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> +L:	linux-media@vger.kernel.org
+> +S:	Maintained
+> +T:	git git://linuxtv.org/media_tree.git
+> +F:	Documentation/devicetree/bindings/media/i2c.onnn,mt9m114.yaml
+> +
+>  MT9P031 APTINA CAMERA SENSOR
+>  M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>  L:	linux-media@vger.kernel.org
+> --
+> Regards,
+>
+> Laurent Pinchart
+>
