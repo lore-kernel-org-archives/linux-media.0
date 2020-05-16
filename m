@@ -2,108 +2,103 @@ Return-Path: <SRS0=fmwn=66=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=DATE_IN_FUTURE_06_12,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBC9AC433DF
-	for <linux-media@archiver.kernel.org>; Sat, 16 May 2020 11:53:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CA51C433DF
+	for <linux-media@archiver.kernel.org>; Sat, 16 May 2020 13:10:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BAA0D20709
-	for <linux-media@archiver.kernel.org>; Sat, 16 May 2020 11:53:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 322E220727
+	for <linux-media@archiver.kernel.org>; Sat, 16 May 2020 13:10:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726206AbgEPLxs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 16 May 2020 07:53:48 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:38473 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbgEPLxr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 16 May 2020 07:53:47 -0400
-Received: from [10.0.0.6] ([120.156.36.44]) by mrelayeu.kundenserver.de
- (mreue012 [213.165.67.103]) with ESMTPSA (Nemesis) id
- 1Ml3ym-1ioWt22sSS-00lWT0 for <linux-media@vger.kernel.org>; Sat, 16 May 2020
- 13:53:45 +0200
-Subject: Re: [GIT,PULL] Ressurect the atomisp staging driver
+        id S1726362AbgEPNKB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 16 May 2020 09:10:01 -0400
+Received: from gofer.mess.org ([88.97.38.141]:51641 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726341AbgEPNKB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 16 May 2020 09:10:01 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id DA2F9C636B; Sat, 16 May 2020 14:09:59 +0100 (BST)
+From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org
-References: <7fa44621-963f-2d55-ab91-0fee483a94f5@rayment.fr>
- <20200516115459.4a24063b@coco.lan>
-From:   Finn Rayment <finn@rayment.fr>
-Message-ID: <be10190f-d87a-aa9e-3fd9-747f7715a108@rayment.fr>
-Date:   Sat, 16 May 2020 21:53:14 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.8.0
+Cc:     Ralf Schmidt <rds2@gmx.de>
+Subject: [PATCH v4l-utils] keytable: "-p all" should not attempt BPF decodes that don't exist
+Date:   Sat, 16 May 2020 14:09:59 +0100
+Message-Id: <20200516130959.2593-1-sean@mess.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20200516115459.4a24063b@coco.lan>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-AU
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:n9Zw8WWapqBQDKeU5BCQXdsn0AX7RCtdBj+YhziRQhDiIDYtuHw
- PH99k8xmcGj+VzuEU8uaGKKqDir64q3/bLiWEjUnfEzIb9Yl2zhzUTeR0MSU2FE5tf5g5dy
- rLj6aW8o0c8DWKNV4H++FfBrvsqTOq5cnoOFTCTBRKppPzIx74EcO5l1JDGXeCjdZ/tZ1Fc
- Soq7XHmjgX6bVFhPADkjw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BIq9dvBSAys=:1C/ZNGybz+5UuWY3GfJTYl
- 3ojMlYDZgHQWzq+doxMIL+afKug7yhSKJHrslo1cPtOhA+9L8n8TpX3SgkhJdp9gTowr7BtP6
- 0lulI2DgoeIgdtHrhggoSdPuYUTutqF8tXrLhRp5mxBPdJ2kC17R3xLXBKwHIqmV9mkPf8RbV
- s4I5l64b8BzO8hgB+np3YZMk+bL01jYOZ0LP65CmN5MYsgcsTWUWi/9mKRDB3lgnbVo3SFyub
- zeR1zy0GuI2a/4sSMjcEaD2ObsoHFhmNwoHFOR55mC6unuquy27CYQ9TVwrXCYpX5LgF0cJQ4
- zZta8Um2ZHD6qZ84MXlkDbGMEtO1X5XX6jimlhiwryIdSTozOrdDU/99MNpDuAdZUEbjHFzw9
- Doi7eljiWOawyYmFu4YwBGhPVpMVzjq3yxlA+0xgKl9e8rQbe/EP/nl6M6XVwe+KMndHK8Im7
- Ii8nIqZdHn5myVI6HrHHQlZ4tibn+FOwcA9EPc5jcqg9SreG1e4cHvm9REQVD1OxXUcNuqph9
- cOFml9q0FlMH8z9OYT1Qlc0z6RhYGxE3k/pBBkOpWcDC9QRqIqNLNaK4r2Xh/2pd1isGW+XFV
- EA8dW121iLKFINdvtrcZsuordYNr8cImkUP6SBvR4o/Cr5goGCwsrPp9D9O23N3I3ChdIxXbI
- VjpVCtgPI2JROqLRRLF4iAlVxaAar5ubaZ32HuK8mdO5e4vOdZpkbJXUj3Cd0Xk2kKuoxJBk/
- xgdDy0kOv0QqjGiKMHit+uUx/KO0Ra5hEoxkNbaNKp07NMlDXCs3rOoxZhKNfmzxSfeuYGPlA
- cnGsf7hKXNpKT1ftaU1iW2MNgJuGWp2ni77ox3x6eGHg6Mg4RxQNvWqVFKj0dNNLb6U/yr1
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 16/5/20 11:54, Mauro Carvalho Chehab wrote:
-> Em Sat, 16 May 2020 15:23:57 +0200
-> Finn Rayment <finn@rayment.fr> escreveu:
-> 
->> Hello,
->>
->> I've cloned HEAD from atomisp_v2 (commit bb1407f0d...), tried to compile
->> it on a T100TA and have received the following error:
->>
->> arch/x86/kvm/../../../virt/kvm/kvm_main.c: In function
->> __kvm_gfn_to_hva_cache_init:
->> arch/x86/kvm/../../../virt/kvm/kvm_main.c:2442:42: error: nr_pages_avail
->> may be used uninitialized in this function [-Werror=maybe-uninitialized]
->>
->> Commenting out the third line in arch/x86/kvm/Makefile has solved this
->> for me. Aside from warnings, this is the only error I receive during
->> compilation.
->>
->> After installing the kernel and booting to Arch Linux, it gets stuck at
->> "Loading initial ramdisk" with no extra information even with
->> `loglevel=7` set. I will try to diagnose the issue and ensure I haven't
->> incorrectly installed the kernel - will also try to compile on another
->> computer.
->>
->> Let me know if I can offer any other help or more information, I would
->> love to contribute to the development of these drivers.
->>
->> Regards,
->> Finn.
-> 
-> Let me enclose the .config file I used here. Perhaps using the same one
-> as a starting point would help building it.
-> 
-> Thanks,
-> Mauro
-> 
+Currently we only have a BPF decoder for xbox_dvd. Other decoders
+should not be attempted.
 
-Thank you for the config. I've tried compiling on the T100TA itself and 
-a second computer and on both I am receiving this error now:
+Reported-by: Ralf Schmidt <rds2@gmx.de>
+Signed-off-by: Sean Young <sean@mess.org>
+---
+ utils/keytable/keytable.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-make[1]: *** [kernel/Makefile:136: kernel/kheaders_data.tar.xz] Error 127
-make: *** [Makefile:1722: kernel] Error 2
-make: *** Waiting for unfinished jobs....
+diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
+index 4db91267..3df5fcf2 100644
+--- a/utils/keytable/keytable.c
++++ b/utils/keytable/keytable.c
+@@ -945,12 +945,21 @@ static struct sysfs_names *find_device(char *name)
+ 	return names;
+ }
+ 
++/*
++ * If an rcdev does not have a decoder for a protocol, try to load a bpf
++ * replacement.
++ */
+ static enum sysfs_protocols load_bpf_for_unsupported(enum sysfs_protocols protocols, enum sysfs_protocols supported)
+ {
+ 	const struct protocol_map_entry *pme;
+ 	struct bpf_protocol *b;
+ 
+ 	for (pme = protocol_map; pme->name; pme++) {
++		// So far, we only have a replacement for the xbox_dvd
++		// protocol
++		if (pme->sysfs_protocol != SYSFS_XBOX_DVD)
++			continue;
++
+ 		if (!(protocols & pme->sysfs_protocol) ||
+ 		    (supported & pme->sysfs_protocol))
+ 			continue;
+@@ -1156,7 +1165,7 @@ static int v2_set_protocols(struct rc_device *rc_dev)
+ 
+ 	if (!stat(name, &st) && !(st.st_mode & 0222)) {
+ 		fprintf(stderr, _("Protocols for device can not be changed\n"));
+-		return 0;
++		return EINVAL;
+ 	}
+ 
+ 	fp = fopen(name, "w");
+@@ -1323,8 +1332,7 @@ static int set_proto(struct rc_device *rc_dev)
+ 	int rc = 0;
+ 
+ 	if (rc_dev->version == VERSION_2) {
+-		rc = v2_set_protocols(rc_dev);
+-		return rc;
++		return v2_set_protocols(rc_dev);
+ 	}
+ 
+ 	rc_dev->current &= rc_dev->supported;
+@@ -2151,9 +2159,7 @@ int main(int argc, char *argv[])
+ 
+ 		rc_dev.current = load_bpf_for_unsupported(ch_proto, rc_dev.supported);
+ 
+-		if (set_proto(&rc_dev))
+-			fprintf(stderr, _("Couldn't change the IR protocols\n"));
+-		else {
++		if (!set_proto(&rc_dev)) {
+ 			fprintf(stderr, _("Protocols changed to "));
+ 			write_sysfs_protocols(rc_dev.current, stderr, "%s ");
+ 			fprintf(stderr, "\n");
+-- 
+2.26.2
 
-I am unable to finish generating the modules because of this.
-
-Regards,
-Finn.
