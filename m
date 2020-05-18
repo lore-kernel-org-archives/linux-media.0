@@ -2,92 +2,182 @@ Return-Path: <SRS0=LG2+=7A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0D53C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 18 May 2020 01:22:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EF27C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 18 May 2020 03:39:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2DB5207BB
-	for <linux-media@archiver.kernel.org>; Mon, 18 May 2020 01:22:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9A0A2070A
+	for <linux-media@archiver.kernel.org>; Mon, 18 May 2020 03:39:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="FkE9zSIv"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="d4A1eNJ/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbgERBWL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 17 May 2020 21:22:11 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17575 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726999AbgERBWA (ORCPT
+        id S1727777AbgERDjg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 17 May 2020 23:39:36 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:60755 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726680AbgERDjg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 17 May 2020 21:22:00 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ec1e2ea0000>; Sun, 17 May 2020 18:20:42 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sun, 17 May 2020 18:21:59 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sun, 17 May 2020 18:21:59 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 18 May
- 2020 01:21:59 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 18 May 2020 01:21:59 +0000
-Received: from sandstorm.nvidia.com (Not Verified[10.2.48.175]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5ec1e3370000>; Sun, 17 May 2020 18:21:59 -0700
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Andy Walls <awalls@md.metrocast.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 0/2] mm/gup, media/ivtv: introduce pin_user_pages_unlocked
-Date:   Sun, 17 May 2020 18:21:55 -0700
-Message-ID: <20200518012157.1178336-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1589764842; bh=UKuuw28idvbuk9+JyJWn1HzG2Q0RnTnMVtU5hSmRMG4=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
-         Content-Type;
-        b=FkE9zSIv1hkK/DzpQp1IN5hwESe78ZJonRfsEtsMWei5LWN6Bx1vKgHaaTYkyleE4
-         r/CKasFjc83PUfYVSQ23U7edCIuZtwRXlBfTCuP4jEChBOzoCrwo4dpqWdVgiajEAz
-         G1ydrOhnQ4L+Cyn8l767TURR5zZmMMb6wCXoRIkuVBc9XIXyDKuKo9XcgrxvwNAzk7
-         P2Y9Vkb0kc+OPssuN8c0CE6XEt95anhC1vSNZzpe7UYjCqLCL0U64C3TMJSI8Z6lYn
-         CsOJ12c4enptaTlurTh2a7Xk1diiTU+YfFnf4219tPRwIPwACv7ZAvstv263w1Bnfs
-         Z6IMHkvmmn8mw==
+        Sun, 17 May 2020 23:39:36 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id aWcmjrrfG8hmdaWcnjf8vd; Mon, 18 May 2020 05:39:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1589773173; bh=++MdutR5M32nQVGRU0GdKSWIX6wMFeXxMsNtefERzeo=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=d4A1eNJ/MlLWz4ajAvYyDouTIkCtRcAkvZgEdgHJmCE/0K35MW3dDuYhlgJ+YkF6y
+         IPV4IbQD18DIeNPv7MGqV27d8sGuSdQI3nQZr3Dd82rfreo2FNaQQ1piqHOPw6Fa1M
+         qPBcxKVjAV+B6mrPYIrCNHjVKfyUjwFiftxE+W9j4RNDjNR8Nlj4r/OQo7X2ehQgld
+         T/+FbrtsJEoiv9b8HhE4nT1ZoUg6OnrcMqa3uHOdjcyqir9ZhkDCFTC/HvRBA0i5I9
+         cqqLgxpxMsENhXd8aTY/i4RLG/mVMWbXMbMJvJkTfo9TWofhXT5nYIZCVpR+xk4GLt
+         eqblCRO5ZE+MQ==
+Message-ID: <d96c6388a14bc1b0f16a1bcf8f7f83c9@smtp-cloud9.xs4all.net>
+Date:   Mon, 18 May 2020 05:39:32 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfFJrIVJDJiVY4Mv3RX8eikBAhsYc91dUFD+mU8JatOygreNhogDN8DN5W7++LOw1ZjWNgNUz/vh0YCRjA3GnieViI6J4zvIda3Y0Mg9L2VeXPqLc946u
+ 6zQSmdonzMRw4wQCt5GeElnukSlPpxuGfJ0sZfSiZu1srh/3zyJmaHta/TT9Im44/ezOjcOn8MUFmi2USdglIDeVdhzGioAchPxL1WX3oIgvpOuP9EHT+X/G
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-I suppose these should go up through Andrew's linux-mm tree, due to
-adding a new pin_user_pages*() variant to gup.c. However, it would be
-nice if anyone from IVTV or linux-media could provide some run time
-testing, maybe even a Tested-by.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Note that I have only compile-tested these patches, although that does
-also include cross-compiling for half a dozen arches.
+Results of the daily build of media_tree:
 
-John Hubbard (2):
-  mm/gup: introduce pin_user_pages_unlocked
-  ivtv: convert get_user_pages() --> pin_user_pages()
+date:			Mon May 18 05:00:10 CEST 2020
+media-tree git hash:	35dd70b4c4935012ee02b4296618e56bd6ae3040
+media_build git hash:	2f75e0d4330da180166ebcd104560d471a1599b6
+v4l-utils git hash:	b6463b0f37905fc8df67bdfaa61924a3b32215fb
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 0accb575719caa47d8fbc866b11e6f7e7e7787cd
+host hardware:		x86_64
+host os:		5.6.0-1-amd64
 
- drivers/media/pci/ivtv/ivtv-udma.c | 19 ++++++-------------
- drivers/media/pci/ivtv/ivtv-yuv.c  | 17 ++++++-----------
- drivers/media/pci/ivtv/ivtvfb.c    |  4 ++--
- include/linux/mm.h                 |  2 ++
- mm/gup.c                           | 17 +++++++++++++++++
- 5 files changed, 33 insertions(+), 26 deletions(-)
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.212-i686: OK
+linux-4.4.212-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.212-i686: OK
+linux-4.9.212-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6.1-i686: OK
+linux-5.6.1-x86_64: OK
+linux-5.7-rc1-i686: OK
+linux-5.7-rc1-x86_64: OK
+apps: WARNINGS
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 2
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 3
+sparse: OK
+smatch: OK
 
+Detailed results are available here:
 
-base-commit: b9bbe6ed63b2b9f2c9ee5cbd0f2c946a2723f4ce
---=20
-2.26.2
+http://www.xs4all.nl/~hverkuil/logs/Monday.log
 
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
