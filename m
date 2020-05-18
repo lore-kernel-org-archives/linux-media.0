@@ -1,106 +1,256 @@
-Return-Path: <SRS0=D5d7=67=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=LG2+=7A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8703AC433E0
-	for <linux-media@archiver.kernel.org>; Sun, 17 May 2020 23:56:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECF9FC433E6
+	for <linux-media@archiver.kernel.org>; Mon, 18 May 2020 01:22:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 664CE207EA
-	for <linux-media@archiver.kernel.org>; Sun, 17 May 2020 23:56:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6A1E20849
+	for <linux-media@archiver.kernel.org>; Mon, 18 May 2020 01:22:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Av50MoMn"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="CX1C6gQ3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726863AbgEQX4W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 17 May 2020 19:56:22 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:1781 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726656AbgEQX4W (ORCPT
+        id S1727782AbgERBWK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 17 May 2020 21:22:10 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:17148 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727006AbgERBWA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 17 May 2020 19:56:22 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ec1cf190000>; Sun, 17 May 2020 16:56:09 -0700
+        Sun, 17 May 2020 21:22:00 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ec1e2aa0002>; Sun, 17 May 2020 18:19:38 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sun, 17 May 2020 16:56:22 -0700
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Sun, 17 May 2020 18:21:59 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sun, 17 May 2020 16:56:22 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 17 May
- 2020 23:56:21 +0000
+        by hqpgpgate102.nvidia.com on Sun, 17 May 2020 18:21:59 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 18 May
+ 2020 01:21:59 +0000
 Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
  (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Sun, 17 May 2020 23:56:21 +0000
+ Transport; Mon, 18 May 2020 01:21:59 +0000
 Received: from sandstorm.nvidia.com (Not Verified[10.2.48.175]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5ec1cf250000>; Sun, 17 May 2020 16:56:21 -0700
+        id <B5ec1e3370002>; Sun, 17 May 2020 18:21:59 -0700
 From:   John Hubbard <jhubbard@nvidia.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-CC:     John Hubbard <jhubbard@nvidia.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-media@vger.kernel.org>
-Subject: [PATCH 0/2] rapidio: convert to pin_user_pages(), plus a small fix
-Date:   Sun, 17 May 2020 16:56:18 -0700
-Message-ID: <20200517235620.205225-1-jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Andy Walls <awalls@md.metrocast.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        <linux-media@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 2/2] ivtv: convert get_user_pages() --> pin_user_pages()
+Date:   Sun, 17 May 2020 18:21:57 -0700
+Message-ID: <20200518012157.1178336-3-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200518012157.1178336-1-jhubbard@nvidia.com>
+References: <20200518012157.1178336-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1589759769; bh=WygXQq7COfHXYUNFNVJbqoqXk/fDsRWGbCYJDmciCZY=;
+        t=1589764778; bh=xH5C6dG4bePEiW5mi0F4Wccp6bZO0ppe4EGiUHwyKL4=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
-         Content-Type;
-        b=Av50MoMnmPmDKeqjGTkSknWAg9YKnSYXVgyvUplqSqBVVUKJ09SzcIUYuWgjIJBOR
-         m8s6E8CQ6ZXKCzJN3DLPaa4MeCwhA4vh+nD+AuPBOKEOmVff3Frdr9UT0BF01afKt/
-         NF5/b82MzHbBa2kCyS6tmA52FKtEgN9JD4Ftkk8+vish81pT9ZsNV05BsLy36scvTh
-         8XRn683/8kwOsBEJRJarzv+gDVbAGm7u6IqDQDAARzeR9r3oC5jLaVldKkDd6WvPUh
-         MZz3dj9xULeBnqlOBcZ2x0UxXlMcg9TnNd7zvEWOfattE0hX/bizEa/aU6KwL6SWpp
-         NakKVu9vCcJEw==
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=CX1C6gQ3Uc4S7SSx/ZsxTBahVSnoaDpWC3l01HcZefatkGC66AlShWq5rJKl8AifA
+         vmW5VlhQ+4xVmr4wRskks+yW0d/6wd8ctYDfKqIVJNwkmEjThrCDShyUhqjvK1PyYF
+         1OdpyULk2UJckuFPpW3kXEuVt2CidPkPfH6LzRJhNUI0scO09uClU/UcEUjwHD9J0T
+         fQcr50jUUVPfi8XG6JThpmWKhEUKScyCEW4gI0754E5+rtHXPqHsekQkFnEkZzAIB5
+         FQsBTB9Dmtwpjx0KZeyPtowlZVDTtViOoniPMR//5lVfjA1TLHuHZnMnIKvreTJXLp
+         YZgjH86pydYVg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While converting rapidio from get_user_pages() to pin_user_pages(),
-I noticed a small problem in the error handling, so that is fixed
-first. As such, the fix has -stable on CC, and can be separately
-applied.
+This code was using get_user_pages*(), in a "Case 2" scenario
+(DMA/RDMA), using the categorization from [1]. That means that it's
+time to convert the get_user_pages*() + put_page() calls to
+pin_user_pages*() + unpin_user_pages() calls.
 
-Note that I have only compile-tested these patches, although that does
-also include cross-compiling for half a dozen arches.
+There is some helpful background in [2]: basically, this is a small
+part of fixing a long-standing disconnect between pinning pages, and
+file systems' use of those pages.
 
-John Hubbard (2):
-  rapidio: fix an error in get_user_pages_fast() error handling
-  rapidio: convert get_user_pages() --> pin_user_pages()
+[1] Documentation/core-api/pin_user_pages.rst
 
- drivers/rapidio/devices/rio_mport_cdev.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+[2] "Explicit pinning of user-space pages":
+    https://lwn.net/Articles/807108/
 
-Cc: Matt Porter <mporter@kernel.crashing.org>
-Cc: Alexandre Bounine <alex.bou9@gmail.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-media@vger.kernel.org
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ drivers/media/pci/ivtv/ivtv-udma.c | 19 ++++++-------------
+ drivers/media/pci/ivtv/ivtv-yuv.c  | 17 ++++++-----------
+ drivers/media/pci/ivtv/ivtvfb.c    |  4 ++--
+ 3 files changed, 14 insertions(+), 26 deletions(-)
 
-John Hubbard (2):
-  rapidio: fix an error in get_user_pages_fast() error handling
-  rapidio: convert get_user_pages() --> pin_user_pages()
-
- drivers/rapidio/devices/rio_mport_cdev.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
-
-
-base-commit: 5a9ffb954a3933d7867f4341684a23e008d6839b
+diff --git a/drivers/media/pci/ivtv/ivtv-udma.c b/drivers/media/pci/ivtv/iv=
+tv-udma.c
+index 5f8883031c9c..0d8372cc364a 100644
+--- a/drivers/media/pci/ivtv/ivtv-udma.c
++++ b/drivers/media/pci/ivtv/ivtv-udma.c
+@@ -92,7 +92,7 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_=
+dest_addr,
+ {
+ 	struct ivtv_dma_page_info user_dma;
+ 	struct ivtv_user_dma *dma =3D &itv->udma;
+-	int i, err;
++	int err;
+=20
+ 	IVTV_DEBUG_DMA("ivtv_udma_setup, dst: 0x%08x\n", (unsigned int)ivtv_dest_=
+addr);
+=20
+@@ -111,16 +111,15 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long i=
+vtv_dest_addr,
+ 		return -EINVAL;
+ 	}
+=20
+-	/* Get user pages for DMA Xfer */
+-	err =3D get_user_pages_unlocked(user_dma.uaddr, user_dma.page_count,
++	/* Pin user pages for DMA Xfer */
++	err =3D pin_user_pages_unlocked(user_dma.uaddr, user_dma.page_count,
+ 			dma->map, FOLL_FORCE);
+=20
+ 	if (user_dma.page_count !=3D err) {
+ 		IVTV_DEBUG_WARN("failed to map user pages, returned %d instead of %d\n",
+ 			   err, user_dma.page_count);
+ 		if (err >=3D 0) {
+-			for (i =3D 0; i < err; i++)
+-				put_page(dma->map[i]);
++			unpin_user_pages(dma->map, err);
+ 			return -EINVAL;
+ 		}
+ 		return err;
+@@ -130,9 +129,7 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivt=
+v_dest_addr,
+=20
+ 	/* Fill SG List with new values */
+ 	if (ivtv_udma_fill_sg_list(dma, &user_dma, 0) < 0) {
+-		for (i =3D 0; i < dma->page_count; i++) {
+-			put_page(dma->map[i]);
+-		}
++		unpin_user_pages(dma->map, dma->page_count);
+ 		dma->page_count =3D 0;
+ 		return -ENOMEM;
+ 	}
+@@ -153,7 +150,6 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivt=
+v_dest_addr,
+ void ivtv_udma_unmap(struct ivtv *itv)
+ {
+ 	struct ivtv_user_dma *dma =3D &itv->udma;
+-	int i;
+=20
+ 	IVTV_DEBUG_INFO("ivtv_unmap_user_dma\n");
+=20
+@@ -169,10 +165,7 @@ void ivtv_udma_unmap(struct ivtv *itv)
+ 	/* sync DMA */
+ 	ivtv_udma_sync_for_cpu(itv);
+=20
+-	/* Release User Pages */
+-	for (i =3D 0; i < dma->page_count; i++) {
+-		put_page(dma->map[i]);
+-	}
++	unpin_user_pages(dma->map, dma->page_count);
+ 	dma->page_count =3D 0;
+ }
+=20
+diff --git a/drivers/media/pci/ivtv/ivtv-yuv.c b/drivers/media/pci/ivtv/ivt=
+v-yuv.c
+index cd2fe2d444c0..5f7dc9771f8d 100644
+--- a/drivers/media/pci/ivtv/ivtv-yuv.c
++++ b/drivers/media/pci/ivtv/ivtv-yuv.c
+@@ -30,7 +30,6 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struc=
+t ivtv_user_dma *dma,
+ 	struct yuv_playback_info *yi =3D &itv->yuv_info;
+ 	u8 frame =3D yi->draw_frame;
+ 	struct yuv_frame_info *f =3D &yi->new_frame_info[frame];
+-	int i;
+ 	int y_pages, uv_pages;
+ 	unsigned long y_buffer_offset, uv_buffer_offset;
+ 	int y_decode_height, uv_decode_height, y_size;
+@@ -62,12 +61,12 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, str=
+uct ivtv_user_dma *dma,
+ 	ivtv_udma_get_page_info (&y_dma, (unsigned long)args->y_source, 720 * y_d=
+ecode_height);
+ 	ivtv_udma_get_page_info (&uv_dma, (unsigned long)args->uv_source, 360 * u=
+v_decode_height);
+=20
+-	/* Get user pages for DMA Xfer */
+-	y_pages =3D get_user_pages_unlocked(y_dma.uaddr,
++	/* Pin user pages for DMA Xfer */
++	y_pages =3D pin_user_pages_unlocked(y_dma.uaddr,
+ 			y_dma.page_count, &dma->map[0], FOLL_FORCE);
+ 	uv_pages =3D 0; /* silence gcc. value is set and consumed only if: */
+ 	if (y_pages =3D=3D y_dma.page_count) {
+-		uv_pages =3D get_user_pages_unlocked(uv_dma.uaddr,
++		uv_pages =3D pin_user_pages_unlocked(uv_dma.uaddr,
+ 				uv_dma.page_count, &dma->map[y_pages],
+ 				FOLL_FORCE);
+ 	}
+@@ -81,8 +80,7 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struc=
+t ivtv_user_dma *dma,
+ 				 uv_pages, uv_dma.page_count);
+=20
+ 			if (uv_pages >=3D 0) {
+-				for (i =3D 0; i < uv_pages; i++)
+-					put_page(dma->map[y_pages + i]);
++				unpin_user_pages(&dma->map[y_pages], uv_pages);
+ 				rc =3D -EFAULT;
+ 			} else {
+ 				rc =3D uv_pages;
+@@ -93,8 +91,7 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struc=
+t ivtv_user_dma *dma,
+ 				 y_pages, y_dma.page_count);
+ 		}
+ 		if (y_pages >=3D 0) {
+-			for (i =3D 0; i < y_pages; i++)
+-				put_page(dma->map[i]);
++			unpin_user_pages(dma->map, y_pages);
+ 			/*
+ 			 * Inherit the -EFAULT from rc's
+ 			 * initialization, but allow it to be
+@@ -112,9 +109,7 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, str=
+uct ivtv_user_dma *dma,
+ 	/* Fill & map SG List */
+ 	if (ivtv_udma_fill_sg_list (dma, &uv_dma, ivtv_udma_fill_sg_list (dma, &y=
+_dma, 0)) < 0) {
+ 		IVTV_DEBUG_WARN("could not allocate bounce buffers for highmem userspace=
+ buffers\n");
+-		for (i =3D 0; i < dma->page_count; i++) {
+-			put_page(dma->map[i]);
+-		}
++		unpin_user_pages(dma->map, dma->page_count);
+ 		dma->page_count =3D 0;
+ 		return -ENOMEM;
+ 	}
+diff --git a/drivers/media/pci/ivtv/ivtvfb.c b/drivers/media/pci/ivtv/ivtvf=
+b.c
+index 0c2859844081..e2d56dca5be4 100644
+--- a/drivers/media/pci/ivtv/ivtvfb.c
++++ b/drivers/media/pci/ivtv/ivtvfb.c
+@@ -281,10 +281,10 @@ static int ivtvfb_prep_dec_dma_to_device(struct ivtv =
+*itv,
+ 	/* Map User DMA */
+ 	if (ivtv_udma_setup(itv, ivtv_dest_addr, userbuf, size_in_bytes) <=3D 0) =
+{
+ 		mutex_unlock(&itv->udma.lock);
+-		IVTVFB_WARN("ivtvfb_prep_dec_dma_to_device, Error with get_user_pages: %=
+d bytes, %d pages returned\n",
++		IVTVFB_WARN("ivtvfb_prep_dec_dma_to_device, Error with pin_user_pages: %=
+d bytes, %d pages returned\n",
+ 			       size_in_bytes, itv->udma.page_count);
+=20
+-		/* get_user_pages must have failed completely */
++		/* pin_user_pages must have failed completely */
+ 		return -EIO;
+ 	}
+=20
 --=20
 2.26.2
 
