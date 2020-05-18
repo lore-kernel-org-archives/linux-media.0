@@ -2,219 +2,151 @@ Return-Path: <SRS0=LG2+=7A=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2A85C433DF
-	for <linux-media@archiver.kernel.org>; Mon, 18 May 2020 10:35:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2101DC433E1
+	for <linux-media@archiver.kernel.org>; Mon, 18 May 2020 11:17:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5E3920787
-	for <linux-media@archiver.kernel.org>; Mon, 18 May 2020 10:35:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1AC620842
+	for <linux-media@archiver.kernel.org>; Mon, 18 May 2020 11:17:16 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IboKzie5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726279AbgERKfg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 May 2020 06:35:36 -0400
-Received: from mga01.intel.com ([192.55.52.88]:49077 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726180AbgERKfg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 May 2020 06:35:36 -0400
-IronPort-SDR: 5/apjnpVWQ17mhsleyp2lOciqFIQLhmq3Gs3ojd68i6AM3rDRETgDuL6lvM5KwBZjham+4XPI9
- obfRsFVZAWwA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 03:35:31 -0700
-IronPort-SDR: OUWCbgipT/1/d7pXb1RM1/XiQxYEaunvRRCFfvBQYvf3hM+aYYiLRDJcfb+aQ4laZ+k7dBgNlV
- vs6AXreEbL4A==
-X-IronPort-AV: E=Sophos;i="5.73,406,1583222400"; 
-   d="scan'208";a="373345144"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 03:35:27 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 024CD20D04; Mon, 18 May 2020 13:35:24 +0300 (EEST)
-Date:   Mon, 18 May 2020 13:35:24 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        bingbu.cao@intel.com, Maxime Ripard <maxime@cerno.tech>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>
-Subject: Re: [PATCH 1/1] Documentation: media: Document how to write camera
- sensor drivers
-Message-ID: <20200518103524.GB20066@paasikivi.fi.intel.com>
-References: <20200512105914.9948-1-sakari.ailus@linux.intel.com>
- <ab436563-9b22-ee4d-5c96-84857720f2f7@xs4all.nl>
+        id S1727833AbgERLRQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 May 2020 07:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726590AbgERLRP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 18 May 2020 07:17:15 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9C1C061A0C
+        for <linux-media@vger.kernel.org>; Mon, 18 May 2020 04:17:14 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id x22so4095079otq.4
+        for <linux-media@vger.kernel.org>; Mon, 18 May 2020 04:17:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g503Ck8Hmnwm3Mle9RPu3pG4Ds3hYRoRksfGfnX5Wtc=;
+        b=IboKzie54ObNPp3JiHhtIQ8kPbLLNHmAcRRYDKnk1oArIjZ+GMd10k4aYMJSRPb9zG
+         17F0resl74uiihv4gxGIutzAXhic+K18i7W3hyGwgMfTt8nCdTFLiRiH/3M90+eJtdp8
+         NOtY1+r+bXRxOoYA/CFBWd3Y29PGDF37HlePI4bTyWF2JDP4nX+bpXNsXdtCMybiKvJk
+         3xL5+CrFHGwbOdHy5qb3FBbTBNIDGk7CJwhLUp4tig7HJTZMNmUt4I/ZmlrsqxCOu96c
+         odlDwjvWGdMjf7bSEZvSr2V+hOQ8gJPE9TtlDbNnG+73EW9FbfvLzrsTUZwGJeNQoI66
+         xWWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g503Ck8Hmnwm3Mle9RPu3pG4Ds3hYRoRksfGfnX5Wtc=;
+        b=pNMm63pSEVRaBaS2xFEb0hEUA6zS1DJqWP917QUtaXjwFFVtCl3gqGjE097ImOOWWD
+         YTpkItsvpfVVOf+ET7tkMXZCyHbsvQFcdWbIJ2C5QuW7sAifSQC+KMBTPJ2sAAe4dtG6
+         orc0UU7ZTDL+DtwmZR4Ikodrb6R3LpwxbVjutB7p/ijXDmM/ptC79kT6qjzOwhWsX4rA
+         Zz8lCHWYt9cCFgd+OQHSut8ePL1HiW8gLnAHtUPxIy/LRKbeEJhZ9eipMSSa63+vTZLe
+         hZnvjVxR9LTceRM+eDCMQ9v5En0eg4JV7mE7wf9US4jT6kfMOIsLoaa2ctjtvM2F9w55
+         1L0w==
+X-Gm-Message-State: AOAM530YriDERfq4p7uCkIlJetmQ882pEja08927AsghdptYAR+s+M/8
+        IflyXhH4D+5WZu99PzN9Sx6D8VmctA/CWuGxiBdNmA==
+X-Google-Smtp-Source: ABdhPJwl5rqs5VWO5Jkao2XeEWkRX+lCx01ip7F50tguMxrw+WswGeYLG9OGd+5XHn6jnx/Q1aQbMIwBn56Y/9LJcLA=
+X-Received: by 2002:a9d:ec7:: with SMTP id 65mr11530376otj.164.1589800633898;
+ Mon, 18 May 2020 04:17:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ab436563-9b22-ee4d-5c96-84857720f2f7@xs4all.nl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200311112004.47138-1-stevensd@chromium.org> <20200311112004.47138-2-stevensd@chromium.org>
+ <CAKMK7uHFgiHLe9oiFBr-VR-6rU9-hLTpBTEVNh0ezyj54u70jw@mail.gmail.com>
+ <CAD=HUj6k-y1=64zY8ZFOQBZ7WSUWiQfvkiTpXXt10JB_CGqk1A@mail.gmail.com>
+ <20200514123007.GP206103@phenom.ffwll.local> <CAD=HUj7452eFfn9i=JWm54Mke3Lew-7AWYeoKZLAjCSg7eLO6A@mail.gmail.com>
+ <20200515140306.GF206103@phenom.ffwll.local>
+In-Reply-To: <20200515140306.GF206103@phenom.ffwll.local>
+From:   Sumit Semwal <sumit.semwal@linaro.org>
+Date:   Mon, 18 May 2020 16:47:02 +0530
+Message-ID: <CAO_48GG85PhyoZ1yzXuwv8tT12V4dkDsXc8_RaMd--oinkpN2g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] dma-buf: add support for virtio exported objects
+To:     David Stevens <stevensd@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:VIRTIO CORE, NET..." 
+        <virtualization@lists.linux-foundation.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>, virtio-dev@lists.oasis-open.org
+Cc:     Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Hello David,
 
-Thanks for the review.
+On Fri, 15 May 2020 at 19:33, Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Fri, May 15, 2020 at 02:07:06PM +0900, David Stevens wrote:
+> > On Thu, May 14, 2020 at 9:30 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > > On Thu, May 14, 2020 at 05:19:40PM +0900, David Stevens wrote:
+> > > > Sorry for the duplicate reply, didn't notice this until now.
+> > > >
+> > > > > Just storing
+> > > > > the uuid should be doable (assuming this doesn't change during the
+> > > > > lifetime of the buffer), so no need for a callback.
+> > > >
+> > > > Directly storing the uuid doesn't work that well because of
+> > > > synchronization issues. The uuid needs to be shared between multiple
+> > > > virtio devices with independent command streams, so to prevent races
+> > > > between importing and exporting, the exporting driver can't share the
+> > > > uuid with other drivers until it knows that the device has finished
+> > > > registering the uuid. That requires a round trip to and then back from
+> > > > the device. Using a callback allows the latency from that round trip
+> > > > registration to be hidden.
+> > >
+> > > Uh, that means you actually do something and there's locking involved.
+> > > Makes stuff more complicated, invariant attributes are a lot easier
+> > > generally. Registering that uuid just always doesn't work, and blocking
+> > > when you're exporting?
+> >
+> > Registering the id at creation and blocking in gem export is feasible,
+> > but it doesn't work well for systems with a centralized buffer
+> > allocator that doesn't support batch allocations (e.g. gralloc). In
+> > such a system, the round trip latency would almost certainly be
+> > included in the buffer allocation time. At least on the system I'm
+> > working on, I suspect that would add 10s of milliseconds of startup
+> > latency to video pipelines (although I haven't benchmarked the
+> > difference). Doing the blocking as late as possible means most or all
+> > of the latency can be hidden behind other pipeline setup work.
+> >
+> > In terms of complexity, I think the synchronization would be basically
+> > the same in either approach, just in different locations. All it would
+> > do is alleviate the need for a callback to fetch the UUID.
+>
+I think I agree with Daniel there - this seems best suited for code
+within virtio.
 
-On Mon, May 18, 2020 at 11:50:34AM +0200, Hans Verkuil wrote:
-> On 12/05/2020 12:59, Sakari Ailus wrote:
-> > While we have had some example drivers, there has been up to date no
-> > formal documentation on how camera sensor drivers should be written; what
-> > are the practices, why, and where they apply.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> > The HTML documentation can be found here:
-> > 
-> > <URL:https://www.retiisi.eu/~sailus/v4l2/tmp/doc/output/driver-api/media/camera-sensor.html>
-> > 
-> >  .../driver-api/media/camera-sensor.rst        | 98 +++++++++++++++++++
-> >  Documentation/driver-api/media/csi2.rst       |  2 +
-> >  Documentation/driver-api/media/index.rst      |  1 +
-> >  3 files changed, 101 insertions(+)
-> >  create mode 100644 Documentation/driver-api/media/camera-sensor.rst
-> > 
-> > diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
-> > new file mode 100644
-> > index 000000000000..345e3ae30340
-> > --- /dev/null
-> > +++ b/Documentation/driver-api/media/camera-sensor.rst
-> > @@ -0,0 +1,98 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +Writing camera sensor drivers
-> > +=============================
-> > +
-> > +CSI-2
-> > +-----
-> > +
-> > +Please see what is written on :ref:`MIPI_CSI_2`.
-> > +
-> > +Handling clocks
-> > +---------------
-> > +
-> > +Camera sensors have an internal clock tree including a PLL and a number of
-> > +divisors. The clock tree is generally configured by the driver based on a few
-> > +input parameters that are specific to the hardware:: the external clock frequency
-> > +and the link frequency. The two parameters generally are obtained from system
-> > +firmware. No other frequencies should be used in any circumstances.
-> > +
-> > +The reason why the clock frequencies are so important is that the clock signals
-> > +come out of the SoC, and in many cases a specific frequency is designed to be
-> > +used in the system. Using another frequency may cause harmful effects
-> > +elsewhere. Therefore only the pre-determined frequencies are configurable by the
-> > +user.
-> > +
-> > +Frame size
-> > +----------
-> > +
-> > +There are two distinct ways to configure the frame size produced by camera
-> > +sensors.
-> > +
-> > +Freely configurable camera sensor drivers
-> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +Freely configurable camera sensor drivers expose the device's internal
-> > +processing pipeline as one or more sub-devices with different cropping and
-> > +scaling configurations. The output size of the device is the result of a series
-> > +of cropping and scaling operations from the device's pixel array's size.
-> > +
-> > +An example of such a driver is the smiapp driver (see drivers/media/i2c/smiapp).
-> > +
-> > +Register list based drivers
-> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +Register list based drivers generally, instead of able to configure the device
-> > +they control based on user requests, are limited to a number of preset
-> > +configurations that combine a number of different parameters that on hardware
-> > +level are independent. How a driver picks such configuration is based on the
-> > +format set on a source pad at the end of the device's internal pipeline.
-> > +
-> > +Most sensor drivers are implemented this way, see e.g. 
-> > +drivers/media/i2c/imx319.c for an example.
-> > +
-> > +Frame interval configuration
-> > +----------------------------
-> > +
-> > +There are two different methods for obtaining possibilities for different frame
-> > +intervals as well as configuring the frame interval. Which one to implement
-> > +depends on the type of the device.
-> > +
-> > +Raw camera sensors
-> > +~~~~~~~~~~~~~~~~~~
-> > +
-> > +Instead of a high level parameter such as frame interval, the frame interval is
-> > +a result of the configuration of a number of camera sensor implementation
-> > +specific parameters. Luckily, these parameters tend to be the same for more or
-> > +less all modern raw camera sensors.
-> > +
-> > +The frame interval is calculated using the following equation::
-> > +
-> > +	frame interval = (analogue crop width + horizontal blanking) *
-> > +			 (analogue crop height + vertical blanking) / pixel rate
-> > +
-> > +The formula is bus independent and is applicable for raw timing parameters on
-> > +large variety of devices beyond camera sensors. Devices that have no analogue
-> > +crop, use the full source image size, i.e. pixel array size.
-> > +
-> > +Horizontal and vertical blanking are specified by ``V4L2_CID_HBLANK`` and
-> > +``V4L2_CID_VBLANK``, respectively. The unit of these controls are lines. The
-> > +pixel rate is specified by ``V4L2_CID_PIXEL_RATE`` in the same sub-device. The
-> > +unit of that control is Hz.
-> > +
-> > +Register list based drivers need to implement read-only sub-device nodes for the
-> > +purpose. Devices that are not register list based need these to configure the
-> > +device's internal processing pipeline.
-> > +
-> > +The first entity in the linear pipeline is the pixel array. The pixel array may
-> > +be followed by other entities that are there to allow configuring binning,
-> > +skipping, scaling or digital crop :ref:`v4l2-subdev-selections`.
-> > +
-> > +USB cameras etc. devices
-> > +~~~~~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +USB video class hardware, as well as many cameras offering a higher level
-> > +control interface, generally use the concept of frame interval (or frame rate)
-> > +on the level of device hardware interface. This means lower level controls
-> > +exposed by raw cameras may not be used as an interface to control the frame
-> > +interval on these devices.
-> > diff --git a/Documentation/driver-api/media/csi2.rst b/Documentation/driver-api/media/csi2.rst
-> > index e111ff7bfd3d..da8b356389f0 100644
-> > --- a/Documentation/driver-api/media/csi2.rst
-> > +++ b/Documentation/driver-api/media/csi2.rst
-> > @@ -1,5 +1,7 @@
-> >  .. SPDX-License-Identifier: GPL-2.0
-> >  
-> > +.. _MIPI_CSI_2:
-> > +
-> >  MIPI CSI-2
-> >  ==========
-> >  
-> > diff --git a/Documentation/driver-api/media/index.rst b/Documentation/driver-api/media/index.rst
-> > index 328350924853..c140692454b1 100644
-> > --- a/Documentation/driver-api/media/index.rst
-> > +++ b/Documentation/driver-api/media/index.rst
-> > @@ -34,6 +34,7 @@ Please see:
-> >      mc-core
-> >      cec-core
-> >      csi2
-> > +    camera-sensor
-> >  
-> >      drivers/index
-> >  
-> > 
-> 
-> Can you add a section on power management? I've CC-ed Sowjanya as well, since she
-> had some questions about that (off-line), and I don't know the answer on the right
-> way to handle power management for sensors.
+> Hm ok. I guess if we go with the older patch, where this all is a lot more
+> just code in virtio, doing an extra function to allocate the uuid sounds
+> fine. Then synchronization is entirely up to the virtio subsystem and not
+> a dma-buf problem (and hence not mine). You can use dma_resv_lock or so,
+> but no need to. But with callbacks potentially going both ways things
+> always get a bit interesting wrt locking - this is what makes peer2peer
+> dma-buf so painful right now. Hence I'd like to avoid that if needed, at
+> least at the dma-buf level. virtio code I don't mind what you do there :-)
+>
+> Cheers, Daniel
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
 
-Sure. There's nothing special in here per se, but given the history and
-interaction with the control framework it's worth documenting that
-separately. Many drivers are also being used on both ACPI and DT that makes
-the drivers somewhat more convoluted.
-
--- 
-Kind regards,
-
-Sakari Ailus
+Best,
+Sumit.
