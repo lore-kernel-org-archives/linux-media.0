@@ -2,91 +2,185 @@ Return-Path: <SRS0=hmUh=7B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AD5DC433E1
-	for <linux-media@archiver.kernel.org>; Tue, 19 May 2020 20:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEA57C433E2
+	for <linux-media@archiver.kernel.org>; Tue, 19 May 2020 21:47:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61D0420826
-	for <linux-media@archiver.kernel.org>; Tue, 19 May 2020 20:03:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="OeA0URDd"
+	by mail.kernel.org (Postfix) with ESMTP id A2D31205CB
+	for <linux-media@archiver.kernel.org>; Tue, 19 May 2020 21:47:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728073AbgESUDE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 May 2020 16:03:04 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:10958 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726545AbgESUDD (ORCPT
+        id S1728378AbgESVrX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 May 2020 17:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728361AbgESVrW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 May 2020 16:03:03 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ec43b280001>; Tue, 19 May 2020 13:01:44 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 19 May 2020 13:03:03 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 19 May 2020 13:03:03 -0700
-Received: from [10.2.90.179] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 May
- 2020 20:03:02 +0000
-Subject: Re: [PATCH] tee: convert convert get_user_pages() -->
- pin_user_pages()
-To:     LKML <linux-kernel@vger.kernel.org>
-CC:     Jens Wiklander <jens.wiklander@linaro.org>,
+        Tue, 19 May 2020 17:47:22 -0400
+Received: from Galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1ED2C08C5C0;
+        Tue, 19 May 2020 14:47:21 -0700 (PDT)
+Received: from [5.158.153.53] (helo=debian-buster-darwi.lab.linutronix.de.)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA1:256)
+        (Exim 4.80)
+        (envelope-from <a.darwish@linutronix.de>)
+        id 1jbA4c-0002kf-Q2; Tue, 19 May 2020 23:46:54 +0200
+From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Sebastian A. Siewior" <bigeasy@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        <tee-dev@lists.linaro.org>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>
-References: <20200519051850.2845561-1-jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <ad103c96-0b84-97cd-48eb-67f5e01e0349@nvidia.com>
-Date:   Tue, 19 May 2020 13:03:02 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "David (ChunMing) Zhou" <David1.Zhou@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
+Subject: [PATCH v1 13/25] dma-buf: Use sequence counter with associated wound/wait mutex
+Date:   Tue, 19 May 2020 23:45:35 +0200
+Message-Id: <20200519214547.352050-14-a.darwish@linutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200519214547.352050-1-a.darwish@linutronix.de>
+References: <20200519214547.352050-1-a.darwish@linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20200519051850.2845561-1-jhubbard@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1589918504; bh=I+orG+7rEdCJPZjUgf5aOsrGlbkMUn9fDowKMSsoZ2g=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=OeA0URDdDEoYmrSyeZbmNSjYkOHX/p9wy63Apbm2XjDHgq3miJl/i0na08Vfn43RI
-         YJi/E7JgJgoXCBwYik7RTdeSvY0bKSpoOinqqc+CK+NUow8VpXp3nz1wbytGFfkjN1
-         /2PyM61mbRSTw5aBh2po+7pSRo9zdFS3H+0b+8b7EHERtfPNskX7FcDvsyA2sWwjHg
-         jAor6efO7gcQ8b6mDVRwikI8RefZr+5pssUoEpJQ3UMBkBTqLknnxmMKSilKMNGQos
-         Pj5dDsBREkofQTJtBKeQFyv7wSW2CWQi7c09i+a2cQ0twqJbn0N6hitYffyPmO4hRw
-         XOflF6r7EqEXw==
+Content-Transfer-Encoding: 8bit
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2020-05-18 22:18, John Hubbard wrote:
-> This code was using get_user_pages*(), in a "Case 2" scenario
-> (DMA/RDMA), using the categorization from [1]. That means that it's
-> time to convert the get_user_pages*() + put_page() calls to
-> pin_user_pages*() + unpin_user_pages() calls.
-> 
+A sequence counter write side critical section must be protected by some
+form of locking to serialize writers. If the serialization primitive is
+not disabling preemption implicitly, preemption has to be explicitly
+disabled before entering the sequence counter write side critical
+section.
 
-Looks like I accidentally doubled a word on the subject line:
-"convert convert". :)
+The dma-buf reservation subsystem uses plain sequence counters to manage
+updates to reservations. Writer serialization is accomplished through a
+wound/wait mutex.
 
-I'd appreciate it a maintainer could remove one of those for
-me, while applying the patch, assuming that we don't need a
-v2 for other reasons.
+Acquiring a wound/wait mutex does not disable preemption, so this needs
+to be done manually before and after the write side critical section.
 
+Use the newly-added seqcount_ww_mutex_t instead:
 
-thanks,
+  - It associates the ww_mutex with the sequence count, which enables
+    lockdep to validate that the write side critical section is properly
+    serialized.
+
+  - It removes the need to explicitly add preempt_disable/enable()
+    around the write side critical section because the write_begin/end()
+    functions for this new data type automatically do this.
+
+If lockdep is disabled this ww_mutex lock association is compiled out
+and has neither storage size nor runtime overhead.
+
+Signed-off-by: Ahmed S. Darwish <a.darwish@linutronix.de>
+---
+ drivers/dma-buf/dma-resv.c                       | 8 +-------
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 2 --
+ include/linux/dma-resv.h                         | 2 +-
+ 3 files changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+index 590ce7ad60a0..3aba2b2bfc48 100644
+--- a/drivers/dma-buf/dma-resv.c
++++ b/drivers/dma-buf/dma-resv.c
+@@ -128,7 +128,7 @@ subsys_initcall(dma_resv_lockdep);
+ void dma_resv_init(struct dma_resv *obj)
+ {
+ 	ww_mutex_init(&obj->lock, &reservation_ww_class);
+-	seqcount_init(&obj->seq);
++	seqcount_ww_mutex_init(&obj->seq, &obj->lock);
+ 
+ 	RCU_INIT_POINTER(obj->fence, NULL);
+ 	RCU_INIT_POINTER(obj->fence_excl, NULL);
+@@ -259,7 +259,6 @@ void dma_resv_add_shared_fence(struct dma_resv *obj, struct dma_fence *fence)
+ 	fobj = dma_resv_get_list(obj);
+ 	count = fobj->shared_count;
+ 
+-	preempt_disable();
+ 	write_seqcount_begin(&obj->seq);
+ 
+ 	for (i = 0; i < count; ++i) {
+@@ -281,7 +280,6 @@ void dma_resv_add_shared_fence(struct dma_resv *obj, struct dma_fence *fence)
+ 	smp_store_mb(fobj->shared_count, count);
+ 
+ 	write_seqcount_end(&obj->seq);
+-	preempt_enable();
+ 	dma_fence_put(old);
+ }
+ EXPORT_SYMBOL(dma_resv_add_shared_fence);
+@@ -308,14 +306,12 @@ void dma_resv_add_excl_fence(struct dma_resv *obj, struct dma_fence *fence)
+ 	if (fence)
+ 		dma_fence_get(fence);
+ 
+-	preempt_disable();
+ 	write_seqcount_begin(&obj->seq);
+ 	/* write_seqcount_begin provides the necessary memory barrier */
+ 	RCU_INIT_POINTER(obj->fence_excl, fence);
+ 	if (old)
+ 		old->shared_count = 0;
+ 	write_seqcount_end(&obj->seq);
+-	preempt_enable();
+ 
+ 	/* inplace update, no shared fences */
+ 	while (i--)
+@@ -393,13 +389,11 @@ int dma_resv_copy_fences(struct dma_resv *dst, struct dma_resv *src)
+ 	src_list = dma_resv_get_list(dst);
+ 	old = dma_resv_get_excl(dst);
+ 
+-	preempt_disable();
+ 	write_seqcount_begin(&dst->seq);
+ 	/* write_seqcount_begin provides the necessary memory barrier */
+ 	RCU_INIT_POINTER(dst->fence_excl, new);
+ 	RCU_INIT_POINTER(dst->fence, dst_list);
+ 	write_seqcount_end(&dst->seq);
+-	preempt_enable();
+ 
+ 	dma_resv_list_free(src_list);
+ 	dma_fence_put(old);
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+index 9dff792c9290..87fd32aae8f9 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+@@ -258,11 +258,9 @@ static int amdgpu_amdkfd_remove_eviction_fence(struct amdgpu_bo *bo,
+ 	new->shared_count = k;
+ 
+ 	/* Install the new fence list, seqcount provides the barriers */
+-	preempt_disable();
+ 	write_seqcount_begin(&resv->seq);
+ 	RCU_INIT_POINTER(resv->fence, new);
+ 	write_seqcount_end(&resv->seq);
+-	preempt_enable();
+ 
+ 	/* Drop the references to the removed fences or move them to ef_list */
+ 	for (i = j, k = 0; i < old->shared_count; ++i) {
+diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
+index a6538ae7d93f..d44a77e8a7e3 100644
+--- a/include/linux/dma-resv.h
++++ b/include/linux/dma-resv.h
+@@ -69,7 +69,7 @@ struct dma_resv_list {
+  */
+ struct dma_resv {
+ 	struct ww_mutex lock;
+-	seqcount_t seq;
++	seqcount_ww_mutex_t seq;
+ 
+ 	struct dma_fence __rcu *fence_excl;
+ 	struct dma_resv_list __rcu *fence;
 -- 
-John Hubbard
-NVIDIA
+2.20.1
+
