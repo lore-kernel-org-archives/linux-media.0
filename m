@@ -2,179 +2,133 @@ Return-Path: <SRS0=hmUh=7B=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63DA8C433E1
-	for <linux-media@archiver.kernel.org>; Tue, 19 May 2020 01:17:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FAE1C433E1
+	for <linux-media@archiver.kernel.org>; Tue, 19 May 2020 02:06:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F80A207E8
-	for <linux-media@archiver.kernel.org>; Tue, 19 May 2020 01:17:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D964A20758
+	for <linux-media@archiver.kernel.org>; Tue, 19 May 2020 02:06:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=globallogic.com header.i=@globallogic.com header.b="VTogGKZn"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="oWzLF/YB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728182AbgESBRC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 May 2020 21:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728139AbgESBRB (ORCPT
+        id S1728003AbgESCGS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 May 2020 22:06:18 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:50263 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726492AbgESCGR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 May 2020 21:17:01 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5D0C05BD09
-        for <linux-media@vger.kernel.org>; Mon, 18 May 2020 18:16:59 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id h26so9775645lfg.6
-        for <linux-media@vger.kernel.org>; Mon, 18 May 2020 18:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=globallogic.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=43OydlKMeB2soLpqk183X/YWIZp+nTEpweso2ysEnH8=;
-        b=VTogGKZn+8HP6GLONdbHWU4k1rjj64jS78ZiVB++LI5W7p7SrXGVUzIPFmY50BLNIk
-         Cax85IyQomdbhLSFvPdkDaka+MFsdCLDe9scDrLEAwpbPc07vgtEuTxVH1M9ttxOa2sf
-         RQI5dBeIl71cBJvEEgkz7FaK5TYvsMyVWi8vJTVO4hRKmog7A/BuDSDU5aMRA0pKGOdK
-         HBAAckL80AmiKDHQw2joI2h5SJISobfBWyd2C8m8ecD+PVLwdMTDQJuB4U8NXwoHYAiQ
-         1cL6iVEOIjfrQMibRTL1y7T0MkfnacAQ4TcIZ/HXOtBuAkRPxRL23E6rs05GvC0E3rNT
-         kU9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=43OydlKMeB2soLpqk183X/YWIZp+nTEpweso2ysEnH8=;
-        b=kcmnii0guIXEIBXffIuhlKbIIlNK8z7imNARoNIKZrrODYMYbxNrFUrqaxT3PBGOAf
-         myFg2T8iJP8Sbki/C4MvAiyPNy/UD98HJfQLF/5ImBbJJMWRZYpHbF+LYD1yKagcC2lr
-         li+kUV5PDB8qfPebz3i4oC5dCrKnw3QkGIq/IoWJLdzRtvTlTnRNYdu6Fn3aKNGFYlV6
-         NPRYBSxLQSfmuGVUUqPjf3A7Piy3B74mMH5+sGFeGSezHxFGr9iAk2RAcMtVl5qkycBn
-         /7O6G+A9W8pzN9cq//HjSLeLeZ8toOmBwJgGw+3Qtl90kP/tK7Txhr3BVA5kagAilY70
-         wMpQ==
-X-Gm-Message-State: AOAM5313zdOJhwB4gHYBGGNeyoCYXLQ9KHw9H+WRpwDK1YVVst1F2iee
-        e2/+8hTL0swAzlJgTbHsrUIuEw==
-X-Google-Smtp-Source: ABdhPJxcnMOesb+fL00R07l3WHxAvKG8zfvphHel04zHEX97w5/GIihgHhN0s7YHytf2m6QMXp6I/A==
-X-Received: by 2002:a05:6512:3082:: with SMTP id z2mr13587206lfd.32.1589851018350;
-        Mon, 18 May 2020 18:16:58 -0700 (PDT)
-Received: from localhost.localdomain ([159.224.5.60])
-        by smtp.googlemail.com with ESMTPSA id i8sm4764244lfl.72.2020.05.18.18.16.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2020 18:16:57 -0700 (PDT)
-From:   Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Luis Oliveira <lolivei@synopsys.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        Todor Tomov <todor.tomov@linaro.org>,
-        Suresh Udipi <sudipi@jp.adit-jv.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.org>,
-        Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
-Subject: [PATCH v2 3/6] media: ov5647: Add support for non-continuous clock mode
-Date:   Tue, 19 May 2020 04:16:18 +0300
-Message-Id: <cd04fe908fc1a747949ee83044f4d2abc1885cee.1589850165.git.roman.kovalivskyi@globallogic.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1589847910.git.roman.kovalivskyi@globallogic.com>
-References: <cover.1589847910.git.roman.kovalivskyi@globallogic.com>
-In-Reply-To: <cover.1589850165.git.roman.kovalivskyi@globallogic.com>
-References: <cover.1589850165.git.roman.kovalivskyi@globallogic.com>
+        Mon, 18 May 2020 22:06:17 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1589853976; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=shu1nRH4yOUpMsF9x6Loiw97DfWS+2VXjIP+je/cjo4=; b=oWzLF/YBxpfPwAuW5Z5Qh/ntHSSyTBaBc2ujgchYdvc4yFb7fcDgshZuR9yeDDz0qYLwVBDd
+ vcGD5gRXeF6JQmI12kD33kNJyRqeo+yKjNvBXNSaVyD8JYJm2W87kb5rQf8YlHxmsvPKVrBD
+ FvkZei1nmT/RRWimyHGruOWAy9A=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 5ec33f0daefa5a01cc32da9d (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 19 May 2020 02:06:05
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 1F196C43637; Tue, 19 May 2020 02:06:04 +0000 (UTC)
+Received: from majja-linux1.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: majja)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 57895C433F2;
+        Tue, 19 May 2020 02:06:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 57895C433F2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=majja@codeaurora.org
+From:   Maheshwar Ajja <majja@codeaurora.org>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@collabora.com, p.zabel@pengutronix.de,
+        paul.kocialkowski@bootlin.com, jonas@kwiboo.se,
+        posciak@chromium.org, boris.brezillon@collabora.com,
+        ribalda@kernel.org, tglx@linutronix.de, sumitg@nvidia.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Maheshwar Ajja <majja@codeaurora.org>
+Subject: [PATCH] media: v4l2-ctrls: add encoder skip frames control
+Date:   Mon, 18 May 2020 19:05:51 -0700
+Message-Id: <1589853951-27948-1-git-send-email-majja@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.org>
+If V4L2_CID_MPEG_VIDEO_ENC_SKIP_FRAMES control is enabled
+encoder can drop frames, if required, to achieve target bitrate
+instead of modifying the quantization parameter which lowers
+the encoded frame quality.
 
-The driver was only supporting continuous clock mode
-although this was not stated anywhere.
-Non-continuous clock saves a small amount of power and
-on some SoCs is easier to interface with.
+Reference: 4.3.8.1 OMX_Video_ControlRateConstantSkipFrames
+https://www.khronos.org/registry/OpenMAX-IL/specs/OpenMAX_IL_1_1_2_Specification.pdf
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
-Signed-off-by: Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
+Signed-off-by: Maheshwar Ajja <majja@codeaurora.org>
 ---
- drivers/media/i2c/ov5647.c | 25 ++++++++++++++++++++++---
- 1 file changed, 22 insertions(+), 3 deletions(-)
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 7 +++++++
+ drivers/media/v4l2-core/v4l2-ctrls.c                      | 2 ++
+ include/uapi/linux/v4l2-controls.h                        | 1 +
+ 3 files changed, 10 insertions(+)
 
-diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index 796cc80f8ee1..10f35c637f91 100644
---- a/drivers/media/i2c/ov5647.c
-+++ b/drivers/media/i2c/ov5647.c
-@@ -44,6 +44,7 @@
- #define PWDN_ACTIVE_DELAY_MS	20
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index d0d506a..bc9265d 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -1081,6 +1081,13 @@ enum v4l2_mpeg_video_h264_entropy_mode -
+     Macroblock level rate control enable. Applicable to the MPEG4 and
+     H264 encoders.
  
- #define MIPI_CTRL00_CLOCK_LANE_GATE		BIT(5)
-+#define MIPI_CTRL00_LINE_SYNC_ENABLE		BIT(4)
- #define MIPI_CTRL00_BUS_IDLE			BIT(2)
- #define MIPI_CTRL00_CLOCK_LANE_DISABLE		BIT(0)
- 
-@@ -95,6 +96,7 @@ struct ov5647 {
- 	int				power_count;
- 	struct clk			*xclk;
- 	struct gpio_desc		*pwdn;
-+	bool				is_clock_contiguous;
- };
- 
- static inline struct ov5647 *to_state(struct v4l2_subdev *sd)
-@@ -274,9 +276,15 @@ static int ov5647_set_virtual_channel(struct v4l2_subdev *sd, int channel)
- 
- static int ov5647_stream_on(struct v4l2_subdev *sd)
- {
-+	struct ov5647 *ov5647 = to_state(sd);
-+	u8 val = MIPI_CTRL00_BUS_IDLE;
- 	int ret;
- 
--	ret = ov5647_write(sd, OV5647_REG_MIPI_CTRL00, MIPI_CTRL00_BUS_IDLE);
-+	if (ov5647->is_clock_contiguous)
-+		val |= MIPI_CTRL00_CLOCK_LANE_GATE |
-+		       MIPI_CTRL00_LINE_SYNC_ENABLE;
++``V4L2_CID_MPEG_VIDEO_ENC_SKIP_FRAMES (boolean)``
++    Encoder skip frames enable. This control is applicable only if
++    ``V4L2_CID_MPEG_VIDEO_BITRATE_MODE`` control is set. If this control
++    is enabled encoder can drop frames, if required, to achieve target
++    bitrate instead of modifying the quantization parameter which lowers
++    the encoded frame quality.
 +
-+	ret = ov5647_write(sd, OV5647_REG_MIPI_CTRL00, val);
- 	if (ret < 0)
- 		return ret;
+ ``V4L2_CID_MPEG_VIDEO_MPEG4_QPEL (boolean)``
+     Quarter pixel motion estimation for MPEG4. Applicable to the MPEG4
+     encoder.
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 1c617b4..d2cb766 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -914,6 +914,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_MPEG_VIDEO_FWHT_PARAMS:			return "FWHT Stateless Parameters";
+ 	case V4L2_CID_FWHT_I_FRAME_QP:				return "FWHT I-Frame QP Value";
+ 	case V4L2_CID_FWHT_P_FRAME_QP:				return "FWHT P-Frame QP Value";
++	case V4L2_CID_MPEG_VIDEO_ENC_SKIP_FRAMES:		return "Encoder Skip Frames";
  
-@@ -573,7 +581,7 @@ static const struct v4l2_subdev_internal_ops ov5647_subdev_internal_ops = {
- 	.open = ov5647_open,
- };
+ 	/* VPX controls */
+ 	case V4L2_CID_MPEG_VIDEO_VPX_NUM_PARTITIONS:		return "VPX Number of Partitions";
+@@ -1180,6 +1181,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:
+ 	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
+ 	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:
++	case V4L2_CID_MPEG_VIDEO_ENC_SKIP_FRAMES:
+ 	case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
+ 	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE:
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_QPEL:
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 0ba1005..d3bc015 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -742,6 +742,7 @@ enum v4l2_cid_mpeg_video_hevc_size_of_length_field {
+ #define V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_BR	(V4L2_CID_MPEG_BASE + 642)
+ #define V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES	(V4L2_CID_MPEG_BASE + 643)
+ #define V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR	(V4L2_CID_MPEG_BASE + 644)
++#define V4L2_CID_MPEG_VIDEO_ENC_SKIP_FRAMES		(V4L2_CID_MPEG_BASE + 645)
  
--static int ov5647_parse_dt(struct device_node *np)
-+static int ov5647_parse_dt(struct ov5647 *sensor, struct device_node *np)
- {
- 	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
- 	struct device_node *ep;
-@@ -586,6 +594,17 @@ static int ov5647_parse_dt(struct device_node *np)
- 
- 	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &bus_cfg);
- 
-+	if (!ret) {
-+		of_node_put(ep);
-+		of_node_put(np);
-+		return ret;
-+	}
-+
-+	if (bus_cfg.bus_type == V4L2_MBUS_CSI2_DPHY
-+		|| bus_cfg.bus_type == V4L2_MBUS_CSI2_CPHY)
-+		sensor->is_clock_contiguous = bus_cfg.bus.mipi_csi2.flags
-+			& V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK;
-+
- 	of_node_put(ep);
- 	return ret;
- }
-@@ -604,7 +623,7 @@ static int ov5647_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	if (IS_ENABLED(CONFIG_OF) && np) {
--		ret = ov5647_parse_dt(np);
-+		ret = ov5647_parse_dt(sensor, np);
- 		if (ret) {
- 			dev_err(dev, "DT parsing error: %d\n", ret);
- 			return ret;
+ /*  MPEG-class control IDs specific to the CX2341x driver as defined by V4L2 */
+ #define V4L2_CID_MPEG_CX2341X_BASE				(V4L2_CTRL_CLASS_MPEG | 0x1000)
 -- 
-2.17.1
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
