@@ -2,122 +2,165 @@ Return-Path: <SRS0=Mt3G=7C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AA07C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BECFEC433DF
 	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 10:02:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A47402075F
-	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 10:02:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 953E32075F
+	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 10:02:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="LiZcA0uL"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="BPtGqrCu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbgETKCG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 May 2020 06:02:06 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:33771 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726729AbgETKCF (ORCPT
+        id S1726839AbgETKCH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 May 2020 06:02:07 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:37547 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726810AbgETKCG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 May 2020 06:02:05 -0400
+        Wed, 20 May 2020 06:02:06 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id bLXzjmaqPFjnUbLY3jXnV8; Wed, 20 May 2020 12:02:03 +0200
+        id bLXzjmaqPFjnUbLY4jXnVV; Wed, 20 May 2020 12:02:04 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1589968923; bh=F6dNqo0JpBgUDVWBOlxOwirjy3/+V4+DwtBLPzyWc5M=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:Content-Type:From:
-         Subject;
-        b=LiZcA0uLnkyRBvzaszYvQGeAfbRxci2nZq3aU4jO736coTuRiZ8HfpQJPUBbfxfnU
-         q5Ss9BUdHklT4hLckoDzZdYTVIlV8omiP5j3PayBgYEQI5uO6XaTynCPACfwt3e2Li
-         GdYbRD481ggSL9SHWozub7SIkDJJUu32HuszxtfmBnf7fQsx3XmdPIwRgMBi6YcznP
-         nk5aSP+5jrMIShKfBZuLtKQpuOlQTP34BqPyLNbC1Cq/Ocmeggi88uhHH6Y+iUtfy8
-         pSYNzmfGXkyhQSjXAAHyoIUg/t8LZPTqpgTr//dwk1kIsnv3i3FQmFtigMSsjageJe
-         ycOfdhv4x4iHw==
+        t=1589968924; bh=xANaQzoI3Pw/9XN4Rvp4pqqAXzEKyWlrC0dtz6VHYc4=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=BPtGqrCuYk46TjYilUSTY07qdHErw2gNOXu1YraRTrOi19wsoJGBG5gAVQeqJ+Szj
+         2tcab4aEIRJJQSFaOq+A81xdC7GzSH9QAmXbYLrFch6NX2xs34hZN7JZ6mgSutdGCr
+         PPRvVsz6K+B/QqsOHvBDebi72HlrNhi8H0S2pEWJtbjj0pgZGE8Ior8T8+So42LRDQ
+         u3ua90kvRfGzpxecBlSNlsU1aZreJaH4ne3gol28Ya+yQqm3JYrj4BtQ1ehMsbHYnR
+         Mf3UQ4OwjDp1nEN++P6/Y3D6aQL48YGc5HKiuA6+i3tfzQCw0F5w8pvqwXKt2Ym5kT
+         oxXC/Puxabpfg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Michael Tretter <m.tretter@pengutronix.de>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Tomasz Figa <tfiga@chromium.org>
-Subject: [PATCHv2 0/2] Stateful Encoding: final bits
-Date:   Wed, 20 May 2020 12:01:57 +0200
-Message-Id: <20200520100159.2094831-1-hverkuil-cisco@xs4all.nl>
+        Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 2/2] vidioc-g-parm.rst: update the VIDIOC_G/S_PARM documentation
+Date:   Wed, 20 May 2020 12:01:59 +0200
+Message-Id: <20200520100159.2094831-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200520100159.2094831-1-hverkuil-cisco@xs4all.nl>
+References: <20200520100159.2094831-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfCs9/CCYUK+6+QKsuPFHPr7qEQUpFHs/KBz8Hj/ouWTUnkZmOcmE7BG41rAONqh7UlwbQEgceu8Y3+6MQMG4KfwTQ2VCNnM531a4dAFnbIddkoQS64qS
- ffu+BUUGHmXuhSvjG/PSxHoKyd8LOTWhd2AL3yLz/Yfpa89lplvNHPFcjlSqJ1jZjKztaoD2jfO90nuGdre+0/a/V462wQQCV0Jsem/jg/enUl1bXfJ/l9RX
- Tnhk3vqL6fLu0iu5yRSPjTQPU+PZLuxwwJ6ACrgO2ULRcyZvfar5LZv2LL4HoVl6
+X-CMAE-Envelope: MS4wfNWZnJQcJi46SO/h6mzDZ2gBjc5RBO2ohWpiqjbN224vLYyxQxRjqlrBcFnoQ+1iibRv/SLUo01GIlccPVMIgjdmu67R6iXPz9+50eECAKDEkcYxFfeq
+ x6YG7qlwCYDn8HUx7uRXBZdMrHgM/zObdiCBY3NmmrVZfHr0wzm1WzTDd0XaEc+sH5Sgs3iVrGGcm+dnFPdsmp42byQiiJIF4S3cAY9NA796wwllXERF3TMj
+ ClCF2UUYqPTxCCFa5FV27KlZSef13WZzEyq5a7SXWMzz9DPlaYYMPeClLbpjCRw/RM9gG+UOPoLPrTB1HS2Q+Bj+rdF5X5PSWVWx3FqSzOQ=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series adds the encoder spec and updates the VIDIOC_G/S_PARM
-documentation.
+This documentation is very outdated. In particular, it is
+not obvious at all that this is used to change the framerate of
+sensors.
 
-This is a follow-up of the original "Stateful Encoding: final bits"
-series (1). 
+Fix it, and include references to the stateful encoder API where
+this works slightly different.
 
-The patches in that series that add support for V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE
-and V4L2_BUF_FLAG_TOO_SMALL have been dropped (the first is not necessary
-and the second can be skipped for now, see the irc discussion with
-Nicolas [3]).
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ .../userspace-api/media/v4l/vidioc-g-parm.rst | 51 ++++++++++++-------
+ 1 file changed, 32 insertions(+), 19 deletions(-)
 
-The encoder spec has been updated since [2] with the following
-changes:
-
-- Document the optional VIDIOC_ENUM_FRAMEINTERVALS ioctl.
-
-- Document how to use VIDIOC_S_PARM:
-
-  1) calling S_PARM for the OUTPUT queue sets both the raw frame interval
-     (this is a hint only) and the coded frame interval.
-
-  2) calling S_PARM for the CAPTURE queue sets the coded frame interval
-     only. This is optional and can be used for off-line encoding. In
-     that case the OUTPUT frame interval can be used by the driver to
-     schedule multiple encoders.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-parm.rst b/Documentation/userspace-api/media/v4l/vidioc-g-parm.rst
+index 42e9f6ee7a59..0524f1e4458e 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-g-parm.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-g-parm.rst
+@@ -42,12 +42,13 @@ Arguments
+ Description
+ ===========
  
-  Ideally S_PARM for the OUTPUT queue would just provide a hint, but
-  existing encoder drivers all use S_PARM for the OUTPUT queue to
-  define the coded frame interval, and that can't be changed.
-
-- Added a note that if a capture buffer is too small it will be
-  returned with V4L2_BUF_FLAG_ERROR and that more work has to be
-  done to properly support this corner case.
-
-- Clarify in the 'Encoding' section that there are more reasons
-  why 'a buffer queued to OUTPUT may result in more than one buffer
-  produced on CAPTURE'.
-
-I think that with these changes this stateful encoder spec is ready
-to be merged.
-
-Regards,
-
-	Hans
-
-[1] https://lore.kernel.org/linux-media/20191119113457.57833-6-hverkuil-cisco@xs4all.nl/T/
-[2] https://www.mail-archive.com/linux-media@vger.kernel.org/msg149211.html
-[3] https://linuxtv.org/irc/irclogger_log/v4l?date=2020-05-19,Tue
-
-Hans Verkuil (1):
-  vidioc-g-parm.rst: update the VIDIOC_G/S_PARM documentation
-
-Tomasz Figa (1):
-  media: docs-rst: Document memory-to-memory video encoder interface
-
- .../userspace-api/media/v4l/dev-encoder.rst   | 727 ++++++++++++++++++
- .../userspace-api/media/v4l/dev-mem2mem.rst   |   1 +
- .../userspace-api/media/v4l/pixfmt-v4l2.rst   |   5 +
- .../userspace-api/media/v4l/v4l2.rst          |   2 +
- .../media/v4l/vidioc-encoder-cmd.rst          |  51 +-
- .../userspace-api/media/v4l/vidioc-g-parm.rst |  51 +-
- 6 files changed, 798 insertions(+), 39 deletions(-)
- create mode 100644 Documentation/userspace-api/media/v4l/dev-encoder.rst
-
+-The current video standard determines a nominal number of frames per
+-second. If less than this number of frames is to be captured or output,
+-applications can request frame skipping or duplicating on the driver
+-side. This is especially useful when using the :ref:`read() <func-read>` or
+-:ref:`write() <func-write>`, which are not augmented by timestamps or sequence
+-counters, and to avoid unnecessary data copying.
++Applications can request a different frame interval. The capture or
++output device will be reconfigured to support the requested frame
++interval if possible. Optionally drivers may choose to skip or
++repeat frames to achieve the requested frame interval.
++
++For stateful encoders (see :ref:`encoder`) this represents the
++frame interval that is typically embedded in the encoded video stream.
+ 
+ Changing the frame interval shall never change the format. Changing the
+ format, on the other hand, may change the frame interval.
+@@ -57,7 +58,8 @@ internally by a driver in read/write mode. For implications see the
+ section discussing the :ref:`read() <func-read>` function.
+ 
+ To get and set the streaming parameters applications call the
+-:ref:`VIDIOC_G_PARM <VIDIOC_G_PARM>` and :ref:`VIDIOC_S_PARM <VIDIOC_G_PARM>` ioctl, respectively. They take a
++:ref:`VIDIOC_G_PARM <VIDIOC_G_PARM>` and
++:ref:`VIDIOC_S_PARM <VIDIOC_G_PARM>` ioctl, respectively. They take a
+ pointer to a struct :c:type:`v4l2_streamparm` which contains a
+ union holding separate parameters for input and output devices.
+ 
+@@ -113,14 +115,21 @@ union holding separate parameters for input and output devices.
+     * - struct :c:type:`v4l2_fract`
+       - ``timeperframe``
+       - This is the desired period between successive frames captured by
+-	the driver, in seconds. The field is intended to skip frames on
+-	the driver side, saving I/O bandwidth.
++	the driver, in seconds.
++    * - :cspan:`2`
++
++	This will configure the speed at which the video source (e.g. a sensor)
++	generates video frames. If the speed is fixed, then the driver may
++	choose to skip or repeat frames in order to achieve the requested
++	frame rate.
++
++        For stateful encoders (see :ref:`encoder`) this represents the
++	frame interval that is typically embedded in the encoded video stream.
+ 
+ 	Applications store here the desired frame period, drivers return
+-	the actual frame period, which must be greater or equal to the
+-	nominal frame period determined by the current video standard
+-	(struct :c:type:`v4l2_standard` ``frameperiod``
+-	field). Changing the video standard (also implicitly by switching
++	the actual frame period.
++
++	Changing the video standard (also implicitly by switching
+ 	the video input) may reset this parameter to the nominal frame
+ 	period. To reset manually applications can just set this field to
+ 	zero.
+@@ -173,11 +182,15 @@ union holding separate parameters for input and output devices.
+ 	:ref:`write() <func-write>` mode (in streaming mode timestamps
+ 	can be used to throttle the output), saving I/O bandwidth.
+ 
++        For stateful encoders (see :ref:`encoder`) this represents the
++	frame interval that is typically embedded in the encoded video stream
++	and it provides a hint to the encoder of the speed at which raw
++	frames are queued up to the encoder.
++
+ 	Applications store here the desired frame period, drivers return
+-	the actual frame period, which must be greater or equal to the
+-	nominal frame period determined by the current video standard
+-	(struct :c:type:`v4l2_standard` ``frameperiod``
+-	field). Changing the video standard (also implicitly by switching
++	the actual frame period.
++
++	Changing the video standard (also implicitly by switching
+ 	the video output) may reset this parameter to the nominal frame
+ 	period. To reset manually applications can just set this field to
+ 	zero.
+@@ -216,8 +229,8 @@ union holding separate parameters for input and output devices.
+ 
+     * - ``V4L2_CAP_TIMEPERFRAME``
+       - 0x1000
+-      - The frame skipping/repeating controlled by the ``timeperframe``
+-	field is supported.
++      - The frame period can be modified by settings the ``timeperframe``
++	field.
+ 
+ 
+ 
 -- 
 2.25.1
 
