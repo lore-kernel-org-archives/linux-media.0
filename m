@@ -2,123 +2,182 @@ Return-Path: <SRS0=Mt3G=7C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A44BFC433E1
-	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 13:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B803CC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 13:26:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8397820756
-	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 13:16:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8337E207C4
+	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 13:26:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Rsc7egtC"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="D2qZ2l/Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726804AbgETNQY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 May 2020 09:16:24 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:51004 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726436AbgETNQY (ORCPT
+        id S1726560AbgETN0i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 May 2020 09:26:38 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:33781 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726452AbgETN0h (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 May 2020 09:16:24 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04KDGIPK075879;
-        Wed, 20 May 2020 08:16:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1589980578;
-        bh=g5mxtIyMDGJIfjMohatgyirw9qrdm5M7LriXPEsGKOs=;
-        h=From:To:CC:Subject:Date;
-        b=Rsc7egtCVTnZ9rJ3AC75KqbJbnXiFZortrfw8p98+O/9/rJfiEL+gPjjKKLLZiXwF
-         JO8Ts9qbYTbLxlZOUdipIsJNH2Lrk+M+sBd53BrZSFD1519giTdG+BIuS3+ATSMbp8
-         LGkFjXBPKgKFpnJZh3FxGILUcx2pa1/hI6WdlMyE=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04KDGIOC094815;
-        Wed, 20 May 2020 08:16:18 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 20
- May 2020 08:16:17 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 20 May 2020 08:16:17 -0500
-Received: from deskari.lan (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04KDGGnl086139;
-        Wed, 20 May 2020 08:16:16 -0500
-From:   Tomi Valkeinen <tomi.valkeinen@ti.com>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>
-Subject: [PATCH] media: videobuf2-dma-contig: fix bad kfree in vb2_dma_contig_clear_max_seg_size
-Date:   Wed, 20 May 2020 16:15:58 +0300
-Message-ID: <20200520131558.23009-1-tomi.valkeinen@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 20 May 2020 09:26:37 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id bOjujbxAAdPgTbOjxjMhAf; Wed, 20 May 2020 15:26:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1589981194; bh=4/ctTwsXiPSb4NvmDrcyK5FdCsKojjn+cNP9JMI3QBg=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=D2qZ2l/Z28Uf7C5bqYrMpTwYRRn7vMimvP7piDPZS1zpq3KJb5DjRJWMrl5qyO6pw
+         vtfBQRZX5sFQwr21G9xgwl1kQzIJX0lCVf9sGxGrOwrqK04XZGfbbmZwHOAvAiMFHA
+         34CyqsALCVF4trphNCZ2K8OcJfHlzJqUIxaQeNPvWRP8/8eBCVAWdRw1dgqoG1KFzU
+         Zlf87K3Jln8jbJwQhzG/WbuNptt03ItLiM3OGLNhVakXLB2uWN+PrKlmeuKrPu91A/
+         ZGBCyXV/nKCZDcm2ZSi8yWdW0zmzY8xG8zaOcUwcpxpaXikA2C11a9McHSVxR1EI4f
+         UuMOnbAtNsc+w==
+Subject: Re: [PATCH v4 2/3] media: uapi: Add VP9 stateless decoder controls
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        gustavo.padovan@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+References: <20200518174011.15543-1-ezequiel@collabora.com>
+ <20200518174011.15543-3-ezequiel@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <c9e71d67-746c-b71e-c8df-d41d7074c20a@xs4all.nl>
+Date:   Wed, 20 May 2020 15:26:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20200518174011.15543-3-ezequiel@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfIJN1LDVCGpOOo4VPXXfFlMHaUJJAd/AzWJlRmvlAOexvk5d2LNhMkOV/xVHo+mBUAFmxCzGZBHvRsKcHAtPEfivxyjvjA2CpNqAtWQ8eppn2Djj/WnU
+ A7AVgS2PvvB4++xi6hR9XDeFHoImYe5u5JTZc9qpGjamLxsJYEDdhpGjH7XLpJRs5tIMrC4+hU5nap6FIA/gX20Svb82dcmMpAYm1BGsA6AsRY19C66K+2WW
+ 3K6DWb0HnHDuguuGcji+dv7PJcqB1mO5bXjCGPnszee7y/f1dGBN14lNaMgWk63GF5NAO3cSisZ0Z7Uil/5xaIXGWIBJZY4M8ZyAkDTo+LhFy4DO3lDBADYb
+ Ua9FtQPKCcU9RPyFiQ+uex0LD99XbJuSLlQZuAwdI74szKk2d/wvCXymBr4gqBQ7zS3oXfl5C6g/4cnlx3JR9BsxlHNNGDLj8S04DdPHpBRYI3WI9+oTgxjU
+ hUGlAZFlgkUAPKSEhalLm9bojCEbuPUEIaMVoqf3EZaxo6/oLlv7h4m++7qE7AwV7ywCElLoE1GBc4LN5/UeLjw2mvNA0r//RVyFJH9rhntz0UXXEGR2CjLJ
+ aM2ws8yzc6n2+6nWA5RhcNbx
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit 9495b7e92f716ab2bd6814fab5e97ab4a39adfdd ("driver core: platform:
-Initialize dma_parms for platform devices") in v5.7-rc5 causes
-vb2_dma_contig_clear_max_seg_size() to kfree memory that was not
-allocated by vb2_dma_contig_set_max_seg_size().
+On 18/05/2020 19:40, Ezequiel Garcia wrote:
+> From: Boris Brezillon <boris.brezillon@collabora.com>
+> 
+> Add the VP9 stateless decoder controls plus the documentation that goes
+> with it.
+> 
+> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> ---
+>  .../userspace-api/media/v4l/biblio.rst        |  10 +
+>  .../media/v4l/ext-ctrls-codec.rst             | 550 ++++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-ctrls.c          | 239 ++++++++
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
+>  include/media/v4l2-ctrls.h                    |   1 +
+>  include/media/vp9-ctrls.h                     | 485 +++++++++++++++
+>  6 files changed, 1286 insertions(+)
+>  create mode 100644 include/media/vp9-ctrls.h
+> 
 
-The assumption in vb2_dma_contig_set_max_seg_size() seems to be that
-dev->dma_parms is always NULL when the driver is probed, and the case
-where dev->dma_parms has bee initialized by someone else than the driver
-(by calling vb2_dma_contig_set_max_seg_size) will cause a failure.
+<snip>
 
-All the current users of these functions are platform devices, which now
-always have dma_parms set by the driver core. To fix the issue for v5.7,
-make vb2_dma_contig_set_max_seg_size() return an error if dma_parms is
-NULL to be on the safe side, and remove the kfree code from
-vb2_dma_contig_clear_max_seg_size().
+> +/**
+> + * struct v4l2_vp9_quantization - VP9 quantization parameters
+> + *
+> + * @base_q_idx: indicates the base frame qindex
+> + * @delta_q_y_dc: indicates the Y DC quantizer relative to base_q_idx
+> + * @delta_q_uv_dc: indicates the UV DC quantizer relative to base_q_idx
+> + * @delta_q_uv_ac indicates the UV AC quantizer relative to base_q_idx
+> + * @padding: padding bytes to align things on 64 bits. Must be set to 0
+> + *
+> + * Encodes the quantization parameters. See section '7.2.9 Quantization params
+> + * syntax' of the VP9 specification for more details.
+> + */
+> +struct v4l2_vp9_quantization {
+> +	__u8 base_q_idx;
+> +	__s8 delta_q_y_dc;
+> +	__s8 delta_q_uv_dc;
+> +	__s8 delta_q_uv_ac;
+> +	__u8 padding[4];
 
-For v5.8 we should remove the two functions and move the
-dma_set_max_seg_size() calls into the drivers.
+Are you sure this padding field is needed? What goes wrong if this is dropped?
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
----
+> +};
 
-Note: I have only fully tested this on linux-next, as the capture driver
-I use doesn't support unloading modules in v5.7.
+<snip>
 
- drivers/media/common/videobuf2/videobuf2-dma-contig.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+> +struct v4l2_ctrl_vp9_frame_decode_params {
+> +	__u32 flags;
+> +	__u16 compressed_header_size;
+> +	__u16 uncompressed_header_size;
+> +	__u8 profile;
+> +	__u8 reset_frame_context;
+> +	__u8 frame_context_idx;
+> +	__u8 bit_depth;
+> +	__u8 interpolation_filter;
+> +	__u8 tile_cols_log2;
+> +	__u8 tile_rows_log2;
+> +	__u8 tx_mode;
+> +	__u8 reference_mode;
+> +	__u8 padding[6];
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index d3a3ee5b597b..24f80b62ef94 100644
---- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-+++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-@@ -726,9 +726,8 @@ EXPORT_SYMBOL_GPL(vb2_dma_contig_memops);
- int vb2_dma_contig_set_max_seg_size(struct device *dev, unsigned int size)
- {
- 	if (!dev->dma_parms) {
--		dev->dma_parms = kzalloc(sizeof(*dev->dma_parms), GFP_KERNEL);
--		if (!dev->dma_parms)
--			return -ENOMEM;
-+		dev_err(dev, "Failed to set max_seg_size: dma_parms is NULL\n");
-+		return -ENODEV;
- 	}
- 	if (dma_get_max_seg_size(dev) < size)
- 		return dma_set_max_seg_size(dev, size);
-@@ -747,8 +746,6 @@ EXPORT_SYMBOL_GPL(vb2_dma_contig_set_max_seg_size);
-  */
- void vb2_dma_contig_clear_max_seg_size(struct device *dev)
- {
--	kfree(dev->dma_parms);
--	dev->dma_parms = NULL;
- }
- EXPORT_SYMBOL_GPL(vb2_dma_contig_clear_max_seg_size);
- 
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+This doesn't look right: this should be 7 if you want to align at 64 bits. Don't
+forget to update the documentation when you change this. In fact, the documentation
+doesn't mention the size of the array, it just says 'u8 padding'.
 
+I thought pahole flags something like this?
+
+> +	__u16 frame_width_minus_1;
+> +	__u16 frame_height_minus_1;
+> +	__u16 render_width_minus_1;
+> +	__u16 render_height_minus_1;
+> +	__u64 refs[V4L2_REF_ID_CNT];
+> +	struct v4l2_vp9_loop_filter lf;
+
+sizeof(lf) is an odd-number of bytes, so...
+
+> +	struct v4l2_vp9_quantization quant;
+
+... even though sizeof(quant) == 8 with the padding bytes, that would still not
+align at 64 bits.
+
+> +	struct v4l2_vp9_segmentation seg;
+> +	struct v4l2_vp9_probabilities probs;
+> +};
+> +
+> +#define V4L2_VP9_NUM_FRAME_CTX	4
+> +
+> +/**
+> + * struct v4l2_ctrl_vp9_frame_ctx - VP9 frame context control
+> + *
+> + * @probs: VP9 probabilities
+> + *
+> + * This control is accessed in both direction. The user should initialize the
+> + * 4 contexts with default values just after starting the stream. Then before
+> + * decoding a frame it should query the current frame context (the one passed
+> + * through &v4l2_ctrl_vp9_frame_decode_params.frame_context_idx) to initialize
+> + * &v4l2_ctrl_vp9_frame_decode_params.probs. The probs are then adjusted based
+> + * on the bitstream info and passed to the kernel. The codec should update
+> + * the frame context after the frame has been decoded, so that next time
+> + * userspace query this context it contains the updated probabilities.
+> + */
+> +struct v4l2_ctrl_vp9_frame_ctx {
+> +	struct v4l2_vp9_probabilities probs;
+> +};
+> +
+> +#endif /* _VP9_CTRLS_H_ */
+> 
+
+Regards,
+
+	Hans
