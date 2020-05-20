@@ -2,181 +2,159 @@ Return-Path: <SRS0=Mt3G=7C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BAB1C433E1
-	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 06:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A852AC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 07:03:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 438842065F
-	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 06:54:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86EDE207D3
+	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 07:03:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="ZdLONIhU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HbXqbch2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbgETGyr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 May 2020 02:54:47 -0400
-Received: from mail-dm6nam10on2081.outbound.protection.outlook.com ([40.107.93.81]:62657
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725998AbgETGyq (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 May 2020 02:54:46 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TovAAStFr6dQ37cf/MQD+bY7blxvs/dUFrClVDj58fM/LXWE+2+V1U56eqk4HnE5W52d1YEyG39k57Gk6IXNXYZZxcxMUMmFhCRF3L8CA1j1nW/rELLBhlskP+T4YEf9tb2q8PvjsY4UFMjKA8foVo8j6kEPcjBQF2tdHw/h28eY9pJ/QTLbwGFL8mAMnWo2GQfWkhwq7IYZnetgK1eSrWEa4Ose6WwfBtPQ7lfj8dzQE9QTQK7JY9oH5SQloGct9HCvLFoGawZy/cdu/yh8YStIl2dw6xgYqkfiT2AiU0Ox10v4zhRCl8WzDT515X7IahgrJT+YCOSHOehwWG8EBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RdaCuSPmEN2mL3/eYXoPsSxKryrFjyMCDnrvwYZBEME=;
- b=ZZAEsLSs9LVeeqr0P4zT8UoIdlOUuYnVPniuIUCJTnfDXMPoxJe0RfbyiCEZ9VOZ8eBITOrD8PbHMTsOASg6NQO2n8QHK+yPo7vTH/oKRxMtv4WaQXwwTe5KmCVFJATAsANu6iUw+HHq5KSmvzPZFlUMgHHmt5+5wJWvj3UAs1QK2iyfqB0ERLAa+wuE8H2yLJ6hAaMwPMpxSluChPRD8/L5QD5iDug2WALm1GuS46X0sKWGb02tYBuyzybG1Bwu/CJeaK9iKu+7zcENqI4gO3FbT0NL3+Cp3aEg8MpitnmEYoLvugEQ9zd4pWOB15BKJ22SO2BfS1t9OuEHo00gYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+        id S1726369AbgETHDs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 May 2020 03:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726714AbgETHDr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 May 2020 03:03:47 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A53C061A0E;
+        Wed, 20 May 2020 00:03:47 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id i68so1782692qtb.5;
+        Wed, 20 May 2020 00:03:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RdaCuSPmEN2mL3/eYXoPsSxKryrFjyMCDnrvwYZBEME=;
- b=ZdLONIhUxC0l8fYW5/3KrPj36fYxyozyAWkrv/CHW5JlGIy4RjLM5B/r3tI/b8KbHswqEEZb4MvZxMvDg+Ze93QXJLw1RlqGuE+lxTQBHnWjPr1tSK+dMJ64zPUSiXysnUgJX073gMvsJIR0sYA7yrf00rjOe9ShCHNJrr9QYj4=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4401.namprd12.prod.outlook.com (2603:10b6:5:2a9::15)
- by DM6PR12MB3260.namprd12.prod.outlook.com (2603:10b6:5:183::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.27; Wed, 20 May
- 2020 06:54:43 +0000
-Received: from DM6PR12MB4401.namprd12.prod.outlook.com
- ([fe80::7949:b580:a2d5:f766]) by DM6PR12MB4401.namprd12.prod.outlook.com
- ([fe80::7949:b580:a2d5:f766%3]) with mapi id 15.20.3021.020; Wed, 20 May 2020
- 06:54:43 +0000
-Subject: Re: [PATCH] dma-fence: add might_sleep annotation to _wait()
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@intel.com>
-References: <20200519132756.682888-1-daniel.vetter@ffwll.ch>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <be86b73c-2fb3-a6c0-5a12-004af051210f@amd.com>
-Date:   Wed, 20 May 2020 08:54:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-In-Reply-To: <20200519132756.682888-1-daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: AM0PR01CA0081.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:10e::22) To DM6PR12MB4401.namprd12.prod.outlook.com
- (2603:10b6:5:2a9::15)
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/bMUwdeTMh2W9i+EOVv7dhyz664fp1ziAg67LLNKBOI=;
+        b=HbXqbch2rS5fgngKGR1Sm2dQbxdU192Y5c3MlFvEYaUbXvLcOFAvcMRrdfLzHlamaq
+         GhvMmpQebC0AYLWCvrbPlqfnCjqZyJGVAb4lIRN4mqmJQrbEWGYTBriUdrRHsykASyh3
+         F0MKWsaWjJd7WmioFTsxJaOtNRcAuItHQraJ82XyuiTds0UFzYA+c6hwhU7tcHYc9aBc
+         LIyOl1KCOrzAVJtmorc3+3WPVf+gOWAGD7yUL7koovgVdGWKx3DMsu/xOFuXzhjhxUuo
+         2u5WpAE9JVhnFmJf9xzz8WfN0LVytt5Tsp7V3sKDhVmrjJLUxT9Q5peLOEMG7j//GHZT
+         CIJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/bMUwdeTMh2W9i+EOVv7dhyz664fp1ziAg67LLNKBOI=;
+        b=ZpnQPElB3MpCzXHG7ZRSw+f7iVJGXTq7F0wigxJM28SMu5OgEqO5vzkOLyVVZyGqTs
+         WGmG8dA4gCvcjRJCT4a0cgItMI62IXnei02ZV/+cYmoaYuj7BObDoXuKxyq2egRMKYzw
+         LLkuiEyaCl5O1Go9hkn8YMSvCEdDpNktJHuvA0AvAumN45f+XDUobsNzwKb+bNUZ5x4w
+         S16vphRudnK3tdCWLjbQePdsjapi3eKSALrN0j0YI3PWBMYD9AzlzlUL9wvGWvv3owkE
+         hVQyB5iIOO786gdXYKg75aLlEZFakJchZsIDqbN1GlAEgh2O+hepJzM2qbEeAkzp6wAj
+         xJVA==
+X-Gm-Message-State: AOAM532/ThvzdrGwS3/LXsfznOponkRU24jgsrVi7heFebLxcHz6gfih
+        1JzyRi1oZKZgVjzht5Dm/84=
+X-Google-Smtp-Source: ABdhPJyXyN7PbTHQV1zOP1vLExnTCKYT4/Ja78kVZ23F83MSq4XOLVctvtmRZuYna4uILW1uNsBKBQ==
+X-Received: by 2002:ac8:2f64:: with SMTP id k33mr3813298qta.105.1589958226820;
+        Wed, 20 May 2020 00:03:46 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14d:72b1:8920:a2ce:f815:f14d:bfac])
+        by smtp.gmail.com with ESMTPSA id i23sm1598893qke.65.2020.05.20.00.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2020 00:03:46 -0700 (PDT)
+From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
+X-Google-Original-From: Daniel W. S. Almeida
+To:     mchehab+huawei@kernel.org, sean@mess.org,
+        kstewart@linuxfoundation.org, allison@lohutok.net,
+        tglx@linutronix.de
+Cc:     "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
+        linux-media@vger.kernel.org, skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC, WIP, v6 01/10] media: vidtv: add Kconfig entry
+Date:   Wed, 20 May 2020 04:03:25 -0300
+Message-Id: <20200520070334.1778751-2-dwlsalmeida@gmail.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200520070334.1778751-1-dwlsalmeida@gmail.com>
+References: <20200520070334.1778751-1-dwlsalmeida@gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM0PR01CA0081.eurprd01.prod.exchangelabs.com (2603:10a6:208:10e::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.23 via Frontend Transport; Wed, 20 May 2020 06:54:40 +0000
-X-Originating-IP: [2a02:908:1252:fb60:be8a:bd56:1f94:86e7]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 3edeaee0-4091-4114-3eaf-08d7fc8aacd2
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3260:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3260EEC5E50B9A746401F5E983B60@DM6PR12MB3260.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 04097B7F7F
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wdMPcZpomRbJjgCjDgCCUUZya90n7J1+9UkWattp/9IEasATIGqpxoSqxQoeit81uNco0lHslCBaGSB7cK3RKiI18D/vtolrL7Fpd77R1VtsqK3Jg+jepvrL4M5kzIXZ6i1Vq/XVLl0F8z/eg4WTuMInnCs4IN6Yq9f8uEu9LVrJma/0Vi8ByfDNHEqAGfAR3UwG33Q//7pG86y8Ph/bJJHWbEr4WbGM4O6IkPAZ2PhtGdfLcoLMIBFcCaRbEcpxH6gAJKW+2OlA8Mwg+WiUpE6/mHXHObuIGfn+L790APf7Ww+bydhDT0kGjUF2NCx5FTT8Mj/9r+U58LR4muBCynl62DU0UVrXAHcvwtvI4YBadIHH9EpAli1VxgJvmcBoV40fiWiAnIl2vGVN1hwyyWMXNsn1K7y3K+5KnQsvMS+SihdljPyoP/P0VWcyp2C7WRbv0sUKiwkOf8cLxZwwf1seX2ya4qEote9GYgqCd+V6R8sriUMIX3rfuJCsuJZC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4401.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(376002)(39860400002)(366004)(396003)(136003)(346002)(86362001)(66574014)(66556008)(31696002)(66946007)(36756003)(54906003)(110136005)(8936002)(8676002)(2616005)(66476007)(316002)(478600001)(5660300002)(6666004)(31686004)(52116002)(6486002)(2906002)(4326008)(16526019)(7416002)(186003)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: /V/rnfUwvEvDmZLV6qlOAhuH5H1zplobp8r10KdpsMacdqzT5BPNffDK2iJnJWxuBkh6t4+zrCADfkH+0KZMGvR/hSatCm6qK98Pk4sGeScWGo2OWXvvPf+DW1T1s7hAVimWUJpi9wF+37c3x4EjT9q5R1KOxIAAZ23GeylDig6nS925R1qE3ZhzV5boCS1Hsgg4JU8jdasJNWZU/pBx7MmhI1fbVcFNbO2pKGCNcsqnlmKwZ63QDPW/keKAhsmkUb/1sm3UYCPfi0gw1E6QQfEARkUk3Q8xeAk7zP+Ja0QZXEuXT6WrfvUKl1xQCrlIS/OKA0OcHGL/sKqqFUAUXMIFpWdKFbom867K2JM0XCJnbpHwESb2oJsxzNTeHrC6HwDA20vVg6dpTMl7Ln+75rnTrJPJW7JG4Glu242z+YJ6F/ubQXPTOiJLH5220tKaieWkP555dgqrZNsO/gtDBD9mmslWMk962nME5rUTve1svCA29ofYSz4Wqnra3YOp4JvGOTGX7nYACmBcdQ22qZ1C1ObBs+ZZOFCPZ9qldljC5F+nmyrQiTYu4njytz/H
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3edeaee0-4091-4114-3eaf-08d7fc8aacd2
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2020 06:54:43.3172
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l2iG+D4zLjAeN5gfBpiIKu8PsRzrVGpBLaDRcRCsKqRRuP+jS5A/aJ/qjMEeReL+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3260
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 19.05.20 um 15:27 schrieb Daniel Vetter:
-> Do it uncontionally, there's a separate peek function with
-> dma_fence_is_signalled() which can be called from atomic context.
->
-> v2: Consensus calls for an unconditional might_sleep (Chris,
-> Christian)
->
-> Full audit:
-> - dma-fence.h: Uses MAX_SCHEDULE_TIMOUT, good chance this sleeps
-> - dma-resv.c: Timeout always at least 1
-> - st-dma-fence.c: Save to sleep in testcases
-> - amdgpu_cs.c: Both callers are for variants of the wait ioctl
-> - amdgpu_device.c: Two callers in vram recover code, both right next
->    to mutex_lock.
-> - amdgpu_vm.c: Use in the vm_wait ioctl, next to _reserve/unreserve
-> - remaining functions in amdgpu: All for test_ib implementations for
->    various engines, caller for that looks all safe (debugfs, driver
->    load, reset)
-> - etnaviv: another wait ioctl
-> - habanalabs: another wait ioctl
-> - nouveau_fence.c: hardcoded 15*HZ ... glorious
-> - nouveau_gem.c: hardcoded 2*HZ ... so not even super consistent, but
->    this one does have a WARN_ON :-/ At least this one is only a
->    fallback path for when kmalloc fails. Maybe this should be put onto
->    some worker list instead, instead of a work per unamp ...
-> - i915/selftests: Hardecoded HZ / 4 or HZ / 8
-> - i915/gt/selftests: Going up the callchain looks safe looking at
->    nearby callers
-> - i915/gt/intel_gt_requests.c. Wrapped in a mutex_lock
-> - i915/gem_i915_gem_wait.c: The i915-version which is called instead
->    for i915 fences already has a might_sleep() annotation, so all good
->
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: Lucas Stach <l.stach@pengutronix.de>
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Ben Skeggs <bskeggs@redhat.com>
-> Cc: "VMware Graphics" <linux-graphics-maintainer@vmware.com>
-> Cc: Oded Gabbay <oded.gabbay@gmail.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: linaro-mm-sig@lists.linaro.org
-> Cc: linux-rdma@vger.kernel.org
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: Chris Wilson <chris@chris-wilson.co.uk>
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Christian König <christian.koenig@amd.com>
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+Add the necessary Kconfig entries and a dummy Makefile to compile the new
+virtual DVB test driver (vidtv).
 
-> ---
->   drivers/dma-buf/dma-fence.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
-> index 90edf2b281b0..656e9ac2d028 100644
-> --- a/drivers/dma-buf/dma-fence.c
-> +++ b/drivers/dma-buf/dma-fence.c
-> @@ -208,6 +208,8 @@ dma_fence_wait_timeout(struct dma_fence *fence, bool intr, signed long timeout)
->   	if (WARN_ON(timeout < 0))
->   		return -EINVAL;
->   
-> +	might_sleep();
-> +
->   	trace_dma_fence_wait_start(fence);
->   	if (fence->ops->wait)
->   		ret = fence->ops->wait(fence, intr, timeout);
+Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
+---
+ drivers/media/test-drivers/Kconfig        | 10 ++++++++++
+ drivers/media/test-drivers/Makefile       |  1 +
+ drivers/media/test-drivers/vidtv/Kconfig  | 11 +++++++++++
+ drivers/media/test-drivers/vidtv/Makefile |  2 ++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 drivers/media/test-drivers/vidtv/Kconfig
+ create mode 100644 drivers/media/test-drivers/vidtv/Makefile
+
+diff --git a/drivers/media/test-drivers/Kconfig b/drivers/media/test-drivers/Kconfig
+index 188381c855939..7d273a8a7acc2 100644
+--- a/drivers/media/test-drivers/Kconfig
++++ b/drivers/media/test-drivers/Kconfig
+@@ -4,6 +4,10 @@ menuconfig V4L_TEST_DRIVERS
+ 	bool "V4L test drivers"
+ 	depends on VIDEO_DEV
+ 
++menuconfig DVB_TEST_DRIVERS
++	bool "DVB test drivers"
++	depends on DVB_CORE && MEDIA_SUPPORT && I2C
++
+ if V4L_TEST_DRIVERS
+ 
+ source "drivers/media/test-drivers/vimc/Kconfig"
+@@ -24,3 +28,9 @@ config VIDEO_VIM2M
+ source "drivers/media/test-drivers/vicodec/Kconfig"
+ 
+ endif #V4L_TEST_DRIVERS
++
++if DVB_TEST_DRIVERS
++
++source "drivers/media/test-drivers/vidtv/Kconfig"
++
++endif #DVB_TEST_DRIVERS
+diff --git a/drivers/media/test-drivers/Makefile b/drivers/media/test-drivers/Makefile
+index 74410d3a9f2d2..9f0e4ebb2efe7 100644
+--- a/drivers/media/test-drivers/Makefile
++++ b/drivers/media/test-drivers/Makefile
+@@ -7,3 +7,4 @@ obj-$(CONFIG_VIDEO_VIMC)		+= vimc/
+ obj-$(CONFIG_VIDEO_VIVID)		+= vivid/
+ obj-$(CONFIG_VIDEO_VIM2M)		+= vim2m.o
+ obj-$(CONFIG_VIDEO_VICODEC)		+= vicodec/
++obj-$(CONFIG_DVB_VIDTV)			+= vidtv/
+diff --git a/drivers/media/test-drivers/vidtv/Kconfig b/drivers/media/test-drivers/vidtv/Kconfig
+new file mode 100644
+index 0000000000000..22c4fd39461f1
+--- /dev/null
++++ b/drivers/media/test-drivers/vidtv/Kconfig
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0-only
++config DVB_VIDTV
++	tristate "Virtual DVB Driver (vidtv)"
++	depends on DVB_CORE && MEDIA_SUPPORT && I2C
++	help
++	  The virtual DVB test driver serves as a reference DVB driver and helps
++	  validate the existing APIs in the media subsystem. It can also aid developers
++	  working on userspace applications.
++
++
++	  When in doubt, say N.
+diff --git a/drivers/media/test-drivers/vidtv/Makefile b/drivers/media/test-drivers/vidtv/Makefile
+new file mode 100644
+index 0000000000000..d1558d84eeaed
+--- /dev/null
++++ b/drivers/media/test-drivers/vidtv/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++
+-- 
+2.26.2
 
