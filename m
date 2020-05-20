@@ -5,56 +5,56 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6989DC433E2
-	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 08:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59CDAC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 08:28:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F371206C3
-	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 08:28:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36AB720825
+	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 08:28:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kma0Y327"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kI33MLAo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726754AbgETI2H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 May 2020 04:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
+        id S1727040AbgETI2N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 May 2020 04:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727004AbgETI2F (ORCPT
+        with ESMTP id S1727030AbgETI2M (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 May 2020 04:28:05 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64FCC061A0F
-        for <linux-media@vger.kernel.org>; Wed, 20 May 2020 01:28:05 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id x10so1027651plr.4
-        for <linux-media@vger.kernel.org>; Wed, 20 May 2020 01:28:05 -0700 (PDT)
+        Wed, 20 May 2020 04:28:12 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A960C061A0F
+        for <linux-media@vger.kernel.org>; Wed, 20 May 2020 01:28:12 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id t7so1035093plr.0
+        for <linux-media@vger.kernel.org>; Wed, 20 May 2020 01:28:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/LfOfRQ1BQiwphHrNRte6xw/jEYRf+xz3oVTVJPPG2I=;
-        b=kma0Y327Haqr7NQBAqM02NV6gKGJitb40eCxnMZm2FrKpq41cEwYS+lyzibfqdMWik
-         w24DvxRBEmGxKioRETpD0bt8cQkeXHl0SBrOvv/rmMAK4t2/vCxn3x2leTbDBbevNZ1W
-         KvGxgBM5JR3rOzCILBJONf9fsWPqU4205zxNc=
+        bh=ll8NxVtMtfVOyEZFFQDfClPq5aIFoMbY7TDtR4kV3zQ=;
+        b=kI33MLAoCd0TxRti1KqGfffMmFCe7Qu+9zJ9GzgvLmIhvWroMh2PK76BMUA9xvXNN3
+         BeTyj3uDBE9zEEC9mrGi7btmBWv1HKDYmi4AFLoegQbxFbzAiNC0xk//stOr6yOaHvmJ
+         RFZ60+RwMPuvjP3Y2vhaAM16aSKaOTZXVNebc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/LfOfRQ1BQiwphHrNRte6xw/jEYRf+xz3oVTVJPPG2I=;
-        b=sLRltzVM+m/Sr8ZvUw6vE97e52X549jjiOx+2LRs3BlY54rZ05e3BSiKVmUWpE10Ol
-         hFHReQOWCZG0uoPdGZ2lIHa1IjmGUK5OW0+r46zFhUUmiv0VV5s4yDFQyoruz5jh9VZI
-         mT5sUK3PxUWUbyHVzx21d/1tm9def4/TV5Hz0AgafebNX1TFwU+sQs7h7dMPgtxMsXwH
-         JBwZN918IyXi4bqU9mJff05nG2w75LW8WAZrXYdSnS0Mbsu9GhSxLJd759814PJKkySc
-         uAdvDzaT14+J7PlXrk4I26Hd6KpM9Y10QyGWmoAywuL33E+FlSGqft9omHb2assue3ye
-         jKWw==
-X-Gm-Message-State: AOAM533PerwgevdTYfoud3WIX6p61r/Lvb75/mPsfHGc2gpjjc4p93Ay
-        L4WfXiOeg8RjcsnPSWOFH8FpfA==
-X-Google-Smtp-Source: ABdhPJzfHlsA4AU1IC84+T8wm6dXklFNwcq+ZgPisV0Y/ZadLwFlgQTchs4DKWy322j4P3LiBQROSQ==
-X-Received: by 2002:a17:902:684f:: with SMTP id f15mr3537657pln.237.1589963285367;
-        Wed, 20 May 2020 01:28:05 -0700 (PDT)
+        bh=ll8NxVtMtfVOyEZFFQDfClPq5aIFoMbY7TDtR4kV3zQ=;
+        b=C/mvW1OUVH6BXSoyYBtBYhEjVDNIqRB7Q8EwZzuXzxEuhRf43zFQGWYkQnNlhcC9Oz
+         JsR/IhNqhleSBeBy4pV7Oa8/WypoAI/Z1dkBFCO4K9AqGlGzzt4Qv0mDoTQ72xbyfdvM
+         hecvqoJOve3Rd9CY5B8RwjfWI93LdNBIa8WQpFmhrzo3hbNxQU9fMMtvhf3LcwePdEJ3
+         jfGUMoQex9/UWx0ZOMQ1SwWE9Vho93POJGld5lLHmwJqO/4/X2WSZIhgplvoYFPyuPv/
+         FQaha6AINJ0NmLH1gSzKEftZMDb1WwcZgkIu7twfyjGppPm0esBIESYDmN5XZ89sLmR7
+         0/Bg==
+X-Gm-Message-State: AOAM533W3ohKBuvanZZKO3lSuG3dRmGnQaRftwN7kOX/MCdjsQxpNdTU
+        HgelJPR+qUTVfeoecL25dPndYA==
+X-Google-Smtp-Source: ABdhPJyLQteFuXuVc69SpcsEFfMjArlHWm8lgkG4Ws0al46mciJZZn5XJ5qdF3eWNGJdzMi89qu6gw==
+X-Received: by 2002:a17:902:bf43:: with SMTP id u3mr3434302pls.240.1589963292039;
+        Wed, 20 May 2020 01:28:12 -0700 (PDT)
 Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:93d9:de4d:e834:3086])
-        by smtp.gmail.com with ESMTPSA id gg8sm1447775pjb.39.2020.05.20.01.28.02
+        by smtp.gmail.com with ESMTPSA id gg8sm1447775pjb.39.2020.05.20.01.28.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2020 01:28:04 -0700 (PDT)
+        Wed, 20 May 2020 01:28:11 -0700 (PDT)
 From:   Alexandre Courbot <acourbot@chromium.org>
 To:     Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -65,9 +65,9 @@ To:     Tiffany Lin <tiffany.lin@mediatek.com>,
 Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH 07/10] media: mtk-vcodec: venc: remove redundant code
-Date:   Wed, 20 May 2020 17:27:20 +0900
-Message-Id: <20200520082723.96136-8-acourbot@chromium.org>
+Subject: [PATCH 09/10] media: dt-bindings: mtk-vcodec: specify SCP node
+Date:   Wed, 20 May 2020 17:27:22 +0900
+Message-Id: <20200520082723.96136-10-acourbot@chromium.org>
 X-Mailer: git-send-email 2.26.2.761.g0e0b3e54be-goog
 In-Reply-To: <20200520082723.96136-1-acourbot@chromium.org>
 References: <20200520082723.96136-1-acourbot@chromium.org>
@@ -78,53 +78,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vidioc_try_fmt() does clamp height and width when called on the OUTPUT
-queue, so clamping them prior to calling this function is redundant. Set
-the queue's parameters after calling vidioc_try_fmt() so we can use the
-values it computed.
+The mediatek codecs can use either the VPU or the SCP as their interface
+to firmware. Reflect this in the DT bindings.
 
 Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
 ---
- .../media/platform/mtk-vcodec/mtk_vcodec_enc.c   | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+ Documentation/devicetree/bindings/media/mediatek-vcodec.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-index 05743a745a11..f0af78f112db 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-@@ -449,7 +449,6 @@ static int vidioc_venc_s_fmt_out(struct file *file, void *priv,
- 	struct mtk_q_data *q_data;
- 	int ret, i;
- 	const struct mtk_video_fmt *fmt;
--	struct v4l2_pix_format_mplane *pix_fmt_mp = &f->fmt.pix_mp;
+diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+index b6b5dde6abd8..7aef0a4fe207 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
++++ b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+@@ -19,7 +19,9 @@ Required properties:
+ - iommus : should point to the respective IOMMU block with master port as
+   argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+   for details.
+-- mediatek,vpu : the node of video processor unit
++One of the two following nodes:
++- mediatek,vpu : the node of the video processor unit, if using VPU.
++- mediatek,scp : the noode of the SCP unit, if using SCP.
  
- 	vq = v4l2_m2m_get_vq(ctx->m2m_ctx, f->type);
- 	if (!vq) {
-@@ -474,20 +473,13 @@ static int vidioc_venc_s_fmt_out(struct file *file, void *priv,
- 		f->fmt.pix.pixelformat = fmt->fourcc;
- 	}
  
--	pix_fmt_mp->height = clamp(pix_fmt_mp->height,
--				MTK_VENC_MIN_H,
--				MTK_VENC_MAX_H);
--	pix_fmt_mp->width = clamp(pix_fmt_mp->width,
--				MTK_VENC_MIN_W,
--				MTK_VENC_MAX_W);
--
--	q_data->visible_width = f->fmt.pix_mp.width;
--	q_data->visible_height = f->fmt.pix_mp.height;
--	q_data->fmt = fmt;
--	ret = vidioc_try_fmt(f, q_data->fmt);
-+	ret = vidioc_try_fmt(f, fmt);
- 	if (ret)
- 		return ret;
- 
-+	q_data->fmt = fmt;
-+	q_data->visible_width = f->fmt.pix_mp.width;
-+	q_data->visible_height = f->fmt.pix_mp.height;
- 	q_data->coded_width = f->fmt.pix_mp.width;
- 	q_data->coded_height = f->fmt.pix_mp.height;
- 
+ Example:
 -- 
 2.26.2.761.g0e0b3e54be-goog
 
