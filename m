@@ -2,63 +2,62 @@ Return-Path: <SRS0=Mt3G=7C=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C1BCC433E1
-	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 07:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25D15C433E2
+	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 07:03:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 707C3207D3
+	by mail.kernel.org (Postfix) with ESMTP id F2F1E20756
 	for <linux-media@archiver.kernel.org>; Wed, 20 May 2020 07:03:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rXmbNI5g"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cTTorZGJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726745AbgETHDw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 May 2020 03:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S1726697AbgETHDo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 May 2020 03:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726714AbgETHDv (ORCPT
+        with ESMTP id S1726369AbgETHDo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 May 2020 03:03:51 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFEDC061A0E;
-        Wed, 20 May 2020 00:03:51 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id v4so1791033qte.3;
-        Wed, 20 May 2020 00:03:51 -0700 (PDT)
+        Wed, 20 May 2020 03:03:44 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22524C061A0E;
+        Wed, 20 May 2020 00:03:44 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id n22so1736217qtv.12;
+        Wed, 20 May 2020 00:03:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eeh2SkWyijymo9cnU9Av2Bb+Xmr6PIKb3ksPyQrjT9I=;
-        b=rXmbNI5gTGNWRLF1wQUtZB2LyQn9YD0sJqIGZWkRqGtwkDOBKvaBMdgvnpUbLgj/+U
-         pJQVcb1EaEb5DLkdmo+gg13eAxhIoAbD5gMoS26twMxEIzDYl1Hnc/TtPDxKzZmMFeKn
-         N91hA9RBq50RxHpQlpgpO5ahVMveCM0rKslW6nQHPF74oebQhnCTbfb6en4W4fW5Ap24
-         /nCeLCTsodI5Qls8gfMO4mjVpfna0X7Qbxd2bjuLTkMtuBL+o1f5YeQ4K5OA3/JM2BrN
-         gsoBMXi1eZBOFzLUrwgRjTVRBnK7e9r2i0dMVWGOt7dD/aU6Q8iplIGvXMF2Q+2cyymR
-         4AGw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SPg3UerPg90w3ZwY/BvCPc4omVM0mKRl5Uw6ZCALGQg=;
+        b=cTTorZGJAZha9tsJP76UL9hMit//fhSOijqnlZQdU9ZwX1UdJnFHBfSCiuMHJRltWt
+         K/pz9L9H9GCvv2PPK2cLm740MVfaZYexWrhxTB/IQpSyOsXN+7B2NfL9Pk+tielFT7YJ
+         OyuAGdaiRbnF7rGS4fMswOg5bNPbm6V37lC7KfJarvibbyrHcyWkZJduxIp3phsK8yk2
+         T82xPoYx7MCc64MUS9tmo50SkK+feh+8P0i0di+uW2qWUzcrNRN60xCpaSNfMDeqrKuq
+         zEE6H/4oqIW6eKY6/Qwxr32jfMoCokSGJOJPTXtGXEo+oWhsuYRf3MLnz/nTf+LNVjNF
+         NVVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eeh2SkWyijymo9cnU9Av2Bb+Xmr6PIKb3ksPyQrjT9I=;
-        b=pQTbNKW6+SR3JEW7qXWDCXktW/IGFWSb0UWAv9qlV8qd9MkpQSidytSp+WuweWdOjn
-         RTAwtxQPSRsGqhYqzRxPzKxfg+Sn48wPAuxynTsj0Fkg1aUUyP4aN4xlOLbCQgcx4x1x
-         42XjcT80CBxf/SdTyh4BsMnn2+kp5oWTQ8QzZyie2itjTE3gipscOQEeOfTrIdbUBwfn
-         EhMgoae39cTCwpUv4nKLM1Sp0TnfUTHEIuwDUtLqg8Bzo4gdkT+CxHlziRpSa0Wo+s46
-         USRBiBd5L7HOb3YTaMir3WM1V/q9Q8yBw7boiC9dTMzLwpLOPQEJU+v9jRC490E9Smfk
-         eMIw==
-X-Gm-Message-State: AOAM532qhnFC0vUAIKdw3OVSFuAdXJJ5fjUhLyETYGVd+X5XMW0r3WsK
-        wIPJ63QRp0eeN0BOzr8je9A=
-X-Google-Smtp-Source: ABdhPJzg55T5Hytku6Km669TJZy80Av/Kmb3uoctl1YzFg6pEG93n6yW/jL0bHG8a/zd8WgY/RmnFw==
-X-Received: by 2002:ac8:945:: with SMTP id z5mr4022225qth.16.1589958230665;
-        Wed, 20 May 2020 00:03:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SPg3UerPg90w3ZwY/BvCPc4omVM0mKRl5Uw6ZCALGQg=;
+        b=sT94k7Q1DKp//p3ngCb3UD9Muvm+0fTCkjwp0pCEHH0e5QU2BUq+nxLB90sexBI83w
+         BL8tAfRoRiiIuhFOORofxRAotoOMwHQjrOe269JPm7zg/UvfEBodZi17oHS2xBYwhbEY
+         pSV0A8HpmlULF/4+Wtv/W4y4IJiYM9GRbFeCiIDn+XJj0wFZ+E66TXjUrWtDymruuvXQ
+         vS2gGD7RVH3v3d9CrWCGtQc07k8i51Ap13G658AxGz0rEES/fSGA86U+KC4UxpUOxtRX
+         ePhTCRgQiWl4evlqOr5Ayu73RtKgAgVQd586EvKeidrc7b5vE7f8BwsUouczl0QnDHA5
+         OLdQ==
+X-Gm-Message-State: AOAM533Em5MfP8rnD4xjqwcoZMJg49nQGadZtWNnlelmfZufCzKb/fmj
+        v/emetce006RuYkYzxSz3ZE=
+X-Google-Smtp-Source: ABdhPJwmGRFWIiu1DJVRB/u/ecF9p0MpmYAe8g5W0ZqK/dP/eT2jN9q3m+TF08mo4vRe0f+B8YcU7Q==
+X-Received: by 2002:ac8:2db0:: with SMTP id p45mr3278993qta.354.1589958223103;
+        Wed, 20 May 2020 00:03:43 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14d:72b1:8920:a2ce:f815:f14d:bfac])
-        by smtp.gmail.com with ESMTPSA id i23sm1598893qke.65.2020.05.20.00.03.47
+        by smtp.gmail.com with ESMTPSA id i23sm1598893qke.65.2020.05.20.00.03.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2020 00:03:50 -0700 (PDT)
+        Wed, 20 May 2020 00:03:41 -0700 (PDT)
 From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 X-Google-Original-From: Daniel W. S. Almeida
 To:     mchehab+huawei@kernel.org, sean@mess.org,
@@ -68,12 +67,10 @@ Cc:     "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         linux-media@vger.kernel.org, skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC, WIP, v6 02/10] media: vidtv: implement a tuner driver
-Date:   Wed, 20 May 2020 04:03:26 -0300
-Message-Id: <20200520070334.1778751-3-dwlsalmeida@gmail.com>
+Subject: [RFC, WIP, v6 00/10] media: vidtv: implement a virtual DVB driver
+Date:   Wed, 20 May 2020 04:03:24 -0300
+Message-Id: <20200520070334.1778751-1-dwlsalmeida@gmail.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200520070334.1778751-1-dwlsalmeida@gmail.com>
-References: <20200520070334.1778751-1-dwlsalmeida@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -83,478 +80,186 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 
-The virtual DVB test driver serves as a reference DVB driver and helps
-validate the existing APIs in the media subsystem. It can also aid developers
-working on userspace applications.
+This series is work in progress. It represents the current work done on a
+virtual DVB driver for the Linux media subsystem. I am new to the media
+subsystem and to kernel development in general.
 
-This dummy tuner should support common TV standards such as DVB-T/T2/S/S2,
-ISDB-T and ATSC when completed.
+This driver aims to:
+	- Serve as template for new DVB driver writers
+	- Help userspace application writers in general
+	- Push fake audio/video to userspace for testing
+		purposes
+	- Push debug information to userspace via debugfs
 
-Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
----
- drivers/media/test-drivers/vidtv/Makefile     |   3 +
- .../media/test-drivers/vidtv/vidtv_tuner.c    | 408 ++++++++++++++++++
- .../media/test-drivers/vidtv/vidtv_tuner.h    |  26 ++
- 3 files changed, 437 insertions(+)
+This should currently be able to feed PSI and PCM audio data to
+userspace.
+
+I appreciate any feedback!
+
+Changes in v6:
+	Addressed the following issues:
+	- Makefile was not actually compiling everything;
+	- The bridge driver should be a platform driver;
+	- There are lots of warnings and other errors produced
+	by the driver.
+
+Changes in v5:
+
+Removed all calls to WARN_ON in favor of pr_warn_ratelimited
+Add a #define for pr_fmt
+Reworked the byte swapping logic for big/little endian support:
+	big endian fields now prepended with __beXX for 'sparse' checks
+	bitfields now laid in reverse order if LITTLE_ENDIAN_BITFIELD
+		is set
+
+media: vidtv: implement a tuner driver
+	Return -EINVAL instead of -1 in vidtv_tuner_check_frequency_shift
+media: vidtv: implement a demodulator driver
+	Add POLL_THRD_TIME #define
+	Implement dvb_frontend_ops as a single struct instead of three
+media: vidtv: move config structs into a separate header
+	Removed this commit, configs are now in vidtv_tuner.h and vidtv_demod.h
+media: vidtv: add a bridge driver
+	module_param: all fs permissions set to 0
+	removed param 'chosen_delsys'
+	module_param: removed "optional" string: all module_params are optional
+	renamed vidtv_bridge -> vidtv_bridg: so the source code and module names
+		are different
+media: vidtv: add wrappers for memcpy and memset
+	Added kernel-docs
+	write address is now computed internally
+media: vidtv: add MPEG TS common code
+	Drop packets if the buffer is full
+media: vidtv: implement a PSI generator
+	Removed vidtv_psi_ts_psi_write_stuffing()
+	Forcibly align misaligned buffers
+	Drop packets if buffer is full
+media: vidtv: implement a PES packetizer
+	Remove vidtv_extract_bits() in favor of GENMASK() and bitwise &
+	Forcibly align misaligned buffers
+media: vidtv: Implement a SMPTE 302M encoder
+	Added kernel-docs for struct vidtv_encoder
+media: vidtv: Add a MPEG Transport Stream Multiplexer
+	Added check for minimum and maximum buffer size.
+	Drop packets if buffer is full
+
+
+Changes in v4:
+Added a PES packetizer
+Implemented a minimum version of the SMPTE 302m encoder for AES3 audio
+Fixed endianness in the PSI generator, converting fields to big endian where applicable
+Added a minimal TS mux abstraction
+
+Changes in v3:
+Added a bridge driver
+Renamed the driver to vidtv
+Renamed/reworked commits into smaller pieces
+Moved the driver into its own directory
+Fixed the code for the signal strength in the tuner
+Removed useless enums in the tuner driver (e.g. lock_status, power_status...)
+Reworked the logic for the poll_snr thread in the demodulator driver
+Moved MPEG related code to the bridge driver, as it controls the demux logic
+Changed literals to #defines, used sizeof in place of integer literals when
+computing the size of PSI structs
+Moved the MPEG PSI tables to the heap to reduce stack space usage
+Now using usleep_range in place of msleep_interruptible in the MPEG TS thread
+Wrapped memcpy and memset to protect against buffer overflow when writing to the
+MPEG TS buffer.
+
+Changes in v2:
+Attempted not to break assignments into multiple lines as much as possible.
+Code now passes checkpatch strict mode
+
+media: dvb_dummy_tuner: implement driver skeleton	
+Changed snr values to mili db
+Return value from 0-100 to indicate how far off the requested
+frequency is from a valid one
+
+Use the frequency shift to interpolate between 34dB and 10dB if
+we can not match against the SNR lookup table
+Remove sleep calls for suspend/resume
+
+Fix memcpy call for the config struct
+
+media: dvb_dummy_fe.c: lose TS lock on bad snr
+Randomly recover the TS lock if the signal quality improves
+
+media: dvb_dummy_fe.c: write PSI information into DMX buffer
+Split the patch into multiple header/source files
+
+Hexadecimal literals are now lower case
+
+Prefer short function names / reduce function signatures
+
+Add #defines for constants when computing section lengths
+
+Change signature for functions that take a dummy channel as
+argument (i.e. channels* is now channels[NUM_CHANNELS])
+
+Daniel W. S. Almeida (10):
+  media: vidtv: add Kconfig entry
+  media: vidtv: implement a tuner driver
+  media: vidtv: implement a demodulator driver
+  media: vidtv: add a bridge driver
+  media: vidtv: add wrappers for memcpy and memset
+  media: vidtv: add MPEG TS common code
+  media: vidtv: implement a PSI generator
+  media: vidtv: implement a PES packetizer
+  media: vidtv: Implement a SMPTE 302M encoder
+  media: vidtv: Add a MPEG Transport Stream Multiplexer
+
+ arch/Kconfig                                  |    2 +-
+ drivers/media/dvb-core/dvbdev.c               |    1 +
+ drivers/media/test-drivers/Kconfig            |   10 +
+ drivers/media/test-drivers/Makefile           |    1 +
+ drivers/media/test-drivers/vidtv/Kconfig      |   11 +
+ drivers/media/test-drivers/vidtv/Makefile     |    9 +
+ .../media/test-drivers/vidtv/vidtv_bridge.c   |  511 ++++++++
+ .../media/test-drivers/vidtv/vidtv_bridge.h   |   41 +
+ .../media/test-drivers/vidtv/vidtv_channel.c  |  339 ++++++
+ .../media/test-drivers/vidtv/vidtv_channel.h  |   66 ++
+ .../media/test-drivers/vidtv/vidtv_common.c   |   86 ++
+ .../media/test-drivers/vidtv/vidtv_common.h   |   34 +
+ .../media/test-drivers/vidtv/vidtv_demod.c    |  444 +++++++
+ .../media/test-drivers/vidtv/vidtv_demod.h    |   41 +
+ .../media/test-drivers/vidtv/vidtv_encoder.h  |  103 ++
+ drivers/media/test-drivers/vidtv/vidtv_mux.c  |  434 +++++++
+ drivers/media/test-drivers/vidtv/vidtv_mux.h  |  105 ++
+ drivers/media/test-drivers/vidtv/vidtv_pes.c  |  450 +++++++
+ drivers/media/test-drivers/vidtv/vidtv_pes.h  |  186 +++
+ drivers/media/test-drivers/vidtv/vidtv_psi.c  | 1055 +++++++++++++++++
+ drivers/media/test-drivers/vidtv/vidtv_psi.h  |  420 +++++++
+ .../media/test-drivers/vidtv/vidtv_s302m.c    |  636 ++++++++++
+ .../media/test-drivers/vidtv/vidtv_s302m.h    |  119 ++
+ drivers/media/test-drivers/vidtv/vidtv_ts.c   |  157 +++
+ drivers/media/test-drivers/vidtv/vidtv_ts.h   |  120 ++
+ .../media/test-drivers/vidtv/vidtv_tuner.c    |  408 +++++++
+ .../media/test-drivers/vidtv/vidtv_tuner.h    |   26 +
+ 27 files changed, 5814 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/media/test-drivers/vidtv/Kconfig
+ create mode 100644 drivers/media/test-drivers/vidtv/Makefile
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_bridge.c
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_bridge.h
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_channel.c
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_channel.h
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_common.c
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_common.h
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_demod.c
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_demod.h
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_encoder.h
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_mux.c
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_mux.h
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_pes.c
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_pes.h
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_psi.c
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_psi.h
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_s302m.c
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_s302m.h
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_ts.c
+ create mode 100644 drivers/media/test-drivers/vidtv/vidtv_ts.h
  create mode 100644 drivers/media/test-drivers/vidtv/vidtv_tuner.c
  create mode 100644 drivers/media/test-drivers/vidtv/vidtv_tuner.h
 
-diff --git a/drivers/media/test-drivers/vidtv/Makefile b/drivers/media/test-drivers/vidtv/Makefile
-index d1558d84eeaed..58e022c094e5e 100644
---- a/drivers/media/test-drivers/vidtv/Makefile
-+++ b/drivers/media/test-drivers/vidtv/Makefile
-@@ -1,2 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+dvb-vidtv-tuner-objs := vidtv_tuner.o
-+
-+obj-$(CONFIG_DVB_VIDTV)	+= dvb-vidtv-tuner.o
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_tuner.c b/drivers/media/test-drivers/vidtv/vidtv_tuner.c
-new file mode 100644
-index 0000000000000..3f2b4b9a6d568
---- /dev/null
-+++ b/drivers/media/test-drivers/vidtv/vidtv_tuner.c
-@@ -0,0 +1,408 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * The Virtual DVB test driver serves as a reference DVB driver and helps
-+ * validate the existing APIs in the media subsystem. It can also aid
-+ * developers working on userspace applications.
-+ *
-+ * The vidtv tuner should support common TV standards such as
-+ * DVB-T/T2/S/S2, ISDB-T and ATSC when completed.
-+ *
-+ * Written by Daniel W. S. Almeida <dwlsalmeida@gmail.com>
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ":%s, %d: " fmt, __func__, __LINE__
-+
-+#include <linux/errno.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <media/dvb_frontend.h>
-+#include <linux/printk.h>
-+#include <linux/ratelimit.h>
-+
-+#include "vidtv_tuner.h"
-+
-+MODULE_DESCRIPTION("Virtual DVB Tuner");
-+MODULE_AUTHOR("Daniel W. S. Almeida");
-+MODULE_LICENSE("GPL");
-+
-+struct vidtv_tuner_cnr_to_qual_s {
-+	/* attempt to use the same values as libdvbv5 */
-+	u32 modulation;
-+	u32 fec;
-+	u32 cnr_ok, cnr_good;
-+};
-+
-+static const struct vidtv_tuner_cnr_to_qual_s vidtv_tuner_c_cnr_2_qual[] = {
-+	/* from libdvbv5 source code, in milli db */
-+	{ QAM_256, FEC_NONE,  34000, 38000},
-+	{ QAM_64,  FEC_NONE,  30000, 34000},
-+};
-+
-+static const struct vidtv_tuner_cnr_to_qual_s vidtv_tuner_s_cnr_2_qual[] = {
-+	/* from libdvbv5 source code, in milli db */
-+	{ QPSK, FEC_1_2,  7000, 10000},
-+
-+	{ QPSK, FEC_2_3,  9000, 12000},
-+	{ QPSK, FEC_3_4, 10000, 13000},
-+	{ QPSK, FEC_5_6, 11000, 14000},
-+
-+	{ QPSK, FEC_7_8, 12000, 15000},
-+};
-+
-+static const struct vidtv_tuner_cnr_to_qual_s vidtv_tuner_s2_cnr_2_qual[] = {
-+	/* from libdvbv5 source code, in milli db */
-+	{ QPSK,  FEC_1_2,   9000,  12000},
-+	{ QPSK,  FEC_2_3,  11000,  14000},
-+	{ QPSK,  FEC_3_4,  12000,  15000},
-+	{ QPSK,  FEC_5_6,  12000,  15000},
-+	{ QPSK,  FEC_8_9,  13000,  16000},
-+	{ QPSK,  FEC_9_10, 13500,  16500},
-+	{ PSK_8, FEC_2_3,  14500,  17500},
-+	{ PSK_8, FEC_3_4,  16000,  19000},
-+	{ PSK_8, FEC_5_6,  17500,  20500},
-+	{ PSK_8, FEC_8_9,  19000,  22000},
-+};
-+
-+static const struct vidtv_tuner_cnr_to_qual_s vidtv_tuner_t_cnr_2_qual[] = {
-+	/* from libdvbv5 source code, in milli db*/
-+	{   QPSK, FEC_1_2,  4100,  5900},
-+	{   QPSK, FEC_2_3,  6100,  9600},
-+	{   QPSK, FEC_3_4,  7200, 12400},
-+	{   QPSK, FEC_5_6,  8500, 15600},
-+	{   QPSK, FEC_7_8,  9200, 17500},
-+
-+	{ QAM_16, FEC_1_2,  9800, 11800},
-+	{ QAM_16, FEC_2_3, 12100, 15300},
-+	{ QAM_16, FEC_3_4, 13400, 18100},
-+	{ QAM_16, FEC_5_6, 14800, 21300},
-+	{ QAM_16, FEC_7_8, 15700, 23600},
-+
-+	{ QAM_64, FEC_1_2, 14000, 16000},
-+	{ QAM_64, FEC_2_3, 19900, 25400},
-+	{ QAM_64, FEC_3_4, 24900, 27900},
-+	{ QAM_64, FEC_5_6, 21300, 23300},
-+	{ QAM_64, FEC_7_8, 22000, 24000},
-+};
-+
-+struct vidtv_tuner_hardware_state {
-+	bool asleep;
-+	u32 lock_status;
-+	u32 if_frequency;
-+	u32 tuned_frequency;
-+	u32 bandwidth;
-+};
-+
-+struct vidtv_tuner_dev {
-+	struct dvb_frontend *fe;
-+	struct vidtv_tuner_hardware_state hw_state;
-+	struct vidtv_tuner_config config;
-+};
-+
-+static struct vidtv_tuner_dev*
-+vidtv_tuner_get_dev(struct dvb_frontend *fe)
-+{
-+	struct i2c_client *client = fe->tuner_priv;
-+
-+	return i2c_get_clientdata(client);
-+}
-+
-+static s32 vidtv_tuner_check_frequency_shift(struct dvb_frontend *fe)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
-+	struct vidtv_tuner_config config  = tuner_dev->config;
-+	u32    *valid_freqs               = NULL;
-+	u32    array_sz                   = 0;
-+	u32 i;
-+	u32 shift;
-+
-+	switch (c->delivery_system) {
-+	case SYS_DVBT:
-+	case SYS_DVBT2:
-+		valid_freqs = config.vidtv_valid_dvb_t_freqs;
-+		array_sz    = ARRAY_SIZE(config.vidtv_valid_dvb_t_freqs);
-+		break;
-+	case SYS_DVBS:
-+	case SYS_DVBS2:
-+		valid_freqs = config.vidtv_valid_dvb_s_freqs;
-+		array_sz    = ARRAY_SIZE(config.vidtv_valid_dvb_s_freqs);
-+		break;
-+	case SYS_DVBC_ANNEX_A:
-+		valid_freqs = config.vidtv_valid_dvb_c_freqs;
-+		array_sz    = ARRAY_SIZE(config.vidtv_valid_dvb_c_freqs);
-+		break;
-+
-+	default:
-+		pr_warn("%s: unsupported delivery system: %u\n",
-+			__func__,
-+			c->delivery_system);
-+
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < array_sz; i++) {
-+		shift = abs(c->frequency - valid_freqs[i]);
-+
-+		if (!shift)
-+			return 0;
-+
-+		/*
-+		 * This will provide a value from 0 to 100 that would
-+		 * indicate how far is the tuned frequency from the
-+		 * right one.
-+		 */
-+		if (shift < config.max_frequency_shift_hz)
-+			return shift * 100 / config.max_frequency_shift_hz;
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int
-+vidtv_tuner_get_signal_strength(struct dvb_frontend *fe, u16 *strength)
-+{
-+	struct dtv_frontend_properties *c          = &fe->dtv_property_cache;
-+	const struct vidtv_tuner_cnr_to_qual_s *cnr2qual = NULL;
-+	u32    array_size                          = 0;
-+	s32 shift;
-+	u32 i;
-+
-+	shift = vidtv_tuner_check_frequency_shift(fe);
-+
-+	switch (c->delivery_system) {
-+	case SYS_DVBT:
-+	case SYS_DVBT2:
-+		cnr2qual   = vidtv_tuner_t_cnr_2_qual;
-+		array_size = ARRAY_SIZE(vidtv_tuner_t_cnr_2_qual);
-+		break;
-+
-+	case SYS_DVBS:
-+		cnr2qual   = vidtv_tuner_s_cnr_2_qual;
-+		array_size = ARRAY_SIZE(vidtv_tuner_s_cnr_2_qual);
-+		break;
-+
-+	case SYS_DVBS2:
-+		cnr2qual   = vidtv_tuner_s2_cnr_2_qual;
-+		array_size = ARRAY_SIZE(vidtv_tuner_s2_cnr_2_qual);
-+		break;
-+
-+	case SYS_DVBC_ANNEX_A:
-+		cnr2qual   = vidtv_tuner_c_cnr_2_qual;
-+		array_size = ARRAY_SIZE(vidtv_tuner_c_cnr_2_qual);
-+		break;
-+
-+	default:
-+		pr_warn_ratelimited("%s: unsupported delivery system: %u\n",
-+				    __func__,
-+				    c->delivery_system);
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i <= array_size; i++) {
-+		if (cnr2qual[i].modulation != c->modulation ||
-+		    cnr2qual[i].fec != c->fec_inner)
-+			continue;
-+
-+		if (!shift) {
-+			*strength = cnr2qual[i].cnr_good;
-+			return 0;
-+		}
-+		if (shift < 0) {	/* Channel not tuned */
-+			*strength = 0;
-+			return 0;
-+		}
-+		/*
-+		 * Channel tuned at wrong frequency. Simulate that the
-+		 * Carrier S/N ratio is not too good.
-+		 */
-+
-+		*strength = cnr2qual[i].cnr_ok -
-+			    (cnr2qual[i].cnr_good - cnr2qual[i].cnr_ok);
-+		return 0;
-+	}
-+
-+	/*
-+	 * do a linear interpolation between 34dB and 10dB if we can't
-+	 * match against the table
-+	 */
-+	*strength = 34 - 24 * shift / 100;
-+	return 0;
-+}
-+
-+static int vidtv_tuner_init(struct dvb_frontend *fe)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+	struct vidtv_tuner_config config  = tuner_dev->config;
-+
-+	msleep_interruptible(config.mock_power_up_delay_msec);
-+
-+	tuner_dev->hw_state.asleep       = false;
-+	tuner_dev->hw_state.if_frequency = 5000;
-+
-+	return 0;
-+}
-+
-+static int vidtv_tuner_sleep(struct dvb_frontend *fe)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+
-+	tuner_dev->hw_state.asleep = true;
-+	return 0;
-+}
-+
-+static int vidtv_tuner_suspend(struct dvb_frontend *fe)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+
-+	tuner_dev->hw_state.asleep = true;
-+	return 0;
-+}
-+
-+static int vidtv_tuner_resume(struct dvb_frontend *fe)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+
-+	tuner_dev->hw_state.asleep = false;
-+	return 0;
-+}
-+
-+static int vidtv_tuner_set_params(struct dvb_frontend *fe)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+	struct vidtv_tuner_config config  = tuner_dev->config;
-+	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
-+	u32    min_freq               = fe->ops.tuner_ops.info.frequency_min_hz;
-+	u32    max_freq               = fe->ops.tuner_ops.info.frequency_max_hz;
-+	u32    min_bw                 = fe->ops.tuner_ops.info.bandwidth_min;
-+	u32    max_bw                 = fe->ops.tuner_ops.info.bandwidth_max;
-+
-+	if (c->frequency < min_freq  || c->frequency > max_freq  ||
-+	    c->bandwidth_hz < min_bw || c->bandwidth_hz > max_bw) {
-+		tuner_dev->hw_state.lock_status = 0;
-+		return -EINVAL;
-+	}
-+
-+	tuner_dev->hw_state.tuned_frequency = c->frequency;
-+	tuner_dev->hw_state.bandwidth       = c->bandwidth_hz;
-+	tuner_dev->hw_state.lock_status     = TUNER_STATUS_LOCKED;
-+
-+	msleep_interruptible(config.mock_tune_delay_msec);
-+	return 0;
-+}
-+
-+static int vidtv_tuner_set_config(struct dvb_frontend *fe,
-+				  void *priv_cfg)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+
-+	memcpy(&tuner_dev->config, priv_cfg, sizeof(tuner_dev->config));
-+
-+	return 0;
-+}
-+
-+static int vidtv_tuner_get_frequency(struct dvb_frontend *fe,
-+				     u32 *frequency)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+
-+	*frequency = tuner_dev->hw_state.tuned_frequency;
-+
-+	return 0;
-+}
-+
-+static int vidtv_tuner_get_bandwidth(struct dvb_frontend *fe,
-+				     u32 *bandwidth)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+
-+	*bandwidth = tuner_dev->hw_state.bandwidth;
-+
-+	return 0;
-+}
-+
-+static int vidtv_tuner_get_if_frequency(struct dvb_frontend *fe,
-+					u32 *frequency)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+
-+	*frequency = tuner_dev->hw_state.if_frequency;
-+
-+	return 0;
-+}
-+
-+static int vidtv_tuner_get_status(struct dvb_frontend *fe, u32 *status)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = vidtv_tuner_get_dev(fe);
-+
-+	*status = tuner_dev->hw_state.lock_status;
-+
-+	return 0;
-+}
-+
-+static const struct dvb_tuner_ops vidtv_tuner_ops = {
-+	.init             = vidtv_tuner_init,
-+	.sleep            = vidtv_tuner_sleep,
-+	.suspend          = vidtv_tuner_suspend,
-+	.resume           = vidtv_tuner_resume,
-+	.set_params       = vidtv_tuner_set_params,
-+	.set_config       = vidtv_tuner_set_config,
-+	.get_bandwidth    = vidtv_tuner_get_bandwidth,
-+	.get_frequency    = vidtv_tuner_get_frequency,
-+	.get_if_frequency = vidtv_tuner_get_if_frequency,
-+	.get_status       = vidtv_tuner_get_status,
-+	.get_rf_strength  = vidtv_tuner_get_signal_strength
-+};
-+
-+static const struct i2c_device_id vidtv_tuner_i2c_id_table[] = {
-+	{"vidtv_tuner", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, vidtv_tuner_i2c_id_table);
-+
-+static int vidtv_tuner_i2c_probe(struct i2c_client *client,
-+				 const struct i2c_device_id *id)
-+{
-+	struct vidtv_tuner_config *config = client->dev.platform_data;
-+	struct dvb_frontend *fe           = config->fe;
-+	struct vidtv_tuner_dev *tuner_dev = NULL;
-+
-+	tuner_dev = kzalloc(sizeof(*tuner_dev), GFP_KERNEL);
-+	if (!tuner_dev)
-+		return -ENOMEM;
-+
-+	tuner_dev->fe = config->fe;
-+	i2c_set_clientdata(client, tuner_dev);
-+
-+	memcpy(&fe->ops.tuner_ops,
-+	       &vidtv_tuner_ops,
-+	       sizeof(struct dvb_tuner_ops));
-+
-+	fe->tuner_priv = client;
-+
-+	return 0;
-+}
-+
-+static int vidtv_tuner_i2c_remove(struct i2c_client *client)
-+{
-+	struct vidtv_tuner_dev *tuner_dev = i2c_get_clientdata(client);
-+	struct dvb_frontend *fe           = tuner_dev->fe;
-+
-+	memset(&fe->ops.tuner_ops, 0, sizeof(struct dvb_tuner_ops));
-+	fe->tuner_priv = NULL;
-+	kfree(tuner_dev);
-+
-+	return 0;
-+}
-+
-+static struct i2c_driver vidtv_tuner_i2c_driver = {
-+	.driver = {
-+		.name                = "vidtv_tuner",
-+		.suppress_bind_attrs = true,
-+	},
-+	.probe    = vidtv_tuner_i2c_probe,
-+	.remove   = vidtv_tuner_i2c_remove,
-+	.id_table = vidtv_tuner_i2c_id_table,
-+};
-+module_i2c_driver(vidtv_tuner_i2c_driver);
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_tuner.h b/drivers/media/test-drivers/vidtv/vidtv_tuner.h
-new file mode 100644
-index 0000000000000..46407739f5d44
---- /dev/null
-+++ b/drivers/media/test-drivers/vidtv/vidtv_tuner.h
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * The Virtual DTV test driver serves as a reference DVB driver and helps
-+ * validate the existing APIs in the media subsystem. It can also aid
-+ * developers working on userspace applications.
-+ *
-+ * Written by Daniel W. S. Almeida <dwlsalmeida@gmail.com>
-+ */
-+
-+#ifndef VIDTV_TUNER_H
-+#define VIDTV_TUNER_H
-+
-+#include <linux/types.h>
-+#include <media/dvb_frontend.h>
-+
-+struct vidtv_tuner_config {
-+	struct dvb_frontend *fe;
-+	u32 mock_power_up_delay_msec;
-+	u32 mock_tune_delay_msec;
-+	u32 vidtv_valid_dvb_t_freqs[8];
-+	u32 vidtv_valid_dvb_c_freqs[8];
-+	u32 vidtv_valid_dvb_s_freqs[8];
-+	u8  max_frequency_shift_hz;
-+};
-+
-+#endif //VIDTV_TUNER_H
 -- 
 2.26.2
 
