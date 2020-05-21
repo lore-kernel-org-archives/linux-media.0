@@ -2,104 +2,112 @@ Return-Path: <SRS0=xnAv=7D=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4F38C433DF
-	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 13:59:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00009C433DF
+	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 14:36:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8489D20721
-	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 13:59:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TZEsQQmR"
+	by mail.kernel.org (Postfix) with ESMTP id DE47120671
+	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 14:36:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729591AbgEUN7m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 May 2020 09:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729544AbgEUN7l (ORCPT
+        id S1728103AbgEUOgd convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 May 2020 10:36:33 -0400
+Received: from esa4.mentor.iphmx.com ([68.232.137.252]:6293 "EHLO
+        esa4.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729821AbgEUOgd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 May 2020 09:59:41 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76050C061A0F
-        for <linux-media@vger.kernel.org>; Thu, 21 May 2020 06:59:41 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id k13so6788418wrx.3
-        for <linux-media@vger.kernel.org>; Thu, 21 May 2020 06:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fd27zalAyz5wmnk1UFuL/3CVJVB2Mbru00pqm3YvwKU=;
-        b=TZEsQQmRmAtlsPZ6hEPx1lfN+WVfX9faQiHdd1FC5rdGKNoEokI5y6RqM2R5AunejI
-         u538EoIRYq37DBlxBdB5BCNFnYNB9Adj3e0xFr5JZI02zmw4mzuluXYm9cnjbvpKyKgs
-         AgA/U/12lSi6ar8khG8bQKCe9ydhwDp5gYliM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fd27zalAyz5wmnk1UFuL/3CVJVB2Mbru00pqm3YvwKU=;
-        b=YQoyJOmrBLsntH04yzXs5O0oy6QqTNoIoaB7MwcOlfh4h2PKk+00F5GdLTHWpUcmar
-         +U8/eOq1Qu4r04QJ/oSQLbLVf/rkd1IeBJYrRppgGt1My35MSK1Kip21XWuJesJ/PLUl
-         3niqk38NeAjmDAoJDdyRydhWgcPh7mKmRAhr73A+hCYhrUCqv/IKZS/j/glsLJy6ClMD
-         iErvMD0fnhPvW/sGtKV/JSrZgaVWkiU995Wi+S6GWe+3bVJybIFL+r4Ha8kht1qnVGuB
-         bjRogXCOMya+etNxNHmp929syT6EPgyIiqwtimd6KL2rlFuKhy+vgjWKzGpljwtg11rB
-         1Oug==
-X-Gm-Message-State: AOAM532bOGDTLJjkIchp0OhYHCyQbM+brQyEo6ffC8UhUFXTHz5ItLUF
-        Kn7PiYAWhl0rmbhIB414xn/GQg==
-X-Google-Smtp-Source: ABdhPJzYH1Ehd7L4WwVhzu2u//nGcgv2AbmGEgmxLvE9GqtTmu1vDDGQKL8r/UbPrLf9oXWCdRfLAA==
-X-Received: by 2002:a5d:68cb:: with SMTP id p11mr8426488wrw.349.1590069580276;
-        Thu, 21 May 2020 06:59:40 -0700 (PDT)
-Received: from chromium.org (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
-        by smtp.gmail.com with ESMTPSA id c17sm6505348wrn.59.2020.05.21.06.59.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2020 06:59:39 -0700 (PDT)
-Date:   Thu, 21 May 2020 13:59:37 +0000
-From:   Tomasz Figa <tfiga@chromium.org>
-To:     Xia Jiang <xia.jiang@mediatek.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rick Chang <rick.chang@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        srv_heupstream@mediatek.com, senozhatsky@chromium.org,
-        mojahsu@chromium.org, drinkcat@chromium.org,
-        maoguang.meng@mediatek.com, sj.huang@mediatek.com
-Subject: Re: [PATCH v8 04/14] media: platform: Change the fixed device node
- number to unfixed value
-Message-ID: <20200521135937.GD209565@chromium.org>
-References: <20200403094033.8288-1-xia.jiang@mediatek.com>
- <20200403094033.8288-5-xia.jiang@mediatek.com>
+        Thu, 21 May 2020 10:36:33 -0400
+IronPort-SDR: Cmq6BQom5OqmqpUC0JqGLYIZtUKSGdPPXOSPV7RK/kwqLaLOdxj2sVpltN0QmGQqQklwG40ClJ
+ dIVyu040zRqCim+D4ejVGdlnNsYpXFgW3huqFzRZhFUeyWlRjnMzWO12TU/CYlofBaCqHn3ies
+ JPAK0ymEA9S0MKBO3YgZQWzq34igx3GCqh/A6bUcIFF2B0/XuUafLnE2mTzRg6rEaeeJqrBjLB
+ iwgcw/rzmAaarlFPdq2LF9pAl2lkRWm1EYA0FoPl7Hemy2m4JOAHgZVg4Fx8oPLe7C7GJDGWOI
+ Tsc=
+X-IronPort-AV: E=Sophos;i="5.73,417,1583222400"; 
+   d="scan'208";a="49132383"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa4.mentor.iphmx.com with ESMTP; 21 May 2020 06:36:32 -0800
+IronPort-SDR: GOY+U8IpcZVGXz0NJChDt2qGoXZQwJCexspTiJAMrvDMaTnVahVcrauaBnztkeCLZyMo8GEaIW
+ lfbxmTaEF5/tQV+JUyGrz6+pfBkP4rWSG+cVLjzTh7C0WtIs0xHi9N1SiGSFWwfne619J5/zXv
+ /a6pNZS7DFHY+WZo+VunW5j9MTFX8Kj2Qa1zRHvRA95j5D69AZMkAqk9HXRYIF65/+UEZ8DC0A
+ 5o76M6TZIEjC477NBXN/VBE0MXaPPXtNh4nyVHC1zUJZcfqiWjd2n5D4ipXIo094AVthIbji1C
+ X+w=
+From:   "Surachari, Bhuvanesh" <Bhuvanesh_Surachari@mentor.com>
+To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+CC:     "Surachari, Bhuvanesh" <Bhuvanesh_Surachari@mentor.com>
+Subject: RE: [v4l-utils] Error in `media-ctl': double free or corruption
+ (fasttop)
+Thread-Topic: [v4l-utils] Error in `media-ctl': double free or corruption
+ (fasttop)
+Thread-Index: AdYux0+ElC5nWFbRTJ2KBnkFxFHJNQAs/gCA
+Date:   Thu, 21 May 2020 14:36:25 +0000
+Message-ID: <56d4e9d795d743d4845afcf9ee24b23e@SVR-IES-MBX-03.mgc.mentorg.com>
+Accept-Language: en-US, en-IE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200403094033.8288-5-xia.jiang@mediatek.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Xia,
+Hello,
 
-On Fri, Apr 03, 2020 at 05:40:23PM +0800, Xia Jiang wrote:
-> Change device node number from 3 to -1 because that the driver will
-> also support jpeg encoder.
-> 
+         When executing command "media-ctl -d /dev/media0 -p" crash is observed very rarely in media_enum_links() while freeing memory with the below backtrace:
 
-Thanks for the patch. The change is correct, but I think the commit
-message doesn't really explain the real reason for it. Perhaps something
-like
+****** EXCEPTION in process PID=1682 (media-ctl) ******* Command line: media-ctl -d /dev/media0 -p exception trigger PROCESS_SIGNAL signal "SIGABRT"
+Signal info:
+               si_signo:6
+               si_errno:0
+               si_code:0xfffffffa
+====== processor registers:
+x0-x9:   0000000000000000 0000ffffcc0c7780 0000000000000000 0000000000000008 0000000000000000 0000ffffcc0c7780 ffffffffffffffff ffffffffffffffff 0000000000000087 ffffffffffffffff
+x10-x19: ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff 0000000000000000 0000000000000000 0000ffff817b8f70 0000ffff816af8e0 0000ffff81787a70 0000000000000006
+x20-x29: 0000ffff817fc010 0000ffff817fb000 0000ffffcc0c79b0 0000000000000002 0000000000000001 0000ffff8175d8b8 0000000000000002 0000ffffcc0c79e0 0000000000000001 0000ffffcc0c7760
+x30: 0000ffff8166b038 sp: 0000ffffcc0c7760 pc: 0000ffff8166b0ac pstate: 0000000000000000 orig_x0: 0000000000000002 syscallno: 00000000ffffffff
 
-"The driver can be instantiated multiple times, e.g. for a decoder and
-an encoder. Moreover, other drivers could coexist on the same system.
-This makes the static video node number assignment pointless, so switch
-to automatic assignment instead."
+backtrace:
+---
+Extracted from stack:
+/lib64/libc-2.27.so(raise+0x9c)[0xffff8166b0ac]
+/lib64/libc-2.27.so(abort+0x140)[0xffff8166c160]
+/lib64/libc-2.27.so(abort+0x9c)[0xffff8166c0bc]
+/lib64/libc-2.27.so(__fsetlocking+0x2e8)[0xffff816a4730]
+/lib64/ld-2.27.so(_dl_rtld_di_serinfo+0xf70)[0xffff817df428]
+/lib64/libc-2.27.so(__fsetlocking+0x2b8)[0xffff816a4700]
+/lib64/libc-2.27.so(__libc_thread_freeres+0x17be8)[0xffff8175d8b8]
+/lib64/libc-2.27.so(__libc_thread_freeres+0x1bf9a)[0xffff81761c6a]
+/lib64/libc-2.27.so(__libc_thread_freeres+0x1bf9a)[0xffff81761c6a]
+/lib64/ld-2.27.so(_dl_rtld_di_serinfo+0x4cc4)[0xffff817e317c]
+/lib64/libc-2.27.so(__libc_thread_freeres+0x17be8)[0xffff8175d8b8]
+/lib64/libc-2.27.so(_IO_str_seekoff+0x4938)[0xffff816aead0]
+/lib64/libc-2.27.so(_IO_str_seekoff+0x88c)[0xffff816aaa24]
+/lib64/libc-2.27.so(__libc_thread_freeres+0x17be8)[0xffff8175d8b8]
+/lib64/libc-2.27.so(_IO_str_seekoff+0x21a0)[0xffff816ac338]
+/usr/lib64/libmediactl.so.0.0.0(media_device_enumerate+0x45c)[0xffff817a74ac]
+/usr/lib64/libmediactl.so.0.0.0(media_device_enumerate+0x360)[0xffff817a73b0]
+/usr/lib64/libmediactl.so.0.0.0(media_device_enumerate+0x45c)[0xffff817a74ac]
+/usr/bin/media-ctl(_init+0x3b0)[0x401738]
+RA: 0x0000000000000000 BP: 0x0000ffffcc0c7760 SP: 0x0000ffffcc0c9000 Saved registers and local vars (0xffffcc0c8f98 - 0xffffcc0c8ff0):
+<0000ffffcc0c8f90>                  5f4452414f420065 4d5f4749464e4f43 6f623d444f485445 636570732d647261 6e79642d63696669 6d6f632d63696d61 0073746e656e6f70         
+<0000ffffcc0c8fd0> 622f7273752f3d5f 616964656d2f6e69 73752f006c74632d 656d2f6e69622f72 006c74632d616964
 
-WDYT?
+The above crash could be related to commit id 112c52c3495713bad522cdf40f285a8e7b38674b ("libmediactl: Don't free an already freed address if no links")
+which was applied. But the commit id 314a19002e7244e4b8d5576f48cb9198ea8294c6 ("Revert "libmediactl: Don't free an already freed address if no links"")
+reverts the above patch.
 
-Best regards,
-Tomasz
+The  commit 112c52c3495713bad522cdf40f285a8e7b38674b ("libmediactl: Don't free an already freed address if no links")
+seems to help the crash we're seeing, but it was reverted the same day it was applied. Was that by accident or for some other reason?.
+
+I have resent the message since I didn't mention the commit id details in the last message.
+
+Thank you,
+Regards,
+Bhuvanesh
