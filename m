@@ -2,96 +2,112 @@ Return-Path: <SRS0=xnAv=7D=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B87CFC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 11:59:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D875EC433E1
+	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 12:02:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 87BF320756
-	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 11:59:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="gM9beF8q"
+	by mail.kernel.org (Postfix) with ESMTP id AC3EA20721
+	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 12:02:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729139AbgEUL7G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 May 2020 07:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729002AbgEUL7F (ORCPT
+        id S1729118AbgEUMCK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 May 2020 08:02:10 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:43723 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729080AbgEUMCJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 May 2020 07:59:05 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB18C061A0E
-        for <linux-media@vger.kernel.org>; Thu, 21 May 2020 04:59:05 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id g9so6467066edw.10
-        for <linux-media@vger.kernel.org>; Thu, 21 May 2020 04:59:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=to:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=/0cSOqQOtATxbOaNPAOcfsLwxJ0O4gpdXivQ0WydxDQ=;
-        b=gM9beF8q53GmO58wKHizsfjZmg9Odme6gdeor0lzQRw6rDgtzYQRL+J4PU6txydjlK
-         hrrXZkRdXTH97VDhRC/UYelCuX9RpdTGg5/BD5G2h5JxaGYWt7+qPtocwHiZXAbuBq5b
-         /P2gYfTs2cPB4a+rqQIm3n/i967eWgQ/Kbf3wBagipBACzelQUZCpAxkzLN2ho1uXjYD
-         Lm/n7TY5+pYh7Plx3b2X+9kI1fTAgxnBe1XPSbicxklvLej9YdWDEPEm24m+egbRhtWA
-         nv0T8abDTALGIg7xgvwRm8aWMjbX7vByRl0NxNwE7ycpj+vp9MCEzlQxTxs7EmR83n7F
-         WSkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=/0cSOqQOtATxbOaNPAOcfsLwxJ0O4gpdXivQ0WydxDQ=;
-        b=k4MAMnhYCWCkpjEhu70mk+2ozmU5SXD/NWZ+tXt50QoRb8XFmWuiU4kSc5YqgyvTI0
-         tIiXiEpHwxNVWSIYgi2BGiNS3CkkYhYeaiWYsqSuEnh+yUZw9m/O5edQgaI28RJ+RU7Y
-         liiicFJyrQ3/HSyIANi7WL5CKgYNTKTZyQ7QjHlNit/0QWdFzcVLbzrP2jFq7BFq7ufP
-         4MBf9l5daHiO0nRBJAxUGve3AIthNUnqNiHroVRvfdlvFpm+Wjf0PRpS0dCUt3S6XGus
-         sfxk3ZMw4n5FaTHd8rmHJIua9b/SyNCU8sTU+VsNRywNL9fPETRwSAQL7+sLo7St/Dc0
-         hgdg==
-X-Gm-Message-State: AOAM530ycMkihHHowVAPPUuKCFhfOtFG2asEi2dYIWQrXMNxk46YodYA
-        eZeKO6aOrg2sQ7N8iBOOHio3ob/+
-X-Google-Smtp-Source: ABdhPJzGi1zt/Njf93LI0+aFxidQjT1I8zbt7v32jXQD8Fhoq4RKcT3D9ULWEwCPiABrlLzVdn2wwA==
-X-Received: by 2002:aa7:d312:: with SMTP id p18mr4674124edq.88.1590062344106;
-        Thu, 21 May 2020 04:59:04 -0700 (PDT)
-Received: from ?IPv6:2a02:810a:8300:1c48:e13e:e99:f3a2:acc4? ([2a02:810a:8300:1c48:e13e:e99:f3a2:acc4])
-        by smtp.gmail.com with ESMTPSA id m2sm4740746ejb.33.2020.05.21.04.59.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2020 04:59:03 -0700 (PDT)
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-From:   Gregor Jasny <gjasny@googlemail.com>
-Subject: v4l-utils: how to solve troff warning: "cannot adjust line"
-Message-ID: <aafd4840-a7c5-558f-7bf9-fe56c95e7bb8@googlemail.com>
-Date:   Thu, 21 May 2020 13:59:02 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.8.0
+        Thu, 21 May 2020 08:02:09 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 9272E1C000E;
+        Thu, 21 May 2020 12:02:05 +0000 (UTC)
+Date:   Thu, 21 May 2020 14:05:25 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: media: Add missing clock domain description
+Message-ID: <20200521120525.m7wskfvgrp572z7t@uno.localdomain>
+References: <20200519074229.22308-1-geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200519074229.22308-1-geert+renesas@glider.be>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Hi Geert,
 
-while packaging v4l-utils 1.20 I noticed the lintian warning about the 
-cec-ctl.1 manpage. It is easily reproduced by calling:
+On Tue, May 19, 2020 at 09:42:29AM +0200, Geert Uytterhoeven wrote:
+> make dtbs_check:
+>
+>     arch/arm/boot/dts/r7s72100-genmai.dt.yaml: camera@e8210000: 'clocks', 'power-domains' do not match any of the regexes: 'pinctrl-[0-9]+'
+>
+> Fix this by documenting the missing properties.
+> Update the example to match reality.
 
-LC_ALL=en_US.UTF-8 MANROFFSEQ='' MANWIDTH=80 man --warnings -E UTF-8 -l 
--Tutf8 -Z cec-ctl.1 >/dev/null
-troff: <standard input>:264: warning [p 5, 0.5i, div 'an-div', 0.2i]: 
-cannot adjust line
+Thanks for fixing this!
 
-It is caused by this overlong command-line options line:
-https://git.linuxtv.org/v4l-utils.git/tree/utils/cec-ctl/cec-ctl.1.in?id=ae8dd398baf927bc5bc18abd1677a5c4e118034e#n264
+Acked-by: Jacopo Mondi <jacopo@jmondi.org>
 
-Does anyone have an idea how to fix this error (while staying 
-syntactivally correct)? I tried adding zero-width break points with \: 
-but the warning did not vanish.
+Thanks
+  j
 
-Thanks,
-Gregor
+>
+> Fixes: 7f464532b05dadc8 ("dt-bindings: Add missing 'additionalProperties: false'")
+> Fixes: 58361eaa11d561f3 ("dt-bindings: media: renesas,ceu: Convert to yaml")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  .../devicetree/bindings/media/renesas,ceu.yaml        | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/media/renesas,ceu.yaml b/Documentation/devicetree/bindings/media/renesas,ceu.yaml
+> index f2393458814ee08f..c7e1e4fe67e6696b 100644
+> --- a/Documentation/devicetree/bindings/media/renesas,ceu.yaml
+> +++ b/Documentation/devicetree/bindings/media/renesas,ceu.yaml
+> @@ -27,6 +27,12 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+>    port:
+>      type: object
+>      additionalProperties: false
+> @@ -57,6 +63,8 @@ required:
+>    - compatible
+>    - reg
+>    - interrupts
+> +  - clocks
+> +  - power-domains
+>    - port
+>
+>  additionalProperties: false
+> @@ -64,11 +72,14 @@ additionalProperties: false
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/r7s72100-clock.h>
+>
+>      ceu: ceu@e8210000 {
+>          reg = <0xe8210000 0x209c>;
+>          compatible = "renesas,r7s72100-ceu";
+>          interrupts = <GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&mstp6_clks R7S72100_CLK_CEU>;
+> +        power-domains = <&cpg_clocks>;
+>
+>          port {
+>              ceu_in: endpoint {
+> --
+> 2.17.1
+>
