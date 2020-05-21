@@ -2,136 +2,291 @@ Return-Path: <SRS0=xnAv=7D=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB228C433E1
-	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 00:10:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46633C433DF
+	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 01:36:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C26062075F
-	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 00:10:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 040322075F
+	for <linux-media@archiver.kernel.org>; Thu, 21 May 2020 01:36:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qUG0/EH6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726748AbgEUAKS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 May 2020 20:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S1727983AbgEUBg5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 May 2020 21:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726619AbgEUAKS (ORCPT
+        with ESMTP id S1727969AbgEUBg4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 May 2020 20:10:18 -0400
-Received: from Galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD09C061A0E;
-        Wed, 20 May 2020 17:10:18 -0700 (PDT)
-Received: from [5.158.153.53] (helo=debian-buster-darwi.lab.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:RSA_AES_256_CBC_SHA1:256)
-        (Exim 4.80)
-        (envelope-from <a.darwish@linutronix.de>)
-        id 1jbYmC-0006mO-Af; Thu, 21 May 2020 02:09:32 +0200
-Date:   Thu, 21 May 2020 02:09:30 +0200
-From:   "Ahmed S. Darwish" <a.darwish@linutronix.de>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        "David (ChunMing) Zhou" <David1.Zhou@amd.com>,
-        amd-gfx@lists.freedesktop.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        "Sebastian A. Siewior" <bigeasy@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v1 13/25] dma-buf: Use sequence counter with associated
- wound/wait mutex
-Message-ID: <20200521000930.GA359643@debian-buster-darwi.lab.linutronix.de>
-References: <20200519214547.352050-1-a.darwish@linutronix.de>
- <20200519214547.352050-14-a.darwish@linutronix.de>
- <e28c251e-5771-598c-37dd-c6be2de4b9e1@gmail.com>
+        Wed, 20 May 2020 21:36:56 -0400
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D980C061A0E
+        for <linux-media@vger.kernel.org>; Wed, 20 May 2020 18:36:56 -0700 (PDT)
+Received: by mail-qv1-xf44.google.com with SMTP id fb16so2381549qvb.5
+        for <linux-media@vger.kernel.org>; Wed, 20 May 2020 18:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oUriGfgjkQX3LYY7wtj+RwTpaaRdDlt+3hTHB1vDTro=;
+        b=qUG0/EH6XgLuxNXbQdJGezJbSQnq0Y0S/9ctlrDqDZzBmDJvsxq7FBzhGpk11Ot+cT
+         UsLryIJ+nLWIYzsIV6Gu/Gb2PxgGUbjh0zqQVnPG4bzFl45QemjVJQaDawNLUKoLvCC9
+         QJ8VqGPOjpv3ayUyQtnOU0LD/9bRdnFGsbRl64BkFPt8mD+QhsPumB/jzYiHyLkVE4B0
+         902XwQS+EUOGGd8kT064L7blhtHZHmZ24U4MraCQJQSV6gr+SfKf9DRh/zaCfYbaRUPl
+         uuGzpzGRkVx78pLUo5Smp49BsBnHwC+RAjbVqMp24UtmQT38yD4UGvKQGeuitvt76b7K
+         MitQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oUriGfgjkQX3LYY7wtj+RwTpaaRdDlt+3hTHB1vDTro=;
+        b=fYM0v2fvKLOt1f3XS5cM1IaRjArnacSLpdeEQbsG4s+VwyAg9liU1JP9JlTO7aibKf
+         8biEOqmsl0ckV4dOy9H1b5aD3y//r99Uv1kBaZyD7pY6uUq60Gx83NurLCvi9fUetiQC
+         qiBhIZsPFTFNULDc2m2Mre0IOWwduuHJQa5OuQDWaj17ImjMoyqlFFzx5K/JalzynfHR
+         VLeyoMcVjeO2paI/SMhX6zdWCiarWWi2BNmTZMqaPQIwYYcGTcBTjV09XHR8lebAWxYM
+         XDmjG5tWtUzq8YA/r33BwK3/WqikUwCP/CocU7FsTxtmgaaaTlNaYG2hCfPlulfotgw8
+         awYw==
+X-Gm-Message-State: AOAM532D4nYHTAKI9jCoEWBTW4Q6c/ZrvJT4ScXcHYwtLaa9gHtRysXW
+        4MQ0CfEilOJH/7vAxn00MRjMkU2YHm9qV41HArn5Iw==
+X-Google-Smtp-Source: ABdhPJy4C/+klK8xF4IEwT19w/09g+zR+6lWSkQvG6oshEgv9u7seIlkLrXJWcxPACRQ5P+F/R97+CzyHpQhoOhPB0E=
+X-Received: by 2002:a0c:ed21:: with SMTP id u1mr7831281qvq.206.1590025015219;
+ Wed, 20 May 2020 18:36:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e28c251e-5771-598c-37dd-c6be2de4b9e1@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+References: <20200506084039.249977-1-eizan@chromium.org> <20200506184018.v2.2.I87cf35a058328c780bd3b8b2191209a5011b7016@changeid>
+ <CAFqH_50_Py7Diu5bwmjLBPGiy3F5J5qNGmtrbH7i7aTUaHif9A@mail.gmail.com>
+In-Reply-To: <CAFqH_50_Py7Diu5bwmjLBPGiy3F5J5qNGmtrbH7i7aTUaHif9A@mail.gmail.com>
+From:   Eizan Miyamoto <eizan@google.com>
+Date:   Thu, 21 May 2020 11:36:43 +1000
+Message-ID: <CAOak1e-U8kxocZWUV=e9zWHzdfLg0=cnvjtX-Wq0G9Cw=Bcq0g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] [media] mtk-mdp: use pm_runtime in MDP component driver
+To:     Enric Balletbo Serra <eballetbo@gmail.com>
+Cc:     Eizan Miyamoto <eizan@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, May 20, 2020, Christian König wrote:
-> Am 19.05.20 um 23:45 schrieb Ahmed S. Darwish:
-> > A sequence counter write side critical section must be protected by some
-> > form of locking to serialize writers. If the serialization primitive is
-> > not disabling preemption implicitly, preemption has to be explicitly
-> > disabled before entering the sequence counter write side critical
-> > section.
-> >
-> > The dma-buf reservation subsystem uses plain sequence counters to manage
-> > updates to reservations. Writer serialization is accomplished through a
-> > wound/wait mutex.
-> >
-> > Acquiring a wound/wait mutex does not disable preemption, so this needs
-> > to be done manually before and after the write side critical section.
-> >
-> > Use the newly-added seqcount_ww_mutex_t instead:
-> >
-> >    - It associates the ww_mutex with the sequence count, which enables
-> >      lockdep to validate that the write side critical section is properly
-> >      serialized.
-> >
-> >    - It removes the need to explicitly add preempt_disable/enable()
-> >      around the write side critical section because the write_begin/end()
-> >      functions for this new data type automatically do this.
-> >
-> > If lockdep is disabled this ww_mutex lock association is compiled out
-> > and has neither storage size nor runtime overhead.
+On Thu, May 7, 2020 at 3:07 AM Enric Balletbo Serra <eballetbo@gmail.com> wrote:
 >
-> Mhm, is the dma_resv object the only user of this new seqcount_ww_mutex
-> variant ?
+> Hi Eizan,
 >
-> If yes we are trying to get rid of this sequence counter for quite some
-> time, so I would rather invest the additional time to finish this.
+> Thank you for the patch.
 >
-
-In this patch series, each extra "seqcount with associated lock" data
-type costs us, exactly:
-
-  - 1 typedef definition, seqcount_ww_mutex_t
-  - 1 static initializer, SEQCNT_WW_MUTEX_ZERO()
-  - 1 runtime initializer, seqcount_ww_mutex_init()
-
-Definitions for the typedef and the 2 initializers above are
-template-code one liners.
-
-The logic which automatically disables preemption upon entering a
-seqcount_ww_mutex_t write side critical section is also already shared
-with seqcount_mutex_t and any future, preemptible, associated lock.
-
-So, yes, dma-resv is the only user of seqcount_ww_mutex.
-
-But even in that case, given the one liner template code nature of
-seqcount_ww_mutex_t logic, it does not make sense to block the dma_resv
-and amdgpu change until at some point in the future the sequence counter
-is completely removed.
-
-**If and when** the sequence counter gets removed, please just remove
-the seqcount_ww_mutex_t data type with it. It will be extremely simple.
-
-> Regards,
-> Christian.
+> Missatge de Eizan Miyamoto <eizan@chromium.org> del dia dc., 6 de maig
+> 2020 a les 10:42:
+> >
+> > Without this change, the MDP components are not fully integrated into
+> > the runtime power management subsystem, and the MDP driver does not
+> > work.
+> >
+> > For each of the component device drivers to be able to call
+> > pm_runtime_get/put_sync() a pointer to the component's device struct
+> > had to be added to struct mtk_mdp_comp, set by mtk_mdp_comp_init().
+> >
+> > Note that the dev argument to mtk_mdp_comp_clock_on/off() has been
+> > removed. Those functions used to be called from the "master" mdp driver
+> > in mtk_mdp_core.c, but the component's device pointer no longer
+> > corresponds to the mdp master device pointer, which is not the right
+> > device to pass to pm_runtime_put/get_sync() which we had to add to get
+> > the driver to work properly.
+> >
+> > Signed-off-by: Eizan Miyamoto <eizan@chromium.org>
+> > ---
+> >
+> > Changes in v2:
 >
+> Ah, I guess this change log corresponds to the first patch.
+>
+> > - remove empty mtk_mdp_comp_init
+> > - update documentation for enum mtk_mdp_comp_type
+> > - remove comma after last element of mtk_mdp_comp_driver_dt_match
+> >
+> >  drivers/media/platform/mtk-mdp/mtk_mdp_comp.c | 22 ++++++++++++++-----
+> >  drivers/media/platform/mtk-mdp/mtk_mdp_comp.h |  6 +++--
+> >  drivers/media/platform/mtk-mdp/mtk_mdp_core.c |  6 ++---
+> >  3 files changed, 23 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c b/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c
+> > index 5b4d482df778..228c58f92c8c 100644
+> > --- a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c
+> > +++ b/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/of_platform.h>
+> >  #include <soc/mediatek/smi.h>
+> >  #include <linux/platform_device.h>
+> > +#include <linux/pm_runtime.h>
+> >
+> >  #include "mtk_mdp_comp.h"
+> >  #include "mtk_mdp_core.h"
+> > @@ -53,7 +54,7 @@ static const struct of_device_id mtk_mdp_comp_driver_dt_match[] = {
+> >  };
+> >  MODULE_DEVICE_TABLE(of, mtk_mdp_comp_driver_dt_match);
+> >
+> > -void mtk_mdp_comp_clock_on(struct device *dev, struct mtk_mdp_comp *comp)
+> > +void mtk_mdp_comp_clock_on(struct mtk_mdp_comp *comp)
+> >  {
+> >         int i, err;
+> >
+> > @@ -62,25 +63,31 @@ void mtk_mdp_comp_clock_on(struct device *dev, struct mtk_mdp_comp *comp)
+> >                 if (err) {
+> >                         enum mtk_mdp_comp_type comp_type =
+> >                                 (enum mtk_mdp_comp_type)
+> > -                               of_device_get_match_data(dev);
+> > -                       dev_err(dev,
+> > +                               of_device_get_match_data(comp->dev);
+> > +                       dev_err(comp->dev,
+> >                                 "failed to get larb, err %d. type:%d\n",
+> >                                 err, comp_type);
+> >                 }
+> >         }
+> >
+> > +       err = pm_runtime_get_sync(comp->dev);
+> > +       if (err < 0)
+> > +               dev_err(comp->dev,
+> > +                       "failed to runtime get, err %d.\n",
+> > +                       err);
+>
+> Should you really ignore this error? If that's the case I'd just call
+> pm_runtime_get_sync() without adding the logic to just print an error
+> message.
 
-Thanks,
+This is mostly consistent with style elsewhere, e.g., in mtk_mdp_m2m.c
+mtk_mdp_m2m_start_streaming and mtk_mdp_m2m_stop_streaming.
 
---
-Ahmed S. Darwish
-Linutronix GmbH
+>
+> > +
+> >         for (i = 0; i < ARRAY_SIZE(comp->clk); i++) {
+> >                 if (IS_ERR(comp->clk[i]))
+> >                         continue;
+> >                 err = clk_prepare_enable(comp->clk[i]);
+> >                 if (err)
+> > -                       dev_err(dev,
+> > +                       dev_err(comp->dev,
+> >                                 "failed to enable clock, err %d. i:%d\n",
+> >                                 err, i);
+>
+> Although ignoring errors seems to be a common pattern in this file and
+> I know you did not introduce this.
+
+Maybe the issue is that since no action is taken, logging at the 'error' log
+level is not the right thing? IOW, should it be changed to an informational
+message instead? Nevertheless, I think we should defer these changes to a
+follow-up patch instead.
+
+>
+> >         }
+> >  }
+> >
+> > -void mtk_mdp_comp_clock_off(struct device *dev, struct mtk_mdp_comp *comp)
+> > +void mtk_mdp_comp_clock_off(struct mtk_mdp_comp *comp)
+> >  {
+> >         int i;
+> >
+> > @@ -92,6 +99,8 @@ void mtk_mdp_comp_clock_off(struct device *dev, struct mtk_mdp_comp *comp)
+> >
+> >         if (comp->larb_dev)
+> >                 mtk_smi_larb_put(comp->larb_dev);
+> > +
+> > +       pm_runtime_put_sync(comp->dev);
+> >  }
+> >
+> >  static int mtk_mdp_comp_bind(struct device *dev, struct device *master,
+> > @@ -101,6 +110,7 @@ static int mtk_mdp_comp_bind(struct device *dev, struct device *master,
+> >         struct mtk_mdp_dev *mdp = data;
+> >
+> >         mtk_mdp_register_component(mdp, comp);
+> > +       pm_runtime_enable(dev);
+> >
+> >         return 0;
+> >  }
+> > @@ -111,6 +121,7 @@ static void mtk_mdp_comp_unbind(struct device *dev, struct device *master,
+> >         struct mtk_mdp_dev *mdp = data;
+> >         struct mtk_mdp_comp *comp = dev_get_drvdata(dev);
+> >
+> > +       pm_runtime_disable(dev);
+> >         mtk_mdp_unregister_component(mdp, comp);
+> >  }
+> >
+> > @@ -129,6 +140,7 @@ int mtk_mdp_comp_init(struct mtk_mdp_comp *comp, struct device *dev)
+> >                  (enum mtk_mdp_comp_type)of_device_get_match_data(dev);
+> >
+> >         INIT_LIST_HEAD(&comp->node);
+> > +       comp->dev = dev;
+> >
+> >         for (i = 0; i < ARRAY_SIZE(comp->clk); i++) {
+> >                 comp->clk[i] = of_clk_get(node, i);
+> > diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.h b/drivers/media/platform/mtk-mdp/mtk_mdp_comp.h
+> > index b5a18fe567aa..de158d3712f6 100644
+> > --- a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.h
+> > +++ b/drivers/media/platform/mtk-mdp/mtk_mdp_comp.h
+> > @@ -12,17 +12,19 @@
+> >   * @node:      list node to track sibing MDP components
+> >   * @clk:       clocks required for component
+> >   * @larb_dev:  SMI device required for component
+> > + * @dev:       component's device
+> >   */
+> >  struct mtk_mdp_comp {
+> >         struct list_head        node;
+> >         struct clk              *clk[2];
+> >         struct device           *larb_dev;
+> > +       struct device           *dev;
+> >  };
+> >
+> >  int mtk_mdp_comp_init(struct mtk_mdp_comp *comp, struct device *dev);
+> >
+> > -void mtk_mdp_comp_clock_on(struct device *dev, struct mtk_mdp_comp *comp);
+> > -void mtk_mdp_comp_clock_off(struct device *dev, struct mtk_mdp_comp *comp);
+> > +void mtk_mdp_comp_clock_on(struct mtk_mdp_comp *comp);
+> > +void mtk_mdp_comp_clock_off(struct mtk_mdp_comp *comp);
+> >
+> >  extern struct platform_driver mtk_mdp_component_driver;
+> >
+> > diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
+> > index 539a7942e3cb..133d107aa4e6 100644
+> > --- a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
+> > +++ b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
+> > @@ -52,20 +52,18 @@ MODULE_DEVICE_TABLE(of, mtk_mdp_of_ids);
+> >
+> >  static void mtk_mdp_clock_on(struct mtk_mdp_dev *mdp)
+> >  {
+> > -       struct device *dev = &mdp->pdev->dev;
+> >         struct mtk_mdp_comp *comp_node;
+> >
+> >         list_for_each_entry(comp_node, &mdp->comp_list, node)
+> > -               mtk_mdp_comp_clock_on(dev, comp_node);
+> > +               mtk_mdp_comp_clock_on(comp_node);
+> >  }
+> >
+> >  static void mtk_mdp_clock_off(struct mtk_mdp_dev *mdp)
+> >  {
+> > -       struct device *dev = &mdp->pdev->dev;
+> >         struct mtk_mdp_comp *comp_node;
+> >
+> >         list_for_each_entry(comp_node, &mdp->comp_list, node)
+> > -               mtk_mdp_comp_clock_off(dev, comp_node);
+> > +               mtk_mdp_comp_clock_off(comp_node);
+> >  }
+> >
+> >  static void mtk_mdp_wdt_worker(struct work_struct *work)
+> > --
+> > 2.26.2.526.g744177e7f7-goog
+> >
+> >
+> > _______________________________________________
+> > Linux-mediatek mailing list
+> > Linux-mediatek@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-mediatek
