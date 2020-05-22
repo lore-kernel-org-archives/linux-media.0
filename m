@@ -2,114 +2,116 @@ Return-Path: <SRS0=PhFA=7E=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23BBBC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 07:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B9E3C433E1
+	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 07:25:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D2BE520757
-	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 07:11:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 660B820738
+	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 07:25:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="W9RzfBvx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bt6mpwNE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728455AbgEVHL4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 May 2020 03:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
+        id S1728772AbgEVHZf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 May 2020 03:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728437AbgEVHL4 (ORCPT
+        with ESMTP id S1728755AbgEVHZc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 May 2020 03:11:56 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DF3C061A0E
-        for <linux-media@vger.kernel.org>; Fri, 22 May 2020 00:11:53 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id t11so4610269pgg.2
-        for <linux-media@vger.kernel.org>; Fri, 22 May 2020 00:11:53 -0700 (PDT)
+        Fri, 22 May 2020 03:25:32 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037ECC061A0E;
+        Fri, 22 May 2020 00:25:32 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id w7so9088093wre.13;
+        Fri, 22 May 2020 00:25:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=es-iitr-ac-in.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=KrAu9c7HI3tm64GJUzPuUL84G8UAjLUaFrddGBaQxRE=;
-        b=W9RzfBvxrXEHJYxnSECp46QOeLQ1Sawo2Kzb6wXbPc+H+t/7wteHtOmeJqEPgQ2gmy
-         87LydWqAmQiEYU4Otz5l5MUnDrKqSeBCuPiq1dBBesg3UWjNNRcuD1tIDJZbUPrCya4v
-         3JRUNHkXg/CZZJzydj3UyCrA0V9o9CvTKlaRSEwdPcanrlN4cz8PugMCyKoilvzSgRCj
-         Wozbf9m54kJKeVnkgPibH2KoZqjhryWRUjYp/f/41Ox58jxQ4+1lYN8/ofuVo7Gwh1+U
-         r+qLDb1IYP3WLBqNkZ24J2KXeNL54NLmhgZpJjNqqwvuHARt7usTQnqEXCcITMlcSvNW
-         y3qg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=D2Vxxx9xwQZv2HFZw44HLDX0KJ9fcafykGilE0KusFA=;
+        b=Bt6mpwNETM8CL17HN9OVzEcNWXBfIJiVKqfh3Oke4QRDt5hbauCQiFHDYm/qhoOvBh
+         TorP/DDfDotp3275SRFVk8I4bonijzearlJ8DHnVuqPInLz07HkE7uisgCyWJNL1Bikq
+         Ne7sEITHz76tdICx67J2ToF5oqaYJjea6EfNrWWOP5j50tqQB9VJy0OpmxS2oPUWeziA
+         lqxJWd//yolQqc8sDWKf8u76eEPqhBrqEIYdBa+PwGTbOwhGuk4qEhagA5myvRg8rwaO
+         3PiwKAuf4+quXgY74OrIZ3dMQgNBYCXoMbsOkZpHkIavLqpw0+N+CI3uCQ37uAXa1Riu
+         M6Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=KrAu9c7HI3tm64GJUzPuUL84G8UAjLUaFrddGBaQxRE=;
-        b=UB+FYarkjDfsW8bi58Zq4X/M1rvJDsdYqE9kbaHIKpOtqPCsA8lDQ+auR5EePP76rq
-         8F1mN71kC2/pvfbXXMKaj0QfqteM7pVsM+xCfqf72cfhrAJmY66py1QBkXxtWrtYi2zL
-         LRvAo3VN1AxTPNCZMaT1/Q9pqvfdUxP0U/OkO/KYQXgthz/V9N7CIwEl/YEKF5Ka3Nge
-         18XMxPT5BXVeEoZz4O0LGXfDuvOk4t7IiNYv6iauQTapNEHhsZygntzTdF9XkZ6s/mcf
-         WpocviI0tQ/1Qwu7DcPQ0/pLXZcFeao5GaDy/Tj1thXfPLRVbRcnDPR4oqDKmJEx+BVs
-         rDkA==
-X-Gm-Message-State: AOAM530Wr4FpLrAhX9btPoN/SN4Yady1b9N7w4Jh0Ub5M2S6g/VMiNmX
-        UGtmlfTsTEWW9M8eMOVVJ6zFqc/lYYiTUA==
-X-Google-Smtp-Source: ABdhPJzHXzAAH9qKcJl5pJjL9aKuGvTyeZf2pspV63w9zgjSD9rZqz7DQs0aZM5fPqp+Hug8Rr54aQ==
-X-Received: by 2002:a63:5f41:: with SMTP id t62mr12728010pgb.252.1590131512519;
-        Fri, 22 May 2020 00:11:52 -0700 (PDT)
-Received: from kaaira-HP-Pavilion-Notebook ([103.113.213.155])
-        by smtp.gmail.com with ESMTPSA id v27sm6208530pfi.61.2020.05.22.00.11.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 22 May 2020 00:11:52 -0700 (PDT)
-Date:   Fri, 22 May 2020 12:41:46 +0530
-From:   Kaaira Gupta <kgupta@es.iitr.ac.in>
-To:     linux-media@vger.kernel.org,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: [PATCH] media: vimc: Apply right blue and red channels to BGR
-Message-ID: <20200522071145.GA17375@kaaira-HP-Pavilion-Notebook>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=D2Vxxx9xwQZv2HFZw44HLDX0KJ9fcafykGilE0KusFA=;
+        b=POmpZcrFv568e8RMIUkzYxvTgUT/8dB+Xdy2fwaSN4jdZsYeMITqCUN0KIqmdVb3I6
+         4Swmr8dzDOMPfz0NGUyOKqSKoT+BP5XS9GvfSSog81BlDk/0/QFBlbReSvD5zP+G2f0s
+         vSgrz4INOIomNtUyxdOiye13I8n8jYtpfNCRHBuVlW4fgbzw8PSeN/tHEo+cpZfThGMN
+         vwhZNlbptcD6F1vfZiFyYLAhxbBXEOjrE5uSeU6QEZnC6wCQxJK0CfBKGI3I+sQbM2rR
+         ZfmuxV6ZbzqXcyGXqcmSU+IqKWLRVGPbUrNVICQFsTY3ADR5NcIf2RybzTbd3rpYdUw3
+         sBbg==
+X-Gm-Message-State: AOAM530pKZ0dhXTwsdh1XA/vAqrftfLqEwhU787QP/N+RzZ/DjdXLTH0
+        6fkiL+LdRs72Bor99iG2LwQ=
+X-Google-Smtp-Source: ABdhPJz/6awZjxVQ+Dp6vSmq92QOklfTK8MOtAn8ONy1iHZCnqeROK6pCNgWTiXRSFDpznJtdikrKQ==
+X-Received: by 2002:adf:fdc1:: with SMTP id i1mr2409080wrs.0.1590132330633;
+        Fri, 22 May 2020 00:25:30 -0700 (PDT)
+Received: from skynet.lan (159.red-83-44-12.dynamicip.rima-tde.net. [83.44.12.159])
+        by smtp.gmail.com with ESMTPSA id f128sm9299898wme.1.2020.05.22.00.25.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 May 2020 00:25:30 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     computersforpeace@gmail.com, kdasu.kdev@gmail.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        sumit.semwal@linaro.org, linux-mtd@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH v3 2/5] mtd: rawnand: brcmnand: fix CS0 layout
+Date:   Fri, 22 May 2020 09:25:22 +0200
+Message-Id: <20200522072525.3919332-3-noltari@gmail.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200522072525.3919332-1-noltari@gmail.com>
+References: <20200512073329.742893-1-noltari@gmail.com>
+ <20200522072525.3919332-1-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-rgb[] is already calculated in the right order, there is no need to swap
-the blue and red channels in it for BGR images. Hence give right rgb
-channels to the src_frame.
+Only v3.3-v5.0 have a different CS0 layout.
+Controllers before v3.3 use the same layout for every CS.
 
-Signed-off-by: Kaaira Gupta <kgupta@es.iitr.ac.in>
+Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom STB NAND controller")
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 ---
- drivers/media/test-drivers/vimc/vimc-debayer.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+ v3: no changes.
+ v2: fix commit log.
 
-diff --git a/drivers/media/test-drivers/vimc/vimc-debayer.c b/drivers/media/test-drivers/vimc/vimc-debayer.c
-index c3f6fef34f68..d41d9f6180df 100644
---- a/drivers/media/test-drivers/vimc/vimc-debayer.c
-+++ b/drivers/media/test-drivers/vimc/vimc-debayer.c
-@@ -318,21 +318,11 @@ static void vimc_deb_process_rgb_frame(struct vimc_deb_device *vdeb,
- 				       unsigned int col,
- 				       unsigned int rgb[3])
- {
--	const struct vimc_pix_map *vpix;
- 	unsigned int i, index;
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+index 6a08dd07b058..72b268d8e3a4 100644
+--- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
++++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+@@ -606,8 +606,9 @@ static int brcmnand_revision_init(struct brcmnand_controller *ctrl)
+ 	} else {
+ 		ctrl->cs_offsets = brcmnand_cs_offsets;
  
--	vpix = vimc_pix_map_by_code(vdeb->src_code);
- 	index = VIMC_FRAME_INDEX(lin, col, vdeb->sink_fmt.width, 3);
--	for (i = 0; i < 3; i++) {
--		switch (vpix->pixelformat) {
--		case V4L2_PIX_FMT_RGB24:
--			vdeb->src_frame[index + i] = rgb[i];
--			break;
--		case V4L2_PIX_FMT_BGR24:
--			vdeb->src_frame[index + i] = rgb[2 - i];
--			break;
--		}
--	}
-+	for (i = 0; i < 3; i++)
-+		vdeb->src_frame[index + i] = rgb[i];
- }
+-		/* v5.0 and earlier has a different CS0 offset layout */
+-		if (ctrl->nand_version <= 0x0500)
++		/* v3.3-5.0 have a different CS0 offset layout */
++		if (ctrl->nand_version >= 0x0303 &&
++		    ctrl->nand_version <= 0x0500)
+ 			ctrl->cs0_offsets = brcmnand_cs_offsets_cs0;
+ 	}
  
- static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
 -- 
-2.17.1
+2.26.2
 
