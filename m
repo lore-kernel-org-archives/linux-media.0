@@ -2,121 +2,489 @@ Return-Path: <SRS0=PhFA=7E=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE63AC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 22:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBD5FC433E1
+	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 22:54:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A6D212065F
-	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 22:35:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 768892073B
+	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 22:54:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=umn.edu header.i=@umn.edu header.b="BTy7Qzvi"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="hWFdwwcH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731144AbgEVWfT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 May 2020 18:35:19 -0400
-Received: from mta-p8.oit.umn.edu ([134.84.196.208]:55942 "EHLO
-        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731029AbgEVWfT (ORCPT
+        id S1731330AbgEVWyX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 May 2020 18:54:23 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:44914 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731029AbgEVWyW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 May 2020 18:35:19 -0400
-X-Greylist: delayed 973 seconds by postgrey-1.27 at vger.kernel.org; Fri, 22 May 2020 18:35:18 EDT
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 49TLVw2Mcqz9vfW1
-        for <linux-media@vger.kernel.org>; Fri, 22 May 2020 22:19:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p8.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id SeN-PJZzojl6 for <linux-media@vger.kernel.org>;
-        Fri, 22 May 2020 17:19:04 -0500 (CDT)
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 49TLVw0m4Wz9vfWD
-        for <linux-media@vger.kernel.org>; Fri, 22 May 2020 17:19:04 -0500 (CDT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 49TLVw0m4Wz9vfWD
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 49TLVw0m4Wz9vfWD
-Received: by mail-io1-f70.google.com with SMTP id z11so8238865iom.18
-        for <linux-media@vger.kernel.org>; Fri, 22 May 2020 15:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xf86DUDR0KCytTZe0PoPEVKJWswyj76Qc8cwS/5pEd8=;
-        b=BTy7Qzvia67Px1tEvWTi8X/NeNB6jPnEST1ETVo7uBwyZ8Wkew6opFNFU8mNZzW21R
-         nNJWn2xhDpBNOD7j3Cqf8M9TKnEA2ESWSydG4JQQoGk92GLN4GiEptxM9qn653V3LfWm
-         zR5YMeRMAhWXAYm6MITvDwZequAwm9QG2kyc1w82icjZ3Epz/qAhABqHLh9SCu83Nnht
-         ky7cXtHlMl0IFuKy3ERdiQqKPI3GxOFe9PbIeujOsk/eetVdQFtkqjF1ZxhM5b0vv6QN
-         cCwKam8UCdajHSyeHNTBnSIWQJzPsZVO4AMp6WGTvZ2GS+ykM4DahQlwnrzZHGVYr66w
-         89MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xf86DUDR0KCytTZe0PoPEVKJWswyj76Qc8cwS/5pEd8=;
-        b=iJXgYwnxoF+Ile3rQMFAJqD0GyRtcQtCfJSBeU3mTIvcfojKMlyr/cujG46DxwnJR0
-         Uhr9G922GOZ36k2d3ZIpAVMPxa29LoBV0Y/8WUyFqAywuHtbTrQzwySvXLvc2H6qVtM4
-         0Fbgmlps4jqvczwLMqQMAVaQgvZd0PvCRd4NDZ31ads7E7iIOqWt+MULvawog0iL0eAF
-         sbZ1sTrfmSWs9BjvkbChUoGfzzhgxa2PUScm3JF3det8DKHJeNI6GXn9tLIfk8U0gQuC
-         Zp0p3uK7zL1jeHRcCeXoxDamyv7GCmcEz0dhlCDEhT5DbzNKoV9fQUKFJA7pFUqxhL1Q
-         UtRA==
-X-Gm-Message-State: AOAM531Mdw/kTOtod3OVua0QapmNCWF7m2YGslkEmobUJs0ORg2Dhdhy
-        p29UdEvz0/NSTKDNCycgB/Fb6dr1KD1u4YTYx9SxPXBSCdSM1bCHNsaxUQntniPMeWA/RL49Fi/
-        IyNDE9gu6lXr2iYgx8YRQZTFJ8ok=
-X-Received: by 2002:a92:c7a4:: with SMTP id f4mr15370414ilk.44.1590185943580;
-        Fri, 22 May 2020 15:19:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw+J0ruAKNhsdIwEN+ydT0VoCKGFWbQcj4ml3xYNL1KOfJyA/BR/ZbR8JROJoT/OQqoIenz1Q==
-X-Received: by 2002:a92:c7a4:: with SMTP id f4mr15370380ilk.44.1590185943240;
-        Fri, 22 May 2020 15:19:03 -0700 (PDT)
-Received: from qiushi.dtc.umn.edu (cs-kh5248-02-umh.cs.umn.edu. [128.101.106.4])
-        by smtp.gmail.com with ESMTPSA id 7sm4210431ion.52.2020.05.22.15.19.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2020 15:19:02 -0700 (PDT)
-From:   wu000273@umn.edu
-To:     sylvester.nawrocki@gmail.com
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kjlu@umn.edu, wu000273@umn.edu
-Subject: [PATCH] media: s3c-camif: fix missing disable in tegra_adma_probe().
-Date:   Fri, 22 May 2020 17:18:55 -0500
-Message-Id: <20200522221855.7891-1-wu000273@umn.edu>
+        Fri, 22 May 2020 18:54:22 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04MMsIkj074463;
+        Fri, 22 May 2020 17:54:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1590188058;
+        bh=z4R0p+Z4Terj2c3sHTat2QqA6F1nnMYJabSURdvraD8=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=hWFdwwcHDFPPmbozPLTl6ey/c61+PQ9T4n6g6TDfoAxOxWiMzPkyb9c7lH9G6z9KP
+         ln58qmP1dGgdTK6Rx3IDIO/NK3fcDMuk4BF22OGNFXJl0yOBEBQjeM872Tu86H5OvG
+         9VYE4gwbUwHrYYVASklv4Ef0SWUu3HhRGK9TSawg=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04MMsI95051609;
+        Fri, 22 May 2020 17:54:18 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 22
+ May 2020 17:54:18 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 22 May 2020 17:54:18 -0500
+Received: from ula0869644.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04MMsGe8128455;
+        Fri, 22 May 2020 17:54:17 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>, Rob Herring <robh+dt@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
+Subject: [Patch 1/2] dt-binbings: media: ti-vpe: Document the VIP driver
+Date:   Fri, 22 May 2020 17:54:11 -0500
+Message-ID: <20200522225412.29440-2-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200522225412.29440-1-bparrot@ti.com>
+References: <20200522225412.29440-1-bparrot@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Qiushi Wu <wu000273@umn.edu>
+Device Tree bindings for the Video Input Port (VIP) driver.
 
-"pm_runtime_enable()" was not handled by "pm_runtime_disable()"
-after a call of the function “pm_runtime_get_sync” failed.
-Thus move the jump target “err_pm” before calling pm_runtime_disable().
-
-Fixes: babde1c243b2 ("[media] V4L: Add driver for S3C24XX/S3C64XX SoC series camera interface")
-Signed-off-by: Qiushi Wu <wu000273@umn.edu>
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/s3c-camif/camif-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/media/ti,vip.yaml     | 394 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 2 files changed, 395 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/ti,vip.yaml
 
-diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/s3c-camif/camif-core.c
-index c6fbcd7036d6..12ee49638f44 100644
---- a/drivers/media/platform/s3c-camif/camif-core.c
-+++ b/drivers/media/platform/s3c-camif/camif-core.c
-@@ -500,8 +500,8 @@ static int s3c_camif_probe(struct platform_device *pdev)
- 	camif_unregister_media_entities(camif);
- err_alloc:
- 	pm_runtime_put(dev);
--	pm_runtime_disable(dev);
- err_pm:
-+	pm_runtime_disable(dev);
- 	camif_clk_put(camif);
- err_clk:
- 	s3c_camif_unregister_subdev(camif);
+diff --git a/Documentation/devicetree/bindings/media/ti,vip.yaml b/Documentation/devicetree/bindings/media/ti,vip.yaml
+new file mode 100644
+index 000000000000..8a9084e42329
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/ti,vip.yaml
+@@ -0,0 +1,394 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/ti,vip.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments DRA7x VIDEO INPUT PORT (VIP) Device Tree Bindings
++
++maintainers:
++  - Benoit Parrot <bparrot@ti.com>
++
++description: |-
++  The Video Input Port (VIP) is a key component for image capture
++  applications. The capture module provides the system interface and the
++  processing capability to connect parallel image-sensor as well as
++  BT.656/1120 capable encoder chip to DRA7x device.
++
++  Each VIP instance supports 2 independently configurable external video
++  input capture slices (Slice 0 and Slice 1) each providing up to two video
++  input ports (Port A and Port B) where Port A can be configured as
++  24/16/8-bit port and Port B is fixed as 8-bit port.
++  Here these ports a represented as follows
++    port@0 -> Slice 0 Port A
++    port@1 -> Slice 0 Port B
++    port@2 -> Slice 1 Port A
++    port@3 -> Slice 1 Port B
++
++  Each camera port nodes should contain a 'port' child node with child
++  'endpoint' node. Please refer to the bindings defined in
++  Documentation/devicetree/bindings/media/video-interfaces.txt.
++
++properties:
++  compatible:
++    const: ti,dra7-vip
++
++  label:
++    description: Instance name
++
++  reg:
++    items:
++      - description: The VIP main register region
++      - description: Video Data Parser (PARSER) register region for Slice0
++      - description: Color Space Conversion (CSC) register region for Slice0
++      - description: Scaler (SC) register region for Slice0
++      - description: Video Data Parser (PARSER) register region for Slice1
++      - description: Color Space Conversion (CSC) register region for Slice1
++      - description: Scaler (SC) register region for Slice1
++      - description: Video Port Direct Memory Access (VPDMA) register region
++
++  reg-names:
++    items:
++      - const: vip
++      - const: parser0
++      - const: csc0
++      - const: sc0
++      - const: parser1
++      - const: csc1
++      - const: sc1
++      - const: vpdma
++
++  interrupts:
++    minItems: 2
++    description:
++      IRQ index 0 is used for Slice0 interrupts
++      IRQ index 1 is used for Slice1 interrupts
++
++  ti,vip-clk-polarity:
++    $ref: "/schemas/types.yaml#/definitions/phandle-array"
++    description:
++      phandle to the device control module. The 1st argument should
++      contain the register offset to the CTRL_CORE_SMA_SW_1 register.
++      2nd argument contains the bit field to slice 0 port A,
++      3rd argument contains the bit field to slice 0 port B,
++      4th argument contains the bit field to slice 1 port A,
++      5th argument contains the bit field to slice 1 port B.
++
++  # See ./video-interfaces.txt for details
++  ports:
++    type: object
++    additionalProperties: false
++
++    properties:
++      "#address-cells":
++        const: 1
++
++      "#size-cells":
++        const: 0
++
++      port@0:
++        type: object
++        additionalProperties: false
++
++        properties:
++          reg:
++            const: 0
++            description: Slice 0 Port A
++
++          label:
++            description: Port name. Usually the pin group name
++
++        patternProperties:
++          endpoint:
++            type: object
++            additionalProperties: false
++
++            properties:
++              hsync-active:
++                maxItems: 1
++
++              vsync-active:
++                maxItems: 1
++
++              pclk-sample:
++                maxItems: 1
++
++              bus-width:
++                maxItems: 1
++
++              ti,vip-pixel-mux:
++                type: boolean
++                description:
++                  In BT656/1120 mode, this enable pixel-muxing if
++                  the number of channels is either 1, 2 or 4. If this
++                  property is present then pixel-muxing is enabled
++                  otherwise it will use line-muxing.
++
++              ti,vip-channels:
++                $ref: "/schemas/types.yaml#definitions/uint8-array"
++                minItems: 1
++                maxItems: 16
++                description: |-
++                  In BT656/1120 mode, list of channel ids to be captured.
++                  If the property is not present then 1 channel is assumed.
++
++              remote-endpoint: true
++
++        required:
++          - reg
++          - label
++
++      port@1:
++        type: object
++        additionalProperties: false
++
++        properties:
++          reg:
++            const: 1
++            description: Slice 0 Port B
++
++          label:
++            description: Port name. Usually the pin group name
++
++        patternProperties:
++          endpoint:
++            type: object
++            additionalProperties: false
++
++            properties:
++              hsync-active:
++                maxItems: 1
++
++              vsync-active:
++                maxItems: 1
++
++              pclk-sample:
++                maxItems: 1
++
++              bus-width:
++                maxItems: 1
++
++              ti,vip-pixel-mux:
++                type: boolean
++                description:
++                  In BT656/1120 mode, this enable pixel-muxing if
++                  the number of channels is either 1, 2 or 4. If this
++                  property is present then pixel-muxing is enabled
++                  otherwise it will use line-muxing.
++
++              ti,vip-channels:
++                $ref: "/schemas/types.yaml#definitions/uint8-array"
++                minItems: 1
++                maxItems: 16
++                description:
++                  In BT656/1120 mode, list of channel ids to be captured.
++                  If the property is not present then 1 channel is assumed.
++
++              remote-endpoint: true
++
++        required:
++          - reg
++          - label
++
++      port@2:
++        type: object
++        additionalProperties: false
++
++        properties:
++          reg:
++            const: 2
++            description: Slice 1 Port A
++
++          label:
++            description: Port name. Usually the pin group name
++
++        patternProperties:
++          endpoint:
++            type: object
++            additionalProperties: false
++
++            properties:
++              hsync-active:
++                maxItems: 1
++
++              vsync-active:
++                maxItems: 1
++
++              pclk-sample:
++                maxItems: 1
++
++              bus-width:
++                maxItems: 1
++
++              ti,vip-pixel-mux:
++                type: boolean
++                description:
++                  In BT656/1120 mode, this enable pixel-muxing if
++                  the number of channels is either 1, 2 or 4. If this
++                  property is present then pixel-muxing is enabled
++                  otherwise it will use line-muxing.
++
++              ti,vip-channels:
++                $ref: "/schemas/types.yaml#definitions/uint8-array"
++                minItems: 1
++                maxItems: 16
++                description:
++                  In BT656/1120 mode, list of channel ids to be captured.
++                  If the property is not present then 1 channel is assumed.
++
++              remote-endpoint: true
++
++        required:
++          - reg
++          - label
++
++      port@3:
++        type: object
++        additionalProperties: false
++
++        properties:
++          reg:
++            const: 3
++            description: Slice 1 Port B
++
++          label:
++            description: Port name. Usually the pin group name
++
++        patternProperties:
++          endpoint:
++            type: object
++            additionalProperties: false
++
++            properties:
++              hsync-active:
++                maxItems: 1
++
++              vsync-active:
++                maxItems: 1
++
++              pclk-sample:
++                maxItems: 1
++
++              bus-width:
++                maxItems: 1
++
++              ti,vip-pixel-mux:
++                type: boolean
++                description:
++                  In BT656/1120 mode, this enable pixel-muxing if
++                  the number of channels is either 1, 2 or 4. If this
++                  property is present then pixel-muxing is enabled
++                  otherwise it will use line-muxing.
++
++              ti,vip-channels:
++                $ref: "/schemas/types.yaml#definitions/uint8-array"
++                minItems: 1
++                maxItems: 16
++                description:
++                  In BT656/1120 mode, list of channel ids to be captured.
++                  If the property is not present then 1 channel is assumed.
++
++              remote-endpoint: true
++
++        required:
++          - reg
++          - label
++
++    required:
++      - "#address-cells"
++      - "#size-cells"
++      - port@0
++
++required:
++  - compatible
++  - label
++  - reg
++  - reg-names
++  - interrupts
++  - ti,vip-clk-polarity
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    vip1: vip@48970000 {
++        compatible = "ti,dra7-vip";
++        label = "vip1";
++        reg = <0x48970000 0x114>,
++              <0x48975500 0xD8>,
++              <0x48975700 0x18>,
++              <0x48975800 0x80>,
++              <0x48975a00 0xD8>,
++              <0x48975c00 0x18>,
++              <0x48975d00 0x80>,
++              <0x4897d000 0x400>;
++        reg-names = "vip",
++                    "parser0",
++                    "csc0",
++                    "sc0",
++                    "parser1",
++                    "csc1",
++                    "sc1",
++                    "vpdma";
++        interrupts = <GIC_SPI 351 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 392 IRQ_TYPE_LEVEL_HIGH>;
++        ti,vip-clk-polarity = <&scm_conf 0x534 0x1 0x4 0x2 0x8>;
++
++        ports {
++              #address-cells = <1>;
++              #size-cells = <0>;
++
++              vin1a: port@0 {
++                    reg = <0>;
++                    label = "vin1a";
++
++                    vin1a_ep: endpoint {
++                           remote-endpoint = <&camera1>;
++                           hsync-active = <1>;
++                           vsync-active = <1>;
++                           pclk-sample = <0>;
++                           bus-width = <8>;
++                    };
++              };
++              vin1b: port@1 {
++                    reg = <1>;
++                    label = "vin1b";
++              };
++              vin2a: port@2 {
++                    reg = <2>;
++                    label = "vin2a";
++              };
++              vin2b: port@3 {
++                    reg = <3>;
++                    label = "vin2b";
++              };
++         };
++    };
++
++    i2c {
++        clock-frequency = <400000>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++         camera@37 {
++              compatible = "ovti,ov10633";
++              reg = <0x37>;
++
++              clocks = <&fixed_clock>;
++              clocks-names = "xvclk";
++
++              port {
++                   camera1: endpoint {
++                           remote-endpoint = <&vin1a_ep>;
++                           hsync-active = <1>;
++                           vsync-active = <1>;
++                           pclk-sample = <0>;
++                           bus-width = <8>;
++                   };
++              };
++         };
++    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2e9a5f6e4ff7..06856d05b53b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16947,6 +16947,7 @@ S:	Maintained
+ W:	http://linuxtv.org/
+ Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+ F:	Documentation/devicetree/bindings/media/ti,cal.yaml
++F:	Documentation/devicetree/bindings/media/ti,vip.yaml
+ F:	Documentation/devicetree/bindings/media/ti,vpe.yaml
+ F:	drivers/media/platform/ti-vpe/
+ 
 -- 
 2.17.1
 
