@@ -2,78 +2,44 @@ Return-Path: <SRS0=PhFA=7E=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB9FC433DF
-	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 07:25:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED186C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 07:56:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42581206DD
-	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 07:25:58 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oATR3FF6"
+	by mail.kernel.org (Postfix) with ESMTP id C4EF020826
+	for <linux-media@archiver.kernel.org>; Fri, 22 May 2020 07:56:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728672AbgEVHZb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 May 2020 03:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
+        id S1728468AbgEVH4K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 May 2020 03:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728409AbgEVHZa (ORCPT
+        with ESMTP id S1728319AbgEVH4J (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 May 2020 03:25:30 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA2FC061A0E;
-        Fri, 22 May 2020 00:25:29 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id h4so7714534wmb.4;
-        Fri, 22 May 2020 00:25:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZLZqiPmSDvovjhwGm4w627YXSjaGWbzcz2M2rVZdomQ=;
-        b=oATR3FF6mh22GdA5Shgwzt7kSFsqqxk32t2cCBJuGQZUet9G3vkl+fJD6Eg5tKiK70
-         lLKjarlUi1zCwgNx+s04jZ8UJkc1xGzejYUMsUbh/edZONvt9eSiqFrz7YBmeAItHsvE
-         yo0pnKdrth0FO0mK/b/bgT7jAQG8J79ezXVlZHZO6JVu1aMv4HLixbeTKUuHeKpg6D5v
-         YUoWbhjRLUin+sGsfwIfmmASbyr0xTSFJVOwPLiuhwJm4x8EPOiFf/UV44jvlaG5SagS
-         8Ac+YtQLVgC5Hi5uM24l6/v57CoflPE/RSiNBaJyMS5MxyA7A5LsMzUHRFqdpI4a0OYl
-         wBGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZLZqiPmSDvovjhwGm4w627YXSjaGWbzcz2M2rVZdomQ=;
-        b=L4Vx242/K93dYEVxpTtEL8lIrSv6rYBIXma7p4TIvsqm9308hmbjnEtV+wzOr+/9am
-         xReWI/AlWWRut6ER+DT1Tn4lgmqjCK5yFQEJSv9g4xaEjsA8fLvrl7RvFSTWdgqZlqG7
-         7lWgYrUCgaQPXMg6TZj3836ir9PmXloMCnhd+6yTYarYTO1T3D3SKwTdw5uNFDihwIif
-         PEpAg2eJJ5qysRrwIgqMPEl7qt2NsQ1kgRCihBopAJb6LynuYW7tSeGOvygnnityCZi6
-         xy4cfZ/qE6PjlCaxjXJX+EPTLkqnvkxmzQXp+EvPXbm/1BKe4lzyCO3Wqv1oa66jMhcm
-         x/Ow==
-X-Gm-Message-State: AOAM530BRF7SjX/ClfoTSfWnTlA8fiEfS+vJJTKuntaZA8XErw64z708
-        dbOZs/p3BTop4ejxSJqzTgU=
-X-Google-Smtp-Source: ABdhPJwu42LmV04Uv0SXsBsA+CPRsY5XoQxYdUKzxlKZnRrbArAX7FQTVSP60lbhmk3O4xW9mgutLQ==
-X-Received: by 2002:a1c:6784:: with SMTP id b126mr6601248wmc.80.1590132328483;
-        Fri, 22 May 2020 00:25:28 -0700 (PDT)
-Received: from skynet.lan (159.red-83-44-12.dynamicip.rima-tde.net. [83.44.12.159])
-        by smtp.gmail.com with ESMTPSA id f128sm9299898wme.1.2020.05.22.00.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2020 00:25:28 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     computersforpeace@gmail.com, kdasu.kdev@gmail.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        sumit.semwal@linaro.org, linux-mtd@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH v3 0/5] mtd: rawnand: brcmnand: support v2.1-v2.2 controllers
-Date:   Fri, 22 May 2020 09:25:20 +0200
-Message-Id: <20200522072525.3919332-1-noltari@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200512073329.742893-1-noltari@gmail.com>
-References: <20200512073329.742893-1-noltari@gmail.com>
+        Fri, 22 May 2020 03:56:09 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732D7C05BD43
+        for <linux-media@vger.kernel.org>; Fri, 22 May 2020 00:56:09 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id 443A22A3537
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
+        dafna3@gmail.com, sakari.ailus@linux.intel.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org, skhan@linuxfoundation.org,
+        niklas.soderlund@ragnatech.se--annotate
+Subject: [PATCH v4 1/5] media: mc-entity.c: add media_graph_walk_next_stream()
+Date:   Fri, 22 May 2020 09:55:18 +0200
+Message-Id: <20200522075522.6190-2-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200522075522.6190-1-dafna.hirschfeld@collabora.com>
+References: <20200522075522.6190-1-dafna.hirschfeld@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -82,22 +48,133 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for v2.1 and v2.2 NAND controllers.
+From: Helen Koike <helen.koike@collabora.com>
 
-v3: fix v2.1 page size shift
-v2: introduce changes suggested by Miquèl.
+Add media_graph_walk_next_stream() function to follow links only from
+sink to source (not the opposite) to allow iteration only through the
+entities participating in a given stream.
 
-Álvaro Fernández Rojas (5):
-  mtd: rawnand: brcmnand: rename v4 registers
-  mtd: rawnand: brcmnand: fix CS0 layout
-  mtd: rawnand: brcmnand: rename page sizes
-  dt: bindings: brcmnand: add v2.1 and v2.2 support
-  nand: brcmnand: support v2.1-v2.2 controllers
+This is useful to allow calling .s_stream() callback only in the
+subdevices that requires to be enabled/disabled, and avoid calling this
+callback when not required.
 
- .../devicetree/bindings/mtd/brcm,brcmnand.txt |   2 +
- drivers/mtd/nand/raw/brcmnand/brcmnand.c      | 100 +++++++++++++++---
- 2 files changed, 86 insertions(+), 16 deletions(-)
+Signed-off-by: Helen Koike <helen.koike@collabora.com>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+[Dafna: fixing coding style issues]
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/media/mc/mc-entity.c | 34 +++++++++++++++++++++++++++++++---
+ include/media/media-entity.h | 15 +++++++++++++++
+ 2 files changed, 46 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 12b45e669bcc..555f9dd9f7f2 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -228,6 +228,11 @@ EXPORT_SYMBOL_GPL(media_entity_pads_init);
+  * Graph traversal
+  */
+ 
++enum media_graph_walk_type {
++	MEDIA_GRAPH_WALK_CONNECTED_NODES,
++	MEDIA_GRAPH_WALK_STREAM_NODES,
++};
++
+ static struct media_entity *
+ media_entity_other(struct media_entity *entity, struct media_link *link)
+ {
+@@ -305,7 +310,8 @@ void media_graph_walk_start(struct media_graph *graph,
+ }
+ EXPORT_SYMBOL_GPL(media_graph_walk_start);
+ 
+-static void media_graph_walk_iter(struct media_graph *graph)
++static void media_graph_walk_iter(struct media_graph *graph,
++				  enum media_graph_walk_type type)
+ {
+ 	struct media_entity *entity = stack_top(graph);
+ 	struct media_link *link;
+@@ -326,6 +332,15 @@ static void media_graph_walk_iter(struct media_graph *graph)
+ 	/* Get the entity in the other end of the link . */
+ 	next = media_entity_other(entity, link);
+ 
++	if (type == MEDIA_GRAPH_WALK_STREAM_NODES &&
++	    next == link->sink->entity) {
++		link_top(graph) = link_top(graph)->next;
++		dev_dbg(entity->graph_obj.mdev->dev,
++			"walk: skipping '%s' (outside of the stream path)\n",
++			link->sink->entity->name);
++		return;
++	}
++
+ 	/* Has the entity already been visited? */
+ 	if (media_entity_enum_test_and_set(&graph->ent_enum, next)) {
+ 		link_top(graph) = link_top(graph)->next;
+@@ -342,7 +357,9 @@ static void media_graph_walk_iter(struct media_graph *graph)
+ 		next->name);
+ }
+ 
+-struct media_entity *media_graph_walk_next(struct media_graph *graph)
++static struct media_entity *
++__media_graph_walk_next(struct media_graph *graph,
++			enum media_graph_walk_type type)
+ {
+ 	struct media_entity *entity;
+ 
+@@ -355,7 +372,7 @@ struct media_entity *media_graph_walk_next(struct media_graph *graph)
+ 	 * found.
+ 	 */
+ 	while (link_top(graph) != &stack_top(graph)->links)
+-		media_graph_walk_iter(graph);
++		media_graph_walk_iter(graph, type);
+ 
+ 	entity = stack_pop(graph);
+ 	dev_dbg(entity->graph_obj.mdev->dev,
+@@ -363,8 +380,19 @@ struct media_entity *media_graph_walk_next(struct media_graph *graph)
+ 
+ 	return entity;
+ }
++
++struct media_entity *media_graph_walk_next(struct media_graph *graph)
++{
++	return __media_graph_walk_next(graph, MEDIA_GRAPH_WALK_CONNECTED_NODES);
++}
+ EXPORT_SYMBOL_GPL(media_graph_walk_next);
+ 
++struct media_entity *media_graph_walk_next_stream(struct media_graph *graph)
++{
++	return __media_graph_walk_next(graph, MEDIA_GRAPH_WALK_STREAM_NODES);
++}
++EXPORT_SYMBOL_GPL(media_graph_walk_next_stream);
++
+ int media_entity_get_fwnode_pad(struct media_entity *entity,
+ 				struct fwnode_handle *fwnode,
+ 				unsigned long direction_flags)
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index cde80ad029b7..9035a36e9442 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -928,6 +928,21 @@ void media_graph_walk_start(struct media_graph *graph,
+  */
+ struct media_entity *media_graph_walk_next(struct media_graph *graph);
+ 
++/**
++ * media_graph_walk_next_stream - Get the next entity in the graph
++ * @graph: Media graph structure
++ *
++ * Perform a depth-first traversal of the given media entities graph only
++ * following links from sink to source (and not the opposite).
++ *
++ * The graph structure must have been previously initialized with a call to
++ * media_graph_walk_start().
++ *
++ * Return: returns the next entity in the graph in the stream path
++ * or %NULL if the whole stream path have been traversed.
++ */
++struct media_entity *media_graph_walk_next_stream(struct media_graph *graph);
++
+ /**
+  * media_pipeline_start - Mark a pipeline as streaming
+  * @entity: Starting entity
 -- 
-2.26.2
+2.17.1
 
