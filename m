@@ -2,114 +2,85 @@ Return-Path: <SRS0=P7As=7F=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B692C433E0
-	for <linux-media@archiver.kernel.org>; Sat, 23 May 2020 06:16:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2316C433E1
+	for <linux-media@archiver.kernel.org>; Sat, 23 May 2020 07:37:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C25E2072C
-	for <linux-media@archiver.kernel.org>; Sat, 23 May 2020 06:16:35 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="kAPKJBbB";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="o3LniShn"
+	by mail.kernel.org (Postfix) with ESMTP id B9FE32071C
+	for <linux-media@archiver.kernel.org>; Sat, 23 May 2020 07:37:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387602AbgEWGQb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 23 May 2020 02:16:31 -0400
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:57127 "EHLO
-        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387446AbgEWGQb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 23 May 2020 02:16:31 -0400
-X-Greylist: delayed 365 seconds by postgrey-1.27 at vger.kernel.org; Sat, 23 May 2020 02:16:31 EDT
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id B27D18CB;
-        Sat, 23 May 2020 02:10:24 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 23 May 2020 02:10:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        from:date:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=LrrYTVFkm9x5WAtV96l5QFTVfXK
-        7jcQpg5sr70HsgwE=; b=kAPKJBbB3e4aBtF2OcbBUICIud8yPLH22RFoStnp4e8
-        yDZXaIlUHk0hzMRsWVU1tHFiy4j0L0oLLRjDEWOTmhX/S/kyk3zo4JPIGMqvBvu/
-        pVHsRR8shbwejVVYYURo0N2WYAO0gpTmU1ZNWJ2HUmC1oVxu4P8anVPVK5dPa3D3
-        VCtDB+/zUbFUwYk4BMaqAjLO9JlrzQtA/2FPzETfMh6ca94xQ5B/gQDe0te1qzXw
-        /DdP9SgJLR7qZbBpupaF2rfmz2uUpswbVzE6RAxliD1hVZEC6Cxme/m7h+bltlXo
-        sgi1B50yNPN4u/lqaF3ofGVVEz6iGA+UFhvCDk9u8bg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=LrrYTV
-        Fkm9x5WAtV96l5QFTVfXK7jcQpg5sr70HsgwE=; b=o3LniShnRlpl+p+BDDClSJ
-        gFgFe65lkZbszodtwx+k48xiTCURwK42S+Fty6srSnJabd4skcMtn27IN77BBB4t
-        0m6wvn6WSvufHru66KSihYcVKdZmLEv188Rj/+jHrpJRk7vef08ZiRmu6xJzZeUb
-        brmvvzvNucIVMlzSlDVdJOwBLrzodmiQwcIIvPxG2miwdgmgYaS1xK3qbGXy0b/B
-        0gwn3JDRJH9RlFMvMAS5WoQy9X9IX7E6Zbaj4Oc+/Nc8SxPoasIiShar3D91kh21
-        l8/i2gHtlYm6pgY2gXS1A6QnKUZM07e1CXyuBXaMoKSP1JNtmNR25lY6c3PjWSTg
-        ==
-X-ME-Sender: <xms:T77IXlv6y-F4jWSN-g0qsuwh-D2FgNmSuQkyix1z2-REyP1dBZ1AQw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedruddugedguddttdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhfffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepghhrvghg
-    sehkrhhorghhrdgtohhmnecuggftrfgrthhtvghrnheptdehveeuieekuddvjefhlefgke
-    dugeeffeffjeetieefgfduveehfedvheeludfhnecukfhppeekfedrkeeirdekledruddt
-    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrh
-    gvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:T77IXud2oWQcXqtjJpYSLzcm7xfysXz80uywdWroCd0IuG6WeZsNvQ>
-    <xmx:T77IXoyC589Z7sLJ5OoU5m3ZDXiWXru70tkQEr2CPDnobSrWxGnt4Q>
-    <xmx:T77IXsPJz4o-qG0QNang-l9w2SYk8cE6fRSpM7EiEVXr9iU2A99IVg>
-    <xmx:UL7IXsVykN8rG8y8fgoGUWZ6glDMhYsF3Sub3bpYfEABCX_YO4a-ML45vUs>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id CFB1530664D9;
-        Sat, 23 May 2020 02:10:22 -0400 (EDT)
-From:   greg@kroah.com
-Date:   Sat, 23 May 2020 08:10:18 +0200
-To:     Oscar Carter <oscar.carter@gmx.com>
-Cc:     stable <stable@vger.kernel.org>,
-        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        Kees Cook <keescook@chromium.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        id S2387627AbgEWHg5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 23 May 2020 03:36:57 -0400
+Received: from mail.zju.edu.cn ([61.164.42.155]:8548 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387471AbgEWHg5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 23 May 2020 03:36:57 -0400
+Received: from localhost.localdomain (unknown [222.205.77.158])
+        by mail-app2 (Coremail) with SMTP id by_KCgAHGBCH0she5564AQ--.42805S4;
+        Sat, 23 May 2020 15:36:44 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Todor Tomov <todor.too@gmail.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        kernel-hardening@lists.openwall.com,
-        linux1394-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        "Lev R . Oshvang ." <levonshe@gmail.com>
-Subject: Re: [PATCH v2] firewire: Remove function callback casts
-Message-ID: <20200523061018.GA3131938@kroah.com>
-References: <20200519173425.4724-1-oscar.carter@gmx.com>
- <20200520061624.GA25690@workstation>
- <20200522174308.GB3059@ubuntu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200522174308.GB3059@ubuntu>
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] media: camss: csid: Fix runtime PM imbalance in csid_set_power
+Date:   Sat, 23 May 2020 15:36:39 +0800
+Message-Id: <20200523073639.7442-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgAHGBCH0she5564AQ--.42805S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrW7ZFW3Gr18JF1xWF4UArb_yoWfZwb_Gr
+        4DXF1xXrW5GrWktr4jkw13uryfXa95u3W8CF1ftF1ayayv9a4kWrykZr98Zwn3ur1jvr17
+        GFn8uFyfCr93ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbIxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48J
+        MxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7VUbhiSPUUUUU==
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgQJBlZdtORGcwABsm
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, May 22, 2020 at 07:43:08PM +0200, Oscar Carter wrote:
-> Hi,
-> 
-> On Wed, May 20, 2020 at 03:16:24PM +0900, Takashi Sakamoto wrote:
-> > Hi,
-> >
-> > I'm an author of ALSA firewire stack and thanks for the patch. I agree with
-> > your intention to remove the cast of function callback toward CFI build.
-> >
-> > Practically, the isochronous context with FW_ISO_CONTEXT_RECEIVE_MULTICHANNEL
-> > is never used by in-kernel drivers. Here, I propose to leave current
-> > kernel API (fw_iso_context_create() with fw_iso_callback_t) as is.
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code. Thus a pairing decrement is needed on
+the error handling path to keep the counter balanced.
 
-If it's not used by anyone, why is it still there?  Can't we just delete
-it?
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+---
+ drivers/media/platform/qcom/camss/camss-csid.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-thanks,
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index a5ae85674ffb..8a247b6f5550 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -562,8 +562,10 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
+ 		u32 hw_version;
+ 
+ 		ret = pm_runtime_get_sync(dev);
+-		if (ret < 0)
++		if (ret < 0) {
++			pm_runtime_put_sync(dev);
+ 			return ret;
++		}
+ 
+ 		ret = regulator_enable(csid->vdda);
+ 		if (ret < 0) {
+-- 
+2.17.1
 
-greg k-h
