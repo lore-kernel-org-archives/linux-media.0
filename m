@@ -1,197 +1,491 @@
-Return-Path: <SRS0=P7As=7F=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=lUmJ=7G=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF7FC433E1
-	for <linux-media@archiver.kernel.org>; Sat, 23 May 2020 17:38:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7936CC433DF
+	for <linux-media@archiver.kernel.org>; Sun, 24 May 2020 01:46:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6360B20679
-	for <linux-media@archiver.kernel.org>; Sat, 23 May 2020 17:38:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E38A20823
+	for <linux-media@archiver.kernel.org>; Sun, 24 May 2020 01:46:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XT+8AQbx"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="PbhT6joC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387660AbgEWRi4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 23 May 2020 13:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387515AbgEWRi4 (ORCPT
+        id S2388257AbgEXBqG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 23 May 2020 21:46:06 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:38664 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726849AbgEXBqF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 23 May 2020 13:38:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381F4C061A0E;
-        Sat, 23 May 2020 10:38:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
-        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=hPoQCBjZWmjMZw8FIVwgdhSjmWeQlwdjeV959pqd6d4=; b=XT+8AQbxTPZM29pEwHt33upJzd
-        BULVgdiPtVtJzJdlO6boiPP2mNsIplOVjNEzOH4u8CS4F8YJmCJNVzt74RompVLLTVANwFyEPH47J
-        3PFAHLH6Ku56XLNX55ZXLAYfuoN/loa5ySfRY5Vmn+M3PD+8XbcZcfq9jDLBDTLKpbIqhesOlRFlA
-        xC6CQXQollwsIIxAAiBIAzELwBqcjCdwGl9kua+0iYVbMVfhNZiZnNyFR3OC0Bdhh66CeD73/pkmW
-        9N3EhrkmUmGCv4OBXyVncN97TTg104K/CR6q6msHoTPl6oLn9SiIHW8NZ/yWaRNb4T4e99V387KHK
-        LWmf2N0w==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jcY6n-0002yu-4c; Sat, 23 May 2020 17:38:53 +0000
-Subject: Re: possible deadlock in media_devnode_release
-To:     syzbot <syzbot+e3c234427cd464510547@syzkaller.appspotmail.com>,
-        brendanhiggins@google.com, gregkh@linuxfoundation.org,
-        heikki.krogerus@linux.intel.com, laurent.pinchart@ideasonboard.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        mchehab@kernel.org, rafael.j.wysocki@intel.com,
-        sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
-References: <0000000000004ae30305a653bc86@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <08f732a9-986f-6dcf-87dd-075a9b4605d7@infradead.org>
-Date:   Sat, 23 May 2020 10:38:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Sat, 23 May 2020 21:46:05 -0400
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 11E8D24D;
+        Sun, 24 May 2020 03:46:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1590284762;
+        bh=lexvNiAKMahPGqf8TgXMopluQH81OQtilrewhXRnGIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PbhT6joCK9bF1uSVlLTTBF35iXU6G4OSwsAOFUJsJWnIkoxr69gIdwpTMkO2Y3UJf
+         1FcMXwKgPKSLbgOsFL2fxcwfuwAkky9GFqaVd8uLr8RZlfQ/HmtA8iTccy+xF8Y3+4
+         qCrTVgeKvCpSYdyqwKazT8y1uFo7siJN5LbrBRys=
+Date:   Sun, 24 May 2020 04:45:48 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Vishal Sagar <vsagar@xilinx.com>
+Cc:     Hyun Kwon <hyunk@xilinx.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "hans.verkuil@cisco.com" <hans.verkuil@cisco.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Michal Simek <michals@xilinx.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Dinesh Kumar <dineshk@xilinx.com>,
+        Sandip Kothari <sandipk@xilinx.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v12 1/2] media: dt-bindings: media: xilinx: Add Xilinx
+ MIPI CSI-2 Rx Subsystem
+Message-ID: <20200524014548.GA6026@pendragon.ideasonboard.com>
+References: <20200423153038.106453-1-vishal.sagar@xilinx.com>
+ <20200423153038.106453-2-vishal.sagar@xilinx.com>
+ <20200505142302.GA19432@pendragon.ideasonboard.com>
+ <BY5PR02MB68679AA1B7CDDC16293EEC12A7A20@BY5PR02MB6867.namprd02.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <0000000000004ae30305a653bc86@google.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <BY5PR02MB68679AA1B7CDDC16293EEC12A7A20@BY5PR02MB6867.namprd02.prod.outlook.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 5/23/20 10:04 AM, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    c11d28ab Add linux-next specific files for 20200522
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17330172100000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3f6dbdea4159fb66
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e3c234427cd464510547
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=122eacba100000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12fffa9a100000
-> 
-> The bug was bisected to:
-> 
-> commit 4ef12f7198023c09ad6d25b652bd8748c965c7fa
-> Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Date:   Wed May 13 15:18:40 2020 +0000
-> 
->     kobject: Make sure the parent does not get released before its children
+Hi Vishal,
 
-Hi,
+On Fri, May 08, 2020 at 01:52:36PM +0000, Vishal Sagar wrote:
+> On Tuesday, May 5, 2020 7:53 PM, Laurent Pinchart wrote:
+> > On Thu, Apr 23, 2020 at 09:00:37PM +0530, Vishal Sagar wrote:
+> > > Add bindings documentation for Xilinx MIPI CSI-2 Rx Subsystem.
+> > >
+> > > The Xilinx MIPI CSI-2 Rx Subsystem consists of a CSI-2 Rx controller,
+> > > a D-PHY in Rx mode and a Video Format Bridge.
+> > >
+> > > Signed-off-by: Vishal Sagar <vishal.sagar@xilinx.com>
+> > > Reviewed-by: Hyun Kwon <hyun.kwon@xilinx.com>
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> > > ---
+> > > v12
+> > > - Moved to yaml format
+> > > - Update CSI-2 and D-PHY
+> > > - Mention that bindings for D-PHY not here
+> > > - reset -> video-reset
+> > >
+> > > v11
+> > > - Modify compatible string from 4.0 to 5.0
+> > >
+> > > v10
+> > > - No changes
+> > >
+> > > v9
+> > > - Fix xlnx,vfb description.
+> > > - s/Optional/Required endpoint property.
+> > > - Move data-lanes description from Ports to endpoint property section.
+> > >
+> > > v8
+> > > - Added reset-gpios optional property to assert video_aresetn
+> > >
+> > > v7
+> > > - Removed the control name from dt bindings
+> > > - Updated the example dt node name to csi2rx
+> > >
+> > > v6
+> > > - Added "control" after V4L2_CID_XILINX_MIPICSISS_ACT_LANES as
+> > > suggested by Luca
+> > > - Added reviewed by Rob Herring
+> > >
+> > > v5
+> > > - Incorporated comments by Luca Cersoli
+> > > - Removed DPHY clock from description and example
+> > > - Removed bayer pattern from device tree MIPI CSI IP
+> > >   doesn't deal with bayer pattern.
+> > >
+> > > v4
+> > > - Added reviewed by Hyun Kwon
+> > >
+> > > v3
+> > > - removed interrupt parent as suggested by Rob
+> > > - removed dphy clock
+> > > - moved vfb to optional properties
+> > > - Added required and optional port properties section
+> > > - Added endpoint property section
+> > >
+> > > v2
+> > > - updated the compatible string to latest version supported
+> > > - removed DPHY related parameters
+> > > - added CSI v2.0 related property (including VCX for supporting upto 16
+> > >   virtual channels).
+> > > - modified csi-pxl-format from string to unsigned int type where the value
+> > >   is as per the CSI specification
+> > > - Defined port 0 and port 1 as sink and source ports.
+> > > - Removed max-lanes property as suggested by Rob and Sakari
+> > > .../bindings/media/xilinx/xlnx,csi2rxss.yaml  | 215 ++++++++++++++++++
+> > >  1 file changed, 215 insertions(+)
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
+> > >
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
+> > > b/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
+> > > new file mode 100644
+> > > index 000000000000..365084e27f7e
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yam
+> > > +++ l
+> > > @@ -0,0 +1,215 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/media/xilinx/xlnx,csi2rxss.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Xilinx MIPI CSI-2 Receiver Subsystem
+> > > +
+> > > +maintainers:
+> > > +  - Vishal Sagar <vishal.sagar@xilinx.com>
+> > > +
+> > > +description: |
+> > > +  The Xilinx MIPI CSI-2 Receiver Subsystem is used to capture MIPI CSI-2
+> > > +  traffic from compliant camera sensors and send the output as AXI4 Stream
+> > > +  video data for image processing.
+> > > +  The subsystem consists of a MIPI D-PHY in slave mode which captures the
+> > > +  data packets. This is passed along the MIPI CSI-2 Rx IP which extracts the
+> > > +  packet data. The optional Video Format Bridge (VFB) converts this data to
+> > > +  AXI4 Stream video data.
+> > > +  For more details, please refer to PG232 Xilinx MIPI CSI-2 Receiver Subsystem.
+> > > +  Please note that this bindings includes only the MIPI CSI-2 Rx controller
+> > > +  and Video Format Bridge and not D-PHY.
+> > 
+> > How should the D-PHY be handled, when DPY_EN_REG_IF is set to true ?
+> 
+> It was suggested in v3 to have a separate D-PHY phy driver which would be initialized / configured from MIPI CSI-2 Rx driver.
+> Currently with the D-PHY register interface enabled, we don't have to really configure anything but the following parameters
+> 1 - init
+> 2 - hs_settle
+> 3 - hs_timeout (High Speed mode timeout)  
+> 4 - esc_timeout  (Escape mode timeout)
+> 5 - idelay tap
+> 
+> The D-PHY Rx can be enabled/disabled and has a soft reset bit.
+> The HS and Escape mode timeout registers can be enabled with a default value via the Vivado IP GUI.
+> 
+> The above parameters would have to be passed to D-PHY driver as custom control via MIPI CSI-2 Rx driver
+> as these depend on the sensor connected.
+> Probably these can be a new common control in V4L2 framework for CSI Rx controllers.
 
-Greg just sent a revert for this patch:
-https://lore.kernel.org/lkml/20200523152922.GA224858@kroah.com/
+It seems that in that case, regardless of whether we go for a separate
+PHY driver or not, we will be able to extend the DT bindings, either
+with a phys property, or with an additional reg entry. That should be
+backward-compatible, so I'm not concerned.
 
-so all 3 of these reports should be cleared up soon.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    items:
+> > > +      - enum:
+> > > +        - xlnx,mipi-csi2-rx-subsystem-5.0
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    description: List of clock specifiers
+> > > +    items:
+> > > +      - description: AXI Lite clock
+> > > +      - description: Video clock
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: lite_aclk
+> > > +      - const: video_aclk
+> > > +
+> > > +  xlnx,csi-pxl-format:
+> > > +    description: |
+> > > +      This denotes the CSI Data type selected in hw design.
+> > > +      Packets other than this data type (except for RAW8 and
+> > > +      User defined data types) will be filtered out.
+> > > +      Possible values are as below -
+> > > +      0x1e - YUV4228B
+> > > +      0x1f - YUV42210B
+> > > +      0x20 - RGB444
+> > > +      0x21 - RGB555
+> > > +      0x22 - RGB565
+> > > +      0x23 - RGB666
+> > > +      0x24 - RGB888
+> > > +      0x28 - RAW6
+> > > +      0x29 - RAW7
+> > > +      0x2a - RAW8
+> > > +      0x2b - RAW10
+> > > +      0x2c - RAW12
+> > > +      0x2d - RAW14
+> > > +      0x2e - RAW16
+> > > +      0x2f - RAW20
+> > > +    allOf:
+> > > +      - $ref: /schemas/types.yaml#/definitions/uint32
+> > > +      - enum: [0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x28, 0x29,
+> > > + 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f]
+> > 
+> > This could also be written
+> > 
+> >     allOf:
+> >       - $ref: /schemas/types.yaml#/definitions/uint32
+> >       - anyOf:
+> >         - minimum: 0x1e
+> >           maximum: 0x24
+> >         - minimum: 0x28
+> >           maximum: 0x2f
+> > 
+> > if you want to make it a bit more compact (in the number of values, not the
+> > number of lines obviously), up to you.
+> 
+> Thanks for sharing this method. I will update this in next version.
+> 
+> > I will also quote the question (and your answer) from the previous
+> > version:
+> > 
+> > > > Isn't this property required only when the VFB is present ?
+> > >
+> > > This will be present irrespective of VFB being enabled.
+> > > With VFB, the data on the bus will be as per Xilinx UG934 which is similar to media bus formats.
+> > >
+> > > Without VFB, it will just be plain data as it comes in data packets.
+> > > Refer to the Xilinx PG 232 "Pixel Packing When Video Format Bridge is Not Present"
+> > >
+> > > So the driver is currently made to load only in case VFB is enabled.
+> > 
+> > I understand that the driver doesn't support the case where the VFB is
+> > disabled, but the DT bindings shouldn't care about that. The document of
+> > v4.1 of the subsystem states that the width of the video_out port is then
+> > selected under "CSI-2 Options TDATA width" (page 11). I however don't such
+> > such an option described on pages 55 or 56, but there's an
+> > AXIS_TDATA_WIDTH parameter on page 61.
+> > 
+> > Is the pixel format relevant when the VFB is disabled ?
+> 
+> When the VFB is disabled, all supported data types will be allowed i.e. no filtering will occur.
+> But the data output will be in 32/64 bit TDATA width (no dependence on pixels per clock) and 
+> will adhere to the "Recommended Memory Storage" section of the CSI spec.
+> In this case data being sent on the bus won't compare to what media bus format documentation describes.
 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=146b3d22100000
-> final crash:    https://syzkaller.appspot.com/x/report.txt?x=166b3d22100000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=126b3d22100000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+e3c234427cd464510547@syzkaller.appspotmail.com
-> Fixes: 4ef12f719802 ("kobject: Make sure the parent does not get released before its children")
-> 
-> usb 1-1: USB disconnect, device number 2
-> ============================================
-> WARNING: possible recursive locking detected
-> 5.7.0-rc6-next-20200522-syzkaller #0 Not tainted
-> --------------------------------------------
-> kworker/1:1/28 is trying to acquire lock:
-> ffffffff8a4f3aa8 (media_devnode_lock){+.+.}-{3:3}, at: media_devnode_release+0x1a/0xe0 drivers/media/mc/mc-devnode.c:53
-> 
-> but task is already holding lock:
-> ffffffff8a4f3aa8 (media_devnode_lock){+.+.}-{3:3}, at: media_devnode_unregister+0x1c/0x69 drivers/media/mc/mc-devnode.c:283
-> 
-> other info that might help us debug this:
->  Possible unsafe locking scenario:
-> 
->        CPU0
->        ----
->   lock(media_devnode_lock);
->   lock(media_devnode_lock);
-> 
->  *** DEADLOCK ***
-> 
->  May be due to missing lock nesting notation
-> 
-> 6 locks held by kworker/1:1/28:
->  #0: ffff88821a8e6138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: __write_once_size include/linux/compiler.h:303 [inline]
->  #0: ffff88821a8e6138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
->  #0: ffff88821a8e6138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
->  #0: ffff88821a8e6138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
->  #0: ffff88821a8e6138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:615 [inline]
->  #0: ffff88821a8e6138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:642 [inline]
->  #0: ffff88821a8e6138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x844/0x16a0 kernel/workqueue.c:2239
->  #1: ffffc90000de7dc0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x878/0x16a0 kernel/workqueue.c:2243
->  #2: ffff88809e850218 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:768 [inline]
->  #2: ffff88809e850218 (&dev->mutex){....}-{3:3}, at: hub_event+0x1b6/0x38f0 drivers/usb/core/hub.c:5522
->  #3: ffff88809749e218 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:768 [inline]
->  #3: ffff88809749e218 (&dev->mutex){....}-{3:3}, at: usb_disconnect+0x91/0x8d0 drivers/usb/core/hub.c:2208
->  #4: ffff8880951c01a8 (&dev->mutex){....}-{3:3}, at: device_release_driver_internal+0x23/0x500 drivers/base/dd.c:1141
->  #5: ffffffff8a4f3aa8 (media_devnode_lock){+.+.}-{3:3}, at: media_devnode_unregister+0x1c/0x69 drivers/media/mc/mc-devnode.c:283
-> 
-> stack backtrace:
-> CPU: 1 PID: 28 Comm: kworker/1:1 Not tainted 5.7.0-rc6-next-20200522-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x18f/0x20d lib/dump_stack.c:118
->  print_deadlock_bug kernel/locking/lockdep.c:2391 [inline]
->  check_deadlock kernel/locking/lockdep.c:2432 [inline]
->  validate_chain kernel/locking/lockdep.c:3202 [inline]
->  __lock_acquire.cold+0x240/0x3e2 kernel/locking/lockdep.c:4380
->  lock_acquire+0x1f2/0x8f0 kernel/locking/lockdep.c:4959
->  __mutex_lock_common kernel/locking/mutex.c:956 [inline]
->  __mutex_lock+0x156/0x13c0 kernel/locking/mutex.c:1103
->  media_devnode_release+0x1a/0xe0 drivers/media/mc/mc-devnode.c:53
->  device_release+0x71/0x200 drivers/base/core.c:1541
->  kobject_cleanup lib/kobject.c:701 [inline]
->  kobject_release lib/kobject.c:732 [inline]
->  kref_put include/linux/kref.h:65 [inline]
->  kobject_put+0x1c8/0x2f0 lib/kobject.c:749
->  cdev_device_del+0x69/0x80 fs/char_dev.c:575
->  media_devnode_unregister+0x2b/0x69 drivers/media/mc/mc-devnode.c:285
->  media_device_unregister drivers/media/mc/mc-device.c:846 [inline]
->  media_device_unregister+0x3da/0x570 drivers/media/mc/mc-device.c:800
->  uvc_unregister_video+0x1b6/0x210 drivers/media/usb/uvc/uvc_driver.c:1960
->  uvc_disconnect+0xbc/0x160 drivers/media/usb/uvc/uvc_driver.c:2270
->  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:436
->  __device_release_driver drivers/base/dd.c:1113 [inline]
->  device_release_driver_internal+0x432/0x500 drivers/base/dd.c:1144
->  bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:533
->  device_del+0x481/0xd30 drivers/base/core.c:2839
->  usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1245
->  usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2217
->  hub_port_connect drivers/usb/core/hub.c:5059 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
->  port_event drivers/usb/core/hub.c:5494 [inline]
->  hub_event+0x17ca/0x38f0 drivers/usb/core/hub.c:5576
->  process_one_work+0x965/0x16a0 kernel/workqueue.c:2268
->  worker_thread+0x96/0xe20 kernel/workqueue.c:2414
->  kthread+0x3b5/0x4a0 kernel/kthread.c:291
->  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:351
-> 
-> 
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
-> 
+My understanding is that, in the case xlnx,vfb would be absent (not
+supported in the driver yet), the xlnx,csi-pxl-format should not be set
+? If that's correct, I'd like to capture that in the bindings already.
+It could be expressed by dropping xlnx,csi-pxl-format from the required
+section, and adding
 
+if:
+  required:
+    - xlnx,vfb
+then:
+  required:
+    - xlnx,csi-pxl-format
+else:
+  properties:
+    xlnx,csi-pxl-format: false
+
+As you will have two conditions defined, they should be grouped with
+
+allOf:
+  - if:
+      required:
+        - xlnx,vfb
+    then:
+      required:
+        - xlnx,csi-pxl-format
+    else:
+      properties:
+        xlnx,csi-pxl-format: false
+
+  - if:
+      not:
+        required:
+          - xlnx,en-csi-v2-0
+    then:
+      properties:
+        xlnx,en-vcx: false
+
+> > > +
+> > > +  xlnx,vfb:
+> > > +    type: boolean
+> > > +    description: Present when Video Format Bridge is enabled in IP
+> > > + configuration
+> > > +
+> > > +  xlnx,en-csi-v2-0:
+> > > +    type: boolean
+> > > +    description: Present if CSI v2 is enabled in IP configuration.
+> > > +
+> > > +  xlnx,en-vcx:
+> > > +    type: boolean
+> > > +    description: |
+> > > +      When present, there are maximum 16 virtual channels, else
+> > > +      only 4. This is present only if xlnx,en-csi-v2-0 is present.
+> > 
+> > The last sentence should be removed, and replaced with
+> > 
+> > if:
+> >   not:
+> >     required:
+> >       - xlnx,en-csi-v2-0
+> > then:
+> >   properties:
+> >     xlnx,en-vcx: false
+> > 
+> > (to be placed after required: and before additionalProperties:).
+> 
+> Got it. Thanks for the tips on YAML.
+> I will update this in next version.
+> 
+> > > +
+> > > +  xlnx,en-active-lanes:
+> > > +    type: boolean
+> > > +    description: |
+> > > +      Present if the number of active lanes can be re-configured at
+> > > +      runtime in the Protocol Configuration Register. Otherwise all lanes,
+> > > +      as set in IP configuration, are always active.
+> > > +
+> > > +  video-reset-gpios:
+> > > +    description: Optional specifier for a GPIO that asserts video_aresetn.
+> > > +    maxItems: 1
+> > > +
+> > > +  ports:
+> > > +    type: object
+> > > +
+> > > +    properties:
+> > > +      port@0:
+> > > +        type: object
+> > > +        description: |
+> > > +          Input / sink port node, single endpoint describing the
+> > > +          CSI-2 transmitter.
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            const: 0
+> > > +
+> > > +          endpoint:
+> > > +            type: object
+> > > +
+> > > +            properties:
+> > > +
+> > > +              data-lanes:
+> > > +                description: |
+> > > +                  This is required only in the sink port 0 endpoint which
+> > > +                  connects to MIPI CSI-2 source like sensor.
+> > > +                  The possible values are -
+> > > +                  1       - For 1 lane enabled in IP.
+> > > +                  1 2     - For 2 lanes enabled in IP.
+> > > +                  1 2 3   - For 3 lanes enabled in IP.
+> > > +                  1 2 3 4 - For 4 lanes enabled in IP.
+> > > +                items:
+> > > +                  - const: 1
+> > > +                  - const: 2
+> > > +                  - const: 3
+> > > +                  - const: 4
+> > > +
+> > > +              remote-endpoint: true
+> > > +
+> > > +            required:
+> > > +              - data-lanes
+> > > +              - remote-endpoint
+> > > +
+> > > +            additionalProperties: false
+> > > +
+> > > +        additionalProperties: false
+> > > +
+> > > +      port@1:
+> > > +        type: object
+> > > +        description: |
+> > > +          Output / source port node, endpoint describing modules
+> > > +          connected the CSI-2 receiver.
+> > > +
+> > > +        properties:
+> > > +
+> > > +          reg:
+> > > +            const: 1
+> > > +
+> > > +          endpoint:
+> > > +            type: object
+> > > +
+> > > +            properties:
+> > > +
+> > > +              remote-endpoint: true
+> > > +
+> > > +            required:
+> > > +              - remote-endpoint
+> > > +
+> > > +            additionalProperties: false
+> > > +
+> > > +        additionalProperties: false
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - interrupts
+> > > +  - clocks
+> > > +  - clock-names
+> > > +  - xlnx,csi-pxl-format
+> > > +  - ports
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/gpio/gpio.h>
+> > > +    xcsi2rxss_1: csi2rx@a0020000 {
+> > > +        compatible = "xlnx,mipi-csi2-rx-subsystem-5.0";
+> > > +        reg = <0x0 0xa0020000 0x0 0x10000>;
+> > > +        interrupt-parent = <&gic>;
+> > > +        interrupts = <0 95 4>;
+> > > +        xlnx,csi-pxl-format = <0x2a>;
+> > > +        xlnx,vfb;
+> > > +        xlnx,en-active-lanes;
+> > > +        xlnx,en-csi-v2-0;
+> > > +        xlnx,en-vcx;
+> > > +        clock-names = "lite_aclk", "video_aclk";
+> > > +        clocks = <&misc_clk_0>, <&misc_clk_1>;
+> > > +        video-reset-gpios = <&gpio 86 GPIO_ACTIVE_LOW>;
+> > > +
+> > > +        ports {
+> > > +            #address-cells = <1>;
+> > > +            #size-cells = <0>;
+> > > +
+> > > +            port@0 {
+> > > +                /* Sink port */
+> > > +                reg = <0>;
+> > > +                csiss_in: endpoint {
+> > > +                    data-lanes = <1 2 3 4>;
+> > > +                    /* MIPI CSI-2 Camera handle */
+> > > +                    remote-endpoint = <&camera_out>;
+> > > +                };
+> > > +            };
+> > > +            port@1 {
+> > > +                /* Source port */
+> > > +                reg = <1>;
+> > > +                csiss_out: endpoint {
+> > > +                    remote-endpoint = <&vproc_in>;
+> > > +                };
+> > > +            };
+> > > +        };
+> > > +    };
 
 -- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Regards,
+
+Laurent Pinchart
