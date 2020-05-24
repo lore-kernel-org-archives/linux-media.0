@@ -2,70 +2,81 @@ Return-Path: <SRS0=lUmJ=7G=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41EC7C433DF
-	for <linux-media@archiver.kernel.org>; Sun, 24 May 2020 16:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66DFFC433E0
+	for <linux-media@archiver.kernel.org>; Sun, 24 May 2020 19:03:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2ADEA20787
-	for <linux-media@archiver.kernel.org>; Sun, 24 May 2020 16:25:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 447B92076C
+	for <linux-media@archiver.kernel.org>; Sun, 24 May 2020 19:03:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1590347012;
+	bh=Mq59j8ehq3CwHIvV0e9bLb39zHdc2gtg/vFQ35A74Xc=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=edxM/D4ekZZP6a12HJ7UGAVtz5+6gBG+8i3wslgOHfPLnQpqCgnU18b8v88e9X8j1
+	 SAKwgwO3hgmFIEW+yJP04RF6U+flpnHMq5DezjIEKqcJEHJsDCviw9kjZVotC6TnSk
+	 WkZ1JvC5G1QxayirWUKkVLbXYCW2iTl5CYgJdgLM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729097AbgEXQZH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 24 May 2020 12:25:07 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:39607 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726851AbgEXQZH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 24 May 2020 12:25:07 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1jctQt-0008Kc-BJ; Sun, 24 May 2020 16:25:03 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org
-Subject: [PATCH] media: gspca: remove redundant assignment to variable retval
-Date:   Sun, 24 May 2020 17:25:03 +0100
-Message-Id: <20200524162503.20902-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        id S2388091AbgEXTD3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 24 May 2020 15:03:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44302 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388085AbgEXTD3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 24 May 2020 15:03:29 -0400
+Received: from [192.168.0.50] (89-70-52-201.dynamic.chello.pl [89.70.52.201])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7BF6E2076C;
+        Sun, 24 May 2020 19:03:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590347008;
+        bh=Mq59j8ehq3CwHIvV0e9bLb39zHdc2gtg/vFQ35A74Xc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=TuUTZ9suN+FFAN3w+WA2Bkdzw0y7tuhWEIUHtcnflF7x0lao+v5s+KRhz07qfY6F9
+         hRcbcOS/amhv1LcGlUX1ABdQHcG1aZH5PTuV4uVNvAA+j3dqhj4EJ0O65upC8TjvAM
+         Mb+47d7mJ1+nVlnjEwNJGay6wrujIW/9m1Ah+q34=
+Subject: Re: [PATCH V2] media: s3c-camif: fix missing disable in
+ tegra_adma_probe().
+To:     wu000273@umn.edu
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kjlu@umn.edu
+References: <20200524034616.31625-1-wu000273@umn.edu>
+From:   Sylwester Nawrocki <snawrocki@kernel.org>
+Message-ID: <9b1cdd76-1fbf-c66b-a8e1-929ce2aba791@kernel.org>
+Date:   Sun, 24 May 2020 21:03:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20200524034616.31625-1-wu000273@umn.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Hi,
 
-The variable retval is being initialized with a value that is
-never read and it is being updated later with a new value. The
-initialization is redundant and can be removed.
+On 5/24/20 05:46, wu000273@umn.edu wrote:
+> From: Qiushi Wu <wu000273@umn.edu>
+> 
+> "pm_runtime_enable()" was not handled by "pm_runtime_disable()"
+> after a call of the function “pm_runtime_get_sync()” failed.
+> Thus move the jump target “err_pm” before calling function
+> "calling pm_runtime_disable()".
+> 
+> Fixes: babde1c243b2 ("[media] V4L: Add driver for S3C24XX/S3C64XX SoC series camera interface")
+> Signed-off-by: Qiushi Wu <wu000273@umn.edu>
+> ---
+> 
+> V2: improving commit messages.
 
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/media/usb/gspca/jl2005bcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the patch. It seems you have got typo in the subject line.
+With tegra_adma_probe changed to s3c_camif_probe feel free to add:
 
-diff --git a/drivers/media/usb/gspca/jl2005bcd.c b/drivers/media/usb/gspca/jl2005bcd.c
-index 80ce7448b3dd..ca12f33f3e12 100644
---- a/drivers/media/usb/gspca/jl2005bcd.c
-+++ b/drivers/media/usb/gspca/jl2005bcd.c
-@@ -165,7 +165,7 @@ static int jl2005c_get_firmware_id(struct gspca_dev *gspca_dev)
- {
- 	struct sd *sd = (struct sd *)gspca_dev;
- 	int i = 0;
--	int retval = -1;
-+	int retval;
- 	unsigned char regs_to_read[] = {0x57, 0x02, 0x03, 0x5d, 0x5e, 0x5f};
- 
- 	gspca_dbg(gspca_dev, D_PROBE, "Running jl2005c_get_firmware_id\n");
--- 
-2.25.1
-
+Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
