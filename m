@@ -2,115 +2,221 @@ Return-Path: <SRS0=CKUu=7H=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08AECC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 25 May 2020 11:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5536C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 25 May 2020 11:47:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E586C2071A
-	for <linux-media@archiver.kernel.org>; Mon, 25 May 2020 11:16:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B2F832073B
+	for <linux-media@archiver.kernel.org>; Mon, 25 May 2020 11:47:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="buAXv4JE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390095AbgEYLQY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 May 2020 07:16:24 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:44168 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389897AbgEYLQX (ORCPT
+        id S2390361AbgEYLru (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 May 2020 07:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390220AbgEYLrt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 May 2020 07:16:23 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 2F0BA1C02C4; Mon, 25 May 2020 13:16:22 +0200 (CEST)
-Date:   Mon, 25 May 2020 13:16:21 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
-        <linux-media@vger.kernel.org>, libcamera-devel@lists.libcamera.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rob Herring <robh@kernel.org>, tfiga@google.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v11 02/13] dt-bindings: video-interface: Replace
- 'rotation' description
-Message-ID: <20200525111621.GE27989@amd>
-References: <20200509090456.3496481-1-jacopo@jmondi.org>
- <20200509090456.3496481-3-jacopo@jmondi.org>
+        Mon, 25 May 2020 07:47:49 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAB4C061A0E
+        for <linux-media@vger.kernel.org>; Mon, 25 May 2020 04:47:48 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id g9so14758383edr.8
+        for <linux-media@vger.kernel.org>; Mon, 25 May 2020 04:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hl7IW7DWz99YomR3QOZBXmvlxAGPmsXZQwu20AX5v3s=;
+        b=buAXv4JEaQqiHrO8/RCz7HUcFTvhmEjLbUZHKrXlRHNck0Rq6D8WUDoq2L3hNja/6v
+         t1syq8JezlywvTLr95huE9K/RR3oyutUWhO1IsPHTp6b/xHwqCEXwE4xS0rtsqbZ6SEL
+         KwmqiMdE0QJSqHwNi1PaxzQDGEvLE0qUP4uaQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hl7IW7DWz99YomR3QOZBXmvlxAGPmsXZQwu20AX5v3s=;
+        b=I/3MjBsHAIQdBGbMxj3ouOQ/DKTp/5ygb44QEuTAu9lJXXKuD9ylU5CuSrMAlSHRIN
+         N7xjB7Zv/131hnhbtdE9OPLwHTNmK3YRL95mENlXFxI8Teb027M8kxog1g/gSJhW3nmE
+         zVnO97Xsw9m3bign4RbxtnQoabPB/Dbhyi1BbbRHF4PUaZ59wxhxotrQcocgXFtbXmZN
+         8yRy/Sm4X+ampUMCjBpppCtP13cXqZH93nIPfG2hf3beFVXKbWiK1UJ1swV8k1tBTa7f
+         /hqzL0smUOtt/DiAHuL/IzCt8wRaQrYgZWu1sOSdI5XSCXVlQXKsCaSjUTGa38mI47zR
+         cE7A==
+X-Gm-Message-State: AOAM532qjbVKz/m6EKG5d8bBWGu39MVcOpXH6EYBoVbMiYCPS58W6YLE
+        REkg9XsMnJ/Rr4SB0u3aw8iQ7zbQd21OaA==
+X-Google-Smtp-Source: ABdhPJz2ws9OUU2yHQI4hGFhLU/K6ZuwZstAE/b6VcB7zXGk5v0Pbina2OeMhi7oqVAtapkkkbTN0w==
+X-Received: by 2002:aa7:d0d9:: with SMTP id u25mr14006598edo.377.1590407266647;
+        Mon, 25 May 2020 04:47:46 -0700 (PDT)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id k3sm15308872edi.60.2020.05.25.04.47.45
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 May 2020 04:47:46 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id c3so12556782wru.12
+        for <linux-media@vger.kernel.org>; Mon, 25 May 2020 04:47:45 -0700 (PDT)
+X-Received: by 2002:adf:e543:: with SMTP id z3mr14323859wrm.385.1590407265383;
+ Mon, 25 May 2020 04:47:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="2hMgfIw2X+zgXrFs"
-Content-Disposition: inline
-In-Reply-To: <20200509090456.3496481-3-jacopo@jmondi.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <20200522202130.13306-1-jonas@kwiboo.se>
+In-Reply-To: <20200522202130.13306-1-jonas@kwiboo.se>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Mon, 25 May 2020 13:47:33 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5C7SsLET_6yHNpXnG5ozb09znOpRV1Rx8-uDpy=d4+ETQ@mail.gmail.com>
+Message-ID: <CAAFQd5C7SsLET_6yHNpXnG5ozb09znOpRV1Rx8-uDpy=d4+ETQ@mail.gmail.com>
+Subject: Re: [PATCH] media: rkvdec: Fix H264 scaling list order
+To:     Jonas Karlman <jonas@kwiboo.se>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
---2hMgfIw2X+zgXrFs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat 2020-05-09 11:04:45, Jacopo Mondi wrote:
-> Replace the 'rotation' property description by providing a definition
-> relative to the camera sensor pixel array coordinate system and the
-> captured scene.
->=20
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+On Fri, May 22, 2020 at 10:21 PM Jonas Karlman <jonas@kwiboo.se> wrote:
+>
+> The Rockchip Video Decoder driver is expecting that the values in a
+> scaling list are in zig-zag order and applies the inverse scanning process
+> to get the values in matrix order.
+>
+> Commit 0b0393d59eb4 ("media: uapi: h264: clarify expected
+> scaling_list_4x4/8x8 order") clarified that the values in the scaling list
+> should already be in matrix order.
+>
+> Fix this by removing the reordering and change to use two memcpy.
+>
+> Fixes: cd33c830448b ("media: rkvdec: Add the rkvdec driver")
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 > ---
->  .../bindings/media/video-interfaces.txt       | 359 +++++++++++++++++-
->  1 file changed, 356 insertions(+), 3 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/media/video-interfaces.txt=
- b/Documentation/devicetree/bindings/media/video-interfaces.txt
-> index b1ff492c7da7a..3920f25a91235 100644
-> --- a/Documentation/devicetree/bindings/media/video-interfaces.txt
-> +++ b/Documentation/devicetree/bindings/media/video-interfaces.txt
-> @@ -85,9 +85,362 @@ Optional properties
->=20
->  - lens-focus: A phandle to the node of the focus lens controller.
->=20
-> -- rotation: The device, typically an image sensor, is not mounted uprigh=
-t,
-> -  but a number of degrees counter clockwise. Typical values are 0 and 180
-> -  (upside down).
-> +- rotation: The camera rotation is expressed as the angular difference in
-> +  degrees between two reference systems, one relative to the camera modu=
-le, and
-> +  one defined on the external world scene to be captured when projected =
-on the
-> +  image sensor pixel array.
+>  drivers/staging/media/rkvdec/rkvdec-h264.c | 70 +++++++---------------
+>  1 file changed, 22 insertions(+), 48 deletions(-)
+>
 
-So.. how is this supposed to work. There's a phone, with its main
-camera. It is designed to be used in both portrait and landscape
-modes, internal accelerometr can tell between the two.
++Alexandre Courbot +Jeffrey Kardatzke for visibility
 
-Plus you have phone with a keyboard. Common usage is portrait with
-keyboard closed, and landscape with keyboard open...
-
-And yes, there's linux with v4l2 working on Nokia N900.
-
-Best regards,
-								Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---2hMgfIw2X+zgXrFs
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl7LqQUACgkQMOfwapXb+vIaMwCfUfK0NB+oJcwe+8349bTgOT7+
-SE4AmgKPNdcqvahEQnuXH22WAUBVSNg5
-=RDoI
------END PGP SIGNATURE-----
-
---2hMgfIw2X+zgXrFs--
+> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> index cd4980d06be7..2719f0c66a4a 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> @@ -18,11 +18,16 @@
+>  /* Size with u32 units. */
+>  #define RKV_CABAC_INIT_BUFFER_SIZE     (3680 + 128)
+>  #define RKV_RPS_SIZE                   ((128 + 128) / 4)
+> -#define RKV_SCALING_LIST_SIZE          (6 * 16 + 6 * 64 + 128)
+>  #define RKV_ERROR_INFO_SIZE            (256 * 144 * 4)
+>
+>  #define RKVDEC_NUM_REFLIST             3
+>
+> +struct rkvdec_scaling_matrix {
+> +       u8 scaling_list_4x4[6][16];
+> +       u8 scaling_list_8x8[6][64];
+> +       u8 padding[128];
+> +};
+> +
+>  struct rkvdec_sps_pps_packet {
+>         u32 info[8];
+>  };
+> @@ -86,7 +91,7 @@ struct rkvdec_ps_field {
+>  /* Data structure describing auxiliary buffer format. */
+>  struct rkvdec_h264_priv_tbl {
+>         s8 cabac_table[4][464][2];
+> -       u8 scaling_list[RKV_SCALING_LIST_SIZE];
+> +       struct rkvdec_scaling_matrix scaling_list;
+>         u32 rps[RKV_RPS_SIZE];
+>         struct rkvdec_sps_pps_packet param_set[256];
+>         u8 err_info[RKV_ERROR_INFO_SIZE];
+> @@ -785,56 +790,25 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+>         }
+>  }
+>
+> -/*
+> - * NOTE: The values in a scaling list are in zig-zag order, apply inverse
+> - * scanning process to get the values in matrix order.
+> - */
+> -static const u32 zig_zag_4x4[16] = {
+> -       0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15
+> -};
+> -
+> -static const u32 zig_zag_8x8[64] = {
+> -       0,  1,  8, 16,  9,  2,  3, 10, 17, 24, 32, 25, 18, 11,  4,  5,
+> -       12, 19, 26, 33, 40, 48, 41, 34, 27, 20, 13,  6,  7, 14, 21, 28,
+> -       35, 42, 49, 56, 57, 50, 43, 36, 29, 22, 15, 23, 30, 37, 44, 51,
+> -       58, 59, 52, 45, 38, 31, 39, 46, 53, 60, 61, 54, 47, 55, 62, 63
+> -};
+> -
+> -static void reorder_scaling_list(struct rkvdec_ctx *ctx,
+> -                                struct rkvdec_h264_run *run)
+> +static void assemble_hw_scaling_list(struct rkvdec_ctx *ctx,
+> +                                    struct rkvdec_h264_run *run)
+>  {
+>         const struct v4l2_ctrl_h264_scaling_matrix *scaling = run->scaling_matrix;
+> -       const size_t num_list_4x4 = ARRAY_SIZE(scaling->scaling_list_4x4);
+> -       const size_t list_len_4x4 = ARRAY_SIZE(scaling->scaling_list_4x4[0]);
+> -       const size_t num_list_8x8 = ARRAY_SIZE(scaling->scaling_list_8x8);
+> -       const size_t list_len_8x8 = ARRAY_SIZE(scaling->scaling_list_8x8[0]);
+>         struct rkvdec_h264_ctx *h264_ctx = ctx->priv;
+>         struct rkvdec_h264_priv_tbl *tbl = h264_ctx->priv_tbl.cpu;
+> -       u8 *dst = tbl->scaling_list;
+> -       const u8 *src;
+> -       int i, j;
+> -
+> -       BUILD_BUG_ON(ARRAY_SIZE(zig_zag_4x4) != list_len_4x4);
+> -       BUILD_BUG_ON(ARRAY_SIZE(zig_zag_8x8) != list_len_8x8);
+> -       BUILD_BUG_ON(ARRAY_SIZE(tbl->scaling_list) <
+> -                    num_list_4x4 * list_len_4x4 +
+> -                    num_list_8x8 * list_len_8x8);
+> -
+> -       src = &scaling->scaling_list_4x4[0][0];
+> -       for (i = 0; i < num_list_4x4; ++i) {
+> -               for (j = 0; j < list_len_4x4; ++j)
+> -                       dst[zig_zag_4x4[j]] = src[j];
+> -               src += list_len_4x4;
+> -               dst += list_len_4x4;
+> -       }
+>
+> -       src = &scaling->scaling_list_8x8[0][0];
+> -       for (i = 0; i < num_list_8x8; ++i) {
+> -               for (j = 0; j < list_len_8x8; ++j)
+> -                       dst[zig_zag_8x8[j]] = src[j];
+> -               src += list_len_8x8;
+> -               dst += list_len_8x8;
+> -       }
+> +       BUILD_BUG_ON(sizeof(tbl->scaling_list.scaling_list_4x4) !=
+> +                    sizeof(scaling->scaling_list_4x4));
+> +       BUILD_BUG_ON(sizeof(tbl->scaling_list.scaling_list_8x8) !=
+> +                    sizeof(scaling->scaling_list_8x8));
+> +
+> +       memcpy(tbl->scaling_list.scaling_list_4x4,
+> +              scaling->scaling_list_4x4,
+> +              sizeof(scaling->scaling_list_4x4));
+> +
+> +       memcpy(tbl->scaling_list.scaling_list_8x8,
+> +              scaling->scaling_list_8x8,
+> +              sizeof(scaling->scaling_list_8x8));
+>  }
+>
+>  /*
+> @@ -1126,7 +1100,7 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+>         v4l2_h264_build_b_ref_lists(&reflist_builder, h264_ctx->reflists.b0,
+>                                     h264_ctx->reflists.b1);
+>
+> -       reorder_scaling_list(ctx, &run);
+> +       assemble_hw_scaling_list(ctx, &run);
+>         assemble_hw_pps(ctx, &run);
+>         assemble_hw_rps(ctx, &run);
+>         config_registers(ctx, &run);
+> --
+> 2.17.1
+>
