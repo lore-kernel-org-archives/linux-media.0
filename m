@@ -2,309 +2,334 @@ Return-Path: <SRS0=aHD+=7I=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E784DC433DF
-	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 14:31:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A82FC433E1
+	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 15:17:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C1FE52065F
-	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 14:31:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 443C220776
+	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 15:17:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="LLSViMJa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728151AbgEZObQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 May 2020 10:31:16 -0400
-Received: from mga12.intel.com ([192.55.52.136]:44723 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726965AbgEZObP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 May 2020 10:31:15 -0400
-IronPort-SDR: uLzWD5KuEvHOc8WBKnUEct9g8OKYtSP52mjhHYw/TIGxji4YkGltDSEJmP4zzTM+YLKwVLjruY
- FDM79DIpBgaw==
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2020 07:31:14 -0700
-IronPort-SDR: LHLSiFElEiSRmOblMHMvnw15oAJVq/ZJUCnkUSwiK8UrdP2FId8zaPoddZB5WI5qH0UMWTyK55
- /tJ3dlmMwM9Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,437,1583222400"; 
-   d="scan'208,223";a="375715781"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 26 May 2020 07:31:11 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 26 May 2020 17:31:10 +0300
-Date:   Tue, 26 May 2020 17:31:10 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tian Shu Qiu <tian.shu.qiu@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>
-Subject: Re: [PATCH] media: ipu3: add a module to probe sensors via ACPI
-Message-ID: <20200526143110.GC3284396@kuha.fi.intel.com>
-References: <12fbe3f5c6a16c5f3447adbc09fe27ceb2b16823.1589625807.git.mchehab+huawei@kernel.org>
- <20200517103659.GS17578@paasikivi.fi.intel.com>
- <20200520094400.5137e7f2@coco.lan>
- <20200520082608.GV20066@paasikivi.fi.intel.com>
- <20200520131830.3ff45919@coco.lan>
- <CAHp75VduEGyzobm0hkXzWmFfZb-uMAEWG-wc89b7M7zVzZ_4LA@mail.gmail.com>
- <20200522115736.10cca8eb@coco.lan>
+        id S1729666AbgEZPRW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 May 2020 11:17:22 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:21204 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727921AbgEZPRV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 26 May 2020 11:17:21 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04QFADsH025032;
+        Tue, 26 May 2020 17:16:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=STMicroelectronics;
+ bh=0feWfYVxQYrSEupQlVoVOosyiC2LKcVNCDVytVsfcsI=;
+ b=LLSViMJaH5iEPzyFmqnA1qbVFgaWgM4Y3b9yMDMw/GXrlXntN+N9M4VKThB2pCLgl7p6
+ JhS05k4oPuEIaDdvY3oMQMgscQ0vN7bXCi2QbevhZ5hFGzFHwSWTL8jaYcRF0YB+sQoJ
+ RN5RCgWXO1svJvjbxKPSUm9cq1Dk8kUAA7chqe2hMmveVEepseGQUVHL/xdlb55jSZ8v
+ xaSD1My5NGrH5hDl/oLSuuxZ2JgkkPu0aUG+jFfSTfAhXyblL2TZO/YoikWVc1T7TDwN
+ e0+CXXN3lf95LTmjJ35jI+vwmXCGnYhwvbCbuleUWDl2LwdS2VyrayUpt2VIq7gbZtfR wg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 316sa20en7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 May 2020 17:16:27 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B8DE2100034;
+        Tue, 26 May 2020 17:16:26 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9E58C2C1D9F;
+        Tue, 26 May 2020 17:16:26 +0200 (CEST)
+Received: from localhost (10.75.127.49) by SFHDAG3NODE3.st.com (10.75.127.9)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 26 May 2020 17:16:25
+ +0200
+From:   Benjamin Gaignard <benjamin.gaignard@st.com>
+To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
+        <hugues.fruchet@st.com>, <mchehab@kernel.org>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <pavel@ucw.cz>, <len.brown@intel.com>,
+        <valentin.schneider@arm.com>, <vincent.guittot@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: [RFC 1/3] PM: QoS: Introduce cpufreq minimum load QoS
+Date:   Tue, 26 May 2020 17:16:17 +0200
+Message-ID: <20200526151619.8779-2-benjamin.gaignard@st.com>
+X-Mailer: git-send-email 2.15.0
+In-Reply-To: <20200526151619.8779-1-benjamin.gaignard@st.com>
+References: <20200526151619.8779-1-benjamin.gaignard@st.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="17pEHd4RhPHOinZp"
-Content-Disposition: inline
-In-Reply-To: <20200522115736.10cca8eb@coco.lan>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG3NODE3.st.com
+ (10.75.127.9)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-05-26_02:2020-05-26,2020-05-26 signatures=0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Introduce cpufreq minimum load QoS, based on the "raw" low-level
+PM QoS, to represent the minimum expected cpu load by various devices.
 
---17pEHd4RhPHOinZp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The cpufreq_minload_qos_limit() helper is defined to retrieve the
+aggregated constraints.
 
-On Fri, May 22, 2020 at 11:57:36AM +0200, Mauro Carvalho Chehab wrote:
-> Em Thu, 21 May 2020 11:00:19 +0300
-> Andy Shevchenko <andy.shevchenko@gmail.com> escreveu:
-> 
-> > +Cc: Heikki (swnode expert)
-> > 
-> > On Wed, May 20, 2020 at 2:19 PM Mauro Carvalho Chehab
-> > <mchehab+huawei@kernel.org> wrote:
-> > > Em Wed, 20 May 2020 11:26:08 +0300
-> > > Sakari Ailus <sakari.ailus@linux.intel.com> escreveu:  
-> > 
-> > ...
-> > 
-> > > As I said, the problem is not probing the sensor via ACPI, but, instead,
-> > > to be able receive platform-specific data.  
-> > 
-> > There is no problem with swnodes, except missing parts (*).
-> > I have Skylake laptop with IPU3 and with half-baked ACPI tables, but
-> > since we have drivers in place with fwnode support, we only need to
-> > recreate fwnode graph in some board file to compensate the gap in
-> > ACPI.
-> > 
-> > *) Missing part is graph support for swnodes. With that done it will
-> > be feasible to achieve the rest.
-> > I forgot if we have anything for this already done. Heikki?
-> 
-> Hmm... I guess I should try this approach. I never heard about swnodes
-> before. Do you have already some patch with the needed swnodes setup,
-> and the missing parts to recreate the fwnode graph?
-
-Here you go. I tested it with this code:
-
-        static const struct software_node nodes[];
-
-        static const struct property_entry ep0_props[] = {
-               PROPERTY_ENTRY_REF("remote-endpoint", &nodes[5]),
-               { }
-        };
-
-        static const struct property_entry ep1_props[] = {
-               PROPERTY_ENTRY_REF("remote-endpoint", &nodes[2]),
-               { }
-        };
-
-        static const struct software_node nodes[] = {
-               { "dev0" },
-               { "port0", &nodes[0] },
-               { "endpoint", &nodes[1], ep0_props },
-               { "dev1" },
-               { "port0", &nodes[3] },
-               { "endpoint", &nodes[4], ep1_props },
-               { }
-        };
-
-        void test(void)
-        {
-                const struct software_node *swnode;
-                struct fwnode_handle *fwnode;
-
-                software_node_register_nodes(nodes);
-
-                fwnode = fwnode_graph_get_remote_port_parent(software_node_fwnode(&nodes[5]));
-                swnode = to_software_node(fwnode);
-                printk("first parent: %s\n", swnode->name);
-
-                fwnode = fwnode_graph_get_remote_port_parent(software_node_fwnode(&nodes[2]));
-                swnode = to_software_node(fwnode);
-                printk("second parent: %s\n", swnode->name);
-
-                software_node_unregister_nodes(nodes);
-        }
-
-thanks,
-
--- 
-heikki
-
---17pEHd4RhPHOinZp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-software-node-Add-support-for-fwnode_graph-family-of.patch"
-
-From c6f8f2253b09e68bfb74a9110165f04fc2f50c51 Mon Sep 17 00:00:00 2001
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Date: Mon, 19 Aug 2019 11:09:41 +0300
-Subject: [PATCH] software node: Add support for fwnode_graph* family of
- functions
-
-This implements the remaining .graph_* callbacks in the
-fwnode operations vector for the software nodes. That makes
-the fwnode_graph*() functions available in the drivers also
-when software nodes are used.
-
-The implementation tries to mimic the "OF graph" as much as
-possible, but there is no support for the "reg" device
-property. The ports will need to have the index in their
-name which starts with "port" (for example "port0", "port1",
-...) and endpoints will use the index of the software node
-that is given to them during creation. The port nodes can
-also be grouped under a specially named "ports" subnode,
-just like in DT, if necessary.
-
-The remote-endpoints are reference properties under the
-endpoint nodes that are named "remote-endpoint".
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
 ---
- drivers/base/swnode.c | 109 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 108 insertions(+), 1 deletion(-)
+ include/linux/pm_qos.h |  12 +++
+ kernel/power/qos.c     | 213 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 225 insertions(+)
 
-diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-index de8d3543e8fe3..7359b3f4e5daa 100644
---- a/drivers/base/swnode.c
-+++ b/drivers/base/swnode.c
-@@ -536,6 +536,108 @@ software_node_get_reference_args(const struct fwnode_handle *fwnode,
- 	return 0;
- }
+diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+index 4a69d4af3ff8..e2cc099322e3 100644
+--- a/include/linux/pm_qos.h
++++ b/include/linux/pm_qos.h
+@@ -316,4 +316,16 @@ int freq_qos_remove_notifier(struct freq_constraints *qos,
+ 			     enum freq_qos_req_type type,
+ 			     struct notifier_block *notifier);
  
-+static struct fwnode_handle *
-+swnode_graph_find_next_port(const struct fwnode_handle *parent,
-+			    struct fwnode_handle *port)
-+{
-+	struct fwnode_handle *old = port;
++/* Definitions related to the cpufreq minimum load QoS. */
 +
-+	while ((port = software_node_get_next_child(parent, old))) {
-+		if (!strncmp(to_swnode(port)->node->name, "port", 4))
-+			return port;
-+		fwnode_handle_put(old);
-+		old = port;
++#define CPUFREQ_GOV_QOS_MIN_LOAD_DEFAULT_VALUE	0
++#define CPUFREQ_GOV_QOS_MIN_LOAD_MAX_VALUE	10
++
++s32 cpufreq_minload_qos_limit(void);
++bool cpufreq_minload_qos_request_active(struct pm_qos_request *req);
++void cpufreq_minload_qos_add_request(struct pm_qos_request *req, s32 value);
++void cpufreq_minload_qos_update_request(struct pm_qos_request *req,
++					s32 new_value);
++void cpufreq_minload_qos_remove_request(struct pm_qos_request *req);
++
+ #endif
+diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+index db0bed2cae26..df2fdd962f35 100644
+--- a/kernel/power/qos.c
++++ b/kernel/power/qos.c
+@@ -671,3 +671,216 @@ int freq_qos_remove_notifier(struct freq_constraints *qos,
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(freq_qos_remove_notifier);
++
++/* Definitions related to the cpufreq minimum load QoS. */
++
++static struct pm_qos_constraints cpufreq_minload_constraints = {
++	.list = PLIST_HEAD_INIT(cpufreq_minload_constraints.list),
++	.target_value = CPUFREQ_GOV_QOS_MIN_LOAD_DEFAULT_VALUE,
++	.default_value = CPUFREQ_GOV_QOS_MIN_LOAD_DEFAULT_VALUE,
++	.no_constraint_value = CPUFREQ_GOV_QOS_MIN_LOAD_DEFAULT_VALUE,
++	.type = PM_QOS_MAX,
++};
++
++/**
++ * cpufreq_minload_qos_limit - Return current system-wide cpufreq
++ * minimum load QoS limit.
++ */
++s32 cpufreq_minload_qos_limit(void)
++{
++	return pm_qos_read_value(&cpufreq_minload_constraints);
++}
++EXPORT_SYMBOL_GPL(cpufreq_minload_qos_limit);
++
++/**
++ * cpufreq_minload_qos_request_active - Check the given PM QoS request.
++ * @req: PM QoS request to check.
++ *
++ * Return: 'true' if @req has been added to the cpufreq minimum load
++ * QoS list, 'false' otherwise.
++ */
++bool cpufreq_minload_qos_request_active(struct pm_qos_request *req)
++{
++	return req->qos == &cpufreq_minload_constraints;
++}
++EXPORT_SYMBOL_GPL(cpufreq_minload_qos_request_active);
++
++/**
++ * cpufreq_minload_qos_add_request - Add new cpufreq minimum load QoS request.
++ * @req: Pointer to a preallocated handle.
++ * @value: Requested constraint value.
++ *
++ * Use @value to initialize the request handle pointed to by @req, insert it as
++ * a new entry to the cpufreq minimum load QoS list and recompute the effective
++ * QoS constraint for that list.
++ *
++ * Callers need to save the handle for later use in updates and removal of the
++ * QoS request represented by it.
++ */
++void cpufreq_minload_qos_add_request(struct pm_qos_request *req, s32 value)
++{
++	if (!req)
++		return;
++
++	if (cpufreq_minload_qos_request_active(req)) {
++		WARN(1, KERN_ERR "%s called for already added request\n", __func__);
++		return;
 +	}
 +
-+	return NULL;
++	trace_pm_qos_add_request(value);
++
++	req->qos = &cpufreq_minload_constraints;
++	pm_qos_update_target(req->qos, &req->node, PM_QOS_ADD_REQ, value);
 +}
++EXPORT_SYMBOL_GPL(cpufreq_minload_qos_add_request);
 +
-+static struct fwnode_handle *
-+software_node_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
-+				      struct fwnode_handle *endpoint)
++/**
++ * cpufreq_minload_qos_update_request - Modify existing cpufreq minimum load
++ * QoS request.
++ * @req : QoS request to update.
++ * @new_value: New requested constraint value.
++ *
++ * Use @new_value to update the QoS request represented by @req in the cpufreq
++ * minimum load QoS list along with updating the effective constraint value for
++ * that list.
++ */
++void cpufreq_minload_qos_update_request(struct pm_qos_request *req,
++					s32 new_value)
 +{
-+	struct swnode *swnode = to_swnode(fwnode);
-+	struct fwnode_handle *old = endpoint;
-+	struct fwnode_handle *parent;
-+	struct fwnode_handle *port;
++	if (!req)
++		return;
 +
-+	if (!swnode)
-+		return NULL;
-+
-+	if (endpoint) {
-+		port = software_node_get_parent(endpoint);
-+		parent = software_node_get_parent(port);
-+	} else {
-+		parent = software_node_get_named_child_node(fwnode, "ports");
-+		if (!parent)
-+			parent = software_node_get(&swnode->fwnode);
-+
-+		port = swnode_graph_find_next_port(parent, NULL);
++	if (!cpufreq_minload_qos_request_active(req)) {
++		WARN(1, KERN_ERR "%s called for unknown object\n", __func__);
++		return;
 +	}
 +
-+	for (; port; port = swnode_graph_find_next_port(parent, port)) {
-+		endpoint = software_node_get_next_child(port, old);
-+		fwnode_handle_put(old);
-+		if (endpoint)
-+			break;
++	trace_pm_qos_update_request(new_value);
++
++	if (new_value == req->node.prio)
++		return;
++
++	pm_qos_update_target(req->qos, &req->node, PM_QOS_UPDATE_REQ, new_value);
++}
++EXPORT_SYMBOL_GPL(cpufreq_minload_qos_update_request);
++
++/**
++ * cpufreq_minload_qos_remove_request - Remove existing cpufreq minimum load QoS
++ * request.
++ * @req: QoS request to remove.
++ *
++ * Remove the cpufreq minimum load QoS request represented by @req from the
++ * cpufreq minimum load QoS list along with updating the effective constraint
++ * value for that list.
++ */
++void cpufreq_minload_qos_remove_request(struct pm_qos_request *req)
++{
++	if (!req)
++		return;
++
++	if (!cpufreq_minload_qos_request_active(req)) {
++		WARN(1, KERN_ERR "%s called for unknown object\n", __func__);
++		return;
 +	}
 +
-+	fwnode_handle_put(port);
-+	software_node_put(parent);
++	trace_pm_qos_remove_request(PM_QOS_DEFAULT_VALUE);
 +
-+	return endpoint;
++	pm_qos_update_target(req->qos, &req->node,
++			     PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
++	memset(req, 0, sizeof(*req));
 +}
++EXPORT_SYMBOL_GPL(cpufreq_minload_qos_remove_request);
 +
-+static struct fwnode_handle *
-+software_node_graph_get_remote_endpoint(const struct fwnode_handle *fwnode)
++/* User space interface to the cpufreq minimum load QoS via misc device. */
++
++static int cpufreq_minload_qos_open(struct inode *inode, struct file *filp)
 +{
-+	struct swnode *swnode = to_swnode(fwnode);
-+	const struct software_node_ref_args *ref;
-+	const struct property_entry *prop;
++	struct pm_qos_request *req;
 +
-+	if (!swnode)
-+		return NULL;
++	req = kzalloc(sizeof(*req), GFP_KERNEL);
++	if (!req)
++		return -ENOMEM;
 +
-+	prop = property_entry_get(swnode->node->properties, "remote-endpoint");
-+	if (!prop || prop->type != DEV_PROP_REF || prop->is_inline)
-+		return NULL;
-+
-+	ref = prop->pointer;
-+
-+	return software_node_get(software_node_fwnode(ref[0].node));
-+}
-+
-+static struct fwnode_handle *
-+software_node_graph_get_port_parent(struct fwnode_handle *fwnode)
-+{
-+	struct swnode *swnode = to_swnode(fwnode);
-+	struct fwnode_handle *parent;
-+
-+	if (!strcmp(swnode->parent->node->name, "ports"))
-+		parent = &swnode->parent->parent->fwnode;
-+	else
-+		parent = &swnode->parent->fwnode;
-+
-+	return software_node_get(parent);
-+}
-+
-+static int
-+software_node_graph_parse_endpoint(const struct fwnode_handle *fwnode,
-+				   struct fwnode_endpoint *endpoint)
-+{
-+	struct swnode *swnode = to_swnode(fwnode);
-+	int ret;
-+
-+	ret = kstrtou32(swnode->parent->node->name + 4, 10, &endpoint->port);
-+	if (ret)
-+		return ret;
-+
-+	endpoint->id = swnode->id;
-+	endpoint->local_fwnode = fwnode;
++	cpufreq_minload_qos_add_request(req, PM_QOS_DEFAULT_VALUE);
++	filp->private_data = req;
 +
 +	return 0;
 +}
 +
- static const struct fwnode_operations software_node_ops = {
- 	.get = software_node_get,
- 	.put = software_node_put,
-@@ -547,7 +649,12 @@ static const struct fwnode_operations software_node_ops = {
- 	.get_parent = software_node_get_parent,
- 	.get_next_child_node = software_node_get_next_child,
- 	.get_named_child_node = software_node_get_named_child_node,
--	.get_reference_args = software_node_get_reference_args
-+	.get_reference_args = software_node_get_reference_args,
++static int cpufreq_minload_qos_release(struct inode *inode, struct file *filp)
++{
++	struct pm_qos_request *req = filp->private_data;
 +
-+	.graph_get_next_endpoint = software_node_graph_get_next_endpoint,
-+	.graph_get_remote_endpoint = software_node_graph_get_remote_endpoint,
-+	.graph_get_port_parent = software_node_graph_get_port_parent,
-+	.graph_parse_endpoint = software_node_graph_parse_endpoint,
- };
- 
- /* -------------------------------------------------------------------------- */
++	filp->private_data = NULL;
++
++	cpufreq_minload_qos_remove_request(req);
++	kfree(req);
++
++	return 0;
++}
++
++static ssize_t cpufreq_minload_qos_read(struct file *filp, char __user *buf,
++					size_t count, loff_t *f_pos)
++{
++	struct pm_qos_request *req = filp->private_data;
++	unsigned long flags;
++	s32 value;
++
++	if (!req || !cpufreq_minload_qos_request_active(req))
++		return -EINVAL;
++
++	spin_lock_irqsave(&pm_qos_lock, flags);
++	value = pm_qos_get_value(&cpufreq_minload_constraints);
++	spin_unlock_irqrestore(&pm_qos_lock, flags);
++
++	return simple_read_from_buffer(buf, count, f_pos, &value, sizeof(s32));
++}
++
++static ssize_t cpufreq_minload_qos_write(struct file *filp,
++					 const char __user *buf,
++					 size_t count, loff_t *f_pos)
++{
++	s32 value;
++
++	if (count == sizeof(s32)) {
++		if (copy_from_user(&value, buf, sizeof(s32)))
++			return -EFAULT;
++	} else {
++		int ret;
++
++		ret = kstrtos32_from_user(buf, count, 16, &value);
++		if (ret)
++			return ret;
++	}
++
++	cpufreq_minload_qos_update_request(filp->private_data, value);
++
++	return count;
++}
++
++static const struct file_operations cpufreq_minload_qos_fops = {
++	.write = cpufreq_minload_qos_write,
++	.read = cpufreq_minload_qos_read,
++	.open = cpufreq_minload_qos_open,
++	.release = cpufreq_minload_qos_release,
++	.llseek = noop_llseek,
++};
++
++static struct miscdevice cpufreq_minload_qos_miscdev = {
++	.minor = MISC_DYNAMIC_MINOR,
++	.name = "cpufreq_minimum_load",
++	.fops = &cpufreq_minload_qos_fops,
++};
++
++static int __init cpufreq_minload_qos_init(void)
++{
++	int ret;
++
++	ret = misc_register(&cpufreq_minload_qos_miscdev);
++	if (ret < 0)
++		pr_err("%s: %s setup failed\n", __func__,
++		       cpufreq_minload_qos_miscdev.name);
++
++	return ret;
++}
++late_initcall(cpufreq_minload_qos_init);
 -- 
-2.26.2
+2.15.0
 
-
---17pEHd4RhPHOinZp--
