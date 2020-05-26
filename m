@@ -2,113 +2,140 @@ Return-Path: <SRS0=aHD+=7I=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FD39C433DF
-	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 15:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BF9AC433E0
+	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 15:53:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7B3E20776
-	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 15:17:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57F90206F1
+	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 15:53:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="ZJ2hInnn"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RaDRF2N6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729752AbgEZPRa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 May 2020 11:17:30 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:25764 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728637AbgEZPRS (ORCPT
+        id S1730532AbgEZPx1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 May 2020 11:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727862AbgEZPx1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 May 2020 11:17:18 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04QFBxuh017911;
-        Tue, 26 May 2020 17:16:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=5Rg4znNj42bzqjnolZJ9lV8rYKa4nFxeh6irBMvctcs=;
- b=ZJ2hInnnSvYQ638CgiFTDp+jSj5/oidFxGSA9sSM2XMhqc62QR9HNVaLncNLEIXTlN5p
- ER9JTb3KxLPPCnv5R6HHhsfzXAGop93eNUX31yoR0c2iZM0IAnNWdbuG+Ctsxra/WIJn
- PT0L9XDXZYuKr4OgrITF+Pv2aLdTkzkexmC9L6OGQbIAuaZXL4x8M5gOdj0yN7Uku2/J
- poaJN/R1cRZtm2XPk/C6fkZmtuoTfbN3MPkGMk8uYvcX1X5AvnwPGeEZEfZlOs9UKl/Z
- mgTu5n1NvqKFkTQpFm6riYPd9ag77GGTFGfTR5wQltucbYf6AMumYRWBUOUzviSprDg8 Wg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 316rya8ff0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 May 2020 17:16:28 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C6EF510002A;
-        Tue, 26 May 2020 17:16:27 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B5EF32C1DA0;
-        Tue, 26 May 2020 17:16:27 +0200 (CEST)
-Received: from localhost (10.75.127.51) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 26 May 2020 17:16:27
- +0200
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
-        <hugues.fruchet@st.com>, <mchehab@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
-        <pavel@ucw.cz>, <len.brown@intel.com>,
-        <valentin.schneider@arm.com>, <vincent.guittot@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [RFC 2/3] cpufreq: governor: Use minimum load QoS
-Date:   Tue, 26 May 2020 17:16:18 +0200
-Message-ID: <20200526151619.8779-3-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
-In-Reply-To: <20200526151619.8779-1-benjamin.gaignard@st.com>
-References: <20200526151619.8779-1-benjamin.gaignard@st.com>
+        Tue, 26 May 2020 11:53:27 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56D9C03E96D
+        for <linux-media@vger.kernel.org>; Tue, 26 May 2020 08:53:26 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id i16so18079992edv.1
+        for <linux-media@vger.kernel.org>; Tue, 26 May 2020 08:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2+YCVxXRzSpuqAVQmezkaPdjvZxG3n6eGNczGrFBVKQ=;
+        b=RaDRF2N6fT6tTHJfeP1bcxjK/BixXWLRPquOH0J+N2D5a8wfpYm53MMdfurtuH/LPS
+         xN2Mlf5Dv3BMNTvYfjXAIxKlUbfygV7/DVUjRhwrUQXwiq/8dW+Bvp9IKvY1FBbEUcLQ
+         eiutx4G20PAIp7NsOza0LphP4SF/tvb9OzBHY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2+YCVxXRzSpuqAVQmezkaPdjvZxG3n6eGNczGrFBVKQ=;
+        b=DPHlvjPd01UIWxRAM47ZcDi6ofsVtk5EU4CQE22ZKTFoFpoq7ihcngHYKVxjZ8Dpl0
+         AE2LZoypcEyzvLrIO4bGzRVfmcmv2U1Ys4GbRNU1dZ85MaKzVYxPtS0NtAviaYuB9On9
+         xuZ9Ksdtye3LixFtw0qyqXCDIQnOaQMUwFJnaGpjQkHsqgLQerAeLxVUU1BtBWjkKwod
+         cLByE0YstvF7rOAvEM/v/jWYM5Ya/5FkxY/xDmPo+hwPmDuthSGSnfm4++YIoAeXedfU
+         XEnoTknQRvUATiQUt8uXDRPp3RdZs/WeiLf//j/DG3jdMOMN4btY4Jvj6NNJBwMsi8ef
+         FmpQ==
+X-Gm-Message-State: AOAM531jNYVWxSpi5TH6xSQNZ+ymCRaUKqfTKWSOclLoXw9m5+ZClxj8
+        9ymlK8OPp6qqJAgXXLaCMunhq9TDkN4=
+X-Google-Smtp-Source: ABdhPJyN9nSBm7eJnv2wdP5XDu6dC+33Bx3ZyxShQf3muAeP155//bjUA+PDna7CA2/Cf+mDFIIIcQ==
+X-Received: by 2002:a05:6402:177c:: with SMTP id da28mr20266220edb.378.1590508405424;
+        Tue, 26 May 2020 08:53:25 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id r1sm241896eja.57.2020.05.26.08.53.24
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2020 08:53:24 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id y17so12495546wrn.11
+        for <linux-media@vger.kernel.org>; Tue, 26 May 2020 08:53:24 -0700 (PDT)
+X-Received: by 2002:a5d:6750:: with SMTP id l16mr20701906wrw.295.1590508403671;
+ Tue, 26 May 2020 08:53:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG5NODE2.st.com (10.75.127.14) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-05-26_02:2020-05-26,2020-05-26 signatures=0
+References: <20200430113809.14872-1-stanimir.varbanov@linaro.org> <3052f24c-18ee-1c7d-111b-ffe15ca71fcb@xs4all.nl>
+In-Reply-To: <3052f24c-18ee-1c7d-111b-ffe15ca71fcb@xs4all.nl>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Tue, 26 May 2020 17:53:11 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5BwCZm3SDE4DdntrzTAyeshWxsAmFh011tAjiWXrh8wug@mail.gmail.com>
+Message-ID: <CAAFQd5BwCZm3SDE4DdntrzTAyeshWxsAmFh011tAjiWXrh8wug@mail.gmail.com>
+Subject: Re: [RFC] docs: dev-decoder: Add two more reasons for dynamic change
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make sure that the returned load is above the system-wide minimum
-load QoS.
-Devices could set this specific QoS to inform governors about their
-need in terms of CPU load when computing it from idle time isn't accurate.
+On Tue, May 26, 2020 at 12:26 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>
+> On 30/04/2020 13:38, Stanimir Varbanov wrote:
+> > Here we add two more reasons for dynamic-resolution-change state
+> > (I think the name is misleading espesially "resolution" word, maybe
+>
+> espesially -> especially
+>
+> > dynamic-bitstream-change is better to describe).
+> >
+> > The first one which could change in the middle of the stream is the
+> > bit-depth. For worst example the stream is 8bit at the begging but
+> > later in the bitstream it changes to 10bit. That change should be
+> > propagated to the client so that it can take appropriate  action. In
+> > this case most probably it has to stop the streaming on the capture
+> > queue and re-negotiate the pixel format and start the streaming
+> > again.
+> >
+> > The second new reason is colorspace change. I'm not sure what action
+> > client should take but at least it should be notified for such change.
+> > One possible action is to notify the display entity that the colorspace
+> > and its parameters (y'cbcr encoding and so on) has been changed.
+> >
+> > Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> > ---
+> >  Documentation/userspace-api/media/v4l/dev-decoder.rst | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/userspace-api/media/v4l/dev-decoder.rst b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+> > index 606b54947e10..bf10eda6125c 100644
+> > --- a/Documentation/userspace-api/media/v4l/dev-decoder.rst
+> > +++ b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+> > @@ -906,7 +906,11 @@ reflected by corresponding queries):
+> >
+> >  * visible resolution (selection rectangles),
+> >
+> > -* the minimum number of buffers needed for decoding.
+> > +* the minimum number of buffers needed for decoding,
+> > +
+> > +* bit-depth of the bitstream has been changed,
+> > +
+> > +* colorspace (and its properties) has been changed.
+>
+> For this I want to have a new source change flag:
+>
+> V4L2_EVENT_SRC_CH_COLORIMETRY
+>
+> Changing colorimetry without changing resolution/bit depth does not
+> require buffers to be re-allocated, it just changes how the pixel
+> data is interpreted w.r.t. color. And that is important to know.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
----
- drivers/cpufreq/cpufreq_governor.c | 5 +++++
- 1 file changed, 5 insertions(+)
+FWIW, the visible resolution (i.e. compose rectangle) change that is
+already defined doesn't require buffers to be re-allocated either.
+Backwards compatibility requires V4L2_EVENT_SRC_CH_RESOLUTION to be
+set, but perhaps we could have further flags introduced, which would
+mean visible resolution and stream format (pixelformat, resolution)
+exclusively?
 
-diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
-index f99ae45efaea..1494e5e4c788 100644
---- a/drivers/cpufreq/cpufreq_governor.c
-+++ b/drivers/cpufreq/cpufreq_governor.c
-@@ -118,6 +118,7 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
- 	unsigned int ignore_nice = dbs_data->ignore_nice_load;
- 	unsigned int max_load = 0, idle_periods = UINT_MAX;
- 	unsigned int sampling_rate, io_busy, j;
-+	unsigned int qos_min_load;
- 
- 	/*
- 	 * Sometimes governors may use an additional multiplier to increase
-@@ -225,6 +226,10 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
- 
- 	policy_dbs->idle_periods = idle_periods;
- 
-+	qos_min_load = cpufreq_minload_qos_limit();
-+	if (qos_min_load > max_load)
-+		max_load = qos_min_load;
-+
- 	return max_load;
- }
- EXPORT_SYMBOL_GPL(dbs_update);
--- 
-2.15.0
-
+Best regards,
+Tomasz
