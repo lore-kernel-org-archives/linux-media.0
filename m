@@ -2,199 +2,303 @@ Return-Path: <SRS0=aHD+=7I=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91423C433E2
-	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 07:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A4FAC433DF
+	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 08:18:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6467D2087D
-	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 07:03:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FFE420776
+	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 08:18:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="B5QkVLst"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="SoCimVBl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731559AbgEZHDw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 May 2020 03:03:52 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:53131 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731436AbgEZHDv (ORCPT
+        id S1728949AbgEZIS4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 May 2020 04:18:56 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:39073 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726926AbgEZISz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 May 2020 03:03:51 -0400
+        Tue, 26 May 2020 04:18:55 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id dTclj6RswFjnUdTcpjebLd; Tue, 26 May 2020 09:03:48 +0200
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id dUnQjEhxgdPgTdUnUjic57; Tue, 26 May 2020 10:18:52 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1590476628; bh=0kXAkIhbXptFYgFRJWtoCtz7iA4IcdHi+f8YJW692hk=;
+        t=1590481132; bh=mOnl31eD/R3ZB8RaOIh/NqeuDuZekmeJbY59KzW2x5k=;
         h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=B5QkVLst8+j5DVXFsTIEir01KJ1/NMcSTAnSbdbSgUABvWnS5E4sq0A6MjSsKRMPH
-         Zr0ahpmWBNwylX+FAIVnMi2uvVEdLNrfPc+F0my4c4Bpr3XMlqBWg+75gnNTufA22u
-         wgp9578mdHMurl2aQympWa3GGh3qqssHjTr7/OWHb5D+/aJO2dzlpZXiSWyNWIulu8
-         8jQGSCT3hsptPz2vUX2WakqMzQ3O9xv9O7jiXOVNmRCbZng6T8D28/Y4G4io4ddb/c
-         aYzP6peDbZ57rIYB0nn1zB8nSdt3PabZbjhRpMRrjzbnI+JYvyup7fhuXXs4hQtuqh
-         DQs8giybdwzqw==
-Subject: Re: [RFC PATCH 0/3] METADATA design using V4l2 Request API
-To:     dikshita@codeaurora.org, linux-media@vger.kernel.org,
-        stanimir.varbanov@linaro.org, sakari.ailus@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, majja@codeaurora.org, jdas@codeaurora.org,
-        linux-media-owner@vger.kernel.org
-References: <1588918890-673-1-git-send-email-dikshita@codeaurora.org>
- <66208196d7668fe184f6c9d8c6c69c8b@codeaurora.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <7d11d3ba-7a76-1b18-c7c6-d9efc5de1500@xs4all.nl>
-Date:   Tue, 26 May 2020 09:03:43 +0200
+        b=SoCimVBlOVm2lnBgpzu4531fzkZw30VORnUdy1cndRTV9MSn1lNATRQDW177ucPXW
+         8uz7mE86cF9G4TQzj4pnZe2xC3fQhvnnyDBnRsMs71DPuTzSQxst9+3rJu6v8F6pU3
+         FLG2T6ClqN/S0dqGlD161EvruEr+BSwuG4DrQc8UQzsArN+dT8C0h9q1+oqdo2P3kh
+         9m3SiqHmkcuF+Rx3iyJujhNwc7cgw8fdx+FWEbhcFol7SltJHL3d9lwhhjToDn/LTN
+         1/MvgsxEOZ6s8S+aamv54/h0ZytHZQcVl1WdyrAiyTfdWO26lipUoUTc5Y5QjrFyuU
+         jtvzm646cGrdA==
+Subject: Re: [PATCHv2 1/2] media: docs-rst: Document memory-to-memory video
+ encoder interface
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org
+Cc:     Michael Tretter <m.tretter@pengutronix.de>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Tomasz Figa <tfiga@chromium.org>
+References: <20200520100159.2094831-1-hverkuil-cisco@xs4all.nl>
+ <20200520100159.2094831-2-hverkuil-cisco@xs4all.nl>
+ <9553a1bc-541b-6664-d476-14fdf6d9b4cf@linaro.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <4d2a3c27-7e7b-d7ba-842f-a396047fb3b8@xs4all.nl>
+Date:   Tue, 26 May 2020 10:18:48 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <66208196d7668fe184f6c9d8c6c69c8b@codeaurora.org>
+In-Reply-To: <9553a1bc-541b-6664-d476-14fdf6d9b4cf@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfBueupDa55MQv2WHpZ1p8Yac3h6A33f9Y6tcGYTDATu2d4lKuHE0607/uuLPD0ezKFIf8I3VGm0xF/xvRR+K/EoSEkPJ5cBMwiM9+7++tE04himiCy+D
- x70CMv4f/klWlsF32vtxbwPuqyrZOTt1kyiZUdYsYlLSaiUOVVZ57mrsjnAQc4DtU5zOfztJ+Uu6cU0ayLngkUCTF+Bb6qc+Ja6Eu3+O5tX09gDfKsWNPXsu
- 3fdM5ZnILePcM2nT6q39xgxLgia9N31dqIsXDxxFfaxuz88aAmezNv6PV2U0st9tEr7mBNVl/PJLGYtMKQ/cGfKsAXHjHKy8KVRqhGdlvt4SoqGY8fUyrhOL
- xcltwyWD15rQ2i5bIQEllXo8HSifhKhkcjob07HTtweh/E7rryQW4JDbDP3Q1Le23dH2ctAxozD/pOQx4pXKFhcfBv/qRx+8AMzlf24N0sM7EInK4xCYgq+V
- XcNwmZhL58DNI1dzp5P3de4vuUqkAdVIj6rouOsPAM6KNzkXpJJLbgjHuhk=
+X-CMAE-Envelope: MS4wfC51UbWM495tkblGawdTwejrXjA4AeVpbmFsclmpexQj9BOXEeF7EzscqTiNXaIh5J+VOLIBhZjIwSveqEYNkKc3m+GylhNI+VhnJ/h3BTUzgIyfMmrH
+ RZDRMKH+ckINPWLB6VBeozQ/kyD0X3g/GhWdigISKmU3anjWhHH8Go0drvfP0MRFD38jfk2TqgEaBgUzGk8CW2ZXKZuZkiYL8reVverxMiXe+hF0DCEn7LhW
+ aXywPiaiKDgIVy0ujdWvFxObY8aovQCiZUVHGvwKo/Ewv1QSrhuE0gdhEHBJi8+L3exUP9E6Qmd6p9fAiMiIzLMNkVrCY33C5EF5fmHi+/I=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 26/05/2020 08:31, dikshita@codeaurora.org wrote:
-> Hi,
+On 20/05/2020 22:33, Stanimir Varbanov wrote:
+> Hi Hans,
 > 
-> A gentle reminder for the review.
+> On 5/20/20 1:01 PM, Hans Verkuil wrote:
+>> From: Tomasz Figa <tfiga@chromium.org>
+>>
+>> Due to complexity of the video encoding process, the V4L2 drivers of
+>> stateful encoder hardware require specific sequences of V4L2 API calls
+>> to be followed. These include capability enumeration, initialization,
+>> encoding, encode parameters change, drain and reset.
+>>
+>> Specifics of the above have been discussed during Media Workshops at
+>> LinuxCon Europe 2012 in Barcelona and then later Embedded Linux
+>> Conference Europe 2014 in Düsseldorf. The de facto Codec API that
+>> originated at those events was later implemented by the drivers we already
+>> have merged in mainline, such as s5p-mfc or coda.
+>>
+>> The only thing missing was the real specification included as a part of
+>> Linux Media documentation. Fix it now and document the encoder part of
+>> the Codec API.
+>>
+>> Signed-off-by: Tomasz Figa <tfiga@chromium.org>
+>> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+>> ---
+>>  .../userspace-api/media/v4l/dev-encoder.rst   | 727 ++++++++++++++++++
+>>  .../userspace-api/media/v4l/dev-mem2mem.rst   |   1 +
+>>  .../userspace-api/media/v4l/pixfmt-v4l2.rst   |   5 +
+>>  .../userspace-api/media/v4l/v4l2.rst          |   2 +
+>>  .../media/v4l/vidioc-encoder-cmd.rst          |  51 +-
+>>  5 files changed, 766 insertions(+), 20 deletions(-)
+>>  create mode 100644 Documentation/userspace-api/media/v4l/dev-encoder.rst
+>>
+>> diff --git a/Documentation/userspace-api/media/v4l/dev-encoder.rst b/Documentation/userspace-api/media/v4l/dev-encoder.rst
+>> new file mode 100644
+>> index 000000000000..b30ef9c5d970
+>> --- /dev/null
+>> +++ b/Documentation/userspace-api/media/v4l/dev-encoder.rst
+>> @@ -0,0 +1,727 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +.. _encoder:
+>> +
+>> +*************************************************
+>> +Memory-to-Memory Stateful Video Encoder Interface
+>> +*************************************************
+>> +
+>> +A stateful video encoder takes raw video frames in display order and encodes
+>> +them into a bytestream. It generates complete chunks of the bytestream, including
+>> +all metadata, headers, etc. The resulting bytestream does not require any
+>> +further post-processing by the client.
+>> +
+>> +Performing software stream processing, header generation etc. in the driver
+>> +in order to support this interface is strongly discouraged. In case such
+>> +operations are needed, use of the Stateless Video Encoder Interface (in
+>> +development) is strongly advised.
+>> +
+> 
+> <cut>
+> 
+>> +Encoding
+>> +========
+>> +
+>> +This state is reached after the `Initialization` sequence finishes
+>> +successfully.  In this state, the client queues and dequeues buffers to both
+>> +queues via :c:func:`VIDIOC_QBUF` and :c:func:`VIDIOC_DQBUF`, following the
+>> +standard semantics.
+>> +
+>> +The content of encoded ``CAPTURE`` buffers depends on the active coded pixel
+>> +format and may be affected by codec-specific extended controls, as stated
+>> +in the documentation of each format.
+>> +
+>> +Both queues operate independently, following standard behavior of V4L2 buffer
+>> +queues and memory-to-memory devices. In addition, the order of encoded frames
+>> +dequeued from the ``CAPTURE`` queue may differ from the order of queuing raw
+>> +frames to the ``OUTPUT`` queue, due to properties of the selected coded format,
+>> +e.g. frame reordering.
+>> +
+>> +The client must not assume any direct relationship between ``CAPTURE`` and
+>> +``OUTPUT`` buffers and any specific timing of buffers becoming
+>> +available to dequeue. Specifically:
+>> +
+>> +* a buffer queued to ``OUTPUT`` may result in more than one buffer produced on
+>> +  ``CAPTURE`` (for example, if returning an encoded frame allowed the encoder
+>> +  to return a frame that preceded it in display, but succeeded it in the decode
+>> +  order; however, there may be other reasons for this as well),
+>> +
+>> +* a buffer queued to ``OUTPUT`` may result in a buffer being produced on
+>> +  ``CAPTURE`` later into encode process, and/or after processing further
+>> +  ``OUTPUT`` buffers, or be returned out of order, e.g. if display
+>> +  reordering is used,
+>> +
+>> +* buffers may become available on the ``CAPTURE`` queue without additional
+>> +  buffers queued to ``OUTPUT`` (e.g. during drain or ``EOS``), because of the
+>> +  ``OUTPUT`` buffers queued in the past whose decoding results are only
+> 
+> 						 ^^^ encoding
+> 
+>> +  available at later time, due to specifics of the decoding process,
+> 
+> 						      ^^^ encoding
 
-It's on my TODO list. I hope to get to it this week or next week at the
-latest.
+Good catch!
 
-Regards,
+> 
+>> +
+>> +* buffers queued to ``OUTPUT`` may not become available to dequeue instantly
+>> +  after being encoded into a corresponding ``CAPTURE`` buffer, e.g. if the
+>> +  encoder needs to use the frame as a reference for encoding further frames.
+>> +
+> 
+> <cut>
+> 
+>> +Drain
+>> +=====
+>> +
+>> +To ensure that all the queued ``OUTPUT`` buffers have been processed and the
+>> +related ``CAPTURE`` buffers are given to the client, the client must follow the
+>> +drain sequence described below. After the drain sequence ends, the client has
+>> +received all encoded frames for all ``OUTPUT`` buffers queued before the
+>> +sequence was started.
+>> +
+>> +1. Begin the drain sequence by issuing :c:func:`VIDIOC_ENCODER_CMD`.
+>> +
+>> +   * **Required fields:**
+>> +
+>> +     ``cmd``
+>> +         set to ``V4L2_ENC_CMD_STOP``.
+>> +
+>> +     ``flags``
+>> +         set to 0.
+>> +
+>> +     ``pts``
+>> +         set to 0.
+>> +
+>> +   .. warning::
+>> +
+>> +      The sequence can be only initiated if both ``OUTPUT`` and ``CAPTURE``
+>> +      queues are streaming. For compatibility reasons, the call to
+>> +      :c:func:`VIDIOC_ENCODER_CMD` will not fail even if any of the queues is
+>> +      not streaming, but at the same time it will not initiate the `Drain`
+>> +      sequence and so the steps described below would not be applicable.
+>> +
+>> +2. Any ``OUTPUT`` buffers queued by the client before the
+>> +   :c:func:`VIDIOC_ENCODER_CMD` was issued will be processed and encoded as
+>> +   normal. The client must continue to handle both queues independently,
+>> +   similarly to normal encode operation. This includes:
+>> +
+>> +   * queuing and dequeuing ``CAPTURE`` buffers, until a buffer marked with the
+>> +     ``V4L2_BUF_FLAG_LAST`` flag is dequeued,
+>> +
+>> +     .. warning::
+>> +
+>> +        The last buffer may be empty (with :c:type:`v4l2_buffer`
+>> +        ``bytesused`` = 0) and in that case it must be ignored by the client,
+>> +        as it does not contain an encoded frame.
+>> +
+>> +     .. note::
+>> +
+>> +        Any attempt to dequeue more ``CAPTURE`` buffers beyond the buffer
+>> +        marked with ``V4L2_BUF_FLAG_LAST`` will result in a -EPIPE error from
+>> +        :c:func:`VIDIOC_DQBUF`.
+>> +
+>> +   * dequeuing processed ``OUTPUT`` buffers, until all the buffers queued
+>> +     before the ``V4L2_ENC_CMD_STOP`` command are dequeued,
+>> +
+>> +   * dequeuing the ``V4L2_EVENT_EOS`` event, if the client subscribes to it.
+>> +
+>> +   .. note::
+>> +
+>> +      For backwards compatibility, the encoder will signal a ``V4L2_EVENT_EOS``
+>> +      event when the last frame has been encoded and all frames are ready to be
+>> +      dequeued. It is deprecated behavior and the client must not rely on it.
+>> +      The ``V4L2_BUF_FLAG_LAST`` buffer flag should be used instead.
+>> +
+>> +3. Once all ``OUTPUT`` buffers queued before the ``V4L2_ENC_CMD_STOP`` call are
+>> +   dequeued and the last ``CAPTURE`` buffer is dequeued, the encoder is stopped
+>> +   and it will accept, but not process any newly queued ``OUTPUT`` buffers
+>> +   until the client issues any of the following operations:
+>> +
+>> +   * ``V4L2_ENC_CMD_START`` - the encoder will not be reset and will resume
+>> +     operation normally, with all the state from before the drain,
+>> +
+>> +   * a pair of :c:func:`VIDIOC_STREAMOFF` and :c:func:`VIDIOC_STREAMON` on the
+>> +     ``CAPTURE`` queue - the encoder will be reset (see the `Reset` sequence)
+>> +     and then resume encoding,
+>> +
+>> +   * a pair of :c:func:`VIDIOC_STREAMOFF` and :c:func:`VIDIOC_STREAMON` on the
+>> +     ``OUTPUT`` queue - the encoder will resume operation normally, however any
+>> +     source frames queued to the ``OUTPUT`` queue between ``V4L2_ENC_CMD_STOP``
+>> +     and :c:func:`VIDIOC_STREAMOFF` will be discarded.
+>> +
+>> +.. note::
+>> +
+>> +   Once the drain sequence is initiated, the client needs to drive it to
+>> +   completion, as described by the steps above, unless it aborts the process by
+>> +   issuing :c:func:`VIDIOC_STREAMOFF` on any of the ``OUTPUT`` or ``CAPTURE``
+>> +   queues.  The client is not allowed to issue ``V4L2_ENC_CMD_START`` or
+>> +   ``V4L2_ENC_CMD_STOP`` again while the drain sequence is in progress and they
+>> +   will fail with -EBUSY error code if attempted.
+>> +
+>> +   For reference, handling of various corner cases is described below:
+>> +
+>> +   * In case of no buffer in the ``OUTPUT`` queue at the time the
+>> +     ``V4L2_ENC_CMD_STOP`` command was issued, the drain sequence completes
+>> +     immediately and the encoder returns an empty ``CAPTURE`` buffer with the
+>> +     ``V4L2_BUF_FLAG_LAST`` flag set.
+>> +
+>> +   * In case of no buffer in the ``CAPTURE`` queue at the time the drain
+>> +     sequence completes, the next time the client queues a ``CAPTURE`` buffer
+>> +     it is returned at once as an empty buffer with the ``V4L2_BUF_FLAG_LAST``
+>> +     flag set.
+>> +
+>> +   * If :c:func:`VIDIOC_STREAMOFF` is called on the ``CAPTURE`` queue in the
+>> +     middle of the drain sequence, the drain sequence is canceled and all
+>> +     ``CAPTURE`` buffers are implicitly returned to the client.
+>> +
+>> +   * If :c:func:`VIDIOC_STREAMOFF` is called on the ``OUTPUT`` queue in the
+>> +     middle of the drain sequence, the drain sequence completes immediately and
+>> +     next ``CAPTURE`` buffer will be returned empty with the
+>> +     ``V4L2_BUF_FLAG_LAST`` flag set.
+>> +
+>> +   Although mandatory, the availability of encoder commands may be queried
+> 
+> maybe "Although not mandatory" ?
+
+And another good catch. The same mistake is in dev-decoder.rst, I'll fix it there
+as well.
+
+Thanks!
 
 	Hans
 
 > 
-> On 2020-05-08 11:51, Dikshita Agarwal wrote:
->> There are many commercialized video use cases which needs metadata info
->> to be circulated between v4l2 client and v4l2 driver.
->>
->> METADATA has following requirements associated:
->> •Metadata is an optional info available for a buffer. It is not
->> mandatorily for every buffer.
->>  For ex. consider metadata ROI (Region Of Interest). ROI is specified
->> by clients to indicate
->>  the region where enhanced quality is desired. This metadata is given
->> as an input information
->>  to encoder output plane. Client may or may not specify the ROI for a
->> frame during encode as
->>  an input metadata. Also if the client has not provided ROI metadata
->> for a given frame,
->>  it would be incorrect to take the metadata from previous frame. If the 
->> data and
->>  metadata is asynchronous, it would be difficult for hardware to decide 
->> if it
->>  needs to wait for metadata buffer or not before processing the input
->> frame for encoding.
->> •Synchronize the buffer requirement across both the video node/session
->>  (incase metadata is being processed as a separate v4l2 video 
->> node/session).
->>  This is to avoid buffer starvation.
->> •Associate the metadata buffer with the data buffer without adding any
->> pipeline delay
->>  in waiting for each other. This is applicable both at the hardware
->> side (the processing end)
->>  and client side (the receiving end).
->> •Low latency usecases like WFD/split rendering/game streaming/IMS have
->> sub-50ms e2e latency
->>  requirements, and it is not practical to stall the pipeline due to
->> inherent framework latencies.
->>  High performance usecase like high-frame rate playback/record can
->> lead to frame loss during any pipeline latency.
->>
->> To address all above requirements, we used v4l2 Request API as 
->> interlace.
->>
->> As an experiment, We have introduced new control
->> V4L2_CID_MPEG_VIDEO_VENUS_METADATA
->> to contain the METADATA info. Exact controls can be finalized once the
->> interface is discussed.
->>
->> For setting metadata from userspace to kernel, let say on encode output 
->> plane,
->> following code sequence was followed
->> 1. Video driver is registering for media device and creating a media
->> node in /dev
->> 2. Request fd is allocated by calling MEDIA_IOC_REQUEST_ALLOC IOCTL on 
->> media fd.
->> 3. METADATA configuration is being applied on request fd using
->> VIDIOC_S_EXT_CTRLS IOCTL
->>    and the same request fd is added to buf structure structure before
->> calling VIDIOC_QBUF on video fd.
->> 4. The same request is queued through MEDIA_REQUEST_IOC_QUEUE IOCTL to
->> driver then, as a result
->>    to which METADATA control will be applied to buffer through S_CTRL.
->> 5. Once control is applied and request is completed,
->> MEDIA_REQUEST_IOC_REINIT IOCTL is called
->>    to re-initialize the request.
->>
->> We could achieve the same on capture plane as well by removing few
->> checks present currently
->> in v4l2 core which restrict the implementation to only output plane.
->>
->> We profiled below data with this implementation :
->> 1. Total time taken ( round trip ) for setting up control data on video 
->> driver
->>    with VIDIOC_S_EXT_CTRLS, QBUF and Queue Request: 737us
->> 2. Time taken for first QBUF on Output plane to reach driver with
->> REQUEST API enabled (One way): 723us
->> 3. Time taken for first QBUF on Output plane to reach driver without
->> REQUEST API (One way) : 250us
->> 4. Time taken by each IOCTL to complete ( round trip ) with REQUEST
->> API enabled :
->>     a. VIDIOC_S_EXT_CTRLS : 201us
->>     b. VIDIOC_QBUF : 92us
->>     c. MEDIA_REQUEST_IOC_QUEUE: 386us
->>
->> Kindly share your feedback/comments on the design/call sequence.
->> Also as we experimented and enabled the metadata on capture plane as
->> well, please comment if any issue in
->> allowing the metadata exchange on capture plane as well.
->>
->> Reference for client side implementation can be found at [1].
->>
->> Thanks,
->> Dikshita
->>
->> [1]
->> https://git.linaro.org/people/stanimir.varbanov/v4l2-encode.git/log/?h=dikshita/request-api
->>
->> Dikshita Agarwal (3):
->>   Register for media device
->>     - Initialize and register for media device
->>     - define venus_m2m_media_ops
->>     - Implement APIs to register/unregister media controller.
->>   Enable Request API for output buffers
->>     - Add dependency on MEDIA_CONTROLLER_REQUEST_API in Kconfig.
->>     - Initialize vb2 ops buf_out_validate and buf_request_complete.
->>     - Add support for custom Metadata control
->> V4L2_CID_MPEG_VIDEO_VENUS_METADATA
->>     - Implemeted/Integrated APIs for Request setup/complete.
->>   Enable Request API for Capture Buffers
->>
->>  drivers/media/common/videobuf2/videobuf2-v4l2.c |   4 +-
->>  drivers/media/platform/Kconfig                  |   2 +-
->>  drivers/media/platform/qcom/venus/core.h        |  36 ++++
->>  drivers/media/platform/qcom/venus/helpers.c     | 247 
->> +++++++++++++++++++++++-
->>  drivers/media/platform/qcom/venus/helpers.h     |  15 ++
->>  drivers/media/platform/qcom/venus/venc.c        |  63 +++++-
->>  drivers/media/platform/qcom/venus/venc_ctrls.c  |  61 +++++-
->>  drivers/media/v4l2-core/v4l2-ctrls.c            |  10 +
->>  drivers/media/v4l2-core/v4l2-mem2mem.c          |  17 +-
->>  include/media/v4l2-ctrls.h                      |   1 +
->>  include/media/venus-ctrls.h                     |  22 +++
->>  11 files changed, 465 insertions(+), 13 deletions(-)
->>  create mode 100644 include/media/venus-ctrls.h
+>> +   using :c:func:`VIDIOC_TRY_ENCODER_CMD`.
+>> +
+> 
+> <cut>
+> 
 
