@@ -7,161 +7,137 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30D2FC433E1
-	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 10:09:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4174BC433E3
+	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 10:09:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09FEE2073B
-	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 10:09:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D5912073B
+	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 10:09:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="jE+MFslp"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="W/RH9j3Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731864AbgEZKJk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 May 2020 06:09:40 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:46263 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731745AbgEZKJj (ORCPT
+        id S1731866AbgEZKJl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 May 2020 06:09:41 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:51973 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731791AbgEZKJk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 May 2020 06:09:39 -0400
+        Tue, 26 May 2020 06:09:40 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id dWWajU9GZDazBdWWfjeM9e; Tue, 26 May 2020 12:09:37 +0200
+        id dWWajU9GZDazBdWWfjeMA8; Tue, 26 May 2020 12:09:38 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1590487777; bh=PLtqEoeLTZJcLkmiOgyYHjH45G+sZjucCtUj5WG57B4=;
+        t=1590487778; bh=M9dx0G/UoFtlTS1Ydg8Q+14FXcpGbNqdVvgcbXnxSX8=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=jE+MFslpKZXKBOPQR9LuQqSt8iszsoF4vv8geIpCXq6ZjpppRkgOdyWcecoqQmb1u
-         PMGvrBu4TEltW4pxBAXNhYmSCPlpcubdxKI9Bl1yst4hu+NV8WzEKDQ1bA9NbDqOKe
-         r6jyOeagn3lxHPaxfeXQQF/F8HXossiCFBd7DfIgzDEPXbmZANC301zAxweR92dn2T
-         QeyKM1mjdkn3ZtkKpyz2gIlH3HMWj21F5NMsuLrQ3Q4YqnXgu1nLRELRIIjjdgVOST
-         fgzh5IXH5D1X6pK6wU6nav9bQNAC4zf19NXrWl6b4L9al2bnuSfOuom6AKqh3KI0Rg
-         iAUHTOSTtynnw==
+        b=W/RH9j3ZzOtUBuqsNCTBxHBmRgAwWXNBvzBLiOABssEPuTAmk9MqtwdSBzOho3lCq
+         TflPHslCC3GkR9SIX/Vfb0wRrloYnFjxDHzKe7K/e6lNqXUu+UkvBq6DdfXGC8VPxZ
+         IHpu60W9mqdcxQd6ovry8T/EjOXnUGadlv3UM0K6gVH/FEq0RiiHoEvkVpDiTWAUJd
+         8P9lsX0kBKuOQlrnOnVTWpMCGeQyzIF59KIvxT7xaP1mik0yHLEU1sSGbMyMcMSzMP
+         SeLK3z1FNPui7ZBB/40iEY5CA5DpCwZyUOlULJgbIj6gijkMCZVEN1Wh3Ph0K7vXdn
+         u6p9Oy9Y4KHLg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
         Tomasz Figa <tfiga@chromium.org>,
         Michael Tretter <m.tretter@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv3 2/5] vidioc-g-parm.rst: update the VIDIOC_G/S_PARM documentation
-Date:   Tue, 26 May 2020 12:09:29 +0200
-Message-Id: <20200526100932.2626420-3-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv3 4/5] videodev2.h: add V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL flag
+Date:   Tue, 26 May 2020 12:09:31 +0200
+Message-Id: <20200526100932.2626420-5-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200526100932.2626420-1-hverkuil-cisco@xs4all.nl>
 References: <20200526100932.2626420-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfFFJmlHXpgKGDNrYZdF1OaHQVZiT1uBUnwp0YrrrYa2ptm9gJu2cB5hK+AvULzer4Y+ymp2iiHlIC42NyQscauzzg8YKZUNbfq+oAXXaf73t4cSDl5/r
- bKNbdzMCKY5jKDJShEoK5Rg9AdM73fJnfD7v8QIkeT2vprTjYKvhGdZvvdy3KeON3x8Mv0d4NZPujVDVhaR5vVlHYmkX2O2iPGpMC5tNnepBITDHVqTyhKW1
- HO0dOU6oELXAjKLVj4k21NXU+rGc5O7anEDwEPboBGAyGTK4HCTZIV2oHgWdsvTC0AjxpY1PjtOQN7OdUhWHFSK7+w7FyRqxQcG6DoWhSAU=
+X-CMAE-Envelope: MS4wfLU/x877oZ8J07T/dy4BRHLYUqkq116F8n0FpMovnMHpisdi1zJQ3oUvpdUQXTpaK7ddcNLpFrYtrjAUFsMq0XIZkCqh0qzkcplwvehL428KoeFtskqo
+ R5YvVE3exlhdNlULZT8t44z27KwhjI8KYWuRSfOmW+csQzxJLKuFiQHAF/MweNbOsnwBRdZtqfXMfFmu3Ldc5zoDTq5zYHJENByfUfFwTHrVRKNGAQamEPOk
+ dpC2B+661YmzlSvfGfOewE7u6hjMskLVLyFVbD69VAquu3QGc1Pz6UZ173ljWZxvwf/sFP8NUUEmULEVxVf/3dbPFtUFzdnjh3OgAc0vi1o=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This documentation is very outdated. In particular, it is
-not obvious at all that this is used to change the framerate of
-sensors.
-
-Fix it, and include references to the stateful encoder API where
-this works slightly different.
+Add the V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL flag to signal that
+the coded frame interval can be set separately from the raw frame
+interval for stateful encoders.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Acked-by: Tomasz Figa <tfiga@chromium.org>
 ---
- .../userspace-api/media/v4l/vidioc-g-parm.rst | 51 ++++++++++++-------
- 1 file changed, 32 insertions(+), 19 deletions(-)
+ .../media/v4l/vidioc-enum-fmt.rst             | 30 +++++++++++++++----
+ .../media/videodev2.h.rst.exceptions          |  1 +
+ include/uapi/linux/videodev2.h                |  1 +
+ 3 files changed, 27 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-parm.rst b/Documentation/userspace-api/media/v4l/vidioc-g-parm.rst
-index 42e9f6ee7a59..af3c5863bb87 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-parm.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-parm.rst
-@@ -42,12 +42,13 @@ Arguments
- Description
- ===========
- 
--The current video standard determines a nominal number of frames per
--second. If less than this number of frames is to be captured or output,
--applications can request frame skipping or duplicating on the driver
--side. This is especially useful when using the :ref:`read() <func-read>` or
--:ref:`write() <func-write>`, which are not augmented by timestamps or sequence
--counters, and to avoid unnecessary data copying.
-+Applications can request a different frame interval. The capture or
-+output device will be reconfigured to support the requested frame
-+interval if possible. Optionally drivers may choose to skip or
-+repeat frames to achieve the requested frame interval.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+index a53dd3d7f7e2..05835e04c20b 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+@@ -167,17 +167,37 @@ the ``mbus_code`` field is handled differently:
+       - The hardware decoder for this compressed bytestream format (aka coded
+ 	format) is capable of parsing a continuous bytestream. Applications do
+ 	not need to parse the bytestream themselves to find the boundaries
+-	between frames/fields. This flag can only be used in combination with
+-	the ``V4L2_FMT_FLAG_COMPRESSED`` flag, since this applies to compressed
++	between frames/fields.
 +
-+For stateful encoders (see :ref:`encoder`) this represents the
-+frame interval that is typically embedded in the encoded video stream.
- 
- Changing the frame interval shall never change the format. Changing the
- format, on the other hand, may change the frame interval.
-@@ -57,7 +58,8 @@ internally by a driver in read/write mode. For implications see the
- section discussing the :ref:`read() <func-read>` function.
- 
- To get and set the streaming parameters applications call the
--:ref:`VIDIOC_G_PARM <VIDIOC_G_PARM>` and :ref:`VIDIOC_S_PARM <VIDIOC_G_PARM>` ioctl, respectively. They take a
-+:ref:`VIDIOC_G_PARM <VIDIOC_G_PARM>` and
-+:ref:`VIDIOC_S_PARM <VIDIOC_G_PARM>` ioctl, respectively. They take a
- pointer to a struct :c:type:`v4l2_streamparm` which contains a
- union holding separate parameters for input and output devices.
- 
-@@ -113,14 +115,21 @@ union holding separate parameters for input and output devices.
-     * - struct :c:type:`v4l2_fract`
-       - ``timeperframe``
-       - This is the desired period between successive frames captured by
--	the driver, in seconds. The field is intended to skip frames on
--	the driver side, saving I/O bandwidth.
-+	the driver, in seconds.
-+    * - :cspan:`2`
++	This flag can only be used in combination with the
++	``V4L2_FMT_FLAG_COMPRESSED`` flag, since this applies to compressed
+ 	formats only. This flag is valid for stateful decoders only.
+     * - ``V4L2_FMT_FLAG_DYN_RESOLUTION``
+       - 0x0008
+       - Dynamic resolution switching is supported by the device for this
+ 	compressed bytestream format (aka coded format). It will notify the user
+ 	via the event ``V4L2_EVENT_SOURCE_CHANGE`` when changes in the video
+-	parameters are detected. This flag can only be used in combination
+-	with the ``V4L2_FMT_FLAG_COMPRESSED`` flag, since this applies to
+-	compressed formats only. It is also only applies to stateful codecs.
++	parameters are detected.
 +
-+	This will configure the speed at which the video source (e.g. a sensor)
-+	generates video frames. If the speed is fixed, then the driver may
-+	choose to skip or repeat frames in order to achieve the requested
-+	frame rate.
++	This flag can only be used in combination with the
++	``V4L2_FMT_FLAG_COMPRESSED`` flag, since this applies to
++	compressed formats only. This flag is valid for stateful codecs only.
++    * - ``V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL``
++      - 0x0010
++      - The hardware encoder supports setting the ``CAPTURE`` coded frame
++	interval separately from the ``OUTPUT`` raw frame interval.
++	Setting the ``OUTPUT`` raw frame interval with :ref:`VIDIOC_S_PARM <VIDIOC_G_PARM>`
++	also sets the ``CAPTURE`` coded frame interval to the same value.
++	If this flag is set, then the ``CAPTURE`` coded frame interval can be
++	set to a different value afterwards. This is typically used for
++	offline encoding where the ``OUTPUT`` raw frame interval is used as
++	a hint for reserving hardware encoder resources and the ``CAPTURE`` coded
++	frame interval is the actual frame rate embedded in the encoded video
++	stream.
 +
-+        For stateful encoders (see :ref:`encoder`) this represents the
-+	frame interval that is typically embedded in the encoded video stream.
- 
- 	Applications store here the desired frame period, drivers return
--	the actual frame period, which must be greater or equal to the
--	nominal frame period determined by the current video standard
--	(struct :c:type:`v4l2_standard` ``frameperiod``
--	field). Changing the video standard (also implicitly by switching
-+	the actual frame period.
-+
-+	Changing the video standard (also implicitly by switching
- 	the video input) may reset this parameter to the nominal frame
- 	period. To reset manually applications can just set this field to
- 	zero.
-@@ -173,11 +182,15 @@ union holding separate parameters for input and output devices.
- 	:ref:`write() <func-write>` mode (in streaming mode timestamps
- 	can be used to throttle the output), saving I/O bandwidth.
- 
-+        For stateful encoders (see :ref:`encoder`) this represents the
-+	frame interval that is typically embedded in the encoded video stream
-+	and it provides a hint to the encoder of the speed at which raw
-+	frames are queued up to the encoder.
-+
- 	Applications store here the desired frame period, drivers return
--	the actual frame period, which must be greater or equal to the
--	nominal frame period determined by the current video standard
--	(struct :c:type:`v4l2_standard` ``frameperiod``
--	field). Changing the video standard (also implicitly by switching
-+	the actual frame period.
-+
-+	Changing the video standard (also implicitly by switching
- 	the video output) may reset this parameter to the nominal frame
- 	period. To reset manually applications can just set this field to
- 	zero.
-@@ -216,8 +229,8 @@ union holding separate parameters for input and output devices.
- 
-     * - ``V4L2_CAP_TIMEPERFRAME``
-       - 0x1000
--      - The frame skipping/repeating controlled by the ``timeperframe``
--	field is supported.
-+      - The frame period can be modified by setting the ``timeperframe``
-+	field.
++	This flag can only be used in combination with the
++	``V4L2_FMT_FLAG_COMPRESSED`` flag, since this applies to
++        compressed formats only. This flag is valid for stateful encoders only.
  
  
+ Return Value
+diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+index a625fb90e3a9..ca05e4e126b2 100644
+--- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
++++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+@@ -187,6 +187,7 @@ replace define V4L2_FMT_FLAG_COMPRESSED fmtdesc-flags
+ replace define V4L2_FMT_FLAG_EMULATED fmtdesc-flags
+ replace define V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM fmtdesc-flags
+ replace define V4L2_FMT_FLAG_DYN_RESOLUTION fmtdesc-flags
++replace define V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL fmtdesc-flags
  
+ # V4L2 timecode types
+ replace define V4L2_TC_TYPE_24FPS timecode-type
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index c3a1cf1c507f..18781f556ad8 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -792,6 +792,7 @@ struct v4l2_fmtdesc {
+ #define V4L2_FMT_FLAG_EMULATED			0x0002
+ #define V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM	0x0004
+ #define V4L2_FMT_FLAG_DYN_RESOLUTION		0x0008
++#define V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL	0x0010
+ 
+ 	/* Frame Size and frame rate enumeration */
+ /*
 -- 
 2.25.1
 
