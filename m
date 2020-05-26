@@ -2,140 +2,100 @@ Return-Path: <SRS0=aHD+=7I=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8CA9C433DF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3422C433E0
 	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 10:09:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A2BC20787
+	by mail.kernel.org (Postfix) with ESMTP id B49022088E
 	for <linux-media@archiver.kernel.org>; Tue, 26 May 2020 10:09:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="L7oJlAae"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="NkpUkg+V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731859AbgEZKJj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 May 2020 06:09:39 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:46337 "EHLO
+        id S1731863AbgEZKJk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 May 2020 06:09:40 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:53329 "EHLO
         lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728799AbgEZKJj (ORCPT
+        by vger.kernel.org with ESMTP id S1731775AbgEZKJj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 26 May 2020 06:09:39 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id dWWajU9GZDazBdWWejeM92; Tue, 26 May 2020 12:09:36 +0200
+        id dWWajU9GZDazBdWWfjeM9r; Tue, 26 May 2020 12:09:37 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1590487776; bh=Fd2wtWKsTOX8ZabhZKVTzNhwCYWrqSGq0nY+z6uYHIY=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:Content-Type:From:
-         Subject;
-        b=L7oJlAaeMs60YIMu6gBk0bqgbB38nGrvdMorC7NmZpPrzvLlibMzFJh1dquK9N2A2
-         wuVdq3KfSWdHKqKax/GjFFWz0tG8km6Oq5dGbwvo7UrVSfJryAQkqrwndgAHTbuvDZ
-         QjHPxqZGcqotRMEUd6JOHKXk2LCrUxp2VCHiO5nV0lZhapX9cYE0uRIIbyNUkn9p8N
-         W0CrdtBAFxMC/seAqHcbbTxAIW5N8dCkhTUJHUvVlsDNiSvQ7SaLv/D+Tiwb0NIJoZ
-         rnH+PrCcMz0tDEIPsy//SKnhYQSox+0GcRkDXGVH7Z3ST0jxCsypO4SPudU+sjpHWn
-         y+VkIRwIxhhBQ==
+        t=1590487777; bh=RdA4ogKp8+0hqRSxs2lzJ3PBCJyzQCF63Vdjpnd4WgA=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
+        b=NkpUkg+VTfVdTCN5+z+MqM+VUdP+TWODYQllB03s3BKNskA9GXrocqLMiARe6O7SE
+         GIsYFdmsT2bpPnURHDMt88pF1StoTyy4S7XXIA6WlS3eexns7id79t1Ygxv342JFbU
+         VabG8AQuCoC/PSTVZbxPpZE/vrTtP/LNMiCAhHuiL4fKuSoy/JTg504vW6jXp+DDO9
+         e+CGrh3m8qU+XR2W3vMrt0p9B6cHpHyBEivJB+B0EkxBmRm+Gv3YSYnDGvH34XllD5
+         CF/Eiuma/6ScidO+cgNC1rh6Seh7mr7AppgI8YMq5+TgkjuOFy3qJjkU4qFyGITnic
+         yhwrylPftPigA==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
         Tomasz Figa <tfiga@chromium.org>,
-        Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCHv3 0/5] Stateful Encoding: final bits
-Date:   Tue, 26 May 2020 12:09:27 +0200
-Message-Id: <20200526100932.2626420-1-hverkuil-cisco@xs4all.nl>
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv3 3/5] dev-decoder.rst: small fixes
+Date:   Tue, 26 May 2020 12:09:30 +0200
+Message-Id: <20200526100932.2626420-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200526100932.2626420-1-hverkuil-cisco@xs4all.nl>
+References: <20200526100932.2626420-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfNw29mmW3/J4npWRVe+AkVhJVLy+YKY5aZKlW0sjPPNEqfCXvsNuv/ueAoW0/SuJDJ5yTwzVs8XuDXUK4M+mn2D5JN2hcUaMYydasMwJCoPIrdW7x8W/
- zw63bcAGr5mEEn2yPBcH9kVOBzR1VuO8glUP1awy0f9saiNujISdICoqU4G3TvYnKb9gU04QUE1vuFf73SwvPPmdnYhb5zG7ByY+DTVM3kU19bgjAcM9yYj5
- qoo4mATxRbrTK2TPmnegd1m4FufVAyU/bdJucVsiKbDzJzQuHS7Tqb2+Z7H7FdsC
+X-CMAE-Envelope: MS4wfFFJmlHXpgKGDNrYZdF1OaHQVZiT1uBUnwp0YrrrYa2ptm9gJu2cB5hK+AvULzer4Y+ymp2iiHlIC42NyQscauzzg8YKZUNbfq+oAXXaf73t4cSDl5/r
+ bKNbdzMCKY5jKDJShEoK5Rg9AdM73fJnfD7v8QIkeT2vprTjYKvhGdZvvdy3KeON3x8Mv0d4NZPujVDVhaR5vVlHYmkX2O2iPGpMC5tNnepBITDHVqTyhKW1
+ HO0dOU6oELXAjKLVj4k21NXU+rGc5O7anEDwEPboBGAyGTK4HCTZIV2oHgWdsvTC0AjxpY1PjtOQN7OdUhWHFSK7+w7FyRqxQcG6DoWhSAU=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series adds the encoder spec and updates the VIDIOC_G/S_PARM
-documentation.
+Add missing periods at the end of two sentences.
 
-This is a follow-up of the original "Stateful Encoding: final bits"
-series (1). 
+Although mandatory -> Although not mandatory
 
-The patches in that series that add support for V4L2_CID_MPEG_VIDEO_ENC_FRAME_RATE
-and V4L2_BUF_FLAG_TOO_SMALL have been dropped (the first is not necessary
-and the second can be skipped for now, see the irc discussion with
-Nicolas [3]).
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ Documentation/userspace-api/media/v4l/dev-decoder.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-The encoder spec has been updated since [2] with the following
-changes:
-
-- Document the optional VIDIOC_ENUM_FRAMEINTERVALS ioctl.
-
-- Document how to use VIDIOC_S_PARM:
-
-  1) calling S_PARM for the OUTPUT queue sets both the raw frame interval
-     (this is a hint only) and the coded frame interval.
-
-  2) calling S_PARM for the CAPTURE queue sets the coded frame interval
-     only. This is optional and can be used for off-line encoding. In
-     that case the OUTPUT frame interval can be used by the driver to
-     schedule multiple encoders.
+diff --git a/Documentation/userspace-api/media/v4l/dev-decoder.rst b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+index 606b54947e10..04034dbc0b3e 100644
+--- a/Documentation/userspace-api/media/v4l/dev-decoder.rst
++++ b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+@@ -247,7 +247,7 @@ Querying Capabilities
+ Initialization
+ ==============
  
-  Ideally S_PARM for the OUTPUT queue would just provide a hint, but
-  existing encoder drivers all use S_PARM for the OUTPUT queue to
-  define the coded frame interval, and that can't be changed.
-
-- Added a note that if a capture buffer is too small it will be
-  returned with V4L2_BUF_FLAG_ERROR and that more work has to be
-  done to properly support this corner case.
-
-- Clarify in the 'Encoding' section that there are more reasons
-  why 'a buffer queued to OUTPUT may result in more than one buffer
-  produced on CAPTURE'.
-
-Added in v3:
-
-- Fix some minor typos.
-
-- Make it more explicit that setting S_PARM(OUTPUT) also sets the
-  CAPTURE frame interval.
-
-- Added a new V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL flag to indicate
-  that S_PARM(CAPTURE) can be set separately.
-
-I think that with these changes this stateful encoder spec is ready
-to be merged.
-
-Regards,
-
-	Hans
-
-[1] https://lore.kernel.org/linux-media/20191119113457.57833-6-hverkuil-cisco@xs4all.nl/T/
-[2] https://www.mail-archive.com/linux-media@vger.kernel.org/msg149211.html
-[3] https://linuxtv.org/irc/irclogger_log/v4l?date=2020-05-19,Tue
-
-Hans Verkuil (4):
-  vidioc-g-parm.rst: update the VIDIOC_G/S_PARM documentation
-  dev-decoder.rst: small fixes
-  videodev2.h: add V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL flag
-  dev-encoder.rst: add reference to V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL
-
-Tomasz Figa (1):
-  media: docs-rst: Document memory-to-memory video encoder interface
-
- .../userspace-api/media/v4l/dev-decoder.rst   |   6 +-
- .../userspace-api/media/v4l/dev-encoder.rst   | 729 ++++++++++++++++++
- .../userspace-api/media/v4l/dev-mem2mem.rst   |   1 +
- .../userspace-api/media/v4l/pixfmt-v4l2.rst   |   5 +
- .../userspace-api/media/v4l/v4l2.rst          |   2 +
- .../media/v4l/vidioc-encoder-cmd.rst          |  51 +-
- .../media/v4l/vidioc-enum-fmt.rst             |  30 +-
- .../userspace-api/media/v4l/vidioc-g-parm.rst |  51 +-
- .../media/videodev2.h.rst.exceptions          |   1 +
- include/uapi/linux/videodev2.h                |   1 +
- 10 files changed, 830 insertions(+), 47 deletions(-)
- create mode 100644 Documentation/userspace-api/media/v4l/dev-encoder.rst
-
+-1. Set the coded format on ``OUTPUT`` via :c:func:`VIDIOC_S_FMT`
++1. Set the coded format on ``OUTPUT`` via :c:func:`VIDIOC_S_FMT`.
+ 
+    * **Required fields:**
+ 
+@@ -803,7 +803,7 @@ it may be affected as per normal decoder operation.
+    * The decoder will drop all the pending ``OUTPUT`` buffers and they must be
+      treated as returned to the client (following standard semantics).
+ 
+-2. Restart the ``OUTPUT`` queue via :c:func:`VIDIOC_STREAMON`
++2. Restart the ``OUTPUT`` queue via :c:func:`VIDIOC_STREAMON`.
+ 
+    * **Required fields:**
+ 
+@@ -1059,7 +1059,7 @@ sequence was started.
+    ``V4L2_DEC_CMD_STOP`` again while the drain sequence is in progress and they
+    will fail with -EBUSY error code if attempted.
+ 
+-   Although mandatory, the availability of decoder commands may be queried
++   Although not mandatory, the availability of decoder commands may be queried
+    using :c:func:`VIDIOC_TRY_DECODER_CMD`.
+ 
+ End of Stream
 -- 
 2.25.1
 
