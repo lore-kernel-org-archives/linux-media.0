@@ -5,69 +5,70 @@ X-Spam-Level:
 X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B530C433E0
-	for <linux-media@archiver.kernel.org>; Wed, 27 May 2020 07:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB0FC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 27 May 2020 07:12:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA0C22078C
-	for <linux-media@archiver.kernel.org>; Wed, 27 May 2020 07:12:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD300208FE
+	for <linux-media@archiver.kernel.org>; Wed, 27 May 2020 07:12:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cJB55FZz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rAvssvWz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729235AbgE0HMf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 May 2020 03:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
+        id S1729120AbgE0HMR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 May 2020 03:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729126AbgE0HMS (ORCPT
+        with ESMTP id S1728303AbgE0HMO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 May 2020 03:12:18 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F8FC03E979;
-        Wed, 27 May 2020 00:12:18 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id k22so9806036pls.10;
-        Wed, 27 May 2020 00:12:18 -0700 (PDT)
+        Wed, 27 May 2020 03:12:14 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549F3C061A0F;
+        Wed, 27 May 2020 00:12:13 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id u5so11377230pgn.5;
+        Wed, 27 May 2020 00:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=o9MqodWCLjikP8AmTG/rqhpi4jiJNC1PbUROm6v1d2Y=;
-        b=cJB55FZzIe+wbZbOjO4+gkJQe15YMlmFQTxt+DZL0GpogJ10Wqsx3OHLygNdzhlD5t
-         qE7H8Jj4R+LviV2dMs8V7qO5bBlsYuG68ANB7g0XTKFzNNeT0SXRE6zDFXFCxmznfA0v
-         mN5KMi5gIwI48uC8b0Kcgk4k/59LITp4LV3NEwAqBrNzC7VqiBGxnIumjWCigThafMq3
-         B6nQmRcMCtEBFe8j8GqQkP9nw6oMqmMpWAHy/oAYFQnqJTvKLst21e2EXIA7wlvDmudE
-         U2eAYVMwlIYwiraTrd8FmigcrRtv/pRy5jFwCFoJ5eV++L8RCEmfTVmIq6A1BuASY/d+
-         6ORA==
+        bh=Qw/QOLBu9d2B+96STuqYNI0AftO5l6SG5yefrjTDHdQ=;
+        b=rAvssvWz49+fXzXPapINBcDmFBTZ01RO2hMId+vgCJN3AG63BmjX55x7SQCy71kRyl
+         Aq0VWotduyCwmPny7lrc0pWTiCgpE0weYmufy41TJVpo1hIV/C2GkMOzqcQzhjRhKz1+
+         r/3q1R8nKhc3wAdHpKSCi/CO48ZFFlGTCM2OUa+PNJbGUpzypAhFiqxYq7rnduqbTk4j
+         PJz2M1SmoOlh5WLkVTvtL/NyMWz2pHepmil5fNaJhItpgj4fT/Zb4biKCGcYNTRp32lA
+         tR+jWjuGDJ+jG9ggkd6y1wPjtHhMpR0j8LjE7SWvY/P4Xf3NvfZ4WG+bPRHcSt04qoZr
+         86SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=o9MqodWCLjikP8AmTG/rqhpi4jiJNC1PbUROm6v1d2Y=;
-        b=htm1jZ9zFvSDzi85pUCoUDZB5aIAhaVh2/VJNwZ3N93vig+xomt0HOFk0uWiEn/DVR
-         HqiYiFZsdCAqK3YTDKvljqx53eEaC3w+REM7/SZeL2jXUccnIh9KGy6PK7z+e8m9Ql/f
-         HW3SxwLHdumgEbDV6udnciXYGMZ4m48VL3KZO9yzbKbmfXGEcmeGYzKxCPEvcil7Xd+b
-         c3zM9driQzbpLJhANsXzBiFW6mbIWxxO/A1m+4ZRolsUO4utH4bVT++rTTk43BcWG1K/
-         64I2kCAUz+fVWCBUzr9pM9rAcIlCcpFa7hSC1/0wud9VTHYDXB8EfyNrjdwmDFKSJbc3
-         ayIQ==
-X-Gm-Message-State: AOAM531XSKKDxShFU/IicWFxEzFoiptf4Ds1qysqESomZU2upjLgh6Mp
-        Zsy+tu3JcH63VxBpKCfxcYF4zcpnniY=
-X-Google-Smtp-Source: ABdhPJxoHRdGCzwo58GDaHJ6G/BJrSAN4ab49i2zjyZzqDrlxy7DIG+b4ZCydP80auPUjGxfCvGnNg==
-X-Received: by 2002:a17:902:8d8d:: with SMTP id v13mr4730527plo.67.1590563537552;
-        Wed, 27 May 2020 00:12:17 -0700 (PDT)
+        bh=Qw/QOLBu9d2B+96STuqYNI0AftO5l6SG5yefrjTDHdQ=;
+        b=GpQTR7+78/WT7niShc+vwd1HlMZ3SxvS9J04OwuMvVEYdaEhyTHtSDCEMJj8K5Enzt
+         yostugGE+dsoh48LbGTqcjAXgtgNJov1+hcOslifkT75/fsA1jp0ufek2H6/z9HzcjpX
+         tX4oDmsE3yEpvN/ghPIU6Y1noi/+V6DPXLyFXivxPRck1urkaOgcuQ0xD4zswC53xND4
+         1TpUBelTCx7mMe+fEUV9ER/ptTEbAo/xge6ETZVBte3AVPO7JaYPFooXPPfkIPPMQ7NO
+         dgCS4yWtvc2bysQOmG1c6RV46egt18itV3qZ3Ix4OffhE62Eocsw6d3CIbv5Alour/RV
+         bA0Q==
+X-Gm-Message-State: AOAM533tKtVMXTfHc4Hl6CENW2k95o2sIoo6IIJiWYf7UD6P11Da7rAv
+        cEbRiHvq/aAtdEqBK6q5EFA=
+X-Google-Smtp-Source: ABdhPJwiMdlTneuDy4qlJ6WknGzBgbOnwG5sxxkqaefuDqkk6jhGJu9u7DEVNg4VjcPowgRDxL0hMg==
+X-Received: by 2002:a63:3c0a:: with SMTP id j10mr2734873pga.35.1590563532903;
+        Wed, 27 May 2020 00:12:12 -0700 (PDT)
 Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id 10sm1306431pfx.138.2020.05.27.00.12.15
+        by smtp.gmail.com with ESMTPSA id 10sm1306431pfx.138.2020.05.27.00.12.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2020 00:12:16 -0700 (PDT)
+        Wed, 27 May 2020 00:12:12 -0700 (PDT)
 From:   Nathan Chancellor <natechancellor@gmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH 4/7] media: atomisp: Remove unnecessary NULL checks in ia_css_pipe_load_extension
-Date:   Wed, 27 May 2020 00:11:47 -0700
-Message-Id: <20200527071150.3381228-5-natechancellor@gmail.com>
+        Nathan Chancellor <natechancellor@gmail.com>,
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH 2/7] media: atomisp: Remove second increment of count in atomisp_subdev_probe
+Date:   Wed, 27 May 2020 00:11:45 -0700
+Message-Id: <20200527071150.3381228-3-natechancellor@gmail.com>
 X-Mailer: git-send-email 2.27.0.rc0
 In-Reply-To: <20200527071150.3381228-1-natechancellor@gmail.com>
 References: <20200527071150.3381228-1-natechancellor@gmail.com>
@@ -81,57 +82,33 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Clang warns:
 
-../drivers/staging/media/atomisp/pci/sh_css.c:8537:14: warning: address
-of 'pipe->output_stage' will always evaluate to 'true'
-[-Wpointer-bool-conversion]
-                if (&pipe->output_stage)
-                ~~   ~~~~~~^~~~~~~~~~~~
-../drivers/staging/media/atomisp/pci/sh_css.c:8545:14: warning: address
-of 'pipe->vf_stage' will always evaluate to 'true'
-[-Wpointer-bool-conversion]
-                if (&pipe->vf_stage)
-                ~~   ~~~~~~^~~~~~~~
+../drivers/staging/media/atomisp/pci/atomisp_v4l2.c:1097:3: warning:
+variable 'count' is incremented both in the loop header and in the loop
+body [-Wfor-loop-analysis]
+                count++;
+                ^
 
-output_stage and vf_stage are pointers in the middle of a struct, their
-addresses cannot be NULL if pipe is not NULL and pipe is already checked
-for NULL in this function. Simplify this if block.
+This was probably unintentional, remove it.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1036
+Reported-by: kbuild test robot <lkp@intel.com>
 Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
- drivers/staging/media/atomisp/pci/sh_css.c | 19 +++----------------
- 1 file changed, 3 insertions(+), 16 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index d77432254a2c..b8626cdb2436 100644
---- a/drivers/staging/media/atomisp/pci/sh_css.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -8533,22 +8533,9 @@ ia_css_pipe_load_extension(struct ia_css_pipe *pipe,
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+index 694268d133c0..c42999a55303 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+@@ -1094,7 +1094,6 @@ static int atomisp_subdev_probe(struct atomisp_device *isp)
+ 		if (camera_count)
+ 			break;
+ 		msleep(SUBDEV_WAIT_TIMEOUT);
+-		count++;
  	}
- 
- 	if (firmware->info.isp.type == IA_CSS_ACC_OUTPUT)
--	{
--		if (&pipe->output_stage)
--			append_firmware(&pipe->output_stage, firmware);
--		else {
--			IA_CSS_LEAVE_ERR_PRIVATE(IA_CSS_ERR_INTERNAL_ERROR);
--			return IA_CSS_ERR_INTERNAL_ERROR;
--		}
--	} else if (firmware->info.isp.type == IA_CSS_ACC_VIEWFINDER)
--	{
--		if (&pipe->vf_stage)
--			append_firmware(&pipe->vf_stage, firmware);
--		else {
--			IA_CSS_LEAVE_ERR_PRIVATE(IA_CSS_ERR_INTERNAL_ERROR);
--			return IA_CSS_ERR_INTERNAL_ERROR;
--		}
--	}
-+		append_firmware(&pipe->output_stage, firmware);
-+	else if (firmware->info.isp.type == IA_CSS_ACC_VIEWFINDER)
-+		append_firmware(&pipe->vf_stage, firmware);
- 	err = acc_load_extension(firmware);
- 
- 	IA_CSS_LEAVE_ERR_PRIVATE(err);
+ 	/* Wait more time to give more time for subdev init code to finish */
+ 	msleep(5 * SUBDEV_WAIT_TIMEOUT);
 -- 
 2.27.0.rc0
 
