@@ -2,142 +2,66 @@ Return-Path: <SRS0=QBGf=7J=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEEE2C433E1
-	for <linux-media@archiver.kernel.org>; Wed, 27 May 2020 07:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36E8DC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 27 May 2020 07:24:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4E1720C56
-	for <linux-media@archiver.kernel.org>; Wed, 27 May 2020 07:12:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TF+ZnVGl"
+	by mail.kernel.org (Postfix) with ESMTP id 10D0920DD4
+	for <linux-media@archiver.kernel.org>; Wed, 27 May 2020 07:24:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729102AbgE0HMR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 May 2020 03:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
+        id S1728934AbgE0HYn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 May 2020 03:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729098AbgE0HMQ (ORCPT
+        with ESMTP id S1728303AbgE0HYn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 May 2020 03:12:16 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1450BC03E97A;
-        Wed, 27 May 2020 00:12:15 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id q8so11447902pfu.5;
-        Wed, 27 May 2020 00:12:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TS7T0GnvahIo34Ueh1mEB91ydpyvQ6Kv78CuMyjghNI=;
-        b=TF+ZnVGlHYlycvaTVaXADyYL0RJeFIrCgBOXxgVjtkEbW1aFo47roQVqe4rimM5XaO
-         0jyPywtYKRd5OylJ6q2ztpi5amDIDSk4F/HP1rcZS61pV+2bP3Et1MOVRJECN4eq3V8K
-         FhE0s9dL0s1W8dAdY7kR8nRl9Cae8qgIRE7TTpJvULSdbuSW46zLeHNOj6acvZ2i0BfU
-         pyr8DtUCyPOWPD0v9PLq5XCcVmfBlD0cEbSbuEt9ikkbHzhXwLtO6p2lZgfzYwu/t6dL
-         vDoVwfTgGtDeyjnENBL9+L74uybPBlYZvUrtsfs5J6Wrz90fcfapibK46F9n+2Hs1C3F
-         Tw6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TS7T0GnvahIo34Ueh1mEB91ydpyvQ6Kv78CuMyjghNI=;
-        b=rxFiqbjxXCVynAGPeCGXwlgT0Wr9dRpJkbxGmHBsn1hpBJip75sFjp9fPmAzce8eEu
-         n6EzjVsQy5ts4Wv5Om45lnuzt1INXhsOJVq9BRE8E4QbwvknGXyS26U8eRu7F4t3QSHZ
-         5GJiQs+kLHONbRmdnolUN2uFbzFoUVErAR3NHQ0Ehg+g5HbSQSOoWQqOXbdfBDJoExMl
-         DLG9pMbrUmk1R4qYT7ITcJK7yy4PEf9BezyGISiFAnHA7Y12qvabQyh6YKEJTvfjnZF0
-         IAXqhKCuTuLNg7/fIRdeQALUEbycfsxGEKu3G8oTe72IOZOIAvT6azPN06jyib9cIw/q
-         Yoeg==
-X-Gm-Message-State: AOAM531ZC9ijKxYdQDEWrHIvob9MEKZQ4Wc+0E35RjXhQ4Vdx+qmgCnB
-        uZwj6cYtiVtO8c0Mrd5FVPQ=
-X-Google-Smtp-Source: ABdhPJwQC4jQeNUEVSfWcbDH8TBVkeO48J33ab8uL53x2ElsZaurgFDeuYMlkbqz8HFBeHrwQ0mRWQ==
-X-Received: by 2002:a62:a50a:: with SMTP id v10mr2720546pfm.134.1590563535044;
-        Wed, 27 May 2020 00:12:15 -0700 (PDT)
-Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id 10sm1306431pfx.138.2020.05.27.00.12.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2020 00:12:14 -0700 (PDT)
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH 3/7] media: atomisp: Add stub for atomisp_mrfld_power
-Date:   Wed, 27 May 2020 00:11:46 -0700
-Message-Id: <20200527071150.3381228-4-natechancellor@gmail.com>
-X-Mailer: git-send-email 2.27.0.rc0
-In-Reply-To: <20200527071150.3381228-1-natechancellor@gmail.com>
-References: <20200527071150.3381228-1-natechancellor@gmail.com>
+        Wed, 27 May 2020 03:24:43 -0400
+Received: from hillosipuli.retiisi.org.uk (hillosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2C4C061A0F
+        for <linux-media@vger.kernel.org>; Wed, 27 May 2020 00:24:43 -0700 (PDT)
+Received: from lanttu.localdomain (lanttu.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::c1:2])
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id C308D634C87
+        for <linux-media@vger.kernel.org>; Wed, 27 May 2020 10:23:51 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH 1/1] smiapp: Use pm_runtime_get_if_active
+Date:   Wed, 27 May 2020 10:24:40 +0300
+Message-Id: <20200527072440.30435-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Clang warns:
+Use the convenience function pm_runtime_get_if_active() instead of a
+number of calls to runtime PM to figure out if the device was already
+powered up.
 
-../drivers/staging/media/atomisp/pci/atomisp_v4l2.c:764:12: warning:
-unused function 'atomisp_mrfld_power' [-Wunused-function]
-static int atomisp_mrfld_power(struct atomisp_device *isp, bool enable)
-           ^
-
-Use an '#if 0' preprocessor define to hide the broken code, leaving the
-FIXME comment intact, and creating an atomisp_mrfld_power stub function
-that just returns 0.
-
-Fixes: 95d1f398c4dc ("media: atomisp: keep the ISP powered on when setting it")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1036
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-core.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index c42999a55303..41aa6018d254 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -736,6 +736,8 @@ static int atomisp_mrfld_pre_power_down(struct atomisp_device *isp)
- * WA for DDR DVFS enable/disable
- * By default, ISP will force DDR DVFS 1600MHz before disable DVFS
- */
-+/* FIXME: at least with ISP2401, the code below causes the driver to break */
-+#if 0
- static void punit_ddr_dvfs_enable(bool enable)
- {
- 	int door_bell = 1 << 8;
-@@ -820,20 +822,23 @@ static int atomisp_mrfld_power(struct atomisp_device *isp, bool enable)
- 	dev_err(isp->dev, "IUNIT power-%s timeout.\n", enable ? "on" : "off");
- 	return -EBUSY;
- }
-+#else
-+static int atomisp_mrfld_power(struct atomisp_device *isp, bool enable)
-+{
-+	return 0;
-+}
-+#endif
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index 5e4f6a2ef78e..841b12afaea7 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -508,9 +508,7 @@ static int smiapp_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		break;
+ 	}
  
- /* Workaround for pmu_nc_set_power_state not ready in MRFLD */
- int atomisp_mrfld_power_down(struct atomisp_device *isp)
- {
--	return 0;
--// FIXME: at least with ISP2401, the code below causes the driver to break
--//	return atomisp_mrfld_power(isp, false);
-+	return atomisp_mrfld_power(isp, false);
- }
- 
- /* Workaround for pmu_nc_set_power_state not ready in MRFLD */
- int atomisp_mrfld_power_up(struct atomisp_device *isp)
- {
- 	return 0;
--// FIXME: at least with ISP2401, the code below causes the driver to break
- //	return atomisp_mrfld_power(isp, true);
- }
+-	pm_runtime_get_noresume(&client->dev);
+-	pm_status = pm_runtime_get_if_in_use(&client->dev);
+-	pm_runtime_put_noidle(&client->dev);
++	pm_status = pm_runtime_get_if_active(&client->dev, true);
+ 	if (!pm_status)
+ 		return 0;
  
 -- 
-2.27.0.rc0
+2.20.1
 
