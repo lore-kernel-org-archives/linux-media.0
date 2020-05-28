@@ -2,240 +2,174 @@ Return-Path: <SRS0=cE1+=7K=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB79FC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 28 May 2020 08:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F9F3C433E1
+	for <linux-media@archiver.kernel.org>; Thu, 28 May 2020 09:14:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96E3020B80
-	for <linux-media@archiver.kernel.org>; Thu, 28 May 2020 08:48:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E5312151B
+	for <linux-media@archiver.kernel.org>; Thu, 28 May 2020 09:14:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="bEgyB8Sh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ne//iH64"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727920AbgE1Is6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 May 2020 04:48:58 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:60851 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726612AbgE1Is5 (ORCPT
+        id S1728150AbgE1JO4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 May 2020 05:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728108AbgE1JO4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 May 2020 04:48:57 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id eEDajH4o7FjnUeEDdji9oU; Thu, 28 May 2020 10:48:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1590655733; bh=zjO35w0aUjU8UAKWf4wi0AUIv1H4ls382wF25UvqVrE=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=bEgyB8ShCujpND3edcUbxuYaFHwiUtBmk5Oynnn3BBNbolvkCuwLRUekACCmtBmts
-         Mrdwei79TyRJVhKoQfj0YMFb9TeCTOQClvJJfg116glNCAG5tbXXobyl3FYbM9jYE/
-         BhXZrCoWn59gaweRcwnBIBCIl+kkPOFkrfskvL+s8Z3fao+JnThqWZDmyPaThSfSCk
-         f/1wJwlOPLYkid16Xo6YW3ogw8lwiHtNGgP7FRcJsBUhtJlZqV79/fjqo+da9QH8AF
-         yJlrOKfz0uVCj3mC2OhBPaepkNaKoKFtETGGeiKOjNCFrThY5cv1wxtu8N9RjGzI0k
-         oOImfEt8A90SA==
-Subject: Re: [PATCHv2 1/2] media: docs-rst: Document memory-to-memory video
- encoder interface
-To:     Michael Tretter <m.tretter@pengutronix.de>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-References: <20200520100159.2094831-1-hverkuil-cisco@xs4all.nl>
- <20200520100159.2094831-2-hverkuil-cisco@xs4all.nl>
- <a14b50176ae678904f9dd39c1bb8edbc5801a030.camel@ndufresne.ca>
- <6caf4e56-2cb3-b193-3760-3a9b3c31bfb0@xs4all.nl>
- <CAAFQd5AveRXvi6GO42qeLXMRLAHiE43tiNvjCKNi2WTZHkVbzQ@mail.gmail.com>
- <20200528074428.GB19211@pengutronix.de>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <16137a65-923b-b131-f95a-7c2d185a3612@xs4all.nl>
-Date:   Thu, 28 May 2020 10:48:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Thu, 28 May 2020 05:14:56 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80B3C08C5C4
+        for <linux-media@vger.kernel.org>; Thu, 28 May 2020 02:14:55 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id b13so9436206uav.3
+        for <linux-media@vger.kernel.org>; Thu, 28 May 2020 02:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/bUPBRUsoGA3duyrH2TeZMw5+oOeqgZqPYVv5N0Bp8E=;
+        b=Ne//iH640h/EEBEtqoCGfuf9pMzYa08gUSFPet3nUiWCMFf0CC/Gr2oVUm+Mf1G5pW
+         7I+c1si80x3o3epEQxzm7aObeVrftr8ivjyXsU0NJLnA6nlvfoZTIVtA94ZOOXhi8eY2
+         KaVs/FyPxbO3ByDFxkdYun2tB6/rHrXt7tlFKQzbSED4KznRDQMndxc/5jEe/eS9oibp
+         DphU8kmMLxd4jpPNExEYWjWzLiyT4OUBFwHyJj5kvH12rkSlaK7khY7SfOshYCYl61AT
+         yiPZjzm1mK5EqW9n3cipObQ28qNzKmCAS+U3Jml+uAqujflKxeH72CxxBdNIKtd0O2Bj
+         W7Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/bUPBRUsoGA3duyrH2TeZMw5+oOeqgZqPYVv5N0Bp8E=;
+        b=UPE6+AzC3gwcXMbJQyaeAFlxr6nPWrC+wu/KPmve1xxwwks0Xe6Yqhpzus7h8+44Xu
+         TwT22AAzOtZvqoaJ3rW9zjb3MX6STJA6EfE/u1Bf4u4mJDfREiJUcGNO4NiFBNm+MZHM
+         0ilx3pRSo7qdspZQ8kWe/XTqaj+VqU3gjzYm/q1DrQznjtfdvQRKlqLGD7yrB4VBdLbl
+         p3AuyhOgZIce//Knf8jIUY/2wQxJwlXrC7Y+6z4tFqjG9JzvYPX3g/iqikrNCWx2PIRB
+         6kRggaqs6DFHu6i6cnUwCyGmmYMc6n0xjIXzT/udJ29nt/FjPd+hvv5h5trbaq/rktp4
+         1gtQ==
+X-Gm-Message-State: AOAM533UE3JsnFvBIgXSDjrfT45Stvpg3B/RZqq/MNCHBxRS3P24xHsO
+        hU3cClX4605EYW7R1ylsUpLgZQYutpTJFC+GjEgQ/g==
+X-Google-Smtp-Source: ABdhPJyeBZDK+eRHDc8CWLgi/p/haWLcwq2ltlK4wv91Z0M2J35aG++4G2ilnQYUpjJaJ7F+JSrxGwE2JExC7SMR47U=
+X-Received: by 2002:ab0:13f2:: with SMTP id n47mr1188594uae.129.1590657294933;
+ Thu, 28 May 2020 02:14:54 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200528074428.GB19211@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfKvgxzZsRCW/Bhp7/RbS9KMpZkiBBwqCNHTHzVTtsZetscmgzR+stT3UXxdjs6rjoC7t6beNCNwGcURC5NK5Yanham+Tyd5DKBdpmbm6MqxNge86X8O5
- n8W+5Mnr1Z4kjU31odbibc0ed3medKPUhMAYxqGtBhVuzQkl6fc8kBslI0xpcD2jKjP5Z5fmS5Fzr7FOGwQ6c23FxN4vvH0Rly7MQkSelGIBYenWwt3g6Nw8
- XQCCBYHAzAzwugFWsEFsRg8obaRlvttSjZwqwLhlmz0JDxZAwP5H0NEOiWHQ595e
+References: <20200527082334.20774-1-tomi.valkeinen@ti.com>
+In-Reply-To: <20200527082334.20774-1-tomi.valkeinen@ti.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 28 May 2020 11:14:18 +0200
+Message-ID: <CAPDyKFqRa81q9EYFKB52kr6+EPJBK5u+4_hC0+ZnxU_axbxAZQ@mail.gmail.com>
+Subject: Re: [PATCHv2] media: videobuf2-dma-contig: fix bad kfree in vb2_dma_contig_clear_max_seg_size
+To:     Tomi Valkeinen <tomi.valkeinen@ti.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "# 4.0+" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 28/05/2020 09:44, Michael Tretter wrote:
-> On Tue, May 26, 2020 at 06:01:35PM +0200, Tomasz Figa wrote:
->> On Tue, May 26, 2020 at 10:32 AM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->>>
->>> On 20/05/2020 22:32, Nicolas Dufresne wrote:
->>>> Le mercredi 20 mai 2020 à 12:01 +0200, Hans Verkuil a écrit :
->>>>> From: Tomasz Figa <tfiga@chromium.org>
->>>>>
->>>>> Due to complexity of the video encoding process, the V4L2 drivers of
->>>>> stateful encoder hardware require specific sequences of V4L2 API calls
->>>>> to be followed. These include capability enumeration, initialization,
->>>>> encoding, encode parameters change, drain and reset.
->>>>>
->>>>> Specifics of the above have been discussed during Media Workshops at
->>>>> LinuxCon Europe 2012 in Barcelona and then later Embedded Linux
->>>>> Conference Europe 2014 in Düsseldorf. The de facto Codec API that
->>>>> originated at those events was later implemented by the drivers we already
->>>>> have merged in mainline, such as s5p-mfc or coda.
->>>>>
->>>>> The only thing missing was the real specification included as a part of
->>>>> Linux Media documentation. Fix it now and document the encoder part of
->>>>> the Codec API.
->>>>>
->>>>> Signed-off-by: Tomasz Figa <tfiga@chromium.org>
->>>>> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->>>>> ---
->>>>>  .../userspace-api/media/v4l/dev-encoder.rst   | 727 ++++++++++++++++++
->>>>>  .../userspace-api/media/v4l/dev-mem2mem.rst   |   1 +
->>>>>  .../userspace-api/media/v4l/pixfmt-v4l2.rst   |   5 +
->>>>>  .../userspace-api/media/v4l/v4l2.rst          |   2 +
->>>>>  .../media/v4l/vidioc-encoder-cmd.rst          |  51 +-
->>>>>  5 files changed, 766 insertions(+), 20 deletions(-)
->>>>>  create mode 100644 Documentation/userspace-api/media/v4l/dev-encoder.rst
->>>>>
->>>>> diff --git a/Documentation/userspace-api/media/v4l/dev-encoder.rst b/Documentation/userspace-api/media/v4l/dev-encoder.rst
->>>
->>> <snip>
->>>
->>>>> +5. **Optional** Set the coded frame interval on the ``CAPTURE`` queue via
->>>>> +   :c:func:`VIDIOC_S_PARM`. This is only necessary if the coded frame
->>>>> +   interval is different from the raw frame interval, which is typically
->>>>> +   the case for off-line encoding.
->>>>> +
->>>>> +   * ** Required fields:**
->>>>> +
->>>>> +     ``type``
->>>>> +     a ``V4L2_BUF_TYPE_*`` enum appropriate for ``CAPTURE``.
->>>>> +
->>>>> +     ``parm.capture``
->>>>> +     set all fields except ``parm.capture.timeperframe`` to 0.
->>>>> +
->>>>> +     ``parm.capture.timeperframe``
->>>>> +     the desired coded frame interval; the encoder may adjust it to
->>>>> +     match hardware requirements.
->>>>> +
->>>>> +   * **Return fields:**
->>>>> +
->>>>> +     ``parm.capture.timeperframe``
->>>>> +     the adjusted frame interval.
->>>>> +
->>>>> +   .. important::
->>>>> +
->>>>> +      Changing the ``CAPTURE`` frame interval sets the framerate for the
->>>>> +      coded video. It does *not* set the rate at which buffers arrive on the
->>>>> +      ``CAPTURE`` queue, that depends on how fast the encoder is and how
->>>>> +      fast raw frames are queued on the ``OUTPUT`` queue.
->>>>> +
->>>>> +   .. important::
->>>>> +
->>>>> +      ``timeperframe`` deals with *frames*, not fields. So for interlaced
->>>>> +      formats this is the time per two fields, since a frame consists of
->>>>> +      a top and a bottom field.
->>>>> +
->>>>> +   .. note::
->>>>> +
->>>>> +      Not all drivers support this functionality, in that case just set
->>>>> +      the desired coded frame interval for the ``OUTPUT`` queue.
->>>>
->>>> There is a slight contorsion in the resulting user-space API. When I
->>>> read this, the logical thing to do for live streams would be to just
->>>> set the OUTPUT and the driver will take care of CAPTURE for me.
->>>>
->>>> While if I want to do offline, I don't know if this is supported or
->>>> not. So the flow would be a bit special:
->>>>
->>>>   S_PARM(OUTPUT) with coded video frame rate
->>>>   S_PARM(CAPTURE) width coded video
->>>>   if ^ worked:
->>>>      S_PARM(OUTPUT) with fastest rate possible
->>>>
->>>> Ideally I would have preferred if there was a more straight forward way
->>>> to configure offline encoding for fastest performance with specific
->>>> coded framerate. I don't think it's a blocker though, performance is
->>>> not critical at all here. Maybe I'm missing something that allow to
->>>> check if this is supported or not without trying it ?
->>>
->>> Good point. I considered adding a flag for the v4l2_fmtdesc struct that
->>> reports whether you can set the capture framerate independently from the
->>> OUTPUT framerate. Perhaps V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL?
->>>
->>> I actually think it would be best if that's added. It is not enough to
->>> rely on whether S_PARM(CAPTURE) works to determine this feature since
->>> at least one encoder drivers supports both OUTPUT and CAPTURE with S_PARM,
->>> but CAPTURE does the same as OUTPUT, so that would be a red herring.
->>>
->>> I'll add this flag for v3.
->>
->> Now if I think of it again, this behavior might be problematic for
->> existing userspace, which I believe assumes encoding as fast as
->> possible, because of how mem2mem devices were expected to behave.
->> Could we define this to always default to as fast as possible?
->> Otherwise we could end up regressing the encoding latency on latency
->> sensitive applications, such as video conferencing.
-> 
-> I see your point regarding the latency, but I don't think that this justifies
-> "as fast as possible" as a default in the API. Adjusting the encoding speed
-> based on a user space hint is usually a trade-off that the driver must make.
-> If the trade-off results in a reduced latency, it is a regression in the
-> individual driver and the trade-offs must be discussed per driver.
+On Wed, 27 May 2020 at 10:23, Tomi Valkeinen <tomi.valkeinen@ti.com> wrote:
+>
+> Commit 9495b7e92f716ab2bd6814fab5e97ab4a39adfdd ("driver core: platform:
+> Initialize dma_parms for platform devices") in v5.7-rc5 causes
+> vb2_dma_contig_clear_max_seg_size() to kfree memory that was not
+> allocated by vb2_dma_contig_set_max_seg_size().
+>
+> The assumption in vb2_dma_contig_set_max_seg_size() seems to be that
+> dev->dma_parms is always NULL when the driver is probed, and the case
+> where dev->dma_parms has bee initialized by someone else than the driver
+> (by calling vb2_dma_contig_set_max_seg_size) will cause a failure.
+>
+> All the current users of these functions are platform devices, which now
+> always have dma_parms set by the driver core. To fix the issue for v5.7,
+> make vb2_dma_contig_set_max_seg_size() return an error if dma_parms is
+> NULL to be on the safe side, and remove the kfree code from
+> vb2_dma_contig_clear_max_seg_size().
+>
+> For v5.8 we should remove the two functions and move the
+> dma_set_max_seg_size() calls into the drivers.
+>
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> Fixes: 9495b7e92f71 ("driver core: platform: Initialize dma_parms for platform devices")
+> Cc: stable@vger.kernel.org
 
-Hmm, perhaps I need to do some more wordsmithing here.
+Thanks for fixing this!
 
-Existing encoder drivers all support setting the framerate by calling
-S_PARM(OUTPUT). This does not mean that the speed at which frames are
-presents to the encoder for encoding is limited, instead it sets the
-framerate embedded in the encoded stream (i.e., this is the rate which
-is used together with the requested bitrates to determine the encoding
-quality).
+However, as I tried to point out in v1, don't you need to care about
+drivers/media/platform/s5p-mfc/s5p_mfc.c, which allocates its own type
+of struct device (non-platform). No?
 
-For live encoding this framerate matches the speed at which the frames
-are queued to the encoder. For off-line encoding this can be different.
+Kind regards
+Uffe
 
-In the corner case (allegro) where there can be multiple encoders that
-can run in parallel setting to OUTPUT framerate can be used to allocate
-resources to each encoder, and then you need to be able to set the actual
-coded framerate using S_PARM(CAPTURE).
 
-> 
->>
->> For example, we could define the rates of both queues the other way
->> around. The OUTPUT queue, which seems to be where the existing user
->> space currently sets the desired stream frame rate, could be
->> interpreted as the frame rate of the video to be encoded, while the
->> CAPTURE queue would control the desired output rate of the encoded
->> video, which would kind of match the V4L2 definition of CAPTURE frame
->> interval.
-> 
-> Setting the desired stream frame rate on CAPTURE does not work with frame
-> reordering. In that case driver returns the CAPTURE buffers, whenever a coded
-> buffer is finished, and not necessarily at a certain frame rate. Strictly
-> following the V4L2 definition for CAPTURE frame interval, the driver would
-> need to produce repeated frames if the decode order differs from the display
-> order.
-
-The CAPTURE framerate for encoders has nothing to do with the rate at which
-buffers are returned to userspace since that makes no sense. Instead, it sets
-the framerate of the coded stream.
-
-> 
-> Setting the stream frame rate on the OUTPUT makes a lot of more sense to me,
-> because that is the rate at which we can feed buffers to the encoder. This
-> rate differs, if we use another V4L2 CAPTURE device as a live source or a file
-> as an offline source for the frames to be encoded, and determines the maximum
-> rate at which the encoder can produce CAPTURE buffers.
-
-Ideally I would have preferred to use S_PARM(CAPTURE) to set the coded framerate
-and S_PARM(OUTPUT) to give a hint of the rate at which raw frames are queued
-(it's a hint only in order to help allocate resources to an encoder instance).
-
-But unfortunately I am constrained by existing behavior.
-
-Regards,
-
-	Hans
+> ---
+>
+> Changes in v2:
+> * vb2_dma_contig_clear_max_seg_size to empty static inline
+> * Added cc: stable and fixes tag
+>
+>  .../common/videobuf2/videobuf2-dma-contig.c   | 20 ++-----------------
+>  include/media/videobuf2-dma-contig.h          |  2 +-
+>  2 files changed, 3 insertions(+), 19 deletions(-)
+>
+> diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+> index d3a3ee5b597b..f4b4a7c135eb 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+> @@ -726,9 +726,8 @@ EXPORT_SYMBOL_GPL(vb2_dma_contig_memops);
+>  int vb2_dma_contig_set_max_seg_size(struct device *dev, unsigned int size)
+>  {
+>         if (!dev->dma_parms) {
+> -               dev->dma_parms = kzalloc(sizeof(*dev->dma_parms), GFP_KERNEL);
+> -               if (!dev->dma_parms)
+> -                       return -ENOMEM;
+> +               dev_err(dev, "Failed to set max_seg_size: dma_parms is NULL\n");
+> +               return -ENODEV;
+>         }
+>         if (dma_get_max_seg_size(dev) < size)
+>                 return dma_set_max_seg_size(dev, size);
+> @@ -737,21 +736,6 @@ int vb2_dma_contig_set_max_seg_size(struct device *dev, unsigned int size)
+>  }
+>  EXPORT_SYMBOL_GPL(vb2_dma_contig_set_max_seg_size);
+>
+> -/*
+> - * vb2_dma_contig_clear_max_seg_size() - release resources for DMA parameters
+> - * @dev:       device for configuring DMA parameters
+> - *
+> - * This function releases resources allocated to configure DMA parameters
+> - * (see vb2_dma_contig_set_max_seg_size() function). It should be called from
+> - * device drivers on driver remove.
+> - */
+> -void vb2_dma_contig_clear_max_seg_size(struct device *dev)
+> -{
+> -       kfree(dev->dma_parms);
+> -       dev->dma_parms = NULL;
+> -}
+> -EXPORT_SYMBOL_GPL(vb2_dma_contig_clear_max_seg_size);
+> -
+>  MODULE_DESCRIPTION("DMA-contig memory handling routines for videobuf2");
+>  MODULE_AUTHOR("Pawel Osciak <pawel@osciak.com>");
+>  MODULE_LICENSE("GPL");
+> diff --git a/include/media/videobuf2-dma-contig.h b/include/media/videobuf2-dma-contig.h
+> index 5604818d137e..5be313cbf7d7 100644
+> --- a/include/media/videobuf2-dma-contig.h
+> +++ b/include/media/videobuf2-dma-contig.h
+> @@ -25,7 +25,7 @@ vb2_dma_contig_plane_dma_addr(struct vb2_buffer *vb, unsigned int plane_no)
+>  }
+>
+>  int vb2_dma_contig_set_max_seg_size(struct device *dev, unsigned int size);
+> -void vb2_dma_contig_clear_max_seg_size(struct device *dev);
+> +static inline void vb2_dma_contig_clear_max_seg_size(struct device *dev) { }
+>
+>  extern const struct vb2_mem_ops vb2_dma_contig_memops;
+>
+> --
+> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+>
