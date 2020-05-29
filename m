@@ -2,110 +2,168 @@ Return-Path: <SRS0=jGff=7L=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43B90C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 10:34:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD2C7C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 10:42:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 232462074B
-	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 10:34:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ACEE220776
+	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 10:42:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LkZpuvvH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725795AbgE2Ke5 convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 May 2020 06:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
+        id S1726882AbgE2KmE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 May 2020 06:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgE2Ke5 (ORCPT
+        with ESMTP id S1726411AbgE2KmD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 May 2020 06:34:57 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF10C03E969
-        for <linux-media@vger.kernel.org>; Fri, 29 May 2020 03:34:57 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id DF190C638E; Fri, 29 May 2020 11:34:53 +0100 (BST)
-Date:   Fri, 29 May 2020 11:34:53 +0100
-From:   Sean Young <sean@mess.org>
-To:     Johan Claude-Breuninger <johan.claudebreuninger@gmail.com>
+        Fri, 29 May 2020 06:42:03 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB035C03E969
+        for <linux-media@vger.kernel.org>; Fri, 29 May 2020 03:42:02 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id n5so2904832wmd.0
+        for <linux-media@vger.kernel.org>; Fri, 29 May 2020 03:42:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JVchq/HIShciP4iV6rg21FSFr1D3DbG0V3fBta4W2tI=;
+        b=LkZpuvvHDUG1asJI56josmIbCq9oEeoxKfgy+ACSWjhZ4aeJ6E8VOaHJ0CLVb6Rf0d
+         o9uM4AjLc7Vm2mOI4GafU9z0M879X4uiedtnuD5NobDg4YBxeTRSfp9vHrQ3Xn3xvJeI
+         Fy10ut7GgBAWLg8a/zESQW7yz/Ynla9fFJBDL0NACVuOfgw4Ty9MiA2QCtftSnHOdeQO
+         ue4+0UqEN7txKBTPB1cVD33NwT7arDXWdTKv8n84krWEmCKvx57AhQ8Bf8PACiIFiz4I
+         lQKXXTSQoue4tu8PgHA7Q7Owi6szxvFJKUy6JDOhXb/IFsoxEctPDqwoTs+s5e8M9hZl
+         ymgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JVchq/HIShciP4iV6rg21FSFr1D3DbG0V3fBta4W2tI=;
+        b=LplcCv7XtikGEGqTpcuOZPRInEm1EPrOCIhxPrzZBOrwzzWGqWhxfpctjSPO+ijxRu
+         1kXK6CDhcYJUHJLStSaNqdaGoJ5k05mgAGn/+O3Ya0Y4wXglZVUK7JBjUi+xQwk64ilh
+         33gjEGEENue5PwelTdOcH68AVjo50lqdRfzz4uM8841ik3LWlq9y5o/a610NReaZC6AH
+         VHHWeeFkbDE8g3xhI/MGIEl+7NXm94PeRiM5tAr5PLpZ+RTY/ZxVFrU58S63HwwVC0Rn
+         QHy5O4Qvp+hKy+qS/4P43WQ+krJDwIt+uQCt7DK3W78RYxtaTbVuYSkWu/pRxpT0mSZB
+         nLyw==
+X-Gm-Message-State: AOAM532tnxSNOgsEfgL5OA7eI/3xP9rkoj6BN/xaUWB8ycT5b3JqbrCK
+        8LYFL0kWqj1RiCpMoaKs3+7KL6r2
+X-Google-Smtp-Source: ABdhPJxHva7eAtfiMLqsKSugAvU6DS9t0yE+KnJU1lrFnWSn46t1zfhSwhCtjVLYdo7xSKSmzR/vEw==
+X-Received: by 2002:a7b:c249:: with SMTP id b9mr7417775wmj.143.1590748921410;
+        Fri, 29 May 2020 03:42:01 -0700 (PDT)
+Received: from johan-pc.localnet ([2a02:810d:ec0:a194:c162:e214:ad93:6fe8])
+        by smtp.gmail.com with ESMTPSA id u10sm9410300wmc.31.2020.05.29.03.42.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2020 03:42:01 -0700 (PDT)
+From:   Johan Claude-Breuninger <johan.claudebreuninger@gmail.com>
+To:     Sean Young <sean@mess.org>
 Cc:     linux-media@vger.kernel.org
 Subject: Re: em28xx driver issue kernel 5.7.0
-Message-ID: <20200529103453.GA27598@gofer.mess.org>
-References: <3329904.flSn8SIOqe@johan-pc>
+Date:   Fri, 29 May 2020 12:42:00 +0200
+Message-ID: <2170285.lfiVHom0a2@johan-pc>
+In-Reply-To: <20200529103453.GA27598@gofer.mess.org>
+References: <3329904.flSn8SIOqe@johan-pc> <20200529103453.GA27598@gofer.mess.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <3329904.flSn8SIOqe@johan-pc>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, May 29, 2020 at 10:32:38AM +0200, Johan Claude-Breuninger wrote:
-> Good morning,
-> 
-> 
-> I hope that this is the right place to report a bug for the em28xx driver as I did not have success on the kernel bug tracker.
-> 
-> Since I started using the 5.7.0 rcs I am getting following call trace with a Hauppauge WinTV-soloHD using the em28xx driver. Other tuners work as expected.
+SSBhbSB1c2luZyBmb2xsb3dpbmcga2VybmVsIHZlcnNpb246CgpMaW51eCBKb2hhbi1QQyA1Ljcu
+MC1yYzctMS1tYWlubGluZSAjMSBTTVAgUFJFRU1QVCBNb24sIDI1IE1heSAyMDIwIDE3OjI5OjM3
+ICswMDAwIHg4Nl82NCBHTlUvTGludXgKCmZyb20gQXJjaCBMaW51eCcgQVVSLgoKCldpbGwgeW91
+ciBtZW50aW9uZWQgcGF0Y2ggYmUgaW5jbHVkZWQgaW4gdGhlIGZpbmFsIDUuNy4wIHJlbGVhc2U/
+CgoKVGhhbmtzCgpKb2hhbgoKCkxlIHZlbmRyZWRpIDI5IG1haSAyMDIwLCAxMjozNDo1MyBDRVNU
+IFNlYW4gWW91bmcgYSDpY3JpdCA6Cj4gT24gRnJpLCBNYXkgMjksIDIwMjAgYXQgMTA6MzI6MzhB
+TSArMDIwMCwgSm9oYW4gQ2xhdWRlLUJyZXVuaW5nZXIgd3JvdGU6Cj4gPiBHb29kIG1vcm5pbmcs
+Cj4gPiAKPiA+IAo+ID4gSSBob3BlIHRoYXQgdGhpcyBpcyB0aGUgcmlnaHQgcGxhY2UgdG8gcmVw
+b3J0IGEgYnVnIGZvciB0aGUgZW0yOHh4IGRyaXZlciBhcyBJIGRpZCBub3QgaGF2ZSBzdWNjZXNz
+IG9uIHRoZSBrZXJuZWwgYnVnIHRyYWNrZXIuCj4gPiAKPiA+IFNpbmNlIEkgc3RhcnRlZCB1c2lu
+ZyB0aGUgNS43LjAgcmNzIEkgYW0gZ2V0dGluZyBmb2xsb3dpbmcgY2FsbCB0cmFjZSB3aXRoIGEg
+SGF1cHBhdWdlIFdpblRWLXNvbG9IRCB1c2luZyB0aGUgZW0yOHh4IGRyaXZlci4gT3RoZXIgdHVu
+ZXJzIHdvcmsgYXMgZXhwZWN0ZWQuCj4gCj4gV2hhdCBrZXJuZWwgdmVyc2lvbiBhcmUgeW91IHVz
+aW5nIGV4YWN0bHk/IEkgd291bGQgbm90IGV4cGVjdCB0aGlzIG9uIGEKPiB2NS43LjAtcmMqIHZl
+cnNpb24sIHdpdGhvdXQgcGF0Y2hlcy4KPiAKPiBUaGVyZSBpcyBhIGZpeCBmb3IgdGhpcyBoZXJl
+OiBodHRwczovL2dpdC5saW51eHR2Lm9yZy9tZWRpYV90cmVlLmdpdC9jb21taXQvP2lkPTlmOTg0
+Y2FjZjRmNGQ1M2ZkOGEzZjQ0ZDdmMTM1MjhiODFjMWY2YTgKPiAKPiBUaGFua3MKPiAKPiBTZWFu
+Cj4gCj4gPiAKPiA+IAo+ID4gRG1lc2cgb3V0cHV0Ogo+ID4gCj4gPiBbICAgIDQuNTc2NDI5XSAt
+LS0tLS0tLS0tLS1bIGN1dCBoZXJlIF0tLS0tLS0tLS0tLS0KPiA+IFsgICAgNC41NzY0MzhdIFdB
+Uk5JTkc6IENQVTogNCBQSUQ6IDg5MSBhdCBkcml2ZXJzL21lZGlhL21jL21jLWVudGl0eS5jOjY2
+OSBtZWRpYV9jcmVhdGVfcGFkX2xpbmsrMHgxY2QvMHgyMDAgW21jXQo+ID4gWyAgICA0LjU3NjQz
+OV0gTW9kdWxlcyBsaW5rZWQgaW46IHNpMjE1NyBzaTIxNjggaTJjX211eCBlbTI4eHhfZHZiKCsp
+IGR2Yl9jb3JlIGNtYWMgYWxnaWZfaGFzaCBhbGdpZl9za2NpcGhlciBhZl9hbGcgYm5lcCBidHVz
+YiBidHJ0bCBidGJjbSBidGludGVsIGJsdWV0b290aCBzbmRfdXNiX2F1ZGlvIHV2Y3ZpZGVvIHZp
+ZGVvYnVmMl92bWFsbG9jIHZpZGVvYnVmMl9tZW1vcHMgc25kX3VzYm1pZGlfbGliIHZpZGVvYnVm
+Ml92NGwyIHNuZF9yYXdtaWRpIHZpZGVvYnVmMl9jb21tb24gZWNkaF9nZW5lcmljIHNuZF9zZXFf
+ZGV2aWNlIGVjYyBlbTI4eHggdHZlZXByb20gdmlkZW9kZXYgbW91c2VkZXYgaW5wdXRfbGVkcyBq
+b3lkZXYgbWMgcmZraWxsIGxtOTIgaXQ4NyBod21vbl92aWQgaGlkX2dlbmVyaWMgdXNiaGlkIGhp
+ZCBlZGFjX21jZV9hbWQgYW1kZ3B1IGt2bV9hbWQga3ZtIG5sc19pc284ODU5XzEgbmxzX2NwNDM3
+IHZmYXQgc25kX2hkYV9jb2RlY19yZWFsdGVrIGZhdCBzbmRfaGRhX2NvZGVjX2dlbmVyaWMgaXJx
+YnlwYXNzIGxlZHRyaWdfYXVkaW8gc25kX2hkYV9jb2RlY19oZG1pIHNuZF9oZGFfaW50ZWwgc25k
+X2ludGVsX2RzcGNmZyBncHVfc2NoZWQgc25kX2hkYV9jb2RlYyB0dG0gY3JjdDEwZGlmX3BjbG11
+bCBjcmMzMl9wY2xtdWwgc25kX2hkYV9jb3JlIGdoYXNoX2NsbXVsbmlfaW50ZWwgd21pX2Jtb2Yg
+bXhtX3dtaSBkcm1fa21zX2hlbHBlciBzbmRfaHdkZXAgc25kX3BjbSBpZ2IgY2VjIGFlc25pX2lu
+dGVsIHJjX2NvcmUgc25kX3RpbWVyIGNjcCBzbmQgc3A1MTAwX3RjbyBjcnlwdG9fc2ltZCBzeXNj
+b3B5YXJlYSBzeXNmaWxscmVjdCBjcnlwdGQgaTJjX2FsZ29fYml0IHN5c2ltZ2JsdCBwY3Nwa3Ig
+azEwdGVtcCBpMmNfcGlpeDQgZ2x1ZV9oZWxwZXIgZGNhIGZiX3N5c19mb3BzIHNvdW5kY29yZSBy
+bmdfY29yZSB3bWkgZXZkZXYgcGluY3RybF9hbWQgbWFjX2hpZCBhY3BpX2NwdWZyZXEgdmJveG5l
+dGZsdChPRSkgdmJveG5ldGFkcChPRSkKPiA+IFsgICAgNC41NzY0ODZdICBkcm0gdmJveGRydihP
+RSkgY3J5cHRvX3VzZXIgYWdwZ2FydCBpcF90YWJsZXMgeF90YWJsZXMgZXh0NCBjcmMzMmNfZ2Vu
+ZXJpYyBjcmMxNiBtYmNhY2hlIGpiZDIgY3JjMzJjX2ludGVsIHhoY2lfcGNpIHhoY2lfaGNkCj4g
+PiBbICAgIDQuNTc2NDk2XSBDUFU6IDQgUElEOiA4OTEgQ29tbTogbW9kcHJvYmUgVGFpbnRlZDog
+RyAgICAgICAgICAgT0UgICAgIDUuNy4wLXJjNy0xLW1haW5saW5lICMxCj4gPiBbICAgIDQuNTc2
+NDk3XSBIYXJkd2FyZSBuYW1lOiBHaWdhYnl0ZSBUZWNobm9sb2d5IENvLiwgTHRkLiBYNTcwIEFP
+UlVTIFBSTy9YNTcwIEFPUlVTIFBSTywgQklPUyBGMTJlIDAzLzA2LzIwMjAKPiA+IFsgICAgNC41
+NzY1MDJdIFJJUDogMDAxMDptZWRpYV9jcmVhdGVfcGFkX2xpbmsrMHgxY2QvMHgyMDAgW21jXQo+
+ID4gWyAgICA0LjU3NjUwNV0gQ29kZTogNWYgYzMgMGYgMGIgNDggODMgYzQgMTAgYjggZWEgZmYg
+ZmYgZmYgNWIgNWQgNDEgNWMgNDEgNWQgNDEgNWUgNDEgNWYgYzMgMGYgMGIgYjggZWEgZmYgZmYg
+ZmYgZWIgZDIgMGYgMGIgYjggZWEgZmYgZmYgZmYgZWIgYzkgPDBmPiAwYiBiOCBlYSBmZiBmZiBm
+ZiBlYiBjMCAwZiAwYiBiOCBlYSBmZiBmZiBmZiBlYiBiNyBiOCBmNCBmZiBmZgo+ID4gWyAgICA0
+LjU3NjUwN10gUlNQOiAwMDE4OmZmZmZhNjcwNDExZDNhZjggRUZMQUdTOiAwMDAxMDI0Ngo+ID4g
+WyAgICA0LjU3NjUwOV0gUkFYOiAwMDAwMDAwMDAwMDAwMDAwIFJCWDogZmZmZmEwZjlhN2Q3NTQw
+MCBSQ1g6IDAwMDAwMDAwMDAwMDAwMDAKPiA+IFsgICAgNC41NzY1MTBdIFJEWDogZmZmZmEwZjlh
+OTdjZDMxMCBSU0k6IDAwMDAwMDAwMDAwMDAwMDAgUkRJOiBmZmZmYTBmOWE5N2NkMjkwCj4gPiBb
+ICAgIDQuNTc2NTEyXSBSQlA6IGZmZmZhMGY5YTk3Y2QyOTAgUjA4OiAwMDAwMDAwMDAwMDAwMDAx
+IFIwOTogMDAwMDAwMDAwMDAwMDAwMAo+ID4gWyAgICA0LjU3NjUxM10gUjEwOiAwMDAwMDAwMDAw
+MDAwMDAxIFIxMTogMDAwMDAwMDAwMDAwMDAwMSBSMTI6IDAwMDAwMDAwMDAwMDAwMDAKPiA+IFsg
+ICAgNC41NzY1MTRdIFIxMzogZmZmZmEwZjljMTNiMGNjOCBSMTQ6IGZmZmZhMGY5Y2JjYTEwMzgg
+UjE1OiAwMDAwMDAwMDAwMDAwMDAwCj4gPiBbICAgIDQuNTc2NTE2XSBGUzogIDAwMDA3ZjY3ODFl
+YTI3NDAoMDAwMCkgR1M6ZmZmZmEwZjljZWIwMDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAw
+MDAwCj4gPiBbICAgIDQuNTc2NTE3XSBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAw
+MDAwMDAwMDgwMDUwMDMzCj4gPiBbICAgIDQuNTc2NTE4XSBDUjI6IDAwMDA3ZjVkYjhiOGNjYjAg
+Q1IzOiAwMDAwMDAwM2RmNjMwMDAwIENSNDogMDAwMDAwMDAwMDM0MGVlMAo+ID4gWyAgICA0LjU3
+NjUyMF0gQ2FsbCBUcmFjZToKPiA+IFsgICAgNC41NzY1MzNdICBkdmJfY3JlYXRlX21lZGlhX2dy
+YXBoKzB4NDhhLzB4NTkwIFtkdmJfY29yZV0KPiA+IFsgICAgNC41NzY1NDBdICBlbTI4eHhfZHZi
+X2luaXQuY29sZCsweDEwMjgvMHgyNWU0IFtlbTI4eHhfZHZiXQo+ID4gWyAgICA0LjU3NjU1MF0g
+IGVtMjh4eF9yZWdpc3Rlcl9leHRlbnNpb24rMHg1YS8weGIwIFtlbTI4eHhdCj4gPiBbICAgIDQu
+NTc2NTU0XSAgPyAweGZmZmZmZmZmYzAzZGQwMDAKPiA+IFsgICAgNC41NzY1NThdICBkb19vbmVf
+aW5pdGNhbGwrMHg1OS8weDI0MAo+ID4gWyAgICA0LjU3NjU2NF0gIGRvX2luaXRfbW9kdWxlKzB4
+NWMvMHgyNjAKPiA+IFsgICAgNC41NzY1NjddICBsb2FkX21vZHVsZSsweDIxMzcvMHgyM2EwCj4g
+PiBbICAgIDQuNTc2NTc0XSAgX19kb19zeXNfaW5pdF9tb2R1bGUrMHgxNzIvMHgxYTAKPiA+IFsg
+ICAgNC41NzY1ODBdICBkb19zeXNjYWxsXzY0KzB4NDkvMHg5MAo+ID4gWyAgICA0LjU3NjU4NF0g
+IGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsweDQ0LzB4YTkKPiA+IFsgICAgNC41NzY1
+ODZdIFJJUDogMDAzMzoweDdmNjc4MWZjZjczZQo+ID4gWyAgICA0LjU3NjU4OV0gQ29kZTogNDgg
+OGIgMGQgNTUgZjcgMGIgMDAgZjcgZDggNjQgODkgMDEgNDggODMgYzggZmYgYzMgNjYgMmUgMGYg
+MWYgODQgMDAgMDAgMDAgMDAgMDAgOTAgZjMgMGYgMWUgZmEgNDkgODkgY2EgYjggYWYgMDAgMDAg
+MDAgMGYgMDUgPDQ4PiAzZCAwMSBmMCBmZiBmZiA3MyAwMSBjMyA0OCA4YiAwZCAyMiBmNyAwYiAw
+MCBmNyBkOCA2NCA4OSAwMSA0OAo+ID4gWyAgICA0LjU3NjU5MV0gUlNQOiAwMDJiOjAwMDA3ZmZj
+YmU0NTdiNDggRUZMQUdTOiAwMDAwMDI0NiBPUklHX1JBWDogMDAwMDAwMDAwMDAwMDBhZgo+ID4g
+WyAgICA0LjU3NjU5M10gUkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJCWDogMDAwMDU2MzYzOTYzZmZm
+MCBSQ1g6IDAwMDA3ZjY3ODFmY2Y3M2UKPiA+IFsgICAgNC41NzY1OTRdIFJEWDogMDAwMDU2MzYz
+ODlmZDM2OCBSU0k6IDAwMDAwMDAwMDAwMGUxNTggUkRJOiAwMDAwNTYzNjM5ZTRlNGUwCj4gPiBb
+ICAgIDQuNTc2NTk1XSBSQlA6IDAwMDA1NjM2MzllNGU0ZTAgUjA4OiAwMDAwMDAwMDAwMDAwMDAw
+IFIwOTogMDAwMDdmZmNiZTQ1NWI0OAo+ID4gWyAgICA0LjU3NjU5Nl0gUjEwOiAwMDAwMDAwMDAw
+MDAwMDAxIFIxMTogMDAwMDAwMDAwMDAwMDI0NiBSMTI6IDAwMDA1NjM2Mzg5ZmQzNjgKPiA+IFsg
+ICAgNC41NzY1OThdIFIxMzogMDAwMDAwMDAwMDAwMDAwMCBSMTQ6IDAwMDA1NjM2Mzk2NDAwNzAg
+UjE1OiAwMDAwNTYzNjM5NjNmZmYwCj4gPiBbICAgIDQuNTc2NjAxXSAtLS1bIGVuZCB0cmFjZSAx
+MmQzMzNiNjIxYTJhNjhjIF0tLS0KPiA+IAo+ID4gCj4gPiBUaGFua3MKPiA+IAo+ID4gSm9oYW4g
+QnJldW5pbmdlcgo+ID4gCj4gPiAKPiAKCg==
 
-What kernel version are you using exactly? I would not expect this on a
-v5.7.0-rc* version, without patches.
 
-There is a fix for this here: https://git.linuxtv.org/media_tree.git/commit/?id=9f984cacf4f4d53fd8a3f44d7f13528b81c1f6a8
 
-Thanks
 
-Sean
-
-> 
-> 
-> Dmesg output:
-> 
-> [    4.576429] ------------[ cut here ]------------
-> [    4.576438] WARNING: CPU: 4 PID: 891 at drivers/media/mc/mc-entity.c:669 media_create_pad_link+0x1cd/0x200 [mc]
-> [    4.576439] Modules linked in: si2157 si2168 i2c_mux em28xx_dvb(+) dvb_core cmac algif_hash algif_skcipher af_alg bnep btusb btrtl btbcm btintel bluetooth snd_usb_audio uvcvideo videobuf2_vmalloc videobuf2_memops snd_usbmidi_lib videobuf2_v4l2 snd_rawmidi videobuf2_common ecdh_generic snd_seq_device ecc em28xx tveeprom videodev mousedev input_leds joydev mc rfkill lm92 it87 hwmon_vid hid_generic usbhid hid edac_mce_amd amdgpu kvm_amd kvm nls_iso8859_1 nls_cp437 vfat snd_hda_codec_realtek fat snd_hda_codec_generic irqbypass ledtrig_audio snd_hda_codec_hdmi snd_hda_intel snd_intel_dspcfg gpu_sched snd_hda_codec ttm crct10dif_pclmul crc32_pclmul snd_hda_core ghash_clmulni_intel wmi_bmof mxm_wmi drm_kms_helper snd_hwdep snd_pcm igb cec aesni_intel rc_core snd_timer ccp snd sp5100_tco crypto_simd syscopyarea sysfillrect cryptd i2c_algo_bit sysimgblt pcspkr k10temp i2c_piix4 glue_helper dca fb_sys_fops soundcore rng_core wmi evdev pinctrl_amd mac_hid acpi_cpufreq vboxnetflt(OE) vboxne
- tadp(OE)
-> [    4.576486]  drm vboxdrv(OE) crypto_user agpgart ip_tables x_tables ext4 crc32c_generic crc16 mbcache jbd2 crc32c_intel xhci_pci xhci_hcd
-> [    4.576496] CPU: 4 PID: 891 Comm: modprobe Tainted: G           OE     5.7.0-rc7-1-mainline #1
-> [    4.576497] Hardware name: Gigabyte Technology Co., Ltd. X570 AORUS PRO/X570 AORUS PRO, BIOS F12e 03/06/2020
-> [    4.576502] RIP: 0010:media_create_pad_link+0x1cd/0x200 [mc]
-> [    4.576505] Code: 5f c3 0f 0b 48 83 c4 10 b8 ea ff ff ff 5b 5d 41 5c 41 5d 41 5e 41 5f c3 0f 0b b8 ea ff ff ff eb d2 0f 0b b8 ea ff ff ff eb c9 <0f> 0b b8 ea ff ff ff eb c0 0f 0b b8 ea ff ff ff eb b7 b8 f4 ff ff
-> [    4.576507] RSP: 0018:ffffa670411d3af8 EFLAGS: 00010246
-> [    4.576509] RAX: 0000000000000000 RBX: ffffa0f9a7d75400 RCX: 0000000000000000
-> [    4.576510] RDX: ffffa0f9a97cd310 RSI: 0000000000000000 RDI: ffffa0f9a97cd290
-> [    4.576512] RBP: ffffa0f9a97cd290 R08: 0000000000000001 R09: 0000000000000000
-> [    4.576513] R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
-> [    4.576514] R13: ffffa0f9c13b0cc8 R14: ffffa0f9cbca1038 R15: 0000000000000000
-> [    4.576516] FS:  00007f6781ea2740(0000) GS:ffffa0f9ceb00000(0000) knlGS:0000000000000000
-> [    4.576517] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    4.576518] CR2: 00007f5db8b8ccb0 CR3: 00000003df630000 CR4: 0000000000340ee0
-> [    4.576520] Call Trace:
-> [    4.576533]  dvb_create_media_graph+0x48a/0x590 [dvb_core]
-> [    4.576540]  em28xx_dvb_init.cold+0x1028/0x25e4 [em28xx_dvb]
-> [    4.576550]  em28xx_register_extension+0x5a/0xb0 [em28xx]
-> [    4.576554]  ? 0xffffffffc03dd000
-> [    4.576558]  do_one_initcall+0x59/0x240
-> [    4.576564]  do_init_module+0x5c/0x260
-> [    4.576567]  load_module+0x2137/0x23a0
-> [    4.576574]  __do_sys_init_module+0x172/0x1a0
-> [    4.576580]  do_syscall_64+0x49/0x90
-> [    4.576584]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> [    4.576586] RIP: 0033:0x7f6781fcf73e
-> [    4.576589] Code: 48 8b 0d 55 f7 0b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 af 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 22 f7 0b 00 f7 d8 64 89 01 48
-> [    4.576591] RSP: 002b:00007ffcbe457b48 EFLAGS: 00000246 ORIG_RAX: 00000000000000af
-> [    4.576593] RAX: ffffffffffffffda RBX: 000056363963fff0 RCX: 00007f6781fcf73e
-> [    4.576594] RDX: 00005636389fd368 RSI: 000000000000e158 RDI: 0000563639e4e4e0
-> [    4.576595] RBP: 0000563639e4e4e0 R08: 0000000000000000 R09: 00007ffcbe455b48
-> [    4.576596] R10: 0000000000000001 R11: 0000000000000246 R12: 00005636389fd368
-> [    4.576598] R13: 0000000000000000 R14: 0000563639640070 R15: 000056363963fff0
-> [    4.576601] ---[ end trace 12d333b621a2a68c ]---
-> 
-> 
-> Thanks
-> 
-> Johan Breuninger
-> 
-> 
