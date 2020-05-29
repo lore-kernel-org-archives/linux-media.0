@@ -2,105 +2,182 @@ Return-Path: <SRS0=jGff=7L=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6132AC433DF
-	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 03:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC932C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 03:37:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 37A7C20B80
-	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 03:00:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E57820888
+	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 03:37:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iR0wgaCZ"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="OmmhrDH3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391764AbgE2DAk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 May 2020 23:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391728AbgE2DAU (ORCPT
+        id S2436594AbgE2DhH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 May 2020 23:37:07 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:50601 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2436471AbgE2DhH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 May 2020 23:00:20 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63289C08C5C7
-        for <linux-media@vger.kernel.org>; Thu, 28 May 2020 20:00:20 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id l1so1249015qtv.13
-        for <linux-media@vger.kernel.org>; Thu, 28 May 2020 20:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=lI0Q6FZINWMsCqdHMNmAEdxWrOY+He9ibCjQyKGbuIo=;
-        b=iR0wgaCZ4Cqh0pE/qgXOa1suDs5YWBzaulscmYb2YUgV2sA9zHfS7zjVfINGwrhkbc
-         fXtlLJjqejfEsL9x/WY3TnkaK31HM9lA9kLPZKCFCXqPgzulGPgSaekSdykIR/L3bKRS
-         psMXsaG96OSATMQYHeszaY8qIlH9zRIcec5GO2GW30+YDzXVdJtw15i7O4TR9IOnOJz0
-         0uM5kQG8T+JiH00KK3Dep7OSuWu1R3h+109QXLT0lyeVaxp3ggzgcOqfGJ381DyiJLpU
-         xcoEh6fmE8Jmn9/2n8yjFemuB6qC2NhcB8FJjwPO8tYSKKQ9ydrtvjgiGyf4mLiJWQKX
-         vYdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=lI0Q6FZINWMsCqdHMNmAEdxWrOY+He9ibCjQyKGbuIo=;
-        b=PxuzeEDg1F0jMqWa0MiFCTxmzsWcn0EC67MX9Xhi6/pT3crHhBJ8JkB3Xs9Plamq2P
-         g6OMIYbTGqgRJqcCrKg6T1lpshenWi3av83Hb7UELjWZA0qpq1v/PYoD2DwyEAXID3vl
-         aRxxslRey1HU158ovMNoxmRHIEnSOpEfbDRfrjT8lA0N53lqy0zY0gFK7NBJLnXCLzm8
-         XQgdfC+Vtnsj5ATd55WjfmJHMdCeTvQqFqgtd9+R5dBKpNiSAIXJwfacMcctlAKlypJS
-         H0RdrgNh62xujeRaQz/eUeaN0g2LoAKNMgQim9AMSMI1VatIezeTTvkXMUuL7OoAeXJi
-         xZfw==
-X-Gm-Message-State: AOAM531T0sitkXH3ieSRUXaYYPifEjiLapqOrGvohDz1YzE4xl8htbQ3
-        VFVzFyTxAwrTqtzmcyK0+fEEc6a3So72gprst6nVrZYtcgA6ol9But1m3antg6JKeEG1RsMjaGy
-        WJ1r4tV5YTZefDw3iHFsCfCQMlIr8OKqwTWudEpjkGQukG5+26n+4cJmySKZ3KhntSsiqpIU=
-X-Google-Smtp-Source: ABdhPJyZfiv7R2c/sS2hwIC+F1gIlp+a63vWm1DnHY3Ra0l1F2/057hmvFvmeEuVeO/iQwjJe9keFhdI1x9x
-X-Received: by 2002:a0c:e48f:: with SMTP id n15mr6380735qvl.73.1590721219377;
- Thu, 28 May 2020 20:00:19 -0700 (PDT)
-Date:   Thu, 28 May 2020 23:00:10 -0400
-Message-Id: <20200529030012.254592-1-jnchase@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.27.0.rc0.183.gde8f92d652-goog
-Subject: [PATCH v3 0/2] CH7322 CEC controller driver
-From:   Jeff Chase <jnchase@google.com>
+        Thu, 28 May 2020 23:37:07 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id eVpPjZlM7dPgTeVpQj9xyE; Fri, 29 May 2020 05:37:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1590723424; bh=4DLls/tmNsgZHhvgQy6ddIwCk7ZrKU4PnIeyEkkRrIg=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=OmmhrDH3T0+gWVVDPYAhtc4ocZc9bTySn3J3aadBB85abSVE7W8p5MhKBn2SLZEOl
+         8On0inNuIptuRdNHPZmmWyf1hxEbc+fvAwDXSgmzjyzgEQN31VzT3PlxYiefnMXMGc
+         zr46367u2mqSK4zZFzg0SukqTjCHaRdmVZwxxGvWkqUmI8RBcZTtQe47Uy8JsTdkS2
+         D0Waaa3bQpN8qr08KOBNYr99iF3yCYZVlYJ1cNdNF+uTljuHow4q7n1enC4JvV7TMO
+         Pqs5+TRhBAVDh5F+4xWj0Z9NXFSTbwyNDR4fAyRQ/XkHAB1oucrr2dHPfrXej4rZKS
+         Y8q8XopAcbP1g==
+Message-ID: <0988a89cb8982f43b0fba30617f5678c@smtp-cloud8.xs4all.net>
+Date:   Fri, 29 May 2020 05:37:03 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, Jeff Chase <jnchase@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfEzXA9sPLMAZMHlHXORHSBRMSyV5HDZF8lJ3tEdrIV//Z6y07UgPHPlQ9+dsloq6jnzKl/U4U+Dw3cD57fMCiIUfLd6PzjUiYB9z0q3KQjz8C/bCf99x
+ 9EIajGCL7GcCqz5wCYNzCBIrrx77RfEYY7iaOYoVcdPFEDZFtI50XfxnVHrwuz4BeWBO8wUWbbaCY/Nh4ukTVfeRpFAfnNB7/jwRCRtVLWyHwF1On69h0wc9
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add device driver and device tree bindings for a Chrontel CEC
-conroller. This is an I2C device that can send and receive CEC
-messages.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Changes from v2:
-- fix formatting errors
-- mask and unmask interrupt in cec adapter enable
+Results of the daily build of media_tree:
 
-Changes from v1:
-- fix formatpatch.pl --strict errors
-- additional comments
-- enable and program logical address register
-- add flags to aid interpreting transmit done status
-- move ch7322 out of devicetree trivial devices
+date:			Fri May 29 05:00:10 CEST 2020
+media-tree git hash:	938b29db3aa9c293c7c1366b16e55e308f1a1ddd
+media_build git hash:	7379d9e55aa05cd53f3dceaa5e0278e93db357bd
+v4l-utils git hash:	74377da4f5f3b63203c599d5dd75db6af91fdbb9
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 0accb575719caa47d8fbc866b11e6f7e7e7787cd
+host hardware:		x86_64
+host os:		5.6.0-1-amd64
 
-Jeff Chase (2):
-  dt-bindings: Add ch7322 media i2c device
-  media: cec: i2c: ch7322: Add ch7322 CEC controller driver
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: WARNINGS
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: WARNINGS: found 4 strcpy(), 4 strncpy(), 4 strlcpy()
+linux-3.10.108-i686: ERRORS
+linux-3.10.108-x86_64: ERRORS
+linux-3.11.10-i686: ERRORS
+linux-3.11.10-x86_64: ERRORS
+linux-3.12.74-i686: ERRORS
+linux-3.12.74-x86_64: ERRORS
+linux-3.13.11-i686: ERRORS
+linux-3.13.11-x86_64: ERRORS
+linux-3.14.79-i686: ERRORS
+linux-3.14.79-x86_64: ERRORS
+linux-3.15.10-i686: ERRORS
+linux-3.15.10-x86_64: ERRORS
+linux-3.16.81-i686: ERRORS
+linux-3.16.81-x86_64: ERRORS
+linux-3.17.8-i686: ERRORS
+linux-3.17.8-x86_64: ERRORS
+linux-3.18.136-i686: ERRORS
+linux-3.18.136-x86_64: ERRORS
+linux-3.19.8-i686: ERRORS
+linux-3.19.8-x86_64: ERRORS
+linux-4.0.9-i686: ERRORS
+linux-4.0.9-x86_64: ERRORS
+linux-4.1.52-i686: ERRORS
+linux-4.1.52-x86_64: ERRORS
+linux-4.2.8-i686: ERRORS
+linux-4.2.8-x86_64: ERRORS
+linux-4.3.6-i686: ERRORS
+linux-4.3.6-x86_64: ERRORS
+linux-4.4.212-i686: ERRORS
+linux-4.4.212-x86_64: ERRORS
+linux-4.5.7-i686: ERRORS
+linux-4.5.7-x86_64: ERRORS
+linux-4.6.7-i686: ERRORS
+linux-4.6.7-x86_64: ERRORS
+linux-4.7.10-i686: ERRORS
+linux-4.7.10-x86_64: ERRORS
+linux-4.8.17-i686: ERRORS
+linux-4.8.17-x86_64: ERRORS
+linux-4.9.212-i686: ERRORS
+linux-4.9.212-x86_64: ERRORS
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: WARNINGS
+linux-4.13.16-x86_64: WARNINGS
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6.1-i686: OK
+linux-5.6.1-x86_64: OK
+linux-5.7-rc1-i686: OK
+linux-5.7-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 2
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 1
+sparse: OK
+smatch: OK
 
- .../bindings/media/i2c/chrontel,ch7322.yaml   |  65 +++
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- MAINTAINERS                                   |   8 +
- drivers/media/cec/Kconfig                     |   1 +
- drivers/media/cec/Makefile                    |   2 +-
- drivers/media/cec/i2c/Kconfig                 |  14 +
- drivers/media/cec/i2c/Makefile                |   5 +
- drivers/media/cec/i2c/ch7322.c                | 523 ++++++++++++++++++
- 8 files changed, 619 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
- create mode 100644 drivers/media/cec/i2c/Kconfig
- create mode 100644 drivers/media/cec/i2c/Makefile
- create mode 100644 drivers/media/cec/i2c/ch7322.c
+Detailed results are available here:
 
--- 
-2.27.0.rc0.183.gde8f92d652-goog
+http://www.xs4all.nl/~hverkuil/logs/Friday.log
 
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Friday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
