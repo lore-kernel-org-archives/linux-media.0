@@ -2,90 +2,168 @@ Return-Path: <SRS0=jGff=7L=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFAB7C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 20:01:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 762A7C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 20:04:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE9E2207BC
-	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 20:01:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4923220810
+	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 20:04:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oIkV2Iwx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728244AbgE2UBV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 May 2020 16:01:21 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:46469 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727975AbgE2UAt (ORCPT
+        id S1728124AbgE2UE0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 May 2020 16:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728314AbgE2UES (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 May 2020 16:00:49 -0400
-Received: from threadripper.lan ([149.172.98.151]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MyK9S-1imwbt0Oxo-00yeuk; Fri, 29 May 2020 22:00:41 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 4/9] staging: media: atomisp: fix a type conversion warning
-Date:   Fri, 29 May 2020 22:00:26 +0200
-Message-Id: <20200529200031.4117841-4-arnd@arndb.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200529200031.4117841-1-arnd@arndb.de>
-References: <20200529200031.4117841-1-arnd@arndb.de>
+        Fri, 29 May 2020 16:04:18 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6C9C08C5C9
+        for <linux-media@vger.kernel.org>; Fri, 29 May 2020 13:04:18 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id a13so1676772pls.8
+        for <linux-media@vger.kernel.org>; Fri, 29 May 2020 13:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4+g7Oezu2RunpZeGCvY0b0s77w8UFoTcEBsYnh2aCmE=;
+        b=oIkV2IwxnKvjZgJ+qdLb8Jx8V/wvhITFMVzbJY5nzmFPezh71a7tDAioCbghNilrqs
+         yf84zuHV81ZntwYnrKWyOTM34RfkWDtvc91CAwfcOb5HwHt6B4JGIuGTCe/wMOHB291r
+         CTJHTLRbWq9I5PCPnqdJ53R1Y2qNC0FTlRUaecb83hWz+ZlkIRBlsB3o7WcIpN7t0ZN6
+         VFJHEH0lA2f4glK3hI6hWda5gKLsfuVoRvyNDt5Qf5nuhAhRM4Pyl8lucO5iZ2oOMKmZ
+         OpsQLoTKWgx/PG4/O3BnWMpiV0OLPhRPx3kbaB4J9OwG6eMdDqLVuPffUlG4qP0nvm++
+         bcvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4+g7Oezu2RunpZeGCvY0b0s77w8UFoTcEBsYnh2aCmE=;
+        b=CunTEYVfhXY9WGqQYJv+It+phLfYWkAYgFrHnfPywP5cFyCjSYIFzbjEZ5LJoAs4Z4
+         3/eannr6nDTuDhHmqk4no1Qu2c2xM17KaWKUYve161+6g8YzlW19+tkRgl33nDR0FdYn
+         kU2xldv/wNtNcdkmytHsrnne3iHOcBZ+MzVLGgw6wNV5wOMEarhqXBnNI/Ot8pJpd0mW
+         7bbB3fpDopkTPZ7rhpL1Ldh9cuRvFlvFYostyU5r1FH5OTe3IEwa/KJ1R6hg1+fZ+Yat
+         vcW3J23qZPvJKYoqvvC9Tnx5ryTAPpCPE3egXmHPHBKyHX9u0cN7vfMAk2DZDy3bieK3
+         NSjQ==
+X-Gm-Message-State: AOAM531z0LSBmIhXd7GaQxoFZWMz7fRXxoOWJWZoatnuJfCrWZEfzhS5
+        MdwA35kY2XsqG0DIGG65ZZqW8ifbojEBQ9ubZveuzg==
+X-Google-Smtp-Source: ABdhPJzajSAOEPn628sZLoiLTrRZedjCZBAQvwF+keg7C4ztulX0K1oUk7mF8ipVkXUUgKnRHQMl+6ln2r4LRdFYT5Q=
+X-Received: by 2002:a17:902:724a:: with SMTP id c10mr10068319pll.223.1590782657556;
+ Fri, 29 May 2020 13:04:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:qWBqLiHAEPDMF8js3BlDSPtIsv7NefuRl9Ih3YXihEz3ytqwK7I
- 95pwIVpN2VK2c6MErMz1nU1mqoSwXJZ4oreJOy0xL2phOWMHcUrB6rNLLn3e/qEBBzYsS81
- tCgb/sdTaV85b0SQpiut7Q2R2d230ZF+dUvb77YsIW7R1Uz+1iRLVu9ZEj+sAJOEKZN3QeP
- Y9Z7KixTphCsicYvRwfpg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ElPwMuZ6EYA=:0afz9AlQbCrElA4/wPvPtt
- I8ZVINFuuOu0sb0PG4sb88XGYuSFmLYxK911LA6eDkfXasPoS5F0s+NL6Fcg4ExHQIMpOijg4
- YBr0uyt7M/yh+nEFrnEmk60iNgmBumR4US/B+RrKhJ4wLeM73A9MU7OcAhRegL4sdtQhO1B6l
- Nls2QL0fKd2PBW0R/IDTen/u0pfGjJ7AW0eW/022wQaW7dpHKCXqgwFbORCECWTjAkZNgXK8s
- RioqNoWlKhifzzPbSSFw0zg0TEtL2xoa8bCICFUjV9k1AFHhJrii1aj8VJUUG+IhGcrCxpg7R
- 8b1nABsEqSYDyb1aQU1IZsklEjVEOip6Pa0XV6qzLYxIlMaMLzNnsLG0js7E8VvLkxkQuNZJL
- BoQ7DayVfuIkT/iA/xioZ9xSUzJy3Z0KCoX7KQzWFWe6tFdtS5h70i3xlZ/068EAZJeWuy1mx
- 2M59u1tri8c8dJpM54fAJQLixVfN91s2DkEO2z7GimRUaIulBeUH/XxZX4jysiiJAZf4UecCQ
- vRyja1RjxpbWLDX/WPOc+Jus3RKAnleTwgHjJ+FHUnQMT4dH+gNhxzGq0T9Ft17w0q3YuC04s
- x+SIvCPSzL799skAtJDgxPqKuXyOScaj/SldgErWCTrpwEFDuSIMUo70DOGsHh+XGwus1gk5n
- K7hfDKlSvK9TA3wBueZX1Puke5NcxdlXFt5z+kG1ZI6vLiSi1W16RSAdXdeDn9MRqXGTKt36d
- 21eLKPhNBs88rTvd8mnZjBT7Q/Dcwcys8bhN4wFy7n1leMS0otcgwuFd4JzrrLcXBV41TTMHw
- q2n7yBgknNPAruPsYYXpqqrDRw35/ewn//GLRvDMyVE1/UF5i0=
+References: <20200529200031.4117841-1-arnd@arndb.de>
+In-Reply-To: <20200529200031.4117841-1-arnd@arndb.de>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 29 May 2020 13:04:05 -0700
+Message-ID: <CAKwvOdnND7XFgr7W9PvZAikJB1nKxB4K5N-oP0YrBT74oX_C9g@mail.gmail.com>
+Subject: Re: [PATCH 1/9] staging: media: atomisp: fix incorrect NULL pointer check
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-clang complains that the type conversion in the MAX() macro
-contains an implied integer overflow to a signed number:
+See also Nathan's 7 patch series.
+https://lore.kernel.org/lkml/20200527071150.3381228-1-natechancellor@gmail.com/
 
-drivers/staging/media/atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c:129:35:
-error: implicit conversion from 'unsigned long' to 'int32_t' (aka 'int') changes value from 18446744073709543424 to -8192 [-Werror,-Wconstant-conversion]
+Might be some overlap between series?
 
-As the conversion is clearly intended here, use an explicit cast.
+On Fri, May 29, 2020 at 1:00 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> Checking the pointer to a member of a struct against NULL
+> is pointless as clang points out:
+>
+> drivers/staging/media/atomisp/pci/atomisp_cmd.c:4278:17: error: address of 'config->info' will always evaluate to 'true'
+>
+> Check the original pointer instead, which may also be
+> unnecessary here, but makes a little more sense.
+>
+> Fixes: 9d4fa1a16b28 ("media: atomisp: cleanup directory hierarchy")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/staging/media/atomisp/pci/atomisp_cmd.c | 2 +-
+>  drivers/staging/media/atomisp/pci/sh_css.c      | 4 ++--
+>  drivers/staging/media/atomisp/pci/sh_css_sp.c   | 4 ++--
+>  3 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+> index 5be690f876c1..342fc3b34fe0 100644
+> --- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+> +++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+> @@ -4275,7 +4275,7 @@ int atomisp_param(struct atomisp_sub_device *asd, int flag,
+>                     atomisp_css_get_dvs_grid_info(
+>                         &asd->params.curr_grid_info);
+>
+> -               if (!&config->info) {
+> +               if (!config) {
+>                         dev_err(isp->dev, "ERROR: NULL pointer in grid_info\n");
+>                         return -EINVAL;
+>                 }
+> diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
+> index d77432254a2c..e91c6029c651 100644
+> --- a/drivers/staging/media/atomisp/pci/sh_css.c
+> +++ b/drivers/staging/media/atomisp/pci/sh_css.c
+> @@ -8534,7 +8534,7 @@ ia_css_pipe_load_extension(struct ia_css_pipe *pipe,
+>
+>         if (firmware->info.isp.type == IA_CSS_ACC_OUTPUT)
+>         {
+> -               if (&pipe->output_stage)
+> +               if (pipe)
+>                         append_firmware(&pipe->output_stage, firmware);
+>                 else {
+>                         IA_CSS_LEAVE_ERR_PRIVATE(IA_CSS_ERR_INTERNAL_ERROR);
+> @@ -8542,7 +8542,7 @@ ia_css_pipe_load_extension(struct ia_css_pipe *pipe,
+>                 }
+>         } else if (firmware->info.isp.type == IA_CSS_ACC_VIEWFINDER)
+>         {
+> -               if (&pipe->vf_stage)
+> +               if (pipe)
+>                         append_firmware(&pipe->vf_stage, firmware);
+>                 else {
+>                         IA_CSS_LEAVE_ERR_PRIVATE(IA_CSS_ERR_INTERNAL_ERROR);
+> diff --git a/drivers/staging/media/atomisp/pci/sh_css_sp.c b/drivers/staging/media/atomisp/pci/sh_css_sp.c
+> index e574396ad0f4..c0e579c1705f 100644
+> --- a/drivers/staging/media/atomisp/pci/sh_css_sp.c
+> +++ b/drivers/staging/media/atomisp/pci/sh_css_sp.c
+> @@ -1022,7 +1022,7 @@ sh_css_sp_init_stage(struct ia_css_binary *binary,
+>                 if (!pipe)
+>                         return IA_CSS_ERR_INTERNAL_ERROR;
+>                 ia_css_get_crop_offsets(pipe, &args->in_frame->info);
+> -       } else if (&binary->in_frame_info)
+> +       } else if (binary)
+>         {
+>                 pipe = find_pipe_by_num(sh_css_sp_group.pipe[thread_id].pipe_num);
+>                 if (!pipe)
+> @@ -1036,7 +1036,7 @@ sh_css_sp_init_stage(struct ia_css_binary *binary,
+>                         if (!pipe)
+>                                 return IA_CSS_ERR_INTERNAL_ERROR;
+>                         ia_css_get_crop_offsets(pipe, &args->in_frame->info);
+> -               } else if (&binary->in_frame_info) {
+> +               } else if (binary) {
+>                         pipe = find_pipe_by_num(sh_css_sp_group.pipe[thread_id].pipe_num);
+>                         if (!pipe)
+>                                 return IA_CSS_ERR_INTERNAL_ERROR;
+> --
+> 2.26.2
+>
+> --
+> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20200529200031.4117841-1-arnd%40arndb.de.
 
-Fixes: 9a0d7fb5ece6 ("media: atomisp: simplify math_support.h")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- .../atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c      | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c
-index a9db6366d20b..613bace0522a 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c
-@@ -126,7 +126,7 @@ compute_blending(int strength)
- 	 * exactly as s0.11 fixed point, but -1.0 can.
- 	 */
- 	isp_strength = -(((strength * isp_scale) + offset) / host_scale);
--	return MAX(MIN(isp_strength, 0), -XNR_BLENDING_SCALE_FACTOR);
-+	return MAX(MIN(isp_strength, 0), -(unsigned int)XNR_BLENDING_SCALE_FACTOR);
- }
- 
- void
+
 -- 
-2.26.2
-
+Thanks,
+~Nick Desaulniers
