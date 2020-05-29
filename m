@@ -6,129 +6,123 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94A72C433E1
-	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 20:01:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67E92C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 20:01:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7777D207BC
-	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 20:01:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B106207BC
+	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 20:01:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728216AbgE2UBK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 May 2020 16:01:10 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:41475 "EHLO
+        id S1728025AbgE2UAu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 May 2020 16:00:50 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:35305 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728124AbgE2UAy (ORCPT
+        with ESMTP id S1726866AbgE2UAt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 May 2020 16:00:54 -0400
+        Fri, 29 May 2020 16:00:49 -0400
 Received: from threadripper.lan ([149.172.98.151]) by mrelayeu.kundenserver.de
  (mreue109 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MKKd7-1jQfCx0lln-00Ljen; Fri, 29 May 2020 22:00:40 +0200
+ 1N3sZy-1iwnQf3ybI-00zltS; Fri, 29 May 2020 22:00:42 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
         Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 1/9] staging: media: atomisp: fix incorrect NULL pointer check
-Date:   Fri, 29 May 2020 22:00:23 +0200
-Message-Id: <20200529200031.4117841-1-arnd@arndb.de>
+Subject: [PATCH 7/9] staging: media: atomisp: fix enum type mixups
+Date:   Fri, 29 May 2020 22:00:29 +0200
+Message-Id: <20200529200031.4117841-7-arnd@arndb.de>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200529200031.4117841-1-arnd@arndb.de>
+References: <20200529200031.4117841-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:+wQ8TKuZZFLgm1wvXX36wv2lc/zCPOC+vLEJsLC5Yfq1Bumz0qA
- guL6S2PS4PsHYgRs6AxROCr3xIHck0FKrrQlrX11NPPgtcKwlYyZm1wIqSETblJZmtl7T5Q
- 9Y8Q/hqtBh2TXLhX0n+ATAYM9+2CXXVm5CZ8ebg+cLCQRvcKPwGEPKuqX8s1AX+iPmXYS+5
- LdYgEDEprrkuRJEtVt7AQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:D1UYBQNkCe8=:PoxgIynrxog2/f95h2DvhW
- KWSbQWmBKPhWkPo92ILPY191ysfIIZbyZrU4X7NvsdDq2ed/cMecws2eRNuCL6tv/BrcExBLi
- JH6uy4mOm9wRdW3jkOdno+QWekRW3rBVYtgKm/aSsCFRagCw73cgZDBut4FPm54VJjJVUsg1D
- HUGUrLtH94rvbXgJ2vJv30x2YzY5QtTh1/4+DJXsLqBXpyBj2e//I5pjXoRey3ZhL09tqlmPR
- O/xnl8gBilayf+tLsYztc1EITkIiyiW0NMgEQx/6/cnmFBsHowomsG2IsZo3EwSMgIMeNLnQ/
- rszbEok0VTx/pVnc0XZJaq5XJJhIPICZ+HGa/Yc5198Y8uizDu8AVs4VsRv5HD0gEV1HouKEd
- dhl7FNNg/LWRP+IrPGZC3kOD/tw59v+zZE/BCKUuupbxdJjzd+fyutM1ykGKpw7KiZLvaweAr
- +bKNWCZAznU9cZzjeNRSwD8jljMMBkfi39NmMh9EzGvaFVJrc7by5yku3hdYOfqeguNgEs55L
- Xz/foeYVwH3w2giLZmXd8hslWjXIX4dROy9CHlE00jgVg83ONq44rpfEZDcNv09I/KJ9mwcW2
- 0oencPzEzNRT4cgeGXG00/aq8/1gQHZw0Z7Q+uJ2HU1DOzEX28oxWA1KzshMAGan93YjFI2sM
- 9NtGL23eo7y42lTFCqaZMTV+X4y9s+6GaMy9f/ORvb19uJK76ZLrAYtQcpevFBiSQx/JKMKao
- Eno9LVJ9KGHw3apIDZF76sQXrnkP1KhanVMUelCj5LB69uPhmL8ooG5dNl25lYHkugfl1R4VK
- q0ez07EkbKXswv4PRv5/qfsqezpa1ieV/tBy0TKUDCYpQMuiy4=
+X-Provags-ID: V03:K1:Oi9GZuwYCtVW0YQN+bXyI0AbOsWHne7iHij3kFt4OBTdybYPLLc
+ H1tbAKJGDVUZ/HsQa0IsK0ChzDn9x9fU4h3sHE2M5zUavENXzgppLZMmVaXJw8OgyvWf8JI
+ 6WLxv0LO1XndxyGT2+tNMSzcBc5pudM+yARQsUzCWMNXsbqpLy5LFNUd51iYNWH5M1XMuyd
+ x4l1SpV6NWqnyboGlSK2w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Iey8Rc3idrk=:R17CteIWPzHogAGPk1oHj2
+ Ef9fDUzN7RcPNaW6sLJmU2Xs+zMyOjV0Yi2Rm6e9hOJsxxSwz6p3nF0I1uqsJphWUNwjZ5VFq
+ cGBRzn9WDHR4MSsXIyVXGbPM5VHX7gRM8FeUxu81KrIwXXEuiD5JHweTfRLdlm/a+8XO1f9pX
+ IHrvVNBArScrA2uLz6vrjnJzdPI6bM1eACaJnn/LjxuRiinFSalnndz0ed39CLMJX5iKHlzsd
+ dGA2cupAXce2lpCk7UQB5r2RJtVprgpO3JYpUGppuuHLwr0ClY2F+UH+mS5zdub7M+MEJhBU4
+ ubSfRC+2iR2pXRFD4DxvMp+mVZrUH3X8+3YluC4oCC7orAFJZmArPNOIa5wjhufII/+BHgR/7
+ gKW4RUhD1AquC5HQ4QQWq+uGyqDyjCG6G809Z7LmGYrzuaYmw/cKs5RZQnc4nkl8RO6IoTA1p
+ dlzfyWYWzYYKBsrRyZZ/3Oq7Xkxj0brEtxLfpZmM6m4rhKx24bRkKrt0iAf9uNfMPnoyG8jSQ
+ pcE8IBgbsu//iK333FfoLHYzqsRVpBqems8d90rwo1wRUKHk6Dziw2EZ3cm6K26OZcWQCDZ8T
+ 8C3c5a9jV7LDkWUSFBfAHenQKFl0tnPbPcDtNqYxhYYthptPMcnNxRxscHftceodQhl3bC6L9
+ HcnxTel/SZ+jZs4Qt2XdlV9gZrGUJtMXXeEtYRMQ1h9p73p4/+a4XSlSh4alXgbnHDzbJ3yjb
+ w67r9wWYFhXQYPwO9+nn3zEMuMnGYyNjYqMaJrzi93icSQhIYIRAjQb0VutuIsPYC8OUwACDc
+ nAIbKVkBQ8scTOAeuXWvnyk94XHy1BVHXzrodpMYzYwVNvLrKk=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Checking the pointer to a member of a struct against NULL
-is pointless as clang points out:
+Some function calls pass an incorrect enum type:
 
-drivers/staging/media/atomisp/pci/atomisp_cmd.c:4278:17: error: address of 'config->info' will always evaluate to 'true'
+drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c:858:16: error: implicit conversion from enumeration type 'input_system_ID_t' to different enumeration type 'gp_device_ID_t' [-Werror,-Wenum-conversion]
+        gp_device_rst(INPUT_SYSTEM0_ID);
+        ~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~
+drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c:860:19: error: implicit conversion from enumeration type 'input_system_ID_t' to different enumeration type 'gp_device_ID_t' [-Werror,-Wenum-conversion]
+        input_switch_rst(INPUT_SYSTEM0_ID);
+        ~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~
+drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c:876:27: error: implicit conversion from enumeration type 'input_system_cfg_flag_t' to different enumeration type 'input_system_connection_t' [-Werror,-Wenum-conversion]
+                config.multicast[i]              = INPUT_SYSTEM_CFG_FLAG_RESET;
+                                                 ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c:1326:32: error: implicit conversion from enumeration type 'input_system_ID_t' to different enumeration type 'gp_device_ID_t' [-Werror,-Wenum-conversion]
+        input_selector_cfg_for_sensor(INPUT_SYSTEM0_ID);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~
+drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c:1329:19: error: implicit conversion from enumeration type 'input_system_ID_t' to different enumeration type 'gp_device_ID_t' [-Werror,-Wenum-conversion]
+        input_switch_cfg(INPUT_SYSTEM0_ID, &config.input_switch_cfg);
+        ~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~
 
-Check the original pointer instead, which may also be
-unnecessary here, but makes a little more sense.
+INPUT_SYSTEM0_ID is zero, so use the corresponding zero-value
+of the expected types instead.
 
-Fixes: 9d4fa1a16b28 ("media: atomisp: cleanup directory hierarchy")
+Fixes: a49d25364dfb ("staging/atomisp: Add support for the Intel IPU v2")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/staging/media/atomisp/pci/atomisp_cmd.c | 2 +-
- drivers/staging/media/atomisp/pci/sh_css.c      | 4 ++--
- drivers/staging/media/atomisp/pci/sh_css_sp.c   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .../pci/hive_isp_css_common/host/input_system.c        | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index 5be690f876c1..342fc3b34fe0 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -4275,7 +4275,7 @@ int atomisp_param(struct atomisp_sub_device *asd, int flag,
- 		    atomisp_css_get_dvs_grid_info(
- 			&asd->params.curr_grid_info);
+diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
+index 2114cf4f3fda..aa0f0fca9346 100644
+--- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
++++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
+@@ -855,9 +855,9 @@ input_system_error_t input_system_configuration_reset(void)
  
--		if (!&config->info) {
-+		if (!config) {
- 			dev_err(isp->dev, "ERROR: NULL pointer in grid_info\n");
- 			return -EINVAL;
- 		}
-diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index d77432254a2c..e91c6029c651 100644
---- a/drivers/staging/media/atomisp/pci/sh_css.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -8534,7 +8534,7 @@ ia_css_pipe_load_extension(struct ia_css_pipe *pipe,
+ 	input_system_network_rst(INPUT_SYSTEM0_ID);
  
- 	if (firmware->info.isp.type == IA_CSS_ACC_OUTPUT)
- 	{
--		if (&pipe->output_stage)
-+		if (pipe)
- 			append_firmware(&pipe->output_stage, firmware);
- 		else {
- 			IA_CSS_LEAVE_ERR_PRIVATE(IA_CSS_ERR_INTERNAL_ERROR);
-@@ -8542,7 +8542,7 @@ ia_css_pipe_load_extension(struct ia_css_pipe *pipe,
- 		}
- 	} else if (firmware->info.isp.type == IA_CSS_ACC_VIEWFINDER)
- 	{
--		if (&pipe->vf_stage)
-+		if (pipe)
- 			append_firmware(&pipe->vf_stage, firmware);
- 		else {
- 			IA_CSS_LEAVE_ERR_PRIVATE(IA_CSS_ERR_INTERNAL_ERROR);
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_sp.c b/drivers/staging/media/atomisp/pci/sh_css_sp.c
-index e574396ad0f4..c0e579c1705f 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_sp.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_sp.c
-@@ -1022,7 +1022,7 @@ sh_css_sp_init_stage(struct ia_css_binary *binary,
- 		if (!pipe)
- 			return IA_CSS_ERR_INTERNAL_ERROR;
- 		ia_css_get_crop_offsets(pipe, &args->in_frame->info);
--	} else if (&binary->in_frame_info)
-+	} else if (binary)
- 	{
- 		pipe = find_pipe_by_num(sh_css_sp_group.pipe[thread_id].pipe_num);
- 		if (!pipe)
-@@ -1036,7 +1036,7 @@ sh_css_sp_init_stage(struct ia_css_binary *binary,
- 			if (!pipe)
- 				return IA_CSS_ERR_INTERNAL_ERROR;
- 			ia_css_get_crop_offsets(pipe, &args->in_frame->info);
--		} else if (&binary->in_frame_info) {
-+		} else if (binary) {
- 			pipe = find_pipe_by_num(sh_css_sp_group.pipe[thread_id].pipe_num);
- 			if (!pipe)
- 				return IA_CSS_ERR_INTERNAL_ERROR;
+-	gp_device_rst(INPUT_SYSTEM0_ID);
++	gp_device_rst(GP_DEVICE0_ID);
+ 
+-	input_switch_rst(INPUT_SYSTEM0_ID);
++	input_switch_rst(GP_DEVICE0_ID);
+ 
+ 	//target_rst();
+ 
+@@ -873,7 +873,7 @@ input_system_error_t input_system_configuration_reset(void)
+ 
+ 	for (i = 0; i < N_CSI_PORTS; i++) {
+ 		config.csi_buffer_flags[i]	 = INPUT_SYSTEM_CFG_FLAG_RESET;
+-		config.multicast[i]		 = INPUT_SYSTEM_CFG_FLAG_RESET;
++		config.multicast[i]		 = INPUT_SYSTEM_DISCARD_ALL;
+ 	}
+ 
+ 	config.source_type_flags				 = INPUT_SYSTEM_CFG_FLAG_RESET;
+@@ -1323,10 +1323,10 @@ static input_system_error_t configuration_to_registers(void)
+ 	} // end of switch (source_type)
+ 
+ 	// Set input selector.
+-	input_selector_cfg_for_sensor(INPUT_SYSTEM0_ID);
++	input_selector_cfg_for_sensor(GP_DEVICE0_ID);
+ 
+ 	// Set input switch.
+-	input_switch_cfg(INPUT_SYSTEM0_ID, &config.input_switch_cfg);
++	input_switch_cfg(GP_DEVICE0_ID, &config.input_switch_cfg);
+ 
+ 	// Set input formatters.
+ 	// AM: IF are set dynamically.
 -- 
 2.26.2
 
