@@ -2,28 +2,28 @@ Return-Path: <SRS0=jGff=7L=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F244C433E1
-	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 13:04:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C865C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 13:04:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E834020C09
-	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 13:04:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1277420C09
+	for <linux-media@archiver.kernel.org>; Fri, 29 May 2020 13:04:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgE2NE0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 May 2020 09:04:26 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:54075 "EHLO
+        id S1726838AbgE2NET (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 May 2020 09:04:19 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:41425 "EHLO
         relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726955AbgE2NEZ (ORCPT
+        with ESMTP id S1726477AbgE2NES (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 May 2020 09:04:25 -0400
+        Fri, 29 May 2020 09:04:18 -0400
 X-Originating-IP: 86.250.147.67
 Received: from pc-10.home (lfbn-tou-1-695-67.w86-250.abo.wanadoo.fr [86.250.147.67])
         (Authenticated sender: maxime.chevallier@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 01CB8C0004;
-        Fri, 29 May 2020 13:04:21 +0000 (UTC)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 0A213C000C;
+        Fri, 29 May 2020 13:04:14 +0000 (UTC)
 From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Robin Murphy <robin.murphy@arm.com>,
@@ -38,12 +38,10 @@ Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v2 3/3] arm64: dts: rockchip: Add the camera interface description of the PX30
-Date:   Fri, 29 May 2020 15:04:05 +0200
-Message-Id: <20200529130405.929429-4-maxime.chevallier@bootlin.com>
+Subject: [PATCH v2 0/3] media: rockchip: Introduce driver for the camera interface on PX30
+Date:   Fri, 29 May 2020 15:04:02 +0200
+Message-Id: <20200529130405.929429-1-maxime.chevallier@bootlin.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200529130405.929429-1-maxime.chevallier@bootlin.com>
-References: <20200529130405.929429-1-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -51,43 +49,70 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The PX30 has a camera interface, supporting CSI2, BT656 and Parallel
-modes. Add a DT description for this interface.
+Hello everyone,
 
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
----
+Here's a V2 of the series adding very basic support for the camera interface on
+the Rockchip PX30 SoC.
 
-Changes since V1:
+Thanks to everyone that commented on the first series, your reviews were
+very helpful :)
 
- - Updated the clock and reset names
- - Reordered the properties to have clocks and resets bundled together
+This Camera Interface is also supported on other Rockchip SoC such as
+the RK1808, RK3128, RK3288 and RK3288, but for now I've only been able to
+test it on the PX30, using a PAL format.
 
- arch/arm64/boot/dts/rockchip/px30.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+This driver is mostly based on the driver found in Rockchip's BSP, that
+has been trimmed down to support the set of features that I was able to test,
+that is pretty much a very basic one-frame capture and video streaming
+with GStreamer. 
 
-diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
-index 9f84aaaf3fba..d895541b7216 100644
---- a/arch/arm64/boot/dts/rockchip/px30.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
-@@ -1140,6 +1140,18 @@ vopl_mmu: iommu@ff470f00 {
- 		status = "disabled";
- 	};
- 
-+	cif: cif@ff490000 {
-+		compatible = "rockchip,px30-cif";
-+		reg = <0x0 0xff490000 0x0 0x200>;
-+		interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru ACLK_CIF>, <&cru HCLK_CIF>, <&cru PCLK_CIF>, <&cru SCLK_CIF_OUT>;
-+		clock-names = "aclk", "hclk", "pclkin";
-+		power-domains = <&power PX30_PD_VI>;
-+		resets = <&cru SRST_CIF_A>, <&cru SRST_CIF_H>, <&cru SRST_CIF_PCLKIN>;
-+		reset-names = "axi", "ahb", "pclkin";
-+		status = "disabled";
-+	};
-+
- 	qos_gmac: qos@ff518000 {
- 		compatible = "syscon";
- 		reg = <0x0 0xff518000 0x0 0x20>;
+This first draft only supports the Parallel interface, although the
+controller has support for BT656 and CSI2.
+
+Finally, this controller has an iommu that could be used in this driver,
+but as of today I've not been able to get it to work.
+
+Any review is welcome.
+
+Thanks,
+
+Maxime
+
+--- Changes since V1 ---
+
+ - Took reviews from Rob, Hans, Robin and Heiko into account :
+  - Renamed the clocks in the binding
+  - Fixed the DT schema compiling
+  - Fixed a few typos
+  - Used the clk bulk API
+  - Used the reset array API
+  - Changed a few helpers for more suitable ones
+  - Rebased on 5.7-rc7
+
+
+
+Maxime Chevallier (3):
+  media: dt-bindings: media: Document Rockchip CIF bindings
+  media: rockchip: Introduce driver for Rockhip's camera interface
+  arm64: dts: rockchip: Add the camera interface description of the PX30
+
+ .../bindings/media/rockchip-cif.yaml          |  100 ++
+ arch/arm64/boot/dts/rockchip/px30.dtsi        |   12 +
+ drivers/media/platform/Kconfig                |   13 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/rockchip/cif/Makefile  |    3 +
+ drivers/media/platform/rockchip/cif/capture.c | 1170 +++++++++++++++++
+ drivers/media/platform/rockchip/cif/dev.c     |  358 +++++
+ drivers/media/platform/rockchip/cif/dev.h     |  213 +++
+ drivers/media/platform/rockchip/cif/regs.h    |  256 ++++
+ 9 files changed, 2126 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/rockchip-cif.yaml
+ create mode 100644 drivers/media/platform/rockchip/cif/Makefile
+ create mode 100644 drivers/media/platform/rockchip/cif/capture.c
+ create mode 100644 drivers/media/platform/rockchip/cif/dev.c
+ create mode 100644 drivers/media/platform/rockchip/cif/dev.h
+ create mode 100644 drivers/media/platform/rockchip/cif/regs.h
+
 -- 
 2.25.4
 
