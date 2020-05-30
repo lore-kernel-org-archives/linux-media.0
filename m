@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9109FC433E0
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:57:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8B7FC433E6
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:57:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A98E20801
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:57:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 744ED206C3
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:57:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590821843;
-	bh=nH5rtDxPNK1Gakh5jDnYxn/bhzeaetx2TYQBH3jwn7E=;
+	s=default; t=1590821847;
+	bh=kxbnh+AHRTOvRY1iUp5etxq7vK91dVI1mcWZd/pGJQo=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=lq9ogmVWYCkj2Ukn2R/CGLByx/3mX9WBzN+npuO0MSL2R+g3rNFhqHyi/SZ7XiA3E
-	 4GnUNthpx+3DwIbDGg1JvtaXPbVTBIpl0gROmM25SHAfInSIWZ6vbWL2UdFQdh2loz
-	 odqnDX7Mat+JCSWQzTL/EWsdnntqEtp2tl5StUa4=
+	b=aXzVOoIEQfRGVGIl2OdH3cqmTFL1rJ6Qm4MOBZEM4/dIr9DJXZ/rvSwhDjrPbiLyZ
+	 95/yV1lQS84/a4Dh+mj/q5MMQOdSL1py1Qfx6wW0qHRg//pZXYbVGwCaVq53uq7iOQ
+	 r0uUpBBKyExKvvjeAk0Zue7LlcoF0rfzu+1YSZgs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729031AbgE3G5H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 May 2020 02:57:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45016 "EHLO mail.kernel.org"
+        id S1729021AbgE3G5G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 May 2020 02:57:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44912 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728851AbgE3G4I (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 May 2020 02:56:08 -0400
+        id S1728871AbgE3G4J (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 30 May 2020 02:56:09 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BF20221897;
-        Sat, 30 May 2020 06:56:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 57D08221EF;
+        Sat, 30 May 2020 06:56:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1590821764;
-        bh=nH5rtDxPNK1Gakh5jDnYxn/bhzeaetx2TYQBH3jwn7E=;
+        bh=kxbnh+AHRTOvRY1iUp5etxq7vK91dVI1mcWZd/pGJQo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TpFnv6ny2Zn5kQCefjg9fhGpoWlYxdLwyM2i9kgWckRtiy1XBsgZR+BQj6aW6XaY6
-         m/dTmO1KA51TjnDS6X4wyvtp3+EGL5X2Hq1h4WI+Z6RSUh0QBgqJFakVaXETvTafj2
-         NC3pmFDZpGrlQXszswL2ql6d+Tbxhrnt46B1nJeA=
+        b=U6dqpeHINmZO5qpFXCZ9uBQVP80pZNehoDKvhHOoP1VkB3WhHXLeCBB5mg/PzEnic
+         LlXH7lRuaBs1/t/0bB0cW6xyt1FxXl2ncNBZmWKu98NKb1EHZswW3hwYhaCibWExyp
+         9eSL5pEq4SOTrfvb3TImJRli5zoU8JTIG8zq5Cj0=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jevPV-001hqK-NU; Sat, 30 May 2020 08:56:01 +0200
+        id 1jevPW-001hqj-5n; Sat, 30 May 2020 08:56:02 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 29/41] media: atomisp: do another round of coding style cleanup
-Date:   Sat, 30 May 2020 08:55:46 +0200
-Message-Id: <691be1dad35302a844c98d6ce8c34b170de00ff0.1590821410.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 33/41] media: atomisp: get rid of a bunch of other wrappers
+Date:   Sat, 30 May 2020 08:55:50 +0200
+Message-Id: <d3ef30d5f639c06a32f5a48093c6983f2b5c5090.1590821410.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1590821410.git.mchehab+huawei@kernel.org>
 References: <cover.1590821410.git.mchehab+huawei@kernel.org>
@@ -61,792 +61,995 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Run checkpatch --fix-inline again, in order to get rid
-of some additional issues that got introduced (or that
-checkpatch can now detect).
+There are too many wrapper functions at atomisp_compat_css20.c.
 
-This should help preventing receiving random cleanups,
-while keeping the code on a better shape.
+Get rid of another set of such wrappers.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/atomisp/TODO            |  4 +--
- drivers/staging/media/atomisp/i2c/Kconfig     |  2 +-
- .../media/atomisp/i2c/atomisp-gc0310.c        |  1 -
- .../media/atomisp/i2c/atomisp-ov2680.c        |  2 +-
- drivers/staging/media/atomisp/i2c/ov2680.h    |  2 ++
- .../media/atomisp/i2c/ov5693/atomisp-ov5693.c |  4 +--
- .../staging/media/atomisp/include/hmm/hmm.h   |  2 +-
- .../media/atomisp/include/linux/atomisp.h     |  2 +-
- .../staging/media/atomisp/pci/atomisp_cmd.c   |  3 +-
- .../media/atomisp/pci/atomisp_gmin_platform.c |  5 ++--
- .../staging/media/atomisp/pci/atomisp_ioctl.c |  5 ++--
- .../staging/media/atomisp/pci/atomisp_v4l2.c  |  4 ++-
- .../css_2400_system/hive/ia_css_isp_states.c  |  2 +-
- .../css_2401_system/hive/ia_css_isp_configs.c |  1 -
- .../css_2401_system/hive/ia_css_isp_states.c  |  2 +-
- .../pci/css_2401_system/isys_dma_global.h     |  1 +
- drivers/staging/media/atomisp/pci/css_trace.h |  1 -
- .../pci/hive_isp_css_common/host/debug.c      |  1 -
- .../hive_isp_css_common/host/debug_private.h  |  1 -
- .../pci/hive_isp_css_include/string_support.h |  1 -
- .../media/atomisp/pci/ia_css_isp_states.h     |  2 +-
- .../media/atomisp/pci/ia_css_pipe_public.h    |  2 +-
- .../staging/media/atomisp/pci/ia_css_types.h  |  1 -
- .../isp/kernels/anr/anr_2/ia_css_anr2_param.h |  2 +-
- .../pci/isp/kernels/bnlm/ia_css_bnlm.host.c   |  2 +-
- .../macc/macc1_5/ia_css_macc1_5_param.h       |  2 +-
- .../sdis/common/ia_css_sdis_common.host.h     |  4 +--
- .../media/atomisp/pci/isp2400_system_local.h  |  5 ++++
- .../media/atomisp/pci/isp2401_system_local.h  |  5 ++++
- .../atomisp/pci/runtime/event/src/event.c     |  1 -
- .../atomisp/pci/runtime/frame/src/frame.c     |  9 +++---
- drivers/staging/media/atomisp/pci/sh_css.c    | 29 ++++++++++++-------
- .../staging/media/atomisp/pci/sh_css_defs.h   |  3 --
- .../staging/media/atomisp/pci/sh_css_params.c |  6 +++-
- .../staging/media/atomisp/pci/sh_css_struct.h |  1 +
- 35 files changed, 67 insertions(+), 53 deletions(-)
+ .../staging/media/atomisp/pci/atomisp_cmd.c   | 156 +++++-----
+ .../media/atomisp/pci/atomisp_compat.h        |  79 -----
+ .../media/atomisp/pci/atomisp_compat_css20.c  | 281 ------------------
+ .../media/atomisp/pci/atomisp_compat_css20.h  |  12 -
+ .../staging/media/atomisp/pci/atomisp_file.c  |   7 +-
+ .../staging/media/atomisp/pci/atomisp_fops.c  |   3 +-
+ .../staging/media/atomisp/pci/atomisp_ioctl.c |  15 +-
+ 7 files changed, 93 insertions(+), 460 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/TODO b/drivers/staging/media/atomisp/TODO
-index 9456ffbfe4aa..e58643a9de43 100644
---- a/drivers/staging/media/atomisp/TODO
-+++ b/drivers/staging/media/atomisp/TODO
-@@ -173,8 +173,8 @@ Limitations
-    device but can also be extracted from the upgrade kit if you've managed
-    to lose them somehow.
- 
--2. Without a 3A libary the capture behaviour is not very good. To take a good
--   picture, you need tune ISP parameters by IOCTL functions or use a 3A libary
-+2. Without a 3A library the capture behaviour is not very good. To take a good
-+   picture, you need tune ISP parameters by IOCTL functions or use a 3A library
-    such as libxcam.
- 
- 3. The driver is intended to drive the PCI exposed versions of the device.
-diff --git a/drivers/staging/media/atomisp/i2c/Kconfig b/drivers/staging/media/atomisp/i2c/Kconfig
-index f7f7177b9b37..caf712c7d1f2 100644
---- a/drivers/staging/media/atomisp/i2c/Kconfig
-+++ b/drivers/staging/media/atomisp/i2c/Kconfig
-@@ -57,7 +57,7 @@ config VIDEO_ATOMISP_GC0310
- 	---help---
- 	  This is a Video4Linux2 sensor-level driver for the Galaxycore
- 	  GC0310 0.3MP sensor.
--	 
-+
- config VIDEO_ATOMISP_OV2680
-        tristate "Omnivision OV2680 sensor support"
- 	depends on ACPI
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-index ad1bd7d6a02b..799383b1101d 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-@@ -1321,7 +1321,6 @@ static int gc0310_probe(struct i2c_client *client)
- 		__func__, acpi_device_bid(adev), acpi_device_hid(adev));
- 	// FIXME: may need to release resources allocated by acpi_bus_get_device()
- 
--
- 	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
- 	if (!dev)
- 		return -ENOMEM;
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-index 1b60f6a9c0e0..df6d3f82fba7 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-@@ -703,7 +703,7 @@ static int power_ctrl(struct v4l2_subdev *sd, bool flag)
- 	if (!dev || !dev->platform_data)
- 		return -ENODEV;
- 
--	dev_dbg(&client->dev, "%s: %s", __func__, flag? "on" : "off");
-+	dev_dbg(&client->dev, "%s: %s", __func__, flag ? "on" : "off");
- 
- 	if (flag) {
- 		ret |= dev->platform_data->v1p8_ctrl(sd, 1);
-diff --git a/drivers/staging/media/atomisp/i2c/ov2680.h b/drivers/staging/media/atomisp/i2c/ov2680.h
-index 034e1032f6c0..f4e618062e9c 100644
---- a/drivers/staging/media/atomisp/i2c/ov2680.h
-+++ b/drivers/staging/media/atomisp/i2c/ov2680.h
-@@ -456,6 +456,7 @@ static struct ov2680_reg const ov2680_656x496_30fps[] = {
- 	// {0x5090, 0x0c},
- 	{}
- };
-+
- /*
- * 800x600 30fps  VBlanking 1lane 10Bit (binning)
- */
-@@ -500,6 +501,7 @@ static struct ov2680_reg const ov2680_720x592_30fps[] = {
- 	{0x5081, 0x41},
- 	{}
- };
-+
- /*
- * 800x600 30fps  VBlanking 1lane 10Bit (binning)
- */
-diff --git a/drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c b/drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c
-index 2be0ef14d53e..62e49a3804f9 100644
---- a/drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c
-+++ b/drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c
-@@ -1087,7 +1087,7 @@ static int ov5693_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_VCM_SLEW:
- 		ret = ov5693_t_vcm_slew(&dev->sd, ctrl->val);
- 		break;
--	case V4L2_CID_VCM_TIMEING:
-+	case V4L2_CID_VCM_TIMING:
- 		ret = ov5693_t_vcm_timing(&dev->sd, ctrl->val);
- 		break;
- 	default:
-@@ -1230,7 +1230,7 @@ static const struct v4l2_ctrl_config ov5693_controls[] = {
- 	},
- 	{
- 		.ops = &ctrl_ops,
--		.id = V4L2_CID_VCM_TIMEING,
-+		.id = V4L2_CID_VCM_TIMING,
- 		.type = V4L2_CTRL_TYPE_INTEGER,
- 		.name = "vcm step time",
- 		.min = 0,
-diff --git a/drivers/staging/media/atomisp/include/hmm/hmm.h b/drivers/staging/media/atomisp/include/hmm/hmm.h
-index 5d725a6b6e10..a91d17a80d9a 100644
---- a/drivers/staging/media/atomisp/include/hmm/hmm.h
-+++ b/drivers/staging/media/atomisp/include/hmm/hmm.h
-@@ -29,7 +29,7 @@
- #include "ia_css_types.h"
- 
- #define mmgr_NULL              ((ia_css_ptr)0)
--#define mmgr_EXCEPTION         ((ia_css_ptr)-1)
-+#define mmgr_EXCEPTION         ((ia_css_ptr) - 1)
- 
- int hmm_pool_register(unsigned int pool_size, enum hmm_pool_type pool_type);
- void hmm_pool_unregister(enum hmm_pool_type pool_type);
-diff --git a/drivers/staging/media/atomisp/include/linux/atomisp.h b/drivers/staging/media/atomisp/include/linux/atomisp.h
-index fc2e76694613..1acfb53eb171 100644
---- a/drivers/staging/media/atomisp/include/linux/atomisp.h
-+++ b/drivers/staging/media/atomisp/include/linux/atomisp.h
-@@ -1274,7 +1274,7 @@ struct atomisp_sensor_ae_bracketing_lut {
- /* VCM slew control */
- #define V4L2_CID_VCM_SLEW                  (V4L2_CID_CAMERA_LASTP1 + 11)
- /* VCM step time */
--#define V4L2_CID_VCM_TIMEING               (V4L2_CID_CAMERA_LASTP1 + 12)
-+#define V4L2_CID_VCM_TIMING                (V4L2_CID_CAMERA_LASTP1 + 12)
- 
- /* Query Focus Status */
- #define V4L2_CID_FOCUS_STATUS              (V4L2_CID_CAMERA_LASTP1 + 14)
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index 2758c2da60da..5754e66eb024 100644
+index 75cbc46f4a07..f3548e741cc5 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -6005,10 +6005,9 @@ int atomisp_set_fmt(struct video_device *vdev, struct v4l2_format *f)
- 				 output_info.padded_width, 8);
- 		pipe->pix.sizeimage =
- 		    PAGE_ALIGN(f->fmt.pix.height * pipe->pix.bytesperline);
--
+@@ -1170,8 +1170,7 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
+ 			atomisp_apply_css_parameters(asd,
+ 						     &asd->params.css_param);
+ 			if (asd->params.css_param.update_flag.dz_config)
+-				atomisp_css_set_dz_config(asd,
+-							  &asd->params.css_param.dz_config);
++				asd->params.config.dz_config = &asd->params.css_param.dz_config;
+ 			/* New global dvs 6axis config should be blocked
+ 			 * here if there's a buffer with per-frame parameters
+ 			 * pending in CSS frame buffer queue.
+@@ -1262,9 +1261,15 @@ void atomisp_delayed_init_work(struct work_struct *work)
+ 	 */
+ 	if (!ATOMISP_USE_YUVPP(asd)) {
+ 		struct v4l2_event event = {0};
++		struct ia_css_stream *stream;
+ 
+-		atomisp_css_allocate_continuous_frames(false, asd);
+-		atomisp_css_update_continuous_frames(asd);
++		stream = asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream;
++
++
++		if (ia_css_alloc_continuous_frame_remain(stream))
++			return;
++
++		ia_css_update_continuous_frames(stream);
+ 
+ 		event.type = V4L2_EVENT_ATOMISP_RAW_BUFFERS_ALLOC_DONE;
+ 		v4l2_event_queue(asd->subdev.devnode, &event);
+@@ -1823,7 +1828,8 @@ void atomisp_setup_flash(struct atomisp_sub_device *asd)
+ 			return;
+ 		}
+ 
+-		atomisp_css_request_flash(asd);
++		ia_css_stream_request_flash(asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream);
++
+ 		asd->params.flash_state = ATOMISP_FLASH_ONGOING;
+ 	} else {
+ 		asd->params.flash_state = ATOMISP_FLASH_IDLE;
+@@ -2107,10 +2113,9 @@ int atomisp_gdc_cac(struct atomisp_sub_device *asd, int flag,
+ 
+ 	asd->params.gdc_cac_en = !!*value;
+ 	if (asd->params.gdc_cac_en) {
+-		atomisp_css_set_morph_table(asd,
+-					    asd->params.css_param.morph_table);
++		asd->params.config.morph_table = asd->params.css_param.morph_table;
+ 	} else {
+-		atomisp_css_set_morph_table(asd, NULL);
++		asd->params.config.morph_table = NULL;
  	}
- 	dev_dbg(isp->dev, "%s: image size: %d, %d bytes per line\n",
--		__func__, pipe->pix.sizeimage,pipe-> pix.bytesperline);
-+		__func__, pipe->pix.sizeimage, pipe->pix.bytesperline);
+ 	asd->params.css_update_params_needed = true;
+ 	atomisp_update_capture_mode(asd);
+@@ -2164,7 +2169,7 @@ int atomisp_nr(struct atomisp_sub_device *asd, int flag,
+ 		/* Set nr config to isp parameters */
+ 		memcpy(&asd->params.css_param.nr_config, arg,
+ 		       sizeof(struct ia_css_nr_config));
+-		atomisp_css_set_nr_config(asd, &asd->params.css_param.nr_config);
++		asd->params.config.nr_config = &asd->params.css_param.nr_config;
+ 		asd->params.css_update_params_needed = true;
+ 	}
+ 	return 0;
+@@ -2185,7 +2190,7 @@ int atomisp_tnr(struct atomisp_sub_device *asd, int flag,
+ 		/* Set tnr config to isp parameters */
+ 		memcpy(&asd->params.css_param.tnr_config, config,
+ 		       sizeof(struct ia_css_tnr_config));
+-		atomisp_css_set_tnr_config(asd, &asd->params.css_param.tnr_config);
++		asd->params.config.tnr_config = &asd->params.css_param.tnr_config;
+ 		asd->params.css_update_params_needed = true;
+ 	}
  
- 	if (f->fmt.pix.field == V4L2_FIELD_ANY)
- 		f->fmt.pix.field = V4L2_FIELD_NONE;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index b096b7d30463..18010bc861fc 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -479,7 +479,6 @@ static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
- 	if (i >= MAX_SUBDEVS)
- 		return NULL;
+@@ -2206,7 +2211,7 @@ int atomisp_black_level(struct atomisp_sub_device *asd, int flag,
+ 		/* Set ob config to isp parameters */
+ 		memcpy(&asd->params.css_param.ob_config, config,
+ 		       sizeof(struct ia_css_ob_config));
+-		atomisp_css_set_ob_config(asd, &asd->params.css_param.ob_config);
++		asd->params.config.ob_config = &asd->params.css_param.ob_config;
+ 		asd->params.css_update_params_needed = true;
+ 	}
  
--
- 	if (power) {
- 		gmin_subdevs[i].pwm_i2c_addr = power->addr;
- 		dev_info(dev,
-@@ -616,6 +615,7 @@ static int axp_regulator_set(struct device *dev, struct gmin_subdev *gs,
- static int axp_v1p8_on(struct device *dev, struct gmin_subdev *gs)
+@@ -2227,7 +2232,7 @@ int atomisp_ee(struct atomisp_sub_device *asd, int flag,
+ 		/* Set ee config to isp parameters */
+ 		memcpy(&asd->params.css_param.ee_config, config,
+ 		       sizeof(asd->params.css_param.ee_config));
+-		atomisp_css_set_ee_config(asd, &asd->params.css_param.ee_config);
++		asd->params.config.ee_config = &asd->params.css_param.ee_config;
+ 		asd->params.css_update_params_needed = true;
+ 	}
+ 
+@@ -2248,7 +2253,7 @@ int atomisp_gamma(struct atomisp_sub_device *asd, int flag,
+ 		/* Set gamma table to isp parameters */
+ 		memcpy(&asd->params.css_param.gamma_table, config,
+ 		       sizeof(asd->params.css_param.gamma_table));
+-		atomisp_css_set_gamma_table(asd, &asd->params.css_param.gamma_table);
++		asd->params.config.gamma_table = &asd->params.css_param.gamma_table;
+ 	}
+ 
+ 	return 0;
+@@ -2288,7 +2293,7 @@ int atomisp_gamma_correction(struct atomisp_sub_device *asd, int flag,
+ 		/* Set gamma correction params to isp parameters */
+ 		memcpy(&asd->params.css_param.gc_config, config,
+ 		       sizeof(asd->params.css_param.gc_config));
+-		atomisp_css_set_gc_config(asd, &asd->params.css_param.gc_config);
++		asd->params.config.gc_config = &asd->params.css_param.gc_config;
+ 		asd->params.css_update_params_needed = true;
+ 	}
+ 
+@@ -2309,7 +2314,7 @@ int atomisp_formats(struct atomisp_sub_device *asd, int flag,
+ 		/* Set narrow gamma flag to isp parameters */
+ 		memcpy(&asd->params.css_param.formats_config, config,
+ 		       sizeof(asd->params.css_param.formats_config));
+-		atomisp_css_set_formats_config(asd, &asd->params.css_param.formats_config);
++		asd->params.config.formats_config = &asd->params.css_param.formats_config;
+ 	}
+ 
+ 	return 0;
+@@ -2320,7 +2325,7 @@ void atomisp_free_internal_buffers(struct atomisp_sub_device *asd)
+ 	atomisp_free_css_parameters(&asd->params.css_param);
+ 
+ 	if (asd->raw_output_frame) {
+-		atomisp_css_frame_free(asd->raw_output_frame);
++		ia_css_frame_free(asd->raw_output_frame);
+ 		asd->raw_output_frame = NULL;
+ 	}
+ }
+@@ -2472,7 +2477,7 @@ int atomisp_gdc_cac_table(struct atomisp_sub_device *asd, int flag,
+ 		}
+ 		asd->params.css_param.morph_table = tab;
+ 		if (asd->params.gdc_cac_en)
+-			atomisp_css_set_morph_table(asd, tab);
++			asd->params.config.morph_table = tab;
+ 	}
+ 
+ 	return 0;
+@@ -2514,7 +2519,7 @@ int atomisp_macc_table(struct atomisp_sub_device *asd, int flag,
+ 		memcpy(macc_table, &config->table,
+ 		       sizeof(struct ia_css_macc_table));
+ 		if (config->color_effect == asd->params.color_effect)
+-			atomisp_css_set_macc_table(asd, macc_table);
++			asd->params.config.macc_table = macc_table;
+ 	}
+ 
+ 	return 0;
+@@ -3151,84 +3156,82 @@ void atomisp_apply_css_parameters(
+     struct atomisp_css_params *css_param)
  {
- 	int ret;
-+
- 	ret = axp_regulator_set(dev, gs, gs->eldo2_sel_reg, gs->eldo2_1p8v,
- 				ELDO_CTRL_REG, gs->eldo2_ctrl_shift, true);
+ 	if (css_param->update_flag.wb_config)
+-		atomisp_css_set_wb_config(asd, &css_param->wb_config);
++		asd->params.config.wb_config = &css_param->wb_config;
+ 
+ 	if (css_param->update_flag.ob_config)
+-		atomisp_css_set_ob_config(asd, &css_param->ob_config);
++		asd->params.config.ob_config = &css_param->ob_config;
+ 
+ 	if (css_param->update_flag.dp_config)
+-		atomisp_css_set_dp_config(asd, &css_param->dp_config);
++		asd->params.config.dp_config = &css_param->dp_config;
+ 
+ 	if (css_param->update_flag.nr_config)
+-		atomisp_css_set_nr_config(asd, &css_param->nr_config);
++		asd->params.config.nr_config = &css_param->nr_config;
+ 
+ 	if (css_param->update_flag.ee_config)
+-		atomisp_css_set_ee_config(asd, &css_param->ee_config);
++		asd->params.config.ee_config = &css_param->ee_config;
+ 
+ 	if (css_param->update_flag.tnr_config)
+-		atomisp_css_set_tnr_config(asd, &css_param->tnr_config);
++		asd->params.config.tnr_config = &css_param->tnr_config;
+ 
+ 	if (css_param->update_flag.a3a_config)
+-		atomisp_css_set_3a_config(asd, &css_param->s3a_config);
++		asd->params.config.s3a_config = &css_param->s3a_config;
+ 
+ 	if (css_param->update_flag.ctc_config)
+-		atomisp_css_set_ctc_config(asd, &css_param->ctc_config);
++		asd->params.config.ctc_config = &css_param->ctc_config;
+ 
+ 	if (css_param->update_flag.cnr_config)
+-		atomisp_css_set_cnr_config(asd, &css_param->cnr_config);
++		asd->params.config.cnr_config = &css_param->cnr_config;
+ 
+ 	if (css_param->update_flag.ecd_config)
+-		atomisp_css_set_ecd_config(asd, &css_param->ecd_config);
++		asd->params.config.ecd_config = &css_param->ecd_config;
+ 
+ 	if (css_param->update_flag.ynr_config)
+-		atomisp_css_set_ynr_config(asd, &css_param->ynr_config);
++		asd->params.config.ynr_config = &css_param->ynr_config;
+ 
+ 	if (css_param->update_flag.fc_config)
+-		atomisp_css_set_fc_config(asd, &css_param->fc_config);
++		asd->params.config.fc_config = &css_param->fc_config;
+ 
+ 	if (css_param->update_flag.macc_config)
+-		atomisp_css_set_macc_config(asd, &css_param->macc_config);
++		asd->params.config.macc_config = &css_param->macc_config;
+ 
+ 	if (css_param->update_flag.aa_config)
+-		atomisp_css_set_aa_config(asd, &css_param->aa_config);
++		asd->params.config.aa_config = &css_param->aa_config;
+ 
+ 	if (css_param->update_flag.anr_config)
+-		atomisp_css_set_anr_config(asd, &css_param->anr_config);
++		asd->params.config.anr_config = &css_param->anr_config;
+ 
+ 	if (css_param->update_flag.xnr_config)
+-		atomisp_css_set_xnr_config(asd, &css_param->xnr_config);
++		asd->params.config.xnr_config = &css_param->xnr_config;
+ 
+ 	if (css_param->update_flag.yuv2rgb_cc_config)
+-		atomisp_css_set_yuv2rgb_cc_config(asd,
+-						  &css_param->yuv2rgb_cc_config);
++		asd->params.config.yuv2rgb_cc_config = &css_param->yuv2rgb_cc_config;
+ 
+ 	if (css_param->update_flag.rgb2yuv_cc_config)
+-		atomisp_css_set_rgb2yuv_cc_config(asd,
+-						  &css_param->rgb2yuv_cc_config);
++		asd->params.config.rgb2yuv_cc_config = &css_param->rgb2yuv_cc_config;
+ 
+ 	if (css_param->update_flag.macc_table)
+-		atomisp_css_set_macc_table(asd, &css_param->macc_table);
++		asd->params.config.macc_table = &css_param->macc_table;
+ 
+ 	if (css_param->update_flag.xnr_table)
+-		atomisp_css_set_xnr_table(asd, &css_param->xnr_table);
++		asd->params.config.xnr_table = &css_param->xnr_table;
+ 
+ 	if (css_param->update_flag.r_gamma_table)
+-		atomisp_css_set_r_gamma_table(asd, &css_param->r_gamma_table);
++		asd->params.config.r_gamma_table = &css_param->r_gamma_table;
+ 
+ 	if (css_param->update_flag.g_gamma_table)
+-		atomisp_css_set_g_gamma_table(asd, &css_param->g_gamma_table);
++		asd->params.config.g_gamma_table = &css_param->g_gamma_table;
+ 
+ 	if (css_param->update_flag.b_gamma_table)
+-		atomisp_css_set_b_gamma_table(asd, &css_param->b_gamma_table);
++		asd->params.config.b_gamma_table = &css_param->b_gamma_table;
+ 
+ 	if (css_param->update_flag.anr_thres)
+ 		atomisp_css_set_anr_thres(asd, &css_param->anr_thres);
+ 
+ 	if (css_param->update_flag.shading_table)
+-		atomisp_css_set_shading_table(asd, css_param->shading_table);
++		asd->params.config.shading_table = css_param->shading_table;
+ 
+ 	if (css_param->update_flag.morph_table && asd->params.gdc_cac_en)
+-		atomisp_css_set_morph_table(asd, css_param->morph_table);
++		asd->params.config.morph_table = css_param->morph_table;
+ 
+ 	if (css_param->update_flag.dvs2_coefs) {
+ 		struct ia_css_dvs_grid_info *dvs_grid_info =
+@@ -4363,18 +4366,18 @@ int atomisp_param(struct atomisp_sub_device *asd, int flag,
+ 	    asd->params.color_effect != V4L2_COLORFX_BW) {
+ 		memcpy(&asd->params.css_param.cc_config, &config->cc_config,
+ 		       sizeof(struct ia_css_cc_config));
+-		atomisp_css_set_cc_config(asd, &asd->params.css_param.cc_config);
++		asd->params.config.cc_config = &asd->params.css_param.cc_config;
+ 	}
+ 
+-	atomisp_css_set_wb_config(asd, &asd->params.css_param.wb_config);
+-	atomisp_css_set_ob_config(asd, &asd->params.css_param.ob_config);
+-	atomisp_css_set_de_config(asd, &asd->params.css_param.de_config);
+-	atomisp_css_set_dz_config(asd, &asd->params.css_param.dz_config);
+-	atomisp_css_set_ce_config(asd, &asd->params.css_param.ce_config);
+-	atomisp_css_set_dp_config(asd, &asd->params.css_param.dp_config);
+-	atomisp_css_set_nr_config(asd, &asd->params.css_param.nr_config);
+-	atomisp_css_set_ee_config(asd, &asd->params.css_param.ee_config);
+-	atomisp_css_set_tnr_config(asd, &asd->params.css_param.tnr_config);
++	asd->params.config.wb_config = &asd->params.css_param.wb_config;
++	asd->params.config.ob_config = &asd->params.css_param.ob_config;
++	asd->params.config.de_config = &asd->params.css_param.de_config;
++	asd->params.config.dz_config = &asd->params.css_param.dz_config;
++	asd->params.config.ce_config = &asd->params.css_param.ce_config;
++	asd->params.config.dp_config = &asd->params.css_param.dp_config;
++	asd->params.config.nr_config = &asd->params.css_param.nr_config;
++	asd->params.config.ee_config = &asd->params.css_param.ee_config;
++	asd->params.config.tnr_config = &asd->params.css_param.tnr_config;
+ 	asd->params.css_update_params_needed = true;
+ 
+ 	return 0;
+@@ -4463,9 +4466,9 @@ int atomisp_color_effect(struct atomisp_sub_device *asd, int flag,
+ 	atomisp_update_capture_mode(asd);
+ 
+ 	if (cc_config)
+-		atomisp_css_set_cc_config(asd, cc_config);
++		asd->params.config.cc_config = cc_config;
+ 	if (macc_table)
+-		atomisp_css_set_macc_table(asd, macc_table);
++		asd->params.config.macc_table = macc_table;
+ 	if (ctc_table)
+ 		atomisp_css_set_ctc_table(asd, ctc_table);
+ 	asd->params.color_effect = (u32)*effect;
+@@ -4502,7 +4505,7 @@ int atomisp_bad_pixel_param(struct atomisp_sub_device *asd, int flag,
+ 		/* Set bad pixel to isp parameters */
+ 		memcpy(&asd->params.css_param.dp_config, config,
+ 		       sizeof(asd->params.css_param.dp_config));
+-		atomisp_css_set_dp_config(asd, &asd->params.css_param.dp_config);
++		asd->params.config.dp_config = &asd->params.css_param.dp_config;
+ 		asd->params.css_update_params_needed = true;
+ 	}
+ 
+@@ -4595,7 +4598,7 @@ atomisp_v4l2_framebuffer_to_css_frame(const struct v4l2_framebuffer *arg,
+ 	/* Note: the padded width on an ia_css_frame is in elements, not in
+ 	   bytes. The RAW frame we use here should always be a 16bit RAW
+ 	   frame. This is why we bytesperline/2 is equal to the padded with */
+-	if (atomisp_css_frame_allocate(&res, arg->fmt.width, arg->fmt.height,
++	if (ia_css_frame_allocate(&res, arg->fmt.width, arg->fmt.height,
+ 				       sh_format, padded_width, 0)) {
+ 		ret = -ENOMEM;
+ 		goto err;
+@@ -4619,7 +4622,7 @@ atomisp_v4l2_framebuffer_to_css_frame(const struct v4l2_framebuffer *arg,
+ 
+ err:
+ 	if (ret && res)
+-		atomisp_css_frame_free(res);
++		ia_css_frame_free(res);
+ 	if (tmp_buf)
+ 		vfree(tmp_buf);
+ 	if (ret == 0)
+@@ -4642,10 +4645,12 @@ int atomisp_fixed_pattern_table(struct atomisp_sub_device *asd,
+ 	ret = atomisp_v4l2_framebuffer_to_css_frame(arg, &raw_black_frame);
  	if (ret)
-@@ -640,6 +640,7 @@ static int axp_v1p8_on(struct device *dev, struct gmin_subdev *gs)
- static int axp_v1p8_off(struct device *dev, struct gmin_subdev *gs)
- {
- 	int ret;
+ 		return ret;
+-	if (atomisp_css_set_black_frame(asd, raw_black_frame))
+-		ret = -ENOMEM;
+ 
+-	atomisp_css_frame_free(raw_black_frame);
++	if (sh_css_set_black_frame(asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream,
++				   raw_black_frame) != 0)
++		return -ENOMEM;
 +
- 	ret = axp_regulator_set(dev, gs, gs->eldo1_sel_reg, gs->eldo1_1p8v,
- 				ELDO_CTRL_REG, gs->eldo1_ctrl_shift, false);
- 	if (ret)
-@@ -650,7 +651,6 @@ static int axp_v1p8_off(struct device *dev, struct gmin_subdev *gs)
++	ia_css_frame_free(raw_black_frame);
  	return ret;
  }
  
--
- static int gmin_gpio0_ctrl(struct v4l2_subdev *subdev, int on)
- {
- 	struct gmin_subdev *gs = find_gmin_subdev(subdev);
-@@ -753,7 +753,6 @@ static int gmin_v1p8_ctrl(struct v4l2_subdev *subdev, int on)
- 		dev_err(subdev->dev, "Couldn't set power mode for v1p2\n");
+@@ -4663,10 +4668,10 @@ int atomisp_false_color(struct atomisp_sub_device *asd, int flag,
+ 
+ 	/* Set nr config to isp parameters */
+ 	if (*value) {
+-		atomisp_css_set_default_de_config(asd);
++		asd->params.config.de_config = NULL;
+ 	} else {
+ 		asd->params.css_param.de_config.pixelnoise = 0;
+-		atomisp_css_set_de_config(asd, &asd->params.css_param.de_config);
++		asd->params.config.de_config = &asd->params.css_param.de_config;
+ 	}
+ 	asd->params.css_update_params_needed = true;
+ 	asd->params.false_color = *value;
+@@ -4687,7 +4692,7 @@ int atomisp_false_color_param(struct atomisp_sub_device *asd, int flag,
+ 		/* Set false color to isp parameters */
+ 		memcpy(&asd->params.css_param.de_config, config,
+ 		       sizeof(asd->params.css_param.de_config));
+-		atomisp_css_set_de_config(asd, &asd->params.css_param.de_config);
++		asd->params.config.de_config = &asd->params.css_param.de_config;
+ 		asd->params.css_update_params_needed = true;
  	}
  
--
- 	return -EINVAL;
- }
+@@ -4708,7 +4713,7 @@ int atomisp_white_balance_param(struct atomisp_sub_device *asd, int flag,
+ 		/* Set white balance to isp parameters */
+ 		memcpy(&asd->params.css_param.wb_config, config,
+ 		       sizeof(asd->params.css_param.wb_config));
+-		atomisp_css_set_wb_config(asd, &asd->params.css_param.wb_config);
++		asd->params.config.wb_config = &asd->params.css_param.wb_config;
+ 		asd->params.css_update_params_needed = true;
+ 	}
  
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index d02c500d53b7..e5ade03e4749 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -1563,7 +1563,7 @@ int atomisp_stream_on_master_slave_sensor(struct atomisp_device *isp,
+@@ -4730,7 +4735,7 @@ int atomisp_3a_config_param(struct atomisp_sub_device *asd, int flag,
+ 		/* Set white balance to isp parameters */
+ 		memcpy(&asd->params.css_param.s3a_config, config,
+ 		       sizeof(asd->params.css_param.s3a_config));
+-		atomisp_css_set_3a_config(asd, &asd->params.css_param.s3a_config);
++		asd->params.config.s3a_config = &asd->params.css_param.s3a_config;
+ 		asd->params.css_update_params_needed = true;
+ 	}
  
- /* FIXME! ISP2400 */
- static void __wdt_on_master_slave_sensor(struct atomisp_device *isp,
--				         unsigned int wdt_duration)
-+					 unsigned int wdt_duration)
- {
- 	if (atomisp_buffers_queued(&isp->asd[0]))
- 		atomisp_wdt_refresh(&isp->asd[0], wdt_duration);
-@@ -2467,7 +2467,6 @@ static int atomisp_camera_s_ext_ctrls(struct file *file, void *fh,
- 	int i;
- 	int ret = 0;
+@@ -5191,7 +5196,7 @@ static int atomisp_set_fmt_to_isp(struct video_device *vdev,
+ 				      configure_pp_input_nop;
+ 	u16 stream_index = atomisp_source_pad_to_stream_id(asd, source_pad);
+ 	const struct atomisp_in_fmt_conv *fc;
+-	int ret;
++	int ret, i;
  
--
- 	if (!atomisp_hw_is_isp2401)
- 		motor = isp->inputs[asd->input_curr].motor;
- 	else
-@@ -2484,7 +2483,7 @@ static int atomisp_camera_s_ext_ctrls(struct file *file, void *fh,
- 		case V4L2_CID_EXPOSURE_METERING:
- 		case V4L2_CID_IRIS_ABSOLUTE:
- 		case V4L2_CID_FNUMBER_ABSOLUTE:
--		case V4L2_CID_VCM_TIMEING:
-+		case V4L2_CID_VCM_TIMING:
- 		case V4L2_CID_VCM_SLEW:
- 		case V4L2_CID_3A_LOCK:
- 		case V4L2_CID_TEST_PATTERN:
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index 719ded53ffd8..891c990ab857 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -1092,10 +1092,11 @@ static int atomisp_subdev_probe(struct atomisp_device *isp)
- 	/* FIXME: should return -EPROBE_DEFER if not all subdevs were probed */
- 	for (count = 0; count < SUBDEV_WAIT_TIMEOUT_MAX_COUNT; count++) {
- 		int camera_count = 0;
+ 	v4l2_fh_init(&fh.vfh, vdev);
+ 
+@@ -5288,8 +5293,9 @@ static int atomisp_set_fmt_to_isp(struct video_device *vdev,
+ 	}
+ 
+ 	atomisp_css_input_set_mode(asd, IA_CSS_INPUT_MODE_BUFFERED_SENSOR);
+-	atomisp_css_disable_vf_pp(asd,
+-				  asd->vfpp->val != ATOMISP_VFPP_ENABLE);
 +
- 		for (subdevs = pdata->subdevs; subdevs->type; ++subdevs) {
- 			if (subdevs->type == RAW_CAMERA ||
- 			    subdevs->type == SOC_CAMERA)
--				camera_count ++;
-+				camera_count++;
- 		}
- 		if (camera_count)
- 			break;
-@@ -1571,6 +1572,7 @@ static int init_atomisp_wdts(struct atomisp_device *isp)
++	for (i = 0; i < IA_CSS_PIPE_ID_NUM; i++)
++		asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].pipe_extra_configs[i].disable_vf_pp = asd->vfpp->val != ATOMISP_VFPP_ENABLE;
  
- 	for (i = 0; i < isp->num_of_streams; i++) {
- 		struct atomisp_sub_device *asd = &isp->asd[i];
-+
- 		if (!atomisp_hw_is_isp2401)
- 			timer_setup(&asd->wdt, atomisp_wdt, 0);
- 		else {
-diff --git a/drivers/staging/media/atomisp/pci/css_2400_system/hive/ia_css_isp_states.c b/drivers/staging/media/atomisp/pci/css_2400_system/hive/ia_css_isp_states.c
-index 42e0344c677d..aac816f8d252 100644
---- a/drivers/staging/media/atomisp/pci/css_2400_system/hive/ia_css_isp_states.c
-+++ b/drivers/staging/media/atomisp/pci/css_2400_system/hive/ia_css_isp_states.c
-@@ -210,7 +210,7 @@ ia_css_initialize_ynr_state(
+ 	/* ISP2401 new input system need to use copy pipe */
+ 	if (asd->copy_mode) {
+@@ -5434,12 +5440,12 @@ static int atomisp_set_fmt_to_isp(struct video_device *vdev,
+ 	atomisp_update_grid_info(asd, pipe_id, source_pad);
  
- /* Code generated by genparam/genstate.c:gen_state_init_table() */
+ 	/* Free the raw_dump buffer first */
+-	atomisp_css_frame_free(asd->raw_output_frame);
++	ia_css_frame_free(asd->raw_output_frame);
+ 	asd->raw_output_frame = NULL;
  
--void (* ia_css_kernel_init_state[IA_CSS_NUM_STATE_IDS])(
-+void (*ia_css_kernel_init_state[IA_CSS_NUM_STATE_IDS])(
-     const struct ia_css_binary *binary) = {
- 	ia_css_initialize_aa_state,
- 	ia_css_initialize_cnr_state,
-diff --git a/drivers/staging/media/atomisp/pci/css_2401_system/hive/ia_css_isp_configs.c b/drivers/staging/media/atomisp/pci/css_2401_system/hive/ia_css_isp_configs.c
-index 29d85407cac4..3ef556a64825 100644
---- a/drivers/staging/media/atomisp/pci/css_2401_system/hive/ia_css_isp_configs.c
-+++ b/drivers/staging/media/atomisp/pci/css_2401_system/hive/ia_css_isp_configs.c
-@@ -272,7 +272,6 @@ ia_css_configure_output(
- 			    "ia_css_configure_output() leave:\n");
- }
+ 	if (!asd->continuous_mode->val &&
+ 	    !asd->params.online_process && !isp->sw_contex.file_input &&
+-	    atomisp_css_frame_allocate_from_info(&asd->raw_output_frame,
++	    ia_css_frame_allocate_from_info(&asd->raw_output_frame,
+ 		    raw_output_info))
+ 		return -ENOMEM;
  
+@@ -6086,7 +6092,7 @@ int atomisp_set_shading_table(struct atomisp_sub_device *asd,
+ 		return -EINVAL;
+ 
+ 	if (!user_shading_table->enable) {
+-		atomisp_css_set_shading_table(asd, NULL);
++		asd->params.config.shading_table = NULL;
+ 		asd->params.sc_en = false;
+ 		return 0;
+ 	}
+@@ -6131,7 +6137,7 @@ int atomisp_set_shading_table(struct atomisp_sub_device *asd,
+ 
+ 	free_table = asd->params.css_param.shading_table;
+ 	asd->params.css_param.shading_table = shading_table;
+-	atomisp_css_set_shading_table(asd, shading_table);
++	asd->params.config.shading_table = shading_table;
+ 	asd->params.sc_en = true;
+ 
+ out:
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat.h b/drivers/staging/media/atomisp/pci/atomisp_compat.h
+index 87677e1117ff..2a4d1b469ebf 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_compat.h
++++ b/drivers/staging/media/atomisp/pci/atomisp_compat.h
+@@ -243,30 +243,6 @@ int atomisp_css_input_configure_port(struct atomisp_sub_device *asd,
+ 				     unsigned int metadata_width,
+ 				     unsigned int metadata_height);
+ 
+-int atomisp_css_frame_allocate(struct ia_css_frame **frame,
+-			       unsigned int width, unsigned int height,
+-			       enum ia_css_frame_format format,
+-			       unsigned int padded_width,
+-			       unsigned int raw_bit_depth);
 -
- /* Code generated by genparam/genconfig.c:gen_configure_function() */
- 
- void
-diff --git a/drivers/staging/media/atomisp/pci/css_2401_system/hive/ia_css_isp_states.c b/drivers/staging/media/atomisp/pci/css_2401_system/hive/ia_css_isp_states.c
-index c54787f3fc24..a8cc21d45bd8 100644
---- a/drivers/staging/media/atomisp/pci/css_2401_system/hive/ia_css_isp_states.c
-+++ b/drivers/staging/media/atomisp/pci/css_2401_system/hive/ia_css_isp_states.c
-@@ -210,7 +210,7 @@ ia_css_initialize_ynr_state(
- 
- /* Code generated by genparam/genstate.c:gen_state_init_table() */
- 
--void (* ia_css_kernel_init_state[IA_CSS_NUM_STATE_IDS])(
-+void (*ia_css_kernel_init_state[IA_CSS_NUM_STATE_IDS])(
-     const struct ia_css_binary *binary) = {
- 	ia_css_initialize_aa_state,
- 	ia_css_initialize_cnr_state,
-diff --git a/drivers/staging/media/atomisp/pci/css_2401_system/isys_dma_global.h b/drivers/staging/media/atomisp/pci/css_2401_system/isys_dma_global.h
-index 2ca4d5210a38..636d34a83931 100644
---- a/drivers/staging/media/atomisp/pci/css_2401_system/isys_dma_global.h
-+++ b/drivers/staging/media/atomisp/pci/css_2401_system/isys_dma_global.h
-@@ -46,6 +46,7 @@ struct isys2401_dma_port_cfg_s {
- 	u32 cropping;
- 	u32 width;
- };
-+
- /* end of DMA Port */
- 
- /************************************************
-diff --git a/drivers/staging/media/atomisp/pci/css_trace.h b/drivers/staging/media/atomisp/pci/css_trace.h
-index 32520c21c324..f272098b28d0 100644
---- a/drivers/staging/media/atomisp/pci/css_trace.h
-+++ b/drivers/staging/media/atomisp/pci/css_trace.h
-@@ -171,7 +171,6 @@ enum TRACE_DUMP_FORMAT {
- #define TRACE_ISP_DATA_SIZE   (TRACE_ISP_SIZE - TRACE_ISP_HEADER_SIZE)
- #define TRACE_ISP_MAX_POINTS  (TRACE_ISP_DATA_SIZE / TRACE_ISP_ITEM_SIZE)
- 
+-int atomisp_css_frame_allocate_from_info(struct ia_css_frame **frame,
+-	const struct ia_css_frame_info *info);
 -
- /* common majors */
- /* SP0 */
- #define MAJOR_MAIN              1
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/debug.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/debug.c
-index 85b054c5ec80..200926cca00f 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/debug.c
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/debug.c
-@@ -20,7 +20,6 @@
- #include "debug_private.h"
- #endif /* __INLINE_DEBUG__ */
- 
+-void atomisp_css_frame_free(struct ia_css_frame *frame);
 -
- #define __INLINE_SP__
- #include "sp.h"
- 
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/debug_private.h b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/debug_private.h
-index 0b107ee13072..23b18a824cc4 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/debug_private.h
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/debug_private.h
-@@ -22,7 +22,6 @@
- #define __INLINE_ISP__
- #include "isp.h"
- 
+-int atomisp_css_frame_map(struct ia_css_frame **frame,
+-			  const struct ia_css_frame_info *info,
+-			  const void __user *data, uint16_t attribute,
+-			  unsigned int pgnr);
 -
- #include "assert_support.h"
+-int atomisp_css_set_black_frame(struct atomisp_sub_device *asd,
+-				const struct ia_css_frame *raw_black_frame);
+-
+-int atomisp_css_allocate_continuous_frames(bool init_time,
+-	struct atomisp_sub_device *asd);
+-
+-void atomisp_css_update_continuous_frames(struct atomisp_sub_device *asd);
+-
+ void atomisp_create_pipes_stream(struct atomisp_sub_device *asd);
+ void atomisp_destroy_pipes_stream_force(struct atomisp_sub_device *asd);
  
- STORAGE_CLASS_DEBUG_C bool is_debug_buffer_empty(void)
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_include/string_support.h b/drivers/staging/media/atomisp/pci/hive_isp_css_include/string_support.h
-index 84efbbe78650..f653ec797601 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_include/string_support.h
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_include/string_support.h
-@@ -161,5 +161,4 @@ static inline int strcpy_s(
+@@ -277,9 +253,6 @@ int atomisp_css_continuous_set_num_raw_frames(
+     struct atomisp_sub_device *asd,
+     int num_frames);
+ 
+-void atomisp_css_disable_vf_pp(struct atomisp_sub_device *asd,
+-			       bool disable);
+-
+ int atomisp_css_copy_configure_output(struct atomisp_sub_device *asd,
+ 				      unsigned int stream_index,
+ 				      unsigned int width, unsigned int height,
+@@ -388,61 +361,9 @@ int atomisp_css_exp_id_unlock(struct atomisp_sub_device *asd, int exp_id);
+ int atomisp_css_capture_enable_xnr(struct atomisp_sub_device *asd,
+ 				   bool enable);
+ 
+-void atomisp_css_send_input_frame(struct atomisp_sub_device *asd,
+-				  unsigned short *data, unsigned int width,
+-				  unsigned int height);
+-
+-bool atomisp_css_isp_has_started(void);
+-
+-void atomisp_css_request_flash(struct atomisp_sub_device *asd);
+-
+-void atomisp_css_set_wb_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_wb_config *wb_config);
+-
+-void atomisp_css_set_ob_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_ob_config *ob_config);
+-
+-void atomisp_css_set_dp_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_dp_config *dp_config);
+-
+-void atomisp_css_set_de_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_de_config *de_config);
+-
+-void atomisp_css_set_dz_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_dz_config *dz_config);
+-
+-void atomisp_css_set_default_de_config(struct atomisp_sub_device *asd);
+-
+-void atomisp_css_set_ce_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_ce_config *ce_config);
+-
+-void atomisp_css_set_nr_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_nr_config *nr_config);
+-
+-void atomisp_css_set_ee_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_ee_config *ee_config);
+-
+-void atomisp_css_set_tnr_config(struct atomisp_sub_device *asd,
+-				struct ia_css_tnr_config *tnr_config);
+-
+-void atomisp_css_set_cc_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_cc_config *cc_config);
+-
+-void atomisp_css_set_macc_table(struct atomisp_sub_device *asd,
+-				struct ia_css_macc_table *macc_table);
+-
+-void atomisp_css_set_gamma_table(struct atomisp_sub_device *asd,
+-				 struct ia_css_gamma_table *gamma_table);
+-
+ void atomisp_css_set_ctc_table(struct atomisp_sub_device *asd,
+ 			       struct ia_css_ctc_table *ctc_table);
+ 
+-void atomisp_css_set_gc_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_gc_config *gc_config);
+-
+-void atomisp_css_set_3a_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_3a_config *s3a_config);
+-
+ void atomisp_css_video_set_dis_vector(struct atomisp_sub_device *asd,
+ 				      struct atomisp_dis_vector *vector);
+ 
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+index 3dc5c4eeb8d3..76e5eda0a8a8 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+@@ -2099,72 +2099,6 @@ int atomisp_css_input_configure_port(
  	return 0;
  }
  
+-int atomisp_css_frame_allocate(struct ia_css_frame **frame,
+-			       unsigned int width, unsigned int height,
+-			       enum ia_css_frame_format format,
+-			       unsigned int padded_width,
+-			       unsigned int raw_bit_depth)
+-{
+-	if (ia_css_frame_allocate(frame, width, height, format,
+-				  padded_width, raw_bit_depth) != 0)
+-		return -ENOMEM;
 -
- #endif /* __STRING_SUPPORT_H_INCLUDED__ */
-diff --git a/drivers/staging/media/atomisp/pci/ia_css_isp_states.h b/drivers/staging/media/atomisp/pci/ia_css_isp_states.h
-index cc9cdcd0e2be..d50c7d5ed5b6 100644
---- a/drivers/staging/media/atomisp/pci/ia_css_isp_states.h
-+++ b/drivers/staging/media/atomisp/pci/ia_css_isp_states.h
-@@ -65,7 +65,7 @@ struct ia_css_state_memory_offsets {
- #include "ia_css_binary.h"   /* struct ia_css_binary */
- /* Code generated by genparam/genstate.c:gen_state_init_table() */
- 
--extern void (* ia_css_kernel_init_state[IA_CSS_NUM_STATE_IDS])(
-+extern void (*ia_css_kernel_init_state[IA_CSS_NUM_STATE_IDS])(
-     const struct ia_css_binary *binary);
- 
- #endif /* IA_CSS_INCLUDE_STATE */
-diff --git a/drivers/staging/media/atomisp/pci/ia_css_pipe_public.h b/drivers/staging/media/atomisp/pci/ia_css_pipe_public.h
-index e782978a5ce7..34d64998202a 100644
---- a/drivers/staging/media/atomisp/pci/ia_css_pipe_public.h
-+++ b/drivers/staging/media/atomisp/pci/ia_css_pipe_public.h
-@@ -502,7 +502,7 @@ ia_css_pipe_get_qos_ext_state(struct ia_css_pipe *pipe,
-  */
- enum ia_css_err
- ia_css_pipe_update_qos_ext_mapped_arg(struct ia_css_pipe *pipe,
--				      uint32_t fw_handle,
-+				      u32 fw_handle,
- 				      struct ia_css_isp_param_css_segments *css_seg,
- 				      struct ia_css_isp_param_isp_segments *isp_seg);
- 
-diff --git a/drivers/staging/media/atomisp/pci/ia_css_types.h b/drivers/staging/media/atomisp/pci/ia_css_types.h
-index d3584756e34e..65073332301a 100644
---- a/drivers/staging/media/atomisp/pci/ia_css_types.h
-+++ b/drivers/staging/media/atomisp/pci/ia_css_types.h
-@@ -306,7 +306,6 @@ struct ia_css_shading_info {
- 			u32 bayer_scale_ver_ratio_in;
- 			u32 bayer_scale_ver_ratio_out;
- 
+-	return 0;
+-}
 -
- 			/** Vertical ratio of bayer scaling
- 			between input height and output height, for the scaling
- 			which should be done before shading correction.
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2_param.h b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2_param.h
-index 47a0fb08cfcc..629c9ae6ad23 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2_param.h
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/anr/anr_2/ia_css_anr2_param.h
-@@ -21,7 +21,7 @@
- /* Advanced Noise Reduction (ANR) thresholds */
- 
- struct ia_css_isp_anr2_params {
--	VMEM_ARRAY(data, ANR_PARAM_SIZE *ISP_VEC_NELEMS);
-+	VMEM_ARRAY(data, ANR_PARAM_SIZE * ISP_VEC_NELEMS);
- };
- 
- #endif /* __IA_CSS_ANR2_PARAM_H */
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/bnlm/ia_css_bnlm.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/bnlm/ia_css_bnlm.host.c
-index 6888a7363710..43c57e401a86 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/bnlm/ia_css_bnlm.host.c
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/bnlm/ia_css_bnlm.host.c
-@@ -42,7 +42,7 @@ static const s32 div_lut_intercepts[BNLM_DIV_LUT_SIZE] = {
-  */
- static inline void
- bnlm_lut_encode(struct bnlm_lut *lut, const int32_t *lut_thr,
--		const int32_t *lut_val, const uint32_t lut_size)
-+		const s32 *lut_val, const uint32_t lut_size)
+-int atomisp_css_frame_allocate_from_info(struct ia_css_frame **frame,
+-	const struct ia_css_frame_info *info)
+-{
+-	if (ia_css_frame_allocate_from_info(frame, info))
+-		return -ENOMEM;
+-
+-	return 0;
+-}
+-
+-void atomisp_css_frame_free(struct ia_css_frame *frame)
+-{
+-	ia_css_frame_free(frame);
+-}
+-
+-int atomisp_css_frame_map(struct ia_css_frame **frame,
+-			  const struct ia_css_frame_info *info,
+-			  const void __user *data, uint16_t attribute,
+-			  unsigned int pgnr)
+-{
+-	if (ia_css_frame_map(frame, info, data, attribute, pgnr)
+-	    != 0)
+-		return -ENOMEM;
+-
+-	return 0;
+-}
+-
+-int atomisp_css_set_black_frame(struct atomisp_sub_device *asd,
+-				const struct ia_css_frame *raw_black_frame)
+-{
+-	if (sh_css_set_black_frame(
+-		asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream,
+-		raw_black_frame) != 0)
+-		return -ENOMEM;
+-
+-	return 0;
+-}
+-
+-int atomisp_css_allocate_continuous_frames(bool init_time,
+-	struct atomisp_sub_device *asd)
+-{
+-	if (ia_css_alloc_continuous_frame_remain(
+-		asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream)
+-	    != 0)
+-		return -EINVAL;
+-	return 0;
+-}
+-
+-void atomisp_css_update_continuous_frames(struct atomisp_sub_device *asd)
+-{
+-	ia_css_update_continuous_frames(
+-	    asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream);
+-}
+-
+ int atomisp_css_stop(struct atomisp_sub_device *asd,
+ 		     enum ia_css_pipe_id pipe_id, bool in_reset)
  {
- 	u32 blk, i;
- 	const u32 block_size = 16;
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/macc/macc1_5/ia_css_macc1_5_param.h b/drivers/staging/media/atomisp/pci/isp/kernels/macc/macc1_5/ia_css_macc1_5_param.h
-index 497ad89ab728..1ac2c9c50a71 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/macc/macc1_5/ia_css_macc1_5_param.h
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/macc/macc1_5/ia_css_macc1_5_param.h
-@@ -25,7 +25,7 @@ struct sh_css_isp_macc1_5_params {
- };
+@@ -2287,16 +2221,6 @@ int atomisp_css_continuous_set_num_raw_frames(
+ 	return 0;
+ }
  
- struct sh_css_isp_macc1_5_vmem_params {
--	VMEM_ARRAY(data, IA_CSS_MACC_NUM_COEFS *ISP_NWAY);
-+	VMEM_ARRAY(data, IA_CSS_MACC_NUM_COEFS * ISP_NWAY);
- };
- 
- #endif /* __IA_CSS_MACC1_5_PARAM_H */
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/sdis/common/ia_css_sdis_common.host.h b/drivers/staging/media/atomisp/pci/isp/kernels/sdis/common/ia_css_sdis_common.host.h
-index c03936fb0550..7f84762d9b98 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/sdis/common/ia_css_sdis_common.host.h
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/sdis/common/ia_css_sdis_common.host.h
-@@ -76,12 +76,12 @@ struct sh_css_isp_sdis_vert_proj_tbl {
- 
- struct sh_css_isp_sdis_hori_coef_tbl {
- 	VMEM_ARRAY(tbl[ISP_DVS_NUM_COEF_TYPES],
--		   ISP_MAX_SDIS_HOR_COEF_NUM_VECS *ISP_NWAY);
-+		   ISP_MAX_SDIS_HOR_COEF_NUM_VECS * ISP_NWAY);
- };
- 
- struct sh_css_isp_sdis_vert_coef_tbl {
- 	VMEM_ARRAY(tbl[ISP_DVS_NUM_COEF_TYPES],
--		   ISP_MAX_SDIS_VER_COEF_NUM_VECS *ISP_NWAY);
-+		   ISP_MAX_SDIS_VER_COEF_NUM_VECS * ISP_NWAY);
- };
- 
- #endif /* defined(__ISP) || defined (MK_FIRMWARE) */
-diff --git a/drivers/staging/media/atomisp/pci/isp2400_system_local.h b/drivers/staging/media/atomisp/pci/isp2400_system_local.h
-index ee38059d6ceb..dad28e42ce5c 100644
---- a/drivers/staging/media/atomisp/pci/isp2400_system_local.h
-+++ b/drivers/staging/media/atomisp/pci/isp2400_system_local.h
-@@ -106,6 +106,7 @@ static const hrt_address IRQ_BASE[N_IRQ_ID] = {
- 	(hrt_address)0x000000000008C000ULL,
- 	(hrt_address)0x0000000000090200ULL
- };
-+
- /*
- 	(hrt_address)0x0000000000000500ULL};
-  */
-@@ -161,6 +162,7 @@ static const hrt_address INPUT_FORMATTER_BASE[N_INPUT_FORMATTER_ID] = {
- static const hrt_address INPUT_SYSTEM_BASE[N_INPUT_SYSTEM_ID] = {
- 	(hrt_address)0x0000000000080000ULL
- };
-+
- /*	(hrt_address)0x0000000000081000ULL, */ /* capture A */
- /*	(hrt_address)0x0000000000082000ULL, */ /* capture B */
- /*	(hrt_address)0x0000000000083000ULL, */ /* capture C */
-@@ -247,6 +249,7 @@ static const hrt_address IRQ_BASE[N_IRQ_ID] = {
- 	(hrt_address)0x0008C000UL,
- 	(hrt_address)0x00090200UL
- };
-+
- /*
- 	(hrt_address)0x00000500UL};
-  */
-@@ -297,12 +300,14 @@ static const hrt_address INPUT_FORMATTER_BASE[N_INPUT_FORMATTER_ID] = {
- 	(hrt_address)0x00030200UL,
- 	(hrt_address)0x00030400UL
- };
-+
- /*	(hrt_address)0x00030600UL, */ /* memcpy() */
- 
- /* INPUT_SYSTEM */
- static const hrt_address INPUT_SYSTEM_BASE[N_INPUT_SYSTEM_ID] = {
- 	(hrt_address)0x00080000UL
- };
-+
- /*	(hrt_address)0x00081000UL, */ /* capture A */
- /*	(hrt_address)0x00082000UL, */ /* capture B */
- /*	(hrt_address)0x00083000UL, */ /* capture C */
-diff --git a/drivers/staging/media/atomisp/pci/isp2401_system_local.h b/drivers/staging/media/atomisp/pci/isp2401_system_local.h
-index 4bd95b818494..1917b1d3b660 100644
---- a/drivers/staging/media/atomisp/pci/isp2401_system_local.h
-+++ b/drivers/staging/media/atomisp/pci/isp2401_system_local.h
-@@ -104,6 +104,7 @@ static const hrt_address IRQ_BASE[N_IRQ_ID] = {
- 	0x000000000008C000ULL,
- 	0x0000000000090200ULL
- };
-+
- /*
- 	0x0000000000000500ULL};
-  */
-@@ -160,6 +161,7 @@ static const hrt_address INPUT_FORMATTER_BASE[N_INPUT_FORMATTER_ID] = {
- static const hrt_address INPUT_SYSTEM_BASE[N_INPUT_SYSTEM_ID] = {
- 	0x0000000000080000ULL
- };
-+
- /*	0x0000000000081000ULL, */ /* capture A */
- /*	0x0000000000082000ULL, */ /* capture B */
- /*	0x0000000000083000ULL, */ /* capture C */
-@@ -287,6 +289,7 @@ static const hrt_address IRQ_BASE[N_IRQ_ID] = {
- 	0x0008C000UL,
- 	0x00090200UL
- };
-+
- /*
- 	0x00000500UL};
-  */
-@@ -336,12 +339,14 @@ static const hrt_address INPUT_FORMATTER_BASE[N_INPUT_FORMATTER_ID] = {
- 	0x00030200UL,
- 	0x00030400UL
- };
-+
- /*	0x00030600UL, */ /* memcpy() */
- 
- /* INPUT_SYSTEM */
- static const hrt_address INPUT_SYSTEM_BASE[N_INPUT_SYSTEM_ID] = {
- 	0x00080000UL
- };
-+
- /*	0x00081000UL, */ /* capture A */
- /*	0x00082000UL, */ /* capture B */
- /*	0x00083000UL, */ /* capture C */
-diff --git a/drivers/staging/media/atomisp/pci/runtime/event/src/event.c b/drivers/staging/media/atomisp/pci/runtime/event/src/event.c
-index 4bbed9ee2e35..0de9de64db55 100644
---- a/drivers/staging/media/atomisp/pci/runtime/event/src/event.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/event/src/event.c
-@@ -29,7 +29,6 @@
- 
- /*#include "sp.h"*/	/* host2sp_enqueue_frame_data() */
- 
+-void atomisp_css_disable_vf_pp(struct atomisp_sub_device *asd,
+-			       bool disable)
+-{
+-	int i;
 -
- #include "assert_support.h"
- #include "platform_support.h"	/* hrt_sleep() */
+-	for (i = 0; i < IA_CSS_PIPE_ID_NUM; i++)
+-		asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL]
+-		.pipe_extra_configs[i].disable_vf_pp = !!disable;
+-}
+-
+ static enum ia_css_pipe_mode __pipe_id_to_pipe_mode(
+     struct atomisp_sub_device *asd,
+     enum ia_css_pipe_id pipe_id)
+@@ -3298,199 +3222,6 @@ int atomisp_css_capture_enable_xnr(struct atomisp_sub_device *asd,
+ 	return 0;
+ }
  
-diff --git a/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c b/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-index 95dcb2b86388..1fa8f7f6ab11 100644
---- a/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-@@ -281,8 +281,7 @@ enum ia_css_err ia_css_frame_allocate_contiguous(struct ia_css_frame **frame,
- 	enum ia_css_err err = IA_CSS_SUCCESS;
+-void atomisp_css_send_input_frame(struct atomisp_sub_device *asd,
+-				  unsigned short *data, unsigned int width,
+-				  unsigned int height)
+-{
+-	ia_css_stream_send_input_frame(
+-	    asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream,
+-	    data, width, height);
+-}
+-
+-bool atomisp_css_isp_has_started(void)
+-{
+-	return ia_css_isp_has_started();
+-}
+-
+-void atomisp_css_request_flash(struct atomisp_sub_device *asd)
+-{
+-	ia_css_stream_request_flash(
+-	    asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream);
+-}
+-
+-void atomisp_css_set_wb_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_wb_config *wb_config)
+-{
+-	asd->params.config.wb_config = wb_config;
+-}
+-
+-void atomisp_css_set_ob_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_ob_config *ob_config)
+-{
+-	asd->params.config.ob_config = ob_config;
+-}
+-
+-void atomisp_css_set_dp_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_dp_config *dp_config)
+-{
+-	asd->params.config.dp_config = dp_config;
+-}
+-
+-void atomisp_css_set_de_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_de_config *de_config)
+-{
+-	asd->params.config.de_config = de_config;
+-}
+-
+-void atomisp_css_set_dz_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_dz_config *dz_config)
+-{
+-	asd->params.config.dz_config = dz_config;
+-}
+-
+-void atomisp_css_set_default_de_config(struct atomisp_sub_device *asd)
+-{
+-	asd->params.config.de_config = NULL;
+-}
+-
+-void atomisp_css_set_ce_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_ce_config *ce_config)
+-{
+-	asd->params.config.ce_config = ce_config;
+-}
+-
+-void atomisp_css_set_nr_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_nr_config *nr_config)
+-{
+-	asd->params.config.nr_config = nr_config;
+-}
+-
+-void atomisp_css_set_ee_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_ee_config *ee_config)
+-{
+-	asd->params.config.ee_config = ee_config;
+-}
+-
+-void atomisp_css_set_tnr_config(struct atomisp_sub_device *asd,
+-				struct ia_css_tnr_config *tnr_config)
+-{
+-	asd->params.config.tnr_config = tnr_config;
+-}
+-
+-void atomisp_css_set_cc_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_cc_config *cc_config)
+-{
+-	asd->params.config.cc_config = cc_config;
+-}
+-
+-void atomisp_css_set_macc_table(struct atomisp_sub_device *asd,
+-				struct ia_css_macc_table *macc_table)
+-{
+-	asd->params.config.macc_table = macc_table;
+-}
+-
+-void atomisp_css_set_macc_config(struct atomisp_sub_device *asd,
+-				 struct ia_css_macc_config *macc_config)
+-{
+-	asd->params.config.macc_config = macc_config;
+-}
+-
+-void atomisp_css_set_ecd_config(struct atomisp_sub_device *asd,
+-				struct ia_css_ecd_config *ecd_config)
+-{
+-	asd->params.config.ecd_config = ecd_config;
+-}
+-
+-void atomisp_css_set_ynr_config(struct atomisp_sub_device *asd,
+-				struct ia_css_ynr_config *ynr_config)
+-{
+-	asd->params.config.ynr_config = ynr_config;
+-}
+-
+-void atomisp_css_set_fc_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_fc_config *fc_config)
+-{
+-	asd->params.config.fc_config = fc_config;
+-}
+-
+-void atomisp_css_set_ctc_config(struct atomisp_sub_device *asd,
+-				struct ia_css_ctc_config *ctc_config)
+-{
+-	asd->params.config.ctc_config = ctc_config;
+-}
+-
+-void atomisp_css_set_cnr_config(struct atomisp_sub_device *asd,
+-				struct ia_css_cnr_config *cnr_config)
+-{
+-	asd->params.config.cnr_config = cnr_config;
+-}
+-
+-void atomisp_css_set_aa_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_aa_config *aa_config)
+-{
+-	asd->params.config.aa_config = aa_config;
+-}
+-
+-void atomisp_css_set_baa_config(struct atomisp_sub_device *asd,
+-				struct ia_css_aa_config *baa_config)
+-{
+-	asd->params.config.baa_config = baa_config;
+-}
+-
+-void atomisp_css_set_anr_config(struct atomisp_sub_device *asd,
+-				struct ia_css_anr_config *anr_config)
+-{
+-	asd->params.config.anr_config = anr_config;
+-}
+-
+-void atomisp_css_set_xnr_config(struct atomisp_sub_device *asd,
+-				struct ia_css_xnr_config *xnr_config)
+-{
+-	asd->params.config.xnr_config = xnr_config;
+-}
+-
+-void atomisp_css_set_yuv2rgb_cc_config(struct atomisp_sub_device *asd,
+-				       struct ia_css_cc_config *yuv2rgb_cc_config)
+-{
+-	asd->params.config.yuv2rgb_cc_config = yuv2rgb_cc_config;
+-}
+-
+-void atomisp_css_set_rgb2yuv_cc_config(struct atomisp_sub_device *asd,
+-				       struct ia_css_cc_config *rgb2yuv_cc_config)
+-{
+-	asd->params.config.rgb2yuv_cc_config = rgb2yuv_cc_config;
+-}
+-
+-void atomisp_css_set_xnr_table(struct atomisp_sub_device *asd,
+-			       struct ia_css_xnr_table *xnr_table)
+-{
+-	asd->params.config.xnr_table = xnr_table;
+-}
+-
+-void atomisp_css_set_r_gamma_table(struct atomisp_sub_device *asd,
+-				   struct ia_css_rgb_gamma_table *r_gamma_table)
+-{
+-	asd->params.config.r_gamma_table = r_gamma_table;
+-}
+-
+-void atomisp_css_set_g_gamma_table(struct atomisp_sub_device *asd,
+-				   struct ia_css_rgb_gamma_table *g_gamma_table)
+-{
+-	asd->params.config.g_gamma_table = g_gamma_table;
+-}
+-
+-void atomisp_css_set_b_gamma_table(struct atomisp_sub_device *asd,
+-				   struct ia_css_rgb_gamma_table *b_gamma_table)
+-{
+-	asd->params.config.b_gamma_table = b_gamma_table;
+-}
+-
+-void atomisp_css_set_gamma_table(struct atomisp_sub_device *asd,
+-				 struct ia_css_gamma_table *gamma_table)
+-{
+-	asd->params.config.gamma_table = gamma_table;
+-}
+-
+ void atomisp_css_set_ctc_table(struct atomisp_sub_device *asd,
+ 			       struct ia_css_ctc_table *ctc_table)
+ {
+@@ -3530,18 +3261,6 @@ void atomisp_css_set_dvs_6axis(struct atomisp_sub_device *asd,
+ 	asd->params.config.dvs_6axis_config = dvs_6axis;
+ }
  
- 	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE,
--			    "ia_css_frame_allocate_contiguous() "
--			    "enter: width=%d, height=%d, format=%d, padded_width=%d, raw_bit_depth=%d\n",
-+			    "ia_css_frame_allocate_contiguous() enter: width=%d, height=%d, format=%d, padded_width=%d, raw_bit_depth=%d\n",
- 			    width, height, format, padded_width, raw_bit_depth);
+-void atomisp_css_set_gc_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_gc_config *gc_config)
+-{
+-	asd->params.config.gc_config = gc_config;
+-}
+-
+-void atomisp_css_set_3a_config(struct atomisp_sub_device *asd,
+-			       struct ia_css_3a_config *s3a_config)
+-{
+-	asd->params.config.s3a_config = s3a_config;
+-}
+-
+ void atomisp_css_video_set_dis_vector(struct atomisp_sub_device *asd,
+ 				      struct atomisp_dis_vector *vector)
+ {
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.h b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.h
+index e8b330dacba9..05f0d6aa72d1 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.h
++++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.h
+@@ -140,18 +140,6 @@ void atomisp_css_set_yuv2rgb_cc_config(struct atomisp_sub_device *asd,
+ void atomisp_css_set_rgb2yuv_cc_config(struct atomisp_sub_device *asd,
+ 				       struct ia_css_cc_config *rgb2yuv_cc_config);
  
- 	err = frame_allocate_with_data(frame, width, height, format,
-@@ -802,9 +801,9 @@ static enum ia_css_err frame_allocate_buffer_data(struct ia_css_frame *frame)
- 	IA_CSS_ENTER_LEAVE_PRIVATE("frame->data_bytes=%d\n", frame->data_bytes);
- #endif
- 	frame->data = hmm_alloc(frame->data_bytes,
--			        HMM_BO_PRIVATE, 0, NULL,
--			        frame->contiguous ?
--			        ATOMISP_MAP_FLAG_CONTIGUOUS : 0);
-+				HMM_BO_PRIVATE, 0, NULL,
-+				frame->contiguous ?
-+				ATOMISP_MAP_FLAG_CONTIGUOUS : 0);
+-void atomisp_css_set_xnr_table(struct atomisp_sub_device *asd,
+-			       struct ia_css_xnr_table *xnr_table);
+-
+-void atomisp_css_set_r_gamma_table(struct atomisp_sub_device *asd,
+-				   struct ia_css_rgb_gamma_table *r_gamma_table);
+-
+-void atomisp_css_set_g_gamma_table(struct atomisp_sub_device *asd,
+-				   struct ia_css_rgb_gamma_table *g_gamma_table);
+-
+-void atomisp_css_set_b_gamma_table(struct atomisp_sub_device *asd,
+-				   struct ia_css_rgb_gamma_table *b_gamma_table);
+-
+ void atomisp_css_set_anr_thres(struct atomisp_sub_device *asd,
+ 			       struct ia_css_anr_thres *anr_thres);
  
- 	if (frame->data == mmgr_NULL)
- 		return IA_CSS_ERR_CANNOT_ALLOCATE_MEMORY;
-diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 90d73fd8aa1b..7fa8ac0c9714 100644
---- a/drivers/staging/media/atomisp/pci/sh_css.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -3686,6 +3686,7 @@ static enum ia_css_err create_host_video_pipeline(struct ia_css_pipe *pipe)
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_file.c b/drivers/staging/media/atomisp/pci/atomisp_file.c
+index 4ab0390316cf..ac2da7c34645 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_file.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_file.c
+@@ -50,11 +50,12 @@ static void file_work(struct work_struct *work)
+ 						V4L2_SUBDEV_FORMAT_ACTIVE,
+ 						ATOMISP_SUBDEV_PAD_SINK);
+ 
+-	while (!atomisp_css_isp_has_started())
++	while (!ia_css_isp_has_started())
+ 		usleep_range(1000, 1500);
+ 
+-	atomisp_css_send_input_frame(asd, buf, isp_sink_fmt.width,
+-				     isp_sink_fmt.height);
++	ia_css_stream_send_input_frame(asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream,
++				       buf, isp_sink_fmt.width,
++				       isp_sink_fmt.height);
+ 	dev_dbg(isp->dev, "<%s: streaming done\n", __func__);
+ }
+ 
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+index 3e5806403b31..8d85b3884ed2 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+@@ -252,8 +252,7 @@ int atomisp_q_video_buffers_to_css(struct atomisp_sub_device *asd,
+ 				err = atomisp_calculate_real_zoom_region(asd,
+ 					&param->params.dz_config, css_pipe_id);
+ 				if (!err)
+-					atomisp_css_set_dz_config(asd,
+-								  &param->params.dz_config);
++					asd->params.config.dz_config = &param->params.dz_config;
+ 			}
+ 			atomisp_css_set_isp_config_applied_frame(asd,
+ 				vm_mem->vaddr);
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+index e5ade03e4749..72c953a6116e 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+@@ -891,7 +891,7 @@ void atomisp_videobuf_free_buf(struct videobuf_buffer *vb)
+ 
+ 	vm_mem = vb->priv;
+ 	if (vm_mem && vm_mem->vaddr) {
+-		atomisp_css_frame_free(vm_mem->vaddr);
++		ia_css_frame_free(vm_mem->vaddr);
+ 		vm_mem->vaddr = NULL;
  	}
- 	if (video_stage) {
- 		int frm;
-+
- 		for (frm = 0; frm < NUM_TNR_FRAMES; frm++) {
- 			video_stage->args.tnr_frames[frm] =
- 			    pipe->pipe_settings.video.tnr_frames[frm];
-@@ -6685,7 +6686,8 @@ static enum ia_css_err load_low_light_binaries(
- 	return err;
  }
+@@ -1067,7 +1067,7 @@ int __atomisp_reqbufs(struct file *file, void *fh,
+ 	 * memory management function
+ 	 */
+ 	for (i = 0; i < req->count; i++) {
+-		if (atomisp_css_frame_allocate_from_info(&frame, &frame_info))
++		if (ia_css_frame_allocate_from_info(&frame, &frame_info))
+ 			goto error;
+ 		vm_mem = pipe->capq.bufs[i]->priv;
+ 		vm_mem->vaddr = frame;
+@@ -1078,11 +1078,11 @@ int __atomisp_reqbufs(struct file *file, void *fh,
+ error:
+ 	while (i--) {
+ 		vm_mem = pipe->capq.bufs[i]->priv;
+-		atomisp_css_frame_free(vm_mem->vaddr);
++		ia_css_frame_free(vm_mem->vaddr);
+ 	}
  
--static bool copy_on_sp(struct ia_css_pipe *pipe) {
-+static bool copy_on_sp(struct ia_css_pipe *pipe)
-+{
- 	bool rval;
+ 	if (asd->vf_frame)
+-		atomisp_css_frame_free(asd->vf_frame);
++		ia_css_frame_free(asd->vf_frame);
  
- 	assert(pipe);
-@@ -7379,7 +7381,8 @@ unload_yuvpp_binaries(struct ia_css_pipe *pipe) {
- 	return IA_CSS_SUCCESS;
+ 	return -ENOMEM;
  }
+@@ -1200,7 +1200,7 @@ static int atomisp_qbuf(struct file *file, void *fh, struct v4l2_buffer *buf)
+ 			goto error;
+ 		}
  
--static enum ia_css_err yuvpp_start(struct ia_css_pipe *pipe) {
-+static enum ia_css_err yuvpp_start(struct ia_css_pipe *pipe)
-+{
- 	struct ia_css_binary *copy_binary;
- 	enum ia_css_err err = IA_CSS_SUCCESS;
- 	enum sh_css_pipe_config_override copy_ovrd;
-@@ -8406,7 +8409,8 @@ remove_firmware(struct ia_css_fw_info **l, struct ia_css_fw_info *firmware) {
- 	return; /* removing single and multiple firmware is handled in acc_unload_extension() */
- }
+-		ret = atomisp_css_frame_map(&handle, &frame_info,
++		ret = ia_css_frame_map(&handle, &frame_info,
+ 					    (void __user *)buf->m.userptr,
+ 					    0, pgnr);
+ 		if (ret) {
+@@ -1210,7 +1210,7 @@ static int atomisp_qbuf(struct file *file, void *fh, struct v4l2_buffer *buf)
  
--static enum ia_css_err upload_isp_code(struct ia_css_fw_info *firmware) {
-+static enum ia_css_err upload_isp_code(struct ia_css_fw_info *firmware)
-+{
- 	ia_css_ptr binary;
- 
- 	if (!firmware) {
-@@ -8663,7 +8667,8 @@ enum ia_css_err ia_css_stream_capture(
- 	return return_err;
- }
- 
--void ia_css_stream_request_flash(struct ia_css_stream *stream) {
-+void ia_css_stream_request_flash(struct ia_css_stream *stream)
-+{
- 	(void)stream;
- 
- 	assert(stream);
-@@ -8764,7 +8769,8 @@ sh_css_init_host_sp_control_vars(void) {
- /*
-     * create the internal structures and fill in the configuration data
-     */
--void ia_css_pipe_config_defaults(struct ia_css_pipe_config *pipe_config) {
-+void ia_css_pipe_config_defaults(struct ia_css_pipe_config *pipe_config)
-+{
- 	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE, "ia_css_pipe_config_defaults()\n");
- 	*pipe_config = DEFAULT_PIPE_CONFIG;
- }
-@@ -8786,7 +8792,8 @@ ia_css_pipe_extra_config_defaults(struct ia_css_pipe_extra_config
- 	extra_config->enable_fractional_ds = false;
- }
- 
--void ia_css_stream_config_defaults(struct ia_css_stream_config *stream_config) {
-+void ia_css_stream_config_defaults(struct ia_css_stream_config *stream_config)
-+{
- 	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE, "ia_css_stream_config_defaults()\n");
- 	assert(stream_config);
- 	memset(stream_config, 0, sizeof(*stream_config));
-@@ -8840,6 +8847,7 @@ ia_css_pipe_create(const struct ia_css_pipe_config *config,
- 	if (!pipe)
- #else
- }
-+
- if (!pipe)
- {
- 	IA_CSS_LEAVE_ERR_PRIVATE(IA_CSS_ERR_INVALID_ARGUMENTS);
-@@ -9059,7 +9067,8 @@ ia_css_pipe_get_info(const struct ia_css_pipe *pipe,
- 	return IA_CSS_SUCCESS;
- }
- 
--bool ia_css_pipe_has_dvs_stats(struct ia_css_pipe_info *pipe_info) {
-+bool ia_css_pipe_has_dvs_stats(struct ia_css_pipe_info *pipe_info)
-+{
- 	unsigned int i;
- 
- 	if (pipe_info) {
-@@ -9915,7 +9924,6 @@ ia_css_stream_get_info(const struct ia_css_stream *stream,
-     */
- enum ia_css_err
- ia_css_stream_load(struct ia_css_stream *stream) {
--
- 	if (!atomisp_hw_is_isp2401) {
- 		int i;
- 		enum ia_css_err err;
-@@ -10492,7 +10500,8 @@ ia_css_update_continuous_frames(struct ia_css_stream *stream) {
- 	return IA_CSS_SUCCESS;
- }
- 
--void ia_css_pipe_map_queue(struct ia_css_pipe *pipe, bool map) {
-+void ia_css_pipe_map_queue(struct ia_css_pipe *pipe, bool map)
-+{
- 	unsigned int thread_id;
- 	enum ia_css_pipe_id pipe_id;
- 	unsigned int pipe_num;
-@@ -10755,7 +10764,7 @@ ia_css_pipe_get_qos_ext_state(struct ia_css_pipe *pipe, uint32_t fw_handle,
- /* ISP2401 */
- enum ia_css_err
- ia_css_pipe_update_qos_ext_mapped_arg(struct ia_css_pipe *pipe,
--					uint32_t fw_handle,
-+					u32 fw_handle,
- 					struct ia_css_isp_param_css_segments *css_seg,
- 					struct ia_css_isp_param_isp_segments *isp_seg) {
- 	unsigned int HIVE_ADDR_sp_group;
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_defs.h b/drivers/staging/media/atomisp/pci/sh_css_defs.h
-index d444af82c309..1317e86849fb 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_defs.h
-+++ b/drivers/staging/media/atomisp/pci/sh_css_defs.h
-@@ -177,7 +177,6 @@ RGB[0,8191],coef[-8192,8191] -> RGB[0,8191]
- #define SH_CSS_MORPH_TABLE_ELEMS_PER_DDR_WORD \
- 	(HIVE_ISP_DDR_WORD_BYTES / SH_CSS_MORPH_TABLE_ELEM_BYTES)
- 
--
- #define ISP2400_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR   (SH_CSS_MAX_BQ_GRID_WIDTH + 1)
- #define ISP2400_SH_CSS_MAX_SCTBL_HEIGHT_PER_COLOR   (SH_CSS_MAX_BQ_GRID_HEIGHT + 1)
- 
-@@ -275,7 +274,6 @@ RGB[0,8191],coef[-8192,8191] -> RGB[0,8191]
- 	(ISP_BQ_GRID_HEIGHT(input_height, deci_factor_log2) + \
- 	SH_CSS_SCTBL_CENTERING_MARGIN + SH_CSS_SCTBL_LAST_GRID_COUNT)
- 
--
- /* ISP2401: Legacy API: Number of horizontal grids per color in the shading table. */
- #define _ISP_SCTBL_LEGACY_WIDTH_PER_COLOR(input_width, deci_factor_log2) \
- 	(ISP_BQ_GRID_WIDTH(input_width, deci_factor_log2) + SH_CSS_SCTBL_LAST_GRID_COUNT)
-@@ -284,7 +282,6 @@ RGB[0,8191],coef[-8192,8191] -> RGB[0,8191]
- #define _ISP_SCTBL_LEGACY_HEIGHT(input_height, deci_factor_log2) \
- 	(ISP_BQ_GRID_HEIGHT(input_height, deci_factor_log2) + SH_CSS_SCTBL_LAST_GRID_COUNT)
- 
--
- /* *****************************************************************
-  * Statistics for 3A (Auto Focus, Auto White Balance, Auto Exposure)
-  * *****************************************************************/
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index 45df88e2aa74..ea5ce1221f5c 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -4249,12 +4249,16 @@ sh_css_params_write_to_ddr_internal(
- 	{
- 		unsigned int i;
- 		ia_css_ptr *virt_addr_tetra_x[
-+
- 		IA_CSS_MORPH_TABLE_NUM_PLANES];
- 		size_t *virt_size_tetra_x[
-+
- 		IA_CSS_MORPH_TABLE_NUM_PLANES];
- 		ia_css_ptr *virt_addr_tetra_y[
-+
- 		IA_CSS_MORPH_TABLE_NUM_PLANES];
- 		size_t *virt_size_tetra_y[
-+
- 		IA_CSS_MORPH_TABLE_NUM_PLANES];
- 
- 		virt_addr_tetra_x[0] = &ddr_map->tetra_r_x;
-@@ -4565,7 +4569,7 @@ free_ia_css_isp_parameter_set_info(
- 	enum ia_css_err err = IA_CSS_SUCCESS;
- 	struct ia_css_isp_parameter_set_info isp_params_info;
- 	unsigned int i;
--	ia_css_ptr *addrs = (ia_css_ptr *) &isp_params_info.mem_map;
-+	ia_css_ptr *addrs = (ia_css_ptr *)&isp_params_info.mem_map;
- 
- 	IA_CSS_ENTER_PRIVATE("ptr = %u", ptr);
- 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_struct.h b/drivers/staging/media/atomisp/pci/sh_css_struct.h
-index 9e25887b9ab8..d4ea847d29ce 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_struct.h
-+++ b/drivers/staging/media/atomisp/pci/sh_css_struct.h
-@@ -66,6 +66,7 @@ struct sh_css {
- #endif
- 	ia_css_ptr                   sp_bin_addr;
- 	hrt_data                       page_table_base_index;
-+
- 	unsigned int
- 	size_mem_words; /* \deprecated{Use ia_css_mipi_buffer_config instead.}*/
- 	enum ia_css_irq_type           irq_type;
+ 		if (vm_mem->vaddr) {
+ 			mutex_lock(&pipe->capq.vb_lock);
+-			atomisp_css_frame_free(vm_mem->vaddr);
++			ia_css_frame_free(vm_mem->vaddr);
+ 			vm_mem->vaddr = NULL;
+ 			vb->state = VIDEOBUF_NEEDS_INIT;
+ 			mutex_unlock(&pipe->capq.vb_lock);
+@@ -1758,8 +1758,7 @@ static int atomisp_streamon(struct file *file, void *fh,
+ 	if (asd->params.css_update_params_needed) {
+ 		atomisp_apply_css_parameters(asd, &asd->params.css_param);
+ 		if (asd->params.css_param.update_flag.dz_config)
+-			atomisp_css_set_dz_config(asd,
+-						  &asd->params.css_param.dz_config);
++			asd->params.config.dz_config = &asd->params.css_param.dz_config;
+ 		atomisp_css_update_isp_params(asd);
+ 		asd->params.css_update_params_needed = false;
+ 		memset(&asd->params.css_param.update_flag, 0,
 -- 
 2.26.2
 
