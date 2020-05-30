@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 154A6C433E0
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3615DC433E0
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E75BF207D0
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1164F207D0
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590821905;
-	bh=yFRa24i4VZ+8r6vgV7GGlJU8KEqcDpSlIGpTIMqi52s=;
+	s=default; t=1590821911;
+	bh=vCqUxjS5GFf0op3eK/T034P63eSiE4MDBhEFwa8b1ek=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=Cl7aVKiiF6VH+HntViWOJtE9/fzYTnQRhwHPOuRU8KHDVkA63GRYTX0o1JHZkmE8P
-	 XzpOOhTl3F3/KLlk467Myw2gGWVqK4BQ3lo2mHgmPzAyprtetbIaxwUyHF95NCN75f
-	 RRrpFN3iWJSjpy+TGrbE04+L+o9bN5pki+a+Lw30=
+	b=FDWSPMOsH0bcL2ECEPpHnuoxJ5ygZfk3f4gV4GnP++n1sbV1fGDiW6yGMfcEfVNky
+	 /RHuWCYV3eZTF4sqaEadfwGirezYwu2+FWkCb8yGZjU064GhgqFNcrJvdj8d/gzm4R
+	 kVKBmZFHi1kY6H+F29KMW9QMGcPvlbjYgzE+UTI8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729140AbgE3G6O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 May 2020 02:58:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45018 "EHLO mail.kernel.org"
+        id S1728918AbgE3G6N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 May 2020 02:58:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44954 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728854AbgE3G4H (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1728849AbgE3G4H (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 30 May 2020 02:56:07 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 975DD21775;
+        by mail.kernel.org (Postfix) with ESMTPSA id B303021841;
         Sat, 30 May 2020 06:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590821764;
-        bh=yFRa24i4VZ+8r6vgV7GGlJU8KEqcDpSlIGpTIMqi52s=;
+        s=default; t=1590821763;
+        bh=vCqUxjS5GFf0op3eK/T034P63eSiE4MDBhEFwa8b1ek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QrhrVxDYZ2Eej4TsUOLZqxyL46Hd+MUo6/ZQz9o4fkqe8da332nVw3OZheLX9rR4E
-         a+r6Z0KnyMxfdskCTIdgQ4HacluOyFEz2rRMcbmM7Rghh60ahofnz03aahRZPzDBo7
-         W3NdszMRJhApoHiGgoWXODbdaVbawrIrMe4yealg=
+        b=MtSz2yHt8OQOetSIxwkgrIEkhC/75DwevXv5REYKqXkGzHMemVrUSzoG4eExiAVAv
+         dp45ixNl/TyoKT6b4Fle3oao6OaRYgJyOOsbgGaLO9fp1LIv/NjVW6HdRcPonHHh9E
+         Cbcw6QIgZeoS9wqhSPcdCBtCfa9KEa80voqnvHdU=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jevPV-001hpj-DO; Sat, 30 May 2020 08:56:01 +0200
+        id 1jevPV-001hq7-Je; Sat, 30 May 2020 08:56:01 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Nathan Chancellor <natechancellor@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        kbuild test robot <lkp@intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v2 21/41] media: atomisp: Clean up if block in sh_css_sp_init_stage
-Date:   Sat, 30 May 2020 08:55:38 +0200
-Message-Id: <19d491af1c88d2b2f04a26301aabb05d233c2e28.1590821410.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 26/41] media: atomisp: Remove binary_supports_input_format
+Date:   Sat, 30 May 2020 08:55:43 +0200
+Message-Id: <2e4b1cb050370ba37eb58be8ec7ea8b31705f847.1590821410.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1590821410.git.mchehab+huawei@kernel.org>
 References: <cover.1590821410.git.mchehab+huawei@kernel.org>
@@ -67,76 +66,68 @@ From: Nathan Chancellor <natechancellor@gmail.com>
 
 Clang warns:
 
-../drivers/staging/media/atomisp/pci/sh_css_sp.c:1039:23: warning:
-address of 'binary->in_frame_info' will always evaluate to 'true'
-[-Wpointer-bool-conversion]
-                } else if (&binary->in_frame_info) {
-                       ~~   ~~~~~~~~^~~~~~~~~~~~~
+drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c:1707:64:
+warning: implicit conversion from enumeration type 'const enum
+ia_css_frame_format' to different enumeration type 'enum
+atomisp_input_format' [-Wenum-conversion]
+        binary_supports_input_format(xcandidate, req_in_info->format));
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ~~~~~~~~~~~~~^~~~~~
 
-in_frame_info is not a pointer so if binary is not NULL, in_frame_info's
-address cannot be NULL. Change this to an else since it will always be
-evaluated as one.
+As it turns out, binary_supports_input_format only asserts that
+xcandidate is not NULL and just returns true so this call is never
+actually made.
 
-While we are here, clean up this if block. The contents of both if
-blocks are the same but a check against "stage == 0" is added when
-ISP2401 is defined. USE_INPUT_SYSTEM_VERSION_2401 is only defined when
-isp2401_system_global.h is included, which only happens when ISP2401. In
-other words, USE_INPUT_SYSTEM_VERSION_2401 always requires ISP2401 to be
-defined so the '#ifndef ISP2401' makes no sense. Remove that part of the
-block to simplify everything.
+There are other functions that are called that assert info is not NULL
+so this function actually serves no purpose. Remove it. It can be
+brought back if needed later.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1036
 
-Reported-by: kbuild test robot <lkp@intel.com>
 Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/sh_css_sp.c | 27 +++----------------
- 1 file changed, 4 insertions(+), 23 deletions(-)
+ .../atomisp/pci/runtime/binary/src/binary.c   | 21 -------------------
+ 1 file changed, 21 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_sp.c b/drivers/staging/media/atomisp/pci/sh_css_sp.c
-index db543c3fec51..4f58562fb389 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_sp.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_sp.c
-@@ -1027,34 +1027,15 @@ sh_css_sp_init_stage(struct ia_css_binary *binary,
- 		return err;
+diff --git a/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c b/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
+index fd4ecd697868..85e8b45d5416 100644
+--- a/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
++++ b/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
+@@ -859,18 +859,6 @@ binary_supports_output_format(const struct ia_css_binary_xinfo *info,
+ 	return false;
+ }
  
- #ifdef USE_INPUT_SYSTEM_VERSION_2401
--#ifndef ISP2401
--	if (args->in_frame)
--	{
-+	if (stage == 0) {
- 		pipe = find_pipe_by_num(sh_css_sp_group.pipe[thread_id].pipe_num);
- 		if (!pipe)
- 			return IA_CSS_ERR_INTERNAL_ERROR;
--		ia_css_get_crop_offsets(pipe, &args->in_frame->info);
--	} else if (&binary->in_frame_info)
--	{
--		pipe = find_pipe_by_num(sh_css_sp_group.pipe[thread_id].pipe_num);
--		if (!pipe)
--			return IA_CSS_ERR_INTERNAL_ERROR;
--		ia_css_get_crop_offsets(pipe, &binary->in_frame_info);
--#else
--	if (stage == 0)
--	{
--		if (args->in_frame) {
--			pipe = find_pipe_by_num(sh_css_sp_group.pipe[thread_id].pipe_num);
--			if (!pipe)
--				return IA_CSS_ERR_INTERNAL_ERROR;
-+
-+		if (args->in_frame)
- 			ia_css_get_crop_offsets(pipe, &args->in_frame->info);
--		} else if (&binary->in_frame_info) {
--			pipe = find_pipe_by_num(sh_css_sp_group.pipe[thread_id].pipe_num);
--			if (!pipe)
--				return IA_CSS_ERR_INTERNAL_ERROR;
-+		else
- 			ia_css_get_crop_offsets(pipe, &binary->in_frame_info);
+-#ifdef ISP2401
+-static bool
+-binary_supports_input_format(const struct ia_css_binary_xinfo *info,
+-			     enum atomisp_input_format format)
+-{
+-	assert(info);
+-	(void)format;
+-
+-	return true;
+-}
+-#endif
+-
+ static bool
+ binary_supports_vf_format(const struct ia_css_binary_xinfo *info,
+ 			  enum ia_css_frame_format format)
+@@ -1701,15 +1689,6 @@ ia_css_binary_find(struct ia_css_binary_descr *descr,
+ 					    binary_supports_output_format(xcandidate, req_bin_out_info->format));
+ 			continue;
+ 		}
+-#ifdef ISP2401
+-		if (!binary_supports_input_format(xcandidate, descr->stream_format)) {
+-			ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE,
+-					    "ia_css_binary_find() [%d] continue: !%d\n",
+-					    __LINE__,
+-					    binary_supports_input_format(xcandidate, req_in_info->format));
+-			continue;
 -		}
 -#endif
- 	}
- #else
- 	(void)pipe; /*avoid build warning*/
+ 		if (xcandidate->num_output_pins > 1 &&
+ 		    /* in case we have a second output pin, */
+ 		    req_vf_info                   && /* and we need vf output. */
 -- 
 2.26.2
 
