@@ -2,55 +2,54 @@ Return-Path: <SRS0=xPKt=7M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6008C433E0
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E9EDC433DF
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D174206C3
+	by mail.kernel.org (Postfix) with ESMTP id E66F0206C3
 	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590821918;
-	bh=ILWZZh+okXiMKOu1SpkJQl4EysGMmt+0/+95PC1gmvc=;
+	s=default; t=1590821919;
+	bh=7zqcBMUWnlZYtXp6OeucXDvSCyZB2ep8pDSjBh/HdTg=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=WHB136EiDiUI2MdOtdv22dETQ1Io87JtWgARqlM/cz0h8aeBGuB+/f9zjxlYQ0vRO
-	 T/jt8suCSWJ3HoGSI6tErgsxB5zbqi7G3Kp0g9RxddteJdR9z8KHEjxcyogCNNs2Wx
-	 3a0Zy7ddfGYdB92KLejJ3u63J4rUk5zAuw8Mlw/k=
+	b=UzAfmAb2gm3TqAOxkjC/Zje2UGlgrOEqHAUlVMjg2y4jbXpTRxV4S4NGK87o0RDaG
+	 NgvanoxfcO0RZBhfEplILkS996OIKgaQLaTNHatxh62hLjSVPCuT9kid4nUImnR6ky
+	 OYXm37fL/4/DWNGLcB22/wPMPfJiqBf+s+MXiT9M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729164AbgE3G6h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 May 2020 02:58:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44920 "EHLO mail.kernel.org"
+        id S1728934AbgE3G6i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 May 2020 02:58:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45020 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728404AbgE3G4G (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1728853AbgE3G4G (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 30 May 2020 02:56:06 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AB1BC21835;
-        Sat, 30 May 2020 06:56:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 30ACA221E6;
+        Sat, 30 May 2020 06:56:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590821763;
-        bh=ILWZZh+okXiMKOu1SpkJQl4EysGMmt+0/+95PC1gmvc=;
+        s=default; t=1590821764;
+        bh=7zqcBMUWnlZYtXp6OeucXDvSCyZB2ep8pDSjBh/HdTg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yJ1Qvi/cYiTrwvIzGwxyZsdEbNVxj/TDmZ3yvTVuA7amaawziUab2kMAL0HkGgwvA
-         JHkVI1nzW27crkbKKSbHdMpTVUioYTzxpP4PhYMNMyTxW+VrPM3jxijQcM6/Su1rsk
-         AQYhPTYAw4xkP8YIXWnlKQsnykJmuwzTBi+p5MJo=
+        b=nKa1K+5ueykun/vdeOVo+wRpoAOnmeczUy9hrZPC9HN/Or09YlAsJWN7h7hT3t1he
+         /tC5MDMT52MzWC/oz2BUa9pSCiLKkpOkv4F+c8JyejnuRNOKOZlx2UgClebf3s4Rj/
+         4+OT/WPtvwqiKrXHDTI8O6iePHmPJOL5xNKdjPJ4=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jevPV-001hq3-Ia; Sat, 30 May 2020 08:56:01 +0200
+        id 1jevPW-001hqe-4X; Sat, 30 May 2020 08:56:02 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v2 25/41] media: atomisp: Avoid overflow in compute_blending
-Date:   Sat, 30 May 2020 08:55:42 +0200
-Message-Id: <22b531f57658727abacb28f534d6fc9d44eee4cf.1590821410.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 32/41] media: atomisp: don't cause a warn if probe failed
+Date:   Sat, 30 May 2020 08:55:49 +0200
+Message-Id: <cc4a83575bdb55ffce5cabc4a3650d83b320de9f.1590821410.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1590821410.git.mchehab+huawei@kernel.org>
 References: <cover.1590821410.git.mchehab+huawei@kernel.org>
@@ -62,49 +61,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+When probe fails, it is possible that hmm_init() to not be
+called. On such case, hmm_cleanup() will cause a WARN_ON().
 
-Clang warns:
+Avoid it by adding an explicit check at hmm_cleanup() to
+ensure that the hmm code was properly initialized.
 
-drivers/staging/media/atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c:129:35:
-warning: implicit conversion from 'unsigned long' to 'int32_t' (aka
-'int') changes value from 18446744073709543424 to -8192
-[-Wconstant-conversion]
-        return MAX(MIN(isp_strength, 0), -XNR_BLENDING_SCALE_FACTOR);
-        ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-XNR_BLENDING_SCALE_FACTOR is BIT(13), or 8192, which will easily fit
-into a signed 32-bit integer. However, it is an unsigned long, which
-means that negating it is the same as subtracting that value from
-ULONG_MAX + 1, which causes it to be larger than a signed 32-bit
-integer so it gets implicitly converted.
-
-We can avoid this by using the variable isp_scale, which holds the value
-of XNR_BLENDING_SCALE_FACTOR already, where the implicit conversion from
-unsigned long to s32 already happened. If that were to ever overflow,
-clang would warn: https://godbolt.org/z/EeSxLG
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1036
-
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c      | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/atomisp/pci/hmm/hmm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c
-index a9db6366d20b..629f07faf20a 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/xnr/xnr_3.0/ia_css_xnr3.host.c
-@@ -126,7 +126,7 @@ compute_blending(int strength)
- 	 * exactly as s0.11 fixed point, but -1.0 can.
- 	 */
- 	isp_strength = -(((strength * isp_scale) + offset) / host_scale);
--	return MAX(MIN(isp_strength, 0), -XNR_BLENDING_SCALE_FACTOR);
-+	return MAX(MIN(isp_strength, 0), -isp_scale);
- }
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+index c8a6e2d6e498..670382c48034 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+@@ -208,6 +208,8 @@ int hmm_init(void)
  
- void
+ void hmm_cleanup(void)
+ {
++	if (!dummy_ptr)
++		return;
+ 	sysfs_remove_group(&atomisp_dev->kobj, atomisp_attribute_group);
+ 
+ 	/* free dummy memory first */
 -- 
 2.26.2
 
