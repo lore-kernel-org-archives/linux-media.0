@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D53E3C433E2
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4253AC433E3
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:57:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5F55206C3
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:57:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1DF45207D0
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:57:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590821858;
-	bh=OkGr1wyY4tvroJ3UDFTTFl/XE5q2AgcowgjQvdCNFUY=;
+	s=default; t=1590821861;
+	bh=ag9KBWaJ+mNe3F0Ez0MK4BJoetM0kZTjmXPO9TUCM8o=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=GKMHJCjXBWOESuHrDgbbos36V5C1cjsSrkEw56wfaUolt7tXlRxYsraPeBkan03Uz
-	 2PGTPV/E9fnxoi0E4YmmyY2EEAlAuFO3Lb6flAx75+Ru0mkaAWZx5F2hPFj4MbTm2a
-	 LctHk8dp3yXok6ad/3IGte/mdKxD9N0dijTibQnI=
+	b=ctk3rnhe7Hepjnew40XgRYDD1Z4puVHoFYsiz7HHxpjosNow2CpnZjMt77kfsHG7w
+	 DMffgFaKD/zHY3bfX52ruPP9b7BP7OQndbIkvKqtQeXOBuzjpaX4MLA324ZhRdYRTH
+	 16tDzvJzGQPJoV//yzO/Kj0zoI2SoRpxTg3VvUCg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729077AbgE3G53 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 May 2020 02:57:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44862 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728878AbgE3G4I (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1728886AbgE3G4I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 30 May 2020 02:56:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44920 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728797AbgE3G4F (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 30 May 2020 02:56:05 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 89057221FC;
-        Sat, 30 May 2020 06:56:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B81C2145D;
+        Sat, 30 May 2020 06:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590821764;
-        bh=OkGr1wyY4tvroJ3UDFTTFl/XE5q2AgcowgjQvdCNFUY=;
+        s=default; t=1590821763;
+        bh=ag9KBWaJ+mNe3F0Ez0MK4BJoetM0kZTjmXPO9TUCM8o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AqSlyh0EOqG1PlR+aG3Z1ccxe4NhvgiW+WBYm9TA4GM0oaps5HPinp8XQBTT1wbXG
-         4pTKDYjdMyrk00LqpRnf6HwuLYlDnc9g1klj4Wkj/eTtMt53zaDRCUY1pQgb6IYwzt
-         NJZWme+GpGB7XlgMKOSCVGz6rK2NCdaGXBglSEe4=
+        b=NmA5COQbqCJqI1j0OUiQwOl9rBPpsPc7HvpdbV6lSiK5E/eQXqGQTtrCEu3tWRg5f
+         NGtmKBxll/FApKVhStwHnj8Vpzl1NgTaYAxEGM/i144X2CKK43hMkpkh7Emdq7D7CW
+         whdqYZXOQrCYC/4CdG7/VDzcMCv6p3QrpSY7Cuvg=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jevPW-001hrF-Eg; Sat, 30 May 2020 08:56:02 +0200
+        id 1jevPV-001hp9-3Q; Sat, 30 May 2020 08:56:01 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v2 40/41] media: atomisp: get rid of set_fs() dirty hacks
-Date:   Sat, 30 May 2020 08:55:57 +0200
-Message-Id: <20234729bd1227640b0ba1976fec9e1121d3437c.1590821410.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 14/41] media: atomisp: use pin_user_pages() for memory allocation
+Date:   Sat, 30 May 2020 08:55:31 +0200
+Message-Id: <2ff6f038d661da0f0e3b75ce1749b8612ac578f3.1590821410.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1590821410.git.mchehab+huawei@kernel.org>
 References: <cover.1590821410.git.mchehab+huawei@kernel.org>
@@ -61,233 +61,215 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This file was based on an older version of the V4L2 compat32
-code, which had this ugly hack.
+Instead of using a hacked version of an old copy of
+get_user_pages(), use pin_user_pages().
 
-Change the code to remove the hack. Yet, the entire compat32
-code is currently commented out. So, let's add a FIXME note
-at the code, as we may need to check if some of the atomisp
-specific ioctls would require it.
-
-It is not worth to do such checks now, as we may get rid
-of several of them while cleaning up other things while
-at staging.
-
-Reported-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/atomisp/TODO            |  3 +
- .../atomisp/pci/atomisp_compat_ioctl32.c      | 89 ++++++++++---------
- 2 files changed, 52 insertions(+), 40 deletions(-)
+ .../media/atomisp/include/hmm/hmm_bo.h        |   2 +
+ .../staging/media/atomisp/pci/hmm/hmm_bo.c    | 145 +++---------------
+ 2 files changed, 24 insertions(+), 123 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/TODO b/drivers/staging/media/atomisp/TODO
-index e58643a9de43..9e46015ebcd5 100644
---- a/drivers/staging/media/atomisp/TODO
-+++ b/drivers/staging/media/atomisp/TODO
-@@ -161,6 +161,9 @@ TODO
-     for this driver until the other work is done, as there will be a lot
-     of code churn until this driver becomes functional again.
+diff --git a/drivers/staging/media/atomisp/include/hmm/hmm_bo.h b/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
+index 7fcb93b6c0f5..39aea0cb2d33 100644
+--- a/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
++++ b/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
+@@ -130,6 +130,8 @@ struct hmm_buffer_object {
+ 	struct list_head	list;
+ 	struct kref	kref;
  
-+16. Fix the compat32 code and remove the comment preventing it to be
-+    called.
++	struct page **pages;
 +
- Limitations
- ===========
+ 	/* mutex protecting this BO */
+ 	struct mutex		mutex;
+ 	enum hmm_bo_type	type;
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c b/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
+index b6dcd246d7af..64bf6b8fc7cc 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
+@@ -854,109 +854,20 @@ static void free_private_pages(struct hmm_buffer_object *bo,
+ 	kfree(bo->page_obj);
+ }
  
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_ioctl32.c b/drivers/staging/media/atomisp/pci/atomisp_compat_ioctl32.c
-index 3079043f1fac..e2e3a242b95d 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_compat_ioctl32.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_compat_ioctl32.c
-@@ -847,9 +847,17 @@ static long atomisp_do_compat_ioctl(struct file *file,
- 		struct atomisp_metadata_with_type md_with_type;
- 		struct atomisp_sensor_ae_bracketing_lut lut;
- 	} karg;
--	mm_segment_t old_fs;
--	void __user *up = compat_ptr(arg);
-+	void __user *p32 = compat_ptr(arg);
-+	void __user *new_p64 = NULL;
- 	long err = -ENOIOCTLCMD;
-+	int compatible_arg = 1;
+-/*
+- * Hacked from kernel function __get_user_pages in mm/memory.c
+- *
+- * Handle buffers allocated by other kernel space driver and mmaped into user
+- * space, function Ignore the VM_PFNMAP and VM_IO flag in VMA structure
+- *
+- * Get physical pages from user space virtual address and update into page list
+- */
+-static int __get_pfnmap_pages(struct task_struct *tsk, struct mm_struct *mm,
+-			      unsigned long start, int nr_pages,
+-			      unsigned int gup_flags, struct page **pages,
+-			      struct vm_area_struct **vmas)
++static void free_user_pages(struct hmm_buffer_object *bo)
+ {
+-	int i, ret;
+-	unsigned long vm_flags;
+-
+-	if (nr_pages <= 0)
+-		return 0;
+-
+-	VM_BUG_ON(!!pages != !!(gup_flags & FOLL_GET));
+-
+-	/*
+-	 * Require read or write permissions.
+-	 * If FOLL_FORCE is set, we only require the "MAY" flags.
+-	 */
+-	vm_flags  = (gup_flags & FOLL_WRITE) ?
+-		    (VM_WRITE | VM_MAYWRITE) : (VM_READ | VM_MAYREAD);
+-	vm_flags &= (gup_flags & FOLL_FORCE) ?
+-		    (VM_MAYREAD | VM_MAYWRITE) : (VM_READ | VM_WRITE);
+-	i = 0;
+-
+-	do {
+-		struct vm_area_struct *vma;
+-
+-		vma = find_vma(mm, start);
+-		if (!vma) {
+-			dev_err(atomisp_dev, "find_vma failed\n");
+-			return i ? : -EFAULT;
+-		}
+-
+-		if (is_vm_hugetlb_page(vma)) {
+-			/*
+-			i = follow_hugetlb_page(mm, vma, pages, vmas,
+-					&start, &nr_pages, i, gup_flags);
+-			*/
+-			continue;
+-		}
+-
+-		do {
+-			struct page *page;
+-			unsigned long pfn;
+-
+-			/*
+-			 * If we have a pending SIGKILL, don't keep faulting
+-			 * pages and potentially allocating memory.
+-			 */
+-			if (unlikely(fatal_signal_pending(current))) {
+-				dev_err(atomisp_dev,
+-					"fatal_signal_pending in %s\n",
+-					__func__);
+-				return i ? i : -ERESTARTSYS;
+-			}
+-
+-			ret = follow_pfn(vma, start, &pfn);
+-			if (ret) {
+-				dev_err(atomisp_dev, "follow_pfn() failed\n");
+-				return i ? : -EFAULT;
+-			}
+-
+-			page = pfn_to_page(pfn);
+-			if (IS_ERR(page))
+-				return i ? i : PTR_ERR(page);
+-			if (pages) {
+-				pages[i] = page;
+-				get_page(page);
+-				flush_anon_page(vma, page, start);
+-				flush_dcache_page(page);
+-			}
+-			if (vmas)
+-				vmas[i] = vma;
+-			i++;
+-			start += PAGE_SIZE;
+-			nr_pages--;
+-		} while (nr_pages && start < vma->vm_end);
+-	} while (nr_pages);
+-
+-	return i;
+-}
+-
+-static int get_pfnmap_pages(struct task_struct *tsk, struct mm_struct *mm,
+-			    unsigned long start, int nr_pages, int write, int force,
+-			    struct page **pages, struct vm_area_struct **vmas)
+-{
+-	int flags = FOLL_TOUCH;
+-
+-	if (pages)
+-		flags |= FOLL_GET;
+-	if (write)
+-		flags |= FOLL_WRITE;
+-	if (force)
+-		flags |= FOLL_FORCE;
+-
+-	return __get_pfnmap_pages(tsk, mm, start, nr_pages, flags, pages, vmas);
++	int i;
 +
-+	/*
-+	 * FIXME: should verify if any of the functions below will be
-+	 * setting a pointer. If so, compatible_arg should be zeroed.
-+	 *
-+	 * Please see v4l2-compat-ioctl32.c for more details
-+	 */
++	hmm_mem_stat.usr_size -= bo->pgnr;
++
++	if (bo->mem_type == HMM_BO_MEM_TYPE_PFN) {
++		unpin_user_pages(bo->pages, bo->pgnr);
++	} else {
++		for (i = 0; i < bo->pgnr; i++)
++			put_page(bo->pages[i]);
++	}
++	kfree(bo->pages);
++	kfree(bo->page_obj);
+ }
  
- 	/* First, convert the command. */
- 	switch (cmd) {
-@@ -936,130 +944,131 @@ static long atomisp_do_compat_ioctl(struct file *file,
- 	switch (cmd) {
- 	case ATOMISP_IOC_G_HISTOGRAM:
- 	case ATOMISP_IOC_S_HISTOGRAM:
--		err = get_atomisp_histogram32(&karg.his, up);
-+		err = get_atomisp_histogram32(&karg.his, p32);
- 		break;
- 	case ATOMISP_IOC_G_DIS_STAT:
--		err = get_atomisp_dis_statistics32(&karg.dis_s, up);
-+		err = get_atomisp_dis_statistics32(&karg.dis_s, p32);
- 		break;
- 	case ATOMISP_IOC_S_DIS_COEFS:
--		err = get_atomisp_dis_coefficients32(&karg.dis_c, up);
-+		err = get_atomisp_dis_coefficients32(&karg.dis_c, p32);
- 		break;
- 	case ATOMISP_IOC_S_DIS_VECTOR:
--		err = get_atomisp_dvs_6axis_config32(&karg.dvs_c, up);
-+		err = get_atomisp_dvs_6axis_config32(&karg.dvs_c, p32);
- 		break;
- 	case ATOMISP_IOC_G_3A_STAT:
--		err = get_atomisp_3a_statistics32(&karg.s3a_s, up);
-+		err = get_atomisp_3a_statistics32(&karg.s3a_s, p32);
- 		break;
- 	case ATOMISP_IOC_G_ISP_GDC_TAB:
- 	case ATOMISP_IOC_S_ISP_GDC_TAB:
--		err = get_atomisp_morph_table32(&karg.mor_t, up);
-+		err = get_atomisp_morph_table32(&karg.mor_t, p32);
- 		break;
- 	case ATOMISP_IOC_S_ISP_FPN_TABLE:
--		err = get_v4l2_framebuffer32(&karg.v4l2_buf, up);
-+		err = get_v4l2_framebuffer32(&karg.v4l2_buf, p32);
- 		break;
- 	case ATOMISP_IOC_G_ISP_OVERLAY:
- 	case ATOMISP_IOC_S_ISP_OVERLAY:
--		err = get_atomisp_overlay32(&karg.overlay, up);
-+		err = get_atomisp_overlay32(&karg.overlay, p32);
- 		break;
- 	case ATOMISP_IOC_G_SENSOR_CALIBRATION_GROUP:
--		err = get_atomisp_calibration_group32(&karg.cal_grp, up);
-+		err = get_atomisp_calibration_group32(&karg.cal_grp, p32);
- 		break;
- 	case ATOMISP_IOC_ACC_LOAD:
--		err = get_atomisp_acc_fw_load32(&karg.acc_fw_load, up);
-+		err = get_atomisp_acc_fw_load32(&karg.acc_fw_load, p32);
- 		break;
- 	case ATOMISP_IOC_ACC_S_ARG:
- 	case ATOMISP_IOC_ACC_DESTAB:
--		err = get_atomisp_acc_fw_arg32(&karg.acc_fw_arg, up);
-+		err = get_atomisp_acc_fw_arg32(&karg.acc_fw_arg, p32);
- 		break;
- 	case ATOMISP_IOC_G_SENSOR_PRIV_INT_DATA:
- 	case ATOMISP_IOC_G_MOTOR_PRIV_INT_DATA:
--		err = get_v4l2_private_int_data32(&karg.v4l2_pri_data, up);
-+		err = get_v4l2_private_int_data32(&karg.v4l2_pri_data, p32);
- 		break;
- 	case ATOMISP_IOC_S_ISP_SHD_TAB:
--		err = get_atomisp_shading_table32(&karg.shd_tbl, up);
-+		err = get_atomisp_shading_table32(&karg.shd_tbl, p32);
- 		break;
- 	case ATOMISP_IOC_ACC_MAP:
- 	case ATOMISP_IOC_ACC_UNMAP:
--		err = get_atomisp_acc_map32(&karg.acc_map, up);
-+		err = get_atomisp_acc_map32(&karg.acc_map, p32);
- 		break;
- 	case ATOMISP_IOC_ACC_S_MAPPED_ARG:
--		err = get_atomisp_acc_s_mapped_arg32(&karg.acc_map_arg, up);
-+		err = get_atomisp_acc_s_mapped_arg32(&karg.acc_map_arg, p32);
- 		break;
- 	case ATOMISP_IOC_S_PARAMETERS:
--		err = get_atomisp_parameters32(&karg.param, up);
-+		err = get_atomisp_parameters32(&karg.param, p32);
- 		break;
- 	case ATOMISP_IOC_ACC_LOAD_TO_PIPE:
- 		err = get_atomisp_acc_fw_load_to_pipe32(&karg.acc_fw_to_pipe,
--							up);
-+							p32);
- 		break;
- 	case ATOMISP_IOC_G_METADATA:
--		err = get_atomisp_metadata_stat32(&karg.md, up);
-+		err = get_atomisp_metadata_stat32(&karg.md, p32);
- 		break;
- 	case ATOMISP_IOC_G_METADATA_BY_TYPE:
- 		err = get_atomisp_metadata_by_type_stat32(&karg.md_with_type,
--			up);
-+			p32);
- 		break;
- 	case ATOMISP_IOC_S_SENSOR_AE_BRACKETING_LUT:
--		err = get_atomisp_sensor_ae_bracketing_lut(&karg.lut, up);
-+		err = get_atomisp_sensor_ae_bracketing_lut(&karg.lut, p32);
- 		break;
+ /*
+@@ -1000,11 +911,12 @@ static int alloc_user_pages(struct hmm_buffer_object *bo,
+ 
+ 	userptr = untagged_addr(userptr);
+ 
++	bo->pages = pages;
++
+ 	if (vma->vm_flags & (VM_IO | VM_PFNMAP)) {
+-		page_nr = get_pfnmap_pages(current, current->mm,
+-					   (unsigned long)userptr,
+-					   (int)(bo->pgnr), 1, 0,
+-					   pages, NULL);
++		page_nr = pin_user_pages((unsigned long)userptr, bo->pgnr,
++					 FOLL_LONGTERM | FOLL_WRITE,
++					 pages, NULL);
+ 		bo->mem_type = HMM_BO_MEM_TYPE_PFN;
+ 	} else {
+ 		/*Handle frame buffer allocated in user space*/
+@@ -1020,6 +932,8 @@ static int alloc_user_pages(struct hmm_buffer_object *bo,
+ 		bo->pgnr,
+ 		bo->mem_type == HMM_BO_MEM_TYPE_USER ? "user" : "pfn", page_nr);
+ 
++	hmm_mem_stat.usr_size += bo->pgnr;
++
+ 	/* can be written by caller, not forced */
+ 	if (page_nr != bo->pgnr) {
+ 		dev_err(atomisp_dev,
+@@ -1032,31 +946,16 @@ static int alloc_user_pages(struct hmm_buffer_object *bo,
+ 		bo->page_obj[i].page = pages[i];
+ 		bo->page_obj[i].type = HMM_PAGE_TYPE_GENERAL;
  	}
- 	if (err)
- 		return err;
+-	hmm_mem_stat.usr_size += bo->pgnr;
+-	kfree(pages);
  
--	old_fs = get_fs();
--	set_fs(KERNEL_DS);
--	err = native_ioctl(file, cmd, (unsigned long)&karg);
--	set_fs(old_fs);
-+	if (compatible_arg)
-+		err = native_ioctl(file, cmd, (unsigned long)p32);
-+	else
-+		err = native_ioctl(file, cmd, (unsigned long)new_p64);
+ 	return 0;
+ 
+ out_of_mem:
+-	for (i = 0; i < page_nr; i++)
+-		put_page(pages[i]);
+-	kfree(pages);
+-	kfree(bo->page_obj);
 +
- 	if (err)
- 		return err;
++	free_user_pages(bo);
  
- 	switch (cmd) {
- 	case ATOMISP_IOC_G_HISTOGRAM:
--		err = put_atomisp_histogram32(&karg.his, up);
-+		err = put_atomisp_histogram32(&karg.his, p32);
- 		break;
- 	case ATOMISP_IOC_G_DIS_STAT:
--		err = put_atomisp_dis_statistics32(&karg.dis_s, up);
-+		err = put_atomisp_dis_statistics32(&karg.dis_s, p32);
- 		break;
- 	case ATOMISP_IOC_G_3A_STAT:
--		err = put_atomisp_3a_statistics32(&karg.s3a_s, up);
-+		err = put_atomisp_3a_statistics32(&karg.s3a_s, p32);
- 		break;
- 	case ATOMISP_IOC_G_ISP_GDC_TAB:
--		err = put_atomisp_morph_table32(&karg.mor_t, up);
-+		err = put_atomisp_morph_table32(&karg.mor_t, p32);
- 		break;
- 	case ATOMISP_IOC_G_ISP_OVERLAY:
--		err = put_atomisp_overlay32(&karg.overlay, up);
-+		err = put_atomisp_overlay32(&karg.overlay, p32);
- 		break;
- 	case ATOMISP_IOC_G_SENSOR_CALIBRATION_GROUP:
--		err = put_atomisp_calibration_group32(&karg.cal_grp, up);
-+		err = put_atomisp_calibration_group32(&karg.cal_grp, p32);
- 		break;
- 	case ATOMISP_IOC_ACC_LOAD:
--		err = put_atomisp_acc_fw_load32(&karg.acc_fw_load, up);
-+		err = put_atomisp_acc_fw_load32(&karg.acc_fw_load, p32);
- 		break;
- 	case ATOMISP_IOC_ACC_S_ARG:
- 	case ATOMISP_IOC_ACC_DESTAB:
--		err = put_atomisp_acc_fw_arg32(&karg.acc_fw_arg, up);
-+		err = put_atomisp_acc_fw_arg32(&karg.acc_fw_arg, p32);
- 		break;
- 	case ATOMISP_IOC_G_SENSOR_PRIV_INT_DATA:
- 	case ATOMISP_IOC_G_MOTOR_PRIV_INT_DATA:
--		err = put_v4l2_private_int_data32(&karg.v4l2_pri_data, up);
-+		err = put_v4l2_private_int_data32(&karg.v4l2_pri_data, p32);
- 		break;
- 	case ATOMISP_IOC_ACC_MAP:
- 	case ATOMISP_IOC_ACC_UNMAP:
--		err = put_atomisp_acc_map32(&karg.acc_map, up);
-+		err = put_atomisp_acc_map32(&karg.acc_map, p32);
- 		break;
- 	case ATOMISP_IOC_ACC_S_MAPPED_ARG:
--		err = put_atomisp_acc_s_mapped_arg32(&karg.acc_map_arg, up);
-+		err = put_atomisp_acc_s_mapped_arg32(&karg.acc_map_arg, p32);
- 		break;
- 	case ATOMISP_IOC_ACC_LOAD_TO_PIPE:
- 		err = put_atomisp_acc_fw_load_to_pipe32(&karg.acc_fw_to_pipe,
--							up);
-+							p32);
- 		break;
- 	case ATOMISP_IOC_G_METADATA:
--		err = put_atomisp_metadata_stat32(&karg.md, up);
-+		err = put_atomisp_metadata_stat32(&karg.md, p32);
- 		break;
- 	case ATOMISP_IOC_G_METADATA_BY_TYPE:
- 		err = put_atomisp_metadata_by_type_stat32(&karg.md_with_type,
--			up);
-+			p32);
- 		break;
- 	}
+ 	return -ENOMEM;
+ }
  
+-static void free_user_pages(struct hmm_buffer_object *bo)
+-{
+-	int i;
+-
+-	for (i = 0; i < bo->pgnr; i++)
+-		put_page(bo->page_obj[i].page);
+-	hmm_mem_stat.usr_size -= bo->pgnr;
+-
+-	kfree(bo->page_obj);
+-}
+-
+ /*
+  * allocate/free physical pages for the bo.
+  *
 -- 
 2.26.2
 
