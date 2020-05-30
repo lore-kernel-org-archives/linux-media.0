@@ -2,56 +2,54 @@ Return-Path: <SRS0=xPKt=7M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C9C5C433E0
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:59:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 738EAC433E1
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:59:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE944208B8
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:59:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4784C20810
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:59:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590821960;
-	bh=oqc98StvgmA7z0fSgQB6Aim2CtSwhSejWpxjl/8s6/s=;
+	s=default; t=1590821963;
+	bh=5bcWPbVOrG7j+OP6Xyz7uIKyWpwnQnhVLv2vj0C97fs=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=yvo5OgSYHFYkk33R+nqyhzTISwCGg7O9BLZulPn0zC/wzKQ2ZalMbCPApMf3WWxti
-	 2OTOaKIpU3RmgSOVE5f/fdmmvF/mXsE/OjUT4jgbyAu5UKOHcolYswutztZlnN+cV3
-	 KmgGA8KhWtEz4bI84ose7AbVI/vumBluvoQl1YkU=
+	b=edei4BYZ3HIPv7qXZJjR/zMSZ4P+cVEi+4pm1JtoHdT+ycAheaGcBq7cVWD6FJy1c
+	 m73CpubscLW0l4KSq+nHdKWkvLU4uSmUm8KtMJlOuS+hNgh8e4vx3F6+HNEGWZ4HAo
+	 T+chFixW+D+vsIK9Empzfgj2Q6efW0Wtt7tCWURw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728967AbgE3G7Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 May 2020 02:59:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44956 "EHLO mail.kernel.org"
+        id S1729183AbgE3G7W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 May 2020 02:59:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728841AbgE3G4G (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 May 2020 02:56:06 -0400
+        id S1728826AbgE3G4F (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 30 May 2020 02:56:05 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9628C2176B;
+        by mail.kernel.org (Postfix) with ESMTPSA id 4FA2021534;
         Sat, 30 May 2020 06:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1590821763;
-        bh=oqc98StvgmA7z0fSgQB6Aim2CtSwhSejWpxjl/8s6/s=;
+        bh=5bcWPbVOrG7j+OP6Xyz7uIKyWpwnQnhVLv2vj0C97fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NWFDQBTwwLRKuN6wcO9Wbu1fRa01fAY4XnsCdOw5YJ2zKAvUrXAc8bbx87ZLwOdL0
-         7pN22SE0EtTYX2liFNea+arUesW6LaKESTw3WFySULoO7bfoGkQ+9SE/xV2mXwxSMt
-         OK9kVTOpBkwhVYVZWvXUonRjIw74RrSCjjKZ7Cz8=
+        b=qCqQPQX6tuEKE9sWbP4thIvVSFBRDrjLG7KuASo0RrQBSXTsv3eKrld68NtPbRWlx
+         9Ra9PAJq8uE9lBwsfrBN2igc6Q1P0Fj4f9WLTJ71SBVhOfDbrhvou1diC4tbMn2iL9
+         DjUjeql1aJkWrCs8nDtjRKsStxAPvEZFnncjnfGA=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jevPV-001hpo-FH; Sat, 30 May 2020 08:56:01 +0200
+        id 1jevPV-001hpE-4k; Sat, 30 May 2020 08:56:01 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        kbuild test robot <lkp@intel.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v2 22/41] media: atomisp: Remove second increment of count in atomisp_subdev_probe
-Date:   Sat, 30 May 2020 08:55:39 +0200
-Message-Id: <84be50326cb07f7329012a40bc25edf7d2bade84.1590821410.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 15/41] media: atomisp: add debug for hmm alloc
+Date:   Sat, 30 May 2020 08:55:32 +0200
+Message-Id: <6b9fbe34195df5a2ef410f0e877b47ba90bb2aa3.1590821410.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1590821410.git.mchehab+huawei@kernel.org>
 References: <cover.1590821410.git.mchehab+huawei@kernel.org>
@@ -63,39 +61,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+The hmm code is still complex and has bugs. Add a debug print
+when memory gets allocated, in order to help identifying what's
+happening out there.
 
-Clang warns:
-
-../drivers/staging/media/atomisp/pci/atomisp_v4l2.c:1097:3: warning:
-variable 'count' is incremented both in the loop header and in the loop
-body [-Wfor-loop-analysis]
-                count++;
-                ^
-
-This was probably unintentional, remove it.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1036
-
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/staging/media/atomisp/pci/hmm/hmm.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index c89d477a3948..374b1bb6c339 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -1098,7 +1098,6 @@ static int atomisp_subdev_probe(struct atomisp_device *isp)
- 		if (camera_count)
- 			break;
- 		msleep(SUBDEV_WAIT_TIMEOUT);
--		count++;
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+index 5e983442ca80..c8a6e2d6e498 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+@@ -253,7 +253,7 @@ ia_css_ptr hmm_alloc(size_t bytes, enum hmm_bo_type type,
+ 		goto alloc_page_err;
  	}
- 	/* Wait more time to give more time for subdev init code to finish */
- 	msleep(5 * SUBDEV_WAIT_TIMEOUT);
+ 
+-	/* Combind the virtual address and pages togather */
++	/* Combine the virtual address and pages together */
+ 	ret = hmm_bo_bind(bo);
+ 	if (ret) {
+ 		dev_err(atomisp_dev, "hmm_bo_bind failed.\n");
+@@ -265,6 +265,10 @@ ia_css_ptr hmm_alloc(size_t bytes, enum hmm_bo_type type,
+ 	if (attrs & ATOMISP_MAP_FLAG_CLEARED)
+ 		hmm_set(bo->start, 0, bytes);
+ 
++	    dev_dbg(atomisp_dev,
++	    "%s: pages: 0x%08x (%ld bytes), type: %d from highmem %d, user ptr %p, cached %d\n",
++	    __func__, bo->start, bytes, type, from_highmem, userptr, cached);
++
+ 	return bo->start;
+ 
+ bind_err:
 -- 
 2.26.2
 
