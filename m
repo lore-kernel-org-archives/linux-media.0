@@ -2,118 +2,182 @@ Return-Path: <SRS0=xPKt=7M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE24EC433E0
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 03:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E3B3C433E0
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 03:36:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C77EC20810
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 03:11:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7B75208A7
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 03:36:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X2iomiCi"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="lVI1jTa1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728680AbgE3DLf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 May 2020 23:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728297AbgE3DLe (ORCPT
+        id S1728449AbgE3Dg2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 May 2020 23:36:28 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:43277 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728297AbgE3Dg2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 May 2020 23:11:34 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8DAC03E969;
-        Fri, 29 May 2020 20:11:33 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id z64so739024pfb.1;
-        Fri, 29 May 2020 20:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=itkS+rLxG0j3d2wAPSaT9vUD+EmHbZGAjTEvDwroJZY=;
-        b=X2iomiCi0U4lxn91zwW4jw40L+v7+RxtzVRJKbNo0p1P2o1d9ZZkBqTlJcYe8Zfi7q
-         k+SnyLCZ/VEyqeCrl1/yeDDqbfeMJePdPjuT7RuttuHfdeGt40GSWfQnGj6rktoOXAiy
-         11qfqjzyaTjQnCwaU5P8cu/BjmrcdqVFa86MoNEEZmRkCJAu/So+qkPDWA72ESY0TWx7
-         obR60o1e4Nu+BrWcW9V1hrbDnrkJuKT81KljN4HsDF2Caqc+RmUW9CklbkGC2vpsicIo
-         lRTFs3EV2FUH4Qlh/N0MnsCloMkR+GP6D8bjOdClyJwm7ZV0xcl+TjKFIXzcFulvKFvD
-         V3zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=itkS+rLxG0j3d2wAPSaT9vUD+EmHbZGAjTEvDwroJZY=;
-        b=nzZtp7twJgJgj7y9bf7W62esNeBc7AAtZEQKqGpkwJxT+GIWwOXgOW04bLz4sul1Hp
-         XOvgbqLBWde1qYrAlXzrhh6TYMbpST9WSXhaoccZdlOUDrpcksYpYyzCZznSrWU1XJ/N
-         EnAYsvkFtaZ1Wf3WhC4pNMNVzgw0eUD+biKd1HLdnEb6U3nmGlIirKSxyvkZPZIFdFwo
-         LXf5rrPmgy6idUimwk0w+MINDvpF7lwU79Eqd3n4z6cUo9EkZ5GiUiCaOwLi6VjyVDQZ
-         ulNaCE7BaxGARTOpG9umbYMQnQO1RkovJzoKOO7qyR1uj3vq643Tv3pJHXMdMerRbz5G
-         3zLw==
-X-Gm-Message-State: AOAM530it3uH4Pp1ic6bOc8FNX4zwvk5gE0ecslM1e+goXnyS1EhDt6b
-        CCJ4EzorwSwzA938kTmTYfg=
-X-Google-Smtp-Source: ABdhPJzBxr7+VGrFtwwe6AOwSvfUQmx6ZgrcOqqOYbLQfJe8Ie4ICZQfQYSvVduIPnmFV+fNFOoQ4A==
-X-Received: by 2002:a62:e801:: with SMTP id c1mr11425576pfi.217.1590808292708;
-        Fri, 29 May 2020 20:11:32 -0700 (PDT)
-Received: from ubuntu-s3-xlarge-x86 ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id n19sm5384613pfu.194.2020.05.29.20.11.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 20:11:31 -0700 (PDT)
-Date:   Fri, 29 May 2020 20:11:29 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH 9/9] staging: media: atomisp: add PMIC_OPREGION dependency
-Message-ID: <20200530031129.GF1367069@ubuntu-s3-xlarge-x86>
-References: <20200529200031.4117841-1-arnd@arndb.de>
- <20200529200031.4117841-9-arnd@arndb.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200529200031.4117841-9-arnd@arndb.de>
+        Fri, 29 May 2020 23:36:28 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id esIKjON3qnv5nesILjjslw; Sat, 30 May 2020 05:36:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1590809785; bh=mmMSb24xnv433ei1xgK+X8aj0GZab09GDYpmRTrvBso=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=lVI1jTa1lrjYs7H9vbtAuzSU3vuJq5NwJaikRl3SAtEH8gcYWddUDasFaDtBU0Ddn
+         708xIMAYFrkvXe8Kvx+/+64d6Cz7R3C22sST2r4EO95WbwiXlIY/h9LYJavwrTeC8F
+         5ryp0MyJnaKes+Tv9KQaUGZn4w6JhZ8u6N+y6cyvfimC5chNcLUbSKhcMB/GgzkJxI
+         15wPvVeAAe8p5Mark3BbVU5tg9n4iRaIzKStl3G6jz+0IdgMxMCdLnVm0NgKVawnfE
+         oOhy8xhci0qnhYo/10rl768R1Zs1gNeKsVibmMbxWRw/ma2ug3QLUqP+I55Qowpb7h
+         5gXC9QnmdG0xQ==
+Message-ID: <f8ccfd98b1c86aeaddcce20bd06a7bd2@smtp-cloud8.xs4all.net>
+Date:   Sat, 30 May 2020 05:36:24 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfAggDHzcEKkaOjfztj1eWlP5qWFkaTLiFIcSMkxHF3IL0b01D9worTmRWTuyoI9eK7nEAz0yigQE8EmqUcOAR12I+GXkbXkMszvBPEsrRy1ZcHWPsYY9
+ fdkoXWuCZSlZyOosTQwFOKfWEv5SMBUnTXjRD5LCrrYDe6SroiaFztBtVusgE0oPJ4gbMwnG0AuYGZZkFO9jIUv/W3ZR6Hx2jGSM5fb9fqsrC1hV966juzie
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, May 29, 2020 at 10:00:31PM +0200, Arnd Bergmann wrote:
-> Without that driver, there is a link failure in
-> 
-> ERROR: modpost: "intel_soc_pmic_exec_mipi_pmic_seq_element"
-> [drivers/staging/media/atomisp/pci/atomisp_gmin_platform.ko] undefined!
-> 
-> Add an explicit Kconfig dependency.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-It'd be interesting to know if this is strictly required for the driver
-to work properly. The call to intel_soc_pmic_exec_mipi_pmic_seq_element
-has some error handling after it, maybe that should just be surrounded
-by an #ifdef or IS_ENABLED for PMIC_OPREGION, like some other drivers
-do.
+Results of the daily build of media_tree:
 
-Regardless of that:
+date:			Sat May 30 05:00:10 CEST 2020
+media-tree git hash:	938b29db3aa9c293c7c1366b16e55e308f1a1ddd
+media_build git hash:	7379d9e55aa05cd53f3dceaa5e0278e93db357bd
+v4l-utils git hash:	74377da4f5f3b63203c599d5dd75db6af91fdbb9
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 0accb575719caa47d8fbc866b11e6f7e7e7787cd
+host hardware:		x86_64
+host os:		5.6.0-1-amd64
 
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: WARNINGS
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: WARNINGS: found 4 strcpy(), 4 strncpy(), 4 strlcpy()
+linux-3.10.108-i686: ERRORS
+linux-3.10.108-x86_64: ERRORS
+linux-3.11.10-i686: ERRORS
+linux-3.11.10-x86_64: ERRORS
+linux-3.12.74-i686: ERRORS
+linux-3.12.74-x86_64: ERRORS
+linux-3.13.11-i686: ERRORS
+linux-3.13.11-x86_64: ERRORS
+linux-3.14.79-i686: ERRORS
+linux-3.14.79-x86_64: ERRORS
+linux-3.15.10-i686: ERRORS
+linux-3.15.10-x86_64: ERRORS
+linux-3.16.81-i686: ERRORS
+linux-3.16.81-x86_64: ERRORS
+linux-3.17.8-i686: ERRORS
+linux-3.17.8-x86_64: ERRORS
+linux-3.18.136-i686: ERRORS
+linux-3.18.136-x86_64: ERRORS
+linux-3.19.8-i686: ERRORS
+linux-3.19.8-x86_64: ERRORS
+linux-4.0.9-i686: ERRORS
+linux-4.0.9-x86_64: ERRORS
+linux-4.1.52-i686: ERRORS
+linux-4.1.52-x86_64: ERRORS
+linux-4.2.8-i686: ERRORS
+linux-4.2.8-x86_64: ERRORS
+linux-4.3.6-i686: ERRORS
+linux-4.3.6-x86_64: ERRORS
+linux-4.4.212-i686: ERRORS
+linux-4.4.212-x86_64: ERRORS
+linux-4.5.7-i686: ERRORS
+linux-4.5.7-x86_64: ERRORS
+linux-4.6.7-i686: ERRORS
+linux-4.6.7-x86_64: ERRORS
+linux-4.7.10-i686: ERRORS
+linux-4.7.10-x86_64: ERRORS
+linux-4.8.17-i686: ERRORS
+linux-4.8.17-x86_64: ERRORS
+linux-4.9.212-i686: ERRORS
+linux-4.9.212-x86_64: ERRORS
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: WARNINGS
+linux-4.13.16-x86_64: WARNINGS
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6.1-i686: OK
+linux-5.6.1-x86_64: OK
+linux-5.7-rc1-i686: OK
+linux-5.7-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 1
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 4
+sparse: OK
+smatch: OK
 
-> ---
->  drivers/staging/media/atomisp/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/staging/media/atomisp/Kconfig b/drivers/staging/media/atomisp/Kconfig
-> index c4f3049b0706..e86311c14329 100644
-> --- a/drivers/staging/media/atomisp/Kconfig
-> +++ b/drivers/staging/media/atomisp/Kconfig
-> @@ -11,6 +11,7 @@ menuconfig INTEL_ATOMISP
->  config VIDEO_ATOMISP
->  	tristate "Intel Atom Image Signal Processor Driver"
->  	depends on VIDEO_V4L2 && INTEL_ATOMISP
-> +	depends on PMIC_OPREGION
->  	select IOSF_MBI
->  	select VIDEOBUF_VMALLOC
->  	---help---
-> -- 
-> 2.26.2
-> 
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
