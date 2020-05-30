@@ -2,55 +2,54 @@ Return-Path: <SRS0=xPKt=7M=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3615DC433E0
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B43C433E0
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1164F207D0
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA670206C3
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590821911;
-	bh=vCqUxjS5GFf0op3eK/T034P63eSiE4MDBhEFwa8b1ek=;
+	s=default; t=1590821915;
+	bh=scAvoLDDGn5cq3ZLD2TTb4DoukfwOFpBqOOQshZmdXg=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=FDWSPMOsH0bcL2ECEPpHnuoxJ5ygZfk3f4gV4GnP++n1sbV1fGDiW6yGMfcEfVNky
-	 /RHuWCYV3eZTF4sqaEadfwGirezYwu2+FWkCb8yGZjU064GhgqFNcrJvdj8d/gzm4R
-	 kVKBmZFHi1kY6H+F29KMW9QMGcPvlbjYgzE+UTI8=
+	b=Mb3uIHk3ArgcAeygnlF51RZVSqQ4p/PfvauuR7cGoGc/n70O4voWflFgvVNHKrrAC
+	 fTc0arDooT0vp7ReWQCsIN8A8u7LhCZiJhiNp1rIVYIFwgIu2/8fUBbSDoqfyAz6DE
+	 oMDZ55BBEJw9M3H6Y/tkyp/da70o+bcBUAmf7W9Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728918AbgE3G6N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 May 2020 02:58:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44954 "EHLO mail.kernel.org"
+        id S1728912AbgE3G6a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 May 2020 02:58:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44972 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728849AbgE3G4H (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1728864AbgE3G4H (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 30 May 2020 02:56:07 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B303021841;
-        Sat, 30 May 2020 06:56:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6955E221F1;
+        Sat, 30 May 2020 06:56:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590821763;
-        bh=vCqUxjS5GFf0op3eK/T034P63eSiE4MDBhEFwa8b1ek=;
+        s=default; t=1590821764;
+        bh=scAvoLDDGn5cq3ZLD2TTb4DoukfwOFpBqOOQshZmdXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MtSz2yHt8OQOetSIxwkgrIEkhC/75DwevXv5REYKqXkGzHMemVrUSzoG4eExiAVAv
-         dp45ixNl/TyoKT6b4Fle3oao6OaRYgJyOOsbgGaLO9fp1LIv/NjVW6HdRcPonHHh9E
-         Cbcw6QIgZeoS9wqhSPcdCBtCfa9KEa80voqnvHdU=
+        b=gtUjHPF4pvuZQE6KtrK5iJ+dYC5RdKOpOKuQABgncK4ZIvZB6erGclHUB9G7uwqyx
+         W1EK+Xnve/unhrNMX1dDtbQpBYkQemW3gq87TjszuOU5ZKZ4jBhumXseOQIs5wkyFE
+         qFkh761p5cNJoHoN7N5UDY8MsKXhem1rWb/jDRFM=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jevPV-001hq7-Je; Sat, 30 May 2020 08:56:01 +0200
+        id 1jevPW-001hqw-A6; Sat, 30 May 2020 08:56:02 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v2 26/41] media: atomisp: Remove binary_supports_input_format
-Date:   Sat, 30 May 2020 08:55:43 +0200
-Message-Id: <2e4b1cb050370ba37eb58be8ec7ea8b31705f847.1590821410.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 36/41] media: atomisp: print firmware data during load
+Date:   Sat, 30 May 2020 08:55:53 +0200
+Message-Id: <0cad0cb793ea9946043b8a02112673165e24ec72.1590821410.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1590821410.git.mchehab+huawei@kernel.org>
 References: <cover.1590821410.git.mchehab+huawei@kernel.org>
@@ -62,72 +61,90 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+While there's a way to list the firmware binaries in runtime,
+it is worth to also print it during firmware load.
 
-Clang warns:
+One advantage is that this code also introduces additional
+checks with regards to invalid firmware types, which can be
+useful to identify problems.
 
-drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c:1707:64:
-warning: implicit conversion from enumeration type 'const enum
-ia_css_frame_format' to different enumeration type 'enum
-atomisp_input_format' [-Wenum-conversion]
-        binary_supports_input_format(xcandidate, req_in_info->format));
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ~~~~~~~~~~~~~^~~~~~
-
-As it turns out, binary_supports_input_format only asserts that
-xcandidate is not NULL and just returns true so this call is never
-actually made.
-
-There are other functions that are called that assert info is not NULL
-so this function actually serves no purpose. Remove it. It can be
-brought back if needed later.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1036
-
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../atomisp/pci/runtime/binary/src/binary.c   | 21 -------------------
- 1 file changed, 21 deletions(-)
+ .../media/atomisp/pci/sh_css_firmware.c       | 48 ++++++++++++++++++-
+ 1 file changed, 47 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c b/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
-index fd4ecd697868..85e8b45d5416 100644
---- a/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
-@@ -859,18 +859,6 @@ binary_supports_output_format(const struct ia_css_binary_xinfo *info,
- 	return false;
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_firmware.c b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
+index 63415356c36d..7cd27707a35f 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_firmware.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
+@@ -206,6 +206,20 @@ sh_css_check_firmware_version(struct device *dev, const char *fw_data)
+ 	return 0;
  }
  
--#ifdef ISP2401
--static bool
--binary_supports_input_format(const struct ia_css_binary_xinfo *info,
--			     enum atomisp_input_format format)
--{
--	assert(info);
--	(void)format;
--
--	return true;
--}
--#endif
--
- static bool
- binary_supports_vf_format(const struct ia_css_binary_xinfo *info,
- 			  enum ia_css_frame_format format)
-@@ -1701,15 +1689,6 @@ ia_css_binary_find(struct ia_css_binary_descr *descr,
- 					    binary_supports_output_format(xcandidate, req_bin_out_info->format));
- 			continue;
- 		}
--#ifdef ISP2401
--		if (!binary_supports_input_format(xcandidate, descr->stream_format)) {
--			ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE,
--					    "ia_css_binary_find() [%d] continue: !%d\n",
--					    __LINE__,
--					    binary_supports_input_format(xcandidate, req_in_info->format));
--			continue;
--		}
--#endif
- 		if (xcandidate->num_output_pins > 1 &&
- 		    /* in case we have a second output pin, */
- 		    req_vf_info                   && /* and we need vf output. */
++static const char *fw_type_name[] = {
++	[ia_css_sp_firmware]		= "SP",
++	[ia_css_isp_firmware]		= "ISP",
++	[ia_css_bootloader_firmware]	= "BootLoader",
++	[ia_css_acc_firmware]		= "accel",
++};
++
++static const char *fw_acc_type_name[] = {
++	[IA_CSS_ACC_NONE] = 		"Normal",
++	[IA_CSS_ACC_OUTPUT] = 		"Accel for output",
++	[IA_CSS_ACC_VIEWFINDER] = 	"Accel for viewfinder",
++	[IA_CSS_ACC_STANDALONE] = 	"Stand-alone accel",
++};
++
+ int
+ sh_css_load_firmware(struct device *dev, const char *fw_data,
+ 		     unsigned int fw_size) {
+@@ -276,13 +290,45 @@ sh_css_load_firmware(struct device *dev, const char *fw_data,
+ 		if (bi->blob.offset + bi->blob.size > fw_size)
+ 			return -EINVAL;
+ 
++		switch (bd.header.type) {
++		case ia_css_isp_firmware:
++			if (bd.header.info.isp.type > IA_CSS_ACC_STANDALONE) {
++				dev_err(dev, "binary #%2d: invalid SP type\n",
++					i);
++				return -EINVAL;
++			}
++
++			dev_dbg(dev,
++				"binary #%-2d type %s (%s), binary id is %2d: %s\n",
++				i,
++				fw_type_name[bd.header.type],
++				fw_acc_type_name[bd.header.info.isp.type],
++				bd.header.info.isp.sp.id,
++				bd.name);
++			break;
++		case ia_css_sp_firmware:
++		case ia_css_bootloader_firmware:
++		case ia_css_acc_firmware:
++			dev_dbg(dev,
++				"binary #%-2d type %s: %s\n",
++				i, fw_type_name[bd.header.type],
++				bd.name);
++		default:
++			if (bd.header.info.isp.type > IA_CSS_ACC_STANDALONE) {
++				dev_err(dev,
++					"binary #%2d: invalid firmware type\n",
++					i);
++				return -EINVAL;
++			}
++			break;
++		}
++
+ 		if (bi->type == ia_css_sp_firmware) {
+ 			if (i != SP_FIRMWARE)
+ 				return -EINVAL;
+ 			err = setup_binary(bi, fw_data, &sh_css_sp_fw, i);
+ 			if (err)
+ 				return err;
+-			dev_dbg(dev, "firmware #%d (SP), name %s\n", i, bd.name);
+ 
+ 		} else {
+ 			/* All subsequent binaries (including bootloaders) (i>NUM_OF_SPS) are ISP firmware */
 -- 
 2.26.2
 
