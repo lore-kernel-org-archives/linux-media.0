@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B43C433E0
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DE8BC433DF
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA670206C3
-	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2601F206C3
+	for <linux-media@archiver.kernel.org>; Sat, 30 May 2020 06:58:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590821915;
-	bh=scAvoLDDGn5cq3ZLD2TTb4DoukfwOFpBqOOQshZmdXg=;
+	s=default; t=1590821916;
+	bh=3goC8OB6qeZ0rHTPEgwao31zlEt51Co3ej14dAQU+3k=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=Mb3uIHk3ArgcAeygnlF51RZVSqQ4p/PfvauuR7cGoGc/n70O4voWflFgvVNHKrrAC
-	 fTc0arDooT0vp7ReWQCsIN8A8u7LhCZiJhiNp1rIVYIFwgIu2/8fUBbSDoqfyAz6DE
-	 oMDZ55BBEJw9M3H6Y/tkyp/da70o+bcBUAmf7W9Y=
+	b=f0za2te/LEF61BHuPWX2/DbzvAlZYQL2VWMOQUObZxKD3niUH/JVQNokmmGSq6/XS
+	 HUEGHs+fWpOoE+EMi2gZC7CQZ2a7OC8LZ+po/DdE4V9yWVexlBjslqsNe4RjhSIwZY
+	 KNhi4pd7Z7oC7a5Ft3aFgNk6FAzKN7metRLo9gWY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728912AbgE3G6a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 May 2020 02:58:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44972 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728864AbgE3G4H (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1728875AbgE3G4H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 30 May 2020 02:56:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44912 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728786AbgE3G4F (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 30 May 2020 02:56:05 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6955E221F1;
-        Sat, 30 May 2020 06:56:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 16A0520C09;
+        Sat, 30 May 2020 06:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590821764;
-        bh=scAvoLDDGn5cq3ZLD2TTb4DoukfwOFpBqOOQshZmdXg=;
+        s=default; t=1590821763;
+        bh=3goC8OB6qeZ0rHTPEgwao31zlEt51Co3ej14dAQU+3k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gtUjHPF4pvuZQE6KtrK5iJ+dYC5RdKOpOKuQABgncK4ZIvZB6erGclHUB9G7uwqyx
-         W1EK+Xnve/unhrNMX1dDtbQpBYkQemW3gq87TjszuOU5ZKZ4jBhumXseOQIs5wkyFE
-         qFkh761p5cNJoHoN7N5UDY8MsKXhem1rWb/jDRFM=
+        b=NMaHqJFaAlu1/ddoZC959Yhj39KFFJUMCmDIGbmv6mPvBMnOHUew6sansjyZpGEzl
+         uFZzMXJB+xwuDGv/A0gIHYCYXRzlCK0XkEsLSVexN2EObdt6VvrACf6C6osqrEgrdW
+         5Z+7mOg5Ng4Iq7Id68OE6Hbm3IyevwOnEm3TGQVU=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jevPW-001hqw-A6; Sat, 30 May 2020 08:56:02 +0200
+        id 1jevPV-001hoz-0Q; Sat, 30 May 2020 08:56:01 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 36/41] media: atomisp: print firmware data during load
-Date:   Sat, 30 May 2020 08:55:53 +0200
-Message-Id: <0cad0cb793ea9946043b8a02112673165e24ec72.1590821410.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 12/41] media: atomisp: get rid of a warning message
+Date:   Sat, 30 May 2020 08:55:29 +0200
+Message-Id: <f4f659f8de12e2ad175772be0579ba3c524c2f52.1590821410.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1590821410.git.mchehab+huawei@kernel.org>
 References: <cover.1590821410.git.mchehab+huawei@kernel.org>
@@ -61,90 +61,75 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While there's a way to list the firmware binaries in runtime,
-it is worth to also print it during firmware load.
+There's a warning message about an unused code. The code that
+were using it were commented out, due to a problem causing the
+firmware load to fail on the machines we're using for testing.
 
-One advantage is that this code also introduces additional
-checks with regards to invalid firmware types, which can be
-useful to identify problems.
+Change the place where we're commenting the code out, in order
+to avoid the warning.
 
+Fixes: 95d1f398c4dc ("media: atomisp: keep the ISP powered on when setting it")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../media/atomisp/pci/sh_css_firmware.c       | 48 ++++++++++++++++++-
- 1 file changed, 47 insertions(+), 1 deletion(-)
+ .../staging/media/atomisp/pci/atomisp_v4l2.c   | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_firmware.c b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-index 63415356c36d..7cd27707a35f 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-@@ -206,6 +206,20 @@ sh_css_check_firmware_version(struct device *dev, const char *fw_data)
- 	return 0;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+index b30a2e54067c..c89d477a3948 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+@@ -734,6 +734,10 @@ static int atomisp_mrfld_pre_power_down(struct atomisp_device *isp)
+ * WA for DDR DVFS enable/disable
+ * By default, ISP will force DDR DVFS 1600MHz before disable DVFS
+ */
++
++#if 0
++// Used only by atomisp_mrfld_power
++
+ static void punit_ddr_dvfs_enable(bool enable)
+ {
+ 	int door_bell = 1 << 8;
+@@ -758,9 +762,12 @@ static void punit_ddr_dvfs_enable(bool enable)
+ 	if (max_wait == -1)
+ 		pr_info("DDR DVFS, door bell is not cleared within 3ms\n");
+ }
++#endif
+ 
+ static int atomisp_mrfld_power(struct atomisp_device *isp, bool enable)
+ {
++// FIXME: at least with ISP2401, the code below causes the driver to break
++#if 0
+ 	unsigned long timeout;
+ 	u32 val = enable ? MRFLD_ISPSSPM0_IUNIT_POWER_ON :
+ 			   MRFLD_ISPSSPM0_IUNIT_POWER_OFF;
+@@ -817,22 +824,21 @@ static int atomisp_mrfld_power(struct atomisp_device *isp, bool enable)
+ 
+ 	dev_err(isp->dev, "IUNIT power-%s timeout.\n", enable ? "on" : "off");
+ 	return -EBUSY;
++#else
++	return 0;
++#endif
  }
  
-+static const char *fw_type_name[] = {
-+	[ia_css_sp_firmware]		= "SP",
-+	[ia_css_isp_firmware]		= "ISP",
-+	[ia_css_bootloader_firmware]	= "BootLoader",
-+	[ia_css_acc_firmware]		= "accel",
-+};
-+
-+static const char *fw_acc_type_name[] = {
-+	[IA_CSS_ACC_NONE] = 		"Normal",
-+	[IA_CSS_ACC_OUTPUT] = 		"Accel for output",
-+	[IA_CSS_ACC_VIEWFINDER] = 	"Accel for viewfinder",
-+	[IA_CSS_ACC_STANDALONE] = 	"Stand-alone accel",
-+};
-+
- int
- sh_css_load_firmware(struct device *dev, const char *fw_data,
- 		     unsigned int fw_size) {
-@@ -276,13 +290,45 @@ sh_css_load_firmware(struct device *dev, const char *fw_data,
- 		if (bi->blob.offset + bi->blob.size > fw_size)
- 			return -EINVAL;
+ /* Workaround for pmu_nc_set_power_state not ready in MRFLD */
+ int atomisp_mrfld_power_down(struct atomisp_device *isp)
+ {
+-	return 0;
+-// FIXME: at least with ISP2401, the code below causes the driver to break
+-//	return atomisp_mrfld_power(isp, false);
++	return atomisp_mrfld_power(isp, false);
+ }
  
-+		switch (bd.header.type) {
-+		case ia_css_isp_firmware:
-+			if (bd.header.info.isp.type > IA_CSS_ACC_STANDALONE) {
-+				dev_err(dev, "binary #%2d: invalid SP type\n",
-+					i);
-+				return -EINVAL;
-+			}
-+
-+			dev_dbg(dev,
-+				"binary #%-2d type %s (%s), binary id is %2d: %s\n",
-+				i,
-+				fw_type_name[bd.header.type],
-+				fw_acc_type_name[bd.header.info.isp.type],
-+				bd.header.info.isp.sp.id,
-+				bd.name);
-+			break;
-+		case ia_css_sp_firmware:
-+		case ia_css_bootloader_firmware:
-+		case ia_css_acc_firmware:
-+			dev_dbg(dev,
-+				"binary #%-2d type %s: %s\n",
-+				i, fw_type_name[bd.header.type],
-+				bd.name);
-+		default:
-+			if (bd.header.info.isp.type > IA_CSS_ACC_STANDALONE) {
-+				dev_err(dev,
-+					"binary #%2d: invalid firmware type\n",
-+					i);
-+				return -EINVAL;
-+			}
-+			break;
-+		}
-+
- 		if (bi->type == ia_css_sp_firmware) {
- 			if (i != SP_FIRMWARE)
- 				return -EINVAL;
- 			err = setup_binary(bi, fw_data, &sh_css_sp_fw, i);
- 			if (err)
- 				return err;
--			dev_dbg(dev, "firmware #%d (SP), name %s\n", i, bd.name);
+ /* Workaround for pmu_nc_set_power_state not ready in MRFLD */
+ int atomisp_mrfld_power_up(struct atomisp_device *isp)
+ {
+-	return 0;
+-// FIXME: at least with ISP2401, the code below causes the driver to break
+-//	return atomisp_mrfld_power(isp, true);
++	return atomisp_mrfld_power(isp, true);
+ }
  
- 		} else {
- 			/* All subsequent binaries (including bootloaders) (i>NUM_OF_SPS) are ISP firmware */
+ int atomisp_runtime_suspend(struct device *dev)
 -- 
 2.26.2
 
