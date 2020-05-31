@@ -2,41 +2,41 @@ Return-Path: <SRS0=CnHI=7N=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61E21C433DF
-	for <linux-media@archiver.kernel.org>; Sun, 31 May 2020 22:48:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14ABCC433DF
+	for <linux-media@archiver.kernel.org>; Sun, 31 May 2020 22:48:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36B3D2074A
-	for <linux-media@archiver.kernel.org>; Sun, 31 May 2020 22:48:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E545F20723
+	for <linux-media@archiver.kernel.org>; Sun, 31 May 2020 22:48:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="OtxxSXSK"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="orGjsQX7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728359AbgEaWsb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 31 May 2020 18:48:31 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:17396 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727098AbgEaWsa (ORCPT
+        id S1728296AbgEaWsa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 31 May 2020 18:48:30 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17369 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726803AbgEaWsa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 31 May 2020 18:48:30 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ed433df0000>; Sun, 31 May 2020 15:46:55 -0700
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ed433e80000>; Sun, 31 May 2020 15:47:04 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sun, 31 May 2020 15:48:30 -0700
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Sun, 31 May 2020 15:48:29 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sun, 31 May 2020 15:48:30 -0700
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 31 May
+        by hqpgpgate102.nvidia.com on Sun, 31 May 2020 15:48:29 -0700
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 31 May
  2020 22:48:29 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
  Transport; Sun, 31 May 2020 22:48:29 +0000
 Received: from sandstorm.nvidia.com (Not Verified[10.2.56.10]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5ed4343d0000>; Sun, 31 May 2020 15:48:29 -0700
+        id <B5ed4343c0000>; Sun, 31 May 2020 15:48:28 -0700
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Andy Walls <awalls@md.metrocast.net>,
@@ -44,103 +44,68 @@ CC:     Andy Walls <awalls@md.metrocast.net>,
         Souptick Joarder <jrdr.linux@gmail.com>,
         <linux-media@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
         <linux-mm@kvack.org>, John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 1/2] mm/gup: introduce pin_user_pages_unlocked
-Date:   Sun, 31 May 2020 15:48:26 -0700
-Message-ID: <20200531224827.769427-2-jhubbard@nvidia.com>
+Subject: [PATCH v2 0/2] mm/gup, media/ivtv: introduce pin_user_pages_unlocked
+Date:   Sun, 31 May 2020 15:48:25 -0700
+Message-ID: <20200531224827.769427-1-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200531224827.769427-1-jhubbard@nvidia.com>
-References: <20200531224827.769427-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1590965215; bh=V53v56y9lJXy8Ev50du65kbxD+j1cmQc1YhH71s5Kv8=;
+        t=1590965224; bh=aOt8sW2DbTQ7aWHqj2at43KUN0KLfkheGWFM9aoSfBc=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=OtxxSXSKgIPisVTVmn6pmBnG+uyjI9ccPbrXFSxcz+rpwSv3CFnLtIdjgxZxSSv2p
-         5ks5OVP/8liP8Ad+e2VVOvJRaW0ctGiBqlegn/Nddg008DoU0xK+QBtWD6enAeS3iR
-         NLE6UZpUXfQsHUiXRMRiAHKD3jw+v3ltspRBycmnMcq8AT6q22UNcAig/yL8rS5moz
-         EKvyLMII8e0BxV1LIGrZo5ZKcrkq1WsvzWN2KI8AElOamFIxHoCkLForTeMcfZiOha
-         UPiTGflB11+Rttp+fbJrz8IoNvXbsPm5XABDBtkW2ghMU25oxrzsBFHYSLbJ9M4NfS
-         39k1p7v/16HCQ==
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=orGjsQX7/GZyhlyjMwLf6Gd8VmiPPfC+bmYyMyV+FSkk4dVzKy+xRoyEt1OSADwaw
+         PFmiV/6Mcm94xUmcAFZgD/UlzH6KxvvtNeLA3CW8XwHodmh+CSAo9V0juitULojMXk
+         syQe5LWa2ICiie+HOEQY5dwPEwDG3MAIRfAW4POeFqeDT6AdNbCiTZfCaYv57CsjJl
+         6mMHbnOCJVKHjFIY+nlKYDOYTfmRshDZ9nzGhGTMFbYrlrYzr0YFPSkDWn2tZN3Fu0
+         ADmc+VAtW4CIisdR3lfvJ0UdS/bgk3vKecEyMWaBW1cs9atrR5ZryEKatflzXDfhk/
+         Eca4Z28vDG1+Q==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Introduce pin_user_pages_unlocked(), which is nearly identical to the
-get_user_pages_unlocked() that it wraps, except that it sets FOLL_PIN
-and rejects FOLL_GET.
+Hi,
 
-As with other pairs of get_user_pages*() and pin_user_pages() API calls,
-it's prudent to assert that FOLL_PIN is *not* set in the
-get_user_pages*() call, so add that as part of this.
+Here is a v2 that includes a small change that follows from Souptick's
+review of another very similar patchset (that added
+pin_user_pages_locked()) [1].
 
-Cc: Souptick Joarder <jrdr.linux@gmail.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- include/linux/mm.h |  2 ++
- mm/gup.c           | 23 +++++++++++++++++++++++
- 2 files changed, 25 insertions(+)
+This applies on top of today's linux.git (5.7-rc7+).
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index f3fe7371855c..a84befdb54b2 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1713,6 +1713,8 @@ long get_user_pages_locked(unsigned long start, unsig=
-ned long nr_pages,
- 		    unsigned int gup_flags, struct page **pages, int *locked);
- long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
- 		    struct page **pages, unsigned int gup_flags);
-+long pin_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
-+		    struct page **pages, unsigned int gup_flags);
-=20
- int get_user_pages_fast(unsigned long start, int nr_pages,
- 			unsigned int gup_flags, struct page **pages);
-diff --git a/mm/gup.c b/mm/gup.c
-index 87a6a59fe667..8ae5d09adb6b 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -2030,6 +2030,12 @@ long get_user_pages_unlocked(unsigned long start, un=
-signed long nr_pages,
- 	 */
- 	if (WARN_ON_ONCE(gup_flags & FOLL_LONGTERM))
- 		return -EINVAL;
-+	/*
-+	 * FOLL_PIN must only be set internally by the pin_user_pages*() APIs,
-+	 * never directly by the caller, so enforce that:
-+	 */
-+	if (WARN_ON_ONCE(gup_flags & FOLL_PIN))
-+		return -EINVAL;
-=20
- 	down_read(&mm->mmap_sem);
- 	ret =3D __get_user_pages_locked(current, mm, start, nr_pages, pages, NULL=
-,
-@@ -2939,3 +2945,20 @@ long pin_user_pages(unsigned long start, unsigned lo=
-ng nr_pages,
- 				     pages, vmas, gup_flags);
- }
- EXPORT_SYMBOL(pin_user_pages);
-+
-+/*
-+ * pin_user_pages_unlocked() is the FOLL_PIN variant of
-+ * get_user_pages_unlocked(). Behavior is the same, except that this one s=
-ets
-+ * FOLL_PIN and rejects FOLL_GET.
-+ */
-+long pin_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
-+			     struct page **pages, unsigned int gup_flags)
-+{
-+	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
-+	if (WARN_ON_ONCE(gup_flags & FOLL_GET))
-+		return -EINVAL;
-+
-+	gup_flags |=3D FOLL_PIN;
-+	return get_user_pages_unlocked(start, nr_pages, pages, gup_flags);
-+}
-+EXPORT_SYMBOL(pin_user_pages_unlocked);
+Changes since v1: added an assert-and-return to the corresponding
+get_user_pages_unlocked() call, to keep out any externally set
+FOLL_PIN flag.
+
+These patches are getting merged via Andrew's linux-mm tree, due to
+adding a new pin_user_pages*() variant to gup.c. However, it would be
+nice if anyone from IVTV or linux-media could provide some run time
+testing, maybe even a Tested-by.
+
+I've run this patchset through non-destructive xfstests, and a few
+other things such as LTP. However, I'm not set up for IVTV specific
+testing.
+
+[1] https://lore.kernel.org/r/d11d52f8-d54c-bb45-bde9-198235a03921@nvidia.c=
+om
+
+
+John Hubbard (2):
+  mm/gup: introduce pin_user_pages_unlocked
+  ivtv: convert get_user_pages() --> pin_user_pages()
+
+ drivers/media/pci/ivtv/ivtv-udma.c | 19 ++++++-------------
+ drivers/media/pci/ivtv/ivtv-yuv.c  | 17 ++++++-----------
+ drivers/media/pci/ivtv/ivtvfb.c    |  4 ++--
+ include/linux/mm.h                 |  2 ++
+ mm/gup.c                           | 23 +++++++++++++++++++++++
+ 5 files changed, 39 insertions(+), 26 deletions(-)
+
+
+base-commit: bdc48fa11e46f867ea4d75fa59ee87a7f48be144
 --=20
 2.26.2
 
