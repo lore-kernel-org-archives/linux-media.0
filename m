@@ -2,111 +2,115 @@ Return-Path: <SRS0=f2z8=7O=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14D58C433DF
-	for <linux-media@archiver.kernel.org>; Mon,  1 Jun 2020 18:50:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F5E5C433DF
+	for <linux-media@archiver.kernel.org>; Mon,  1 Jun 2020 19:22:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4F57206E2
-	for <linux-media@archiver.kernel.org>; Mon,  1 Jun 2020 18:50:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="YlnHXxlY"
+	by mail.kernel.org (Postfix) with ESMTP id 0E94220734
+	for <linux-media@archiver.kernel.org>; Mon,  1 Jun 2020 19:22:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728637AbgFASuT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Jun 2020 14:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729968AbgFASGP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Jun 2020 14:06:15 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6704BC05BD43
-        for <linux-media@vger.kernel.org>; Mon,  1 Jun 2020 11:06:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id y18so267493plr.4
-        for <linux-media@vger.kernel.org>; Mon, 01 Jun 2020 11:06:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=es-iitr-ac-in.20150623.gappssmtp.com; s=20150623;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=poRdmI3sV+WAEeJ184sPC3DagggHtzKjgaeE5Yaw6wQ=;
-        b=YlnHXxlYl+SOpQEvQznxQyGnf0ez8Fe1+z7AtuhnP2bvUCbA+Qk7QQd1dLs3Eiysuo
-         4vE7UVP7MaUmLVsZQLm2mHFJhn38CeQLyyAlYMALNdsJoWPrW/UIiWU9X1ob+uqAul0z
-         m7n/XC9dg7d5B7Synzd1nnRm6RGB5QZiJhjyaUi9s3OFeC2joTZKXBCrk+p06NU9Nnkx
-         scmWPuCn9EJT4J9XtA/PHwhDZ2xjLWlZ5y5m1OG22yb4yLPIUuCudz7CEbSFIDjCsXNH
-         B4mkRHuCuHOFN0bOoOtSyuStK15jLiQg9cOq97m7omdsotrNbjvP0onlubU/D370uvu3
-         iTCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=poRdmI3sV+WAEeJ184sPC3DagggHtzKjgaeE5Yaw6wQ=;
-        b=JrHvQOWXIE+uct4xyzluBwJBvmsT4EKrkCIpZIqHLKzldIrgVnyxOMy7ADsZRtki6e
-         liJnCwcFYg9Nfv4j3s+nzATT1FmNMegHQ/2E5Wdtk/cViJy1bschhI5cROnHSgoXsJN5
-         wbfpvH+iEgSTYwoDpor/3wHuTmkyP92SfEyc4XhRnLMMnSZx6TACF74/jZsCe3XMsgDS
-         uI4sdnEY807F50d+zsimo8zt3a3l8k4swHuPB4g9MfzmFUMPgYHAnva0XlWZciVf6Kq/
-         tZ6SEkm2oU0jP2aN7kynQvmaKMz67o7Z+sjBbd2hgI6KB2gvKZA7jf5fEjpmZXV2pZBX
-         aPwA==
-X-Gm-Message-State: AOAM530R3+k4o/gaJGhFIT+XTR2cSW7WGZKLgSml1KRsZU//ZrlfNLqa
-        pODZ64mKBoqK1BwVl/UgxY6QwA==
-X-Google-Smtp-Source: ABdhPJz9pyZqkmO3A0oC3+WeIAYCaVJwUVVxWnY8RVi4WTC5OtCQrLGgDuTlu/2Hs13GiYFNcTBnXA==
-X-Received: by 2002:a17:90b:78b:: with SMTP id l11mr597420pjz.97.1591034772292;
-        Mon, 01 Jun 2020 11:06:12 -0700 (PDT)
-Received: from kaaira-HP-Pavilion-Notebook ([103.113.213.174])
-        by smtp.gmail.com with ESMTPSA id a16sm118713pgk.88.2020.06.01.11.06.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 01 Jun 2020 11:06:11 -0700 (PDT)
-From:   Kaaira Gupta <kgupta@es.iitr.ac.in>
-X-Google-Original-From: Kaaira Gupta <Kaairakgupta@es.iitr.ac.in>
-Date:   Mon, 1 Jun 2020 23:36:03 +0530
-To:     Helen Koike <helen.koike@collabora.com>
-Cc:     Kaaira Gupta <kgupta@es.iitr.ac.in>, linux-media@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com,
-        laurent.pinchart@ideasonboard.com,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: vimc: Add color descriptions to test image
-Message-ID: <20200601180603.GA23904@kaaira-HP-Pavilion-Notebook>
-References: <20200601135339.GA16606@kaaira-HP-Pavilion-Notebook>
- <dd4e19e7-285b-dced-bc0d-5aca38019b44@collabora.com>
+        id S1728289AbgFATWC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Jun 2020 15:22:02 -0400
+Received: from v6.sk ([167.172.42.174]:45480 "EHLO v6.sk"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726751AbgFATWB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 1 Jun 2020 15:22:01 -0400
+Received: from localhost (v6.sk [IPv6:::1])
+        by v6.sk (Postfix) with ESMTP id D5A2761306;
+        Mon,  1 Jun 2020 19:21:29 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>
+Subject: [RESEND 2 PATCH] media: marvell-ccic: Add support for runtime PM
+Date:   Mon,  1 Jun 2020 21:21:24 +0200
+Message-Id: <20200601192124.172650-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dd4e19e7-285b-dced-bc0d-5aca38019b44@collabora.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jun 01, 2020 at 01:36:59PM -0300, Helen Koike wrote:
-> 
-> 
-> On 6/1/20 10:53 AM, Kaaira Gupta wrote:
-> > Hi!
-> > 
-> > Currently there is no method to know if the test image generated by vimc
-> > is correct (except for comparing it with a known 'correct' image). So, I
-> > wanted to investigate about a possibility to add text to each color bar
-> > of the generated pattern. I think currently vivid supports this
-> > functionality as an optional control, so can we move it to a common 
-> > platform so that both VIVID and VIMC can supoort it?
-> > 
-> > Thanks,
-> > Kaaira
-> > 
-> 
-> If it is useful I don't oppose, but I'm not sure how this is implemented
-> in vivid (or if it is in tpg).
-> I guess it is easier to judge from an RFC code :)
+On MMP3, the camera block lives on na separate power island. We want to
+turn it off if the CCIC is not in use to conserve power.
 
-I am sorry for the confusion. Kieran pointed it out to me that vivid
-does not print the values of colors to check if they are right or not.
-It prints other useful information. As for vimc we want the order of
-test image color to be printed so that it can be checked if the visible
-order is correct. 
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+---
+ drivers/media/platform/marvell-ccic/mcam-core.c  |  3 +++
+ drivers/media/platform/marvell-ccic/mmp-driver.c | 12 ++++++++----
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-> 
-> Regards,
-> Helen
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
+index 09775b6624c6b..c2cd1d461bd06 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -24,6 +24,7 @@
+ #include <linux/clk.h>
+ #include <linux/clk-provider.h>
+ #include <linux/videodev2.h>
++#include <linux/pm_runtime.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-ioctl.h>
+ #include <media/v4l2-ctrls.h>
+@@ -901,6 +902,7 @@ static void mcam_clk_enable(struct mcam_camera *mcam)
+ {
+ 	unsigned int i;
+ 
++	pm_runtime_get_sync(mcam->dev);
+ 	for (i = 0; i < NR_MCAM_CLK; i++) {
+ 		if (!IS_ERR(mcam->clk[i]))
+ 			clk_prepare_enable(mcam->clk[i]);
+@@ -915,6 +917,7 @@ static void mcam_clk_disable(struct mcam_camera *mcam)
+ 		if (!IS_ERR(mcam->clk[i]))
+ 			clk_disable_unprepare(mcam->clk[i]);
+ 	}
++	pm_runtime_put(mcam->dev);
+ }
+ 
+ /* ---------------------------------------------------------------------- */
+diff --git a/drivers/media/platform/marvell-ccic/mmp-driver.c b/drivers/media/platform/marvell-ccic/mmp-driver.c
+index 92b92255dac66..eec482d16805b 100644
+--- a/drivers/media/platform/marvell-ccic/mmp-driver.c
++++ b/drivers/media/platform/marvell-ccic/mmp-driver.c
+@@ -24,6 +24,7 @@
+ #include <linux/list.h>
+ #include <linux/pm.h>
+ #include <linux/clk.h>
++#include <linux/pm_runtime.h>
+ 
+ #include "mcam-core.h"
+ 
+@@ -313,10 +314,12 @@ static int mmpcam_probe(struct platform_device *pdev)
+ 	cam->irq = res->start;
+ 	ret = devm_request_irq(&pdev->dev, cam->irq, mmpcam_irq, IRQF_SHARED,
+ 					"mmp-camera", mcam);
+-	if (ret == 0) {
+-		mmpcam_add_device(cam);
+-		return 0;
+-	}
++	if (ret)
++		goto out;
++
++	mmpcam_add_device(cam);
++	pm_runtime_enable(&pdev->dev);
++	return 0;
+ 
+ out:
+ 	fwnode_handle_put(mcam->asd.match.fwnode);
+@@ -332,6 +335,7 @@ static int mmpcam_remove(struct mmp_camera *cam)
+ 
+ 	mmpcam_remove_device(cam);
+ 	mccic_shutdown(mcam);
++	pm_runtime_force_suspend(mcam->dev);
+ 	return 0;
+ }
+ 
+-- 
+2.26.2
+
