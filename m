@@ -2,158 +2,111 @@ Return-Path: <SRS0=f2z8=7O=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4BAEC433E0
-	for <linux-media@archiver.kernel.org>; Mon,  1 Jun 2020 18:48:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14D58C433DF
+	for <linux-media@archiver.kernel.org>; Mon,  1 Jun 2020 18:50:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 804BE206C3
-	for <linux-media@archiver.kernel.org>; Mon,  1 Jun 2020 18:48:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4F57206E2
+	for <linux-media@archiver.kernel.org>; Mon,  1 Jun 2020 18:50:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HHXQoRKk"
+	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="YlnHXxlY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730795AbgFASsM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Jun 2020 14:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S1728637AbgFASuT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Jun 2020 14:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730310AbgFASsK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Jun 2020 14:48:10 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE871C061A0E
-        for <linux-media@vger.kernel.org>; Mon,  1 Jun 2020 11:48:09 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id n24so10219044ejd.0
-        for <linux-media@vger.kernel.org>; Mon, 01 Jun 2020 11:48:09 -0700 (PDT)
+        with ESMTP id S1729968AbgFASGP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Jun 2020 14:06:15 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6704BC05BD43
+        for <linux-media@vger.kernel.org>; Mon,  1 Jun 2020 11:06:13 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id y18so267493plr.4
+        for <linux-media@vger.kernel.org>; Mon, 01 Jun 2020 11:06:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ll0Hxtpd9kUjoZ6368PBnHFjk1t/KP9A5doX0NsjS8Y=;
-        b=HHXQoRKkRwnj5wx8VXlsES6HymXOV8W2MTPYDHm4YaFpj9bCVwM2Nxf2BlFpKZp3XB
-         2Qh/o6KxlEKLbqinUeFXafMKslx9YzDJAaZs+8Unv53j5DBKoqiPBjGvg/IYBC7Q3JA/
-         Ieg4HsYz/NKf3SaU/zciPOSrIIBePr/Z58XAE=
+        d=es-iitr-ac-in.20150623.gappssmtp.com; s=20150623;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=poRdmI3sV+WAEeJ184sPC3DagggHtzKjgaeE5Yaw6wQ=;
+        b=YlnHXxlYl+SOpQEvQznxQyGnf0ez8Fe1+z7AtuhnP2bvUCbA+Qk7QQd1dLs3Eiysuo
+         4vE7UVP7MaUmLVsZQLm2mHFJhn38CeQLyyAlYMALNdsJoWPrW/UIiWU9X1ob+uqAul0z
+         m7n/XC9dg7d5B7Synzd1nnRm6RGB5QZiJhjyaUi9s3OFeC2joTZKXBCrk+p06NU9Nnkx
+         scmWPuCn9EJT4J9XtA/PHwhDZ2xjLWlZ5y5m1OG22yb4yLPIUuCudz7CEbSFIDjCsXNH
+         B4mkRHuCuHOFN0bOoOtSyuStK15jLiQg9cOq97m7omdsotrNbjvP0onlubU/D370uvu3
+         iTCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ll0Hxtpd9kUjoZ6368PBnHFjk1t/KP9A5doX0NsjS8Y=;
-        b=elw5JRcbMtEoPDnyqbNq8CdjjJi+wq8Bd22hjSuaQfq09UXIjddyF9HiZqXhijV2H1
-         u2X4PI1ZLw/E0BPKl3Q5NVwNWrAsAemnfBbz3JzBIkrX+DemGkQIX0Sdaw5xWnRc6Nrl
-         6NRRc6V2jg3/vMmuL7Pg8ncS9X6ykcxnrj37QfSpt/YWqHOACiWNeOmzontNT64IUyjc
-         Zw/5hisITZePz2my4O4b1E0eNu5rB4puCRb0FX0Ng92rTe+FJmwm64aJFTiuDAmGb35D
-         tNG5JMltHvAryay7bCLL4bdibHowzZluhCESxYigHlx4puQZ4D0unvWbLlyhboYtuZZQ
-         e6xQ==
-X-Gm-Message-State: AOAM533V/uduzb2L+UB+E1fXx5kkdTqfQEpiqc6ZCgMR2XWOdPUNGhdB
-        Ym00SR1QAqlOtm47/qLuVMWhgorlmmJxjA==
-X-Google-Smtp-Source: ABdhPJx47QQ6cEuoy6uipSHWtWB6TyKM1E4XXwhu6BmJawg7mqyGvX1tu/Oxk+d+QNShM7Ey3MN6Jw==
-X-Received: by 2002:a17:906:4406:: with SMTP id x6mr20336405ejo.160.1591037288348;
-        Mon, 01 Jun 2020 11:48:08 -0700 (PDT)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id c17sm354566eja.42.2020.06.01.11.48.06
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jun 2020 11:48:07 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id r15so554178wmh.5
-        for <linux-media@vger.kernel.org>; Mon, 01 Jun 2020 11:48:06 -0700 (PDT)
-X-Received: by 2002:a7b:c622:: with SMTP id p2mr590231wmk.55.1591037285905;
- Mon, 01 Jun 2020 11:48:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200518132731.20855-1-dongchun.zhu@mediatek.com>
- <20200518132731.20855-3-dongchun.zhu@mediatek.com> <20200521195113.GC14214@chromium.org>
- <1590139561.8804.390.camel@mhfsdcap03> <CAAFQd5CCsT_oM9aij_imV+NABzByi94RmCj97Dx0Tk3S0WDsTg@mail.gmail.com>
- <1590570089.8804.453.camel@mhfsdcap03>
-In-Reply-To: <1590570089.8804.453.camel@mhfsdcap03>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Mon, 1 Jun 2020 20:47:54 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5Dgboh8om68546ADELX3g-0y40rdBxY+H3WsX5xAD1_FQ@mail.gmail.com>
-Message-ID: <CAAFQd5Dgboh8om68546ADELX3g-0y40rdBxY+H3WsX5xAD1_FQ@mail.gmail.com>
-Subject: Re: [V6, 2/2] media: i2c: dw9768: Add DW9768 VCM driver
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=poRdmI3sV+WAEeJ184sPC3DagggHtzKjgaeE5Yaw6wQ=;
+        b=JrHvQOWXIE+uct4xyzluBwJBvmsT4EKrkCIpZIqHLKzldIrgVnyxOMy7ADsZRtki6e
+         liJnCwcFYg9Nfv4j3s+nzATT1FmNMegHQ/2E5Wdtk/cViJy1bschhI5cROnHSgoXsJN5
+         wbfpvH+iEgSTYwoDpor/3wHuTmkyP92SfEyc4XhRnLMMnSZx6TACF74/jZsCe3XMsgDS
+         uI4sdnEY807F50d+zsimo8zt3a3l8k4swHuPB4g9MfzmFUMPgYHAnva0XlWZciVf6Kq/
+         tZ6SEkm2oU0jP2aN7kynQvmaKMz67o7Z+sjBbd2hgI6KB2gvKZA7jf5fEjpmZXV2pZBX
+         aPwA==
+X-Gm-Message-State: AOAM530R3+k4o/gaJGhFIT+XTR2cSW7WGZKLgSml1KRsZU//ZrlfNLqa
+        pODZ64mKBoqK1BwVl/UgxY6QwA==
+X-Google-Smtp-Source: ABdhPJz9pyZqkmO3A0oC3+WeIAYCaVJwUVVxWnY8RVi4WTC5OtCQrLGgDuTlu/2Hs13GiYFNcTBnXA==
+X-Received: by 2002:a17:90b:78b:: with SMTP id l11mr597420pjz.97.1591034772292;
+        Mon, 01 Jun 2020 11:06:12 -0700 (PDT)
+Received: from kaaira-HP-Pavilion-Notebook ([103.113.213.174])
+        by smtp.gmail.com with ESMTPSA id a16sm118713pgk.88.2020.06.01.11.06.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 01 Jun 2020 11:06:11 -0700 (PDT)
+From:   Kaaira Gupta <kgupta@es.iitr.ac.in>
+X-Google-Original-From: Kaaira Gupta <Kaairakgupta@es.iitr.ac.in>
+Date:   Mon, 1 Jun 2020 23:36:03 +0530
+To:     Helen Koike <helen.koike@collabora.com>
+Cc:     Kaaira Gupta <kgupta@es.iitr.ac.in>, linux-media@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Cao Bing Bu <bingbu.cao@intel.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Sj Huang <sj.huang@mediatek.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        =?UTF-8?B?U2hlbmduYW4gV2FuZyAo546L5Zyj55S3KQ==?= 
-        <shengnan.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Subject: vimc: Add color descriptions to test image
+Message-ID: <20200601180603.GA23904@kaaira-HP-Pavilion-Notebook>
+References: <20200601135339.GA16606@kaaira-HP-Pavilion-Notebook>
+ <dd4e19e7-285b-dced-bc0d-5aca38019b44@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dd4e19e7-285b-dced-bc0d-5aca38019b44@collabora.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, May 27, 2020 at 11:03 AM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
->
-> Hi Tomasz,
->
-> On Mon, 2020-05-25 at 13:45 +0200, Tomasz Figa wrote:
-> > On Fri, May 22, 2020 at 11:27 AM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
-> > >
-> > > Hi Tomasz,
-> > >
-> > > Thanks for the review. My replies are as below.
-> > >
-> > > On Thu, 2020-05-21 at 19:51 +0000, Tomasz Figa wrote:
-> > > > Hi Dongchun, Sakari,
-> > > >
-> > > > On Mon, May 18, 2020 at 09:27:31PM +0800, Dongchun Zhu wrote:
-> > [snip]
-> > > > > +   pm_runtime_enable(dev);
-> > > > > +   if (!pm_runtime_enabled(dev)) {
-> > > > > +           ret = dw9768_runtime_resume(dev);
-> > > > > +           if (ret < 0) {
-> > > > > +                   dev_err(dev, "failed to power on: %d\n", ret);
-> > > > > +                   goto entity_cleanup;
-> > > > > +           }
-> > > > > +   }
-> > > > > +
-> > > > > +   ret = v4l2_async_register_subdev(&dw9768->sd);
-> > > > > +   if (ret < 0)
-> > > > > +           goto entity_cleanup;
-> > > > > +
-> > > > > +   return 0;
-> > > > > +
-> > > > > +entity_cleanup:
-> > > >
-> > > > Need to power off if the code above powered on.
-> > > >
-> > >
-> > > Thanks for the reminder.
-> > > If there is something wrong with runtime PM, actuator is to be powered
-> > > on via dw9768_runtime_resume() API.
-> > > When actuator sub-device is powered on completely and async registered
-> > > successfully, we shall power off it afterwards.
-> > >
-> >
-> > The code above calls dw9768_runtime_resume() if
-> > !pm_runtime_enabled(dev), but the clean-up code below the
-> > entity_cleanup label doesn't have the corresponding
-> > dw9768_runtime_suspend() call.
-> >
->
-> Did you mean the 'entity_cleanup' after v4l2_async_register_subdev()?
+On Mon, Jun 01, 2020 at 01:36:59PM -0300, Helen Koike wrote:
+> 
+> 
+> On 6/1/20 10:53 AM, Kaaira Gupta wrote:
+> > Hi!
+> > 
+> > Currently there is no method to know if the test image generated by vimc
+> > is correct (except for comparing it with a known 'correct' image). So, I
+> > wanted to investigate about a possibility to add text to each color bar
+> > of the generated pattern. I think currently vivid supports this
+> > functionality as an optional control, so can we move it to a common 
+> > platform so that both VIVID and VIMC can supoort it?
+> > 
+> > Thanks,
+> > Kaaira
+> > 
+> 
+> If it is useful I don't oppose, but I'm not sure how this is implemented
+> in vivid (or if it is in tpg).
+> I guess it is easier to judge from an RFC code :)
 
-Yes.
+I am sorry for the confusion. Kieran pointed it out to me that vivid
+does not print the values of colors to check if they are right or not.
+It prints other useful information. As for vimc we want the order of
+test image color to be printed so that it can be checked if the visible
+order is correct. 
 
-> Actually I made some changes for OV02A V9, according to this comment.
-> Could you help review that change? Thanks.
-
-Sure, I will take a look.
-
-Best regards,
-Tomasz
+> 
+> Regards,
+> Helen
