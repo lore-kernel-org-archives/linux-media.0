@@ -2,112 +2,211 @@ Return-Path: <SRS0=rRVp=7Q=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91053C433E0
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jun 2020 12:46:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E4B6C433DF
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jun 2020 13:32:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 702EB20678
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jun 2020 12:46:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="nxmb/mIr"
+	by mail.kernel.org (Postfix) with ESMTP id 59A2F20679
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jun 2020 13:32:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725997AbgFCMqW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Jun 2020 08:46:22 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:20050 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725833AbgFCMqW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 3 Jun 2020 08:46:22 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 053CgD4B004142;
-        Wed, 3 Jun 2020 14:46:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=zWShjHdtkDP9KEzM3tiXokZkb+o6dSeLDNYRf6d3oDE=;
- b=nxmb/mIrDMRgEFlxZzjDRPIQLRaHmG/XYTkZaHIphD+5bSr30D6uvz5pXEK+AIByCwY3
- sAlxXOxBBImp0/VrkVgnc/EIKxov/S4A2UNrA74TM8TG/oeoykThJuGghBibMHJH7Gsz
- udccshrbY2SdFt4ZwC3V4mq2i1ZIWu9vjaZPmr63cnHnpomcgvjOoE2qqsjd4HV4WhLj
- yHkfPT2Uhb8oSQ4tTwxk/XGd+SxDOG2c6QpG4QoxWctle1TdC4Fq/oFYROoFXZ7Z6lfe
- nTKZdGgE/iHbY/GO5VXryoLWiKCcEYfWWzM3H6muY7FDsQqkUJrQDi7vnZzZFpLAqc4R Nw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 31bcm94qen-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Jun 2020 14:46:08 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D0E2C10002A;
-        Wed,  3 Jun 2020 14:46:05 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C09A22CB37B;
-        Wed,  3 Jun 2020 14:46:05 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 3 Jun 2020 14:46:05
- +0200
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <hugues.fruchet@st.com>, <mchehab@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <vincent.guittot@linaro.org>,
-        <valentin.schneider@arm.com>, <rjw@rjwysocki.net>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH v2 1/3] dt-bindings: media: stm32-dcmi: Add DCMI min frequency property
-Date:   Wed, 3 Jun 2020 14:45:57 +0200
-Message-ID: <20200603124559.22652-2-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
-In-Reply-To: <20200603124559.22652-1-benjamin.gaignard@st.com>
-References: <20200603124559.22652-1-benjamin.gaignard@st.com>
+        id S1725866AbgFCNca (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Jun 2020 09:32:30 -0400
+Received: from mga14.intel.com ([192.55.52.115]:17055 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725836AbgFCNc3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Jun 2020 09:32:29 -0400
+IronPort-SDR: P8VaJCXHIJAua/tOIDwV+KO8cRBBkxC8VD4vTJbEOkNhs2HyRougsHYbGOBesnFre5La33dRiX
+ gz7iGT1MpL5w==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2020 06:32:27 -0700
+IronPort-SDR: fCwZRAMXHsTCUIsQiDZEUm99tBgvpHSItZ4kNXeUk+zAUqtQd8mWHJe4VXrNUKd74Z8iihgKBW
+ qAFagyN00DFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,467,1583222400"; 
+   d="scan'208";a="287039262"
+Received: from lkp-server01.sh.intel.com (HELO dad89584b564) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 03 Jun 2020 06:32:24 -0700
+Received: from kbuild by dad89584b564 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jgTVI-0000AQ-69; Wed, 03 Jun 2020 13:32:24 +0000
+Date:   Wed, 03 Jun 2020 21:31:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org
+Subject: [ragnatech:media-next] BUILD REGRESSION
+ 60b2c19dd09b0413fb864b5d75949125b47baa1a
+Message-ID: <5ed7a630.F+iDtFpF/dqDOcuR%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-03_12:2020-06-02,2020-06-03 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document st,stm32-dcmi-min-frequency property which is used to
-request CPUs minimum frequency when streaming frames.
+tree/branch: git://git.ragnatech.se/linux  media-next
+branch HEAD: 60b2c19dd09b0413fb864b5d75949125b47baa1a  media: atomisp: set DFS to MAX if sensor doesn't report fps
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+Error/Warning in current branch:
+
+drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:4196:9: error: 'atomisp_hw_is_isp2401' undeclared (first use in this function)
+
+Error/Warning ids grouped by kconfigs:
+
+recent_errors
+|-- i386-allmodconfig
+|   `-- drivers-staging-media-atomisp-pci-atomisp_compat_css20.c:error:atomisp_hw_is_isp2401-undeclared-(first-use-in-this-function)
+|-- i386-allyesconfig
+|   `-- drivers-staging-media-atomisp-pci-atomisp_compat_css20.c:error:atomisp_hw_is_isp2401-undeclared-(first-use-in-this-function)
+`-- x86_64-allyesconfig
+    `-- drivers-staging-media-atomisp-pci-atomisp_compat_css20.c:error:atomisp_hw_is_isp2401-undeclared-(first-use-in-this-function)
+
+elapsed time: 1852m
+
+configs tested: 134
+configs skipped: 16
+
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+mips                           gcw0_defconfig
+arc                    vdk_hs38_smp_defconfig
+ia64                          tiger_defconfig
+parisc                           allmodconfig
+mips                     loongson1b_defconfig
+sh                        sh7763rdp_defconfig
+ia64                              allnoconfig
+sh                           se7619_defconfig
+mips                         rt305x_defconfig
+powerpc                 linkstation_defconfig
+arm                        spear6xx_defconfig
+mips                           ip28_defconfig
+xtensa                generic_kc705_defconfig
+arc                             nps_defconfig
+arm                        keystone_defconfig
+arm                        multi_v5_defconfig
+h8300                       h8s-sim_defconfig
+m68k                       m5475evb_defconfig
+arm                      pxa255-idp_defconfig
+arm                     am200epdkit_defconfig
+mips                      maltaaprp_defconfig
+arm                            pleb_defconfig
+sh                           sh2007_defconfig
+arm                     eseries_pxa_defconfig
+sparc64                          alldefconfig
+m68k                            mac_defconfig
+powerpc                  mpc885_ads_defconfig
+riscv                            alldefconfig
+sh                        sh7785lcr_defconfig
+arm                          lpd270_defconfig
+arm                          moxart_defconfig
+sh                               j2_defconfig
+sparc64                          allyesconfig
+arm                            mps2_defconfig
+arm                          prima2_defconfig
+s390                              allnoconfig
+mips                              allnoconfig
+mips                            gpr_defconfig
+sh                     sh7710voipgw_defconfig
+ia64                             allmodconfig
+powerpc                  storcenter_defconfig
+mips                  decstation_64_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                     magicpanelr2_defconfig
+mips                           ci20_defconfig
+mips                           ip22_defconfig
+parisc                            allnoconfig
+s390                             alldefconfig
+c6x                        evmc6472_defconfig
+sh                          rsk7264_defconfig
+sh                          kfr2r09_defconfig
+m68k                       m5208evb_defconfig
+c6x                         dsk6455_defconfig
+m68k                          multi_defconfig
+i386                             alldefconfig
+sh                   sh7770_generic_defconfig
+m68k                       m5275evb_defconfig
+mips                  mips_paravirt_defconfig
+arm                         lpc18xx_defconfig
+arm                              zx_defconfig
+ia64                             alldefconfig
+mips                        nlm_xlp_defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+parisc                              defconfig
+parisc                           allyesconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allmodconfig
+um                                  defconfig
+um                                allnoconfig
+um                               allyesconfig
+um                               allmodconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
 ---
- Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-index 3fe778cb5cc3..05ca85a2411a 100644
---- a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-+++ b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-@@ -44,6 +44,13 @@ properties:
-       bindings defined in
-       Documentation/devicetree/bindings/media/video-interfaces.txt.
- 
-+  st,stm32-dcmi-min-frequency:
-+    description: DCMI minimum CPUs frequency requirement (in KHz).
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/uint32
-+      - minimum: 0
-+      - default: 0
-+
- required:
-   - compatible
-   - reg
-@@ -71,6 +78,7 @@ examples:
-         clock-names = "mclk";
-         dmas = <&dmamux1 75 0x400 0x0d>;
-         dma-names = "tx";
-+        st,stm32-dcmi-min-frequency = <650000>;
- 
-         port {
-              dcmi_0: endpoint {
--- 
-2.15.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
