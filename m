@@ -4,53 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 328ECC433E1
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jun 2020 07:01:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BC96C433E0
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jun 2020 07:01:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 047EC2068D
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jun 2020 07:01:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B993207DA
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jun 2020 07:01:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591167712;
-	bh=H8ctQ2sg2LU2YVj/bJeUzHXsZxf6SNLpmvCtQX7m0hU=;
+	s=default; t=1591167713;
+	bh=eWAJvViYM06bCspTqoBw5aI7xqOFP2eVmb3nVQAQ9wY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=tteBJx/v+hxawls6nb7XRhYRF0QhNytGHFH9hIKP4F3BistFMDN5otyfh0auX403s
-	 mcUy4nnf19jL+LW2vc7jqOFfEBs3POiC4LgroNzNEVjTzcbIGs4TZq/q3Q6r8btwjp
-	 HwaYkdi4xJq6oSmO3/QRqLngF7yWP68ga6pD+es8=
+	b=XGdjjCNjPuaYCvAYUWADmv+zbshakT61kSijkz2R3lEmNeLQvukS1IDgRH+MsEcB5
+	 6g7ySMSidv/FpMKVdKycoA+CBzq6KAO9+ZzGWZEIjLFjtCFywZAq3K/mmN5P6RHpiq
+	 f83zLan/NPSmhoAfev+DcO4YbSnEy+Hhhwfj53Qk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726234AbgFCHBh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Jun 2020 03:01:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43410 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726123AbgFCHBI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726150AbgFCHBI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 3 Jun 2020 03:01:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43304 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725881AbgFCHBG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Jun 2020 03:01:06 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AB80420878;
+        by mail.kernel.org (Postfix) with ESMTPSA id 804302077D;
         Wed,  3 Jun 2020 07:01:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1591167665;
-        bh=H8ctQ2sg2LU2YVj/bJeUzHXsZxf6SNLpmvCtQX7m0hU=;
+        bh=eWAJvViYM06bCspTqoBw5aI7xqOFP2eVmb3nVQAQ9wY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jbnpGrbEEdsD6tzbYDQCSomSWUSMun64MUKh4bQZjckH+uz1npGr2DEBtC54Gx/20
-         ak2SsVY6elKjL7feWhfFP0Rq7kRacGu7dNKAprkDmdQkqKLCMy3dyzZIPlOU0tQtPp
-         TxVRE8iq5JUsitlp2uEXZv8dZ6kn+jLgp16sfFHA=
+        b=QK+/al89zy+82hQBgD2jdShYFfh7VIXPNz3PIkM6AjrLzxAdSNh7J96+jd0ktmnBB
+         c8XYlbSGiG4kLnp93+bK/KSUK5FEfy3yUG5Z+C4zTng2WHTcP/JYc8mNKV6+D8oIq+
+         iaIXF/TdOI+Gi3d43CxV0BiWOknuBuaQg4Heg1qE=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jgNOZ-004j95-P5; Wed, 03 Jun 2020 09:01:03 +0200
+        id 1jgNOZ-004j84-3J; Wed, 03 Jun 2020 09:01:03 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH 14/15] media: atomisp: use strscpy() instead of less secure variants
-Date:   Wed,  3 Jun 2020 09:01:00 +0200
-Message-Id: <3fca28b47d2f2e7d646013619a16f754f9632c19.1591167358.git.mchehab+huawei@kernel.org>
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 01/15] media: atomisp: improve IRQ handling debug messages
+Date:   Wed,  3 Jun 2020 09:00:47 +0200
+Message-Id: <575283fde059cbb42bf4e7b044cafbfe463e9f3b.1591167358.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1591167358.git.mchehab+huawei@kernel.org>
 References: <cover.1591167358.git.mchehab+huawei@kernel.org>
@@ -61,162 +60,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace usages of strcpy(), strlcpy() and strncpy() in favor
-of strscpy().
+When an IRQ is not handled, it is nice to know what's the
+reason.
 
-Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_file.c     |  2 +-
- .../media/atomisp/pci/atomisp_gmin_platform.c        |  2 +-
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c    | 12 ++++++------
- drivers/staging/media/atomisp/pci/atomisp_tpg.c      |  2 +-
- .../staging/media/atomisp/pci/atomisp_trace_event.h  |  6 +++---
- drivers/staging/media/atomisp/pci/atomisp_v4l2.c     |  2 +-
- drivers/staging/media/atomisp/pci/sh_css_sp.c        |  3 +--
- drivers/staging/media/atomisp/pci/sh_css_version.c   |  2 +-
- 8 files changed, 15 insertions(+), 16 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_cmd.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_file.c b/drivers/staging/media/atomisp/pci/atomisp_file.c
-index fa92b5eba740..e568ca99c45a 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_file.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_file.c
-@@ -219,7 +219,7 @@ int atomisp_file_input_init(struct atomisp_device *isp)
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+index d06173b62b99..875dd3ce6e48 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+@@ -566,7 +566,7 @@ irqreturn_t atomisp_isr(int irq, void *dev)
  
- 	v4l2_subdev_init(sd, &file_input_ops);
- 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
--	strcpy(sd->name, "file_input_subdev");
-+	strscpy(sd->name, "file_input_subdev", sizeof(sd->name));
- 	v4l2_set_subdevdata(sd, file_dev);
- 
- 	pads[0].flags = MEDIA_PAD_FL_SINK;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index e8f835c3bbae..5d2bfe2ea971 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -936,7 +936,7 @@ static int gmin_get_hardcoded_var(struct gmin_cfg_var *varlist,
- 		if (vl > *out_len - 1)
- 			return -ENOSPC;
- 
--		strcpy(out, gv->val);
-+		strscpy(out, gv->val, *out_len);
- 		*out_len = vl;
- 		return 0;
+ 	if (irq_infos & IA_CSS_IRQ_INFO_CSS_RECEIVER_SOF) {
+ 		dev_dbg_ratelimited(isp->dev,
+-				    "irq:0x%x (IA_CSS_IRQ_INFO_CSS_RECEIVER_SOF)\n",
++				    "irq:0x%x (SOF)\n",
+ 				    irq_infos);
+ 		irq_infos &= ~IA_CSS_IRQ_INFO_CSS_RECEIVER_SOF;
  	}
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index 15567623b51b..9404a678fa6f 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -547,8 +547,8 @@ static int atomisp_querycap(struct file *file, void *fh,
- 	struct video_device *vdev = video_devdata(file);
- 	struct atomisp_device *isp = video_get_drvdata(vdev);
+@@ -591,14 +591,14 @@ irqreturn_t atomisp_isr(int irq, void *dev)
+ 			/* EOF Event does not have the css_pipe returned */
+ 			asd = __get_asd_from_port(isp, eof_event.event.port);
+ 			if (!asd) {
+-				dev_err(isp->dev, "%s:no subdev.event:%d",
++				dev_err(isp->dev, "%s: ISYS event, but no subdev.event:%d",
+ 					__func__, eof_event.event.type);
+ 				continue;
+ 			}
  
--	strscpy(cap->driver, DRIVER, sizeof(cap->driver) - 1);
--	strscpy(cap->card, CARD, sizeof(cap->card) - 1);
-+	strscpy(cap->driver, DRIVER, sizeof(cap->driver));
-+	strscpy(cap->card, CARD, sizeof(cap->card));
- 	snprintf(cap->bus_info, sizeof(cap->bus_info), "PCI:%s",
- 		 pci_name(isp->pdev));
- 
-@@ -573,8 +573,8 @@ static int atomisp_enum_input(struct file *file, void *fh,
- 		return -EINVAL;
- 
- 	memset(input, 0, sizeof(struct v4l2_input));
--	strncpy(input->name, isp->inputs[index].camera->name,
--		sizeof(input->name) - 1);
-+	strscpy(input->name, isp->inputs[index].camera->name,
-+		sizeof(input->name));
- 
- 	/*
- 	 * HACK: append actuator's name to sensor's
-@@ -593,8 +593,8 @@ static int atomisp_enum_input(struct file *file, void *fh,
- 
- 		if (max_size > 1) {
- 			input->name[cur_len] = '+';
--			strncpy(&input->name[cur_len + 1],
--				motor->name, max_size - 1);
-+			strscpy(&input->name[cur_len + 1],
-+				motor->name, max_size);
+ 			atomisp_eof_event(asd, eof_event.event.exp_id);
+ 			dev_dbg_ratelimited(isp->dev,
+-					    "%s EOF exp_id %d, asd %d\n",
++					    "%s ISYS event: EOF exp_id %d, asd %d\n",
+ 					    __func__, eof_event.event.exp_id,
+ 					    asd->index);
  		}
- 	}
+@@ -610,7 +610,7 @@ irqreturn_t atomisp_isr(int irq, void *dev)
  
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_tpg.c b/drivers/staging/media/atomisp/pci/atomisp_tpg.c
-index 9477ac5e22b9..1def80bab180 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_tpg.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_tpg.c
-@@ -148,7 +148,7 @@ int atomisp_tpg_init(struct atomisp_device *isp)
- 	tpg->isp = isp;
- 	v4l2_subdev_init(sd, &tpg_ops);
- 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
--	strcpy(sd->name, "tpg_subdev");
-+	strscpy(sd->name, "tpg_subdev", sizeof(sd->name));
- 	v4l2_set_subdevdata(sd, tpg);
+ 	spin_unlock_irqrestore(&isp->lock, flags);
  
- 	pads[0].flags = MEDIA_PAD_FL_SINK;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_trace_event.h b/drivers/staging/media/atomisp/pci/atomisp_trace_event.h
-index 61f402a642d4..538d45e008b5 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_trace_event.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_trace_event.h
-@@ -44,7 +44,7 @@ TRACE_EVENT(camera_meminfo,
- 	    ),
+-	dev_dbg_ratelimited(isp->dev, "irq:0x%x\n", irq_infos);
++	dev_dbg_ratelimited(isp->dev, "irq:0x%x (unhandled)\n", irq_infos);
  
- 	    TP_fast_assign(
--		strlcpy(__entry->name, name, 24);
-+		strscpy(__entry->name, name, 24);
- 		__entry->uptr_size = uptr_size;
- 		__entry->counter = counter;
- 		__entry->sys_size = sys_size;
-@@ -74,8 +74,8 @@ TRACE_EVENT(camera_debug,
- 	    ),
+ 	return IRQ_WAKE_THREAD;
  
- 	    TP_fast_assign(
--		strlcpy(__entry->name, name, 24);
--		strlcpy(__entry->info, info, 24);
-+		strscpy(__entry->name, name, 24);
-+		strscpy(__entry->info, info, 24);
- 		__entry->line = line;
- 	    ),
+@@ -618,7 +618,8 @@ irqreturn_t atomisp_isr(int irq, void *dev)
+ 	spin_unlock_irqrestore(&isp->lock, flags);
  
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index 158f11f4f545..e0d08040df6e 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -1212,7 +1212,7 @@ static int atomisp_register_entities(struct atomisp_device *isp)
+ 	if (irq_infos)
+-		dev_dbg_ratelimited(isp->dev, "irq:0x%x\n", irq_infos);
++		dev_dbg_ratelimited(isp->dev, "irq:0x%x (ignored, as not streaming anymore)\n",
++				    irq_infos);
  
- 	isp->media_dev.dev = isp->dev;
- 
--	strlcpy(isp->media_dev.model, "Intel Atom ISP",
-+	strscpy(isp->media_dev.model, "Intel Atom ISP",
- 		sizeof(isp->media_dev.model));
- 
- 	media_device_init(&isp->media_dev);
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_sp.c b/drivers/staging/media/atomisp/pci/sh_css_sp.c
-index 756aad4a6e43..a40020ad699d 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_sp.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_sp.c
-@@ -991,8 +991,7 @@ sh_css_sp_init_stage(struct ia_css_binary *binary,
- 
- 	/* Make sure binary name is smaller than allowed string size */
- 	assert(strlen(binary_name) < SH_CSS_MAX_BINARY_NAME - 1);
--	strncpy(sh_css_isp_stage.binary_name, binary_name, SH_CSS_MAX_BINARY_NAME - 1);
--	sh_css_isp_stage.binary_name[SH_CSS_MAX_BINARY_NAME - 1] = 0;
-+	strscpy(sh_css_isp_stage.binary_name, binary_name, SH_CSS_MAX_BINARY_NAME);
- 	sh_css_isp_stage.mem_initializers = *isp_mem_if;
- 
- 	/*
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_version.c b/drivers/staging/media/atomisp/pci/sh_css_version.c
-index 3ef690d6f2cf..fa6de61e4995 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_version.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_version.c
-@@ -31,7 +31,7 @@ ia_css_get_version(char *version, int max_size) {
- 
- 	if (max_size <= (int)strlen(css_version) + (int)strlen(sh_css_get_fw_version()) + 5)
- 		return -EINVAL;
--	strcpy(version, css_version);
-+	strscpy(version, css_version, max_size);
- 	strcat(version, "FW:");
- 	strcat(version, sh_css_get_fw_version());
- 	strcat(version, "; ");
+ 	return IRQ_HANDLED;
+ }
 -- 
 2.26.2
 
