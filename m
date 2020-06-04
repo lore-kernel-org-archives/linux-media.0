@@ -7,53 +7,53 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 314B8C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 08:13:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E15EC433E8
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 08:13:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0EB1C207F9
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 08:13:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E6D4207F9
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 08:13:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="MV7FJtoE"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="ifotk2PJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727917AbgFDIM6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 04:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
+        id S1727902AbgFDIM5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 04:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726819AbgFDIM4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 04:12:56 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF2CC03E96E
-        for <linux-media@vger.kernel.org>; Thu,  4 Jun 2020 01:12:56 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id q25so4636025wmj.0
-        for <linux-media@vger.kernel.org>; Thu, 04 Jun 2020 01:12:56 -0700 (PDT)
+        with ESMTP id S1727829AbgFDIMu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 04:12:50 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F5EC08C5C3
+        for <linux-media@vger.kernel.org>; Thu,  4 Jun 2020 01:12:50 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id l11so5071809wru.0
+        for <linux-media@vger.kernel.org>; Thu, 04 Jun 2020 01:12:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tFPcYYVPEczCJNqu565ZZzRL31Ro7iqoJLud+V9/W6s=;
-        b=MV7FJtoEKLyy0r+Z0KoFPEtyhRXEwQ/IbBpYLu8LO9Uc78Ax/2RYA4vzBMjtiJcK6p
-         AdKwrHzr6dzh+N3ms51V1I6le1IjLWDF+LcV9lCl9LStGwUptD8GwQ/Htx2fZJN8DVly
-         sAfPeJLEgUIdNH8S/XB9b4lCyMgUL5KbMtjSc=
+        bh=zHLq9yPZgKKERQ/k46N5wAtq1tEa3e90dS7EqKAAVV8=;
+        b=ifotk2PJMfPqXT/+gwn4eR7/3IWQV+W9DCcY7OyrRdaAZFQwKftRJdQXo0rpUM3/yB
+         gFJrkbneOCQ2QX77TBZL8U/VuKVxgzOxX4tlg9WC2CbjGOvgEb6AVwmiQ15EpDYBd7lG
+         Tzy0RTnpPG+HiMGAwz3SGe+WNdJdbJrdEf6D0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tFPcYYVPEczCJNqu565ZZzRL31Ro7iqoJLud+V9/W6s=;
-        b=LXx2kN0IuBkgqBJlZ5Pgw6zJyuTCXrmguT4CNc0s6EjdGw6cumW8xKTUCjODQ83K7j
-         lnypHe4Y8DjdOBitI/Bs+VM3QtzxBjACdZ2uWZDCNp/Y66m37TtjXVTXnooS8g5cKJEl
-         SWf2o+a4uxCBF7rxDBWNLe/MhBfRDGdIc6RbpLUIpoBOul+9fFPrGPhUu5B6gsvov+tP
-         fiFd2JoHV+kqFsvEAbLAYtveZJgDFCWXYR0B2Zg/7FuYQHen9c38dckUD+C359QtcpyG
-         vghu8kh8z1/9FM5drbpz1OrS1MMO8B+hUzIHRrmcN8gcaAoOTFbyI3DaG/tDcizGrgu8
-         Cnng==
-X-Gm-Message-State: AOAM531R2XSPxQdjIN+nuQ5BsdFuslBmQi4rm4ptdft2QMWEIpLfqJw+
-        JpVrxrzi58lCcJf0cN5YuqNY1A==
-X-Google-Smtp-Source: ABdhPJwyTSsHObvqYxt5vjWFqYKxgNRr/Tg50mOhhgXdXRLp1pp0LpRagZgRAkv0R2QBG8+IZNWOoQ==
-X-Received: by 2002:a7b:c18a:: with SMTP id y10mr3020133wmi.73.1591258374887;
-        Thu, 04 Jun 2020 01:12:54 -0700 (PDT)
+        bh=zHLq9yPZgKKERQ/k46N5wAtq1tEa3e90dS7EqKAAVV8=;
+        b=FVDb8iDNGB0ASbg0cdPEfaQcr9bNQ9Ep3WcpcH5n1DIk4t3SA5MOn3hsNhg8WXSPE/
+         aD/0tGCaMTi6ee5YB//JlHucscmoEum6me/36NhEuM/0Ut1H+FyDAPo9GHYg7wZOzoHa
+         v8lMdsNvuScYg1CFYJeOiJ54q7KjBlKcXjX69QvtkZ7fK1HK0MJdOaRSIqXPvjrzplv1
+         s51CM9uTHUNyRRWgDvCgswMLx+HLflE0lJmnHNpInuNNrJpZrkaKnwG+5ZjWLRXZGzgI
+         831iC+sEWeost/4FaPE5HZDE5d7BROAsWAFdm4K2kJ1j9duSCSrigDNSEqaikWaKRDd8
+         M/mw==
+X-Gm-Message-State: AOAM530qMQ/lrvShZBHZMnm2jD3HBJec98nww5BWZXctN4liPAyeGZdK
+        Be4CJCreshEfio+rkLbeZ2HM8Q==
+X-Google-Smtp-Source: ABdhPJwmXgxb0rRlbz9RyKT6KVGNFYaugD+jseyFJKYlXk9wNmaSF3eMQq44tjneQVcPWbVrYiOUJw==
+X-Received: by 2002:adf:fb0f:: with SMTP id c15mr3424740wrr.410.1591258368775;
+        Thu, 04 Jun 2020 01:12:48 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id f11sm6873305wrj.2.2020.06.04.01.12.53
+        by smtp.gmail.com with ESMTPSA id f11sm6873305wrj.2.2020.06.04.01.12.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2020 01:12:54 -0700 (PDT)
+        Thu, 04 Jun 2020 01:12:48 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
@@ -65,9 +65,9 @@ Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Daniel Vetter <daniel.vetter@intel.com>
-Subject: [PATCH 18/18] drm/i915: Annotate dma_fence_work
-Date:   Thu,  4 Jun 2020 10:12:24 +0200
-Message-Id: <20200604081224.863494-19-daniel.vetter@ffwll.ch>
+Subject: [PATCH 13/18] drm/amdgpu/dc: Stop dma_resv_lock inversion in commit_tail
+Date:   Thu,  4 Jun 2020 10:12:19 +0200
+Message-Id: <20200604081224.863494-14-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200604081224.863494-1-daniel.vetter@ffwll.ch>
 References: <20200604081224.863494-1-daniel.vetter@ffwll.ch>
@@ -79,21 +79,14 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-i915 does tons of allocations from this worker, which lockdep catches.
+Trying to grab dma_resv_lock while in commit_tail before we've done
+all the code that leads to the eventual signalling of the vblank event
+(which can be a dma_fence) is deadlock-y. Don't do that.
 
-Also generic infrastructure like this with big potential for how
-dma_fence or other cross driver contracts work, really should be
-reviewed on dri-devel. Implementing custom wheels for everything
-within the driver is a classic case of "platform problem" [1]. Which in
-upstream we really shouldn't have.
+Here the solution is easy because just grabbing locks to read
+something races anyway. We don't need to bother, READ_ONCE is
+equivalent. And avoids the locking issue.
 
-Since there's no quick way to solve these splats (dma_fence_work is
-used a bunch in basic buffer management and command submission) like
-for amdgpu, I'm giving up at this point here. Annotating i915
-scheduler and gpu reset could would be interesting, but since lockdep
-is one-shot we can't see what surprises would lurk there.
-
-1: https://lwn.net/Articles/443531/
 Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
 Cc: linux-rdma@vger.kernel.org
@@ -104,29 +97,38 @@ Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 Cc: Christian König <christian.koenig@amd.com>
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 ---
- drivers/gpu/drm/i915/i915_sw_fence_work.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/gpu/drm/i915/i915_sw_fence_work.c b/drivers/gpu/drm/i915/i915_sw_fence_work.c
-index a3a81bb8f2c3..5b74acadaef5 100644
---- a/drivers/gpu/drm/i915/i915_sw_fence_work.c
-+++ b/drivers/gpu/drm/i915/i915_sw_fence_work.c
-@@ -17,12 +17,15 @@ static void fence_work(struct work_struct *work)
- {
- 	struct dma_fence_work *f = container_of(work, typeof(*f), work);
- 	int err;
-+	bool fence_cookie;
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index c575e7394d03..04c11443b9ca 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -6910,7 +6910,11 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
+ 		 * explicitly on fences instead
+ 		 * and in general should be called for
+ 		 * blocking commit to as per framework helpers
++		 *
++		 * Yes, this deadlocks, since you're calling dma_resv_lock in a
++		 * path that leads to a dma_fence_signal(). Don't do that.
+ 		 */
++#if 0
+ 		r = amdgpu_bo_reserve(abo, true);
+ 		if (unlikely(r != 0))
+ 			DRM_ERROR("failed to reserve buffer before flip\n");
+@@ -6920,6 +6924,12 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
+ 		tmz_surface = amdgpu_bo_encrypted(abo);
  
-+	fence_cookie = dma_fence_begin_signalling();
- 	err = f->ops->work(f);
- 	if (err)
- 		dma_fence_set_error(&f->dma, err);
+ 		amdgpu_bo_unreserve(abo);
++#endif
++		/*
++		 * this races anyway, so READ_ONCE isn't any better or worse
++		 * than the stuff above. Except the stuff above can deadlock.
++		 */
++		tiling_flags = READ_ONCE(abo->tiling_flags);
  
- 	fence_complete(f);
-+	dma_fence_end_signalling(fence_cookie);
- 	dma_fence_put(&f->dma);
- }
- 
+ 		fill_dc_plane_info_and_addr(
+ 			dm->adev, new_plane_state, tiling_flags,
 -- 
 2.26.2
 
