@@ -2,239 +2,105 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BACEBC433E0
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 13:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FFA8C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 13:45:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 875952067B
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 13:15:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EAFAE20835
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 13:45:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="T1AJ7XcB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728224AbgFDNPT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 09:15:19 -0400
-Received: from mga14.intel.com ([192.55.52.115]:7290 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728093AbgFDNPS (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Jun 2020 09:15:18 -0400
-IronPort-SDR: d3SlNGDNy1Aq8cMPxIaIu3mgC+zAp+Q95xFdQn3N8eXI2d/FbSiFh8zH/6MuVW7zubNKNIsOWa
- 1v7YD6lqLSVg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 06:15:16 -0700
-IronPort-SDR: NHa4I8rqk/VBWdXSIdyhy53n3s7B7T24ZOA5sr8Rxw1DZWi+a3yxavDzv1zZ/R/dSWr8bnCd9H
- UnFya4ptxBWw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,472,1583222400"; 
-   d="scan'208";a="257727059"
-Received: from lkp-server02.sh.intel.com (HELO 6de3076d9aaa) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Jun 2020 06:15:15 -0700
-Received: from kbuild by 6de3076d9aaa with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jgpiE-00000V-QJ; Thu, 04 Jun 2020 13:15:14 +0000
-Date:   Thu, 04 Jun 2020 21:14:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org
-Subject: [ragnatech:media-next] BUILD REGRESSION
- be4b9e888184bc10c16b180096ee2592cd42f5f1
-Message-ID: <5ed8f3ac.buw+A2kugKzbTgJr%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728447AbgFDNpE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 09:45:04 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:44415 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726415AbgFDNpE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Jun 2020 09:45:04 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id gqB1j2vDlnv5ngqB4juIbn; Thu, 04 Jun 2020 15:45:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1591278302; bh=G53ENnm/UjOpaZusiLzzWOlK8nfMcbfwukP66+vVrI8=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=T1AJ7XcBmdqymmBP6z79g3Ln9kscDyEGbcYKFAsZaUWq8NtQiyHn4rk++cSPlm/tz
+         /zUwHh8RkdO8yajvnG5f34PbdAsiC8ZVo+ZykMABBdx0ZoTcSa98c96SX4pGbpVK1r
+         xvBBoBuQFSlNZS2vyZjqQQakB8t3OqfG+KqALIyhCLiC+02lt4HNB9G7GCHXWSowZZ
+         j+d6hwEZmT1fxZ1XDFwVAYnUOZH1XSyGZDOAXFiN0G79NsJYzp7ivR3ntS2nviHdQe
+         AsguziHlq/84X2zDkRnf02DwGeAkvwVgihcL+WIeD7RjEClqjRxi+ENsVkoiWQxE/x
+         5s6SWeCK+50RQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT FIXES FOR v5.8] Various fixes for v5.8
+Message-ID: <3fd4dd63-530b-0341-8579-a5759d8bb07a@xs4all.nl>
+Date:   Thu, 4 Jun 2020 15:44:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfG0S2RbEmj+G4PrD/docPnx9yyte0gy/B11THp66zz5bdCXt87I5yZeAaMxord68tTHALSOiu/f+qlK6wpOey5eewVdrE8aXx/m5Gd1o6tFnlZRlTxDP
+ P78KJjxVDS7+P0/KY0q2RrLIPw6sR7nePDZd/xhM4d0oTu7MldkKojqs/9RDPkcLV0EvNSQRzYUsKQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree/branch: git://git.ragnatech.se/linux  media-next
-branch HEAD: be4b9e888184bc10c16b180096ee2592cd42f5f1  media: atomisp: get rid of a string_support.h abstraction layer
+The following changes since commit 938b29db3aa9c293c7c1366b16e55e308f1a1ddd:
 
-Error/Warning in current branch:
+  media: Documentation: media: Refer to mbus format documentation from CSI-2 docs (2020-05-25 15:47:02 +0200)
 
-cc1: warning: drivers/staging/media/atomisp//pci/hive_isp_css_include/memory_access/: No such file or directory [-Wmissing-include-dirs]
-drivers/staging/media/atomisp/pci/atomisp_cmd.c:2810:31: warning: variable 'stream_config' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:159:2: warning: function 'atomisp_css2_dbg_print' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:165:2: warning: function 'atomisp_css2_dbg_ftrace_print' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:171:2: warning: function 'atomisp_css2_err_print' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-drivers/staging/media/atomisp/pci/atomisp_v4l2.c:1454:15: warning: variable 'a0_max_id' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/hmm/hmm.c:271:6: note: in expansion of macro 'dev_dbg'
-drivers/staging/media/atomisp/pci/hmm/hmm.c:272:6: warning: format '%ld' expects argument of type 'long int', but argument 6 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-drivers/staging/media/atomisp/pci/isp/kernels/dvs/dvs_1.0/ia_css_dvs.host.c:237:31: warning: variable 'isp_data_ptr' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/isp/kernels/sdis/sdis_2/ia_css_sdis2.host.c:119:15: warning: variable 'hor_num_isp' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/isp/kernels/sdis/sdis_2/ia_css_sdis2.host.c:119:28: warning: variable 'ver_num_isp' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/isp/kernels/vf/vf_1.0/ia_css_vf.host.c:127:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/runtime/rmgr/src/rmgr_vbuf.c:244:7: warning: variable 'succes' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:10514:22: warning: variable 'pipe_id' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:1371:24: warning: variable 'stream' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:2735:22: warning: variable 'capture_pipe' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:2864:7: warning: variable 'continuous' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:3567:15: warning: variable 'num_output_pins' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:3975:26: warning: variable 'me' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:3976:24: warning: variable 'copy_binary' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:3976:38: warning: variable 'preview_binary' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:3976:55: warning: variable 'vf_pp_binary' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:6072:7: warning: variable 'memory' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css.c:7521:26: warning: variable 'num_vf_pp_stage' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css_mipi.c:415:27: warning: variable 'mipi_intermediate_info' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css_param_shading.c:239:4: warning: variable 'padded_width' set but not used [-Wunused-but-set-variable]
-drivers/staging/media/atomisp/pci/sh_css_params.c:1637:36: warning: variable 'row_padding' set but not used [-Wunused-but-set-variable]
+are available in the Git repository at:
 
-Error/Warning ids grouped by kconfigs:
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.8a
 
-recent_errors
-`-- i386-allyesconfig
-    |-- cc1:warning:drivers-staging-media-atomisp-pci-hive_isp_css_include-memory_access:No-such-file-or-directory
-    |-- drivers-staging-media-atomisp-pci-atomisp_cmd.c:warning:variable-stream_config-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-atomisp_compat_css20.c:warning:function-atomisp_css2_dbg_ftrace_print-might-be-a-candidate-for-gnu_printf-format-attribute
-    |-- drivers-staging-media-atomisp-pci-atomisp_compat_css20.c:warning:function-atomisp_css2_dbg_print-might-be-a-candidate-for-gnu_printf-format-attribute
-    |-- drivers-staging-media-atomisp-pci-atomisp_compat_css20.c:warning:function-atomisp_css2_err_print-might-be-a-candidate-for-gnu_printf-format-attribute
-    |-- drivers-staging-media-atomisp-pci-atomisp_v4l2.c:warning:variable-a0_max_id-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-hmm-hmm.c:note:in-expansion-of-macro-dev_dbg
-    |-- drivers-staging-media-atomisp-pci-hmm-hmm.c:warning:format-ld-expects-argument-of-type-long-int-but-argument-has-type-size_t-aka-unsigned-int
-    |-- drivers-staging-media-atomisp-pci-isp-kernels-dvs-dvs_1.-ia_css_dvs.host.c:warning:variable-isp_data_ptr-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-isp-kernels-sdis-sdis_2-ia_css_sdis2.host.c:warning:variable-hor_num_isp-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-isp-kernels-sdis-sdis_2-ia_css_sdis2.host.c:warning:variable-ver_num_isp-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-isp-kernels-vf-vf_1.-ia_css_vf.host.c:warning:variable-err-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-runtime-rmgr-src-rmgr_vbuf.c:warning:variable-succes-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-capture_pipe-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-continuous-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-copy_binary-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-me-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-memory-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-num_output_pins-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-num_vf_pp_stage-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-pipe_id-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-preview_binary-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-stream-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css.c:warning:variable-vf_pp_binary-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css_mipi.c:warning:variable-mipi_intermediate_info-set-but-not-used
-    |-- drivers-staging-media-atomisp-pci-sh_css_param_shading.c:warning:variable-padded_width-set-but-not-used
-    `-- drivers-staging-media-atomisp-pci-sh_css_params.c:warning:variable-row_padding-set-but-not-used
+for you to fetch changes up to 36344121e87087b345167f260d08bf888528e499:
 
-elapsed time: 1765m
+  media: rkvdec: Fix H264 scaling list order (2020-06-04 15:24:52 +0200)
 
-configs tested: 114
-configs skipped: 3
+----------------------------------------------------------------
+Tag branch
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-sh                        edosk7760_defconfig
-mips                          ath79_defconfig
-arm                            mps2_defconfig
-mips                 decstation_r4k_defconfig
-arm                          collie_defconfig
-arm                         shannon_defconfig
-mips                      bmips_stb_defconfig
-powerpc                  storcenter_defconfig
-arc                          axs103_defconfig
-arm                    vt8500_v6_v7_defconfig
-arm                           sama5_defconfig
-sh                           sh2007_defconfig
-arm                        trizeps4_defconfig
-nios2                            alldefconfig
-powerpc64                           defconfig
-arm                              zx_defconfig
-microblaze                    nommu_defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-i386                 randconfig-a001-20200603
-i386                 randconfig-a006-20200603
-i386                 randconfig-a002-20200603
-i386                 randconfig-a005-20200603
-i386                 randconfig-a003-20200603
-i386                 randconfig-a004-20200603
-x86_64               randconfig-a002-20200603
-x86_64               randconfig-a006-20200603
-x86_64               randconfig-a001-20200603
-x86_64               randconfig-a003-20200603
-x86_64               randconfig-a004-20200603
-x86_64               randconfig-a005-20200603
-i386                 randconfig-a014-20200603
-i386                 randconfig-a015-20200603
-i386                 randconfig-a011-20200603
-i386                 randconfig-a016-20200603
-i386                 randconfig-a012-20200603
-i386                 randconfig-a013-20200603
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      medium: cec: Make MEDIA_CEC_SUPPORT default to n if !MEDIA_SUPPORT
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Jernej Skrabec (1):
+      media: cedrus: Implement runtime PM
+
+Jonas Karlman (2):
+      media: v4l2-ctrls: Unset correct HEVC loop filter flag
+      media: rkvdec: Fix H264 scaling list order
+
+Marek Szyprowski (1):
+      media: s5p-mfc: Properly handle dma_parms for the allocated devices
+
+Michael Rodin (1):
+      v4l2-subdev.rst: correct information about v4l2 events
+
+Samuel Holland (1):
+      media: cedrus: Program output format during each run
+
+Tomi Valkeinen (1):
+      media: videobuf2-dma-contig: fix bad kfree in vb2_dma_contig_clear_max_seg_size
+
+ Documentation/driver-api/media/v4l2-subdev.rst        |   3 +-
+ drivers/media/cec/Kconfig                             |   2 +-
+ drivers/media/common/videobuf2/videobuf2-dma-contig.c |  20 +--------
+ drivers/media/platform/s5p-mfc/s5p_mfc.c              |   6 ++-
+ drivers/media/v4l2-core/v4l2-ctrls.c                  |   2 +-
+ drivers/staging/media/rkvdec/rkvdec-h264.c            |  70 ++++++++++---------------------
+ drivers/staging/media/sunxi/cedrus/cedrus.c           |   7 ++++
+ drivers/staging/media/sunxi/cedrus/cedrus_dec.c       |   2 +
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.c        | 106 ++++++++++++++++++++++++++++++-----------------
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.h        |   3 ++
+ drivers/staging/media/sunxi/cedrus/cedrus_video.c     |  36 +++++++++++-----
+ include/media/videobuf2-dma-contig.h                  |   2 +-
+ 12 files changed, 139 insertions(+), 120 deletions(-)
