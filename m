@@ -6,42 +6,42 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C1D3C433E1
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 16:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ABB7C433E0
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 16:16:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 46AD9207D8
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 16:16:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3CBE0207F7
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 16:16:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729782AbgFDQQB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 12:16:01 -0400
-Received: from mga03.intel.com ([134.134.136.65]:60613 "EHLO mga03.intel.com"
+        id S1729783AbgFDQQK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 12:16:10 -0400
+Received: from mga17.intel.com ([192.55.52.151]:25667 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729703AbgFDQQA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Jun 2020 12:16:00 -0400
-IronPort-SDR: sU46OLIQCrFRZqIfAXeJtET1Y6rvSVf0LquhYSwfcq0ut4ZPtvY5yxxBlq8rlcfF3XTHjG5jZA
- 3pzUKjr2kiDQ==
+        id S1729699AbgFDQQK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Jun 2020 12:16:10 -0400
+IronPort-SDR: PYPgzZr5f4cVt3jEsGyA/I3zOOAa4SKqppoq9yXhUXjD2e5d45zuAa1bkV2KKSr94zKiqGo84G
+ EAUo7Uq/HA6A==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 09:15:45 -0700
-IronPort-SDR: db2R2AIDuUwUHHwbDigP6trjrd4QIF3C7/1KJQee6m5OKoihGPZ96oBJolv8dIrhrZ7svqjpfC
- aja9/ksrT3RA==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 09:15:45 -0700
+IronPort-SDR: 5j+gICrUYsT6/W5kFmavGdZPcoW0MWCoeCET0ho6I4I0fmqt0uB8OYsSWneHb+9gCSXjpEZt5v
+ fECKlqbIxuGA==
 X-IronPort-AV: E=Sophos;i="5.73,472,1583222400"; 
-   d="scan'208";a="294382544"
+   d="scan'208";a="258930715"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 09:15:44 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 09:15:44 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 0DB65208B5;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 20FD021505;
         Thu,  4 Jun 2020 19:15:42 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1jgsXV-0002QZ-9j; Thu, 04 Jun 2020 19:16:21 +0300
+        id 1jgsXV-0002Qf-CA; Thu, 04 Jun 2020 19:16:21 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     mchehab@kernel.org
 Cc:     linux-media@vger.kernel.org
-Subject: [PATCH 2/4] staging: atomisp: Fix atomisp_overlay32 compat handling
-Date:   Thu,  4 Jun 2020 19:16:19 +0300
-Message-Id: <20200604161621.9282-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH 4/4] staging: atomisp: Check return value from compat_alloc_user_space
+Date:   Thu,  4 Jun 2020 19:16:21 +0300
+Message-Id: <20200604161621.9282-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200604161621.9282-1-sakari.ailus@linux.intel.com>
 References: <20200604161621.9282-1-sakari.ailus@linux.intel.com>
@@ -52,47 +52,24 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The struct atomisp_overlay contains overlay_start_x and overlay_start_y
-fields. Instead of copying the value of the overlay_start_x field between
-the two structs, the value of the overlay_start_y field of the compat
-struct was copied to the overlay_start_x field of the 64-bit kernel struct
-in get operation and back in put. The overlay_start_x field value was not
-copied from or to the user space struct.
-
-Fix this so that the value of overlay_start_x is copied to overlay_start_x
-and the value of overlay_start_y is copied to overlay_start_y.
-
-Also do copy blend_overlay_perc_u field only once.
-
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/staging/media/atomisp/pci/atomisp_compat_ioctl32.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_compat_ioctl32.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_ioctl32.c b/drivers/staging/media/atomisp/pci/atomisp_compat_ioctl32.c
-index 3079043f1fac0..1853d907260db 100644
+index c8649923b6b9e..e06cf1883fc4b 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_compat_ioctl32.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp_compat_ioctl32.c
-@@ -399,7 +399,8 @@ static int get_atomisp_overlay32(struct atomisp_overlay *kp,
- 	    get_user(kp->blend_overlay_perc_u, &up->blend_overlay_perc_u) ||
- 	    get_user(kp->blend_overlay_perc_v, &up->blend_overlay_perc_v) ||
- 	    get_user(kp->blend_overlay_perc_u, &up->blend_overlay_perc_u) ||
--	    get_user(kp->overlay_start_x, &up->overlay_start_y))
-+	    get_user(kp->overlay_start_x, &up->overlay_start_x) ||
-+	    get_user(kp->overlay_start_y, &up->overlay_start_y))
- 		return -EFAULT;
+@@ -863,6 +863,8 @@ static long atomisp_do_compat_ioctl(struct file *file,
+ 				 sizeof(struct atomisp_morph_table) +
+ 				 sizeof(struct atomisp_dis_coefficients) +
+ 				 sizeof(struct atomisp_dvs_6axis_config) : 0));
++	if (!karg)
++		return -ENOMEM;
  
- 	kp->frame = (void __force *)compat_ptr(frame);
-@@ -423,7 +424,8 @@ static int put_atomisp_overlay32(struct atomisp_overlay *kp,
- 	    put_user(kp->blend_overlay_perc_u, &up->blend_overlay_perc_u) ||
- 	    put_user(kp->blend_overlay_perc_v, &up->blend_overlay_perc_v) ||
- 	    put_user(kp->blend_overlay_perc_u, &up->blend_overlay_perc_u) ||
--	    put_user(kp->overlay_start_x, &up->overlay_start_y))
-+	    put_user(kp->overlay_start_x, &up->overlay_start_x)
-+	    put_user(kp->overlay_start_y, &up->overlay_start_y))
- 		return -EFAULT;
- 
- 	return 0;
+ 	/* First, convert the command. */
+ 	switch (cmd) {
 -- 
 2.20.1
 
