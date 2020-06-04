@@ -2,173 +2,112 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB151C433DF
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 12:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE390C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 12:40:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0B5D20829
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 12:34:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC622207D8
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 12:40:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HadJutmZ"
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="R+nb7Y4C"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbgFDMel (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 08:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726639AbgFDMek (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 08:34:40 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA44C08C5C0
-        for <linux-media@vger.kernel.org>; Thu,  4 Jun 2020 05:34:39 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id e2so5868123eje.13
-        for <linux-media@vger.kernel.org>; Thu, 04 Jun 2020 05:34:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Nh6Fxl/rFWFjZ0mh1YLfpCBKN2BRCz1msmd0XlPhSPc=;
-        b=HadJutmZrq87AfUahea24rwNBQV91QqGmVI4d13K1j39KvnX14bCZbUQspEMwpk+34
-         +HMtPcc4DGkVylGQKtf3m9pU3P30qqLaCFAdM30VzuPBK5bb3QMlCiH/E1wHZqOTHOSF
-         HoQdWaOpwNULI43+0fEySHjmGUn4j2zwla0u2VQGm/Aa/T7exLvDm1KKDPB2YEcPYo7U
-         oZVXnCsyZBaFY2bwrquFVNHCWQ+69gPgurk6UO2nIpGjwB7IHavGHPO/G/IjvoNXeLJw
-         P/XNNMLF74/w93fKg5QEMxfdd82ll8Hj/y9z+ju1LqmYzWj5RzhWUZsiSoCOEj2l8ZqN
-         6lNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Nh6Fxl/rFWFjZ0mh1YLfpCBKN2BRCz1msmd0XlPhSPc=;
-        b=ImS30Qcuct37x9eUoC1QdVzjtYMoy29toIBqCDZoU4YMkaHkXfZQIDLSIXXaieJzeL
-         aAyaAMRUL5194uJKIGKoRBQoRYFNqDL0WF+cOnSLKHaActagsiEzZOeVFPwPpX538gVa
-         LV8u9NV85gPLZJLVRVyUt25npkFO6aaDpxlZJ+du4UMWtF1xVRCJZLmGO7NrbqxAQVqX
-         4tWr8fj0AfXxMKGyYRyakvSGuJMHguFpSzLdUsn0E+1Sw3TwC9WWU5pZhC2h6oct079m
-         bmvLaZGsGB2iu97kHtLinCcZ7R2LgC4Px5nR6Pcypxe3lRfw55mPdlM1E5fukrktZ47c
-         gxkw==
-X-Gm-Message-State: AOAM533FLvKGNNgzmA6WvWmOC5TVVIUtYspZ7s7ZHWc4ExvUzNAJYbx5
-        ZDuBmMbdTkHoAjkbVdlHGA+YIA==
-X-Google-Smtp-Source: ABdhPJxjsRjcO77z+ZojCCiCgjuXwanDqsaKHDha7hYUwP8L6t6HmL0IsNT5xhe6gbVE0yPUV4zJrQ==
-X-Received: by 2002:a17:906:f0c3:: with SMTP id dk3mr3576057ejb.202.1591274077853;
-        Thu, 04 Jun 2020 05:34:37 -0700 (PDT)
-Received: from [192.168.1.4] (212-5-158-209.ip.btc-net.bg. [212.5.158.209])
-        by smtp.googlemail.com with ESMTPSA id r6sm1504624edq.44.2020.06.04.05.34.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jun 2020 05:34:37 -0700 (PDT)
-Subject: Re: [PATCH] v4l2-ctrl: add control for thumnails
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Tomasz Figa <tfiga@chromium.org>
-References: <20200526085446.30956-1-stanimir.varbanov@linaro.org>
- <65ac9697-a43f-7025-e6fe-69c4a44c6d9a@xs4all.nl>
- <ce28a840-a763-6700-16dd-d708e570d55c@linaro.org>
- <d02c6cd0-a502-dc52-519e-54b6328d5373@linaro.org>
- <544b19dd-4883-bae0-b488-46c856eb207d@xs4all.nl>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Message-ID: <6f71931a-9060-a399-835c-a1cf1f05dc79@linaro.org>
-Date:   Thu, 4 Jun 2020 15:34:35 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726883AbgFDMkU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 08:40:20 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:17190 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725601AbgFDMkT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Jun 2020 08:40:19 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 054CWUtR006294;
+        Thu, 4 Jun 2020 14:40:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=STMicroelectronics;
+ bh=zWShjHdtkDP9KEzM3tiXokZkb+o6dSeLDNYRf6d3oDE=;
+ b=R+nb7Y4C+6vJV56wpDtXXRYJR+cfuOq3u00kysalI5XbqnsaAhF5cL8L6zYP3JcDkwJu
+ p0TqGmKozMMcaJLJg+1lWeYDggGWsfo4GEAe5n98i7O8QXpX681HLCrAChFh1m6yl+js
+ vK1qPsPELc0sp8Z2hfPon6zgpnXKR6ju+RZ/MJxb0oLPcRSl/c4W7JJnpwt62UzSF+bW
+ 06b0zkEE1h6EIAM44agyeYy/GbF6ZUaZM9Dfjybyfp6q0mmLtxK7kmX5ERiDxYaWORiR
+ Qm8UOuLn3fr3S/dDYj4A8t8VrpvXN3hQ25eqOy13T9iQ4TmBE3mA+tsifyZ2a3FJdUbd Zw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 31ejxauugw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Jun 2020 14:40:06 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7E956100039;
+        Thu,  4 Jun 2020 14:40:04 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4A12B2BE254;
+        Thu,  4 Jun 2020 14:40:04 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SFHDAG3NODE3.st.com (10.75.127.9)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 4 Jun 2020 14:39:35
+ +0200
+From:   Benjamin Gaignard <benjamin.gaignard@st.com>
+To:     <hugues.fruchet@st.com>, <mchehab@kernel.org>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>
+CC:     <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <vincent.guittot@linaro.org>,
+        <valentin.schneider@arm.com>, <rjw@rjwysocki.net>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: [PATCH v3 1/3] dt-bindings: media: stm32-dcmi: Add DCMI min frequency property
+Date:   Thu, 4 Jun 2020 14:39:30 +0200
+Message-ID: <20200604123932.20512-2-benjamin.gaignard@st.com>
+X-Mailer: git-send-email 2.15.0
+In-Reply-To: <20200604123932.20512-1-benjamin.gaignard@st.com>
+References: <20200604123932.20512-1-benjamin.gaignard@st.com>
 MIME-Version: 1.0
-In-Reply-To: <544b19dd-4883-bae0-b488-46c856eb207d@xs4all.nl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG3NODE3.st.com
+ (10.75.127.9)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-04_10:2020-06-02,2020-06-04 signatures=0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Document st,stm32-dcmi-min-frequency property which is used to
+request CPUs minimum frequency when streaming frames.
 
-On 6/4/20 12:08 PM, Hans Verkuil wrote:
-> On 04/06/2020 11:02, Stanimir Varbanov wrote:
->> Hi Hans,
->>
->> On 5/27/20 12:53 AM, Stanimir Varbanov wrote:
->>> Hi Hans,
->>>
->>> On 5/26/20 3:04 PM, Hans Verkuil wrote:
->>>> On 26/05/2020 10:54, Stanimir Varbanov wrote:
->>>>> Add v4l2 control for decoder thumbnail.
->>>>>
->>>>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
->>>>> ---
->>>>>  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 7 +++++++
->>>>>  drivers/media/v4l2-core/v4l2-ctrls.c                      | 2 ++
->>>>>  include/uapi/linux/v4l2-controls.h                        | 2 ++
->>>>>  3 files changed, 11 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>>> index d0d506a444b1..e838e410651b 100644
->>>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>>> @@ -3726,6 +3726,13 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>>>      disables generating SPS and PPS at every IDR. Setting it to one enables
->>>>>      generating SPS and PPS at every IDR.
->>>>>  
->>>>> +``V4L2_CID_MPEG_VIDEO_DECODER_THUMBNAIL (button)``
->>>>> +    Instructs the decoder to produce immediate output. The decoder should
->>>>> +    consume first input buffer for progressive stream (or first two buffers
->>>>> +    for interlace). Decoder should not allocate more output buffers that it
->>>>> +    is required to consume one input frame. Usually the decoder input
->>>>> +    buffers will contain only I/IDR frames but it is not mandatory.
->>>>
->>>> This is very vague. It doesn't explain why the control is called 'THUMBNAIL',
->>>> but more importantly it doesn't explain how this relates to normal decoding.
->>>
->>> If in the normal decode the capture queue buffers are 5, in the
->>> thumbnail mode the number of buffers will be only 1 (if the bitstream is
->>> progressive) and this will guarantee low memory usage. The other
->>> difference is that the decoder will produce decoded frames (without
->>> errors) only for I/IDR (sync frames).
-> 
-> Isn't this really a "DECODE_SYNC_FRAMES_ONLY" control? That's what it does,
-> right? Skip any B/P frames and only decode sync frames.
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+---
+ Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Yes, it is.
-To me V4L2_CID_MPEG_VIDEO_DECODE_SYNC_FRAMES sounds better. If you are
-fine I can send a new patch.
-
-The definition of "sync frames" is a bit difficult for codec-agnostic
-controls. Is it sound better "INTRA", DECODE_INTRA_FRAMES (ONLY)?
-
-> 
-> That this is useful for creating thumbnails is just a specific use-case.
-> 
-> Regards,
-> 
-> 	Hans
-> 
->>>
->>>>
->>>> I.e. if you are decoding and 'press' this control, what happens then?
->>>
->>> Might be the button type wasn't great idea. In fact the control should
->>> be set before streamon so that the driver returns min_capture_bufs 1.
->>>
->>>>
->>>> What exactly is the use-case?
->>>
->>> It could be used to generate thumbnails of all video clips in a folder
->>> or when you open a Gallery application on your phone.
->>>
->>
->> What is your opinion on that control? I could consider to make it Venus
->> custom control but from the use-case it looks other drivers also can
->> benefit of it.
->>
->> I tried to make more generic one [1] but it looks it will be too difficult.
->>
-> 
-
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
+index 3fe778cb5cc3..05ca85a2411a 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
+@@ -44,6 +44,13 @@ properties:
+       bindings defined in
+       Documentation/devicetree/bindings/media/video-interfaces.txt.
+ 
++  st,stm32-dcmi-min-frequency:
++    description: DCMI minimum CPUs frequency requirement (in KHz).
++    allOf:
++      - $ref: /schemas/types.yaml#/definitions/uint32
++      - minimum: 0
++      - default: 0
++
+ required:
+   - compatible
+   - reg
+@@ -71,6 +78,7 @@ examples:
+         clock-names = "mclk";
+         dmas = <&dmamux1 75 0x400 0x0d>;
+         dma-names = "tx";
++        st,stm32-dcmi-min-frequency = <650000>;
+ 
+         port {
+              dcmi_0: endpoint {
 -- 
-regards,
-Stan
+2.15.0
+
