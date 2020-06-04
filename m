@@ -2,88 +2,69 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 590F8C433DF
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 18:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8903EC433DF
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 19:00:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3755F207D5
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 18:55:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F646206C3
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 19:00:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729093AbgFDSzR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 14:55:17 -0400
-Received: from mailoutvs56.siol.net ([185.57.226.247]:52635 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728476AbgFDSzQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 14:55:16 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id 74C5F5204BB;
-        Thu,  4 Jun 2020 20:55:13 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at psrvmta10.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta10.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 69uBF3PPSFrh; Thu,  4 Jun 2020 20:55:13 +0200 (CEST)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id 0DE0952112F;
-        Thu,  4 Jun 2020 20:55:13 +0200 (CEST)
-Received: from kista.localdomain (cpe-194-152-20-232.static.triera.net [194.152.20.232])
-        (Authenticated sender: 031275009)
-        by mail.siol.net (Postfix) with ESMTPSA id 5224F5204BB;
-        Thu,  4 Jun 2020 20:55:08 +0200 (CEST)
-From:   Jernej Skrabec <jernej.skrabec@siol.net>
-To:     paul.kocialkowski@bootlin.com, mripard@kernel.org
-Cc:     mchehab@kernel.org, wens@csie.org, hverkuil-cisco@xs4all.nl,
-        gregkh@linuxfoundation.org, jonas@kwiboo.se, nicolas@ndufresne.ca,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 0/3] media: uapi: cedrus: Fix decoding interlaced H264 content
-Date:   Thu,  4 Jun 2020 20:57:42 +0200
-Message-Id: <20200604185745.23568-1-jernej.skrabec@siol.net>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        id S1729357AbgFDTAa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 15:00:30 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:55556 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729076AbgFDTAa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 15:00:30 -0400
+Received: from localhost.localdomain (p200300cb871f5b00dc30b2a26950c31b.dip0.t-ipconnect.de [IPv6:2003:cb:871f:5b00:dc30:b2a2:6950:c31b])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id CDE4F2A42FD;
+        Thu,  4 Jun 2020 20:00:28 +0100 (BST)
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
+        dafna3@gmail.com, sakari.ailus@linux.intel.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org, skhan@linuxfoundation.org
+Subject: [PATCH 1/2] media: staging: rkisp1: rsz: supported formats are the isp's src formats, not sink formats
+Date:   Thu,  4 Jun 2020 21:00:14 +0200
+Message-Id: <20200604190015.12069-1-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently H264 interlaced content it's not properly decoded on Cedrus.
-There are two reasons for this:
-1. slice parameters control doesn't provide enough information
-2. bug in frame list construction in Cedrus driver
+The rkisp1_resizer's enum callback 'rkisp1_rsz_enum_mbus_code'
+calls the enum callback of the 'rkisp1_isp' on it's video sink pad.
+This is a bug, the resizer should support the same formats
+supported by the 'rkisp1_isp' on the source pad (not the sink pad).
 
-As described in commit message in patch 1, references stored in
-reference lists should tell if reference targets top or bottom field.
-However, this information is currently not provided. Patch 1 adds
-it in form of flags which are set for each reference. Patch 2 then
-uses those flags in Cedrus driver.
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/staging/media/rkisp1/rkisp1-resizer.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Frame list construction is fixed in patch 3.
-
-This solution was extensively tested using Kodi on LibreELEC with A64,
-H3, H5 and H6 SoCs in slightly different form (flags were transmitted
-in MSB bits in index).
-
-Note: I'm not 100% sure if flags for both, top and bottom fields are
-needed. Any input here would be welcome.
-
-Please take a look.
-
-Best regards,
-Jernej
-
-Jernej Skrabec (3):
-  media: uapi: h264: update reference lists
-  media: cedrus: h264: Properly configure reference field
-  media: cedrus: h264: Fix frame list construction
-
- .../media/v4l/ext-ctrls-codec.rst             | 40 ++++++++++++++++++-
- .../staging/media/sunxi/cedrus/cedrus_h264.c  | 27 +++++++------
- include/media/h264-ctrls.h                    | 12 +++++-
- 3 files changed, 62 insertions(+), 17 deletions(-)
-
---=20
-2.27.0
+diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+index d049374413dc..d64c064bdb1d 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
++++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+@@ -437,8 +437,8 @@ static int rkisp1_rsz_enum_mbus_code(struct v4l2_subdev *sd,
+ 	u32 pad = code->pad;
+ 	int ret;
+ 
+-	/* supported mbus codes are the same in isp sink pad */
+-	code->pad = RKISP1_ISP_PAD_SINK_VIDEO;
++	/* supported mbus codes are the same in isp video src pad */
++	code->pad = RKISP1_ISP_PAD_SOURCE_VIDEO;
+ 	ret = v4l2_subdev_call(&rsz->rkisp1->isp.sd, pad, enum_mbus_code,
+ 			       &dummy_cfg, code);
+ 
+-- 
+2.17.1
 
