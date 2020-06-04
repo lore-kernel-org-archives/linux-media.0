@@ -2,138 +2,157 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78F4FC433E3
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 09:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA095C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 09:09:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 179382065C
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 09:08:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91C702065C
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 09:09:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="g8wRyxai"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="M21yFlh/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728592AbgFDJI6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 05:08:58 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:48021 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728593AbgFDJI5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Jun 2020 05:08:57 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id glrkjqbQWCKzeglrojT6Dn; Thu, 04 Jun 2020 11:08:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1591261733; bh=j4KmuNfoaD1xgru0STWLiixs8IWyKqQToaes8a8SFfM=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=g8wRyxaisc9bkXrFJVdkVtuRd2L6hwzYieCL0LlDIbz33nd1dewAnqgXtrDi3kg6+
-         z52Y5SlGec3+bDQkPxR7u+Q+/pzvkHDEhsgTz50AYTzfCdoyMxFbTbDdmUssUIu6oG
-         0X96eGKhSwseQQEJrDApfpn8gyWc9M03uMxdGMSnicxFXVak5OvHUqoRhqAHr1u2u3
-         6xA4kdiI9VHe7xLw2GTIYd8vec1J4Bshyt9q1Q/zpM5fOpGtBCvfhB8dWqPlwg4v3u
-         fwsB9oFdWUPStNFc7FpAb7ZOYraW0M/IAKnohSDo6ST4XOKz18772ymn4FZykvRZd5
-         BOdkwfoYWGf2A==
-Subject: Re: [PATCH] v4l2-ctrl: add control for thumnails
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Tomasz Figa <tfiga@chromium.org>
-References: <20200526085446.30956-1-stanimir.varbanov@linaro.org>
- <65ac9697-a43f-7025-e6fe-69c4a44c6d9a@xs4all.nl>
- <ce28a840-a763-6700-16dd-d708e570d55c@linaro.org>
- <d02c6cd0-a502-dc52-519e-54b6328d5373@linaro.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <544b19dd-4883-bae0-b488-46c856eb207d@xs4all.nl>
-Date:   Thu, 4 Jun 2020 11:08:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1728515AbgFDJIY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 05:08:24 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:60955 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728365AbgFDJIY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 05:08:24 -0400
+X-UUID: a2d5a55ccf5c4183a28e4f1d5c85f04d-20200604
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=CwLZiApyK6bUNwQh1RXzmg2IHc9+21e/FaYfMkX4XA8=;
+        b=M21yFlh/6eWbYjXweLiyq+QaEyAdI/1muLPIKNjEwoQ8WdbBQOoXCZdmu5t6LGd3b6AObu+XB70gIduiom54yyqVxp9SZUEcsvSSAB5pfAue0QJ4ZAm6iU85hnGH7KYQeOpBSg9VZvcUdiN0puvdHl8zUpc9OqQZb1OJJXGSDyU=;
+X-UUID: a2d5a55ccf5c4183a28e4f1d5c85f04d-20200604
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        (envelope-from <xia.jiang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1661794861; Thu, 04 Jun 2020 17:08:17 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 4 Jun 2020 17:08:14 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 4 Jun 2020 17:08:12 +0800
+From:   Xia Jiang <xia.jiang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rick Chang <rick.chang@mediatek.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        <srv_heupstream@mediatek.com>, <senozhatsky@chromium.org>,
+        <mojahsu@chromium.org>, <drinkcat@chromium.org>,
+        <maoguang.meng@mediatek.com>, <sj.huang@mediatek.com>,
+        Xia Jiang <xia.jiang@mediatek.com>
+Subject: [PATCH RESEND v9 11/18] media: platform: Use generic rounding helpers
+Date:   Thu, 4 Jun 2020 17:05:46 +0800
+Message-ID: <20200604090553.10861-13-xia.jiang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20200604090553.10861-1-xia.jiang@mediatek.com>
+References: <20200604090553.10861-1-xia.jiang@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <d02c6cd0-a502-dc52-519e-54b6328d5373@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfOu4u7+06bZWadT4Jj2h7ITjojpPgQdZS6iYuSScB0bwJDJKgOYDMWrCCgR3/hc+zzs9RxjvajWgWKm+2+ECdZPg2LTa7RSThVQS/dpGg1aydxRnlYLQ
- ds2ZbWaNfnyu00wa1qHKHkXmBp7ldPKGxJsito5iVTSnt3G//dag3X72ALBl8qZKlK8Yay55eRhqqjgmc7YmMntDQWDxHubleUnMd7PN7ZeZmVGTqEBUoxqA
- clljEZOnnkNcuK2+GIlc8GcI/EnIw15gzJM/KJwlhGyE7zcDwLm26NmrzWZ2spFLqoXgb9wo2AZ8Epade4OoAIBTZmpd9OMWiMebB+/A7rjmy+jShgF9QHp/
- vwoLSVfm3f6lREjN+mTpJqBi71csCXvTyMArAMRPQ4ZUjo2aQdssjO9W5mfmPULGsvuvK++3IF/97cw9caxBCpZ64PHy3Q==
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 04/06/2020 11:02, Stanimir Varbanov wrote:
-> Hi Hans,
-> 
-> On 5/27/20 12:53 AM, Stanimir Varbanov wrote:
->> Hi Hans,
->>
->> On 5/26/20 3:04 PM, Hans Verkuil wrote:
->>> On 26/05/2020 10:54, Stanimir Varbanov wrote:
->>>> Add v4l2 control for decoder thumbnail.
->>>>
->>>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
->>>> ---
->>>>  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 7 +++++++
->>>>  drivers/media/v4l2-core/v4l2-ctrls.c                      | 2 ++
->>>>  include/uapi/linux/v4l2-controls.h                        | 2 ++
->>>>  3 files changed, 11 insertions(+)
->>>>
->>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>> index d0d506a444b1..e838e410651b 100644
->>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>> @@ -3726,6 +3726,13 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>>      disables generating SPS and PPS at every IDR. Setting it to one enables
->>>>      generating SPS and PPS at every IDR.
->>>>  
->>>> +``V4L2_CID_MPEG_VIDEO_DECODER_THUMBNAIL (button)``
->>>> +    Instructs the decoder to produce immediate output. The decoder should
->>>> +    consume first input buffer for progressive stream (or first two buffers
->>>> +    for interlace). Decoder should not allocate more output buffers that it
->>>> +    is required to consume one input frame. Usually the decoder input
->>>> +    buffers will contain only I/IDR frames but it is not mandatory.
->>>
->>> This is very vague. It doesn't explain why the control is called 'THUMBNAIL',
->>> but more importantly it doesn't explain how this relates to normal decoding.
->>
->> If in the normal decode the capture queue buffers are 5, in the
->> thumbnail mode the number of buffers will be only 1 (if the bitstream is
->> progressive) and this will guarantee low memory usage. The other
->> difference is that the decoder will produce decoded frames (without
->> errors) only for I/IDR (sync frames).
-
-Isn't this really a "DECODE_SYNC_FRAMES_ONLY" control? That's what it does,
-right? Skip any B/P frames and only decode sync frames.
-
-That this is useful for creating thumbnails is just a specific use-case.
-
-Regards,
-
-	Hans
-
->>
->>>
->>> I.e. if you are decoding and 'press' this control, what happens then?
->>
->> Might be the button type wasn't great idea. In fact the control should
->> be set before streamon so that the driver returns min_capture_bufs 1.
->>
->>>
->>> What exactly is the use-case?
->>
->> It could be used to generate thumbnails of all video clips in a folder
->> or when you open a Gallery application on your phone.
->>
-> 
-> What is your opinion on that control? I could consider to make it Venus
-> custom control but from the use-case it looks other drivers also can
-> benefit of it.
-> 
-> I tried to make more generic one [1] but it looks it will be too difficult.
-> 
+VXNlIGNsYW1wKCkgdG8gcmVwbGFjZSBtdGtfanBlZ19ib3VuZF9hbGlnbl9pbWFnZSgpIGFuZCBy
+b3VuZCgpIHRvDQpyZXBsYWNlIG10a19qcGVnX2FsaWduKCkuDQoNClJldmlld2VkLWJ5OiBUb21h
+c3ogRmlnYSA8dGZpZ2FAY2hyb21pdW0ub3JnPg0KU2lnbmVkLW9mZi1ieTogWGlhIEppYW5nIDx4
+aWEuamlhbmdAbWVkaWF0ZWsuY29tPg0KLS0tDQp2OTogY2hhbmdlIHRoZSBwYXRjaCB0aXRsZSBk
+ZXNjcmlwdGlvbg0KLS0tDQogLi4uL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2Nv
+cmUuYyAgIHwgNDEgKysrKystLS0tLS0tLS0tLS0tLQ0KIGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0v
+bXRrLWpwZWcvbXRrX2pwZWdfaHcuYyB8ICA4ICsrLS0NCiBkcml2ZXJzL21lZGlhL3BsYXRmb3Jt
+L210ay1qcGVnL210a19qcGVnX2h3LmggfCAgNSAtLS0NCiAzIGZpbGVzIGNoYW5nZWQsIDE1IGlu
+c2VydGlvbnMoKyksIDM5IGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZWRp
+YS9wbGF0Zm9ybS9tdGstanBlZy9tdGtfanBlZ19jb3JlLmMgYi9kcml2ZXJzL21lZGlhL3BsYXRm
+b3JtL210ay1qcGVnL210a19qcGVnX2NvcmUuYw0KaW5kZXggYmQxY2M1ODMyNGM2Li5jOWMwMzU3
+YjJkNmMgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19q
+cGVnX2NvcmUuYw0KKysrIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstanBlZy9tdGtfanBl
+Z19jb3JlLmMNCkBAIC0xNTEsMjUgKzE1MSw2IEBAIHN0YXRpYyBzdHJ1Y3QgbXRrX2pwZWdfZm10
+ICptdGtfanBlZ19maW5kX2Zvcm1hdChzdHJ1Y3QgbXRrX2pwZWdfY3R4ICpjdHgsDQogCXJldHVy
+biBOVUxMOw0KIH0NCiANCi1zdGF0aWMgdm9pZCBtdGtfanBlZ19ib3VuZF9hbGlnbl9pbWFnZSh1
+MzIgKncsIHVuc2lnbmVkIGludCB3bWluLA0KLQkJCQkgICAgICAgdW5zaWduZWQgaW50IHdtYXgs
+IHVuc2lnbmVkIGludCB3YWxpZ24sDQotCQkJCSAgICAgICB1MzIgKmgsIHVuc2lnbmVkIGludCBo
+bWluLA0KLQkJCQkgICAgICAgdW5zaWduZWQgaW50IGhtYXgsIHVuc2lnbmVkIGludCBoYWxpZ24p
+DQotew0KLQlpbnQgd2lkdGgsIGhlaWdodCwgd19zdGVwLCBoX3N0ZXA7DQotDQotCXdpZHRoID0g
+Knc7DQotCWhlaWdodCA9ICpoOw0KLQl3X3N0ZXAgPSAxIDw8IHdhbGlnbjsNCi0JaF9zdGVwID0g
+MSA8PCBoYWxpZ247DQotDQotCXY0bF9ib3VuZF9hbGlnbl9pbWFnZSh3LCB3bWluLCB3bWF4LCB3
+YWxpZ24sIGgsIGhtaW4sIGhtYXgsIGhhbGlnbiwgMCk7DQotCWlmICgqdyA8IHdpZHRoICYmICgq
+dyArIHdfc3RlcCkgPD0gd21heCkNCi0JCSp3ICs9IHdfc3RlcDsNCi0JaWYgKCpoIDwgaGVpZ2h0
+ICYmICgqaCArIGhfc3RlcCkgPD0gaG1heCkNCi0JCSpoICs9IGhfc3RlcDsNCi19DQotDQogc3Rh
+dGljIHZvaWQgbXRrX2pwZWdfYWRqdXN0X2ZtdF9tcGxhbmUoc3RydWN0IG10a19qcGVnX2N0eCAq
+Y3R4LA0KIAkJCQkgICAgICAgc3RydWN0IHY0bDJfZm9ybWF0ICpmKQ0KIHsNCkBAIC0yMTEsMjQg
+KzE5MiwyNCBAQCBzdGF0aWMgaW50IG10a19qcGVnX3RyeV9mbXRfbXBsYW5lKHN0cnVjdCB2NGwy
+X2Zvcm1hdCAqZiwNCiAJaWYgKHFfdHlwZSA9PSBNVEtfSlBFR19GTVRfVFlQRV9PVVRQVVQpIHsN
+CiAJCXN0cnVjdCB2NGwyX3BsYW5lX3BpeF9mb3JtYXQgKnBmbXQgPSAmcGl4X21wLT5wbGFuZV9m
+bXRbMF07DQogDQotCQltdGtfanBlZ19ib3VuZF9hbGlnbl9pbWFnZSgmcGl4X21wLT53aWR0aCwg
+TVRLX0pQRUdfTUlOX1dJRFRILA0KLQkJCQkJICAgTVRLX0pQRUdfTUFYX1dJRFRILCAwLA0KLQkJ
+CQkJICAgJnBpeF9tcC0+aGVpZ2h0LCBNVEtfSlBFR19NSU5fSEVJR0hULA0KLQkJCQkJICAgTVRL
+X0pQRUdfTUFYX0hFSUdIVCwgMCk7DQorCQlwaXhfbXAtPmhlaWdodCA9IGNsYW1wKHBpeF9tcC0+
+aGVpZ2h0LCBNVEtfSlBFR19NSU5fSEVJR0hULA0KKwkJCQkgICAgICAgTVRLX0pQRUdfTUFYX0hF
+SUdIVCk7DQorCQlwaXhfbXAtPndpZHRoID0gY2xhbXAocGl4X21wLT53aWR0aCwgTVRLX0pQRUdf
+TUlOX1dJRFRILA0KKwkJCQkgICAgICBNVEtfSlBFR19NQVhfV0lEVEgpOw0KIA0KIAkJcGZtdC0+
+Ynl0ZXNwZXJsaW5lID0gMDsNCiAJCS8qIFNvdXJjZSBzaXplIG11c3QgYmUgYWxpZ25lZCB0byAx
+MjggKi8NCi0JCXBmbXQtPnNpemVpbWFnZSA9IG10a19qcGVnX2FsaWduKHBmbXQtPnNpemVpbWFn
+ZSwgMTI4KTsNCisJCXBmbXQtPnNpemVpbWFnZSA9IHJvdW5kX3VwKHBmbXQtPnNpemVpbWFnZSwg
+MTI4KTsNCiAJCWlmIChwZm10LT5zaXplaW1hZ2UgPT0gMCkNCiAJCQlwZm10LT5zaXplaW1hZ2Ug
+PSBNVEtfSlBFR19ERUZBVUxUX1NJWkVJTUFHRTsNCiAJCWdvdG8gZW5kOw0KIAl9DQogDQogCS8q
+IHR5cGUgaXMgTVRLX0pQRUdfRk1UX1RZUEVfQ0FQVFVSRSAqLw0KLQltdGtfanBlZ19ib3VuZF9h
+bGlnbl9pbWFnZSgmcGl4X21wLT53aWR0aCwgTVRLX0pQRUdfTUlOX1dJRFRILA0KLQkJCQkgICBN
+VEtfSlBFR19NQVhfV0lEVEgsIGZtdC0+aF9hbGlnbiwNCi0JCQkJICAgJnBpeF9tcC0+aGVpZ2h0
+LCBNVEtfSlBFR19NSU5fSEVJR0hULA0KLQkJCQkgICBNVEtfSlBFR19NQVhfSEVJR0hULCBmbXQt
+PnZfYWxpZ24pOw0KKwlwaXhfbXAtPmhlaWdodCA9IGNsYW1wKHJvdW5kX3VwKHBpeF9tcC0+aGVp
+Z2h0LCBmbXQtPnZfYWxpZ24pLA0KKwkJCSAgICAgICBNVEtfSlBFR19NSU5fSEVJR0hULCBNVEtf
+SlBFR19NQVhfSEVJR0hUKTsNCisJcGl4X21wLT53aWR0aCA9IGNsYW1wKHJvdW5kX3VwKHBpeF9t
+cC0+d2lkdGgsIGZtdC0+aF9hbGlnbiksDQorCQkJICAgICAgTVRLX0pQRUdfTUlOX1dJRFRILCBN
+VEtfSlBFR19NQVhfV0lEVEgpOw0KIA0KIAlmb3IgKGkgPSAwOyBpIDwgZm10LT5jb2xwbGFuZXM7
+IGkrKykgew0KIAkJc3RydWN0IHY0bDJfcGxhbmVfcGl4X2Zvcm1hdCAqcGZtdCA9ICZwaXhfbXAt
+PnBsYW5lX2ZtdFtpXTsNCkBAIC03MzQsOCArNzE1LDggQEAgc3RhdGljIHZvaWQgbXRrX2pwZWdf
+c2V0X2RlY19zcmMoc3RydWN0IG10a19qcGVnX2N0eCAqY3R4LA0KIHsNCiAJYnMtPnN0cl9hZGRy
+ID0gdmIyX2RtYV9jb250aWdfcGxhbmVfZG1hX2FkZHIoc3JjX2J1ZiwgMCk7DQogCWJzLT5lbmRf
+YWRkciA9IGJzLT5zdHJfYWRkciArDQotCQkJIG10a19qcGVnX2FsaWduKHZiMl9nZXRfcGxhbmVf
+cGF5bG9hZChzcmNfYnVmLCAwKSwgMTYpOw0KLQlicy0+c2l6ZSA9IG10a19qcGVnX2FsaWduKHZi
+Ml9wbGFuZV9zaXplKHNyY19idWYsIDApLCAxMjgpOw0KKwkJICAgICAgIHJvdW5kX3VwKHZiMl9n
+ZXRfcGxhbmVfcGF5bG9hZChzcmNfYnVmLCAwKSwgMTYpOw0KKwlicy0+c2l6ZSA9IHJvdW5kX3Vw
+KHZiMl9wbGFuZV9zaXplKHNyY19idWYsIDApLCAxMjgpOw0KIH0NCiANCiBzdGF0aWMgaW50IG10
+a19qcGVnX3NldF9kZWNfZHN0KHN0cnVjdCBtdGtfanBlZ19jdHggKmN0eCwNCmRpZmYgLS1naXQg
+YS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2h3LmMgYi9kcml2ZXJz
+L21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2h3LmMNCmluZGV4IGRkZjBkZmE3OGUy
+MC4uNjhhYmNmZDc0OTRkIDEwMDY0NA0KLS0tIGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGst
+anBlZy9tdGtfanBlZ19ody5jDQorKysgYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVn
+L210a19qcGVnX2h3LmMNCkBAIC0xNTMsMTAgKzE1MywxMCBAQCBzdGF0aWMgaW50IG10a19qcGVn
+X2NhbGNfZHN0X3NpemUoc3RydWN0IG10a19qcGVnX2RlY19wYXJhbSAqcGFyYW0pDQogCQkJCXBh
+cmFtLT5zYW1wbGluZ193W2ldOw0KIAkJLyogb3V0cHV0IGZvcm1hdCBpcyA0MjAvNDIyICovDQog
+CQlwYXJhbS0+Y29tcF93W2ldID0gcGFkZGluZ193ID4+IGJyel93W2ldOw0KLQkJcGFyYW0tPmNv
+bXBfd1tpXSA9IG10a19qcGVnX2FsaWduKHBhcmFtLT5jb21wX3dbaV0sDQotCQkJCQkJICBNVEtf
+SlBFR19EQ1RTSVpFKTsNCi0JCXBhcmFtLT5pbWdfc3RyaWRlW2ldID0gaSA/IG10a19qcGVnX2Fs
+aWduKHBhcmFtLT5jb21wX3dbaV0sIDE2KQ0KLQkJCQkJOiBtdGtfanBlZ19hbGlnbihwYXJhbS0+
+Y29tcF93W2ldLCAzMik7DQorCQlwYXJhbS0+Y29tcF93W2ldID0gcm91bmRfdXAocGFyYW0tPmNv
+bXBfd1tpXSwNCisJCQkJCSAgICBNVEtfSlBFR19EQ1RTSVpFKTsNCisJCXBhcmFtLT5pbWdfc3Ry
+aWRlW2ldID0gaSA/IHJvdW5kX3VwKHBhcmFtLT5jb21wX3dbaV0sIDE2KQ0KKwkJCQkJOiByb3Vu
+ZF91cChwYXJhbS0+Y29tcF93W2ldLCAzMik7DQogCQlkc19yb3dfaFtpXSA9IChNVEtfSlBFR19E
+Q1RTSVpFICogcGFyYW0tPnNhbXBsaW5nX2hbaV0pOw0KIAl9DQogCXBhcmFtLT5kZWNfdyA9IHBh
+cmFtLT5pbWdfc3RyaWRlWzBdOw0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0v
+bXRrLWpwZWcvbXRrX2pwZWdfaHcuaCBiL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbXRrLWpwZWcv
+bXRrX2pwZWdfaHcuaA0KaW5kZXggOWM2NTg0ZWFhZDk5Li43YjA2ODdmOGY0YjYgMTAwNjQ0DQot
+LS0gYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2h3LmgNCisrKyBi
+L2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbXRrLWpwZWcvbXRrX2pwZWdfaHcuaA0KQEAgLTU0LDEx
+ICs1NCw2IEBAIHN0cnVjdCBtdGtfanBlZ19kZWNfcGFyYW0gew0KIAl1OCB1dl9icnpfdzsNCiB9
+Ow0KIA0KLXN0YXRpYyBpbmxpbmUgdTMyIG10a19qcGVnX2FsaWduKHUzMiB2YWwsIHUzMiBhbGln
+bikNCi17DQotCXJldHVybiAodmFsICsgYWxpZ24gLSAxKSAmIH4oYWxpZ24gLSAxKTsNCi19DQot
+DQogc3RydWN0IG10a19qcGVnX2JzIHsNCiAJZG1hX2FkZHJfdAlzdHJfYWRkcjsNCiAJZG1hX2Fk
+ZHJfdAllbmRfYWRkcjsNCi0tIA0KMi4xOC4wDQo=
 
