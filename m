@@ -2,69 +2,40 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1065BC433E0
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 13:53:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A064CC433E1
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 14:05:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF89B20772
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 13:53:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="O51Osu4U"
+	by mail.kernel.org (Postfix) with ESMTP id 7EA78207D8
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 14:05:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728760AbgFDNx3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 09:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728738AbgFDNx3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 09:53:29 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E110FC08C5C0
-        for <linux-media@vger.kernel.org>; Thu,  4 Jun 2020 06:53:28 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id r7so6228423wro.1
-        for <linux-media@vger.kernel.org>; Thu, 04 Jun 2020 06:53:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RNKgisTvCxKeIfzFNw79PawPgsdQpi+VTBw2eOrL7UI=;
-        b=O51Osu4UdCOGnotGhmGHJ94XsvwJxmD+RL/BS27sj3XsP9eR4kHTb7INzvbmhlBvlN
-         rkWYTnjyEYtr0YDzMY3DYmpmeBHD2VZQvLtyScigshpv1/y2n7nlH55NZ53DLwvzu8by
-         F1ZhUQ3WBqgq9FXPVN5C5mTbOQ6NvqI0rcuRpD0nK/pH2TBrBdpobdxf3G3nRR1vekki
-         iO3f9lHdG9jEFpKK4mFfiAuFO/Pa8ZBPE2z6kKu7JTDk6G+cEQaRzinD7/0foyg048Gh
-         9khvPqsS5YZSCB+wa+8s2lk2PFqPmadl0+6QZSiJcMHWbBEI+8U71HcphuUVlhgucVKj
-         mTrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RNKgisTvCxKeIfzFNw79PawPgsdQpi+VTBw2eOrL7UI=;
-        b=fG0sjff58eUPMFBNboTTA/Vl3Bv91MuhTs1uIl56tgx7iakqH7esMacXF8phcuq1N7
-         gShG0Pav55Mh7pXwzj3ahE6WVXRoA6IUP+7CSBHeshLoa4Y2LBXU0gaX37g7iV53LrTP
-         go21YJJ48hD7WwcsfMgcsfZ2ezd2NV5dCfScwz4dWWG2WOm/X9EWLtXP2m9Ewy3QKUDA
-         BPF3Df9yhZF4OlNJxWQ2T36AOA8Q7kZBo1Pz3d30Z9HzmfARBd8ByHZZnAcoEHvHKM2t
-         hqE3kYQ3AcUbfrChZ9p1q9JBjJm33iUp/bfSIr3ZQRLwok3d+f0maeAP6SDdgu2seS/H
-         s+XA==
-X-Gm-Message-State: AOAM531xQZw7tSQkQn2tOV3BcFXwzxxljzwHlhTX8P7xAAxgeI8Z5/A6
-        1qTLlqZhjBByLcku6uixndMfFh76I4jyHQ==
-X-Google-Smtp-Source: ABdhPJxqdqJHN5Y5b9X1Q7kP0UxYnF1bBarO0Pdw4x0ipWE20qFJ7SzK27MiQOP21FgZk4r2/ND1+Q==
-X-Received: by 2002:adf:e782:: with SMTP id n2mr4462910wrm.417.1591278807326;
-        Thu, 04 Jun 2020 06:53:27 -0700 (PDT)
-Received: from bender.baylibre.local ([2a01:e35:2ec0:82b0:22:5867:d2c6:75f4])
-        by smtp.gmail.com with ESMTPSA id i74sm8185599wri.49.2020.06.04.06.53.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2020 06:53:26 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH 0/5] media: meson: vdec: Add support for compressed framebuffer
-Date:   Thu,  4 Jun 2020 15:53:12 +0200
-Message-Id: <20200604135317.9235-1-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
+        id S1728714AbgFDOFp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 10:05:45 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:52396 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728673AbgFDOFo (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Jun 2020 10:05:44 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jgqRK-00HVFo-Az; Thu, 04 Jun 2020 14:01:50 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jgqX9-0006sX-Pr; Thu, 04 Jun 2020 14:07:51 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT FIXES FOR v5.8] Various fixes for v5.8 (#64275)
+Date:   Thu,  4 Jun 2020 14:07:51 +0000
+Message-Id: <20200604140751.26400-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <3fd4dd63-530b-0341-8579-a5759d8bb07a@xs4all.nl>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -72,51 +43,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patchset add support for compressed framebuffer while decoding VP9
-8bit and 10bit streams.
+From: builder@linuxtv.org
 
-First, it adds two generic Compressed Framebuffer pixel formats to be used
-with a modifier when imported back in another subsystem like DRM/KMS.
+Pull request: https://patchwork.linuxtv.org/patch/64275/
+Build log: https://builder.linuxtv.org/job/patchwork/53937/
+Build time: 00:17:39
+Link: https://lore.kernel.org/linux-media/3fd4dd63-530b-0341-8579-a5759d8bb07a@xs4all.nl
 
-These are aligned with the DRM_FORMAT_YUV420_8BIT and DRM_FORMAT_YUV420_10BIT
-used to describe the underlying compressed buffers used for ARM Framebuffer
-Compression. In the Amlogic case, the compression is different but the
-underlying buffer components is the same.
+gpg: Signature made Thu 04 Jun 2020 01:43:45 PM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
 
-Then, in order to handle Compressed Framebuffer support, we need to handle
-the switch between 8bit and 10bit frame output.
-Add the necessary changes to decode VP9 8bit and 10bit streams into
-compressed buffers to be imported back into DRM/KMS using a modifier.
+Summary: 4 patches and/or PDF generation with issues, being 0 at build time
 
-Finally, add the necessary to add support for negociating the compressed buffer
-pixel format with the V4L2 M2M consumer, and allocating the right
-buffers in this case.
+Error/warnings:
 
-Until a proper mechanism exists to pass a modifier along the pixel format,
-only the generic V4L2_PIX_FMT_YUV420_8BIT and V4L2_PIX_FMT_YUV420_10BIT
-format are passed in v4l2_pix_format_mplane struct for consumer.
 
-Maxime Jourdan (5):
-  media: videodev2: add Compressed Framebuffer pixel formats
-  media: meson: vdec: handle bitdepth on source change
-  media: meson: vdec: update compressed buffer helpers
-  media: meson: vdec: add support for compressed output for VP9 decoder
-  media: meson: vdec: handle compressed output pixel format negociation
-    with consumer
+Error #256 when running cat patches/0004-media-s5p-mfc-Properly-handle-dma_parms-for-the-allo.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0004-media-s5p-mfc-Properly-handle-dma_parms-for-the-allo.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:6: WARNING: Unknown commit id '9495b7e92f71', maybe rebased or not pulled?
+-:15: WARNING: Unknown commit id '9495b7e92f71', maybe rebased or not pulled?
 
- drivers/media/v4l2-core/v4l2-ioctl.c          |   2 +
- drivers/staging/media/meson/vdec/codec_h264.c |   3 +-
- .../media/meson/vdec/codec_hevc_common.c      | 133 +++++++-----------
- .../media/meson/vdec/codec_hevc_common.h      |  13 +-
- drivers/staging/media/meson/vdec/codec_vp9.c  |  29 ++--
- drivers/staging/media/meson/vdec/vdec.c       |  46 ++++++
- drivers/staging/media/meson/vdec/vdec.h       |   4 +
- .../staging/media/meson/vdec/vdec_helpers.c   |  68 +++++++--
- .../staging/media/meson/vdec/vdec_helpers.h   |  11 +-
- .../staging/media/meson/vdec/vdec_platform.c  |   9 +-
- include/uapi/linux/videodev2.h                |   9 ++
- 11 files changed, 203 insertions(+), 124 deletions(-)
+Error #256 when running cat patches/0006-media-videobuf2-dma-contig-fix-bad-kfree-in-vb2_dma_.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0006-media-videobuf2-dma-contig-fix-bad-kfree-in-vb2_dma_.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:6: ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'Commit fatal: bad o ("ab5e97ab4a39adfdd")'
 
--- 
-2.22.0
+Error #256 when running cat patches/0007-media-v4l2-ctrls-Unset-correct-HEVC-loop-filter-flag.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0007-media-v4l2-ctrls-Unset-correct-HEVC-loop-filter-flag.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:28: WARNING: line over 80 characters
 
