@@ -2,156 +2,149 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93881C433DF
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 08:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFCE2C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 08:12:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 759B2206C3
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 08:10:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F37F207D5
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 08:12:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="gE8sqqdh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbgFDIKm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 04:10:42 -0400
-Received: from mga02.intel.com ([134.134.136.20]:22184 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726047AbgFDIKm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Jun 2020 04:10:42 -0400
-IronPort-SDR: k2PffX4gI4onnC2BwLanvyM4Ds9H/j71SzOyGLlu/2QUZWL0jcTDkNYu99ywLTs7TD24WXHA13
- pmgNmi9O39XA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 01:10:39 -0700
-IronPort-SDR: CbG8SA9IhTmLTH3EL+wOoj7Z+e/tx6p7eh+kvesL/bCsdRHwoUHbG9MoFKrrpylBG1+ENZXDTC
- ZYuSLrwBrVXA==
-X-IronPort-AV: E=Sophos;i="5.73,471,1583222400"; 
-   d="scan'208";a="294250715"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 01:10:34 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id D771F20859; Thu,  4 Jun 2020 11:10:32 +0300 (EEST)
-Date:   Thu, 4 Jun 2020 11:10:32 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Cao Bing Bu <bingbu.cao@intel.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg 
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Sj Huang <sj.huang@mediatek.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Shengnan Wang =?utf-8?B?KOeOi+Wco+eUtyk=?= 
-        <shengnan.wang@mediatek.com>
-Subject: Re: [V6, 2/2] media: i2c: dw9768: Add DW9768 VCM driver
-Message-ID: <20200604081032.GG16711@paasikivi.fi.intel.com>
-References: <20200518132731.20855-1-dongchun.zhu@mediatek.com>
- <20200518132731.20855-3-dongchun.zhu@mediatek.com>
- <20200521195113.GC14214@chromium.org>
- <1590139561.8804.390.camel@mhfsdcap03>
- <CAAFQd5CCsT_oM9aij_imV+NABzByi94RmCj97Dx0Tk3S0WDsTg@mail.gmail.com>
- <1590570089.8804.453.camel@mhfsdcap03>
- <CAAFQd5Dgboh8om68546ADELX3g-0y40rdBxY+H3WsX5xAD1_FQ@mail.gmail.com>
- <1591238018.8804.555.camel@mhfsdcap03>
+        id S1727061AbgFDIMn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 04:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727031AbgFDIMm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 04:12:42 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DD8C08C5C5
+        for <linux-media@vger.kernel.org>; Thu,  4 Jun 2020 01:12:41 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id c3so5008974wru.12
+        for <linux-media@vger.kernel.org>; Thu, 04 Jun 2020 01:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+tjBPalwpvfaI2TJsBD2Z0Z3ZUY/HUiWjYFdKsCw83k=;
+        b=gE8sqqdhi+ZYNpSwpwhah5KEVl5ccYRDpPqBoxZhhBcosuxdUUBujJlkR2DqFrVMMb
+         SHhTPvm1cFszlQjqvdRcNdZIe628+AaiwXuD9C5umUghpDpDj2u5g6Zm/nnu8nPXkam7
+         hk6PoZYcpGdN71cpcxHDgPkUd9FGT9iRwxbMY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+tjBPalwpvfaI2TJsBD2Z0Z3ZUY/HUiWjYFdKsCw83k=;
+        b=eNwPTXhgE6caNqbwoSmBrAd/gZOW7OUdqM9UwRY2M5Nt6cIxsMhB8hlC/L4oKf5d/q
+         7RlUcy7zotwsC7atS8+G+k90r3D2Ehzc7Lb2LTR6VTTFzM7L5tm257o4Jg7TBfNDfHSF
+         0dud0VfT1SOBFQVsiI8/erK9wyGKknWSBiGOh8tsc/iG0vQpxigBU+76lNEWSi1Qv+JJ
+         Y1VsKJsRmlG7KCFhPuiNGbjlR8sx85sgPq74TAbN81xXk29EiRPLNHySMo4a23WPuYL+
+         IQCmIS4kor+ryYqxISYfGfNxXxp8vGUd66s+1IanNx6tiu8v+oBwgctu37WaCQ8jVB4F
+         FIlw==
+X-Gm-Message-State: AOAM533cOKEgYq0wH3sL+qKdW3HuqrQbayXydm9yhN4i27Ql+AjJqId6
+        6+SSfMMw8BmOQw8Mtgh2L96YNg==
+X-Google-Smtp-Source: ABdhPJwyNPXbNijhsqAaAQsM5v0tMhjUWaBKp4ap7N+trIcZ19JD/P6xXjcKeG1ExDIrDg6JX8QemA==
+X-Received: by 2002:a5d:6144:: with SMTP id y4mr3357789wrt.185.1591258359734;
+        Thu, 04 Jun 2020 01:12:39 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id f11sm6873305wrj.2.2020.06.04.01.12.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2020 01:12:39 -0700 (PDT)
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@intel.com>
+Subject: [PATCH 06/18] drm/vblank: Annotate with dma-fence signalling section
+Date:   Thu,  4 Jun 2020 10:12:12 +0200
+Message-Id: <20200604081224.863494-7-daniel.vetter@ffwll.ch>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200604081224.863494-1-daniel.vetter@ffwll.ch>
+References: <20200604081224.863494-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1591238018.8804.555.camel@mhfsdcap03>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jun 04, 2020 at 10:33:38AM +0800, Dongchun Zhu wrote:
-> Hi Tomasz,
-> 
-> On Mon, 2020-06-01 at 20:47 +0200, Tomasz Figa wrote:
-> > On Wed, May 27, 2020 at 11:03 AM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
-> > >
-> > > Hi Tomasz,
-> > >
-> > > On Mon, 2020-05-25 at 13:45 +0200, Tomasz Figa wrote:
-> > > > On Fri, May 22, 2020 at 11:27 AM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
-> > > > >
-> > > > > Hi Tomasz,
-> > > > >
-> > > > > Thanks for the review. My replies are as below.
-> > > > >
-> > > > > On Thu, 2020-05-21 at 19:51 +0000, Tomasz Figa wrote:
-> > > > > > Hi Dongchun, Sakari,
-> > > > > >
-> > > > > > On Mon, May 18, 2020 at 09:27:31PM +0800, Dongchun Zhu wrote:
-> > > > [snip]
-> > > > > > > +   pm_runtime_enable(dev);
-> > > > > > > +   if (!pm_runtime_enabled(dev)) {
-> > > > > > > +           ret = dw9768_runtime_resume(dev);
-> > > > > > > +           if (ret < 0) {
-> > > > > > > +                   dev_err(dev, "failed to power on: %d\n", ret);
-> > > > > > > +                   goto entity_cleanup;
-> > > > > > > +           }
-> > > > > > > +   }
-> > > > > > > +
-> > > > > > > +   ret = v4l2_async_register_subdev(&dw9768->sd);
-> > > > > > > +   if (ret < 0)
-> > > > > > > +           goto entity_cleanup;
-> > > > > > > +
-> > > > > > > +   return 0;
-> > > > > > > +
-> > > > > > > +entity_cleanup:
-> > > > > >
-> > > > > > Need to power off if the code above powered on.
-> > > > > >
-> > > > >
-> > > > > Thanks for the reminder.
-> > > > > If there is something wrong with runtime PM, actuator is to be powered
-> > > > > on via dw9768_runtime_resume() API.
-> > > > > When actuator sub-device is powered on completely and async registered
-> > > > > successfully, we shall power off it afterwards.
-> > > > >
-> > > >
-> > > > The code above calls dw9768_runtime_resume() if
-> > > > !pm_runtime_enabled(dev), but the clean-up code below the
-> > > > entity_cleanup label doesn't have the corresponding
-> > > > dw9768_runtime_suspend() call.
-> > > >
-> > >
-> > > Did you mean the 'entity_cleanup' after v4l2_async_register_subdev()?
-> > 
-> > Yes.
-> > 
-> > > Actually I made some changes for OV02A V9, according to this comment.
-> > > Could you help review that change? Thanks.
-> > 
-> > Sure, I will take a look.
-> > 
-> 
-> Thanks.
-> Sorry, I just wanna make sure the change is okay for next release.
-> May we use the check like OV02A V9 did?
-> ret = v4l2_async_register_subdev(&dw9768->sd);
-> if (ret < 0) {
-> 	if (!pm_runtime_enabled(dev))
-> 		dw9768_runtime_suspend(dev);
+This is rather overkill since currently all drivers call this from
+hardirq (or at least timers). But maybe in the future we're going to
+have thread irq handlers and what not, doesn't hurt to be prepared.
+Plus this is an easy start for sprinkling these fence annotations into
+shared code.
 
-Please do this part where you're jumping to, if possible.
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Cc: linux-rdma@vger.kernel.org
+Cc: amd-gfx@lists.freedesktop.org
+Cc: intel-gfx@lists.freedesktop.org
+Cc: Chris Wilson <chris@chris-wilson.co.uk>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Christian König <christian.koenig@amd.com>
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+---
+ drivers/gpu/drm/drm_vblank.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-> 	goto entity_cleanup;
-> }
-> 
-
+diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
+index 85e5f2db1608..93a5bba5f665 100644
+--- a/drivers/gpu/drm/drm_vblank.c
++++ b/drivers/gpu/drm/drm_vblank.c
+@@ -24,6 +24,7 @@
+  * OTHER DEALINGS IN THE SOFTWARE.
+  */
+ 
++#include <linux/dma-fence.h>
+ #include <linux/export.h>
+ #include <linux/moduleparam.h>
+ 
+@@ -1908,7 +1909,7 @@ bool drm_handle_vblank(struct drm_device *dev, unsigned int pipe)
+ {
+ 	struct drm_vblank_crtc *vblank = &dev->vblank[pipe];
+ 	unsigned long irqflags;
+-	bool disable_irq;
++	bool disable_irq, fence_cookie;
+ 
+ 	if (drm_WARN_ON_ONCE(dev, !drm_dev_has_vblank(dev)))
+ 		return false;
+@@ -1916,6 +1917,8 @@ bool drm_handle_vblank(struct drm_device *dev, unsigned int pipe)
+ 	if (drm_WARN_ON(dev, pipe >= dev->num_crtcs))
+ 		return false;
+ 
++	fence_cookie = dma_fence_begin_signalling();
++
+ 	spin_lock_irqsave(&dev->event_lock, irqflags);
+ 
+ 	/* Need timestamp lock to prevent concurrent execution with
+@@ -1928,6 +1931,7 @@ bool drm_handle_vblank(struct drm_device *dev, unsigned int pipe)
+ 	if (!vblank->enabled) {
+ 		spin_unlock(&dev->vblank_time_lock);
+ 		spin_unlock_irqrestore(&dev->event_lock, irqflags);
++		dma_fence_end_signalling(fence_cookie);
+ 		return false;
+ 	}
+ 
+@@ -1953,6 +1957,8 @@ bool drm_handle_vblank(struct drm_device *dev, unsigned int pipe)
+ 	if (disable_irq)
+ 		vblank_disable_fn(&vblank->disable_timer);
+ 
++	dma_fence_end_signalling(fence_cookie);
++
+ 	return true;
+ }
+ EXPORT_SYMBOL(drm_handle_vblank);
 -- 
-Sakari Ailus
+2.26.2
+
