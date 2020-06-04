@@ -2,88 +2,83 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F9ADC433E0
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 20:47:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E292C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 22:50:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E44DA206DC
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 20:47:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591303660;
-	bh=Qo4iouPHpf3BJiYOoLSBBWarAnUgUp44p/1xY7iDdbs=;
-	h=From:Cc:Subject:Date:To:List-ID:From;
-	b=ur+cz55NFaQumWR7SbMVp4FwkNIioSQKLQ80LSdukJisgaPaU2rD5mZcryQRrx9ht
-	 I+vftJyTgzwSvMqI6UMwE1disCpEGY1X16bicsFgHpepv7Yyp1xIeNLpZAH4RwIosm
-	 dsuU9nkekGv++M1f5fJBlQDxF5tTxKHgSx2G/SiM=
+	by mail.kernel.org (Postfix) with ESMTP id E14A0207DA
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 22:50:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730026AbgFDUrJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 16:47:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40996 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729174AbgFDUrJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Jun 2020 16:47:09 -0400
-Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A87D5206DC;
-        Thu,  4 Jun 2020 20:47:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591303628;
-        bh=Qo4iouPHpf3BJiYOoLSBBWarAnUgUp44p/1xY7iDdbs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=p25+39YGs09UTDVBmtDmLT+oKJy/0KC1yHGPY4Y+AJ1smzRMuCUAR8S7ddNUsT0FY
-         Em8J36/ctZ4PMn7Yr7JNABCUOoKQVJAZq9brxC21U95Ff/tRDgQ/2aVeSnH3cGyh2s
-         Rsd8UvacHo8qieFeZ3XhD1w04be83FYMVtnxpKRQ=
-Received: from mchehab by mail.kernel.org with local (Exim 4.93)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jgwlW-0004AW-ME; Thu, 04 Jun 2020 22:47:06 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-media@vger.kernel.org
-Subject: [PATCH 0/5] Improve ACPI detection code for atomisp
-Date:   Thu,  4 Jun 2020 22:47:00 +0200
-Message-Id: <cover.1591303518.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+        id S1727053AbgFDWuT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 18:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726240AbgFDWuT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 18:50:19 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECCFC08C5C0;
+        Thu,  4 Jun 2020 15:50:19 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 3642E120ED481;
+        Thu,  4 Jun 2020 15:50:17 -0700 (PDT)
+Date:   Thu, 04 Jun 2020 15:50:16 -0700 (PDT)
+Message-Id: <20200604.155016.1381130025313726200.davem@davemloft.net>
+To:     a.darwish@linutronix.de
+Cc:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        tglx@linutronix.de, paulmck@kernel.org, bigeasy@linutronix.de,
+        rostedt@goodmis.org, linux-kernel@vger.kernel.org, kuba@kernel.org,
+        edumazet@google.com, axboe@kernel.dk, vgoyal@redhat.com,
+        linux-block@vger.kernel.org, airlied@linux.ie, daniel@ffwll.ch,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 0/6] seqlock: seqcount_t call sites bugfixes
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200603144949.1122421-1-a.darwish@linutronix.de>
+References: <20200603144949.1122421-1-a.darwish@linutronix.de>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 04 Jun 2020 15:50:18 -0700 (PDT)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support to read the sensor configuration directly from the BIOS,
-instead of relying on DMI match tables.
+From: "Ahmed S. Darwish" <a.darwish@linutronix.de>
+Date: Wed,  3 Jun 2020 16:49:43 +0200
 
-As we don't have the legacy models there which has their own
-DMI match tables, we can't remove them, but this change should
-make this driver to better detect unlisted devices.
+> Since patch #7 and #8 from the series:
+> 
+>    [PATCH v1 00/25] seqlock: Extend seqcount API with associated locks
+>    https://lore.kernel.org/lkml/20200519214547.352050-1-a.darwish@linutronix.de
+> 
+> are now pending on the lockdep/x86 IRQ state tracking patch series:
+> 
+>    [PATCH 00/14] x86/entry: disallow #DB more and x86/entry lockdep/nmi
+>    https://lkml.kernel.org/r/20200529212728.795169701@infradead.org
+> 
+>    [PATCH v3 0/5] lockdep: Change IRQ state tracking to use per-cpu variables
+>    https://lkml.kernel.org/r/20200529213550.683440625@infradead.org
+> 
+> This is a repost only of the seqcount_t call sites bugfixes that were on
+> top of the seqlock patch series.
+> 
+> These fixes are independent, and can thus be merged on their own. I'm
+> reposting them now so they can at least hit -rc2 or -rc3.
+> 
+> Changelog-v2:
+> 
+>   - patch #1: Add a missing up_read() on netdev_get_name() error path
+>               exit. Thanks to Dan/kbuild-bot report.
+> 
+>   - patch #4: new patch, invalid preemptible context found by the new
+>               lockdep checks added in the seqlock series + kbuild-bot.
 
-Mauro Carvalho Chehab (5):
-  media: atomisp: improve sensor detection code to use _DSM table
-  Revert "media: atomisp: Add some ACPI detection info"
-  Revert "media: atomisp: add Asus Transform T101HA ACPI vars"
-  media: atomisp: change clock source default for ISP2401
-  media: atomisp: improve ACPI/DMI detection logs
-
- drivers/staging/media/atomisp/TODO            |  43 +----
- .../media/atomisp/i2c/atomisp-gc0310.c        |  11 --
- .../media/atomisp/i2c/atomisp-gc2235.c        |  11 --
- .../media/atomisp/i2c/atomisp-lm3554.c        |  11 --
- .../media/atomisp/i2c/atomisp-mt9m114.c       |  11 --
- .../media/atomisp/i2c/atomisp-ov2680.c        |  11 --
- .../media/atomisp/i2c/atomisp-ov2722.c        |  11 --
- .../media/atomisp/i2c/ov5693/atomisp-ov5693.c |  11 --
- .../media/atomisp/pci/atomisp_gmin_platform.c | 157 ++++++++++++++----
- 9 files changed, 129 insertions(+), 148 deletions(-)
-
--- 
-2.26.2
-
-
+I'll apply patches 1-4 to the net tree.
