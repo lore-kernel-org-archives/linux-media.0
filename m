@@ -2,87 +2,156 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05375C433E1
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 07:31:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93881C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 08:10:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D506020663
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 07:31:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="m2O2xQ21"
+	by mail.kernel.org (Postfix) with ESMTP id 759B2206C3
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 08:10:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727981AbgFDH3V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 03:29:21 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:16598 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727768AbgFDH3V (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 03:29:21 -0400
-X-UUID: 085839d8068b4b0386376325890c0989-20200604
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=uB/eaRDqLP8g/98zHxi4C86lzCa4pVEjbzjzQz34ezU=;
-        b=m2O2xQ21gZsfetgrCsc46/U5CtfXhF4gtjsmnjp8rY28MFLIT/lhBXMPKx8v0ysirqdscYOZyrZUekBxWABYxaiTube0IprUoAjyXYMlsE7MSQQjW8bwpqW80+g05WMiRrQHhy4asfJixKbXvKyY2nO0s/uD6Htvp5neisluPNE=;
-X-UUID: 085839d8068b4b0386376325890c0989-20200604
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <xia.jiang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 933793228; Thu, 04 Jun 2020 15:29:16 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 4 Jun 2020 15:29:13 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 4 Jun 2020 15:29:11 +0800
-From:   Xia Jiang <xia.jiang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        id S1726897AbgFDIKm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 04:10:42 -0400
+Received: from mga02.intel.com ([134.134.136.20]:22184 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726047AbgFDIKm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Jun 2020 04:10:42 -0400
+IronPort-SDR: k2PffX4gI4onnC2BwLanvyM4Ds9H/j71SzOyGLlu/2QUZWL0jcTDkNYu99ywLTs7TD24WXHA13
+ pmgNmi9O39XA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 01:10:39 -0700
+IronPort-SDR: CbG8SA9IhTmLTH3EL+wOoj7Z+e/tx6p7eh+kvesL/bCsdRHwoUHbG9MoFKrrpylBG1+ENZXDTC
+ ZYuSLrwBrVXA==
+X-IronPort-AV: E=Sophos;i="5.73,471,1583222400"; 
+   d="scan'208";a="294250715"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 01:10:34 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id D771F20859; Thu,  4 Jun 2020 11:10:32 +0300 (EEST)
+Date:   Thu, 4 Jun 2020 11:10:32 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Rick Chang <rick.chang@mediatek.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+        Cao Bing Bu <bingbu.cao@intel.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
         <linux-mediatek@lists.infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        <srv_heupstream@mediatek.com>, <senozhatsky@chromium.org>,
-        <mojahsu@chromium.org>, <drinkcat@chromium.org>,
-        <maoguang.meng@mediatek.com>, <sj.huang@mediatek.com>,
-        Xia Jiang <xia.jiang@mediatek.com>
-Subject: [PATCH v9 01/18] media: platform: Improve subscribe event flow for bug fixing
-Date:   Thu, 4 Jun 2020 15:26:51 +0800
-Message-ID: <20200604072708.9468-2-xia.jiang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200604072708.9468-1-xia.jiang@mediatek.com>
-References: <20200604072708.9468-1-xia.jiang@mediatek.com>
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg 
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        Sj Huang <sj.huang@mediatek.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Shengnan Wang =?utf-8?B?KOeOi+Wco+eUtyk=?= 
+        <shengnan.wang@mediatek.com>
+Subject: Re: [V6, 2/2] media: i2c: dw9768: Add DW9768 VCM driver
+Message-ID: <20200604081032.GG16711@paasikivi.fi.intel.com>
+References: <20200518132731.20855-1-dongchun.zhu@mediatek.com>
+ <20200518132731.20855-3-dongchun.zhu@mediatek.com>
+ <20200521195113.GC14214@chromium.org>
+ <1590139561.8804.390.camel@mhfsdcap03>
+ <CAAFQd5CCsT_oM9aij_imV+NABzByi94RmCj97Dx0Tk3S0WDsTg@mail.gmail.com>
+ <1590570089.8804.453.camel@mhfsdcap03>
+ <CAAFQd5Dgboh8om68546ADELX3g-0y40rdBxY+H3WsX5xAD1_FQ@mail.gmail.com>
+ <1591238018.8804.555.camel@mhfsdcap03>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1591238018.8804.555.camel@mhfsdcap03>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-TGV0IHY0bDJfY3RybF9zdWJzY3JpYmVfZXZlbnQoKSBkbyB0aGUgam9iIGZvciBvdGhlciB0eXBl
-cyBleGNlcHQNClY0TDJfRVZFTlRfU09VUkNFX0NIQU5HRS4NCg0KUmV2aWV3ZWQtYnk6IFRvbWFz
-eiBGaWdhIDx0ZmlnYUBjaHJvbWl1bS5vcmc+DQpTaWduZWQtb2ZmLWJ5OiBYaWEgSmlhbmcgPHhp
-YS5qaWFuZ0BtZWRpYXRlay5jb20+DQotLS0NCnY5OiBubyBjaGFuZ2VzDQotLS0NCiBkcml2ZXJz
-L21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2NvcmUuYyB8IDQgKystLQ0KIDEgZmls
-ZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQg
-YS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2NvcmUuYyBiL2RyaXZl
-cnMvbWVkaWEvcGxhdGZvcm0vbXRrLWpwZWcvbXRrX2pwZWdfY29yZS5jDQppbmRleCBmODJhODFh
-M2JkZWUuLjRhZDRhNGIzMGEwZSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0v
-bXRrLWpwZWcvbXRrX2pwZWdfY29yZS5jDQorKysgYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210
-ay1qcGVnL210a19qcGVnX2NvcmUuYw0KQEAgLTQ0Niw5ICs0NDYsOSBAQCBzdGF0aWMgaW50IG10
-a19qcGVnX3N1YnNjcmliZV9ldmVudChzdHJ1Y3QgdjRsMl9maCAqZmgsDQogCXN3aXRjaCAoc3Vi
-LT50eXBlKSB7DQogCWNhc2UgVjRMMl9FVkVOVF9TT1VSQ0VfQ0hBTkdFOg0KIAkJcmV0dXJuIHY0
-bDJfc3JjX2NoYW5nZV9ldmVudF9zdWJzY3JpYmUoZmgsIHN1Yik7DQotCWRlZmF1bHQ6DQotCQly
-ZXR1cm4gLUVJTlZBTDsNCiAJfQ0KKw0KKwlyZXR1cm4gdjRsMl9jdHJsX3N1YnNjcmliZV9ldmVu
-dChmaCwgc3ViKTsNCiB9DQogDQogc3RhdGljIGludCBtdGtfanBlZ19nX3NlbGVjdGlvbihzdHJ1
-Y3QgZmlsZSAqZmlsZSwgdm9pZCAqcHJpdiwNCi0tIA0KMi4xOC4wDQo=
+On Thu, Jun 04, 2020 at 10:33:38AM +0800, Dongchun Zhu wrote:
+> Hi Tomasz,
+> 
+> On Mon, 2020-06-01 at 20:47 +0200, Tomasz Figa wrote:
+> > On Wed, May 27, 2020 at 11:03 AM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
+> > >
+> > > Hi Tomasz,
+> > >
+> > > On Mon, 2020-05-25 at 13:45 +0200, Tomasz Figa wrote:
+> > > > On Fri, May 22, 2020 at 11:27 AM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
+> > > > >
+> > > > > Hi Tomasz,
+> > > > >
+> > > > > Thanks for the review. My replies are as below.
+> > > > >
+> > > > > On Thu, 2020-05-21 at 19:51 +0000, Tomasz Figa wrote:
+> > > > > > Hi Dongchun, Sakari,
+> > > > > >
+> > > > > > On Mon, May 18, 2020 at 09:27:31PM +0800, Dongchun Zhu wrote:
+> > > > [snip]
+> > > > > > > +   pm_runtime_enable(dev);
+> > > > > > > +   if (!pm_runtime_enabled(dev)) {
+> > > > > > > +           ret = dw9768_runtime_resume(dev);
+> > > > > > > +           if (ret < 0) {
+> > > > > > > +                   dev_err(dev, "failed to power on: %d\n", ret);
+> > > > > > > +                   goto entity_cleanup;
+> > > > > > > +           }
+> > > > > > > +   }
+> > > > > > > +
+> > > > > > > +   ret = v4l2_async_register_subdev(&dw9768->sd);
+> > > > > > > +   if (ret < 0)
+> > > > > > > +           goto entity_cleanup;
+> > > > > > > +
+> > > > > > > +   return 0;
+> > > > > > > +
+> > > > > > > +entity_cleanup:
+> > > > > >
+> > > > > > Need to power off if the code above powered on.
+> > > > > >
+> > > > >
+> > > > > Thanks for the reminder.
+> > > > > If there is something wrong with runtime PM, actuator is to be powered
+> > > > > on via dw9768_runtime_resume() API.
+> > > > > When actuator sub-device is powered on completely and async registered
+> > > > > successfully, we shall power off it afterwards.
+> > > > >
+> > > >
+> > > > The code above calls dw9768_runtime_resume() if
+> > > > !pm_runtime_enabled(dev), but the clean-up code below the
+> > > > entity_cleanup label doesn't have the corresponding
+> > > > dw9768_runtime_suspend() call.
+> > > >
+> > >
+> > > Did you mean the 'entity_cleanup' after v4l2_async_register_subdev()?
+> > 
+> > Yes.
+> > 
+> > > Actually I made some changes for OV02A V9, according to this comment.
+> > > Could you help review that change? Thanks.
+> > 
+> > Sure, I will take a look.
+> > 
+> 
+> Thanks.
+> Sorry, I just wanna make sure the change is okay for next release.
+> May we use the check like OV02A V9 did?
+> ret = v4l2_async_register_subdev(&dw9768->sd);
+> if (ret < 0) {
+> 	if (!pm_runtime_enabled(dev))
+> 		dw9768_runtime_suspend(dev);
 
+Please do this part where you're jumping to, if possible.
+
+> 	goto entity_cleanup;
+> }
+> 
+
+-- 
+Sakari Ailus
