@@ -2,96 +2,164 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4E9EC433DF
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 12:40:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18668C433E1
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 12:56:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B96512063A
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 12:40:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E800C206E6
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 12:56:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="U0qHYui8"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="JXYnJsBU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgFDMkS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 08:40:18 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:39636 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726173AbgFDMkS (ORCPT
+        id S1728162AbgFDM4i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 08:56:38 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:39931 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726003AbgFDM4h (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Jun 2020 08:40:18 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 054CW6o2027156;
-        Thu, 4 Jun 2020 14:40:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=I4QdjFYx39ebfZ/eN0TjEZ+AQQlfm1leEYYrWsoH42c=;
- b=U0qHYui8oJ8onkOeR4YAiuCrypzu/hGpxTvlmJDNwuD9njC3P8Mo2ER3D9zlsSEerodh
- GBlP3d4yNiq7WJnk1AsIGIB2WMe+rEuOYNzL9YiThOnWwe5C7RbJKwkCIpq8igZDMR5V
- Zf2JnNvD1nigzeFITjXldbleai6k6V82ejWcukAgbQTwHCLhAagrEm/PmklT11cRj5Ut
- 2/oieS6fM8xUKiREtIPGrtuq2+ajkAgnEs2fK/38yAPvwA2NMcFbibFnrVaOunlqEdnO
- VcZnAwDNNgUoWhRNWvsvEDZDCuzhK/2Vuoo0kSB0PzEbDrtO9R8EH1hl0xN2iPx8Ax3u Mw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 31becga082-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Jun 2020 14:40:05 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 78BF810002A;
-        Thu,  4 Jun 2020 14:40:04 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 407D62BE253;
-        Thu,  4 Jun 2020 14:40:04 +0200 (CEST)
-Received: from localhost (10.75.127.48) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 4 Jun 2020 14:39:34
- +0200
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <hugues.fruchet@st.com>, <mchehab@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <vincent.guittot@linaro.org>,
-        <valentin.schneider@arm.com>, <rjw@rjwysocki.net>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH v3 0/3] DCMI set minimum cpufreq requirement
-Date:   Thu, 4 Jun 2020 14:39:29 +0200
-Message-ID: <20200604123932.20512-1-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
+        Thu, 4 Jun 2020 08:56:37 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id gpQ7j2fwhnv5ngpQAju8kv; Thu, 04 Jun 2020 14:56:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1591275395; bh=GsXkE50T8O25yTIHoQaRVvowv2CeDBSFCyEe0VxuHU8=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=JXYnJsBUkpWl1YoOy2DtjiJSHC0mjJZa9TKkwt2F5mzHyuqS6pujrCr3YTRMKa3Ik
+         QUb2aWcVVMf8zMEz6YYNa6ktgWXYkuR/hWJFnRL8cXmkzE/6Xcxa/t+y6jwj1BBpAC
+         xjobzBAvnl/CmOy4QCLeE6TC+Eox9LNw1z5mJiPkkGv71QHsH5VGKAwEOUMD3BKKT8
+         gEpFDzit9PNFrLOtBZcT4cq14h+8pzEcuC1Y/43o7OQnn14p3jsc198xPVMIseRDOw
+         CkohQLnQHEibijkmcaGP2dDvV3ZITpgXTS+qxLjjC2dovLpyOJQC9wGXDf8bOB+eFG
+         32RCRQbzuHdUw==
+Subject: Re: [PATCH] v4l2-ctrl: add control for thumnails
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Tomasz Figa <tfiga@chromium.org>
+References: <20200526085446.30956-1-stanimir.varbanov@linaro.org>
+ <65ac9697-a43f-7025-e6fe-69c4a44c6d9a@xs4all.nl>
+ <ce28a840-a763-6700-16dd-d708e570d55c@linaro.org>
+ <d02c6cd0-a502-dc52-519e-54b6328d5373@linaro.org>
+ <544b19dd-4883-bae0-b488-46c856eb207d@xs4all.nl>
+ <6f71931a-9060-a399-835c-a1cf1f05dc79@linaro.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <1bc10e88-8cbe-3da9-daeb-d015f42d7acc@xs4all.nl>
+Date:   Thu, 4 Jun 2020 14:56:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG7NODE2.st.com (10.75.127.20) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-04_10:2020-06-02,2020-06-04 signatures=0
+In-Reply-To: <6f71931a-9060-a399-835c-a1cf1f05dc79@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfAPj4iDjEkjil0CAzJQ0LO6ID7xKeLwdy5pi67iOCfa0MSwEHrW/RftrQ7mLUR6JHdeGk9Pd3wPbSJbN9phw4wgeN5kP7Dtw+ng4q1KObpTo9MqecqPH
+ weJKY04Tr4lC0JjE4tSxbVfNeWRzl8zyoRkowTdItkbpdPsK7DzM4OLH9oOs+vjUKYy0calpH3ZRFdfDl2tb66MUe1IuLSWxNlShFNZe/PNlxkhXtDhj9TXH
+ JtXczQh5AlenBmgzMPjKgwfJL7VzMp0zqoNIOmU4lFIL/XyAGQB7JXXMtPjkMVeaSNFpI7LSFU0Psza7JD2AhVLOpyKzLO1YTlIbzHidfcWLbqBMRT9D4o6B
+ rat7Lvg++pDnhaQ3Dth+5qT70qWKyiFbrslLfFMZvKdjDdjz4x7geavqdIegb5hJYou2hnqVexuf+/kTarp7bQHJxZ/2Pg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series allow to STM32 camera interface (DCMI) to require a minimum
-frequency to the CPUs before start streaming frames from the sensor.
-The minimum frequency requirement is provided in the devide-tree node.
+On 04/06/2020 14:34, Stanimir Varbanov wrote:
+> Hi Hans,
+> 
+> On 6/4/20 12:08 PM, Hans Verkuil wrote:
+>> On 04/06/2020 11:02, Stanimir Varbanov wrote:
+>>> Hi Hans,
+>>>
+>>> On 5/27/20 12:53 AM, Stanimir Varbanov wrote:
+>>>> Hi Hans,
+>>>>
+>>>> On 5/26/20 3:04 PM, Hans Verkuil wrote:
+>>>>> On 26/05/2020 10:54, Stanimir Varbanov wrote:
+>>>>>> Add v4l2 control for decoder thumbnail.
+>>>>>>
+>>>>>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+>>>>>> ---
+>>>>>>  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 7 +++++++
+>>>>>>  drivers/media/v4l2-core/v4l2-ctrls.c                      | 2 ++
+>>>>>>  include/uapi/linux/v4l2-controls.h                        | 2 ++
+>>>>>>  3 files changed, 11 insertions(+)
+>>>>>>
+>>>>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>>> index d0d506a444b1..e838e410651b 100644
+>>>>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>>> @@ -3726,6 +3726,13 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>>>      disables generating SPS and PPS at every IDR. Setting it to one enables
+>>>>>>      generating SPS and PPS at every IDR.
+>>>>>>  
+>>>>>> +``V4L2_CID_MPEG_VIDEO_DECODER_THUMBNAIL (button)``
+>>>>>> +    Instructs the decoder to produce immediate output. The decoder should
+>>>>>> +    consume first input buffer for progressive stream (or first two buffers
+>>>>>> +    for interlace). Decoder should not allocate more output buffers that it
+>>>>>> +    is required to consume one input frame. Usually the decoder input
+>>>>>> +    buffers will contain only I/IDR frames but it is not mandatory.
+>>>>>
+>>>>> This is very vague. It doesn't explain why the control is called 'THUMBNAIL',
+>>>>> but more importantly it doesn't explain how this relates to normal decoding.
+>>>>
+>>>> If in the normal decode the capture queue buffers are 5, in the
+>>>> thumbnail mode the number of buffers will be only 1 (if the bitstream is
+>>>> progressive) and this will guarantee low memory usage. The other
+>>>> difference is that the decoder will produce decoded frames (without
+>>>> errors) only for I/IDR (sync frames).
+>>
+>> Isn't this really a "DECODE_SYNC_FRAMES_ONLY" control? That's what it does,
+>> right? Skip any B/P frames and only decode sync frames.
+> 
+> Yes, it is.
+> To me V4L2_CID_MPEG_VIDEO_DECODE_SYNC_FRAMES sounds better. If you are
+> fine I can send a new patch.
+> 
+> The definition of "sync frames" is a bit difficult for codec-agnostic
+> controls. Is it sound better "INTRA", DECODE_INTRA_FRAMES (ONLY)?
 
-Setting a minimum frequency for the CPUs is needed to ensure a quick handling
-of the interrupts between two sensor frames and avoid dropping half of them.
+INTRA is better. DECODE_INTRA_FRAMES_ONLY is a good name, I think.
 
-version 3:
-- add a cpumask field to track boosted CPUs
-- add irq_affinity_notify callback
-- protect cpumask field with a mutex 
+Thumbnail creation can be given as an example in the description of the
+control, but that's just a use-case.
 
-Benjamin Gaignard (3):
-  dt-bindings: media: stm32-dcmi: Add DCMI min frequency property
-  media: stm32-dcmi: Set minimum cpufreq requirement
-  ARM: dts: stm32: Set DCMI frequency requirement for stm32mp15x
+Regards,
 
- .../devicetree/bindings/media/st,stm32-dcmi.yaml   |   8 +
- arch/arm/boot/dts/stm32mp151.dtsi                  |   1 +
- drivers/media/platform/stm32/stm32-dcmi.c          | 187 ++++++++++++++++++++-
- 3 files changed, 188 insertions(+), 8 deletions(-)
+	Hans
 
--- 
-2.15.0
+> 
+>>
+>> That this is useful for creating thumbnails is just a specific use-case.
+>>
+>> Regards,
+>>
+>> 	Hans
+>>
+>>>>
+>>>>>
+>>>>> I.e. if you are decoding and 'press' this control, what happens then?
+>>>>
+>>>> Might be the button type wasn't great idea. In fact the control should
+>>>> be set before streamon so that the driver returns min_capture_bufs 1.
+>>>>
+>>>>>
+>>>>> What exactly is the use-case?
+>>>>
+>>>> It could be used to generate thumbnails of all video clips in a folder
+>>>> or when you open a Gallery application on your phone.
+>>>>
+>>>
+>>> What is your opinion on that control? I could consider to make it Venus
+>>> custom control but from the use-case it looks other drivers also can
+>>> benefit of it.
+>>>
+>>> I tried to make more generic one [1] but it looks it will be too difficult.
+>>>
+>>
+> 
 
