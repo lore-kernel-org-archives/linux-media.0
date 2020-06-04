@@ -2,97 +2,170 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAA1AC433DF
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 06:21:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 833DAC433DF
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 07:28:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AFF022077D
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 06:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591251660;
-	bh=+HdQImVDyrT99xu6InwjdgnGBee+vtpE89w1UlBanIE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=xxn4F6jrjOsWBSvMKJVswzeUKA+K7cAP+gKXEbmOq73LOghvdXIEz0JJPEavtDo3x
-	 pNiPwqbgtHWFUhzNFKnFW3iaSZb6DuBTVJ9wTymyoLGoRRIqKfZpuQZMhPwcEG6zCv
-	 H5t5rfKJme7eHZxGojlEfnghuQU5ktLVklJROeK4=
+	by mail.kernel.org (Postfix) with ESMTP id 5F22A2072E
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 07:28:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Zb0a4IXz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgFDGU5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 02:20:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59504 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726603AbgFDGU4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Jun 2020 02:20:56 -0400
-Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 357E7206DC;
-        Thu,  4 Jun 2020 06:20:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591251656;
-        bh=+HdQImVDyrT99xu6InwjdgnGBee+vtpE89w1UlBanIE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=asoXW0pWuATP8jFKvFvNgsCVYtB54v25YROE33i5jH5P/1UetYz8OtYr0eNqaFdig
-         /XwS0KlWwm1EgFLSBOb4XrFrqQC+KC3t2BDFpPC+CTKrErpagVmTeUlt8cCxagRgLC
-         z+kmUC6vfolwV6zu1yPLtOC8yQG9Cq8v1qZtuWOg=
-Date:   Thu, 4 Jun 2020 08:20:52 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL for v5.8-rc1] media updates
-Message-ID: <20200604082052.298d534f@coco.lan>
-In-Reply-To: <CAHk-=wg0=J7VXoEL0eCNmguyj-z7G-iByHcUV02nrmw10GCZ3A@mail.gmail.com>
-References: <20200603100559.2718efba@coco.lan>
-        <CAHk-=wg0=J7VXoEL0eCNmguyj-z7G-iByHcUV02nrmw10GCZ3A@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1728000AbgFDH2r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 03:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727094AbgFDH2q (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 03:28:46 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8126EC03E96D
+        for <linux-media@vger.kernel.org>; Thu,  4 Jun 2020 00:28:46 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id h5so4897643wrc.7
+        for <linux-media@vger.kernel.org>; Thu, 04 Jun 2020 00:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PcR+p2aqynDC6hdpbjatYKqB7lnaf2TVTcZxrW9wkJ8=;
+        b=Zb0a4IXzLUSWE7c899RieIrz2yAeS7PSFSlKymHYfU6bYWdWQ4N/biWdxEFx320+Lu
+         Tm2SwDP3Zf3dT++Y45bxahozjksznuodBEVCDX3ty4vYumG0MjH5rhcZf7dQ81Bnzc/J
+         SUdbNZ9d7/H4Q7YOE1kd2VefVYRBii3eihoKo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=PcR+p2aqynDC6hdpbjatYKqB7lnaf2TVTcZxrW9wkJ8=;
+        b=RC+tHNFPwBUdhhl+UEj2pGFFg0HbW/rX3Ak198j788+SwzgfQMK4l+5xQUakxhyj4+
+         ISRoUa+uwbKyismlwKtCkHTul46pzGhPVWXhuAjWSWVxiWovwimV2KMAqjrhCM1DCAID
+         l0wlWIZC+LhVB53xT/DLoKs6driU37G7XS4SUp8wZfiecj78t+SMkW+gvGgWNofiQN3E
+         A4Yof57gVtHDcGyoMvTeVZbHexPF44EhpHgYzQbBzmfwezyZhdxOEKur3jJ/Ux6mR4TO
+         8uHdPn5oCBLhsdsc1c5FfuD9niMZIUE8SOULrfHdlU/kXJlfPdJvEn1lW/9Zed0LDPDo
+         /zpA==
+X-Gm-Message-State: AOAM532wkq+jcBuEbzdYXjv4qk6c3ezTdZ1LFcOprdeaGmMqxB56In2N
+        gRPiskhrHGcWKgTSiXQjADKixQ==
+X-Google-Smtp-Source: ABdhPJzR++BcxQdCdbYMaFBVBu37Z3AiOCBNnPIbstbCVZxnXHdyEel0ruVeUnaQJ43wOmRp2FlHew==
+X-Received: by 2002:adf:e58c:: with SMTP id l12mr3056955wrm.34.1591255725227;
+        Thu, 04 Jun 2020 00:28:45 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id b8sm6876269wrs.36.2020.06.04.00.28.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2020 00:28:44 -0700 (PDT)
+Date:   Thu, 4 Jun 2020 09:28:41 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     "Ahmed S. Darwish" <a.darwish@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Sebastian A. Siewior" <bigeasy@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jens Axboe <axboe@kernel.dk>, Vivek Goyal <vgoyal@redhat.com>,
+        linux-block@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 0/6] seqlock: seqcount_t call sites bugfixes
+Message-ID: <20200604072841.GR20149@phenom.ffwll.local>
+Mail-Followup-To: "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Sebastian A. Siewior" <bigeasy@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Vivek Goyal <vgoyal@redhat.com>, linux-block@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Sumit Semwal <sumit.semwal@linaro.org>, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20200603144949.1122421-1-a.darwish@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200603144949.1122421-1-a.darwish@linutronix.de>
+X-Operating-System: Linux phenom 5.6.0-1-amd64 
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Wed, 3 Jun 2020 21:21:06 -0700
-Linus Torvalds <torvalds@linux-foundation.org> escreveu:
+On Wed, Jun 03, 2020 at 04:49:43PM +0200, Ahmed S. Darwish wrote:
+> Hi,
+> 
+> Since patch #7 and #8 from the series:
+> 
+>    [PATCH v1 00/25] seqlock: Extend seqcount API with associated locks
+>    https://lore.kernel.org/lkml/20200519214547.352050-1-a.darwish@linutronix.de
+> 
+> are now pending on the lockdep/x86 IRQ state tracking patch series:
+> 
+>    [PATCH 00/14] x86/entry: disallow #DB more and x86/entry lockdep/nmi
+>    https://lkml.kernel.org/r/20200529212728.795169701@infradead.org
+> 
+>    [PATCH v3 0/5] lockdep: Change IRQ state tracking to use per-cpu variables
+>    https://lkml.kernel.org/r/20200529213550.683440625@infradead.org
+> 
+> This is a repost only of the seqcount_t call sites bugfixes that were on
+> top of the seqlock patch series.
+> 
+> These fixes are independent, and can thus be merged on their own. I'm
+> reposting them now so they can at least hit -rc2 or -rc3.
 
-> On Wed, Jun 3, 2020 at 1:06 AM Mauro Carvalho Chehab
-> <mchehab+huawei@kernel.org> wrote:
-> >
-> >   - The atomisp staging driver was resurrected. It is meant to work with
-> >     4 generations of cameras on Atom-based laptops, tablets and cell
-> >     phones. So, it seems worth investing time to cleanup this driver and
-> >     making it in good shape. =20
->=20
-> Hmm. It causes a warning for me:
->=20
->    drivers/staging/media/atomisp/pci/atomisp_v4l2.c:764:12: warning:
-> =E2=80=98atomisp_mrfld_power=E2=80=99 defined but not used [-Wunused-func=
-tion]
->=20
-> which is a bit annoying.
->=20
-> I can see the FIXME's there, but the warning still isn't acceptable.
->=20
-> I'll add a fixup commit. I was going to do it in the merge itself, but
-> decided that was a bit too subtle.
+I'm confused on what I should do with patch 6 here for dma-buf. Looks like
+just a good cleanup/prep work, so I'd queue it for linux-next and 5.9, but
+sounds like you want this in earlier. Do you need this in 5.8-rc for some
+work meant for 5.9? Will this go in through some topic branch directly?
+Should I apply it?
 
-OK!
+Patch itself lgtm, I'm just confused what I should do with it.
+-Daniel
 
-I have a patch like that already on a separate pile of patches,
-which address several other things. I opted to place them in
-separate, in order to give people some time to comment and review.
+> 
+> Changelog-v2:
+> 
+>   - patch #1: Add a missing up_read() on netdev_get_name() error path
+>               exit. Thanks to Dan/kbuild-bot report.
+> 
+>   - patch #4: new patch, invalid preemptible context found by the new
+>               lockdep checks added in the seqlock series + kbuild-bot.
+> 
+> Thanks,
+> 
+> 8<--------------
+> 
+> Ahmed S. Darwish (6):
+>   net: core: device_rename: Use rwsem instead of a seqcount
+>   net: phy: fixed_phy: Remove unused seqcount
+>   u64_stats: Document writer non-preemptibility requirement
+>   net: mdiobus: Disable preemption upon u64_stats update
+>   block: nr_sects_write(): Disable preemption on seqcount write
+>   dma-buf: Remove custom seqcount lockdep class key
+> 
+>  block/blk.h                    |  2 ++
+>  drivers/dma-buf/dma-resv.c     |  9 +------
+>  drivers/net/phy/fixed_phy.c    | 26 ++++++++------------
+>  drivers/net/phy/mdio_bus.c     |  2 ++
+>  include/linux/dma-resv.h       |  2 --
+>  include/linux/u64_stats_sync.h | 43 ++++++++++++++++++----------------
+>  net/core/dev.c                 | 40 ++++++++++++++-----------------
+>  7 files changed, 56 insertions(+), 68 deletions(-)
+> 
+> base-commit: 3d77e6a8804abcc0504c904bd6e5cdf3a5cf8162
+> --
+> 2.20.1
 
-My plan is to keep them on linux-next and submit you next week, if
-ok for you.
-
-The new series should drop all LLVM warnings and add SPDX headers,
-among other things.=20
-
-Thanks,
-Mauro
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
