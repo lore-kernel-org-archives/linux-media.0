@@ -2,105 +2,190 @@ Return-Path: <SRS0=S7kU=7R=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FFA8C433DF
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 13:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81E1DC433E1
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 13:53:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EAFAE20835
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 13:45:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B245207D0
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jun 2020 13:53:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="T1AJ7XcB"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="XyuF7akh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728447AbgFDNpE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jun 2020 09:45:04 -0400
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:44415 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726415AbgFDNpE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Jun 2020 09:45:04 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id gqB1j2vDlnv5ngqB4juIbn; Thu, 04 Jun 2020 15:45:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1591278302; bh=G53ENnm/UjOpaZusiLzzWOlK8nfMcbfwukP66+vVrI8=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=T1AJ7XcBmdqymmBP6z79g3Ln9kscDyEGbcYKFAsZaUWq8NtQiyHn4rk++cSPlm/tz
-         /zUwHh8RkdO8yajvnG5f34PbdAsiC8ZVo+ZykMABBdx0ZoTcSa98c96SX4pGbpVK1r
-         xvBBoBuQFSlNZS2vyZjqQQakB8t3OqfG+KqALIyhCLiC+02lt4HNB9G7GCHXWSowZZ
-         j+d6hwEZmT1fxZ1XDFwVAYnUOZH1XSyGZDOAXFiN0G79NsJYzp7ivR3ntS2nviHdQe
-         AsguziHlq/84X2zDkRnf02DwGeAkvwVgihcL+WIeD7RjEClqjRxi+ENsVkoiWQxE/x
-         5s6SWeCK+50RQ==
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT FIXES FOR v5.8] Various fixes for v5.8
-Message-ID: <3fd4dd63-530b-0341-8579-a5759d8bb07a@xs4all.nl>
-Date:   Thu, 4 Jun 2020 15:44:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1728904AbgFDNxd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jun 2020 09:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728896AbgFDNxc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jun 2020 09:53:32 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87334C08C5C1
+        for <linux-media@vger.kernel.org>; Thu,  4 Jun 2020 06:53:32 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id r9so5325149wmh.2
+        for <linux-media@vger.kernel.org>; Thu, 04 Jun 2020 06:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WTN9hKVRvS3SB3HTMfGE7UGBs+9KNxbyg3Yusfgv+rE=;
+        b=XyuF7akhxZYqkjEdda9jL2OlbN0kGPXJPHJ0ss5AJZFIm7yaqkJ70UFt397DKdBTTy
+         LkysXfSu9XsXPGq1ID7H1auU1t3o5k0fJr+9ipc5zC1uDNIVS9a6lO7HiJSMM5ke/Vyh
+         U4IPCGpq3r09LTUCHE/F46tvaQJWRMqsdWCzlzPW6KYO/505VDb/T7Q42z23eGQE7z6Z
+         72ekSvLROK+9p6ZCe38kEP+yGRvhGpOsD8lrv4WBaqHrAnYrxmr2Tn9T2oRvMg/H8LnU
+         igUmQBOWOMLCuTbzTJ8RUUrZiJqr3vm3VVIfo/NiZePI42xwckDiJmy4cK4CdbrEplxc
+         4BPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WTN9hKVRvS3SB3HTMfGE7UGBs+9KNxbyg3Yusfgv+rE=;
+        b=UDEopkjMc87mgCvS3zegZKB6Kbe1OchkdTqTd4EB95NTZ5LJVQwa6Ztf4m4IyMvT1P
+         cuMusIwv7VlDRWZqlpW1wecfWCBeR4wQLhkVmLJ1ks5KQHytmr0p6V+L9H8VGgmxjmpr
+         dxl1f/WEjf+7wQYfN6oIbePMcpEmIuNGUAUsS7ZCDch3wi5Ti45vbWT44BJRpGQG1zEm
+         5XIvMche25mXc9T9hWJa3Mflx/BF/gn6eiKOERw1mGlN/Dl2HFyogMt1CUdtJ70QvsEp
+         PsqM4CC6CzNfZJkp9ECOMUprHdPSh7gi4QgCR1SvrwJMQ7BkimvPy6sWdm8h5589wyAz
+         VHRQ==
+X-Gm-Message-State: AOAM531Y6I+TdeFwgI4V82dezsI9UplxFaDujG6hmhO1gudY206zQZMH
+        DtHXMedb/nH+l+VSfDOU9n6wJw==
+X-Google-Smtp-Source: ABdhPJwd9WGnr6Q/FV1RFyKfSIpbxLo2wXPQ8ohJw62dgXc/LSq0+CrfVHbTBTa4n1Fkmh1H7CwwIg==
+X-Received: by 2002:a1c:9d53:: with SMTP id g80mr4410607wme.13.1591278811002;
+        Thu, 04 Jun 2020 06:53:31 -0700 (PDT)
+Received: from bender.baylibre.local ([2a01:e35:2ec0:82b0:22:5867:d2c6:75f4])
+        by smtp.gmail.com with ESMTPSA id i74sm8185599wri.49.2020.06.04.06.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2020 06:53:30 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Maxime Jourdan <mjourdan@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: [PATCH 2/5] media: meson: vdec: handle bitdepth on source change
+Date:   Thu,  4 Jun 2020 15:53:14 +0200
+Message-Id: <20200604135317.9235-3-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20200604135317.9235-1-narmstrong@baylibre.com>
+References: <20200604135317.9235-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfG0S2RbEmj+G4PrD/docPnx9yyte0gy/B11THp66zz5bdCXt87I5yZeAaMxord68tTHALSOiu/f+qlK6wpOey5eewVdrE8aXx/m5Gd1o6tFnlZRlTxDP
- P78KJjxVDS7+P0/KY0q2RrLIPw6sR7nePDZd/xhM4d0oTu7MldkKojqs/9RDPkcLV0EvNSQRzYUsKQ==
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The following changes since commit 938b29db3aa9c293c7c1366b16e55e308f1a1ddd:
+From: Maxime Jourdan <mjourdan@baylibre.com>
 
-  media: Documentation: media: Refer to mbus format documentation from CSI-2 docs (2020-05-25 15:47:02 +0200)
+In order to handle Compressed Framebuffer support, we need to handle
+the switch between 8bit and 10bit frame output.
 
-are available in the Git repository at:
+This handles the bitdepth in the codec amvdec_src_change() call to handle
+a source change/decode resume when the stream bitdepth changes.
 
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.8a
+Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/staging/media/meson/vdec/codec_h264.c   |  3 ++-
+ drivers/staging/media/meson/vdec/codec_vp9.c    |  3 ++-
+ drivers/staging/media/meson/vdec/vdec.h         |  1 +
+ drivers/staging/media/meson/vdec/vdec_helpers.c | 10 ++++++----
+ drivers/staging/media/meson/vdec/vdec_helpers.h |  3 ++-
+ 5 files changed, 13 insertions(+), 7 deletions(-)
 
-for you to fetch changes up to 36344121e87087b345167f260d08bf888528e499:
+diff --git a/drivers/staging/media/meson/vdec/codec_h264.c b/drivers/staging/media/meson/vdec/codec_h264.c
+index c61128fc4bb9..d53c9a464bde 100644
+--- a/drivers/staging/media/meson/vdec/codec_h264.c
++++ b/drivers/staging/media/meson/vdec/codec_h264.c
+@@ -353,7 +353,8 @@ static void codec_h264_src_change(struct amvdec_session *sess)
+ 		frame_width, frame_height, crop_right, crop_bottom);
+ 
+ 	codec_h264_set_par(sess);
+-	amvdec_src_change(sess, frame_width, frame_height, h264->max_refs + 5);
++	amvdec_src_change(sess, frame_width, frame_height,
++			  h264->max_refs + 5, 8);
+ }
+ 
+ /*
+diff --git a/drivers/staging/media/meson/vdec/codec_vp9.c b/drivers/staging/media/meson/vdec/codec_vp9.c
+index 897f5d7a6aad..4c6a644ab1a7 100644
+--- a/drivers/staging/media/meson/vdec/codec_vp9.c
++++ b/drivers/staging/media/meson/vdec/codec_vp9.c
+@@ -2132,7 +2132,8 @@ static irqreturn_t codec_vp9_threaded_isr(struct amvdec_session *sess)
+ 
+ 	codec_vp9_fetch_rpm(sess);
+ 	if (codec_vp9_process_rpm(vp9)) {
+-		amvdec_src_change(sess, vp9->width, vp9->height, 16);
++		amvdec_src_change(sess, vp9->width, vp9->height, 16,
++				  vp9->is_10bit ? 10 : 8);
+ 
+ 		/* No frame is actually processed */
+ 		vp9->cur_frame = NULL;
+diff --git a/drivers/staging/media/meson/vdec/vdec.h b/drivers/staging/media/meson/vdec/vdec.h
+index f95445ac0658..e3e4af73447a 100644
+--- a/drivers/staging/media/meson/vdec/vdec.h
++++ b/drivers/staging/media/meson/vdec/vdec.h
+@@ -234,6 +234,7 @@ struct amvdec_session {
+ 	u32 width;
+ 	u32 height;
+ 	u32 colorspace;
++	u32 bitdepth;
+ 	u8 ycbcr_enc;
+ 	u8 quantization;
+ 	u8 xfer_func;
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
+index 7f07a9175815..eed7a929c5d0 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.c
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
+@@ -436,7 +436,7 @@ void amvdec_set_par_from_dar(struct amvdec_session *sess,
+ EXPORT_SYMBOL_GPL(amvdec_set_par_from_dar);
+ 
+ void amvdec_src_change(struct amvdec_session *sess, u32 width,
+-		       u32 height, u32 dpb_size)
++		       u32 height, u32 dpb_size, u32 bitdepth)
+ {
+ 	static const struct v4l2_event ev = {
+ 		.type = V4L2_EVENT_SOURCE_CHANGE,
+@@ -451,7 +451,8 @@ void amvdec_src_change(struct amvdec_session *sess, u32 width,
+ 	if (sess->streamon_cap &&
+ 	    sess->width == width &&
+ 	    sess->height == height &&
+-	    dpb_size <= sess->num_dst_bufs) {
++	    dpb_size <= sess->num_dst_bufs &&
++	    sess->bitdepth == bitdepth) {
+ 		sess->fmt_out->codec_ops->resume(sess);
+ 		return;
+ 	}
+@@ -460,9 +461,10 @@ void amvdec_src_change(struct amvdec_session *sess, u32 width,
+ 	sess->width = width;
+ 	sess->height = height;
+ 	sess->status = STATUS_NEEDS_RESUME;
++	sess->bitdepth = bitdepth;
+ 
+-	dev_dbg(sess->core->dev, "Res. changed (%ux%u), DPB size %u\n",
+-		width, height, dpb_size);
++	dev_dbg(sess->core->dev, "Res. changed (%ux%u), DPB %u, bitdepth %u\n",
++		width, height, dpb_size, bitdepth);
+ 	v4l2_event_queue_fh(&sess->fh, &ev);
+ }
+ EXPORT_SYMBOL_GPL(amvdec_src_change);
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
+index cfaed52ab526..f059cf195cca 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.h
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
+@@ -76,9 +76,10 @@ void amvdec_set_par_from_dar(struct amvdec_session *sess,
+  * @width: picture width detected by the hardware
+  * @height: picture height detected by the hardware
+  * @dpb_size: Decoded Picture Buffer size (= amount of buffers for decoding)
++ * @bitdepth: Bit depth (usually 10 or 8) of the coded content
+  */
+ void amvdec_src_change(struct amvdec_session *sess, u32 width,
+-		       u32 height, u32 dpb_size);
++		       u32 height, u32 dpb_size, u32 bitdepth);
+ 
+ /**
+  * amvdec_abort() - Abort the current decoding session
+-- 
+2.22.0
 
-  media: rkvdec: Fix H264 scaling list order (2020-06-04 15:24:52 +0200)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      medium: cec: Make MEDIA_CEC_SUPPORT default to n if !MEDIA_SUPPORT
-
-Jernej Skrabec (1):
-      media: cedrus: Implement runtime PM
-
-Jonas Karlman (2):
-      media: v4l2-ctrls: Unset correct HEVC loop filter flag
-      media: rkvdec: Fix H264 scaling list order
-
-Marek Szyprowski (1):
-      media: s5p-mfc: Properly handle dma_parms for the allocated devices
-
-Michael Rodin (1):
-      v4l2-subdev.rst: correct information about v4l2 events
-
-Samuel Holland (1):
-      media: cedrus: Program output format during each run
-
-Tomi Valkeinen (1):
-      media: videobuf2-dma-contig: fix bad kfree in vb2_dma_contig_clear_max_seg_size
-
- Documentation/driver-api/media/v4l2-subdev.rst        |   3 +-
- drivers/media/cec/Kconfig                             |   2 +-
- drivers/media/common/videobuf2/videobuf2-dma-contig.c |  20 +--------
- drivers/media/platform/s5p-mfc/s5p_mfc.c              |   6 ++-
- drivers/media/v4l2-core/v4l2-ctrls.c                  |   2 +-
- drivers/staging/media/rkvdec/rkvdec-h264.c            |  70 ++++++++++---------------------
- drivers/staging/media/sunxi/cedrus/cedrus.c           |   7 ++++
- drivers/staging/media/sunxi/cedrus/cedrus_dec.c       |   2 +
- drivers/staging/media/sunxi/cedrus/cedrus_hw.c        | 106 ++++++++++++++++++++++++++++++-----------------
- drivers/staging/media/sunxi/cedrus/cedrus_hw.h        |   3 ++
- drivers/staging/media/sunxi/cedrus/cedrus_video.c     |  36 +++++++++++-----
- include/media/videobuf2-dma-contig.h                  |   2 +-
- 12 files changed, 139 insertions(+), 120 deletions(-)
