@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C169FC433E1
-	for <linux-media@archiver.kernel.org>; Fri,  5 Jun 2020 16:29:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27912C433E0
+	for <linux-media@archiver.kernel.org>; Fri,  5 Jun 2020 16:29:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F70220810
-	for <linux-media@archiver.kernel.org>; Fri,  5 Jun 2020 16:29:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F23302074B
+	for <linux-media@archiver.kernel.org>; Fri,  5 Jun 2020 16:29:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lRsBh9rY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uo6n7Hqf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728311AbgFEQ3A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Jun 2020 12:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S1727015AbgFEQ0J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Jun 2020 12:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727037AbgFEQ0M (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Jun 2020 12:26:12 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B23EC08C5C3;
-        Fri,  5 Jun 2020 09:26:12 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 64so5120575pfg.8;
-        Fri, 05 Jun 2020 09:26:12 -0700 (PDT)
+        with ESMTP id S1726987AbgFEQ0I (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Jun 2020 12:26:08 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086A0C08C5C2;
+        Fri,  5 Jun 2020 09:26:08 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id m1so5392230pgk.1;
+        Fri, 05 Jun 2020 09:26:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=dASDXMiZEph5YCTisMlHTdhBBOP44OwUKjYtbrazK0w=;
-        b=lRsBh9rYlD3/klFZqakJ0sVqCrjSPf2sDijjIOPnDVwZ7apuHjMIwwQDkp0+o754gF
-         4/xGNuMr+V1FHGugjT8Ie3mOvRMgbkxkDzn1B1wmUksTu/6TkerWdC4b5JgLu6MmHpVq
-         qGU0/l0rodSFQVrMSXc6gP4B7Pqb9bcYNABfaqO0EyBbBVsnEskMDEt8tJxFCGtU/EQe
-         i36ujV6luk8DndCyrMCvPNxMMfB34OiDPeljv9TEbLLh1INxeEBEOOVMaFI1bmu1XC+J
-         oOshsyJtmIG+waJl7NW2fTf6KGn3GipfU5B45FbpYN7hvkgZ8TLEm6+UYw1cS+qD75L8
-         9+iQ==
+        bh=fWpx6f+4wgL8xMRTLX05j8UVK4Mv/r1SKdVKvG+UIsw=;
+        b=uo6n7HqfcM6VUZR43CM1H8xUQpdJkgfQfPZVGILieyWTkZLA+DJmBnr6xQOqpAgi4P
+         MHtEBdaDPjd5LKi32C/K2zWm96qiLzPd8wnoJ8isRVBib/tC3ueP3UtX5ZjOy9nH8s6L
+         H8vD61zb6C+AxPk0ENjz1cNNgrvhCYxkKfcqu/sa/ai7zNouyIVFCVfhE8ZTxXz8kaQ6
+         Gq1OlQ5u4C42v0czLu5+56VgfOsgRUfZg0VcgOmuT4oWk9HImP+yKzExQnV9p2m1fiFp
+         qZ6V4PVzpHPYMGGIYvRZusComaG1IUenQDO1kHLAd/x83Fy+OvkuNc4sGPKV1rJKpOG7
+         72uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=dASDXMiZEph5YCTisMlHTdhBBOP44OwUKjYtbrazK0w=;
-        b=jYpXyNsYad1wDZFYYagu/wWmccRmASORfeJwti5T59pcWhouLMfzbubtL+DcU0ssxn
-         QQK2lQv9Xi02wRLGPAA8yB9IJ3mL4gMvO/X66MvM8A1G2WWsjq7320WeeVkrfA6nHDOG
-         jfnog2fb+dtSP4I+kN/HUy+Xte5+ZHlu/hKZnQOvX0c4YYO57H+HE9wLkD02MILcDtRh
-         rfXXHTFAIXH2RPr5G9Dh5Zs6RnWfuhfCtIseJO13v65ZqYAEVA5/imdlRqrP9kFK7naa
-         y1MLPxZQTPYpjyUx/ZUeOPCRc/JvzTTITTjcQo8QPHEvzbX4V7eb33/szFJBXfpTGpme
-         L8qQ==
-X-Gm-Message-State: AOAM531AuyWN6mhHlqDRaVgXuzWen0wNtzDbgQEeAb/ioi0o5QQ5tJWV
-        /nlxBOSvnKhkQILSWsWSu3EmWjga
-X-Google-Smtp-Source: ABdhPJwXx/cGe9xW2SYlzP6+8kzFsQ21N0G0adYtcyJqEYt6Q8PYpLKRa6OKd3iLBwEm+8laxXxzXg==
-X-Received: by 2002:a63:7519:: with SMTP id q25mr9985787pgc.224.1591374371249;
-        Fri, 05 Jun 2020 09:26:11 -0700 (PDT)
+        bh=fWpx6f+4wgL8xMRTLX05j8UVK4Mv/r1SKdVKvG+UIsw=;
+        b=UOesNUHdvRdylRN0M/H4GGDmnLehLxQSl23ELpJXGduPPc3EPKIC9NniU+JcxehIYZ
+         mvkPPS/iKe6ZdJhH0ZCpa1JthWWslFr0Vw88nNDJd0Qz2r7iXQ+unXAjQWA4cukS3i2a
+         K4+uNe1LXr/tllIGUYYDuk3pb3JQsofVZ57v2VuVm4969hS3YgxxauWUxPzwYWs95mp+
+         xvj5yjThQR0jWelZLqQjOjK9T8mmQMylI428j5O5DKmngdkg0ZpOO+dOVDyZYujd1P/X
+         mHdCIeUXUOtWvBwFYDHiGIkUWYIpIL7NtPyFm0oBLe3bnYhyiC+M59mcKKArd3ZsGAo3
+         ua+g==
+X-Gm-Message-State: AOAM531+jjI07cmsSZgtBeS8hARXjXnEIMIAJ0zpdG+izwKGtvT8aR+n
+        TVLmB+vhHcQ8kKXS9WxmCQSTRAWB
+X-Google-Smtp-Source: ABdhPJzzHgGmsx0Aif2ScHBiwMep4HjZ3Ui2LhF+D+YePIxEYb/HPAN8UGfB02GPqOhvQkQksQH6bQ==
+X-Received: by 2002:a62:6846:: with SMTP id d67mr10705706pfc.167.1591374367137;
+        Fri, 05 Jun 2020 09:26:07 -0700 (PDT)
 Received: from localhost.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id b29sm86205pff.176.2020.06.05.09.26.09
+        by smtp.gmail.com with ESMTPSA id b29sm86205pff.176.2020.06.05.09.26.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2020 09:26:10 -0700 (PDT)
+        Fri, 05 Jun 2020 09:26:06 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 X-Google-Original-From: Florian Fainelli <florian.fainelli@broadcom.com>
 To:     linux-kernel@vger.kernel.org
@@ -75,9 +75,9 @@ Cc:     stable@vger.kernel.org,
         (V4L/DVB)),
         linux-fsdevel@vger.kernel.org (open list:FILESYSTEMS (VFS and
         infrastructure))
-Subject: [PATCH stable 4.9 07/21] media: stv6110: get rid of a srate dead code
-Date:   Fri,  5 Jun 2020 09:25:04 -0700
-Message-Id: <20200605162518.28099-8-florian.fainelli@broadcom.com>
+Subject: [PATCH stable 4.9 05/21] media: dvb_frontend: get rid of get_property() callback
+Date:   Fri,  5 Jun 2020 09:25:02 -0700
+Message-Id: <20200605162518.28099-6-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200605162518.28099-1-florian.fainelli@broadcom.com>
 References: <20200605162518.28099-1-florian.fainelli@broadcom.com>
@@ -88,55 +88,111 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Mauro Carvalho Chehab <mchehab@s-opensource.com>
 
-commit 282996925b4d78f9795d176f7fb409281c98d56d upstream
+commit 8f8a19fcc1a89b83d0ab6d7cf2bcdd272dbd4334 upstream
 
-The stv6110 has a weird code that checks if get_property
-and set_property ioctls are defined. If they're, it initializes
-a "srate" var from properties cache. Otherwise, it sets to
-15MBaud, with won't make any sense.
+Only lg2160 implement gets_property, but there's no need for that,
+as no other driver calls this callback, as get_frontend() does the
+same, and set_frontend() also calls lg2160 get_frontend().
 
-Thankfully, it seems that someone else discovered the issue in
-the past, as "srate" is currently not used anywhere!
+So, get rid of it.
 
-So, get rid of that really weird dead code logic.
-
-Reported-by: Honza Petrous <jpetrous@gmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+Reviewed-by: Michael Ira Krufky <mkrufky@linuxtv.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@s-opensource.com>
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/media/dvb-frontends/stv6110.c | 9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/media/dvb-core/dvb_frontend.c |  9 +--------
+ drivers/media/dvb-core/dvb_frontend.h |  3 ---
+ drivers/media/dvb-frontends/lg2160.c  | 14 --------------
+ 3 files changed, 1 insertion(+), 25 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/stv6110.c b/drivers/media/dvb-frontends/stv6110.c
-index 66a5a7f2295c..93262b13c644 100644
---- a/drivers/media/dvb-frontends/stv6110.c
-+++ b/drivers/media/dvb-frontends/stv6110.c
-@@ -263,11 +263,9 @@ static int stv6110_get_frequency(struct dvb_frontend *fe, u32 *frequency)
- static int stv6110_set_frequency(struct dvb_frontend *fe, u32 frequency)
+diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
+index 7eeb5d302c9c..97c825f97b15 100644
+--- a/drivers/media/dvb-core/dvb_frontend.c
++++ b/drivers/media/dvb-core/dvb_frontend.c
+@@ -1306,7 +1306,7 @@ static int dtv_property_process_get(struct dvb_frontend *fe,
+ 				    struct dtv_property *tvp,
+ 				    struct file *file)
  {
- 	struct stv6110_priv *priv = fe->tuner_priv;
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
- 	u8 ret = 0x04;
- 	u32 divider, ref, p, presc, i, result_freq, vco_freq;
- 	s32 p_calc, p_calc_opt = 1000, r_div, r_div_opt = 0, p_val;
--	s32 srate;
+-	int r, ncaps;
++	int ncaps;
  
- 	dprintk("%s, freq=%d kHz, mclk=%d Hz\n", __func__,
- 						frequency, priv->mclk);
-@@ -278,13 +276,6 @@ static int stv6110_set_frequency(struct dvb_frontend *fe, u32 frequency)
- 				((((priv->mclk / 1000000) - 16) & 0x1f) << 3);
+ 	switch(tvp->cmd) {
+ 	case DTV_ENUM_DELSYS:
+@@ -1517,13 +1517,6 @@ static int dtv_property_process_get(struct dvb_frontend *fe,
+ 		return -EINVAL;
+ 	}
  
- 	/* BB_GAIN = db/2 */
--	if (fe->ops.set_property && fe->ops.get_property) {
--		srate = c->symbol_rate;
--		dprintk("%s: Get Frontend parameters: srate=%d\n",
--							__func__, srate);
--	} else
--		srate = 15000000;
+-	/* Allow the frontend to override outgoing properties */
+-	if (fe->ops.get_property) {
+-		r = fe->ops.get_property(fe, tvp);
+-		if (r < 0)
+-			return r;
+-	}
 -
- 	priv->regs[RSTV6110_CTRL2] &= ~0x0f;
- 	priv->regs[RSTV6110_CTRL2] |= (priv->gain & 0x0f);
+ 	dtv_property_dump(fe, false, tvp);
  
+ 	return 0;
+diff --git a/drivers/media/dvb-core/dvb_frontend.h b/drivers/media/dvb-core/dvb_frontend.h
+index fb6e84811504..57cedbe5c2c7 100644
+--- a/drivers/media/dvb-core/dvb_frontend.h
++++ b/drivers/media/dvb-core/dvb_frontend.h
+@@ -399,8 +399,6 @@ struct dtv_frontend_properties;
+  * @analog_ops:		pointer to struct analog_demod_ops
+  * @set_property:	callback function to allow the frontend to validade
+  *			incoming properties. Should not be used on new drivers.
+- * @get_property:	callback function to allow the frontend to override
+- *			outcoming properties. Should not be used on new drivers.
+  */
+ struct dvb_frontend_ops {
+ 
+@@ -463,7 +461,6 @@ struct dvb_frontend_ops {
+ 	struct analog_demod_ops analog_ops;
+ 
+ 	int (*set_property)(struct dvb_frontend* fe, struct dtv_property* tvp);
+-	int (*get_property)(struct dvb_frontend* fe, struct dtv_property* tvp);
+ };
+ 
+ #ifdef __DVB_CORE__
+diff --git a/drivers/media/dvb-frontends/lg2160.c b/drivers/media/dvb-frontends/lg2160.c
+index f51a3a0b3949..1b640651531d 100644
+--- a/drivers/media/dvb-frontends/lg2160.c
++++ b/drivers/media/dvb-frontends/lg2160.c
+@@ -1052,16 +1052,6 @@ static int lg216x_get_frontend(struct dvb_frontend *fe,
+ 	return ret;
+ }
+ 
+-static int lg216x_get_property(struct dvb_frontend *fe,
+-			       struct dtv_property *tvp)
+-{
+-	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
+-
+-	return (DTV_ATSCMH_FIC_VER == tvp->cmd) ?
+-		lg216x_get_frontend(fe, c) : 0;
+-}
+-
+-
+ static int lg2160_set_frontend(struct dvb_frontend *fe)
+ {
+ 	struct lg216x_state *state = fe->demodulator_priv;
+@@ -1372,8 +1362,6 @@ static struct dvb_frontend_ops lg2160_ops = {
+ 	.init                 = lg216x_init,
+ 	.sleep                = lg216x_sleep,
+ #endif
+-	.get_property         = lg216x_get_property,
+-
+ 	.set_frontend         = lg2160_set_frontend,
+ 	.get_frontend         = lg216x_get_frontend,
+ 	.get_tune_settings    = lg216x_get_tune_settings,
+@@ -1400,8 +1388,6 @@ static struct dvb_frontend_ops lg2161_ops = {
+ 	.init                 = lg216x_init,
+ 	.sleep                = lg216x_sleep,
+ #endif
+-	.get_property         = lg216x_get_property,
+-
+ 	.set_frontend         = lg2160_set_frontend,
+ 	.get_frontend         = lg216x_get_frontend,
+ 	.get_tune_settings    = lg216x_get_tune_settings,
 -- 
 2.17.1
 
