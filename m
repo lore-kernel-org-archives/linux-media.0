@@ -6,24 +6,27 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3271FC433E4
-	for <linux-media@archiver.kernel.org>; Fri,  5 Jun 2020 17:27:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 605F9C433DF
+	for <linux-media@archiver.kernel.org>; Fri,  5 Jun 2020 17:27:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09DF9207D8
-	for <linux-media@archiver.kernel.org>; Fri,  5 Jun 2020 17:27:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 429FA207D3
+	for <linux-media@archiver.kernel.org>; Fri,  5 Jun 2020 17:27:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbgFER04 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Jun 2020 13:26:56 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38890 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727771AbgFER0z (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Jun 2020 13:26:55 -0400
+        id S1727966AbgFER1A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Jun 2020 13:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727895AbgFER04 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Jun 2020 13:26:56 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B99C08C5C2
+        for <linux-media@vger.kernel.org>; Fri,  5 Jun 2020 10:26:55 -0700 (PDT)
 Received: from localhost.localdomain (p200300cb871f5b0030b619f331cc239b.dip0.t-ipconnect.de [IPv6:2003:cb:871f:5b00:30b6:19f3:31cc:239b])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 5DC082A5063;
-        Fri,  5 Jun 2020 18:26:52 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 0813A2A507D;
+        Fri,  5 Jun 2020 18:26:54 +0100 (BST)
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
@@ -32,9 +35,9 @@ Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         linux-rockchip@lists.infradead.org, mchehab@kernel.org,
         tfiga@chromium.org, skhan@linuxfoundation.org,
         p.zabel@pengutronix.de
-Subject: [RFC v4 2/8] media: staging: rkisp1: rsz: set default format if the given format is not RKISP1_DIR_SRC
-Date:   Fri,  5 Jun 2020 19:26:19 +0200
-Message-Id: <20200605172625.19777-3-dafna.hirschfeld@collabora.com>
+Subject: [RFC v4 5/8] media: staging: rkisp1: allow quantization conversion from userspace for isp source pad
+Date:   Fri,  5 Jun 2020 19:26:22 +0200
+Message-Id: <20200605172625.19777-6-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200605172625.19777-1-dafna.hirschfeld@collabora.com>
 References: <20200605172625.19777-1-dafna.hirschfeld@collabora.com>
@@ -43,61 +46,167 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When setting the sink format of the 'rkisp1_resizer'
-the format should be supported by 'rkisp1_isp' on
-the video source pad. This patch checks this condition
-and set the format to default if the condition is false.
+The isp entity has a hardware support to force full range quantization
+for YUV formats. Use the CSC API to allow userspace to set the
+quantization for YUV formats on the isp, resizer and capture entities.
+
+- The flag V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION is set on
+YUV formats during enumeration of the resizer and isp formats.
+- The flag V4L2_FMT_FLAG_CSC_QUANTIZATION is set on the YUV formats
+during enumeration of the capture formats.
+- The full quantization is set on YUV formats if userspace ask it
+on the entities using the flag V4L2_MBUS_FRAMEFMT_SET_CSC
+for subdevices and the flag V4L2_PIX_FMT_FLAG_SET_CSC on for
+the capture entity.
 
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- drivers/staging/media/rkisp1/rkisp1-common.h  | 4 ++++
- drivers/staging/media/rkisp1/rkisp1-isp.c     | 4 ----
- drivers/staging/media/rkisp1/rkisp1-resizer.c | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/staging/media/rkisp1/rkisp1-capture.c | 23 ++++++++++++-------
+ drivers/staging/media/rkisp1/rkisp1-isp.c     | 22 ++++++++++++++----
+ drivers/staging/media/rkisp1/rkisp1-resizer.c | 22 ++++++++++++++++++
+ 3 files changed, 55 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
-index 0c4fe503adc9..39d8e46d8d8a 100644
---- a/drivers/staging/media/rkisp1/rkisp1-common.h
-+++ b/drivers/staging/media/rkisp1/rkisp1-common.h
-@@ -22,6 +22,10 @@
- #include "rkisp1-regs.h"
- #include "uapi/rkisp1-config.h"
+diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
+index f69235f82c45..66856d5eb576 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-capture.c
++++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
+@@ -1085,8 +1085,6 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
+ 			   const struct v4l2_format_info **fmt_info)
+ {
+ 	const struct rkisp1_capture_config *config = cap->config;
+-	struct rkisp1_capture *other_cap =
+-			&cap->rkisp1->capture_devs[cap->id ^ 1];
+ 	const struct rkisp1_capture_fmt_cfg *fmt;
+ 	const struct v4l2_format_info *info;
+ 	const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
+@@ -1108,16 +1106,21 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
+ 	pixm->field = V4L2_FIELD_NONE;
+ 	pixm->colorspace = V4L2_COLORSPACE_DEFAULT;
+ 	pixm->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
++	pixm->xfer_func = V4L2_XFER_FUNC_DEFAULT;
  
-+#define RKISP1_DIR_SRC BIT(0)
-+#define RKISP1_DIR_SINK BIT(1)
-+#define RKISP1_DIR_SINK_SRC (RKISP1_DIR_SINK | RKISP1_DIR_SRC)
-+
- #define RKISP1_ISP_MAX_WIDTH		4032
- #define RKISP1_ISP_MAX_HEIGHT		3024
- #define RKISP1_ISP_MIN_WIDTH		32
+ 	info = rkisp1_fill_pixfmt(pixm, cap->id);
+ 
+-	/* can not change quantization when stream-on */
+-	if (other_cap->is_streaming)
+-		pixm->quantization = other_cap->pix.fmt.quantization;
+-	/* output full range by default, take effect in params */
+-	else if (!pixm->quantization ||
+-		 pixm->quantization > V4L2_QUANTIZATION_LIM_RANGE)
++	/*
++	 * isp has a feature to select between limited and full range for YUV
++	 * formats.
++	 * So we should also support it in the capture using the CSC API
++	 */
++	if (pixm->flags & V4L2_PIX_FMT_FLAG_SET_CSC &&
++	    pixm->quantization == V4L2_QUANTIZATION_FULL_RANGE &&
++	    v4l2_is_format_yuv(info))
+ 		pixm->quantization = V4L2_QUANTIZATION_FULL_RANGE;
++	else
++		pixm->quantization = V4L2_QUANTIZATION_DEFAULT;
+ 
+ 	if (fmt_cfg)
+ 		*fmt_cfg = fmt;
+@@ -1152,12 +1155,16 @@ static int rkisp1_enum_fmt_vid_cap_mplane(struct file *file, void *priv,
+ {
+ 	struct rkisp1_capture *cap = video_drvdata(file);
+ 	const struct rkisp1_capture_fmt_cfg *fmt = NULL;
++	const struct v4l2_format_info *info;
+ 
+ 	if (f->index >= cap->config->fmt_size)
+ 		return -EINVAL;
+ 
+ 	fmt = &cap->config->fmts[f->index];
+ 	f->pixelformat = fmt->fourcc;
++	info = v4l2_format_info(f->pixelformat);
++	if (v4l2_is_format_yuv(info))
++		f->flags = V4L2_FMT_FLAG_CSC_QUANTIZATION;
+ 
+ 	return 0;
+ }
 diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
-index dc2b59a0160a..e66e87d6ea8b 100644
+index e66e87d6ea8b..28e0a3c594aa 100644
 --- a/drivers/staging/media/rkisp1/rkisp1-isp.c
 +++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
-@@ -23,10 +23,6 @@
+@@ -591,6 +591,10 @@ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
  
- #define RKISP1_ISP_DEV_NAME	RKISP1_DRIVER_NAME "_isp"
+ 		if (code->index == pos - 1) {
+ 			code->code = fmt->mbus_code;
++			if (fmt->pixel_enc == V4L2_PIXEL_ENC_YUV &&
++			    dir == RKISP1_DIR_SRC)
++				code->flags =
++					V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION;
+ 			return 0;
+ 		}
+ 	}
+@@ -622,7 +626,6 @@ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
+ 					     RKISP1_ISP_PAD_SOURCE_VIDEO);
+ 	*src_fmt = *sink_fmt;
+ 	src_fmt->code = RKISP1_DEF_SRC_PAD_FMT;
+-	src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
  
--#define RKISP1_DIR_SRC BIT(0)
--#define RKISP1_DIR_SINK BIT(1)
--#define RKISP1_DIR_SINK_SRC (RKISP1_DIR_SINK | RKISP1_DIR_SRC)
--
- /*
-  * NOTE: MIPI controller and input MUX are also configured in this file.
-  * This is because ISP Subdev describes not only ISP submodule (input size,
+ 	src_crop = v4l2_subdev_get_try_crop(sd, cfg,
+ 					    RKISP1_ISP_PAD_SOURCE_VIDEO);
+@@ -665,10 +668,21 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
+ 		isp->src_fmt = mbus_info;
+ 	src_fmt->width  = src_crop->width;
+ 	src_fmt->height = src_crop->height;
+-	src_fmt->quantization = format->quantization;
+-	/* full range by default */
+-	if (!src_fmt->quantization)
++
++	src_fmt->colorspace = V4L2_COLORSPACE_DEFAULT;
++	src_fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
++	src_fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
++
++	/*
++	 * The CSC API is used to allow userspace to force full
++	 * quantization on YUV formats.
++	 */
++	if (format->flags & V4L2_MBUS_FRAMEFMT_SET_CSC &&
++	    format->quantization == V4L2_QUANTIZATION_FULL_RANGE &&
++	    mbus_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
+ 		src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
++	else
++		src_fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
+ 
+ 	*format = *src_fmt;
+ }
 diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-index d64c064bdb1d..fa28f4bd65c0 100644
+index fa28f4bd65c0..237cce9183f7 100644
 --- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
 +++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-@@ -542,7 +542,7 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
- 					    which);
- 	sink_fmt->code = format->code;
- 	mbus_info = rkisp1_isp_mbus_info_get(sink_fmt->code);
--	if (!mbus_info) {
-+	if (!mbus_info || !(mbus_info->direction & RKISP1_DIR_SRC)) {
- 		sink_fmt->code = RKISP1_DEF_FMT;
- 		mbus_info = rkisp1_isp_mbus_info_get(sink_fmt->code);
- 	}
+@@ -549,8 +549,30 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
+ 	if (which == V4L2_SUBDEV_FORMAT_ACTIVE)
+ 		rsz->pixel_enc = mbus_info->pixel_enc;
+ 
++	sink_fmt->colorspace = V4L2_COLORSPACE_DEFAULT;
++	sink_fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
++	sink_fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
++
++	/*
++	 * isp has a feature to select between limited and full range for
++	 * YUV formats.
++	 * so we should support it in the resizer using the CSC API
++	 */
++
++	if (format->flags & V4L2_MBUS_FRAMEFMT_SET_CSC &&
++	    format->quantization == V4L2_QUANTIZATION_FULL_RANGE &&
++	    mbus_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
++		sink_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
++	else
++		sink_fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
++
+ 	/* Propagete to source pad */
+ 	src_fmt->code = sink_fmt->code;
++	src_fmt->field = sink_fmt->field;
++	src_fmt->colorspace = sink_fmt->colorspace;
++	src_fmt->ycbcr_enc = sink_fmt->ycbcr_enc;
++	src_fmt->xfer_func = sink_fmt->xfer_func;
++	src_fmt->quantization = sink_fmt->quantization;
+ 
+ 	sink_fmt->width = clamp_t(u32, format->width,
+ 				  rsz->config->min_rsz_width,
 -- 
 2.17.1
 
