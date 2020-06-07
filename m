@@ -2,40 +2,44 @@ Return-Path: <SRS0=qNqh=7U=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A932C433E0
-	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 01:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 299EBC433DF
+	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 02:28:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45D5D2073A
-	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 01:53:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB4B620723
+	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 02:27:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="b94yVX9e"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728894AbgFGBxO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 6 Jun 2020 21:53:14 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:53286 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728883AbgFGBxO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 6 Jun 2020 21:53:14 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1jhkR2-002zYk-Tz; Sun, 07 Jun 2020 01:49:16 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1jhkWw-0006qW-5w; Sun, 07 Jun 2020 01:55:22 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.9] Xilinx CSI-2 RX subsystem (#64347)
-Date:   Sun,  7 Jun 2020 01:55:22 +0000
-Message-Id: <20200607015522.26275-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200607013904.GA21888@pendragon.ideasonboard.com>
-References: 
+        id S1728920AbgFGC17 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 6 Jun 2020 22:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728887AbgFGC17 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 6 Jun 2020 22:27:59 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E99C08C5C2
+        for <linux-media@vger.kernel.org>; Sat,  6 Jun 2020 19:21:11 -0700 (PDT)
+Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 653AF2C9
+        for <linux-media@vger.kernel.org>; Sun,  7 Jun 2020 04:21:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1591496469;
+        bh=mlyMuDZw3FoQvMOO4Wxgy9OvKT47GC0pbtdKjU1jmg4=;
+        h=From:To:Subject:Date:From;
+        b=b94yVX9euhvlYXcL4E8D41kd1EvHkE8fMWolkRDqRP139R2pFhdtJzZe0FF7Jf5Wj
+         SgVfuwSr0kBaTe/CRpo+lqVntwl3b82S7XthQcMVeYUfvz1Iq5dRjESE6UTpU6hZty
+         t4Cwvvu0rPSVkuAZ4M7KrPRnv1ONUBguawa6qSJ0=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH] media: uvcvideo: Set media controller entity functions
+Date:   Sun,  7 Jun 2020 05:20:47 +0300
+Message-Id: <20200607022047.29111-1-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -43,29 +47,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+The media controller core prints a warning when an entity is registered
+without a function being set. This affect the uvcvideo driver, as the
+warning was added without first addressing the issue in existing
+drivers. The problem is harmless, but unnecessarily worries users. Fix
+it by mapping UVC entity types to MC entity functions as accurately as
+possible using the existing functions.
 
-Pull request: https://patchwork.linuxtv.org/patch/64347/
-Build log: https://builder.linuxtv.org/job/patchwork/54297/
-Build time: 00:05:07
-Link: https://lore.kernel.org/linux-media/20200607013904.GA21888@pendragon.ideasonboard.com
+Fixes: b50bde4e476d ("[media] v4l2-subdev: use MEDIA_ENT_T_UNKNOWN for new subdevs")
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/usb/uvc/uvc_entity.c | 35 ++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-gpg: Signature made Sun 07 Jun 2020 01:34:51 AM UTC
-gpg:                using RSA key BD94648A8E47ECEDBF199B1862255D299E280B24
-gpg:                issuer "laurent.pinchart@ideasonboard.com"
-gpg: Good signature from "Laurent Pinchart <laurent.pinchart@ideasonboard.com>" [full]
+diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
+index b4499cddeffe..ca3a9c2eec27 100644
+--- a/drivers/media/usb/uvc/uvc_entity.c
++++ b/drivers/media/usb/uvc/uvc_entity.c
+@@ -73,10 +73,45 @@ static int uvc_mc_init_entity(struct uvc_video_chain *chain,
+ 	int ret;
+ 
+ 	if (UVC_ENTITY_TYPE(entity) != UVC_TT_STREAMING) {
++		u32 function;
++
+ 		v4l2_subdev_init(&entity->subdev, &uvc_subdev_ops);
+ 		strscpy(entity->subdev.name, entity->name,
+ 			sizeof(entity->subdev.name));
+ 
++		switch (UVC_ENTITY_TYPE(entity)) {
++		case UVC_VC_SELECTOR_UNIT:
++			function = MEDIA_ENT_F_VID_MUX;
++			break;
++		case UVC_VC_PROCESSING_UNIT:
++		case UVC_VC_EXTENSION_UNIT:
++			/* For lack of a better option. */
++			function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
++			break;
++		case UVC_COMPOSITE_CONNECTOR:
++		case UVC_COMPONENT_CONNECTOR:
++			function = MEDIA_ENT_F_CONN_COMPOSITE;
++			break;
++		case UVC_SVIDEO_CONNECTOR:
++			function = MEDIA_ENT_F_CONN_SVIDEO;
++			break;
++		case UVC_ITT_CAMERA:
++			function = MEDIA_ENT_F_CAM_SENSOR;
++			break;
++		case UVC_TT_VENDOR_SPECIFIC:
++		case UVC_ITT_VENDOR_SPECIFIC:
++		case UVC_ITT_MEDIA_TRANSPORT_INPUT:
++		case UVC_OTT_VENDOR_SPECIFIC:
++		case UVC_OTT_DISPLAY:
++		case UVC_OTT_MEDIA_TRANSPORT_OUTPUT:
++		case UVC_EXTERNAL_VENDOR_SPECIFIC:
++		default:
++			function = MEDIA_ENT_F_V4L2_SUBDEV_UNKNOWN;
++			break;
++		}
++
++		entity->subdev.entity.function = function;
++
+ 		ret = media_entity_pads_init(&entity->subdev.entity,
+ 					entity->num_pads, entity->pads);
+ 
+-- 
+Regards,
 
-Summary: 3 patches and/or PDF generation with issues, being 0 at build time
-
-Error/warnings:
-
-
-Error #256 when running cat patches/0001-media-dt-bindings-media-xilinx-Add-Xilinx-MIPI-CSI-2.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
-$ cat patches/0001-media-dt-bindings-media-xilinx-Add-Xilinx-MIPI-CSI-2.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
--:25: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-
-Error #256 when running cat patches/0002-media-v4l-xilinx-Add-Xilinx-MIPI-CSI-2-Rx-Subsystem-.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
-$ cat patches/0002-media-v4l-xilinx-Add-Xilinx-MIPI-CSI-2-Rx-Subsystem-.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
--:42: WARNING: please write a paragraph that describes the config symbol fully
--:64: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+Laurent Pinchart
 
