@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C226C433DF
-	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 16:31:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3233CC433E0
+	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 16:31:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 451FA2067B
-	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 16:31:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09DD1207BC
+	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 16:31:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hgMmXQrm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xdTL2NQO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726823AbgFGQb0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 7 Jun 2020 12:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
+        id S1728001AbgFGQb1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 7 Jun 2020 12:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727790AbgFGQbG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 7 Jun 2020 12:31:06 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68297C08C5C3
-        for <linux-media@vger.kernel.org>; Sun,  7 Jun 2020 09:31:06 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id x18so1023089lji.1
-        for <linux-media@vger.kernel.org>; Sun, 07 Jun 2020 09:31:06 -0700 (PDT)
+        with ESMTP id S1727768AbgFGQbB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 7 Jun 2020 12:31:01 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FEAC08C5C3
+        for <linux-media@vger.kernel.org>; Sun,  7 Jun 2020 09:31:00 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id j12so8732569lfh.0
+        for <linux-media@vger.kernel.org>; Sun, 07 Jun 2020 09:31:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ZN8pb1DxbDLuAa3GwJ440N0/6Zk96TU9nPo+rlxSNXs=;
-        b=hgMmXQrmQr4gLMphT0IR3nsiRZgO+DUmJ3Jk8kWCmvJJkWdlGe8cAbh9VOYwOIqVjD
-         V4oz0SXiDfTtEt7QnN+7tS0C5/r5ys9CSB/0SevtYjrYtp+38gyPGwdqDNJ7ZOeIRtVs
-         rXO/zgcXzFu4ryb6uENXqD1Zw5RNVpBLPtqtsQkhq7uApRlntzg+xFh27ORacmkgvkn9
-         RD0QTa6dONTYPTxsL/gB44FSKAZ2oGXG+7Hj7o/Bl3/Dx+IWIMZqNbWs4hfnyUDNKXuV
-         TFjRWiJfOjfyo0jFcRelceUsoPmgmZrKsuZUzx0znCkiFpDlDW7F+25HnPgiLYjAaRrk
-         VQWg==
+        bh=WjXebY5QtcvN7Odp1pbuemzpCVQPCaprQRcJnauls1g=;
+        b=xdTL2NQOA8zPNA64Udqix9m8upZNsI4VUW2sLly0Ad9qQw9ZpEacC8Yeh3M8oeYi7R
+         xyGaN+/jaQQGQuV5ShduYcJN9elzEic60QctEwL+nSzJVnzeO6V1wXJ1a0Y3dNGCvB0F
+         HymT2Tk0BXnG4lBjWA2yfi3U1MwJm79EeXYbSPbwMtWl/RBtSWBy2jXB4mS96nPadHpP
+         kxz8l6iKCpkR/w4SEeOH0hQiAPPzIXvAbKVqVuNopbbpgPR0crnATl8qKakTprrDBfiV
+         04pyjWVqjBS7W+v1u6o99xPvu3OcAHZ6IwlbwjDfmsFz5JeGEHtplDdKrIzCU3mrYatg
+         diXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=ZN8pb1DxbDLuAa3GwJ440N0/6Zk96TU9nPo+rlxSNXs=;
-        b=ScFsCWxujhOfbF0Hn5D9FKaRoSPIFe4M2G+1ziPyHyva0W0t0GX+IbdSh5+cdZVKSL
-         2DH13NWb78RxHNyZFKvqWlQfTg21usCuFaXwYGi2LWjDqJuBvJPGNxF+aSkneRVeb9/m
-         RFaJWytxE+dNFJWRhu65Ciha1Vey4M4S/PnmiyOWWHo7JALJ0fAaJ55cba2+/0cF3pXG
-         Zioa1cEP11qhvb6sc6WfcOdgvQ5PIz2WYPuYixsSCPgG3pRzLNumGkJFFV35kL5043zc
-         kvTddy88YS7iFubTtd9S2IznaW0iPp+Rd5NWBclyIKEEja42O0SDEr7MNju3+H2b+/m1
-         MRnw==
-X-Gm-Message-State: AOAM533oge8fWfdVQG3nR0niZtwMleUvJ7BcZNxXDbq92HpNhU8dYgZ0
-        WG05bIXyGL4JseT0GMiyDz/NtQ==
-X-Google-Smtp-Source: ABdhPJwKvDoJhrs1A3GxUZPAsk4YJqgk84ISg9RDQ8bOuu1WO9sTe68xjvI+5fEFyJEEzp396jhkgg==
-X-Received: by 2002:a2e:87da:: with SMTP id v26mr8806511ljj.14.1591547464950;
-        Sun, 07 Jun 2020 09:31:04 -0700 (PDT)
+        bh=WjXebY5QtcvN7Odp1pbuemzpCVQPCaprQRcJnauls1g=;
+        b=nsQOL0yn2Hkg72jpWE2wYpAjXHWYLbFPJlVnjxBlWsHq8iAF1PFv5jaDBly2aKdG7E
+         jltaBOQxkwnBmywJXpsU2+OXuMxlg3Pf4OMa7iyHZ5fsqPr7jpAyKeJyHUcZuqysuXHw
+         +jsvu5CZ+BUVrniwbfeYC/6AG1p3VZP5BsZZ2+FX91phyx0if8GmMn5LUjG5BSieSEfa
+         a5LrLt+9uO601dTzU+lS5hqgdfyV8FxrR8K9QKejVhtWFIJsg0eR5QxOVbm+zh3WbuAC
+         cu5wG5CA7vH5mh7r4rQ9pEiGvORbqGhGpAkBVKuxIttYY8nhpk9sFotnPGSG3DT6Cgp0
+         8yhw==
+X-Gm-Message-State: AOAM530A9mUk0IUoOX8jtkXWBeqNX1T1ZTp1N6SuwHD/9Y3rUX4TAd/9
+        BeaDkNvWjEH7XZwDnO3tXXSdHQ==
+X-Google-Smtp-Source: ABdhPJz2+0XORBmKupYT1hANsXAnVr8WdKQBgv6HE9FXfAm085NQD6o5rVpp3L583ehbFYtmVImxMg==
+X-Received: by 2002:a19:3f01:: with SMTP id m1mr10354676lfa.130.1591547459202;
+        Sun, 07 Jun 2020 09:30:59 -0700 (PDT)
 Received: from localhost.localdomain (37-144-159-139.broadband.corbina.ru. [37.144.159.139])
-        by smtp.googlemail.com with ESMTPSA id l7sm1726511ljj.55.2020.06.07.09.31.03
+        by smtp.googlemail.com with ESMTPSA id l7sm1726511ljj.55.2020.06.07.09.30.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2020 09:31:04 -0700 (PDT)
+        Sun, 07 Jun 2020 09:30:58 -0700 (PDT)
 From:   Andrey Konovalov <andrey.konovalov@linaro.org>
 To:     mchehab@kernel.org, sakari.ailus@iki.fi,
         manivannan.sadhasivam@linaro.org
@@ -63,9 +63,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         c.barrett@framos.com, a.brela@framos.com, peter.griffin@linaro.org,
         Andrey Konovalov <andrey.konovalov@linaro.org>
-Subject: [PATCH v4 08/10] media: i2c: imx290: Add support to enumerate all frame sizes
-Date:   Sun,  7 Jun 2020 19:30:23 +0300
-Message-Id: <20200607163025.8409-9-andrey.konovalov@linaro.org>
+Subject: [PATCH v4 06/10] media: i2c: imx290: Add support for test pattern generation
+Date:   Sun,  7 Jun 2020 19:30:21 +0300
+Message-Id: <20200607163025.8409-7-andrey.konovalov@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200607163025.8409-1-andrey.konovalov@linaro.org>
 References: <20200607163025.8409-1-andrey.konovalov@linaro.org>
@@ -76,56 +76,108 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Add support to enumerate all frame sizes supported by IMX290. This is
-required for using with userspace tools such as libcamera.
+Add support for generating following test patterns by IMX290:
+
+* Sequence Pattern 1
+* Horizontal Color-bar Chart
+* Vertical Color-bar Chart
+* Sequence Pattern 2
+* Gradation Pattern 1
+* Gradation Pattern 2
+* 000/555h Toggle Pattern
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
 ---
- drivers/media/i2c/imx290.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ drivers/media/i2c/imx290.c | 41 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index c654a9a8fb08..fd147fac5ef2 100644
+index 152b65cb7cbc..67725a5aabd3 100644
 --- a/drivers/media/i2c/imx290.c
 +++ b/drivers/media/i2c/imx290.c
-@@ -528,6 +528,28 @@ static int imx290_enum_mbus_code(struct v4l2_subdev *sd,
- 	return 0;
- }
+@@ -26,12 +26,19 @@
+ #define IMX290_REGHOLD 0x3001
+ #define IMX290_XMSTA 0x3002
+ #define IMX290_FR_FDG_SEL 0x3009
++#define IMX290_BLKLEVEL_LOW 0x300a
++#define IMX290_BLKLEVEL_HIGH 0x300b
+ #define IMX290_GAIN 0x3014
+ #define IMX290_HMAX_LOW 0x301c
+ #define IMX290_HMAX_HIGH 0x301d
++#define IMX290_PGCTRL 0x308c
+ #define IMX290_PHY_LANE_NUM 0x3407
+ #define IMX290_CSI_LANE_MODE 0x3443
  
-+static int imx290_enum_frame_size(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_pad_config *cfg,
-+				  struct v4l2_subdev_frame_size_enum *fse)
-+{
-+	const struct imx290 *imx290 = to_imx290(sd);
-+	const struct imx290_mode *imx290_modes = imx290_modes_ptr(imx290);
++#define IMX290_PGCTRL_REGEN BIT(0)
++#define IMX290_PGCTRL_THRU BIT(1)
++#define IMX290_PGCTRL_MODE(n) ((n) << 4)
 +
-+	if ((fse->code != imx290_formats[0].code) &&
-+	    (fse->code != imx290_formats[1].code))
-+		return -EINVAL;
-+
-+	if (fse->index >= imx290_modes_num(imx290))
-+		return -EINVAL;
-+
-+	fse->min_width = imx290_modes[fse->index].width;
-+	fse->max_width = imx290_modes[fse->index].width;
-+	fse->min_height = imx290_modes[fse->index].height;
-+	fse->max_height = imx290_modes[fse->index].height;
-+
-+	return 0;
-+}
-+
- static int imx290_get_fmt(struct v4l2_subdev *sd,
- 			  struct v4l2_subdev_pad_config *cfg,
- 			  struct v4l2_subdev_format *fmt)
-@@ -873,6 +895,7 @@ static const struct v4l2_subdev_video_ops imx290_video_ops = {
- static const struct v4l2_subdev_pad_ops imx290_pad_ops = {
- 	.init_cfg = imx290_entity_init_cfg,
- 	.enum_mbus_code = imx290_enum_mbus_code,
-+	.enum_frame_size = imx290_enum_frame_size,
- 	.get_fmt = imx290_get_fmt,
- 	.set_fmt = imx290_set_fmt,
+ static const char * const imx290_supply_name[] = {
+ 	"vdda",
+ 	"vddd",
+@@ -91,6 +98,17 @@ static const struct regmap_config imx290_regmap_config = {
+ 	.cache_type = REGCACHE_RBTREE,
  };
+ 
++static const char * const imx290_test_pattern_menu[] = {
++	"Disabled",
++	"Sequence Pattern 1",
++	"Horizontal Color-bar Chart",
++	"Vertical Color-bar Chart",
++	"Sequence Pattern 2",
++	"Gradation Pattern 1",
++	"Gradation Pattern 2",
++	"000/555h Toggle Pattern",
++};
++
+ static const struct imx290_regval imx290_global_init_settings[] = {
+ 	{ 0x3007, 0x00 },
+ 	{ 0x3018, 0x65 },
+@@ -448,6 +466,22 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_GAIN:
+ 		ret = imx290_set_gain(imx290, ctrl->val);
+ 		break;
++	case V4L2_CID_TEST_PATTERN:
++		if (ctrl->val) {
++			imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW, 0x00);
++			imx290_write_reg(imx290, IMX290_BLKLEVEL_HIGH, 0x00);
++			msleep(10);
++			imx290_write_reg(imx290, IMX290_PGCTRL,
++					 (u8)(IMX290_PGCTRL_REGEN |
++					 IMX290_PGCTRL_THRU |
++					 IMX290_PGCTRL_MODE(ctrl->val)));
++		} else {
++			imx290_write_reg(imx290, IMX290_PGCTRL, 0x00);
++			msleep(10);
++			imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW, 0x3c);
++			imx290_write_reg(imx290, IMX290_BLKLEVEL_HIGH, 0x00);
++		}
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+@@ -959,7 +993,7 @@ static int imx290_probe(struct i2c_client *client)
+ 	 */
+ 	imx290_entity_init_cfg(&imx290->sd, NULL);
+ 
+-	v4l2_ctrl_handler_init(&imx290->ctrls, 3);
++	v4l2_ctrl_handler_init(&imx290->ctrls, 4);
+ 
+ 	v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
+ 			  V4L2_CID_GAIN, 0, 72, 1, 0);
+@@ -977,6 +1011,11 @@ static int imx290_probe(struct i2c_client *client)
+ 					       1, INT_MAX, 1,
+ 					       imx290_calc_pixel_rate(imx290));
+ 
++	v4l2_ctrl_new_std_menu_items(&imx290->ctrls, &imx290_ctrl_ops,
++				     V4L2_CID_TEST_PATTERN,
++				     ARRAY_SIZE(imx290_test_pattern_menu) - 1,
++				     0, 0, imx290_test_pattern_menu);
++
+ 	imx290->sd.ctrl_handler = &imx290->ctrls;
+ 
+ 	if (imx290->ctrls.error) {
 -- 
 2.17.1
 
