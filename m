@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0C73C433DF
-	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 16:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D48BC433DF
+	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 16:31:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8DA6F2067B
-	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 16:31:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 498B22067B
+	for <linux-media@archiver.kernel.org>; Sun,  7 Jun 2020 16:31:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dv/XUq+W"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ml+4gVbe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727778AbgFGQbG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 7 Jun 2020 12:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
+        id S1727920AbgFGQbO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 7 Jun 2020 12:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727790AbgFGQbD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 7 Jun 2020 12:31:03 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3DBC08C5C5
-        for <linux-media@vger.kernel.org>; Sun,  7 Jun 2020 09:31:02 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id n24so17469563lji.10
-        for <linux-media@vger.kernel.org>; Sun, 07 Jun 2020 09:31:02 -0700 (PDT)
+        with ESMTP id S1726683AbgFGQbJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 7 Jun 2020 12:31:09 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D7EC08C5C6
+        for <linux-media@vger.kernel.org>; Sun,  7 Jun 2020 09:31:08 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id n23so17498693ljh.7
+        for <linux-media@vger.kernel.org>; Sun, 07 Jun 2020 09:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=VUUHzTYdCTkEy8qJLKBgOAUld/T0D8KqCFLo4EbK13A=;
-        b=dv/XUq+WdfVan0lSFHWk+qgDn/wSsMi9bV9WLipNALihtYxVDlZ5TyFZOdJFDN3/7H
-         cDRzz/M5jcdpPR0vOKqIQo3pOs0vxr1rXvXeelKgzgktgDvHHxQvMq7ghf+eDhjhO5mH
-         Ip8cJ/kSPzI840wrR3SNLc/gSWwoO/KfEAH70YodQrITPITS12uNAiO+gBH9xshBz7H+
-         BN2BhGK7Gp+AMqrmFiaK3VZlQ8NxPKjkdt1yScsfYogANa2qcXuCTUwyXxtEhPlGaaJS
-         L5/bkNPRpdusnIzTCW8LOuGRDRkVroIRt5AWG5LJxmfx1F8fV5FfpuysqAjt6aQQb/N+
-         jHag==
+        bh=Rt6ATyUj+kngO18ntOXAOOJDegUILp5okUOOJZj7u30=;
+        b=ml+4gVbeQHnwks5Iuv1jZCzoHDKLU/b9ovZ9dwJFwQrqiRoSpHXMs18iuG9+NtJiMd
+         +Lg5g9KGMG/7imFtj2Drlv+VawBL7qCRfUi3wwnO22W/NN7TNRV+e2UgNm49HMqn7pMq
+         VekBB4R5QnczjNrBjx0DQuOEMgygxoqJhh7PyspGiwcKh08+hk+pdqNSz4LrnX/I/h7m
+         lY5uwVFqM/O6ITPZcXYb5hmMHlg++05bzStAZrgsRrs0zGuUZisYjqHhBJm05srSn5PS
+         0AL/s8Xnbl9sGY5s1qZEvydkYDc0Us9ET1mG6mc6h92tH1usT1ItACDMm+hy+Z9B0beH
+         M6+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=VUUHzTYdCTkEy8qJLKBgOAUld/T0D8KqCFLo4EbK13A=;
-        b=MjkvFQ9ZXLAHIG2jSY6cAnIvbbS2m+iaMtJF93eg77JWcy0HCQz9Ja0iIx56zB43Rq
-         45ie20yjZ6IFRj43Ye9tDv2ph51tWhP9XkpO2FEnFsuLEcgIQrB+2f0JObEmiDHiyYGm
-         4MemNbmPIk7bCTqTCIuI9HqFhPq8c+OMkVXsU3Jp74tBrXUIl9ZtaRRK5Lc/xFk4cM7X
-         8/ev8oOu5pU9xsi2yUv9fD2HZBWqQz4r9yD301QM8p4sCMHTxFkQS0efbcsWQcBnTlUN
-         FCwZxoh5HpkOq5KYiZ0GbIEujY7QjDRS5CyAko9dZXbtIzKixQkUXqksJO043lT8nWSU
-         faWA==
-X-Gm-Message-State: AOAM531zgieN9Tmj27229YMc+QfdJAF4Q7Fk7kGaIKa54g/vCDJZRzU0
-        woa+4uPlTNSWmgvDCY1H9URxYg==
-X-Google-Smtp-Source: ABdhPJwUO3GSSqzVk9B3bZCVYJUf3X9ZKgSM1/1T9D2s9BR1VOO8qfvlTsbykFp1BPj6WrWXZNVl0w==
-X-Received: by 2002:a2e:2f0f:: with SMTP id v15mr8348721ljv.219.1591547461316;
-        Sun, 07 Jun 2020 09:31:01 -0700 (PDT)
+        bh=Rt6ATyUj+kngO18ntOXAOOJDegUILp5okUOOJZj7u30=;
+        b=WDg+pe+GbsHbgqPu2ssfZWEw7JWIVxw1KpAtDbCDET6lTfCP/OXkDqtumRyGXShj2S
+         NYxWBH4zodk3tLK3MCX4S/19RIIjBG574D4MfcRfbm9kNOXQXMV7MhVX72bCc9+RsP09
+         8nqpjR7YjzYlNFlmNXKpJ6tnJJoSqHIqV11jtxkQ6hepqLk9I8YHD2r//Gs98IG7lauG
+         m+YDRAu+uJ4j91RflwV4zaDb+7Vt7P4Gc1Ua+kjIUuB4sKnQP70iwk/jA0Ma/1A6q7nh
+         NrRNPSuo0in4CpoInJ0adQkQpxFLYuhqBIPfO27XYTATHaeml1Iw5pXffLILmgXu+5qL
+         QyuA==
+X-Gm-Message-State: AOAM531sHWTKNQl9XQhCrmJ+WcerFrZCRQXfmW+MLdXWA+3Tqlr/8tNO
+        ljzG4DLbffjGKxfLvmQ9LWfLPQ==
+X-Google-Smtp-Source: ABdhPJzAvsjh6tvRZCxTeM3UyEofF++E+CgDNsgqVLM63SFDjmzic+mxo9+95tiJJjm8CU13LJYNeg==
+X-Received: by 2002:a2e:584e:: with SMTP id x14mr9077902ljd.106.1591547467090;
+        Sun, 07 Jun 2020 09:31:07 -0700 (PDT)
 Received: from localhost.localdomain (37-144-159-139.broadband.corbina.ru. [37.144.159.139])
-        by smtp.googlemail.com with ESMTPSA id l7sm1726511ljj.55.2020.06.07.09.31.00
+        by smtp.googlemail.com with ESMTPSA id l7sm1726511ljj.55.2020.06.07.09.31.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2020 09:31:00 -0700 (PDT)
+        Sun, 07 Jun 2020 09:31:06 -0700 (PDT)
 From:   Andrey Konovalov <andrey.konovalov@linaro.org>
 To:     mchehab@kernel.org, sakari.ailus@iki.fi,
         manivannan.sadhasivam@linaro.org
@@ -63,9 +63,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         c.barrett@framos.com, a.brela@framos.com, peter.griffin@linaro.org,
         Andrey Konovalov <andrey.konovalov@linaro.org>
-Subject: [PATCH v4 07/10] media: i2c: imx290: Add RAW12 mode support
-Date:   Sun,  7 Jun 2020 19:30:22 +0300
-Message-Id: <20200607163025.8409-8-andrey.konovalov@linaro.org>
+Subject: [PATCH v4 09/10] media: i2c: imx290: Move the settle time delay out of loop
+Date:   Sun,  7 Jun 2020 19:30:24 +0300
+Message-Id: <20200607163025.8409-10-andrey.konovalov@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200607163025.8409-1-andrey.konovalov@linaro.org>
 References: <20200607163025.8409-1-andrey.konovalov@linaro.org>
@@ -76,108 +76,35 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-IMX290 is capable of outputting frames in both Raw Bayer (packed) 10 and
-12 bit formats. Since the driver already supports RAW10 mode, let's add
-the missing RAW12 mode as well.
+The 10ms settle time is needed only at the end of all consecutive
+register writes. So move the delay to outside of the for loop of
+imx290_set_register_array().
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
 ---
- drivers/media/i2c/imx290.c | 36 +++++++++++++++++++++++++++++++++---
- 1 file changed, 33 insertions(+), 3 deletions(-)
+ drivers/media/i2c/imx290.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 67725a5aabd3..c654a9a8fb08 100644
+index fd147fac5ef2..02001c1b0dfc 100644
 --- a/drivers/media/i2c/imx290.c
 +++ b/drivers/media/i2c/imx290.c
-@@ -67,6 +67,7 @@ struct imx290 {
- 	struct clk *xclk;
- 	struct regmap *regmap;
- 	u8 nlanes;
-+	u8 bpp;
+@@ -404,11 +404,11 @@ static int imx290_set_register_array(struct imx290 *imx290,
+ 		ret = imx290_write_reg(imx290, settings->reg, settings->val);
+ 		if (ret < 0)
+ 			return ret;
+-
+-		/* Settle time is 10ms for all registers */
+-		msleep(10);
+ 	}
  
- 	struct v4l2_subdev sd;
- 	struct v4l2_fwnode_endpoint ep;
-@@ -86,10 +87,12 @@ struct imx290 {
- 
- struct imx290_pixfmt {
- 	u32 code;
-+	u8 bpp;
- };
- 
- static const struct imx290_pixfmt imx290_formats[] = {
--	{ MEDIA_BUS_FMT_SRGGB10_1X10 },
-+	{ MEDIA_BUS_FMT_SRGGB10_1X10, 10 },
-+	{ MEDIA_BUS_FMT_SRGGB12_1X12, 12 },
- };
- 
- static const struct regmap_config imx290_regmap_config = {
-@@ -257,6 +260,18 @@ static const struct imx290_regval imx290_10bit_settings[] = {
- 	{ 0x300b, 0x00},
- };
- 
-+static const struct imx290_regval imx290_12bit_settings[] = {
-+	{ 0x3005, 0x01 },
-+	{ 0x3046, 0x01 },
-+	{ 0x3129, 0x00 },
-+	{ 0x317c, 0x00 },
-+	{ 0x31ec, 0x0e },
-+	{ 0x3441, 0x0c },
-+	{ 0x3442, 0x0c },
-+	{ 0x300a, 0xf0 },
-+	{ 0x300b, 0x00 },
-+};
++	/* Provide 10ms settle time */
++	msleep(10);
 +
- /* supported link frequencies */
- #define FREQ_INDEX_1080P	0
- #define FREQ_INDEX_720P		1
-@@ -478,7 +493,12 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
- 		} else {
- 			imx290_write_reg(imx290, IMX290_PGCTRL, 0x00);
- 			msleep(10);
--			imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW, 0x3c);
-+			if (imx290->bpp == 10)
-+				imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW,
-+						 0x3c);
-+			else /* 12 bits per pixel */
-+				imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW,
-+						 0xf0);
- 			imx290_write_reg(imx290, IMX290_BLKLEVEL_HIGH, 0x00);
- 		}
- 		break;
-@@ -550,7 +570,7 @@ static u64 imx290_calc_pixel_rate(struct imx290 *imx290)
- 
- 	/* pixel rate = link_freq * 2 * nr_of_lanes / bits_per_sample */
- 	pixel_rate = link_freq * 2 * nlanes;
--	do_div(pixel_rate, 10);
-+	do_div(pixel_rate, imx290->bpp);
- 	return pixel_rate;
+ 	return 0;
  }
  
-@@ -587,6 +607,7 @@ static int imx290_set_fmt(struct v4l2_subdev *sd,
- 	} else {
- 		format = &imx290->current_format;
- 		imx290->current_mode = mode;
-+		imx290->bpp = imx290_formats[i].bpp;
- 
- 		if (imx290->link_freq)
- 			__v4l2_ctrl_s_ctrl(imx290->link_freq,
-@@ -631,6 +652,15 @@ static int imx290_write_current_format(struct imx290 *imx290)
- 			return ret;
- 		}
- 		break;
-+	case MEDIA_BUS_FMT_SRGGB12_1X12:
-+		ret = imx290_set_register_array(imx290, imx290_12bit_settings,
-+						ARRAY_SIZE(
-+							imx290_12bit_settings));
-+		if (ret < 0) {
-+			dev_err(imx290->dev, "Could not set format registers\n");
-+			return ret;
-+		}
-+		break;
- 	default:
- 		dev_err(imx290->dev, "Unknown pixel format\n");
- 		return -EINVAL;
 -- 
 2.17.1
 
