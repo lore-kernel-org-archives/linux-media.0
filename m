@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF5D2C433E0
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 00:16:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5CB4C433E1
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 00:16:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8235F20801
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 00:16:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDA2E2078D
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 00:16:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591661801;
-	bh=PipZDpc4zio2i/P7rMo2qp0LC9rOMw/z7y7C0AbfTDM=;
+	s=default; t=1591661817;
+	bh=Z16FR46Wfib9ObRljsI1+fcv3Z7krEYvl7iFsM+AQ1E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=2EgPva5m9dw2YqsTFO/W/DuRSA3uBgnnOxAmCpdzgL+uBs7oreK+7S6sy+Y0JW/7D
-	 nl5nl8imir+FJgEvF3KMmHFxr424t5NwwkT0iMFVdbW8FsB7uFDiMpLudlO+Q+F7Qj
-	 3+dZsL7WSQvMb+AdIcEKfr0/8PW99K1GzC5tlP+Q=
+	b=sSW/qdHw33e//KgQmiqEEjNe3e5c0Gcsvsequg1tL5AMaZ7NjoA00zqi1Ga4s7G32
+	 zGc+MieFrXL0zJc84gzlvsjXRTiWp0HC6DZERACDU3NkS1UIQj+UBBv8oZpEdZ+vyz
+	 eGVrvyDEw/4SA0lME2AF0+dl/zcytQmfYXk3UzI8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730972AbgFIAQi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:16:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41590 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730730AbgFHXS7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1730732AbgFHXS7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 8 Jun 2020 19:18:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41534 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727045AbgFHXS6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:18:58 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 40B0E20870;
-        Mon,  8 Jun 2020 23:18:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D3A052083E;
+        Mon,  8 Jun 2020 23:18:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658339;
-        bh=PipZDpc4zio2i/P7rMo2qp0LC9rOMw/z7y7C0AbfTDM=;
+        s=default; t=1591658337;
+        bh=Z16FR46Wfib9ObRljsI1+fcv3Z7krEYvl7iFsM+AQ1E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JkET5nHF5V0GoM8jrpJvE7z7GpJ4Gce+rDoioEdRCrDsutmPiOY5dV1cD3JpXYhzV
-         NJG+ktSetleqEOR3BO0Q2o5RLx5IeNZV4flEnDKwhv2RLOS/QpeT5GbL5Qg3AJZFHl
-         75DcvvzzgjRFFIn+t2fxunH2H27me8xuZHCSSOP8=
+        b=PJRRCIJZnJZyCqWKOipkwMHBZMblHLBwvFMh0HtZ5qZnm7q+vb5V5bDWDRSf1xvBy
+         b8zRYTKfrJ8h4zVPHrO85nfZlyOBX1GXDqF/H97G4rK5BdYe2KEOZ18Hn+z8kQhIqr
+         800IX81HAhqB4Ywou/KARP5BvXE4Cmcb9sjR1yn8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Bingbu Cao <bingbu.cao@intel.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 008/175] media: imx: imx7-mipi-csis: Cleanup and fix subdev pad format handling
-Date:   Mon,  8 Jun 2020 19:16:01 -0400
-Message-Id: <20200608231848.3366970-8-sashal@kernel.org>
+        devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.4 007/175] media: staging: imgu: do not hold spinlock during freeing mmu page table
+Date:   Mon,  8 Jun 2020 19:16:00 -0400
+Message-Id: <20200608231848.3366970-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
 References: <20200608231848.3366970-1-sashal@kernel.org>
@@ -61,162 +61,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Bingbu Cao <bingbu.cao@intel.com>
 
-[ Upstream commit d321dd233b9f2bb407b8e6b4759408f09ec207c3 ]
+[ Upstream commit e1ebe9f9c88e5a78fcc4670a9063c9b3cd87dda4 ]
 
-The subdev set pad format operation currently misbehaves in multiple ways:
+ImgU need set the mmu page table in memory as uncached, and set back
+to write-back when free the page table by set_memory_wb(),
+set_memory_wb() can not do flushing without interrupt, so the spinlock
+should not be hold during ImgU page alloc and free, the interrupt
+should be enabled during memory cache flush.
 
-- mipi_csis_try_format() unconditionally stores the format in the device
-  state, even for V4L2_SUBDEV_FORMAT_TRY.
+This patch release spinlock before freeing pages table.
 
-- The format is never stored in the pad cfg, but the pad cfg format
-  always overwrites the format requested by the user.
-
-- The sink format is not propagated to the source.
-
-Fix all this by reworking the set format operation as follows:
-
-1. For the source pad, turn set() into get() as the source format is not
-   modifiable.
-2. Validate the requested format and updated the stored format
-   accordingly.
-3. Return the format actually set.
-4. Propagate the format from sink to source.
-
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 82 ++++++++++------------
- 1 file changed, 37 insertions(+), 45 deletions(-)
+ drivers/staging/media/ipu3/ipu3-mmu.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 6f628195c4da..021bbd420390 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -657,28 +657,6 @@ static int mipi_csis_init_cfg(struct v4l2_subdev *mipi_sd,
- 	return 0;
+diff --git a/drivers/staging/media/ipu3/ipu3-mmu.c b/drivers/staging/media/ipu3/ipu3-mmu.c
+index 3d969b0522ab..abcf1f3e5f63 100644
+--- a/drivers/staging/media/ipu3/ipu3-mmu.c
++++ b/drivers/staging/media/ipu3/ipu3-mmu.c
+@@ -174,8 +174,10 @@ static u32 *imgu_mmu_get_l2pt(struct imgu_mmu *mmu, u32 l1pt_idx)
+ 	spin_lock_irqsave(&mmu->lock, flags);
+ 
+ 	l2pt = mmu->l2pts[l1pt_idx];
+-	if (l2pt)
+-		goto done;
++	if (l2pt) {
++		spin_unlock_irqrestore(&mmu->lock, flags);
++		return l2pt;
++	}
+ 
+ 	spin_unlock_irqrestore(&mmu->lock, flags);
+ 
+@@ -190,8 +192,9 @@ static u32 *imgu_mmu_get_l2pt(struct imgu_mmu *mmu, u32 l1pt_idx)
+ 
+ 	l2pt = mmu->l2pts[l1pt_idx];
+ 	if (l2pt) {
++		spin_unlock_irqrestore(&mmu->lock, flags);
+ 		imgu_mmu_free_page_table(new_l2pt);
+-		goto done;
++		return l2pt;
+ 	}
+ 
+ 	l2pt = new_l2pt;
+@@ -200,7 +203,6 @@ static u32 *imgu_mmu_get_l2pt(struct imgu_mmu *mmu, u32 l1pt_idx)
+ 	pteval = IPU3_ADDR2PTE(virt_to_phys(new_l2pt));
+ 	mmu->l1pt[l1pt_idx] = pteval;
+ 
+-done:
+ 	spin_unlock_irqrestore(&mmu->lock, flags);
+ 	return l2pt;
  }
- 
--static struct csis_pix_format const *
--mipi_csis_try_format(struct v4l2_subdev *mipi_sd, struct v4l2_mbus_framefmt *mf)
--{
--	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
--	struct csis_pix_format const *csis_fmt;
--
--	csis_fmt = find_csis_format(mf->code);
--	if (!csis_fmt)
--		csis_fmt = &mipi_csis_formats[0];
--
--	v4l_bound_align_image(&mf->width, 1, CSIS_MAX_PIX_WIDTH,
--			      csis_fmt->pix_width_alignment,
--			      &mf->height, 1, CSIS_MAX_PIX_HEIGHT, 1,
--			      0);
--
--	state->format_mbus.code = csis_fmt->code;
--	state->format_mbus.width = mf->width;
--	state->format_mbus.height = mf->height;
--
--	return csis_fmt;
--}
--
- static struct v4l2_mbus_framefmt *
- mipi_csis_get_format(struct csi_state *state,
- 		     struct v4l2_subdev_pad_config *cfg,
-@@ -691,53 +669,67 @@ mipi_csis_get_format(struct csi_state *state,
- 	return &state->format_mbus;
- }
- 
--static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
-+static int mipi_csis_get_fmt(struct v4l2_subdev *mipi_sd,
- 			     struct v4l2_subdev_pad_config *cfg,
- 			     struct v4l2_subdev_format *sdformat)
- {
- 	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
--	struct csis_pix_format const *csis_fmt;
- 	struct v4l2_mbus_framefmt *fmt;
- 
--	if (sdformat->pad >= CSIS_PADS_NUM)
--		return -EINVAL;
--
--	fmt = mipi_csis_get_format(state, cfg, sdformat->which, sdformat->pad);
--
- 	mutex_lock(&state->lock);
--	if (sdformat->pad == CSIS_PAD_SOURCE) {
--		sdformat->format = *fmt;
--		goto unlock;
--	}
--
--	csis_fmt = mipi_csis_try_format(mipi_sd, &sdformat->format);
--
-+	fmt = mipi_csis_get_format(state, cfg, sdformat->which, sdformat->pad);
- 	sdformat->format = *fmt;
--
--	if (csis_fmt && sdformat->which == V4L2_SUBDEV_FORMAT_ACTIVE)
--		state->csis_fmt = csis_fmt;
--	else
--		cfg->try_fmt = sdformat->format;
--
--unlock:
- 	mutex_unlock(&state->lock);
- 
- 	return 0;
- }
- 
--static int mipi_csis_get_fmt(struct v4l2_subdev *mipi_sd,
-+static int mipi_csis_set_fmt(struct v4l2_subdev *mipi_sd,
- 			     struct v4l2_subdev_pad_config *cfg,
- 			     struct v4l2_subdev_format *sdformat)
- {
- 	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
-+	struct csis_pix_format const *csis_fmt;
- 	struct v4l2_mbus_framefmt *fmt;
- 
--	mutex_lock(&state->lock);
-+	/*
-+	 * The CSIS can't transcode in any way, the source format can't be
-+	 * modified.
-+	 */
-+	if (sdformat->pad == CSIS_PAD_SOURCE)
-+		return mipi_csis_get_fmt(mipi_sd, cfg, sdformat);
-+
-+	if (sdformat->pad != CSIS_PAD_SINK)
-+		return -EINVAL;
- 
- 	fmt = mipi_csis_get_format(state, cfg, sdformat->which, sdformat->pad);
- 
-+	mutex_lock(&state->lock);
-+
-+	/* Validate the media bus code and clamp the size. */
-+	csis_fmt = find_csis_format(sdformat->format.code);
-+	if (!csis_fmt)
-+		csis_fmt = &mipi_csis_formats[0];
-+
-+	fmt->code = csis_fmt->code;
-+	fmt->width = sdformat->format.width;
-+	fmt->height = sdformat->format.height;
-+
-+	v4l_bound_align_image(&fmt->width, 1, CSIS_MAX_PIX_WIDTH,
-+			      csis_fmt->pix_width_alignment,
-+			      &fmt->height, 1, CSIS_MAX_PIX_HEIGHT, 1, 0);
-+
- 	sdformat->format = *fmt;
- 
-+	/* Propagate the format from sink to source. */
-+	fmt = mipi_csis_get_format(state, cfg, sdformat->which,
-+				   CSIS_PAD_SOURCE);
-+	*fmt = sdformat->format;
-+
-+	/* Store the CSIS format descriptor for active formats. */
-+	if (sdformat->which == V4L2_SUBDEV_FORMAT_ACTIVE)
-+		state->csis_fmt = csis_fmt;
-+
- 	mutex_unlock(&state->lock);
- 
- 	return 0;
 -- 
 2.25.1
 
