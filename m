@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 616B4C433E1
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 00:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 606ADC433E0
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 00:16:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3361D2078D
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 00:15:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34C8E2078D
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 00:16:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591661717;
-	bh=V+vcCCtE8fOBO6vP1/kpuBe7xlqLjt8XpmsrNP0SSZQ=;
+	s=default; t=1591661793;
+	bh=AbrDoYb1mtOPgL9voySeDvbnxUxAfco9Fnjx+ijRfyE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ZYYTfqx0C0Q6pE+2SGJoUbW/yXK9teiskkaohMpeeL1RZLTmmKeTmPU30hwp4pToK
-	 5uviiJx71idvkcLqlw5W5Pd5MjOobxJt13v0LInHCVjbGtvZUPy4+nupultUzeSkqm
-	 W4h6H0Ho5kTEAp7FUPM/fFdTO2YZX4IE7yZvqr7g=
+	b=cxyaeNgdI0ThbowjxFwoKHXzi2Eqo1Y46pZ7UGYZR+CLfbXO1XfaFMNRANE09zWAR
+	 HK33r4Jd2f4xYT2bPZ3G/oM0e2X7WS/gB95JkXtANh6HJg4cuWLzDCqKiM+a9p3RtD
+	 vGVfGyrf18MFplERydhW8xW9P/v+dXFkep3M/Srs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729149AbgFIAPO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1731822AbgFIAPO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 8 Jun 2020 20:15:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41640 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:41660 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728231AbgFHXTC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:19:02 -0400
+        id S1729185AbgFHXTD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:19:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CED1F2083E;
-        Mon,  8 Jun 2020 23:19:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F0AD920823;
+        Mon,  8 Jun 2020 23:19:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658341;
-        bh=V+vcCCtE8fOBO6vP1/kpuBe7xlqLjt8XpmsrNP0SSZQ=;
+        s=default; t=1591658342;
+        bh=AbrDoYb1mtOPgL9voySeDvbnxUxAfco9Fnjx+ijRfyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VB2E25tpmx+0t79c7yTgGKMDcA0rDpaE482z8dBXweHA4QLZTw2Sa0ZcoSKstEVmT
-         StbHUJVuQcSEiLt2a+B7cpeUmqpl4j2aT6XRk+i2TdD8exyfA1kbuMNBwcvomIuD0k
-         TMbZLSiHsRFaD53A82qSlu36+QBI/P7zLA1BNpnA=
+        b=c/7ZPUKXvoG+yaKl3lqRW9VMflxW02ZVZQueouPwuUG6LPHCyUmXjpj3RvCalnuCX
+         0rSLuFF/wyPtiiGnTxRoFmKDqdmVDN/WB4kDHAfp1hAIJ62g0XjiX90toIbfz0BdwF
+         PNDgxYyi0RcSZ/OFP17p7ESCaDkGFZYEEB/AtFKg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Brad Love <brad@nextdimension.cc>, Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 010/175] media: vicodec: Fix error codes in probe function
-Date:   Mon,  8 Jun 2020 19:16:03 -0400
-Message-Id: <20200608231848.3366970-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 011/175] media: si2157: Better check for running tuner in init
+Date:   Mon,  8 Jun 2020 19:16:04 -0400
+Message-Id: <20200608231848.3366970-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
 References: <20200608231848.3366970-1-sashal@kernel.org>
@@ -59,53 +58,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Brad Love <brad@nextdimension.cc>
 
-[ Upstream commit f36592e7b343d853edf44d3545bb68961c0949a4 ]
+[ Upstream commit e955f959ac52e145f27ff2be9078b646d0352af0 ]
 
-If these functions fail then we return success, but we should instead
-preserve negative error code and return that.
+Getting the Xtal trim property to check if running is less error prone.
+Reset if_frequency if state is unknown.
 
-Fixes: fde649b418d1 ("media: vicodec: Register another node for stateless decoder")
-Fixes: c022a4a95722 ("media: vicodec: add struct for encoder/decoder instance")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Replaces the previous "garbage check".
+
+Signed-off-by: Brad Love <brad@nextdimension.cc>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/vicodec/vicodec-core.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/media/tuners/si2157.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/vicodec/vicodec-core.c b/drivers/media/platform/vicodec/vicodec-core.c
-index 82350097503e..84ec36156f73 100644
---- a/drivers/media/platform/vicodec/vicodec-core.c
-+++ b/drivers/media/platform/vicodec/vicodec-core.c
-@@ -2172,16 +2172,19 @@ static int vicodec_probe(struct platform_device *pdev)
+diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
+index e87040d6eca7..a39e1966816b 100644
+--- a/drivers/media/tuners/si2157.c
++++ b/drivers/media/tuners/si2157.c
+@@ -75,24 +75,23 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	struct si2157_cmd cmd;
+ 	const struct firmware *fw;
+ 	const char *fw_name;
+-	unsigned int uitmp, chip_id;
++	unsigned int chip_id, xtal_trim;
  
- 	platform_set_drvdata(pdev, dev);
+ 	dev_dbg(&client->dev, "\n");
  
--	if (register_instance(dev, &dev->stateful_enc,
--			      "stateful-encoder", true))
-+	ret = register_instance(dev, &dev->stateful_enc, "stateful-encoder",
-+				true);
-+	if (ret)
- 		goto unreg_dev;
+-	/* Returned IF frequency is garbage when firmware is not running */
+-	memcpy(cmd.args, "\x15\x00\x06\x07", 4);
++	/* Try to get Xtal trim property, to verify tuner still running */
++	memcpy(cmd.args, "\x15\x00\x04\x02", 4);
+ 	cmd.wlen = 4;
+ 	cmd.rlen = 4;
+ 	ret = si2157_cmd_execute(client, &cmd);
+-	if (ret)
+-		goto err;
  
--	if (register_instance(dev, &dev->stateful_dec,
--			      "stateful-decoder", false))
-+	ret = register_instance(dev, &dev->stateful_dec, "stateful-decoder",
-+				false);
-+	if (ret)
- 		goto unreg_sf_enc;
+-	uitmp = cmd.args[2] << 0 | cmd.args[3] << 8;
+-	dev_dbg(&client->dev, "if_frequency kHz=%u\n", uitmp);
++	xtal_trim = cmd.args[2] | (cmd.args[3] << 8);
  
--	if (register_instance(dev, &dev->stateless_dec,
--			      "stateless-decoder", false))
-+	ret = register_instance(dev, &dev->stateless_dec, "stateless-decoder",
-+				false);
-+	if (ret)
- 		goto unreg_sf_dec;
+-	if (uitmp == dev->if_frequency / 1000)
++	if (ret == 0 && xtal_trim < 16)
+ 		goto warm;
  
- #ifdef CONFIG_MEDIA_CONTROLLER
++	dev->if_frequency = 0; /* we no longer know current tuner state */
++
+ 	/* power up */
+ 	if (dev->chiptype == SI2157_CHIPTYPE_SI2146) {
+ 		memcpy(cmd.args, "\xc0\x05\x01\x00\x00\x0b\x00\x00\x01", 9);
 -- 
 2.25.1
 
