@@ -2,199 +2,182 @@ Return-Path: <SRS0=Gwua=7V=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9654C433DF
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 03:34:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7503DC433DF
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 03:40:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 998EF2076A
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 03:34:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0ADD62067B
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 03:40:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=adit-jv.com header.i=@adit-jv.com header.b="4Luth47s"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="ETstXJVy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728965AbgFHDeb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 7 Jun 2020 23:34:31 -0400
-Received: from ma-dnext03.denso.co.jp ([133.192.181.78]:54988 "EHLO
-        ma-dnext03.denso.co.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728065AbgFHDea (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 7 Jun 2020 23:34:30 -0400
-X-Greylist: delayed 555 seconds by postgrey-1.27 at vger.kernel.org; Sun, 07 Jun 2020 23:34:29 EDT
-Received: from grdma01h.denso.co.jp (unknown [133.192.24.24])
-        by ma-dnext03.denso.co.jp (Postfix) with ESMTP id D5B7E5D011C;
-        Mon,  8 Jun 2020 12:25:12 +0900 (JST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=adit-jv.com;
-        s=jpadit-jvmail2011; t=1591586712;
-        bh=holotR25MoQcrX0pBCrpZj4TxKa2LtqzjI7kvv+9c3A=;
-        h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=4Luth47sSIPifry+JR5PvbuLwOPeDbnJIupuG0UKhqGOi7og2FsQG6DVbrYyxyMY3
-         KHz5SR3swOo06IuYLb5YDm7qv8ikaINN4poiD0Zz7Gn0EbfBZ+wC95tq1XtE65ZNBe
-         wId2eDwv2MWI9SOM/NUSKAvZ9oA9mc7MWysVNkC8TjQ+mRHuIYeNnIzejhpY8VE01A
-         lMZ8SnoCEEwmqyFs+ZSole+Fs5drbUh7TE2pL9gfBUOYuh4N9flTKpl2/jGbSrRryo
-         xDN76+ZQn3KWGShatk12K4Ke5Y8ei0NzO0TnN60mCs35dG3AibDTp6t+rrWdqwap9L
-         iT2aQPqkSv57Q==
-Received: by grdma01h.denso.co.jp (Postfix, from userid 0)
-        id CC4D6C04E02; Mon,  8 Jun 2020 12:25:12 +0900 (JST)
-Received: from smtp0.denso.co.jp [133.192.24.87] 
-         by grdma01h. with ESMTP id NAA09474;
-         Mon, 8 Jun 2020 12:25:12 +0900
-Received: from ky0exch01.adit-jv.com ([10.71.113.8])
-        by smtp00.denso.co.jp (MOS 4.4.7-GA)
-        with ESMTP id FZQ69071;
-        Mon, 8 Jun 2020 12:25:12 +0900
-Received: from jp-u0004.adit-jv.com (10.71.112.120) by ky0exch01.adit-jv.com
- (10.71.113.8) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 8 Jun 2020
- 12:25:11 +0900
-From:   Suresh Udipi <sudipi@jp.adit-jv.com>
-To:     <mrodin@de.adit-jv.com>
-CC:     <efriedrich@de.adit-jv.com>, <erosca@de.adit-jv.com>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>, <mchehab@kernel.org>,
-        <michael@rodin.online>, <niklas.soderlund@ragnatech.se>,
-        <sudipi@jp.adit-jv.com>, <securitycheck@denso.co.jp>,
-        Kazuyoshi Akiyama <akiyama@nds-osk.co.jp>
-Subject: [PATCH v6] media: rcar-csi2: Correct the selection of hsfreqrange
-Date:   Mon, 8 Jun 2020 12:25:03 +0900
-Message-ID: <1591586703-32246-1-git-send-email-sudipi@jp.adit-jv.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <20200605184426.GA5206@vmlxhi-121.adit-jv.com>
-References: <20200605184426.GA5206@vmlxhi-121.adit-jv.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.71.112.120]
+        id S1728834AbgFHDkh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 7 Jun 2020 23:40:37 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:45137 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728773AbgFHDkh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 7 Jun 2020 23:40:37 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id i8eHjLoIUnv5ni8eIj1KAn; Mon, 08 Jun 2020 05:40:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1591587634; bh=eLxxE7YonKvKfU0yjfB/bPNz7mXtxQcqINrSvv+71F8=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=ETstXJVyus4bAaJJK6WQZNi9EF9m0Qw1u/RJZN0ovQCN85pcxptmd9uYrSGw0XCMh
+         FGeWL12324OXrYKFyg6XTdGqdSoudViNLIuh56L4M/c4rGYibUCapps7A0D33vSkUR
+         qGgaSOUA4yvb6e7LGT8rnnZKDSxAsXya7nTJjTCJOXtAdI6IoAeCG/ay1Gknx2c9Xq
+         UouuUozll9KXgFo1pv64IyWvrwZ/hUFZGmyEh0QgVHq2S5y5e+PPqkLFbfRyW+woik
+         JMtveu2PsMfqj458MUJUrn10Sb0ryARXMg0EKdFZxyxFjkIxNAG1Zn+rfIUvMvNQaN
+         OZhdyezX/0Cew==
+Message-ID: <f7fafb55caaaf2548942cf871af071a7@smtp-cloud8.xs4all.net>
+Date:   Mon, 08 Jun 2020 05:40:33 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfPIf65Olr8dnmomlSP7xMNj4ams295NzB68PcayPwAvTzJTWlEjegOC0pp9kxZrQ7H9ld0oHqp/2JIeZ/yU2lS2Hupm/11HAznMXrnK67mhyjkq0xevv
+ 0TFBEmgGT/KL/WQ0hDbthDatDXOtepgf8dRQjmO3kHv/JGXaNJs6S3lPAwQPxh/tJgs9n99hcCU1FBIVR1WbjtRxClxJc/Ltc2vgm57P8V/b+x8lUmLtJzsg
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-hsfreqrange should be chosen based on the calculated mbps which
-is closer to the default bit rate  and within the range as per
-table[1]. But current calculation always selects first value which
-is greater than or equal to the calculated mbps which may lead
-to chosing a wrong range in some cases.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-For example for 360 mbps for H3/M3N
-Existing logic selects
-Calculated value 360Mbps : Default 400Mbps Range [368.125 -433.125 mbps]
+Results of the daily build of media_tree:
 
-This hsfreqrange is out of range.
+date:			Mon Jun  8 05:00:13 CEST 2020
+media-tree git hash:	938b29db3aa9c293c7c1366b16e55e308f1a1ddd
+media_build git hash:	337283131d6117aa9b0c0c62d32e323da54a9359
+v4l-utils git hash:	74377da4f5f3b63203c599d5dd75db6af91fdbb9
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: a0e63d2e6cdc689a8af8c9ae6df1674d0fe38c74
+host hardware:		x86_64
+host os:		5.6.0-1-amd64
 
-The logic is changed to get the default value which is closest to the
-calculated value [1]
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: WARNINGS
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: WARNINGS: found 4 strcpy(), 4 strncpy(), 4 strlcpy()
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.212-i686: OK
+linux-4.4.212-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.212-i686: OK
+linux-4.9.212-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6.1-i686: OK
+linux-5.6.1-x86_64: OK
+linux-5.7-rc1-i686: OK
+linux-5.7-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 5
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 3
+sparse: OK
+smatch: OK
 
-Calculated value 360Mbps : Default 350Mbps  Range [320.625 -380.625 mpbs]
+Detailed results are available here:
 
-[1] specs r19uh0105ej0200-r-car-3rd-generation.pdf [Table 25.9]
+http://www.xs4all.nl/~hverkuil/logs/Monday.log
 
-Please note that According to Renesas in Table 25.9 the range for
-220 default value is corrected as below
+Detailed regression test results are available here:
 
- |Range (Mbps)     |  Default  Bit rate (Mbps) |
- -----------------------------------------------
- | 197.125-244.125 |     220                   |
- -----------------------------------------------
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
 
-Fixes: 769afd212b16 ("media: rcar-csi2: add Renesas R-Car MIPI CSI-2 receiver driver")
+Full logs are available here:
 
-Signed-off-by: Suresh Udipi <sudipi@jp.adit-jv.com>
-Signed-off-by: Kazuyoshi Akiyama <akiyama@nds-osk.co.jp>
-Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
----
- Changes in v2:
-  - Added the boundary check for the maximum bit rate.
+http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
 
-  - Simplified the logic by remmoving range check
-    as only the closest default value covers most
-    of the use cases.
+The Media Infrastructure API from this daily build is here:
 
-  - Aligning the commit message based on the above change
-
-
- Changes in v3:
-    - Added max member from struct rcsi2_mbps_reg.
-      mbps varialbe cannot be removed from rcsi2_mbps_reg,
-      since this structure is reused for
-      phtw_mbps_h3_v3h_m3n/phtw_mbps_v3m_e3 where mbps is
-      used.
-
-
-   -  Update the walk of the array in rcsi2_set_phypll() so that it finds
-      the first entry where the calculated bit rate is less than the max.
-
-   - Support lower bit rates less than 80Mbps like 48Mbps
-     (Raspberry pi camera 640x480 connected to Kingfisher)
-     can also be supported by selecting the lowest default bit rate 80Mbps
-     as done before this fix
-
-   - Alignement of the commit message based on above changes.
-
- Changes in v4:
-  -  Remove unncessary braces.
-
- Changes in v5:
-   - Removed mbps variable in rcsi2_mbps_reg and aligned all 
-     tables accordingly
-	 
- Changes in v6
-   - Renesas correct the range of default value 220Mbps. Now
-     if we select the nearest value to the default value all
-	 the values are in range. So reverting back to original patch
-	 
-   - Added warning for values less than Minimum 80Mbps
-
-
- drivers/media/platform/rcar-vin/rcar-csi2.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index 151e6a9..8c502b7 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -199,6 +199,8 @@ static const struct rcsi2_mbps_reg phtw_mbps_v3m_e3[] = {
- /* PHY Frequency Control */
- #define PHYPLL_REG			0x68
- #define PHYPLL_HSFREQRANGE(n)		((n) << 16)
-+#define PHYPLL_HSFREQRANGE_MAX		1500
-+#define PHYPLL_HSFREQRANGE_MIN		  80
- 
- static const struct rcsi2_mbps_reg hsfreqrange_h3_v3h_m3n[] = {
- 	{ .mbps =   80, .reg = 0x00 },
-@@ -431,16 +433,27 @@ static int rcsi2_wait_phy_start(struct rcar_csi2 *priv)
- static int rcsi2_set_phypll(struct rcar_csi2 *priv, unsigned int mbps)
- {
- 	const struct rcsi2_mbps_reg *hsfreq;
-+	const struct rcsi2_mbps_reg *hsfreq_prev = NULL;
- 
--	for (hsfreq = priv->info->hsfreqrange; hsfreq->mbps != 0; hsfreq++)
--		if (hsfreq->mbps >= mbps)
--			break;
--
--	if (!hsfreq->mbps) {
-+	if (mbps > PHYPLL_HSFREQRANGE_MAX) {
- 		dev_err(priv->dev, "Unsupported PHY speed (%u Mbps)", mbps);
- 		return -ERANGE;
- 	}
- 
-+	if (mbps < PHYPLL_HSFREQRANGE_MIN)
-+		dev_warn(priv->dev, "PHY speed (%u Mbps) less \
-+			 than Min 80Mbps\n", mbps);
-+
-+	for (hsfreq = priv->info->hsfreqrange; hsfreq->mbps != 0; hsfreq++) {
-+		if (hsfreq->mbps >= mbps)
-+			break;
-+		hsfreq_prev = hsfreq;
-+	}
-+
-+	if (hsfreq_prev &&
-+	    ((mbps - hsfreq_prev->mbps) <= (hsfreq->mbps - mbps)))
-+		hsfreq = hsfreq_prev;
-+
- 	rcsi2_write(priv, PHYPLL_REG, PHYPLL_HSFREQRANGE(hsfreq->reg));
- 
- 	return 0;
--- 
-2.7.4
-
+http://www.xs4all.nl/~hverkuil/spec/index.html
