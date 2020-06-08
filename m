@@ -2,96 +2,76 @@ Return-Path: <SRS0=Gwua=7V=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C326DC433E1
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 03:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 481C7C433E0
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 03:33:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A3F72077D
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 03:11:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="cyC+6XTL"
+	by mail.kernel.org (Postfix) with ESMTP id 2AB5F20724
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 03:33:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728684AbgFHDL4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 7 Jun 2020 23:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728065AbgFHDL4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 7 Jun 2020 23:11:56 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22ACC08C5C3;
-        Sun,  7 Jun 2020 20:11:55 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6E89E2C9;
-        Mon,  8 Jun 2020 05:11:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1591585913;
-        bh=o3gXWP2/3hk/aMnwZ9n2UL8s6c1rZAqBPrr54YZAGh0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cyC+6XTL60swUYZA4YrYqawpNeex+1EmJFY99syleO6FgNjMqyQOtmDiDP7KbcWQP
-         cgviici9KeGVjP0c2KwLIhUn2OoJxrNNa7sZLo8OhkK1WrPwZvA52KT+1Ss1eQUXR9
-         pR4Hn/35uFKUFwnH5CQzGpDVv8CXJRiVosmhYAxI=
-Date:   Mon, 8 Jun 2020 06:11:34 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     dinghao.liu@zju.edu.cn
+        id S1728938AbgFHDdq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 7 Jun 2020 23:33:46 -0400
+Received: from spam.zju.edu.cn ([61.164.42.155]:21694 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728065AbgFHDdq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 7 Jun 2020 23:33:46 -0400
+Received: by ajax-webmail-mail-app4 (Coremail) ; Mon, 8 Jun 2020 11:33:34
+ +0800 (GMT+08:00)
+X-Originating-IP: [222.205.62.26]
+Date:   Mon, 8 Jun 2020 11:33:34 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   dinghao.liu@zju.edu.cn
+To:     "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>
 Cc:     kjlu@umn.edu,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Kieran Bingham" <kieran.bingham+renesas@ideasonboard.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] media: vsp1: Fix runtime PM imbalance in vsp1_probe
-Message-ID: <20200608031134.GO22208@pendragon.ideasonboard.com>
+Subject: Re: Re: Re: [PATCH] media: vsp1: Fix runtime PM imbalance in
+ vsp1_probe
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.10 build 20190906(84e8bf8f)
+ Copyright (c) 2002-2020 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20200608031134.GO22208@pendragon.ideasonboard.com>
 References: <20200523115426.19285-1-dinghao.liu@zju.edu.cn>
  <20200608015456.GJ22208@pendragon.ideasonboard.com>
  <20200608015753.GK22208@pendragon.ideasonboard.com>
  <7b79863f.f636d.17291e1ff94.Coremail.dinghao.liu@zju.edu.cn>
+ <20200608031134.GO22208@pendragon.ideasonboard.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7b79863f.f636d.17291e1ff94.Coremail.dinghao.liu@zju.edu.cn>
+Message-ID: <769e1fbf.f668c.17291fd9673.Coremail.dinghao.liu@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgC3WeSOsd1ewnfVAA--.20728W
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgYFBlZdtOhd1AACsb
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJTRUUUbX0S07vEb7Iv0x
+        C_Cr1lV2xY67kC6x804xWlV2xY67CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DMIAI
+        bVAFxVCF77xC64kEw24lV2xY67C26IkvcIIF6IxKo4kEV4ylV2xY628lY4IE4IxF12IF4w
+        CS07vE84x0c7CEj48ve4kI8wCS07vE84ACjcxK6xIIjxv20xvE14v26w1j6s0DMIAIbVA2
+        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wCS07vE84ACjcxK6I8E87Iv67AKxVW0oV
+        Cq3wCS07vE84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DMIAIbVAS0I0E0xvYzxvE52x0
+        82IY62kv0487MIAIbVAqx4xG64xvF2IEw4CE5I8CrVC2j2WlV2xY6cIj6xIIjxv20xvE14
+        v26r1j6r18MIAIbVAv7VC2z280aVAFwI0_Jr0_Gr1lV2xY6cvjeVCFs4IE7xkEbVWUJVW8
+        JwCS07vE7I0Y64k_MIAIbVCY02Avz4vE14v_Gr4lV2xY6xkI7II2jI8vz4vEwIxGrwCS07
+        vE42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMIAIbVCF72vE77IF4wCS07vE4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1lV2xY6I8I3I0E5I8CrVAFwI0_Jr0_Jr4lV2xY6I8I3I0E7480Y4vE14
+        v26r106r1rMIAIbVC2zVAF1VAY17CE14v26r126r1DMIAIbVCI42IY6xIIjxv20xvE14v2
+        6r1j6r1xMIAIbVCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lV2xY6IIF0xvE42xK8V
+        AvwI8IcIk0rVWrJr0_WFyUJwCS07vEIxAIcVC2z280aVAFwI0_Jr0_Gr1lV2xY6IIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dianghao,
-
-On Mon, Jun 08, 2020 at 11:03:26AM +0800, dinghao.liu@zju.edu.cn wrote:
-> Hi Laurent,
-> 
-> > > I wonder how many bugs we have today, and how many bugs will keep
-> > > appearing in the future, due to this historical design mistake :-( 
-> 
-> Good question. It's hard to say if this is a design mistake (some use
-> of this API does not check its return value and expects it always to
-> increment the usage counter). But it does make developers misuse it easier.
-> 
-> > > This change looks good to me, but we also need a similar change in the
-> > > vsp1_device_get() function if I'm not mistaken. Could you combine both
-> > > in the same patch ?
-> 
-> Thank you for your advice! I think you are right and I will fix this in the
-> next version of patch. 
-> 
-> > And actually, after fixing vsp1_device_get(), we should replace the
-> > pm_runtime_get_sync() call here with vsp1_device_get(), and the
-> > pm_runtime_put_sync() below with vsp1_device_put(), so there would be no
-> > need to call pm_runtime_put_sync() manually in the error path here.
-> 
-> The parameter type of vsp1_device_get() and vsp1_device_put() is "struct 
-> vsp1_device". If we want to use these two wrappers, we need to adjust their 
-> parameter type to "struct platform_device" or "struct device", which may 
-> lead to errors in other callers. Maybe we should leave it as it is.
-
-The vsp1_probe() function has a struct vsp1_device whose dev field is
-populated by the time it needs to call pm_runtime_get_sync() and
-pm_runtime_get_put(), so I think you can use vsp1_device_get() and
-vsp1_device_put() as drop-in replacements without changing the
-parameters to these two functions.
-
--- 
-Regards,
-
-Laurent Pinchart
+Cj4gCj4gVGhlIHZzcDFfcHJvYmUoKSBmdW5jdGlvbiBoYXMgYSBzdHJ1Y3QgdnNwMV9kZXZpY2Ug
+d2hvc2UgZGV2IGZpZWxkIGlzCj4gcG9wdWxhdGVkIGJ5IHRoZSB0aW1lIGl0IG5lZWRzIHRvIGNh
+bGwgcG1fcnVudGltZV9nZXRfc3luYygpIGFuZAo+IHBtX3J1bnRpbWVfZ2V0X3B1dCgpLCBzbyBJ
+IHRoaW5rIHlvdSBjYW4gdXNlIHZzcDFfZGV2aWNlX2dldCgpIGFuZAo+IHZzcDFfZGV2aWNlX3B1
+dCgpIGFzIGRyb3AtaW4gcmVwbGFjZW1lbnRzIHdpdGhvdXQgY2hhbmdpbmcgdGhlCj4gcGFyYW1l
+dGVycyB0byB0aGVzZSB0d28gZnVuY3Rpb25zLgo+IAoKSXQncyBjbGVhciB0byBtZSwgdGhhbmtz
+IQoKUmVnYXJkcywKRGluZ2hhbwo=
