@@ -2,290 +2,207 @@ Return-Path: <SRS0=Gwua=7V=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 167C9C433DF
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 09:05:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CD0BC433E1
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 09:26:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE9F9206C3
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 09:05:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 669762072F
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 09:26:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ibq40S+j"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="a59jseDg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729079AbgFHJFw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Jun 2020 05:05:52 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:39981 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728956AbgFHJFv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Jun 2020 05:05:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591607149;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UBDBaofmkevoFUCcmp5LD2lbzL88KdyVVmDXS+KkN/E=;
-        b=Ibq40S+jbYxuHKg/DSUQ6NykjuYdRo774P68cboqdyCLKl1ZsPuIS1TzV1bac4LrR5/wJ4
-        VEh/CVZBeIr7UBf2agaXtk6HAr105alPVs052A/2Gf0eUTrmnVrWKzUYR8aKeFGCDzM5QT
-        YcDc9wswgG9BDbo/JlJiMR5rzEoPeLA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-149-R78PSUh8M42qXSXYHtccoA-1; Mon, 08 Jun 2020 05:05:45 -0400
-X-MC-Unique: R78PSUh8M42qXSXYHtccoA-1
-Received: by mail-wr1-f72.google.com with SMTP id l18so6935761wrm.0
-        for <linux-media@vger.kernel.org>; Mon, 08 Jun 2020 02:05:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UBDBaofmkevoFUCcmp5LD2lbzL88KdyVVmDXS+KkN/E=;
-        b=d5p666QBV+PLpr1fO7gs2qQBZm73gq7Ewll+ZjaiBhnOj0Oo16CaFstQiMJ/4slXLE
-         DEWHyDR97ucWBCloRQIQKrqxMHKzo+QZxBhgwnixKs2ATUXW4OG+C/fneVtTXcLG10HT
-         Z+QaF9gCxMpf1D0KD2Y6aKIq8gZlDJQRzrsW1xEjvwMVdnsLwaMaIvEeysD85fdKRiiC
-         80LWOXUHHd2pKZ/W3mjiSx8OVpE8Jmu8ar9E+NvpwBvy1I6nNQCS30X9PbEuxQo1yXxt
-         zcbu4iOc7ity8YY6KnsXxNtIFVxy+DGoFN+lbQXnsiIDFzbDPLlwYg1PutNnzjteibOT
-         OVQQ==
-X-Gm-Message-State: AOAM532o2G46JCdW4LtKasRaLPafZp9tR4Jco/B8osuM2hbhp7RMjOZh
-        yldbcMOJ3hQNsph2FPNX2U72YieeuQKGvsuto9NwHv/RKJpj6xTJoVJ3Y+o/qjuDbPqQdwZPNCX
-        CoerKrSxyM9lhLTQUrB2eViY=
-X-Received: by 2002:a5d:40d0:: with SMTP id b16mr22193302wrq.218.1591607144385;
-        Mon, 08 Jun 2020 02:05:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwfuPKvhBZLPjNX70m6bFQ/4dKhZwSBSaUmWOsS/atH5G6Zy/wGrgwuZyiRUNbKJnF51i6YoQ==
-X-Received: by 2002:a5d:40d0:: with SMTP id b16mr22193272wrq.218.1591607144101;
-        Mon, 08 Jun 2020 02:05:44 -0700 (PDT)
-Received: from redhat.com (bzq-109-64-41-91.red.bezeqint.net. [109.64.41.91])
-        by smtp.gmail.com with ESMTPSA id c65sm22490993wme.8.2020.06.08.02.05.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2020 02:05:43 -0700 (PDT)
-Date:   Mon, 8 Jun 2020 05:05:40 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        open list <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>, virtio-dev@lists.oasis-open.org
-Subject: Re: [PATCH v4 1/3] virtio: add dma-buf support for exported objects
-Message-ID: <20200608045721-mutt-send-email-mst@kernel.org>
-References: <20200526105811.30784-1-stevensd@chromium.org>
- <20200526105811.30784-2-stevensd@chromium.org>
- <20200604145620-mutt-send-email-mst@kernel.org>
- <CAD=HUj74mKs5AfcViD3CBva86E0Hvg_pmYChAJe3ny8jtnZ8Tw@mail.gmail.com>
- <20200606160155-mutt-send-email-mst@kernel.org>
- <CAD=HUj5Jn+grQVfxmPSSnERdGwnu8RceDsdpWpoxXH+WL4k+qw@mail.gmail.com>
- <20200608015728-mutt-send-email-mst@kernel.org>
- <CAD=HUj68NfNK+0go7Z-XeZ2ckWJpYsym3G+-DfJyoUm+dJDznQ@mail.gmail.com>
+        id S1729160AbgFHJ04 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Jun 2020 05:26:56 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:56413 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728022AbgFHJ0z (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Jun 2020 05:26:55 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id iE3FjPmHFCKzeiE3IjlJjA; Mon, 08 Jun 2020 11:26:52 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1591608412; bh=PpFwGAPmdlyGPTX8U2mQmWfV0t76Txr3GSa+LJ+jIkE=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=a59jseDgaUfyCmcsSfq4iTWn/fJcaw9nD2dZjbYJH8TAsJirLI680PmdOCKcN+duc
+         Bttek/fu5PBb7PfGen5CZCTwbvt9UgBGBPkFuAePtsBQPiMvNk/DJNLOR4fXIuxueq
+         xEqDz8ZFF6dg2l0o5PmGk8UUlXqZcFrth+fG/E+Ywd2idXMeYOlUvQg9ORyLQJd76f
+         2WDj4XsdPn+4dk6poFyD23Thu0x3o/A8srQ5veu1x1SJY82uAhVsvCiXLB19IenMmj
+         mJKECkO0jihmcRRzy+Y08pJ2ams+E6CmQAq7IEdeAlpTMQlunJ4Dmw78WdMQMjUqJv
+         LAt4ceM+DodcA==
+Subject: Re: [PATCH 1/5] media: videodev2: add Compressed Framebuffer pixel
+ formats
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Maxime Jourdan <mjourdan@baylibre.com>,
+        Tomasz Figa <tfiga@chromium.org>
+References: <20200604135317.9235-1-narmstrong@baylibre.com>
+ <20200604135317.9235-2-narmstrong@baylibre.com>
+ <02aa06fd8397b77c9a75d3a8399cb55d3b4d39c1.camel@ndufresne.ca>
+ <4d22ff40-11ac-c77a-564d-af9a678f23af@baylibre.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <a15dea55-3ca4-2a65-5c56-6c1edd2de405@xs4all.nl>
+Date:   Mon, 8 Jun 2020 11:26:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=HUj68NfNK+0go7Z-XeZ2ckWJpYsym3G+-DfJyoUm+dJDznQ@mail.gmail.com>
+In-Reply-To: <4d22ff40-11ac-c77a-564d-af9a678f23af@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfFMAIH4XTFcp0UvS6gvlUy/sf5utcQPAAQUM/NAmiyjoXxTvfnDlfZIUdwVqZXw/D/j+u/9aoK1Z7eEC50nnKBp7rTuIHlgYYZCfi9PMTWORWXOTkmtd
+ i+LFYZW9e2esVQOfZ5baeC1oFfajYLO6DY5KfkyC3Fn1kT4ab8pfzw4nH2RU91RBeR+NhRLe2XTaVeeXb5o9Z6d9cE3VByKmZ/sfplGmxSQl/OgWGtsyxcYg
+ +tAHynkwfNZ+VtXe2PILMT2oqIIozEI5LBBCfZ+77pNEvAMl8Pfzg2QnpedAjEt+4vARkxL9BoNxMLsCvleMcT0FUyraFCaT5InqbBnisJ4R4zSD1f/tC94i
+ Wbmlm+v7FfCmMt2+6U/trpBgPvcnCl2Zg/kq8OjS0L0Pifyw5Dg1EoVxCNrf2F0g7RvQDczCLPQRwi1S9cYcQ0f94IRkab8GiSuA39OZ1AMQxPMtcMg=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jun 08, 2020 at 05:32:26PM +0900, David Stevens wrote:
-> On Mon, Jun 8, 2020 at 3:00 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Mon, Jun 08, 2020 at 10:33:09AM +0900, David Stevens wrote:
-> > > On Sun, Jun 7, 2020 at 5:04 AM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Fri, Jun 05, 2020 at 10:28:42AM +0900, David Stevens wrote:
-> > > > > On Fri, Jun 5, 2020 at 4:05 AM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > >
-> > > > > > On Tue, May 26, 2020 at 07:58:09PM +0900, David Stevens wrote:
-> > > > > > > This change adds a new flavor of dma-bufs that can be used by virtio
-> > > > > > > drivers to share exported objects. A virtio dma-buf can be queried by
-> > > > > > > virtio drivers to obtain the UUID which identifies the underlying
-> > > > > > > exported object.
-> > > > > > >
-> > > > > > > Signed-off-by: David Stevens <stevensd@chromium.org>
-> > > > > >
-> > > > > > Is this just for graphics? If yes I'd rather we put it in the graphics
-> > > > > > driver. We can always move it later ...
-> > > > >
-> > > > > As stated in the cover letter, this will be used by virtio-video.
-> > > > >
-> > > > > The proposed virtio-video patches: https://markmail.org/thread/p5d3k566srtdtute
-> > > > > The patch which imports these dma-bufs (slightly out of data, uses v3
-> > > > > of this patch set): https://markmail.org/thread/j4xlqaaim266qpks
-> > > > >
-> > > > > > > ---
-> > > > > > >  drivers/virtio/Makefile         |  2 +-
-> > > > > > >  drivers/virtio/virtio.c         |  6 +++
-> > > > > > >  drivers/virtio/virtio_dma_buf.c | 89 +++++++++++++++++++++++++++++++++
-> > > > > > >  include/linux/virtio.h          |  1 +
-> > > > > > >  include/linux/virtio_dma_buf.h  | 58 +++++++++++++++++++++
-> > > > > > >  5 files changed, 155 insertions(+), 1 deletion(-)
-> > > > > > >  create mode 100644 drivers/virtio/virtio_dma_buf.c
-> > > > > > >  create mode 100644 include/linux/virtio_dma_buf.h
-> > > > > > >
-> > > > > > > diff --git a/drivers/virtio/Makefile b/drivers/virtio/Makefile
-> > > > > > > index 29a1386ecc03..ecdae5b596de 100644
-> > > > > > > --- a/drivers/virtio/Makefile
-> > > > > > > +++ b/drivers/virtio/Makefile
-> > > > > > > @@ -1,5 +1,5 @@
-> > > > > > >  # SPDX-License-Identifier: GPL-2.0
-> > > > > > > -obj-$(CONFIG_VIRTIO) += virtio.o virtio_ring.o
-> > > > > > > +obj-$(CONFIG_VIRTIO) += virtio.o virtio_ring.o virtio_dma_buf.o
-> > > > > > >  obj-$(CONFIG_VIRTIO_MMIO) += virtio_mmio.o
-> > > > > > >  obj-$(CONFIG_VIRTIO_PCI) += virtio_pci.o
-> > > > > > >  virtio_pci-y := virtio_pci_modern.o virtio_pci_common.o
-> > > > > > > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> > > > > > > index a977e32a88f2..5d46f0ded92d 100644
-> > > > > > > --- a/drivers/virtio/virtio.c
-> > > > > > > +++ b/drivers/virtio/virtio.c
-> > > > > > > @@ -357,6 +357,12 @@ int register_virtio_device(struct virtio_device *dev)
-> > > > > > >  }
-> > > > > > >  EXPORT_SYMBOL_GPL(register_virtio_device);
-> > > > > > >
-> > > > > > > +bool is_virtio_device(struct device *dev)
-> > > > > > > +{
-> > > > > > > +     return dev->bus == &virtio_bus;
-> > > > > > > +}
-> > > > > > > +EXPORT_SYMBOL_GPL(is_virtio_device);
-> > > > > > > +
-> > > > > > >  void unregister_virtio_device(struct virtio_device *dev)
-> > > > > > >  {
-> > > > > > >       int index = dev->index; /* save for after device release */
-> > > > > > > diff --git a/drivers/virtio/virtio_dma_buf.c b/drivers/virtio/virtio_dma_buf.c
-> > > > > > > new file mode 100644
-> > > > > > > index 000000000000..23e3399b11ed
-> > > > > > > --- /dev/null
-> > > > > > > +++ b/drivers/virtio/virtio_dma_buf.c
-> > > > > > > @@ -0,0 +1,89 @@
-> > > > > > > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > > > > > > +/*
-> > > > > > > + * dma-bufs for virtio exported objects
-> > > > > > > + *
-> > > > > > > + * Copyright (C) 2020 Google, Inc.
-> > > > > > > + */
-> > > > > > > +
-> > > > > > > +#include <linux/virtio_dma_buf.h>
-> > > > > > > +
-> > > > > > > +/**
-> > > > > > > + * virtio_dma_buf_export - Creates a new dma-buf for a virtio exported object
-> > > > > > > + *
-> > > > > > > + * This wraps dma_buf_export() to allow virtio drivers to create a dma-buf
-> > > > > > > + * for an virtio exported object that can be queried by other virtio drivers
-> > > > > > > + * for the object's UUID.
-> > > > > > > + */
-> > > > > > > +struct dma_buf *virtio_dma_buf_export(
-> > > > > > > +             const struct virtio_dma_buf_export_info *virtio_exp_info)
-> > > > > > > +{
-> > > > > > > +     struct dma_buf_export_info exp_info;
-> > > > > > > +
-> > > > > > > +     if (!virtio_exp_info->ops
-> > > > > > > +             || virtio_exp_info->ops->ops.attach != &virtio_dma_buf_attach
-> > > > > > > +             || !virtio_exp_info->ops->get_uuid) {
-> > > > > > > +             return ERR_PTR(-EINVAL);
-> > > > > > > +     }
-> > > > > > > +
-> > > > > > > +     exp_info.exp_name = virtio_exp_info->exp_name;
-> > > > > > > +     exp_info.owner = virtio_exp_info->owner;
-> > > > > > > +     exp_info.ops = &virtio_exp_info->ops->ops;
-> > > > > > > +     exp_info.size = virtio_exp_info->size;
-> > > > > > > +     exp_info.flags = virtio_exp_info->flags;
-> > > > > > > +     exp_info.resv = virtio_exp_info->resv;
-> > > > > > > +     exp_info.priv = virtio_exp_info->priv;
-> > > > > > > +     BUILD_BUG_ON(sizeof(struct virtio_dma_buf_export_info)
-> > > > > > > +                  != sizeof(struct dma_buf_export_info));
-> > > > > >
-> > > > > > This is the only part that gives me pause. Why do we need this hack?
-> > > > > > What's wrong with just using dma_buf_export_info directly,
-> > > > > > and if you want the virtio ops, just using container_off?
-> > > > >
-> > > > > This approach provides a more explicit type signature and a little
-> > > > > more type safety, I think. If others don't think it's a worthwhile
-> > > > > tradeoff, I can remove it.
-> > > > >
-> > > > > -David
-> > > >
-> > > > The cost is that if dma_buf_export_info changes even slightly, we get
-> > > > weird crashes.
-> > >
-> > > I'm not sure I understand what types of changes you're referring to.
-> > > As this is written, virtio-dma-buf is just another client of the
-> > > dma-buf API. If this were rewritten to use dma-buf directly, then
-> > > whatever code calls virtio_dma_buf_export would become a client of the
-> > > dma-buf API. If the semantics of existing fields in the dma-buf API
-> > > were changed and virtio-dma-buf wasn't updated, then yes, you could
-> > > get weird crashes from virtio-dma-buf.
-> > > However, the same problem would
-> > > exist if virtio_dma_buf_export used dma-buf directly - changes to
-> > > dma-buf's semantics could cause weird crashes if the caller of
-> > > virtio_dma_buf_export wasn't updated properly. The only potential
-> > > source of problems I see is if virtio_dma_buf_export_info wasn't
-> > > updated properly, but virtio_dma_buf_export_info is dead simple, so I
-> > > don't know if that's really a problem.
-> > >
-> > > -David
-> >
-> > I think you can get weird crashes if fields in dma buf are reordered, or
-> > if a field size changes.  You have a build bug catching overall struct
-> > size changes but that can remain the same due do compiler padding or
-> > such.
+On 08/06/2020 10:16, Neil Armstrong wrote:
+> Hi Nicolas,
 > 
-> Since it's manually copying the fields instead of trying something
-> clever like memcpy, I don't see how reordering the fields or changing
-> the size of the fields would cause problems. Right now,
-> virtio_dma_buf_export is just a regular client of dma_buf_export, no
-> different than any of the other call sites in the kernel.
+> On 05/06/2020 17:35, Nicolas Dufresne wrote:
+>> Le jeudi 04 juin 2020 à 15:53 +0200, Neil Armstrong a écrit :
+>>> From: Maxime Jourdan <mjourdan@baylibre.com>
+>>>
+>>> Add two generic Compressed Framebuffer pixel formats to be used
+>>> with a modifier when imported back in another subsystem like DRM/KMS.
+>>>
+>>> These pixel formats represents generic 8bits and 10bits compressed buffers
+>>> with a vendor specific layout.
+>>>
+>>> These are aligned with the DRM_FORMAT_YUV420_8BIT and DRM_FORMAT_YUV420_10BIT
+>>> used to describe the underlying compressed buffers used for ARM Framebuffer
+>>> Compression. In the Amlogic case, the compression is different but the
+>>> underlying buffer components is the same.
+>>>
+>>> Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
+>>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+>>> ---
+>>>  drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
+>>>  include/uapi/linux/videodev2.h       | 9 +++++++++
+>>>  2 files changed, 11 insertions(+)
+>>>
+>>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>> index 2322f08a98be..8f14adfd5bc5 100644
+>>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+>>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>> @@ -1447,6 +1447,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>>>  		case V4L2_PIX_FMT_S5C_UYVY_JPG:	descr = "S5C73MX interleaved UYVY/JPEG"; break;
+>>>  		case V4L2_PIX_FMT_MT21C:	descr = "Mediatek Compressed Format"; break;
+>>>  		case V4L2_PIX_FMT_SUNXI_TILED_NV12: descr = "Sunxi Tiled NV12 Format"; break;
+>>> +		case V4L2_PIX_FMT_YUV420_8BIT:	descr = "Compressed YUV 4:2:0 8-bit Format"; break;
+>>> +		case V4L2_PIX_FMT_YUV420_10BIT:	descr = "Compressed YUV 4:2:0 10-bit Format"; break;
 > 
-> Overall, I don't really think that this is a problem. If someone makes
-> breaking changes to the semantics of dma-buf, then they will need to
-> update this call site, just like they will need to update all of the
-> other call sites in the kernel. If someone adds new functionality to
-> dma-buf and adds another field to dma_buf_export_info, the build bug
-> is a reminder to add it to virtio_dma_buf_export_info. However, if the
-> struct padding happens to work out such that the build bug doesn't
-> trigger, that doesn't really matter - it just means that the new
-> dma-buf feature won't be exposed by virito-dma-buf until someone needs
-> it and notices that the new field is missing.
+> Seems we are totally on-par with the following :-)
 > 
-> -David
+>>
+>> When I read the DRM documentation [0], I'm reading that YUV420_8BIT
+>> definition matches V4L2_PIX_FMT_YVU420 and V4L2_PIX_FMT_YVU420M fully.
+>> In fact, on DRM side, to represent that format you want to expose here,
+>> they will strictly combine this generic format (documented un-
+>> compressed) with a modifier generated with the macro
+>> DRM_FORMAT_MOD_ARM_AFBC(*). And only the combination represent a unique
+>> and share-able format.
+> 
+> Yes, and this is exactly my goal here, and matches the Amlogic Framebuffer as
+> described in patch 4. The modifier patchset is at [1].
+> 
+>>
+>> In absence of modifier in V4L2 API, this compressed format should be
+>> named accordingly to the compressed algorithm used (something like
+>> FMT_YUV420_8BIT_AML_FBC). 
+> 
+> It's even more complex, the modifier depends on the SoC revision, so we can
+> have up to6 different unique pixel format instead of 2 with a variable
+> modifier.
+> 
+>> So I believe these format name cannot be
+>> copied as-is like this, as they can only introduce more ambiguity in
+>> the already quite hard to follow naming of pixel formats. In fact, it
+>> is very common to see multiple different vendor compressions on the
+>> same SoC, so I don't really believe a "generic" compressed format make
+>> sense. To site one, the IMX8M, which got Verrisillicon/Vivante DEC400
+>> on the GPU, and the Hantro G2 compression format. Both will apply to
+>> NV12 class of format so in DRM they would be NV12 + modifier, and the
+>> combination forms the unique format. Now, in term of sharing, they must
+>> be differiented by userspace, as support for compression/decompression
+>> is heterogeneous (in that case the GPU does not support Hantro G2
+>> decompression or compression, and the VPU does not support DEC400).
+>>
+>> I'll remind that the modifier implementation has great value and is
+>> much more scalable then the current V4L2 approach. There has been some
+>> early proposal for this, maybe it's time to prioritize because this
+>> list will starts growing with hundred or even thousands or format,
+>> which is clearly indicated by the increase of modifier generator macro
+>> on the DRM side.
+> 
+> Yes, but until the migration of drm_fourcc and v4l2 fourcc into a common one
+> is decided, I'm stuck and this is the only intermediate solution I found.
 
-Think about the reasons for the BUILD_BUG_ON being there, checking
-struct sizes like this is a clear sign of something strange going on.
+We can safely assume that drm fourcc and v4l2 fourcc won't be merged.
 
+There is too much divergence and not enough interest in creating common
+fourccs.
 
-But really this is just unnecessary complexity anyway.
+But we *do* want to share the modifiers.
 
-The only difference with dma_buf is get_uuid and device_attacj, isn't it?
+> 
+> We have a working solution with Boris's patchset with ext_fmt passing the
+> modifier to user-space.
+> 
+> but anyway, since the goal is to merge the fourcc between DRM & V4L2, these YUV420_*BIT
+> will still be needed if we pass the modifier with an extended format struct.
 
-And they are called like this:
+We tried merging fourccs but that ran into resistance. Frankly, I wouldn't
+bother with this, it is much easier to just create a conversion table in the
+kernel docs.
 
+So don't block on this, I would really prefer if the ext_fmt series is picked
+up again and rebased and reposted and then worked on. The stateless codec support
+is taking less time (it's shaping up well) so there is more time to work on this.
 
+I believe we really need this since v4l2_buffer and v4l2_format are a real mess.
 
-+ */
-+int virtio_dma_buf_get_uuid(struct dma_buf *dma_buf,
-+                           uuid_t *uuid)
-+{
-+       const struct virtio_dma_buf_ops *ops = container_of(
-+                       dma_buf->ops, const struct virtio_dma_buf_ops, ops);
-+       
-+       if (!is_virtio_dma_buf(dma_buf))
-+               return -EINVAL;
-+
-+       return ops->get_uuid(dma_buf, uuid);
-+}
+Regards,
 
+	Hans
 
-So you are doing the container_of trick anyway, the extra structure
-did not give us any type safety.
-
-
--- 
-MST
+> 
+>>
+>>>  		default:
+>>>  			if (fmt->description[0])
+>>>  				return;
+>>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+>>> index c3a1cf1c507f..90b9949acb8a 100644
+>>> --- a/include/uapi/linux/videodev2.h
+>>> +++ b/include/uapi/linux/videodev2.h
+>>> @@ -705,6 +705,15 @@ struct v4l2_pix_format {
+>>>  #define V4L2_PIX_FMT_FWHT     v4l2_fourcc('F', 'W', 'H', 'T') /* Fast Walsh Hadamard Transform (vicodec) */
+>>>  #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
+>>>  
+>>> +/*
+>>> + * Compressed Luminance+Chrominance meta-formats
+>>> + * In these formats, the component ordering is specified (Y, followed by U
+>>> + * then V), but the exact Linear layout is undefined.
+>>> + * These formats can only be used with a non-Linear modifier.
+>>> + */
+>>> +#define V4L2_PIX_FMT_YUV420_8BIT	v4l2_fourcc('Y', 'U', '0', '8') /* 1-plane YUV 4:2:0 8-bit */
+>>> +#define V4L2_PIX_FMT_YUV420_10BIT	v4l2_fourcc('Y', 'U', '1', '0') /* 1-plane YUV 4:2:0 10-bit */
+>>> +
+>>>  /*  Vendor-specific formats   */
+>>>  #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
+>>>  #define V4L2_PIX_FMT_WNVA     v4l2_fourcc('W', 'N', 'V', 'A') /* Winnov hw compress */
+>>
+> 
+> [1] https://patchwork.freedesktop.org/series/73722/#rev7
+> 
 
