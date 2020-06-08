@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3580FC433E0
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 23:39:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72822C433E1
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 23:43:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D1FB2076C
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 23:39:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3534F20760
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 23:43:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591659586;
-	bh=+Gcw09n/bPKMcv+/4kI3NujXaSsob+ZVOBmDqpwRikY=;
+	s=default; t=1591659815;
+	bh=Q1MnH9RZEWmo/MLTr/txxuhrn1OC1QQbfLP0JeFzoCs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Kj7Ttb4BYWyEQTHfKZo3qAtrduM/Hrrhm0qs/NsX7IFt9dz7pga7PDLlmnuOBliBg
-	 LcUaO0dKmzdvVLVZB3pzbgQ8tbuJsb+vYn5YB3mzjQNUepb/lmVLgg4MM5oH+AxB0N
-	 Q2jn7X16bRQODVP4+BhnQP7nclT88bERGiA+kNdE=
+	b=cPN02WCqUZcW1OixHRuQYDhBmL0spA+2knBM9lQyJlE0LBB3kYhTeeM902aNdfcWR
+	 Q4ovISAt0Dn26dfJGC97pAesCxYQDOsADZuKdY/Eq50Kqze/PwZfTUVMJ/6NLL3M6f
+	 +/RqAMWQnixm/EI6zgMjmEffjGWo6k0j6BMGFwvg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731121AbgFHXjl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:39:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57442 "EHLO mail.kernel.org"
+        id S2387851AbgFHXnY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Jun 2020 19:43:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55320 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387713AbgFHX2N (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:28:13 -0400
+        id S2387598AbgFHX1J (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:27:09 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C9155207C3;
-        Mon,  8 Jun 2020 23:28:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9E85F20775;
+        Mon,  8 Jun 2020 23:27:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658892;
-        bh=+Gcw09n/bPKMcv+/4kI3NujXaSsob+ZVOBmDqpwRikY=;
+        s=default; t=1591658829;
+        bh=Q1MnH9RZEWmo/MLTr/txxuhrn1OC1QQbfLP0JeFzoCs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G2qdeWt26mU3qsMk0A8bxwHsoSl3V4o8ju5xfMy90r458hwqceFIZwwbnSwILmc7n
-         jlJ+DRr1DVSG5aej60/p9IjiNnVQYizjK/Phei7xTSKfNGBXwdQO+ryaKouUuUzR8A
-         QpQOqg/qGtJs6eA7g9Hzju/DPuS0LZf+uZhrikb0=
+        b=dcSUYjMibokDUC++6FlPZRMe1EB5rhDEnibODQxWhMslR4y+nZLyExP92bC1YRFU/
+         AbwRgZvwgeGglUK22I0fVuprWLkGoVMOjPtba/yD5cTOVByy25rLPLB2ltRMxGx0A2
+         VE9efUzUsFWPkxw2bARePJ9kEPHG3qFa1fGKT0Nw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Colin Ian King <colin.king@canonical.com>,
         Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 15/37] media: dvb: return -EREMOTEIO on i2c transfer failure.
-Date:   Mon,  8 Jun 2020 19:27:27 -0400
-Message-Id: <20200608232750.3370747-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 20/50] media: dvb: return -EREMOTEIO on i2c transfer failure.
+Date:   Mon,  8 Jun 2020 19:26:10 -0400
+Message-Id: <20200608232640.3370262-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608232750.3370747-1-sashal@kernel.org>
-References: <20200608232750.3370747-1-sashal@kernel.org>
+In-Reply-To: <20200608232640.3370262-1-sashal@kernel.org>
+References: <20200608232640.3370262-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -82,7 +82,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/usb/dvb-usb/dibusb-mb.c b/drivers/media/usb/dvb-usb/dibusb-mb.c
-index a4ac37e0e98b..d888e27dad3c 100644
+index a0057641cc86..c55180912c3a 100644
 --- a/drivers/media/usb/dvb-usb/dibusb-mb.c
 +++ b/drivers/media/usb/dvb-usb/dibusb-mb.c
 @@ -84,7 +84,7 @@ static int dibusb_tuner_probe_and_attach(struct dvb_usb_adapter *adap)
