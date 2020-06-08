@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B80FC433E1
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 23:56:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84F3CC433E0
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 23:57:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2216F20659
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 23:56:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D86420659
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jun 2020 23:57:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591660571;
-	bh=c9lNOa5f4PM28KYvAvQhiHQM1QkkevK3wIQFfznxuAA=;
+	s=default; t=1591660635;
+	bh=ECcn17W33XXpxx4IFxtIAWTOwXr2/kUWxEFrI6i1i6s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=1Hq6PCOCzB+8Shg7q/aFsfENn3CxgWPFO68RWkPGbz2cqoRmD4asjvD8QJXqz3Z8G
-	 ozhRzEYBsNcwhdv39yEfPPVSaiGA1WyAlhahva3mdF96OoDcxarNC+mKVJeOmh52dr
-	 E5i5oLr+XUa0qrQeO3wV1gb5AKnDz1/i6UHPLisI=
+	b=EpnWSLWeL7BS3o+yGDo7RM4zODmcqtfGj6+jNsu4shXuN8XDZQWqTHemsdHc3Lf0P
+	 NSlUkg+wT1P8I7EbnFtAiom+v15v5bCoCRu201nZsh18Kjh9rB/bCsL06djpkiwI1o
+	 rgtKGIt+ndM7bN78LdWthTm7BTlPLM61uuKXjDeI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732429AbgFHX4J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:56:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49504 "EHLO mail.kernel.org"
+        id S1731515AbgFHXXd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Jun 2020 19:23:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48978 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730201AbgFHXXs (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:23:48 -0400
+        id S1729372AbgFHXXc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:23:32 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B8E4C2072F;
-        Mon,  8 Jun 2020 23:23:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 589F92072F;
+        Mon,  8 Jun 2020 23:23:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658628;
-        bh=c9lNOa5f4PM28KYvAvQhiHQM1QkkevK3wIQFfznxuAA=;
+        s=default; t=1591658612;
+        bh=ECcn17W33XXpxx4IFxtIAWTOwXr2/kUWxEFrI6i1i6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EQipey9U+/nOMQe7Ao0wtm7Pt6xfq3G7RqUHvDZKXA4/dIdTi3cPKXkAPZAcRtp9a
-         WwwHpIt2mNhkIHHVxun2eYiCK99TWODMQ/OItfpZTjL/oKdoA3l1IWKI3OkEpUYMEG
-         H62/lihtl+uQACPBDAiBHdY+0a22/eb08sV7maRw=
+        b=xa4/XoQ4zgYPKbsOd5JjIzmpSJl9CaeArPTktJHxeQSL+auCjE43xqm6yO1V4Pixi
+         FSYx35fn2pAE/MePrzGdhWYEAAscDhaTTzDkm3pVsfeqQn70r9aFnMxir14FXDapZH
+         UCpBTscnhmLNYL1rwH8EdyDphR34eorBcTAX0Hm8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 052/106] media: cec: silence shift wrapping warning in __cec_s_log_addrs()
-Date:   Mon,  8 Jun 2020 19:21:44 -0400
-Message-Id: <20200608232238.3368589-52-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 038/106] media: dvb: return -EREMOTEIO on i2c transfer failure.
+Date:   Mon,  8 Jun 2020 19:21:30 -0400
+Message-Id: <20200608232238.3368589-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608232238.3368589-1-sashal@kernel.org>
 References: <20200608232238.3368589-1-sashal@kernel.org>
@@ -59,54 +59,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit 3b5af3171e2d5a73ae6f04965ed653d039904eb6 ]
+[ Upstream commit 96f3a9392799dd0f6472648a7366622ffd0989f3 ]
 
-The log_addrs->log_addr_type[i] value is a u8 which is controlled by
-the user and comes from the ioctl.  If it's over 31 then that results in
-undefined behavior (shift wrapping) and that leads to a Smatch static
-checker warning.  We already cap the value later so we can silence the
-warning just by re-ordering the existing checks.
+Currently when i2c transfers fail the error return -EREMOTEIO
+is assigned to err but then later overwritten when the tuner
+attach call is made.  Fix this by returning early with the
+error return code -EREMOTEIO on i2c transfer failure errors.
 
-I think the UBSan checker will also catch this bug at runtime and
-generate a warning.  But otherwise the bug is harmless.
+If the transfer fails, an uninitialized value will be read from b2.
 
-Fixes: 9881fe0ca187 ("[media] cec: add HDMI CEC framework (adapter)")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Addresses-Coverity: ("Unused value")
+
+Fixes: fbfee8684ff2 ("V4L/DVB (5651): Dibusb-mb: convert pll handling to properly use dvb-pll")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/cec-adap.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/usb/dvb-usb/dibusb-mb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/cec/cec-adap.c b/drivers/media/cec/cec-adap.c
-index ba7e976bf6dc..60b20ae02b05 100644
---- a/drivers/media/cec/cec-adap.c
-+++ b/drivers/media/cec/cec-adap.c
-@@ -1668,6 +1668,10 @@ int __cec_s_log_addrs(struct cec_adapter *adap,
- 		unsigned j;
+diff --git a/drivers/media/usb/dvb-usb/dibusb-mb.c b/drivers/media/usb/dvb-usb/dibusb-mb.c
+index 408920577716..94f59c7765dc 100644
+--- a/drivers/media/usb/dvb-usb/dibusb-mb.c
++++ b/drivers/media/usb/dvb-usb/dibusb-mb.c
+@@ -84,7 +84,7 @@ static int dibusb_tuner_probe_and_attach(struct dvb_usb_adapter *adap)
  
- 		log_addrs->log_addr[i] = CEC_LOG_ADDR_INVALID;
-+		if (log_addrs->log_addr_type[i] > CEC_LOG_ADDR_TYPE_UNREGISTERED) {
-+			dprintk(1, "unknown logical address type\n");
-+			return -EINVAL;
-+		}
- 		if (type_mask & (1 << log_addrs->log_addr_type[i])) {
- 			dprintk(1, "duplicate logical address type\n");
- 			return -EINVAL;
-@@ -1688,10 +1692,6 @@ int __cec_s_log_addrs(struct cec_adapter *adap,
- 			dprintk(1, "invalid primary device type\n");
- 			return -EINVAL;
- 		}
--		if (log_addrs->log_addr_type[i] > CEC_LOG_ADDR_TYPE_UNREGISTERED) {
--			dprintk(1, "unknown logical address type\n");
--			return -EINVAL;
--		}
- 		for (j = 0; j < feature_sz; j++) {
- 			if ((features[j] & 0x80) == 0) {
- 				if (op_is_dev_features)
+ 	if (i2c_transfer(&adap->dev->i2c_adap, msg, 2) != 2) {
+ 		err("tuner i2c write failed.");
+-		ret = -EREMOTEIO;
++		return -EREMOTEIO;
+ 	}
+ 
+ 	if (adap->fe_adap[0].fe->ops.i2c_gate_ctrl)
 -- 
 2.25.1
 
