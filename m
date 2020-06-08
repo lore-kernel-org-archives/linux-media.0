@@ -7,45 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CC05C433E0
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 01:09:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50042C433E1
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 01:09:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 64F0E2076C
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 01:09:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20A142083E
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 01:09:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591664987;
-	bh=PURkuQjDd4uIDSMLujFEZ60c931LKLsJlFRXqNsQ6kw=;
+	s=default; t=1591664994;
+	bh=RfN7e+IqfNDAX+YUtjar6zUcVJXwkRCwxqE082RR7Yc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=wJHoPf60NI52Ng0CGiOAl9/uc9kK76lowLkzqe+fl/0DLOg36vRgIlXlfSDA4Sn6G
-	 DENYC/D/VVb6uxgH2d9Vh1lbZVMVMmnr3v0/MdWCA1ybazkFweAU5Y8PBv95AXJSGq
-	 EMbHxhF0m7cA/bMC10oUMEQUa/uIM3VytTiM025w=
+	b=MjPxpJyzD55ZUabgJIeFoxWZ0vput9K1kk9ThCqLi94bpX8rLUj1ghd/FGQUmMjQL
+	 /OObmcg7FR1ib5RPKcBv5de+gGezstpeKuguJ/+/bMHRIpyqHbWpJfdpZbUosWMp7w
+	 uMqDCs6kCITng8UCvqT3Zd6O0m8+jDOk3X/KJ3ag=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729164AbgFIBJe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Jun 2020 21:09:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49504 "EHLO mail.kernel.org"
+        id S1730265AbgFIBJt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Jun 2020 21:09:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49386 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726981AbgFHXG0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:06:26 -0400
+        id S1726961AbgFHXGY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:06:24 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B2C772076C;
-        Mon,  8 Jun 2020 23:06:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 668D920774;
+        Mon,  8 Jun 2020 23:06:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657585;
-        bh=PURkuQjDd4uIDSMLujFEZ60c931LKLsJlFRXqNsQ6kw=;
+        s=default; t=1591657583;
+        bh=RfN7e+IqfNDAX+YUtjar6zUcVJXwkRCwxqE082RR7Yc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0KKKP/EfVcoougZuQJA6+xLrYjf9GhGybSTAfw/FbskRW7izHTD+iZHnvodJKy3BE
-         VpN1ehWSzE6DbOH2K73Bcnu7xs5/c+Ttg5fVBblh7DXVLqwCgfItDOZq9xDt2/8SKs
-         x/RgPQTgpXkzMEojPyXDtn/t5bXRHroNYdaktLRs=
+        b=A5QyrQpoGQ9sNl6Fa+BgTAVKlgiP2UtyIkh8Pc21Ku2c/G3rJFVoMd55lFACXKWYX
+         XsOdeJYzh3sfBVlqkS3Bh/EtpFh8RJHqoVdvcjHjwqNaVekvUMFY8xrFy8phXGOj8F
+         0uqGlOGwxGT9Vt4WaKlA1sLV6Tk9iRJEy6aWBqVI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 014/274] media: v4l2-ctrls: v4l2_ctrl_g/s_ctrl*(): don't continue when WARN_ON
-Date:   Mon,  8 Jun 2020 19:01:47 -0400
-Message-Id: <20200608230607.3361041-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 012/274] media: vicodec: Fix error codes in probe function
+Date:   Mon,  8 Jun 2020 19:01:45 -0400
+Message-Id: <20200608230607.3361041-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -58,87 +59,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 7c3bae3f430af6b4fcbdb7272e191e266fd94b45 ]
+[ Upstream commit f36592e7b343d853edf44d3545bb68961c0949a4 ]
 
-If the v4l2_ctrl_g_ctrl*() or __v4l2_ctrl_s_ctrl*() functions
-are called for the wrong control type then they call WARN_ON
-since that is a driver error. But they still continue, potentially
-overwriting data. Change this to return an error (s_ctrl) or 0
-(g_ctrl), just to be safe.
+If these functions fail then we return success, but we should instead
+preserve negative error code and return that.
 
+Fixes: fde649b418d1 ("media: vicodec: Register another node for stateless decoder")
+Fixes: c022a4a95722 ("media: vicodec: add struct for encoder/decoder instance")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/media/platform/vicodec/vicodec-core.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 93d33d1db4e8..452edd06d67d 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -3794,7 +3794,8 @@ s32 v4l2_ctrl_g_ctrl(struct v4l2_ctrl *ctrl)
- 	struct v4l2_ext_control c;
+diff --git a/drivers/media/platform/vicodec/vicodec-core.c b/drivers/media/platform/vicodec/vicodec-core.c
+index 30ced1c21387..e879290727ef 100644
+--- a/drivers/media/platform/vicodec/vicodec-core.c
++++ b/drivers/media/platform/vicodec/vicodec-core.c
+@@ -2114,16 +2114,19 @@ static int vicodec_probe(struct platform_device *pdev)
  
- 	/* It's a driver bug if this happens. */
--	WARN_ON(!ctrl->is_int);
-+	if (WARN_ON(!ctrl->is_int))
-+		return 0;
- 	c.value = 0;
- 	get_ctrl(ctrl, &c);
- 	return c.value;
-@@ -3806,7 +3807,8 @@ s64 v4l2_ctrl_g_ctrl_int64(struct v4l2_ctrl *ctrl)
- 	struct v4l2_ext_control c;
+ 	platform_set_drvdata(pdev, dev);
  
- 	/* It's a driver bug if this happens. */
--	WARN_ON(ctrl->is_ptr || ctrl->type != V4L2_CTRL_TYPE_INTEGER64);
-+	if (WARN_ON(ctrl->is_ptr || ctrl->type != V4L2_CTRL_TYPE_INTEGER64))
-+		return 0;
- 	c.value64 = 0;
- 	get_ctrl(ctrl, &c);
- 	return c.value64;
-@@ -4215,7 +4217,8 @@ int __v4l2_ctrl_s_ctrl(struct v4l2_ctrl *ctrl, s32 val)
- 	lockdep_assert_held(ctrl->handler->lock);
+-	if (register_instance(dev, &dev->stateful_enc,
+-			      "stateful-encoder", true))
++	ret = register_instance(dev, &dev->stateful_enc, "stateful-encoder",
++				true);
++	if (ret)
+ 		goto unreg_dev;
  
- 	/* It's a driver bug if this happens. */
--	WARN_ON(!ctrl->is_int);
-+	if (WARN_ON(!ctrl->is_int))
-+		return -EINVAL;
- 	ctrl->val = val;
- 	return set_ctrl(NULL, ctrl, 0);
- }
-@@ -4226,7 +4229,8 @@ int __v4l2_ctrl_s_ctrl_int64(struct v4l2_ctrl *ctrl, s64 val)
- 	lockdep_assert_held(ctrl->handler->lock);
+-	if (register_instance(dev, &dev->stateful_dec,
+-			      "stateful-decoder", false))
++	ret = register_instance(dev, &dev->stateful_dec, "stateful-decoder",
++				false);
++	if (ret)
+ 		goto unreg_sf_enc;
  
- 	/* It's a driver bug if this happens. */
--	WARN_ON(ctrl->is_ptr || ctrl->type != V4L2_CTRL_TYPE_INTEGER64);
-+	if (WARN_ON(ctrl->is_ptr || ctrl->type != V4L2_CTRL_TYPE_INTEGER64))
-+		return -EINVAL;
- 	*ctrl->p_new.p_s64 = val;
- 	return set_ctrl(NULL, ctrl, 0);
- }
-@@ -4237,7 +4241,8 @@ int __v4l2_ctrl_s_ctrl_string(struct v4l2_ctrl *ctrl, const char *s)
- 	lockdep_assert_held(ctrl->handler->lock);
+-	if (register_instance(dev, &dev->stateless_dec,
+-			      "stateless-decoder", false))
++	ret = register_instance(dev, &dev->stateless_dec, "stateless-decoder",
++				false);
++	if (ret)
+ 		goto unreg_sf_dec;
  
- 	/* It's a driver bug if this happens. */
--	WARN_ON(ctrl->type != V4L2_CTRL_TYPE_STRING);
-+	if (WARN_ON(ctrl->type != V4L2_CTRL_TYPE_STRING))
-+		return -EINVAL;
- 	strscpy(ctrl->p_new.p_char, s, ctrl->maximum + 1);
- 	return set_ctrl(NULL, ctrl, 0);
- }
-@@ -4249,7 +4254,8 @@ int __v4l2_ctrl_s_ctrl_area(struct v4l2_ctrl *ctrl,
- 	lockdep_assert_held(ctrl->handler->lock);
- 
- 	/* It's a driver bug if this happens. */
--	WARN_ON(ctrl->type != V4L2_CTRL_TYPE_AREA);
-+	if (WARN_ON(ctrl->type != V4L2_CTRL_TYPE_AREA))
-+		return -EINVAL;
- 	*ctrl->p_new.p_area = *area;
- 	return set_ctrl(NULL, ctrl, 0);
- }
+ #ifdef CONFIG_MEDIA_CONTROLLER
 -- 
 2.25.1
 
