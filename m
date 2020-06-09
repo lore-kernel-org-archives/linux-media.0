@@ -2,163 +2,121 @@ Return-Path: <SRS0=lba3=7W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6DD1C433E1
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 01:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DCFCC433E0
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 01:25:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E5BC2076C
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 01:11:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591665061;
-	bh=CicGRjGSOTBsUj/Eqh9polVEPmrcjtOxTk5wOZR5tgE=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=RhK95bBRhyvMlub/C6isEu8iINUCS4TNIUvWcPq5CewshRL+lJWaYfFk5NFnMKitm
-	 EyKq5A9XDFjd4TJlJ4Ywh9q3Bx179alYqZKV+FK/hxHDeIJCzD4IBR5UMj9LP4T1JV
-	 micdbT3fdnLw0AGLKniUWFZzVvnN8l1AAX8EBAeE=
+	by mail.kernel.org (Postfix) with ESMTP id 2918A206A4
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 01:25:54 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="m4U6w8Hj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgFHXGK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:06:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48944 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726746AbgFHXGK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:06:10 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 899DA2076A;
-        Mon,  8 Jun 2020 23:06:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657569;
-        bh=CicGRjGSOTBsUj/Eqh9polVEPmrcjtOxTk5wOZR5tgE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nI2YdhB1zt9pJ919fxs1oyKtdENrnrLP24ylg86cC/kUoj9RYMFYPe0Ipv8Hn3GWu
-         nZxfi5XehnjrGsJvLMtMlzOtIG5ZkVO4CuuenLWVF3RtdywZzfTkl4Mq+JN7GR6afq
-         ynvWaLS+BIuCTUZ7fNshAQE/pc0Txda7UNMTR2OI=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        xinhui pan <xinhui.pan@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH AUTOSEL 5.7 001/274] drm/amdgpu: fix and cleanup amdgpu_gem_object_close v4
-Date:   Mon,  8 Jun 2020 19:01:34 -0400
-Message-Id: <20200608230607.3361041-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        id S1726949AbgFIBZt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Jun 2020 21:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726860AbgFIBZs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Jun 2020 21:25:48 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99089C03E969
+        for <linux-media@vger.kernel.org>; Mon,  8 Jun 2020 18:25:47 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id i4so643611pjd.0
+        for <linux-media@vger.kernel.org>; Mon, 08 Jun 2020 18:25:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=COw8MsymzwRUQaCcvby30uu+ORzSh+2s4CK8yqEnGk0=;
+        b=m4U6w8Hj6efLuU2XJFCP8IPM+30vKQRX8BKy4OU/D+DUTmyH9XKbfEELFpSz42f7a/
+         a3V6e3lrKLFyYc13GVhfa4CdVD7sYJf2xvK5y5RWC823y9VUiUO/9hdCrABpETL9VLNp
+         ypI6smgxA7gnRqgf3Gf8k99kM728ZEUHZIKPQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=COw8MsymzwRUQaCcvby30uu+ORzSh+2s4CK8yqEnGk0=;
+        b=ljNembMEjit5+K47pKaUEciNvtcWCGp53jQ9aEtil7VAkSJHbeSqP80+qSA9/oIOn8
+         n/6voOvX2MO1HY1UBaoUaOKw4+65t5NHTyU9D/USnrOkcuuR7TPwPxSV/RzAllAX6q1u
+         s6Fb/0rsgvC4pTqo3KQip3bqDI7epy/YTIWZQ+LW0PNNLR3gEs90ffx1vTCmPbt8eLLY
+         32LDYGaWcUxKhXZTHghqnCG2MIUyROR8KbOGquCYM+HeRsxgcQNWHgsd6aJN/mnspb+g
+         CabBfp8yoYykiyc0nDpdZJY6Jafg2e4lLbC/COwn3TPkUrkCS6hCGagZax/8QFM51fjI
+         JLBw==
+X-Gm-Message-State: AOAM530N6X+Q7cRxiId3afdL9lXq3rcyV0Fe8Th5wGo9ep2Fbps6O0qe
+        mQ/Yh2HLk6BVwpLPWpvt/SrPWw==
+X-Google-Smtp-Source: ABdhPJxxp3CZRZ++LaDq5ouPDTw2c1q5JXibsFXECAvthEk/ewMP/5LQ+XhXru1zBYVm40/rZfIFZw==
+X-Received: by 2002:a17:902:9043:: with SMTP id w3mr1170254plz.250.1591665946907;
+        Mon, 08 Jun 2020 18:25:46 -0700 (PDT)
+Received: from localhost ([2401:fa00:8f:203:30f2:7a9c:387e:6c7])
+        by smtp.gmail.com with ESMTPSA id z23sm6716617pga.86.2020.06.08.18.25.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jun 2020 18:25:46 -0700 (PDT)
+From:   David Stevens <stevensd@chromium.org>
+To:     Gerd Hoffmann <kraxel@redhat.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Stevens <stevensd@chromium.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        virtio-dev@lists.oasis-open.org
+Subject: [PATCH v5 0/3] Support virtio cross-device resources
+Date:   Tue,  9 Jun 2020 10:25:15 +0900
+Message-Id: <20200609012518.198908-1-stevensd@chromium.org>
+X-Mailer: git-send-email 2.27.0.278.ge193c7cf3a9-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Christian König <christian.koenig@amd.com>
+This patchset implements the current proposal for virtio cross-device
+resource sharing [1]. It will be used to import virtio resources into
+the virtio-video driver currently under discussion [2]. The patch
+under consideration to add support in the virtio-video driver is [3].
+It uses the APIs from v3 of this series, but the changes to update it
+are relatively minor.
 
-[ Upstream commit 82c416b13cb7d22b96ec0888b296a48dff8a09eb ]
+This patchset adds a new flavor of dma-bufs that supports querying the
+underlying virtio object UUID, as well as adding support for exporting
+resources from virtgpu.
 
-The problem is that we can't add the clear fence to the BO
-when there is an exclusive fence on it since we can't
-guarantee the the clear fence will complete after the
-exclusive one.
+[1] https://markmail.org/thread/2ypjt5cfeu3m6lxu
+[2] https://markmail.org/thread/p5d3k566srtdtute
+[3] https://markmail.org/thread/j4xlqaaim266qpks
 
-To fix this refactor the function and also add the exclusive
-fence as shared to the resv object.
+v4 -> v5 changes:
+ - Remove virtio_dma_buf_export_info.
 
-v2: fix warning
-v3: add excl fence as shared instead
-v4: squash in fix for fence handling in amdgpu_gem_object_close
+David Stevens (3):
+  virtio: add dma-buf support for exported objects
+  virtio-gpu: add VIRTIO_GPU_F_RESOURCE_UUID feature
+  drm/virtio: Support virtgpu exported resources
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: xinhui pan <xinhui.pan@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c | 43 ++++++++++++++-----------
- 1 file changed, 25 insertions(+), 18 deletions(-)
+ drivers/gpu/drm/virtio/virtgpu_drv.c   |  3 +
+ drivers/gpu/drm/virtio/virtgpu_drv.h   | 20 ++++++
+ drivers/gpu/drm/virtio/virtgpu_kms.c   |  4 ++
+ drivers/gpu/drm/virtio/virtgpu_prime.c | 96 +++++++++++++++++++++++++-
+ drivers/gpu/drm/virtio/virtgpu_vq.c    | 55 +++++++++++++++
+ drivers/virtio/Makefile                |  2 +-
+ drivers/virtio/virtio.c                |  6 ++
+ drivers/virtio/virtio_dma_buf.c        | 82 ++++++++++++++++++++++
+ include/linux/virtio.h                 |  1 +
+ include/linux/virtio_dma_buf.h         | 37 ++++++++++
+ include/uapi/linux/virtio_gpu.h        | 19 +++++
+ 11 files changed, 321 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/virtio/virtio_dma_buf.c
+ create mode 100644 include/linux/virtio_dma_buf.h
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-index 4277125a79ee..32f36c940abb 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-@@ -161,16 +161,17 @@ void amdgpu_gem_object_close(struct drm_gem_object *obj,
- 
- 	struct amdgpu_bo_list_entry vm_pd;
- 	struct list_head list, duplicates;
-+	struct dma_fence *fence = NULL;
- 	struct ttm_validate_buffer tv;
- 	struct ww_acquire_ctx ticket;
- 	struct amdgpu_bo_va *bo_va;
--	int r;
-+	long r;
- 
- 	INIT_LIST_HEAD(&list);
- 	INIT_LIST_HEAD(&duplicates);
- 
- 	tv.bo = &bo->tbo;
--	tv.num_shared = 1;
-+	tv.num_shared = 2;
- 	list_add(&tv.head, &list);
- 
- 	amdgpu_vm_get_pd_bo(vm, &list, &vm_pd);
-@@ -178,28 +179,34 @@ void amdgpu_gem_object_close(struct drm_gem_object *obj,
- 	r = ttm_eu_reserve_buffers(&ticket, &list, false, &duplicates);
- 	if (r) {
- 		dev_err(adev->dev, "leaking bo va because "
--			"we fail to reserve bo (%d)\n", r);
-+			"we fail to reserve bo (%ld)\n", r);
- 		return;
- 	}
- 	bo_va = amdgpu_vm_bo_find(vm, bo);
--	if (bo_va && --bo_va->ref_count == 0) {
--		amdgpu_vm_bo_rmv(adev, bo_va);
--
--		if (amdgpu_vm_ready(vm)) {
--			struct dma_fence *fence = NULL;
-+	if (!bo_va || --bo_va->ref_count)
-+		goto out_unlock;
- 
--			r = amdgpu_vm_clear_freed(adev, vm, &fence);
--			if (unlikely(r)) {
--				dev_err(adev->dev, "failed to clear page "
--					"tables on GEM object close (%d)\n", r);
--			}
-+	amdgpu_vm_bo_rmv(adev, bo_va);
-+	if (!amdgpu_vm_ready(vm))
-+		goto out_unlock;
- 
--			if (fence) {
--				amdgpu_bo_fence(bo, fence, true);
--				dma_fence_put(fence);
--			}
--		}
-+	fence = dma_resv_get_excl(bo->tbo.base.resv);
-+	if (fence) {
-+		amdgpu_bo_fence(bo, fence, true);
-+		fence = NULL;
- 	}
-+
-+	r = amdgpu_vm_clear_freed(adev, vm, &fence);
-+	if (r || !fence)
-+		goto out_unlock;
-+
-+	amdgpu_bo_fence(bo, fence, true);
-+	dma_fence_put(fence);
-+
-+out_unlock:
-+	if (unlikely(r < 0))
-+		dev_err(adev->dev, "failed to clear page "
-+			"tables on GEM object close (%ld)\n", r);
- 	ttm_eu_backoff_reservation(&ticket, &list);
- }
- 
 -- 
-2.25.1
+2.27.0.278.ge193c7cf3a9-goog
 
