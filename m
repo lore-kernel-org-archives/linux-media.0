@@ -2,126 +2,67 @@ Return-Path: <SRS0=lba3=7W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A924C433E0
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 15:16:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A25AC433DF
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 15:29:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 63D3A2074B
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 15:16:54 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="sA5Ai0ti"
+	by mail.kernel.org (Postfix) with ESMTP id 7EC142072F
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 15:29:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730712AbgFIPQx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Jun 2020 11:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730436AbgFIPQx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Jun 2020 11:16:53 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D86C05BD1E;
-        Tue,  9 Jun 2020 08:16:53 -0700 (PDT)
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E56F3291;
-        Tue,  9 Jun 2020 17:16:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1591715811;
-        bh=IC7Dfd45JXlJHgI52UIb0qH+JnzSyuvSQq4C1KRAEtk=;
-        h=Subject:To:Cc:References:Reply-To:From:Date:In-Reply-To:From;
-        b=sA5Ai0tiRQNWPtHk9QfA2hBdTB8hDuZxi0Hcxnk0k315YHI8YX2pN0Scoq6hM5IV8
-         AgJsCFap3VSTVFj7AozsWMSxzbhW10QihLz1h6xHe9pHy3t5/Tfw20jcITJYiSkzVc
-         TBsYHZs+EmPavcx9IbDPilqGRWVFc8gehw8xi7Po=
-Subject: Re: [RFC 1/5] uapi/linux/media.h: add flag field to struct
- media_device_info
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-References: <20200318213051.3200981-1-niklas.soderlund+renesas@ragnatech.se>
- <20200318213051.3200981-2-niklas.soderlund+renesas@ragnatech.se>
- <20200319023744.GC27375@pendragon.ideasonboard.com>
- <20200319023856.GD27375@pendragon.ideasonboard.com>
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Organization: Ideas on Board
-Message-ID: <afea3497-3295-03f2-9b41-d5828dedd8ac@ideasonboard.com>
-Date:   Tue, 9 Jun 2020 16:16:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200319023856.GD27375@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+        id S1730108AbgFIP3H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Jun 2020 11:29:07 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49918 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728822AbgFIP3G (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Jun 2020 11:29:06 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id E054F2A3B13
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
+        dafna3@gmail.com, sakari.ailus@linux.intel.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org
+Subject: [PATCH v2 0/4] media: staging: rkisp1: bugs fixes and vars renames
+Date:   Tue,  9 Jun 2020 17:28:21 +0200
+Message-Id: <20200609152825.24772-1-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 19/03/2020 02:38, Laurent Pinchart wrote:
-> On Thu, Mar 19, 2020 at 04:37:44AM +0200, Laurent Pinchart wrote:
->> Hi Niklas,
->>
->> Thank you for the patch.
->>
->> On Wed, Mar 18, 2020 at 10:30:47PM +0100, Niklas Söderlund wrote:
->>> Add a flags field to the media_device_info structure by taking one
->>> of the reserved u32 fields. The use-case is to have a way to
->>> (optionally) report to user-space if the media graph is complete or not.
->>>
->>> Also define two flags to carry information about if the graph is
->>> complete or not. If neither of the two flags are set the
->>> media device does not support reporting its graph status. The other bits
->>> in the flags field are unused for now, but could be claimed to carry
->>> other type of information in the future.
->>>
->>> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
->>> ---
->>>  include/uapi/linux/media.h | 9 ++++++++-
->>>  1 file changed, 8 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
->>> index 383ac7b7d8f07eca..9b37ed8b41d0d866 100644
->>> --- a/include/uapi/linux/media.h
->>> +++ b/include/uapi/linux/media.h
->>> @@ -34,9 +34,16 @@ struct media_device_info {
->>>  	__u32 media_version;
->>>  	__u32 hw_revision;
->>>  	__u32 driver_version;
->>> -	__u32 reserved[31];
->>> +	__u32 flags;
->>> +	__u32 reserved[30];
->>
->> I think this information should be added to media_v2_topology, not
->> media_device_info, otherwise you'll have a race condition between
->> retrieving the media device information and the topology.
->> media_device_info is really supposed to be static.
-> 
-> Also, documentation is needed.
-> 
->>>  };
->>>  
->>> +/*
->>> + * Graph flags
->>> + */
->>> +#define MEDIA_INFO_FLAG_INCOMPLETE	(1 << 0)
->>> +#define MEDIA_INFO_FLAG_COMPLETE	(1 << 1)
+The first two patches in this patchset are two bug fixes related to the enumeration and
+settings of the sink format of the resizer entity.
+The two other patches are renaming of macros and the variables.
 
-Isn't this boolean, and therefore wouldn't a single flag be sufficient?
-or do you expect there to be some in-between state where neither of
-these flags would be set.
+changes from v1:
+- added "Fixes: 56e3b29f9f6b "media: staging: rkisp1: add streaming paths"
+to the commit log of the first two patches.
+- added two patches. One patch rename the macros "RKISP1_DIR_*"
+to "RKISP1_ISP_SD_*", another that rename the field 'direction'
+in 'struct rkisp1_isp_mbus_info' to 'isp_pads_flags'
 
---
-Kieran
+Dafna Hirschfeld (4):
+  media: staging: rkisp1: rsz: supported formats are the isp's src
+    formats, not sink formats
+  media: staging: rkisp1: rsz: set default format if the given format is
+    not RKISP1_DIR_SRC
+  media: staging: rkisp1: rename macros 'RKISP1_DIR_*' to
+    'RKISP1_ISP_SD_*'
+  media: staging: rkisp1: rename the field 'direction' in
+    'rkisp1_isp_mbus_info' to 'isp_pads_flags'
 
+ drivers/staging/media/rkisp1/rkisp1-common.h  |  6 ++-
+ drivers/staging/media/rkisp1/rkisp1-isp.c     | 50 +++++++++----------
+ drivers/staging/media/rkisp1/rkisp1-resizer.c |  6 +--
+ 3 files changed, 31 insertions(+), 31 deletions(-)
 
->>> +
->>>  /*
->>>   * Base number ranges for entity functions
->>>   *
-> 
+-- 
+2.17.1
 
