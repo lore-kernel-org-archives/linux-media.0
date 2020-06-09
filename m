@@ -2,368 +2,137 @@ Return-Path: <SRS0=lba3=7W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21E2BC433E1
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 11:59:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CD65C433DF
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 12:00:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC68220812
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 11:59:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36FA920812
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 12:00:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="yyF85fTy"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="siAhLnZI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729196AbgFIL7W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Jun 2020 07:59:22 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:57814 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729052AbgFIL6t (ORCPT
+        id S1728796AbgFIMAG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Jun 2020 08:00:06 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:53593 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727903AbgFIMAF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 9 Jun 2020 07:58:49 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 059Br3pF027369;
-        Tue, 9 Jun 2020 13:58:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=+299Rt35y65guLJlSkAwB9xzVJMA7vgquxOWfqyq5+E=;
- b=yyF85fTyjiFPIsiaPJ0WPXCR6pRNq+cpfBCzbpg/6/bIu+673gl1HqAtCRmUn4CfP/qJ
- A6fM0fxN4k88BY8yiUWcfcEN/hd7DFwERGZeQQPBKSKQaxmKlrWV/ynZ7P9DcOg5ZkJz
- EJ6h6wBhth9gRxjrOmkxEC2F1KEK2h1RkFlPmgRsnSm7MNoKj8in2bkI7GoRKpxj6jf/
- Bqgv6rdUKYfENmCnvknY2Sq0rKy6IEc51MklPS7fr2lew0apkzwvivDpgpIP218CeCX8
- XBzf1lMPUEbu7DZj81gvcetEE3DONKHPnu2UIsDbPl7xL4N4pL8kIJsM0SyJPVJ9p214 Hg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 31h8ku8srx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Jun 2020 13:58:31 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0B9A910002A;
-        Tue,  9 Jun 2020 13:58:31 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id ECD692ACA01;
-        Tue,  9 Jun 2020 13:58:30 +0200 (CEST)
-Received: from localhost (10.75.127.50) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 9 Jun 2020 13:58:30
- +0200
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <hugues.fruchet@st.com>, <mchehab@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <vincent.guittot@linaro.org>,
-        <valentin.schneider@arm.com>, <rjw@rjwysocki.net>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH v5 2/3] media: stm32-dcmi: Set minimum cpufreq requirement
-Date:   Tue, 9 Jun 2020 13:58:24 +0200
-Message-ID: <20200609115825.10748-3-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
-In-Reply-To: <20200609115825.10748-1-benjamin.gaignard@st.com>
-References: <20200609115825.10748-1-benjamin.gaignard@st.com>
+        Tue, 9 Jun 2020 08:00:05 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id icv8jYwBtCKzeicvCjrB6T; Tue, 09 Jun 2020 14:00:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1591704002; bh=3ecFIY/XYufh0xO3+60Kog3lmNXGTQHqQpTGAYffZto=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=siAhLnZI/sgI20Qr6qu/sgWu8jGyKhfYLHOHop8QbvKUwkqr39Ix67CayRalbR4ur
+         e2Hw0EfbdP4PsbV9J2JlDH0rK0emiAK61SfdZcz9M2bLQc7Vv0DFaN28BnUmFYjI9S
+         EnnJa3s3x0IwR3Jv56YyOiWaj3qJyfLoYt2LFreeSmxIJCmFN+PFclHABXAjClbVeh
+         q018oiMCU2QMWNIrHn1p1K1/cLWo+w04TMGia1qtWJ2qtp361WXc8oCXPHMoBRH9tR
+         IH4zS/x1otZLnKNExpiTClf2bCs0x+c4rF8RdTgveRcxQjoZLWMEqJLgDqajTWudgp
+         FT9Wu31ZrUH7w==
+Subject: Re: [RFC] docs: dev-decoder: Add two more reasons for dynamic change
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+References: <20200430113809.14872-1-stanimir.varbanov@linaro.org>
+ <3052f24c-18ee-1c7d-111b-ffe15ca71fcb@xs4all.nl>
+ <dab8ac0c-3d9b-dc31-5880-8eacce948a0b@linaro.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <738dfcca-d391-6491-1217-6f5bad1398eb@xs4all.nl>
+Date:   Tue, 9 Jun 2020 13:59:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-09_03:2020-06-09,2020-06-09 signatures=0
+In-Reply-To: <dab8ac0c-3d9b-dc31-5880-8eacce948a0b@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfEqa+W25IvP4P8B9HwSMuQ7PScZ2JNt8863mPDR0MnHyrbfB3NCbVNfMlFvu1sExNwxQ4xJGV2gq1uHr64rrVnNIyktmKORBrnknJ3OnsOGtwUoz0Yeo
+ 0TWtk+ekkG5S+2rRoYZyIHyGvD7iZNIQ05Sr5CcrU5HGB1HWLJhCk0/1tjHahYP56cqZ0+J2wV6u1fm3bLVXBZiGi2OxBT0wPh5snXwnRunzireKKTWcvcJT
+ oXBHN5k2ONvNmT9fWdmzopxFfZMl8KPxiBD2nrH5UTSKCaS3amxdEy2Bw5gU76o6Wp13f9JG0yUQUDQX8UmyxQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Before start streaming set cpufreq minimum frequency requirement.
-The cpufreq governor will adapt the frequencies and we will have
-no latency for handling interrupts.
-The frequency requirement is retrieved from the device-tree node.
+On 09/06/2020 11:44, Stanimir Varbanov wrote:
+> Hi Hans,
+> 
+> On 5/26/20 1:26 PM, Hans Verkuil wrote:
+>> On 30/04/2020 13:38, Stanimir Varbanov wrote:
+>>> Here we add two more reasons for dynamic-resolution-change state
+>>> (I think the name is misleading espesially "resolution" word, maybe
+>>
+>> espesially -> especially
+>>
+>>> dynamic-bitstream-change is better to describe).
+>>>
+>>> The first one which could change in the middle of the stream is the
+>>> bit-depth. For worst example the stream is 8bit at the begging but
+>>> later in the bitstream it changes to 10bit. That change should be
+>>> propagated to the client so that it can take appropriate  action. In
+>>> this case most probably it has to stop the streaming on the capture
+>>> queue and re-negotiate the pixel format and start the streaming
+>>> again.
+>>>
+>>> The second new reason is colorspace change. I'm not sure what action
+>>> client should take but at least it should be notified for such change.
+>>> One possible action is to notify the display entity that the colorspace
+>>> and its parameters (y'cbcr encoding and so on) has been changed.
+>>>
+>>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+>>> ---
+>>>  Documentation/userspace-api/media/v4l/dev-decoder.rst | 6 +++++-
+>>>  1 file changed, 5 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/userspace-api/media/v4l/dev-decoder.rst b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+>>> index 606b54947e10..bf10eda6125c 100644
+>>> --- a/Documentation/userspace-api/media/v4l/dev-decoder.rst
+>>> +++ b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+>>> @@ -906,7 +906,11 @@ reflected by corresponding queries):
+>>>  
+>>>  * visible resolution (selection rectangles),
+>>>  
+>>> -* the minimum number of buffers needed for decoding.
+>>> +* the minimum number of buffers needed for decoding,
+>>> +
+>>> +* bit-depth of the bitstream has been changed,
+>>> +
+>>> +* colorspace (and its properties) has been changed.
+>>
+>> For this I want to have a new source change flag:
+>>
+>> V4L2_EVENT_SRC_CH_COLORIMETRY
+>>
+>> Changing colorimetry without changing resolution/bit depth does not
+>> require buffers to be re-allocated, it just changes how the pixel
+>> data is interpreted w.r.t. color. And that is important to know.
+> 
+> I'm going to create a patch for this event, but I started to wonder do
+> we need new buffer flag for this?
+> 
+> Something like below sequence:
+> 
+>  - client receive SRC_CH_COLORIMETRY event
+>  - client issue G_FMT(CAPTURE queue)
+>  - at that point the client has to know the last buffer with previous
+> colorimetry and thus the buffer with new colorimetry
+> 
+> How the client will know the buffer with new colorimetry?
+> 
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
----
-version 5:
-- add a mutex to protect dcmi_irq_notifier_notify()
-- register notifier a probe time
+You still need to drain the capture queue, so only after draining and a
+V4L2_DEC_CMD_START (or a STREAMOFF/ON pair) will the new colorimetry become
+active. But the big difference with CH_RESOLUTION is that no new capture
+buffers have to be allocated for just a colorimetry change.
 
-version 4:
-- simplify irq affinity handling by using only dcmi_irq_notifier_notify() 
+Regards,
 
-version 3:
-- add a cpumask field to track boosted CPUs
-- add irq_affinity_notify callback
-- protect cpumask field with a mutex 
-
- drivers/media/platform/stm32/stm32-dcmi.c | 137 ++++++++++++++++++++++++++++--
- 1 file changed, 129 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index b8931490b83b..68e2be0bcd26 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -13,10 +13,13 @@
- 
- #include <linux/clk.h>
- #include <linux/completion.h>
-+#include <linux/cpufreq.h>
-+#include <linux/cpumask.h>
- #include <linux/delay.h>
- #include <linux/dmaengine.h>
- #include <linux/init.h>
- #include <linux/interrupt.h>
-+#include <linux/irq.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -99,6 +102,8 @@ enum state {
- 
- #define OVERRUN_ERROR_THRESHOLD	3
- 
-+static DEFINE_PER_CPU(struct freq_qos_request, qos_req);
-+
- struct dcmi_graph_entity {
- 	struct v4l2_async_subdev asd;
- 
-@@ -133,6 +138,7 @@ struct stm32_dcmi {
- 	struct resource			*res;
- 	struct reset_control		*rstc;
- 	int				sequence;
-+	int				irq;
- 	struct list_head		buffers;
- 	struct dcmi_buf			*active;
- 
-@@ -173,6 +179,12 @@ struct stm32_dcmi {
- 	struct media_device		mdev;
- 	struct media_pad		vid_cap_pad;
- 	struct media_pipeline		pipeline;
-+
-+	struct mutex			freq_lock;
-+	u32				min_frequency;
-+	u32				targeted_frequency;
-+	cpumask_var_t			boosted;
-+	struct irq_affinity_notify	notify;
- };
- 
- static inline struct stm32_dcmi *notifier_to_dcmi(struct v4l2_async_notifier *n)
-@@ -722,6 +734,92 @@ static void dcmi_pipeline_stop(struct stm32_dcmi *dcmi)
- 	dcmi_pipeline_s_stream(dcmi, 0);
- }
- 
-+static void dcmi_get_min_frequency(struct stm32_dcmi *dcmi)
-+{
-+	struct device_node *np = dcmi->mdev.dev->of_node;
-+
-+	dcmi->min_frequency = FREQ_QOS_MIN_DEFAULT_VALUE;
-+	dcmi->targeted_frequency = FREQ_QOS_MIN_DEFAULT_VALUE;
-+
-+	of_property_read_u32(np, "st,stm32-dcmi-min-frequency",
-+			     &dcmi->min_frequency);
-+}
-+
-+static void dcmi_irq_notifier_notify(struct irq_affinity_notify *notify,
-+				     const cpumask_t *mask)
-+{
-+	struct stm32_dcmi *dcmi = container_of(notify,
-+					       struct stm32_dcmi,
-+					       notify);
-+	struct cpufreq_policy *p;
-+	int cpu;
-+
-+	mutex_lock(&dcmi->freq_lock);
-+	/*
-+	 * For all boosted CPUs check if it is still the case
-+	 * if not remove the request
-+	 */
-+	for_each_cpu(cpu, dcmi->boosted) {
-+		if (cpumask_test_cpu(cpu, mask))
-+			continue;
-+
-+		p = cpufreq_cpu_get(cpu);
-+		if (!p)
-+			continue;
-+
-+		freq_qos_remove_request(&per_cpu(qos_req, cpu));
-+		cpumask_andnot(dcmi->boosted, dcmi->boosted, p->cpus);
-+
-+		cpufreq_cpu_put(p);
-+	}
-+
-+	/*
-+	 * For CPUs in the mask check if they are boosted if not add
-+	 * a request
-+	 */
-+	for_each_cpu(cpu, mask) {
-+		if (cpumask_test_cpu(cpu, dcmi->boosted))
-+			continue;
-+
-+		p = cpufreq_cpu_get(cpu);
-+		if (!p)
-+			continue;
-+
-+		freq_qos_add_request(&p->constraints, &per_cpu(qos_req, cpu),
-+				     FREQ_QOS_MIN, dcmi->targeted_frequency);
-+		cpumask_or(dcmi->boosted, dcmi->boosted, p->cpus);
-+		cpufreq_cpu_put(p);
-+	}
-+
-+	mutex_unlock(&dcmi->freq_lock);
-+}
-+
-+static void dcmi_irq_notifier_release(struct kref *ref)
-+{
-+	/*
-+	 * This is required by affinity notifier. We don't have anything to
-+	 * free here.
-+	 */
-+}
-+
-+static void dcmi_set_min_frequency(struct stm32_dcmi *dcmi, s32 freq)
-+{
-+	struct irq_affinity_notify *notify = &dcmi->notify;
-+	struct cpumask clear;
-+
-+	mutex_lock(&dcmi->freq_lock);
-+	dcmi->targeted_frequency = freq;
-+	mutex_unlock(&dcmi->freq_lock);
-+
-+	if (freq) {
-+		dcmi_irq_notifier_notify(notify,
-+					 irq_get_affinity_mask(dcmi->irq));
-+	} else {
-+		cpumask_clear(&clear);
-+		dcmi_irq_notifier_notify(notify, &clear);
-+	}
-+}
-+
- static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- {
- 	struct stm32_dcmi *dcmi = vb2_get_drv_priv(vq);
-@@ -736,11 +834,13 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 		goto err_release_buffers;
- 	}
- 
-+	dcmi_set_min_frequency(dcmi, dcmi->min_frequency);
-+
- 	ret = media_pipeline_start(&dcmi->vdev->entity, &dcmi->pipeline);
- 	if (ret < 0) {
- 		dev_err(dcmi->dev, "%s: Failed to start streaming, media pipeline start error (%d)\n",
- 			__func__, ret);
--		goto err_pm_put;
-+		goto err_drop_qos;
- 	}
- 
- 	ret = dcmi_pipeline_start(dcmi);
-@@ -835,7 +935,8 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- err_media_pipeline_stop:
- 	media_pipeline_stop(&dcmi->vdev->entity);
- 
--err_pm_put:
-+err_drop_qos:
-+	dcmi_set_min_frequency(dcmi, FREQ_QOS_MIN_DEFAULT_VALUE);
- 	pm_runtime_put(dcmi->dev);
- 
- err_release_buffers:
-@@ -863,6 +964,8 @@ static void dcmi_stop_streaming(struct vb2_queue *vq)
- 
- 	media_pipeline_stop(&dcmi->vdev->entity);
- 
-+	dcmi_set_min_frequency(dcmi, FREQ_QOS_MIN_DEFAULT_VALUE);
-+
- 	spin_lock_irq(&dcmi->irqlock);
- 
- 	/* Disable interruptions */
-@@ -1834,11 +1937,11 @@ static int dcmi_probe(struct platform_device *pdev)
- 	struct device_node *np = pdev->dev.of_node;
- 	const struct of_device_id *match = NULL;
- 	struct v4l2_fwnode_endpoint ep = { .bus_type = 0 };
-+	struct irq_affinity_notify *notify;
- 	struct stm32_dcmi *dcmi;
- 	struct vb2_queue *q;
- 	struct dma_chan *chan;
- 	struct clk *mclk;
--	int irq;
- 	int ret = 0;
- 
- 	match = of_match_device(of_match_ptr(stm32_dcmi_of_match), &pdev->dev);
-@@ -1879,9 +1982,9 @@ static int dcmi_probe(struct platform_device *pdev)
- 	dcmi->bus.bus_width = ep.bus.parallel.bus_width;
- 	dcmi->bus.data_shift = ep.bus.parallel.data_shift;
- 
--	irq = platform_get_irq(pdev, 0);
--	if (irq <= 0)
--		return irq ? irq : -ENXIO;
-+	dcmi->irq = platform_get_irq(pdev, 0);
-+	if (dcmi->irq <= 0)
-+		return dcmi->irq ? dcmi->irq : -ENXIO;
- 
- 	dcmi->res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (!dcmi->res) {
-@@ -1895,11 +1998,12 @@ static int dcmi_probe(struct platform_device *pdev)
- 		return PTR_ERR(dcmi->regs);
- 	}
- 
--	ret = devm_request_threaded_irq(&pdev->dev, irq, dcmi_irq_callback,
-+	ret = devm_request_threaded_irq(&pdev->dev, dcmi->irq,
-+					dcmi_irq_callback,
- 					dcmi_irq_thread, IRQF_ONESHOT,
- 					dev_name(&pdev->dev), dcmi);
- 	if (ret) {
--		dev_err(&pdev->dev, "Unable to request irq %d\n", irq);
-+		dev_err(&pdev->dev, "Unable to request irq %d\n", dcmi->irq);
- 		return ret;
- 	}
- 
-@@ -1922,6 +2026,7 @@ static int dcmi_probe(struct platform_device *pdev)
- 	spin_lock_init(&dcmi->irqlock);
- 	mutex_init(&dcmi->lock);
- 	mutex_init(&dcmi->dma_lock);
-+	mutex_init(&dcmi->freq_lock);
- 	init_completion(&dcmi->complete);
- 	INIT_LIST_HEAD(&dcmi->buffers);
- 
-@@ -1930,6 +2035,15 @@ static int dcmi_probe(struct platform_device *pdev)
- 	dcmi->state = STOPPED;
- 	dcmi->dma_chan = chan;
- 
-+	if (!alloc_cpumask_var(&dcmi->boosted, GFP_KERNEL))
-+		return -ENODEV;
-+
-+	notify = &dcmi->notify;
-+	notify->notify = dcmi_irq_notifier_notify;
-+	notify->release = dcmi_irq_notifier_release;
-+	if (irq_set_affinity_notifier(dcmi->irq, notify))
-+		return -EINVAL;
-+
- 	q = &dcmi->queue;
- 
- 	dcmi->v4l2_dev.mdev = &dcmi->mdev;
-@@ -2022,6 +2136,8 @@ static int dcmi_probe(struct platform_device *pdev)
- 
- 	dev_info(&pdev->dev, "Probe done\n");
- 
-+	dcmi_get_min_frequency(dcmi);
-+
- 	platform_set_drvdata(pdev, dcmi);
- 
- 	pm_runtime_enable(&pdev->dev);
-@@ -2039,6 +2155,7 @@ static int dcmi_probe(struct platform_device *pdev)
- err_media_device_cleanup:
- 	media_device_cleanup(&dcmi->mdev);
- 	dma_release_channel(dcmi->dma_chan);
-+	irq_set_affinity_notifier(dcmi->irq, NULL);
- 
- 	return ret;
- }
-@@ -2049,6 +2166,10 @@ static int dcmi_remove(struct platform_device *pdev)
- 
- 	pm_runtime_disable(&pdev->dev);
- 
-+	irq_set_affinity_notifier(dcmi->irq, NULL);
-+
-+	free_cpumask_var(dcmi->boosted);
-+
- 	v4l2_async_notifier_unregister(&dcmi->notifier);
- 	v4l2_async_notifier_cleanup(&dcmi->notifier);
- 	media_entity_cleanup(&dcmi->vdev->entity);
--- 
-2.15.0
-
+	Hans
