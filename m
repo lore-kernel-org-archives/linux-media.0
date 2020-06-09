@@ -2,125 +2,74 @@ Return-Path: <SRS0=lba3=7W=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5633BC433E0
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 10:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40FA0C433E0
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 11:09:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 31E212078D
-	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 10:50:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19FE1207ED
+	for <linux-media@archiver.kernel.org>; Tue,  9 Jun 2020 11:09:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YcyHykJc"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HlftRkd+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728055AbgFIKua (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Jun 2020 06:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S1728481AbgFILJO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Jun 2020 07:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726918AbgFIKre (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Jun 2020 06:47:34 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B686C08C5C4
-        for <linux-media@vger.kernel.org>; Tue,  9 Jun 2020 03:47:33 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id mb16so21824512ejb.4
-        for <linux-media@vger.kernel.org>; Tue, 09 Jun 2020 03:47:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=p+3qxG4IVGjzzVjW9GQuIsYW/5Su4XmyAq4tUI3f9kc=;
-        b=YcyHykJcGW6dvg5l+6eVeEGZXy3JVntamLO7FbHdJOBvI8KQWdvEYbRjXwsYElyby9
-         Ed/vzFhjeBRCMCvh4PDj/Nj8oWxpFlXwRtAyUw+ZnFPaXzn3b0mqjE7LamQ0gCRi2epp
-         LiKPhT51jkXhhik1ICQ06wB/qfHgHprjhxvAJI02yGbDt9zuZhx5NmCyLqUhr5aZbC7m
-         6iV2TFgRU+862dqtrw52VFrT8PGgNFAyVYkxSv4o3/crC4qBT6SdFyyoor9/dTTS+1V+
-         TNQ2fLUQD8hyTkb3jo+DLaYhB56HCMzDNN6NQ4QywZ2z/eeUd+hlNKcpi5XMx7ozmrfO
-         ZRHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=p+3qxG4IVGjzzVjW9GQuIsYW/5Su4XmyAq4tUI3f9kc=;
-        b=HbrhbNlaKPHJwZw9egRTIxUTwBG5hQSAvBu51fZp2AXH1GeC0fNUZQCtK0g9uCeLAp
-         zDeqCzMm4IpiOI3oe4QVEIFduSRsEX3qb952eKLIW+IdxUCxeupzByYDoGXcmNGFEdQS
-         Hud789pGfXaNSFekX1LcL3MTlyghn02q+bEE7CKsEx59i+hlikwULbRqz4+7xXa6PvAY
-         AnwxYKnx/EDqTIGFgmp4gQ75D2PPF/8ziBB1gKIWLjbTXtUADxgjfz+On5tvVQ+koYjb
-         bPUAaT42zQKF32MklFKDn+KPZeZB5kJ3nRJZRmZrYopRJqQY7qCU001tuzDj7DDoj6na
-         QN8g==
-X-Gm-Message-State: AOAM532t/khAHAA8IWCdD2FMoD1hxVttHP8/3Pr8XbV5mWfCGzO0IjnQ
-        uuDIi4dJV1i4rFuU5FHKXuIWcw==
-X-Google-Smtp-Source: ABdhPJwOKge6Hzbdo61zDo+biArgiANhUoagULJsDuRSfbmyRyi170/EUHj7g5antha/fljvEu9kYw==
-X-Received: by 2002:a17:906:3483:: with SMTP id g3mr24541480ejb.373.1591699650514;
-        Tue, 09 Jun 2020 03:47:30 -0700 (PDT)
-Received: from localhost.localdomain (hst-221-69.medicom.bg. [84.238.221.69])
-        by smtp.gmail.com with ESMTPSA id qt19sm12267763ejb.14.2020.06.09.03.47.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 03:47:29 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S1728338AbgFILJG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Jun 2020 07:09:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760DDC05BD1E;
+        Tue,  9 Jun 2020 04:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jzlGHVTHxHocaBNnVtWkIwZrj7yO/ADtEgfhe970dr4=; b=HlftRkd+efYJpZYlbgE32i9wn+
+        7aRy9RCVjvkXe262spiOpmcVXldxbLW7/W5eyOq9mvWooSAG/hcztag1XNy4s0gXBYEIv1gcOoyO2
+        zrBjMdqcH5Ek+oSdQdd1dejxY3IBaOgYUPrTAHFhJx3IFdrGCMnlGCyfXq1w2U14RudltTDExUbsr
+        GJSNOz4/zHKBwH0/gwBkkf+NO7Bbshuq3RFwe0ldmA0t2uoKvfBHPU+aOG9td0tWJoKfJiPGF00pV
+        watWjdSNArWtDhX0Mbr9Ujl7T3aHwjfpHvsF+t7bDMIvuVOhuPRWBCvr+RlgBosN86SBvFV+IFiGN
+        ZxdQjVhw==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jic7q-0008MC-0t; Tue, 09 Jun 2020 11:09:02 +0000
+Date:   Tue, 9 Jun 2020 04:09:01 -0700
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-btrfs@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Joe Perches <joe@perches.com>,
+        netdev@vger.kernel.org, Joe Perches <joe@perches.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jason Baron <jbaron@akamai.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v3 0/7] Venus dynamic debug
-Date:   Tue,  9 Jun 2020 13:45:57 +0300
-Message-Id: <20200609104604.1594-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH v3 1/7] Documentation: dynamic-debug: Add description of
+ level bitmask
+Message-ID: <20200609110901.GZ19604@bombadil.infradead.org>
+References: <20200609104604.1594-1-stanimir.varbanov@linaro.org>
+ <20200609104604.1594-2-stanimir.varbanov@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200609104604.1594-2-stanimir.varbanov@linaro.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+On Tue, Jun 09, 2020 at 01:45:58PM +0300, Stanimir Varbanov wrote:
+> +level
+> +    The given level will be a bitmask ANDed with the level of the each ``pr_debug()``
+> +    callsite. This will allow to group debug messages and show only those of the
+> +    same level.  The -p flag takes precedence over the given level. Note that we can
+> +    have up to five groups of debug messages.
 
-Here is the third version of dynamic debug improvements in Venus
-driver.  As has been suggested on previous version by Joe [1] I've
-made the relevant changes in dynamic debug core to handle leveling
-as more generic way and not open-code/workaround it in the driver.
+That doesn't sound like a "level".  printk has levels.  If you ask for
+"level 3" messages, you get messages from levels 0, 1, 2, and 3.  These
+seem like "types" or "groups" or something.
 
-About changes:
- - added change in the dynamic_debug and in documentation
- - added respective pr_debug_level and dev_dbg_level
-
-regards,
-Stan
-
-[1] https://lkml.org/lkml/2020/5/21/668
-
-Stanimir Varbanov (7):
-  Documentation: dynamic-debug: Add description of level bitmask
-  dynamic_debug: Group debug messages by level bitmask
-  dev_printk: Add dev_dbg_level macro over dynamic one
-  printk: Add pr_debug_level macro over dynamic one
-  venus: Add debugfs interface to set firmware log level
-  venus: Make debug infrastructure more flexible
-  venus: Add a debugfs file for SSR trigger
-
- .../admin-guide/dynamic-debug-howto.rst       | 10 +++
- drivers/media/platform/qcom/venus/Makefile    |  2 +-
- drivers/media/platform/qcom/venus/core.c      |  5 ++
- drivers/media/platform/qcom/venus/core.h      |  8 +++
- drivers/media/platform/qcom/venus/dbgfs.c     | 57 +++++++++++++++++
- drivers/media/platform/qcom/venus/dbgfs.h     | 12 ++++
- drivers/media/platform/qcom/venus/helpers.c   |  2 +-
- drivers/media/platform/qcom/venus/hfi_msgs.c  | 30 ++++-----
- drivers/media/platform/qcom/venus/hfi_venus.c | 27 ++++++--
- .../media/platform/qcom/venus/pm_helpers.c    |  3 +-
- drivers/media/platform/qcom/venus/vdec.c      | 63 +++++++++++++++++--
- drivers/media/platform/qcom/venus/venc.c      |  4 ++
- fs/btrfs/ctree.h                              | 12 ++--
- include/linux/acpi.h                          |  3 +-
- include/linux/dev_printk.h                    | 12 +++-
- include/linux/dynamic_debug.h                 | 55 +++++++++++-----
- include/linux/net.h                           |  3 +-
- include/linux/printk.h                        |  9 ++-
- lib/dynamic_debug.c                           | 30 +++++++++
- 19 files changed, 289 insertions(+), 58 deletions(-)
- create mode 100644 drivers/media/platform/qcom/venus/dbgfs.c
- create mode 100644 drivers/media/platform/qcom/venus/dbgfs.h
-
--- 
-2.17.1
-
+> +  // enable all messages in file with 0x01 level bitmask
+> +  nullarbor:~ # echo -n 'file foo.c level 0x01 +p' >
+> +                                <debugfs>/dynamic_debug/control
