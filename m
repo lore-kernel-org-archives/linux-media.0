@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02ED0C433DF
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 06:03:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8088C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 06:03:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D39DB2081A
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 06:02:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1E0620801
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 06:03:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="SfrZUwq0"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="pbejqEq1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbgFJGCt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Jun 2020 02:02:49 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:11205 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726112AbgFJGCp (ORCPT
+        id S1726316AbgFJGDA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Jun 2020 02:03:00 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:6094 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726251AbgFJGCt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Jun 2020 02:02:45 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ee077290002>; Tue, 09 Jun 2020 23:01:13 -0700
+        Wed, 10 Jun 2020 02:02:49 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ee0775b0000>; Tue, 09 Jun 2020 23:02:03 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 09 Jun 2020 23:02:45 -0700
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 09 Jun 2020 23:02:48 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 09 Jun 2020 23:02:45 -0700
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL101.nvidia.com
+        by hqpgpgate101.nvidia.com on Tue, 09 Jun 2020 23:02:48 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL101.nvidia.com
  (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 10 Jun
- 2020 06:02:45 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 10 Jun 2020 06:02:44 +0000
+ 2020 06:02:48 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 10 Jun 2020 06:02:48 +0000
 Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.167.70]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5ee077840000>; Tue, 09 Jun 2020 23:02:44 -0700
+        id <B5ee077870000>; Tue, 09 Jun 2020 23:02:47 -0700
 From:   Sowjanya Komatineni <skomatineni@nvidia.com>
 To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
         <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
@@ -46,9 +46,9 @@ CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
         <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-Subject: [RFC PATCH v1 02/18] arm64: tegra: Add missing clocks and power-domains to Tegra210 VI I2C
-Date:   Tue, 9 Jun 2020 23:02:24 -0700
-Message-ID: <1591768960-31648-3-git-send-email-skomatineni@nvidia.com>
+Subject: [RFC PATCH v1 07/18] media: tegra-video: Fix channel format alignment
+Date:   Tue, 9 Jun 2020 23:02:29 -0700
+Message-ID: <1591768960-31648-8-git-send-email-skomatineni@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1591768960-31648-1-git-send-email-skomatineni@nvidia.com>
 References: <1591768960-31648-1-git-send-email-skomatineni@nvidia.com>
@@ -56,51 +56,67 @@ X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1591768873; bh=aZpfEHCdQO79JYgaC0ZbsOUqg2JPUB+AZNA7nau630I=;
+        t=1591768923; bh=8GJbUvoTqNXQhoilqMQO06MgCPv5IgO6eahUeR7/0ig=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:X-NVConfidentiality:MIME-Version:
          Content-Type;
-        b=SfrZUwq0QbUFnEh+2mW1hBfrysLvlhF6RwRmdezH1QkEG85lHpyROhUwiWDqf8W+r
-         GSHBw33OCuWGt072Nnz8stoyMkm4/UsdmTELHQWpHGKepSOWdrA64J9OoHAnCNwxQn
-         D2oswMmu2yF76RaSkKE9KZpwyPQ2lPR53JpZFJ6gh3F16O8XebkaOJ7ys5q/6IIeTH
-         Qouz8I7d5qgwqaoeae4xKtSAPCPJteqyP1M2NFXlK1x3rC/R2oMqGS1WgbQzI+xflS
-         O5RXCIlXaBcckNbC1AfFoW4P8EKdB5rTIodjA2wCDTFiD8Un8yNoUdC0FYeyd1TJQN
-         MT7oWQNjPtAlg==
+        b=pbejqEq1pq31KzLzJ/BnpGUQSpGRX3kiKwRtDSyFNjxMx2bWJZCoRynik19X8Eo+N
+         SE0fFIHiGkxfgcnfbJ8s42EkUjVAlHInPXIx6Hv1Ean21ghAEoDwsMJsTXitbeuPoq
+         8RoHlGMhjAveHXUQ+ic3800PIaBZV1mSGlCw9z+Nl1iJxlwrzcIucGwJQCaHHqDfxK
+         alwAekJbgXRDMvuAYRZMR7WGhRmIFb02b3qKt0fQd+qPCVhnCoS3cZ5YdVh3JN4x8a
+         9J4b4oVZB0su9+0acnNE8hr2UFTmoB8AbTjZP200O+09uWESf2tEvZQZgW78UXllO8
+         c5MUQF7Rz6+jw==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Tegra210 VI I2C is in VE power domain and i2c-vi node should have
-power-domains property.
+Pixel format width is mistakenly aligned to surface align bytes
+and altering width to aligned value may force sensor mode change
+other than the requested one and also cause mismatch in width
+programmed between sensor and vi which can lead to capture errors.
 
-Current Tegra210 i2c-vi device node is missing both VI I2C clocks
-and power-domains property.
-
-This patch adds them.
+This patch removes width alignment and clamps width as per Tegra
+minimum and maximum limits.
 
 Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 ---
- arch/arm64/boot/dts/nvidia/tegra210.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/staging/media/tegra-video/vi.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-index 0865508..3a4ed10 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-@@ -376,6 +376,12 @@
- 			compatible = "nvidia,tegra210-i2c-vi";
- 			reg = <0x0 0x546c0000 0x0 0x00040000>;
- 			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&tegra_car TEGRA210_CLK_VI_I2C>,
-+				 <&tegra_car TEGRA210_CLK_I2CSLOW>;
-+			clock-names = "div-clk", "slow";
-+			resets = <&tegra_car TEGRA210_CLK_VI_I2C>;
-+			reset-names = "i2c";
-+			power-domains = <&pd_venc>;
- 			status = "disabled";
- 		};
- 	};
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index 1b5e660..d621ebc 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -359,25 +359,15 @@ static void tegra_channel_fmt_align(struct tegra_vi_channel *chan,
+ 				    struct v4l2_pix_format *pix,
+ 				    unsigned int bpp)
+ {
+-	unsigned int align;
+-	unsigned int min_width;
+-	unsigned int max_width;
+-	unsigned int width;
+ 	unsigned int min_bpl;
+ 	unsigned int max_bpl;
+ 	unsigned int bpl;
+ 
+ 	/*
+-	 * The transfer alignment requirements are expressed in bytes. Compute
+-	 * minimum and maximum values, clamp the requested width and convert
+-	 * it back to pixels. Use bytesperline to adjust the width.
++	 * The transfer alignment requirements are expressed in bytes.
++	 * Clamp the requested width and height to the limits.
+ 	 */
+-	align = lcm(SURFACE_ALIGN_BYTES, bpp);
+-	min_width = roundup(TEGRA_MIN_WIDTH, align);
+-	max_width = rounddown(TEGRA_MAX_WIDTH, align);
+-	width = roundup(pix->width * bpp, align);
+-
+-	pix->width = clamp(width, min_width, max_width) / bpp;
++	pix->width = clamp(pix->width, TEGRA_MIN_WIDTH, TEGRA_MAX_WIDTH);
+ 	pix->height = clamp(pix->height, TEGRA_MIN_HEIGHT, TEGRA_MAX_HEIGHT);
+ 
+ 	/* Clamp the requested bytes per line value. If the maximum bytes per
 -- 
 2.7.4
 
