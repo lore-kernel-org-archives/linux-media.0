@@ -2,112 +2,124 @@ Return-Path: <SRS0=cH4w=7X=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD5C8C433E0
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 12:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1186DC433DF
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 12:26:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 84DDD206F4
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 12:25:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="lK9774uv"
+	by mail.kernel.org (Postfix) with ESMTP id DC6D6206F4
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 12:26:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1591792014;
+	bh=PBnbsD1r4hBJSwpcdPlA8plwD/kWkJiD61twepTwXNE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=uusuGGS9pMfC8c/3kllrlqLu6GsEi4HyFU7xK1/03eYaTDcqYA8lo5G5eAuNw8usP
+	 Tb1aiFXSXr42Gf/wBAHNq21Rs0bHNeN75YN9bowFDzcmNUIhaCslIIVryGen5+Q8kN
+	 3zCfDkTdwfWndqQvy2l+n6XVxD+b9FC5Er7OkSug=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728981AbgFJMZU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Jun 2020 08:25:20 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:3998 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728973AbgFJMZU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Jun 2020 08:25:20 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05ACI8aY011853;
-        Wed, 10 Jun 2020 14:25:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=zWShjHdtkDP9KEzM3tiXokZkb+o6dSeLDNYRf6d3oDE=;
- b=lK9774uvrYbZCJxM/8TyE1xEC0G84Bwoa9/uAW5IojR7iydzTmokegAkuXHbSWfLYDsP
- +Enf1x2pLmDln/EkdQphXrjbaPWSY9iQuUKsV3YCqOLUAJVoXz5F2JQ8RKzPhctOenAy
- HD8kV1tzJtVRPBytgRNKWN4Nwm0DeQUj8DcmMCAE0mYJmWXvaw3fUF2GrTdeDYHrOnux
- wf96AS3Wdzt9Kfg9tHhOWcYiDNd9g0lnSFQuV5vfZjmXKRqu52YXzY8lyx6mr1KmXh44
- NRQDz0SKR8oDyvVF8U5Q4U+OiP+T4aVomn+uRa9tcUnp9wFLwfQq4DpNjiIKRSKqe01p hA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 31g0wvw0m9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Jun 2020 14:25:04 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id ACD9B10002A;
-        Wed, 10 Jun 2020 14:25:03 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 978802106E9;
-        Wed, 10 Jun 2020 14:25:03 +0200 (CEST)
-Received: from localhost (10.75.127.49) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 10 Jun 2020 14:25:03
- +0200
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <hugues.fruchet@st.com>, <mchehab@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <vincent.guittot@linaro.org>,
-        <valentin.schneider@arm.com>, <rjw@rjwysocki.net>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH v6 1/3] dt-bindings: media: stm32-dcmi: Add DCMI min frequency property
-Date:   Wed, 10 Jun 2020 14:24:58 +0200
-Message-ID: <20200610122500.4304-2-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
-In-Reply-To: <20200610122500.4304-1-benjamin.gaignard@st.com>
-References: <20200610122500.4304-1-benjamin.gaignard@st.com>
+        id S1729166AbgFJM0u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Jun 2020 08:26:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38506 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729077AbgFJM0s (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 10 Jun 2020 08:26:48 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A8D02206F4;
+        Wed, 10 Jun 2020 12:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591792007;
+        bh=PBnbsD1r4hBJSwpcdPlA8plwD/kWkJiD61twepTwXNE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jJpTTwI4BcRIVrN10ZRmWWQHb9uLqvUrrTbyJC1G5ckdCzOCEOBlPdgX2dMouNv0y
+         YAgEbPCewSSW4UUxn4RQtfuCNeuAdQ/VXQBBn5Ha87ZqsZt+1tcxAPrnMH0pHm3w0F
+         EFkHX/7w+geTl3Np545ZBkOWixSYUU12SBQ6Y3Ls=
+Date:   Wed, 10 Jun 2020 14:26:41 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, Joe Perches <joe@perches.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH v3 1/7] Documentation: dynamic-debug: Add description of
+ level bitmask
+Message-ID: <20200610122641.GB1900758@kroah.com>
+References: <20200609104604.1594-1-stanimir.varbanov@linaro.org>
+ <20200609104604.1594-2-stanimir.varbanov@linaro.org>
+ <20200609111615.GD780233@kroah.com>
+ <0830ba57-d416-4788-351a-6d1b2ca5b7d8@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG5NODE2.st.com (10.75.127.14) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-10_07:2020-06-10,2020-06-10 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0830ba57-d416-4788-351a-6d1b2ca5b7d8@linaro.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document st,stm32-dcmi-min-frequency property which is used to
-request CPUs minimum frequency when streaming frames.
+On Wed, Jun 10, 2020 at 01:29:20PM +0300, Stanimir Varbanov wrote:
+> Hi Greg,
+> 
+> On 6/9/20 2:16 PM, Greg Kroah-Hartman wrote:
+> > On Tue, Jun 09, 2020 at 01:45:58PM +0300, Stanimir Varbanov wrote:
+> >> This adds description of the level bitmask feature.
+> >>
+> >> Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
+> >>
+> >> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> >> ---
+> >>  Documentation/admin-guide/dynamic-debug-howto.rst | 10 ++++++++++
+> >>  1 file changed, 10 insertions(+)
+> >>
+> >> diff --git a/Documentation/admin-guide/dynamic-debug-howto.rst b/Documentation/admin-guide/dynamic-debug-howto.rst
+> >> index 0dc2eb8e44e5..c2b751fc8a17 100644
+> >> --- a/Documentation/admin-guide/dynamic-debug-howto.rst
+> >> +++ b/Documentation/admin-guide/dynamic-debug-howto.rst
+> >> @@ -208,6 +208,12 @@ line
+> >>  	line -1605          // the 1605 lines from line 1 to line 1605
+> >>  	line 1600-          // all lines from line 1600 to the end of the file
+> >>  
+> >> +level
+> >> +    The given level will be a bitmask ANDed with the level of the each ``pr_debug()``
+> >> +    callsite. This will allow to group debug messages and show only those of the
+> >> +    same level.  The -p flag takes precedence over the given level. Note that we can
+> >> +    have up to five groups of debug messages.
+> > 
+> > As was pointed out, this isn't a "level", it's some arbitrary type of
+> > "grouping".
+> 
+> Yes, it is grouping of KERN_DEBUG level messages by importance (my
+> fault, I put incorrect name).  What is important is driver author
+> decision.  Usually when the driver is huge and has a lot of debug
+> messages it is not practical to enable all of them to chasing a
+> particular bug or issue.  You know that debugging (printk) add delays
+> which could hide or rise additional issue(s) which would complicate
+> debug and waste time.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
----
- Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
+That is why it is possible to turn on and off debugging messages on a
+function/line basis already.  Why not just use that instead?
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-index 3fe778cb5cc3..05ca85a2411a 100644
---- a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-+++ b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-@@ -44,6 +44,13 @@ properties:
-       bindings defined in
-       Documentation/devicetree/bindings/media/video-interfaces.txt.
- 
-+  st,stm32-dcmi-min-frequency:
-+    description: DCMI minimum CPUs frequency requirement (in KHz).
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/uint32
-+      - minimum: 0
-+      - default: 0
-+
- required:
-   - compatible
-   - reg
-@@ -71,6 +78,7 @@ examples:
-         clock-names = "mclk";
-         dmas = <&dmamux1 75 0x400 0x0d>;
-         dma-names = "tx";
-+        st,stm32-dcmi-min-frequency = <650000>;
- 
-         port {
-              dcmi_0: endpoint {
--- 
-2.15.0
+> For the Venus driver I have defined three groups of KERN_DEBUG - low,
+> medium and high (again the driver author(s) will decide what the
+> importance is depending on his past experience).
+> 
+> There is another point where the debugging is made by person who is not
+> familiar with the driver code. In that case he/she cannot enable lines
+> or range of lines because he don't know the details. Here the grouping
+> by importance could help.
 
+And they will really know what "low/medium/high" are?
+
+Anyway, that makes a bit more sense, but the documentation could use a
+lot more in order to describe this type of behavior, and what is
+expected by both driver authors, and users of the interface.
+
+thanks,
+
+greg k-h
