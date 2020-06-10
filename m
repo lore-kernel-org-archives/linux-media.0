@@ -2,74 +2,169 @@ Return-Path: <SRS0=cH4w=7X=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 409BBC433DF
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 19:50:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98B50C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 19:54:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 241EC20656
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 19:50:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A1C42074B
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 19:54:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1591818866;
+	bh=Yg0bwUEXCPhL7rJbg5cSW1Yn2jabUHpPN4pbRRuj8ao=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=dd0zW6WeqirdgusrJ4ElqxA/d3g8hD9hCxcf2gm7gmbvVLFl3a0rPdnSm8O7cMtMy
+	 LQn8LFdWx6aT6oB7+uGD3FvdWYjLIZM2gAsVJ7cQ++eli9Z5w7KgebcdAtuaPYfgI7
+	 w5tqhu+9jhC9zkayjaTQ0FZvPL6xSk+Ll5vhRsvA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730331AbgFJTuC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Jun 2020 15:50:02 -0400
-Received: from smtprelay0193.hostedemail.com ([216.40.44.193]:34158 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730085AbgFJTuC (ORCPT
+        id S1730463AbgFJTy0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Jun 2020 15:54:26 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:41917 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727773AbgFJTxw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Jun 2020 15:50:02 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 700B5180295B8;
-        Wed, 10 Jun 2020 19:50:00 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: blade08_160868726dcd
-X-Filterd-Recvd-Size: 1819
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf16.hostedemail.com (Postfix) with ESMTPA;
-        Wed, 10 Jun 2020 19:49:58 +0000 (UTC)
-Message-ID: <31e1aa72b41f9ff19094476033511442bb6ccda0.camel@perches.com>
-Subject: Re: [PATCH v3 6/7] venus: Make debug infrastructure more flexible
-From:   Joe Perches <joe@perches.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, Jason Baron <jbaron@akamai.com>
-Date:   Wed, 10 Jun 2020 12:49:57 -0700
-In-Reply-To: <20200610133717.GB1906670@kroah.com>
-References: <20200609104604.1594-1-stanimir.varbanov@linaro.org>
-         <20200609104604.1594-7-stanimir.varbanov@linaro.org>
-         <20200609111414.GC780233@kroah.com>
-         <dc85bf9e-e3a6-15a1-afaa-0add3e878573@linaro.org>
-         <20200610133717.GB1906670@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.2-0ubuntu1 
+        Wed, 10 Jun 2020 15:53:52 -0400
+Received: by mail-io1-f65.google.com with SMTP id o5so3691084iow.8;
+        Wed, 10 Jun 2020 12:53:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=O+t9lN1UMgBXDzBprmivY3nXV0Nk80cUhVR4G1aXLM8=;
+        b=Yxq0VeEUi56pSR8YYDTj8uqLk4dp5LqdgvZkrNQiuE9tExPtVnhb7YCQcBExeuHN8D
+         +4nH3vPA2RRKd52GTD1AsIywWzblYmWXhfGacKD0UIUBAJ0uquAiasaMwI5M9jRT25sk
+         hYgzQilQqmG0BswRNV5jaRHWrIa7eMQgRcylgcIIIFoS4VkH52d/7LspaPD6EELhc4XH
+         zMwJiIddk5gVM340V5KCuqS5OxWjj5fLiPn7SM6rXXFWILm4naiq9iLPIaP+2+ZM/SuI
+         e+GwTBI2vYUhxI5su7dHTr4Jecy8OyTVeUUQ7B2jlAYL8rzjg1hpc2VoQCe73g+5YuDW
+         dKEw==
+X-Gm-Message-State: AOAM5331UfG7AsOxR/turAwT/BDJct+m0XiMamHiUdmldXiUDx4MrY8Y
+        kSPN8jb5Oh9EL5ekNa1PdA==
+X-Google-Smtp-Source: ABdhPJxgi35NvZv7yMGHmOA+wBKY4rZbmDSzHwLSvytHAzYSEuK9hWs1yklVui3HUx2F1LGdIWldTg==
+X-Received: by 2002:a02:908b:: with SMTP id x11mr4496909jaf.41.1591818830814;
+        Wed, 10 Jun 2020 12:53:50 -0700 (PDT)
+Received: from xps15 ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id w29sm428458ila.26.2020.06.10.12.53.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2020 12:53:49 -0700 (PDT)
+Received: (nullmailer pid 3611634 invoked by uid 1000);
+        Wed, 10 Jun 2020 19:53:48 -0000
+Date:   Wed, 10 Jun 2020 13:53:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jeff Chase <jnchase@google.com>
+Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: Add ch7322 media i2c device
+Message-ID: <20200610195348.GA3606875@bogus>
+References: <20200602190914.218541-1-jnchase@google.com>
+ <20200602190914.218541-2-jnchase@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200602190914.218541-2-jnchase@google.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 2020-06-10 at 15:37 +0200, Greg Kroah-Hartman wrote:
-> Please work with the infrastructure we have, we have spent a lot of time
-> and effort to make it uniform to make it easier for users and
-> developers.
+On Tue, Jun 02, 2020 at 03:09:13PM -0400, Jeff Chase wrote:
+> The ch7322 is a Chrontel CEC controller.
+> 
+> Signed-off-by: Jeff Chase <jnchase@google.com>
+> ---
+>  .../bindings/media/i2c/chrontel,ch7322.yaml   | 67 +++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+>  MAINTAINERS                                   |  7 ++
+>  3 files changed, 76 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml b/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
+> new file mode 100644
+> index 000000000000..daa2869377c5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/media/i2c/chrontel,ch7322.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Chrontel HDMI-CEC Controller
+> +
+> +maintainers:
+> +  - Jeff Chase <jnchase@google.com>
+> +
+> +description:
+> +  The Chrontel CH7322 is a discrete HDMI-CEC controller. It is
+> +  programmable through I2C and drives a single CEC line.
+> +
+> +properties:
+> +  compatible:
+> +    const: chrontel,ch7322
+> +
+> +  reg:
+> +    description: I2C device address
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  reset-gpios:
+> +    description:
+> +      Reference to the GPIO connected to the RESET pin, if any. This
+> +      pin is active-low.
+> +    maxItems: 1
+> +
+> +  standby-gpios:
+> +    description:
+> +      Reference to the GPIO connected to the OE pin, if any. When low
+> +      the device will respond to power status requests with "standby"
+> +      if in auto mode.
+> +    maxItems: 1
+> +
+> +  # see ../cec.txt
+> +  hdmi-phandle:
+> +    description: phandle to the HDMI controller
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      ch7322@75 {
+> +        compatible = "chrontel,ch7322";
+> +        reg = <0x75>;
+> +        interrupts = <47 IRQ_TYPE_EDGE_RISING>;
+> +        standby-gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
+> +        reset-gpios = <&gpio 15 GPIO_ACTIVE_LOW>;
+> +        hdmi-phandle = <&hdmi>;
+> +      };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index d3891386d671..7794ffccd325 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -187,6 +187,8 @@ patternProperties:
+>      description: ChipOne
+>    "^chipspark,.*":
+>      description: ChipSPARK
+> +  "^chrontel,.*":
+> +    description: Chrontel, Inc.
 
-Not quite.
+This is in Linus' master already, so you can drop it. Otherwise,
 
-This lack of debug grouping by type has been a
-_long_ standing issue with drivers.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-> Don't regress and try to make driver-specific ways of doing
-> things, that way lies madness...
-
-It's not driver specific, it allows driver developers to
-better isolate various debug states instead of keeping
-lists of specific debug messages and enabling them
-individually.
-
-
+Rob
