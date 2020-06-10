@@ -2,182 +2,105 @@ Return-Path: <SRS0=cH4w=7X=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2677C433DF
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 03:41:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02ED0C433DF
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 06:03:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42EAE2076A
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 03:41:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D39DB2081A
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 06:02:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="rcIWhSWo"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="SfrZUwq0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726040AbgFJDk7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Jun 2020 23:40:59 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:59133 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725988AbgFJDk7 (ORCPT
+        id S1726262AbgFJGCt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Jun 2020 02:02:49 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:11205 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726112AbgFJGCp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 9 Jun 2020 23:40:59 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id irbjje1VTCKzeirbkjuOzW; Wed, 10 Jun 2020 05:40:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1591760456; bh=/+ImwNnAE+tRbgUnayJMqhfvY9vHslNHAw3XqHg0k/Y=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=rcIWhSWoivldXCY3BBCQMI4in45DqtqsG91+sS8dsjIZt516tNDej5wI4tMn1bQcu
-         mjAexZ2LToVLp6ZPIg+GwGJjL3KPQDQ++53CvXGVDCqE4HZr50jN4jfIWKB0Xgt2Kn
-         ucft0Fe1PnT1d2GOG0p6n/Vh8ji14hV2fjkPKfuMGadGOrQKTjsMN2MmLXY9GTb7TQ
-         RF6bfr+eypdyc2ywURU9INEOiwDWCycEDF/P88Dod2pW1lcLOfH9OLY9Kdh2uE0dcs
-         pAyAUgQdnzSyXLebo2VoGUXWRqCfaga5ai95WIZYyrO4uETfK2Bn5srVC9MBq5QHZ+
-         LC0rLrzFYWX6Q==
-Message-ID: <dcaa0e5aaf0ee755498e5aa2fe6cbdc2@smtp-cloud9.xs4all.net>
-Date:   Wed, 10 Jun 2020 05:40:55 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfEIXUiHFQEdiU8v7KB8mWijmZcfod95gq7FDLDuTWkZNkvZNj5ANJ2tVaF00xMmgyT0CIK7TQgK0bmzb0RNIZTDprFr8Qap5jTOoXMHj+Yl6vPMbntGH
- PYFHQ3hw9kKEInqR8IudrcwQWou+GjgVaPRHlP6eoSe/rp+lMq/q/LokevHVcxwaXQ8uIfNDSPEZAKJuEM5TormdANUfCes7/OWgg+o1TN5LdQNmFkyHDCNW
+        Wed, 10 Jun 2020 02:02:45 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ee077290002>; Tue, 09 Jun 2020 23:01:13 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 09 Jun 2020 23:02:45 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Tue, 09 Jun 2020 23:02:45 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 10 Jun
+ 2020 06:02:45 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 10 Jun 2020 06:02:44 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.167.70]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5ee077840000>; Tue, 09 Jun 2020 23:02:44 -0700
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
+        <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+Subject: [RFC PATCH v1 02/18] arm64: tegra: Add missing clocks and power-domains to Tegra210 VI I2C
+Date:   Tue, 9 Jun 2020 23:02:24 -0700
+Message-ID: <1591768960-31648-3-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1591768960-31648-1-git-send-email-skomatineni@nvidia.com>
+References: <1591768960-31648-1-git-send-email-skomatineni@nvidia.com>
+X-NVConfidentiality: public
+MIME-Version: 1.0
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1591768873; bh=aZpfEHCdQO79JYgaC0ZbsOUqg2JPUB+AZNA7nau630I=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=SfrZUwq0QbUFnEh+2mW1hBfrysLvlhF6RwRmdezH1QkEG85lHpyROhUwiWDqf8W+r
+         GSHBw33OCuWGt072Nnz8stoyMkm4/UsdmTELHQWpHGKepSOWdrA64J9OoHAnCNwxQn
+         D2oswMmu2yF76RaSkKE9KZpwyPQ2lPR53JpZFJ6gh3F16O8XebkaOJ7ys5q/6IIeTH
+         Qouz8I7d5qgwqaoeae4xKtSAPCPJteqyP1M2NFXlK1x3rC/R2oMqGS1WgbQzI+xflS
+         O5RXCIlXaBcckNbC1AfFoW4P8EKdB5rTIodjA2wCDTFiD8Un8yNoUdC0FYeyd1TJQN
+         MT7oWQNjPtAlg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Tegra210 VI I2C is in VE power domain and i2c-vi node should have
+power-domains property.
 
-Results of the daily build of media_tree:
+Current Tegra210 i2c-vi device node is missing both VI I2C clocks
+and power-domains property.
 
-date:			Wed Jun 10 05:00:11 CEST 2020
-media-tree git hash:	938b29db3aa9c293c7c1366b16e55e308f1a1ddd
-media_build git hash:	337283131d6117aa9b0c0c62d32e323da54a9359
-v4l-utils git hash:	74377da4f5f3b63203c599d5dd75db6af91fdbb9
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 9.3.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.1-rc1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: a0e63d2e6cdc689a8af8c9ae6df1674d0fe38c74
-host hardware:		x86_64
-host os:		5.6.0-1-amd64
+This patch adds them.
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-mips: OK
-linux-git-arm64: OK
-linux-git-powerpc64: OK
-linux-git-arm-multi: OK
-linux-git-i686: WARNINGS
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: WARNINGS: found 4 strcpy(), 4 strncpy(), 4 strlcpy()
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.81-i686: OK
-linux-3.16.81-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.212-i686: OK
-linux-4.4.212-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.212-i686: OK
-linux-4.9.212-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.169-i686: OK
-linux-4.14.169-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.101-i686: OK
-linux-4.19.101-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4.17-i686: OK
-linux-5.4.17-x86_64: OK
-linux-5.5.1-i686: OK
-linux-5.5.1-x86_64: OK
-linux-5.6.1-i686: OK
-linux-5.6.1-x86_64: OK
-linux-5.7-rc1-i686: OK
-linux-5.7-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 4
-virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 1
-sparse: OK
-smatch: OK
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+---
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Detailed results are available here:
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+index 0865508..3a4ed10 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+@@ -376,6 +376,12 @@
+ 			compatible = "nvidia,tegra210-i2c-vi";
+ 			reg = <0x0 0x546c0000 0x0 0x00040000>;
+ 			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&tegra_car TEGRA210_CLK_VI_I2C>,
++				 <&tegra_car TEGRA210_CLK_I2CSLOW>;
++			clock-names = "div-clk", "slow";
++			resets = <&tegra_car TEGRA210_CLK_VI_I2C>;
++			reset-names = "i2c";
++			power-domains = <&pd_venc>;
+ 			status = "disabled";
+ 		};
+ 	};
+-- 
+2.7.4
 
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-32.log
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
