@@ -2,124 +2,147 @@ Return-Path: <SRS0=cH4w=7X=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4929C433DF
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 17:26:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB663C433DF
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 17:29:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB2FC2070B
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 17:26:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B39B6206F4
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jun 2020 17:29:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kI75ydh9"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nYUpGKBs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbgFJR0c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Jun 2020 13:26:32 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:55764 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726095AbgFJR0b (ORCPT
+        id S1726393AbgFJR3B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Jun 2020 13:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726322AbgFJR3A (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Jun 2020 13:26:31 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05AHMO7o089411;
-        Wed, 10 Jun 2020 17:26:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=ijYAQnfitZ0djMaR0rpx+C3/Bd2mhPossi+K/mI0VoI=;
- b=kI75ydh9ZL5mQPBTpohY4GT9bQrOliTsUsmcseh1HpRMR2Ay8CP7R+wsB+gSaOfFPRsj
- YG2pSAxlBuTvDEF2tBzkisr9OnnhhEseZsjYL02tI2JqAHEpeBdY3EENXe8xiVcZbosm
- gzUqQoEdddo7iduvSkWWi9G7rPRlR13pONPQqymkg7lCiSqlOj8XSd00f6GLklYpDGl2
- ewF6x5hwQaNuT3IGU7c2Y1dqXjIS/2Qq6z6TvOorHt0Y2ZkakW9qg12h4DVnRkjZB3mF
- RrsEDTyollatoZRiE979GlzYW7M6sQ5ouR8pEevQppKT9DUb7G68nU/JaN114NLDIV2G tw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 31g2jrbp85-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 10 Jun 2020 17:26:24 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05AHNjRL099650;
-        Wed, 10 Jun 2020 17:26:24 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 31gn2yts7u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 10 Jun 2020 17:26:24 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 05AHQN5v000591;
-        Wed, 10 Jun 2020 17:26:23 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 10 Jun 2020 10:26:22 -0700
-Date:   Wed, 10 Jun 2020 20:26:15 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] media: pxa_camera: remove an impossible condition
-Message-ID: <20200610172615.GD90634@mwanda>
+        Wed, 10 Jun 2020 13:29:00 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BC1C03E96B
+        for <linux-media@vger.kernel.org>; Wed, 10 Jun 2020 10:29:00 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id u13so2586668wml.1
+        for <linux-media@vger.kernel.org>; Wed, 10 Jun 2020 10:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=E/OpYtkdJhBuYsHSJhq676XvJqjKjlf+gMoabLS0g4A=;
+        b=nYUpGKBs4xEHPwNFak20lPLO9cHto5Hm28yV7rMIpULXEx9LOCq282m5wJn8aspYyf
+         deotVxLT/l5bQk1UdN/3Rkf/mR5CKcy25daHDqFrqa81Iy5I8EqC2cNLcOvG8y48WaMF
+         CAHmtDsJZD52OQM43AQ5C0AJyEjuSwD/nw0oE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E/OpYtkdJhBuYsHSJhq676XvJqjKjlf+gMoabLS0g4A=;
+        b=gBc8aeuDbn9Z7on2r8qB/A1zW90PUJEMXScytct70P0oVDQtnHucCuUMl2CAxCRbyY
+         yGvy6fc0BAFK6s8ySzrmlsv7+90FqwE/pZ0RouB8Fn3M7jIz3GO0jY1vSKSMUyEX7pAp
+         7kXOXIsTjCrlblmUayFFFbBN06dfOZ43qJ95PckpXhC7DahIaMwYZMwIfMeIo0gneuxB
+         Jn3RlDqeLxl3LrnE38elTNcqtvZleZnYTtLkFHDRjOvmqBJGiSoMtdGkZXQSRx6gLuvA
+         goc8VXHIk9D+vqyl8vaqTjzwoVFv985EscXza5mYkC/wMVtZiNVLLMEKXMBqlzTqVPFi
+         se0g==
+X-Gm-Message-State: AOAM532Cg51RKusMad+ZofDIbHQqTwaa/XDahPFSqXOjCgo61dklpADe
+        ccNHHqxGcNdbF9sVCe+Sf1NJ9A==
+X-Google-Smtp-Source: ABdhPJzkHS+OI1HGIrKjMxe9yNET80vIiPkjUOxBkrzk8eds2xaarln9Q8zxhAniA4Pm9pxWM6Lc7A==
+X-Received: by 2002:a7b:cbd9:: with SMTP id n25mr4188276wmi.30.1591810139023;
+        Wed, 10 Jun 2020 10:28:59 -0700 (PDT)
+Received: from chromium.org (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
+        by smtp.gmail.com with ESMTPSA id c5sm678037wrb.72.2020.06.10.10.28.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2020 10:28:58 -0700 (PDT)
+Date:   Wed, 10 Jun 2020 17:28:57 +0000
+From:   Tomasz Figa <tfiga@chromium.org>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, skhan@linuxfoundation.org,
+        niklas.soderlund@ragnatech.se--annotate
+Subject: Re: [PATCH v4 4/5] media: staging: rkisp1: cap: use
+ v4l2_pipeline_stream_{enable,disable} helpers
+Message-ID: <20200610172857.GH201868@chromium.org>
+References: <20200522075522.6190-1-dafna.hirschfeld@collabora.com>
+ <20200522075522.6190-5-dafna.hirschfeld@collabora.com>
+ <20200610170344.GC201868@chromium.org>
+ <02c8bd4a-0fc1-fcc5-4d8b-63ff1d406988@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9648 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 malwarescore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006100133
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9648 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 impostorscore=0
- cotscore=-2147483648 priorityscore=1501 spamscore=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
- phishscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006100133
+In-Reply-To: <02c8bd4a-0fc1-fcc5-4d8b-63ff1d406988@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It's not possible for "pcdev->mclk" to be zero because we check for
-that earlier and set it to 20000000 in that situation.  If it were
-possible, that would be a problem because it could have lead to an Oops
-in the error handling when we call v4l2_clk_unregister(pcdev->mclk_clk);
+On Wed, Jun 10, 2020 at 07:22:04PM +0200, Dafna Hirschfeld wrote:
+> 
+> 
+> On 10.06.20 19:03, Tomasz Figa wrote:
+> > Hi Dafna,
+> > 
+> > On Fri, May 22, 2020 at 09:55:21AM +0200, Dafna Hirschfeld wrote:
+> > > From: Helen Koike <helen.koike@collabora.com>
+> > > 
+> > > Use v4l2_pipeline_stream_{enable,disable} to call .s_stream()
+> > > subdevice callbacks through the pipeline.
+> > > Those helpers are called only if the other capture is not streaming.
+> > > 
+> > > If the other capture is streaming then he already did that for us
+> > > so we call s_stream only on the resizer that is connected to the
+> > > capture node.
+> > > 
+> > > Signed-off-by: Helen Koike <helen.koike@collabora.com>
+> > > Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> > > ---
+> > >   drivers/staging/media/rkisp1/rkisp1-capture.c | 104 ++++++------------
+> > >   1 file changed, 32 insertions(+), 72 deletions(-)
+> > > 
+> > 
+> > Thank you for the patch. Please see my comments inline.
+> > 
+> > [snip]
+> > > +static int rkisp1_s_stream_subdev(struct rkisp1_capture *cap, int enable)
+> > > +{
+> > > +	struct rkisp1_device *rkisp1 = cap->rkisp1;
+> > > +	struct rkisp1_capture *other = &rkisp1->capture_devs[cap->id ^ 1];
+> > > +	int ret;
+> > > +
+> > > +	/*
+> > > +	 * if the other capture is already streaming then we only need to
+> > > +	 * call s_stream of our reszier
+> > > +	 */
+> > > +	if (other->is_streaming) {
+> > > +		struct v4l2_subdev *rsz_sd  = &rkisp1->resizer_devs[cap->id].sd;
+> > > +
+> > > +		ret = v4l2_subdev_call(rsz_sd, video, s_stream, enable);
+> > > +		if (ret && ret != -ENOIOCTLCMD)
+> > > +			dev_err(rkisp1->dev,
+> > > +				"stream %s resizer '%s' failed (%d)\n",
+> > > +				enable ? "on" : "off", rsz_sd->name, ret);
+> > 
+> > Do we need this special case? Wouldn't v4l2_pipeline_stream_*() simply
+> > increment reference counters for the other entities?
+> 
+> I removed the stream count in v4 of the patchset since I thought it
+> might be problematic/confusing to add a field "stream_count" in
+> "struct v4l2_subdev" that is used and updated only by those helper functions
+> 
+> What do you think?
+> 
+> There is also the issue that both you and Sakari Ailus mentioned that
+> an isp driver can't know the subtopology of a sensor driver and how it handle the
+> s_stream callback on it's entities.
 
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/media/platform/pxa_camera.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+Ah, okay, so we settled on removing the refcounting from the helpers.
+Fair enough. Sorry for the noise.
 
-diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
-index 3c5fe737d36f7..8e5613c1fe067 100644
---- a/drivers/media/platform/pxa_camera.c
-+++ b/drivers/media/platform/pxa_camera.c
-@@ -2504,17 +2504,14 @@ static int pxa_camera_probe(struct platform_device *pdev)
- 	if (err)
- 		goto exit_notifier_cleanup;
- 
--	if (pcdev->mclk) {
--		v4l2_clk_name_i2c(clk_name, sizeof(clk_name),
--				  pcdev->asd.match.i2c.adapter_id,
--				  pcdev->asd.match.i2c.address);
--
--		pcdev->mclk_clk = v4l2_clk_register(&pxa_camera_mclk_ops,
--						    clk_name, NULL);
--		if (IS_ERR(pcdev->mclk_clk)) {
--			err = PTR_ERR(pcdev->mclk_clk);
--			goto exit_notifier_cleanup;
--		}
-+	v4l2_clk_name_i2c(clk_name, sizeof(clk_name),
-+			  pcdev->asd.match.i2c.adapter_id,
-+			  pcdev->asd.match.i2c.address);
-+
-+	pcdev->mclk_clk = v4l2_clk_register(&pxa_camera_mclk_ops, clk_name, NULL);
-+	if (IS_ERR(pcdev->mclk_clk)) {
-+		err = PTR_ERR(pcdev->mclk_clk);
-+		goto exit_notifier_cleanup;
- 	}
- 
- 	err = v4l2_async_notifier_register(&pcdev->v4l2_dev, &pcdev->notifier);
--- 
-2.26.2
+Feel free to add my Reviewed-by.
 
+Best regards,
+Tomasz
