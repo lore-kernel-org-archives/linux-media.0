@@ -4,28 +4,30 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 022F4C433E2
-	for <linux-media@archiver.kernel.org>; Thu, 11 Jun 2020 15:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5836CC433E0
+	for <linux-media@archiver.kernel.org>; Thu, 11 Jun 2020 15:46:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D9A09206C3
-	for <linux-media@archiver.kernel.org>; Thu, 11 Jun 2020 15:46:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37EE8206C3
+	for <linux-media@archiver.kernel.org>; Thu, 11 Jun 2020 15:46:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728706AbgFKPqC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Jun 2020 11:46:02 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51088 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728657AbgFKPqB (ORCPT
+        id S1728712AbgFKPqE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Jun 2020 11:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728708AbgFKPqD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Jun 2020 11:46:01 -0400
+        Thu, 11 Jun 2020 11:46:03 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE88C08C5C1;
+        Thu, 11 Jun 2020 08:46:02 -0700 (PDT)
 Received: from localhost.localdomain (p200300cb871f5b00895b3f12fcab1eee.dip0.t-ipconnect.de [IPv6:2003:cb:871f:5b00:895b:3f12:fcab:1eee])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 538482A5099;
-        Thu, 11 Jun 2020 16:45:59 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 663312A50A8;
+        Thu, 11 Jun 2020 16:46:01 +0100 (BST)
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
@@ -33,9 +35,9 @@ Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         dafna3@gmail.com, sakari.ailus@linux.intel.com,
         linux-rockchip@lists.infradead.org, mchehab@kernel.org,
         tfiga@chromium.org, stable@vger.kernel.org
-Subject: [RESEND PATCH v3 2/6] media: staging: rkisp1: rsz: set default format if the given format is not RKISP1_DIR_SRC
-Date:   Thu, 11 Jun 2020 17:45:47 +0200
-Message-Id: <20200611154551.25022-3-dafna.hirschfeld@collabora.com>
+Subject: [RESEND PATCH v3 6/6] media: staging: rkisp1: common: add documentation for struct rkisp1_isp_mbus_info
+Date:   Thu, 11 Jun 2020 17:45:51 +0200
+Message-Id: <20200611154551.25022-7-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200611154551.25022-1-dafna.hirschfeld@collabora.com>
 References: <20200611154551.25022-1-dafna.hirschfeld@collabora.com>
@@ -44,64 +46,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When setting the sink format of the 'rkisp1_resizer'
-the format should be supported by 'rkisp1_isp' on
-the video source pad. This patch checks this condition
-and set the format to default if the condition is false.
-
-Fixes: 56e3b29f9f6b "media: staging: rkisp1: add streaming paths"
+Add documentation for the struct rkisp1_isp_mbus_info with
+one line doc of each field
 
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
 ---
- drivers/staging/media/rkisp1/rkisp1-common.h  | 4 ++++
- drivers/staging/media/rkisp1/rkisp1-isp.c     | 4 ----
- drivers/staging/media/rkisp1/rkisp1-resizer.c | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/staging/media/rkisp1/rkisp1-common.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
-index 0c4fe503adc9..39d8e46d8d8a 100644
+index 13c5eeff66f3..6104eddac0e5 100644
 --- a/drivers/staging/media/rkisp1/rkisp1-common.h
 +++ b/drivers/staging/media/rkisp1/rkisp1-common.h
-@@ -22,6 +22,10 @@
- #include "rkisp1-regs.h"
- #include "uapi/rkisp1-config.h"
+@@ -268,6 +268,19 @@ struct rkisp1_device {
+ 	struct rkisp1_debug debug;
+ };
  
-+#define RKISP1_DIR_SRC BIT(0)
-+#define RKISP1_DIR_SINK BIT(1)
-+#define RKISP1_DIR_SINK_SRC (RKISP1_DIR_SINK | RKISP1_DIR_SRC)
++/*
++ * struct rkisp1_isp_mbus_info
++ *
++ * holds information about the supported isp media bus
++ * @mbus_code: the media bus code
++ * @pixel_enc: the pixel encoding
++ * @mipi_dt: the mipi data type
++ * @yuv_seq: the order of the yuv values for yuv formats
++ * @bus_width: the bus width
++ * @bayer_pat: the bayer pattern for bayer formats
++ * @isp_pads_mask: a bitmask of the pads that the format is supported on
++ */
 +
- #define RKISP1_ISP_MAX_WIDTH		4032
- #define RKISP1_ISP_MAX_HEIGHT		3024
- #define RKISP1_ISP_MIN_WIDTH		32
-diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
-index dc2b59a0160a..e66e87d6ea8b 100644
---- a/drivers/staging/media/rkisp1/rkisp1-isp.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
-@@ -23,10 +23,6 @@
- 
- #define RKISP1_ISP_DEV_NAME	RKISP1_DRIVER_NAME "_isp"
- 
--#define RKISP1_DIR_SRC BIT(0)
--#define RKISP1_DIR_SINK BIT(1)
--#define RKISP1_DIR_SINK_SRC (RKISP1_DIR_SINK | RKISP1_DIR_SRC)
--
  /*
-  * NOTE: MIPI controller and input MUX are also configured in this file.
-  * This is because ISP Subdev describes not only ISP submodule (input size,
-diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-index d64c064bdb1d..fa28f4bd65c0 100644
---- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-@@ -542,7 +542,7 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
- 					    which);
- 	sink_fmt->code = format->code;
- 	mbus_info = rkisp1_isp_mbus_info_get(sink_fmt->code);
--	if (!mbus_info) {
-+	if (!mbus_info || !(mbus_info->direction & RKISP1_DIR_SRC)) {
- 		sink_fmt->code = RKISP1_DEF_FMT;
- 		mbus_info = rkisp1_isp_mbus_info_get(sink_fmt->code);
- 	}
+  * struct rkisp1_isp_mbus_info - ISP pad format info
+  *
 -- 
 2.17.1
 
