@@ -4,99 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4548CC433DF
-	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 13:56:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8FAFC433E1
+	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 14:11:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D7F020835
-	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 13:56:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1CD32074B
+	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 14:11:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XLWy5sO0"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="oZp+wqEA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbgFLN4k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Jun 2020 09:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S1726453AbgFLOLg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Jun 2020 10:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726368AbgFLNyY (ORCPT
+        with ESMTP id S1726449AbgFLOLf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Jun 2020 09:54:24 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04196C08C5C4
-        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 06:54:23 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id h188so5526473lfd.7
-        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 06:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=i8QHZ+71uR5r8C2iVrz+FnYiMnJAkGWgVhEcbxpdOK0=;
-        b=XLWy5sO0x6NyMihD9u77RPeoTa4IN3p4476KrhEB3C21R7zGrViSArupp8vODWeY08
-         MZAA3SwN3S2SA6wiLKAnZTnaJ+tnvDIHdd39DowB98xoNi9Z2TOoma4aoiU4O4Mc8mgG
-         SL95B7uIT4Lv994CBMH+AHawfTt3QilccsXJTsPxr1d2BgD2APHJ2Ea0FappE9lUlgbx
-         oP4EKJSze9ktQAMIfGqxnt/MEijNdd0DgnDnaSSi00JB79vNii1CxJVUdcAFn2d9MAPg
-         goz06Sx8j18T6Dbu7MOOnB1zls/Ow3l8Ceedxl5NwZEHsZo1HCQnTsc1Q0BgLt3746aB
-         swMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=i8QHZ+71uR5r8C2iVrz+FnYiMnJAkGWgVhEcbxpdOK0=;
-        b=orPig1FXzwcDXRNZo4yv4/bwZqn+sLQai9SxejYGnuUqB1FFCz6lz4j0C3I0L8ek0Z
-         +f89NjDARHsKWZVniX9IYms4notxbKftKBEQKk3XiM/DcPboxPpcOdpJ6FBQ75MS5AB/
-         mDEh1wE+UrH5rcnrPu/gMCyenu/wXrV4hmKpToQfiZ3HpYsZ9odsHRjopydo/XRZdJIK
-         wcyf+1Ei8CgPOrKVFGqKM9vBtiNWzSk1yKKElAZD2W7azKXIrVJEM8QeuUlweEpr52BV
-         0F76/QwwqzrVpPkDRU9VE5LRLDqVY4EMM1fxfD+eJUymODUV1LEYz7B2vDo/A99EvqLX
-         rW2w==
-X-Gm-Message-State: AOAM530LKwck3q0rvuoMRqVFNwghdM0vLVmvsee5OirmeHp2BFbMM3rZ
-        qnpz+nW3XM0JE7O7wyPNnmSkTQ==
-X-Google-Smtp-Source: ABdhPJwO0Af920iLi+MZmruEfnVsbizcM52UCA3GXDnT0F2vvjwJGqBUDC4wL8C8SVGin7D00Fgkvw==
-X-Received: by 2002:a19:cbd7:: with SMTP id b206mr6991562lfg.163.1591970061110;
-        Fri, 12 Jun 2020 06:54:21 -0700 (PDT)
-Received: from localhost.localdomain (37-144-159-139.broadband.corbina.ru. [37.144.159.139])
-        by smtp.googlemail.com with ESMTPSA id a1sm2414415lfi.36.2020.06.12.06.54.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2020 06:54:20 -0700 (PDT)
-From:   Andrey Konovalov <andrey.konovalov@linaro.org>
-To:     mchehab@kernel.org, sakari.ailus@iki.fi,
-        manivannan.sadhasivam@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        c.barrett@framos.com, a.brela@framos.com, peter.griffin@linaro.org,
-        Andrey Konovalov <andrey.konovalov@linaro.org>
-Subject: [PATCH v5 02/10] media: i2c: imx290: fix the order of the args in SET_RUNTIME_PM_OPS()
-Date:   Fri, 12 Jun 2020 16:53:47 +0300
-Message-Id: <20200612135355.30286-3-andrey.konovalov@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200612135355.30286-1-andrey.konovalov@linaro.org>
-References: <20200612135355.30286-1-andrey.konovalov@linaro.org>
+        Fri, 12 Jun 2020 10:11:35 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6177BC03E96F
+        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 07:11:35 -0700 (PDT)
+Received: from jade.flets-east.jp (unknown [IPv6:2400:4051:61:600:b09c:6559:5445:7c98])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9215524F;
+        Fri, 12 Jun 2020 16:11:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1591971091;
+        bh=A0wo2yVIKVCYRdr8z3MFmtSJsX7sKzG4wyuAVO7BbkE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oZp+wqEAtRWpwiVw2kPVtSQDnm5UK0wLmFVezWBh8aB/hmeF5xoYtOPHfkm63x9FT
+         799qGAf8kL7ApiRtE1yPwGKkJD5Ns5dSyMfStxA3urJ4T/ohMZDBWvGQYKwcr2fw+K
+         MCupiejva9oF/wK0aW7twcxMOP6/G5Xa6HLHD29A=
+From:   Paul Elder <paul.elder@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Paul Elder <paul.elder@ideasonboard.com>, hverkuil@xs4all.nl,
+        laurent.pinchart@ideasonboard.com
+Subject: [PATCH] v4l2-compliance: Kill child after failed streamoff test blocks
+Date:   Fri, 12 Jun 2020 23:11:07 +0900
+Message-Id: <20200612141107.43344-1-paul.elder@ideasonboard.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The macro is defined as SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn),
-so imx290_power_off must be the 1st arg, and imx290_power_on the 2nd.
+The test to test that a forked child process can do VIDIOC_STREAMOFF
+without being blocked does not kill the child in the event of a failure
+(ie. the child process blocks on VIDIOC_STREAMOFF). This causes the
+video device node to still be in use even after v4l2-compliance
+completes execution. Kill the child process after this test fails.
 
-Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
 ---
- drivers/media/i2c/imx290.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/v4l2-compliance/v4l2-test-buffers.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 2d8c38ffe2f0..d0322f9a8856 100644
---- a/drivers/media/i2c/imx290.c
-+++ b/drivers/media/i2c/imx290.c
-@@ -648,7 +648,7 @@ static int imx290_power_off(struct device *dev)
- }
- 
- static const struct dev_pm_ops imx290_pm_ops = {
--	SET_RUNTIME_PM_OPS(imx290_power_on, imx290_power_off, NULL)
-+	SET_RUNTIME_PM_OPS(imx290_power_off, imx290_power_on, NULL)
- };
- 
- static const struct v4l2_subdev_video_ops imx290_video_ops = {
+diff --git a/utils/v4l2-compliance/v4l2-test-buffers.cpp b/utils/v4l2-compliance/v4l2-test-buffers.cpp
+index fc49fff6..896e8e14 100644
+--- a/utils/v4l2-compliance/v4l2-test-buffers.cpp
++++ b/utils/v4l2-compliance/v4l2-test-buffers.cpp
+@@ -2282,6 +2282,8 @@ static int testBlockingDQBuf(struct node *node, cv4l_queue &q)
+ 	usleep(250000);
+ 	pid = waitpid(pid_streamoff, &wstatus_streamoff, WNOHANG);
+ 	kill(pid_dqbuf, SIGKILL);
++	if (pid != pid_streamoff)
++		kill(pid_streamoff, SIGKILL);
+ 	fail_on_test(pid != pid_streamoff);
+ 	/* Test that the second child exited properly */
+ 	if (!pid || !WIFEXITED(wstatus_streamoff)) {
 -- 
-2.17.1
+2.27.0
 
