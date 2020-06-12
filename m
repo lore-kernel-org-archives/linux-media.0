@@ -2,120 +2,92 @@ Return-Path: <SRS0=koyS=7Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9720BC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 14:48:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D53AC433DF
+	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 15:20:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7443B206A4
-	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 14:48:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F797206A4
+	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 15:20:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="JUrEayeG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cwc9p9+Q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbgFLOrV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Jun 2020 10:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
+        id S1726388AbgFLPUT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Jun 2020 11:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726275AbgFLOrU (ORCPT
+        with ESMTP id S1726272AbgFLPUT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Jun 2020 10:47:20 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865FAC03E96F;
-        Fri, 12 Jun 2020 07:47:20 -0700 (PDT)
-Received: from Q.local (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C38E924F;
-        Fri, 12 Jun 2020 16:47:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1591973238;
-        bh=uU2xQmtH42tW6IeH3dGPC0lnUtMW5Hht2lqVT2Xjgz4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JUrEayeG7tbFE0EaqcSKTcecMDVLls8Vl7ypODt5Ph1HOtNgfrQ1Zmg1qSwHLRPqh
-         kgIq1pd3nDQVwWbcFRnWnH049/v3J4k+xQ6QU6ImcPQiwLax0fDUjtIR2/1YEIJQLJ
-         ZEhpP4JcSnMVu8Q4167QaYmuGVgCiu8KZ/WMAlz0=
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-To:     linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        sakari.ailus@iki.fi
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Hyun Kwon <hyunk@xilinx.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Subject: [PATCH v10 0/4] MAX9286 GMSL Support (+RDACM20)
-Date:   Fri, 12 Jun 2020 15:47:09 +0100
-Message-Id: <20200612144713.502006-1-kieran.bingham+renesas@ideasonboard.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 12 Jun 2020 11:20:19 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE11C03E96F
+        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 08:20:19 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id c35so6705568edf.5
+        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 08:20:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=w0BLx/Yb1xMdASFemzJHlnStrv0tSRDqkM3p+P3utx0=;
+        b=cwc9p9+Q/BDRTWHJJUNoSrkl8Xcf2A6qutsAJ7JAVL54nzx2azGKepXk4J7zZMMgmt
+         g+chw/JicTgl0yyyVjP4+3Q02qEiKjeDY4JnMKRWt8PPqvxBtvpOmo5mF/SkdBEbdLnR
+         13ZoxaxT9hfsEmrAWcrmESQC/FhA6uWyJybWfdSJJHkDA5rlStCUizSlWLm+RrpxDuVS
+         DuU87E0cY2XbdkH0FvR15L38XexLt9Xc8fge+CeNANlkvDRYOZI9NaDHQOdGtJPUq3Nh
+         ip7qzox1SPuAqTSzfPSwdRtHhTVryOIONO2/+zj8XBErVxY8eRr/KboZ1E0Sw7z8ka6R
+         +Ucw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=w0BLx/Yb1xMdASFemzJHlnStrv0tSRDqkM3p+P3utx0=;
+        b=oclGKGklJTv3PXfDtPCPz6wyvXADln2FuL2u6mMP3pcK3k//GAiH2MT7xjap2qQeN8
+         yKbKNak9jXQM15SsD/0RunJUq3KbBjhGwB7Umxucl2TQHwaKi7V9hb/OBrR09Rp38Kq9
+         T5wXnvRr+Fc6gLn2aGoFuHs4IE3/d92AtxhUrGNZuQsKqV8IR9E/IoeMAGZu0RsPoAmi
+         Gb9SlbP5o+Mqwo5fV+wXguu90xLOFQJmgqDhBxy0DZbLbc23Oy+1OSyFGyv/Sb7AtwZ0
+         OEPnGUoQPzufIWZMx2aUh/nV08Xsh0/R6Hk2OyjaPLgvfwY1S6SZjvNYVhzr3TbeecVb
+         r6qg==
+X-Gm-Message-State: AOAM5314XJ8HzyYKRapL4tdNhfFD3N/QiSsEoAAlkkYmHfJbk3H2Od+h
+        ae6+uMVUIL12P5Td9iru0dieQQ==
+X-Google-Smtp-Source: ABdhPJz1Gv3+XseglEaR0L46Km8v2TbUxFKgX3Ur5aSmVY7dYkuiP/MHwlQITZ2axasmW8KqSqdvuA==
+X-Received: by 2002:a50:e881:: with SMTP id f1mr11697081edn.98.1591975216296;
+        Fri, 12 Jun 2020 08:20:16 -0700 (PDT)
+Received: from [192.168.1.3] (212-5-158-24.ip.btc-net.bg. [212.5.158.24])
+        by smtp.googlemail.com with ESMTPSA id z10sm3740893ejb.9.2020.06.12.08.20.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Jun 2020 08:20:15 -0700 (PDT)
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, Tomasz Figa <tfiga@chromium.org>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Subject: reqbuf(count=0), new vb2 op or something else
+Message-ID: <5408d9f1-6415-7089-8069-ec36cd9eed75@linaro.org>
+Date:   Fri, 12 Jun 2020 18:20:14 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series provides a pair of drivers for the GMSL cameras on the R-Car ADAS
-platforms.
+I failed to found previous discussion on the subject, maybe it was on IRC.
 
-These drivers originate from Cogent Embedded, and have been refactored to split
-the MAX9286 away from the RDACM20 drivers which were once very tightly coupled.
+I stuck with fixing of issues which depends on this reqbuf(count=0).
+Currently I'm counting the buffers in vb2::buf_init and vb2::buf_cleanup
+but I don't want to rely on that implicit way anymore.
 
-The MAX9286 is capable of capturing up to 4 streams simultaneously, and while
-the V4L2-Multiplexed streams series is not available, this works purely on the
-assumption that the receiver will correctly map each of the 4 VCs to separate
-video nodes, as the RCar-VIN does.
+If someone of you can remember let me know so that I can prepare an RFC.
 
-This driver along with a camera driver for the RDACM20 and the
-associated platform support for the Renesas R-Car Salvator-X, and the Eagle-V3M
-can be found at:
+I can think of two options:
+ - change vb2::queue_setup so it could be called with num_buffers=0
+ - add new vb2::queue_release op
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git gmsl/v10
-
-This latest v10 cleans up the DT bindings validation, and several comments
-from Sakari's review in v9.
-
-It has been successfully tested to capture from all 4 inputs simultaneously.
-
-We're very much hoping that we can aim to get the max9286 into the next
-merge-window. Please let us know if there are any issues blocking this.
-
-Jacopo Mondi (2):
-  dt-bindings: media: i2c: Add bindings for IMI RDACM2x
-  media: i2c: Add RDACM20 driver
-
-Kieran Bingham (1):
-  media: i2c: Add MAX9286 driver
-
-Laurent Pinchart (1):
-  dt-bindings: media: i2c: Add bindings for Maxim Integrated MAX9286
-
- .../bindings/media/i2c/imi,rdacm2x-gmsl.yaml  |  159 ++
- .../bindings/media/i2c/maxim,max9286.yaml     |  366 +++++
- .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
- MAINTAINERS                                   |   22 +
- drivers/media/i2c/Kconfig                     |   26 +
- drivers/media/i2c/Makefile                    |    3 +
- drivers/media/i2c/max9271.c                   |  341 +++++
- drivers/media/i2c/max9271.h                   |  224 +++
- drivers/media/i2c/max9286.c                   | 1320 +++++++++++++++++
- drivers/media/i2c/rdacm20.c                   |  667 +++++++++
- 10 files changed, 3130 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/imi,rdacm2x-gmsl.yaml
- create mode 100644 Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
- create mode 100644 drivers/media/i2c/max9271.c
- create mode 100644 drivers/media/i2c/max9271.h
- create mode 100644 drivers/media/i2c/max9286.c
- create mode 100644 drivers/media/i2c/rdacm20.c
+More options?
 
 -- 
-2.25.1
-
+regards,
+Stan
