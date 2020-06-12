@@ -2,102 +2,121 @@ Return-Path: <SRS0=koyS=7Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C84D8C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB6CC433E0
+	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:39:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C0C8207ED
-	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:33:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97E8F207F7
+	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:39:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cZW7Sncq"
+	dkim=pass (2048-bit key) header.d=nextdimension-cc.20150623.gappssmtp.com header.i=@nextdimension-cc.20150623.gappssmtp.com header.b="CctSf85V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgFLSdp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Jun 2020 14:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
+        id S1726281AbgFLSjx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Jun 2020 14:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbgFLSdo (ORCPT
+        with ESMTP id S1726085AbgFLSjw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Jun 2020 14:33:44 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4456C03E96F
-        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:33:44 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id m21so7094288eds.13
-        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:33:44 -0700 (PDT)
+        Fri, 12 Jun 2020 14:39:52 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9A8C03E96F
+        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:39:52 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id 25so9547771oiy.13
+        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:39:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q7SrjVqVBTDVCWZmoq5uoTeKKp+YP3TsSad+GNKJpV8=;
-        b=cZW7SncqKz7jqf9xP4wJfA1dLkNwlB8DBWwXRqdrodvYWgpKyBHM02hG7EVuklqWAw
-         UBDcMfZdFrCXwigDUX++WRU8WmQ/IOwYvpKWbXRrk40zO99eQDUJT0XKKexaNKjT+LIP
-         u8Tzuip4ran883lY3vAUlW1pdHotV77+WNdpE=
+        d=nextdimension-cc.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9NhezEOlYZOE4xrAF7aFVWPoiw7SuxoGGuk6rNqxZAs=;
+        b=CctSf85VfYtFEeeiegDM7S+1L9WRlBUI4moIQhxugF6TSmKuwt4GoyD1R4SRTWZfH3
+         HD5Q/gWUYpNR5sFOdRTuiZHHIkmctC3qitad4N6OxEQNuyuFqtPHKqQV5eJbP5ldHL9A
+         /lmz+AkUTfg1Q+5XXCIafUID51ggAuotGEh14mnt2C4am8Uj7nqfry+GSC99+lvkup9+
+         R7yxL6HzDXLZMTZAPKawJTnLbxu6cj6kXawkEfL0UsPVXda/vWwmZZwX81j2EY8h/qHy
+         7z+uiZqYyUacpFTV6tZcldCof6n94cd5IKQdAU8woJKWZm4DzYH3uu4ltTyxXPAnq/OL
+         otEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q7SrjVqVBTDVCWZmoq5uoTeKKp+YP3TsSad+GNKJpV8=;
-        b=Ca+KW1YAenHizDhy22OQGbp3DESnes5RHFmOxdDWt3UnxA5Et0FJcZbqORl+k/akEq
-         W5CbyoApf4ZjLQsRsB24mMXkgiEC8jD2TFpnGXxXuVxWPPvIZm50S0y3Vb1+/bMTSHWQ
-         +luvKdn+xVmp8KKQmG5UJvLWzvP3nrdc+iDZBZUehZ4zYn5r4BqV20yw4pFTEpmT2Ejw
-         bAmDwIZ4aeX/CqIgDQPLU66oKcIqjYFZ3oTljQeCvJUNtj2SuoapqDNryJdOuFzvZH/3
-         fbotWo1ZeCUFj9hFFaztN8dg/oi+k6ifDMN7cctnSIaYdNHqR5/8uwt6ApHNNGeTSNO7
-         finw==
-X-Gm-Message-State: AOAM533F8OAVN87ytO63tuildMJWTHIdRD+bogOaz4QicmM8U95QAP4J
-        8wq1NQfvyYWVyPUcFBNOFGwt9s0vZZYHhw==
-X-Google-Smtp-Source: ABdhPJz05KyPL/uSvAtkooeeEMPJiJmb44chHKxEMBfwhmRZOZvBrrxffFCzV24/Qk/ynhfw1+udog==
-X-Received: by 2002:a50:fb92:: with SMTP id e18mr12493346edq.135.1591986822815;
-        Fri, 12 Jun 2020 11:33:42 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id y26sm3493110edv.91.2020.06.12.11.33.41
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2020 11:33:42 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id c3so10651988wru.12
-        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:33:41 -0700 (PDT)
-X-Received: by 2002:adf:9c12:: with SMTP id f18mr17545158wrc.105.1591986821298;
- Fri, 12 Jun 2020 11:33:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9NhezEOlYZOE4xrAF7aFVWPoiw7SuxoGGuk6rNqxZAs=;
+        b=sztBt42It+xUvqD3E3KC2qIE8yQs9MYUIwA5Hb5HfgbFkTRLGn34rBMHIFCV/sL9nd
+         KW1ew1DjXFkGI/Kvsies7batM/IMI/aRPcrFdjhMbc5YrXZVRFR3ome1QluuyMGY/hZS
+         MrrCeA2iaidPaOwq9TYo1LVHxEtScDq3IMmaJ1qEKhEFf45PoDzLCoixtC/bQebpsVDY
+         gGOuJf0maetSDVCBNnpAk4CV46uvm/pjD+FLPGoziAYwtTk89DvQ5XkU513035KgZAlI
+         h66/Z6bSX1dT5Kjbrcmo8zI4kJwQI6GnZZqqknkQj/6febrjmTWe8r9SmR/zBvMlkOal
+         qlyQ==
+X-Gm-Message-State: AOAM530i+e0ca/+2bsolQEyyYq/p1x/k/1oUcHmjaq9scoC4J8NoWKog
+        4mkPG4m7JNQmFMsA80/P3BA2oECv6uIpSA==
+X-Google-Smtp-Source: ABdhPJx1+SfhN4H/RMnuoZikRKzjFLRBSh1F8ks7F86KM6fokawkyYaVxCt6T1R+9UKEbssZPI007A==
+X-Received: by 2002:aca:b9c3:: with SMTP id j186mr255324oif.2.1591987191938;
+        Fri, 12 Jun 2020 11:39:51 -0700 (PDT)
+Received: from localhost (66-90-181-52.dyn.grandenetworks.net. [66.90.181.52])
+        by smtp.gmail.com with ESMTPSA id k14sm1494196oof.48.2020.06.12.11.39.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 12 Jun 2020 11:39:51 -0700 (PDT)
+From:   Brad Love <brad@nextdimension.cc>
+To:     linux-media@vger.kernel.org
+Cc:     Brad Love <brad@nextdimension.cc>
+Subject: [PATCH 0/3] MaxLinear mxl692 demod-tuner / Hauppauge usb QuadHD
+Date:   Fri, 12 Jun 2020 13:39:34 -0500
+Message-Id: <20200612183937.10952-1-3126054018@nextdimension.cc>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <5408d9f1-6415-7089-8069-ec36cd9eed75@linaro.org>
-In-Reply-To: <5408d9f1-6415-7089-8069-ec36cd9eed75@linaro.org>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 12 Jun 2020 20:33:28 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5ADxz-GYYiocKcB+Qxk9_tNJ_aAMxoOY6N9NLC-6ya3pw@mail.gmail.com>
-Message-ID: <CAAFQd5ADxz-GYYiocKcB+Qxk9_tNJ_aAMxoOY6N9NLC-6ya3pw@mail.gmail.com>
-Subject: Re: reqbuf(count=0), new vb2 op or something else
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Stanimir,
+Attached is a new driver for MaxLinear mxl692 ATSC/QAM combo
+tuner-demodulator. The driver is used by em28xx based
+Hauppauge USB QuadHD.
 
-On Fri, Jun 12, 2020 at 5:20 PM Stanimir Varbanov
-<stanimir.varbanov@linaro.org> wrote:
->
-> I failed to found previous discussion on the subject, maybe it was on IRC.
->
-> I stuck with fixing of issues which depends on this reqbuf(count=0).
-> Currently I'm counting the buffers in vb2::buf_init and vb2::buf_cleanup
-> but I don't want to rely on that implicit way anymore.
->
-> If someone of you can remember let me know so that I can prepare an RFC.
->
-> I can think of two options:
->  - change vb2::queue_setup so it could be called with num_buffers=0
->  - add new vb2::queue_release op
->
-> More options?
+The Hauppauge USB QuadHD contains four instances of the mxl692,
+configured as two "dual tuner" em28xx devices.
 
-Just to make sure we're on the same page: Are you looking for a way to
-handle some operation only when all buffers on the queue are being
-freed?
+Bus 003 Device 006: ID 2040:846d Hauppauge
+Bus 003 Device 005: ID 2040:846d Hauppauge
 
-Best regards,
-Tomasz
+The ATSC portion works fully, the QAM portion needs some TLC,
+and is therefore not listed in the DVB capabilities.
+
+The driver is based off vendor provided GPLv2 source code.
+
+Note: there are a number of LONG_LINE warnings. I have left them
+as is, due to recent developments/statements regarding this topic.
+I do not feel the driver would be made any clearer by arbitrarily
+splitting up the remaining lines further.
+
+
+This is just a v1, if there's any comments/questions/concerns
+let me know and I'll sort them out.
+
+
+
+Brad Love (3):
+  mxl692: MaxLinear 692 ATSC demod-tuner driver
+  em28xx-core: Fix TS2 active led
+  em28xx: Add support for Hauppauge USB QuadHD
+
+ drivers/media/dvb-frontends/Kconfig       |    9 +
+ drivers/media/dvb-frontends/Makefile      |    1 +
+ drivers/media/dvb-frontends/mxl692.c      | 1363 +++++++++++++++++++++
+ drivers/media/dvb-frontends/mxl692.h      |   38 +
+ drivers/media/dvb-frontends/mxl692_defs.h |  493 ++++++++
+ drivers/media/usb/em28xx/Kconfig          |    1 +
+ drivers/media/usb/em28xx/em28xx-cards.c   |   46 +
+ drivers/media/usb/em28xx/em28xx-core.c    |    4 +-
+ drivers/media/usb/em28xx/em28xx-dvb.c     |   26 +
+ drivers/media/usb/em28xx/em28xx.h         |    1 +
+ 10 files changed, 1981 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/media/dvb-frontends/mxl692.c
+ create mode 100644 drivers/media/dvb-frontends/mxl692.h
+ create mode 100644 drivers/media/dvb-frontends/mxl692_defs.h
+
+-- 
+2.23.0
+
