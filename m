@@ -2,150 +2,143 @@ Return-Path: <SRS0=koyS=7Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AC0CC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:45:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7083C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:47:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 262A8207F7
-	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:45:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4A06206DC
+	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:47:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bRJxS+Q2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S2x9dGEH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbgFLSps (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Jun 2020 14:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
+        id S1726340AbgFLSru (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Jun 2020 14:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbgFLSps (ORCPT
+        with ESMTP id S1726268AbgFLSrt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Jun 2020 14:45:48 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5405C03E96F
-        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:45:46 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id l27so11106268ejc.1
-        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:45:46 -0700 (PDT)
+        Fri, 12 Jun 2020 14:47:49 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2093C03E96F;
+        Fri, 12 Jun 2020 11:47:49 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id x189so2239329iof.9;
+        Fri, 12 Jun 2020 11:47:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P8sNBYcte/zk1gJm2YzOJRDjejnEUqN/A2ieuNyUweg=;
-        b=bRJxS+Q2KQuM54a8erBJ8qt32TXVRsXhyMB8WWOq3eNmxwrN4tec98hY1I3dgRAadb
-         ts7ymaPP/cxcISqUJMVR1rg0hvz0g6hLj31QBZ2Q4wp8U7XtRblQESknjGvBDfox0Z06
-         uKeyun3azaUw4eFf03EUYyLAv5q0HMR3PsF8E=
+         :cc:content-transfer-encoding;
+        bh=LZDy9XcI4N1lUd1gGa7ISl9lwNSdZf1QWRf62wPMnVw=;
+        b=S2x9dGEHkOnJf+7GpQkXBNyZgMb+NG5lpVqGB+F8ObbicBblcPnt1Zj0z2T2BJN1ak
+         BE5tyB3SXO/vcPpoE1SV0kY1Hyiuhx8BaCvyI4y2wl5zVlTziIxk6WAAGlfkyrGWK2Ab
+         ZJmk91KRA2HRL5FDYwjDYXfdoxwSeDYU2+fZ5Z8Mkt+x8+aREd4LyXa1focAkMeBM167
+         RGDhyMr0dOAIZK/jg79jEb+znkyhK/DuF8F1TzcM7Ak+2abPElSzvfEwgLwHRZ/tiXLT
+         XcVd6vAWGmnp9IO5dm4LC11qH4Ycso5wykJuil7n4kQNX5Uq5tVU5q/eYugeOmAWp9i4
+         NGUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P8sNBYcte/zk1gJm2YzOJRDjejnEUqN/A2ieuNyUweg=;
-        b=SVte17IHSrvCHTLmZkHXdb4aDILzZlTpCxqup1S3MlPWecJ7dJ6iAhH07fko0pbgqi
-         7rX59Gl4zvoub+hIpL4cTGHmtAhGwVhiBThjMWfM5ww/Y0OX1EccI31NcReuE86bBVDH
-         b2GLQxNPZAfBs+9KMuhV52mo8rF2rgmCwYJPzQTB04EzshjuMMkQubyh4RSHNchtnBXJ
-         2c+O4K+42a6MUmeDfE0TCqfWXqmtMJ0SYaiMwmzPFg5xv/pPfJoLl1+ThiZriVymqMab
-         QVoPWImfIGKdf7gUl+cjtvtlZPduRy/56ztC4PgB9fmwt5NPiWO7FiWqLdJ7SxhwNoHG
-         uSiQ==
-X-Gm-Message-State: AOAM532PF7G5crDO1NG6SZ0qeZrnaB/Y2W1PxLXn9TW+ncQLlfUzzkzx
-        G9l5Vcf1pquvbHZOU35P4jrqcaVYTAjppA==
-X-Google-Smtp-Source: ABdhPJxYF+jTPS+A9voTh6m8SOIjNLEFgHSJcsH1aCm0Lb7M14FwaiKfCt2D6Y0pchc9Wwz5MpcvsA==
-X-Received: by 2002:a17:906:4a8d:: with SMTP id x13mr13983161eju.26.1591987542946;
-        Fri, 12 Jun 2020 11:45:42 -0700 (PDT)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id rp21sm3996926ejb.97.2020.06.12.11.45.42
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2020 11:45:42 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id j10so10717887wrw.8
-        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:45:42 -0700 (PDT)
-X-Received: by 2002:a1c:2e0e:: with SMTP id u14mr257126wmu.55.1591987183150;
- Fri, 12 Jun 2020 11:39:43 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LZDy9XcI4N1lUd1gGa7ISl9lwNSdZf1QWRf62wPMnVw=;
+        b=Wugerj51NeCUivMnRVXoyO0tDkrZ+JBGsATk6DIN0w1zDfuLheiMC9ryCHlh38vdDW
+         3Pr+jyo7D9n/ToGOr5DSczfFM6uPjCJpOG+yILvgwxCpKOWwqRQmropefAmNt8A1Xdtw
+         x0apvtMYr/MJBjAwVPORLsWqacQAX0dEzjZnSCodvKWuUlH3RIgR7+Qvb6EXAvorZP9W
+         4xwsYa9VwNApTKspcOdCHDv7tsnQA3FC040F9//kptPv+ONBnnkEM58c+CA2Dz0hrAGT
+         tAZp/XqexR8scpsjgeVD2PmunY8prQGesgSRYdx5zfsB2Ffx/0lGQXiu6Z1HtTGqym2t
+         kxBg==
+X-Gm-Message-State: AOAM531gW2iZA1E/vlRn3Vh6cGKQ2YfEoFcl72i65Lt0qLkY4VEppCfa
+        9SKzIwvEajfeOefJ1SUGmaeN5eBuZ+5v//ce428=
+X-Google-Smtp-Source: ABdhPJzfRaFPvLx+fMxGrt+I4C3SRFJHleONaqg7i4IvAGQ6aQvoRRGtLFcMRTSg9k7ZAk6Yl7tZSKL1xoRRRuVrgIQ=
+X-Received: by 2002:a05:6602:1601:: with SMTP id x1mr15442631iow.129.1591987668271;
+ Fri, 12 Jun 2020 11:47:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200523084103.31276-1-dongchun.zhu@mediatek.com>
- <20200523084103.31276-3-dongchun.zhu@mediatek.com> <20200610194455.GK201868@chromium.org>
- <1591958798.8804.660.camel@mhfsdcap03>
-In-Reply-To: <1591958798.8804.660.camel@mhfsdcap03>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 12 Jun 2020 20:39:30 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5Bcb4A+HAivA-jrczK+OMxwZk3w0GYoh-DU=6gmTZBWnQ@mail.gmail.com>
-Message-ID: <CAAFQd5Bcb4A+HAivA-jrczK+OMxwZk3w0GYoh-DU=6gmTZBWnQ@mail.gmail.com>
-Subject: Re: [V9, 2/2] media: i2c: ov02a10: Add OV02A10 image sensor driver
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Cao Bing Bu <bingbu.cao@intel.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Sj Huang <sj.huang@mediatek.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        =?UTF-8?B?U2hlbmduYW4gV2FuZyAo546L5Zyj55S3KQ==?= 
-        <shengnan.wang@mediatek.com>
+References: <20200605170720.2478262-1-noltari@gmail.com>
+In-Reply-To: <20200605170720.2478262-1-noltari@gmail.com>
+From:   Kamal Dasu <kdasu.kdev@gmail.com>
+Date:   Fri, 12 Jun 2020 14:47:37 -0400
+Message-ID: <CAC=U0a3xa9k76mxsiVKDyXsuvboZAyMkXT-S3-6oVZKjnWkeHA@mail.gmail.com>
+Subject: Re: [PATCH] mtd: rawnand: brcmnand: force raw OOB writes
+To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Cc:     Brian Norris <computersforpeace@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        "R, Vignesh" <vigneshr@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jun 12, 2020 at 12:49 PM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
+On Fri, Jun 5, 2020 at 1:07 PM =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gm=
+ail.com> wrote:
 >
-> Hi Tomasz,
+> MTD_OPS_AUTO_OOB is writting OOB with ECC enabled, which changes all ECC =
+bytes
+> from an erased page to 0x00 when JFFS2 cleanmarkers are added with mtd-ut=
+ils.
+>          | BBI |   JFFS2   |   ECC   |   JFFS2   | Spare  |
+> 00000800  ff ff 19 85 20 03 00 00  00 00 00 00 08 ff ff ff
 >
-> On Wed, 2020-06-10 at 19:44 +0000, Tomasz Figa wrote:
-> > Hi Dongchun,
-> >
-> > On Sat, May 23, 2020 at 04:41:03PM +0800, Dongchun Zhu wrote:
-> > > Add a V4L2 sub-device driver for OV02A10 image sensor.
-> > >
-> > > Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-> > > ---
-> > >  MAINTAINERS                 |    1 +
-> > >  drivers/media/i2c/Kconfig   |   13 +
-> > >  drivers/media/i2c/Makefile  |    1 +
-> > >  drivers/media/i2c/ov02a10.c | 1025 +++++++++++++++++++++++++++++++++++++++++++
-> > >  4 files changed, 1040 insertions(+)
-> > >  create mode 100644 drivers/media/i2c/ov02a10.c
-> > >
-> >
-> > Thank you for the patch. Please see my comments inline.
-> >
-> > [snip]
-> > > diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
-> > > new file mode 100644
-> > > index 0000000..160a0b5
-> > > --- /dev/null
-> > > +++ b/drivers/media/i2c/ov02a10.c
-> > [snip]
-> > > +static const char * const ov02a10_test_pattern_menu[] = {
-> > > +   "Disabled",
-> > > +   "Color Bar",
-> >
-> > nit: We should normalize this to one of the standard names. What is the
-> > pattern on this sensor? Is it perhaps "Eight Vertical Colour Bars"?
-> >
->
-> Yes. It is one kind of 'Eight Vertical Colour Bars'.
-> This pattern is called as 'MIPI color bar' per the datasheet.
-> Can we here use 'Vertical Color Bar' or 'MIPI Color Bar'?
->
+> However, if OOB is written with ECC disabled, the JFFS2 cleanmarkers are
+> correctly written without changing the ECC bytes:
+>          | BBI |   JFFS2   |   ECC   |   JFFS2   | Spare  |
+> 00000800  ff ff 19 85 20 03 ff ff  ff 00 00 00 08 ff ff ff
 
-We should try to stick to the names as exposed by existing drivers.
-There was an attempt to unify the naming of some Sony sensors some
-time ago [1]. Perhaps one of the names there matches the pattern of
-this sensor?
+Both brcmand_write_oob_raw() and brcmnand_write_oob() use
+brcmnand_write() that uses PROGRAM_PAGE cmd, means also programs data
+areas and ECC when enabled  is always calculated on DATA+OOB.  since
+in both cases we only want to modify OOB, data is always assumed to be
+0xffs (means erased state). So as far as this api always is used on
+the erased page it should be good. Are the sub-pages/oob areas read by
+jffs2  also read without ecc enabled?. Just want to be sure that it
+does not break any other utilities like nandwrite.
 
-[1] https://patchwork.kernel.org/patch/10711777/
-
-Best regards,
-Tomasz
+>
+> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+> ---
+>  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 9 +--------
+>  1 file changed, 1 insertion(+), 8 deletions(-)
+>
+> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/=
+raw/brcmnand/brcmnand.c
+> index 8f9ffb46a09f..566281770841 100644
+> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> @@ -2279,13 +2279,6 @@ static int brcmnand_write_page_raw(struct nand_chi=
+p *chip, const uint8_t *buf,
+>         return nand_prog_page_end_op(chip);
+>  }
+>
+> -static int brcmnand_write_oob(struct nand_chip *chip, int page)
+> -{
+> -       return brcmnand_write(nand_to_mtd(chip), chip,
+> -                             (u64)page << chip->page_shift, NULL,
+> -                             chip->oob_poi);
+> -}
+> -
+>  static int brcmnand_write_oob_raw(struct nand_chip *chip, int page)
+>  {
+>         struct mtd_info *mtd =3D nand_to_mtd(chip);
+> @@ -2642,7 +2635,7 @@ static int brcmnand_init_cs(struct brcmnand_host *h=
+ost, struct device_node *dn)
+>         chip->ecc.write_oob_raw =3D brcmnand_write_oob_raw;
+>         chip->ecc.read_oob_raw =3D brcmnand_read_oob_raw;
+>         chip->ecc.read_oob =3D brcmnand_read_oob;
+> -       chip->ecc.write_oob =3D brcmnand_write_oob;
+> +       chip->ecc.write_oob =3D brcmnand_write_oob_raw;
+>
+>         chip->controller =3D &ctrl->controller;
+>
+> --
+> 2.26.2
+>
