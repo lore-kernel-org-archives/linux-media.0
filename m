@@ -2,68 +2,71 @@ Return-Path: <SRS0=koyS=7Z=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB6CC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:39:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ABF9C433E1
+	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:39:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97E8F207F7
-	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:39:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66E7A206DC
+	for <linux-media@archiver.kernel.org>; Fri, 12 Jun 2020 18:39:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nextdimension-cc.20150623.gappssmtp.com header.i=@nextdimension-cc.20150623.gappssmtp.com header.b="CctSf85V"
+	dkim=pass (2048-bit key) header.d=nextdimension-cc.20150623.gappssmtp.com header.i=@nextdimension-cc.20150623.gappssmtp.com header.b="tK4nHHdN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726281AbgFLSjx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Jun 2020 14:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
+        id S1726311AbgFLSj4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Jun 2020 14:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbgFLSjw (ORCPT
+        with ESMTP id S1726085AbgFLSj4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Jun 2020 14:39:52 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9A8C03E96F
-        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:39:52 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id 25so9547771oiy.13
-        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:39:52 -0700 (PDT)
+        Fri, 12 Jun 2020 14:39:56 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B46C03E96F
+        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:39:55 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id b18so8091181oti.1
+        for <linux-media@vger.kernel.org>; Fri, 12 Jun 2020 11:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=nextdimension-cc.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9NhezEOlYZOE4xrAF7aFVWPoiw7SuxoGGuk6rNqxZAs=;
-        b=CctSf85VfYtFEeeiegDM7S+1L9WRlBUI4moIQhxugF6TSmKuwt4GoyD1R4SRTWZfH3
-         HD5Q/gWUYpNR5sFOdRTuiZHHIkmctC3qitad4N6OxEQNuyuFqtPHKqQV5eJbP5ldHL9A
-         /lmz+AkUTfg1Q+5XXCIafUID51ggAuotGEh14mnt2C4am8Uj7nqfry+GSC99+lvkup9+
-         R7yxL6HzDXLZMTZAPKawJTnLbxu6cj6kXawkEfL0UsPVXda/vWwmZZwX81j2EY8h/qHy
-         7z+uiZqYyUacpFTV6tZcldCof6n94cd5IKQdAU8woJKWZm4DzYH3uu4ltTyxXPAnq/OL
-         otEw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1lYYt12LyqwgnRy30s+B8H0p09E/N8YF4ER1tK9L5pE=;
+        b=tK4nHHdN04fcDD5I+e1opANtsVzebFdOaz5h+QAnv3vL7knCat9iNF3lch1Wfcj3xK
+         C89kiz1VC05AoQbGN6CmfpGhzjhZUFXzqXTBtnIuR2yd+4eIjfQbrbJkFEgscuovya0/
+         TyEndGf589MI9cWc2GPwHKxuWtYDfTPKPWsnbLsKN9zGmhoCDxLZoRfTqhAbxU40VGRR
+         EW3D9MSTHhuFWAGISEsXG5TZoQI6Ad0WSxmcHbva9b/e+XmU8CPqRge3OnNruoQzvEM0
+         MpQBFtQMofbpTti4gACWrHiikGuNzRLvel1LsuLgsi6nz8hS9vCND+bgLZDfdDtrNt8O
+         KSrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9NhezEOlYZOE4xrAF7aFVWPoiw7SuxoGGuk6rNqxZAs=;
-        b=sztBt42It+xUvqD3E3KC2qIE8yQs9MYUIwA5Hb5HfgbFkTRLGn34rBMHIFCV/sL9nd
-         KW1ew1DjXFkGI/Kvsies7batM/IMI/aRPcrFdjhMbc5YrXZVRFR3ome1QluuyMGY/hZS
-         MrrCeA2iaidPaOwq9TYo1LVHxEtScDq3IMmaJ1qEKhEFf45PoDzLCoixtC/bQebpsVDY
-         gGOuJf0maetSDVCBNnpAk4CV46uvm/pjD+FLPGoziAYwtTk89DvQ5XkU513035KgZAlI
-         h66/Z6bSX1dT5Kjbrcmo8zI4kJwQI6GnZZqqknkQj/6febrjmTWe8r9SmR/zBvMlkOal
-         qlyQ==
-X-Gm-Message-State: AOAM530i+e0ca/+2bsolQEyyYq/p1x/k/1oUcHmjaq9scoC4J8NoWKog
-        4mkPG4m7JNQmFMsA80/P3BA2oECv6uIpSA==
-X-Google-Smtp-Source: ABdhPJx1+SfhN4H/RMnuoZikRKzjFLRBSh1F8ks7F86KM6fokawkyYaVxCt6T1R+9UKEbssZPI007A==
-X-Received: by 2002:aca:b9c3:: with SMTP id j186mr255324oif.2.1591987191938;
-        Fri, 12 Jun 2020 11:39:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1lYYt12LyqwgnRy30s+B8H0p09E/N8YF4ER1tK9L5pE=;
+        b=raQtL99PG1urUWfEtArfKQWtrZs/ZcTMh3sPfTLTqrjjl5YsNHqeXgBJRisHGaP3oQ
+         L6W5S8B1ydsUpBrI6HmNUiwmVx9W4ogFfH3khwo+spIo4YRnMoP41U1TRmJjmjBwDVzQ
+         7W44M9wpG1dxZGudrSMmGQGvXoSypZ1faHAR9RxggVo+a5vLxag6557hPbuWSTKrSvCr
+         PY+wzXz8uBptivNz7h/+0S1CI8Q4P1xYho2YnJTksB7kKc/Zru4AKueG0IovStgRVLqn
+         rB5vgzC/tC5vqUiGYiwO0XyTUB3lCgDfVJ5lJ+MixUu5tyMgtXXDJxDuHqgJPll+l4UM
+         Roog==
+X-Gm-Message-State: AOAM532g+F8Argslp60cc9yR4+UmK9tTHv966fTq9FwSJE6MTEPBlzBv
+        NQWmZIW1hS4DOb2sJPr5CNxfNFqYohhe0Q==
+X-Google-Smtp-Source: ABdhPJwt9eQiwGTezVkIPkOZ3gjY98hYYnAz7tB3BzyHcS53My5Q9jvzHtk2A9hPkWaKDKZ8HNMkPw==
+X-Received: by 2002:a9d:3df7:: with SMTP id l110mr11526054otc.214.1591987194217;
+        Fri, 12 Jun 2020 11:39:54 -0700 (PDT)
 Received: from localhost (66-90-181-52.dyn.grandenetworks.net. [66.90.181.52])
-        by smtp.gmail.com with ESMTPSA id k14sm1494196oof.48.2020.06.12.11.39.51
+        by smtp.gmail.com with ESMTPSA id n128sm1461376oih.33.2020.06.12.11.39.53
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 12 Jun 2020 11:39:51 -0700 (PDT)
+        Fri, 12 Jun 2020 11:39:53 -0700 (PDT)
 From:   Brad Love <brad@nextdimension.cc>
 To:     linux-media@vger.kernel.org
 Cc:     Brad Love <brad@nextdimension.cc>
-Subject: [PATCH 0/3] MaxLinear mxl692 demod-tuner / Hauppauge usb QuadHD
-Date:   Fri, 12 Jun 2020 13:39:34 -0500
-Message-Id: <20200612183937.10952-1-3126054018@nextdimension.cc>
+Subject: [PATCH 2/3] em28xx-core: Fix TS2 active led
+Date:   Fri, 12 Jun 2020 13:39:36 -0500
+Message-Id: <20200612183937.10952-3-3126054018@nextdimension.cc>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200612183937.10952-1-3126054018@nextdimension.cc>
+References: <20200612183937.10952-1-3126054018@nextdimension.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -71,52 +74,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Attached is a new driver for MaxLinear mxl692 ATSC/QAM combo
-tuner-demodulator. The driver is used by em28xx based
-Hauppauge USB QuadHD.
+TS2 active led is completely igored, fix that.
 
-The Hauppauge USB QuadHD contains four instances of the mxl692,
-configured as two "dual tuner" em28xx devices.
+Signed-off-by: Brad Love <brad@nextdimension.cc>
+---
+ drivers/media/usb/em28xx/em28xx-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Bus 003 Device 006: ID 2040:846d Hauppauge
-Bus 003 Device 005: ID 2040:846d Hauppauge
-
-The ATSC portion works fully, the QAM portion needs some TLC,
-and is therefore not listed in the DVB capabilities.
-
-The driver is based off vendor provided GPLv2 source code.
-
-Note: there are a number of LONG_LINE warnings. I have left them
-as is, due to recent developments/statements regarding this topic.
-I do not feel the driver would be made any clearer by arbitrarily
-splitting up the remaining lines further.
-
-
-This is just a v1, if there's any comments/questions/concerns
-let me know and I'll sort them out.
-
-
-
-Brad Love (3):
-  mxl692: MaxLinear 692 ATSC demod-tuner driver
-  em28xx-core: Fix TS2 active led
-  em28xx: Add support for Hauppauge USB QuadHD
-
- drivers/media/dvb-frontends/Kconfig       |    9 +
- drivers/media/dvb-frontends/Makefile      |    1 +
- drivers/media/dvb-frontends/mxl692.c      | 1363 +++++++++++++++++++++
- drivers/media/dvb-frontends/mxl692.h      |   38 +
- drivers/media/dvb-frontends/mxl692_defs.h |  493 ++++++++
- drivers/media/usb/em28xx/Kconfig          |    1 +
- drivers/media/usb/em28xx/em28xx-cards.c   |   46 +
- drivers/media/usb/em28xx/em28xx-core.c    |    4 +-
- drivers/media/usb/em28xx/em28xx-dvb.c     |   26 +
- drivers/media/usb/em28xx/em28xx.h         |    1 +
- 10 files changed, 1981 insertions(+), 1 deletion(-)
- create mode 100644 drivers/media/dvb-frontends/mxl692.c
- create mode 100644 drivers/media/dvb-frontends/mxl692.h
- create mode 100644 drivers/media/dvb-frontends/mxl692_defs.h
-
+diff --git a/drivers/media/usb/em28xx/em28xx-core.c b/drivers/media/usb/em28xx/em28xx-core.c
+index e6088b5d1b80..299cd38a86e9 100644
+--- a/drivers/media/usb/em28xx/em28xx-core.c
++++ b/drivers/media/usb/em28xx/em28xx-core.c
+@@ -698,8 +698,10 @@ int em28xx_capture_start(struct em28xx *dev, int start)
+ 
+ 	if (dev->mode == EM28XX_ANALOG_MODE)
+ 		led = em28xx_find_led(dev, EM28XX_LED_ANALOG_CAPTURING);
+-	else
++	else if (dev->ts == PRIMARY_TS)
+ 		led = em28xx_find_led(dev, EM28XX_LED_DIGITAL_CAPTURING);
++	else
++		led = em28xx_find_led(dev, EM28XX_LED_DIGITAL_CAPTURING_TS2);
+ 
+ 	if (led)
+ 		em28xx_write_reg_bits(dev, led->gpio_reg,
 -- 
 2.23.0
 
