@@ -2,29 +2,30 @@ Return-Path: <SRS0=PMdm=72=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D597C433DF
-	for <linux-media@archiver.kernel.org>; Sat, 13 Jun 2020 09:14:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3714C433E0
+	for <linux-media@archiver.kernel.org>; Sat, 13 Jun 2020 09:14:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 871E3206D7
-	for <linux-media@archiver.kernel.org>; Sat, 13 Jun 2020 09:14:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D600B206D7
+	for <linux-media@archiver.kernel.org>; Sat, 13 Jun 2020 09:14:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726381AbgFMJOU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 Jun 2020 05:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S1726384AbgFMJOX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 Jun 2020 05:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726308AbgFMJOR (ORCPT
+        with ESMTP id S1726323AbgFMJOT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 Jun 2020 05:14:17 -0400
+        Sat, 13 Jun 2020 05:14:19 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F2DC08C5C1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8CAC08C5C2
         for <linux-media@vger.kernel.org>; Sat, 13 Jun 2020 02:14:16 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id 705492A0D2F
+        with ESMTPSA id 7625D2A26B1
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
@@ -32,54 +33,75 @@ Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         dafna3@gmail.com, sakari.ailus@linux.intel.com,
         linux-rockchip@lists.infradead.org, mchehab@kernel.org,
         tfiga@chromium.org
-Subject: [RESEND PATCH v3 0/6] media: staging: rkisp1: bugs fixes and vars renames
-Date:   Sat, 13 Jun 2020 11:13:47 +0200
-Message-Id: <20200613091353.12689-1-dafna.hirschfeld@collabora.com>
+Subject: [RESEND PATCH v3 2/6] media: staging: rkisp1: rsz: set default format if the given format is not RKISP1_DIR_SRC
+Date:   Sat, 13 Jun 2020 11:13:49 +0200
+Message-Id: <20200613091353.12689-3-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200613091353.12689-1-dafna.hirschfeld@collabora.com>
+References: <20200613091353.12689-1-dafna.hirschfeld@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+When setting the sink format of the 'rkisp1_resizer'
+the format should be supported by 'rkisp1_isp' on
+the video source pad. This patch checks this condition
+and set the format to default if the condition is false.
 
-RESEND the patchset because I forgot to add the first two patches
-to the set (now also dropping CC to stable)
+Fixes: 56e3b29f9f6b "media: staging: rkisp1: add streaming paths"
 
-The first two patches in this patchset are two bug fixes related to the enumeration and
-settings of the sink format of the resizer entity.
-The next 3 patches are renaming/removing macros and variables.
-patch 6 adds documentation to the struct rkisp1_isp_mbus_info
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+---
+ drivers/staging/media/rkisp1/rkisp1-common.h  | 4 ++++
+ drivers/staging/media/rkisp1/rkisp1-isp.c     | 4 ----
+ drivers/staging/media/rkisp1/rkisp1-resizer.c | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-changes from v2:
-- patch 3 is new - remove macro RKISP1_DIR_SINK_SRC since the code is more readable without it.
-- patch 5 - rename 'direction' to 'isp_pads_mask' instead of 'isp_pads_flags'
-- patch 6 is new - add documentation of the struct 'rkisp1_isp_mbus_info'
-
-changes from v1:
-- added "Fixes: 56e3b29f9f6b "media: staging: rkisp1: add streaming paths"
-to the commit log of the first two patches.
-- added two patches. One patch rename the macros "RKISP1_DIR_*"
-to "RKISP1_ISP_SD_*", another that rename the field 'direction'
-in 'struct rkisp1_isp_mbus_info' to 'isp_pads_flags'
-
-Dafna Hirschfeld (6):
-  media: staging: rkisp1: rsz: supported formats are the isp's src
-    formats, not sink formats
-  media: staging: rkisp1: rsz: set default format if the given format is
-    not RKISP1_DIR_SRC
-  media: staging: rkisp1: remove macro RKISP1_DIR_SINK_SRC
-  media: staging: rkisp1: rename macros 'RKISP1_DIR_*' to
-    'RKISP1_ISP_SD_*'
-  media: staging: rkisp1: rename the field 'direction' in
-    'rkisp1_isp_mbus_info' to 'isp_pads_mask'
-  media: staging: rkisp1: common: add documentation for struct
-    rkisp1_isp_mbus_info
-
- drivers/staging/media/rkisp1/rkisp1-common.h  | 18 ++++++-
- drivers/staging/media/rkisp1/rkisp1-isp.c     | 50 +++++++++----------
- drivers/staging/media/rkisp1/rkisp1-resizer.c |  6 +--
- 3 files changed, 43 insertions(+), 31 deletions(-)
-
+diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
+index 0c4fe503adc9..39d8e46d8d8a 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-common.h
++++ b/drivers/staging/media/rkisp1/rkisp1-common.h
+@@ -22,6 +22,10 @@
+ #include "rkisp1-regs.h"
+ #include "uapi/rkisp1-config.h"
+ 
++#define RKISP1_DIR_SRC BIT(0)
++#define RKISP1_DIR_SINK BIT(1)
++#define RKISP1_DIR_SINK_SRC (RKISP1_DIR_SINK | RKISP1_DIR_SRC)
++
+ #define RKISP1_ISP_MAX_WIDTH		4032
+ #define RKISP1_ISP_MAX_HEIGHT		3024
+ #define RKISP1_ISP_MIN_WIDTH		32
+diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
+index dc2b59a0160a..e66e87d6ea8b 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-isp.c
++++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
+@@ -23,10 +23,6 @@
+ 
+ #define RKISP1_ISP_DEV_NAME	RKISP1_DRIVER_NAME "_isp"
+ 
+-#define RKISP1_DIR_SRC BIT(0)
+-#define RKISP1_DIR_SINK BIT(1)
+-#define RKISP1_DIR_SINK_SRC (RKISP1_DIR_SINK | RKISP1_DIR_SRC)
+-
+ /*
+  * NOTE: MIPI controller and input MUX are also configured in this file.
+  * This is because ISP Subdev describes not only ISP submodule (input size,
+diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+index d64c064bdb1d..fa28f4bd65c0 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
++++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+@@ -542,7 +542,7 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
+ 					    which);
+ 	sink_fmt->code = format->code;
+ 	mbus_info = rkisp1_isp_mbus_info_get(sink_fmt->code);
+-	if (!mbus_info) {
++	if (!mbus_info || !(mbus_info->direction & RKISP1_DIR_SRC)) {
+ 		sink_fmt->code = RKISP1_DEF_FMT;
+ 		mbus_info = rkisp1_isp_mbus_info_get(sink_fmt->code);
+ 	}
 -- 
 2.17.1
 
