@@ -2,70 +2,82 @@ Return-Path: <SRS0=PMdm=72=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84BC1C433DF
-	for <linux-media@archiver.kernel.org>; Sat, 13 Jun 2020 20:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ABB8C433E0
+	for <linux-media@archiver.kernel.org>; Sat, 13 Jun 2020 21:08:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61950207BC
-	for <linux-media@archiver.kernel.org>; Sat, 13 Jun 2020 20:25:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592079911;
-	bh=BLDwn1Xpcwl2bf+fUx4xdiG5WEMgUHANMpDykFVLjR4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=Pb4I502WdUjJ/YdJldfbIzrvJHymyIDpXWEpYTpGTfL08WJbnL3VwXjWsNJkD0iwj
-	 lti7ypaNSbSe7F1T6+TngJgg/caFkacRSsMJWKtjQbD2MrNlWdPblnk0+1aQBcCWMn
-	 h4fiXsp8gaaBtKGlUH6l+w3UWBfvVsrbyEr2UtkQ=
+	by mail.kernel.org (Postfix) with ESMTP id 150D8207BC
+	for <linux-media@archiver.kernel.org>; Sat, 13 Jun 2020 21:08:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726852AbgFMUZE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 Jun 2020 16:25:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38222 "EHLO mail.kernel.org"
+        id S1726618AbgFMVIP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 Jun 2020 17:08:15 -0400
+Received: from mga03.intel.com ([134.134.136.65]:56872 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726845AbgFMUZE (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 Jun 2020 16:25:04 -0400
-Subject: Re: [GIT PULL for v5.8-rc1] media updates
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592079903;
-        bh=BLDwn1Xpcwl2bf+fUx4xdiG5WEMgUHANMpDykFVLjR4=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=I2n81Pdv39WU2ig+PDcICLFpOfd5PG2sN3l9S9eEiptfX0KlgmPpw/SvA7MFvUVER
-         Th/FIK5E9hRuDQISVjrZsgUrI1QnbBPgyQiXgGdFiU1qOGDQv5BH7BAwva2tme8l1U
-         sEJph8PTMfvPSgiMS8+PWjwPVY+ZtD1rH/UHmMBM=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200613012615.31969e39@coco.lan>
-References: <20200613012615.31969e39@coco.lan>
-X-PR-Tracked-List-Id: <linux-media.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200613012615.31969e39@coco.lan>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media
- tags/media/v5.8-2
-X-PR-Tracked-Commit-Id: 2630e1bb0948c3134c6f22ad275ae27cc6023532
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ac911b316336ad3d22b09e82698f0463347a5507
-Message-Id: <159207990357.31508.8045695379272610944.pr-tracker-bot@kernel.org>
-Date:   Sat, 13 Jun 2020 20:25:03 +0000
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1726507AbgFMVIO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 13 Jun 2020 17:08:14 -0400
+IronPort-SDR: dEScZmdJDsk0aC8Fg4c+J632XA6QAaLPKmKFaFCpDdV86HHMq25PNDbXA6n6tK5J9NGQw0s8aO
+ 1kI9DXnaoj+w==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2020 14:08:14 -0700
+IronPort-SDR: NqrmBTmTIUlG859RnBviS5Ar9Eknn95ItJXRkwOWqdo7dMDW0bQfPGyuPB4KkBzcIRJAR/LZBE
+ 0TKTa7Pn1gvw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,508,1583222400"; 
+   d="scan'208";a="261237235"
+Received: from lkp-server02.sh.intel.com (HELO de5642daf266) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 13 Jun 2020 14:08:13 -0700
+Received: from kbuild by de5642daf266 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jkDNs-0000Sw-9D; Sat, 13 Jun 2020 21:08:12 +0000
+Date:   Sun, 14 Jun 2020 05:07:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Brad Love <brad@nextdimension.cc>, linux-media@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Brad Love <brad@nextdimension.cc>
+Subject: [PATCH] mxl692: fix platform_no_drv_owner.cocci warnings
+Message-ID: <20200613210745.GA892@f6b5b28f03af>
+References: <20200612183937.10952-2-3126054018@nextdimension.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200612183937.10952-2-3126054018@nextdimension.cc>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pull request you sent on Sat, 13 Jun 2020 01:26:15 +0200:
+From: kernel test robot <lkp@intel.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.8-2
+drivers/media/dvb-frontends/mxl692.c:1350:3-8: No need to set .owner here. The core will do it.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ac911b316336ad3d22b09e82698f0463347a5507
+ Remove .owner field if calls are used which set it automatically
 
-Thank you!
+Generated by: scripts/coccinelle/api/platform_no_drv_owner.cocci
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+CC: Brad Love <brad@nextdimension.cc>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+
+url:    https://github.com/0day-ci/linux/commits/Brad-Love/MaxLinear-mxl692-demod-tuner-Hauppauge-usb-QuadHD/20200613-024056
+base:   git://linuxtv.org/media_tree.git master
+
+ mxl692.c |    1 -
+ 1 file changed, 1 deletion(-)
+
+--- a/drivers/media/dvb-frontends/mxl692.c
++++ b/drivers/media/dvb-frontends/mxl692.c
+@@ -1347,7 +1347,6 @@ MODULE_DEVICE_TABLE(i2c, mxl692_id_table
+ 
+ static struct i2c_driver mxl692_driver = {
+ 	.driver = {
+-		.owner	= THIS_MODULE,
+ 		.name	= "mxl692",
+ 	},
+ 	.probe		= mxl692_probe,
