@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C755BC433DF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB963C433E2
 	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:00:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C9F120768
+	by mail.kernel.org (Postfix) with ESMTP id C75C320775
 	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:00:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="tSoBl+yG"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="OTKEAN8G"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728106AbgFOAAc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Jun 2020 20:00:32 -0400
+        id S1728089AbgFOAA2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Jun 2020 20:00:28 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:33340 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728098AbgFOAAa (ORCPT
+        with ESMTP id S1728074AbgFOAA0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Jun 2020 20:00:30 -0400
+        Sun, 14 Jun 2020 20:00:26 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E8AEA1AB5;
-        Mon, 15 Jun 2020 02:00:17 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3DB6019EE;
+        Mon, 15 Jun 2020 02:00:16 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592179218;
-        bh=wCoqy/S86EfxyZQFTi+Cvlw9AumocEkD1iSzF1CXE2U=;
+        s=mail; t=1592179216;
+        bh=slpa+jwQ/ggnyTeEw/d0q/9TG9eW1Ixiq6xb+uCzdHk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tSoBl+yGJwBiXTB/MvbnPqCYJO4dU8I02f9dPVxnCXKRL1jxR7FEK2lEQ+rhAtYmm
-         qnl2im1xoWjtAnZ6MlpJFqnoPmHIYgrU02ATuVIop/i4UJbEUa4mZXm0MvueV3DhnZ
-         Un4WDXIJWglNrQl1cAhhTyfPMFOHkh+jRE+a+mZ4=
+        b=OTKEAN8GnFFp5MoW3pZ70tXs7pj1EFraXfp9S5rPKkusX6JfWKhDQkfJDokq6NNby
+         n17gFCTET0hpKtARaVneyYKJseSPuJR1OaqAiWCAp6Dt0VDV8MAHrS2UiVM9mek1+Q
+         vSaQ4SzgCkrQADe+0kepi6jGolgYXDfR6ORE0lXM=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v1 018/107] media: ti-vpe: cal: Make structure fields unsigned where applicable
-Date:   Mon, 15 Jun 2020 02:58:15 +0300
-Message-Id: <20200614235944.17716-19-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 014/107] media: ti-vpe: cal: Embed base_fields array in struct cal_csi2_phy
+Date:   Mon, 15 Jun 2020 02:58:11 +0300
+Message-Id: <20200614235944.17716-15-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
 References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
@@ -49,41 +49,129 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Several structure fields declared as int store positive values only.
-Make them unsigned.
+The base_fields field of cal_csi2_phy points to a fixed-size array of
+struct reg_field. This level of indirection isn't needed, embed the
+array directly in struct cal_csi2_phy.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c | 70 +++++++++++++----------------
+ 1 file changed, 30 insertions(+), 40 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 19cd795b71b9..d8bf24029d54 100644
+index a407dbeaa720..116d7890cadd 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -240,11 +240,11 @@ struct cal_csi2_phy {
- 		unsigned int lsb;
- 		unsigned int msb;
- 	} fields[F_MAX_FIELDS];
--	const int num_lanes;
-+	const unsigned int num_lanes;
+@@ -234,7 +234,7 @@ enum cal_camerarx_field {
+ 
+ struct cal_csi2_phy {
+ 	struct regmap_field *fields[F_MAX_FIELDS];
+-	struct reg_field *base_fields;
++	struct reg_field base_fields[F_MAX_FIELDS];
+ 	const int num_lanes;
  };
  
- struct cal_data {
--	const int num_csi2_phy;
-+	const unsigned int num_csi2_phy;
- 	struct cal_csi2_phy *csi2_phy_core;
- 
+@@ -245,27 +245,23 @@ struct cal_data {
  	const unsigned int flags;
-@@ -388,7 +388,7 @@ struct cal_ctx {
+ };
  
- 	/* Current subdev enumerated format */
- 	const struct cal_fmt	*active_fmt[ARRAY_SIZE(cal_formats)];
--	int			num_active_fmt;
-+	unsigned int		num_active_fmt;
+-static struct reg_field dra72x_ctrl_core_csi0_reg_fields[F_MAX_FIELDS] = {
+-	[F_CTRLCLKEN] = REG_FIELD(0, 10, 10),
+-	[F_CAMMODE] = REG_FIELD(0, 11, 12),
+-	[F_LANEENABLE] = REG_FIELD(0, 13, 16),
+-	[F_CSI_MODE] = REG_FIELD(0, 17, 17),
+-};
+-
+-static struct reg_field dra72x_ctrl_core_csi1_reg_fields[F_MAX_FIELDS] = {
+-	[F_CTRLCLKEN] = REG_FIELD(0, 0, 0),
+-	[F_CAMMODE] = REG_FIELD(0, 1, 2),
+-	[F_LANEENABLE] = REG_FIELD(0, 3, 4),
+-	[F_CSI_MODE] = REG_FIELD(0, 5, 5),
+-};
+-
+ static struct cal_csi2_phy dra72x_cal_csi_phy[] = {
+ 	{
+-		.base_fields = dra72x_ctrl_core_csi0_reg_fields,
++		.base_fields = {
++			[F_CTRLCLKEN] = REG_FIELD(0, 10, 10),
++			[F_CAMMODE] = REG_FIELD(0, 11, 12),
++			[F_LANEENABLE] = REG_FIELD(0, 13, 16),
++			[F_CSI_MODE] = REG_FIELD(0, 17, 17),
++		},
+ 		.num_lanes = 4,
+ 	},
+ 	{
+-		.base_fields = dra72x_ctrl_core_csi1_reg_fields,
++		.base_fields = {
++			[F_CTRLCLKEN] = REG_FIELD(0, 0, 0),
++			[F_CAMMODE] = REG_FIELD(0, 1, 2),
++			[F_LANEENABLE] = REG_FIELD(0, 3, 4),
++			[F_CSI_MODE] = REG_FIELD(0, 5, 5),
++		},
+ 		.num_lanes = 2,
+ 	},
+ };
+@@ -281,27 +277,23 @@ static const struct cal_data dra72x_es1_cal_data = {
+ 	.flags = DRA72_CAL_PRE_ES2_LDO_DISABLE,
+ };
  
- 	struct v4l2_fract	timeperframe;
- 	unsigned int		sequence;
+-static struct reg_field dra76x_ctrl_core_csi0_reg_fields[F_MAX_FIELDS] = {
+-	[F_CTRLCLKEN] = REG_FIELD(0, 8, 8),
+-	[F_CAMMODE] = REG_FIELD(0, 9, 10),
+-	[F_CSI_MODE] = REG_FIELD(0, 11, 11),
+-	[F_LANEENABLE] = REG_FIELD(0, 27, 31),
+-};
+-
+-static struct reg_field dra76x_ctrl_core_csi1_reg_fields[F_MAX_FIELDS] = {
+-	[F_CTRLCLKEN] = REG_FIELD(0, 0, 0),
+-	[F_CAMMODE] = REG_FIELD(0, 1, 2),
+-	[F_CSI_MODE] = REG_FIELD(0, 3, 3),
+-	[F_LANEENABLE] = REG_FIELD(0, 24, 26),
+-};
+-
+ static struct cal_csi2_phy dra76x_cal_csi_phy[] = {
+ 	{
+-		.base_fields = dra76x_ctrl_core_csi0_reg_fields,
++		.base_fields = {
++			[F_CTRLCLKEN] = REG_FIELD(0, 8, 8),
++			[F_CAMMODE] = REG_FIELD(0, 9, 10),
++			[F_CSI_MODE] = REG_FIELD(0, 11, 11),
++			[F_LANEENABLE] = REG_FIELD(0, 27, 31),
++		},
+ 		.num_lanes = 5,
+ 	},
+ 	{
+-		.base_fields = dra76x_ctrl_core_csi1_reg_fields,
++		.base_fields = {
++			[F_CTRLCLKEN] = REG_FIELD(0, 0, 0),
++			[F_CAMMODE] = REG_FIELD(0, 1, 2),
++			[F_CSI_MODE] = REG_FIELD(0, 3, 3),
++			[F_LANEENABLE] = REG_FIELD(0, 24, 26),
++		},
+ 		.num_lanes = 3,
+ 	},
+ };
+@@ -311,15 +303,13 @@ static const struct cal_data dra76x_cal_data = {
+ 	.num_csi2_phy = ARRAY_SIZE(dra76x_cal_csi_phy),
+ };
+ 
+-static struct reg_field am654_ctrl_core_csi0_reg_fields[F_MAX_FIELDS] = {
+-	[F_CTRLCLKEN] = REG_FIELD(0, 15, 15),
+-	[F_CAMMODE] = REG_FIELD(0, 24, 25),
+-	[F_LANEENABLE] = REG_FIELD(0, 0, 4),
+-};
+-
+ static struct cal_csi2_phy am654_cal_csi_phy[] = {
+ 	{
+-		.base_fields = am654_ctrl_core_csi0_reg_fields,
++		.base_fields = {
++			[F_CTRLCLKEN] = REG_FIELD(0, 15, 15),
++			[F_CAMMODE] = REG_FIELD(0, 24, 25),
++			[F_LANEENABLE] = REG_FIELD(0, 0, 4),
++		},
+ 		.num_lanes = 5,
+ 	},
+ };
 -- 
 Regards,
 
