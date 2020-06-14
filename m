@@ -2,43 +2,46 @@ Return-Path: <SRS0=EymB=74=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C1DCC433DF
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:00:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40222C433E1
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:00:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CC6720768
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:00:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D37B20747
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:00:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="DoZ2SZEc"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vehyK4X6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728050AbgFOAAO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Jun 2020 20:00:14 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33322 "EHLO
+        id S1728052AbgFOAAP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Jun 2020 20:00:15 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:33330 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728034AbgFOAAO (ORCPT
+        with ESMTP id S1728035AbgFOAAP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Jun 2020 20:00:14 -0400
+        Sun, 14 Jun 2020 20:00:15 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4E640F9;
-        Mon, 15 Jun 2020 02:00:10 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2B21398D;
+        Mon, 15 Jun 2020 02:00:11 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592179210;
-        bh=ipKnPhenAYnlQIeHlkQ01LxdCj0D914DTCITMdqa1DY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DoZ2SZEcdnk8qFBzmo46AS6RpBq7VBVIeWnqXmRZLjXWY4PISYkBbsrYg/tz6jBuN
-         4KqiKKNHOOhvoavmI4WzFzgD8eJfXJZ5quNrTgWxiJOT5jHbaegajBkMARQxcBxlOX
-         +dEayd1/5LXRuU/r+N4WhRh39wOtv4gPEL576Gv4=
+        s=mail; t=1592179211;
+        bh=BK+PPv4NedoLVyVXRX7EHaHY1AJbKDH0AuI7Tbr89q8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vehyK4X6aA57Ki3JymAhlVDh8EHay/58M+zZUKP1fp0MbdAruaqUjvQpfHJFev+mV
+         Z8WEhelBykCeDLher+UzWT2Wx9w16Wk7t0uxLVKEv8cFoRA+zS4q4SYLpMyL9mPFQ0
+         Gp/aU8RngOOSSqzSku7X6YY9J5bVEGe3b5ODck+s=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v1 000/107] media: ti-vpe: cal: Add media controller support
-Date:   Mon, 15 Jun 2020 02:57:57 +0300
-Message-Id: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 002/107] media: ti-vpe: cal: Avoid function forward declaration
+Date:   Mon, 15 Jun 2020 02:57:59 +0300
+Message-Id: <20200614235944.17716-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
+References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -46,184 +49,143 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Move the cal_complete_ctx() function earlier in the file to avoid a
+foward declaration. There is no functional change.
 
-This small patch series adds media controller support to the ti-cal
-driver.
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/ti-vpe/cal.c | 111 ++++++++++++++--------------
+ 1 file changed, 55 insertions(+), 56 deletions(-)
 
-The end goal is to support pipelines where the image source is more
-complex than a single subdev (for instance a SMIA++-compliant sensor, or
-an FPD-Link source made of a camera, a serializer and a deserializer),
-and to prepare for support of multiple hardware contexts, needed for
-CSI-2 virtual channel and data type multiplexing support. These use
-cases require configuration of the external pipeline from userspace, and
-thus need support for the media controller and V4L2 subdev userspace
-APIs.
-
-The series starts with miscellaneous cleanups and refactoring, in
-patches 001/107 to 083/107. Worth being noted is the split of the large
-driver into multiple files, with patch 081/107 moving video node
-handling to cal-video.c and patch 083/107 moving CAMERARX handling to
-cal-camerarx.c.
-
-Interleaved with more cleanup and refactoring, patch 084/107 creates
-subdevs for the CAMERARX instances, patch 090/107 implements the subdev
-operations, and patch 091/107 uses the subdev .set_fmt() and .s_stream()
-operations to configure and control the CAMERARX. 
-
-More refactoring and cleanup follow in patches 092/107 to 106/107, until
-patch 107/107 that adds media controller support. As the existing video
-node centric API needs to be preserved to avoid breaking userspace
-applications, a module parameter is added to enable the media controller
-API. Changes are otherwise fairly limited, and mostly involve the
-implementation of MC-centric V4L2 ioctl handlers (which are far simpler
-than their video node centric equivalents), additional pipeline
-validation in the vb2 start streaming handler, and disabling control
-handling in the video nodes.
-
-The patches have been tested on an AM65x EVM with an OV5640 camera
-module with the yavta test application, both in MC mode and in legacy
-mode. As the ov5640 driver sets a default format identical to the
-default of the ti-cal driver, capture in both modes can simply be tested
-with
-
-	yavta -f UYVY -s 640x480 -c10 --requeue-last /dev/video0
-
-without requiring manual pipeline setup through the media controller
-API. Usage of other formats or resolutions require pipeline
-configuration before capture.
-
-Laurent Pinchart (107):
-  media: ti-vpe: cal: Sort headers alphabetically
-  media: ti-vpe: cal: Avoid function forward declaration
-  media: ti-vpe: cal: Decouple CSI2 port and CPORT
-  media: ti-vpe: cal: Index CSI-2 port starting at 0
-  media: ti-vpe: cal: Index IRQ registersstarting at 0
-  media: ti-vpe: cal: Merge all status variables in IRQ handler
-  media: ti-vpe: cal: Inline CAL_VERSION macro in its only user
-  media: ti-vpe: cal: Turn reg_(read|write)_field() into inline
-    functions
-  media: ti-vpe: cal: Make cal_formats array const
-  media: ti-vpe: cal: Remove needless variable initialization
-  media: ti-vpe: cal: Remove needless casts
-  media: ti-vpe: cal: Turn boolean variable into bool
-  media: ti-vpe: cal: Make loop indices unsigned where applicable
-  media: ti-vpe: cal: Embed base_fields array in struct cal_csi2_phy
-  media: ti-vpe: cal: Don't modify cal_csi2_phy base_fields
-  media: ti-vpe: cal: Store PHY regmap fields in struct cc_data
-  media: ti-vpe: cal: Rename cal_csi2_phy base_fields to fields
-  media: ti-vpe: cal: Make structure fields unsigned where applicable
-  media: ti-vpe: cal: Constify platform data
-  media: ti-vpe: cal: Remove static const cal_regmap_config template
-  media: ti-vpe: cal: Remove unused structure fields
-  media: ti-vpe: cal: Remove flags field from struct cal_dev
-  media: ti-vpe: cal: Move function to avoid forward declaration
-  media: ti-vpe: cal: Rename cc_data to cal_camerarx
-  media: ti-vpe: cal: Rename cal_csi2_phy to cal_camerarx_data
-  media: ti-vpe: cal: Name all cal_dev pointers consistently
-  media: ti-vpe: cal: Name all cal_camerarx pointers consistently
-  media: ti-vpe: cal: Remove internal phy structure from cal_camerarx
-  media: ti-vpe: cal: Store instance ID and cal pointer in cal_camerarx
-  media: ti-vpe: cal: Use dev_* print macros
-  media: ti-vpe: cal: Add print macros for the cal_camerarx instances
-  media: ti-vpe: cal: Store sensor-related data in cal_camerarx
-  media: ti-vpe: cal: Create consistent naming for CAMERARX functions
-  media: ti-vpe: cal: Group CAMERARX-related functions together
-  media: ti-vpe: cal: Create consistent naming for context functions
-  media: ti-vpe: cal: Reorganize remaining code in sections
-  media: ti-vpe: cal: Rename cal_ctx.csi2_port to cal_ctx.index
-  media: ti-vpe: cal: Use correct device name for bus_info
-  media: ti-vpe: cal: Get struct device without going through
-    v4l2_device
-  media: ti-vpe: cal: Use ctx_info() instead of v4l2_info()
-  media: ti-vpe: cal: Use a loop to create CAMERARX and context
-    instances
-  media: ti-vpe: cal: Drop struct cal_dev v4l2_dev field
-  media: ti-vpe: cal: Split CAMERARX syscon regmap retrieval to a
-    function
-  media: ti-vpe: cal: Use syscon_regmap_lookup_by_phandle_args()
-  media: ti-vpe: cal: Inline cal_get_camerarx_regmap() in caller
-  media: ti-vpe: cal: Add comments to cal_probe() to delimitate sections
-  media: ti-vpe: cal: Rename cal_create_instance() to cal_ctx_create()
-  media: ti-vpe: cal: Hardcode virtual channel to 0
-  media: ti-vpe: cal: Use of_graph_get_endpoint_by_regs() to parse OF
-  media: ti-vpe: cal: Fix usage of v4l2_fwnode_endpoint_parse()
-  media: ti-vpe: cal: Decouple control handler from v4l2_device
-  media: ti-vpe: cal: Move v4l2_device from cal_ctx to cal_dev
-  media: ti-vpe: cal: Split video device initialization and registration
-  media: ti-vpe: cal: Add context V4L2 cleanup and unregister functions
-  media: ti-vpe: cal: Unregister video device before cleanup
-  media: ti-vpe: cal: Add cal_camerarx_destroy() to cleanup CAMERARX
-  media: ti-vpe: cal: Move DT parsing to CAMERARX
-  media: ti-vpe: cal: Use ARRAY_SIZE to replace numerical value
-  media: ti-vpe: cal: Move all sensor-related init to .bound() notifier
-  media: ti-vpe: cal: Allow multiple contexts per subdev notifier
-  media: ti-vpe: cal: Move async notifiers from contexts to cal_dev
-  media: ti-vpe: cal: Replace context with phy in async notifier entries
-  media: ti-vpe: cal: Operate on phy instances in cal_quickdump_regs()
-  media: ti-vpe: cal: Decouple context and phy cleanup at remove time
-  media: ti-vpe: cal: Move CAL_NUM_CSI2_PORTS from cal_regs.h to cal.c
-  media: ti-vpe: cal: Remove isvcirqset() and isportirqset() macros
-  media: ti-vpe: cal: Replace number of ports numerical value by macro
-  media: ti-vpe: cal: Split media initialization and cleanup to
-    functions
-  media: ti-vpe: cal: Read hardware revision earlier during probe
-  media: ti-vpe: cal: Print revision and hwinfo in a more readable
-    format
-  media: ti-vpe: cal: Store struct device in cal_dev
-  media: ti-vpe: cal: Register a media device
-  media: ti-vpe: cal: Init formats in cal_ctx_v4l2_register()
-  media: ti-vpe: cal: Allocate cal_ctx active_fmt array dynamically
-  media: ti-vpe: cal: Inline cal_camerarx_max_lanes() in its only caller
-  media: ti-vpe: cal: Reorder camerarx functions to prepare refactoring
-  media: ti-vpe: cal: Refactor camerarx start and stop
-  media: ti-vpe: cal: Don't store external rate in cal_camerarx
-  media: ti-vpe: cal: Remove unneeded phy->sensor NULL check
-  media: ti-vpe: cal: Use 'unsigned int' type instead of 'unsigned'
-  media: ti-vpe: cal: Split video node handling to cal-video.c
-  media: ti-vpe: cal: Move CAL I/O accessors to cal.h
-  media: ti-vpe: cal: Split CAMERARX handling to cal-camerarx.c
-  media: ti-vpe: cal: Create subdev for CAMERARX
-  media: ti-vpe: cal: Drop cal_ctx m_fmt field
-  media: ti-vpe: cal: Move format handling to cal.c and expose helpers
-  media: ti-vpe: cal: Rename MAX_(WIDTH|HEIGHT)_* macros with CAL_
-    prefix
-  media: ti-vpe: cal: Replace hardcoded BIT() value with macro
-  media: ti-vpe: cal: Iterate over correct number of CAMERARX instances
-  media: ti-vpe: cal: Implement subdev ops for CAMERARX
-  media: ti-vpe: cal: Use CAMERARX subdev s_stream op in video device
-    code
-  media: ti-vpe: cal: Don't pass format to cal_ctx_wr_dma_config()
-  media: ti-vpe: cal: Rename struct cal_fmt to cal_format_info
-  media: ti-vpe: cal: Refactor interrupt enable/disable
-  media: ti-vpe: cal: Fold PPI enable in CAMERARX .s_stream()
-  media: ti-vpe: cal: Stop write DMA without disabling PPI
-  media: ti-vpe: cal: Use spin_lock_irq() when starting or stopping
-    stream
-  media: ti-vpe: cal: Share buffer release code between start and stop
-  media: ti-vpe: cal: Drop V4L2_CAP_READWRITE
-  media: ti-vpe: cal: Drop unneeded check in cal_calc_format_size()
-  media: ti-vpe: cal: Remove DMA queue empty check at start streaming
-    time
-  media: ti-vpe: cal: Use list_first_entry()
-  media: ti-vpe: cal: Group all DMA queue fields in struct cal_dmaqueue
-  media: ti-vpe: cal: Set cal_dmaqueue.pending to NULL when no pending
-    buffer
-  media: ti-vpe: cal: Store buffer DMA address in dma_addr_t
-  media: ti-vpe: cal: Simplify the context API
-  media: ti-vpe: cal: Implement media controller centric API
-
- drivers/media/platform/ti-vpe/Makefile       |    2 +-
- drivers/media/platform/ti-vpe/cal-camerarx.c |  857 ++++++
- drivers/media/platform/ti-vpe/cal-video.c    |  957 ++++++
- drivers/media/platform/ti-vpe/cal.c          | 2732 +++++-------------
- drivers/media/platform/ti-vpe/cal.h          |  310 ++
- drivers/media/platform/ti-vpe/cal_regs.h     |   74 +-
- 6 files changed, 2865 insertions(+), 2067 deletions(-)
- create mode 100644 drivers/media/platform/ti-vpe/cal-camerarx.c
- create mode 100644 drivers/media/platform/ti-vpe/cal-video.c
- create mode 100644 drivers/media/platform/ti-vpe/cal.h
-
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
+index 19425248bd63..88fed930ed50 100644
+--- a/drivers/media/platform/ti-vpe/cal.c
++++ b/drivers/media/platform/ti-vpe/cal.c
+@@ -1852,7 +1852,61 @@ static const struct video_device cal_videodev = {
+  *	Initialization and module stuff
+  * ------------------------------------------------------------------
+  */
+-static int cal_complete_ctx(struct cal_ctx *ctx);
++
++static int cal_complete_ctx(struct cal_ctx *ctx)
++{
++	struct video_device *vfd;
++	struct vb2_queue *q;
++	int ret;
++
++	ctx->timeperframe = tpf_default;
++	ctx->external_rate = 192000000;
++
++	/* initialize locks */
++	spin_lock_init(&ctx->slock);
++	mutex_init(&ctx->mutex);
++
++	/* initialize queue */
++	q = &ctx->vb_vidq;
++	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
++	q->io_modes = VB2_MMAP | VB2_DMABUF | VB2_READ;
++	q->drv_priv = ctx;
++	q->buf_struct_size = sizeof(struct cal_buffer);
++	q->ops = &cal_video_qops;
++	q->mem_ops = &vb2_dma_contig_memops;
++	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
++	q->lock = &ctx->mutex;
++	q->min_buffers_needed = 3;
++	q->dev = ctx->v4l2_dev.dev;
++
++	ret = vb2_queue_init(q);
++	if (ret)
++		return ret;
++
++	/* init video dma queues */
++	INIT_LIST_HEAD(&ctx->vidq.active);
++
++	vfd = &ctx->vdev;
++	*vfd = cal_videodev;
++	vfd->v4l2_dev = &ctx->v4l2_dev;
++	vfd->queue = q;
++
++	/*
++	 * Provide a mutex to v4l2 core. It will be used to protect
++	 * all fops and v4l2 ioctls.
++	 */
++	vfd->lock = &ctx->mutex;
++	video_set_drvdata(vfd, ctx);
++
++	ret = video_register_device(vfd, VFL_TYPE_VIDEO, video_nr);
++	if (ret < 0)
++		return ret;
++
++	v4l2_info(&ctx->v4l2_dev, "V4L2 device registered as %s\n",
++		  video_device_node_name(vfd));
++
++	return 0;
++}
+ 
+ static int cal_async_bound(struct v4l2_async_notifier *notifier,
+ 			   struct v4l2_subdev *subdev,
+@@ -1948,61 +2002,6 @@ static const struct v4l2_async_notifier_operations cal_async_ops = {
+ 	.complete = cal_async_complete,
+ };
+ 
+-static int cal_complete_ctx(struct cal_ctx *ctx)
+-{
+-	struct video_device *vfd;
+-	struct vb2_queue *q;
+-	int ret;
+-
+-	ctx->timeperframe = tpf_default;
+-	ctx->external_rate = 192000000;
+-
+-	/* initialize locks */
+-	spin_lock_init(&ctx->slock);
+-	mutex_init(&ctx->mutex);
+-
+-	/* initialize queue */
+-	q = &ctx->vb_vidq;
+-	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+-	q->io_modes = VB2_MMAP | VB2_DMABUF | VB2_READ;
+-	q->drv_priv = ctx;
+-	q->buf_struct_size = sizeof(struct cal_buffer);
+-	q->ops = &cal_video_qops;
+-	q->mem_ops = &vb2_dma_contig_memops;
+-	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+-	q->lock = &ctx->mutex;
+-	q->min_buffers_needed = 3;
+-	q->dev = ctx->v4l2_dev.dev;
+-
+-	ret = vb2_queue_init(q);
+-	if (ret)
+-		return ret;
+-
+-	/* init video dma queues */
+-	INIT_LIST_HEAD(&ctx->vidq.active);
+-
+-	vfd = &ctx->vdev;
+-	*vfd = cal_videodev;
+-	vfd->v4l2_dev = &ctx->v4l2_dev;
+-	vfd->queue = q;
+-
+-	/*
+-	 * Provide a mutex to v4l2 core. It will be used to protect
+-	 * all fops and v4l2 ioctls.
+-	 */
+-	vfd->lock = &ctx->mutex;
+-	video_set_drvdata(vfd, ctx);
+-
+-	ret = video_register_device(vfd, VFL_TYPE_VIDEO, video_nr);
+-	if (ret < 0)
+-		return ret;
+-
+-	v4l2_info(&ctx->v4l2_dev, "V4L2 device registered as %s\n",
+-		  video_device_node_name(vfd));
+-
+-	return 0;
+-}
+-
+ static struct device_node *
+ of_get_next_port(const struct device_node *parent,
+ 		 struct device_node *prev)
 -- 
 Regards,
 
