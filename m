@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBF1EC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D568C433E1
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC78F20768
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7CD1920768
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Hq01beqT"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="QgucLCfW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728204AbgFOABa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Jun 2020 20:01:30 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33330 "EHLO
+        id S1728187AbgFOABZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Jun 2020 20:01:25 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:33340 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728199AbgFOAB2 (ORCPT
+        with ESMTP id S1728190AbgFOABX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Jun 2020 20:01:28 -0400
+        Sun, 14 Jun 2020 20:01:23 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 970A8215C;
-        Mon, 15 Jun 2020 02:00:41 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 70FD7215B;
+        Mon, 15 Jun 2020 02:00:39 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592179241;
-        bh=rjLoTu478HddeFMwwh93Xbw6vStjXWo5yHgnbI3f8b8=;
+        s=mail; t=1592179239;
+        bh=e3j3v0hP1bda0RqROA5fAsmP7FEs9ylD3KdFZRzeBRw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hq01beqTYiLEcjNjXPvxSgNWAiGaDwM5ua0MdoJumHUa7lYrIdSi9nmSmTeUfIqRb
-         l+0/56vHm3r11vcF0QCOlk183+N0wMB3l5ckMBi4p6LTWeRMK4haQAi1O1U0KdbEwY
-         Xi0ojL3j60ZYa9s7fm7JOLpr1lNfEw0QfCFZNQpQ=
+        b=QgucLCfWcZcJWUEQKGpWIuRiDCDY32LzmgeRE/kwYecwhjc4l3vBf3av7YPo17Gpg
+         SNBhhqNsqNKQLiMDBZouUYSJUWqX8oD1VkOVIbfK//267gB3Nv34fTSEQBeW7fBvNY
+         PW/gWkWKs/u7zDlzKRGZNLLyunx4ufVf+Mrw64Nw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v1 068/107] media: ti-vpe: cal: Split media initialization and cleanup to functions
-Date:   Mon, 15 Jun 2020 02:59:05 +0300
-Message-Id: <20200614235944.17716-69-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 063/107] media: ti-vpe: cal: Operate on phy instances in cal_quickdump_regs()
+Date:   Mon, 15 Jun 2020 02:59:00 +0300
+Message-Id: <20200614235944.17716-64-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
 References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
@@ -49,215 +49,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Create four functions to handle initialization, cleanup, registration
-and unregistration of the V4L2 (and sonn media controller) objects:
-
-- init() is meant to be called early at probe time to initialize the
-  objects, before they get used from within the kernel
-
-- cleanup() is the counterpart of init, and is meant to be called at the
-  end of the remove sequence to free all objects
-
-- register() is meant to be called at the end of the probe sequence, to
-  register the userspace-facing devices
-
-- unregister() is the counterpart of register, and is meant to be called
-  at the beginning for the remove sequence, to disallow access from
-  userspace
+The cal_quickdump_regs() dumps registers for the two CAMERARX instances.
+Retrieve those instances from the cal_dev directly instead of going
+through the contexts, and simplify the code by using a loop.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 120 +++++++++++++++++++++-------
- 1 file changed, 92 insertions(+), 28 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 9fe8abfa1df9..6655c0051ccc 100644
+index d551f1d9895b..d9cb7a53cb8d 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -2202,6 +2202,88 @@ static void cal_async_notifier_unregister(struct cal_dev *cal)
- 	v4l2_async_notifier_cleanup(&cal->notifier);
- }
+@@ -449,26 +449,24 @@ static inline void set_field(u32 *valp, u32 field, u32 mask)
  
-+/* ------------------------------------------------------------------
-+ *	Media and V4L2 device handling
-+ * ------------------------------------------------------------------
-+ */
-+
-+/*
-+ * Register user-facing devices. To be called at the end of the probe function
-+ * when all resources are initialized and ready.
-+ */
-+static int cal_media_register(struct cal_dev *cal)
-+{
-+	int ret;
-+
-+	/*
-+	 * Register the async notifier. This may trigger registration of the
-+	 * V4L2 video devices if all subdevs are ready.
-+	 */
-+	ret = cal_async_notifier_register(cal);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Unregister the user-facing devices, but don't free memory yet. To be called
-+ * at the beginning of the remove function, to disallow access from userspace.
-+ */
-+static void cal_media_unregister(struct cal_dev *cal)
-+{
+ static void cal_quickdump_regs(struct cal_dev *cal)
+ {
 +	unsigned int i;
 +
-+	/* Unregister all the V4L2 video devices. */
-+	for (i = 0; i < ARRAY_SIZE(cal->ctx); i++) {
-+		if (cal->ctx[i])
-+			cal_ctx_v4l2_unregister(cal->ctx[i]);
-+	}
-+
-+	cal_async_notifier_unregister(cal);
-+}
-+
-+/*
-+ * Initialize the in-kernel objects. To be called at the beginning of the probe
-+ * function, before the V4L2 device is used by the driver.
-+ */
-+static int cal_media_init(struct cal_dev *cal)
-+{
-+	int ret;
-+
-+	/*
-+	 * Initialize the V4L2 device (despite the function name, this performs
-+	 * initialization, not registration).
-+	 */
-+	ret = v4l2_device_register(&cal->pdev->dev, &cal->v4l2_dev);
-+	if (ret) {
-+		cal_err(cal, "Failed to register V4L2 device\n");
-+		return ret;
-+	}
-+
-+	vb2_dma_contig_set_max_seg_size(&cal->pdev->dev, DMA_BIT_MASK(32));
-+
-+	return 0;
-+}
-+
-+/*
-+ * Cleanup the in-kernel objects, freeing memory. To be called at the very end
-+ * of the remove sequence, when nothing (including userspace) can access the
-+ * objects anymore.
-+ */
-+static void cal_media_cleanup(struct cal_dev *cal)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(cal->ctx); i++) {
-+		if (cal->ctx[i])
-+			cal_ctx_v4l2_cleanup(cal->ctx[i]);
-+	}
-+
-+	v4l2_device_unregister(&cal->v4l2_dev);
-+	vb2_dma_contig_clear_max_seg_size(&cal->pdev->dev);
-+}
-+
- /* ------------------------------------------------------------------
-  *	Initialization and module stuff
-  * ------------------------------------------------------------------
-@@ -2328,12 +2410,10 @@ static int cal_probe(struct platform_device *pdev)
- 		}
- 	}
+ 	cal_info(cal, "CAL Registers @ 0x%pa:\n", &cal->res->start);
+ 	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
+ 		       (__force const void *)cal->base,
+ 		       resource_size(cal->res), false);
  
--	/* Register the V4L2 device. */
--	ret = v4l2_device_register(&pdev->dev, &cal->v4l2_dev);
--	if (ret) {
--		cal_err(cal, "Failed to register V4L2 device\n");
-+	/* Initialize the media device. */
-+	ret = cal_media_init(cal);
-+	if (ret < 0)
- 		goto error_camerarx;
+-	if (cal->ctx[0]) {
+-		cal_info(cal, "CSI2 Core 0 Registers @ %pa:\n",
+-			 &cal->ctx[0]->phy->res->start);
+-		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
+-			       (__force const void *)cal->ctx[0]->phy->base,
+-			       resource_size(cal->ctx[0]->phy->res),
+-			       false);
 -	}
++	for (i = 0; i < ARRAY_SIZE(cal->phy); ++i) {
++		struct cal_camerarx *phy = cal->phy[i];
++
++		if (!phy)
++			continue;
  
- 	/* Create contexts. */
- 	for (i = 0; i < cal_data_get_num_csi2_phy(cal); ++i)
-@@ -2342,11 +2422,9 @@ static int cal_probe(struct platform_device *pdev)
- 	if (!cal->ctx[0] && !cal->ctx[1]) {
- 		cal_err(cal, "Neither port is configured, no point in staying up\n");
- 		ret = -ENODEV;
--		goto error_v4l2;
-+		goto error_media;
+-	if (cal->ctx[1]) {
+-		cal_info(cal, "CSI2 Core 1 Registers @ %pa:\n",
+-			 &cal->ctx[1]->phy->res->start);
++		cal_info(cal, "CSI2 Core %u Registers @ %pa:\n", i,
++			 &phy->res->start);
+ 		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
+-			       (__force const void *)cal->ctx[1]->phy->base,
+-			       resource_size(cal->ctx[1]->phy->res),
++			       (__force const void *)phy->base,
++			       resource_size(phy->res),
+ 			       false);
  	}
- 
--	vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
--
- 	/* Read the revision and hardware info to verify hardware access. */
- 	pm_runtime_enable(&pdev->dev);
- 	ret = pm_runtime_get_sync(&pdev->dev);
-@@ -2356,16 +2434,14 @@ static int cal_probe(struct platform_device *pdev)
- 	cal_get_hwinfo(cal);
- 	pm_runtime_put_sync(&pdev->dev);
- 
--	/* Register the async notifier. */
--	ret = cal_async_notifier_register(cal);
-+	/* Register the media device. */
-+	ret = cal_media_register(cal);
- 	if (ret)
- 		goto error_pm_runtime;
- 
- 	return 0;
- 
- error_pm_runtime:
--	vb2_dma_contig_clear_max_seg_size(&pdev->dev);
--
- 	pm_runtime_disable(&pdev->dev);
- 	for (i = 0; i < ARRAY_SIZE(cal->ctx); i++) {
- 		ctx = cal->ctx[i];
-@@ -2373,8 +2449,8 @@ static int cal_probe(struct platform_device *pdev)
- 			cal_ctx_v4l2_cleanup(ctx);
- 	}
- 
--error_v4l2:
--	v4l2_device_unregister(&cal->v4l2_dev);
-+error_media:
-+	cal_media_cleanup(cal);
- 
- error_camerarx:
- 	for (i = 0; i < ARRAY_SIZE(cal->phy); i++)
-@@ -2392,24 +2468,14 @@ static int cal_remove(struct platform_device *pdev)
- 
- 	pm_runtime_get_sync(&pdev->dev);
- 
--	cal_async_notifier_unregister(cal);
--
--	for (i = 0; i < ARRAY_SIZE(cal->ctx); i++) {
--		if (cal->ctx[i])
--			cal_ctx_v4l2_unregister(cal->ctx[i]);
--	}
-+	cal_media_unregister(cal);
- 
- 	for (i = 0; i < ARRAY_SIZE(cal->phy); i++) {
- 		if (cal->phy[i])
- 			cal_camerarx_disable(cal->phy[i]);
- 	}
- 
--	for (i = 0; i < ARRAY_SIZE(cal->ctx); i++) {
--		if (cal->ctx[i])
--			cal_ctx_v4l2_cleanup(cal->ctx[i]);
--	}
--
--	v4l2_device_unregister(&cal->v4l2_dev);
-+	cal_media_cleanup(cal);
- 
- 	for (i = 0; i < ARRAY_SIZE(cal->phy); i++)
- 		cal_camerarx_destroy(cal->phy[i]);
-@@ -2417,8 +2483,6 @@ static int cal_remove(struct platform_device *pdev)
- 	pm_runtime_put_sync(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
- 
--	vb2_dma_contig_clear_max_seg_size(&pdev->dev);
--
- 	return 0;
  }
- 
 -- 
 Regards,
 
