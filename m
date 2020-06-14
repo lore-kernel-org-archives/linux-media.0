@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C372FC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E72DBC433E1
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A361320768
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4CE520768
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="rlFzuAw0"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="nObWn9Lx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728190AbgFOABZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Jun 2020 20:01:25 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33330 "EHLO
+        id S1728198AbgFOAB0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Jun 2020 20:01:26 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:33340 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728180AbgFOABW (ORCPT
+        with ESMTP id S1728185AbgFOABZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Jun 2020 20:01:22 -0400
+        Sun, 14 Jun 2020 20:01:25 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CDA9A215A;
-        Mon, 15 Jun 2020 02:00:38 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4B57A2159;
+        Mon, 15 Jun 2020 02:00:40 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592179239;
-        bh=ngoKVgzG1YWkamn52gYjpUUxtJQHRCl6El5wgthJpaI=;
+        s=mail; t=1592179240;
+        bh=kMRoPymRl0zJVEuqO0RagXmERW8NfPSOhHCNq33nWDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rlFzuAw060oI0AUhZgPt0pc315tvt2wmMq6kZBRG91Ip0sAchBFTK7/D4DPrStf/H
-         4jhxebUU7gF33Ht5CRjv+O+fptplbnCsZMcCaUIpzMBa4mXhqPJ5fDuDcU0jV0Z4Uc
-         JQ7t7gqSCzwV/5JcpaLtuYbKXIYQ/Bg3MS/zior8=
+        b=nObWn9Lx53B8+c3Dl+ZyrgoOXngk5cbzCsl1eyOjkYd0fyfPPxKK00CDxUuODAlav
+         SleeblfrsI6VrNf9KJ+LBHws2EQSqDeCRlRpxgVoWbp5sYvbjxXTaQiIwscPxvV9Mw
+         aByrFgTGGgRooMjP+c+Se50mrPc0izu7Dz38Wxc4=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v1 062/107] media: ti-vpe: cal: Replace context with phy in async notifier entries
-Date:   Mon, 15 Jun 2020 02:58:59 +0300
-Message-Id: <20200614235944.17716-63-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 065/107] media: ti-vpe: cal: Move CAL_NUM_CSI2_PORTS from cal_regs.h to cal.c
+Date:   Mon, 15 Jun 2020 02:59:02 +0300
+Message-Id: <20200614235944.17716-66-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
 References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
@@ -49,87 +49,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The async notifier is meant to bind to subdevs connected to the CSI-2
-ports. Those ports are modelled by the CAMERARX phy instances. To
-prepare for additional decoupling of contexts and phys, make the
-notifier operate on phys. We still initialize and register the context
-V4L2 support in the async notifier complete operation as that's our
-signal that the userspace API is ready to be exposed.
+The CAL_NUM_CSI2_PORTS macro isn't a register definition. Move it to
+cal.c, and fix indentation of the other macros while at it.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c      | 7 ++++---
+ drivers/media/platform/ti-vpe/cal_regs.h | 2 --
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 1c9a0369d025..d551f1d9895b 100644
+index 0ce627b668ab..518f8af616b6 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -2101,7 +2101,7 @@ static void cal_ctx_v4l2_cleanup(struct cal_ctx *ctx)
+@@ -74,10 +74,11 @@ MODULE_PARM_DESC(debug, "activates debug info");
+ #define phy_err(phy, fmt, arg...)	\
+ 	cal_err((phy)->cal, "phy%u: " fmt, (phy)->instance, ##arg)
  
- struct cal_v4l2_async_subdev {
- 	struct v4l2_async_subdev asd;
--	struct cal_ctx *ctx;
-+	struct cal_camerarx *phy;
- };
+-#define CAL_NUM_CONTEXT 2
++#define CAL_NUM_CONTEXT			2
++#define CAL_NUM_CSI2_PORTS		2
  
- static inline struct cal_v4l2_async_subdev *
-@@ -2114,16 +2114,16 @@ static int cal_async_notifier_bound(struct v4l2_async_notifier *notifier,
- 				    struct v4l2_subdev *subdev,
- 				    struct v4l2_async_subdev *asd)
- {
--	struct cal_ctx *ctx = to_cal_asd(asd)->ctx;
-+	struct cal_camerarx *phy = to_cal_asd(asd)->phy;
+-#define MAX_WIDTH_BYTES (8192 * 8)
+-#define MAX_HEIGHT_LINES 16383
++#define MAX_WIDTH_BYTES			(8192 * 8)
++#define MAX_HEIGHT_LINES		16383
  
--	if (ctx->phy->sensor) {
--		ctx_info(ctx, "Rejecting subdev %s (Already set!!)",
-+	if (phy->sensor) {
-+		phy_info(phy, "Rejecting subdev %s (Already set!!)",
- 			 subdev->name);
- 		return 0;
- 	}
+ /* ------------------------------------------------------------------
+  *	Format Handling
+diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti-vpe/cal_regs.h
+index b551e67d5d41..f752096dcf7f 100644
+--- a/drivers/media/platform/ti-vpe/cal_regs.h
++++ b/drivers/media/platform/ti-vpe/cal_regs.h
+@@ -34,8 +34,6 @@
+  */
+ #define DRA72_CAL_PRE_ES2_LDO_DISABLE BIT(0)
  
--	ctx->phy->sensor = subdev;
--	ctx_dbg(1, ctx, "Using sensor %s for capture\n", subdev->name);
-+	phy->sensor = subdev;
-+	phy_dbg(1, phy, "Using sensor %s for capture\n", subdev->name);
+-#define CAL_NUM_CSI2_PORTS		2
+-
+ /* CAL register offsets */
  
- 	return 0;
- }
-@@ -2163,27 +2163,27 @@ static int cal_async_notifier_register(struct cal_dev *cal)
- 	v4l2_async_notifier_init(&cal->notifier);
- 	cal->notifier.ops = &cal_async_notifier_ops;
- 
--	for (i = 0; i < ARRAY_SIZE(cal->ctx); ++i) {
--		struct cal_ctx *ctx = cal->ctx[i];
-+	for (i = 0; i < ARRAY_SIZE(cal->phy); ++i) {
-+		struct cal_camerarx *phy = cal->phy[i];
- 		struct cal_v4l2_async_subdev *casd;
- 		struct v4l2_async_subdev *asd;
- 		struct fwnode_handle *fwnode;
- 
--		if (!ctx)
-+		if (!phy)
- 			continue;
- 
--		fwnode = of_fwnode_handle(ctx->phy->sensor_node);
-+		fwnode = of_fwnode_handle(phy->sensor_node);
- 		asd = v4l2_async_notifier_add_fwnode_subdev(&cal->notifier,
- 							    fwnode,
- 							    sizeof(*asd));
- 		if (IS_ERR(asd)) {
--			ctx_err(ctx, "Failed to add subdev to notifier\n");
-+			phy_err(phy, "Failed to add subdev to notifier\n");
- 			ret = PTR_ERR(asd);
- 			goto error;
- 		}
- 
- 		casd = to_cal_asd(asd);
--		casd->ctx = ctx;
-+		casd->phy = phy;
- 	}
- 
- 	ret = v4l2_async_notifier_register(&cal->v4l2_dev, &cal->notifier);
+ #define CAL_HL_REVISION			0x0000
 -- 
 Regards,
 
