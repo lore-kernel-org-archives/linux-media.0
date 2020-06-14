@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D568C433E1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2ABDC433DF
 	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CD1920768
+	by mail.kernel.org (Postfix) with ESMTP id D2C8220768
 	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="QgucLCfW"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="K1iQLUQ5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728187AbgFOABZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Jun 2020 20:01:25 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33340 "EHLO
+        id S1728201AbgFOABc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Jun 2020 20:01:32 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:33330 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728190AbgFOABX (ORCPT
+        with ESMTP id S1728180AbgFOAB3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Jun 2020 20:01:23 -0400
+        Sun, 14 Jun 2020 20:01:29 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 70FD7215B;
-        Mon, 15 Jun 2020 02:00:39 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 70E8F215D;
+        Mon, 15 Jun 2020 02:00:42 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592179239;
-        bh=e3j3v0hP1bda0RqROA5fAsmP7FEs9ylD3KdFZRzeBRw=;
+        s=mail; t=1592179242;
+        bh=SSNXdeDeKCP4JLx9739v4fc03kW9ML6g9/gJbQ3/tf4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QgucLCfWcZcJWUEQKGpWIuRiDCDY32LzmgeRE/kwYecwhjc4l3vBf3av7YPo17Gpg
-         SNBhhqNsqNKQLiMDBZouUYSJUWqX8oD1VkOVIbfK//267gB3Nv34fTSEQBeW7fBvNY
-         PW/gWkWKs/u7zDlzKRGZNLLyunx4ufVf+Mrw64Nw=
+        b=K1iQLUQ5VKUSIy0ha3NB3N2u1MCYBLH4ONP5RRaZ2IYsb7W6Flx8cQ+mgKztnGxkJ
+         9BM+2uVjpeBCwJYmU/AtWcs7FULBGrTxnA6wummU/dnlO/QCL8L+cBbAvkXTzJ3Sfv
+         bc9rPC3zagdJ5RNhVmMJpgd0DKFHQUfqjFmvmjnY=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v1 063/107] media: ti-vpe: cal: Operate on phy instances in cal_quickdump_regs()
-Date:   Mon, 15 Jun 2020 02:59:00 +0300
-Message-Id: <20200614235944.17716-64-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 070/107] media: ti-vpe: cal: Print revision and hwinfo in a more readable format
+Date:   Mon, 15 Jun 2020 02:59:07 +0300
+Message-Id: <20200614235944.17716-71-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
 References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
@@ -49,57 +49,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The cal_quickdump_regs() dumps registers for the two CAMERARX instances.
-Retrieve those instances from the cal_dev directly instead of going
-through the contexts, and simplify the code by using a loop.
+Print the hardware revision in the X.Y.R format, which is more readable
+that the 32-bit hex value. For the hardware info register, only print
+its value if it doesn't contain what we expect.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index d551f1d9895b..d9cb7a53cb8d 100644
+index 33a985300045..4a1f76b12130 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -449,26 +449,24 @@ static inline void set_field(u32 *valp, u32 field, u32 mask)
+@@ -2331,21 +2331,36 @@ static const struct of_device_id cal_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, cal_of_match);
  
- static void cal_quickdump_regs(struct cal_dev *cal)
+-/*
+- * Get Revision and HW info
+- */
++/* Get hardware revision and info. */
++
++#define CAL_HL_HWINFO_VALUE		0xa3c90469
++
+ static void cal_get_hwinfo(struct cal_dev *cal)
  {
-+	unsigned int i;
-+
- 	cal_info(cal, "CAL Registers @ 0x%pa:\n", &cal->res->start);
- 	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
- 		       (__force const void *)cal->base,
- 		       resource_size(cal->res), false);
+ 	u32 revision;
+ 	u32 hwinfo;
  
--	if (cal->ctx[0]) {
--		cal_info(cal, "CSI2 Core 0 Registers @ %pa:\n",
--			 &cal->ctx[0]->phy->res->start);
--		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
--			       (__force const void *)cal->ctx[0]->phy->base,
--			       resource_size(cal->ctx[0]->phy->res),
--			       false);
--	}
-+	for (i = 0; i < ARRAY_SIZE(cal->phy); ++i) {
-+		struct cal_camerarx *phy = cal->phy[i];
+ 	revision = reg_read(cal, CAL_HL_REVISION);
+-	cal_dbg(3, cal, "CAL_HL_REVISION = 0x%08x (expecting 0x40000200)\n",
+-		revision);
++	switch (FIELD_GET(CAL_HL_REVISION_SCHEME_MASK, revision)) {
++	case CAL_HL_REVISION_SCHEME_H08:
++		cal_dbg(3, cal, "CAL HW revision %lu.%lu.%lu (0x%08x)\n",
++			FIELD_GET(CAL_HL_REVISION_MAJOR_MASK, revision),
++			FIELD_GET(CAL_HL_REVISION_MINOR_MASK, revision),
++			FIELD_GET(CAL_HL_REVISION_RTL_MASK, revision),
++			revision);
++		break;
 +
-+		if (!phy)
-+			continue;
++	case CAL_HL_REVISION_SCHEME_LEGACY:
++	default:
++		cal_info(cal, "Unexpected CAL HW revision 0x%08x\n",
++			 revision);
++		break;
++	}
  
--	if (cal->ctx[1]) {
--		cal_info(cal, "CSI2 Core 1 Registers @ %pa:\n",
--			 &cal->ctx[1]->phy->res->start);
-+		cal_info(cal, "CSI2 Core %u Registers @ %pa:\n", i,
-+			 &phy->res->start);
- 		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
--			       (__force const void *)cal->ctx[1]->phy->base,
--			       resource_size(cal->ctx[1]->phy->res),
-+			       (__force const void *)phy->base,
-+			       resource_size(phy->res),
- 			       false);
- 	}
+ 	hwinfo = reg_read(cal, CAL_HL_HWINFO);
+-	cal_dbg(3, cal, "CAL_HL_HWINFO = 0x%08x (expecting 0xA3C90469)\n",
+-		hwinfo);
++	if (hwinfo != CAL_HL_HWINFO_VALUE)
++		cal_info(cal, "CAL_HL_HWINFO = 0x%08x, expected 0x%08x\n",
++			 hwinfo, CAL_HL_HWINFO_VALUE);
  }
+ 
+ static u32 cal_data_get_num_csi2_phy(struct cal_dev *cal)
 -- 
 Regards,
 
