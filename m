@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2625FC433E1
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:00:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8A00C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:00:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 04DCD207BC
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:00:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB30420747
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:00:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="bV92Uv5a"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Vk/hXRJB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728101AbgFOAAa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Jun 2020 20:00:30 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33340 "EHLO
+        id S1728098AbgFOAAd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Jun 2020 20:00:33 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:33330 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728083AbgFOAA3 (ORCPT
+        with ESMTP id S1728100AbgFOAAb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Jun 2020 20:00:29 -0400
+        Sun, 14 Jun 2020 20:00:31 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18F5C1A96;
-        Mon, 15 Jun 2020 02:00:17 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5D84598D;
+        Mon, 15 Jun 2020 02:00:18 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592179217;
-        bh=x+ymr3CEY9ZXk1YvH8pZQd020UcwhmmQkapzbrB+jBs=;
+        s=mail; t=1592179218;
+        bh=k2Pac8C5U7yZWinwo0+cVxYwgDC0UxKJ6XykFPlnD1k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bV92Uv5a42gJba3azYX8J+er9Y2QdAI4FE/5F2lGNzcdrTjIcHi63D8WG6w+a1Jh1
-         W5qY/pHizfb+WGl/G9EDZViEPkbFUE9oZLkDgxZmL94lU8mq4eMYsZFj/vaCUIkX9D
-         hr2pLwEBco+z0t7+WxdankDzg+uXx5tZKnPcIEOc=
+        b=Vk/hXRJBacGwzfffGL4MvUkREiK/wU2mYMVoAKx32EobKNtmp88lt2Y0G5q6Y64fX
+         bX1+D0xXDzu4awY8UMFET8dTmn0mJjCW3Vtv120vU0z+eeERAKSE3km1mXuQhAVR8g
+         wbEpJTH1m6vAUgpbtFTKyxzki8QZYQsnNMe2nv9Y=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v1 016/107] media: ti-vpe: cal: Store PHY regmap fields in struct cc_data
-Date:   Mon, 15 Jun 2020 02:58:13 +0300
-Message-Id: <20200614235944.17716-17-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 019/107] media: ti-vpe: cal: Constify platform data
+Date:   Mon, 15 Jun 2020 02:58:16 +0300
+Message-Id: <20200614235944.17716-20-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
 References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
@@ -49,179 +49,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The PHY regmap fields are created dynamically at runtime. They don't
-belong to the platform data that should be constant. Move them to the
-cc_data structure.
+Now that no platform data fields are modified at runtime, make the
+corresponding structures const. The const qualifier for integer fields
+is removed as it's not required anymore.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 90 +++++++++++++++--------------
- 1 file changed, 46 insertions(+), 44 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index dda0d7a6b02f..46e12e4c4f5d 100644
+index d8bf24029d54..d1ab7fc26d25 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -215,13 +215,6 @@ struct cal_dmaqueue {
- 	int			ini_jiffies;
- };
- 
--struct cc_data {
--	void __iomem		*base;
--	struct resource		*res;
--
--	struct platform_device *pdev;
--};
--
- /* CTRL_CORE_CAMERRX_CONTROL register field id */
- enum cal_camerarx_field {
- 	F_CTRLCLKEN,
-@@ -232,8 +225,17 @@ enum cal_camerarx_field {
- 	F_MAX_FIELDS,
- };
- 
-+struct cc_data {
-+	void __iomem		*base;
-+	struct resource		*res;
-+	struct platform_device	*pdev;
-+
-+	struct {
-+		struct regmap_field *fields[F_MAX_FIELDS];
-+	} phy;
-+};
-+
- struct cal_csi2_phy {
--	struct regmap_field *fields[F_MAX_FIELDS];
- 	struct {
+@@ -240,17 +240,17 @@ struct cal_csi2_phy {
  		unsigned int lsb;
  		unsigned int msb;
-@@ -477,37 +479,37 @@ static u32 cal_data_get_num_csi2_phy(struct cal_dev *dev)
- 	return dev->data->num_csi2_phy;
- }
+ 	} fields[F_MAX_FIELDS];
+-	const unsigned int num_lanes;
++	unsigned int num_lanes;
+ };
  
--static int cal_camerarx_regmap_init(struct cal_dev *dev)
-+static int cal_camerarx_regmap_init(struct cal_dev *dev, struct cc_data *cc,
-+				    unsigned int idx)
- {
--	struct cal_csi2_phy *phy;
--	unsigned int i, j;
-+	const struct cal_csi2_phy *phy;
-+	unsigned int i;
+ struct cal_data {
+-	const unsigned int num_csi2_phy;
+-	struct cal_csi2_phy *csi2_phy_core;
++	unsigned int num_csi2_phy;
++	const struct cal_csi2_phy *csi2_phy_core;
  
- 	if (!dev->data)
- 		return -EINVAL;
+-	const unsigned int flags;
++	unsigned int flags;
+ };
  
--	for (i = 0; i < cal_data_get_num_csi2_phy(dev); i++) {
--		phy = &dev->data->csi2_phy_core[i];
--		for (j = 0; j < F_MAX_FIELDS; j++) {
--			struct reg_field field = {
--				.reg = dev->syscon_camerrx_offset,
--				.lsb = phy->base_fields[j].lsb,
--				.msb = phy->base_fields[j].msb,
--			};
-+	phy = &dev->data->csi2_phy_core[idx];
+-static struct cal_csi2_phy dra72x_cal_csi_phy[] = {
++static const struct cal_csi2_phy dra72x_cal_csi_phy[] = {
+ 	{
+ 		.fields = {
+ 			[F_CTRLCLKEN] = { 10, 10 },
+@@ -282,7 +282,7 @@ static const struct cal_data dra72x_es1_cal_data = {
+ 	.flags = DRA72_CAL_PRE_ES2_LDO_DISABLE,
+ };
  
--			/*
--			 * Here we update the reg offset with the
--			 * value found in DT
--			 */
--			phy->fields[j] =
--				devm_regmap_field_alloc(&dev->pdev->dev,
--							dev->syscon_camerrx,
--							field);
--			if (IS_ERR(phy->fields[j])) {
--				cal_err(dev, "Unable to allocate regmap fields\n");
--				return PTR_ERR(phy->fields[j]);
--			}
-+	for (i = 0; i < F_MAX_FIELDS; i++) {
-+		struct reg_field field = {
-+			.reg = dev->syscon_camerrx_offset,
-+			.lsb = phy->base_fields[i].lsb,
-+			.msb = phy->base_fields[i].msb,
-+		};
-+
-+		/*
-+		 * Here we update the reg offset with the
-+		 * value found in DT
-+		 */
-+		cc->phy.fields[i] = devm_regmap_field_alloc(&dev->pdev->dev,
-+							    dev->syscon_camerrx,
-+							    field);
-+		if (IS_ERR(cc->phy.fields[i])) {
-+			cal_err(dev, "Unable to allocate regmap fields\n");
-+			return PTR_ERR(cc->phy.fields[i]);
- 		}
- 	}
-+
- 	return 0;
- }
+-static struct cal_csi2_phy dra76x_cal_csi_phy[] = {
++static const struct cal_csi2_phy dra76x_cal_csi_phy[] = {
+ 	{
+ 		.fields = {
+ 			[F_CTRLCLKEN] = { 8, 8 },
+@@ -308,7 +308,7 @@ static const struct cal_data dra76x_cal_data = {
+ 	.num_csi2_phy = ARRAY_SIZE(dra76x_cal_csi_phy),
+ };
  
-@@ -554,28 +556,26 @@ static struct regmap *cal_get_camerarx_regmap(struct cal_dev *dev)
-  */
- static void camerarx_phy_enable(struct cal_ctx *ctx)
- {
--	struct cal_csi2_phy *phy;
- 	u32 phy_id = ctx->csi2_port;
-+	struct cc_data *cc = ctx->dev->cc[phy_id];
- 	u32 max_lanes;
- 
--	phy = &ctx->dev->data->csi2_phy_core[phy_id];
--	regmap_field_write(phy->fields[F_CAMMODE], 0);
-+	regmap_field_write(cc->phy.fields[F_CAMMODE], 0);
- 	/* Always enable all lanes at the phy control level */
- 	max_lanes = (1 << cal_data_get_phy_max_lanes(ctx)) - 1;
--	regmap_field_write(phy->fields[F_LANEENABLE], max_lanes);
-+	regmap_field_write(cc->phy.fields[F_LANEENABLE], max_lanes);
- 	/* F_CSI_MODE is not present on every architecture */
--	if (phy->fields[F_CSI_MODE])
--		regmap_field_write(phy->fields[F_CSI_MODE], 1);
--	regmap_field_write(phy->fields[F_CTRLCLKEN], 1);
-+	if (cc->phy.fields[F_CSI_MODE])
-+		regmap_field_write(cc->phy.fields[F_CSI_MODE], 1);
-+	regmap_field_write(cc->phy.fields[F_CTRLCLKEN], 1);
- }
- 
- static void camerarx_phy_disable(struct cal_ctx *ctx)
- {
--	struct cal_csi2_phy *phy;
- 	u32 phy_id = ctx->csi2_port;
-+	struct cc_data *cc = ctx->dev->cc[phy_id];
- 
--	phy = &ctx->dev->data->csi2_phy_core[phy_id];
--	regmap_field_write(phy->fields[F_CTRLCLKEN], 0);
-+	regmap_field_write(cc->phy.fields[F_CTRLCLKEN], 0);
- }
- 
- /*
-@@ -585,6 +585,7 @@ static struct cc_data *cc_create(struct cal_dev *dev, unsigned int core)
- {
- 	struct platform_device *pdev = dev->pdev;
- 	struct cc_data *cc;
-+	int ret;
- 
- 	cc = devm_kzalloc(&pdev->dev, sizeof(*cc), GFP_KERNEL);
- 	if (!cc)
-@@ -604,6 +605,10 @@ static struct cc_data *cc_create(struct cal_dev *dev, unsigned int core)
- 	cal_dbg(1, dev, "ioresource %s at %pa - %pa\n",
- 		cc->res->name, &cc->res->start, &cc->res->end);
- 
-+	ret = cal_camerarx_regmap_init(dev, cc, core);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
- 	return cc;
- }
- 
-@@ -2317,9 +2322,6 @@ static int cal_probe(struct platform_device *pdev)
- 
- 	dev->syscon_camerrx = syscon_camerrx;
- 	dev->syscon_camerrx_offset = syscon_camerrx_offset;
--	ret = cal_camerarx_regmap_init(dev);
--	if (ret)
--		return ret;
- 
- 	dev->res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 						"cal_top");
+-static struct cal_csi2_phy am654_cal_csi_phy[] = {
++static const struct cal_csi2_phy am654_cal_csi_phy[] = {
+ 	{
+ 		.fields = {
+ 			[F_CTRLCLKEN] = { 15, 15 },
 -- 
 Regards,
 
