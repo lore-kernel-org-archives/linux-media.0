@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 737EBC433E2
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94910C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53A7320768
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C8E020768
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 00:01:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="VCYxPj+i"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="eZOelXXt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728224AbgFOABf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Jun 2020 20:01:35 -0400
+        id S1728223AbgFOABe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Jun 2020 20:01:34 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:33340 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728218AbgFOABf (ORCPT
+        with ESMTP id S1728211AbgFOABd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Jun 2020 20:01:35 -0400
+        Sun, 14 Jun 2020 20:01:33 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 88FCC2163;
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 23C8F2128;
         Mon, 15 Jun 2020 02:00:44 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
         s=mail; t=1592179244;
-        bh=dfi23yu4+uAAvh6ImlVI4ClRPMbNH96Ut15NhnudKlo=;
+        bh=pFa1pYVJDztBBCgqEqtlnEqPLNEUz1pCLvCJCWGsgYc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VCYxPj+iDdP0MrEfeadMUF+O4wbPFKvPYM7/VwZX2Tf6aBSXo3hfuHfYCQ8urySLY
-         t4krs4VHFG2rd1b+BxDTkZjhzRmkj19CPQ2W04bVadGxN376m/Fzf1Zg5ucAb9LK+/
-         03rIDLGQaSUGY5iIiRmovhyZQdy6RtMIJyWX+i6I=
+        b=eZOelXXtJcMHWtU2//T6+LeVcYaH4is6qzFgzBJ+ioL25YZM2TTtCZBtMdnxYuuyZ
+         QK4PURb40b95GUI4Ojn/Ljk1f/6Ds+JH9OeEbzvR3fgDu6alBFH97OPd1XSz2LN+KQ
+         be/LRQyRrziP7Z8vak4EAlPUXOkZCBr75LHiUa90=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v1 075/107] media: ti-vpe: cal: Inline cal_camerarx_max_lanes() in its only caller
-Date:   Mon, 15 Jun 2020 02:59:12 +0300
-Message-Id: <20200614235944.17716-76-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v1 074/107] media: ti-vpe: cal: Allocate cal_ctx active_fmt array dynamically
+Date:   Mon, 15 Jun 2020 02:59:11 +0300
+Message-Id: <20200614235944.17716-75-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
 References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
@@ -49,40 +49,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The cal_camerarx_max_lanes() function is a one-liner that has a single
-caller. It doesn't improve readability. Inline it in its caller.
+To avoid making the cal_ctx structure layoug depend on the size of the
+cal_formats array, allocate the active_fmt array dynamically. This
+prepares for splitting the driver in multiple files.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 3c24a7f7f1d9..be5b0b70420c 100644
+index d81195006026..3c24a7f7f1d9 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -481,19 +481,13 @@ static void cal_quickdump_regs(struct cal_dev *cal)
-  * ------------------------------------------------------------------
-  */
+@@ -325,7 +325,7 @@ struct cal_ctx {
+ 	struct v4l2_mbus_framefmt	m_fmt;
  
--static u32 cal_camerarx_max_lanes(struct cal_camerarx *phy)
--{
--	return phy->cal->data->camerarx[phy->instance].num_lanes;
--}
--
- static void cal_camerarx_enable(struct cal_camerarx *phy)
- {
--	u32 max_lanes;
-+	u32 num_lanes = phy->cal->data->camerarx[phy->instance].num_lanes;
+ 	/* Current subdev enumerated format */
+-	const struct cal_fmt	*active_fmt[ARRAY_SIZE(cal_formats)];
++	const struct cal_fmt	**active_fmt;
+ 	unsigned int		num_active_fmt;
  
- 	regmap_field_write(phy->fields[F_CAMMODE], 0);
- 	/* Always enable all lanes at the phy control level */
--	max_lanes = (1 << cal_camerarx_max_lanes(phy)) - 1;
--	regmap_field_write(phy->fields[F_LANEENABLE], max_lanes);
-+	regmap_field_write(phy->fields[F_LANEENABLE], (1 << num_lanes) - 1);
- 	/* F_CSI_MODE is not present on every architecture */
- 	if (phy->fields[F_CSI_MODE])
- 		regmap_field_write(phy->fields[F_CSI_MODE], 1);
+ 	unsigned int		sequence;
+@@ -1947,7 +1947,13 @@ static int cal_ctx_v4l2_init_formats(struct cal_ctx *ctx)
+ 	int ret = 0;
+ 
+ 	/* Enumerate sub device formats and enable all matching local formats */
++	ctx->active_fmt = devm_kcalloc(ctx->cal->dev, ARRAY_SIZE(cal_formats),
++				       sizeof(*ctx->active_fmt), GFP_KERNEL);
++	if (!ctx->active_fmt)
++		return -ENOMEM;
++
+ 	ctx->num_active_fmt = 0;
++
+ 	for (j = 0, i = 0; ret != -EINVAL; ++j) {
+ 
+ 		memset(&mbus_code, 0, sizeof(mbus_code));
 -- 
 Regards,
 
