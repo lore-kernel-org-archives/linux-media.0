@@ -2,179 +2,121 @@ Return-Path: <SRS0=EymB=74=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67F0AC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 05:23:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44685C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 05:36:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 411DE206E2
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 05:23:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592198584;
-	bh=zPlpTa454L5yrfSi13qbEwagpHFZip8m/fWGQw2Q8Fg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=Hh0VIxG+NVDQLFRPiW5TMGRS9pIQm1aou1CKSe0kjKGs/YaTxIQGQquIh26pAXZTU
-	 9Qntx4bxlxdYI4ZWkZNsWl3oWtTuS1rMTOvLvAG4JZZ8dN2JZD612PhNAxLNTmDo0s
-	 oxx7MnqlSIAGguX/Grti5Xxx18K2HgKjsa9p4+bM=
+	by mail.kernel.org (Postfix) with ESMTP id 2A59920679
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 05:36:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728180AbgFOFW7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jun 2020 01:22:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36568 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725648AbgFOFW7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jun 2020 01:22:59 -0400
-Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 65B76206E2;
-        Mon, 15 Jun 2020 05:22:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592198578;
-        bh=zPlpTa454L5yrfSi13qbEwagpHFZip8m/fWGQw2Q8Fg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vbKPNbVp8AtbqUGqqG99y/OymMfT33ItV2e94bH8ZT/H3gH6Z+1pPtqJ0sV5Cmsdz
-         fBcrZcTvC9UQqaJLV7yRDO+7W1shXXPxCfWzbx8yeQ5U5HssfZHQa0AE1s6EyIlZdK
-         /ajiHZpd8mUh9r36EylkjWaoR0JxhoZUW+Wt9PgY=
-Date:   Mon, 15 Jun 2020 07:22:54 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+        id S1726859AbgFOFgE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jun 2020 01:36:04 -0400
+Received: from smtprelay0022.hostedemail.com ([216.40.44.22]:59452 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725648AbgFOFgE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jun 2020 01:36:04 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay04.hostedemail.com (Postfix) with ESMTP id E1274180A7FEB;
+        Mon, 15 Jun 2020 05:36:02 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: rice41_210a42e26df3
+X-Filterd-Recvd-Size: 3609
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf04.hostedemail.com (Postfix) with ESMTPA;
+        Mon, 15 Jun 2020 05:36:01 +0000 (UTC)
+Message-ID: <923edc47122b3a143b06a1e711d2ec1736d898f9.camel@perches.com>
+Subject: Re: [PATCH 2/2] media: atomisp: replace old ---help--- tags by just
+ help
+From:   Joe Perches <joe@perches.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] media: atomisp: replace old ---help--- tags by just
- help
-Message-ID: <20200615072254.7be610bd@coco.lan>
-In-Reply-To: <849016f49273cd245401cc2d7d454d3a12330658.1592198305.git.mchehab+huawei@kernel.org>
+Date:   Sun, 14 Jun 2020 22:36:00 -0700
+In-Reply-To: <20200615072254.7be610bd@coco.lan>
 References: <d94e7bff13e8a361353360e4cdbf637bfb701bed.1592198305.git.mchehab+huawei@kernel.org>
-        <849016f49273cd245401cc2d7d454d3a12330658.1592198305.git.mchehab+huawei@kernel.org>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+         <849016f49273cd245401cc2d7d454d3a12330658.1592198305.git.mchehab+huawei@kernel.org>
+         <20200615072254.7be610bd@coco.lan>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.2-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Mon, 15 Jun 2020 07:18:34 +0200
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
-
-> There are several places on this file using the deprecated
-> ---help--- tag.
+On Mon, 2020-06-15 at 07:22 +0200, Mauro Carvalho Chehab wrote:
+> Em Mon, 15 Jun 2020 07:18:34 +0200
+> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
 > 
-> Replaces them.
-
-
-Just ignore it. A treewide patch already changed it:
-
-	a7f7f6248d97 ("treewide: replace '---help---' in Kconfig files with 'help'")
-
-I'll double-check the spacing things here. If it lasts upstream, I'll
-send the changes on a separate patch.
-
+> > There are several places on this file using the deprecated
+> > ---help--- tag.
+> > 
+> > Replaces them.
 > 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  drivers/staging/media/atomisp/i2c/Kconfig        | 14 +++++++-------
->  drivers/staging/media/atomisp/i2c/ov5693/Kconfig | 14 +++++++-------
->  2 files changed, 14 insertions(+), 14 deletions(-)
+> Just ignore it. A treewide patch already changed it:
 > 
-> diff --git a/drivers/staging/media/atomisp/i2c/Kconfig b/drivers/staging/media/atomisp/i2c/Kconfig
-> index 69f325c9a724..038de895ce40 100644
-> --- a/drivers/staging/media/atomisp/i2c/Kconfig
-> +++ b/drivers/staging/media/atomisp/i2c/Kconfig
-> @@ -9,7 +9,7 @@ config VIDEO_ATOMISP_OV2722
->         tristate "OVT ov2722 sensor support"
->  	depends on ACPI
->         depends on I2C && VIDEO_V4L2
-> -       ---help---
-> +       help
->  	 This is a Video4Linux2 sensor-level driver for the OVT
->  	 OV2722 raw camera.
->  
-> @@ -21,7 +21,7 @@ config VIDEO_ATOMISP_GC2235
->         tristate "Galaxy gc2235 sensor support"
->  	depends on ACPI
->         depends on I2C && VIDEO_V4L2
-> -       ---help---
-> +       help
->  	 This is a Video4Linux2 sensor-level driver for the OVT
->  	 GC2235 raw camera.
->  
-> @@ -32,7 +32,7 @@ config VIDEO_ATOMISP_GC2235
->  config VIDEO_ATOMISP_MSRLIST_HELPER
->         tristate "Helper library to load, parse and apply large register lists."
->         depends on I2C
-> -       ---help---
-> +       help
->  	 This is a helper library to be used from a sensor driver to load, parse
->  	 and apply large register lists.
->  
-> @@ -43,7 +43,7 @@ config VIDEO_ATOMISP_MT9M114
->         tristate "Aptina mt9m114 sensor support"
->  	depends on ACPI
->         depends on I2C && VIDEO_V4L2
-> -       ---help---
-> +       help
->  	 This is a Video4Linux2 sensor-level driver for the Micron
->  	 mt9m114 1.3 Mpixel camera.
->  
-> @@ -55,7 +55,7 @@ config VIDEO_ATOMISP_GC0310
->  	tristate "GC0310 sensor support"
->  	depends on ACPI
->  	depends on I2C && VIDEO_V4L2
-> -	---help---
-> +	help
->  	  This is a Video4Linux2 sensor-level driver for the Galaxycore
->  	  GC0310 0.3MP sensor.
->  
-> @@ -63,7 +63,7 @@ config VIDEO_ATOMISP_OV2680
->         tristate "Omnivision OV2680 sensor support"
->  	depends on ACPI
->         depends on I2C && VIDEO_V4L2
-> -       ---help---
-> +       help
->  	 This is a Video4Linux2 sensor-level driver for the Omnivision
->  	 OV2680 raw camera.
->  
-> @@ -79,7 +79,7 @@ config VIDEO_ATOMISP_LM3554
->         tristate "LM3554 flash light driver"
->  	depends on ACPI
->         depends on VIDEO_V4L2 && I2C
-> -       ---help---
-> +       help
->  	 This is a Video4Linux2 sub-dev driver for the LM3554
->  	 flash light driver.
->  
-> diff --git a/drivers/staging/media/atomisp/i2c/ov5693/Kconfig b/drivers/staging/media/atomisp/i2c/ov5693/Kconfig
-> index c6ee90b2d13f..536a731dba50 100644
-> --- a/drivers/staging/media/atomisp/i2c/ov5693/Kconfig
-> +++ b/drivers/staging/media/atomisp/i2c/ov5693/Kconfig
-> @@ -1,12 +1,12 @@
->  # SPDX-License-Identifier: GPL-2.0
->  config VIDEO_ATOMISP_OV5693
-> -       tristate "Omnivision ov5693 sensor support"
-> +	tristate "Omnivision ov5693 sensor support"
->  	depends on ACPI
-> -       depends on I2C && VIDEO_V4L2
-> -       ---help---
-> -	 This is a Video4Linux2 sensor-level driver for the Micron
-> -	 ov5693 5 Mpixel camera.
-> +	depends on I2C && VIDEO_V4L2
-> +	help
-> +	  This is a Video4Linux2 sensor-level driver for the Micron
-> +	  ov5693 5 Mpixel camera.
->  
-> -	 ov5693 is video camera sensor.
-> +	  ov5693 is video camera sensor.
->  
-> -	 It currently only works with the atomisp driver.
-> +	  It currently only works with the atomisp driver.
+> 	a7f7f6248d97 ("treewide: replace '---help---' in Kconfig files with 'help'")
+> 
+> I'll double-check the spacing things here. If it lasts upstream, I'll
+> send the changes on a separate patch.
+
+Another possible change to avoid more ---help--- lines:
+---
+ scripts/checkkconfigsymbols.py | 2 +-
+ scripts/checkpatch.pl          | 6 +-----
+ scripts/kconfig/lexer.l        | 2 +-
+ 3 files changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/scripts/checkkconfigsymbols.py b/scripts/checkkconfigsymbols.py
+index 00a10a293f4f..1548f9ce4682 100755
+--- a/scripts/checkkconfigsymbols.py
++++ b/scripts/checkkconfigsymbols.py
+@@ -34,7 +34,7 @@ REGEX_SOURCE_SYMBOL = re.compile(SOURCE_SYMBOL)
+ REGEX_KCONFIG_DEF = re.compile(DEF)
+ REGEX_KCONFIG_EXPR = re.compile(EXPR)
+ REGEX_KCONFIG_STMT = re.compile(STMT)
+-REGEX_KCONFIG_HELP = re.compile(r"^\s+(help|---help---)\s*$")
++REGEX_KCONFIG_HELP = re.compile(r"^\s+help\s*$")
+ REGEX_FILTER_SYMBOLS = re.compile(r"[A-Za-z0-9]$")
+ REGEX_NUMERIC = re.compile(r"0[xX][0-9a-fA-F]+|[0-9]+")
+ REGEX_QUOTES = re.compile("(\"(.*?)\")")
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 524df88f9364..738bb3fcf202 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -3044,11 +3044,7 @@ sub process {
+ 
+ 				if ($lines[$ln - 1] =~ /^\+\s*(?:bool|tristate|prompt)\s*["']/) {
+ 					$is_start = 1;
+-				} elsif ($lines[$ln - 1] =~ /^\+\s*(?:help|---help---)\s*$/) {
+-					if ($lines[$ln - 1] =~ "---help---") {
+-						WARN("CONFIG_DESCRIPTION",
+-						     "prefer 'help' over '---help---' for new help texts\n" . $herecurr);
+-					}
++				} elsif ($lines[$ln - 1] =~ /^\+\s*help\s*$/) {
+ 					$length = -1;
+ 				}
+ 
+diff --git a/scripts/kconfig/lexer.l b/scripts/kconfig/lexer.l
+index 6354c905b006..4b7339ff4c8b 100644
+--- a/scripts/kconfig/lexer.l
++++ b/scripts/kconfig/lexer.l
+@@ -105,7 +105,7 @@ n	[A-Za-z0-9_-]
+ "endchoice"		return T_ENDCHOICE;
+ "endif"			return T_ENDIF;
+ "endmenu"		return T_ENDMENU;
+-"help"|"---help---"	return T_HELP;
++"help"			return T_HELP;
+ "hex"			return T_HEX;
+ "if"			return T_IF;
+ "imply"			return T_IMPLY;
 
 
-
-Thanks,
-Mauro
