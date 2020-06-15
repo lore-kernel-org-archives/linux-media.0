@@ -2,87 +2,121 @@ Return-Path: <SRS0=EymB=74=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B0B2C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 07:59:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF744C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 08:01:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B960206D7
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 07:59:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="SYydaonK"
+	by mail.kernel.org (Postfix) with ESMTP id A67AA2067B
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jun 2020 08:01:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728522AbgFOH6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jun 2020 03:58:33 -0400
-Received: from www.zeus03.de ([194.117.254.33]:49104 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728782AbgFOH6b (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jun 2020 03:58:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=RMjlCTPUvJW1xCnOoDBBA4mwVvV
-        x7bFOG969Q15EZOU=; b=SYydaonKX5A7C0B1a+4qFM1lKE7T4hIZFdE9R+5ioBU
-        dOOeaOjQ69pzbcX6BA1gYstAhfc1gEvpILpV03n5BL9khDjYRlxzJz7PnJDduXzy
-        TtJoCxH8ev12glMVgaCN8go3X4rAVq2RX7GLodVdpYjE3qrBwpILRdwcJxD9VSbA
-        =
-Received: (qmail 989091 invoked from network); 15 Jun 2020 09:58:27 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Jun 2020 09:58:27 +0200
-X-UD-Smtp-Session: l3s3148p1@h+KzyhqoBrYgAwDPXwRdAFnN6pRlEuNX
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, x86@kernel.org
-Subject: [PATCH 0/6] remove deprecated i2c_new_device API
-Date:   Mon, 15 Jun 2020 09:58:09 +0200
-Message-Id: <20200615075816.2848-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.27.0
+        id S1728268AbgFOIBt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jun 2020 04:01:49 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:34419 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbgFOIBt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jun 2020 04:01:49 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 09E2620012;
+        Mon, 15 Jun 2020 08:01:45 +0000 (UTC)
+Date:   Mon, 15 Jun 2020 10:05:10 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] rcar-csi2: Rename confirm_start() to phy_post_init() to
+ match its usage
+Message-ID: <20200615080510.h35ftz36esrl2cx5@uno.localdomain>
+References: <20200611193232.128721-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200611193232.128721-1-niklas.soderlund+renesas@ragnatech.se>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-I want to remove the above API this cycle, and just a few patches have
-not made it into 5.8-rc1. They have been reviewed and most had been
-promised to get into linux-next, but well, things happen. So, I hope it
-is okay for everyone to collect them like this and push them via I2C for
-5.8-rc2.
+Hi Niklas,
 
-One minor exception is the media documentation patch which I simply have
-missed so far, but it is trivial.
+On Thu, Jun 11, 2020 at 09:32:32PM +0200, Niklas Söderlund wrote:
+> Since the driver was picked-up the starting of the PHY have changed
+> quiet a bit. An artifact of these changes is the now poorly named
+> callback confirm_start(). It used to confirm start of the PHY but now
+> performs post PHY start initialization, rename it to phy_post_init() to
+> reflect this.
+>
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-And then, finally, there is the removal of the old API as the final
-patch. Phew, that's been a long ride.
+Seems reasonable
+Acked-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
-I am open for comments, of course.
+Thanks
+  j
 
-Happy hacking,
-
-   Wolfram
-
-
-Wolfram Sang (6):
-  drm: encoder_slave: fix refcouting error for modules
-  drm: encoder_slave: use new I2C API
-  x86/platform/intel-mid: convert to use i2c_new_client_device()
-  video: backlight: tosa_lcd: convert to use i2c_new_client_device()
-  Documentation: media: convert to use i2c_new_client_device()
-  i2c: remove deprecated i2c_new_device API
-
- .../driver-api/media/v4l2-subdev.rst          |  2 +-
- .../userspace-api/media/conf_nitpick.py       |  2 +-
- arch/x86/platform/intel-mid/sfi.c             |  4 +--
- drivers/gpu/drm/drm_encoder_slave.c           | 15 ++++-------
- drivers/i2c/i2c-core-base.c                   | 25 -------------------
- drivers/video/backlight/tosa_lcd.c            |  4 +--
- include/linux/i2c.h                           |  8 +++---
- 7 files changed, 14 insertions(+), 46 deletions(-)
-
--- 
-2.27.0
-
+> ---
+>  drivers/media/platform/rcar-vin/rcar-csi2.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> index 151e6a90c5fbc70e..6dbfac9dcf775f84 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> @@ -344,7 +344,7 @@ enum rcar_csi2_pads {
+>
+>  struct rcar_csi2_info {
+>  	int (*init_phtw)(struct rcar_csi2 *priv, unsigned int mbps);
+> -	int (*confirm_start)(struct rcar_csi2 *priv);
+> +	int (*phy_post_init)(struct rcar_csi2 *priv);
+>  	const struct rcsi2_mbps_reg *hsfreqrange;
+>  	unsigned int csi0clkfreqrange;
+>  	unsigned int num_channels;
+> @@ -575,9 +575,9 @@ static int rcsi2_start_receiver(struct rcar_csi2 *priv)
+>  	if (ret)
+>  		return ret;
+>
+> -	/* Confirm start */
+> -	if (priv->info->confirm_start) {
+> -		ret = priv->info->confirm_start(priv);
+> +	/* Run post PHY start initialization, if needed. */
+> +	if (priv->info->phy_post_init) {
+> +		ret = priv->info->phy_post_init(priv);
+>  		if (ret)
+>  			return ret;
+>  	}
+> @@ -975,7 +975,7 @@ static int rcsi2_init_phtw_v3m_e3(struct rcar_csi2 *priv, unsigned int mbps)
+>  	return rcsi2_phtw_write_mbps(priv, mbps, phtw_mbps_v3m_e3, 0x44);
+>  }
+>
+> -static int rcsi2_confirm_start_v3m_e3(struct rcar_csi2 *priv)
+> +static int rcsi2_phy_post_init_v3m_e3(struct rcar_csi2 *priv)
+>  {
+>  	static const struct phtw_value step1[] = {
+>  		{ .data = 0xee, .code = 0x34 },
+> @@ -1059,7 +1059,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a77965 = {
+>
+>  static const struct rcar_csi2_info rcar_csi2_info_r8a77970 = {
+>  	.init_phtw = rcsi2_init_phtw_v3m_e3,
+> -	.confirm_start = rcsi2_confirm_start_v3m_e3,
+> +	.phy_post_init = rcsi2_phy_post_init_v3m_e3,
+>  	.num_channels = 4,
+>  };
+>
+> @@ -1072,7 +1072,7 @@ static const struct rcar_csi2_info rcar_csi2_info_r8a77980 = {
+>
+>  static const struct rcar_csi2_info rcar_csi2_info_r8a77990 = {
+>  	.init_phtw = rcsi2_init_phtw_v3m_e3,
+> -	.confirm_start = rcsi2_confirm_start_v3m_e3,
+> +	.phy_post_init = rcsi2_phy_post_init_v3m_e3,
+>  	.num_channels = 2,
+>  };
+>
+> --
+> 2.27.0
+>
