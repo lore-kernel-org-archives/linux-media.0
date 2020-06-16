@@ -2,106 +2,110 @@ Return-Path: <SRS0=krkx=75=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5C5AC433E2
-	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 14:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 898B8C433DF
+	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 14:09:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A28B620882
-	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 14:09:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6799B206F1
+	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 14:09:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MJHlkngF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729250AbgFPOJd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Jun 2020 10:09:33 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:57339 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728557AbgFPOJd (ORCPT
+        id S1729528AbgFPOJo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Jun 2020 10:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729050AbgFPOJk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Jun 2020 10:09:33 -0400
-X-Originating-IP: 93.34.118.233
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 2C2B5E000C;
-        Tue, 16 Jun 2020 14:09:29 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        kieran.bingham@ideasonboard.com, dave.stevenson@raspberrypi.com,
-        hyun.kwon@xilinx.com, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v5 01/10] media: v4l2-subdev: Introduce [get|set]_mbus_config pad ops
-Date:   Tue, 16 Jun 2020 16:12:36 +0200
-Message-Id: <20200616141244.49407-2-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200616141244.49407-1-jacopo+renesas@jmondi.org>
-References: <20200616141244.49407-1-jacopo+renesas@jmondi.org>
+        Tue, 16 Jun 2020 10:09:40 -0400
+Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5707BC061573;
+        Tue, 16 Jun 2020 07:09:40 -0700 (PDT)
+Received: by mail-vk1-xa41.google.com with SMTP id p187so4840445vkf.0;
+        Tue, 16 Jun 2020 07:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=kvkbSZZ2ghPvtr7g+4DwKKTOPHzQ+JkuiYjOoBKXQ1E=;
+        b=MJHlkngFT133npieWpyoGh0urU3iWbGas7CJZrtMJerpGuJtXJBloYvzE44huOfDvE
+         a+B2I1EBIwegx2wV251qk0dxjJ99+TVLMAqauve8tcZ/Czgrah7MQQ9zWAcV9Tfi1xha
+         368bEbvhG4rwhmCGX8rOyR5bixzGVSwmAMPwD6QW2bTSIQh9lUvIM33As4HJz19uN1Br
+         HJp2wwAzWFPjN5Re7TByc9JQSxrZvwsUW3K2FdN4eakM9unoII1EBeAVH+SxY6FAnGxd
+         GwnXUnN4QQOVPAAy+h7We3R1u3lxfmC3vixsKANC95sKfUVVE+mFs+DQdYIE/Cezz8YZ
+         W4Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=kvkbSZZ2ghPvtr7g+4DwKKTOPHzQ+JkuiYjOoBKXQ1E=;
+        b=teF1W9dg+PfqGbk34fqDmfqhGa2We0QBrjBA0Wt2YuE+6ZoRLr2qtXxQK++RN12DFV
+         1MkV7ZKkHtlHC5m+1ZW4O8CV4CsJB8b8gEP2ZUuVCNCeFS1Y2BiL+f8ex6DnM0fgOy2T
+         qfDx0Ah1dbFEfHCyH9n2BPz4dnRjhl/Da53eqFLe2rB/FYmv3oUF7pbe4704WMvQawgB
+         Ozl9BVkEwJQWNUJaqfTPbGM/NI1Qeb7r5jmwl6A2XhOmYQYp4IS7gLh6BBDN+mKk6Hyv
+         O/2Gb8O1eu8vMfs5LV/84zDNCvTKvPKjytME/sAIWT09N54KUfZa9btD81eAHE281hlu
+         OHGg==
+X-Gm-Message-State: AOAM532qgNBH/iyy4DKw9tnbgja9vkzjRyq64FKr48tie17uiyyvVYyt
+        CtLfCWGOTEfZpYBUIYvRYDQuafvwBvD5Vm+9RJViEw==
+X-Google-Smtp-Source: ABdhPJze8O6g9fE6ltSX85adg2jK4puYbKO8MUJwujXYHUy4P5RhKum5p0M5dGxwTqPtL4ATGFihpSZvv1m1jjx+STY=
+X-Received: by 2002:a1f:9094:: with SMTP id s142mr1776422vkd.6.1592316579576;
+ Tue, 16 Jun 2020 07:09:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200615075816.2848-1-wsa+renesas@sang-engineering.com> <20200616121244.GN20149@phenom.ffwll.local>
+In-Reply-To: <20200616121244.GN20149@phenom.ffwll.local>
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+Date:   Tue, 16 Jun 2020 15:05:58 +0100
+Message-ID: <CACvgo52PaW97cxMeGhbpD4FUVy5BRAunaCxX3106OOAZm6x67A@mail.gmail.com>
+Subject: Re: [PATCH 0/6] remove deprecated i2c_new_device API
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org,
+        linux-fbdev <linux-fbdev@vger.kernel.org>, x86@kernel.org,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Introduce two new pad operations to allow retrieving and configuring the
-media bus parameters on a subdevice pad.
+Hi all,
 
-The newly introduced operations aims to replace the s/g_mbus_config video
-operations, which have been on their way for deprecation since a long
-time.
+On Tue, 16 Jun 2020 at 13:12, Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Mon, Jun 15, 2020 at 09:58:09AM +0200, Wolfram Sang wrote:
+> > I want to remove the above API this cycle, and just a few patches have
+> > not made it into 5.8-rc1. They have been reviewed and most had been
+> > promised to get into linux-next, but well, things happen. So, I hope it
+> > is okay for everyone to collect them like this and push them via I2C for
+> > 5.8-rc2.
+>
+> for the drm side of things:
+>
+> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> >
+> > One minor exception is the media documentation patch which I simply have
+> > missed so far, but it is trivial.
+> >
+> > And then, finally, there is the removal of the old API as the final
+> > patch. Phew, that's been a long ride.
+> >
+> > I am open for comments, of course.
+> >
+> > Happy hacking,
+> >
+> >    Wolfram
+> >
+> >
+> > Wolfram Sang (6):
+> >   drm: encoder_slave: fix refcouting error for modules
+> >   drm: encoder_slave: use new I2C API
 
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- include/media/v4l2-subdev.h | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+The first two are in drm-misc-next and are to be expected with the 5.9
+merge window. As long as that doesn't cause major nuisance proceed as
+you prefer.
 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index f7fe78a6f65a..d8b9d5735307 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -670,6 +670,29 @@ struct v4l2_subdev_pad_config {
-  *
-  * @set_frame_desc: set the low level media bus frame parameters, @fd array
-  *                  may be adjusted by the subdev driver to device capabilities.
-+ *
-+ * @get_mbus_config: get the media bus configuration of a remote sub-device.
-+ *		     The media bus configuration is usually retrieved from the
-+ *		     firmware interface at sub-device probe time, immediately
-+ *		     applied to the hardware and eventually adjusted by the
-+ *		     driver. Remote sub-devices (usually video receivers) shall
-+ *		     use this operation to query the transmitting end bus
-+ *		     configuration in order to adjust their own one accordingly.
-+ *		     Callers should make sure they get the most up-to-date as
-+ *		     possible configuration from the remote end, likely calling
-+ *		     this operation as close as possible to stream on time. The
-+ *		     operation shall fail if the pad index it has been called on
-+ *		     is not valid.
-+ *
-+ * @set_mbus_config: set the media bus configuration of a remote sub-device.
-+ *		     This operations is intended to allow, in combination with
-+ *		     the get_mbus_config operation, the negotiation of media bus
-+ *		     configuration parameters between media sub-devices. The
-+ *		     operation shall not fail if the requested configuration is
-+ *		     not supported, but the driver shall update the content of
-+ *		     the %config argument to reflect what has been actually
-+ *		     applied to the hardware. The operation shall fail if the
-+ *		     pad index it has been called on is not valid.
-  */
- struct v4l2_subdev_pad_ops {
- 	int (*init_cfg)(struct v4l2_subdev *sd,
-@@ -710,6 +733,10 @@ struct v4l2_subdev_pad_ops {
- 			      struct v4l2_mbus_frame_desc *fd);
- 	int (*set_frame_desc)(struct v4l2_subdev *sd, unsigned int pad,
- 			      struct v4l2_mbus_frame_desc *fd);
-+	int (*get_mbus_config)(struct v4l2_subdev *sd, unsigned int pad,
-+			       struct v4l2_mbus_config *config);
-+	int (*set_mbus_config)(struct v4l2_subdev *sd, unsigned int pad,
-+			       struct v4l2_mbus_config *config);
- };
- 
- /**
--- 
-2.27.0
-
+-Emil
