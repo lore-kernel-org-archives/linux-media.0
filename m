@@ -2,254 +2,160 @@ Return-Path: <SRS0=krkx=75=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B91BC433E1
-	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 18:41:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75266C433E0
+	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 20:15:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 530552082F
-	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 18:41:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48DE2208B3
+	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 20:15:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="uT6hcV+G"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gy3NOO0T"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729605AbgFPSlm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Jun 2020 14:41:42 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:27440 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727114AbgFPSll (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Jun 2020 14:41:41 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1592332900; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=4IXZYzpvzDFKvTNY4cMQoOFAUngf4iLPe0XTms7I9B8=;
- b=uT6hcV+GwTx7hrbhY81y1r5lwxTv2ZkJG+IyTDzumDykki3N0wNmvh8X50ns0YkyWNtiSb2k
- 7U+XrwBIXxSuCBDAPHaoM2ti75II6cdIyGUgRdC361LMcxdUMOwvQRm/EHfxtz30HU8TG2Vg
- rRDKZdaiJqnlnKCn0XCaIbziNOo=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n09.prod.us-east-1.postgun.com with SMTP id
- 5ee9125ba6e154319fb82bb9 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 16 Jun 2020 18:41:31
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id EF01DC43395; Tue, 16 Jun 2020 18:41:29 +0000 (UTC)
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: dikshita)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B2460C433C9;
-        Tue, 16 Jun 2020 18:41:28 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Wed, 17 Jun 2020 00:11:28 +0530
-From:   dikshita@codeaurora.org
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>, mchehab@kernel.org,
-        ezequiel@collabora.com, boris.brezillon@collabora.com,
-        ribalda@kernel.org, paul.kocialkowski@bootlin.com,
-        posciak@chromium.org, linux-media@vger.kernel.org,
-        stanimir.varbanov@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, vgarodia@codeaurora.org,
-        majja@codeaurora.org, linux-media-owner@vger.kernel.org
-Subject: Re: [RFC PATCH 0/1] Add LTR controls
-In-Reply-To: <1a9904b6-60a5-0faa-8a5e-c9dc00802184@xs4all.nl>
-References: <1591871121-25420-1-git-send-email-dikshita@codeaurora.org>
- <f07c4aab69d2b333c0e36c50c526c0a85322e708.camel@ndufresne.ca>
- <1a9904b6-60a5-0faa-8a5e-c9dc00802184@xs4all.nl>
-Message-ID: <40040141fc3027c3eb1fdebc1a0e8ade@codeaurora.org>
-X-Sender: dikshita@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        id S1731715AbgFPUPw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Jun 2020 16:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731682AbgFPUPp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 16 Jun 2020 16:15:45 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA10C061573
+        for <linux-media@vger.kernel.org>; Tue, 16 Jun 2020 13:15:43 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id o26so181960edq.0
+        for <linux-media@vger.kernel.org>; Tue, 16 Jun 2020 13:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=AZqdoAEGz2z2dhDjwXWaMZ24wdl6oc5L+Rca1tEh8dc=;
+        b=gy3NOO0TVFbQO8JeVz50/yi9A6AS7UoNAvAWS0yUYYqBasL4KYmzd6LX0YSCcoYzih
+         WZAXIMLWxXdlpY/bvSoQGSycZqpuRHWIneQo9OcdzFjNUomCLSSqIOPp+mszgZqoPk58
+         11vlXMHdE8MlJ4HgS2M268UOIQg/vg94l2gEPrHYgzwAlfNPcT+aLo+uzZqgkLwSOejQ
+         7pTvUWtbeRhK8owv8gttck7ySAvgy2te3vvK1RRACY0AitSSke1l+HqJN1XmObrNj9pk
+         9Gt8EA3JTwxuKVwPRdbirVeQDhKiVXmFX2yjEqB5roJ5YX8jD5XeOYouqsyg4Mbq/taa
+         zXVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=AZqdoAEGz2z2dhDjwXWaMZ24wdl6oc5L+Rca1tEh8dc=;
+        b=Q/csQD8cFT9VdziULGw04gygDODip+ZQS9TUJKZEYa5y57tvWlPNHvXZa3hfwgm2EZ
+         FndOTZTeu5kRv6rNaPVO1LFi0TS3FpS86/JHNg7WOOkKUzkvLo4KR5ZdEFEXsfgWtOAG
+         rQ9RlMcH5a+q9b5YJfm8D9dBGs7RJXRR/AfyhfVGEl4JvQEZ9XK93C5Sf57AWKABprWM
+         Wf68aVUIBo0hGjtsxLDZmZGNBufgZEEoxLm7kZDAxkGQ1ipEnHXTVkBltmPWRMJgpIPJ
+         y5QRJpNzjeLx43TStN1V+ZdgWWXsaKQo8ijyVwsAJ5Y+8Sfo3sqDvay7DorU8aD01G7+
+         Z9Uw==
+X-Gm-Message-State: AOAM533eRlNK+RCVzc8iHwna9XTg9ajAfWJmQ1khU4DQCDjIPpBYgFHw
+        8hdtj3jeUTfOFU2AEj27NhmodgGsMQxQpw==
+X-Google-Smtp-Source: ABdhPJxIsyuMwyfFK+YWY/8UN0ykI79Dmd+IfHF88uSKNdHy2vmbGNi43R1JVapD/sonJonUkmDEIg==
+X-Received: by 2002:aa7:da8c:: with SMTP id q12mr4234503eds.385.1592338542217;
+        Tue, 16 Jun 2020 13:15:42 -0700 (PDT)
+Received: from localhost.localdomain (212-5-158-38.ip.btc-net.bg. [212.5.158.38])
+        by smtp.gmail.com with ESMTPSA id b14sm11602658ejq.105.2020.06.16.13.15.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2020 13:15:41 -0700 (PDT)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Maheshwar Ajja <majja@codeaurora.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Subject: [PATCH v2 4/4] venus: vdec: Add support for decode intra frames only
+Date:   Tue, 16 Jun 2020 23:14:46 +0300
+Message-Id: <20200616201446.15996-5-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200616201446.15996-1-stanimir.varbanov@linaro.org>
+References: <20200616201446.15996-1-stanimir.varbanov@linaro.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans, Nicolas,
+Adds support in the decoder for intra frames only decode. The
+implementation in the Venus use HFI property for thumbnail
+generation to lower memory usage and when the control is enabled
+the number of decoder output buffers for progressive stream
+will be one (for interlace two). We assume that the client will
+queue on the decoder input intra frames only but this is not
+mandatory. If the client queue non-intra frames on decoder input
+they will be returned on decoder output with an error.
 
-Thanks for your comments.
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+ drivers/media/platform/qcom/venus/core.h       | 1 +
+ drivers/media/platform/qcom/venus/vdec.c       | 7 +++++++
+ drivers/media/platform/qcom/venus/vdec_ctrls.c | 9 ++++++++-
+ 3 files changed, 16 insertions(+), 1 deletion(-)
 
-On 2020-06-12 14:41, Hans Verkuil wrote:
-> Hi Dikshita, Nicolas,
-> 
-> On 11/06/2020 16:22, Nicolas Dufresne wrote:
->> Le jeudi 11 juin 2020 à 15:55 +0530, Dikshita Agarwal a écrit :
->>> LTR (Long Term Reference) frames are the frames that are encoded 
->>> sometime in the past
->>> and stored in the DPB buffer list to be used as reference to encode 
->>> future frames.
->>> One usage of LTR encoding is to reduce error propagation for video 
->>> transmission
->>> in packet lossy networks.  For example, encoder may want to specify 
->>> some key frames as
->>> LTR pictures and use them as reference frames for encoding. With 
->>> extra protection
->>> selectively on these LTR frames or synchronization with the receiver 
->>> of reception of
->>> the LTR frames during transmission, decoder can receive reference 
->>> frames more reliably
->>> than other non-reference frames. As a result, transmission error can 
->>> be effectively
->>> restricted within certain frames rather than propagated to future 
->>> frames.
->>> 
->>> We are introducing below V4l2 Controls for this feature
->>> 1. V4L2_CID_MPEG_VIDEO_LTRCOUNT
->>>     a. This is used to query or configure the number of LTR frames.
->>>        This is a static control and is controlled by the client.
->>>     b. The LTR index varies from 0 to the max LTR-1.
->>>     c. If LTR Count is more than max supported LTR count (max LTR) by 
->>> driver, it will be rejected.
->>>     d. Auto Marking : If LTR count is non zero,
->>>         1) first LTR count frames would be mark as LTR automatically 
->>> after
->>>       	   every IDR frame (inclusive).
->>>         2) For multilayer encoding: first LTR count base layer 
->>> reference frames starting after
->>>            every IDR frame (inclusive) in encoding order would be 
->>> marked as LTR frames by the encoder.
->>>         3) Auto marking of LTR due to IDR should consider following 
->>> conditions:
->>>             1. The frame is not already set to be marked as LTR.
->>>             2. The frame is part of the base layer in the 
->>> hierarchical layer case.
->>>             3. The number of frames currently marked as LTR is less 
->>> than the maximum LTR frame index plus 1.
->>>     e. Encoder needs to handle explicit Mark/Use command when encoder 
->>> is still doing "auto" marking
-> 
-> I don't follow this, quite possibly due to lack of experience with 
-> encoders.
-> 
-> I kind of would expect to see two modes: either automatic where 
-> encoders can
-> mark up to LTR_COUNT frames as long term reference, and userspace just 
-> sets
-> LTR_COUNT and doesn't have to do anything else.
-> 
-> Or it is manual mode where userspace explicitly marks long term 
-> reference
-> frames.
-> 
-> From the proposal above it looks like you can mix auto and manual 
-> modes.
-> 
-> BTW, how do you 'unmark' long term reference frames?
-> 
-> This feature is for stateful encoders, right?
-> 
->> 
->> Perhaps we are missing a LONG_TERM_REFERENCE_MODE ? I bet some encoder
->> can select by themself long term references and even some encoders may
->> not let the user decide.
->> 
->> (not huge han of LTR acronyme, but that could be fine too, assuming 
->> you
->> add more _).
->> 
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 1bac30d4cf50..b9a3b9ca6ae1 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -191,6 +191,7 @@ struct vdec_controls {
+ 	u32 post_loop_deb_mode;
+ 	u32 profile;
+ 	u32 level;
++	bool intra_only;
+ };
+ 
+ struct venc_controls {
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 7c4c483d5438..aa68cefcae96 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -625,6 +625,13 @@ static int vdec_set_properties(struct venus_inst *inst)
+ 			return ret;
+ 	}
+ 
++	if (ctr->intra_only) {
++		ptype = HFI_PROPERTY_PARAM_VDEC_THUMBNAIL_MODE;
++		ret = hfi_session_set_property(inst, ptype, &en);
++		if (ret)
++			return ret;
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/media/platform/qcom/venus/vdec_ctrls.c b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+index 3a963cbd342a..96ca8d9dd22e 100644
+--- a/drivers/media/platform/qcom/venus/vdec_ctrls.c
++++ b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+@@ -28,6 +28,9 @@ static int vdec_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
+ 		ctr->level = ctrl->val;
+ 		break;
++	case V4L2_CID_MPEG_VIDEO_DECODE_INTRA_FRAMES_ONLY:
++		ctr->intra_only = ctrl->val;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -86,7 +89,7 @@ int vdec_ctrl_init(struct venus_inst *inst)
+ 	struct v4l2_ctrl *ctrl;
+ 	int ret;
+ 
+-	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 7);
++	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 8);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -141,6 +144,10 @@ int vdec_ctrl_init(struct venus_inst *inst)
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 
++	v4l2_ctrl_new_std(&inst->ctrl_handler, &vdec_ctrl_ops,
++			  V4L2_CID_MPEG_VIDEO_DECODE_INTRA_FRAMES_ONLY,
++			  0, 1, 1, 0);
++
+ 	ret = inst->ctrl_handler.error;
+ 	if (ret) {
+ 		v4l2_ctrl_handler_free(&inst->ctrl_handler);
+-- 
+2.17.1
 
-Userspace sets LTR count which signifies the number of LTR frames 
-encoder needs to generate or keep.
-The encoder has to build-up its internal buffer reference list (aka DBP 
-list or recon buffer list).
-In order to achieve that encoder will fill It's LTR (long term 
-references) list and STR (short term references) list
-by auto marking n frames as LTR frames(n is equal to LTR count) based on 
-auto-marking dictated by the encoder spec.
-The client then can replace those automatically marked frames with new 
-frames using V4L2_CID_MPEG_VIDEO_MARKLTRFRAME and can ask
-encoder to refer the newly marked frame for encoding the next frame 
-using V4L2_CID_MPEG_VIDEO_USELTRFRAME.
-
->>> 
->>> 2. V4L2_CID_MPEG_VIDEO_MARKLTRFRAME :
->>>     a. This signals to mark the current frame as LTR frame. It is a 
->>> dynamic control and also provide the LTR index to be used.
->>>     b. the LTR index provided by this control should never exceed the 
->>> max LTR-1. Else it will be rejected.
->> 
->> The "current" frame seems a bit loose. Perhaps you wanted to use 
->> buffer
->> flags ? A bit like what we have to signal TOP/BOTTOM fields in
->> alternate interlacing.
-> 
-> I was thinking the same thing. Using a control for this doesn't seem 
-> right.
-> 
-
-the client sets this to replace automatically marked frames by the 
-encoder with a particular frame.
-this provides an index that ranges from 0 to LTR count-1 and then the 
-particular frame will be marked with that index.
-this can be achieved through request by associating this control with a 
-specific buffer to make it synchronized.
-
->> 
->>> 
->>> 3. V4L2_CID_MPEG_VIDEO_USELTRFRAME :
->>>     a. This specifies the LTR frame(s) to be used for encoding the 
->>> current frame. This is a dynamic control.
->>>     b. LTR Use Bitmap : this consists of bits [0, 15]. A total of N 
->>> LSB bits of this field are valid,
->>>        where N is the maximum number of LTRs supported. All the other 
->>> bits are invalid and should be rejected.
->>>        The LSB corresponds to the LTR index 0. Bit N-1 from the LSB 
->>> corresponds to the LTR index max LTR-1.
-> 
-> How would userspace know this? Esp. with auto marking since userspace 
-> would have
-> to predict how auto marking works (if I understand this correctly).
-> 
-
-Client sets LTR count which tells about the number of LTR frames 
-automatically marked by the encoder.
-so client can use LTR index (0 to LTR count -1) to ask encoder to refer 
-any particular
-frame (marked automatically by driver or marked by client with 
-V4L2_CID_MPEG_VIDEO_MARKLTRFRAME) as a reference to encode the next 
-frame.
-
-> For which HW encoder is this meant?
-> 
-This is primarily meant for H264 and HEVC.
-
-Thanks,
-Dikshita
-
->> 
->> Note, I haven't captured very well the userspace control flow, perhaps
->> this could be enhanced through writing some documentation.
->> 
->> As per all other generic encoder controls, we need to make sure it 
->> will
->> be usable and flexible enough for multiple HW blocks, as it can be
->> tedious to extend later otherwise. It is important that along with 
->> this
->> RFC you provide some comparisons with with other HW / SW APIs in order
->> to help justify the design decisions. I also think there should be
->> link made V4L2_CID_MPEG_VIDEO_GOP_* , number of B-Frames etc.
-> 
-> I agree with Nicolas.
-> 
-> Regards,
-> 
-> 	Hans
-> 
->> 
->> regards,
->> Nicolas
->> 
->>> 
->>> Dikshita Agarwal (1):
->>>   media: v4l2-ctrls:  add control for ltr
->>> 
->>>  drivers/media/v4l2-core/v4l2-ctrls.c | 6 ++++++
->>>  include/uapi/linux/v4l2-controls.h   | 4 ++++
->>>  2 files changed, 10 insertions(+)
->>> 
->> 
