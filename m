@@ -2,159 +2,49 @@ Return-Path: <SRS0=krkx=75=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEC68C433E0
-	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 10:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A51B7C433E0
+	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 10:05:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1C6A20767
-	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 10:00:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8254820707
+	for <linux-media@archiver.kernel.org>; Tue, 16 Jun 2020 10:05:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728175AbgFPKAn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Jun 2020 06:00:43 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:36126 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726052AbgFPKAi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Jun 2020 06:00:38 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 38AF43C0579;
-        Tue, 16 Jun 2020 12:00:36 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wZY7WntlG0fp; Tue, 16 Jun 2020 12:00:31 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 029253C00BA;
-        Tue, 16 Jun 2020 12:00:31 +0200 (CEST)
-Received: from vmlxhi-110.adit-jv.com (10.72.93.196) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 16 Jun
- 2020 12:00:30 +0200
-From:   Ramzi BEN MEFTAH <rbmeftah@de.adit-jv.com>
-To:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Steve Longerbeam <steve_longerbeam@mentor.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Arnd Bergmann <arnd@arndb.de>, <linux-media@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Michael Rodin <mrodin@de.adit-jv.com>, <efriedrich@de.adit-jv.com>,
-        <erosca@de.adit-jv.com>
-Subject: [PATCH 2/3] media: i2c: adv748x-afe: Implement enum/get/set input
-Date:   Tue, 16 Jun 2020 12:00:16 +0200
-Message-ID: <1592301619-17631-2-git-send-email-rbmeftah@de.adit-jv.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1592301619-17631-1-git-send-email-rbmeftah@de.adit-jv.com>
-References: <1592301619-17631-1-git-send-email-rbmeftah@de.adit-jv.com>
+        id S1728144AbgFPKFH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Jun 2020 06:05:07 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:42518 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728153AbgFPKFF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 16 Jun 2020 06:05:05 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jl8Om-00EWMR-Vj; Tue, 16 Jun 2020 10:00:56 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jl8Uv-0003Lc-3l; Tue, 16 Jun 2020 10:07:17 +0000
+Date:   Tue, 16 Jun 2020 10:07:17 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <1267748959.30.1592302037103.JavaMail.jenkins@builder.linuxtv.org>
+In-Reply-To: <291823702.29.1592299182538.JavaMail.jenkins@builder.linuxtv.org>
+References: <291823702.29.1592299182538.JavaMail.jenkins@builder.linuxtv.org>
+Subject: Jenkins build is back to normal : media-build #3115
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.72.93.196]
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: SUCCESS
+Auto-submitted: auto-generated
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Steve Longerbeam <steve_longerbeam@mentor.com>
-
-The adv748x-afe sub-device driver does not support changing the
-analog input, so enuminput returns only the status of a single
-input at index=0. Likewise g_input returns only index 0, and s_input
-returns -EINVAL if index is not 0, and otherwise does nothing.
-
-Signed-off-by: Steve Longerbeam <steve_longerbeam@mentor.com>
-(cherry picked from ADIT v4.14 commit 8aadc35d3ae252a1eaed8506fbd1675911465bbd)
----
- drivers/media/i2c/adv748x/adv748x-afe.c | 42 ++++++++++++++++++++++++++++++---
- 1 file changed, 39 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/media/i2c/adv748x/adv748x-afe.c b/drivers/media/i2c/adv748x/adv748x-afe.c
-index dbbb1e4..6b090f4 100644
---- a/drivers/media/i2c/adv748x/adv748x-afe.c
-+++ b/drivers/media/i2c/adv748x/adv748x-afe.c
-@@ -154,7 +154,7 @@ static void adv748x_afe_set_video_standard(struct adv748x_state *state,
- 		   (sdpstd & 0xf) << ADV748X_SDP_VID_SEL_SHIFT);
- }
- 
--static int adv748x_afe_s_input(struct adv748x_afe *afe, unsigned int input)
-+static int adv748x_afe_set_input(struct adv748x_afe *afe, unsigned int input)
- {
- 	struct adv748x_state *state = adv748x_afe_to_state(afe);
- 
-@@ -267,6 +267,39 @@ static int adv748x_afe_g_input_status(struct v4l2_subdev *sd, u32 *status)
- 	return ret;
- }
- 
-+static int adv748x_afe_enuminput(struct v4l2_subdev *sd,
-+				 struct v4l2_input *input)
-+{
-+	struct adv748x_afe *afe = adv748x_sd_to_afe(sd);
-+
-+	if (input->index != 0)
-+		return -EINVAL;
-+
-+	input->type = V4L2_INPUT_TYPE_CAMERA;
-+	input->capabilities = V4L2_IN_CAP_STD;
-+	input->status = V4L2_IN_ST_NO_SIGNAL;
-+	/* API says we must return all supported standards */
-+	input->std = V4L2_STD_ALL;
-+
-+	snprintf(input->name, sizeof(input->name), "%s AIN%u",
-+		 sd->name, afe->input);
-+
-+	return adv748x_afe_g_input_status(sd, &input->status);
-+}
-+
-+static int adv748x_afe_g_input(struct v4l2_subdev *sd, u32 *index)
-+{
-+	*index = 0;
-+	return 0;
-+}
-+
-+static int adv748x_afe_s_input(struct v4l2_subdev *sd, u32 index)
-+{
-+	if (index != 0)
-+		return -EINVAL;
-+	return 0;
-+}
-+
- static int adv748x_afe_s_stream(struct v4l2_subdev *sd, int enable)
- {
- 	struct adv748x_afe *afe = adv748x_sd_to_afe(sd);
-@@ -277,7 +310,7 @@ static int adv748x_afe_s_stream(struct v4l2_subdev *sd, int enable)
- 	mutex_lock(&state->mutex);
- 
- 	if (enable) {
--		ret = adv748x_afe_s_input(afe, afe->input);
-+		ret = adv748x_afe_set_input(afe, afe->input);
- 		if (ret)
- 			goto unlock;
- 	}
-@@ -306,6 +339,9 @@ static const struct v4l2_subdev_video_ops adv748x_afe_video_ops = {
- 	.querystd = adv748x_afe_querystd,
- 	.g_tvnorms = adv748x_afe_g_tvnorms,
- 	.g_input_status = adv748x_afe_g_input_status,
-+	.enuminput = adv748x_afe_enuminput,
-+	.g_input = adv748x_afe_g_input,
-+	.s_input = adv748x_afe_s_input,
- 	.s_stream = adv748x_afe_s_stream,
- 	.g_pixelaspect = adv748x_afe_g_pixelaspect,
- };
-@@ -520,7 +556,7 @@ int adv748x_afe_init(struct adv748x_afe *afe)
- 		}
- 	}
- 
--	adv748x_afe_s_input(afe, afe->input);
-+	adv748x_afe_set_input(afe, afe->input);
- 
- 	adv_dbg(state, "AFE Default input set to %d\n", afe->input);
- 
--- 
-2.7.4
+See <https://builder.linuxtv.org/job/media-build/3115/display/redirect?page=changes>
 
