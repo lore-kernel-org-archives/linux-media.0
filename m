@@ -2,89 +2,88 @@ Return-Path: <SRS0=whLO=76=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EB66C433E0
-	for <linux-media@archiver.kernel.org>; Wed, 17 Jun 2020 18:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BE98C433DF
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jun 2020 19:08:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36E76217D9
-	for <linux-media@archiver.kernel.org>; Wed, 17 Jun 2020 18:52:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62A3E2088E
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jun 2020 19:08:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592419959;
-	bh=i+KcznjcHmFJXCMts75e4liweyEkr+LWYq1E5sBldjU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=HBRgl3HS7AoM7ed3Q6rGUkFeWwI8+YhaS5AK9722J4/LPulzmG/OzJTB+tAKAVRHj
-	 kdcvoJc1+RsOmWo1+APgjfS03KGwerrdNYTcbFp6bwxlqbCFDCy1q4h1MscX+c6qse
-	 c1nzjqQLr9un+1/gv0uw6Mq1Iuta+ptMtni/gvxc=
+	s=default; t=1592420886;
+	bh=e/5+Rb5G33cHdb0vaSQhP5UBxDZid2EqzR4REteNm0g=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=ZAZrpqEZEzkLLV40SNQInEfT+GeU2RzxrUw54WmkcojkNOhJ+8vjC0h+bp6cnjOOk
+	 DhVH7OCpY5U5rB8ZfE3lnhy/dfvVlrFrp2ysC8oS9ERw1bKbwEi/bIeOghmzZxrzR3
+	 k0HKoKGiC7AeVGdZKf9xWfRSD/66Vyg10Q+CqdY0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727894AbgFQSwU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Jun 2020 14:52:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40470 "EHLO mail.kernel.org"
+        id S1726948AbgFQTIB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Jun 2020 15:08:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49450 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726835AbgFQSwT (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Jun 2020 14:52:19 -0400
-Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        id S1726906AbgFQTIB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Jun 2020 15:08:01 -0400
+Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C65D21532;
-        Wed, 17 Jun 2020 18:52:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8348C212CC;
+        Wed, 17 Jun 2020 19:07:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592419938;
-        bh=i+KcznjcHmFJXCMts75e4liweyEkr+LWYq1E5sBldjU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F8x3VHksnMc+dVcBrz+GahrAmkWlsXQ1Le2LfObX/8lArJAAg3fukisN3Ck389ahO
-         MA2xNEyDPaXO0J72l9tEm5XtpJBWd7hbHLGmuDb4B78ppAQ759UMVzNssAZfFEabeq
-         sbAyg6qXNI3SiHKnxFu17/+jFpBJw1c4qbtlBqGc=
-Received: from mchehab by mail.kernel.org with local (Exim 4.93)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jldAV-00C8Al-Vq; Wed, 17 Jun 2020 20:52:15 +0200
+        s=default; t=1592420880;
+        bh=e/5+Rb5G33cHdb0vaSQhP5UBxDZid2EqzR4REteNm0g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ijyw4jYzonC/TpUxkUJcYLfLFvoV/dmUA8cVBeRHaoHrHlBI7zK+yMx9+lllc15a/
+         WuEhuYKCU3ar0yPMOCqvBCBoGM3ojMuJYBnwdCzSXD0Lie1rzsM2M0s2x+/8tp4Z0i
+         8xRnltLkln8admHqJZo1pd6PJRKGyBPVv6kXccOE=
+Date:   Wed, 17 Jun 2020 21:07:55 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+Cc:     Marc Gonzalez <marc.w.gonzalez@free.fr>,
         Brad Love <brad@nextdimension.cc>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
-Subject: [RFC 2/4] media: atomisp: fix help message for ISP2401 selection
-Date:   Wed, 17 Jun 2020 20:52:12 +0200
-Message-Id: <52b8bb5c7ebf039b4b7f72f250cbe897a0671b34.1592419750.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, Sean Young <sean@mess.org>,
+        devel@driverdev.osuosl.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [RFC 0/4] Don't do tuning zigzag using the very same frequency
+Message-ID: <20200617210755.1138caa2@coco.lan>
 In-Reply-To: <cover.1592419750.git.mchehab+huawei@kernel.org>
 References: <cover.1592419750.git.mchehab+huawei@kernel.org>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-I'm pretty sure I named this right, but it sounds that I ended
-doing something weird maybe while solving some conflict.
+Em Wed, 17 Jun 2020 20:52:10 +0200
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
 
-So, fix the title of this config var.
+> Marc reported on IRC that the zigzag code is trying to tune several times using
+> the same frequency with si2168. Well, this is not how this would be supposed
+> to do: it should try with different frequencies each time.
+> 
+> Change the core to use the one-shot mode if the frontend doesn't report a
+> frequency step. This will default to the current behavior, except that tuning
+> should be faster.
+> 
+> Yet, probably the right thing to do is to implement a frequency shift at such
+> frontends, as otherwise  tuning may have problems. So, produce a warning
+> on such cases, in order for the FE driver to be fixed.
+> 
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/staging/media/atomisp/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/Kconfig b/drivers/staging/media/atomisp/Kconfig
-index fea06cb0eb48..37577bb72998 100644
---- a/drivers/staging/media/atomisp/Kconfig
-+++ b/drivers/staging/media/atomisp/Kconfig
-@@ -22,7 +22,7 @@ config VIDEO_ATOMISP
- 	  module will be called atomisp
- 
- config VIDEO_ATOMISP_ISP2401
--	bool "VIDEO_ATOMISP_ISP2401"
-+	bool "Use Intel Atom ISP on Cherrytail/Anniedale (ISP2401)"
- 	depends on VIDEO_ATOMISP
- 	help
- 	  Enable support for Atom ISP2401-based boards.
--- 
-2.26.2
+> Mauro Carvalho Chehab (4):
+>   media: atomisp: fix identation at I2C Kconfig menu
+>   media: atomisp: fix help message for ISP2401 selection
 
+Those two patches are unrelated. Please ignore it on the context of this RFC.
+
+
+Thanks,
+Mauro
