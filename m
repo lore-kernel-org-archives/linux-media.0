@@ -2,86 +2,113 @@ Return-Path: <SRS0=whLO=76=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FD92C433E1
-	for <linux-media@archiver.kernel.org>; Wed, 17 Jun 2020 13:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA1A8C433DF
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jun 2020 14:21:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C35720776
-	for <linux-media@archiver.kernel.org>; Wed, 17 Jun 2020 13:55:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B32CB217A0
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jun 2020 14:21:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726594AbgFQNzx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Jun 2020 09:55:53 -0400
-Received: from smtp4-g21.free.fr ([212.27.42.4]:12662 "EHLO smtp4-g21.free.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726494AbgFQNzx (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Jun 2020 09:55:53 -0400
-Received: from [192.168.1.91] (unknown [77.207.133.132])
-        (Authenticated sender: marc.w.gonzalez)
-        by smtp4-g21.free.fr (Postfix) with ESMTPSA id 2497919F4F3;
-        Wed, 17 Jun 2020 15:55:12 +0200 (CEST)
-To:     Brad Love <brad@nextdimension.cc>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
-Subject: Re: si2168: different default that windows driver
-Message-ID: <bab43a4a-d213-96ed-cb88-fb2d1470e99f@free.fr>
-Date:   Wed, 17 Jun 2020 15:55:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726597AbgFQOVW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Jun 2020 10:21:22 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:34336 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726329AbgFQOVW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Jun 2020 10:21:22 -0400
+Received: by mail-vs1-f65.google.com with SMTP id q2so1492092vsr.1;
+        Wed, 17 Jun 2020 07:21:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ERGqcQ7t8WT4ifOpQtED2cQLgSQqRg45Jtc+jpL/R/s=;
+        b=toAClvRvSBV0LPW/IdJ972hNRe3Kgela9tPIBMfcBd774zNapT/ua5FCA0vvI10bpP
+         jRbPiosS9NW6WSx48r48b431a2g9hqOQUluFGCeCa1tGRfdA/4bYZgj6eygGvTXmhtFt
+         pDSXmWH8GOhZtmafLy7K2cyQMqVCOzYFLiLcGBJnMtp5BIO28Mh8Ui3lIOyalYOpefB9
+         td+jceWWuTLm1Ompc2ngrs+aYeBaohhxAVcFD5/QAUBgwv1UAkq90/b6VEEB55WSh9C3
+         BKt82uDAwz/8oNKV5d80odkqjtkiBvQcEf9wcN9FLAGDGbAA48VzntJTIUwN30+xmFcj
+         J+5w==
+X-Gm-Message-State: AOAM530r41Dl7gaEL5PEpKT7IJvZXrs1CoHa37BBf12DGv1Mvi9+DFna
+        OtlLunI/tcxGbnpRDUWAlNIf7B5jZcrlYydNkDo=
+X-Google-Smtp-Source: ABdhPJxUB28eId7C069Z9yU5wnQSTxhlhjJBmlSA6lDeLgkW8xYFy5G701t2YSWHVSEGhHywz7FhjlBV+Vo9znzTuNM=
+X-Received: by 2002:a67:e90e:: with SMTP id c14mr6182478vso.185.1592403680997;
+ Wed, 17 Jun 2020 07:21:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200605162518.28099-1-florian.fainelli@broadcom.com>
+ <6b1f0668-572e-ae52-27e6-c897bab4204c@gmail.com> <0c0ba84e-4b2d-53ac-5092-40312ecba13b@gmail.com>
+In-Reply-To: <0c0ba84e-4b2d-53ac-5092-40312ecba13b@gmail.com>
+From:   Michael Ira Krufky <mkrufky@linuxtv.org>
+Date:   Wed, 17 Jun 2020 10:21:08 -0400
+Message-ID: <CAOcJUbxfa8tQbHa8r=vyGoaJK0+N6v8puufu8vVJKZ4NdbpWKA@mail.gmail.com>
+Subject: Re: [PATCH stable 4.9 00/21] Unbreak 32-bit DVB applications on
+ 64-bit kernels
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jaedon Shin <jaedon.shin@gmail.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Katsuhiro Suzuki <suzuki.katsuhiro@socionext.com>,
+        Satendra Singh Thakur <satendra.t@samsung.com>,
+        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>,
+        "open list:FILESYSTEMS (VFS and infrastructure)" 
+        <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Brad,
+Hey Florian,
 
-I found this patch you wrote:
-https://github.com/b-rad-NDi/Ubuntu-media-tree-kernel-builder/blob/master/patches/mainline-extra/tip/10.random.patches/0004-si2168-different-default-that-windows-driver.patch
+Thank you for the time and effort that you put into this patch series.
+I was excited to see this, when I first saw it posted a few weeks ago.
+I have every intention of giving it a review, but just haven't found
+the time yet.  I'm sure that Mauro would say the same.
 
-Subject: [PATCH 4/5] si2168: different default that windows driver
+I'm sure that he and I both will find some time, hopefully over the
+next few weeks or sooner, to give this a thorough review and provide
+some feedback.
 
-Unsure of meaning, look into...
----
- drivers/media/dvb-frontends/si2168.c | 2 ++
- 1 file changed, 2 insertions(+)
+Hopefully we can put this on its way for merge soon.  Please bear with us..
 
-diff --git a/drivers/media/dvb-frontends/si2168.c b/drivers/media/dvb-frontends/si2168.c
-index 0d9d384cf..72794ead8 100644
---- a/drivers/media/dvb-frontends/si2168.c
-+++ b/drivers/media/dvb-frontends/si2168.c
-@@ -418,6 +418,8 @@ static int si2168_set_frontend(struct dvb_frontend *fe)
- 	}
- 
- 	cmd_init(&cmd, "\x14\x00\x0f\x10\x10\x00", 6, 4);
-+	/* BUGBUG? FW defaults to 1, but windows driver uses 30; above is 0? */
-+	cmd.args[5] = 30;
- 	ret = si2168_cmd_execute(client, &cmd);
- 	if (ret)
- 		goto err;
+Thanks again for your contribution.
 
+-Mike Krufky
 
-0x14 = SET_PROPERTY
-args[1] is ignored
-args[2:3] = little-endian property = 0x100f
-args[4:5] = little-endian prop_arg = 0x0010
-
-0x100f configures the "Signal Quality Indicator" computation.
-The value is averaged over the last N samples.
-N = prop_arg_bits[0:4]
-(legal values are 1-30, dunno what happens for 0 and 31)
-
-You're not supposed to change args[5] i.e. prop_arg_bits[8:15]
-Maybe you meant cmd.args[4] = 30; ?
-Or just change the command to "\x14\x00\x0f\x10\x1e\x00" ?
-Or just use 16 samples instead of 30 for the averaging?
-
-Regards.
+On Wed, Jun 17, 2020 at 12:39 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+>
+>
+> On 6/11/2020 9:45 PM, Florian Fainelli wrote:
+> >
+> >
+> > On 6/5/2020 9:24 AM, Florian Fainelli wrote:
+> >> Hi all,
+> >>
+> >> This long patch series was motivated by backporting Jaedon's changes
+> >> which add a proper ioctl compatibility layer for 32-bit applications
+> >> running on 64-bit kernels. We have a number of Android TV-based products
+> >> currently running on the 4.9 kernel and this was broken for them.
+> >>
+> >> Thanks to Robert McConnell for identifying and providing the patches in
+> >> their initial format.
+> >>
+> >> In order for Jaedon's patches to apply cleanly a number of changes were
+> >> applied to support those changes. If you deem the patch series too big
+> >> please let me know.
+> >
+> > Mauro, can you review this? I would prefer not to maintain those patches
+> > in our downstream 4.9 kernel as there are quite a few of them, and this
+> > is likely beneficial to other people.
+>
+> Hello? Anybody here?
+> --
+> Florian
