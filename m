@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58420C433E1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98C38C433DF
 	for <linux-media@archiver.kernel.org>; Wed, 17 Jun 2020 11:45:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4135E2168B
+	by mail.kernel.org (Postfix) with ESMTP id 777832168B
 	for <linux-media@archiver.kernel.org>; Wed, 17 Jun 2020 11:45:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbgFQLp5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Jun 2020 07:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
+        id S1726605AbgFQLp6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Jun 2020 07:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726355AbgFQLp4 (ORCPT
+        with ESMTP id S1726540AbgFQLp4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 17 Jun 2020 07:45:56 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A9DC061573
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E66EC0613EE
         for <linux-media@vger.kernel.org>; Wed, 17 Jun 2020 04:45:55 -0700 (PDT)
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1jlWVt-0002Wc-A6; Wed, 17 Jun 2020 13:45:53 +0200
+        id 1jlWVt-0002WX-7T; Wed, 17 Jun 2020 13:45:53 +0200
 Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1jlWVs-0000re-J8; Wed, 17 Jun 2020 13:45:52 +0200
+        id 1jlWVs-0000rO-DH; Wed, 17 Jun 2020 13:45:52 +0200
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         kernel@pengutronix.de, Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH 11/12] media: allegro: add a version field to mcu messages
-Date:   Wed, 17 Jun 2020 13:45:49 +0200
-Message-Id: <20200617114550.3235-12-m.tretter@pengutronix.de>
+Subject: [PATCH 06/12] media: allegro: support handling firmware dependent values
+Date:   Wed, 17 Jun 2020 13:45:44 +0200
+Message-Id: <20200617114550.3235-7-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200617114550.3235-1-m.tretter@pengutronix.de>
 References: <20200617114550.3235-1-m.tretter@pengutronix.de>
@@ -52,172 +52,107 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to distinguish the message format that is expected by the
-firmware, add a version field to the message header. This allows to
-encode and decode the messages for the version of the firmware that was
-loaded by the driver.
+Like the message format, also the identifiers in the messages differ
+between firmware versions. This especially affects the identifier for
+the codec that shall be used. As the messages used by the driver are now
+independent from the firmware, we can use the values defined by V4L2 as
+identifiers in the messages.
+
+Convert the V4L2 codec format to the respective firmware value when
+encoding the messages to binary format instead beforehand.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- .../staging/media/allegro-dvt/allegro-core.c  | 22 ++++++++++++++-----
- .../staging/media/allegro-dvt/allegro-mail.h  |  6 +++++
- 2 files changed, 23 insertions(+), 5 deletions(-)
+ drivers/staging/media/allegro-dvt/allegro-core.c | 11 +----------
+ drivers/staging/media/allegro-dvt/allegro-mail.c | 15 ++++++++++++++-
+ drivers/staging/media/allegro-dvt/allegro-mail.h |  2 +-
+ 3 files changed, 16 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
-index 98df10b39a0c..36da55fc5792 100644
+index d42d076cecdf..792d825cf118 100644
 --- a/drivers/staging/media/allegro-dvt/allegro-core.c
 +++ b/drivers/staging/media/allegro-dvt/allegro-core.c
-@@ -130,6 +130,7 @@ struct allegro_dev {
- 	struct regmap *regmap;
- 	struct regmap *sram;
- 
-+	const struct fw_info *fw_info;
- 	struct allegro_buffer firmware;
- 	struct allegro_buffer suballocator;
- 
-@@ -277,6 +278,7 @@ struct fw_info {
- 	unsigned int mailbox_cmd;
- 	unsigned int mailbox_status;
- 	size_t mailbox_size;
-+	enum mcu_msg_version mailbox_version;
- 	size_t suballocator_size;
- };
- 
-@@ -288,6 +290,7 @@ static const struct fw_info supported_firmware[] = {
- 		.mailbox_cmd = 0x7800,
- 		.mailbox_status = 0x7c00,
- 		.mailbox_size = 0x400 - 0x8,
-+		.mailbox_version = MCU_MSG_VERSION_2018_2,
- 		.suballocator_size = SZ_16M,
- 	},
- };
-@@ -749,6 +752,8 @@ static int allegro_mbox_notify(struct allegro_mbox *mbox)
- 	if (!msg)
- 		return -ENOMEM;
- 
-+	msg->header.version = dev->fw_info->mailbox_version;
-+
- 	tmp = kmalloc(mbox->size, GFP_KERNEL);
- 	if (!tmp) {
- 		err = -ENOMEM;
-@@ -780,6 +785,7 @@ static void allegro_mcu_send_init(struct allegro_dev *dev,
- 	memset(&msg, 0, sizeof(msg));
- 
- 	msg.header.type = MCU_MSG_TYPE_INIT;
-+	msg.header.version = dev->fw_info->mailbox_version;
- 
- 	msg.suballoc_dma = to_mcu_addr(dev, suballoc_dma);
- 	msg.suballoc_size = to_mcu_size(dev, suballoc_size);
-@@ -993,11 +999,13 @@ static int allegro_mcu_send_create_channel(struct allegro_dev *dev,
- 	memset(&param, 0, sizeof(param));
- 	fill_create_channel_param(channel, &param);
- 	allegro_alloc_buffer(dev, blob, sizeof(struct create_channel_param));
-+	param.version = dev->fw_info->mailbox_version;
- 	size = allegro_encode_config_blob(blob->vaddr, &param);
- 
- 	memset(&msg, 0, sizeof(msg));
- 
- 	msg.header.type = MCU_MSG_TYPE_CREATE_CHANNEL;
-+	msg.header.version = dev->fw_info->mailbox_version;
- 
- 	msg.user_id = channel->user_id;
- 
-@@ -1018,6 +1026,7 @@ static int allegro_mcu_send_destroy_channel(struct allegro_dev *dev,
- 	memset(&msg, 0, sizeof(msg));
- 
- 	msg.header.type = MCU_MSG_TYPE_DESTROY_CHANNEL;
-+	msg.header.version = dev->fw_info->mailbox_version;
- 
- 	msg.channel_id = channel->mcu_channel_id;
- 
-@@ -1037,6 +1046,7 @@ static int allegro_mcu_send_put_stream_buffer(struct allegro_dev *dev,
- 	memset(&msg, 0, sizeof(msg));
- 
- 	msg.header.type = MCU_MSG_TYPE_PUT_STREAM_BUFFER;
-+	msg.header.version = dev->fw_info->mailbox_version;
- 
- 	msg.channel_id = channel->mcu_channel_id;
- 	msg.dma_addr = to_codec_addr(dev, paddr);
-@@ -1061,6 +1071,7 @@ static int allegro_mcu_send_encode_frame(struct allegro_dev *dev,
- 	memset(&msg, 0, sizeof(msg));
- 
- 	msg.header.type = MCU_MSG_TYPE_ENCODE_FRAME;
-+	msg.header.version = dev->fw_info->mailbox_version;
- 
- 	msg.channel_id = channel->mcu_channel_id;
- 	msg.encoding_options = AL_OPT_FORCE_LOAD;
-@@ -1125,6 +1136,8 @@ static int allegro_mcu_push_buffer_internal(struct allegro_channel *channel,
- 		return -ENOMEM;
- 
- 	msg->header.type = type;
-+	msg->header.version = dev->fw_info->mailbox_version;
-+
- 	msg->channel_id = channel->mcu_channel_id;
- 	msg->num_buffers = num_buffers;
- 
-@@ -2992,7 +3005,6 @@ static void allegro_fw_callback(const struct firmware *fw, void *context)
- 	const char *fw_codec_name = "al5e.fw";
- 	const struct firmware *fw_codec;
- 	int err;
--	const struct fw_info *info;
- 
- 	if (!fw)
- 		return;
-@@ -3003,14 +3015,14 @@ static void allegro_fw_callback(const struct firmware *fw, void *context)
- 	if (err)
- 		goto err_release_firmware;
- 
--	info = allegro_get_firmware_info(dev, fw, fw_codec);
--	if (!info) {
-+	dev->fw_info = allegro_get_firmware_info(dev, fw, fw_codec);
-+	if (!dev->fw_info) {
- 		v4l2_err(&dev->v4l2_dev, "firmware is not supported\n");
- 		goto err_release_firmware_codec;
+@@ -816,15 +816,6 @@ static u32 v4l2_colorspace_to_mcu_colorspace(enum v4l2_colorspace colorspace)
  	}
+ }
  
- 	v4l2_info(&dev->v4l2_dev,
--		  "using mcu firmware version '%s'\n", info->version);
-+		  "using mcu firmware version '%s'\n", dev->fw_info->version);
+-static s8 v4l2_pixelformat_to_mcu_codec(u32 pixelformat)
+-{
+-	switch (pixelformat) {
+-	case V4L2_PIX_FMT_H264:
+-	default:
+-		return 1;
+-	}
+-}
+-
+ static u8 v4l2_profile_to_mcu_profile(enum v4l2_mpeg_video_h264_profile profile)
+ {
+ 	switch (profile) {
+@@ -923,7 +914,7 @@ static int fill_create_channel_param(struct allegro_channel *channel,
+ 	param->src_mode = 0x0;
+ 	param->profile = v4l2_profile_to_mcu_profile(channel->profile);
+ 	param->constraint_set_flags = BIT(1);
+-	param->codec = v4l2_pixelformat_to_mcu_codec(channel->codec);
++	param->codec = channel->codec;
+ 	param->level = v4l2_level_to_mcu_level(channel->level);
+ 	param->tier = 0;
+ 	param->sps_param = BIT(20) | 0x4a;
+diff --git a/drivers/staging/media/allegro-dvt/allegro-mail.c b/drivers/staging/media/allegro-dvt/allegro-mail.c
+index ba1c3bc587c6..ce183bd2495b 100644
+--- a/drivers/staging/media/allegro-dvt/allegro-mail.c
++++ b/drivers/staging/media/allegro-dvt/allegro-mail.c
+@@ -9,6 +9,7 @@
+ #include <linux/bitfield.h>
+ #include <linux/export.h>
+ #include <linux/errno.h>
++#include <linux/videodev2.h>
  
- 	/* Ensure that the mcu is sleeping at the reset vector */
- 	err = allegro_mcu_reset(dev);
-@@ -3022,7 +3034,7 @@ static void allegro_fw_callback(const struct firmware *fw, void *context)
- 	allegro_copy_firmware(dev, fw->data, fw->size);
- 	allegro_copy_fw_codec(dev, fw_codec->data, fw_codec->size);
+ #include "allegro-mail.h"
  
--	err = allegro_mcu_hw_init(dev, info);
-+	err = allegro_mcu_hw_init(dev, dev->fw_info);
- 	if (err) {
- 		v4l2_err(&dev->v4l2_dev, "failed to initialize mcu\n");
- 		goto err_free_fw_codec;
+@@ -53,17 +54,29 @@ allegro_enc_init(u32 *dst, struct mcu_msg_init_request *msg)
+ 	return i * sizeof(*dst);
+ }
+ 
++static inline u32 settings_get_mcu_codec(struct create_channel_param *param)
++{
++	u32 pixelformat = param->codec;
++
++	switch (pixelformat) {
++	case V4L2_PIX_FMT_H264:
++	default:
++		return 1;
++	}
++}
++
+ static ssize_t
+ allegro_encode_channel_config(u32 *dst, struct create_channel_param *param)
+ {
+ 	unsigned int i = 0;
++	unsigned int codec = settings_get_mcu_codec(param);
+ 
+ 	dst[i++] = FIELD_PREP(GENMASK(31, 16), param->height) |
+ 		   FIELD_PREP(GENMASK(15, 0), param->width);
+ 	dst[i++] = param->format;
+ 	dst[i++] = param->colorspace;
+ 	dst[i++] = param->src_mode;
+-	dst[i++] = FIELD_PREP(GENMASK(31, 24), param->codec) |
++	dst[i++] = FIELD_PREP(GENMASK(31, 24), codec) |
+ 		   FIELD_PREP(GENMASK(23, 8), param->constraint_set_flags) |
+ 		   FIELD_PREP(GENMASK(7, 0), param->profile);
+ 	dst[i++] = FIELD_PREP(GENMASK(31, 16), param->tier) |
 diff --git a/drivers/staging/media/allegro-dvt/allegro-mail.h b/drivers/staging/media/allegro-dvt/allegro-mail.h
-index 397622973c19..c095dbfcf104 100644
+index ae81e94a2f2c..a92a27e270b5 100644
 --- a/drivers/staging/media/allegro-dvt/allegro-mail.h
 +++ b/drivers/staging/media/allegro-dvt/allegro-mail.h
-@@ -20,10 +20,15 @@ enum mcu_msg_type {
- 	MCU_MSG_TYPE_PUSH_BUFFER_REFERENCE = 0x000f,
- };
- 
-+enum mcu_msg_version {
-+	MCU_MSG_VERSION_2018_2,
-+};
-+
- const char *msg_type_name(enum mcu_msg_type type);
- 
- struct mcu_msg_header {
- 	enum mcu_msg_type type;
-+	enum mcu_msg_version version;
- };
- 
- struct mcu_msg_init_request {
-@@ -40,6 +45,7 @@ struct mcu_msg_init_response {
- };
- 
- struct create_channel_param {
-+	enum mcu_msg_version version;
- 	u16 width;
- 	u16 height;
- 	u32 format;
+@@ -48,7 +48,7 @@ struct create_channel_param {
+ 	u32 src_mode;
+ 	u8 profile;
+ 	u16 constraint_set_flags;
+-	s8 codec;
++	u32 codec;
+ 	u16 level;
+ 	u16 tier;
+ 	u32 sps_param;
 -- 
 2.20.1
 
