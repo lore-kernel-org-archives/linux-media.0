@@ -2,66 +2,154 @@ Return-Path: <SRS0=u95x=77=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85573C433E1
-	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 13:23:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71538C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 13:30:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6DEB32082F
-	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 13:23:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C197206D7
+	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 13:30:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="eecemE88"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729995AbgFRNXK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Jun 2020 09:23:10 -0400
-Received: from winnie.ispras.ru ([83.149.199.91]:27651 "EHLO smtp.ispras.ru"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729828AbgFRNXJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Jun 2020 09:23:09 -0400
-X-Greylist: delayed 438 seconds by postgrey-1.27 at vger.kernel.org; Thu, 18 Jun 2020 09:23:08 EDT
-Received: from home.intra.ispras.ru (unknown [10.10.165.12])
-        by smtp.ispras.ru (Postfix) with ESMTP id B71F8203BF;
-        Thu, 18 Jun 2020 16:15:47 +0300 (MSK)
-From:   Evgeny Novikov <novikov@ispras.ru>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Evgeny Novikov <novikov@ispras.ru>, Sean Young <sean@mess.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-Subject: [PATCH] media: rc: return proper error code on error handling path in init
-Date:   Thu, 18 Jun 2020 16:15:38 +0300
-Message-Id: <20200618131538.18257-1-novikov@ispras.ru>
-X-Mailer: git-send-email 2.16.4
+        id S1730199AbgFRNaL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Jun 2020 09:30:11 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:50158 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729047AbgFRNaB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 18 Jun 2020 09:30:01 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05IDTwfV100277;
+        Thu, 18 Jun 2020 08:29:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1592486998;
+        bh=5va+SErevFHXq2MTpWc+Slrv+u6J1iA9q+8UrxyMzso=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=eecemE88YoMXc3DqpbxdciJJDRemT5z79LdJbGb4As3NYCVgohClbNiyKhtqzo5+5
+         RJMWSRg2DACi+6ORgOjgIxtbfx2g3EfXVyptiwxxlIPtTndJvPm/K5ZIUNIwlIJ75m
+         IBlIJ3sx05iztjB/CTzzbOW7y/35coY/KDqpsBfU=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05IDTwWr074409;
+        Thu, 18 Jun 2020 08:29:58 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 18
+ Jun 2020 08:29:57 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 18 Jun 2020 08:29:57 -0500
+Received: from ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with SMTP id 05IDTtpw075964;
+        Thu, 18 Jun 2020 08:29:56 -0500
+Date:   Thu, 18 Jun 2020 08:29:55 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC:     <linux-media@vger.kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>
+Subject: Re: [PATCH v1 008/107] media: ti-vpe: cal: Turn
+ reg_(read|write)_field() into inline functions
+Message-ID: <20200618132955.ozbx3heo6a5tas3m@ti.com>
+References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
+ <20200614235944.17716-9-laurent.pinchart@ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200614235944.17716-9-laurent.pinchart@ideasonboard.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If lirc_dev_init() fails during module initialization, rc_core_init()
-returns 0 denoting success. This can cause different issues during
-further operation of the module. The patch fixes the return value of
-rc_core_init() on the corresponding error handling path.
+Hi Laurent,
 
-Found by Linux Driver Verification project (linuxtesting.org).
+Thank you for the patch.
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
----
- drivers/media/rc/rc-main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote on Mon [2020-Jun-15 02:58:05 +0300]:
+> Turn the reg_(read|write)_field() macros into inline functions for
+> additional type safety. Use the FIELD_GET() and FIELD_PREP() macros
+> internally instead of reinventing the wheel.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>  drivers/media/platform/ti-vpe/cal.c | 28 ++++++++++++++++------------
+>  1 file changed, 16 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
+> index fa86a53882cc..8c068af936f0 100644
+> --- a/drivers/media/platform/ti-vpe/cal.c
+> +++ b/drivers/media/platform/ti-vpe/cal.c
+> @@ -6,6 +6,7 @@
+>   * Benoit Parrot, <bparrot@ti.com>
+>   */
+>  
+> +#include <linux/bitfield.h>
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/interrupt.h>
+> @@ -76,13 +77,6 @@ static const struct v4l2_fract
+>  #define reg_read(dev, offset) ioread32(dev->base + offset)
+>  #define reg_write(dev, offset, val) iowrite32(val, dev->base + offset)
+>  
+> -#define reg_read_field(dev, offset, mask) get_field(reg_read(dev, offset), \
+> -						    mask)
+> -#define reg_write_field(dev, offset, field, mask) { \
+> -	u32 val = reg_read(dev, offset); \
+> -	set_field(&val, field, mask); \
+> -	reg_write(dev, offset, val); }
+> -
+>  /* ------------------------------------------------------------------
+>   *	Basic structures
+>   * ------------------------------------------------------------------
+> @@ -418,6 +412,21 @@ struct cal_ctx {
+>  	bool dma_act;
+>  };
+>  
+> +static inline u32 reg_read_field(struct cal_dev *dev, u32 offset, u32 mask)
+> +{
+> +	return FIELD_GET(mask, reg_read(dev, offset));
+> +}
+> +
+> +static inline void reg_write_field(struct cal_dev *dev, u32 offset, u32 value,
+> +				   u32 mask)
+> +{
+> +	u32 val = reg_read(dev, offset);
+> +
+> +	val &= ~mask;
+> +	val |= FIELD_PREP(mask, value);
+> +	reg_write(dev, offset, val);
+> +}
+> +
+>  static const struct cal_fmt *find_format_by_pix(struct cal_ctx *ctx,
+>  						u32 pixelformat)
+>  {
+> @@ -453,11 +462,6 @@ static inline struct cal_ctx *notifier_to_ctx(struct v4l2_async_notifier *n)
+>  	return container_of(n, struct cal_ctx, notifier);
+>  }
+>  
+> -static inline int get_field(u32 value, u32 mask)
+> -{
+> -	return (value & mask) >> __ffs(mask);
+> -}
+> -
+>  static inline void set_field(u32 *valp, u32 field, u32 mask)
+>  {
+>  	u32 val = *valp;
 
-diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index d7064d664d52..7b53066d9d07 100644
---- a/drivers/media/rc/rc-main.c
-+++ b/drivers/media/rc/rc-main.c
-@@ -2052,7 +2052,7 @@ static int __init rc_core_init(void)
- 	if (rc) {
- 		pr_err("rc_core: unable to init lirc\n");
- 		class_unregister(&rc_class);
--		return 0;
-+		return rc;
- 	}
- 
- 	led_trigger_register_simple("rc-feedback", &led_feedback);
--- 
-2.16.4
+Is set_field still in use then after this patch?
+Any reason to keep it around?
 
+Benoit
+
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
+> 
