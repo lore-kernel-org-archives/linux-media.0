@@ -2,131 +2,77 @@ Return-Path: <SRS0=u95x=77=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 252A7C433E0
-	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 10:50:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 862BDC433DF
+	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 11:35:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01096206E2
-	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 10:50:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tIRU1k1m"
+	by mail.kernel.org (Postfix) with ESMTP id 662FB2067D
+	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 11:35:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729266AbgFRKuO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Jun 2020 06:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
+        id S1729520AbgFRLfh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Jun 2020 07:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726899AbgFRKuM (ORCPT
+        with ESMTP id S1729504AbgFRLfg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Jun 2020 06:50:12 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90A2C06174E;
-        Thu, 18 Jun 2020 03:50:11 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id e1so5553808wrt.5;
-        Thu, 18 Jun 2020 03:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rq2vtUmYaxK4oFT2JMWTlMByzPndGv5xo1xhKDsPblM=;
-        b=tIRU1k1mmbprjFBezRoJ/fRf6b4ii5Zvlsnfw1NYXXMVmQm4MXjoPLMQkSy9D1oWyU
-         COnpdWBxiA1BzcutzGTvVRN1Tz4Izy1pmKsev0pIwbF81DXfrGYLiZvlBOU8uS/1SBdK
-         wIdX/dgFCGW3al6nLuoYKTb8Qa/tH8GOYUXw945nfC7HvJEeHrU9H+3kfzuaV5SbJ6kq
-         NhZBOvH97jHYsQ3QVAwHyZz1RK52KR1+JgbYMA5qZ4i/w3fuyC+bIlftZl8ag6eJM2dk
-         X2d9D0A+v12N6ssf1BRC6dVsIekuehm0ncNsKB5A5BakdVfpqudtRYBmB5abLqdnYzX1
-         t2JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rq2vtUmYaxK4oFT2JMWTlMByzPndGv5xo1xhKDsPblM=;
-        b=SBJEZZnvCxNnlWkhtUNSLIZUKa6MJIUUAk0n485OYAt+lo+EJ8X/y5k85Iojns4NHl
-         efXxf/5DaGTZXBiJfsHF1tKa5eFnFv672XhMBtFugd2Bf6lSnEMXFsC5v/I96avNYKWa
-         8m0rmsSv3TmOmOzxIL+wbGCPRjG0ti5BUlMVwE2+VH2cnqgZOxZHze25Sg9U8CqzHzNT
-         fslekuPy/PDTMedo/hYTJgTo1BgXu4hdF4+GgK1U2n1Z8yaUo+Qi2QH6KD9XmwF88aKZ
-         GZKOnRn9IQ/7qZ9Z6p/1VMKQGA0hFGQSayDUJKlUtnzaHgnmPg81jv/r03OtScQpZK7n
-         fWcA==
-X-Gm-Message-State: AOAM532PC5FOXWPZcYiVrEEG10IpxGjlPeOmNPbH4qNI5Ns87jB1JM6q
-        szlz1NMK42WzsjeDpQz+Ylg=
-X-Google-Smtp-Source: ABdhPJzn6TiRD5IAKs0XCAIfaFPig7mPGXaimtb/vQ+Sfv8NqJIzzX/LezQJNXioqTqXrux5wOb1qA==
-X-Received: by 2002:adf:df91:: with SMTP id z17mr3835800wrl.273.1592477410465;
-        Thu, 18 Jun 2020 03:50:10 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id o10sm3073553wrj.37.2020.06.18.03.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2020 03:50:09 -0700 (PDT)
-Date:   Thu, 18 Jun 2020 12:50:07 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>, jonathanh@nvidia.com,
-        frankc@nvidia.com, hverkuil@xs4all.nl, sakari.ailus@iki.fi,
-        helen.koike@collabora.com, digetx@gmail.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [RFC PATCH v1 10/18] dt-bindings: tegra: Document VI and CSI
- port nodes
-Message-ID: <20200618105007.GA3663225@ulmo>
-References: <1591768960-31648-1-git-send-email-skomatineni@nvidia.com>
- <1591768960-31648-11-git-send-email-skomatineni@nvidia.com>
- <20200617221411.GB2923473@bogus>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ew6BAiZeqk4r7MaW"
-Content-Disposition: inline
-In-Reply-To: <20200617221411.GB2923473@bogus>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+        Thu, 18 Jun 2020 07:35:36 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D78C06174E
+        for <linux-media@vger.kernel.org>; Thu, 18 Jun 2020 04:35:35 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id D8ED62A4A7B
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
+        dafna3@gmail.com, sakari.ailus@linux.intel.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org
+Subject: [PATCH v4 1/4] media: staging: rkisp1: rsz: supported formats are the isp's src formats, not sink formats
+Date:   Thu, 18 Jun 2020 13:35:15 +0200
+Message-Id: <20200618113518.30057-2-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200618113518.30057-1-dafna.hirschfeld@collabora.com>
+References: <20200618113518.30057-1-dafna.hirschfeld@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+The rkisp1_resizer's enum callback 'rkisp1_rsz_enum_mbus_code'
+calls the enum callback of the 'rkisp1_isp' on it's video sink pad.
+This is a bug, the resizer should support the same formats
+supported by the 'rkisp1_isp' on the source pad (not the sink pad).
 
---ew6BAiZeqk4r7MaW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 56e3b29f9f6b "media: staging: rkisp1: add streaming paths"
 
-On Wed, Jun 17, 2020 at 04:14:11PM -0600, Rob Herring wrote:
-> On Tue, Jun 09, 2020 at 11:02:32PM -0700, Sowjanya Komatineni wrote:
-> > This patch documents Tegra VI and CSI port and endpoint nodes along
-> > with the other required properties.
-> >=20
-> > Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> > ---
-> >  .../display/tegra/nvidia,tegra20-host1x.txt        | 87 ++++++++++++++=
-++++++++
-> >  1 file changed, 87 insertions(+)
->=20
-> This is getting converted to schema by Thierry.
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Acked-by: Helen Koike <helen.koike@collabora.com>
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+---
+ drivers/staging/media/rkisp1/rkisp1-resizer.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yeah, once this has settled it probably makes sense for me to pick this
-up into the json-schema series on top of the initial conversion.
+diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+index d049374413dc..d64c064bdb1d 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
++++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+@@ -437,8 +437,8 @@ static int rkisp1_rsz_enum_mbus_code(struct v4l2_subdev *sd,
+ 	u32 pad = code->pad;
+ 	int ret;
+ 
+-	/* supported mbus codes are the same in isp sink pad */
+-	code->pad = RKISP1_ISP_PAD_SINK_VIDEO;
++	/* supported mbus codes are the same in isp video src pad */
++	code->pad = RKISP1_ISP_PAD_SOURCE_VIDEO;
+ 	ret = v4l2_subdev_call(&rsz->rkisp1->isp.sd, pad, enum_mbus_code,
+ 			       &dummy_cfg, code);
+ 
+-- 
+2.17.1
 
-Thierry
-
---ew6BAiZeqk4r7MaW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl7rRt0ACgkQ3SOs138+
-s6GjeQ//V5z5HHU3AGAEhkRvK5MxJwjbKjLteO/qr7SoHUcB0259EJUCo+M/Sj9r
-fhPbTuepd7NldeZBKTTHO+nwYVsl09ztvRAEdHHOZ9Nir6xToHYmr8i9t8bJH0Da
-Z1zueXUCBK+XWvodw0qzW6vLAZKAPgXk9ZyWXE2QcdiKTi/nq//ND3Wl2m1f8qdc
-IeoReqDLMJZEkig5HdDjkDcX0DnYhWaiN6TlYTN0gFt0P9n/3vrys6A3UnKQHcAt
-/vKgw5YKUfk4MHhKVZqWAeOVhRHxpef+2Q5atXqxWCwAQtcbrANXKA2UQMZ/fiux
-7xs8MhOOhkfVrH67N8qU/qzS00k8V+5CW1XVBfMQs2qfwRFSXlpBj5ONXPWLzbKs
-5/LXp/y+A+L0U7SykbfD8lT6SsCxabI5jF6jF/zlExc4gpqlL0gjVEaNpMcFje1/
-40ZwDxxQZHtSamkuOET5flEgDbe/uTc07Susmee5tBP3I91C7zikZZJvvKJ6sZnO
-HuQ3Yq67LFLl/q+pjyHPXoxx7+OsY1Z7Zm/3WWjfnprR+Y2IjUJ70nqxvlx/FZ03
-HrTf1iReuKRJMB1uDJT9YHxkAELACQql2hxCs1pa+X3GV/G5C0sMxN4rmmZQeQnm
-dzqM9ZVaXqmHopcGVfsAXF3/nyLKVPYVTdjngoP1fxcIqv9rEV4=
-=gbuv
------END PGP SIGNATURE-----
-
---ew6BAiZeqk4r7MaW--
