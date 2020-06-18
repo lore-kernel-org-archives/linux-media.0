@@ -2,192 +2,384 @@ Return-Path: <SRS0=u95x=77=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8687C433E1
-	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 15:01:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC2CFC433EB
+	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 15:41:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C021320773
-	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 15:01:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81192206FA
+	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 15:41:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="NAXSbQeH"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="qc9xM290"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730936AbgFRPBB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Jun 2020 11:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727055AbgFRPA7 (ORCPT
+        id S1731794AbgFRPlY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Jun 2020 11:41:24 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:55002 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731664AbgFRPk4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Jun 2020 11:00:59 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAF3C06174E
-        for <linux-media@vger.kernel.org>; Thu, 18 Jun 2020 08:00:58 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id p5so6378956wrw.9
-        for <linux-media@vger.kernel.org>; Thu, 18 Jun 2020 08:00:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6OXAj9s43JL1nA3AEpbYM/MO9Qwg5Ya14IpN0gZo/as=;
-        b=NAXSbQeHANLe1jipR3irzjbY7yWCggcmWa6HNg2IPmITzqFGf3L5EfLt0xDSdDrG+b
-         x2cMxixoM50+NeYTVtrK/kNJYHNO6fr4lE9I3N0/BlBM5groWNzwqW1H+Hm//JIuCUoA
-         dlNXlF2mmmSgTTwOzqZXKvpuzoxFA0/uYDSds=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=6OXAj9s43JL1nA3AEpbYM/MO9Qwg5Ya14IpN0gZo/as=;
-        b=qBT10FB5xjcRn5Hw81mlywMxUfrKKWa0cAQ1ojPhGZkKpIzFkjvxZDXbwal355QCMO
-         imA9xTvnsG0DxVOUa7eQaZvXS3NlcbkqIHUfBbzt2vgWA3QzsNFXJWEMbh0ektTIiMy2
-         Y7EecgymV6BqHMtJhw08NL0wA1vUMThcbfZY/TlSi9DiKVcUwdKbeGTasWo0TvYQAAmp
-         oXAazMW1trNSCU+bKqEOvyDkSuqPZQWHvBYALYFcK93H5bfQFm/o816jSUEuJgTPx5nn
-         HWGz56hTFlS/umLdMkyBhpUnW04ymYPoC5oj15wAhWL8JOjFwVIXH+WHvhcX77ip+3B9
-         AwTw==
-X-Gm-Message-State: AOAM532FRBmZ8mLDMEGb2dsHsR1I50+fEdgwGrmNJY7lhS4wopMS1RiX
-        x8lbzFBh8Gh+HLGrD2HSKeqY9g==
-X-Google-Smtp-Source: ABdhPJyrsmwBwFtG4KAk31ycwBo00rNlOYG3lXCyUqre+ViPnXoXIqRRhRlofgF6zGCpK4dB5Hv+mw==
-X-Received: by 2002:adf:d841:: with SMTP id k1mr4031245wrl.93.1592492454932;
-        Thu, 18 Jun 2020 08:00:54 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id p7sm3878240wro.26.2020.06.18.08.00.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2020 08:00:53 -0700 (PDT)
-Date:   Thu, 18 Jun 2020 17:00:51 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Thomas =?iso-8859-1?Q?Hellstr=F6m_=28Intel=29?= 
-        <thomas_os@shipmail.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Mika Kuoppala <mika.kuoppala@intel.com>
-Subject: Re: [Linaro-mm-sig] [PATCH 04/18] dma-fence: prime lockdep
- annotations
-Message-ID: <20200618150051.GS20149@phenom.ffwll.local>
-Mail-Followup-To: Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas =?iso-8859-1?Q?Hellstr=F6m_=28Intel=29?= <thomas_os@shipmail.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" <linaro-mm-sig@lists.linaro.org>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" <linux-media@vger.kernel.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Mika Kuoppala <mika.kuoppala@intel.com>
-References: <20200604081224.863494-1-daniel.vetter@ffwll.ch>
- <20200604081224.863494-5-daniel.vetter@ffwll.ch>
- <b11c2140-1b9c-9013-d9bb-9eb2c1906710@shipmail.org>
- <20200611083430.GD20149@phenom.ffwll.local>
- <20200611141515.GW6578@ziepe.ca>
- <20200616120719.GL20149@phenom.ffwll.local>
- <CAKMK7uE7DKUo9Z+yCpY+mW5gmKet8ugbF3yZNyHGqsJ=e-g_hA@mail.gmail.com>
- <20200617152835.GF6578@ziepe.ca>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200617152835.GF6578@ziepe.ca>
-X-Operating-System: Linux phenom 5.6.0-1-amd64 
+        Thu, 18 Jun 2020 11:40:56 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200618154039euoutp01a64c329269f89f2347a9dee3b92ff620~ZrZ56S_kw1844218442euoutp01V
+        for <linux-media@vger.kernel.org>; Thu, 18 Jun 2020 15:40:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200618154039euoutp01a64c329269f89f2347a9dee3b92ff620~ZrZ56S_kw1844218442euoutp01V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1592494839;
+        bh=bUR0gkYnHY2yGJNGlfsLKjT3FPrFZZ3Z2LsLuxLZIzE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qc9xM290EInWEc6qOa+aAiUjmqO3epRnOrc6nSHKgDev3t4LN1k4W5tu8cp34nabm
+         EbLBhXwwEgR9vg3caaX12Yd3RRi4t14YhzqOP3rbft79xPrudkTSZkrvLVsHu3/DMa
+         hYK4ZgDNP7wl2mquyDG44tghLtdaOQJWPJflaL9w=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200618154039eucas1p27f22f2881645b0769b94b16a5159f94d~ZrZ5oBFp40608806088eucas1p20;
+        Thu, 18 Jun 2020 15:40:39 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 61.70.60698.6FA8BEE5; Thu, 18
+        Jun 2020 16:40:38 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200618154038eucas1p1acd4fcdd183de4c19c4004778527a755~ZrZ5UdJYA1545815458eucas1p1o;
+        Thu, 18 Jun 2020 15:40:38 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200618154038eusmtrp12e800f642df656361881d213119aff1b~ZrZ5Ty4wZ2230622306eusmtrp1W;
+        Thu, 18 Jun 2020 15:40:38 +0000 (GMT)
+X-AuditID: cbfec7f5-a0fff7000001ed1a-54-5eeb8af69cde
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 76.F9.07950.6FA8BEE5; Thu, 18
+        Jun 2020 16:40:38 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200618154038eusmtip19632174da7f25d0e928d6533f76216c7~ZrZ4ojlkT0833608336eusmtip1V;
+        Thu, 18 Jun 2020 15:40:38 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Pawel Osciak <pawel@osciak.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v6 35/36] videobuf2: use sgtable-based scatterlist wrappers
+Date:   Thu, 18 Jun 2020 17:39:56 +0200
+Message-Id: <20200618153956.29558-36-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200618153956.29558-1-m.szyprowski@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA0VSfSxVYRzuPeeec8+9uXW6bN6htLtVqy0y2s7GRMXO1h+ppbU+cOPsMp/d
+        g6g/ssR0XUYUSTGZb7ldopFEcUXdiBpJiLXrW7vubczIcaj/nt/z/J49z+/dS6DSLsyGCImI
+        ZpQR8jAZLhbUdyzpD5tV035HFtvdqDT9e4R6nluDUWv1mSjVb5rHqfLKdoTqfTgsoApbXKnF
+        /jGE0o5/xai+xnycUmteYFT1u2EhVaJdQajs2SUh1bowgXnspKueVAG62VwooLUVd3G6wTyK
+        0SOpOoSuLb5FD62Oo3TWQCmgmwYTcHp8eRKn0+sqAG3U7qG7TEahj+Si2C2ICQuJZZSO7gHi
+        4Lo7TVjU4zNxmYNvsQRQc0IFRAQkXWBxeg+iAmJCSpYBWNo/gfPDIoDjw29QfjACaNIX4FuW
+        0aFZAS+UAvjDYEA4YcNyf8aDwzjpBFWzqg2DFZkEYGeaBYdRsgaFRVUkhy3JU/CVqVfIYQG5
+        D36YasU4LCHdYbN5ZjPMHlZquBYiQrTOd+uSMC4Ykj+FUFOWg/JLJ2FnKm+GpCWc0tUJeWwH
+        u7PUAt6QCOCYvlrID2oA+27nAn7LFX7XL6/HEev1DsKaRkee9oSGri8oR0NyBxyY3cUfsAPe
+        q8/ZpCUwJVnKb++Hebpn/2Jbez5vVqPh4iezkH+sTADzH7ShGcA+739YIQAVwJqJYcMVDOsc
+        wVx3YOXhbEyEwiEwMlwL1n9Y96rO9BK8XrnaBkgCyCwkhnPTflJMHsvGh7cBSKAyK8nxj91+
+        UkmQPP4Go4z0V8aEMWwbsCUEMmuJc9HkFSmpkEczoQwTxSi3VIQQ2SQAu8Cg6NSGuaXta1bO
+        GeLzjnp1cHCKZvqaxne+ExObygfYuJLQZH3OseUDigxRbs82URwYS3Qe7Ajx81ww7vVHjK4t
+        BbWI+GbcJR8W9QLFj5xqn9p7H+2w/TZy+QJ6einAxScxg7I/W9ArBnO/e3u8s2ki0Xd385+W
+        X/Neah+ZgA2WOx1Claz8LxjfRMVdAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsVy+t/xu7rful7HGZzepmvRe+4kk8XGGetZ
+        Lf5vm8hsceXrezaLlauPMllcnHmXxWLBfmuLL1ceMllsenyN1eLyrjlsFj0btrJarD1yl91i
+        2aY/TBZT3v5ktzj44QmrA7/HmnlrGD32flvA4rFpVSebx/ZvD1g97ncfZ/LYvKTe4/a/x8we
+        k28sZ/TYfbOBzePxr5dsHn1bVjF6fN4k53Hq62f2AN4oPZui/NKSVIWM/OISW6VoQwsjPUNL
+        Cz0jE0s9Q2PzWCsjUyV9O5uU1JzMstQifbsEvYwtLbtZC+YGVky8eZi1gXG9cxcjJ4eEgInE
+        g9tvWboYuTiEBJYySmy79JwFIiEjcXJaAyuELSzx51oXG0TRJ6Cin8/ZQRJsAoYSXW8hEiIC
+        nYwS07o/soM4zAI7mSX2337KCFIlLOAtsefrRbAOFgFViTOvDoKN5RWwk9j77Q0bxAp5idUb
+        DjCD2JxA8dPHW8FqhARsJZ5/aGObwMi3gJFhFaNIamlxbnpusZFecWJucWleul5yfu4mRmBU
+        bTv2c8sOxq53wYcYBTgYlXh4X4S8jhNiTSwrrsw9xCjBwawkwut09nScEG9KYmVValF+fFFp
+        TmrxIUZToKMmMkuJJucDIz6vJN7Q1NDcwtLQ3Njc2MxCSZy3Q+BgjJBAemJJanZqakFqEUwf
+        EwenVAPjjl8WdSqe5595zjmo+Enw/Pe537TWvbJ7HvXl0bednWmh3OHLm9tSMyKe+WyW36Gm
+        Y9gXZ/rh7gxNBpEtEwzllrMeW3dCakl9z/VSZZX8aYzhqmf9NphnHOq8dcfyRHOJq5Xxn5fK
+        3/5ve6HgdUj62e6UH8/VQsUWuDXbLnF7/TLiwYq/YlcUlFiKMxINtZiLihMB19SdncACAAA=
+X-CMS-MailID: 20200618154038eucas1p1acd4fcdd183de4c19c4004778527a755
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200618154038eucas1p1acd4fcdd183de4c19c4004778527a755
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200618154038eucas1p1acd4fcdd183de4c19c4004778527a755
+References: <20200618153956.29558-1-m.szyprowski@samsung.com>
+        <CGME20200618154038eucas1p1acd4fcdd183de4c19c4004778527a755@eucas1p1.samsung.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 12:28:35PM -0300, Jason Gunthorpe wrote:
-> On Wed, Jun 17, 2020 at 08:48:50AM +0200, Daniel Vetter wrote:
-> 
-> > Now my understanding for rdma is that if you don't have hw page fault
-> > support,
-> 
-> The RDMA ODP feature is restartable HW page faulting just like nouveau
-> has. The classical MR feature doesn't have this. Only mlx5 HW supports
-> ODP today.
-> 
-> > It's only gpus (I think) which are in this awkward in-between spot
-> > where dynamic memory management really is much wanted, but the hw
-> > kinda sucks. Aside, about 10+ years ago we had a similar problem with
-> > gpu hw, but for security: Many gpu didn't have any kinds of page
-> > tables to isolate different clients from each another. drivers/gpu
-> > fixed this by parsing&validating what userspace submitted to make sure
-> > it's only every accessing its own buffers. Most gpus have become
-> > reasonable nowadays and do have proper per-process pagetables (gpu
-> > process, not the pasid stuff), but even today there's still some of
-> > the old model left in some of the smallest SoC.
-> 
-> But I still don't understand why a dma fence is needed inside the GPU
-> driver itself in the notifier.
-> 
-> Surely the GPU driver can block and release the notifier directly from
-> its own command processing channel?
-> 
-> Why does this fence and all it entails need to leak out across
-> drivers?
+Use recently introduced common wrappers operating directly on the struct
+sg_table objects and scatterlist page iterators to make the code a bit
+more compact, robust, easier to follow and copy/paste safe.
 
-So 10 years ago we had this world of every gpu driver is its own bucket,
-nothing leaks out to the world. But the world had a different idea how
-gpus where supposed to work, with stuff like:
+No functional change, because the code already properly did all the
+scaterlist related calls.
 
-- laptops with a power-efficient but slow gpu integrated on the cpu die,
-  and a 2nd, much faster but also more wasteful gpu seperately
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ .../common/videobuf2/videobuf2-dma-contig.c   | 41 ++++++++-----------
+ .../media/common/videobuf2/videobuf2-dma-sg.c | 32 ++++++---------
+ .../common/videobuf2/videobuf2-vmalloc.c      | 12 ++----
+ 3 files changed, 34 insertions(+), 51 deletions(-)
 
-- also multi-gpu rendering (but on linux we never really got around to
-  enabling that, at least not for 3d rendering)
-
-- soc just bundle IP blocks together, and very often they feel like they
-  have to do their own display block (it's fairly easy and allows you to
-  keep your hw engineers justified on payroll with some more patents they
-  create), but anything more fancy they buy in. So from a driver
-  architecture pov even a single chip soc looks like a bundle of gpus
-
-And you want to pipeline all this because performance, so waiting in
-userspace for one block to finish before you hand it ever to the other
-isn't a good idea.
-
-Hence dma_fence as a cross driver leak was created by pulling the gpu
-completion tracking from the drm/ttm library for managing vram.
-
-Now with glorious hindsight we could have come up with a different
-approach, where synchronization is managed by userspace, kernel just
-provides some primitives (kinda like futexes, but for gpu). And the kernel
-manages residency and gpu pte wrangling entirely seperately. But:
-
-- 10 years ago drivers/gpu was a handful of people at best
-
-- we just finished the massive rewrite to get to a kernel memory manager
-  and kernel modesetting (over 5 years after windows/macos), so appetite
-  for massive rewrites was minimal.
-
-Here we are, now with 50 more drivers built on top and an entire userspace
-ecosystem that relies on all this (because yes we made dma_fence also the
-building block for all the cross-process uapi, why wouldn't we).
-
-I hope that explains a bit the history of how and why we ended up here.
-
-Maybe I should do a plumbers talk about "How not to memory manage -
-cautious tales from drivers/gpu" I think there's a lot of areas where the
-conversation usually goes "wtf" ... long explanation of history and
-technical reasons leading to a "oh dear". With a lot of other accelerators
-and things landing might be good to have a list of things that look
-tempting (because hey 2% faster) but arent worth the pain.
--Daniel
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+index f4b4a7c135eb..ba01a8692d88 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
+@@ -48,16 +48,15 @@ struct vb2_dc_buf {
+ 
+ static unsigned long vb2_dc_get_contiguous_size(struct sg_table *sgt)
+ {
+-	struct scatterlist *s;
+ 	dma_addr_t expected = sg_dma_address(sgt->sgl);
+-	unsigned int i;
++	struct sg_dma_page_iter dma_iter;
+ 	unsigned long size = 0;
+ 
+-	for_each_sg(sgt->sgl, s, sgt->nents, i) {
+-		if (sg_dma_address(s) != expected)
++	for_each_sgtable_dma_page(sgt, &dma_iter, 0) {
++		if (sg_page_iter_dma_address(&dma_iter) != expected)
+ 			break;
+-		expected = sg_dma_address(s) + sg_dma_len(s);
+-		size += sg_dma_len(s);
++		expected += PAGE_SIZE;
++		size += PAGE_SIZE;
+ 	}
+ 	return size;
+ }
+@@ -99,8 +98,7 @@ static void vb2_dc_prepare(void *buf_priv)
+ 	if (!sgt || buf->db_attach)
+ 		return;
+ 
+-	dma_sync_sg_for_device(buf->dev, sgt->sgl, sgt->orig_nents,
+-			       buf->dma_dir);
++	dma_sync_sgtable_for_device(buf->dev, sgt, buf->dma_dir);
+ }
+ 
+ static void vb2_dc_finish(void *buf_priv)
+@@ -112,7 +110,7 @@ static void vb2_dc_finish(void *buf_priv)
+ 	if (!sgt || buf->db_attach)
+ 		return;
+ 
+-	dma_sync_sg_for_cpu(buf->dev, sgt->sgl, sgt->orig_nents, buf->dma_dir);
++	dma_sync_sgtable_for_cpu(buf->dev, sgt, buf->dma_dir);
+ }
+ 
+ /*********************************************/
+@@ -273,8 +271,8 @@ static void vb2_dc_dmabuf_ops_detach(struct dma_buf *dbuf,
+ 		 * memory locations do not require any explicit cache
+ 		 * maintenance prior or after being used by the device.
+ 		 */
+-		dma_unmap_sg_attrs(db_attach->dev, sgt->sgl, sgt->orig_nents,
+-				   attach->dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
++		dma_unmap_sgtable(db_attach->dev, sgt, attach->dma_dir,
++				  DMA_ATTR_SKIP_CPU_SYNC);
+ 	sg_free_table(sgt);
+ 	kfree(attach);
+ 	db_attach->priv = NULL;
+@@ -299,8 +297,8 @@ static struct sg_table *vb2_dc_dmabuf_ops_map(
+ 
+ 	/* release any previous cache */
+ 	if (attach->dma_dir != DMA_NONE) {
+-		dma_unmap_sg_attrs(db_attach->dev, sgt->sgl, sgt->orig_nents,
+-				   attach->dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
++		dma_unmap_sgtable(db_attach->dev, sgt, attach->dma_dir,
++				  DMA_ATTR_SKIP_CPU_SYNC);
+ 		attach->dma_dir = DMA_NONE;
+ 	}
+ 
+@@ -308,9 +306,8 @@ static struct sg_table *vb2_dc_dmabuf_ops_map(
+ 	 * mapping to the client with new direction, no cache sync
+ 	 * required see comment in vb2_dc_dmabuf_ops_detach()
+ 	 */
+-	sgt->nents = dma_map_sg_attrs(db_attach->dev, sgt->sgl, sgt->orig_nents,
+-				      dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
+-	if (!sgt->nents) {
++	if (dma_map_sgtable(db_attach->dev, sgt, dma_dir,
++			    DMA_ATTR_SKIP_CPU_SYNC)) {
+ 		pr_err("failed to map scatterlist\n");
+ 		mutex_unlock(lock);
+ 		return ERR_PTR(-EIO);
+@@ -423,8 +420,8 @@ static void vb2_dc_put_userptr(void *buf_priv)
+ 		 * No need to sync to CPU, it's already synced to the CPU
+ 		 * since the finish() memop will have been called before this.
+ 		 */
+-		dma_unmap_sg_attrs(buf->dev, sgt->sgl, sgt->orig_nents,
+-				   buf->dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
++		dma_unmap_sgtable(buf->dev, sgt, buf->dma_dir,
++				  DMA_ATTR_SKIP_CPU_SYNC);
+ 		pages = frame_vector_pages(buf->vec);
+ 		/* sgt should exist only if vector contains pages... */
+ 		BUG_ON(IS_ERR(pages));
+@@ -521,9 +518,8 @@ static void *vb2_dc_get_userptr(struct device *dev, unsigned long vaddr,
+ 	 * No need to sync to the device, this will happen later when the
+ 	 * prepare() memop is called.
+ 	 */
+-	sgt->nents = dma_map_sg_attrs(buf->dev, sgt->sgl, sgt->orig_nents,
+-				      buf->dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
+-	if (sgt->nents <= 0) {
++	if (dma_map_sgtable(buf->dev, sgt, buf->dma_dir,
++			    DMA_ATTR_SKIP_CPU_SYNC)) {
+ 		pr_err("failed to map scatterlist\n");
+ 		ret = -EIO;
+ 		goto fail_sgt_init;
+@@ -545,8 +541,7 @@ static void *vb2_dc_get_userptr(struct device *dev, unsigned long vaddr,
+ 	return buf;
+ 
+ fail_map_sg:
+-	dma_unmap_sg_attrs(buf->dev, sgt->sgl, sgt->orig_nents,
+-			   buf->dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
++	dma_unmap_sgtable(buf->dev, sgt, buf->dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
+ 
+ fail_sgt_init:
+ 	sg_free_table(sgt);
+diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+index 92072a08af25..6ddf953efa11 100644
+--- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
++++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+@@ -142,9 +142,8 @@ static void *vb2_dma_sg_alloc(struct device *dev, unsigned long dma_attrs,
+ 	 * No need to sync to the device, this will happen later when the
+ 	 * prepare() memop is called.
+ 	 */
+-	sgt->nents = dma_map_sg_attrs(buf->dev, sgt->sgl, sgt->orig_nents,
+-				      buf->dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
+-	if (!sgt->nents)
++	if (dma_map_sgtable(buf->dev, sgt, buf->dma_dir,
++			    DMA_ATTR_SKIP_CPU_SYNC)) {
+ 		goto fail_map;
+ 
+ 	buf->handler.refcount = &buf->refcount;
+@@ -180,8 +179,8 @@ static void vb2_dma_sg_put(void *buf_priv)
+ 	if (refcount_dec_and_test(&buf->refcount)) {
+ 		dprintk(1, "%s: Freeing buffer of %d pages\n", __func__,
+ 			buf->num_pages);
+-		dma_unmap_sg_attrs(buf->dev, sgt->sgl, sgt->orig_nents,
+-				   buf->dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
++		dma_unmap_sgtable(buf->dev, sgt, buf->dma_dir,
++				  DMA_ATTR_SKIP_CPU_SYNC);
+ 		if (buf->vaddr)
+ 			vm_unmap_ram(buf->vaddr, buf->num_pages);
+ 		sg_free_table(buf->dma_sgt);
+@@ -202,8 +201,7 @@ static void vb2_dma_sg_prepare(void *buf_priv)
+ 	if (buf->db_attach)
+ 		return;
+ 
+-	dma_sync_sg_for_device(buf->dev, sgt->sgl, sgt->orig_nents,
+-			       buf->dma_dir);
++	dma_sync_sgtable_for_device(buf->dev, sgt, buf->dma_dir);
+ }
+ 
+ static void vb2_dma_sg_finish(void *buf_priv)
+@@ -215,7 +213,7 @@ static void vb2_dma_sg_finish(void *buf_priv)
+ 	if (buf->db_attach)
+ 		return;
+ 
+-	dma_sync_sg_for_cpu(buf->dev, sgt->sgl, sgt->orig_nents, buf->dma_dir);
++	dma_sync_sgtable_for_cpu(buf->dev, sgt, buf->dma_dir);
+ }
+ 
+ static void *vb2_dma_sg_get_userptr(struct device *dev, unsigned long vaddr,
+@@ -258,9 +256,8 @@ static void *vb2_dma_sg_get_userptr(struct device *dev, unsigned long vaddr,
+ 	 * No need to sync to the device, this will happen later when the
+ 	 * prepare() memop is called.
+ 	 */
+-	sgt->nents = dma_map_sg_attrs(buf->dev, sgt->sgl, sgt->orig_nents,
+-				      buf->dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
+-	if (!sgt->nents)
++	if (dma_map_sgtable(buf->dev, sgt, buf->dma_dir,
++			    DMA_ATTR_SKIP_CPU_SYNC)) {
+ 		goto userptr_fail_map;
+ 
+ 	return buf;
+@@ -286,8 +283,7 @@ static void vb2_dma_sg_put_userptr(void *buf_priv)
+ 
+ 	dprintk(1, "%s: Releasing userspace buffer of %d pages\n",
+ 	       __func__, buf->num_pages);
+-	dma_unmap_sg_attrs(buf->dev, sgt->sgl, sgt->orig_nents, buf->dma_dir,
+-			   DMA_ATTR_SKIP_CPU_SYNC);
++	dma_unmap_sgtable(buf->dev, sgt, buf->dma_dir, DMA_ATTR_SKIP_CPU_SYNC);
+ 	if (buf->vaddr)
+ 		vm_unmap_ram(buf->vaddr, buf->num_pages);
+ 	sg_free_table(buf->dma_sgt);
+@@ -410,8 +406,7 @@ static void vb2_dma_sg_dmabuf_ops_detach(struct dma_buf *dbuf,
+ 
+ 	/* release the scatterlist cache */
+ 	if (attach->dma_dir != DMA_NONE)
+-		dma_unmap_sg(db_attach->dev, sgt->sgl, sgt->orig_nents,
+-			attach->dma_dir);
++		dma_unmap_sgtable(db_attach->dev, sgt, attach->dma_dir);
+ 	sg_free_table(sgt);
+ 	kfree(attach);
+ 	db_attach->priv = NULL;
+@@ -436,15 +431,12 @@ static struct sg_table *vb2_dma_sg_dmabuf_ops_map(
+ 
+ 	/* release any previous cache */
+ 	if (attach->dma_dir != DMA_NONE) {
+-		dma_unmap_sg(db_attach->dev, sgt->sgl, sgt->orig_nents,
+-			attach->dma_dir);
++		dma_unmap_sgtable(db_attach->dev, sgt, attach->dma_dir);
+ 		attach->dma_dir = DMA_NONE;
+ 	}
+ 
+ 	/* mapping to the client with new direction */
+-	sgt->nents = dma_map_sg(db_attach->dev, sgt->sgl, sgt->orig_nents,
+-				dma_dir);
+-	if (!sgt->nents) {
++	if (dma_map_sgtable(db_attach->dev, sgt, dma_dir, 0)) {
+ 		pr_err("failed to map scatterlist\n");
+ 		mutex_unlock(lock);
+ 		return ERR_PTR(-EIO);
+diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+index c66fda4a65e4..bf5ac63a5742 100644
+--- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
++++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
+@@ -229,7 +229,7 @@ static int vb2_vmalloc_dmabuf_ops_attach(struct dma_buf *dbuf,
+ 		kfree(attach);
+ 		return ret;
+ 	}
+-	for_each_sg(sgt->sgl, sg, sgt->nents, i) {
++	for_each_sgtable_sg(sgt, sg, i) {
+ 		struct page *page = vmalloc_to_page(vaddr);
+ 
+ 		if (!page) {
+@@ -259,8 +259,7 @@ static void vb2_vmalloc_dmabuf_ops_detach(struct dma_buf *dbuf,
+ 
+ 	/* release the scatterlist cache */
+ 	if (attach->dma_dir != DMA_NONE)
+-		dma_unmap_sg(db_attach->dev, sgt->sgl, sgt->orig_nents,
+-			attach->dma_dir);
++		dma_unmap_sgtable(db_attach->dev, sgt, attach->dma_dir, 0);
+ 	sg_free_table(sgt);
+ 	kfree(attach);
+ 	db_attach->priv = NULL;
+@@ -285,15 +284,12 @@ static struct sg_table *vb2_vmalloc_dmabuf_ops_map(
+ 
+ 	/* release any previous cache */
+ 	if (attach->dma_dir != DMA_NONE) {
+-		dma_unmap_sg(db_attach->dev, sgt->sgl, sgt->orig_nents,
+-			attach->dma_dir);
++		dma_unmap_sgtable(db_attach->dev, sgt, attach->dma_dir, 0);
+ 		attach->dma_dir = DMA_NONE;
+ 	}
+ 
+ 	/* mapping to the client with new direction */
+-	sgt->nents = dma_map_sg(db_attach->dev, sgt->sgl, sgt->orig_nents,
+-				dma_dir);
+-	if (!sgt->nents) {
++	if (dma_map_sgtable(db_attach->dev, sgt, dma_dir, 0)) {
+ 		pr_err("failed to map scatterlist\n");
+ 		mutex_unlock(lock);
+ 		return ERR_PTR(-EIO);
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.17.1
+
