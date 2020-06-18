@@ -2,145 +2,198 @@ Return-Path: <SRS0=u95x=77=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6141EC433E0
-	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 03:42:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5B61C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 05:33:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 417D121841
-	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 03:42:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D8292186A
+	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 05:33:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="uwL64kzb"
+	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="EEMSb4/s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727011AbgFRDmy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Jun 2020 23:42:54 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:28455 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726853AbgFRDmx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Jun 2020 23:42:53 -0400
-X-UUID: 9c0c628e6d1147de9a55d7b9b2d44b79-20200618
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=i4jSTDSTh0GaOSOIPc+y2DdxkaaCQiUZ9e4P/5TV8Tc=;
-        b=uwL64kzbKtCqafMZJaBJO8Dg+HDeUyDHDTrUpi6lT6q0IVvr9OXI2lFFS+87Ms+NfaOvfTD6ZIS0l4p90+mQv8+bKJrxXYuHg/3fTcT0eYmJ1DoeRgU7VcxLDxThlK/r6K3Sii1s9H4FZ3p4wBfGeEr4rwPYNm2enP7Tz4tuwkI=;
-X-UUID: 9c0c628e6d1147de9a55d7b9b2d44b79-20200618
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <xia.jiang@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 37253424; Thu, 18 Jun 2020 11:42:48 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 18 Jun
- 2020 11:42:47 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 18 Jun 2020 11:42:45 +0800
-Message-ID: <1592451616.15355.25.camel@mhfsdcap03>
-Subject: Re: [PATCH v8 11/14] media: dt-bindings: Add jpeg enc device tree
- node document
-From:   Xia Jiang <xia.jiang@mediatek.com>
-To:     Tomasz Figa <tfiga@chromium.org>
-CC:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Rick Chang <rick.chang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        <srv_heupstream@mediatek.com>, <senozhatsky@chromium.org>,
-        <mojahsu@chromium.org>, <drinkcat@chromium.org>,
-        <maoguang.meng@mediatek.com>, <sj.huang@mediatek.com>,
-        <yong.wu@mediatek.com>
-Date:   Thu, 18 Jun 2020 11:40:16 +0800
-In-Reply-To: <20200521160046.GJ209565@chromium.org>
-References: <20200403094033.8288-1-xia.jiang@mediatek.com>
-         <20200403094033.8288-12-xia.jiang@mediatek.com>
-         <20200521160046.GJ209565@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726993AbgFRFd2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Jun 2020 01:33:28 -0400
+Received: from mail-eopbgr680058.outbound.protection.outlook.com ([40.107.68.58]:26382
+        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726382AbgFRFd1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 18 Jun 2020 01:33:27 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PsNKslWv9U45p6ljNG8U3a+Pe4xWXTFG3jl89qoNhajClpvFqEh8FQEWcMbazCHeWlo4bG5MkKzgOK2TNUKA1rx9uNhjsjGbpuRmR+wBcoYtZYF2ai0kWmJu9D5w+bWNZ98E2zk90m5rMHh8NsNVbzHzTsFskmaMWIRIpcMKHqQePiXw7TViIKBrvmNep16wAdbW/uXEllajT3hyCRdEK7T5pwc3ZQbgO/U7y8szbdnQIfH2TusqlbMdHtzEr1z+Nf47msJdWkRftlLGabLyBAal+feY+ZIPgf7KNMHknArILWcckYzNyn3LjRaDsfPAaonaxX3iKawneNoLoXmB7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Di/y+TR4fQ58FL6K53Ajp8ljwMwKDiwkPfzFDiDUQak=;
+ b=devzsOEvULhXJX7b19rQIWIaYsLEx+v0zDYQp+t9NSk/rcjSKJwNchGS5nNItxhNPRk0d/it90x+gusDV9AHVaQLTdcBvLOcHIRksob4KVlvQFUw3syVFbf1p30QJKQsFTqtkYR5/U1uxuEWv3NMBQ9do2mLlhGL/OHAO+C3Yb4ChdwJc5QUdLduE3cctInpU+BITh5v4VPHqWn9GEjw1RAHKsbdZwyBmAJ6xpx9hv0q116KpiIRr9FnB5vhrNGQV8YT21OgrePNRtsNczibZltWCfDglTlNGBOcla2/gzppPcHHL8A13GxJTt2qh6HQ3qwyW+T4gOJhGbuNWFQaPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=ideasonboard.com smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Di/y+TR4fQ58FL6K53Ajp8ljwMwKDiwkPfzFDiDUQak=;
+ b=EEMSb4/srdz5+yug4xWKZC43v8DWhtdWxyQBHk016fWMcjyHoUADIYgkvyhuwy55lk0YoDITAM1d+K5zS10Yk07IBBtLt4u/SVqSixQHHOQp8b6sZyP5sXl8DSshquqPvH/I5hP5mg67z+nEvhknlW8rDipcZ90y4c1S4rL2mQE=
+Received: from SN1PR12CA0099.namprd12.prod.outlook.com (2603:10b6:802:21::34)
+ by BN6PR02MB2179.namprd02.prod.outlook.com (2603:10b6:404:34::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22; Thu, 18 Jun
+ 2020 05:33:23 +0000
+Received: from SN1NAM02FT035.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:802:21:cafe::32) by SN1PR12CA0099.outlook.office365.com
+ (2603:10b6:802:21::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22 via Frontend
+ Transport; Thu, 18 Jun 2020 05:33:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; ideasonboard.com; dkim=none (message not signed)
+ header.d=none;ideasonboard.com; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ SN1NAM02FT035.mail.protection.outlook.com (10.152.72.145) with Microsoft SMTP
+ Server id 15.20.3088.18 via Frontend Transport; Thu, 18 Jun 2020 05:33:22
+ +0000
+Received: from [149.199.38.66] (port=58928 helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
+        (envelope-from <vishal.sagar@xilinx.com>)
+        id 1jln9s-0006yp-GM; Wed, 17 Jun 2020 22:32:16 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <vishal.sagar@xilinx.com>)
+        id 1jlnAv-0003RZ-Qn; Wed, 17 Jun 2020 22:33:21 -0700
+Received: from [10.140.6.6] (helo=xhdappanad40.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <vishal.sagar@xilinx.com>)
+        id 1jlnAp-0003Ok-4g; Wed, 17 Jun 2020 22:33:15 -0700
+From:   Vishal Sagar <vishal.sagar@xilinx.com>
+To:     hyunk@xilinx.com, laurent.pinchart@ideasonboard.com,
+        hverkuil@xs4all.nl, mchehab@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, michals@xilinx.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        joe@perches.com
+Cc:     sandipk@xilinx.com, dineshk@xilinx.com,
+        Vishal Sagar <vishal.sagar@xilinx.com>
+Subject: [PATCH v3 1/3] v4l2-dv-timings: Add timings for 1920x1080P48 and 4KP48
+Date:   Thu, 18 Jun 2020 11:03:02 +0530
+Message-Id: <20200618053304.14551-2-vishal.sagar@xilinx.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20200618053304.14551-1-vishal.sagar@xilinx.com>
+References: <20200618053304.14551-1-vishal.sagar@xilinx.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: E100C0680B0A813F09A9DC10EAB829B13E2B394890EB73037F1C971D096F1A762000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(39860400002)(346002)(396003)(376002)(136003)(46966005)(83380400001)(478600001)(7696005)(426003)(81166007)(5660300002)(336012)(6666004)(356005)(47076004)(316002)(7416002)(70586007)(107886003)(70206006)(9786002)(82310400002)(186003)(26005)(4326008)(8676002)(2906002)(82740400003)(2616005)(8936002)(44832011)(1076003)(36756003)(921003);DIR:OUT;SFP:1101;
+X-MS-PublicTrafficType: Email
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: e5982b77-bd07-4e7c-a0a2-08d813491d84
+X-MS-TrafficTypeDiagnostic: BN6PR02MB2179:
+X-Microsoft-Antispam-PRVS: <BN6PR02MB2179F938B00DC82227CD72A6A79B0@BN6PR02MB2179.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:751;
+X-Forefront-PRVS: 0438F90F17
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b9HA6V2IF/tKY4unC2RNXCak5vfHm6aXa9eo52e4XEiC6IOPpxrlXPu1LROJ25cKjwyPhMG+HUYbaUPRUyXFRtSD1qwiRXe7hMKlZAiNuag8zwhVJKdDK0a1VYRUcHXBMWngfMVqiFKysHWiycDvC8vcJWQAl593X34abwso2Nf7cHPIqmzGjTfK/IeITY/MS5R4JfR+rbIjNU2zcu0m81FoUznJauSxY97RGdoYXKyddTtI2Qxe2w/GxCKIY2jZAc6mWYbealMoudv7mSFSNcOhs2i2k7bB1G/pJ8+r6Fxk9GlEcwqyTygZuqvGGxe+KmyeWe0Vcy42FldR/Uhp/CVyEAzzwbfPyT+lOc367QgUWWzHK7UWdl9fM9IuCBF78coKnxH27XTu6oKHDWh8/2bYL61T5Bp9MDT5O+/0Voo=
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2020 05:33:22.1556
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5982b77-bd07-4e7c-a0a2-08d813491d84
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2179
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA1LTIxIGF0IDE2OjAwICswMDAwLCBUb21hc3ogRmlnYSB3cm90ZToNCj4g
-SGkgWGlhLA0KPiANCj4gT24gRnJpLCBBcHIgMDMsIDIwMjAgYXQgMDU6NDA6MzBQTSArMDgwMCwg
-WGlhIEppYW5nIHdyb3RlOg0KPiA+IEFkZCBqcGVnIGVuYyBkZXZpY2UgdHJlZSBub2RlIGRvY3Vt
-ZW50DQo+ID4gDQo+ID4gUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+
-DQo+ID4gU2lnbmVkLW9mZi1ieTogWGlhIEppYW5nIDx4aWEuamlhbmdAbWVkaWF0ZWsuY29tPg0K
-PiA+IC0tLQ0KPiA+IHY4OiBubyBjaGFuZ2VzDQo+ID4gDQo+ID4gdjc6IG5vIGNoYW5nZXMNCj4g
-PiANCj4gPiB2Njogbm8gY2hhbmdlcw0KPiA+IA0KPiA+IHY1OiBubyBjaGFuZ2VzDQo+ID4gDQo+
-ID4gdjQ6IG5vIGNoYW5nZXMNCj4gPiANCj4gPiB2MzogY2hhbmdlIGNvbXBhdGlibGUgdG8gU29D
-IHNwZWNpZmljIGNvbXBhdGlibGUNCj4gPiANCj4gPiB2Mjogbm8gY2hhbmdlcw0KPiA+IC0tLQ0K
-PiA+ICAuLi4vYmluZGluZ3MvbWVkaWEvbWVkaWF0ZWstanBlZy1lbmNvZGVyLnR4dCAgfCAzNyAr
-KysrKysrKysrKysrKysrKysrDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAzNyBpbnNlcnRpb25zKCsp
-DQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3MvbWVkaWEvbWVkaWF0ZWstanBlZy1lbmNvZGVyLnR4dA0KPiA+IA0KPiANCj4gVGhhbmsgeW91
-IGZvciB0aGUgcGF0Y2guIFBsZWFzZSBzZWUgbXkgY29tbWVudHMgaW5saW5lLg0KRGVhciBUb21h
-c3osDQoNClNvcnJ5IGZvciBtaXNzaW5nIHRoaXMgbWVzc2FnZS4gUmVwbGllZCBiZWxvdy4NCj4g
-DQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZWRp
-YS9tZWRpYXRlay1qcGVnLWVuY29kZXIudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL21lZGlhL21lZGlhdGVrLWpwZWctZW5jb2Rlci50eHQNCj4gPiBuZXcgZmlsZSBtb2Rl
-IDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uZmE4ZGE2OTk0OTNiDQo+ID4gLS0tIC9k
-ZXYvbnVsbA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZWRp
-YS9tZWRpYXRlay1qcGVnLWVuY29kZXIudHh0DQo+ID4gQEAgLTAsMCArMSwzNyBAQA0KPiA+ICsq
-IE1lZGlhVGVrIEpQRUcgRW5jb2Rlcg0KPiA+ICsNCj4gPiArTWVkaWFUZWsgSlBFRyBFbmNvZGVy
-IGlzIHRoZSBKUEVHIGVuY29kZSBoYXJkd2FyZSBwcmVzZW50IGluIE1lZGlhVGVrIFNvQ3MNCj4g
-PiArDQo+ID4gK1JlcXVpcmVkIHByb3BlcnRpZXM6DQo+ID4gKy0gY29tcGF0aWJsZSA6IHNob3Vs
-ZCBiZSBvbmUgb2Y6DQo+ID4gKyAgICAgICAgICAgICAgICJtZWRpYXRlayxtdDI3MDEtanBnZW5j
-Ig0KPiA+ICsgICAgICAgICAgICAgICAuLi4NCj4gDQo+IFdoYXQgZG9lcyB0aGlzICIuLi4iIG1l
-YW4/DQoiLi4uIiBtZWFucyB0aGF0IGNvbXBhdGlibGUgbmFtZSBpcyBub3QganVzdCAibWVkaWF0
-ZWssbXQyNzAxLWpwZ2VuYyIsDQpkaWZmZXJlbnQgcHJvamVjdCBoYXMgZGlmZmVyZW50IGNvbXBh
-dGlibGUgbmFtZShmb3IgZXhhbXBsZSB0aGUgTVQ4MTczJ3MNCmNvbXBhdGlibGUgbmFtZSBtYXkg
-YmUgIm1lZGlhdGVrLG10ODE3My1qcGdlbmMiKS4NCj4gDQo+ID4gKyAgICAgICAgICAgICAgIGZv
-bGxvd2VkIGJ5ICJtZWRpYXRlayxtdGstanBnZW5jIg0KPiA+ICstIHJlZyA6IHBoeXNpY2FsIGJh
-c2UgYWRkcmVzcyBvZiB0aGUgSlBFRyBlbmNvZGVyIHJlZ2lzdGVycyBhbmQgbGVuZ3RoIG9mDQo+
-ID4gKyAgbWVtb3J5IG1hcHBlZCByZWdpb24uDQo+ID4gKy0gaW50ZXJydXB0cyA6IGludGVycnVw
-dCBudW1iZXIgdG8gdGhlIGludGVycnVwdCBjb250cm9sbGVyLg0KPiA+ICstIGNsb2NrczogZGV2
-aWNlIGNsb2Nrcywgc2VlDQo+ID4gKyAgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L2Nsb2NrL2Nsb2NrLWJpbmRpbmdzLnR4dCBmb3IgZGV0YWlscy4NCj4gPiArLSBjbG9jay1uYW1l
-czogbXVzdCBjb250YWluICJqcGdlbmMiLiBJdCBpcyB0aGUgY2xvY2sgb2YgSlBFRyBlbmNvZGVy
-Lg0KPiANCj4gbml0OiBJbiBwcmluY2lwbGUgdGhlIGNsb2NrcyBzaG91bGQgYmUgbmFtZWQgYWZ0
-ZXIgdGhlIGZ1bmN0aW9uIHRoZSBjbG9jaw0KPiBwZXJmb3JtcyBvbiB0aGUgY29uc3VtZXIgc2lk
-ZSwgaS5lLiB0aGUgSlBFRyBibG9jayBpbiB0aGlzIGNhc2UsIEkgZ3Vlc3MNCj4gaGVyZSBpdCdz
-IGp1c3QgYSBnZW5lcmljIGNsb2NrIHRoYXQgZG9lcyBldmVyeXRoaW5nLCBidXQgSSBndWVzcyBp
-dCBjb21lcw0KPiBmcm9tIHNvbWV3aGVyZS4gSXMgaXQgdGhlIEFIQiBjbG9jayBvciBzb21ldGhp
-bmc/IEluIHRoYXQgY2FzZSBpdCB3b3VsZA0KPiBub3JtYWxseSBiZSBjYWxsZWQgImFoYiIuDQpJ
-IGhhdmUgY29uZmlybWVkIHdpdGggaGFyZHdhcmUgZGVzaWduZXIgdGhhdCB0aGUganBlZyBjbG9j
-ayBpcyBub3QgQUhCDQpjbG9jayxpdCBmb2xsb3dzIHN1YnN5cyBjbG9jayhiZWNhdXNlIDI3MDEg
-aXMgdGhlIG9sZCBJQyxJIGRpZG4ndCBnZXQNCnRoZSBzb3VyY2UgbmFtZSkuSXQgaGFzIHRoZSBz
-YW1lIHNvdXJjZSB3aXRoIHZlbmMgY2xvY2suV2UgY2FuIHNlZSB0aGF0DQp0aGUgY2xvY2tzID0g
-PGltZ3N5cyBDTEtfSU1HX1ZFTkM+LCBTaG91bGQgSSBuYW1lIGl0ICJ2ZW5jIiBvciB0aGUNCm9y
-aWduYWwgImpwZ2VuYyI/DQo+IA0KPiA+ICstIHBvd2VyLWRvbWFpbnM6IGEgcGhhbmRsZSB0byB0
-aGUgcG93ZXIgZG9tYWluLCBzZWUNCj4gPiArICBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3MvcG93ZXIvcG93ZXJfZG9tYWluLnR4dCBmb3IgZGV0YWlscy4NCj4gPiArLSBtZWRpYXRl
-ayxsYXJiOiBtdXN0IGNvbnRhaW4gdGhlIGxvY2FsIGFyYml0ZXJzIGluIHRoZSBjdXJyZW50IFNv
-Q3MsIHNlZQ0KPiA+ICsgIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZW1vcnkt
-Y29udHJvbGxlcnMvbWVkaWF0ZWssc21pLWxhcmIudHh0DQo+ID4gKyAgZm9yIGRldGFpbHMuDQo+
-IA0KPiBJIGJlbGlldmUgdGhpcyBpc24ndCBuZWNlc3NhcnkgYW55bW9yZSwgYmVjYXVzZSBsYXJi
-cyBhcmUgYWRkZWQNCj4gYXV0b21hdGljYWxseSBieSB0aGUgTVRLIElPTU1VIGRyaXZlciB1c2lu
-ZyBkZXZpY2UgbGlua3MuICtDQyBZb25nIHdobw0KPiB3b3JrZWQgb24gdGhhdC4NClllcyxJIGhh
-dmUgY29uZmlybWVkIHdpdGggWW9uZyB0aGF0IGhlIHdpbGwgaGVscCBtZSB0byBtb2RpZnkgdGhp
-cy5JcyBpdA0Kb2sgdGhhdCBJIGtlZXAgdGhlIG9yaWduYWwgbGFyYiBjb2RlPw0KDQpCZXN0IFJl
-Z2FyZHMsDQpYaWEgSmlhbmcNCj4gDQo+ID4gKy0gaW9tbXVzOiBzaG91bGQgcG9pbnQgdG8gdGhl
-IHJlc3BlY3RpdmUgSU9NTVUgYmxvY2sgd2l0aCBtYXN0ZXIgcG9ydCBhcw0KPiA+ICsgIGFyZ3Vt
-ZW50LCBzZWUgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2lvbW11L21lZGlhdGVr
-LGlvbW11LnR4dA0KPiA+ICsgIGZvciBkZXRhaWxzLg0KPiA+ICsNCj4gPiArRXhhbXBsZToNCj4g
-PiArCWpwZWdlbmM6IGpwZWdlbmNAMTUwMGEwMDAgew0KPiA+ICsJCWNvbXBhdGlibGUgPSAibWVk
-aWF0ZWssbXQyNzAxLWpwZ2VuYyIsDQo+ID4gKwkJCSAgICAgIm1lZGlhdGVrLG10ay1qcGdlbmMi
-Ow0KPiA+ICsJCXJlZyA9IDwwIDB4MTUwMGEwMDAgMCAweDEwMDA+Ow0KPiA+ICsJCWludGVycnVw
-dHMgPSA8R0lDX1NQSSAxNDEgSVJRX1RZUEVfTEVWRUxfTE9XPjsNCj4gPiArCQljbG9ja3MgPSAg
-PCZpbWdzeXMgQ0xLX0lNR19WRU5DPjsNCj4gPiArCQljbG9jay1uYW1lcyA9ICJqcGdlbmMiOw0K
-PiA+ICsJCXBvd2VyLWRvbWFpbnMgPSA8JnNjcHN5cyBNVDI3MDFfUE9XRVJfRE9NQUlOX0lTUD47
-DQo+ID4gKwkJbWVkaWF0ZWssbGFyYiA9IDwmbGFyYjI+Ow0KPiANCj4gRGl0dG8uDQo+IA0KPiBC
-ZXN0IHJlZ2FyZHMsDQo+IFRvbWFzeg0KDQo=
+Add the timing entry for 1920x1080p48, 3840x2160p48 and 4096x2160p48
+from CTA-861-G.
+1920x1080p48 is VIC 111.
+3840x2160P48 is VIC 114.
+4096x2160P48 is VIC 115.
+
+Signed-off-by: Vishal Sagar <vishal.sagar@xilinx.com>
+---
+v3
+- Added for first time
+
+ include/uapi/linux/v4l2-dv-timings.h | 31 +++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
+
+diff --git a/include/uapi/linux/v4l2-dv-timings.h b/include/uapi/linux/v4l2-dv-timings.h
+index b52b67c62562..6ceaa7841923 100644
+--- a/include/uapi/linux/v4l2-dv-timings.h
++++ b/include/uapi/linux/v4l2-dv-timings.h
+@@ -167,6 +167,16 @@
+ 		V4L2_DV_FL_HAS_CEA861_VIC, { 0, 0 }, 20) \
+ }
+ 
++#define V4L2_DV_BT_CEA_1920X1080P48 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		148500000, 638, 44, 148, 4, 5, 36, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 0, 0 }, 111) \
++}
++
+ #define V4L2_DV_BT_CEA_1920X1080P50 { \
+ 	.type = V4L2_DV_BT_656_1120, \
+ 	V4L2_INIT_BT_TIMINGS(1920, 1080, 0, \
+@@ -229,6 +239,16 @@
+ 		{ 0, 0 }, 95, 1) \
+ }
+ 
++#define V4L2_DV_BT_CEA_3840X2160P48 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		594000000, 1276, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 0, 0 }, 114) \
++}
++
+ #define V4L2_DV_BT_CEA_3840X2160P50 { \
+ 	.type = V4L2_DV_BT_656_1120, \
+ 	V4L2_INIT_BT_TIMINGS(3840, 2160, 0, \
+@@ -278,6 +298,16 @@
+ 		V4L2_DV_FL_HAS_CEA861_VIC, { 0, 0 }, 100) \
+ }
+ 
++#define V4L2_DV_BT_CEA_4096X2160P48 { \
++	.type = V4L2_DV_BT_656_1120, \
++	V4L2_INIT_BT_TIMINGS(4096, 2160, 0, \
++		V4L2_DV_HSYNC_POS_POL | V4L2_DV_VSYNC_POS_POL, \
++		594000000, 1020, 88, 296, 8, 10, 72, 0, 0, 0, \
++		V4L2_DV_BT_STD_CEA861, \
++		V4L2_DV_FL_CAN_REDUCE_FPS | V4L2_DV_FL_IS_CE_VIDEO | \
++		V4L2_DV_FL_HAS_CEA861_VIC, { 0, 0 }, 115) \
++}
++
+ #define V4L2_DV_BT_CEA_4096X2160P50 { \
+ 	.type = V4L2_DV_BT_656_1120, \
+ 	V4L2_INIT_BT_TIMINGS(4096, 2160, 0, \
+@@ -297,7 +327,6 @@
+ 		V4L2_DV_FL_HAS_CEA861_VIC, { 0, 0 }, 102) \
+ }
+ 
+-
+ /* VESA Discrete Monitor Timings as per version 1.0, revision 12 */
+ 
+ #define V4L2_DV_BT_DMT_640X350P85 { \
+-- 
+2.21.0
 
