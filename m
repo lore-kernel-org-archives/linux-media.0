@@ -2,189 +2,66 @@ Return-Path: <SRS0=u95x=77=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42C7BC433E2
-	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 13:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85573C433E1
+	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 13:23:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2436D2073E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 13:18:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6DEB32082F
+	for <linux-media@archiver.kernel.org>; Thu, 18 Jun 2020 13:23:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730102AbgFRNSN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Jun 2020 09:18:13 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:11915 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728049AbgFRNSF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Jun 2020 09:18:05 -0400
-X-Originating-IP: 93.34.118.233
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id C9EE7240005;
-        Thu, 18 Jun 2020 13:17:56 +0000 (UTC)
-Date:   Thu, 18 Jun 2020 15:21:22 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     jmkrzyszt@gmail.com
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se,
-        kieran.bingham@ideasonboard.com, dave.stevenson@raspberrypi.com,
-        hyun.kwon@xilinx.com, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v5 03/10] media: i2c: ov6650: Use new
- [get|set]_mbus_config ops
-Message-ID: <20200618132122.ekxt2xeat3gybvvi@uno.localdomain>
-References: <20200616141244.49407-1-jacopo+renesas@jmondi.org>
- <20200616141244.49407-4-jacopo+renesas@jmondi.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200616141244.49407-4-jacopo+renesas@jmondi.org>
+        id S1729995AbgFRNXK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Jun 2020 09:23:10 -0400
+Received: from winnie.ispras.ru ([83.149.199.91]:27651 "EHLO smtp.ispras.ru"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729828AbgFRNXJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 18 Jun 2020 09:23:09 -0400
+X-Greylist: delayed 438 seconds by postgrey-1.27 at vger.kernel.org; Thu, 18 Jun 2020 09:23:08 EDT
+Received: from home.intra.ispras.ru (unknown [10.10.165.12])
+        by smtp.ispras.ru (Postfix) with ESMTP id B71F8203BF;
+        Thu, 18 Jun 2020 16:15:47 +0300 (MSK)
+From:   Evgeny Novikov <novikov@ispras.ru>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Evgeny Novikov <novikov@ispras.ru>, Sean Young <sean@mess.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: [PATCH] media: rc: return proper error code on error handling path in init
+Date:   Thu, 18 Jun 2020 16:15:38 +0300
+Message-Id: <20200618131538.18257-1-novikov@ispras.ru>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Janusz,
-On Tue, Jun 16, 2020 at 04:12:38PM +0200, Jacopo Mondi wrote:
-> Use the new get_mbus_config and set_mbus_config pad operations in place
-> of the video operations currently in use.
->
-> Compared to other drivers where the same conversion has been performed,
-> ov6650 proved to be a bit more tricky, as the existing g_mbus_config
-> implementation did not report the currently applied configuration but
-> the set of all possible configuration options.
->
-> Adapt the driver to support the semantic of the two newly introduced
-> operations:
-> - get_mbus_config reports the current media bus configuration
-> - set_mbus_config applies only changes explicitly requested and updates
->   the provided cfg parameter to report what has actually been applied to
->   the hardware.
->
-> Compile-tested only.
+If lirc_dev_init() fails during module initialization, rc_core_init()
+returns 0 denoting success. This can cause different issues during
+further operation of the module. The patch fixes the return value of
+rc_core_init() on the corresponding error handling path.
 
-As the original author of this driver, are you still looking after it ?
-Do you have any opinion on this patch/series? I should have cc-ed you
-from the beginning probably, but get_maintainer didn't point to you :)
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Thanks
-   j
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+---
+ drivers/media/rc/rc-main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> ---
->  drivers/media/i2c/ov6650.c | 56 ++++++++++++++++++++++++++------------
->  1 file changed, 39 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-> index 91906b94f978..d2e7a8556ed7 100644
-> --- a/drivers/media/i2c/ov6650.c
-> +++ b/drivers/media/i2c/ov6650.c
-> @@ -921,46 +921,68 @@ static const struct v4l2_subdev_core_ops ov6650_core_ops = {
->  };
->
->  /* Request bus settings on camera side */
-> -static int ov6650_g_mbus_config(struct v4l2_subdev *sd,
-> -				struct v4l2_mbus_config *cfg)
-> +static int ov6650_get_mbus_config(struct v4l2_subdev *sd,
-> +				  unsigned int pad,
-> +				  struct v4l2_mbus_config *cfg)
->  {
-> +	struct i2c_client *client = v4l2_get_subdevdata(sd);
-> +	u8 comj, comf;
-> +	int ret;
-> +
-> +	ret = ov6650_reg_read(client, REG_COMJ, &comj);
-> +	if (ret)
-> +		return ret;
->
-> -	cfg->flags = V4L2_MBUS_MASTER |
-> -		V4L2_MBUS_PCLK_SAMPLE_RISING | V4L2_MBUS_PCLK_SAMPLE_FALLING |
-> -		V4L2_MBUS_HSYNC_ACTIVE_HIGH | V4L2_MBUS_HSYNC_ACTIVE_LOW |
-> -		V4L2_MBUS_VSYNC_ACTIVE_HIGH | V4L2_MBUS_VSYNC_ACTIVE_LOW |
-> -		V4L2_MBUS_DATA_ACTIVE_HIGH;
-> +	ret = ov6650_reg_read(client, REG_COMF, &comf);
-> +	if (ret)
-> +		return ret;
-> +
-> +	cfg->flags = V4L2_MBUS_MASTER
-> +		   | ((comj & COMJ_VSYNC_HIGH)  ? V4L2_MBUS_VSYNC_ACTIVE_HIGH
-> +						: V4L2_MBUS_VSYNC_ACTIVE_LOW)
-> +		   | ((comf & COMF_HREF_LOW)    ? V4L2_MBUS_HSYNC_ACTIVE_LOW
-> +						: V4L2_MBUS_HSYNC_ACTIVE_HIGH)
-> +		   | ((comj & COMJ_PCLK_RISING) ? V4L2_MBUS_PCLK_SAMPLE_RISING
-> +						: V4L2_MBUS_PCLK_SAMPLE_FALLING);
->  	cfg->type = V4L2_MBUS_PARALLEL;
->
->  	return 0;
->  }
->
->  /* Alter bus settings on camera side */
-> -static int ov6650_s_mbus_config(struct v4l2_subdev *sd,
-> -				const struct v4l2_mbus_config *cfg)
-> +static int ov6650_set_mbus_config(struct v4l2_subdev *sd,
-> +				  unsigned int pad,
-> +				  struct v4l2_mbus_config *cfg)
->  {
->  	struct i2c_client *client = v4l2_get_subdevdata(sd);
-> -	int ret;
-> +	int ret = 0;
->
->  	if (cfg->flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
->  		ret = ov6650_reg_rmw(client, REG_COMJ, COMJ_PCLK_RISING, 0);
-> -	else
-> +	else if (cfg->flags & V4L2_MBUS_PCLK_SAMPLE_FALLING)
->  		ret = ov6650_reg_rmw(client, REG_COMJ, 0, COMJ_PCLK_RISING);
->  	if (ret)
-> -		return ret;
-> +		goto error;
->
->  	if (cfg->flags & V4L2_MBUS_HSYNC_ACTIVE_LOW)
->  		ret = ov6650_reg_rmw(client, REG_COMF, COMF_HREF_LOW, 0);
-> -	else
-> +	else if (cfg->flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
->  		ret = ov6650_reg_rmw(client, REG_COMF, 0, COMF_HREF_LOW);
->  	if (ret)
-> -		return ret;
-> +		goto error;
->
->  	if (cfg->flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH)
->  		ret = ov6650_reg_rmw(client, REG_COMJ, COMJ_VSYNC_HIGH, 0);
-> -	else
-> +	else if (cfg->flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
->  		ret = ov6650_reg_rmw(client, REG_COMJ, 0, COMJ_VSYNC_HIGH);
->
-> +error:
-> +	/*
-> +	 * Update the configuration to report what is actually applied to
-> +	 * the hardware.
-> +	 */
-> +	ov6650_get_mbus_config(sd, pad, cfg);
-> +
->  	return ret;
->  }
->
-> @@ -968,8 +990,6 @@ static const struct v4l2_subdev_video_ops ov6650_video_ops = {
->  	.s_stream	= ov6650_s_stream,
->  	.g_frame_interval = ov6650_g_frame_interval,
->  	.s_frame_interval = ov6650_s_frame_interval,
-> -	.g_mbus_config	= ov6650_g_mbus_config,
-> -	.s_mbus_config	= ov6650_s_mbus_config,
->  };
->
->  static const struct v4l2_subdev_pad_ops ov6650_pad_ops = {
-> @@ -978,6 +998,8 @@ static const struct v4l2_subdev_pad_ops ov6650_pad_ops = {
->  	.set_selection	= ov6650_set_selection,
->  	.get_fmt	= ov6650_get_fmt,
->  	.set_fmt	= ov6650_set_fmt,
-> +	.get_mbus_config = ov6650_get_mbus_config,
-> +	.set_mbus_config = ov6650_set_mbus_config,
->  };
->
->  static const struct v4l2_subdev_ops ov6650_subdev_ops = {
-> --
-> 2.27.0
->
+diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+index d7064d664d52..7b53066d9d07 100644
+--- a/drivers/media/rc/rc-main.c
++++ b/drivers/media/rc/rc-main.c
+@@ -2052,7 +2052,7 @@ static int __init rc_core_init(void)
+ 	if (rc) {
+ 		pr_err("rc_core: unable to init lirc\n");
+ 		class_unregister(&rc_class);
+-		return 0;
++		return rc;
+ 	}
+ 
+ 	led_trigger_register_simple("rc-feedback", &led_feedback);
+-- 
+2.16.4
+
