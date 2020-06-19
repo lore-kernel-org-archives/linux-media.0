@@ -2,260 +2,290 @@ Return-Path: <SRS0=jh8c=AA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BDE7C433E0
-	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 16:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04FBBC433E3
+	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 16:20:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D408217D8
-	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 16:10:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB4F520B80
+	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 16:20:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vpreWgqa"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="KTV4omVy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404125AbgFSQKX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Jun 2020 12:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S2391467AbgFSQT7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Jun 2020 12:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394311AbgFSQKS (ORCPT
+        with ESMTP id S2394615AbgFSQTz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Jun 2020 12:10:18 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6322C0613EE
-        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 09:10:18 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id e9so4667141pgo.9
-        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 09:10:18 -0700 (PDT)
+        Fri, 19 Jun 2020 12:19:55 -0400
+Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB685C0613EE
+        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 09:19:55 -0700 (PDT)
+Received: by mail-oo1-xc41.google.com with SMTP id c4so496717oou.6
+        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 09:19:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=ffwll.ch; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tTASVTiSXZsyhNQTM1i/jl+TLSbZb4AaMfa8Navk19E=;
-        b=vpreWgqaEL0hY65uQHwXkrI1bw0hlhvKUMRBvVleOAPt8JQ/GitPept7T9GRzNywIs
-         W2dOqIazGiiOvoSWqv3PycaYBGGtaFnJmikOwKlvx81VV+NIT06c4NueHo7lVGbRfmbu
-         J6MoX7JUIiQvfadTANBttCsI/2mNjQTAv/5q3SdAO5DDbq+e0drMP9VA+auz2XoRNtjT
-         sM6ssTKbWM/e88hJTaU5GgGrph/M5FFDili9NvLvjTOVefjwpFaOCSLr3Yqsi9zvo3lE
-         N3LB4jN44AMOn+eVgs34fWKsbIr46QT1ejTAZsUDJw1+U2f8C9b/miIubc6K86Jtj02I
-         pcoQ==
+        bh=Wj1FO43iGyk7PYrrEEhEjkp2h2XH2iryroz21N45gqk=;
+        b=KTV4omVyKlC8idt6WMrK4rC6pvlVu4xrql1JVUD6KZBV7gKdYxJqpq4ZpeJGmx7n73
+         SSvhTZIxARGe61f5ZXZTmUvAdjCzvsY39rR/ObaJechM5w4wxPVEwfsRpKxgNAiucgSa
+         n+dE3o8mBQzdJSPyc96774z0RS4si3IIY3MGE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tTASVTiSXZsyhNQTM1i/jl+TLSbZb4AaMfa8Navk19E=;
-        b=Hro8XI5xEnNyTpw+aG35Qmt3fQTT30+APjzO6wzEEdkCLSXUN0zrzbRAKdh95AeGfF
-         u81xzxYtfYlDo+9hsKI4tLX/4lhA53TXoeGZpeRhyyl8hL4rIhCukjyrFnvIgQoQ0g46
-         7Dcr1maIIc5d+QFHFUPy2ZLc7t6vBcWI4Qvj5mQj2RsZM89Ttjai6VGOflwUGg9I7W7Z
-         n8KOpHXwv0Ghf9OUkXU8vwDJv5Iy5aocK9oyxMrD70oGK/Ko/7pLwtAKZL4HuhxNEznM
-         X5Wc6Xu3BGaVeYFfomdvw/60bUAny/nf2TleBmckl1uj002odFot0EkPulV0tVmT5v8r
-         fJKQ==
-X-Gm-Message-State: AOAM530Mc+HNKgqw/TvAvZ4zQo88j7Lv0T7qBYboxeMa5Lk2Wz+S4fj+
-        qHK6OfCtd/M9Tt5qZqBf3GBRBhlIyfxkgwFPLRduBQ==
-X-Google-Smtp-Source: ABdhPJxyC2UuE0NNmrY1qY4W7Z++jdlGfsPJt0+ldEi7tHtlwWMxYsJpYJCnjas5qPET4m31FTa/mR9QYlrakCnyz38=
-X-Received: by 2002:a62:25c5:: with SMTP id l188mr8813970pfl.178.1592583017934;
- Fri, 19 Jun 2020 09:10:17 -0700 (PDT)
+        bh=Wj1FO43iGyk7PYrrEEhEjkp2h2XH2iryroz21N45gqk=;
+        b=HOVab+A6f//L9vKdrRVm6likqg7PL3zZEhrXjOFuFAKYEAr/engl6ASy0LluYytNun
+         scbZihkGVPtjNiQfrPYMBu+NYUS8beu0wl0zbDAKp/iebJyrs2+4IInyZuOdcuRg8ho1
+         WGQTxlGAMLC5W05WONt5EWqZrN+94VFlr4JCGwGOq7eFI/ibA0O2xzJOe9x+MzXhpGT3
+         K+/prJuVOqszv5JtOcysIgGOu4hLhob/puTf5KHTqm1Xy1k1+GwghWkB3/4rLdpaiw89
+         75JV6Bp1IZ0s9JsET7zrzwjKt0ZEg0fS4tcCJ4qhreM2B5YqnhIgAj7/CeusSk+HOVVz
+         zosw==
+X-Gm-Message-State: AOAM532d5hxXapxNxGiYCK5f8Ayij2+izak9YepvnbZTgsbn7eYYIWui
+        6DQuRzpet3WMQW8WhVn+5rhIHoOEgqPq8MPPnT9h/Q==
+X-Google-Smtp-Source: ABdhPJyoy6aHWkVkbh8xMF9/TzGOKKb8kpLI0Idlia3eF0cObcMto8g+bs85raCaxdKtZhy5XKzmlJ6GtvyqnZQdJOE=
+X-Received: by 2002:a4a:9528:: with SMTP id m37mr3925602ooi.85.1592583593309;
+ Fri, 19 Jun 2020 09:19:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000780999059c048dfc@google.com>
-In-Reply-To: <000000000000780999059c048dfc@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 19 Jun 2020 18:10:07 +0200
-Message-ID: <CAAeHK+xT12YpnLYw78RVS5PAFK=yFnYNhq0vny7C2O+zUsFwdg@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in uvc_probe
-To:     syzbot <syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
-        USB list <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <20200611083430.GD20149@phenom.ffwll.local> <20200611141515.GW6578@ziepe.ca>
+ <20200616120719.GL20149@phenom.ffwll.local> <CAKMK7uE7DKUo9Z+yCpY+mW5gmKet8ugbF3yZNyHGqsJ=e-g_hA@mail.gmail.com>
+ <20200617152835.GF6578@ziepe.ca> <20200618150051.GS20149@phenom.ffwll.local>
+ <20200618172338.GM6578@ziepe.ca> <CAKMK7uEbqTu4q-amkLXyd1i8KNtLaoO2ZFoGqYiG6D0m0FKpOg@mail.gmail.com>
+ <20200619113934.GN6578@ziepe.ca> <CAKMK7uE-kWA==Cko5uenMrcnopEjq42HxoDTDywzBAbHqsN13g@mail.gmail.com>
+ <20200619151551.GP6578@ziepe.ca>
+In-Reply-To: <20200619151551.GP6578@ziepe.ca>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Fri, 19 Jun 2020 18:19:41 +0200
+Message-ID: <CAKMK7uEvkshAM6KUYZu8_OCpF4+1Y_SM7cQ9nJWpagfke8s8LA@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] [PATCH 04/18] dma-fence: prime lockdep annotations
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     =?UTF-8?Q?Thomas_Hellstr=C3=B6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Mika Kuoppala <mika.kuoppala@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 1:24 PM syzbot
-<syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com> wrote:
+On Fri, Jun 19, 2020 at 5:15 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
 >
-> Hello,
+> On Fri, Jun 19, 2020 at 05:06:04PM +0200, Daniel Vetter wrote:
+> > On Fri, Jun 19, 2020 at 1:39 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> > >
+> > > On Fri, Jun 19, 2020 at 09:22:09AM +0200, Daniel Vetter wrote:
+> > > > > As I've understood GPU that means you need to show that the commands
+> > > > > associated with the buffer have completed. This is all local stuff
+> > > > > within the driver, right? Why use fence (other than it already exists)
+> > > >
+> > > > Because that's the end-of-dma thing. And it's cross-driver for the
+> > > > above reasons, e.g.
+> > > > - device A renders some stuff. Userspace gets dma_fence A out of that
+> > > > (well sync_file or one of the other uapi interfaces, but you get the
+> > > > idea)
+> > > > - userspace (across process or just different driver) issues more
+> > > > rendering for device B, which depends upon the rendering done on
+> > > > device A. So dma_fence A is an dependency and will block this dma
+> > > > operation. Userspace (and the kernel) gets dma_fence B out of this
+> > > > - because unfortunate reasons, the same rendering on device B also
+> > > > needs a userptr buffer, which means that dma_fence B is also the one
+> > > > that the mmu_range_notifier needs to wait on before it can tell core
+> > > > mm that it can go ahead and release those pages
+> > >
+> > > I was afraid you'd say this - this is complete madness for other DMA
+> > > devices to borrow the notifier hook of the first device!
+> >
+> > The first device might not even have a notifier. This is the 2nd
+> > device, waiting on a dma_fence of its own, but which happens to be
+> > queued up as a dma operation behind something else.
+> >
+> > > What if the first device is a page faulting device and doesn't call
+> > > dma_fence??
+> >
+> > Not sure what you mean with this ... even if it does page-faulting for
+> > some other reasons, it'll emit a dma_fence which the 2nd device can
+> > consume as a dependency.
 >
-> syzbot found the following crash on:
+> At some point the pages under the buffer have to be either pinned
+> or protected by mmu notifier. So each and every single device doing
+> DMA to these pages must either pin, or use mmu notifier.
 >
-> HEAD commit:    ae179410 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=132223fee00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d751a3a72ae57
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9a48339b077c5a80b869
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16857325e00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=142e069ee00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com
->
-> usb 1-1: New USB device found, idVendor=0bd3, idProduct=0555,
-> bcdDevice=69.6a
-> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 1-1: config 0 descriptor??
-> usb 1-1: string descriptor 0 read error: -71
-> uvcvideo: Found UVC 0.00 device <unnamed> (0bd3:0555)
-> ==================================================================
-> BUG: KASAN: use-after-free in uvc_register_terms
-> drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
-> BUG: KASAN: use-after-free in uvc_register_chains
-> drivers/media/usb/uvc/uvc_driver.c:2070 [inline]
-> BUG: KASAN: use-after-free in uvc_probe.cold+0x2193/0x29de
-> drivers/media/usb/uvc/uvc_driver.c:2201
-> Read of size 2 at addr ffff8881d4f1bc2e by task kworker/1:2/94
->
-> CPU: 1 PID: 94 Comm: kworker/1:2 Not tainted 5.5.0-rc3-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xef/0x16e lib/dump_stack.c:118
->   print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
->   __kasan_report.cold+0x37/0x85 mm/kasan/report.c:506
->   kasan_report+0xe/0x20 mm/kasan/common.c:639
->   uvc_register_terms drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
->   uvc_register_chains drivers/media/usb/uvc/uvc_driver.c:2070 [inline]
->   uvc_probe.cold+0x2193/0x29de drivers/media/usb/uvc/uvc_driver.c:2201
->   usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
->   really_probe+0x290/0xad0 drivers/base/dd.c:548
->   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
->   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->   __device_attach+0x217/0x390 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
->   usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
->   really_probe+0x290/0xad0 drivers/base/dd.c:548
->   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
->   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->   __device_attach+0x217/0x390 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
->   usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
->   hub_port_connect drivers/usb/core/hub.c:5184 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
->   port_event drivers/usb/core/hub.c:5470 [inline]
->   hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
->   process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2410
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> Allocated by task 94:
->   save_stack+0x1b/0x80 mm/kasan/common.c:72
->   set_track mm/kasan/common.c:80 [inline]
->   __kasan_kmalloc mm/kasan/common.c:513 [inline]
->   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:486
->   kmalloc include/linux/slab.h:556 [inline]
->   kzalloc include/linux/slab.h:670 [inline]
->   uvc_alloc_chain+0x48/0xfa drivers/media/usb/uvc/uvc_driver.c:1692
->   uvc_scan_device drivers/media/usb/uvc/uvc_driver.c:1818 [inline]
->   uvc_probe.cold+0x15f0/0x29de drivers/media/usb/uvc/uvc_driver.c:2197
->   usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
->   really_probe+0x290/0xad0 drivers/base/dd.c:548
->   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
->   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->   __device_attach+0x217/0x390 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
->   usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
->   really_probe+0x290/0xad0 drivers/base/dd.c:548
->   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
->   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->   __device_attach+0x217/0x390 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
->   usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
->   hub_port_connect drivers/usb/core/hub.c:5184 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
->   port_event drivers/usb/core/hub.c:5470 [inline]
->   hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
->   process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2410
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> Freed by task 94:
->   save_stack+0x1b/0x80 mm/kasan/common.c:72
->   set_track mm/kasan/common.c:80 [inline]
->   kasan_set_free_info mm/kasan/common.c:335 [inline]
->   __kasan_slab_free+0x117/0x160 mm/kasan/common.c:474
->   slab_free_hook mm/slub.c:1425 [inline]
->   slab_free_freelist_hook mm/slub.c:1458 [inline]
->   slab_free mm/slub.c:3005 [inline]
->   kfree+0xd5/0x300 mm/slub.c:3957
->   uvc_scan_device drivers/media/usb/uvc/uvc_driver.c:1825 [inline]
->   uvc_probe.cold+0x16fd/0x29de drivers/media/usb/uvc/uvc_driver.c:2197
->   usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
->   really_probe+0x290/0xad0 drivers/base/dd.c:548
->   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
->   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->   __device_attach+0x217/0x390 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
->   usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
->   really_probe+0x290/0xad0 drivers/base/dd.c:548
->   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
->   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->   __device_attach+0x217/0x390 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
->   usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
->   hub_port_connect drivers/usb/core/hub.c:5184 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
->   port_event drivers/usb/core/hub.c:5470 [inline]
->   hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
->   process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2410
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> The buggy address belongs to the object at ffff8881d4f1bc00
->   which belongs to the cache kmalloc-256 of size 256
-> The buggy address is located 46 bytes inside of
->   256-byte region [ffff8881d4f1bc00, ffff8881d4f1bd00)
-> The buggy address belongs to the page:
-> page:ffffea000753c680 refcount:1 mapcount:0 mapping:ffff8881da002780
-> index:0x0 compound_mapcount: 0
-> raw: 0200000000010200 ffffea000753c600 0000000300000003 ffff8881da002780
-> raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->   ffff8881d4f1bb00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->   ffff8881d4f1bb80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > ffff8881d4f1bc00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                                    ^
->   ffff8881d4f1bc80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff8881d4f1bd00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ==================================================================
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+> Driver A should never 'borrow' a notifier from B
 
-Fixed by something.
+It doesn't. I guess this would be great topic for lpc with a seriously
+big white-board, but I guess we don't have that this year again, so
+let me try again. Simplified example ofc, but should be the gist.
 
-#syz invalid
+Ingredients:
+Device A and Device B
+A dma-buf, shared between device A and device B, let's call that shared_buf
+A userptr buffer, which userspace created on device B to hopefully
+somewhat track a virtual memory range, let's call that userptr_buf.
+A pile of other buffers, but we pretend they don't exist (because they
+kinda don't matter.
+
+Sequence of events as userspace issues them to the kernel.
+1. dma operation on device A, which fills some interesting stuff into
+shared_buf. Userspace gets back a handle to dma_fence fence_A. No mmu
+notifier anywhere to be seen in the driver for device A.
+
+2. userspace passes fence_A around to some other place
+
+3. other places takes the handle for shared_buf and fence_A and
+userptr_buf and starts a dma operation on device B. It's one dma
+operation, maybe device B is taking the data from shared_buf and
+compresses it into userptr_buf, so that userspace can then send it
+over the network or to disk or whatever. device B has a mmu_notifier.
+Userspace gets back fence_B, which represents this dma operation. The
+kernel also stuffs this fence_B into the mmu_range_notifier for
+userptr_buf.
+
+-> at this point device A might still be crunching the numbers
+
+4. device A is finally done doing whatever it was supposed to do, and
+fence_A completes
+
+5. device B wakes up (this might or might not involve the kernel,
+usually it does) since fence_A has completed, and now starts doing its
+own crunching.
+
+6. once device B is also done, it signals fence_B
+
+In all this device A has never borrowed the mmu notifier or even
+accessd the memory in userptr_buf or had access to that buffer handle.
+
+The madness is only that device B's mmu notifier might need to wait
+for fence_B so that the dma operation finishes. Which in turn has to
+wait for device A to finish first.
+
+> If each driver controls its own lifetime of the buffers, why can't the
+> driver locally wait for its device to finish?
+>
+> Can't the GPUs cancel work that is waiting on a DMA fence? Ie if
+> Driver A detects that work completed and wants to trigger a DMA fence,
+> but it now knows the buffer is invalidated, can't it tell driver B to
+> give up?
+
+We can (usually, the shitty hw where we can't has generally
+disappeared) with gpu reset. Users make really sad faces when that
+happens though, and generally they're only ok with that if it's indeed
+a nasty gpu program that resulted in the crash (there's some webgl
+shaders that run too long for quick&easy testing of how good the gpu
+reset is, don't do that if you care about the data in your desktop
+session ...).
+
+The trouble is that userspace assembles the work that's queued up on
+the gpu. After submission everyone has forgotten enough that just
+canceling stuff and re-issuing everything isn't on the table.
+
+Some hw is better, with real hw page faults and stuff, but those also
+don't need dma_fence to track their memory. But generally just not
+possible.
+
+> > The problem is that there's piles of other dependencies for a dma job.
+> > GPU doesn't just consume a single buffer each time, it consumes entire
+> > lists of buffers and mixes them all up in funny ways. Some of these
+> > buffers are userptr, entirely local to the device. Other buffers are
+> > just normal device driver allocations (and managed with some shrinker
+> > to keep them in check). And then there's the actually shared dma-buf
+> > with other devices. The trouble is that they're all bundled up
+> > together.
+>
+> But why does this matter? Does the GPU itself consume some work and
+> then stall internally waiting for an external DMA fence?
+
+Yup, see above, that's what's going on. Userspace queues up
+distributed work across engines & drivers, and then just waits for the
+entire thing to cascade and finish.
+
+> Otherwise I would expect this dependency chain should be breakable by
+> aborting work waiting on fences upon invalidation (without stalling)
+
+Yup, it would. Now on some hw you have a gpu work scheduler that sits
+in some kthread, and you could probably unschedule the work if there's
+some external dependency and you get an mmu notifier callback. Then
+put it on some queue, re-acquire the user pages and then reschedule
+it.
+
+It's still as horrible, since you still have the wait for the
+completion in there, the only benefit is that other device drivers
+without userptr support don't have to live with that specific
+constraint. dma_fence rules are still very strict and easy to
+deadlock, so we'd still want some lockdep checks, but now you'd have
+to somehow annotate whether you're a driver with userptr or a driver
+without userptr and make sure everyone gets it right.
+
+Also a scheduler which can unschedule and reschedule is mighty more
+complex than one which cannot, plus it needs to do that from mmu
+notifier callback (not the nicest calling context we have in the
+kernel by far). And if you have a single driver which doesn't
+unschedule, you're still screwed from an overall subsystem pov.
+
+So lots of code, lots of work, and not that much motivation to roll it
+out consistently across the board since there's no incremental payoff.
+Plus the thing is, the drivers without userptr are generally the
+really simple ones. Much easier to just fix those than to change the
+big complex render beasts which want userptr :-)
+
+E.g. the atomic modeset framework we've rolled out in the past few
+years and that almost all display drivers now use pulls any (sleeping)
+locks and memory allocations out of the critical async work section by
+design. Some drivers still managed to butcher it (the annotations
+caught some locking bugs already, not just memory allocations in the
+wrong spot), but generally easy to fix those.
+
+> > > Do not need to wait on dma_fence in notifiers.
+> >
+> > Maybe :-) The goal of this series is more to document current rules
+> > and make them more consistent. Fixing them if we don't like them might
+> > be a follow-up task, but that would likely be a pile more work. First
+> > we need to know what the exact shape of the problem even is.
+>
+> Fair enough
+
+Full disclosure: We are aware that we've designed ourselves into an
+impressive corner here, and there's lots of talks going on about
+untangling the dma synchronization from the memory management
+completely. But
+
+- that needs minimally reliable preempt support for gpu work, and hw
+engineers seem to have a hard time with that (or just don't want to do
+it). hw page faults would be even better, and even more wishlist than
+reality if you expect it to work everywhere.
+
+- it'd be a complete break of the established userspace abi, including
+all the cross driver stuff. Which means it's not just some in-kernel
+refactoring, we need to rev the entire ecosystem. And that takes a
+very long time, and needs serious pressure to get people moving.
+
+E.g. the atomic modeset rework is still not yet rolled out to major
+linux desktop environments, and it's over 5 years old, and it's
+starting to seriously hurt because lots of performance features
+require atomic modeset in userspace to be able to use them. I think
+rev'ing the entire memory management support will take as long. Plus I
+don't think we can ditch the old ways - even if all the hw currently
+using this would be dead (and we can delete the drivers) there's still
+the much smaller gpus in SoC that also need to go through the entire
+evolution.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
