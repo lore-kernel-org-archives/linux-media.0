@@ -2,179 +2,176 @@ Return-Path: <SRS0=jh8c=AA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9155C433E0
-	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 12:39:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18A76C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 13:41:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A9A11207E8
-	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 12:39:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="GHb2tJFI"
+	by mail.kernel.org (Postfix) with ESMTP id F101A208C7
+	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 13:41:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbgFSMjP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Jun 2020 08:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725974AbgFSMjK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Jun 2020 08:39:10 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9B1C0613EE
-        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 05:39:09 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id f18so8753240qkh.1
-        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 05:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=jS9Cx48KxvyLj4sEdC/4ikdQnELSNwkqzFpXAm2s44w=;
-        b=GHb2tJFIzWdBnMTKTlBJYZ/jbvDCcFIL08zyDDiOOLIooFN2jtNK2vQCzX1jR7qxlb
-         LEZLEf4Toqc6AOaT6k80vZvqR2/666M4jmSiKsDW/T3z34uELwUPRqSepX0EIIekUiqj
-         MmWPwQDoLjYgxZuxKhbyibG8QeYFHwHFfFwwo2QsXbkoMmfSW1a5++5ZNBmiKGvfrqiY
-         hW9rtQORDQjFlEjPjMbYF6v7/BC+Dp9Bi0YP0pyiOizh9dNv6tr38+RK3hKVAJQ+gwPe
-         y86icKWuq/4VTDDteTieZje7CSOH6MobjiVlJK9f/mNcp65nziNLDN4fFIgbwHLzcph1
-         pxlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=jS9Cx48KxvyLj4sEdC/4ikdQnELSNwkqzFpXAm2s44w=;
-        b=SQb00uJ3LERc22VxLDH4IGtJyOxgMS3au1raud7np8KG8fVoiJLHYbbxJzQ2Vcz/Jz
-         3qkNL4TTw7TH67ouJFJqaQ9BBm6IWCY7qyp/2AwwFZmy8pSX8qfNdP2i2SZN0oidoK0d
-         2Bznd0dCRg6uueVnX8Jzn24+jQzOuE+K0Z0zGBWoPaL2u39P8gaRNTM1x/2DlmL2rln/
-         hM8Zb3B12UwVGP+xUTRG9YhNDG9STZcS1i5k9xDuqhCjU4CyPFZiUzZRg8P2VQoVZjnd
-         GeQ1DcDf3jcfhyNBE3iLoo8qnxB2h3IBpYw/+OhGmMLL5cxpPfLyJ8Wcm9eIN2Rm/cI3
-         aHCg==
-X-Gm-Message-State: AOAM5314Nbak3czzi0rWP+i6UeCB+LXyR3lGhBJ7ACFot7hC4AWzfc1M
-        7SS0fXYouiRp36TrhAnZTraldw==
-X-Google-Smtp-Source: ABdhPJyRBAIWwslNfa6GQwpEXR/EmtXc5kObKKUOQaAOlhKKorBr5wMy2rmwwIGhrJIYOcxD6iMc2w==
-X-Received: by 2002:ae9:e647:: with SMTP id x7mr3262880qkl.70.1592570348755;
-        Fri, 19 Jun 2020 05:39:08 -0700 (PDT)
-Received: from nicolas-tpx395 ([192.222.193.21])
-        by smtp.gmail.com with ESMTPSA id u205sm6026879qka.81.2020.06.19.05.39.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2020 05:39:08 -0700 (PDT)
-Message-ID: <a0ee566a587c28ffce97224abfa901520af5c83f.camel@ndufresne.ca>
-Subject: Re: [PATCH 3/4] v4l2-ctrl: Add control for intra only decode
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Maheshwar Ajja <majja@codeaurora.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Date:   Fri, 19 Jun 2020 08:39:07 -0400
-In-Reply-To: <20200616123001.11321-4-stanimir.varbanov@linaro.org>
-References: <20200616123001.11321-1-stanimir.varbanov@linaro.org>
-         <20200616123001.11321-4-stanimir.varbanov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.2 (3.36.2-1.fc32) 
+        id S1731581AbgFSNlK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Jun 2020 09:41:10 -0400
+Received: from mga14.intel.com ([192.55.52.115]:40530 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726124AbgFSNlI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 19 Jun 2020 09:41:08 -0400
+IronPort-SDR: nfoJQH5BGMNV+73jPfyIhjf9GrLuCnsdQJrxrjJCF0HtN9IV0IiUOO4loikuuvctkfUCgZJ0jD
+ KJFOAFsrxZmw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="142035387"
+X-IronPort-AV: E=Sophos;i="5.75,255,1589266800"; 
+   d="scan'208";a="142035387"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2020 06:41:04 -0700
+IronPort-SDR: 7a6fRNvxQocMKFtpy6dheILuMZlNC+47soiadq6ZNoMhv0FDBFbc26o7AeG0lq/RmKEjJnIqPR
+ NRo405rUk2Vg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,255,1589266800"; 
+   d="scan'208";a="300061811"
+Received: from fmsmsx106.amr.corp.intel.com ([10.18.124.204])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Jun 2020 06:41:04 -0700
+Received: from fmsmsx158.amr.corp.intel.com (10.18.116.75) by
+ FMSMSX106.amr.corp.intel.com (10.18.124.204) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Fri, 19 Jun 2020 06:41:04 -0700
+Received: from fmsmsx108.amr.corp.intel.com ([169.254.9.193]) by
+ fmsmsx158.amr.corp.intel.com ([169.254.15.146]) with mapi id 14.03.0439.000;
+ Fri, 19 Jun 2020 06:41:04 -0700
+From:   "Ruhl, Michael J" <michael.j.ruhl@intel.com>
+To:     Charan Teja Kalla <charante@codeaurora.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "David.Laight@ACULAB.COM" <David.Laight@ACULAB.COM>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        DRI mailing list <dri-devel@lists.freedesktop.org>
+CC:     Linaro MM SIG <linaro-mm-sig@lists.linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] dmabuf: use spinlock to access dmabuf->name
+Thread-Topic: [PATCH v2] dmabuf: use spinlock to access dmabuf->name
+Thread-Index: AQHWRjDU8ynrfmeG7EGyHovmSs13oqjf8L+w
+Date:   Fri, 19 Jun 2020 13:41:03 +0000
+Message-ID: <14063C7AD467DE4B82DEDB5C278E866301154BAE9E@FMSMSX108.amr.corp.intel.com>
+References: <a83e7f0d-4e54-9848-4b58-e1acdbe06735@codeaurora.org>
+In-Reply-To: <a83e7f0d-4e54-9848-4b58-e1acdbe06735@codeaurora.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [10.1.200.108]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le mardi 16 juin 2020 à 15:30 +0300, Stanimir Varbanov a écrit :
-> This adds a new decoder control to instruct the decoders to
-> produce on its output intra frames only. Usually in this mode
-> decoders might lower the count of output decoder buffers and
-> hence reduce memory usage.
-
-Perhaps I missed some discussion, would be nice if you could remind the
-rationale from going away from a SKIP_MODE menu to adding dedicated boolean
-control for each mode.
-
-> 
-> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-> ---
->  .../userspace-api/media/v4l/ext-ctrls-codec.rst          | 9 +++++++++
->  drivers/media/v4l2-core/v4l2-ctrls.c                     | 2 ++
->  include/uapi/linux/v4l2-controls.h                       | 1 +
->  3 files changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index b9d3f7ae6486..d7f34596f95b 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -652,6 +652,15 @@ enum v4l2_mpeg_video_bitrate_mode -
->      otherwise the decoder expects a single frame in per buffer.
->      Applicable to the decoder, all codecs.
->  
-> +``V4L2_CID_MPEG_VIDEO_DECODE_INTRA_FRAMES_ONLY (boolean)``
-> +    If enabled the decoder should start decoding only intra frames. The
-> +    decoder consume first input buffer for progressive stream (or first
-> +    two buffers for interlace). Decoder might not allocate more output
-> +    buffers than it is required to consume one input frame. Usually the
-> +    decoder input buffers will contain only intra frames but it is not
-> +    mandatory. This control could be used for thumbnails generation.
-> +    Applicable to the decoder, all codecs.
-
-This imply that number of allocated buffers might be smaller (no references
-buffer are needed), but I think it should actually be more explicit that this
-must be set prior to reading MIN_BUFFER* and/or allocating buffers (since it's
-userspace that allocates buffers).
-
-What if a HW support live switching of this mode on key frames ? And if so, how
-do we configure and control that ?
-
-> +
->  ``V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE (boolean)``
->      Enable writing sample aspect ratio in the Video Usability
->      Information. Applicable to the H264 encoder.
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-
-> core/v4l2-ctrls.c
-> index bc00d02e411f..2b1fb8dcd360 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-> @@ -846,6 +846,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264
-> MB Level Rate Control";
->  	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:			return
-> "Sequence Header Mode";
->  	case V4L2_CID_MPEG_VIDEO_MAX_REF_PIC:			return "Max
-> Number of Reference Pics";
-> +	case V4L2_CID_MPEG_VIDEO_DECODE_INTRA_FRAMES_ONLY:	return "Decode
-> intra frames only";
->  	case V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP:		return "H263 I-Frame
-> QP Value";
->  	case V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP:		return "H263 P-Frame
-> QP Value";
->  	case V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP:		return "H263 B-Frame
-> QP Value";
-> @@ -1197,6 +1198,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum
-> v4l2_ctrl_type *type,
->  	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE:
->  	case V4L2_CID_MPEG_VIDEO_MPEG4_QPEL:
->  	case V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER:
-> +	case V4L2_CID_MPEG_VIDEO_DECODE_INTRA_FRAMES_ONLY:
->  	case V4L2_CID_WIDE_DYNAMIC_RANGE:
->  	case V4L2_CID_IMAGE_STABILIZATION:
->  	case V4L2_CID_RDS_RECEPTION:
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-
-> controls.h
-> index 0f7e4388dcce..c64471e64aa7 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -744,6 +744,7 @@ enum v4l2_cid_mpeg_video_hevc_size_of_length_field {
->  #define V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES	(V4L2_CID_MPEG_BASE +
-> 643)
->  #define V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR	(V4L2_CID_MPEG_BASE +
-> 644)
->  #define V4L2_CID_MPEG_VIDEO_CONSTANT_QUALITY		(V4L2_CID_MPEG_BASE +
-> 645)
-> +#define V4L2_CID_MPEG_VIDEO_DECODE_INTRA_FRAMES_ONLY	(V4L2_CID_MPEG_BASE +
-> 646)
->  
->  /*  MPEG-class control IDs specific to the CX2341x driver as defined by V4L2
-> */
->  #define V4L2_CID_MPEG_CX2341X_BASE				(V4L2_CTRL_CLASS
-> _MPEG | 0x1000)
-
+Pi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogY2hhcmFudGU9Y29kZWF1cm9yYS5v
+cmdAbWcuY29kZWF1cm9yYS5vcmcNCj48Y2hhcmFudGU9Y29kZWF1cm9yYS5vcmdAbWcuY29kZWF1
+cm9yYS5vcmc+IE9uIEJlaGFsZiBPZiBDaGFyYW4gVGVqYQ0KPkthbGxhDQo+U2VudDogRnJpZGF5
+LCBKdW5lIDE5LCAyMDIwIDc6NTcgQU0NCj5UbzogU3VtaXQgU2Vtd2FsIDxzdW1pdC5zZW13YWxA
+bGluYXJvLm9yZz47IFJ1aGwsIE1pY2hhZWwgSg0KPjxtaWNoYWVsLmoucnVobEBpbnRlbC5jb20+
+OyBEYXZpZC5MYWlnaHRAQUNVTEFCLkNPTTsgb3BlbiBsaXN0OkRNQQ0KPkJVRkZFUiBTSEFSSU5H
+IEZSQU1FV09SSyA8bGludXgtbWVkaWFAdmdlci5rZXJuZWwub3JnPjsgRFJJIG1haWxpbmcNCj5s
+aXN0IDxkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnPg0KPkNjOiBMaW5hcm8gTU0gU0lH
+IDxsaW5hcm8tbW0tc2lnQGxpc3RzLmxpbmFyby5vcmc+OyBMS01MIDxsaW51eC0NCj5rZXJuZWxA
+dmdlci5rZXJuZWwub3JnPg0KPlN1YmplY3Q6IFtQQVRDSCB2Ml0gZG1hYnVmOiB1c2Ugc3Bpbmxv
+Y2sgdG8gYWNjZXNzIGRtYWJ1Zi0+bmFtZQ0KPg0KPlRoZXJlIGV4aXN0cyBhIHNsZWVwLXdoaWxl
+LWF0b21pYyBidWcgd2hpbGUgYWNjZXNzaW5nIHRoZSBkbWFidWYtPm5hbWUNCj51bmRlciBtdXRl
+eCBpbiB0aGUgZG1hYnVmZnNfZG5hbWUoKS4gVGhpcyBpcyBjYXVzZWQgZnJvbSB0aGUgU0VMaW51
+eA0KPnBlcm1pc3Npb25zIGNoZWNrcyBvbiBhIHByb2Nlc3Mgd2hlcmUgaXQgdHJpZXMgdG8gdmFs
+aWRhdGUgdGhlIGluaGVyaXRlZA0KPmZpbGVzIGZyb20gZm9yaygpIGJ5IHRyYXZlcnNpbmcgdGhl
+bSB0aHJvdWdoIGl0ZXJhdGVfZmQoKSAod2hpY2gNCj50cmF2ZXJzZSBmaWxlcyB1bmRlciBzcGlu
+X2xvY2spIGFuZCBjYWxsDQo+bWF0Y2hfZmlsZShzZWN1cml0eS9zZWxpbnV4L2hvb2tzLmMpIHdo
+ZXJlIHRoZSBwZXJtaXNzaW9uIGNoZWNrcyBoYXBwZW4uDQo+VGhpcyBhdWRpdCBpbmZvcm1hdGlv
+biBpcyBsb2dnZWQgdXNpbmcgZHVtcF9jb21tb25fYXVkaXRfZGF0YSgpIHdoZXJlIGl0DQo+Y2Fs
+bHMgZF9wYXRoKCkgdG8gZ2V0IHRoZSBmaWxlIHBhdGggbmFtZS4gSWYgdGhlIGZpbGUgY2hlY2sg
+aGFwcGVuIG9uDQo+dGhlIGRtYWJ1ZidzIGZkLCB0aGVuIGl0IGVuZHMgdXAgaW4gLT5kbWFidWZm
+c19kbmFtZSgpIGFuZCB1c2UgbXV0ZXggdG8NCj5hY2Nlc3MgZG1hYnVmLT5uYW1lLiBUaGUgZmxv
+dyB3aWxsIGJlIGxpa2UgYmVsb3c6DQo+Zmx1c2hfdW5hdXRob3JpemVkX2ZpbGVzKCkNCj4gIGl0
+ZXJhdGVfZmQoKQ0KPiAgICBzcGluX2xvY2soKSAtLT4gU3RhcnQgb2YgdGhlIGF0b21pYyBzZWN0
+aW9uLg0KPiAgICAgIG1hdGNoX2ZpbGUoKQ0KPiAgICAgICAgZmlsZV9oYXNfcGVybSgpDQo+ICAg
+ICAgICAgIGF2Y19oYXNfcGVybSgpDQo+ICAgICAgICAgICAgYXZjX2F1ZGl0KCkNCj4gICAgICAg
+ICAgICAgIHNsb3dfYXZjX2F1ZGl0KCkNCj4JICAgICAgICBjb21tb25fbHNtX2F1ZGl0KCkNCj4J
+CSAgZHVtcF9jb21tb25fYXVkaXRfZGF0YSgpDQo+CQkgICAgYXVkaXRfbG9nX2RfcGF0aCgpDQo+
+CQkgICAgICBkX3BhdGgoKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgIGRtYWJ1ZmZzX2RuYW1l
+KCkNCj4gICAgICAgICAgICAgICAgICAgICAgICAgIG11dGV4X2xvY2soKS0tPiBTbGVlcCB3aGls
+ZSBhdG9taWMuDQo+DQo+Q2FsbCB0cmFjZSBjYXB0dXJlZCAob24gNC4xOSBrZXJuZWxzKSBpcyBi
+ZWxvdzoNCj5fX19taWdodF9zbGVlcCsweDIwNC8weDIwOA0KPl9fbWlnaHRfc2xlZXArMHg1MC8w
+eDg4DQo+X19tdXRleF9sb2NrX2NvbW1vbisweDVjLzB4MTA2OA0KPl9fbXV0ZXhfbG9ja19jb21t
+b24rMHg1Yy8weDEwNjgNCj5tdXRleF9sb2NrX25lc3RlZCsweDQwLzB4NTANCj5kbWFidWZmc19k
+bmFtZSsweGEwLzB4MTcwDQo+ZF9wYXRoKzB4ODQvMHgyOTANCj5hdWRpdF9sb2dfZF9wYXRoKzB4
+NzQvMHgxMzANCj5jb21tb25fbHNtX2F1ZGl0KzB4MzM0LzB4NmU4DQo+c2xvd19hdmNfYXVkaXQr
+MHhiOC8weGY4DQo+YXZjX2hhc19wZXJtKzB4MTU0LzB4MjE4DQo+ZmlsZV9oYXNfcGVybSsweDcw
+LzB4MTgwDQo+bWF0Y2hfZmlsZSsweDYwLzB4NzgNCj5pdGVyYXRlX2ZkKzB4MTI4LzB4MTY4DQo+
+c2VsaW51eF9icHJtX2NvbW1pdHRpbmdfY3JlZHMrMHgxNzgvMHgyNDgNCj5zZWN1cml0eV9icHJt
+X2NvbW1pdHRpbmdfY3JlZHMrMHgzMC8weDQ4DQo+aW5zdGFsbF9leGVjX2NyZWRzKzB4MWMvMHg2
+OA0KPmxvYWRfZWxmX2JpbmFyeSsweDNhNC8weDE0ZTANCj5zZWFyY2hfYmluYXJ5X2hhbmRsZXIr
+MHhiMC8weDFlMA0KPg0KPlNvLCB1c2Ugc3BpbmxvY2sgdG8gYWNjZXNzIGRtYWJ1Zi0+bmFtZSB0
+byBhdm9pZCBzbGVlcC13aGlsZS1hdG9taWMuDQo+DQo+Q2M6IDxzdGFibGVAdmdlci5rZXJuZWwu
+b3JnPiBbNS4zK10NCj5TaWduZWQtb2ZmLWJ5OiBDaGFyYW4gVGVqYSBSZWRkeSA8Y2hhcmFudGVA
+Y29kZWF1cm9yYS5vcmc+DQo+LS0tDQo+DQo+Q2hhbmdlcyBpbiBWMjogQWRkcmVzc2VkIHJldmll
+dyBjb21tZW50cyBmcm9tIFJ1aGwsIE1pY2hhZWwgSg0KPg0KPkNoYW5nZXMgaW4gVjE6IGh0dHBz
+Oi8vbG9yZS5rZXJuZWwub3JnL3BhdGNod29yay9wYXRjaC8xMjU1MDU1Lw0KPg0KPiBkcml2ZXJz
+L2RtYS1idWYvZG1hLWJ1Zi5jIHwgMTEgKysrKysrKy0tLS0NCj4gaW5jbHVkZS9saW51eC9kbWEt
+YnVmLmggICB8ICAxICsNCj4gMiBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDQgZGVs
+ZXRpb25zKC0pDQo+DQo+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvZG1hLWJ1Zi9kbWEtYnVmLmMgYi9k
+cml2ZXJzL2RtYS1idWYvZG1hLWJ1Zi5jDQo+aW5kZXggMDFjZTEyNS4uZDgxZDI5OCAxMDA2NDQN
+Cj4tLS0gYS9kcml2ZXJzL2RtYS1idWYvZG1hLWJ1Zi5jDQo+KysrIGIvZHJpdmVycy9kbWEtYnVm
+L2RtYS1idWYuYw0KPkBAIC00NSwxMCArNDUsMTAgQEAgc3RhdGljIGNoYXIgKmRtYWJ1ZmZzX2Ru
+YW1lKHN0cnVjdCBkZW50cnkgKmRlbnRyeSwNCj5jaGFyICpidWZmZXIsIGludCBidWZsZW4pDQo+
+IAlzaXplX3QgcmV0ID0gMDsNCj4NCj4gCWRtYWJ1ZiA9IGRlbnRyeS0+ZF9mc2RhdGE7DQo+LQlk
+bWFfcmVzdl9sb2NrKGRtYWJ1Zi0+cmVzdiwgTlVMTCk7DQo+KwlzcGluX2xvY2soJmRtYWJ1Zi0+
+bmFtZV9sb2NrKTsNCj4gCWlmIChkbWFidWYtPm5hbWUpDQo+IAkJcmV0ID0gc3RybGNweShuYW1l
+LCBkbWFidWYtPm5hbWUsIERNQV9CVUZfTkFNRV9MRU4pOw0KPi0JZG1hX3Jlc3ZfdW5sb2NrKGRt
+YWJ1Zi0+cmVzdik7DQo+KwlzcGluX3VubG9jaygmZG1hYnVmLT5uYW1lX2xvY2spOw0KPg0KPiAJ
+cmV0dXJuIGR5bmFtaWNfZG5hbWUoZGVudHJ5LCBidWZmZXIsIGJ1ZmxlbiwgIi8lczolcyIsDQo+
+IAkJCSAgICAgZGVudHJ5LT5kX25hbWUubmFtZSwgcmV0ID4gMCA/IG5hbWUgOiAiIik7DQo+QEAg
+LTM0MSw4ICszNDEsMTAgQEAgc3RhdGljIGxvbmcgZG1hX2J1Zl9zZXRfbmFtZShzdHJ1Y3QgZG1h
+X2J1Zg0KPipkbWFidWYsIGNvbnN0IGNoYXIgX191c2VyICpidWYpDQo+IAkJa2ZyZWUobmFtZSk7
+DQo+IAkJZ290byBvdXRfdW5sb2NrOw0KPiAJfQ0KPisJc3Bpbl9sb2NrKCZkbWFidWYtPm5hbWVf
+bG9jayk7DQo+IAlrZnJlZShkbWFidWYtPm5hbWUpOw0KPiAJZG1hYnVmLT5uYW1lID0gbmFtZTsN
+Cj4rCXNwaW5fdW5sb2NrKCZkbWFidWYtPm5hbWVfbG9jayk7DQoNCldoaWxlIHRoaXMgY29kZSBw
+YXRoIGlzIG9rLCBJIHdvdWxkIGhhdmUgc2VwYXJhdGVkIHRoZSBwcm90ZWN0aW9uIG9mIHRoZQ0K
+YXR0YWNobWVudCBsaXN0IGFuZCB0aGUgbmFtZSBtYW5pcHVsYXRpb24uDQoNCmRtYV9yZXN2X2xv
+Y2socmVzdikNCmlmICghbGlzdF9lbXB0eShhdHRhY2htZW50KQ0KCXJldCA9IC1FQlVTWQ0KZG1h
+X3Jlc3ZfdW5sb2NrKHJlc3YpDQoNCmlmIChyZXQpIHsNCglrZnJlZShuYW1lKQ0KCXJldHVybiBy
+ZXQ7DQp9DQoNCnNwaW5sb2NrKG5hbV9sb2NrKQ0KLi4uDQoNCk5lc3RpbmcgbG9ja3MgIHRoYXQg
+ZG9uJ3QgbmVlZCB0byBiZSBuZXN0ZWQgYWx3YXlzIG1ha2VzIG1lIG5lcnZvdXMNCmZvciBmdXR1
+cmUgdXNlIHRoYXQgbWlzc2VzIHRoZSBsb2NrL3VubG9jayBwYXR0ZXJuLg0KDQpIb3dldmVyLCB0
+aGlzIGxvb2tzIHJlYXNvbmFibGUuDQoNCldpdGggdGhpcyBjdXJyZW50IGNvZGUsIG9yIGlmIHlv
+dSB1cGRhdGUgdG8gdGhlIGFib3ZlIHBhdHRlcm46DQoNClJldmlld2VkLWJ5OiBNaWNoYWVsIEou
+IFJ1aGwgPG1pY2hhZWwuai5ydWhsQGludGVsLmNvbT4NCg0KTWlrZQ0KDQoNCj4gb3V0X3VubG9j
+azoNCj4gCWRtYV9yZXN2X3VubG9jayhkbWFidWYtPnJlc3YpOw0KPkBAIC00MDUsMTAgKzQwNywx
+MCBAQCBzdGF0aWMgdm9pZCBkbWFfYnVmX3Nob3dfZmRpbmZvKHN0cnVjdCBzZXFfZmlsZQ0KPipt
+LCBzdHJ1Y3QgZmlsZSAqZmlsZSkNCj4gCS8qIERvbid0IGNvdW50IHRoZSB0ZW1wb3JhcnkgcmVm
+ZXJlbmNlIHRha2VuIGluc2lkZSBwcm9jZnMgc2VxX3Nob3cNCj4qLw0KPiAJc2VxX3ByaW50Ziht
+LCAiY291bnQ6XHQlbGRcbiIsIGZpbGVfY291bnQoZG1hYnVmLT5maWxlKSAtIDEpOw0KPiAJc2Vx
+X3ByaW50ZihtLCAiZXhwX25hbWU6XHQlc1xuIiwgZG1hYnVmLT5leHBfbmFtZSk7DQo+LQlkbWFf
+cmVzdl9sb2NrKGRtYWJ1Zi0+cmVzdiwgTlVMTCk7DQo+KwlzcGluX2xvY2soJmRtYWJ1Zi0+bmFt
+ZV9sb2NrKTsNCj4gCWlmIChkbWFidWYtPm5hbWUpDQo+IAkJc2VxX3ByaW50ZihtLCAibmFtZTpc
+dCVzXG4iLCBkbWFidWYtPm5hbWUpOw0KPi0JZG1hX3Jlc3ZfdW5sb2NrKGRtYWJ1Zi0+cmVzdik7
+DQo+KwlzcGluX3VubG9jaygmZG1hYnVmLT5uYW1lX2xvY2spOw0KPiB9DQo+DQo+IHN0YXRpYyBj
+b25zdCBzdHJ1Y3QgZmlsZV9vcGVyYXRpb25zIGRtYV9idWZfZm9wcyA9IHsNCj5AQCAtNTQ2LDYg
+KzU0OCw3IEBAIHN0cnVjdCBkbWFfYnVmICpkbWFfYnVmX2V4cG9ydChjb25zdCBzdHJ1Y3QNCj5k
+bWFfYnVmX2V4cG9ydF9pbmZvICpleHBfaW5mbykNCj4gCWRtYWJ1Zi0+c2l6ZSA9IGV4cF9pbmZv
+LT5zaXplOw0KPiAJZG1hYnVmLT5leHBfbmFtZSA9IGV4cF9pbmZvLT5leHBfbmFtZTsNCj4gCWRt
+YWJ1Zi0+b3duZXIgPSBleHBfaW5mby0+b3duZXI7DQo+KwlzcGluX2xvY2tfaW5pdCgmZG1hYnVm
+LT5uYW1lX2xvY2spOw0KPiAJaW5pdF93YWl0cXVldWVfaGVhZCgmZG1hYnVmLT5wb2xsKTsNCj4g
+CWRtYWJ1Zi0+Y2JfZXhjbC5wb2xsID0gZG1hYnVmLT5jYl9zaGFyZWQucG9sbCA9ICZkbWFidWYt
+PnBvbGw7DQo+IAlkbWFidWYtPmNiX2V4Y2wuYWN0aXZlID0gZG1hYnVmLT5jYl9zaGFyZWQuYWN0
+aXZlID0gMDsNCj5kaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9kbWEtYnVmLmggYi9pbmNsdWRl
+L2xpbnV4L2RtYS1idWYuaA0KPmluZGV4IGFiMGMxNTYuLjkzMTA4ZmQgMTAwNjQ0DQo+LS0tIGEv
+aW5jbHVkZS9saW51eC9kbWEtYnVmLmgNCj4rKysgYi9pbmNsdWRlL2xpbnV4L2RtYS1idWYuaA0K
+PkBAIC0zMTEsNiArMzExLDcgQEAgc3RydWN0IGRtYV9idWYgew0KPiAJdm9pZCAqdm1hcF9wdHI7
+DQo+IAljb25zdCBjaGFyICpleHBfbmFtZTsNCj4gCWNvbnN0IGNoYXIgKm5hbWU7DQo+KwlzcGlu
+bG9ja190IG5hbWVfbG9jazsNCj4gCXN0cnVjdCBtb2R1bGUgKm93bmVyOw0KPiAJc3RydWN0IGxp
+c3RfaGVhZCBsaXN0X25vZGU7DQo+IAl2b2lkICpwcml2Ow0KPi0tDQo+VGhlIFF1YWxjb21tIElu
+bm92YXRpb24gQ2VudGVyLCBJbmMuIGlzIGEgbWVtYmVyIG9mIHRoZSBDb2RlIEF1cm9yYQ0KPkZv
+cnVtLCBhIExpbnV4IEZvdW5kYXRpb24gQ29sbGFib3JhdGl2ZSBQcm9qZWN0DQo=
