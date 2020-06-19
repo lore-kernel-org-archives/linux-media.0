@@ -7,139 +7,116 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E3D5C433E1
-	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:41:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5785BC433E1
+	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:52:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6BC7C206FA
-	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:41:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D03A2193E
+	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:52:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="gK78Od7D"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="FNTLaFjM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391995AbgFSPlB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Jun 2020 11:41:01 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:34036 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403778AbgFSPkq (ORCPT
+        id S2393084AbgFSPWy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Jun 2020 11:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393078AbgFSPWw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Jun 2020 11:40:46 -0400
+        Fri, 19 Jun 2020 11:22:52 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAA0C06174E
+        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 08:22:52 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5C23A552;
-        Fri, 19 Jun 2020 17:40:44 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8965C552;
+        Fri, 19 Jun 2020 17:22:50 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592581244;
-        bh=few0hraihlucTKv2CI/X4H0rEq6CRIhANUxhWCu1DOg=;
+        s=mail; t=1592580170;
+        bh=CP4llM9MfdiadH25cs8m8az/rOpCnPSQ2QZhiRHEX9I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gK78Od7D1xoYwifXtShc6ju95r2MQtBGtEfp9wQcElB7lJiX1ibnx8gbTrAdGngWz
-         RAKGuBkqMxhvs3sO/tF2Js9/2vh0DWzO1yT+NxgRsJYrWWZx55hAjHkQwHe9AnRTQ2
-         biQDJxEiukacdbMesUISYECC4Boax3k7kpswTYLc=
-Date:   Fri, 19 Jun 2020 18:40:20 +0300
+        b=FNTLaFjMXCPOVi3BpqI0XYMvgD38pNznJBpoiI8Elp7i05v1BsZ+gNef3KmImLw76
+         7N+kd0xiCcgwSDErdeO6ZBvFVzqj7MZm/eNJEbcrM1KEg9mZ7xX8LZZx9QMWgUE3Vu
+         EAbONx2h08bSxqkwKKJ89eww06oczEAwUcbujRvk=
+Date:   Fri, 19 Jun 2020 18:22:27 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Benoit Parrot <bparrot@ti.com>
-Subject: Re: [PATCH v1 082/107] media: ti-vpe: cal: Move CAL I/O accessors to
- cal.h
-Message-ID: <20200619154020.GH5823@pendragon.ideasonboard.com>
+To:     Benoit Parrot <bparrot@ti.com>
+Cc:     linux-media@vger.kernel.org, Tomi Valkeinen <tomi.valkeinen@ti.com>
+Subject: Re: [PATCH v1 030/107] media: ti-vpe: cal: Use dev_* print macros
+Message-ID: <20200619152227.GF5823@pendragon.ideasonboard.com>
 References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
- <20200614235944.17716-83-laurent.pinchart@ideasonboard.com>
- <CAAEAJfDLv-hx=4JL2=+AgU1c8bcLhNu8_ZGu8cNtkXDVLx8H3A@mail.gmail.com>
+ <20200614235944.17716-31-laurent.pinchart@ideasonboard.com>
+ <20200618182855.xdx64prbc54ifn5k@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAAEAJfDLv-hx=4JL2=+AgU1c8bcLhNu8_ZGu8cNtkXDVLx8H3A@mail.gmail.com>
+In-Reply-To: <20200618182855.xdx64prbc54ifn5k@ti.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ezequiel,
+Hi Benoit,
 
-On Fri, Jun 19, 2020 at 01:18:28AM -0300, Ezequiel Garcia wrote:
-> On Sun, 14 Jun 2020 at 21:01, Laurent Pinchart wrote:
-> >
-> > To prepare for the split of the camerarx code to a separate file, move
-> > the CAL I/O accessors to cal.h. This requires renaming the accessors
-> > with a cal_prefix, as the current names are too generic and prone to
-> > namespace clashes.
-> >
-> > The reg_read() and read_write() macros, that cover both CAL and CAMERARX
-> > register access, are split in two groups of inline functions, one for
-> > CAL access and one for CAMERARX access.
-> >
+On Thu, Jun 18, 2020 at 01:28:55PM -0500, Benoit Parrot wrote:
+> Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote on Mon [2020-Jun-15 02:58:27 +0300]:
+> > Use the dev_* print macros instead of the v4l2_* print macros. This
+> > prepares for a common print infrastructure that will also support the
+> > cal_camerarx instances.
+> > 
 > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > > ---
-> >  drivers/media/platform/ti-vpe/cal-video.c |   1 -
-> >  drivers/media/platform/ti-vpe/cal.c       | 280 ++++++++++------------
-> >  drivers/media/platform/ti-vpe/cal.h       |  36 +++
-> >  3 files changed, 168 insertions(+), 149 deletions(-)
-> >
-> > diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
-> > index 82b32a2f9db5..df472a175e83 100644
-> > --- a/drivers/media/platform/ti-vpe/cal-video.c
-> > +++ b/drivers/media/platform/ti-vpe/cal-video.c
-> > @@ -9,7 +9,6 @@
-> >   *     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >   */
-> >
-> > -#include <linux/bitfield.h>
-> >  #include <linux/delay.h>
-> >  #include <linux/ioctl.h>
-> >  #include <linux/pm_runtime.h>
+> >  drivers/media/platform/ti-vpe/cal.c | 17 ++++++++++-------
+> >  1 file changed, 10 insertions(+), 7 deletions(-)
+> > 
 > > diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-> > index 0bc02ba52b59..abeded3b5e6c 100644
+> > index e40967751aa4..e62089832713 100644
 > > --- a/drivers/media/platform/ti-vpe/cal.c
 > > +++ b/drivers/media/platform/ti-vpe/cal.c
-> > @@ -9,11 +9,9 @@
-> >   *     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >   */
-> >
-> > -#include <linux/bitfield.h>
-> >  #include <linux/clk.h>
-> >  #include <linux/delay.h>
-> >  #include <linux/interrupt.h>
-> > -#include <linux/io.h>
-> >  #include <linux/mfd/syscon.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of_device.h>
-> > @@ -133,33 +131,6 @@ static const struct cal_data am654_cal_data = {
-> >   * ------------------------------------------------------------------
-> >   */
-> >
-> > -#define reg_read(dev, offset) ioread32(dev->base + offset)
-> > -#define reg_write(dev, offset, val) iowrite32(val, dev->base + offset)
-> > -
-> > -static inline u32 reg_read_field(struct cal_dev *cal, u32 offset, u32 mask)
-> > -{
-> > -       return FIELD_GET(mask, reg_read(cal, offset));
-> > -}
-> > -
-> > -static inline void reg_write_field(struct cal_dev *cal, u32 offset, u32 value,
-> > -                                  u32 mask)
-> > -{
-> > -       u32 val = reg_read(cal, offset);
-> > -
-> > -       val &= ~mask;
-> > -       val |= FIELD_PREP(mask, value);
-> > -       reg_write(cal, offset, val);
-> > -}
-> > -
-> > -static inline void set_field(u32 *valp, u32 field, u32 mask)
-> > -{
-> > -       u32 val = *valp;
-> > -
-> > -       val &= ~mask;
-> > -       val |= (field << __ffs(mask)) & mask;
-> > -       *valp = val;
-> > -}
-> > -
+> > @@ -53,19 +53,22 @@ static unsigned debug;
+> >  module_param(debug, uint, 0644);
+> >  MODULE_PARM_DESC(debug, "activates debug info");
+> >  
+> > -#define cal_dbg(level, cal, fmt, arg...)	\
+> > -		v4l2_dbg(level, debug, &cal->v4l2_dev, fmt, ##arg)
+> > +#define cal_dbg(level, cal, fmt, arg...)				\
+> > +	do {								\
+> > +		if (debug >= (level))					\
+> > +			dev_dbg(&(cal)->pdev->dev, fmt, ##arg);		\
+> > +	} while (0)
 > 
-> Slightly unrelated, have you considered moving all of these to regmap?
+> The problem here with using dev_dbg is that you loose the ability to enable
+> or disable debug log at runtime. Which I find highly convenient.
 > 
-> Perhaps it will make the code more maintainable.
+> With dev_dbg you have to compile with DEBUG defined or at the very least
+> DYNAMIC_DEBUG.
 
-I'm considering it now :-) Benoit, Tomi, any objection ? Otherwise I'll
-try to switch to regmap on top of this series.
+That's actually one of the things I like about dev_dbg(), it shrinks the
+kernel when DEBUG (or DYNAMIC_DEBUG) isn't defined. In which case we
+could possibly even remove the debug module parameter, as DYNAMIC_DEBUG
+already gives us control over which messages are printed.
+
+I however hear your concern, and I don't dispute that a module parameter
+can also make debugging easier, at in some cases. It's partly a matter
+of getting use to DYNAMIC_DEBUG, but not just that. I'll thus replace
+dev_dbg() with dev_printk(KERN_DEBUG, ...) here.
+
+> >  #define cal_info(cal, fmt, arg...)	\
+> > -		v4l2_info(&cal->v4l2_dev, fmt, ##arg)
+> > +	dev_info(&(cal)->pdev->dev, fmt, ##arg)
+> >  #define cal_err(cal, fmt, arg...)	\
+> > -		v4l2_err(&cal->v4l2_dev, fmt, ##arg)
+> > +	dev_err(&(cal)->pdev->dev, fmt, ##arg)
+> >  
+> >  #define ctx_dbg(level, ctx, fmt, arg...)	\
+> > -		v4l2_dbg(level, debug, &ctx->v4l2_dev, fmt, ##arg)
+> > +	cal_dbg(level, (ctx)->cal, "ctx%u: " fmt, (ctx)->csi2_port, ##arg)
+> >  #define ctx_info(ctx, fmt, arg...)	\
+> > -		v4l2_info(&ctx->v4l2_dev, fmt, ##arg)
+> > +	cal_info((ctx)->cal, "ctx%u: " fmt, (ctx)->csi2_port, ##arg)
+> >  #define ctx_err(ctx, fmt, arg...)	\
+> > -		v4l2_err(&ctx->v4l2_dev, fmt, ##arg)
+> > +	cal_err((ctx)->cal, "ctx%u: " fmt, (ctx)->csi2_port, ##arg)
+> >  
+> >  #define CAL_NUM_CONTEXT 2
+> >  
 
 -- 
 Regards,
