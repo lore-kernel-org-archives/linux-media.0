@@ -2,640 +2,177 @@ Return-Path: <SRS0=jh8c=AA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FB99C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F469C433E3
+	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:59:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71DF520809
-	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:58:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69CFD21532
+	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:59:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vs2MA7Cl"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="KCSiM2dD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404223AbgFSP6f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Jun 2020 11:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S2392065AbgFSPTM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Jun 2020 11:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405476AbgFSP6b (ORCPT
+        with ESMTP id S2392439AbgFSPPy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Jun 2020 11:58:31 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3660C06174E
-        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 08:58:31 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DF6DA556;
-        Fri, 19 Jun 2020 17:58:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592582309;
-        bh=6XsfziCo+NY3TY/B4tS1vEUAsFKm4JL9azRLyCrS+JM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vs2MA7Clc4jsgTZxZtbOXMv/P37vglujFi7P829puZ/wraLfOGmise13gGnPX4fh5
-         3i+MFmEh25QyekkniaXvDSeCwMDsuHVyDsvRoWqamh0OZEEpX50J8MfrQochUK2com
-         pdT/soy0G6BWO7HOtiCByuH+lDEAekOaXpGWd9Ek=
-Date:   Fri, 19 Jun 2020 18:58:05 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Benoit Parrot <bparrot@ti.com>
-Cc:     linux-media@vger.kernel.org, Tomi Valkeinen <tomi.valkeinen@ti.com>
-Subject: Re: [PATCH v1 107/107] media: ti-vpe: cal: Implement media
- controller centric API
-Message-ID: <20200619155805.GK5823@pendragon.ideasonboard.com>
-References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
- <20200614235944.17716-108-laurent.pinchart@ideasonboard.com>
- <20200619144648.k7dwx52vyzq7rmqx@ti.com>
+        Fri, 19 Jun 2020 11:15:54 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61621C061794
+        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 08:15:53 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id x62so4075587qtd.3
+        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 08:15:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=X2HlrHXMTsUGZp7zXkK0C6ORZXN08Rk3M03svjYzeco=;
+        b=KCSiM2dDaLHttoqe1QHt/9yr2IYYTmKDtwUlr/2aAPsMXJotGdlS5LIUOCBI3nfUKr
+         7H5hXjOFeIhEMM1rhPsYmLXsVGK+/URRxwB5gkdgB/VVBX1WNWiPWPxGzOXFSojm2k67
+         xv0fxT++s5BYKLm5BozcojKfi5oVGvmGeiUTUYEK9kBmA8g9ZeUGElwaPjjy3Aw3zHUD
+         ZgrJPkhJj7UA3fOZqK2qsLucfVZJHTCbjC1vzx8LgcH+mB7ndhuHBfDQHVam/u5lMZnQ
+         /ScgOIQLnmny9xQ2AmPd/r9OS8erk86JqJJRaxVdcgDBEB/6Qu//RVN/4j5OzzqwuMzv
+         jKuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X2HlrHXMTsUGZp7zXkK0C6ORZXN08Rk3M03svjYzeco=;
+        b=RB9wvxLCnxVyNUfxbKbJ+WM2zWKZJ0rctPgrGGcoGNbCs2BqVMaMKAmZb1xpQiJAhB
+         ksr0LYF+s/6f3BzRNBcivnCbjul2c1EzfyWmXfWm/wfO26KOQXmNk6Tzx0a5w1Dm9vjW
+         nok8b8UaKa9vYorudE6DItNgG/dD6SDvfW/a28KN3LERZefTh50XrsGYLnF9Y6jcnmeB
+         KqqXNyiSmnEavELzNQktwJbPgn30gYTnmURqF3RtRbmNBjQf0qnguAE4ppMlzzGMlYkw
+         1giIYA/sW0NF1Xu4Q0uNH2raQtPFIitQCq42fQlTnA6vnXIio8Em/ArQa86UVLGGgX5X
+         Ek/g==
+X-Gm-Message-State: AOAM5325MaqJfAmj8qkNtg1WnMxbExLmdQX7FIES1ACoS66zFRSpu0V3
+        IuMk/p7xV2vX0Fend27A5irZdg==
+X-Google-Smtp-Source: ABdhPJwyaHoM3658+VLpg+i0sFuo+6OU0FHPK264DOfSFcO/+Xp6yT6eiXXI1R4LmEbcaqkeIQOs/w==
+X-Received: by 2002:ac8:2fb0:: with SMTP id l45mr3800795qta.260.1592579752403;
+        Fri, 19 Jun 2020 08:15:52 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
+        by smtp.gmail.com with ESMTPSA id y54sm7195320qtj.28.2020.06.19.08.15.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2020 08:15:51 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.93)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1jmIkB-00Ap5C-Bi; Fri, 19 Jun 2020 12:15:51 -0300
+Date:   Fri, 19 Jun 2020 12:15:51 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Thomas =?utf-8?B?SGVsbHN0csO2bSAoSW50ZWwp?= 
+        <thomas_os@shipmail.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Mika Kuoppala <mika.kuoppala@intel.com>
+Subject: Re: [Linaro-mm-sig] [PATCH 04/18] dma-fence: prime lockdep
+ annotations
+Message-ID: <20200619151551.GP6578@ziepe.ca>
+References: <20200611083430.GD20149@phenom.ffwll.local>
+ <20200611141515.GW6578@ziepe.ca>
+ <20200616120719.GL20149@phenom.ffwll.local>
+ <CAKMK7uE7DKUo9Z+yCpY+mW5gmKet8ugbF3yZNyHGqsJ=e-g_hA@mail.gmail.com>
+ <20200617152835.GF6578@ziepe.ca>
+ <20200618150051.GS20149@phenom.ffwll.local>
+ <20200618172338.GM6578@ziepe.ca>
+ <CAKMK7uEbqTu4q-amkLXyd1i8KNtLaoO2ZFoGqYiG6D0m0FKpOg@mail.gmail.com>
+ <20200619113934.GN6578@ziepe.ca>
+ <CAKMK7uE-kWA==Cko5uenMrcnopEjq42HxoDTDywzBAbHqsN13g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200619144648.k7dwx52vyzq7rmqx@ti.com>
+In-Reply-To: <CAKMK7uE-kWA==Cko5uenMrcnopEjq42HxoDTDywzBAbHqsN13g@mail.gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Benoit,
-
-On Fri, Jun 19, 2020 at 09:46:50AM -0500, Benoit Parrot wrote:
-> Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote on Mon [2020-Jun-15 02:59:44 +0300]:
-> > The CAL driver is video node centric, it controls the whole device
-> > through the video device nodes. This limits the possible use cases as it
-> > can't support sources that are more complex than a single subdev. To
-> > support more complex hardware pipelines, implement support for the media
-> > controller centric API. The exposed API can be selected through a module
-> > parameter.
-> > 
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> >  drivers/media/platform/ti-vpe/cal-camerarx.c |   1 +
-> >  drivers/media/platform/ti-vpe/cal-video.c    | 358 ++++++++++++++-----
-> >  drivers/media/platform/ti-vpe/cal.c          |  10 +-
-> >  drivers/media/platform/ti-vpe/cal.h          |   2 +
-> >  4 files changed, 289 insertions(+), 82 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
-> > index 2e7a3bc716cf..014ca46509db 100644
-> > --- a/drivers/media/platform/ti-vpe/cal-camerarx.c
-> > +++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
-> > @@ -818,6 +818,7 @@ struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
-> >  	sd = &phy->subdev;
-> >  	v4l2_subdev_init(sd, &cal_camerarx_subdev_ops);
-> >  	sd->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-> > +	sd->flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
-> >  	snprintf(sd->name, sizeof(sd->name), "CAMERARX%u", instance);
-> >  	sd->dev = cal->dev;
-> >  
-> > diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
-> > index 0f8702bd77db..5f9cd449f027 100644
-> > --- a/drivers/media/platform/ti-vpe/cal-video.c
-> > +++ b/drivers/media/platform/ti-vpe/cal-video.c
-> > @@ -40,40 +40,10 @@ static char *fourcc_to_str(u32 fmt)
-> >  }
-> >  
-> >  /* ------------------------------------------------------------------
-> > - *	V4L2 Video IOCTLs
-> > + *	V4L2 Common IOCTLs
-> >   * ------------------------------------------------------------------
-> >   */
-> >  
-> > -static const struct cal_format_info *find_format_by_pix(struct cal_ctx *ctx,
-> > -							u32 pixelformat)
-> > -{
-> > -	const struct cal_format_info *fmtinfo;
-> > -	unsigned int k;
-> > -
-> > -	for (k = 0; k < ctx->num_active_fmt; k++) {
-> > -		fmtinfo = ctx->active_fmt[k];
-> > -		if (fmtinfo->fourcc == pixelformat)
-> > -			return fmtinfo;
-> > -	}
-> > -
-> > -	return NULL;
-> > -}
-> > -
-> > -static const struct cal_format_info *find_format_by_code(struct cal_ctx *ctx,
-> > -							 u32 code)
-> > -{
-> > -	const struct cal_format_info *fmtinfo;
-> > -	unsigned int k;
-> > -
-> > -	for (k = 0; k < ctx->num_active_fmt; k++) {
-> > -		fmtinfo = ctx->active_fmt[k];
-> > -		if (fmtinfo->code == code)
-> > -			return fmtinfo;
-> > -	}
-> > -
-> > -	return NULL;
-> > -}
-> > -
-> >  static int cal_querycap(struct file *file, void *priv,
-> >  			struct v4l2_capability *cap)
-> >  {
-> > @@ -87,6 +57,51 @@ static int cal_querycap(struct file *file, void *priv,
-> >  	return 0;
-> >  }
-> >  
-> > +static int cal_g_fmt_vid_cap(struct file *file, void *priv,
-> > +			     struct v4l2_format *f)
-> > +{
-> > +	struct cal_ctx *ctx = video_drvdata(file);
-> > +
-> > +	*f = ctx->v_fmt;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/* ------------------------------------------------------------------
-> > + *	V4L2 Video Node Centric IOCTLs
-> > + * ------------------------------------------------------------------
-> > + */
-> > +
-> > +static const struct cal_format_info *find_format_by_pix(struct cal_ctx *ctx,
-> > +							u32 pixelformat)
-> > +{
-> > +	const struct cal_format_info *fmtinfo;
-> > +	unsigned int k;
-> > +
-> > +	for (k = 0; k < ctx->num_active_fmt; k++) {
-> > +		fmtinfo = ctx->active_fmt[k];
-> > +		if (fmtinfo->fourcc == pixelformat)
-> > +			return fmtinfo;
-> > +	}
-> > +
-> > +	return NULL;
-> > +}
-> > +
-> > +static const struct cal_format_info *find_format_by_code(struct cal_ctx *ctx,
-> > +							 u32 code)
-> > +{
-> > +	const struct cal_format_info *fmtinfo;
-> > +	unsigned int k;
-> > +
-> > +	for (k = 0; k < ctx->num_active_fmt; k++) {
-> > +		fmtinfo = ctx->active_fmt[k];
-> > +		if (fmtinfo->code == code)
-> > +			return fmtinfo;
-> > +	}
-> > +
-> > +	return NULL;
-> > +}
-> > +
-> >  static int cal_enum_fmt_vid_cap(struct file *file, void  *priv,
-> >  				struct v4l2_fmtdesc *f)
-> >  {
-> > @@ -174,16 +189,6 @@ static void cal_calc_format_size(struct cal_ctx *ctx,
-> >  		f->fmt.pix.bytesperline, f->fmt.pix.sizeimage);
-> >  }
-> >  
-> > -static int cal_g_fmt_vid_cap(struct file *file, void *priv,
-> > -			     struct v4l2_format *f)
-> > -{
-> > -	struct cal_ctx *ctx = video_drvdata(file);
-> > -
-> > -	*f = ctx->v_fmt;
-> > -
-> > -	return 0;
-> > -}
-> > -
-> >  static int cal_try_fmt_vid_cap(struct file *file, void *priv,
-> >  			       struct v4l2_format *f)
-> >  {
-> > @@ -383,17 +388,7 @@ static int cal_enum_frameintervals(struct file *file, void *priv,
-> >  	return 0;
-> >  }
-> >  
-> > -static const struct v4l2_file_operations cal_fops = {
-> > -	.owner		= THIS_MODULE,
-> > -	.open           = v4l2_fh_open,
-> > -	.release        = vb2_fop_release,
-> > -	.read           = vb2_fop_read,
-> > -	.poll		= vb2_fop_poll,
-> > -	.unlocked_ioctl = video_ioctl2, /* V4L2 ioctl handler */
-> > -	.mmap           = vb2_fop_mmap,
-> > -};
-> > -
-> > -static const struct v4l2_ioctl_ops cal_ioctl_ops = {
-> > +static const struct v4l2_ioctl_ops cal_ioctl_video_ops = {
-> >  	.vidioc_querycap      = cal_querycap,
-> >  	.vidioc_enum_fmt_vid_cap  = cal_enum_fmt_vid_cap,
-> >  	.vidioc_g_fmt_vid_cap     = cal_g_fmt_vid_cap,
-> > @@ -419,7 +414,153 @@ static const struct v4l2_ioctl_ops cal_ioctl_ops = {
-> >  };
-> >  
-> >  /* ------------------------------------------------------------------
-> > - *	videobuf2 Operations
-> > + *	V4L2 Media Controller Centric IOCTLs
-> > + * ------------------------------------------------------------------
-> > + */
-> > +
-> > +static int cal_mc_enum_fmt_vid_cap(struct file *file, void  *priv,
-> > +				   struct v4l2_fmtdesc *f)
-> > +{
-> > +	if (f->index >= cal_num_formats)
-> > +		return -EINVAL;
-> > +
-> > +	f->pixelformat = cal_formats[f->index].fourcc;
-> > +	f->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void cal_mc_try_fmt(struct cal_ctx *ctx, struct v4l2_format *f,
-> > +			   const struct cal_format_info **info)
-> > +{
-> > +	struct v4l2_pix_format *format = &f->fmt.pix;
-> > +	const struct cal_format_info *fmtinfo;
-> > +	unsigned int bpp;
-> > +
-> > +	/*
-> > +	 * Default to the first format is the requested pixel format code isn't
-> > +	 * supported.
-> > +	 */
-> > +	fmtinfo = cal_format_by_fourcc(f->fmt.pix.pixelformat);
-> > +	if (!fmtinfo)
-> > +		fmtinfo = &cal_formats[0];
-> > +
-> > +	/*
-> > +	 * Clamp the size, update the pixel format. The field and colorspace are
-> > +	 * accepted as-is, except for V4L2_FIELD_ANY that is turned into
-> > +	 * V4L2_FIELD_NONE.
-> > +	 */
-> > +	bpp = ALIGN(fmtinfo->bpp, 8);
-> > +
-> > +	format->width = clamp_t(unsigned int, format->width,
-> > +				CAL_MIN_WIDTH_BYTES * 8 / bpp,
-> > +				CAL_MAX_WIDTH_BYTES * 8 / bpp);
-> > +	format->height = clamp_t(unsigned int, format->height,
-> > +				 CAL_MIN_HEIGHT_LINES, CAL_MAX_HEIGHT_LINES);
-> > +	format->pixelformat = fmtinfo->fourcc;
-> > +
-> > +	if (format->field == V4L2_FIELD_ANY)
-> > +		format->field = V4L2_FIELD_NONE;
-> > +
-> > +	/*
-> > +	 * Calculate the number of bytes per line and the image size. The
-> > +	 * hardware stores the stride as a number of 16 bytes words, in a
-> > +	 * signed 15-bit value. Only 14 bits are thus usable.
-> > +	 */
-> > +	format->bytesperline = ALIGN(clamp(format->bytesperline,
-> > +					   format->width * bpp / 8,
-> > +					   ((1U << 14) - 1) * 16), 16);
-> > +
-> > +	format->sizeimage = format->height * format->bytesperline;
-> > +
-> > +	if (info)
-> > +		*info = fmtinfo;
-> > +
-> > +	ctx_dbg(3, ctx, "%s: %s %ux%u (bytesperline %u sizeimage %u)\n",
-> > +		__func__, fourcc_to_str(format->pixelformat),
-> > +		format->width, format->height,
-> > +		format->bytesperline, format->sizeimage);
-> > +}
-> > +
-> > +static int cal_mc_try_fmt_vid_cap(struct file *file, void *priv,
-> > +				  struct v4l2_format *f)
-> > +{
-> > +	struct cal_ctx *ctx = video_drvdata(file);
-> > +
-> > +	cal_mc_try_fmt(ctx, f, NULL);
-> > +	return 0;
-> > +}
-> > +
-> > +static int cal_mc_s_fmt_vid_cap(struct file *file, void *priv,
-> > +				struct v4l2_format *f)
-> > +{
-> > +	struct cal_ctx *ctx = video_drvdata(file);
-> > +	const struct cal_format_info *fmtinfo;
-> > +
-> > +	if (vb2_is_busy(&ctx->vb_vidq)) {
-> > +		ctx_dbg(3, ctx, "%s device busy\n", __func__);
-> > +		return -EBUSY;
-> > +	}
-> > +
-> > +	cal_mc_try_fmt(ctx, f, &fmtinfo);
-> > +
-> > +	ctx->v_fmt = *f;
-> > +	ctx->fmtinfo = fmtinfo;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int cal_mc_enum_framesizes(struct file *file, void *fh,
-> > +				  struct v4l2_frmsizeenum *fsize)
-> > +{
-> > +	struct cal_ctx *ctx = video_drvdata(file);
-> > +	const struct cal_format_info *fmtinfo;
-> > +	unsigned int bpp;
-> > +
-> > +	if (fsize->index > 0)
-> > +		return -EINVAL;
-> > +
-> > +	fmtinfo = cal_format_by_fourcc(fsize->pixel_format);
-> > +	if (!fmtinfo) {
-> > +		ctx_dbg(3, ctx, "Invalid pixel format 0x%08x\n",
-> > +			fsize->pixel_format);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	bpp = ALIGN(fmtinfo->bpp, 8);
-> > +
-> > +	fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
-> > +	fsize->stepwise.min_width = CAL_MIN_WIDTH_BYTES * 8 / bpp;
-> > +	fsize->stepwise.max_width = CAL_MAX_WIDTH_BYTES * 8 / bpp;
-> > +	fsize->stepwise.step_width = 64 / bpp;
-> > +	fsize->stepwise.min_height = CAL_MIN_HEIGHT_LINES;
-> > +	fsize->stepwise.max_height = CAL_MAX_HEIGHT_LINES;
-> > +	fsize->stepwise.step_height = 1;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct v4l2_ioctl_ops cal_ioctl_mc_ops = {
-> > +	.vidioc_querycap      = cal_querycap,
-> > +	.vidioc_enum_fmt_vid_cap  = cal_mc_enum_fmt_vid_cap,
-> > +	.vidioc_g_fmt_vid_cap     = cal_g_fmt_vid_cap,
-> > +	.vidioc_try_fmt_vid_cap   = cal_mc_try_fmt_vid_cap,
-> > +	.vidioc_s_fmt_vid_cap     = cal_mc_s_fmt_vid_cap,
-> > +	.vidioc_enum_framesizes   = cal_mc_enum_framesizes,
-> > +	.vidioc_reqbufs       = vb2_ioctl_reqbufs,
-> > +	.vidioc_create_bufs   = vb2_ioctl_create_bufs,
-> > +	.vidioc_prepare_buf   = vb2_ioctl_prepare_buf,
-> > +	.vidioc_querybuf      = vb2_ioctl_querybuf,
-> > +	.vidioc_qbuf          = vb2_ioctl_qbuf,
-> > +	.vidioc_dqbuf         = vb2_ioctl_dqbuf,
-> > +	.vidioc_expbuf        = vb2_ioctl_expbuf,
-> > +	.vidioc_streamon      = vb2_ioctl_streamon,
-> > +	.vidioc_streamoff     = vb2_ioctl_streamoff,
-> > +	.vidioc_log_status    = v4l2_ctrl_log_status,
-> > +};
-> > +
-> > +/* ------------------------------------------------------------------
-> > + *	videobuf2 Common Operations
-> >   * ------------------------------------------------------------------
-> >   */
-> >  
-> > @@ -505,6 +646,26 @@ static void cal_release_buffers(struct cal_ctx *ctx,
-> >  	spin_unlock_irq(&ctx->dma.lock);
-> >  }
-> >  
-> > +/* ------------------------------------------------------------------
-> > + *	videobuf2 Operations
-> > + * ------------------------------------------------------------------
-> > + */
-> > +
-> > +static int cal_video_check_format(struct cal_ctx *ctx)
-> > +{
-> > +	const struct v4l2_mbus_framefmt *format;
-> > +
-> > +	format = &ctx->phy->formats[CAL_CAMERARX_PAD_SOURCE];
-> > +
-> > +	if (ctx->fmtinfo->code != format->code ||
-> > +	    ctx->v_fmt.fmt.pix.height != format->height ||
-> > +	    ctx->v_fmt.fmt.pix.width != format->width ||
-> > +	    ctx->v_fmt.fmt.pix.field != format->field)
-> > +		return -EPIPE;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
-> >  {
-> >  	struct cal_ctx *ctx = vb2_get_drv_priv(vq);
-> > @@ -512,6 +673,23 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
-> >  	dma_addr_t addr;
-> >  	int ret;
-> >  
-> > +	ret = media_pipeline_start(&ctx->vdev.entity, &ctx->phy->pipe);
-> > +	if (ret < 0) {
-> > +		ctx_err(ctx, "Failed to start media pipeline: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Verify that the currently configured format matches the output of
-> > +	 * the connected CAMERARX.
-> > +	 */
-> > +	ret = cal_video_check_format(ctx);
-> > +	if (ret < 0) {
-> > +		ctx_dbg(3, ctx,
-> > +			"Format mismatch between CAMERARX and video node\n");
-> > +		goto error_pipeline;
-> > +	}
-> > +
-> >  	spin_lock_irq(&ctx->dma.lock);
-> >  	buf = list_first_entry(&ctx->dma.queue, struct cal_buffer, list);
-> >  	ctx->dma.pending = buf;
-> > @@ -527,18 +705,21 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
-> >  
-> >  	ret = v4l2_subdev_call(&ctx->phy->subdev, video, s_stream, 1);
-> >  	if (ret)
-> > -		goto err;
-> > +		goto error_stop;
-> >  
-> >  	if (cal_debug >= 4)
-> >  		cal_quickdump_regs(ctx->cal);
-> >  
-> >  	return 0;
-> >  
-> > -err:
-> > +error_stop:
-> >  	cal_ctx_stop(ctx);
-> >  	pm_runtime_put_sync(ctx->cal->dev);
-> >  
-> > +error_pipeline:
-> > +	media_pipeline_stop(&ctx->vdev.entity);
-> >  	cal_release_buffers(ctx, VB2_BUF_STATE_QUEUED);
-> > +
-> >  	return ret;
-> >  }
-> >  
-> > @@ -553,6 +734,8 @@ static void cal_stop_streaming(struct vb2_queue *vq)
-> >  	pm_runtime_put_sync(ctx->cal->dev);
-> >  
-> >  	cal_release_buffers(ctx, VB2_BUF_STATE_ERROR);
-> > +
-> > +	media_pipeline_stop(&ctx->vdev.entity);
-> >  }
-> >  
-> >  static const struct vb2_ops cal_video_qops = {
-> > @@ -570,13 +753,14 @@ static const struct vb2_ops cal_video_qops = {
-> >   * ------------------------------------------------------------------
-> >   */
-> >  
-> > -static const struct video_device cal_videodev = {
-> > -	.name		= CAL_MODULE_NAME,
-> > -	.fops		= &cal_fops,
-> > -	.ioctl_ops	= &cal_ioctl_ops,
-> > -	.minor		= -1,
-> > -	.release	= video_device_release_empty,
-> > -	.device_caps	= V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING,
-> > +static const struct v4l2_file_operations cal_fops = {
-> > +	.owner		= THIS_MODULE,
-> > +	.open           = v4l2_fh_open,
-> > +	.release        = vb2_fop_release,
-> > +	.read           = vb2_fop_read,
-> > +	.poll		= vb2_fop_poll,
-> > +	.unlocked_ioctl = video_ioctl2, /* V4L2 ioctl handler */
-> > +	.mmap           = vb2_fop_mmap,
-> >  };
-> >  
-> >  static int cal_ctx_v4l2_init_formats(struct cal_ctx *ctx)
-> > @@ -650,19 +834,22 @@ static int cal_ctx_v4l2_init_formats(struct cal_ctx *ctx)
-> >  
-> >  int cal_ctx_v4l2_register(struct cal_ctx *ctx)
-> >  {
-> > -	struct v4l2_ctrl_handler *hdl = &ctx->ctrl_handler;
-> >  	struct video_device *vfd = &ctx->vdev;
-> >  	int ret;
-> >  
-> > -	ret = cal_ctx_v4l2_init_formats(ctx);
-> > -	if (ret)
-> > -		return ret;
-> > +	if (!cal_mc_api) {
-> > +		struct v4l2_ctrl_handler *hdl = &ctx->ctrl_handler;
-> >  
-> > -	ret = v4l2_ctrl_add_handler(hdl, ctx->phy->sensor->ctrl_handler, NULL,
-> > -				    true);
-> > -	if (ret < 0) {
-> > -		ctx_err(ctx, "Failed to add sensor ctrl handler\n");
-> > -		return ret;
-> > +		ret = cal_ctx_v4l2_init_formats(ctx);
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		ret = v4l2_ctrl_add_handler(hdl, ctx->phy->sensor->ctrl_handler,
-> > +					    NULL, true);
-> > +		if (ret < 0) {
-> > +			ctx_err(ctx, "Failed to add sensor ctrl handler\n");
-> > +			return ret;
-> > +		}
-> >  	}
-> >  
-> >  	ret = video_register_device(vfd, VFL_TYPE_VIDEO, cal_video_nr);
-> > @@ -699,7 +886,6 @@ void cal_ctx_v4l2_unregister(struct cal_ctx *ctx)
-> >  
-> >  int cal_ctx_v4l2_init(struct cal_ctx *ctx)
-> >  {
-> > -	struct v4l2_ctrl_handler *hdl = &ctx->ctrl_handler;
-> >  	struct video_device *vfd = &ctx->vdev;
-> >  	struct vb2_queue *q = &ctx->vb_vidq;
-> >  	int ret;
-> > @@ -726,10 +912,14 @@ int cal_ctx_v4l2_init(struct cal_ctx *ctx)
-> >  		return ret;
-> >  
-> >  	/* Initialize the video device and media entity. */
-> > -	*vfd = cal_videodev;
-> > +	vfd->fops = &cal_fops;
-> > +	vfd->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING
-> > +			 | (cal_mc_api ? V4L2_CAP_IO_MC : 0);
-> >  	vfd->v4l2_dev = &ctx->cal->v4l2_dev;
-> >  	vfd->queue = q;
-> >  	snprintf(vfd->name, sizeof(vfd->name), "CAL output %u", ctx->index);
-> > +	vfd->release = video_device_release_empty;
-> > +	vfd->ioctl_ops = cal_mc_api ? &cal_ioctl_mc_ops : &cal_ioctl_video_ops;
-> >  	vfd->lock = &ctx->mutex;
-> >  	video_set_drvdata(vfd, ctx);
-> >  
-> > @@ -738,15 +928,19 @@ int cal_ctx_v4l2_init(struct cal_ctx *ctx)
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > -	/* Initialize the control handler. */
-> > -	ret = v4l2_ctrl_handler_init(hdl, 11);
-> > -	if (ret < 0) {
-> > -		ctx_err(ctx, "Failed to init ctrl handler\n");
-> > -		goto error;
-> > +	if (!cal_mc_api) {
-> > +		/* Initialize the control handler. */
-> > +		struct v4l2_ctrl_handler *hdl = &ctx->ctrl_handler;
-> > +
-> > +		ret = v4l2_ctrl_handler_init(hdl, 11);
-> > +		if (ret < 0) {
-> > +			ctx_err(ctx, "Failed to init ctrl handler\n");
-> > +			goto error;
-> > +		}
-> > +
-> > +		vfd->ctrl_handler = hdl;
-> >  	}
-> >  
-> > -	vfd->ctrl_handler = hdl;
-> > -
-> >  	return 0;
-> >  
-> >  error:
-> > @@ -756,6 +950,8 @@ int cal_ctx_v4l2_init(struct cal_ctx *ctx)
-> >  
-> >  void cal_ctx_v4l2_cleanup(struct cal_ctx *ctx)
-> >  {
-> > -	v4l2_ctrl_handler_free(&ctx->ctrl_handler);
-> > +	if (!cal_mc_api)
-> > +		v4l2_ctrl_handler_free(&ctx->ctrl_handler);
-> > +
-> >  	media_entity_cleanup(&ctx->vdev.entity);
-> >  }
-> > diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-> > index f97c213f716f..caea3e129c87 100644
-> > --- a/drivers/media/platform/ti-vpe/cal.c
-> > +++ b/drivers/media/platform/ti-vpe/cal.c
-> > @@ -43,6 +43,10 @@ unsigned int cal_debug;
-> >  module_param_named(debug, cal_debug, uint, 0644);
-> >  MODULE_PARM_DESC(debug, "activates debug info");
-> >  
-> > +bool cal_mc_api;
-> > +module_param_named(mc_api, cal_mc_api, bool, 0444);
-> > +MODULE_PARM_DESC(debug, "activates MC API");
+On Fri, Jun 19, 2020 at 05:06:04PM +0200, Daniel Vetter wrote:
+> On Fri, Jun 19, 2020 at 1:39 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> >
+> > On Fri, Jun 19, 2020 at 09:22:09AM +0200, Daniel Vetter wrote:
+> > > > As I've understood GPU that means you need to show that the commands
+> > > > associated with the buffer have completed. This is all local stuff
+> > > > within the driver, right? Why use fence (other than it already exists)
+> > >
+> > > Because that's the end-of-dma thing. And it's cross-driver for the
+> > > above reasons, e.g.
+> > > - device A renders some stuff. Userspace gets dma_fence A out of that
+> > > (well sync_file or one of the other uapi interfaces, but you get the
+> > > idea)
+> > > - userspace (across process or just different driver) issues more
+> > > rendering for device B, which depends upon the rendering done on
+> > > device A. So dma_fence A is an dependency and will block this dma
+> > > operation. Userspace (and the kernel) gets dma_fence B out of this
+> > > - because unfortunate reasons, the same rendering on device B also
+> > > needs a userptr buffer, which means that dma_fence B is also the one
+> > > that the mmu_range_notifier needs to wait on before it can tell core
+> > > mm that it can go ahead and release those pages
+> >
+> > I was afraid you'd say this - this is complete madness for other DMA
+> > devices to borrow the notifier hook of the first device!
 > 
-> Shouldn't this be 
-> 	MODULE_PARM_DESC(mc_api, "activates MC API");
-> instead?
+> The first device might not even have a notifier. This is the 2nd
+> device, waiting on a dma_fence of its own, but which happens to be
+> queued up as a dma operation behind something else.
+> 
+> > What if the first device is a page faulting device and doesn't call
+> > dma_fence??
+> 
+> Not sure what you mean with this ... even if it does page-faulting for
+> some other reasons, it'll emit a dma_fence which the 2nd device can
+> consume as a dependency.
 
-Of course :-) Thanks for catching this wrong copy&paste, I'll fix it.
+At some point the pages under the buffer have to be either pinned
+or protected by mmu notifier. So each and every single device doing
+DMA to these pages must either pin, or use mmu notifier.
 
-> > +
-> >  /* ------------------------------------------------------------------
-> >   *	Format Handling
-> >   * ------------------------------------------------------------------
-> > @@ -655,13 +659,17 @@ static int cal_async_notifier_complete(struct v4l2_async_notifier *notifier)
-> >  {
-> >  	struct cal_dev *cal = container_of(notifier, struct cal_dev, notifier);
-> >  	unsigned int i;
-> > +	int ret = 0;
-> >  
-> >  	for (i = 0; i < ARRAY_SIZE(cal->ctx); ++i) {
-> >  		if (cal->ctx[i])
-> >  			cal_ctx_v4l2_register(cal->ctx[i]);
-> >  	}
-> >  
-> > -	return 0;
-> > +	if (cal_mc_api)
-> > +		ret = v4l2_device_register_subdev_nodes(&cal->v4l2_dev);
-> > +
-> > +	return ret;
-> >  }
-> >  
-> >  static const struct v4l2_async_notifier_operations cal_async_notifier_ops = {
-> > diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
-> > index 036b944c3862..f6b4c9a73aab 100644
-> > --- a/drivers/media/platform/ti-vpe/cal.h
-> > +++ b/drivers/media/platform/ti-vpe/cal.h
-> > @@ -160,6 +160,7 @@ struct cal_camerarx {
-> >  	struct device_node	*sensor_ep_node;
-> >  	struct device_node	*sensor_node;
-> >  	struct v4l2_subdev	*sensor;
-> > +	struct media_pipeline	pipe;
-> >  
-> >  	struct v4l2_subdev	subdev;
-> >  	struct media_pad	pads[2];
-> > @@ -224,6 +225,7 @@ struct cal_ctx {
-> >  
-> >  extern unsigned int cal_debug;
-> >  extern int cal_video_nr;
-> > +extern bool cal_mc_api;
-> >  
-> >  #define cal_dbg(level, cal, fmt, arg...)				\
-> >  	do {								\
+Driver A should never 'borrow' a notifier from B
 
--- 
-Regards,
+If each driver controls its own lifetime of the buffers, why can't the
+driver locally wait for its device to finish?
 
-Laurent Pinchart
+Can't the GPUs cancel work that is waiting on a DMA fence? Ie if
+Driver A detects that work completed and wants to trigger a DMA fence,
+but it now knows the buffer is invalidated, can't it tell driver B to
+give up?
+
+> The problem is that there's piles of other dependencies for a dma job.
+> GPU doesn't just consume a single buffer each time, it consumes entire
+> lists of buffers and mixes them all up in funny ways. Some of these
+> buffers are userptr, entirely local to the device. Other buffers are
+> just normal device driver allocations (and managed with some shrinker
+> to keep them in check). And then there's the actually shared dma-buf
+> with other devices. The trouble is that they're all bundled up
+> together.
+
+But why does this matter? Does the GPU itself consume some work and
+then stall internally waiting for an external DMA fence?
+
+Otherwise I would expect this dependency chain should be breakable by
+aborting work waiting on fences upon invalidation (without stalling)
+
+> > Do not need to wait on dma_fence in notifiers.
+> 
+> Maybe :-) The goal of this series is more to document current rules
+> and make them more consistent. Fixing them if we don't like them might
+> be a follow-up task, but that would likely be a pile more work. First
+> we need to know what the exact shape of the problem even is.
+
+Fair enough
+
+Jason
