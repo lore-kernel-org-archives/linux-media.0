@@ -7,116 +7,362 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5785BC433E1
-	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:52:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA9CC433DF
+	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:53:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D03A2193E
-	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:52:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1067A217A0
+	for <linux-media@archiver.kernel.org>; Fri, 19 Jun 2020 15:53:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="FNTLaFjM"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="wk7ogkGJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393084AbgFSPWy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Jun 2020 11:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393078AbgFSPWw (ORCPT
+        id S2392739AbgFSPxD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Jun 2020 11:53:03 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:34112 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405381AbgFSPw5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Jun 2020 11:22:52 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAA0C06174E
-        for <linux-media@vger.kernel.org>; Fri, 19 Jun 2020 08:22:52 -0700 (PDT)
+        Fri, 19 Jun 2020 11:52:57 -0400
 Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8965C552;
-        Fri, 19 Jun 2020 17:22:50 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 66FD5552;
+        Fri, 19 Jun 2020 17:52:54 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592580170;
-        bh=CP4llM9MfdiadH25cs8m8az/rOpCnPSQ2QZhiRHEX9I=;
+        s=mail; t=1592581974;
+        bh=GUrqTrgTVCr0RV+J3qDtcnq5Cs/2fiFp33b8pLyKc1A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FNTLaFjMXCPOVi3BpqI0XYMvgD38pNznJBpoiI8Elp7i05v1BsZ+gNef3KmImLw76
-         7N+kd0xiCcgwSDErdeO6ZBvFVzqj7MZm/eNJEbcrM1KEg9mZ7xX8LZZx9QMWgUE3Vu
-         EAbONx2h08bSxqkwKKJ89eww06oczEAwUcbujRvk=
-Date:   Fri, 19 Jun 2020 18:22:27 +0300
+        b=wk7ogkGJFcA+/Cfzb+cg5IjOTqMdnlFTtwRWcDnq/c/WDClo52kLiGPnM6hK5ssHC
+         wzSm2D7ngOM7SmKaZHRuK9Wta4TSvdI9pUdM+Y9VwlSNf1aHlhL50Y6mqg0dd77KiY
+         x4jEWASea68IBoc25njHjHCrvdMuhgofJCGXixc8=
+Date:   Fri, 19 Jun 2020 18:52:30 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Benoit Parrot <bparrot@ti.com>
-Cc:     linux-media@vger.kernel.org, Tomi Valkeinen <tomi.valkeinen@ti.com>
-Subject: Re: [PATCH v1 030/107] media: ti-vpe: cal: Use dev_* print macros
-Message-ID: <20200619152227.GF5823@pendragon.ideasonboard.com>
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Benoit Parrot <bparrot@ti.com>
+Subject: Re: [PATCH v1 084/107] media: ti-vpe: cal: Create subdev for CAMERARX
+Message-ID: <20200619155230.GJ5823@pendragon.ideasonboard.com>
 References: <20200614235944.17716-1-laurent.pinchart@ideasonboard.com>
- <20200614235944.17716-31-laurent.pinchart@ideasonboard.com>
- <20200618182855.xdx64prbc54ifn5k@ti.com>
+ <20200614235944.17716-85-laurent.pinchart@ideasonboard.com>
+ <f8fb8096-4497-7108-9906-5a0b8b7c195f@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200618182855.xdx64prbc54ifn5k@ti.com>
+In-Reply-To: <f8fb8096-4497-7108-9906-5a0b8b7c195f@ideasonboard.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Benoit,
+Hi Kieran,
 
-On Thu, Jun 18, 2020 at 01:28:55PM -0500, Benoit Parrot wrote:
-> Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote on Mon [2020-Jun-15 02:58:27 +0300]:
-> > Use the dev_* print macros instead of the v4l2_* print macros. This
-> > prepares for a common print infrastructure that will also support the
-> > cal_camerarx instances.
+On Wed, Jun 17, 2020 at 11:10:32AM +0100, Kieran Bingham wrote:
+> On 15/06/2020 00:59, Laurent Pinchart wrote:
+> > Create and register V4L2 sudbevs for the CAMERARX instances, and link
+> 
+> s/sudbevs/subdevs/
+> 
+> > them in the media graph to the sensors and video nodes. The subdev API
+> > is not exposed to userspace at this point, and no subdev operation is
+> > implemented, but the media controller graph is visible to applications.
 > > 
 > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > > ---
-> >  drivers/media/platform/ti-vpe/cal.c | 17 ++++++++++-------
-> >  1 file changed, 10 insertions(+), 7 deletions(-)
+> >  drivers/media/platform/ti-vpe/cal-camerarx.c | 42 +++++++++++++++++++-
+> >  drivers/media/platform/ti-vpe/cal-video.c    | 12 ++++++
+> >  drivers/media/platform/ti-vpe/cal.c          | 31 ++++++++++++---
+> >  drivers/media/platform/ti-vpe/cal.h          |  9 ++++-
+> >  4 files changed, 86 insertions(+), 8 deletions(-)
 > > 
+> > diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti-vpe/cal-camerarx.c
+> > index a7e4b81c9734..9be432ff87b2 100644
+> > --- a/drivers/media/platform/ti-vpe/cal-camerarx.c
+> > +++ b/drivers/media/platform/ti-vpe/cal-camerarx.c
+> > @@ -526,8 +526,8 @@ static int cal_camerarx_regmap_init(struct cal_dev *cal,
+> >  static int cal_camerarx_parse_dt(struct cal_camerarx *phy)
+> >  {
+> >  	struct v4l2_fwnode_endpoint *endpoint = &phy->endpoint;
+> > -	struct device_node *ep_node;
+> >  	char data_lanes[V4L2_FWNODE_CSI2_MAX_DATA_LANES * 2];
+> > +	struct device_node *ep_node;
+> >  	unsigned int i;
+> >  	int ret;
+> >  
+> > @@ -571,7 +571,8 @@ static int cal_camerarx_parse_dt(struct cal_camerarx *phy)
+> >  		endpoint->bus.mipi_csi2.flags);
+> >  
+> >  	/* Retrieve the connected device and store it for later use. */
+> > -	phy->sensor_node = of_graph_get_remote_port_parent(ep_node);
+> > +	phy->sensor_ep_node = of_graph_get_remote_endpoint(ep_node);
+> > +	phy->sensor_node = of_graph_get_port_parent(phy->sensor_ep_node);
+> >  	if (!phy->sensor_node) {
+> >  		phy_dbg(3, phy, "Can't get remote parent\n");
+> >  		goto done;
+> > @@ -580,15 +581,30 @@ static int cal_camerarx_parse_dt(struct cal_camerarx *phy)
+> >  	phy_dbg(1, phy, "Found connected device %pOFn\n", phy->sensor_node);
+> >  
+> >  done:
+> > +	of_node_put(phy->sensor_ep_node);
+> >  	of_node_put(ep_node);
+> >  	return ret;
+> >  }
+> >  
+> > +/* ------------------------------------------------------------------
+> > + *	V4L2 Subdev Operations
+> > + * ------------------------------------------------------------------
+> > + */
+> > +
+> > +static const struct v4l2_subdev_ops cal_camerarx_subdev_ops = {
+> > +};
+> > +
+> > +/* ------------------------------------------------------------------
+> > + *	Create and Destroy
+> > + * ------------------------------------------------------------------
+> > + */
+> > +
+> >  struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
+> >  					 unsigned int instance)
+> >  {
+> >  	struct platform_device *pdev = to_platform_device(cal->dev);
+> >  	struct cal_camerarx *phy;
+> > +	struct v4l2_subdev *sd;
+> >  	int ret;
+> >  
+> >  	phy = kzalloc(sizeof(*phy), GFP_KERNEL);
+> > @@ -620,9 +636,28 @@ struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
+> >  	if (ret)
+> >  		goto error;
+> >  
+> > +	/* Initialize the V4L2 subdev and media entity. */
+> > +	sd = &phy->subdev;
+> > +	v4l2_subdev_init(sd, &cal_camerarx_subdev_ops);
+> > +	sd->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+> > +	snprintf(sd->name, sizeof(sd->name), "CAMERARX%u", instance);
+> > +	sd->dev = cal->dev;
+> > +
+> > +	phy->pads[CAL_CAMERARX_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+> > +	phy->pads[CAL_CAMERARX_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
+> > +	ret = media_entity_pads_init(&sd->entity, ARRAY_SIZE(phy->pads),
+> > +				     phy->pads);
+> > +	if (ret)
+> > +		goto error;
+> > +
+> > +	ret = v4l2_device_register_subdev(&cal->v4l2_dev, sd);
+> > +	if (ret)
+> > +		goto error;
+> > +
+> >  	return phy;
+> >  
+> >  error:
+> > +	media_entity_cleanup(&phy->subdev.entity);
+> >  	kfree(phy);
+> >  	return ERR_PTR(ret);
+> >  }
+> > @@ -632,6 +667,9 @@ void cal_camerarx_destroy(struct cal_camerarx *phy)
+> >  	if (!phy)
+> >  		return;
+> >  
+> > +	v4l2_device_unregister_subdev(&phy->subdev);
+> > +	media_entity_cleanup(&phy->subdev.entity);
+> > +	of_node_put(phy->sensor_ep_node);
+> >  	of_node_put(phy->sensor_node);
+> >  	kfree(phy);
+> >  }
+> > diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
+> > index df472a175e83..0a1a11692208 100644
+> > --- a/drivers/media/platform/ti-vpe/cal-video.c
+> > +++ b/drivers/media/platform/ti-vpe/cal-video.c
+> > @@ -809,6 +809,18 @@ int cal_ctx_v4l2_register(struct cal_ctx *ctx)
+> >  		return ret;
+> >  	}
+> >  
+> > +	ret = media_create_pad_link(&ctx->phy->subdev.entity,
+> > +				    CAL_CAMERARX_PAD_SOURCE,
+> > +				    &vfd->entity, 0,
+> > +				    MEDIA_LNK_FL_IMMUTABLE |
+> > +				    MEDIA_LNK_FL_ENABLED);
+> > +	if (ret) {
+> > +		ctx_err(ctx, "Failed to create media link for context %u\n",
+> > +			ctx->index);
+> > +		video_unregister_device(vfd);
+> > +		return ret;
+> > +	}
+> > +
+> >  	ctx_info(ctx, "V4L2 device registered as %s\n",
+> >  		 video_device_node_name(vfd));
+> >  
 > > diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-> > index e40967751aa4..e62089832713 100644
+> > index ca8576aa2646..bf1734d4d800 100644
 > > --- a/drivers/media/platform/ti-vpe/cal.c
 > > +++ b/drivers/media/platform/ti-vpe/cal.c
-> > @@ -53,19 +53,22 @@ static unsigned debug;
-> >  module_param(debug, uint, 0644);
-> >  MODULE_PARM_DESC(debug, "activates debug info");
+> > @@ -416,6 +416,8 @@ static int cal_async_notifier_bound(struct v4l2_async_notifier *notifier,
+> >  				    struct v4l2_async_subdev *asd)
+> >  {
+> >  	struct cal_camerarx *phy = to_cal_asd(asd)->phy;
+> > +	int pad;
+> > +	int ret;
 > >  
-> > -#define cal_dbg(level, cal, fmt, arg...)	\
-> > -		v4l2_dbg(level, debug, &cal->v4l2_dev, fmt, ##arg)
-> > +#define cal_dbg(level, cal, fmt, arg...)				\
-> > +	do {								\
-> > +		if (debug >= (level))					\
-> > +			dev_dbg(&(cal)->pdev->dev, fmt, ##arg);		\
-> > +	} while (0)
+> >  	if (phy->sensor) {
+> >  		phy_info(phy, "Rejecting subdev %s (Already set!!)",
+> > @@ -426,6 +428,25 @@ static int cal_async_notifier_bound(struct v4l2_async_notifier *notifier,
+> >  	phy->sensor = subdev;
+> >  	phy_dbg(1, phy, "Using sensor %s for capture\n", subdev->name);
+> >  
+> > +	pad = media_entity_get_fwnode_pad(&subdev->entity,
+> > +					  of_fwnode_handle(phy->sensor_ep_node),
+> > +					  MEDIA_PAD_FL_SOURCE);
+> > +	if (pad < 0) {
+> > +		phy_err(phy, "Sensor %s has no connected source pad\n",
+> > +			subdev->name);
+> > +		return pad;
+> > +	}
+> > +
+> > +	ret = media_create_pad_link(&subdev->entity, pad,
+> > +				    &phy->subdev.entity, CAL_CAMERARX_PAD_SINK,
+> > +				    MEDIA_LNK_FL_IMMUTABLE |
+> > +				    MEDIA_LNK_FL_ENABLED);
+> > +	if (ret) {
+> > +		phy_err(phy, "Failed to create media link for sensor %s\n",
+> > +			subdev->name);
+> > +		return ret;
+> > +	}
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > @@ -796,6 +817,11 @@ static int cal_probe(struct platform_device *pdev)
+> >  	cal_get_hwinfo(cal);
+> >  	pm_runtime_put_sync(&pdev->dev);
+> >  
+> > +	/* Initialize the media device. */
+> > +	ret = cal_media_init(cal);
+> > +	if (ret < 0)
+> > +		goto error_camerarx;
 > 
-> The problem here with using dev_dbg is that you loose the ability to enable
-> or disable debug log at runtime. Which I find highly convenient.
+> This code moves now uses the wrong error label.
 > 
-> With dev_dbg you have to compile with DEBUG defined or at the very least
-> DYNAMIC_DEBUG.
+> Moreover, moving it - now means that the loop creating the CAMERARX PHYs
+> should now also cleanup the media device upon failure.
+> 
+> I have the following fixup patch which you could squash in here if you wish.
+> 
+> 
+> From e6fc5364d92d0ded26f3d8bb6c06a650fcb1ba84 Mon Sep 17 00:00:00 2001
+> From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+> Date: Tue, 16 Jun 2020 15:00:19 +0100
+> Subject: [PATCH] media: ti-vpe: cal: Fix error path jumps
+> 
+> The error paths in cal_probe() incorrectly called through the
+> error_camerarx before the camerarx instances were created, and neglected
+> to call the error_media/cal_media_cleanup() paths if a camera failed to
+> be created.
+> 
+> Tidy up the error paths, removing the now redundant error_media label.
+> 
+> Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+> ---
+>  drivers/media/platform/ti-vpe/cal.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/platform/ti-vpe/cal.c
+> b/drivers/media/platform/ti-vpe/cal.c
+> index caea3e129c87..d00dc241804b 100644
+> --- a/drivers/media/platform/ti-vpe/cal.c
+> +++ b/drivers/media/platform/ti-vpe/cal.c
+> @@ -1026,14 +1026,14 @@ static int cal_probe(struct platform_device *pdev)
+>         /* Initialize the media device. */
+>         ret = cal_media_init(cal);
+>         if (ret < 0)
+> -               goto error_camerarx;
+> +               goto error_pm_runtime;
+> 
+>         /* Create CAMERARX PHYs. */
+>         for (i = 0; i < cal_data_get_num_csi2_phy(cal); ++i) {
+>                 cal->phy[i] = cal_camerarx_create(cal, i);
+>                 if (IS_ERR(cal->phy[i])) {
+>                         ret = PTR_ERR(cal->phy[i]);
+> -                       goto error_camerarx;
+> +                       goto error_media;
+>                 }
+>         }
+> 
+> @@ -1063,8 +1063,6 @@ static int cal_probe(struct platform_device *pdev)
+> 
+>  error_media:
+>         cal_media_cleanup(cal);
+> -
+> -error_camerarx:
+>         for (i = 0; i < cal->data->num_csi2_phy; i++)
+>                 cal_camerarx_destroy(cal->phy[i]);
 
-That's actually one of the things I like about dev_dbg(), it shrinks the
-kernel when DEBUG (or DYNAMIC_DEBUG) isn't defined. In which case we
-could possibly even remove the debug module parameter, as DYNAMIC_DEBUG
-already gives us control over which messages are printed.
+Good catch. I'll fix the second issues slightly differently, by moving
+cal_media_cleanup() below the cal_camerarx_destroy() loop, and keeping
+the error_camerarx label, as it's best to perform cleanups in the
+reverse order of the inits (unless there's a specific reason not to do
+so).
 
-I however hear your concern, and I don't dispute that a module parameter
-can also make debugging easier, at in some cases. It's partly a matter
-of getting use to DYNAMIC_DEBUG, but not just that. I'll thus replace
-dev_dbg() with dev_printk(KERN_DEBUG, ...) here.
+> With that fixed,
+> 
+> Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 
-> >  #define cal_info(cal, fmt, arg...)	\
-> > -		v4l2_info(&cal->v4l2_dev, fmt, ##arg)
-> > +	dev_info(&(cal)->pdev->dev, fmt, ##arg)
-> >  #define cal_err(cal, fmt, arg...)	\
-> > -		v4l2_err(&cal->v4l2_dev, fmt, ##arg)
-> > +	dev_err(&(cal)->pdev->dev, fmt, ##arg)
+Please let me know if you see problems in the proposed change, otherwise
+I'll add your tag.
+
+> > +
+> >  	/* Create CAMERARX PHYs. */
+> >  	for (i = 0; i < cal_data_get_num_csi2_phy(cal); ++i) {
+> >  		cal->phy[i] = cal_camerarx_create(cal, i);
+> > @@ -805,11 +831,6 @@ static int cal_probe(struct platform_device *pdev)
+> >  		}
+> >  	}
 > >  
-> >  #define ctx_dbg(level, ctx, fmt, arg...)	\
-> > -		v4l2_dbg(level, debug, &ctx->v4l2_dev, fmt, ##arg)
-> > +	cal_dbg(level, (ctx)->cal, "ctx%u: " fmt, (ctx)->csi2_port, ##arg)
-> >  #define ctx_info(ctx, fmt, arg...)	\
-> > -		v4l2_info(&ctx->v4l2_dev, fmt, ##arg)
-> > +	cal_info((ctx)->cal, "ctx%u: " fmt, (ctx)->csi2_port, ##arg)
-> >  #define ctx_err(ctx, fmt, arg...)	\
-> > -		v4l2_err(&ctx->v4l2_dev, fmt, ##arg)
-> > +	cal_err((ctx)->cal, "ctx%u: " fmt, (ctx)->csi2_port, ##arg)
+> > -	/* Initialize the media device. */
+> > -	ret = cal_media_init(cal);
+> > -	if (ret < 0)
+> > -		goto error_camerarx;
+> > -
+> >  	/* Create contexts. */
+> >  	for (i = 0; i < cal_data_get_num_csi2_phy(cal); ++i)
+> >  		cal->ctx[i] = cal_ctx_create(cal, i);
+> > diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti-vpe/cal.h
+> > index cb167bfc2773..bf31dbf24523 100644
+> > --- a/drivers/media/platform/ti-vpe/cal.h
+> > +++ b/drivers/media/platform/ti-vpe/cal.h
+> > @@ -24,6 +24,7 @@
+> >  #include <media/v4l2-dev.h>
+> >  #include <media/v4l2-device.h>
+> >  #include <media/v4l2-fwnode.h>
+> > +#include <media/v4l2-subdev.h>
+> >  #include <media/videobuf2-v4l2.h>
 > >  
-> >  #define CAL_NUM_CONTEXT 2
+> >  #define CAL_MODULE_NAME			"cal"
+> > @@ -33,12 +34,14 @@
+> >  #define MAX_WIDTH_BYTES			(8192 * 8)
+> >  #define MAX_HEIGHT_LINES		16383
 > >  
+> > +#define CAL_CAMERARX_PAD_SINK		0
+> > +#define CAL_CAMERARX_PAD_SOURCE		1
+> > +
+> >  struct device;
+> >  struct device_node;
+> >  struct resource;
+> >  struct regmap;
+> >  struct regmap_fied;
+> > -struct v4l2_subdev;
+> >  
+> >  /* CTRL_CORE_CAMERRX_CONTROL register field id */
+> >  enum cal_camerarx_field {
+> > @@ -108,8 +111,12 @@ struct cal_camerarx {
+> >  	unsigned int		instance;
+> >  
+> >  	struct v4l2_fwnode_endpoint	endpoint;
+> > +	struct device_node	*sensor_ep_node;
+> >  	struct device_node	*sensor_node;
+> >  	struct v4l2_subdev	*sensor;
+> > +
+> > +	struct v4l2_subdev	subdev;
+> > +	struct media_pad	pads[2];
+> >  };
+> >  
+> >  struct cal_dev {
 
 -- 
 Regards,
