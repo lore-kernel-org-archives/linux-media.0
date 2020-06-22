@@ -2,142 +2,133 @@ Return-Path: <SRS0=tb8e=AE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71AE8C433DF
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 00:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C914C433DF
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 00:40:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 52CB82076A
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 00:05:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D425320706
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 00:40:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="ZqLlsVf8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gmta/vZG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731359AbgFWAF2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Jun 2020 20:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S1731977AbgFWAkQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Jun 2020 20:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730227AbgFWAF1 (ORCPT
+        with ESMTP id S1731631AbgFWAkO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Jun 2020 20:05:27 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66908C061573
-        for <linux-media@vger.kernel.org>; Mon, 22 Jun 2020 17:05:27 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id o38so5449288qtf.6
-        for <linux-media@vger.kernel.org>; Mon, 22 Jun 2020 17:05:27 -0700 (PDT)
+        Mon, 22 Jun 2020 20:40:14 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D28C061795;
+        Mon, 22 Jun 2020 17:39:34 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id l63so138294oih.13;
+        Mon, 22 Jun 2020 17:39:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZARmJJ7xCkdZZ2t8wNh4/tQvVIlLfUoBxGbPVnLj1no=;
-        b=ZqLlsVf823WvkS6Pxei8NiC2W2IIsAJoQA2urO7e9M3j3n78WU8zuiQnBC/Hh13LQ7
-         W82cIEkI8yK1kig27JBpN1A+kBTvdyfep2zqFSsRZ3bneYMoHddrECdeOHAhBx3jAggE
-         8oQvGlZO4VuJSft8Izl2Bf/u/NJdZDmJmyKoVRcHZq2TKwggLrrOlhDeM/ysxoX7/Me3
-         dqRCX3t0aoqiPb12yGgusjNMnEL8ewMvbu4zIi2lDYR1tedgzPmqU85hNdNt9mW7kpmp
-         xuKIYdmxHb1ZwHUACc5P3GQ4w7GIm5gpp47skdgCpNYwfEX9eupQQgKd/elWzUh05kv2
-         mhag==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=68GP117GFRUsx6QpEeOc82reTKVBWwmz16vEIsvU5G4=;
+        b=gmta/vZGc8pQNwndeUZSBEuYDUhotgIBPf7X5ZvRpmklWY2K8gINbs+jySCeUE2nC2
+         Yqk/WGvdHJfIT3634Lxi3hX7KTOPzvm3eitow6IQwwD0mwkfrh6vZhy2JvLVNmAYIce0
+         7uh5OGP9Sf28c10JfHn7VlATpBKZRcod48KbG0O0T4Vimb7aPQSWPbreT7NjTfikH5NG
+         yTkdUaNB057OVAKh6yB5V/K20AzqE4Zgud+IB5xKV3l98uUJZeDjvf5mg/Xcb/5R+brM
+         zDJYeM4kDanPSnMH+RiQgzFK8KvNwVQ7ViETmlQHxJQIfggL81fdYQyS4lOG7hSmDwf2
+         KVQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZARmJJ7xCkdZZ2t8wNh4/tQvVIlLfUoBxGbPVnLj1no=;
-        b=TmC1D/XzgIJc9tiIroezcFJR+a4faHdZdMPs41sQhDECvgmFQ1xkbwfZBRgQfpT2sv
-         /HFyta3TYHVzaJeFC0eNvCVp4Gg5uMF+ZhbV1W1gQwzh8zjsCdrJRTZGVqykgXr6n1/y
-         LuX45aEEtqJ2eUcaUN+CeECPKy6i4Pcg9wcAQvJS5RGR03YM/RhF6xwpMBJLuZOCCRVb
-         i5yhSQZWW/bs4NAC0Tj2FWuZglULo2pAAUXW9Tyke9gOayBgIYEaUcvPkyHpkErdkL1K
-         FnOMp9akFRI2QCoBtYXlxkr3aLuT9v7Pn2mzVDEJhzbis36UObXxCBIXKGoW+DaaZoz3
-         9+UQ==
-X-Gm-Message-State: AOAM5327cxfV0TtOP91Lv6IyyuG9RoOAKIFmN3RI7bcco7VqoVEXBOh0
-        tjUYoLuXNGl+EwcuYBDya57ZKw==
-X-Google-Smtp-Source: ABdhPJybLGEC9Vkbo3afR1e0rkiE4Uqi81y09rG7Z316acKAzGcUboScxSHByPFqPGL4yR3GT9b3Ew==
-X-Received: by 2002:ac8:279a:: with SMTP id w26mr18731669qtw.309.1592870726664;
-        Mon, 22 Jun 2020 17:05:26 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id n143sm1204192qkn.94.2020.06.22.17.05.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=68GP117GFRUsx6QpEeOc82reTKVBWwmz16vEIsvU5G4=;
+        b=IDy/OwqfYMg40AyM6veAxuH9OaRnDN04Q4CPuGFdEm26ZmkeefbYSUiD5Zdte7dJlA
+         sjYojSw8aplBjAhxnfOaTzxxEumcHgnDdhoDG7jwhdD3Qs8kbvmmu7bMzbvQgtzOWel4
+         0WbM5wP7HHYTJ6cUiKICoIJEg5pzG+ZHTUybdlvbnNabkE+DuBSVwdsSiLZ3udnZiQ1A
+         uqwlCKOQcXEa4Y/ujOnE53midoCi67thDC4nY3dWt/aJCopca7rhru1LfnEVy5+D+YjT
+         L07ynI4mCE4rpjJkd+qff1eJ6yMvYAfIe3h9Zt76x/H3RbKFJbDALZyL2iiWsV6nAhoZ
+         DxfQ==
+X-Gm-Message-State: AOAM533ffLVZEq/CK7T1xMWfph2lOr9dXM7eR84El+WBHYJwvnqyxwQY
+        BtqMsdr8rxUTf94Wv9WpOKk=
+X-Google-Smtp-Source: ABdhPJx+RrYbJfFiUi0YzMQpliOjObSZz4xZivexdIDBHV5ROsp9MKcr19adXrjBQNGDfBB5c4pbkg==
+X-Received: by 2002:aca:5c1:: with SMTP id 184mr13713429oif.119.1592872773768;
+        Mon, 22 Jun 2020 17:39:33 -0700 (PDT)
+Received: from localhost.localdomain ([2604:1380:4111:8b00::3])
+        by smtp.gmail.com with ESMTPSA id y31sm3677828otb.41.2020.06.22.17.39.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 17:05:26 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.93)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1jnWRJ-00CHPu-Cd; Mon, 22 Jun 2020 21:05:25 -0300
-Date:   Mon, 22 Jun 2020 21:05:25 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jerome Glisse <jglisse@redhat.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Thomas =?utf-8?B?SGVsbHN0csO2bSAoSW50ZWwp?= 
-        <thomas_os@shipmail.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Mika Kuoppala <mika.kuoppala@intel.com>
-Subject: Re: [Linaro-mm-sig] [PATCH 04/18] dma-fence: prime lockdep
- annotations
-Message-ID: <20200623000525.GX6578@ziepe.ca>
-References: <20200618172338.GM6578@ziepe.ca>
- <CAKMK7uEbqTu4q-amkLXyd1i8KNtLaoO2ZFoGqYiG6D0m0FKpOg@mail.gmail.com>
- <20200619113934.GN6578@ziepe.ca>
- <CAKMK7uE-kWA==Cko5uenMrcnopEjq42HxoDTDywzBAbHqsN13g@mail.gmail.com>
- <20200619151551.GP6578@ziepe.ca>
- <CAKMK7uEvkshAM6KUYZu8_OCpF4+1Y_SM7cQ9nJWpagfke8s8LA@mail.gmail.com>
- <20200619172308.GQ6578@ziepe.ca>
- <20200619180935.GA10009@redhat.com>
- <20200619181849.GR6578@ziepe.ca>
- <20200619201011.GB13117@redhat.com>
+        Mon, 22 Jun 2020 17:39:32 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, clang-built-linux@googlegroups.com,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH 1/2] media: omap3isp: Remove cacheflush.h
+Date:   Mon, 22 Jun 2020 16:47:39 -0700
+Message-Id: <20200622234740.72825-2-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200622234740.72825-1-natechancellor@gmail.com>
+References: <20200622234740.72825-1-natechancellor@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200619201011.GB13117@redhat.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 04:10:11PM -0400, Jerome Glisse wrote:
+After mm.h was removed from the asm-generic version of cacheflush.h,
+s390 allyesconfig shows several warnings of the following nature:
+
+In file included from ./arch/s390/include/generated/asm/cacheflush.h:1,
+                 from drivers/media/platform/omap3isp/isp.c:42:
+./include/asm-generic/cacheflush.h:16:42: warning: 'struct mm_struct'
+declared inside parameter list will not be visible outside of this
+definition or declaration
+
+As Geert and Laurent point out, this driver does not need this header in
+the two files that include it. Remove it so there are no warnings.
+
+Fixes: e0cf615d725c ("asm-generic: don't include <linux/mm.h> in cacheflush.h")
+Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
+ drivers/media/platform/omap3isp/isp.c      | 2 --
+ drivers/media/platform/omap3isp/ispvideo.c | 1 -
+ 2 files changed, 3 deletions(-)
+
+diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
+index a4ee6b86663e..b91e472ee764 100644
+--- a/drivers/media/platform/omap3isp/isp.c
++++ b/drivers/media/platform/omap3isp/isp.c
+@@ -39,8 +39,6 @@
+  *	Troy Laramy <t-laramy@ti.com>
+  */
  
-> Maybe we can audit how user ptr buffer are use today and see if
-> we can define a usage pattern that would allow to cut corner in
-> kernel. For instance we could use mmu notifier just to block CPU
-> pte update while we do GUP and thus never wait on dma fence.
-
-The DMA fence is the main problem, if you can think of a way to avoid
-it then it would be great!
+-#include <asm/cacheflush.h>
+-
+ #include <linux/clk.h>
+ #include <linux/clkdev.h>
+ #include <linux/delay.h>
+diff --git a/drivers/media/platform/omap3isp/ispvideo.c b/drivers/media/platform/omap3isp/ispvideo.c
+index 10c214bd0903..1ac9aef70dff 100644
+--- a/drivers/media/platform/omap3isp/ispvideo.c
++++ b/drivers/media/platform/omap3isp/ispvideo.c
+@@ -18,7 +18,6 @@
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+-#include <asm/cacheflush.h>
  
-> Then GPU driver just keep the GUP pin around until they are done
-> with the page. They can also use the mmu notifier to keep a flag
-> so that the driver know if it needs to redo a GUP ie:
-> 
-> The notifier path:
->    GPU_mmu_notifier_start_callback(range)
->         gpu_lock_cpu_pagetable(range)
->         for_each_bo_in(bo, range) {
->             bo->need_gup = true;
->         }
->         gpu_unlock_cpu_pagetable(range)
+ #include <media/v4l2-dev.h>
+ #include <media/v4l2-ioctl.h>
 
-So some kind of invalidation tracking? But this doesn't solve COW and
-Fork problem?
+base-commit: 27f11fea33608cbd321a97cbecfa2ef97dcc1821
+-- 
+2.27.0
 
-> > It is kind of unrelated to HMM, it just shouldn't be using mmu
-> > notifiers to replace page pinning..
-> 
-> Well my POV is that if you abide by rules HMM defined then you do
-> not need to pin pages. The rule is asynchronous device page table
-> update.
-
-I think one of the hmm rules is to not block notifiers for a long
-time, which these scheme seem to violate already.
-
-Pinning for a long time is less bad than blocing notifiers for a long
-time, IMHO
-
-Jason
