@@ -2,154 +2,88 @@ Return-Path: <SRS0=IKjz=AD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF21C433DF
-	for <linux-media@archiver.kernel.org>; Mon, 22 Jun 2020 15:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AA13C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 22 Jun 2020 16:40:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A4492071A
-	for <linux-media@archiver.kernel.org>; Mon, 22 Jun 2020 15:23:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QIqapg7U"
+	by mail.kernel.org (Postfix) with ESMTP id 6BA472073E
+	for <linux-media@archiver.kernel.org>; Mon, 22 Jun 2020 16:40:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729257AbgFVPXy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Jun 2020 11:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729206AbgFVPXx (ORCPT
+        id S1729471AbgFVQkl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Jun 2020 12:40:41 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:58413 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729260AbgFVQkl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Jun 2020 11:23:53 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DD9C061795
-        for <linux-media@vger.kernel.org>; Mon, 22 Jun 2020 08:23:53 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id y20so16152871wmi.2
-        for <linux-media@vger.kernel.org>; Mon, 22 Jun 2020 08:23:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/6MBthvd6z52RmcbVSvKwI0rMiVPtPQAGgLYFja/1c8=;
-        b=QIqapg7UGAmb7VCS9WiE39Ucx7flL+0/1f0tX4gViGTqA0Dt1WWk0CfUL0bB1CWZe1
-         0F5wNMEyPlkrayB6yKdsbfAtGYkWKvzorXou4ujarZc+GnvkTtj4XYGaSJPqC8i+g6CB
-         M2cjdIbSGr+aE2ZeRyC67jAkGhOSWxxIkT/GA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/6MBthvd6z52RmcbVSvKwI0rMiVPtPQAGgLYFja/1c8=;
-        b=OmNEoK8pHtHDA3s55Ff3/4EJAwjYTr/EHCk0bg4lGaZoSgpCC28b4jw6VSIdbSY+DC
-         gpBOSqFVybeIAKnIb2MEGZ5xy6zjeQ+r7iC5MX7fum9ReC8PRne20EQ5gOg+KosVGqyn
-         hOZ83CQsn/Zywd3fs5dkrvLQM5VdMuRPgbC6cXyyKc7tIxeRUTEiY3wLa8YMWrjK9y2N
-         mx0IbyTkosLZrRluiAYx1lrbXHaW86w9UiBT190apx1N8BXI1FOmUO2+mDql8jfL/zI0
-         Hay7zurouWGLMSm88ThSAsMmd1oaHJyYLFjKxUKCsGQkIB7x347nDzKJpuTB1xELio/m
-         jtvQ==
-X-Gm-Message-State: AOAM530W8exgGdSoW0CedI6CgG58/vPtuUtYLgIDwVmRhQmEALIBofrJ
-        Rn0YDneoMJ2scfdc01X68tuHNw==
-X-Google-Smtp-Source: ABdhPJzBqoqGaZ3AGchbWoNgqa479fduCq/sAUf3WneGLyZ7HwXh6yxNJZvcIOQjzKi5Q3M8R73oyQ==
-X-Received: by 2002:a1c:e355:: with SMTP id a82mr7854723wmh.165.1592839432304;
-        Mon, 22 Jun 2020 08:23:52 -0700 (PDT)
-Received: from chromium.org (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
-        by smtp.gmail.com with ESMTPSA id m65sm16890177wmf.17.2020.06.22.08.23.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 08:23:51 -0700 (PDT)
-Date:   Mon, 22 Jun 2020 15:23:50 +0000
-From:   Tomasz Figa <tfiga@chromium.org>
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        mchehab@kernel.org, andriy.shevchenko@linux.intel.com,
-        robh+dt@kernel.org, mark.rutland@arm.com,
-        sakari.ailus@linux.intel.com, drinkcat@chromium.org,
-        matthias.bgg@gmail.com, bingbu.cao@intel.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, sj.huang@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        louis.kuo@mediatek.com, shengnan.wang@mediatek.com
-Subject: Re: [PATCH V10 2/2] media: i2c: ov02a10: Add OV02A10 image sensor
- driver
-Message-ID: <20200622152350.GB260716@chromium.org>
-References: <20200615122937.18965-1-dongchun.zhu@mediatek.com>
- <20200615122937.18965-3-dongchun.zhu@mediatek.com>
- <20200618191026.GA73379@chromium.org>
- <1592639284.8804.712.camel@mhfsdcap03>
+        Mon, 22 Jun 2020 12:40:41 -0400
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 888E8240014;
+        Mon, 22 Jun 2020 16:40:38 +0000 (UTC)
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2] media: i2c: imx214: select V4L2_FWNODE
+Date:   Mon, 22 Jun 2020 18:43:52 +0200
+Message-Id: <20200622164352.605546-1-jacopo@jmondi.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1592639284.8804.712.camel@mhfsdcap03>
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Jun 20, 2020 at 03:48:04PM +0800, Dongchun Zhu wrote:
-> Hi Tomasz,
-> 
-> Thanks for the review.
-> 
-> On Thu, 2020-06-18 at 19:10 +0000, Tomasz Figa wrote:
-> > Hi Dongchun,
-> > 
-> > On Mon, Jun 15, 2020 at 08:29:37PM +0800, Dongchun Zhu wrote:
-> > > Add a V4L2 sub-device driver for OV02A10 image sensor.
-> > > 
-> > > Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-> > > ---
-> > >  MAINTAINERS                 |    1 +
-> > >  drivers/media/i2c/Kconfig   |   13 +
-> > >  drivers/media/i2c/Makefile  |    1 +
-> > >  drivers/media/i2c/ov02a10.c | 1042 +++++++++++++++++++++++++++++++++++++++++++
-> > >  4 files changed, 1057 insertions(+)
-> > >  create mode 100644 drivers/media/i2c/ov02a10.c
-> > > 
-> > 
-> > Thank you for the patch. Please see my comments inline.
-> > 
-> > [snip]
-> > > +static int ov02a10_set_fmt(struct v4l2_subdev *sd,
-> > > +			   struct v4l2_subdev_pad_config *cfg,
-> > > +			   struct v4l2_subdev_format *fmt)
-> > > +{
-> > > +	struct ov02a10 *ov02a10 = to_ov02a10(sd);
-> > > +	struct v4l2_mbus_framefmt *mbus_fmt = &fmt->format;
-> > > +
-> > > +	mutex_lock(&ov02a10->mutex);
-> > > +
-> > > +	if (ov02a10->streaming) {
-> > > +		mutex_unlock(&ov02a10->mutex);
-> > > +		return -EBUSY;
-> > > +	}
-> > > +
-> > > +	/* Only one sensor mode supported */
-> > > +	mbus_fmt->code = ov02a10->fmt.code;
-> > > +	ov02a10_fill_fmt(ov02a10->cur_mode, mbus_fmt);
-> > > +	ov02a10->fmt = fmt->format;
-> > > +
-> > > +	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-> > > +		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-> > 
-> > If fmt->which is V4L2_SUBDEV_FORMAT_TRY, the internal driver state must not
-> > be affected. It also should not depend on whether the sensor is streaming
-> > or not. Basically it should be considered a special "candidate" format,
-> > which isn't programmed to the hardware, but just stored aside.
-> > 
-> 
-> Hmm. Maybe we shall use FORMAT_TRY like this:
-> struct v4l2_mbus_framefmt *frame_fmt;
-> ...
-> if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-> 	frame_fmt = v4l2_subdev_get_try_format(sd, cfg, 0);
-> else
-> 	frame_fmt = &ov02a10->fmt;
-> 
-> *frame_fmt = *mbus_fmt;
-> 
-> (Remove 'ov02a10->fmt = fmt->format;' above)
->
+From: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
-Yes, I guess that should work. Also the ov02a10->streaming condition
-shouldn't be checked if fmt->which is V4L2_SUBDEV_FORMAT_TRY).
+After the recent conversion of the media build infrastructure to select
+V4L2 components instead of depending on their presence, which took place
+in:
+32a363d0b0b14 ("media: Kconfig files: use select for V4L2 subdevs and MC")
 
-Best regards,
-Tomasz
+imx214 stands out as being the (only?) media I2C driver that still depends
+on a V4L2 core symbol instead of selecting it.
+
+This confuses the build system which claims it has detected a circular
+dependency when other drivers select the same symbol as the imx214
+driver does.
+
+drivers/media/i2c/Kconfig:728:error: recursive dependency detected!
+drivers/media/i2c/Kconfig:728:	symbol VIDEO_IMX214 depends on V4L2_FWNODE
+drivers/media/v4l2-core/Kconfig:71:	symbol V4L2_FWNODE is selected by VIDEO_BCM2835_UNICAM
+drivers/media/platform/bcm2835/Kconfig:3:	symbol VIDEO_BCM2835_UNICAM depends on VIDEO_V4L2_SUBDEV_API
+drivers/media/v4l2-core/Kconfig:19:	symbol VIDEO_V4L2_SUBDEV_API depends on MEDIA_CONTROLLER
+drivers/media/Kconfig:168:	symbol MEDIA_CONTROLLER is selected by VIDEO_IMX214
+
+Fix this by making the imx214 driver select V4L2_FWNODE instead of
+depending on it and align it with all the other drivers.
+
+Fixes: 32a363d0b0b14 ("media: Kconfig files: use select for V4L2 subdevs and MC")
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ drivers/media/i2c/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index da11036ad804d..6b1a6851ccb0b 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -728,7 +728,7 @@ config VIDEO_HI556
+ config VIDEO_IMX214
+ 	tristate "Sony IMX214 sensor support"
+ 	depends on GPIOLIB && I2C && VIDEO_V4L2
+-	depends on V4L2_FWNODE
++	select V4L2_FWNODE
+ 	select MEDIA_CONTROLLER
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select REGMAP_I2C
+--
+2.27.0
+
