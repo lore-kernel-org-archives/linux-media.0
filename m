@@ -2,113 +2,176 @@ Return-Path: <SRS0=tb8e=AE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65676C433DF
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 16:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80134C433E0
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 16:52:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42E3420780
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 16:52:54 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nOg1elpg"
+	by mail.kernel.org (Postfix) with ESMTP id 645A7207E8
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 16:52:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732979AbgFWQwt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Jun 2020 12:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732292AbgFWQwt (ORCPT
+        id S1733053AbgFWQwz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Jun 2020 12:52:55 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:37143 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732973AbgFWQwz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Jun 2020 12:52:49 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168F9C061573
-        for <linux-media@vger.kernel.org>; Tue, 23 Jun 2020 09:52:49 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id n23so24202131ljh.7
-        for <linux-media@vger.kernel.org>; Tue, 23 Jun 2020 09:52:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=9eAoVwwU455W7Czxum9R509qblQHWN+bx3H+gQGOmvw=;
-        b=nOg1elpgMjDnL2iUKJnVpDVctBW1jvhE72nBWtCOTXcRixhdoxgqpu23EPtJijz9Wz
-         RM3TWym8YyqJtD77Ke3onfEX/7wwyzu348UkdvOS11RVeykvCmYfosMW4mNn5MjGeDj5
-         qdfplHhOzj90GifR7zC1P71u46HgqJbl1ShYWUhCxFkCWgJcjyl5KidjfiBihz9YNO9w
-         68zKO0VTcBu0H5WVPK17creR0T1vupxTz+4/QbYO/A54YEkfQxdRP53Bk9hPkc1gGg57
-         6tVFhHqYnWoloJ5ORhKy+J9lZ2QhD8jcrdt84W/COE0amXGMNVI8pYEBiCJJNsPCWW0V
-         c54A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=9eAoVwwU455W7Czxum9R509qblQHWN+bx3H+gQGOmvw=;
-        b=GktgXy/JXVXs4CvE3JOd5YBQb59U+8fFdfSzk4J+uFEwSQ/Ke5lNplTKnAJj1rYBC5
-         TvpBU1SQis8t3z/6Z4X9p7FT182YFsD50FsOodPu7QF0h38H/YRMPxxwUUuxIDgl/phh
-         1paMrtwmNo1XqVqGZwyFYLDyKLmS4WWBAuv9lDqjre3vUcVtwZa1fXMrAszVQR4kNpkF
-         +ufH8CE2LypNm6zgRis6mFpGz03+PaDk9+ZAtYGivy3xtH33LynXmz9NNukF/FYM+A3I
-         xKblr1YHSApaUUAd527YYpVbRCuYB8dFMcs7aJVpk5S4g82mQeXKqcs0G5fhTBS2vFxq
-         73Og==
-X-Gm-Message-State: AOAM532E+zjmmhQr/YlgaSjtOh/7NeKYkoDus83xbp4hfbNox3s/LnqU
-        mcEm01JlaV128a3vfqZs33MinQ==
-X-Google-Smtp-Source: ABdhPJy5hnqphZVKvT4tjhqXiFArb8FWO5XWovl0z0bz4em/Ks3QTF0sE1lcBeYCa96oqq5SCFQkrg==
-X-Received: by 2002:a2e:9a4d:: with SMTP id k13mr11631973ljj.43.1592931167616;
-        Tue, 23 Jun 2020 09:52:47 -0700 (PDT)
-Received: from localhost.localdomain (37-144-159-139.broadband.corbina.ru. [37.144.159.139])
-        by smtp.googlemail.com with ESMTPSA id e13sm3405325ljo.6.2020.06.23.09.52.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 09:52:46 -0700 (PDT)
-From:   Andrey Konovalov <andrey.konovalov@linaro.org>
-To:     mchehab@kernel.org, sakari.ailus@iki.fi,
-        manivannan.sadhasivam@linaro.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, c.barrett@framos.com,
-        a.brela@framos.com, peter.griffin@linaro.org,
-        Andrey Konovalov <andrey.konovalov@linaro.org>
-Subject: [PATCH] media: i2c: imx290: replace msleep(10) with usleep_range(10000, 11000)
-Date:   Tue, 23 Jun 2020 19:52:26 +0300
-Message-Id: <20200623165226.12197-1-andrey.konovalov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Tue, 23 Jun 2020 12:52:55 -0400
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 1C10A20000A;
+        Tue, 23 Jun 2020 16:52:49 +0000 (UTC)
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
+        roman.kovalivskyi@globallogic.com, dave.stevenson@raspberrypi.org,
+        naush@raspberrypi.com
+Cc:     mrodin@de.adit-jv.com, hugues.fruchet@st.com, mripard@kernel.org,
+        aford173@gmail.com, sudipi@jp.adit-jv.com,
+        andrew_gabbasov@mentor.com, erosca@de.adit-jv.com,
+        linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH 23/25] media: ov5647: Support V4L2_CID_HBLANK control
+Date:   Tue, 23 Jun 2020 18:55:48 +0200
+Message-Id: <20200623165550.45835-4-jacopo@jmondi.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200623100815.10674-1-jacopo@jmondi.org>
+References: <20200623100815.10674-1-jacopo@jmondi.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This fixes checkpatch warnings of "msleep < 20ms can sleep for up to 20ms".
+Add support for the V4L2_CID_HBLANK read-only control.
 
-Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+The implementation has been upported from RaspberryPi BSP commit:
+commit d82f202156605 ("media: i2c: ov5647: Set V4L2_SUBDEV_FL_HAS_EVENTS flag")
+
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/imx290.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ov5647.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 9c97830164e9..adcddf3204f7 100644
---- a/drivers/media/i2c/imx290.c
-+++ b/drivers/media/i2c/imx290.c
-@@ -406,7 +406,7 @@ static int imx290_set_register_array(struct imx290 *imx290,
- 	}
+diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
+index 218576a05e66b..3467a8090b38d 100644
+--- a/drivers/media/i2c/ov5647.c
++++ b/drivers/media/i2c/ov5647.c
+@@ -77,6 +77,7 @@ struct ov5647_mode {
+ 	struct v4l2_mbus_framefmt	format;
+ 	struct v4l2_rect		crop;
+ 	u64				pixel_rate;
++	int				hts;
+ 	struct regval_list		*reg_list;
+ 	unsigned int			num_regs;
+ };
+@@ -99,6 +100,7 @@ struct ov5647 {
+ 	struct ov5647_mode		*mode;
+ 	struct ov5647_mode		*current_mode;
+ 	struct v4l2_ctrl		*pixel_rate;
++	struct v4l2_ctrl		*hblank;
+ };
  
- 	/* Provide 10ms settle time */
--	msleep(10);
-+	usleep_range(10000, 11000);
+ static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
+@@ -586,6 +588,7 @@ static struct ov5647_mode ov5647_sbggr8_modes[] = {
+ 			.height		= 960,
+ 		},
+ 		.pixel_rate	= 77291670,
++		.hts		= 1896,
+ 		.reg_list	= ov5647_640x480_sbggr8,
+ 		.num_regs	= ARRAY_SIZE(ov5647_640x480_sbggr8)
+ 	},
+@@ -608,6 +611,7 @@ static struct ov5647_mode ov5647_sbggr10_modes[] = {
+ 			.height		= 1944
+ 		},
+ 		.pixel_rate	= 87500000,
++		.hts		= 2844,
+ 		.reg_list	= ov5647_2592x1944_sbggr10,
+ 		.num_regs	= ARRAY_SIZE(ov5647_2592x1944_sbggr10)
+ 	},
+@@ -627,6 +631,7 @@ static struct ov5647_mode ov5647_sbggr10_modes[] = {
+ 			.height		= 1080,
+ 		},
+ 		.pixel_rate	= 81666700,
++		.hts		= 2416,
+ 		.reg_list	= ov5647_1080p30_sbggr10,
+ 		.num_regs	= ARRAY_SIZE(ov5647_1080p30_sbggr10)
+ 	},
+@@ -646,6 +651,7 @@ static struct ov5647_mode ov5647_sbggr10_modes[] = {
+ 			.height		= 1944,
+ 		},
+ 		.pixel_rate	= 81666700,
++		.hts		= 1896,
+ 		.reg_list	= ov5647_2x2binned_sbggr10,
+ 		.num_regs	= ARRAY_SIZE(ov5647_2x2binned_sbggr10)
+ 	},
+@@ -665,6 +671,7 @@ static struct ov5647_mode ov5647_sbggr10_modes[] = {
+ 			.height		= 1920,
+ 		},
+ 		.pixel_rate	= 55000000,
++		.hts		= 1852,
+ 		.reg_list	= ov5647_640x480_sbggr10,
+ 		.num_regs	= ARRAY_SIZE(ov5647_640x480_sbggr10)
+ 	},
+@@ -1072,6 +1079,7 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
+ 	struct ov5647_mode *ov5647_mode_list;
+ 	struct ov5647_mode *mode;
+ 	unsigned int num_modes;
++	int hblank;
  
- 	return 0;
- }
-@@ -484,14 +484,14 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
- 		if (ctrl->val) {
- 			imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW, 0x00);
- 			imx290_write_reg(imx290, IMX290_BLKLEVEL_HIGH, 0x00);
--			msleep(10);
-+			usleep_range(10000, 11000);
- 			imx290_write_reg(imx290, IMX290_PGCTRL,
- 					 (u8)(IMX290_PGCTRL_REGEN |
- 					 IMX290_PGCTRL_THRU |
- 					 IMX290_PGCTRL_MODE(ctrl->val)));
- 		} else {
- 			imx290_write_reg(imx290, IMX290_PGCTRL, 0x00);
--			msleep(10);
-+			usleep_range(10000, 11000);
- 			if (imx290->bpp == 10)
- 				imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW,
- 						 0x3c);
+ 	/*
+ 	 * Default mbus code MEDIA_BUS_FMT_SBGGR10_1X10 if the requested one
+@@ -1105,6 +1113,9 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
+ 	__v4l2_ctrl_modify_range(sensor->pixel_rate, mode->pixel_rate,
+ 				 mode->pixel_rate, 1, mode->pixel_rate);
+ 
++	hblank = mode->hts - mode->format.width;
++	__v4l2_ctrl_modify_range(sensor->hblank, hblank, hblank, 1, hblank);
++
+ 	*fmt = mode->format;
+ 	mutex_unlock(&sensor->lock);
+ 
+@@ -1309,6 +1320,9 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_PIXEL_RATE:
+ 		/* Read-only, but we adjust it based on mode. */
+ 		return 0;
++	case V4L2_CID_HBLANK:
++		/* Read-only, but we adjust it based on mode. */
++		return 0;
+ 	default:
+ 		dev_info(&client->dev,
+ 			 "Control (id:0x%x, val:0x%x) not supported\n",
+@@ -1326,8 +1340,9 @@ static const struct v4l2_ctrl_ops ov5647_ctrl_ops = {
+ static int ov5647_init_controls(struct ov5647 *sensor)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
++	int hblank;
+ 
+-	v4l2_ctrl_handler_init(&sensor->ctrls, 6);
++	v4l2_ctrl_handler_init(&sensor->ctrls, 7);
+ 
+ 	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
+ 			  V4L2_CID_AUTOGAIN, 0, 1, 1, 0);
+@@ -1357,6 +1372,15 @@ static int ov5647_init_controls(struct ov5647 *sensor)
+ 		goto handler_free;
+ 	sensor->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
++	/* By default, HBLANK is read only, but it does change per mode */
++	hblank = sensor->mode->hts - sensor->mode->format.width;
++	sensor->hblank = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
++					   V4L2_CID_HBLANK, hblank, hblank, 1,
++					   hblank);
++	if (!sensor->hblank)
++		goto handler_free;
++	sensor->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++
+ 	if (sensor->ctrls.error)
+ 		goto handler_free;
+ 
 -- 
-2.17.1
+2.27.0
 
