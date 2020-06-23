@@ -2,188 +2,127 @@ Return-Path: <SRS0=tb8e=AE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C67DCC433DF
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 18:30:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA39C433DF
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 18:44:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0F08207F9
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 18:30:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7136A20781
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 18:44:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=vanguardiasur-com-ar.20150623.gappssmtp.com header.i=@vanguardiasur-com-ar.20150623.gappssmtp.com header.b="O84lAlQt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387442AbgFWS3D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Jun 2020 14:29:03 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42722 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732549AbgFWS3C (ORCPT
+        id S1733311AbgFWSo2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Jun 2020 14:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733309AbgFWSo0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Jun 2020 14:29:02 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id A6B352A384C
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Jeffrey Kardatzke <jkardatzke@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Subject: [RFC 1/7] media: uapi: h264: update reference lists
-Date:   Tue, 23 Jun 2020 15:28:03 -0300
-Message-Id: <20200623182809.1375-2-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200623182809.1375-1-ezequiel@collabora.com>
-References: <20200623182809.1375-1-ezequiel@collabora.com>
+        Tue, 23 Jun 2020 14:44:26 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4FBC061795
+        for <linux-media@vger.kernel.org>; Tue, 23 Jun 2020 11:44:24 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id e15so6737457edr.2
+        for <linux-media@vger.kernel.org>; Tue, 23 Jun 2020 11:44:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YHRfY/482pH60fZPQJikxqae/P0Z6lDDbQXNlIRp7tc=;
+        b=O84lAlQtan6g3BHHHf7sIEL60Tt8VsrCeEVE8CQeBdNfZtWiEkIBf5EnEBTSnOIYhV
+         EPdW4t8kcLvZ9LhfuTnNxdMsJ721WftZAm2YfItBlw7ZCfjOPOaCPgEhEUNc/LV9MpMT
+         UfTabuopH1KekbGurNoL/s3jNY+zFWjIe+weZsQUyV611kaMJC6SyKOGCy0LGyPBBocU
+         I6eEwuTw3L5JxgW9yX5wsfKT5IEMwvCDD1gcvJX0Dzz/DeyHX3FjI/lPlo2zl6EOxPbC
+         oaCdMzn5EhGGffrjqZGBaLeDIrHSd1fkpJvfsTmFDUL3W1alvsulTjb0gLAndKmgvLhD
+         JFYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YHRfY/482pH60fZPQJikxqae/P0Z6lDDbQXNlIRp7tc=;
+        b=b7i9YsL4h2Xf0KvK6zxNgyi1E3RFEXogp3ytcUn7NzYfb4pMQeRNiiUgZlkSB7+05Y
+         ibEeYiyHOSzI20GWpioeYDPxIa0deH7Bwuwppb3vMTZz3DJCzqUALxMV2b2iysgqSaPV
+         gPRDVDkzF9zClqa/i/8bkLf4upwRLRW0cvmLIfT4fG8uGZFd3FeVvJiagGjj3phc+3tj
+         s6kv8RXuLMQ0D4794g6vC+rvu6H6/cm2qDo7JsGLniw/n7AbOUQ8Ou+hTru9RjSpO7cV
+         JQpb49+bpMlILub8R994TDQjdhCZT6QmQ2x9QpP5OKRrjReJ55seOQA2Z4AmVj1myvJe
+         Q2Og==
+X-Gm-Message-State: AOAM530ShGXUSro07ZyV75/HRzRr5mO1DpjjQ6yT9qez39XM/gmC/gqW
+        +1B8Fh4hayqRtWWjEl451Ar7nx1JtsXUThD/JGZmQw==
+X-Google-Smtp-Source: ABdhPJyPUIlDVH1n7pGFYZ5aO9aLZJphcDUMccOXmcIiaLZUxDvA5Dpv5o3A65C6wRy4Z9PcnkaV9feKOmD03dYG9P4=
+X-Received: by 2002:a05:6402:1247:: with SMTP id l7mr22177355edw.61.1592937862811;
+ Tue, 23 Jun 2020 11:44:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200622015227.24134-1-yunfei.dong@mediatek.com>
+In-Reply-To: <20200622015227.24134-1-yunfei.dong@mediatek.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Tue, 23 Jun 2020 15:43:47 -0300
+Message-ID: <CAAEAJfBtuZUn-LxiwCZ75rwT_oEuM-_QEXCH4-vFhV6X+8=4SA@mail.gmail.com>
+Subject: Re: [PATCH v2, 0/2] This patchset add Read-only(Ro) request for
+ capture queue
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jernej Skrabec <jernej.skrabec@siol.net>
+Hi Yunfei,
 
-When dealing with with interlaced frames, reference lists must tell if
-each particular reference is meant for top or bottom field. This info
-is currently not provided at all in the H264 related controls.
+Thanks for the patch.
 
-Make reference lists hold a structure which will also hold flags along
-index into DPB array. Flags will tell if reference is meant for top or
-bottom field.
+On Sun, 21 Jun 2020 at 22:55, Yunfei Dong <yunfei.dong@mediatek.com> wrote:
+>
+> User driver need to get HDR10+ information for each capture buffer;
+> For some encoder cases, user driver need to get encoded message for
+> each frame. So add support read-only(Ro) request for capture queue.
+>
+> Ro request mean that user driver just can get ext ctrls, set ext ctrls
+> is not not allowed. Ro Request also can be used in output queue.
+>
+> There is not upstream driver to use this feature at now, but we are
+> developing internal driver to use it. If it is ready, we will try to
+> upstream vdec/venc driver based on this feature.
+>
 
-Currently the only user of these lists is Cedrus which is just compile
-fixed here. Actual usage of newly introduced flags will come in
-following commit.
+An upstream driver using the feature would be important, but it would
+be nice to also have: an open-source userspace application,
+and a proper explanation in the stateless decoder interface specification.
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
----
- .../media/v4l/ext-ctrls-codec.rst             | 40 ++++++++++++++++++-
- .../staging/media/sunxi/cedrus/cedrus_h264.c  |  6 +--
- include/media/h264-ctrls.h                    | 12 +++++-
- 3 files changed, 51 insertions(+), 7 deletions(-)
+Thanks,
+Ezequiel
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index d0d506a444b1..6c36d298db20 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -1843,10 +1843,10 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-     * - __u32
-       - ``slice_group_change_cycle``
-       -
--    * - __u8
-+    * - struct :c:type:`v4l2_h264_reference`
-       - ``ref_pic_list0[32]``
-       - Reference picture list after applying the per-slice modifications
--    * - __u8
-+    * - struct :c:type:`v4l2_h264_reference`
-       - ``ref_pic_list1[32]``
-       - Reference picture list after applying the per-slice modifications
-     * - __u32
-@@ -1926,6 +1926,42 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-       - ``chroma_offset[32][2]``
-       -
- 
-+``Picture Reference``
-+
-+.. c:type:: v4l2_h264_reference
-+
-+.. cssclass:: longtable
-+
-+.. flat-table:: struct v4l2_h264_reference
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __u16
-+      - ``flags``
-+      - See :ref:`Picture Reference Flags <h264_reference_flags>`
-+    * - __u8
-+      - ``index``
-+      -
-+
-+.. _h264_reference_flags:
-+
-+``Picture Reference Flags``
-+
-+.. cssclass:: longtable
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - ``V4L2_H264_REFERENCE_FLAG_TOP_FIELD``
-+      - 0x00000001
-+      -
-+    * - ``V4L2_H264_REFERENCE_FLAG_BOTTOM_FIELD``
-+      - 0x00000002
-+      -
-+
- ``V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS (struct)``
-     Specifies the decode parameters (as extracted from the bitstream)
-     for the associated H264 slice data. This includes the necessary
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-index 54ee2aa423e2..cce527bbdf86 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-@@ -166,8 +166,8 @@ static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
- 
- static void _cedrus_write_ref_list(struct cedrus_ctx *ctx,
- 				   struct cedrus_run *run,
--				   const u8 *ref_list, u8 num_ref,
--				   enum cedrus_h264_sram_off sram)
-+				   const struct v4l2_h264_reference *ref_list,
-+				   u8 num_ref, enum cedrus_h264_sram_off sram)
- {
- 	const struct v4l2_ctrl_h264_decode_params *decode = run->h264.decode_params;
- 	struct vb2_queue *cap_q;
-@@ -188,7 +188,7 @@ static void _cedrus_write_ref_list(struct cedrus_ctx *ctx,
- 		int buf_idx;
- 		u8 dpb_idx;
- 
--		dpb_idx = ref_list[i];
-+		dpb_idx = ref_list[i].index;
- 		dpb = &decode->dpb[dpb_idx];
- 
- 		if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
-diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
-index 080fd1293c42..9b1cbc9bc38e 100644
---- a/include/media/h264-ctrls.h
-+++ b/include/media/h264-ctrls.h
-@@ -140,6 +140,14 @@ struct v4l2_h264_pred_weight_table {
- #define V4L2_H264_SLICE_FLAG_DIRECT_SPATIAL_MV_PRED	0x04
- #define V4L2_H264_SLICE_FLAG_SP_FOR_SWITCH		0x08
- 
-+#define V4L2_H264_REFERENCE_FLAG_TOP_FIELD		0x01
-+#define V4L2_H264_REFERENCE_FLAG_BOTTOM_FIELD		0x02
-+
-+struct v4l2_h264_reference {
-+	__u8 flags;
-+	__u8 index;
-+};
-+
- struct v4l2_ctrl_h264_slice_params {
- 	/* Size in bytes, including header */
- 	__u32 size;
-@@ -182,8 +190,8 @@ struct v4l2_ctrl_h264_slice_params {
- 	 * Entries on each list are indices into
- 	 * v4l2_ctrl_h264_decode_params.dpb[].
- 	 */
--	__u8 ref_pic_list0[32];
--	__u8 ref_pic_list1[32];
-+	struct v4l2_h264_reference ref_pic_list0[32];
-+	struct v4l2_h264_reference ref_pic_list1[32];
- 
- 	__u32 flags;
- };
--- 
-2.26.0.rc2
-
+> Change compared to v1:
+> -change commit message of patch 01/02
+> -change commit message of patch 02/02
+>
+> Yunfei Dong (2):
+>   media: v4l UAPI: add V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS
+>   media: v4l: Add Ro request api for capture queue
+>
+>  .../media/v4l/vidioc-reqbufs.rst              |   4 +
+>  .../media/common/videobuf2/videobuf2-v4l2.c   |   7 ++
+>  drivers/media/mc/mc-request.c                 |  10 +-
+>  drivers/media/v4l2-core/v4l2-ctrls.c          | 107 +++++++++++++++---
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |  22 ++++
+>  drivers/media/v4l2-core/v4l2-mem2mem.c        |  19 ++--
+>  include/media/v4l2-ctrls.h                    |  22 +++-
+>  include/media/v4l2-fh.h                       |   2 +
+>  include/media/videobuf2-core.h                |   2 +
+>  include/uapi/linux/videodev2.h                |   1 +
+>  10 files changed, 158 insertions(+), 38 deletions(-)
+>
