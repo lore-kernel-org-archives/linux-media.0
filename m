@@ -2,161 +2,127 @@ Return-Path: <SRS0=tb8e=AE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57416C433DF
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 16:53:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D775C433E1
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 16:55:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DEDB2076E
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 16:53:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BE2C20774
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 16:55:01 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IxNJ+1Jt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733004AbgFWQxC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Jun 2020 12:53:02 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:40823 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732510AbgFWQxC (ORCPT
+        id S1732662AbgFWQy5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Jun 2020 12:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732538AbgFWQy5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Jun 2020 12:53:02 -0400
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 2C20F200018;
-        Tue, 23 Jun 2020 16:52:56 +0000 (UTC)
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
-        roman.kovalivskyi@globallogic.com, dave.stevenson@raspberrypi.org,
-        naush@raspberrypi.com
-Cc:     mrodin@de.adit-jv.com, hugues.fruchet@st.com, mripard@kernel.org,
-        aford173@gmail.com, sudipi@jp.adit-jv.com,
-        andrew_gabbasov@mentor.com, erosca@de.adit-jv.com,
-        linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH 25/25] media: ov5647: Advertise the correct exposure range
-Date:   Tue, 23 Jun 2020 18:55:50 +0200
-Message-Id: <20200623165550.45835-6-jacopo@jmondi.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200623100815.10674-1-jacopo@jmondi.org>
-References: <20200623100815.10674-1-jacopo@jmondi.org>
+        Tue, 23 Jun 2020 12:54:57 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EBEC061573
+        for <linux-media@vger.kernel.org>; Tue, 23 Jun 2020 09:54:57 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id a9so24230532ljn.6
+        for <linux-media@vger.kernel.org>; Tue, 23 Jun 2020 09:54:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ooMzjE9WFJyNnXxUflYIdbOsLymdxGSl5zf58v431ME=;
+        b=IxNJ+1JtIzIGXMCnQ6UO6123d8G4fJCPmS098u927TcDhfdHOKPGlYUz/rQt0gJK3+
+         Y9tElPyB+BcqwFwk8lE+tHDhpU+RIBse03WSrtFrJ6dWRHsp5CqNeGc5DHy/1eP0cr0G
+         8Ln9Brt5cTHNtTY/pjDHwrYcuC4aLr30LTPZPrbRn1aHRbzfSRXEO91llwyzK6TiSvsU
+         H+iIwRubMPpUZNOJfT1x+Nol8/rL2gubF16RVOWB3cqasfp7WwKYCxZAZEwBpwhwam7J
+         RhSUWH8bn6YFuzvBFgt0nK8CT0YOWbwxJ7xEk3q5zUfDDM8cUZgH7soPhaF4ZG5Rf6wq
+         UgAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ooMzjE9WFJyNnXxUflYIdbOsLymdxGSl5zf58v431ME=;
+        b=Khu3nauYBDGEeXXMtK8lh19tD5EqVjEJmsPxTVsQoJIG372/dya9tuwdYBv/7soVM+
+         Cqh7Jii+fQd3xbC/BTg78WwXrLR4i0OCstZs0hWpbtONHCOYGR/VLXmjjgyAVIUjW90z
+         nGIOY3M4D96aH0dI0Ye7lZ5KDiK2HM61cSfQidKG5uCPJU43yNu1y8afmK/Y0racIggh
+         3gz3J8xwT+p8hXE8m8HR2aHjJH+VtN9maWezlw5jMt7WxlF8p35Ie82VBa2zwDUMgGBo
+         IG4fBj6lQ61PGZd+AA3DZ+apbDKbfbck7l/I+5hHuTV1vK3PITSOdOfKwJ5Xb4fifs75
+         HTgA==
+X-Gm-Message-State: AOAM5328DJaZbyWa0VmhhykkUphsUy+jVxzPmkSIIk+d2/vA7IUOqOAA
+        NYxEfY+6reOrco9xU8WxJnnoxA==
+X-Google-Smtp-Source: ABdhPJxc24WApjfS0ez0g26JY8PMYXzcFXTVqfl5l9fvYBr3otvIMWXPE6vGzZKJqAJFrcvvx7gtoA==
+X-Received: by 2002:a2e:8858:: with SMTP id z24mr11893135ljj.128.1592931295540;
+        Tue, 23 Jun 2020 09:54:55 -0700 (PDT)
+Received: from [192.168.118.216] (37-144-159-139.broadband.corbina.ru. [37.144.159.139])
+        by smtp.gmail.com with ESMTPSA id g14sm3963877ljl.117.2020.06.23.09.54.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jun 2020 09:54:54 -0700 (PDT)
+Subject: Re: [PATCH] media: i2c: imx290: replace msleep(10) with
+ usleep_range(10000, 11000)
+To:     mchehab@kernel.org, sakari.ailus@iki.fi,
+        manivannan.sadhasivam@linaro.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, c.barrett@framos.com,
+        a.brela@framos.com, peter.griffin@linaro.org
+References: <20200623165226.12197-1-andrey.konovalov@linaro.org>
+From:   Andrey Konovalov <andrey.konovalov@linaro.org>
+Message-ID: <af22cf49-80d2-3ee7-c490-939065b38bfa@linaro.org>
+Date:   Tue, 23 Jun 2020 19:54:53 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200623165226.12197-1-andrey.konovalov@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+This patch should be applied on top of "[PATCH v5 00/10] Improvements to IMX290 CMOS driver" series.
 
-Exposure is clipped by the VTS of the mode, so it needs to be updated
-when this is changed.
+Thanks,
+Andrey
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
----
- drivers/media/i2c/ov5647.c | 41 ++++++++++++++++++++++++++++++++------
- 1 file changed, 35 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index 209218fb073d6..8f62415c07aad 100644
---- a/drivers/media/i2c/ov5647.c
-+++ b/drivers/media/i2c/ov5647.c
-@@ -73,6 +73,11 @@
- #define OV5647_VBLANK_MIN		4
- #define OV5647_VTS_MAX			32767
- 
-+#define OV5647_EXPOSURE_MIN		4
-+#define OV5647_EXPOSURE_STEP		1
-+#define OV5647_EXPOSURE_DEFAULT		1000
-+#define OV5647_EXPOSURE_MAX		65535
-+
- struct regval_list {
- 	u16 addr;
- 	u8 data;
-@@ -108,6 +113,7 @@ struct ov5647 {
- 	struct v4l2_ctrl		*pixel_rate;
- 	struct v4l2_ctrl		*hblank;
- 	struct v4l2_ctrl		*vblank;
-+	struct v4l2_ctrl		*exposure;
- };
- 
- static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
-@@ -1102,10 +1108,10 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
- {
- 	struct v4l2_mbus_framefmt *fmt = &format->format;
- 	struct ov5647 *sensor = to_sensor(sd);
-+	int hblank, exposure_max, exposure_def;
- 	struct ov5647_mode *ov5647_mode_list;
- 	struct ov5647_mode *mode;
- 	unsigned int num_modes;
--	int hblank;
- 
- 	/*
- 	 * Default mbus code MEDIA_BUS_FMT_SBGGR10_1X10 if the requested one
-@@ -1147,6 +1153,13 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
- 				 1, mode->vts - mode->format.height);
- 	__v4l2_ctrl_s_ctrl(sensor->vblank, mode->vts - mode->format.height);
- 
-+	exposure_max = mode->vts - 4;
-+	exposure_def = exposure_max < OV5647_EXPOSURE_DEFAULT ? exposure_max
-+							      : OV5647_EXPOSURE_DEFAULT;
-+	__v4l2_ctrl_modify_range(sensor->exposure, sensor->exposure->minimum,
-+				 exposure_max, sensor->exposure->step,
-+				 exposure_def);
-+
- 	*fmt = mode->format;
- 	mutex_unlock(&sensor->lock);
- 
-@@ -1329,6 +1342,18 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
- 
- 	/* v4l2_ctrl_lock() locks our own mutex */
- 
-+	if (ctrl->id == V4L2_CID_VBLANK) {
-+		int exposure_max, exposure_def;
-+
-+		/* Update max exposure while meeting expected vblanking */
-+		exposure_max = sensor->mode->format.height + ctrl->val - 4;
-+		exposure_def = exposure_max < OV5647_EXPOSURE_DEFAULT
-+			     ? exposure_max : OV5647_EXPOSURE_DEFAULT;
-+		__v4l2_ctrl_modify_range(sensor->exposure, sensor->exposure->minimum,
-+					 exposure_max, sensor->exposure->step,
-+					 exposure_def);
-+	}
-+
- 	/*
- 	 * If the device is not powered up by the host driver do
- 	 * not apply any controls to H/W at this time. Instead
-@@ -1374,9 +1399,9 @@ static const struct v4l2_ctrl_ops ov5647_ctrl_ops = {
- static int ov5647_init_controls(struct ov5647 *sensor)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
--	int hblank;
-+	int hblank, exposure_max, exposure_def;
- 
--	v4l2_ctrl_handler_init(&sensor->ctrls, 8);
-+	v4l2_ctrl_handler_init(&sensor->ctrls, 9);
- 
- 	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
- 			  V4L2_CID_AUTOGAIN, 0, 1, 1, 0);
-@@ -1388,9 +1413,13 @@ static int ov5647_init_controls(struct ov5647 *sensor)
- 			       V4L2_CID_EXPOSURE_AUTO, V4L2_EXPOSURE_MANUAL,
- 			       0, V4L2_EXPOSURE_MANUAL);
- 
--	/* min: 4 lines; max: 0xffff lines; default: 1000 lines. */
--	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
--			  V4L2_CID_EXPOSURE, 4, 65535, 1, 1000);
-+	exposure_max = sensor->mode->vts - 4;
-+	exposure_def = exposure_max < OV5647_EXPOSURE_DEFAULT ? exposure_max
-+							      : OV5647_EXPOSURE_DEFAULT;
-+	sensor->exposure = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-+					     V4L2_CID_EXPOSURE, OV5647_EXPOSURE_MIN,
-+					     exposure_max, OV5647_EXPOSURE_STEP,
-+					     exposure_def);
- 
- 	/* min: 16 = 1.0x; max (10 bits); default: 32 = 2.0x. */
- 	v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
--- 
-2.27.0
-
+On 23.06.2020 19:52, Andrey Konovalov wrote:
+> This fixes checkpatch warnings of "msleep < 20ms can sleep for up to 20ms".
+> 
+> Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+> ---
+>   drivers/media/i2c/imx290.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+> index 9c97830164e9..adcddf3204f7 100644
+> --- a/drivers/media/i2c/imx290.c
+> +++ b/drivers/media/i2c/imx290.c
+> @@ -406,7 +406,7 @@ static int imx290_set_register_array(struct imx290 *imx290,
+>   	}
+>   
+>   	/* Provide 10ms settle time */
+> -	msleep(10);
+> +	usleep_range(10000, 11000);
+>   
+>   	return 0;
+>   }
+> @@ -484,14 +484,14 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+>   		if (ctrl->val) {
+>   			imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW, 0x00);
+>   			imx290_write_reg(imx290, IMX290_BLKLEVEL_HIGH, 0x00);
+> -			msleep(10);
+> +			usleep_range(10000, 11000);
+>   			imx290_write_reg(imx290, IMX290_PGCTRL,
+>   					 (u8)(IMX290_PGCTRL_REGEN |
+>   					 IMX290_PGCTRL_THRU |
+>   					 IMX290_PGCTRL_MODE(ctrl->val)));
+>   		} else {
+>   			imx290_write_reg(imx290, IMX290_PGCTRL, 0x00);
+> -			msleep(10);
+> +			usleep_range(10000, 11000);
+>   			if (imx290->bpp == 10)
+>   				imx290_write_reg(imx290, IMX290_BLKLEVEL_LOW,
+>   						 0x3c);
+> 
