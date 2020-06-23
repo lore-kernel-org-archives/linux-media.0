@@ -2,127 +2,79 @@ Return-Path: <SRS0=tb8e=AE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1988C433DF
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 10:39:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93727C433E0
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 10:45:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EE1B20771
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 10:39:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592908747;
-	bh=x00467Rl0LmFnavuTmVqzJxFqs8KPCS7xTfFN7uGrE8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=YCsHylnUsFaogBJtSLxF57WTSQNRqa/KvRs5KVlq3SqgeaE6UPjzGbWtw/NzC+Np8
-	 zXM0woPvbzqve/a2Hw2YJBTUImxG1YuZ56/gIIDPzwzD7JLOF5cECd8zyuk0SN2loG
-	 9NBWrGg5M6Yb/yxcTptI702TCCL8W4uNkmxs64tc=
+	by mail.kernel.org (Postfix) with ESMTP id 6D0EE2064B
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 10:45:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732213AbgFWKjH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Jun 2020 06:39:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732191AbgFWKjG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Jun 2020 06:39:06 -0400
-Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 396E520724;
-        Tue, 23 Jun 2020 10:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592908746;
-        bh=x00467Rl0LmFnavuTmVqzJxFqs8KPCS7xTfFN7uGrE8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hskJCYY2VQaWRQahqt6o9K8Jyv6ubz72qlv+HlgKATNsISBswCSBbABp4PKTnbXjK
-         n04KepcydqoB/XHFNbdmSFiPKlzliv3QvDBRJQU9zHFa0j9441ZL5fgjwwLNI4oknY
-         ZzGHdSNeUBOIk9OkhM2cOUsm8S7KpTJEd6YkehaM=
-Date:   Tue, 23 Jun 2020 12:39:02 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-Subject: Re: [GIT PULL FOR v5.9] Finalize stateful encoder support
-Message-ID: <20200623123902.334b4f15@coco.lan>
-In-Reply-To: <741fd4cb-1c56-9546-36da-1993474caf49@xs4all.nl>
-References: <741fd4cb-1c56-9546-36da-1993474caf49@xs4all.nl>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1732202AbgFWKpn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Jun 2020 06:45:43 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:56475 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728472AbgFWKpn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 23 Jun 2020 06:45:43 -0400
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 68CFD240004;
+        Tue, 23 Jun 2020 10:45:35 +0000 (UTC)
+Date:   Tue, 23 Jun 2020 12:49:03 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     lolivei@synopsys.com, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, hverkuil@xs4all.nl,
+        laurent.pinchart@ideasonboard.com,
+        roman.kovalivskyi@globallogic.com, dave.stevenson@raspberrypi.org,
+        naush@raspberrypi.com, mrodin@de.adit-jv.com,
+        hugues.fruchet@st.com, mripard@kernel.org, aford173@gmail.com,
+        sudipi@jp.adit-jv.com, andrew_gabbasov@mentor.com,
+        linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH 00/25] media: ov5647: Support RaspberryPi Camera Module v1
+Message-ID: <20200623104903.47op5yrtb3swccnz@uno.localdomain>
+References: <20200622171910.608894-1-jacopo@jmondi.org>
+ <20200622172614.gcwxubshubl7qzpl@uno.localdomain>
+ <20200623103002.GA10561@lxhi-065.adit-jv.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200623103002.GA10561@lxhi-065.adit-jv.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Tue, 2 Jun 2020 12:02:54 +0200
-Hans Verkuil <hverkuil-cisco@xs4all.nl> escreveu:
+Hi Eugeniu,
 
-> Hi Mauro,
-> 
-> This PR finalizes the stateful encoder support by adding the stateful encoder
-> spec. It was delayed quite a bit and the main reason was how framerates should
-> be handled given the constraints of what existing stateful encoder drivers
-> implemented.
-> 
-> Michael, can you make a allegro patch that sets the V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL
-> flag in that driver and have it behave according to this updated spec?
-> 
-> Many thanks to all who contributed, with honorable mention of Tomasz who wrote
-> the original version of this spec.
-> 
-> Regards,
-> 
-> 	Hans
-> 
-> The following changes since commit 938b29db3aa9c293c7c1366b16e55e308f1a1ddd:
-> 
->   media: Documentation: media: Refer to mbus format documentation from CSI-2 docs (2020-05-25 15:47:02 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://linuxtv.org/hverkuil/media_tree.git tags/br-stateful-enc
-> 
-> for you to fetch changes up to f73d82aca17259d7409c3bb675c1def0d71041e0:
-> 
->   dev-encoder.rst: add reference to V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL (2020-06-02 11:05:51 +0200)
-> 
-> ----------------------------------------------------------------
-> Tag branch
-> 
-> ----------------------------------------------------------------
-> Hans Verkuil (4):
->       vidioc-g-parm.rst: update the VIDIOC_G/S_PARM documentation
->       dev-decoder.rst: small fixes
->       videodev2.h: add V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL flag
->       dev-encoder.rst: add reference to V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL
-> 
-> Tomasz Figa (1):
->       media: docs-rst: Document memory-to-memory video encoder interface
-> 
->  Documentation/userspace-api/media/v4l/dev-decoder.rst        |   6 +-
->  Documentation/userspace-api/media/v4l/dev-encoder.rst        | 729 ++++++++++++++++++++++++++++++++++++++++
+On Tue, Jun 23, 2020 at 12:30:02PM +0200, Eugeniu Rosca wrote:
+> Hi Jacopo,
+>
+> Many thanks for your precious contribution.
+>
+> On Mon, Jun 22, 2020 at 07:26:14PM +0200, Jacopo Mondi wrote:
+> > My ISP has rejected the rest of the series: too many emails :(
+> > Has it ever happened to anyone else ? How did you solved this ?
+>
+> I guess leaving 5-10 seconds between sending individual patches should
+> overcome this? I wonder if git provides a built-in command for that?
+>
 
-There's an issue here:
+git send-email does provide the --batch-size --relogin-delay options,
+as Ezequiel suggested me in #v4l.
 
-diff --git a/Documentation/userspace-api/media/v4l/dev-encoder.rst b/Documentation/userspace-api/media/v4l/dev-encoder.rst
-new file mode 100644
-index 000000000000..aace7b812a9c
---- /dev/null
-+++ b/Documentation/userspace-api/media/v4l/dev-encoder.rst
-@@ -0,0 +1,728 @@
-+.. SPDX-License-Identifier: GPL-2.0
+I tried re-sending with a 10 email batch and a 5 seconds delay but I
+got the same failure. I was not able to find any description of the
+email number limits for the SMTP server I'm using, so I could only go
+and try. I think the extensive CC list of this series which I got from
+Roman's series plays a role, so I can't try just by sending to
+myself... I wonder if I should send the series in chunks, the first 10
+patches went out (2 times '-.- ) already...
 
-In order to be compatible with the license of the entire uAPI, we need
-to use here:
-
-	.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-or-later-no-invariants
-
-E.g. dual GPLv2 and GFDL 1.1 or later.
-
-
-Thanks,
-Mauro
+> --
+> Best regards,
+> Eugeniu Rosca
