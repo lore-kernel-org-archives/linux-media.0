@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D57EC433E1
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 18:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31B3BC433E0
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 18:05:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 398072072E
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 18:05:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C22F2072E
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jun 2020 18:05:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733204AbgFWSFm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Jun 2020 14:05:42 -0400
-Received: from mga11.intel.com ([192.55.52.93]:1935 "EHLO mga11.intel.com"
+        id S1733211AbgFWSFn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Jun 2020 14:05:43 -0400
+Received: from mga01.intel.com ([192.55.52.88]:54409 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733193AbgFWSFk (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Jun 2020 14:05:40 -0400
-IronPort-SDR: leaD6S007AZnhH0xbSiGF1+4BYYmw70AC7e/tXyHhesYp7A0I6nzGRfuCIkTFNdNMvfT+11snC
- EAQBsMYvS+TA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="142404329"
+        id S1733202AbgFWSFm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 23 Jun 2020 14:05:42 -0400
+IronPort-SDR: TJiKgGuFCLCMUcgytNuRIhPqBIoPnTRhNDW9NXn7osddd5scZ0Dg6HYFPBQipCeMzHOWjjS0mI
+ UbPDh8zQTiSg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="162242886"
 X-IronPort-AV: E=Sophos;i="5.75,272,1589266800"; 
-   d="scan'208";a="142404329"
+   d="scan'208";a="162242886"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 11:05:36 -0700
-IronPort-SDR: 5Ch0N9djfR09sOKmkac3YYG9usb/7eSppbNBj1Ca3OsdRG3K7l45gLdXmAD3PI1bLS7KnLWoqK
- 88tkN/r8aTLA==
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 11:05:38 -0700
+IronPort-SDR: lKPiaIc/56xSuZcjTa95ZIgDGbD+hcHG2xL+w5TkYGeBkNm67LEumsAcKZvOz5pKKja5C2bqyD
+ TGZyXUAFvSUg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,272,1589266800"; 
-   d="scan'208";a="423093617"
+   d="scan'208";a="287177934"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 23 Jun 2020 11:05:34 -0700
+  by orsmga007.jf.intel.com with ESMTP; 23 Jun 2020 11:05:37 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0B03711C; Tue, 23 Jun 2020 21:05:34 +0300 (EEST)
+        id 49CE930F; Tue, 23 Jun 2020 21:05:34 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/9] media: atomisp: move CCK endpoint address to generic header
-Date:   Tue, 23 Jun 2020 21:05:26 +0300
-Message-Id: <20200623180533.65970-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 8/9] media: atomisp: Drop global atomisp_dev variable (easy cases)
+Date:   Tue, 23 Jun 2020 21:05:32 +0300
+Message-Id: <20200623180533.65970-8-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200623180533.65970-1-andriy.shevchenko@linux.intel.com>
 References: <20200623180533.65970-1-andriy.shevchenko@linux.intel.com>
@@ -55,58 +55,156 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-IOSF MBI header contains a lot of definitions, such as
-end point addresses of IPs. Move CCK address from AtomISP driver
-to generic header.
-
-While here, drop unused one.
+Refactor code to avoid use of atomisp_dev global variable
+where it's easy to achieve.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- arch/x86/include/asm/iosf_mbi.h                  | 1 +
- drivers/staging/media/atomisp/pci/atomisp-regs.h | 3 ---
- drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 2 +-
- 3 files changed, 2 insertions(+), 4 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_acc.c  |  4 ++--
+ .../media/atomisp/pci/atomisp_compat_css20.c     | 16 +++++++---------
+ .../media/atomisp/pci/atomisp_compat_css20.h     |  2 +-
+ .../staging/media/atomisp/pci/atomisp_drvfs.c    | 11 +++++------
+ 4 files changed, 15 insertions(+), 18 deletions(-)
 
-diff --git a/arch/x86/include/asm/iosf_mbi.h b/arch/x86/include/asm/iosf_mbi.h
-index 5270ff39b9af..a1911fea8739 100644
---- a/arch/x86/include/asm/iosf_mbi.h
-+++ b/arch/x86/include/asm/iosf_mbi.h
-@@ -39,6 +39,7 @@
- #define BT_MBI_UNIT_PMC		0x04
- #define BT_MBI_UNIT_GFX		0x06
- #define BT_MBI_UNIT_SMI		0x0C
-+#define BT_MBI_UNIT_CCK		0x14
- #define BT_MBI_UNIT_USB		0x43
- #define BT_MBI_UNIT_SATA	0xA3
- #define BT_MBI_UNIT_PCIE	0xA6
-diff --git a/drivers/staging/media/atomisp/pci/atomisp-regs.h b/drivers/staging/media/atomisp/pci/atomisp-regs.h
-index de34ee28e390..022997f47121 100644
---- a/drivers/staging/media/atomisp/pci/atomisp-regs.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp-regs.h
-@@ -20,9 +20,6 @@
- #define ATOMISP_REGS_H
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_acc.c b/drivers/staging/media/atomisp/pci/atomisp_acc.c
+index 76861396ba86..f638d0bd09fe 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_acc.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_acc.c
+@@ -355,11 +355,11 @@ int atomisp_acc_map(struct atomisp_sub_device *asd, struct atomisp_acc_map *map)
  
- /* common register definitions */
--#define PUNIT_PORT		0x04
--#define CCK_PORT		0x14
--
- #define PCICMDSTS		0x01
- #define INTR			0x0f
- #define MSI_CAPID		0x24
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index d36809a0182c..fa07cbaf0422 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -1685,7 +1685,7 @@ static int atomisp_pci_probe(struct pci_dev *dev,
- 		isp->dfs = &dfs_config_cht;
- 		isp->pdev->d3cold_delay = 0;
+ 		pgnr = DIV_ROUND_UP(map->length, PAGE_SIZE);
+ 		if (pgnr < ((PAGE_ALIGN(map->length)) >> PAGE_SHIFT)) {
+-			dev_err(atomisp_dev,
++			dev_err(asd->isp->dev,
+ 				"user space memory size is less than the expected size..\n");
+ 			return -ENOMEM;
+ 		} else if (pgnr > ((PAGE_ALIGN(map->length)) >> PAGE_SHIFT)) {
+-			dev_err(atomisp_dev,
++			dev_err(asd->isp->dev,
+ 				"user space memory size is large than the expected size..\n");
+ 			return -ENOMEM;
+ 		}
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+index 010b2b19d811..499916bc6aab 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+@@ -182,10 +182,10 @@ void atomisp_load_uint32(hrt_address addr, uint32_t *data)
+ 	*data = atomisp_css2_hw_load_32(addr);
+ }
  
--		iosf_mbi_read(CCK_PORT, MBI_REG_READ, CCK_FUSE_REG_0, &val);
-+		iosf_mbi_read(BT_MBI_UNIT_CCK, MBI_REG_READ, CCK_FUSE_REG_0, &val);
- 		switch (val & CCK_FUSE_HPLL_FREQ_MASK) {
- 		case 0x00:
- 			isp->hpll_freq = HPLL_FREQ_800MHZ;
+-static int hmm_get_mmu_base_addr(unsigned int *mmu_base_addr)
++static int hmm_get_mmu_base_addr(struct device *dev, unsigned int *mmu_base_addr)
+ {
+ 	if (!sh_mmu_mrfld.get_pd_base) {
+-		dev_err(atomisp_dev, "get mmu base address failed.\n");
++		dev_err(dev, "get mmu base address failed.\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -840,7 +840,7 @@ int atomisp_css_init(struct atomisp_device *isp)
+ 	int ret;
+ 	int err;
+ 
+-	ret = hmm_get_mmu_base_addr(&mmu_base_addr);
++	ret = hmm_get_mmu_base_addr(isp->dev, &mmu_base_addr);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -942,7 +942,7 @@ int atomisp_css_resume(struct atomisp_device *isp)
+ 	unsigned int mmu_base_addr;
+ 	int ret;
+ 
+-	ret = hmm_get_mmu_base_addr(&mmu_base_addr);
++	ret = hmm_get_mmu_base_addr(isp->dev, &mmu_base_addr);
+ 	if (ret) {
+ 		dev_err(isp->dev, "get base address error.\n");
+ 		return -EINVAL;
+@@ -4337,7 +4337,7 @@ static const char * const fw_acc_type_name[] = {
+ 	[IA_CSS_ACC_STANDALONE] =	"Stand-alone acceleration",
+ };
+ 
+-int atomisp_css_dump_blob_infor(void)
++int atomisp_css_dump_blob_infor(struct atomisp_device *isp)
+ {
+ 	struct ia_css_blob_descr *bd = sh_css_blob_info;
+ 	unsigned int i, nm = sh_css_num_binaries;
+@@ -4354,8 +4354,7 @@ int atomisp_css_dump_blob_infor(void)
+ 	for (i = 0; i < sh_css_num_binaries - NUM_OF_SPS; i++) {
+ 		switch (bd[i].header.type) {
+ 		case ia_css_isp_firmware:
+-			dev_dbg(atomisp_dev,
+-				"Num%2d type %s (%s), binary id is %2d, name is %s\n",
++			dev_dbg(isp->dev, "Num%2d type %s (%s), binary id is %2d, name is %s\n",
+ 				i + NUM_OF_SPS,
+ 				fw_type_name[bd[i].header.type],
+ 				fw_acc_type_name[bd[i].header.info.isp.type],
+@@ -4363,8 +4362,7 @@ int atomisp_css_dump_blob_infor(void)
+ 				bd[i].name);
+ 			break;
+ 		default:
+-			dev_dbg(atomisp_dev,
+-				"Num%2d type %s, name is %s\n",
++			dev_dbg(isp->dev, "Num%2d type %s, name is %s\n",
+ 				i + NUM_OF_SPS, fw_type_name[bd[i].header.type],
+ 				bd[i].name);
+ 		}
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.h b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.h
+index 8376aec18e3e..e0601534380f 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.h
++++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.h
+@@ -153,7 +153,7 @@ int atomisp_css_debug_dump_isp_binary(void);
+ 
+ int atomisp_css_dump_sp_raw_copy_linecount(bool reduced);
+ 
+-int atomisp_css_dump_blob_infor(void);
++int atomisp_css_dump_blob_infor(struct atomisp_device *isp);
+ 
+ void atomisp_css_set_isp_config_id(struct atomisp_sub_device *asd,
+ 				   uint32_t isp_config_id);
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_drvfs.c b/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
+index 3711df111fbf..f670faf978e6 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
+@@ -62,9 +62,9 @@ static inline int iunit_dump_dbgopt(struct atomisp_device *isp,
+ 
+ 	if (opt & OPTION_VALID) {
+ 		if (opt & OPTION_BIN_LIST) {
+-			ret = atomisp_css_dump_blob_infor();
++			ret = atomisp_css_dump_blob_infor(isp);
+ 			if (ret) {
+-				dev_err(atomisp_dev, "%s dump blob infor err[ret:%d]\n",
++				dev_err(isp->dev, "%s dump blob infor err[ret:%d]\n",
+ 					__func__, ret);
+ 				goto opt_err;
+ 			}
+@@ -76,7 +76,7 @@ static inline int iunit_dump_dbgopt(struct atomisp_device *isp,
+ 				atomisp_css_debug_dump_isp_binary();
+ 			} else {
+ 				ret = -EPERM;
+-				dev_err(atomisp_dev, "%s dump running bin err[ret:%d]\n",
++				dev_err(isp->dev, "%s dump running bin err[ret:%d]\n",
+ 					__func__, ret);
+ 				goto opt_err;
+ 			}
+@@ -86,8 +86,7 @@ static inline int iunit_dump_dbgopt(struct atomisp_device *isp,
+ 			hmm_show_mem_stat(__func__, __LINE__);
+ 	} else {
+ 		ret = -EINVAL;
+-		dev_err(atomisp_dev, "%s dump nothing[ret=%d]\n", __func__,
+-			ret);
++		dev_err(isp->dev, "%s dump nothing[ret=%d]\n", __func__, ret);
+ 	}
+ 
+ opt_err:
+@@ -195,7 +194,7 @@ int atomisp_drvfs_init(struct atomisp_device *isp)
+ 
+ 	ret = iunit_drvfs_create_files(iunit_debug.drv);
+ 	if (ret) {
+-		dev_err(atomisp_dev, "drvfs_create_files error: %d\n", ret);
++		dev_err(isp->dev, "drvfs_create_files error: %d\n", ret);
+ 		iunit_drvfs_remove_files(iunit_debug.drv);
+ 	}
+ 
 -- 
 2.27.0
 
