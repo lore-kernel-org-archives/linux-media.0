@@ -8,57 +8,57 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05F80C433E1
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jun 2020 15:09:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1583DC433DF
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jun 2020 15:09:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D94962076E
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jun 2020 15:09:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E94482076E
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jun 2020 15:09:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YMrvDWL/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DaVK2w2z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404447AbgFXPJD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Jun 2020 11:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
+        id S2404434AbgFXPI7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Jun 2020 11:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404442AbgFXPJB (ORCPT
+        with ESMTP id S2404357AbgFXPI6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Jun 2020 11:09:01 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44BAC061573;
-        Wed, 24 Jun 2020 08:09:00 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id g139so1452745lfd.10;
-        Wed, 24 Jun 2020 08:09:00 -0700 (PDT)
+        Wed, 24 Jun 2020 11:08:58 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE19C0613ED;
+        Wed, 24 Jun 2020 08:08:58 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id i3so2970370ljg.3;
+        Wed, 24 Jun 2020 08:08:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KheAdp9M1dfbG4eEm8dhaFoYt33Uw8W6nHGfCYpBQ1U=;
-        b=YMrvDWL/13Qtb/t3P8AqAn7YXh+E5039QwPNb0vmwIbDc+mVHxz7OIiIAMP+ST+S+v
-         WEi9f/pouSHwNiVg9M9zSajFLSKXGJZ/v3hOEQwNFyhZ1dH1O9+KH3OKMptmoOtL6eed
-         Q8L07crHA2zRVbxLHhAme3Ig61vVANQHgD9UfkdluZmOM2ZbWeohP1hinz8Foc2jrh69
-         3ibyFDx5rnQIFxdyp3LYxg3rioriCS0sOxMI33kKetcMsKIxkrjyg7G1Z/3fZw/b0Mzb
-         51L5Us03w/z7vBI1W+pWMTwAMt0Dt/uyBYNfXypX46LgBJHwGp2XbhhRrm1ML1ZH2A9c
-         7d4Q==
+        bh=n81a7xgicqVqpnshMV1Fym2lKSMaAj06qWLiaAZUAA8=;
+        b=DaVK2w2zzhMR7dhzxorRAMiXFpOAQqUV3BgyeJk5BvrGgH4/6DEBA3VxQxEHsMmopB
+         16gMgtDiFKxBRWtXnqDuRsAAXODJ1rftcFpKFv8E57JigQk64LxlGC7mC45qrncZ1PVK
+         rjEabLm92zu/UhkkKPeFaoy6TdduiuiqkC5ym/8X1VCH1VDIWbSiNX/JAJBlWdhiJbjd
+         FoLN7w6NDq01hRz3ahZGsOpqmvechMFisnPwzDwMIMt6UVryrcxeBHiGhlgz3xfehLF5
+         mEAyDUxib+8AA/apNlZnWL46u8EKrEfTZTnRRSTunBM5M2PuqBHO34Cj1pbrSL3M0m3J
+         8WdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KheAdp9M1dfbG4eEm8dhaFoYt33Uw8W6nHGfCYpBQ1U=;
-        b=jfKYb1kX7eWg4WXnbXWM724BVrNdl/bHQPyydb120T3eks0AJXiafTirlMpFAZqhYu
-         J68DLxtqw+8AzvP8LkHu+taoyozvvnEWvn53s6sgSal0+M+NctI7c9fM8ZWcxWJV5GIB
-         be11hG5cz23HkA5fiv/sNjKIHaItEYRi12PJqCAP9sMnl8MJpz5PfHVJ4CNHJ97Xi2H7
-         gu64LQBrZGq2+UZFijSZREXtctdjwWc3LOa1Hmu2w/aUSPmZwYuXGQNgo5yH+B1sPm4Z
-         LukQ9YSlT10heGQUYrVrQMJIRWwaQTMqmbDXgDoJ2JXA3vBR3rRimhLe+A2d4uoPwqZ9
-         gSew==
-X-Gm-Message-State: AOAM531D/LXFUobL/FF9nS2xjikZ7l7f8vy4X3m/uOJb0wHXHCpgw7f4
-        cJQbyx3nlHWL1gBHJLZE2YE=
-X-Google-Smtp-Source: ABdhPJyuihnjhleoFSkxrceYwKLcXKmloeag18MhVXjSAM33bpxBmEXnrnBvMHE+KbpSExRlAvz/bA==
-X-Received: by 2002:ac2:4a83:: with SMTP id l3mr15608005lfp.92.1593011339237;
-        Wed, 24 Jun 2020 08:08:59 -0700 (PDT)
+        bh=n81a7xgicqVqpnshMV1Fym2lKSMaAj06qWLiaAZUAA8=;
+        b=KRVVq5iJxdUT2RdF9YVMg5MAmzuJOE6+FvtJPfcYSdVX8ZPGuX0iYJYD5GV5ZjXPuS
+         sGPnLt6ITvzlfgYMvX1/kycGZfdUKzpjPp35l16srLujCfKgcyJzJUksaJx+4csXsisp
+         HQi0cTsm0+KkbzSlCyqde3FUaTu3O4Sree0ApCJt50pw7CrMpmkeoN0faEu/1l8BWZLv
+         Ivk/wwlAl+KNdSfVeCPPPfjQbrS4RUeQWpiiHIvQtkuRqBMQqNd1p/EA4JPkAT06s7ML
+         EnUYvLBLz5audyeGSsXYIEhPFBzfbR3y5QxZJupzHCzFY8Zp+OXpZA9wZaoXT7A/W0SU
+         NYMg==
+X-Gm-Message-State: AOAM533Dk33SN9W3WsnPqneCPU0kN0AUi/qrbMPqkgPGqtpFvY6VwhX3
+        dhc1iLAyGyFyYF5NduRYf8A=
+X-Google-Smtp-Source: ABdhPJwWvevn5bWodaDDTeO6gegWo/JJY45ganJgJ5FSOkH7CGVN4WdL93vQRhvTexMjGq2XSmWDgw==
+X-Received: by 2002:a05:651c:338:: with SMTP id b24mr13475658ljp.87.1593011337024;
+        Wed, 24 Jun 2020 08:08:57 -0700 (PDT)
 Received: from localhost.localdomain (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
-        by smtp.gmail.com with ESMTPSA id z1sm4182049lja.47.2020.06.24.08.08.58
+        by smtp.gmail.com with ESMTPSA id z1sm4182049lja.47.2020.06.24.08.08.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2020 08:08:58 -0700 (PDT)
+        Wed, 24 Jun 2020 08:08:56 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -66,9 +66,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
         devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/4] media: staging: tegra-vde: Turn ON power domain on shutdown
-Date:   Wed, 24 Jun 2020 18:08:46 +0300
-Message-Id: <20200624150847.22672-4-digetx@gmail.com>
+Subject: [PATCH v2 1/4] media: staging: tegra-vde: Balance runtime PM use-count on resume failure
+Date:   Wed, 24 Jun 2020 18:08:44 +0300
+Message-Id: <20200624150847.22672-2-digetx@gmail.com>
 X-Mailer: git-send-email 2.26.0
 In-Reply-To: <20200624150847.22672-1-digetx@gmail.com>
 References: <20200624150847.22672-1-digetx@gmail.com>
@@ -79,65 +79,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On some devices bootloader isn't ready to a clamped VDE power, and thus,
-machine hangs on a warm reboot (CPU reset). The VDE power partition is
-turned ON by default on a cold boot, hence VDE driver should keep power
-partition enabled on system's reboot too. This fixes hang on a warm reboot
-on a Tegra20 Acer A500 device, which is handy if Embedded Controller
-driver is unavailable, i.e. cold reboot can't be performed.
+The RPM's use-count is getting incremented regardless of the
+pm_runtime_get_sync() success or fail. It's up to a driver how to
+handle the failed RPM. In the case of VDE driver, the RPM's use-count
+should be restored if runtime-resume fails. Use pm_runtime_put_noidle(),
+which is the most straight-forward variant to balance the RPM, confirmed
+by Rafael J. Wysocki.
 
+Link: https://lore.kernel.org/linux-i2c/CAJZ5v0i87NGcy9+kxubScdPDyByr8ypQWcGgBFn+V-wDd69BHQ@mail.gmail.com/
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/staging/media/tegra-vde/vde.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/staging/media/tegra-vde/vde.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/staging/media/tegra-vde/vde.c b/drivers/staging/media/tegra-vde/vde.c
-index 85cbbc8f70d3..b64e35b86fb4 100644
+index d3e63512a765..803e5dda4bb5 100644
 --- a/drivers/staging/media/tegra-vde/vde.c
 +++ b/drivers/staging/media/tegra-vde/vde.c
-@@ -1085,9 +1085,17 @@ static int tegra_vde_remove(struct platform_device *pdev)
- 	struct tegra_vde *vde = platform_get_drvdata(pdev);
- 	struct device *dev = &pdev->dev;
+@@ -776,8 +776,10 @@ static int tegra_vde_ioctl_decode_h264(struct tegra_vde *vde,
+ 		goto release_dpb_frames;
  
-+	pm_runtime_get_sync(dev);
- 	pm_runtime_dont_use_autosuspend(dev);
- 	pm_runtime_disable(dev);
+ 	ret = pm_runtime_get_sync(dev);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put_noidle(dev);
+ 		goto unlock;
++	}
  
-+	/*
-+	 * Balance RPM state, the VDE power domain is left ON and hardware
-+	 * is clock-gated. It's safe to reboot machine now.
-+	 */
-+	pm_runtime_put_noidle(dev);
-+	clk_disable_unprepare(vde->clk);
-+
- 	misc_deregister(&vde->miscdev);
- 
- 	tegra_vde_dmabuf_cache_unmap_all(vde);
-@@ -1099,6 +1107,16 @@ static int tegra_vde_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static void tegra_vde_shutdown(struct platform_device *pdev)
-+{
-+	/*
-+	 * On some devices bootloader isn't ready to a power-gated VDE on
-+	 * a warm-reboot, machine will hang in that case.
-+	 */
-+	if (pm_runtime_status_suspended(&pdev->dev))
-+		tegra_vde_runtime_resume(&pdev->dev);
-+}
-+
- static __maybe_unused int tegra_vde_pm_suspend(struct device *dev)
- {
- 	struct tegra_vde *vde = dev_get_drvdata(dev);
-@@ -1144,6 +1162,7 @@ MODULE_DEVICE_TABLE(of, tegra_vde_of_match);
- static struct platform_driver tegra_vde_driver = {
- 	.probe		= tegra_vde_probe,
- 	.remove		= tegra_vde_remove,
-+	.shutdown	= tegra_vde_shutdown,
- 	.driver		= {
- 		.name		= "tegra-vde",
- 		.of_match_table = tegra_vde_of_match,
+ 	/*
+ 	 * We rely on the VDE registers reset value, otherwise VDE
 -- 
 2.26.0
 
