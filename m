@@ -2,184 +2,404 @@ Return-Path: <SRS0=o2oZ=AG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98DB0C433E0
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jun 2020 03:46:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01149C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jun 2020 04:49:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3102920781
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jun 2020 03:46:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D13EA2081A
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jun 2020 04:49:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="MS8S7vBV"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="VFj1j+cQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389701AbgFYDq2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Jun 2020 23:46:28 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:52595 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388485AbgFYDq2 (ORCPT
+        id S2389565AbgFYEtC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Jun 2020 00:49:02 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:40180 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389457AbgFYEtB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Jun 2020 23:46:28 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id oIqGjaKjtZb5ioIqHj5V3Y; Thu, 25 Jun 2020 05:46:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1593056785; bh=rNmb6gy1YgARbBZuAy0to4fAKq25meAZhWkf7mA2dYs=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=MS8S7vBVAJKj+tfWTvNfTCqyJPpEiU3BcbzWELQuk1kHub4p4pmN4OI+inaAK1ckN
-         ykYHm8XKEP3l3MCPmLvnaA4u32Xn6OJutHzR5L4e0sSKkgynY3M6rJtwVha7q37VI5
-         CxYQ6Fr6YHSOB3UycE9C+m6DvMSHQdv9y11E0sgDp+DxNTfgcC5GK6RZu8kelvVZbC
-         cmk7+y19Jk2qvFwU+mkGfnrVNzx1FLW8DiIIAJyzW+g5Dbaj5TNIU9lqE+XIhzFsXw
-         4bSYTNgXb++s3+uKNuJYIwG1kvbT7DrlUonEe7mXlk9jzgOuCETYQGO9HtRBcJNqo7
-         4AUu9h0VifKpQ==
-Message-ID: <38df5bb7ad9c3fc17cf106d1e58afe77@smtp-cloud9.xs4all.net>
-Date:   Thu, 25 Jun 2020 05:46:24 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: ERRORS
-X-CMAE-Envelope: MS4wfKoEGsNp5nhZoU0aw+nNai1kIdCSW+5cipoBc2DUzYhWBqfLrFt1S9lqTj9rLGOxNIEJSrgmfEH2DspzWXCSrkLlGZ6BEaWmHkfvfVGZx3skH9XqdKNe
- Odr1sJ4l9TIsPMjvCUxPuD7TuU5iVChfuHknDVU8IPLbo10RJtTrPzijDqG5mF3tScHxlIb/1/BQKtrDVdVZkKUj/5XDGTbpx1M4jmCGZ3tHZWekq4oiR5TQ
+        Thu, 25 Jun 2020 00:49:01 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1593060540; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=J+YgVxbiCPuM44zJOwLWdnalSiCJ18h1jUiApL65cuQ=;
+ b=VFj1j+cQIILdj+QcQ8fYFFEP0o9bwSUsNussMWW8fwh+P74bQt6O3TxDdy/hrvltLs2fDW66
+ rX2uAChjxsBsRq18RpWz7HXf2qDO7ZNh41GHF6Gdqr7n68PoO0u2GrESgoUhJvNFJK+FimsR
+ 43SG/RfRrI/6zekk30b18Dlm05w=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 5ef42cbba6e154319f372a82 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 25 Jun 2020 04:48:59
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 65B5CC433C8; Thu, 25 Jun 2020 04:48:58 +0000 (UTC)
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: dikshita)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7C1DCC433C6;
+        Thu, 25 Jun 2020 04:48:56 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 25 Jun 2020 10:18:56 +0530
+From:   dikshita@codeaurora.org
+To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org, majja@codeaurora.org
+Subject: Re: [PATCH] venus: Add platform specific capabilities
+In-Reply-To: <1590736709-508-1-git-send-email-dikshita@codeaurora.org>
+References: <1590736709-508-1-git-send-email-dikshita@codeaurora.org>
+Message-ID: <c73036a9871cddaddb9235453901fb49@codeaurora.org>
+X-Sender: dikshita@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Hi Stanimir,
 
-Results of the daily build of media_tree:
+A gentle reminder for the review.
 
-date:			Thu Jun 25 05:00:11 CEST 2020
-media-tree git hash:	e30cc79cc80fd919b697a15c5000d9f57487de8e
-media_build git hash:	5d6f120c8a035dc51e4685061c5e0deafe532122
-v4l-utils git hash:	3e786411d8189cd1fa65c73221a1d9bac0bd4f16
-edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
-gcc version:		i686-linux-gcc (GCC) 9.3.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.1-rc1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 5540ce1b67f5015886e850a4775d2eace9efe922
-host hardware:		x86_64
-host os:		5.6.0-1-amd64
-
-linux-git-sh: OK
-linux-git-arm-davinci: OK
-linux-git-arm-at91: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-mips: OK
-linux-git-arm64: OK
-linux-git-powerpc64: OK
-linux-git-arm-multi: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: WARNINGS: VIDEO_TEGRA
-Check for strcpy/strncpy/strlcpy: WARNINGS: found 4 strcpy(), 4 strncpy(), 4 strlcpy()
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: ERRORS
-linux-3.11.10-x86_64: ERRORS
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: ERRORS
-linux-3.13.11-x86_64: ERRORS
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.81-i686: OK
-linux-3.16.81-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.212-i686: OK
-linux-4.4.212-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.212-i686: OK
-linux-4.9.212-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.169-i686: OK
-linux-4.14.169-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.101-i686: OK
-linux-4.19.101-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4.17-i686: OK
-linux-5.4.17-x86_64: OK
-linux-5.5.1-i686: OK
-linux-5.5.1-x86_64: OK
-linux-5.6.1-i686: OK
-linux-5.6.1-x86_64: OK
-linux-5.7.2-i686: OK
-linux-5.7.2-x86_64: OK
-linux-5.8-rc1-i686: OK
-linux-5.8-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 0
-virtme-32: ERRORS
-sparse: OK
-smatch: ERRORS
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Thursday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-32.log
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+Thanks,
+Dikshita
+On 2020-05-29 12:48, Dikshita Agarwal wrote:
+> Add platform specific capabilities and use them
+> in place of firmware capabilities.
+> 
+> Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+> ---
+>  drivers/media/platform/qcom/venus/core.c           |   3 +
+>  drivers/media/platform/qcom/venus/hfi_helper.h     |   3 +-
+>  drivers/media/platform/qcom/venus/hfi_parser.c     |  21 +--
+>  .../media/platform/qcom/venus/hfi_platform_data.c  | 153 
+> ++++++++++++++++++++-
+>  .../media/platform/qcom/venus/hfi_platform_data.h  |  37 ++++-
+>  5 files changed, 193 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/core.c
+> b/drivers/media/platform/qcom/venus/core.c
+> index 4fde4aa..8221e5c 100644
+> --- a/drivers/media/platform/qcom/venus/core.c
+> +++ b/drivers/media/platform/qcom/venus/core.c
+> @@ -273,6 +273,9 @@ static int venus_probe(struct platform_device 
+> *pdev)
+>  	if (ret)
+>  		goto err_venus_shutdown;
+> 
+> +	if (core->hfi_data && core->hfi_data->venus_parse_resources)
+> +		venus_parse_resources(core);
+> +
+>  	ret = hfi_core_init(core);
+>  	if (ret)
+>  		goto err_venus_shutdown;
+> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h
+> b/drivers/media/platform/qcom/venus/hfi_helper.h
+> index f6613df..1671012 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
+> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+> @@ -520,7 +520,8 @@
+>  enum hfi_version {
+>  	HFI_VERSION_1XX,
+>  	HFI_VERSION_3XX,
+> -	HFI_VERSION_4XX
+> +	HFI_VERSION_4XX,
+> +	HFI_VERSION_6XX
+>  };
+> 
+>  struct hfi_buffer_info {
+> diff --git a/drivers/media/platform/qcom/venus/hfi_parser.c
+> b/drivers/media/platform/qcom/venus/hfi_parser.c
+> index 7f515a4..b4b60e1 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_parser.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_parser.c
+> @@ -10,30 +10,11 @@
+>  #include "core.h"
+>  #include "hfi_helper.h"
+>  #include "hfi_parser.h"
+> +#include "hfi_platform_data.h"
+> 
+>  typedef void (*func)(struct venus_caps *cap, const void *data,
+>  		     unsigned int size);
+> 
+> -static void init_codecs(struct venus_core *core)
+> -{
+> -	struct venus_caps *caps = core->caps, *cap;
+> -	unsigned long bit;
+> -
+> -	for_each_set_bit(bit, &core->dec_codecs, MAX_CODEC_NUM) {
+> -		cap = &caps[core->codecs_count++];
+> -		cap->codec = BIT(bit);
+> -		cap->domain = VIDC_SESSION_TYPE_DEC;
+> -		cap->valid = false;
+> -	}
+> -
+> -	for_each_set_bit(bit, &core->enc_codecs, MAX_CODEC_NUM) {
+> -		cap = &caps[core->codecs_count++];
+> -		cap->codec = BIT(bit);
+> -		cap->domain = VIDC_SESSION_TYPE_ENC;
+> -		cap->valid = false;
+> -	}
+> -}
+> -
+>  static void for_each_codec(struct venus_caps *caps, unsigned int 
+> caps_num,
+>  			   u32 codecs, u32 domain, func cb, void *data,
+>  			   unsigned int size)
+> diff --git a/drivers/media/platform/qcom/venus/hfi_platform_data.c
+> b/drivers/media/platform/qcom/venus/hfi_platform_data.c
+> index 9d9035f..fc838f5 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_platform_data.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_platform_data.c
+> @@ -5,8 +5,132 @@
+>  #include "hfi_platform_data.h"
+>  #include "core.h"
+> 
+> +void init_codecs(struct venus_core *core)
+> +{
+> +	struct venus_caps *caps = core->caps, *cap;
+> +	unsigned long bit;
+> +
+> +	for_each_set_bit(bit, &core->dec_codecs, MAX_CODEC_NUM) {
+> +		cap = &caps[core->codecs_count++];
+> +		cap->codec = BIT(bit);
+> +		cap->domain = VIDC_SESSION_TYPE_DEC;
+> +		cap->valid = false;
+> +	}
+> +
+> +	for_each_set_bit(bit, &core->enc_codecs, MAX_CODEC_NUM) {
+> +		cap = &caps[core->codecs_count++];
+> +		cap->codec = BIT(bit);
+> +		cap->domain = VIDC_SESSION_TYPE_ENC;
+> +		cap->valid = false;
+> +	}
+> +}
+> +
+> +static void parse_codecs(struct venus_core *core)
+> +{
+> +	const struct venus_hfi_platform_data *hfi_data = core->hfi_data;
+> +	const struct venus_codecs *codecs = hfi_data->venus_codecs;
+> +	unsigned int i, codecs_size;
+> +
+> +	core->enc_codecs = 0;
+> +	core->dec_codecs = 0;
+> +	codecs_size = hfi_data->venus_codecs_size;
+> +
+> +	for (i = 0; i < codecs_size; i++) {
+> +		if (codecs[i].domain == VIDC_SESSION_TYPE_ENC)
+> +			core->enc_codecs |= codecs[i].codecs;
+> +		else
+> +			core->dec_codecs |= codecs[i].codecs;
+> +	}
+> +	init_codecs(core);
+> +}
+> +
+> +static int fill_raw_fmt(struct venus_capability *hfi_data_caps,
+> +			struct venus_caps *core_caps)
+> +{
+> +	if ((core_caps->num_pl + 1) == HFI_MAX_PROFILE_COUNT)
+> +		return -EINVAL;
+> +
+> +	core_caps->fmts[core_caps->num_fmts].buftype =
+> +		hfi_data_caps->capability_type;
+> +	core_caps->fmts[core_caps->num_fmts].fmt =
+> +		hfi_data_caps->defaul_value;
+> +	core_caps->num_fmts += 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int fill_profile(struct venus_capability *hfi_data_caps,
+> +			struct venus_caps *core_caps)
+> +{
+> +	if ((core_caps->num_pl + 1) == HFI_MAX_PROFILE_COUNT)
+> +		return -EINVAL;
+> +
+> +	core_caps->pl[core_caps->num_pl].profile =
+> +		hfi_data_caps->capability_type;
+> +	core_caps->pl[core_caps->num_pl].level = hfi_data_caps->defaul_value;
+> +	core_caps->num_pl += 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int fill_capabilities(struct venus_capability *hfi_data_caps,
+> +			     struct venus_caps *core_caps)
+> +{
+> +	if ((core_caps->num_caps + 1) == MAX_CAP_ENTRIES)
+> +		return -EINVAL;
+> +
+> +	core_caps->caps[core_caps->num_caps].capability_type =
+> +		hfi_data_caps->capability_type;
+> +	core_caps->caps[core_caps->num_caps].min = hfi_data_caps->min;
+> +	core_caps->caps[core_caps->num_caps].max = hfi_data_caps->max;
+> +	core_caps->caps[core_caps->num_caps].step_size =
+> +		hfi_data_caps->step_size;
+> +	core_caps->num_caps += 1;
+> +	return 0;
+> +}
+> +
+> +static int fill_caps(struct venus_capability *hfi_data_caps,
+> +		     struct venus_caps *core_caps)
+> +{
+> +	if (hfi_data_caps->entry_type == CAPABILITY_ENTRY)
+> +		return fill_capabilities(hfi_data_caps, core_caps);
+> +	else if (hfi_data_caps->entry_type == PROFILE_ENTRY)
+> +		return fill_profile(hfi_data_caps, core_caps);
+> +	else
+> +		return fill_raw_fmt(hfi_data_caps, core_caps);
+> +}
+> +
+> +static void parse_capabilities(struct venus_core *core)
+> +{
+> +	unsigned int i, j, ret;
+> +	const struct venus_hfi_platform_data *hfi_data = core->hfi_data;
+> +	struct venus_capability *hfi_data_caps = hfi_data->capabilities;
+> +	unsigned int hfi_data_caps_size = hfi_data->capabilities_size;
+> +	const unsigned int codecs_size = hfi_data->venus_codecs_size;
+> +
+> +	for (i = 0; i < hfi_data_caps_size; i++) {
+> +		for (j = 0; j < codecs_size; j++) {
+> +			if ((hfi_data_caps[i].domain &
+> +				core->caps[j].domain) &&
+> +				(hfi_data_caps[i].codecs &
+> +				core->caps[j].codec)) {
+> +				ret = fill_caps(&hfi_data_caps[i],
+> +						core->caps);
+> +				if (!ret)
+> +					break;
+> +			}
+> +		}
+> +	}
+> +}
+> +
+> +void venus_parse_resources(struct venus_core *core)
+> +{
+> +	parse_codecs(core);
+> +	parse_capabilities(core);
+> +}
+> +
+>  static struct codec_freq_data hfi4_codec_freq_data[] =  {
+> -{ V4L2_PIX_FMT_H264, VIDC_SESSION_TYPE_ENC, 675, 10 },
+> +	{ V4L2_PIX_FMT_H264, VIDC_SESSION_TYPE_ENC, 675, 10 },
+>  	{ V4L2_PIX_FMT_HEVC, VIDC_SESSION_TYPE_ENC, 675, 10 },
+>  	{ V4L2_PIX_FMT_VP8, VIDC_SESSION_TYPE_ENC, 675, 10 },
+>  	{ V4L2_PIX_FMT_MPEG2, VIDC_SESSION_TYPE_DEC, 200, 10 },
+> @@ -16,20 +140,45 @@
+>  	{ V4L2_PIX_FMT_VP9, VIDC_SESSION_TYPE_DEC, 200, 10 },
+>  };
+> 
+> +static struct venus_codecs default_codecs[] = { {DEC, H264}, {DEC, 
+> HEVC},
+> +	{DEC, VP8}, {DEC, MPEG2}, {ENC, H264}, {ENC, HEVC}, {ENC, VP8},
+> +};
+> +
+> +static struct venus_capability hfi6_capabilities[] = {
+> +	/* {cap_type, codecs, domains, min, max, step_size, default} */
+> +	{ HFI_CAPABILITY_FRAME_WIDTH, CODECS_ALL, DOMAINS_ALL, 96, 5760, 1,
+> +		96, CAPABILITY_ENTRY },
+> +	{ HFI_CAPABILITY_FRAME_HEIGHT, CODECS_ALL, DOMAINS_ALL, 96, 5760, 1,
+> +		96, CAPABILITY_ENTRY },
+> +	{ HFI_CAPABILITY_FRAMERATE, CODECS_ALL, DOMAINS_ALL, 1, 480, 1,
+> +		1, CAPABILITY_ENTRY },
+> +	{ HFI_CAPABILITY_MAX_VIDEOCORES, CODECS_ALL, DOMAINS_ALL, 1, 2, 1,
+> +		1, CAPABILITY_ENTRY },
+> +};
+> +
+>  static const struct venus_hfi_platform_data hfi4_data = {
+>  	.codec_freq_data = hfi4_codec_freq_data,
+>  	.codec_freq_data_size = ARRAY_SIZE(hfi4_codec_freq_data),
+>  };
+> 
+> +static const struct venus_hfi_platform_data hfi6_data = {
+> +	.venus_codecs = default_codecs,
+> +	.venus_codecs_size = ARRAY_SIZE(default_codecs),
+> +	.capabilities = hfi6_capabilities,
+> +	.capabilities_size = ARRAY_SIZE(hfi6_capabilities),
+> +	.venus_parse_resources = venus_parse_resources,
+> +};
+> +
+>  const struct venus_hfi_platform_data *venus_get_hfi_platform
+>  	(enum hfi_version version)
+>  {
+>  	switch (version) {
+>  	case HFI_VERSION_4XX:
+>  		return &hfi4_data;
+> +	case HFI_VERSION_6XX:
+> +		return &hfi6_data;
+>  	default:
+>  		return NULL;
+>  	}
+>  	return NULL;
+>  }
+> -
+> diff --git a/drivers/media/platform/qcom/venus/hfi_platform_data.h
+> b/drivers/media/platform/qcom/venus/hfi_platform_data.h
+> index 1b4bfb6..55de59b 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_platform_data.h
+> +++ b/drivers/media/platform/qcom/venus/hfi_platform_data.h
+> @@ -8,6 +8,19 @@
+> 
+>  #include "core.h"
+> 
+> +#define ENC    VIDC_SESSION_TYPE_ENC
+> +#define DEC    VIDC_SESSION_TYPE_DEC
+> +#define H264 HFI_VIDEO_CODEC_H264
+> +#define MPEG2 HFI_VIDEO_CODEC_MPEG2
+> +#define HEVC HFI_VIDEO_CODEC_HEVC
+> +#define VP8 HFI_VIDEO_CODEC_VP8
+> +#define DOMAINS_ALL    (HFI_DOMAIN_BASE_VENC | HFI_DOMAIN_BASE_VDEC)
+> +#define CODECS_ALL (HFI_VIDEO_CODEC_H264 | HFI_VIDEO_CODEC_H264    \
+> +					| HFI_VIDEO_CODEC_VP8)
+> +#define CAPABILITY_ENTRY	0
+> +#define PROFILE_ENTRY	1
+> +#define FMT_ENTRY	2
+> +
+>  struct codec_freq_data {
+>  	u32 pixfmt;
+>  	u32 session_type;
+> @@ -15,13 +28,35 @@ struct codec_freq_data {
+>  	unsigned long vsp_freq;
+>  };
+> 
+> +struct venus_codecs {
+> +	u32 codecs;
+> +	u32 domain;
+> +};
+> +
+> +struct venus_capability {
+> +	u32 capability_type;
+> +	u32 codecs;
+> +	u32 domain;
+> +	u32 min;
+> +	u32 max;
+> +	u32 step_size;
+> +	u32 defaul_value;
+> +	u32 entry_type;
+> +};
+> +
+>  struct venus_hfi_platform_data {
+>  	const struct codec_freq_data *codec_freq_data;
+>  	unsigned int codec_freq_data_size;
+> +	struct venus_codecs *venus_codecs;
+> +	unsigned int venus_codecs_size;
+> +	struct venus_capability *capabilities;
+> +	unsigned int capabilities_size;
+> +	void (*venus_parse_resources)(struct venus_core *core);
+>  };
+> 
+>  const struct venus_hfi_platform_data *venus_get_hfi_platform
+>  	(enum hfi_version version);
+> +void venus_parse_resources(struct venus_core *core);
+> +void init_codecs(struct venus_core *core);
+> 
+>  #endif
+> -
