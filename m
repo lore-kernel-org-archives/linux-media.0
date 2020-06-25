@@ -2,177 +2,69 @@ Return-Path: <SRS0=o2oZ=AG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2D33C433E1
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jun 2020 17:41:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6BBEC433E0
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jun 2020 17:43:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99F9A20781
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jun 2020 17:41:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B85C92080C
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jun 2020 17:43:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405170AbgFYRlP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Jun 2020 13:41:15 -0400
-Received: from esa4.mentor.iphmx.com ([68.232.137.252]:17793 "EHLO
-        esa4.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405083AbgFYRlP (ORCPT
+        id S2406855AbgFYRnH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Jun 2020 13:43:07 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:39050 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406853AbgFYRnH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Jun 2020 13:41:15 -0400
-IronPort-SDR: RmN9LfFRFNe2G7Q0PERxj/pvfRH/4iI8Aj/76yhTph297BRag65e+1JOBL0ikEOTc8z3HPK19/
- rGTNChYx1uj0uTePzJrFejznXqaI1cWTaHC8WKhFQJDyZyBkdwg49/GNA3ByroA1GpL+xpYHVx
- aNYNoQHX+3oa8p9z3ChLrueDgqzkHD6y1kKz+N0419g65RBLV+48WKAwoAhzh8udxpttd66dWY
- m2G5RB833Y/lXUbURApw2E8u7JDsc563BE6V7xGOlQek9SwYnawD+cvYvqew5OVjhxf+y0cmux
- h+k=
-X-IronPort-AV: E=Sophos;i="5.75,280,1589270400"; 
-   d="scan'208";a="50322167"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa4.mentor.iphmx.com with ESMTP; 25 Jun 2020 09:41:13 -0800
-IronPort-SDR: LWkbEBr2wJvlrPZvGOT4sExRu+WgOSN1jMXf9Jzhe3/acdh+oohcAtfQQpH669DLSKWL4MojVw
- 6vkqHSlueSV5IWJq5/wXJq2UlHwKNDDNC1UfQT2E9usRwfVNTT19wHliXosyyzVELlWuA46Ge+
- AroaIF7bkfkcPIauWop0p6zLdLUv9TYER3VDDDv3yjT6ePpMT12RXPDicMCN83cp93X6niy0AD
- EM6u3MfDrEPFdjKPK7lVj8Cc7Xw63YDyuURMpXZLnp50ZLT0HOzUu3t0ePdvXpqnCpp+g+TKeJ
- 1mg=
-Subject: Re: [PATCH 1/3] v4l2-subdev: Add subdev ioctl support for
- ENUM/GET/SET INPUT
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-CC:     Ramzi BEN MEFTAH <rbmeftah@de.adit-jv.com>,
-        niklas soderlund <niklas.soderlund@ragnatech.se>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Arnd Bergmann <arnd@arndb.de>, <linux-media@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        <efriedrich@de.adit-jv.com>, <erosca@de.adit-jv.com>
-References: <1592301619-17631-1-git-send-email-rbmeftah@de.adit-jv.com>
- <20200624075307.hl6wew7vr5ue225t@uno.localdomain>
- <20200625020138.GW5980@pendragon.ideasonboard.com>
-From:   Steve Longerbeam <steve_longerbeam@mentor.com>
-Message-ID: <c57d416d-14d4-6d5d-a281-ddbf3183395a@mentor.com>
-Date:   Thu, 25 Jun 2020 10:41:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200625020138.GW5980@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: svr-orw-mbx-04.mgc.mentorg.com (147.34.90.204) To
- svr-orw-mbx-02.mgc.mentorg.com (147.34.90.202)
+        Thu, 25 Jun 2020 13:43:07 -0400
+Received: from localhost.localdomain (p200300cb8737cf00e4140a231ed1025d.dip0.t-ipconnect.de [IPv6:2003:cb:8737:cf00:e414:a23:1ed1:25d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 0BDE72A0538;
+        Thu, 25 Jun 2020 18:43:05 +0100 (BST)
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
+        dafna3@gmail.com, sakari.ailus@linux.intel.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org
+Subject: [PATCH 0/3] media: staging: rkisp1: various bug fixes in params
+Date:   Thu, 25 Jun 2020 19:42:54 +0200
+Message-Id: <20200625174257.22216-1-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent, all,
+3 bug fixes found in rkisp1-params.c related to managing the vb2 buffers.
 
-On 6/24/20 7:01 PM, Laurent Pinchart wrote:
-> Hi Jacopo,
->
-> On Wed, Jun 24, 2020 at 09:53:07AM +0200, Jacopo Mondi wrote:
->> On Tue, Jun 16, 2020 at 12:00:15PM +0200, Ramzi BEN MEFTAH wrote:
->>> From: Steve Longerbeam <steve_longerbeam@mentor.com>
->>   +Niklas, +Laurent
->>
->> Niklas, Laurent, how does this play with CAP_IO_MC ?
-> I don't think it's related to CAP_IO_MC, but I don't think it's a good
-> idea either :-) Routing doesn't go through the subdev [gs]_input
-> operations in MC-based drivers. It should be configured through link
-> setup instead. This patch goes in the wrong direction, sorry Steve.
+Testing:
+--------
 
-That's OK! :) I didn't submit this patch, and as stated in the commit 
-header, I never recommended this patch be submitted to upstream in the 
-first place.
+A test that streams the selfpath and params entities simultaneously
+can be found in this branch of v4l-utils:
+https://gitlab.collabora.com/dafna/v4l-utils/-/tree/params-bug-fixes
 
-Selecting inputs at a subdev should normally make use of media link 
-setup. But for selecting analog signal inputs, such as the ADV748x AFE 
-standard definition inputs, that would  mean there would need to exist 
-source "analog" subdevs that connect to the AFE inputs, if only for the 
-purpose of selecting those inputs, which seems silly IMHO. The ADV748x 
-AFE subdev defines these inputs as media pads, but have no connections, 
-so link setup API can't be used to select those inputs.
+In the repo:
+$ cd contrib/test
+$ python3 test-rkisp1.py -t RKISP1_TEST_simple_stream_with_params -o /root -S -v --params-buf params-buf.dat
 
-So a new subdev pad API is clearly needed, not just to get input status 
-at a subdev pad, but to select/make active such analog inputs without 
-requiring link setup API.
+Dafna Hirschfeld (3):
+  media: staging: rkisp1: params: don't reference the vb2 buffer after
+    calling vb2_buffer_done
+  media: staging: rkisp1: params: don't release lock in isr before
+    buffer is done
+  media: staging: rkisp1: params: in 'stop_streaming' don't release the
+    lock while returning buffers
 
-Steve
+ drivers/staging/media/rkisp1/rkisp1-params.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-
-
->
->>> This commit enables VIDIOC_ENUMINPUT, VIDIOC_G_INPUT, and VIDIOC_S_INPUT
->>> ioctls for use via v4l2 subdevice node.
->>>
->>> This commit should probably not be pushed upstream, because the (old)
->>> idea of video inputs conflicts with the newer concept of establishing
->>> media links between src->sink pads.
->>>
->>> However it might make sense for some subdevices to support enum/get/set
->>> inputs. One example would be the analog front end subdevice for the
->>> ADV748x. By providing these ioctls, selecting the ADV748x analog inputs
->>> can be done without requiring the implementation of media entities that
->>> would define the analog source for which to establish a media link.
->>>
->>> Signed-off-by: Steve Longerbeam <steve_longerbeam@mentor.com>
->>> ---
->>>   drivers/media/v4l2-core/v4l2-subdev.c |  9 +++++++++
->>>   include/media/v4l2-subdev.h           | 11 +++++++++++
->>>   2 files changed, 20 insertions(+)
->>>
->>> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
->>> index 6b989fe..73fbfe9 100644
->>> --- a/drivers/media/v4l2-core/v4l2-subdev.c
->>> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
->>> @@ -378,6 +378,15 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
->>>   			return -ENOTTY;
->>>   		return v4l2_querymenu(vfh->ctrl_handler, arg);
->>>
->>> +	case VIDIOC_ENUMINPUT:
->>> +		return v4l2_subdev_call(sd, video, enuminput, arg);
->>> +
->>> +	case VIDIOC_G_INPUT:
->>> +		return v4l2_subdev_call(sd, video, g_input, arg);
->>> +
->>> +	case VIDIOC_S_INPUT:
->>> +		return v4l2_subdev_call(sd, video, s_input, *(u32 *)arg);
->>> +
->>>   	case VIDIOC_G_CTRL:
->>>   		if (!vfh->ctrl_handler)
->>>   			return -ENOTTY;
->>> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
->>> index f7fe78a..6e1a9cd 100644
->>> --- a/include/media/v4l2-subdev.h
->>> +++ b/include/media/v4l2-subdev.h
->>> @@ -383,6 +383,14 @@ struct v4l2_mbus_frame_desc {
->>>    * @g_input_status: get input status. Same as the status field in the
->>>    *	&struct &v4l2_input
->>>    *
->>> + * @enuminput: enumerate inputs. Should return the same input status as
->>> + *      @g_input_status if the passed input index is the currently active
->>> + *      input.
->>> + *
->>> + * @g_input: returns the currently active input index.
->>> + *
->>> + * @s_input: set the active input.
->>> + *
->>>    * @s_stream: used to notify the driver that a video stream will start or has
->>>    *	stopped.
->>>    *
->>> @@ -423,6 +431,9 @@ struct v4l2_subdev_video_ops {
->>>   	int (*g_tvnorms)(struct v4l2_subdev *sd, v4l2_std_id *std);
->>>   	int (*g_tvnorms_output)(struct v4l2_subdev *sd, v4l2_std_id *std);
->>>   	int (*g_input_status)(struct v4l2_subdev *sd, u32 *status);
->>> +	int (*enuminput)(struct v4l2_subdev *sd, struct v4l2_input *input);
->>> +	int (*g_input)(struct v4l2_subdev *sd, u32 *index);
->>> +	int (*s_input)(struct v4l2_subdev *sd, u32 index);
->>>   	int (*s_stream)(struct v4l2_subdev *sd, int enable);
->>>   	int (*g_pixelaspect)(struct v4l2_subdev *sd, struct v4l2_fract *aspect);
->>>   	int (*g_frame_interval)(struct v4l2_subdev *sd,
+-- 
+2.17.1
 
