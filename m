@@ -2,257 +2,103 @@ Return-Path: <SRS0=LydW=AH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9998FC433DF
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 11:59:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99B2AC433DF
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CC252078D
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 11:59:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6FFB0207FC
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728897AbgFZL71 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Jun 2020 07:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726256AbgFZL71 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Jun 2020 07:59:27 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197E1C08C5DB;
-        Fri, 26 Jun 2020 04:59:27 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id CB1E22A5A99
-Subject: Re: [PATCH v6 3/3] media: vimc: Add a control to display info on test
- image
-To:     Kaaira Gupta <kgupta@es.iitr.ac.in>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        hverkuil@xs4all.nl
-References: <20200626113618.15280-1-kgupta@es.iitr.ac.in>
- <20200626113618.15280-4-kgupta@es.iitr.ac.in>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <694350b5-cd61-1e9d-36ee-6028b59a53a6@collabora.com>
-Date:   Fri, 26 Jun 2020 08:59:19 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1728256AbgFZMTa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Jun 2020 08:19:30 -0400
+Received: from mga17.intel.com ([192.55.52.151]:33134 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726667AbgFZMTa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 26 Jun 2020 08:19:30 -0400
+IronPort-SDR: VlsOxr0UtZ9g6Zk3Cs519KbNhu7PxSFmbdEIlF5Nwwk02G4Wz5xD9ZR2OZE2LMCI/E04+Gq056
+ X7q9Orxr/58w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="125507080"
+X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
+   d="scan'208";a="125507080"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 05:19:30 -0700
+IronPort-SDR: Le1KrzuE4cyZIQdMcEw8zZwZ2VicQ/wgxmAb0YbyU+SfUn47xaMCh3qHxpTzbLcU4/quiaKHv1
+ oHsyuPWRxK7w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
+   d="scan'208";a="479811594"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 26 Jun 2020 05:19:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 2585A2C4; Fri, 26 Jun 2020 15:19:28 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 01/15] media: atomisp: Replace last use of Intel MID APIs
+Date:   Fri, 26 Jun 2020 15:19:11 +0300
+Message-Id: <20200626121925.14365-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200626121925.14365-1-andriy.shevchenko@linux.intel.com>
+References: <20200626121925.14365-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20200626113618.15280-4-kgupta@es.iitr.ac.in>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Kaaira,
+Intel MID special header is not in use in this driver.
+Replace it with a better macro for now on.
 
-Thanks for the patch,
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ .../staging/media/atomisp/include/linux/atomisp_platform.h   | 1 +
+ drivers/staging/media/atomisp/pci/atomisp_compat_css20.c     | 5 +----
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-On 6/26/20 8:36 AM, Kaaira Gupta wrote:
-> Add a control in VIMC to display information such as the correct order of
-> colors for a given test pattern, brightness, hue, saturation, contrast,
-> width and height at sensor, and time since streaming started over test image.
-> 
-> Signed-off-by: Kaaira Gupta <kgupta@es.iitr.ac.in>
-> ---
->  drivers/media/test-drivers/vimc/Kconfig       |  2 +
->  drivers/media/test-drivers/vimc/vimc-common.h |  1 +
->  drivers/media/test-drivers/vimc/vimc-core.c   | 10 ++++
->  drivers/media/test-drivers/vimc/vimc-sensor.c | 60 +++++++++++++++++++
->  4 files changed, 73 insertions(+)
-> 
-> diff --git a/drivers/media/test-drivers/vimc/Kconfig b/drivers/media/test-drivers/vimc/Kconfig
-> index 4068a67585f9..da4b2ad6e40c 100644
-> --- a/drivers/media/test-drivers/vimc/Kconfig
-> +++ b/drivers/media/test-drivers/vimc/Kconfig
-> @@ -2,6 +2,8 @@
->  config VIDEO_VIMC
->  	tristate "Virtual Media Controller Driver (VIMC)"
->  	depends on VIDEO_DEV && VIDEO_V4L2
-> +	select FONT_SUPPORT
-> +	select FONT_8x16
->  	select MEDIA_CONTROLLER
->  	select VIDEO_V4L2_SUBDEV_API
->  	select VIDEOBUF2_VMALLOC
-> diff --git a/drivers/media/test-drivers/vimc/vimc-common.h b/drivers/media/test-drivers/vimc/vimc-common.h
-> index ae163dec2459..a289434e75ba 100644
-> --- a/drivers/media/test-drivers/vimc/vimc-common.h
-> +++ b/drivers/media/test-drivers/vimc/vimc-common.h
-> @@ -20,6 +20,7 @@
->  #define VIMC_CID_VIMC_CLASS		(0x00f00000 | 1)
->  #define VIMC_CID_TEST_PATTERN		(VIMC_CID_VIMC_BASE + 0)
->  #define VIMC_CID_MEAN_WIN_SIZE		(VIMC_CID_VIMC_BASE + 1)
-> +#define VIMC_CID_OSD_TEXT_MODE		(VIMC_CID_VIMC_BASE + 2)
->  
->  #define VIMC_FRAME_MAX_WIDTH 4096
->  #define VIMC_FRAME_MAX_HEIGHT 2160
-> diff --git a/drivers/media/test-drivers/vimc/vimc-core.c b/drivers/media/test-drivers/vimc/vimc-core.c
-> index 11210aaa2551..8337e1276bba 100644
-> --- a/drivers/media/test-drivers/vimc/vimc-core.c
-> +++ b/drivers/media/test-drivers/vimc/vimc-core.c
-> @@ -5,10 +5,12 @@
->   * Copyright (C) 2015-2017 Helen Koike <helen.fornazier@gmail.com>
->   */
->  
-> +#include <linux/font.h>
->  #include <linux/init.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <media/media-device.h>
-> +#include <media/tpg/v4l2-tpg.h>
->  #include <media/v4l2-device.h>
->  
->  #include "vimc-common.h"
-> @@ -263,11 +265,19 @@ static int vimc_register_devices(struct vimc_device *vimc)
->  
->  static int vimc_probe(struct platform_device *pdev)
->  {
-> +	const struct font_desc *font = find_font("VGA8x16");
->  	struct vimc_device *vimc;
->  	int ret;
->  
->  	dev_dbg(&pdev->dev, "probe");
->  
-> +	if (!font) {
-> +		dev_err(&pdev->dev, "vimc: could not find font\n");
+diff --git a/drivers/staging/media/atomisp/include/linux/atomisp_platform.h b/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
+index 873344a02ccf..5a5121d958ed 100644
+--- a/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
++++ b/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
+@@ -250,6 +250,7 @@ const struct atomisp_camera_caps *atomisp_get_default_camera_caps(void);
+ #define IS_MFLD	__IS_SOC(INTEL_FAM6_ATOM_SALTWELL_MID)
+ #define IS_BYT	__IS_SOC(INTEL_FAM6_ATOM_SILVERMONT)
+ #define IS_CHT	__IS_SOC(INTEL_FAM6_ATOM_AIRMONT)
++#define IS_MRFD	__IS_SOC(INTEL_FAM6_ATOM_SILVERMONT_MID)
+ #define IS_MOFD	__IS_SOC(INTEL_FAM6_ATOM_AIRMONT_MID)
+ 
+ /* Both CHT and MOFD come with ISP2401 */
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+index c1e282a974d0..df352be06474 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+@@ -33,8 +33,6 @@
+ #include "atomisp_ioctl.h"
+ #include "atomisp_acc.h"
+ 
+-#include <asm/intel-mid.h>
+-
+ #include "ia_css_debug.h"
+ #include "ia_css_isp_param.h"
+ #include "sh_css_hrt.h"
+@@ -1966,8 +1964,7 @@ void atomisp_css_input_set_mode(struct atomisp_sub_device *asd,
+ 			true,
+ 			0x13000,
+ 			&size_mem_words) != 0) {
+-			if (intel_mid_identify_cpu() ==
+-			    INTEL_MID_CPU_CHIP_TANGIER)
++			if (IS_MRFD)
+ 				size_mem_words = CSS_MIPI_FRAME_BUFFER_SIZE_2;
+ 			else
+ 				size_mem_words = CSS_MIPI_FRAME_BUFFER_SIZE_1;
+-- 
+2.27.0
 
-You don't need the "vimc: " prefix if you are using dev_err(), it already gets the name from pdev->dev
-
-> +		return -ENODEV;
-> +	}
-> +
-> +	tpg_set_font(font->data);
-> +
->  	vimc = kzalloc(sizeof(*vimc), GFP_KERNEL);
->  	if (!vimc)
->  		return -ENOMEM;
-> diff --git a/drivers/media/test-drivers/vimc/vimc-sensor.c b/drivers/media/test-drivers/vimc/vimc-sensor.c
-> index a2f09ac9a360..ce438cdabb73 100644
-> --- a/drivers/media/test-drivers/vimc/vimc-sensor.c
-> +++ b/drivers/media/test-drivers/vimc/vimc-sensor.c
-> @@ -19,6 +19,8 @@ struct vimc_sen_device {
->  	struct v4l2_subdev sd;
->  	struct tpg_data tpg;
->  	u8 *frame;
-> +	unsigned int osd_mode;
-> +	u64 start_stream_ts;
->  	/* The active format */
->  	struct v4l2_mbus_framefmt mbus_format;
->  	struct v4l2_ctrl_handler hdl;
-> @@ -185,10 +187,46 @@ static const struct v4l2_subdev_pad_ops vimc_sen_pad_ops = {
->  static void *vimc_sen_process_frame(struct vimc_ent_device *ved,
->  				    const void *sink_frame)
->  {
-> +	enum osd_mode {OSD_SHOW_ALL = 0, OSD_SHOW_COUNTERS = 1};
-> +	u8 *basep[TPG_MAX_PLANES][2];
-> +	char str[100];
-> +	int line = 1;
-
-unsigned int
-
-> +	const unsigned int line_height = 16;
->  	struct vimc_sen_device *vsen = container_of(ved, struct vimc_sen_device,
->  						    ved);
-
-I would just re-order the declaration vars to have the longest lines first.
-
->  
->  	tpg_fill_plane_buffer(&vsen->tpg, 0, 0, vsen->frame);
-> +	tpg_calc_text_basep(&vsen->tpg, basep, 0, vsen->frame);
-> +
-> +	if (vsen->osd_mode <= OSD_SHOW_COUNTERS) {
-> +		unsigned int ms;
-> +
-> +		ms = (ktime_get_ns() - vsen->start_stream_ts) / 1000000;
-> +		snprintf(str, sizeof(str), "%02d:%02d:%02d:%03d",
-> +			 (ms / (60 * 60 * 1000)) % 24,
-> +			 (ms / (60 * 1000)) % 60,
-> +			 (ms / 1000) % 60,
-> +			 ms % 1000);
-> +		tpg_gen_text(&vsen->tpg, basep, line++ * line_height, 16, str);
-> +	}
-> +
-> +	if (vsen->osd_mode == OSD_SHOW_ALL) {
-> +		const char *order = tpg_g_color_order(&vsen->tpg);
-> +
-> +		tpg_gen_text(&vsen->tpg, basep,
-> +			     line++ * line_height, 16, order);
-> +		snprintf(str, sizeof(str),
-> +			 "brightness %3d, contrast %3d, saturation %3d, hue %d ",
-> +			 vsen->tpg.brightness,
-> +			 vsen->tpg.contrast,
-> +			 vsen->tpg.saturation,
-> +			 vsen->tpg.hue);
-> +		tpg_gen_text(&vsen->tpg, basep, line++ * line_height, 16, str);
-> +		snprintf(str, sizeof(str), "sensor size: %dx%d",
-> +			 vsen->mbus_format.width, vsen->mbus_format.height);
-> +		tpg_gen_text(&vsen->tpg, basep, line++ * line_height, 16, str);
-> +	}
-
-How about the nice case-switch statement proposed by Kieran in the last version?
-
-Thanks,
-Helen
-
-> +
->  	return vsen->frame;
->  }
->  
-> @@ -201,6 +239,8 @@ static int vimc_sen_s_stream(struct v4l2_subdev *sd, int enable)
->  		const struct vimc_pix_map *vpix;
->  		unsigned int frame_size;
->  
-> +		vsen->start_stream_ts = ktime_get_ns();
-> +
->  		/* Calculate the frame size */
->  		vpix = vimc_pix_map_by_code(vsen->mbus_format.code);
->  		frame_size = vsen->mbus_format.width * vpix->bpp *
-> @@ -269,6 +309,9 @@ static int vimc_sen_s_ctrl(struct v4l2_ctrl *ctrl)
->  	case V4L2_CID_SATURATION:
->  		tpg_s_saturation(&vsen->tpg, ctrl->val);
->  		break;
-> +	case VIMC_CID_OSD_TEXT_MODE:
-> +		vsen->osd_mode = ctrl->val;
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -307,6 +350,22 @@ static const struct v4l2_ctrl_config vimc_sen_ctrl_test_pattern = {
->  	.qmenu = tpg_pattern_strings,
->  };
->  
-> +static const char * const vimc_ctrl_osd_mode_strings[] = {
-> +	"All",
-> +	"Counters Only",
-> +	"None",
-> +	NULL,
-> +};
-> +
-> +static const struct v4l2_ctrl_config vimc_sen_ctrl_osd_mode = {
-> +	.ops = &vimc_sen_ctrl_ops,
-> +	.id = VIMC_CID_OSD_TEXT_MODE,
-> +	.name = "Show Information",
-> +	.type = V4L2_CTRL_TYPE_MENU,
-> +	.max = ARRAY_SIZE(vimc_ctrl_osd_mode_strings) - 2,
-> +	.qmenu = vimc_ctrl_osd_mode_strings,
-> +};
-> +
->  static struct vimc_ent_device *vimc_sen_add(struct vimc_device *vimc,
->  					    const char *vcfg_name)
->  {
-> @@ -323,6 +382,7 @@ static struct vimc_ent_device *vimc_sen_add(struct vimc_device *vimc,
->  
->  	v4l2_ctrl_new_custom(&vsen->hdl, &vimc_sen_ctrl_class, NULL);
->  	v4l2_ctrl_new_custom(&vsen->hdl, &vimc_sen_ctrl_test_pattern, NULL);
-> +	v4l2_ctrl_new_custom(&vsen->hdl, &vimc_sen_ctrl_osd_mode, NULL);
->  	v4l2_ctrl_new_std(&vsen->hdl, &vimc_sen_ctrl_ops,
->  			  V4L2_CID_VFLIP, 0, 1, 1, 0);
->  	v4l2_ctrl_new_std(&vsen->hdl, &vimc_sen_ctrl_ops,
-> 
