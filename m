@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8B01C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:46:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF880C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:48:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 764772078D
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:46:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94E3E207E8
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:48:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="gfI90Mmb"
+	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="bYH0wrdx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725940AbgFZMqg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Jun 2020 08:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S1726999AbgFZMsB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Jun 2020 08:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725283AbgFZMqf (ORCPT
+        with ESMTP id S1726592AbgFZMsA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Jun 2020 08:46:35 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0DCC08C5DC
-        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 05:46:35 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id f6so902616pjq.5
-        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 05:46:35 -0700 (PDT)
+        Fri, 26 Jun 2020 08:48:00 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3520C08C5DB
+        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 05:48:00 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id a127so4587368pfa.12
+        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 05:48:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=es-iitr-ac-in.20150623.gappssmtp.com; s=20150623;
         h=from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=qp7cxXNnoQLpTzXpdFOv4m150rdWcZ4/YgkjWFZjCkI=;
-        b=gfI90MmbelR+XJ0JnMP7klGkKtzrZvQGQ4Er89vl85IAH0afuMNDjCRDRjKPmm4WCj
-         ly9jFt43ZDfiHmVXOkioLYauy45iF12mMVna+ZPLaslNF+NLoKTUAHDWIZFQPPKcJzfx
-         X0QsJrK3i194+u7f8jXF+GFzjLY0MyGonNglsvS7ivnCKzlIkqtCuWI/wDroOMrV3kwv
-         z+xAOdHJLb8DIUYutd8V4aMFZpMZlBCZiIy/heZ6dkyQKuCRZFVHHOnBi6ZTBcFwq84H
-         1aCchSxt3QUY5ddYNyJEhXprR6iv/3PB4kYOotsM1ks4Q9Q6D5CXmi0rgfVX7UiSNbTN
-         1C6A==
+        bh=s9Y6i2d0SkOyDxDxXtBmg8v9R/vz4yuL09v6Kczh3wU=;
+        b=bYH0wrdxlCOE+3GcqlHlBzuyuNSYaks6jLleR/NujR2KpT+l5K0Xv4AbsFOFBTvA4L
+         NiaYqbk3rpDBvHDc5gyonGTu4cQYgs3G6+eBt3hdXPnEH4juclnq3QNMv/D32LuP39Rc
+         gAmjk7yfSkB1y1n4J3oC3vM3YMLYyrl9vq4snHJ56phnOZwbviEKxvoWDZsE2giQ46qy
+         VPwzdPf+pUWb18jydV0/UjSfh2MFIH8rwylaEOR2nrA/v54OTkbGlVTHH0mdcsjbty3W
+         bg4rAXYfezomUOIT7NtT5ZBGrZLSLdVIfhIF00Fc+1aKzpU0C8J8ZXQ/1h4sJWQLzYX/
+         EmMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qp7cxXNnoQLpTzXpdFOv4m150rdWcZ4/YgkjWFZjCkI=;
-        b=dCjfKuheqtWeUKwPiIavQIE5rPhLl9YDudoTsjsQVfDDnVEcD3oe11DBQw97iGsYlw
-         lXYMvBpuyjp9eB5y7VXiRcYlQlcTPcD1ejpLcniPnanokXss14K/cBPCFlOvYWd8VCqm
-         AOXFmWRDEaiJZEUKxkZLWiqvKJz2a/g+8mL+mDvGKdwvx/GdBXpbPAHg4HelLtyFlRyV
-         h96GeXEMU9qNTAhu9NNM2T5Yb+OYprkkEC65sBNftFrpmsot9ecrEkTjRDdWa716+Vf5
-         N/fztqePE+5f0a+ImwC5zbVmNUmbAeDWUwoqYSVWYDgdCFeYF9suT2MPv2VcoMpptBtk
-         kBlA==
-X-Gm-Message-State: AOAM532FEbKFIxP4nYYy80cmRJBHPkfiZkwNBuunJ3iVvs1pK70QPsbs
-        ewGpIJIHWDY6d9xgq/fzdtyWJg==
-X-Google-Smtp-Source: ABdhPJzIbRLlpBSqRNqrORwPDB30Vu3JF61XDQZkQ2dT81CeMikzWmSvZlOLXvC5d8gJh3jzGLE5yA==
-X-Received: by 2002:a17:90b:3d7:: with SMTP id go23mr3310630pjb.157.1593175594561;
-        Fri, 26 Jun 2020 05:46:34 -0700 (PDT)
+        bh=s9Y6i2d0SkOyDxDxXtBmg8v9R/vz4yuL09v6Kczh3wU=;
+        b=tYvcYPDluj/lg9T3F5H+y72vd7PWLqzAH7eYfiJlTeHil4J0HS87VMBb1q7h2jKSf9
+         VVGsCIWY+RQ1JvrPEU4Lj1jW0fxOwn/P7itY9oglLRbCqwrStA1jYjjGzn8nYxptFg9Z
+         5q0eCViT7y8bEJSDpK0cplrBhZV7mvdKXtBVRPvoBNHDa3R1yXEJ7qIAS3MxC4bXjq7g
+         Ci/snnRLM2Vm/Fur+vYGJAb7pQ8aoSpLT7ryrvZhBqFkLY6EqYA01zwrKrEpfSRy3H0l
+         cJgSJqjqXc6LsDOPobEhu2mhYxqKEXndc/zr+LolHquitYBE0vHYsve2F3xta7NCHk/f
+         gbcQ==
+X-Gm-Message-State: AOAM5311WJPREsgT5FbzkuZ3Wc5PTEg0UshZeW1JrW0lLuLo30dFv+5D
+        Tqu8uwBEimafh3ua+XEIYNmn3A==
+X-Google-Smtp-Source: ABdhPJx9jirsBYe8bWgg7S/9jKhT3qd+6QcEvB4Mct4ZLwdiixtyw++vZgtKSqU7Jtf594nz0ubMEA==
+X-Received: by 2002:a62:8688:: with SMTP id x130mr2670928pfd.280.1593175680235;
+        Fri, 26 Jun 2020 05:48:00 -0700 (PDT)
 Received: from kaaira-HP-Pavilion-Notebook ([103.113.213.178])
-        by smtp.gmail.com with ESMTPSA id w24sm25684475pfn.11.2020.06.26.05.46.30
+        by smtp.gmail.com with ESMTPSA id 140sm1873337pfa.92.2020.06.26.05.47.55
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 26 Jun 2020 05:46:33 -0700 (PDT)
+        Fri, 26 Jun 2020 05:47:59 -0700 (PDT)
 From:   Kaaira Gupta <kgupta@es.iitr.ac.in>
 X-Google-Original-From: Kaaira Gupta <Kaairakgupta@es.iitr.ac.in>
-Date:   Fri, 26 Jun 2020 18:16:26 +0530
+Date:   Fri, 26 Jun 2020 18:17:51 +0530
 To:     Helen Koike <helen.koike@collabora.com>
 Cc:     Kaaira Gupta <kgupta@es.iitr.ac.in>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -70,7 +70,7 @@ Cc:     Kaaira Gupta <kgupta@es.iitr.ac.in>,
         hverkuil@xs4all.nl
 Subject: Re: [PATCH v6 3/3] media: vimc: Add a control to display info on
  test image
-Message-ID: <20200626124626.GA13722@kaaira-HP-Pavilion-Notebook>
+Message-ID: <20200626124751.GB13722@kaaira-HP-Pavilion-Notebook>
 References: <20200626113618.15280-1-kgupta@es.iitr.ac.in>
  <20200626113618.15280-4-kgupta@es.iitr.ac.in>
  <694350b5-cd61-1e9d-36ee-6028b59a53a6@collabora.com>
@@ -232,11 +232,7 @@ On Fri, Jun 26, 2020 at 08:59:19AM -0300, Helen Koike wrote:
 > 
 > How about the nice case-switch statement proposed by Kieran in the last version?
 
-If I use switch-case, I can then not declare const char * order, which
-gives order of colors, /inside/ the case when it needs to be printed. I
-can declare it outside, with all other initialisations if that is fine
-but that would mean calling the function unnecessarily if its not to be
-printed..which case should I go with?
+Ignore my earlier message for this please, I was mistaken.
 
 > 
 > Thanks,
