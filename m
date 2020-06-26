@@ -2,59 +2,60 @@ Return-Path: <SRS0=LydW=AH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D337AC433E3
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 08:05:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F002C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 08:06:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE5772076E
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 08:05:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5B6220857
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 08:06:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Wc4p/7DY"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RZSRuHcg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729127AbgFZIFo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Jun 2020 04:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
+        id S1729252AbgFZIGP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Jun 2020 04:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729086AbgFZIFn (ORCPT
+        with ESMTP id S1729246AbgFZIGO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Jun 2020 04:05:43 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E49C08C5C1
-        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 01:05:43 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id l63so4602471pge.12
-        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 01:05:43 -0700 (PDT)
+        Fri, 26 Jun 2020 04:06:14 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121EFC08C5C1
+        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 01:06:15 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id q90so3881861pjh.3
+        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 01:06:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7V2A5fkfvadRzdAjDcuus6ZC1AgMqICM5JDDtMi/HGs=;
-        b=Wc4p/7DYysyli5fTsdAhq8wvvWlC/JmZNvpgVXlA2JT+jNOrZJ4WeoY6wrJ6YU3rRU
-         dSfaGvdozeZqknaIyynf1spPhEic62+2/UNcZUXT4Rf5x7y5G/kE1mipu2z+ayv3CxP4
-         vjdI9DPSLnM5iylCRI2OCU0i/kj9kXdIGRdVA=
+        bh=NbohQFHY7x95L6QCxTobEstXc6fGTf3rPXBo2gDeR+4=;
+        b=RZSRuHcg+fqMQQA3O2GKclz3AMt+0iakFG324G+yuOcaJSx1C2zvSZd7p3mh+isy0W
+         fMrml0vILtGCti3TW2EGJrSE+2sMayf1xKMNfjGU2C7HO843sEKamFIG9eJ+bvLtiw/O
+         U9A4K3YIbFGUboPjcnjlqNVcXfWMuih/PpKJM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7V2A5fkfvadRzdAjDcuus6ZC1AgMqICM5JDDtMi/HGs=;
-        b=amiGDPTz3OI8SBoj8v2gCsydWQYHYuYoFjiEXqdy0M0NUD5GrcEfC8joWwVIlpYxKf
-         juAPuxe5S9tzFh9lsr1Gp10MklOLovAr2BDiG6U8KYuurWrhg080oX9IO+dEK4MdD9l5
-         D+XnxUQZf3z3Jj8g/rtjLGZH28//z+MStFDNsruxITwsAE5Yy6bo3vOImRVF/FCK2O/2
-         1gNPQZ9w5hRJYMe0zzpotujICSmMjXWZZXAPq4EyVCMJEgw+MemnJWgks60cWTigxxu3
-         75Y3kLBvqT3ExwbVTNptNSq6RTXQAJX3DNKPZbvRtSt1zVo37QkmbJZfF0vEP4nR4ZUQ
-         LwEA==
-X-Gm-Message-State: AOAM531Hm/m9+H+NqK0ZHM+M341kANGlqzgBT8vQxdEdPoL2Sh8ocbCe
-        iqe/+LhtYu042W2p9LK3Icp3Sw==
-X-Google-Smtp-Source: ABdhPJwyLfn/tbH8qNj8oxjeima95maYPJdySVlLmwBRCCUKPXMnUidGGPvzcrQJ//NqoV5Dm6pdpA==
-X-Received: by 2002:a62:8c12:: with SMTP id m18mr1653124pfd.111.1593158742824;
-        Fri, 26 Jun 2020 01:05:42 -0700 (PDT)
+        bh=NbohQFHY7x95L6QCxTobEstXc6fGTf3rPXBo2gDeR+4=;
+        b=FxBNdrZjD2xRZ+Bdt/bnWfsqdMXkdUkM5RA6MebNlsvB69Ofl/60FBpXQddBTlZyRE
+         /lvBnJmnhD4WwcWf7ZBAOnFO0lusD/cwUXLIW6We428A1Th8ep6NGNQwCC/GdCcypGm3
+         klXnbzBsApsLN7eLTjCSmN1epKa1uAHcAwqZ8j7cqXdCNLV6YPBHV0xyeyLu/Na0/X+W
+         pEbKSXPiQxUWymcJ9un5fre7cJXR9s+/6Mx66ZC2RRh6bAyMIthT+xNGOmtw8S0ciX9q
+         foTkijXaVIrdz2t1K9HX3oHGCc995d3nwu5U/zaMWcJUuyWPRoaqC2fJ2ymGagueQmOb
+         49Bw==
+X-Gm-Message-State: AOAM531sh2qJnVeO8IkKKbvhHmWdruoFz0I0/iDdNrg4qTbQYUH2UVDW
+        9qa+4ztAaGuAM+bfdbDier0zUA==
+X-Google-Smtp-Source: ABdhPJyo/eKnP9Mj39RkYn10v03lQbOGvoSfYy+bk02mQFN2DxVBCFGSYeL/vgwY7Jx0BX/7YKIjuw==
+X-Received: by 2002:a17:902:aa97:: with SMTP id d23mr1663416plr.128.1593158774621;
+        Fri, 26 Jun 2020 01:06:14 -0700 (PDT)
 Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:93d9:de4d:e834:3086])
-        by smtp.gmail.com with ESMTPSA id 137sm21809843pgg.72.2020.06.26.01.05.40
+        by smtp.gmail.com with ESMTPSA id 137sm21809843pgg.72.2020.06.26.01.06.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2020 01:05:42 -0700 (PDT)
+        Fri, 26 Jun 2020 01:06:13 -0700 (PDT)
 From:   Alexandre Courbot <acourbot@chromium.org>
 To:     Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -65,9 +66,9 @@ To:     Tiffany Lin <tiffany.lin@mediatek.com>,
 Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH v2 04/18] media: mtk-vcodec: venc: handle firmware version field
-Date:   Fri, 26 Jun 2020 17:04:28 +0900
-Message-Id: <20200626080442.292309-5-acourbot@chromium.org>
+Subject: [PATCH v2 14/18] media: mtk-vcodec: venc: support ENUM_FRAMESIZES on OUTPUT formats
+Date:   Fri, 26 Jun 2020 17:04:38 +0900
+Message-Id: <20200626080442.292309-15-acourbot@chromium.org>
 X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
 In-Reply-To: <20200626080442.292309-1-acourbot@chromium.org>
 References: <20200626080442.292309-1-acourbot@chromium.org>
@@ -78,147 +79,142 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Firmwares for encoders newer than MT8173 will include an ABI version
-number in their initialization ack message. Add the capacity to manage
-it and make initialization fail if the firmware ABI is of a version that
-we don't support.
-
-For MT8173, this ABI version field is reserved and thus undefined ; thus
-ignore it on this chip. There should only be one firmware version available
-for it anyway.
+v4l2-compliance requires ENUM_FRAMESIZES to support OUTPUT formats.
+Reuse mtk_venc_find_format() to make sure both queues are considered
+when serving an ENUM_FRAMESIZES.
 
 Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
-Acked-by: Tiffany Lin <tiffany.lin@mediatek.com>
 ---
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  8 ++++++
- .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |  1 +
- .../media/platform/mtk-vcodec/venc_ipi_msg.h  |  9 ++++---
- .../media/platform/mtk-vcodec/venc_vpu_if.c   | 27 ++++++++++++++++---
- 4 files changed, 38 insertions(+), 7 deletions(-)
+ .../platform/mtk-vcodec/mtk_vcodec_enc.c      | 72 +++++++++----------
+ 1 file changed, 34 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 45c8adfc6a0c..e7b155e7432e 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -300,13 +300,21 @@ struct mtk_vcodec_ctx {
- 
- };
- 
-+enum mtk_chip {
-+	MTK_MT8173,
-+};
-+
- /**
-  * struct mtk_vcodec_enc_pdata - compatible data for each IC
-  *
-+ * @chip: chip this encoder is compatible with
-+ *
-  * @uses_ext: whether the encoder uses the extended firmware messaging format
-  * @has_lt_irq: whether the encoder uses the LT irq
-  */
- struct mtk_vcodec_enc_pdata {
-+	enum mtk_chip chip;
-+
- 	bool uses_ext;
- 	bool has_lt_irq;
- };
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index 922bc8883811..c1365209263e 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -378,6 +378,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+index f8d4fbe927f9..6cef61cb7883 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+@@ -123,28 +123,45 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc *f,
+ 	return 0;
  }
  
- static const struct mtk_vcodec_enc_pdata mt8173_pdata = {
-+	.chip = MTK_MT8173,
- 	.has_lt_irq = true,
- };
- 
-diff --git a/drivers/media/platform/mtk-vcodec/venc_ipi_msg.h b/drivers/media/platform/mtk-vcodec/venc_ipi_msg.h
-index 4cafbf92d9cd..31a3c76f7d0d 100644
---- a/drivers/media/platform/mtk-vcodec/venc_ipi_msg.h
-+++ b/drivers/media/platform/mtk-vcodec/venc_ipi_msg.h
-@@ -131,16 +131,17 @@ struct venc_vpu_ipi_msg_common {
-  * @venc_inst:	AP encoder instance (struct venc_vp8_inst/venc_h264_inst *)
-  * @vpu_inst_addr:	VPU encoder instance addr
-  *			(struct venc_vp8_vsi/venc_h264_vsi *)
-- * @reserved:	reserved for future use. vpu is running in 32bit. Without
-- *		this reserved field, if kernel run in 64bit. this struct size
-- *		will be different between kernel and vpu
-+ * @venc_abi_version:	ABI version of the firmware. Kernel can use it to
-+ *			ensure that it is compatible with the firmware.
-+ *			For MT8173 the value of this field is undefined and
-+ *			should not be used.
-  */
- struct venc_vpu_ipi_msg_init {
- 	uint32_t msg_id;
- 	uint32_t status;
- 	uint64_t venc_inst;
- 	uint32_t vpu_inst_addr;
--	uint32_t reserved;
-+	uint32_t venc_abi_version;
- };
- 
- /**
-diff --git a/drivers/media/platform/mtk-vcodec/venc_vpu_if.c b/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
-index 6c77bf025172..472503701003 100644
---- a/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
-+++ b/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
-@@ -4,6 +4,7 @@
-  * Author: PoChun Lin <pochun.lin@mediatek.com>
-  */
- 
-+#include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_fw.h"
- #include "venc_ipi_msg.h"
- #include "venc_vpu_if.h"
-@@ -15,6 +16,23 @@ static void handle_enc_init_msg(struct venc_vpu_inst *vpu, const void *data)
- 	vpu->inst_addr = msg->vpu_inst_addr;
- 	vpu->vsi = mtk_vcodec_fw_map_dm_addr(vpu->ctx->dev->fw_handler,
- 					     msg->vpu_inst_addr);
++static const struct mtk_video_fmt *mtk_venc_find_format(u32 fourcc,
++	const struct mtk_vcodec_enc_pdata *pdata)
++{
++	const struct mtk_video_fmt *fmt;
++	unsigned int k;
 +
-+	/* Firmware version field value is unspecified on MT8173. */
-+	if (vpu->ctx->dev->venc_pdata->chip == MTK_MT8173)
-+		return;
-+
-+	/* Check firmware version. */
-+	mtk_vcodec_debug(vpu, "firmware version: 0x%x\n",
-+			 msg->venc_abi_version);
-+	switch (msg->venc_abi_version) {
-+	case 1:
-+		break;
-+	default:
-+		mtk_vcodec_err(vpu, "unhandled firmware version 0x%x\n",
-+			       msg->venc_abi_version);
-+		vpu->failure = 1;
-+		break;
++	for (k = 0; k < pdata->num_capture_formats; k++) {
++		fmt = &pdata->capture_formats[k];
++		if (fmt->fourcc == fourcc)
++			return fmt;
 +	}
++
++	for (k = 0; k < pdata->num_output_formats; k++) {
++		fmt = &pdata->output_formats[k];
++		if (fmt->fourcc == fourcc)
++			return fmt;
++	}
++
++	return NULL;
++}
++
++
+ static int vidioc_enum_framesizes(struct file *file, void *fh,
+ 				  struct v4l2_frmsizeenum *fsize)
+ {
+-	const struct mtk_vcodec_enc_pdata *pdata =
+-		fh_to_ctx(fh)->dev->venc_pdata;
+-	int i = 0;
++	const struct mtk_video_fmt *fmt;
+ 
+ 	if (fsize->index != 0)
+ 		return -EINVAL;
+ 
+-	for (i = 0; i < pdata->num_capture_formats; ++i) {
+-		const struct mtk_video_fmt *fmt = &pdata->capture_formats[i];
+-
+-		if (fsize->pixel_format != fmt->fourcc)
+-			continue;
++	fmt = mtk_venc_find_format(fsize->pixel_format,
++				   fh_to_ctx(fh)->dev->venc_pdata);
++	if (!fmt)
++		return -EINVAL;
+ 
+-		fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
+-		fsize->stepwise = mtk_venc_framesizes;
+-		return 0;
+-	}
++	fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
++	fsize->stepwise = mtk_venc_framesizes;
+ 
+-	return -EINVAL;
++	return 0;
  }
  
- static void handle_enc_encode_msg(struct venc_vpu_inst *vpu, const void *data)
-@@ -35,6 +53,11 @@ static void vpu_enc_ipi_handler(void *data, unsigned int len, void *priv)
- 	mtk_vcodec_debug(vpu, "msg_id %x inst %p status %d",
- 			 msg->msg_id, vpu, msg->status);
+ static int vidioc_enum_fmt_vid_cap(struct file *file, void *priv,
+@@ -222,27 +239,6 @@ static struct mtk_q_data *mtk_venc_get_q_data(struct mtk_vcodec_ctx *ctx,
+ 	return &ctx->q_data[MTK_Q_DATA_DST];
+ }
  
-+	vpu->signaled = 1;
-+	vpu->failure = (msg->status != VENC_IPI_MSG_STATUS_OK);
-+	if (vpu->failure)
-+		goto failure;
-+
- 	switch (msg->msg_id) {
- 	case VPU_IPIMSG_ENC_INIT_DONE:
- 		handle_enc_init_msg(vpu, data);
-@@ -51,9 +74,7 @@ static void vpu_enc_ipi_handler(void *data, unsigned int len, void *priv)
- 		break;
+-static const struct mtk_video_fmt *mtk_venc_find_format(struct v4l2_format *f,
+-	const struct mtk_vcodec_enc_pdata *pdata)
+-{
+-	const struct mtk_video_fmt *fmt;
+-	unsigned int k;
+-
+-	for (k = 0; k < pdata->num_capture_formats; k++) {
+-		fmt = &pdata->capture_formats[k];
+-		if (fmt->fourcc == f->fmt.pix.pixelformat)
+-			return fmt;
+-	}
+-
+-	for (k = 0; k < pdata->num_output_formats; k++) {
+-		fmt = &pdata->output_formats[k];
+-		if (fmt->fourcc == f->fmt.pix.pixelformat)
+-			return fmt;
+-	}
+-
+-	return NULL;
+-}
+-
+ /* V4L2 specification suggests the driver corrects the format struct if any of
+  * the dimensions is unsupported
+  */
+@@ -403,7 +399,7 @@ static int vidioc_venc_s_fmt_cap(struct file *file, void *priv,
+ 		return -EINVAL;
  	}
  
--	vpu->signaled = 1;
--	vpu->failure = (msg->status != VENC_IPI_MSG_STATUS_OK);
--
-+failure:
- 	mtk_vcodec_debug_leave(vpu);
- }
+-	fmt = mtk_venc_find_format(f, pdata);
++	fmt = mtk_venc_find_format(f->fmt.pix.pixelformat, pdata);
+ 	if (!fmt) {
+ 		fmt = &ctx->dev->venc_pdata->capture_formats[0];
+ 		f->fmt.pix.pixelformat = fmt->fourcc;
+@@ -467,7 +463,7 @@ static int vidioc_venc_s_fmt_out(struct file *file, void *priv,
+ 		return -EINVAL;
+ 	}
  
+-	fmt = mtk_venc_find_format(f, pdata);
++	fmt = mtk_venc_find_format(f->fmt.pix.pixelformat, pdata);
+ 	if (!fmt) {
+ 		fmt = &ctx->dev->venc_pdata->output_formats[0];
+ 		f->fmt.pix.pixelformat = fmt->fourcc;
+@@ -550,7 +546,7 @@ static int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *priv,
+ 	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
+ 	const struct mtk_vcodec_enc_pdata *pdata = ctx->dev->venc_pdata;
+ 
+-	fmt = mtk_venc_find_format(f, pdata);
++	fmt = mtk_venc_find_format(f->fmt.pix.pixelformat, pdata);
+ 	if (!fmt) {
+ 		fmt = &ctx->dev->venc_pdata->capture_formats[0];
+ 		f->fmt.pix.pixelformat = fmt->fourcc;
+@@ -570,7 +566,7 @@ static int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
+ 	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
+ 	const struct mtk_vcodec_enc_pdata *pdata = ctx->dev->venc_pdata;
+ 
+-	fmt = mtk_venc_find_format(f, pdata);
++	fmt = mtk_venc_find_format(f->fmt.pix.pixelformat, pdata);
+ 	if (!fmt) {
+ 		fmt = &ctx->dev->venc_pdata->output_formats[0];
+ 		f->fmt.pix.pixelformat = fmt->fourcc;
 -- 
 2.27.0.212.ge8ba1cc988-goog
 
