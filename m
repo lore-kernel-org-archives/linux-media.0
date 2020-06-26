@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9639CC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A1FBC433DF
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81218207D8
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42161207D8
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbgFZMTt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Jun 2020 08:19:49 -0400
-Received: from mga11.intel.com ([192.55.52.93]:29764 "EHLO mga11.intel.com"
+        id S1728376AbgFZMTv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Jun 2020 08:19:51 -0400
+Received: from mga11.intel.com ([192.55.52.93]:29753 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728354AbgFZMTt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1728353AbgFZMTt (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Fri, 26 Jun 2020 08:19:49 -0400
-IronPort-SDR: +jKEjxHBRXleA+op/a9FZl2BoPnHJCAQSDNnBW5vjvdeFcnTej5mbqhDD0fvhRsdbkGjcmsNnF
- 5j8FKrxUWuag==
-X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="143544892"
+IronPort-SDR: UVkFqtVOSusx1ikKTHAdEtOCYZVp61e8qmLLoVkLZJqLhcZzY8jdsY6yhNI143n+Zc5JwR74ZZ
+ LuwK1F/vwy+g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="143544881"
 X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
-   d="scan'208";a="143544892"
+   d="scan'208";a="143544881"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 05:19:34 -0700
-IronPort-SDR: NOud4+RQuRtxPTdBCGDmx+V9evZ3iB8328AgJIHOWMLypYSsnKPfXsDSy2JBK9478mm9IOv5vM
- UPzV0st1OkTA==
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 05:19:33 -0700
+IronPort-SDR: YUBmXrTewMBQv5SY1Lq/Mpk0dD76KLFEEihbmVlgx9+wqNP0KLMKrocTq1A5U1meSVaKAIgN93
+ LRTWiXYZvcKA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
-   d="scan'208";a="312306796"
+   d="scan'208";a="424058158"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 26 Jun 2020 05:19:33 -0700
+  by orsmga004.jf.intel.com with ESMTP; 26 Jun 2020 05:19:31 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9EB81710; Fri, 26 Jun 2020 15:19:28 +0300 (EEST)
+        id 75FEE3D3; Fri, 26 Jun 2020 15:19:28 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 15/15] media: atomisp: Deduplicate return ret in gmin_i2c_write()
-Date:   Fri, 26 Jun 2020 15:19:25 +0300
-Message-Id: <20200626121925.14365-16-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 12/15] media: atomisp: Refactor PMIC detection to a separate function.
+Date:   Fri, 26 Jun 2020 15:19:22 +0300
+Message-Id: <20200626121925.14365-13-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200626121925.14365-1-andriy.shevchenko@linux.intel.com>
 References: <20200626121925.14365-1-andriy.shevchenko@linux.intel.com>
@@ -55,40 +55,86 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Deduplicate return ret in gmin_i2c_write().
-
-While here, replace 'Kernel' by 'kernel' in the message and
-reduce amount of LOCs.
+Refactor PMIC detection to a separate function. In the future
+we may move this code somewhere else where it's more suitable.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- .../staging/media/atomisp/pci/atomisp_gmin_platform.c  | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ .../media/atomisp/pci/atomisp_gmin_platform.c | 40 +++++++++++--------
+ 1 file changed, 23 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index 7f9e93a9a4b1..11437161ef20 100644
+index 84e9bf1825fa..26f200b1ed6d 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -423,16 +423,12 @@ static int gmin_i2c_write(struct device *dev, u16 i2c_addr, u8 reg,
- 		"I2C write, addr: 0x%02x, reg: 0x%02x, value: 0x%02x, mask: 0x%02x\n",
- 		i2c_addr, reg, value, mask);
+@@ -439,19 +439,34 @@ static int gmin_i2c_write(struct device *dev, u16 i2c_addr, u8 reg,
  
--	ret = intel_soc_pmic_exec_mipi_pmic_seq_element(i2c_addr, reg,
--							value, mask);
+ static struct i2c_client *power;
+ 
++static int gmin_pmic_detect(struct v4l2_subdev *subdev)
++{
++	struct i2c_client *client = v4l2_get_subdevdata(subdev);
++	struct device *dev = &client->dev;
++
++	if (pmic_id)
++		return pmic_id;
++
++	if (gmin_i2c_dev_exists(dev, PMIC_ACPI_TI, &power))
++		pmic_id = PMIC_TI;
++	else if (gmin_i2c_dev_exists(dev, PMIC_ACPI_AXP, &power))
++		pmic_id = PMIC_AXP;
++	else if (gmin_i2c_dev_exists(dev, PMIC_ACPI_CRYSTALCOVE, &power))
++		pmic_id = PMIC_CRYSTALCOVE;
++	else
++		pmic_id = PMIC_REGULATOR;
++
++	return pmic_id;
++}
++
+ static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(subdev);
++	struct device *dev = &client->dev;
+ 	struct acpi_device *adev;
+ 	acpi_handle handle;
+-	struct device *dev;
+ 	int i, ret;
+ 
+-	if (!client)
+-		return NULL;
 -
--	if (ret == -EOPNOTSUPP) {
-+	ret = intel_soc_pmic_exec_mipi_pmic_seq_element(i2c_addr, reg, value, mask);
-+	if (ret == -EOPNOTSUPP)
- 		dev_err(dev,
- 			"ACPI didn't mapped the OpRegion needed to access I2C address 0x%02x.\n"
--			"Need to compile the Kernel using CONFIG_*_PMIC_OPREGION settings\n",
-+			"Need to compile the kernel using CONFIG_*_PMIC_OPREGION settings\n",
- 			i2c_addr);
--		return ret;
--	}
+-	dev = &client->dev;
+-
+ 	handle = ACPI_HANDLE(dev);
  
- 	return ret;
+ 	// FIXME: may need to release resources allocated by acpi_bus_get_device()
+@@ -463,17 +478,6 @@ static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
+ 	dev_info(&client->dev, "%s: ACPI detected it on bus ID=%s, HID=%s\n",
+ 		__func__, acpi_device_bid(adev), acpi_device_hid(adev));
+ 
+-	if (!pmic_id) {
+-		if (gmin_i2c_dev_exists(dev, PMIC_ACPI_TI, &power))
+-			pmic_id = PMIC_TI;
+-		else if (gmin_i2c_dev_exists(dev, PMIC_ACPI_AXP, &power))
+-			pmic_id = PMIC_AXP;
+-		else if (gmin_i2c_dev_exists(dev, PMIC_ACPI_CRYSTALCOVE, &power))
+-			pmic_id = PMIC_CRYSTALCOVE;
+-		else
+-			pmic_id = PMIC_REGULATOR;
+-	}
+-
+ 	for (i = 0; i < MAX_SUBDEVS && gmin_subdevs[i].subdev; i++)
+ 		;
+ 	if (i >= MAX_SUBDEVS)
+@@ -588,6 +592,8 @@ static struct gmin_subdev *find_gmin_subdev(struct v4l2_subdev *subdev)
+ 	for (i = 0; i < MAX_SUBDEVS; i++)
+ 		if (gmin_subdevs[i].subdev == subdev)
+ 			return &gmin_subdevs[i];
++
++	gmin_pmic_detect(subdev);
+ 	return gmin_subdev_add(subdev);
  }
+ 
 -- 
 2.27.0
 
