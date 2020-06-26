@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BABCAC433DF
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 14:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4923FC433E1
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 14:05:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8938920E65
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 14:05:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A4D620DD4
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 14:05:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1593180333;
-	bh=e7N2SIIa+nFd98qwutbfTR9JvzeEd0QzoGZgPTGy2XI=;
+	s=default; t=1593180334;
+	bh=7/2GiHT+xOcz6nhxikdh6BpA4sfdaRgRyRNN5TGFLZc=;
 	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=IQOlqtW7YKbNyB+tRsCdbTVmW5/b1lHIoRP6PMaUmY9RrhTyVoQBpqAA0lgEk9AvV
-	 Wih5lhA7pSOqwAHmeG5FAT1/rXk0Tze/xjqrrCo7f6t5Y8737QlsTa3+kKxaXN51Jt
-	 ad98R6gQFa6sS+Hn+qWsvXnejpCYMUE1NLc7caJg=
+	b=N8KExmDFiID85j9w1qxmBoODqXG3AIuU7e6tktU7qR+7OKlND9Q7amsx3ur7srxWC
+	 sJ0deUm46yEbQGKGzTSLSVYCrkUHWMmIo66/NKboBCpwdyU6Nm4aRKS9w286GES9Fe
+	 0rR3vwEIReHItiJRgtB4frfjLwJ5uxdB5ap0T9rw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729118AbgFZOFV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Jun 2020 10:05:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50092 "EHLO mail.kernel.org"
+        id S1729109AbgFZOFU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Jun 2020 10:05:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50108 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728964AbgFZOFC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Jun 2020 10:05:02 -0400
+        id S1729011AbgFZOFD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 26 Jun 2020 10:05:03 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0707E2080C;
+        by mail.kernel.org (Postfix) with ESMTPSA id 183E220E65;
         Fri, 26 Jun 2020 14:05:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1593180302;
-        bh=e7N2SIIa+nFd98qwutbfTR9JvzeEd0QzoGZgPTGy2XI=;
+        bh=7/2GiHT+xOcz6nhxikdh6BpA4sfdaRgRyRNN5TGFLZc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LBh2l6xOQkHobw2dFEhjLXnONV9J7QTnDllUaUQpQ+LTLTlHCcn8hN1pUtoQ9t9xu
-         RHYYwgPp6Ti2BSvb/5FP1i9hm0SvEnGiORI9E1lpOHRPe5rq6quuYk3zTkGkpKcFtn
-         ujPuJ48Ymm2JDVKXIXqmo8ub+Pj38n6ULwRSi/KI=
+        b=FmVL8y6fRZEWk7y+1aXncux9dQiXVRIRKAcqLl/l+UsI7mAFsWZKyJz9Ek9f/CygP
+         UcJyVm/mBa2U72SezttADzerhtJHxU5WF9D06N+QCLH3cnVz3wvqSlKd3fsZWcJUUL
+         ezD/mFyD1+uKhB0zZwW1rJzHgbm/Fha/RmH0JXiU=
 Received: from mchehab by mail.kernel.org with local (Exim 4.93)
         (envelope-from <mchehab@kernel.org>)
-        id 1jooyS-00HKwD-3g; Fri, 26 Jun 2020 16:05:00 +0200
+        id 1jooyS-00HKwP-6Y; Fri, 26 Jun 2020 16:05:00 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -48,9 +48,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/7] media: atomisp: properly parse CLK PMIC on newer devices
-Date:   Fri, 26 Jun 2020 16:04:55 +0200
-Message-Id: <a5d8185e00c6248e4076095101b6a1add8954f11.1593180146.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 6/7] media: atomisp: split add from find subdev
+Date:   Fri, 26 Jun 2020 16:04:58 +0200
+Message-Id: <c4953a78554a2443373189dcda2e63aef489fbc2.1593180146.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1593180146.git.mchehab+huawei@kernel.org>
 References: <cover.1593180146.git.mchehab+huawei@kernel.org>
@@ -62,107 +62,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Newer devices don't place the PMIC CLK line inside an EFI
-var. Instead, those are found at the _PR0 table.
-
-Add a parser for it, using info stored via the DSDT table.
+There's only one place where a subdev can be added: when the
+sensor driver registers it. Trying to do it elsewhere will
+cause problems, as the detection code needs to access the
+I2C bus in order to probe some things.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../media/atomisp/pci/atomisp_gmin_platform.c | 66 ++++++++++++++++++-
- 1 file changed, 64 insertions(+), 2 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index 2903aa52115b..e476cf1f3294 100644
+index 31ec21a3ba84..3136759bf96f 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -444,6 +444,61 @@ static int gmin_i2c_write(struct device *dev, u16 i2c_addr, u8 reg,
- 	return ret;
+@@ -202,6 +202,8 @@ int atomisp_register_i2c_module(struct v4l2_subdev *subdev,
+ 	 * gmin_subdev struct is already initialized for us.
+ 	 */
+ 	gs = find_gmin_subdev(subdev);
++	if (!gs)
++		return -ENODEV;
+ 
+ 	pdata.subdevs[i].type = type;
+ 	pdata.subdevs[i].port = gs->csi_port;
+@@ -726,7 +728,7 @@ static struct gmin_subdev *find_gmin_subdev(struct v4l2_subdev *subdev)
+ 	for (i = 0; i < MAX_SUBDEVS; i++)
+ 		if (gmin_subdevs[i].subdev == subdev)
+ 			return &gmin_subdevs[i];
+-	return gmin_subdev_add(subdev);
++	return NULL;
  }
  
-+static int atomisp_get_acpi_power(struct device *dev, acpi_handle handle)
-+{
-+	char name[5];
-+	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-+	struct acpi_buffer b_name = { sizeof(name), name };
-+	union acpi_object *package, *element;
-+	acpi_handle rhandle;
-+	acpi_status status;
-+	int clock_num = -1;
-+	int i;
-+
-+	status = acpi_evaluate_object(handle, "_PR0", NULL, &buffer);
-+	if (!ACPI_SUCCESS(status))
-+		return -1;
-+
-+	package = buffer.pointer;
-+
-+	if (!buffer.length || !package
-+	    || package->type != ACPI_TYPE_PACKAGE
-+	    || !package->package.count)
-+		goto fail;
-+
-+	for (i = 0; i < package->package.count; i++) {
-+		element = &package->package.elements[i];
-+
-+		if (element->type != ACPI_TYPE_LOCAL_REFERENCE)
-+			continue;
-+
-+		rhandle = element->reference.handle;
-+		if (!rhandle)
-+			goto fail;
-+
-+		acpi_get_name(rhandle, ACPI_SINGLE_NAME, &b_name);
-+
-+		dev_dbg(dev, "Found PM resource '%s'\n", name);
-+		if (strlen(name) == 4 && !strncmp(name, "CLK", 3)) {
-+		        if (name[3] >= '0' && name[3] <= '4')
-+				clock_num = name[3] - '0';
-+#if 0
-+			/*
-+			 * We could abort here, but let's parse all resources,
-+			 * as this is helpful for debugging purposes
-+			 */
-+			if (clock_num >= 0)
-+			    break;
-+#endif
-+		}
-+	}
-+
-+fail:
-+	ACPI_FREE(buffer.pointer);
-+
-+	return clock_num;
-+}
-+
- static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
+ static int axp_regulator_set(struct device *dev, struct gmin_subdev *gs,
+@@ -1077,7 +1079,7 @@ struct camera_sensor_platform_data *gmin_camera_platform_data(
+     enum atomisp_input_format csi_format,
+     enum atomisp_bayer_order csi_bayer)
  {
- 	struct i2c_client *power = NULL, *client = v4l2_get_subdevdata(subdev);
-@@ -451,7 +506,7 @@ static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
- 	struct gmin_subdev *gs;
- 	acpi_handle handle;
- 	struct device *dev;
--	int i, ret, clock_num;
-+	int i, ret, clock_num = -1;
+-	struct gmin_subdev *gs = find_gmin_subdev(subdev);
++	struct gmin_subdev *gs = gmin_subdev_add(subdev);
  
- 	if (!client)
- 		return NULL;
-@@ -570,7 +625,14 @@ static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
- 	 * is a power resource already, falling back to the EFI vars detection
- 	 * otherwise.
- 	 */
--	clock_num = gmin_get_var_int(dev, false, "CamClk", -1);
-+
-+	/* Try first to use ACPI to get the clock resource */
-+	if (acpi_device_power_manageable(adev))
-+		clock_num = atomisp_get_acpi_power(dev, handle);
-+
-+	/* Fall-back use EFI and/or DMI match */
-+	if (clock_num < 0)
-+		clock_num = gmin_get_var_int(dev, false, "CamClk", 0);
- 
- 	if (clock_num < 0 || clock_num > MAX_CLK_COUNT) {
- 		dev_err(dev, "Invalid clock number\n");
+ 	gs->csi_fmt = csi_format;
+ 	gs->csi_bayer = csi_bayer;
 -- 
 2.26.2
 
