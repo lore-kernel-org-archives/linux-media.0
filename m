@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99B2AC433DF
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6254C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6FFB0207FC
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1A3C208C9
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728256AbgFZMTa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Jun 2020 08:19:30 -0400
-Received: from mga17.intel.com ([192.55.52.151]:33134 "EHLO mga17.intel.com"
+        id S1728274AbgFZMTc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Jun 2020 08:19:32 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32972 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726667AbgFZMTa (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Jun 2020 08:19:30 -0400
-IronPort-SDR: VlsOxr0UtZ9g6Zk3Cs519KbNhu7PxSFmbdEIlF5Nwwk02G4Wz5xD9ZR2OZE2LMCI/E04+Gq056
- X7q9Orxr/58w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="125507080"
+        id S1726667AbgFZMTb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 26 Jun 2020 08:19:31 -0400
+IronPort-SDR: y5Je2Z071M+DEbflhPGnr1CW9sFzifedL2hNJhGhLLj19h+H/PHnb22MnhYqLdb4bR+yi7M1du
+ wVbQpZajWbPA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="132725896"
 X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
-   d="scan'208";a="125507080"
+   d="scan'208";a="132725896"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 05:19:30 -0700
-IronPort-SDR: Le1KrzuE4cyZIQdMcEw8zZwZ2VicQ/wgxmAb0YbyU+SfUn47xaMCh3qHxpTzbLcU4/quiaKHv1
- oHsyuPWRxK7w==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 05:19:30 -0700
+IronPort-SDR: wk2gnt7mYmMtRP+jCpILVBVnQYa/7erRxG9X49TGSLG9pjylDHpEOGkKrHbzsaUY4UdN0qjTQq
+ aWc43XXXb8+w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
-   d="scan'208";a="479811594"
+   d="scan'208";a="265606528"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Jun 2020 05:19:29 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 26 Jun 2020 05:19:29 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2585A2C4; Fri, 26 Jun 2020 15:19:28 +0300 (EEST)
+        id 3C63532E; Fri, 26 Jun 2020 15:19:28 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 01/15] media: atomisp: Replace last use of Intel MID APIs
-Date:   Fri, 26 Jun 2020 15:19:11 +0300
-Message-Id: <20200626121925.14365-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 04/15] media: atomisp: don't pass struct device_driver as parameter
+Date:   Fri, 26 Jun 2020 15:19:14 +0300
+Message-Id: <20200626121925.14365-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200626121925.14365-1-andriy.shevchenko@linux.intel.com>
 References: <20200626121925.14365-1-andriy.shevchenko@linux.intel.com>
@@ -55,50 +55,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Intel MID special header is not in use in this driver.
-Replace it with a better macro for now on.
+There is no need to pass a pointer to struct device_driver
+when we have an access to struct device already.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- .../staging/media/atomisp/include/linux/atomisp_platform.h   | 1 +
- drivers/staging/media/atomisp/pci/atomisp_compat_css20.c     | 5 +----
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_drvfs.c | 3 ++-
+ drivers/staging/media/atomisp/pci/atomisp_drvfs.h | 2 +-
+ drivers/staging/media/atomisp/pci/atomisp_v4l2.c  | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/include/linux/atomisp_platform.h b/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
-index 873344a02ccf..5a5121d958ed 100644
---- a/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
-+++ b/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
-@@ -250,6 +250,7 @@ const struct atomisp_camera_caps *atomisp_get_default_camera_caps(void);
- #define IS_MFLD	__IS_SOC(INTEL_FAM6_ATOM_SALTWELL_MID)
- #define IS_BYT	__IS_SOC(INTEL_FAM6_ATOM_SILVERMONT)
- #define IS_CHT	__IS_SOC(INTEL_FAM6_ATOM_AIRMONT)
-+#define IS_MRFD	__IS_SOC(INTEL_FAM6_ATOM_SILVERMONT_MID)
- #define IS_MOFD	__IS_SOC(INTEL_FAM6_ATOM_AIRMONT_MID)
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_drvfs.c b/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
+index fe0e2bfde27f..3711df111fbf 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
+@@ -185,8 +185,9 @@ static void iunit_drvfs_remove_files(struct device_driver *drv)
+ 		driver_remove_file(drv, &iunit_drvfs_attrs[i]);
+ }
  
- /* Both CHT and MOFD come with ISP2401 */
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-index c1e282a974d0..df352be06474 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-@@ -33,8 +33,6 @@
- #include "atomisp_ioctl.h"
- #include "atomisp_acc.h"
+-int atomisp_drvfs_init(struct device_driver *drv, struct atomisp_device *isp)
++int atomisp_drvfs_init(struct atomisp_device *isp)
+ {
++	struct device_driver *drv = isp->dev->driver;
+ 	int ret;
  
--#include <asm/intel-mid.h>
--
- #include "ia_css_debug.h"
- #include "ia_css_isp_param.h"
- #include "sh_css_hrt.h"
-@@ -1966,8 +1964,7 @@ void atomisp_css_input_set_mode(struct atomisp_sub_device *asd,
- 			true,
- 			0x13000,
- 			&size_mem_words) != 0) {
--			if (intel_mid_identify_cpu() ==
--			    INTEL_MID_CPU_CHIP_TANGIER)
-+			if (IS_MRFD)
- 				size_mem_words = CSS_MIPI_FRAME_BUFFER_SIZE_2;
- 			else
- 				size_mem_words = CSS_MIPI_FRAME_BUFFER_SIZE_1;
+ 	iunit_debug.isp = isp;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_drvfs.h b/drivers/staging/media/atomisp/pci/atomisp_drvfs.h
+index 4911037231fb..8f4cc722b881 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_drvfs.h
++++ b/drivers/staging/media/atomisp/pci/atomisp_drvfs.h
+@@ -19,7 +19,7 @@
+ #ifndef	__ATOMISP_DRVFS_H__
+ #define	__ATOMISP_DRVFS_H__
+ 
+-int atomisp_drvfs_init(struct device_driver *drv, struct atomisp_device *isp);
++int atomisp_drvfs_init(struct atomisp_device *isp);
+ void atomisp_drvfs_exit(void);
+ 
+ #endif /* __ATOMISP_DRVFS_H__ */
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+index fa07cbaf0422..c6996b1f228b 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+@@ -1838,7 +1838,7 @@ static int atomisp_pci_probe(struct pci_dev *dev,
+ 	isp->firmware = NULL;
+ 	isp->css_env.isp_css_fw.data = NULL;
+ 
+-	atomisp_drvfs_init(&dev->driver->driver, isp);
++	atomisp_drvfs_init(isp);
+ 
+ 	return 0;
+ 
 -- 
 2.27.0
 
