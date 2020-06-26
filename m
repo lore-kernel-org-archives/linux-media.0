@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39779C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 08:07:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50692C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 08:08:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 164BA20836
-	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 08:07:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 297162076E
+	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 08:08:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SZIoVTB2"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RHg9Dgp1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729411AbgFZIH2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Jun 2020 04:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S1729180AbgFZIF6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Jun 2020 04:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729200AbgFZIGC (ORCPT
+        with ESMTP id S1729172AbgFZIF4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Jun 2020 04:06:02 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6B3C08C5DB
-        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 01:06:02 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id f3so4637534pgr.2
-        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 01:06:02 -0700 (PDT)
+        Fri, 26 Jun 2020 04:05:56 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBF6C08C5DB
+        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 01:05:56 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id f3so4637412pgr.2
+        for <linux-media@vger.kernel.org>; Fri, 26 Jun 2020 01:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=R5vXuXwwtIZUfF4BfG9q9gkBaSVJwvlyD2fg0DvyG/o=;
-        b=SZIoVTB2bUsJPcvPGht36M0kNPya2OtypIUm6R/kU5idf+jHwGcKBDebxUMontdwE3
-         ucu8ImAhdYwNMIGhZBU/ejFM6SA8aC6xrI2AQao5qFzDp/WSgwiTK0sOKxLJb7WLOiGX
-         0c7g+j1jwesG3xBx+UbJku56d/hrsWmoLjKkg=
+        bh=nNwEzWipSSz2vd4pkUc1DMaHvpQvQj+NbszKHo/2YLs=;
+        b=RHg9Dgp1ggVhlqYSJDRUT2dau1OUPfz/FXjf2pt27uOy/W6ONc7WnGbc/0XGJbOcyd
+         SWY/owF6lII0qNEXDIqNVkda5D09wHn8vUWjUc/O1NKTb94LaeBEbqyr4NzLubmAkK5V
+         1n7jgw+DidjDUHHAZFLU21HT2TII00JvGgS8E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=R5vXuXwwtIZUfF4BfG9q9gkBaSVJwvlyD2fg0DvyG/o=;
-        b=SGcfxIDnneLfNhV1WxCZ6jCL0zmIOBUBG8vuY5YrElg0UGHCKsFLkRe31WGgk8UeHu
-         xsx3VWx16BZyU0ZsNHujbYS1+UljWOKJu+fVHNvHvPyKE4qQY3llAQsrapbxNd3j1gZJ
-         TkB42PgCjBN/NTJVU6TQpRYo71ClaI8Lw9P6W3ahEA0kHiJWvCD4TXWcVH8aNrRr/KF3
-         1DNc56aiWn3rirfc9lfcAZT+9CHsZq3zR4QLLwnzHU9CWws7CSwHy8s8lmbhf8uq13TN
-         pwwUeR/MP4xMYWMDYdrLshSN3x6EStCyYB5ZMd6fUc4YBSrpbcrHv/VeobhtJqfr45rG
-         aBqQ==
-X-Gm-Message-State: AOAM530hshf57skPXO4rctzU/YdzWvlvKG3B/sK6qqkNbBqbq5oGgkCf
-        blHbHI3mUqDNXVxR/zu0PzLVwjDGNXBBYQ==
-X-Google-Smtp-Source: ABdhPJwsPYMFNn4UtISOFCd1oyh+Vgmf6qCPkOU+H1OcttLDf70TTxwBOBUiqZwXjwu/ORDB1zroQw==
-X-Received: by 2002:a63:c58:: with SMTP id 24mr1611333pgm.343.1593158762125;
-        Fri, 26 Jun 2020 01:06:02 -0700 (PDT)
+        bh=nNwEzWipSSz2vd4pkUc1DMaHvpQvQj+NbszKHo/2YLs=;
+        b=enaodDxxSOfX/l2vMpt9KzPVLJipq2HIpolVnI28uc3SBtSVqrHjMq/MHABuX/DGcI
+         DNBdJn+a63fuLfJYCWXnTzcQT+tB8AqPii3M0wTwkIxru8zSCVhsDwz0OZoj/pBgllo0
+         k7+Iq4Cn07mjMNK7Kck+sqoX+/Ahwm1Z+YPNFPsgHTANCpM87K2ZMHwRMCevxpTsTVRO
+         saAduz8OpRjY5Bos8HQykMFz+7LfVvc+vBPZ5zYXmqu9lfZ1O+CDoPLA7k8gc8QbxHWX
+         FrvdUm8JQKxsM7YP4IeTafGMzX8bT6KVON5cYOQa7FzaXplgBE0BhsHXf1q0hiX8/GQw
+         DJJQ==
+X-Gm-Message-State: AOAM5331xlOg/4k03tXisQhsbpYCLfa23MgSL63txvE/13nWR/x2lNTA
+        ZTqThTOSgBf+JcFjB5oUzIfQBw==
+X-Google-Smtp-Source: ABdhPJxVxy+TcRiUnQ2Y6bbJtc+2IY2rhhdtmkNKrhVuoI5PJYt+s5qOfWmaSqZKimV2x8zZ4qzRhA==
+X-Received: by 2002:a65:46c9:: with SMTP id n9mr1608943pgr.89.1593158756043;
+        Fri, 26 Jun 2020 01:05:56 -0700 (PDT)
 Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:93d9:de4d:e834:3086])
-        by smtp.gmail.com with ESMTPSA id 137sm21809843pgg.72.2020.06.26.01.05.59
+        by smtp.gmail.com with ESMTPSA id 137sm21809843pgg.72.2020.06.26.01.05.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2020 01:06:01 -0700 (PDT)
+        Fri, 26 Jun 2020 01:05:55 -0700 (PDT)
 From:   Alexandre Courbot <acourbot@chromium.org>
 To:     Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -65,9 +65,9 @@ To:     Tiffany Lin <tiffany.lin@mediatek.com>,
 Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH v2 10/18] Revert "media: mtk-vcodec: Remove extra area allocation in an input buffer on encoding"
-Date:   Fri, 26 Jun 2020 17:04:34 +0900
-Message-Id: <20200626080442.292309-11-acourbot@chromium.org>
+Subject: [PATCH v2 08/18] media: dt-bindings: mtk-vcodec: specify SCP node
+Date:   Fri, 26 Jun 2020 17:04:32 +0900
+Message-Id: <20200626080442.292309-9-acourbot@chromium.org>
 X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
 In-Reply-To: <20200626080442.292309-1-acourbot@chromium.org>
 References: <20200626080442.292309-1-acourbot@chromium.org>
@@ -78,48 +78,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This reverts commit 81735ecb62f882853a37a8c157407ec4aed44fd0.
-
-The hardware needs data to follow the previous alignment, so this extra
-space was not superfluous after all. Besides, this also made
-v4l2-compliance's G_FMT and S_FMT tests regress.
+The mediatek codecs can use either the VPU or the SCP as their interface
+to firmware. Reflect this in the DT bindings.
 
 Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+Acked-by: Tiffany Lin <tiffany.lin@mediatek.com>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/media/mediatek-vcodec.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-index 05743a745a11..f2ba19c32400 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-@@ -299,12 +299,14 @@ static int vidioc_try_fmt(struct v4l2_format *f,
+diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+index b6b5dde6abd8..7aef0a4fe207 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
++++ b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+@@ -19,7 +19,9 @@ Required properties:
+ - iommus : should point to the respective IOMMU block with master port as
+   argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
+   for details.
+-- mediatek,vpu : the node of video processor unit
++One of the two following nodes:
++- mediatek,vpu : the node of the video processor unit, if using VPU.
++- mediatek,scp : the noode of the SCP unit, if using SCP.
  
- 		pix_fmt_mp->num_planes = fmt->num_planes;
- 		pix_fmt_mp->plane_fmt[0].sizeimage =
--			pix_fmt_mp->width * pix_fmt_mp->height;
-+				pix_fmt_mp->width * pix_fmt_mp->height +
-+				((ALIGN(pix_fmt_mp->width, 16) * 2) * 16);
- 		pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width;
  
- 		if (pix_fmt_mp->num_planes == 2) {
- 			pix_fmt_mp->plane_fmt[1].sizeimage =
--				(pix_fmt_mp->width * pix_fmt_mp->height) / 2;
-+				(pix_fmt_mp->width * pix_fmt_mp->height) / 2 +
-+				(ALIGN(pix_fmt_mp->width, 16) * 16);
- 			pix_fmt_mp->plane_fmt[2].sizeimage = 0;
- 			pix_fmt_mp->plane_fmt[1].bytesperline =
- 							pix_fmt_mp->width;
-@@ -312,7 +314,8 @@ static int vidioc_try_fmt(struct v4l2_format *f,
- 		} else if (pix_fmt_mp->num_planes == 3) {
- 			pix_fmt_mp->plane_fmt[1].sizeimage =
- 			pix_fmt_mp->plane_fmt[2].sizeimage =
--				(pix_fmt_mp->width * pix_fmt_mp->height) / 4;
-+				(pix_fmt_mp->width * pix_fmt_mp->height) / 4 +
-+				((ALIGN(pix_fmt_mp->width, 16) / 2) * 16);
- 			pix_fmt_mp->plane_fmt[1].bytesperline =
- 				pix_fmt_mp->plane_fmt[2].bytesperline =
- 				pix_fmt_mp->width / 2;
+ Example:
 -- 
 2.27.0.212.ge8ba1cc988-goog
 
