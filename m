@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55206C433E1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C709DC433DF
 	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F0B52088E
+	by mail.kernel.org (Postfix) with ESMTP id ADE7D2088E
 	for <linux-media@archiver.kernel.org>; Fri, 26 Jun 2020 12:19:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728314AbgFZMTf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728320AbgFZMTf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 26 Jun 2020 08:19:35 -0400
-Received: from mga06.intel.com ([134.134.136.31]:61058 "EHLO mga06.intel.com"
+Received: from mga05.intel.com ([192.55.52.43]:3716 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728290AbgFZMTd (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Jun 2020 08:19:33 -0400
-IronPort-SDR: Y1MBOzHGzP8Or3oaxC85Wu/KzzqGn+oC6IlEWyIbnVvahJn6EGQM1d/MErrI8bV1M0Ef2ylb6R
- 2258STlxRrtw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="206818993"
+        id S1726667AbgFZMTc (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 26 Jun 2020 08:19:32 -0400
+IronPort-SDR: Oks5GDRpm7ABBM9W6KfrSrWM4el9OHltgFwFl5SJt8XP2Wk1bRUTvxcJvjlmArRm3VX8exvkDz
+ xSRXjGTFs9jQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="230076578"
 X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
-   d="scan'208";a="206818993"
+   d="scan'208";a="230076578"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 05:19:32 -0700
-IronPort-SDR: BXoa+NGYslo2E62TJY+ShinQxyxyR6VBGprGjCTXulkAXx855BltH//mR1EU1W7VXalNkxc2c4
- 96dUtREGgSmQ==
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 05:19:30 -0700
+IronPort-SDR: PJYb08jRJB+R2iKeo+VoaY5hA6ZLF24bWa+Gq6r0PiyWEzbPizBVaWVwOHqGoxPwQyavXxcOQ1
+ ZzCdvNZXjGjA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; 
-   d="scan'208";a="280130796"
+   d="scan'208";a="301031920"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 26 Jun 2020 05:19:31 -0700
+  by orsmga007.jf.intel.com with ESMTP; 26 Jun 2020 05:19:29 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 69B3B66E; Fri, 26 Jun 2020 15:19:28 +0300 (EEST)
+        id 2CEE1352; Fri, 26 Jun 2020 15:19:28 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 10/15] media: atomisp: Don't try to parse unexpected ACPI object type
-Date:   Fri, 26 Jun 2020 15:19:20 +0300
-Message-Id: <20200626121925.14365-11-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 02/15] media: atomisp: move CCK endpoint address to generic header
+Date:   Fri, 26 Jun 2020 15:19:12 +0300
+Message-Id: <20200626121925.14365-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200626121925.14365-1-andriy.shevchenko@linux.intel.com>
 References: <20200626121925.14365-1-andriy.shevchenko@linux.intel.com>
@@ -55,31 +55,58 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are devices with completely different _DSM() format,
-and accessing object as a package leads to crashes.
+IOSF MBI header contains a lot of definitions, such as
+end point addresses of IPs. Move CCK address from AtomISP driver
+to generic header.
 
-Bail out in the case of unexpected object type.
+While here, drop unused one.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/include/asm/iosf_mbi.h                  | 1 +
+ drivers/staging/media/atomisp/pci/atomisp-regs.h | 3 ---
+ drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 2 +-
+ 3 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index fb61274af7e5..f06c0eb6d288 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -959,6 +959,10 @@ static int gmin_get_config_dsm_var(struct device *dev,
- 		return -EINVAL;
- 	}
+diff --git a/arch/x86/include/asm/iosf_mbi.h b/arch/x86/include/asm/iosf_mbi.h
+index 5270ff39b9af..a1911fea8739 100644
+--- a/arch/x86/include/asm/iosf_mbi.h
++++ b/arch/x86/include/asm/iosf_mbi.h
+@@ -39,6 +39,7 @@
+ #define BT_MBI_UNIT_PMC		0x04
+ #define BT_MBI_UNIT_GFX		0x06
+ #define BT_MBI_UNIT_SMI		0x0C
++#define BT_MBI_UNIT_CCK		0x14
+ #define BT_MBI_UNIT_USB		0x43
+ #define BT_MBI_UNIT_SATA	0xA3
+ #define BT_MBI_UNIT_PCIE	0xA6
+diff --git a/drivers/staging/media/atomisp/pci/atomisp-regs.h b/drivers/staging/media/atomisp/pci/atomisp-regs.h
+index de34ee28e390..022997f47121 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp-regs.h
++++ b/drivers/staging/media/atomisp/pci/atomisp-regs.h
+@@ -20,9 +20,6 @@
+ #define ATOMISP_REGS_H
  
-+	/* Return on unexpected object type */
-+	if (obj->type != ACPI_TYPE_PACKAGE)
-+		return -EINVAL;
-+
- #if 0 /* Just for debugging purposes */
- 	for (i = 0; i < obj->package.count; i++) {
- 		union acpi_object *cur = &obj->package.elements[i];
+ /* common register definitions */
+-#define PUNIT_PORT		0x04
+-#define CCK_PORT		0x14
+-
+ #define PCICMDSTS		0x01
+ #define INTR			0x0f
+ #define MSI_CAPID		0x24
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+index d36809a0182c..fa07cbaf0422 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+@@ -1685,7 +1685,7 @@ static int atomisp_pci_probe(struct pci_dev *dev,
+ 		isp->dfs = &dfs_config_cht;
+ 		isp->pdev->d3cold_delay = 0;
+ 
+-		iosf_mbi_read(CCK_PORT, MBI_REG_READ, CCK_FUSE_REG_0, &val);
++		iosf_mbi_read(BT_MBI_UNIT_CCK, MBI_REG_READ, CCK_FUSE_REG_0, &val);
+ 		switch (val & CCK_FUSE_HPLL_FREQ_MASK) {
+ 		case 0x00:
+ 			isp->hpll_freq = HPLL_FREQ_800MHZ;
 -- 
 2.27.0
 
