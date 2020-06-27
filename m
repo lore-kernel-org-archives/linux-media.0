@@ -2,60 +2,96 @@ Return-Path: <SRS0=GQVD=AI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 057D1C433DF
-	for <linux-media@archiver.kernel.org>; Sat, 27 Jun 2020 10:20:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4177C433DF
+	for <linux-media@archiver.kernel.org>; Sat, 27 Jun 2020 14:18:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE34120DD4
-	for <linux-media@archiver.kernel.org>; Sat, 27 Jun 2020 10:20:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B30CB21655
+	for <linux-media@archiver.kernel.org>; Sat, 27 Jun 2020 14:18:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1593267491;
+	bh=cIt6opZa+yAA6PsRPnToKEVJTOvIWVfLvMCDwYPe3Xk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=EsxteUn0uaX9ssYzG7bO4onln2Vdphj4JdC6cFDwAIT1RGmgwG9Yagx0OU5MXy87f
+	 Fo8s2FLEa5bxQfPH+vp7P8WD315Mr4FjsjFq3r1NWMIg5jbFxmDYtmgqauItQXh/Kv
+	 a3HFxNIxNfNtkQJbvs8kVVOX1D1npE1c9zv0z6S4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726439AbgF0KUZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 27 Jun 2020 06:20:25 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:34146 "EHLO www.linuxtv.org"
+        id S1726012AbgF0OSI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 27 Jun 2020 10:18:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726175AbgF0KUX (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 27 Jun 2020 06:20:23 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1jp7sQ-00BLPj-Lf; Sat, 27 Jun 2020 10:16:02 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1jp7yo-000493-OL; Sat, 27 Jun 2020 10:22:38 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL for v5.9] Venus updates (#64981)
-Date:   Sat, 27 Jun 2020 10:22:38 +0000
-Message-Id: <20200627102238.15891-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200627101537.14704-1-stanimir.varbanov@linaro.org>
-References: 
+        id S1725798AbgF0OSI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 27 Jun 2020 10:18:08 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DC7DF21655;
+        Sat, 27 Jun 2020 14:18:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593267487;
+        bh=cIt6opZa+yAA6PsRPnToKEVJTOvIWVfLvMCDwYPe3Xk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dTMsD6U1Gd9Qs59wnuvSXVIWP5yBbcKqUWOEqIRqRg003TxHdGjemMqUAOW021M3y
+         LDlPtAuI31mU3xn8qrXtq2QDqTSP5QolxLsRAKvrYHTzpwdnUsjZGyjJuFuLOycqOU
+         AnY4+beRGssrk+yVQP7fbEVlO0Tvb6GdFd3ZedEA=
+Date:   Sat, 27 Jun 2020 16:18:01 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Erwan Le Ray <erwan.leray@st.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-serial@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        Fabrice Gasnier <fabrice.gasnier@st.com>
+Subject: Re: [PATCH 1/2] dt-bindings: serial: add generic DT binding for
+ announcing RTS/CTS lines
+Message-ID: <20200627141801.GA1945477@kroah.com>
+References: <20200520133932.30441-1-erwan.leray@st.com>
+ <20200520133932.30441-2-erwan.leray@st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200520133932.30441-2-erwan.leray@st.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+On Wed, May 20, 2020 at 03:39:31PM +0200, Erwan Le Ray wrote:
+> Add support of generic DT binding for annoucing RTS/CTS lines. The initial
+> binding 'st,hw-flow-control' is not needed anymore since generic binding
+> is available, but is kept for backward compatibility.
+> 
+> Signed-off-by: Erwan Le Ray <erwan.leray@st.com>
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
+> index 75b8521eb7cb..06d5f251ec88 100644
+> --- a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
+> @@ -35,9 +35,11 @@ properties:
+>      description: label associated with this uart
+>  
+>    st,hw-flow-ctrl:
+> -    description: enable hardware flow control
+> +    description: enable hardware flow control (deprecated)
+>      $ref: /schemas/types.yaml#/definitions/flag
+>  
+> +  uart-has-rtscts: true
+> +
+>    dmas:
+>      minItems: 1
+>      maxItems: 2
+> -- 
+> 2.17.1
+> 
 
-Pull request: https://patchwork.linuxtv.org/patch/64981/
-Build log: https://builder.linuxtv.org/job/patchwork/57219/
-Build time: 00:02:28
-Link: https://lore.kernel.org/linux-media/20200627101537.14704-1-stanimir.varbanov@linaro.org
-
-gpg: Signature made Sat 27 Jun 2020 10:07:13 AM UTC
-gpg:                using RSA key E1558C2497CE3CCC2B5AA30F25B55FC81B7035F2
-gpg: Good signature from "Stanimir Varbanov <stanimir.varbanov@linaro.org>" [unknown]
-gpg: WARNING: This key is not certified with a trusted signature!
-gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: 34CF E039 8A16 AD93 18FD  D5E8 A6D0 26D8 E358 14D4
-     Subkey fingerprint: E155 8C24 97CE 3CCC 2B5A  A30F 25B5 5FC8 1B70 35F2
-
-Summary: 1 patches and/or PDF generation with issues, being 0 at build time
+Did this get ignored by the DT maintainers?  :(
