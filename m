@@ -2,124 +2,85 @@ Return-Path: <SRS0=GQVD=AI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28551C433DF
-	for <linux-media@archiver.kernel.org>; Sat, 27 Jun 2020 09:20:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2543CC433DF
+	for <linux-media@archiver.kernel.org>; Sat, 27 Jun 2020 09:35:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07185206A5
-	for <linux-media@archiver.kernel.org>; Sat, 27 Jun 2020 09:20:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F038120DD4
+	for <linux-media@archiver.kernel.org>; Sat, 27 Jun 2020 09:35:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="H8DDRnjS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbgF0JUS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 27 Jun 2020 05:20:18 -0400
-Received: from smtprelay0206.hostedemail.com ([216.40.44.206]:58100 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725850AbgF0JUS (ORCPT
+        id S1726378AbgF0Jf2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 27 Jun 2020 05:35:28 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:42723 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726160AbgF0Jf1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 27 Jun 2020 05:20:18 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 214C4837F24C;
-        Sat, 27 Jun 2020 09:20:17 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: week56_580e02926e5c
-X-Filterd-Recvd-Size: 3605
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf12.hostedemail.com (Postfix) with ESMTPA;
-        Sat, 27 Jun 2020 09:20:15 +0000 (UTC)
-Message-ID: <3f3cc81521d405c62a83650c9315c9ddbf2135aa.camel@perches.com>
-Subject: Re: [PATCH] staging: media: usbvision: removing prohibited space
- before ',' (ctx:WxW)
-From:   Joe Perches <joe@perches.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     B K KARTHIK PES2201800185STUDENT ECE DeptPESU EC
-         Campus <bkkarthik@pesu.pes.edu>, devel@driverdev.osuosl.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Date:   Sat, 27 Jun 2020 02:20:14 -0700
-In-Reply-To: <20200627084932.GA1560170@kroah.com>
-References: <20200626143205.xns6nwggskssujao@pesu-pes-edu>
-         <CAAhDqq0tSftPxMWGeVy3mp4DGDN3o0uQwTqVbjYUwjqzWpbibQ@mail.gmail.com>
-         <20200627050745.GD226238@kroah.com>
-         <f73c5a69-1bf9-d80d-2399-ef18ce78b8ac@xs4all.nl>
-         <20200627084932.GA1560170@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.2-0ubuntu1 
+        Sat, 27 Jun 2020 05:35:27 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id p7F4jpCPwrl4Bp7F7jSiQA; Sat, 27 Jun 2020 11:35:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1593250526; bh=djCCE7OKoIpYQ9Z8j1hpBW1tx5BOQY6bwirNRRWaHBI=;
+        h=Subject:From:To:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=H8DDRnjSORJGHA8sr1WelvBosgGhP0ObLfNOdAhWtKabwauW8OOiIZ14bQfJLgCfb
+         oeMou8uQZjzB48UkMgwK9J7T3YkI8ZOeflCtJh4Dx5dnUFgb/bJdAWxQ6rdKztnvkJ
+         JtYSBxXA7Kj1nZVlpGz79wamauaRONQecU3e+YRHa/6X3w7YJ4MLcnETqf8+thytQk
+         6inmha4yMyaEZ5XtAkf/MuHdcb9dAwvEpAwaXskbrrFcF7tUKWjIUuSUzuIHunfIgA
+         4K/g54dSUp6LNMk8CgkD5ktDB/POjyT7LlMqAyYVxKgFxZSMWGBWXrKA1A+oMgHQFD
+         E4H8wXS9q5v1w==
+Subject: [PATCH 9/7] MAINTAINERS: remove SOC-CAMERA entry
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>
+References: <20200626115321.1898798-1-hverkuil-cisco@xs4all.nl>
+ <20200626115321.1898798-8-hverkuil-cisco@xs4all.nl>
+ <8c9e0509-38c6-2013-740f-56b9e229d837@xs4all.nl>
+Message-ID: <3e6f90c5-c111-9b1c-4741-4ebe3b8b1a67@xs4all.nl>
+Date:   Sat, 27 Jun 2020 11:35:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <8c9e0509-38c6-2013-740f-56b9e229d837@xs4all.nl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfHZkMkQntfyXFW5GeWDxTPAv081M3J7DkZs4RiRCqi0SnBVxfVGx2Hb4ynqrB3+b0ILzUCg5WqlO7JHjN1IRwcFFFfpNFUw7VPNDjA0MnvqQ8IRS8tvE
+ N5ydCfvpDBArpipYOIe/ynbiSWuBVP6JgooT9h/uzb1FzFmwV/os3TmWeF8t0VKWbencXGI6bG+tg6uC1wYouUkTKWy3ApPZVQO4/OhkNhRm8LJwe/E2QviF
+ Xb3TYabn/7C6lSllkHqabZTHl/VxFVyBTk6tDfX/hX11AeremYZbqsxnngeUMuoK
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, 2020-06-27 at 10:49 +0200, Greg Kroah-Hartman wrote:
-> On Sat, Jun 27, 2020 at 10:28:31AM +0200, Hans Verkuil wrote:
-> > On 27/06/2020 07:07, Greg Kroah-Hartman wrote:
-> > > A: http://en.wikipedia.org/wiki/Top_post
-> > > Q: Were do I find info about this thing called top-posting?
-> > > A: Because it messes up the order in which people normally read text.
-> > > Q: Why is top-posting such a bad thing?
-> > > A: Top-posting.
-> > > Q: What is the most annoying thing in e-mail?
-> > > 
-> > > A: No.
-> > > Q: Should I include quotations after my reply?
-> > > 
-> > > http://daringfireball.net/2007/07/on_top
-> > > 
-> > > On Fri, Jun 26, 2020 at 11:42:49AM -0400, B K KARTHIK PES2201800185STUDENT ECE DeptPESU EC Campus wrote:
-> > > > Oh, I'm sorry but wouldn't it be helpful if we had a file that lists
-> > > > all drivers that are scheduled for removal?
-> > > 
-> > > The TODO file in the directory for the driver should have this
-> > > information in it.  I don't know if all of the media drivers have this,
-> > > if not, then there is no way you could have known this.
-> > 
-> > They have, and in addition the Kconfig entry will mention that the driver
-> > is deprecated.
-> > 
-> > TODO of usbvision:
-> > 
-> > The driver is deprecated and scheduled for removal by the end
-> > of 2020.
-> > 
-> > In order to prevent removal the following actions would have to
-> > be taken:
-> > 
-> > - clean up the code
-> > - convert to the vb2 framework
-> > - fix the disconnect and free-on-last-user handling (i.e., add
-> >   a release callback for struct v4l2_device and rework the code
-> >   to use that correctly).
-> 
-> Ah, great, nevermind then!
-> 
-> B K, your wish is already granted, the text is present, you just needed
-> to have noticed it :)
-> 
-> greg k-h
+After the removal of the soc_camera driver and the soc_camera.h header
+the SOC-CAMERA entry in the MAINTAINERS file can also be removed.
 
-You should mark the entry in MAINTAINERS as obsolete
-so checkpatch tells people not to send patches.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 04fceaee5200..7c136018d153 100644
+index 634d2c3d621a..ef9afc88e9d5 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -17906,7 +17906,7 @@ F:	include/uapi/linux/uvcvideo.h
- USB VISION DRIVER
- M:	Hans Verkuil <hverkuil@xs4all.nl>
- L:	linux-media@vger.kernel.org
--S:	Odd Fixes
-+S:	Odd Fixes / Obsolete
- W:	https://linuxtv.org
- T:	git git://linuxtv.org/media_tree.git
- F:	drivers/staging/media/usbvision/
+@@ -15764,13 +15764,6 @@ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/net/ethernet/smsc/smsc9420.*
 
+-SOC-CAMERA V4L2 SUBSYSTEM
+-L:	linux-media@vger.kernel.org
+-S:	Orphan
+-T:	git git://linuxtv.org/media_tree.git
+-F:	drivers/staging/media/soc_camera/
+-F:	include/media/soc_camera.h
+-
+ SOCIONEXT (SNI) AVE NETWORK DRIVER
+ M:	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+ L:	netdev@vger.kernel.org
 
