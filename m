@@ -4,187 +4,227 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0506EC433E0
-	for <linux-media@archiver.kernel.org>; Sun, 28 Jun 2020 14:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 717FBC433E0
+	for <linux-media@archiver.kernel.org>; Sun, 28 Jun 2020 14:59:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1728206C0
-	for <linux-media@archiver.kernel.org>; Sun, 28 Jun 2020 14:55:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CBE6206F2
+	for <linux-media@archiver.kernel.org>; Sun, 28 Jun 2020 14:59:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1593356156;
-	bh=SQFaPjzIwZyMYdbfKcDctgYgUqrfUeI4IZn4kaiXUWU=;
+	s=default; t=1593356379;
+	bh=AYelRfzaJcKalSujJzvmSbKORE68nn9z7/DMdkL8X4I=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=S65rR4x+AASf/gsTMKmFTyCwUaHy4Ey2qZA5wDFZ1rpVTtIIX5Fn0npm8Ej5Bff16
-	 pN0aT+In8yIXi+zCN9p33BfCjc65GXpMgRUcKWidFCO5ueSUSNucI6NUds4pt5tMhG
-	 iQ34+I1RJbTjpte9RXMaqR5PLm/5YSit1m/GAUZ4=
+	b=uJfHu4ru/nRSzlZI7KCxP1PzbU8xA52Z3ksLXDtVDIz9v0JRdgsdKHRrzeIdR6hiD
+	 qW5gyLP1OyDS4g8zS1uHwGlmtGvbQ/4HQuOX+sN9Q4Ddow3peJbBcu14HKvTdkqTlQ
+	 YTpQKPRsJ3nBwvTL3QkOEBsigICMReKmJXjshMFQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgF1Oz4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 28 Jun 2020 10:55:56 -0400
-Received: from condef-06.nifty.com ([202.248.20.71]:31402 "EHLO
-        condef-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726027AbgF1Oz4 (ORCPT
+        id S1726585AbgF1O7f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 28 Jun 2020 10:59:35 -0400
+Received: from conssluserg-03.nifty.com ([210.131.2.82]:27341 "EHLO
+        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726141AbgF1O7f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 28 Jun 2020 10:55:56 -0400
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-06.nifty.com with ESMTP id 05SEggG0018439
-        for <linux-media@vger.kernel.org>; Sun, 28 Jun 2020 23:42:42 +0900
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 05SEgN8B013205;
-        Sun, 28 Jun 2020 23:42:24 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 05SEgN8B013205
+        Sun, 28 Jun 2020 10:59:35 -0400
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 05SEx3FM021744;
+        Sun, 28 Jun 2020 23:59:03 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 05SEx3FM021744
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1593355344;
-        bh=F4Ul3QwS5sq/Dagy2Itj+JgsQfyq68W59QMQSZwzORY=;
+        s=dec2015msa; t=1593356344;
+        bh=8y+sYvvSlsPJkePBvt6b93o/5tiZNHK5j3ROt3+LDbs=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kYbFuW1AYplplAAR/JteIZWMrzXmRVP5XlnmIADQq+CwGimwA79fagIg6q50NURcQ
-         wwNn++KQrj87ErhTOPeBpio/ne3K8msALwP9cPt9PXEDzFkiXnINqHqsonYc3zWMfJ
-         DpRH76RRa3DDpejA3WCbxkEKrc7KxGoeXDwxLRJVg3pCVrXY3Da3OZlK7TmcvipVKE
-         QtnjBYgU9yBAhMjsNHQIWWYfcV0Fgj4gJkcAbkSzOtHYOfkNBApDqNOa+DUnRnKV7C
-         DMnXaT5uv1xGbt+wwG3Q51U4bfbaIQXizPwSoW6WANlmAqFhhuAeNOnuIM86APk6Ol
-         Dzg44z4JL4HTw==
-X-Nifty-SrcIP: [209.85.217.52]
-Received: by mail-vs1-f52.google.com with SMTP id e15so7914262vsc.7;
-        Sun, 28 Jun 2020 07:42:24 -0700 (PDT)
-X-Gm-Message-State: AOAM533I6lQm19KlKs9urf9CWul7f69vDZmtI7r2lCr6klOCzFZ1MrJq
-        mXV2mhEndanl4zYAj4jZig1k8pn5r8Lw7noAe4E=
-X-Google-Smtp-Source: ABdhPJzF/r3rcyvb5VTGteuguwuySEKuiM7j7thgi4p2kH4dIcDXyAs1NK15AruMzVLZSKBg0G3XPFfdoEBLnOSjm0o=
-X-Received: by 2002:a67:22c7:: with SMTP id i190mr8320550vsi.179.1593355342898;
- Sun, 28 Jun 2020 07:42:22 -0700 (PDT)
+        b=gfV/cVSVyqGELOxkmM0ddlpJzfJFpck3dTVCA4ly/qTctqpOgCIt8KI/0GZQEwIpB
+         Dh5E0+44WOBbh5EzEmaDJTOy+nPCv9Ao3kYSIM6q+hJC5d8r7+GlqWGIL0kiMffB6t
+         2s3DpyYA9Ax2Sq97z0qWyYs2OE/sBmLBjGuPI3AoI3LgoqBTDfCrDFZWU6ZmIAukrC
+         47Ge9Cyfjj8oyAbh+gAzNTqsGTrVfarH4+aqZzHOm6MAfUF2vtYgvJ0yjbGIC+Twqx
+         6FUmzNZACWngYv//f0oAnoZVp/e7XgnA4FOK/snsM81iAAr74iLfmrIPANSU/CbhLT
+         1xWc7JGgj32mA==
+X-Nifty-SrcIP: [209.85.222.54]
+Received: by mail-ua1-f54.google.com with SMTP id g44so4524769uae.12;
+        Sun, 28 Jun 2020 07:59:03 -0700 (PDT)
+X-Gm-Message-State: AOAM533XXynDBHswid/CHUQ2p/gzZdIWUnLkQe5ziPrXAg/Z22qzXaA3
+        McAaBq9r7HumYBpeH6ltbDeqME9QsXVqfgrS6ms=
+X-Google-Smtp-Source: ABdhPJzk10ZsmGC+0M0P8bzA7VrZG8l8xO59Tn4JuDQ61DXvhrT8sTPgPSyCfs0ZJlUarc4D98BLZyDfrhOoX/2BOrE=
+X-Received: by 2002:ab0:5b91:: with SMTP id y17mr8257200uae.95.1593356342166;
+ Sun, 28 Jun 2020 07:59:02 -0700 (PDT)
 MIME-Version: 1.0
 References: <ff9d1c3369b96c1d14b1e898e3d5f64ad945b604.1593346883.git.mchehab+huawei@kernel.org>
-In-Reply-To: <ff9d1c3369b96c1d14b1e898e3d5f64ad945b604.1593346883.git.mchehab+huawei@kernel.org>
+ <CAK7LNARnDe0ToxYj9mMpocxzmrUvp6yf14iDRxgG8nGuGcxFKw@mail.gmail.com> <9ed32076053cd860900366dc9e12e5cb76d031b5.camel@redhat.com>
+In-Reply-To: <9ed32076053cd860900366dc9e12e5cb76d031b5.camel@redhat.com>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 28 Jun 2020 23:41:46 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARnDe0ToxYj9mMpocxzmrUvp6yf14iDRxgG8nGuGcxFKw@mail.gmail.com>
-Message-ID: <CAK7LNARnDe0ToxYj9mMpocxzmrUvp6yf14iDRxgG8nGuGcxFKw@mail.gmail.com>
+Date:   Sun, 28 Jun 2020 23:58:25 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARJ6VMX_NJ9_YncWe0HQvJgOxnzujC+S0ZB8cL0NCYMWg@mail.gmail.com>
+Message-ID: <CAK7LNARJ6VMX_NJ9_YncWe0HQvJgOxnzujC+S0ZB8cL0NCYMWg@mail.gmail.com>
 Subject: Re: [PATCH] kconfig: qconf: make debug links work again
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Jun 28, 2020 at 9:21 PM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
+On Sun, Jun 28, 2020 at 11:48 PM Maxim Levitsky <mlevitsk@redhat.com> wrote:
 >
-> The Qt5 conversion broke support for debug info links.
+> On Sun, 2020-06-28 at 23:41 +0900, Masahiro Yamada wrote:
+> > On Sun, Jun 28, 2020 at 9:21 PM Mauro Carvalho Chehab
+> > <mchehab+huawei@kernel.org> wrote:
+> > > The Qt5 conversion broke support for debug info links.
+> > >
+> > > Restore the behaviour added by changeset
+> > > ab45d190fd4a ("kconfig: create links in info window").
+> > >
+> > > Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> >
+> > I tested this patch, but this caused
+> > segmentation fault.
+> >
+> >
+> > I enabled 'Show Debug Info',
+> > and then clicked
+> > dep: <symbol name>.
+> >
+> > Then, xconfig crashed.
+> >
+> > (without this patch, it did not cause
+> > segfault at least)
+> >
+> > Did you see this?
 >
-> Restore the behaviour added by changeset
-> ab45d190fd4a ("kconfig: create links in info window").
+> Works for me - tested this again
+> (I have both patches applied on top on mainline master branch).
+> Maybe you have Qt4?
+
+
+I do not think so.
+
+I checked scripts/kconfig/.qconf.cmd
+
+qconf was linked with Qt5.
+
+
+$ cat scripts/kconfig/.qconf.cmd
+cmd_scripts/kconfig/qconf := g++   -o scripts/kconfig/qconf
+scripts/kconfig/images.o scripts/kconfig/confdata.o
+scripts/kconfig/expr.o scripts/kconfig/lexer.lex.o
+scripts/kconfig/parser.tab.o scripts/kconfig/preprocess.o
+scripts/kconfig/symbol.o scripts/kconfig/util.o
+scripts/kconfig/qconf.o   -lQt5Widgets -lQt5Gui -lQt5Core
+
+
+BTW, my machine runs ubuntu 20.04
+
+
+
+
 >
-> Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-
-
-I tested this patch, but this caused
-segmentation fault.
-
-
-I enabled 'Show Debug Info',
-and then clicked
-dep: <symbol name>.
-
-Then, xconfig crashed.
-
-(without this patch, it did not cause
-segfault at least)
-
-Did you see this?
-
-
-
-
-
-
-
-
-
-
-
-> ---
->  scripts/kconfig/qconf.cc | 35 ++++++++++++++++++++++++++++++++++-
->  scripts/kconfig/qconf.h  |  1 +
->  2 files changed, 35 insertions(+), 1 deletion(-)
+> One thing that I forgot to report is that when clicking on the symbol,
+> only config descripion updates and not config/menu windows.
+> It might even be always like that, I don't remember, but it would be nice if
+> these were updated too.
 >
-> diff --git a/scripts/kconfig/qconf.cc b/scripts/kconfig/qconf.cc
-> index 631e19659504..03cadf27a376 100644
-> --- a/scripts/kconfig/qconf.cc
-> +++ b/scripts/kconfig/qconf.cc
-> @@ -1012,7 +1012,7 @@ ConfigInfoView::ConfigInfoView(QWidget* parent, const char *name)
->         : Parent(parent), sym(0), _menu(0)
->  {
->         setObjectName(name);
-> -
-> +       setOpenLinks(false);
+> Best regards,
+>         Maxim Levitsky
 >
->         if (!objectName().isEmpty()) {
->                 configSettings->beginGroup(objectName());
-> @@ -1224,6 +1224,36 @@ void ConfigInfoView::expr_print_help(void *data, struct symbol *sym, const char
->                 *text += str2;
->  }
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> > > ---
+> > >  scripts/kconfig/qconf.cc | 35 ++++++++++++++++++++++++++++++++++-
+> > >  scripts/kconfig/qconf.h  |  1 +
+> > >  2 files changed, 35 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/scripts/kconfig/qconf.cc b/scripts/kconfig/qconf.cc
+> > > index 631e19659504..03cadf27a376 100644
+> > > --- a/scripts/kconfig/qconf.cc
+> > > +++ b/scripts/kconfig/qconf.cc
+> > > @@ -1012,7 +1012,7 @@ ConfigInfoView::ConfigInfoView(QWidget* parent, const char *name)
+> > >         : Parent(parent), sym(0), _menu(0)
+> > >  {
+> > >         setObjectName(name);
+> > > -
+> > > +       setOpenLinks(false);
+> > >
+> > >         if (!objectName().isEmpty()) {
+> > >                 configSettings->beginGroup(objectName());
+> > > @@ -1224,6 +1224,36 @@ void ConfigInfoView::expr_print_help(void *data, struct symbol *sym, const char
+> > >                 *text += str2;
+> > >  }
+> > >
+> > > +void ConfigInfoView::clicked(const QUrl &url)
+> > > +{
+> > > +       QByteArray str = url.toEncoded();
+> > > +       const std::size_t count = str.size();
+> > > +       char *hex = new char[count];
+> > > +       unsigned long p;
+> > > +
+> > > +       if (count < 1)
+> > > +               return;
+> > > +
+> > > +       memcpy(hex, str.constData(), count);
+> > > +       p = (int)strtol(hex + 1, NULL, 16);
+> > > +
+> > > +       if (!p)
+> > > +               return;
+> > > +
+> > > +       if (hex[0] == 's') {
+> > > +               struct symbol *s = (struct symbol *)p;
+> > > +
+> > > +               sym = s;
+> > > +               symbolInfo();
+> > > +       } else {
+> > > +               struct menu *m = (struct menu *)p;
+> > > +
+> > > +               _menu = m;
+> > > +               menuInfo();
+> > > +       }
+> > > +       emit showDebugChanged(true);
+> > > +}
+> > > +
+> > >  QMenu* ConfigInfoView::createStandardContextMenu(const QPoint & pos)
+> > >  {
+> > >         QMenu* popup = Parent::createStandardContextMenu(pos);
+> > > @@ -1497,6 +1527,9 @@ ConfigMainWindow::ConfigMainWindow(void)
+> > >         helpMenu->addAction(showIntroAction);
+> > >         helpMenu->addAction(showAboutAction);
+> > >
+> > > +       connect (helpText, SIGNAL (anchorClicked (const QUrl &)),
+> > > +                helpText, SLOT (clicked (const QUrl &)) );
+> > > +
+> > >         connect(configList, SIGNAL(menuChanged(struct menu *)),
+> > >                 helpText, SLOT(setInfo(struct menu *)));
+> > >         connect(configList, SIGNAL(menuSelected(struct menu *)),
+> > > diff --git a/scripts/kconfig/qconf.h b/scripts/kconfig/qconf.h
+> > > index d913a02967ae..a193137f2314 100644
+> > > --- a/scripts/kconfig/qconf.h
+> > > +++ b/scripts/kconfig/qconf.h
+> > > @@ -250,6 +250,7 @@ public slots:
+> > >         void setInfo(struct menu *menu);
+> > >         void saveSettings(void);
+> > >         void setShowDebug(bool);
+> > > +       void clicked (const QUrl &url);
+> > >
+> > >  signals:
+> > >         void showDebugChanged(bool);
+> > > --
+> > > 2.26.2
+> > >
+> >
+> >
 >
-> +void ConfigInfoView::clicked(const QUrl &url)
-> +{
-> +       QByteArray str = url.toEncoded();
-> +       const std::size_t count = str.size();
-> +       char *hex = new char[count];
-> +       unsigned long p;
-> +
-> +       if (count < 1)
-> +               return;
-> +
-> +       memcpy(hex, str.constData(), count);
-> +       p = (int)strtol(hex + 1, NULL, 16);
-> +
-> +       if (!p)
-> +               return;
-> +
-> +       if (hex[0] == 's') {
-> +               struct symbol *s = (struct symbol *)p;
-> +
-> +               sym = s;
-> +               symbolInfo();
-> +       } else {
-> +               struct menu *m = (struct menu *)p;
-> +
-> +               _menu = m;
-> +               menuInfo();
-> +       }
-> +       emit showDebugChanged(true);
-> +}
-> +
->  QMenu* ConfigInfoView::createStandardContextMenu(const QPoint & pos)
->  {
->         QMenu* popup = Parent::createStandardContextMenu(pos);
-> @@ -1497,6 +1527,9 @@ ConfigMainWindow::ConfigMainWindow(void)
->         helpMenu->addAction(showIntroAction);
->         helpMenu->addAction(showAboutAction);
->
-> +       connect (helpText, SIGNAL (anchorClicked (const QUrl &)),
-> +                helpText, SLOT (clicked (const QUrl &)) );
-> +
->         connect(configList, SIGNAL(menuChanged(struct menu *)),
->                 helpText, SLOT(setInfo(struct menu *)));
->         connect(configList, SIGNAL(menuSelected(struct menu *)),
-> diff --git a/scripts/kconfig/qconf.h b/scripts/kconfig/qconf.h
-> index d913a02967ae..a193137f2314 100644
-> --- a/scripts/kconfig/qconf.h
-> +++ b/scripts/kconfig/qconf.h
-> @@ -250,6 +250,7 @@ public slots:
->         void setInfo(struct menu *menu);
->         void saveSettings(void);
->         void setShowDebug(bool);
-> +       void clicked (const QUrl &url);
->
->  signals:
->         void showDebugChanged(bool);
-> --
-> 2.26.2
 >
 
 
