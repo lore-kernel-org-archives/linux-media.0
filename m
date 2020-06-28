@@ -2,1053 +2,200 @@ Return-Path: <SRS0=zL7A=AJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UPPERCASE_75_100,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CF19C433DF
-	for <linux-media@archiver.kernel.org>; Sun, 28 Jun 2020 13:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D068C433DF
+	for <linux-media@archiver.kernel.org>; Sun, 28 Jun 2020 14:48:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CAAF20760
-	for <linux-media@archiver.kernel.org>; Sun, 28 Jun 2020 13:23:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 180EE20772
+	for <linux-media@archiver.kernel.org>; Sun, 28 Jun 2020 14:48:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L29c4uHg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ifPFtZ0n"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726374AbgF1NXn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 28 Jun 2020 09:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726316AbgF1NXn (ORCPT
+        id S1726575AbgF1OsP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 28 Jun 2020 10:48:15 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:28395 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726573AbgF1OsP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 28 Jun 2020 09:23:43 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF23C061794
-        for <linux-media@vger.kernel.org>; Sun, 28 Jun 2020 06:23:43 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id 35so6074706ple.0
-        for <linux-media@vger.kernel.org>; Sun, 28 Jun 2020 06:23:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=chke5JHMQNtg2+4m//BZeEbYDN7q1ZFnTzgYhgsVH2o=;
-        b=L29c4uHgvfY4aKZzg12Fc9DvBRAMH0b/lB7kXmKiuSZ91jK+VwUiX4YIpoZ27Q2wmV
-         3rAavOCuR0MvrsnFsnv7KSGc9x7lHsWAmmWRZTDkv0n4R/AIRUZgzISHGelOr4LKZCpK
-         AmW+U/pYjyiXmvkic/SMaUxu7Uu3JI5Vjz5ZD2oBWqIzCI9NvhoWnQlbJYtj9Ll6tIJ+
-         mr02eXjcJ2V6pQMwkjJH95DgRF0A6tcajOwK5hzEb4W3V6irzmQ717FZEHwrLNUG12lc
-         YeJb26bCG/HC8hH+uPOzCb71w9ICFJI/OFeJNVVyKqvmgNx0CRZ6n1Wya2ZjsBq1Rd4S
-         7tvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=chke5JHMQNtg2+4m//BZeEbYDN7q1ZFnTzgYhgsVH2o=;
-        b=dQxvkvnv1X6qVJDnvBs9rE6jXRiDZI9iNK6BnJoUi+RBAhQwsNeXcIvcsFJZxoIdU0
-         /HNxVR7Wexmy81sNtzqSeRYExpDuKOqHAmZcgp+jmbEAWO+Z4YZCZ2WvRwbpoXsEk/nT
-         LPby0Es7mCf1X0bwNwtNM5rGOG9TVohDJyWiigRi9IBDjRqOP1Gm6GP9zUtZqQKn2HEa
-         3uXCCpZtN6IIue9dgpsq1ojgy0nthqdFk7pLG/skXp+7wnA+ukzy3r4GTGksv/syO2+P
-         ySMilEAefzUDCh8oGxwyuW4r7HDS9GsM225bYJxpVoAtF8+la8sOTH5KgPJHa2PFx0rE
-         NLlQ==
-X-Gm-Message-State: AOAM5329qDdwuca/pgTx3eANVcBqh2BTDqvNtWtevhzDl6KW+MQHk02B
-        wdn0Jof9ALAOlRMb5EbJInUSbLNrDL8ShQ==
-X-Google-Smtp-Source: ABdhPJyqfahDvtrVnYIxrc2NJXLkwJ8kOJ5Xs0j9CFNpLkhBUGJjYK9mn/wP+DTdinJ6T6EFZmHT7w==
-X-Received: by 2002:a17:90a:9515:: with SMTP id t21mr11850515pjo.115.1593350622010;
-        Sun, 28 Jun 2020 06:23:42 -0700 (PDT)
-Received: from localhost.localdomain ([122.128.43.5])
-        by smtp.gmail.com with ESMTPSA id z1sm16545575pjz.10.2020.06.28.06.23.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jun 2020 06:23:41 -0700 (PDT)
-From:   Hyunwoo Park <hyunwoo.park@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     Hyunwoo Park <hyunwoo.park@gmail.com>
-Subject: [PATCH 1/1] Add atsc/kr-Cable-8VSB
-Date:   Sun, 28 Jun 2020 22:21:56 +0900
-Message-Id: <20200628132156.15402-2-hyunwoo.park@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200628132156.15402-1-hyunwoo.park@gmail.com>
-References: <20200628132156.15402-1-hyunwoo.park@gmail.com>
+        Sun, 28 Jun 2020 10:48:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1593355694;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=82qSMqnQIxtm9RO80DF49vRKylVY7TBxv5Jeswhd/Z0=;
+        b=ifPFtZ0nTj7awNM7AogpU1RIpRAHJgNN+hJBXrkzzzBey9eIMPf56dZBtVEaDICG9oMF77
+        x2P3phbqyTJhEvDibTfhj+rr7x/Yxl6zIPl/oau/2tLGWkeBVcAnEsBE7ND5oO3/cv7XST
+        kyE0b7gFeWWENSqdoLuMl2pT14kuz7Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-19-RQbvHIngOyOU1dHs64vcGw-1; Sun, 28 Jun 2020 10:48:12 -0400
+X-MC-Unique: RQbvHIngOyOU1dHs64vcGw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B8BEE1800D42;
+        Sun, 28 Jun 2020 14:48:10 +0000 (UTC)
+Received: from starship (unknown [10.35.206.56])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4FA7A9CFD0;
+        Sun, 28 Jun 2020 14:48:09 +0000 (UTC)
+Message-ID: <9ed32076053cd860900366dc9e12e5cb76d031b5.camel@redhat.com>
+Subject: Re: [PATCH] kconfig: qconf: make debug links work again
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Sun, 28 Jun 2020 17:48:08 +0300
+In-Reply-To: <CAK7LNARnDe0ToxYj9mMpocxzmrUvp6yf14iDRxgG8nGuGcxFKw@mail.gmail.com>
+References: <ff9d1c3369b96c1d14b1e898e3d5f64ad945b604.1593346883.git.mchehab+huawei@kernel.org>
+         <CAK7LNARnDe0ToxYj9mMpocxzmrUvp6yf14iDRxgG8nGuGcxFKw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-8VSB modulation is used in korean cable DTV with standard cable
-frequencies.
----
- atsc/kr-Cable-8VSB | 961 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 961 insertions(+)
- create mode 100644 atsc/kr-Cable-8VSB
+On Sun, 2020-06-28 at 23:41 +0900, Masahiro Yamada wrote:
+> On Sun, Jun 28, 2020 at 9:21 PM Mauro Carvalho Chehab
+> <mchehab+huawei@kernel.org> wrote:
+> > The Qt5 conversion broke support for debug info links.
+> > 
+> > Restore the behaviour added by changeset
+> > ab45d190fd4a ("kconfig: create links in info window").
+> > 
+> > Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> 
+> I tested this patch, but this caused
+> segmentation fault.
+> 
+> 
+> I enabled 'Show Debug Info',
+> and then clicked
+> dep: <symbol name>.
+> 
+> Then, xconfig crashed.
+> 
+> (without this patch, it did not cause
+> segfault at least)
+> 
+> Did you see this?
 
-diff --git a/atsc/kr-Cable-8VSB b/atsc/kr-Cable-8VSB
-new file mode 100644
-index 0000000..70207d2
---- /dev/null
-+++ b/atsc/kr-Cable-8VSB
-@@ -0,0 +1,961 @@
-+# Korean cable frequency.
-+# Modified from us-Cable-Standard-center-frequencies-QAM256
-+
-+#2
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 57000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 63000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 69000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 79000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 85000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 177000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 183000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 189000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#10
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 195000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 201000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 207000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 213000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 123012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 129012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 135012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 141000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 147000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 153000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#20
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 159000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 165000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 171000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 219000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 225000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 231012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 237012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 243012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 249012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 255012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#30
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 261012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 267012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 273012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 279012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 285012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 291012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 297012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 303012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 309012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 315012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#40
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 321012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 327012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 333025000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 339012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 345012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 351012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 357012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 363012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 369012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 375012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#50
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 381012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 387012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 393012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 399012500
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 405000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 411000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 417000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 423000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 429000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 435000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#60
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 441000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 447000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 453000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 459000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 465000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 471000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 477000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 483000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 489000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 495000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#70
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 501000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 507000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 513000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 519000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 525000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 531000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 537000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 543000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 549000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 555000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#80
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 561000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 567000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 573000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 579000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 585000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 591000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 597000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 603000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 609000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 615000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#90
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 621000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 627000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 633000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 639000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 645000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 93000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 99000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 105000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 111025000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 117025000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#100
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 651000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 657000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 663000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 669000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 675000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 681000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 687000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 693000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 699000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 705000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#110
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 711000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 717000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 723000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 729000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 735000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 741000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 747000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 753000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 759000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 765000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#120
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 771000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 777000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 783000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 789000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 795000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 801000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 807000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 813000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 819000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 825000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#121
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 831000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 837000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 843000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 849000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 855000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 861000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 867000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 873000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 879000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 885000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#122
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 891000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 897000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 903000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 909000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 915000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 921000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 927000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 933000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 939000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 945000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+#123
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 951000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 957000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 963000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 969000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 975000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 981000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 987000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 993000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
-+[CHANNEL]
-+	DELIVERY_SYSTEM = DVBC/ANNEX_B
-+	FREQUENCY = 999000000
-+	MODULATION = VSB/8
-+	INVERSION = AUTO
-+
--- 
-2.26.2
+Works for me - tested this again 
+(I have both patches applied on top on mainline master branch).
+Maybe you have Qt4?
+
+One thing that I forgot to report is that when clicking on the symbol,
+only config descripion updates and not config/menu windows.
+It might even be always like that, I don't remember, but it would be nice if 
+these were updated too.
+
+Best regards,
+	Maxim Levitsky
+
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> > ---
+> >  scripts/kconfig/qconf.cc | 35 ++++++++++++++++++++++++++++++++++-
+> >  scripts/kconfig/qconf.h  |  1 +
+> >  2 files changed, 35 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/scripts/kconfig/qconf.cc b/scripts/kconfig/qconf.cc
+> > index 631e19659504..03cadf27a376 100644
+> > --- a/scripts/kconfig/qconf.cc
+> > +++ b/scripts/kconfig/qconf.cc
+> > @@ -1012,7 +1012,7 @@ ConfigInfoView::ConfigInfoView(QWidget* parent, const char *name)
+> >         : Parent(parent), sym(0), _menu(0)
+> >  {
+> >         setObjectName(name);
+> > -
+> > +       setOpenLinks(false);
+> > 
+> >         if (!objectName().isEmpty()) {
+> >                 configSettings->beginGroup(objectName());
+> > @@ -1224,6 +1224,36 @@ void ConfigInfoView::expr_print_help(void *data, struct symbol *sym, const char
+> >                 *text += str2;
+> >  }
+> > 
+> > +void ConfigInfoView::clicked(const QUrl &url)
+> > +{
+> > +       QByteArray str = url.toEncoded();
+> > +       const std::size_t count = str.size();
+> > +       char *hex = new char[count];
+> > +       unsigned long p;
+> > +
+> > +       if (count < 1)
+> > +               return;
+> > +
+> > +       memcpy(hex, str.constData(), count);
+> > +       p = (int)strtol(hex + 1, NULL, 16);
+> > +
+> > +       if (!p)
+> > +               return;
+> > +
+> > +       if (hex[0] == 's') {
+> > +               struct symbol *s = (struct symbol *)p;
+> > +
+> > +               sym = s;
+> > +               symbolInfo();
+> > +       } else {
+> > +               struct menu *m = (struct menu *)p;
+> > +
+> > +               _menu = m;
+> > +               menuInfo();
+> > +       }
+> > +       emit showDebugChanged(true);
+> > +}
+> > +
+> >  QMenu* ConfigInfoView::createStandardContextMenu(const QPoint & pos)
+> >  {
+> >         QMenu* popup = Parent::createStandardContextMenu(pos);
+> > @@ -1497,6 +1527,9 @@ ConfigMainWindow::ConfigMainWindow(void)
+> >         helpMenu->addAction(showIntroAction);
+> >         helpMenu->addAction(showAboutAction);
+> > 
+> > +       connect (helpText, SIGNAL (anchorClicked (const QUrl &)),
+> > +                helpText, SLOT (clicked (const QUrl &)) );
+> > +
+> >         connect(configList, SIGNAL(menuChanged(struct menu *)),
+> >                 helpText, SLOT(setInfo(struct menu *)));
+> >         connect(configList, SIGNAL(menuSelected(struct menu *)),
+> > diff --git a/scripts/kconfig/qconf.h b/scripts/kconfig/qconf.h
+> > index d913a02967ae..a193137f2314 100644
+> > --- a/scripts/kconfig/qconf.h
+> > +++ b/scripts/kconfig/qconf.h
+> > @@ -250,6 +250,7 @@ public slots:
+> >         void setInfo(struct menu *menu);
+> >         void saveSettings(void);
+> >         void setShowDebug(bool);
+> > +       void clicked (const QUrl &url);
+> > 
+> >  signals:
+> >         void showDebugChanged(bool);
+> > --
+> > 2.26.2
+> > 
+> 
+> 
+
 
