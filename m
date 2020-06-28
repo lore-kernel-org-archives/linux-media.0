@@ -1,97 +1,185 @@
-Return-Path: <SRS0=GQVD=AI=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=zL7A=AJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4177C433DF
-	for <linux-media@archiver.kernel.org>; Sat, 27 Jun 2020 14:18:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DECBEC433DF
+	for <linux-media@archiver.kernel.org>; Sun, 28 Jun 2020 03:42:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B30CB21655
-	for <linux-media@archiver.kernel.org>; Sat, 27 Jun 2020 14:18:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1593267491;
-	bh=cIt6opZa+yAA6PsRPnToKEVJTOvIWVfLvMCDwYPe3Xk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=EsxteUn0uaX9ssYzG7bO4onln2Vdphj4JdC6cFDwAIT1RGmgwG9Yagx0OU5MXy87f
-	 Fo8s2FLEa5bxQfPH+vp7P8WD315Mr4FjsjFq3r1NWMIg5jbFxmDYtmgqauItQXh/Kv
-	 a3HFxNIxNfNtkQJbvs8kVVOX1D1npE1c9zv0z6S4=
+	by mail.kernel.org (Postfix) with ESMTP id 729F520782
+	for <linux-media@archiver.kernel.org>; Sun, 28 Jun 2020 03:42:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="uLt0668Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbgF0OSI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 27 Jun 2020 10:18:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36926 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725798AbgF0OSI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 27 Jun 2020 10:18:08 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC7DF21655;
-        Sat, 27 Jun 2020 14:18:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593267487;
-        bh=cIt6opZa+yAA6PsRPnToKEVJTOvIWVfLvMCDwYPe3Xk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dTMsD6U1Gd9Qs59wnuvSXVIWP5yBbcKqUWOEqIRqRg003TxHdGjemMqUAOW021M3y
-         LDlPtAuI31mU3xn8qrXtq2QDqTSP5QolxLsRAKvrYHTzpwdnUsjZGyjJuFuLOycqOU
-         AnY4+beRGssrk+yVQP7fbEVlO0Tvb6GdFd3ZedEA=
-Date:   Sat, 27 Jun 2020 16:18:01 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Erwan Le Ray <erwan.leray@st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-serial@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-Subject: Re: [PATCH 1/2] dt-bindings: serial: add generic DT binding for
- announcing RTS/CTS lines
-Message-ID: <20200627141801.GA1945477@kroah.com>
-References: <20200520133932.30441-1-erwan.leray@st.com>
- <20200520133932.30441-2-erwan.leray@st.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200520133932.30441-2-erwan.leray@st.com>
+        id S1726011AbgF1DmL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 27 Jun 2020 23:42:11 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:49081 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725993AbgF1DmL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 27 Jun 2020 23:42:11 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id pOCljtWuvrl4BpOCmjU8Td; Sun, 28 Jun 2020 05:42:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1593315728; bh=LXtY+mBIDAy03ithdN8oj9h30v3uKPa5cLpzjnkuRgI=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=uLt0668YTx1JJZHqZDiu1C0w7Ywii+7SbZ+RqymganbkDJp3Ql7n2zZv/kGGDxsMi
+         CKnmGXf5+9zYLujk7yOhsbn+arKpQBGnDlTAMbK99IGpSbJNJwqmqdEwDz+racqXc/
+         eidNwZBOYXvfBmMbgAJIeDm4pP6Iz3Kce7xat9uVsUMBtIXxHeP4hd9i9oGxkqzxiS
+         ejKOE+CBCbB4epM+KBlNVQSDaDZRTNDNJQ8LCYmtw0Vr92npyF2rKCRfK1APmFMD+I
+         +fgQT2KgLQLxV6bJ9dHOZlrY40rnDzaJqEGAJsV4PY9BG1bOiaJ3yo8d7Y7YT6IV1u
+         2C4zZ1u4WT23g==
+Message-ID: <8fa4f1958b10b7b0944becda51e78e8c@smtp-cloud9.xs4all.net>
+Date:   Sun, 28 Jun 2020 05:42:07 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfDEH5fFKafu25FstcH/Gkjzz0Vo6Phm/NxoR/Xpqr9is1VXx1MzOsdD9lqrQedQzscC+ZySrw2cnR4oA/qcSYqBYf0kgK9xBT6yFKkRR6zvjcySF0hES
+ rdKnu5aUOE2dugPZVwsV5Wcj5l6nw/vl0SAOFsCmO8QrHTZoSE4RZK3Fm+BadEim79RzFI3642fKxiusZ2TrnI49QbVlrRKe0yXJk1maHfOq+40UbEUBMoSe
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, May 20, 2020 at 03:39:31PM +0200, Erwan Le Ray wrote:
-> Add support of generic DT binding for annoucing RTS/CTS lines. The initial
-> binding 'st,hw-flow-control' is not needed anymore since generic binding
-> is available, but is kept for backward compatibility.
-> 
-> Signed-off-by: Erwan Le Ray <erwan.leray@st.com>
-> 
-> diff --git a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-> index 75b8521eb7cb..06d5f251ec88 100644
-> --- a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-> @@ -35,9 +35,11 @@ properties:
->      description: label associated with this uart
->  
->    st,hw-flow-ctrl:
-> -    description: enable hardware flow control
-> +    description: enable hardware flow control (deprecated)
->      $ref: /schemas/types.yaml#/definitions/flag
->  
-> +  uart-has-rtscts: true
-> +
->    dmas:
->      minItems: 1
->      maxItems: 2
-> -- 
-> 2.17.1
-> 
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Did this get ignored by the DT maintainers?  :(
+Results of the daily build of media_tree:
+
+date:			Sun Jun 28 05:00:11 CEST 2020
+media-tree git hash:	e30cc79cc80fd919b697a15c5000d9f57487de8e
+media_build git hash:	39a7ce1e32308668ff1493247747e26b4367c6fe
+v4l-utils git hash:	eb147329b96b5d8f8f3638a159d1b3bcec22f0f0
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-6154-g2f65f604
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 5540ce1b67f5015886e850a4775d2eace9efe922
+host hardware:		x86_64
+host os:		5.6.0-1-amd64
+
+linux-git-sh: OK
+linux-git-arm-davinci: OK
+linux-git-arm-at91: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-powerpc64: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: WARNINGS: VIDEO_TEGRA
+Check for strcpy/strncpy/strlcpy: WARNINGS: found 4 strcpy(), 4 strncpy(), 4 strlcpy()
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.212-i686: OK
+linux-4.4.212-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.212-i686: OK
+linux-4.9.212-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6.1-i686: OK
+linux-5.6.1-x86_64: OK
+linux-5.7.2-i686: OK
+linux-5.7.2-x86_64: OK
+linux-5.8-rc1-i686: OK
+linux-5.8-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2943, Succeeded: 2943, Failed: 0, Warnings: 5
+virtme-32: WARNINGS: Final Summary: 2779, Succeeded: 2779, Failed: 0, Warnings: 3
+sparse: OK
+smatch: ERRORS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
