@@ -2,156 +2,95 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=0.1 required=3.0 tests=DATE_IN_PAST_03_06,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0385C433E1
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:20:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AFC4C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:27:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 806C820656
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:20:39 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="nKoZs9Oh"
+	by mail.kernel.org (Postfix) with ESMTP id 45833206A5
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:27:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728829AbgF2UUg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:20:36 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:48759 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732968AbgF2UUd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 16:20:33 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id poa3jwdSRxmkVpoa6jrcJI; Mon, 29 Jun 2020 09:51:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1593417118; bh=n2F3aTBOa4joxWST/JEYSEL6V66wosTxhb8FoIF7TCs=;
-        h=From:Subject:To:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=nKoZs9OhhNOZuEkadDqVEJu3v+Eqoem/dySTjo8xGlMT5sylN+ON+EK+jzm7dxD+E
-         CS804EWYPKtsIaK0Qj1wg+QEIIApQNOBbTtAt+Ho4orzU6PK5WYRxFLVQs3GclVIMG
-         NOwgGd11ICA125+6ZvK41uqRt2UqykF4NRQKXDRNg8v3g7tNkr0vDcqVZ0aZBz45pS
-         YaIFfZi+yhSneLIpAmFUrMZN2SnXdYt2W6aMWUmyRiveZHDruAtnzPLiCwID/VKm4C
-         4xIJ5OJkzNgZ+OMWVXauPED/hTvQGzoHGFZ1tnb6dkic4MXDdn46HXqHtaKQAKPRkJ
-         ogFgd5Xjd7EcA==
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.9] Removal of soc-camera and dependent sensor
- drivers
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Message-ID: <bf6d5d12-9460-2bcc-a0d7-5553e7e18065@xs4all.nl>
-Date:   Mon, 29 Jun 2020 09:51:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S2388911AbgF2U1a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:27:30 -0400
+Received: from mga04.intel.com ([192.55.52.120]:36333 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732517AbgF2TZY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:25:24 -0400
+IronPort-SDR: GVMgacdmGUkbW+ffhO2gdvKlvkWPQ2O3fzLe5ZUGIVWDmmTXdMANqnNA13P2RYS23XFd8aCO4Z
+ 4GzpZCMrxMmA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="143475983"
+X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
+   d="scan'208";a="143475983"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2020 09:24:53 -0700
+IronPort-SDR: 62afR1hi7+NIlYXmM50Jcl16b+Vm/woAty1FR5P9n+HqfEBNErhKyZ64sGMTbgA/bZkvchdUeW
+ WVP1tG8ShNyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
+   d="scan'208";a="264877717"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Jun 2020 09:24:51 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jprOg-00Gdw6-TX; Mon, 29 Jun 2020 13:52:22 +0300
+Date:   Mon, 29 Jun 2020 13:52:22 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH 0/7] Some atomisp fixes and improvements
+Message-ID: <20200629105222.GF3703480@smile.fi.intel.com>
+References: <cover.1593180146.git.mchehab+huawei@kernel.org>
+ <20200626150021.GY3703480@smile.fi.intel.com>
+ <20200626175216.7955c374@coco.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfIAS4QfHzy+EUFTqJFYXu3HFjKuiCPy3Ij5mzH1VQ9i3x0fAk73d9e64/nUJp4Z+0yihHddFI8ZsmCIIMDBTwn1iLVBD/1DOuKLgdLBP5GXMkgdVUrn7
- szfV1U1E8CSXND/1iBTMuOiFCz7I/L8c1QnkIPf3xwL13Wpu79FD2jbM+izWODQCV+QnY9NbogWK2A==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200626175216.7955c374@coco.lan>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This pull request removes drivers/staging/media/soc_camera since
-soc-camera has long been a deprecated driver depending on BROKEN. Also
-the several sensors drivers in that same directory that depended on the
-soc-camera driver (and thus on BROKEN) have been removed.
+On Fri, Jun 26, 2020 at 05:52:16PM +0200, Mauro Carvalho Chehab wrote:
+> Em Fri, 26 Jun 2020 18:00:21 +0300
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> escreveu:
+> 
+> > On Fri, Jun 26, 2020 at 04:04:52PM +0200, Mauro Carvalho Chehab wrote:
+> > > Those patches are meant to improve device detection by the atomisp driver,
+> > > relying on ACPI bios when possible.
+> > > 
+> > > It also adds a basis for using ACPI PM, but only if the DSDT tables have
+> > > a description about how to turn on the resources needed by the cameras.
+> > > 
+> > > At least on the device I'm using for tests, this is not the case.  
+> > 
+> > Is this in your experimental tree? 
+> 
+> Yes. 
+> 
+> > I'll rebase mine on top and test.
+> > After I will send the rest from my series and give a tag to this.
+> 
+> It would be helpful if you could test removing the DMI match table from
+> your board. If your device has a DSDT table close to the one I have, the
+> new code may be able to get everything from DSDT.
 
-To remove the soc_camera.h header several board files that depended on
-that had to be modified, specifically by removing the remaining camera
-support (which wasn't functioning since 4.6/4.8 anyway). At the request
-of Arnd these patches go through the media tree as well.
+I have checked the atomisp_v5 branch and it doesn't bring any regression to my
+case. So, feel free to add
+Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Any remaining CONFIG_SOC_CAMERA* entries in config files were also removed.
+I'll send rebased patches soon.
 
-The first two patches just update MODULE_DESCRIPTIONs in two camera drivers
-to avoid referring to SoC Camera since those drivers have been independent
-of the soc-camera framework for a long time now.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Finally the last patch removes the SOC-CAMERA entry from the MAINTAINERS file.
 
-Regards,
-
-	Hans
-
-The following changes since commit e30cc79cc80fd919b697a15c5000d9f57487de8e:
-
-  media: media-request: Fix crash if memory allocation fails (2020-06-23 15:19:37 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-soc-camera
-
-for you to fetch changes up to 041ddbe862acb03d6f33ff9f6bdf83d045f15b4d:
-
-  MAINTAINERS: remove SOC-CAMERA entry (2020-06-29 09:40:55 +0200)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Hans Verkuil (10):
-      ov9640: update MODULE_DESCRIPTION
-      pxa_camera: update MODULE_DESCRIPTION
-      mach-imx: mach-imx27_visstrim_m10.c: remove soc_camera dependencies
-      mach-omap1: board-ams-delta.c: remove soc_camera dependencies
-      mach-pxa: palmz72/pcm990: remove soc_camera dependencies
-      staging/media/soc_camera: remove this driver
-      soc_camera.h: remove this unused header
-      arch/arm/configs: remove obsolete CONFIG_SOC_CAMERA*
-      arch/sh/configs: remove obsolete CONFIG_SOC_CAMERA*
-      MAINTAINERS: remove SOC-CAMERA entry
-
- MAINTAINERS                                      |    7 -
- arch/arm/configs/ezx_defconfig                   |    2 -
- arch/arm/configs/imote2_defconfig                |    2 -
- arch/arm/configs/imx_v4_v5_defconfig             |    1 -
- arch/arm/configs/imx_v6_v7_defconfig             |    1 -
- arch/arm/configs/pxa_defconfig                   |    3 -
- arch/arm/configs/sama5_defconfig                 |    2 -
- arch/arm/mach-imx/mach-imx27_visstrim_m10.c      |   31 -
- arch/arm/mach-omap1/board-ams-delta.c            |   32 -
- arch/arm/mach-omap1/camera.h                     |   14 -
- arch/arm/mach-omap1/devices.c                    |   43 --
- arch/arm/mach-pxa/palmz72.c                      |  112 ---
- arch/arm/mach-pxa/pcm990-baseboard.c             |  157 -----
- arch/sh/configs/ap325rxa_defconfig               |    3 -
- arch/sh/configs/ecovec24_defconfig               |    3 -
- arch/sh/configs/migor_defconfig                  |    3 -
- arch/sh/configs/se7724_defconfig                 |    2 -
- drivers/media/i2c/ov9640.c                       |    2 +-
- drivers/media/platform/pxa_camera.c              |    2 +-
- drivers/staging/media/Kconfig                    |    2 -
- drivers/staging/media/Makefile                   |    1 -
- drivers/staging/media/soc_camera/Kconfig         |   51 --
- drivers/staging/media/soc_camera/Makefile        |    7 -
- drivers/staging/media/soc_camera/TODO            |    4 -
- drivers/staging/media/soc_camera/imx074.c        |  492 -------------
- drivers/staging/media/soc_camera/mt9t031.c       |  853 -----------------------
- drivers/staging/media/soc_camera/soc-camera.rst  |  171 -----
- drivers/staging/media/soc_camera/soc_camera.c    | 2164 ----------------------------------------------------------
- drivers/staging/media/soc_camera/soc_mediabus.c  |  529 --------------
- drivers/staging/media/soc_camera/soc_mt9v022.c   | 1008 ---------------------------
- drivers/staging/media/soc_camera/soc_ov5642.c    | 1085 -----------------------------
- drivers/staging/media/soc_camera/soc_ov9740.c    |  992 ---------------------------
- include/linux/platform_data/media/omap1_camera.h |   32 -
- include/media/drv-intf/soc_mediabus.h            |  107 ---
- include/media/soc_camera.h                       |  397 -----------
- 35 files changed, 2 insertions(+), 8315 deletions(-)
- delete mode 100644 arch/arm/mach-omap1/camera.h
- delete mode 100644 drivers/staging/media/soc_camera/Kconfig
- delete mode 100644 drivers/staging/media/soc_camera/Makefile
- delete mode 100644 drivers/staging/media/soc_camera/TODO
- delete mode 100644 drivers/staging/media/soc_camera/imx074.c
- delete mode 100644 drivers/staging/media/soc_camera/mt9t031.c
- delete mode 100644 drivers/staging/media/soc_camera/soc-camera.rst
- delete mode 100644 drivers/staging/media/soc_camera/soc_camera.c
- delete mode 100644 drivers/staging/media/soc_camera/soc_mediabus.c
- delete mode 100644 drivers/staging/media/soc_camera/soc_mt9v022.c
- delete mode 100644 drivers/staging/media/soc_camera/soc_ov5642.c
- delete mode 100644 drivers/staging/media/soc_camera/soc_ov9740.c
- delete mode 100644 include/linux/platform_data/media/omap1_camera.h
- delete mode 100644 include/media/drv-intf/soc_mediabus.h
- delete mode 100644 include/media/soc_camera.h
