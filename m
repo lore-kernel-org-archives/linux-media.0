@@ -2,122 +2,193 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0327C433E1
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BA4FC433E4
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:52:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D3533204EC
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:49:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="egF/bFkm"
+	by mail.kernel.org (Postfix) with ESMTP id 0C4FB204EC
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:52:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727101AbgF2St4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 14:49:56 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:57816 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729000AbgF2Stx (ORCPT
+        id S1729432AbgF2SwA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 14:52:00 -0400
+Received: from smtp1.de.adit-jv.com ([93.241.18.167]:55815 "EHLO
+        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729716AbgF2Sv7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:49:53 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05T8ASlU008548;
-        Mon, 29 Jun 2020 10:13:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=w3dIE67dE3KoXbBoLblS3zP9klm4N4Ihl8g7RfI8wH4=;
- b=egF/bFkmDFi7YrM+IdLAZv0HQBZnKlfV+ZcniDcXQgm0yYyQudJlHBmPZOj+bvarfTpC
- N2vq7bC3bsrcygWGevkP28ipsoYRjbYzU/ukbSDNeWdIFxPpQgFeUFfWo0HImZzP96r6
- NO4om23b3JpL5HGFBOlb90MZs2YD59p8FBst0j1X10V6NFOGGR0HbkYH/PzXDIV5Vo4t
- BYzVz379+39a+OCZmA/jRfUyFQTVEOgQVO3QZNFcCX5rJRG2Q5MX7P5q4wGRnjxbVd+B
- OSS/qYn0R40K+763Eag4amcidi0CidlPYJjlQQnskRL6qCLn37ZAmuEGeJdhQSGA4O/t mQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 31ww0ftpxb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Jun 2020 10:13:29 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 510A010002A;
-        Mon, 29 Jun 2020 10:13:28 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag5node1.st.com [10.75.127.13])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 136A82ADA04;
-        Mon, 29 Jun 2020 10:13:28 +0200 (CEST)
-Received: from SFHDAG3NODE1.st.com (10.75.127.7) by SFHDAG5NODE1.st.com
- (10.75.127.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 29 Jun
- 2020 10:13:27 +0200
-Received: from SFHDAG3NODE1.st.com ([fe80::1166:1abb:aad4:5f86]) by
- SFHDAG3NODE1.st.com ([fe80::1166:1abb:aad4:5f86%20]) with mapi id
- 15.00.1473.003; Mon, 29 Jun 2020 10:13:27 +0200
-From:   Erwan LE RAY <erwan.leray@st.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>
-Subject: Re: [PATCH 1/2] dt-bindings: serial: add generic DT binding for
- announcing RTS/CTS lines
-Thread-Topic: [PATCH 1/2] dt-bindings: serial: add generic DT binding for
- announcing RTS/CTS lines
-Thread-Index: AQHWLqwdvriVa1dO+kuLItas4TvOb6jsnKeAgAK+zQA=
-Date:   Mon, 29 Jun 2020 08:13:27 +0000
-Message-ID: <b282002b-bca6-96a0-98f8-b4dd5f813296@st.com>
-References: <20200520133932.30441-1-erwan.leray@st.com>
- <20200520133932.30441-2-erwan.leray@st.com>
- <20200627141801.GA1945477@kroah.com>
-In-Reply-To: <20200627141801.GA1945477@kroah.com>
-Accept-Language: en-US, fr-FR
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <85399D0122B0FC468E36B331A46F0E31@st.com>
-Content-Transfer-Encoding: base64
+        Mon, 29 Jun 2020 14:51:59 -0400
+Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
+        by smtp1.de.adit-jv.com (Postfix) with ESMTP id EFC963C0588;
+        Mon, 29 Jun 2020 11:24:22 +0200 (CEST)
+Received: from smtp1.de.adit-jv.com ([127.0.0.1])
+        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3LZ3PyHkiLPo; Mon, 29 Jun 2020 11:24:18 +0200 (CEST)
+Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 274483C0585;
+        Mon, 29 Jun 2020 11:24:18 +0200 (CEST)
+Received: from vmlxhi-110.adit-jv.com (10.72.93.196) by HI2EXCH01.adit-jv.com
+ (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 29 Jun
+ 2020 11:24:17 +0200
+Date:   Mon, 29 Jun 2020 11:24:13 +0200
+From:   Ramzi Ben Meftah <rbmeftah@de.adit-jv.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC:     Steve Longerbeam <steve_longerbeam@mentor.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Ramzi BEN MEFTAH <rbmeftah@de.adit-jv.com>,
+        niklas soderlund <niklas.soderlund@ragnatech.se>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>, <linux-media@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Michael Rodin <mrodin@de.adit-jv.com>,
+        <efriedrich@de.adit-jv.com>, <erosca@de.adit-jv.com>
+Subject: Re: [PATCH 1/3] v4l2-subdev: Add subdev ioctl support for
+ ENUM/GET/SET INPUT
+Message-ID: <20200629092413.GA84958@vmlxhi-110.adit-jv.com>
+References: <1592301619-17631-1-git-send-email-rbmeftah@de.adit-jv.com>
+ <20200624075307.hl6wew7vr5ue225t@uno.localdomain>
+ <20200625020138.GW5980@pendragon.ideasonboard.com>
+ <c57d416d-14d4-6d5d-a281-ddbf3183395a@mentor.com>
+ <20200626011251.GP5865@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-29_07:2020-06-26,2020-06-29 signatures=0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200626011251.GP5865@pendragon.ideasonboard.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.93.196]
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-DQpPbiA2LzI3LzIwIDQ6MTggUE0sIEdyZWcgS3JvYWgtSGFydG1hbiB3cm90ZToNCj4gT24gV2Vk
-LCBNYXkgMjAsIDIwMjAgYXQgMDM6Mzk6MzFQTSArMDIwMCwgRXJ3YW4gTGUgUmF5IHdyb3RlOg0K
-Pj4gQWRkIHN1cHBvcnQgb2YgZ2VuZXJpYyBEVCBiaW5kaW5nIGZvciBhbm5vdWNpbmcgUlRTL0NU
-UyBsaW5lcy4gVGhlIGluaXRpYWwNCj4+IGJpbmRpbmcgJ3N0LGh3LWZsb3ctY29udHJvbCcgaXMg
-bm90IG5lZWRlZCBhbnltb3JlIHNpbmNlIGdlbmVyaWMgYmluZGluZw0KPj4gaXMgYXZhaWxhYmxl
-LCBidXQgaXMga2VwdCBmb3IgYmFja3dhcmQgY29tcGF0aWJpbGl0eS4NCj4+DQo+PiBTaWduZWQt
-b2ZmLWJ5OiBFcndhbiBMZSBSYXkgPGVyd2FuLmxlcmF5QHN0LmNvbT4NCj4+DQo+PiBkaWZmIC0t
-Z2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NlcmlhbC9zdCxzdG0zMi11
-YXJ0LnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc2VyaWFsL3N0LHN0
-bTMyLXVhcnQueWFtbA0KPj4gaW5kZXggNzViODUyMWViN2NiLi4wNmQ1ZjI1MWVjODggMTAwNjQ0
-DQo+PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc2VyaWFsL3N0LHN0
-bTMyLXVhcnQueWFtbA0KPj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L3NlcmlhbC9zdCxzdG0zMi11YXJ0LnlhbWwNCj4+IEBAIC0zNSw5ICszNSwxMSBAQCBwcm9wZXJ0
-aWVzOg0KPj4gICAgICAgZGVzY3JpcHRpb246IGxhYmVsIGFzc29jaWF0ZWQgd2l0aCB0aGlzIHVh
-cnQNCj4+ICAgDQo+PiAgICAgc3QsaHctZmxvdy1jdHJsOg0KPj4gLSAgICBkZXNjcmlwdGlvbjog
-ZW5hYmxlIGhhcmR3YXJlIGZsb3cgY29udHJvbA0KPj4gKyAgICBkZXNjcmlwdGlvbjogZW5hYmxl
-IGhhcmR3YXJlIGZsb3cgY29udHJvbCAoZGVwcmVjYXRlZCkNCj4+ICAgICAgICRyZWY6IC9zY2hl
-bWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL2ZsYWcNCj4+ICAgDQo+PiArICB1YXJ0LWhhcy1y
-dHNjdHM6IHRydWUNCj4+ICsNCj4+ICAgICBkbWFzOg0KPj4gICAgICAgbWluSXRlbXM6IDENCj4+
-ICAgICAgIG1heEl0ZW1zOiAyDQo+PiAtLSANCj4+IDIuMTcuMQ0KPj4NCj4gRGlkIHRoaXMgZ2V0
-IGlnbm9yZWQgYnkgdGhlIERUIG1haW50YWluZXJzPyAgOigNCg0KSGkgUm9iLA0KDQpHZW50bGUg
-cmVtaW5kZXIuIENvdWxkIHlvdSBwbGVhc2UgcHJvdmlkZSB5b3VyIGZlZWRiYWNrIG9uIHRoaXMg
-cGF0Y2ggPw0KDQpCZXN0IFJlZ2FyZHMsIEVyd2FuLg0K
+Hi Laurent,
+
+On Fri, Jun 26, 2020 at 04:12:51AM +0300, Laurent Pinchart wrote:
+> Hi Steve,
+> 
+> On Thu, Jun 25, 2020 at 10:41:09AM -0700, Steve Longerbeam wrote:
+> > On 6/24/20 7:01 PM, Laurent Pinchart wrote:
+> > > On Wed, Jun 24, 2020 at 09:53:07AM +0200, Jacopo Mondi wrote:
+> > >> On Tue, Jun 16, 2020 at 12:00:15PM +0200, Ramzi BEN MEFTAH wrote:
+> > >>> From: Steve Longerbeam <steve_longerbeam@mentor.com>
+> > >>   +Niklas, +Laurent
+> > >>
+> > >> Niklas, Laurent, how does this play with CAP_IO_MC ?
+> > > I don't think it's related to CAP_IO_MC, but I don't think it's a good
+> > > idea either :-) Routing doesn't go through the subdev [gs]_input
+> > > operations in MC-based drivers. It should be configured through link
+> > > setup instead. This patch goes in the wrong direction, sorry Steve.
+> > 
+> > That's OK! :) I didn't submit this patch, and as stated in the commit 
+> > header, I never recommended this patch be submitted to upstream in the 
+> > first place.
+> > 
+> > Selecting inputs at a subdev should normally make use of media link 
+> > setup. But for selecting analog signal inputs, such as the ADV748x AFE 
+> > standard definition inputs, that would  mean there would need to exist 
+> > source "analog" subdevs that connect to the AFE inputs, if only for the 
+> > purpose of selecting those inputs, which seems silly IMHO. The ADV748x 
+> > AFE subdev defines these inputs as media pads, but have no connections, 
+> > so link setup API can't be used to select those inputs.
+> > 
+> > So a new subdev pad API is clearly needed, not just to get input status 
+> > at a subdev pad, but to select/make active such analog inputs without 
+> > requiring link setup API.
+> 
+> There was an attempt to create a subdev ioctl to configure internal
+> routing. See "[PATCH v4 19/31] media: Documentation: Add GS_ROUTING
+> documentation" ([1]) and the related patches in the series.
+> 
+> [1] https://lore.kernel.org/linux-media/20190328200608.9463-20-jacopo+renesas@jmondi.org/
+> 
+
+I was thinking why not just allowing linking pads of the same media entity.
+This will avoid adding a new control, and will do the same as S_INPUT ioctl.
+
+> > >>> This commit enables VIDIOC_ENUMINPUT, VIDIOC_G_INPUT, and VIDIOC_S_INPUT
+> > >>> ioctls for use via v4l2 subdevice node.
+> > >>>
+> > >>> This commit should probably not be pushed upstream, because the (old)
+> > >>> idea of video inputs conflicts with the newer concept of establishing
+> > >>> media links between src->sink pads.
+> > >>>
+> > >>> However it might make sense for some subdevices to support enum/get/set
+> > >>> inputs. One example would be the analog front end subdevice for the
+> > >>> ADV748x. By providing these ioctls, selecting the ADV748x analog inputs
+> > >>> can be done without requiring the implementation of media entities that
+> > >>> would define the analog source for which to establish a media link.
+> > >>>
+> > >>> Signed-off-by: Steve Longerbeam <steve_longerbeam@mentor.com>
+> > >>> ---
+> > >>>   drivers/media/v4l2-core/v4l2-subdev.c |  9 +++++++++
+> > >>>   include/media/v4l2-subdev.h           | 11 +++++++++++
+> > >>>   2 files changed, 20 insertions(+)
+> > >>>
+> > >>> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> > >>> index 6b989fe..73fbfe9 100644
+> > >>> --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> > >>> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> > >>> @@ -378,6 +378,15 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+> > >>>   			return -ENOTTY;
+> > >>>   		return v4l2_querymenu(vfh->ctrl_handler, arg);
+> > >>>
+> > >>> +	case VIDIOC_ENUMINPUT:
+> > >>> +		return v4l2_subdev_call(sd, video, enuminput, arg);
+> > >>> +
+> > >>> +	case VIDIOC_G_INPUT:
+> > >>> +		return v4l2_subdev_call(sd, video, g_input, arg);
+> > >>> +
+> > >>> +	case VIDIOC_S_INPUT:
+> > >>> +		return v4l2_subdev_call(sd, video, s_input, *(u32 *)arg);
+> > >>> +
+> > >>>   	case VIDIOC_G_CTRL:
+> > >>>   		if (!vfh->ctrl_handler)
+> > >>>   			return -ENOTTY;
+> > >>> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> > >>> index f7fe78a..6e1a9cd 100644
+> > >>> --- a/include/media/v4l2-subdev.h
+> > >>> +++ b/include/media/v4l2-subdev.h
+> > >>> @@ -383,6 +383,14 @@ struct v4l2_mbus_frame_desc {
+> > >>>    * @g_input_status: get input status. Same as the status field in the
+> > >>>    *	&struct &v4l2_input
+> > >>>    *
+> > >>> + * @enuminput: enumerate inputs. Should return the same input status as
+> > >>> + *      @g_input_status if the passed input index is the currently active
+> > >>> + *      input.
+> > >>> + *
+> > >>> + * @g_input: returns the currently active input index.
+> > >>> + *
+> > >>> + * @s_input: set the active input.
+> > >>> + *
+> > >>>    * @s_stream: used to notify the driver that a video stream will start or has
+> > >>>    *	stopped.
+> > >>>    *
+> > >>> @@ -423,6 +431,9 @@ struct v4l2_subdev_video_ops {
+> > >>>   	int (*g_tvnorms)(struct v4l2_subdev *sd, v4l2_std_id *std);
+> > >>>   	int (*g_tvnorms_output)(struct v4l2_subdev *sd, v4l2_std_id *std);
+> > >>>   	int (*g_input_status)(struct v4l2_subdev *sd, u32 *status);
+> > >>> +	int (*enuminput)(struct v4l2_subdev *sd, struct v4l2_input *input);
+> > >>> +	int (*g_input)(struct v4l2_subdev *sd, u32 *index);
+> > >>> +	int (*s_input)(struct v4l2_subdev *sd, u32 index);
+> > >>>   	int (*s_stream)(struct v4l2_subdev *sd, int enable);
+> > >>>   	int (*g_pixelaspect)(struct v4l2_subdev *sd, struct v4l2_fract *aspect);
+> > >>>   	int (*g_frame_interval)(struct v4l2_subdev *sd,
+> > 
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
+
+-- 
+Best Regards,
+Ramzi Ben Meftah.
