@@ -2,84 +2,109 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=0.1 required=3.0 tests=DATE_IN_PAST_03_06,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D0E9C433DF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7AB8C433E0
 	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 19:28:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E7F82065F
+	by mail.kernel.org (Postfix) with ESMTP id B8D062065F
 	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 19:28:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732356AbgF2T20 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 15:28:26 -0400
-Received: from mga14.intel.com ([192.55.52.115]:4746 "EHLO mga14.intel.com"
+        id S1726990AbgF2T2d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 15:28:33 -0400
+Received: from mga14.intel.com ([192.55.52.115]:4716 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730546AbgF2T2Z (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:28:25 -0400
-IronPort-SDR: tNZFQ/Kw0Qk9MB/aPXFv90TbNOvfp3o6HYTLPron9/reT+NkQIeTDUoqjYipEC5Dt0qBcJorM4
- aoa66tq40T0w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="145064142"
+        id S1729373AbgF2T20 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:28:26 -0400
+IronPort-SDR: h8cquvd4pUdRX4j3aAL0ls90lHKzyYoHuI9mzH/UtlKebMkWyn3z3ssrKhXRZrgft7EzWeq52x
+ 31ha8Dzcn1eA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="145063766"
 X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
-   d="scan'208";a="145064142"
+   d="scan'208";a="145063766"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2020 09:25:00 -0700
-IronPort-SDR: i5zqokhpUgxuo+bUMZ96Gnbmc51BTC8pH+WCvzJ3tixSsqU7kvUaPWyn3xUiSDgXiKBpNgayFN
- XvGLYflgDO6Q==
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2020 09:22:08 -0700
+IronPort-SDR: 86Bmt34df9qssARpKaRTi3ExbknnCpvFsiJ1QOuZMUt7ohu7vUpI4gyzkEK/yGmFt44COFwjUz
+ c+m2M6tFidNQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
-   d="scan'208";a="266235448"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Jun 2020 09:24:59 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jprPs-00Gdwm-DS; Mon, 29 Jun 2020 13:53:36 +0300
-Date:   Mon, 29 Jun 2020 13:53:36 +0300
+   d="scan'208";a="480847127"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2020 09:22:05 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6AA292C2; Mon, 29 Jun 2020 13:57:40 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org,
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v2 00/15] media: atomisp: Clean ups and fixes to make it
- load on Baytrail
-Message-ID: <20200629105336.GG3703480@smile.fi.intel.com>
-References: <20200626121925.14365-1-andriy.shevchenko@linux.intel.com>
- <20200626152953.261dd214@coco.lan>
- <20200626160141.03a8d4dd@coco.lan>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 5/5] media: atomisp: Clean up non-existing folders from Makefile
+Date:   Mon, 29 Jun 2020 13:57:39 +0300
+Message-Id: <20200629105739.3098-5-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200629105739.3098-1-andriy.shevchenko@linux.intel.com>
+References: <20200629105739.3098-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200626160141.03a8d4dd@coco.lan>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 04:01:41PM +0200, Mauro Carvalho Chehab wrote:
-> Em Fri, 26 Jun 2020 15:29:53 +0200
-> Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
-> > Em Fri, 26 Jun 2020 15:19:10 +0300
-> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> escreveu:
+Compiler is not happy about leftovers:
+cc1: warning: .../pci/hrt/: No such file or directory [-Wmissing-include-dirs]
+cc1: warning: .../pci/hive_isp_css_include/memory_access/: No such file or directory [-Wmissing-include-dirs]
+cc1: warning: .../pci/css_2400_system/hrt/: No such file or directory [-Wmissing-include-dirs]
 
-> > >   media: atomisp: Refactor PMIC detection to a separate function.
-> > >   media: atomisp: Provide Gmin subdev as parameter to gmin_subdev_add()
-> 
-> Could you please rebase those on the top of my atomisp branch? 
-> 
-> > >   media: atomisp: Get rid of ugly and leaky ACPI handling in
-> > >     gmin_subdev_add()
-> 
-> The part of the code that used to call acpi_bus_get_device() was
-> already removed by a previous patch on my tree. So, I guess this one
-> may not be needed anymore.
+Drop them from Makefile.
 
-Mentioned above have been rebased and I'm about to send a v2.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/staging/media/atomisp/Makefile | 5 -----
+ 1 file changed, 5 deletions(-)
 
+diff --git a/drivers/staging/media/atomisp/Makefile b/drivers/staging/media/atomisp/Makefile
+index 41a5656da85c..9e5a29c6fb71 100644
+--- a/drivers/staging/media/atomisp/Makefile
++++ b/drivers/staging/media/atomisp/Makefile
+@@ -182,7 +182,6 @@ INCLUDES += \
+ 	-I$(atomisp)/include/hmm/ \
+ 	-I$(atomisp)/include/mmu/ \
+ 	-I$(atomisp)/pci/ \
+-	-I$(atomisp)/pci/hrt/ \
+ 	-I$(atomisp)/pci/base/circbuf/interface/ \
+ 	-I$(atomisp)/pci/base/refcount/interface/ \
+ 	-I$(atomisp)/pci/camera/pipe/interface/ \
+@@ -192,7 +191,6 @@ INCLUDES += \
+ 	-I$(atomisp)/pci/hive_isp_css_include/ \
+ 	-I$(atomisp)/pci/hive_isp_css_include/device_access/ \
+ 	-I$(atomisp)/pci/hive_isp_css_include/host/ \
+-	-I$(atomisp)/pci/hive_isp_css_include/memory_access/ \
+ 	-I$(atomisp)/pci/hive_isp_css_shared/ \
+ 	-I$(atomisp)/pci/hive_isp_css_shared/host/ \
+ 	-I$(atomisp)/pci/isp/kernels/ \
+@@ -311,9 +309,7 @@ INCLUDES += \
+ 	-I$(atomisp)/pci/runtime/tagger/interface/
+ 
+ INCLUDES_byt += \
+-	-I$(atomisp)/pci/css_2400_system/ \
+ 	-I$(atomisp)/pci/css_2400_system/hive/ \
+-	-I$(atomisp)/pci/css_2400_system/hrt/ \
+ 
+ INCLUDES_cht += \
+ 	-I$(atomisp)/pci/css_2401_system/ \
+@@ -321,7 +317,6 @@ INCLUDES_cht += \
+ 	-I$(atomisp)/pci/css_2401_system/hive/ \
+ 	-I$(atomisp)/pci/css_2401_system/hrt/ \
+ 
+-#	-I$(atomisp)/pci/css_2401_system/hrt/ \
+ #	-I$(atomisp)/pci/css_2401_system/hive_isp_css_2401_system_generated/ \
+ 
+ DEFINES := -DHRT_HW -DHRT_ISP_CSS_CUSTOM_HOST -DHRT_USE_VIR_ADDRS -D__HOST__
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.27.0
 
