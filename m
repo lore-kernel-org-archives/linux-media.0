@@ -2,69 +2,91 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-7.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 550FCC433E4
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:37:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFA0CC433E1
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:44:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 364442225F
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:37:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D409B20656
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:44:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="o0WmxEJv"
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="KAo2ucLD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727061AbgF2ShE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 14:37:04 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:59599 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726884AbgF2SgA (ORCPT
+        id S1729040AbgF2So2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 14:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728060AbgF2SoZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:36:00 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1593455759; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=2UyrXWkOMOMhSQo6t9EmNJzuHREHp5h9gbpKc9GpJzw=; b=o0WmxEJvFQXWthcLC9ci6Pzeh2y3m0qNQw7waTCKDJEOfbz9aS6x0L/XAXFVvbHW/1aP9Uvh
- EH/+HNP/4qOojv5apF23WwMY9S3kBUWKNFkqyqI5NM5/3mmvXRMeExdlKRGnLnA4w+MvdGWk
- KECTjaWYHzne31/3k3WM7uXAWak=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n12.prod.us-west-2.postgun.com with SMTP id
- 5ef9c72cad153efa34b15da7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Jun 2020 10:49:16
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id DCD1BC433CA; Mon, 29 Jun 2020 10:49:15 +0000 (UTC)
-Received: from [10.50.61.98] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 33980C433C6;
-        Mon, 29 Jun 2020 10:49:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 33980C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [PATCH v6 5/6] media: venus: core: Add support for opp
- tables/perf voting
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        bjorn.andersson@linaro.org, agross@kernel.org, robdclark@gmail.com,
-        robdclark@chromium.org
-Cc:     viresh.kumar@linaro.org, sboyd@kernel.org, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <1592222564-13556-1-git-send-email-rnayak@codeaurora.org>
- <1592222564-13556-6-git-send-email-rnayak@codeaurora.org>
- <e0f856ec-e391-9b1d-baa3-7dda20cb853a@linaro.org>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <fbb3bdd7-523b-a5fa-cde1-c61e7691e7f9@codeaurora.org>
-Date:   Mon, 29 Jun 2020 16:19:08 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        Mon, 29 Jun 2020 14:44:25 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B043FC031C40
+        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 11:44:24 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id z13so17607373wrw.5
+        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 11:44:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/AQ+ndF/nBnEnPlnNgnpg4KNyiyQQKJje/zoTKNBiuc=;
+        b=KAo2ucLDX7jr8UkDJohj0YyCzNyfI1iCi/MK55mlgVPyboFGLZPtD13iAnFWKyJkih
+         /xLbN5X0LL2ekSCtGuF+079A7dmCkpvwhOpx4CEfLZqYA1Mcixp/fCJvIn8zVf0Uu93t
+         qxej6yqBGPxlKVo7X2h/HjrFqHU6RiiIEotFqBwzeyrtdHljwBlvE1BAEL6XlBNqZT73
+         qS2YHvw0L2vAUEANru6PpyS/YgTmjIA+QeJQ8rXmSi3VpNx1B4DONeT3qa994iXqlkxw
+         gzyVbgUGTO+aF0RfSYDYXqwvYmsotH6ylpP+HA9QqjlvMN8QN2D27VEMaSALODZ70sPH
+         6B/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/AQ+ndF/nBnEnPlnNgnpg4KNyiyQQKJje/zoTKNBiuc=;
+        b=EwK09N18MBH97yH5o4v1xKV271qDYMYhALZ4fLm2i5uVi8CcW6NNODqxhxXeCwuAW3
+         hdmRn+KogGOV3UkoPj07TakimNDrWvkUBfMVcstGLOzFNsBzshRxKNiXoreyJJbOqDcq
+         Vb7e2d04AaoLEjJpaz7uc+sgKZLMqlseLX457SWwu8/EBqym1uL4HpCfWRse09k2fnl/
+         qn4EyHlXhuCwGys8K3FtsPRrze1mEAp5HpIygLxx9DdmUSM1O2IM11MJqjigTPo25nJp
+         7s2vUOWx6SzrPl5MHvVJvwdZPrN3pXtfybXUOsEY0cspEhKP+hCQB1B9SLWi2U81vrk6
+         wKzg==
+X-Gm-Message-State: AOAM5306E0mLZcxleDABqthNoFSLZ4O2SiOBLlbCweUNYjGBPKBAK30Y
+        B/lDDjM6Fn0bDxvZdTe7JAo=
+X-Google-Smtp-Source: ABdhPJwUhxylAxf3q3l0uHAAJI+5N5gK1xmeudzZjO2DYSJTR8sEj/ENdXAwhV032Wj5t8u3JgBhmg==
+X-Received: by 2002:adf:f3cd:: with SMTP id g13mr17465464wrp.45.1593456263452;
+        Mon, 29 Jun 2020 11:44:23 -0700 (PDT)
+Received: from ?IPv6:2a02:810a:8300:1c48:5b0:bdfc:fdc6:4650? ([2a02:810a:8300:1c48:5b0:bdfc:fdc6:4650])
+        by smtp.gmail.com with ESMTPSA id q1sm672295wro.82.2020.06.29.11.44.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jun 2020 11:44:22 -0700 (PDT)
+Subject: Re: [PATCH v1 1/1] Add support for meson building
+To:     Ariel D'Alessandro <ariel@vanguardiasur.com.ar>,
+        Xavier Claessens <xavier.claessens@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     kieran.bingham@ideasonboard.com, linux-media@vger.kernel.org,
+        hverkuil@xs4all.nl, sean@mess.org, p.zabel@pengutronix.de,
+        nicolas@ndufresne.ca,
+        nicolas Dufresne <nicolas.dufresne@collabora.com>
+References: <20200618133303.28676-1-ariel@vanguardiasur.com.ar>
+ <20200618133303.28676-2-ariel@vanguardiasur.com.ar>
+ <d09caaf6-402f-ba57-825c-410ce39a5e2b@ideasonboard.com>
+ <f2bf8846e265024c20a77fa618d54455b3b7ca95.camel@collabora.com>
+ <20200619144229.GD5823@pendragon.ideasonboard.com>
+ <adbb92de81105575d661f348a9804279a2844d64.camel@collabora.com>
+ <93bf1b72-0108-1dfa-22b4-f2194660129c@googlemail.com>
+ <0d3450f0-8883-e094-3c1b-d8f93c2e4833@googlemail.com>
+ <1586973f-5f69-fed0-4ad8-266cdd8e818b@vanguardiasur.com.ar>
+ <4d8eecf2-3ce5-927b-bb3d-d950d123f0e0@googlemail.com>
+ <c8d8a2fe-6abb-796d-803c-672106bc9587@vanguardiasur.com.ar>
+From:   Gregor Jasny <gjasny@googlemail.com>
+Message-ID: <1497236f-6b21-922d-efe1-a0d4a44fc6f5@googlemail.com>
+Date:   Mon, 29 Jun 2020 20:44:20 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <e0f856ec-e391-9b1d-baa3-7dda20cb853a@linaro.org>
+In-Reply-To: <c8d8a2fe-6abb-796d-803c-672106bc9587@vanguardiasur.com.ar>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -75,135 +97,34 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 
 
-On 6/18/2020 8:24 PM, Stanimir Varbanov wrote:
-> Hi Rajendra,
+On 6/25/20 8:32 PM, Ariel D'Alessandro wrote:
+> Hey Gregor,
 > 
-> On 6/15/20 3:02 PM, Rajendra Nayak wrote:
->> Add support to add OPP tables and perf voting on the OPP powerdomain.
->> This is needed so venus votes on the corresponding performance state
->> for the OPP powerdomain along with setting the core clock rate.
+> On 6/24/20 4:46 PM, Gregor Jasny wrote:
+>> Hello,
 >>
->> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
->> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
->> Cc: Stanimir Varbanov <stanimir.varbanov@linaro.org>
->> Cc: linux-media@vger.kernel.org
->> ---
->> No functional change in v6, rebased over 5.8-rc1
->> Bindings update to add optional PD https://lore.kernel.org/patchwork/patch/1241077/
+>> thanks for your helpful suggestions. I made a PR from those: Feel free to squash
+>> it into yours:
+>> https://gitlab.com/adalessandro/v4l-utils/-/merge_requests/1
 >>
->>   drivers/media/platform/qcom/venus/core.c       | 43 +++++++++++++++++---
->>   drivers/media/platform/qcom/venus/core.h       |  5 +++
->>   drivers/media/platform/qcom/venus/pm_helpers.c | 54 ++++++++++++++++++++++++--
->>   3 files changed, 92 insertions(+), 10 deletions(-)
->>
+>> When looking at your quoted code with the fixes I'm wondering if you forgot to
+>> push your branch?
 > 
-> <cut>
-> 
->>   
->> @@ -740,13 +740,16 @@ static int venc_power_v4(struct device *dev, int on)
->>   
->>   static int vcodec_domains_get(struct device *dev)
->>   {
->> +	int ret;
->> +	struct opp_table *opp_table;
->> +	struct device **opp_virt_dev;
->>   	struct venus_core *core = dev_get_drvdata(dev);
->>   	const struct venus_resources *res = core->res;
->>   	struct device *pd;
->>   	unsigned int i;
->>   
->>   	if (!res->vcodec_pmdomains_num)
->> -		return -ENODEV;
->> +		goto skip_pmdomains;
->>   
->>   	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
->>   		pd = dev_pm_domain_attach_by_name(dev,
->> @@ -763,7 +766,41 @@ static int vcodec_domains_get(struct device *dev)
->>   	if (!core->pd_dl_venus)
->>   		return -ENODEV;
->>   
->> +skip_pmdomains:
->> +	if (!core->has_opp_table)
->> +		return 0;
->> +
->> +	/* Attach the power domain for setting performance state */
->> +	opp_table = dev_pm_opp_attach_genpd(dev, res->opp_pmdomain, &opp_virt_dev);
->> +	if (IS_ERR(opp_table)) {
->> +		ret = PTR_ERR(opp_table);
->> +		goto opp_attach_err;
->> +	}
->> +
->> +	core->opp_pmdomain = *opp_virt_dev;
->> +	core->opp_dl_venus = device_link_add(dev, core->opp_pmdomain,
->> +					     DL_FLAG_RPM_ACTIVE |
->> +					     DL_FLAG_PM_RUNTIME |
->> +					     DL_FLAG_STATELESS);
->> +	if (!core->opp_dl_venus) {
->> +		ret = -ENODEV;
->> +		goto opp_dl_add_err;
->> +	}
->> +
->>   	return 0;
->> +
->> +opp_dl_add_err:
->> +	dev_pm_domain_detach(core->opp_pmdomain, true);
->> +opp_attach_err:
->> +	if (core->pd_dl_venus) {
->> +		device_link_del(core->pd_dl_venus);
->> +		for (i = 0; i < res->vcodec_pmdomains_num; i++) {
->> +			if (IS_ERR_OR_NULL(core->pmdomains[i]))
->> +				continue;
->> +			dev_pm_domain_detach(core->pmdomains[i], true);
->> +		}
->> +	}
->> +	return ret;
->>   }
->>   
->>   static void vcodec_domains_put(struct device *dev)
->> @@ -773,7 +810,7 @@ static void vcodec_domains_put(struct device *dev)
->>   	unsigned int i;
->>   
->>   	if (!res->vcodec_pmdomains_num)
->> -		return;
->> +		goto skip_pmdomains;
->>   
->>   	if (core->pd_dl_venus)
->>   		device_link_del(core->pd_dl_venus);
->> @@ -783,6 +820,15 @@ static void vcodec_domains_put(struct device *dev)
->>   			continue;
->>   		dev_pm_domain_detach(core->pmdomains[i], true);
->>   	}
->> +
->> +skip_pmdomains:
->> +	if (!res->opp_pmdomain)
->> +		return;
->> +
->> +	if (core->opp_dl_venus)
->> +		device_link_del(core->opp_dl_venus);
->> +
->> +	dev_pm_domain_detach(core->opp_pmdomain, true);
-> 
-> Without corresponding changes in venus DT node we call pm_domain_detach
-> with core->opp_pmdomain = NULL which triggers NULL pointer dereference.
-> 
-> I guess you should check:
-> 
-> 	if (core->has_opp_table)
-> 		dev_pm_domain_detach(core->opp_pmdomain, true);
-> 
-> or
-> 
-> 	if (core->opp_pmdomain)
-> 		dev_pm_domain_detach(core->opp_pmdomain, true);
-> 
-> 
-> ... not sure which one is more appropriate or both are.
+> Merged and pushed, thanks.
 
-Thanks, I'll fix that up when I repost. Sorry I was out for a while so
-haven't been able to reproduce the rpmh timeout issue you reported.
-Will spend some time on it this week and see if I can reproduce it.
+ From a Debian packager perspective the current branch looks really 
+good. Only lintian found a small typo:
+
+I: qv4l2: image-file-has-conflicting-name 
+usr/share/icons/hicolor/scalable/apps/qv4l2.svg (is PNG)
 
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+I guess it's due to that:
+
+qv4l2_icons_files = [
+...
+     ['qv4l2.png',       'scalable', 'qv4l2.svg'],
+]
+
+Thanks,
+Gregor
