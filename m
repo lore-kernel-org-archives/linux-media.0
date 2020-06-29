@@ -2,151 +2,122 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFADCC433DF
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:48:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0327C433E1
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:49:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A7ED02064B
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:48:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3533204EC
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 18:49:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="egF/bFkm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729052AbgF2Sr6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 14:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729353AbgF2Srp (ORCPT
+        id S1727101AbgF2St4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 14:49:56 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:57816 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729000AbgF2Stx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:47:45 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1CBC031C76
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 11:08:56 -0700 (PDT)
-Received: from [IPv6:2003:cb:8737:cf00:84c7:ee07:61e9:a21f] (p200300cb8737cf0084c7ee0761e9a21f.dip0.t-ipconnect.de [IPv6:2003:cb:8737:cf00:84c7:ee07:61e9:a21f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 2ACAA2A122C;
-        Mon, 29 Jun 2020 19:08:54 +0100 (BST)
-Subject: Re: [PATCH 00/25] media: ov5647: Support RaspberryPi Camera Module v1
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, hverkuil@xs4all.nl,
-        laurent.pinchart@ideasonboard.com,
-        roman.kovalivskyi@globallogic.com, dave.stevenson@raspberrypi.org,
-        naush@raspberrypi.com
-Cc:     mrodin@de.adit-jv.com, hugues.fruchet@st.com, mripard@kernel.org,
-        aford173@gmail.com, sudipi@jp.adit-jv.com,
-        andrew_gabbasov@mentor.com, erosca@de.adit-jv.com,
-        linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org,
-        dafna Hirschfeld <dafna3@gmail.com>
-References: <20200623100815.10674-1-jacopo@jmondi.org>
- <0cafeeb9-54bd-1a1b-3301-47b5b8542ae8@collabora.com>
-Message-ID: <602feda3-6c4c-4107-f0a5-e19be73c7db6@collabora.com>
-Date:   Mon, 29 Jun 2020 20:08:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <0cafeeb9-54bd-1a1b-3301-47b5b8542ae8@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Mon, 29 Jun 2020 14:49:53 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05T8ASlU008548;
+        Mon, 29 Jun 2020 10:13:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=w3dIE67dE3KoXbBoLblS3zP9klm4N4Ihl8g7RfI8wH4=;
+ b=egF/bFkmDFi7YrM+IdLAZv0HQBZnKlfV+ZcniDcXQgm0yYyQudJlHBmPZOj+bvarfTpC
+ N2vq7bC3bsrcygWGevkP28ipsoYRjbYzU/ukbSDNeWdIFxPpQgFeUFfWo0HImZzP96r6
+ NO4om23b3JpL5HGFBOlb90MZs2YD59p8FBst0j1X10V6NFOGGR0HbkYH/PzXDIV5Vo4t
+ BYzVz379+39a+OCZmA/jRfUyFQTVEOgQVO3QZNFcCX5rJRG2Q5MX7P5q4wGRnjxbVd+B
+ OSS/qYn0R40K+763Eag4amcidi0CidlPYJjlQQnskRL6qCLn37ZAmuEGeJdhQSGA4O/t mQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 31ww0ftpxb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Jun 2020 10:13:29 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 510A010002A;
+        Mon, 29 Jun 2020 10:13:28 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag5node1.st.com [10.75.127.13])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 136A82ADA04;
+        Mon, 29 Jun 2020 10:13:28 +0200 (CEST)
+Received: from SFHDAG3NODE1.st.com (10.75.127.7) by SFHDAG5NODE1.st.com
+ (10.75.127.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 29 Jun
+ 2020 10:13:27 +0200
+Received: from SFHDAG3NODE1.st.com ([fe80::1166:1abb:aad4:5f86]) by
+ SFHDAG3NODE1.st.com ([fe80::1166:1abb:aad4:5f86%20]) with mapi id
+ 15.00.1473.003; Mon, 29 Jun 2020 10:13:27 +0200
+From:   Erwan LE RAY <erwan.leray@st.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        Fabrice GASNIER <fabrice.gasnier@st.com>
+Subject: Re: [PATCH 1/2] dt-bindings: serial: add generic DT binding for
+ announcing RTS/CTS lines
+Thread-Topic: [PATCH 1/2] dt-bindings: serial: add generic DT binding for
+ announcing RTS/CTS lines
+Thread-Index: AQHWLqwdvriVa1dO+kuLItas4TvOb6jsnKeAgAK+zQA=
+Date:   Mon, 29 Jun 2020 08:13:27 +0000
+Message-ID: <b282002b-bca6-96a0-98f8-b4dd5f813296@st.com>
+References: <20200520133932.30441-1-erwan.leray@st.com>
+ <20200520133932.30441-2-erwan.leray@st.com>
+ <20200627141801.GA1945477@kroah.com>
+In-Reply-To: <20200627141801.GA1945477@kroah.com>
+Accept-Language: en-US, fr-FR
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <85399D0122B0FC468E36B331A46F0E31@st.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-29_07:2020-06-26,2020-06-29 signatures=0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
-
-On 29.06.20 19:33, Dafna Hirschfeld wrote:
-> Hi,
-> Thanks for the series,
-> 
-> I tried to apply it on master and found out that the set
-> is rebased on top of the patchset
-> "dt-bidings: media: ov5647 bindings"
-> so running 'git am' without the other set fails.
-> Maybe better to merge the two sets or mention it in the cover letter.
-> 
-> Thanks,
-> Dafna
-> 
-> 
-> 
-> On 23.06.20 12:07, Jacopo Mondi wrote:
->> -------------------------------------------------------------------------------
->> Second attempt after my ISP blocked the part of the first sending.
->> Also removed Luis Oliveira email from the receiver list as it gets
->> bounced back.
->> 550 5.1.1 <lolivei@synopsys.com>... User unknown
->> -------------------------------------------------------------------------------
->>
->> Hello,
->>    this series improves and expand the existing ov5647 sensor driver to
->> the same feature level as found in RaspberryPi BSP.
->>
->> It is based on recent media tree master and the sensor bindings conversion
->> to dt-schema I sent out a few days ago:
->> "[PATCH 0/2] dt-bidings: media: ov5647 bindings + small fix"
-
-oops, maybe I should better read the cover letter first,
-sorry for the noise,
-
-Thanks,
-Dafna
-
->>
->> The first patches in the series has been sent by Roman as part of
->> "[PATCH v2 0/6] ov5647 driver improvement"
->> I took his patches in, addressed review comments and rebased on top
->> of the new dt-schema bindings. I kept the extensive receiver list he had
->> in his series for this reason.
->>
->> The series continues by polishing and cleaning up the driver and expanding
->> its functionalities to support multiple modes and image formats.
->>
->> The series has been tested with libcamera and the driver functionalities
->> compared with the BSP driver ones, and tested stand-alone by capturing
->> raw frames with yavta.
->>
->> Thanks
->>     j
->>
->> Dave Stevenson (8):
->>    media: ov5647: Add support for PWDN GPIO.
->>    media: ov5647: Add support for non-continuous clock mode
->>    media: ov5647: Add set_fmt and get_fmt calls.
->>    media: ov5647: Add support for get_selection()
->>    media: ov5647: Set V4L2_SUBDEV_FL_HAS_EVENTS flag
->>    media: ov5647: Support V4L2_CID_PIXEL_RATE
->>    media: ov5647: Support V4L2_CID_VBLANK control
->>    media: ov5647: Advertise the correct exposure range
->>
->> David Plowman (1):
->>    media: ov5647: Support gain, exposure and AWB controls
->>
->> Jacopo Mondi (16):
->>    dt-bindings: media: ov5647: Document pwdn-gpios
->>    dt-bindings: media: ov5647: Document clock-noncontinuous
->>    media: ov5647: Fix format initialization
->>    media: ov5647: Fix style issues
->>    media: ov5647: Replace license with SPDX identifier
->>    media: ov5647: Fix return value from read/write
->>    media: ov5647: Program mode at s_stream(1) time
->>    media: ov5647: Implement enum_frame_size()
->>    media: ov5647: Protect s_stream() with mutex
->>    media: ov5647: Rationalize driver structure name
->>    media: ov5647: Break out format handling
->>    media: ov5647: Rename SBGGR8 VGA mode
->>    media: ov5647: Add SGGBR10_1X10 modes
->>    media: ov5647: Implement set_fmt pad operation
->>    media: ov5647: Program mode only if it has changed
->>    media: ov5647: Support V4L2_CID_HBLANK control
->>
->>   .../devicetree/bindings/media/i2c/ov5647.yaml |   11 +
->>   drivers/media/i2c/ov5647.c                    | 1267 +++++++++++++++--
->>   2 files changed, 1126 insertions(+), 152 deletions(-)
->>
->> -- 
->> 2.27.0
->>
+DQpPbiA2LzI3LzIwIDQ6MTggUE0sIEdyZWcgS3JvYWgtSGFydG1hbiB3cm90ZToNCj4gT24gV2Vk
+LCBNYXkgMjAsIDIwMjAgYXQgMDM6Mzk6MzFQTSArMDIwMCwgRXJ3YW4gTGUgUmF5IHdyb3RlOg0K
+Pj4gQWRkIHN1cHBvcnQgb2YgZ2VuZXJpYyBEVCBiaW5kaW5nIGZvciBhbm5vdWNpbmcgUlRTL0NU
+UyBsaW5lcy4gVGhlIGluaXRpYWwNCj4+IGJpbmRpbmcgJ3N0LGh3LWZsb3ctY29udHJvbCcgaXMg
+bm90IG5lZWRlZCBhbnltb3JlIHNpbmNlIGdlbmVyaWMgYmluZGluZw0KPj4gaXMgYXZhaWxhYmxl
+LCBidXQgaXMga2VwdCBmb3IgYmFja3dhcmQgY29tcGF0aWJpbGl0eS4NCj4+DQo+PiBTaWduZWQt
+b2ZmLWJ5OiBFcndhbiBMZSBSYXkgPGVyd2FuLmxlcmF5QHN0LmNvbT4NCj4+DQo+PiBkaWZmIC0t
+Z2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NlcmlhbC9zdCxzdG0zMi11
+YXJ0LnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc2VyaWFsL3N0LHN0
+bTMyLXVhcnQueWFtbA0KPj4gaW5kZXggNzViODUyMWViN2NiLi4wNmQ1ZjI1MWVjODggMTAwNjQ0
+DQo+PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc2VyaWFsL3N0LHN0
+bTMyLXVhcnQueWFtbA0KPj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
+L3NlcmlhbC9zdCxzdG0zMi11YXJ0LnlhbWwNCj4+IEBAIC0zNSw5ICszNSwxMSBAQCBwcm9wZXJ0
+aWVzOg0KPj4gICAgICAgZGVzY3JpcHRpb246IGxhYmVsIGFzc29jaWF0ZWQgd2l0aCB0aGlzIHVh
+cnQNCj4+ICAgDQo+PiAgICAgc3QsaHctZmxvdy1jdHJsOg0KPj4gLSAgICBkZXNjcmlwdGlvbjog
+ZW5hYmxlIGhhcmR3YXJlIGZsb3cgY29udHJvbA0KPj4gKyAgICBkZXNjcmlwdGlvbjogZW5hYmxl
+IGhhcmR3YXJlIGZsb3cgY29udHJvbCAoZGVwcmVjYXRlZCkNCj4+ICAgICAgICRyZWY6IC9zY2hl
+bWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL2ZsYWcNCj4+ICAgDQo+PiArICB1YXJ0LWhhcy1y
+dHNjdHM6IHRydWUNCj4+ICsNCj4+ICAgICBkbWFzOg0KPj4gICAgICAgbWluSXRlbXM6IDENCj4+
+ICAgICAgIG1heEl0ZW1zOiAyDQo+PiAtLSANCj4+IDIuMTcuMQ0KPj4NCj4gRGlkIHRoaXMgZ2V0
+IGlnbm9yZWQgYnkgdGhlIERUIG1haW50YWluZXJzPyAgOigNCg0KSGkgUm9iLA0KDQpHZW50bGUg
+cmVtaW5kZXIuIENvdWxkIHlvdSBwbGVhc2UgcHJvdmlkZSB5b3VyIGZlZWRiYWNrIG9uIHRoaXMg
+cGF0Y2ggPw0KDQpCZXN0IFJlZ2FyZHMsIEVyd2FuLg0K
