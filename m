@@ -2,95 +2,167 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44BD2C433E1
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 19:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 634E4C433E1
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 19:23:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1792F206E2
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 19:09:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1593457791;
-	bh=4iXE6X6BH7Sxje+iISVf8jR0Is6iv3UfKTVAnMUZGaY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=Nu3Z+hmOHuLnsmF+7ISFOkcdDCwlRdFRONSvpiz34GlzwgurZBQBXVWYlTJgQtXia
-	 oZM0Y/+VVX2MWOeUmCAZBUhBsL2bBm2jMNFxwHdjP/f/MfjEx+XwvGncmb1M4EJNUP
-	 ZqXc5d07f1IdJReauRj55BzXUp9PJZ01VIt+3qPQ=
+	by mail.kernel.org (Postfix) with ESMTP id 468DC206F1
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 19:23:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730202AbgF2TJu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 15:09:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45438 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730335AbgF2TAT (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:00:19 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1730416AbgF2TXO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 15:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732297AbgF2TWp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:22:45 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0301C030F35
+        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 09:54:48 -0700 (PDT)
+Received: from [IPv6:2003:cb:8737:cf00:84c7:ee07:61e9:a21f] (p200300cb8737cf0084c7ee0761e9a21f.dip0.t-ipconnect.de [IPv6:2003:cb:8737:cf00:84c7:ee07:61e9:a21f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3DB7F2554B;
-        Mon, 29 Jun 2020 15:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593446112;
-        bh=4iXE6X6BH7Sxje+iISVf8jR0Is6iv3UfKTVAnMUZGaY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h2U+MILBVT23YaZGdGpLO6laSjCwUsbg1urnAwBg/mN+0QstKMt2rgVhJrjbvq5RT
-         s6etxdPdTY1Mv4RLGYevq3RavmmS//9KWuBexp7reG+SFRlF4vhtx+Z2GYBUqhoUnK
-         bgcM4W2IY97lLpe70xK5huDwRLE4lOXseGWjvwcM=
-Date:   Mon, 29 Jun 2020 17:55:03 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     B K Karthik <bkkarthik@pesu.pes.edu>
-Cc:     B K Karthik <karthik.bk2000@live.com>, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 834CF260CC6;
+        Mon, 29 Jun 2020 17:54:46 +0100 (BST)
+Subject: Re: [libcamera-devel] [PATCH 19/25] media: ov5647: Implement set_fmt
+ pad operation
+To:     Jacopo Mondi <jacopo@jmondi.org>, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, hverkuil@xs4all.nl,
+        laurent.pinchart@ideasonboard.com,
+        roman.kovalivskyi@globallogic.com, dave.stevenson@raspberrypi.org,
+        naush@raspberrypi.com
+Cc:     andrew_gabbasov@mentor.com, mrodin@de.adit-jv.com,
+        mripard@kernel.org, libcamera-devel@lists.libcamera.org,
+        sudipi@jp.adit-jv.com, hugues.fruchet@st.com,
+        erosca@de.adit-jv.com, aford173@gmail.com,
         linux-media@vger.kernel.org
-Subject: Re: [PATCH] staging: media: atomisp: i2c: atomisp-ov2680.c: fixed a
- brace coding style issue.
-Message-ID: <20200629155503.GB512815@kroah.com>
-References: <20200628043833.3dodctrmkec6aoe5@pesu-pes-edu>
- <20200629144336.fhykjoqrhfhifmes@pesu-pes-edu>
+References: <20200623100815.10674-1-jacopo@jmondi.org>
+ <20200623164911.45147-4-jacopo@jmondi.org>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Message-ID: <8f9e76ed-8c78-f6ae-c0c9-fc6d0927325b@collabora.com>
+Date:   Mon, 29 Jun 2020 18:54:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200629144336.fhykjoqrhfhifmes@pesu-pes-edu>
+In-Reply-To: <20200623164911.45147-4-jacopo@jmondi.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
 
-A: No.
-Q: Should I include quotations after my reply?
 
-http://daringfireball.net/2007/07/on_top
-
-On Mon, Jun 29, 2020 at 10:43:36AM -0400, B K Karthik wrote:
-> Did this get burried in along with a bunch of other patches? I am sending this email only because I did not recieve a negetive acknowledgement on the patch.
+On 23.06.20 18:49, Jacopo Mondi wrote:
+> Now that the driver supports more than a single mode, implement the
+> .set_fmt pad operation and adjust the existing .get_fmt one to report
+> the currently applied format.
 > 
-> I apologize if this message was hurtful / disrespectfull in any manner,
-> thank you for reading this message.
+> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> ---
+>   drivers/media/i2c/ov5647.c | 67 +++++++++++++++++++++++++++++++++++---
+>   1 file changed, 62 insertions(+), 5 deletions(-)
 > 
-> karthik
+> diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
+> index af9e6d43967d8..39e320f321bd8 100644
+> --- a/drivers/media/i2c/ov5647.c
+> +++ b/drivers/media/i2c/ov5647.c
+> @@ -1016,15 +1016,72 @@ static int ov5647_enum_frame_size(struct v4l2_subdev *sd,
+>   	return 0;
+>   }
+>   
+> -static int ov5647_set_get_fmt(struct v4l2_subdev *sd,
+> +static int ov5647_get_pad_fmt(struct v4l2_subdev *sd,
+>   			      struct v4l2_subdev_pad_config *cfg,
+>   			      struct v4l2_subdev_format *format)
+>   {
+>   	struct v4l2_mbus_framefmt *fmt = &format->format;
+> +	struct v4l2_mbus_framefmt *sensor_format;
+> +	struct ov5647 *sensor = to_sensor(sd);
+>   
+> -	/* Only one format is supported, so return that. */
+> +	mutex_lock(&sensor->lock);
+>   	memset(fmt, 0, sizeof(*fmt));
+> -	*fmt = OV5647_DEFAULT_FORMAT;
+> +
+> +	switch (format->which) {
+> +	case V4L2_SUBDEV_FORMAT_TRY:
+> +		sensor_format = v4l2_subdev_get_try_format(sd, cfg, format->pad);
+> +		break;
+> +	default:
+> +		sensor_format = &sensor->mode->format;
+> +		break;
+> +	}
+> +
+> +	*fmt = *sensor_format;
+> +	mutex_unlock(&sensor->lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
+> +			      struct v4l2_subdev_pad_config *cfg,
+> +			      struct v4l2_subdev_format *format)
+> +{
+> +	struct v4l2_mbus_framefmt *fmt = &format->format;
+> +	struct ov5647 *sensor = to_sensor(sd);
+> +	struct ov5647_mode *ov5647_mode_list;
+> +	struct ov5647_mode *mode;
+> +	unsigned int num_modes;
+> +
+> +	/*
+> +	 * Default mbus code MEDIA_BUS_FMT_SBGGR10_1X10 if the requested one
+> +	 * is not supported.
+
+In previous patch you added macros OV5647_DEFAULT_MODE, OV5647_DEFAULT_FORMAT
+which comes from first format in the array 'ov5647_formats' which is MEDIA_BUS_FMT_SBGGR8_1X8.
+But here you set the default format to MEDIA_BUS_FMT_SBGGR10_1X10
+
+> +	 */
+> +	if (fmt->code == MEDIA_BUS_FMT_SBGGR8_1X8) {
+> +		ov5647_mode_list = ov5647_sbggr8_modes;
+> +		num_modes = ARRAY_SIZE(ov5647_sbggr8_modes);
+> +	} else {
+> +		ov5647_mode_list = ov5647_sbggr10_modes;
+> +		num_modes = ARRAY_SIZE(ov5647_sbggr10_modes);
+> +	}
+> +
+> +	mode = v4l2_find_nearest_size(ov5647_mode_list, num_modes,
+> +				      format.width, format.height,
+> +				      fmt->width, fmt->height);
+> +
+> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
+> +		mutex_lock(&sensor->lock);
+> +		*v4l2_subdev_get_try_format(sd, cfg, format->pad) = mode->format;
+> +		*fmt = mode->format;
+> +		mutex_unlock(&sensor->lock);
+> +
+> +		return 0;
+> +	}
+> +
+> +	/* Update the sensor mode and apply at it at streamon time. */
+> +	mutex_lock(&sensor->lock);
+> +	sensor->mode = mode;
+> +	*fmt = mode->format;
+> +	mutex_unlock(&sensor->lock);
+>   
+>   	return 0;
+>   }
+> @@ -1068,8 +1125,8 @@ static int ov5647_get_selection(struct v4l2_subdev *sd,
+>   static const struct v4l2_subdev_pad_ops ov5647_subdev_pad_ops = {
+>   	.enum_mbus_code		= ov5647_enum_mbus_code,
+>   	.enum_frame_size	= ov5647_enum_frame_size,
+> -	.set_fmt		= ov5647_set_get_fmt,
+> -	.get_fmt		= ov5647_set_get_fmt,
+> +	.set_fmt		= ov5647_set_pad_fmt,
+> +	.get_fmt		= ov5647_get_pad_fmt,
+>   	.get_selection		= ov5647_get_selection,
+>   };
+>   
 > 
-> On 20/06/28 12:38AM, B K Karthik wrote:
-
-You sent this one day ago.
-
-Please be patient, some maintainers only get to patches every few weeks.
-If, after 2 weeks, there has not been a response, then resend it.
-
-Remember, maintainers have other work to do as well, and staging patches
-are usually down the list of things they work on.
-
-(hint, I'm not the maintainer of this part of the staging tree...)
-
-thanks,
-
-greg k-h
