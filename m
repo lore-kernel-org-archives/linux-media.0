@@ -2,279 +2,323 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1257FC433E2
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 21:25:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 500BEC433E2
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 21:57:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CECAA214F1
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 21:25:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29FC9206C3
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 21:57:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="P3b0Oc0J"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="LQslp9z5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390660AbgF2VZb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 17:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390495AbgF2VZ3 (ORCPT
+        id S2404728AbgF2V5l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 17:57:41 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:60333 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2404715AbgF2V5j (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 17:25:29 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BE3C061755
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 14:25:29 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id b6so18032474wrs.11
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 14:25:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BM50nnBHnVeRvMZAbBCWlBD03TO+/80b6hWhqJH/GZY=;
-        b=P3b0Oc0JgkqZgKoOV67SdE4VfSsU2JGvGtH/XKD5HTmzB9gzjqrOWmyeONm5DhPz+Q
-         /MLyuMMBR04vWUBk1L571QgJ8PXXpmfOK5YD5RRSoAYmeD+QszCfRI3X68J9MKw20cwQ
-         H3I3TRPYcEKB/x1T8wBYhS0OPd1c9hDarsz2D+p3fXG+hcujQz6CjK5hnrS5xxghMQbw
-         c1K/f4aYDDIg0wJmyUrrDtFTxfPppuCMsgqGiI20Pel6lJxRBfNUufFRayMpM0sKgTVN
-         B18/4knFdP3Uodk/LF0/6WTVTQPQOYoR2vy8fOPSfOtH74w6at3r6Tg2qG87XngppomV
-         iiTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BM50nnBHnVeRvMZAbBCWlBD03TO+/80b6hWhqJH/GZY=;
-        b=jECOzk/dCKjEpuOhTZy70SVjIVLTlHzCsMvlu5XSr9KZMJvJ17Jqj0X7zYdrfmpdXu
-         5Cj/GpiTLaqKUc/GqMIXW6xBkKYRWiQb4Xq+MBVNTs4v/aTNEXymdwK6Z1KUS5cQn2dR
-         QpJVkhCdDcIlwYiIL3pOrlfuDO4FdXttLh7MT3M7Szn6tUwohPoioR/PHk2Ga2GhHIBK
-         0EsuGs7hyNA8/ypNXXXnLaMS0gkzrWzexKJCjD5VC5l/si5ULvN348D4kU2jfNgKpJB/
-         oXDEzkYF8dAhudiWGv8fauwgNu6OZNE464sEjo3dcZsuYb8LOQuiSQbXo5ynbvaEkfJd
-         jLZA==
-X-Gm-Message-State: AOAM532KZUARZ5bF1adRMRAadlEC/bSjduMV565kMBqe7IePRpqp5y8c
-        Pj0jL4Vzjqbi9h2F72jZo2yqoERA3pvgOzzFbMyP2Q==
-X-Google-Smtp-Source: ABdhPJybfFNMi3YyvOvpv8ztq38Sb1e0ZKFiOiMy63eHPDD2Rpb5GtPT4Szks0WP96EU0G6C26wzBtE2IUjnDice7MI=
-X-Received: by 2002:adf:fc90:: with SMTP id g16mr18655166wrr.42.1593465927946;
- Mon, 29 Jun 2020 14:25:27 -0700 (PDT)
+        Mon, 29 Jun 2020 17:57:39 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id pq5yjZgkq0MRapq61jPyw7; Mon, 29 Jun 2020 11:29:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1593422943; bh=HG6aXa0G2/oL2YwtHy3gZbLqxOSMpxFnwk+kd5Lht7E=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=LQslp9z5ToBLh8Xspe/VcMIlqNlvL0wDyuxqQrSy0sYxcx4SjMBARBzmPp2b/mXJO
+         ahIRiJPczRzP6fDFBsCp4e1kszT1DitQNxDRSIRM7k11f0+NeHiSxqNg+Xb6IJj0rK
+         6MtdmbxuPuA6uuVUK01JgmQ5EDrhFL1EyR4sFmthYrUkwtHzyXV0+gn9cRsihwWgYh
+         nf3L0SwaXNWEGW/tZfhzM3yWnzbmCSCphRCsrsl5JlnE7DnXmTHJiewRYmYqbZRwvc
+         luDADAG7vIqS7Lr559JOv8zfpeabluaStg6OIa/mGdRplnqMjxyyZ5N72Ka0sCg+vo
+         iwRHoO5pnEQrw==
+Subject: Re: [RFC PATCH v2 08/18] media: tegra-video: Enable TPG based on
+ kernel config
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
+        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com
+Cc:     digetx@gmail.com, sboyd@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
+ <1592358094-23459-9-git-send-email-skomatineni@nvidia.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <f0f362e2-3748-5efe-b4a2-4ad344ae6a1e@xs4all.nl>
+Date:   Mon, 29 Jun 2020 11:28:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-References: <20200623100815.10674-1-jacopo@jmondi.org> <20200623165550.45835-3-jacopo@jmondi.org>
- <3aab9b3d-0156-e83c-9a63-026ded395af6@collabora.com>
-In-Reply-To: <3aab9b3d-0156-e83c-9a63-026ded395af6@collabora.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Mon, 29 Jun 2020 22:25:12 +0100
-Message-ID: <CAPY8ntBq6Lzo2qPNX6ke608SOQYVxsdjfXj2GTS6uZQMmi23JQ@mail.gmail.com>
-Subject: Re: [libcamera-devel] [PATCH 22/25] media: ov5647: Support V4L2_CID_PIXEL_RATE
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.org>,
-        Naushir Patuck <naush@raspberrypi.com>,
-        andrew_gabbasov@mentor.com, mrodin@de.adit-jv.com,
-        Maxime Ripard <mripard@kernel.org>,
-        libcamera-devel@lists.libcamera.org, sudipi@jp.adit-jv.com,
-        hugues.fruchet@st.com, erosca@de.adit-jv.com, aford173@gmail.com,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1592358094-23459-9-git-send-email-skomatineni@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfKkXLlR5hpfZJdFnd49TANoPwmUQ+5Xlsf+/kOTXOATIDj7u/gR8iNOwyKfLYxvURugNirOKE6DEVtqs48XFDgFdx6qriUZ2xKX4qkBqbKgvZoMmpijX
+ Xkzn3p0ixS/u7QOhz00Ms1O2drJ01MohpuFxwQBNRAohGKycIaWaChyy7vjvU7FHZIzh7UicRMOg/0tGkm5HaIdVSXDZmJQoxOz4liitbhzMjFM2zbUnyPIJ
+ jcBRc6WaNqsbkSxHffaRLMpGG0eN3Bw8YNjj9lmEFnJLqFY9gGr1UHtAB9osHeC7oMm5gkPs7eqokAavAQI9T6+uIhQPRgaT9kLZnTzIWq/hdFeAK9infQeo
+ YUncUHqsLkOGfVh8BnvHjHbHS/YSHlU4KbYhxyralzi8UmqqaIF4mPgUS9PMbgLWVQYELJQVI3vFDQRBe+n8yN824Qq9Ech6RUXCyasPC0ae1tGIJANaWBbX
+ s+StPVVHPks4BRihMV01KZklVJucFrwX33jKLcQB5SQP3pzLZV8DpEd9q2EjRqff7otc0I7InXyINCUlRBUIEtwirGk5kEFNx7Njngvjh/22TnVc1w92WZca
+ j5h5fyts+ItWYkLyXbRzUcFj2jjTlAERAM5wGO5ECSBjrKUR5xcdENX93Dk6s5oKcft4C630sz+LqsBfLo41nbsE
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dafna
+On 17/06/2020 03:41, Sowjanya Komatineni wrote:
+> Tegra internal TPG mode is only for Tegra vi and csi testing
+> without a real sensor and driver should default support real
+> sensor.
+> 
+> So, This patch adds CONFIG_VIDEO_TEGRA_TPG and enables Tegra
+> internal TPG mode only when this config is selected.
+> 
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> ---
+>  drivers/staging/media/tegra-video/Kconfig    |  6 +++++
+>  drivers/staging/media/tegra-video/csi.c      | 38 +++++++++++++++++++++++-----
+>  drivers/staging/media/tegra-video/tegra210.c |  6 +++++
+>  drivers/staging/media/tegra-video/vi.c       | 13 +++++++---
+>  drivers/staging/media/tegra-video/video.c    | 23 +++++++++--------
+>  5 files changed, 65 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/staging/media/tegra-video/Kconfig b/drivers/staging/media/tegra-video/Kconfig
+> index f6c61ec..566da62 100644
+> --- a/drivers/staging/media/tegra-video/Kconfig
+> +++ b/drivers/staging/media/tegra-video/Kconfig
+> @@ -10,3 +10,9 @@ config VIDEO_TEGRA
+>  
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called tegra-video.
+> +
+> +config VIDEO_TEGRA_TPG
+> +	bool "NVIDIA Tegra VI driver TPG mode"
+> +	depends on VIDEO_TEGRA
+> +	help
+> +	  Say yes here to enable Tegra internal TPG mode
 
-On Mon, 29 Jun 2020 at 18:01, Dafna Hirschfeld
-<dafna.hirschfeld@collabora.com> wrote:
->
->
->
-> On 23.06.20 18:55, Jacopo Mondi wrote:
-> > From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> >
-> > Clients need to know the pixel rate in order to compute exposure
-> > and frame rate values. Advertise it.
-> >
-> > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> > ---
-> >   drivers/media/i2c/ov5647.c | 40 +++++++++++++++++++++++++++++++-------
-> >   1 file changed, 33 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-> > index 35865e56de5f9..218576a05e66b 100644
-> > --- a/drivers/media/i2c/ov5647.c
-> > +++ b/drivers/media/i2c/ov5647.c
-> > @@ -76,6 +76,7 @@ struct regval_list {
-> >   struct ov5647_mode {
-> >       struct v4l2_mbus_framefmt       format;
-> >       struct v4l2_rect                crop;
-> > +     u64                             pixel_rate;
-> >       struct regval_list              *reg_list;
-> >       unsigned int                    num_regs;
-> >   };
-> > @@ -97,6 +98,7 @@ struct ov5647 {
-> >       struct v4l2_ctrl_handler        ctrls;
-> >       struct ov5647_mode              *mode;
-> >       struct ov5647_mode              *current_mode;
-> > +     struct v4l2_ctrl                *pixel_rate;
-> >   };
-> >
-> >   static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
-> > @@ -583,6 +585,7 @@ static struct ov5647_mode ov5647_sbggr8_modes[] = {
-> >                       .width          = 1280,
-> >                       .height         = 960,
-> >               },
-> > +             .pixel_rate     = 77291670,
-> >               .reg_list       = ov5647_640x480_sbggr8,
-> >               .num_regs       = ARRAY_SIZE(ov5647_640x480_sbggr8)
-> >       },
-> > @@ -604,6 +607,7 @@ static struct ov5647_mode ov5647_sbggr10_modes[] = {
-> >                       .width          = 2592,
-> >                       .height         = 1944
-> >               },
-> > +             .pixel_rate     = 87500000,
-> >               .reg_list       = ov5647_2592x1944_sbggr10,
-> >               .num_regs       = ARRAY_SIZE(ov5647_2592x1944_sbggr10)
-> >       },
-> > @@ -622,6 +626,7 @@ static struct ov5647_mode ov5647_sbggr10_modes[] = {
-> >                       .width          = 1928,
-> >                       .height         = 1080,
-> >               },
-> > +             .pixel_rate     = 81666700,
-> >               .reg_list       = ov5647_1080p30_sbggr10,
-> >               .num_regs       = ARRAY_SIZE(ov5647_1080p30_sbggr10)
-> >       },
-> > @@ -640,6 +645,7 @@ static struct ov5647_mode ov5647_sbggr10_modes[] = {
-> >                       .width          = 2592,
-> >                       .height         = 1944,
-> >               },
-> > +             .pixel_rate     = 81666700,
-> >               .reg_list       = ov5647_2x2binned_sbggr10,
-> >               .num_regs       = ARRAY_SIZE(ov5647_2x2binned_sbggr10)
-> >       },
-> > @@ -658,6 +664,7 @@ static struct ov5647_mode ov5647_sbggr10_modes[] = {
-> >                       .width          = 2560,
-> >                       .height         = 1920,
-> >               },
-> > +             .pixel_rate     = 55000000,
-> >               .reg_list       = ov5647_640x480_sbggr10,
-> >               .num_regs       = ARRAY_SIZE(ov5647_640x480_sbggr10)
-> >       },
-> > @@ -1094,6 +1101,10 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
-> >       /* Update the sensor mode and apply at it at streamon time. */
-> >       mutex_lock(&sensor->lock);
-> >       sensor->mode = mode;
-> > +
-> > +     __v4l2_ctrl_modify_range(sensor->pixel_rate, mode->pixel_rate,
-> > +                              mode->pixel_rate, 1, mode->pixel_rate);
-> > +
-> >       *fmt = mode->format;
-> >       mutex_unlock(&sensor->lock);
-> >
-> > @@ -1295,6 +1306,9 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
-> >               return  ov5647_s_analogue_gain(sd, ctrl->val);
-> >       case V4L2_CID_EXPOSURE:
-> >               return ov5647_s_exposure(sd, ctrl->val);
-> > +     case V4L2_CID_PIXEL_RATE:
-> > +             /* Read-only, but we adjust it based on mode. */
->
-> Looking at other drivers, I see they don't handle read only controls
-> in s_ctrl cb. Also the docs (vidioc-queryctrl.rst) says that trying to set a read only control should
-> return EINVAL
+This is not clear: if this is enabled, will the driver use TPG for
+ALL CSI ports? Or just for those that are not connected to anything?
+(i.e. the unused ports).
 
-It was a while ago that I looked at this, but my memory says that
-without a handler here then the call to __v4l2_ctrl_modify_range to
-update the value failed. The ranges and default were changed, but the
-current value wasn't.
+I always assumed that the latter was intended, but it kind of looks from
+the code that this switches to TPG completely.
 
-Checking now, yes, without returning 0 here,  __v4l2_ctrl_modify_range
-returns -22 (-EINVAL) and v4l2-ctl --list-ctrls afterwards shows
-Image Processing Controls
+It would also be nice if you can still use the TPG even for connected
+CSI ports by just setting the TEST_PATTERN control. I believe that's also what
+happens in the driver that is in the L4T tree.
 
-                     pixel_rate 0x009f0902 (int64)  : min=87500000
-max=87500000 step=1 default=87500000 value=81666700 flags=read-only
+In any case, it is definitely not clear from this config description what
+it does.
 
-A failure of the framework then and needs fixing there, or is it
-correct for the driver to have to implement a set hander if it needs
-to update the ranges?
-A quick grep implies that ov5647 is the first driver that needs to
-update V4L2_CID_PIXEL_RATE based on mode. I'll check in the morning if
-things like V4L2_CID_HBLANK behave the same - it may be a control type
-issue with 64 bit values.
+Regards,
 
+	Hans
 
-Interesting that the docs say EINVAL as at least one path in the
-framework appears to return -EACCES [1]
-Checking it:
-pi@raspberrypi:~ $ v4l2-ctl --set-ctrl pixel_rate=42
-VIDIOC_S_EXT_CTRLS: failed: Permission denied
-Error setting controls: Permission denied
-which would imply -EACCES
+> diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
+> index 40ea195..fb667df 100644
+> --- a/drivers/staging/media/tegra-video/csi.c
+> +++ b/drivers/staging/media/tegra-video/csi.c
+> @@ -62,6 +62,9 @@ static int csi_enum_bus_code(struct v4l2_subdev *subdev,
+>  			     struct v4l2_subdev_pad_config *cfg,
+>  			     struct v4l2_subdev_mbus_code_enum *code)
+>  {
+> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+> +		return -ENOIOCTLCMD;
+> +
+>  	if (code->index >= ARRAY_SIZE(tegra_csi_tpg_fmts))
+>  		return -EINVAL;
+>  
+> @@ -76,6 +79,9 @@ static int csi_get_format(struct v4l2_subdev *subdev,
+>  {
+>  	struct tegra_csi_channel *csi_chan = to_csi_chan(subdev);
+>  
+> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+> +		return -ENOIOCTLCMD;
+> +
+>  	fmt->format = csi_chan->format;
+>  
+>  	return 0;
+> @@ -121,6 +127,9 @@ static int csi_enum_framesizes(struct v4l2_subdev *subdev,
+>  {
+>  	unsigned int i;
+>  
+> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+> +		return -ENOIOCTLCMD;
+> +
+>  	if (fse->index >= ARRAY_SIZE(tegra_csi_tpg_sizes))
+>  		return -EINVAL;
+>  
+> @@ -148,6 +157,9 @@ static int csi_enum_frameintervals(struct v4l2_subdev *subdev,
+>  	const struct tpg_framerate *frmrate = csi->soc->tpg_frmrate_table;
+>  	int index;
+>  
+> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+> +		return -ENOIOCTLCMD;
+> +
+>  	/* one framerate per format and resolution */
+>  	if (fie->index > 0)
+>  		return -EINVAL;
+> @@ -172,6 +184,9 @@ static int csi_set_format(struct v4l2_subdev *subdev,
+>  	const struct v4l2_frmsize_discrete *sizes;
+>  	unsigned int i;
+>  
+> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+> +		return -ENOIOCTLCMD;
+> +
+>  	sizes = v4l2_find_nearest_size(tegra_csi_tpg_sizes,
+>  				       ARRAY_SIZE(tegra_csi_tpg_sizes),
+>  				       width, height,
+> @@ -208,6 +223,9 @@ static int tegra_csi_g_frame_interval(struct v4l2_subdev *subdev,
+>  {
+>  	struct tegra_csi_channel *csi_chan = to_csi_chan(subdev);
+>  
+> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+> +		return -ENOIOCTLCMD;
+> +
+>  	vfi->interval.numerator = 1;
+>  	vfi->interval.denominator = csi_chan->framerate;
+>  
+> @@ -311,8 +329,12 @@ static int tegra_csi_channel_init(struct tegra_csi_channel *chan)
+>  	subdev = &chan->subdev;
+>  	v4l2_subdev_init(subdev, &tegra_csi_ops);
+>  	subdev->dev = csi->dev;
+> -	snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "%s-%d", "tpg",
+> -		 chan->csi_port_num);
+> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+> +		snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "%s-%d", "tpg",
+> +			 chan->csi_port_num);
+> +	else
+> +		snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "%s",
+> +			 kbasename(chan->of_node->full_name));
+>  
+>  	v4l2_set_subdevdata(subdev, chan);
+>  	subdev->fwnode = of_fwnode_handle(chan->of_node);
+> @@ -405,11 +427,13 @@ static int tegra_csi_init(struct host1x_client *client)
+>  
+>  	INIT_LIST_HEAD(&csi->csi_chans);
+>  
+> -	ret = tegra_csi_tpg_channels_alloc(csi);
+> -	if (ret < 0) {
+> -		dev_err(csi->dev,
+> -			"failed to allocate tpg channels: %d\n", ret);
+> -		goto cleanup;
+> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)) {
+> +		ret = tegra_csi_tpg_channels_alloc(csi);
+> +		if (ret < 0) {
+> +			dev_err(csi->dev,
+> +				"failed to allocate tpg channels: %d\n", ret);
+> +			goto cleanup;
+> +		}
+>  	}
+>  
+>  	ret = tegra_csi_channels_init(csi);
+> diff --git a/drivers/staging/media/tegra-video/tegra210.c b/drivers/staging/media/tegra-video/tegra210.c
+> index 3baa4e3..3492a8a 100644
+> --- a/drivers/staging/media/tegra-video/tegra210.c
+> +++ b/drivers/staging/media/tegra-video/tegra210.c
+> @@ -631,7 +631,11 @@ const struct tegra_vi_soc tegra210_vi_soc = {
+>  	.ops = &tegra210_vi_ops,
+>  	.hw_revision = 3,
+>  	.vi_max_channels = 6,
+> +#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
+>  	.vi_max_clk_hz = 499200000,
+> +#else
+> +	.vi_max_clk_hz = 998400000,
+> +#endif
+>  };
+>  
+>  /* Tegra210 CSI PHY registers accessors */
+> @@ -957,7 +961,9 @@ static const char * const tegra210_csi_cil_clks[] = {
+>  	"cilab",
+>  	"cilcd",
+>  	"cile",
+> +#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
+>  	"csi_tpg",
+> +#endif
+>  };
+>  
+>  /* Tegra210 CSI operations */
+> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+> index d621ebc..0197f4e 100644
+> --- a/drivers/staging/media/tegra-video/vi.c
+> +++ b/drivers/staging/media/tegra-video/vi.c
+> @@ -565,6 +565,7 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
+>  {
+>  	int ret;
+>  
+> +#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
+>  	/* add test pattern control handler to v4l2 device */
+>  	v4l2_ctrl_new_std_menu_items(&chan->ctrl_handler, &vi_ctrl_ops,
+>  				     V4L2_CID_TEST_PATTERN,
+> @@ -576,6 +577,7 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
+>  		v4l2_ctrl_handler_free(&chan->ctrl_handler);
+>  		return chan->ctrl_handler.error;
+>  	}
+> +#endif
+>  
+>  	/* setup the controls */
+>  	ret = v4l2_ctrl_handler_setup(&chan->ctrl_handler);
+> @@ -918,10 +920,13 @@ static int tegra_vi_init(struct host1x_client *client)
+>  
+>  	INIT_LIST_HEAD(&vi->vi_chans);
+>  
+> -	ret = tegra_vi_tpg_channels_alloc(vi);
+> -	if (ret < 0) {
+> -		dev_err(vi->dev, "failed to allocate tpg channels: %d\n", ret);
+> -		goto free_chans;
+> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)) {
+> +		ret = tegra_vi_tpg_channels_alloc(vi);
+> +		if (ret < 0) {
+> +			dev_err(vi->dev,
+> +				"failed to allocate tpg channels: %d\n", ret);
+> +			goto free_chans;
+> +		}
+>  	}
+>  
+>  	ret = tegra_vi_channels_init(vi);
+> diff --git a/drivers/staging/media/tegra-video/video.c b/drivers/staging/media/tegra-video/video.c
+> index 30816aa..e50bd70 100644
+> --- a/drivers/staging/media/tegra-video/video.c
+> +++ b/drivers/staging/media/tegra-video/video.c
+> @@ -60,15 +60,17 @@ static int host1x_video_probe(struct host1x_device *dev)
+>  	if (ret < 0)
+>  		goto unregister_v4l2;
+>  
+> -	/*
+> -	 * Both vi and csi channels are available now.
+> -	 * Register v4l2 nodes and create media links for TPG.
+> -	 */
+> -	ret = tegra_v4l2_nodes_setup_tpg(vid);
+> -	if (ret < 0) {
+> -		dev_err(&dev->dev,
+> -			"failed to setup tpg graph: %d\n", ret);
+> -		goto device_exit;
+> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)) {
+> +		/*
+> +		 * Both vi and csi channels are available now.
+> +		 * Register v4l2 nodes and create media links for TPG.
+> +		 */
+> +		ret = tegra_v4l2_nodes_setup_tpg(vid);
+> +		if (ret < 0) {
+> +			dev_err(&dev->dev,
+> +				"failed to setup tpg graph: %d\n", ret);
+> +			goto device_exit;
+> +		}
+>  	}
+>  
+>  	return 0;
+> @@ -91,7 +93,8 @@ static int host1x_video_remove(struct host1x_device *dev)
+>  {
+>  	struct tegra_video_device *vid = dev_get_drvdata(&dev->dev);
+>  
+> -	tegra_v4l2_nodes_cleanup_tpg(vid);
+> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+> +		tegra_v4l2_nodes_cleanup_tpg(vid);
+>  
+>  	host1x_device_exit(dev);
+>  
+> 
 
-I am testing on a 5.4 kernel rather than media_tree.git, but there
-don't appear to be any significant differences in this area between
-the two.
-
-Cheers.
-  Dave
-
-[1] https://git.linuxtv.org/media_tree.git/tree/drivers/media/v4l2-core/v4l2-ctrls.c#n4224
-
-> Thanks,
-> Dafna
->
-> > +             return 0;
-> >       default:
-> >               dev_info(&client->dev,
-> >                        "Control (id:0x%x, val:0x%x) not supported\n",
-> > @@ -1313,7 +1327,7 @@ static int ov5647_init_controls(struct ov5647 *sensor)
-> >   {
-> >       struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
-> >
-> > -     v4l2_ctrl_handler_init(&sensor->ctrls, 5);
-> > +     v4l2_ctrl_handler_init(&sensor->ctrls, 6);
-> >
-> >       v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-> >                         V4L2_CID_AUTOGAIN, 0, 1, 1, 0);
-> > @@ -1333,17 +1347,29 @@ static int ov5647_init_controls(struct ov5647 *sensor)
-> >       v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-> >                         V4L2_CID_ANALOGUE_GAIN, 16, 1023, 1, 32);
-> >
-> > -     if (sensor->ctrls.error) {
-> > -             dev_err(&client->dev, "%s Controls initialization failed (%d)\n",
-> > -                     __func__, sensor->ctrls.error);
-> > -             v4l2_ctrl_handler_free(&sensor->ctrls);
-> > +     /* By default, PIXEL_RATE is read only, but it does change per mode */
-> > +     sensor->pixel_rate = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
-> > +                                            V4L2_CID_PIXEL_RATE,
-> > +                                            sensor->mode->pixel_rate,
-> > +                                            sensor->mode->pixel_rate, 1,
-> > +                                            sensor->mode->pixel_rate);
-> > +     if (!sensor->pixel_rate)
-> > +             goto handler_free;
-> > +     sensor->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> >
-> > -             return sensor->ctrls.error;
-> > -     }
-> > +     if (sensor->ctrls.error)
-> > +             goto handler_free;
-> >
-> >       sensor->sd.ctrl_handler = &sensor->ctrls;
-> >
-> >       return 0;
-> > +
-> > +handler_free:
-> > +     dev_err(&client->dev, "%s Controls initialization failed (%d)\n",
-> > +             __func__, sensor->ctrls.error);
-> > +     v4l2_ctrl_handler_free(&sensor->ctrls);
-> > +
-> > +     return sensor->ctrls.error;
-> >   }
-> >
-> >   static int ov5647_parse_dt(struct ov5647 *sensor, struct device_node *np)
-> >
-> _______________________________________________
-> libcamera-devel mailing list
-> libcamera-devel@lists.libcamera.org
-> https://lists.libcamera.org/listinfo/libcamera-devel
