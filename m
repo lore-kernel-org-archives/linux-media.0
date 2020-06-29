@@ -2,183 +2,172 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 194F7C433E1
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC204C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:52:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E261820663
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:50:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD91120663
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:52:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GryIZOgw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="soWLyATD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388123AbgF2Uup (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S2389778AbgF2UwF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731431AbgF2TNe (ORCPT
+        with ESMTP id S1731372AbgF2TN1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:13:34 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9B7C008618
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 03:29:57 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id h28so12393326edz.0
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 03:29:57 -0700 (PDT)
+        Mon, 29 Jun 2020 15:13:27 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE899C0A8939;
+        Mon, 29 Jun 2020 00:37:48 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id o1so195020plk.1;
+        Mon, 29 Jun 2020 00:37:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PhguteWn+BNL2rOz+hmBG6LMc95B72qiCMa6M5a1mog=;
-        b=GryIZOgwWXWQdlINYt+x/02V6RsfowLZwhA3TrXCr0kgs/XolUBKkiYBVjZIeZVq6U
-         B0A+U5FpFXsT10NBtK+1s80jnmBYvKFrjgCI6zXkQLKW1c9oDO0LQ4FLIsfYd0rfHVAx
-         jfAXF26rS6rgbwq+ioEFJHVIJaG2W8rmmHqW4=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DRaWMxjlA+y9G9x8PTReSZmOggDcJdYbq3Dmt0Z1Wlg=;
+        b=soWLyATDxsP3lSKBdnbKGoDIiCBQaXGh9rWTzN54ndzKrsUNd0G0F2H/4XSCMotvjR
+         YSPGri8ucPhLiObQp+xsTU6lkzmVJymhJF9wc0Ue711DLzMZWvpfsVh7IQOz85b936Qn
+         Mdnl7wrMDLGJFMOOmIoqg0TXIGB74cL/i6YwdqkKPbiKx2++8a9enxWsKUq7Pxt5/yup
+         udl+xB/D51qwssbd3BQlZqN82j0YURu669zYz2nNRCWYDpEA0NbfiwL13/FaR8pL1SUv
+         Udijy41l1GPzKMzS8sM4HfGclXHANrqlirJxzN+N+piO83H3P9+vKgOLNipO85hXgl0H
+         EPgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PhguteWn+BNL2rOz+hmBG6LMc95B72qiCMa6M5a1mog=;
-        b=V9JveaevMUvloezjIdx2xzEOcvASD2RW3EjOxPPwK4BcI8UJxnXdYpzQ6YHK7mdQL8
-         pAU4MFIY1HZvKoG+eatxE0ry2ZKKBpl80pN9VkZYwW/ZYVYaa4gOtvx8LG2HCBghCQT6
-         0eeTgQ7ViSOZ8ItNk6SZf4noLI5hmgWWgsMOiIkvrarntYtepyPJHz2Ijan1o5djRUcl
-         4+8lzvJ6gkSuk/PwHp6VCcGASrfBxaZqarD3EmF1rbudI5nlkah9sahHbvghRS6BnmR0
-         CadJYvT1PXX1VvzUCnktGYyuw15lR70Px2PbvXQw6Bborh0+CA5zb2TnVw0wNk3Jz5JX
-         S2AQ==
-X-Gm-Message-State: AOAM532texPwNwgPjVPNBQ0pNw6PXH8RvvTyaJOb3kFu0Ptt3bxlVmmx
-        oRq1+px4wrIaACHGfw6Q8w4QjhHH5SJSIA==
-X-Google-Smtp-Source: ABdhPJwxQQ5X3IsNw5mp896b98SgGEfOn/VBsmNfXtwwPScBWDnj7ovAIgKJJ40W3thX/1XzD2Yf9Q==
-X-Received: by 2002:aa7:c341:: with SMTP id j1mr17505669edr.197.1593426595821;
-        Mon, 29 Jun 2020 03:29:55 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id p14sm2127658edr.23.2020.06.29.03.29.55
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jun 2020 03:29:55 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id s10so15950125wrw.12
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 03:29:55 -0700 (PDT)
-X-Received: by 2002:adf:80e6:: with SMTP id 93mr15866385wrl.17.1593426145911;
- Mon, 29 Jun 2020 03:22:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DRaWMxjlA+y9G9x8PTReSZmOggDcJdYbq3Dmt0Z1Wlg=;
+        b=cgs0pkVkOZZkrVjG8ywlr+IwyFb5zrha10gwz8h3Dg43SOxkoy32CpJkQ1EUXWZrFD
+         SCWeQtP32dNRAwgV68AiOSyX2H5CvgzmFM6DItqXq/rYLZla0CctQKIyPqp6Wi6hAEFI
+         2J0XO7z/D19CJ52DI1cbkCY/5DpycIIfN6gkz14EjsW0OT2/9/0xLtJXXnn0g6W48fIZ
+         PqY4m8LQOaHEWAsDEoMPqKv5iad9NNC5QSGgyZuzYoLstdVayQBU6vxNq7XwYF0JInlV
+         Mcjqil2zxKL7NqAm53QpZSgvO+vnswz+6sP5JEPXgFofErdVx2G4e1/eJola0PX3Bt4P
+         0/+g==
+X-Gm-Message-State: AOAM530lN1x4xD/kypI53Ca/scRYVqNMBlBE5Nyr1AF7XuTzadWKCdfn
+        1BKU/g9rIXRrLkZXjtlFOSQ=
+X-Google-Smtp-Source: ABdhPJz3FvoamkU1GXqNQu9Zc7XjkNo/hUIxVOEgR9mxBWcqDHqy9UnEwm4JEcoy46VmRIDPIGi8vw==
+X-Received: by 2002:a17:90a:df11:: with SMTP id gp17mr15071981pjb.188.1593416268444;
+        Mon, 29 Jun 2020 00:37:48 -0700 (PDT)
+Received: from varodek.iballbatonwifi.com ([103.105.153.57])
+        by smtp.gmail.com with ESMTPSA id q10sm34673004pfk.86.2020.06.29.00.37.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 00:37:48 -0700 (PDT)
+From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, bjorn@helgaas.com,
+        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        skhan@linuxfoundation.org
+Subject: [PATCH v1 6/6] [media] tw68: use generic power management
+Date:   Mon, 29 Jun 2020 13:06:04 +0530
+Message-Id: <20200629073604.205478-7-vaibhavgupta40@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200629073604.205478-1-vaibhavgupta40@gmail.com>
+References: <20200629073604.205478-1-vaibhavgupta40@gmail.com>
 MIME-Version: 1.0
-References: <20200615122937.18965-1-dongchun.zhu@mediatek.com>
- <20200615122937.18965-3-dongchun.zhu@mediatek.com> <20200618191026.GA73379@chromium.org>
- <1592639284.8804.712.camel@mhfsdcap03> <20200622152350.GB260716@chromium.org> <1593412218.17166.3.camel@mhfsdcap03>
-In-Reply-To: <1593412218.17166.3.camel@mhfsdcap03>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Mon, 29 Jun 2020 12:22:14 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5Bi+Dh85Wz5q4RMGQvKw3aHFWWgypKsNukg_MwF4_ceCw@mail.gmail.com>
-Message-ID: <CAAFQd5Bi+Dh85Wz5q4RMGQvKw3aHFWWgypKsNukg_MwF4_ceCw@mail.gmail.com>
-Subject: Re: [PATCH V10 2/2] media: i2c: ov02a10: Add OV02A10 image sensor driver
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Cao Bing Bu <bingbu.cao@intel.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Sj Huang <sj.huang@mediatek.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        =?UTF-8?B?U2hlbmduYW4gV2FuZyAo546L5Zyj55S3KQ==?= 
-        <shengnan.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 8:30 AM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
->
-> Hi Tomasz,
->
-> Thanks for the review.
->
-> On Mon, 2020-06-22 at 15:23 +0000, Tomasz Figa wrote:
-> > On Sat, Jun 20, 2020 at 03:48:04PM +0800, Dongchun Zhu wrote:
-> > > Hi Tomasz,
-> > >
-> > > Thanks for the review.
-> > >
-> > > On Thu, 2020-06-18 at 19:10 +0000, Tomasz Figa wrote:
-> > > > Hi Dongchun,
-> > > >
-> > > > On Mon, Jun 15, 2020 at 08:29:37PM +0800, Dongchun Zhu wrote:
-> > > > > Add a V4L2 sub-device driver for OV02A10 image sensor.
-> > > > >
-> > > > > Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-> > > > > ---
-> > > > >  MAINTAINERS                 |    1 +
-> > > > >  drivers/media/i2c/Kconfig   |   13 +
-> > > > >  drivers/media/i2c/Makefile  |    1 +
-> > > > >  drivers/media/i2c/ov02a10.c | 1042 +++++++++++++++++++++++++++++++++++++++++++
-> > > > >  4 files changed, 1057 insertions(+)
-> > > > >  create mode 100644 drivers/media/i2c/ov02a10.c
-> > > > >
-> > > >
-> > > > Thank you for the patch. Please see my comments inline.
-> > > >
-> > > > [snip]
-> > > > > +static int ov02a10_set_fmt(struct v4l2_subdev *sd,
-> > > > > +                          struct v4l2_subdev_pad_config *cfg,
-> > > > > +                          struct v4l2_subdev_format *fmt)
-> > > > > +{
-> > > > > +       struct ov02a10 *ov02a10 = to_ov02a10(sd);
-> > > > > +       struct v4l2_mbus_framefmt *mbus_fmt = &fmt->format;
-> > > > > +
-> > > > > +       mutex_lock(&ov02a10->mutex);
-> > > > > +
-> > > > > +       if (ov02a10->streaming) {
-> > > > > +               mutex_unlock(&ov02a10->mutex);
-> > > > > +               return -EBUSY;
-> > > > > +       }
-> > > > > +
-> > > > > +       /* Only one sensor mode supported */
-> > > > > +       mbus_fmt->code = ov02a10->fmt.code;
-> > > > > +       ov02a10_fill_fmt(ov02a10->cur_mode, mbus_fmt);
-> > > > > +       ov02a10->fmt = fmt->format;
-> > > > > +
-> > > > > +       if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-> > > > > +               *v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-> > > >
-> > > > If fmt->which is V4L2_SUBDEV_FORMAT_TRY, the internal driver state must not
-> > > > be affected. It also should not depend on whether the sensor is streaming
-> > > > or not. Basically it should be considered a special "candidate" format,
-> > > > which isn't programmed to the hardware, but just stored aside.
-> > > >
-> > >
-> > > Hmm. Maybe we shall use FORMAT_TRY like this:
-> > > struct v4l2_mbus_framefmt *frame_fmt;
-> > > ...
-> > > if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-> > >     frame_fmt = v4l2_subdev_get_try_format(sd, cfg, 0);
-> > > else
-> > >     frame_fmt = &ov02a10->fmt;
-> > >
-> > > *frame_fmt = *mbus_fmt;
-> > >
-> > > (Remove 'ov02a10->fmt = fmt->format;' above)
-> > >
-> >
-> > Yes, I guess that should work. Also the ov02a10->streaming condition
-> > shouldn't be checked if fmt->which is V4L2_SUBDEV_FORMAT_TRY).
-> >
->
-> Maybe we shall use more strict condition to check streaming state:
-> 'if (ov02a10->streaming)' --> 'if (ov02a10->streaming && fmt->which ==
-> V4L2_SUBDEV_FORMAT_ACTIVE)'
+With legacy PM, drivers themselves were responsible for managing the
+device's power states and takes care of register states.
 
-Yes, that should work.
+After upgrading to the generic structure, PCI core will take care of
+required tasks and drivers should do only device-specific operations.
 
-Best regards,
-Tomasz
+The driver was invoking PCI helper functions like pci_save/restore_state()
+which is not recommended.
+
+Compile-Tested only.
+
+Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+---
+ drivers/media/pci/tw68/tw68-core.c | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/media/pci/tw68/tw68-core.c b/drivers/media/pci/tw68/tw68-core.c
+index b45f3ffa3de5..065420b09250 100644
+--- a/drivers/media/pci/tw68/tw68-core.c
++++ b/drivers/media/pci/tw68/tw68-core.c
+@@ -359,10 +359,9 @@ static void tw68_finidev(struct pci_dev *pci_dev)
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ }
+ 
+-#ifdef CONFIG_PM
+-
+-static int tw68_suspend(struct pci_dev *pci_dev , pm_message_t state)
++static int __maybe_unused tw68_suspend(struct device *dev_d)
+ {
++	struct pci_dev *pci_dev = to_pci_dev(dev_d);
+ 	struct v4l2_device *v4l2_dev = pci_get_drvdata(pci_dev);
+ 	struct tw68_dev *dev = container_of(v4l2_dev,
+ 				struct tw68_dev, v4l2_dev);
+@@ -373,24 +372,19 @@ static int tw68_suspend(struct pci_dev *pci_dev , pm_message_t state)
+ 
+ 	synchronize_irq(pci_dev->irq);
+ 
+-	pci_save_state(pci_dev);
+-	pci_set_power_state(pci_dev, pci_choose_state(pci_dev, state));
+ 	vb2_discard_done(&dev->vidq);
+ 
+ 	return 0;
+ }
+ 
+-static int tw68_resume(struct pci_dev *pci_dev)
++static int __maybe_unused tw68_resume(struct device *dev_d)
+ {
+-	struct v4l2_device *v4l2_dev = pci_get_drvdata(pci_dev);
++	struct v4l2_device *v4l2_dev = dev_get_drvdata(dev_d);
+ 	struct tw68_dev *dev = container_of(v4l2_dev,
+ 					    struct tw68_dev, v4l2_dev);
+ 	struct tw68_buf *buf;
+ 	unsigned long flags;
+ 
+-	pci_set_power_state(pci_dev, PCI_D0);
+-	pci_restore_state(pci_dev);
+-
+ 	/* Do things that are done in tw68_initdev ,
+ 		except of initializing memory structures.*/
+ 
+@@ -408,19 +402,17 @@ static int tw68_resume(struct pci_dev *pci_dev)
+ 
+ 	return 0;
+ }
+-#endif
+ 
+ /* ----------------------------------------------------------- */
+ 
++static SIMPLE_DEV_PM_OPS(tw68_pm_ops, tw68_suspend, tw68_resume);
++
+ static struct pci_driver tw68_pci_driver = {
+-	.name	  = "tw68",
+-	.id_table = tw68_pci_tbl,
+-	.probe	  = tw68_initdev,
+-	.remove	  = tw68_finidev,
+-#ifdef CONFIG_PM
+-	.suspend  = tw68_suspend,
+-	.resume   = tw68_resume
+-#endif
++	.name	   = "tw68",
++	.id_table  = tw68_pci_tbl,
++	.probe	   = tw68_initdev,
++	.remove	   = tw68_finidev,
++	.driver.pm = &tw68_pm_ops,
+ };
+ 
+ module_pci_driver(tw68_pci_driver);
+-- 
+2.27.0
+
