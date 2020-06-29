@@ -2,150 +2,120 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE6C4C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 19:33:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6417C433E1
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 19:52:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 891E02067D
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 19:33:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=pesu-pes-edu.20150623.gappssmtp.com header.i=@pesu-pes-edu.20150623.gappssmtp.com header.b="CN262X2B"
+	by mail.kernel.org (Postfix) with ESMTP id B0DEB20724
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 19:52:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732218AbgF2TdN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 15:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733042AbgF2Tcp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:32:45 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38977C02F006
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 07:43:43 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id c1so857594pja.5
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 07:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pesu-pes-edu.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jLORGp6VfrDrQA8PpUsXn5+mhrmQSe4/xK3Vs+cmlnA=;
-        b=CN262X2BWpTSqbB1xZLnzt3P6PXjtlLIfYiIegWD8/RQLngh8QXv28Rke8t+T7ErjV
-         0xoehil5YqUKWFNf9122vK/5Bl/5hRrynVReUB3J5JnMTxyoit84XWPf/TXz1ioFztsx
-         AHVRLwqLna0A2h1BfWLa6SpiqcFSvanAVPhajVV+GYLDx6Q8/BDHlmGdGmlSXzWQ/ZTX
-         IFWxdidVNy4yIbMMgL2eFDLZh1gon3kWRo1AzuR3WxbQGW5UDDAdyMMFy5F/qo91WYm7
-         qo+N+qOh3A/N7rL4UKaOo4Xf7ki/gntOiUCTeRRDcT02wPU4+AzS2xOjl9YaWxHfl1JS
-         T3HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jLORGp6VfrDrQA8PpUsXn5+mhrmQSe4/xK3Vs+cmlnA=;
-        b=sR+7q/1I4fHlE4ncJHAd/lf1DiDyd3CzdVXbCruPPnhDKcz+Pv4/HGOVkwvM6mUPdl
-         ABS8CpQExJOAaJxDe7pc1zJRoKkg1tIe0jCu2l01syZIoyJnT4EJs+zSOVkfboHksNRi
-         riuS2Ys4KNXT0lHAEpX6oCRJq2UG0nHt7ZfT/yyeHpKOkFaDnoHUATyP8ZZVfIre04wW
-         IhCwtX8juR0itcGE/E4bTiKu4TkwfDJcZ/CIenFRETbxAuDguHbzvKmQE5ygz4ITSGT6
-         ZK54oL7eN9NJuFfiLxu487fZML76S34B2IWZ5qD/V6OFC78AFtSOLMtQ2pl2Rg0CZVUa
-         1hXw==
-X-Gm-Message-State: AOAM531VPuqbdhplwrvfqrsT9qJWYSH1xU7Dd8XsqzHg6oWfFCOq66U5
-        CgNAUlpt4wDAdLah1VH8iZsh2A==
-X-Google-Smtp-Source: ABdhPJyirQnsQiQuhswSo/uIYV1ui5LyLyvg/sRt0KpvA9WEl1ByzdHprHAFfNPsV1N0i2xDWfS+Eg==
-X-Received: by 2002:a17:90a:a413:: with SMTP id y19mr4591589pjp.59.1593441822678;
-        Mon, 29 Jun 2020 07:43:42 -0700 (PDT)
-Received: from localhost ([2406:7400:73:703c:908:f18a:1156:5c38])
-        by smtp.gmail.com with ESMTPSA id s9sm101062pgo.22.2020.06.29.07.43.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 07:43:41 -0700 (PDT)
-Date:   Mon, 29 Jun 2020 10:43:36 -0400
-From:   B K Karthik <bkkarthik@pesu.pes.edu>
-To:     B K Karthik <karthik.bk2000@live.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: media: atomisp: i2c: atomisp-ov2680.c: fixed a
- brace coding style issue.
-Message-ID: <20200629144336.fhykjoqrhfhifmes@pesu-pes-edu>
-References: <20200628043833.3dodctrmkec6aoe5@pesu-pes-edu>
+        id S2388214AbgF2Tvy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 15:51:54 -0400
+Received: from mga07.intel.com ([134.134.136.100]:58002 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387713AbgF2Tkb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:40:31 -0400
+IronPort-SDR: g8a0he2nHZlnaZhU3njqQbqewEUftLYU4N2MQUeSjTSXLdJ1YyvxZuQ+T365G2vhmUf/Yv2RwI
+ vt+M19BHPEYg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="211080107"
+X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
+   d="scan'208";a="211080107"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2020 09:22:04 -0700
+IronPort-SDR: /q+RtWXWvKmeLRpINcXoUrFDfGKuP+aWYfd3r32KmAC2Yfhfzh0eVzyy4RA616VQtk9mp9FT4m
+ epK84cUWBG0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
+   d="scan'208";a="294928961"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 29 Jun 2020 09:22:03 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 50E2917D; Mon, 29 Jun 2020 13:57:40 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 2/5] media: atomisp: Use temporary variable for device in gmin_subdev_add()
+Date:   Mon, 29 Jun 2020 13:57:36 +0300
+Message-Id: <20200629105739.3098-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200629105739.3098-1-andriy.shevchenko@linux.intel.com>
+References: <20200629105739.3098-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i3ho2sv5roir6t7m"
-Content-Disposition: inline
-In-Reply-To: <20200628043833.3dodctrmkec6aoe5@pesu-pes-edu>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Use temporary variable for device in gmin_subdev_add().
 
---i3ho2sv5roir6t7m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+While here, drop unused temporary variable for device in other places.
 
-Did this get burried in along with a bunch of other patches? I am sending t=
-his email only because I did not recieve a negetive acknowledgement on the =
-patch.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ .../media/atomisp/pci/atomisp_gmin_platform.c   | 17 ++---------------
+ 1 file changed, 2 insertions(+), 15 deletions(-)
 
-I apologize if this message was hurtful / disrespectfull in any manner,
-thank you for reading this message.
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+index 7f846a61858d..aa4424a60e92 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+@@ -514,19 +514,14 @@ static int gmin_detect_pmic(struct v4l2_subdev *subdev)
+ static struct gmin_subdev *gmin_subdev_add(struct v4l2_subdev *subdev)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(subdev);
++	struct device *dev = &client->dev;
+ 	struct acpi_device *adev;
+ 	struct gmin_subdev *gs;
+ 	acpi_handle handle;
+-	struct device *dev;
+ 	int i, ret, clock_num = -1;
+ 
+-	if (!client)
+-		return NULL;
+-
+-	dev = &client->dev;
+-
+ 	handle = ACPI_HANDLE(dev);
+-	adev = ACPI_COMPANION(&client->dev);
++	adev = ACPI_COMPANION(dev);
+ 
+ 	dev_info(&client->dev, "%s: ACPI detected it on bus ID=%s, HID=%s\n",
+ 		__func__, acpi_device_bid(adev), acpi_device_hid(adev));
+@@ -842,12 +837,8 @@ static int gmin_v1p8_ctrl(struct v4l2_subdev *subdev, int on)
+ {
+ 	struct gmin_subdev *gs = find_gmin_subdev(subdev);
+ 	int ret;
+-	struct device *dev;
+-	struct i2c_client *client = v4l2_get_subdevdata(subdev);
+ 	int value;
+ 
+-	dev = &client->dev;
+-
+ 	if (gs->v1p8_gpio >= 0) {
+ 		pr_info("atomisp_gmin_platform: 1.8v power on GPIO %d\n",
+ 			gs->v1p8_gpio);
+@@ -900,12 +891,8 @@ static int gmin_v2p8_ctrl(struct v4l2_subdev *subdev, int on)
+ {
+ 	struct gmin_subdev *gs = find_gmin_subdev(subdev);
+ 	int ret;
+-	struct device *dev;
+-	struct i2c_client *client = v4l2_get_subdevdata(subdev);
+ 	int value;
+ 
+-	dev = &client->dev;
+-
+ 	if (gs->v2p8_gpio >= 0) {
+ 		pr_info("atomisp_gmin_platform: 2.8v power on GPIO %d\n",
+ 			gs->v2p8_gpio);
+-- 
+2.27.0
 
-karthik
-
-On 20/06/28 12:38AM, B K Karthik wrote:
-> Fixed a coding style issue.
->=20
-> Signed-off-by: B K Karthik <karthik.bk2000@live.com>
-> ---
->  drivers/staging/media/atomisp/i2c/atomisp-ov2680.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers=
-/staging/media/atomisp/i2c/atomisp-ov2680.c
-> index 90d125ba080f..c90730513438 100644
-> --- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-> +++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-> @@ -495,11 +495,11 @@ static int ov2680_h_flip(struct v4l2_subdev *sd, s3=
-2 value)
->  	ret =3D ov2680_read_reg(client, 1, OV2680_MIRROR_REG, &val);
->  	if (ret)
->  		return ret;
-> -	if (value) {
-> +	if (value)
->  		val |=3D OV2680_FLIP_MIRROR_BIT_ENABLE;
-> -	} else {
-> +	else
->  		val &=3D ~OV2680_FLIP_MIRROR_BIT_ENABLE;
-> -	}
-> +
->  	ret =3D ov2680_write_reg(client, 1,
->  			       OV2680_MIRROR_REG, val);
->  	if (ret)
-> --
-> 2.20.1
-
-
-
---i3ho2sv5roir6t7m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAEBCgAdFiEEpIrzAt4LvWLJmKjp471Q5AHeZ2oFAl75/hgACgkQ471Q5AHe
-Z2o9Zwv/W+4Q3b66dFYLTKnXoigYHIbecsuAc0LMW5V2VSXQJ8dq+DsCFvawZMh3
-UmbKaZsk033rYkKxbc1rubekPkm1eQ0kAY2iG6j+sIPnYtlUpkLRT6fU6vclZkAO
-gliHVAn1j0aB483pR6TJY0ek+ieMra9a7cetHsDHwzjdFQsheKDmEvtwjSYo5CCY
-0gImXtqo0md5TaiCmATWZ8GA6iOFcgOA+AHxhHN/s/SJ+CmZ2Ep4JGbPiaOCZcvq
-YjwBI15IiHVfJ8DDiYbemJvZRkZdKmgh8oIFDKS0jyFcGBn6fBkhWregLs9tqhyu
-PaSgKyS4nCIXL0mSDv87nPH8pq8DTfmFb6LEA09slsKzwMBUgESCywCLX0jiWTSn
-q0Y+CaE5mdKQBkOkizun3BuHbu43YDHKTy4qHNBDnTrLdltAKFjvxfvh6Sixfsvj
-1tEo886KYQETUjkIdmdCkjs5FT5uRDF+XGjCH2MxY/uxmq/LkxMOLY/IMGjMPf9U
-TkhSrXDs
-=Ikkk
------END PGP SIGNATURE-----
-
---i3ho2sv5roir6t7m--
