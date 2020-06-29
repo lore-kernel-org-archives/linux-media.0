@@ -2,95 +2,82 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=0.1 required=3.0 tests=DATE_IN_PAST_03_06,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AFC4C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:27:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38D7BC433DF
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:32:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45833206A5
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:27:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 223572067D
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:32:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388911AbgF2U1a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:27:30 -0400
-Received: from mga04.intel.com ([192.55.52.120]:36333 "EHLO mga04.intel.com"
+        id S2387591AbgF2Ucu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:32:50 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:49142 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732517AbgF2TZY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:25:24 -0400
-IronPort-SDR: GVMgacdmGUkbW+ffhO2gdvKlvkWPQ2O3fzLe5ZUGIVWDmmTXdMANqnNA13P2RYS23XFd8aCO4Z
- 4GzpZCMrxMmA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="143475983"
-X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
-   d="scan'208";a="143475983"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2020 09:24:53 -0700
-IronPort-SDR: 62afR1hi7+NIlYXmM50Jcl16b+Vm/woAty1FR5P9n+HqfEBNErhKyZ64sGMTbgA/bZkvchdUeW
- WVP1tG8ShNyg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
-   d="scan'208";a="264877717"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga007.fm.intel.com with ESMTP; 29 Jun 2020 09:24:51 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jprOg-00Gdw6-TX; Mon, 29 Jun 2020 13:52:22 +0300
-Date:   Mon, 29 Jun 2020 13:52:22 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 0/7] Some atomisp fixes and improvements
-Message-ID: <20200629105222.GF3703480@smile.fi.intel.com>
-References: <cover.1593180146.git.mchehab+huawei@kernel.org>
- <20200626150021.GY3703480@smile.fi.intel.com>
- <20200626175216.7955c374@coco.lan>
+        id S1732405AbgF2Ucr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 29 Jun 2020 16:32:47 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jq0O8-00E6ru-FM; Mon, 29 Jun 2020 20:28:24 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jq0Ua-0000on-55; Mon, 29 Jun 2020 20:35:04 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.9] Removal of soc-camera and dependent sensor (#64993)
+Date:   Mon, 29 Jun 2020 20:35:04 +0000
+Message-Id: <20200629203504.3104-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <bf6d5d12-9460-2bcc-a0d7-5553e7e18065@xs4all.nl>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200626175216.7955c374@coco.lan>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 05:52:16PM +0200, Mauro Carvalho Chehab wrote:
-> Em Fri, 26 Jun 2020 18:00:21 +0300
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> escreveu:
-> 
-> > On Fri, Jun 26, 2020 at 04:04:52PM +0200, Mauro Carvalho Chehab wrote:
-> > > Those patches are meant to improve device detection by the atomisp driver,
-> > > relying on ACPI bios when possible.
-> > > 
-> > > It also adds a basis for using ACPI PM, but only if the DSDT tables have
-> > > a description about how to turn on the resources needed by the cameras.
-> > > 
-> > > At least on the device I'm using for tests, this is not the case.  
-> > 
-> > Is this in your experimental tree? 
-> 
-> Yes. 
-> 
-> > I'll rebase mine on top and test.
-> > After I will send the rest from my series and give a tag to this.
-> 
-> It would be helpful if you could test removing the DMI match table from
-> your board. If your device has a DSDT table close to the one I have, the
-> new code may be able to get everything from DSDT.
+From: builder@linuxtv.org
 
-I have checked the atomisp_v5 branch and it doesn't bring any regression to my
-case. So, feel free to add
-Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Pull request: https://patchwork.linuxtv.org/patch/64993/
+Build log: https://builder.linuxtv.org/job/patchwork/57568/
+Build time: 00:04:50
+Link: https://lore.kernel.org/linux-media/bf6d5d12-9460-2bcc-a0d7-5553e7e18065@xs4all.nl
 
-I'll send rebased patches soon.
+gpg: Signature made Mon 29 Jun 2020 07:45:36 AM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
 
--- 
-With Best Regards,
-Andy Shevchenko
+Summary: 6 patches and/or PDF generation with issues, being 0 at build time
 
+Error/warnings:
+
+
+Error #256 when running cat patches/0003-mach-imx-mach-imx27_visstrim_m10.c-remove-soc_camera.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0003-mach-imx-mach-imx27_visstrim_m10.c-remove-soc_camera.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:10: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+Error #256 when running cat patches/0004-mach-omap1-board-ams-delta.c-remove-soc_camera-depen.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0004-mach-omap1-board-ams-delta.c-remove-soc_camera-depen.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:10: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+-:104: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+Error #256 when running cat patches/0005-mach-pxa-palmz72-pcm990-remove-soc_camera-dependenci.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0005-mach-pxa-palmz72-pcm990-remove-soc_camera-dependenci.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:10: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+Error #256 when running cat patches/0006-staging-media-soc_camera-remove-this-driver.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0006-staging-media-soc_camera-remove-this-driver.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:67: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+Error #256 when running cat patches/0007-soc_camera.h-remove-this-unused-header.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0007-soc_camera.h-remove-this-unused-header.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:18: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
 
