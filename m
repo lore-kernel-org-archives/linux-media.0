@@ -2,62 +2,63 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9106C433E2
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:59:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 278EBC433DF
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:59:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5697206F1
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:59:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 089D1206F1
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:59:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X8RCISIZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AytPDfT2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390028AbgF2U6p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S1731246AbgF2U7c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730969AbgF2TNC (ORCPT
+        with ESMTP id S1731245AbgF2TNB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:13:02 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B38BC0A891E;
-        Mon, 29 Jun 2020 00:37:20 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id x3so2007746pfo.9;
-        Mon, 29 Jun 2020 00:37:20 -0700 (PDT)
+        Mon, 29 Jun 2020 15:13:01 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B02EC0A8937;
+        Mon, 29 Jun 2020 00:37:39 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id d4so7914246pgk.4;
+        Mon, 29 Jun 2020 00:37:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gDM4k1Yk8LW7xlU6yNIJsCHS3QIR5uvUtDlbeW1QFKk=;
-        b=X8RCISIZnXYpunasoPJqDhNH3rQ0XiSvdy4nAbk41pWq/dz/IPVZkg7PzZFRa4X1xn
-         2YpDmquvcakzAJvUjME2R+RjFbDUOq9YJeT8rjloM3HOL5a532uXPTt3dHwNj9mDtxDE
-         /rr7V6qOJWdkIs7xHye+ZDDVtmnOsdmoRMhBAY5Ll2d3KNJ6vxOXRcwIpI/ZM2B8s8e5
-         EFAo4K2iEPmbe3Zg26yk6ckABJk299EGhZxOMt+9spTkdaphyQMC8ffmnIa2dvd6pC5w
-         vz36LE8CtA5QSCMHB7d3B1H2h8nqKu3qQnShqek5l9zhH7FMXqpb+4uo9XFAE17E3zRm
-         ZoJw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EssEWRuUlyUMovXvf1Owqev660e7KUxdmLM0BPnhB2U=;
+        b=AytPDfT240W61C3o6D7il9CG8AFES77CMBtW6PtMpoZtIZ4KUdiQDw1kr6rk7xC86+
+         7k6MyyuKeQFCdf1UOQ8mUKDDAEUHUNO27DZOIbiAxYZ92HjCHrCO74ymPfH6IzHoI4F2
+         dg/oTA9EYIkdFwhDeIXc3zqe8+xOI1iWbid8trljq5ton6TrgnctIjozgEpiblxiGEwC
+         hB5J8pu+waxM5vczpiCP7zzWsnjrbzgTFgqL01m6SKvIXxvRCaB39XawcGdxvVGRk5kq
+         IOW1PNZ/V4LFOqXaa6mcn1Q6YjKrvBoeP3eM5vYfL5ln0FxnNM4orwSLWc5M5GsZchPE
+         hoNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gDM4k1Yk8LW7xlU6yNIJsCHS3QIR5uvUtDlbeW1QFKk=;
-        b=ecKykODT0J/xY1MRekonSaUdzf0zCjepa4quyBnufQJCGle+YBGe3OrKhYriyq5cfu
-         HErPg1ddzpGmtbi0hXi1xULCXIvlvPr4zwauB1skHzxMFaX4CyRGSSC94nrNfoX8EuIy
-         Z/Boiz6q2Gj8qLlZqUJim5ijK+rt2Ef2er54sE4u0ZC+IPXsJh4E5nzS+pXEwQdyg2L3
-         cCfHUso9+tvVHXyMWIpotjgajZNL8HOVzTl3UcPuL3tEQVvRN/Q/fzdmij0qJwEXS+XJ
-         f/ja5aMfDx2ZJg70lW9suwNcK53dp7o6wPEEGQDMti+NPo+pyDXdhOuL920JBzAU8VEH
-         QPzQ==
-X-Gm-Message-State: AOAM531oowVC4Shqb4zwjOtbhUSKpKSjzKUcR4lhW70BlENgwQ4zK1i7
-        ux292YPk6Ntpbi3gg7iY638=
-X-Google-Smtp-Source: ABdhPJxpCV89OAF2D6UcINS7KgFdE7WIv1a5RmvUcOk3a454WOLgNxKhYjvpA5bfJR821uWzIzAJxw==
-X-Received: by 2002:a63:4861:: with SMTP id x33mr8936376pgk.448.1593416239679;
-        Mon, 29 Jun 2020 00:37:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EssEWRuUlyUMovXvf1Owqev660e7KUxdmLM0BPnhB2U=;
+        b=KSqaLSIjL6UARS+qVM6MvlmWz0Q/UFwpT3ChskgThk4Me9oS8aDgybQQ4I2VMe9syu
+         +L6XS25kHGT2nd7jOeDVTEnF92yuU35kg5c4hrIaxn23q2LDpf0Uv2B1G1K5KcSiCxlr
+         4qBXUpZ3KDGQx/Wgte4L1LQMo/oEVBwt3tWQk1L5OOZgI4kWqQYzUkz3ZuHc3j3vwXr2
+         wtryzHYA1y5p4unsupBH2L6N0KfGjLUyBis91GzavYdLyny+LwTS8ejBTN5kXfT2ozzN
+         60saj1pxiFB5P/Z6FUzPPzxTRAGLvAXkTLvgCy8saJ9o4nd9+t+CLyCY9bRLslVZmkfX
+         w2MQ==
+X-Gm-Message-State: AOAM533nkItOXbI1v9AE7B7WAKv2CXJUzXhAairEfq6K5eKX45TboSsC
+        qwslvlRVrw38ed0lMmEqbtc=
+X-Google-Smtp-Source: ABdhPJwzhiGQLxmqe1ZN2rfVRGk+dNFXyDLy1Krsxxp130ZsiGww/UHMfamqU+y8FseQr5GY8llZdg==
+X-Received: by 2002:a63:3603:: with SMTP id d3mr8298304pga.200.1593416258709;
+        Mon, 29 Jun 2020 00:37:38 -0700 (PDT)
 Received: from varodek.iballbatonwifi.com ([103.105.153.57])
-        by smtp.gmail.com with ESMTPSA id q10sm34673004pfk.86.2020.06.29.00.37.15
+        by smtp.gmail.com with ESMTPSA id q10sm34673004pfk.86.2020.06.29.00.37.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 00:37:19 -0700 (PDT)
+        Mon, 29 Jun 2020 00:37:38 -0700 (PDT)
 From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
 To:     Bjorn Helgaas <helgaas@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>, bjorn@helgaas.com,
@@ -67,10 +68,12 @@ Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         skhan@linuxfoundation.org
-Subject: [PATCH v1 0/6] [media] pci: use generic power management
-Date:   Mon, 29 Jun 2020 13:05:58 +0530
-Message-Id: <20200629073604.205478-1-vaibhavgupta40@gmail.com>
+Subject: [PATCH v1 4/6] [media] cx88: use generic power management
+Date:   Mon, 29 Jun 2020 13:06:02 +0530
+Message-Id: <20200629073604.205478-5-vaibhavgupta40@gmail.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200629073604.205478-1-vaibhavgupta40@gmail.com>
+References: <20200629073604.205478-1-vaibhavgupta40@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -78,36 +81,116 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Linux Kernel Mentee: Remove Legacy Power Management.
+With legacy PM, drivers themselves were responsible for managing the
+device's power states and takes care of register states.
 
-The purpose of this patch series is to remove legacy power management callbacks
-from amd ethernet drivers.
+After upgrading to the generic structure, PCI core will take care of
+required tasks and drivers should do only device-specific operations.
 
-The callbacks performing suspend() and resume() operations are still calling
-pci_save_state(), pci_set_power_state(), etc. and handling the power management
-themselves, which is not recommended.
+The driver was invoking PCI helper functions like pci_save/restore_state(),
+pci_enable/disable_device() and pci_set_power_state(), which is not
+recommended.
 
-The conversion requires the removal of the those function calls and change the
-callback definition accordingly and make use of dev_pm_ops structure.
+Compile-tested only.
 
-All patches are compile-tested only.
+Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+---
+ drivers/media/pci/cx88/cx88-video.c | 52 ++++++++---------------------
+ 1 file changed, 13 insertions(+), 39 deletions(-)
 
-Vaibhav Gupta (6):
-  [media] sta2x11: use generic power management
-  [media] cx23885: use generic power management
-  [media] cx25821: use generic power management
-  [media] cx88: use generic power management
-  [media] meye: use generic power management
-  [media] tw68: use generic power management
-
- drivers/media/pci/cx23885/cx23885-core.c | 16 +++---
- drivers/media/pci/cx25821/cx25821-core.c |  8 ++-
- drivers/media/pci/cx88/cx88-video.c      | 52 +++++--------------
- drivers/media/pci/meye/meye.c            | 15 ++----
- drivers/media/pci/sta2x11/sta2x11_vip.c  | 63 ++++++------------------
- drivers/media/pci/tw68/tw68-core.c       | 30 +++++------
- 6 files changed, 60 insertions(+), 124 deletions(-)
-
+diff --git a/drivers/media/pci/cx88/cx88-video.c b/drivers/media/pci/cx88/cx88-video.c
+index ba0e9660a047..a06d5b8f31b9 100644
+--- a/drivers/media/pci/cx88/cx88-video.c
++++ b/drivers/media/pci/cx88/cx88-video.c
+@@ -1551,10 +1551,9 @@ static void cx8800_finidev(struct pci_dev *pci_dev)
+ 	kfree(dev);
+ }
+ 
+-#ifdef CONFIG_PM
+-static int cx8800_suspend(struct pci_dev *pci_dev, pm_message_t state)
++static int __maybe_unused cx8800_suspend(struct device *dev_d)
+ {
+-	struct cx8800_dev *dev = pci_get_drvdata(pci_dev);
++	struct cx8800_dev *dev = dev_get_drvdata(dev_d);
+ 	struct cx88_core *core = dev->core;
+ 	unsigned long flags;
+ 
+@@ -1575,40 +1574,17 @@ static int cx8800_suspend(struct pci_dev *pci_dev, pm_message_t state)
+ 	/* FIXME -- shutdown device */
+ 	cx88_shutdown(core);
+ 
+-	pci_save_state(pci_dev);
+-	if (pci_set_power_state(pci_dev,
+-				pci_choose_state(pci_dev, state)) != 0) {
+-		pci_disable_device(pci_dev);
+-		dev->state.disabled = 1;
+-	}
++	dev->state.disabled = 1;
+ 	return 0;
+ }
+ 
+-static int cx8800_resume(struct pci_dev *pci_dev)
++static int __maybe_unused cx8800_resume(struct device *dev_d)
+ {
+-	struct cx8800_dev *dev = pci_get_drvdata(pci_dev);
++	struct cx8800_dev *dev = dev_get_drvdata(dev_d);
+ 	struct cx88_core *core = dev->core;
+ 	unsigned long flags;
+-	int err;
+-
+-	if (dev->state.disabled) {
+-		err = pci_enable_device(pci_dev);
+-		if (err) {
+-			pr_err("can't enable device\n");
+-			return err;
+-		}
+-
+-		dev->state.disabled = 0;
+-	}
+-	err = pci_set_power_state(pci_dev, PCI_D0);
+-	if (err) {
+-		pr_err("can't set power state\n");
+-		pci_disable_device(pci_dev);
+-		dev->state.disabled = 1;
+ 
+-		return err;
+-	}
+-	pci_restore_state(pci_dev);
++	dev->state.disabled = 0;
+ 
+ 	/* FIXME: re-initialize hardware */
+ 	cx88_reset(core);
+@@ -1631,7 +1607,6 @@ static int cx8800_resume(struct pci_dev *pci_dev)
+ 
+ 	return 0;
+ }
+-#endif
+ 
+ /* ----------------------------------------------------------- */
+ 
+@@ -1647,15 +1622,14 @@ static const struct pci_device_id cx8800_pci_tbl[] = {
+ };
+ MODULE_DEVICE_TABLE(pci, cx8800_pci_tbl);
+ 
++static SIMPLE_DEV_PM_OPS(cx8800_pm_ops, cx8800_suspend, cx8800_resume);
++
+ static struct pci_driver cx8800_pci_driver = {
+-	.name     = "cx8800",
+-	.id_table = cx8800_pci_tbl,
+-	.probe    = cx8800_initdev,
+-	.remove   = cx8800_finidev,
+-#ifdef CONFIG_PM
+-	.suspend  = cx8800_suspend,
+-	.resume   = cx8800_resume,
+-#endif
++	.name      = "cx8800",
++	.id_table  = cx8800_pci_tbl,
++	.probe     = cx8800_initdev,
++	.remove    = cx8800_finidev,
++	.driver.pm = &cx8800_pm_ops,
+ };
+ 
+ module_pci_driver(cx8800_pci_driver);
 -- 
 2.27.0
 
