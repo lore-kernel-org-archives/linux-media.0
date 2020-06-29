@@ -2,276 +2,328 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0B56C433DF
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:39:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22DD9C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:40:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 933C620720
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:39:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Lx3CXAeD"
+	by mail.kernel.org (Postfix) with ESMTP id 0416F20672
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:40:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389557AbgF2UjD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S1732150AbgF2UkM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731729AbgF2TOP (ORCPT
+        with ESMTP id S1731688AbgF2TOM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:14:15 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B774EC008613
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 03:27:42 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id e15so12384947edr.2
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 03:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dyroAN44J2OM/AhTWy0pxzrNp1szrmJqs4ojQ9k1drM=;
-        b=Lx3CXAeD23+wZge0roPuQ06+3bFnks98aupHyP/952olcUbmZ2dGTSHxJzw5EIsGUz
-         uvmG4nB45dVQbnkuBckzCSHvrW6zVQknmXJgYHoxX9RTQxR9W989Dk2c+DFBEIzUtvdl
-         dZiHdHK9D7RHwsK8Co1GH/0nYKIPbjqHYwn5s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dyroAN44J2OM/AhTWy0pxzrNp1szrmJqs4ojQ9k1drM=;
-        b=k9Iezc8wW6JCj5s/6SK+IVUEa3w+RPeW6M/6Hh61EsL5WfKJNGMwHIvHREJFR4VCPo
-         KBxbb01WfMCcHXKXaP9Ga7Mf1+8ju1MiORH9ON5XbdI7TXhb1RqQSM1aUr4R0NJRxnKL
-         61RQNEZ4tUEAGkx51ZxgptcL8+NWLujC/Gx7XfSI4h2yXsuh9oREsYOJIos3EPGo7j1d
-         0eO4Ettz5SHhhBwSZOtGu6yWpJ/so+uB/c7K5F8Zse32PfaVVBqlW/B/L+rWcg1itgSU
-         odFw3PECuzZkwRe4tgoz+7LpVjt08qzP7BOI3LwQkJyIiKGqKM21YHEV5lrJNGSSmwKG
-         eybw==
-X-Gm-Message-State: AOAM530BVVezZ/1UPVoJpvj7D/R6PdoQdJ38S3gdIRYLe0AOgSCg+/KA
-        KZjxYvz9U8woi7+ecGP46wQbC2CW7cp+1g==
-X-Google-Smtp-Source: ABdhPJzTZcTCu0qoqo2IcW5gTPH/fg9+oxsfscq2xXABACKrhKgfRDzO5GK6tvHHT1ltdlRcrC/aLQ==
-X-Received: by 2002:a50:d753:: with SMTP id i19mr17358303edj.9.1593426461110;
-        Mon, 29 Jun 2020 03:27:41 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id cb6sm27823172edb.18.2020.06.29.03.27.39
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jun 2020 03:27:40 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id 22so14860452wmg.1
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 03:27:39 -0700 (PDT)
-X-Received: by 2002:a1c:4303:: with SMTP id q3mr16649103wma.134.1593426459341;
- Mon, 29 Jun 2020 03:27:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200615122937.18965-1-dongchun.zhu@mediatek.com>
- <20200615122937.18965-3-dongchun.zhu@mediatek.com> <20200618191026.GA73379@chromium.org>
- <1593417224.17166.10.camel@mhfsdcap03>
-In-Reply-To: <1593417224.17166.10.camel@mhfsdcap03>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Mon, 29 Jun 2020 12:27:28 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5DAbGDp=e-b2K89ydyK_bft5D2grpFfGDtX6hC__n-L-g@mail.gmail.com>
-Message-ID: <CAAFQd5DAbGDp=e-b2K89ydyK_bft5D2grpFfGDtX6hC__n-L-g@mail.gmail.com>
-Subject: Re: [PATCH V10 2/2] media: i2c: ov02a10: Add OV02A10 image sensor driver
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Cao Bing Bu <bingbu.cao@intel.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Sj Huang <sj.huang@mediatek.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        =?UTF-8?B?U2hlbmduYW4gV2FuZyAo546L5Zyj55S3KQ==?= 
-        <shengnan.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 29 Jun 2020 15:14:12 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135A8C08ED84
+        for <linux-media@vger.kernel.org>; Sun, 28 Jun 2020 23:58:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id 4165F2A1B20
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
+        dafna3@gmail.com, sakari.ailus@linux.intel.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org
+Subject: [PATCH 4/4] media: staging: rkisp1: improve documentation of rkisp1-common.h
+Date:   Mon, 29 Jun 2020 08:57:54 +0200
+Message-Id: <20200629065754.26621-5-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200629065754.26621-1-dafna.hirschfeld@collabora.com>
+References: <20200629065754.26621-1-dafna.hirschfeld@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 9:54 AM Dongchun Zhu <dongchun.zhu@mediatek.com> wrote:
->
-> Hi Tomasz,
->
-> On Thu, 2020-06-18 at 19:10 +0000, Tomasz Figa wrote:
-> > Hi Dongchun,
-> >
-> > On Mon, Jun 15, 2020 at 08:29:37PM +0800, Dongchun Zhu wrote:
-> > > Add a V4L2 sub-device driver for OV02A10 image sensor.
-> > >
-> > > Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-> > > ---
-> > >  MAINTAINERS                 |    1 +
-> > >  drivers/media/i2c/Kconfig   |   13 +
-> > >  drivers/media/i2c/Makefile  |    1 +
-> > >  drivers/media/i2c/ov02a10.c | 1042 +++++++++++++++++++++++++++++++++++++++++++
-> > >  4 files changed, 1057 insertions(+)
-> > >  create mode 100644 drivers/media/i2c/ov02a10.c
-> > >
-> >
-> > Thank you for the patch. Please see my comments inline.
-> >
->
-> [snip]
->
-> > > +static int ov02a10_probe(struct i2c_client *client)
-> > > +{
-> > > +   struct device *dev = &client->dev;
-> > > +   struct ov02a10 *ov02a10;
-> > > +   unsigned int rotation;
-> > > +   unsigned int clock_lane_tx_speed;
-> > > +   unsigned int i;
-> > > +   int ret;
-> > > +
-> > > +   ov02a10 = devm_kzalloc(dev, sizeof(*ov02a10), GFP_KERNEL);
-> > > +   if (!ov02a10)
-> > > +           return -ENOMEM;
-> > > +
-> > > +   ret = ov02a10_check_hwcfg(dev, ov02a10);
-> > > +   if (ret) {
-> > > +           dev_err(dev, "failed to check HW configuration: %d", ret);
-> > > +           return ret;
-> > > +   }
-> > > +
-> > > +   v4l2_i2c_subdev_init(&ov02a10->subdev, client, &ov02a10_subdev_ops);
-> > > +   ov02a10->mipi_clock_tx_speed = OV02A10_MIPI_TX_SPEED_DEFAULT;
-> > > +   ov02a10->fmt.code = MEDIA_BUS_FMT_SBGGR10_1X10;
-> > > +
-> > > +   /* Optional indication of physical rotation of sensor */
-> > > +   ret = fwnode_property_read_u32(dev_fwnode(dev), "rotation", &rotation);
-> > > +   if (!ret && rotation == 180) {
-> > > +           ov02a10->upside_down = true;
-> > > +           ov02a10->fmt.code = MEDIA_BUS_FMT_SRGGB10_1X10;
-> > > +   }
-> > > +
-> > > +   /* Optional indication of mipi TX speed */
-> > > +   ret = fwnode_property_read_u32(dev_fwnode(dev), "ovti,mipi-tx-speed",
-> > > +                                  &clock_lane_tx_speed);
-> > > +
-> > > +   if (!ret)
-> > > +           ov02a10->mipi_clock_tx_speed = clock_lane_tx_speed;
-> > > +
-> > > +   /* Get system clock (eclk) */
-> > > +   ov02a10->eclk = devm_clk_get(dev, "eclk");
-> > > +   if (IS_ERR(ov02a10->eclk)) {
-> > > +           ret = PTR_ERR(ov02a10->eclk);
-> > > +           dev_err(dev, "failed to get eclk %d\n", ret);
-> > > +           return ret;
-> > > +   }
-> > > +
-> > > +   ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
-> > > +                                  &ov02a10->eclk_freq);
-> > > +   if (ret) {
-> > > +           dev_err(dev, "failed to get eclk frequency\n");
-> > > +           return ret;
-> > > +   }
-> > > +
-> > > +   ret = clk_set_rate(ov02a10->eclk, ov02a10->eclk_freq);
-> > > +   if (ret) {
-> > > +           dev_err(dev, "failed to set eclk frequency (24MHz)\n");
-> > > +           return ret;
-> > > +   }
-> > > +
-> > > +   if (clk_get_rate(ov02a10->eclk) != OV02A10_ECLK_FREQ) {
-> > > +           dev_warn(dev, "wrong eclk frequency %d Hz, expected: %d Hz\n",
-> > > +                    ov02a10->eclk_freq, OV02A10_ECLK_FREQ);
-> > > +           return -EINVAL;
-> > > +   }
-> > > +
-> > > +   ov02a10->pd_gpio = devm_gpiod_get(dev, "powerdown", GPIOD_OUT_HIGH);
-> > > +   if (IS_ERR(ov02a10->pd_gpio)) {
-> > > +           ret = PTR_ERR(ov02a10->pd_gpio);
-> > > +           dev_err(dev, "failed to get powerdown-gpios %d\n", ret);
-> > > +           return ret;
-> > > +   }
-> > > +
-> > > +   ov02a10->rst_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-> > > +   if (IS_ERR(ov02a10->rst_gpio)) {
-> > > +           ret = PTR_ERR(ov02a10->rst_gpio);
-> > > +           dev_err(dev, "failed to get reset-gpios %d\n", ret);
-> > > +           return ret;
-> > > +   }
-> > > +
-> > > +   for (i = 0; i < ARRAY_SIZE(ov02a10_supply_names); i++)
-> > > +           ov02a10->supplies[i].supply = ov02a10_supply_names[i];
-> > > +
-> > > +   ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ov02a10_supply_names),
-> > > +                                 ov02a10->supplies);
-> > > +   if (ret) {
-> > > +           dev_err(dev, "failed to get regulators\n");
-> > > +           return ret;
-> > > +   }
-> > > +
-> > > +   mutex_init(&ov02a10->mutex);
-> > > +   ov02a10->cur_mode = &supported_modes[0];
-> > > +   ret = ov02a10_initialize_controls(ov02a10);
-> > > +   if (ret) {
-> > > +           dev_err(dev, "failed to initialize controls\n");
-> > > +           goto err_destroy_mutex;
-> > > +   }
-> > > +
-> > > +   ov02a10->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> > > +   ov02a10->subdev.entity.ops = &ov02a10_subdev_entity_ops;
-> > > +   ov02a10->subdev.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> > > +   ov02a10->pad.flags = MEDIA_PAD_FL_SOURCE;
-> > > +   ret = media_entity_pads_init(&ov02a10->subdev.entity, 1, &ov02a10->pad);
-> > > +   if (ret < 0) {
-> > > +           dev_err(dev, "failed to init entity pads: %d", ret);
-> > > +           goto err_free_handler;
-> > > +   }
-> > > +
-> > > +   pm_runtime_enable(dev);
-> > > +   if (!pm_runtime_enabled(dev)) {
-> > > +           ret = ov02a10_power_on(dev);
-> > > +           if (ret < 0) {
-> > > +                   dev_err(dev, "failed to power on: %d\n", ret);
-> > > +                   goto err_clean_entity;
-> > > +           }
-> > > +   }
-> > > +
-> > > +   ret = v4l2_async_register_subdev(&ov02a10->subdev);
-> > > +   if (ret) {
-> > > +           dev_err(dev, "failed to register V4L2 subdev: %d", ret);
-> > > +           goto err_power_off;
-> > > +   }
-> > > +
-> > > +   return 0;
-> > > +
-> > > +err_power_off:
-> > > +   pm_runtime_disable(dev);
-> > > +   if (!pm_runtime_enabled(dev))
-> >
-> > This would be always true, resulting in unbalanced power off. Moving
-> > pm_runtime_disable() after this if should work better.
-> >
->
-> Pardon, do you mean that we shall use like this:
-> err_power_off:
->         if (!pm_runtime_enabled(dev)) {
->                 pm_runtime_disable(dev);
->                 if (!pm_runtime_status_suspended(dev)
->                         ov02a10_power_off(dev);
->         }
+Add more detailed documentation of the structs in rkisp1-common.h
 
-Hmm, that wouldn't really work, because there is no reason to disable
-runtime PM if it's disabled already. I also noticed that we don't need
-to check pm_runtime_status_suspended() in the error path in probe,
-because we only ever attempt to power it on when runtime PM is
-disabled in kernel config. This would make the end result as:
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/staging/media/rkisp1/TODO            |   1 -
+ drivers/staging/media/rkisp1/rkisp1-common.h | 133 +++++++++++++++----
+ 2 files changed, 106 insertions(+), 28 deletions(-)
 
-         if (pm_runtime_enabled(dev))
-                 pm_runtime_disable(dev);
-         else
-                 ov02a10_power_off(dev);
+diff --git a/drivers/staging/media/rkisp1/TODO b/drivers/staging/media/rkisp1/TODO
+index bdb1b8f73556..f0c90d1c86a8 100644
+--- a/drivers/staging/media/rkisp1/TODO
++++ b/drivers/staging/media/rkisp1/TODO
+@@ -2,7 +2,6 @@
+ * Fix checkpatch errors.
+ * Review and comment every lock
+ * Handle quantization
+-* Document rkisp1-common.h
+ * streaming paths (mainpath and selfpath) check if the other path is streaming
+ in several places of the code, review this, specially that it doesn't seem it
+ supports streaming from both paths at the same time.
+diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
+index 4185487c520c..47b03a1dfe1b 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-common.h
++++ b/drivers/staging/media/rkisp1/rkisp1-common.h
+@@ -73,8 +73,16 @@ enum rkisp1_isp_pad {
+ };
+ 
+ /*
+- * struct rkisp1_sensor_async - Sensor information
+- * @mbus: media bus configuration
++ * struct rkisp1_sensor_async - A container for the v4l2_async_subdev to add to the notifier
++ * of the v4l2-async API.
++ *
++ * @asd: the async_subdev var for the sensor
++ * @lanes: number of lanes
++ * @mbus_type: type of bus (currently only CSI2 is supported)
++ * @mbus_flags: media bus (V4L2_MBUS_*) flags
++ * @sd: a pointer to the v4l2_subdev struct of the sensor
++ * @pixel_rate_ctrl: the pixel rate of the sensor, used to initialize the phy
++ * @dphy: a pointer to the phy
+  */
+ struct rkisp1_sensor_async {
+ 	struct v4l2_async_subdev asd;
+@@ -87,19 +95,16 @@ struct rkisp1_sensor_async {
+ };
+ 
+ /*
+- * struct rkisp1_isp - ISP sub-device
++ * struct rkisp1_isp - ISP subdev entity
+  *
+- * See Cropping regions of ISP in rkisp1.c for details
+- * @sink_frm: input size, don't have to be equal to sensor size
++ * @sd: the v4l2_subdev var
++ * @pads: the media pads
++ * @pad_cfg: the pads configurations
+  * @sink_fmt: input format
+- * @sink_crop: crop for sink pad
+  * @src_fmt: output format
+- * @src_crop: output size
+  * @ops_lock: ops serialization
+- *
+  * @is_dphy_errctrl_disabled : if dphy errctrl is disabled (avoid endless interrupt)
+  * @frame_sequence: used to synchronize frame_id between video devices.
+- * @quantization: output quantization
+  */
+ struct rkisp1_isp {
+ 	struct v4l2_subdev sd;
+@@ -107,11 +112,20 @@ struct rkisp1_isp {
+ 	struct v4l2_subdev_pad_config pad_cfg[RKISP1_ISP_PAD_MAX];
+ 	const struct rkisp1_isp_mbus_info *sink_fmt;
+ 	const struct rkisp1_isp_mbus_info *src_fmt;
+-	struct mutex ops_lock;
++	struct mutex ops_lock; /* serialize the subdevice ops */
+ 	bool is_dphy_errctrl_disabled;
+ 	atomic_t frame_sequence;
+ };
+ 
++/*
++ * struct rkisp1_vdev_node - A Container for the video nodes of the video devices:
++ *			     params, stats, mainpath, selfpath
++ *
++ * @buf_queue: the queue of buffers.
++ * @vlock: the lock of the video node
++ * @vdev: the video node
++ * @pad: the media pad
++ */
+ struct rkisp1_vdev_node {
+ 	struct vb2_queue buf_queue;
+ 	struct mutex vlock; /* ioctl serialization mutex */
+@@ -119,6 +133,15 @@ struct rkisp1_vdev_node {
+ 	struct media_pad pad;
+ };
+ 
++/*
++ * struct rkisp1_buffer - A container for the vb2 buffers used by the video devices:
++ *			  params, stats, mainpath, selfpath
++ *
++ * @vb: the vb2 buffer
++ * @queue: the entry of the buffer in the queue
++ * @buff_addr: the dma addresses of each plain, used only by the capture devices: selfpath, mainpath
++ * @vaddr: the virtual addresses, used only by the params and stats devices
++ */
+ struct rkisp1_buffer {
+ 	struct vb2_v4l2_buffer vb;
+ 	struct list_head queue;
+@@ -128,6 +151,9 @@ struct rkisp1_buffer {
+ 	};
+ };
+ 
++/*
++ * A dummy buffer to write the next frame to in case there are no vb2 buffers available.
++ */
+ struct rkisp1_dummy_buffer {
+ 	void *vaddr;
+ 	dma_addr_t dma_addr;
+@@ -139,17 +165,28 @@ struct rkisp1_device;
+ /*
+  * struct rkisp1_capture - ISP capture video device
+  *
+- * @pix.fmt: buffer format
+- * @pix.info: pixel information
+- * @pix.cfg: pixel configuration
+- *
+- * @buf.lock: lock to protect buf_queue
++ * @vnode: the video node
++ * @rkisp1: pointer to the rkisp1 device
++ * @id: the id of the capture, one of RKISP1_SELFPATH, RKISP1_MAINPATH
++ * @ops: list of callbacks to configure the capture device.
++ * @config: a pointer to the list of registers to configure the capture format.
++ * @is_streaming: device is streaming
++ * @is_stopping: stop_streaming callback was called and the device is in the process of stopping
++ *		 the streaming.
++ * @done: when stop_streaming callback is called, the device waits for the next irq handler to stop
++ *	  the streaming from there by waiting on the 'done' wait queue.
++ *	  If the irq handler is not called, the stream is stopped from the callback after timeout.
++ * @sp_y_stride: the selfpath allows to configure a y stride that is longer than the image width.
++ * @buf.lock: lock to protect buf.queue
+  * @buf.queue: queued buffer list
+  * @buf.dummy: dummy space to store dropped data
+  *
+- * rkisp1 use shadowsock registers, so it need two buffer at a time
++ * rkisp1 uses shadow registers, so it needs two buffers at a time
+  * @buf.curr: the buffer used for current frame
+  * @buf.next: the buffer used for next frame
++ * @pix.cfg: pixel configuration
++ * @pix.info: a pointer to the v4l2_format_info of the pixel format
++ * @pix.fmt: buffer format
+  */
+ struct rkisp1_capture {
+ 	struct rkisp1_vdev_node vnode;
+@@ -179,14 +216,18 @@ struct rkisp1_capture {
+ /*
+  * struct rkisp1_stats - ISP Statistics device
+  *
++ * @vnode: the video node
++ * @rkisp1: pointer to the rkisp1 device
+  * @lock: locks the buffer list 'stat' and 'is_streaming'
+- * @stat: stats buffer list
++ * @stat: the queue of rkisp1_buffer
++ * @vdev_fmt: the v4l2_format
++ * @is_streaming: device is streaming
+  */
+ struct rkisp1_stats {
+ 	struct rkisp1_vdev_node vnode;
+ 	struct rkisp1_device *rkisp1;
+ 
+-	spinlock_t lock; /* locks 'is_streaming', and 'stats' */
++	spinlock_t lock; /* locks the buffers list 'stats' and 'is_streaming' */
+ 	struct list_head stat;
+ 	struct v4l2_format vdev_fmt;
+ 	bool is_streaming;
+@@ -195,14 +236,22 @@ struct rkisp1_stats {
+ /*
+  * struct rkisp1_params - ISP input parameters device
+  *
+- * @cur_params: Current ISP parameters
++ * @vnode: the video node
++ * @rkisp1: pointer to the rkisp1 device
++ * @config_lock: locks the buffer list 'params' and 'is_streaming'
++ * @params: the queue of rkisp1_buffer
++ * @cur_params: the first params values from userspace
++ * @vdev_fmt: the v4l2_format
++ * @is_streaming: device is streaming
+  * @is_first_params: the first params should take effect immediately
++ * @quantization: the quantization configured on the isp's src pad
++ * @raw_type: the bayer pattern on the isp video sink pad
+  */
+ struct rkisp1_params {
+ 	struct rkisp1_vdev_node vnode;
+ 	struct rkisp1_device *rkisp1;
+ 
+-	spinlock_t config_lock;
++	spinlock_t config_lock; /* locks the buffers list 'params' and 'is_streaming' */
+ 	struct list_head params;
+ 	struct rkisp1_params_cfg cur_params;
+ 	struct v4l2_format vdev_fmt;
+@@ -213,6 +262,18 @@ struct rkisp1_params {
+ 	enum rkisp1_fmt_raw_pat_type raw_type;
+ };
+ 
++/*
++ * struct rkisp1_resizer - Resizer subdev
++ *
++ * @sd: the v4l2_subdev var
++ * @id: the id of the resizer, one of RKISP1_SELFPATH, RKISP1_MAINPATH
++ * @rkisp1: pointer to the rkisp1 device
++ * @pads: the media pads
++ * @pad_cfg: the configurations for the pads
++ * @config: the set of registers to configure the resizer
++ * @pixel_enc: the pixel encoding of the resizer
++ * @ops_lock: a lock for the subdev ops
++ */
+ struct rkisp1_resizer {
+ 	struct v4l2_subdev sd;
+ 	enum rkisp1_stream_id id;
+@@ -221,9 +282,12 @@ struct rkisp1_resizer {
+ 	struct v4l2_subdev_pad_config pad_cfg[RKISP1_RSZ_PAD_MAX];
+ 	const struct rkisp1_rsz_config *config;
+ 	enum v4l2_pixel_encoding pixel_enc;
+-	struct mutex ops_lock;
++	struct mutex ops_lock; /* serialize the subdevice ops */
+ };
+ 
++/*
++ * struct rkisp1_debug - values to be exposed on debugfs
++ */
+ struct rkisp1_debug {
+ 	struct dentry *debugfs_dir;
+ 	unsigned long data_loss;
+@@ -237,12 +301,22 @@ struct rkisp1_debug {
+ /*
+  * struct rkisp1_device - ISP platform device
+  * @base_addr: base register address
++ * @irq: the irq number
++ * @dev: a pointer to the struct device
++ * @clk_size: the number of clocks
++ * @clks: the array of clocks
++ * @v4l2_dev: the v4l2_device
++ * @media_dev: the media_device
++ * @notifier: a notifier to register on the v4l2-async API to be notified on the sensor
+  * @active_sensor: sensor in-use, set when streaming on
+  * @isp: ISP sub-device
+- * @rkisp1_capture: capture video device
++ * @resizer_devs: the two resizer sub-devices
++ * @capture_devs: the two capture devices
+  * @stats: ISP statistics output device
+  * @params: ISP input parameters device
+- * @stream_lock: lock to serialize start/stop streaming in capture devices.
++ * @pipe: the media pipeline
++ * @stream_lock: serializes {start/stop}_streaming callbacks between the capture devices.
++ * @debug: the debug params to be exposed on debugfs
+  */
+ struct rkisp1_device {
+ 	void __iomem *base_addr;
+@@ -260,16 +334,21 @@ struct rkisp1_device {
+ 	struct rkisp1_stats stats;
+ 	struct rkisp1_params params;
+ 	struct media_pipeline pipe;
+-	struct mutex stream_lock;
++	struct mutex stream_lock; /* serialize {start/stop}_streaming cb between capture devices */
+ 	struct rkisp1_debug debug;
+ };
+ 
+ /*
+- * struct rkisp1_isp_mbus_info - ISP pad format info
++ * struct rkisp1_isp_mbus_info - ISP media bus info
+  *
+- * Translate mbus_code to hardware format values
++ * Translates mbus_code to hardware format values
+  *
+- * @bus_width: used for parallel
++ * @mbus_code: the media bus code
++ * @pixel_enc: the pixel encoding
++ * @mipi_dt: the mipi data type
++ * @bus_width: the bus width
++ * @bayer_pat: the bayer pattern
++ * @direction: a bitmask of the flags indicating on which pad the format is supported on
+  */
+ struct rkisp1_isp_mbus_info {
+ 	u32 mbus_code;
+-- 
+2.17.1
 
-Best regards,
-Tomasz
