@@ -2,346 +2,156 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18226C433DF
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0385C433E1
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:20:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E390B207D0
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:08:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 806C820656
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 20:20:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="WDO97jzJ"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="nKoZs9Oh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732972AbgF2UIp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:08:45 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:16980 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388510AbgF2UIY (ORCPT
+        id S1728829AbgF2UUg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:20:36 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:48759 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732968AbgF2UUd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 16:08:24 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ef9fecb0001>; Mon, 29 Jun 2020 07:46:35 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 29 Jun 2020 07:48:13 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 29 Jun 2020 07:48:13 -0700
-Received: from [10.2.167.193] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 29 Jun
- 2020 14:48:12 +0000
-Subject: Re: [RFC PATCH v2 08/18] media: tegra-video: Enable TPG based on
- kernel config
-To:     Hans Verkuil <hverkuil@xs4all.nl>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <sakari.ailus@iki.fi>,
-        <robh+dt@kernel.org>, <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
-        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
- <1592358094-23459-9-git-send-email-skomatineni@nvidia.com>
- <f0f362e2-3748-5efe-b4a2-4ad344ae6a1e@xs4all.nl>
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-Message-ID: <91c70ed2-2a86-e99f-8dcb-73501a25b3d8@nvidia.com>
-Date:   Mon, 29 Jun 2020 07:48:43 -0700
+        Mon, 29 Jun 2020 16:20:33 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id poa3jwdSRxmkVpoa6jrcJI; Mon, 29 Jun 2020 09:51:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1593417118; bh=n2F3aTBOa4joxWST/JEYSEL6V66wosTxhb8FoIF7TCs=;
+        h=From:Subject:To:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=nKoZs9OhhNOZuEkadDqVEJu3v+Eqoem/dySTjo8xGlMT5sylN+ON+EK+jzm7dxD+E
+         CS804EWYPKtsIaK0Qj1wg+QEIIApQNOBbTtAt+Ho4orzU6PK5WYRxFLVQs3GclVIMG
+         NOwgGd11ICA125+6ZvK41uqRt2UqykF4NRQKXDRNg8v3g7tNkr0vDcqVZ0aZBz45pS
+         YaIFfZi+yhSneLIpAmFUrMZN2SnXdYt2W6aMWUmyRiveZHDruAtnzPLiCwID/VKm4C
+         4xIJ5OJkzNgZ+OMWVXauPED/hTvQGzoHGFZ1tnb6dkic4MXDdn46HXqHtaKQAKPRkJ
+         ogFgd5Xjd7EcA==
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.9] Removal of soc-camera and dependent sensor
+ drivers
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Message-ID: <bf6d5d12-9460-2bcc-a0d7-5553e7e18065@xs4all.nl>
+Date:   Mon, 29 Jun 2020 09:51:55 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <f0f362e2-3748-5efe-b4a2-4ad344ae6a1e@xs4all.nl>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1593441995; bh=mRHvcQYMUVmA9zSshngrK+5IlhrjxWXFrVsZZvga3QQ=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=WDO97jzJDKDQPttTd6AfzMo5VeIPv3djcwqFiAR1sFdr4QgvbndC8++vvqxNVLGo1
-         OsKjCUnizT/a5uY4sBKu0uX5gyHXSPvDq6k1hp+Zv6PjSq8KpYHw5e78DSBVJpjpI0
-         odO5XM/1WLMOHMvFQvGcGhzJwtZ1qTTFVUd1AggCKxVT1fPAw4AEcoC2K33DiGg1sh
-         hV2TqaBgtksici/VBLyAgYNAcBUn01wsYIMyn+V1Bc/WtSfaeMIOBRRue8GRTQQi25
-         jp4UM4ugJJGzgct7/3CFaSCfeZyMFcsOP1San1gWDtg9wdMoEETK2wEwcgVJ/Pyx4s
-         3k2lLOuVLggAQ==
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfIAS4QfHzy+EUFTqJFYXu3HFjKuiCPy3Ij5mzH1VQ9i3x0fAk73d9e64/nUJp4Z+0yihHddFI8ZsmCIIMDBTwn1iLVBD/1DOuKLgdLBP5GXMkgdVUrn7
+ szfV1U1E8CSXND/1iBTMuOiFCz7I/L8c1QnkIPf3xwL13Wpu79FD2jbM+izWODQCV+QnY9NbogWK2A==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+This pull request removes drivers/staging/media/soc_camera since
+soc-camera has long been a deprecated driver depending on BROKEN. Also
+the several sensors drivers in that same directory that depended on the
+soc-camera driver (and thus on BROKEN) have been removed.
 
-On 6/29/20 2:28 AM, Hans Verkuil wrote:
-> On 17/06/2020 03:41, Sowjanya Komatineni wrote:
->> Tegra internal TPG mode is only for Tegra vi and csi testing
->> without a real sensor and driver should default support real
->> sensor.
->>
->> So, This patch adds CONFIG_VIDEO_TEGRA_TPG and enables Tegra
->> internal TPG mode only when this config is selected.
->>
->> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->> ---
->>   drivers/staging/media/tegra-video/Kconfig    |  6 +++++
->>   drivers/staging/media/tegra-video/csi.c      | 38 +++++++++++++++++++++++-----
->>   drivers/staging/media/tegra-video/tegra210.c |  6 +++++
->>   drivers/staging/media/tegra-video/vi.c       | 13 +++++++---
->>   drivers/staging/media/tegra-video/video.c    | 23 +++++++++--------
->>   5 files changed, 65 insertions(+), 21 deletions(-)
->>
->> diff --git a/drivers/staging/media/tegra-video/Kconfig b/drivers/staging/media/tegra-video/Kconfig
->> index f6c61ec..566da62 100644
->> --- a/drivers/staging/media/tegra-video/Kconfig
->> +++ b/drivers/staging/media/tegra-video/Kconfig
->> @@ -10,3 +10,9 @@ config VIDEO_TEGRA
->>   
->>   	  To compile this driver as a module, choose M here: the module
->>   	  will be called tegra-video.
->> +
->> +config VIDEO_TEGRA_TPG
->> +	bool "NVIDIA Tegra VI driver TPG mode"
->> +	depends on VIDEO_TEGRA
->> +	help
->> +	  Say yes here to enable Tegra internal TPG mode
-> This is not clear: if this is enabled, will the driver use TPG for
-> ALL CSI ports? Or just for those that are not connected to anything?
-> (i.e. the unused ports).
->
-> I always assumed that the latter was intended, but it kind of looks from
-> the code that this switches to TPG completely.
->
-> It would also be nice if you can still use the TPG even for connected
-> CSI ports by just setting the TEST_PATTERN control. I believe that's also what
-> happens in the driver that is in the L4T tree.
->
-> In any case, it is definitely not clear from this config description what
-> it does.
->
-> Regards,
->
-> 	Hans
+To remove the soc_camera.h header several board files that depended on
+that had to be modified, specifically by removing the remaining camera
+support (which wasn't functioning since 4.6/4.8 anyway). At the request
+of Arnd these patches go through the media tree as well.
 
-Same v4l2 test pattern control is used by sensor subdevices as well and 
-we can't differentiate between Tegra Vs Sensor test patterns.
+Any remaining CONFIG_SOC_CAMERA* entries in config files were also removed.
 
-Current patches are based on our prior discussions where Tegra internal 
-TPG is enabled for all channels/ports only when TPG Kconfig is set 
-otherwise it will be for sensor capture based on the device graph.
+The first two patches just update MODULE_DESCRIPTIONs in two camera drivers
+to avoid referring to SoC Camera since those drivers have been independent
+of the soc-camera framework for a long time now.
 
-To be clear, will update Kconfig description specifying all channels 
-will be in TPG mode only when TPG Kconfig is set otherwise media links 
-are purely based on the device graph from DT.
+Finally the last patch removes the SOC-CAMERA entry from the MAINTAINERS file.
 
-Thanks
+Regards,
 
-Sowjanya
+	Hans
 
->
->> diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
->> index 40ea195..fb667df 100644
->> --- a/drivers/staging/media/tegra-video/csi.c
->> +++ b/drivers/staging/media/tegra-video/csi.c
->> @@ -62,6 +62,9 @@ static int csi_enum_bus_code(struct v4l2_subdev *subdev,
->>   			     struct v4l2_subdev_pad_config *cfg,
->>   			     struct v4l2_subdev_mbus_code_enum *code)
->>   {
->> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->> +		return -ENOIOCTLCMD;
->> +
->>   	if (code->index >= ARRAY_SIZE(tegra_csi_tpg_fmts))
->>   		return -EINVAL;
->>   
->> @@ -76,6 +79,9 @@ static int csi_get_format(struct v4l2_subdev *subdev,
->>   {
->>   	struct tegra_csi_channel *csi_chan = to_csi_chan(subdev);
->>   
->> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->> +		return -ENOIOCTLCMD;
->> +
->>   	fmt->format = csi_chan->format;
->>   
->>   	return 0;
->> @@ -121,6 +127,9 @@ static int csi_enum_framesizes(struct v4l2_subdev *subdev,
->>   {
->>   	unsigned int i;
->>   
->> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->> +		return -ENOIOCTLCMD;
->> +
->>   	if (fse->index >= ARRAY_SIZE(tegra_csi_tpg_sizes))
->>   		return -EINVAL;
->>   
->> @@ -148,6 +157,9 @@ static int csi_enum_frameintervals(struct v4l2_subdev *subdev,
->>   	const struct tpg_framerate *frmrate = csi->soc->tpg_frmrate_table;
->>   	int index;
->>   
->> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->> +		return -ENOIOCTLCMD;
->> +
->>   	/* one framerate per format and resolution */
->>   	if (fie->index > 0)
->>   		return -EINVAL;
->> @@ -172,6 +184,9 @@ static int csi_set_format(struct v4l2_subdev *subdev,
->>   	const struct v4l2_frmsize_discrete *sizes;
->>   	unsigned int i;
->>   
->> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->> +		return -ENOIOCTLCMD;
->> +
->>   	sizes = v4l2_find_nearest_size(tegra_csi_tpg_sizes,
->>   				       ARRAY_SIZE(tegra_csi_tpg_sizes),
->>   				       width, height,
->> @@ -208,6 +223,9 @@ static int tegra_csi_g_frame_interval(struct v4l2_subdev *subdev,
->>   {
->>   	struct tegra_csi_channel *csi_chan = to_csi_chan(subdev);
->>   
->> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->> +		return -ENOIOCTLCMD;
->> +
->>   	vfi->interval.numerator = 1;
->>   	vfi->interval.denominator = csi_chan->framerate;
->>   
->> @@ -311,8 +329,12 @@ static int tegra_csi_channel_init(struct tegra_csi_channel *chan)
->>   	subdev = &chan->subdev;
->>   	v4l2_subdev_init(subdev, &tegra_csi_ops);
->>   	subdev->dev = csi->dev;
->> -	snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "%s-%d", "tpg",
->> -		 chan->csi_port_num);
->> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->> +		snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "%s-%d", "tpg",
->> +			 chan->csi_port_num);
->> +	else
->> +		snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "%s",
->> +			 kbasename(chan->of_node->full_name));
->>   
->>   	v4l2_set_subdevdata(subdev, chan);
->>   	subdev->fwnode = of_fwnode_handle(chan->of_node);
->> @@ -405,11 +427,13 @@ static int tegra_csi_init(struct host1x_client *client)
->>   
->>   	INIT_LIST_HEAD(&csi->csi_chans);
->>   
->> -	ret = tegra_csi_tpg_channels_alloc(csi);
->> -	if (ret < 0) {
->> -		dev_err(csi->dev,
->> -			"failed to allocate tpg channels: %d\n", ret);
->> -		goto cleanup;
->> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)) {
->> +		ret = tegra_csi_tpg_channels_alloc(csi);
->> +		if (ret < 0) {
->> +			dev_err(csi->dev,
->> +				"failed to allocate tpg channels: %d\n", ret);
->> +			goto cleanup;
->> +		}
->>   	}
->>   
->>   	ret = tegra_csi_channels_init(csi);
->> diff --git a/drivers/staging/media/tegra-video/tegra210.c b/drivers/staging/media/tegra-video/tegra210.c
->> index 3baa4e3..3492a8a 100644
->> --- a/drivers/staging/media/tegra-video/tegra210.c
->> +++ b/drivers/staging/media/tegra-video/tegra210.c
->> @@ -631,7 +631,11 @@ const struct tegra_vi_soc tegra210_vi_soc = {
->>   	.ops = &tegra210_vi_ops,
->>   	.hw_revision = 3,
->>   	.vi_max_channels = 6,
->> +#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
->>   	.vi_max_clk_hz = 499200000,
->> +#else
->> +	.vi_max_clk_hz = 998400000,
->> +#endif
->>   };
->>   
->>   /* Tegra210 CSI PHY registers accessors */
->> @@ -957,7 +961,9 @@ static const char * const tegra210_csi_cil_clks[] = {
->>   	"cilab",
->>   	"cilcd",
->>   	"cile",
->> +#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
->>   	"csi_tpg",
->> +#endif
->>   };
->>   
->>   /* Tegra210 CSI operations */
->> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
->> index d621ebc..0197f4e 100644
->> --- a/drivers/staging/media/tegra-video/vi.c
->> +++ b/drivers/staging/media/tegra-video/vi.c
->> @@ -565,6 +565,7 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
->>   {
->>   	int ret;
->>   
->> +#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
->>   	/* add test pattern control handler to v4l2 device */
->>   	v4l2_ctrl_new_std_menu_items(&chan->ctrl_handler, &vi_ctrl_ops,
->>   				     V4L2_CID_TEST_PATTERN,
->> @@ -576,6 +577,7 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
->>   		v4l2_ctrl_handler_free(&chan->ctrl_handler);
->>   		return chan->ctrl_handler.error;
->>   	}
->> +#endif
->>   
->>   	/* setup the controls */
->>   	ret = v4l2_ctrl_handler_setup(&chan->ctrl_handler);
->> @@ -918,10 +920,13 @@ static int tegra_vi_init(struct host1x_client *client)
->>   
->>   	INIT_LIST_HEAD(&vi->vi_chans);
->>   
->> -	ret = tegra_vi_tpg_channels_alloc(vi);
->> -	if (ret < 0) {
->> -		dev_err(vi->dev, "failed to allocate tpg channels: %d\n", ret);
->> -		goto free_chans;
->> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)) {
->> +		ret = tegra_vi_tpg_channels_alloc(vi);
->> +		if (ret < 0) {
->> +			dev_err(vi->dev,
->> +				"failed to allocate tpg channels: %d\n", ret);
->> +			goto free_chans;
->> +		}
->>   	}
->>   
->>   	ret = tegra_vi_channels_init(vi);
->> diff --git a/drivers/staging/media/tegra-video/video.c b/drivers/staging/media/tegra-video/video.c
->> index 30816aa..e50bd70 100644
->> --- a/drivers/staging/media/tegra-video/video.c
->> +++ b/drivers/staging/media/tegra-video/video.c
->> @@ -60,15 +60,17 @@ static int host1x_video_probe(struct host1x_device *dev)
->>   	if (ret < 0)
->>   		goto unregister_v4l2;
->>   
->> -	/*
->> -	 * Both vi and csi channels are available now.
->> -	 * Register v4l2 nodes and create media links for TPG.
->> -	 */
->> -	ret = tegra_v4l2_nodes_setup_tpg(vid);
->> -	if (ret < 0) {
->> -		dev_err(&dev->dev,
->> -			"failed to setup tpg graph: %d\n", ret);
->> -		goto device_exit;
->> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)) {
->> +		/*
->> +		 * Both vi and csi channels are available now.
->> +		 * Register v4l2 nodes and create media links for TPG.
->> +		 */
->> +		ret = tegra_v4l2_nodes_setup_tpg(vid);
->> +		if (ret < 0) {
->> +			dev_err(&dev->dev,
->> +				"failed to setup tpg graph: %d\n", ret);
->> +			goto device_exit;
->> +		}
->>   	}
->>   
->>   	return 0;
->> @@ -91,7 +93,8 @@ static int host1x_video_remove(struct host1x_device *dev)
->>   {
->>   	struct tegra_video_device *vid = dev_get_drvdata(&dev->dev);
->>   
->> -	tegra_v4l2_nodes_cleanup_tpg(vid);
->> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->> +		tegra_v4l2_nodes_cleanup_tpg(vid);
->>   
->>   	host1x_device_exit(dev);
->>   
->>
+The following changes since commit e30cc79cc80fd919b697a15c5000d9f57487de8e:
+
+  media: media-request: Fix crash if memory allocation fails (2020-06-23 15:19:37 +0200)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-soc-camera
+
+for you to fetch changes up to 041ddbe862acb03d6f33ff9f6bdf83d045f15b4d:
+
+  MAINTAINERS: remove SOC-CAMERA entry (2020-06-29 09:40:55 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Hans Verkuil (10):
+      ov9640: update MODULE_DESCRIPTION
+      pxa_camera: update MODULE_DESCRIPTION
+      mach-imx: mach-imx27_visstrim_m10.c: remove soc_camera dependencies
+      mach-omap1: board-ams-delta.c: remove soc_camera dependencies
+      mach-pxa: palmz72/pcm990: remove soc_camera dependencies
+      staging/media/soc_camera: remove this driver
+      soc_camera.h: remove this unused header
+      arch/arm/configs: remove obsolete CONFIG_SOC_CAMERA*
+      arch/sh/configs: remove obsolete CONFIG_SOC_CAMERA*
+      MAINTAINERS: remove SOC-CAMERA entry
+
+ MAINTAINERS                                      |    7 -
+ arch/arm/configs/ezx_defconfig                   |    2 -
+ arch/arm/configs/imote2_defconfig                |    2 -
+ arch/arm/configs/imx_v4_v5_defconfig             |    1 -
+ arch/arm/configs/imx_v6_v7_defconfig             |    1 -
+ arch/arm/configs/pxa_defconfig                   |    3 -
+ arch/arm/configs/sama5_defconfig                 |    2 -
+ arch/arm/mach-imx/mach-imx27_visstrim_m10.c      |   31 -
+ arch/arm/mach-omap1/board-ams-delta.c            |   32 -
+ arch/arm/mach-omap1/camera.h                     |   14 -
+ arch/arm/mach-omap1/devices.c                    |   43 --
+ arch/arm/mach-pxa/palmz72.c                      |  112 ---
+ arch/arm/mach-pxa/pcm990-baseboard.c             |  157 -----
+ arch/sh/configs/ap325rxa_defconfig               |    3 -
+ arch/sh/configs/ecovec24_defconfig               |    3 -
+ arch/sh/configs/migor_defconfig                  |    3 -
+ arch/sh/configs/se7724_defconfig                 |    2 -
+ drivers/media/i2c/ov9640.c                       |    2 +-
+ drivers/media/platform/pxa_camera.c              |    2 +-
+ drivers/staging/media/Kconfig                    |    2 -
+ drivers/staging/media/Makefile                   |    1 -
+ drivers/staging/media/soc_camera/Kconfig         |   51 --
+ drivers/staging/media/soc_camera/Makefile        |    7 -
+ drivers/staging/media/soc_camera/TODO            |    4 -
+ drivers/staging/media/soc_camera/imx074.c        |  492 -------------
+ drivers/staging/media/soc_camera/mt9t031.c       |  853 -----------------------
+ drivers/staging/media/soc_camera/soc-camera.rst  |  171 -----
+ drivers/staging/media/soc_camera/soc_camera.c    | 2164 ----------------------------------------------------------
+ drivers/staging/media/soc_camera/soc_mediabus.c  |  529 --------------
+ drivers/staging/media/soc_camera/soc_mt9v022.c   | 1008 ---------------------------
+ drivers/staging/media/soc_camera/soc_ov5642.c    | 1085 -----------------------------
+ drivers/staging/media/soc_camera/soc_ov9740.c    |  992 ---------------------------
+ include/linux/platform_data/media/omap1_camera.h |   32 -
+ include/media/drv-intf/soc_mediabus.h            |  107 ---
+ include/media/soc_camera.h                       |  397 -----------
+ 35 files changed, 2 insertions(+), 8315 deletions(-)
+ delete mode 100644 arch/arm/mach-omap1/camera.h
+ delete mode 100644 drivers/staging/media/soc_camera/Kconfig
+ delete mode 100644 drivers/staging/media/soc_camera/Makefile
+ delete mode 100644 drivers/staging/media/soc_camera/TODO
+ delete mode 100644 drivers/staging/media/soc_camera/imx074.c
+ delete mode 100644 drivers/staging/media/soc_camera/mt9t031.c
+ delete mode 100644 drivers/staging/media/soc_camera/soc-camera.rst
+ delete mode 100644 drivers/staging/media/soc_camera/soc_camera.c
+ delete mode 100644 drivers/staging/media/soc_camera/soc_mediabus.c
+ delete mode 100644 drivers/staging/media/soc_camera/soc_mt9v022.c
+ delete mode 100644 drivers/staging/media/soc_camera/soc_ov5642.c
+ delete mode 100644 drivers/staging/media/soc_camera/soc_ov9740.c
+ delete mode 100644 include/linux/platform_data/media/omap1_camera.h
+ delete mode 100644 include/media/drv-intf/soc_mediabus.h
+ delete mode 100644 include/media/soc_camera.h
