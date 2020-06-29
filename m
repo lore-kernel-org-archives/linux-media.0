@@ -2,323 +2,449 @@ Return-Path: <SRS0=15y/=AK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 500BEC433E2
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 21:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 266C3C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 23:08:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29FC9206C3
-	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 21:57:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7CD420780
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jun 2020 23:08:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="LQslp9z5"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="nB9PBotG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404728AbgF2V5l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Jun 2020 17:57:41 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:60333 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404715AbgF2V5j (ORCPT
+        id S1728817AbgF2XIO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Jun 2020 19:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728354AbgF2XIN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Jun 2020 17:57:39 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id pq5yjZgkq0MRapq61jPyw7; Mon, 29 Jun 2020 11:29:03 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1593422943; bh=HG6aXa0G2/oL2YwtHy3gZbLqxOSMpxFnwk+kd5Lht7E=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=LQslp9z5ToBLh8Xspe/VcMIlqNlvL0wDyuxqQrSy0sYxcx4SjMBARBzmPp2b/mXJO
-         ahIRiJPczRzP6fDFBsCp4e1kszT1DitQNxDRSIRM7k11f0+NeHiSxqNg+Xb6IJj0rK
-         6MtdmbxuPuA6uuVUK01JgmQ5EDrhFL1EyR4sFmthYrUkwtHzyXV0+gn9cRsihwWgYh
-         nf3L0SwaXNWEGW/tZfhzM3yWnzbmCSCphRCsrsl5JlnE7DnXmTHJiewRYmYqbZRwvc
-         luDADAG7vIqS7Lr559JOv8zfpeabluaStg6OIa/mGdRplnqMjxyyZ5N72Ka0sCg+vo
-         iwRHoO5pnEQrw==
-Subject: Re: [RFC PATCH v2 08/18] media: tegra-video: Enable TPG based on
- kernel config
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
-        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com
-Cc:     digetx@gmail.com, sboyd@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
- <1592358094-23459-9-git-send-email-skomatineni@nvidia.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <f0f362e2-3748-5efe-b4a2-4ad344ae6a1e@xs4all.nl>
-Date:   Mon, 29 Jun 2020 11:28:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        Mon, 29 Jun 2020 19:08:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F421C061755
+        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 16:08:13 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1C739299;
+        Tue, 30 Jun 2020 01:08:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1593472090;
+        bh=GBki4TG3UpayckI7YxdEmeEzHzRPmpTXUZqa6Lwm1tw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nB9PBotGzRKzQIeEyVdm+PlDAsFwIgHW1VfCcHPG1WR9lJELiQcypwUoyYCVyjdQE
+         nSbqK0ZE874AZZyUpqzq73+hTFGrTe1veHjmTeXNz9QJEwj8gJt/7t2WyJcqZJ2Jox
+         TCeBCfwxGt+gvRATM+MBQ28k9pfNf8cKL6zyTFcw=
+Date:   Tue, 30 Jun 2020 02:08:06 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Helen Koike <helen.koike@collabora.com>
+Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, kernel@collabora.com,
+        Dafna Hirschfeld <dafna3@gmail.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [RFC v3 2/2] media: staging: rkisp1: allow quantization
+ conversion from userspace for isp source pad
+Message-ID: <20200629230806.GE21452@pendragon.ideasonboard.com>
+References: <62611ccd-e4cd-728a-355b-532661b36be0@collabora.com>
+ <20200618184923.GB68039@chromium.org>
+ <a163dbb3-8278-684e-6324-4c36924ed335@collabora.com>
+ <20200618192535.GD73379@chromium.org>
+ <67cdd3be-ee2a-3b88-5d17-d9d1d17b2603@collabora.com>
+ <CAAFQd5Bkh1QphjQtMyWQeN7wtK93YN2PeU-bKkUFh46PQ=ujLw@mail.gmail.com>
+ <20200628131537.GT6954@pendragon.ideasonboard.com>
+ <CAAFQd5BDXJVZ1UNvbLwccFnTOoQ_U7MdZhQNNzQSZtn9ne40cA@mail.gmail.com>
+ <848a7c75-7d63-7763-cbd2-84833f85cec8@collabora.com>
+ <aed7c3a2-2a35-17f0-f06b-4ef2e5232415@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <1592358094-23459-9-git-send-email-skomatineni@nvidia.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfKkXLlR5hpfZJdFnd49TANoPwmUQ+5Xlsf+/kOTXOATIDj7u/gR8iNOwyKfLYxvURugNirOKE6DEVtqs48XFDgFdx6qriUZ2xKX4qkBqbKgvZoMmpijX
- Xkzn3p0ixS/u7QOhz00Ms1O2drJ01MohpuFxwQBNRAohGKycIaWaChyy7vjvU7FHZIzh7UicRMOg/0tGkm5HaIdVSXDZmJQoxOz4liitbhzMjFM2zbUnyPIJ
- jcBRc6WaNqsbkSxHffaRLMpGG0eN3Bw8YNjj9lmEFnJLqFY9gGr1UHtAB9osHeC7oMm5gkPs7eqokAavAQI9T6+uIhQPRgaT9kLZnTzIWq/hdFeAK9infQeo
- YUncUHqsLkOGfVh8BnvHjHbHS/YSHlU4KbYhxyralzi8UmqqaIF4mPgUS9PMbgLWVQYELJQVI3vFDQRBe+n8yN824Qq9Ech6RUXCyasPC0ae1tGIJANaWBbX
- s+StPVVHPks4BRihMV01KZklVJucFrwX33jKLcQB5SQP3pzLZV8DpEd9q2EjRqff7otc0I7InXyINCUlRBUIEtwirGk5kEFNx7Njngvjh/22TnVc1w92WZca
- j5h5fyts+ItWYkLyXbRzUcFj2jjTlAERAM5wGO5ECSBjrKUR5xcdENX93Dk6s5oKcft4C630sz+LqsBfLo41nbsE
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aed7c3a2-2a35-17f0-f06b-4ef2e5232415@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 17/06/2020 03:41, Sowjanya Komatineni wrote:
-> Tegra internal TPG mode is only for Tegra vi and csi testing
-> without a real sensor and driver should default support real
-> sensor.
+Hi Helen,
+
+On Mon, Jun 29, 2020 at 12:50:06PM -0300, Helen Koike wrote:
+> On 6/28/20 4:34 PM, Dafna Hirschfeld wrote:
+> > On 28.06.20 16:59, Tomasz Figa wrote:
+> >> On Sun, Jun 28, 2020 at 3:15 PM Laurent Pinchart wrote:
+> >>> On Sun, Jun 28, 2020 at 03:10:41PM +0200, Tomasz Figa wrote:
+> >>>> On Fri, Jun 26, 2020 at 2:15 AM Helen Koike <helen.koike@collabora.com> wrote:
+> >>>>> On 6/18/20 4:25 PM, Tomasz Figa wrote:
+> >>>>>> On Thu, Jun 18, 2020 at 08:54:34PM +0200, Dafna Hirschfeld wrote:
+> >>>>>>> On 18.06.20 20:49, Tomasz Figa wrote:
+> >>>>>>>> On Thu, Jun 18, 2020 at 08:26:33PM +0200, Dafna Hirschfeld wrote:
+> >>>>>>>>> On 18.06.20 19:27, Tomasz Figa wrote:
+> >>>>>>>>>> On Wed, Jun 10, 2020 at 2:08 PM Tomasz Figa wrote:
+> >>>>>>>>>>> On Thu, Jun 4, 2020 at 9:11 PM Dafna Hirschfeld wrote:
+> >>>>>>>>>>>> On 04.06.20 19:54, Tomasz Figa wrote:
+> >>>>>>>>>>>>> On Thu, Apr 16, 2020 at 04:56:05PM +0200, Dafna Hirschfeld wrote:
+> >>>>>>>>>>>>>> The isp entity has a hardware support to force full range quantization
+> >>>>>>>>>>>>>> for YUV formats. Use the new API to indicate userspace that
+> >>>>>>>>>>>>>> quantization conversion is supported by adding the flag
+> >>>>>>>>>>>>>> V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION during media code enumeration.
+> >>>>>>>>>>>>>> Then uppon s_fmt on the video source pad, we assign the
+> >>>>>>>>>>>>>> quantization from userspace for YUV formats.
+> >>>>>>>>>>>>>> Also in the capture and resizer entities we retrieve the colorspace
+> >>>>>>>>>>>>>> from the isp entity.
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> >>>>>>>>>>>>>> ---
+> >>>>>>>>>>>>>>      drivers/staging/media/rkisp1/rkisp1-capture.c | 28 ++++++-------
+> >>>>>>>>>>>>>>      drivers/staging/media/rkisp1/rkisp1-common.h  |  2 +
+> >>>>>>>>>>>>>>      drivers/staging/media/rkisp1/rkisp1-isp.c     | 39 +++++++++++++++++--
+> >>>>>>>>>>>>>>      drivers/staging/media/rkisp1/rkisp1-resizer.c | 13 +++++++
+> >>>>>>>>>>>>>>      4 files changed, 65 insertions(+), 17 deletions(-)
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
+> >>>>>>>>>>>>>> index fbf62399fe3d..aca0f93bc772 100644
+> >>>>>>>>>>>>>> --- a/drivers/staging/media/rkisp1/rkisp1-capture.c
+> >>>>>>>>>>>>>> +++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
+> >>>>>>>>>>>>>> @@ -1066,14 +1066,13 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
+> >>>>>>>>>>>>>>                            const struct v4l2_format_info **fmt_info)
+> >>>>>>>>>>>>>>      {
+> >>>>>>>>>>>>>>         const struct rkisp1_capture_config *config = cap->config;
+> >>>>>>>>>>>>>> -    struct rkisp1_capture *other_cap =
+> >>>>>>>>>>>>>> -                    &cap->rkisp1->capture_devs[cap->id ^ 1];
+> >>>>>>>>>>>>>>         const struct rkisp1_capture_fmt_cfg *fmt;
+> >>>>>>>>>>>>>>         const struct v4l2_format_info *info;
+> >>>>>>>>>>>>>>         const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
+> >>>>>>>>>>>>>>                                             RKISP1_RSZ_SP_SRC_MAX_WIDTH };
+> >>>>>>>>>>>>>>         const unsigned int max_heights[] = { RKISP1_RSZ_MP_SRC_MAX_HEIGHT,
+> >>>>>>>>>>>>>>                                              RKISP1_RSZ_SP_SRC_MAX_HEIGHT};
+> >>>>>>>>>>>>>> +    struct v4l2_subdev_format isp_sd_fmt;
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>         fmt = rkisp1_find_fmt_cfg(cap, pixm->pixelformat);
+> >>>>>>>>>>>>>>         if (!fmt) {
+> >>>>>>>>>>>>>> @@ -1081,24 +1080,27 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
+> >>>>>>>>>>>>>>                 pixm->pixelformat = fmt->fourcc;
+> >>>>>>>>>>>>>>         }
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> +    rkisp1_get_isp_src_fmt(cap->rkisp1, &isp_sd_fmt);
+> >>>>>>>>>>>>>> +    pixm->field = isp_sd_fmt.format.field;
+> >>>>>>>>>>>>>> +    pixm->colorspace = isp_sd_fmt.format.colorspace;
+> >>>>>>>>>>>>>> +    pixm->ycbcr_enc = isp_sd_fmt.format.ycbcr_enc;
+> >>>>>>>>>>>>>> +    pixm->xfer_func = isp_sd_fmt.format.xfer_func;
+> >>>>>>>>>>>>>> +
+> >>>>>>>>>>>>>> +    /*
+> >>>>>>>>>>>>>> +     * isp has a feature to set full range quantization for yuv formats.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> How about "select between limited and full range for YUV formats"?
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>>> +     * so we need to get the format from the isp.
+> >>>>>>>>>>>>>> +     */
+> >>>>>>>>>>>>>> +    pixm->quantization = isp_sd_fmt.format.quantization;
+> >>>>>>>>>>>>>> +    if (!v4l2_is_format_yuv(cap->pix.info))
+> >>>>>>>>>>>>>> +            pixm->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+> >>>>>>>>>>>>>> +
+> >>>>>>>>>>>>>>         pixm->width = clamp_t(u32, pixm->width,
+> >>>>>>>>>>>>>>                               RKISP1_RSZ_SRC_MIN_WIDTH, max_widths[cap->id]);
+> >>>>>>>>>>>>>>         pixm->height = clamp_t(u32, pixm->height,
+> >>>>>>>>>>>>>>                                RKISP1_RSZ_SRC_MIN_HEIGHT, max_heights[cap->id]);
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> -    pixm->field = V4L2_FIELD_NONE;
+> >>>>>>>>>>>>>> -    pixm->colorspace = V4L2_COLORSPACE_DEFAULT;
+> >>>>>>>>>>>>>> -    pixm->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+> >>>>>>>>>>>>>> -
+> >>>>>>>>>>>>>>         info = rkisp1_fill_pixfmt(pixm, cap->id);
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> -    /* can not change quantization when stream-on */
+> >>>>>>>>>>>>>> -    if (other_cap->is_streaming)
+> >>>>>>>>>>>>>> -            pixm->quantization = other_cap->pix.fmt.quantization;
+> >>>>>>>>>>>>>> -    /* output full range by default, take effect in params */
+> >>>>>>>>>>>>>> -    else if (!pixm->quantization ||
+> >>>>>>>>>>>>>> -             pixm->quantization > V4L2_QUANTIZATION_LIM_RANGE)
+> >>>>>>>>>>>>>> -            pixm->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>         if (fmt_cfg)
+> >>>>>>>>>>>>>>                 *fmt_cfg = fmt;
+> >>>>>>>>>>>>>> diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
+> >>>>>>>>>>>>>> index 2d7b7e078636..7a5576fa14c9 100644
+> >>>>>>>>>>>>>> --- a/drivers/staging/media/rkisp1/rkisp1-common.h
+> >>>>>>>>>>>>>> +++ b/drivers/staging/media/rkisp1/rkisp1-common.h
+> >>>>>>>>>>>>>> @@ -300,6 +300,8 @@ int rkisp1_isp_register(struct rkisp1_device *rkisp1,
+> >>>>>>>>>>>>>>                         struct v4l2_device *v4l2_dev);
+> >>>>>>>>>>>>>>      void rkisp1_isp_unregister(struct rkisp1_device *rkisp1);
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> +int rkisp1_get_isp_src_fmt(struct rkisp1_device *rkisp1,
+> >>>>>>>>>>>>>> +                       struct v4l2_subdev_format *sd_fmt);
+> >>>>>>>>>>>>>>      const struct rkisp1_isp_mbus_info *rkisp1_isp_mbus_info_get(u32 mbus_code);
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>      irqreturn_t rkisp1_isp_isr(struct rkisp1_device *rkisp1);
+> >>>>>>>>>>>>>> diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
+> >>>>>>>>>>>>>> index dee8e96f3900..6fdf5ed0b6b1 100644
+> >>>>>>>>>>>>>> --- a/drivers/staging/media/rkisp1/rkisp1-isp.c
+> >>>>>>>>>>>>>> +++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
+> >>>>>>>>>>>>>> @@ -613,6 +613,10 @@ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>                 if (code->index == pos - 1) {
+> >>>>>>>>>>>>>>                         code->code = fmt->mbus_code;
+> >>>>>>>>>>>>>> +                    if (fmt->pixel_enc == V4L2_PIXEL_ENC_YUV &&
+> >>>>>>>>>>>>>> +                        dir == RKISP1_DIR_SRC)
+> >>>>>>>>>>>>>> +                            code->flags =
+> >>>>>>>>>>>>>> +                                    V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION;
+> >>>>>>>>>>>>>>                         return 0;
+> >>>>>>>>>>>>>>                 }
+> >>>>>>>>>>>>>>         }
+> >>>>>>>>>>>>>> @@ -639,12 +643,21 @@ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
+> >>>>>>>>>>>>>>         sink_crop->height = RKISP1_DEFAULT_HEIGHT;
+> >>>>>>>>>>>>>>         sink_crop->left = 0;
+> >>>>>>>>>>>>>>         sink_crop->top = 0;
+> >>>>>>>>>>>>>> +    sink_fmt->colorspace = V4L2_COLORSPACE_SRGB;
+> >>>>>>>>>>>>>> +    sink_fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(sink_fmt->colorspace);
+> >>>>>>>>>>>>>> +    sink_fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(sink_fmt->colorspace);
+> >>>>>>>>>>>>>> +    sink_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+> >>>>>>>>>>>>>> +
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>         src_fmt = v4l2_subdev_get_try_format(sd, cfg,
+> >>>>>>>>>>>>>>                                              RKISP1_ISP_PAD_SOURCE_VIDEO);
+> >>>>>>>>>>>>>>         *src_fmt = *sink_fmt;
+> >>>>>>>>>>>>>>         src_fmt->code = RKISP1_DEF_SRC_PAD_FMT;
+> >>>>>>>>>>>>>> -    src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+> >>>>>>>>>>>>>> +    src_fmt->colorspace = V4L2_COLORSPACE_SRGB;
+> >>>>>>>>>>>>>> +    src_fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(src_fmt->colorspace);
+> >>>>>>>>>>>>>> +    src_fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(src_fmt->colorspace);
+> >>>>>>>>>>>>>> +    src_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE;
+> >>>>>>>>>>>>>> +
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>         src_crop = v4l2_subdev_get_try_crop(sd, cfg,
+> >>>>>>>>>>>>>>                                             RKISP1_ISP_PAD_SOURCE_VIDEO);
+> >>>>>>>>>>>>>> @@ -687,10 +700,17 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
+> >>>>>>>>>>>>>>                 isp->src_fmt = mbus_info;
+> >>>>>>>>>>>>>>         src_fmt->width  = src_crop->width;
+> >>>>>>>>>>>>>>         src_fmt->height = src_crop->height;
+> >>>>>>>>>>>>>> -    src_fmt->quantization = format->quantization;
+> >>>>>>>>>>>>>> -    /* full range by default */
+> >>>>>>>>>>>>>> -    if (!src_fmt->quantization)
+> >>>>>>>>>>>>>> +
+> >>>>>>>>>>>>>> +    src_fmt->colorspace = V4L2_COLORSPACE_SRGB;
+> >>>>>>>>>>>>>> +    src_fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(src_fmt->colorspace);
+> >>>>>>>>>>>>>> +    src_fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(src_fmt->colorspace);
+> >>>>>>>>>>>>>> +
+> >>>>>>>>>>>>>> +    if (mbus_info->pixel_enc == V4L2_PIXEL_ENC_BAYER)
+> >>>>>>>>>>>>>>                 src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+> >>>>>>>>>>>>>> +    else if (format->quantization == V4L2_QUANTIZATION_DEFAULT)
+> >>>>>>>>>>>>>> +            src_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE;
+> >>>>>>>>>>>>>> +    else
+> >>>>>>>>>>>>>> +            src_fmt->quantization = format->quantization;
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>         *format = *src_fmt;
+> >>>>>>>>>>>>>>      }
+> >>>>>>>>>>>>>> @@ -1068,6 +1088,17 @@ int rkisp1_isp_register(struct rkisp1_device *rkisp1,
+> >>>>>>>>>>>>>>         return ret;
+> >>>>>>>>>>>>>>      }
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> +int rkisp1_get_isp_src_fmt(struct rkisp1_device *rkisp1,
+> >>>>>>>>>>>>>> +                       struct v4l2_subdev_format *sd_fmt)
+> >>>>>>>>>>>>>> +{
+> >>>>>>>>>>>>>> +    struct rkisp1_isp *isp = &rkisp1->isp;
+> >>>>>>>>>>>>>> +
+> >>>>>>>>>>>>>> +    sd_fmt->which = V4L2_SUBDEV_FORMAT_ACTIVE;
+> >>>>>>>>>>>>>> +    sd_fmt->pad = RKISP1_ISP_PAD_SOURCE_VIDEO;
+> >>>>>>>>>>>>>> +
+> >>>>>>>>>>>>>> +    return v4l2_subdev_call(&isp->sd, pad, get_fmt, NULL, sd_fmt);
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Do we need to get through the external API to access data that is
+> >>>>>>>>>>>>> driver-internal anyway?
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>>> +}
+> >>>>>>>>>>>>>> +
+> >>>>>>>>>>>>>>      void rkisp1_isp_unregister(struct rkisp1_device *rkisp1)
+> >>>>>>>>>>>>>>      {
+> >>>>>>>>>>>>>>         struct v4l2_subdev *sd = &rkisp1->isp.sd;
+> >>>>>>>>>>>>>> diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+> >>>>>>>>>>>>>> index 7b6b7ddd4169..8705b133de68 100644
+> >>>>>>>>>>>>>> --- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
+> >>>>>>>>>>>>>> +++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+> >>>>>>>>>>>>>> @@ -525,6 +525,7 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
+> >>>>>>>>>>>>>>         const struct rkisp1_isp_mbus_info *mbus_info;
+> >>>>>>>>>>>>>>         struct v4l2_mbus_framefmt *sink_fmt, *src_fmt;
+> >>>>>>>>>>>>>>         struct v4l2_rect *sink_crop;
+> >>>>>>>>>>>>>> +    struct v4l2_subdev_format isp_sd_fmt;
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>         sink_fmt = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SINK, which);
+> >>>>>>>>>>>>>>         src_fmt = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SRC, which);
+> >>>>>>>>>>>>>> @@ -539,8 +540,20 @@ static void rkisp1_rsz_set_sink_fmt(struct rkisp1_resizer *rsz,
+> >>>>>>>>>>>>>>         if (which == V4L2_SUBDEV_FORMAT_ACTIVE)
+> >>>>>>>>>>>>>>                 rsz->pixel_enc = mbus_info->pixel_enc;
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> +    rkisp1_get_isp_src_fmt(rsz->rkisp1, &isp_sd_fmt);
+> >>>>>>>>>>>>>> +
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Is this necessary? My understanding was that in the subdev model, it was
+> >>>>>>>>>>>>> the userspace responsibility to propagate any configuration changes through
+> >>>>>>>>>>>>> the graph.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Also, doing this only here wouldn't fully maintain the
+> >>>>>>>>>>>>> consistency of the state. For example, if one sets the ISP subdev format
+> >>>>>>>>>>>>> first, then the resizer subdev and then the ISP subdev again, wouldn't the
+> >>>>>>>>>>>>> resizer subdev end up with a wrong format?
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> yes, this is indeed a bug, I am preparing v4 now.
+> >>>>>>>>>>>> What I thought to do is adding quantization conversion
+> >>>>>>>>>>>> support also on ther resizer and capture entities.
+> >>>>>>>>>>>> Then in the 'link_validation' callbacks, there
+> >>>>>>>>>>>> is a validation that the quantization fields matches.
+> >>>>>>>>>>>
+> >>>>>>>>>>> My understanding is that, if we have the following topology
+> >>>>>>>>>>>
+> >>>>>>>>>>> [ ISP ] -> [ Resizer ] -> [ Video node ]
+> >>>>>>>>>>>
+> >>>>>>>>>>> then the ISP source pad would have the csc capability, while resizer
+> >>>>>>>>>>> and video node would just accept whatever is configured on their sink
+> >>>>>>>>>>> pads (no need for csc capability for that) and propagate that to their
+> >>>>>>>>>>> outputs, i.e. resizer source pad and video node CAPTURE format.
+> >>>>>>>>>>>
+> >>>>>>>>>>> Is this what you were going to implement?
+> >>>>>>>>> Hi, I sent a v4 where the CSC capability is set on the reiszer and capture as well.
+> >>>>>>>>> I can send a v5 implementing it the way you suggest. Currently the doc says that the colorspace fields
+> >>>>>>>>> must be set by the driver for capture streams. This implies that userspace can set it
+> >>>>>>>>> only if the CSC is supported.
+> >>>>>>>>
+> >>>>>>>> Why would the userspace have to set it for the capture stream on the
+> >>>>>>>> resizer and video nodes? Couldn't the userspace set it to DEFAULT and
+> >>>>>>>> then the driver override to whatever it received on the corresponding
+> >>>>>>>> sink?
+> >>>>>
+> >>>>> According to the documentation [1]:
+> >>>>>
+> >>>>> "the default quantization encoding as defined by the colorspace"
+> >>>>>
+> >>>>> Then, for instance, the default for V4L2_COLORSPACE_SRGB is limited range [2].
+> >>>>>
+> >>>>> Unless we change the definition of DEFAULT to let it accept whatever it receives on the corresponding sink.
+> >>>>>
+> >>>>> Then the way I understand is:
+> >>>>>
+> >>>>> [sensor]->[isp]->[resizer]->[capture]
+> >>>>>
+> >>>>> Userspace should set quantization on:
+> >>>>> * sensor source pad
+> >>>>> * isp sink pad
+> >>>>> * resizer sink pad
+> >>>>> * capture node
+> >>>>>
+> >>>>> The remaining source pads would get values propagated from their sink pads.
+> >>>>>
+> >>>>> [1] https://linuxtv.org/downloads/v4l-dvb-apis-new/userspace-api/v4l/colorspaces-defs.html#c.v4l2_quantization
+> >>>>> [2] https://linuxtv.org/downloads/v4l-dvb-apis-new/userspace-api/v4l/colorspaces-details.html#col-srgb
+> >>>>
+> >>>> After discussing this offline, we concluded that:
+> >>>> - only the source pad of the ISP entity should expose the CSC capability,
+> >>>> - the CAPTURE video node should expose only the formats/color spaces
+> >>>> compatible with the current setting of the resizer source,
+> >>>> - consistency between the resizer source format and CAPTURE format
+> >>>> should be implicitly maintained by the driver.
+> >>>
+> >>> Do you mean it should be validated at streamon time ?
+> >>
+> >> Nope. Any V4L2 state must be kept valid all the time, as mandated by
+> >> the general V4L2 principles. Wrong configuration of the video node
+> >> must not be a reason for STREAMON failing.
+> >>
+> >>> In MC-based
+> >>> drivers, entities are isolated from each other from a configuration
+> >>> point of view, and the validity of the configuration across the whole
+> >>> pipeline is checked at streamon time. I don't think CSC parameters
+> >>> should be treated differently than formats in this regard.
+> >>
+> >> Indeed, the ISP entity and the resizer entity are isolated from each
+> >> other and they need to be validated separately. However, the resizer
+> >> entity is not isolated from the video node, as there is no
+> >> configuration exposed for the video node in the MC API. If MC exposed
+> >> an explicit format control for the video interface sink pad, then the
+> >> resizer would have to be validated separately indeed, but still that
+> >> video interface sink pad would be tied to the rest of the
+> >> configuration of the video node (e.g. the CAPTURE format).
+> > 
+> > Two questions:
+> > 
+> > The validation callback between the resizer and the isp has to include check
+> > that the quantization values matches ?
 > 
-> So, This patch adds CONFIG_VIDEO_TEGRA_TPG and enables Tegra
-> internal TPG mode only when this config is selected.
+> To sumarize:
 > 
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> ---
->  drivers/staging/media/tegra-video/Kconfig    |  6 +++++
->  drivers/staging/media/tegra-video/csi.c      | 38 +++++++++++++++++++++++-----
->  drivers/staging/media/tegra-video/tegra210.c |  6 +++++
->  drivers/staging/media/tegra-video/vi.c       | 13 +++++++---
->  drivers/staging/media/tegra-video/video.c    | 23 +++++++++--------
->  5 files changed, 65 insertions(+), 21 deletions(-)
+> The current quantization fields from VIDIOC_SUBDEV_{S,G}_FMT and VIDEO_{SET,GET}_FORMAT
+> are filled by the driver (read-only by userspace).
 > 
-> diff --git a/drivers/staging/media/tegra-video/Kconfig b/drivers/staging/media/tegra-video/Kconfig
-> index f6c61ec..566da62 100644
-> --- a/drivers/staging/media/tegra-video/Kconfig
-> +++ b/drivers/staging/media/tegra-video/Kconfig
-> @@ -10,3 +10,9 @@ config VIDEO_TEGRA
->  
->  	  To compile this driver as a module, choose M here: the module
->  	  will be called tegra-video.
-> +
-> +config VIDEO_TEGRA_TPG
-> +	bool "NVIDIA Tegra VI driver TPG mode"
-> +	depends on VIDEO_TEGRA
-> +	help
-> +	  Say yes here to enable Tegra internal TPG mode
+> This RFC exposes an API that allows the quantization to be a read-write configuration.
+> The question is where we expose the read-write capability.
+> 
+> We have two main design choices here.
+> 
+> 1) Expose read-write quantization in all pads and video nodes.
+> And userspace must set matching quantization in all of them.
+> Which makes userspace more complicated, but userspace already needs to configure
+> the whole topology anyway.
+> This wouldn't make much sense in video nodes for metadata (params and statistics)
+> 
+> In this options, the validation callback should check for matching quantizations
+> between all links, and it would failed on STREAMON if formats don't match.
+> 
+> 2-A) Expose read-write quantization only on the isp source pad.
+> The others pads and video nodes would be keept read-only.
+> Which means that changing quantization on a read-write node, will implicitly
+> change the values on the read-only nodes.
+> Which maybe not be a problem, since current API (read-only) already says this field
+> is filled by the driver.
+> 
+> In this options, the validation callback doesn't need to check for matching quantizations
+> between links.
+> 
+> 2-A) Expose read-write quantization only on the video node
+> This is basically the same as 2-A, but userspace could interpret that we
+> could have different quantizations in each video node.
+> 
+> 
+> I'd like to hear from others what would be better here, design choice 1 or 2.
 
-This is not clear: if this is enabled, will the driver use TPG for
-ALL CSI ports? Or just for those that are not connected to anything?
-(i.e. the unused ports).
+To keep things simple, I'd go for 2-A, and I would ignore the colorspace
+fields completely on the video nodes.
 
-I always assumed that the latter was intended, but it kind of looks from
-the code that this switches to TPG completely.
+In an MC-centric driver there should be no automatic in-kernel
+propagation of userspace-visible configuration from a source pad to the
+connected sink pad (regardless of whether the sink is a subdev or a
+video node). It's userspace that is responsible for propagating the
+configuration, and the kernel is supposed to validate it at stream-on
+time.
 
-It would also be nice if you can still use the TPG even for connected
-CSI ports by just setting the TEST_PATTERN control. I believe that's also what
-happens in the driver that is in the L4T tree.
+In this case, the colorspace information is only relevant to the ISP and
+nobody else cares (neither the resizer nor the DMA engines) - please
+correct me if I'm wrong. Given that userspace will be specific to this
+particular hardware, I would not enforce matching colorspace beyond the
+output of the ISP. Userspace will deal with colorspace at the output of
+the ISP and ignore it on the video node.
 
-In any case, it is definitely not clear from this config description what
-it does.
+> > Userspace have to configure the quantizaion on the resizer sink pad without that CSC
+> > API beeing expose on it?
+> 
+> In the current API, the quantization field is read-only, so to allow userspace to configure
+> quantization in any pad, the CSC API needs to be exposed on the pad to make it read-write.
+> 
+> >>>> Below is the rationale for that:
+> >>>> - In the MC model, the video node represents the DMA alone (and thus
+> >>>> the reason to have the resizer entities at all) and since the
+> >>>> colorspace is not a property of the DMA, it doesn't belong there.
+> >>>> - Even if we put that aside, both MP and SP can only output the same
+> >>>> colorspace, which would create a dependency between the configuration
+> >>>> of the two video nodes, which is not something well defined by V4L2.
+> >>>> - A video interface in the MC API doesn't expose control over its
+> >>>> input format, which means that the relation between the other side of
+> >>>> the link (resizer source) and the video node is implicit and needs to
+> >>>> be handled internally in the driver.
+> >>>> - V4L2, as opposed to MC, requires that the current state is always
+> >>>> consistent and valid. In this case it means that an ioctl on the video
+> >>>> node must not be able to alter the state in a way that would make it
+> >>>> inconsistent with the state of the matching resizer source.
 
+-- 
 Regards,
 
-	Hans
-
-> diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
-> index 40ea195..fb667df 100644
-> --- a/drivers/staging/media/tegra-video/csi.c
-> +++ b/drivers/staging/media/tegra-video/csi.c
-> @@ -62,6 +62,9 @@ static int csi_enum_bus_code(struct v4l2_subdev *subdev,
->  			     struct v4l2_subdev_pad_config *cfg,
->  			     struct v4l2_subdev_mbus_code_enum *code)
->  {
-> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> +		return -ENOIOCTLCMD;
-> +
->  	if (code->index >= ARRAY_SIZE(tegra_csi_tpg_fmts))
->  		return -EINVAL;
->  
-> @@ -76,6 +79,9 @@ static int csi_get_format(struct v4l2_subdev *subdev,
->  {
->  	struct tegra_csi_channel *csi_chan = to_csi_chan(subdev);
->  
-> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> +		return -ENOIOCTLCMD;
-> +
->  	fmt->format = csi_chan->format;
->  
->  	return 0;
-> @@ -121,6 +127,9 @@ static int csi_enum_framesizes(struct v4l2_subdev *subdev,
->  {
->  	unsigned int i;
->  
-> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> +		return -ENOIOCTLCMD;
-> +
->  	if (fse->index >= ARRAY_SIZE(tegra_csi_tpg_sizes))
->  		return -EINVAL;
->  
-> @@ -148,6 +157,9 @@ static int csi_enum_frameintervals(struct v4l2_subdev *subdev,
->  	const struct tpg_framerate *frmrate = csi->soc->tpg_frmrate_table;
->  	int index;
->  
-> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> +		return -ENOIOCTLCMD;
-> +
->  	/* one framerate per format and resolution */
->  	if (fie->index > 0)
->  		return -EINVAL;
-> @@ -172,6 +184,9 @@ static int csi_set_format(struct v4l2_subdev *subdev,
->  	const struct v4l2_frmsize_discrete *sizes;
->  	unsigned int i;
->  
-> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> +		return -ENOIOCTLCMD;
-> +
->  	sizes = v4l2_find_nearest_size(tegra_csi_tpg_sizes,
->  				       ARRAY_SIZE(tegra_csi_tpg_sizes),
->  				       width, height,
-> @@ -208,6 +223,9 @@ static int tegra_csi_g_frame_interval(struct v4l2_subdev *subdev,
->  {
->  	struct tegra_csi_channel *csi_chan = to_csi_chan(subdev);
->  
-> +	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> +		return -ENOIOCTLCMD;
-> +
->  	vfi->interval.numerator = 1;
->  	vfi->interval.denominator = csi_chan->framerate;
->  
-> @@ -311,8 +329,12 @@ static int tegra_csi_channel_init(struct tegra_csi_channel *chan)
->  	subdev = &chan->subdev;
->  	v4l2_subdev_init(subdev, &tegra_csi_ops);
->  	subdev->dev = csi->dev;
-> -	snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "%s-%d", "tpg",
-> -		 chan->csi_port_num);
-> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> +		snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "%s-%d", "tpg",
-> +			 chan->csi_port_num);
-> +	else
-> +		snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "%s",
-> +			 kbasename(chan->of_node->full_name));
->  
->  	v4l2_set_subdevdata(subdev, chan);
->  	subdev->fwnode = of_fwnode_handle(chan->of_node);
-> @@ -405,11 +427,13 @@ static int tegra_csi_init(struct host1x_client *client)
->  
->  	INIT_LIST_HEAD(&csi->csi_chans);
->  
-> -	ret = tegra_csi_tpg_channels_alloc(csi);
-> -	if (ret < 0) {
-> -		dev_err(csi->dev,
-> -			"failed to allocate tpg channels: %d\n", ret);
-> -		goto cleanup;
-> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)) {
-> +		ret = tegra_csi_tpg_channels_alloc(csi);
-> +		if (ret < 0) {
-> +			dev_err(csi->dev,
-> +				"failed to allocate tpg channels: %d\n", ret);
-> +			goto cleanup;
-> +		}
->  	}
->  
->  	ret = tegra_csi_channels_init(csi);
-> diff --git a/drivers/staging/media/tegra-video/tegra210.c b/drivers/staging/media/tegra-video/tegra210.c
-> index 3baa4e3..3492a8a 100644
-> --- a/drivers/staging/media/tegra-video/tegra210.c
-> +++ b/drivers/staging/media/tegra-video/tegra210.c
-> @@ -631,7 +631,11 @@ const struct tegra_vi_soc tegra210_vi_soc = {
->  	.ops = &tegra210_vi_ops,
->  	.hw_revision = 3,
->  	.vi_max_channels = 6,
-> +#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
->  	.vi_max_clk_hz = 499200000,
-> +#else
-> +	.vi_max_clk_hz = 998400000,
-> +#endif
->  };
->  
->  /* Tegra210 CSI PHY registers accessors */
-> @@ -957,7 +961,9 @@ static const char * const tegra210_csi_cil_clks[] = {
->  	"cilab",
->  	"cilcd",
->  	"cile",
-> +#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
->  	"csi_tpg",
-> +#endif
->  };
->  
->  /* Tegra210 CSI operations */
-> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-> index d621ebc..0197f4e 100644
-> --- a/drivers/staging/media/tegra-video/vi.c
-> +++ b/drivers/staging/media/tegra-video/vi.c
-> @@ -565,6 +565,7 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
->  {
->  	int ret;
->  
-> +#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
->  	/* add test pattern control handler to v4l2 device */
->  	v4l2_ctrl_new_std_menu_items(&chan->ctrl_handler, &vi_ctrl_ops,
->  				     V4L2_CID_TEST_PATTERN,
-> @@ -576,6 +577,7 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
->  		v4l2_ctrl_handler_free(&chan->ctrl_handler);
->  		return chan->ctrl_handler.error;
->  	}
-> +#endif
->  
->  	/* setup the controls */
->  	ret = v4l2_ctrl_handler_setup(&chan->ctrl_handler);
-> @@ -918,10 +920,13 @@ static int tegra_vi_init(struct host1x_client *client)
->  
->  	INIT_LIST_HEAD(&vi->vi_chans);
->  
-> -	ret = tegra_vi_tpg_channels_alloc(vi);
-> -	if (ret < 0) {
-> -		dev_err(vi->dev, "failed to allocate tpg channels: %d\n", ret);
-> -		goto free_chans;
-> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)) {
-> +		ret = tegra_vi_tpg_channels_alloc(vi);
-> +		if (ret < 0) {
-> +			dev_err(vi->dev,
-> +				"failed to allocate tpg channels: %d\n", ret);
-> +			goto free_chans;
-> +		}
->  	}
->  
->  	ret = tegra_vi_channels_init(vi);
-> diff --git a/drivers/staging/media/tegra-video/video.c b/drivers/staging/media/tegra-video/video.c
-> index 30816aa..e50bd70 100644
-> --- a/drivers/staging/media/tegra-video/video.c
-> +++ b/drivers/staging/media/tegra-video/video.c
-> @@ -60,15 +60,17 @@ static int host1x_video_probe(struct host1x_device *dev)
->  	if (ret < 0)
->  		goto unregister_v4l2;
->  
-> -	/*
-> -	 * Both vi and csi channels are available now.
-> -	 * Register v4l2 nodes and create media links for TPG.
-> -	 */
-> -	ret = tegra_v4l2_nodes_setup_tpg(vid);
-> -	if (ret < 0) {
-> -		dev_err(&dev->dev,
-> -			"failed to setup tpg graph: %d\n", ret);
-> -		goto device_exit;
-> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)) {
-> +		/*
-> +		 * Both vi and csi channels are available now.
-> +		 * Register v4l2 nodes and create media links for TPG.
-> +		 */
-> +		ret = tegra_v4l2_nodes_setup_tpg(vid);
-> +		if (ret < 0) {
-> +			dev_err(&dev->dev,
-> +				"failed to setup tpg graph: %d\n", ret);
-> +			goto device_exit;
-> +		}
->  	}
->  
->  	return 0;
-> @@ -91,7 +93,8 @@ static int host1x_video_remove(struct host1x_device *dev)
->  {
->  	struct tegra_video_device *vid = dev_get_drvdata(&dev->dev);
->  
-> -	tegra_v4l2_nodes_cleanup_tpg(vid);
-> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> +		tegra_v4l2_nodes_cleanup_tpg(vid);
->  
->  	host1x_device_exit(dev);
->  
-> 
-
+Laurent Pinchart
