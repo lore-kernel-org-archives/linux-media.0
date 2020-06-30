@@ -2,201 +2,389 @@ Return-Path: <SRS0=SGFW=AL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4157C433E1
-	for <linux-media@archiver.kernel.org>; Tue, 30 Jun 2020 06:28:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74F35C433E1
+	for <linux-media@archiver.kernel.org>; Tue, 30 Jun 2020 07:36:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0EE3207E8
-	for <linux-media@archiver.kernel.org>; Tue, 30 Jun 2020 06:28:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="J+2x/+M7"
+	by mail.kernel.org (Postfix) with ESMTP id 54CF72073E
+	for <linux-media@archiver.kernel.org>; Tue, 30 Jun 2020 07:36:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730357AbgF3G2h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Jun 2020 02:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        id S1731071AbgF3Hga (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Jun 2020 03:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730236AbgF3G1x (ORCPT
+        with ESMTP id S1731033AbgF3Hga (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Jun 2020 02:27:53 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE32C03E979
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 23:27:53 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id 35so8081551ple.0
-        for <linux-media@vger.kernel.org>; Mon, 29 Jun 2020 23:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IHSDE3MCRa+j8pKcxUh7y14LEBciAICiE97iwJ5rqDM=;
-        b=J+2x/+M77MfBW8HPgwGdfrtkc3vJUvLveNcRe8PHu861Z/YU8S/AkPNT9wC+6bsHZ/
-         1+JGpmnqFFkdabkpZbCQnGcsFXQiRehA2+YDSKXcfWTjo8o7SU9mIER/DNWC8DAi7W0y
-         6xK29NE+PVVinquGJjTjxsWSjcoAv893gIeO0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IHSDE3MCRa+j8pKcxUh7y14LEBciAICiE97iwJ5rqDM=;
-        b=AML20NQUxYL3d0Hz8gYMSdUo2uBwGWiJTQH1OttfX2GPtlSrJ1WoIvzrI4/5k5oM2w
-         kfMUqv4gihVmVaP+SIt97ZsBC6RysdwIFuRbzFLJAqjM2DPTgIbsKWixo9bWyAOsf+8a
-         kim7/QRLV7+P/NKxVC5MNDy+nONp98MbUXUb6jcUYXxWfbE6tEfe3p9DvxaOxIAhjXRt
-         DZ1SsiJ9CPzkHefU23LUGmvG43iPsuBeVECUNeYW8mxBbrqFZTUmRqhc8CmyBKY7Y8Ye
-         QQlu+2W+ltxQwwJcaK679odd+GQM+x4dPScq3+6At5KmVhCD0Dlj7fruzyi1ncoceTB3
-         K4+g==
-X-Gm-Message-State: AOAM532MFkdEiw1ZxSVu9N/4hdY7lHqK40fxsX3wgXxfvIdVkZmo6ui2
-        180GWOa+Grpcw3hb67lPeI6dBg==
-X-Google-Smtp-Source: ABdhPJxabatUBNTtvr2Hv5NoLC7MLhlWxkg/fu+mXY41IkelDvc0R4c6tp8WIOAa9KUU6JPrZayROA==
-X-Received: by 2002:a17:90a:3624:: with SMTP id s33mr9581648pjb.148.1593498454259;
-        Mon, 29 Jun 2020 23:27:34 -0700 (PDT)
-Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:93d9:de4d:e834:3086])
-        by smtp.gmail.com with ESMTPSA id d1sm1463366pfq.113.2020.06.29.23.27.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 23:27:33 -0700 (PDT)
-From:   Alexandre Courbot <acourbot@chromium.org>
-To:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Rui Wang <gtk_ruiwang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Pi-Hsun Shih <pihsun@chromium.org>,
-        Maoguang Meng <maoguang.meng@mediatek.com>
-Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>
-Subject: [PATCH 2/9] media: mtk-vcodec: vdec: handle firmware version field
-Date:   Tue, 30 Jun 2020 15:27:04 +0900
-Message-Id: <20200630062711.4169601-3-acourbot@chromium.org>
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-In-Reply-To: <20200630062711.4169601-1-acourbot@chromium.org>
-References: <20200630062711.4169601-1-acourbot@chromium.org>
+        Tue, 30 Jun 2020 03:36:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAF2C061755
+        for <linux-media@vger.kernel.org>; Tue, 30 Jun 2020 00:36:29 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1jqAoe-0004JO-In; Tue, 30 Jun 2020 09:36:28 +0200
+Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1jqAod-0007Oj-SC; Tue, 30 Jun 2020 09:36:27 +0200
+Date:   Tue, 30 Jun 2020 09:36:27 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 01/12] media: allegro: rework mbox handling
+Message-ID: <20200630073627.GA6843@pengutronix.de>
+Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
+References: <20200617114550.3235-1-m.tretter@pengutronix.de>
+ <20200617114550.3235-2-m.tretter@pengutronix.de>
+ <b433b4f4-71c4-6c2c-9dd4-6ed8c60a4751@xs4all.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b433b4f4-71c4-6c2c-9dd4-6ed8c60a4751@xs4all.nl>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 09:32:23 up 131 days, 15:02, 122 users,  load average: 0.10, 0.32,
+ 0.27
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Firmwares for decoders newer than MT8173 will include an ABI version
-number in their initialization ack message. Add the capacity to manage
-it and make initialization fail if the firmware ABI is of a version that
-we don't support.
+On Wed, Jun 24, 2020 at 04:35:09PM +0200, Hans Verkuil wrote:
+> On 17/06/2020 13:45, Michael Tretter wrote:
+> > Add a send/notify abstraction for the mailbox and separate the message
+> > handling in the driver from the code to read and write message to the
+> > mailbox.
+> > 
+> > This untangles how mails are written into the MCU's SRAM and signaled to
+> > the MCU from the protocol between the driver and the firmware.
+> > 
+> > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+> > ---
+> >  .../staging/media/allegro-dvt/allegro-core.c  | 150 +++++++++++-------
+> >  1 file changed, 92 insertions(+), 58 deletions(-)
+> > 
+> > diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
+> > index 70f133a842dd..447b15cc235c 100644
+> > --- a/drivers/staging/media/allegro-dvt/allegro-core.c
+> > +++ b/drivers/staging/media/allegro-dvt/allegro-core.c
+> > @@ -105,9 +105,11 @@ struct allegro_buffer {
+> >  	struct list_head head;
+> >  };
+> >  
+> > +struct allegro_dev;
+> >  struct allegro_channel;
+> >  
+> >  struct allegro_mbox {
+> > +	struct allegro_dev *dev;
+> >  	unsigned int head;
+> >  	unsigned int tail;
+> >  	unsigned int data;
+> > @@ -134,8 +136,8 @@ struct allegro_dev {
+> >  	struct completion init_complete;
+> >  
+> >  	/* The mailbox interface */
+> > -	struct allegro_mbox mbox_command;
+> > -	struct allegro_mbox mbox_status;
+> > +	struct allegro_mbox *mbox_command;
+> > +	struct allegro_mbox *mbox_status;
+> >  
+> >  	/*
+> >  	 * The downstream driver limits the users to 64 users, thus I can use
+> > @@ -583,12 +585,20 @@ static void allegro_free_buffer(struct allegro_dev *dev,
+> >   * Mailbox interface to send messages to the MCU.
+> >   */
+> >  
+> > -static int allegro_mbox_init(struct allegro_dev *dev,
+> > -			     struct allegro_mbox *mbox,
+> > -			     unsigned int base, size_t size)
+> > +static void allegro_mcu_interrupt(struct allegro_dev *dev);
+> > +static void allegro_handle_message(struct allegro_dev *dev,
+> > +				   union mcu_msg_response *msg);
+> > +
+> > +static struct allegro_mbox *allegro_mbox_init(struct allegro_dev *dev,
+> > +					      unsigned int base, size_t size)
+> >  {
+> > +	struct allegro_mbox *mbox;
+> > +
+> > +	mbox = devm_kmalloc(&dev->plat_dev->dev, sizeof(*mbox), GFP_KERNEL);
+> >  	if (!mbox)
+> > -		return -EINVAL;
+> > +		return ERR_PTR(-ENOMEM);
+> > +
+> > +	mbox->dev = dev;
+> >  
+> >  	mbox->head = base;
+> >  	mbox->tail = base + 0x4;
+> > @@ -599,7 +609,7 @@ static int allegro_mbox_init(struct allegro_dev *dev,
+> >  	regmap_write(dev->sram, mbox->head, 0);
+> >  	regmap_write(dev->sram, mbox->tail, 0);
+> >  
+> > -	return 0;
+> > +	return mbox;
+> >  }
+> >  
+> >  static int allegro_mbox_write(struct allegro_dev *dev,
+> > @@ -713,9 +723,55 @@ static ssize_t allegro_mbox_read(struct allegro_dev *dev,
+> >  	return size;
+> >  }
+> >  
+> > -static void allegro_mcu_interrupt(struct allegro_dev *dev)
+> > +/**
+> > + * allegro_mbox_send() - Send a message via the mailbox
+> > + * @mbox: the mailbox which is used to send the message
+> > + * @msg: the message to send
+> > + */
+> > +static int allegro_mbox_send(struct allegro_mbox *mbox, void *msg)
+> >  {
+> > -	regmap_write(dev->regmap, AL5_MCU_INTERRUPT, BIT(0));
+> > +	struct allegro_dev *dev = mbox->dev;
+> > +	struct mcu_msg_header *header = msg;
+> > +	ssize_t size = sizeof(*header) + header->length;
+> > +	int err;
+> > +
+> > +	err = allegro_mbox_write(dev, mbox, msg, size);
+> > +	if (err)
+> > +		goto out;
+> > +
+> > +	allegro_mcu_interrupt(dev);
+> > +
+> > +out:
+> > +	return err;
+> > +}
+> > +
+> > +/**
+> > + * allegro_mbox_notify() - Notify the mailbox about a new message
+> > + * @mbox: The allegro_mbox to notify
+> > + */
+> > +static int allegro_mbox_notify(struct allegro_mbox *mbox)
+> > +{
+> > +	struct allegro_dev *dev = mbox->dev;
+> > +	union mcu_msg_response *msg;
+> > +	ssize_t size;
+> > +	int err;
+> 
+> Shouldn't this be 'err = 0;'?
+> 
+> smatch gives me an error for this:
+> 
+> media-git/drivers/staging/media/allegro-dvt/allegro-core.c:786 allegro_mbox_notify() error: uninitialized symbol 'err'.
 
-For MT8173, this ABI version field does not exist ; thus ignore it on
-this chip. There should only be one firmware version available for it
-anyway.
+Yes, thank you. I just found out that I was using a really, really old version
+of smatch. Will send a v2.
 
-Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
----
- .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |  1 +
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  4 ++++
- .../media/platform/mtk-vcodec/vdec_ipi_msg.h  |  5 +++++
- .../media/platform/mtk-vcodec/vdec_vpu_if.c   | 21 +++++++++++++++++--
- 4 files changed, 29 insertions(+), 2 deletions(-)
+Michael
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-index 3224c8049255..b4dad8767f3c 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-@@ -619,6 +619,7 @@ static struct vb2_ops mtk_vdec_frame_vb2_ops = {
- };
- 
- const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata = {
-+	.chip = MTK_MT8173,
- 	.init_vdec_params = mtk_init_vdec_params,
- 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
- 	.vdec_vb2_ops = &mtk_vdec_frame_vb2_ops,
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 388659c28603..386712f9bffc 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -322,6 +322,8 @@ enum mtk_chip {
-  * @vdec_framesizes: supported video decoder frame sizes
-  * @num_framesizes: count of video decoder frame sizes
-  *
-+ * @chip: chip this decoder is compatible with
-+ *
-  * @uses_stateless_api: whether the decoder uses the stateless API with requests
-  */
- 
-@@ -341,6 +343,8 @@ struct mtk_vcodec_dec_pdata {
- 	const struct mtk_codec_framesizes *vdec_framesizes;
- 	const int num_framesizes;
- 
-+	enum mtk_chip chip;
-+
- 	bool uses_stateless_api;
- };
- 
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-index 47a1c1c0fd04..eb66729fda63 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-+++ b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-@@ -83,12 +83,17 @@ struct vdec_ap_ipi_dec_start {
-  * @status	: VPU exeuction result
-  * @ap_inst_addr	: AP vcodec_vpu_inst instance address
-  * @vpu_inst_addr	: VPU decoder instance address
-+ * @vdec_abi_version:	ABI version of the firmware. Kernel can use it to
-+ *			ensure that it is compatible with the firmware.
-+ *			This field is not valid for MT8173 and must not be
-+ *			accessed for this chip.
-  */
- struct vdec_vpu_ipi_init_ack {
- 	uint32_t msg_id;
- 	int32_t status;
- 	uint64_t ap_inst_addr;
- 	uint32_t vpu_inst_addr;
-+	uint32_t vdec_abi_version;
- };
- 
- #endif
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-index 58b0e6fa8fd2..203089213e67 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-@@ -24,6 +24,22 @@ static void handle_init_ack_msg(const struct vdec_vpu_ipi_init_ack *msg)
- 	vpu->inst_addr = msg->vpu_inst_addr;
- 
- 	mtk_vcodec_debug(vpu, "- vpu_inst_addr = 0x%x", vpu->inst_addr);
-+
-+	/* Firmware version field does not exist on MT8173. */
-+	if (vpu->ctx->dev->vdec_pdata->chip == MTK_MT8173)
-+		return;
-+
-+	/* Check firmware version. */
-+	mtk_vcodec_debug(vpu, "firmware version 0x%x\n", msg->vdec_abi_version);
-+	switch (msg->vdec_abi_version) {
-+	case 1:
-+		break;
-+	default:
-+		mtk_vcodec_err(vpu, "unhandled firmware version 0x%x\n",
-+			       msg->vdec_abi_version);
-+		vpu->failure = 1;
-+		break;
-+	}
- }
- 
- /*
-@@ -44,6 +60,9 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
- 
- 	mtk_vcodec_debug(vpu, "+ id=%X", msg->msg_id);
- 
-+	vpu->failure = msg->status;
-+	vpu->signaled = 1;
-+
- 	if (msg->status == 0) {
- 		switch (msg->msg_id) {
- 		case VPU_IPIMSG_DEC_INIT_ACK:
-@@ -63,8 +82,6 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
- 	}
- 
- 	mtk_vcodec_debug(vpu, "- id=%X", msg->msg_id);
--	vpu->failure = msg->status;
--	vpu->signaled = 1;
- }
- 
- static int vcodec_vpu_send_msg(struct vdec_vpu_inst *vpu, void *msg, int len)
+> 
+> Regards,
+> 
+> 	Hans
+> 
+> > +
+> > +	msg = kmalloc(sizeof(*msg), GFP_KERNEL);
+> > +	if (!msg)
+> > +		return -ENOMEM;
+> > +
+> > +	size = allegro_mbox_read(dev, mbox, msg, sizeof(*msg));
+> > +	if (size < 0) {
+> > +		err = size;
+> > +		goto out;
+> > +	}
+> > +
+> > +	allegro_handle_message(dev, msg);
+> > +
+> > +out:
+> > +	kfree(msg);
+> > +
+> > +	return err;
+> >  }
+> >  
+> >  static void allegro_mcu_send_init(struct allegro_dev *dev,
+> > @@ -736,8 +792,7 @@ static void allegro_mcu_send_init(struct allegro_dev *dev,
+> >  	msg.l2_cache[1] = -1;
+> >  	msg.l2_cache[2] = -1;
+> >  
+> > -	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+> > -	allegro_mcu_interrupt(dev);
+> > +	allegro_mbox_send(dev->mbox_command, &msg);
+> >  }
+> >  
+> >  static u32 v4l2_pixelformat_to_mcu_format(u32 pixelformat)
+> > @@ -946,8 +1001,7 @@ static int allegro_mcu_send_create_channel(struct allegro_dev *dev,
+> >  
+> >  	fill_create_channel_param(channel, &msg.param);
+> >  
+> > -	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+> > -	allegro_mcu_interrupt(dev);
+> > +	allegro_mbox_send(dev->mbox_command, &msg);
+> >  
+> >  	return 0;
+> >  }
+> > @@ -964,8 +1018,7 @@ static int allegro_mcu_send_destroy_channel(struct allegro_dev *dev,
+> >  
+> >  	msg.channel_id = channel->mcu_channel_id;
+> >  
+> > -	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+> > -	allegro_mcu_interrupt(dev);
+> > +	allegro_mbox_send(dev->mbox_command, &msg);
+> >  
+> >  	return 0;
+> >  }
+> > @@ -991,8 +1044,7 @@ static int allegro_mcu_send_put_stream_buffer(struct allegro_dev *dev,
+> >  	/* copied to mcu_msg_encode_frame_response */
+> >  	msg.stream_id = stream_id;
+> >  
+> > -	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+> > -	allegro_mcu_interrupt(dev);
+> > +	allegro_mbox_send(dev->mbox_command, &msg);
+> >  
+> >  	return 0;
+> >  }
+> > @@ -1021,8 +1073,7 @@ static int allegro_mcu_send_encode_frame(struct allegro_dev *dev,
+> >  	msg.ep2 = 0x0;
+> >  	msg.ep2_v = to_mcu_addr(dev, msg.ep2);
+> >  
+> > -	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+> > -	allegro_mcu_interrupt(dev);
+> > +	allegro_mbox_send(dev->mbox_command, &msg);
+> >  
+> >  	return 0;
+> >  }
+> > @@ -1084,12 +1135,8 @@ static int allegro_mcu_push_buffer_internal(struct allegro_channel *channel,
+> >  		buffer++;
+> >  	}
+> >  
+> > -	err = allegro_mbox_write(dev, &dev->mbox_command, msg, size);
+> > -	if (err)
+> > -		goto out;
+> > -	allegro_mcu_interrupt(dev);
+> > +	err = allegro_mbox_send(dev->mbox_command, msg);
+> >  
+> > -out:
+> >  	kfree(msg);
+> >  	return err;
+> >  }
+> > @@ -1681,51 +1728,28 @@ allegro_handle_encode_frame(struct allegro_dev *dev,
+> >  	return 0;
+> >  }
+> >  
+> > -static int allegro_receive_message(struct allegro_dev *dev)
+> > +static void allegro_handle_message(struct allegro_dev *dev,
+> > +				   union mcu_msg_response *msg)
+> >  {
+> > -	union mcu_msg_response *msg;
+> > -	ssize_t size;
+> > -	int err = 0;
+> > -
+> > -	msg = kmalloc(sizeof(*msg), GFP_KERNEL);
+> > -	if (!msg)
+> > -		return -ENOMEM;
+> > -
+> > -	size = allegro_mbox_read(dev, &dev->mbox_status, msg, sizeof(*msg));
+> > -	if (size < sizeof(msg->header)) {
+> > -		v4l2_err(&dev->v4l2_dev,
+> > -			 "invalid mbox message (%zd): must be at least %zu\n",
+> > -			 size, sizeof(msg->header));
+> > -		err = -EINVAL;
+> > -		goto out;
+> > -	}
+> > -
+> >  	switch (msg->header.type) {
+> >  	case MCU_MSG_TYPE_INIT:
+> > -		err = allegro_handle_init(dev, &msg->init);
+> > +		allegro_handle_init(dev, &msg->init);
+> >  		break;
+> >  	case MCU_MSG_TYPE_CREATE_CHANNEL:
+> > -		err = allegro_handle_create_channel(dev, &msg->create_channel);
+> > +		allegro_handle_create_channel(dev, &msg->create_channel);
+> >  		break;
+> >  	case MCU_MSG_TYPE_DESTROY_CHANNEL:
+> > -		err = allegro_handle_destroy_channel(dev,
+> > -						     &msg->destroy_channel);
+> > +		allegro_handle_destroy_channel(dev, &msg->destroy_channel);
+> >  		break;
+> >  	case MCU_MSG_TYPE_ENCODE_FRAME:
+> > -		err = allegro_handle_encode_frame(dev, &msg->encode_frame);
+> > +		allegro_handle_encode_frame(dev, &msg->encode_frame);
+> >  		break;
+> >  	default:
+> >  		v4l2_warn(&dev->v4l2_dev,
+> >  			  "%s: unknown message %s\n",
+> >  			  __func__, msg_type_name(msg->header.type));
+> > -		err = -EINVAL;
+> >  		break;
+> >  	}
+> > -
+> > -out:
+> > -	kfree(msg);
+> > -
+> > -	return err;
+> >  }
+> >  
+> >  static irqreturn_t allegro_hardirq(int irq, void *data)
+> > @@ -1746,7 +1770,7 @@ static irqreturn_t allegro_irq_thread(int irq, void *data)
+> >  {
+> >  	struct allegro_dev *dev = data;
+> >  
+> > -	allegro_receive_message(dev);
+> > +	allegro_mbox_notify(dev->mbox_status);
+> >  
+> >  	return IRQ_HANDLED;
+> >  }
+> > @@ -1895,6 +1919,11 @@ static int allegro_mcu_reset(struct allegro_dev *dev)
+> >  	return allegro_mcu_wait_for_sleep(dev);
+> >  }
+> >  
+> > +static void allegro_mcu_interrupt(struct allegro_dev *dev)
+> > +{
+> > +	regmap_write(dev->regmap, AL5_MCU_INTERRUPT, BIT(0));
+> > +}
+> > +
+> >  static void allegro_destroy_channel(struct allegro_channel *channel)
+> >  {
+> >  	struct allegro_dev *dev = channel->dev;
+> > @@ -2887,10 +2916,15 @@ static int allegro_mcu_hw_init(struct allegro_dev *dev,
+> >  {
+> >  	int err;
+> >  
+> > -	allegro_mbox_init(dev, &dev->mbox_command,
+> > -			  info->mailbox_cmd, info->mailbox_size);
+> > -	allegro_mbox_init(dev, &dev->mbox_status,
+> > -			  info->mailbox_status, info->mailbox_size);
+> > +	dev->mbox_command = allegro_mbox_init(dev, info->mailbox_cmd,
+> > +					      info->mailbox_size);
+> > +	dev->mbox_status = allegro_mbox_init(dev, info->mailbox_status,
+> > +					     info->mailbox_size);
+> > +	if (!dev->mbox_command || !dev->mbox_status) {
+> > +		v4l2_err(&dev->v4l2_dev,
+> > +			 "failed to initialize mailboxes\n");
+> > +		return -EIO;
+> > +	}
+> >  
+> >  	allegro_mcu_enable_interrupts(dev);
+> >  
+> > 
+> 
+> 
+
 -- 
-2.27.0.212.ge8ba1cc988-goog
-
+Pengutronix e.K.                           | Michael Tretter             |
+Steuerwalder Str. 21                       | https://www.pengutronix.de/ |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
