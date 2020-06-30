@@ -2,234 +2,147 @@ Return-Path: <SRS0=SGFW=AL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F3C7C433E0
-	for <linux-media@archiver.kernel.org>; Tue, 30 Jun 2020 04:05:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F239C433E0
+	for <linux-media@archiver.kernel.org>; Tue, 30 Jun 2020 06:22:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 219A02076C
-	for <linux-media@archiver.kernel.org>; Tue, 30 Jun 2020 04:05:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2816F207F9
+	for <linux-media@archiver.kernel.org>; Tue, 30 Jun 2020 06:22:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ill14ZYw"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="IJTwGoY4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725845AbgF3EFi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Jun 2020 00:05:38 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:54276 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbgF3EFi (ORCPT
+        id S1730004AbgF3GWl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Jun 2020 02:22:41 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:3549 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725845AbgF3GWk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Jun 2020 00:05:38 -0400
-Received: from localhost.localdomain (unknown [76.104.235.235])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 34BA620B717A;
-        Mon, 29 Jun 2020 21:05:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 34BA620B717A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1593489936;
-        bh=CmGFQ9niOSk+ACKmBSWPMNZSpZIIgbWlh6k26nTf4iQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ill14ZYwu76ZUJDg5ujOsP9irOUNVPkvwSJh01qkK6V+BFmFxkNC6i5lbOqYeyy4G
-         XknfWzcl4VPasKK4bTO7M5jAxHrwcKPjFOSgn4FpSCcLrklc9qhIWOCCmNq23IlWgV
-         a1iyQ8nP1Oe4/psKnPUz2ND83NfNoa2K52TXgTwQ=
-From:   jorhand@linux.microsoft.com
-To:     linux-media@vger.kernel.org
-Cc:     Jordan Hand <jorhand@linux.microsoft.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tian Shu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH] media: ipu3.rst: Format media-ctl and yavta commands as code blocks
-Date:   Mon, 29 Jun 2020 21:05:08 -0700
-Message-Id: <20200630040508.11461-1-jorhand@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 30 Jun 2020 02:22:40 -0400
+X-UUID: ac97b2df3d1e4d328fa8929d2b049f8b-20200630
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=JC6Ap5lkEUDRzG48YCqQYH/0TW9LXucBJHSVGVhjYFg=;
+        b=IJTwGoY4HRRXDLWxmJ+CEaapKQigX+Nw/3MKwNjP90RgTKcHAul1chUe8vIGvogJwI34JQB5SD2641Gh3whPssEo+GbwoYy7l11xayZIqQjOS5ruVKtHNaQWRIh23bev+xVuKHPIkemL0EsfQDBA2MkQtg7xkDoeRYpr1+qNPIA=;
+X-UUID: ac97b2df3d1e4d328fa8929d2b049f8b-20200630
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        (envelope-from <dongchun.zhu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1099122218; Tue, 30 Jun 2020 14:22:36 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 30 Jun 2020 14:22:34 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 30 Jun 2020 14:22:35 +0800
+From:   Dongchun Zhu <dongchun.zhu@mediatek.com>
+To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
+        <mchehab@kernel.org>, <andriy.shevchenko@linux.intel.com>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <sakari.ailus@linux.intel.com>, <drinkcat@chromium.org>,
+        <tfiga@chromium.org>, <matthias.bgg@gmail.com>,
+        <bingbu.cao@intel.com>
+CC:     <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <sj.huang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <louis.kuo@mediatek.com>, <shengnan.wang@mediatek.com>,
+        <dongchun.zhu@mediatek.com>
+Subject: [PATCH V9 1/2] media: dt-bindings: media: i2c: Document DW9768 bindings
+Date:   Tue, 30 Jun 2020 14:22:10 +0800
+Message-ID: <20200630062211.22988-2-dongchun.zhu@mediatek.com>
+X-Mailer: git-send-email 2.9.2
+In-Reply-To: <20200630062211.22988-1-dongchun.zhu@mediatek.com>
+References: <20200630062211.22988-1-dongchun.zhu@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jordan Hand <jorhand@linux.microsoft.com>
-
-Fix improper line breaks and format all example yavta and media-ctl
-commands as code blocks to improve readability.
-
-Signed-off-by: Jordan Hand <jorhand@linux.microsoft.com>
----
- Documentation/admin-guide/media/ipu3.rst | 104 ++++++++++++-----------
- 1 file changed, 56 insertions(+), 48 deletions(-)
-
-diff --git a/Documentation/admin-guide/media/ipu3.rst b/Documentation/admin-guide/media/ipu3.rst
-index 9361c34f123e..28649414b9f7 100644
---- a/Documentation/admin-guide/media/ipu3.rst
-+++ b/Documentation/admin-guide/media/ipu3.rst
-@@ -89,41 +89,43 @@ Let us take the example of ov5670 sensor connected to CSI2 port 0, for a
- Using the media contorller APIs, the ov5670 sensor is configured to send
- frames in packed raw Bayer format to IPU3 CSI2 receiver.
- 
--# This example assumes /dev/media0 as the CIO2 media device
--
--export MDEV=/dev/media0
--
--# and that ov5670 sensor is connected to i2c bus 10 with address 0x36
--
--export SDEV=$(media-ctl -d $MDEV -e "ov5670 10-0036")
-+.. code-block:: none
- 
--# Establish the link for the media devices using media-ctl [#f3]_
--media-ctl -d $MDEV -l "ov5670:0 -> ipu3-csi2 0:0[1]"
-+    # This example assumes /dev/media0 as the CIO2 media device
-+    export MDEV=/dev/media0
- 
--# Set the format for the media devices
--media-ctl -d $MDEV -V "ov5670:0 [fmt:SGRBG10/2592x1944]"
-+    # and that ov5670 sensor is connected to i2c bus 10 with address 0x36
-+    export SDEV=$(media-ctl -d $MDEV -e "ov5670 10-0036")
- 
--media-ctl -d $MDEV -V "ipu3-csi2 0:0 [fmt:SGRBG10/2592x1944]"
-+    # Establish the link for the media devices using media-ctl [#f3]_
-+    media-ctl -d $MDEV -l "ov5670:0 -> ipu3-csi2 0:0[1]"
- 
--media-ctl -d $MDEV -V "ipu3-csi2 0:1 [fmt:SGRBG10/2592x1944]"
-+    # Set the format for the media devices
-+    media-ctl -d $MDEV -V "ov5670:0 [fmt:SGRBG10/2592x1944]"
-+    media-ctl -d $MDEV -V "ipu3-csi2 0:0 [fmt:SGRBG10/2592x1944]"
-+    media-ctl -d $MDEV -V "ipu3-csi2 0:1 [fmt:SGRBG10/2592x1944]"
- 
- Once the media pipeline is configured, desired sensor specific settings
- (such as exposure and gain settings) can be set, using the yavta tool.
- 
- e.g
- 
--yavta -w 0x009e0903 444 $SDEV
-+.. code-block:: none
-+
-+    yavta -w 0x009e0903 444 $SDEV
- 
--yavta -w 0x009e0913 1024 $SDEV
-+    yavta -w 0x009e0913 1024 $SDEV
- 
--yavta -w 0x009e0911 2046 $SDEV
-+    yavta -w 0x009e0911 2046 $SDEV
- 
- Once the desired sensor settings are set, frame captures can be done as below.
- 
- e.g
- 
--yavta --data-prefix -u -c10 -n5 -I -s2592x1944 --file=/tmp/frame-#.bin \
--      -f IPU3_SGRBG10 $(media-ctl -d $MDEV -e "ipu3-cio2 0")
-+.. code-block:: none
-+
-+    yavta --data-prefix -u -c10 -n5 -I -s2592x1944 --file=/tmp/frame-#.bin \
-+        -f IPU3_SGRBG10 $(media-ctl -d $MDEV -e "ipu3-cio2 0")
- 
- With the above command, 10 frames are captured at 2592x1944 resolution, with
- sGRBG10 format and output as IPU3_SGRBG10 format.
-@@ -269,21 +271,21 @@ all the video nodes setup correctly.
- 
- Let us take "ipu3-imgu 0" subdev as an example.
- 
--media-ctl -d $MDEV -r
--
--media-ctl -d $MDEV -l "ipu3-imgu 0 input":0 -> "ipu3-imgu 0":0[1]
--
--media-ctl -d $MDEV -l "ipu3-imgu 0":2 -> "ipu3-imgu 0 output":0[1]
--
--media-ctl -d $MDEV -l "ipu3-imgu 0":3 -> "ipu3-imgu 0 viewfinder":0[1]
-+.. code-block:: none
- 
--media-ctl -d $MDEV -l "ipu3-imgu 0":4 -> "ipu3-imgu 0 3a stat":0[1]
-+    media-ctl -d $MDEV -r
-+    media-ctl -d $MDEV -l "ipu3-imgu 0 input":0 -> "ipu3-imgu 0":0[1]
-+    media-ctl -d $MDEV -l "ipu3-imgu 0":2 -> "ipu3-imgu 0 output":0[1]
-+    media-ctl -d $MDEV -l "ipu3-imgu 0":3 -> "ipu3-imgu 0 viewfinder":0[1]
-+    media-ctl -d $MDEV -l "ipu3-imgu 0":4 -> "ipu3-imgu 0 3a stat":0[1]
- 
- Also the pipe mode of the corresponding V4L2 subdev should be set as desired
- (e.g 0 for video mode or 1 for still mode) through the control id 0x009819a1 as
- below.
- 
--yavta -w "0x009819A1 1" /dev/v4l-subdev7
-+.. code-block:: none
-+
-+    yavta -w "0x009819A1 1" /dev/v4l-subdev7
- 
- Certain hardware blocks in ImgU pipeline can change the frame resolution by
- cropping or scaling, these hardware blocks include Input Feeder(IF), Bayer Down
-@@ -371,30 +373,32 @@ v4l2n command can be used. This helps process the raw Bayer frames and produces
- the desired results for the main output image and the viewfinder output, in NV12
- format.
- 
--v4l2n --pipe=4 --load=/tmp/frame-#.bin --open=/dev/video4
----fmt=type:VIDEO_OUTPUT_MPLANE,width=2592,height=1944,pixelformat=0X47337069
----reqbufs=type:VIDEO_OUTPUT_MPLANE,count:1 --pipe=1 --output=/tmp/frames.out
----open=/dev/video5
----fmt=type:VIDEO_CAPTURE_MPLANE,width=2560,height=1920,pixelformat=NV12
----reqbufs=type:VIDEO_CAPTURE_MPLANE,count:1 --pipe=2 --output=/tmp/frames.vf
----open=/dev/video6
----fmt=type:VIDEO_CAPTURE_MPLANE,width=2560,height=1920,pixelformat=NV12
----reqbufs=type:VIDEO_CAPTURE_MPLANE,count:1 --pipe=3 --open=/dev/video7
----output=/tmp/frames.3A --fmt=type:META_CAPTURE,?
----reqbufs=count:1,type:META_CAPTURE --pipe=1,2,3,4 --stream=5
-+.. code-block:: none
-+
-+    v4l2n --pipe=4 --load=/tmp/frame-#.bin --open=/dev/video4
-+        --fmt=type:VIDEO_OUTPUT_MPLANE,width=2592,height=1944,pixelformat=0X47337069
-+        --reqbufs=type:VIDEO_OUTPUT_MPLANE,count:1 --pipe=1 --output=/tmp/frames.out
-+        --open=/dev/video5
-+        --fmt=type:VIDEO_CAPTURE_MPLANE,width=2560,height=1920,pixelformat=NV12
-+        --reqbufs=type:VIDEO_CAPTURE_MPLANE,count:1 --pipe=2 --output=/tmp/frames.vf
-+        --open=/dev/video6
-+        --fmt=type:VIDEO_CAPTURE_MPLANE,width=2560,height=1920,pixelformat=NV12
-+        --reqbufs=type:VIDEO_CAPTURE_MPLANE,count:1 --pipe=3 --open=/dev/video7
-+        --output=/tmp/frames.3A --fmt=type:META_CAPTURE,?
-+        --reqbufs=count:1,type:META_CAPTURE --pipe=1,2,3,4 --stream=5
- 
- You can also use yavta [#f2]_ command to do same thing as above:
- 
- .. code-block:: none
- 
--	yavta --data-prefix -Bcapture-mplane -c10 -n5 -I -s2592x1944 \
--	--file=frame-#.out-f NV12 /dev/video5 & \
--	yavta --data-prefix -Bcapture-mplane -c10 -n5 -I -s2592x1944 \
--	--file=frame-#.vf -f NV12 /dev/video6 & \
--	yavta --data-prefix -Bmeta-capture -c10 -n5 -I \
--	--file=frame-#.3a /dev/video7 & \
--	yavta --data-prefix -Boutput-mplane -c10 -n5 -I -s2592x1944 \
--	--file=/tmp/frame-in.cio2 -f IPU3_SGRBG10 /dev/video4
-+    yavta --data-prefix -Bcapture-mplane -c10 -n5 -I -s2592x1944 \
-+        --file=frame-#.out-f NV12 /dev/video5 & \
-+    yavta --data-prefix -Bcapture-mplane -c10 -n5 -I -s2592x1944 \
-+        --file=frame-#.vf -f NV12 /dev/video6 & \
-+    yavta --data-prefix -Bmeta-capture -c10 -n5 -I \
-+        --file=frame-#.3a /dev/video7 & \
-+    yavta --data-prefix -Boutput-mplane -c10 -n5 -I -s2592x1944 \
-+        --file=/tmp/frame-in.cio2 -f IPU3_SGRBG10 /dev/video4
- 
- where /dev/video4, /dev/video5, /dev/video6 and /dev/video7 devices point to
- input, output, viewfinder and 3A statistics video nodes respectively.
-@@ -408,7 +412,9 @@ as below.
- Main output frames
- ~~~~~~~~~~~~~~~~~~
- 
--raw2pnm -x2560 -y1920 -fNV12 /tmp/frames.out /tmp/frames.out.ppm
-+.. code-block:: none
-+
-+    raw2pnm -x2560 -y1920 -fNV12 /tmp/frames.out /tmp/frames.out.ppm
- 
- where 2560x1920 is output resolution, NV12 is the video format, followed
- by input frame and output PNM file.
-@@ -416,7 +422,9 @@ by input frame and output PNM file.
- Viewfinder output frames
- ~~~~~~~~~~~~~~~~~~~~~~~~
- 
--raw2pnm -x2560 -y1920 -fNV12 /tmp/frames.vf /tmp/frames.vf.ppm
-+.. code-block:: none
-+
-+    raw2pnm -x2560 -y1920 -fNV12 /tmp/frames.vf /tmp/frames.vf.ppm
- 
- where 2560x1920 is output resolution, NV12 is the video format, followed
- by input frame and output PNM file.
--- 
-2.17.1
+QWRkIERldmljZVRyZWUgQmluZGluZyBEb2N1bWVudGF0aW9uIGZvciBEb25nd29vbiBBbmF0ZWNo
+IERXOTc2OA0Kdm9pY2UgY29pbCBhY3R1YXRvci4NCg0KUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5n
+IDxyb2JoQGtlcm5lbC5vcmc+DQpTaWduZWQtb2ZmLWJ5OiBEb25nY2h1biBaaHUgPGRvbmdjaHVu
+LnpodUBtZWRpYXRlay5jb20+DQotLS0NCiAuLi4vYmluZGluZ3MvbWVkaWEvaTJjL2Rvbmd3b29u
+LGR3OTc2OC55YW1sICAgICAgICB8IDEwMCArKysrKysrKysrKysrKysrKysrKysNCiBNQUlOVEFJ
+TkVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgNyArKw0KIDIg
+ZmlsZXMgY2hhbmdlZCwgMTA3IGluc2VydGlvbnMoKykNCiBjcmVhdGUgbW9kZSAxMDA2NDQgRG9j
+dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21lZGlhL2kyYy9kb25nd29vbixkdzk3Njgu
+eWFtbA0KDQpkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21l
+ZGlhL2kyYy9kb25nd29vbixkdzk3NjgueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
+aW5kaW5ncy9tZWRpYS9pMmMvZG9uZ3dvb24sZHc5NzY4LnlhbWwNCm5ldyBmaWxlIG1vZGUgMTAw
+NjQ0DQppbmRleCAwMDAwMDAwLi5jYjk2ZTk1DQotLS0gL2Rldi9udWxsDQorKysgYi9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWVkaWEvaTJjL2Rvbmd3b29uLGR3OTc2OC55YW1s
+DQpAQCAtMCwwICsxLDEwMCBAQA0KKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4w
+IE9SIEJTRC0yLUNsYXVzZSkNCisjIENvcHlyaWdodCAoYykgMjAyMCBNZWRpYVRlayBJbmMuDQor
+JVlBTUwgMS4yDQorLS0tDQorJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9tZWRp
+YS9pMmMvZG9uZ3dvb24sZHc5NzY4LnlhbWwjDQorJHNjaGVtYTogaHR0cDovL2RldmljZXRyZWUu
+b3JnL21ldGEtc2NoZW1hcy9jb3JlLnlhbWwjDQorDQordGl0bGU6IERvbmd3b29uIEFuYXRlY2gg
+RFc5NzY4IFZvaWNlIENvaWwgTW90b3IgKFZDTSkgTGVucyBEZXZpY2UgVHJlZSBCaW5kaW5ncw0K
+Kw0KK21haW50YWluZXJzOg0KKyAgLSBEb25nY2h1biBaaHUgPGRvbmdjaHVuLnpodUBtZWRpYXRl
+ay5jb20+DQorDQorZGVzY3JpcHRpb246IHwtDQorICBUaGUgRG9uZ3dvb24gRFc5NzY4IGlzIGEg
+c2luZ2xlIDEwLWJpdCBkaWdpdGFsLXRvLWFuYWxvZyAoREFDKSBjb252ZXJ0ZXINCisgIHdpdGgg
+MTAwIG1BIG91dHB1dCBjdXJyZW50IHNpbmsgY2FwYWJpbGl0eS4gVkNNIGN1cnJlbnQgaXMgY29u
+dHJvbGxlZCB3aXRoDQorICBhIGxpbmVhciBtb2RlIGRyaXZlci4gVGhlIERBQyBpcyBjb250cm9s
+bGVkIHZpYSBhIDItd2lyZSAoSTJDLWNvbXBhdGlibGUpDQorICBzZXJpYWwgaW50ZXJmYWNlIHRo
+YXQgb3BlcmF0ZXMgYXQgY2xvY2sgcmF0ZXMgdXAgdG8gMU1Iei4gVGhpcyBjaGlwDQorICBpbnRl
+Z3JhdGVzIEFkdmFuY2VkIEFjdHVhdG9yIENvbnRyb2wgKEFBQykgdGVjaG5vbG9neSBhbmQgaXMg
+aW50ZW5kZWQgZm9yDQorICBkcml2aW5nIHZvaWNlIGNvaWwgbGVuc2VzIGluIGNhbWVyYSBtb2R1
+bGVzLg0KKw0KK3Byb3BlcnRpZXM6DQorICBjb21wYXRpYmxlOg0KKyAgICBlbnVtOg0KKyAgICAg
+IC0gZG9uZ3dvb24sZHc5NzY4ICMgZm9yIERXOTc2OCBWQ00NCisgICAgICAtIGdpYW50ZWMsZ3Q5
+NzY5ICAjIGZvciBHVDk3NjkgVkNNDQorDQorICByZWc6DQorICAgIG1heEl0ZW1zOiAxDQorDQor
+ICB2aW4tc3VwcGx5Og0KKyAgICBkZXNjcmlwdGlvbjoNCisgICAgICBEZWZpbml0aW9uIG9mIHRo
+ZSByZWd1bGF0b3IgdXNlZCBhcyBEaWdpdGFsIEkvTyB2b2x0YWdlIHN1cHBseS4NCisNCisgIHZk
+ZC1zdXBwbHk6DQorICAgIGRlc2NyaXB0aW9uOg0KKyAgICAgIERlZmluaXRpb24gb2YgdGhlIHJl
+Z3VsYXRvciB1c2VkIGFzIERpZ2l0YWwgY29yZSB2b2x0YWdlIHN1cHBseS4NCisNCisgIGRvbmd3
+b29uLGFhYy1tb2RlOg0KKyAgICBkZXNjcmlwdGlvbjoNCisgICAgICBJbmRpY2F0aW9uIG9mIEFB
+QyBtb2RlIHNlbGVjdC4NCisgICAgYWxsT2Y6DQorICAgICAgLSAkcmVmOiAiL3NjaGVtYXMvdHlw
+ZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyIg0KKyAgICAgIC0gZW51bToNCisgICAgICAgICAg
+LSAxICAgICMgIEFBQzIgbW9kZShvcGVyYXRpb24gdGltZSMgMC40OCB4IFR2aWIpDQorICAgICAg
+ICAgIC0gMiAgICAjICBBQUMzIG1vZGUob3BlcmF0aW9uIHRpbWUjIDAuNzAgeCBUdmliKQ0KKyAg
+ICAgICAgICAtIDMgICAgIyAgQUFDNCBtb2RlKG9wZXJhdGlvbiB0aW1lIyAwLjc1IHggVHZpYikN
+CisgICAgICAgICAgLSA1ICAgICMgIEFBQzggbW9kZShvcGVyYXRpb24gdGltZSMgMS4xMyB4IFR2
+aWIpDQorICAgICAgICBkZWZhdWx0OiAyDQorDQorICBkb25nd29vbixhYWMtdGltaW5nOg0KKyAg
+ICBkZXNjcmlwdGlvbjoNCisgICAgICBOdW1iZXIgb2YgQUFDIFRpbWluZyBjb3VudCB0aGF0IGNv
+bnRyb2xsZWQgYnkgb25lIDYtYml0IHBlcmlvZCBvZg0KKyAgICAgIHZpYnJhdGlvbiByZWdpc3Rl
+ciBBQUNUWzU6MF0sIHRoZSB1bml0IG9mIHdoaWNoIGlzIDEwMCB1cy4NCisgICAgYWxsT2Y6DQor
+ICAgICAgLSAkcmVmOiAiL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyIg0K
+KyAgICAgIC0gZGVmYXVsdDogMHgyMA0KKyAgICAgICAgbWluaW11bTogMHgwMA0KKyAgICAgICAg
+bWF4aW11bTogMHgzZg0KKw0KKyAgZG9uZ3dvb24sY2xvY2stcHJlc2M6DQorICAgIGRlc2NyaXB0
+aW9uOg0KKyAgICAgIEluZGljYXRpb24gb2YgVkNNIGludGVybmFsIGNsb2NrIGRpdmlkaW5nIHJh
+dGUgc2VsZWN0LCBhcyBvbmUgbXVsdGlwbGUNCisgICAgICBmYWN0b3IgdG8gY2FsY3VsYXRlIFZD
+TSByaW5nIHBlcmlvZGljIHRpbWUgVHZpYi4NCisgICAgYWxsT2Y6DQorICAgICAgLSAkcmVmOiAi
+L3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyIg0KKyAgICAgIC0gZW51bToN
+CisgICAgICAgICAgLSAwICAgICMgIERpdmlkaW5nIFJhdGUgLSAgMg0KKyAgICAgICAgICAtIDEg
+ICAgIyAgRGl2aWRpbmcgUmF0ZSAtICAxDQorICAgICAgICAgIC0gMiAgICAjICBEaXZpZGluZyBS
+YXRlIC0gIDEvMg0KKyAgICAgICAgICAtIDMgICAgIyAgRGl2aWRpbmcgUmF0ZSAtICAxLzQNCisg
+ICAgICAgICAgLSA0ICAgICMgIERpdmlkaW5nIFJhdGUgLSAgOA0KKyAgICAgICAgICAtIDUgICAg
+IyAgRGl2aWRpbmcgUmF0ZSAtICA0DQorICAgICAgICBkZWZhdWx0OiAxDQorDQorcmVxdWlyZWQ6
+DQorICAtIGNvbXBhdGlibGUNCisgIC0gcmVnDQorICAtIHZpbi1zdXBwbHkNCisgIC0gdmRkLXN1
+cHBseQ0KKw0KK2FkZGl0aW9uYWxQcm9wZXJ0aWVzOiBmYWxzZQ0KKw0KK2V4YW1wbGVzOg0KKyAg
+LSB8DQorDQorICAgIGkyYyB7DQorICAgICAgICAjYWRkcmVzcy1jZWxscyA9IDwxPjsNCisgICAg
+ICAgICNzaXplLWNlbGxzID0gPDA+Ow0KKw0KKyAgICAgICAgZHc5NzY4OiBjYW1lcmEtbGVuc0Bj
+IHsNCisgICAgICAgICAgICBjb21wYXRpYmxlID0gImRvbmd3b29uLGR3OTc2OCI7DQorICAgICAg
+ICAgICAgcmVnID0gPDB4MGM+Ow0KKw0KKyAgICAgICAgICAgIHZpbi1zdXBwbHkgPSA8Jm10NjM1
+OF92Y2FtaW9fcmVnPjsNCisgICAgICAgICAgICB2ZGQtc3VwcGx5ID0gPCZtdDYzNThfdmNhbWEy
+X3JlZz47DQorICAgICAgICAgICAgZG9uZ3dvb24sYWFjLXRpbWluZyA9IDwweDM5PjsNCisgICAg
+ICAgIH07DQorICAgIH07DQorDQorLi4uDQpkaWZmIC0tZ2l0IGEvTUFJTlRBSU5FUlMgYi9NQUlO
+VEFJTkVSUw0KaW5kZXggNjhmMjFkNC4uNjI2OTBjNCAxMDA2NDQNCi0tLSBhL01BSU5UQUlORVJT
+DQorKysgYi9NQUlOVEFJTkVSUw0KQEAgLTUyMTUsNiArNTIxNSwxMyBAQCBUOglnaXQgZ2l0Oi8v
+bGludXh0di5vcmcvbWVkaWFfdHJlZS5naXQNCiBGOglEb2N1bWVudGF0aW9uL2RldmljZXRyZWUv
+YmluZGluZ3MvbWVkaWEvaTJjL2Rvbmd3b29uLGR3OTcxNC50eHQNCiBGOglkcml2ZXJzL21lZGlh
+L2kyYy9kdzk3MTQuYw0KIA0KK0RPTkdXT09OIERXOTc2OCBMRU5TIFZPSUNFIENPSUwgRFJJVkVS
+DQorTToJRG9uZ2NodW4gWmh1IDxkb25nY2h1bi56aHVAbWVkaWF0ZWsuY29tPg0KK0w6CWxpbnV4
+LW1lZGlhQHZnZXIua2VybmVsLm9yZw0KK1M6CU1haW50YWluZWQNCitUOglnaXQgZ2l0Oi8vbGlu
+dXh0di5vcmcvbWVkaWFfdHJlZS5naXQNCitGOglEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
+ZGluZ3MvbWVkaWEvaTJjL2Rvbmd3b29uLGR3OTc2OC55YW1sDQorDQogRE9OR1dPT04gRFc5ODA3
+IExFTlMgVk9JQ0UgQ09JTCBEUklWRVINCiBNOglTYWthcmkgQWlsdXMgPHNha2FyaS5haWx1c0Bs
+aW51eC5pbnRlbC5jb20+DQogTDoJbGludXgtbWVkaWFAdmdlci5rZXJuZWwub3JnDQotLSANCjIu
+OS4yDQo=
 
