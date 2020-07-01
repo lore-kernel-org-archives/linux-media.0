@@ -2,60 +2,58 @@ Return-Path: <SRS0=Gyqd=AM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4FAEC433DF
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 13:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AEE7C433DF
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 13:30:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9EA10206BE
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 13:30:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2546B206BE
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 13:30:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="B4pEaSay"
+	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="MdZcrTH6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731068AbgGAN34 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jul 2020 09:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
+        id S1731063AbgGANaJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jul 2020 09:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731064AbgGAN3z (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jul 2020 09:29:55 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E26C08C5DB
-        for <linux-media@vger.kernel.org>; Wed,  1 Jul 2020 06:29:55 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id k5so1481516pjg.3
-        for <linux-media@vger.kernel.org>; Wed, 01 Jul 2020 06:29:55 -0700 (PDT)
+        with ESMTP id S1730705AbgGAN3r (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jul 2020 09:29:47 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A52C08C5C1
+        for <linux-media@vger.kernel.org>; Wed,  1 Jul 2020 06:29:47 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id 207so10827419pfu.3
+        for <linux-media@vger.kernel.org>; Wed, 01 Jul 2020 06:29:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=es-iitr-ac-in.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=4HXkSJihp3Fc8dO1xehGtp3D9ixK4/XcOCc354oqDWM=;
-        b=B4pEaSayd8mYWdN+od8lcucTv6XEOZMnM1CJ9CTdKxpRYtZ81//xZLs0WIE/ZipTTT
-         7ioDkVp299DfixguuLpn2jP2Zusx5f1lDACuGYIY2wV2RhU2Xnr851u07mqfWT1iEICt
-         hpc2NtwUMmVVIJOOxYdvjuFVvGD70FiIZYpQEr7AAAuDkfdn7cZCT7xJwjUUL8lkvGNL
-         i3LCKq5RMd5tv2Tt29TiMBOfOW57vOF7fysOo2XrWLKlMoKZY33EykF+5RyDPp6itc3m
-         BB+cjvo/LQc4bo0L1NZhcakC5yCpF+Po3LC6pLLQhUOMHFd/cZ+BlkzVBJAurondzOl5
-         1z2A==
+        h=from:to:cc:subject:date:message-id;
+        bh=YgnZaQZA95kZa9eD6Aa+cAMcR8VkfrVLM4dfgiEOVdc=;
+        b=MdZcrTH6R7MypetoKPIS7cwWYBfzncRlX/sj2B9Le2wEQOCNOg4KG6n50/jSWJEOxs
+         +7GNqsDV/bHIBjpT5cozeyY2oUgsjkE3FNWIs0FgrJsMlA/p8ztSG124NdHpDRUaNlP4
+         rzofCw55+49xl5hgBjeZujfO29hSiUs0pBiVJ6Bw/mNB9Ub3sDXwld2HN0MuTrcof4L8
+         UN5vKGx4J8XpOQrE82rZISBEb9O9xxgIX5iOPxMzhrSHQy2mBe3NYempIKDw+ge6GvdT
+         Qp+ZrmpucNycajR8CggchRLto9h0WzX7bP7YzNKNTkFVPLH70byI2LmUsnp7TcZI/H6U
+         bh5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=4HXkSJihp3Fc8dO1xehGtp3D9ixK4/XcOCc354oqDWM=;
-        b=KUl0kdTvMpLYNDqUsGHuEIvgH2FZHyOi3jp+6nJ8L4Nwzprf6JksZpBfvQGZQmoDkj
-         vM+E7k/F8TQC9Opz0UISkCT+FzUkbhTDo1lF92Smt3cPkFM96NR54KjhL3jGuj63c7+f
-         O7Il9Np/JbXErwcYvrQDE1PlFiisNZIXUpdl4EfZMnqOoFdId1cAvZg3TAQrFaZyXq9I
-         KKPutoJDX2k1bYHIlI5hBzj2Hns3x3eH4111AY8h2ycyDKgLRr28bPNWe0KtdTVo8jhN
-         VQ6/ULEcX0+Q9lZyE8zKC3ChdFZCKcVk4dmfXfx4qwOk3XKO6hfG3+nFwNrznYS2SDYK
-         j1Rw==
-X-Gm-Message-State: AOAM532QsYWwytnlnnTQnEjda0hnr6myYeeB4JbQa9Ojy/Ajmx+ZgPGn
-        wL3u5Sbw8OUewSKVbYNlyQei2A==
-X-Google-Smtp-Source: ABdhPJy8tMcLsooUW4oNittTDcqYtO8mPql+bLGTctDTXxb+IYs3D3IkZlPggf0pAharRBGhYA0/3w==
-X-Received: by 2002:a17:90b:120a:: with SMTP id gl10mr9638252pjb.44.1593610194650;
-        Wed, 01 Jul 2020 06:29:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=YgnZaQZA95kZa9eD6Aa+cAMcR8VkfrVLM4dfgiEOVdc=;
+        b=hcf9ef++3uKJ+A2esgfZiOHZhUOSfRosxKxsZUa+ghkHz1p94nPiauDq6huSnQGcl9
+         7GDlbFACa9wMfqF88fqICe5NL0VavQr+bebCc7UsXa0ENzGajylZoRKxQxAFoxB03aoP
+         b3VyG79dp0FE5vK9TuMrOD1WpWwj/kNLU1qIC7rNbyjsmCBX2n6FoY5e1F0xhs4qGXfZ
+         QDfeww6OmB5m9GnH4EqMArMO+j6vWoilK4viUX22mu/Bh+1qa8mg4rMWkwmWmLRaqD5O
+         YKXeAZqHCFI2ZHDgdevx1s8IEXfxRmYtlFyAKkzk4AWxI2xKcSnoVZuHNYWMoAxfSg/w
+         Rf2Q==
+X-Gm-Message-State: AOAM533PqwV2Kz+NwJ+oEYWY0YZ63Jxrak7rlD5w/82RolWvwZjo92Hg
+        UNmcnBwtWlhcArfp30NE8pQzfg==
+X-Google-Smtp-Source: ABdhPJzj1O+Xr/fxUrf64PQVVVa1YDdBRm8l3RGZQknYVJhKvV48RBcDh7B1AvfcxXVX4n4OooNCmA==
+X-Received: by 2002:aa7:871a:: with SMTP id b26mr17825125pfo.294.1593610186566;
+        Wed, 01 Jul 2020 06:29:46 -0700 (PDT)
 Received: from kaaira-HP-Pavilion-Notebook ([103.113.213.178])
-        by smtp.gmail.com with ESMTPSA id o42sm5464435pje.10.2020.07.01.06.29.53
+        by smtp.gmail.com with ESMTPSA id l22sm5154330pjq.20.2020.07.01.06.29.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2020 06:29:54 -0700 (PDT)
+        Wed, 01 Jul 2020 06:29:46 -0700 (PDT)
 From:   Kaaira Gupta <kgupta@es.iitr.ac.in>
 To:     Helen Koike <helen.koike@collabora.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -64,95 +62,103 @@ To:     Helen Koike <helen.koike@collabora.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         hverkuil@xs4all.nl
 Cc:     Kaaira Gupta <kgupta@es.iitr.ac.in>
-Subject: [PATCH v9 2/3] media: tpg: Add function to return colors' order of test image
-Date:   Wed,  1 Jul 2020 18:59:39 +0530
-Message-Id: <20200701132940.21257-3-kgupta@es.iitr.ac.in>
+Subject: [PATCH v9 0/3] media: Add colors' order and other info over test image
+Date:   Wed,  1 Jul 2020 18:59:37 +0530
+Message-Id: <20200701132940.21257-1-kgupta@es.iitr.ac.in>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200701132940.21257-1-kgupta@es.iitr.ac.in>
-References: <20200701132940.21257-1-kgupta@es.iitr.ac.in>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently there is no method to know the correct order of the colors for
-a test image generated by tpg. Write a function that returns a string of
-colors' order given a tpg. It returns a NULL pointer in case of test
-patterns which do not have a well defined colors' order. Hence add a
-NULL check for text in tpg_gen_text().
+This patchset aims to add a method to display the correct order of
+colors for a test image generated. It does so by adding a function
+which returns a string of correct order of the colors for a test
+pattern. It then adds a control in vimc which displays the string
+over test image. It also displays some other information like saturation,
+hue, contrast brightness and time since the stream started over test
+image generated by vimc.
 
-Signed-off-by: Kaaira Gupta <kgupta@es.iitr.ac.in>
-Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Reviewed-by: Helen Koike <helen.koike@collabora.com>
----
- drivers/media/common/v4l2-tpg/v4l2-tpg-core.c | 30 +++++++++++++++++--
- include/media/tpg/v4l2-tpg.h                  |  1 +
- 2 files changed, 29 insertions(+), 2 deletions(-)
+Changes since v8:
+	In patch 1:
+	- Add more details to commit message.
+	In patch 3:
+	- Formatting nits.
 
-diff --git a/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c b/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
-index dde22a4cbd6c..c46ddd902675 100644
---- a/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
-+++ b/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
-@@ -1959,12 +1959,14 @@ void tpg_gen_text(const struct tpg_data *tpg, u8 *basep[TPG_MAX_PLANES][2],
- 	unsigned step = V4L2_FIELD_HAS_T_OR_B(tpg->field) ? 2 : 1;
- 	unsigned div = step;
- 	unsigned first = 0;
--	unsigned len = strlen(text);
-+	unsigned len;
- 	unsigned p;
- 
--	if (font8x16 == NULL || basep == NULL)
-+	if (font8x16 == NULL || basep == NULL || text == NULL)
- 		return;
- 
-+	len = strlen(text);
-+
- 	/* Checks if it is possible to show string */
- 	if (y + 16 >= tpg->compose.height || x + 8 >= tpg->compose.width)
- 		return;
-@@ -2006,6 +2008,30 @@ void tpg_gen_text(const struct tpg_data *tpg, u8 *basep[TPG_MAX_PLANES][2],
- }
- EXPORT_SYMBOL_GPL(tpg_gen_text);
- 
-+const char *tpg_g_color_order(const struct tpg_data *tpg)
-+{
-+	switch (tpg->pattern) {
-+	case TPG_PAT_75_COLORBAR:
-+	case TPG_PAT_100_COLORBAR:
-+	case TPG_PAT_CSC_COLORBAR:
-+	case TPG_PAT_100_HCOLORBAR:
-+		return "white, yellow, cyan, green, magenta, red, blue, black";
-+	case TPG_PAT_BLACK:
-+		return "Black";
-+	case TPG_PAT_WHITE:
-+		return "White";
-+	case TPG_PAT_RED:
-+		return "Red";
-+	case TPG_PAT_GREEN:
-+		return "Green";
-+	case TPG_PAT_BLUE:
-+		return "Blue";
-+	default:
-+		return NULL;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(tpg_g_color_order);
-+
- void tpg_update_mv_step(struct tpg_data *tpg)
- {
- 	int factor = tpg->mv_hor_mode > TPG_MOVE_NONE ? -1 : 1;
-diff --git a/include/media/tpg/v4l2-tpg.h b/include/media/tpg/v4l2-tpg.h
-index 9749ed409856..0b0ddb87380e 100644
---- a/include/media/tpg/v4l2-tpg.h
-+++ b/include/media/tpg/v4l2-tpg.h
-@@ -252,6 +252,7 @@ void tpg_fillbuffer(struct tpg_data *tpg, v4l2_std_id std,
- bool tpg_s_fourcc(struct tpg_data *tpg, u32 fourcc);
- void tpg_s_crop_compose(struct tpg_data *tpg, const struct v4l2_rect *crop,
- 		const struct v4l2_rect *compose);
-+const char *tpg_g_color_order(const struct tpg_data *tpg);
- 
- static inline void tpg_s_pattern(struct tpg_data *tpg, enum tpg_pattern pattern)
- {
+Changes since v7:
+        In patch 3:
+        - Use fallthrough; to indicate a fall through in switch-case
+        - Use enum type instead of int for osd_value
+        - Change varaible to osd_value instead of osd_mode as the enum
+          osd_mode defines the modes.
+
+Changes since v6:
+        In patch 3:
+        - Use switch case instead of if()
+        - reorder declarartions.
+
+Changes since v5:
+        In patch 2:
+        - Add missing EXPORT_SYMBOL_GPL()
+        In patch 3:
+        - Renamed varaibles.
+        - use u64 instead of int for getting current time in
+          nanoseconds.
+        - Use enum instead of numbers to describe the state of osd_mode
+          control in code.
+
+Changes since v4:
+        - Add another patch which changes char argument to const char
+        in function tpg_gen_text()
+        - Return const char * from function tpg_g_color_order() in patch
+          2
+        In 3rd patch:
+        - Check font in probe() instead of s_stream()
+        - Use dev_err instead of pr_err
+        - Fix errors in commit message.
+        - Base VIMC_CID_SHOW_INFO on VIVID_CID_OSD_TEXT_MODE
+
+Changes since v3:
+        In 1st patch:
+        -Improved formatting of returned string.
+
+        In 2nd patch:
+         - Add CID prefix in control name and change it to a more
+           generic name.
+         - Rename bool variable to a generic name.
+         - Disable text rendering instead of stopping stream if no
+           font found.
+         - Display more info like VIVID in VIMC.
+
+Changes since v2:
+        In 1st patch:
+        - Create a 'define' to prevent repetition of the common color
+          sequence string.
+        - Use 'fallthrough' on case statement to prevent repetition of
+          code.
+
+Changes since v1:
+        - Divided the patch into two patches.
+        - Returned NULL for patterns whose color order cannot be
+          defined. (Reported-by: kernel test robot <lkp@intel.com>)
+        - Made separate switch cases for separate test patterns
+         (Reported-by: kernel test robot <lkp@intel.com>)
+        - Renamed variables from camelcase to use '_'
+        - prefixed 'media' to the patches.
+
+Kaaira Gupta (3):
+  media: tpg: change char argument to const char
+  media: tpg: Add function to return colors' order of test image
+  media: vimc: Add a control to display info on test image
+
+ drivers/media/common/v4l2-tpg/v4l2-tpg-core.c | 40 +++++++++--
+ drivers/media/test-drivers/vimc/Kconfig       |  2 +
+ drivers/media/test-drivers/vimc/vimc-common.h |  1 +
+ drivers/media/test-drivers/vimc/vimc-core.c   | 10 +++
+ drivers/media/test-drivers/vimc/vimc-sensor.c | 71 +++++++++++++++++++
+ include/media/tpg/v4l2-tpg.h                  |  3 +-
+ 6 files changed, 119 insertions(+), 8 deletions(-)
+
 -- 
 2.17.1
 
