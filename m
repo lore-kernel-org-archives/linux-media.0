@@ -2,81 +2,75 @@ Return-Path: <SRS0=Gyqd=AM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2B99C433E0
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 17:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14590C433E0
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 18:46:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C222F20747
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 17:06:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED3BD20760
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 18:46:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech-se.20150623.gappssmtp.com header.i=@ragnatech-se.20150623.gappssmtp.com header.b="ApapzghE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dwkLGxYa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732517AbgGARGq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jul 2020 13:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
+        id S1726616AbgGASqp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jul 2020 14:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728103AbgGARGp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jul 2020 13:06:45 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5423C08C5DB
-        for <linux-media@vger.kernel.org>; Wed,  1 Jul 2020 10:06:44 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id h22so20902057lji.9
-        for <linux-media@vger.kernel.org>; Wed, 01 Jul 2020 10:06:44 -0700 (PDT)
+        with ESMTP id S1725875AbgGASqo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jul 2020 14:46:44 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B9AC08C5C1;
+        Wed,  1 Jul 2020 11:46:44 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id 12so14988554oir.4;
+        Wed, 01 Jul 2020 11:46:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=tcIQMF02joGJf9PoED6lN7WVG9QYgV665UVlkED6s7M=;
-        b=ApapzghEJPkCJtTaj2opXImF/Hme9OqoLIgo+RINEDoctO9HLV9eSes9+qO+wy4siK
-         J2iR09/6u5RMl/udCQkFj50vjDHtFTMehZ/l36RHIummt6tcTr9luhSkL15pllNr4cMe
-         WSQiNdirT3bU1RBl21vaCWbraFyrKjtU89zzkD2MIxJ1eS3sfLAeogd7bwhTQX+D8Ndl
-         /6EBz3ZbayvgUlwP/RyJHIBgn64Au53kMBOIJELYf7014LoOsrqKlxPp/6BRPvOg2Jkp
-         a6WkioaUPb2N+/pFqelKeOlVgQpm38ROYK0RZXlkcJq5VmiYj0EiAM7bEYLcns3Ol+o/
-         vomA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u5c83WCGX0NDyaUCMmG0xgffkHyXstMK7mXxU0DUqNM=;
+        b=dwkLGxYa3+N9fekdfFDFa5FVj3CBLbagAn/Nr7MHAjYudTprLVSdReSc2VzzdNArpW
+         8QsAVf+aLNZMoQvO7x5uQk49CqeV4qe10P3PN4OwLL2q0PbJWg9uxtrsogXHCEdp2ZW6
+         yngjH/EXW4oizpkILGQoSyyRWsqCDs6+ZDeFKXg9D0E+m7ucWbzmQ6nnTgtDwZ3DXagw
+         3YMIdW4r55KKXHaUuCTYYjd43m0nQRV2P3ryCy0iC/PrgWOesB0WFUyuqIC9UpM19k1b
+         UzdNPlf+DwaUD1qcwu94oPFV4T2FwATGcALYrW0Mz1WBFHVRCqYrEMgyCg8m177BHSOZ
+         EavQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=tcIQMF02joGJf9PoED6lN7WVG9QYgV665UVlkED6s7M=;
-        b=jaM4GL4Uf9yR3fgIxMb/EdnL80IpM44CQwAnGZ8rQEcuxQhJPLGtky49IGDy9vVVnY
-         0gM+uAjqW12AeEJhEoksf57ZhwXSYb9ulGMbTfkt9X+jC+Cdi2u187rPq04+jNU+BYE4
-         xE6MZgqxdR92FQTezUQrRy5sNyKd40s94LaXb8slIC7Egok/tTX7+bcv3YGTtEsAAwkV
-         YXSs3SbfxaXuCw58q/slsSkBJVOHu0oX2iNbGwmWa5tvTGM3d5GMHqdRilO6KwybfSEj
-         Yu/WaOlNV56XC9xv3NPa1yASGJHrPjkNbOgYArcahSZpRUjNy0ZoZKdtz4wGZk2FHmD6
-         t3Zw==
-X-Gm-Message-State: AOAM532+TGqFQu8pSwxwpZ4tJRxClUyW9hNYJPXgiw7rLYus7ZuqNns6
-        KYjrFgaXC1/s+NXrNIhzI80Wmw==
-X-Google-Smtp-Source: ABdhPJx7+SK6IJp6bSOIKCatkPwOLaV0Qt7gkogizWrPHXb7o3gsqUmjH9/jP2Xicsj0KIhA4gDs6Q==
-X-Received: by 2002:a05:651c:1a7:: with SMTP id c7mr13530894ljn.345.1593623203053;
-        Wed, 01 Jul 2020 10:06:43 -0700 (PDT)
-Received: from localhost (h-209-203.A463.priv.bahnhof.se. [155.4.209.203])
-        by smtp.gmail.com with ESMTPSA id c27sm2243714lfm.56.2020.07.01.10.06.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2020 10:06:42 -0700 (PDT)
-Date:   Wed, 1 Jul 2020 19:06:42 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u5c83WCGX0NDyaUCMmG0xgffkHyXstMK7mXxU0DUqNM=;
+        b=aM2i0KvOaQQw40jN4E5ecCjNE2Md5SeXFnZfzllag4OqN3Ke1fDqVr6dvOUhIT3/Jq
+         5aPR5JbARRjECk3ndkCdsIJbJZzGHPJKd9jc3HJ7bcA7GNS7KL5+e+ei0vVPkccu/jxf
+         oDvZv5yoHl3M21MsOJ+sCzI8/J+AX631Wt4Xs33/tDImxCOdZ+vU2cLdArZx7tBXHNDF
+         DRHAMIGg20WelocpuL6/ELTMaTSe+rBVUBPHpFCX8jLvyQJoOpYz2zwinzLGg/bkmsq1
+         9gy9k7shnGavLslm5Igak5bn0z6zyCMwvSV6zqUdhnpCb7T0KZzyIV3ufiFB7o/sShkS
+         5q2w==
+X-Gm-Message-State: AOAM532kkvdqRMKrx8mzuh+qvczgqy4u9tabCGd69MrUcAQEcue9hcse
+        bo9tYN4OsCzkqhERm1f/GQBxB3qwnT+251WFlxM=
+X-Google-Smtp-Source: ABdhPJwHzMay7ZnRljIpduOFKx31p6b8NTrJ1RgzCwos45MT0JO3GrKNQSxxo1iYRBFfO5WFOQgVImjaRqbMF/+LGUc=
+X-Received: by 2002:a54:4518:: with SMTP id l24mr21862766oil.8.1593629204142;
+ Wed, 01 Jul 2020 11:46:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200701062140.12953-1-laurent.pinchart+renesas@ideasonboard.com> <20200701062140.12953-2-laurent.pinchart+renesas@ideasonboard.com>
+In-Reply-To: <20200701062140.12953-2-laurent.pinchart+renesas@ideasonboard.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 1 Jul 2020 19:46:17 +0100
+Message-ID: <CA+V-a8s6izi09GKU83LBmgXGaGcnuCDnf0ZZOSBTkHhB3JsxqQ@mail.gmail.com>
 Subject: Re: [PATCH v4 1/4] device property: Add a function to test is a
  fwnode is a graph endpoint
-Message-ID: <20200701170642.GA2703142@oden.dyn.berto.se>
-References: <20200701062140.12953-1-laurent.pinchart+renesas@ideasonboard.com>
- <20200701062140.12953-2-laurent.pinchart+renesas@ideasonboard.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200701062140.12953-2-laurent.pinchart+renesas@ideasonboard.com>
+To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc:     linux-media <linux-media@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -84,46 +78,46 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Laurent,
 
-Thanks for your work.
+Thank you for the patch.
 
-On 2020-07-01 09:21:37 +0300, Laurent Pinchart wrote:
+On Wed, Jul 1, 2020 at 7:21 AM Laurent Pinchart
+<laurent.pinchart+renesas@ideasonboard.com> wrote:
+>
 > Drivers may need to test if a fwnode is a graph endpoint. To avoid
 > hand-written solutions that wouldn't work for all fwnode types, add a
 > new fwnode_graph_is_endpoint() function for this purpose. We don't need
 > to wire it up to different backends for OF and ACPI for now, as the
 > implementation can simply be based on checkout the presence of a
 > remote-endpoint property.
-> 
+>
 > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
 > ---
 >  include/linux/property.h | 5 +++++
 >  1 file changed, 5 insertions(+)
-> 
+>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+
+Cheers,
+--Prabhakar
+
 > diff --git a/include/linux/property.h b/include/linux/property.h
 > index 10d03572f52e..9f805c442819 100644
 > --- a/include/linux/property.h
 > +++ b/include/linux/property.h
 > @@ -389,6 +389,11 @@ struct fwnode_handle *
 >  fwnode_graph_get_remote_node(const struct fwnode_handle *fwnode, u32 port,
->  			     u32 endpoint);
->  
+>                              u32 endpoint);
+>
 > +static inline bool fwnode_graph_is_endpoint(struct fwnode_handle *fwnode)
 > +{
-> +	return fwnode_property_present(fwnode, "remote-endpoint");
+> +       return fwnode_property_present(fwnode, "remote-endpoint");
 > +}
 > +
 >  /*
 >   * Fwnode lookup flags
 >   *
-> -- 
+> --
 > Regards,
-> 
+>
 > Laurent Pinchart
-> 
-
--- 
-Regards,
-Niklas Söderlund
+>
