@@ -2,82 +2,91 @@ Return-Path: <SRS0=Gyqd=AM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C98F9C433E0
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 09:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 370FDC433DF
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 09:36:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ACA0020722
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 09:16:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1594520747
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 09:36:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="M5+AqbU7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729193AbgGAJQY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jul 2020 05:16:24 -0400
-Received: from mga11.intel.com ([192.55.52.93]:21544 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728776AbgGAJQY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 1 Jul 2020 05:16:24 -0400
-IronPort-SDR: ttru2E9b2dBHY+bbHvbro0c7gwP00b/HugUFSpEltYkNcOH7SOu/+dOKGNrPJFcAV5+y/ElKYw
- YxEt7kQJepsQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9668"; a="144689083"
-X-IronPort-AV: E=Sophos;i="5.75,299,1589266800"; 
-   d="scan'208";a="144689083"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2020 02:16:24 -0700
-IronPort-SDR: Nbl7zm0UC4Q0tOalM8IapjeJbZy3GvjOB3grt6wLAxXu6vAIm/hp2QstzuSPYNdFYsvvlTsHB0
- ETX1pUk8u9sg==
-X-IronPort-AV: E=Sophos;i="5.75,299,1589266800"; 
-   d="scan'208";a="321182597"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2020 02:16:20 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 2AB0C20760; Wed,  1 Jul 2020 12:16:18 +0300 (EEST)
-Date:   Wed, 1 Jul 2020 12:16:18 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        mchehab@kernel.org, andriy.shevchenko@linux.intel.com,
-        robh+dt@kernel.org, mark.rutland@arm.com, drinkcat@chromium.org,
-        tfiga@chromium.org, matthias.bgg@gmail.com, bingbu.cao@intel.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, sj.huang@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        louis.kuo@mediatek.com, shengnan.wang@mediatek.com
-Subject: Re: [PATCH V9 0/2] media: i2c: Add support for DW9768 VCM
-Message-ID: <20200701091618.GN16711@paasikivi.fi.intel.com>
-References: <20200630062211.22988-1-dongchun.zhu@mediatek.com>
+        id S1729497AbgGAJgA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jul 2020 05:36:00 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:14631 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726715AbgGAJgA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jul 2020 05:36:00 -0400
+X-UUID: af45b242b3df4cb99126d3925be38024-20200701
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=NCLao9xja/z/UOC7Zzg8iO34wroh+bPww07IWqMYaLk=;
+        b=M5+AqbU7Z2CzF+ADimNnNuC/fXnEWTSmmOiSlM8XlxrSiS2jVR4tDZcrlel/9foKKWvN//CING4jJa7IDoaOqww0B9RfhUnguF/bBwsyNHgl9lu65ruhzNPLZsFJqX/1WUy1GzqnOywnC44Q/+J4kOrUpzSG36OGb/Kx0JsaoYs=;
+X-UUID: af45b242b3df4cb99126d3925be38024-20200701
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 871960600; Wed, 01 Jul 2020 17:35:55 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 1 Jul 2020 17:35:51 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 1 Jul 2020 17:35:51 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>
+Subject: [PATCH v3,1/2] media: v4l UAPI: add V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS
+Date:   Wed, 1 Jul 2020 17:35:21 +0800
+Message-ID: <20200701093522.8521-2-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20200701093522.8521-1-yunfei.dong@mediatek.com>
+References: <20200701093522.8521-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200630062211.22988-1-dongchun.zhu@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dongchun,
+VGhpcyBwYXRjaCBhZGRzIHN1cHBvcnQgZm9yIHRoZSBWNEwyX0JVRl9DQVBfU1VQUE9SVFNfUk9f
+UkVRVUVTVFMNCmZsYWcuIFRoaXMgZmxhZyBpcyB1c2VkIGZvciBSZWFkLW9ubHkoUm8pIFJlcXVl
+c3QuDQoNClNpZ25lZC1vZmYtYnk6IFl1bmZlaSBEb25nIDx5dW5mZWkuZG9uZ0BtZWRpYXRlay5j
+b20+DQotLS0NCiBEb2N1bWVudGF0aW9uL3VzZXJzcGFjZS1hcGkvbWVkaWEvdjRsL3ZpZGlvYy1y
+ZXFidWZzLnJzdCB8IDQgKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKykNCg0K
+ZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vdXNlcnNwYWNlLWFwaS9tZWRpYS92NGwvdmlkaW9j
+LXJlcWJ1ZnMucnN0IGIvRG9jdW1lbnRhdGlvbi91c2Vyc3BhY2UtYXBpL21lZGlhL3Y0bC92aWRp
+b2MtcmVxYnVmcy5yc3QNCmluZGV4IGI2ZDUyMDgzNzA3Yi4uN2M3NDUxNzczYjhlIDEwMDY0NA0K
+LS0tIGEvRG9jdW1lbnRhdGlvbi91c2Vyc3BhY2UtYXBpL21lZGlhL3Y0bC92aWRpb2MtcmVxYnVm
+cy5yc3QNCisrKyBiL0RvY3VtZW50YXRpb24vdXNlcnNwYWNlLWFwaS9tZWRpYS92NGwvdmlkaW9j
+LXJlcWJ1ZnMucnN0DQpAQCAtMTI2LDYgKzEyNiw3IEBAIGFib3J0aW5nIG9yIGZpbmlzaGluZyBh
+bnkgRE1BIGluIHByb2dyZXNzLCBhbiBpbXBsaWNpdA0KIC4uIF9WNEwyLUJVRi1DQVAtU1VQUE9S
+VFMtUkVRVUVTVFM6DQogLi4gX1Y0TDItQlVGLUNBUC1TVVBQT1JUUy1PUlBIQU5FRC1CVUZTOg0K
+IC4uIF9WNEwyLUJVRi1DQVAtU1VQUE9SVFMtTTJNLUhPTEQtQ0FQVFVSRS1CVUY6DQorLi4gX1Y0
+TDItQlVGLUNBUC1TVVBQT1JUUy1STy1SRVFVRVNUUzoNCiANCiAuLiBjc3NjbGFzczo6IGxvbmd0
+YWJsZQ0KIA0KQEAgLTE1Niw2ICsxNTcsOSBAQCBhYm9ydGluZyBvciBmaW5pc2hpbmcgYW55IERN
+QSBpbiBwcm9ncmVzcywgYW4gaW1wbGljaXQNCiAgICAgICAtIE9ubHkgdmFsaWQgZm9yIHN0YXRl
+bGVzcyBkZWNvZGVycy4gSWYgc2V0LCB0aGVuIHVzZXJzcGFjZSBjYW4gc2V0IHRoZQ0KICAgICAg
+ICAgYGBWNEwyX0JVRl9GTEFHX00yTV9IT0xEX0NBUFRVUkVfQlVGYGAgZmxhZyB0byBob2xkIG9m
+ZiBvbiByZXR1cm5pbmcgdGhlDQogCWNhcHR1cmUgYnVmZmVyIHVudGlsIHRoZSBPVVRQVVQgdGlt
+ZXN0YW1wIGNoYW5nZXMuDQorICAgICogLSBgYFY0TDJfQlVGX0NBUF9TVVBQT1JUU19ST19SRVFV
+RVNUU2BgDQorICAgICAgLSAweDAwMDAwMDQwDQorICAgICAgLSBUaGlzIGJ1ZmZlciB0eXBlIHN1
+cHBvcnRzIDpyZWY6YHJlcXVlc3RzIDxtZWRpYS1yZXF1ZXN0LWFwaT5gLg0KIA0KIFJldHVybiBW
+YWx1ZQ0KID09PT09PT09PT09PQ0KLS0gDQoyLjE4LjANCg==
 
-On Tue, Jun 30, 2020 at 02:22:09PM +0800, Dongchun Zhu wrote:
-> Hello,
-> 
-> This series adds DT bindings and V4L2 sub-device driver for Dongwoon's DW9768,
-> which is a 10-bit DAC with 100mA output current sink capability.
-> 
-> The driver is designed for linear control of voice coil motor(VCM).
-> It creates a V4L2 sub-device and provides control to set the desired focus.
-
-Thanks for the update.
-
-There seem to be trailing whitespaces at least in the first patch, and a
-conflict in MAINTAINERS vs. current media tree master.
-
-Could you address these, please?
-
--- 
-Regards,
-
-Sakari Ailus
