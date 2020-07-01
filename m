@@ -2,104 +2,105 @@ Return-Path: <SRS0=Gyqd=AM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CB93C433E0
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 13:17:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 126F8C433E0
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 13:21:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 358A420780
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 13:17:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA8D6207FB
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 13:21:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730999AbgGANRu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jul 2020 09:17:50 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:45850 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730997AbgGANRu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jul 2020 09:17:50 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 0294F2A56D0
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com
-Subject: [PATCH v2] v4l2-core: Print control name in VIDIOC_S/G_(EXT)_CTRL(S)
-Date:   Wed,  1 Jul 2020 10:17:30 -0300
-Message-Id: <20200701131730.122209-1-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200609121514.9414-1-ezequiel@collabora.com>
-References: <20200609121514.9414-1-ezequiel@collabora.com>
+        id S1730783AbgGANVk convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jul 2020 09:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728399AbgGANVk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jul 2020 09:21:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842D2C03E979
+        for <linux-media@vger.kernel.org>; Wed,  1 Jul 2020 06:21:39 -0700 (PDT)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1jqcgE-0005n3-5u; Wed, 01 Jul 2020 15:21:38 +0200
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1jqcg7-0003ZN-FA; Wed, 01 Jul 2020 15:21:31 +0200
+Message-ID: <bf6f168cc34d1bd09b6f6af52fa4662c70b4c10e.camel@pengutronix.de>
+Subject: Re: [RFC v4 4/8] v4l2: add support for colorspace conversion API
+ (CSC) for video capture and subdevices
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     helen.koike@collabora.com, ezequiel@collabora.com,
+        kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, tfiga@chromium.org, skhan@linuxfoundation.org,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Date:   Wed, 01 Jul 2020 15:21:31 +0200
+In-Reply-To: <8fd5417b-970d-e9d5-824a-31658fe50c99@collabora.com>
+References: <20200605172625.19777-1-dafna.hirschfeld@collabora.com>
+         <20200605172625.19777-5-dafna.hirschfeld@collabora.com>
+         <973edb0c-4c52-c29c-4b22-54a05eca6f7a@xs4all.nl>
+         <e55548ad47eacd9acf3aa94cc98a46b3f4924cd9.camel@pengutronix.de>
+         <8fd5417b-970d-e9d5-824a-31658fe50c99@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While debugging, it's currently really hard to identify controls
-by their ID. Print the control name making the print more helpful.
+On Tue, 2020-06-30 at 17:23 +0200, Dafna Hirschfeld wrote:
+> 
+> On 26.06.20 14:22, Philipp Zabel wrote:
+> > Hi Dafna,
+> > 
+> > On Mon, 2020-06-08 at 12:00 +0200, Hans Verkuil wrote:
+> > [...]
+> > > > diff --git a/include/uapi/linux/v4l2-mediabus.h b/include/uapi/linux/v4l2-mediabus.h
+> > > > index 123a231001a8..0f916278137a 100644
+> > > > --- a/include/uapi/linux/v4l2-mediabus.h
+> > > > +++ b/include/uapi/linux/v4l2-mediabus.h
+> > > > @@ -16,6 +16,8 @@
+> > > >   #include <linux/types.h>
+> > > >   #include <linux/videodev2.h>
+> > > >   
+> > > > +#define V4L2_MBUS_FRAMEFMT_SET_CSC	0x0001
+> > > > +
+> > > >   /**
+> > > >    * struct v4l2_mbus_framefmt - frame format on the media bus
+> > > >    * @width:	image width
 
-With this change, the print changes from:
+             ^^^^^
+             this one
 
-video1: VIDIOC_S_EXT_CTRLS: which=0xf010000, count=5, error_idx=4, request_fd=45, id/size=0x990ce8/1048, id/size=0x990ce9/12, id/size=0x990cea/480, id/size=0x990ceb/896, id/size=0x990cec/400
+> > > > @@ -36,7 +38,8 @@ struct v4l2_mbus_framefmt {
+> > > >   	__u16			ycbcr_enc;
+> > > >   	__u16			quantization;
+> > > >   	__u16			xfer_func;
+> > > > -	__u16			reserved[11];
+> > > > +	__u16			flags;
+> > > > +	__u16			reserved[10];
+> > > >   };
+> > 
+> > The the flags field should also be added to the kerneldoc comment.
+> 
+> Hi, Which kerneldoc comment do you mean?
+> I added to the doc of the v4l2-mbus-framefmt:
 
-to:
+See above, I meant the comment right above the structure definition.
 
-video1: VIDIOC_S_EXT_CTRLS: which=0xf010000, count=5, error_idx=4, request_fd=42, name=H264 Sequence Parameter Set, id/size=0x990ce8/1048, name=H264 Picture Parameter Set, id/size=0x990ce9/12, name=H264 Scaling Matrix, id/size=0x990cea/480, name=H264 Slice Parameters, id/size=0x990ceb/896, name=H264 Decode Parameters, id/size=0x990cec/400
-
-For instance, this is specially helpful when the ioctl fails. Consider
-the following example:
-
-v4l2-ctrls: prepare_ext_ctrls: video1: pointer control id 0x990cec size too small, 400 bytes but 784 bytes needed
-v4l2-ctrls: try_set_ext_ctrls: video1: video1: try_set_ext_ctrls_common failed (-14)
-video1: VIDIOC_S_EXT_CTRLS: error -14: which=0xf010000, count=5, error_idx=5, request_fd=39, name=H264 Sequence Parameter Set, id/size=0x990ce8/1048, name=H264 Picture Parameter Set, id/size=0x990ce9/12, name=H264 Scaling Matrix, id/size=0x990cea/480, name=H264 Slice Parameters, id/size=0x990ceb/896, name=H264 Decode Parameters, id/size=0x990cec/400
-
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
-v2:
-* As requested by Hans, only print the name if non-null.
----
- drivers/media/v4l2-core/v4l2-ioctl.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 02bfef0da76d..a556880f225a 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -582,7 +582,10 @@ static void v4l_print_querymenu(const void *arg, bool write_only)
- static void v4l_print_control(const void *arg, bool write_only)
- {
- 	const struct v4l2_control *p = arg;
-+	const char *name = v4l2_ctrl_get_name(p->id);
- 
-+	if (name)
-+		pr_cont("name=%s, ", name);
- 	pr_cont("id=0x%x, value=%d\n", p->id, p->value);
- }
- 
-@@ -594,12 +597,15 @@ static void v4l_print_ext_controls(const void *arg, bool write_only)
- 	pr_cont("which=0x%x, count=%d, error_idx=%d, request_fd=%d",
- 			p->which, p->count, p->error_idx, p->request_fd);
- 	for (i = 0; i < p->count; i++) {
-+		unsigned int id = p->controls[i].id;
-+		const char *name = v4l2_ctrl_get_name(id);
-+
-+		if (name)
-+			pr_cont(", name=%s", name);
- 		if (!p->controls[i].size)
--			pr_cont(", id/val=0x%x/0x%x",
--				p->controls[i].id, p->controls[i].value);
-+			pr_cont(", id/val=0x%x/0x%x", id, p->controls[i].value);
- 		else
--			pr_cont(", id/size=0x%x/%u",
--				p->controls[i].id, p->controls[i].size);
-+			pr_cont(", id/size=0x%x/%u", id, p->controls[i].size);
- 	}
- 	pr_cont("\n");
- }
--- 
-2.26.0.rc2
-
+regards
+Philipp
