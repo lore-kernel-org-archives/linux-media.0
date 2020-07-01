@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 513B5C433E2
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 22:01:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12416C433E3
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 22:01:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29EE32085B
+	by mail.kernel.org (Postfix) with ESMTP id D3C13207E8
 	for <linux-media@archiver.kernel.org>; Wed,  1 Jul 2020 22:01:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="Kcvik/5c"
+	dkim=pass (1024-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="Mw7RrWX0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727840AbgGAWB1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jul 2020 18:01:27 -0400
-Received: from o1.b.az.sendgrid.net ([208.117.55.133]:26298 "EHLO
+        id S1727853AbgGAWB3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jul 2020 18:01:29 -0400
+Received: from o1.b.az.sendgrid.net ([208.117.55.133]:60784 "EHLO
         o1.b.az.sendgrid.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727112AbgGAWB0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jul 2020 18:01:26 -0400
+        with ESMTP id S1727768AbgGAWB2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jul 2020 18:01:28 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
         h=from:subject:in-reply-to:references:to:cc:content-type:
         content-transfer-encoding;
-        s=001; bh=7H3DbOIR6DWUdA/y3YLDXdf//aCB9yI7dsoADDEwozU=;
-        b=Kcvik/5cXSTLA53WDTTVMGXhxNHcp5acdMhICJ2UqO8KfvhWBqBg0rqI8IKX5+iCS4Yd
-        T8oMHrbtUN5VANPskoLjqXlHz4mbcwNCTZj4vpSQWcIAX4PhBBHhMn+y8Fvf8EtEqYSREL
-        wdAVPVlIfVDOybau5IIn6pB03edoSlPWk=
-Received: by filterdrecv-p3iad2-5b55dcd864-n2v2l with SMTP id filterdrecv-p3iad2-5b55dcd864-n2v2l-20-5EFD0686-43
-        2020-07-01 21:56:22.80847321 +0000 UTC m=+449226.666074437
+        s=001; bh=xxBcOYWt9uzoWsnklEsOL7RvonYUzi+J+0wqGYzLRTw=;
+        b=Mw7RrWX0ZzLNqhzpSj0DlF01JA8dDQdPDLDKqgJwZUi4Umu4Fbsn+h1NojdMRLTvYg2t
+        wbvscc5bLknO1zPep+RnYqS0TaB89bExoP9RLqBCmuNj0SmebvrdpgaptHex9KTl2Cu1Zf
+        iGzsoyLwoX8K0FXqkukJyThYge6WuyO9g=
+Received: by filterdrecv-p3iad2-5b55dcd864-xnspw with SMTP id filterdrecv-p3iad2-5b55dcd864-xnspw-17-5EFD0688-6
+        2020-07-01 21:56:24.205538858 +0000 UTC m=+449220.630116891
 Received: from bionic.localdomain (unknown)
         by ismtpd0001p1lon1.sendgrid.net (SG) with ESMTP
-        id EUQFfvG1TEmNXhiQgqGLxw
-        Wed, 01 Jul 2020 21:56:22.550 +0000 (UTC)
+        id 9_xgV5kdRsyJnw_SpztECA
+        Wed, 01 Jul 2020 21:56:23.947 +0000 (UTC)
 From:   Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH 5/9] media: v4l2-common: Add helpers to calculate bytesperline
- and sizeimage
-Date:   Wed, 01 Jul 2020 21:56:22 +0000 (UTC)
-Message-Id: <20200701215616.30874-6-jonas@kwiboo.se>
+Subject: [PATCH 8/9] media: rkvdec: Add validate_fmt ops for pixelformat
+ validation
+Date:   Wed, 01 Jul 2020 21:56:24 +0000 (UTC)
+Message-Id: <20200701215616.30874-9-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200701215616.30874-1-jonas@kwiboo.se>
 References: <20200701215616.30874-1-jonas@kwiboo.se>
 X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
- =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h0uPT0Fcu4aS=2FJELx?=
- =?us-ascii?Q?zmlrelv=2FRxNNGKdLUb6zfjLL5hY9lxvy0FnaZCc?=
- =?us-ascii?Q?mavxY0dPQ+1i1s4MfBxbGo=2FrSq9p+VL870UklDZ?=
- =?us-ascii?Q?XWdviC6ghk3PqEetIddIit+QBxSQbEVgJxL596h?=
- =?us-ascii?Q?ahcSL3TclL2WTWy6kAZ4EwDpLNqwSnMD+JYgdmL?=
- =?us-ascii?Q?CL8v7Z7I5zW0iycnVAcew=3D=3D?=
+ =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h+lXJzeJhqDHpvcg8?=
+ =?us-ascii?Q?AJotR+LFDFZT1dM6SQR+PgjpaKMikyyPoncZva0?=
+ =?us-ascii?Q?UczSXisuYUKmaKw2JKm4vH5YXbIqJHPX9uLfPo1?=
+ =?us-ascii?Q?bK=2FbslKbkXH3sNgiTkY0IMHIMvH6LizCzv44pKF?=
+ =?us-ascii?Q?8JjILwfJ6Avyxd0EAryr0yIiHQnQhRrXQHsn7Qm?=
+ =?us-ascii?Q?47ZBUfYyQ0ggQUQxHDWbQ=3D=3D?=
 To:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Jonas Karlman <jonas@kwiboo.se>,
@@ -64,128 +64,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add helper functions to calculate plane bytesperline and sizeimage, these
-new helpers consider block width and height when calculating plane
-bytesperline and sizeimage.
+Add an optional validate_fmt operation that is used to validate the
+pixelformat of CAPTURE buffers.
 
-This prepare support for new pixel formats added in next patch that make
-use of block width and height.
+This is used in next patch to ensure correct pixelformat is used for 10-bit
+and 4:2:2 content.
 
 Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 ---
- drivers/media/v4l2-core/v4l2-common.c | 77 +++++++++++++--------------
- 1 file changed, 38 insertions(+), 39 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 8 ++++++++
+ drivers/staging/media/rkvdec/rkvdec.h | 1 +
+ 2 files changed, 9 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 3dc17ebe14fa..4102c373b48a 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -333,6 +333,33 @@ static inline unsigned int v4l2_format_block_height(const struct v4l2_format_inf
- 	return info->block_h[plane];
- }
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index b1de55aa6535..465444c58f13 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -239,6 +239,14 @@ static int rkvdec_try_capture_fmt(struct file *file, void *priv,
+ 	if (WARN_ON(!coded_desc))
+ 		return -EINVAL;
  
-+static inline unsigned int v4l2_format_plane_width(const struct v4l2_format_info *info, int plane,
-+						   unsigned int width)
-+{
-+	unsigned int hdiv = plane ? info->hdiv : 1;
-+	unsigned int bytes = DIV_ROUND_UP(width * info->bpp[plane],
-+				v4l2_format_block_width(info, plane) *
-+				v4l2_format_block_height(info, plane));
++	if (coded_desc->ops->validate_fmt) {
++		int ret;
 +
-+	return DIV_ROUND_UP(bytes, hdiv);
-+}
++		ret = coded_desc->ops->validate_fmt(ctx, pix_mp->pixelformat);
++		if (ret)
++			return ret;
++	}
 +
-+static inline unsigned int v4l2_format_plane_height(const struct v4l2_format_info *info, int plane,
-+						    unsigned int height)
-+{
-+	unsigned int vdiv = plane ? info->vdiv : 1;
-+	unsigned int lines = ALIGN(height, v4l2_format_block_height(info, plane));
-+
-+	return DIV_ROUND_UP(lines, vdiv);
-+}
-+
-+static inline unsigned int v4l2_format_plane_size(const struct v4l2_format_info *info, int plane,
-+						  unsigned int width, unsigned int height)
-+{
-+	return v4l2_format_plane_width(info, plane, width) *
-+	       v4l2_format_plane_height(info, plane, height);
-+}
-+
- void v4l2_apply_frmsize_constraints(u32 *width, u32 *height,
- 				    const struct v4l2_frmsize_stepwise *frmsize)
- {
-@@ -368,37 +395,19 @@ int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt,
- 
- 	if (info->mem_planes == 1) {
- 		plane = &pixfmt->plane_fmt[0];
--		plane->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
-+		plane->bytesperline = v4l2_format_plane_width(info, 0, width);
- 		plane->sizeimage = 0;
- 
--		for (i = 0; i < info->comp_planes; i++) {
--			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
--			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
--			unsigned int aligned_width;
--			unsigned int aligned_height;
--
--			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
--			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
--
--			plane->sizeimage += info->bpp[i] *
--				DIV_ROUND_UP(aligned_width, hdiv) *
--				DIV_ROUND_UP(aligned_height, vdiv);
--		}
-+		for (i = 0; i < info->comp_planes; i++)
-+			plane->sizeimage +=
-+				v4l2_format_plane_size(info, i, width, height);
- 	} else {
- 		for (i = 0; i < info->comp_planes; i++) {
--			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
--			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
--			unsigned int aligned_width;
--			unsigned int aligned_height;
--
--			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
--			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
--
- 			plane = &pixfmt->plane_fmt[i];
- 			plane->bytesperline =
--				info->bpp[i] * DIV_ROUND_UP(aligned_width, hdiv);
--			plane->sizeimage =
--				plane->bytesperline * DIV_ROUND_UP(aligned_height, vdiv);
-+				v4l2_format_plane_width(info, i, width);
-+			plane->sizeimage = plane->bytesperline *
-+				v4l2_format_plane_height(info, i, height);
- 		}
- 	}
- 	return 0;
-@@ -422,22 +431,12 @@ int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, u32 pixelformat,
- 	pixfmt->width = width;
- 	pixfmt->height = height;
- 	pixfmt->pixelformat = pixelformat;
--	pixfmt->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
-+	pixfmt->bytesperline = v4l2_format_plane_width(info, 0, width);
- 	pixfmt->sizeimage = 0;
- 
--	for (i = 0; i < info->comp_planes; i++) {
--		unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
--		unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
--		unsigned int aligned_width;
--		unsigned int aligned_height;
--
--		aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
--		aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
--
--		pixfmt->sizeimage += info->bpp[i] *
--			DIV_ROUND_UP(aligned_width, hdiv) *
--			DIV_ROUND_UP(aligned_height, vdiv);
--	}
-+	for (i = 0; i < info->comp_planes; i++)
-+		pixfmt->sizeimage +=
-+			v4l2_format_plane_size(info, i, width, height);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt);
+ 	for (i = 0; i < coded_desc->num_decoded_fmts; i++) {
+ 		if (coded_desc->decoded_fmts[i] == pix_mp->pixelformat)
+ 			break;
+diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
+index 2fc9f46b6910..be4fc3645cde 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.h
++++ b/drivers/staging/media/rkvdec/rkvdec.h
+@@ -64,6 +64,7 @@ vb2_to_rkvdec_decoded_buf(struct vb2_buffer *buf)
+ struct rkvdec_coded_fmt_ops {
+ 	int (*adjust_fmt)(struct rkvdec_ctx *ctx,
+ 			  struct v4l2_format *f);
++	int (*validate_fmt)(struct rkvdec_ctx *ctx, u32 pixelformat);
+ 	int (*start)(struct rkvdec_ctx *ctx);
+ 	void (*stop)(struct rkvdec_ctx *ctx);
+ 	int (*run)(struct rkvdec_ctx *ctx);
 -- 
 2.17.1
 
