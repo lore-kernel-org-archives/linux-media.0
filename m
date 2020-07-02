@@ -2,156 +2,108 @@ Return-Path: <SRS0=5iRl=AN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MIME_BASE64_TEXT,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA68C433DF
-	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 11:52:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 453C1C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 11:53:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9B3172070C
-	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 11:52:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2140B20884
+	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 11:53:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jlEZbxDk"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="QMsEoFtX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728813AbgGBLwn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Jul 2020 07:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728675AbgGBLwm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Jul 2020 07:52:42 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C62C08C5DC
-        for <linux-media@vger.kernel.org>; Thu,  2 Jul 2020 04:52:42 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id z17so23374724edr.9
-        for <linux-media@vger.kernel.org>; Thu, 02 Jul 2020 04:52:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=EiqTap8T6Zb+qWW/TbyjpdKcbIGKuEupmyMffGohwBI=;
-        b=jlEZbxDkbdFHua2NcVeFcU9j07KAJ1AV6iVAdwpSsU4Xi3sbCwV0Ns4iKR7ZvokUDt
-         H5PjUdx+7KKJd0d/mLLmAZoxsQfULGfq1jDMkjrEGhlPVCI4uoL75Hs10/bu6lkUGQ2K
-         vxMKSXI1v4xmi5RKkwOMveJtLCUWIng+rzgVBe2yoCBJaQh5/Yzyz57iOb2KhlI3qlvl
-         LZ2l+DMABjJNRKMkPQMM6kUW/j2wo7W1pyGGewBD22Zb2Rxc2SJO18BSaY2Z7fEZmfdv
-         OvqDB/n4J/vYBaBBsV8PSA1zGLYtXQIwZgkzqqR3MtueiF8VBXT4MhTTot/jBvq8Gwo4
-         eycQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=EiqTap8T6Zb+qWW/TbyjpdKcbIGKuEupmyMffGohwBI=;
-        b=gzbhQg6hxFvraeoFKfKArmsCIF7Nu8j6u4B0gnuOET5IuEAbbqSz6c6gx3xVEF7Dya
-         kJ7tITollOAhyKDMQ8DiYbGYUV9rFaYEbaWPkyDH1qDHWFQVadCVr8TPjoIclQ3euiab
-         cSAyKZQ/pAQPZn3Q0hFnmb/AVi0L+1YDprpRHBQasjOGiRQV6DBIbFcXDAcJNqibT21x
-         /jf5lAYWvJHBzlzwC46484tKborVcnWLovLk2JNT7a1ClvMcMOvxA6XL9j+hCU0PepoP
-         l5JrDrz8rmYCFDWjVgsDlAuRRXXnM+6n/kIwUTQOQGkWK/Gkr53LaegfC+gLZuXuTGuZ
-         TlzA==
-X-Gm-Message-State: AOAM531bfCYF6ZMV4HjZehvri0Krn07vVjT140imXfUmhJi/AjElj8DD
-        94bxK95rdMWOmefPTyxu8JxUMw==
-X-Google-Smtp-Source: ABdhPJx2stqBIdudxKApNBtpS5VGy6/jeoYUnvSCAdbJw3W4lYG3Ok4K++EQ7nbQuuIOs5pq/UA3vQ==
-X-Received: by 2002:a05:6402:1c96:: with SMTP id cy22mr33538816edb.79.1593690761145;
-        Thu, 02 Jul 2020 04:52:41 -0700 (PDT)
-Received: from [192.168.1.4] (212-5-158-220.ip.btc-net.bg. [212.5.158.220])
-        by smtp.googlemail.com with ESMTPSA id a5sm4564402eda.35.2020.07.02.04.52.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jul 2020 04:52:40 -0700 (PDT)
-Subject: Re: [PATCH] v4l: Add source change event for colorimetry
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-References: <20200702100017.24700-1-stanimir.varbanov@linaro.org>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Message-ID: <8dafbb4b-4626-5191-c57a-f3ef19c14618@linaro.org>
-Date:   Thu, 2 Jul 2020 14:52:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1728842AbgGBLxC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Jul 2020 07:53:02 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:7483 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728661AbgGBLxB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Jul 2020 07:53:01 -0400
+X-UUID: 7210cb0f931f47278b16833dfce785c6-20200702
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=nKlkkWFs3s2d4usM6wA4JUcE08ohBoy1IQ8R65ZelwI=;
+        b=QMsEoFtXueawmjXCAiGgcFsDUkIMsU/s5ihO33BAgNSmrA30JL6Ak8fVViGRmWT5mfXwZcRS3uU1UUONCCpcO2sbvdd0HIsrvH98FnTEMoJ2FzPqyI6t8ClM4Xl53zq4lmXGArvweM5cpmf6JjwsFvyHl2H830QsjUXTzMNyTG0=;
+X-UUID: 7210cb0f931f47278b16833dfce785c6-20200702
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <dongchun.zhu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 480147576; Thu, 02 Jul 2020 19:52:56 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 2 Jul 2020 19:52:47 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 2 Jul 2020 19:52:46 +0800
+From:   Dongchun Zhu <dongchun.zhu@mediatek.com>
+To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
+        <mchehab@kernel.org>, <andriy.shevchenko@linux.intel.com>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <sakari.ailus@linux.intel.com>, <drinkcat@chromium.org>,
+        <tfiga@chromium.org>, <matthias.bgg@gmail.com>,
+        <bingbu.cao@intel.com>
+CC:     <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <sj.huang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <louis.kuo@mediatek.com>, <shengnan.wang@mediatek.com>,
+        <dongchun.zhu@mediatek.com>
+Subject: [PATCH V12 0/2] media: i2c: Add support for OV02A10 sensor
+Date:   Thu, 2 Jul 2020 19:52:21 +0800
+Message-ID: <20200702115223.21507-1-dongchun.zhu@mediatek.com>
+X-Mailer: git-send-email 2.9.2
 MIME-Version: 1.0
-In-Reply-To: <20200702100017.24700-1-stanimir.varbanov@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+SGVsbG8sDQoNClRoaXMgc2VyaWVzIGFkZHMgRFQgYmluZGluZ3MgaW4gWUFNTCBhbmQgVjRMMiBz
+dWItZGV2aWNlIGRyaXZlciBmb3IgT21uaXZpc2lvbidzDQpPVjAyQTEwIDIgbWVnYXBpeGVsIENN
+T1MgMS81IiBzZW5zb3IsIHdoaWNoIGhhcyBhIHNpbmdsZSBNSVBJIGxhbmUgaW50ZXJmYWNlDQph
+bmQgb3V0cHV0IGZvcm1hdCBvZiAxMC1iaXQgUkFXLg0KDQpUaGUgZHJpdmVyIGlzIGltcGxlbWVu
+dGVkIHdpdGggVjRMMiBmcmFtZXdvcmsuDQogLSBBc3luYyByZWdpc3RlcmVkIGFzIGEgVjRMMiBz
+dWItZGV2aWNlLg0KIC0gQXMgdGhlIGZpcnN0IGNvbXBvbmVudCBvZiBjYW1lcmEgc3lzdGVtIGlu
+Y2x1ZGluZyBTZW5pbmYsIElTUCBwaXBlbGluZS4NCiAtIEEgbWVkaWEgZW50aXR5IHRoYXQgcHJv
+dmlkZXMgb25lIHNvdXJjZSBwYWQgaW4gY29tbW9uIGFuZCB0d28gZm9yIGR1YWwtY2FtLg0KIA0K
+UHJldmlvdXMgdmVyc2lvbnMgb2YgdGhpcyBwYXRjaC1zZXQgY2FuIGJlIGZvdW5kIGhlcmU6DQog
+djExOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1tZWRpYS8yMDIwMDYzMDAyNDk0Mi4y
+MDg5MS0xLWRvbmdjaHVuLnpodUBtZWRpYXRlay5jb20vDQogdjEwOiBodHRwczovL2xvcmUua2Vy
+bmVsLm9yZy9saW51eC1tZWRpYS8yMDIwMDYxNTEyMjkzNy4xODk2NS0zLWRvbmdjaHVuLnpodUBt
+ZWRpYXRlay5jb20vDQogdjA5OiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1tZWRpYS8y
+MDIwMDUyMzA4NDEwMy4zMTI3Ni0xLWRvbmdjaHVuLnpodUBtZWRpYXRlay5jb20vDQogdjA4OiBo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1tZWRpYS8yMDIwMDUwOTA4MDYyNy4yMzIyMi0x
+LWRvbmdjaHVuLnpodUBtZWRpYXRlay5jb20vDQogdjA3OiBodHRwczovL2xvcmUua2VybmVsLm9y
+Zy9saW51eC1tZWRpYS8yMDIwMDQzMDA4MDkyNC4xMTQwLTEtZG9uZ2NodW4uemh1QG1lZGlhdGVr
+LmNvbS8NCiB2MDY6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LW1lZGlhLzIwMTkxMjEx
+MTEyODQ5LjE2NzA1LTEtZG9uZ2NodW4uemh1QG1lZGlhdGVrLmNvbS8NCiB2MDU6IGh0dHBzOi8v
+bG9yZS5rZXJuZWwub3JnL2xpbnV4LW1lZGlhLzIwMTkxMTA0MTA1NzEzLjI0MzExLTEtZG9uZ2No
+dW4uemh1QG1lZGlhdGVrLmNvbS8NCiB2MDQ6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4
+LW1lZGlhLzIwMTkwOTA3MDkyNzI4LjIzODk3LTEtZG9uZ2NodW4uemh1QG1lZGlhdGVrLmNvbS8N
+CiB2MDM6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LW1lZGlhLzIwMTkwODE5MDM0MzMx
+LjEzMDk4LTEtZG9uZ2NodW4uemh1QG1lZGlhdGVrLmNvbS8NCiB2MDI6IGh0dHBzOi8vbG9yZS5r
+ZXJuZWwub3JnL2xpbnV4LW1lZGlhLzIwMTkwNzA0MDg0NjUxLjMxMDUtMS1kb25nY2h1bi56aHVA
+bWVkaWF0ZWsuY29tLw0KIHYwMTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtbWVkaWEv
+MjAxOTA1MjMxMDIyMDQuMjQxMTItMS1kb25nY2h1bi56aHVAbWVkaWF0ZWsuY29tLw0KDQpDaGFu
+Z2VzIG9mIHYxMiBtYWlubHkgYWRkcmVzcyBjb21tZW50cyBmcm9tIFNha2FyaSwgVG9tYXN6LCBB
+bmR5Lg0KQ29tcGFyZWQgdG8gdjExOg0KIC0gVXBkYXRlIHRoZSBpbml0aWFsIEdQSU8gc3RhdGUg
+Zm9yIHJlc2V0IHBpbiBpbiBwcm9iZSgpDQogLSBSZWZpbmUgdGhlIGZ1bmN0aW9uIG92MDJhMTBf
+ZW50aXR5X2luaXRfY2ZnKCkNCg0KUGxlYXNlIHJldmlldy4NClRoYW5rcy4NCg0KRG9uZ2NodW4g
+Wmh1ICgyKToNCiAgbWVkaWE6IGR0LWJpbmRpbmdzOiBtZWRpYTogaTJjOiBEb2N1bWVudCBPVjAy
+QTEwIGJpbmRpbmdzDQogIG1lZGlhOiBpMmM6IG92MDJhMTA6IEFkZCBPVjAyQTEwIGltYWdlIHNl
+bnNvciBkcml2ZXINCg0KIC4uLi9iaW5kaW5ncy9tZWRpYS9pMmMvb3Z0aSxvdjAyYTEwLnlhbWwg
+ICAgICAgICAgIHwgIDE3MiArKysrDQogTUFJTlRBSU5FUlMgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgfCAgICA4ICsNCiBkcml2ZXJzL21lZGlhL2kyYy9LY29uZmlnICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8ICAgMTMgKw0KIGRyaXZlcnMvbWVkaWEvaTJjL01ha2Vm
+aWxlICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgMSArDQogZHJpdmVycy9tZWRpYS9pMmMv
+b3YwMmExMC5jICAgICAgICAgICAgICAgICAgICAgICAgfCAxMDUyICsrKysrKysrKysrKysrKysr
+KysrDQogNSBmaWxlcyBjaGFuZ2VkLCAxMjQ2IGluc2VydGlvbnMoKykNCiBjcmVhdGUgbW9kZSAx
+MDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21lZGlhL2kyYy9vdnRpLG92
+MDJhMTAueWFtbA0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL21lZGlhL2kyYy9vdjAyYTEw
+LmMNCg0KLS0gDQoyLjkuMg0K
 
-Once we have this event there is still open question how the client will
-know the data buffer on which the new colorspace is valid/applied.
-
-The options could be:
- * a new buffer flag and
- * some information in the v4l2_event structure.
-
-Thoughts?
-
-On 7/2/20 1:00 PM, Stanimir Varbanov wrote:
-> This event indicate that the source colorspace is changed
-> during run-time. The client has to retrieve the new colorspace
-> identifiers by getting the format (G_FMT).
-> 
-> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-> ---
->  .../userspace-api/media/v4l/vidioc-dqevent.rst        | 11 ++++++++++-
->  .../userspace-api/media/videodev2.h.rst.exceptions    |  1 +
->  include/uapi/linux/videodev2.h                        |  1 +
->  3 files changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
-> index a9a176d5256d..3f69c753db58 100644
-> --- a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
-> +++ b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
-> @@ -381,7 +381,16 @@ call.
->  	that many Video Capture devices are not able to recover from a temporary
->  	loss of signal and so restarting streaming I/O is required in order for
->  	the hardware to synchronize to the video signal.
-> -
-> +    * - ``V4L2_EVENT_SRC_CH_COLORIMETRY``
-> +      - 0x0002
-> +      - This event gets triggered when a colorspace change is detected at
-> +	an input. By colorspace change here we include also changes in the
-> +	colorspace specifiers (transfer function, Y'CbCr encoding and
-> +	quantization). This event can come from an input or from video decoder.
-> +	Once the event has been send to the client the driver has to update
-> +	the colorspace specifiers internally so that they could be retrieved by
-> +	client. In that case queue re-negotiation is not needed as this change
-> +	only reflects on the interpretation of the data.
->  
->  Return Value
->  ============
-> diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-> index ca05e4e126b2..54fc21af852d 100644
-> --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-> +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-> @@ -492,6 +492,7 @@ replace define V4L2_EVENT_CTRL_CH_FLAGS ctrl-changes-flags
->  replace define V4L2_EVENT_CTRL_CH_RANGE ctrl-changes-flags
->  
->  replace define V4L2_EVENT_SRC_CH_RESOLUTION src-changes-flags
-> +replace define V4L2_EVENT_SRC_CH_COLORIMETRY src-changes-flags
->  
->  replace define V4L2_EVENT_MD_FL_HAVE_FRAME_SEQ :c:type:`v4l2_event_motion_det`
->  
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 303805438814..b5838bc4e3a3 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -2351,6 +2351,7 @@ struct v4l2_event_frame_sync {
->  };
->  
->  #define V4L2_EVENT_SRC_CH_RESOLUTION		(1 << 0)
-> +#define V4L2_EVENT_SRC_CH_COLORIMETRY		(1 << 1)
->  
->  struct v4l2_event_src_change {
->  	__u32 changes;
-> 
-
--- 
-regards,
-Stan
