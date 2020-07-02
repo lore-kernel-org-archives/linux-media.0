@@ -2,110 +2,83 @@ Return-Path: <SRS0=5iRl=AN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA65EC433DF
-	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 01:36:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1031C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 01:51:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 896462083E
-	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 01:36:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1593653810;
-	bh=H6E1ErTHKdU8VDL/lt494z9m+g1stL2ziOwVXwpMVPw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VuPdda44ltvSWlaBfkkgP6Oi2YayrrytxGlNXpttGay/52YVEakRQW4D0UYxXw7dv
-	 RjBmsC3F+STLzURisJDL6QDavXWQpJbXucXa3besp9GWv9jVVl53gfotbHbm1c41eb
-	 8aZb8aYfmtmzM2/eVHCtLDoNYvQ1bFMrOCX1DMcM=
+	by mail.kernel.org (Postfix) with ESMTP id 82E4B2082F
+	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 01:51:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728187AbgGBBXF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jul 2020 21:23:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53346 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728174AbgGBBXD (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 1 Jul 2020 21:23:03 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8AAAA20874;
-        Thu,  2 Jul 2020 01:23:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593652982;
-        bh=H6E1ErTHKdU8VDL/lt494z9m+g1stL2ziOwVXwpMVPw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RsBmcNxWvcFx8Qd0eTxU8HcHpfbmrYWP3whfaXxMqJJgJ/fIVfN4kC5Vr8OjHGNI7
-         8v5eCp5xz1u9XkDTBf34C1IvnEhRySFyBksWYTJf9cLV1A6IK+qGgDjNdKARoB0bnx
-         C6g3FlX7XZ9dxdLqx5fQ05/xOz5esjdVUEQCnXh8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Sasha Levin <sashal@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH AUTOSEL 5.7 06/53] drm/ttm: Fix dma_fence refcnt leak in ttm_bo_vm_fault_reserved
-Date:   Wed,  1 Jul 2020 21:21:15 -0400
-Message-Id: <20200702012202.2700645-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200702012202.2700645-1-sashal@kernel.org>
-References: <20200702012202.2700645-1-sashal@kernel.org>
+        id S1727778AbgGBBvS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jul 2020 21:51:18 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:35902 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726735AbgGBBvR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 1 Jul 2020 21:51:17 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id C942361FB4DC5C89F11F;
+        Thu,  2 Jul 2020 09:51:15 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 2 Jul 2020 09:51:07 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        <christian.koenig@amd.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <sumit.semwal@linaro.org>, <tianci.yin@amd.com>,
+        <kraxel@redhat.com>, <Likun.Gao@amd.com>, <Felix.Kuehling@amd.com>,
+        <jgg@ziepe.ca>, <Hawking.Zhang@amd.com>
+CC:     YueHaibing <yuehaibing@huawei.com>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-media@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>,
+        <kernel-janitors@vger.kernel.org>
+Subject: [PATCH -next] drm/amdgpu: remove set but not used variable 'adev'
+Date:   Thu, 2 Jul 2020 01:55:52 +0000
+Message-ID: <20200702015552.42377-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Fixes gcc '-Wunused-but-set-variable' warning:
 
-[ Upstream commit 37cc4b95d13f311c04aa8e9daacca3905ad45ca7 ]
+drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c: In function 'amdgpu_init_mem_type':
+drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c:81:24: warning:
+ variable 'adev' set but not used [-Wunused-but-set-variable]
+  struct amdgpu_device *adev;
+                        ^
 
-ttm_bo_vm_fault_reserved() invokes dma_fence_get(), which returns a
-reference of the specified dma_fence object to "moving" with increased
-refcnt.
-
-When ttm_bo_vm_fault_reserved() returns, local variable "moving" becomes
-invalid, so the refcount should be decreased to keep refcount balanced.
-
-The reference counting issue happens in several exception handling paths
-of ttm_bo_vm_fault_reserved(). When those error scenarios occur such as
-"err" equals to -EBUSY, the function forgets to decrease the refcnt
-increased by dma_fence_get(), causing a refcnt leak.
-
-Fix this issue by calling dma_fence_put() when no_wait_gpu flag is
-equals to true.
-
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Link: https://patchwork.freedesktop.org/patch/370219/
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/gpu/drm/ttm/ttm_bo_vm.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/ttm/ttm_bo_vm.c b/drivers/gpu/drm/ttm/ttm_bo_vm.c
-index 0ad30b1129821..72100b84c7a90 100644
---- a/drivers/gpu/drm/ttm/ttm_bo_vm.c
-+++ b/drivers/gpu/drm/ttm/ttm_bo_vm.c
-@@ -300,8 +300,10 @@ vm_fault_t ttm_bo_vm_fault_reserved(struct vm_fault *vmf,
- 			break;
- 		case -EBUSY:
- 		case -ERESTARTSYS:
-+			dma_fence_put(moving);
- 			return VM_FAULT_NOPAGE;
- 		default:
-+			dma_fence_put(moving);
- 			return VM_FAULT_SIGBUS;
- 		}
- 
--- 
-2.25.1
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index bb95627ad2cc..8199702d3354 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -78,10 +78,6 @@
+ static int amdgpu_init_mem_type(struct ttm_bo_device *bdev, uint32_t type,
+ 				struct ttm_mem_type_manager *man)
+ {
+-	struct amdgpu_device *adev;
+-
+-	adev = amdgpu_ttm_adev(bdev);
+-
+ 	switch (type) {
+ 	case TTM_PL_SYSTEM:
+ 		/* System memory */
+
+
+
+
 
