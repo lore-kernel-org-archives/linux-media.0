@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D30C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 01:34:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39149C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 01:36:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BF2920748
-	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 01:34:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0943C20781
+	for <linux-media@archiver.kernel.org>; Thu,  2 Jul 2020 01:36:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1593653690;
-	bh=t14ieBLjcRC8mGAiZegb7Cr7kUc2KlBM9DA1w+vutoM=;
+	s=default; t=1593653808;
+	bh=/5tEx96xy1e4vi6a8sCn19YEYK/t5MtKMJLjxv8RtbY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=h/FelaSo5BW8ESN8s5GkZDH7vWfGPYZhiYU/eqy4uuwdiGyX9tNequb7F08X5+wPC
-	 cBhfMkop0/7fSo0KgL14tKEGnAy6MxXJmZsWH00WdL/xv/sZfSHSPvHWBnHjn0i1c3
-	 VDP1qroiqNVFjxYUXa69Z+1Fv1mMwnrqs08yaaho=
+	b=wrw6c6+eteLLMwHJVh60/cWgmYvWCD6kkU7aPY6wKRi0FDLrlGfJDaYFe3iS/uQZn
+	 XbQKYtRdoixs9pJxpWfxkxLc1s+SpQrXUvNnD1UwR2AxDcsSFZzdizAwPHZXmeabOB
+	 mExlmPq6bqM8XxQ57abqeu0D2IGQ6L2QodZwGZCM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbgGBBei (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jul 2020 21:34:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56426 "EHLO mail.kernel.org"
+        id S1728195AbgGBBXG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jul 2020 21:23:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53376 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727917AbgGBBZb (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 1 Jul 2020 21:25:31 -0400
+        id S1728175AbgGBBXE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 1 Jul 2020 21:23:04 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4868B20884;
-        Thu,  2 Jul 2020 01:25:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E6F5920748;
+        Thu,  2 Jul 2020 01:23:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593653131;
-        bh=t14ieBLjcRC8mGAiZegb7Cr7kUc2KlBM9DA1w+vutoM=;
+        s=default; t=1593652983;
+        bh=/5tEx96xy1e4vi6a8sCn19YEYK/t5MtKMJLjxv8RtbY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1oXUp9wzNcRNNnwrckzit2GEfwWFu+UfjWuR9nCt19oi7MXiGAIdU5pz+4bswUwtI
-         j3Z/A7ECNwnqIqUmFzLvit4dJ6ZrQ5KpXfIXdmclBUwKX5HB0XykY8LwVdic0sm9od
-         WV0QX9DlyE0hFD1lbfD5S9J3a9xjciVdSV8f70Vc=
+        b=KMBLrFTTWgmGJbCRnVFdgqAuWGcGnW+rafceudbV1+Sy9KoJjWC83fN9SQ5H2Kkwt
+         BS4VPWly8zyKoIMhkCVOSnehRJ121wxMjhpbCl82P9E8PRCkVFKe45aQApftDPLBuu
+         s4FGxCeKnU/1dNrjPcCi/jRMZmG/+Lc/qsQ5U/xU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Xiyu Yang <xiyuyang19@fudan.edu.cn>,
@@ -46,12 +46,12 @@ Cc:     Xiyu Yang <xiyuyang19@fudan.edu.cn>,
         Sasha Levin <sashal@kernel.org>,
         dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org
-Subject: [PATCH AUTOSEL 5.4 05/40] drm/ttm: Fix dma_fence refcnt leak when adding move fence
-Date:   Wed,  1 Jul 2020 21:23:26 -0400
-Message-Id: <20200702012402.2701121-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 07/53] drm/ttm: Fix dma_fence refcnt leak when adding move fence
+Date:   Wed,  1 Jul 2020 21:21:16 -0400
+Message-Id: <20200702012202.2700645-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200702012402.2701121-1-sashal@kernel.org>
-References: <20200702012402.2701121-1-sashal@kernel.org>
+In-Reply-To: <20200702012202.2700645-1-sashal@kernel.org>
+References: <20200702012202.2700645-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -92,10 +92,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
-index abf165b2f64fc..3ce8ad7603c7f 100644
+index 9e07c3f75156b..ef5bc00c73e23 100644
 --- a/drivers/gpu/drm/ttm/ttm_bo.c
 +++ b/drivers/gpu/drm/ttm/ttm_bo.c
-@@ -941,8 +941,10 @@ static int ttm_bo_add_move_fence(struct ttm_buffer_object *bo,
+@@ -881,8 +881,10 @@ static int ttm_bo_add_move_fence(struct ttm_buffer_object *bo,
  	if (!fence)
  		return 0;
  
