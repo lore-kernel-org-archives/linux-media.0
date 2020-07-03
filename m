@@ -7,21 +7,21 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 486ABC433E0
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 18:02:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 653D9C433DF
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 18:02:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39E7A221EB
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 18:02:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 43685221EB
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 18:02:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbgGCSCw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Jul 2020 14:02:52 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:46602 "EHLO
+        id S1726477AbgGCSCx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Jul 2020 14:02:53 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46634 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726035AbgGCSCw (ORCPT
+        with ESMTP id S1726258AbgGCSCw (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jul 2020 14:02:52 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id 04FC82A64FE
+        with ESMTPSA id 543162A65A5
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
@@ -29,9 +29,9 @@ Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         dafna3@gmail.com, sakari.ailus@linux.intel.com,
         linux-rockchip@lists.infradead.org, mchehab@kernel.org,
         tfiga@chromium.org
-Subject: [PATCH v4l-utils v5 1/4] v4l2-ctl: vidcap: Add support for the CSC API
-Date:   Fri,  3 Jul 2020 20:02:36 +0200
-Message-Id: <20200703180239.25841-2-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v4l-utils v5 3/4] v4l2-ctl: subdev: Add support for the CSC API in the subdevices
+Date:   Fri,  3 Jul 2020 20:02:38 +0200
+Message-Id: <20200703180239.25841-4-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200703180239.25841-1-dafna.hirschfeld@collabora.com>
 References: <20200703180239.25841-1-dafna.hirschfeld@collabora.com>
@@ -40,112 +40,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With the CSC API, capture drivers can allow userspace to request
-to set the colorspace fields of the pixelformat. This patch adds
-supports for this feature. when calling 'v4l2-ctl --set-fmt-video'
-on capture devices userspace can ask to change the fields
-'colorspace', 'ycbcr/hsv_enc', 'quantization' and 'xfer_func'
-of the format if the driver supports it.
+The CSC API allows userspace to configure the colorspace,
+quantization, (ycbcr/hsv)_enc and xfer_func fields when
+setting the formats, so those fields are not read only
+in userspace. This patch adds support for this API in
+subevices.
 
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- utils/v4l2-compliance/v4l2-test-formats.cpp |  4 ++-
- utils/v4l2-ctl/v4l2-ctl-vidcap.cpp          | 39 +++++++++++++++++++--
- 2 files changed, 39 insertions(+), 4 deletions(-)
+ utils/v4l2-ctl/v4l2-ctl-subdev.cpp | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/utils/v4l2-compliance/v4l2-test-formats.cpp b/utils/v4l2-compliance/v4l2-test-formats.cpp
-index e1b00f3c..70e5f506 100644
---- a/utils/v4l2-compliance/v4l2-test-formats.cpp
-+++ b/utils/v4l2-compliance/v4l2-test-formats.cpp
-@@ -264,7 +264,9 @@ static int testEnumFormatsType(struct node *node, unsigned type)
- 			return fail("drivers must never set the emulated flag\n");
- 		if (fmtdesc.flags & ~(V4L2_FMT_FLAG_COMPRESSED | V4L2_FMT_FLAG_EMULATED |
- 				      V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM |
--				      V4L2_FMT_FLAG_DYN_RESOLUTION))
-+				      V4L2_FMT_FLAG_DYN_RESOLUTION | V4L2_FMT_FLAG_CSC_COLORSPACE |
-+				      V4L2_FMT_FLAG_CSC_YCBCR_ENC | V4L2_FMT_FLAG_CSC_HSV_ENC |
-+				      V4L2_FMT_FLAG_CSC_QUANTIZATION | V4L2_FMT_FLAG_CSC_XFER_FUNC))
- 			return fail("unknown flag %08x returned\n", fmtdesc.flags);
- 		if (!(fmtdesc.flags & V4L2_FMT_FLAG_COMPRESSED))
- 			fail_on_test(fmtdesc.flags & (V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM |
-diff --git a/utils/v4l2-ctl/v4l2-ctl-vidcap.cpp b/utils/v4l2-ctl/v4l2-ctl-vidcap.cpp
-index 80312b51..26c8a578 100644
---- a/utils/v4l2-ctl/v4l2-ctl-vidcap.cpp
-+++ b/utils/v4l2-ctl/v4l2-ctl-vidcap.cpp
-@@ -21,6 +21,7 @@ static struct v4l2_frmsizeenum frmsize; /* list frame sizes */
- static struct v4l2_frmivalenum frmival; /* list frame intervals */
- static unsigned set_fmts;
- static __u32 width, height, pixfmt, field, flags;
-+static __u32 ycbcr, quantization, xfer_func, colorspace;
- static __u32 bytesperline[VIDEO_MAX_PLANES];
- static __u32 sizeimage[VIDEO_MAX_PLANES];
+diff --git a/utils/v4l2-ctl/v4l2-ctl-subdev.cpp b/utils/v4l2-ctl/v4l2-ctl-subdev.cpp
+index c0f36eab..c6ec21a9 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-subdev.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-subdev.cpp
+@@ -424,14 +424,22 @@ void subdev_set(cv4l_fd &_fd)
+ 				fmt.format.code = ffmt.code;
+ 			if (set_fmt & FmtField)
+ 				fmt.format.field = ffmt.field;
+-			if (set_fmt & FmtColorspace)
++			if (set_fmt & FmtColorspace) {
+ 				fmt.format.colorspace = ffmt.colorspace;
+-			if (set_fmt & FmtXferFunc)
++				fmt.format.flags |= V4L2_MBUS_FRAMEFMT_SET_CSC;
++			}
++			if (set_fmt & FmtXferFunc) {
+ 				fmt.format.xfer_func = ffmt.xfer_func;
+-			if (set_fmt & FmtYCbCr)
++				fmt.format.flags |= V4L2_MBUS_FRAMEFMT_SET_CSC;
++			}
++			if (set_fmt & FmtYCbCr) {
+ 				fmt.format.ycbcr_enc = ffmt.ycbcr_enc;
+-			if (set_fmt & FmtQuantization)
++				fmt.format.flags |= V4L2_MBUS_FRAMEFMT_SET_CSC;
++			}
++			if (set_fmt & FmtQuantization) {
+ 				fmt.format.quantization = ffmt.quantization;
++				fmt.format.flags |= V4L2_MBUS_FRAMEFMT_SET_CSC;
++			}
  
-@@ -101,7 +102,6 @@ static void print_video_fields(int fd)
- 
- void vidcap_cmd(int ch, char *optarg)
- {
--	__u32 colorspace, xfer_func, ycbcr, quantization;
- 	char *value, *subs;
- 	bool be_pixfmt;
- 
-@@ -111,8 +111,7 @@ void vidcap_cmd(int ch, char *optarg)
- 		set_fmts = parse_fmt(optarg, width, height, pixfmt, field, colorspace,
- 				xfer_func, ycbcr, quantization, flags, bytesperline,
- 				sizeimage);
--		if (!set_fmts ||
--		    (set_fmts & (FmtColorspace | FmtYCbCr | FmtQuantization | FmtXferFunc))) {
-+		if (!set_fmts) {
- 			vidcap_usage();
- 			std::exit(EXIT_FAILURE);
- 		}
-@@ -220,6 +219,23 @@ int vidcap_get_and_update_fmt(cv4l_fd &_fd, struct v4l2_format &vfmt)
- 				vfmt.fmt.pix_mp.plane_fmt[i].sizeimage =
- 					sizeimage[i];
- 		}
-+
-+		if (set_fmts & FmtColorspace) {
-+			vfmt.fmt.pix_mp.flags |= V4L2_PIX_FMT_FLAG_SET_CSC;
-+			vfmt.fmt.pix_mp.colorspace = colorspace;
-+		}
-+		if (set_fmts & FmtYCbCr) {
-+			vfmt.fmt.pix_mp.flags |= V4L2_PIX_FMT_FLAG_SET_CSC;
-+			vfmt.fmt.pix_mp.ycbcr_enc = ycbcr;
-+		}
-+		if (set_fmts & FmtQuantization) {
-+			vfmt.fmt.pix_mp.flags |= V4L2_PIX_FMT_FLAG_SET_CSC;
-+			vfmt.fmt.pix_mp.quantization = quantization;
-+		}
-+		if (set_fmts & FmtXferFunc) {
-+			vfmt.fmt.pix_mp.flags |= V4L2_PIX_FMT_FLAG_SET_CSC;
-+			vfmt.fmt.pix_mp.xfer_func = xfer_func;
-+		}
- 	} else {
- 		if (set_fmts & FmtWidth)
- 			vfmt.fmt.pix.width = width;
-@@ -249,6 +265,23 @@ int vidcap_get_and_update_fmt(cv4l_fd &_fd, struct v4l2_format &vfmt)
- 		}
- 		if (set_fmts & FmtSizeImage)
- 			vfmt.fmt.pix.sizeimage = sizeimage[0];
-+		if (set_fmts & FmtColorspace) {
-+			vfmt.fmt.pix.flags |= V4L2_PIX_FMT_FLAG_SET_CSC;
-+			vfmt.fmt.pix.colorspace = colorspace;
-+		}
-+		if (set_fmts & FmtYCbCr) {
-+			vfmt.fmt.pix.flags |= V4L2_PIX_FMT_FLAG_SET_CSC;
-+			vfmt.fmt.pix.ycbcr_enc = ycbcr;
-+		}
-+		if (set_fmts & FmtQuantization) {
-+			vfmt.fmt.pix.flags |= V4L2_PIX_FMT_FLAG_SET_CSC;
-+			vfmt.fmt.pix.quantization = quantization;
-+		}
-+		if (set_fmts & FmtXferFunc) {
-+			vfmt.fmt.pix.flags |= V4L2_PIX_FMT_FLAG_SET_CSC;
-+			vfmt.fmt.pix.xfer_func = xfer_func;
-+		}
-+
- 	}
- 
- 	if ((set_fmts & FmtPixelFormat) &&
+ 			if (options[OptSetSubDevFormat])
+ 				printf("Note: --set-subdev-fmt is only for testing.\n"
 -- 
 2.17.1
 
