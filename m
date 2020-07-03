@@ -2,240 +2,272 @@ Return-Path: <SRS0=uRfZ=AO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 783FCC433DF
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 16:33:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D8E7C433DF
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 17:10:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4DC8C20760
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 16:33:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CEB720870
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 17:09:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="rlpj94BX"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="ngSp8V3Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726147AbgGCQd1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Jul 2020 12:33:27 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33340 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726098AbgGCQd1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jul 2020 12:33:27 -0400
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 02D8529E;
-        Fri,  3 Jul 2020 18:33:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1593794003;
-        bh=Nwh0YN0KeqC0InYjn2BqTnLR9TGdn4HVickM9LbHxRY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rlpj94BXVfWK3mFgx5+5HjqPxdUp01z3HFl0V9wyDfgH+Qc5CGkIlnr128MVJnjKT
-         Jp8A7iypgOSUL3ye1A/W0MVXg3d+BBVoPoU76HFmt9Ou6+OetRj/jfJk+X9dag7ZEE
-         59yNJ6iPYF6nXCoBQf+5pQ+SauWjDj1cLaQKEsWs=
-Date:   Fri, 3 Jul 2020 19:33:18 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        hverkuil@xs4all.nl, roman.kovalivskyi@globallogic.com,
-        dave.stevenson@raspberrypi.org, naush@raspberrypi.com,
-        mrodin@de.adit-jv.com, hugues.fruchet@st.com, mripard@kernel.org,
-        aford173@gmail.com, sudipi@jp.adit-jv.com,
-        andrew_gabbasov@mentor.com, erosca@de.adit-jv.com,
-        linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org,
-        dafna Hirschfeld <dafna3@gmail.com>
-Subject: Re: [PATCH 20/25] media: ov5647: Program mode only if it has changed
-Message-ID: <20200703163318.GF14255@pendragon.ideasonboard.com>
-References: <20200623165550.45835-1-jacopo@jmondi.org>
- <80139e40-914f-c547-922f-91fe3f611202@collabora.com>
- <20200630074305.soctqoaqirfdnvv2@uno.localdomain>
- <e3dfbf68-f81b-3349-b3ad-dd9e5f6a0f5f@collabora.com>
- <20200630100651.ikjcazgbvoq2hab4@uno.localdomain>
- <de712b61-4b20-cfbd-ab79-d71bd1b7fc56@collabora.com>
- <20200630120528.xffvivfriblc6a2y@uno.localdomain>
- <ae93796f-dd9d-730b-008a-13f90ff1f5cd@collabora.com>
- <20200701072554.GH5963@pendragon.ideasonboard.com>
- <20200703122150.7mrsl3sw3hblcldv@uno.localdomain>
+        id S1726907AbgGCRJ4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Jul 2020 13:09:56 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:2398 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726803AbgGCRJz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jul 2020 13:09:55 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5eff66550001>; Fri, 03 Jul 2020 10:09:42 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Fri, 03 Jul 2020 10:09:54 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Fri, 03 Jul 2020 10:09:54 -0700
+Received: from [10.2.167.4] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 3 Jul
+ 2020 17:09:53 +0000
+Subject: Re: [RFC PATCH v2 12/18] media: tegra-video: Add support for
+ selection ioctl ops
+To:     Hans Verkuil <hverkuil@xs4all.nl>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <sakari.ailus@iki.fi>,
+        <robh+dt@kernel.org>, <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
+ <1592358094-23459-13-git-send-email-skomatineni@nvidia.com>
+ <efc84cff-76d5-78a2-e84e-0342459d3756@xs4all.nl>
+ <c82a000a-7766-c933-fd69-24eb4885fc14@nvidia.com>
+ <a95717b6-e2ee-78df-5145-de265805b3d4@xs4all.nl>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <5db8cc27-d1a6-4cdf-4974-65ccd8328f74@nvidia.com>
+Date:   Fri, 3 Jul 2020 10:12:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200703122150.7mrsl3sw3hblcldv@uno.localdomain>
+In-Reply-To: <a95717b6-e2ee-78df-5145-de265805b3d4@xs4all.nl>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1593796182; bh=z3ubYMdxm5GM7bjfyrT2sTe7DwgcgLSwUPRS4maOLPk=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=ngSp8V3YIr+/iilUNwIAV9bPIzcw7DjZX76OB7kPkMvJhftOu7eFuyGXMe9+LNNJ7
+         Br/hOgL5MUkWj+p+YPtV4e9f5hZW8JiX7qVbIWBzaGDj325k+T9RohnDydRcuA6ISZ
+         Tw+gQlVFx73kifiiBXyTXB6i7uyWAdSfLKP4kxBQ39gpUlYY0jfSyKO2qjp+D1dGzO
+         3Pr3/zsUEk7t5Y0UYTl2kL2snprxXa3rlls1L5q3IayRSv7daIRrvHKa6rENvCRTen
+         IgaLD7ppXt8L2Tw/8nIGdKZrm9hB2QQ8XFu63dgU18ApzOzcyV1mNkk0oy6v4V3/+7
+         /3nQ7zURuyJnA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
 
-On Fri, Jul 03, 2020 at 02:21:50PM +0200, Jacopo Mondi wrote:
-> On Wed, Jul 01, 2020 at 10:25:54AM +0300, Laurent Pinchart wrote:
-> > On Tue, Jun 30, 2020 at 03:01:21PM +0200, Dafna Hirschfeld wrote:
-> >> On 30.06.20 14:05, Jacopo Mondi wrote:
-> >>> On Tue, Jun 30, 2020 at 12:56:44PM +0200, Dafna Hirschfeld wrote:
-> >>>> On 30.06.20 12:06, Jacopo Mondi wrote:
-> >>>>> On Tue, Jun 30, 2020 at 11:32:12AM +0200, Dafna Hirschfeld wrote:
-> >>>>>> On 30.06.20 09:43, Jacopo Mondi wrote:
-> >>>>>>> On Mon, Jun 29, 2020 at 07:48:16PM +0200, Dafna Hirschfeld wrote:
-> >>>>>>>> On 23.06.20 18:55, Jacopo Mondi wrote:
-> >>>>>>>>> Store in the driver structure a pointer to the currently applied mode
-> >>>>>>>>> and program a new one at s_stream(1) time only if it has changed.
-> >>>>>>>>
-> >>>>>>>> Hi,
-> >>>>>>>> I think this can be more readably implemented with a 'is_streaming' boolean
-> >>>>>>>> field.
-> >>>>>>>
-> >>>>>>> How would you like to use an 'is_streaming' flag to decide if the
-> >>>>>>> sensor mode has to be updated ?
-> >>>>>>
-> >>>>>> since 'current_mode' is set to NULL upon `ov5647_stream_off`
-> >>>>>> and you return from 'ov5647_set_stream' immediately if 'mode == current_mode'
-> >>>>>> it seem very similar to returning immediately from 'ov5647_set_stream' if the
-> >>>>>> device is currently streaming.
-> >>>>>
-> >>>>> No, the code returns immediately from ov5647_set_mode() if mode ==
-> >>>>> current_mode. The modes comparison makes sure the sensor is not
-> >>>>> reprogrammed if the mode hasn't changed. The remaning part of
-> >>>>> s_stream() is executed regardless of the mode configuration. Am I
-> >>>>> missing some part of the picture ?
-> >>>>>
-> >>>>>> But actually in this patch it seems to be possible to change the mode
-> >>>>>> while streaming, if the callbacks are executed:
-> >>>>>>
-> >>>>>> s_stream(1)
-> >>>>>> s_fmt
-> >>>>>> s_stream(1)
-> >>>>>>
-> >>>>>> which is maybe a bug?
-> >>>>>
-> >>>>> The new format is stored in sensor->mode, and applied at the next
-> >>>>> s_stream(1) operation if it differs from the already programmed one,
-> >>>>> at least, this is how it is intended to work, have you found any
-> >>>>> failing s_stream/set_fmt/s_stream which could be caused by a bug ?
-> >>>>
-> >>>> What I meant is that there could be valid sequence of calls
-> >>>>
-> >>>> s_stream(enable=1)
-> >>>> s_fmt
-> >>>> s_stream(enable=1)
-> >>>>
-> >>>> For example if two video devices are connected to the sensor and they
-> >>>> stream simultaneously. There was a discussion about adding a code to the core
-> >>>
-> >>> I'm not sure it is possible, given that the subdev has a single source
-> >>> pad
-> >>
-> >> Video devices should not be connected directly to the sensor, they can also
-> >> be connected to the sensor through an isp entity that is connected to the sensor
-> >> from one side and to two video devices from the other side.
-> >
-> > I don't think it should be the job of the sensor driver to handle this.
-> > A sensor can be streaming or not streaming, and a .s_stream(1) call
-> > while already streaming shouldn't happen. It's the job of the ISP driver
-> > (with help from core code) to ensure this won't happen. Otherwise we
-> > would have to protect against that case in all sensor drivers,
-> > duplicating code in many places and opening the door to bugs. Subdev
-> > drivers should be as simple as possible.
-> 
-> Most of the sensor driver I've briefly looked at implement a simple
-> check to avoid double stream(1) but they do not implement any form of
-> refcounting. I think that does more harm than good to be honest, as it
-> would hide  potential problematic start stream sequences, but would
-> stop the sensor at the first stream(0), leaving one of the multiple
-> receivers stuck.
-> 
-> I would prefer avoid doing this here.
-> 
-> However the driver already refcounting on s_power(), which if I'm not
-> mistaken could be avoided, as bridges should use
-> v4l2_pipeline_pm_get(), which already does refcounting, if I'm not
-> mistaken.
-
-.s_power() can also be called when opening the subdev device node from
-userspace, through sd->internal_ops->open(). In new drivers, I'd
-recommend implementing .s_power() based on runtime PM, with .s_power(1)
-calling pm_runtime_get_sync() and .s_power(0) calling pm_runtime_put().
-.s_stream() should call the runtime PM functions too. That way all the
-refcounting will be handled by runtime PM.
-
-.s_stream() should not be refcounted, the caller should ensure that a
-started sensor doesn't get started again and that a stopped sensor
-doesn't receive a .s_stream(0) call.
-
-> To me, grasping how s_stream() and s_start() work for real is still hard,
-> as those are the only two operation propagated along the pipeline by
-> briges, even for MC platforms, and it seems looking at the existing
-> driver, the confusion is big, as all of them handle things slightly
-> differently :/
-
-None of this has ever been really documented, and APIs have evolved over
-time without fixing drivers, hence today's mess.
-
-> >>>> to follow the s_stream callback and call it only if the subdev is not streaming
-> >>>> but currently subdevs should support it themselves.
-> >>>
-> >>> Oh, so you're concerned about the fact userspace can call s_stream(1)
-> >>> twice consecutively! it's indipendent from s_ftm if I got your point.
-> >>>
-> >>> In this case a flag to control if the device is streaming already should
-> >>> help, yes, I overlooked that indeed.
-> >>>
-> >>>>>>>>> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> >>>>>>>>> ---
-> >>>>>>>>>      drivers/media/i2c/ov5647.c | 16 +++++++++++++++-
-> >>>>>>>>>      1 file changed, 15 insertions(+), 1 deletion(-)
-> >>>>>>>>>
-> >>>>>>>>> diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-> >>>>>>>>> index 39e320f321bd8..ac114269e1c73 100644
-> >>>>>>>>> --- a/drivers/media/i2c/ov5647.c
-> >>>>>>>>> +++ b/drivers/media/i2c/ov5647.c
-> >>>>>>>>> @@ -96,6 +96,7 @@ struct ov5647 {
-> >>>>>>>>>      	bool				clock_ncont;
-> >>>>>>>>>      	struct v4l2_ctrl_handler	ctrls;
-> >>>>>>>>>      	struct ov5647_mode		*mode;
-> >>>>>>>>> +	struct ov5647_mode		*current_mode;
-> >>>>>>>>>      };
-> >>>>>>>>>      static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
-> >>>>>>>>> @@ -750,9 +751,13 @@ static int ov5647_set_virtual_channel(struct v4l2_subdev *sd, int channel)
-> >>>>>>>>>      static int ov5647_set_mode(struct v4l2_subdev *sd)
-> >>>>>>>>>      {
-> >>>>>>>>>      	struct i2c_client *client = v4l2_get_subdevdata(sd);
-> >>>>>>>>> +	struct ov5647 *sensor = to_sensor(sd);
-> >>>>>>>>>      	u8 resetval, rdval;
-> >>>>>>>>>      	int ret;
-> >>>>>>>>> +	if (sensor->mode == sensor->current_mode)
-> >>>>>>>>> +		return 0;
-> >>>>>>>>> +
-> >>>>>>>>>      	ret = ov5647_read(sd, OV5647_SW_STANDBY, &rdval);
-> >>>>>>>>>      	if (ret < 0)
-> >>>>>>>>>      		return ret;
-> >>>>>>>>> @@ -778,6 +783,8 @@ static int ov5647_set_mode(struct v4l2_subdev *sd)
-> >>>>>>>>>      			return ret;
-> >>>>>>>>>      	}
-> >>>>>>>>> +	sensor->current_mode = sensor->mode;
-> >>>>>>>>> +
-> >>>>>>>>>      	return 0;
-> >>>>>>>>>      }
-> >>>>>>>>> @@ -816,6 +823,7 @@ static int ov5647_stream_on(struct v4l2_subdev *sd)
-> >>>>>>>>>      static int ov5647_stream_off(struct v4l2_subdev *sd)
-> >>>>>>>>>      {
-> >>>>>>>>> +	struct ov5647 *sensor = to_sensor(sd);
-> >>>>>>>>>      	int ret;
-> >>>>>>>>>      	ret = ov5647_write(sd, OV5647_REG_MIPI_CTRL00, MIPI_CTRL00_CLOCK_LANE_GATE |
-> >>>>>>>>> @@ -827,7 +835,13 @@ static int ov5647_stream_off(struct v4l2_subdev *sd)
-> >>>>>>>>>      	if (ret < 0)
-> >>>>>>>>>      		return ret;
-> >>>>>>>>> -	return ov5647_write(sd, OV5640_REG_PAD_OUT, 0x01);
-> >>>>>>>>> +	ret = ov5647_write(sd, OV5640_REG_PAD_OUT, 0x01);
-> >>>>>>>>> +	if (ret < 0)
-> >>>>>>>>> +		return ret;
-> >>>>>>>>> +
-> >>>>>>>>> +	sensor->current_mode = NULL;
-> >>>>>>>>> +
-> >>>>>>>>> +	return 0;
-> >>>>>>>>>      }
-> >>>>>>>>>      static int set_sw_standby(struct v4l2_subdev *sd, bool standby)
-> >>>>>>>>>
-
--- 
-Regards,
-
-Laurent Pinchart
+On 7/3/20 1:06 AM, Hans Verkuil wrote:
+> On 02/07/2020 23:20, Sowjanya Komatineni wrote:
+>> On 7/2/20 6:54 AM, Hans Verkuil wrote:
+>>> On 17/06/2020 03:41, Sowjanya Komatineni wrote:
+>>>> This patch adds selection v4l2 ioctl operations to allow configuring
+>>>> a selection rectangle in the sensor through the Tegra video device
+>>>> node.
+>>>>
+>>>> Some sensor drivers supporting crop uses try_crop rectangle from
+>>>> v4l2_subdev_pad_config during try format for computing binning.
+>>>>
+>>>> So with selection ops support, this patch also updates try format
+>>>> to use try crop rectangle either from subdev frame size enumeration
+>>>> or from subdev crop boundary.
+>>>>
+>>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+>>>> ---
+>>>>    drivers/staging/media/tegra-video/vi.c | 106 +++++++++++++++++++++++++++++++++
+>>>>    1 file changed, 106 insertions(+)
+>>>>
+>>>> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+>>>> index 506c263..f9eb96b 100644
+>>>> --- a/drivers/staging/media/tegra-video/vi.c
+>>>> +++ b/drivers/staging/media/tegra-video/vi.c
+>>>> @@ -427,6 +427,13 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+>>>>    	struct v4l2_subdev *subdev;
+>>>>    	struct v4l2_subdev_format fmt;
+>>>>    	struct v4l2_subdev_pad_config *pad_cfg;
+>>>> +	struct v4l2_subdev_frame_size_enum fse = {
+>>>> +		.which = V4L2_SUBDEV_FORMAT_TRY,
+>>>> +	};
+>>>> +	struct v4l2_subdev_selection sdsel = {
+>>>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+>>>> +		.target = V4L2_SEL_TGT_CROP_BOUNDS,
+>>>> +	};
+>>>>    	int ret;
+>>>>    
+>>>>    	subdev = tegra_channel_get_remote_subdev(chan, true);
+>>>> @@ -449,6 +456,24 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+>>>>    	fmt.which = V4L2_SUBDEV_FORMAT_TRY;
+>>>>    	fmt.pad = 0;
+>>>>    	v4l2_fill_mbus_format(&fmt.format, pix, fmtinfo->code);
+>>>> +
+>>>> +	/*
+>>>> +	 * Attempt to obtain the format size from subdev.
+>>>> +	 * If not available, try to get crop boundary from subdev.
+>>>> +	 */
+>>>> +	fse.code = fmtinfo->code;
+>>>> +	ret = v4l2_subdev_call(subdev, pad, enum_frame_size, pad_cfg, &fse);
+>>>> +	if (ret) {
+>>>> +		ret = v4l2_subdev_call(subdev, pad, get_selection, NULL, &sdsel);
+>>>> +		if (ret)
+>>>> +			return -EINVAL;
+>>>> +		pad_cfg->try_crop.width = sdsel.r.width;
+>>>> +		pad_cfg->try_crop.height = sdsel.r.height;
+>>>> +	} else {
+>>>> +		pad_cfg->try_crop.width = fse.max_width;
+>>>> +		pad_cfg->try_crop.height = fse.max_height;
+>>>> +	}
+>>>> +
+>>>>    	ret = v4l2_subdev_call(subdev, pad, set_fmt, pad_cfg, &fmt);
+>>>>    	if (ret < 0)
+>>>>    		return ret;
+>>>> @@ -540,6 +565,85 @@ static int tegra_channel_set_subdev_active_fmt(struct tegra_vi_channel *chan)
+>>>>    	return 0;
+>>>>    }
+>>>>    
+>>>> +static int tegra_channel_g_selection(struct file *file, void *priv,
+>>>> +				     struct v4l2_selection *sel)
+>>>> +{
+>>>> +	struct tegra_vi_channel *chan = video_drvdata(file);
+>>>> +	struct v4l2_subdev *subdev;
+>>>> +	struct v4l2_subdev_format fmt = {
+>>>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+>>>> +	};
+>>>> +	struct v4l2_subdev_selection sdsel = {
+>>>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+>>>> +		.target = sel->target,
+>>>> +	};
+>>>> +	int ret;
+>>>> +
+>>>> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+>>>> +		return -ENOTTY;
+>>>> +
+>>>> +	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+>>>> +		return -EINVAL;
+>>>> +	/*
+>>>> +	 * Try the get selection operation and fallback to get format if not
+>>>> +	 * implemented.
+>>>> +	 */
+>>>> +	subdev = tegra_channel_get_remote_subdev(chan, true);
+>>>> +	ret = v4l2_subdev_call(subdev, pad, get_selection, NULL, &sdsel);
+>>>> +	if (!ret)
+>>>> +		sel->r = sdsel.r;
+>>>> +	if (ret != -ENOIOCTLCMD)
+>>>> +		return ret;
+>>>> +
+>>>> +	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &fmt);
+>>>> +	if (ret < 0)
+>>>> +		return ret;
+>>>> +
+>>>> +	sel->r.left = 0;
+>>>> +	sel->r.top = 0;
+>>>> +	sel->r.width = fmt.format.width;
+>>>> +	sel->r.height = fmt.format.height;
+>>>> +
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>> +static int tegra_channel_s_selection(struct file *file, void *fh,
+>>>> +				     struct v4l2_selection *sel)
+>>>> +{
+>>>> +	struct tegra_vi_channel *chan = video_drvdata(file);
+>>>> +	struct v4l2_subdev *subdev;
+>>>> +	int ret;
+>>>> +	struct v4l2_subdev_selection sdsel = {
+>>>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+>>>> +		.target = sel->target,
+>>>> +		.flags = sel->flags,
+>>>> +		.r = sel->r,
+>>>> +	};
+>>>> +
+>>> This function doesn't check if the subdev actually supports set_selection.
+>>> The imx219 is one such driver: it supports get_selection, but not set_selection.
+>>>
+>>> So this code should add these lines to fix the v4l2-compliance fail:
+>>>
+>>>          subdev = tegra_channel_get_remote_subdev(chan, true);
+>>>
+>>>          if (!v4l2_subdev_has_op(subdev, pad, set_selection))
+>>>                  return -ENOTTY;
+>>>
+>> v4l2_subdev_call() does that check and returns -ENOIOCTLCMD when
+>> specified subdev ops does not exist.
+> But that test happens too late. In the v4l2-compliance test it fails in the
+> sel->type test below, so it returns EINVAL instead of ENOTTY.
+>
+>>>> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+>>>> +		return -ENOTTY;
+> I think this test should come before the v4l2_subdev_has_op test since there
+> is probably no subdev if the TPG is enabled. So:
+>
+> 	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+> 		return -ENOTTY;
+>
+>          subdev = tegra_channel_get_remote_subdev(chan, true);
+>          if (!v4l2_subdev_has_op(subdev, pad, set_selection))
+>                  return -ENOTTY;
+>
+>
+> Regards,
+>
+> 	Hans
+OK Will update in v3. Thanks Hans
+>>>> +
+>>>> +	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+>>>> +		return -EINVAL;
+>>>> +
+>>>> +	if (vb2_is_busy(&chan->queue))
+>>>> +		return -EBUSY;
+>>>> +
+>>>> +	subdev = tegra_channel_get_remote_subdev(chan, true);
+>>> And this line can be dropped.
+>>>
+>>> Regards,
+>>>
+>>> 	Hans
+>>>
+>>>> +	ret = v4l2_subdev_call(subdev, pad, set_selection, NULL, &sdsel);
+>>>> +	if (!ret) {
+>>>> +		sel->r = sdsel.r;
+>>>> +		/*
+>>>> +		 * Subdev active format resolution may have changed during
+>>>> +		 * set selection operation. So, update channel format to
+>>>> +		 * the sub-device active format.
+>>>> +		 */
+>>>> +		return tegra_channel_set_subdev_active_fmt(chan);
+>>>> +	}
+>>>> +
+>>>> +	return ret;
+>>>> +}
+>>>> +
+>>>>    static int tegra_channel_enum_input(struct file *file, void *fh,
+>>>>    				    struct v4l2_input *inp)
+>>>>    {
+>>>> @@ -597,6 +701,8 @@ static const struct v4l2_ioctl_ops tegra_channel_ioctl_ops = {
+>>>>    	.vidioc_streamoff		= vb2_ioctl_streamoff,
+>>>>    	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
+>>>>    	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
+>>>> +	.vidioc_g_selection		= tegra_channel_g_selection,
+>>>> +	.vidioc_s_selection		= tegra_channel_s_selection,
+>>>>    };
+>>>>    
+>>>>    /*
+>>>>
