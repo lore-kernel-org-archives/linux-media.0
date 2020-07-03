@@ -2,185 +2,157 @@ Return-Path: <SRS0=uRfZ=AO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2522C433DF
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 02:15:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D7E0C433E0
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 02:48:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B08E020EDD
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 02:15:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="adKrVXFE"
+	by mail.kernel.org (Postfix) with ESMTP id 08AC22070C
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jul 2020 02:48:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726065AbgGCCPn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Jul 2020 22:15:43 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:2207 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726030AbgGCCPn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Jul 2020 22:15:43 -0400
-X-UUID: e4770e8de1e94a19828db6bc3c2a6353-20200703
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=6S5fL7cNWMNyVjavf1uZrRamVIgh2MpovqmKdJHBH8o=;
-        b=adKrVXFEBl4a78bR5xb8ZY2ltZ28CbDjSzzDjUvISxpWUSAfc5VpkBwpYgO+bIP29BnWzDhK3ruLsnMvbD9rI/Kko0ijrSGf9WuBiMYMD5D9EEw6uBM8AHGNslUlonDn73AMLR6kB8oRezXUx8+pVey5JbLaqRoFjWaNXY0dO2E=;
-X-UUID: e4770e8de1e94a19828db6bc3c2a6353-20200703
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <dongchun.zhu@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 365824529; Fri, 03 Jul 2020 10:15:33 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 3 Jul
- 2020 10:15:32 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 3 Jul 2020 10:15:30 +0800
-Message-ID: <1593742505.17166.81.camel@mhfsdcap03>
-Subject: Re: [PATCH V12 2/2] media: i2c: ov02a10: Add OV02A10 image sensor
- driver
-From:   Dongchun Zhu <dongchun.zhu@mediatek.com>
-To:     <linus.walleij@linaro.org>, <sakari.ailus@linux.intel.com>,
-        <drinkcat@chromium.org>, <tfiga@chromium.org>
-CC:     <bgolaszewski@baylibre.com>, <mchehab@kernel.org>,
-        <andriy.shevchenko@linux.intel.com>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <matthias.bgg@gmail.com>,
-        <bingbu.cao@intel.com>, <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <sj.huang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <louis.kuo@mediatek.com>, <shengnan.wang@mediatek.com>,
-        <dongchun.zhu@mediatek.com>
-Date:   Fri, 3 Jul 2020 10:15:05 +0800
-In-Reply-To: <20200702115223.21507-3-dongchun.zhu@mediatek.com>
-References: <20200702115223.21507-1-dongchun.zhu@mediatek.com>
-         <20200702115223.21507-3-dongchun.zhu@mediatek.com>
+        id S1726129AbgGCCsr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Jul 2020 22:48:47 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37480 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726035AbgGCCsq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Jul 2020 22:48:46 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id CCF222A6121
+Message-ID: <abfa036dc0c997bb68280195b2cc422e88c6f4b5.camel@collabora.com>
+Subject: Re: [PATCH 3/9] media: rkvdec: h264: Fix pic width and height in mbs
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Jonas Karlman <jonas@kwiboo.se>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>
+Date:   Thu, 02 Jul 2020 23:48:34 -0300
+In-Reply-To: <20200701215616.30874-4-jonas@kwiboo.se>
+References: <20200701215616.30874-1-jonas@kwiboo.se>
+         <20200701215616.30874-4-jonas@kwiboo.se>
+Organization: Collabora
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+User-Agent: Evolution 3.36.0-1 
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 7D9EAA1E8C099B6E5F8EA8E45985B32180308D54A52914B6B8ECCDF6DCA0DE8D2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA3LTAyIGF0IDE5OjUyICswODAwLCBEb25nY2h1biBaaHUgd3JvdGU6DQo+
-IEFkZCBhIFY0TDIgc3ViLWRldmljZSBkcml2ZXIgZm9yIE9WMDJBMTAgaW1hZ2Ugc2Vuc29yLg0K
-PiANCj4gUmV2aWV3ZWQtYnk6IFRvbWFzeiBGaWdhIDx0ZmlnYUBjaHJvbWl1bS5vcmc+DQo+IFNp
-Z25lZC1vZmYtYnk6IERvbmdjaHVuIFpodSA8ZG9uZ2NodW4uemh1QG1lZGlhdGVrLmNvbT4NCj4g
-LS0tDQo+ICBNQUlOVEFJTkVSUyAgICAgICAgICAgICAgICAgfCAgICAxICsNCj4gIGRyaXZlcnMv
-bWVkaWEvaTJjL0tjb25maWcgICB8ICAgMTMgKw0KPiAgZHJpdmVycy9tZWRpYS9pMmMvTWFrZWZp
-bGUgIHwgICAgMSArDQo+ICBkcml2ZXJzL21lZGlhL2kyYy9vdjAyYTEwLmMgfCAxMDUyICsrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gIDQgZmlsZXMgY2hhbmdl
-ZCwgMTA2NyBpbnNlcnRpb25zKCspDQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9tZWRp
-YS9pMmMvb3YwMmExMC5jDQo+IA0KDQpbc25pcF0NCg0KPiArc3RhdGljIGludCBvdjAyYTEwX3By
-b2JlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpDQo+ICt7DQo+ICsJc3RydWN0IGRldmljZSAq
-ZGV2ID0gJmNsaWVudC0+ZGV2Ow0KPiArCXN0cnVjdCBvdjAyYTEwICpvdjAyYTEwOw0KPiArCXVu
-c2lnbmVkIGludCByb3RhdGlvbjsNCj4gKwl1bnNpZ25lZCBpbnQgY2xvY2tfbGFuZV90eF9zcGVl
-ZDsNCj4gKwl1bnNpZ25lZCBpbnQgaTsNCj4gKwlpbnQgcmV0Ow0KPiArDQo+ICsJb3YwMmExMCA9
-IGRldm1fa3phbGxvYyhkZXYsIHNpemVvZigqb3YwMmExMCksIEdGUF9LRVJORUwpOw0KPiArCWlm
-ICghb3YwMmExMCkNCj4gKwkJcmV0dXJuIC1FTk9NRU07DQo+ICsNCj4gKwlyZXQgPSBvdjAyYTEw
-X2NoZWNrX2h3Y2ZnKGRldiwgb3YwMmExMCk7DQo+ICsJaWYgKHJldCkgew0KPiArCQlkZXZfZXJy
-KGRldiwgImZhaWxlZCB0byBjaGVjayBIVyBjb25maWd1cmF0aW9uOiAlZCIsIHJldCk7DQo+ICsJ
-CXJldHVybiByZXQ7DQo+ICsJfQ0KPiArDQo+ICsJdjRsMl9pMmNfc3ViZGV2X2luaXQoJm92MDJh
-MTAtPnN1YmRldiwgY2xpZW50LCAmb3YwMmExMF9zdWJkZXZfb3BzKTsNCj4gKwlvdjAyYTEwLT5t
-aXBpX2Nsb2NrX3R4X3NwZWVkID0gT1YwMkExMF9NSVBJX1RYX1NQRUVEX0RFRkFVTFQ7DQo+ICsJ
-b3YwMmExMC0+Zm10LmNvZGUgPSBNRURJQV9CVVNfRk1UX1NCR0dSMTBfMVgxMDsNCj4gKw0KPiAr
-CS8qIE9wdGlvbmFsIGluZGljYXRpb24gb2YgcGh5c2ljYWwgcm90YXRpb24gb2Ygc2Vuc29yICov
-DQo+ICsJcmV0ID0gZndub2RlX3Byb3BlcnR5X3JlYWRfdTMyKGRldl9md25vZGUoZGV2KSwgInJv
-dGF0aW9uIiwgJnJvdGF0aW9uKTsNCj4gKwlpZiAoIXJldCAmJiByb3RhdGlvbiA9PSAxODApIHsN
-Cj4gKwkJb3YwMmExMC0+dXBzaWRlX2Rvd24gPSB0cnVlOw0KPiArCQlvdjAyYTEwLT5mbXQuY29k
-ZSA9IE1FRElBX0JVU19GTVRfU1JHR0IxMF8xWDEwOw0KPiArCX0NCj4gKw0KPiArCS8qIE9wdGlv
-bmFsIGluZGljYXRpb24gb2YgbWlwaSBUWCBzcGVlZCAqLw0KPiArCXJldCA9IGZ3bm9kZV9wcm9w
-ZXJ0eV9yZWFkX3UzMihkZXZfZndub2RlKGRldiksICJvdnRpLG1pcGktdHgtc3BlZWQiLA0KPiAr
-CQkJCSAgICAgICAmY2xvY2tfbGFuZV90eF9zcGVlZCk7DQo+ICsNCj4gKwlpZiAoIXJldCkNCj4g
-KwkJb3YwMmExMC0+bWlwaV9jbG9ja190eF9zcGVlZCA9IGNsb2NrX2xhbmVfdHhfc3BlZWQ7DQo+
-ICsNCj4gKwkvKiBHZXQgc3lzdGVtIGNsb2NrIChlY2xrKSAqLw0KPiArCW92MDJhMTAtPmVjbGsg
-PSBkZXZtX2Nsa19nZXQoZGV2LCAiZWNsayIpOw0KPiArCWlmIChJU19FUlIob3YwMmExMC0+ZWNs
-aykpIHsNCj4gKwkJcmV0ID0gUFRSX0VSUihvdjAyYTEwLT5lY2xrKTsNCj4gKwkJZGV2X2Vycihk
-ZXYsICJmYWlsZWQgdG8gZ2V0IGVjbGsgJWRcbiIsIHJldCk7DQo+ICsJCXJldHVybiByZXQ7DQo+
-ICsJfQ0KPiArDQo+ICsJcmV0ID0gZndub2RlX3Byb3BlcnR5X3JlYWRfdTMyKGRldl9md25vZGUo
-ZGV2KSwgImNsb2NrLWZyZXF1ZW5jeSIsDQo+ICsJCQkJICAgICAgICZvdjAyYTEwLT5lY2xrX2Zy
-ZXEpOw0KPiArCWlmIChyZXQpIHsNCj4gKwkJZGV2X2VycihkZXYsICJmYWlsZWQgdG8gZ2V0IGVj
-bGsgZnJlcXVlbmN5XG4iKTsNCj4gKwkJcmV0dXJuIHJldDsNCj4gKwl9DQo+ICsNCj4gKwlyZXQg
-PSBjbGtfc2V0X3JhdGUob3YwMmExMC0+ZWNsaywgb3YwMmExMC0+ZWNsa19mcmVxKTsNCj4gKwlp
-ZiAocmV0KSB7DQo+ICsJCWRldl9lcnIoZGV2LCAiZmFpbGVkIHRvIHNldCBlY2xrIGZyZXF1ZW5j
-eSAoMjRNSHopXG4iKTsNCj4gKwkJcmV0dXJuIHJldDsNCj4gKwl9DQo+ICsNCj4gKwlpZiAoY2xr
-X2dldF9yYXRlKG92MDJhMTAtPmVjbGspICE9IE9WMDJBMTBfRUNMS19GUkVRKSB7DQo+ICsJCWRl
-dl93YXJuKGRldiwgIndyb25nIGVjbGsgZnJlcXVlbmN5ICVkIEh6LCBleHBlY3RlZDogJWQgSHpc
-biIsDQo+ICsJCQkgb3YwMmExMC0+ZWNsa19mcmVxLCBPVjAyQTEwX0VDTEtfRlJFUSk7DQoNCkl0
-IHNlZW1zIHRvIGhhdmUgYSBidWlsZC13YXJuaW5nIGhlcmUuDQpGaXhlZCBpbiBuZXh0IHJlbGVh
-c2UuDQoNCj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ICsJfQ0KPiArDQo+ICsJb3YwMmExMC0+cGRf
-Z3BpbyA9IGRldm1fZ3Bpb2RfZ2V0KGRldiwgInBvd2VyZG93biIsIEdQSU9EX09VVF9ISUdIKTsN
-Cj4gKwlpZiAoSVNfRVJSKG92MDJhMTAtPnBkX2dwaW8pKSB7DQo+ICsJCXJldCA9IFBUUl9FUlIo
-b3YwMmExMC0+cGRfZ3Bpbyk7DQo+ICsJCWRldl9lcnIoZGV2LCAiZmFpbGVkIHRvIGdldCBwb3dl
-cmRvd24tZ3Bpb3MgJWRcbiIsIHJldCk7DQo+ICsJCXJldHVybiByZXQ7DQo+ICsJfQ0KPiArDQo+
-ICsJb3YwMmExMC0+cnN0X2dwaW8gPSBkZXZtX2dwaW9kX2dldChkZXYsICJyZXNldCIsIEdQSU9E
-X09VVF9ISUdIKTsNCj4gKwlpZiAoSVNfRVJSKG92MDJhMTAtPnJzdF9ncGlvKSkgew0KPiArCQly
-ZXQgPSBQVFJfRVJSKG92MDJhMTAtPnJzdF9ncGlvKTsNCj4gKwkJZGV2X2VycihkZXYsICJmYWls
-ZWQgdG8gZ2V0IHJlc2V0LWdwaW9zICVkXG4iLCByZXQpOw0KPiArCQlyZXR1cm4gcmV0Ow0KPiAr
-CX0NCj4gKw0KPiArCWZvciAoaSA9IDA7IGkgPCBBUlJBWV9TSVpFKG92MDJhMTBfc3VwcGx5X25h
-bWVzKTsgaSsrKQ0KPiArCQlvdjAyYTEwLT5zdXBwbGllc1tpXS5zdXBwbHkgPSBvdjAyYTEwX3N1
-cHBseV9uYW1lc1tpXTsNCj4gKw0KPiArCXJldCA9IGRldm1fcmVndWxhdG9yX2J1bGtfZ2V0KGRl
-diwgQVJSQVlfU0laRShvdjAyYTEwX3N1cHBseV9uYW1lcyksDQo+ICsJCQkJICAgICAgb3YwMmEx
-MC0+c3VwcGxpZXMpOw0KPiArCWlmIChyZXQpIHsNCj4gKwkJZGV2X2VycihkZXYsICJmYWlsZWQg
-dG8gZ2V0IHJlZ3VsYXRvcnNcbiIpOw0KPiArCQlyZXR1cm4gcmV0Ow0KPiArCX0NCj4gKw0KPiAr
-CW11dGV4X2luaXQoJm92MDJhMTAtPm11dGV4KTsNCj4gKwlvdjAyYTEwLT5jdXJfbW9kZSA9ICZz
-dXBwb3J0ZWRfbW9kZXNbMF07DQo+ICsNCj4gKwlyZXQgPSBvdjAyYTEwX2luaXRpYWxpemVfY29u
-dHJvbHMob3YwMmExMCk7DQo+ICsJaWYgKHJldCkgew0KPiArCQlkZXZfZXJyKGRldiwgImZhaWxl
-ZCB0byBpbml0aWFsaXplIGNvbnRyb2xzXG4iKTsNCj4gKwkJZ290byBlcnJfZGVzdHJveV9tdXRl
-eDsNCj4gKwl9DQo+ICsNCj4gKwlvdjAyYTEwLT5zdWJkZXYuZmxhZ3MgfD0gVjRMMl9TVUJERVZf
-RkxfSEFTX0RFVk5PREU7DQo+ICsJb3YwMmExMC0+c3ViZGV2LmVudGl0eS5vcHMgPSAmb3YwMmEx
-MF9zdWJkZXZfZW50aXR5X29wczsNCj4gKwlvdjAyYTEwLT5zdWJkZXYuZW50aXR5LmZ1bmN0aW9u
-ID0gTUVESUFfRU5UX0ZfQ0FNX1NFTlNPUjsNCj4gKwlvdjAyYTEwLT5wYWQuZmxhZ3MgPSBNRURJ
-QV9QQURfRkxfU09VUkNFOw0KPiArDQo+ICsJcmV0ID0gbWVkaWFfZW50aXR5X3BhZHNfaW5pdCgm
-b3YwMmExMC0+c3ViZGV2LmVudGl0eSwgMSwgJm92MDJhMTAtPnBhZCk7DQo+ICsJaWYgKHJldCA8
-IDApIHsNCj4gKwkJZGV2X2VycihkZXYsICJmYWlsZWQgdG8gaW5pdCBlbnRpdHkgcGFkczogJWQi
-LCByZXQpOw0KPiArCQlnb3RvIGVycl9mcmVlX2hhbmRsZXI7DQo+ICsJfQ0KPiArDQo+ICsJcG1f
-cnVudGltZV9lbmFibGUoZGV2KTsNCj4gKwlpZiAoIXBtX3J1bnRpbWVfZW5hYmxlZChkZXYpKSB7
-DQo+ICsJCXJldCA9IG92MDJhMTBfcG93ZXJfb24oZGV2KTsNCj4gKwkJaWYgKHJldCA8IDApIHsN
-Cj4gKwkJCWRldl9lcnIoZGV2LCAiZmFpbGVkIHRvIHBvd2VyIG9uOiAlZFxuIiwgcmV0KTsNCj4g
-KwkJCWdvdG8gZXJyX2NsZWFuX2VudGl0eTsNCj4gKwkJfQ0KPiArCX0NCj4gKw0KPiArCXJldCA9
-IHY0bDJfYXN5bmNfcmVnaXN0ZXJfc3ViZGV2KCZvdjAyYTEwLT5zdWJkZXYpOw0KPiArCWlmIChy
-ZXQpIHsNCj4gKwkJZGV2X2VycihkZXYsICJmYWlsZWQgdG8gcmVnaXN0ZXIgVjRMMiBzdWJkZXY6
-ICVkIiwgcmV0KTsNCj4gKwkJZ290byBlcnJfcG93ZXJfb2ZmOw0KPiArCX0NCj4gKw0KPiArCXJl
-dHVybiAwOw0KPiArDQo+ICtlcnJfcG93ZXJfb2ZmOg0KPiArCWlmIChwbV9ydW50aW1lX2VuYWJs
-ZWQoZGV2KSkNCj4gKwkJcG1fcnVudGltZV9kaXNhYmxlKGRldik7DQo+ICsJZWxzZQ0KPiArCQlv
-djAyYTEwX3Bvd2VyX29mZihkZXYpOw0KPiArZXJyX2NsZWFuX2VudGl0eToNCj4gKwltZWRpYV9l
-bnRpdHlfY2xlYW51cCgmb3YwMmExMC0+c3ViZGV2LmVudGl0eSk7DQo+ICtlcnJfZnJlZV9oYW5k
-bGVyOg0KPiArCXY0bDJfY3RybF9oYW5kbGVyX2ZyZWUob3YwMmExMC0+c3ViZGV2LmN0cmxfaGFu
-ZGxlcik7DQo+ICtlcnJfZGVzdHJveV9tdXRleDoNCj4gKwltdXRleF9kZXN0cm95KCZvdjAyYTEw
-LT5tdXRleCk7DQo+ICsNCj4gKwlyZXR1cm4gcmV0Ow0KPiArfQ0KPiArDQo+ICtzdGF0aWMgaW50
-IG92MDJhMTBfcmVtb3ZlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpDQo+ICt7DQo+ICsJc3Ry
-dWN0IHY0bDJfc3ViZGV2ICpzZCA9IGkyY19nZXRfY2xpZW50ZGF0YShjbGllbnQpOw0KPiArCXN0
-cnVjdCBvdjAyYTEwICpvdjAyYTEwID0gdG9fb3YwMmExMChzZCk7DQo+ICsNCj4gKwl2NGwyX2Fz
-eW5jX3VucmVnaXN0ZXJfc3ViZGV2KHNkKTsNCj4gKwltZWRpYV9lbnRpdHlfY2xlYW51cCgmc2Qt
-PmVudGl0eSk7DQo+ICsJdjRsMl9jdHJsX2hhbmRsZXJfZnJlZShzZC0+Y3RybF9oYW5kbGVyKTsN
-Cj4gKwlwbV9ydW50aW1lX2Rpc2FibGUoJmNsaWVudC0+ZGV2KTsNCj4gKwlpZiAoIXBtX3J1bnRp
-bWVfc3RhdHVzX3N1c3BlbmRlZCgmY2xpZW50LT5kZXYpKQ0KPiArCQlvdjAyYTEwX3Bvd2VyX29m
-ZigmY2xpZW50LT5kZXYpOw0KPiArCXBtX3J1bnRpbWVfc2V0X3N1c3BlbmRlZCgmY2xpZW50LT5k
-ZXYpOw0KPiArCW11dGV4X2Rlc3Ryb3koJm92MDJhMTAtPm11dGV4KTsNCj4gKw0KPiArCXJldHVy
-biAwOw0KPiArfQ0KPiArDQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBvdjAy
-YTEwX29mX21hdGNoW10gPSB7DQo+ICsJeyAuY29tcGF0aWJsZSA9ICJvdnRpLG92MDJhMTAiIH0s
-DQo+ICsJe30NCj4gK307DQo+ICtNT0RVTEVfREVWSUNFX1RBQkxFKG9mLCBvdjAyYTEwX29mX21h
-dGNoKTsNCj4gKw0KPiArc3RhdGljIHN0cnVjdCBpMmNfZHJpdmVyIG92MDJhMTBfaTJjX2RyaXZl
-ciA9IHsNCj4gKwkuZHJpdmVyID0gew0KPiArCQkubmFtZSA9ICJvdjAyYTEwIiwNCj4gKwkJLnBt
-ID0gJm92MDJhMTBfcG1fb3BzLA0KPiArCQkub2ZfbWF0Y2hfdGFibGUgPSBvdjAyYTEwX29mX21h
-dGNoLA0KPiArCX0sDQo+ICsJLnByb2JlX25ldwk9ICZvdjAyYTEwX3Byb2JlLA0KPiArCS5yZW1v
-dmUJCT0gJm92MDJhMTBfcmVtb3ZlLA0KPiArfTsNCj4gKw0KPiArbW9kdWxlX2kyY19kcml2ZXIo
-b3YwMmExMF9pMmNfZHJpdmVyKTsNCj4gKw0KPiArTU9EVUxFX0FVVEhPUigiRG9uZ2NodW4gWmh1
-IDxkb25nY2h1bi56aHVAbWVkaWF0ZWsuY29tPiIpOw0KPiArTU9EVUxFX0RFU0NSSVBUSU9OKCJP
-bW5pVmlzaW9uIE9WMDJBMTAgc2Vuc29yIGRyaXZlciIpOw0KPiArTU9EVUxFX0xJQ0VOU0UoIkdQ
-TCB2MiIpOw0KPiArDQoNCldoZW4gYXBwbHlpbmcgdGhlIHBhdGNoIHdpdGggZ2l0IGFtLCB0aGVy
-ZSB3b3VsZCBiZSBhIHdhcm5pbmcgaGVyZS4NCi0tLS0tLS0tLS0tLS0tLS0tODwtLS0tLS0tLS0t
-LS0tLS0tLS0tDQpbbXRrMTUwMTNAbWhmc2RjbHgxMTYgbWVkaWF0ZWtdJGdpdCBhbSAtcw0Kfi9i
-YWsvbWVkaWEtaTJjLUFkZC1zdXBwb3J0LWZvci1PVjAyQTEwLXNlbnNvci5wYXRjaA0KQXBwbHlp
-bmc6IG1lZGlhOiBkdC1iaW5kaW5nczogbWVkaWE6IGkyYzogRG9jdW1lbnQgT1YwMkExMCBiaW5k
-aW5ncw0KQXBwbHlpbmc6IG1lZGlhOiBpMmM6IG92MDJhMTA6IEFkZCBPVjAyQTEwIGltYWdlIHNl
-bnNvciBkcml2ZXINCi5naXQvcmViYXNlLWFwcGx5L3BhdGNoOjExMTQ6IG5ldyBibGFuayBsaW5l
-IGF0IEVPRi4NCisNCndhcm5pbmc6IDEgbGluZSBhZGRzIHdoaXRlc3BhY2UgZXJyb3JzLg0KLS0t
-LS0tLS0tLS0tLS0tLS04PC0tLS0tLS0tLS0tLS0tLS0tLS0NCg0KRml4ZWQgaW4gbmV4dCByZWxl
-YXNlLg0K
+On Wed, 2020-07-01 at 21:56 +0000, Jonas Karlman wrote:
+> The width and height in mbs is currently configured based on OUTPUT buffer
+> resolution, this works for frame pictures but can cause issues for field
+> pictures or when frmsize step_width is changed to support 10-bit decoding.
+> 
+> When frame_mbs_only_flag is 0 the height in mbs should be height of
+> the field instead of height of frame.
+> 
+> Validate pic_width_in_mbs_minus1 and pic_height_in_map_units_minus1
+> against CAPTURE buffer resolution and use these values to configure HW.
+> 
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+> ---
+>  drivers/staging/media/rkvdec/rkvdec-h264.c | 44 +++++++++++++++++++---
+>  1 file changed, 39 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> index f0cfed84d60d..c9aebeb8f9b3 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> @@ -672,8 +672,8 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+>  		  LOG2_MAX_PIC_ORDER_CNT_LSB_MINUS4);
+>  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_DELTA_PIC_ORDER_ALWAYS_ZERO),
+>  		  DELTA_PIC_ORDER_ALWAYS_ZERO_FLAG);
+> -	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.width, 16), PIC_WIDTH_IN_MBS);
+> -	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.height, 16), PIC_HEIGHT_IN_MBS);
+> +	WRITE_PPS(sps->pic_width_in_mbs_minus1 + 1, PIC_WIDTH_IN_MBS);
+> +	WRITE_PPS(sps->pic_height_in_map_units_minus1 + 1, PIC_HEIGHT_IN_MBS);
+>  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY),
+>  		  FRAME_MBS_ONLY_FLAG);
+>  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD),
+> @@ -1058,10 +1058,33 @@ static void rkvdec_h264_stop(struct rkvdec_ctx *ctx)
+>  	kfree(h264_ctx);
+>  }
+>  
+> -static void rkvdec_h264_run_preamble(struct rkvdec_ctx *ctx,
+> -				     struct rkvdec_h264_run *run)
+> +static int validate_sps(struct rkvdec_ctx *ctx,
+> +			const struct v4l2_ctrl_h264_sps *sps)
+> +{
+> +	unsigned int width, height;
+> +
+> +	if (WARN_ON(!sps))
+> +		return -EINVAL;
+> +
+> +	width = (sps->pic_width_in_mbs_minus1 + 1) * 16;
+> +	height = (sps->pic_height_in_map_units_minus1 + 1) * 16;
+> +
+> +	if (width > ctx->decoded_fmt.fmt.pix_mp.width ||
+> +	    height > ctx->decoded_fmt.fmt.pix_mp.height) {
+
+Why using decoded_fmt instead of coded_fmt?
+
+Also, by the time the SPS control is passed, the OUTPUT
+and CAPTURE formats should be already set, so it should be
+possible to validate the SPS at TRY_EXT_CTRLS, using
+v4l2_ctrl_ops.try_ctrl.
+
+That would be much better, since once the application
+calls STREAMON on both queues, I think things are
+expected to be validated as much as possible.
+
+Thanks,
+Ezequiel
+
+> +		dev_err(ctx->dev->dev,
+> +			"unexpected bitstream resolution %ux%u\n",
+> +			width, height);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int rkvdec_h264_run_preamble(struct rkvdec_ctx *ctx,
+> +				    struct rkvdec_h264_run *run)
+>  {
+>  	struct v4l2_ctrl *ctrl;
+> +	int ret;
+>  
+>  	ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl,
+>  			      V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS);
+> @@ -1080,6 +1103,12 @@ static void rkvdec_h264_run_preamble(struct rkvdec_ctx *ctx,
+>  	run->scaling_matrix = ctrl ? ctrl->p_cur.p : NULL;
+>  
+>  	rkvdec_run_preamble(ctx, &run->base);
+> +
+> +	ret = validate_sps(ctx, run->sps);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+>  }
+>  
+>  static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+> @@ -1088,8 +1117,13 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+>  	struct rkvdec_dev *rkvdec = ctx->dev;
+>  	struct rkvdec_h264_ctx *h264_ctx = ctx->priv;
+>  	struct rkvdec_h264_run run;
+> +	int ret;
+>  
+> -	rkvdec_h264_run_preamble(ctx, &run);
+> +	ret = rkvdec_h264_run_preamble(ctx, &run);
+> +	if (ret) {
+> +		rkvdec_run_postamble(ctx, &run.base);
+> +		return ret;
+> +	}
+>  
+>  	/* Build the P/B{0,1} ref lists. */
+>  	v4l2_h264_init_reflist_builder(&reflist_builder, run.decode_params,
+
 
