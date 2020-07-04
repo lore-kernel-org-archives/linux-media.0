@@ -4,38 +4,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A293C433E2
-	for <linux-media@archiver.kernel.org>; Sat,  4 Jul 2020 03:20:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A373C433E1
+	for <linux-media@archiver.kernel.org>; Sat,  4 Jul 2020 03:20:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DBB5206BE
-	for <linux-media@archiver.kernel.org>; Sat,  4 Jul 2020 03:20:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E8D7221534
+	for <linux-media@archiver.kernel.org>; Sat,  4 Jul 2020 03:20:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tJY95Xa0"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="v7qgqwTp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727088AbgGDDUj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Jul 2020 23:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
+        id S1727772AbgGDDUu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Jul 2020 23:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726501AbgGDDUi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jul 2020 23:20:38 -0400
+        with ESMTP id S1727121AbgGDDUs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jul 2020 23:20:48 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF33C061794;
-        Fri,  3 Jul 2020 20:20:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADA9C061794;
+        Fri,  3 Jul 2020 20:20:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=aRVEN4YU/BFDPd6cVTCzZUpu/CCVzRwNOQDbPEBZys4=; b=tJY95Xa0IAWCrSFHJ8hTCqVmCb
-        PXAAOu78uVM3UWrMJkge+fpEUOzsWN6i1uIxsyLnmkkuQkJJKI8Wx/TOSwiCRs3GoeUv+ef/Odg/4
-        DScwsH1ayFutkvn+JXl/8SAVMLiPQGYB0MUXTsWHuuWqq5ph52ziQX1HKD76p6hA9U7asFqXqBZeE
-        9rhtY/avec+Vt38MW41IjTZHQyftEBAk/dryc/xxN2emvHd+r8wIzhVGs4AVI9JlrkZ3Em9tgS+5V
-        Fz+a9iVry0UFDQ259p5zqFaxpP59X6EW0kDPHUScNKFFxI8sioWVwnTmsuLAIn7yc+3yPmOcbAc9k
-        lOiOUrzQ==;
+        bh=nGMSxQvjBkDqTq1f7jabTVwcwzwy9TqipamfSuuvRvE=; b=v7qgqwTp0o7B2yw+fo8AWsziCa
+        QCzGaPg3f+qq+ROY2INYQI8VUTFqoXrT5d6hPs8xHq7Mt/E5SKay93YzKdTdPNfV+eSOJnkZMLERO
+        ksSyXgbNjmEVfqdLAy+Pdv8iOR+BVQ3faPXjeme/1Yx6cATtT1zHjPcqTUtb+GP5RO4yvCOSuSII8
+        d1gWvhHCJiVxw9vXprLRXkimQGTgFHV+gIZdkYTlwb98yPIZJhPe4fX+Q4PhQo4NO72htHNfsc36p
+        SVdueTJezN0ljHdlWqSU3/207/YC+deDIjdlp5ZP+j4ie32tKAuCae10hOg+UcW46n9rxLWe4oCxK
+        XolpU1gQ==;
 Received: from [2601:1c0:6280:3f0::19c2] (helo=smtpauth.infradead.org)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jrYjE-0000Ri-15; Sat, 04 Jul 2020 03:20:36 +0000
+        id 1jrYjN-0000Ri-Mb; Sat, 04 Jul 2020 03:20:46 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
@@ -52,9 +52,9 @@ Cc:     Randy Dunlap <rdunlap@infradead.org>,
         platform-driver-x86@vger.kernel.org,
         "Darrick J . Wong" <darrick.wong@oracle.com>,
         linux-xfs@vger.kernel.org
-Subject: [PATCH 02/13] Documentation/admin-guide: cgroup-v1/rdma: drop doubled word
-Date:   Fri,  3 Jul 2020 20:20:09 -0700
-Message-Id: <20200704032020.21923-3-rdunlap@infradead.org>
+Subject: [PATCH 04/13] Documentation/admin-guide: media/building: drop doubled words
+Date:   Fri,  3 Jul 2020 20:20:11 -0700
+Message-Id: <20200704032020.21923-5-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200704032020.21923-1-rdunlap@infradead.org>
 References: <20200704032020.21923-1-rdunlap@infradead.org>
@@ -65,21 +65,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Drop the doubled word "echo".
+Drop some doubled words.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
-Cc: cgroups@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
 ---
- Documentation/admin-guide/cgroup-v1/rdma.rst |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/admin-guide/media/building.rst |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- linux-next-20200701.orig/Documentation/admin-guide/cgroup-v1/rdma.rst
-+++ linux-next-20200701/Documentation/admin-guide/cgroup-v1/rdma.rst
-@@ -114,4 +114,4 @@ Following resources can be accounted by
+--- linux-next-20200701.orig/Documentation/admin-guide/media/building.rst
++++ linux-next-20200701/Documentation/admin-guide/media/building.rst
+@@ -90,7 +90,7 @@ built as modules.
+        Those GPU-specific drivers are selected via the ``Graphics support``
+        menu, under ``Device Drivers``.
  
- (d) Delete resource limit::
+-       When a GPU driver supports supports HDMI CEC, it will automatically
++       When a GPU driver supports HDMI CEC, it will automatically
+        enable the CEC core support at the media subsystem.
  
--	echo echo mlx4_0 hca_handle=max hca_object=max > /sys/fs/cgroup/rdma/1/rdma.max
-+	echo mlx4_0 hca_handle=max hca_object=max > /sys/fs/cgroup/rdma/1/rdma.max
+ Media dependencies
+@@ -244,7 +244,7 @@ functionality.
+    If you have an hybrid card, you may need to enable both ``Analog TV``
+    and ``Digital TV`` at the menu.
+ 
+-When using this option, the defaults for the the media support core
++When using this option, the defaults for the media support core
+ functionality are usually good enough to provide the basic functionality
+ for the driver. Yet, you could manually enable some desired extra (optional)
+ functionality using the settings under each of the following
