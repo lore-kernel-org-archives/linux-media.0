@@ -2,194 +2,167 @@ Return-Path: <SRS0=3PUB=AQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1D77C433E1
-	for <linux-media@archiver.kernel.org>; Sun,  5 Jul 2020 12:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00F85C433DF
+	for <linux-media@archiver.kernel.org>; Sun,  5 Jul 2020 13:53:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C52620874
-	for <linux-media@archiver.kernel.org>; Sun,  5 Jul 2020 12:12:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1ED72075D
+	for <linux-media@archiver.kernel.org>; Sun,  5 Jul 2020 13:53:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vbZMpbtL"
+	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="g1MDiuJ2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbgGEMME (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 5 Jul 2020 08:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
+        id S1726924AbgGENx1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 5 Jul 2020 09:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726933AbgGEMME (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Jul 2020 08:12:04 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9546C08C5DF
-        for <linux-media@vger.kernel.org>; Sun,  5 Jul 2020 05:12:03 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id n26so25598767ejx.0
-        for <linux-media@vger.kernel.org>; Sun, 05 Jul 2020 05:12:03 -0700 (PDT)
+        with ESMTP id S1726804AbgGENx1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Jul 2020 09:53:27 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93ACC061794
+        for <linux-media@vger.kernel.org>; Sun,  5 Jul 2020 06:53:24 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id b92so15882709pjc.4
+        for <linux-media@vger.kernel.org>; Sun, 05 Jul 2020 06:53:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=c3pGEpF7DAEXcC0pN3mSKCevTRzMwQB5I1tTMzDxF0M=;
-        b=vbZMpbtLs7CMVmEYX3n7vzrtz2n0vXIVLeeIYUduO9/JCmDVzmpE694X79b/QX8vbk
-         g79hDHalKGmtcUL12AUmRKvMKm1EBXLb1nyJH7sS/R7R/YunYkUlpLDWakrxNIHfvO6m
-         EKYd5Rghwsgo34jU1V8Kk0yV/7jBrcc2tPGQupqn0K7yl83ucAPK/zzudLC2BH4e65tx
-         X6O3YYZ4f1tloPGYPuULuSiNoZMYUuIBy6Osww1D0Bmx0lXeoKn9uByUILggLchm9IKF
-         grffUmDqIbnH+zRGIG70MjEr5QUfwh2NgcV/iWw1zagwRdSt8ZqA9jRqThntJprFW5Ar
-         nqwg==
+        d=es-iitr-ac-in.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id;
+        bh=Zvrrr/jCdVtqukzvrk9NHKvKUQCbdo2phy68HZUCPiA=;
+        b=g1MDiuJ23X0nii/rFRT2Hzg6WO7+PSVHLhMc6XTp62YJD9yA+bhg61khgfMKZ6Wfo5
+         u/zIS8CW2tw1JV/Ijd8AFYgvw2r+yM3fGVRYjT2qaPnUZbLa4aCQrKpL0YhNPh/ocylg
+         rAir8Ja7fIiSFRLgibpK9Et3VE1Q14V3bRkCPV1j4LfCQxj98cMR83R0HBG5qDPq8oO+
+         GdxnXtd1fwcfeVbVKNHwPzCi5BtvunA0T16ti2JepTuqy3ouSopdY3oqDoUOSdIhHReW
+         Vn0rTvddMiZ3+79XQUazTSl/F0Et8ChPWygNVNtOowUoczHyfNADWTyBzTmChA4ee4SC
+         bxVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=c3pGEpF7DAEXcC0pN3mSKCevTRzMwQB5I1tTMzDxF0M=;
-        b=lj/i1jEprxzbVlcwEwomcMO6qoNCtEdHL9iLK6EdFA6kvF6B6NTJYAxf+7EKUtMH5v
-         Z/64yo+fbrioWa8CXci13/Hv6cH/MlgBSWhDlJSAl/jPLVvegxz3qsUZ9ZuNJTSkl054
-         sPddEpc0HVjtnfePp1unfytuvtYNNZGZ7Eft/5CO5C5X2EVQgXyW7XnRtEsmTihDoGer
-         QExpQlN+x2b4mlOdcF2kxI37sViXBSC86W1RivH52rBDcsOotH13Q5WXjqxW2FlyPP+8
-         b+gUngZGJ5//Ds8bcWTXEHF3bWsh1emTohSkcODGEFY3/GqdCV/+N8OlY9ARY1IDpqTi
-         yhbg==
-X-Gm-Message-State: AOAM5333l0azaG/AHIY5wc3719DZdx0DUIzYHf0UOWKxAM6GR+7zMc6u
-        pHNi5JOnhZZXBv9y9QL8ZTPY12Qn2EcZKA==
-X-Google-Smtp-Source: ABdhPJwegaq+qx2Qs3TctwwlzOm8u+gVW6hpz/YzvS9BnNgGVly0C6L2+37x3HsFr6j0j1L5FmD2LA==
-X-Received: by 2002:a17:906:8316:: with SMTP id j22mr38504760ejx.97.1593951122243;
-        Sun, 05 Jul 2020 05:12:02 -0700 (PDT)
-Received: from localhost.localdomain (212-5-158-133.ip.btc-net.bg. [212.5.158.133])
-        by smtp.gmail.com with ESMTPSA id j64sm1517458edd.61.2020.07.05.05.12.00
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Zvrrr/jCdVtqukzvrk9NHKvKUQCbdo2phy68HZUCPiA=;
+        b=Xv/l6YJAD8DIJpuQjb0CtPtRDHxN3/jCxXhg0at0l87OBO+fKHhb0tCT0abf9zt29l
+         7ril504kG/OrBvQf+aDUUXJhUpkwaSY5FwYXmva690sNFRgtAljlOXmgS3OyHG7IyGaz
+         GguObx3WmEqfiNHve76DE0049bZ7pVZToAcUbjUpCFYt7pe76WWvjdWl7h39DDlYIW4r
+         z0r34wjUZU0g+AuEU9MkYi2tjO/h288idxpFnFLQwvbc6no9oEO1JCNoqcpFsN32EQBV
+         0C8+44+R+UNS+7V8Rs/dYs1XzquaPdXrdGRHSHl9fZatcHlR9KaQNbgGfDdQ94L8qUA0
+         dmXQ==
+X-Gm-Message-State: AOAM531l+b/7w1NrKc8iIQOp4xTleM5dRKNH21qoPg5nAWg3GeH0UZQZ
+        jo4Pp8/ISoWGCqcjEzIj/jTjVw==
+X-Google-Smtp-Source: ABdhPJxTz+jrSeP8MQVahpcbg0RfDLC109NfjNL4vDMt5Y4HTPswmnhzYHvTY6hAS5kgt65zBOev7A==
+X-Received: by 2002:a17:90a:254f:: with SMTP id j73mr36672053pje.16.1593957204192;
+        Sun, 05 Jul 2020 06:53:24 -0700 (PDT)
+Received: from kaaira-HP-Pavilion-Notebook ([103.113.213.178])
+        by smtp.gmail.com with ESMTPSA id f14sm16560916pgj.62.2020.07.05.06.53.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jul 2020 05:12:01 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Jeongtae Park <jtp.park@samsung.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Maheshwar Ajja <majja@codeaurora.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 1/4] media: v4l2-ctrl: Add frame-skip std encoder control
-Date:   Sun,  5 Jul 2020 15:11:25 +0300
-Message-Id: <20200705121128.5250-2-stanimir.varbanov@linaro.org>
+        Sun, 05 Jul 2020 06:53:23 -0700 (PDT)
+From:   Kaaira Gupta <kgupta@es.iitr.ac.in>
+To:     Helen Koike <helen.koike@collabora.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Kaaira Gupta <kgupta@es.iitr.ac.in>
+Subject: [PATCH v10 0/3] media: Add colors' order and other info over test image
+Date:   Sun,  5 Jul 2020 19:23:03 +0530
+Message-Id: <20200705135307.27564-1-kgupta@es.iitr.ac.in>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200705121128.5250-1-stanimir.varbanov@linaro.org>
-References: <20200705121128.5250-1-stanimir.varbanov@linaro.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds encoders standard v4l2 control for frame-skip. The control
-is a copy of a custom encoder control so that other v4l2 encoder
-drivers can use it.
+This patchset aims to add a method to display the correct order of
+colors for a test image generated. It does so by adding a function
+which returns a string of correct order of the colors for a test
+pattern. It then adds a control in vimc which displays the string
+over test image. It also displays some other information like saturation,
+hue, contrast brightness and time since the stream started over test
+image generated by vimc.
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
- .../media/v4l/ext-ctrls-codec.rst             | 32 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c          | 10 ++++++
- include/uapi/linux/v4l2-controls.h            |  6 ++++
- 3 files changed, 48 insertions(+)
+Changes since v9:
+	In patch 3:
+	- Use div_u64() instead of "/" to divide a u64 divident with a
+	  constant (u32)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index d0d506a444b1..a8b4c0b40747 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -592,6 +592,38 @@ enum v4l2_mpeg_video_bitrate_mode -
-     the average video bitrate. It is ignored if the video bitrate mode
-     is set to constant bitrate.
- 
-+``V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE (enum)``
-+
-+enum v4l2_mpeg_video_frame_skip_mode -
-+    Indicates in what conditions the encoder should skip frames. If
-+    encoding a frame would cause the encoded stream to be larger then a
-+    chosen data limit then the frame will be skipped. Possible values
-+    are:
-+
-+
-+.. tabularcolumns:: |p{9.2cm}|p{8.3cm}|
-+
-+.. raw:: latex
-+
-+    \small
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - ``V4L2_MPEG_FRAME_SKIP_MODE_DISABLED``
-+      - Frame skip mode is disabled.
-+    * - ``V4L2_MPEG_FRAME_SKIP_MODE_LEVEL_LIMIT``
-+      - Frame skip mode enabled and buffer limit is set by the chosen
-+	level and is defined by the standard.
-+    * - ``V4L2_MPEG_FRAME_SKIP_MODE_BUF_LIMIT``
-+      - Frame skip mode enabled and buffer limit is set by the VBV
-+	(MPEG1/2/4) or CPB (H264) buffer size control.
-+
-+.. raw:: latex
-+
-+    \normalsize
-+
- ``V4L2_CID_MPEG_VIDEO_TEMPORAL_DECIMATION (integer)``
-     For every captured frame, skip this many subsequent frames (default
-     0).
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 3f3fbcd60cc6..d088acfa6dd8 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -590,6 +590,12 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		"External",
- 		NULL,
- 	};
-+	static const char * const mpeg_video_frame_skip[] = {
-+		"Disabled",
-+		"Level Limit",
-+		"VBV/CPB Limit",
-+		NULL,
-+	};
- 
- 	switch (id) {
- 	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
-@@ -651,6 +657,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		return flash_strobe_source;
- 	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:
- 		return header_mode;
-+	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:
-+		return mpeg_video_frame_skip;
- 	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE:
- 		return multi_slice;
- 	case V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE:
-@@ -844,6 +852,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
- 	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:			return "Sequence Header Mode";
- 	case V4L2_CID_MPEG_VIDEO_MAX_REF_PIC:			return "Max Number of Reference Pics";
-+	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:		return "Frame Skip Mode";
- 	case V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP:		return "H263 I-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP:		return "H263 P-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP:		return "H263 B-Frame QP Value";
-@@ -1265,6 +1274,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_FLASH_LED_MODE:
- 	case V4L2_CID_FLASH_STROBE_SOURCE:
- 	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:
-+	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:
- 	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE:
- 	case V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE:
- 	case V4L2_CID_MPEG_VIDEO_H264_LEVEL:
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 62271418c1be..4e1526175a4c 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -742,6 +742,12 @@ enum v4l2_cid_mpeg_video_hevc_size_of_length_field {
- #define V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_BR	(V4L2_CID_MPEG_BASE + 642)
- #define V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES	(V4L2_CID_MPEG_BASE + 643)
- #define V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR	(V4L2_CID_MPEG_BASE + 644)
-+#define V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE		(V4L2_CID_MPEG_BASE + 645)
-+enum v4l2_mpeg_video_frame_skip_mode {
-+	V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED	= 0,
-+	V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_LEVEL_LIMIT	= 1,
-+	V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT	= 2,
-+};
- 
- /*  MPEG-class control IDs specific to the CX2341x driver as defined by V4L2 */
- #define V4L2_CID_MPEG_CX2341X_BASE				(V4L2_CTRL_CLASS_MPEG | 0x1000)
+Changes since v8:
+        In patch 1:
+        - Add more details to commit message.
+        In patch 3:
+        - Formatting nits.
+
+Changes since v7:
+        In patch 3:
+        - Use fallthrough; to indicate a fall through in switch-case
+        - Use enum type instead of int for osd_value
+        - Change varaible to osd_value instead of osd_mode as the enum
+          osd_mode defines the modes.
+
+Changes since v6:
+        In patch 3:
+        - Use switch case instead of if()
+        - reorder declarartions.
+
+Changes since v5:
+        In patch 2:
+        - Add missing EXPORT_SYMBOL_GPL()
+        In patch 3:
+        - Renamed varaibles.
+        - use u64 instead of int for getting current time in
+          nanoseconds.
+        - Use enum instead of numbers to describe the state of osd_mode
+          control in code.
+
+Changes since v4:
+        - Add another patch which changes char argument to const char
+        in function tpg_gen_text()
+        - Return const char * from function tpg_g_color_order() in patch
+          2
+        In 3rd patch:
+        - Check font in probe() instead of s_stream()
+        - Use dev_err instead of pr_err
+        - Fix errors in commit message.
+        - Base VIMC_CID_SHOW_INFO on VIVID_CID_OSD_TEXT_MODE
+
+Changes since v3:
+        In 1st patch:
+        -Improved formatting of returned string.
+
+        In 2nd patch:
+         - Add CID prefix in control name and change it to a more
+           generic name.
+         - Rename bool variable to a generic name.
+         - Disable text rendering instead of stopping stream if no
+           font found.
+         - Display more info like VIVID in VIMC.
+
+Changes since v2:
+        In 1st patch:
+        - Create a 'define' to prevent repetition of the common color
+          sequence string.
+        - Use 'fallthrough' on case statement to prevent repetition of
+          code.
+
+Changes since v1:
+        - Divided the patch into two patches.
+        - Returned NULL for patterns whose color order cannot be
+          defined. (Reported-by: kernel test robot <lkp@intel.com>)
+        - Made separate switch cases for separate test patterns
+         (Reported-by: kernel test robot <lkp@intel.com>)
+        - Renamed variables from camelcase to use '_'
+        - prefixed 'media' to the patches.
+
+Kaaira Gupta (3):
+  media: tpg: change char argument to const char
+  media: tpg: Add function to return colors' order of test image
+  media: vimc: Add a control to display info on test image
+
+ drivers/media/common/v4l2-tpg/v4l2-tpg-core.c | 40 +++++++++--
+ drivers/media/test-drivers/vimc/Kconfig       |  2 +
+ drivers/media/test-drivers/vimc/vimc-common.h |  1 +
+ drivers/media/test-drivers/vimc/vimc-core.c   | 10 +++
+ drivers/media/test-drivers/vimc/vimc-sensor.c | 71 +++++++++++++++++++
+ include/media/tpg/v4l2-tpg.h                  |  3 +-
+ 6 files changed, 119 insertions(+), 8 deletions(-)
+
 -- 
 2.17.1
 
