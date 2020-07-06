@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3B35C433E2
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50A4BC433E3
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8EE10206DF
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DB00206DF
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="iWJYQtMX"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ibiEHobA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729865AbgGFShl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Jul 2020 14:37:41 -0400
+        id S1729868AbgGFShm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Jul 2020 14:37:42 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:45198 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729849AbgGFShj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:37:39 -0400
+        with ESMTP id S1729695AbgGFShl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:37:41 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9D8ADD98;
-        Mon,  6 Jul 2020 20:37:32 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6DA3212BE;
+        Mon,  6 Jul 2020 20:37:34 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594060653;
-        bh=USYoXMaipwqJxdelAV1dYXNIMromSZMKWMNbZIV02d4=;
+        s=mail; t=1594060654;
+        bh=spdoj2NpFbuU9popchVmDGHZFfDYk2OKFtNUZt33QRQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iWJYQtMX9m+z0lNtddc3pLWCUmovCGU+BCuEUNOZ5q0vWTZ9oL0+8UFC+8HagKwJm
-         B/gnV5J6zXn0MoyVxh8vVsOo4xtn3xBqmf+sLQ66b/Zrehly5RLNw70Z1CUtEIGlZ4
-         NPuVy0XEsEAFnWESxMzsx3VAXpPoIwMmWZ9+CIKg=
+        b=ibiEHobAuv7ogsrCJ3vqGlSOS1Ojv4YJgST21xvy4mVPRmyYvfr/a5N4FfgfpnB9E
+         hQW+XU+Z+BmM5LuSc/yqhvOND3dWjduBtYLKY+i2eVesRiPMjZiuVSzTQZTCAbaevH
+         1QZjIxwJ/XQ/kvQY5fNfLZwClhxNZdYQO434915I=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v2 011/108] media: ti-vpe: cal: Remove needless casts
-Date:   Mon,  6 Jul 2020 21:35:32 +0300
-Message-Id: <20200706183709.12238-12-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 013/108] media: ti-vpe: cal: Make loop indices unsigned where applicable
+Date:   Mon,  6 Jul 2020 21:35:34 +0300
+Message-Id: <20200706183709.12238-14-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
 References: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
@@ -48,38 +48,124 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Casting from a void pointer to a struct pointer doesn't require a cast.
-Remove them.
+Many loop indices only take positive values. Make them unsigned.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 Reviewed-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Changes since v1:
+
+- Add the loop indices in cal_irq()
+---
+ drivers/media/platform/ti-vpe/cal.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index d0390b23426d..ee6f700ad190 100644
+index edb1034f3b04..579f823451f4 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -1205,7 +1205,7 @@ static inline void cal_process_buffer_complete(struct cal_ctx *ctx)
- 
- static irqreturn_t cal_irq(int irq_cal, void *data)
+@@ -488,7 +488,7 @@ static int cal_camerarx_regmap_init(struct cal_dev *dev)
  {
--	struct cal_dev *dev = (struct cal_dev *)data;
-+	struct cal_dev *dev = data;
- 	struct cal_ctx *ctx;
- 	struct cal_dmaqueue *dma_q;
- 	u32 status;
-@@ -2404,8 +2404,7 @@ static int cal_probe(struct platform_device *pdev)
+ 	struct reg_field *field;
+ 	struct cal_csi2_phy *phy;
+-	int i, j;
++	unsigned int i, j;
  
- static int cal_remove(struct platform_device *pdev)
+ 	if (!dev->data)
+ 		return -EINVAL;
+@@ -901,7 +901,7 @@ static void csi2_wait_for_phy(struct cal_ctx *ctx)
+ 
+ static void csi2_phy_deinit(struct cal_ctx *ctx)
  {
--	struct cal_dev *dev =
--		(struct cal_dev *)platform_get_drvdata(pdev);
-+	struct cal_dev *dev = platform_get_drvdata(pdev);
+-	int i;
++	unsigned int i;
+ 
+ 	csi2_cio_power(ctx, false);
+ 
+@@ -1212,7 +1212,7 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 
+ 	status = reg_read(dev, CAL_HL_IRQSTATUS(0));
+ 	if (status) {
+-		int i;
++		unsigned int i;
+ 
+ 		reg_write(dev, CAL_HL_IRQSTATUS(0), status);
+ 
+@@ -1225,7 +1225,7 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 							CAL_CSI2_COMPLEXIO_IRQSTATUS(i));
+ 
+ 				dev_err_ratelimited(&dev->pdev->dev,
+-						    "CIO%d error: %#08x\n", i, cio_stat);
++						    "CIO%u error: %#08x\n", i, cio_stat);
+ 
+ 				reg_write(dev, CAL_CSI2_COMPLEXIO_IRQSTATUS(i),
+ 					  cio_stat);
+@@ -1236,7 +1236,7 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 	/* Check which DMA just finished */
+ 	status = reg_read(dev, CAL_HL_IRQSTATUS(1));
+ 	if (status) {
+-		int i;
++		unsigned int i;
+ 
+ 		/* Clear Interrupt status */
+ 		reg_write(dev, CAL_HL_IRQSTATUS(1), status);
+@@ -1259,7 +1259,7 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 	/* Check which DMA just started */
+ 	status = reg_read(dev, CAL_HL_IRQSTATUS(2));
+ 	if (status) {
+-		int i;
++		unsigned int i;
+ 
+ 		/* Clear Interrupt status */
+ 		reg_write(dev, CAL_HL_IRQSTATUS(2), status);
+@@ -1917,8 +1917,8 @@ static int cal_async_bound(struct v4l2_async_notifier *notifier,
+ {
+ 	struct cal_ctx *ctx = notifier_to_ctx(notifier);
+ 	struct v4l2_subdev_mbus_code_enum mbus_code;
++	unsigned int i, j, k;
+ 	int ret = 0;
+-	int i, j, k;
+ 
+ 	if (ctx->sensor) {
+ 		ctx_info(ctx, "Rejecting subdev %s (Already set!!)",
+@@ -1942,7 +1942,7 @@ static int cal_async_bound(struct v4l2_async_notifier *notifier,
+ 			continue;
+ 
+ 		ctx_dbg(2, ctx,
+-			"subdev %s: code: %04x idx: %d\n",
++			"subdev %s: code: %04x idx: %u\n",
+ 			subdev->name, mbus_code.code, j);
+ 
+ 		for (k = 0; k < ARRAY_SIZE(cal_formats); k++) {
+@@ -1951,7 +1951,7 @@ static int cal_async_bound(struct v4l2_async_notifier *notifier,
+ 			if (mbus_code.code == fmt->code) {
+ 				ctx->active_fmt[i] = fmt;
+ 				ctx_dbg(2, ctx,
+-					"matched fourcc: %s: code: %04x idx: %d\n",
++					"matched fourcc: %s: code: %04x idx: %u\n",
+ 					fourcc_to_str(fmt->fourcc),
+ 					fmt->code, i);
+ 				ctx->num_active_fmt = ++i;
+@@ -2269,9 +2269,9 @@ static int cal_probe(struct platform_device *pdev)
+ 	struct device_node *parent = pdev->dev.of_node;
+ 	struct regmap *syscon_camerrx;
+ 	u32 syscon_camerrx_offset;
++	unsigned int i;
+ 	int ret;
+ 	int irq;
+-	int i;
+ 
+ 	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+ 	if (!dev)
+@@ -2407,7 +2407,7 @@ static int cal_remove(struct platform_device *pdev)
+ {
+ 	struct cal_dev *dev = platform_get_drvdata(pdev);
  	struct cal_ctx *ctx;
- 	int i;
+-	int i;
++	unsigned int i;
+ 
+ 	cal_dbg(1, dev, "Removing %s\n", CAL_MODULE_NAME);
  
 -- 
 Regards,
