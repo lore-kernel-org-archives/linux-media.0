@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B083C433E0
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91616C433DF
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3AEC0206DF
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6987D206DF
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="TaTuvtGp"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="C0xaPZWB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729918AbgGFSiJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Jul 2020 14:38:09 -0400
+        id S1729920AbgGFSiK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Jul 2020 14:38:10 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:45198 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729915AbgGFSiI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:38:08 -0400
+        with ESMTP id S1729779AbgGFSiK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:38:10 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C96A818EE;
-        Mon,  6 Jul 2020 20:37:53 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6C2F71972;
+        Mon,  6 Jul 2020 20:37:56 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594060674;
-        bh=d+8AEJahpGxXBoICSykd/VajUMwmiIQYy3hFd9lykRE=;
+        s=mail; t=1594060676;
+        bh=cR7sC0HM7fuf/L39RM5X0B2XCWrqz5cwYZCnwY17HsE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TaTuvtGp5rv9bJcAFA+LVywuLHMFzwSRXliZbCcM2XqK2VPeP6R9SxjsErG286tTd
-         AsA+Q+nTgt6aL79fQqKtAZvg6RYDaWrdo+FYuwSn7lAYJNjvWSXhUMSSDg/Z6P7N2i
-         qobJ26uOdxXyFT5sLThKUW9ma1qwK91nwv5kYGMo=
+        b=C0xaPZWBFyQDlVCCFrxEDD8pExlDt+0AKyUuPh7a8bdb/PPocgoF0sA/RxS8EW15I
+         mFwQuAWNbzwgsbjNWqJEQRlnsGP1aFuYEev3PMivO0Mfq9MQyc6qS/Wn1KuFps0vnC
+         +lMC2kPCrRc9u1l3fiYu4XsU0IgRET6ceeMZ7LGw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v2 040/108] media: ti-vpe: cal: Get struct device without going through v4l2_device
-Date:   Mon,  6 Jul 2020 21:36:01 +0300
-Message-Id: <20200706183709.12238-41-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 042/108] media: ti-vpe: cal: Use a loop to create CAMERARX and context instances
+Date:   Mon,  6 Jul 2020 21:36:03 +0300
+Message-Id: <20200706183709.12238-43-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
 References: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
@@ -48,30 +48,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of retrieving the struct device for the platform device from the
-v4l2_device, get it from the platform device directly. This prepares for
-cleanups related to v4l2_device handling.
+Replace a manually unrolled loop with an explicit for loop to increase
+readability when creating the CAMERARX and context instances. The
+explicit NULL initialization of cal->phy[] and cal->ctx[] is removed, as
+the cal structure is zeroed when allocated.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 Reviewed-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/ti-vpe/cal.c | 21 ++++++---------------
+ 1 file changed, 6 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 028479498c07..22679baec364 100644
+index b55c8fb369a0..f92d6e49571f 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -1868,7 +1868,7 @@ static int cal_complete_ctx(struct cal_ctx *ctx)
- 	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
- 	q->lock = &ctx->mutex;
- 	q->min_buffers_needed = 3;
--	q->dev = ctx->v4l2_dev.dev;
-+	q->dev = &ctx->cal->pdev->dev;
+@@ -2348,24 +2348,15 @@ static int cal_probe(struct platform_device *pdev)
  
- 	ret = vb2_queue_init(q);
- 	if (ret)
+ 	platform_set_drvdata(pdev, cal);
+ 
+-	cal->phy[0] = cal_camerarx_create(cal, 0);
+-	if (IS_ERR(cal->phy[0]))
+-		return PTR_ERR(cal->phy[0]);
+-
+-	if (cal->data->num_csi2_phy > 1) {
+-		cal->phy[1] = cal_camerarx_create(cal, 1);
+-		if (IS_ERR(cal->phy[1]))
+-			return PTR_ERR(cal->phy[1]);
+-	} else {
+-		cal->phy[1] = NULL;
++	for (i = 0; i < cal->data->num_csi2_phy; ++i) {
++		cal->phy[i] = cal_camerarx_create(cal, i);
++		if (IS_ERR(cal->phy[i]))
++			return PTR_ERR(cal->phy[i]);
+ 	}
+ 
+-	cal->ctx[0] = NULL;
+-	cal->ctx[1] = NULL;
++	for (i = 0; i < cal->data->num_csi2_phy; ++i)
++		cal->ctx[i] = cal_create_instance(cal, i);
+ 
+-	cal->ctx[0] = cal_create_instance(cal, 0);
+-	if (cal->data->num_csi2_phy > 1)
+-		cal->ctx[1] = cal_create_instance(cal, 1);
+ 	if (!cal->ctx[0] && !cal->ctx[1]) {
+ 		cal_err(cal, "Neither port is configured, no point in staying up\n");
+ 		return -ENODEV;
 -- 
 Regards,
 
