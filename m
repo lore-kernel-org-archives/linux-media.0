@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05115C433E1
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB48C433DF
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D7663206DF
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A07F220771
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="DvDVQJhB"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Qe03SevD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729928AbgGFSiP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Jul 2020 14:38:15 -0400
+        id S1729789AbgGFSiQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Jul 2020 14:38:16 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:45202 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729922AbgGFSiN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:38:13 -0400
+        with ESMTP id S1729919AbgGFSiP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:38:15 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AC1E72121;
-        Mon,  6 Jul 2020 20:37:57 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 86017215D;
+        Mon,  6 Jul 2020 20:37:58 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594060677;
-        bh=3LuRfkQGD1bf7g5K7js457V5LXrl0pBS5Ywf0R7Xt90=;
+        s=mail; t=1594060678;
+        bh=NCAiHkHnyywtrJl98mEhvBxKr3BTZ85L3JQz8RISERo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DvDVQJhBA34TyMJCn0BaFPhsx5gw/Xxp2pKLOivwXOd2BlZBCQYV3l96AJveQCMo2
-         sa7HcwCyJy8uMrVrgi0rsL4w2pdXZVkzJ3nsP2ZE21c7cms3ObtjPQL0hZxVmLgOjv
-         Dr1JPuUVw2YjBwxwb/4w53uCMCaIdbZdDv/WCCzc=
+        b=Qe03SevDAaXM9GtC0PcoC151qmpwC7I2j0C/4zkqQ2g3oc/PklVEyJPxoYOyQVgfT
+         vxicwFRIv2LUYtMurWKn3Mu7nTz0qg87NlVhMK8Tyj69ipRjyn3Oz/km69qLKhcIFp
+         Kv909nY5btPxJEoPRZi9lGtuJdxdFgthx78+gYvc=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v2 045/108] media: ti-vpe: cal: Use syscon_regmap_lookup_by_phandle_args()
-Date:   Mon,  6 Jul 2020 21:36:06 +0300
-Message-Id: <20200706183709.12238-46-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 047/108] media: ti-vpe: cal: Add comments to cal_probe() to delimitate sections
+Date:   Mon,  6 Jul 2020 21:36:08 +0300
+Message-Id: <20200706183709.12238-48-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
 References: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
@@ -48,59 +48,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the syscon_regmap_lookup_by_phandle_args() function to replace
-manual lookup of the syscon regmap offset. This simplifies the
-cal_camerarx_init_regmap() implementation.
+The cal_probe() function is a bit long, add comments to delimitate
+sections in order to improve readability. The platform_set_drvdata()
+call is moved to a more logical place as a result.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 Reviewed-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 6607e359855d..cb567d313035 100644
+index aecded3cad16..738fd7a46399 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -995,17 +995,14 @@ static int cal_camerarx_init_regmap(struct cal_dev *cal)
- {
- 	struct device_node *np = cal->pdev->dev.of_node;
- 	struct regmap *syscon;
--	u32 syscon_offset;
--	int ret;
-+	unsigned int offset;
- 
--	syscon = syscon_regmap_lookup_by_phandle(np, "ti,camerrx-control");
--	ret = of_property_read_u32_index(np, "ti,camerrx-control", 1,
--					 &syscon_offset);
--	if (IS_ERR(syscon))
--		ret = PTR_ERR(syscon);
--	if (ret) {
-+	syscon = syscon_regmap_lookup_by_phandle_args(np, "ti,camerrx-control",
-+						      1, &offset);
-+	if (IS_ERR(syscon)) {
- 		dev_warn(&cal->pdev->dev,
--			 "failed to get ti,camerrx-control: %d\n", ret);
-+			 "failed to get ti,camerrx-control: %ld\n",
-+			 PTR_ERR(syscon));
- 
- 		/*
- 		 * Backward DTS compatibility.
-@@ -1021,11 +1018,11 @@ static int cal_camerarx_init_regmap(struct cal_dev *cal)
- 		/* In this case the base already point to the direct
- 		 * CM register so no need for an offset
- 		 */
--		syscon_offset = 0;
-+		offset = 0;
+@@ -2309,9 +2309,10 @@ static int cal_probe(struct platform_device *pdev)
+ 		return -ENODEV;
  	}
  
- 	cal->syscon_camerrx = syscon;
--	cal->syscon_camerrx_offset = syscon_offset;
-+	cal->syscon_camerrx_offset = offset;
+-	/* save pdev pointer */
+ 	cal->pdev = pdev;
++	platform_set_drvdata(pdev, cal);
+ 
++	/* Acquire resources: clocks, CAMERARX regmap, I/O memory and IRQ. */
+ 	cal->fclk = devm_clk_get(&pdev->dev, "fck");
+ 	if (IS_ERR(cal->fclk)) {
+ 		dev_err(&pdev->dev, "cannot get CAL fclk\n");
+@@ -2338,14 +2339,14 @@ static int cal_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	platform_set_drvdata(pdev, cal);
+-
++	/* Create CAMERARX PHYs. */
+ 	for (i = 0; i < cal->data->num_csi2_phy; ++i) {
+ 		cal->phy[i] = cal_camerarx_create(cal, i);
+ 		if (IS_ERR(cal->phy[i]))
+ 			return PTR_ERR(cal->phy[i]);
+ 	}
+ 
++	/* Create contexts. */
+ 	for (i = 0; i < cal->data->num_csi2_phy; ++i)
+ 		cal->ctx[i] = cal_create_instance(cal, i);
+ 
+@@ -2356,15 +2357,13 @@ static int cal_probe(struct platform_device *pdev)
+ 
+ 	vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
+ 
++	/* Read the revision and hardware info to verify hardware access. */
+ 	pm_runtime_enable(&pdev->dev);
+-
+ 	ret = pm_runtime_get_sync(&pdev->dev);
+ 	if (ret)
+ 		goto runtime_disable;
+ 
+-	/* Just check we can actually access the module */
+ 	cal_get_hwinfo(cal);
+-
+ 	pm_runtime_put_sync(&pdev->dev);
  
  	return 0;
- }
 -- 
 Regards,
 
