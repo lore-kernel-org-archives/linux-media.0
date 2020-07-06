@@ -5,51 +5,51 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB7A8C433E0
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 21:54:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC596C433E1
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 21:54:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6D5220723
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 21:54:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1B2420674
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 21:54:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="HhG+fJE6"
+	dkim=pass (1024-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="i61qMz44"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727864AbgGFVyr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Jul 2020 17:54:47 -0400
-Received: from o1.b.az.sendgrid.net ([208.117.55.133]:6357 "EHLO
+        id S1727817AbgGFVyi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Jul 2020 17:54:38 -0400
+Received: from o1.b.az.sendgrid.net ([208.117.55.133]:38039 "EHLO
         o1.b.az.sendgrid.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726918AbgGFVyj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 17:54:39 -0400
+        with ESMTP id S1727098AbgGFVyh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 17:54:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
         h=from:subject:in-reply-to:references:to:cc:content-type:
         content-transfer-encoding;
-        s=001; bh=MLSvldzejjVa6mA9VLILpE7cVCqoIBR9HapVYyZOR0A=;
-        b=HhG+fJE6+169yi9zVjcph7xe0etGhuWflJ+VOPLB8FnwVd8+BPow5Rjb07Y0m2p64WQh
-        wi36rKVnhhaloYOKpMWy/02kOIbxpcwd6v+sXuq+T7a6QO6pRJOCPGGeA28ByK73wirGmU
-        euyTQ7c9Ac+mVw36Lcdl3Nwop6dX8/s0A=
-Received: by filterdrecv-p3iad2-5b55dcd864-hp5f5 with SMTP id filterdrecv-p3iad2-5b55dcd864-hp5f5-19-5F039D9D-44
-        2020-07-06 21:54:37.854603941 +0000 UTC m=+881115.898031932
+        s=001; bh=3CQUn2PVnW9X4yx0d9/3EzKXGgYmdWlnwnt1CztSmW0=;
+        b=i61qMz44kVFyABbirdM2EF8Jyzb44X8XPtXarmhQL879GU1X0fXluEIb//DemiFh5ROO
+        ZW+V/BOsglT7Mdzutu+Ylp7JsuCWqoXQaKUHsQ/FfsZWH3Gb93Mq1JfJKt6q2r2sfeUlQn
+        C7PjOdWu7UsZZ40yqdPoEOoqZJt48eyJ4=
+Received: by filterdrecv-p3iad2-5b55dcd864-n86tl with SMTP id filterdrecv-p3iad2-5b55dcd864-n86tl-21-5F039D9C-3C
+        2020-07-06 21:54:36.626597881 +0000 UTC m=+881120.392039716
 Received: from bionic.localdomain (unknown)
         by ismtpd0008p1lon1.sendgrid.net (SG) with ESMTP
-        id Rz21i4k0TPihwDSj8S233A
-        Mon, 06 Jul 2020 21:54:37.607 +0000 (UTC)
+        id F70ZXhhbSZ6A7Rdnhu03sw
+        Mon, 06 Jul 2020 21:54:36.378 +0000 (UTC)
 From:   Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v2 11/12] media: rkvdec: h264: Support High 10 and 4:2:2
- profiles
-Date:   Mon, 06 Jul 2020 21:54:37 +0000 (UTC)
-Message-Id: <20200706215430.22859-12-jonas@kwiboo.se>
+Subject: [PATCH v2 08/12] media: rkvdec: h264: Use bytesperline and buffer
+ height to calculate stride
+Date:   Mon, 06 Jul 2020 21:54:36 +0000 (UTC)
+Message-Id: <20200706215430.22859-9-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200706215430.22859-1-jonas@kwiboo.se>
 References: <20200701215616.30874-1-jonas@kwiboo.se>
  <20200706215430.22859-1-jonas@kwiboo.se>
 X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
- =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h+R=2FN4SrW2dJiDYTG?=
- =?us-ascii?Q?Dah4WIX6jGHzzO2ZlGh8MC6B6jPMIEM1idY6ip1?=
- =?us-ascii?Q?c4tSpok6dKXGLm4Xw3VNEcUURkA+L3RUifV0mge?=
- =?us-ascii?Q?nX8GJ4namVxJwbi7SwFSl3xnMbi+claxe5gGGTi?=
- =?us-ascii?Q?3d+V5XsAhoDpwKd76fJjNisKKR9Lo1BcXiyVea8?=
- =?us-ascii?Q?De36ktqLa5bUSr3J8bnBg=3D=3D?=
+ =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h9ohZspGJZfMni=2Ffz?=
+ =?us-ascii?Q?fWWRa+I4LBx+40cubwsiXB2hHCNd1DojwFpL+Ir?=
+ =?us-ascii?Q?i5OLgLH8uykEtrqZ2jmg9+1iGqlJnYZ+Myirhs0?=
+ =?us-ascii?Q?3kOYhGIbk0UpihSYPRDqSQ+gpOtL=2FQ8YZaKhU4l?=
+ =?us-ascii?Q?T5Z5ChyOkDGOmFjPt3RDYqLoA6e4I+q7CTaVMrC?=
+ =?us-ascii?Q?=2FCGyCo2Jk6KbFzzVrRsnw=3D=3D?=
 To:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Jonas Karlman <jonas@kwiboo.se>,
@@ -65,109 +65,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support and enable decoding of H264 High 10 and 4:2:2 profiles.
+Use bytesperline and buffer height to calculate the strides configured.
 
-Decoded CAPTURE buffer width is aligned to 64 pixels to accommodate HW
-requirement on 10-bit format buffers.
-
-The new valid_fmt operation is implemented and return a valid pixelformat
-for the provided SPS control.
+This does not really change anything other than ensuring the bytesperline
+that is signaled to userspace matches what is configured in HW.
 
 Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 ---
 Changes in v2:
-- Only align decoded buffer instead of using frmsize step_width
+- Drop code refactoring
 ---
- drivers/staging/media/rkvdec/rkvdec-h264.c | 20 ++++++++++++++++++++
- drivers/staging/media/rkvdec/rkvdec.c      | 19 +++++++++----------
- 2 files changed, 29 insertions(+), 10 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec-h264.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 10756b9d6118..0757fc97d1ff 100644
+index 3a85545bcb38..10756b9d6118 100644
 --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
 +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -1018,6 +1018,25 @@ static int rkvdec_h264_adjust_fmt(struct rkvdec_ctx *ctx,
- 	return 0;
- }
+@@ -891,9 +891,9 @@ static void config_registers(struct rkvdec_ctx *ctx,
+ 	dma_addr_t rlc_addr;
+ 	dma_addr_t refer_addr;
+ 	u32 rlc_len;
+-	u32 hor_virstride = 0;
+-	u32 ver_virstride = 0;
+-	u32 y_virstride = 0;
++	u32 hor_virstride;
++	u32 ver_virstride;
++	u32 y_virstride;
+ 	u32 yuv_virstride = 0;
+ 	u32 offset;
+ 	dma_addr_t dst_addr;
+@@ -904,8 +904,8 @@ static void config_registers(struct rkvdec_ctx *ctx,
  
-+static u32 rkvdec_h264_valid_fmt(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
-+{
-+	const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p;
-+
-+	if (sps->bit_depth_luma_minus8 == 0) {
-+		if (sps->chroma_format_idc == 2)
-+			return V4L2_PIX_FMT_NV16;
-+		else
-+			return V4L2_PIX_FMT_NV12;
-+	} else if (sps->bit_depth_luma_minus8 == 2) {
-+		if (sps->chroma_format_idc == 2)
-+			return V4L2_PIX_FMT_NV20;
-+		else
-+			return V4L2_PIX_FMT_NV15;
-+	}
-+
-+	return 0;
-+}
-+
- static int rkvdec_h264_start(struct rkvdec_ctx *ctx)
- {
- 	struct rkvdec_dev *rkvdec = ctx->dev;
-@@ -1125,6 +1144,7 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+ 	f = &ctx->decoded_fmt;
+ 	dst_fmt = &f->fmt.pix_mp;
+-	hor_virstride = (sps->bit_depth_luma_minus8 + 8) * dst_fmt->width / 8;
+-	ver_virstride = round_up(dst_fmt->height, 16);
++	hor_virstride = dst_fmt->plane_fmt[0].bytesperline;
++	ver_virstride = dst_fmt->height;
+ 	y_virstride = hor_virstride * ver_virstride;
  
- const struct rkvdec_coded_fmt_ops rkvdec_h264_fmt_ops = {
- 	.adjust_fmt = rkvdec_h264_adjust_fmt,
-+	.valid_fmt = rkvdec_h264_valid_fmt,
- 	.start = rkvdec_h264_start,
- 	.stop = rkvdec_h264_stop,
- 	.run = rkvdec_h264_run,
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index 11a88cb6407d..4faee9262392 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -31,7 +31,7 @@ static void rkvdec_fill_decoded_pixfmt(struct rkvdec_ctx *ctx,
- 				       struct v4l2_pix_format_mplane *pix_mp)
- {
- 	v4l2_fill_pixfmt_mp(pix_mp, pix_mp->pixelformat,
--			    pix_mp->width, pix_mp->height);
-+			    ALIGN(pix_mp->width, 64), pix_mp->height);
- 	pix_mp->plane_fmt[0].sizeimage += 128 *
- 		DIV_ROUND_UP(pix_mp->width, 16) *
- 		DIV_ROUND_UP(pix_mp->height, 16);
-@@ -55,19 +55,15 @@ static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
- 	if (ctrl->id == V4L2_CID_MPEG_VIDEO_H264_SPS) {
- 		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p;
- 		unsigned int width, height;
--		/*
--		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
--		 * but it's currently broken in the driver.
--		 * Reject them for now, until it's fixed.
--		 */
--		if (sps->chroma_format_idc > 1)
--			/* Only 4:0:0 and 4:2:0 are supported */
-+
-+		if (sps->chroma_format_idc > 2)
-+			/* Only 4:0:0, 4:2:0 and 4:2:2 are supported */
- 			return -EINVAL;
- 		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
- 			/* Luma and chroma bit depth mismatch */
- 			return -EINVAL;
--		if (sps->bit_depth_luma_minus8 != 0)
--			/* Only 8-bit is supported */
-+		if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
-+			/* Only 8-bit and 10-bit is supported */
- 			return -EINVAL;
- 
- 		if (ctx->valid_fmt && ctx->valid_fmt != rkvdec_valid_fmt(ctx, ctrl))
-@@ -157,6 +153,9 @@ static const struct rkvdec_ctrls rkvdec_h264_ctrls = {
- 
- static const u32 rkvdec_h264_decoded_fmts[] = {
- 	V4L2_PIX_FMT_NV12,
-+	V4L2_PIX_FMT_NV15,
-+	V4L2_PIX_FMT_NV16,
-+	V4L2_PIX_FMT_NV20,
- };
- 
- static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
+ 	if (sps->chroma_format_idc == 0)
 -- 
 2.17.1
 
