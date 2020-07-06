@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AEDAC433DF
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB7CFC433E0
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4048A206DF
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B74D206DF
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="PHVABoGQ"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ehWj0hxM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729738AbgGFShb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Jul 2020 14:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
+        id S1729845AbgGFShd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Jul 2020 14:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729569AbgGFShb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:37:31 -0400
+        with ESMTP id S1729832AbgGFShc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:37:32 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1427EC061755
-        for <linux-media@vger.kernel.org>; Mon,  6 Jul 2020 11:37:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78038C061794
+        for <linux-media@vger.kernel.org>; Mon,  6 Jul 2020 11:37:32 -0700 (PDT)
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B5EADD98;
-        Mon,  6 Jul 2020 20:37:28 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9D1AA12BE;
+        Mon,  6 Jul 2020 20:37:29 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
         s=mail; t=1594060649;
-        bh=T42eIdOv6EUh4nP3Vbf19UsJi90aSalIq4t6AWWTVP4=;
+        bh=BELma/zYjmvpXi/S3EhSQOb1mzj7gcpZ8GJLFb5JpmQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PHVABoGQJ/qtJIpM7lW4JeKG7mokdcOg9cD3/dw5m5Yg6MNSkDdMomyWhPkIbWN6s
-         JerbuS1qAFo4GWVq4wdVHaTq0kjjFJJ5TR1EdeCNE5FCLFV2hvsTFV1WU5qgKV6IN4
-         U8+X1Nc7QxgyelTYXG9MP1cgtyjRQzkBzOnDv/zE=
+        b=ehWj0hxMkQ8iw+QNvYn+tkCaD8aowfjsvJlXGuh3J2ND5LXRDVffWhxEdZ5TsPIXS
+         wVqn7SQ1ywq8G8UAR+L9U68GDtxN0QIrJYjLGvaa9WaFqwOt15B5TkQuc3jgdkPtI3
+         ckZ4fBl+U38ThUqL+83FsIHpOyfSuLJnt2UTPLOw=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v2 002/108] media: ti-vpe: cal: Avoid function forward declaration
-Date:   Mon,  6 Jul 2020 21:35:23 +0300
-Message-Id: <20200706183709.12238-3-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 004/108] media: ti-vpe: cal: Index CSI-2 port starting at 0
+Date:   Mon,  6 Jul 2020 21:35:25 +0300
+Message-Id: <20200706183709.12238-5-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
 References: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
@@ -51,145 +51,231 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move the cal_complete_ctx() function earlier in the file to avoid a
-foward declaration. There is no functional change.
+The datasheet numbers the CSI-2 PHYs (external to the CAL) starting from
+1, but the PPI inputs to the CAL starting from 0. Update the numbering
+scheme for csi2_port to match the datasheet, which also simplifies the
+driver by removing the need to constantly subtract 1 from the value.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 Reviewed-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 111 ++++++++++++++--------------
- 1 file changed, 55 insertions(+), 56 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c      | 30 +++++------
+ drivers/media/platform/ti-vpe/cal_regs.h | 64 ++++++++++++------------
+ 2 files changed, 47 insertions(+), 47 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 19425248bd63..88fed930ed50 100644
+index 201ef3585a48..799c25f5aafd 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -1852,7 +1852,61 @@ static const struct video_device cal_videodev = {
-  *	Initialization and module stuff
-  * ------------------------------------------------------------------
-  */
--static int cal_complete_ctx(struct cal_ctx *ctx);
-+
-+static int cal_complete_ctx(struct cal_ctx *ctx)
-+{
-+	struct video_device *vfd;
-+	struct vb2_queue *q;
-+	int ret;
-+
-+	ctx->timeperframe = tpf_default;
-+	ctx->external_rate = 192000000;
-+
-+	/* initialize locks */
-+	spin_lock_init(&ctx->slock);
-+	mutex_init(&ctx->mutex);
-+
-+	/* initialize queue */
-+	q = &ctx->vb_vidq;
-+	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+	q->io_modes = VB2_MMAP | VB2_DMABUF | VB2_READ;
-+	q->drv_priv = ctx;
-+	q->buf_struct_size = sizeof(struct cal_buffer);
-+	q->ops = &cal_video_qops;
-+	q->mem_ops = &vb2_dma_contig_memops;
-+	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-+	q->lock = &ctx->mutex;
-+	q->min_buffers_needed = 3;
-+	q->dev = ctx->v4l2_dev.dev;
-+
-+	ret = vb2_queue_init(q);
-+	if (ret)
-+		return ret;
-+
-+	/* init video dma queues */
-+	INIT_LIST_HEAD(&ctx->vidq.active);
-+
-+	vfd = &ctx->vdev;
-+	*vfd = cal_videodev;
-+	vfd->v4l2_dev = &ctx->v4l2_dev;
-+	vfd->queue = q;
-+
-+	/*
-+	 * Provide a mutex to v4l2 core. It will be used to protect
-+	 * all fops and v4l2 ioctls.
-+	 */
-+	vfd->lock = &ctx->mutex;
-+	video_set_drvdata(vfd, ctx);
-+
-+	ret = video_register_device(vfd, VFL_TYPE_VIDEO, video_nr);
-+	if (ret < 0)
-+		return ret;
-+
-+	v4l2_info(&ctx->v4l2_dev, "V4L2 device registered as %s\n",
-+		  video_device_node_name(vfd));
-+
-+	return 0;
-+}
+@@ -472,7 +472,7 @@ static inline void set_field(u32 *valp, u32 field, u32 mask)
+ static u32 cal_data_get_phy_max_lanes(struct cal_ctx *ctx)
+ {
+ 	struct cal_dev *dev = ctx->dev;
+-	u32 phy_id = ctx->csi2_port - 1;
++	u32 phy_id = ctx->csi2_port;
  
- static int cal_async_bound(struct v4l2_async_notifier *notifier,
- 			   struct v4l2_subdev *subdev,
-@@ -1948,61 +2002,6 @@ static const struct v4l2_async_notifier_operations cal_async_ops = {
- 	.complete = cal_async_complete,
- };
+ 	return dev->data->csi2_phy_core[phy_id].num_lanes;
+ }
+@@ -557,7 +557,7 @@ static struct regmap *cal_get_camerarx_regmap(struct cal_dev *dev)
+ static void camerarx_phy_enable(struct cal_ctx *ctx)
+ {
+ 	struct cal_csi2_phy *phy;
+-	u32 phy_id = ctx->csi2_port - 1;
++	u32 phy_id = ctx->csi2_port;
+ 	u32 max_lanes;
  
--static int cal_complete_ctx(struct cal_ctx *ctx)
--{
--	struct video_device *vfd;
--	struct vb2_queue *q;
--	int ret;
--
--	ctx->timeperframe = tpf_default;
--	ctx->external_rate = 192000000;
--
--	/* initialize locks */
--	spin_lock_init(&ctx->slock);
--	mutex_init(&ctx->mutex);
--
--	/* initialize queue */
--	q = &ctx->vb_vidq;
--	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
--	q->io_modes = VB2_MMAP | VB2_DMABUF | VB2_READ;
--	q->drv_priv = ctx;
--	q->buf_struct_size = sizeof(struct cal_buffer);
--	q->ops = &cal_video_qops;
--	q->mem_ops = &vb2_dma_contig_memops;
--	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--	q->lock = &ctx->mutex;
--	q->min_buffers_needed = 3;
--	q->dev = ctx->v4l2_dev.dev;
--
--	ret = vb2_queue_init(q);
--	if (ret)
--		return ret;
--
--	/* init video dma queues */
--	INIT_LIST_HEAD(&ctx->vidq.active);
--
--	vfd = &ctx->vdev;
--	*vfd = cal_videodev;
--	vfd->v4l2_dev = &ctx->v4l2_dev;
--	vfd->queue = q;
--
--	/*
--	 * Provide a mutex to v4l2 core. It will be used to protect
--	 * all fops and v4l2 ioctls.
--	 */
--	vfd->lock = &ctx->mutex;
--	video_set_drvdata(vfd, ctx);
--
--	ret = video_register_device(vfd, VFL_TYPE_VIDEO, video_nr);
--	if (ret < 0)
--		return ret;
--
--	v4l2_info(&ctx->v4l2_dev, "V4L2 device registered as %s\n",
--		  video_device_node_name(vfd));
--
--	return 0;
--}
--
- static struct device_node *
- of_get_next_port(const struct device_node *parent,
- 		 struct device_node *prev)
+ 	phy = &ctx->dev->data->csi2_phy_core[phy_id];
+@@ -574,7 +574,7 @@ static void camerarx_phy_enable(struct cal_ctx *ctx)
+ static void camerarx_phy_disable(struct cal_ctx *ctx)
+ {
+ 	struct cal_csi2_phy *phy;
+-	u32 phy_id = ctx->csi2_port - 1;
++	u32 phy_id = ctx->csi2_port;
+ 
+ 	phy = &ctx->dev->data->csi2_phy_core[phy_id];
+ 	regmap_field_write(phy->fields[F_CTRLCLKEN], 0);
+@@ -712,7 +712,7 @@ static void enable_irqs(struct cal_ctx *ctx)
+ 	set_field(&val, 1, CAL_HL_IRQ_MASK(ctx->csi2_port));
+ 	reg_write(ctx->dev, CAL_HL_IRQENABLE_SET(3), val);
+ 	/* Todo: Add VC_IRQ and CSI2_COMPLEXIO_IRQ handling */
+-	reg_write(ctx->dev, CAL_CSI2_VC_IRQENABLE(1), 0xFF000000);
++	reg_write(ctx->dev, CAL_CSI2_VC_IRQENABLE(0), 0xFF000000);
+ }
+ 
+ static void disable_irqs(struct cal_ctx *ctx)
+@@ -734,7 +734,7 @@ static void disable_irqs(struct cal_ctx *ctx)
+ 	set_field(&val, 1, CAL_HL_IRQ_MASK(ctx->csi2_port));
+ 	reg_write(ctx->dev, CAL_HL_IRQENABLE_CLR(3), val);
+ 	/* Todo: Add VC_IRQ and CSI2_COMPLEXIO_IRQ handling */
+-	reg_write(ctx->dev, CAL_CSI2_VC_IRQENABLE(1), 0);
++	reg_write(ctx->dev, CAL_CSI2_VC_IRQENABLE(0), 0);
+ }
+ 
+ static void csi2_cio_power(struct cal_ctx *ctx, bool enable)
+@@ -894,7 +894,7 @@ static void csi2_wait_for_phy(struct cal_ctx *ctx)
+ 	csi2_wait_stop_state(ctx);
+ 
+ 	ctx_dbg(1, ctx, "CSI2_%d_REG1 = 0x%08x (Bit(31,28) should be set!)\n",
+-		(ctx->csi2_port - 1), reg_read(ctx->cc, CAL_CSI2_PHY_REG1));
++		ctx->csi2_port, reg_read(ctx->cc, CAL_CSI2_PHY_REG1));
+ }
+ 
+ static void csi2_phy_deinit(struct cal_ctx *ctx)
+@@ -1139,7 +1139,7 @@ static void csi2_phy_config(struct cal_ctx *ctx)
+ 	set_field(&reg0, ths_term, CAL_CSI2_PHY_REG0_THS_TERM_MASK);
+ 	set_field(&reg0, ths_settle, CAL_CSI2_PHY_REG0_THS_SETTLE_MASK);
+ 
+-	ctx_dbg(1, ctx, "CSI2_%d_REG0 = 0x%08x\n", (ctx->csi2_port - 1), reg0);
++	ctx_dbg(1, ctx, "CSI2_%d_REG0 = 0x%08x\n", ctx->csi2_port, reg0);
+ 	reg_write(ctx->cc, CAL_CSI2_PHY_REG0, reg0);
+ 
+ 	reg1 = reg_read(ctx->cc, CAL_CSI2_PHY_REG1);
+@@ -1148,7 +1148,7 @@ static void csi2_phy_config(struct cal_ctx *ctx)
+ 	set_field(&reg1, TCLK_MISS, CAL_CSI2_PHY_REG1_CTRLCLK_DIV_FACTOR_MASK);
+ 	set_field(&reg1, TCLK_SETTLE, CAL_CSI2_PHY_REG1_TCLK_SETTLE_MASK);
+ 
+-	ctx_dbg(1, ctx, "CSI2_%d_REG1 = 0x%08x\n", (ctx->csi2_port - 1), reg1);
++	ctx_dbg(1, ctx, "CSI2_%d_REG1 = 0x%08x\n", ctx->csi2_port, reg1);
+ 	reg_write(ctx->cc, CAL_CSI2_PHY_REG1, reg1);
+ }
+ 
+@@ -1217,7 +1217,7 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 		if (irqst1 & CAL_HL_IRQ_OCPO_ERR_MASK)
+ 			dev_err_ratelimited(&dev->pdev->dev, "OCPO ERROR\n");
+ 
+-		for (i = 1; i <= 2; ++i) {
++		for (i = 0; i < 2; ++i) {
+ 			if (irqst1 & CAL_HL_IRQ_CIO_MASK(i)) {
+ 				u32 cio_stat = reg_read(dev,
+ 							CAL_CSI2_COMPLEXIO_IRQSTATUS(i));
+@@ -1239,9 +1239,9 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 		/* Clear Interrupt status */
+ 		reg_write(dev, CAL_HL_IRQSTATUS(2), irqst2);
+ 
+-		for (i = 1; i <= 2; ++i) {
++		for (i = 0; i < 2; ++i) {
+ 			if (isportirqset(irqst2, i)) {
+-				ctx = dev->ctx[i - 1];
++				ctx = dev->ctx[i];
+ 
+ 				spin_lock(&ctx->slock);
+ 				ctx->dma_act = false;
+@@ -1262,9 +1262,9 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
+ 		/* Clear Interrupt status */
+ 		reg_write(dev, CAL_HL_IRQSTATUS(3), irqst3);
+ 
+-		for (i = 1; i <= 2; ++i) {
++		for (i = 0; i < 2; ++i) {
+ 			if (isportirqset(irqst3, i)) {
+-				ctx = dev->ctx[i - 1];
++				ctx = dev->ctx[i];
+ 				dma_q = &ctx->vidq;
+ 
+ 				spin_lock(&ctx->slock);
+@@ -2221,8 +2221,8 @@ static struct cal_ctx *cal_create_instance(struct cal_dev *dev, int inst)
+ 	ctx->cc = dev->cc[inst];
+ 
+ 	/* Store the instance id */
+-	ctx->csi2_port = inst + 1;
+-	ctx->cport = inst + 1;
++	ctx->csi2_port = inst;
++	ctx->cport = inst;
+ 
+ 	ret = of_cal_create_instance(ctx, inst);
+ 	if (ret) {
+diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti-vpe/cal_regs.h
+index ac54a2fe7bb6..56c8ccd0e75f 100644
+--- a/drivers/media/platform/ti-vpe/cal_regs.h
++++ b/drivers/media/platform/ti-vpe/cal_regs.h
+@@ -46,7 +46,7 @@
+ #define CAL_HL_IRQSTATUS(m)		(0x24U + ((m-1) * 0x10U))
+ #define CAL_HL_IRQENABLE_SET(m)		(0x28U + ((m-1) * 0x10U))
+ #define CAL_HL_IRQENABLE_CLR(m)		(0x2cU + ((m-1) * 0x10U))
+-#define CAL_PIX_PROC(m)			(0xc0U + ((m-1) * 0x4U))
++#define CAL_PIX_PROC(m)			(0xc0U + (m) * 0x4U)
+ #define CAL_CTRL			0x100
+ #define CAL_CTRL1			0x104
+ #define CAL_LINE_NUMBER_EVT		0x108
+@@ -62,34 +62,34 @@
+ #define CAL_RD_DMA_INIT_ADDR		0x154
+ #define CAL_RD_DMA_INIT_OFST		0x168
+ #define CAL_RD_DMA_CTRL2		0x16c
+-#define CAL_WR_DMA_CTRL(m)		(0x200U + ((m-1) * 0x10U))
+-#define CAL_WR_DMA_ADDR(m)		(0x204U + ((m-1) * 0x10U))
+-#define CAL_WR_DMA_OFST(m)		(0x208U + ((m-1) * 0x10U))
+-#define CAL_WR_DMA_XSIZE(m)		(0x20cU + ((m-1) * 0x10U))
+-#define CAL_CSI2_PPI_CTRL(m)		(0x300U + ((m-1) * 0x80U))
+-#define CAL_CSI2_COMPLEXIO_CFG(m)	(0x304U + ((m-1) * 0x80U))
+-#define CAL_CSI2_COMPLEXIO_IRQSTATUS(m)	(0x308U + ((m-1) * 0x80U))
+-#define CAL_CSI2_SHORT_PACKET(m)	(0x30cU + ((m-1) * 0x80U))
+-#define CAL_CSI2_COMPLEXIO_IRQENABLE(m)	(0x310U + ((m-1) * 0x80U))
+-#define CAL_CSI2_TIMING(m)		(0x314U + ((m-1) * 0x80U))
+-#define CAL_CSI2_VC_IRQENABLE(m)	(0x318U + ((m-1) * 0x80U))
+-#define CAL_CSI2_VC_IRQSTATUS(m)	(0x328U + ((m-1) * 0x80U))
+-#define CAL_CSI2_CTX0(m)		(0x330U + ((m-1) * 0x80U))
+-#define CAL_CSI2_CTX1(m)		(0x334U + ((m-1) * 0x80U))
+-#define CAL_CSI2_CTX2(m)		(0x338U + ((m-1) * 0x80U))
+-#define CAL_CSI2_CTX3(m)		(0x33cU + ((m-1) * 0x80U))
+-#define CAL_CSI2_CTX4(m)		(0x340U + ((m-1) * 0x80U))
+-#define CAL_CSI2_CTX5(m)		(0x344U + ((m-1) * 0x80U))
+-#define CAL_CSI2_CTX6(m)		(0x348U + ((m-1) * 0x80U))
+-#define CAL_CSI2_CTX7(m)		(0x34cU + ((m-1) * 0x80U))
+-#define CAL_CSI2_STATUS0(m)		(0x350U + ((m-1) * 0x80U))
+-#define CAL_CSI2_STATUS1(m)		(0x354U + ((m-1) * 0x80U))
+-#define CAL_CSI2_STATUS2(m)		(0x358U + ((m-1) * 0x80U))
+-#define CAL_CSI2_STATUS3(m)		(0x35cU + ((m-1) * 0x80U))
+-#define CAL_CSI2_STATUS4(m)		(0x360U + ((m-1) * 0x80U))
+-#define CAL_CSI2_STATUS5(m)		(0x364U + ((m-1) * 0x80U))
+-#define CAL_CSI2_STATUS6(m)		(0x368U + ((m-1) * 0x80U))
+-#define CAL_CSI2_STATUS7(m)		(0x36cU + ((m-1) * 0x80U))
++#define CAL_WR_DMA_CTRL(m)		(0x200U + (m) * 0x10U)
++#define CAL_WR_DMA_ADDR(m)		(0x204U + (m) * 0x10U)
++#define CAL_WR_DMA_OFST(m)		(0x208U + (m) * 0x10U)
++#define CAL_WR_DMA_XSIZE(m)		(0x20cU + (m) * 0x10U)
++#define CAL_CSI2_PPI_CTRL(m)		(0x300U + (m) * 0x80U)
++#define CAL_CSI2_COMPLEXIO_CFG(m)	(0x304U + (m) * 0x80U)
++#define CAL_CSI2_COMPLEXIO_IRQSTATUS(m)	(0x308U + (m) * 0x80U)
++#define CAL_CSI2_SHORT_PACKET(m)	(0x30cU + (m) * 0x80U)
++#define CAL_CSI2_COMPLEXIO_IRQENABLE(m)	(0x310U + (m) * 0x80U)
++#define CAL_CSI2_TIMING(m)		(0x314U + (m) * 0x80U)
++#define CAL_CSI2_VC_IRQENABLE(m)	(0x318U + (m) * 0x80U)
++#define CAL_CSI2_VC_IRQSTATUS(m)	(0x328U + (m) * 0x80U)
++#define CAL_CSI2_CTX0(m)		(0x330U + (m) * 0x80U)
++#define CAL_CSI2_CTX1(m)		(0x334U + (m) * 0x80U)
++#define CAL_CSI2_CTX2(m)		(0x338U + (m) * 0x80U)
++#define CAL_CSI2_CTX3(m)		(0x33cU + (m) * 0x80U)
++#define CAL_CSI2_CTX4(m)		(0x340U + (m) * 0x80U)
++#define CAL_CSI2_CTX5(m)		(0x344U + (m) * 0x80U)
++#define CAL_CSI2_CTX6(m)		(0x348U + (m) * 0x80U)
++#define CAL_CSI2_CTX7(m)		(0x34cU + (m) * 0x80U)
++#define CAL_CSI2_STATUS0(m)		(0x350U + (m) * 0x80U)
++#define CAL_CSI2_STATUS1(m)		(0x354U + (m) * 0x80U)
++#define CAL_CSI2_STATUS2(m)		(0x358U + (m) * 0x80U)
++#define CAL_CSI2_STATUS3(m)		(0x35cU + (m) * 0x80U)
++#define CAL_CSI2_STATUS4(m)		(0x360U + (m) * 0x80U)
++#define CAL_CSI2_STATUS5(m)		(0x364U + (m) * 0x80U)
++#define CAL_CSI2_STATUS6(m)		(0x368U + (m) * 0x80U)
++#define CAL_CSI2_STATUS7(m)		(0x36cU + (m) * 0x80U)
+ 
+ /* CAL CSI2 PHY register offsets */
+ #define CAL_CSI2_PHY_REG0		0x000
+@@ -141,12 +141,12 @@
+ #define CAL_HL_IRQ_EOI_LINE_NUMBER_READ0		0
+ #define CAL_HL_IRQ_EOI_LINE_NUMBER_EOI0			0
+ 
+-#define CAL_HL_IRQ_MASK(m)			BIT((m) - 1)
++#define CAL_HL_IRQ_MASK(m)			BIT(m)
+ 
+ #define CAL_HL_IRQ_OCPO_ERR_MASK		BIT(6)
+ 
+-#define CAL_HL_IRQ_CIO_MASK(i)			BIT(16 + ((i) - 1) * 8)
+-#define CAL_HL_IRQ_VC_MASK(i)			BIT(17 + ((i) - 1) * 8)
++#define CAL_HL_IRQ_CIO_MASK(i)			BIT(16 + (i) * 8)
++#define CAL_HL_IRQ_VC_MASK(i)			BIT(17 + (i) * 8)
+ 
+ #define CAL_PIX_PROC_EN_MASK			BIT(0)
+ #define CAL_PIX_PROC_EXTRACT_MASK		GENMASK(4, 1)
 -- 
 Regards,
 
