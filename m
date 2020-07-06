@@ -7,37 +7,40 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68017C433E0
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8285BC433E2
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 436EA20771
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 622A520774
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:37:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="demZ9XC3"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="DMQ9vzVQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729853AbgGFShg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Jul 2020 14:37:36 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:45198 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729831AbgGFShe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:37:34 -0400
+        id S1729836AbgGFShd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Jul 2020 14:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729569AbgGFShc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:37:32 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BF7C061755
+        for <linux-media@vger.kernel.org>; Mon,  6 Jul 2020 11:37:31 -0700 (PDT)
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0E7A518E5;
-        Mon,  6 Jul 2020 20:37:30 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2952DE37;
+        Mon,  6 Jul 2020 20:37:29 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594060650;
-        bh=yH5biP5AEoZqgbLoAqdzPxlCF2+N/mC792lEQ+I/4Ic=;
+        s=mail; t=1594060649;
+        bh=fU+2c/VVQblt6Hxqp9hUv19onQIWz/Lw3CjYWzrtkBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=demZ9XC38vZnPOy+deob7QhTgYGzAbZiIzW0BzDpb4v8i/N3BDANEPbnQctjxWYV7
-         C85ayhHcD0kVRdZRmwZNwIcR9G9TsEc/+2tcT1fVJvMdkpDhciG1uiSQhoJdjaqtNu
-         3bX2cM3kzcSsJvwpRU7QdGEQOYDZFL2max0NXULA=
+        b=DMQ9vzVQxJBtACUJgSZs+MUnOKZ/Rqk47kXa1glLE/G32OvkEz6/qEcO4Tb6N1zM4
+         IWaKy027Ef73MkgWVLjKWYwPLZXaQJG8FtDe9AycUhDXrPBLsOg1/Iw/Vs9+NxUo0v
+         U7hZTpC/fccJd6i+GAeGqwJcjl9gYjRgiJ2g+e4k=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v2 005/108] media: ti-vpe: cal: Index IRQ registersstarting at 0
-Date:   Mon,  6 Jul 2020 21:35:26 +0300
-Message-Id: <20200706183709.12238-6-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 003/108] media: ti-vpe: cal: Decouple CSI2 port and CPORT
+Date:   Mon,  6 Jul 2020 21:35:24 +0300
+Message-Id: <20200706183709.12238-4-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
 References: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
@@ -48,148 +51,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The datasheet numbers the IRQ registers starting from 0. Update the
-numbering scheme to match the datasheet.
+The CPORT mentioned in the CAL documentation has nothing to do with the
+CSI-2 ports. It's a remnant of CSI-3 support (or an attempt to achieve
+it), and now only serves as an arbitraty tag value used to associate
+data samples with contexts. Add a cport field to the cal_ctx structure
+and use it instead of the CSI-2 port number where a CPORT is required by
+the hardware. The value of the cport field is currently the same as the
+csi2_port field, so there's no functional change, but this will help
+reworking CPORT and CSI-2 port handling separately.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 Reviewed-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/cal.c      | 38 ++++++++++++------------
- drivers/media/platform/ti-vpe/cal_regs.h |  8 ++---
- 2 files changed, 23 insertions(+), 23 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 799c25f5aafd..b04d8cb86977 100644
+index 88fed930ed50..201ef3585a48 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -695,22 +695,22 @@ static void enable_irqs(struct cal_ctx *ctx)
- 		CAL_CSI2_COMPLEXIO_IRQ_ECC_NO_CORRECTION_MASK;
+@@ -409,6 +409,7 @@ struct cal_ctx {
+ 	struct vb2_queue	vb_vidq;
+ 	unsigned int		seq_count;
+ 	unsigned int		csi2_port;
++	unsigned int		cport;
+ 	unsigned int		virtual_channel;
  
- 	/* Enable CIO error irqs */
--	reg_write(ctx->dev, CAL_HL_IRQENABLE_SET(1),
-+	reg_write(ctx->dev, CAL_HL_IRQENABLE_SET(0),
- 		  CAL_HL_IRQ_CIO_MASK(ctx->csi2_port));
- 	reg_write(ctx->dev, CAL_CSI2_COMPLEXIO_IRQENABLE(ctx->csi2_port),
- 		  cio_err_mask);
- 
- 	/* Always enable OCPO error */
--	reg_write(ctx->dev, CAL_HL_IRQENABLE_SET(1), CAL_HL_IRQ_OCPO_ERR_MASK);
-+	reg_write(ctx->dev, CAL_HL_IRQENABLE_SET(0), CAL_HL_IRQ_OCPO_ERR_MASK);
- 
- 	/* Enable IRQ_WDMA_END 0/1 */
- 	val = 0;
- 	set_field(&val, 1, CAL_HL_IRQ_MASK(ctx->csi2_port));
--	reg_write(ctx->dev, CAL_HL_IRQENABLE_SET(2), val);
-+	reg_write(ctx->dev, CAL_HL_IRQENABLE_SET(1), val);
- 	/* Enable IRQ_WDMA_START 0/1 */
- 	val = 0;
- 	set_field(&val, 1, CAL_HL_IRQ_MASK(ctx->csi2_port));
--	reg_write(ctx->dev, CAL_HL_IRQENABLE_SET(3), val);
-+	reg_write(ctx->dev, CAL_HL_IRQENABLE_SET(2), val);
- 	/* Todo: Add VC_IRQ and CSI2_COMPLEXIO_IRQ handling */
- 	reg_write(ctx->dev, CAL_CSI2_VC_IRQENABLE(0), 0xFF000000);
- }
-@@ -720,7 +720,7 @@ static void disable_irqs(struct cal_ctx *ctx)
+ 	/* Pointer pointing to current v4l2_buffer */
+@@ -971,7 +972,7 @@ static void csi2_ctx_config(struct cal_ctx *ctx)
  	u32 val;
  
- 	/* Disable CIO error irqs */
--	reg_write(ctx->dev, CAL_HL_IRQENABLE_CLR(1),
-+	reg_write(ctx->dev, CAL_HL_IRQENABLE_CLR(0),
- 		  CAL_HL_IRQ_CIO_MASK(ctx->csi2_port));
- 	reg_write(ctx->dev, CAL_CSI2_COMPLEXIO_IRQENABLE(ctx->csi2_port),
- 		  0);
-@@ -728,11 +728,11 @@ static void disable_irqs(struct cal_ctx *ctx)
- 	/* Disable IRQ_WDMA_END 0/1 */
- 	val = 0;
- 	set_field(&val, 1, CAL_HL_IRQ_MASK(ctx->csi2_port));
--	reg_write(ctx->dev, CAL_HL_IRQENABLE_CLR(2), val);
-+	reg_write(ctx->dev, CAL_HL_IRQENABLE_CLR(1), val);
- 	/* Disable IRQ_WDMA_START 0/1 */
- 	val = 0;
- 	set_field(&val, 1, CAL_HL_IRQ_MASK(ctx->csi2_port));
--	reg_write(ctx->dev, CAL_HL_IRQENABLE_CLR(3), val);
-+	reg_write(ctx->dev, CAL_HL_IRQENABLE_CLR(2), val);
- 	/* Todo: Add VC_IRQ and CSI2_COMPLEXIO_IRQ handling */
- 	reg_write(ctx->dev, CAL_CSI2_VC_IRQENABLE(0), 0);
- }
-@@ -1206,13 +1206,13 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
- 	struct cal_dev *dev = (struct cal_dev *)data;
- 	struct cal_ctx *ctx;
- 	struct cal_dmaqueue *dma_q;
--	u32 irqst1, irqst2, irqst3;
-+	u32 irqst0, irqst1, irqst2;
+ 	val = reg_read(ctx->dev, CAL_CSI2_CTX0(ctx->csi2_port));
+-	set_field(&val, ctx->csi2_port, CAL_CSI2_CTX_CPORT_MASK);
++	set_field(&val, ctx->cport, CAL_CSI2_CTX_CPORT_MASK);
+ 	/*
+ 	 * DT type: MIPI CSI-2 Specs
+ 	 *   0x1: All - DT filter is disabled
+@@ -1036,7 +1037,7 @@ static void pix_proc_config(struct cal_ctx *ctx)
+ 	set_field(&val, CAL_PIX_PROC_DPCMD_BYPASS, CAL_PIX_PROC_DPCMD_MASK);
+ 	set_field(&val, CAL_PIX_PROC_DPCME_BYPASS, CAL_PIX_PROC_DPCME_MASK);
+ 	set_field(&val, pack, CAL_PIX_PROC_PACK_MASK);
+-	set_field(&val, ctx->csi2_port, CAL_PIX_PROC_CPORT_MASK);
++	set_field(&val, ctx->cport, CAL_PIX_PROC_CPORT_MASK);
+ 	set_field(&val, 1, CAL_PIX_PROC_EN_MASK);
+ 	reg_write(ctx->dev, CAL_PIX_PROC(ctx->csi2_port), val);
+ 	ctx_dbg(3, ctx, "CAL_PIX_PROC(%d) = 0x%08x\n", ctx->csi2_port,
+@@ -1049,7 +1050,7 @@ static void cal_wr_dma_config(struct cal_ctx *ctx,
+ 	u32 val;
  
--	irqst1 = reg_read(dev, CAL_HL_IRQSTATUS(1));
--	if (irqst1) {
-+	irqst0 = reg_read(dev, CAL_HL_IRQSTATUS(0));
-+	if (irqst0) {
- 		int i;
+ 	val = reg_read(ctx->dev, CAL_WR_DMA_CTRL(ctx->csi2_port));
+-	set_field(&val, ctx->csi2_port, CAL_WR_DMA_CTRL_CPORT_MASK);
++	set_field(&val, ctx->cport, CAL_WR_DMA_CTRL_CPORT_MASK);
+ 	set_field(&val, height, CAL_WR_DMA_CTRL_YSIZE_MASK);
+ 	set_field(&val, CAL_WR_DMA_CTRL_DTAG_PIX_DAT,
+ 		  CAL_WR_DMA_CTRL_DTAG_MASK);
+@@ -2221,6 +2222,7 @@ static struct cal_ctx *cal_create_instance(struct cal_dev *dev, int inst)
  
--		reg_write(dev, CAL_HL_IRQSTATUS(1), irqst1);
-+		reg_write(dev, CAL_HL_IRQSTATUS(0), irqst0);
+ 	/* Store the instance id */
+ 	ctx->csi2_port = inst + 1;
++	ctx->cport = inst + 1;
  
- 		if (irqst1 & CAL_HL_IRQ_OCPO_ERR_MASK)
- 			dev_err_ratelimited(&dev->pdev->dev, "OCPO ERROR\n");
-@@ -1232,15 +1232,15 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
- 	}
- 
- 	/* Check which DMA just finished */
--	irqst2 = reg_read(dev, CAL_HL_IRQSTATUS(2));
--	if (irqst2) {
-+	irqst1 = reg_read(dev, CAL_HL_IRQSTATUS(1));
-+	if (irqst1) {
- 		int i;
- 
- 		/* Clear Interrupt status */
--		reg_write(dev, CAL_HL_IRQSTATUS(2), irqst2);
-+		reg_write(dev, CAL_HL_IRQSTATUS(1), irqst1);
- 
- 		for (i = 0; i < 2; ++i) {
--			if (isportirqset(irqst2, i)) {
-+			if (isportirqset(irqst1,  i)) {
- 				ctx = dev->ctx[i];
- 
- 				spin_lock(&ctx->slock);
-@@ -1255,15 +1255,15 @@ static irqreturn_t cal_irq(int irq_cal, void *data)
- 	}
- 
- 	/* Check which DMA just started */
--	irqst3 = reg_read(dev, CAL_HL_IRQSTATUS(3));
--	if (irqst3) {
-+	irqst2 = reg_read(dev, CAL_HL_IRQSTATUS(2));
-+	if (irqst2) {
- 		int i;
- 
- 		/* Clear Interrupt status */
--		reg_write(dev, CAL_HL_IRQSTATUS(3), irqst3);
-+		reg_write(dev, CAL_HL_IRQSTATUS(2), irqst2);
- 
- 		for (i = 0; i < 2; ++i) {
--			if (isportirqset(irqst3, i)) {
-+			if (isportirqset(irqst2, i)) {
- 				ctx = dev->ctx[i];
- 				dma_q = &ctx->vidq;
- 
-diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti-vpe/cal_regs.h
-index 56c8ccd0e75f..b551e67d5d41 100644
---- a/drivers/media/platform/ti-vpe/cal_regs.h
-+++ b/drivers/media/platform/ti-vpe/cal_regs.h
-@@ -42,10 +42,10 @@
- #define CAL_HL_HWINFO			0x0004
- #define CAL_HL_SYSCONFIG		0x0010
- #define CAL_HL_IRQ_EOI			0x001c
--#define CAL_HL_IRQSTATUS_RAW(m)		(0x20U + ((m-1) * 0x10U))
--#define CAL_HL_IRQSTATUS(m)		(0x24U + ((m-1) * 0x10U))
--#define CAL_HL_IRQENABLE_SET(m)		(0x28U + ((m-1) * 0x10U))
--#define CAL_HL_IRQENABLE_CLR(m)		(0x2cU + ((m-1) * 0x10U))
-+#define CAL_HL_IRQSTATUS_RAW(m)		(0x20U + (m) * 0x10U)
-+#define CAL_HL_IRQSTATUS(m)		(0x24U + (m) * 0x10U)
-+#define CAL_HL_IRQENABLE_SET(m)		(0x28U + (m) * 0x10U)
-+#define CAL_HL_IRQENABLE_CLR(m)		(0x2cU + (m) * 0x10U)
- #define CAL_PIX_PROC(m)			(0xc0U + (m) * 0x4U)
- #define CAL_CTRL			0x100
- #define CAL_CTRL1			0x104
+ 	ret = of_cal_create_instance(ctx, inst);
+ 	if (ret) {
 -- 
 Regards,
 
