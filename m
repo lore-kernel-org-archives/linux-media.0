@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8786BC433E3
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0838C433E0
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6AD2220771
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8BB45206DF
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 18:38:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="oVIioPtd"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="muMQDsY/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729911AbgGFSiA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Jul 2020 14:38:00 -0400
+        id S1729718AbgGFSiD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Jul 2020 14:38:03 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:45202 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729657AbgGFSiA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:38:00 -0400
+        with ESMTP id S1729788AbgGFSiC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 14:38:02 -0400
 Received: from pendragon.bb.dnainternet.fi (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B78CE18E5;
-        Mon,  6 Jul 2020 20:37:47 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 96AD42156;
+        Mon,  6 Jul 2020 20:37:48 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
         s=mail; t=1594060668;
-        bh=gl4ewBo5+r1CvHSLCZpFxMdmug9UVc3bwzlpofQTqJI=;
+        bh=1hz6bXTkkvBGlyF+S1bFXp1ElHiKkvJaztTrfPHw6mE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oVIioPtd+krv0+B/zrZKIdyZdemrHiIBccIBSouYqLlNI5A5rJyspXJHWMdyLZDAf
-         x5WAPGltSJhUVaSQJN4EoMoeovjgRJZXYD4YVrkAAv3BrxI2a1rxX69g956PaPdQE2
-         PiCc1Ah/ih2IOy6GcJHv+uRleToNnsuqvXttcULo=
+        b=muMQDsY/lsAWPmj++w4I2Jb7diIZJcrQU3dzdDKi3HojZXKhQCbdgoOxy8TgJN3zN
+         7qlYsWOLbAjTtUiwaKMJf7Ow+5/afkyPp3YgN8inTy/Ih9XaL9xdM9F0vFEhsZpoE8
+         7nwlVLUhjpkFJ9DpgTmUk+uEfMFt90YwfxayYdas=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH v2 032/108] media: ti-vpe: cal: Store sensor-related data in cal_camerarx
-Date:   Mon,  6 Jul 2020 21:35:53 +0300
-Message-Id: <20200706183709.12238-33-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 034/108] media: ti-vpe: cal: Group CAMERARX-related functions together
+Date:   Mon,  6 Jul 2020 21:35:55 +0300
+Message-Id: <20200706183709.12238-35-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
 References: <20200706183709.12238-1-laurent.pinchart@ideasonboard.com>
@@ -48,230 +48,411 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The sensor is connected to the CAMERARX. Store its pointer, as well as
-the sensor pixel rate and the endpoint, in the cal_camerarx. This
-prepares for decoupling the cal_camerarx and cal_ctx.
+Group the CAMERARX functions together to make the overall driver
+structure easier to navigate. This only moves functions around, no
+functional change is included.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 Reviewed-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 59 +++++++++++++++--------------
- 1 file changed, 30 insertions(+), 29 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c | 339 ++++++++++++++--------------
+ 1 file changed, 169 insertions(+), 170 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 7ec2b6febf71..eb5fd81eda37 100644
+index bbf7acab17af..57d2feabc2e8 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -339,6 +339,10 @@ struct cal_camerarx {
+@@ -468,9 +468,30 @@ static inline void set_field(u32 *valp, u32 field, u32 mask)
+ 	*valp = val;
+ }
  
- 	struct cal_dev		*cal;
- 	unsigned int		instance;
+-static u32 cal_camerarx_max_lanes(struct cal_camerarx *phy)
++static void cal_quickdump_regs(struct cal_dev *cal)
+ {
+-	return phy->cal->data->camerarx[phy->instance].num_lanes;
++	cal_info(cal, "CAL Registers @ 0x%pa:\n", &cal->res->start);
++	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
++		       (__force const void *)cal->base,
++		       resource_size(cal->res), false);
 +
-+	struct v4l2_fwnode_endpoint	endpoint;
-+	struct v4l2_subdev	*sensor;
-+	unsigned int		external_rate;
- };
++	if (cal->ctx[0]) {
++		cal_info(cal, "CSI2 Core 0 Registers @ %pa:\n",
++			 &cal->ctx[0]->phy->res->start);
++		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
++			       (__force const void *)cal->ctx[0]->phy->base,
++			       resource_size(cal->ctx[0]->phy->res),
++			       false);
++	}
++
++	if (cal->ctx[1]) {
++		cal_info(cal, "CSI2 Core 1 Registers @ %pa:\n",
++			 &cal->ctx[1]->phy->res->start);
++		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
++			       (__force const void *)cal->ctx[1]->phy->base,
++			       resource_size(cal->ctx[1]->phy->res),
++			       false);
++	}
+ }
  
- struct cal_dev {
-@@ -369,8 +373,6 @@ struct cal_ctx {
- 	struct v4l2_ctrl_handler ctrl_handler;
- 	struct video_device	vdev;
- 	struct v4l2_async_notifier notifier;
--	struct v4l2_subdev	*sensor;
--	struct v4l2_fwnode_endpoint	endpoint;
+ static u32 cal_data_get_num_csi2_phy(struct cal_dev *cal)
+@@ -478,74 +499,16 @@ static u32 cal_data_get_num_csi2_phy(struct cal_dev *cal)
+ 	return cal->data->num_csi2_phy;
+ }
  
- 	struct cal_dev		*cal;
- 	struct cal_camerarx	*phy;
-@@ -394,7 +396,6 @@ struct cal_ctx {
- 	unsigned int		num_active_fmt;
+-static int cal_camerarx_regmap_init(struct cal_dev *cal,
+-				    struct cal_camerarx *phy)
+-{
+-	const struct cal_camerarx_data *phy_data;
+-	unsigned int i;
+-
+-	if (!cal->data)
+-		return -EINVAL;
+-
+-	phy_data = &cal->data->camerarx[phy->instance];
+-
+-	for (i = 0; i < F_MAX_FIELDS; i++) {
+-		struct reg_field field = {
+-			.reg = cal->syscon_camerrx_offset,
+-			.lsb = phy_data->fields[i].lsb,
+-			.msb = phy_data->fields[i].msb,
+-		};
+-
+-		/*
+-		 * Here we update the reg offset with the
+-		 * value found in DT
+-		 */
+-		phy->fields[i] = devm_regmap_field_alloc(&cal->pdev->dev,
+-							 cal->syscon_camerrx,
+-							 field);
+-		if (IS_ERR(phy->fields[i])) {
+-			cal_err(cal, "Unable to allocate regmap fields\n");
+-			return PTR_ERR(phy->fields[i]);
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static struct regmap *cal_get_camerarx_regmap(struct cal_dev *cal)
+-{
+-	struct platform_device *pdev = cal->pdev;
+-	struct regmap_config config = { };
+-	struct regmap *regmap;
+-	void __iomem *base;
+-	struct resource *res;
+-
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+-					   "camerrx_control");
+-	base = devm_ioremap_resource(&pdev->dev, res);
+-	if (IS_ERR(base)) {
+-		cal_err(cal, "failed to ioremap\n");
+-		return ERR_CAST(base);
+-	}
+-
+-	cal_dbg(1, cal, "ioresource %s at %pa - %pa\n",
+-		res->name, &res->start, &res->end);
+-
+-	config.reg_bits = 32;
+-	config.reg_stride = 4;
+-	config.val_bits = 32;
+-	config.max_register = resource_size(res) - 4;
+-
+-	regmap = regmap_init_mmio(NULL, base, &config);
+-	if (IS_ERR(regmap))
+-		pr_err("regmap init failed\n");
+-
+-	return regmap;
+-}
+-
+-/*
+- * Control Module CAMERARX block access
++/* ------------------------------------------------------------------
++ *	CAMERARX Management
++ * ------------------------------------------------------------------
+  */
++
++static u32 cal_camerarx_max_lanes(struct cal_camerarx *phy)
++{
++	return phy->cal->data->camerarx[phy->instance].num_lanes;
++}
++
+ static void cal_camerarx_enable(struct cal_camerarx *phy)
+ {
+ 	u32 max_lanes;
+@@ -565,61 +528,6 @@ static void cal_camerarx_disable(struct cal_camerarx *phy)
+ 	regmap_field_write(phy->fields[F_CTRLCLKEN], 0);
+ }
  
- 	unsigned int		sequence;
--	unsigned int		external_rate;
- 	struct vb2_queue	vb_vidq;
- 	unsigned int		csi2_port;
- 	unsigned int		cport;
-@@ -587,6 +588,7 @@ static struct cal_camerarx *cc_create(struct cal_dev *cal,
+-/*
+- * Camera Instance access block
+- */
+-static struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
+-						unsigned int instance)
+-{
+-	struct platform_device *pdev = cal->pdev;
+-	struct cal_camerarx *phy;
+-	int ret;
+-
+-	phy = devm_kzalloc(&pdev->dev, sizeof(*phy), GFP_KERNEL);
+-	if (!phy)
+-		return ERR_PTR(-ENOMEM);
+-
+-	phy->cal = cal;
+-	phy->instance = instance;
+-	phy->external_rate = 192000000;
+-
+-	phy->res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+-						(instance == 0) ?
+-						"cal_rx_core0" :
+-						"cal_rx_core1");
+-	phy->base = devm_ioremap_resource(&pdev->dev, phy->res);
+-	if (IS_ERR(phy->base)) {
+-		cal_err(cal, "failed to ioremap\n");
+-		return ERR_CAST(phy->base);
+-	}
+-
+-	cal_dbg(1, cal, "ioresource %s at %pa - %pa\n",
+-		phy->res->name, &phy->res->start, &phy->res->end);
+-
+-	ret = cal_camerarx_regmap_init(cal, phy);
+-	if (ret)
+-		return ERR_PTR(ret);
+-
+-	return phy;
+-}
+-
+-/*
+- * Get Revision and HW info
+- */
+-static void cal_get_hwinfo(struct cal_dev *cal)
+-{
+-	u32 revision;
+-	u32 hwinfo;
+-
+-	revision = reg_read(cal, CAL_HL_REVISION);
+-	cal_dbg(3, cal, "CAL_HL_REVISION = 0x%08x (expecting 0x40000200)\n",
+-		revision);
+-
+-	hwinfo = reg_read(cal, CAL_HL_HWINFO);
+-	cal_dbg(3, cal, "CAL_HL_HWINFO = 0x%08x (expecting 0xA3C90469)\n",
+-		hwinfo);
+-}
+-
+ /*
+  *   Errata i913: CSI2 LDO Needs to be disabled when module is powered on
+  *
+@@ -649,32 +557,6 @@ static void cal_camerarx_i913_errata(struct cal_camerarx *phy)
+ 	reg_write(phy, CAL_CSI2_PHY_REG10, reg10);
+ }
  
- 	phy->cal = cal;
- 	phy->instance = instance;
+-static void cal_quickdump_regs(struct cal_dev *cal)
+-{
+-	cal_info(cal, "CAL Registers @ 0x%pa:\n", &cal->res->start);
+-	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
+-		       (__force const void *)cal->base,
+-		       resource_size(cal->res), false);
+-
+-	if (cal->ctx[0]) {
+-		cal_info(cal, "CSI2 Core 0 Registers @ %pa:\n",
+-			 &cal->ctx[0]->phy->res->start);
+-		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
+-			       (__force const void *)cal->ctx[0]->phy->base,
+-			       resource_size(cal->ctx[0]->phy->res),
+-			       false);
+-	}
+-
+-	if (cal->ctx[1]) {
+-		cal_info(cal, "CSI2 Core 1 Registers @ %pa:\n",
+-			 &cal->ctx[1]->phy->res->start);
+-		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_OFFSET, 16, 4,
+-			       (__force const void *)cal->ctx[1]->phy->base,
+-			       resource_size(cal->ctx[1]->phy->res),
+-			       false);
+-	}
+-}
+-
+ /*
+  * Enable the expected IRQ sources
+  */
+@@ -1010,6 +892,126 @@ static void cal_camerarx_ppi_disable(struct cal_camerarx *phy)
+ 			0, CAL_CSI2_PPI_CTRL_IF_EN_MASK);
+ }
+ 
++static int cal_camerarx_get_external_info(struct cal_camerarx *phy)
++{
++	struct v4l2_ctrl *ctrl;
++
++	if (!phy->sensor)
++		return -ENODEV;
++
++	ctrl = v4l2_ctrl_find(phy->sensor->ctrl_handler, V4L2_CID_PIXEL_RATE);
++	if (!ctrl) {
++		phy_err(phy, "no pixel rate control in subdev: %s\n",
++			phy->sensor->name);
++		return -EPIPE;
++	}
++
++	phy->external_rate = v4l2_ctrl_g_ctrl_int64(ctrl);
++	phy_dbg(3, phy, "sensor Pixel Rate: %u\n", phy->external_rate);
++
++	return 0;
++}
++
++static int cal_camerarx_regmap_init(struct cal_dev *cal,
++				    struct cal_camerarx *phy)
++{
++	const struct cal_camerarx_data *phy_data;
++	unsigned int i;
++
++	if (!cal->data)
++		return -EINVAL;
++
++	phy_data = &cal->data->camerarx[phy->instance];
++
++	for (i = 0; i < F_MAX_FIELDS; i++) {
++		struct reg_field field = {
++			.reg = cal->syscon_camerrx_offset,
++			.lsb = phy_data->fields[i].lsb,
++			.msb = phy_data->fields[i].msb,
++		};
++
++		/*
++		 * Here we update the reg offset with the
++		 * value found in DT
++		 */
++		phy->fields[i] = devm_regmap_field_alloc(&cal->pdev->dev,
++							 cal->syscon_camerrx,
++							 field);
++		if (IS_ERR(phy->fields[i])) {
++			cal_err(cal, "Unable to allocate regmap fields\n");
++			return PTR_ERR(phy->fields[i]);
++		}
++	}
++
++	return 0;
++}
++
++static struct cal_camerarx *cal_camerarx_create(struct cal_dev *cal,
++						unsigned int instance)
++{
++	struct platform_device *pdev = cal->pdev;
++	struct cal_camerarx *phy;
++	int ret;
++
++	phy = devm_kzalloc(&pdev->dev, sizeof(*phy), GFP_KERNEL);
++	if (!phy)
++		return ERR_PTR(-ENOMEM);
++
++	phy->cal = cal;
++	phy->instance = instance;
 +	phy->external_rate = 192000000;
- 
- 	phy->res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 						(instance == 0) ?
-@@ -778,12 +780,12 @@ static void csi2_phy_config(struct cal_ctx *ctx)
- 	unsigned int ths_term, ths_settle;
- 	unsigned int csi2_ddrclk_khz;
- 	struct v4l2_fwnode_bus_mipi_csi2 *mipi_csi2 =
--			&ctx->endpoint.bus.mipi_csi2;
-+			&ctx->phy->endpoint.bus.mipi_csi2;
- 	u32 num_lanes = mipi_csi2->num_data_lanes;
- 
- 	/* DPHY timing configuration */
- 	/* CSI-2 is DDR and we only count used lanes. */
--	csi2_ddrclk_khz = ctx->external_rate / 1000
-+	csi2_ddrclk_khz = ctx->phy->external_rate / 1000
- 		/ (2 * num_lanes) * ctx->fmt->bpp;
- 	ctx_dbg(1, ctx, "csi2_ddrclk_khz: %d\n", csi2_ddrclk_khz);
- 
-@@ -978,7 +980,7 @@ static void csi2_lane_config(struct cal_ctx *ctx)
- 	u32 lane_mask = CAL_CSI2_COMPLEXIO_CFG_CLOCK_POSITION_MASK;
- 	u32 polarity_mask = CAL_CSI2_COMPLEXIO_CFG_CLOCK_POL_MASK;
- 	struct v4l2_fwnode_bus_mipi_csi2 *mipi_csi2 =
--		&ctx->endpoint.bus.mipi_csi2;
-+		&ctx->phy->endpoint.bus.mipi_csi2;
- 	int lane;
- 
- 	set_field(&val, mipi_csi2->clock_lane + 1, lane_mask);
-@@ -1149,22 +1151,22 @@ static void cal_wr_dma_addr(struct cal_ctx *ctx, unsigned int dmaaddr)
++
++	phy->res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
++						(instance == 0) ?
++						"cal_rx_core0" :
++						"cal_rx_core1");
++	phy->base = devm_ioremap_resource(&pdev->dev, phy->res);
++	if (IS_ERR(phy->base)) {
++		cal_err(cal, "failed to ioremap\n");
++		return ERR_CAST(phy->base);
++	}
++
++	cal_dbg(1, cal, "ioresource %s at %pa - %pa\n",
++		phy->res->name, &phy->res->start, &phy->res->end);
++
++	ret = cal_camerarx_regmap_init(cal, phy);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return phy;
++}
++
++static struct regmap *cal_get_camerarx_regmap(struct cal_dev *cal)
++{
++	struct platform_device *pdev = cal->pdev;
++	struct regmap_config config = { };
++	struct regmap *regmap;
++	void __iomem *base;
++	struct resource *res;
++
++	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
++					   "camerrx_control");
++	base = devm_ioremap_resource(&pdev->dev, res);
++	if (IS_ERR(base)) {
++		cal_err(cal, "failed to ioremap\n");
++		return ERR_CAST(base);
++	}
++
++	cal_dbg(1, cal, "ioresource %s at %pa - %pa\n",
++		res->name, &res->start, &res->end);
++
++	config.reg_bits = 32;
++	config.reg_stride = 4;
++	config.val_bits = 32;
++	config.max_register = resource_size(res) - 4;
++
++	regmap = regmap_init_mmio(NULL, base, &config);
++	if (IS_ERR(regmap))
++		pr_err("regmap init failed\n");
++
++	return regmap;
++}
++
+ static void csi2_ctx_config(struct cal_ctx *ctx)
+ {
+ 	u32 val;
+@@ -1146,26 +1148,6 @@ static void cal_wr_dma_addr(struct cal_ctx *ctx, unsigned int dmaaddr)
  	reg_write(ctx->cal, CAL_WR_DMA_ADDR(ctx->csi2_port), dmaaddr);
  }
  
--static int cal_get_external_info(struct cal_ctx *ctx)
-+static int cal_get_external_info(struct cal_camerarx *phy)
- {
- 	struct v4l2_ctrl *ctrl;
- 
--	if (!ctx->sensor)
-+	if (!phy->sensor)
- 		return -ENODEV;
- 
--	ctrl = v4l2_ctrl_find(ctx->sensor->ctrl_handler, V4L2_CID_PIXEL_RATE);
-+	ctrl = v4l2_ctrl_find(phy->sensor->ctrl_handler, V4L2_CID_PIXEL_RATE);
- 	if (!ctrl) {
--		ctx_err(ctx, "no pixel rate control in subdev: %s\n",
--			ctx->sensor->name);
-+		phy_err(phy, "no pixel rate control in subdev: %s\n",
-+			phy->sensor->name);
- 		return -EPIPE;
- 	}
- 
--	ctx->external_rate = v4l2_ctrl_g_ctrl_int64(ctrl);
--	ctx_dbg(3, ctx, "sensor Pixel Rate: %d\n", ctx->external_rate);
-+	phy->external_rate = v4l2_ctrl_g_ctrl_int64(ctrl);
-+	phy_dbg(3, phy, "sensor Pixel Rate: %u\n", phy->external_rate);
- 
- 	return 0;
- }
-@@ -1319,7 +1321,7 @@ static int __subdev_get_format(struct cal_ctx *ctx,
- 	sd_fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 	sd_fmt.pad = 0;
- 
--	ret = v4l2_subdev_call(ctx->sensor, pad, get_fmt, NULL, &sd_fmt);
-+	ret = v4l2_subdev_call(ctx->phy->sensor, pad, get_fmt, NULL, &sd_fmt);
- 	if (ret)
- 		return ret;
- 
-@@ -1342,7 +1344,7 @@ static int __subdev_set_format(struct cal_ctx *ctx,
- 	sd_fmt.pad = 0;
- 	*mbus_fmt = *fmt;
- 
--	ret = v4l2_subdev_call(ctx->sensor, pad, set_fmt, NULL, &sd_fmt);
-+	ret = v4l2_subdev_call(ctx->phy->sensor, pad, set_fmt, NULL, &sd_fmt);
- 	if (ret)
- 		return ret;
- 
-@@ -1423,7 +1425,7 @@ static int cal_try_fmt_vid_cap(struct file *file, void *priv,
- 	fse.code = fmt->code;
- 	fse.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 	for (fse.index = 0; ; fse.index++) {
--		ret = v4l2_subdev_call(ctx->sensor, pad, enum_frame_size,
-+		ret = v4l2_subdev_call(ctx->phy->sensor, pad, enum_frame_size,
- 				       NULL, &fse);
- 		if (ret)
- 			break;
-@@ -1521,7 +1523,8 @@ static int cal_enum_framesizes(struct file *file, void *fh,
- 	fse.code = fmt->code;
- 	fse.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 
--	ret = v4l2_subdev_call(ctx->sensor, pad, enum_frame_size, NULL, &fse);
-+	ret = v4l2_subdev_call(ctx->phy->sensor, pad, enum_frame_size, NULL,
-+			       &fse);
- 	if (ret)
- 		return ret;
- 
-@@ -1577,7 +1580,7 @@ static int cal_enum_frameintervals(struct file *file, void *priv,
- 		return -EINVAL;
- 
- 	fie.code = fmt->code;
--	ret = v4l2_subdev_call(ctx->sensor, pad, enum_frame_interval,
-+	ret = v4l2_subdev_call(ctx->phy->sensor, pad, enum_frame_interval,
- 			       NULL, &fie);
- 	if (ret)
- 		return ret;
-@@ -1675,11 +1678,11 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	addr = vb2_dma_contig_plane_dma_addr(&ctx->cur_frm->vb.vb2_buf, 0);
- 	ctx->sequence = 0;
- 
--	ret = cal_get_external_info(ctx);
-+	ret = cal_get_external_info(ctx->phy);
- 	if (ret < 0)
- 		goto err;
- 
--	ret = v4l2_subdev_call(ctx->sensor, core, s_power, 1);
-+	ret = v4l2_subdev_call(ctx->phy->sensor, core, s_power, 1);
- 	if (ret < 0 && ret != -ENOIOCTLCMD && ret != -ENODEV) {
- 		ctx_err(ctx, "power on failed in subdev\n");
- 		goto err;
-@@ -1696,9 +1699,9 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	enable_irqs(ctx);
- 	csi2_phy_init(ctx);
- 
--	ret = v4l2_subdev_call(ctx->sensor, video, s_stream, 1);
-+	ret = v4l2_subdev_call(ctx->phy->sensor, video, s_stream, 1);
- 	if (ret) {
--		v4l2_subdev_call(ctx->sensor, core, s_power, 0);
-+		v4l2_subdev_call(ctx->phy->sensor, core, s_power, 0);
- 		ctx_err(ctx, "stream on failed in subdev\n");
- 		pm_runtime_put_sync(&ctx->cal->pdev->dev);
- 		goto err;
-@@ -1755,10 +1758,10 @@ static void cal_stop_streaming(struct vb2_queue *vq)
- 	disable_irqs(ctx);
- 	csi2_phy_deinit(ctx);
- 
--	if (v4l2_subdev_call(ctx->sensor, video, s_stream, 0))
-+	if (v4l2_subdev_call(ctx->phy->sensor, video, s_stream, 0))
- 		ctx_err(ctx, "stream off failed in subdev\n");
- 
--	ret = v4l2_subdev_call(ctx->sensor, core, s_power, 0);
-+	ret = v4l2_subdev_call(ctx->phy->sensor, core, s_power, 0);
- 	if (ret < 0 && ret != -ENOIOCTLCMD && ret != -ENODEV)
- 		ctx_err(ctx, "power off failed in subdev\n");
- 
-@@ -1849,8 +1852,6 @@ static int cal_complete_ctx(struct cal_ctx *ctx)
- 	struct vb2_queue *q;
- 	int ret;
- 
--	ctx->external_rate = 192000000;
+-static int cal_camerarx_get_external_info(struct cal_camerarx *phy)
+-{
+-	struct v4l2_ctrl *ctrl;
 -
- 	/* initialize locks */
- 	spin_lock_init(&ctx->slock);
- 	mutex_init(&ctx->mutex);
-@@ -1906,13 +1907,13 @@ static int cal_async_bound(struct v4l2_async_notifier *notifier,
- 	unsigned int i, j, k;
- 	int ret = 0;
+-	if (!phy->sensor)
+-		return -ENODEV;
+-
+-	ctrl = v4l2_ctrl_find(phy->sensor->ctrl_handler, V4L2_CID_PIXEL_RATE);
+-	if (!ctrl) {
+-		phy_err(phy, "no pixel rate control in subdev: %s\n",
+-			phy->sensor->name);
+-		return -EPIPE;
+-	}
+-
+-	phy->external_rate = v4l2_ctrl_g_ctrl_int64(ctrl);
+-	phy_dbg(3, phy, "sensor Pixel Rate: %u\n", phy->external_rate);
+-
+-	return 0;
+-}
+-
+ static inline void cal_schedule_next_buffer(struct cal_ctx *ctx)
+ {
+ 	struct cal_dmaqueue *dma_q = &ctx->vidq;
+@@ -2244,6 +2226,23 @@ static const struct of_device_id cal_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, cal_of_match);
  
--	if (ctx->sensor) {
-+	if (ctx->phy->sensor) {
- 		ctx_info(ctx, "Rejecting subdev %s (Already set!!)",
- 			 subdev->name);
- 		return 0;
- 	}
- 
--	ctx->sensor = subdev;
-+	ctx->phy->sensor = subdev;
- 	ctx_dbg(1, ctx, "Using sensor %s for capture\n", subdev->name);
- 
- 	/* Enumerate sub device formats and enable all matching local formats */
-@@ -2065,7 +2066,7 @@ static int of_cal_create_instance(struct cal_ctx *ctx, int inst)
- 
- 	parent = pdev->dev.of_node;
- 
--	endpoint = &ctx->endpoint;
-+	endpoint = &ctx->phy->endpoint;
- 
- 	ep_node = NULL;
- 	port = NULL;
++/*
++ * Get Revision and HW info
++ */
++static void cal_get_hwinfo(struct cal_dev *cal)
++{
++	u32 revision;
++	u32 hwinfo;
++
++	revision = reg_read(cal, CAL_HL_REVISION);
++	cal_dbg(3, cal, "CAL_HL_REVISION = 0x%08x (expecting 0x40000200)\n",
++		revision);
++
++	hwinfo = reg_read(cal, CAL_HL_HWINFO);
++	cal_dbg(3, cal, "CAL_HL_HWINFO = 0x%08x (expecting 0xA3C90469)\n",
++		hwinfo);
++}
++
+ static int cal_probe(struct platform_device *pdev)
+ {
+ 	struct cal_dev *cal;
 -- 
 Regards,
 
