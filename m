@@ -2,53 +2,54 @@ Return-Path: <SRS0=iZD8=AR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5E77C433DF
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 21:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C68FC433DF
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 21:55:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 90BE620674
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 21:55:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D4B620674
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jul 2020 21:55:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="YoIQFPcJ"
+	dkim=pass (1024-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="CFjJyI82"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgGFVyf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Jul 2020 17:54:35 -0400
-Received: from o1.b.az.sendgrid.net ([208.117.55.133]:3927 "EHLO
+        id S1727908AbgGFVzX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Jul 2020 17:55:23 -0400
+Received: from o1.b.az.sendgrid.net ([208.117.55.133]:64851 "EHLO
         o1.b.az.sendgrid.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726729AbgGFVye (ORCPT
+        with ESMTP id S1726835AbgGFVye (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jul 2020 17:54:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
         h=from:subject:in-reply-to:references:to:cc:content-type:
         content-transfer-encoding;
-        s=001; bh=zH7tX8PPrQOiC8YQYfNApiiYgPL8wf8hdlJJn7cx1Rc=;
-        b=YoIQFPcJX23K4CfU4auvTouFdT/J035h8AJE9Py+DXVx+HiFocDTHIKMR4sU/q5+ebKd
-        SnjjrxkFIXmWqyK1Mmqzo3j8MrIyuxj5sMpBGhDEN2xboGAGp797rYqw8lei6CtOnvwRoN
-        r6pLbjS3vK1YXJkV68S/75j5kn5RkcxVY=
-Received: by filterdrecv-p3iad2-5b55dcd864-pbk2w with SMTP id filterdrecv-p3iad2-5b55dcd864-pbk2w-17-5F039D99-1F
-        2020-07-06 21:54:33.351928764 +0000 UTC m=+881113.475332882
+        s=001; bh=TGA8bCtzG3W48MXoVBxFSHeewOIBjbl37ylvpTpVch8=;
+        b=CFjJyI82kqHAAybk35Iw5Oxm6ciN3WXKnqdGBPs6ot03enrioSCkp+e7N7T6q7aas32L
+        Hr264zsRRdggLlNKE+Xlb8Ji2bhg87huQr7K/Y3Fgy+H61iSc9DLbgPOZCt5uN+JkZ1/2F
+        yiAEFNJ4JNO25EH2SUKRFh6Nit9l2iHHA=
+Received: by filterdrecv-p3iad2-5b55dcd864-d2lx7 with SMTP id filterdrecv-p3iad2-5b55dcd864-d2lx7-18-5F039D9A-4
+        2020-07-06 21:54:34.170135634 +0000 UTC m=+881111.822229131
 Received: from bionic.localdomain (unknown)
         by ismtpd0008p1lon1.sendgrid.net (SG) with ESMTP
-        id coCc3ZK0SEeNipq-mYYnXg
-        Mon, 06 Jul 2020 21:54:33.104 +0000 (UTC)
+        id lAitVEpTTyqzql48WShlmQ
+        Mon, 06 Jul 2020 21:54:33.919 +0000 (UTC)
 From:   Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v2 00/12] media: rkvdec: Add H.264 High 10 and 4:2:2 profile
- support
-Date:   Mon, 06 Jul 2020 21:54:33 +0000 (UTC)
-Message-Id: <20200706215430.22859-1-jonas@kwiboo.se>
+Subject: [PATCH v2 02/12] media: rkvdec: Ensure decoded resolution fit coded
+ resolution
+Date:   Mon, 06 Jul 2020 21:54:34 +0000 (UTC)
+Message-Id: <20200706215430.22859-3-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200701215616.30874-1-jonas@kwiboo.se>
+In-Reply-To: <20200706215430.22859-1-jonas@kwiboo.se>
 References: <20200701215616.30874-1-jonas@kwiboo.se>
+ <20200706215430.22859-1-jonas@kwiboo.se>
 X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
- =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0hypXKcIOeSYpNSUeY?=
- =?us-ascii?Q?emRpIrZd9puwQGdPqGdlyH4xQt+Xy=2Fer833ML+Z?=
- =?us-ascii?Q?Yb0lIUcPP=2FZt=2F5FyizZgascWuYLH4=2FBkxMfldDK?=
- =?us-ascii?Q?PxuMCZ8UMswwiueYRXhpFNZWbAlHgnDyB56lvKF?=
- =?us-ascii?Q?YV2tE9fLtwWBYcgDZJZNvUte9v+h513VfDqQ7V4?=
- =?us-ascii?Q?9OF2sDnnkLuAwicWQpFow=3D=3D?=
+ =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0hxOVj4gd+wIhsMeaZ?=
+ =?us-ascii?Q?4=2Fuq2uZ67RzqPtTDrFqEKz5LOLXtj=2FFf4sWlE2+?=
+ =?us-ascii?Q?+AwGx5hzQFsz0qLPWfM26W5k7Zgkfyh+NQuvGT7?=
+ =?us-ascii?Q?gW2DAY1rpO85eI33a6lEOTqA9+YLNLQDIn=2FSyuQ?=
+ =?us-ascii?Q?AwxxdfwUEHZjGtPF1aeFRJW398HZXeXBbhXhwXq?=
+ =?us-ascii?Q?Vn3GtEYT6z2RN1oiunIJg=3D=3D?=
 To:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Jonas Karlman <jonas@kwiboo.se>,
@@ -64,78 +65,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series contains minor fixes and adds H.264 High 10 and 4:2:2 profile
-support to the Rockchip Video Decoder driver.
+Ensure decoded CAPTURE buffer resolution is larger or equal to the coded
+OPTUPT buffer resolution.
 
-Patch 1 and 3 fixes two issues when decoding field encoded content. Patch 2
-ensures CAPTURE buffer is same resolution or larger than OUTPUT buffer.
-
-Patch 5 allows userspace to set OUTPUT sizeimage.
-
-Patch 6 updates the v4l2_format helpers to consider block width and height
-when calculating plane bytesperline and sizeimage.
-
-Patch 7 adds two new pixelformats for 10-bit 4:2:0/4:2:2.
-
-Patch 8 change to use bytesperline and buffer height to configure strides.
-
-Patch 9 and 10 add support for limit/lock down a pixelformat based on SPS.
-
-Patch 11 adds final bits to support H.264 High 10 and 4:2:2 profiles.
-
-Patch 12 adds profile and level controls.
-
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+---
 Changes in v2:
-- Collect r-b tags
-- SPS pic width and height in mbs validation moved to rkvdec_try_ctrl
-- New patch to not override output buffer sizeimage
-- Reworked pixel format validation
-- Only align decoded buffer instead of changing frmsize step_width
-See indivitual patch for changes.
+- New patch
+---
+ drivers/staging/media/rkvdec/rkvdec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This series depend on the "handle unsupported H.264 bitstreams" series at [1]
-with a small fixup, s/p_cur/p_new/.
-
-To fully runtime test this series you may need drm patches from [2] and
-ffmpeg patches from [3], this series and drm patches is also available at [4].
-
-[1] https://patchwork.linuxtv.org/cover/64977/
-[2] https://patchwork.freedesktop.org/series/78099/
-[3] https://github.com/Kwiboo/FFmpeg/commits/v4l2-request-hwaccel-4.3-rkvdec-high-10
-[4] https://github.com/Kwiboo/linux-rockchip/commits/linuxtv-rkvdec-high-10-v2
-
-Regards,
-Jonas
-
-Jonas Karlman (12):
-  media: rkvdec: h264: Fix reference frame_num wrap for second field
-  media: rkvdec: Ensure decoded resolution fit coded resolution
-  media: rkvdec: h264: Validate and use pic width and height in mbs
-  media: rkvdec: h264: Fix bit depth wrap in pps packet
-  media: rkvdec: h264: Do not override output buffer sizeimage
-  media: v4l2-common: Add helpers to calculate bytesperline and
-    sizeimage
-  media: v4l2: Add NV15 and NV20 pixel formats
-  media: rkvdec: h264: Use bytesperline and buffer height to calculate
-    stride
-  media: rkvdec: Extract rkvdec_fill_decoded_pixfmt helper method
-  media: rkvdec: Lock capture pixel format in s_ctrl and s_fmt
-  media: rkvdec: h264: Support High 10 and 4:2:2 profiles
-  media: rkvdec: h264: Support profile and level controls
-
- .../userspace-api/media/v4l/pixfmt-nv15.rst   | 101 ++++++++++++++
- .../userspace-api/media/v4l/pixfmt-nv20.rst   |  99 +++++++++++++
- .../userspace-api/media/v4l/yuv-formats.rst   |   2 +
- drivers/media/v4l2-core/v4l2-common.c         |  80 +++++------
- drivers/media/v4l2-core/v4l2-ioctl.c          |   2 +
- drivers/staging/media/rkvdec/rkvdec-h264.c    |  45 ++++--
- drivers/staging/media/rkvdec/rkvdec.c         | 130 ++++++++++++++----
- drivers/staging/media/rkvdec/rkvdec.h         |   2 +
- include/uapi/linux/videodev2.h                |   3 +
- 9 files changed, 384 insertions(+), 80 deletions(-)
- create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-nv15.rst
- create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-nv20.rst
-
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index 55dc27171ce4..4ab8f7e0566b 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -235,6 +235,8 @@ static int rkvdec_try_capture_fmt(struct file *file, void *priv,
+ 		pix_mp->pixelformat = coded_desc->decoded_fmts[0];
+ 
+ 	/* Always apply the frmsize constraint of the coded end. */
++	pix_mp->width = max(pix_mp->width, ctx->coded_fmt.fmt.pix_mp.width);
++	pix_mp->height = max(pix_mp->height, ctx->coded_fmt.fmt.pix_mp.height);
+ 	v4l2_apply_frmsize_constraints(&pix_mp->width,
+ 				       &pix_mp->height,
+ 				       &coded_desc->frmsize);
 -- 
 2.17.1
 
