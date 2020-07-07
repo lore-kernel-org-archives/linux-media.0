@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52A41C43463
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jul 2020 20:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E323C433F1
+	for <linux-media@archiver.kernel.org>; Tue,  7 Jul 2020 20:12:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3470920720
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jul 2020 20:13:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F350220771
+	for <linux-media@archiver.kernel.org>; Tue,  7 Jul 2020 20:12:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="I+82JJmu"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="lUb6/2C1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728722AbgGGUNG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Jul 2020 16:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
+        id S1728521AbgGGUMt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Jul 2020 16:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728714AbgGGUNF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jul 2020 16:13:05 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AFBC061755
-        for <linux-media@vger.kernel.org>; Tue,  7 Jul 2020 13:13:05 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id 17so473913wmo.1
-        for <linux-media@vger.kernel.org>; Tue, 07 Jul 2020 13:13:05 -0700 (PDT)
+        with ESMTP id S1728509AbgGGUMs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jul 2020 16:12:48 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7373C08C5E1
+        for <linux-media@vger.kernel.org>; Tue,  7 Jul 2020 13:12:47 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id s10so46549955wrw.12
+        for <linux-media@vger.kernel.org>; Tue, 07 Jul 2020 13:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=v6mLNvmwV0mXXFCJp1CZ5e+LEhcYSNx/dxx3MEMckRw=;
-        b=I+82JJmua6H54T91fmYUr8DAr6NrwnR+mkHvBYi78d5aDPpW3+51mLiZmLWpatmsVZ
-         7UZkmP80kTFgcoEpPk4rtMeZpVJWOIuNxSW1ZScEeiy2ttA5BTAFxF1utpsJipJarIxb
-         cjMyFkg21+NB7V8zjtGNczY53Qq7GLqyckRu4=
+        bh=R7r8HkxhAltQkANshfUVKOa4w7KadUqkfySsv01pqsM=;
+        b=lUb6/2C1t/0BczmmAESZFVy3ccpSWX6DXL3EcY8slzPmYihQSo/azW2t3/M5JiH14J
+         aK/7fLcwD1euBZpHzS+NZC/FqjYxHmtJM/bpV67xREte7QpEJy9IidpYszMIjAJr487d
+         v4lWU+54O3CYmSUq2eU5Xu9GSbBwur2KbYexU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=v6mLNvmwV0mXXFCJp1CZ5e+LEhcYSNx/dxx3MEMckRw=;
-        b=Cfp8Zh9NOl8ckBr01kUerTCaP+Tgg+bMKUxlYwL3IXHuwCXeYJqQMKTV6vB5oqpTiA
-         dapSjf8FdhGI4tScByDZkPAWPrOE9oogzrd1LntIECrxwSR0wSgye/MM7WyuDuBMIrBN
-         s0wy3JzZGEUnrg+zEmVKg3CmfySAo9zEtgMjM2mEsodpKau+9WnMk7zyqPwqERBV/vZe
-         wxx9lD57tKtWVo4vsEf2aoHzKGmzW1aPUtfl0ZvuMKGAswlzoUy1wkReVynCLevoTibn
-         P/yLUPBi3RI6v+CDSS/qyjMDcrS/6FR/ZoQ4i0TG7d8EISfWxMp7epLI+41EES23j4uS
-         0sbg==
-X-Gm-Message-State: AOAM531FIgDSyrDN4y6DLBXmIC3lxrVkTWSY83cryOch0l4tLX09AqYz
-        GqIHmGKTjB6E+pPA7xAwwVRCtQ==
-X-Google-Smtp-Source: ABdhPJwb8lrdzNzimlB7WFs1FDrPYBlKDSPiN4WBOCVQt3QuE500w5Nk7OIYzGADJypoV3zm1LNAIA==
-X-Received: by 2002:a1c:44e:: with SMTP id 75mr5900441wme.139.1594152784201;
-        Tue, 07 Jul 2020 13:13:04 -0700 (PDT)
+        bh=R7r8HkxhAltQkANshfUVKOa4w7KadUqkfySsv01pqsM=;
+        b=TyiotpWvUH5qR6rJfIY8mDR5W0+iLyf3zhWk5qIUEe3rogxOEFUG2HZ1GKRoKerlEB
+         kB3t2zLq0M5MQH6qCLLCRzywlO5k+G1T6/NeevFp1SerknB9kq6Isl6nkQF76aZpaU+n
+         Hlu5QoDy96k5aHUJf1zw6fhb4ozidAXfMPt8YjMmMJ6nb8Tg8zbkyyC6zq3Mq855e5u7
+         DGMXeE+6teHNlxgAO79XwPf8GX2rJ3YUAmASaAgI1rUhsiE8C13s984wleb39Awhofqb
+         yo+dkUVl6t4W4pmlTgCKlK6EadkGFR9CF7i0HYI2bbr1qpRdmIatdCNt0MGJdY5ayB+Z
+         Nx8A==
+X-Gm-Message-State: AOAM531EiYvK9tAe1AmcPyPTn/AVbL4y4WqdWKgoW2Z+T7+qKyISHLki
+        9j3LcEdFNQ4x28WtXIYPW8ccDQ==
+X-Google-Smtp-Source: ABdhPJxvUfhaain32DYJto8+g+k8DFNdTCbiLFr70tdNRSjr9MfRuytRxDtClvyHP2uJMy0wP4RbzQ==
+X-Received: by 2002:adf:e38b:: with SMTP id e11mr54679740wrm.65.1594152766573;
+        Tue, 07 Jul 2020 13:12:46 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q7sm2515262wra.56.2020.07.07.13.13.02
+        by smtp.gmail.com with ESMTPSA id q7sm2515262wra.56.2020.07.07.13.12.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 13:13:03 -0700 (PDT)
+        Tue, 07 Jul 2020 13:12:46 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
@@ -63,10 +63,13 @@ Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Chris Wilson <chris@chris-wilson.co.uk>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@intel.com>
-Subject: [PATCH 19/25] drm/amdgpu: s/GFP_KERNEL/GFP_ATOMIC in scheduler code
-Date:   Tue,  7 Jul 2020 22:12:23 +0200
-Message-Id: <20200707201229.472834-20-daniel.vetter@ffwll.ch>
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: [PATCH 04/25] drm/vkms: Annotate vblank timer
+Date:   Tue,  7 Jul 2020 22:12:08 +0200
+Message-Id: <20200707201229.472834-5-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200707201229.472834-1-daniel.vetter@ffwll.ch>
 References: <20200707201229.472834-1-daniel.vetter@ffwll.ch>
@@ -78,46 +81,11 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-My dma-fence lockdep annotations caught an inversion because we
-allocate memory where we really shouldn't:
-
-	kmem_cache_alloc+0x2b/0x6d0
-	amdgpu_fence_emit+0x30/0x330 [amdgpu]
-	amdgpu_ib_schedule+0x306/0x550 [amdgpu]
-	amdgpu_job_run+0x10f/0x260 [amdgpu]
-	drm_sched_main+0x1b9/0x490 [gpu_sched]
-	kthread+0x12e/0x150
-
-Trouble right now is that lockdep only validates against GFP_FS, which
-would be good enough for shrinkers. But for mmu_notifiers we actually
-need !GFP_ATOMIC, since they can be called from any page laundering,
-even if GFP_NOFS or GFP_NOIO are set.
-
-I guess we should improve the lockdep annotations for
-fs_reclaim_acquire/release.
-
-Ofc real fix is to properly preallocate this fence and stuff it into
-the amdgpu job structure. But GFP_ATOMIC gets the lockdep splat out of
-the way.
-
-v2: Two more allocations in scheduler paths.
-
-Frist one:
-
-	__kmalloc+0x58/0x720
-	amdgpu_vmid_grab+0x100/0xca0 [amdgpu]
-	amdgpu_job_dependency+0xf9/0x120 [amdgpu]
-	drm_sched_entity_pop_job+0x3f/0x440 [gpu_sched]
-	drm_sched_main+0xf9/0x490 [gpu_sched]
-
-Second one:
-
-	kmem_cache_alloc+0x2b/0x6d0
-	amdgpu_sync_fence+0x7e/0x110 [amdgpu]
-	amdgpu_vmid_grab+0x86b/0xca0 [amdgpu]
-	amdgpu_job_dependency+0xf9/0x120 [amdgpu]
-	drm_sched_entity_pop_job+0x3f/0x440 [gpu_sched]
-	drm_sched_main+0xf9/0x490 [gpu_sched]
+This is needed to signal the fences from page flips, annotate it
+accordingly. We need to annotate entire timer callback since if we get
+stuck anywhere in there, then the timer stops, and hence fences stop.
+Just annotating the top part that does the vblank handling isn't
+enough.
 
 Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
@@ -128,50 +96,44 @@ Cc: Chris Wilson <chris@chris-wilson.co.uk>
 Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 Cc: Christian König <christian.koenig@amd.com>
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Cc: Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
+Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c   | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/vkms/vkms_crtc.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-index 8d84975885cd..a089a827fdfe 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-@@ -143,7 +143,7 @@ int amdgpu_fence_emit(struct amdgpu_ring *ring, struct dma_fence **f,
- 	uint32_t seq;
- 	int r;
+diff --git a/drivers/gpu/drm/vkms/vkms_crtc.c b/drivers/gpu/drm/vkms/vkms_crtc.c
+index ac85e17428f8..a53a40848a72 100644
+--- a/drivers/gpu/drm/vkms/vkms_crtc.c
++++ b/drivers/gpu/drm/vkms/vkms_crtc.c
+@@ -1,5 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0+
  
--	fence = kmem_cache_alloc(amdgpu_fence_slab, GFP_KERNEL);
-+	fence = kmem_cache_alloc(amdgpu_fence_slab, GFP_ATOMIC);
- 	if (fence == NULL)
- 		return -ENOMEM;
++#include <linux/dma-fence.h>
++
+ #include <drm/drm_atomic.h>
+ #include <drm/drm_atomic_helper.h>
+ #include <drm/drm_probe_helper.h>
+@@ -14,7 +16,9 @@ static enum hrtimer_restart vkms_vblank_simulate(struct hrtimer *timer)
+ 	struct drm_crtc *crtc = &output->crtc;
+ 	struct vkms_crtc_state *state;
+ 	u64 ret_overrun;
+-	bool ret;
++	bool ret, fence_cookie;
++
++	fence_cookie = dma_fence_begin_signalling();
  
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c
-index 267fa45ddb66..a333ca2d4ddd 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c
-@@ -208,7 +208,7 @@ static int amdgpu_vmid_grab_idle(struct amdgpu_vm *vm,
- 	if (ring->vmid_wait && !dma_fence_is_signaled(ring->vmid_wait))
- 		return amdgpu_sync_fence(sync, ring->vmid_wait);
+ 	ret_overrun = hrtimer_forward_now(&output->vblank_hrtimer,
+ 					  output->period_ns);
+@@ -49,6 +53,8 @@ static enum hrtimer_restart vkms_vblank_simulate(struct hrtimer *timer)
+ 			DRM_DEBUG_DRIVER("Composer worker already queued\n");
+ 	}
  
--	fences = kmalloc_array(sizeof(void *), id_mgr->num_ids, GFP_KERNEL);
-+	fences = kmalloc_array(sizeof(void *), id_mgr->num_ids, GFP_ATOMIC);
- 	if (!fences)
- 		return -ENOMEM;
- 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-index 8ea6c49529e7..af22b526cec9 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-@@ -160,7 +160,7 @@ int amdgpu_sync_fence(struct amdgpu_sync *sync, struct dma_fence *f)
- 	if (amdgpu_sync_add_later(sync, f))
- 		return 0;
- 
--	e = kmem_cache_alloc(amdgpu_sync_slab, GFP_KERNEL);
-+	e = kmem_cache_alloc(amdgpu_sync_slab, GFP_ATOMIC);
- 	if (!e)
- 		return -ENOMEM;
++	dma_fence_end_signalling(fence_cookie);
++
+ 	return HRTIMER_RESTART;
+ }
  
 -- 
 2.27.0
