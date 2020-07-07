@@ -2,191 +2,173 @@ Return-Path: <SRS0=sYeE=AS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F893C43468
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jul 2020 20:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38E50C433E0
+	for <linux-media@archiver.kernel.org>; Tue,  7 Jul 2020 20:29:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B605206BE
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jul 2020 20:13:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17BC320773
+	for <linux-media@archiver.kernel.org>; Tue,  7 Jul 2020 20:29:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="h/9rvaxm"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="qm2gIMJS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728730AbgGGUNK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Jul 2020 16:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728737AbgGGUNJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jul 2020 16:13:09 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9FBC08C5DC
-        for <linux-media@vger.kernel.org>; Tue,  7 Jul 2020 13:13:09 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id q15so469130wmj.2
-        for <linux-media@vger.kernel.org>; Tue, 07 Jul 2020 13:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=J/s3MmMboTlzjq+8NZ+kuHYErla2b65vDUsaQSqJLtQ=;
-        b=h/9rvaxmqOgZnk0yzbidQ1mSiN2f8H+tTzjFdhGdFOWlNwkDo4JJi3I20FJiVQ64++
-         9VJT4q9VDm5n5KWBq+/qF0XamCRdfGRwp7BYVYCjbzT/qAAc5KAW0TvQWvcGnmu5uO6S
-         M3uCxlfFkcBpdt/fJ0q8qkf07KDjc8MnphevQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=J/s3MmMboTlzjq+8NZ+kuHYErla2b65vDUsaQSqJLtQ=;
-        b=okOjO2vJK/kQ0su1+etnyZvaiZBUww+xW4w4N20LKfTR4d70fjzcVMLAXQRP1z1C7H
-         cZMmq6nkCj+BLJEFPjEomeTl7RtxxpYUAH6MRj7x9ULo0nd9FmHbDsdLXPKVjRct/J5X
-         H1ImwMj8DT2gOsH2oVTX/1YDIHF4y1QaN6LK46PWNA6tFyM5WRr/MyyRNGVkG3LehHIG
-         BPkb8RiyX1sBc2hjHbwS1r7VwgHGMxSIOYyJR28t0qnlt9MJfSrT46nBspomQaiA5+GA
-         Xt31lLy590oJghVWzy+uEJr647f0sxryPcaiXKmAT6b5rDqL2aH03Ip9XgvDHfnOk440
-         +gCg==
-X-Gm-Message-State: AOAM530wi0WQIt9UYzWbYYtEFUYDKSDLGSGXaxeOzo0XUE5HRn836Iy4
-        /q9jh65ZZtU4ntmfAKq+jrcrwg==
-X-Google-Smtp-Source: ABdhPJxlP5xpy/2lURkIV3PTnLCHYkUbyRh4w5Xrsscd+z01BMadEva1i1SCumwZqijjHCScWIcFig==
-X-Received: by 2002:a1c:96c5:: with SMTP id y188mr6024472wmd.71.1594152788077;
-        Tue, 07 Jul 2020 13:13:08 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q7sm2515262wra.56.2020.07.07.13.13.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 13:13:07 -0700 (PDT)
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-To:     DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        linux-rdma@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@intel.com>
-Subject: [PATCH 22/25] drm/scheduler: use dma-fence annotations in tdr work
-Date:   Tue,  7 Jul 2020 22:12:26 +0200
-Message-Id: <20200707201229.472834-23-daniel.vetter@ffwll.ch>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200707201229.472834-1-daniel.vetter@ffwll.ch>
-References: <20200707201229.472834-1-daniel.vetter@ffwll.ch>
+        id S1728329AbgGGU3M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Jul 2020 16:29:12 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:8289 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727090AbgGGU3L (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jul 2020 16:29:11 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f04db0a0002>; Tue, 07 Jul 2020 13:28:58 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 07 Jul 2020 13:29:11 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 07 Jul 2020 13:29:11 -0700
+Received: from [10.2.173.217] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jul
+ 2020 20:29:10 +0000
+Subject: Re: [RFC PATCH v2 11/18] media: tegra-video: Add support for external
+ sensor capture
+To:     Hans Verkuil <hverkuil@xs4all.nl>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <sakari.ailus@iki.fi>,
+        <robh+dt@kernel.org>, <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
+ <1592358094-23459-12-git-send-email-skomatineni@nvidia.com>
+ <50deca28-c198-703c-96e2-82c53f48cd65@xs4all.nl>
+ <6ee18b4d-b63b-8053-1b7e-c3ec7c1d4956@nvidia.com>
+ <6846e5bb-db1d-c2ff-c52c-70a2094c5b50@nvidia.com>
+ <af11cb24-57b2-7326-ca29-e168dcbb8006@xs4all.nl>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <c08ea38f-7629-1800-fb74-a2f75daf2eb0@nvidia.com>
+Date:   Tue, 7 Jul 2020 13:29:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <af11cb24-57b2-7326-ca29-e168dcbb8006@xs4all.nl>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1594153738; bh=41u0GL5cMfBoVRtx5rywogpG12/ebnA5LHTDhsHfwM4=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=qm2gIMJSMkbFfKypTqzi0HUw27rTjlHyza8d8CrVMsdmdz9kZHHbcltBu9kaRPB2l
+         RrJ3oWaEmjCZXYx4q/kQ/JWx0uOSBV5hGC68ULq+vq7ToQ8W2XnA22FBZJN935Vllt
+         r6+cuvlIs0rdZjTZNP0ptA0CsjtLRZLD+o0Og7oF5Y7cxOPN5we3xZHAwfXriDRT+C
+         +Ol5Kr2xuAY3h14mG6XZqAEV3z6PLVYV4eqFg0lMcei0MKIteouiNrdz7NLHO59LxV
+         b2OxQpOo58uPSW8S6ykElYzZmOn32HB/dST9WqGV9EoMcCTu0cTFvyM2THDyE0cWcO
+         MPHAntPEs3YzQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In the face of unpriviledged userspace being able to submit bogus gpu
-workloads the kernel needs gpu timeout and reset (tdr) to guarantee
-that dma_fences actually complete. Annotate this worker to make sure
-we don't have any accidental locking inversions or other problems
-lurking.
 
-Originally this was part of the overall scheduler annotation patch.
-But amdgpu has some glorious inversions here:
+On 7/7/20 12:35 PM, Hans Verkuil wrote:
+> On 07/07/2020 21:25, Sowjanya Komatineni wrote:
+>> On 7/7/20 12:01 PM, Sowjanya Komatineni wrote:
+>>>
+>>> On 7/6/20 2:10 AM, Hans Verkuil wrote:
+>>>>> +static void tegra_vi_graph_cleanup(struct tegra_vi *vi)
+>>>>> +{
+>>>>> +	struct tegra_vi_channel *chan;
+>>>>> +
+>>>>> +	list_for_each_entry(chan, &vi->vi_chans, list) {
+>>>>> +		video_unregister_device(&chan->video);
+>>>>> +		mutex_lock(&chan->video_lock);
+>>>>> +		vb2_queue_release(&chan->queue);
+>>>> No need for this since this is done in vb2_fop_release().
+>>>>
+>>>> In fact, vb2_queue_release should never be called by drivers. Just usi=
+ng
+>>>> vb2_fop_release or __vb2_fop_release is sufficient.
+>>>>
+>>>> The confusion is due to the fact that the name suggests that vb2_queue=
+_release
+>>>> has to be balanced with vb2_queue_init, but that's not the case. Perha=
+ps
+>>>> vb2_queue_stop or something like that might be a better name. I'll hav=
+e to
+>>>> think about this since I see that a lot of drivers do this wrong.
+>>>>
+>>>>> +		mutex_unlock(&chan->video_lock);
+>>>>> +		v4l2_async_notifier_unregister(&chan->notifier);
+>>>>> +		v4l2_async_notifier_cleanup(&chan->notifier);
+>>>>> +	}
+>>>>> +}
+>>>>> +
+>>> vb2_queue_release() here is called to stop streaming a head before medi=
+a links are removed in case of when driver unbind happens while
+>>> userspace application holds video device with active streaming in progr=
+ess.
+>>>
+>>> Without vb2_queue_release() here streaming will be active during the dr=
+iver unbind and by the time vb2_queue_release() happens from
+>>> vb2_fop_release(), async notifiers gets unregistered and media links wi=
+ll be removed which causes channel stop stream to crash as we can't
+>>> retrieve sensor subdev=C2=A0 thru media entity pads to execute s_stream=
+ on subdev.
+>>>
+>> I think we don't need async notifier unbind. Currently media links are r=
+emoved during unbind so during notifier unregister all subdevs gets
+>> unbind and links removed.
+>>
+>> media_device_unregister during video device release callback takes care =
+of media entity unregister and removing links.
+>>
+>> So, will try by removing notifier unbind along with removing vb2_queue_r=
+elease during cleanup.
+>>
+> I actually wonder if vb2_queue_release shouldn't be called from video_unr=
+egister_device.
+>
+> I'll look into this tomorrow.
+>
+> Regards,
+>
+> 	Hans
 
-- grabs console_lock
-- does a full modeset, which grabs all kinds of locks
-  (drm_modeset_lock, dma_resv_lock) which can deadlock with
-  dma_fence_wait held inside them.
-- almost minor at that point, but the modeset code also allocates
-  memory
+Thanks Hans.
 
-These all look like they'll be very hard to fix properly, the hardware
-seems to require a full display reset with any gpu recovery.
+Tried without notifier unbind to remove media links and I still see=20
+crash due to below diff reason now.
 
-Hence split out as a seperate patch.
+With userspace app holding video device node with active streaming in=20
+progress when I do driver unbind, v4l2_device release callback=20
+tegra_v4l2_dev_release() happens prior to vb2_fops_release() ->=20
+vb2_queue_release().
 
-Since amdgpu isn't the only hardware driver that needs to reset the
-display (at least gen2/3 on intel have the same problem) we need a
-generic solution for this. There's two tricks we could still from
-drm/i915 and lift to dma-fence:
+All channels resources and channel memory is freed during v4l2_device=20
+release callback.
 
-- The big whack, aka force-complete all fences. i915 does this for all
-  pending jobs if the reset is somehow stuck. Trouble is we'd need to
-  do this for all fences in the entire system, and just the
-  book-keeping for that will be fun. Plus lots of drivers use fences
-  for all kinds of internal stuff like memory management, so
-  unconditionally resetting all of them doesn't work.
+Letting vb2_queue_release() to happen thru vb2_fops_release() causes=20
+crash as stop streaming tries to retrieve subdev thru channel media pads=20
+and channel memory is freed by that time.
 
-  I'm also hoping that with these fence annotations we could enlist
-  lockdep in finding the last offenders causing deadlocks, and we
-  could remove this get-out-of-jail trick.
+So, doing vb2_queue_release() during driver unbind -> tegra_vi_exit() ->=20
+tegra_vi_graph_cleanup(), stops subdev stream properly and then on=20
+v4l2_device release channel memory gets freed and this works which is=20
+the existing implementation in the patch.
 
-- The more feasible approach (across drivers at least as part of the
-  dma_fence contract) is what drm/i915 does for gen2/3: When we need
-  to reset the display we wake up all dma_fence_wait_interruptible
-  calls, or well at least the equivalent of those in i915 internally.
+I remember adding vb2_queue_release() during graph cleanup for TPG as=20
+well for the same reason to allow driver unbind while holding video=20
+device from user space so media pad can be accessible to stop stream=20
+before channel cleanup.
 
-  Relying on ioctl restart we force all other threads to release their
-  locks, which means the tdr thread is guaranteed to be able to get
-  them. I think we could implement this at the dma_fence level,
-  including proper lockdep annotations.
+Regards,
 
-  dma_fence_begin_tdr():
-  - must be nested within a dma_fence_begin/end_signalling section
-  - will wake up all interruptible (but not the non-interruptible)
-    dma_fence_wait() calls and force them to complete with a
-    -ERESTARTSYS errno code. All new interrupitble calls to
-    dma_fence_wait() will immeidately fail with the same error code.
-
-  dma_fence_end_trdr():
-  - this will convert dma_fence_wait() calls back to normal.
-
-  Of course interrupting dma_fence_wait is only ok if the caller
-  specified that, which means we need to split the annotations into
-  interruptible and non-interruptible version. If we then make sure
-  that we only use interruptible dma_fence_wait() calls while holding
-  drm_modeset_lock we can grab them in tdr code, and allow display
-  resets. Doing the same for dma_resv_lock might be a lot harder, so
-  buffer updates must be avoided.
-
-  What's worse, we're not going to be able to make the dma_fence_wait
-  calls in mmu-notifiers interruptible, that doesn't work. So
-  allocating memory still wont' be allowed, even in tdr sections. Plus
-  obviously we can use this trick only in tdr, it is rather intrusive.
-
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: linux-rdma@vger.kernel.org
-Cc: amd-gfx@lists.freedesktop.org
-Cc: intel-gfx@lists.freedesktop.org
-Cc: Chris Wilson <chris@chris-wilson.co.uk>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Christian König <christian.koenig@amd.com>
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
----
- drivers/gpu/drm/scheduler/sched_main.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index 52f1ab4bc922..a1c091e11ffd 100644
---- a/drivers/gpu/drm/scheduler/sched_main.c
-+++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -281,9 +281,12 @@ static void drm_sched_job_timedout(struct work_struct *work)
- {
- 	struct drm_gpu_scheduler *sched;
- 	struct drm_sched_job *job;
-+	bool fence_cookie;
- 
- 	sched = container_of(work, struct drm_gpu_scheduler, work_tdr.work);
- 
-+	fence_cookie = dma_fence_begin_signalling();
-+
- 	/* Protects against concurrent deletion in drm_sched_get_cleanup_job */
- 	spin_lock(&sched->job_list_lock);
- 	job = list_first_entry_or_null(&sched->ring_mirror_list,
-@@ -315,6 +318,8 @@ static void drm_sched_job_timedout(struct work_struct *work)
- 	spin_lock(&sched->job_list_lock);
- 	drm_sched_start_timeout(sched);
- 	spin_unlock(&sched->job_list_lock);
-+
-+	dma_fence_end_signalling(fence_cookie);
- }
- 
-  /**
--- 
-2.27.0
+Sowjanya
 
