@@ -2,181 +2,167 @@ Return-Path: <SRS0=jMCU=AV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B528C433E2
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 12:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75A58C433E1
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 12:25:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF47E20772
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 12:22:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="s747MRhJ"
+	by mail.kernel.org (Postfix) with ESMTP id 56A7120748
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 12:25:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727098AbgGJMWE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Jul 2020 08:22:04 -0400
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:53075 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726496AbgGJMWE (ORCPT
+        id S1726965AbgGJMZm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Jul 2020 08:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726725AbgGJMZl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Jul 2020 08:22:04 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id ts2Qjn77aJcNHts2Tjryaa; Fri, 10 Jul 2020 14:22:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1594383721; bh=M7El8JzyXyZJguGY4nruxkxs3oPq65JLv5W51rj+I7Q=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=s747MRhJ9bkcggd8M9ZzC+aUeiKmLQ3PHmuXIvomv/2wktPFnC8DMji//UOyWvVqU
-         3FW/fmcG92eQBMi+Dh2TwM+L5WLlQ+k5SkhkzMo10AaKheBpFDxTXFMU1DbXgcCund
-         gy/7q1soX8S6mgNsW9SqrzM3+6Y2mRz8GfF0spuieE4CECP54IflcM4Aha5ZJvchwx
-         TYKrk37jV7tCH+z9RqLZGKJUfYE44WhbxcaCFkKrVjQ9FIWNl7YNH7IgolYfiYzziY
-         sz0wh8yE7H2KqKnLbQQGhYjhdvcw32CjDE9KLn/yfj/yfkCAVyIMcbCmdRX8i9117p
-         FEF2eSx4a8BsQ==
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.9] ti-vpe cleanups
-Message-ID: <630cbf59-d40f-5115-7f43-3ad4ecfe1166@xs4all.nl>
-Date:   Fri, 10 Jul 2020 14:21:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        Fri, 10 Jul 2020 08:25:41 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABCEC08C5CE;
+        Fri, 10 Jul 2020 05:25:41 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 4DAE42A698B
+Message-ID: <05b6cff6ba230c0ab6a562e17926d8503e2dfadd.camel@collabora.com>
+Subject: Re: [RFC 07/12] media: uapi: h264: Add DPB entry field reference
+ flags
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Boris Brezillon <boris.brezillon@collabora.com>,
+        nicolas.dufresne@collabora.com
+Cc:     Jonas Karlman <jonas@kwiboo.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Fri, 10 Jul 2020 09:25:29 -0300
+In-Reply-To: <20200710140502.627b2b54@collabora.com>
+References: <HE1PR06MB40117D0EE96E6FA638A04B78ACBF0@HE1PR06MB4011.eurprd06.prod.outlook.com>
+         <20190901124531.23645-1-jonas@kwiboo.se>
+         <HE1PR06MB4011559BF2447047C66285D2ACBF0@HE1PR06MB4011.eurprd06.prod.outlook.com>
+         <233509924f72d69824920d9312373eced68674c0.camel@collabora.com>
+         <20200710101333.05077f18@collabora.com>
+         <6232d8475e169ee53b5864959af21d14bf0fc620.camel@collabora.com>
+         <20200710140502.627b2b54@collabora.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfICH4GLmhFUB+p4CTBjTjhV62/ErHbmzml8PUr0KG+9iItImNCvdzCaZj+ys0m1RF97gDjG244RxT6eGJndDWlUOMtgk5FFFHLPIMMdy6XkDrMDzoxfb
- q/ALg2mzti+L+E3rYbLlbzjofWb1B+ZnODMyDHUJbK1ekIFiid3ucsn3fIWIgCJpUNoXjRQ1LQu/CECDoBgaSG7hrnJJU2n6gjnl0bVXZHOV3xVtqeqM9fZF
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
++Nicolas
 
-This PR contains patches 01-84 of the "ti-vpe: cal: Add media controller support"
-series (https://patchwork.linuxtv.org/cover/65193/).
+On Fri, 2020-07-10 at 14:05 +0200, Boris Brezillon wrote:
+> On Fri, 10 Jul 2020 08:50:28 -0300
+> Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> 
+> > On Fri, 2020-07-10 at 10:13 +0200, Boris Brezillon wrote:
+> > > On Fri, 10 Jul 2020 01:21:07 -0300
+> > > Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> > >   
+> > > > Hello Jonas,
+> > > > 
+> > > > In the context of the uAPI cleanup,
+> > > > I'm revisiting this patch.
+> > > > 
+> > > > On Sun, 2019-09-01 at 12:45 +0000, Jonas Karlman wrote:  
+> > > > > Add DPB entry flags to help indicate when a reference frame is a field picture
+> > > > > and how the DPB entry is referenced, top or bottom field or full frame.
+> > > > > 
+> > > > > Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+> > > > > ---
+> > > > >  Documentation/media/uapi/v4l/ext-ctrls-codec.rst | 12 ++++++++++++
+> > > > >  include/media/h264-ctrls.h                       |  4 ++++
+> > > > >  2 files changed, 16 insertions(+)
+> > > > > 
+> > > > > diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> > > > > index bc5dd8e76567..eb6c32668ad7 100644
+> > > > > --- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> > > > > +++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> > > > > @@ -2022,6 +2022,18 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+> > > > >      * - ``V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM``
+> > > > >        - 0x00000004
+> > > > >        - The DPB entry is a long term reference frame
+> > > > > +    * - ``V4L2_H264_DPB_ENTRY_FLAG_FIELD_PICTURE``
+> > > > > +      - 0x00000008
+> > > > > +      - The DPB entry is a field picture
+> > > > > +    * - ``V4L2_H264_DPB_ENTRY_FLAG_REF_TOP``
+> > > > > +      - 0x00000010
+> > > > > +      - The DPB entry is a top field reference
+> > > > > +    * - ``V4L2_H264_DPB_ENTRY_FLAG_REF_BOTTOM``
+> > > > > +      - 0x00000020
+> > > > > +      - The DPB entry is a bottom field reference
+> > > > > +    * - ``V4L2_H264_DPB_ENTRY_FLAG_REF_FRAME``
+> > > > > +      - 0x00000030
+> > > > > +      - The DPB entry is a reference frame
+> > > > >  
+> > > > >  ``V4L2_CID_MPEG_VIDEO_H264_DECODE_MODE (enum)``
+> > > > >      Specifies the decoding mode to use. Currently exposes slice-based and
+> > > > > diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
+> > > > > index e877bf1d537c..76020ebd1e6c 100644
+> > > > > --- a/include/media/h264-ctrls.h
+> > > > > +++ b/include/media/h264-ctrls.h
+> > > > > @@ -185,6 +185,10 @@ struct v4l2_ctrl_h264_slice_params {
+> > > > >  #define V4L2_H264_DPB_ENTRY_FLAG_VALID		0x01
+> > > > >  #define V4L2_H264_DPB_ENTRY_FLAG_ACTIVE		0x02
+> > > > >  #define V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM	0x04
+> > > > > +#define V4L2_H264_DPB_ENTRY_FLAG_FIELD_PICTURE	0x08
+> > > > > +#define V4L2_H264_DPB_ENTRY_FLAG_REF_TOP	0x10
+> > > > > +#define V4L2_H264_DPB_ENTRY_FLAG_REF_BOTTOM	0x20
+> > > > > +#define V4L2_H264_DPB_ENTRY_FLAG_REF_FRAME	0x30
+> > > > >      
+> > > > 
+> > > > I've been going thru the H264 spec and I'm unsure,
+> > > > are all these flags semantically needed?
+> > > > 
+> > > > For instance, if one of REF_BOTTOM or REF_TOP (or both)
+> > > > are set, doesn't that indicate it's a field picture?
+> > > > 
+> > > > Or conversely, if neither REF_BOTTOM or REF_TOP are set,
+> > > > then it's a frame picture?  
+> > > 
+> > > I think that's what I was trying to do here [1]
+> > > 
+> > > [1]https://patchwork.kernel.org/patch/11392095/  
+> > 
+> > Right. Aren't we missing a DPB_ENTRY_FLAG_TOP_FIELD?
+> > 
+> > If I understand correctly, the DPB can contain:
+> > 
+> > * frames (FLAG_FIELD not set)
+> > * a field pair, with a single field (FLAG_FIELD and either TOP or BOTTOM).
+> > * a field pair, with boths fields (FLAG_FIELD and both TOP or BOTTOM).
+> 
+> Well, my understand is that, if the buffer contains both a TOP and
+> BOTTOM field, it actually becomes a full frame, so you actually have
+> those cases:
+> 
+> * FLAG_FIELD not set: this a frame (note that a TOP/BOTTOM field
+>   decoded buffer can become of frame if it's complemented with the
+>   missing field later during the decoding)
+> * FLAG_FIELD set + BOTTOM_FIELD not set: this is a TOP field
+> * FLAG_FIELD set + BOTTOM_FIELD set: this is a BOTTOM field
+> * FLAG_FIELD not set + BOTTOM_FIELD set: invalid combination
+> 
+> but I might be wrong.
 
-Since it is such a large series I'll do this in two parts: first the cleanup
-patches, and later the remaining patches that do the 'real' work.
+Yes, perhaps that's correct. I was trying to think strictly
+in terms of the H264 semantics, to define a clean interface.
 
-Having this merged first will make the remainder more manageable.
+From the mpp code, looks like the above is enough for rkvdec
+(although I haven't done any tests).
 
-Regards,
+Ezequiel
 
-	Hans
 
-The following changes since commit 6f01dfb760c027d5dd6199d91ee9599f2676b5c6:
 
-  media: cros-ec-cec: do not bail on device_init_wakeup failure (2020-07-04 12:45:45 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.9f
-
-for you to fetch changes up to 638a958ba9a9d9fab3626e18fb3877702e7950a2:
-
-  media: ti-vpe: cal: Split CAMERARX handling to cal-camerarx.c (2020-07-10 14:11:00 +0200)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Laurent Pinchart (84):
-      media: ti-vpe: cal: Sort headers alphabetically
-      media: ti-vpe: cal: Avoid function forward declaration
-      media: ti-vpe: cal: Decouple CSI2 port and CPORT
-      media: ti-vpe: cal: Index CSI-2 port starting at 0
-      media: ti-vpe: cal: Index IRQ registersstarting at 0
-      media: ti-vpe: cal: Merge all status variables in IRQ handler
-      media: ti-vpe: cal: Inline CAL_VERSION macro in its only user
-      media: ti-vpe: cal: Turn reg_(read|write)_field() into inline functions
-      media: ti-vpe: cal: Make cal_formats array const
-      media: ti-vpe: cal: Remove needless variable initialization
-      media: ti-vpe: cal: Remove needless casts
-      media: ti-vpe: cal: Turn boolean variable into bool
-      media: ti-vpe: cal: Make loop indices unsigned where applicable
-      media: ti-vpe: cal: Embed base_fields array in struct cal_csi2_phy
-      media: ti-vpe: cal: Don't modify cal_csi2_phy base_fields
-      media: ti-vpe: cal: Store PHY regmap fields in struct cc_data
-      media: ti-vpe: cal: Rename cal_csi2_phy base_fields to fields
-      media: ti-vpe: cal: Make structure fields unsigned where applicable
-      media: ti-vpe: cal: Constify platform data
-      media: ti-vpe: cal: Remove static const cal_regmap_config template
-      media: ti-vpe: cal: Remove unused structure fields
-      media: ti-vpe: cal: Remove flags field from struct cal_dev
-      media: ti-vpe: cal: Move function to avoid forward declaration
-      media: ti-vpe: cal: Rename cc_data to cal_camerarx
-      media: ti-vpe: cal: Rename cal_csi2_phy to cal_camerarx_data
-      media: ti-vpe: cal: Name all cal_dev pointers consistently
-      media: ti-vpe: cal: Name all cal_camerarx pointers consistently
-      media: ti-vpe: cal: Remove internal phy structure from cal_camerarx
-      media: ti-vpe: cal: Store instance ID and cal pointer in cal_camerarx
-      media: ti-vpe: cal: Use dev_* print macros
-      media: ti-vpe: cal: Add print macros for the cal_camerarx instances
-      media: ti-vpe: cal: Store sensor-related data in cal_camerarx
-      media: ti-vpe: cal: Create consistent naming for CAMERARX functions
-      media: ti-vpe: cal: Group CAMERARX-related functions together
-      media: ti-vpe: cal: Inline cal_data_get_num_csi2_phy() in its caller
-      media: ti-vpe: cal: Create consistent naming for context functions
-      media: ti-vpe: cal: Reorganize remaining code in sections
-      media: ti-vpe: cal: Rename cal_ctx.csi2_port to cal_ctx.index
-      media: ti-vpe: cal: Use correct device name for bus_info
-      media: ti-vpe: cal: Get struct device without going through v4l2_device
-      media: ti-vpe: cal: Use ctx_info() instead of v4l2_info()
-      media: ti-vpe: cal: Use a loop to create CAMERARX and context instances
-      media: ti-vpe: cal: Drop struct cal_dev v4l2_dev field
-      media: ti-vpe: cal: Split CAMERARX syscon regmap retrieval to a function
-      media: ti-vpe: cal: Use syscon_regmap_lookup_by_phandle_args()
-      media: ti-vpe: cal: Inline cal_get_camerarx_regmap() in caller
-      media: ti-vpe: cal: Add comments to cal_probe() to delimitate sections
-      media: ti-vpe: cal: Rename cal_create_instance() to cal_ctx_create()
-      media: ti-vpe: cal: Hardcode virtual channel to 0
-      media: ti-vpe: cal: Use of_graph_get_endpoint_by_regs() to parse OF
-      media: ti-vpe: cal: Fix usage of v4l2_fwnode_endpoint_parse()
-      media: ti-vpe: cal: Decouple control handler from v4l2_device
-      media: ti-vpe: cal: Move v4l2_device from cal_ctx to cal_dev
-      media: ti-vpe: cal: Split video device initialization and registration
-      media: ti-vpe: cal: Add context V4L2 cleanup and unregister functions
-      media: ti-vpe: cal: Unregister video device before cleanup
-      media: ti-vpe: cal: Add cal_camerarx_destroy() to cleanup CAMERARX
-      media: ti-vpe: cal: Move DT parsing to CAMERARX
-      media: ti-vpe: cal: Use ARRAY_SIZE to replace numerical value
-      media: ti-vpe: cal: Move all sensor-related init to .bound() notifier
-      media: ti-vpe: cal: Allow multiple contexts per subdev notifier
-      media: ti-vpe: cal: Move async notifiers from contexts to cal_dev
-      media: ti-vpe: cal: Replace context with phy in async notifier entries
-      media: ti-vpe: cal: Operate on phy instances in cal_quickdump_regs()
-      media: ti-vpe: cal: Decouple context and phy cleanup at remove time
-      media: ti-vpe: cal: Move CAL_NUM_CSI2_PORTS from cal_regs.h to cal.c
-      media: ti-vpe: cal: Remove isvcirqset() and isportirqset() macros
-      media: ti-vpe: cal: Replace number of ports numerical value by macro
-      media: ti-vpe: cal: Split media initialization and cleanup to functions
-      media: ti-vpe: cal: Read hardware revision earlier during probe
-      media: ti-vpe: cal: Print revision and hwinfo in a more readable format
-      media: ti-vpe: cal: Store struct device in cal_dev
-      media: ti-vpe: cal: Register a media device
-      media: ti-vpe: cal: Init formats in cal_ctx_v4l2_register()
-      media: ti-vpe: cal: Allocate cal_ctx active_fmt array dynamically
-      media: ti-vpe: cal: Inline cal_camerarx_max_lanes() in its only caller
-      media: ti-vpe: cal: Reorder camerarx functions to prepare refactoring
-      media: ti-vpe: cal: Refactor camerarx start and stop
-      media: ti-vpe: cal: Don't store external rate in cal_camerarx
-      media: ti-vpe: cal: Remove unneeded phy->sensor NULL check
-      media: ti-vpe: cal: Use 'unsigned int' type instead of 'unsigned'
-      media: ti-vpe: cal: Split video node handling to cal-video.c
-      media: ti-vpe: cal: Move CAL I/O accessors to cal.h
-      media: ti-vpe: cal: Split CAMERARX handling to cal-camerarx.c
-
- drivers/media/platform/ti-vpe/Makefile       |    2 +-
- drivers/media/platform/ti-vpe/cal-camerarx.c |  649 ++++++++++++++++
- drivers/media/platform/ti-vpe/cal-video.c    |  886 ++++++++++++++++++++++
- drivers/media/platform/ti-vpe/cal.c          | 2523 ++++++++++++-------------------------------------------------
- drivers/media/platform/ti-vpe/cal.h          |  267 +++++++
- drivers/media/platform/ti-vpe/cal_regs.h     |   74 +-
- 6 files changed, 2328 insertions(+), 2073 deletions(-)
- create mode 100644 drivers/media/platform/ti-vpe/cal-camerarx.c
- create mode 100644 drivers/media/platform/ti-vpe/cal-video.c
- create mode 100644 drivers/media/platform/ti-vpe/cal.h
