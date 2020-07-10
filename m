@@ -2,69 +2,120 @@ Return-Path: <SRS0=jMCU=AV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75849C433E1
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C849C433E8
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:29:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 532FA20720
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:27:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0226A20720
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:29:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="gwEx2KAf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727910AbgGJP1C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Jul 2020 11:27:02 -0400
-Received: from gofer.mess.org ([88.97.38.141]:56203 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726925AbgGJP1C (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Jul 2020 11:27:02 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 4E1DAC63DC; Fri, 10 Jul 2020 16:27:01 +0100 (BST)
-Date:   Fri, 10 Jul 2020 16:27:01 +0100
-From:   Sean Young <sean@mess.org>
-To:     Ismael Luceno <ismael@iodev.co.uk>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH] keytable: Fix missing inclusion of argp.h
-Message-ID: <20200710152701.GA2738@gofer.mess.org>
-References: <20200709174831.14134-1-ismael@iodev.co.uk>
+        id S1728022AbgGJP3Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Jul 2020 11:29:24 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:50752 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726832AbgGJP3Y (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 10 Jul 2020 11:29:24 -0400
+Received: from pyrite.rasen.tech (unknown [IPv6:2400:4051:61:600:2c71:1b79:d06d:5032])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8878B9B1;
+        Fri, 10 Jul 2020 17:29:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1594394962;
+        bh=9A/atXH1YXfDrfH9zej5/expJA3ciqGtIoKfltEw+e4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gwEx2KAfu7Smhfl9UGhElT5GJ8o8D+wuKizCYX60P9SYD0EcxuZnjNR4uXb0t22Yn
+         XGVJhM3JoF3DOEaBgeYN5Uu3sxFjkrJxIvHQ8lms9u097rOM+O1fSBZ1Ao2OTmnjyd
+         ZvMTMxB0xDcU2Cmrou/FP94YedmHaLGJm+ANuq8Q=
+From:   Paul Elder <paul.elder@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Paul Elder <paul.elder@ideasonboard.com>,
+        laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
+Subject: [PATCH v2 2/6] v4l2-ctl: Add version command
+Date:   Sat, 11 Jul 2020 00:28:54 +0900
+Message-Id: <20200710152858.486326-2-paul.elder@ideasonboard.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200710152858.486326-1-paul.elder@ideasonboard.com>
+References: <20200710152858.486326-1-paul.elder@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200709174831.14134-1-ismael@iodev.co.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Add a --version option to v4l2-ctl to retrieve the version of v4l2-ctl.
 
-On Thu, Jul 09, 2020 at 07:48:31PM +0200, Ismael Luceno wrote:
-> error_t is only defined by argp.h on non-glibc systems.
-> 
-> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
-> ---
->  utils/keytable/bpf_load.c | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+---
+ utils/v4l2-ctl/v4l2-ctl-common.cpp | 1 +
+ utils/v4l2-ctl/v4l2-ctl.cpp        | 9 +++++++++
+ utils/v4l2-ctl/v4l2-ctl.h          | 1 +
+ 3 files changed, 11 insertions(+)
 
-Thank you, this does indeed fix the BPF build on alpine linux. I've
-push the patch to master and the stable-1.20 branch.
+diff --git a/utils/v4l2-ctl/v4l2-ctl-common.cpp b/utils/v4l2-ctl/v4l2-ctl-common.cpp
+index 47f5da1a..9b785cbf 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-common.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-common.cpp
+@@ -121,6 +121,7 @@ void common_usage()
+ 	       "  --silent           only set the result code, do not print any messages\n"
+ 	       "  --sleep <secs>     sleep <secs>, call QUERYCAP and close the file handle\n"
+ 	       "  --verbose          turn on verbose ioctl status reporting\n"
++	       "  --version          show version information\n"
+ 	       );
+ }
+ 
+diff --git a/utils/v4l2-ctl/v4l2-ctl.cpp b/utils/v4l2-ctl/v4l2-ctl.cpp
+index 4972591e..bc7330c4 100644
+--- a/utils/v4l2-ctl/v4l2-ctl.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl.cpp
+@@ -284,6 +284,7 @@ static struct option long_options[] = {
+ 	{"stream-out-user", optional_argument, 0, OptStreamOutUser},
+ 	{"stream-out-dmabuf", no_argument, 0, OptStreamOutDmaBuf},
+ 	{"list-patterns", no_argument, 0, OptListPatterns},
++	{"version", no_argument, 0, OptVersion},
+ 	{0, 0, 0, 0}
+ };
+ 
+@@ -306,6 +307,11 @@ static void usage_all()
+        edid_usage();
+ }
+ 
++static void version()
++{
++	printf("v4l2-ctl " PACKAGE_VERSION "\n");
++}
++
+ int test_ioctl(int fd, unsigned long cmd, void *arg)
+ {
+ 	return options[OptUseWrapper] ? v4l2_ioctl(fd, cmd, arg) : ioctl(fd, cmd, arg);
+@@ -1245,6 +1251,9 @@ int main(int argc, char **argv)
+ 		case OptSleep:
+ 			secs = strtoul(optarg, 0L, 0);
+ 			break;
++		case OptVersion:
++			version();
++			return 0;
+ 		case ':':
+ 			fprintf(stderr, "Option '%s' requires a value\n",
+ 					argv[optind]);
+diff --git a/utils/v4l2-ctl/v4l2-ctl.h b/utils/v4l2-ctl/v4l2-ctl.h
+index 28e50471..27a3ca35 100644
+--- a/utils/v4l2-ctl/v4l2-ctl.h
++++ b/utils/v4l2-ctl/v4l2-ctl.h
+@@ -263,6 +263,7 @@ enum Option {
+ 	OptHelpStreaming,
+ 	OptHelpEdid,
+ 	OptHelpAll,
++	OptVersion,
+ 	OptLast = 512
+ };
+ 
+-- 
+2.27.0
 
-Sean
-
-> 
-> diff --git a/utils/keytable/bpf_load.c b/utils/keytable/bpf_load.c
-> index 9f64cf4e91e8..7ae9af4a57be 100644
-> --- a/utils/keytable/bpf_load.c
-> +++ b/utils/keytable/bpf_load.c
-> @@ -13,6 +13,7 @@
->  #include <stdlib.h>
->  #include <linux/bpf.h>
->  #include <assert.h>
-> +#include <argp.h>
->  #include "keymap.h"
->  #include "bpf.h"
->  #include "bpf_load.h"
-> -- 
-> 2.27.0
