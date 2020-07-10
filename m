@@ -4,44 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F38D7C433EC
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:29:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 245A0C433EA
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:29:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C70422083B
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:29:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E8F282078B
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:29:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="me7A1naI"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="HlESv3tm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728089AbgGJP3d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Jul 2020 11:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726832AbgGJP3d (ORCPT
+        id S1728067AbgGJP3b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Jul 2020 11:29:31 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:50770 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726832AbgGJP3b (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Jul 2020 11:29:33 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742F6C08C5CE
-        for <linux-media@vger.kernel.org>; Fri, 10 Jul 2020 08:29:33 -0700 (PDT)
+        Fri, 10 Jul 2020 11:29:31 -0400
 Received: from pyrite.rasen.tech (unknown [IPv6:2400:4051:61:600:2c71:1b79:d06d:5032])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F2629B1;
-        Fri, 10 Jul 2020 17:29:30 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E36AA2C0;
+        Fri, 10 Jul 2020 17:29:27 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594394972;
-        bh=2c5DqY/D9UWKF7DFmRgu0m5XhHNAY/LzzjurIsk78sI=;
+        s=mail; t=1594394969;
+        bh=8YpS6M62rzCTKd8bpWa38Z1F4L8DhLSDvcPeqDKa5Ho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=me7A1naIRGpG2d7sDyniQW8+Y4KIpZsurjEhjivpMU25mPetgmNIpadGDM+GAZUvc
-         cBh8WEmd7Imz/e0SjqCXK7DJhv40Mcl+vOI/4wSYygr4QwdX0QnkTAAL8c+ZrDsuCF
-         TkyQu3YQXu2M5zCXriIU9gYIXIAnvbA4XPOd5+To=
+        b=HlESv3tmhLTnj/nRcCnf+VFIJPnabnpVmtYko2yd5kcTGAqNjCam8CRDwGbRa/MnD
+         l7ulfjIs4zWUUlsGlda1exluxu6p7hUcnV4watqxaSeoeiovgcZ9aLpjdNQIszbyT7
+         QgyaBnphsnrZKoW6YFG3uksa9eOqG/3XaHWZ85RQ=
 From:   Paul Elder <paul.elder@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Paul Elder <paul.elder@ideasonboard.com>,
         laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
-Subject: [PATCH v2 6/6] media-ctl: Add version command
-Date:   Sat, 11 Jul 2020 00:28:58 +0900
-Message-Id: <20200710152858.486326-6-paul.elder@ideasonboard.com>
+Subject: [PATCH v2 5/6] cec-follower: Add version command
+Date:   Sat, 11 Jul 2020 00:28:57 +0900
+Message-Id: <20200710152858.486326-5-paul.elder@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200710152858.486326-1-paul.elder@ideasonboard.com>
 References: <20200710152858.486326-1-paul.elder@ideasonboard.com>
@@ -52,79 +49,61 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a --version option to media-ctl to retrieve the version of
-media-ctl.
+Add a --version option to cec-follower to retrieve the version of
+cec-follower.
 
 Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
 ---
- utils/media-ctl/options.c | 12 ++++++++++++
- utils/media-ctl/options.h |  2 ++
- 2 files changed, 14 insertions(+)
+ utils/cec-follower/cec-follower.cpp | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/utils/media-ctl/options.c b/utils/media-ctl/options.c
-index fb923775..3346ecb1 100644
---- a/utils/media-ctl/options.c
-+++ b/utils/media-ctl/options.c
-@@ -42,6 +42,11 @@ struct media_options media_opts = {
- 	.devname = MEDIA_DEVNAME_DEFAULT,
+diff --git a/utils/cec-follower/cec-follower.cpp b/utils/cec-follower/cec-follower.cpp
+index 9cead57a..34663f5b 100644
+--- a/utils/cec-follower/cec-follower.cpp
++++ b/utils/cec-follower/cec-follower.cpp
+@@ -46,6 +46,7 @@ enum Option {
+ 	OptShowState = 's',
+ 	OptWallClock = 'w',
+ 	OptServiceByDigID = 128,
++	OptVersion,
+ 	OptLast = 256
+ };
+ 
+@@ -70,10 +71,16 @@ static struct option long_options[] = {
+ 	{ "wall-clock", no_argument, 0, OptWallClock },
+ 	{ "service-by-dig-id", no_argument, 0, OptServiceByDigID },
+ 	{ "ignore", required_argument, 0, OptIgnore },
++	{ "version", no_argument, 0, OptVersion },
+ 
+ 	{ 0, 0, 0, 0 }
  };
  
 +static void version()
 +{
-+	printf("media-ctl " PACKAGE_VERSION "\n");
++	printf("cec-follower " PACKAGE_VERSION "\n");
 +}
 +
- static void usage(const char *argv0)
+ static void usage()
  {
- 	unsigned int i;
-@@ -66,6 +71,7 @@ static void usage(const char *argv0)
- 	printf("    --print-dot		Print the device topology as a dot graph\n");
- 	printf("-r, --reset		Reset all links to inactive\n");
- 	printf("-v, --verbose		Be verbose\n");
-+	printf("    --version		Show version information\n");
- 	printf("\n");
- 	printf("Links and formats are defined as\n");
- 	printf("\tlinks           = link { ',' link } ;\n");
-@@ -127,6 +133,7 @@ static void usage(const char *argv0)
- #define OPT_SET_DV			258
- #define OPT_LIST_KNOWN_MBUS_FMTS	259
- #define OPT_GET_DV			260
-+#define OPT_VERSION			261
+ 	printf("Usage:\n"
+@@ -93,6 +100,7 @@ static void usage()
+ 	       "                      Ignore messages from logical address <la> and opcode\n"
+ 	       "                      <opcode>. 'all' can be used for <la> or <opcode> to match\n"
+ 	       "                      all logical addresses or opcodes.\n"
++	       "  --version           Show version information\n"
+ 	       );
+ }
  
- static struct option opts[] = {
- 	{"device", 1, 0, 'd'},
-@@ -145,6 +152,7 @@ static struct option opts[] = {
- 	{"print-topology", 0, 0, 'p'},
- 	{"reset", 0, 0, 'r'},
- 	{"verbose", 0, 0, 'v'},
-+	{"version", 0, 0, OPT_VERSION},
- 	{ },
- };
- 
-@@ -287,6 +295,10 @@ int parse_cmdline(int argc, char **argv)
- 			list_known_mbus_formats();
- 			exit(0);
- 
-+		case OPT_VERSION:
+@@ -427,6 +435,9 @@ int main(int argc, char **argv)
+ 			show_msgs = true;
+ 			show_state = true;
+ 			break;
++		case OptVersion:
 +			version();
-+			exit(0);
-+
- 		default:
- 			printf("Invalid option -%c\n", opt);
- 			printf("Run %s -h for help.\n", argv[0]);
-diff --git a/utils/media-ctl/options.h b/utils/media-ctl/options.h
-index 7e0556fc..b1751f56 100644
---- a/utils/media-ctl/options.h
-+++ b/utils/media-ctl/options.h
-@@ -22,6 +22,8 @@
- #ifndef __OPTIONS_H
- #define __OPTIONS_H
- 
-+#include <config.h>
-+
- struct media_options
- {
- 	const char *devname;
++			std::exit(EXIT_SUCCESS);
+ 		case ':':
+ 			fprintf(stderr, "Option '%s' requires a value\n",
+ 				argv[optind]);
 -- 
 2.27.0
 
