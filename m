@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93FF2C433E2
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:29:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F38D7C433EC
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:29:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A8712078B
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:29:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C70422083B
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 15:29:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="MY3pl8uZ"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="me7A1naI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728065AbgGJP33 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Jul 2020 11:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S1728089AbgGJP3d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Jul 2020 11:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726832AbgGJP32 (ORCPT
+        with ESMTP id S1726832AbgGJP3d (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Jul 2020 11:29:28 -0400
+        Fri, 10 Jul 2020 11:29:33 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EF4C08C5CE
-        for <linux-media@vger.kernel.org>; Fri, 10 Jul 2020 08:29:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742F6C08C5CE
+        for <linux-media@vger.kernel.org>; Fri, 10 Jul 2020 08:29:33 -0700 (PDT)
 Received: from pyrite.rasen.tech (unknown [IPv6:2400:4051:61:600:2c71:1b79:d06d:5032])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 73FC69B1;
-        Fri, 10 Jul 2020 17:29:25 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F2629B1;
+        Fri, 10 Jul 2020 17:29:30 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594394967;
-        bh=Whk1suoOgmf2WQVJN9qBm6EqkiQe7VJyA3plS0Ws1Is=;
+        s=mail; t=1594394972;
+        bh=2c5DqY/D9UWKF7DFmRgu0m5XhHNAY/LzzjurIsk78sI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MY3pl8uZ9TbOHK6baKIxFIGfvveWA4PqHjW99ZeGi08q1rhFAhHkN7/QxtZRw76Yr
-         IVubEYNCCCmbZjmgvz2TE1H6pS2vjBEN7ogmjB0owG60SCLZussgQ4kNh5WYT6/URW
-         OBjbTRiCNFebNl8pFV7yQvmFn6iGm4Xor8suj3FA=
+        b=me7A1naIRGpG2d7sDyniQW8+Y4KIpZsurjEhjivpMU25mPetgmNIpadGDM+GAZUvc
+         cBh8WEmd7Imz/e0SjqCXK7DJhv40Mcl+vOI/4wSYygr4QwdX0QnkTAAL8c+ZrDsuCF
+         TkyQu3YQXu2M5zCXriIU9gYIXIAnvbA4XPOd5+To=
 From:   Paul Elder <paul.elder@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Paul Elder <paul.elder@ideasonboard.com>,
         laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
-Subject: [PATCH v2 4/6] cec-ctl: Add version command
-Date:   Sat, 11 Jul 2020 00:28:56 +0900
-Message-Id: <20200710152858.486326-4-paul.elder@ideasonboard.com>
+Subject: [PATCH v2 6/6] media-ctl: Add version command
+Date:   Sat, 11 Jul 2020 00:28:58 +0900
+Message-Id: <20200710152858.486326-6-paul.elder@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200710152858.486326-1-paul.elder@ideasonboard.com>
 References: <20200710152858.486326-1-paul.elder@ideasonboard.com>
@@ -52,65 +52,79 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a --version option to cec-ctl to retrieve the version of cec-ctl.
+Add a --version option to media-ctl to retrieve the version of
+media-ctl.
 
 Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
 ---
- utils/cec-ctl/cec-ctl.cpp | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ utils/media-ctl/options.c | 12 ++++++++++++
+ utils/media-ctl/options.h |  2 ++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/utils/cec-ctl/cec-ctl.cpp b/utils/cec-ctl/cec-ctl.cpp
-index 455cdaeb..d4a4f036 100644
---- a/utils/cec-ctl/cec-ctl.cpp
-+++ b/utils/cec-ctl/cec-ctl.cpp
-@@ -133,6 +133,7 @@ enum Option {
- 	OptVendorCommandWithID,
- 	OptVendorRemoteButtonDown,
- 	OptCustomCommand,
-+	OptVersion,
- };
- 
- struct node {
-@@ -218,6 +219,8 @@ static struct option long_options[] = {
- 	{ "unregistered", no_argument, 0, OptUnregistered },
- 	{ "help-all", no_argument, 0, OptHelpAll },
- 
-+	{ "version", no_argument, 0, OptVersion },
-+
- 	CEC_PARSE_LONG_OPTS
- 
- 	{ "vendor-remote-button-down", required_argument, 0, OptVendorRemoteButtonDown }, \
-@@ -231,6 +234,11 @@ static struct option long_options[] = {
- 	{ 0, 0, 0, 0 }
+diff --git a/utils/media-ctl/options.c b/utils/media-ctl/options.c
+index fb923775..3346ecb1 100644
+--- a/utils/media-ctl/options.c
++++ b/utils/media-ctl/options.c
+@@ -42,6 +42,11 @@ struct media_options media_opts = {
+ 	.devname = MEDIA_DEVNAME_DEFAULT,
  };
  
 +static void version()
 +{
-+	printf("cec-ctl " PACKAGE_VERSION "\n");
++	printf("media-ctl " PACKAGE_VERSION "\n");
 +}
 +
- static void usage()
+ static void usage(const char *argv0)
  {
- 	printf("Usage:\n"
-@@ -262,6 +270,7 @@ static void usage()
- 	       "  --help-all               Show all help messages\n"
- 	       "  -T, --trace              Trace all called ioctls\n"
- 	       "  -v, --verbose            Turn on verbose reporting\n"
-+	       "  --version                Show version information\n"
- 	       "  -w, --wall-clock         Show timestamps as wall-clock time (implies -v)\n"
- 	       "  -W, --wait-for-msgs      Wait for messages and events for up to --monitor-time secs.\n"
- 	       "  --cec-version-1.4        Use CEC Version 1.4 instead of 2.0\n"
-@@ -2296,6 +2305,10 @@ int main(int argc, char **argv)
- 			break;
- 		}
+ 	unsigned int i;
+@@ -66,6 +71,7 @@ static void usage(const char *argv0)
+ 	printf("    --print-dot		Print the device topology as a dot graph\n");
+ 	printf("-r, --reset		Reset all links to inactive\n");
+ 	printf("-v, --verbose		Be verbose\n");
++	printf("    --version		Show version information\n");
+ 	printf("\n");
+ 	printf("Links and formats are defined as\n");
+ 	printf("\tlinks           = link { ',' link } ;\n");
+@@ -127,6 +133,7 @@ static void usage(const char *argv0)
+ #define OPT_SET_DV			258
+ #define OPT_LIST_KNOWN_MBUS_FMTS	259
+ #define OPT_GET_DV			260
++#define OPT_VERSION			261
  
-+		case OptVersion:
+ static struct option opts[] = {
+ 	{"device", 1, 0, 'd'},
+@@ -145,6 +152,7 @@ static struct option opts[] = {
+ 	{"print-topology", 0, 0, 'p'},
+ 	{"reset", 0, 0, 'r'},
+ 	{"verbose", 0, 0, 'v'},
++	{"version", 0, 0, OPT_VERSION},
+ 	{ },
+ };
+ 
+@@ -287,6 +295,10 @@ int parse_cmdline(int argc, char **argv)
+ 			list_known_mbus_formats();
+ 			exit(0);
+ 
++		case OPT_VERSION:
 +			version();
-+			std::exit(EXIT_SUCCESS);
++			exit(0);
 +
  		default:
- 			if (ch >= OptHelpAll) {
- 				cec_parse_usage_options(options);
+ 			printf("Invalid option -%c\n", opt);
+ 			printf("Run %s -h for help.\n", argv[0]);
+diff --git a/utils/media-ctl/options.h b/utils/media-ctl/options.h
+index 7e0556fc..b1751f56 100644
+--- a/utils/media-ctl/options.h
++++ b/utils/media-ctl/options.h
+@@ -22,6 +22,8 @@
+ #ifndef __OPTIONS_H
+ #define __OPTIONS_H
+ 
++#include <config.h>
++
+ struct media_options
+ {
+ 	const char *devname;
 -- 
 2.27.0
 
