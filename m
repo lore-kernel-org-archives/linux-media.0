@@ -2,121 +2,75 @@ Return-Path: <SRS0=jMCU=AV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AFA3C433E0
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 13:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55CFFC433E2
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 13:29:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B7C3207BB
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 13:25:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="QzxeUBxS"
+	by mail.kernel.org (Postfix) with ESMTP id 3A829207BB
+	for <linux-media@archiver.kernel.org>; Fri, 10 Jul 2020 13:29:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbgGJNZp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Jul 2020 09:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726774AbgGJNZo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Jul 2020 09:25:44 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5998BC08C5CE
-        for <linux-media@vger.kernel.org>; Fri, 10 Jul 2020 06:25:44 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 810382C0;
-        Fri, 10 Jul 2020 15:25:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594387542;
-        bh=49ZaW1a5B2Y+qMmvawS6y4s/fMQB690wUCISdP9teUI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QzxeUBxSv8Hivt3OO/1tEVyXrCmpjCfpxtwu0v+pCEgfd4UGfK1wWkspN7zPz5P8E
-         vnx2H5F/E73qA+8HZiIqZU/dmpUWWmPAtA7vbQHBibs/O5oZPqtTGooyi4Q4uDMBDw
-         KA15HF08INy5GvMb2hEgVE3JHBCD/dwAjs9iyi0s=
-Date:   Fri, 10 Jul 2020 16:25:36 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Elder <paul.elder@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl
-Subject: Re: [PATCH 1/2] v4l2-compliance: Add version command
-Message-ID: <20200710132536.GX5964@pendragon.ideasonboard.com>
-References: <20200710131813.452513-1-paul.elder@ideasonboard.com>
+        id S1726872AbgGJN30 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Jul 2020 09:29:26 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:36596 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726774AbgGJN3Z (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 10 Jul 2020 09:29:25 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jtrwE-009NrD-2o; Fri, 10 Jul 2020 12:15:34 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1jts38-0001QN-IT; Fri, 10 Jul 2020 12:22:42 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.9] Various fixes (#65372)
+Date:   Fri, 10 Jul 2020 12:22:42 +0000
+Message-Id: <20200710122242.5434-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <f50d6ee4-91c4-2a10-dfc8-827081cf290a@xs4all.nl>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200710131813.452513-1-paul.elder@ideasonboard.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Paul,
+From: builder@linuxtv.org
 
-Thank you for the patch.
+Pull request: https://patchwork.linuxtv.org/patch/65372/
+Build log: https://builder.linuxtv.org/job/patchwork/59099/
+Build time: 00:42:03
+Link: https://lore.kernel.org/linux-media/f50d6ee4-91c4-2a10-dfc8-827081cf290a@xs4all.nl
 
-On Fri, Jul 10, 2020 at 10:18:12PM +0900, Paul Elder wrote:
-> Add a --version option to v4l2-compliance to retrieve the version of
-> v4l2-compliance.
-> 
-> Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
-> ---
->  utils/v4l2-compliance/v4l2-compliance.cpp | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp b/utils/v4l2-compliance/v4l2-compliance.cpp
-> index 4b45f110..72b9768f 100644
-> --- a/utils/v4l2-compliance/v4l2-compliance.cpp
-> +++ b/utils/v4l2-compliance/v4l2-compliance.cpp
-> @@ -79,6 +79,7 @@ enum Option {
->  	OptMediaBusInfo = 'z',
->  	OptStreamFrom = 128,
->  	OptStreamFromHdr,
-> +	OptVersion,
->  	OptLast = 256
->  };
->  
-> @@ -153,9 +154,15 @@ static struct option long_options[] = {
->  	{"stream-all-formats", optional_argument, 0, OptStreamAllFormats},
->  	{"stream-all-io", no_argument, 0, OptStreamAllIO},
->  	{"stream-all-color", required_argument, 0, OptStreamAllColorTest},
-> +	{"version", no_argument, 0, OptVersion},
->  	{0, 0, 0, 0}
->  };
->  
-> +static void version()
-> +{
-> +	printf("v4l2-compliance " PACKAGE_VERSION "\n");
+gpg: Signature made Fri 10 Jul 2020 11:19:23 AM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [full]
 
-Is it enough to rely on the v4l-utils package version, or should we add
-a git commit count as well ? The traditional version number will make it
-difficult to test for features added between two released versions.
+Summary: 3 patches and/or PDF generation with issues, being 0 at build time
 
-> +}
-> +
->  static void usage()
->  {
->  	printf("Usage:\n");
-> @@ -244,6 +251,7 @@ static void usage()
->  	printf("  -P, --no-progress  Turn off progress messages.\n");
->  	printf("  -T, --trace        Trace all called ioctls.\n");
->  	printf("  -v, --verbose      Turn on verbose reporting.\n");
-> +	printf("  --version          Show version information.\n");
->  #ifndef NO_LIBV4L2
->  	printf("  -w, --wrapper      Use the libv4l2 wrapper library.\n");
->  #endif
-> @@ -1664,6 +1672,9 @@ int main(int argc, char **argv)
->  		case OptNoProgress:
->  			no_progress = true;
->  			break;
-> +		case OptVersion:
-> +			version();
-> +			std::exit(EXIT_SUCCESS);
->  		case ':':
->  			fprintf(stderr, "Option `%s' requires a value\n",
->  				argv[optind]);
+Error/warnings:
 
--- 
-Regards,
 
-Laurent Pinchart
+Error #256 when running cat patches/0007-v4l2-core-Print-control-name-in-VIDIOC_S-G_-EXT-_CTR.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0007-v4l2-core-Print-control-name-in-VIDIOC_S-G_-EXT-_CTR.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:11: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+-:13: WARNING: Use a single space after To:
+-:13: ERROR: Unrecognized email address: ''
+-:41: WARNING: Avoid logging continuation uses where feasible
+-:53: WARNING: Avoid logging continuation uses where feasible
+-:57: WARNING: Avoid logging continuation uses where feasible
+-:61: WARNING: Avoid logging continuation uses where feasible
+
+Error #256 when running cat patches/0015-media-atmel-atmel-isc-rework-component-offsets.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict:
+$ cat patches/0015-media-atmel-atmel-isc-rework-component-offsets.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+-:34: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
