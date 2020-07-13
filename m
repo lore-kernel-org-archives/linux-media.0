@@ -2,117 +2,177 @@ Return-Path: <SRS0=Gq82=AY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B9E4C433E0
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 11:30:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51D6AC433E2
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 11:30:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75F6F20773
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 11:30:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F4372075B
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 11:30:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="WYqoD0Cb"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="sE7JwRZX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728714AbgGMLay (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jul 2020 07:30:54 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:39095 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727890AbgGMLax (ORCPT
+        id S1729543AbgGMLa4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jul 2020 07:30:56 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:34595 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729027AbgGMLa4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jul 2020 07:30:53 -0400
+        Mon, 13 Jul 2020 07:30:56 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id uwfYj6z2lGLmCuwfbjB4tK; Mon, 13 Jul 2020 13:30:51 +0200
+        id uwfYj6z2lGLmCuwfejB4tx; Mon, 13 Jul 2020 13:30:54 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1594639851; bh=jyA+70r3Q3Sno8H2+1OYpHs6iSwppMHGl/ApNAs08e0=;
+        t=1594639854; bh=094ART6fsiTMvB26geTAXWvaGzP9j98uCNjR53aC5Cg=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=WYqoD0CbJRt+K/NTAddBU/xguLr4q5PxW5ywlJ8wZlh+ILNoE54KXTD0Enzy6o6E1
-         E+pCzlqrTr/43koonU+R3G2bYg4liI/HAf9PbUmx+ZOsdWVfUwgBeHGa60R2cpOWWe
-         ADZxrCsUmbN6qGsmHeneyyO0mzH3SXrtRPTA+rS9M8s9fG+6m/6Ugiy7VlOPnwSPSq
-         GitnSxspEmtAOI6vpmddT7evPmtLz4MQZVDUjbDIGWINWC5H48FZ2G8T49fhHjp71V
-         ORXpPCj5AYWfGdYUb70YYUhfErrnZ7H7yBUGpjmhFTvXwkRc5b72AOZoUBghpWuuWh
-         mGBrqhHg90bXA==
+        b=sE7JwRZXzEcvySHLyL3NUKotaomgSwJlJU/DeFxIVNNQ0IkWvGFaRFEdtiLirOc/b
+         zE1HF//k11qo7/CNYjAkkOn1ZPYX2jRAdTjANbPdWRQWcT27wm82wBQOD2LR4GYFbI
+         Dbe7HvE9m1jNtkOMGtlQi68mPjCJ1n8vCiSt3F2jLUqOoa0YaxJq3XG5n8E8uhCXGV
+         3wVLu6neux/X/kwOer0OC6sdyXQccYMUI/AQB9OPm4frEwGE6fxvnim/An5DZ51lsu
+         ca1N5axwYmCiWPUVBCaLkAQGqkGiu1n/bTfRImt9sKlojblWvhYpM+qLFfiooNnlPi
+         6wwSHyhpah8aQ==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: [PATCHv3 0/7] media: use vb2_video_unregister_device()
-Date:   Mon, 13 Jul 2020 13:30:41 +0200
-Message-Id: <20200713113048.1150542-1-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Robert Foss <robert.foss@linaro.org>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>
+Subject: [PATCHv3 2/7] qcom/camss: use vb2_video_unregister_device()
+Date:   Mon, 13 Jul 2020 13:30:43 +0200
+Message-Id: <20200713113048.1150542-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200713113048.1150542-1-hverkuil-cisco@xs4all.nl>
+References: <20200713113048.1150542-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfOZxkyoHLYAmRBqX+0ux6JbIPr9IU5drBDSMO2NlpN9QmCUJU+SSZNKCt2hVmWxUMhexWBgrs9ZHAVZgDrFjfo/JTjOW1mvcPNNLqNXqZEWrzIQBxV4l
- xXPnW6Jkbjp/wM7WkEx6CzlOF8qLWkN8+AvPs/I7ShCm496frtNpHWFhqTTiIxSFpW74GEzoMGKG2w==
+X-CMAE-Envelope: MS4wfMGjLj2W68T9S41ABpylCO2HeD9mOSfSufutuAV/LqHukRMFxZAdQilW2K+j5cHuErszXK3Vy/rfl2vXtGS72ttOjv34Pepbs3sxOAYygQVpJTu9tLGf
+ jbXRQ/ghbRewl24OVXsnfZoMlXf2BWQldgMRRUuXwTr6PN3Gb1N3mmSXuPHuljTSf72+isHB/yn0v5xTK6T01sbOUQfSt4oyJa+V6vsEBiOeT38b/+d4sZbV
+ YR0LluDEdRe6LNb6AC4QnKd/YLkGyYH5KPV1RktQmsD2Xzql1XGRwy4E4ZYF35b3
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series supersedes this patch:
+Use vb2_video_unregister_device() to automatically stop streaming
+at unregister time.
 
-https://patchwork.linuxtv.org/project/linux-media/patch/7e7e9841-7f3a-468b-01c8-5921e5c14df8@xs4all.nl/
+This avoids the use of vb2_queue_release() which should not be
+called by drivers that set vdev->queue.
 
-This series checks drivers that use vb2_queue_release() incorrectly
-and fixes them, and calls vb2_video_unregister_device() as well if the
-driver set vdev->queue.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: Andrey Konovalov <andrey.konovalov@linaro.org>
+---
+ drivers/media/platform/qcom/camss/camss-vfe.c   |  8 --------
+ drivers/media/platform/qcom/camss/camss-vfe.h   |  2 --
+ drivers/media/platform/qcom/camss/camss-video.c | 12 ++----------
+ drivers/media/platform/qcom/camss/camss-video.h |  2 --
+ drivers/media/platform/qcom/camss/camss.c       |  5 -----
+ 5 files changed, 2 insertions(+), 27 deletions(-)
 
-There are a lot more drivers that set vdev->queue and can probably
-benefit from using vb2_video_unregister_device(), but that's something
-for a future series.
-
-The main focus of this series is to check for incorrect use of
-vb2_queue_release().
-
-Changes since v2: add patches 2-7.
-
-Regards,
-
-	Hans
-
-Hans Verkuil (7):
-  videobuf2-v4l2.c: add vb2_video_unregister_device helper function
-  qcom/camss: use vb2_video_unregister_device()
-  media/pci: use vb2_video_unregister_device()
-  media/platform: drop vb2_queue_release()
-  media/usb: use vb2_video_unregister_device()
-  vimc: use vb2_video_unregister_device()
-  staging/media: drop vb2_queue_release()
-
- .../media/common/videobuf2/videobuf2-v4l2.c   | 51 ++++++++++++++++---
- drivers/media/pci/dt3155/dt3155.c             |  3 +-
- drivers/media/pci/intel/ipu3/ipu3-cio2.c      |  9 ++--
- drivers/media/pci/saa7134/saa7134-core.c      |  6 +--
- drivers/media/pci/saa7134/saa7134-empress.c   |  3 +-
- drivers/media/pci/saa7134/saa7134-go7007.c    |  2 +-
- drivers/media/pci/saa7134/saa7134-video.c     |  2 -
- drivers/media/pci/sta2x11/sta2x11_vip.c       |  6 +--
- drivers/media/pci/tw5864/tw5864-video.c       |  4 +-
- drivers/media/platform/aspeed-video.c         |  5 +-
- .../platform/mtk-vcodec/mtk_vcodec_dec.c      |  4 +-
- drivers/media/platform/qcom/camss/camss-vfe.c |  8 ---
- drivers/media/platform/qcom/camss/camss-vfe.h |  2 -
- .../media/platform/qcom/camss/camss-video.c   | 12 +----
- .../media/platform/qcom/camss/camss-video.h   |  2 -
- drivers/media/platform/qcom/camss/camss.c     |  5 --
- drivers/media/platform/qcom/venus/vdec.c      |  8 +--
- drivers/media/platform/qcom/venus/venc.c      |  8 +--
- .../platform/sunxi/sun4i-csi/sun4i_csi.c      |  1 +
- .../platform/sunxi/sun4i-csi/sun4i_dma.c      |  6 +--
- .../platform/sunxi/sun6i-csi/sun6i_video.c    |  7 +--
- .../media/test-drivers/vimc/vimc-capture.c    |  7 +--
- drivers/media/test-drivers/vivid/vivid-core.c | 32 ++++++------
- drivers/media/usb/au0828/au0828-video.c       | 12 ++---
- drivers/media/usb/dvb-usb/cxusb-analog.c      | 13 ++---
- drivers/media/usb/usbtv/usbtv-video.c         |  4 +-
- drivers/staging/media/meson/vdec/vdec.c       |  8 +--
- drivers/staging/media/rkisp1/rkisp1-capture.c |  2 +-
- drivers/staging/media/rkisp1/rkisp1-params.c  |  7 +--
- drivers/staging/media/rkisp1/rkisp1-stats.c   |  6 +--
- drivers/staging/media/tegra-video/vi.c        |  8 +--
- include/media/videobuf2-v4l2.h                | 17 +++++++
- 32 files changed, 118 insertions(+), 152 deletions(-)
-
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index fc31c2c169cd..b7d2293a5004 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -2205,14 +2205,6 @@ static const struct camss_video_ops camss_vfe_video_ops = {
+ 	.flush_buffers = vfe_flush_buffers,
+ };
+ 
+-void msm_vfe_stop_streaming(struct vfe_device *vfe)
+-{
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(vfe->line); i++)
+-		msm_video_stop_streaming(&vfe->line[i].video_out);
+-}
+-
+ /*
+  * msm_vfe_register_entities - Register subdev node for VFE module
+  * @vfe: VFE device
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
+index 0d10071ae881..a90b0d2cc6de 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -178,8 +178,6 @@ void msm_vfe_unregister_entities(struct vfe_device *vfe);
+ void msm_vfe_get_vfe_id(struct media_entity *entity, u8 *id);
+ void msm_vfe_get_vfe_line_id(struct media_entity *entity, enum vfe_line_id *id);
+ 
+-void msm_vfe_stop_streaming(struct vfe_device *vfe);
+-
+ extern const struct vfe_hw_ops vfe_ops_4_1;
+ extern const struct vfe_hw_ops vfe_ops_4_7;
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+index cdbd6dba1122..0e2fcee97eeb 100644
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -879,7 +879,7 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
+ 	if (ret < 0) {
+ 		dev_err(v4l2_dev->dev, "Failed to init video entity: %d\n",
+ 			ret);
+-		goto error_media_init;
++		goto error_vb2_init;
+ 	}
+ 
+ 	mutex_init(&video->lock);
+@@ -936,23 +936,15 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
+ error_video_register:
+ 	media_entity_cleanup(&vdev->entity);
+ 	mutex_destroy(&video->lock);
+-error_media_init:
+-	vb2_queue_release(&video->vb2_q);
+ error_vb2_init:
+ 	mutex_destroy(&video->q_lock);
+ 
+ 	return ret;
+ }
+ 
+-void msm_video_stop_streaming(struct camss_video *video)
+-{
+-	if (vb2_is_streaming(&video->vb2_q))
+-		vb2_queue_release(&video->vb2_q);
+-}
+-
+ void msm_video_unregister(struct camss_video *video)
+ {
+ 	atomic_inc(&video->camss->ref_count);
+-	video_unregister_device(&video->vdev);
++	vb2_video_unregister_device(&video->vdev);
+ 	atomic_dec(&video->camss->ref_count);
+ }
+diff --git a/drivers/media/platform/qcom/camss/camss-video.h b/drivers/media/platform/qcom/camss/camss-video.h
+index aa35e8cc6fd5..bdbae8424140 100644
+--- a/drivers/media/platform/qcom/camss/camss-video.h
++++ b/drivers/media/platform/qcom/camss/camss-video.h
+@@ -52,8 +52,6 @@ struct camss_video {
+ 	unsigned int nformats;
+ };
+ 
+-void msm_video_stop_streaming(struct camss_video *video);
+-
+ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
+ 		       const char *name, int is_pix);
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 3fdc9f964a3c..d0f4360eb9a0 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -964,13 +964,8 @@ void camss_delete(struct camss *camss)
+  */
+ static int camss_remove(struct platform_device *pdev)
+ {
+-	unsigned int i;
+-
+ 	struct camss *camss = platform_get_drvdata(pdev);
+ 
+-	for (i = 0; i < camss->vfe_num; i++)
+-		msm_vfe_stop_streaming(&camss->vfe[i]);
+-
+ 	v4l2_async_notifier_unregister(&camss->notifier);
+ 	v4l2_async_notifier_cleanup(&camss->notifier);
+ 	camss_unregister_entities(camss);
 -- 
 2.27.0
 
