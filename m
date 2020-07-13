@@ -2,216 +2,383 @@ Return-Path: <SRS0=Gq82=AY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45492C433E3
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 11:30:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98D21C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 11:53:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2354E2075B
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 11:30:58 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="SQNpE6EC"
+	by mail.kernel.org (Postfix) with ESMTP id 668B62072D
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 11:53:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729545AbgGMLa5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jul 2020 07:30:57 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:39095 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727890AbgGMLa4 (ORCPT
+        id S1729259AbgGMLxG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jul 2020 07:53:06 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37326 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727890AbgGMLxF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jul 2020 07:30:56 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id uwfYj6z2lGLmCuwfbjB4tM; Mon, 13 Jul 2020 13:30:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1594639854; bh=N3j2GzSmLbl6NCGSZ9HQsaaUJLTGBPxk+tjiPRkrRfE=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=SQNpE6EC2lxOsUrn4O2MdQb6BWDFYLskFWpLNZXOfqnIsiYMyeuCxjFNjCVYY8rhp
-         Y+hLSmmZcQMzmDvel30Xir4WMDnEK8EKy551XpR0L17hcJZEPC75uJR1h7dnFOEtKg
-         Yv5WS6QZJZI9I55KAQSylOXpuvRU0FG6EK+Rtaq6tF+RIJAw+lWyo+qAHKJxfarb8M
-         BMbIyh/H50jRChiSzEQF9NRNkkEH788KWipXOyPsvyWNzENp+PsDKEHsa32Cwk+Jxh
-         7eDj1ulDDjWxDGy0cjDFLxCNjYOPXQcZKakInGPxR8cRrn/UxaW3I6A3mUpH3igSOK
-         xvG6n+VMEUQAA==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Helen Koike <helen.koike@collabora.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Eddie James <eajames@linux.vnet.ibm.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCHv3 1/7] videobuf2-v4l2.c: add vb2_video_unregister_device helper function
-Date:   Mon, 13 Jul 2020 13:30:42 +0200
-Message-Id: <20200713113048.1150542-2-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200713113048.1150542-1-hverkuil-cisco@xs4all.nl>
-References: <20200713113048.1150542-1-hverkuil-cisco@xs4all.nl>
+        Mon, 13 Jul 2020 07:53:05 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id 189962A2AF5
+Subject: Re: [PATCH 4/4] media: staging: rkisp1: improve documentation of
+ rkisp1-common.h
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
+        dafna3@gmail.com, sakari.ailus@linux.intel.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org
+References: <20200629065754.26621-1-dafna.hirschfeld@collabora.com>
+ <20200629065754.26621-5-dafna.hirschfeld@collabora.com>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <ec28e78b-3c80-8cc7-4d2c-a46629850e78@collabora.com>
+Date:   Mon, 13 Jul 2020 08:52:55 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfMGjLj2W68T9S41ABpylCO2HeD9mOSfSufutuAV/LqHukRMFxZAdQilW2K+j5cHuErszXK3Vy/rfl2vXtGS72ttOjv34Pepbs3sxOAYygQVpJTu9tLGf
- jbXRQ/ghbRewl/3X/fZt4glxj2MRh1yeDHe+jUdNWSBtFSGc6CQ9OCQNN7IEr7L3DeTi4IHBQtiAkWze3cPcBaCa7ZBittzzmy91z/Zw+7aa9qgnwuUuehf4
- TrqP5wcLU6CGGYLwKLopUKaKQ9YEw9UJBmVTSgUEQ8vei4VrNj7jSQmvsKD5ctikT2zixtf6hIDFwAICaZT/UFNsqNV3g1P0+aPAXOcg6FBemg7uc+sXOyn3
- lC3XCxbM1b8eKAy40vMTrwAODH5wm9YDH+L19kiOTUSt1hyqFD3BdsTGECikhAg0ZM7iXjJI7HwVUL4V8RTFypisAjBgKzsMY/63ZrywGkzeufpbihwzeNhi
- 9AkNgSn4RXXnHaSIBaCvkRLFAvhuSB1Tnbl8P2Bif+PfWu2bPqHoiFzTIWpk1Q8x/wfHvNazrN3mZ7e1u4qXeN+NFj1pBqZzMWjnwkHArx6WX2soeMCX6tZC
- zLqSr949NzjHxw5JVieD9kxodgygh8ieYifXR9ErJjvGLvQtLN9D4mqxeGCKMksloJA6dZf2lw37sDU3b5Zx04go
+In-Reply-To: <20200629065754.26621-5-dafna.hirschfeld@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If a driver calls (_)vb2_fop_release(), then such a driver should also
-call vb2_video_unregister_device() instead of video_unregister_device().
-This helper will all vb2_queue_release() if a filehandle is marked as
-owner of the queue. This ensures that at unregister time any streaming
-is cancelled and all buffers are returned to userspace.
+Hi Dafna,
 
-This is very useful for complex drivers since this stops all streaming
-in all subdevs in the pipeline controlled by this video device. Otherwise
-this would happen until the owner filehandle is closed, which can be quite
-some time later.
+Thanks for the patch.
 
-Bonus points for ordering the includes :-)
+On 6/29/20 3:57 AM, Dafna Hirschfeld wrote:
+> Add more detailed documentation of the structs in rkisp1-common.h
+> 
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> ---
+>  drivers/staging/media/rkisp1/TODO            |   1 -
+>  drivers/staging/media/rkisp1/rkisp1-common.h | 133 +++++++++++++++----
+>  2 files changed, 106 insertions(+), 28 deletions(-)
+> 
+> diff --git a/drivers/staging/media/rkisp1/TODO b/drivers/staging/media/rkisp1/TODO
+> index bdb1b8f73556..f0c90d1c86a8 100644
+> --- a/drivers/staging/media/rkisp1/TODO
+> +++ b/drivers/staging/media/rkisp1/TODO
+> @@ -2,7 +2,6 @@
+>  * Fix checkpatch errors.
+>  * Review and comment every lock
+>  * Handle quantization
+> -* Document rkisp1-common.h
+>  * streaming paths (mainpath and selfpath) check if the other path is streaming
+>  in several places of the code, review this, specially that it doesn't seem it
+>  supports streaming from both paths at the same time.
+> diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
+> index 4185487c520c..47b03a1dfe1b 100644
+> --- a/drivers/staging/media/rkisp1/rkisp1-common.h
+> +++ b/drivers/staging/media/rkisp1/rkisp1-common.h
+> @@ -73,8 +73,16 @@ enum rkisp1_isp_pad {
+>  };
+>  
+>  /*
+> - * struct rkisp1_sensor_async - Sensor information
+> - * @mbus: media bus configuration
+> + * struct rkisp1_sensor_async - A container for the v4l2_async_subdev to add to the notifier
+> + * of the v4l2-async API.
+> + *
+> + * @asd: the async_subdev var for the sensor
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Robert Foss <robert.foss@linaro.org>
-Cc: Andrey Konovalov <andrey.konovalov@linaro.org>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Helen Koike <helen.koike@collabora.com>
-Cc: Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Eddie James <eajames@linux.vnet.ibm.com>
-Cc: Maxime Ripard <maxime@cerno.tech>
-Cc: Alexandre Courbot <acourbot@chromium.org>
-Cc: Tiffany Lin <tiffany.lin@mediatek.com>
-Cc: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
- .../media/common/videobuf2/videobuf2-v4l2.c   | 51 ++++++++++++++++---
- include/media/videobuf2-v4l2.h                | 17 +++++++
- 2 files changed, 62 insertions(+), 6 deletions(-)
+I think you can remove "the" here, same for other fields in the rest of this patch.
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index 57aa183bd198..576057132d3e 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -14,21 +14,22 @@
-  * the Free Software Foundation.
-  */
- 
-+#include <linux/device.h>
- #include <linux/err.h>
-+#include <linux/freezer.h>
- #include <linux/kernel.h>
--#include <linux/module.h>
-+#include <linux/kthread.h>
- #include <linux/mm.h>
-+#include <linux/module.h>
- #include <linux/poll.h>
--#include <linux/slab.h>
- #include <linux/sched.h>
--#include <linux/freezer.h>
--#include <linux/kthread.h>
-+#include <linux/slab.h>
- 
-+#include <media/v4l2-common.h>
- #include <media/v4l2-dev.h>
- #include <media/v4l2-device.h>
--#include <media/v4l2-fh.h>
- #include <media/v4l2-event.h>
--#include <media/v4l2-common.h>
-+#include <media/v4l2-fh.h>
- 
- #include <media/videobuf2-v4l2.h>
- 
-@@ -1234,6 +1235,44 @@ unsigned long vb2_fop_get_unmapped_area(struct file *file, unsigned long addr,
- EXPORT_SYMBOL_GPL(vb2_fop_get_unmapped_area);
- #endif
- 
-+void vb2_video_unregister_device(struct video_device *vdev)
-+{
-+	/* Check if vdev was ever registered at all */
-+	if (!vdev || !video_is_registered(vdev))
-+		return;
-+
-+	/*
-+	 * Calling this function only makes sense if vdev->queue is set.
-+	 * If it is NULL, then just call video_unregister_device() instead.
-+	 */
-+	WARN_ON(!vdev->queue);
-+
-+	/*
-+	 * Take a reference to the device since video_unregister_device()
-+	 * calls device_unregister(), but we don't want that to release
-+	 * the device since we want to clean up the queue first.
-+	 */
-+	get_device(&vdev->dev);
-+	video_unregister_device(vdev);
-+	if (vdev->queue && vdev->queue->owner) {
-+		struct mutex *lock = vdev->queue->lock ?
-+			vdev->queue->lock : vdev->lock;
-+
-+		if (lock)
-+			mutex_lock(lock);
-+		vb2_queue_release(vdev->queue);
-+		vdev->queue->owner = NULL;
-+		if (lock)
-+			mutex_unlock(lock);
-+	}
-+	/*
-+	 * Now we put the device, and in most cases this will release
-+	 * everything.
-+	 */
-+	put_device(&vdev->dev);
-+}
-+EXPORT_SYMBOL_GPL(vb2_video_unregister_device);
-+
- /* vb2_ops helpers. Only use if vq->lock is non-NULL. */
- 
- void vb2_ops_wait_prepare(struct vb2_queue *vq)
-diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
-index b7b5a9cb5a28..c203047eb834 100644
---- a/include/media/videobuf2-v4l2.h
-+++ b/include/media/videobuf2-v4l2.h
-@@ -23,6 +23,8 @@
- #error VB2_MAX_PLANES != VIDEO_MAX_PLANES
- #endif
- 
-+struct video_device;
-+
- /**
-  * struct vb2_v4l2_buffer - video buffer information for v4l2.
-  *
-@@ -319,6 +321,21 @@ unsigned long vb2_fop_get_unmapped_area(struct file *file, unsigned long addr,
- 		unsigned long len, unsigned long pgoff, unsigned long flags);
- #endif
- 
-+/**
-+ * vb2_video_unregister_device - unregister the video device and release queue
-+ *
-+ * @vdev: pointer to &struct video_device
-+ *
-+ * If the driver uses vb2_fop_release()/_vb2_fop_release(), then it should use
-+ * vb2_video_unregister_device() instead of video_unregister_device().
-+ *
-+ * This function will call video_unregister_device() and then release the
-+ * vb2_queue if streaming is in progress. This will stop streaming and
-+ * this will simplify the unbind sequence since after this call all subdevs
-+ * will have stopped streaming as well.
-+ */
-+void vb2_video_unregister_device(struct video_device *vdev);
-+
- /**
-  * vb2_ops_wait_prepare - helper function to lock a struct &vb2_queue
-  *
--- 
-2.27.0
+> + * @lanes: number of lanes
+> + * @mbus_type: type of bus (currently only CSI2 is supported)
+> + * @mbus_flags: media bus (V4L2_MBUS_*) flags
+> + * @sd: a pointer to the v4l2_subdev struct of the sensor
+> + * @pixel_rate_ctrl: the pixel rate of the sensor, used to initialize the phy
+> + * @dphy: a pointer to the phy
+>   */
 
+Just a nit, could you align the comments? I think it is easier to read.
+
+>  struct rkisp1_sensor_async {
+>  	struct v4l2_async_subdev asd;
+> @@ -87,19 +95,16 @@ struct rkisp1_sensor_async {
+>  };
+>  
+>  /*
+> - * struct rkisp1_isp - ISP sub-device
+> + * struct rkisp1_isp - ISP subdev entity
+>   *
+> - * See Cropping regions of ISP in rkisp1.c for details
+> - * @sink_frm: input size, don't have to be equal to sensor size
+> + * @sd: the v4l2_subdev var
+> + * @pads: the media pads
+> + * @pad_cfg: the pads configurations
+>   * @sink_fmt: input format
+> - * @sink_crop: crop for sink pad
+>   * @src_fmt: output format
+> - * @src_crop: output size
+>   * @ops_lock: ops serialization
+> - *
+>   * @is_dphy_errctrl_disabled : if dphy errctrl is disabled (avoid endless interrupt)
+>   * @frame_sequence: used to synchronize frame_id between video devices.
+> - * @quantization: output quantization
+>   */
+>  struct rkisp1_isp {
+>  	struct v4l2_subdev sd;
+> @@ -107,11 +112,20 @@ struct rkisp1_isp {
+>  	struct v4l2_subdev_pad_config pad_cfg[RKISP1_ISP_PAD_MAX];
+>  	const struct rkisp1_isp_mbus_info *sink_fmt;
+>  	const struct rkisp1_isp_mbus_info *src_fmt;
+> -	struct mutex ops_lock;
+> +	struct mutex ops_lock; /* serialize the subdevice ops */
+>  	bool is_dphy_errctrl_disabled;
+>  	atomic_t frame_sequence;
+>  };
+>  
+> +/*
+> + * struct rkisp1_vdev_node - A Container for the video nodes of the video devices:
+> + *			     params, stats, mainpath, selfpath
+
+Or maybe just:
+Container for the video devices nodes: params, stats, mainpath, selfpath
+
+> + *
+> + * @buf_queue: the queue of buffers.
+> + * @vlock: the lock of the video node
+> + * @vdev: the video node
+> + * @pad: the media pad
+> + */
+>  struct rkisp1_vdev_node {
+>  	struct vb2_queue buf_queue;
+>  	struct mutex vlock; /* ioctl serialization mutex */
+> @@ -119,6 +133,15 @@ struct rkisp1_vdev_node {
+>  	struct media_pad pad;
+>  };
+>  
+> +/*
+> + * struct rkisp1_buffer - A container for the vb2 buffers used by the video devices:
+> + *			  params, stats, mainpath, selfpath
+> + *
+> + * @vb: the vb2 buffer
+> + * @queue: the entry of the buffer in the queue
+> + * @buff_addr: the dma addresses of each plain, used only by the capture devices: selfpath, mainpath
+
+s/plain/plane
+
+> + * @vaddr: the virtual addresses, used only by the params and stats devices
+
+maybe:
+
+virtual addresses for buffers used by params and stats devices
+
+I also noticed that params and stats only use vaddr[0], maybe we can remove the array and
+replaced by a simple variable.
+
+> + */
+>  struct rkisp1_buffer {
+>  	struct vb2_v4l2_buffer vb;
+>  	struct list_head queue;
+> @@ -128,6 +151,9 @@ struct rkisp1_buffer {
+>  	};
+>  };
+>  
+> +/*
+> + * A dummy buffer to write the next frame to in case there are no vb2 buffers available.
+> + */
+
+Could you please follow the same standard used in the rest of this patch?
+
+>  struct rkisp1_dummy_buffer {
+>  	void *vaddr;
+>  	dma_addr_t dma_addr;
+> @@ -139,17 +165,28 @@ struct rkisp1_device;
+>  /*
+>   * struct rkisp1_capture - ISP capture video device
+>   *
+> - * @pix.fmt: buffer format
+> - * @pix.info: pixel information
+> - * @pix.cfg: pixel configuration
+> - *
+> - * @buf.lock: lock to protect buf_queue
+> + * @vnode: the video node
+> + * @rkisp1: pointer to the rkisp1 device
+> + * @id: the id of the capture, one of RKISP1_SELFPATH, RKISP1_MAINPATH
+> + * @ops: list of callbacks to configure the capture device.
+> + * @config: a pointer to the list of registers to configure the capture format.
+> + * @is_streaming: device is streaming
+> + * @is_stopping: stop_streaming callback was called and the device is in the process of stopping
+> + *		 the streaming.
+> + * @done: when stop_streaming callback is called, the device waits for the next irq handler to stop
+> + *	  the streaming from there by waiting on the 'done' wait queue.
+
+s/to stop the streaming from there by waiting/to stop the streaming by waiting/
+
+> + *	  If the irq handler is not called, the stream is stopped from the callback after timeout.
+
+s/from/by
+
+> + * @sp_y_stride: the selfpath allows to configure a y stride that is longer than the image width.
+> + * @buf.lock: lock to protect buf.queue
+>   * @buf.queue: queued buffer list
+>   * @buf.dummy: dummy space to store dropped data
+>   *
+> - * rkisp1 use shadowsock registers, so it need two buffer at a time
+> + * rkisp1 uses shadow registers, so it needs two buffers at a time
+>   * @buf.curr: the buffer used for current frame
+>   * @buf.next: the buffer used for next frame
+> + * @pix.cfg: pixel configuration
+> + * @pix.info: a pointer to the v4l2_format_info of the pixel format
+> + * @pix.fmt: buffer format
+>   */
+>  struct rkisp1_capture {
+>  	struct rkisp1_vdev_node vnode;
+> @@ -179,14 +216,18 @@ struct rkisp1_capture {
+>  /*
+>   * struct rkisp1_stats - ISP Statistics device
+>   *
+> + * @vnode: the video node
+> + * @rkisp1: pointer to the rkisp1 device
+>   * @lock: locks the buffer list 'stat' and 'is_streaming'
+> - * @stat: stats buffer list
+> + * @stat: the queue of rkisp1_buffer
+> + * @vdev_fmt: the v4l2_format
+> + * @is_streaming: device is streaming
+>   */
+>  struct rkisp1_stats {
+>  	struct rkisp1_vdev_node vnode;
+>  	struct rkisp1_device *rkisp1;
+>  
+> -	spinlock_t lock; /* locks 'is_streaming', and 'stats' */
+> +	spinlock_t lock; /* locks the buffers list 'stats' and 'is_streaming' */
+>  	struct list_head stat;
+>  	struct v4l2_format vdev_fmt;
+>  	bool is_streaming;
+> @@ -195,14 +236,22 @@ struct rkisp1_stats {
+>  /*
+>   * struct rkisp1_params - ISP input parameters device
+>   *
+> - * @cur_params: Current ISP parameters
+> + * @vnode: the video node
+> + * @rkisp1: pointer to the rkisp1 device
+> + * @config_lock: locks the buffer list 'params' and 'is_streaming'
+> + * @params: the queue of rkisp1_buffer
+> + * @cur_params: the first params values from userspace
+> + * @vdev_fmt: the v4l2_format
+> + * @is_streaming: device is streaming
+>   * @is_first_params: the first params should take effect immediately
+> + * @quantization: the quantization configured on the isp's src pad
+
+Just a note unrelated to this patch:
+Maybe quantization could be moved to struct rkisp1_device, so it is accessible by all the entities
+without the need to maintain copies around.
+
+> + * @raw_type: the bayer pattern on the isp video sink pad
+>   */
+>  struct rkisp1_params {
+>  	struct rkisp1_vdev_node vnode;
+>  	struct rkisp1_device *rkisp1;
+>  
+> -	spinlock_t config_lock;
+> +	spinlock_t config_lock; /* locks the buffers list 'params' and 'is_streaming' */
+>  	struct list_head params;
+>  	struct rkisp1_params_cfg cur_params;
+>  	struct v4l2_format vdev_fmt;
+> @@ -213,6 +262,18 @@ struct rkisp1_params {
+>  	enum rkisp1_fmt_raw_pat_type raw_type;
+>  };
+>  
+> +/*
+> + * struct rkisp1_resizer - Resizer subdev
+> + *
+> + * @sd: the v4l2_subdev var
+> + * @id: the id of the resizer, one of RKISP1_SELFPATH, RKISP1_MAINPATH
+> + * @rkisp1: pointer to the rkisp1 device
+> + * @pads: the media pads
+> + * @pad_cfg: the configurations for the pads
+> + * @config: the set of registers to configure the resizer
+> + * @pixel_enc: the pixel encoding of the resizer
+> + * @ops_lock: a lock for the subdev ops
+> + */
+>  struct rkisp1_resizer {
+>  	struct v4l2_subdev sd;
+>  	enum rkisp1_stream_id id;
+> @@ -221,9 +282,12 @@ struct rkisp1_resizer {
+>  	struct v4l2_subdev_pad_config pad_cfg[RKISP1_RSZ_PAD_MAX];
+>  	const struct rkisp1_rsz_config *config;
+>  	enum v4l2_pixel_encoding pixel_enc;
+> -	struct mutex ops_lock;
+> +	struct mutex ops_lock; /* serialize the subdevice ops */
+>  };
+>  
+> +/*
+> + * struct rkisp1_debug - values to be exposed on debugfs
+> + */
+>  struct rkisp1_debug {
+>  	struct dentry *debugfs_dir;
+>  	unsigned long data_loss;
+> @@ -237,12 +301,22 @@ struct rkisp1_debug {
+>  /*
+>   * struct rkisp1_device - ISP platform device
+
+Missing new line here
+
+>   * @base_addr: base register address
+> + * @irq: the irq number
+> + * @dev: a pointer to the struct device
+> + * @clk_size: the number of clocks
+> + * @clks: the array of clocks
+> + * @v4l2_dev: the v4l2_device
+> + * @media_dev: the media_device
+> + * @notifier: a notifier to register on the v4l2-async API to be notified on the sensor
+>   * @active_sensor: sensor in-use, set when streaming on
+>   * @isp: ISP sub-device
+> - * @rkisp1_capture: capture video device
+> + * @resizer_devs: the two resizer sub-devices
+> + * @capture_devs: the two capture devices
+>   * @stats: ISP statistics output device
+>   * @params: ISP input parameters device
+> - * @stream_lock: lock to serialize start/stop streaming in capture devices.
+> + * @pipe: the media pipeline
+> + * @stream_lock: serializes {start/stop}_streaming callbacks between the capture devices.
+> + * @debug: the debug params to be exposed on debugfs
+>   */
+>  struct rkisp1_device {
+>  	void __iomem *base_addr;
+> @@ -260,16 +334,21 @@ struct rkisp1_device {
+>  	struct rkisp1_stats stats;
+>  	struct rkisp1_params params;
+>  	struct media_pipeline pipe;
+> -	struct mutex stream_lock;
+> +	struct mutex stream_lock; /* serialize {start/stop}_streaming cb between capture devices */
+>  	struct rkisp1_debug debug;
+>  };
+>  
+>  /*
+> - * struct rkisp1_isp_mbus_info - ISP pad format info
+> + * struct rkisp1_isp_mbus_info - ISP media bus info
+>   *
+> - * Translate mbus_code to hardware format values
+> + * Translates mbus_code to hardware format values
+>   *
+> - * @bus_width: used for parallel
+> + * @mbus_code: the media bus code
+> + * @pixel_enc: the pixel encoding
+> + * @mipi_dt: the mipi data type
+> + * @bus_width: the bus width
+> + * @bayer_pat: the bayer pattern
+> + * @direction: a bitmask of the flags indicating on which pad the format is supported on
+>   */
+>  struct rkisp1_isp_mbus_info {
+>  	u32 mbus_code;
+> 
+
+It would also be nice to add docs to the enums, macros and functions, but since this is an internal
+header, it's fine, we can add them later.
+
+With these changes:
+
+Acked-by: Helen Koike <helen.koike@collabora.com>
+
+Thanks
+Helen
