@@ -2,43 +2,46 @@ Return-Path: <SRS0=Gq82=AY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 615B1C433EC
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05A91C433EB
 	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A5CC20738
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E334C20738
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730049AbgGMOml (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730046AbgGMOml (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 13 Jul 2020 10:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729689AbgGMOmd (ORCPT
+        with ESMTP id S1729881AbgGMOmd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 13 Jul 2020 10:42:33 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A790C08C5DD
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60698C08C5E0
         for <linux-media@vger.kernel.org>; Mon, 13 Jul 2020 07:42:33 -0700 (PDT)
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1juzf5-0001mN-CN; Mon, 13 Jul 2020 16:42:31 +0200
+        id 1juzf5-0001mS-D6; Mon, 13 Jul 2020 16:42:31 +0200
 Received: from mtr by dude02.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1juzf4-0007rJ-IV; Mon, 13 Jul 2020 16:42:30 +0200
+        id 1juzf4-0007ra-L1; Mon, 13 Jul 2020 16:42:30 +0200
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         kernel@pengutronix.de, Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH v2 00/12] media: allegro: Add support for firmware 2019.2
-Date:   Mon, 13 Jul 2020 16:42:17 +0200
-Message-Id: <20200713144229.30057-1-m.tretter@pengutronix.de>
+Subject: [PATCH v2 05/12] media: allegro: don't pack MCU messages
+Date:   Mon, 13 Jul 2020 16:42:22 +0200
+Message-Id: <20200713144229.30057-6-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200713144229.30057-1-m.tretter@pengutronix.de>
+References: <20200713144229.30057-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
@@ -50,169 +53,124 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is v2 of the series to add support for the firmware version 2019.2 to the
-allegro driver.
+The messages are now explicitly converted from the struct to the binary
+representation used by the firmware. Therefore, there is no need to keep
+the structs packed anymore.
 
-The changes compared to v1:
+Drop the attribute and avoid confusion why the mails are packed.
 
-- Change the return type of allegro_mbox_notify() to void. The return
-  value was neither checked, nor is there anything we can do, if an error
-  occurs, thus there is no need to return an error.
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+---
+ .../staging/media/allegro-dvt/allegro-mail.h  | 26 +++++++++----------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-- Add the string.h to allegro-mail.c, which is necessary for memcpy().
-
-Motivation of the patch series in the cover letter of v1:
-
-The updated firmware contains updates and bugfixes. For example, VBR encoding
-works much more reliable than with the firmware 2018.2. Unfortunately, I was
-not able to find an actual changelog that lists the firmware changes. Even
-more unfortunately, the firmware ABI is not stable across firmware versions.
-
-Therefore, this series changes how messages for the mailbox are created.
-Previously, the driver defined a struct mcu_msg_* for each message that can be
-written directly into the mailbox. This approach is incompatible with support
-for more than one firmware version. Now the driver converts the struct
-mcu_msg_* into the binary format that is expected by the firmware. The struct
-mcu_msg_* are still the same to reduce changes to the code that is used to
-prepare the messages.
-
-This separation allows to change the struct mcu_msg_* more freely, because it
-is not bound to the firmware ABI anymore and allows to get rid of ugly hacks
-like using the message size to determine the number of elements in the
-PUSH_BUFFER_INTERMEDIATE and PUSH_BUFFER_REFERENCE message.
-
-Updated v4l2-compliance result:
-
-v4l2-compliance SHA: d366a4e439599450ae1a82b23a37fc8e6b38d1ab, 64 bits, 64-bit time_t
-
-Compliance test for allegro device /dev/video3:
-
-Driver Info:
-	Driver name      : allegro
-	Card type        : Allegro DVT Video Encoder
-	Bus info         : platform:a0009000.video-codec
-	Driver version   : 5.8.0
-	Capabilities     : 0x84208000
-		Video Memory-to-Memory
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04208000
-		Video Memory-to-Memory
-		Streaming
-		Extended Pix Format
-	Detected Stateful Encoder
-
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-	test second /dev/video3 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-	test invalid ioctls: OK
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 16 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Test input 0:
-
-Streaming ioctls:
-	test read/write: OK (Not Supported)
-	test blocking wait: OK
-	Video Capture: Captured 60 buffers
-	test MMAP (select): OK
-	Video Capture: Captured 60 buffers
-	test MMAP (epoll): OK
-	test USERPTR (select): OK (Not Supported)
-	test DMABUF: Cannot test, specify --expbuf-device
-
-Total for allegro device /dev/video3: 50, Succeeded: 50, Failed: 0, Warnings: 0
-
-Michael
-
-Changelog:
-
-v1 -> v2:
-
-- change allegro_mbox_notify() to void
-- add missing string.h header
-
-Michael Tretter (12):
-  media: allegro: rework mbox handling
-  media: allegro: rework read/write to mailbox
-  media: allegro: add explicit mail encoding and decoding
-  media: allegro: add field for number of buffers
-  media: allegro: don't pack MCU messages
-  media: allegro: support handling firmware dependent values
-  media: allegro: encode bit fields separately
-  media: allegro: add config blob for channel
-  media: allegro: set num_ref_idx using response of configured channels
-  media: allegro: drop length field from message header
-  media: allegro: add a version field to mcu messages
-  media: allegro: add support for allegro firmware 2019.2
-
- .../staging/media/allegro-dvt/allegro-core.c  | 383 +++++++------
- .../staging/media/allegro-dvt/allegro-mail.c  | 507 ++++++++++++++++++
- .../staging/media/allegro-dvt/allegro-mail.h  | 111 ++--
- 3 files changed, 800 insertions(+), 201 deletions(-)
-
+diff --git a/drivers/staging/media/allegro-dvt/allegro-mail.h b/drivers/staging/media/allegro-dvt/allegro-mail.h
+index 14b54eb52488..ae81e94a2f2c 100644
+--- a/drivers/staging/media/allegro-dvt/allegro-mail.h
++++ b/drivers/staging/media/allegro-dvt/allegro-mail.h
+@@ -25,7 +25,7 @@ const char *msg_type_name(enum mcu_msg_type type);
+ struct mcu_msg_header {
+ 	u16 length;		/* length of the body in bytes */
+ 	u16 type;
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_init_request {
+ 	struct mcu_msg_header header;
+@@ -33,12 +33,12 @@ struct mcu_msg_init_request {
+ 	u32 suballoc_dma;
+ 	u32 suballoc_size;
+ 	s32 l2_cache[3];
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_init_response {
+ 	struct mcu_msg_header header;
+ 	u32 reserved0;
+-} __attribute__ ((__packed__));
++};
+ 
+ struct create_channel_param {
+ 	u16 width;
+@@ -127,13 +127,13 @@ struct create_channel_param {
+ 	u32 subframe_latency;
+ 	u32 lda_control_mode;
+ 	u32 unknown41;
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_create_channel {
+ 	struct mcu_msg_header header;
+ 	u32 user_id;
+ 	struct create_channel_param param;
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_create_channel_response {
+ 	struct mcu_msg_header header;
+@@ -148,30 +148,30 @@ struct mcu_msg_create_channel_response {
+ 	u32 rec_buffers_size;
+ 	u32 reserved;
+ 	u32 error_code;
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_destroy_channel {
+ 	struct mcu_msg_header header;
+ 	u32 channel_id;
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_destroy_channel_response {
+ 	struct mcu_msg_header header;
+ 	u32 channel_id;
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_push_buffers_internal_buffer {
+ 	u32 dma_addr;
+ 	u32 mcu_addr;
+ 	u32 size;
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_push_buffers_internal {
+ 	struct mcu_msg_header header;
+ 	u32 channel_id;
+ 	size_t num_buffers;
+ 	struct mcu_msg_push_buffers_internal_buffer buffer[];
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_put_stream_buffer {
+ 	struct mcu_msg_header header;
+@@ -181,7 +181,7 @@ struct mcu_msg_put_stream_buffer {
+ 	u32 size;
+ 	u32 offset;
+ 	u64 stream_id;
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_encode_frame {
+ 	struct mcu_msg_header header;
+@@ -214,7 +214,7 @@ struct mcu_msg_encode_frame {
+ 	u32 stride;
+ 	u32 ep2;
+ 	u64 ep2_v;
+-} __attribute__ ((__packed__));
++};
+ 
+ struct mcu_msg_encode_frame_response {
+ 	struct mcu_msg_header header;
+@@ -255,7 +255,7 @@ struct mcu_msg_encode_frame_response {
+ 	u16 pps_qp;
+ 	u16 reserved1;
+ 	u32 reserved2;
+-} __attribute__ ((__packed__));
++};
+ 
+ union mcu_msg_response {
+ 	struct mcu_msg_header header;
 -- 
 2.20.1
 
