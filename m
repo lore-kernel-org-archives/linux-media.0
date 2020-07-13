@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B2BEC433E2
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 461E8C433E6
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21EA620738
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BAE720738
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730011AbgGMOme (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jul 2020 10:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
+        id S1729981AbgGMOmd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jul 2020 10:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729988AbgGMOmd (ORCPT
+        with ESMTP id S1729681AbgGMOmd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 13 Jul 2020 10:42:33 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72304C08C5E2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268CFC061755
         for <linux-media@vger.kernel.org>; Mon, 13 Jul 2020 07:42:33 -0700 (PDT)
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1juzf5-0001mW-P3; Mon, 13 Jul 2020 16:42:31 +0200
+        id 1juzf5-0001mP-CN; Mon, 13 Jul 2020 16:42:31 +0200
 Received: from mtr by dude02.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1juzf4-0007rz-Om; Mon, 13 Jul 2020 16:42:30 +0200
+        id 1juzf4-0007rO-Jq; Mon, 13 Jul 2020 16:42:30 +0200
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         kernel@pengutronix.de, Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH v2 09/12] media: allegro: set num_ref_idx using response of configured channels
-Date:   Mon, 13 Jul 2020 16:42:26 +0200
-Message-Id: <20200713144229.30057-10-m.tretter@pengutronix.de>
+Subject: [PATCH v2 02/12] media: allegro: rework read/write to mailbox
+Date:   Mon, 13 Jul 2020 16:42:19 +0200
+Message-Id: <20200713144229.30057-3-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200713144229.30057-1-m.tretter@pengutronix.de>
 References: <20200713144229.30057-1-m.tretter@pengutronix.de>
@@ -53,100 +53,214 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The firmware decides how many reference frames shall be used und returns
-this information via the config blob. In order to set the number of
-reference frames in the PPS, the driver has to read these values from
-the config blob after the channel has been created in the firmware.
+Rework the functions that read and write the SRAM that is used to
+communicate with the MCU.
+
+As the functions will not operate on structs but on prepared binary
+buffers, make the buffer stride more explicit. Also, avoid any uses of
+struct mcu_msg_header to analyze messages in memory, because the header
+will be made independent of the binary representation in the mailbox.
+Instead explicitly access the mail size field in the mailbox.
+
+As at it, further reduce the dependency between the mailboxes and struct
+allegro_dev.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- drivers/staging/media/allegro-dvt/allegro-core.c | 10 ++++++++--
- drivers/staging/media/allegro-dvt/allegro-mail.c |  6 +++++-
- drivers/staging/media/allegro-dvt/allegro-mail.h |  5 ++++-
- 3 files changed, 17 insertions(+), 4 deletions(-)
+ .../staging/media/allegro-dvt/allegro-core.c  | 110 ++++++------------
+ 1 file changed, 36 insertions(+), 74 deletions(-)
 
 diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
-index 51e85cad9941..07deb5ba13dc 100644
+index 11333f900302..dc2627df0eec 100644
 --- a/drivers/staging/media/allegro-dvt/allegro-core.c
 +++ b/drivers/staging/media/allegro-dvt/allegro-core.c
-@@ -208,6 +208,9 @@ struct allegro_channel {
+@@ -612,49 +612,34 @@ static struct allegro_mbox *allegro_mbox_init(struct allegro_dev *dev,
+ 	return mbox;
+ }
  
- 	struct allegro_buffer config_blob;
+-static int allegro_mbox_write(struct allegro_dev *dev,
+-			      struct allegro_mbox *mbox, void *src, size_t size)
++static int allegro_mbox_write(struct allegro_mbox *mbox,
++			      const u32 *src, size_t size)
+ {
+-	struct mcu_msg_header *header = src;
++	struct regmap *sram = mbox->dev->sram;
+ 	unsigned int tail;
+ 	size_t size_no_wrap;
+ 	int err = 0;
++	int stride = regmap_get_reg_stride(sram);
  
-+	unsigned int num_ref_idx_l0;
-+	unsigned int num_ref_idx_l1;
-+
- 	struct v4l2_ctrl *mpeg_video_h264_profile;
- 	struct v4l2_ctrl *mpeg_video_h264_level;
- 	struct v4l2_ctrl *mpeg_video_h264_i_frame_qp;
-@@ -1336,8 +1339,8 @@ static ssize_t allegro_h264_write_pps(struct allegro_channel *channel,
- 	pps->entropy_coding_mode_flag = 0;
- 	pps->bottom_field_pic_order_in_frame_present_flag = 0;
- 	pps->num_slice_groups_minus1 = 0;
--	pps->num_ref_idx_l0_default_active_minus1 = 2;
--	pps->num_ref_idx_l1_default_active_minus1 = 2;
-+	pps->num_ref_idx_l0_default_active_minus1 = channel->num_ref_idx_l0 - 1;
-+	pps->num_ref_idx_l1_default_active_minus1 = channel->num_ref_idx_l1 - 1;
- 	pps->weighted_pred_flag = 0;
- 	pps->weighted_bipred_idc = 0;
- 	pps->pic_init_qp_minus26 = 0;
-@@ -1639,6 +1642,9 @@ allegro_handle_create_channel(struct allegro_dev *dev,
+ 	if (!src)
+ 		return -EINVAL;
+ 
+-	if (size > mbox->size) {
+-		v4l2_err(&dev->v4l2_dev,
+-			 "message (%zu bytes) too large for mailbox (%zu bytes)\n",
+-			 size, mbox->size);
+-		return -EINVAL;
+-	}
+-
+-	if (header->length != size - sizeof(*header)) {
+-		v4l2_err(&dev->v4l2_dev,
+-			 "invalid message length: %u bytes (expected %zu bytes)\n",
+-			 header->length, size - sizeof(*header));
++	if (size > mbox->size)
+ 		return -EINVAL;
+-	}
+-
+-	v4l2_dbg(2, debug, &dev->v4l2_dev,
+-		 "write command message: type %s, body length %d\n",
+-		 msg_type_name(header->type), header->length);
+ 
+ 	mutex_lock(&mbox->lock);
+-	regmap_read(dev->sram, mbox->tail, &tail);
++	regmap_read(sram, mbox->tail, &tail);
+ 	if (tail > mbox->size) {
+-		v4l2_err(&dev->v4l2_dev,
+-			 "invalid tail (0x%x): must be smaller than mailbox size (0x%zx)\n",
+-			 tail, mbox->size);
+ 		err = -EIO;
+ 		goto out;
+ 	}
+ 	size_no_wrap = min(size, mbox->size - (size_t)tail);
+-	regmap_bulk_write(dev->sram, mbox->data + tail, src, size_no_wrap / 4);
+-	regmap_bulk_write(dev->sram, mbox->data,
+-			  src + size_no_wrap, (size - size_no_wrap) / 4);
+-	regmap_write(dev->sram, mbox->tail, (tail + size) % mbox->size);
++	regmap_bulk_write(sram, mbox->data + tail,
++			  src, size_no_wrap / stride);
++	regmap_bulk_write(sram, mbox->data,
++			  src + (size_no_wrap / sizeof(*src)),
++			  (size - size_no_wrap) / stride);
++	regmap_write(sram, mbox->tail, (tail + size) % mbox->size);
+ 
+ out:
+ 	mutex_unlock(&mbox->lock);
+@@ -662,40 +647,32 @@ static int allegro_mbox_write(struct allegro_dev *dev,
+ 	return err;
+ }
+ 
+-static ssize_t allegro_mbox_read(struct allegro_dev *dev,
+-				 struct allegro_mbox *mbox,
+-				 void *dst, size_t nbyte)
++static ssize_t allegro_mbox_read(struct allegro_mbox *mbox,
++				 u32 *dst, size_t nbyte)
+ {
+-	struct mcu_msg_header *header;
++	struct {
++		u16 length;
++		u16 type;
++	} __attribute__ ((__packed__)) *header;
++	struct regmap *sram = mbox->dev->sram;
+ 	unsigned int head;
+ 	ssize_t size;
+ 	size_t body_no_wrap;
++	int stride = regmap_get_reg_stride(sram);
+ 
+-	regmap_read(dev->sram, mbox->head, &head);
+-	if (head > mbox->size) {
+-		v4l2_err(&dev->v4l2_dev,
+-			 "invalid head (0x%x): must be smaller than mailbox size (0x%zx)\n",
+-			 head, mbox->size);
++	regmap_read(sram, mbox->head, &head);
++	if (head > mbox->size)
+ 		return -EIO;
+-	}
+ 
+ 	/* Assume that the header does not wrap. */
+-	regmap_bulk_read(dev->sram, mbox->data + head,
+-			 dst, sizeof(*header) / 4);
+-	header = dst;
++	regmap_bulk_read(sram, mbox->data + head,
++			 dst, sizeof(*header) / stride);
++	header = (void *)dst;
+ 	size = header->length + sizeof(*header);
+-	if (size > mbox->size || size & 0x3) {
+-		v4l2_err(&dev->v4l2_dev,
+-			 "invalid message length: %zu bytes (maximum %zu bytes)\n",
+-			 header->length + sizeof(*header), mbox->size);
++	if (size > mbox->size || size & 0x3)
+ 		return -EIO;
+-	}
+-	if (size > nbyte) {
+-		v4l2_err(&dev->v4l2_dev,
+-			 "destination buffer too small: %zu bytes (need %zu bytes)\n",
+-			 nbyte, size);
++	if (size > nbyte)
+ 		return -EINVAL;
+-	}
+ 
+ 	/*
+ 	 * The message might wrap within the mailbox. If the message does not
+@@ -708,17 +685,14 @@ static ssize_t allegro_mbox_read(struct allegro_dev *dev,
+ 	 */
+ 	body_no_wrap = min((size_t)header->length,
+ 			   (size_t)(mbox->size - (head + sizeof(*header))));
+-	regmap_bulk_read(dev->sram, mbox->data + head + sizeof(*header),
+-			 dst + sizeof(*header), body_no_wrap / 4);
+-	regmap_bulk_read(dev->sram, mbox->data,
+-			 dst + sizeof(*header) + body_no_wrap,
+-			 (header->length - body_no_wrap) / 4);
++	regmap_bulk_read(sram, mbox->data + head + sizeof(*header),
++			 dst + (sizeof(*header) / sizeof(*dst)),
++			 body_no_wrap / stride);
++	regmap_bulk_read(sram, mbox->data,
++			 dst + (sizeof(*header) + body_no_wrap) / sizeof(*dst),
++			 (header->length - body_no_wrap) / stride);
+ 
+-	regmap_write(dev->sram, mbox->head, (head + size) % mbox->size);
+-
+-	v4l2_dbg(2, debug, &dev->v4l2_dev,
+-		 "read status message: type %s, body length %d\n",
+-		 msg_type_name(header->type), header->length);
++	regmap_write(sram, mbox->head, (head + size) % mbox->size);
+ 
+ 	return size;
+ }
+@@ -735,7 +709,7 @@ static int allegro_mbox_send(struct allegro_mbox *mbox, void *msg)
+ 	ssize_t size = sizeof(*header) + header->length;
+ 	int err;
+ 
+-	err = allegro_mbox_write(dev, mbox, msg, size);
++	err = allegro_mbox_write(mbox, msg, size);
  	if (err)
  		goto out;
  
-+	channel->num_ref_idx_l0 = param.num_ref_idx_l0;
-+	channel->num_ref_idx_l1 = param.num_ref_idx_l1;
-+
- 	v4l2_dbg(1, debug, &dev->v4l2_dev,
- 		 "channel %d: intermediate buffers: %d x %d bytes\n",
- 		 channel->mcu_channel_id,
-diff --git a/drivers/staging/media/allegro-dvt/allegro-mail.c b/drivers/staging/media/allegro-dvt/allegro-mail.c
-index c55b9339f9c6..bb15de080431 100644
---- a/drivers/staging/media/allegro-dvt/allegro-mail.c
-+++ b/drivers/staging/media/allegro-dvt/allegro-mail.c
-@@ -173,6 +173,9 @@ ssize_t allegro_decode_config_blob(struct create_channel_param *param,
- 				   struct mcu_msg_create_channel_response *msg,
- 				   u32 *src)
- {
-+	param->num_ref_idx_l0 = msg->num_ref_idx_l0;
-+	param->num_ref_idx_l1 = msg->num_ref_idx_l1;
-+
- 	return 0;
- }
+@@ -759,7 +733,7 @@ static void allegro_mbox_notify(struct allegro_mbox *mbox)
+ 	if (!msg)
+ 		return;
  
-@@ -273,7 +276,8 @@ allegro_dec_create_channel(struct mcu_msg_create_channel_response *msg,
- 	msg->user_id = src[i++];
- 	msg->options = src[i++];
- 	msg->num_core = src[i++];
--	msg->pps_param = src[i++];
-+	msg->num_ref_idx_l0 = FIELD_GET(GENMASK(7, 4), src[i]);
-+	msg->num_ref_idx_l1 = FIELD_GET(GENMASK(11, 8), src[i++]);
- 	msg->int_buffers_count = src[i++];
- 	msg->int_buffers_size = src[i++];
- 	msg->rec_buffers_count = src[i++];
-diff --git a/drivers/staging/media/allegro-dvt/allegro-mail.h b/drivers/staging/media/allegro-dvt/allegro-mail.h
-index 07ed0a8d3de3..a4d829f6f99d 100644
---- a/drivers/staging/media/allegro-dvt/allegro-mail.h
-+++ b/drivers/staging/media/allegro-dvt/allegro-mail.h
-@@ -55,6 +55,8 @@ struct create_channel_param {
- 	u32 log2_max_frame_num;
- 	u32 temporal_mvp_enable;
- 	u32 dbf_ovr_en;
-+	u32 num_ref_idx_l0;
-+	u32 num_ref_idx_l1;
- 	u32 rdo_cost_mode;
- 	u32 lf;
- 	u32 lf_x_tile;
-@@ -127,7 +129,8 @@ struct mcu_msg_create_channel_response {
- 	u32 user_id;
- 	u32 options;
- 	u32 num_core;
--	u32 pps_param;
-+	u32 num_ref_idx_l0;
-+	u32 num_ref_idx_l1;
- 	u32 int_buffers_count;
- 	u32 int_buffers_size;
- 	u32 rec_buffers_count;
+-	size = allegro_mbox_read(dev, mbox, msg, sizeof(*msg));
++	size = allegro_mbox_read(mbox, (u32 *)msg, sizeof(*msg));
+ 	if (size < 0)
+ 		goto out;
+ 
+@@ -1604,12 +1578,6 @@ allegro_handle_create_channel(struct allegro_dev *dev,
+ 	struct allegro_channel *channel;
+ 	int err = 0;
+ 
+-	if (msg->header.length != sizeof(*msg) - sizeof(msg->header))
+-		v4l2_warn(&dev->v4l2_dev,
+-			  "received message has %d bytes, but expected %zu\n",
+-			  msg->header.length,
+-			  sizeof(*msg) - sizeof(msg->header));
+-
+ 	channel = allegro_find_channel_by_user_id(dev, msg->user_id);
+ 	if (IS_ERR(channel)) {
+ 		v4l2_warn(&dev->v4l2_dev,
+@@ -1703,12 +1671,6 @@ allegro_handle_encode_frame(struct allegro_dev *dev,
+ {
+ 	struct allegro_channel *channel;
+ 
+-	if (msg->header.length != sizeof(*msg) - sizeof(msg->header))
+-		v4l2_warn(&dev->v4l2_dev,
+-			  "received message has %d bytes, but expected %zu\n",
+-			  msg->header.length,
+-			  sizeof(*msg) - sizeof(msg->header));
+-
+ 	channel = allegro_find_channel_by_channel_id(dev, msg->channel_id);
+ 	if (IS_ERR(channel)) {
+ 		v4l2_err(&dev->v4l2_dev,
 -- 
 2.20.1
 
