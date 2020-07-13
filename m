@@ -2,92 +2,86 @@ Return-Path: <SRS0=Gq82=AY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35AD0C433E2
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 15:56:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41A78C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 15:58:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C4ED2068F
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 15:56:03 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kCMQpToX"
+	by mail.kernel.org (Postfix) with ESMTP id 1B2392068F
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 15:58:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1594655898;
+	bh=/R0sGmkVLjot+Hv1jQ3IPjEDDit7OO7V5MraQJ27Me4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=ctX4d6hr6yCN3vG/qg2pOft3fXfHYzdhOA7m3hR56HlDbO/4PtqksbI2Sa9cHJcZa
+	 upQyE6YuO8JHyygzI7i2s56/Ow3DHDToMiFhTMBXbxq+5sevKYDLe75G6Ud8lGAuZc
+	 y4ncmhmr+Onx3KJXKiUJ7qtw/2yD8qwb3ElinHDw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729840AbgGMP4C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jul 2020 11:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729659AbgGMP4B (ORCPT
+        id S1730263AbgGMP6R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jul 2020 11:58:17 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:40788 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729027AbgGMP6Q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jul 2020 11:56:01 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0325C061755
-        for <linux-media@vger.kernel.org>; Mon, 13 Jul 2020 08:56:01 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id l63so11342550oih.13
-        for <linux-media@vger.kernel.org>; Mon, 13 Jul 2020 08:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KJwvSYWoWDkN35u71y4ODaHWxVlDrck10Sd0PYp8JB8=;
-        b=kCMQpToX6Ti19kjjqU3/m3aePquWWV1/Ga1S9xRfCQJdave0wjUUhMdwl9hNc4B0fd
-         LBEswGCaQzZrdHFpbg5ssjMO04oH/iNMfEshtAAE5LfglPXFqENVtde9ByCfp4tCZX7/
-         rtR8y8nFp3HQ/QfumhSbA7UztFxclyulo5khAOUdidKn4ZybR8W0KSmsACdEaPLtCU/s
-         T2pn6Ir7OrWAkr9eHt+fUrbhW93QN4i3nfLxRVaw3q287exbfi738/cqDzXve/EhyffZ
-         S9jWE66kaF3xqXdTs+x0aoOVRgxgT7K3jNknbbgVlXAnXoZI1XMM//AVEnDt03y/9CTM
-         ucWw==
+        Mon, 13 Jul 2020 11:58:16 -0400
+Received: by mail-io1-f66.google.com with SMTP id l17so2497460iok.7;
+        Mon, 13 Jul 2020 08:58:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KJwvSYWoWDkN35u71y4ODaHWxVlDrck10Sd0PYp8JB8=;
-        b=W53HQR3qZFSi2Ab7JwOcPeMCfa7JiQBP4lWeb5dNJnzFB5KF4/JmPSJjei0L81TA0y
-         TnU8+eoe4/zCUh7BaDjlDE07PK9crsO9q2eDqG/sVdYHQuh8pa7YrYH940hRbWWnes9G
-         nYi55es+wv/MdobjpEg4T3k2dYdKzL9NkrxydFNQBJ8mKVg0sejqmlW1xKZmOM+EEbrT
-         Sc6wguJssMuPZb9rRdD8MyzNppch4cEmp7+dd2TzNwJAQWJGeB6ngyplrDb9Fk+J/hFT
-         VAK8yoVGeq6XaRVnyJORuPpWCH0wR7PntsP7gCxg3q2Ton6GeU84E/5fBnIdTgb7GkkO
-         vztw==
-X-Gm-Message-State: AOAM532TP783RHKhn0rynYudThdF9lFAeqE6SY/dEfBXFYV90CI5XsMI
-        nNOBHz/+1QoXbB1Dp6Q3v/zPcJVzDv+hgok3r8IVmw==
-X-Google-Smtp-Source: ABdhPJxG5twj23Ffcyls5m+48bFNBeD2hBEALr+Z1Hax/CwValhFKUkphCjEWkOshDnXOu3RR1CE8IcA5Ox/ht9o3Nc=
-X-Received: by 2002:a05:6808:ab8:: with SMTP id r24mr17108oij.133.1594655761260;
- Mon, 13 Jul 2020 08:56:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Fy0QyknEQIFDih/wXqka2gt2ibIDjdhI1UxiYacbQUo=;
+        b=t2+6/vkBD9ylOLfHd3E8RT34rzymon2+/A73msAHYwsBfleeo2ElBP4SWHZ7oQ9C2c
+         6lRevdeOrugbjnILY4ngZRHhcADe6igxMJ6ZP7wCjnKAObChFDwnkKfDtjrc39N/I9+w
+         IlInpQbe35WuqwxYBHkWpCHqePiJO7AAwE7PqmsKdeZ7iYxl8VCRR10GvsWtg+j3Si7N
+         hFeUV0mL3IV7OJIx03eGvT9lMm1S5WL1x6o9FgMvROeL3i8inVpfRg9+SU9tuXQzYmzm
+         RIZDbNX8P2tNoVRlg5ndHDR+hq1jn15Xa+kZPUfTV1pqSgfQ4T3NdnmQbsLTLDOAe6WF
+         VNFg==
+X-Gm-Message-State: AOAM533oNq/V6uOI5S8YV4r4ilP8HLDSgyQmVXvId4fASsDnTHhBOkDZ
+        vihNDlwG3+fYDCAve+50j3FxIu4X7Q==
+X-Google-Smtp-Source: ABdhPJxPue7aaZXd+HwUAIdtuoA4XS1gpiRIWhi/rVmK8wNvO6OGXfiIvga/INnnNbr20nzGEyhgTw==
+X-Received: by 2002:a05:6638:519:: with SMTP id i25mr715965jar.99.1594655895435;
+        Mon, 13 Jul 2020 08:58:15 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id n1sm8525392ilo.68.2020.07.13.08.58.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 08:58:14 -0700 (PDT)
+Received: (nullmailer pid 291615 invoked by uid 1000);
+        Mon, 13 Jul 2020 15:58:13 -0000
+Date:   Mon, 13 Jul 2020 09:58:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     roman.kovalivskyi@globallogic.com, robh+dt@kernel.org,
+        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
+        devicetree@vger.kernel.org, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
+        dave.stevenson@raspberrypi.com, dongchun.zhu@mediatek.com
+Subject: Re: [PATCH 1/2] dt-bindings: media: ov5647: Convert to json-schema
+Message-ID: <20200713155813.GA291484@bogus>
+References: <20200618134045.151532-1-jacopo@jmondi.org>
+ <20200618134045.151532-2-jacopo@jmondi.org>
 MIME-Version: 1.0
-References: <20200713113048.1150542-1-hverkuil-cisco@xs4all.nl> <20200713113048.1150542-2-hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20200713113048.1150542-2-hverkuil-cisco@xs4all.nl>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 13 Jul 2020 17:55:50 +0200
-Message-ID: <CAG3jFytwGeu5EyxWwfF8FyZ=LK-3Nzsr00Y9-=u4N0WN5w3zdw@mail.gmail.com>
-Subject: Re: [PATCHv3 1/7] videobuf2-v4l2.c: add vb2_video_unregister_device
- helper function
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Helen Koike <helen.koike@collabora.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Eddie James <eajames@linux.vnet.ibm.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200618134045.151532-2-jacopo@jmondi.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hey Hans,
+On Thu, 18 Jun 2020 15:40:44 +0200, Jacopo Mondi wrote:
+> Convert the ov5647 image sensor bindings to DT schema.
+> 
+> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> ---
+>  .../devicetree/bindings/media/i2c/ov5647.txt  | 35 --------
+>  .../devicetree/bindings/media/i2c/ov5647.yaml | 82 +++++++++++++++++++
+>  2 files changed, 82 insertions(+), 35 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5647.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ov5647.yaml
+> 
 
-Thanks for submitting this.
-
-> If a driver calls (_)vb2_fop_release(), then such a driver should also
-> call vb2_video_unregister_device() instead of video_unregister_device().
-> This helper will all vb2_queue_release() if a filehandle is marked as
-> owner of the queue. This ensures that at unregister time any streaming
-> is cancelled and all buffers are returned to userspace.
-
-Nit: "This helper will all vb2_queue_release()" wording is a bit confusing.
+Reviewed-by: Rob Herring <robh@kernel.org>
