@@ -2,83 +2,102 @@ Return-Path: <SRS0=Gq82=AY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F346CC433E3
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 15:57:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 422EEC433E2
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 16:02:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6EDF2068F
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 15:57:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594655822;
-	bh=SEBqvsM7mXZseePnytz7+cp2u35fQ/w6AWKqI+ro1r0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=kOHrSZ1l703OrNkBVcGvuy5J3Hk70PmPKyWBIwzwa2/a2H28lK72DzXEa5otVl12M
-	 IuBjvSHZmTRhOjR/Esvw4tZSqyztOSzQl57tALBEBI5Bc+Vvrq+cXn+odp+6Gcrxt1
-	 M543HK/YyfMHWZehuXtHmaFP9t2dXMQZie+E3blY=
+	by mail.kernel.org (Postfix) with ESMTP id 21BF92067D
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 16:02:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729861AbgGMP5C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jul 2020 11:57:02 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:40605 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729784AbgGMP5B (ORCPT
+        id S1729649AbgGMQC3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jul 2020 12:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729027AbgGMQC3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jul 2020 11:57:01 -0400
-Received: by mail-io1-f68.google.com with SMTP id l17so2492506iok.7;
-        Mon, 13 Jul 2020 08:57:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KoKKMla/uV6lVvThsKoY/n+C6PI/9y0lYfBZDiPoY0U=;
-        b=Dpj9D6F2+FqX17G91nJL85jjiZueY7Gb6Q9rH4eLkuGWE5SlpJmyeIMMUN+ijaxhKx
-         wMzSev6apVZ4Xg02z8/Cug18AzgWyI3hkn7bJMng7IE6xORKS/98TVcNM36Yz+cTPK22
-         bT2IZAyZKxtBXOAu77DeyUV+1l8P4WF+lIG/jVEcdUefN8mbWVSUxzjBX+XC6iRK4xn/
-         0cKCj8RHI1A/7RiIfJF+uMYjqs2OE0esVwGd/nyhnYQtdYfOlDOuIktFRmledXG79IGo
-         2KA7Vyj4a1XscQzYkS0Oaf4VJ6l6gRBlZfN4oVfYGeCds7ulDkawpMXVvq1jq19u6U+a
-         ge+A==
-X-Gm-Message-State: AOAM530GC1t8G5zKoe9aMSUIye+qf4YdmpyJWO4I0WfDA8kPs1AAfO8T
-        GA52E7ATcH3ixQDPBwfzjUs61wRFXw==
-X-Google-Smtp-Source: ABdhPJy6ZF1zzn/oRtoonJVg75hjx+jd1g9/dP1spLHVHEPBWZBwLz9KyG2hWBSwr5/inTzCDDtR8A==
-X-Received: by 2002:a6b:661a:: with SMTP id a26mr309367ioc.197.1594655821210;
-        Mon, 13 Jul 2020 08:57:01 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id s5sm8411068ilo.24.2020.07.13.08.56.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 08:57:00 -0700 (PDT)
-Received: (nullmailer pid 289202 invoked by uid 1000);
-        Mon, 13 Jul 2020 15:56:59 -0000
-Date:   Mon, 13 Jul 2020 09:56:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        hverkuil-cisco@xs4all.nl, dave.stevenson@raspberrypi.com,
-        dongchun.zhu@mediatek.com, laurent.pinchart@ideasonboard.com,
-        roman.kovalivskyi@globallogic.com
-Subject: Re: [PATCH 2/2] dt-bindings: media: i2c: Document 'remote-endpoint'
-Message-ID: <20200713155659.GA283117@bogus>
-References: <20200618134045.151532-1-jacopo@jmondi.org>
- <20200618134045.151532-3-jacopo@jmondi.org>
+        Mon, 13 Jul 2020 12:02:29 -0400
+Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4292CC061755;
+        Mon, 13 Jul 2020 09:02:29 -0700 (PDT)
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 2F40DBC0CA;
+        Mon, 13 Jul 2020 16:02:26 +0000 (UTC)
+From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
+To:     maintainers@bluecherrydvr.com, anton@corp.bluecherry.net,
+        andrey.utkin@corp.bluecherry.net, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Subject: [PATCH] [media] tw5864-core: Replace HTTP links with HTTPS ones
+Date:   Mon, 13 Jul 2020 18:02:19 +0200
+Message-Id: <20200713160219.35612-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200618134045.151532-3-jacopo@jmondi.org>
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: +++++
+Authentication-Results: smtp.al2klimov.de;
+        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 03:40:45PM +0200, Jacopo Mondi wrote:
-> Document the 'remote-endpoint' property and add it to the list of required
-> endpoint properties in imx219 and ov8856 dt-schema binding files.
-> 
-> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> ---
->  Documentation/devicetree/bindings/media/i2c/imx219.yaml | 5 +++++
->  Documentation/devicetree/bindings/media/i2c/ov8856.yaml | 5 +++++
->  2 files changed, 10 insertions(+)
+Rationale:
+Reduces attack surface on kernel devs opening the links for MITM
+as HTTPS traffic is much harder to manipulate.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Deterministic algorithm:
+For each file:
+  If not .svg:
+    For each line:
+      If doesn't contain `\bxmlns\b`:
+        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+            If both the HTTP and HTTPS versions
+            return 200 OK and serve the same content:
+              Replace HTTP with HTTPS.
+
+Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+---
+ Continuing my work started at 93431e0607e5.
+ See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+ (Actually letting a shell for loop submit all this stuff for me.)
+
+ If there are any URLs to be removed completely or at least not just HTTPSified:
+ Just clearly say so and I'll *undo my change*.
+ See also: https://lkml.org/lkml/2020/6/27/64
+
+ If there are any valid, but yet not changed URLs:
+ See: https://lkml.org/lkml/2020/6/26/837
+
+ If you apply the patch, please let me know.
+
+ Sorry again to all maintainers who complained about subject lines.
+ Now I realized that you want an actually perfect prefixes,
+ not just subsystem ones.
+ I tried my best...
+ And yes, *I could* (at least half-)automate it.
+ Impossible is nothing! :)
+
+
+ drivers/media/pci/tw5864/tw5864-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/pci/tw5864/tw5864-core.c b/drivers/media/pci/tw5864/tw5864-core.c
+index 66f2a5cabc6e..282f7dfb7aaf 100644
+--- a/drivers/media/pci/tw5864/tw5864-core.c
++++ b/drivers/media/pci/tw5864/tw5864-core.c
+@@ -65,7 +65,7 @@ module_param_array(video_nr, int, NULL, 0444);
+ MODULE_PARM_DESC(video_nr, "video devices numbers array");
+ 
+ /*
+- * Please add any new PCI IDs to: http://pci-ids.ucw.cz.  This keeps
++ * Please add any new PCI IDs to: https://pci-ids.ucw.cz.  This keeps
+  * the PCI ID database up to date.  Note that the entries must be
+  * added under vendor 0x1797 (Techwell Inc.) as subsystem IDs.
+  */
+-- 
+2.27.0
+
