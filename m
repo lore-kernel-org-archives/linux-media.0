@@ -2,203 +2,352 @@ Return-Path: <SRS0=Gq82=AY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 137CEC433E1
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 13:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12B42C433DF
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DB9F2072D
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 13:45:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="TQQYk3fK"
+	by mail.kernel.org (Postfix) with ESMTP id E496520738
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729856AbgGMNpd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jul 2020 09:45:33 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:41681 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728950AbgGMNpc (ORCPT
+        id S1730005AbgGMOme (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jul 2020 10:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729659AbgGMOmd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jul 2020 09:45:32 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id uylrjEcO05flquyluj0vql; Mon, 13 Jul 2020 15:45:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1594647930; bh=55qKzuUVLIDKWl3ypb4HXUPqMSZ9yHHADOpO7HsTkww=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=TQQYk3fKebd82NCcOHsoHdy/yAkCBVa5cap1ndHUR4/WFRJjdzipBx/L/YTI8L3lb
-         SgkqDuNGrFceln8TNbozELpVBIYXNa8adPRup/f2Qedbvs9VUNmVdkL2pyA/YVHMot
-         ld9DWAebROY4Zz9wOYxNIK18JAFktykTbaBEbs4TV9ozuruGLeYwsvyIxQUrn0dFAU
-         NUaI1kpauAFyYNO0T9uRH2I9ixudQRi4F3AdUNPA4hJhGH+WpOCnG06Kheb9PaF0tK
-         z7VExRQhi/9Tj6fiE1TmiFasyQR88kQPvRUlYlGdpWgyxbDzrDzOuOnGffu2YffuNf
-         KRpD7K8zh04vg==
-Subject: Re: [PATCH v3] media: videobuf2: Print videobuf2 buffer state by name
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org
-Cc:     kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-References: <20200710125129.159710-1-ezequiel@collabora.com>
- <20200710130010.160712-1-ezequiel@collabora.com>
- <cf01d95f-d9fb-5b0f-a81e-e97d3deabb18@xs4all.nl>
- <2e6b728bf8360a06025a1057568102ed40919bb7.camel@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <afc88186-1381-4379-c145-fa47da28380e@xs4all.nl>
-Date:   Mon, 13 Jul 2020 15:45:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 13 Jul 2020 10:42:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37660C061794
+        for <linux-media@vger.kernel.org>; Mon, 13 Jul 2020 07:42:33 -0700 (PDT)
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1juzf5-0001mO-CO; Mon, 13 Jul 2020 16:42:31 +0200
+Received: from mtr by dude02.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1juzf4-0007rL-JC; Mon, 13 Jul 2020 16:42:30 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        kernel@pengutronix.de, Michael Tretter <m.tretter@pengutronix.de>
+Subject: [PATCH v2 01/12] media: allegro: rework mbox handling
+Date:   Mon, 13 Jul 2020 16:42:18 +0200
+Message-Id: <20200713144229.30057-2-m.tretter@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200713144229.30057-1-m.tretter@pengutronix.de>
+References: <20200713144229.30057-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <2e6b728bf8360a06025a1057568102ed40919bb7.camel@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfNuCpzRDdd8pxEaT8hShpNgbe4nuwjs7xuJH/hZPz8jeM3XjfGi2A0IYyhtU+wPlIN3cyHtbsErmG7Ay/dTAaL0ygCWb1VCgTAyWYsCI7rbT1RrP4wx0
- kSO80anfJ+QCwDjPzeCAnH2juPYPa2gKDDl9GkY+KnBTnOOSAlwD9kOHyQ4uXQfDq7Vpl6u5sS/JmYdPpToQIHHfVCM6u7dmMEsYa07SSOPP/x6EgoUnNNbs
- S+AZJ9H/xPfeLJpMt3eiApNkooFAEdiWtkDn99QQpFaC2QL5nXuly+q0vOjsP67o
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 13/07/2020 15:10, Ezequiel Garcia wrote:
-> On Mon, 2020-07-13 at 11:31 +0200, Hans Verkuil wrote:
->> On 10/07/2020 15:00, Ezequiel Garcia wrote:
->>> For debugging purposes, seeing the state integer
->>> representation is really inconvenient.
->>>
->>> Improve this and be developer-friendly by printing
->>> the state name instead.
->>>
->>> Suggested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->>> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
->>> ---
->>> v3:
->>> * Drop static modifier from the now local name array.
->>> v2:
->>> * Use a proper function instead of a C macro.
->>>
->>>  .../media/common/videobuf2/videobuf2-core.c   | 35 ++++++++++++++-----
->>>  1 file changed, 27 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
->>> index abaf28e057eb..d5942cd455bf 100644
->>> --- a/drivers/media/common/videobuf2/videobuf2-core.c
->>> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
->>> @@ -191,6 +191,23 @@ module_param(debug, int, 0644);
->>>  static void __vb2_queue_cancel(struct vb2_queue *q);
->>>  static void __enqueue_in_driver(struct vb2_buffer *vb);
->>>  
->>> +static inline const char *vb2_state_name(enum vb2_buffer_state s)
->>
->> Why inline? That adds nothing of value. It's too big for an inline
->> anyway and it's only used when debug is on.
->>
-> 
-> Yes, you're right.
-> 
->>> +{
->>> +	const char * const state_names[] = {
->>
->> This really should be static, local or not. I'm not sure why you dropped
->> that. Possibly because of the inline?
->>
-> 
-> I was hesitant about this, as you can see. After some thought,
-> it seemed a waste of space to have this array allocated statically.
-> 
-> Could you clarify this for me? Why do you believe it should be static?
+Add a send/notify abstraction for the mailbox and separate the message
+handling in the driver from the code to read and write message to the
+mailbox.
 
-If it is not static, then the compiler could create this array every time you
-enter this function. It probably is smart enough to avoid that, but there is
-no guarantee. This array is constant, will never change, so why not make it
-static? I'm not really should what you waste here.
+This untangles how mails are written into the MCU's SRAM and signaled to
+the MCU from the protocol between the driver and the firmware.
 
-Regards,
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 
-	Hans
+---
+Changelog:
 
-> 
-> Thanks,
-> Ezequiel
-> 
->> Regards,
->>
->> 	Hans
->>
->>> +		[VB2_BUF_STATE_DEQUEUED] = "dequeued",
->>> +		[VB2_BUF_STATE_IN_REQUEST] = "in request",
->>> +		[VB2_BUF_STATE_PREPARING] = "preparing",
->>> +		[VB2_BUF_STATE_QUEUED] = "queued",
->>> +		[VB2_BUF_STATE_ACTIVE] = "active",
->>> +		[VB2_BUF_STATE_DONE] = "done",
->>> +		[VB2_BUF_STATE_ERROR] = "error",
->>> +	};
->>> +
->>> +	if ((unsigned int)(s) < ARRAY_SIZE(state_names))
->>> +		return state_names[s];
->>> +	return "unknown";
->>> +}
->>> +
->>>  /*
->>>   * __vb2_buf_mem_alloc() - allocate video memory for the given buffer
->>>   */
->>> @@ -1015,8 +1032,8 @@ void vb2_buffer_done(struct vb2_buffer *vb, enum vb2_buffer_state state)
->>>  	 */
->>>  	vb->cnt_buf_done++;
->>>  #endif
->>> -	dprintk(q, 4, "done processing on buffer %d, state: %d\n",
->>> -			vb->index, state);
->>> +	dprintk(q, 4, "done processing on buffer %d, state: %s\n",
->>> +		vb->index, vb2_state_name(state));
->>>  
->>>  	if (state != VB2_BUF_STATE_QUEUED)
->>>  		__vb2_buf_mem_finish(vb);
->>> @@ -1490,8 +1507,8 @@ int vb2_core_prepare_buf(struct vb2_queue *q, unsigned int index, void *pb)
->>>  
->>>  	vb = q->bufs[index];
->>>  	if (vb->state != VB2_BUF_STATE_DEQUEUED) {
->>> -		dprintk(q, 1, "invalid buffer state %d\n",
->>> -			vb->state);
->>> +		dprintk(q, 1, "invalid buffer state %s\n",
->>> +			vb2_state_name(vb->state));
->>>  		return -EINVAL;
->>>  	}
->>>  	if (vb->prepared) {
->>> @@ -1670,7 +1687,8 @@ int vb2_core_qbuf(struct vb2_queue *q, unsigned int index, void *pb,
->>>  		dprintk(q, 1, "buffer still being prepared\n");
->>>  		return -EINVAL;
->>>  	default:
->>> -		dprintk(q, 1, "invalid buffer state %d\n", vb->state);
->>> +		dprintk(q, 1, "invalid buffer state %s\n",
->>> +			vb2_state_name(vb->state));
->>>  		return -EINVAL;
->>>  	}
->>>  
->>> @@ -1884,7 +1902,8 @@ int vb2_core_dqbuf(struct vb2_queue *q, unsigned int *pindex, void *pb,
->>>  		dprintk(q, 3, "returning done buffer with errors\n");
->>>  		break;
->>>  	default:
->>> -		dprintk(q, 1, "invalid buffer state\n");
->>> +		dprintk(q, 1, "invalid buffer state %s\n",
->>> +			vb2_state_name(vb->state));
->>>  		return -EINVAL;
->>>  	}
->>>  
->>> @@ -1915,8 +1934,8 @@ int vb2_core_dqbuf(struct vb2_queue *q, unsigned int *pindex, void *pb,
->>>  		media_request_put(vb->request);
->>>  	vb->request = NULL;
->>>  
->>> -	dprintk(q, 2, "dqbuf of buffer %d, with state %d\n",
->>> -			vb->index, vb->state);
->>> +	dprintk(q, 2, "dqbuf of buffer %d, state: %s\n",
->>> +		vb->index, vb2_state_name(vb->state));
->>>  
->>>  	return 0;
->>>  
->>>
-> 
-> 
+v1 -> v2:
+- change allegro_mbox_notify() to void
+---
+ .../staging/media/allegro-dvt/allegro-core.c  | 145 +++++++++++-------
+ 1 file changed, 87 insertions(+), 58 deletions(-)
+
+diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
+index 3ed66aae741d..11333f900302 100644
+--- a/drivers/staging/media/allegro-dvt/allegro-core.c
++++ b/drivers/staging/media/allegro-dvt/allegro-core.c
+@@ -105,9 +105,11 @@ struct allegro_buffer {
+ 	struct list_head head;
+ };
+ 
++struct allegro_dev;
+ struct allegro_channel;
+ 
+ struct allegro_mbox {
++	struct allegro_dev *dev;
+ 	unsigned int head;
+ 	unsigned int tail;
+ 	unsigned int data;
+@@ -134,8 +136,8 @@ struct allegro_dev {
+ 	struct completion init_complete;
+ 
+ 	/* The mailbox interface */
+-	struct allegro_mbox mbox_command;
+-	struct allegro_mbox mbox_status;
++	struct allegro_mbox *mbox_command;
++	struct allegro_mbox *mbox_status;
+ 
+ 	/*
+ 	 * The downstream driver limits the users to 64 users, thus I can use
+@@ -583,12 +585,20 @@ static void allegro_free_buffer(struct allegro_dev *dev,
+  * Mailbox interface to send messages to the MCU.
+  */
+ 
+-static int allegro_mbox_init(struct allegro_dev *dev,
+-			     struct allegro_mbox *mbox,
+-			     unsigned int base, size_t size)
++static void allegro_mcu_interrupt(struct allegro_dev *dev);
++static void allegro_handle_message(struct allegro_dev *dev,
++				   union mcu_msg_response *msg);
++
++static struct allegro_mbox *allegro_mbox_init(struct allegro_dev *dev,
++					      unsigned int base, size_t size)
+ {
++	struct allegro_mbox *mbox;
++
++	mbox = devm_kmalloc(&dev->plat_dev->dev, sizeof(*mbox), GFP_KERNEL);
+ 	if (!mbox)
+-		return -EINVAL;
++		return ERR_PTR(-ENOMEM);
++
++	mbox->dev = dev;
+ 
+ 	mbox->head = base;
+ 	mbox->tail = base + 0x4;
+@@ -599,7 +609,7 @@ static int allegro_mbox_init(struct allegro_dev *dev,
+ 	regmap_write(dev->sram, mbox->head, 0);
+ 	regmap_write(dev->sram, mbox->tail, 0);
+ 
+-	return 0;
++	return mbox;
+ }
+ 
+ static int allegro_mbox_write(struct allegro_dev *dev,
+@@ -713,9 +723,50 @@ static ssize_t allegro_mbox_read(struct allegro_dev *dev,
+ 	return size;
+ }
+ 
+-static void allegro_mcu_interrupt(struct allegro_dev *dev)
++/**
++ * allegro_mbox_send() - Send a message via the mailbox
++ * @mbox: the mailbox which is used to send the message
++ * @msg: the message to send
++ */
++static int allegro_mbox_send(struct allegro_mbox *mbox, void *msg)
+ {
+-	regmap_write(dev->regmap, AL5_MCU_INTERRUPT, BIT(0));
++	struct allegro_dev *dev = mbox->dev;
++	struct mcu_msg_header *header = msg;
++	ssize_t size = sizeof(*header) + header->length;
++	int err;
++
++	err = allegro_mbox_write(dev, mbox, msg, size);
++	if (err)
++		goto out;
++
++	allegro_mcu_interrupt(dev);
++
++out:
++	return err;
++}
++
++/**
++ * allegro_mbox_notify() - Notify the mailbox about a new message
++ * @mbox: The allegro_mbox to notify
++ */
++static void allegro_mbox_notify(struct allegro_mbox *mbox)
++{
++	struct allegro_dev *dev = mbox->dev;
++	union mcu_msg_response *msg;
++	ssize_t size;
++
++	msg = kmalloc(sizeof(*msg), GFP_KERNEL);
++	if (!msg)
++		return;
++
++	size = allegro_mbox_read(dev, mbox, msg, sizeof(*msg));
++	if (size < 0)
++		goto out;
++
++	allegro_handle_message(dev, msg);
++
++out:
++	kfree(msg);
+ }
+ 
+ static void allegro_mcu_send_init(struct allegro_dev *dev,
+@@ -736,8 +787,7 @@ static void allegro_mcu_send_init(struct allegro_dev *dev,
+ 	msg.l2_cache[1] = -1;
+ 	msg.l2_cache[2] = -1;
+ 
+-	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+-	allegro_mcu_interrupt(dev);
++	allegro_mbox_send(dev->mbox_command, &msg);
+ }
+ 
+ static u32 v4l2_pixelformat_to_mcu_format(u32 pixelformat)
+@@ -946,8 +996,7 @@ static int allegro_mcu_send_create_channel(struct allegro_dev *dev,
+ 
+ 	fill_create_channel_param(channel, &msg.param);
+ 
+-	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+-	allegro_mcu_interrupt(dev);
++	allegro_mbox_send(dev->mbox_command, &msg);
+ 
+ 	return 0;
+ }
+@@ -964,8 +1013,7 @@ static int allegro_mcu_send_destroy_channel(struct allegro_dev *dev,
+ 
+ 	msg.channel_id = channel->mcu_channel_id;
+ 
+-	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+-	allegro_mcu_interrupt(dev);
++	allegro_mbox_send(dev->mbox_command, &msg);
+ 
+ 	return 0;
+ }
+@@ -991,8 +1039,7 @@ static int allegro_mcu_send_put_stream_buffer(struct allegro_dev *dev,
+ 	/* copied to mcu_msg_encode_frame_response */
+ 	msg.stream_id = stream_id;
+ 
+-	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+-	allegro_mcu_interrupt(dev);
++	allegro_mbox_send(dev->mbox_command, &msg);
+ 
+ 	return 0;
+ }
+@@ -1021,8 +1068,7 @@ static int allegro_mcu_send_encode_frame(struct allegro_dev *dev,
+ 	msg.ep2 = 0x0;
+ 	msg.ep2_v = to_mcu_addr(dev, msg.ep2);
+ 
+-	allegro_mbox_write(dev, &dev->mbox_command, &msg, sizeof(msg));
+-	allegro_mcu_interrupt(dev);
++	allegro_mbox_send(dev->mbox_command, &msg);
+ 
+ 	return 0;
+ }
+@@ -1084,12 +1130,8 @@ static int allegro_mcu_push_buffer_internal(struct allegro_channel *channel,
+ 		buffer++;
+ 	}
+ 
+-	err = allegro_mbox_write(dev, &dev->mbox_command, msg, size);
+-	if (err)
+-		goto out;
+-	allegro_mcu_interrupt(dev);
++	err = allegro_mbox_send(dev->mbox_command, msg);
+ 
+-out:
+ 	kfree(msg);
+ 	return err;
+ }
+@@ -1681,51 +1723,28 @@ allegro_handle_encode_frame(struct allegro_dev *dev,
+ 	return 0;
+ }
+ 
+-static int allegro_receive_message(struct allegro_dev *dev)
++static void allegro_handle_message(struct allegro_dev *dev,
++				   union mcu_msg_response *msg)
+ {
+-	union mcu_msg_response *msg;
+-	ssize_t size;
+-	int err = 0;
+-
+-	msg = kmalloc(sizeof(*msg), GFP_KERNEL);
+-	if (!msg)
+-		return -ENOMEM;
+-
+-	size = allegro_mbox_read(dev, &dev->mbox_status, msg, sizeof(*msg));
+-	if (size < sizeof(msg->header)) {
+-		v4l2_err(&dev->v4l2_dev,
+-			 "invalid mbox message (%zd): must be at least %zu\n",
+-			 size, sizeof(msg->header));
+-		err = -EINVAL;
+-		goto out;
+-	}
+-
+ 	switch (msg->header.type) {
+ 	case MCU_MSG_TYPE_INIT:
+-		err = allegro_handle_init(dev, &msg->init);
++		allegro_handle_init(dev, &msg->init);
+ 		break;
+ 	case MCU_MSG_TYPE_CREATE_CHANNEL:
+-		err = allegro_handle_create_channel(dev, &msg->create_channel);
++		allegro_handle_create_channel(dev, &msg->create_channel);
+ 		break;
+ 	case MCU_MSG_TYPE_DESTROY_CHANNEL:
+-		err = allegro_handle_destroy_channel(dev,
+-						     &msg->destroy_channel);
++		allegro_handle_destroy_channel(dev, &msg->destroy_channel);
+ 		break;
+ 	case MCU_MSG_TYPE_ENCODE_FRAME:
+-		err = allegro_handle_encode_frame(dev, &msg->encode_frame);
++		allegro_handle_encode_frame(dev, &msg->encode_frame);
+ 		break;
+ 	default:
+ 		v4l2_warn(&dev->v4l2_dev,
+ 			  "%s: unknown message %s\n",
+ 			  __func__, msg_type_name(msg->header.type));
+-		err = -EINVAL;
+ 		break;
+ 	}
+-
+-out:
+-	kfree(msg);
+-
+-	return err;
+ }
+ 
+ static irqreturn_t allegro_hardirq(int irq, void *data)
+@@ -1746,7 +1765,7 @@ static irqreturn_t allegro_irq_thread(int irq, void *data)
+ {
+ 	struct allegro_dev *dev = data;
+ 
+-	allegro_receive_message(dev);
++	allegro_mbox_notify(dev->mbox_status);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -1895,6 +1914,11 @@ static int allegro_mcu_reset(struct allegro_dev *dev)
+ 	return allegro_mcu_wait_for_sleep(dev);
+ }
+ 
++static void allegro_mcu_interrupt(struct allegro_dev *dev)
++{
++	regmap_write(dev->regmap, AL5_MCU_INTERRUPT, BIT(0));
++}
++
+ static void allegro_destroy_channel(struct allegro_channel *channel)
+ {
+ 	struct allegro_dev *dev = channel->dev;
+@@ -2887,10 +2911,15 @@ static int allegro_mcu_hw_init(struct allegro_dev *dev,
+ {
+ 	int err;
+ 
+-	allegro_mbox_init(dev, &dev->mbox_command,
+-			  info->mailbox_cmd, info->mailbox_size);
+-	allegro_mbox_init(dev, &dev->mbox_status,
+-			  info->mailbox_status, info->mailbox_size);
++	dev->mbox_command = allegro_mbox_init(dev, info->mailbox_cmd,
++					      info->mailbox_size);
++	dev->mbox_status = allegro_mbox_init(dev, info->mailbox_status,
++					     info->mailbox_size);
++	if (!dev->mbox_command || !dev->mbox_status) {
++		v4l2_err(&dev->v4l2_dev,
++			 "failed to initialize mailboxes\n");
++		return -EIO;
++	}
+ 
+ 	allegro_mcu_enable_interrupts(dev);
+ 
+-- 
+2.20.1
 
