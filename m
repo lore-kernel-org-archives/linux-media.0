@@ -2,46 +2,43 @@ Return-Path: <SRS0=Gq82=AY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 461E8C433E6
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 615B1C433EC
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2BAE720738
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A5CC20738
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 14:42:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729981AbgGMOmd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jul 2020 10:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
+        id S1730049AbgGMOml (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jul 2020 10:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729681AbgGMOmd (ORCPT
+        with ESMTP id S1729689AbgGMOmd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 13 Jul 2020 10:42:33 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268CFC061755
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A790C08C5DD
         for <linux-media@vger.kernel.org>; Mon, 13 Jul 2020 07:42:33 -0700 (PDT)
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1juzf5-0001mP-CN; Mon, 13 Jul 2020 16:42:31 +0200
+        id 1juzf5-0001mN-CN; Mon, 13 Jul 2020 16:42:31 +0200
 Received: from mtr by dude02.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1juzf4-0007rO-Jq; Mon, 13 Jul 2020 16:42:30 +0200
+        id 1juzf4-0007rJ-IV; Mon, 13 Jul 2020 16:42:30 +0200
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         kernel@pengutronix.de, Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH v2 02/12] media: allegro: rework read/write to mailbox
-Date:   Mon, 13 Jul 2020 16:42:19 +0200
-Message-Id: <20200713144229.30057-3-m.tretter@pengutronix.de>
+Subject: [PATCH v2 00/12] media: allegro: Add support for firmware 2019.2
+Date:   Mon, 13 Jul 2020 16:42:17 +0200
+Message-Id: <20200713144229.30057-1-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200713144229.30057-1-m.tretter@pengutronix.de>
-References: <20200713144229.30057-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
@@ -53,214 +50,169 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rework the functions that read and write the SRAM that is used to
-communicate with the MCU.
+This is v2 of the series to add support for the firmware version 2019.2 to the
+allegro driver.
 
-As the functions will not operate on structs but on prepared binary
-buffers, make the buffer stride more explicit. Also, avoid any uses of
-struct mcu_msg_header to analyze messages in memory, because the header
-will be made independent of the binary representation in the mailbox.
-Instead explicitly access the mail size field in the mailbox.
+The changes compared to v1:
 
-As at it, further reduce the dependency between the mailboxes and struct
-allegro_dev.
+- Change the return type of allegro_mbox_notify() to void. The return
+  value was neither checked, nor is there anything we can do, if an error
+  occurs, thus there is no need to return an error.
 
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
----
- .../staging/media/allegro-dvt/allegro-core.c  | 110 ++++++------------
- 1 file changed, 36 insertions(+), 74 deletions(-)
+- Add the string.h to allegro-mail.c, which is necessary for memcpy().
 
-diff --git a/drivers/staging/media/allegro-dvt/allegro-core.c b/drivers/staging/media/allegro-dvt/allegro-core.c
-index 11333f900302..dc2627df0eec 100644
---- a/drivers/staging/media/allegro-dvt/allegro-core.c
-+++ b/drivers/staging/media/allegro-dvt/allegro-core.c
-@@ -612,49 +612,34 @@ static struct allegro_mbox *allegro_mbox_init(struct allegro_dev *dev,
- 	return mbox;
- }
- 
--static int allegro_mbox_write(struct allegro_dev *dev,
--			      struct allegro_mbox *mbox, void *src, size_t size)
-+static int allegro_mbox_write(struct allegro_mbox *mbox,
-+			      const u32 *src, size_t size)
- {
--	struct mcu_msg_header *header = src;
-+	struct regmap *sram = mbox->dev->sram;
- 	unsigned int tail;
- 	size_t size_no_wrap;
- 	int err = 0;
-+	int stride = regmap_get_reg_stride(sram);
- 
- 	if (!src)
- 		return -EINVAL;
- 
--	if (size > mbox->size) {
--		v4l2_err(&dev->v4l2_dev,
--			 "message (%zu bytes) too large for mailbox (%zu bytes)\n",
--			 size, mbox->size);
--		return -EINVAL;
--	}
--
--	if (header->length != size - sizeof(*header)) {
--		v4l2_err(&dev->v4l2_dev,
--			 "invalid message length: %u bytes (expected %zu bytes)\n",
--			 header->length, size - sizeof(*header));
-+	if (size > mbox->size)
- 		return -EINVAL;
--	}
--
--	v4l2_dbg(2, debug, &dev->v4l2_dev,
--		 "write command message: type %s, body length %d\n",
--		 msg_type_name(header->type), header->length);
- 
- 	mutex_lock(&mbox->lock);
--	regmap_read(dev->sram, mbox->tail, &tail);
-+	regmap_read(sram, mbox->tail, &tail);
- 	if (tail > mbox->size) {
--		v4l2_err(&dev->v4l2_dev,
--			 "invalid tail (0x%x): must be smaller than mailbox size (0x%zx)\n",
--			 tail, mbox->size);
- 		err = -EIO;
- 		goto out;
- 	}
- 	size_no_wrap = min(size, mbox->size - (size_t)tail);
--	regmap_bulk_write(dev->sram, mbox->data + tail, src, size_no_wrap / 4);
--	regmap_bulk_write(dev->sram, mbox->data,
--			  src + size_no_wrap, (size - size_no_wrap) / 4);
--	regmap_write(dev->sram, mbox->tail, (tail + size) % mbox->size);
-+	regmap_bulk_write(sram, mbox->data + tail,
-+			  src, size_no_wrap / stride);
-+	regmap_bulk_write(sram, mbox->data,
-+			  src + (size_no_wrap / sizeof(*src)),
-+			  (size - size_no_wrap) / stride);
-+	regmap_write(sram, mbox->tail, (tail + size) % mbox->size);
- 
- out:
- 	mutex_unlock(&mbox->lock);
-@@ -662,40 +647,32 @@ static int allegro_mbox_write(struct allegro_dev *dev,
- 	return err;
- }
- 
--static ssize_t allegro_mbox_read(struct allegro_dev *dev,
--				 struct allegro_mbox *mbox,
--				 void *dst, size_t nbyte)
-+static ssize_t allegro_mbox_read(struct allegro_mbox *mbox,
-+				 u32 *dst, size_t nbyte)
- {
--	struct mcu_msg_header *header;
-+	struct {
-+		u16 length;
-+		u16 type;
-+	} __attribute__ ((__packed__)) *header;
-+	struct regmap *sram = mbox->dev->sram;
- 	unsigned int head;
- 	ssize_t size;
- 	size_t body_no_wrap;
-+	int stride = regmap_get_reg_stride(sram);
- 
--	regmap_read(dev->sram, mbox->head, &head);
--	if (head > mbox->size) {
--		v4l2_err(&dev->v4l2_dev,
--			 "invalid head (0x%x): must be smaller than mailbox size (0x%zx)\n",
--			 head, mbox->size);
-+	regmap_read(sram, mbox->head, &head);
-+	if (head > mbox->size)
- 		return -EIO;
--	}
- 
- 	/* Assume that the header does not wrap. */
--	regmap_bulk_read(dev->sram, mbox->data + head,
--			 dst, sizeof(*header) / 4);
--	header = dst;
-+	regmap_bulk_read(sram, mbox->data + head,
-+			 dst, sizeof(*header) / stride);
-+	header = (void *)dst;
- 	size = header->length + sizeof(*header);
--	if (size > mbox->size || size & 0x3) {
--		v4l2_err(&dev->v4l2_dev,
--			 "invalid message length: %zu bytes (maximum %zu bytes)\n",
--			 header->length + sizeof(*header), mbox->size);
-+	if (size > mbox->size || size & 0x3)
- 		return -EIO;
--	}
--	if (size > nbyte) {
--		v4l2_err(&dev->v4l2_dev,
--			 "destination buffer too small: %zu bytes (need %zu bytes)\n",
--			 nbyte, size);
-+	if (size > nbyte)
- 		return -EINVAL;
--	}
- 
- 	/*
- 	 * The message might wrap within the mailbox. If the message does not
-@@ -708,17 +685,14 @@ static ssize_t allegro_mbox_read(struct allegro_dev *dev,
- 	 */
- 	body_no_wrap = min((size_t)header->length,
- 			   (size_t)(mbox->size - (head + sizeof(*header))));
--	regmap_bulk_read(dev->sram, mbox->data + head + sizeof(*header),
--			 dst + sizeof(*header), body_no_wrap / 4);
--	regmap_bulk_read(dev->sram, mbox->data,
--			 dst + sizeof(*header) + body_no_wrap,
--			 (header->length - body_no_wrap) / 4);
-+	regmap_bulk_read(sram, mbox->data + head + sizeof(*header),
-+			 dst + (sizeof(*header) / sizeof(*dst)),
-+			 body_no_wrap / stride);
-+	regmap_bulk_read(sram, mbox->data,
-+			 dst + (sizeof(*header) + body_no_wrap) / sizeof(*dst),
-+			 (header->length - body_no_wrap) / stride);
- 
--	regmap_write(dev->sram, mbox->head, (head + size) % mbox->size);
--
--	v4l2_dbg(2, debug, &dev->v4l2_dev,
--		 "read status message: type %s, body length %d\n",
--		 msg_type_name(header->type), header->length);
-+	regmap_write(sram, mbox->head, (head + size) % mbox->size);
- 
- 	return size;
- }
-@@ -735,7 +709,7 @@ static int allegro_mbox_send(struct allegro_mbox *mbox, void *msg)
- 	ssize_t size = sizeof(*header) + header->length;
- 	int err;
- 
--	err = allegro_mbox_write(dev, mbox, msg, size);
-+	err = allegro_mbox_write(mbox, msg, size);
- 	if (err)
- 		goto out;
- 
-@@ -759,7 +733,7 @@ static void allegro_mbox_notify(struct allegro_mbox *mbox)
- 	if (!msg)
- 		return;
- 
--	size = allegro_mbox_read(dev, mbox, msg, sizeof(*msg));
-+	size = allegro_mbox_read(mbox, (u32 *)msg, sizeof(*msg));
- 	if (size < 0)
- 		goto out;
- 
-@@ -1604,12 +1578,6 @@ allegro_handle_create_channel(struct allegro_dev *dev,
- 	struct allegro_channel *channel;
- 	int err = 0;
- 
--	if (msg->header.length != sizeof(*msg) - sizeof(msg->header))
--		v4l2_warn(&dev->v4l2_dev,
--			  "received message has %d bytes, but expected %zu\n",
--			  msg->header.length,
--			  sizeof(*msg) - sizeof(msg->header));
--
- 	channel = allegro_find_channel_by_user_id(dev, msg->user_id);
- 	if (IS_ERR(channel)) {
- 		v4l2_warn(&dev->v4l2_dev,
-@@ -1703,12 +1671,6 @@ allegro_handle_encode_frame(struct allegro_dev *dev,
- {
- 	struct allegro_channel *channel;
- 
--	if (msg->header.length != sizeof(*msg) - sizeof(msg->header))
--		v4l2_warn(&dev->v4l2_dev,
--			  "received message has %d bytes, but expected %zu\n",
--			  msg->header.length,
--			  sizeof(*msg) - sizeof(msg->header));
--
- 	channel = allegro_find_channel_by_channel_id(dev, msg->channel_id);
- 	if (IS_ERR(channel)) {
- 		v4l2_err(&dev->v4l2_dev,
+Motivation of the patch series in the cover letter of v1:
+
+The updated firmware contains updates and bugfixes. For example, VBR encoding
+works much more reliable than with the firmware 2018.2. Unfortunately, I was
+not able to find an actual changelog that lists the firmware changes. Even
+more unfortunately, the firmware ABI is not stable across firmware versions.
+
+Therefore, this series changes how messages for the mailbox are created.
+Previously, the driver defined a struct mcu_msg_* for each message that can be
+written directly into the mailbox. This approach is incompatible with support
+for more than one firmware version. Now the driver converts the struct
+mcu_msg_* into the binary format that is expected by the firmware. The struct
+mcu_msg_* are still the same to reduce changes to the code that is used to
+prepare the messages.
+
+This separation allows to change the struct mcu_msg_* more freely, because it
+is not bound to the firmware ABI anymore and allows to get rid of ugly hacks
+like using the message size to determine the number of elements in the
+PUSH_BUFFER_INTERMEDIATE and PUSH_BUFFER_REFERENCE message.
+
+Updated v4l2-compliance result:
+
+v4l2-compliance SHA: d366a4e439599450ae1a82b23a37fc8e6b38d1ab, 64 bits, 64-bit time_t
+
+Compliance test for allegro device /dev/video3:
+
+Driver Info:
+	Driver name      : allegro
+	Card type        : Allegro DVT Video Encoder
+	Bus info         : platform:a0009000.video-codec
+	Driver version   : 5.8.0
+	Capabilities     : 0x84208000
+		Video Memory-to-Memory
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04208000
+		Video Memory-to-Memory
+		Streaming
+		Extended Pix Format
+	Detected Stateful Encoder
+
+Required ioctls:
+	test VIDIOC_QUERYCAP: OK
+
+Allow for multiple opens:
+	test second /dev/video3 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+	test invalid ioctls: OK
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 16 Private Controls: 0
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK (Not Supported)
+	test Composing: OK (Not Supported)
+	test Scaling: OK (Not Supported)
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+
+Test input 0:
+
+Streaming ioctls:
+	test read/write: OK (Not Supported)
+	test blocking wait: OK
+	Video Capture: Captured 60 buffers
+	test MMAP (select): OK
+	Video Capture: Captured 60 buffers
+	test MMAP (epoll): OK
+	test USERPTR (select): OK (Not Supported)
+	test DMABUF: Cannot test, specify --expbuf-device
+
+Total for allegro device /dev/video3: 50, Succeeded: 50, Failed: 0, Warnings: 0
+
+Michael
+
+Changelog:
+
+v1 -> v2:
+
+- change allegro_mbox_notify() to void
+- add missing string.h header
+
+Michael Tretter (12):
+  media: allegro: rework mbox handling
+  media: allegro: rework read/write to mailbox
+  media: allegro: add explicit mail encoding and decoding
+  media: allegro: add field for number of buffers
+  media: allegro: don't pack MCU messages
+  media: allegro: support handling firmware dependent values
+  media: allegro: encode bit fields separately
+  media: allegro: add config blob for channel
+  media: allegro: set num_ref_idx using response of configured channels
+  media: allegro: drop length field from message header
+  media: allegro: add a version field to mcu messages
+  media: allegro: add support for allegro firmware 2019.2
+
+ .../staging/media/allegro-dvt/allegro-core.c  | 383 +++++++------
+ .../staging/media/allegro-dvt/allegro-mail.c  | 507 ++++++++++++++++++
+ .../staging/media/allegro-dvt/allegro-mail.h  | 111 ++--
+ 3 files changed, 800 insertions(+), 201 deletions(-)
+
 -- 
 2.20.1
 
