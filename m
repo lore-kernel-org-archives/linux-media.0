@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84429C433DF
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 23:49:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5D42C433E5
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 23:59:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4EE1B21582
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 23:49:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CAE02184D
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jul 2020 23:59:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594684199;
-	bh=eGzzwkQy7TJb7jQCM5JMwE5A2XFczasB0BAqqwJg9Jc=;
+	s=default; t=1594684779;
+	bh=lq7Xg+c8P1na+II2tu2GEW3kP1XjrRj56oaOdxv9f/A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=pjuZVgjoKj/9iNjKWvyoqgpOqPnIDm65zU4osg0jP56uAzqwM64UgvrAfbmoFu/ue
-	 V2SjEmWoiC8RsF4C4aS5CEya+19clVTj3Mp+OmZpjFe9R9t/fLOGI1Fsn2COw84jPI
-	 imjhu/58eTADRoUA8Xlc8A0izox0uYOkMSMLaIPk=
+	b=c/9VFGkBlA5/jzebTvlG16lsM1EaISz25l2ySZsNxlKXkUgdNO3dAGo6wlLmoYTpH
+	 HtVO2ktrV7pEECGyx+lR7t/XW8VJlwAvSNjCQJKydQaQR8x0xByUvcuYRZPd3/EfOD
+	 bCy9GqCgXtvM6XLbRgv4zTjvw6TwWil8ik36DLpo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727916AbgGMXt6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jul 2020 19:49:58 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:36780 "EHLO
+        id S1726798AbgGMX7i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jul 2020 19:59:38 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:33763 "EHLO
         mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726750AbgGMXt5 (ORCPT
+        with ESMTP id S1726339AbgGMX7i (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jul 2020 19:49:57 -0400
-Received: by mail-io1-f66.google.com with SMTP id y2so15441491ioy.3;
-        Mon, 13 Jul 2020 16:49:57 -0700 (PDT)
+        Mon, 13 Jul 2020 19:59:38 -0400
+Received: by mail-io1-f66.google.com with SMTP id d18so15481400ion.0;
+        Mon, 13 Jul 2020 16:59:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=UHyenos/gOjNznjgGtTMdPBde8a7doL/E2F5z4MsQK4=;
-        b=rI6Fv3hUNjXHgAmxqsRfe6RdxFUzmQGUF9dRvM3dsVMpD2AnOdWYyQK4R1K5DR6gOx
-         Cb91yogt7grNj3jp3qQ+s4kn9jszCms6AzRrEol/qtLs2yeL7+S6B23nfWEaMwl0/7yN
-         3QHlsVkhD0S/3AOivfxtTQh1T2nk6XpzeZ5Jba07yKpYd2/7+44CydPOAyGrLe4Z+ES8
-         G9mLDvI80rgEEpPL0bqYkV9SMJHtDDJJv77qgZESA1sppa4bobslATwc7YzslMT8XdPT
-         ylwLyvJ681pvJqkj2aVKc/1DdG1hLvZW2lTIo9FUqKJdXDEI8Rpo/jWEPHRI6va/mxdA
-         fn/g==
-X-Gm-Message-State: AOAM531ytaD6cAjQJXzacgxVbOIOpJ+mv+OMSHTCn4C5ZntGykFAQHgI
-        bjNA5FZqsFXLO0vBSrVkdpu/yTdihl9M
-X-Google-Smtp-Source: ABdhPJzfzaXdZE8vse9V7QWXDeRzevOTeaM6e8+2cA9sunwS0j0aDIbLLE5AFf0GuST9flOv9XFHgQ==
-X-Received: by 2002:a02:8816:: with SMTP id r22mr2939355jai.128.1594684197253;
-        Mon, 13 Jul 2020 16:49:57 -0700 (PDT)
+        bh=459d77cK5HS2FH2dcRqpFw2lnIuuj+dUdJALm7saacU=;
+        b=cMhUOmG0+FKgOAfAy15EqUG23VZkgW+qSw/7Gp86i0a+OU0ArWbPWDvabAXNxGomz/
+         3PYN9o0lQqF+3hBir9CaevsBQKcliLF4CD+IvIrTv8/DnVGEfoK2x25uskaOs7uXE4Z5
+         KFp679S6MOr3xjtBIM9ZU0B8NmGCjaH+Io9lesoCUWNd++iUARfBuWM3s9ppjnRtPE8i
+         NkFUvpaKvtxJ0TCrKF4mzZ0kxw7WCz4v5AQSTjfDrGLqkaOjYFfPn/AtRtYoxQkcHj9h
+         odwV4aoOtU43CIsakvaKcDvv0/4HpmA0CC/BeDsKJQCrg34kosq6+JtT0lx51penO/XK
+         jCwg==
+X-Gm-Message-State: AOAM530kUnP6vzB/Wuo5bndErVaVkEZ4/jNqhRug5e0hgmJ6x1HVH9f+
+        F8z/wtsk8jbOaw7q/RCOuy9H1oRlR8Hi
+X-Google-Smtp-Source: ABdhPJyPlbc1aSPv3+AKY7qOpV+xg3N05oqCGPQx7urbOOGaG7CZ/c1mLdcI+ruLuZoGOJzCXS9DwQ==
+X-Received: by 2002:a6b:6e11:: with SMTP id d17mr2391954ioh.102.1594684777722;
+        Mon, 13 Jul 2020 16:59:37 -0700 (PDT)
 Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id u9sm8737169iom.14.2020.07.13.16.49.55
+        by smtp.gmail.com with ESMTPSA id a1sm8971534ilq.50.2020.07.13.16.59.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 16:49:56 -0700 (PDT)
-Received: (nullmailer pid 948459 invoked by uid 1000);
-        Mon, 13 Jul 2020 23:49:55 -0000
-Date:   Mon, 13 Jul 2020 17:49:55 -0600
+        Mon, 13 Jul 2020 16:59:37 -0700 (PDT)
+Received: (nullmailer pid 961887 invoked by uid 1000);
+        Mon, 13 Jul 2020 23:59:36 -0000
+Date:   Mon, 13 Jul 2020 17:59:36 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     sakari.ailus@iki.fi, gregkh@linuxfoundation.org, frankc@nvidia.com,
-        robh+dt@kernel.org, digetx@gmail.com, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        thierry.reding@gmail.com, sboyd@kernel.org,
-        linux-media@vger.kernel.org, hverkuil@xs4all.nl,
-        helen.koike@collabora.com, jonathanh@nvidia.com,
-        devicetree@vger.kernel.org
-Subject: Re: [RFC PATCH v2 01/18] dt-bindings: i2c: tegra: Document Tegra210
- VI I2C clocks and power-domains
-Message-ID: <20200713234955.GA948428@bogus>
-References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
- <1592358094-23459-2-git-send-email-skomatineni@nvidia.com>
+To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2 2/8] dt-bindings: media: renesas, fcp: Make
+ power-domains mandatory
+Message-ID: <20200713235936.GA961843@bogus>
+References: <20200621004734.28602-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20200621004734.28602-3-laurent.pinchart+renesas@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1592358094-23459-2-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <20200621004734.28602-3-laurent.pinchart+renesas@ideasonboard.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 16 Jun 2020 18:41:17 -0700, Sowjanya Komatineni wrote:
-> This patch documents missing clocks and power-domains of Tegra210 VI I2C.
+On Sun, 21 Jun 2020 03:47:28 +0300, Laurent Pinchart wrote:
+> All DT source files in the kernel tree specify the power-domains
+> property. Make it mandatory.
 > 
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
->  .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt    | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
+> Changes since v1:
+> 
+> - Fix typo in commit message
+> ---
+>  Documentation/devicetree/bindings/media/renesas,fcp.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
