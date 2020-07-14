@@ -2,78 +2,77 @@ Return-Path: <SRS0=2MZP=AZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBD15C433E3
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 19:47:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C6F7C433E4
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 22:06:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9516A22B37
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 19:47:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CBF120658
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 22:06:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Oj5ln53B"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729761AbgGNTrz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Jul 2020 15:47:55 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:41977 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729466AbgGNTry (ORCPT
+        id S1728159AbgGNWGD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Jul 2020 18:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726446AbgGNWGB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Jul 2020 15:47:54 -0400
-Received: (qmail 1035129 invoked by uid 1000); 14 Jul 2020 15:47:53 -0400
-Date:   Tue, 14 Jul 2020 15:47:53 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+4d3749e9612c2cfab956@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, fweisbec@gmail.com,
-        Jarod Wilson <jarod@redhat.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mingo@kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
-Subject: Re: INFO: rcu detected stall in dummy_timer (3)
-Message-ID: <20200714194753.GA1033470@rowland.harvard.edu>
-References: <000000000000e7493205aa694785@google.com>
+        Tue, 14 Jul 2020 18:06:01 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86893C061755;
+        Tue, 14 Jul 2020 15:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=zMAVqr1ZVAgKsumDOBlr2S8WpO6ubTtWRskT0EuzD4E=; b=Oj5ln53BGU0pvq5VcuuSvrOL81
+        7+xb1f7CBiudMdz9DE/2DaqAPj3yJ/iDQCqjb0KXc9h+6tniKSUfigdLll42e24H+dCaHcjvtWG3f
+        q5g71p+5mmkXaNlyRr+WENgW0a27z4Ugm+3F6TI6Dj1bKEXv4qj8Q3A0d3V//rQMbQ7uuAv4M72DP
+        ahwjLOt7VsmsB+ovu+WvGkKzSr1vWn4Eu5kxM73nOm8BwNIdf2WBcC1QhCF2H21HjbJjlyrbCDZgK
+        tSkemt5JEQflPa1NVRoX1CKLGJ6kav3dI95UpqAINPuBil/ayBHG3mCQxdsGGnVoFTb8vAo4sMbD2
+        PKWZt7gw==;
+Received: from [2601:1c0:6280:3f0::19c2] (helo=smtpauth.infradead.org)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jvT3n-0001IZ-6Q; Tue, 14 Jul 2020 22:05:59 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: [PATCH 2/5] media/media-devnode.h: drop duplicated word in comment
+Date:   Tue, 14 Jul 2020 15:05:50 -0700
+Message-Id: <20200714220553.20294-2-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200714220553.20294-1-rdunlap@infradead.org>
+References: <20200714220553.20294-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000e7493205aa694785@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 09:27:18AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    25051b55 udc: lpc32xx: make symbol 'lpc32xx_usbddata' static
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12e0ba00900000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=999be4eb2478ffa5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4d3749e9612c2cfab956
-> compiler:       gcc (GCC) 10.1.0-syz 20200507
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=127354e7100000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ba8500900000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+4d3749e9612c2cfab956@syzkaller.appspotmail.com
-> 
-> mceusb 5-1:0.0: Error: urb status = -71
-> mceusb 3-1:0.0: Error: urb status = -71
-> mceusb 4-1:0.0: Error: urb status = -71
-> mceusb 6-1:0.0: Error: urb status = -71
-> mceusb 5-1:0.0: Error: urb status = -71
-> rcu: INFO: rcu_sched self-detected stall on CPU
+Delete the doubled word "the" in a comment.
 
-This looks like an error in mceusb_dev_recv() in 
-drivers/media/rc/mceusb.c.  In the case of a -EPROTO error (indeed, any 
-error code it doesn't recognize), the routine immediately resubmits the 
-URB.  Instead it should do the same thing as in the other error cases: 
-return without resubmitting.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+---
+ include/media/media-devnode.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-(Incidentally, the calls to usb_unlink_urb() in that routine are useless 
-and look very strange.  The URB is already unlinked, since 
-mceusb_dev_recv() is the completion handler.)
-
-Alan Stern
+--- linux-next-20200714.orig/include/media/media-devnode.h
++++ linux-next-20200714/include/media/media-devnode.h
+@@ -39,7 +39,7 @@ struct media_device;
+  * @poll: pointer to the function that implements poll() syscall
+  * @ioctl: pointer to the function that implements ioctl() syscall
+  * @compat_ioctl: pointer to the function that will handle 32 bits userspace
+- *	calls to the the ioctl() syscall on a Kernel compiled with 64 bits.
++ *	calls to the ioctl() syscall on a Kernel compiled with 64 bits.
+  * @open: pointer to the function that implements open() syscall
+  * @release: pointer to the function that will release the resources allocated
+  *	by the @open function.
