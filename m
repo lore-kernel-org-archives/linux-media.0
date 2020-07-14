@@ -2,49 +2,47 @@ Return-Path: <SRS0=2MZP=AZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22A2EC433E6
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 12:41:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8E5BC433E1
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 12:44:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0AD0722472
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 12:41:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAEBD22472
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 12:44:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728187AbgGNMlv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Jul 2020 08:41:51 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:47087 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726354AbgGNMlv (ORCPT
+        id S1728006AbgGNMoz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Jul 2020 08:44:55 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:48529 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727772AbgGNMoy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Jul 2020 08:41:51 -0400
+        Tue, 14 Jul 2020 08:44:54 -0400
+X-Originating-IP: 93.34.118.233
 Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 5E71B100006;
-        Tue, 14 Jul 2020 12:41:42 +0000 (UTC)
-Date:   Tue, 14 Jul 2020 14:45:15 +0200
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id C1D7C1C000B;
+        Tue, 14 Jul 2020 12:44:47 +0000 (UTC)
+Date:   Tue, 14 Jul 2020 14:48:20 +0200
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
         roman.kovalivskyi@globallogic.com, dave.stevenson@raspberrypi.org,
-        naush@raspberrypi.com, mrodin@de.adit-jv.com,
-        hugues.fruchet@st.com, mripard@kernel.org, aford173@gmail.com,
-        sudipi@jp.adit-jv.com, andrew_gabbasov@mentor.com,
-        erosca@de.adit-jv.com, linux-media@vger.kernel.org,
-        libcamera-devel@lists.libcamera.org
-Subject: Re: [libcamera-devel] [PATCH 03/25] media: ov5647: Add support for
- PWDN GPIO.
-Message-ID: <20200714124515.ptliaxjrscieqsdi@uno.localdomain>
+        naush@raspberrypi.com, andrew_gabbasov@mentor.com,
+        mrodin@de.adit-jv.com, mripard@kernel.org,
+        libcamera-devel@lists.libcamera.org, sudipi@jp.adit-jv.com,
+        hugues.fruchet@st.com, erosca@de.adit-jv.com, aford173@gmail.com,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 00/25] media: ov5647: Support RaspberryPi Camera Module v1
+Message-ID: <20200714124820.dcq4eucynyzpqlmi@uno.localdomain>
 References: <20200623100815.10674-1-jacopo@jmondi.org>
- <20200623100815.10674-4-jacopo@jmondi.org>
- <5dbb468e-db42-6ac2-db40-196dc0f8a09f@collabora.com>
+ <09d5ae97-3576-0666-20ed-29c00ce28ee2@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5dbb468e-db42-6ac2-db40-196dc0f8a09f@collabora.com>
+In-Reply-To: <09d5ae97-3576-0666-20ed-29c00ce28ee2@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -52,109 +50,102 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Dafna,
 
-On Thu, Jul 09, 2020 at 10:04:14PM +0200, Dafna Hirschfeld wrote:
+On Fri, Jul 10, 2020 at 05:59:56PM +0200, Dafna Hirschfeld wrote:
 >
 >
 > On 23.06.20 12:07, Jacopo Mondi wrote:
-> > From: Dave Stevenson <dave.stevenson@raspberrypi.org>
+> > -------------------------------------------------------------------------------
+> > Second attempt after my ISP blocked the part of the first sending.
+> > Also removed Luis Oliveira email from the receiver list as it gets
+> > bounced back.
+> > 550 5.1.1 <lolivei@synopsys.com>... User unknown
+> > -------------------------------------------------------------------------------
 > >
-> > Add support for an optional GPIO connected to PWDN on the sensor. This
-> > allows the use of hardware standby mode where internal device clock
-> > and circuit activities are halted.
+> > Hello,
+> >    this series improves and expand the existing ov5647 sensor driver to
+> > the same feature level as found in RaspberryPi BSP.
 > >
-> > Please note that power is off when PWDN is high.
+> > It is based on recent media tree master and the sensor bindings conversion
+> > to dt-schema I sent out a few days ago:
+> > "[PATCH 0/2] dt-bidings: media: ov5647 bindings + small fix"
 > >
-> > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
-> > Signed-off-by: Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>
-> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> > ---
-> >   drivers/media/i2c/ov5647.c | 28 ++++++++++++++++++++++++++++
-> >   1 file changed, 28 insertions(+)
+> > The first patches in the series has been sent by Roman as part of
+> > "[PATCH v2 0/6] ov5647 driver improvement"
+> > I took his patches in, addressed review comments and rebased on top
+> > of the new dt-schema bindings. I kept the extensive receiver list he had
+> > in his series for this reason.
 > >
-> > diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-> > index e7d2e5b4ad4b9..105ff7f899b34 100644
-> > --- a/drivers/media/i2c/ov5647.c
-> > +++ b/drivers/media/i2c/ov5647.c
-> > @@ -21,6 +21,7 @@
-> >   #include <linux/clk.h>
-> >   #include <linux/delay.h>
-> > +#include <linux/gpio/consumer.h>
-> >   #include <linux/i2c.h>
-> >   #include <linux/init.h>
-> >   #include <linux/io.h>
-> > @@ -35,6 +36,13 @@
-> >   #define SENSOR_NAME "ov5647"
-> > +/*
-> > + * From the datasheet, "20ms after PWDN goes low or 20ms after RESETB goes
-> > + * high if reset is inserted after PWDN goes high, host can access sensor's
-> > + * SCCB to initialize sensor."
-> > + */
-> > +#define PWDN_ACTIVE_DELAY_MS	20
-> > +
-> >   #define MIPI_CTRL00_CLOCK_LANE_GATE		BIT(5)
-> >   #define MIPI_CTRL00_BUS_IDLE			BIT(2)
-> >   #define MIPI_CTRL00_CLOCK_LANE_DISABLE		BIT(0)
-> > @@ -86,6 +94,7 @@ struct ov5647 {
-> >   	unsigned int			height;
-> >   	int				power_count;
-> >   	struct clk			*xclk;
-> > +	struct gpio_desc		*pwdn;
-> >   };
-> >   static inline struct ov5647 *to_state(struct v4l2_subdev *sd)
-> > @@ -355,6 +364,11 @@ static int ov5647_sensor_power(struct v4l2_subdev *sd, int on)
-> >   	if (on && !ov5647->power_count)	{
-> >   		dev_dbg(&client->dev, "OV5647 power on\n");
-> > +		if (ov5647->pwdn) {
-> > +			gpiod_set_value_cansleep(ov5647->pwdn, 0);
-> > +			msleep(PWDN_ACTIVE_DELAY_MS);
-> > +		}
-> > +
-> >   		ret = clk_prepare_enable(ov5647->xclk);
-> >   		if (ret < 0) {
-> >   			dev_err(&client->dev, "clk prepare enable failed\n");
-> > @@ -392,6 +406,8 @@ static int ov5647_sensor_power(struct v4l2_subdev *sd, int on)
-> >   			dev_dbg(&client->dev, "soft stby failed\n");
-> >   		clk_disable_unprepare(ov5647->xclk);
-> > +
-> > +		gpiod_set_value_cansleep(ov5647->pwdn, 1);
-> >   	}
-> >   	/* Update the power count. */
-> > @@ -581,6 +597,10 @@ static int ov5647_probe(struct i2c_client *client)
-> >   		return -EINVAL;
-> >   	}
-> > +	/* Request the power down GPIO asserted */
-> > +	sensor->pwdn = devm_gpiod_get_optional(&client->dev, "pwdn",
-> > +					       GPIOD_OUT_HIGH);
+> > The series continues by polishing and cleaning up the driver and expanding
+> > its functionalities to support multiple modes and image formats.
+> >
+> > The series has been tested with libcamera and the driver functionalities
+> > compared with the BSP driver ones, and tested stand-alone by capturing
+> > raw frames with yavta.
 >
 > Hi,
-> I see that other drivers check for error from 'devm_gpiod_get_optional'
-> using 'IS_ERR'
+> Tested it on rock-pi 4 board with rkisp1 driver for the isp,
+> using the command 'cam -c 1 -C --file="/tmp/libcamframe#.data" -s width=800,height=600'
+> from libcamera.
+>
+> This the branch: https://gitlab.collabora.com/dafna/linux/-/tree/test-ov5647-10-jul
+> The top commit is the ov5647 dts node:
+> https://gitlab.collabora.com/dafna/linux/-/commit/6aa58e6c5378dc20fce9fcc0ef68916ae3fa7b22
+>
+> Tested-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>
 
-Thanks for noticing. It's probably worth adding a check for this.
-I'll fix in v2.
+Thanks for having validated the driver on a platform different from
+the one I've tested with.
+
+I'll collect your tag in the next version.
 
 Thanks
   j
 
->
-> Thanks,
-> Dafna
->
-> > +
-> >   	mutex_init(&sensor->lock);
-> >   	sd = &sensor->sd;
-> > @@ -594,7 +614,15 @@ static int ov5647_probe(struct i2c_client *client)
-> >   	if (ret < 0)
-> >   		goto mutex_remove;
-> > +	if (sensor->pwdn) {
-> > +		gpiod_set_value_cansleep(sensor->pwdn, 0);
-> > +		msleep(PWDN_ACTIVE_DELAY_MS);
-> > +	}
-> > +
-> >   	ret = ov5647_detect(sd);
-> > +
-> > +	gpiod_set_value_cansleep(sensor->pwdn, 1);
-> > +
-> >   	if (ret < 0)
-> >   		goto error;
+> >
+> > Thanks
+> >     j
+> >
+> > Dave Stevenson (8):
+> >    media: ov5647: Add support for PWDN GPIO.
+> >    media: ov5647: Add support for non-continuous clock mode
+> >    media: ov5647: Add set_fmt and get_fmt calls.
+> >    media: ov5647: Add support for get_selection()
+> >    media: ov5647: Set V4L2_SUBDEV_FL_HAS_EVENTS flag
+> >    media: ov5647: Support V4L2_CID_PIXEL_RATE
+> >    media: ov5647: Support V4L2_CID_VBLANK control
+> >    media: ov5647: Advertise the correct exposure range
+> >
+> > David Plowman (1):
+> >    media: ov5647: Support gain, exposure and AWB controls
+> >
+> > Jacopo Mondi (16):
+> >    dt-bindings: media: ov5647: Document pwdn-gpios
+> >    dt-bindings: media: ov5647: Document clock-noncontinuous
+> >    media: ov5647: Fix format initialization
+> >    media: ov5647: Fix style issues
+> >    media: ov5647: Replace license with SPDX identifier
+> >    media: ov5647: Fix return value from read/write
+> >    media: ov5647: Program mode at s_stream(1) time
+> >    media: ov5647: Implement enum_frame_size()
+> >    media: ov5647: Protect s_stream() with mutex
+> >    media: ov5647: Rationalize driver structure name
+> >    media: ov5647: Break out format handling
+> >    media: ov5647: Rename SBGGR8 VGA mode
+> >    media: ov5647: Add SGGBR10_1X10 modes
+> >    media: ov5647: Implement set_fmt pad operation
+> >    media: ov5647: Program mode only if it has changed
+> >    media: ov5647: Support V4L2_CID_HBLANK control
+> >
+> >   .../devicetree/bindings/media/i2c/ov5647.yaml |   11 +
+> >   drivers/media/i2c/ov5647.c                    | 1267 +++++++++++++++--
+> >   2 files changed, 1126 insertions(+), 152 deletions(-)
+> >
+> > --
+> > 2.27.0
+> >
+> > _______________________________________________
+> > libcamera-devel mailing list
+> > libcamera-devel@lists.libcamera.org
+> > https://lists.libcamera.org/listinfo/libcamera-devel
 > >
