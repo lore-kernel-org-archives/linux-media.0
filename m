@@ -5,43 +5,44 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC31BC433E6
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 05:59:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6C9FC433DF
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 05:59:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 95F75221E7
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 05:59:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80DDD21D93
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 05:59:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="M7DtmvbG"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="v7fgZ4jz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbgGNF7z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Jul 2020 01:59:55 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:60728 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726660AbgGNF7z (ORCPT
+        id S1725884AbgGNF7k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Jul 2020 01:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725306AbgGNF7j (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Jul 2020 01:59:55 -0400
+        Tue, 14 Jul 2020 01:59:39 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77745C061755
+        for <linux-media@vger.kernel.org>; Mon, 13 Jul 2020 22:59:39 -0700 (PDT)
 Received: from pyrite.rasen.tech (unknown [IPv6:2400:4051:61:600:2c71:1b79:d06d:5032])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4868B564;
-        Tue, 14 Jul 2020 07:59:50 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 879F8564;
+        Tue, 14 Jul 2020 07:59:35 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594706393;
-        bh=leaVOcVC0KbhrxAshuXz6qhHxu+s6tSVrZ9onCPA+CU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M7DtmvbGnBhPE+NZX2kZcjJ3zKZeKtARUFFqEmxsrtYqPhbU59e+h7KvoawT12x/P
-         aoJkzb8rv7BJ4NouDy2Re1R8wmiE8Q9lYmftA2xFkkZ6JdHfIIuv4jXhTrIInwi8rh
-         /SoDuFdWMPDEwc/UfkhnAIEYHvxcIwlWgOADmgfs=
+        s=mail; t=1594706377;
+        bh=WDoRO9NPR4MOKJ4HxQQ9ebMJzu2nlO4yiSFWk8VgQgo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=v7fgZ4jziq42OLOHzqHfJB5HMdiqDbqKum6DS0uqMXivH+D6wOUnoaccrlgNDydy0
+         Gc9NRbpKSvEA0LRggJseafIVtxoCPctPvMqPV/pkCurQ8pt+XUEV492nAk1yJVFhER
+         wHekxDJcirkwhQnXBofxVQ5B3LSRPerHbC32fRqo=
 From:   Paul Elder <paul.elder@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Paul Elder <paul.elder@ideasonboard.com>,
         laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
-Subject: [PATCH v4 7/7] media-ctl: Add version command
-Date:   Tue, 14 Jul 2020 14:59:15 +0900
-Message-Id: <20200714055915.640438-7-paul.elder@ideasonboard.com>
+Subject: [PATCH v4 1/7] configure.ac: Export git commit count
+Date:   Tue, 14 Jul 2020 14:59:09 +0900
+Message-Id: <20200714055915.640438-1-paul.elder@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200714055915.640438-1-paul.elder@ideasonboard.com>
-References: <20200714055915.640438-1-paul.elder@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -49,98 +50,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a --version option to media-ctl to retrieve the version of
-media-ctl.
+Export the git commit count from configure.ac to append to version
+numbers in the various utils.
 
 Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
 
 ---
-Changes in v4:
-- add git commit count to version
-
-Changes in v3:
-- embed PACKAGE_VERSION instead of string concatenation
+New in v4
 ---
- utils/media-ctl/Makefile.am |  1 +
- utils/media-ctl/options.c   | 14 ++++++++++++++
- utils/media-ctl/options.h   |  2 ++
- 3 files changed, 17 insertions(+)
+ configure.ac | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/utils/media-ctl/Makefile.am b/utils/media-ctl/Makefile.am
-index ee7dcc96..860e6f5a 100644
---- a/utils/media-ctl/Makefile.am
-+++ b/utils/media-ctl/Makefile.am
-@@ -27,3 +27,4 @@ noinst_HEADERS = mediactl.h v4l2subdev.h
- bin_PROGRAMS = media-ctl
- media_ctl_SOURCES = media-ctl.c options.c options.h tools.h
- media_ctl_LDADD = libmediactl.la libv4l2subdev.la
-+media_ctl_CFLAGS = $(GIT_COMMIT_CNT)
-diff --git a/utils/media-ctl/options.c b/utils/media-ctl/options.c
-index fb923775..55376323 100644
---- a/utils/media-ctl/options.c
-+++ b/utils/media-ctl/options.c
-@@ -42,6 +42,13 @@ struct media_options media_opts = {
- 	.devname = MEDIA_DEVNAME_DEFAULT,
- };
+diff --git a/configure.ac b/configure.ac
+index 36fa6ec8..b3b090f2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -574,6 +574,9 @@ CPPFLAGS="-I\$(top_srcdir)/lib/include -Wall -Wpointer-arith -D_GNU_SOURCE $CPPF
+ # Obtain git SHA of HEAD
+ AC_SUBST(GIT_SHA, ["-DGIT_SHA=\$(shell if test -d \$(top_srcdir)/.git ; then git -C \$(top_srcdir) rev-parse HEAD ; else printf '\"not available\"'; fi)"])
  
-+static void print_version()
-+{
-+#define STR(x) #x
-+#define STRING(x) STR(x)
-+	printf("media-ctl %s%s\n", PACKAGE_VERSION, STRING(GIT_COMMIT_CNT));
-+}
++# Obtain git commit count of HEAD
++AC_SUBST(GIT_COMMIT_CNT, ["-DGIT_COMMIT_CNT=\$(shell if test -d \$(top_srcdir)/.git ; then printf '-'; git -C \$(top_srcdir) rev-list --count HEAD ; fi)"])
 +
- static void usage(const char *argv0)
- {
- 	unsigned int i;
-@@ -66,6 +73,7 @@ static void usage(const char *argv0)
- 	printf("    --print-dot		Print the device topology as a dot graph\n");
- 	printf("-r, --reset		Reset all links to inactive\n");
- 	printf("-v, --verbose		Be verbose\n");
-+	printf("    --version		Show version information\n");
- 	printf("\n");
- 	printf("Links and formats are defined as\n");
- 	printf("\tlinks           = link { ',' link } ;\n");
-@@ -127,6 +135,7 @@ static void usage(const char *argv0)
- #define OPT_SET_DV			258
- #define OPT_LIST_KNOWN_MBUS_FMTS	259
- #define OPT_GET_DV			260
-+#define OPT_VERSION			261
- 
- static struct option opts[] = {
- 	{"device", 1, 0, 'd'},
-@@ -145,6 +154,7 @@ static struct option opts[] = {
- 	{"print-topology", 0, 0, 'p'},
- 	{"reset", 0, 0, 'r'},
- 	{"verbose", 0, 0, 'v'},
-+	{"version", 0, 0, OPT_VERSION},
- 	{ },
- };
- 
-@@ -287,6 +297,10 @@ int parse_cmdline(int argc, char **argv)
- 			list_known_mbus_formats();
- 			exit(0);
- 
-+		case OPT_VERSION:
-+			print_version();
-+			exit(0);
-+
- 		default:
- 			printf("Invalid option -%c\n", opt);
- 			printf("Run %s -h for help.\n", argv[0]);
-diff --git a/utils/media-ctl/options.h b/utils/media-ctl/options.h
-index 7e0556fc..b1751f56 100644
---- a/utils/media-ctl/options.h
-+++ b/utils/media-ctl/options.h
-@@ -22,6 +22,8 @@
- #ifndef __OPTIONS_H
- #define __OPTIONS_H
- 
-+#include <config.h>
-+
- struct media_options
- {
- 	const char *devname;
+ AM_COND_IF([WITH_LIBDVBV5], [USE_LIBDVBV5="yes"], [USE_LIBDVBV5="no"])
+ AM_COND_IF([WITH_DVBV5_REMOTE], [USE_DVBV5_REMOTE="yes"
+ 				 AC_DEFINE([HAVE_DVBV5_REMOTE], [1], [Usage of DVBv5 remote enabled])],
 -- 
 2.27.0
 
