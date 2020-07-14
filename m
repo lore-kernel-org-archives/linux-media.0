@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9B3CC43458
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 13:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 087AAC433E7
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 13:55:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E28020760
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 13:55:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD2DA2250F
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 13:55:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728295AbgGNNzP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Jul 2020 09:55:15 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:43313 "EHLO
+        id S1728140AbgGNNzF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Jul 2020 09:55:05 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:57951 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726801AbgGNNzO (ORCPT
+        with ESMTP id S1726918AbgGNNzD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Jul 2020 09:55:14 -0400
+        Tue, 14 Jul 2020 09:55:03 -0400
 X-Originating-IP: 93.34.118.233
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 8C8A41C0009;
-        Tue, 14 Jul 2020 13:55:10 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 5C50F1C0002;
+        Tue, 14 Jul 2020 13:54:58 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com
@@ -33,9 +33,9 @@ Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         kieran.bingham@ideasonboard.com, dave.stevenson@raspberrypi.com,
         hyun.kwon@xilinx.com, jmkrzyszt@gmail.com, robert.jarzmik@free.fr,
         linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v6 9/9] media: rcar-csi2: Negotiate data lanes number
-Date:   Tue, 14 Jul 2020 15:58:12 +0200
-Message-Id: <20200714135812.55158-10-jacopo+renesas@jmondi.org>
+Subject: [PATCH v6 4/9] media: pxa_camera: Use the new set_mbus_config op
+Date:   Tue, 14 Jul 2020 15:58:07 +0200
+Message-Id: <20200714135812.55158-5-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200714135812.55158-1-jacopo+renesas@jmondi.org>
 References: <20200714135812.55158-1-jacopo+renesas@jmondi.org>
@@ -46,160 +46,284 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the newly introduced get_mbus_config() subdevice pad operation to
-retrieve the remote subdevice MIPI CSI-2 bus configuration and configure
-the number of active data lanes accordingly.
+Move the PXA camera driver to use the new set_mbus_config pad operation.
+For this platform the change is not only cosmetic, as the pxa driver is
+currently the only driver in mainline to make use of the g_mbus_config
+and s_mbus_config video operations.
 
-In order to be able to call the remote subdevice operation cache the
-index of the remote pad connected to the single CSI-2 input port.
+The existing driver semantic is the following:
+- Collect all supported mbus config flags from the remote end
+- Match them with the supported PXA mbus configuration flags
+- If the remote subdevice allows multiple options for for VSYNC, HSYNC
+  and PCLK polarity, use platform data requested settings
+
+The semantic of the new get_mbus_config and set_mbus_config differs from
+the corresponding video ops, particularly in the fact get_mbus_config
+reports the current mbus configuration and not the set of supported
+configuration options, with set_mbus_config always reporting the actual
+mbus configuration applied to the remote subdevice.
+
+Adapt the driver to perform the following
+- Set the remote subdevice mbus configuration according to the PXA
+  platform data preferences.
+- If the applied configuration differs from the requested one (i.e. the
+  remote subdevice does not allow changing one setting) make sure that
+  - The remote end does not claim for DATA_ACTIVE_LOW, which seems not
+    supported by the platform
+  - The bus mastering roles match
+
+While at there remove a few checks performed on the media bus
+configuration at get_format() time as they do not belong there.
+
+Compile-tested only.
 
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c | 74 +++++++++++++++++++--
- 1 file changed, 67 insertions(+), 7 deletions(-)
+ drivers/media/platform/pxa_camera.c | 189 ++++++++--------------------
+ 1 file changed, 51 insertions(+), 138 deletions(-)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index c6cc4f473a07..d39f312ebff9 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -364,6 +364,7 @@ struct rcar_csi2 {
- 	struct v4l2_async_notifier notifier;
- 	struct v4l2_async_subdev asd;
- 	struct v4l2_subdev *remote;
-+	unsigned int remote_pad;
- 
- 	struct v4l2_mbus_framefmt mf;
- 
-@@ -409,13 +410,14 @@ static void rcsi2_exit_standby(struct rcar_csi2 *priv)
- 	reset_control_deassert(priv->rstc);
+diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
+index 6dce33f35041..0366c4a813ce 100644
+--- a/drivers/media/platform/pxa_camera.c
++++ b/drivers/media/platform/pxa_camera.c
+@@ -605,42 +605,6 @@ static const struct pxa_mbus_pixelfmt *pxa_mbus_get_fmtdesc(
+ 	return pxa_mbus_find_fmtdesc(code, mbus_fmt, ARRAY_SIZE(mbus_fmt));
  }
  
--static int rcsi2_wait_phy_start(struct rcar_csi2 *priv)
-+static int rcsi2_wait_phy_start(struct rcar_csi2 *priv,
-+				unsigned int active_lanes)
+-static unsigned int pxa_mbus_config_compatible(const struct v4l2_mbus_config *cfg,
+-					unsigned int flags)
+-{
+-	unsigned long common_flags;
+-	bool hsync = true, vsync = true, pclk, data, mode;
+-	bool mipi_lanes, mipi_clock;
+-
+-	common_flags = cfg->flags & flags;
+-
+-	switch (cfg->type) {
+-	case V4L2_MBUS_PARALLEL:
+-		hsync = common_flags & (V4L2_MBUS_HSYNC_ACTIVE_HIGH |
+-					V4L2_MBUS_HSYNC_ACTIVE_LOW);
+-		vsync = common_flags & (V4L2_MBUS_VSYNC_ACTIVE_HIGH |
+-					V4L2_MBUS_VSYNC_ACTIVE_LOW);
+-		/* fall through */
+-	case V4L2_MBUS_BT656:
+-		pclk = common_flags & (V4L2_MBUS_PCLK_SAMPLE_RISING |
+-				       V4L2_MBUS_PCLK_SAMPLE_FALLING);
+-		data = common_flags & (V4L2_MBUS_DATA_ACTIVE_HIGH |
+-				       V4L2_MBUS_DATA_ACTIVE_LOW);
+-		mode = common_flags & (V4L2_MBUS_MASTER | V4L2_MBUS_SLAVE);
+-		return (!hsync || !vsync || !pclk || !data || !mode) ?
+-			0 : common_flags;
+-	case V4L2_MBUS_CSI2_DPHY:
+-		mipi_lanes = common_flags & V4L2_MBUS_CSI2_LANES;
+-		mipi_clock = common_flags & (V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK |
+-					     V4L2_MBUS_CSI2_CONTINUOUS_CLOCK);
+-		return (!mipi_lanes || !mipi_clock) ? 0 : common_flags;
+-	default:
+-		WARN_ON(1);
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+ /**
+  * struct pxa_camera_format_xlate - match between host and sensor formats
+  * @code: code of a sensor provided format
+@@ -1231,31 +1195,6 @@ static irqreturn_t pxa_camera_irq(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static int test_platform_param(struct pxa_camera_dev *pcdev,
+-			       unsigned char buswidth, unsigned long *flags)
+-{
+-	/*
+-	 * Platform specified synchronization and pixel clock polarities are
+-	 * only a recommendation and are only used during probing. The PXA270
+-	 * quick capture interface supports both.
+-	 */
+-	*flags = (pcdev->platform_flags & PXA_CAMERA_MASTER ?
+-		  V4L2_MBUS_MASTER : V4L2_MBUS_SLAVE) |
+-		V4L2_MBUS_HSYNC_ACTIVE_HIGH |
+-		V4L2_MBUS_HSYNC_ACTIVE_LOW |
+-		V4L2_MBUS_VSYNC_ACTIVE_HIGH |
+-		V4L2_MBUS_VSYNC_ACTIVE_LOW |
+-		V4L2_MBUS_DATA_ACTIVE_HIGH |
+-		V4L2_MBUS_PCLK_SAMPLE_RISING |
+-		V4L2_MBUS_PCLK_SAMPLE_FALLING;
+-
+-	/* If requested data width is supported by the platform, use it */
+-	if ((1 << (buswidth - 1)) & pcdev->width_flags)
+-		return 0;
+-
+-	return -EINVAL;
+-}
+-
+ static void pxa_camera_setup_cicr(struct pxa_camera_dev *pcdev,
+ 				  unsigned long flags, __u32 pixfmt)
  {
- 	unsigned int timeout;
- 
- 	/* Wait for the clock and data lanes to enter LP-11 state. */
- 	for (timeout = 0; timeout <= 20; timeout++) {
--		const u32 lane_mask = (1 << priv->lanes) - 1;
-+		const u32 lane_mask = (1 << active_lanes) - 1;
- 
- 		if ((rcsi2_read(priv, PHCLM_REG) & PHCLM_STOPSTATECKL)  &&
- 		    (rcsi2_read(priv, PHDLM_REG) & lane_mask) == lane_mask)
-@@ -447,7 +449,8 @@ static int rcsi2_set_phypll(struct rcar_csi2 *priv, unsigned int mbps)
- 	return 0;
- }
- 
--static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp)
-+static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp,
-+			   unsigned int active_lanes)
+@@ -1598,99 +1537,78 @@ static int pxa_camera_init_videobuf2(struct pxa_camera_dev *pcdev)
+  */
+ static int pxa_camera_set_bus_param(struct pxa_camera_dev *pcdev)
  {
- 	struct v4l2_subdev *source;
- 	struct v4l2_ctrl *ctrl;
-@@ -472,15 +475,63 @@ static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp)
- 	 * bps = link_freq * 2
- 	 */
- 	mbps = v4l2_ctrl_g_ctrl_int64(ctrl) * bpp;
--	do_div(mbps, priv->lanes * 1000000);
-+	do_div(mbps, active_lanes * 1000000);
++	unsigned int bus_width = pcdev->current_fmt->host_fmt->bits_per_sample;
+ 	struct v4l2_mbus_config cfg = {.type = V4L2_MBUS_PARALLEL,};
+ 	u32 pixfmt = pcdev->current_fmt->host_fmt->fourcc;
+-	unsigned long bus_flags, common_flags;
++	int mbus_config;
+ 	int ret;
  
- 	return mbps;
- }
+-	ret = test_platform_param(pcdev,
+-				  pcdev->current_fmt->host_fmt->bits_per_sample,
+-				  &bus_flags);
+-	if (ret < 0)
+-		return ret;
+-
+-	ret = sensor_call(pcdev, video, g_mbus_config, &cfg);
+-	if (!ret) {
+-		common_flags = pxa_mbus_config_compatible(&cfg,
+-							  bus_flags);
+-		if (!common_flags) {
+-			dev_warn(pcdev_to_dev(pcdev),
+-				 "Flags incompatible: camera 0x%x, host 0x%lx\n",
+-				 cfg.flags, bus_flags);
+-			return -EINVAL;
+-		}
+-	} else if (ret != -ENOIOCTLCMD) {
+-		return ret;
+-	} else {
+-		common_flags = bus_flags;
++	if (!((1 << (bus_width - 1)) & pcdev->width_flags)) {
++		dev_err(pcdev_to_dev(pcdev), "Unsupported bus width %u",
++			bus_width);
++		return -EINVAL;
+ 	}
  
-+static int rcsi2_config_active_lanes(struct rcar_csi2 *priv,
-+				     unsigned int *active_lanes)
-+{
-+	struct v4l2_mbus_config mbus_config = { 0 };
-+	unsigned int num_lanes = (-1U);
-+	int ret;
+ 	pcdev->channels = 1;
+ 
+ 	/* Make choices, based on platform preferences */
+-	if ((common_flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH) &&
+-	    (common_flags & V4L2_MBUS_HSYNC_ACTIVE_LOW)) {
+-		if (pcdev->platform_flags & PXA_CAMERA_HSP)
+-			common_flags &= ~V4L2_MBUS_HSYNC_ACTIVE_HIGH;
+-		else
+-			common_flags &= ~V4L2_MBUS_HSYNC_ACTIVE_LOW;
+-	}
++	mbus_config = 0;
++	if (pcdev->platform_flags & PXA_CAMERA_MASTER)
++		mbus_config |= V4L2_MBUS_MASTER;
++	else
++		mbus_config |= V4L2_MBUS_SLAVE;
+ 
+-	if ((common_flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH) &&
+-	    (common_flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)) {
+-		if (pcdev->platform_flags & PXA_CAMERA_VSP)
+-			common_flags &= ~V4L2_MBUS_VSYNC_ACTIVE_HIGH;
+-		else
+-			common_flags &= ~V4L2_MBUS_VSYNC_ACTIVE_LOW;
+-	}
++	if (pcdev->platform_flags & PXA_CAMERA_HSP)
++		mbus_config |= V4L2_MBUS_HSYNC_ACTIVE_HIGH;
++	else
++		mbus_config |= V4L2_MBUS_HSYNC_ACTIVE_LOW;
+ 
+-	if ((common_flags & V4L2_MBUS_PCLK_SAMPLE_RISING) &&
+-	    (common_flags & V4L2_MBUS_PCLK_SAMPLE_FALLING)) {
+-		if (pcdev->platform_flags & PXA_CAMERA_PCP)
+-			common_flags &= ~V4L2_MBUS_PCLK_SAMPLE_RISING;
+-		else
+-			common_flags &= ~V4L2_MBUS_PCLK_SAMPLE_FALLING;
+-	}
++	if (pcdev->platform_flags & PXA_CAMERA_VSP)
++		mbus_config |= V4L2_MBUS_VSYNC_ACTIVE_HIGH;
++	else
++		mbus_config |= V4L2_MBUS_VSYNC_ACTIVE_LOW;
+ 
+-	cfg.flags = common_flags;
+-	ret = sensor_call(pcdev, video, s_mbus_config, &cfg);
++	if (pcdev->platform_flags & PXA_CAMERA_PCP)
++		mbus_config |= V4L2_MBUS_PCLK_SAMPLE_RISING;
++	else
++		mbus_config |= V4L2_MBUS_PCLK_SAMPLE_FALLING;
++	mbus_config |= V4L2_MBUS_DATA_ACTIVE_HIGH;
 +
-+	*active_lanes = priv->lanes;
-+	ret = v4l2_subdev_call(priv->remote, pad, get_mbus_config,
-+			       priv->remote_pad, &mbus_config);
-+	if (ret == -ENOIOCTLCMD) {
-+		dev_dbg(priv->dev, "No remote mbus configuration available\n");
-+		return 0;
-+	}
-+
-+	if (ret) {
-+		dev_err(priv->dev, "Failed to get remote mbus configuration\n");
-+		return ret;
-+	}
-+
-+	if (mbus_config.type != V4L2_MBUS_CSI2_DPHY) {
-+		dev_err(priv->dev, "Unsupported media bus type %u\n",
-+			mbus_config.type);
-+		return -EINVAL;
-+	}
-+
-+	if (mbus_config.flags & V4L2_MBUS_CSI2_1_LANE)
-+		num_lanes = 1;
-+	else if (mbus_config.flags & V4L2_MBUS_CSI2_2_LANE)
-+		num_lanes = 2;
-+	else if (mbus_config.flags & V4L2_MBUS_CSI2_3_LANE)
-+		num_lanes = 3;
-+	else if (mbus_config.flags & V4L2_MBUS_CSI2_4_LANE)
-+		num_lanes = 4;
-+
-+	if (num_lanes > priv->lanes) {
-+		dev_err(priv->dev,
-+			"Unsupported mbus config: too many data lanes %u\n",
-+			num_lanes);
-+		return -EINVAL;
-+	}
-+
-+	*active_lanes = num_lanes;
++	cfg.flags = mbus_config;
++	ret = sensor_call(pcdev, pad, set_mbus_config, 0, &cfg);
+ 	if (ret < 0 && ret != -ENOIOCTLCMD) {
+-		dev_dbg(pcdev_to_dev(pcdev),
+-			"camera s_mbus_config(0x%lx) returned %d\n",
+-			common_flags, ret);
++		dev_err(pcdev_to_dev(pcdev),
++			"Failed to call set_mbus_config: %d\n", ret);
+ 		return ret;
+ 	}
+ 
+-	pxa_camera_setup_cicr(pcdev, common_flags, pixfmt);
+-
+-	return 0;
+-}
+-
+-static int pxa_camera_try_bus_param(struct pxa_camera_dev *pcdev,
+-				    unsigned char buswidth)
+-{
+-	struct v4l2_mbus_config cfg = {.type = V4L2_MBUS_PARALLEL,};
+-	unsigned long bus_flags, common_flags;
+-	int ret = test_platform_param(pcdev, buswidth, &bus_flags);
+-
+-	if (ret < 0)
+-		return ret;
++	/*
++	 * If the requested media bus configuration has not been fully applied
++	 * make sure it is supported by the platform.
++	 *
++	 * PXA does not support V4L2_MBUS_DATA_ACTIVE_LOW and the bus mastering
++	 * roles should match.
++	 */
++	if (cfg.flags != mbus_config) {
++		unsigned int pxa_mbus_role = mbus_config & (V4L2_MBUS_MASTER |
++							    V4L2_MBUS_SLAVE);
++		if (pxa_mbus_role != (cfg.flags & (V4L2_MBUS_MASTER |
++						   V4L2_MBUS_SLAVE))) {
++			dev_err(pcdev_to_dev(pcdev),
++				"Unsupported mbus configuration: bus mastering\n");
++			return -EINVAL;
++		}
+ 
+-	ret = sensor_call(pcdev, video, g_mbus_config, &cfg);
+-	if (!ret) {
+-		common_flags = pxa_mbus_config_compatible(&cfg,
+-							  bus_flags);
+-		if (!common_flags) {
+-			dev_warn(pcdev_to_dev(pcdev),
+-				 "Flags incompatible: camera 0x%x, host 0x%lx\n",
+-				 cfg.flags, bus_flags);
++		if (cfg.flags & V4L2_MBUS_DATA_ACTIVE_LOW) {
++			dev_err(pcdev_to_dev(pcdev),
++				"Unsupported mbus configuration: DATA_ACTIVE_LOW\n");
+ 			return -EINVAL;
+ 		}
+-	} else if (ret == -ENOIOCTLCMD) {
+-		ret = 0;
+ 	}
+ 
+-	return ret;
++	pxa_camera_setup_cicr(pcdev, cfg.flags, pixfmt);
 +
 +	return 0;
-+}
-+
- static int rcsi2_start_receiver(struct rcar_csi2 *priv)
- {
- 	const struct rcar_csi2_format *format;
- 	u32 phycnt, vcdt = 0, vcdt2 = 0, fld = 0;
-+	unsigned int active_lanes;
- 	unsigned int i;
- 	int mbps, ret;
+ }
  
-@@ -522,10 +573,18 @@ static int rcsi2_start_receiver(struct rcar_csi2 *priv)
- 			fld |= FLD_FLD_NUM(1);
+ static const struct pxa_mbus_pixelfmt pxa_camera_formats[] = {
+@@ -1738,11 +1656,6 @@ static int pxa_camera_get_formats(struct v4l2_device *v4l2_dev,
+ 		return 0;
  	}
  
-+	/*
-+	 * Get the number of active data lanes inspecting the remote mbus
-+	 * configuration.
-+	 */
-+	ret = rcsi2_config_active_lanes(priv, &active_lanes);
-+	if (ret)
-+		return ret;
-+
- 	phycnt = PHYCNT_ENABLECLK;
--	phycnt |= (1 << priv->lanes) - 1;
-+	phycnt |= (1 << active_lanes) - 1;
- 
--	mbps = rcsi2_calc_mbps(priv, format->bpp);
-+	mbps = rcsi2_calc_mbps(priv, format->bpp, active_lanes);
- 	if (mbps < 0)
- 		return mbps;
- 
-@@ -572,7 +631,7 @@ static int rcsi2_start_receiver(struct rcar_csi2 *priv)
- 	rcsi2_write(priv, PHYCNT_REG, phycnt | PHYCNT_SHUTDOWNZ);
- 	rcsi2_write(priv, PHYCNT_REG, phycnt | PHYCNT_SHUTDOWNZ | PHYCNT_RSTZ);
- 
--	ret = rcsi2_wait_phy_start(priv);
-+	ret = rcsi2_wait_phy_start(priv, active_lanes);
- 	if (ret)
- 		return ret;
- 
-@@ -749,6 +808,7 @@ static int rcsi2_notify_bound(struct v4l2_async_notifier *notifier,
- 	}
- 
- 	priv->remote = subdev;
-+	priv->remote_pad = pad;
- 
- 	dev_dbg(priv->dev, "Bound %s pad: %d\n", subdev->name, pad);
- 
+-	/* This also checks support for the requested bits-per-sample */
+-	ret = pxa_camera_try_bus_param(pcdev, fmt->bits_per_sample);
+-	if (ret < 0)
+-		return 0;
+-
+ 	switch (code.code) {
+ 	case MEDIA_BUS_FMT_UYVY8_2X8:
+ 		formats++;
 -- 
 2.27.0
 
