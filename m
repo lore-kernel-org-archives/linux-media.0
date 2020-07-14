@@ -2,167 +2,87 @@ Return-Path: <SRS0=2MZP=AZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC06CC433E1
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 12:28:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67CA3C433E1
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 12:38:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9EA3422453
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 12:28:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46E382242C
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 12:38:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728050AbgGNM2S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Jul 2020 08:28:18 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:55963 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726352AbgGNM2R (ORCPT
+        id S1726914AbgGNMin (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Jul 2020 08:38:43 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48554 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726041AbgGNMin (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Jul 2020 08:28:17 -0400
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id ECB9924000D;
-        Tue, 14 Jul 2020 12:28:13 +0000 (UTC)
-Date:   Tue, 14 Jul 2020 14:31:46 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
-        libcamera-devel@lists.libcamera.org
-Subject: Re: [PATCH] imx219: selection compliance fixes
-Message-ID: <20200714123146.5xhmslath7vqqfds@uno.localdomain>
-References: <b580ac9d-5ae4-29ce-c81a-a1f98b1d953b@xs4all.nl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b580ac9d-5ae4-29ce-c81a-a1f98b1d953b@xs4all.nl>
+        Tue, 14 Jul 2020 08:38:43 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id 938E02A0D19
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
+        dafna3@gmail.com, sakari.ailus@linux.intel.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org
+Subject: [PATCH 1/4] media: staging: rkisp1: cap: don't set next buffer from rkisp1_vb2_buf_queue
+Date:   Tue, 14 Jul 2020 14:38:29 +0200
+Message-Id: <20200714123832.28011-2-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200714123832.28011-1-dafna.hirschfeld@collabora.com>
+References: <20200714123832.28011-1-dafna.hirschfeld@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+The function 'rkisp1_vb2_buf_queue' sets the next buffer directly
+in case the capture is already streaming but no frame yet arrived
+from the sensor. This is an optimization that tries to avoid
+dropping a frame.
+The call atomic_read(&cap->rkisp1->isp.frame_sequence) is used
+to check if a frame arrived. Reading the 'frame_sequence' should
+be avoided outside irq handlers to avoid race conditions.
 
-On Thu, Jul 02, 2020 at 03:50:04PM +0200, Hans Verkuil wrote:
-> The top/left crop coordinates were 0, 0 instead of 8, 8 in the
-> supported_modes array. This was a mismatch with the default values,
-> so this is corrected. Found with v4l2-compliance.
->
-> Also add V4L2_SEL_TGT_CROP_BOUNDS support: CROP_DEFAULT and CROP_BOUNDS
-> always go together. Found with v4l2-compliance.
+This patch removes this optimization. Dropping of the first
+frames can be avoided if userspace queues the buffers before
+start streaming. If userspace starts queueing buffers
+only after calling 'streamon' he risks frame drops anyway.
 
-I actually introduced this with
-e6d4ef7d58aa ("media: i2c: imx219: Implement get_selection")
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/staging/media/rkisp1/rkisp1-capture.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
->
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> ---
->  drivers/media/i2c/imx219.c | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> index 0a546b8e466c..935e2a258ce5 100644
-> --- a/drivers/media/i2c/imx219.c
-> +++ b/drivers/media/i2c/imx219.c
-> @@ -473,8 +473,8 @@ static const struct imx219_mode supported_modes[] = {
->  		.width = 3280,
->  		.height = 2464,
->  		.crop = {
-> -			.left = 0,
-> -			.top = 0,
-> +			.left = 8,
-> +			.top = 8,
+diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
+index 793ec884c894..572b0949c81f 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-capture.c
++++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
+@@ -743,18 +743,7 @@ static void rkisp1_vb2_buf_queue(struct vb2_buffer *vb)
+ 		     ispbuf->buff_addr[RKISP1_PLANE_CB]);
+ 
+ 	spin_lock_irqsave(&cap->buf.lock, flags);
+-
+-	/*
+-	 * If there's no next buffer assigned, queue this buffer directly
+-	 * as the next buffer, and update the memory interface.
+-	 */
+-	if (cap->is_streaming && !cap->buf.next &&
+-	    atomic_read(&cap->rkisp1->isp.frame_sequence) == -1) {
+-		cap->buf.next = ispbuf;
+-		rkisp1_set_next_buf(cap);
+-	} else {
+-		list_add_tail(&ispbuf->queue, &cap->buf.queue);
+-	}
++	list_add_tail(&ispbuf->queue, &cap->buf.queue);
+ 	spin_unlock_irqrestore(&cap->buf.lock, flags);
+ }
+ 
+-- 
+2.17.1
 
-Mmmm, why this change ?
-This values are used to report V4L2_SEL_TGT_CROP rectangle, which
-according to the documentation is defined as
-"Crop rectangle. Defines the cropped area."
-(not a much extensive description :)
-
-Clearly this is a faulty definition, and I know from experience how
-hard is proving to define pixel array properties and in which extent
-the documentation has to go:
-https://lists.libcamera.org/pipermail/libcamera-devel/2020-June/009115.html
-
-My understanding is that target should report the current crop
-rectangle, defined from the rectangle retrieved with the
-V4L2_SEL_TGT_CROP_DEFAULT target, which, according documentation
-reports the:
-"Suggested cropping rectangle that covers the “whole picture”.
-This includes only active pixels and excludes other non-active pixels such
-as black pixels"
-
-The TGT_CROP_DEFAULT then reports the active pixel array portion, and
-needs to be defined in respect to the TGT_NATIVE_SIZE, which reports
-the dimensions of the whole pixel matrix, including non-active pixels,
-optical blanks active and non-active pixels.
-
-The TGT_CROP rectangle is hence defined from the CROP_DEFAULT one, and
-if the 'whole active area' is selected, its top-left corner is placed
-in position (0, 0) (what's the point of defining it in respect to an
-area which cannot be read anyway ?)
-
-Unless TGT_CROP should be defined in respect to the NATIVE_SIZE
-rectangle too, but that's not specified anywhere.
-
-Anyway, those selection targets badly apply to image sensors, are
-ill-defined as the definition of active pixels, optical blank (active
-and non-active) pixels is not provided anywhere, and it's not specified
-anywhere what is the reference area for each of those rectangles, so I
-might very well got them wrongly.
-
->  			.width = 3280,
->  			.height = 2464
->  		},
-> @@ -489,8 +489,8 @@ static const struct imx219_mode supported_modes[] = {
->  		.width = 1920,
->  		.height = 1080,
->  		.crop = {
-> -			.left = 680,
-> -			.top = 692,
-> +			.left = 8 + 680,
-> +			.top = 8 + 692,
->  			.width = 1920,
->  			.height = 1080
->  		},
-> @@ -505,8 +505,8 @@ static const struct imx219_mode supported_modes[] = {
->  		.width = 1640,
->  		.height = 1232,
->  		.crop = {
-> -			.left = 0,
-> -			.top = 0,
-> +			.left = 8,
-> +			.top = 8,
->  			.width = 3280,
->  			.height = 2464
->  		},
-> @@ -521,8 +521,8 @@ static const struct imx219_mode supported_modes[] = {
->  		.width = 640,
->  		.height = 480,
->  		.crop = {
-> -			.left = 1000,
-> -			.top = 752,
-> +			.left = 8 + 1000,
-> +			.top = 8 + 752,
->  			.width = 1280,
->  			.height = 960
->  		},
-> @@ -1014,6 +1014,7 @@ static int imx219_get_selection(struct v4l2_subdev *sd,
->  		return 0;
->
->  	case V4L2_SEL_TGT_CROP_DEFAULT:
-> +	case V4L2_SEL_TGT_CROP_BOUNDS:
-
-Still not getting what is the purpose of two targets if the "always
-have to go together" :)
-
->  		sel->r.top = IMX219_PIXEL_ARRAY_TOP;
->  		sel->r.left = IMX219_PIXEL_ARRAY_LEFT;
->  		sel->r.width = IMX219_PIXEL_ARRAY_WIDTH;
-> --
-> 2.27.0
->
