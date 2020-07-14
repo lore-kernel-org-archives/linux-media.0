@@ -2,105 +2,154 @@ Return-Path: <SRS0=2MZP=AZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5612C433E7
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 12:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88D5BC433E4
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 13:24:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C5EF32242C
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 12:48:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66672224DE
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jul 2020 13:24:03 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=pesu-pes-edu.20150623.gappssmtp.com header.i=@pesu-pes-edu.20150623.gappssmtp.com header.b="gEkXrr3u"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728233AbgGNMsT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Jul 2020 08:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S1728449AbgGNNX7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Jul 2020 09:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728393AbgGNMsT (ORCPT
+        with ESMTP id S1728396AbgGNNX6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Jul 2020 08:48:19 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE82C061755
-        for <linux-media@vger.kernel.org>; Tue, 14 Jul 2020 05:48:19 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 11A752A2D7F
-Subject: Re: [PATCH 1/4] media: staging: rkisp1: cap: don't set next buffer
- from rkisp1_vb2_buf_queue
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
-Cc:     ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        tfiga@chromium.org
-References: <20200714123832.28011-1-dafna.hirschfeld@collabora.com>
- <20200714123832.28011-2-dafna.hirschfeld@collabora.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <c4dd300d-4dab-8c5a-e2c3-2d0ba042dc8d@collabora.com>
-Date:   Tue, 14 Jul 2020 09:48:09 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 14 Jul 2020 09:23:58 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ACEC061755
+        for <linux-media@vger.kernel.org>; Tue, 14 Jul 2020 06:23:58 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id mn17so1575412pjb.4
+        for <linux-media@vger.kernel.org>; Tue, 14 Jul 2020 06:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pesu-pes-edu.20150623.gappssmtp.com; s=20150623;
+        h=from:date:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=4tyb2WDwFS2aoAxOZTJuZZO8xIzZEBnfgQRrMTFVPy8=;
+        b=gEkXrr3ujKnbFKozZYmYSKWkXIwMUEl0kj87Y52XG5O756MlCo18hrRS93htxsbthP
+         kp8Sbtma0TC4EZLqrBUGQeW74DMIgtH6SX40KmCDNC36fvbt+2SDxIqe5AXVoIvyi5Sb
+         pqgZpWSrs/LFzkuQJA+G+serReQq8+vo/oZONYqea/XLjYvffTxu1uYKfSptktwOtHwJ
+         cZs77V21LVQHT/siPYiMZr3eguJyyeC/r3iFhjK3TU95rJD40CYI3dVfF8h5fWC367h/
+         Rv1+YQ2bWX8iBFF0D2YvPUVn9cnu7xKdspxMvs9ikCeA0rnlzlItrwMQogYEQvTJbhsq
+         wFSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=4tyb2WDwFS2aoAxOZTJuZZO8xIzZEBnfgQRrMTFVPy8=;
+        b=na2cZWFqSHQkodkzlxdWmpvehgm7dFeJmfuSzxg7p79Qpcd9jcidy4k3j+nLgVPhFu
+         TrnJccvknW6Gtq5U4BbD19cRNf2714Lp8hO6gU+spHZFijeMe1Gm0NQNLo1g04GOtdvQ
+         Jvg+ssug92snMA2ZkERzHg4ywkGLr5f4QZj5NaDSjiBBUUeGdXhPaJZn83hKmWAR4q5n
+         4Cb2iPWPWx0Id6bu/nueXzetp342uUCmyWD+kYMXFLYTrH1Ph+325ZiNZC814DQ1r3QO
+         7pi3EDTeKMK6tuTgQjGPKHC7FaeDren4eV5TFgplaNJSpdYnLaauUuLY7S9ZvbVh+CtN
+         eqcw==
+X-Gm-Message-State: AOAM5302RDNr1ltkj/gjIb9iA4u19hxuOfyJvCvQJflU1EOoDNFl7TgN
+        cf+H5gFgDk7eQ/JaTQIBrUbs8w==
+X-Google-Smtp-Source: ABdhPJwzRaA4tJhjLno+GpL8qdTMO5ieciJeOHn1En2igShXXa0max+08dg16ajrcA9WvWEenrMkrQ==
+X-Received: by 2002:a17:90a:454f:: with SMTP id r15mr4607372pjm.6.1594733037918;
+        Tue, 14 Jul 2020 06:23:57 -0700 (PDT)
+Received: from localhost ([2406:7400:73:6b0b:30fb:46c3:cbfb:2554])
+        by smtp.gmail.com with ESMTPSA id n9sm2631321pjo.53.2020.07.14.06.23.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2020 06:23:56 -0700 (PDT)
+From:   B K Karthik <bkkarthik@pesu.pes.edu>
+X-Google-Original-From: B K Karthik <karthik.bk2000@live.com>
+Date:   Tue, 14 Jul 2020 09:23:50 -0400
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers: staging: media: atomisp: pci: css_2401_system:
+ host: csi_rx.c: fixed a sparse warning by making undeclared symbols static
+Message-ID: <20200714132350.naekk4zqivpuaedi@pesu-pes-edu>
 MIME-Version: 1.0
-In-Reply-To: <20200714123832.28011-2-dafna.hirschfeld@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="52gap7mw3pinsur3"
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dafna,
 
-On 7/14/20 9:38 AM, Dafna Hirschfeld wrote:
-> The function 'rkisp1_vb2_buf_queue' sets the next buffer directly
-> in case the capture is already streaming but no frame yet arrived
-> from the sensor. This is an optimization that tries to avoid
-> dropping a frame.
-> The call atomic_read(&cap->rkisp1->isp.frame_sequence) is used
-> to check if a frame arrived. Reading the 'frame_sequence' should
-> be avoided outside irq handlers to avoid race conditions.
-> 
-> This patch removes this optimization. Dropping of the first
-> frames can be avoided if userspace queues the buffers before
-> start streaming. If userspace starts queueing buffers
-> only after calling 'streamon' he risks frame drops anyway.
-> 
-> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> ---
->  drivers/staging/media/rkisp1/rkisp1-capture.c | 13 +------------
->  1 file changed, 1 insertion(+), 12 deletions(-)
-> 
-> diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
-> index 793ec884c894..572b0949c81f 100644
-> --- a/drivers/staging/media/rkisp1/rkisp1-capture.c
-> +++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
-> @@ -743,18 +743,7 @@ static void rkisp1_vb2_buf_queue(struct vb2_buffer *vb)
->  		     ispbuf->buff_addr[RKISP1_PLANE_CB]);
->  
->  	spin_lock_irqsave(&cap->buf.lock, flags);
-> -
-> -	/*
-> -	 * If there's no next buffer assigned, queue this buffer directly
-> -	 * as the next buffer, and update the memory interface.
-> -	 */
-> -	if (cap->is_streaming && !cap->buf.next &&
-> -	    atomic_read(&cap->rkisp1->isp.frame_sequence) == -1) {
-> -		cap->buf.next = ispbuf;
-> -		rkisp1_set_next_buf(cap);
+--52gap7mw3pinsur3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Doesn't this mean we'll always drop the first frame? Since the first user buffer will only be configured to
-the hardware after receiving the first frame? So the first frame will always go to the dummy buffer, no?
+changed symbols N_SHORT_PACKET_LUT_ENTRIES, N_LONG_PACKET_ENTRIES,
+N_CSI_RX_FE_CTRL_DLANES, N_CSI_RX_BE_SID_WIDTH to static because they
+were not declared earlier.
 
-Thanks
-Helen
+Signed-off-by: B K Karthik <karthik.bk2000@live.com>
+---
+ .../media/atomisp/pci/css_2401_system/host/csi_rx.c       | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> -	} else {
-> -		list_add_tail(&ispbuf->queue, &cap->buf.queue);
-> -	}
-> +	list_add_tail(&ispbuf->queue, &cap->buf.queue);
->  	spin_unlock_irqrestore(&cap->buf.lock, flags);
->  }
->  
-> 
+diff --git a/drivers/staging/media/atomisp/pci/css_2401_system/host/csi_rx.=
+c b/drivers/staging/media/atomisp/pci/css_2401_system/host/csi_rx.c
+index 8e661091f7d9..4d2076db1240 100644
+--- a/drivers/staging/media/atomisp/pci/css_2401_system/host/csi_rx.c
++++ b/drivers/staging/media/atomisp/pci/css_2401_system/host/csi_rx.c
+@@ -15,26 +15,26 @@
+=20
+ #include "system_global.h"
+=20
+-const u32 N_SHORT_PACKET_LUT_ENTRIES[N_CSI_RX_BACKEND_ID] =3D {
++static const u32 N_SHORT_PACKET_LUT_ENTRIES[N_CSI_RX_BACKEND_ID] =3D {
+ 	4,	/* 4 entries at CSI_RX_BACKEND0_ID*/
+ 	4,	/* 4 entries at CSI_RX_BACKEND1_ID*/
+ 	4	/* 4 entries at CSI_RX_BACKEND2_ID*/
+ };
+=20
+-const u32 N_LONG_PACKET_LUT_ENTRIES[N_CSI_RX_BACKEND_ID] =3D {
++static const u32 N_LONG_PACKET_LUT_ENTRIES[N_CSI_RX_BACKEND_ID] =3D {
+ 	8,	/* 8 entries at CSI_RX_BACKEND0_ID*/
+ 	4,	/* 4 entries at CSI_RX_BACKEND1_ID*/
+ 	4	/* 4 entries at CSI_RX_BACKEND2_ID*/
+ };
+=20
+-const u32 N_CSI_RX_FE_CTRL_DLANES[N_CSI_RX_FRONTEND_ID] =3D {
++static const u32 N_CSI_RX_FE_CTRL_DLANES[N_CSI_RX_FRONTEND_ID] =3D {
+ 	N_CSI_RX_DLANE_ID,	/* 4 dlanes for CSI_RX_FR0NTEND0_ID */
+ 	N_CSI_RX_DLANE_ID,	/* 4 dlanes for CSI_RX_FR0NTEND1_ID */
+ 	N_CSI_RX_DLANE_ID	/* 4 dlanes for CSI_RX_FR0NTEND2_ID */
+ };
+=20
+ /* sid_width for CSI_RX_BACKEND<N>_ID */
+-const u32 N_CSI_RX_BE_SID_WIDTH[N_CSI_RX_BACKEND_ID] =3D {
++static const u32 N_CSI_RX_BE_SID_WIDTH[N_CSI_RX_BACKEND_ID] =3D {
+ 	3,
+ 	2,
+ 	2
+--=20
+2.20.1
+
+
+--52gap7mw3pinsur3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEpIrzAt4LvWLJmKjp471Q5AHeZ2oFAl8NseYACgkQ471Q5AHe
+Z2q9wgv/V4UWsixwDSiDh5IhJKpSctI49K7a+54UXQNdlMduZb2oJZA9jbN/PoRd
+2hdgclHErUk54YcJpaVyooLd6HWJoz0lB+Nf4/rWrlEYsPAoeAo6Aoji76VgX+9I
+HLBLPH20N9CTA584xJjiluVIdYnuKo/jX/hIDHuU8pZOJbqc8exnmkJVBO7o3mCF
+Cz/VeL/GAuFglQ4mzlVFFWfEjEnsrbMiL3qZPgzvS10cjn4htz07hhrcWdmYtnr7
+vICyPutw7y3wLchTKwCy3hRwap6Bz2mst2ViYFGkX32iAomdL5ZHCzlPC6xneQq0
+EOfN9OAECH9Kw+AjnxFN6EDyIYCGXmC88c+l3u9fJeHqPjY7tKXdVOerC36dOSJa
+MJouVcyOxKR54eBVy60F+2mM22SUqQJ0r1c9FIkzj9qF+snEFCQmz6BPXjNvNKIY
+u9hBEyu+RsalTLzIwvgZa6xKVfCPFDD+tLoAtxBGAZdh6UYnJgtp0QS2hmx+ZnM2
+03gE5VRj
+=6ueS
+-----END PGP SIGNATURE-----
+
+--52gap7mw3pinsur3--
