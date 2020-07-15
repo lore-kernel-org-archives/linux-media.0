@@ -2,169 +2,109 @@ Return-Path: <SRS0=i11G=A2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 142BDC433DF
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 085FAC433E7
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:36:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD2E320657
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:26:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="g4/O7JCJ"
+	by mail.kernel.org (Postfix) with ESMTP id DA92D20656
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:36:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728926AbgGOK0x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jul 2020 06:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728132AbgGOK0x (ORCPT
+        id S1731171AbgGOKgM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jul 2020 06:36:12 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:36943 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728781AbgGOKgL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jul 2020 06:26:53 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F74C061755
-        for <linux-media@vger.kernel.org>; Wed, 15 Jul 2020 03:26:53 -0700 (PDT)
-Received: from pyrite.rasen.tech (unknown [IPv6:2400:4051:61:600:2c71:1b79:d06d:5032])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EC1AF564;
-        Wed, 15 Jul 2020 12:26:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594808811;
-        bh=DWpG4S89inUMoW6sZEPPMoEKf3yYaDnkBMj3oU2qS3k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=g4/O7JCJ/0m91WL9eAuQEmZY9YgQXAIf1UEyWQQMmS5jgfVPDuhKJtBzbcd3B43i9
-         EkdIgRkJ/xIJwcfXbE5e/piPrUPViBPT3UUo0TrIBffXV15KC6EX3rwDYcz4ufr+gH
-         WWvfLgb49+Q6NuW0e2CGsHOXrl+GSYM0U6elvkpc=
-From:   Paul Elder <paul.elder@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Paul Elder <paul.elder@ideasonboard.com>,
-        laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
-Subject: [PATCH v5 1/5] v4l2-compliance: Add version command
-Date:   Wed, 15 Jul 2020 19:26:36 +0900
-Message-Id: <20200715102640.17554-1-paul.elder@ideasonboard.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 15 Jul 2020 06:36:11 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 4A288C0011;
+        Wed, 15 Jul 2020 10:36:05 +0000 (UTC)
+Date:   Wed, 15 Jul 2020 12:39:39 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dongchun.zhu@mediatek.com,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        roman.kovalivskyi@globallogic.com,
+        Luis de Oliveira <Luis.Oliveira@synopsys.com>
+Subject: Re: [PATCH v2 3/3] media: MAINTAINERS: ov5647: Add myself as
+ maintainer
+Message-ID: <20200715103939.rh7hhpqp4xi73av6@uno.localdomain>
+References: <20200714142856.58365-1-jacopo+renesas@jmondi.org>
+ <20200714142856.58365-4-jacopo+renesas@jmondi.org>
+ <CAMuHMdV64srQaDcAPwjA_QR6v_FOykgQpxgdT-srRk1r7NQiGQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdV64srQaDcAPwjA_QR6v_FOykgQpxgdT-srRk1r7NQiGQ@mail.gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a --version option to v4l2-compliance to retrieve the version of
-v4l2-compliance. While at it, factor out and reorder printing the SHA to
-after argument parsing.
+Hi Geert
 
-Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+On Wed, Jul 15, 2020 at 12:26:49PM +0200, Geert Uytterhoeven wrote:
+> CC Luis' last used address
+>
+> On Tue, Jul 14, 2020 at 4:25 PM Jacopo Mondi <jacopo+renesas@jmondi.org> wrote:
+> >
+> > Since the current maintainer email address bounces back, replace
+> > the entry and make myself maintainer of the driver since I have the
+> > sensor and platforms to test it.
+> >
+> > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > ---
+> >  MAINTAINERS | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 1742fa1a88cd..e2128afd83b6 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -12607,7 +12607,7 @@ T:      git git://linuxtv.org/media_tree.git
+> >  F:     drivers/media/i2c/ov5640.c
+> >
+> >  OMNIVISION OV5647 SENSOR DRIVER
+> > -M:     Luis Oliveira <lolivei@synopsys.com>
+> > +M:     Jacopo Mondi <jacopo@jmondi.org>
+> >  L:     linux-media@vger.kernel.org
+> >  S:     Maintained
+> >  T:     git git://linuxtv.org/media_tree.git
 
----
-Changes in v5:
-- update manpage
-- move STR macros to before print_sha()
+Oh thanks!
 
-Changes in v4:
-- add git commit count to version
+I would be happy if Luis would like to keep maintaing the driver and
+just update his address in that case. I however volounteer to help here,
+so please keep my address here as well.
 
-Changes in v3:
-- embed PACKAGE_VERSION instead of string concatenation
----
- utils/v4l2-compliance/v4l2-compliance.1.in |  3 +++
- utils/v4l2-compliance/v4l2-compliance.cpp  | 31 +++++++++++++++++-----
- 2 files changed, 28 insertions(+), 6 deletions(-)
+Thanks
+  j
 
-diff --git a/utils/v4l2-compliance/v4l2-compliance.1.in b/utils/v4l2-compliance/v4l2-compliance.1.in
-index 39f0229d..89d7e482 100644
---- a/utils/v4l2-compliance/v4l2-compliance.1.in
-+++ b/utils/v4l2-compliance/v4l2-compliance.1.in
-@@ -184,6 +184,9 @@ Trace all called ioctls.
- \fB\-v\fR, \fB\-\-verbose\fR
- Turn on verbose reporting.
- .TP
-+\fB\-\-version\fR
-+Show version information.
-+.TP
- \fB\-w\fR, \fB\-\-wrapper\fR
- Use the libv4l2 wrapper library for all V4L2 device accesses. Note that doing this will
- cause some tests to fail because the libv4l2 library isn't fully V4L2 compliant. By
-diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp b/utils/v4l2-compliance/v4l2-compliance.cpp
-index 825f2aa6..92b4e995 100644
---- a/utils/v4l2-compliance/v4l2-compliance.cpp
-+++ b/utils/v4l2-compliance/v4l2-compliance.cpp
-@@ -76,6 +76,7 @@ enum Option {
- 	OptMediaBusInfo = 'z',
- 	OptStreamFrom = 128,
- 	OptStreamFromHdr,
-+	OptVersion,
- 	OptLast = 256
- };
- 
-@@ -150,9 +151,25 @@ static struct option long_options[] = {
- 	{"stream-all-formats", optional_argument, 0, OptStreamAllFormats},
- 	{"stream-all-io", no_argument, 0, OptStreamAllIO},
- 	{"stream-all-color", required_argument, 0, OptStreamAllColorTest},
-+	{"version", no_argument, 0, OptVersion},
- 	{0, 0, 0, 0}
- };
- 
-+#define STR(x) #x
-+#define STRING(x) STR(x)
-+
-+static void print_sha()
-+{
-+	printf("v4l2-compliance SHA: %s", STRING(GIT_SHA));
-+	printf(", %zd bits, %zd-bit time_t\n", sizeof(void *) * 8, sizeof(time_t) * 8);
-+	printf("\n");
-+}
-+
-+static void print_version()
-+{
-+	printf("v4l2-compliance %s%s\n", PACKAGE_VERSION, STRING(GIT_COMMIT_CNT));
-+}
-+
- static void usage()
- {
- 	printf("Usage:\n");
-@@ -241,6 +258,7 @@ static void usage()
- 	printf("  -P, --no-progress  Turn off progress messages.\n");
- 	printf("  -T, --trace        Trace all called ioctls.\n");
- 	printf("  -v, --verbose      Turn on verbose reporting.\n");
-+	printf("  --version          Show version information.\n");
- #ifndef NO_LIBV4L2
- 	printf("  -w, --wrapper      Use the libv4l2 wrapper library.\n");
- #endif
-@@ -1482,12 +1500,6 @@ int main(int argc, char **argv)
- 	char *value, *subs;
- 	int idx = 0;
- 
--#define STR(x) #x
--#define STRING(x) STR(x)
--	printf("v4l2-compliance SHA: %s", STRING(GIT_SHA));
--	printf(", %zd bits, %zd-bit time_t\n", sizeof(void *) * 8, sizeof(time_t) * 8);
--	printf("\n");
--
- 	if (!env_media_apps_color || !strcmp(env_media_apps_color, "auto"))
- 		show_colors = isatty(STDOUT_FILENO);
- 	else if (!strcmp(env_media_apps_color, "always"))
-@@ -1656,6 +1668,10 @@ int main(int argc, char **argv)
- 		case OptNoProgress:
- 			no_progress = true;
- 			break;
-+		case OptVersion:
-+			print_version();
-+			print_sha();
-+			std::exit(EXIT_SUCCESS);
- 		case ':':
- 			fprintf(stderr, "Option `%s' requires a value\n",
- 				argv[optind]);
-@@ -1677,6 +1693,9 @@ int main(int argc, char **argv)
- 		usage();
- 		std::exit(EXIT_FAILURE);
- 	}
-+
-+	print_sha();
-+
- 	bool direct = !options[OptUseWrapper];
- 	int fd;
- 
--- 
-2.27.0
-
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
