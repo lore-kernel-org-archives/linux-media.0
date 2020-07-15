@@ -2,26 +2,27 @@ Return-Path: <SRS0=i11G=A2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B7FFC433E1
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 20:22:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20CF9C433E6
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 20:23:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EFBC420672
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 20:22:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D4542070E
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 20:23:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726907AbgGOUWz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jul 2020 16:22:55 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37088 "EHLO
+        id S1727849AbgGOUXF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jul 2020 16:23:05 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37114 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbgGOUWy (ORCPT
+        with ESMTP id S1727828AbgGOUXF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jul 2020 16:22:54 -0400
+        Wed, 15 Jul 2020 16:23:05 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id AA8492A5175
+        with ESMTPSA id 8E2442A518C
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
@@ -34,10 +35,12 @@ Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
         Maxime Ripard <mripard@kernel.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 0/7] media: Clean H264 stateless uAPI
-Date:   Wed, 15 Jul 2020 17:22:23 -0300
-Message-Id: <20200715202233.185680-1-ezequiel@collabora.com>
+Subject: [PATCH 02/10] media: uapi: h264: Further clarify scaling lists order
+Date:   Wed, 15 Jul 2020 17:22:25 -0300
+Message-Id: <20200715202233.185680-3-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200715202233.185680-1-ezequiel@collabora.com>
+References: <20200715202233.185680-1-ezequiel@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -45,65 +48,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The recent patch posted by Jernej (which I'm including for context),
-encouraged me to address all the known issues in the uAPI.
+Commit 0b0393d59eb4a ("media: uapi: h264: clarify
+expected scaling_list_4x4/8x8 order") improved the
+documentation on H264 scaling lists order.
 
-I hope we can finally make this uAPI interface
-public; and then also address the other codec
-interfaces so we can move the codec drivers out of staging.
+This commit improves the documentation by clarifying
+that the lists themselves are expected in matrix order.
 
-It should be noted that there is already GStreamer native
-support for this interface, which will be part of 1.18,
-once it's released [1], as well as support in Chromium [2].
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-I have pushed a branch porting GStreamer to
-support these interface changes:
-
-https://gitlab.freedesktop.org/ezequielgarcia/gst-plugins-bad/-/commits/for_h264_uapi_v2
-
-The main changes are:
-
-* Split prediction weight table to a separate control.
-* Increase size of first_mb_in_slice field.
-* Cleanup DPB entry interface, to support field coding.
-* Increase of DPB entry pic_num field.
-* Move slice invariant fields to the per-frame control.
-
-I'm adding here the change from Jernej, and a change from
-Philipp Zabel which apparently fell thru the cracks.
-
-Ezequiel Garcia (8):
-  media: uapi: h264: Further clarify scaling lists order
-  media: uapi: h264: Split prediction weight parameters
-  media: uapi: h264: Increase size of 'first_mb_in_slice' field
-  media: uapi: h264: Cleanup DPB entry interface
-  media: uapi: h264: Increase size of DPB entry pic_num
-  media: uapi: h264: Clean slice invariants syntax elements
-  media: hantro: Don't require unneeded H264_SLICE_PARAMS
-  media: rkvdec: Don't require unneeded H264_SLICE_PARAMS
-
-Jernej Skrabec (1):
-  media: uapi: h264: Update reference lists
-
-Philipp Zabel (1):
-  media: uapi: h264: Clarify pic_order_cnt_bit_size field
-
- .../media/v4l/ext-ctrls-codec.rst             | 192 +++++++++++-------
- drivers/media/v4l2-core/v4l2-ctrls.c          |  25 +++
- drivers/media/v4l2-core/v4l2-h264.c           |  12 +-
- drivers/staging/media/hantro/hantro_drv.c     |   5 -
- .../staging/media/hantro/hantro_g1_h264_dec.c |  21 +-
- drivers/staging/media/hantro/hantro_h264.c    |   8 +-
- drivers/staging/media/hantro/hantro_hw.h      |   2 -
- drivers/staging/media/rkvdec/rkvdec-h264.c    |  18 +-
- drivers/staging/media/rkvdec/rkvdec.c         |   5 -
- drivers/staging/media/sunxi/cedrus/cedrus.h   |   1 +
- .../staging/media/sunxi/cedrus/cedrus_dec.c   |   2 +
- .../staging/media/sunxi/cedrus/cedrus_h264.c  |  21 +-
- include/media/h264-ctrls.h                    |  80 +++++---
- include/media/v4l2-h264.h                     |   3 +-
- 14 files changed, 234 insertions(+), 161 deletions(-)
-
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index c2e17c02f77e..16bfc98ab2f6 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -1725,12 +1725,14 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+       - ``scaling_list_4x4[6][16]``
+       - Scaling matrix after applying the inverse scanning process.
+         Expected list order is Intra Y, Intra Cb, Intra Cr, Inter Y,
+-        Inter Cb, Inter Cr.
++        Inter Cb, Inter Cr. The values on each scaling list are
++        expected in matrix order.
+     * - __u8
+       - ``scaling_list_8x8[6][64]``
+       - Scaling matrix after applying the inverse scanning process.
+         Expected list order is Intra Y, Inter Y, Intra Cb, Inter Cb,
+-        Intra Cr, Inter Cr.
++        Intra Cr, Inter Cr. The values on each scaling list are
++        expected in matrix order.
+ 
+ ``V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS (struct)``
+     Specifies the slice parameters (as extracted from the bitstream)
 -- 
 2.27.0
 
