@@ -5,43 +5,44 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 096A3C433E8
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 142BDC433DF
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:26:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC6DB20657
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:27:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD2E320657
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:26:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="VnfzssQb"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="g4/O7JCJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731147AbgGOK1G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jul 2020 06:27:06 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:53422 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729167AbgGOK07 (ORCPT
+        id S1728926AbgGOK0x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jul 2020 06:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728132AbgGOK0x (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jul 2020 06:26:59 -0400
+        Wed, 15 Jul 2020 06:26:53 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F74C061755
+        for <linux-media@vger.kernel.org>; Wed, 15 Jul 2020 03:26:53 -0700 (PDT)
 Received: from pyrite.rasen.tech (unknown [IPv6:2400:4051:61:600:2c71:1b79:d06d:5032])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 012BD564;
-        Wed, 15 Jul 2020 12:26:54 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EC1AF564;
+        Wed, 15 Jul 2020 12:26:49 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594808816;
-        bh=YKf80gNJ1vPiHZZptZDpJkKBoIHqbkZgneSXs9ywNgc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VnfzssQbJcUxL9zLoL6c4sKhnwnyBKV33AJrmQAJB/dt3J4AXyBDFupGX51akdFka
-         lC/iN/QjnWvWF2EIC4c9CydUR/BUSKRD5JhPyCwzK0HeykmpabasPEyRXrhvWnzbyJ
-         /Fk/wixDhb8nRNAF1tIq4a+cInUdYA3rK3hQDdXU=
+        s=mail; t=1594808811;
+        bh=DWpG4S89inUMoW6sZEPPMoEKf3yYaDnkBMj3oU2qS3k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=g4/O7JCJ/0m91WL9eAuQEmZY9YgQXAIf1UEyWQQMmS5jgfVPDuhKJtBzbcd3B43i9
+         EkdIgRkJ/xIJwcfXbE5e/piPrUPViBPT3UUo0TrIBffXV15KC6EX3rwDYcz4ufr+gH
+         WWvfLgb49+Q6NuW0e2CGsHOXrl+GSYM0U6elvkpc=
 From:   Paul Elder <paul.elder@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Paul Elder <paul.elder@ideasonboard.com>,
         laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
-Subject: [PATCH v5 3/5] cec-compliance: Add version command
-Date:   Wed, 15 Jul 2020 19:26:38 +0900
-Message-Id: <20200715102640.17554-3-paul.elder@ideasonboard.com>
+Subject: [PATCH v5 1/5] v4l2-compliance: Add version command
+Date:   Wed, 15 Jul 2020 19:26:36 +0900
+Message-Id: <20200715102640.17554-1-paul.elder@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200715102640.17554-1-paul.elder@ideasonboard.com>
-References: <20200715102640.17554-1-paul.elder@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -49,8 +50,9 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a --version option to cec-compliance to retrieve the version of
-cec-compliance. While at it, factor out printing the SHA.
+Add a --version option to v4l2-compliance to retrieve the version of
+v4l2-compliance. While at it, factor out and reorder printing the SHA to
+after argument parsing.
 
 Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
 
@@ -65,55 +67,40 @@ Changes in v4:
 Changes in v3:
 - embed PACKAGE_VERSION instead of string concatenation
 ---
- utils/cec-compliance/Makefile.am         |  2 +-
- utils/cec-compliance/cec-compliance.1.in |  3 +++
- utils/cec-compliance/cec-compliance.cpp  | 25 +++++++++++++++++++++---
- 3 files changed, 26 insertions(+), 4 deletions(-)
+ utils/v4l2-compliance/v4l2-compliance.1.in |  3 +++
+ utils/v4l2-compliance/v4l2-compliance.cpp  | 31 +++++++++++++++++-----
+ 2 files changed, 28 insertions(+), 6 deletions(-)
 
-diff --git a/utils/cec-compliance/Makefile.am b/utils/cec-compliance/Makefile.am
-index 57ed7b37..a9c59ca6 100644
---- a/utils/cec-compliance/Makefile.am
-+++ b/utils/cec-compliance/Makefile.am
-@@ -2,7 +2,7 @@ bin_PROGRAMS = cec-compliance
- man_MANS = cec-compliance.1
- 
- cec_compliance_SOURCES = cec-compliance.cpp cec-compliance.h cec-test.cpp cec-test-adapter.cpp cec-test-audio.cpp cec-test-power.cpp cec-test-fuzzing.cpp
--cec_compliance_CPPFLAGS = -I$(top_srcdir)/utils/libcecutil $(GIT_SHA)
-+cec_compliance_CPPFLAGS = -I$(top_srcdir)/utils/libcecutil $(GIT_SHA) $(GIT_COMMIT_CNT)
- cec_compliance_LDADD = -lrt ../libcecutil/libcecutil.la
- 
- EXTRA_DIST = cec-compliance.1
-diff --git a/utils/cec-compliance/cec-compliance.1.in b/utils/cec-compliance/cec-compliance.1.in
-index 3f9c7d8b..94654858 100644
---- a/utils/cec-compliance/cec-compliance.1.in
-+++ b/utils/cec-compliance/cec-compliance.1.in
-@@ -119,6 +119,9 @@ check that the test produced no warnings.
+diff --git a/utils/v4l2-compliance/v4l2-compliance.1.in b/utils/v4l2-compliance/v4l2-compliance.1.in
+index 39f0229d..89d7e482 100644
+--- a/utils/v4l2-compliance/v4l2-compliance.1.in
++++ b/utils/v4l2-compliance/v4l2-compliance.1.in
+@@ -184,6 +184,9 @@ Trace all called ioctls.
  \fB\-v\fR, \fB\-\-verbose\fR
  Turn on verbose reporting.
  .TP
 +\fB\-\-version\fR
 +Show version information.
 +.TP
- \fB\-w\fR, \fB\-\-wall\-clock\fR
- Show timestamps as wall-clock time. This also turns on verbose reporting.
- .TP
-diff --git a/utils/cec-compliance/cec-compliance.cpp b/utils/cec-compliance/cec-compliance.cpp
-index bfd82af7..618e3160 100644
---- a/utils/cec-compliance/cec-compliance.cpp
-+++ b/utils/cec-compliance/cec-compliance.cpp
-@@ -93,6 +93,8 @@ enum Option {
- 	OptSkipTestTunerControl,
- 	OptSkipTestVendorSpecificCommands,
- 	OptSkipTestStandbyResume,
-+
+ \fB\-w\fR, \fB\-\-wrapper\fR
+ Use the libv4l2 wrapper library for all V4L2 device accesses. Note that doing this will
+ cause some tests to fail because the libv4l2 library isn't fully V4L2 compliant. By
+diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp b/utils/v4l2-compliance/v4l2-compliance.cpp
+index 825f2aa6..92b4e995 100644
+--- a/utils/v4l2-compliance/v4l2-compliance.cpp
++++ b/utils/v4l2-compliance/v4l2-compliance.cpp
+@@ -76,6 +76,7 @@ enum Option {
+ 	OptMediaBusInfo = 'z',
+ 	OptStreamFrom = 128,
+ 	OptStreamFromHdr,
 +	OptVersion,
  	OptLast = 256
  };
  
-@@ -174,9 +176,23 @@ static struct option long_options[] = {
- 	{"skip-test-tuner-control", no_argument, 0, OptSkipTestTunerControl},
- 	{"skip-test-vendor-specific-commands", no_argument, 0, OptSkipTestVendorSpecificCommands},
- 	{"skip-test-standby-resume", no_argument, 0, OptSkipTestStandbyResume},
+@@ -150,9 +151,25 @@ static struct option long_options[] = {
+ 	{"stream-all-formats", optional_argument, 0, OptStreamAllFormats},
+ 	{"stream-all-io", no_argument, 0, OptStreamAllIO},
+ 	{"stream-all-color", required_argument, 0, OptStreamAllColorTest},
 +	{"version", no_argument, 0, OptVersion},
  	{0, 0, 0, 0}
  };
@@ -123,47 +110,61 @@ index bfd82af7..618e3160 100644
 +
 +static void print_sha()
 +{
-+	printf("cec-compliance SHA                 : %s\n", STRING(GIT_SHA));
++	printf("v4l2-compliance SHA: %s", STRING(GIT_SHA));
++	printf(", %zd bits, %zd-bit time_t\n", sizeof(void *) * 8, sizeof(time_t) * 8);
++	printf("\n");
 +}
 +
 +static void print_version()
 +{
-+	printf("cec-compliance %s%s\n", PACKAGE_VERSION, STRING(GIT_COMMIT_CNT));
++	printf("v4l2-compliance %s%s\n", PACKAGE_VERSION, STRING(GIT_COMMIT_CNT));
 +}
 +
  static void usage()
  {
- 	printf("Usage:\n"
-@@ -231,6 +247,7 @@ static void usage()
- 	       "  -s, --skip-info    Skip Driver Info output\n"
- 	       "  -T, --trace        Trace all called ioctls\n"
- 	       "  -v, --verbose      Turn on verbose reporting\n"
-+	       "  --version          Show version information\n"
- 	       "  -w, --wall-clock   Show timestamps as wall-clock time (implies -v)\n"
- 	       "  -W, --exit-on-warn Exit on the first warning.\n"
- 	       );
-@@ -1258,6 +1275,10 @@ int main(int argc, char **argv)
- 		case OptVerbose:
- 			show_info = true;
+ 	printf("Usage:\n");
+@@ -241,6 +258,7 @@ static void usage()
+ 	printf("  -P, --no-progress  Turn off progress messages.\n");
+ 	printf("  -T, --trace        Trace all called ioctls.\n");
+ 	printf("  -v, --verbose      Turn on verbose reporting.\n");
++	printf("  --version          Show version information.\n");
+ #ifndef NO_LIBV4L2
+ 	printf("  -w, --wrapper      Use the libv4l2 wrapper library.\n");
+ #endif
+@@ -1482,12 +1500,6 @@ int main(int argc, char **argv)
+ 	char *value, *subs;
+ 	int idx = 0;
+ 
+-#define STR(x) #x
+-#define STRING(x) STR(x)
+-	printf("v4l2-compliance SHA: %s", STRING(GIT_SHA));
+-	printf(", %zd bits, %zd-bit time_t\n", sizeof(void *) * 8, sizeof(time_t) * 8);
+-	printf("\n");
+-
+ 	if (!env_media_apps_color || !strcmp(env_media_apps_color, "auto"))
+ 		show_colors = isatty(STDOUT_FILENO);
+ 	else if (!strcmp(env_media_apps_color, "always"))
+@@ -1656,6 +1668,10 @@ int main(int argc, char **argv)
+ 		case OptNoProgress:
+ 			no_progress = true;
  			break;
 +		case OptVersion:
 +			print_version();
 +			print_sha();
 +			std::exit(EXIT_SUCCESS);
  		case ':':
- 			fprintf(stderr, "Option '%s' requires a value\n",
+ 			fprintf(stderr, "Option `%s' requires a value\n",
  				argv[optind]);
-@@ -1392,9 +1413,7 @@ int main(int argc, char **argv)
- 	if (options[OptInteractive])
- 		test_tags |= TAG_INTERACTIVE;
- 
--#define STR(x) #x
--#define STRING(x) STR(x)
--	printf("cec-compliance SHA                 : %s\n", STRING(GIT_SHA));
+@@ -1677,6 +1693,9 @@ int main(int argc, char **argv)
+ 		usage();
+ 		std::exit(EXIT_FAILURE);
+ 	}
++
 +	print_sha();
++
+ 	bool direct = !options[OptUseWrapper];
+ 	int fd;
  
- 	node.phys_addr = CEC_PHYS_ADDR_INVALID;
- 	doioctl(&node, CEC_ADAP_G_PHYS_ADDR, &node.phys_addr);
 -- 
 2.27.0
 
