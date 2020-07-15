@@ -8,119 +8,92 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B88AC43616
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 04:20:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F39F0C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 04:23:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA8A32067D
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 04:20:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C232C2067D
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 04:23:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Q4sNDhf7"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="ktReT8M/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728082AbgGOETZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jul 2020 00:19:25 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:4596 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725824AbgGOETX (ORCPT
+        id S1725897AbgGOEX2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jul 2020 00:23:28 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:12214 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725770AbgGOEX0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jul 2020 00:19:23 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f0e83be0000>; Tue, 14 Jul 2020 21:19:10 -0700
+        Wed, 15 Jul 2020 00:23:26 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f0e84840000>; Tue, 14 Jul 2020 21:22:28 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 14 Jul 2020 21:19:23 -0700
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 14 Jul 2020 21:23:26 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 14 Jul 2020 21:19:23 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 15 Jul
- 2020 04:19:22 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 15 Jul 2020 04:19:22 +0000
+        by hqpgpgate102.nvidia.com on Tue, 14 Jul 2020 21:23:26 -0700
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 15 Jul
+ 2020 04:23:25 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 15 Jul 2020 04:23:25 +0000
 Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.160.169]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f0e83c90003>; Tue, 14 Jul 2020 21:19:22 -0700
+        id <B5f0e84bc0003>; Tue, 14 Jul 2020 21:23:25 -0700
 From:   Sowjanya Komatineni <skomatineni@nvidia.com>
 To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
         <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
-        <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
-        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-Subject: [RFC PATCH v3 01/18] dt-bindings: i2c: tegra: Document Tegra210 VI I2C clocks and power-domains
-Date:   Tue, 14 Jul 2020 21:20:38 -0700
-Message-ID: <1594786855-26506-2-git-send-email-skomatineni@nvidia.com>
+        <luca@lucaceresoli.net>, <leonl@leopardimaging.com>,
+        <robh+dt@kernel.org>, <lgirdwood@gmail.com>, <broonie@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 2/3] dt-bindings: media: imx274: Add optional xclk and supplies
+Date:   Tue, 14 Jul 2020 21:24:55 -0700
+Message-ID: <1594787096-26685-2-git-send-email-skomatineni@nvidia.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1594786855-26506-1-git-send-email-skomatineni@nvidia.com>
-References: <1594786855-26506-1-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <1594787096-26685-1-git-send-email-skomatineni@nvidia.com>
+References: <1594787096-26685-1-git-send-email-skomatineni@nvidia.com>
 X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1594786750; bh=M4O0xvH9jkOkIfyCWsWjZaEplFLrJZlC+QemXhCNkTI=;
+        t=1594786948; bh=gNw4k90OTE+VvIylcKV7xe1muDw1PPjdaD+rSYJHkSk=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:X-NVConfidentiality:MIME-Version:
          Content-Type;
-        b=Q4sNDhf7qMcqUTgPnN0JSwr1ga81wkG28Btq//uewCuxbpPCfCTpeZ0ylf4jHgazr
-         F4uaS1/2O1Sda8TS/+HpVw+SnYsth8tsPUwe+f/bcWJvYnGPHcitFhHCb9ggAuWrDL
-         aUsVbO5kH6zqAO9CS36SLldto9VpyOuGFRFBQiosdunr65Bo1nTllPjpGytFrRmaeX
-         7lfbmz32Xe5+QYVs2WFAYWNBdHPzm5Pt07aF0LY9Fx+yr8aUUX6LNq9KvGd04/RhJg
-         AUfUKLgBiLFYp93sBRU3nde3fAvNYgwiiobctzmI5rZqwxHJ7ZqYk4jhHWI6txGH/b
-         4U5b2duBBKfhA==
+        b=ktReT8M/m/qQbNnGK2NvTQn2mTM4+l+EyVfDq1luzIM/t8wJiTBt7n5OPD0nmkDWY
+         cFZe0eBSxF1Q57aAdAIaOoH2MvoF0xSt/tZilgCUY53uv30ij0NG4+Q876VXXtjh4Q
+         MSZslh4W5iA0e3TygUl1l4R4dcGgY0JpDULps+9tRlDHRJkNh0+Gs3/7V2xRpcNb86
+         AxV4Ruqkc8gyROxtNCooc+3ZznjjuF7V5Hr6RR5PkgocOVWjFHkPMHbgdQfaPOxXut
+         /8RY29wTIW0+27avwQPxtcJ6TJOuU45cb5JQg27toSu1XlFCY+qf5fFN4mes29Pgj7
+         nwEwhcku3yAiQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch documents missing clocks and power-domains of Tegra210 VI I2C.
+This patch adds IMX274 optional external clock input and voltage
+supplies to device tree bindings.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 ---
- .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt    | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ Documentation/devicetree/bindings/media/i2c/imx274.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.txt b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.txt
-index 18c0de3..3f2f990 100644
---- a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.txt
-+++ b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.txt
-@@ -35,12 +35,12 @@ Required properties:
- 	Due to above changes, Tegra114 I2C driver makes incompatible with
- 	previous hardware driver. Hence, tegra114 I2C controller is compatible
- 	with "nvidia,tegra114-i2c".
--  nvidia,tegra210-i2c-vi: Tegra210 has one I2C controller that is part of the
--	host1x domain and typically used for camera use-cases. This VI I2C
--	controller is mostly compatible with the programming model of the
--	regular I2C controllers with a few exceptions. The I2C registers start
--	at an offset of 0xc00 (instead of 0), registers are 16 bytes apart
--	(rather than 4) and the controller does not support slave mode.
-+  nvidia,tegra210-i2c-vi: Tegra210 has one I2C controller that is on host1x bus
-+	and is part of VE power domain and typically used for camera use-cases.
-+	This VI I2C controller is mostly compatible with the programming model
-+	of the regular I2C controllers with a few exceptions. The I2C registers
-+	start at an offset of 0xc00 (instead of 0), registers are 16 bytes
-+	apart (rather than 4) and the controller does not support slave mode.
- - reg: Should contain I2C controller registers physical address and length.
- - interrupts: Should contain I2C controller interrupts.
- - address-cells: Address cells for I2C device address.
-@@ -53,10 +53,17 @@ Required properties:
-   - fast-clk
-   Tegra114:
-   - div-clk
-+  Tegra210:
-+  - div-clk
-+  - slow (only for nvidia,tegra210-i2c-vi compatible node)
- - resets: Must contain an entry for each entry in reset-names.
-   See ../reset/reset.txt for details.
- - reset-names: Must include the following entries:
-   - i2c
-+- power-domains: Only for nvidia,tegra210-i2c-vi compatible node and must
-+  include venc powergate node as vi i2c is part of VE power domain.
-+  tegra210-i2c-vi:
-+  - pd_venc
- - dmas: Must contain an entry for each entry in clock-names.
-   See ../dma/dma.txt for details.
- - dma-names: Must include the following entries:
+diff --git a/Documentation/devicetree/bindings/media/i2c/imx274.txt b/Documentation/devicetree/bindings/media/i2c/imx274.txt
+index 80f2e89..ee427f5 100644
+--- a/Documentation/devicetree/bindings/media/i2c/imx274.txt
++++ b/Documentation/devicetree/bindings/media/i2c/imx274.txt
+@@ -13,6 +13,11 @@ Required Properties:
+ 
+ Optional Properties:
+ - reset-gpios: Sensor reset GPIO
++- clocks: Reference to the xclk clock.
++- clock-names: Should be "xclk".
++- VANA-supply: Sensor 2.8v analog supply.
++- VDIG-supply: Sensor 1.8v digital core supply.
++- VDDL-supply: Sensor digital IO 1.2v supply.
+ 
+ The imx274 device node should contain one 'port' child node with
+ an 'endpoint' subnode. For further reading on port node refer to
 -- 
 2.7.4
 
