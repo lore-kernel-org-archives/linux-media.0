@@ -7,38 +7,41 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50CA8C433E1
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:26:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32B8EC433E3
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:27:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2DA2D20657
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:26:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0888F20771
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:27:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="XqV+Y9fF"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="RHmSut8p"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729154AbgGOK04 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jul 2020 06:26:56 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:53418 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728132AbgGOK04 (ORCPT
+        id S1731116AbgGOK1C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jul 2020 06:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728132AbgGOK1A (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jul 2020 06:26:56 -0400
+        Wed, 15 Jul 2020 06:27:00 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F41C061755
+        for <linux-media@vger.kernel.org>; Wed, 15 Jul 2020 03:27:00 -0700 (PDT)
 Received: from pyrite.rasen.tech (unknown [IPv6:2400:4051:61:600:2c71:1b79:d06d:5032])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8584D595;
-        Wed, 15 Jul 2020 12:26:52 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6F454E06;
+        Wed, 15 Jul 2020 12:26:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1594808814;
-        bh=qtNY5VitZDMUUhrhbQmXzCTqX4RQXjpfC6pVBlwAu6Q=;
+        s=mail; t=1594808819;
+        bh=akm130KVecOIp6kBJe7Wog8H9i50UiQ6euxHTasVoRI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XqV+Y9fFpidU1N/cjKIvQ7WXS7mP3fLKgskFDGQt46Fv9v9GqQJ7VDnGO2hq8rVmj
-         BTDHFv4WWlwAYpKs/oTJXF4HhZbFJ+ZMPtTesKzEjDThW7ofQJPeyB+pTb0NQlFZ1h
-         p4/qP9owaOAnOMYRtZI528pQp7ojdwcaW4kXfjzM=
+        b=RHmSut8pJ3pPD6Z+MqaO9VqzN4Tmu8TweTHyUfE5fGwiXovELLKKCA2cBrHIonBFy
+         9a9laEwPE0oaATqPVma7d0KJ+9YxX2YF0p54gdGlR1uiWjtKIal3Uz0MX0qnJYwCb/
+         D+bTVj8be2PtBBhJHBg5c3hSAF2kcMsVxmWJ+ySA=
 From:   Paul Elder <paul.elder@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Paul Elder <paul.elder@ideasonboard.com>,
         laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
-Subject: [PATCH v5 2/5] v4l2-ctl: Add version command
-Date:   Wed, 15 Jul 2020 19:26:37 +0900
-Message-Id: <20200715102640.17554-2-paul.elder@ideasonboard.com>
+Subject: [PATCH v5 4/5] cec-ctl: Add version command
+Date:   Wed, 15 Jul 2020 19:26:39 +0900
+Message-Id: <20200715102640.17554-4-paul.elder@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200715102640.17554-1-paul.elder@ideasonboard.com>
 References: <20200715102640.17554-1-paul.elder@ideasonboard.com>
@@ -49,10 +52,9 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a --version option to v4l2-ctl to retrieve the version of v4l2-ctl.
+Add a --version option to cec-ctl to retrieve the version of cec-ctl.
 
 Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 ---
 Changes in v5:
@@ -64,100 +66,92 @@ Changes in v4:
 Changes in v3:
 - embed PACKAGE_VERSION instead of string concatenation
 ---
- utils/v4l2-ctl/Makefile.am         |  2 +-
- utils/v4l2-ctl/v4l2-ctl-common.cpp |  1 +
- utils/v4l2-ctl/v4l2-ctl.1.in       |  3 +++
- utils/v4l2-ctl/v4l2-ctl.cpp        | 11 +++++++++++
- utils/v4l2-ctl/v4l2-ctl.h          |  1 +
- 5 files changed, 17 insertions(+), 1 deletion(-)
+ utils/cec-ctl/Makefile.am  |  2 +-
+ utils/cec-ctl/cec-ctl.1.in |  3 +++
+ utils/cec-ctl/cec-ctl.cpp  | 15 +++++++++++++++
+ 3 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/utils/v4l2-ctl/Makefile.am b/utils/v4l2-ctl/Makefile.am
-index 3ba3c96b..04d30894 100644
---- a/utils/v4l2-ctl/Makefile.am
-+++ b/utils/v4l2-ctl/Makefile.am
-@@ -14,7 +14,7 @@ v4l2_ctl_SOURCES = v4l2-ctl.cpp v4l2-ctl.h v4l2-ctl-common.cpp v4l2-ctl-tuner.cp
- 	v4l2-ctl-streaming.cpp v4l2-ctl-sdr.cpp v4l2-ctl-edid.cpp v4l2-ctl-modes.cpp \
- 	v4l2-ctl-subdev.cpp v4l2-tpg-colors.c v4l2-tpg-core.c v4l-stream.c v4l2-ctl-meta.cpp \
- 	media-info.cpp v4l2-info.cpp codec-fwht.c codec-v4l2-fwht.c
--v4l2_ctl_CPPFLAGS = -I$(top_srcdir)/utils/common
-+v4l2_ctl_CPPFLAGS = -I$(top_srcdir)/utils/common $(GIT_COMMIT_CNT)
+diff --git a/utils/cec-ctl/Makefile.am b/utils/cec-ctl/Makefile.am
+index 24341ed7..278fcc47 100644
+--- a/utils/cec-ctl/Makefile.am
++++ b/utils/cec-ctl/Makefile.am
+@@ -2,7 +2,7 @@ bin_PROGRAMS = cec-ctl
+ man_MANS = cec-ctl.1
  
- media-bus-format-names.h: $(top_srcdir)/include/linux/media-bus-format.h
- 	sed -e '/#define MEDIA_BUS_FMT/ ! d; s/.*FMT_//; /FIXED/ d; s/\t.*//; s/.*/{ \"&\", MEDIA_BUS_FMT_& },/;' \
-diff --git a/utils/v4l2-ctl/v4l2-ctl-common.cpp b/utils/v4l2-ctl/v4l2-ctl-common.cpp
-index 47f5da1a..9b785cbf 100644
---- a/utils/v4l2-ctl/v4l2-ctl-common.cpp
-+++ b/utils/v4l2-ctl/v4l2-ctl-common.cpp
-@@ -121,6 +121,7 @@ void common_usage()
- 	       "  --silent           only set the result code, do not print any messages\n"
- 	       "  --sleep <secs>     sleep <secs>, call QUERYCAP and close the file handle\n"
- 	       "  --verbose          turn on verbose ioctl status reporting\n"
-+	       "  --version          show version information\n"
- 	       );
- }
+ cec_ctl_SOURCES = cec-ctl.cpp cec-pin.cpp cec-ctl.h
+-cec_ctl_CPPFLAGS = -I$(top_srcdir)/utils/libcecutil
++cec_ctl_CPPFLAGS = -I$(top_srcdir)/utils/libcecutil $(GIT_COMMIT_CNT)
+ cec_ctl_LDADD = -lrt ../libcecutil/libcecutil.la
  
-diff --git a/utils/v4l2-ctl/v4l2-ctl.1.in b/utils/v4l2-ctl/v4l2-ctl.1.in
-index e9fff788..b8cbe6d2 100644
---- a/utils/v4l2-ctl/v4l2-ctl.1.in
-+++ b/utils/v4l2-ctl/v4l2-ctl.1.in
-@@ -21,6 +21,9 @@ with the bus info string as specified by the \fB-z\fR option.
+ EXTRA_DIST = cec-ctl.1
+diff --git a/utils/cec-ctl/cec-ctl.1.in b/utils/cec-ctl/cec-ctl.1.in
+index f767b479..fac3a92e 100644
+--- a/utils/cec-ctl/cec-ctl.1.in
++++ b/utils/cec-ctl/cec-ctl.1.in
+@@ -52,6 +52,9 @@ having to rely on the device node number.
  \fB\-v\fR, \fB\-\-verbose\fR
  Turn on verbose reporting.
  .TP
 +\fB\-\-version\fR
 +Show version information.
 +.TP
- \fB\-w\fR, \fB\-\-wrapper\fR
- Use the libv4l2 wrapper library for all V4L2 device accesses. By default v4l2-ctl will
- directly access the V4L2 device, but with this option all access will go via this
-diff --git a/utils/v4l2-ctl/v4l2-ctl.cpp b/utils/v4l2-ctl/v4l2-ctl.cpp
-index 4972591e..321d2d1c 100644
---- a/utils/v4l2-ctl/v4l2-ctl.cpp
-+++ b/utils/v4l2-ctl/v4l2-ctl.cpp
-@@ -284,6 +284,7 @@ static struct option long_options[] = {
- 	{"stream-out-user", optional_argument, 0, OptStreamOutUser},
- 	{"stream-out-dmabuf", no_argument, 0, OptStreamOutDmaBuf},
- 	{"list-patterns", no_argument, 0, OptListPatterns},
-+	{"version", no_argument, 0, OptVersion},
- 	{0, 0, 0, 0}
+ \fB\-w\fR, \fB\-\-wall\-clock\fR
+ Show timestamps as wall-clock time. This also turns on verbose reporting. 
+ .TP
+diff --git a/utils/cec-ctl/cec-ctl.cpp b/utils/cec-ctl/cec-ctl.cpp
+index 455cdaeb..47867f87 100644
+--- a/utils/cec-ctl/cec-ctl.cpp
++++ b/utils/cec-ctl/cec-ctl.cpp
+@@ -133,6 +133,7 @@ enum Option {
+ 	OptVendorCommandWithID,
+ 	OptVendorRemoteButtonDown,
+ 	OptCustomCommand,
++	OptVersion,
  };
  
-@@ -306,6 +307,13 @@ static void usage_all()
-        edid_usage();
- }
+ struct node {
+@@ -218,6 +219,8 @@ static struct option long_options[] = {
+ 	{ "unregistered", no_argument, 0, OptUnregistered },
+ 	{ "help-all", no_argument, 0, OptHelpAll },
+ 
++	{ "version", no_argument, 0, OptVersion },
++
+ 	CEC_PARSE_LONG_OPTS
+ 
+ 	{ "vendor-remote-button-down", required_argument, 0, OptVendorRemoteButtonDown }, \
+@@ -231,6 +234,13 @@ static struct option long_options[] = {
+ 	{ 0, 0, 0, 0 }
+ };
  
 +static void print_version()
 +{
 +#define STR(x) #x
 +#define STRING(x) STR(x)
-+	printf("v4l2-ctl %s%s\n", PACKAGE_VERSION, STRING(GIT_COMMIT_CNT));
++	printf("cec-ctl %s%s\n", PACKAGE_VERSION, STRING(GIT_COMMIT_CNT));
 +}
 +
- int test_ioctl(int fd, unsigned long cmd, void *arg)
+ static void usage()
  {
- 	return options[OptUseWrapper] ? v4l2_ioctl(fd, cmd, arg) : ioctl(fd, cmd, arg);
-@@ -1245,6 +1253,9 @@ int main(int argc, char **argv)
- 		case OptSleep:
- 			secs = strtoul(optarg, 0L, 0);
+ 	printf("Usage:\n"
+@@ -262,6 +272,7 @@ static void usage()
+ 	       "  --help-all               Show all help messages\n"
+ 	       "  -T, --trace              Trace all called ioctls\n"
+ 	       "  -v, --verbose            Turn on verbose reporting\n"
++	       "  --version                Show version information\n"
+ 	       "  -w, --wall-clock         Show timestamps as wall-clock time (implies -v)\n"
+ 	       "  -W, --wait-for-msgs      Wait for messages and events for up to --monitor-time secs.\n"
+ 	       "  --cec-version-1.4        Use CEC Version 1.4 instead of 2.0\n"
+@@ -2296,6 +2307,10 @@ int main(int argc, char **argv)
  			break;
+ 		}
+ 
 +		case OptVersion:
 +			print_version();
-+			return 0;
- 		case ':':
- 			fprintf(stderr, "Option '%s' requires a value\n",
- 					argv[optind]);
-diff --git a/utils/v4l2-ctl/v4l2-ctl.h b/utils/v4l2-ctl/v4l2-ctl.h
-index 28e50471..27a3ca35 100644
---- a/utils/v4l2-ctl/v4l2-ctl.h
-+++ b/utils/v4l2-ctl/v4l2-ctl.h
-@@ -263,6 +263,7 @@ enum Option {
- 	OptHelpStreaming,
- 	OptHelpEdid,
- 	OptHelpAll,
-+	OptVersion,
- 	OptLast = 512
- };
- 
++			std::exit(EXIT_SUCCESS);
++
+ 		default:
+ 			if (ch >= OptHelpAll) {
+ 				cec_parse_usage_options(options);
 -- 
 2.27.0
 
