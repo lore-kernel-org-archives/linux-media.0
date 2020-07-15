@@ -2,136 +2,162 @@ Return-Path: <SRS0=i11G=A2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9077DC433E1
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:07:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50CA8C433E1
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:26:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D375206D5
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:07:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DA2D20657
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jul 2020 10:26:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="XqV+Y9fF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730947AbgGOKHw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jul 2020 06:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728044AbgGOKHv (ORCPT
+        id S1729154AbgGOK04 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jul 2020 06:26:56 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:53418 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728132AbgGOK04 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jul 2020 06:07:51 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D3AC061755
-        for <linux-media@vger.kernel.org>; Wed, 15 Jul 2020 03:07:51 -0700 (PDT)
-Received: from [IPv6:2804:14c:483:73a8::1001] (unknown [IPv6:2804:14c:483:73a8::1001])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: koike)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 8A0272A0A6B;
-        Wed, 15 Jul 2020 11:07:47 +0100 (BST)
-Subject: Re: [PATCH 1/4] media: staging: rkisp1: cap: don't set next buffer
- from rkisp1_vb2_buf_queue
-From:   Helen Koike <helen.koike@collabora.com>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
-Cc:     ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        tfiga@chromium.org
-References: <20200714123832.28011-1-dafna.hirschfeld@collabora.com>
- <20200714123832.28011-2-dafna.hirschfeld@collabora.com>
- <c4dd300d-4dab-8c5a-e2c3-2d0ba042dc8d@collabora.com>
- <5b31b7cb-0eb4-5623-9527-b55952a939a2@collabora.com>
-Message-ID: <4a715814-2971-e9fd-3cb2-3646e6c14b19@collabora.com>
-Date:   Wed, 15 Jul 2020 07:07:42 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 15 Jul 2020 06:26:56 -0400
+Received: from pyrite.rasen.tech (unknown [IPv6:2400:4051:61:600:2c71:1b79:d06d:5032])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8584D595;
+        Wed, 15 Jul 2020 12:26:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1594808814;
+        bh=qtNY5VitZDMUUhrhbQmXzCTqX4RQXjpfC6pVBlwAu6Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XqV+Y9fFpidU1N/cjKIvQ7WXS7mP3fLKgskFDGQt46Fv9v9GqQJ7VDnGO2hq8rVmj
+         BTDHFv4WWlwAYpKs/oTJXF4HhZbFJ+ZMPtTesKzEjDThW7ofQJPeyB+pTb0NQlFZ1h
+         p4/qP9owaOAnOMYRtZI528pQp7ojdwcaW4kXfjzM=
+From:   Paul Elder <paul.elder@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Paul Elder <paul.elder@ideasonboard.com>,
+        laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
+Subject: [PATCH v5 2/5] v4l2-ctl: Add version command
+Date:   Wed, 15 Jul 2020 19:26:37 +0900
+Message-Id: <20200715102640.17554-2-paul.elder@ideasonboard.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200715102640.17554-1-paul.elder@ideasonboard.com>
+References: <20200715102640.17554-1-paul.elder@ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <5b31b7cb-0eb4-5623-9527-b55952a939a2@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Add a --version option to v4l2-ctl to retrieve the version of v4l2-ctl.
 
+Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-On 7/14/20 12:11 PM, Helen Koike wrote:
-> 
-> 
-> On 7/14/20 9:48 AM, Helen Koike wrote:
->> Hi Dafna,
->>
->> On 7/14/20 9:38 AM, Dafna Hirschfeld wrote:
->>> The function 'rkisp1_vb2_buf_queue' sets the next buffer directly
->>> in case the capture is already streaming but no frame yet arrived
->>> from the sensor. This is an optimization that tries to avoid
->>> dropping a frame.
->>> The call atomic_read(&cap->rkisp1->isp.frame_sequence) is used
->>> to check if a frame arrived. Reading the 'frame_sequence' should
->>> be avoided outside irq handlers to avoid race conditions.
->>>
->>> This patch removes this optimization. Dropping of the first
->>> frames can be avoided if userspace queues the buffers before
->>> start streaming. If userspace starts queueing buffers
->>> only after calling 'streamon' he risks frame drops anyway.
->>>
->>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
->>> ---
->>>  drivers/staging/media/rkisp1/rkisp1-capture.c | 13 +------------
->>>  1 file changed, 1 insertion(+), 12 deletions(-)
->>>
->>> diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
->>> index 793ec884c894..572b0949c81f 100644
->>> --- a/drivers/staging/media/rkisp1/rkisp1-capture.c
->>> +++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
->>> @@ -743,18 +743,7 @@ static void rkisp1_vb2_buf_queue(struct vb2_buffer *vb)
->>>  		     ispbuf->buff_addr[RKISP1_PLANE_CB]);
->>>  
->>>  	spin_lock_irqsave(&cap->buf.lock, flags);
->>> -
->>> -	/*
->>> -	 * If there's no next buffer assigned, queue this buffer directly
->>> -	 * as the next buffer, and update the memory interface.
->>> -	 */
->>> -	if (cap->is_streaming && !cap->buf.next &&
->>> -	    atomic_read(&cap->rkisp1->isp.frame_sequence) == -1) {
->>> -		cap->buf.next = ispbuf;
->>> -		rkisp1_set_next_buf(cap);
->>
->> Doesn't this mean we'll always drop the first frame? Since the first user buffer will only be configured to
->> the hardware after receiving the first frame? So the first frame will always go to the dummy buffer, no?
-> 
-> I see this is actually solved in the last patch of this series.
-> 
-> Maybe this can be re-order, so this patch is after 4/4.
-> 
-> With or without this re-ordering:
+---
+Changes in v5:
+- update manpage
 
-As discussed throught chat, this is not an issue, since we have a minimum amount of buffers that need
-to be queued before starting the stream, so we'll never have frame_sequence == -1 (which represents the first frame)
-with an empty queue, so no patch re-ordering is needed.
+Changes in v4:
+- add git commit count to version
 
-Regards,
-Helen
+Changes in v3:
+- embed PACKAGE_VERSION instead of string concatenation
+---
+ utils/v4l2-ctl/Makefile.am         |  2 +-
+ utils/v4l2-ctl/v4l2-ctl-common.cpp |  1 +
+ utils/v4l2-ctl/v4l2-ctl.1.in       |  3 +++
+ utils/v4l2-ctl/v4l2-ctl.cpp        | 11 +++++++++++
+ utils/v4l2-ctl/v4l2-ctl.h          |  1 +
+ 5 files changed, 17 insertions(+), 1 deletion(-)
 
-> 
-> Acked-by: Helen Koike <helen.koike@collabora.com>
-> 
-> Thanks
-> Helen
-> 
->>
->> Thanks
->> Helen
->>
->>> -	} else {
->>> -		list_add_tail(&ispbuf->queue, &cap->buf.queue);
->>> -	}
->>> +	list_add_tail(&ispbuf->queue, &cap->buf.queue);
->>>  	spin_unlock_irqrestore(&cap->buf.lock, flags);
->>>  }
->>>  
->>>
+diff --git a/utils/v4l2-ctl/Makefile.am b/utils/v4l2-ctl/Makefile.am
+index 3ba3c96b..04d30894 100644
+--- a/utils/v4l2-ctl/Makefile.am
++++ b/utils/v4l2-ctl/Makefile.am
+@@ -14,7 +14,7 @@ v4l2_ctl_SOURCES = v4l2-ctl.cpp v4l2-ctl.h v4l2-ctl-common.cpp v4l2-ctl-tuner.cp
+ 	v4l2-ctl-streaming.cpp v4l2-ctl-sdr.cpp v4l2-ctl-edid.cpp v4l2-ctl-modes.cpp \
+ 	v4l2-ctl-subdev.cpp v4l2-tpg-colors.c v4l2-tpg-core.c v4l-stream.c v4l2-ctl-meta.cpp \
+ 	media-info.cpp v4l2-info.cpp codec-fwht.c codec-v4l2-fwht.c
+-v4l2_ctl_CPPFLAGS = -I$(top_srcdir)/utils/common
++v4l2_ctl_CPPFLAGS = -I$(top_srcdir)/utils/common $(GIT_COMMIT_CNT)
+ 
+ media-bus-format-names.h: $(top_srcdir)/include/linux/media-bus-format.h
+ 	sed -e '/#define MEDIA_BUS_FMT/ ! d; s/.*FMT_//; /FIXED/ d; s/\t.*//; s/.*/{ \"&\", MEDIA_BUS_FMT_& },/;' \
+diff --git a/utils/v4l2-ctl/v4l2-ctl-common.cpp b/utils/v4l2-ctl/v4l2-ctl-common.cpp
+index 47f5da1a..9b785cbf 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-common.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-common.cpp
+@@ -121,6 +121,7 @@ void common_usage()
+ 	       "  --silent           only set the result code, do not print any messages\n"
+ 	       "  --sleep <secs>     sleep <secs>, call QUERYCAP and close the file handle\n"
+ 	       "  --verbose          turn on verbose ioctl status reporting\n"
++	       "  --version          show version information\n"
+ 	       );
+ }
+ 
+diff --git a/utils/v4l2-ctl/v4l2-ctl.1.in b/utils/v4l2-ctl/v4l2-ctl.1.in
+index e9fff788..b8cbe6d2 100644
+--- a/utils/v4l2-ctl/v4l2-ctl.1.in
++++ b/utils/v4l2-ctl/v4l2-ctl.1.in
+@@ -21,6 +21,9 @@ with the bus info string as specified by the \fB-z\fR option.
+ \fB\-v\fR, \fB\-\-verbose\fR
+ Turn on verbose reporting.
+ .TP
++\fB\-\-version\fR
++Show version information.
++.TP
+ \fB\-w\fR, \fB\-\-wrapper\fR
+ Use the libv4l2 wrapper library for all V4L2 device accesses. By default v4l2-ctl will
+ directly access the V4L2 device, but with this option all access will go via this
+diff --git a/utils/v4l2-ctl/v4l2-ctl.cpp b/utils/v4l2-ctl/v4l2-ctl.cpp
+index 4972591e..321d2d1c 100644
+--- a/utils/v4l2-ctl/v4l2-ctl.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl.cpp
+@@ -284,6 +284,7 @@ static struct option long_options[] = {
+ 	{"stream-out-user", optional_argument, 0, OptStreamOutUser},
+ 	{"stream-out-dmabuf", no_argument, 0, OptStreamOutDmaBuf},
+ 	{"list-patterns", no_argument, 0, OptListPatterns},
++	{"version", no_argument, 0, OptVersion},
+ 	{0, 0, 0, 0}
+ };
+ 
+@@ -306,6 +307,13 @@ static void usage_all()
+        edid_usage();
+ }
+ 
++static void print_version()
++{
++#define STR(x) #x
++#define STRING(x) STR(x)
++	printf("v4l2-ctl %s%s\n", PACKAGE_VERSION, STRING(GIT_COMMIT_CNT));
++}
++
+ int test_ioctl(int fd, unsigned long cmd, void *arg)
+ {
+ 	return options[OptUseWrapper] ? v4l2_ioctl(fd, cmd, arg) : ioctl(fd, cmd, arg);
+@@ -1245,6 +1253,9 @@ int main(int argc, char **argv)
+ 		case OptSleep:
+ 			secs = strtoul(optarg, 0L, 0);
+ 			break;
++		case OptVersion:
++			print_version();
++			return 0;
+ 		case ':':
+ 			fprintf(stderr, "Option '%s' requires a value\n",
+ 					argv[optind]);
+diff --git a/utils/v4l2-ctl/v4l2-ctl.h b/utils/v4l2-ctl/v4l2-ctl.h
+index 28e50471..27a3ca35 100644
+--- a/utils/v4l2-ctl/v4l2-ctl.h
++++ b/utils/v4l2-ctl/v4l2-ctl.h
+@@ -263,6 +263,7 @@ enum Option {
+ 	OptHelpStreaming,
+ 	OptHelpEdid,
+ 	OptHelpAll,
++	OptVersion,
+ 	OptLast = 512
+ };
+ 
+-- 
+2.27.0
+
