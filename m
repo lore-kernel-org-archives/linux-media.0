@@ -8,172 +8,207 @@ X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45715C433E1
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jul 2020 09:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A788C433E0
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jul 2020 09:48:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 18C7420656
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jul 2020 09:18:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69ECE2071B
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jul 2020 09:48:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="PbvJ+XFj"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="MO+S1UOi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726250AbgGPJSi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jul 2020 05:18:38 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:33413 "EHLO
+        id S1726105AbgGPJs3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jul 2020 05:48:29 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:37243 "EHLO
         lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725975AbgGPJSh (ORCPT
+        by vger.kernel.org with ESMTP id S1726027AbgGPJs2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jul 2020 05:18:37 -0400
+        Thu, 16 Jul 2020 05:48:28 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id w029jTsWQyPEdw02Cj3UJP; Thu, 16 Jul 2020 11:18:34 +0200
+        id w0V1jTyLYyPEdw0V5j3Xtd; Thu, 16 Jul 2020 11:48:25 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1594891114; bh=f/+PE7uvrvBzCd2FPEuT+QH4AP75SFLYd1nHj76lynk=;
+        t=1594892905; bh=1fMFslxsXMYCfM1QqAPBZ2zIGMTnPrRHGBdLv7aDVek=;
         h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=PbvJ+XFjvF1KvH6ZZzC+U+/QlA//bMgYtDW69hnQBn2moJdphDRqsOAfLrZ3F4GWh
-         VJFisXwQTfasyAu08noeM7lnr65T+8MTOh19bUY1vuuY5ba7NdHedQ66yB7ugZCkAW
-         z5hlpq9h8yUSoHO1qBmjPvBoxGNjy9E1KeN2Rxhau9wYnzpctunJRD1SxE94tGWcPq
-         3l6tojUqd31jYC3QdU96U5xVjCb3C+Y3Ei5wH3r4towP+AqDG0HX62jN8AQWdLqlb7
-         B73zlS5ut8vstMNGQjeP3eV+gtNUES3r/kcjh+bYaQ5fAYGdgUxuerF1TkeK+5jPYn
-         2b02xF/K0ZFow==
-Subject: Re: [PATCH] media: rcar-vin: Move media_device_register to async
- completion
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     Michael Rodin <mrodin@de.adit-jv.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, michael@rodin.online,
-        efriedrich@de.adit-jv.com, erosca@de.adit-jv.com,
-        Steve Longerbeam <steve_longerbeam@mentor.com>
-References: <1592328696-84533-1-git-send-email-mrodin@de.adit-jv.com>
- <20200617105646.GB2850317@oden.dyn.berto.se>
- <20200617151537.GB88066@vmlxhi-121.adit-jv.com>
- <20200617152857.GA2936315@oden.dyn.berto.se>
- <427325ff-e21f-91fd-6236-6d1f6615ca41@xs4all.nl>
- <20200624145423.GA1595450@oden.dyn.berto.se>
+        b=MO+S1UOigiiA8YhWgWWvwe93YUKY3jOhNjKCDtnHtNlcZDaksOWhpJ2HeeWKePOe8
+         +piaxUMnSS1Ttb+aGNZ2lelkWYcFxGFWsVQudXX4x4pj6anAe1NlqidCO2bepvN/Yi
+         lpOoOPCaS1F6GJGZnu+3OGNsFaqz9LkZ+JNQAPJCT4eAc51osohawXXu712uMh9Dq4
+         qQdYBHbJR7gKl+AgWqG7zQ38lHHQozuYNgb7+zxycDjA3aqz4SBVsdayAYDrnWnh61
+         ZBMxEvh319+jzO//KS0X/e0GP518VDoK8u64MZojOjAECkbpQEwpQjZqiYdPAVMMLi
+         Og1xNNFKnNRdQ==
+Subject: Re: [PATCH] imx219: selection compliance fixes
+To:     Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
+        libcamera-devel@lists.libcamera.org
+References: <b580ac9d-5ae4-29ce-c81a-a1f98b1d953b@xs4all.nl>
+ <20200714123146.5xhmslath7vqqfds@uno.localdomain>
+ <20200714234938.GP5854@pendragon.ideasonboard.com>
+ <20200715071954.uk4mhur6use6nson@uno.localdomain>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <e0e38519-bdce-9865-5420-904b41d7531a@xs4all.nl>
-Date:   Thu, 16 Jul 2020 11:18:29 +0200
+Message-ID: <5adade02-c863-1473-8c71-65f49be5e5b3@xs4all.nl>
+Date:   Thu, 16 Jul 2020 11:48:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200624145423.GA1595450@oden.dyn.berto.se>
+In-Reply-To: <20200715071954.uk4mhur6use6nson@uno.localdomain>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfDSaJlPsuSMSTwTorgKYR0W35aKiTdv4DKlrl+ksbHsnqE9fX1Ij0R9AhgdDMB4Vjra4Qk7/xGL6hgtDYqGOMWISFd9qJmIgGymDTmCZmIum4gZ2rZk6
- kS5KjL39hGpsvDt8/g4egIylrAcPJYHtay8j81i8HXzZ1Pf1xOMVAWouMH12Y3DWJhS8mS4AWkaR3Pu5ZpQOQNvxJy67TzOjbCu/s21bRaf9ToRapemDipDk
- IZKd17T2RoM9wvOdhQ4QwU8Hplz4ayfInh6eG9PtlxBDwQRYvIsjTib3v7L+IA+KaPe8ydQRMoUwwakyLZm0dw+ltihkE/GblwHbs8rMnJIch17U4kHrXlVD
- ePwBMcLq/2JgMMsQtwyVQUI8dUCl1rnvg7rQn9sZ7tPyKKeOMTrMrNDyyFuWtIjGghAWymW+aOGryuBQ6QIGjXNAYjcUu6P8yPLMV2TyFQLM7rcPE2zJl8ha
- hVfGbIwxuGXCb+UFmJARMe07m6uN9oJGdCOCxmeBhQyePh7XMmXsmPjZTQw=
+X-CMAE-Envelope: MS4wfHSA4ELBwh3HYx90bASIYoH8PxqKXuhYKhyWwk2fDo8BTgjkTjgaKEZQR2cDqlqn/RifWJ30gPpnmYg287JvLGTg1fZ46GfaWmGLC7MVhyzQF2yM0jEy
+ NvMx56eLXqjpvCpfc9+l7f0KKTk2mdccBLfuxa2te8rzIoWGGnuO/wIl2f71EEld6asVDa5Pg6X9rRcAQQkYlexKiJ9xiHGxlaI66KApWKN9WQ071LPmXwvW
+ 4nO4vG2D7gwOBW7BY0kPy8PzsbMvx2AnoJQRadGRYkqs89NSecUX64VuuNz8QLpda5kDle/1i8a8pVdiSTzHnAXZ4DMflifMlCCO6G0ushCFOG0lxszbI1cG
+ d+b3MjAcWZytiE9VB/BUZ4bRC4fllra2d7iJaZxpYush/u2M2CApHrDF5qSBEyyfevwj1ykR
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 24/06/2020 16:54, Niklas Söderlund wrote:
-> Hi Hans,
+On 15/07/2020 09:19, Jacopo Mondi wrote:
+> Hi Laurent,
 > 
-> On 2020-06-24 15:31:01 +0200, Hans Verkuil wrote:
->> On 17/06/2020 17:28, Niklas Söderlund wrote:
->>> Hi Michael,
->>>
->>> On 2020-06-17 17:15:37 +0200, Michael Rodin wrote:
->>>> Hi Niklas and Steve,
->>>>
->>>> On Wed, Jun 17, 2020 at 12:56:46PM +0200, Niklas Söderlund wrote:
->>>>> Hi Michael and Steve,
->>>>>
->>>>> On 2020-06-16 19:31:36 +0200, Michael Rodin wrote:
->>>>>> From: Steve Longerbeam <steve_longerbeam@mentor.com>
->>>>>>
->>>>>> The media_device is registered during driver probe, before async
->>>>>> completion, so it is possible for .link_notify to be called before
->>>>>> all devices are bound.
->>>>>>
->>>>>> Fix this by moving media_device_register() to rvin_group_notify_complete().
->>>>>> This ensures that all devices are now bound (the rcar-csi2 subdevices and
->>>>>> and video capture devices) before .link_notify can be called.
->>>>>
->>>>> I'm curious to what situation created the need for this change. I'm 
->>>>> currently trying to take the VIN driver in the opposite direction [1] 
->>>>> with the end goal of registering video devices at probe time and then 
->>>>> allow the media graph to populate as devices becomes available.
->>>>
->>>> It looks like almost all platform drivers call media_device_register() in
->>>> the completion callback. From my understaning it is necessary to ensure
->>>> that all subdevices are bound and all links are created before the user
->>>> can enable any link (which would trigger link_notify callback execution)
->>>> and set formats. If I am not mistaken, Steve could observe an "OOPS" or
->>>> at least it is theoretically possible.
->>>
->>> If an OOPS have been observed I would be interested to see it. That way 
->>> we can fix the OOPS and keep the media graph registration where it is 
->>> today.
->>>
->>>>
->>>> Actually I found that this patch alone is not enough even if it is correct,
->>>> because we also have to register the media device in rvin_parallel_notify_complete()
->>>> in case if there is only a parallel video input device attached.
->>>>
->>>>> My reason for this is that we could have a functional pipeline inside 
->>>>> the graph even if it's not complete. This came out of the GMSL work done
->>>>> a while pack where I had a faulty camera that would prevent the other 7 
->>>>> in the system to function.
->>>>
->>>> I agree that if a probe of a faulty subdevice fails, this should not affect
->>>> functionality of the other attached subdevices. The "complete" callback of
->>>> the async notifier is probably not executed in this case, so I guess, we
->>>> would have to register the media device in the "bound" callback after the first
->>>> subdevice has been probed? Otherwise there is not much sense to have video
->>>> capture devices, which are not connected to any source.
->>>
->>> Calling it in the bound callback is mostly the same as it is today, as 
->>> link_notify could then be called when not all entities are in the graph.  
->>> In fact even if we where tp move the media device registration to the t
->>> complete callback we have this problem if any of the subdevices are 
->>> unbound. Then we are back to the state with a registerd media device 
->>> where not all entities are present.
->>>
->>> I think the solution here is to address the issue (if any) in the 
->>> link_notify callback when the graph is not fully populated.
+> On Wed, Jul 15, 2020 at 02:49:38AM +0300, Laurent Pinchart wrote:
+>> Hi Jacopo,
 >>
->> As I have mentioned in other threads in this mailinglist (e.g.
->> https://www.spinics.net/lists/linux-media/msg171067.html), this is part
->> of a bigger problem: what to do if only part of a graph comes up, or
->> a part disappears. Today this is not supported.
->>
->> It is certainly desirable to support this, but I want to see an RFC first
->> detailing the interaction with userspace. And remember that today the
->> expectation of applications is that device nodes are only created if all
->> components of the device probed successfully.
->>
->> My preference is that rcar-vin is first changed to conform to current
->> expectations (i.e. /dev/mediaX is only registered at async completion).
-> 
-> I do not object to first making rcar-vin behave in this way. However for 
-> that work to be truly useful it should also solve what happens with all 
-> video, subdevices and media devices in the scenario where one device of 
-> the graph is unbound after complete have been called and how they can 
-> reregisterd if the graph becomes complete again.
-> 
-> If I understand things correctly the idea is to register video and 
-> subdevices at the time complete is called. However I'm unsure what is 
-> suppose to happen when unbound is called, shall all video and subdevices 
-> of the graph then be unregistered? Currently this happens for video 
-> devices in rcar-vin but it has a huge drawback, if the device that was 
-> unbound is rebound and complete() is called a second time the kernel 
-> prints big warnings on newer kernels and crashes in older. This is due 
-> to the kref involved in the V4L2 core. Also I'm unaware of how one could 
-> unregister all subdevies if another subdev in the graph is removed.
-> 
-> Figuring this out would make me happy as it's been a pet problem of mine 
-> for many years. I also think making this work could help in the 
-> discussion on how we can build partial initialization on top.
+>> On Tue, Jul 14, 2020 at 02:31:46PM +0200, Jacopo Mondi wrote:
+>>> Hi Hans,
+>>>
+>>> On Thu, Jul 02, 2020 at 03:50:04PM +0200, Hans Verkuil wrote:
+>>>> The top/left crop coordinates were 0, 0 instead of 8, 8 in the
+>>>> supported_modes array. This was a mismatch with the default values,
+>>>> so this is corrected. Found with v4l2-compliance.
+>>>>
+>>>> Also add V4L2_SEL_TGT_CROP_BOUNDS support: CROP_DEFAULT and CROP_BOUNDS
+>>>> always go together. Found with v4l2-compliance.
+>>>
+>>> I actually introduced this with
+>>> e6d4ef7d58aa ("media: i2c: imx219: Implement get_selection")
+>>>
+>>>>
+>>>> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+>>>> ---
+>>>>  drivers/media/i2c/imx219.c | 17 +++++++++--------
+>>>>  1 file changed, 9 insertions(+), 8 deletions(-)
+>>>>
+>>>> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+>>>> index 0a546b8e466c..935e2a258ce5 100644
+>>>> --- a/drivers/media/i2c/imx219.c
+>>>> +++ b/drivers/media/i2c/imx219.c
+>>>> @@ -473,8 +473,8 @@ static const struct imx219_mode supported_modes[] = {
+>>>>  		.width = 3280,
+>>>>  		.height = 2464,
+>>>>  		.crop = {
+>>>> -			.left = 0,
+>>>> -			.top = 0,
+>>>> +			.left = 8,
+>>>> +			.top = 8,
+>>>
+>>> Mmmm, why this change ?
+>>> This values are used to report V4L2_SEL_TGT_CROP rectangle, which
+>>> according to the documentation is defined as
+>>> "Crop rectangle. Defines the cropped area."
+>>> (not a much extensive description :)
 
-What exactly are these warnings? I remember faintly seeing backtraces of
-this before, but it is so long ago. It would be good to see what happens with
-the latest kernel (i.e. media master branch).
+Unless changed by calling S_SELECTION(TGT_CROP) the initial crop is equal
+to TGT_CROP_DEFAULT, and but TGT_CROP and TGT_CROP_DEFAULT shall be inside
+TGT_CROP_BOUNDS. CROP_BOUNDS may be larger than CROP_DEFAULT and describes
+the whole area from which you can crop. I.e. in the case of sensors you can
+set the crop rectangle to include optical blanks active pixels.
+
+In this driver the initial TGT_CROP rectangle as specified in supported_modes
+(aligned with the top-left pixel) was outside CROP_BOUNDS (centered) and also
+a mismatch with CROP_DEFAULT (also centered).
+
+>>>
+>>> Clearly this is a faulty definition, and I know from experience how
+>>> hard is proving to define pixel array properties and in which extent
+>>> the documentation has to go:
+>>> https://lists.libcamera.org/pipermail/libcamera-devel/2020-June/009115.html
+>>>
+>>> My understanding is that target should report the current crop
+>>> rectangle, defined from the rectangle retrieved with the
+>>> V4L2_SEL_TGT_CROP_DEFAULT target, which, according documentation
+>>> reports the:
+>>> "Suggested cropping rectangle that covers the “whole picture”.
+>>> This includes only active pixels and excludes other non-active pixels such
+>>> as black pixels"
+>>>
+>>> The TGT_CROP_DEFAULT then reports the active pixel array portion, and
+>>> needs to be defined in respect to the TGT_NATIVE_SIZE, which reports
+>>> the dimensions of the whole pixel matrix, including non-active pixels,
+>>> optical blanks active and non-active pixels.
+
+The relationship between NATIVE_SIZE and CROP_BOUNDS is not properly defined,
+but I would expect that CROP_BOUNDS is inside the NATIVE_SIZE target rectangle.
+
+If NATIVE_SIZE is larger than BOUNDS, then I would expect that the additional
+margins are pixels that are invalid or otherwise useless.
+
+The hard rule though is that you can crop anywhere within the CROP_BOUNDS area.
+
+Historically CROP_BOUNDS originated with analog SDTV video capture where it was
+possible to capture more data than just the typical 720x576/480 PAL/NTSC active
+video area. Analog video was often overscanned, i.e. there was more video data
+outside the 'active' video area. That was how CRTs worked. So you could move the
+crop window around within the CROP_BOUNDS area, or just capture the full CROP_BOUNDS
+are. Although this was often poorly tested/implemented. The bttv driver is one of
+the few that could do this.
+
+This is actually simplified since you could do weird things with the horizontal
+sample rate as well, effectively changing the pixel aspect ratio, making things
+really complicated. It's analog video so while the video lines were discrete,
+horizontally you are just sampling a waveform, so you could sample at different
+rates if you wanted to. I doubt anyone ever used it since doing that would give
+you a huge headache :-)
+
+With digital video interfaces (HDMI, DVI, SDI, DP, etc.) that no longer applies and
+for those receivers the initial CROP/CROP_DEFAULT/CROP_BOUNDS rectangles are all
+the same, e.g. 1920x1080 for 1080p HDMI video.
+
+>>>
+>>> The TGT_CROP rectangle is hence defined from the CROP_DEFAULT one, and
+>>> if the 'whole active area' is selected, its top-left corner is placed
+>>> in position (0, 0) (what's the point of defining it in respect to an
+>>> area which cannot be read anyway ?)
+>>>
+>>> Unless TGT_CROP should be defined in respect to the NATIVE_SIZE
+>>> rectangle too, but that's not specified anywhere.
+>>>
+>>> Anyway, those selection targets badly apply to image sensors, are
+>>> ill-defined as the definition of active pixels, optical blank (active
+>>> and non-active) pixels is not provided anywhere, and it's not specified
+>>> anywhere what is the reference area for each of those rectangles, so I
+>>> might very well got them wrongly.
+>>
+>> My understanding is that both TGT_CROP_DEFAULT and TGT_CROP_BOUNDS are
+>> relative to TGT_NATIVE_SIZE. BOUNDS defines all the pixels that can be
+> 
+> And what is TGT_CROP reference in your understanding ?
+
+That's the rectangle you are actually cropping. Initially CROP == CROP_DEFAULT
+and CROP shall always be inside CROP_BOUNDS. And CROP_BOUNDS shall be equal
+or larger than CROP_DEFAULT.
+
+> 
+>> captured, including optical black and invalid pixels, while DEFAULT
+>> defines the active area, excluding optical black and invalida pixels. To
+>> put it another way, DEFAULT is what the kernel recommends applications
+>> to use if they have no specific requirement and/or no specific knowledge
+>> about the sensor.
+>>
+>> I fully agree this is very under-documented, which also means that my
+>> understanding may be wrong :-)
+> 
+> With some consensus on this interpretation I would be happy to update
+> the documentation. I already considered that, but the selection API
+> does not apply to image sensors only, and giving a description which
+> is about the pixel array properties might be not totally opportune as
+> it would rule out other devices like bridges or muxers.
+
+And m2m devices like codecs.
 
 Regards,
 
@@ -181,97 +216,57 @@ Regards,
 
 > 
 >>
->> After a proper discussion on how to handle partial initialization and
->> after we have a good plan, then this can be implemented in rcar-vin.
+>>>>  			.width = 3280,
+>>>>  			.height = 2464
+>>>>  		},
+>>>> @@ -489,8 +489,8 @@ static const struct imx219_mode supported_modes[] = {
+>>>>  		.width = 1920,
+>>>>  		.height = 1080,
+>>>>  		.crop = {
+>>>> -			.left = 680,
+>>>> -			.top = 692,
+>>>> +			.left = 8 + 680,
+>>>> +			.top = 8 + 692,
+>>>>  			.width = 1920,
+>>>>  			.height = 1080
+>>>>  		},
+>>>> @@ -505,8 +505,8 @@ static const struct imx219_mode supported_modes[] = {
+>>>>  		.width = 1640,
+>>>>  		.height = 1232,
+>>>>  		.crop = {
+>>>> -			.left = 0,
+>>>> -			.top = 0,
+>>>> +			.left = 8,
+>>>> +			.top = 8,
+>>>>  			.width = 3280,
+>>>>  			.height = 2464
+>>>>  		},
+>>>> @@ -521,8 +521,8 @@ static const struct imx219_mode supported_modes[] = {
+>>>>  		.width = 640,
+>>>>  		.height = 480,
+>>>>  		.crop = {
+>>>> -			.left = 1000,
+>>>> -			.top = 752,
+>>>> +			.left = 8 + 1000,
+>>>> +			.top = 8 + 752,
+>>>>  			.width = 1280,
+>>>>  			.height = 960
+>>>>  		},
+>>>> @@ -1014,6 +1014,7 @@ static int imx219_get_selection(struct v4l2_subdev *sd,
+>>>>  		return 0;
+>>>>
+>>>>  	case V4L2_SEL_TGT_CROP_DEFAULT:
+>>>> +	case V4L2_SEL_TGT_CROP_BOUNDS:
+>>>
+>>> Still not getting what is the purpose of two targets if the "always
+>>> have to go together" :)
+>>>
+>>>>  		sel->r.top = IMX219_PIXEL_ARRAY_TOP;
+>>>>  		sel->r.left = IMX219_PIXEL_ARRAY_LEFT;
+>>>>  		sel->r.width = IMX219_PIXEL_ARRAY_WIDTH;
 >>
->> Note that I really want to support partial initialization, but I want
->> to see an RFC with a proper analysis and proposal first.
->>
+>> --
 >> Regards,
 >>
->> 	Hans
->>
->>>
->>>>
->>>> (Delayed) population of the media graph after media device registration
->>>> sounds also like a requirement for device tree overlay support, which would
->>>> also be a nice feature.
->>>>
->>>>> 1. [PATCH 0/5] media-device: Report if graph is complete
->>>>>
->>>>>>
->>>>>> Signed-off-by: Steve Longerbeam <steve_longerbeam@mentor.com>
->>>>>> Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
->>>>>> ---
->>>>>>  drivers/media/platform/rcar-vin/rcar-core.c | 14 ++++++--------
->>>>>>  1 file changed, 6 insertions(+), 8 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
->>>>>> index 7440c89..e70f83b 100644
->>>>>> --- a/drivers/media/platform/rcar-vin/rcar-core.c
->>>>>> +++ b/drivers/media/platform/rcar-vin/rcar-core.c
->>>>>> @@ -253,7 +253,6 @@ static int rvin_group_init(struct rvin_group *group, struct rvin_dev *vin)
->>>>>>  	struct media_device *mdev = &group->mdev;
->>>>>>  	const struct of_device_id *match;
->>>>>>  	struct device_node *np;
->>>>>> -	int ret;
->>>>>>  
->>>>>>  	mutex_init(&group->lock);
->>>>>>  
->>>>>> @@ -266,7 +265,6 @@ static int rvin_group_init(struct rvin_group *group, struct rvin_dev *vin)
->>>>>>  	vin_dbg(vin, "found %u enabled VIN's in DT", group->count);
->>>>>>  
->>>>>>  	mdev->dev = vin->dev;
->>>>>> -	mdev->ops = &rvin_media_ops;
->>>>>>  
->>>>>>  	match = of_match_node(vin->dev->driver->of_match_table,
->>>>>>  			      vin->dev->of_node);
->>>>>> @@ -278,11 +276,7 @@ static int rvin_group_init(struct rvin_group *group, struct rvin_dev *vin)
->>>>>>  
->>>>>>  	media_device_init(mdev);
->>>>>>  
->>>>>> -	ret = media_device_register(&group->mdev);
->>>>>> -	if (ret)
->>>>>> -		rvin_group_cleanup(group);
->>>>>> -
->>>>>> -	return ret;
->>>>>> +	return 0;
->>>>>>  }
->>>>>>  
->>>>>>  static void rvin_group_release(struct kref *kref)
->>>>>> @@ -688,6 +682,8 @@ static int rvin_group_notify_complete(struct v4l2_async_notifier *notifier)
->>>>>>  		return ret;
->>>>>>  	}
->>>>>>  
->>>>>> +	vin->group->mdev.ops = &rvin_media_ops;
->>>>>> +
->>>>>>  	/* Register all video nodes for the group. */
->>>>>>  	for (i = 0; i < RCAR_VIN_NUM; i++) {
->>>>>>  		if (vin->group->vin[i] &&
->>>>>> @@ -736,8 +732,10 @@ static int rvin_group_notify_complete(struct v4l2_async_notifier *notifier)
->>>>>>  		}
->>>>>>  	}
->>>>>>  	mutex_unlock(&vin->group->lock);
->>>>>> +	if (ret)
->>>>>> +		return ret;
->>>>>>  
->>>>>> -	return ret;
->>>>>> +	return media_device_register(&vin->group->mdev);
->>>>>>  }
->>>>>>  
->>>>>>  static void rvin_group_notify_unbind(struct v4l2_async_notifier *notifier,
->>>>>> -- 
->>>>>> 2.7.4
->>>>>>
->>>>>
->>>>> -- 
->>>>> Regards,
->>>>> Niklas Söderlund
->>>>
->>>> -- 
->>>> Best Regards,
->>>> Michael
->>>
->>
-> 
+>> Laurent Pinchart
 
