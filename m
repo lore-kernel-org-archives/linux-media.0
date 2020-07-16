@@ -2,157 +2,118 @@ Return-Path: <SRS0=8nip=A3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9F7BC433E4
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jul 2020 21:33:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2911BC433E4
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jul 2020 23:08:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F0F1207CB
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jul 2020 21:33:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06D4C212CC
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jul 2020 23:08:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m2OYpSaj"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="kw25KOP8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbgGPVdM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jul 2020 17:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbgGPVdL (ORCPT
+        id S1727050AbgGPXIh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jul 2020 19:08:37 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:14623 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726189AbgGPXIg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jul 2020 17:33:11 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B115C061755;
-        Thu, 16 Jul 2020 14:33:11 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id f139so13196567wmf.5;
-        Thu, 16 Jul 2020 14:33:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=jVRCxAU1h8uuMP5tlk5Q3qw+CDViJUj6+cwcmkFoV2I=;
-        b=m2OYpSajgIdqjKm9kQG8kvxpt0MuknTil2/DXtr3coNClLWwVDowL4oW+qaM1nPeEQ
-         tdKEGdYGp+qtPT15R2/PG4xjaIlSn3zzelPRoUwurVJQvHplOJ+nvOpzuKV6TQppv46b
-         rHzDsX0tPxfrUVbXV9HZlESUPIFEuHknSIimxf8z0PLKPD9ZGeqZlyujR8Y8XUW5Hdzm
-         1GhZEJxeYK+uMiYtJUngU81CpTJwWMlKst5ZzS9O6H3RssbleNq4FHvbxUpsn/lweUVz
-         rk6iykT4jlf3Fftfw0bQ3eBAU3IrE8145Jm4ZVCycNSN/2p3p+CjhdRW0HF2towyYiem
-         Y0ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=jVRCxAU1h8uuMP5tlk5Q3qw+CDViJUj6+cwcmkFoV2I=;
-        b=JTpuB2sTB+hDVtVAIltMORi2FFqcBHAyKvL9KM2ZS1wP6WwSviHn2XU+LAxKtxoIKx
-         IbANQkA45TCRB/MfnvRHMwH3/qvdIMidGLeIQ+NXT2twqvPatmvdLbX44pluF14JfBsO
-         8eKPwLYyFD4aYILTxrc/Nx7BoYlBofEyGZTOeEKIJZZZ0lWA0f9L9cc2WHxLISrnH2RZ
-         kgX16PM9vI+kzGL7u/ecbJGjlOc6ZL0dydKpOKYGTqbsTgKveBkLgVeEaoBKbSdRcLeh
-         hViZHzwfeKJ1o86tA56XTtZ7bMH3SVSqi/nNpqJf1lD01cCzQGtI790WLYdLZAtMMBo3
-         WHUg==
-X-Gm-Message-State: AOAM530GfUpAxALGECaHR1vAAmu7Ou7XFFuUe/m7UyuRdGjTBpI3KDeo
-        +BjjfqGvNd6qjrsM8JjGkI6eNutgrw==
-X-Google-Smtp-Source: ABdhPJzyU+1bToje+Yv8U/cWOGO3OKW1Aeh17ICpPtjpRkx2p87s8HuYdnwNug4TFPuzHzsS5CZc0Q==
-X-Received: by 2002:a7b:c194:: with SMTP id y20mr6420782wmi.83.1594935189465;
-        Thu, 16 Jul 2020 14:33:09 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:810b:f40:e00:922b:34ff:fe38:6455])
-        by smtp.googlemail.com with ESMTPSA id v11sm7444825wmb.3.2020.07.16.14.33.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 14:33:08 -0700 (PDT)
-From:   Alex Bee <knaerzche@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     Alex Bee <knaerzche@gmail.com>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH] media: dvb_usb_pctv452e: use ISL6423 voltage regulator per default
-Date:   Thu, 16 Jul 2020 23:33:03 +0200
-Message-Id: <20200716213303.20044-1-knaerzche@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 16 Jul 2020 19:08:36 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f10dd010000>; Thu, 16 Jul 2020 16:04:33 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 16 Jul 2020 16:06:29 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 16 Jul 2020 16:06:29 -0700
+Received: from [10.2.163.115] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 16 Jul
+ 2020 23:06:27 +0000
+Subject: Re: [RFC PATCH v3 16/18] gpu: host1x: mipi: Split
+ tegra_mipi_calibrate and tegra_mipi_wait
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
+        <helen.koike@collabora.com>
+CC:     <sboyd@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+References: <1594786855-26506-1-git-send-email-skomatineni@nvidia.com>
+ <1594786855-26506-17-git-send-email-skomatineni@nvidia.com>
+ <a06dec8f-7042-767b-545b-048685a7683d@gmail.com>
+ <20d63eca-4b2b-584e-a391-a4fb64a16b40@nvidia.com>
+ <c4945c77-5de1-e9b1-9f4f-cdd78bca18c7@gmail.com>
+ <ce0c5ffb-f859-0eab-1ea5-044623dff221@nvidia.com>
+ <a2b8169c-c4a3-4862-cd27-8c1a51ddc558@gmail.com>
+ <4690e682-8495-2327-87c7-c2f06a7a479d@nvidia.com>
+Message-ID: <66812127-38cf-2af3-51c0-50edbe446e73@nvidia.com>
+Date:   Thu, 16 Jul 2020 16:09:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <4690e682-8495-2327-87c7-c2f06a7a479d@nvidia.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1594940673; bh=Z4JZpBtLsxYQwYWYUS7JvDfbpdedkjBLLYi0PiWmXmk=;
+        h=X-PGP-Universal:Subject:From:To:CC:References:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=kw25KOP8ZMu/3RgD066xjNLJQmMe1Yn3cDZuI6pFYiSjZP6mRBPPgRhCQQbpAmN3Q
+         PRMHAmEOlmegOMdVPB2B7B2WS91FjBaAOAsFq0u7gX+vJ0QbKlLEksLJ2WECLXNpRY
+         mPTZMMtIg+piKtlW8nq7wqbWd6v7/kOah8aRXyea0X8tDC8dAHKIFctIbtBiWqQAbz
+         AizGcKDNNwHaPBVh7UB41U/Zq/RysGV0dJgV7Q9yT2y35aww8u7MyYqI4JvGsaHBi7
+         l06K+Pe6Uhb71lcOxypn3fA+QPLOODOerBWJaN5JB5dCvY42NSgzonbPxwIPKSRSVk
+         G39XvkISUav8A==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Both TT-connect S2-3600 and Pinnacle PCTV Sat HDTV are using
-Intersil ISL6423 as LNB voltage regulator. This makes
-TT-connect S2-3650 CI the only device which uses STM LNBP22 regulator
-which is currently used for all devices driven by pctv452e driver.
 
-This patch fixes this by creating an exception for TT-connect S2-3650 CI
-to continue to use STM LNBP22 while all others now using correct ISL6423
-driver which makes DiSEqC/EN50494 comands which involve voltage changes
-now working on the other devices (which didn't work before).
+On 7/16/20 4:06 PM, Sowjanya Komatineni wrote:
+>
+> On 7/16/20 4:01 PM, Dmitry Osipenko wrote:
+>> 17.07.2020 01:49, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>>> What keeps MIPI clock enabled after completion of the
+>>>> tegra_mipi_calibrate() invocation?
+>>> MIPI clock is disabled at end of tegra_mipi_calibrate and is re-enabled
+>>> during tegra_mipi_wait.
+>>>
+>>> I think I should fix this to keep the clock enabled till calibration
+>>> results are latched.
+>>>
+>>> All consumers of tegra_mipi_calibrate() will call tegra_mipi_wait().
+>>>
+>>> So will remove clk_disable mipi clk at end of tegra_mipi_calibrate()=20
+>>> and
+>>> clk_enable mipi_clk at beginning of tegra_mipi_wait()
+>> Isn't it possible to perform the calibration after enabling CSI and
+>> before of starting the sensor streaming?
+> Currently this is what I am doing. Triggering calibration start during=20
+> CSI receiver being ready and then sensor streaming will happen where=20
+> internal MIPI CAL detects for LP -> HS transition and applies results=20
+> to pads. So checking for calibration results after sensor stream is=20
+> enabled
 
-Signed-off-by: Alex Bee <knaerzche@gmail.com>
----
- drivers/media/usb/dvb-usb/Kconfig    |  1 +
- drivers/media/usb/dvb-usb/pctv452e.c | 24 ++++++++++++++++++++----
- 2 files changed, 21 insertions(+), 4 deletions(-)
+1. Calling tegra_mipi_calibrate() during CSI streaming where CSI pads=20
+are enabled and receiver is kept ready
 
-diff --git a/drivers/media/usb/dvb-usb/Kconfig b/drivers/media/usb/dvb-usb/Kconfig
-index 25ba03edcb5c..7498110142e4 100644
---- a/drivers/media/usb/dvb-usb/Kconfig
-+++ b/drivers/media/usb/dvb-usb/Kconfig
-@@ -279,6 +279,7 @@ config DVB_USB_PCTV452E
- 	tristate "Pinnacle PCTV HDTV Pro USB device/TT Connect S2-3600"
- 	depends on DVB_USB
- 	select TTPCI_EEPROM
-+	select DVB_ISL6423 if MEDIA_SUBDRV_AUTOSELECT
- 	select DVB_LNBP22 if MEDIA_SUBDRV_AUTOSELECT
- 	select DVB_STB0899 if MEDIA_SUBDRV_AUTOSELECT
- 	select DVB_STB6100 if MEDIA_SUBDRV_AUTOSELECT
-diff --git a/drivers/media/usb/dvb-usb/pctv452e.c b/drivers/media/usb/dvb-usb/pctv452e.c
-index 441d878fc22c..4b13c1f35b28 100644
---- a/drivers/media/usb/dvb-usb/pctv452e.c
-+++ b/drivers/media/usb/dvb-usb/pctv452e.c
-@@ -20,6 +20,7 @@
- #include "stb6100.h"
- #include "stb6100_cfg.h"
- /* FE Power */
-+#include "isl6423.h"
- #include "lnbp22.h"
- 
- #include <media/dvb_ca_en50221.h>
-@@ -83,6 +84,13 @@ static struct stb0899_postproc pctv45e_postproc[] = {
- 	{ 0, 0 }
- };
- 
-+static struct isl6423_config pctv452e_isl6423_config = {
-+	.current_max		= SEC_CURRENT_515m,
-+	.curlim			= SEC_CURRENT_LIM_ON,
-+	.mod_extern		= 1,
-+	.addr			= 0x08,
-+};
-+
- /*
-  * stores all private variables for communication with the PCTV452e DVB-S2
-  */
-@@ -909,15 +917,23 @@ static int pctv452e_frontend_attach(struct dvb_usb_adapter *a)
- 						&a->dev->i2c_adap);
- 	if (!a->fe_adap[0].fe)
- 		return -ENODEV;
--	if ((dvb_attach(lnbp22_attach, a->fe_adap[0].fe,
--					&a->dev->i2c_adap)) == NULL)
--		err("Cannot attach lnbp22\n");
- 
- 	id = a->dev->desc->warm_ids[0];
- 	if (USB_VID_TECHNOTREND == id->idVendor
--	    && USB_PID_TECHNOTREND_CONNECT_S2_3650_CI == id->idProduct)
-+	    && USB_PID_TECHNOTREND_CONNECT_S2_3650_CI == id->idProduct) {
-+		if (dvb_attach(lnbp22_attach,
-+			       a->fe_adap[0].fe,
-+			       &a->dev->i2c_adap) == NULL) {
-+			err("Cannot attach lnbp22\n");
-+		}
- 		/* Error ignored. */
- 		tt3650_ci_init(a);
-+	} else if (dvb_attach(isl6423_attach,
-+			      a->fe_adap[0].fe,
-+			      &a->dev->i2c_adap,
-+			      &pctv452e_isl6423_config) == NULL) {
-+		err("Cannot attach isl6423\n");
-+	}
- 
- 	return 0;
- }
--- 
-2.17.1
+2. Start Sensor stream
+
+3. Calling tegra_mipi_wait() to check for MIPI Cal status.
+
+So as mipi cal clk need to be kept enabled till 3rd step, we can enable=20
+clock during tegra_mipi_calibrate() and leave it enabled and disable it=20
+in tegra_mipi_wait after status check.
 
