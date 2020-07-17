@@ -2,110 +2,94 @@ Return-Path: <SRS0=7xhz=A4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A32FFC433E6
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 18:56:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C35A8C433E6
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 19:12:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83AC520704
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 18:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595012184;
-	bh=I9y75J42IaBzL+25s+fqD6Tv/7wRsnJAIgF5M/KtE8s=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=IIswyj3u9hfwyEcXs23h38zpSHI5b3ASDHw26oZO5KBXC4mZugh1TE2e1PVYkb3sm
-	 CgHLv681l9wKeRG5zMfltjvFziftbRCOYB6DPHQAb1YWUM15McPn8l53mD/S5SrtkP
-	 0YBiR+mWNMcoDx2FHp1bfPzUJ1Oz85ystVpbrlMs=
+	by mail.kernel.org (Postfix) with ESMTP id A1A66207DD
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 19:12:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="dNkIccMw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728301AbgGQS4X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Jul 2020 14:56:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59454 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727821AbgGQS4W (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Jul 2020 14:56:22 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 282992076A;
-        Fri, 17 Jul 2020 18:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595012182;
-        bh=I9y75J42IaBzL+25s+fqD6Tv/7wRsnJAIgF5M/KtE8s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YOgbEyq8cf4E8Nzby24S64YuwCPk30Pyc6TNnN/7KLYSfVxUlRfo1LKhyrR1mxvky
-         +WKAv9mBFQCbvz0vPdtusnhCt+1CL9ug4b0T469Si4vy4cJvJHsD2BUfA5WF5cfTXu
-         Ip34uThPZIACCqnZWc/Fy2nh0q2P7d7z2nDgCfPo=
-Received: by mail-ot1-f49.google.com with SMTP id n24so7584082otr.13;
-        Fri, 17 Jul 2020 11:56:22 -0700 (PDT)
-X-Gm-Message-State: AOAM530qIsmAXEaTjrYq9QFK+J/sBdSxFgxfeZgVBICnTp8fVmvoLkTP
-        YHvAmVgrvKdj8FTidbfMDb2qHeCKrLeWH9eoBw==
-X-Google-Smtp-Source: ABdhPJywlK24TqAj8hYZIsgs4xNwf07oJW+ZcpWB866d/ln/mXcc0o7YOwYsKhM3niloEukzN1I53bEoEo12QLx0uaA=
-X-Received: by 2002:a9d:2646:: with SMTP id a64mr9524072otb.107.1595012181490;
- Fri, 17 Jul 2020 11:56:21 -0700 (PDT)
+        id S1728632AbgGQTL7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Jul 2020 15:11:59 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:1396 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728607AbgGQTL6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 17 Jul 2020 15:11:58 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f11f7c20006>; Fri, 17 Jul 2020 12:10:58 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Fri, 17 Jul 2020 12:11:57 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Fri, 17 Jul 2020 12:11:57 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 17 Jul
+ 2020 19:11:57 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 17 Jul 2020 19:11:57 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.163.115]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5f11f7fc0001>; Fri, 17 Jul 2020 12:11:56 -0700
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <luca@lucaceresoli.net>, <leonl@leopardimaging.com>,
+        <robh+dt@kernel.org>, <lgirdwood@gmail.com>, <broonie@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/3] media: i2c: imx274: Fix Y_OUT_SIZE register setting
+Date:   Fri, 17 Jul 2020 12:15:20 -0700
+Message-ID: <1595013322-15077-1-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <1594878139-3402-1-git-send-email-rnayak@codeaurora.org>
- <1594878139-3402-2-git-send-email-rnayak@codeaurora.org> <20200716195913.GA2744252@bogus>
- <cd368ea7-6ddc-004c-164d-dbbad8516853@codeaurora.org>
-In-Reply-To: <cd368ea7-6ddc-004c-164d-dbbad8516853@codeaurora.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 17 Jul 2020 12:56:10 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+RXcgTVwd_JC8YLYb1Ni29zFD9AxcNsmcpyrdefWq3Kw@mail.gmail.com>
-Message-ID: <CAL_Jsq+RXcgTVwd_JC8YLYb1Ni29zFD9AxcNsmcpyrdefWq3Kw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: media: venus: Add an optional power
- domain for perf voting
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1595013058; bh=DLvQ6chRzbjeKicuQdxuqVcpH3d1W/1R1Kay/NtRj70=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=dNkIccMwSkcpJVG9TVvN1c8DqptyYAYHC0pojdxtG/ndu8jD1Aqq8KySS2156GZQm
+         yngeqITKvsHwtyC2mPMbgIoU7I6NAAfkIR3cQD8BtywDat7iYArxf0NoScpyi9SlbM
+         pMUY7U4PFSmgDiu39pU9LqEhyukAf2VhxjdYKUi1jFtIlymWLn7Y7HB3wUpYAZWJqk
+         FLVNwWvdAlmJXbXy5zeU63P91/RarxpLqS8hNorSv25iXnI3FefRBmWj3t7FxlFbd4
+         1wR3HRZfgqhbsY6XDaelo7suvoDrmjeTShv0B0YG9M7chZ5jXhYugVQ6fVhFetF03x
+         lfT3lqnadGRRg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 11:52 PM Rajendra Nayak <rnayak@codeaurora.org> wrote:
->
->
-> On 7/17/2020 1:29 AM, Rob Herring wrote:
-> > On Thu, Jul 16, 2020 at 11:12:16AM +0530, Rajendra Nayak wrote:
-> >> Add an optional power domain which when specified can be used for
-> >> setting the performance state of Venus.
-> >
-> > The h/w suddenly grew a new power island/domain? Seems like an abuse of
-> > power-domains...
->
-> The power-domain always existed, we have just managed to survive without
-> having venus support DVFS and have the domain always be at a high performance
-> level (set statically by boot code)
-> Now, if we care to do DVFS and support better PM on the SoC, its important
-> for the devices to manage this additional power domain (and dynamically
-> scale it)
->
-> That said, if the name 'opp-pd' makes it look like a software construct,
-> like Bjorn mentioned, I am fine to give it a real name like 'cx-pd'
-> Does that sound good?
+As per Sony IMX274 Y_OUT_SIZE should be the height of effective
+image output from the sensor which are the actual total lines
+sent over MIPI CSI to receiver.
 
-He suggested 'cx' as '-pd' would be redundant. I have no idea what
-'cx' means, but fine.
+So, Y_OUT_SIZE should be same as crop height and this patch fixes it.
 
-> PS: Like I mentioned earlier [1], cx is a shared power island,
-> not a power island specific to this block, and definitely not a software
-> pm-domain construct.
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+---
+ drivers/media/i2c/imx274.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Put this context/detail into your patches. Assume I don't remember
-what happened last week.
+diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+index e6aa9f3..55869ff 100644
+--- a/drivers/media/i2c/imx274.c
++++ b/drivers/media/i2c/imx274.c
+@@ -1163,7 +1163,7 @@ static int imx274_apply_trimming(struct stimx274 *imx274)
+ 		(-imx274->crop.top / 2) : (imx274->crop.top / 2);
+ 	v_cut = (IMX274_MAX_HEIGHT - imx274->crop.height) / 2;
+ 	write_v_size = imx274->crop.height + 22;
+-	y_out_size   = imx274->crop.height + 14;
++	y_out_size   = imx274->crop.height;
+ 
+ 	err = imx274_write_mbreg(imx274, IMX274_HMAX_REG_LSB, hmax, 2);
+ 	if (!err)
+-- 
+2.7.4
 
-Unfortunately, gmail seems to have no way to filter on unread mails in
-reply to my replies and doesn't move the thread up in 'Sent' filter,
-so older threads get lost.
-
-Rob
-
-> [1] https://lore.kernel.org/patchwork/patch/1241077/
