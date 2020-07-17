@@ -7,33 +7,34 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAA17C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 03:43:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ACD8C433E2
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 03:49:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8ED6E2076A
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 03:43:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7171D206F4
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 03:49:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726665AbgGQDnX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jul 2020 23:43:23 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:52114 "EHLO
+        id S1727033AbgGQDtf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jul 2020 23:49:35 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:52168 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726489AbgGQDnX (ORCPT
+        with ESMTP id S1726530AbgGQDtf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jul 2020 23:43:23 -0400
+        Thu, 16 Jul 2020 23:49:35 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id C88642A4FA6
+        with ESMTPSA id 473132A518C
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@collabora.com>, kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Subject: [PATCH v4] media: videobuf2: Print videobuf2 buffer state by name
-Date:   Fri, 17 Jul 2020 00:39:57 -0300
-Message-Id: <20200717033957.218056-1-ezequiel@collabora.com>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        kernel@collabora.com, stable@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH 1/2] media: coda: Fix reported H264 profile
+Date:   Fri, 17 Jul 2020 00:49:22 -0300
+Message-Id: <20200717034923.219524-1-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200710130010.160712-1-ezequiel@collabora.com>
-References: <20200710130010.160712-1-ezequiel@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -41,107 +42,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For debugging purposes, seeing the state integer
-representation is really inconvenient.
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-Improve this and be developer-friendly by printing
-the state name instead.
+The CODA960 manual states that ASO/FMO features of baseline are not
+supported, so for this reason this driver should only report
+constrained baseline support.
 
-Suggested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+This fixes negotiation issue with constrained baseline content
+on GStreamer 1.17.1.
+
+Cc: stable@vger.kernel.org
+Fixes: 42a68012e67c2 ("media: coda: add read-only h.264 decoder profile/level controls")
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
-v4:
-* Drop inline modifier.
-* Add back static modifier from the now local name array.
-v3:
-* Drop static modifier from the now local name array.
-v2:
-* Use a proper function instead of a C macro.
+ drivers/media/platform/coda/coda-common.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- .../media/common/videobuf2/videobuf2-core.c   | 35 ++++++++++++++-----
- 1 file changed, 27 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index abaf28e057eb..f544d3393e9d 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -191,6 +191,23 @@ module_param(debug, int, 0644);
- static void __vb2_queue_cancel(struct vb2_queue *q);
- static void __enqueue_in_driver(struct vb2_buffer *vb);
- 
-+static const char *vb2_state_name(enum vb2_buffer_state s)
-+{
-+	static const char * const state_names[] = {
-+		[VB2_BUF_STATE_DEQUEUED] = "dequeued",
-+		[VB2_BUF_STATE_IN_REQUEST] = "in request",
-+		[VB2_BUF_STATE_PREPARING] = "preparing",
-+		[VB2_BUF_STATE_QUEUED] = "queued",
-+		[VB2_BUF_STATE_ACTIVE] = "active",
-+		[VB2_BUF_STATE_DONE] = "done",
-+		[VB2_BUF_STATE_ERROR] = "error",
-+	};
-+
-+	if ((unsigned int)(s) < ARRAY_SIZE(state_names))
-+		return state_names[s];
-+	return "unknown";
-+}
-+
- /*
-  * __vb2_buf_mem_alloc() - allocate video memory for the given buffer
-  */
-@@ -1015,8 +1032,8 @@ void vb2_buffer_done(struct vb2_buffer *vb, enum vb2_buffer_state state)
- 	 */
- 	vb->cnt_buf_done++;
- #endif
--	dprintk(q, 4, "done processing on buffer %d, state: %d\n",
--			vb->index, state);
-+	dprintk(q, 4, "done processing on buffer %d, state: %s\n",
-+		vb->index, vb2_state_name(state));
- 
- 	if (state != VB2_BUF_STATE_QUEUED)
- 		__vb2_buf_mem_finish(vb);
-@@ -1490,8 +1507,8 @@ int vb2_core_prepare_buf(struct vb2_queue *q, unsigned int index, void *pb)
- 
- 	vb = q->bufs[index];
- 	if (vb->state != VB2_BUF_STATE_DEQUEUED) {
--		dprintk(q, 1, "invalid buffer state %d\n",
--			vb->state);
-+		dprintk(q, 1, "invalid buffer state %s\n",
-+			vb2_state_name(vb->state));
- 		return -EINVAL;
- 	}
- 	if (vb->prepared) {
-@@ -1670,7 +1687,8 @@ int vb2_core_qbuf(struct vb2_queue *q, unsigned int index, void *pb,
- 		dprintk(q, 1, "buffer still being prepared\n");
- 		return -EINVAL;
- 	default:
--		dprintk(q, 1, "invalid buffer state %d\n", vb->state);
-+		dprintk(q, 1, "invalid buffer state %s\n",
-+			vb2_state_name(vb->state));
- 		return -EINVAL;
- 	}
- 
-@@ -1884,7 +1902,8 @@ int vb2_core_dqbuf(struct vb2_queue *q, unsigned int *pindex, void *pb,
- 		dprintk(q, 3, "returning done buffer with errors\n");
- 		break;
- 	default:
--		dprintk(q, 1, "invalid buffer state\n");
-+		dprintk(q, 1, "invalid buffer state %s\n",
-+			vb2_state_name(vb->state));
- 		return -EINVAL;
- 	}
- 
-@@ -1915,8 +1934,8 @@ int vb2_core_dqbuf(struct vb2_queue *q, unsigned int *pindex, void *pb,
- 		media_request_put(vb->request);
- 	vb->request = NULL;
- 
--	dprintk(q, 2, "dqbuf of buffer %d, with state %d\n",
--			vb->index, vb->state);
-+	dprintk(q, 2, "dqbuf of buffer %d, state: %s\n",
-+		vb->index, vb2_state_name(vb->state));
- 
- 	return 0;
- 
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 3ab3d976d8ca..c641d1608825 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -2335,8 +2335,8 @@ static void coda_encode_ctrls(struct coda_ctx *ctx)
+ 		V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET, -12, 12, 1, 0);
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+ 		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE, 0x0,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE);
++		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE, 0x0,
++		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE);
+ 	if (ctx->dev->devtype->product == CODA_HX4 ||
+ 	    ctx->dev->devtype->product == CODA_7541) {
+ 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+@@ -2417,7 +2417,7 @@ static void coda_decode_ctrls(struct coda_ctx *ctx)
+ 	ctx->h264_profile_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
+ 		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+ 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
+-		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
++		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
+ 		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
+ 		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
+ 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
 -- 
 2.27.0
 
