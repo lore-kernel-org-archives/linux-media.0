@@ -7,32 +7,32 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E269BC433F4
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 13:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15EBDC433F1
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 13:25:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C1B172067D
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 13:25:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F10462067D
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 13:25:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726675AbgGQNZw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Jul 2020 09:25:52 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:50569 "EHLO
+        id S1726569AbgGQNZo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Jul 2020 09:25:44 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:60637 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726580AbgGQNZv (ORCPT
+        with ESMTP id S1726201AbgGQNZn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Jul 2020 09:25:51 -0400
+        Fri, 17 Jul 2020 09:25:43 -0400
 X-Originating-IP: 93.34.118.233
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id A7B031C0012;
-        Fri, 17 Jul 2020 13:25:48 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id F1DA71C0012;
+        Fri, 17 Jul 2020 13:25:40 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     robh+dt@kernel.org, devicetree@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, slongerbeam@gmail.com,
         linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 06/13] dt-bindings: media: ov5640: Require ep properties
-Date:   Fri, 17 Jul 2020 15:28:52 +0200
-Message-Id: <20200717132859.237120-7-jacopo+renesas@jmondi.org>
+        linux-renesas-soc@vger.kernel.org, bparrot@ti.com
+Subject: [PATCH 04/13] dt-bindings: media: ti,cal: Remove sensor from example
+Date:   Fri, 17 Jul 2020 15:28:50 +0200
+Message-Id: <20200717132859.237120-5-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200717132859.237120-1-jacopo+renesas@jmondi.org>
 References: <20200717132859.237120-1-jacopo+renesas@jmondi.org>
@@ -43,80 +43,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that the bus-type property has been made mandatory for
-the ov5640 bindings, use the property value to mark endpoint
-properties as required depending on the data interface in use.
+The newly introduced dt-schema bindings for the ov5640 image
+sensor triggered a warning in the ti,cal.yaml bindings file, which
+has a camera sensor node marked compatible with the sensor.
 
-Mark as 'required' all the properties that were defined as required
-in the original bindings in textual form. Adjust the example to
-comply with validation requirement but do not update the existing
-users as most of the required properties will be demoted in the
-next patches.
+As in the example is enough to report a node for the device that
+the bindings is about, and maintaining the sensor node up-to-date
+is a non-necessary burden, remove the image sensor node from the
+ti,cal bindings file.
 
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- .../devicetree/bindings/media/i2c/ov5640.yaml | 41 +++++++++++++++++--
- 1 file changed, 38 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/media/ti,cal.yaml     | 22 -------------------
+ 1 file changed, 22 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ov5640.yaml b/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
-index 16e6c2dc629a..8fd54575a1db 100644
---- a/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
-@@ -110,9 +110,40 @@ properties:
-           pclk-sample:
-             enum: [0, 1]
- 
--        required:
--          - remote-endpoint
--          - bus-type
-+        allOf:
-+          - if:
-+              properties:
-+                bus-type:
-+                  const: 4
-+            then:
-+                properties:
-+                  bus-width: false
-+                  data-shift: false
-+                  hsync-active: false
-+                  vsync-active: false
-+                  pclk-sample: false
-+                required:
-+                  - remote-endpoint
-+                  - bus-type
-+                  - clock-lanes
-+                  - data-lanes
-+
-+          - if:
-+              properties:
-+                bus-type:
-+                  const: 5
-+            then:
-+              properties:
-+                clock-lanes: false
-+                data-lanes: false
-+              required:
-+                - remote-endpoint
-+                - bus-type
-+                - bus-width
-+                - data-shift
-+                - hsync-active
-+                - vsync-active
-+                - pclk-sample
- 
-     additionalProperties: false
- 
-@@ -179,6 +210,10 @@ examples:
-                     remote-endpoint = <&parallel_from_ov5640>;
-                     bus-type = <5>;
-                     bus-width = <10>;
-+                    data-shift = <0>;
-+                    hsync-active = <1>;
-+                    vsync-active = <1>;
-+                    pclk-sample = <1>;
-                 };
-             };
+diff --git a/Documentation/devicetree/bindings/media/ti,cal.yaml b/Documentation/devicetree/bindings/media/ti,cal.yaml
+index 5e066629287d..fe5c74dd246e 100644
+--- a/Documentation/devicetree/bindings/media/ti,cal.yaml
++++ b/Documentation/devicetree/bindings/media/ti,cal.yaml
+@@ -177,26 +177,4 @@ examples:
          };
--- 
+     };
+
+-    i2c {
+-        clock-frequency = <400000>;
+-        #address-cells = <1>;
+-        #size-cells = <0>;
+-
+-        camera-sensor@3c {
+-               compatible = "ovti,ov5640";
+-               reg = <0x3c>;
+-
+-               clocks = <&clk_ov5640_fixed>;
+-               clock-names = "xclk";
+-
+-               port {
+-                    csi2_cam0: endpoint {
+-                            remote-endpoint = <&csi2_phy0>;
+-                            clock-lanes = <0>;
+-                            data-lanes = <1 2>;
+-                    };
+-               };
+-        };
+-    };
+-
+ ...
+--
 2.27.0
 
