@@ -2,114 +2,138 @@ Return-Path: <SRS0=7xhz=A4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A6BBC433E0
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 19:35:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E78C5C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 19:36:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 500432074B
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 19:35:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C95D22074B
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 19:36:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="lb+bHSCu"
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="RUv2iy5H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728633AbgGQTfT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Jul 2020 15:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
+        id S1728422AbgGQTgQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Jul 2020 15:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727999AbgGQTfT (ORCPT
+        with ESMTP id S1727999AbgGQTgP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Jul 2020 15:35:19 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EB0C0619D2;
-        Fri, 17 Jul 2020 12:35:19 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B4A2971D;
-        Fri, 17 Jul 2020 21:35:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1595014517;
-        bh=sNhGPc3xQuBFysuH7SMI1uMpqbxHDIN6W0Sor1W4IlE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lb+bHSCuaE1sPU8nsA6kHrQZOuy7wXCAX0oo1V5VN1QsMKVlC8WbZe1iABSFb+uWU
-         P+SZ8NfjhWDSE+Har7h91s4t2g8S3er42LDaqhHiuyWNQdENC4izWwcQo7KrBHCIXo
-         0/ZwLBXJVeKe+o/ZxfyrbESrnRH+2+FCNvtE+KCg=
-Date:   Fri, 17 Jul 2020 22:35:09 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        slongerbeam@gmail.com, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>
-Subject: Re: [PATCH 02/13] arm64: dts: qcom: apq8016-sbc: Fix CSI-2 lanes
- routing
-Message-ID: <20200717193509.GD5961@pendragon.ideasonboard.com>
-References: <20200717132859.237120-1-jacopo+renesas@jmondi.org>
- <20200717132859.237120-3-jacopo+renesas@jmondi.org>
+        Fri, 17 Jul 2020 15:36:15 -0400
+X-Greylist: delayed 322 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Jul 2020 12:36:15 PDT
+Received: from forward500o.mail.yandex.net (forward500o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::610])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6879BC0619D2;
+        Fri, 17 Jul 2020 12:36:15 -0700 (PDT)
+Received: from mxback13o.mail.yandex.net (mxback13o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::64])
+        by forward500o.mail.yandex.net (Yandex) with ESMTP id 800F660A6A;
+        Fri, 17 Jul 2020 22:30:48 +0300 (MSK)
+Received: from localhost (localhost [::1])
+        by mxback13o.mail.yandex.net (mxback/Yandex) with ESMTP id zew1qFiGlB-Ulri2CAh;
+        Fri, 17 Jul 2020 22:30:48 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1595014248;
+        bh=neFvZqFNmZb2bdWawLymjbFJjg/MqakFYDFRHvN10qQ=;
+        h=Message-Id:Cc:Subject:In-Reply-To:Date:References:To:From;
+        b=RUv2iy5Hz4T0CGQ9CnRVPwv0jr47nvr2H7Qs01eUgUKmlSRZXQMEnZoOw9iACledj
+         fri84ZLf2yKuog7mnxyn8R7j/nl1pQvVhagLBwXtxnkSUzyzetN+MOEN8Qq5Nv3pJN
+         lFeC8qoxMEapvFsEhJwS5YWruAx/3rMNIp0VBWIY=
+Authentication-Results: mxback13o.mail.yandex.net; dkim=pass header.i=@yandex.ru
+Received: by iva1-e3ac85a63903.qloud-c.yandex.net with HTTP;
+        Fri, 17 Jul 2020 22:30:48 +0300
+From:   Evgeny Novikov <novikov@ispras.ru>
+Envelope-From: eugenenovikov@yandex.ru
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "ldv-project@linuxtesting.org" <ldv-project@linuxtesting.org>
+In-Reply-To: <CA+V-a8sekdRDqahs-Zi-KiSbdv0sRHy7KuHraTRtuE6mz2+beg@mail.gmail.com>
+References: <20200714172049.27738-1-novikov@ispras.ru> <CA+V-a8sekdRDqahs-Zi-KiSbdv0sRHy7KuHraTRtuE6mz2+beg@mail.gmail.com>
+Subject: Re: [PATCH] media: isif: reset global state
 MIME-Version: 1.0
+X-Mailer: Yamail [ http://yandex.ru ] 5.0
+Date:   Fri, 17 Jul 2020 22:30:48 +0300
+Message-Id: <170261594993608@mail.yandex.ru>
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200717132859.237120-3-jacopo+renesas@jmondi.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Hi Lad,
 
-On Fri, Jul 17, 2020 at 03:28:48PM +0200, Jacopo Mondi wrote:
-> The ov5640 sensor does not support lanes reconfiguration according
-> to version of the datasheet I have (version 2.03) and the driver
-> does not parse the properties to try to reconfigure them.
-> 
-> Fix the properties values in the camera and cci node.
-> 
-> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> ---
-> Loic, I see you added the camera nodes in
-> 39e0ce6cd1bf ("arm64: dts: qcom: apq8016-sbc: Add CCI/Sensor nodes")
-> 
-> Do you have any idea how lanes could be swapped if, from my understanding,
-> nor the sensor nor the driver supports that ?
+I will try to answer your question below.
 
-It's not supported on the OV5640 side, so I think the second hunk of
-this patch is correct, but I believe that the CAMSS supports lane
-reordering, so the first hunk is likely incorrect and should be dropped.
+17.07.2020, 12:55, "Lad, Prabhakar" <prabhakar.csengg@gmail.com>:
+> HI Evgeny,
+>
+> Thank you for the patch.
+>
+> On Tue, Jul 14, 2020 at 6:20 PM Evgeny Novikov <novikov@ispras.ru> wrote:
+>>  isif_probe() invokes iounmap() on error handling paths, but it does not
+>>  reset the global state. So, later it can invoke iounmap() even when
+>>  ioremap() fails. This is the case also for isif_remove(). The patch
+>>  resets the global state after invoking iounmap() to avoid this.
+>>
+>>  Found by Linux Driver Verification project (linuxtesting.org).
+>>
+>>  Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+>>  ---
+>>   drivers/media/platform/davinci/isif.c | 11 +++++++++--
+>>   1 file changed, 9 insertions(+), 2 deletions(-)
+>>
+>>  diff --git a/drivers/media/platform/davinci/isif.c b/drivers/media/platform/davinci/isif.c
+>>  index c98edb67cfb2..c53cecd072b1 100644
+>>  --- a/drivers/media/platform/davinci/isif.c
+>>  +++ b/drivers/media/platform/davinci/isif.c
+>>  @@ -1075,10 +1075,14 @@ static int isif_probe(struct platform_device *pdev)
+>>          release_mem_region(res->start, resource_size(res));
+>>          i--;
+>>   fail_nobase_res:
+>>  - if (isif_cfg.base_addr)
+>>  + if (isif_cfg.base_addr) {
+>>                  iounmap(isif_cfg.base_addr);
+>>  - if (isif_cfg.linear_tbl0_addr)
+>>  + isif_cfg.base_addr = NULL;
+>>  + }
+>>  + if (isif_cfg.linear_tbl0_addr) {
+>>                  iounmap(isif_cfg.linear_tbl0_addr);
+>>  + isif_cfg.linear_tbl0_addr = NULL;
+>>  + }
+>
+> As the probe itself is failing I don't see a benefit in setting the
+> pointers to NULL. Unless I'm missing something.
 
-> ---
->  arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi b/arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi
-> index 8a4b790aa7ff..fe6613676e45 100644
-> --- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dtsi
-> @@ -591,8 +591,8 @@ ports {
->  		port@0 {
->  			reg = <0>;
->  			csiphy0_ep: endpoint {
-> -				clock-lanes = <1>;
-> -				data-lanes = <0 2>;
-> +				clock-lanes = <0>;
-> +				data-lanes = <1 2>;
->  				remote-endpoint = <&ov5640_ep>;
->  				status = "okay";
->  			};
-> @@ -627,8 +627,8 @@ camera_rear@3b {
-> 
->  		port {
->  			ov5640_ep: endpoint {
-> -				clock-lanes = <1>;
-> -				data-lanes = <0 2>;
-> +				clock-lanes = <0>;
-> +				data-lanes = <1 2>;
->  				remote-endpoint = <&csiphy0_ep>;
->  			};
->  		};
+Unfortunately, I can not provide you easily with a nice visualization of a corresponding error trace, but I will try to explain it in a text form. Our environment model for device drivers infinitely invokes their probe and remove callbacks. In particular, when probe fails, it does not invoke remove, but it can call probe again.
+
+Before the fix the global state (isif_cfg.base_addr and isif_cfg.linear_tbl0_addr) was not set to NULL when first probe fails. Assuming some failures during the second invocation of probe, e.g. ioremap_nocache() can fail, the driver proceeds to iounmap() because corresponding pointers are not NULL. Of course, one can hardly imagine that this is possible in practice but static analysis treats all possible paths.
+
+Perhaps, our environment model is not accurate enough in this aspect. But our tool does not report many similar warnings when we check thousands of drivers, so, we can assume that everything is okay. If you have another opinion, I would be glad to hear it.  
 
 -- 
-Regards,
+Evgeny Novikov
+Linux Verification Center, ISP RAS
+http://linuxtesting.org
 
-Laurent Pinchart
+>
+> Cheers,
+> --Prabhakar
+>
+>>          while (i >= 0) {
+>>                  res = platform_get_resource(pdev, IORESOURCE_MEM, i);
+>>  @@ -1096,8 +1100,11 @@ static int isif_remove(struct platform_device *pdev)
+>>          int i = 0;
+>>
+>>          iounmap(isif_cfg.base_addr);
+>>  + isif_cfg.base_addr = NULL;
+>>          iounmap(isif_cfg.linear_tbl0_addr);
+>>  + isif_cfg.linear_tbl0_addr = NULL;
+>>          iounmap(isif_cfg.linear_tbl1_addr);
+>>  + isif_cfg.linear_tbl1_addr = NULL;
+>>          while (i < 3) {
+>>                  res = platform_get_resource(pdev, IORESOURCE_MEM, i);
+>>                  if (res)
+>>  --
+>>  2.16.4
