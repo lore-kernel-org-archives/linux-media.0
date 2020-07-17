@@ -2,130 +2,84 @@ Return-Path: <SRS0=7xhz=A4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B036C433F2
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 11:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AFB3C433EB
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 11:59:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E33832065E
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 11:55:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 79A48208C7
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 11:59:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="bs6rAoV6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726834AbgGQLzT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Jul 2020 07:55:19 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56790 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726201AbgGQLzS (ORCPT
+        id S1726907AbgGQL7e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Jul 2020 07:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725950AbgGQL7d (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Jul 2020 07:55:18 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 568FC2A576B
-From:   Helen Koike <helen.koike@collabora.com>
-To:     mchehab@kernel.org, hans.verkuil@cisco.com,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
+        Fri, 17 Jul 2020 07:59:33 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD13C061755;
+        Fri, 17 Jul 2020 04:59:33 -0700 (PDT)
+Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 82400561;
+        Fri, 17 Jul 2020 13:59:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1594987170;
+        bh=xF/xJDcrJipLnK8pks8U4NEnx0RCjMwVlmOA23tAZic=;
+        h=Subject:To:Cc:References:Reply-To:From:Date:In-Reply-To:From;
+        b=bs6rAoV6BK4ecPn9HeLWpIPYWoRyZhJH3ys2/JX9rqA2Q+HFY+fPejaVP0R03ydRi
+         aNv2668HBWSTzbGZW04M7fvnHlZxDyB5k+hnoQwdpu6+68A4VXS4Q/czvnkXIRRy9K
+         Yr4Jzey15aObbdba6elVp4NZSjn6odTNPxOZgrBQ=
+Subject: Re: [PATCH 1/5] media/media-device.h: drop duplicated word in comment
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
-        Helen Koike <helen.koike@collabora.com>, tfiga@chromium.org,
-        hiroh@chromium.org, nicolas@ndufresne.ca, Brian.Starkey@arm.com,
-        kernel@collabora.com, narmstrong@baylibre.com,
-        linux-kernel@vger.kernel.org, frkoenig@chromium.org,
-        mjourdan@baylibre.com, stanimir.varbanov@linaro.org
-Subject: [PATCH v4 4/6] media: mediabus: Add helpers to convert a ext_pix format to/from a mbus_fmt
-Date:   Fri, 17 Jul 2020 08:54:33 -0300
-Message-Id: <20200717115435.2632623-5-helen.koike@collabora.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200717115435.2632623-1-helen.koike@collabora.com>
-References: <20200717115435.2632623-1-helen.koike@collabora.com>
+References: <20200714220553.20294-1-rdunlap@infradead.org>
+Reply-To: kieran.bingham+renesas@ideasonboard.com
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Organization: Ideas on Board
+Message-ID: <6df0dd2e-b33a-ae7a-6584-58a6be7c1675@ideasonboard.com>
+Date:   Fri, 17 Jul 2020 12:59:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200714220553.20294-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Boris Brezillon <boris.brezillon@collabora.com>
+On 14/07/2020 23:05, Randy Dunlap wrote:
+> Delete the doubled word "the" in a comment.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-media@vger.kernel.org
 
-Just a new version of v4l2_fill_mbus_format() and v4l2_fill_ext_pix_format()
-to deal with the new v4l2_ext_pix_format struct.
-This is needed to convert the VIMC driver to the EXT_FMT/EXT_BUF iocts.
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-Signed-off-by: Helen Koike <helen.koike@collabora.com>
----
-Changes in v4:
-- Add helper v4l2_fill_ext_pix_format()
-- Rebased on top of media/master (post 5.8-rc1)
-
-Changes in v3:
-- Rebased on top of media/master (post 5.4-rc1)
-
-Changes in v2:
-- New patch
----
- include/media/v4l2-mediabus.h | 42 +++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
-
-diff --git a/include/media/v4l2-mediabus.h b/include/media/v4l2-mediabus.h
-index 45f88f0248c4e..8133407377f7d 100644
---- a/include/media/v4l2-mediabus.h
-+++ b/include/media/v4l2-mediabus.h
-@@ -119,6 +119,26 @@ v4l2_fill_pix_format(struct v4l2_pix_format *pix_fmt,
- 	pix_fmt->xfer_func = mbus_fmt->xfer_func;
- }
- 
-+/**
-+ * v4l2_fill_ext_pix_format - Ancillary routine that fills a &struct
-+ *	v4l2_ext_pix_format fields from a &struct v4l2_mbus_framefmt.
-+ *
-+ * @pix_fmt:	pointer to &struct v4l2_ext_pix_format to be filled
-+ * @mbus_fmt:	pointer to &struct v4l2_mbus_framefmt to be used as model
-+ */
-+static inline void
-+v4l2_fill_ext_pix_format(struct v4l2_ext_pix_format *pix_fmt,
-+		     const struct v4l2_mbus_framefmt *mbus_fmt)
-+{
-+	pix_fmt->width = mbus_fmt->width;
-+	pix_fmt->height = mbus_fmt->height;
-+	pix_fmt->field = mbus_fmt->field;
-+	pix_fmt->colorspace = mbus_fmt->colorspace;
-+	pix_fmt->ycbcr_enc = mbus_fmt->ycbcr_enc;
-+	pix_fmt->quantization = mbus_fmt->quantization;
-+	pix_fmt->xfer_func = mbus_fmt->xfer_func;
-+}
-+
- /**
-  * v4l2_fill_pix_format - Ancillary routine that fills a &struct
-  *	v4l2_mbus_framefmt from a &struct v4l2_pix_format and a
-@@ -182,4 +202,26 @@ v4l2_fill_mbus_format_mplane(struct v4l2_mbus_framefmt *mbus_fmt,
- 	mbus_fmt->xfer_func = pix_mp_fmt->xfer_func;
- }
- 
-+/**
-+ * v4l2_fill_mbus_format_ext - Ancillary routine that fills a &struct
-+ *	v4l2_mbus_framefmt from a &struct v4l2_ext_pix_format.
-+ *
-+ * @mbus_fmt:	pointer to &struct v4l2_mbus_framefmt to be filled
-+ * @pix_fmt:	pointer to &struct v4l2_ext_pix_format to be used as model
-+ * @code:	data format code (from &enum v4l2_mbus_pixelcode)
-+ */
-+static inline void
-+v4l2_fill_mbus_format_ext(struct v4l2_mbus_framefmt *mbus_fmt,
-+			  const struct v4l2_ext_pix_format *pix_fmt, u32 code)
-+{
-+	mbus_fmt->width = pix_fmt->width;
-+	mbus_fmt->height = pix_fmt->height;
-+	mbus_fmt->field = pix_fmt->field;
-+	mbus_fmt->colorspace = pix_fmt->colorspace;
-+	mbus_fmt->ycbcr_enc = pix_fmt->ycbcr_enc;
-+	mbus_fmt->quantization = pix_fmt->quantization;
-+	mbus_fmt->xfer_func = pix_fmt->xfer_func;
-+	mbus_fmt->code = code;
-+}
-+
- #endif
--- 
-2.26.0
+> ---
+>  include/media/media-device.h |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- linux-next-20200714.orig/include/media/media-device.h
+> +++ linux-next-20200714/include/media/media-device.h
+> @@ -128,7 +128,7 @@ struct media_device_ops {
+>   *
+>   * Use-case: find tuner entity connected to the decoder
+>   * entity and check if it is available, and activate the
+> - * the link between them from @enable_source and deactivate
+> + * link between them from @enable_source and deactivate
+>   * from @disable_source.
+>   *
+>   * .. note::
+> 
 
