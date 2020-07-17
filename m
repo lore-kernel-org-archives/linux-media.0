@@ -7,49 +7,50 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0643C433E0
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 21:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D819C433E1
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 20:57:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA8CC20809
-	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 21:02:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 072AC2070E
+	for <linux-media@archiver.kernel.org>; Fri, 17 Jul 2020 20:57:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Xp4odvCc"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KJFvMgCt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726626AbgGQVCb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Jul 2020 17:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726393AbgGQVCb (ORCPT
+        id S1726619AbgGQU5d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Jul 2020 16:57:33 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:36942 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726492AbgGQU5d (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Jul 2020 17:02:31 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEB6C0619D2;
-        Fri, 17 Jul 2020 14:02:31 -0700 (PDT)
+        Fri, 17 Jul 2020 16:57:33 -0400
 Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E37B171D;
-        Fri, 17 Jul 2020 23:02:28 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4E96471D;
+        Fri, 17 Jul 2020 22:57:30 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1595019749;
-        bh=0uhzC+Mssd0si73Nzsm1nP0SdZBHYqve9sskX1Uq63M=;
+        s=mail; t=1595019450;
+        bh=KrWW9UrE75AYkx5HCf9FQsCDNTM8G46KJkgzYPObyTU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xp4odvCctrRVBrDSt+CGwsBRuvtrE2vbRxjBjGI+SZ8fxI+IfTTX8cq1UR+QRvVY1
-         xb0YmrSS+S5+zy5bnARv+N7sjoDFggE0O3W1y5uMaEKOr8DQq7C0ak36WQGWrtRItR
-         Q1aGHzzbEXNf0a+2/WQMFRdlGqMzg07efNUHyuho=
-Date:   Sat, 18 Jul 2020 00:02:20 +0300
+        b=KJFvMgCt3Pm8Yy2Pp2XLvmXwG+sjH8HnsG4U9jL7FSdeFf2hYv5iDmypEAFZIjjtg
+         BhSbOhdfO2vM3+RjZs1gII40I5AuY2dZmkiK1l63rohy3P9Qyl/RRvU/9qUNkHOnkq
+         xfOH3OSNqNsPlm28zcE29tu5W2uu5GdSP+VcRfp4=
+Date:   Fri, 17 Jul 2020 23:57:22 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
 Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
         slongerbeam@gmail.com, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 11/13] media: i2c: ov5640: Initialize DVP polarities as
- default
-Message-ID: <20200717210220.GM5961@pendragon.ideasonboard.com>
+        linux-renesas-soc@vger.kernel.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH 08/13] dt-bindings: media: ov5640: Remove data-shift
+Message-ID: <20200717205722.GJ5961@pendragon.ideasonboard.com>
 References: <20200717132859.237120-1-jacopo+renesas@jmondi.org>
- <20200717132859.237120-12-jacopo+renesas@jmondi.org>
+ <20200717132859.237120-9-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200717132859.237120-12-jacopo+renesas@jmondi.org>
+In-Reply-To: <20200717132859.237120-9-jacopo+renesas@jmondi.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -57,79 +58,81 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Jacopo,
 
+(CC'ing Sakari)
+
 Thank you for the patch.
 
-On Fri, Jul 17, 2020 at 03:28:57PM +0200, Jacopo Mondi wrote:
-> With the bindings now updated to initialize the DVP synchronism
+On Fri, Jul 17, 2020 at 03:28:54PM +0200, Jacopo Mondi wrote:
+> The value of the data-shift property solely depend on the selected
+> bus width and it's not freely configurable.
+> 
+> Remove it from the bindings document and update its users accordingly.
 
-s/synchronism/synchronization/
+Hmmmm that's an interesting one. Sakari, what do you think ?
 
-> signals to the values reported by the datasheet, update the driver
-> to respect the same default values.
-> 
-> The driver works-around a documentation bug and reports the VSYNC
-> polarity control bit to be inverted. Regardless of the actual
-> value written to the hardware register, initialize the DVP configuration
-> to the defaults reported by the chip manual and the bindings document:
-> 
-> - VSYNC: active low
-> - HREF:	active low
-> - PCLK:	active high
-> 
 > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 > ---
->  drivers/media/i2c/ov5640.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+>  Documentation/devicetree/bindings/media/i2c/ov5640.yaml | 9 ---------
+>  arch/arm/boot/dts/stm32mp157c-ev1.dts                   | 1 -
+>  2 files changed, 10 deletions(-)
 > 
-> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-> index 2fe4a7ac0592..012ef1df59aa 100644
-> --- a/drivers/media/i2c/ov5640.c
-> +++ b/drivers/media/i2c/ov5640.c
-> @@ -1212,9 +1212,9 @@ static int ov5640_set_stream_dvp(struct ov5640_dev *sensor, bool on)
->  {
->  	int ret;
->  	unsigned int flags = sensor->ep.bus.parallel.flags;
-> -	u8 pclk_pol = 0;
-> +	u8 pclk_pol = 1;
->  	u8 hsync_pol = 0;
-> -	u8 vsync_pol = 0;
-> +	u8 vsync_pol = 1;
->  
->  	/*
->  	 * Note about parallel port configuration.
-> @@ -1229,9 +1229,9 @@ static int ov5640_set_stream_dvp(struct ov5640_dev *sensor, bool on)
->  	 * devicetree endpoint control lines properties.
->  	 * If no endpoint control lines properties are set,
->  	 * polarity will be as below:
-> -	 * - VSYNC:	active high
-> +	 * - VSYNC:	active low
->  	 * - HREF:	active low
-> -	 * - PCLK:	active low
-> +	 * - PCLK:	active high
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ov5640.yaml b/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
+> index 5e1662e848bd..ab700a1830aa 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
+> +++ b/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
+> @@ -92,12 +92,6 @@ properties:
+>                parallel bus.
+>              enum: [8, 10]
+> 
+> -          data-shift:
+> -            description: |
+> -              Shall be set to <2> for 8 bits parallel bus (lines 9:2 are used) or
+> -              <0> for 10 bits parallel bus.
+> -            enum: [0, 2]
 
-This changes the existing behaviour, doesn't it break DT backward
-compatibility ?
+Should you document in the description of bus-width that data-shift is
+implied ?
 
->  	 */
->  
->  	if (on) {
-> @@ -1245,12 +1245,12 @@ static int ov5640_set_stream_dvp(struct ov5640_dev *sensor, bool on)
->  		 *		datasheet and hardware, 0 is active high
->  		 *		and 1 is active low...)
->  		 */
-> -		if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
-> -			pclk_pol = 1;
-> +		if (flags & V4L2_MBUS_PCLK_SAMPLE_FALLING)
-> +			pclk_pol = 0;
->  		if (flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
->  			hsync_pol = 1;
-> -		if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
-> -			vsync_pol = 1;
-> +		if (flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH)
-> +			vsync_pol = 0;
->  
->  		ret = ov5640_write_reg(sensor,
->  				       OV5640_REG_POLARITY_CTRL00,
+> -
+>            hsync-active:
+>              enum: [0, 1]
+> 
+> @@ -115,7 +109,6 @@ properties:
+>              then:
+>                  properties:
+>                    bus-width: false
+> -                  data-shift: false
+>                    hsync-active: false
+>                    vsync-active: false
+>                    pclk-sample: false
+> @@ -135,7 +128,6 @@ properties:
+>                  - remote-endpoint
+>                  - bus-type
+>                  - bus-width
+> -                - data-shift
+>                  - hsync-active
+>                  - vsync-active
+>                  - pclk-sample
+> @@ -204,7 +196,6 @@ examples:
+>                      remote-endpoint = <&parallel_from_ov5640>;
+>                      bus-type = <5>;
+>                      bus-width = <10>;
+> -                    data-shift = <0>;
+>                      hsync-active = <1>;
+>                      vsync-active = <1>;
+>                      pclk-sample = <1>;
+> diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+> index 613ede73b65b..96f96202ca63 100644
+> --- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
+> +++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+> @@ -192,7 +192,6 @@ ov5640_0: endpoint {
+>  				remote-endpoint = <&dcmi_0>;
+>  				bus-type = <5>;
+>  				bus-width = <8>;
+> -				data-shift = <2>; /* lines 9:2 are used */
+>  				hsync-active = <0>;
+>  				vsync-active = <0>;
+>  				pclk-sample = <1>;
 
 -- 
 Regards,
