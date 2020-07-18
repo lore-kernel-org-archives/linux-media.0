@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27634C433E2
-	for <linux-media@archiver.kernel.org>; Sat, 18 Jul 2020 07:35:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C550C433EA
+	for <linux-media@archiver.kernel.org>; Sat, 18 Jul 2020 09:28:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0779920724
-	for <linux-media@archiver.kernel.org>; Sat, 18 Jul 2020 07:35:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E5E322B4E
+	for <linux-media@archiver.kernel.org>; Sat, 18 Jul 2020 09:28:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595057758;
+	s=default; t=1595064523;
 	bh=rt7r8XiIxEkqFJ0t2gUyj37btoYwlDfLnXTwW+Dcn+Q=;
 	h=From:Cc:Subject:Date:To:List-ID:From;
-	b=kX8NFoETlGaH8GjyhFH5zMKSsbk/hAAvlG5auUxZk17zR41Ve3GbuSAe6ZjwAvgSC
-	 oATkNEhSgsFTvagCAPLENXhhZx+zuKq3VYxo/xhMehpYdKmAMm+7suR2XnABm9elIr
-	 1gIyL9LBuDL9Sn8Uag7yrKl/AG9kcKCpiQx1NYFg=
+	b=PiMF2CF39WJAHJ5yR1vBWz7zMmFrhOALQpMDK7EhVpZ59hFKT7qf/L/UpSDb6TGxy
+	 Fo56POk/wpB5+WFuxPLzyWgydiRAiYPbBmHnQWYe/tyMQ2++n3NJQ2eV/9sJV5PCeL
+	 Z9iaihFf57l26rs+n0zaEYLYOgZ9ElMv28/vlyUI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729087AbgGRHfw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 18 Jul 2020 03:35:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47270 "EHLO mail.kernel.org"
+        id S1726595AbgGRJ22 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 18 Jul 2020 05:28:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43092 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725983AbgGRHfv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 18 Jul 2020 03:35:51 -0400
+        id S1726217AbgGRJ22 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 18 Jul 2020 05:28:28 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C89B420775;
-        Sat, 18 Jul 2020 07:35:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 551A722B49;
+        Sat, 18 Jul 2020 09:28:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595057751;
+        s=default; t=1595064507;
         bh=rt7r8XiIxEkqFJ0t2gUyj37btoYwlDfLnXTwW+Dcn+Q=;
         h=From:To:Cc:Subject:Date:From;
-        b=h5cmUHdpdOrsBqM2cZyRpJyKxqMw36AviFE5rkcmgeK/EH20yZgw4eUeHdadxl4cN
-         Fa81ywvUr/OlLbzh5RTuKiqsrxyhorBB+tkMQDiXT+LEVv+ITp30X2I8OsjYvslRHl
-         l5jD1utOp96F4jSyQWWO4c7EBysaEOjpGC+4lMS0=
+        b=CC9PAnBlKlln9NFHVv2TmXTPSGbQLX/l2KP8sf67U7COCyDvO5EjtG0u345XdfELt
+         blHJCI30VuAGtNCqiqjI9HPCY40G/OInjmEFlakDmGsI5ZwYefAPZihaWEwz3uvrs+
+         uEVTUVWjDna/dBIiGJvSxdlrGnCfrHSFIoI1OvE0=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1jwhNs-005EPN-J1; Sat, 18 Jul 2020 09:35:48 +0200
+        id 1jwj8r-005wDS-7H; Sat, 18 Jul 2020 11:28:25 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] media: atomisp: get rid of some unused static vars
-Date:   Sat, 18 Jul 2020 09:35:45 +0200
-Message-Id: <06a617f163762cd60474fde9c88fde72dca447f4.1595057709.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 1/4] media: atomisp: get rid of some unused static vars
+Date:   Sat, 18 Jul 2020 11:28:19 +0200
+Message-Id: <22a1ad531d3b2030fe0b0ffae9d883b0d5cc0406.1595062851.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
