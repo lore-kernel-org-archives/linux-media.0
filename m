@@ -2,82 +2,504 @@ Return-Path: <SRS0=UAVd=A5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0FAAC433E5
-	for <linux-media@archiver.kernel.org>; Sat, 18 Jul 2020 05:54:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C9CBC433E3
+	for <linux-media@archiver.kernel.org>; Sat, 18 Jul 2020 07:35:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CA4E2083E
-	for <linux-media@archiver.kernel.org>; Sat, 18 Jul 2020 05:54:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5308C20724
+	for <linux-media@archiver.kernel.org>; Sat, 18 Jul 2020 07:35:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595051658;
-	bh=7tj0coF0LM+/VMFkugJPQNZQ4IPbTxLOCHXhOrSJqAY=;
-	h=Date:From:Cc:Subject:In-Reply-To:References:To:List-ID:From;
-	b=eK4MRcd4FHRCHodQX6QTbe57G83Hwn1FYq2LhTtZWyujtTw+TSg8eYrlqB163m1Mm
-	 6ciDDzBg8i97+7aAm86D09vB4oZtT7rbw+VjgI30m0yxCpd7MkMK0S2c/Q8PbusGDZ
-	 2aO/9CAfl4xL5FQt/kBziC4T9GRCIGtWiVlhs0So=
+	s=default; t=1595057756;
+	bh=BS0rLaTKgIYv7YZTAi5CbvFOwVpWyr5E6Tx5aa710Xw=;
+	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
+	b=NYIRCDOEUg8EypYEPKD+St1Ifc2FMh4Tb2isNNygNsISjeHYaVp97PNf9pWHWu6bM
+	 c1Vmk7WOCqk2nWB6BvRbpy4lTCVLctgh13XbXzvhScptGblfpWf3hcZ1H9Q/s1EBY/
+	 pNcBzx53qYh63xZ0V/JvDynEV3McEfjdYdT/Jmzs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbgGRFyN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 18 Jul 2020 01:54:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51002 "EHLO mail.kernel.org"
+        id S1729150AbgGRHfx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 18 Jul 2020 03:35:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47280 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726377AbgGRFyM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 18 Jul 2020 01:54:12 -0400
-Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        id S1728936AbgGRHfw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 18 Jul 2020 03:35:52 -0400
+Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F0139207FB;
-        Sat, 18 Jul 2020 05:54:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C6FA320724;
+        Sat, 18 Jul 2020 07:35:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595051652;
-        bh=7tj0coF0LM+/VMFkugJPQNZQ4IPbTxLOCHXhOrSJqAY=;
-        h=Date:From:Cc:Subject:In-Reply-To:References:From;
-        b=DMAsgOdbE5S+/snFh2fLr9vtfPqyP/vp0lnwJW1CI2VHKury2pA4DUzMmnHeDDWJ3
-         WVxj32rIi08omQDlDtE5PuS1Cx4+3fw0xRU3eV76cWasmwj+YwF/+GUC5FnSJuIxSZ
-         t6hOLOuQWHuG3NUYgp7Mw4My71LeguU2aBTrbnrY=
-Date:   Sat, 18 Jul 2020 07:54:07 +0200
+        s=default; t=1595057751;
+        bh=BS0rLaTKgIYv7YZTAi5CbvFOwVpWyr5E6Tx5aa710Xw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dYT+hrGeQspISOC5M1kdXPcfJoovXpC8rdPsDKwrKi8lk3nHm4mG5s8gbeLSnj5D7
+         DkWBq7JWOt6E5j6+HWGQIr2eQQQWrpi1ZK0gU/qN9Z7QW6dy1I0SwugiTRWffjw2zj
+         0nGECIiaU90cj3rVG5XZLhhYj4j+Kd9pqRw6lVSc=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jwhNs-005EPQ-KA; Sat, 18 Jul 2020 09:35:48 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Jonas Karlman <jonas@kwiboo.se>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Subject: Re: [PATCH 1/3] media: rkvdec: Fix H264 scaling list order
-Message-ID: <20200718075407.765551bb@coco.lan>
-In-Reply-To: <2630e1bb0948c3134c6f22ad275ae27cc6023532.1595048742.git.mchehab+huawei@kernel.org>
-References: <2630e1bb0948c3134c6f22ad275ae27cc6023532.1595048742.git.mchehab+huawei@kernel.org>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] atomisp: remove non-used 32-bits consts at system_local
+Date:   Sat, 18 Jul 2020 09:35:46 +0200
+Message-Id: <b24c905e7ba83b59d68cd4b76814e2a66450ea4d.1595057709.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <06a617f163762cd60474fde9c88fde72dca447f4.1595057709.git.mchehab+huawei@kernel.org>
+References: <06a617f163762cd60474fde9c88fde72dca447f4.1595057709.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Sat, 18 Jul 2020 07:05:54 +0200
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
+There is an abstraction at the code in order to support
+32 or 64 bits address/data length. However, for all
+Atom chipsets supported by this version, the size is fixed.
 
-> From: Jonas Karlman <jonas@kwiboo.se>
-> 
-> The Rockchip Video Decoder driver is expecting that the values in a
-> scaling list are in zig-zag order and applies the inverse scanning process
-> to get the values in matrix order.
-> 
-> Commit 0b0393d59eb4 ("media: uapi: h264: clarify expected
-> scaling_list_4x4/8x8 order") clarified that the values in the scaling list
-> should already be in matrix order.
-> 
-> Fix this by removing the reordering and change to use two memcpy.
+So, cleanup the mess, removing the uused code and placing
+the data sizes on a single place.
 
-Please ignore this one. This patch is already merged, and it is
-not related to the 2 atomisp patches on this short series.
+The end goal is to completely remove those local/global
+headers, replacing them by some ISP-version dependent struct,
+in order for the driver to decide what version it would need
+in runtime.
 
-Thanks,
-Mauro
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ .../staging/media/atomisp/pci/hive_types.h    |  24 +--
+ .../media/atomisp/pci/isp2400_system_global.h |   2 -
+ .../media/atomisp/pci/isp2400_system_local.h  | 131 -------------
+ .../media/atomisp/pci/isp2401_system_global.h |   4 -
+ .../media/atomisp/pci/isp2401_system_local.h  | 173 ------------------
+ 5 files changed, 3 insertions(+), 331 deletions(-)
+
+diff --git a/drivers/staging/media/atomisp/pci/hive_types.h b/drivers/staging/media/atomisp/pci/hive_types.h
+index addda9b81d7b..4b8a679fb672 100644
+--- a/drivers/staging/media/atomisp/pci/hive_types.h
++++ b/drivers/staging/media/atomisp/pci/hive_types.h
+@@ -52,32 +52,14 @@ typedef unsigned short       hive_uint16;
+ typedef unsigned int         hive_uint32;
+ typedef unsigned long long   hive_uint64;
+ 
+-/* by default assume 32 bit master port (both data and address) */
+-#ifndef HRT_DATA_WIDTH
+-#define HRT_DATA_WIDTH 32
+-#endif
+-#ifndef HRT_ADDRESS_WIDTH
+-#define HRT_ADDRESS_WIDTH 32
+-#endif
+-
++#define HRT_DATA_WIDTH	  32
++#define HRT_ADDRESS_WIDTH 64
+ #define HRT_DATA_BYTES    (HRT_DATA_WIDTH / 8)
+ #define HRT_ADDRESS_BYTES (HRT_ADDRESS_WIDTH / 8)
++#define SIZEOF_HRT_REG    (HRT_DATA_WIDTH >> 3)
+ 
+-#if HRT_DATA_WIDTH == 64
+-typedef hive_uint64 hrt_data;
+-#elif HRT_DATA_WIDTH == 32
+ typedef hive_uint32 hrt_data;
+-#else
+-#error data width not supported
+-#endif
+-
+-#if HRT_ADDRESS_WIDTH == 64
+ typedef hive_uint64 hrt_address;
+-#elif HRT_ADDRESS_WIDTH == 32
+-typedef hive_uint32 hrt_address;
+-#else
+-#error adddres width not supported
+-#endif
+ 
+ /* use 64 bit addresses in simulation, where possible */
+ typedef hive_uint64  hive_sim_address;
+diff --git a/drivers/staging/media/atomisp/pci/isp2400_system_global.h b/drivers/staging/media/atomisp/pci/isp2400_system_global.h
+index d87ddf1d2fe9..3888793a31e2 100644
+--- a/drivers/staging/media/atomisp/pci/isp2400_system_global.h
++++ b/drivers/staging/media/atomisp/pci/isp2400_system_global.h
+@@ -75,8 +75,6 @@
+  * Semi global. "HRT" is accessible from SP, but the HRT types do not fully apply
+  */
+ #define HRT_VADDRESS_WIDTH	32
+-//#define HRT_ADDRESS_WIDTH	64		/* Surprise, this is a local property*/
+-#define HRT_DATA_WIDTH		32
+ 
+ #define SIZEOF_HRT_REG		(HRT_DATA_WIDTH >> 3)
+ #define HIVE_ISP_CTRL_DATA_BYTES (HIVE_ISP_CTRL_DATA_WIDTH / 8)
+diff --git a/drivers/staging/media/atomisp/pci/isp2400_system_local.h b/drivers/staging/media/atomisp/pci/isp2400_system_local.h
+index f889b7bf8f2d..3c7dc180ffe6 100644
+--- a/drivers/staging/media/atomisp/pci/isp2400_system_local.h
++++ b/drivers/staging/media/atomisp/pci/isp2400_system_local.h
+@@ -24,17 +24,12 @@
+ 
+ #include "system_global.h"
+ 
+-/* HRT assumes 32 by default (see Linux/include/hive_types.h), overrule it in case it is different */
+-#undef HRT_ADDRESS_WIDTH
+-#define HRT_ADDRESS_WIDTH	64		/* Surprise, this is a local property */
+-
+ /* This interface is deprecated */
+ #include "hive_types.h"
+ 
+ /*
+  * Cell specific address maps
+  */
+-#if HRT_ADDRESS_WIDTH == 64
+ 
+ #define GP_FIFO_BASE   ((hrt_address)0x0000000000090104)		/* This is NOT a base address */
+ 
+@@ -154,130 +149,4 @@ static const hrt_address RX_BASE[N_RX_ID] = {
+ 	(hrt_address)0x0000000000080100ULL
+ };
+ 
+-#elif HRT_ADDRESS_WIDTH == 32
+-
+-#define GP_FIFO_BASE   ((hrt_address)0x00090104)		/* This is NOT a base address */
+-
+-/* ISP */
+-static const hrt_address ISP_CTRL_BASE[N_ISP_ID] = {
+-	(hrt_address)0x00020000UL
+-};
+-
+-static const hrt_address ISP_DMEM_BASE[N_ISP_ID] = {
+-	(hrt_address)0x00200000UL
+-};
+-
+-static const hrt_address ISP_BAMEM_BASE[N_BAMEM_ID] = {
+-	(hrt_address)0x100000UL
+-};
+-
+-/* SP */
+-static const hrt_address SP_CTRL_BASE[N_SP_ID] = {
+-	(hrt_address)0x00010000UL
+-};
+-
+-static const hrt_address SP_DMEM_BASE[N_SP_ID] = {
+-	(hrt_address)0x00300000UL
+-};
+-
+-/* MMU */
+-/*
+- * MMU0_ID: The data MMU
+- * MMU1_ID: The icache MMU
+- */
+-static const hrt_address MMU_BASE[N_MMU_ID] = {
+-	(hrt_address)0x00070000UL,
+-	(hrt_address)0x000A0000UL
+-};
+-
+-/* DMA */
+-static const hrt_address DMA_BASE[N_DMA_ID] = {
+-	(hrt_address)0x00040000UL
+-};
+-
+-/* IRQ */
+-static const hrt_address IRQ_BASE[N_IRQ_ID] = {
+-	(hrt_address)0x00000500UL,
+-	(hrt_address)0x00030A00UL,
+-	(hrt_address)0x0008C000UL,
+-	(hrt_address)0x00090200UL
+-};
+-
+-/*
+-	(hrt_address)0x00000500UL};
+- */
+-
+-/* GDC */
+-static const hrt_address GDC_BASE[N_GDC_ID] = {
+-	(hrt_address)0x00050000UL,
+-	(hrt_address)0x00060000UL
+-};
+-
+-/* FIFO_MONITOR (not a subset of GP_DEVICE) */
+-static const hrt_address FIFO_MONITOR_BASE[N_FIFO_MONITOR_ID] = {
+-	(hrt_address)0x00000000UL
+-};
+-
+-/*
+-static const hrt_address GP_REGS_BASE[N_GP_REGS_ID] = {
+-	(hrt_address)0x00000000UL};
+-
+-static const hrt_address GP_DEVICE_BASE[N_GP_DEVICE_ID] = {
+-	(hrt_address)0x00090000UL};
+-*/
+-
+-/* GP_DEVICE (single base for all separate GP_REG instances) */
+-static const hrt_address GP_DEVICE_BASE[N_GP_DEVICE_ID] = {
+-	(hrt_address)0x00000000UL
+-};
+-
+-/*GP TIMER , all timer registers are inter-twined,
+- * so, having multiple base addresses for
+- * different timers does not help*/
+-static const hrt_address GP_TIMER_BASE =
+-    (hrt_address)0x00000600UL;
+-
+-/* GPIO */
+-static const hrt_address GPIO_BASE[N_GPIO_ID] = {
+-	(hrt_address)0x00000400UL
+-};
+-
+-/* TIMED_CTRL */
+-static const hrt_address TIMED_CTRL_BASE[N_TIMED_CTRL_ID] = {
+-	(hrt_address)0x00000100UL
+-};
+-
+-/* INPUT_FORMATTER */
+-static const hrt_address INPUT_FORMATTER_BASE[N_INPUT_FORMATTER_ID] = {
+-	(hrt_address)0x00030000UL,
+-	(hrt_address)0x00030200UL,
+-	(hrt_address)0x00030400UL
+-};
+-
+-/*	(hrt_address)0x00030600UL, */ /* memcpy() */
+-
+-/* INPUT_SYSTEM */
+-static const hrt_address INPUT_SYSTEM_BASE[N_INPUT_SYSTEM_ID] = {
+-	(hrt_address)0x00080000UL
+-};
+-
+-/*	(hrt_address)0x00081000UL, */ /* capture A */
+-/*	(hrt_address)0x00082000UL, */ /* capture B */
+-/*	(hrt_address)0x00083000UL, */ /* capture C */
+-/*	(hrt_address)0x00084000UL, */ /* Acquisition */
+-/*	(hrt_address)0x00085000UL, */ /* DMA */
+-/*	(hrt_address)0x00089000UL, */ /* ctrl */
+-/*	(hrt_address)0x0008A000UL, */ /* GP regs */
+-/*	(hrt_address)0x0008B000UL, */ /* FIFO */
+-/*	(hrt_address)0x0008C000UL, */ /* IRQ */
+-
+-/* RX, the MIPI lane control regs start at offset 0 */
+-static const hrt_address RX_BASE[N_RX_ID] = {
+-	(hrt_address)0x00080100UL
+-};
+-
+-#else
+-#error "system_local.h: HRT_ADDRESS_WIDTH must be one of {32,64}"
+-#endif
+-
+ #endif /* __SYSTEM_LOCAL_H_INCLUDED__ */
+diff --git a/drivers/staging/media/atomisp/pci/isp2401_system_global.h b/drivers/staging/media/atomisp/pci/isp2401_system_global.h
+index 8bb2a956f983..b4a6976d7eab 100644
+--- a/drivers/staging/media/atomisp/pci/isp2401_system_global.h
++++ b/drivers/staging/media/atomisp/pci/isp2401_system_global.h
+@@ -85,11 +85,7 @@
+  * the HRT types do not fully apply
+  */
+ #define HRT_VADDRESS_WIDTH	32
+-/* Surprise, this is a local property*/
+-/*#define HRT_ADDRESS_WIDTH	64 */
+-#define HRT_DATA_WIDTH		32
+ 
+-#define SIZEOF_HRT_REG		(HRT_DATA_WIDTH >> 3)
+ #define HIVE_ISP_CTRL_DATA_BYTES (HIVE_ISP_CTRL_DATA_WIDTH / 8)
+ 
+ /* The main bus connecting all devices */
+diff --git a/drivers/staging/media/atomisp/pci/isp2401_system_local.h b/drivers/staging/media/atomisp/pci/isp2401_system_local.h
+index 1bb01e627cd7..d60591e04b61 100644
+--- a/drivers/staging/media/atomisp/pci/isp2401_system_local.h
++++ b/drivers/staging/media/atomisp/pci/isp2401_system_local.h
+@@ -24,15 +24,12 @@
+ 
+ #include "system_global.h"
+ 
+-#define HRT_ADDRESS_WIDTH	64		/* Surprise, this is a local property */
+-
+ /* This interface is deprecated */
+ #include "hive_types.h"
+ 
+ /*
+  * Cell specific address maps
+  */
+-#if HRT_ADDRESS_WIDTH == 64
+ 
+ #define GP_FIFO_BASE   ((hrt_address)0x0000000000090104)		/* This is NOT a base address */
+ 
+@@ -198,175 +195,5 @@ static const hrt_address STREAM2MMIO_CTRL_BASE[N_STREAM2MMIO_ID] = {
+ 	0x00000000000C2C00ULL,	/* stream2mmio controller B */
+ 	0x00000000000C4C00ULL	/* stream2mmio controller C */
+ };
+-#elif HRT_ADDRESS_WIDTH == 32
+-
+-#define GP_FIFO_BASE   ((hrt_address)0x00090104)		/* This is NOT a base address */
+-
+-/* ISP */
+-static const hrt_address ISP_CTRL_BASE[N_ISP_ID] = {
+-	0x00020000UL
+-};
+-
+-static const hrt_address ISP_DMEM_BASE[N_ISP_ID] = {
+-	0xffffffffUL
+-};
+-
+-static const hrt_address ISP_BAMEM_BASE[N_BAMEM_ID] = {
+-	0xffffffffUL
+-};
+-
+-/* SP */
+-static const hrt_address SP_CTRL_BASE[N_SP_ID] = {
+-	0x00010000UL
+-};
+-
+-static const hrt_address SP_DMEM_BASE[N_SP_ID] = {
+-	0x00300000UL
+-};
+-
+-/* MMU */
+-/*
+- * MMU0_ID: The data MMU
+- * MMU1_ID: The icache MMU
+- */
+-static const hrt_address MMU_BASE[N_MMU_ID] = {
+-	0x00070000UL,
+-	0x000A0000UL
+-};
+-
+-/* DMA */
+-static const hrt_address DMA_BASE[N_DMA_ID] = {
+-	0x00040000UL
+-};
+-
+-static const hrt_address ISYS2401_DMA_BASE[N_ISYS2401_DMA_ID] = {
+-	0x000CA000UL
+-};
+-
+-/* IRQ */
+-static const hrt_address IRQ_BASE[N_IRQ_ID] = {
+-	0x00000500UL,
+-	0x00030A00UL,
+-	0x0008C000UL,
+-	0x00090200UL
+-};
+-
+-/*
+-	0x00000500UL};
+- */
+-
+-/* GDC */
+-static const hrt_address GDC_BASE[N_GDC_ID] = {
+-	0x00050000UL,
+-	0x00060000UL
+-};
+-
+-/* FIFO_MONITOR (not a subset of GP_DEVICE) */
+-static const hrt_address FIFO_MONITOR_BASE[N_FIFO_MONITOR_ID] = {
+-	0x00000000UL
+-};
+-
+-/*
+-static const hrt_address GP_REGS_BASE[N_GP_REGS_ID] = {
+-	0x00000000UL};
+-
+-static const hrt_address GP_DEVICE_BASE[N_GP_DEVICE_ID] = {
+-	0x00090000UL};
+-*/
+-
+-/* GP_DEVICE (single base for all separate GP_REG instances) */
+-static const hrt_address GP_DEVICE_BASE[N_GP_DEVICE_ID] = {
+-	0x00000000UL
+-};
+-
+-/*GP TIMER , all timer registers are inter-twined,
+- * so, having multiple base addresses for
+- * different timers does not help*/
+-static const hrt_address GP_TIMER_BASE =
+-    (hrt_address)0x00000600UL;
+-/* GPIO */
+-static const hrt_address GPIO_BASE[N_GPIO_ID] = {
+-	0x00000400UL
+-};
+-
+-/* TIMED_CTRL */
+-static const hrt_address TIMED_CTRL_BASE[N_TIMED_CTRL_ID] = {
+-	0x00000100UL
+-};
+-
+-/* INPUT_FORMATTER */
+-static const hrt_address INPUT_FORMATTER_BASE[N_INPUT_FORMATTER_ID] = {
+-	0x00030000UL,
+-	0x00030200UL,
+-	0x00030400UL
+-};
+-
+-/*	0x00030600UL, */ /* memcpy() */
+-
+-/* INPUT_SYSTEM */
+-static const hrt_address INPUT_SYSTEM_BASE[N_INPUT_SYSTEM_ID] = {
+-	0x00080000UL
+-};
+-
+-/*	0x00081000UL, */ /* capture A */
+-/*	0x00082000UL, */ /* capture B */
+-/*	0x00083000UL, */ /* capture C */
+-/*	0x00084000UL, */ /* Acquisition */
+-/*	0x00085000UL, */ /* DMA */
+-/*	0x00089000UL, */ /* ctrl */
+-/*	0x0008A000UL, */ /* GP regs */
+-/*	0x0008B000UL, */ /* FIFO */
+-/*	0x0008C000UL, */ /* IRQ */
+-
+-/* RX, the MIPI lane control regs start at offset 0 */
+-static const hrt_address RX_BASE[N_RX_ID] = {
+-	0x00080100UL
+-};
+-
+-/* IBUF_CTRL, part of the Input System 2401 */
+-static const hrt_address IBUF_CTRL_BASE[N_IBUF_CTRL_ID] = {
+-	0x000C1800UL,	/* ibuf controller A */
+-	0x000C3800UL,	/* ibuf controller B */
+-	0x000C5800UL	/* ibuf controller C */
+-};
+-
+-/* ISYS IRQ Controllers, part of the Input System 2401 */
+-static const hrt_address ISYS_IRQ_BASE[N_ISYS_IRQ_ID] = {
+-	0x000C1400ULL,	/* port a */
+-	0x000C3400ULL,	/* port b */
+-	0x000C5400ULL	/* port c */
+-};
+-
+-/* CSI FE, part of the Input System 2401 */
+-static const hrt_address CSI_RX_FE_CTRL_BASE[N_CSI_RX_FRONTEND_ID] = {
+-	0x000C0400UL,	/* csi fe controller A */
+-	0x000C2400UL,	/* csi fe controller B */
+-	0x000C4400UL	/* csi fe controller C */
+-};
+-
+-/* CSI BE, part of the Input System 2401 */
+-static const hrt_address CSI_RX_FE_CTRL_BASE[N_CSI_RX_BACKEND_ID] = {
+-	0x000C0800UL,	/* csi be controller A */
+-	0x000C2800UL,	/* csi be controller B */
+-	0x000C4800UL	/* csi be controller C */
+-};
+-
+-/* PIXEL Generator, part of the Input System 2401 */
+-static const hrt_address PIXELGEN_CTRL_BASE[N_PIXELGEN_ID] = {
+-	0x000C1000UL,	/* pixel gen controller A */
+-	0x000C3000UL,	/* pixel gen controller B */
+-	0x000C5000UL	/* pixel gen controller C */
+-};
+-
+-/* Stream2MMIO, part of the Input System 2401 */
+-static const hrt_address STREAM2MMIO_CTRL_BASE[N_STREAM2MMIO_ID] = {
+-	0x000C0C00UL,	/* stream2mmio controller A */
+-	0x000C2C00UL,	/* stream2mmio controller B */
+-	0x000C4C00UL	/* stream2mmio controller C */
+-};
+-
+-#else
+-#error "system_local.h: HRT_ADDRESS_WIDTH must be one of {32,64}"
+-#endif
+ 
+ #endif /* __SYSTEM_LOCAL_H_INCLUDED__ */
+-- 
+2.26.2
+
