@@ -2,31 +2,27 @@ Return-Path: <SRS0=qdh+=A7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87B15C43445
-	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 16:18:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7EADC433FE
+	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 16:20:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 729F520684
-	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 16:18:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8FB820656
+	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 16:20:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388286AbgGTQSp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 20 Jul 2020 12:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387706AbgGTQNF (ORCPT
+        id S2388687AbgGTQUZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 20 Jul 2020 12:20:25 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57534 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387635AbgGTQUX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 20 Jul 2020 12:13:05 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5A4C061794;
-        Mon, 20 Jul 2020 09:13:05 -0700 (PDT)
+        Mon, 20 Jul 2020 12:20:23 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 2FEF6290061
-Message-ID: <77cc8d67c6016c6cefb3d2b93ae212cc02bac064.camel@collabora.com>
+        with ESMTPSA id DDDD6291119
+Message-ID: <1eafe9f8c0668daf6523827db09c9b0d4cbe000a.camel@collabora.com>
 Subject: Re: [PATCH 1/2] media: coda: Fix reported H264 profile
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reply-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
@@ -36,13 +32,15 @@ To:     Philipp Zabel <p.zabel@pengutronix.de>,
 Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
         Robert Beckett <bob.beckett@collabora.com>,
         kernel@collabora.com, stable@vger.kernel.org
-Date:   Mon, 20 Jul 2020 12:13:00 -0400
-In-Reply-To: <51175cb496644aaa5d5004630925ead4c6f0ddc7.camel@pengutronix.de>
+Date:   Mon, 20 Jul 2020 12:20:17 -0400
+In-Reply-To: <0e0bb486f4a95686b1385f978333a584a34db9b0.camel@pengutronix.de>
 References: <20200717034923.219524-1-ezequiel@collabora.com>
          <51175cb496644aaa5d5004630925ead4c6f0ddc7.camel@pengutronix.de>
+         <17189cd91b7412fdd102c2710d9e6aa8778aac23.camel@collabora.com>
+         <0e0bb486f4a95686b1385f978333a584a34db9b0.camel@pengutronix.de>
 Organization: Collabora
 Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-yA5jdyyuXrf/LlHFsfE9"
+        boundary="=-tXlWoDBPFQDUyLGcRdzi"
 User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
 MIME-Version: 1.0
 Sender: linux-media-owner@vger.kernel.org
@@ -51,95 +49,82 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---=-yA5jdyyuXrf/LlHFsfE9
+--=-tXlWoDBPFQDUyLGcRdzi
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Le vendredi 17 juillet 2020 =C3=A0 10:14 +0200, Philipp Zabel a =C3=A9crit =
-:
-> On Fri, 2020-07-17 at 00:49 -0300, Ezequiel Garcia wrote:
-> > From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Le lundi 20 juillet 2020 =C3=A0 10:40 +0200, Philipp Zabel a =C3=A9crit :
+> On Fri, 2020-07-17 at 11:56 -0400, Nicolas Dufresne wrote:
+> > Le vendredi 17 juillet 2020 =C3=A0 10:14 +0200, Philipp Zabel a =C3=A9c=
+rit :
+> > > On Fri, 2020-07-17 at 00:49 -0300, Ezequiel Garcia wrote:
+> > > > From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > > >=20
+> > > > The CODA960 manual states that ASO/FMO features of baseline are not
+> > > > supported, so for this reason this driver should only report
+> > > > constrained baseline support.
+> > >=20
+> > > I know the encoder doesn't support this, but is this also true of the
+> > > decoder? The i.MX6DQ Reference Manual explicitly lists H.264/AVC deco=
+der
+> > > support for both baseline profile and constrained base line profile.
 > >=20
-> > The CODA960 manual states that ASO/FMO features of baseline are not
-> > supported, so for this reason this driver should only report
-> > constrained baseline support.
+> > Hmm, double checking, you are right this is documented in the encoding =
+tools
+> > sections, not the decoding. But there is extra buffers that need to be =
+passed
+> > for ASO/FMO to work, I greatly doubt you have ever tested it.
 >=20
-> I know the encoder doesn't support this, but is this also true of the
-> decoder? The i.MX6DQ Reference Manual explicitly lists H.264/AVC decoder
-> support for both baseline profile and constrained base line profile.
+> And you are correct, I don't think I use any test streams that have
+> ASO/FMO enabled.
 >=20
-> > This fixes negotiation issue with constrained baseline content
-> > on GStreamer 1.17.1.
+> > This is not supported by GStreamer parser, or FFMPEG parsers either.
+> > Again, we need to make sure in V2 that encoding and decoding
+> > capabilities are well seperated.
 > >=20
-> > Cc: stable@vger.kernel.org
-> > Fixes: 42a68012e67c2 ("media: coda: add read-only h.264 decoder profile=
-/level controls")
-> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> > ---
-> >  drivers/media/platform/coda/coda-common.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/=
-platform/coda/coda-common.c
-> > index 3ab3d976d8ca..c641d1608825 100644
-> > --- a/drivers/media/platform/coda/coda-common.c
-> > +++ b/drivers/media/platform/coda/coda-common.c
-> > @@ -2335,8 +2335,8 @@ static void coda_encode_ctrls(struct coda_ctx *ct=
-x)
-> >  		V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET, -12, 12, 1, 0);
-> >  	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
-> >  		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
-> > -		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE, 0x0,
-> > -		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE);
-> > +		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE, 0x0,
-> > +		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE);
+> > As for advertising ASO/FMO, I can leave it there, but be aware I won't =
+be
+> > testing it. I can provide you links to streams if you care (they are pu=
+blicly
+> > accessible throught the ITU conformance streams published by the ITU).
 >=20
-> Encoder support is listed as baseline, not constrained baseline, in the
-> manual, but the SPS NALs produced by the encoder start with:
->   00 00 00 01 67 42 40
->                     ^
-> so that is profile_idc=3D66, constraint_set1_flag=3D=3D1, constrained bas=
-eline
-> indeed. I think this change is correct.
->=20
-> >  	if (ctx->dev->devtype->product =3D=3D CODA_HX4 ||
-> >  	    ctx->dev->devtype->product =3D=3D CODA_7541) {
-> >  		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
-> > @@ -2417,7 +2417,7 @@ static void coda_decode_ctrls(struct coda_ctx *ct=
-x)
-> >  	ctx->h264_profile_ctrl =3D v4l2_ctrl_new_std_menu(&ctx->ctrls,
-> >  		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_H264_PROFILE,
-> >  		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-> > -		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
-> > +		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
-> >  		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
-> >  		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
-> >  		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
->=20
-> I'm not sure about this one.
+> That would be welcome.
 
-Indeed, the decoder does support ASO/FMO, assuming the extra buffer
-space is allocated as per the documentation (says that slice_save_size
-should be the max_width * max_height * 3 / 4). Did you have that
-implemented ? If not, I'd keep that patch, but add a comment to explain
-that it can be enabled later.
+https://www.itu.int/net/ITU-T/sigdb/spevideo/VideoForm-s.aspx?val=3D1020026=
+41
+
+Notably, if you download the AVCv1 series, there is at
+least FM2_SVA_C.zip that uses FMO (slice groups). I haven't looked them
+up, I barely started harnessing it for GStreamer.
+
+You can find the link to everything else here, including HEVC.
+
+https://www.itu.int/net/ITU-T/sigdb/spevideo/Hseries-s.htm
+
+>=20
+> > But as for GStreamer and FFMPEG, this is not supported anyway.
+>=20
+> Ok, how about changing the commit message to say that this is
+> unsupported for the encoder and untested for the decoder because there
+> is no userspace support?
+
+Agreed.
 
 >=20
 > regards
 > Philipp
 
---=-yA5jdyyuXrf/LlHFsfE9
+--=-tXlWoDBPFQDUyLGcRdzi
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXxXCjAAKCRBxUwItrAao
-HDpKAJ9xt9juXaoVD+M9EL8J6QYMeyAXoQCfb3uh0OjL8388yFy/Mb2pLtk7RYg=
-=IKyR
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXxXEQQAKCRBxUwItrAao
+HMlKAKDdLaaH0pFzX9sFTZfWpmu70QFI5gCeJvd+wksn4WXWpeCgySiwKBu9WEg=
+=CtU8
 -----END PGP SIGNATURE-----
 
---=-yA5jdyyuXrf/LlHFsfE9--
+--=-tXlWoDBPFQDUyLGcRdzi--
 
