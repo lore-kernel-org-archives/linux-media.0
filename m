@@ -1,95 +1,93 @@
-Return-Path: <SRS0=c3lX=A6=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=qdh+=A7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B615BC433E0
-	for <linux-media@archiver.kernel.org>; Sun, 19 Jul 2020 21:16:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08A51C433E3
+	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 02:15:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BFD221744
-	for <linux-media@archiver.kernel.org>; Sun, 19 Jul 2020 21:16:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="RNWe3132"
+	by mail.kernel.org (Postfix) with ESMTP id DD38B2065D
+	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 02:15:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726446AbgGSVQ0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 19 Jul 2020 17:16:26 -0400
-Received: from mail-40136.protonmail.ch ([185.70.40.136]:14721 "EHLO
-        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbgGSVQZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 19 Jul 2020 17:16:25 -0400
-Date:   Sun, 19 Jul 2020 21:16:16 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1595193383;
-        bh=iHJCwGyfLi/ic3OraUqBRzHGFPaJD/yS0fa/qwNWLbc=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=RNWe3132lffeIRtZi2wtEMzi3qU1nkWOVJHZwSp8hh8UguZwz/rDPqj9LF/3bTD++
-         bOIcqIZZcx5RJM1kxmBPaypRV+EufiFPCB5cjNPrJMVH4/WlXcp4uTZmC7J56gPDjT
-         d+U/zY76CwboSXSDmTZtUeiKxUM6jUwIQjvjWz8M=
-To:     mchehab@kernel.org
-From:   Colton Lewis <colton.w.lewis@protonmail.com>
-Cc:     linux-media@vger.kernel.org,
-        Colton Lewis <colton.w.lewis@protonmail.com>
-Reply-To: Colton Lewis <colton.w.lewis@protonmail.com>
-Subject: [PATCH 1/2] v4l2: Correct kernel-doc inconsistency
-Message-ID: <20200719211609.152611-1-colton.w.lewis@protonmail.com>
+        id S1726546AbgGTCP1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 19 Jul 2020 22:15:27 -0400
+Received: from mga01.intel.com ([192.55.52.88]:10176 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726312AbgGTCP1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 19 Jul 2020 22:15:27 -0400
+IronPort-SDR: 9mm0DynQ/t2anGi0P1xnSf3wHOX5ISoOxqPIQvdqFGohn1HTm+AG9YhRGBBOVTrfgFz21qADe4
+ 5hwP/6xN4oLg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9687"; a="167969291"
+X-IronPort-AV: E=Sophos;i="5.75,373,1589266800"; 
+   d="scan'208";a="167969291"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2020 19:15:26 -0700
+IronPort-SDR: d1WB62cRq5P0pr0r6xP2Hg/eqqZBXqKV6bOHhVI7I8LLvNTj9FgDXdEHA/OLmPSFM51auLff9M
+ NsEQ0rn1BaKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,373,1589266800"; 
+   d="scan'208";a="461513294"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.196]) ([10.238.232.196])
+  by orsmga005.jf.intel.com with ESMTP; 19 Jul 2020 19:15:23 -0700
+Subject: Re: [PATCH] staging: media: ipu3: Replace depracated MSI API.
+To:     Suraj Upadhyay <usuraj35@gmail.com>, sakari.ailus@linux.intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <20200718133238.GA11982@blackclown>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <8dc91dd2-b165-bd97-00f7-16c4cb266163@linux.intel.com>
+Date:   Mon, 20 Jul 2020 10:17:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200718133238.GA11982@blackclown>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Silence documentation build warnings by correcting kernel-doc comment
-v4l2_create_fwnode_links_to_pad and v4l2_create_fwnode_links functions.
+Upadhyay,
 
-./include/media/v4l2-mc.h:110: warning: Function parameter or member 'src_s=
-d' not described in 'v4l2_create_fwnode_links_to_pad'
-./include/media/v4l2-mc.h:110: warning: Function parameter or member 'sink'=
- not described in 'v4l2_create_fwnode_links_to_pad'
-./include/media/v4l2-mc.h:134: warning: Function parameter or member 'src_s=
-d' not described in 'v4l2_create_fwnode_links'
-./include/media/v4l2-mc.h:134: warning: Function parameter or member 'sink_=
-sd' not described in 'v4l2_create_fwnode_links'
+Thanks for your patch. Please correct the typo in message.
 
-Signed-off-by: Colton Lewis <colton.w.lewis@protonmail.com>
----
- include/media/v4l2-mc.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On 7/18/20 9:32 PM, Suraj Upadhyay wrote:
+> Replace depracated psi_enable_msi with pci_alloc_irq_vectors.
+> And as a result modify how the returned value is handled.
+> 
+> Signed-off-by: Suraj Upadhyay <usuraj35@gmail.com>
+> ---
+>  drivers/staging/media/ipu3/ipu3.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/media/ipu3/ipu3.c b/drivers/staging/media/ipu3/ipu3.c
+> index ee1bba6bdcac..54690e7442be 100644
+> --- a/drivers/staging/media/ipu3/ipu3.c
+> +++ b/drivers/staging/media/ipu3/ipu3.c
+> @@ -602,9 +602,9 @@ static irqreturn_t imgu_isr(int irq, void *imgu_ptr)
+>  static int imgu_pci_config_setup(struct pci_dev *dev)
+>  {
+>  	u16 pci_command;
+> -	int r = pci_enable_msi(dev);
+> +	int r = pci_alloc_irq_vectors(dev, 1, 1, PCI_IRQ_MSI);
+>  
+> -	if (r) {
+> +	if (r < 0) {
+>  		dev_err(&dev->dev, "failed to enable MSI (%d)\n", r);
+>  		return r;
+>  	}
+> 
 
-diff --git a/include/media/v4l2-mc.h b/include/media/v4l2-mc.h
-index 246eed398648..bdaa5f2f8ca2 100644
---- a/include/media/v4l2-mc.h
-+++ b/include/media/v4l2-mc.h
-@@ -89,8 +89,8 @@ int v4l_vb2q_enable_media_source(struct vb2_queue *q);
-  * v4l2_create_fwnode_links_to_pad - Create fwnode-based links from a
-  *                                   source subdev to a sink subdev pad.
-  *
-- * @src_sd - pointer to a source subdev
-- * @sink - pointer to a subdev sink pad
-+ * @src_sd: pointer to a source subdev
-+ * @sink:  pointer to a subdev sink pad
-  *
-  * This function searches for fwnode endpoint connections from a source
-  * subdevice to a single sink pad, and if suitable connections are found,
-@@ -113,8 +113,8 @@ int v4l2_create_fwnode_links_to_pad(struct v4l2_subdev =
-*src_sd,
-  * v4l2_create_fwnode_links - Create fwnode-based links from a source
-  *                            subdev to a sink subdev.
-  *
-- * @src_sd - pointer to a source subdevice
-- * @sink_sd - pointer to a sink subdevice
-+ * @src_sd: pointer to a source subdevice
-+ * @sink_sd: pointer to a sink subdevice
-  *
-  * This function searches for any and all fwnode endpoint connections
-  * between source and sink subdevices, and translates them into media
---=20
-2.26.2
-
-
+-- 
+Best regards,
+Bingbu Cao
