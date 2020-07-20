@@ -2,118 +2,103 @@ Return-Path: <SRS0=qdh+=A7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61D1DC433E4
-	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 16:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 124ADC433E4
+	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 16:32:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4933D20656
-	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 16:20:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3E57206E9
+	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 16:32:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1595262761;
+	bh=yqlDf7fN/QLqWmc3udzm7E6RBXgv5NpGLgWaVfr5Qtw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=KwMsTwcfHECgJp45M3NHJqFwKRyuWpsgSq1EWc+WFxH3yFLU44nJBdAP5wTHizCL1
+	 ERVBt1KhE5uHjYGuDaWmNxT9r6UetUoCeaeiuJM1ACU8K1Xefi1DMhZZ4hXGFjTO9y
+	 Tl8HVpizyrm5H+/vV7bYur5/ezI5MrhPKNY8E2hA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387596AbgGTQJy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 20 Jul 2020 12:09:54 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57442 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387587AbgGTQJx (ORCPT
+        id S2388887AbgGTQci (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 20 Jul 2020 12:32:38 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:35245 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731808AbgGTQch (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 20 Jul 2020 12:09:53 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 411CC295F35
-Message-ID: <4fee7fb9ded19cb9dab58561396e6f30393e42fa.camel@collabora.com>
-Subject: Re: [PATCH 2/2] media: coda: Add more H264 levels for CODA960
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reply-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        kernel@collabora.com, stable@vger.kernel.org
-Date:   Mon, 20 Jul 2020 12:09:47 -0400
-In-Reply-To: <05184a7c923c7e2aacca9da2bafe338ff5a7c16d.camel@pengutronix.de>
-References: <20200717034923.219524-1-ezequiel@collabora.com>
-                 <20200717034923.219524-2-ezequiel@collabora.com>
-         <05184a7c923c7e2aacca9da2bafe338ff5a7c16d.camel@pengutronix.de>
-Organization: Collabora
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-6QIMy4g9SukUt3RE3IU0"
-User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
+        Mon, 20 Jul 2020 12:32:37 -0400
+Received: by mail-io1-f65.google.com with SMTP id v8so18270263iox.2;
+        Mon, 20 Jul 2020 09:32:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yQyvs1jRHaG4iCDzDf8+qWStV4fhrEVZDcK1+1MvdZw=;
+        b=ffUUXhgl8xxspbPMTooZU2d7B4r17cpo6A9CTfFnq94BrfIi7vzstq7va/c0S0uB0t
+         NpL1p1+Q1Uo5xCCennh53Fmaq0mSuyIKepPP8quROzY9M5H2WBIWk++QmOeenBTVJqX3
+         kcN5Wtd0dnngvGKYzNxAOfhfRqfRcvQrIovgua9EiDDPyr1j4vruW30DKOM4y+ciOHv+
+         PXOZs7POL9n0wn58lq2bMVe271C6lcYjFyN+Eg02Bc7S+hydD04L/erqwMzFc9sfHrJe
+         ME6zOx7QU0hC1n1kW8aAWC+e+kSwV2KCw4JYKz8nH1AbXe+EIQKIdEk6/rqdct49UdKb
+         L0Ig==
+X-Gm-Message-State: AOAM532sQLGgyDuAqJ9XC3BIEIJWmftyzpD0QphuciiXNcnzPEfsrdr4
+        Bto2SuhgozTvGLdMc5N/dG5F+dJQgw==
+X-Google-Smtp-Source: ABdhPJwknigBOGgNYAdUjh4u6rS8PisVTTSLhhXo4Mpm0o84omeZS5Hi+Wkk+jC2ZNgZWLbPh0RBwg==
+X-Received: by 2002:a5d:964b:: with SMTP id d11mr6997577ios.30.1595262756173;
+        Mon, 20 Jul 2020 09:32:36 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id v7sm563525iol.53.2020.07.20.09.32.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2020 09:32:35 -0700 (PDT)
+Received: (nullmailer pid 2625208 invoked by uid 1000);
+        Mon, 20 Jul 2020 16:32:34 -0000
+Date:   Mon, 20 Jul 2020 10:32:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
+        laurent.pinchart@ideasonboard.com, slongerbeam@gmail.com
+Subject: Re: [PATCH 01/13] dt-bindings: media: ov5640: Convert to json-schema
+Message-ID: <20200720163234.GA2624150@bogus>
+References: <20200717132859.237120-1-jacopo+renesas@jmondi.org>
+ <20200717132859.237120-2-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200717132859.237120-2-jacopo+renesas@jmondi.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Fri, 17 Jul 2020 15:28:47 +0200, Jacopo Mondi wrote:
+> Convert the ov5640 bindings document to json-schema.
+> 
+> This commit ports the existing bindings, clean up patches
+> will follow.
+> 
+> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> ---
+>  .../devicetree/bindings/media/i2c/ov5640.txt  |  92 ---------
+>  .../devicetree/bindings/media/i2c/ov5640.yaml | 181 ++++++++++++++++++
+>  2 files changed, 181 insertions(+), 92 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5640.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ov5640.yaml
+> 
 
---=-6QIMy4g9SukUt3RE3IU0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Le vendredi 17 juillet 2020 =C3=A0 09:48 +0200, Philipp Zabel a =C3=A9crit =
-:
-> Hi Ezequiel, Nicolas,
->=20
-> On Fri, 2020-07-17 at 00:49 -0300, Ezequiel Garcia wrote:
-> > From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> >=20
-> > This add H264 level 4.1, 4.2 and 5.0 to the list of supported formats.
-> > While the hardware does not fully support these levels, it do support
-> > most of them.
->=20
-> Could you clarify this? As far as I understand the hardware supports
-> maximum frame size requirement for up to level 4.2 (8704 macroblocks),
-> but not 5.0, and at least the implementation on i.MX6 does not support
-> the max encoding speed requirements for levels 4.1 and higher.
->=20
-> I don't think the firmware ever produces any output with a level higher
-> than 4.0 either, so what is the purpose of pretending otherwise?
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Nothing is very explicit in the user manual, they speak in term of
-resolution and framerate. They claim 1080p 30fps for encoding, and
-1080p 60fps for decoding. For the encoder, there is an auto selection
-for the level, and the documentation is maxed to 4.0, and so I would
-agree that 4.0 is the max encoding level. Wikipedia also list "1,920=C3=971=
-,
-080@30.1 (4)" so 1080p30 with 4 frame references as being an example of
-4.0 maximum. So V2 of this patchset should make sure that for the
-encoder this stays there.
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/ti,cal.example.dt.yaml: camera-sensor@3c: 'DOVDD-supply' is a required property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/ti,cal.example.dt.yaml: camera-sensor@3c: 'AVDD-supply' is a required property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/ti,cal.example.dt.yaml: camera-sensor@3c: 'DVDD-supply' is a required property
 
-On the decoding side, what I found is that there is an error bit
-indicator called LEVELID (bit 19) that indicates that SPS level_idc
-wasn't accepted. The error is described as "Supported up to 51.". So
-basically there is some extra contraints that least to 4.2 as you
-describe, and above 5.1 is an hard failure. That imho creates a grey-
-zone. If we think of DASH/HLS, the information usually comes with
-Resolution/Framerate/Codec/Profile/Level, and in this context, you can
-enable 5.1 safely assuming the Resolition/Framerate/Profile are already
-verified. But if you only wanted to use the level, then you could
-prefer the driver to expose a max of 4.2.
 
-So do you have an opinion on the way forward ? Personally I like the
-idea of giving the list of level_idc that won't cause the parser to
-reject it, and leave it to the user to validate the
-Resolution/Framerate seperatly, we have the V4L2 API for that. Let me
-know, as we'll use that for V2.
+See https://patchwork.ozlabs.org/patch/1331124
 
->=20
-> regards
-> Philipp
->=20
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
 
---=-6QIMy4g9SukUt3RE3IU0
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
 
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXxXBzAAKCRBxUwItrAao
-HK+GAKCYfD/TkbcW5mD2ej9TpGwqooECdQCg12D8JcaeELjApgm7pj4I9qeSoK4=
-=dwdk
------END PGP SIGNATURE-----
-
---=-6QIMy4g9SukUt3RE3IU0--
+Please check and re-submit.
 
