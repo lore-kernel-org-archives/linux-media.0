@@ -2,255 +2,115 @@ Return-Path: <SRS0=qdh+=A7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07639C433E1
-	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 19:26:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79BEDC433E0
+	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 19:36:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA99622BEF
-	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 19:26:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 573E5207DF
+	for <linux-media@archiver.kernel.org>; Mon, 20 Jul 2020 19:36:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1595273771;
+	bh=Wssz6CSp3X3RUs+/oiIaLxOi5v6s8TWDdDZhm53kFu4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=f3dTOdbtwRCkXkqeEpk15Ei45JtUhmQPaZURB4SFD/bdVkvL3JhRKe0QiIZu7prWu
+	 qTbF3nd1+gOqP4gHWQ5ikpypajxefKYofS+VNP04nhohOfV6oDQHWD6W1F+FEAcdXd
+	 VUopM/5uWBFKfsR1NM/WNhHAW5y1HgxC5qotg8PM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729386AbgGTT0o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 20 Jul 2020 15:26:44 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:59438 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729092AbgGTT0o (ORCPT
+        id S1729954AbgGTTgK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 20 Jul 2020 15:36:10 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:34180 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbgGTTgK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 20 Jul 2020 15:26:44 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id A100F28DE7B
-Subject: Re: [PATCH v2 6/9] media: staging: rkisp1: unify (un)register
- functions to have the same parameters
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
-Cc:     ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        tfiga@chromium.org
-References: <20200718145918.17752-1-dafna.hirschfeld@collabora.com>
- <20200718145918.17752-7-dafna.hirschfeld@collabora.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <a470661a-3ec7-67af-e191-7b2f21fa9eb8@collabora.com>
-Date:   Mon, 20 Jul 2020 16:26:36 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 20 Jul 2020 15:36:10 -0400
+Received: by mail-io1-f68.google.com with SMTP id q74so18912106iod.1;
+        Mon, 20 Jul 2020 12:36:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1YZl80952mHTSs8UNwk68pvRqpUlNAQdc1Q4B7k7SNM=;
+        b=QtpbFdhZhjJ3OT+s+fDEdMsb3JgKGpGeDg+L2aUySOkkyM68LDynT4d4N99YvBPHQa
+         1asdfdJkzgpxA+PPTFg99BiliDy/XNpXjy60z0RvGnxqFerBsk6IIKv7XOBeZ6cLK6yg
+         bIUyyP67qlKCLYDm6HefJvV2Ws4OCt/i0NhklvGDW422ZVwtFJ8PbQj6e/XNkIqCM5GW
+         JwndOwi4EjepESHcdE2hMZdw38mjdQjzoaQ5RdXCcTOSvLhBDjraaNdUqlYH+dq43K7h
+         Gqc7kJA5fZuaLOORVoxu0F6N0+0Nc6+iABiqDYlIfk9LDZ77ThoROLnproRe+/y6ohKv
+         PzjA==
+X-Gm-Message-State: AOAM5304GR+6+J0t97bxgEQH/By7696wblYkhcbzE1wslZXjErNjVUYE
+        0+3xlFoP8XuWlP1LDLmY0w==
+X-Google-Smtp-Source: ABdhPJzc8i0GZHL5ILLIAxZ8ilXyFLcBjyDnfVYAFmK/L3yC7ekaolASQz7arjDrz62StByEvkBNPg==
+X-Received: by 2002:a6b:ba8b:: with SMTP id k133mr24656306iof.204.1595273769393;
+        Mon, 20 Jul 2020 12:36:09 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id a10sm9267565iln.20.2020.07.20.12.36.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2020 12:36:07 -0700 (PDT)
+Received: (nullmailer pid 2872234 invoked by uid 1000);
+        Mon, 20 Jul 2020 19:36:06 -0000
+Date:   Mon, 20 Jul 2020 13:36:06 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        devicetree@vger.kernel.org, slongerbeam@gmail.com,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 03/13] dt-bindings: media: ov5640: Do not limit rotation
+Message-ID: <20200720193606.GA2858543@bogus>
+References: <20200717132859.237120-1-jacopo+renesas@jmondi.org>
+ <20200717132859.237120-4-jacopo+renesas@jmondi.org>
+ <20200717193807.GE5961@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <20200718145918.17752-7-dafna.hirschfeld@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200717193807.GE5961@pendragon.ideasonboard.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
-
-On 7/18/20 11:59 AM, Dafna Hirschfeld wrote:
-> The different register/unregister functions receive
-> different parameters. This patch unify them so they all receive just
-> 'struct *rkisp1_device' as parameter.
+On Fri, Jul 17, 2020 at 10:38:07PM +0300, Laurent Pinchart wrote:
+> Hi Jacopo,
 > 
-> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-
-Acked-by: Helen Koike <helen.koike@collabora.com>
-
-> ---
->  drivers/staging/media/rkisp1/rkisp1-common.h | 15 +++++----------
->  drivers/staging/media/rkisp1/rkisp1-dev.c    | 15 +++++++--------
->  drivers/staging/media/rkisp1/rkisp1-isp.c    |  5 ++---
->  drivers/staging/media/rkisp1/rkisp1-params.c | 10 +++++-----
->  drivers/staging/media/rkisp1/rkisp1-stats.c  | 10 +++++-----
->  5 files changed, 24 insertions(+), 31 deletions(-)
+> Thank you for the patch.
 > 
-> diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
-> index 893caa9df891..fe1a775de768 100644
-> --- a/drivers/staging/media/rkisp1/rkisp1-common.h
-> +++ b/drivers/staging/media/rkisp1/rkisp1-common.h
-> @@ -304,8 +304,7 @@ void rkisp1_sd_adjust_crop_rect(struct v4l2_rect *crop,
->  void rkisp1_sd_adjust_crop(struct v4l2_rect *crop,
->  			   const struct v4l2_mbus_framefmt *bounds);
->  
-> -int rkisp1_isp_register(struct rkisp1_device *rkisp1,
-> -			struct v4l2_device *v4l2_dev);
-> +int rkisp1_isp_register(struct rkisp1_device *rkisp1);
->  void rkisp1_isp_unregister(struct rkisp1_device *rkisp1);
->  
->  const struct rkisp1_isp_mbus_info *rkisp1_isp_mbus_info_get(u32 mbus_code);
-> @@ -322,19 +321,15 @@ void rkisp1_capture_devs_unregister(struct rkisp1_device *rkisp1);
->  int rkisp1_resizer_devs_register(struct rkisp1_device *rkisp1);
->  void rkisp1_resizer_devs_unregister(struct rkisp1_device *rkisp1);
->  
-> -int rkisp1_stats_register(struct rkisp1_stats *stats,
-> -			  struct v4l2_device *v4l2_dev,
-> -			  struct rkisp1_device *rkisp1);
-> -void rkisp1_stats_unregister(struct rkisp1_stats *stats);
-> +int rkisp1_stats_register(struct rkisp1_device *rkisp1);
-> +void rkisp1_stats_unregister(struct rkisp1_device *rkisp1);
->  
->  void rkisp1_params_configure(struct rkisp1_params *params,
->  			     enum rkisp1_fmt_raw_pat_type bayer_pat,
->  			     enum v4l2_quantization quantization);
->  void rkisp1_params_disable(struct rkisp1_params *params);
-> -int rkisp1_params_register(struct rkisp1_params *params,
-> -			   struct v4l2_device *v4l2_dev,
-> -			   struct rkisp1_device *rkisp1);
-> -void rkisp1_params_unregister(struct rkisp1_params *params);
-> +int rkisp1_params_register(struct rkisp1_device *rkisp1);
-> +void rkisp1_params_unregister(struct rkisp1_device *rkisp1);
->  
->  void rkisp1_params_isr_handler(struct rkisp1_device *rkisp1, u32 isp_mis);
->  
-> diff --git a/drivers/staging/media/rkisp1/rkisp1-dev.c b/drivers/staging/media/rkisp1/rkisp1-dev.c
-> index a0eb8f08708b..d85ac10e5494 100644
-> --- a/drivers/staging/media/rkisp1/rkisp1-dev.c
-> +++ b/drivers/staging/media/rkisp1/rkisp1-dev.c
-> @@ -345,7 +345,7 @@ static int rkisp1_entities_register(struct rkisp1_device *rkisp1)
->  {
->  	int ret;
->  
-> -	ret = rkisp1_isp_register(rkisp1, &rkisp1->v4l2_dev);
-> +	ret = rkisp1_isp_register(rkisp1);
->  	if (ret)
->  		return ret;
->  
-> @@ -357,12 +357,11 @@ static int rkisp1_entities_register(struct rkisp1_device *rkisp1)
->  	if (ret)
->  		goto err_unreg_resizer_devs;
->  
-> -	ret = rkisp1_stats_register(&rkisp1->stats, &rkisp1->v4l2_dev, rkisp1);
-> +	ret = rkisp1_stats_register(rkisp1);
->  	if (ret)
->  		goto err_unreg_capture_devs;
->  
-> -	ret = rkisp1_params_register(&rkisp1->params,
-> -				     &rkisp1->v4l2_dev, rkisp1);
-> +	ret = rkisp1_params_register(rkisp1);
->  	if (ret)
->  		goto err_unreg_stats;
->  
-> @@ -375,9 +374,9 @@ static int rkisp1_entities_register(struct rkisp1_device *rkisp1)
->  
->  	return 0;
->  err_unreg_params:
-> -	rkisp1_params_unregister(&rkisp1->params);
-> +	rkisp1_params_unregister(rkisp1);
->  err_unreg_stats:
-> -	rkisp1_stats_unregister(&rkisp1->stats);
-> +	rkisp1_stats_unregister(rkisp1);
->  err_unreg_capture_devs:
->  	rkisp1_capture_devs_unregister(rkisp1);
->  err_unreg_resizer_devs:
-> @@ -551,8 +550,8 @@ static int rkisp1_remove(struct platform_device *pdev)
->  	v4l2_async_notifier_unregister(&rkisp1->notifier);
->  	v4l2_async_notifier_cleanup(&rkisp1->notifier);
->  
-> -	rkisp1_params_unregister(&rkisp1->params);
-> -	rkisp1_stats_unregister(&rkisp1->stats);
-> +	rkisp1_params_unregister(rkisp1);
-> +	rkisp1_stats_unregister(rkisp1);
->  	rkisp1_capture_devs_unregister(rkisp1);
->  	rkisp1_resizer_devs_unregister(rkisp1);
->  	rkisp1_isp_unregister(rkisp1);
-> diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
-> index b2131aea5488..d7e533bb6f1d 100644
-> --- a/drivers/staging/media/rkisp1/rkisp1-isp.c
-> +++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
-> @@ -986,8 +986,7 @@ static const struct v4l2_subdev_ops rkisp1_isp_ops = {
->  	.pad = &rkisp1_isp_pad_ops,
->  };
->  
-> -int rkisp1_isp_register(struct rkisp1_device *rkisp1,
-> -			struct v4l2_device *v4l2_dev)
-> +int rkisp1_isp_register(struct rkisp1_device *rkisp1)
->  {
->  	struct rkisp1_isp *isp = &rkisp1->isp;
->  	struct media_pad *pads = isp->pads;
-> @@ -1016,7 +1015,7 @@ int rkisp1_isp_register(struct rkisp1_device *rkisp1,
->  	if (ret)
->  		return ret;
->  
-> -	ret = v4l2_device_register_subdev(v4l2_dev, sd);
-> +	ret = v4l2_device_register_subdev(&rkisp1->v4l2_dev, sd);
->  	if (ret) {
->  		dev_err(rkisp1->dev, "Failed to register isp subdev\n");
->  		goto err_cleanup_media_entity;
-> diff --git a/drivers/staging/media/rkisp1/rkisp1-params.c b/drivers/staging/media/rkisp1/rkisp1-params.c
-> index 2ab25062cde6..c3c0ab5a5713 100644
-> --- a/drivers/staging/media/rkisp1/rkisp1-params.c
-> +++ b/drivers/staging/media/rkisp1/rkisp1-params.c
-> @@ -1570,10 +1570,9 @@ static void rkisp1_init_params(struct rkisp1_params *params)
->  		sizeof(struct rkisp1_params_cfg);
->  }
->  
-> -int rkisp1_params_register(struct rkisp1_params *params,
-> -			   struct v4l2_device *v4l2_dev,
-> -			   struct rkisp1_device *rkisp1)
-> +int rkisp1_params_register(struct rkisp1_device *rkisp1)
->  {
-> +	struct rkisp1_params *params = &rkisp1->params;
->  	struct rkisp1_vdev_node *node = &params->vnode;
->  	struct video_device *vdev = &node->vdev;
->  	int ret;
-> @@ -1593,7 +1592,7 @@ int rkisp1_params_register(struct rkisp1_params *params,
->  	 * to protect all fops and v4l2 ioctls.
->  	 */
->  	vdev->lock = &node->vlock;
-> -	vdev->v4l2_dev = v4l2_dev;
-> +	vdev->v4l2_dev = &rkisp1->v4l2_dev;
->  	vdev->queue = &node->buf_queue;
->  	vdev->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_META_OUTPUT;
->  	vdev->vfl_dir = VFL_DIR_TX;
-> @@ -1619,8 +1618,9 @@ int rkisp1_params_register(struct rkisp1_params *params,
->  	return ret;
->  }
->  
-> -void rkisp1_params_unregister(struct rkisp1_params *params)
-> +void rkisp1_params_unregister(struct rkisp1_device *rkisp1)
->  {
-> +	struct rkisp1_params *params = &rkisp1->params;
->  	struct rkisp1_vdev_node *node = &params->vnode;
->  	struct video_device *vdev = &node->vdev;
->  
-> diff --git a/drivers/staging/media/rkisp1/rkisp1-stats.c b/drivers/staging/media/rkisp1/rkisp1-stats.c
-> index a67c233b8641..f5dbd134ee24 100644
-> --- a/drivers/staging/media/rkisp1/rkisp1-stats.c
-> +++ b/drivers/staging/media/rkisp1/rkisp1-stats.c
-> @@ -375,10 +375,9 @@ static void rkisp1_init_stats(struct rkisp1_stats *stats)
->  		sizeof(struct rkisp1_stat_buffer);
->  }
->  
-> -int rkisp1_stats_register(struct rkisp1_stats *stats,
-> -			  struct v4l2_device *v4l2_dev,
-> -			  struct rkisp1_device *rkisp1)
-> +int rkisp1_stats_register(struct rkisp1_device *rkisp1)
->  {
-> +	struct rkisp1_stats *stats = &rkisp1->stats;
->  	struct rkisp1_vdev_node *node = &stats->vnode;
->  	struct video_device *vdev = &node->vdev;
->  	int ret;
-> @@ -395,7 +394,7 @@ int rkisp1_stats_register(struct rkisp1_stats *stats,
->  	vdev->fops = &rkisp1_stats_fops;
->  	vdev->release = video_device_release_empty;
->  	vdev->lock = &node->vlock;
-> -	vdev->v4l2_dev = v4l2_dev;
-> +	vdev->v4l2_dev = &rkisp1->v4l2_dev;
->  	vdev->queue = &node->buf_queue;
->  	vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
->  	vdev->vfl_dir =  VFL_DIR_RX;
-> @@ -425,8 +424,9 @@ int rkisp1_stats_register(struct rkisp1_stats *stats,
->  	return ret;
->  }
->  
-> -void rkisp1_stats_unregister(struct rkisp1_stats *stats)
-> +void rkisp1_stats_unregister(struct rkisp1_device *rkisp1)
->  {
-> +	struct rkisp1_stats *stats = &rkisp1->stats;
->  	struct rkisp1_vdev_node *node = &stats->vnode;
->  	struct video_device *vdev = &node->vdev;
->  
+> On Fri, Jul 17, 2020 at 03:28:49PM +0200, Jacopo Mondi wrote:
+> > The 'rotation' property should not be limited to only support 0 and
+> > 180 degrees, as that limitation comes from the driver implementation
+> > and not from any device specific constraint.
+> > 
+> > Remove the enumeration of supported values from 'rotation'.
+> > 
+> > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > ---
+> >  Documentation/devicetree/bindings/media/i2c/ov5640.yaml | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/media/i2c/ov5640.yaml b/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
+> > index ceeacc91c801..503f8b78615c 100644
+> > --- a/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
+> > +++ b/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
+> > @@ -55,7 +55,7 @@ properties:
+> >    rotation:
+> >      description: |
+> >        As defined in Documentation/devicetree/bindings/media/video-interfaces.txt
+> > -    enum: [0, 180]
+> > +    maxItems: 1
+
+Not an array, so 'maxItems' doesn't make sense here.
+
 > 
+> Maybe
+> 
+>     $ref: /schemas/types.yaml#/definitions/uint32
+>     minimum: 0
+>     maximum: 359
+> 
+> ?
+
+We should have a common definition and this binding just needs to define 
+the specific constraints. If none, then just 'rotation: true'.
+
+Rob
