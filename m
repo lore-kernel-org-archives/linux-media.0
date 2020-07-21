@@ -1,134 +1,132 @@
-Return-Path: <SRS0=pJLX=BG=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=lMHH=BA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79266C433E4
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 22:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BEC4C433E1
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 10:52:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 56C70206D7
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 22:03:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68F0520771
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 10:52:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="sRkYK5Xa"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="arNhpI5y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726283AbgG0WDd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Jul 2020 18:03:33 -0400
-Received: from o1.b.az.sendgrid.net ([208.117.55.133]:38952 "EHLO
-        o1.b.az.sendgrid.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726183AbgG0WDd (ORCPT
+        id S1729349AbgGUKwA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Jul 2020 06:52:00 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:56062 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729312AbgGUKv7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Jul 2020 18:03:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
-        h=subject:references:from:mime-version:in-reply-to:to:cc:content-type:
-        content-transfer-encoding;
-        s=001; bh=w2bDNJZ76P9qJ19x5xB00kMLUR4+ZgAUg8Ijbwn+DLA=;
-        b=sRkYK5XabzB5/UUKrx2kGwHUiyaCOb3S58Ql5Zj2zmLjA2ku0DBwS+oYRp1N7NpFPuil
-        YYM4yCBPcdSt8H6JhPSLBPcq2p9zBDbx1xsmERfdpHU7n3Cn9Q518tyuofCqjLkDSndbCh
-        eWkCnluUY/9cErabpmIfHSDl1SHAJeQ+U=
-Received: by filterdrecv-p3iad2-5b55dcd864-m99xc with SMTP id filterdrecv-p3iad2-5b55dcd864-m99xc-18-5F1F4F33-B5
-        2020-07-27 22:03:31.636807693 +0000 UTC m=+2696046.241755925
-Received: from [192.168.1.14] (unknown)
-        by ismtpd0001p1lon1.sendgrid.net (SG) with ESMTP
-        id i_qwivOTRUCQfKgZSd4ODw
-        Mon, 27 Jul 2020 22:03:31.287 +0000 (UTC)
-Subject: Re: [PATCH 10/10] media: rkvdec: Don't require unneeded
- H264_SLICE_PARAMS
-References: <20200715202233.185680-1-ezequiel@collabora.com>
- <20200715202233.185680-11-ezequiel@collabora.com>
-From:   Jonas Karlman <jonas@kwiboo.se>
-Message-ID: <13935609-c123-3eae-9a18-c11ece2f59e9@kwiboo.se>
-Date:   Mon, 27 Jul 2020 22:03:31 +0000 (UTC)
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 21 Jul 2020 06:51:59 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06LAcjeq128470;
+        Tue, 21 Jul 2020 10:51:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=PvyKfoECg1Rab+GAU63ZCDHWNoKItHwcDywMEowL0/0=;
+ b=arNhpI5yyyDf49hCGFPElJ5vRRE0/vpywHNqFvNnPpbIm7+10SMWlJhm8b5eJv3/r1kY
+ u4QsCdbnTM6vpEiaMdkfALoYvZ69OSft93BcfpnLwTvth7LfIgXlD1yif8pWGxfJOlu2
+ uCwAxZ4+6fdlO3upuD+52heuJl3kWGRheAkbjjP+pBUDDzqoZ0nSvjGDcz+oaekWBJo4
+ nrq8Wtx7en2hNKYwoHAld/LB3Q++tVMNTXdiBFm71igi0YopaP3VGmr8kFpZBC5940cC
+ bKzTXMgYnbZFmIkJ2y4rsJcSOoTI08tmI9cFchSzlHpmTBL21TA7DxrGW3cKImDj6gUw ug== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 32brgrcgwb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Jul 2020 10:51:56 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06LAbxrE151527;
+        Tue, 21 Jul 2020 10:49:55 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 32dw48mbs4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Jul 2020 10:49:55 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06LAnsJb017121;
+        Tue, 21 Jul 2020 10:49:54 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 21 Jul 2020 10:49:54 +0000
+Date:   Tue, 21 Jul 2020 13:49:46 +0300
+From:   <dan.carpenter@oracle.com>
+To:     <mchehab+huawei@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [bug report] media: atomisp: place all gpio parsing together
+Message-ID: <20200721104946.GA149039@mwanda>
 MIME-Version: 1.0
-In-Reply-To: <20200715202233.185680-11-ezequiel@collabora.com>
-X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
- =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0hySkcpyJxVVHTnEQc?=
- =?us-ascii?Q?+vC59FDvRguz4eio+Q+kuDyCnvNMtKH55NhSJJw?=
- =?us-ascii?Q?R7ujHnm5=2FdyT+4C4fAn=2FbSiYAeT4=2Fz46zMaz=2FWW?=
- =?us-ascii?Q?lJMXvZwY6SjI17j6KfWwaguCxI0pSSJFaTS0wCs?=
- =?us-ascii?Q?LEKRWyRlmAxWMLci3qONZteXLI2Lu=2FTUr=2FVEchc?=
- =?us-ascii?Q?9qN=2F553hSxcuQYU7Fa=2F4A=3D=3D?=
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Jeffrey Kardatzke <jkardatzke@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Content-Type: text/plain; charset=us-ascii
-Content-Language: sv
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 bulkscore=0
+ suspectscore=3 malwarescore=0 adultscore=0 phishscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007210075
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
+ impostorscore=0 suspectscore=3 adultscore=0 clxscore=1015 mlxlogscore=999
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007210075
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hello Mauro Carvalho Chehab,
 
-On 2020-07-15 22:22, Ezequiel Garcia wrote:
-> Now that slice invariant parameters have been moved,
-> the driver no longer needs this control, so drop it.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> ---
->  drivers/staging/media/rkvdec/rkvdec-h264.c | 4 ----
->  drivers/staging/media/rkvdec/rkvdec.c      | 5 -----
->  2 files changed, 9 deletions(-)
-> 
-> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> index 57c084910b3b..f6e1fa19d625 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> @@ -109,7 +109,6 @@ struct rkvdec_h264_reflists {
->  struct rkvdec_h264_run {
->  	struct rkvdec_run base;
->  	const struct v4l2_ctrl_h264_decode_params *decode_params;
-> -	const struct v4l2_ctrl_h264_slice_params *slices_params;
->  	const struct v4l2_ctrl_h264_sps *sps;
->  	const struct v4l2_ctrl_h264_pps *pps;
->  	const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
-> @@ -1067,9 +1066,6 @@ static void rkvdec_h264_run_preamble(struct rkvdec_ctx *ctx,
->  	run->decode_params = ctrl ? ctrl->p_cur.p : NULL;
->  	ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl,
->  			      V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS);
-> -	run->slices_params = ctrl ? ctrl->p_cur.p : NULL;
-> -	ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl,
-> -			      V4L2_CID_MPEG_VIDEO_H264_SPS);
+This is a semi-automatic email about new static checker warnings.
 
-V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS line should be removed not SPS :-)
+The patch 79317baaaea2: "media: atomisp: place all gpio parsing 
+together" from Jun 21, 2020, leads to the following Smatch complaint:
 
-With that fixed,
+    drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c:830 gmin_v1p8_ctrl()
+    warn: variable dereferenced before check 'gs' (see line 820)
 
-Reviewed-by: Jonas Karlman <jonas@kwiboo.se>
+drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+   814  static int gmin_v1p8_ctrl(struct v4l2_subdev *subdev, int on)
+   815  {
+   816          struct gmin_subdev *gs = find_gmin_subdev(subdev);
+   817          int ret;
+   818          int value;
+   819	
+   820		if (gs->v1p8_gpio >= 0) {
+                    ^^
+New dereference.
 
-Best regards,
-Jonas
+   821			pr_info("atomisp_gmin_platform: 1.8v power on GPIO %d\n",
+   822				gs->v1p8_gpio);
+   823			ret = gpio_request(gs->v1p8_gpio, "camera_v1p8_en");
+   824			if (!ret)
+   825				ret = gpio_direction_output(gs->v1p8_gpio, 0);
+   826			if (ret)
+   827				pr_err("V1P8 GPIO initialization failed\n");
+   828		}
+   829	
+   830		if (!gs || gs->v1p8_on == on)
+                     ^^
+Too late.
 
->  	run->sps = ctrl ? ctrl->p_cur.p : NULL;
->  	ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl,
->  			      V4L2_CID_MPEG_VIDEO_H264_PPS);
-> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-> index accb4a902fdd..8ebc9dfc83be 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec.c
-> @@ -59,11 +59,6 @@ static const struct rkvdec_ctrl_desc rkvdec_h264_ctrl_descs[] = {
->  		.mandatory = true,
->  		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS,
->  	},
-> -	{
-> -		.per_request = true,
-> -		.mandatory = true,
-> -		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS,
-> -	},
->  	{
->  		.per_request = true,
->  		.mandatory = true,
-> 
+   831			return 0;
+   832		gs->v1p8_on = on;
+   833  
+   834          if (gs->v1p8_gpio >= 0)
+   835                  gpio_set_value(gs->v1p8_gpio, on);
+
+Could we combine this with the first "if (gs->v1p8_gpio >= 0) {"
+condition?  This code is looking pretty subtle so maybe not.
+
+   836  
+   837          if (gs->v1p8_reg) {
+   838                  regulator_set_voltage(gs->v1p8_reg, 1800000, 1800000);
+   839                  if (on)
+   840                          return regulator_enable(gs->v1p8_reg);
+   841                  else
+   842                          return regulator_disable(gs->v1p8_reg);
+   843          }
+   844  
+
+regards,
+dan carpenter
