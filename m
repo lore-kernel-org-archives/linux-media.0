@@ -2,145 +2,184 @@ Return-Path: <SRS0=lMHH=BA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F500C433DF
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 08:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 096D4C433F1
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 08:55:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C78421702
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 08:46:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA0E92080D
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 08:55:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=pesu-pes-edu.20150623.gappssmtp.com header.i=@pesu-pes-edu.20150623.gappssmtp.com header.b="sBtQrgeX"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="k1L0dIXX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726521AbgGUIqw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Jul 2020 04:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGUIqv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Jul 2020 04:46:51 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090ADC061794
-        for <linux-media@vger.kernel.org>; Tue, 21 Jul 2020 01:46:51 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id q6so2177765ljp.4
-        for <linux-media@vger.kernel.org>; Tue, 21 Jul 2020 01:46:50 -0700 (PDT)
+        id S1728987AbgGUIzZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Jul 2020 04:55:25 -0400
+Received: from mail-bn7nam10on2061.outbound.protection.outlook.com ([40.107.92.61]:7905
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728885AbgGUIzZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 21 Jul 2020 04:55:25 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RyWoBuQ5/q8f7GSM5pxp7oX4iypUMU8JrRihVvht5qUo14kbroUGsZeSw+2pAotaqcvYinXgl6uceXG8lwdh4ageLVAvteUcTdtBCvUjt2lSu1SUqGJ0NGQCYfA2R71n1BhwRcuVrdsDz0BDMqAGHwIayxNV45l/r2b6/ZFVHLrELLGxUHx+TnctK4GuX/ZaHqrj+E4IOgazYBfFYCq9mvZAmfa85jvLWVXkWMpSsNC6oc9iDGyGVvx30p82tTCYKAM3gcRmKJtyYRM8nWamiQL0rbk3uuLiYo8Pp56vGm0Q2HASMawAaBi0WWz8bRPp3LjbR9GpUKW7VEZn//EBtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QeaGCrrDHmqsSeyTGV4X/OwWpWxAHHNG/nNNVIxtZPA=;
+ b=jDIqUXgIx1uMb/e5Gf7K1BeulL5n/Y5nTrMa5ONdS8Wr1fsL96Gj//Wl3FsqFn1CqgrymRtwvsvhQhpovmNHWdlA2JGVj/uUkiOov2pHSrjYR13tkSpjnHNxflGqC5/miSkQ1s9qs3n35UVB69vP5U1FtIZFKTdTes+9RiRRgb133o9VfUayWo9wjcw5cLYrcZN4wkDxAQs3n9rQb1uP/T3UaBNsYDDyk8G+rx29w2M781bbd5MTJfGT+pOYmWQHwPhf1tikRGt0yYtYR0QeNK5n/niw1o37eGhZpDF9JW9YEj9+rkmrZxTTjQTTob5k3nE+7VlKzXPeHjWuVdodoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pesu-pes-edu.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=65aNYDMHso00QBpYKlJQ2NuOwOKHTaALj+/FvCeLQ34=;
-        b=sBtQrgeXFs7uHWLQjkXwaQ7oDfcP1FZFjsYMa38Qs2uhbqiamAw1iqSfqzPx14VrAI
-         86pWqy6lzMbQND7IYV/tI9v9ZW89XxUUP5DggUW/08WWmsjtCPy0kEp/kZYgv+i1Cyhe
-         gjYf40x6nMJWbuovtRzC3AvnUhTy3fAHiDmrS6Q18UyI6jt5myIOmf5EXl3PirrqUkmX
-         NjysXiBQ86kZ00cKiVRoPQFzDUxQx+OHJ/SgGfUzCbd/TKdbbNhqTgIEq08QwqHzgxay
-         3jQnOQwOzPL+9q5DAYfKGqp/XpiH9CeuaBj1BGYIPZL9/pyYsDMrQ9SzgbFeM5TkQR9S
-         cfTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=65aNYDMHso00QBpYKlJQ2NuOwOKHTaALj+/FvCeLQ34=;
-        b=EU63QnpyRhIY/RjIGXUFuQ1Azk7tAnH7V5+X/N9jHe3F8y1EGgpLE+I7jzNRFgJh1X
-         naYl6wziJ8fB2CSdzWB2zstQw0eYn3Es6Uf4R0wiQDobamuc4uPEHMndDFt0Yh1+hF0Y
-         IlIQXaAHntyzP2E6NsMloRcQYiY3ii59F+qU2CbncYDloiZjMvpDwMacofVbIFAPxZfU
-         468MXdeCgoEzBL8TjFM4c29ZSztewZ/837LQO9qEHZxGVM1za9oVAJzIV7OP4Gtmf+N3
-         HiaZJvV/XhpUGbHbIZkC/UrWwELvVCpj3qDs6gRCKdrzHiBHfhtY4SaI88+IpkaF6h0l
-         2+Dg==
-X-Gm-Message-State: AOAM533rMiyo1E/k2xUThmgKNBo8DlfMwKmhLYqtm2zwyGfim7knHskc
-        1mggMJ9eslfhEJNZh3U7B21/5v2Xfp+rHcN4JbvOug==
-X-Google-Smtp-Source: ABdhPJxGXm2fBsKUpZKPxL7HWctJNjr7DBqn3XFbOZNZvaqD4loXHv8b2yCGJDCLqp6h9GETa0Hhz6bps6x6UFVYuIo=
-X-Received: by 2002:a2e:b4ed:: with SMTP id s13mr12396288ljm.296.1595321208788;
- Tue, 21 Jul 2020 01:46:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200721075642.4cdlzbewml5jwbwm@pesu.pes.edu> <20200721083539.GJ2549@kadam>
-In-Reply-To: <20200721083539.GJ2549@kadam>
-From:   B K Karthik <bkkarthik@pesu.pes.edu>
-Date:   Tue, 21 Jul 2020 14:16:37 +0530
-Message-ID: <CAAhDqq0SR2cKhetYTrHB2b2OMgEOi4JHgA1Syg1Lc0+umD=p2Q@mail.gmail.com>
-Subject: Re: [PATCH] fix WARNING in pvr2_i2c_core_done
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Mike Isely <isely@pobox.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QeaGCrrDHmqsSeyTGV4X/OwWpWxAHHNG/nNNVIxtZPA=;
+ b=k1L0dIXX99MPttlQHdGZxGeqZvwlQKfFDEcBvBq2K58ylw1w1AGopksnZ5GGsZaohglQEtGCh09N0qvgTCEYOxd7JkIDdrUzfUwBMh/gDVQOBv19Cvei43iR1dYfeHxbxdST3hflV2TqQjemXB1cUqtj6Yhj2nt6CzuMo2d5brM=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB3775.namprd12.prod.outlook.com (2603:10b6:208:159::19)
+ by MN2PR12MB3967.namprd12.prod.outlook.com (2603:10b6:208:16c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17; Tue, 21 Jul
+ 2020 08:55:22 +0000
+Received: from MN2PR12MB3775.namprd12.prod.outlook.com
+ ([fe80::a16e:8812:b4c0:918d]) by MN2PR12MB3775.namprd12.prod.outlook.com
+ ([fe80::a16e:8812:b4c0:918d%6]) with mapi id 15.20.3195.026; Tue, 21 Jul 2020
+ 08:55:21 +0000
+Subject: Re: [Linaro-mm-sig] [PATCH 1/2] dma-buf.rst: Document why indefinite
+ fences are a bad idea
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>, Daniel Vetter <daniel@ffwll.ch>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Daniel Stone <daniels@collabora.com>,
+        linux-rdma@vger.kernel.org,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        amd-gfx@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Steve Pronovost <spronovo@microsoft.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Jesse Natalie <jenatali@microsoft.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
         linux-media@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        Mika Kuoppala <mika.kuoppala@intel.com>
+References: <20200707201229.472834-4-daniel.vetter@ffwll.ch>
+ <20200709123339.547390-1-daniel.vetter@ffwll.ch>
+ <93b673b7-bb48-96eb-dc2c-bd4f9304000e@shipmail.org>
+ <20200721074157.GB3278063@phenom.ffwll.local>
+ <3603bb71-318b-eb53-0532-9daab62dce86@amd.com>
+ <57a5eb9d-b74f-8ce4-7199-94e911d9b68b@shipmail.org>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Message-ID: <2ca2c004-1e11-87f5-4bd8-761e1b44d21f@amd.com>
+Date:   Tue, 21 Jul 2020 10:55:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+In-Reply-To: <57a5eb9d-b74f-8ce4-7199-94e911d9b68b@shipmail.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-ClientProxiedBy: AM0PR04CA0127.eurprd04.prod.outlook.com
+ (2603:10a6:208:55::32) To MN2PR12MB3775.namprd12.prod.outlook.com
+ (2603:10b6:208:159::19)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM0PR04CA0127.eurprd04.prod.outlook.com (2603:10a6:208:55::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.18 via Frontend Transport; Tue, 21 Jul 2020 08:55:19 +0000
+X-Originating-IP: [2a02:908:1252:fb60:be8a:bd56:1f94:86e7]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: c78dc7db-fd98-4487-e0ec-08d82d53ccc8
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3967:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3967567C61BC043F2058343F83780@MN2PR12MB3967.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K8rlvC2wFfrdV23lhT4j0xR0dD9gmUFu7MPEQCWmSOztkQ+OyTxg7R+hbwVYVG9sX9ct+YtOwGgtydW0wE024a1LCCOb35M8TL3QGhA0WtVSoZpLBIhyfviSO+lS4hUwhgNoNCMWXcA8uqlh+7lSbywiYv280mqj5uFUEZtNF+4cajSJRv5si6bhfMVOoAIP0AbZQ4jh+W2B5fRKr5Z5WOfrAXLrWhW0kd0F2rzWodFipMgGshGv3pbbXRl1RLOpZsBRMeOdwk+pse14Qwd90YFxuiAnea6CO38HCCTJjq7koryTqYy8lm7/XFzT9hkw/kIG9JSKBBmO488LJPLJADVXwXcQzxACPYMcwtuOm91LLndwCsllXPSiUfBGIpvaErlnCygVBFDoRFxP1gOPZuUYfH9HK+81xF7IMkVCPFc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3775.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(376002)(136003)(396003)(39860400002)(366004)(45080400002)(8676002)(316002)(66574015)(53546011)(86362001)(6486002)(36756003)(8936002)(4326008)(52116002)(478600001)(110136005)(66556008)(66476007)(16526019)(31696002)(2616005)(66946007)(186003)(54906003)(6666004)(2906002)(5660300002)(966005)(31686004)(7416002)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: j5mbNK/Jgj9MbhAJ5gwTfJ+CkMspFk073mKcJj4d4yHlqML3H+MZQDLBxiUZKol8Kyk8RpzPLAworAeONdvWfGLuRE1y+ySef7GkbfMo9RjHxx4jufjqPzWyLkJLvXTJlgxhTWNHJxLjBRK8jldOq1TSLM8EIVeDASsWA3AmtsJE5ld5vcZUYQk69bg/Z9118M5pjRfrkGH7hQjRLDkUXQqshD/HLW9b16c/17E4B2m2VrPqhSiX0qT/FrM51TgnhgW2Nv4RP6lVp7Yr4+phiDYQ9Q/nxxGux2tpAGN8XIJQif4L4WcOvnSXLh8YnIp6O9BduFMlqnelVgdiF+qFl8ChKcrenKu7vhuOvkiED1hcimwscTPvRwjNZa7FHb2Prx4t1BBAMfx7y5ZCZqXQn0NOfGRhJG3Cj6pj3hAGJSjVTioQjODcdm/5TJFtC5InsKsGdSdSQU4DmdZuAZaO8J72Mw8gtYL5QAwEemNB3dXiCaWKkFf8rkCAFxGAmV47u5/CiypVMfTXaGwibIqP0SuyYTOc+jOVzqkRpoDdch7lpEIKOujG/WwE/uHugyW7
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c78dc7db-fd98-4487-e0ec-08d82d53ccc8
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3775.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2020 08:55:21.7195
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jFZhoKNd61bmkQxYXFVOo0u1t22+F09PgeCmpytZeEgYR9Bqyy9LlVgORb47dDiY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3967
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 2:05 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+Am 21.07.20 um 10:47 schrieb Thomas Hellström (Intel):
 >
-> The subject isn't right.  Cc the correct people from get_maintainer.pl
-
-I'm sorry, but I just wanted syzbot to test this because I was unable
-to test it myself for some reason
+> On 7/21/20 9:45 AM, Christian König wrote:
+>> Am 21.07.20 um 09:41 schrieb Daniel Vetter:
+>>> On Mon, Jul 20, 2020 at 01:15:17PM +0200, Thomas Hellström (Intel) 
+>>> wrote:
+>>>> Hi,
+>>>>
+>>>> On 7/9/20 2:33 PM, Daniel Vetter wrote:
+>>>>> Comes up every few years, gets somewhat tedious to discuss, let's
+>>>>> write this down once and for all.
+>>>>>
+>>>>> What I'm not sure about is whether the text should be more 
+>>>>> explicit in
+>>>>> flat out mandating the amdkfd eviction fences for long running 
+>>>>> compute
+>>>>> workloads or workloads where userspace fencing is allowed.
+>>>> Although (in my humble opinion) it might be possible to completely 
+>>>> untangle
+>>>> kernel-introduced fences for resource management and dma-fences 
+>>>> used for
+>>>> completion- and dependency tracking and lift a lot of restrictions 
+>>>> for the
+>>>> dma-fences, including prohibiting infinite ones, I think this makes 
+>>>> sense
+>>>> describing the current state.
+>>> Yeah I think a future patch needs to type up how we want to make that
+>>> happen (for some cross driver consistency) and what needs to be
+>>> considered. Some of the necessary parts are already there (with like 
+>>> the
+>>> preemption fences amdkfd has as an example), but I think some clear 
+>>> docs
+>>> on what's required from both hw, drivers and userspace would be really
+>>> good.
+>>
+>> I'm currently writing that up, but probably still need a few days for 
+>> this.
 >
-> On Tue, Jul 21, 2020 at 01:26:42PM +0530, B K Karthik wrote:
-> > i2c_acpi_remove_space_handler makes a call to
-> > kmem_cache_free() through acpi_ut_delete_generic_state
-> > in drivers/acpi/osl.c. since this removes the kobject,
-> > there is a warning thrown in i2c_del_adapter. The group
-> > can not be found because it has already been removed.
+> Great! I put down some (very) initial thoughts a couple of weeks ago 
+> building on eviction fences for various hardware complexity levels here:
 >
-> The commit message needs to have a cut and paste of the warning.
-> I don't think you can't ask syzbot to test linux-next when the patch is
-> not in linux-next.
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgitlab.freedesktop.org%2Fthomash%2Fdocs%2F-%2Fblob%2Fmaster%2FUntangling%2520dma-fence%2520and%2520memory%2520allocation.odt&amp;data=02%7C01%7Cchristian.koenig%40amd.com%7C8978bbd7823e4b41663708d82d52add3%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637309180424312390&amp;sdata=tTxx2vfzfwLM1IBJSqqAZRw1604R%2F0bI3MwN1%2FBf2VQ%3D&amp;reserved=0 
 >
-> https://lkml.org/lkml/2019/9/25/302
+
+I don't think that this will ever be possible.
+
+See that Daniel describes in his text is that indefinite fences are a 
+bad idea for memory management, and I think that this is a fixed fact.
+
+In other words the whole concept of submitting work to the kernel which 
+depends on some user space interaction doesn't work and never will.
+
+What can be done is that dma_fences work with hardware schedulers. E.g. 
+what the KFD tries to do with its preemption fences.
+
+But for this you need a better concept and description of what the 
+hardware scheduler is supposed to do and how that interacts with 
+dma_fence objects.
+
+Christian.
+
 >
-> There was some discussion about this bug in Sept and it looked like the
-> correct fix was to unregister in the release handler instead of the
-> disconnect handler.  I'm not sure if the pvr2 maintainers were ever
-> CC'd about this or if anyone wrote a patch.
+> /Thomas
 >
-Yes, I'm aware of that discussion. I am not sure what exactly you mean
-by release and disconnect handlers though.
-And yes, I did not find a patch that makes the change you said.
+>
 
-Forgive me, but i noticed this:
-
-in i2c_del_adapter+0x373/0x660 drivers/i2c/i2c-core-base.c:1516
-(quoted from crash log)
-i2c_acpi_remove_space_handler(adap); that takes us to
-drivers/i2c/i2c-core-acpi.c:753
-acpi_remove_address_space_handler() that takes us to
-drivers/acpi/acpica/evxfregn.c:205
-acpi_ut_remove_reference() that takes us to drivers/acpi/acpica/utdelete.c:736
-acpi_ut_update_object_reference() that takes us to
-drivers/acpi/acpica/utdelete.c:654
-acpi_ut_delete_generic_state() that takes us to drivers/acpi/osl.c:1708
-
-where a call to kmem_cache_free() is made.
-Hence, the object does not exist anymore. (am i right?)
-
-now that i know the object does exist, was it meant to be '0-0011' ?
-
-later in the same function
-in i2c_del_adapter+0x373/0x660 drivers/i2c/i2c-core-base.c:1532
-(function name quoted from crash log)
-a call to i2c_unregister_device() is made, where it tries to
-unregister the device and it is a 2 pass process.
-
-it tries to unregister the client device first, and then the dummy
-device since we can not remove
-the dummy devices during the first pass. (comment in
-drivers/i2c/i2c-core-base.c:1540)
-
-hence, the problem is not with the sysfs group, but with the invalid kobject.
-that is why in the bug reported, it says kobject '0-0011' (am i right?)
-
-if this is what you meant, sorry for wasting your time.
-
-I thought since a call to kmem_cache_free() is being made, the kobject
-was removed.
-thus, i sent a patch with the if() statement. If i am thinking the
-wrong way, please let me know.
-
-thanks,
-
-karthik
