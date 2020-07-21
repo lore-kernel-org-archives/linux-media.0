@@ -2,63 +2,43 @@ Return-Path: <SRS0=lMHH=BA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99430C433E2
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 07:52:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09595C433E2
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 07:55:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A0FD208E4
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 07:52:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DAC8A20658
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 07:55:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Pqv9oNkm"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="E0Dp32ec"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727837AbgGUHwC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Jul 2020 03:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728072AbgGUHwA (ORCPT
+        id S1728689AbgGUHzd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Jul 2020 03:55:33 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:56419 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728550AbgGUHz2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Jul 2020 03:52:00 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45507C0619D9
-        for <linux-media@vger.kernel.org>; Tue, 21 Jul 2020 00:52:00 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id u12so11135829lff.2
-        for <linux-media@vger.kernel.org>; Tue, 21 Jul 2020 00:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=j9CTrGuuoHUlZAGWfnV64jcGILUKrabUBS1No8VUp1I=;
-        b=Pqv9oNkm+9Pyllwjqpce/RwRsaSGWGr+5lDHn44Yg8zbs2uz60bhclQNYbB+p1Hcjc
-         VQ1IgVfV0bRdqmrENvzzsrYv6a1kEqITdKiiCdBY91izlprm+tK/KiHxn/Kp9XJh+iUG
-         Vos3S2owafkRuZZTsRqGs0RjMXKcaUkZ2pCPEPdmnnWU4uzQzTk/NYhU00OO/yiCa+tL
-         Njtzj2G/F5xm0WX+Y7IJM3DvrfNYC4qfQjXMOj0lO/likqKukAyy7/WL126HeEUEX997
-         9Nx96Zu/Hlny6SS8VgLvOxQI2oyJRrUNpWyIus56AnoP+rYLNYanke4lrOnFZBAr/l4e
-         S8Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=j9CTrGuuoHUlZAGWfnV64jcGILUKrabUBS1No8VUp1I=;
-        b=sB3ZDpTtAuHqN04WG/O6o16+dC9etYqaLrG+ep65VzrVZhC/Gj7Ue5aTJDehAclATl
-         lN3ObC9GCAPCQQTovVP2rXJW8hHr8Ky78d6vXkervmQPOp9l0Ug+OyeaseWsrZjrIFaE
-         KKpKBTFiO9/wK7NiwJ42A88uk+2QpOgoJjbYtaGZBM+NKfb1uvqPOfRShea9DO95r6bd
-         pTrKQ5F/qosRrXRMYUVm/SRkznwR45zuC9150MZpMBT1AP5Wy5lc2i90FWWjDGqObuEQ
-         7zwWmz3te3ZADCFwrlaxhJfZpGir8lGks/tZzm75JW1ka7iMn+A2YQWn+R+Y5jzOrmPb
-         /rKA==
-X-Gm-Message-State: AOAM5310cy+hNJNNm1PyIooJQHpbbJxihDWYrEi779aHTkEZ4bLNj7d6
-        UsRpTfYyhoez1aSD0Lt3+8cLO6kHQp4=
-X-Google-Smtp-Source: ABdhPJwhwYi8BcbhhK+d0NPV7/Ock8IRaNVE45gU8A1BPsbDTrV6VzVsxLBZz5UDMstanyJRUsJ3Tg==
-X-Received: by 2002:a19:e204:: with SMTP id z4mr3654835lfg.121.1595317918217;
-        Tue, 21 Jul 2020 00:51:58 -0700 (PDT)
-Received: from localhost.localdomain ([195.24.90.54])
-        by smtp.gmail.com with ESMTPSA id d2sm4045334ljg.6.2020.07.21.00.50.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 00:51:57 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tue, 21 Jul 2020 03:55:28 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id xn7VjfUH2NPeYxn7WjsO2w; Tue, 21 Jul 2020 09:55:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1595318126; bh=/v79hKJJGRj6BzbMDkBIw597JdY422SD+5dhz06Pjoo=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=E0Dp32ecGVC2zSDgeY6KLpgLujdeQRvj674g6uBfnL4OSWfzivez4CJk6zrdlOdof
+         /gDjzQ0c0jvRIXF5iHqpSiVVh1WtrDvVGvarhwVYnUsjwgidXmRmpBkoX1lFFaYzYG
+         /iBYRR4GFL8m9pUqejzhqjr5A49D5mZwlaSUANRSQ5ozjCaQE3lwJmbZO/iN93RMRR
+         lctsgeD9eg3FcZAymJ/AAEAmSemG+QSG2cPHojZY564qTiRj/kyBTnhv0Qj86zrEw4
+         kJFMurxsJp9HE8vFFU75WKs9dOzfgpTjRRdYRzRvG5zH16pktZb32gm3YOgsPk1m4A
+         wMHey373YkJAQ==
+Subject: Re: [PATCH v2 6/6] media: docs: Deprecate mfc frame skip control
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -67,153 +47,58 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Andrzej Hajda <a.hajda@samsung.com>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Maheshwar Ajja <majja@codeaurora.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v2 3/6] media: v4l2-ctrl: Add frame-skip std encoder control
-Date:   Tue, 21 Jul 2020 10:45:35 +0300
-Message-Id: <20200721074538.505-4-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200721074538.505-1-stanimir.varbanov@linaro.org>
+        Nicolas Dufresne <nicolas@ndufresne.ca>
 References: <20200721074538.505-1-stanimir.varbanov@linaro.org>
+ <20200721074538.505-7-stanimir.varbanov@linaro.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <0195497b-a64b-e501-45af-b3847fe3108d@xs4all.nl>
+Date:   Tue, 21 Jul 2020 09:55:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200721074538.505-7-stanimir.varbanov@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfPmZ2fNz+MsuKWtZE7Hw0mxslV4JLJgnH+exA32HpgMPVpj+zK3AX9ZL4xCN+7LiHEY1utWNYeb6beC54iEcmiMCjXyqlJvBk4D/sXUJG1RZau6BPS4I
+ 8hJneXG+lCnneUiwc2yotKW68Hv6SWkoPRBFnCEsTbQDyFKaGhhPozx4HGU27pz5XHW0eeKV82HR+ssTWZ3kHuBdjL3lSxCRCnQJQvtfnQN7vMjE6MeGzy8i
+ lfubeitgnty8veyAJE0VqZVyLAR1ExPUyUr1Epa125ZW+zOjutSPXCLLiGLCoXlFMZee29tHBWZThaCLSsKHf8WNLHvnz/Ui1EU7G+drEmjU77rJzxPrTs1y
+ o5mRAYhtMr0/3BRxfTR7GM02HlK4qAcUOqjJokIyy5JWLrV5IH0eE+kyQEHa9z4VAEdMY+orhKLNX467PIg/N9OErF8Rp02r9LLb1kdkuU0BzhrZtXVmozPp
+ 9eZGGtvOETiW1TUB40ciDitM5Uxh2uVSOQlJCa+sjEaZfLwcEkoRNRFUeZW3mh1E8iDGzNif2Niq9Jk6JeMXBpk1GuTYj22Zmvc1e8vBk//ehgfUk3U8myZz
+ tsGC0zbYGEtbKx/ujl6pUsbohhBr38VEAOPUqo1EL4mid4zcxtanpvyDXcAzxBYbnS1nZDx0J1pgUcVHg0xgVIuxRPlJnb88WekUgmpKGhCF7vZ8f5SkjYnh
+ 1G2DoM9LqX4=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds encoders standard v4l2 control for frame-skip. The control
-is a copy of a custom encoder control so that other v4l2 encoder
-drivers can use it.
+On 21/07/2020 09:45, Stanimir Varbanov wrote:
+> Deprecate mfc private frame skip mode control for new
+> clients and use the standard one instead.
+> 
+> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- .../media/v4l/ext-ctrls-codec.rst             | 38 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c          | 10 +++++
- include/uapi/linux/v4l2-controls.h            |  6 +++
- 3 files changed, 54 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index b9d3f7ae6486..985e4c2d29bf 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -602,6 +602,40 @@ enum v4l2_mpeg_video_bitrate_mode -
-     Encoder will decide the appropriate quantization parameter and
-     bitrate to produce requested frame quality.
- 
-+
-+``V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE (enum)``
-+
-+enum v4l2_mpeg_video_frame_skip_mode -
-+    Indicates in what conditions the encoder should skip frames. If
-+    encoding a frame would cause the encoded stream to be larger then a
-+    chosen data limit then the frame will be skipped. Possible values
-+    are:
-+
-+
-+.. tabularcolumns:: |p{9.2cm}|p{8.3cm}|
-+
-+.. raw:: latex
-+
-+    \small
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - ``V4L2_MPEG_FRAME_SKIP_MODE_DISABLED``
-+      - Frame skip mode is disabled.
-+    * - ``V4L2_MPEG_FRAME_SKIP_MODE_LEVEL_LIMIT``
-+      - Frame skip mode enabled and buffer limit is set by the chosen
-+        level and is defined by the standard.
-+    * - ``V4L2_MPEG_FRAME_SKIP_MODE_BUF_LIMIT``
-+      - Frame skip mode enabled and buffer limit is set by the
-+        :ref:`VBV (MPEG1/2/4) <v4l2-mpeg-video-vbv-size>` or
-+        :ref:`CPB (H264) buffer size <v4l2-mpeg-video-h264-cpb-size>` control.
-+
-+.. raw:: latex
-+
-+    \normalsize
-+
- ``V4L2_CID_MPEG_VIDEO_TEMPORAL_DECIMATION (integer)``
-     For every captured frame, skip this many subsequent frames (default
-     0).
-@@ -1173,6 +1207,8 @@ enum v4l2_mpeg_video_h264_entropy_mode -
-     Quantization parameter for an B frame for MPEG4. Valid range: from 1
-     to 31.
- 
-+.. _v4l2-mpeg-video-vbv-size:
-+
- ``V4L2_CID_MPEG_VIDEO_VBV_SIZE (integer)``
-     The Video Buffer Verifier size in kilobytes, it is used as a
-     limitation of frame skip. The VBV is defined in the standard as a
-@@ -1210,6 +1246,8 @@ enum v4l2_mpeg_video_h264_entropy_mode -
-     Force a key frame for the next queued buffer. Applicable to
-     encoders. This is a general, codec-agnostic keyframe control.
- 
-+.. _v4l2-mpeg-video-h264-cpb-size:
-+
- ``V4L2_CID_MPEG_VIDEO_H264_CPB_SIZE (integer)``
-     The Coded Picture Buffer size in kilobytes, it is used as a
-     limitation of frame skip. The CPB is defined in the H264 standard as
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index bc00d02e411f..eb403858d325 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -591,6 +591,12 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		"External",
- 		NULL,
- 	};
-+	static const char * const mpeg_video_frame_skip[] = {
-+		"Disabled",
-+		"Level Limit",
-+		"VBV/CPB Limit",
-+		NULL,
-+	};
- 
- 	switch (id) {
- 	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
-@@ -652,6 +658,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		return flash_strobe_source;
- 	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:
- 		return header_mode;
-+	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:
-+		return mpeg_video_frame_skip;
- 	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE:
- 		return multi_slice;
- 	case V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE:
-@@ -846,6 +854,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
- 	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:			return "Sequence Header Mode";
- 	case V4L2_CID_MPEG_VIDEO_MAX_REF_PIC:			return "Max Number of Reference Pics";
-+	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:		return "Frame Skip Mode";
- 	case V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP:		return "H263 I-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP:		return "H263 P-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP:		return "H263 B-Frame QP Value";
-@@ -1267,6 +1276,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_FLASH_LED_MODE:
- 	case V4L2_CID_FLASH_STROBE_SOURCE:
- 	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:
-+	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:
- 	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE:
- 	case V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE:
- 	case V4L2_CID_MPEG_VIDEO_H264_LEVEL:
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 0f7e4388dcce..053827cda8e6 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -744,6 +744,12 @@ enum v4l2_cid_mpeg_video_hevc_size_of_length_field {
- #define V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES	(V4L2_CID_MPEG_BASE + 643)
- #define V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR	(V4L2_CID_MPEG_BASE + 644)
- #define V4L2_CID_MPEG_VIDEO_CONSTANT_QUALITY		(V4L2_CID_MPEG_BASE + 645)
-+#define V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE		(V4L2_CID_MPEG_BASE + 646)
-+enum v4l2_mpeg_video_frame_skip_mode {
-+	V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED	= 0,
-+	V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_LEVEL_LIMIT	= 1,
-+	V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT	= 2,
-+};
- 
- /*  MPEG-class control IDs specific to the CX2341x driver as defined by V4L2 */
- #define V4L2_CID_MPEG_CX2341X_BASE				(V4L2_CTRL_CLASS_MPEG | 0x1000)
--- 
-2.17.1
+> ---
+>  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index 985e4c2d29bf..31d77d1cdcc9 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -2821,6 +2821,11 @@ MFC 5.1 Control IDs
+>  ``V4L2_CID_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE``
+>      (enum)
+>  
+> +    .. note::
+> +
+> +       This control is deprecated. Use the standard
+> +       ``V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE`` control instead.
+> +
+>  enum v4l2_mpeg_mfc51_video_frame_skip_mode -
+>      Indicates in what conditions the encoder should skip frames. If
+>      encoding a frame would cause the encoded stream to be larger then a
+> 
 
