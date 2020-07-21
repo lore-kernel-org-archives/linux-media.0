@@ -2,143 +2,189 @@ Return-Path: <SRS0=lMHH=BA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AF66C433E5
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 13:56:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CE9CC433E0
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 13:54:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2114F207CD
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 13:56:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 432DC206E9
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 13:54:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="jYZawbeI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728385AbgGUN4f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Jul 2020 09:56:35 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44400 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726359AbgGUN4f (ORCPT
+        id S1726700AbgGUNyT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Jul 2020 09:54:19 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:59251 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726120AbgGUNyT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Jul 2020 09:56:35 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id C0EFB297385
-Subject: Re: [PATCH v4 0/6] media: v4l2: Add extended fmt and buffer ioctls
-To:     Boris Brezillon <boris.brezillon@collabora.com>,
-        Brian.Starkey@arm.com
-Cc:     mchehab@kernel.org, hans.verkuil@cisco.com,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
-        linux-media@vger.kernel.org, tfiga@chromium.org,
-        hiroh@chromium.org, nicolas@ndufresne.ca, kernel@collabora.com,
-        narmstrong@baylibre.com, linux-kernel@vger.kernel.org,
-        frkoenig@chromium.org, mjourdan@baylibre.com,
-        stanimir.varbanov@linaro.org
-References: <20200717115435.2632623-1-helen.koike@collabora.com>
- <20200721131537.6ff83c71@collabora.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <6bbcc4e3-aaaa-624e-94bf-a950dd77421b@collabora.com>
-Date:   Tue, 21 Jul 2020 10:56:25 -0300
+        Tue, 21 Jul 2020 09:54:19 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id xsimjiBjfNPeYxsinjufOB; Tue, 21 Jul 2020 15:54:17 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1595339657; bh=PDSQ9CQyuDNzepwlhrVFRQg5sIt+xIhogYTeu7Pbyh4=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=jYZawbeItMgcBeR5Py1hyn08kt/wV0uQ6dK712Q6c0AkMkCUj6MJBEWZQli9ffIqb
+         08yuv6pGROp0gYsfQlx5jOISsvT7QtkocWADbCmM8/xwyCSmMjJ0FvLPnViRvWHI5y
+         sd71cca+zrSSmar01ksF2FM2+qZ64d8PvQzIo1M66MKHgoTFKKhF8hY3ZHvpknFeGr
+         leGnHuucMZb0YPR9cnRLUHr3olWTs4CZBHn3CfOP/9WudSJSFlQfocSKAQfzs8hGfZ
+         LWtSGP5XXFvAbMKDVxTbiSTMUeXmHZujjBY6QjoLHYyVl4W3JBfQi6GXZtI5d9RJdA
+         wCwxgGgowrTkg==
+Subject: Re: [PATCH v5 5/7] media: v4l2: add support for the subdev CSC API
+ for hsv_enc on mediabus
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     helen.koike@collabora.com, ezequiel@collabora.com,
+        kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, tfiga@chromium.org
+References: <20200703171019.19270-1-dafna.hirschfeld@collabora.com>
+ <20200703171019.19270-6-dafna.hirschfeld@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <f78cd2d5-a38b-7bbd-b03a-299ca8644bc9@xs4all.nl>
+Date:   Tue, 21 Jul 2020 15:54:16 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200721131537.6ff83c71@collabora.com>
+In-Reply-To: <20200703171019.19270-6-dafna.hirschfeld@collabora.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfGRGQXQuDOc+R/i4nqKvbfg6vLpe3Nkqk+SMkWMW2a64e99MvCfO9+6Y0etrVRPUKhtoGVqOoIG+/xP766k/y0kSMzDi98/9nUKvct0Qcmf6GU8fZJZZ
+ jmJc9UzZBVjWXuooJkCdblR7NNIE1IWC+F6JQaFhVJ7AFtvi1WQ7HeXYiOvO1RM8OUsXzUyosJ+nV0BC1WnIAn2yTswNINF/Tq0KOM5PEdcufB8wY7dqIvl1
+ RZTuqhD7IbnwYEWB+hHGh7IT4H3ULathYMMM6rwYPVTV5+5+KQQDgMCkl9Wp3ACjNFgEPI2XsoGqSEvmF5lmLnEV81oECEYJP6hwRrdWaorY6DjZ6v0MF6XY
+ Kj4uJDWaGi3KpnMO7C0B7xEIySKGrxmDkR/RSC1Um1FWUGP/4UpIpRaJqwQAIkrf/yytsRYCK6nDehXm+NBCca69v6MqRsoAaL7rQQt7xpQs//XbEw4U7uyx
+ SUryBKJ4UZ3cCZSGWcxLoaLHp1IFLekY8P9FTN58QhGcMdYwNc0JB9hbVPimSC5sbvOy37r5BQjff76K0ZB+9EbpWpzXL6wLqTCGSxTUlgVk+3/V4AX/K0c6
+ I4Sn3PXhnrolrzFhGZyqux4lWjrA7OwdMED+3sLdEAeQjZfj6R1xZflCwYJZwDYYYs8=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Boris,
+On 03/07/2020 19:10, Dafna Hirschfeld wrote:
+> Add the flag V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC that drivers
+> can set when enumerating the supported mediabus formats
+> on subdevices to indicate that the userspace can ask to
+> set the 'hsv_enc'. The patch also replaces the 'ycbcr_enc'
+> field in 'struct v4l2_mbus_framefmt' with a union that
+> includes 'hsv_enc'
 
-On 7/21/20 8:15 AM, Boris Brezillon wrote:
-> Hello Helen,
-> 
-> Just a few drive-by comments.
-> 
-> On Fri, 17 Jul 2020 08:54:29 -0300
-> Helen Koike <helen.koike@collabora.com> wrote:
-> 
->> Hi,
->>
->> I'm sorry for taking too long to submit v4.
->>
->> It is not perfect, not all v4l2-compliance tests passes, but I'd like a review,
->> specially on the API and potential problems, so I can focus on improving implementation
->> and maybe drop the RFC tag for next version.
->>
->> Follow below what changed in v4 and some items I'd like to discuss:
->>
->>
->> * Ioctl to replace v4l2_pix_format
->> ---------------------------------------------------------------------------------
->> During last media summit, we agreed to create ioctls that replace the v4l2_pix_format
->> struct and leave the other structs in the v4l2_format union alone.
->> Thus I refactored the code to receive struct v4l2_ext_pix_format, and I renamed the
->> ioctls, so now we have:
->>
->> int ioctl(int fd, VIDIOC_G_EXT_FMT, struct v4l2_ext_pix_format *argp);
-> 
-> Maybe use the EXT_PIX_FMT suffix here since the struct is really only
-> about pixel formats.
-
-Sorry, this is a copy&paste error, I'm already using this suffix in the code, except for the ioctls
-that handle buffers (since they get v4l2_ext_buffer struct).
+I would just squash this patch with the previous patch. There is really
+no need to split this into two patches.
 
 Regards,
-Helen
+
+	Hans
 
 > 
->> int ioctl(int fd, VIDIOC_S_EXT_FMT, struct v4l2_ext_pix_format *argp);
->> int ioctl(int fd, VIDIOC_TRY_EXT_FMT, struct v4l2_ext_pix_format *argp);
->>
->> The only valid types are V4L2_BUF_TYPE_VIDEO_CAPTURE and V4L2_BUF_TYPE_VIDEO_OUTPUT,
->> all the other types are invalid with this API.
->>
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> ---
+>  .../media/v4l/subdev-formats.rst              | 33 +++++++++++++++----
+>  include/uapi/linux/v4l2-mediabus.h            |  8 ++++-
+>  include/uapi/linux/v4l2-subdev.h              |  1 +
+>  3 files changed, 34 insertions(+), 8 deletions(-)
 > 
-> [...]
+> diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> index 7362ee0b1e96..dddc38191547 100644
+> --- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> +++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> @@ -51,7 +51,9 @@ Media Bus Formats
+>  	The driver indicates that colorspace conversion is supported by setting
+>  	the flag V4L2_SUBDEV_MBUS_CODE_CSC_COLORSPACE in the corresponding struct
+>  	:c:type:`v4l2_subdev_mbus_code_enum` during enumeration.
+> -	See :ref:`colorspaces`.
+> +	See :ref:`v4l2-subdev-mbus-code-flags`.
+> +    * - union {
+> +      - (anonymous)
+>      * - __u16
+>        - ``ycbcr_enc``
+>        - Y'CbCr encoding, from enum :c:type:`v4l2_ycbcr_encoding`.
+> @@ -67,7 +69,23 @@ Media Bus Formats
+>  	V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC in the corresponding struct
+>  	:c:type:`v4l2_subdev_mbus_code_enum` during enumeration.
+>  	See :ref:`v4l2-subdev-mbus-code-flags`.
+> -
+> +    * - __u16
+> +      - ``hsv_enc``
+> +      - HSV encoding, from enum :c:type:`v4l2_hsv_encoding`.
+> +        This information supplements the ``colorspace`` and must be set by
+> +	the driver for capture streams and by the application for output
+> +	streams, see :ref:`colorspaces`. If the application sets the
+> +	flag ``V4L2_MBUS_FRAMEFMT_SET_CSC`` then the application can set
+> +	this field for a capture stream to request a specific HSV encoding
+> +	for the media bus data. If the driver cannot handle requested
+> +	conversion, it will return another supported encoding.
+> +	This field is ignored for Y'CbCr media bus formats. The driver indicates
+> +	that hsv_enc conversion is supported by setting the flag
+> +	V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC in the corresponding struct
+> +	:c:type:`v4l2_subdev_mbus_code_enum` during enumeration.
+> +	See :ref:`v4l2-subdev-mbus-code-flags`
+> +    * - }
+> +      -
+>      * - __u16
+>        - ``quantization``
+>        - Quantization range, from enum :c:type:`v4l2_quantization`.
+> @@ -123,11 +141,12 @@ Media Bus Formats
+>  	ignored for output streams. If set, then request the subdevice to do
+>  	colorspace conversion from the received colorspace to the requested
+>  	colorspace values. If colorimetry field (``colorspace``, ``ycbcr_enc``,
+> -	``quantization`` or ``xfer_func``) is set to 0, then that colorimetry
+> -	setting will remain unchanged from what was received. So to change the
+> -	quantization, only the ``quantization`` field shall be set to non-zero values
+> -	(``V4L2_QUANTIZATION_FULL_RANGE`` or ``V4L2_QUANTIZATION_LIM_RANGE``)
+> -	and all other colorimetry fields shall be set to 0.
+> +	''hsv_enc``, ``quantization`` or ``xfer_func``) is set to 0, then that
+> +	colorimetry setting will remain unchanged from what was received. So to
+> +	change the quantization, only the ``quantization`` field shall be set to
+> +	non-zero values (``V4L2_QUANTIZATION_FULL_RANGE`` or
+> +	``V4L2_QUANTIZATION_LIM_RANGE``) and all other colorimetry fields shall
+> +	be set to 0.
+>  
+>  	To check which conversions are supported by the hardware for the current
+>  	media bus frame format, see :ref:`v4l2-subdev-mbus-code-flags`.
+> diff --git a/include/uapi/linux/v4l2-mediabus.h b/include/uapi/linux/v4l2-mediabus.h
+> index 3b7d692b4015..d0bc8df18ad5 100644
+> --- a/include/uapi/linux/v4l2-mediabus.h
+> +++ b/include/uapi/linux/v4l2-mediabus.h
+> @@ -26,6 +26,7 @@
+>   * @field:	used interlacing type (from enum v4l2_field)
+>   * @colorspace:	colorspace of the data (from enum v4l2_colorspace)
+>   * @ycbcr_enc:	YCbCr encoding of the data (from enum v4l2_ycbcr_encoding)
+> + * @hsv_enc:	HSV encoding of the data (from enum v4l2_hsv_encoding)
+>   * @quantization: quantization of the data (from enum v4l2_quantization)
+>   * @xfer_func:  transfer function of the data (from enum v4l2_xfer_func)
+>   * @reserved2:  two reserved bytes that can be later used
+> @@ -38,7 +39,12 @@ struct v4l2_mbus_framefmt {
+>  	__u32			code;
+>  	__u32			field;
+>  	__u32			colorspace;
+> -	__u16			ycbcr_enc;
+> +	union {
+> +		/* enum v4l2_ycbcr_encoding */
+> +		__u16			ycbcr_enc;
+> +		/* enum v4l2_hsv_encoding */
+> +		__u16			hsv_enc;
+> +	};
+>  	__u16			quantization;
+>  	__u16			xfer_func;
+>  	__u16			reserved2;
+> diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+> index c20aa9a89864..08e25a961d15 100644
+> --- a/include/uapi/linux/v4l2-subdev.h
+> +++ b/include/uapi/linux/v4l2-subdev.h
+> @@ -67,6 +67,7 @@ struct v4l2_subdev_crop {
+>  
+>  #define V4L2_SUBDEV_MBUS_CODE_CSC_COLORSPACE	0x00000001
+>  #define V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC	0x00000002
+> +#define V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC	V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC
+>  #define V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION	0x00000004
+>  #define V4L2_SUBDEV_MBUS_CODE_CSC_XFER_FUNC	0x00000008
+>  /**
 > 
->>
->>
->> Boris Brezillon (5):
->>   media: v4l2: Extend pixel formats to unify single/multi-planar
->>     handling (and more)
->>   media: videobuf2: Expose helpers to implement the _ext_fmt and
->>     _ext_buf hooks
->>   media: mediabus: Add helpers to convert a ext_pix format to/from a
->>     mbus_fmt
->>   media: vivid: Convert the capture and output drivers to
->>     EXT_FMT/EXT_BUF
->>   media: vimc: Implement the ext_fmt and ext_buf hooks
-> 
-> I think you should take ownership of these patches. The end result is
-> likely to be completely different from what I initially posted, and
-> you're the one doing the hard work here.
-> 
->>
->> Hans Verkuil (1):
->>   media: v4l2: Add extended buffer operations
->>
->>  .../media/common/videobuf2/videobuf2-core.c   |   2 +
->>  .../media/common/videobuf2/videobuf2-v4l2.c   | 549 +++++-----
->>  .../media/test-drivers/vimc/vimc-capture.c    |  61 +-
->>  drivers/media/test-drivers/vimc/vimc-common.c |   6 +-
->>  drivers/media/test-drivers/vimc/vimc-common.h |   2 +-
->>  drivers/media/test-drivers/vivid/vivid-core.c |  70 +-
->>  .../test-drivers/vivid/vivid-touch-cap.c      |  26 +-
->>  .../test-drivers/vivid/vivid-touch-cap.h      |   3 +-
->>  .../media/test-drivers/vivid/vivid-vid-cap.c  | 169 +---
->>  .../media/test-drivers/vivid/vivid-vid-cap.h  |  15 +-
->>  .../media/test-drivers/vivid/vivid-vid-out.c  | 193 ++--
->>  .../media/test-drivers/vivid/vivid-vid-out.h  |  15 +-
->>  drivers/media/v4l2-core/v4l2-dev.c            |  50 +-
->>  drivers/media/v4l2-core/v4l2-ioctl.c          | 934 ++++++++++++++++--
->>  include/media/v4l2-ioctl.h                    |  60 ++
->>  include/media/v4l2-mediabus.h                 |  42 +
->>  include/media/videobuf2-core.h                |   6 +-
->>  include/media/videobuf2-v4l2.h                |  21 +-
->>  include/uapi/linux/videodev2.h                | 144 +++
->>  19 files changed, 1650 insertions(+), 718 deletions(-)
->>
-> 
+
