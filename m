@@ -2,189 +2,263 @@ Return-Path: <SRS0=lMHH=BA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CE9CC433E0
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 13:54:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C05C433EA
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 13:59:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 432DC206E9
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 13:54:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE3F5204EA
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 13:59:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="jYZawbeI"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="z9NW9roC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726700AbgGUNyT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Jul 2020 09:54:19 -0400
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:59251 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726120AbgGUNyT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Jul 2020 09:54:19 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id xsimjiBjfNPeYxsinjufOB; Tue, 21 Jul 2020 15:54:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1595339657; bh=PDSQ9CQyuDNzepwlhrVFRQg5sIt+xIhogYTeu7Pbyh4=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=jYZawbeItMgcBeR5Py1hyn08kt/wV0uQ6dK712Q6c0AkMkCUj6MJBEWZQli9ffIqb
-         08yuv6pGROp0gYsfQlx5jOISsvT7QtkocWADbCmM8/xwyCSmMjJ0FvLPnViRvWHI5y
-         sd71cca+zrSSmar01ksF2FM2+qZ64d8PvQzIo1M66MKHgoTFKKhF8hY3ZHvpknFeGr
-         leGnHuucMZb0YPR9cnRLUHr3olWTs4CZBHn3CfOP/9WudSJSFlQfocSKAQfzs8hGfZ
-         LWtSGP5XXFvAbMKDVxTbiSTMUeXmHZujjBY6QjoLHYyVl4W3JBfQi6GXZtI5d9RJdA
-         wCwxgGgowrTkg==
-Subject: Re: [PATCH v5 5/7] media: v4l2: add support for the subdev CSC API
- for hsv_enc on mediabus
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
-Cc:     helen.koike@collabora.com, ezequiel@collabora.com,
-        kernel@collabora.com, dafna3@gmail.com,
-        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
-        mchehab@kernel.org, tfiga@chromium.org
-References: <20200703171019.19270-1-dafna.hirschfeld@collabora.com>
- <20200703171019.19270-6-dafna.hirschfeld@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <f78cd2d5-a38b-7bbd-b03a-299ca8644bc9@xs4all.nl>
-Date:   Tue, 21 Jul 2020 15:54:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200703171019.19270-6-dafna.hirschfeld@collabora.com>
-Content-Type: text/plain; charset=utf-8
+        id S1728445AbgGUN70 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Jul 2020 09:59:26 -0400
+Received: from mail-bn7nam10on2040.outbound.protection.outlook.com ([40.107.92.40]:4225
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726942AbgGUN7Z (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 21 Jul 2020 09:59:25 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MrZ3lIT9V0thjVmeLeA2jsEuUOlv0qye4upjsur2Pyt6i3JUWInQJrnPQ009x1IXMeJL/KQm03w/xLj7Gf9xzwZan+eqv48hWoS9NnwInVCoVsQYefDMyYtQWJicSfUi1/X0GMSjrkYgADqSxoycgKOYQhkko1YhDklIKN6bfSudHhwehZ/Md+BKMTGmb22FU0rT470RZYum3tuFrmEKt8LoH1bPjSWU17SQWtVQ4k7zhsI0ftaXhMJelJ656ly1chUUkc9M7fIvYfvQdVPLsniBywha3qhC2dgdp7PetofI2S15bVwTK3N2jgrzplyhHbc3VNwSci5N1/4IdJq50Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l1eSOFrKHl+ZoCrLbZQd20Pqo9TlM1qpLLV8LiD0BMg=;
+ b=eYTbFRXIf78qcPCADEzTZXMqRiROgXU3PElfvJd0RC3Vkl5m6AHqOnHiUMEgW5ENQ073SNY6S2hWIj3/mDxQ3qHJMvHiI5+0HCVOusqgUhW7Jn0GAPuYCDvOk2b50RrZrnzMy1aKiSVDUbBZ3qIQO1isAJ9el9fFlIO/nhGdD+xQbga+WEH61kJuDPA4rkM1mnToj/dQSn5UxIAy14tpyPYJletzluGGqHU4NXlrPclD+HR6sbwQ4Uy3MapJs8AWQgG+02Qjc0q9RLxsSqpSE2gFNePI3stxLys1UjkkH/hpxjd7mkDQlCtYZ9x/4yGV4lVy23Iw2t6u28/N0sZEbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l1eSOFrKHl+ZoCrLbZQd20Pqo9TlM1qpLLV8LiD0BMg=;
+ b=z9NW9roCuoW1oYSl/GpWfxRhdlBHu9uPzqvIhS3xWcN4/bY+7wt04NNu548vvB0eSCZhlyknMjuVL1y7X7DEARJZxm34lBfHQFyWOnMc6k2JcSJAo9/skW5IsWAbaOGVEXJ2nFWccifjyeps6n8hnsf/J1MYpc/N/pNOFWxWFxo=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3764.namprd12.prod.outlook.com (2603:10b6:a03:1ac::17)
+ by BYAPR12MB2773.namprd12.prod.outlook.com (2603:10b6:a03:72::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.25; Tue, 21 Jul
+ 2020 13:59:18 +0000
+Received: from BY5PR12MB3764.namprd12.prod.outlook.com
+ ([fe80::bc19:eb90:1151:fc7a]) by BY5PR12MB3764.namprd12.prod.outlook.com
+ ([fe80::bc19:eb90:1151:fc7a%3]) with mapi id 15.20.3216.020; Tue, 21 Jul 2020
+ 13:59:18 +0000
+Subject: Re: [Linaro-mm-sig] [PATCH 1/2] dma-buf.rst: Document why indefinite
+ fences are a bad idea
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>, Daniel Vetter <daniel@ffwll.ch>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Daniel Stone <daniels@collabora.com>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Steve Pronovost <spronovo@microsoft.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Jesse Natalie <jenatali@microsoft.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        Mika Kuoppala <mika.kuoppala@intel.com>
+References: <20200707201229.472834-4-daniel.vetter@ffwll.ch>
+ <20200709123339.547390-1-daniel.vetter@ffwll.ch>
+ <93b673b7-bb48-96eb-dc2c-bd4f9304000e@shipmail.org>
+ <20200721074157.GB3278063@phenom.ffwll.local>
+ <3603bb71-318b-eb53-0532-9daab62dce86@amd.com>
+ <57a5eb9d-b74f-8ce4-7199-94e911d9b68b@shipmail.org>
+ <2ca2c004-1e11-87f5-4bd8-761e1b44d21f@amd.com>
+ <74727f17-b3a5-ca12-6db6-e47543797b72@shipmail.org>
+ <CAKMK7uFfMi5M5EkCeG6=tjuDANH4=gDLnFpxCYU-E-xyrxwYUg@mail.gmail.com>
+ <ae4e4188-39e6-ec41-c11d-91e9211b4d3a@shipmail.org>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Message-ID: <f8f73b9f-ce8d-ea02-7caa-d50b75b72809@amd.com>
+Date:   Tue, 21 Jul 2020 15:59:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+In-Reply-To: <ae4e4188-39e6-ec41-c11d-91e9211b4d3a@shipmail.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfGRGQXQuDOc+R/i4nqKvbfg6vLpe3Nkqk+SMkWMW2a64e99MvCfO9+6Y0etrVRPUKhtoGVqOoIG+/xP766k/y0kSMzDi98/9nUKvct0Qcmf6GU8fZJZZ
- jmJc9UzZBVjWXuooJkCdblR7NNIE1IWC+F6JQaFhVJ7AFtvi1WQ7HeXYiOvO1RM8OUsXzUyosJ+nV0BC1WnIAn2yTswNINF/Tq0KOM5PEdcufB8wY7dqIvl1
- RZTuqhD7IbnwYEWB+hHGh7IT4H3ULathYMMM6rwYPVTV5+5+KQQDgMCkl9Wp3ACjNFgEPI2XsoGqSEvmF5lmLnEV81oECEYJP6hwRrdWaorY6DjZ6v0MF6XY
- Kj4uJDWaGi3KpnMO7C0B7xEIySKGrxmDkR/RSC1Um1FWUGP/4UpIpRaJqwQAIkrf/yytsRYCK6nDehXm+NBCca69v6MqRsoAaL7rQQt7xpQs//XbEw4U7uyx
- SUryBKJ4UZ3cCZSGWcxLoaLHp1IFLekY8P9FTN58QhGcMdYwNc0JB9hbVPimSC5sbvOy37r5BQjff76K0ZB+9EbpWpzXL6wLqTCGSxTUlgVk+3/V4AX/K0c6
- I4Sn3PXhnrolrzFhGZyqux4lWjrA7OwdMED+3sLdEAeQjZfj6R1xZflCwYJZwDYYYs8=
+X-ClientProxiedBy: AM0PR04CA0137.eurprd04.prod.outlook.com
+ (2603:10a6:208:55::42) To BY5PR12MB3764.namprd12.prod.outlook.com
+ (2603:10b6:a03:1ac::17)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM0PR04CA0137.eurprd04.prod.outlook.com (2603:10a6:208:55::42) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.18 via Frontend Transport; Tue, 21 Jul 2020 13:59:14 +0000
+X-Originating-IP: [2a02:908:1252:fb60:be8a:bd56:1f94:86e7]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 3347e7f9-b40c-406a-8fb5-08d82d7e427d
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2773:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR12MB27734EB7C6155426A96AC46883780@BYAPR12MB2773.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l14VUsFKTFKWT74xk6GoxHgXX898LKQi8MfCTMcCFN0k5uEeh8edSKb/4fElkkc0zNn94jA9ISjOvGo0XgyW5XelmJgx3SJrxK8mM7o2uWctxQGtWtKRQzu8iVwI+ZMOwto9l5vynFhllT5V7YA30XFf5Mtq/Sx39zXIG6GFXVekvauCiUH+paIay4yZhmdIWmUMgDtwYZj/wi+4zN91AAC0PmfGZDSDT/8yMPTNvJjML1t9buA/kXR726nu/foRd3n5NRmwB4uQLN3+Sxr4POjQrE2UWKbi2feRj0xR3Iev/Q2dG7110Pt62s82Qfc1D7aH2TzNcwfCJz2n/ogxc1UuKmQYptvc2hBmeWvHTcXyQEuDqi4oBhoOrzkbX12ARwCI+4ZRsgrr7r+MDD1CgDKbAXxP3SdnQmpDHf9BEv8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3764.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(366004)(136003)(346002)(376002)(396003)(6666004)(53546011)(186003)(2906002)(5660300002)(478600001)(16526019)(6486002)(966005)(4326008)(110136005)(316002)(54906003)(66574015)(31696002)(2616005)(8936002)(7416002)(52116002)(8676002)(66556008)(36756003)(45080400002)(86362001)(31686004)(83380400001)(66476007)(66946007)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: R9h9Cz9RrQMijEwUA8iSn5Gm2Lw/lP2HTrlD5UFcraikwTq4yL6ZmwOdCkUumPNvynvc+ZKwrDohMCMaEV+mr3zRnenXjIfiuLmcs6VVR25W/mK4TCVnsUDjz5/MF938ffuMdo/+sNpkVKi3ZiNwcb/Z3CXVQ7nk+J21cbtJ6h2W95Zu6kvt1AGug5qclWKHqPnNto2Yzjpnv6ZAa5SOaIq43Nqdn3efMi5H5i83aKx0DnxSusfwQWk/EVY3CaZZjzqPGaAigE30zLmg0uKuekJHz71HaDpX/5M+QdLjrgyIenlVnekSoIcj4ps3T6g3TruoWeq9Gh5bn95UYDgZ0EcwC91w19Hzl18t5IuJJcgRW5OvwdpgAwu4Jux7e7gYd5vFrT01kMbYmISUupfYmW+bsyoHAQbRroThVIeRpflMZgXbmpS+xibQ9gtUdoO9mxCrHWRTfOSG7LYcamJP13+yfLCE1kZDHWF1CWneApg3tZ+KuAYGPydT/vWLKUFFP1qBfRDN5HI/BOTimEoT6XtYoBb8ZKXpm9IoT5rnouPn0vyMjCWcszdkPa17OKkc
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3347e7f9-b40c-406a-8fb5-08d82d7e427d
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3764.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2020 13:59:18.1836
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RoS/lQrY0iANUX1xcFX7Vi6ZTlrLiIpdprkt4yQipAm6KvDT902qsDDF8R4ulGj1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2773
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 03/07/2020 19:10, Dafna Hirschfeld wrote:
-> Add the flag V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC that drivers
-> can set when enumerating the supported mediabus formats
-> on subdevices to indicate that the userspace can ask to
-> set the 'hsv_enc'. The patch also replaces the 'ycbcr_enc'
-> field in 'struct v4l2_mbus_framefmt' with a union that
-> includes 'hsv_enc'
+Am 21.07.20 um 12:47 schrieb Thomas Hellström (Intel):
+>
+> On 7/21/20 11:50 AM, Daniel Vetter wrote:
+>> On Tue, Jul 21, 2020 at 11:38 AM Thomas Hellström (Intel)
+>> <thomas_os@shipmail.org> wrote:
+>>>
+>>> On 7/21/20 10:55 AM, Christian König wrote:
+>>>> Am 21.07.20 um 10:47 schrieb Thomas Hellström (Intel):
+>>>>> On 7/21/20 9:45 AM, Christian König wrote:
+>>>>>> Am 21.07.20 um 09:41 schrieb Daniel Vetter:
+>>>>>>> On Mon, Jul 20, 2020 at 01:15:17PM +0200, Thomas Hellström (Intel)
+>>>>>>> wrote:
+>>>>>>>> Hi,
+>>>>>>>>
+>>>>>>>> On 7/9/20 2:33 PM, Daniel Vetter wrote:
+>>>>>>>>> Comes up every few years, gets somewhat tedious to discuss, let's
+>>>>>>>>> write this down once and for all.
+>>>>>>>>>
+>>>>>>>>> What I'm not sure about is whether the text should be more
+>>>>>>>>> explicit in
+>>>>>>>>> flat out mandating the amdkfd eviction fences for long running
+>>>>>>>>> compute
+>>>>>>>>> workloads or workloads where userspace fencing is allowed.
+>>>>>>>> Although (in my humble opinion) it might be possible to completely
+>>>>>>>> untangle
+>>>>>>>> kernel-introduced fences for resource management and dma-fences
+>>>>>>>> used for
+>>>>>>>> completion- and dependency tracking and lift a lot of restrictions
+>>>>>>>> for the
+>>>>>>>> dma-fences, including prohibiting infinite ones, I think this
+>>>>>>>> makes sense
+>>>>>>>> describing the current state.
+>>>>>>> Yeah I think a future patch needs to type up how we want to make 
+>>>>>>> that
+>>>>>>> happen (for some cross driver consistency) and what needs to be
+>>>>>>> considered. Some of the necessary parts are already there (with
+>>>>>>> like the
+>>>>>>> preemption fences amdkfd has as an example), but I think some clear
+>>>>>>> docs
+>>>>>>> on what's required from both hw, drivers and userspace would be 
+>>>>>>> really
+>>>>>>> good.
+>>>>>> I'm currently writing that up, but probably still need a few days
+>>>>>> for this.
+>>>>> Great! I put down some (very) initial thoughts a couple of weeks ago
+>>>>> building on eviction fences for various hardware complexity levels 
+>>>>> here:
+>>>>>
+>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgitlab.freedesktop.org%2Fthomash%2Fdocs%2F-%2Fblob%2Fmaster%2FUntangling%2520dma-fence%2520and%2520memory%2520allocation.odt&amp;data=02%7C01%7Cchristian.koenig%40amd.com%7C0af39422c4e744a9303b08d82d637d62%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637309252665326201&amp;sdata=Zk3LVX7bbMpfAMsq%2Fs2jyA0puRQNcjzliJS%2BC7uDLMo%3D&amp;reserved=0 
+>>>>>
+>>>>>
+>>>> I don't think that this will ever be possible.
+>>>>
+>>>> See that Daniel describes in his text is that indefinite fences are a
+>>>> bad idea for memory management, and I think that this is a fixed fact.
+>>>>
+>>>> In other words the whole concept of submitting work to the kernel
+>>>> which depends on some user space interaction doesn't work and never 
+>>>> will.
+>>> Well the idea here is that memory management will *never* depend on
+>>> indefinite fences: As soon as someone waits on a memory manager fence
+>>> (be it eviction, shrinker or mmu notifier) it breaks out of any
+>>> dma-fence dependencies and /or user-space interaction. The text 
+>>> tries to
+>>> describe what's required to be able to do that (save for 
+>>> non-preemptible
+>>> gpus where someone submits a forever-running shader).
+>> Yeah I think that part of your text is good to describe how to
+>> untangle memory fences from synchronization fences given how much the
+>> hw can do.
+>>
+>>> So while I think this is possible (until someone comes up with a case
+>>> where it wouldn't work of course), I guess Daniel has a point in 
+>>> that it
+>>> won't happen because of inertia and there might be better options.
+>> Yeah it's just I don't see much chance for splitting dma-fence itself.
 
-I would just squash this patch with the previous patch. There is really
-no need to split this into two patches.
+Well that's the whole idea with the timeline semaphores and waiting for 
+a signal number to appear.
 
-Regards,
+E.g. instead of doing the wait with the dma_fence we are separating that 
+out into the timeline semaphore object.
 
-	Hans
+This not only avoids the indefinite fence problem for the wait before 
+signal case in Vulkan, but also prevents userspace to submit stuff which 
+can't be processed immediately.
 
-> 
-> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> ---
->  .../media/v4l/subdev-formats.rst              | 33 +++++++++++++++----
->  include/uapi/linux/v4l2-mediabus.h            |  8 ++++-
->  include/uapi/linux/v4l2-subdev.h              |  1 +
->  3 files changed, 34 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-> index 7362ee0b1e96..dddc38191547 100644
-> --- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
-> +++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-> @@ -51,7 +51,9 @@ Media Bus Formats
->  	The driver indicates that colorspace conversion is supported by setting
->  	the flag V4L2_SUBDEV_MBUS_CODE_CSC_COLORSPACE in the corresponding struct
->  	:c:type:`v4l2_subdev_mbus_code_enum` during enumeration.
-> -	See :ref:`colorspaces`.
-> +	See :ref:`v4l2-subdev-mbus-code-flags`.
-> +    * - union {
-> +      - (anonymous)
->      * - __u16
->        - ``ycbcr_enc``
->        - Y'CbCr encoding, from enum :c:type:`v4l2_ycbcr_encoding`.
-> @@ -67,7 +69,23 @@ Media Bus Formats
->  	V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC in the corresponding struct
->  	:c:type:`v4l2_subdev_mbus_code_enum` during enumeration.
->  	See :ref:`v4l2-subdev-mbus-code-flags`.
-> -
-> +    * - __u16
-> +      - ``hsv_enc``
-> +      - HSV encoding, from enum :c:type:`v4l2_hsv_encoding`.
-> +        This information supplements the ``colorspace`` and must be set by
-> +	the driver for capture streams and by the application for output
-> +	streams, see :ref:`colorspaces`. If the application sets the
-> +	flag ``V4L2_MBUS_FRAMEFMT_SET_CSC`` then the application can set
-> +	this field for a capture stream to request a specific HSV encoding
-> +	for the media bus data. If the driver cannot handle requested
-> +	conversion, it will return another supported encoding.
-> +	This field is ignored for Y'CbCr media bus formats. The driver indicates
-> +	that hsv_enc conversion is supported by setting the flag
-> +	V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC in the corresponding struct
-> +	:c:type:`v4l2_subdev_mbus_code_enum` during enumeration.
-> +	See :ref:`v4l2-subdev-mbus-code-flags`
-> +    * - }
-> +      -
->      * - __u16
->        - ``quantization``
->        - Quantization range, from enum :c:type:`v4l2_quantization`.
-> @@ -123,11 +141,12 @@ Media Bus Formats
->  	ignored for output streams. If set, then request the subdevice to do
->  	colorspace conversion from the received colorspace to the requested
->  	colorspace values. If colorimetry field (``colorspace``, ``ycbcr_enc``,
-> -	``quantization`` or ``xfer_func``) is set to 0, then that colorimetry
-> -	setting will remain unchanged from what was received. So to change the
-> -	quantization, only the ``quantization`` field shall be set to non-zero values
-> -	(``V4L2_QUANTIZATION_FULL_RANGE`` or ``V4L2_QUANTIZATION_LIM_RANGE``)
-> -	and all other colorimetry fields shall be set to 0.
-> +	''hsv_enc``, ``quantization`` or ``xfer_func``) is set to 0, then that
-> +	colorimetry setting will remain unchanged from what was received. So to
-> +	change the quantization, only the ``quantization`` field shall be set to
-> +	non-zero values (``V4L2_QUANTIZATION_FULL_RANGE`` or
-> +	``V4L2_QUANTIZATION_LIM_RANGE``) and all other colorimetry fields shall
-> +	be set to 0.
->  
->  	To check which conversions are supported by the hardware for the current
->  	media bus frame format, see :ref:`v4l2-subdev-mbus-code-flags`.
-> diff --git a/include/uapi/linux/v4l2-mediabus.h b/include/uapi/linux/v4l2-mediabus.h
-> index 3b7d692b4015..d0bc8df18ad5 100644
-> --- a/include/uapi/linux/v4l2-mediabus.h
-> +++ b/include/uapi/linux/v4l2-mediabus.h
-> @@ -26,6 +26,7 @@
->   * @field:	used interlacing type (from enum v4l2_field)
->   * @colorspace:	colorspace of the data (from enum v4l2_colorspace)
->   * @ycbcr_enc:	YCbCr encoding of the data (from enum v4l2_ycbcr_encoding)
-> + * @hsv_enc:	HSV encoding of the data (from enum v4l2_hsv_encoding)
->   * @quantization: quantization of the data (from enum v4l2_quantization)
->   * @xfer_func:  transfer function of the data (from enum v4l2_xfer_func)
->   * @reserved2:  two reserved bytes that can be later used
-> @@ -38,7 +39,12 @@ struct v4l2_mbus_framefmt {
->  	__u32			code;
->  	__u32			field;
->  	__u32			colorspace;
-> -	__u16			ycbcr_enc;
-> +	union {
-> +		/* enum v4l2_ycbcr_encoding */
-> +		__u16			ycbcr_enc;
-> +		/* enum v4l2_hsv_encoding */
-> +		__u16			hsv_enc;
-> +	};
->  	__u16			quantization;
->  	__u16			xfer_func;
->  	__u16			reserved2;
-> diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
-> index c20aa9a89864..08e25a961d15 100644
-> --- a/include/uapi/linux/v4l2-subdev.h
-> +++ b/include/uapi/linux/v4l2-subdev.h
-> @@ -67,6 +67,7 @@ struct v4l2_subdev_crop {
->  
->  #define V4L2_SUBDEV_MBUS_CODE_CSC_COLORSPACE	0x00000001
->  #define V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC	0x00000002
-> +#define V4L2_SUBDEV_MBUS_CODE_CSC_HSV_ENC	V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC
->  #define V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION	0x00000004
->  #define V4L2_SUBDEV_MBUS_CODE_CSC_XFER_FUNC	0x00000008
->  /**
-> 
+>> That's also why I'm not positive on the "no hw preemption, only
+>> scheduler" case: You still have a dma_fence for the batch itself,
+>> which means still no userspace controlled synchronization or other
+>> form of indefinite batches allowed. So not getting us any closer to
+>> enabling the compute use cases people want.
+
+What compute use case are you talking about? I'm only aware about the 
+wait before signal case from Vulkan, the page fault case and the KFD 
+preemption fence case.
+
+>
+> Yes, we can't do magic. As soon as an indefinite batch makes it to 
+> such hardware we've lost. But since we can break out while the batch 
+> is stuck in the scheduler waiting, what I believe we *can* do with 
+> this approach is to avoid deadlocks due to locally unknown 
+> dependencies, which has some bearing on this documentation patch, and 
+> also to allow memory allocation in dma-fence (not memory-fence) 
+> critical sections, like gpu fault- and error handlers without 
+> resorting to using memory pools.
+
+Avoiding deadlocks is only the tip of the iceberg here.
+
+When you allow the kernel to depend on user space to proceed with some 
+operation there are a lot more things which need consideration.
+
+E.g. what happens when an userspace process which has submitted stuff to 
+the kernel is killed? Are the prepared commands send to the hardware or 
+aborted as well? What do we do with other processes waiting for that stuff?
+
+How to we do resource accounting? When processes need to block when 
+submitting to the hardware stuff which is not ready we have a process we 
+can punish for blocking resources. But how is kernel memory used for a 
+submission accounted? How do we avoid deny of service attacks here were 
+somebody eats up all memory by doing submissions which can't finish?
+
+> But again. I'm not saying we should actually implement this. Better to 
+> consider it and reject it than not consider it at all.
+
+Agreed.
+
+Same thing as it turned out with the Wait before Signal for Vulkan, 
+initially it looked simpler to do it in the kernel. But as far as I know 
+the solution in userspace now works so well that we don't really want 
+the pain for a kernel implementation any more.
+
+Christian.
+
+>
+> /Thomas
+>
+>
 
