@@ -2,120 +2,160 @@ Return-Path: <SRS0=lMHH=BA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8689EC433F4
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 16:44:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 967C7C433E0
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 17:07:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 656D420792
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 16:44:15 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LpGWutRN"
+	by mail.kernel.org (Postfix) with ESMTP id 7C250206E9
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 17:07:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730329AbgGUQoO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Jul 2020 12:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730644AbgGUQm0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Jul 2020 12:42:26 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596CAC0619DC
-        for <linux-media@vger.kernel.org>; Tue, 21 Jul 2020 09:42:26 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id f18so3544981wml.3
-        for <linux-media@vger.kernel.org>; Tue, 21 Jul 2020 09:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NlNHMHfamoMPmJrUb8frNLzKxuzuwwYQiNIBCGNRN3Y=;
-        b=LpGWutRNDDGbBfDluzeZmrFjdybeakSXXV6IzwT/bs2I8ayF22tzzT9Qy4UeMGsh+1
-         sDN+M+xKUjurEqBlsNLJzpn/VCb0P4cPgwcmdRYkUPSMFfq1eHX0kPDcPDwmw9hQsJdz
-         feF2XVv0JdW4gpsABcL2PM6LUgi6p3U+aEl0q+8nhtaZDzVPM2ODjwE70cDvHZXkgBST
-         dgf8/0x0YbaehjZgzG21wmFt8cH6zoB5Fx27Im5NV5XPTm+mWSlX1+CbNmjQHX6zieO/
-         6ubx2pyw92+bs3yhriJOZHhtIf/gTD4Q/U/J+Z+sCue/dzmf8nkSduhEYYd4dMZ6CaYo
-         BpsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NlNHMHfamoMPmJrUb8frNLzKxuzuwwYQiNIBCGNRN3Y=;
-        b=mKs1K4jNlF3ZzqnoObZLdIn3FrD7HYNLC5EA01arcOU9D9hQ6p3VlR7K8n/rwEjCpH
-         XdLo83nvosufu1d9Cmcq3b86O4bF2j1Wjd5AV4AOGB7uqUQBF/1fPEe5nYOriTMcYsFu
-         EAE6uu7JH+K9vGhb8YXzv+4gKb0Olu6vHbyz1To5l6jJW/asgX68bYvcve7dRwAEP+AZ
-         MY0zHv0uwQr7MgRlTAxsRBs5J0HV9vrnxFFnuUC/Bqko1AH48yKRSxHGj2xLkLhay8lM
-         pjtSYKYKcdHJp6Cqku3/v/4iIcyWy44RbkX3R+gDKU3/qLzTVssQsSmchJk5rXPmgoOG
-         iG+g==
-X-Gm-Message-State: AOAM530k9ppz98TLep+fCW1VePM23E+UsCY97hWyoYey61LZeuSbwrxk
-        SzGpcVZbxyOtLGzrp30EabAOWQ==
-X-Google-Smtp-Source: ABdhPJwHJOCPpMHirhA5AzA1uKZfGURLoMQ//Npq9re6B1i5CNE254w0YYLI3gaarCY06m7S3TvxKw==
-X-Received: by 2002:a1c:6354:: with SMTP id x81mr4633604wmb.98.1595349745126;
-        Tue, 21 Jul 2020 09:42:25 -0700 (PDT)
-Received: from localhost.localdomain ([2.27.167.94])
-        by smtp.gmail.com with ESMTPSA id m4sm3933524wmi.48.2020.07.21.09.42.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 09:42:24 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 20/40] scsi: lpfc: lpfc_sli: Remove unused variable 'pg_addr'
-Date:   Tue, 21 Jul 2020 17:41:28 +0100
-Message-Id: <20200721164148.2617584-21-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200721164148.2617584-1-lee.jones@linaro.org>
-References: <20200721164148.2617584-1-lee.jones@linaro.org>
+        id S1728773AbgGURHp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Jul 2020 13:07:45 -0400
+Received: from gofer.mess.org ([88.97.38.141]:49947 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726686AbgGURHp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 21 Jul 2020 13:07:45 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id DFB8EC6415; Tue, 21 Jul 2020 18:07:43 +0100 (BST)
+Date:   Tue, 21 Jul 2020 18:07:43 +0100
+From:   Sean Young <sean@mess.org>
+To:     Hans Petter Selasky <hps@selasky.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Subject: Re: [PATCH] [MEDIA] Use standard integer types
+Message-ID: <20200721170743.GA9984@gofer.mess.org>
+References: <4c32e020-1da4-5fbd-a445-121d361bd1e0@selasky.org>
+ <20200721075707.GA1497@gofer.mess.org>
+ <ce7dc15a-9f8e-733d-ccac-d6510c9eae11@selasky.org>
+ <12e18aad-76af-885f-babe-c25cc1863cdd@selasky.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12e18aad-76af-885f-babe-c25cc1863cdd@selasky.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+On Tue, Jul 21, 2020 at 12:53:42PM +0200, Hans Petter Selasky wrote:
+> Fixes compilation under FreeBSD.
 
- drivers/scsi/lpfc/lpfc_sli.c: In function ‘lpfc_wq_create’:
- drivers/scsi/lpfc/lpfc_sli.c:15810:16: warning: variable ‘pg_addr’ set but not used [-Wunused-but-set-variable]
- 15810 | unsigned long pg_addr;
- | ^~~~~~~
+Thanks, applied.
 
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Dick Kennedy <dick.kennedy@broadcom.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/scsi/lpfc/lpfc_sli.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sean
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 92fc6527e7ee6..86e5f8c75ba4e 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -15998,9 +15998,9 @@ lpfc_wq_create(struct lpfc_hba *phba, struct lpfc_queue *wq,
- 					wq->queue_id, pci_barset, db_offset,
- 					wq->dpp_id, dpp_barset, dpp_offset);
- 
-+#ifdef CONFIG_X86
- 			/* Enable combined writes for DPP aperture */
- 			pg_addr = (unsigned long)(wq->dpp_regaddr) & PAGE_MASK;
--#ifdef CONFIG_X86
- 			rc = set_memory_wc(pg_addr, 1);
- 			if (rc) {
- 				lpfc_printf_log(phba, KERN_ERR, LOG_INIT,
--- 
-2.25.1
-
+> 
+> Signed-off-by: Hans Petter Selasky <hps@selasky.org>
+> ---
+>  utils/common/keymap.h     | 10 ++++++----
+>  utils/keytable/keytable.c | 24 ++++++++++++------------
+>  2 files changed, 18 insertions(+), 16 deletions(-)
+> 
+> diff --git a/utils/common/keymap.h b/utils/common/keymap.h
+> index 99833827..dc198bc1 100644
+> --- a/utils/common/keymap.h
+> +++ b/utils/common/keymap.h
+> @@ -2,6 +2,8 @@
+>  #ifndef __KEYMAP_H
+>  #define __KEYMAP_H
+> 
+> +#include <stdint.h>
+> +
+>  struct keymap {
+>  	struct keymap *next;
+>  	char *name;
+> @@ -20,16 +22,16 @@ struct protocol_param {
+> 
+>  struct scancode_entry {
+>  	struct scancode_entry *next;
+> -	u_int64_t scancode;
+> +	uint64_t scancode;
+>  	char *keycode;
+>  };
+> 
+>  struct raw_entry {
+>  	struct raw_entry *next;
+> -	u_int64_t scancode;
+> -	u_int32_t raw_length;
+> +	uint64_t scancode;
+> +	uint32_t raw_length;
+>  	char *keycode;
+> -	u_int32_t raw[1];
+> +	uint32_t raw[1];
+>  };
+> 
+>  void free_keymap(struct keymap *map);
+> diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
+> index 3df5fcf2..cb91f1f0 100644
+> --- a/utils/keytable/keytable.c
+> +++ b/utils/keytable/keytable.c
+> @@ -55,11 +55,11 @@
+> 
+>  struct input_keymap_entry_v2 {
+>  #define KEYMAP_BY_INDEX	(1 << 0)
+> -	u_int8_t  flags;
+> -	u_int8_t  len;
+> -	u_int16_t index;
+> -	u_int32_t keycode;
+> -	u_int8_t  scancode[32];
+> +	uint8_t  flags;
+> +	uint8_t  len;
+> +	uint16_t index;
+> +	uint32_t keycode;
+> +	uint8_t  scancode[32];
+>  };
+> 
+>  #ifndef input_event_sec
+> @@ -82,7 +82,7 @@ struct input_keymap_entry_v2 {
+>  struct keytable_entry {
+>  	// 64 bit int which can printed with %llx
+>  	unsigned long long scancode;
+> -	u_int32_t keycode;
+> +	uint32_t keycode;
+>  	struct keytable_entry *next;
+>  };
+> 
+> @@ -1376,7 +1376,7 @@ static int get_input_protocol_version(int fd)
+>  static void clear_table(int fd)
+>  {
+>  	int i, j;
+> -	u_int32_t codes[2];
+> +	uint32_t codes[2];
+>  	struct input_keymap_entry_v2 entry;
+> 
+>  	/* Clears old table */
+> @@ -1463,7 +1463,7 @@ static void display_proto(struct rc_device *rc_dev)
+>  }
+> 
+> 
+> -static char *get_event_name(struct parse_event *event, u_int16_t code)
+> +static char *get_event_name(struct parse_event *event, uint16_t code)
+>  {
+>  	struct parse_event *p;
+> 
+> @@ -1647,14 +1647,14 @@ static void display_table_v2(struct rc_device
+> *rc_dev, int fd)
+>  		if (ioctl(fd, EVIOCGKEYCODE_V2, &entry) == -1)
+>  			break;
+> 
+> -		if (entry.len == sizeof(u_int32_t)) {
+> -			u_int32_t temp;
+> +		if (entry.len == sizeof(uint32_t)) {
+> +			uint32_t temp;
+> 
+>  			memcpy(&temp, entry.scancode, sizeof(temp));
+> 
+>  			scancode = temp;
+> -		} else if (entry.len == sizeof(u_int64_t)) {
+> -			u_int64_t temp;
+> +		} else if (entry.len == sizeof(uint64_t)) {
+> +			uint64_t temp;
+> 
+>  			memcpy(&temp, entry.scancode, sizeof(temp));
+> 
+> -- 
+> 2.27.0
