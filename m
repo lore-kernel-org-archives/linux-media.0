@@ -2,137 +2,127 @@ Return-Path: <SRS0=lMHH=BA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEC63C433E4
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 08:35:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C214FC433E7
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 08:47:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9918206E9
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 08:35:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0F3E206F2
+	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 08:47:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="y8I+NhcS"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=shipmail.org header.i=@shipmail.org header.b="cfyygOmS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726529AbgGUIf4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Jul 2020 04:35:56 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:40600 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGUIf4 (ORCPT
+        id S1728471AbgGUIrV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Jul 2020 04:47:21 -0400
+Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:13814 "EHLO
+        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725984AbgGUIrV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Jul 2020 04:35:56 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06L8RmZo101671;
-        Tue, 21 Jul 2020 08:35:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=05l1rKdrSgScAm71Y0DqPRHKe7cVAnwHKVSOdGMgmiU=;
- b=y8I+NhcSmMZaPtlYCFH9a8UicnvilJ1IVH0guYVousnBX/P94PP65jFsSU/2xx/oCsWJ
- PVCswmqB+0CH5QkcZ6lK6aQfCZikSM7PjldTf0WUXv+ocZVEw8flw2fuqa5uURssPUuK
- ceKR9dbqu2HkwX0LJo48IJJQiKeEG89kyGnLnjw9ZS2M4Rmm8pStGvXuDTuxnTWjTpmF
- cB6OnBEgdZVHmGTvPCX2lRxK/FhDtlwKm+RDUtI0rJ8Oscf9zMD4BYgTIVLAYrRklTcz
- DPBGxK2q6eMtL/nGoY/lagY6F+NDnvyp+mdjf7ZlAT73q9wYBSj0OFGr5D/oUcYTUT6c RA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 32brgrbtdm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Jul 2020 08:35:48 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06L8OdwM128229;
-        Tue, 21 Jul 2020 08:35:48 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 32dvu00q1s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jul 2020 08:35:48 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06L8Zk5x013293;
-        Tue, 21 Jul 2020 08:35:46 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 21 Jul 2020 01:35:46 -0700
-Date:   Tue, 21 Jul 2020 11:35:39 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     B K Karthik <bkkarthik@pesu.pes.edu>, Mike Isely <isely@pobox.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
-        syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] fix WARNING in pvr2_i2c_core_done
-Message-ID: <20200721083539.GJ2549@kadam>
-References: <20200721075642.4cdlzbewml5jwbwm@pesu.pes.edu>
+        Tue, 21 Jul 2020 04:47:21 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id D68C23FA36;
+        Tue, 21 Jul 2020 10:47:18 +0200 (CEST)
+Authentication-Results: ste-pvt-msa1.bahnhof.se;
+        dkim=pass (1024-bit key; unprotected) header.d=shipmail.org header.i=@shipmail.org header.b=cfyygOmS;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id xxeMSWhjAfgq; Tue, 21 Jul 2020 10:47:17 +0200 (CEST)
+Received: from mail1.shipmail.org (h-205-35.A357.priv.bahnhof.se [155.4.205.35])
+        (Authenticated sender: mb878879)
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 7D82A3F9E7;
+        Tue, 21 Jul 2020 10:47:15 +0200 (CEST)
+Received: from localhost.localdomain (h-205-35.A357.priv.bahnhof.se [155.4.205.35])
+        by mail1.shipmail.org (Postfix) with ESMTPSA id CC59B36014B;
+        Tue, 21 Jul 2020 10:47:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
+        t=1595321234; bh=hkvhvfi+JM5OBDtRUXrbQuN3JiHLZIObnsH22OCtN8w=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=cfyygOmSajTjenzL9cXVdGG96y6lgmTbUKCjVuFw82RLrwHeoGBU5cn0KXg8YsS8h
+         YKNgp4ieMf+U+RCdhVHHVDMnwiUl/E1dxMV0R8mgb7kxAM5+y+xKebL1Yf3BX4g1hl
+         4HmPvZMeCBWn3jekYn0VjQxbnQfT37gTupSD2Mdo=
+Subject: Re: [Linaro-mm-sig] [PATCH 1/2] dma-buf.rst: Document why indefinite
+ fences are a bad idea
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Daniel Stone <daniels@collabora.com>,
+        linux-rdma@vger.kernel.org,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        amd-gfx@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Steve Pronovost <spronovo@microsoft.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Jesse Natalie <jenatali@microsoft.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        linux-media@vger.kernel.org,
+        Mika Kuoppala <mika.kuoppala@intel.com>
+References: <20200707201229.472834-4-daniel.vetter@ffwll.ch>
+ <20200709123339.547390-1-daniel.vetter@ffwll.ch>
+ <93b673b7-bb48-96eb-dc2c-bd4f9304000e@shipmail.org>
+ <20200721074157.GB3278063@phenom.ffwll.local>
+ <3603bb71-318b-eb53-0532-9daab62dce86@amd.com>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+Message-ID: <57a5eb9d-b74f-8ce4-7199-94e911d9b68b@shipmail.org>
+Date:   Tue, 21 Jul 2020 10:47:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200721075642.4cdlzbewml5jwbwm@pesu.pes.edu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
- mlxlogscore=999 adultscore=0 malwarescore=0 phishscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007210059
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
- impostorscore=0 suspectscore=0 adultscore=0 clxscore=1011 mlxlogscore=999
- priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007210059
+In-Reply-To: <3603bb71-318b-eb53-0532-9daab62dce86@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The subject isn't right.  Cc the correct people from get_maintainer.pl
 
-On Tue, Jul 21, 2020 at 01:26:42PM +0530, B K Karthik wrote:
-> i2c_acpi_remove_space_handler makes a call to
-> kmem_cache_free() through acpi_ut_delete_generic_state
-> in drivers/acpi/osl.c. since this removes the kobject,
-> there is a warning thrown in i2c_del_adapter. The group
-> can not be found because it has already been removed.
+On 7/21/20 9:45 AM, Christian König wrote:
+> Am 21.07.20 um 09:41 schrieb Daniel Vetter:
+>> On Mon, Jul 20, 2020 at 01:15:17PM +0200, Thomas Hellström (Intel) 
+>> wrote:
+>>> Hi,
+>>>
+>>> On 7/9/20 2:33 PM, Daniel Vetter wrote:
+>>>> Comes up every few years, gets somewhat tedious to discuss, let's
+>>>> write this down once and for all.
+>>>>
+>>>> What I'm not sure about is whether the text should be more explicit in
+>>>> flat out mandating the amdkfd eviction fences for long running compute
+>>>> workloads or workloads where userspace fencing is allowed.
+>>> Although (in my humble opinion) it might be possible to completely 
+>>> untangle
+>>> kernel-introduced fences for resource management and dma-fences used 
+>>> for
+>>> completion- and dependency tracking and lift a lot of restrictions 
+>>> for the
+>>> dma-fences, including prohibiting infinite ones, I think this makes 
+>>> sense
+>>> describing the current state.
+>> Yeah I think a future patch needs to type up how we want to make that
+>> happen (for some cross driver consistency) and what needs to be
+>> considered. Some of the necessary parts are already there (with like the
+>> preemption fences amdkfd has as an example), but I think some clear docs
+>> on what's required from both hw, drivers and userspace would be really
+>> good.
+>
+> I'm currently writing that up, but probably still need a few days for 
+> this.
 
-The commit message needs to have a cut and paste of the warning.
-I don't think you can't ask syzbot to test linux-next when the patch is
-not in linux-next.
+Great! I put down some (very) initial thoughts a couple of weeks ago 
+building on eviction fences for various hardware complexity levels here:
 
-https://lkml.org/lkml/2019/9/25/302
+https://gitlab.freedesktop.org/thomash/docs/-/blob/master/Untangling%20dma-fence%20and%20memory%20allocation.odt
 
-There was some discussion about this bug in Sept and it looked like the
-correct fix was to unregister in the release handler instead of the
-disconnect handler.  I'm not sure if the pvr2 maintainers were ever
-CC'd about this or if anyone wrote a patch.
-
-regards,
-dan carpenter
-
-> 
-> Reported-by: syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com
-> Signed-off-by: B K Karthik <bkkarthik@pesu.pes.edu>
-> ---
->  drivers/i2c/i2c-core-base.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 26f03a14a478..cecf27fcc4f9 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -1527,7 +1527,8 @@ void i2c_del_adapter(struct i2c_adapter *adap)
->  		dev_dbg(&adap->dev, "Removing %s at 0x%x\n", client->name,
->  			client->addr);
->  		list_del(&client->detected);
-> -		i2c_unregister_device(client);
-> +		if (client->dev->kobj)
-> +			i2c_unregister_device(client);
->  	}
->  	mutex_unlock(&adap->userspace_clients_lock);
->  
-> -- 
-> 2.20.1
-> 
-> -- 
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/20200721075642.4cdlzbewml5jwbwm%40pesu.pes.edu.
+/Thomas
 
 
