@@ -4,146 +4,152 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 516E9C433DF
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 12:43:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69957C433ED
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 12:53:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 261BB20658
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 12:43:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 469A1207BB
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 12:53:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="gBXojG/J"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="MIbvpaL0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728242AbgGVMnK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Jul 2020 08:43:10 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:58204 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726161AbgGVMnJ (ORCPT
+        id S1732447AbgGVMxe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Jul 2020 08:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732340AbgGVMxc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Jul 2020 08:43:09 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06MCVINm015061;
-        Wed, 22 Jul 2020 12:42:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=ARG1RVN/4F6TCixySUe9XAtp/OnPCTzgVMh4TORIM7U=;
- b=gBXojG/JTaneWtO9vyz6ktJc0zIKmUUKGU5OgP+Q06B0u3Nn70f8Vcm372F7SCdjOKyS
- fVokWo4EFHYOkK5OuDIj9FDQid+SA2F34SqfH7ifPTZGpx42VH2LrSEtSGwY+9Ru6I5S
- y1q9smgTPT5JLB+JCA9odVt1wnHnitkzThkfDRZvPbttDm6Dy4EpGfm2tCiZmftkomNB
- Y5fdnwnKTSd/pZjV9Jhp/j840c6xr8kSlD6cSae9e0m5llKBjPWhbCFVN13SniQ5efvd
- 1w0ADOkTebWSyvKdchT/SMPAkBl3JomT3+l5XeGB23Im1OcOZLFBtju90ysQqMKrozI5 WQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 32d6ksq77c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 22 Jul 2020 12:42:59 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06MCY2T4152577;
-        Wed, 22 Jul 2020 12:42:58 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 32enj60dkf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jul 2020 12:42:58 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06MCdO4a030269;
-        Wed, 22 Jul 2020 12:39:24 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 22 Jul 2020 12:39:23 +0000
-Date:   Wed, 22 Jul 2020 15:39:14 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Minghsiu Tsai <minghsiu.tsai@mediatek.com>
-Cc:     Houlong Wei <houlong.wei@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH] media: mtk-mdp: Fix a refcounting bug on error in init
-Message-ID: <20200722123914.GB220681@mwanda>
+        Wed, 22 Jul 2020 08:53:32 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7D7C0619DC
+        for <linux-media@vger.kernel.org>; Wed, 22 Jul 2020 05:53:32 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id 184so1907337wmb.0
+        for <linux-media@vger.kernel.org>; Wed, 22 Jul 2020 05:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WpWpodk0bkykYyQPhY1GLcLq3RG2UyzhjsrNWHvr0T0=;
+        b=MIbvpaL0YOGsJvaNtGp45i0OD/GrjY6AbNwiFm2fRpn48im39Wm6adcHHCQJ9w40X8
+         90pmiIU8C/W4ajcYLmQ4WWQvXQ2WYjL9GIRMFFpzpT/zqtdT7nru63v1j9fjTstqxpCN
+         q+JMNSKTWHzDQF0S743aSv7f33qspRfk7LzXI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WpWpodk0bkykYyQPhY1GLcLq3RG2UyzhjsrNWHvr0T0=;
+        b=id4ywAflFexO1vMECeQaObYz0Sl/jCS0Fpj864/Dpv48aS5qBbaB8izxY2AzFZ06Ls
+         Jp+eXThgD2NRsqmN7ggt4mi5Q9xQIMMjgU+3vadSl1QaRbhLJwJh3ZMp2oblC32pnKtd
+         RF1kb9SOFWKnXQCEhbokCoZn7EKO2vEZulpPE7A2XspbYAFvXWRFgiJV9WB5RLCVIN0c
+         q34/2PvAAResxcg6bBXmSqfy/4vH/KuIWCqMXARBI6uXDVYcnbE9qGvdogXOdjChvrfj
+         W38aIldIH9dUr31cE1KE+h2a9TD6ZcdnBH8fBdtI9mULmMLAFnSLP6VtP6zeanHW/qT2
+         v+vg==
+X-Gm-Message-State: AOAM532u2kCQJ8P+0aUE6uAoJZmQCtDTnh/bFzL50/rq6QMLROZ5J4r0
+        iGrjB5R5YYVikytntMYNGTiOKxDO5PU=
+X-Google-Smtp-Source: ABdhPJzU+TSJErAVfK3dolNzb0q/+IAhbpku4rrYezbmA7lrWFN00F2h08omLUwG2B2GKWzKkxILdQ==
+X-Received: by 2002:a1c:dd86:: with SMTP id u128mr8304083wmg.131.1595422410773;
+        Wed, 22 Jul 2020 05:53:30 -0700 (PDT)
+Received: from chromium.org (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
+        by smtp.gmail.com with ESMTPSA id z8sm1264956wmi.6.2020.07.22.05.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2020 05:53:30 -0700 (PDT)
+Date:   Wed, 22 Jul 2020 12:53:28 +0000
+From:   Tomasz Figa <tfiga@chromium.org>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        sakari.ailus@linux.intel.com, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org
+Subject: Re: [PATCH v5 4/7] v4l2: extend the CSC API to subdevice.
+Message-ID: <20200722125328.GA1828171@chromium.org>
+References: <20200703171019.19270-1-dafna.hirschfeld@collabora.com>
+ <20200703171019.19270-5-dafna.hirschfeld@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9689 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 phishscore=0
- adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007220094
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9689 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- bulkscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 spamscore=0 adultscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007220094
+In-Reply-To: <20200703171019.19270-5-dafna.hirschfeld@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We need to call of_node_put(comp->dev_node); on the error paths in this
-function.
+Hi Dafna,
 
-Fixes: c8eb2d7e8202 ("[media] media: Add Mediatek MDP Driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/media/platform/mtk-mdp/mtk_mdp_comp.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+On Fri, Jul 03, 2020 at 07:10:16PM +0200, Dafna Hirschfeld wrote:
+> This patch extends the CSC API in video devices to be supported
+> also on sub-devices. The flag V4L2_MBUS_FRAMEFMT_SET_CSC set by
+> the application when calling VIDIOC_SUBDEV_S_FMT ioctl.
+> The flags:
+> 
+> V4L2_SUBDEV_MBUS_CODE_CSC_COLORSPACE, V4L2_SUBDEV_MBUS_CODE_CSC_YCBCR_ENC,
+> V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION V4L2_SUBDEV_MBUS_CODE_CSC_XFER_FUNC,
+> 
+> are set by the driver in the VIDIOC_SUBDEV_ENUM_MBUS_CODE ioctl.
+> 
+> New 'flags' fields were added to the structs
+> v4l2_subdev_mbus_code_enum, v4l2_mbus_framefmt which are borrowed
+> from the 'reserved' field
+> 
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> ---
+>  .../media/v4l/subdev-formats.rst              | 78 +++++++++++++++++--
+>  .../v4l/vidioc-subdev-enum-mbus-code.rst      | 44 ++++++++++-
+>  include/uapi/linux/v4l2-mediabus.h            |  9 ++-
+>  include/uapi/linux/v4l2-subdev.h              |  8 +-
+>  4 files changed, 129 insertions(+), 10 deletions(-)
+> 
 
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c b/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c
-index 362fff924aef..478ad034ef2a 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c
-@@ -57,6 +57,7 @@ int mtk_mdp_comp_init(struct device *dev, struct device_node *node,
- {
- 	struct device_node *larb_node;
- 	struct platform_device *larb_pdev;
-+	int ret;
- 	int i;
- 
- 	comp->dev_node = of_node_get(node);
-@@ -67,8 +68,8 @@ int mtk_mdp_comp_init(struct device *dev, struct device_node *node,
- 		if (IS_ERR(comp->clk[i])) {
- 			if (PTR_ERR(comp->clk[i]) != -EPROBE_DEFER)
- 				dev_err(dev, "Failed to get clock\n");
--
--			return PTR_ERR(comp->clk[i]);
-+			ret = PTR_ERR(comp->clk[i]);
-+			goto put_dev;
- 		}
- 
- 		/* Only RDMA needs two clocks */
-@@ -87,20 +88,27 @@ int mtk_mdp_comp_init(struct device *dev, struct device_node *node,
- 	if (!larb_node) {
- 		dev_err(dev,
- 			"Missing mediadek,larb phandle in %pOF node\n", node);
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_dev;
- 	}
- 
- 	larb_pdev = of_find_device_by_node(larb_node);
- 	if (!larb_pdev) {
- 		dev_warn(dev, "Waiting for larb device %pOF\n", larb_node);
- 		of_node_put(larb_node);
--		return -EPROBE_DEFER;
-+		ret = -EPROBE_DEFER;
-+		goto put_dev;
- 	}
- 	of_node_put(larb_node);
- 
- 	comp->larb_dev = &larb_pdev->dev;
- 
- 	return 0;
-+
-+put_dev:
-+	of_node_put(comp->dev_node);
-+
-+	return ret;
- }
- 
- void mtk_mdp_comp_deinit(struct device *dev, struct mtk_mdp_comp *comp)
--- 
-2.27.0
+Thank you for the patch. Please see my comments inline.
 
+> diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> index 9a4d61b0d76f..7362ee0b1e96 100644
+> --- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> +++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> @@ -41,32 +41,96 @@ Media Bus Formats
+>  	:ref:`field-order` for details.
+>      * - __u32
+>        - ``colorspace``
+> -      - Image colorspace, from enum
+> -	:c:type:`v4l2_colorspace`. See
+> -	:ref:`colorspaces` for details.
+> +      - Image colorspace, from enum :c:type:`v4l2_colorspace`.
+> +        Must be set by the driver for capture streams and by the application
+> +	for output streams, see :ref:`colorspaces`. If the application sets the
+> +	flag ``V4L2_MBUS_FRAMEFMT_SET_CSC`` then the application can set
+> +	this field for a capture stream to request a specific colorspace
+
+What is a "capture stream" in terms of the subdev API? Should this
+perhaps refer to "source pads" instead?
+
+[snip]
+> +.. _v4l2-mbus-framefmt-flags:
+> +
+> +.. flat-table:: v4l2_mbus_framefmt Flags
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +    :widths:       3 1 4
+> +
+> +    * .. _`mbus-framefmt-set-csc`:
+> +
+> +      - ``V4L2_MBUS_FRAMEFMT_SET_CSC``
+> +      - 0x00000001
+> +      - Set by the application. It is only used for capture and is
+> +	ignored for output streams. If set, then request the subdevice to do
+
+Ditto.
+
+> +	colorspace conversion from the received colorspace to the requested
+> +	colorspace values. If colorimetry field (``colorspace``, ``ycbcr_enc``,
+
+nit: a colorimetry field
+
+> +	``quantization`` or ``xfer_func``) is set to 0, then that colorimetry
+
+Is it okay to explicitly mention 0 here, rather than the defined
+"_DEFAULT" values?
+
+Best regards,
+Tomasz
