@@ -2,221 +2,247 @@ Return-Path: <SRS0=rgoD=BB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D4D4C433DF
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 17:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35BA7C433E3
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 17:11:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C7A4207BB
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 17:13:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 172A8206D7
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 17:11:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727060AbgGVRNu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Jul 2020 13:13:50 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:36644 "EHLO
+        id S1731424AbgGVRLq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Jul 2020 13:11:46 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:36622 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726666AbgGVRNu (ORCPT
+        with ESMTP id S1726907AbgGVRLq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Jul 2020 13:13:50 -0400
+        Wed, 22 Jul 2020 13:11:46 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 38279282F27
-Subject: Re: [PATCH v5 6/7] media: staging: rkisp1: allow quantization setting
- by userspace on the isp source pad
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org
-References: <20200703171019.19270-1-dafna.hirschfeld@collabora.com>
- <20200703171019.19270-7-dafna.hirschfeld@collabora.com>
- <a4d0a929-8e54-a72f-0940-1657987c8522@collabora.com>
- <20200722131242.GB1828171@chromium.org>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <25ab2b2d-c7f4-24f7-071f-2a99c9339217@collabora.com>
-Date:   Wed, 22 Jul 2020 14:13:41 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 41CC6292013
+Message-ID: <49bc44236edc0925314ee2988fe94453ebc21df1.camel@collabora.com>
+Subject: Re: [PATCH 06/10] media: uapi: h264: Cleanup DPB entry interface
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Date:   Wed, 22 Jul 2020 14:11:33 -0300
+In-Reply-To: <2192247.mDtJn7f4FH@jernej-laptop>
+References: <20200715202233.185680-1-ezequiel@collabora.com>
+         <20200715202233.185680-7-ezequiel@collabora.com>
+         <2192247.mDtJn7f4FH@jernej-laptop>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-1 
 MIME-Version: 1.0
-In-Reply-To: <20200722131242.GB1828171@chromium.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+On Wed, 2020-07-22 at 18:09 +0200, Jernej Škrabec wrote:
+> Hi!
+> 
+> Dne sreda, 15. julij 2020 ob 22:22:29 CEST je Ezequiel Garcia napisal(a):
+> > As discussed recently, the current interface for the
+> > Decoded Picture Buffer is not enough to properly
+> > support field coding.
+> > 
+> > This commit introduces enough semantics to support
+> > frame and field coding, and to signal how DPB entries
+> > are "used for reference".
+> > 
+> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > ---
+> >  .../media/v4l/ext-ctrls-codec.rst             | 46 ++++++++++++-------
+> >  drivers/media/v4l2-core/v4l2-h264.c           |  4 +-
+> >  drivers/staging/media/rkvdec/rkvdec-h264.c    |  8 ++--
+> >  include/media/h264-ctrls.h                    |  8 +++-
+> >  4 files changed, 42 insertions(+), 24 deletions(-)
+> > 
+> > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst index
+> > dd8e5a2e8986..46d4c8c6ad47 100644
+> > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > @@ -2058,10 +2058,35 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+> > * - __s32
+> >        - ``bottom_field_order_cnt``
+> >        -
+> > +    * - enum :c:type:`v4l2_h264_dpb_reference`
+> > +      - ``reference``
+> > +      - Specifies how the DPB entry is referenced.
+> >      * - __u32
+> >        - ``flags``
+> >        - See :ref:`DPB Entry Flags <h264_dpb_flags>`
+> > 
+> > +.. c:type:: v4l2_h264_dpb_reference
+> > +
+> > +.. cssclass:: longtable
+> > +
+> > +.. flat-table::
+> > +    :header-rows:  0
+> > +    :stub-columns: 0
+> > +    :widths:       1 1 2
+> > +
+> > +    * - ``V4L2_H264_DPB_TOP_REF``
+> > +      - 0x1
+> > +      - The top field in field pair is used for
+> > +        short-term reference.
+> > +    * - ``V4L2_H264_DPB_BOTTOM_REF``
+> > +      - 0x2
+> > +      - The bottom field in field pair is used for
+> > +        short-term reference.
+> > +    * - ``V4L2_H264_DPB_FRAME_REF``
+> > +      - 0x3
+> > +      - The frame (or the top/bottom fields, if it's a field pair)
+> > +        is used for short-term reference.
+> > +
+> >  .. _h264_dpb_flags:
+> > 
+> >  ``DPB Entries Flags``
+> > @@ -2075,29 +2100,16 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+> > 
+> >      * - ``V4L2_H264_DPB_ENTRY_FLAG_VALID``
+> >        - 0x00000001
+> > -      - The DPB entry is valid and should be considered
+> > +      - The DPB entry is valid (non-empty) and should be considered.
+> >      * - ``V4L2_H264_DPB_ENTRY_FLAG_ACTIVE``
+> 
+> I'm still not sure that we actually need both flags. Technically, if entry is 
+> not used for reference then doesn't need to be present. Am I missing 
+> something?
+> 
 
-On 7/22/20 10:12 AM, Tomasz Figa wrote:
-> On Fri, Jul 03, 2020 at 05:00:40PM -0300, Helen Koike wrote:
->> Hi Dafna,
->>
->> Thanks for your patch.
->>
->> On 7/3/20 2:10 PM, Dafna Hirschfeld wrote:
->>> The isp entity has a hardware support to force full range quantization
->>> for YUV formats. Use the subdev CSC API to allow userspace to set the
->>> quantization for YUV formats on the isp entity.
->>>
->>> - The flag V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION is set on
->>> YUV formats during enumeration of the isp formats on the source pad.
->>> - The full quantization is set on YUV formats if userspace ask it
->>> on the isp entity using the flag V4L2_MBUS_FRAMEFMT_SET_CSC.
->>>
->>> On the capture and the resizer, the quantization is read-only
->>> and always set to the default quantization.
->>>
->>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
->>> ---
->>>  drivers/staging/media/rkisp1/TODO             |  2 +-
->>>  drivers/staging/media/rkisp1/rkisp1-capture.c | 10 ----------
->>>  drivers/staging/media/rkisp1/rkisp1-isp.c     | 18 ++++++++++++++----
->>>  3 files changed, 15 insertions(+), 15 deletions(-)
->>>
->>> diff --git a/drivers/staging/media/rkisp1/TODO b/drivers/staging/media/rkisp1/TODO
->>> index c0cbec0a164d..db05288949bd 100644
->>> --- a/drivers/staging/media/rkisp1/TODO
->>> +++ b/drivers/staging/media/rkisp1/TODO
->>> @@ -2,7 +2,7 @@
->>>  * Use threaded interrupt for rkisp1_stats_isr(), remove work queue.
->>>  * Fix checkpatch errors.
->>>  * Review and comment every lock
->>> -* Handle quantization
->>> +* Add uapi docs. Remeber to add documentation of how quantization is handled.
->>>  * Document rkisp1-common.h
->>>  * streaming paths (mainpath and selfpath) check if the other path is streaming
->>>  in several places of the code, review this, specially that it doesn't seem it
->>> diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
->>> index f69235f82c45..93d6846886f2 100644
->>> --- a/drivers/staging/media/rkisp1/rkisp1-capture.c
->>> +++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
->>> @@ -1085,8 +1085,6 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
->>>  			   const struct v4l2_format_info **fmt_info)
->>>  {
->>>  	const struct rkisp1_capture_config *config = cap->config;
->>> -	struct rkisp1_capture *other_cap =
->>> -			&cap->rkisp1->capture_devs[cap->id ^ 1];
->>>  	const struct rkisp1_capture_fmt_cfg *fmt;
->>>  	const struct v4l2_format_info *info;
->>>  	const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
->>> @@ -1111,14 +1109,6 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
->>>  
->>>  	info = rkisp1_fill_pixfmt(pixm, cap->id);
->>>  
->>> -	/* can not change quantization when stream-on */
->>> -	if (other_cap->is_streaming)
->>> -		pixm->quantization = other_cap->pix.fmt.quantization;
->>> -	/* output full range by default, take effect in params */
->>> -	else if (!pixm->quantization ||
->>> -		 pixm->quantization > V4L2_QUANTIZATION_LIM_RANGE)
->>> -		pixm->quantization = V4L2_QUANTIZATION_FULL_RANGE;
->>> -
->>>  	if (fmt_cfg)
->>>  		*fmt_cfg = fmt;
->>>  	if (fmt_info)
->>> diff --git a/drivers/staging/media/rkisp1/rkisp1-isp.c b/drivers/staging/media/rkisp1/rkisp1-isp.c
->>> index 58c90c67594d..d575c1e4dc4b 100644
->>> --- a/drivers/staging/media/rkisp1/rkisp1-isp.c
->>> +++ b/drivers/staging/media/rkisp1/rkisp1-isp.c
->>> @@ -589,6 +589,10 @@ static int rkisp1_isp_enum_mbus_code(struct v4l2_subdev *sd,
->>>  
->>>  		if (code->index == pos - 1) {
->>>  			code->code = fmt->mbus_code;
->>> +			if (fmt->pixel_enc == V4L2_PIXEL_ENC_YUV &&
->>> +			    dir == RKISP1_ISP_SD_SRC)
->>> +				code->flags =
->>> +					V4L2_SUBDEV_MBUS_CODE_CSC_QUANTIZATION;
->>>  			return 0;
->>>  		}
->>>  	}
->>> @@ -620,7 +624,6 @@ static int rkisp1_isp_init_config(struct v4l2_subdev *sd,
->>>  					     RKISP1_ISP_PAD_SOURCE_VIDEO);
->>>  	*src_fmt = *sink_fmt;
->>>  	src_fmt->code = RKISP1_DEF_SRC_PAD_FMT;
->>> -	src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
->>>  
->>>  	src_crop = v4l2_subdev_get_try_crop(sd, cfg,
->>>  					    RKISP1_ISP_PAD_SOURCE_VIDEO);
->>> @@ -663,10 +666,17 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
->>>  		isp->src_fmt = mbus_info;
->>>  	src_fmt->width  = src_crop->width;
->>>  	src_fmt->height = src_crop->height;
->>> -	src_fmt->quantization = format->quantization;
->>> -	/* full range by default */
->>> -	if (!src_fmt->quantization)
->>> +
->>> +	/*
->>> +	 * The CSC API is used to allow userspace to force full
->>> +	 * quantization on YUV formats.
->>> +	 */
->>> +	if (format->flags & V4L2_MBUS_FRAMEFMT_SET_CSC &&
->>> +	    format->quantization == V4L2_QUANTIZATION_FULL_RANGE &&
->>> +	    mbus_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
->>>  		src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
->>> +	else
->>> +		src_fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
->>
->> According to the docs [1]:
->>
->> [1] https://linuxtv.org/downloads/v4l-dvb-apis-new/userspace-api/v4l/colorspaces-defs.html?highlight=quantization
->>
->> "The default colorspace. This can be used by applications to let the driver fill in the colorspace."
->>
->> So, in my understanding, the driver should never return V4L2_QUANTIZATION_DEFAULT to userspace.
->>
-> 
-> The part of the documentation you quoted comes from the description of
-> V4L2_COLORSPACE_DEFAULT and not V4L2_QUANTIZATION_DEFAULT.
-> 
-> For the latter it says:
-> 
-> "Use the default quantization encoding as defined by the colorspace.
->  This is always full range for R’G’B’ (except for the BT.2020 colorspace)
->  and HSV. It is usually limited range for Y’CbCr."
-> 
-> Which, in my understanding, doesn't suggest in any way that it shouldn't
-> be returned by the driver. There is also a valid case when the driver
-> simply doesn't know or care what quantization the captured signal uses.
+Indeed, that's exactly what I raised during the review of these flags.
 
-Thanks for this clarification.
+However, note that the Cedrus driver seem to do something with
+VALID but not ACTIVE DPB entries, although maybe that's not really needed.
 
-> 
-> However, in this case, I don't see why we would return DEFAULT here
-> indeed, as the driver has the full knowledge, RGB is full range and YUV
-> is limited range unless full range was requested.
-> 
->> We have the same issue in the resizer.
->>
->> I also see an issue in the capture that allows userspace to change quantization, and this should be fixed.
->>
->> In my understanding, since you are leaving all the other pads and video nodes with read-only quantization,
->> changing quantization in the ISP source pad should change the readings in all the other pads and video nodes.
->> So, if all pads are reporting V4L2_QUANTIZATION_LIM_RANGE (which is the default for sRGB colorspace), and userspace sets
->> V4L2_QUANTIZATION_FULL_RANGE to the isp source pad, then all the other pads and video nodes should also report
->> V4L2_QUANTIZATION_FULL_RANGE, since this will be the actual quantization used by the driver.
-> 
-> This was extensively discussed at v3:
-> https://patchwork.kernel.org/patch/11493105/
-> 
-> The conclusion is that there is no value from both the kernel and the userspace point of
-> view in propagating this to the end of the pipeline, because the
-> hardware components later in the pipeline don't care and the userspace,
-> given the DEFAULT quantization value, can infer the exact quantziation from the
-> pipeline - here from what it configured at the ISP entity.
+If you could check the code and drop the VALID usage, and confirm
+ACTIVE is the only flag needed, that would be nice.
 
-Let's use DEFAULT then, sounds the simplest solution imho, unless you disagree.
+Now, OTOH, having an extra flag is not hurting us.
+It might be more consistent for applications, as it
+would mean simpler setup of the DPB, and more consistent mapping
+between application kept DPB and kernel DPB.
 
-Acked-by: Helen Koike <helen.koike@collabora.com>
+Thanks,
+Ezequiel
 
-Regards,
-Helen
-
-> 
 > Best regards,
-> Tomasz
+> Jernej
 > 
+> >        - 0x00000002
+> > -      - The DPB entry is currently being used as a reference frame
+> > +      - The DPB entry is used for reference.
+> >      * - ``V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM``
+> >        - 0x00000004
+> > -      - The DPB entry is a long term reference frame
+> > +      - The DPB entry is used for long-term reference.
+> >      * - ``V4L2_H264_DPB_ENTRY_FLAG_FIELD``
+> >        - 0x00000008
+> > -      - The DPB entry is a field reference, which means only one of the
+> > field -        will be used when decoding the new frame/field. When not set
+> > the DPB -        entry is a frame reference (both fields will be used).
+> > Note that this -        flag does not say anything about the number of
+> > fields contained in the -        reference frame, it just describes the one
+> > used to decode the new -        field/frame
+> > -    * - ``V4L2_H264_DPB_ENTRY_FLAG_BOTTOM_FIELD``
+> > -      - 0x00000010
+> > -      - The DPB entry is a bottom field reference (only the bottom field of
+> > the -        reference frame is needed to decode the new frame/field). Only
+> > valid if -        V4L2_H264_DPB_ENTRY_FLAG_FIELD is set. When
+> > -        V4L2_H264_DPB_ENTRY_FLAG_FIELD is set but
+> > -        V4L2_H264_DPB_ENTRY_FLAG_BOTTOM_FIELD is not, that means the
+> > -        DPB entry is a top field reference
+> > +      - The DPB entry is a single field or a complementary field pair.
+> > 
+> >  ``V4L2_CID_MPEG_VIDEO_H264_DECODE_MODE (enum)``
+> >      Specifies the decoding mode to use. Currently exposes slice-based and
+> > diff --git a/drivers/media/v4l2-core/v4l2-h264.c
+> > b/drivers/media/v4l2-core/v4l2-h264.c index edf6225f0522..306a51683606
+> > 100644
+> > --- a/drivers/media/v4l2-core/v4l2-h264.c
+> > +++ b/drivers/media/v4l2-core/v4l2-h264.c
+> > @@ -66,10 +66,10 @@ v4l2_h264_init_reflist_builder(struct
+> > v4l2_h264_reflist_builder *b, else
+> >  			b->refs[i].frame_num = dpb[i].frame_num;
+> > 
+> > -		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD))
+> > +		if (dpb[i].reference & V4L2_H264_DPB_FRAME_REF)
+> >  			pic_order_count = 
+> min(dpb[i].top_field_order_cnt,
+> >  					      
+> dpb[i].bottom_field_order_cnt);
+> > -		else if (dpb[i].flags & 
+> V4L2_H264_DPB_ENTRY_FLAG_BOTTOM_FIELD)
+> > +		else if (dpb[i].reference & V4L2_H264_DPB_BOTTOM_REF)
+> >  			pic_order_count = 
+> dpb[i].bottom_field_order_cnt;
+> >  		else
+> >  			pic_order_count = dpb[i].top_field_order_cnt;
+> > diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > b/drivers/staging/media/rkvdec/rkvdec-h264.c index
+> > 7b66e2743a4f..57539c630422 100644
+> > --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > @@ -953,11 +953,11 @@ static void config_registers(struct rkvdec_ctx *ctx,
+> >  			     RKVDEC_COLMV_USED_FLAG_REF;
+> > 
+> >  		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD))
+> > -			refer_addr |= RKVDEC_TOPFIELD_USED_REF |
+> > -				      RKVDEC_BOTFIELD_USED_REF;
+> > -		else if (dpb[i].flags & 
+> V4L2_H264_DPB_ENTRY_FLAG_BOTTOM_FIELD)
+> > +			refer_addr |= RKVDEC_FIELD_REF;
+> > +
+> > +		if (dpb[i].reference & V4L2_H264_DPB_TOP_REF)
+> >  			refer_addr |= RKVDEC_BOTFIELD_USED_REF;
+> > -		else
+> > +		else if (dpb[i].reference & V4L2_H264_DPB_BOTTOM_REF)
+> >  			refer_addr |= RKVDEC_TOPFIELD_USED_REF;
+> > 
+> >  		writel_relaxed(dpb[i].top_field_order_cnt,
+> > diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
+> > index 620ee8863d74..52f3976b986c 100644
+> > --- a/include/media/h264-ctrls.h
+> > +++ b/include/media/h264-ctrls.h
+> > @@ -202,7 +202,12 @@ struct v4l2_ctrl_h264_slice_params {
+> >  #define V4L2_H264_DPB_ENTRY_FLAG_ACTIVE		0x02
+> >  #define V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM	0x04
+> >  #define V4L2_H264_DPB_ENTRY_FLAG_FIELD		0x08
+> > -#define V4L2_H264_DPB_ENTRY_FLAG_BOTTOM_FIELD	0x10
+> > +
+> > +enum v4l2_h264_dpb_reference {
+> > +	V4L2_H264_DPB_TOP_REF = 0x1,
+> > +	V4L2_H264_DPB_BOTTOM_REF = 0x2,
+> > +	V4L2_H264_DPB_FRAME_REF = 0x3,
+> > +};
+> > 
+> >  struct v4l2_h264_dpb_entry {
+> >  	__u64 reference_ts;
+> > @@ -211,6 +216,7 @@ struct v4l2_h264_dpb_entry {
+> >  	/* Note that field is indicated by v4l2_buffer.field */
+> >  	__s32 top_field_order_cnt;
+> >  	__s32 bottom_field_order_cnt;
+> > +	enum v4l2_h264_dpb_reference reference;
+> >  	__u32 flags; /* V4L2_H264_DPB_ENTRY_FLAG_* */
+> >  };
+> 
+> 
+> 
+
+
