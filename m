@@ -2,144 +2,314 @@ Return-Path: <SRS0=rgoD=BB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7F0BC433E1
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 11:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79838C433E0
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 11:39:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 964BB20771
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 11:31:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C87A20729
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 11:39:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kPwE57tT"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Y7hXQUhJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727948AbgGVLa5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Jul 2020 07:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S1730099AbgGVLjd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Jul 2020 07:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726146AbgGVLa5 (ORCPT
+        with ESMTP id S1726028AbgGVLjd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Jul 2020 07:30:57 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D981EC0619DC;
-        Wed, 22 Jul 2020 04:30:56 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id d7so826540plq.13;
-        Wed, 22 Jul 2020 04:30:56 -0700 (PDT)
+        Wed, 22 Jul 2020 07:39:33 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7A5C0619DC
+        for <linux-media@vger.kernel.org>; Wed, 22 Jul 2020 04:39:33 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id l63so1545330oih.13
+        for <linux-media@vger.kernel.org>; Wed, 22 Jul 2020 04:39:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=REutpgTEY8zqFjKsJaL/pIrbvSAniP7JYrpnR8Uq2Hg=;
-        b=kPwE57tThRH2Xl2UQew/QQhJ0HEFx8Jfswz2xfdVqwfJEnOAVAQt/gxOFQAaucsGkP
-         iwTxQyDTZN9pqWHyQWba20tdpkLJC2eECm1uryNRmShampx1pE6Vqnabd5MtVoMw6sjt
-         R+ycwIZOfR1O7qUEEU+VW5xTpGSYvO1YVON5j49sDyzYwH17KCT6JRCUGuZvoh9PiFfA
-         DRZE8xEzFRyPWozCxhyMyoRKlnMCyCM8Y5O4ruvALKA/qPYA4j14X5sJUIKVOhfQHLge
-         BVw42vbho9lHN+PHthr4gTN2OkWYS5xn1ArFGBP5FXQOm6N1+ddhU1wxKIa+NP6Zwsiq
-         +xXA==
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=g9TiRZLPSKHMr8Ff++37IewQa29JTl7u2x6QvpJDSzY=;
+        b=Y7hXQUhJdiARkKQNxqTHTZ+wAkAyDx9PL1FW8VwRs0O4aHcHffMqUchTVQfjgTJXb5
+         JZNpDjP3MlIHmY8EaB6B2OPT61NK4d1aJj69PrXp/keN7eQ4mdBPRDCWlRwCctpRtcon
+         pB6fyBnJveDM/iUy5w8/CXhV8E3ydB6J3h0d0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=REutpgTEY8zqFjKsJaL/pIrbvSAniP7JYrpnR8Uq2Hg=;
-        b=aCyrPU/bVv2GJYNtNf6vLt6qtZS7anPm01nVbO9uZOo0OPnZkARXjWNBXPqtNc/6yS
-         UPXOdiacxD60cv+BYcz2OWFUvq39L8RnSHl3PjBLbqVc5fo6CRO8BP/kTUs0BRyXGP+6
-         EcQnHe60UYAlYdyt7TD0POAar+UiubfIeTtuCeLHN9R+27nksOi0U1BRPOQdST8yT8ut
-         75d1BNnUbRyo9clrsqceDKFeJAxCbRloORkzvddWblE6OAZy0geusZz9MTwTRYCuQEX6
-         kvf85ITiKNj1qt845tOKj0bqXgcEA5jWN9Ubk/vXNa+g4b2mKlwJglNwF9tWB/x94Uvx
-         IJGw==
-X-Gm-Message-State: AOAM530aKUxgl+K3tgl8fU/dbfM69rScSG5CA/0bgTC2n7PcHe7EESY6
-        o5a3jj2NjOgEoc1dsucCA0s=
-X-Google-Smtp-Source: ABdhPJyeGR7pcKdtW0vy20t9YcWddsffnZ+VrlDb2rR78ZIMmGBE0qd26bogPd3aN3sGzeQ3acYUJQ==
-X-Received: by 2002:a17:902:10e:: with SMTP id 14mr24718428plb.297.1595417456363;
-        Wed, 22 Jul 2020 04:30:56 -0700 (PDT)
-Received: from rahulg-ThinkPad-T450 ([122.175.73.180])
-        by smtp.gmail.com with ESMTPSA id gv16sm6507715pjb.5.2020.07.22.04.30.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2020 04:30:55 -0700 (PDT)
-Date:   Wed, 22 Jul 2020 17:00:52 +0530
-From:   Rahul Gottipati <rahul.blr97@gmail.com>
-To:     mchehab@kernel.org
-Cc:     sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] media: atomisp: Fix coding style issue - correct
- multiline comments
-Message-ID: <c73ee9bced34777cea5b1a3a97f57c723b0a97b1.1595416585.git.rahul.blr97@gmail.com>
-References: <cover.1595416585.git.rahul.blr97@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=g9TiRZLPSKHMr8Ff++37IewQa29JTl7u2x6QvpJDSzY=;
+        b=m/WQfDgrz5m42s7GfyGW5bDQOvAXiX7plr1RW3GWJR+Wl5GsjG/fMZIC3g0Z3eYHIw
+         SB+I1DcxEpOuumnyiE6Q+2jCNUu8QRFfvEaKvnkwOYvt7nD/z5DfXnZEl8iacJeF48Hg
+         4Yzs5UbGZv85bhOBv4HS+94CkEWbUvHJNLa4dIPnhxTLbpA94EIXniAFOTFIy72Syu4D
+         k9vp1Nzx5u49cEZVCjPjjkHlOcjGGSF+hXtYYN+9Np+PFwgs/F13/6GNwj0sln2ajzcO
+         m0fmyZdLppiSL0ck6NMAqXEurb9eJqJzXSeLwQ7nQav1awcjJ+nBP54gLtWmNG5jSE7U
+         8bPw==
+X-Gm-Message-State: AOAM531sDappmskB0z30R0s+1bK99h+pCXYvOHOdqPMlOkF/fLfBh7ZN
+        yqKvcPrbZ8LdxF0fie9wdPgb5axZVrCDG6WUlo7cbA==
+X-Google-Smtp-Source: ABdhPJzY6PHdL/L/QgEPLmGA+g6qf3lZeTpfg/RFXs/QangcGvPjy4yTJwwEFD9BwKm/swCp49wY5XPczQ7jnPAYjJY=
+X-Received: by 2002:aca:da03:: with SMTP id r3mr6821055oig.14.1595417972307;
+ Wed, 22 Jul 2020 04:39:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1595416585.git.rahul.blr97@gmail.com>
+References: <20200707201229.472834-4-daniel.vetter@ffwll.ch>
+ <20200709123339.547390-1-daniel.vetter@ffwll.ch> <93b673b7-bb48-96eb-dc2c-bd4f9304000e@shipmail.org>
+ <20200721074157.GB3278063@phenom.ffwll.local> <3603bb71-318b-eb53-0532-9daab62dce86@amd.com>
+ <57a5eb9d-b74f-8ce4-7199-94e911d9b68b@shipmail.org> <CAPM=9twUWeenf-26GEvkuKo3wHgS3BCyrva=sNaWo6+=A5qdoQ@mail.gmail.com>
+ <805c49b7-f0b3-45dc-5fe3-b352f0971527@shipmail.org> <CAKMK7uHhhxBC2MvnNnU9FjxJaWkEcP3m5m7AN3yzfw=wxFsckA@mail.gmail.com>
+ <92393d26-d863-aac6-6d27-53cad6854e13@shipmail.org> <CAKMK7uF8jpyuCF8uUbEeJUedErxqRGa8JY+RuURg7H1XXWXzkw@mail.gmail.com>
+ <8fd999f2-cbf6-813c-6ad4-131948fb5cc5@shipmail.org>
+In-Reply-To: <8fd999f2-cbf6-813c-6ad4-131948fb5cc5@shipmail.org>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Wed, 22 Jul 2020 13:39:21 +0200
+Message-ID: <CAKMK7uH0rcyepP2hDpNB-yuvNyjee1tPmxWUyefS5j7i-N6Pfw@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] [PATCH 1/2] dma-buf.rst: Document why indefinite
+ fences are a bad idea
+To:     =?UTF-8?Q?Thomas_Hellstr=C3=B6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Stone <daniels@collabora.com>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Steve Pronovost <spronovo@microsoft.com>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Jesse Natalie <jenatali@microsoft.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Mika Kuoppala <mika.kuoppala@intel.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This fixes some coding style issues of multiline comments to
-correct a few checkpatch.pl warnings.
+On Wed, Jul 22, 2020 at 12:31 PM Thomas Hellstr=C3=B6m (Intel)
+<thomas_os@shipmail.org> wrote:
+>
+>
+> On 2020-07-22 11:45, Daniel Vetter wrote:
+> > On Wed, Jul 22, 2020 at 10:05 AM Thomas Hellstr=C3=B6m (Intel)
+> > <thomas_os@shipmail.org> wrote:
+> >>
+> >> On 2020-07-22 09:11, Daniel Vetter wrote:
+> >>> On Wed, Jul 22, 2020 at 8:45 AM Thomas Hellstr=C3=B6m (Intel)
+> >>> <thomas_os@shipmail.org> wrote:
+> >>>> On 2020-07-22 00:45, Dave Airlie wrote:
+> >>>>> On Tue, 21 Jul 2020 at 18:47, Thomas Hellstr=C3=B6m (Intel)
+> >>>>> <thomas_os@shipmail.org> wrote:
+> >>>>>> On 7/21/20 9:45 AM, Christian K=C3=B6nig wrote:
+> >>>>>>> Am 21.07.20 um 09:41 schrieb Daniel Vetter:
+> >>>>>>>> On Mon, Jul 20, 2020 at 01:15:17PM +0200, Thomas Hellstr=C3=B6m =
+(Intel)
+> >>>>>>>> wrote:
+> >>>>>>>>> Hi,
+> >>>>>>>>>
+> >>>>>>>>> On 7/9/20 2:33 PM, Daniel Vetter wrote:
+> >>>>>>>>>> Comes up every few years, gets somewhat tedious to discuss, le=
+t's
+> >>>>>>>>>> write this down once and for all.
+> >>>>>>>>>>
+> >>>>>>>>>> What I'm not sure about is whether the text should be more exp=
+licit in
+> >>>>>>>>>> flat out mandating the amdkfd eviction fences for long running=
+ compute
+> >>>>>>>>>> workloads or workloads where userspace fencing is allowed.
+> >>>>>>>>> Although (in my humble opinion) it might be possible to complet=
+ely
+> >>>>>>>>> untangle
+> >>>>>>>>> kernel-introduced fences for resource management and dma-fences=
+ used
+> >>>>>>>>> for
+> >>>>>>>>> completion- and dependency tracking and lift a lot of restricti=
+ons
+> >>>>>>>>> for the
+> >>>>>>>>> dma-fences, including prohibiting infinite ones, I think this m=
+akes
+> >>>>>>>>> sense
+> >>>>>>>>> describing the current state.
+> >>>>>>>> Yeah I think a future patch needs to type up how we want to make=
+ that
+> >>>>>>>> happen (for some cross driver consistency) and what needs to be
+> >>>>>>>> considered. Some of the necessary parts are already there (with =
+like the
+> >>>>>>>> preemption fences amdkfd has as an example), but I think some cl=
+ear docs
+> >>>>>>>> on what's required from both hw, drivers and userspace would be =
+really
+> >>>>>>>> good.
+> >>>>>>> I'm currently writing that up, but probably still need a few days=
+ for
+> >>>>>>> this.
+> >>>>>> Great! I put down some (very) initial thoughts a couple of weeks a=
+go
+> >>>>>> building on eviction fences for various hardware complexity levels=
+ here:
+> >>>>>>
+> >>>>>> https://gitlab.freedesktop.org/thomash/docs/-/blob/master/Untangli=
+ng%20dma-fence%20and%20memory%20allocation.odt
+> >>>>> We are seeing HW that has recoverable GPU page faults but only for
+> >>>>> compute tasks, and scheduler without semaphores hw for graphics.
+> >>>>>
+> >>>>> So a single driver may have to expose both models to userspace and
+> >>>>> also introduces the problem of how to interoperate between the two
+> >>>>> models on one card.
+> >>>>>
+> >>>>> Dave.
+> >>>> Hmm, yes to begin with it's important to note that this is not a
+> >>>> replacement for new programming models or APIs, This is something th=
+at
+> >>>> takes place internally in drivers to mitigate many of the restrictio=
+ns
+> >>>> that are currently imposed on dma-fence and documented in this and
+> >>>> previous series. It's basically the driver-private narrow completion=
+s
+> >>>> Jason suggested in the lockdep patches discussions implemented the s=
+ame
+> >>>> way as eviction-fences.
+> >>>>
+> >>>> The memory fence API would be local to helpers and middle-layers lik=
+e
+> >>>> TTM, and the corresponding drivers.  The only cross-driver-like
+> >>>> visibility would be that the dma-buf move_notify() callback would no=
+t be
+> >>>> allowed to wait on dma-fences or something that depends on a dma-fen=
+ce.
+> >>> Because we can't preempt (on some engines at least) we already have
+> >>> the requirement that cross driver buffer management can get stuck on =
+a
+> >>> dma-fence. Not even taking into account the horrors we do with
+> >>> userptr, which are cross driver no matter what. Limiting move_notify
+> >>> to memory fences only doesn't work, since the pte clearing might need
+> >>> to wait for a dma_fence first. Hence this becomes a full end-of-batch
+> >>> fence, not just a limited kernel-internal memory fence.
+> >> For non-preemptible hardware the memory fence typically *is* the
+> >> end-of-batch fence. (Unless, as documented, there is a scheduler
+> >> consuming sync-file dependencies in which case the memory fence wait
+> >> needs to be able to break out of that). The key thing is not that we c=
+an
+> >> break out of execution, but that we can break out of dependencies, sin=
+ce
+> >> when we're executing all dependecies (modulo semaphores) are already
+> >> fulfilled. That's what's eliminating the deadlocks.
+> >>
+> >>> That's kinda why I think only reasonable option is to toss in the
+> >>> towel and declare dma-fence to be the memory fence (and suck up all
+> >>> the consequences of that decision as uapi, which is kinda where we
+> >>> are), and construct something new&entirely free-wheeling for userspac=
+e
+> >>> fencing. But only for engines that allow enough preempt/gpu page
+> >>> faulting to make that possible. Free wheeling userspace fences/gpu
+> >>> semaphores or whatever you want to call them (on windows I think it's
+> >>> monitored fence) only work if you can preempt to decouple the memory
+> >>> fences from your gpu command execution.
+> >>>
+> >>> There's the in-between step of just decoupling the batchbuffer
+> >>> submission prep for hw without any preempt (but a scheduler), but tha=
+t
+> >>> seems kinda pointless. Modern execbuf should be O(1) fastpath, with
+> >>> all the allocation/mapping work pulled out ahead. vk exposes that
+> >>> model directly to clients, GL drivers could use it internally too, so
+> >>> I see zero value in spending lots of time engineering very tricky
+> >>> kernel code just for old userspace. Much more reasonable to do that i=
+n
+> >>> userspace, where we have real debuggers and no panics about security
+> >>> bugs (or well, a lot less, webgl is still a thing, but at least
+> >>> browsers realized you need to container that completely).
+> >> Sure, it's definitely a big chunk of work. I think the big win would b=
+e
+> >> allowing memory allocation in dma-fence critical sections. But I
+> >> completely buy the above argument. I just wanted to point out that man=
+y
+> >> of the dma-fence restrictions are IMHO fixable, should we need to do
+> >> that for whatever reason.
+> > I'm still not sure that's possible, without preemption at least. We
+> > have 4 edges:
+> > - Kernel has internal depencies among memory fences. We want that to
+> > allow (mild) amounts of overcommit, since that simplifies live so
+> > much.
+> > - Memory fences can block gpu ctx execution (by nature of the memory
+> > simply not being there yet due to our overcommit)
+> > - gpu ctx have (if we allow this) userspace controlled semaphore
+> > dependencies. Of course userspace is expected to not create deadlocks,
+> > but that's only assuming the kernel doesn't inject additional
+> > dependencies. Compute folks really want that.
+> > - gpu ctx can hold up memory allocations if all we have is
+> > end-of-batch fences. And end-of-batch fences are all we have without
+> > preempt, plus if we want backwards compat with the entire current
+> > winsys/compositor ecosystem we need them, which allows us to inject
+> > stuff dependent upon them pretty much anywhere.
+> >
+> > Fundamentally that's not fixable without throwing one of the edges
+> > (and the corresponding feature that enables) out, since no entity has
+> > full visibility into what's going on. E.g. forcing userspace to tell
+> > the kernel about all semaphores just brings up back to the
+> > drm_timeline_syncobj design we have merged right now. And that's imo
+> > no better.
+>
+> Indeed, HW waiting for semaphores without being able to preempt that
+> wait is a no-go. The doc (perhaps naively) assumes nobody is doing that.
 
-Signed-off-by: Rahul Gottipati <rahul.blr97@gmail.com>
----
-Changes in v2:
-	Distributed changes across 2 patches instead of the previous 1.
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+preempt is a necessary but not sufficient condition, you also must not
+have end-of-batch memory fences. And i915 has semaphore support and
+end-of-batch memory fences, e.g. one piece is:
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index 9cdcbe774229..5bf3a86f98f8 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -1281,7 +1281,8 @@ static int atomisp_qbuf(struct file *file, void *fh, struct v4l2_buffer *buf)
- 	 * But the capture number cannot be determined by HAL.
- 	 * So HAL only sets the capture number to be 1 and queue multiple
- 	 * buffers. Atomisp driver needs to check this case and re-trigger
--	 * CSS to do capture when new buffer is queued. */
-+	 * CSS to do capture when new buffer is queued.
-+	 */
- 	if (asd->continuous_mode->val &&
- 	    atomisp_subdev_source_pad(vdev)
- 	    == ATOMISP_SUBDEV_PAD_SOURCE_CAPTURE &&
-@@ -1806,7 +1807,7 @@ static int atomisp_streamon(struct file *file, void *fh,
- 		/*
- 		 * set freq to max when streaming count > 1 which indicate
- 		 * dual camera would run
--		*/
-+		 */
- 		if (atomisp_streaming_count(isp) > 1) {
- 			if (atomisp_freq_scaling(isp,
- 						 ATOMISP_DFS_MODE_MAX, false) < 0)
-@@ -2438,7 +2439,8 @@ static int atomisp_g_ext_ctrls(struct file *file, void *fh,
- 	int i, ret = 0;
- 
- 	/* input_lock is not need for the Camera related IOCTLs
--	 * The input_lock downgrade the FPS of 3A*/
-+	 * The input_lock downgrade the FPS of 3A
-+	 */
- 	ret = atomisp_camera_g_ext_ctrls(file, fh, c);
- 	if (ret != -EINVAL)
- 		return ret;
-@@ -2521,7 +2523,8 @@ static int atomisp_camera_s_ext_ctrls(struct file *file, void *fh,
- 				    v4l2_s_ctrl(NULL, isp->flash->ctrl_handler,
- 						&ctrl);
- 				/* When flash mode is changed we need to reset
--				 * flash state */
-+				 * flash state
-+				 */
- 				if (ctrl.id == V4L2_CID_FLASH_MODE) {
- 					asd->params.flash_state =
- 					    ATOMISP_FLASH_IDLE;
-@@ -2560,7 +2563,8 @@ static int atomisp_s_ext_ctrls(struct file *file, void *fh,
- 	int i, ret = 0;
- 
- 	/* input_lock is not need for the Camera related IOCTLs
--	 * The input_lock downgrade the FPS of 3A*/
-+	 * The input_lock downgrade the FPS of 3A
-+	 */
- 	ret = atomisp_camera_s_ext_ctrls(file, fh, c);
- 	if (ret != -EINVAL)
- 		return ret;
--- 
-2.25.1
+commit c4e8ba7390346a77ffe33ec3f210bc62e0b6c8c6
+Author: Chris Wilson <chris@chris-wilson.co.uk>
+Date:   Tue Apr 7 14:08:11 2020 +0100
 
+    drm/i915/gt: Yield the timeslice if caught waiting on a user semaphore
+
+Sure it preempts, but that's not enough.
+
+> > That's kinda why I'm not seeing much benefits in a half-way state:
+> > Tons of work, and still not what userspace wants. And for the full
+> > deal that userspace wants we might as well not change anything with
+> > dma-fences. For that we need a) ctx preempt and b) new entirely
+> > decoupled fences that never feed back into a memory fences and c) are
+> > controlled entirely by userspace. And c) is the really important thing
+> > people want us to provide.
+> >
+> > And once we're ok with dma_fence =3D=3D memory fences, then enforcing t=
+he
+> > strict and painful memory allocation limitations is actually what we
+> > want.
+>
+> Let's hope you're right. My fear is that that might be pretty painful as
+> well.
+
+Oh it's very painful too:
+- We need a separate uapi flavour for gpu ctx with preempt instead of
+end-of-batch dma-fence.
+- Which needs to be implemented without breaking stuff badly - e.g. we
+need to make sure we don't probe-wait on fences unnecessarily since
+that forces random unwanted preempts.
+- If we want this with winsys integration we need full userspace
+revisions since all the dma_fence based sync sharing is out (implicit
+sync on dma-buf, sync_file, drm_syncobj are all defunct since we can
+only go the other way round).
+
+Utter pain, but I think it's better since it can be done
+driver-by-driver, and even userspace usecase by usecase. Which means
+we can experiment in areas where the 10+ years of uapi guarantee isn't
+so painful, learn, until we do the big jump of new
+zero-interaction-with-memory-management fences become baked in forever
+into compositor/winsys/modeset protocols. With the other approach of
+splitting dma-fence we need to do all the splitting first, make sure
+we get it right, and only then can we enable the use-case for real.
+
+That's just not going to happen, at least not in upstream across all
+drivers. Within a single driver in some vendor tree hacking stuff up
+is totally fine ofc.
+-Daniel
+--=20
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
