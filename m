@@ -2,132 +2,82 @@ Return-Path: <SRS0=rgoD=BB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2744DC433E5
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 11:35:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CB2AC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 11:58:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 026FB20787
-	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 11:35:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aZL9LR7W"
+	by mail.kernel.org (Postfix) with ESMTP id 2658D20849
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 11:58:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726841AbgGVLfs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Jul 2020 07:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726161AbgGVLfr (ORCPT
+        id S1732090AbgGVL6T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Jul 2020 07:58:19 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:59558 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726334AbgGVL6T (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Jul 2020 07:35:47 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523E6C0619DE
-        for <linux-media@vger.kernel.org>; Wed, 22 Jul 2020 04:35:47 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id h22so2093044lji.9
-        for <linux-media@vger.kernel.org>; Wed, 22 Jul 2020 04:35:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TGNDP7TokQIPIiDyQQilw1gTxHg2ntwORp5IuJSSxuk=;
-        b=aZL9LR7W/tIRttDyuKuxTLD2H6940gR+znMFp2lInXL0+1POU9uVrCT4hYQxPdhmrn
-         S2+g7c/STj8trDv1J2dQh3yyuNbmZ/FBmfEofuV2tYt9DbWbverlMsjtAkntWgcoBobl
-         GmDgFcdpbAIHAOBcT+RBAoeWRhrGDrKkVU9oGAjoW+TesAdIwns/dtIXqAMavqIOPb8q
-         xHk0KNI0Tyh4U6NHUfxwyi5CC896PdNiIKLXyXjv83xR+Xzdz2Uq+gXtg41h/iWsNeyf
-         sH5vhVzLjP4d3Igau5+FBEbxHeer8J86otHzCm6cfki7BTD3cKxo7/mNY4xV309jy07l
-         VllQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TGNDP7TokQIPIiDyQQilw1gTxHg2ntwORp5IuJSSxuk=;
-        b=dRBK6LVKcqGCwAPFYmv+nW0/M5ttD7pXn++GijWZ2pm7a+sIrUOCrGHS+BB8R+n6H3
-         jM5G1in9yzccz2JOWTvsGmffHf5q0pT5/Jtl5mThTdVw/C7mzQOm46Y1yWWJYDAxF3eG
-         iZ3eu08Xl3ft4iCam0JF/b9O+V3BDljvsjF+SLV69v2AXQNzMLR1H3HB4/GWYzI8+3/b
-         lR252mQM52MfLh8RUmaanbqC76qXngvEGhmWtWDtatflqOMu/LgryeK9Uui+LHruD/w2
-         JRzYetdKkSf1CVbqs57QpqbP6wc26dGcbrXGvtSlAAWjPy3tvbL09YwjH225AVnY2rF4
-         J9fQ==
-X-Gm-Message-State: AOAM532l9RvhlPWwJvUZjpSLQEzMU4iZ/s5P51DDLtPn4ov9VQklkc1N
-        kka7ySaAurd7XZ3oEwqJOO0AsQ==
-X-Google-Smtp-Source: ABdhPJx10tJmh0m7u1T2ZgbF1/QplULMvy/0nd1WW5FAXaMP8a/XeDzSYyeVLyeB1Xeshxh8kVGUpQ==
-X-Received: by 2002:a2e:978c:: with SMTP id y12mr14882344lji.270.1595417745685;
-        Wed, 22 Jul 2020 04:35:45 -0700 (PDT)
-Received: from [192.168.1.12] ([195.24.90.54])
-        by smtp.googlemail.com with ESMTPSA id p1sm6537308lji.93.2020.07.22.04.35.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jul 2020 04:35:44 -0700 (PDT)
-Subject: Re: [PATCH v2 5/6] media: s5p-mfc: Use standard frame skip mode
- control
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Jeongtae Park <jtp.park@samsung.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Maheshwar Ajja <majja@codeaurora.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-References: <20200721074538.505-1-stanimir.varbanov@linaro.org>
- <20200721074538.505-6-stanimir.varbanov@linaro.org>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Message-ID: <d219e893-8a9e-e977-a901-d17b71121555@linaro.org>
-Date:   Wed, 22 Jul 2020 14:35:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 22 Jul 2020 07:58:19 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 084C0297C6F
+Message-ID: <18bc849e1844d9a3955d096f41f174408e1a4d31.camel@collabora.com>
+Subject: Re: [PATCH v2 0/1] Add support for meson building
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Gregor Jasny <gjasny@googlemail.com>,
+        Ariel D'Alessandro <ariel@vanguardiasur.com.ar>,
+        linux-media@vger.kernel.org
+Cc:     hverkuil@xs4all.nl, sean@mess.org, p.zabel@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, nicolas@ndufresne.ca,
+        kieran.bingham@ideasonboard.com, xavier.claessens@collabora.com,
+        nicolas.dufresne@collabora.com, user.vdr@gmail.com
+Date:   Wed, 22 Jul 2020 08:58:07 -0300
+In-Reply-To: <5598a9af-9f97-76db-eb24-6deeb05f88c1@googlemail.com>
+References: <20200721151434.115651-1-ariel@vanguardiasur.com.ar>
+         <5598a9af-9f97-76db-eb24-6deeb05f88c1@googlemail.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-1 
 MIME-Version: 1.0
-In-Reply-To: <20200721074538.505-6-stanimir.varbanov@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
-
-Could someone mfc driver maintainers ack or review this patch?
-
-On 7/21/20 10:45 AM, Stanimir Varbanov wrote:
-> Use the standard menu control for frame skip mode in the MFC
-> driver. The legacy private menu control is kept for backward
-> compatibility.
+On Wed, 2020-07-22 at 11:32 +0200, Gregor Jasny wrote:
+> Hello,
 > 
-> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-> ---
->  drivers/media/platform/s5p-mfc/s5p_mfc_enc.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+> On 7/21/20 5:14 PM, Ariel D'Alessandro wrote:
+> > Hello there,
+> > 
+> > Here's another step on porting v4l-utils to meson build system.
+> > Following the discussion thread for v1, several changes were added (see
+> > Changelog below).
+> > 
+> > Further testing, deeper reviews, more comments, are all welcome :-)
 > 
-> diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-> index 912fe0c5ab18..3092eb6777a5 100644
-> --- a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-> +++ b/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-> @@ -261,6 +261,11 @@ static struct mfc_control controls[] = {
->  		.menu_skip_mask = 0,
->  		.default_value = V4L2_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE_DISABLED,
->  	},
-> +	{
-> +		.id = V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE,
-> +		.maximum = V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT,
-> +		.default_value = V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED,
-> +	},
->  	{
->  		.id = V4L2_CID_MPEG_MFC51_VIDEO_RC_FIXED_TARGET_BIT,
->  		.type = V4L2_CTRL_TYPE_BOOLEAN,
-> @@ -1849,6 +1854,7 @@ static int s5p_mfc_enc_s_ctrl(struct v4l2_ctrl *ctrl)
->  		p->seq_hdr_mode = ctrl->val;
->  		break;
->  	case V4L2_CID_MPEG_MFC51_VIDEO_FRAME_SKIP_MODE:
-> +	case V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE:
->  		p->frame_skip_mode = ctrl->val;
->  		break;
->  	case V4L2_CID_MPEG_MFC51_VIDEO_RC_FIXED_TARGET_BIT:
+> Thanks you for polishing the patch. It looks good and the Debian package 
+> properly builds.
+> 
+> Before merging to master the build system needs to catch-up with the 
+> master branch. For example the following got added to configure.ac:
+> 
+> > +# Obtain git SHA of HEAD
+> > +AC_SUBST(GIT_SHA, ["-DGIT_SHA=\$(shell if test -d \$(top_srcdir)/.git ; then git -C \$(top_srcdir) rev-parse HEAD ; else printf '\"not
+> > available\"'; fi)"])
+> > +
+> > +# Obtain git commit count of HEAD
+> > +AC_SUBST(GIT_COMMIT_CNT, ["-DGIT_COMMIT_CNT=\$(shell if test -d \$(top_srcdir)/.git ; then printf '-'; git -C \$(top_srcdir) rev-list --count
+> > HEAD ; fi)"])
+> 
+> I'm wondering if we should drop autotools shortly after the meson patch 
+> was merged to prevent further drift.
 > 
 
--- 
-regards,
-Stan
+That would make a lot of sense, indeed.
+
+Thanks,
+Ezequiel
+
