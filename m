@@ -1,150 +1,185 @@
-Return-Path: <SRS0=lMHH=BA=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=rgoD=BB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC36CC433E3
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 22:46:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56512C433DF
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 03:18:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C892F20771
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 22:46:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9B9520787
+	for <linux-media@archiver.kernel.org>; Wed, 22 Jul 2020 03:18:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rEZAPXIo"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="XIogIvuA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728182AbgGUWqG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Jul 2020 18:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726555AbgGUWqG (ORCPT
+        id S1731855AbgGVDSY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 21 Jul 2020 23:18:24 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:53519 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731793AbgGVDSX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Jul 2020 18:46:06 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B20CC061794;
-        Tue, 21 Jul 2020 15:46:06 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id rk21so178841ejb.2;
-        Tue, 21 Jul 2020 15:46:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9xr1v2W2JnKVVLyTRtwOt/n6iJhD2D3A0fwqKMz4hPs=;
-        b=rEZAPXIor3Dz4RHCbGWSYP7bPSEIjpr4PFXwS2Im8j4mhj6ape6iAKrEuKt9/16wJb
-         lZpHG0XlEaVhnsqWhDvwzZnhbH2qGMHiCuDZM7WS0KrrZjv8jJcsCna7l+z6N03RSryI
-         U8/GUuaiXjjM2Legmhg4UW/y2nxUfiL9rhNEEIH/m+ikMiguNIXPzWp5FcJ8lZyev8PT
-         WLWiiHIj1Ebcit0XN21uV4r+cIGcJsECcR3QBWCPN5odx48VmqH3GUnoXIOIUIHYK2TF
-         yOJJ06VoDsthqoqZ7vPs3+DXb1cqJV++ZhwSCJu2JFkx6/PDQzDmpkrcwLU4TMBFOJQB
-         RSSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9xr1v2W2JnKVVLyTRtwOt/n6iJhD2D3A0fwqKMz4hPs=;
-        b=epfBJ9O2DLqqEfuQNBC87h1QCObo16TlqRIxc1nQM2gnUjbY8uVJfUtSJtAGU3IGBX
-         HAgt+7bzhrS26yCVri0WPR6kMZFAT10FGI11Lwuw3a0GaYmxcCHA8qbCjw9Lw/CIYDOt
-         TIqBg5oKowGA4Mg6Lrs/E3gThlS+6RUdsrn5ym/VCivnLxU+Hk7pVEI01Rg1EegNZc/I
-         eXVbM4yL9p7MyAqnU7l06AIOfRfYDChiWVp5FiRbYe6xu5CkLmJUhP5/XXX275AZf9l2
-         FTOC4wla/K18gjwVGmAQXQv+oTJr5wYAWbI66jz5JrVOgS1/j6ZGIc3ITUaUkq6CvmDU
-         D6YQ==
-X-Gm-Message-State: AOAM5333wGPItnbpDDIxYyX381r5aMK7d4NT+r78khr4dwEfWw5xXw0R
-        gnza/XqLvhD/OnU0c8Ind28dRViB8Gs7ENow/8w=
-X-Google-Smtp-Source: ABdhPJwZ3Ot7QKWc1rFSm9ERPUfpZAjcJpv8FnDDuXOOnkUxeoTuK9PsCTyGH0MloHa+IJHrTWbjlRTbPgJrqaOl/nY=
-X-Received: by 2002:a17:906:4086:: with SMTP id u6mr3259703ejj.9.1595371564794;
- Tue, 21 Jul 2020 15:46:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200707201229.472834-4-daniel.vetter@ffwll.ch>
- <20200709123339.547390-1-daniel.vetter@ffwll.ch> <93b673b7-bb48-96eb-dc2c-bd4f9304000e@shipmail.org>
- <20200721074157.GB3278063@phenom.ffwll.local> <3603bb71-318b-eb53-0532-9daab62dce86@amd.com>
- <57a5eb9d-b74f-8ce4-7199-94e911d9b68b@shipmail.org>
-In-Reply-To: <57a5eb9d-b74f-8ce4-7199-94e911d9b68b@shipmail.org>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Wed, 22 Jul 2020 08:45:53 +1000
-Message-ID: <CAPM=9twUWeenf-26GEvkuKo3wHgS3BCyrva=sNaWo6+=A5qdoQ@mail.gmail.com>
-Subject: Re: [Linaro-mm-sig] [PATCH 1/2] dma-buf.rst: Document why indefinite
- fences are a bad idea
-To:     =?UTF-8?Q?Thomas_Hellstr=C3=B6m_=28Intel=29?= 
-        <thomas_os@shipmail.org>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniels@collabora.com>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Steve Pronovost <spronovo@microsoft.com>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Jesse Natalie <jenatali@microsoft.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Mika Kuoppala <mika.kuoppala@intel.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 21 Jul 2020 23:18:23 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id y5Gtj1UHeywL5y5GujH11c; Wed, 22 Jul 2020 05:18:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1595387901; bh=+i3lB6hLwwNYE+idCqIfNOL0xt5DtvLRwhv8F1cd6d8=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=XIogIvuA0K+E2IeZq1su9foxm/UeKuw6dl0tw5OfQejVpaus1iTJdple/EyLX7kyj
+         oj2xZuGrp9IeR2osO+Hu1c2OoYPKndwOG/igOj3nV02io71VaA6wFFtMOtoB28+oWS
+         aGhkToT8g3Ym50SJ9/D6lgFesJ8HrsAePNl/AE079FteEvz3tnmZIhSFCKi4tUimYP
+         MwJAcmT6zJh5zoDe8PVcr6b71EHbCOwZ9xnr7qJHXZPUEn7+dTwQKzX+fPpyefHhrj
+         hRzg5MXoFokSjJ+EtEnObE+bS9Q9+9kpqb+6nKkL1hT5QZVHV95JNJvxw6+9gIViam
+         8cb/RGE+Rjkxw==
+Message-ID: <0dafcee6fdd7edcf073f8c4b0c1cf194@smtp-cloud7.xs4all.net>
+Date:   Wed, 22 Jul 2020 05:18:19 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfEO1rjS7Ri65mGqkSnXgr27b/nRScic1Sfq6XpVr0tTcos5uK1l+aLlBcp5v3JMoUt0f+XLCSemFAl4hJ75HpIK6Pds/AwfNPNkoaJt1Fds585OUCKQd
+ +otfUcrtPFSwLV2Dtho+kkd6BxT7TJbOaJUHW95EPYQxTYzfhR2pmmn30svsaeM2QuJ88j8Db4vtFMhHYwHkKVunqEuhB8KlRfO2EqodglDeZ0X1S37C4Okg
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 21 Jul 2020 at 18:47, Thomas Hellstr=C3=B6m (Intel)
-<thomas_os@shipmail.org> wrote:
->
->
-> On 7/21/20 9:45 AM, Christian K=C3=B6nig wrote:
-> > Am 21.07.20 um 09:41 schrieb Daniel Vetter:
-> >> On Mon, Jul 20, 2020 at 01:15:17PM +0200, Thomas Hellstr=C3=B6m (Intel=
-)
-> >> wrote:
-> >>> Hi,
-> >>>
-> >>> On 7/9/20 2:33 PM, Daniel Vetter wrote:
-> >>>> Comes up every few years, gets somewhat tedious to discuss, let's
-> >>>> write this down once and for all.
-> >>>>
-> >>>> What I'm not sure about is whether the text should be more explicit =
-in
-> >>>> flat out mandating the amdkfd eviction fences for long running compu=
-te
-> >>>> workloads or workloads where userspace fencing is allowed.
-> >>> Although (in my humble opinion) it might be possible to completely
-> >>> untangle
-> >>> kernel-introduced fences for resource management and dma-fences used
-> >>> for
-> >>> completion- and dependency tracking and lift a lot of restrictions
-> >>> for the
-> >>> dma-fences, including prohibiting infinite ones, I think this makes
-> >>> sense
-> >>> describing the current state.
-> >> Yeah I think a future patch needs to type up how we want to make that
-> >> happen (for some cross driver consistency) and what needs to be
-> >> considered. Some of the necessary parts are already there (with like t=
-he
-> >> preemption fences amdkfd has as an example), but I think some clear do=
-cs
-> >> on what's required from both hw, drivers and userspace would be really
-> >> good.
-> >
-> > I'm currently writing that up, but probably still need a few days for
-> > this.
->
-> Great! I put down some (very) initial thoughts a couple of weeks ago
-> building on eviction fences for various hardware complexity levels here:
->
-> https://gitlab.freedesktop.org/thomash/docs/-/blob/master/Untangling%20dm=
-a-fence%20and%20memory%20allocation.odt
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-We are seeing HW that has recoverable GPU page faults but only for
-compute tasks, and scheduler without semaphores hw for graphics.
+Results of the daily build of media_tree:
 
-So a single driver may have to expose both models to userspace and
-also introduces the problem of how to interoperate between the two
-models on one card.
+date:			Wed Jul 22 05:00:12 CEST 2020
+media-tree git hash:	8f2a4a9d5ff5202d0b3e3a144ebb9b67aabadd29
+media_build git hash:	ea2766f182b3a4e03543be2ded0845fca4d4fa80
+v4l-utils git hash:	df6ffb4df75c758b1ebef9e05d6490b370e781ae
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 9.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-6381-g344ef612
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 1276c1355abc12c391f3d471acc71d55421b87b6
+host hardware:		x86_64
+host os:		5.7.0-1-amd64
 
-Dave.
+linux-git-sh: OK
+linux-git-arm-davinci: OK
+linux-git-arm-at91: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: WARNINGS: VIDEO_TEGRA
+Check for strcpy/strncpy/strlcpy: WARNINGS: found 3 strcpy(), 3 strncpy(), 3 strlcpy()
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.81-i686: OK
+linux-3.16.81-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.212-i686: OK
+linux-4.4.212-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.212-i686: OK
+linux-4.9.212-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.169-i686: OK
+linux-4.14.169-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.101-i686: OK
+linux-4.19.101-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: WARNINGS
+linux-5.3.1-x86_64: WARNINGS
+linux-5.4.17-i686: OK
+linux-5.4.17-x86_64: OK
+linux-5.5.1-i686: OK
+linux-5.5.1-x86_64: OK
+linux-5.6.1-i686: OK
+linux-5.6.1-x86_64: OK
+linux-5.7.2-i686: OK
+linux-5.7.2-x86_64: OK
+linux-5.8-rc1-i686: OK
+linux-5.8-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: ERRORS
+virtme-32: ERRORS
+sparse: WARNINGS
+smatch: ERRORS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
