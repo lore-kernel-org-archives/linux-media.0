@@ -2,153 +2,197 @@ Return-Path: <SRS0=QjF1=BC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0ED4C433EB
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 23:16:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EE96C433E4
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 23:48:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC4F32071A
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 23:16:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65B3C2080D
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 23:48:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="DQxjeXAV"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="ENPrKbk3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbgGWXQB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Jul 2020 19:16:01 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:34990 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727901AbgGWXP6 (ORCPT
+        id S1728390AbgGWXsV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Jul 2020 19:48:21 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:7650 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728194AbgGWXsT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Jul 2020 19:15:58 -0400
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B6336279;
-        Fri, 24 Jul 2020 01:15:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1595546155;
-        bh=6y3U4yLr3ZQR9s0aeNcGQU+EWxh0U1ZBRXVyKtbSqKU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DQxjeXAVtgVxhpDiJRG7FVdtmWfKjhiw6AqHSaHrN2I8F61jxkXTcDX0jx2f0zreC
-         NtvNWATcWPQXQNwP6yIxlqGIck1StxplXEcj4klD0AW3AQdO6wVuCwTUcquLSETbgL
-         bilIQk56ILpsoD3r77VWFvlHM5tKJHg0M6m3Yjcg=
-Date:   Fri, 24 Jul 2020 02:15:49 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, slongerbeam@gmail.com,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: Re: [PATCH 08/13] dt-bindings: media: ov5640: Remove data-shift
-Message-ID: <20200723231549.GE21353@pendragon.ideasonboard.com>
-References: <20200717132859.237120-1-jacopo+renesas@jmondi.org>
- <20200717132859.237120-9-jacopo+renesas@jmondi.org>
- <20200717205722.GJ5961@pendragon.ideasonboard.com>
- <20200723222259.GB829@valkosipuli.retiisi.org.uk>
+        Thu, 23 Jul 2020 19:48:19 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f1a21b50001>; Thu, 23 Jul 2020 16:48:05 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 23 Jul 2020 16:48:18 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 23 Jul 2020 16:48:18 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 23 Jul
+ 2020 23:48:17 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 23 Jul 2020 23:48:17 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.168.236]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5f1a21c10001>; Thu, 23 Jul 2020 16:48:17 -0700
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
+        <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+Subject: [RFC PATCH v4 02/14] i2c: tegra: Remove NULL pointer check before clk_enable/disable/prepare/unprepare
+Date:   Thu, 23 Jul 2020 16:51:00 -0700
+Message-ID: <1595548272-9809-3-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1595548272-9809-1-git-send-email-skomatineni@nvidia.com>
+References: <1595548272-9809-1-git-send-email-skomatineni@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200723222259.GB829@valkosipuli.retiisi.org.uk>
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1595548085; bh=jD0igf8U1bTJzOqQcNuwvqEC25xsAMW3RMlh+sdfw58=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=ENPrKbk31hDdtOdLpNXjzsNn+ZpaqkAbsmKyMQNFeyBEMePQLr53Fyi5MJzlLm2NK
+         lTq7IZtJTAepkSsqXcTApOvJJBQEJv9zG/LdzmKh15/xQa5j9Tz5wurZWqzb3BhpXP
+         qXY9xLxdmpT3xfr+B4r5pplHVlcvs9ygjRg7Yb2kJFxKdyI6LBsxV0OHvTuty+h2Z1
+         R6dEVhfW8FdGBKDtfmyHMnwgbdRjtZCisZghA/nAx0IwAmJjvCiUbGm2fQ7iPJ2op8
+         pRwyAIGVAQpOpmv0uFy8FzxxnFs40x+FCmSSH4EO6dVmcZ6wXk/bMg40qB0F66R4FD
+         3SITAuf3L120A==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+clk_enable, clk_disable, clk_prepare, and clk_unprepare APIs have
+implementation for checking clk pointer not NULL and clock consumers
+can safely call these APIs without NULL pointer check.
 
-On Fri, Jul 24, 2020 at 01:22:59AM +0300, Sakari Ailus wrote:
-> On Fri, Jul 17, 2020 at 11:57:22PM +0300, Laurent Pinchart wrote:
-> > Hi Jacopo,
-> > 
-> > (CC'ing Sakari)
-> > 
-> > Thank you for the patch.
-> > 
-> > On Fri, Jul 17, 2020 at 03:28:54PM +0200, Jacopo Mondi wrote:
-> > > The value of the data-shift property solely depend on the selected
-> > > bus width and it's not freely configurable.
-> > > 
-> > > Remove it from the bindings document and update its users accordingly.
-> > 
-> > Hmmmm that's an interesting one. Sakari, what do you think ?
-> > 
-> > > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> > > ---
-> > >  Documentation/devicetree/bindings/media/i2c/ov5640.yaml | 9 ---------
-> > >  arch/arm/boot/dts/stm32mp157c-ev1.dts                   | 1 -
-> > >  2 files changed, 10 deletions(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/media/i2c/ov5640.yaml b/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
-> > > index 5e1662e848bd..ab700a1830aa 100644
-> > > --- a/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
-> > > +++ b/Documentation/devicetree/bindings/media/i2c/ov5640.yaml
-> > > @@ -92,12 +92,6 @@ properties:
-> > >                parallel bus.
-> > >              enum: [8, 10]
-> > > 
-> > > -          data-shift:
-> > > -            description: |
-> > > -              Shall be set to <2> for 8 bits parallel bus (lines 9:2 are used) or
-> > > -              <0> for 10 bits parallel bus.
-> > > -            enum: [0, 2]
-> > 
-> > Should you document in the description of bus-width that data-shift is
-> > implied ?
-> 
-> The purpose of the datas-shift property is to convey how the parallel bus
-> lines are connected for a given bus width for devices where it is
-> configurable. As this device does not not support that, then indeed this
-> property is not relevant for the device IMO.
+So, this patch cleans up Tegra i2c driver to remove explicit checks
+before these APIs.
 
-Could you elaborate on this ? I believe the case that Jacopo is
-describing connects D[9:2] from the sensor to D[7:0] of the receiver
-(Jacopo, could you confirm ?). Isn't that what data-shift is for ?
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 64 +++++++++++++++---------------------------
+ 1 file changed, 23 insertions(+), 41 deletions(-)
 
-> > > -
-> > >            hsync-active:
-> > >              enum: [0, 1]
-> > > 
-> > > @@ -115,7 +109,6 @@ properties:
-> > >              then:
-> > >                  properties:
-> > >                    bus-width: false
-> > > -                  data-shift: false
-> > >                    hsync-active: false
-> > >                    vsync-active: false
-> > >                    pclk-sample: false
-> > > @@ -135,7 +128,6 @@ properties:
-> > >                  - remote-endpoint
-> > >                  - bus-type
-> > >                  - bus-width
-> > > -                - data-shift
-> > >                  - hsync-active
-> > >                  - vsync-active
-> > >                  - pclk-sample
-> > > @@ -204,7 +196,6 @@ examples:
-> > >                      remote-endpoint = <&parallel_from_ov5640>;
-> > >                      bus-type = <5>;
-> > >                      bus-width = <10>;
-> > > -                    data-shift = <0>;
-> > >                      hsync-active = <1>;
-> > >                      vsync-active = <1>;
-> > >                      pclk-sample = <1>;
-> > > diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-> > > index 613ede73b65b..96f96202ca63 100644
-> > > --- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
-> > > +++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-> > > @@ -192,7 +192,6 @@ ov5640_0: endpoint {
-> > >  				remote-endpoint = <&dcmi_0>;
-> > >  				bus-type = <5>;
-> > >  				bus-width = <8>;
-> > > -				data-shift = <2>; /* lines 9:2 are used */
-> > >  				hsync-active = <0>;
-> > >  				vsync-active = <0>;
-> > >  				pclk-sample = <1>;
-
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 3be1018..c91307b9 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -655,21 +655,17 @@ static int __maybe_unused tegra_i2c_runtime_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (!i2c_dev->hw->has_single_clk_source) {
+-		ret = clk_enable(i2c_dev->fast_clk);
+-		if (ret < 0) {
+-			dev_err(i2c_dev->dev,
+-				"Enabling fast clk failed, err %d\n", ret);
+-			return ret;
+-		}
++	ret = clk_enable(i2c_dev->fast_clk);
++	if (ret < 0) {
++		dev_err(i2c_dev->dev,
++			"Enabling fast clk failed, err %d\n", ret);
++		return ret;
+ 	}
+ 
+-	if (i2c_dev->slow_clk) {
+-		ret = clk_enable(i2c_dev->slow_clk);
+-		if (ret < 0) {
+-			dev_err(dev, "failed to enable slow clock: %d\n", ret);
+-			return ret;
+-		}
++	ret = clk_enable(i2c_dev->slow_clk);
++	if (ret < 0) {
++		dev_err(dev, "failed to enable slow clock: %d\n", ret);
++		return ret;
+ 	}
+ 
+ 	ret = clk_enable(i2c_dev->div_clk);
+@@ -688,12 +684,8 @@ static int __maybe_unused tegra_i2c_runtime_suspend(struct device *dev)
+ 	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+ 
+ 	clk_disable(i2c_dev->div_clk);
+-
+-	if (i2c_dev->slow_clk)
+-		clk_disable(i2c_dev->slow_clk);
+-
+-	if (!i2c_dev->hw->has_single_clk_source)
+-		clk_disable(i2c_dev->fast_clk);
++	clk_disable(i2c_dev->slow_clk);
++	clk_disable(i2c_dev->fast_clk);
+ 
+ 	return pinctrl_pm_select_idle_state(i2c_dev->dev);
+ }
+@@ -1716,20 +1708,16 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, i2c_dev);
+ 
+-	if (!i2c_dev->hw->has_single_clk_source) {
+-		ret = clk_prepare(i2c_dev->fast_clk);
+-		if (ret < 0) {
+-			dev_err(i2c_dev->dev, "Clock prepare failed %d\n", ret);
+-			return ret;
+-		}
++	ret = clk_prepare(i2c_dev->fast_clk);
++	if (ret < 0) {
++		dev_err(i2c_dev->dev, "Clock prepare failed %d\n", ret);
++		return ret;
+ 	}
+ 
+-	if (i2c_dev->slow_clk) {
+-		ret = clk_prepare(i2c_dev->slow_clk);
+-		if (ret < 0) {
+-			dev_err(dev, "failed to prepare slow clock: %d\n", ret);
+-			goto unprepare_fast_clk;
+-		}
++	ret = clk_prepare(i2c_dev->slow_clk);
++	if (ret < 0) {
++		dev_err(dev, "failed to prepare slow clock: %d\n", ret);
++		goto unprepare_fast_clk;
+ 	}
+ 
+ 	if (i2c_dev->bus_clk_rate > I2C_MAX_FAST_MODE_FREQ &&
+@@ -1843,12 +1831,10 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 	clk_unprepare(i2c_dev->div_clk);
+ 
+ unprepare_slow_clk:
+-	if (i2c_dev->is_vi)
+-		clk_unprepare(i2c_dev->slow_clk);
++	clk_unprepare(i2c_dev->slow_clk);
+ 
+ unprepare_fast_clk:
+-	if (!i2c_dev->hw->has_single_clk_source)
+-		clk_unprepare(i2c_dev->fast_clk);
++	clk_unprepare(i2c_dev->fast_clk);
+ 
+ 	return ret;
+ }
+@@ -1867,12 +1853,8 @@ static int tegra_i2c_remove(struct platform_device *pdev)
+ 		tegra_i2c_runtime_suspend(&pdev->dev);
+ 
+ 	clk_unprepare(i2c_dev->div_clk);
+-
+-	if (i2c_dev->slow_clk)
+-		clk_unprepare(i2c_dev->slow_clk);
+-
+-	if (!i2c_dev->hw->has_single_clk_source)
+-		clk_unprepare(i2c_dev->fast_clk);
++	clk_unprepare(i2c_dev->slow_clk);
++	clk_unprepare(i2c_dev->fast_clk);
+ 
+ 	tegra_i2c_release_dma(i2c_dev);
+ 	return 0;
 -- 
-Regards,
+2.7.4
 
-Laurent Pinchart
