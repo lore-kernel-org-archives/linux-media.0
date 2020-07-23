@@ -2,323 +2,123 @@ Return-Path: <SRS0=QjF1=BC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39B99C433E5
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 13:21:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2721FC433E4
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 14:17:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1CF8922BEA
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 13:21:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0361C206E3
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 14:17:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=vanguardiasur-com-ar.20150623.gappssmtp.com header.i=@vanguardiasur-com-ar.20150623.gappssmtp.com header.b="CY6bT6qf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729102AbgGWNVX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Jul 2020 09:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
+        id S1728630AbgGWORh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Jul 2020 10:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgGWNVW (ORCPT
+        with ESMTP id S1726089AbgGWORe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Jul 2020 09:21:22 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F35FC0619DC
-        for <linux-media@vger.kernel.org>; Thu, 23 Jul 2020 06:21:22 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id A9904298A2A
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
-Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
-        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com, mchehab@kernel.org,
-        tfiga@chromium.org
-Subject: [PATCH v3 05/10] media: staging: rkisp1: add capability V4L2_CAP_IO_MC to capture devices
-Date:   Thu, 23 Jul 2020 15:20:09 +0200
-Message-Id: <20200723132014.4597-6-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200723132014.4597-1-dafna.hirschfeld@collabora.com>
-References: <20200723132014.4597-1-dafna.hirschfeld@collabora.com>
+        Thu, 23 Jul 2020 10:17:34 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B29C0619DC
+        for <linux-media@vger.kernel.org>; Thu, 23 Jul 2020 07:17:33 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id h7so5440364qkk.7
+        for <linux-media@vger.kernel.org>; Thu, 23 Jul 2020 07:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2LiwihvWW0t0hQ1nxsWSdrlPG1hvyHa/lTR1EPP1bqs=;
+        b=CY6bT6qfsSCAWYmYLCe/3wU4AjPKfSXSspT/gmiqDIAXpou5xYrbbGUtsWehjkwgXg
+         itkx1lcS2Hw+mxyD2encMlI7MmLaybcn6+qXRpoTxEvINAZMEgYpnhjILeYQQyXRLu7z
+         OdritbG0B6uoj1oftmky+TLZGVnLjapnfGnD4JbfjUkiMDphbYcgxHSveo8XaQphF0x0
+         aKqsUlZn7O+RC4DunuIdLVS14i6kMO+kuKQNogSnYXY+DTbKmPMKyBCYZUHn7y3x5aBc
+         9pRLi1FgQhUkJZ9SIKbEM05yK1/soSoUskP8oaBXDGO/+N/3JKfHPNqgGZ+sj8EHXl90
+         GLRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2LiwihvWW0t0hQ1nxsWSdrlPG1hvyHa/lTR1EPP1bqs=;
+        b=gfri0GZNCHgdxlDfTHS8Vjterj8x4dNbxUV4CeVi9+fxkIPaZXEHS9rw37UG4iZyM1
+         rwyGDmA0Yli2PjkfxFjsKo8EpxmcAlrKfU/usAGecC3Ws5teSUsxeoTN3XiB6gNBPI5G
+         9/imI3pUdXpRUy8uNUapNf44FqcmD4gOf4BGN5/cb8ZK/uWDYh+xp8lIuuvLUYHLzLEI
+         XDp2a5NS+NobvI6oJDqXry9hiCbogWzNiaTQhwXWraMs9IcMObh7Pn4dN21LKMuWkGHe
+         s98ZWNsX3+dz88WKRFNO/GptXLvxfMkDxsMUp3H6mRLQnM3bkXaC5wH87wf5nFQGQe0w
+         ACjg==
+X-Gm-Message-State: AOAM533ZNL2kqIWhBSzDWzrmv2hDzVK20pRY68OO29yz4zYD+2d4mCwA
+        a/yQN4V4UXpHq9G6LROvvgheBQ==
+X-Google-Smtp-Source: ABdhPJwsHtL+OaJzevgvh8+gj/etcnpcPMkpuszGBbDzXmpAd8JLF9mhOoDk2bxqETqeWi8gF6O6mQ==
+X-Received: by 2002:a05:620a:4d9:: with SMTP id 25mr1447986qks.411.1595513852724;
+        Thu, 23 Jul 2020 07:17:32 -0700 (PDT)
+Received: from [192.168.0.102] ([186.136.155.69])
+        by smtp.gmail.com with ESMTPSA id o187sm2568166qkd.112.2020.07.23.07.17.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jul 2020 07:17:32 -0700 (PDT)
+Subject: Re: [PATCH v2 0/1] Add support for meson building
+To:     Gregor Jasny <gjasny@googlemail.com>, linux-media@vger.kernel.org
+Cc:     hverkuil@xs4all.nl, sean@mess.org, p.zabel@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, ezequiel@collabora.com,
+        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com,
+        xavier.claessens@collabora.com, nicolas.dufresne@collabora.com,
+        user.vdr@gmail.com
+References: <20200721151434.115651-1-ariel@vanguardiasur.com.ar>
+ <5598a9af-9f97-76db-eb24-6deeb05f88c1@googlemail.com>
+From:   Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+Message-ID: <9f6cb0d7-e0fd-9af9-9683-32b544d21eff@vanguardiasur.com.ar>
+Date:   Thu, 23 Jul 2020 11:17:34 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <5598a9af-9f97-76db-eb24-6deeb05f88c1@googlemail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The capture devices supports YUV, RGB, and Bayer formats.
-Adding V4L2_CAP_IO_MC capability will reflect userspace
-what format should be set on the resizer in order to stream
-each of the video formats.
+Hi Gregor,
 
-The patch adds a 'mbus' field to the struct
-'rkisp1_capture_fmt_cfg' which maps the video format
-to the needed mbus format.
+On 7/22/20 6:32 AM, Gregor Jasny wrote:
+> Hello,
+> 
+> On 7/21/20 5:14 PM, Ariel D'Alessandro wrote:
+>> Hello there,
+>>
+>> Here's another step on porting v4l-utils to meson build system.
+>> Following the discussion thread for v1, several changes were added (see
+>> Changelog below).
+>>
+>> Further testing, deeper reviews, more comments, are all welcome :-)
+> 
+> Thanks you for polishing the patch. It looks good and the Debian package
+> properly builds.
+> 
+> Before merging to master the build system needs to catch-up with the master
+> branch. For example the following got added to configure.ac:
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
----
- drivers/staging/media/rkisp1/rkisp1-capture.c | 60 +++++++++++++++++--
- 1 file changed, 56 insertions(+), 4 deletions(-)
+Right. I'll do that quickly.
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
-index 27efec004686..5dd91b5f82a4 100644
---- a/drivers/staging/media/rkisp1/rkisp1-capture.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
-@@ -49,12 +49,14 @@ enum rkisp1_plane {
-  * @uv_swap: if cb cr swaped, for yuv
-  * @write_format: defines how YCbCr self picture data is written to memory
-  * @output_format: defines sp output format
-+ * @mbus: the mbus code on the src resizer pad that matches the pixel format
-  */
- struct rkisp1_capture_fmt_cfg {
- 	u32 fourcc;
- 	u8 uv_swap;
- 	u32 write_format;
- 	u32 output_format;
-+	u32 mbus;
- };
- 
- struct rkisp1_capture_ops {
-@@ -88,92 +90,116 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_mp_fmts[] = {
- 		.fourcc = V4L2_PIX_FMT_YUYV,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUV422P,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV16,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV61,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVU422M,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	},
- 	/* yuv420 */
- 	{
- 		.fourcc = V4L2_PIX_FMT_NV21,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV12,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV21M,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV12M,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUV420,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVU420,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	},
- 	/* yuv400 */
- 	{
- 		.fourcc = V4L2_PIX_FMT_GREY,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	},
- 	/* raw */
- 	{
- 		.fourcc = V4L2_PIX_FMT_SRGGB8,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
-+		.mbus = MEDIA_BUS_FMT_SRGGB8_1X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGRBG8,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
-+		.mbus = MEDIA_BUS_FMT_SGRBG8_1X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGBRG8,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
-+		.mbus = MEDIA_BUS_FMT_SGBRG8_1X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SBGGR8,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
-+		.mbus = MEDIA_BUS_FMT_SBGGR8_1X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SRGGB10,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
-+		.mbus = MEDIA_BUS_FMT_SRGGB10_1X10,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGRBG10,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
-+		.mbus = MEDIA_BUS_FMT_SGRBG10_1X10,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGBRG10,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
-+		.mbus = MEDIA_BUS_FMT_SGBRG10_1X10,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SBGGR10,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
-+		.mbus = MEDIA_BUS_FMT_SBGGR10_1X10,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SRGGB12,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
-+		.mbus = MEDIA_BUS_FMT_SRGGB12_1X12,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGRBG12,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
-+		.mbus = MEDIA_BUS_FMT_SGRBG12_1X12,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SGBRG12,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
-+		.mbus = MEDIA_BUS_FMT_SGBRG12_1X12,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_SBGGR12,
- 		.write_format = RKISP1_MI_CTRL_MP_WRITE_RAW12,
-+		.mbus = MEDIA_BUS_FMT_SBGGR12_1X12,
- 	},
- };
- 
-@@ -184,26 +210,31 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUV422P,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV16,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV61,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVU422M,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	},
- 	/* yuv420 */
- 	{
-@@ -211,31 +242,37 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV12,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV21M,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_NV12M,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_SPLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUV420,
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YVU420,
- 		.uv_swap = 1,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
- 	},
- 	/* yuv400 */
- 	{
-@@ -243,16 +280,19 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
- 		.uv_swap = 0,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV400,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	},
- 	/* rgb */
- 	{
- 		.fourcc = V4L2_PIX_FMT_XBGR32,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_RGB888,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_RGB565,
- 		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
- 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_RGB565,
-+		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
- 	},
- };
- 
-@@ -1107,11 +1147,23 @@ static int rkisp1_enum_fmt_vid_cap_mplane(struct file *file, void *priv,
- 	struct rkisp1_capture *cap = video_drvdata(file);
- 	const struct rkisp1_capture_fmt_cfg *fmt = NULL;
- 
--	if (f->index >= cap->config->fmt_size)
-+	if (f->mbus_code) {
-+		int i, n = 0;
-+
-+		for (i = 0; i < cap->config->fmt_size; i++)
-+			if (cap->config->fmts[i].mbus == f->mbus_code)
-+				if (n++ == f->index) {
-+					f->pixelformat = cap->config->fmts[i].fourcc;
-+					return 0;
-+				}
- 		return -EINVAL;
-+	} else {
-+		if (f->index >= cap->config->fmt_size)
-+			return -EINVAL;
- 
--	fmt = &cap->config->fmts[f->index];
--	f->pixelformat = fmt->fourcc;
-+		fmt = &cap->config->fmts[f->index];
-+		f->pixelformat = fmt->fourcc;
-+	}
- 
- 	return 0;
- }
-@@ -1261,7 +1313,7 @@ static int rkisp1_register_capture(struct rkisp1_capture *cap)
- 	vdev->v4l2_dev = v4l2_dev;
- 	vdev->lock = &node->vlock;
- 	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE_MPLANE |
--			    V4L2_CAP_STREAMING;
-+			    V4L2_CAP_STREAMING | V4L2_CAP_IO_MC;
- 	vdev->entity.ops = &rkisp1_media_ops;
- 	video_set_drvdata(vdev, cap);
- 	vdev->vfl_dir = VFL_DIR_RX;
--- 
-2.17.1
+> 
+>> +# Obtain git SHA of HEAD
+>> +AC_SUBST(GIT_SHA, ["-DGIT_SHA=\$(shell if test -d \$(top_srcdir)/.git ; then
+>> git -C \$(top_srcdir) rev-parse HEAD ; else printf '\"not available\"'; fi)"])
+>> +
+>> +# Obtain git commit count of HEAD
+>> +AC_SUBST(GIT_COMMIT_CNT, ["-DGIT_COMMIT_CNT=\$(shell if test -d
+>> \$(top_srcdir)/.git ; then printf '-'; git -C \$(top_srcdir) rev-list --count
+>> HEAD ; fi)"])
+> 
+> I'm wondering if we should drop autotools shortly after the meson patch was
+> merged to prevent further drift.
 
++1 That'd be a good way to go.
+
+Thanks,
+Ariel
