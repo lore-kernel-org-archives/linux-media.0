@@ -2,94 +2,119 @@ Return-Path: <SRS0=QjF1=BC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AFABC28E82
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 03:08:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7BFAC433E4
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 08:10:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 461AE22B40
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 03:08:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92A8220709
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 08:10:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="m7MB1RDv"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="RcM+VRiD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387470AbgGWDGL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Jul 2020 23:06:11 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:42320 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728902AbgGWDGK (ORCPT
+        id S1726330AbgGWIKm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Jul 2020 04:10:42 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:47743 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725858AbgGWIKm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Jul 2020 23:06:10 -0400
-X-UUID: e3a00ba8331442efbef138afeb00268e-20200723
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=uT8+cJJLKxx7iRx/f4SzV/NgZq66VioBNZtU/EdloOs=;
-        b=m7MB1RDvvlhoBKSMkXeZShri9hodmlR8b7arhymZFUK0AIb3OGSrQdGgI+cf3yJr4nXUOiG7cwPtgWbpO5Jnkc/vFU+voV6SUK81Js7kW5CKUVuUMliHUWtzL4oitA2lQp5Sd6phl7BjxV9vfLqXmKSG6sf9BE638qSnve5/vWA=;
-X-UUID: e3a00ba8331442efbef138afeb00268e-20200723
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <xia.jiang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1499454690; Thu, 23 Jul 2020 11:06:07 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 23 Jul 2020 11:06:05 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 23 Jul 2020 11:06:02 +0800
-From:   Xia Jiang <xia.jiang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 23 Jul 2020 04:10:42 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id yWJHjzu6MuuXOyWJIj8xiI; Thu, 23 Jul 2020 10:10:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1595491839; bh=S4EgoCbBmTgeGbV3FNpEwzrs8Seq7SlB0q88PTB/Mg4=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=RcM+VRiD8st0V/BJSf2L9MvhUo0T8OyRhqfznuVlPCajuoUlCnjB+2Z4FDo/qPraQ
+         Jc9L1m3XOA7bSxoFe3VUP9FRh130sr07z79w51IRnUlgXp8elE7boYyu0R9NDRC6ty
+         VD2fZx4HimeIgxOnL1lC0SuWfIf5b47hpaHqi2Cs7tFWCXN3DybD8XpGXosfoNhZOU
+         TUTvJS3k7LTRKjElL9LC8h7RFTFo/V7nh1geXg1mhaZ4Ik0uKt1xGk9iPIIU9wXuwT
+         4Sw+HeFsvhs7ozb2AQWCp0u94SpMvLNXm6fZJ1dtC4+NICYAyGsE95rG6T424CZgcW
+         g1P2h4N2m3l1A==
+Subject: Re: [PATCH v3,1/2] media: v4l UAPI: add
+ V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Rick Chang <rick.chang@mediatek.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
         Tomasz Figa <tfiga@chromium.org>,
-        <srv_heupstream@mediatek.com>, <senozhatsky@chromium.org>,
-        <mojahsu@chromium.org>, <drinkcat@chromium.org>,
-        <maoguang.meng@mediatek.com>, Xia Jiang <xia.jiang@mediatek.com>
-Subject: [PATCH v10 03/28] media: platform: Improve getting and requesting irq flow for bug fixing
-Date:   Thu, 23 Jul 2020 11:04:26 +0800
-Message-ID: <20200723030451.5616-4-xia.jiang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200723030451.5616-1-xia.jiang@mediatek.com>
-References: <20200723030451.5616-1-xia.jiang@mediatek.com>
+        Alexandre Courbot <acourbot@chromium.org>
+References: <20200701093522.8521-1-yunfei.dong@mediatek.com>
+ <20200701093522.8521-2-yunfei.dong@mediatek.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <047b49b0-53d4-3ddf-e629-1686a6d4eb31@xs4all.nl>
+Date:   Thu, 23 Jul 2020 10:10:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20200701093522.8521-2-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfFQN2IYlI+0IepjRuZ70GgrkpY9Ngx0UU6k7lKmM0epEF1LWTvJfQyRbUzdemzReVKMEfVECkSDwUvHCFqmC6WMTFU9/qdfF+EpUapAgHTBNveCH/J6N
+ nK0IDmGmDsoRpHl7xhiH/Bz4mofLIkVPScuqHc2kMFhfE2eoYNdtXbnpfgwfrZDVVA/IGWIN5z8i2lAWY7qBwzETEzVoWtMgxjM1vplYXWvv3lXbKi7ETxm6
+ 6QHvYAKqYhVStAtKkFeyFDOBHDLXEf8gpuDdsnNbbIQ02HC9zjz/W7ihTVdV2RaQ19lAZboxNUh7wdGr6m9+N5gGE+5wbpVw0cRz+4SZxUogco0tbkvwB4ZN
+ EzW4ZDP5oQmwg+fA7nU68gleNtparGKVRvI1PmpqV1JualWfAvMAoFbJFgRSvs9Ws3WGMr+mqZGQB4/7Q6onnvwZay9aQ1wsK25IJOuvebncPdHgicn6oSbw
+ LavBgbF6lhFEZ247AQerScfwAdjxvQ5YiRP6zp9cYbwAp1dCvhq1HPHHB7lNUQCVif9uX5aJCg/SWAW//v7OEapSGpa+uIKQ1gJR1rpZuUtDENL+1Dx3Jz/S
+ oaPd6qO95uTtcPmmGS936jCgdoUSuD0iloZ2cKGp1yLzKQrI/3pvMsXXB1aFqzTTUxM0ABDsw7SdO+I9EE6azUpGamhAe8wMD3ud3hrShZc3jxyExKk2OoHE
+ W6UVMGaaACw=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-RGVsZXRlIHBsYXRmb3JtX2dldF9yZXNvdXJjZSBvcGVyYXRpb24gZm9yIGlycS4NClJldHVybiBh
-Y3R1YWwgdmFsdWUgcmF0aGVyIHRoYW4gRUlOVkFMIHdoZW4gZmFpbCB0byBnZXQgYW5kIHJlcXVl
-c3QNCmlycS4NCg0KUmV2aWV3ZWQtYnk6IFRvbWFzeiBGaWdhIDx0ZmlnYUBjaHJvbWl1bS5vcmc+
-DQpTaWduZWQtb2ZmLWJ5OiBYaWEgSmlhbmcgPHhpYS5qaWFuZ0BtZWRpYXRlay5jb20+DQotLS0N
-CnYxMDogbm8gY2hhbmdlcw0KLS0tDQogZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstanBlZy9t
-dGtfanBlZ19jb3JlLmMgfCA3ICsrLS0tLS0NCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25z
-KCspLCA1IGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9y
-bS9tdGstanBlZy9tdGtfanBlZ19jb3JlLmMgYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1q
-cGVnL210a19qcGVnX2NvcmUuYw0KaW5kZXggNjdhMDIyZDA0ZGY3Li4yNjc3NTgwOTQxYjAgMTAw
-NjQ0DQotLS0gYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2NvcmUu
-Yw0KKysrIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstanBlZy9tdGtfanBlZ19jb3JlLmMN
-CkBAIC0xMTAzLDEyICsxMTAzLDEwIEBAIHN0YXRpYyBpbnQgbXRrX2pwZWdfcHJvYmUoc3RydWN0
-IHBsYXRmb3JtX2RldmljZSAqcGRldikNCiAJCXJldHVybiByZXQ7DQogCX0NCiANCi0JcmVzID0g
-cGxhdGZvcm1fZ2V0X3Jlc291cmNlKHBkZXYsIElPUkVTT1VSQ0VfSVJRLCAwKTsNCiAJZGVjX2ly
-cSA9IHBsYXRmb3JtX2dldF9pcnEocGRldiwgMCk7DQotCWlmICghcmVzIHx8IGRlY19pcnEgPCAw
-KSB7DQorCWlmIChkZWNfaXJxIDwgMCkgew0KIAkJZGV2X2VycigmcGRldi0+ZGV2LCAiRmFpbGVk
-IHRvIGdldCBkZWNfaXJxICVkLlxuIiwgZGVjX2lycSk7DQotCQlyZXQgPSAtRUlOVkFMOw0KLQkJ
-cmV0dXJuIHJldDsNCisJCXJldHVybiBkZWNfaXJxOw0KIAl9DQogDQogCXJldCA9IGRldm1fcmVx
-dWVzdF9pcnEoJnBkZXYtPmRldiwgZGVjX2lycSwgbXRrX2pwZWdfZGVjX2lycSwgMCwNCkBAIC0x
-MTE2LDcgKzExMTQsNiBAQCBzdGF0aWMgaW50IG10a19qcGVnX3Byb2JlKHN0cnVjdCBwbGF0Zm9y
-bV9kZXZpY2UgKnBkZXYpDQogCWlmIChyZXQpIHsNCiAJCWRldl9lcnIoJnBkZXYtPmRldiwgIkZh
-aWxlZCB0byByZXF1ZXN0IGRlY19pcnEgJWQgKCVkKVxuIiwNCiAJCQlkZWNfaXJxLCByZXQpOw0K
-LQkJcmV0ID0gLUVJTlZBTDsNCiAJCWdvdG8gZXJyX3JlcV9pcnE7DQogCX0NCiANCi0tIA0KMi4x
-OC4wDQo=
+On 01/07/2020 11:35, Yunfei Dong wrote:
+> This patch adds support for the V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS
+> flag. This flag is used for Read-only(Ro) Request.
+> 
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>  Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+> index b6d52083707b..7c7451773b8e 100644
+> --- a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+> +++ b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
+> @@ -126,6 +126,7 @@ aborting or finishing any DMA in progress, an implicit
+>  .. _V4L2-BUF-CAP-SUPPORTS-REQUESTS:
+>  .. _V4L2-BUF-CAP-SUPPORTS-ORPHANED-BUFS:
+>  .. _V4L2-BUF-CAP-SUPPORTS-M2M-HOLD-CAPTURE-BUF:
+> +.. _V4L2-BUF-CAP-SUPPORTS-RO-REQUESTS:
+>  
+>  .. cssclass:: longtable
+>  
+> @@ -156,6 +157,9 @@ aborting or finishing any DMA in progress, an implicit
+>        - Only valid for stateless decoders. If set, then userspace can set the
+>          ``V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF`` flag to hold off on returning the
+>  	capture buffer until the OUTPUT timestamp changes.
+> +    * - ``V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS``
+> +      - 0x00000040
+> +      - This buffer type supports :ref:`requests <media-request-api>`.
+
+This is wrong, it supports *read-only* requests.
+
+Also, Documentation/userspace-api/media/mediactl/request-api.rst should mention
+read-only requests: I think a new section "Read-Only Requests" explaining the
+purpose and use of such requests would be best. It can be inserted just before
+the "Example for a Codec Device" at the end.
+
+Regards,
+
+	Hans
+
+>  
+>  Return Value
+>  ============
+> 
 
