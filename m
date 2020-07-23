@@ -2,119 +2,126 @@ Return-Path: <SRS0=QjF1=BC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7BFAC433E4
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 08:10:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F1C2C433E8
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 11:27:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 92A8220709
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 08:10:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 508FA20709
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 11:27:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="RcM+VRiD"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="i9aYwbXd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726330AbgGWIKm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Jul 2020 04:10:42 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:47743 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725858AbgGWIKm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Jul 2020 04:10:42 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id yWJHjzu6MuuXOyWJIj8xiI; Thu, 23 Jul 2020 10:10:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1595491839; bh=S4EgoCbBmTgeGbV3FNpEwzrs8Seq7SlB0q88PTB/Mg4=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=RcM+VRiD8st0V/BJSf2L9MvhUo0T8OyRhqfznuVlPCajuoUlCnjB+2Z4FDo/qPraQ
-         Jc9L1m3XOA7bSxoFe3VUP9FRh130sr07z79w51IRnUlgXp8elE7boYyu0R9NDRC6ty
-         VD2fZx4HimeIgxOnL1lC0SuWfIf5b47hpaHqi2Cs7tFWCXN3DybD8XpGXosfoNhZOU
-         TUTvJS3k7LTRKjElL9LC8h7RFTFo/V7nh1geXg1mhaZ4Ik0uKt1xGk9iPIIU9wXuwT
-         4Sw+HeFsvhs7ozb2AQWCp0u94SpMvLNXm6fZJ1dtC4+NICYAyGsE95rG6T424CZgcW
-         g1P2h4N2m3l1A==
-Subject: Re: [PATCH v3,1/2] media: v4l UAPI: add
- V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>
-References: <20200701093522.8521-1-yunfei.dong@mediatek.com>
- <20200701093522.8521-2-yunfei.dong@mediatek.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <047b49b0-53d4-3ddf-e629-1686a6d4eb31@xs4all.nl>
-Date:   Thu, 23 Jul 2020 10:10:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200701093522.8521-2-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfFQN2IYlI+0IepjRuZ70GgrkpY9Ngx0UU6k7lKmM0epEF1LWTvJfQyRbUzdemzReVKMEfVECkSDwUvHCFqmC6WMTFU9/qdfF+EpUapAgHTBNveCH/J6N
- nK0IDmGmDsoRpHl7xhiH/Bz4mofLIkVPScuqHc2kMFhfE2eoYNdtXbnpfgwfrZDVVA/IGWIN5z8i2lAWY7qBwzETEzVoWtMgxjM1vplYXWvv3lXbKi7ETxm6
- 6QHvYAKqYhVStAtKkFeyFDOBHDLXEf8gpuDdsnNbbIQ02HC9zjz/W7ihTVdV2RaQ19lAZboxNUh7wdGr6m9+N5gGE+5wbpVw0cRz+4SZxUogco0tbkvwB4ZN
- EzW4ZDP5oQmwg+fA7nU68gleNtparGKVRvI1PmpqV1JualWfAvMAoFbJFgRSvs9Ws3WGMr+mqZGQB4/7Q6onnvwZay9aQ1wsK25IJOuvebncPdHgicn6oSbw
- LavBgbF6lhFEZ247AQerScfwAdjxvQ5YiRP6zp9cYbwAp1dCvhq1HPHHB7lNUQCVif9uX5aJCg/SWAW//v7OEapSGpa+uIKQ1gJR1rpZuUtDENL+1Dx3Jz/S
- oaPd6qO95uTtcPmmGS936jCgdoUSuD0iloZ2cKGp1yLzKQrI/3pvMsXXB1aFqzTTUxM0ABDsw7SdO+I9EE6azUpGamhAe8wMD3ud3hrShZc3jxyExKk2OoHE
- W6UVMGaaACw=
+        id S1728571AbgGWL1j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Jul 2020 07:27:39 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:52325 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728134AbgGWL1f (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 23 Jul 2020 07:27:35 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1595503655; h=References: In-Reply-To: Message-Id: Date:
+ Subject: Cc: To: From: Sender;
+ bh=yXX+zDjtzoUhuag45GK9cAM42D+4eQLi+FQrdJPM7bk=; b=i9aYwbXdoJLNGmzXcMAxySVPd0bnU0G9MBEAmykOlo1uR3W1N7H1aeBu7TYNP+qJSWQIzTXa
+ pUM+ntMPuOHOInw7ipyi89D6B6hYmEwh0p7Lx3fjgBfk2MMuAjJcJR4CNqVsAPlVtB4H8ADJ
+ oY5TQvYuHUx1jdXXfBbeidu2H+Q=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 5f19741bed710aec628887e8 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 23 Jul 2020 11:27:23
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id AA7ACC433C9; Thu, 23 Jul 2020 11:27:23 +0000 (UTC)
+Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4DFC4C43391;
+        Thu, 23 Jul 2020 11:27:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4DFC4C43391
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+To:     stanimir.varbanov@linaro.org, robh+dt@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>
+Subject: [PATCH v4 1/5] dt-bindings: media: venus: Add an optional power domain for perf voting
+Date:   Thu, 23 Jul 2020 16:56:48 +0530
+Message-Id: <1595503612-2901-2-git-send-email-rnayak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1595503612-2901-1-git-send-email-rnayak@codeaurora.org>
+References: <1595503612-2901-1-git-send-email-rnayak@codeaurora.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 01/07/2020 11:35, Yunfei Dong wrote:
-> This patch adds support for the V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS
-> flag. This flag is used for Read-only(Ro) Request.
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->  Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-> index b6d52083707b..7c7451773b8e 100644
-> --- a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-> +++ b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-> @@ -126,6 +126,7 @@ aborting or finishing any DMA in progress, an implicit
->  .. _V4L2-BUF-CAP-SUPPORTS-REQUESTS:
->  .. _V4L2-BUF-CAP-SUPPORTS-ORPHANED-BUFS:
->  .. _V4L2-BUF-CAP-SUPPORTS-M2M-HOLD-CAPTURE-BUF:
-> +.. _V4L2-BUF-CAP-SUPPORTS-RO-REQUESTS:
->  
->  .. cssclass:: longtable
->  
-> @@ -156,6 +157,9 @@ aborting or finishing any DMA in progress, an implicit
->        - Only valid for stateless decoders. If set, then userspace can set the
->          ``V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF`` flag to hold off on returning the
->  	capture buffer until the OUTPUT timestamp changes.
-> +    * - ``V4L2_BUF_CAP_SUPPORTS_RO_REQUESTS``
-> +      - 0x00000040
-> +      - This buffer type supports :ref:`requests <media-request-api>`.
+Venus needs to vote for the performance state of a power domain (cx)
+to be able to support DVFS. This 'cx' power domain is controlled by
+rpmh and is a common power domain (scalable) not specific to
+venus alone. This is optional in the sense that, leaving this power
+domain out does not really impact the functionality but just makes
+the platform a little less power efficient.
 
-This is wrong, it supports *read-only* requests.
+Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+---
+ Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml    | 6 +++++-
+ Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml | 6 +++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-Also, Documentation/userspace-api/media/mediactl/request-api.rst should mention
-read-only requests: I think a new section "Read-Only Requests" explaining the
-purpose and use of such requests would be best. It can be inserted just before
-the "Example for a Codec Device" at the end.
-
-Regards,
-
-	Hans
-
->  
->  Return Value
->  ============
-> 
+diff --git a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
+index 55f2d67..04e303b 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
+@@ -25,12 +25,16 @@ properties:
+     maxItems: 1
+ 
+   power-domains:
+-    maxItems: 2
++    minItems: 2
++    maxItems: 3
+ 
+   power-domain-names:
++    minItems: 2
++    maxItems: 3
+     items:
+       - const: venus
+       - const: vcodec0
++      - const: cx
+ 
+   clocks:
+     maxItems: 5
+diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
+index 157dff8..90013d4 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
+@@ -25,13 +25,17 @@ properties:
+     maxItems: 1
+ 
+   power-domains:
+-    maxItems: 3
++    minItems: 3
++    maxItems: 4
+ 
+   power-domain-names:
++    minItems: 3
++    maxItems: 4
+     items:
+       - const: venus
+       - const: vcodec0
+       - const: vcodec1
++      - const: cx
+ 
+   clocks:
+     maxItems: 7
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
