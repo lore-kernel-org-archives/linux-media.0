@@ -7,34 +7,31 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BA82C433F1
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 13:21:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B5F1C433EB
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 13:21:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 52126207BB
-	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 13:21:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20C1B207BB
+	for <linux-media@archiver.kernel.org>; Thu, 23 Jul 2020 13:21:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729147AbgGWNV1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Jul 2020 09:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729061AbgGWNVY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S1729130AbgGWNVY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 23 Jul 2020 09:21:24 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D00AC0619DC
-        for <linux-media@vger.kernel.org>; Thu, 23 Jul 2020 06:21:24 -0700 (PDT)
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48528 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729094AbgGWNVX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 23 Jul 2020 09:21:23 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id 8A1C0298A24
+        with ESMTPSA id 4CD3F298A1E
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
         dafna3@gmail.com, sakari.ailus@linux.intel.com, mchehab@kernel.org,
         tfiga@chromium.org
-Subject: [PATCH v3 08/10] media: staging: rkisp1: rsz: Add support to more YUV encoded mbus codes on src pad
-Date:   Thu, 23 Jul 2020 15:20:12 +0200
-Message-Id: <20200723132014.4597-9-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v3 06/10] media: staging: rkisp1: add a helper function to enumerate supported mbus formats on capture
+Date:   Thu, 23 Jul 2020 15:20:10 +0200
+Message-Id: <20200723132014.4597-7-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200723132014.4597-1-dafna.hirschfeld@collabora.com>
 References: <20200723132014.4597-1-dafna.hirschfeld@collabora.com>
@@ -43,129 +40,156 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support to more YUV encoded media bus formats on the resizer's
-source pad. The patch defines an array rkisp1_rsz_yuv_formats[]
-with the list of supported YUV media bus formats and their {hv}div
-values. The {hv}div are used in the function 'rkisp1_rsz_config'
-instead of the macros RKISP1_MBUS_FMT_(HV)DIV, and instead of
-checking the capture format.
+Add a function 'rkisp1_cap_enum_mbus_codes' that receive
+a pointer to 'v4l2_subdev_mbus_code_enum' and returns the
+next supported mbus format of the capture. The function
+assumes that pixel formats with identical 'mbus' are grouped
+together in the hardcoded arrays, therefore the order of the
+entries in the array 'rkisp1_sp_fmts' are adjusted.
+This function is a helper for the media bus enumeration of
+the source pad of the resizer entity.
 
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- drivers/staging/media/rkisp1/rkisp1-resizer.c | 66 ++++++++++++++-----
- 1 file changed, 48 insertions(+), 18 deletions(-)
+ drivers/staging/media/rkisp1/rkisp1-capture.c | 77 ++++++++++++-------
+ drivers/staging/media/rkisp1/rkisp1-common.h  |  8 ++
+ 2 files changed, 58 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-index 4e87c6f3f732..8f68a7be659f 100644
---- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
-@@ -16,8 +16,35 @@
- #define RKISP1_DEF_FMT MEDIA_BUS_FMT_YUYV8_2X8
- #define RKISP1_DEF_PIXEL_ENC V4L2_PIXEL_ENC_YUV
+diff --git a/drivers/staging/media/rkisp1/rkisp1-capture.c b/drivers/staging/media/rkisp1/rkisp1-capture.c
+index 5dd91b5f82a4..4dabd07a3da9 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-capture.c
++++ b/drivers/staging/media/rkisp1/rkisp1-capture.c
+@@ -112,6 +112,13 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_mp_fmts[] = {
+ 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
+ 		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+ 	},
++	/* yuv400 */
++	{
++		.fourcc = V4L2_PIX_FMT_GREY,
++		.uv_swap = 0,
++		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
++		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
++	},
+ 	/* yuv420 */
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_NV21,
+@@ -144,13 +151,6 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_mp_fmts[] = {
+ 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8,
+ 		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
+ 	},
+-	/* yuv400 */
+-	{
+-		.fourcc = V4L2_PIX_FMT_GREY,
+-		.uv_swap = 0,
+-		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
+-		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+-	},
+ 	/* raw */
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_SRGGB8,
+@@ -236,6 +236,26 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
+ 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
+ 		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+ 	},
++	/* yuv400 */
++	{
++		.fourcc = V4L2_PIX_FMT_GREY,
++		.uv_swap = 0,
++		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
++		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV400,
++		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
++	},
++	/* rgb */
++	{
++		.fourcc = V4L2_PIX_FMT_XBGR32,
++		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
++		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_RGB888,
++		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
++	}, {
++		.fourcc = V4L2_PIX_FMT_RGB565,
++		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
++		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_RGB565,
++		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
++	},
+ 	/* yuv420 */
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_NV21,
+@@ -274,26 +294,6 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
+ 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV420,
+ 		.mbus = MEDIA_BUS_FMT_YUYV8_1_5X8,
+ 	},
+-	/* yuv400 */
+-	{
+-		.fourcc = V4L2_PIX_FMT_GREY,
+-		.uv_swap = 0,
+-		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
+-		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV400,
+-		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+-	},
+-	/* rgb */
+-	{
+-		.fourcc = V4L2_PIX_FMT_XBGR32,
+-		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
+-		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_RGB888,
+-		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+-	}, {
+-		.fourcc = V4L2_PIX_FMT_RGB565,
+-		.write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
+-		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_RGB565,
+-		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+-	},
+ };
  
--#define RKISP1_MBUS_FMT_HDIV 2
--#define RKISP1_MBUS_FMT_VDIV 1
-+struct rkisp1_rsz_yuv_mbus_info {
-+	u32 mbus_code;
-+	u32 hdiv;
-+	u32 vdiv;
-+};
-+
-+static const struct rkisp1_rsz_yuv_mbus_info rkisp1_rsz_yuv_src_formats[] = {
-+	{
-+		.mbus_code	= MEDIA_BUS_FMT_YUYV8_2X8, /* YUV422 */
-+		.hdiv		= 2,
-+		.vdiv		= 1,
-+	},
-+	{
-+		.mbus_code	= MEDIA_BUS_FMT_YUYV8_1_5X8, /* YUV420 */
-+		.hdiv		= 2,
-+		.vdiv		= 2,
-+	},
-+};
-+
-+static const struct rkisp1_rsz_yuv_mbus_info *rkisp1_rsz_yuv_mbus_info(u32 mbus_code)
+ static const struct rkisp1_capture_config rkisp1_capture_config_mp = {
+@@ -334,6 +334,29 @@ rkisp1_vdev_to_node(struct video_device *vdev)
+ 	return container_of(vdev, struct rkisp1_vdev_node, vdev);
+ }
+ 
++int rkisp1_cap_enum_mbus_codes(struct rkisp1_capture *cap,
++			       struct v4l2_subdev_mbus_code_enum *code)
 +{
-+	unsigned int i;
++	const struct rkisp1_capture_fmt_cfg *fmts = cap->config->fmts;
++	u32 curr_mbus = fmts[0].mbus;
++	int i, n = 0;
 +
-+	for (i = 0; i < ARRAY_SIZE(rkisp1_rsz_yuv_src_formats); i++)
-+		if (rkisp1_rsz_yuv_src_formats[i].mbus_code == mbus_code)
-+			return &rkisp1_rsz_yuv_src_formats[i];
-+
-+	return NULL;
-+}
- 
- enum rkisp1_shadow_regs_when {
- 	RKISP1_SHADOW_REGS_SYNC,
-@@ -361,16 +388,19 @@ static void rkisp1_rsz_config_regs(struct rkisp1_resizer *rsz,
- static void rkisp1_rsz_config(struct rkisp1_resizer *rsz,
- 			      enum rkisp1_shadow_regs_when when)
- {
--	u8 hdiv = RKISP1_MBUS_FMT_HDIV, vdiv = RKISP1_MBUS_FMT_VDIV;
-+	const struct rkisp1_rsz_yuv_mbus_info *sink_yuv_info, *src_yuv_info;
- 	struct v4l2_rect sink_y, sink_c, src_y, src_c;
--	struct v4l2_mbus_framefmt *src_fmt;
-+	struct v4l2_mbus_framefmt *src_fmt, *sink_fmt;
- 	struct v4l2_rect *sink_crop;
--	struct rkisp1_capture *cap = &rsz->rkisp1->capture_devs[rsz->id];
- 
- 	sink_crop = rkisp1_rsz_get_pad_crop(rsz, NULL, RKISP1_RSZ_PAD_SINK,
- 					    V4L2_SUBDEV_FORMAT_ACTIVE);
- 	src_fmt = rkisp1_rsz_get_pad_fmt(rsz, NULL, RKISP1_RSZ_PAD_SRC,
- 					 V4L2_SUBDEV_FORMAT_ACTIVE);
-+	src_yuv_info = rkisp1_rsz_yuv_mbus_info(src_fmt->code);
-+	sink_fmt = rkisp1_rsz_get_pad_fmt(rsz, NULL, RKISP1_RSZ_PAD_SINK,
-+					  V4L2_SUBDEV_FORMAT_ACTIVE);
-+	sink_yuv_info = rkisp1_rsz_yuv_mbus_info(sink_fmt->code);
- 
- 	/*
- 	 * The resizer only works on yuv formats,
-@@ -386,25 +416,17 @@ static void rkisp1_rsz_config(struct rkisp1_resizer *rsz,
- 	src_y.width = src_fmt->width;
- 	src_y.height = src_fmt->height;
- 
--	sink_c.width = sink_y.width / RKISP1_MBUS_FMT_HDIV;
--	sink_c.height = sink_y.height / RKISP1_MBUS_FMT_VDIV;
-+	sink_c.width = sink_y.width / sink_yuv_info->hdiv;
-+	sink_c.height = sink_y.height / sink_yuv_info->vdiv;
- 
- 	/*
- 	 * The resizer is used not only to change the dimensions of the frame
- 	 * but also to change the scale for YUV formats,
- 	 * (4:2:2 -> 4:2:0 for example). So the width/height of the CbCr
--	 * streams should be set according to the pixel format in the capture.
--	 * The resizer always gets the input as YUV422. If the capture format
--	 * is RGB then the memory input should be YUV422 so we don't change the
--	 * default hdiv, vdiv in that case.
-+	 * streams should be set according to the media bus format in the src pad.
- 	 */
--	if (v4l2_is_format_yuv(cap->pix.info)) {
--		hdiv = cap->pix.info->hdiv;
--		vdiv = cap->pix.info->vdiv;
--	}
--
--	src_c.width = src_y.width / hdiv;
--	src_c.height = src_y.height / vdiv;
-+	src_c.width = src_y.width / src_yuv_info->hdiv;
-+	src_c.height = src_y.height / src_yuv_info->vdiv;
- 
- 	if (sink_c.width == src_c.width && sink_c.height == src_c.height) {
- 		rkisp1_rsz_disable(rsz, when);
-@@ -499,6 +521,14 @@ static void rkisp1_rsz_set_src_fmt(struct rkisp1_resizer *rsz,
- 	struct v4l2_mbus_framefmt *src_fmt;
- 
- 	src_fmt = rkisp1_rsz_get_pad_fmt(rsz, cfg, RKISP1_RSZ_PAD_SRC, which);
-+	if (rsz->pixel_enc == V4L2_PIXEL_ENC_YUV) {
-+		const struct rkisp1_rsz_yuv_mbus_info *fmt =
-+			rkisp1_rsz_yuv_mbus_info(format->code);
-+
-+		if (fmt)
-+			src_fmt->code = format->code;
++	if (code->index == 0) {
++		code->code = fmts[0].mbus;
++		return 0;
 +	}
 +
- 	src_fmt->width = clamp_t(u32, format->width,
- 				 rsz->config->min_rsz_width,
- 				 rsz->config->max_rsz_width);
++	for (i = 1; i < cap->config->fmt_size; i++)
++		if (fmts[i].mbus != curr_mbus) {
++			curr_mbus = fmts[i].mbus;
++			if (++n == code->index) {
++				code->code = curr_mbus;
++				return 0;
++			}
++		}
++	return -EINVAL;
++}
++
+ /* ----------------------------------------------------------------------------
+  * Stream operations for self-picture path (sp) and main-picture path (mp)
+  */
+diff --git a/drivers/staging/media/rkisp1/rkisp1-common.h b/drivers/staging/media/rkisp1/rkisp1-common.h
+index 3dc51d703f73..73e1963cc47a 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-common.h
++++ b/drivers/staging/media/rkisp1/rkisp1-common.h
+@@ -297,6 +297,14 @@ static inline u32 rkisp1_read(struct rkisp1_device *rkisp1, unsigned int addr)
+ 	return readl(rkisp1->base_addr + addr);
+ }
+ 
++/*
++ * rkisp1_cap_enum_mbus_codes - A helper function that return the i'th supported mbus code
++ *				of the capture entity. This is used to enumerate the supported
++ *				mbus codes on the source pad of the resizer.
++ */
++int rkisp1_cap_enum_mbus_codes(struct rkisp1_capture *cap,
++			       struct v4l2_subdev_mbus_code_enum *code);
++
+ void rkisp1_sd_adjust_crop_rect(struct v4l2_rect *crop,
+ 				const struct v4l2_rect *bounds);
+ 
 -- 
 2.17.1
 
