@@ -2,129 +2,91 @@ Return-Path: <SRS0=bEPg=BD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1438CC433E4
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 15:08:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8BF8C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 15:21:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBE80206D7
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 15:08:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8822C206E3
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 15:21:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726892AbgGXPIZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Jul 2020 11:08:25 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:42486 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726366AbgGXPIY (ORCPT
+        id S1726424AbgGXPV0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Jul 2020 11:21:26 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35208 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbgGXPVZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Jul 2020 11:08:24 -0400
-X-IronPort-AV: E=Sophos;i="5.75,391,1589209200"; 
-   d="scan'208";a="52963390"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 25 Jul 2020 00:08:23 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id A16C54005E3C;
-        Sat, 25 Jul 2020 00:08:21 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 1/2] media: i2c: ov772x: Add support for BT656 mode
-Date:   Fri, 24 Jul 2020 16:08:15 +0100
-Message-Id: <1595603296-25903-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1595603296-25903-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1595603296-25903-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Fri, 24 Jul 2020 11:21:25 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: koike)
+        with ESMTPSA id B7DE129925A
+Subject: Re: [PATCH 1/4] media: staging: rkisp1: remove two unused fields in
+ uapi struct
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
+        dafna3@gmail.com, sakari.ailus@linux.intel.com,
+        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
+        tfiga@chromium.org
+References: <20200625185017.16493-1-dafna.hirschfeld@collabora.com>
+ <20200625185017.16493-2-dafna.hirschfeld@collabora.com>
+From:   Helen Koike <helen.koike@collabora.com>
+Message-ID: <183bc35a-e3ad-1558-c132-245192d94d35@collabora.com>
+Date:   Fri, 24 Jul 2020 12:21:16 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200625185017.16493-2-dafna.hirschfeld@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support to read the bus-type and enable BT656 mode if needed.
+Hi Dafna,
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- drivers/media/i2c/ov772x.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
-index 2cc6a67..3b7dfba 100644
---- a/drivers/media/i2c/ov772x.c
-+++ b/drivers/media/i2c/ov772x.c
-@@ -31,6 +31,7 @@
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-event.h>
-+#include <media/v4l2-fwnode.h>
- #include <media/v4l2-image-sizes.h>
- #include <media/v4l2-subdev.h>
- 
-@@ -434,6 +435,7 @@ struct ov772x_priv {
- #ifdef CONFIG_MEDIA_CONTROLLER
- 	struct media_pad pad;
- #endif
-+	struct v4l2_fwnode_endpoint ep;
- };
- 
- /*
-@@ -585,7 +587,6 @@ static int ov772x_s_stream(struct v4l2_subdev *sd, int enable)
- 				 enable ? 0 : SOFT_SLEEP_MODE);
- 	if (ret)
- 		goto done;
--
- 	if (enable) {
- 		dev_dbg(&client->dev, "format %d, win %s\n",
- 			priv->cfmt->code, priv->win->name);
-@@ -1104,7 +1105,10 @@ static int ov772x_set_params(struct ov772x_priv *priv,
- 		goto ov772x_set_fmt_error;
- 
- 	/* COM7: Sensor resolution and output format control. */
--	ret = regmap_write(priv->regmap, COM7, win->com7_bit | cfmt->com7);
-+	val = win->com7_bit | cfmt->com7;
-+	if (priv->ep.bus_type == V4L2_MBUS_BT656)
-+		val |= ITU656_ON_OFF;
-+	ret = regmap_write(priv->regmap, COM7, val);
- 	if (ret < 0)
- 		goto ov772x_set_fmt_error;
- 
-@@ -1354,6 +1358,7 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
- 
- static int ov772x_probe(struct i2c_client *client)
- {
-+	struct fwnode_handle *endpoint;
- 	struct ov772x_priv	*priv;
- 	int			ret;
- 	static const struct regmap_config ov772x_regmap_config = {
-@@ -1415,6 +1420,20 @@ static int ov772x_probe(struct i2c_client *client)
- 		goto error_clk_put;
- 	}
- 
-+	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
-+						  NULL);
-+	if (!endpoint) {
-+		dev_err(&client->dev, "endpoint node not found\n");
-+		goto error_clk_put;
-+	}
-+
-+	ret = v4l2_fwnode_endpoint_parse(endpoint, &priv->ep);
-+	fwnode_handle_put(endpoint);
-+	if (ret) {
-+		dev_err(&client->dev, "Could not parse endpoint\n");
-+		goto error_clk_put;
-+	}
-+
- 	ret = ov772x_video_probe(priv);
- 	if (ret < 0)
- 		goto error_gpio_put;
--- 
-2.7.4
+On 6/25/20 3:50 PM, Dafna Hirschfeld wrote:
+> The fields 'config_width', 'config_height' in struct
+> 'rkisp1_cif_isp_lsc_config' are not used by the driver and
+> therefore are not needed. This patch removes them.
+> In later patch, documentation of the fields in struct
+> 'rkisp1_cif_isp_lsc_config' will be added.
+> 
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> ---
+>  drivers/staging/media/rkisp1/uapi/rkisp1-config.h | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
+> index ca0d031b14ac..7331bacf7dfd 100644
+> --- a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
+> +++ b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
+> @@ -285,8 +285,6 @@ struct rkisp1_cif_isp_lsc_config {
+>  
+>  	__u32 x_size_tbl[RKISP1_CIF_ISP_LSC_SIZE_TBL_SIZE];
+>  	__u32 y_size_tbl[RKISP1_CIF_ISP_LSC_SIZE_TBL_SIZE];
+> -	__u16 config_width;
+> -	__u16 config_height;
+>  } __packed;
+>  
+>  /**
+> 
 
+
+I was checking the Rockchip 3A library API, and they use these fields on:
+
+https://github.com/rockchip-linux/camera_engine_rkisp/blob/master/rkisp/ia-engine/include/ia/rk_aiq_types.h#L409
+
+Which I'm not sure what it means tbh, so I would rather leave these fields (with a comment to say it is not used
+by the driver) just in case it is useful in the future.
+Ideally we should try to understand what this field does to make a decision.
+
+Regards,
+Helen
