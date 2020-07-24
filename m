@@ -7,57 +7,57 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47015C433EC
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 12:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07EE2C433E8
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 12:02:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 257CF20737
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 12:02:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA9CC20737
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 12:02:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="Y9nHFo1t"
+	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="VeE6kkrh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728033AbgGXMCm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Jul 2020 08:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
+        id S1727900AbgGXMCi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Jul 2020 08:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727991AbgGXMCk (ORCPT
+        with ESMTP id S1726975AbgGXMCc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Jul 2020 08:02:40 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A12C0619E4
-        for <linux-media@vger.kernel.org>; Fri, 24 Jul 2020 05:02:40 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id s26so4990283pfm.4
-        for <linux-media@vger.kernel.org>; Fri, 24 Jul 2020 05:02:40 -0700 (PDT)
+        Fri, 24 Jul 2020 08:02:32 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990FDC0619D3
+        for <linux-media@vger.kernel.org>; Fri, 24 Jul 2020 05:02:32 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id l6so4322470plt.7
+        for <linux-media@vger.kernel.org>; Fri, 24 Jul 2020 05:02:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=es-iitr-ac-in.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VKngwrDwYgMZRpBa5N9RttIghmCEGJz3vjqXKKgCKYk=;
-        b=Y9nHFo1tSKAnjffVi8kwBLAhbHp18RkjpUlSYPHC5SLF6ED+aAi8ub0ltlRPvNOo6m
-         jyRVYf50yN+B368eh0I9OOPp0FGE2rVkkkPe8Dl0zntj2+6UtzM9TT8LnXYpEviCFHnj
-         AO9WiXksWr8YJUBFdDCP05mzFPBm1kVCvZhEtHv6WVMgvxDwG4o0KIb6CTSZTXjfwA32
-         QTJ1McDzGMLXsUqcr4K/Hc52U/uZzAh0FtwjJfxcmknTx4AfjUNamWAvycYFBFyqWW2f
-         kP05t82lXJJmJCjHWHPoH3FY+lH2DDHsI2quYHe4UVCQ5LZWaRC3UsO+iuPw0c5NqJiV
-         O3Og==
+        bh=Cvnh2hEgqr+H3PqRAzGMgrE9Ro4XZW4OvEzfzGD53mo=;
+        b=VeE6kkrhkfhNP5LUcTBQH11gWeFF2+m6gYWJQs7hF4vvMOESDioBiAvItJzO2SMFbK
+         8FCqkBz8VjNAQkhBINnbqgV765p/yY2MKpyR4pbsPScOW6XqETJq3/hC8OqcV1u/nyIE
+         hMUwPK0tvMmRutyClsFgP7hCPQTUJsihOINYnmTVNYLXqJ8rkWEPfnMB81qnj645CWZs
+         dN700jzBqr3D81QOg2wZtaTObxl7GCECZHV90gHavWW8j3JFlJ1C9JeyqdtW6qXJZtSo
+         qIzIT2xN8tCc1kIhTppQog0LsNo2J49gakquKZFtFBoH/c3FduITekszQUZJPtJ2NeuW
+         GzPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VKngwrDwYgMZRpBa5N9RttIghmCEGJz3vjqXKKgCKYk=;
-        b=I29Jk0fGSoEuwV6GaHqQdkFpqKqcBBZXIgGrV/vQXFJjy7BEciLMyLjzBzK9aCeOBB
-         q0bo3ZpvzkMQ0mM9Cg6nX1xnhvdfRu/m9qVkf3h6Zj7VSLxFMw60uVEiur6aw2muhWZB
-         uhrRPHCaGH3rc35kBzJRv6NJ6c0nGcBiW2wk6xyo58N8/KSaCMYDw6FXkFzwqD8P+fpk
-         i6m//VRxXyYGkx8ZRdmJGJesNkd3/f2xoC0lqKMNFx94FtRNKRxVnEbexiNqleaG3RUg
-         ILKT6hJNvzwR0+Z7ZVnI0HtGvRm4oKlp83eKWhL+QZZxCWyEK2a7X7c1GKM6Bk3X1DvJ
-         hqcQ==
-X-Gm-Message-State: AOAM532XbMToqLUU2o6hgTqxXf6skPFf5QEGZBheATIrrj8T6kvMkUa4
-        QWaioDcLzpfo8WCkRFQY5B4O3g==
-X-Google-Smtp-Source: ABdhPJzGkOww4gi9LFKtV7dptKqSu31UyPoqgTqsxr4uMsEnNXSe4O6qsjXXwcf2My8/R09yVCrJew==
-X-Received: by 2002:a62:e217:: with SMTP id a23mr8616963pfi.257.1595592160037;
-        Fri, 24 Jul 2020 05:02:40 -0700 (PDT)
+        bh=Cvnh2hEgqr+H3PqRAzGMgrE9Ro4XZW4OvEzfzGD53mo=;
+        b=SGj8GnPbPzVLsmsbUPnppy2v1ltxYo3cmzLlK7yh7kqoeQoL1BKd3KBWGqVbjmLsAw
+         1UR6TkwtMF/LzuiovW4OL4+XN+NtPAmARcw/7PbfgnuGnOSZC13rCyfjBcIIh5E0Ad5I
+         eeOzJipf3WnC5hcH/AkU+1cmbWsYhFHQ04zafyvLsEndscn8W8XXgWzWFiRa0hLTW9z9
+         NnlXYesdt/ValyCPA0jfW9eVD4hA/WqtVc24qKwVS6ZENmUeMrSeiRVMQC6enE9Msr7v
+         G34MfFO/RwAOr8TdV4AOupxXiZ1NI5vpR98dwjnJDA7fCFX02PdxVMnZ9VKWyLZASNMX
+         PdKg==
+X-Gm-Message-State: AOAM533QJslOr9r+wy6VZR/F156TlCbrH0J9DyDbmtIbAuwQE/HIbBBM
+        hesoI44lg3nLiifeZMN9FbwhXA==
+X-Google-Smtp-Source: ABdhPJx1KpkTSIokD3l7fY0gnmrHS9A2ucrNiBW4LSWWu0NAn1vNg+7QQ5JqFjd577c75UP4IxamzA==
+X-Received: by 2002:a17:90b:4b84:: with SMTP id lr4mr4891056pjb.111.1595592151966;
+        Fri, 24 Jul 2020 05:02:31 -0700 (PDT)
 Received: from kaaira-HP-Pavilion-Notebook ([103.113.213.178])
-        by smtp.gmail.com with ESMTPSA id w71sm6455658pfd.6.2020.07.24.05.02.38
+        by smtp.gmail.com with ESMTPSA id h15sm6293300pfo.192.2020.07.24.05.02.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2020 05:02:39 -0700 (PDT)
+        Fri, 24 Jul 2020 05:02:31 -0700 (PDT)
 From:   Kaaira Gupta <kgupta@es.iitr.ac.in>
 To:     Helen Koike <helen.koike@collabora.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -66,9 +66,9 @@ To:     Helen Koike <helen.koike@collabora.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
 Cc:     Kaaira Gupta <kgupta@es.iitr.ac.in>
-Subject: [PATCH v2 3/3] media: vimc: Join pipeline if one already exists
-Date:   Fri, 24 Jul 2020 17:32:13 +0530
-Message-Id: <20200724120213.17119-4-kgupta@es.iitr.ac.in>
+Subject: [PATCH v2 1/3] media: vimc: Add usage count to subdevices
+Date:   Fri, 24 Jul 2020 17:32:11 +0530
+Message-Id: <20200724120213.17119-2-kgupta@es.iitr.ac.in>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200724120213.17119-1-kgupta@es.iitr.ac.in>
 References: <20200724120213.17119-1-kgupta@es.iitr.ac.in>
@@ -80,80 +80,148 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-An output which is running is already part of a pipeline and trying to
-start a new pipeline is not possible. This prevents two capture devices
-from streaming at the same time.
+Prepare for multiple video streams from the same sensor by adding a use
+counter to each subdevice. The counter is increased for every s_stream(1)
+and decremented for every s_stream(0) call.
 
-Instead of failing to start the second capture device allow it to join
-the already running pipeline. This allows two (or more) capture devices
-to independently be started and stopped.
+The subdevice stream is not started or stopped unless the usage count go
+from 0 to 1 (started) or from 1 to 0 (stopped). This allows for multiple
+s_stream() calls to try to either start or stop the device while only
+the first/last call will actually effect the state of the device.
 
-[Kaaira: Changed the search for an existing connected sensor, to search
-for a non-NULL pipe instead, this helps to terminate the search at
-output itself instead of going till the sensor, changed variable names,
-commit message and conditions accordingly]
+[Kaaira: rebased the patch on current HEAD of media-tree
+(8f2a4a9d5ff5202d0b3e3a144ebb9b67aabadd29)]
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
 Signed-off-by: Kaaira Gupta <kgupta@es.iitr.ac.in>
 ---
- .../media/test-drivers/vimc/vimc-capture.c    | 35 ++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+ drivers/media/test-drivers/vimc/vimc-debayer.c | 8 ++++++++
+ drivers/media/test-drivers/vimc/vimc-scaler.c  | 8 ++++++++
+ drivers/media/test-drivers/vimc/vimc-sensor.c  | 9 ++++++++-
+ 3 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/test-drivers/vimc/vimc-capture.c b/drivers/media/test-drivers/vimc/vimc-capture.c
-index c63496b17b9a..423d5e5a508d 100644
---- a/drivers/media/test-drivers/vimc/vimc-capture.c
-+++ b/drivers/media/test-drivers/vimc/vimc-capture.c
-@@ -237,16 +237,49 @@ static void vimc_cap_return_all_buffers(struct vimc_cap_device *vcap,
- 	spin_unlock(&vcap->qlock);
- }
+diff --git a/drivers/media/test-drivers/vimc/vimc-debayer.c b/drivers/media/test-drivers/vimc/vimc-debayer.c
+index c3f6fef34f68..93fe19d8d2b4 100644
+--- a/drivers/media/test-drivers/vimc/vimc-debayer.c
++++ b/drivers/media/test-drivers/vimc/vimc-debayer.c
+@@ -29,6 +29,7 @@ struct vimc_deb_pix_map {
+ struct vimc_deb_device {
+ 	struct vimc_ent_device ved;
+ 	struct v4l2_subdev sd;
++	atomic_t use_count;
+ 	/* The active format */
+ 	struct v4l2_mbus_framefmt sink_fmt;
+ 	u32 src_code;
+@@ -343,6 +344,9 @@ static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
+ 		const struct vimc_pix_map *vpix;
+ 		unsigned int frame_size;
  
-+static struct media_entity *vimc_cap_get_output(struct vimc_cap_device *vcap)
-+{
-+	struct media_entity *entity = &vcap->vdev.entity;
-+	struct media_device *mdev = entity->graph_obj.mdev;
-+	struct media_graph graph;
++		if (atomic_inc_return(&vdeb->use_count) != 1)
++			return 0;
 +
-+	mutex_lock(&mdev->graph_mutex);
-+	if (media_graph_walk_init(&graph, mdev)) {
-+		mutex_unlock(&mdev->graph_mutex);
-+		return NULL;
-+	}
-+
-+	media_graph_walk_start(&graph, entity);
-+
-+	while ((entity = media_graph_walk_next(&graph)))
-+		if (entity->pipe)
-+			break;
-+
-+	mutex_unlock(&mdev->graph_mutex);
-+
-+	media_graph_walk_cleanup(&graph);
-+
-+	return entity;
-+}
-+
- static int vimc_cap_start_streaming(struct vb2_queue *vq, unsigned int count)
- {
- 	struct vimc_cap_device *vcap = vb2_get_drv_priv(vq);
- 	struct media_entity *entity = &vcap->vdev.entity;
-+	struct media_pipeline *pipe = NULL;
-+	struct media_entity *oent;
- 	int ret;
+ 		if (vdeb->src_frame)
+ 			return 0;
  
- 	vcap->sequence = 0;
+@@ -368,6 +372,9 @@ static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
+ 			return -ENOMEM;
  
- 	/* Start the media pipeline */
--	ret = media_pipeline_start(entity, &vcap->stream.pipe);
-+	oent = vimc_cap_get_output(vcap);
-+	if (oent)
-+		pipe = oent->pipe;
-+	else
-+		pipe = &vcap->stream.pipe;
+ 	} else {
++		if (atomic_dec_return(&vdeb->use_count) != 0)
++			return 0;
 +
-+	ret = media_pipeline_start(entity, pipe);
- 	if (ret) {
- 		vimc_cap_return_all_buffers(vcap, VB2_BUF_STATE_QUEUED);
- 		return ret;
+ 		if (!vdeb->src_frame)
+ 			return 0;
+ 
+@@ -595,6 +602,7 @@ static struct vimc_ent_device *vimc_deb_add(struct vimc_device *vimc,
+ 	vdeb->ved.process_frame = vimc_deb_process_frame;
+ 	vdeb->ved.dev = vimc->mdev.dev;
+ 	vdeb->mean_win_size = vimc_deb_ctrl_mean_win_size.def;
++	atomic_set(&vdeb->use_count, 0);
+ 
+ 	/* Initialize the frame format */
+ 	vdeb->sink_fmt = sink_fmt_default;
+diff --git a/drivers/media/test-drivers/vimc/vimc-scaler.c b/drivers/media/test-drivers/vimc/vimc-scaler.c
+index 121fa7d62a2e..9b8458dbe57c 100644
+--- a/drivers/media/test-drivers/vimc/vimc-scaler.c
++++ b/drivers/media/test-drivers/vimc/vimc-scaler.c
+@@ -25,6 +25,7 @@ MODULE_PARM_DESC(sca_mult, " the image size multiplier");
+ struct vimc_sca_device {
+ 	struct vimc_ent_device ved;
+ 	struct v4l2_subdev sd;
++	atomic_t use_count;
+ 	/* NOTE: the source fmt is the same as the sink
+ 	 * with the width and hight multiplied by mult
+ 	 */
+@@ -340,6 +341,9 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
+ 		const struct vimc_pix_map *vpix;
+ 		unsigned int frame_size;
+ 
++		if (atomic_inc_return(&vsca->use_count) != 1)
++			return 0;
++
+ 		if (vsca->src_frame)
+ 			return 0;
+ 
+@@ -363,6 +367,9 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
+ 			return -ENOMEM;
+ 
+ 	} else {
++		if (atomic_dec_return(&vsca->use_count) != 0)
++			return 0;
++
+ 		if (!vsca->src_frame)
+ 			return 0;
+ 
+@@ -506,6 +513,7 @@ static struct vimc_ent_device *vimc_sca_add(struct vimc_device *vimc,
+ 
+ 	vsca->ved.process_frame = vimc_sca_process_frame;
+ 	vsca->ved.dev = vimc->mdev.dev;
++	atomic_set(&vsca->use_count, 0);
+ 
+ 	/* Initialize the frame format */
+ 	vsca->sink_fmt = sink_fmt_default;
+diff --git a/drivers/media/test-drivers/vimc/vimc-sensor.c b/drivers/media/test-drivers/vimc/vimc-sensor.c
+index ba5db5a150b4..dbe169604e71 100644
+--- a/drivers/media/test-drivers/vimc/vimc-sensor.c
++++ b/drivers/media/test-drivers/vimc/vimc-sensor.c
+@@ -24,6 +24,7 @@ struct vimc_sen_device {
+ 	struct vimc_ent_device ved;
+ 	struct v4l2_subdev sd;
+ 	struct tpg_data tpg;
++	atomic_t use_count;
+ 	u8 *frame;
+ 	enum vimc_sen_osd_mode osd_value;
+ 	u64 start_stream_ts;
+@@ -250,8 +251,10 @@ static int vimc_sen_s_stream(struct v4l2_subdev *sd, int enable)
+ 		const struct vimc_pix_map *vpix;
+ 		unsigned int frame_size;
+ 
+-		vsen->start_stream_ts = ktime_get_ns();
++		if (atomic_inc_return(&vsen->use_count) != 1)
++			return 0;
+ 
++		vsen->start_stream_ts = ktime_get_ns();
+ 		/* Calculate the frame size */
+ 		vpix = vimc_pix_map_by_code(vsen->mbus_format.code);
+ 		frame_size = vsen->mbus_format.width * vpix->bpp *
+@@ -270,6 +273,9 @@ static int vimc_sen_s_stream(struct v4l2_subdev *sd, int enable)
+ 
+ 	} else {
+ 
++		if (atomic_dec_return(&vsen->use_count) != 0)
++			return 0;
++
+ 		vfree(vsen->frame);
+ 		vsen->frame = NULL;
+ 	}
+@@ -430,6 +436,7 @@ static struct vimc_ent_device *vimc_sen_add(struct vimc_device *vimc,
+ 
+ 	vsen->ved.process_frame = vimc_sen_process_frame;
+ 	vsen->ved.dev = vimc->mdev.dev;
++	atomic_set(&vsen->use_count, 0);
+ 
+ 	/* Initialize the frame format */
+ 	vsen->mbus_format = fmt_default;
 -- 
 2.17.1
 
