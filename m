@@ -2,61 +2,62 @@ Return-Path: <SRS0=bEPg=BD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F19E8C433F2
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 12:02:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC9FBC433ED
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 12:02:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFB9520737
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 12:02:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84E3A20737
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 12:02:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="WjefxjKp"
+	dkim=pass (2048-bit key) header.d=es-iitr-ac-in.20150623.gappssmtp.com header.i=@es-iitr-ac-in.20150623.gappssmtp.com header.b="j64VirAV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727859AbgGXMCv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Jul 2020 08:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
+        id S1727880AbgGXMCi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Jul 2020 08:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726696AbgGXMC2 (ORCPT
+        with ESMTP id S1726689AbgGXMCh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Jul 2020 08:02:28 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D20C0619E4
-        for <linux-media@vger.kernel.org>; Fri, 24 Jul 2020 05:02:28 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id w126so4821330pfw.8
-        for <linux-media@vger.kernel.org>; Fri, 24 Jul 2020 05:02:28 -0700 (PDT)
+        Fri, 24 Jul 2020 08:02:37 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE8FC0619D3
+        for <linux-media@vger.kernel.org>; Fri, 24 Jul 2020 05:02:36 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id x8so4314051plm.10
+        for <linux-media@vger.kernel.org>; Fri, 24 Jul 2020 05:02:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=es-iitr-ac-in.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jD9j6opAZjPsy3NUA4rBVj0Mn4JgNhzYg7OVCYAcm1o=;
-        b=WjefxjKpwQYRJAw8+fhmEXe7R2Z9Ykf1di6zK8tOvYlFU3CZWul7kx1m3QMHmFmh8i
-         lbnjKbf79tLW+MpJScjd8llgAkR48TvpGKH6/D29dRaMPJMwfJ3Ohu6KlOA9IGHZDzln
-         we61sxpM/OJUwk5UgrsnEWVQz+yYIwC3acOtlHMx+qhJU6s6sl0DCn7xwQKQM3E2+6vJ
-         zWaBd7zZKHgKC7qWf3GO7jyjt4zZlEmi9gj7u19zr/37JxI0eeMdFkb4GnRfSyI4e1UT
-         pu/xZ0q5ytjhSXcxW4G41dS/ylaZVcHen4Wc35xt83Rd3Ym1SaJ1kAsF197sUmTooNrD
-         m5Zg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6aW+OAbXsp3FlPblfOXdNolvlbzdTC0MkCKKEXc8Ieo=;
+        b=j64VirAVnfq9D8gtEAgxq6H8YErCJSqcg/A3pTwm7JCYI1LmLeKkuVNSpCTl+0l0rJ
+         JMHlSzc+ErXAIGNo0oRshO3h+BJA3QNI6YrRZfEkamVXHWQoQ2Fi3W4rhjTNxm4DC1G4
+         UXROwf2VNkw2L4OncqKi21oEzrNTkCn3wNssPxW+7mbKrxjQgBr5W3Zof68SL1hTsN8y
+         tBsWFLtdgGacbfg6s3W3AXFO2WlaI7S+4gGijgey+w+ZU6U7D4CY8lRo5jEWazoaqOPg
+         Z/9VLDAW1OG3jjzRFW2/EY5SiTw6QCHBgYGggjIWZf9ow6yP97qFMc9T7jJLJHaGhhyW
+         F71Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jD9j6opAZjPsy3NUA4rBVj0Mn4JgNhzYg7OVCYAcm1o=;
-        b=GZbBgkzs2qRUBjqFonPzgno+AFOmwcos9xOscSw50wnj1wxU7IKSMy144r+10y1tyA
-         WCvSZuUwVFo/GS/XL5eLB8aJAHzxHz4HOWyInga/abRMmT6vn2YUzG2F55r8sIYrpJIL
-         Aw1qHBfZdo7/uCeoF/xdK3QdK4RpyLWQYiZNzs3CfPetdDqua6r/nvV1C7KbUsdaI1x8
-         UGwVB/yuNF9OrHSRXAQnKx5hYg90XvHEwcCR+9egoFTE9ln59XKymiYbiyndc3eMoCfr
-         EW1aO2qNrdQP4LWScZUH/zlNGtt5eN4CCltKrQFoYBG30DxTSSNNbNIy19oHsan36Kb9
-         nkDw==
-X-Gm-Message-State: AOAM533qYy8rie2JkNDC//PG4BeX/Nms6akXppKj8lZPKrfLwNHIKCGe
-        UicfGSBlf6DUUhJLvKPPxHuB3A==
-X-Google-Smtp-Source: ABdhPJwkTBH8ZPUfyKqhTdhf8safIlGUaU734H4KQFMiE4FD51jyGoAjD8Cm12hkJB9HJ4600Whhfw==
-X-Received: by 2002:a63:29c8:: with SMTP id p191mr8499852pgp.333.1595592147687;
-        Fri, 24 Jul 2020 05:02:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6aW+OAbXsp3FlPblfOXdNolvlbzdTC0MkCKKEXc8Ieo=;
+        b=Wz0q7pOilzBbIlTR3otp/V6ioGZ4Lvmw+k4y9LkVdxtjH0+E8FQzRa0Ay5zcAWGWH9
+         OjVpn5iLJMxMt5MC+e/UgWqPy7/H3WXavhM4iD3g2C+QIs4QaYdI7fxE3VnlSewm24Dn
+         NmkL54KVy6YYv8hyRNEvPuBlxFmMqXLz9/SYIVh2wKD6A1o8RxIJ81sR4UoiOCiYsvXk
+         UFt1UruhFD7TCtfMFZFKruUCwqJLtYVdpr32GjzrFto+OITdT+CyxaAIPhpipI9ETV0i
+         Ze3vycyY47lW/yNzOt3LxQWA6qWI5kY9MlasKDRc/WgFrg7nYT+ZO8Hr/Cv4DqMc60X1
+         4pmw==
+X-Gm-Message-State: AOAM532LyccBIMRnsFKXZRyAhySHXeHbiCUs1BCEDprHW7I+Fw6xRlNk
+        VTVPJ+6SSMYRe8DggVEbmGWyDA==
+X-Google-Smtp-Source: ABdhPJxiuz/K72vLYQtQ8sa8fff4jyWc+jbdFZOdXUoEWtTxg4EKvH1E1ViQFYVSWL5uFHbg81p+6A==
+X-Received: by 2002:a17:90a:26ac:: with SMTP id m41mr4880104pje.169.1595592156165;
+        Fri, 24 Jul 2020 05:02:36 -0700 (PDT)
 Received: from kaaira-HP-Pavilion-Notebook ([103.113.213.178])
-        by smtp.gmail.com with ESMTPSA id c23sm6154734pfo.32.2020.07.24.05.02.26
+        by smtp.gmail.com with ESMTPSA id w9sm5622318pfq.178.2020.07.24.05.02.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2020 05:02:26 -0700 (PDT)
+        Fri, 24 Jul 2020 05:02:35 -0700 (PDT)
 From:   Kaaira Gupta <kgupta@es.iitr.ac.in>
 To:     Helen Koike <helen.koike@collabora.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -65,10 +66,12 @@ To:     Helen Koike <helen.koike@collabora.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
 Cc:     Kaaira Gupta <kgupta@es.iitr.ac.in>
-Subject: [PATCH v2 0/3] media: vimc: Allow multiple capture devices to use the same sensor
-Date:   Fri, 24 Jul 2020 17:32:10 +0530
-Message-Id: <20200724120213.17119-1-kgupta@es.iitr.ac.in>
+Subject: [PATCH v2 2/3] media: vimc: Serialize vimc_streamer_s_stream()
+Date:   Fri, 24 Jul 2020 17:32:12 +0530
+Message-Id: <20200724120213.17119-3-kgupta@es.iitr.ac.in>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200724120213.17119-1-kgupta@es.iitr.ac.in>
+References: <20200724120213.17119-1-kgupta@es.iitr.ac.in>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -77,38 +80,91 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is version 2 of the patch series posted by Niklas for allowing
-multiple streams in VIMC.
-The original series can be found here:
-https://patchwork.kernel.org/cover/10948831/
+Prepare for multiple video streams from the same sensor by serializing
+vimc_streamer_s_stream(). Multiple streams will allow for multiple
+concurrent calls to this function that could involve the same
+subdevices.
 
-This series adds support for two (or more) capture devices to be 
-connected to the same sensors and run simultaneously. Each capture device 
-can be started and stopped independent of each other.
+If that happens the internal state of the involved subdevices could go
+out of sync as they are being started and stopped at the same time,
+prevent this by serializing starting and stopping of the vimc streamer.
 
-Patch 1/3 and 2/3 deals with solving the issues that arises once two 
-capture devices can be part of the same pipeline. While 3/3 allows for 
-two capture devices to be part of the same pipeline and thus allows for 
-simultaneously use.
+[Kaaira: rebased the patch on current HEAD of media-tree
+(8f2a4a9d5ff5202d0b3e3a144ebb9b67aabadd29)]
 
-Changes since v1:
-	- All three patches rebased on latest media-tree.
-	Patch 3:
-	- Search for an entity with a non-NULL pipe instead of searching
-	  for sensor. This terminates the search at output itself.
+Signed-off-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+Signed-off-by: Kaaira Gupta <kgupta@es.iitr.ac.in>
+---
+ .../media/test-drivers/vimc/vimc-streamer.c   | 23 ++++++++++++-------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-Kaaira Gupta (3):
-  media: vimc: Add usage count to subdevices
-  media: vimc: Serialize vimc_streamer_s_stream()
-  media: vimc: Join pipeline if one already exists
-
- .../media/test-drivers/vimc/vimc-capture.c    | 35 ++++++++++++++++++-
- .../media/test-drivers/vimc/vimc-debayer.c    |  8 +++++
- drivers/media/test-drivers/vimc/vimc-scaler.c |  8 +++++
- drivers/media/test-drivers/vimc/vimc-sensor.c |  9 ++++-
- .../media/test-drivers/vimc/vimc-streamer.c   | 23 +++++++-----
- 5 files changed, 73 insertions(+), 10 deletions(-)
-
+diff --git a/drivers/media/test-drivers/vimc/vimc-streamer.c b/drivers/media/test-drivers/vimc/vimc-streamer.c
+index 451a32c0d034..5cd2f86a146a 100644
+--- a/drivers/media/test-drivers/vimc/vimc-streamer.c
++++ b/drivers/media/test-drivers/vimc/vimc-streamer.c
+@@ -192,18 +192,23 @@ int vimc_streamer_s_stream(struct vimc_stream *stream,
+ 			   struct vimc_ent_device *ved,
+ 			   int enable)
+ {
++	static DEFINE_MUTEX(vimc_streamer_lock);
+ 	int ret;
+ 
+ 	if (!stream || !ved)
+ 		return -EINVAL;
+ 
++	ret = mutex_lock_interruptible(&vimc_streamer_lock);
++	if (ret)
++		return ret;
++
+ 	if (enable) {
+ 		if (stream->kthread)
+-			return 0;
++			goto out;
+ 
+ 		ret = vimc_streamer_pipeline_init(stream, ved);
+ 		if (ret)
+-			return ret;
++			goto out;
+ 
+ 		stream->kthread = kthread_run(vimc_streamer_thread, stream,
+ 					      "vimc-streamer thread");
+@@ -211,14 +216,12 @@ int vimc_streamer_s_stream(struct vimc_stream *stream,
+ 		if (IS_ERR(stream->kthread)) {
+ 			ret = PTR_ERR(stream->kthread);
+ 			dev_err(ved->dev, "kthread_run failed with %d\n", ret);
+-			vimc_streamer_pipeline_terminate(stream);
+-			stream->kthread = NULL;
+-			return ret;
++			goto out;
+ 		}
+ 
+ 	} else {
+ 		if (!stream->kthread)
+-			return 0;
++			goto out;
+ 
+ 		ret = kthread_stop(stream->kthread);
+ 		/*
+@@ -227,13 +230,17 @@ int vimc_streamer_s_stream(struct vimc_stream *stream,
+ 		 * a chance to run. Ignore errors to stop the stream in the
+ 		 * pipeline.
+ 		 */
+-		if (ret)
++		if (ret) {
+ 			dev_dbg(ved->dev, "kthread_stop returned '%d'\n", ret);
++			goto out;
++		}
+ 
+ 		stream->kthread = NULL;
+ 
+ 		vimc_streamer_pipeline_terminate(stream);
+ 	}
++out:
++	mutex_unlock(&vimc_streamer_lock);
+ 
+-	return 0;
++	return ret;
+ }
 -- 
 2.17.1
 
