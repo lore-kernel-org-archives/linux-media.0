@@ -2,108 +2,396 @@ Return-Path: <SRS0=bEPg=BD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94202C433E3
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 15:49:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56C0AC433E0
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 16:26:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C68C206F0
-	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 15:49:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34C06206EB
+	for <linux-media@archiver.kernel.org>; Fri, 24 Jul 2020 16:26:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbgGXPtG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Jul 2020 11:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
+        id S1726636AbgGXQ0I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Jul 2020 12:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726381AbgGXPtF (ORCPT
+        with ESMTP id S1726455AbgGXQ0H (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Jul 2020 11:49:05 -0400
+        Fri, 24 Jul 2020 12:26:07 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E22C0619D3
-        for <linux-media@vger.kernel.org>; Fri, 24 Jul 2020 08:49:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BF6C0619D3;
+        Fri, 24 Jul 2020 09:26:07 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: koike)
-        with ESMTPSA id 828592992C6
-Subject: Re: [PATCH 4/4] media: staging: rkisp1: change type of fields in
- 'rkisp1_cif_isp_lsc_config' from u32 to u16
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
-Cc:     ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com,
-        linux-rockchip@lists.infradead.org, mchehab@kernel.org,
-        tfiga@chromium.org
-References: <20200625185017.16493-1-dafna.hirschfeld@collabora.com>
- <20200625185017.16493-5-dafna.hirschfeld@collabora.com>
+        with ESMTPSA id BF34E29931C
 From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <5e7061c6-89e4-486f-e642-ed2374da38a7@collabora.com>
-Date:   Fri, 24 Jul 2020 12:48:57 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, hverkuil-cisco@xs4all.nl,
+        kernel@collabora.com, dafna.hirschfeld@collabora.com,
+        tfiga@chromium.org
+Subject: [PATCH] media: staging: rkisp1: uapi: remove __packed
+Date:   Fri, 24 Jul 2020 13:25:55 -0300
+Message-Id: <20200724162555.393631-1-helen.koike@collabora.com>
+X-Mailer: git-send-email 2.28.0.rc1
 MIME-Version: 1.0
-In-Reply-To: <20200625185017.16493-5-dafna.hirschfeld@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+The driver access struct's fields one by one, they are not blindly
+copied to/from the hardware, so we can remove __packed from the
+structs.
 
+Tested on Scarlet Chromebook with ChromeOS stack and verified images
+with the Camera app.
 
-On 6/25/20 3:50 PM, Dafna Hirschfeld wrote:
-> The fields in struct 'rkisp1_cif_isp_lsc_config' need to hold
-> values of 12 bits, therefore it is enough to declare them as u16.
-> 
-> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Signed-off-by: Helen Koike <helen.koike@collabora.com>
+---
+ .../staging/media/rkisp1/uapi/rkisp1-config.h | 76 +++++++++----------
+ 1 file changed, 38 insertions(+), 38 deletions(-)
 
-I see this comes from:
+diff --git a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
+index 8f9b061e5b6b6..dbcb5933185e3 100644
+--- a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
++++ b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
+@@ -163,7 +163,7 @@ struct rkisp1_cif_isp_window {
+ 	__u16 v_offs;
+ 	__u16 h_size;
+ 	__u16 v_size;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_bls_fixed_val - BLS fixed subtraction values
+@@ -181,7 +181,7 @@ struct rkisp1_cif_isp_bls_fixed_val {
+ 	__s16 gr;
+ 	__s16 gb;
+ 	__s16 b;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_bls_config - Configuration used by black level subtraction
+@@ -203,7 +203,7 @@ struct rkisp1_cif_isp_bls_config {
+ 	struct rkisp1_cif_isp_window bls_window2;
+ 	__u8 bls_samples;
+ 	struct rkisp1_cif_isp_bls_fixed_val fixed_val;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_dpcc_methods_config - Methods Configuration used by DPCC
+@@ -224,7 +224,7 @@ struct rkisp1_cif_isp_dpcc_methods_config {
+ 	__u32 pg_fac;
+ 	__u32 rnd_thresh;
+ 	__u32 rg_fac;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_dpcc_config - Configuration used by DPCC
+@@ -245,16 +245,16 @@ struct rkisp1_cif_isp_dpcc_config {
+ 	struct rkisp1_cif_isp_dpcc_methods_config methods[RKISP1_CIF_ISP_DPCC_METHODS_MAX];
+ 	__u32 ro_limits;
+ 	__u32 rnd_offs;
+-} __packed;
++};
+ 
+ struct rkisp1_cif_isp_gamma_corr_curve {
+ 	__u16 gamma_y[RKISP1_CIF_ISP_DEGAMMA_CURVE_SIZE];
+-} __packed;
++};
+ 
+ struct rkisp1_cif_isp_gamma_curve_x_axis_pnts {
+ 	__u32 gamma_dx0;
+ 	__u32 gamma_dx1;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_sdg_config - Configuration used by sensor degamma
+@@ -267,7 +267,7 @@ struct rkisp1_cif_isp_sdg_config {
+ 	struct rkisp1_cif_isp_gamma_corr_curve curve_g;
+ 	struct rkisp1_cif_isp_gamma_corr_curve curve_b;
+ 	struct rkisp1_cif_isp_gamma_curve_x_axis_pnts xa_pnts;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_lsc_config - Configuration used by Lens shading correction
+@@ -287,7 +287,7 @@ struct rkisp1_cif_isp_lsc_config {
+ 	__u32 y_size_tbl[RKISP1_CIF_ISP_LSC_SIZE_TBL_SIZE];
+ 	__u16 config_width;
+ 	__u16 config_height;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_ie_config - Configuration used by image effects
+@@ -308,7 +308,7 @@ struct rkisp1_cif_isp_ie_config {
+ 	__u16 eff_mat_4;
+ 	__u16 eff_mat_5;
+ 	__u16 eff_tint;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_cproc_config - Configuration used by Color Processing
+@@ -330,7 +330,7 @@ struct rkisp1_cif_isp_cproc_config {
+ 	__u8 brightness;
+ 	__u8 sat;
+ 	__u8 hue;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_awb_meas_config - Configuration used by auto white balance
+@@ -363,7 +363,7 @@ struct rkisp1_cif_isp_awb_meas_config {
+ 	__u8 awb_ref_cr;
+ 	__u8 awb_ref_cb;
+ 	__u8 enable_ymax_cmp;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_awb_gain_config - Configuration used by auto white balance gain
+@@ -375,7 +375,7 @@ struct rkisp1_cif_isp_awb_gain_config {
+ 	__u16 gain_green_r;
+ 	__u16 gain_blue;
+ 	__u16 gain_green_b;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_flt_config - Configuration used by ISP filtering
+@@ -403,7 +403,7 @@ struct rkisp1_cif_isp_flt_config {
+ 	__u32 fac_mid;
+ 	__u32 fac_bl0;
+ 	__u32 fac_bl1;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_bdm_config - Configuration used by Bayer DeMosaic
+@@ -412,7 +412,7 @@ struct rkisp1_cif_isp_flt_config {
+  */
+ struct rkisp1_cif_isp_bdm_config {
+ 	__u8 demosaic_th;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_ctk_config - Configuration used by Cross Talk correction
+@@ -433,7 +433,7 @@ struct rkisp1_cif_isp_ctk_config {
+ 	__u16 ct_offset_r;
+ 	__u16 ct_offset_g;
+ 	__u16 ct_offset_b;
+-} __packed;
++};
+ 
+ enum rkisp1_cif_isp_goc_mode {
+ 	RKISP1_CIF_ISP_GOC_MODE_LOGARITHMIC,
+@@ -449,7 +449,7 @@ enum rkisp1_cif_isp_goc_mode {
+ struct rkisp1_cif_isp_goc_config {
+ 	__u32 mode;
+ 	__u16 gamma_y[RKISP1_CIF_ISP_GAMMA_OUT_MAX_SAMPLES];
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_hst_config - Configuration used by Histogram
+@@ -465,7 +465,7 @@ struct rkisp1_cif_isp_hst_config {
+ 	__u8 histogram_predivider;
+ 	struct rkisp1_cif_isp_window meas_window;
+ 	__u8 hist_weight[RKISP1_CIF_ISP_HISTOGRAM_WEIGHT_GRIDS_SIZE];
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_aec_config - Configuration used by Auto Exposure Control
+@@ -478,7 +478,7 @@ struct rkisp1_cif_isp_aec_config {
+ 	__u32 mode;
+ 	__u32 autostop;
+ 	struct rkisp1_cif_isp_window meas_window;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_afc_config - Configuration used by Auto Focus Control
+@@ -494,7 +494,7 @@ struct rkisp1_cif_isp_afc_config {
+ 	struct rkisp1_cif_isp_window afm_win[RKISP1_CIF_ISP_AFM_MAX_WINDOWS];
+ 	__u32 thres;
+ 	__u32 var_shift;
+-} __packed;
++};
+ 
+ /**
+  * enum rkisp1_cif_isp_dpf_gain_usage - dpf gain usage
+@@ -549,7 +549,7 @@ enum rkisp1_cif_isp_dpf_nll_scale_mode {
+ struct rkisp1_cif_isp_dpf_nll {
+ 	__u16 coeff[RKISP1_CIF_ISP_DPF_MAX_NLF_COEFFS];
+ 	__u32 scale_mode;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_dpf_rb_flt - Red blue filter config
+@@ -565,7 +565,7 @@ struct rkisp1_cif_isp_dpf_rb_flt {
+ 	__u8 spatial_coeff[RKISP1_CIF_ISP_DPF_MAX_SPATIAL_COEFFS];
+ 	__u8 r_enable;
+ 	__u8 b_enable;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_dpf_g_flt - Green filter Configuration
+@@ -578,7 +578,7 @@ struct rkisp1_cif_isp_dpf_g_flt {
+ 	__u8 spatial_coeff[RKISP1_CIF_ISP_DPF_MAX_SPATIAL_COEFFS];
+ 	__u8 gr_enable;
+ 	__u8 gb_enable;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_dpf_gain - Noise function Configuration
+@@ -597,7 +597,7 @@ struct rkisp1_cif_isp_dpf_gain {
+ 	__u16 nf_b_gain;
+ 	__u16 nf_gr_gain;
+ 	__u16 nf_gb_gain;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_dpf_config - Configuration used by De-noising pre-filter
+@@ -612,7 +612,7 @@ struct rkisp1_cif_isp_dpf_config {
+ 	struct rkisp1_cif_isp_dpf_g_flt g_flt;
+ 	struct rkisp1_cif_isp_dpf_rb_flt rb_flt;
+ 	struct rkisp1_cif_isp_dpf_nll nll;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_dpf_strength_config - strength of the filter
+@@ -625,7 +625,7 @@ struct rkisp1_cif_isp_dpf_strength_config {
+ 	__u8 r;
+ 	__u8 g;
+ 	__u8 b;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_isp_other_cfg - Parameters for some blocks in rockchip isp1
+@@ -659,7 +659,7 @@ struct rkisp1_cif_isp_isp_other_cfg {
+ 	struct rkisp1_cif_isp_dpf_strength_config dpf_strength_config;
+ 	struct rkisp1_cif_isp_cproc_config cproc_config;
+ 	struct rkisp1_cif_isp_ie_config ie_config;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_isp_meas_cfg - Rockchip ISP1 Measure Parameters
+@@ -674,7 +674,7 @@ struct rkisp1_cif_isp_isp_meas_cfg {
+ 	struct rkisp1_cif_isp_hst_config hst_config;
+ 	struct rkisp1_cif_isp_aec_config aec_config;
+ 	struct rkisp1_cif_isp_afc_config afc_config;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_params_cfg - Rockchip ISP1 Input Parameters Meta Data
+@@ -693,7 +693,7 @@ struct rkisp1_params_cfg {
+ 
+ 	struct rkisp1_cif_isp_isp_meas_cfg meas;
+ 	struct rkisp1_cif_isp_isp_other_cfg others;
+-} __packed;
++};
+ 
+ /*---------- PART2: Measurement Statistics ------------*/
+ 
+@@ -714,7 +714,7 @@ struct rkisp1_cif_isp_awb_meas {
+ 	__u8 mean_y_or_g;
+ 	__u8 mean_cb_or_b;
+ 	__u8 mean_cr_or_r;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_awb_stat - statistics automatic white balance data
+@@ -723,7 +723,7 @@ struct rkisp1_cif_isp_awb_meas {
+  */
+ struct rkisp1_cif_isp_awb_stat {
+ 	struct rkisp1_cif_isp_awb_meas awb_mean[RKISP1_CIF_ISP_AWB_MAX_GRID];
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_bls_meas_val - BLS measured values
+@@ -738,7 +738,7 @@ struct rkisp1_cif_isp_bls_meas_val {
+ 	__u16 meas_gr;
+ 	__u16 meas_gb;
+ 	__u16 meas_b;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_ae_stat - statistics auto exposure data
+@@ -751,7 +751,7 @@ struct rkisp1_cif_isp_bls_meas_val {
+ struct rkisp1_cif_isp_ae_stat {
+ 	__u8 exp_mean[RKISP1_CIF_ISP_AE_MEAN_MAX];
+ 	struct rkisp1_cif_isp_bls_meas_val bls_val;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_af_meas_val - AF measured values
+@@ -762,7 +762,7 @@ struct rkisp1_cif_isp_ae_stat {
+ struct rkisp1_cif_isp_af_meas_val {
+ 	__u32 sum;
+ 	__u32 lum;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_af_stat - statistics auto focus data
+@@ -774,7 +774,7 @@ struct rkisp1_cif_isp_af_meas_val {
+  */
+ struct rkisp1_cif_isp_af_stat {
+ 	struct rkisp1_cif_isp_af_meas_val window[RKISP1_CIF_ISP_AFM_MAX_WINDOWS];
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_cif_isp_hist_stat - statistics histogram data
+@@ -786,7 +786,7 @@ struct rkisp1_cif_isp_af_stat {
+  */
+ struct rkisp1_cif_isp_hist_stat {
+ 	__u16 hist_bins[RKISP1_CIF_ISP_HIST_BIN_N_MAX];
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_stat_buffer - Rockchip ISP1 Statistics Data
+@@ -801,7 +801,7 @@ struct rkisp1_cif_isp_stat {
+ 	struct rkisp1_cif_isp_ae_stat ae;
+ 	struct rkisp1_cif_isp_af_stat af;
+ 	struct rkisp1_cif_isp_hist_stat hist;
+-} __packed;
++};
+ 
+ /**
+  * struct rkisp1_stat_buffer - Rockchip ISP1 Statistics Meta Data
+@@ -814,6 +814,6 @@ struct rkisp1_stat_buffer {
+ 	__u32 meas_type;
+ 	__u32 frame_id;
+ 	struct rkisp1_cif_isp_stat params;
+-} __packed;
++};
+ 
+ #endif /* _UAPI_RKISP1_CONFIG_H */
+-- 
+2.28.0.rc1
 
-#define RKISP1_CIF_ISP_LSC_TABLE_DATA(v0, v1)     \
-	(((v0) & 0xFFF) | (((v1) & 0xFFF) << 12))
-
-That is used in those fields.
-
-Acked-by: Helen Koike <helen.koike@collabora.com>
-
-On a side note, it would be nice to update this header in libcamera as well.
-
-Thanks
-Helen
-
-> ---
->  .../staging/media/rkisp1/uapi/rkisp1-config.h    | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-> index bca2e805c0f5..c032c8403f17 100644
-> --- a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-> +++ b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-> @@ -274,16 +274,16 @@ struct rkisp1_cif_isp_sdg_config {
->   * refer to REF_01 for details
->   */
->  struct rkisp1_cif_isp_lsc_config {
-> -	__u32 r_data_tbl[RKISP1_CIF_ISP_LSC_SAMPLES_MAX][RKISP1_CIF_ISP_LSC_SAMPLES_MAX];
-> -	__u32 gr_data_tbl[RKISP1_CIF_ISP_LSC_SAMPLES_MAX][RKISP1_CIF_ISP_LSC_SAMPLES_MAX];
-> -	__u32 gb_data_tbl[RKISP1_CIF_ISP_LSC_SAMPLES_MAX][RKISP1_CIF_ISP_LSC_SAMPLES_MAX];
-> -	__u32 b_data_tbl[RKISP1_CIF_ISP_LSC_SAMPLES_MAX][RKISP1_CIF_ISP_LSC_SAMPLES_MAX];
-> +	__u16 r_data_tbl[RKISP1_CIF_ISP_LSC_SAMPLES_MAX][RKISP1_CIF_ISP_LSC_SAMPLES_MAX];
-> +	__u16 gr_data_tbl[RKISP1_CIF_ISP_LSC_SAMPLES_MAX][RKISP1_CIF_ISP_LSC_SAMPLES_MAX];
-> +	__u16 gb_data_tbl[RKISP1_CIF_ISP_LSC_SAMPLES_MAX][RKISP1_CIF_ISP_LSC_SAMPLES_MAX];
-> +	__u16 b_data_tbl[RKISP1_CIF_ISP_LSC_SAMPLES_MAX][RKISP1_CIF_ISP_LSC_SAMPLES_MAX];
->  
-> -	__u32 x_grad_tbl[RKISP1_CIF_ISP_LSC_SECTORS_TBL_SIZE];
-> -	__u32 y_grad_tbl[RKISP1_CIF_ISP_LSC_SECTORS_TBL_SIZE];
-> +	__u16 x_grad_tbl[RKISP1_CIF_ISP_LSC_SECTORS_TBL_SIZE];
-> +	__u16 y_grad_tbl[RKISP1_CIF_ISP_LSC_SECTORS_TBL_SIZE];
->  
-> -	__u32 x_size_tbl[RKISP1_CIF_ISP_LSC_SECTORS_TBL_SIZE];
-> -	__u32 y_size_tbl[RKISP1_CIF_ISP_LSC_SECTORS_TBL_SIZE];
-> +	__u16 x_size_tbl[RKISP1_CIF_ISP_LSC_SECTORS_TBL_SIZE];
-> +	__u16 y_size_tbl[RKISP1_CIF_ISP_LSC_SECTORS_TBL_SIZE];
->  } __packed;
->  
->  /**
-> 
