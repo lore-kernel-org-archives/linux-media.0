@@ -2,107 +2,118 @@ Return-Path: <SRS0=cC6z=BF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4CAAC433E1
-	for <linux-media@archiver.kernel.org>; Sun, 26 Jul 2020 09:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C2E5C433F4
+	for <linux-media@archiver.kernel.org>; Sun, 26 Jul 2020 09:19:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B3F5A206F6
-	for <linux-media@archiver.kernel.org>; Sun, 26 Jul 2020 09:15:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38360206F6
+	for <linux-media@archiver.kernel.org>; Sun, 26 Jul 2020 09:19:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rqW9TyJP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LxCzSbbh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbgGZJPL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Jul 2020 05:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        id S1727893AbgGZJTg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Jul 2020 05:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725794AbgGZJPL (ORCPT
+        with ESMTP id S1726100AbgGZJTf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Jul 2020 05:15:11 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79119C0619D2;
-        Sun, 26 Jul 2020 02:15:11 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id k1so7573124pjt.5;
-        Sun, 26 Jul 2020 02:15:11 -0700 (PDT)
+        Sun, 26 Jul 2020 05:19:35 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2155C0619D2;
+        Sun, 26 Jul 2020 02:19:35 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id k1so7581196pjt.5;
+        Sun, 26 Jul 2020 02:19:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gqsz2+R48srpESLq+ec96ZXtSgH1w2eJBdh6duitcjs=;
-        b=rqW9TyJPPGeHjxPLemQmlKL8ITcw+Hx2rBaR2fL8cFQCuByvgN4XFxxaSm3Xvj1rvj
-         58sNFDKRJfaZqlWzvcJxg6Y1awM4Uhlxh8QU0uxjhZCgy1+vwLVLw7UF8fHNHcEB1vbN
-         eDGzpcDhqToR9D5EoSWoemqvr/lJhL+aWjtWJ3qqfPbqCyU1IficLgTBvNmEBT/nA2rB
-         GxYuNQt9GmikOg7xhxbPDYJzX4DDmALTqXQzrcE1GXwUhVJxPNXtosysVgzJGWIE5FK6
-         VvI8VamMvEZIjSPLblRWJc+zpU2JK46m9NBqttpK09QyeDVYybkJjxAWzhkxWBFhfaQQ
-         JBpg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=f9+BvbidqIi5KrJv6F/Ng/Bay2ACaZFPGHdyYHb/krg=;
+        b=LxCzSbbhmTC7r7Yg+gaBst0fpjkUq0dgLVZ68belm0Z+s8un8G453ez3fZ3vmXs7/h
+         VvKHWK6NGkfkokn8fZExmyoBhxLqKDUCZU4DVFze76b3BIPTcR7mu/3CHG0W0c89o6M2
+         7mKMuOC+21T8F8O+msyqmhDGLz4e9dgLSv6VZr35wUwxdT11TxDMJUTQCq08KOR2Gh/Y
+         R6NFvKKtmLVHj9lfDLGL1Sp9X8iBBcVwBWnu3R4gR2v1uCtE0lFinBm3jq94I5A52URI
+         Vs7vLdjLeOqUkA8uueJI7rsc4bJumsAT0QTJv6s9St14BnrS3t5g1xnqtNk1es9FJ9H7
+         nHng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gqsz2+R48srpESLq+ec96ZXtSgH1w2eJBdh6duitcjs=;
-        b=fMmwKL5e6+9JwQYDz8pLR6qOdahhEJj5VyYLBfMWAC/g9bNI3Yn4LAPQ3F31ehlb1u
-         aPZ/gJrpQYhPhJQjANJuHBVcgHV5gcMdcKMtMAxvVGwiCsRiAA8tojPbPemZiTlvpNxw
-         k4ymxlMLTOlBzub8VlHRmcN3XtPpccY0DXdFcSkeoWuWQRavWpHvSTYRJ9o6uwZ6R17n
-         dnZAd6oAsIBP3j7xmvScCt2XL589IHVeyCeBV/qJ13ycy2qZ2UjmV7eN9dISvTIjjde+
-         Llg6xXOmpF/IhItYmia3cu44imXrg50jj8NTtaBa5FHGC3BaFBPSty/erhnM5KJ68sn4
-         Awpg==
-X-Gm-Message-State: AOAM532FGZFDKJYOpkyJNBhLgM6qDLN6WrYQX0sF+ru6tXQwbG/t6ZQ4
-        Kq7IsH/NwF0IZN2KSST4/mo=
-X-Google-Smtp-Source: ABdhPJy1GXHYwnH0qCgksHECal1EE5PZaUsJgsr/UBBcTcxGQJXfIy2IVlYBLr66WYfcrTsoQ9Z+Jw==
-X-Received: by 2002:a17:90b:ec8:: with SMTP id gz8mr7662770pjb.87.1595754911011;
-        Sun, 26 Jul 2020 02:15:11 -0700 (PDT)
-Received: from localhost.localdomain ([1.186.115.27])
-        by smtp.gmail.com with ESMTPSA id a129sm1608215pfd.165.2020.07.26.02.15.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jul 2020 02:15:10 -0700 (PDT)
-From:   Rohit K Bharadwaj <bharadwaj.rohit8@gmail.com>
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org,
-        Rohit K Bharadwaj <bharadwaj.rohit8@gmail.com>
-Subject: [PATCH v3 4/4] staging: media: atomisp: fix line length exceeds
-Date:   Sun, 26 Jul 2020 14:35:16 +0530
-Message-Id: <20200726090512.20574-4-bharadwaj.rohit8@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200726062541.11304-1-bharadwaj.rohit8@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=f9+BvbidqIi5KrJv6F/Ng/Bay2ACaZFPGHdyYHb/krg=;
+        b=LvccNpquWSjDsUl3TAe5jyAeZkPLGeXrC5fSgzEkIl8kj4fEuosNwbrM34MK7Lw/+U
+         kz2qTqmHSmE/eYUoS4ZwMRnh4x8wYKgfbCo1rmRuo2P5iOQSkMBBzj5cAStWdvSeOg3S
+         O7vfQqDa2+t+Yk3y5OKcK1tnvlvwQOrLAzDjzu2uk7omZ94NTXLcwmAkwvxpXLWL6DOF
+         uX5WvThPl3TOtbIdter2HlD+abCTT7s8Gj/gToQYfjnbGuhio9Lm+aFhpyypi3qGsZrk
+         yuMoHTVvcqW1A6dgJm6PgYBtvbaLP3ZGj9zLiFHpsu31xuDxyCs9VyNj2kTxrGJWBTGg
+         hR0g==
+X-Gm-Message-State: AOAM532O0wMSH7U2G0meOPKx1yL7iwBon+xdYsdFgH8Kc6JD90+cA6q1
+        OACFu2Wy4EeOt+n2p9q1YkjJPmoRukI=
+X-Google-Smtp-Source: ABdhPJxy11NqBk/e8Hj1jFN5T5gBzagjV3YGhBg3rpJSER2xbx8LIGV57G8g8/jlJq37UHsa7My9qQ==
+X-Received: by 2002:a17:90a:c085:: with SMTP id o5mr13873286pjs.196.1595755174934;
+        Sun, 26 Jul 2020 02:19:34 -0700 (PDT)
+Received: from [192.168.0.109] ([1.186.115.27])
+        by smtp.gmail.com with ESMTPSA id h7sm11738689pfq.15.2020.07.26.02.19.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jul 2020 02:19:34 -0700 (PDT)
+Subject: Re: [PATCH v3 1/4] staging: media: atomisp: fix style of block
+ comments
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
 References: <20200726062541.11304-1-bharadwaj.rohit8@gmail.com>
+ <20200726090512.20574-1-bharadwaj.rohit8@gmail.com>
+ <20200726091209.GA451376@kroah.com>
+From:   Rohit K Bharadwaj <bharadwaj.rohit8@gmail.com>
+Message-ID: <9fb53713-e58c-17d9-1553-80d80e4b3863@gmail.com>
+Date:   Sun, 26 Jul 2020 14:49:30 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200726091209.GA451376@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-this patch fixes the line length exceeded error from checkpatch.pl
-
-Signed-off-by: Rohit K Bharadwaj <bharadwaj.rohit8@gmail.com>
----
-v3: change patch subject prefix
-v2: split patch into sequence of patches 
-v1: fix all coding style issues in single patch
-
- drivers/staging/media/atomisp/pci/sh_css_firmware.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_firmware.c b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-index 2208453cbef0..6e8f45e38804 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-@@ -243,7 +243,8 @@ sh_css_load_firmware(struct device *dev, const char *fw_data,
- 	firmware_header = (struct firmware_header *)fw_data;
- 	file_header = &firmware_header->file_header;
- 	binaries = &firmware_header->binary_header;
--	strscpy(FW_rel_ver_name, file_header->version, min(sizeof(FW_rel_ver_name), sizeof(file_header->version)));
-+	strscpy(FW_rel_ver_name, file_header->version,
-+		min(sizeof(FW_rel_ver_name), sizeof(file_header->version)));
- 	ret = sh_css_check_firmware_version(dev, fw_data);
- 	if (ret) {
- 		IA_CSS_ERROR("CSS code version (%s) and firmware version (%s) mismatch!",
--- 
-2.25.1
-
+On 26/07/20 2:42 pm, Greg KH wrote:
+> On Sun, Jul 26, 2020 at 02:35:10PM +0530, Rohit K Bharadwaj wrote:
+>> this patch fixes the coding style of block comments.
+>>
+>> Signed-off-by: Rohit K Bharadwaj <bharadwaj.rohit8@gmail.com>
+>> ---
+>> v3: change patch subject prefix
+>> v2: split patch into sequence of patches 
+>> v1: fix all coding style issues in single patch
+>>
+>>  .../media/atomisp/pci/sh_css_firmware.c       | 28 +++++++++++++------
+>>  1 file changed, 19 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/staging/media/atomisp/pci/sh_css_firmware.c b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
+>> index d4ab15b6d1ac..2907aead98b7 100644
+>> --- a/drivers/staging/media/atomisp/pci/sh_css_firmware.c
+>> +++ b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
+>> @@ -51,9 +51,12 @@ struct fw_param {
+>>  
+>>  static struct firmware_header *firmware_header;
+>>  
+>> -/* The string STR is a place holder
+>> +/*
+>> + * The string STR is a place holder
+>>   * which will be replaced with the actual RELEASE_VERSION
+>> - * during package generation. Please do not modify  */
+>> + * during package generation. Please do not modify
+>> + */
+>> +
+> 
+> Why the blank line?
+> 
+Sir, I thought that it would improve the readability of the code and would help easily distinguish comments from the variable declaration part, and also since there was a blank line between the start of comment and the static struct firmware_header variable, I thought of putting a blank line after the comment end as well to maintain symmetry. 
