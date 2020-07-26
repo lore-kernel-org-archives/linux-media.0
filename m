@@ -2,184 +2,89 @@ Return-Path: <SRS0=cC6z=BF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB966C433E1
-	for <linux-media@archiver.kernel.org>; Sun, 26 Jul 2020 09:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8053DC433E5
+	for <linux-media@archiver.kernel.org>; Sun, 26 Jul 2020 09:12:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C4D7820738
-	for <linux-media@archiver.kernel.org>; Sun, 26 Jul 2020 09:10:10 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="anGHIYnc"
+	by mail.kernel.org (Postfix) with ESMTP id 558C220714
+	for <linux-media@archiver.kernel.org>; Sun, 26 Jul 2020 09:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1595754737;
+	bh=SkIbXYrd9PCUhAfh+KHQ6eWiQH+hjmz6Y3cUt7Ryq8Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=KQcd+bsCPGRRQty3KivnTB58H1IZwTUMFLAzsQeTTUFnFPYgGpMCjKDRSRHcgKRLs
+	 WeEfokW3RNYZU/qa0rhrZSfhF6r4z1itrR1juRhVIWzvkycNYFsMqw2TrsdNddvVZ+
+	 B8qaBofhNYDA+IpZuSzGAv5RYMQ1D4VI6UZbvS8E=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726570AbgGZJKH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Jul 2020 05:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbgGZJKG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Jul 2020 05:10:06 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C10DC0619D2;
-        Sun, 26 Jul 2020 02:10:06 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id g67so7750285pgc.8;
-        Sun, 26 Jul 2020 02:10:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=W55/l1JBEazK4N5hQv70nA809fQUH8diXh6vKYJ/So8=;
-        b=anGHIYncjeMTl4zshsSV/aAmEBzakA5HLMWpVf2oOP/cmPmoqVO0+JVevzweTTS/Do
-         ZTp4H0waL/0qoY25GGhzAyn0SJAn104Npl3GeicS62ieinMin6WD7yH/bv7ezEoHmyMn
-         6AkNUjwL1WQ/J6paZXKNGb2QxKUcKfX0Y9C81r0eLi7whVlr5YMXUDEUM6AaHtjKxbC6
-         qrc9pP3NW2SR4iitA3wWa27Jf75naxGs6LhezEKLMq3hyGQSMd6cuZB5VmOAAGA93B0d
-         Mc9ehRp3QsiZKNnhUlt8iZ8t5kmMVMzcHMnnqlczKQ/rmdUx4btc/HHJ/JAm+ZjVazqV
-         kQ8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=W55/l1JBEazK4N5hQv70nA809fQUH8diXh6vKYJ/So8=;
-        b=QhZzgWKou0YiaUutcxM3gRtsG8bp9hFLTQ38zKUDadR/o7eCpvFreZPURiLj+4tl7C
-         jv2DT1RCsYcrEvxn/hTPG9X2tYKHztwxkl4PuGOu06c50jb5xSqX36qGUVGJVNzgE/pe
-         fF6XdKbZj3RXpWCJbivNl4wa4qiuUTQa/Dwc6pTCqIlVTmZ2VPdyuMjAjp7qQBNL5mLY
-         d57d+KzDxh66+dHMwXyuOBzT1ZXaPpcOE1pq9BmaoSwQaW3UUVLV1QQFfeyxrf5k2Sqh
-         A2NHtw9PJRMrYIg8kTSyt+4mdzNRYXnuKzG9/VO0QC6LOyII/MDSvmjJmdpDu8FillS6
-         prxQ==
-X-Gm-Message-State: AOAM533TKpdXEbIFuHOKrfr9I76BlhF94m14z8VLor6PhTaylqHGBekM
-        J6U4CnhvWKWhD9E24LDJbf2pO/Nw0nA=
-X-Google-Smtp-Source: ABdhPJxj/1I02FNE8PkSlNSXn49RGOhicLXpFgHxSXLoygrAG4eCmZ92+eOL5yERkeNqP/Ch7pjPUA==
-X-Received: by 2002:a63:a06b:: with SMTP id u43mr15118867pgn.294.1595754605977;
-        Sun, 26 Jul 2020 02:10:05 -0700 (PDT)
-Received: from localhost.localdomain ([1.186.115.27])
-        by smtp.gmail.com with ESMTPSA id a129sm1608215pfd.165.2020.07.26.02.10.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jul 2020 02:10:05 -0700 (PDT)
-From:   Rohit K Bharadwaj <bharadwaj.rohit8@gmail.com>
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org,
-        Rohit K Bharadwaj <bharadwaj.rohit8@gmail.com>
-Subject: [PATCH v3 2/4] staging: media: atomisp: fix style of open brace
-Date:   Sun, 26 Jul 2020 14:35:12 +0530
-Message-Id: <20200726090512.20574-2-bharadwaj.rohit8@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200726062541.11304-1-bharadwaj.rohit8@gmail.com>
+        id S1727103AbgGZJMO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Jul 2020 05:12:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43158 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725794AbgGZJMN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 26 Jul 2020 05:12:13 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EDA9F206F6;
+        Sun, 26 Jul 2020 09:12:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595754733;
+        bh=SkIbXYrd9PCUhAfh+KHQ6eWiQH+hjmz6Y3cUt7Ryq8Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SFhM2n8ac9C3e3sYuWswrp8xNieMzbpCePZvZBBsCpJCWWHEFw52WZFRSoyy4EO+A
+         rywNPHEIm+uCj8BqqZnqdgHdXL+JssIWMnZqqD1acqNmL/wJZ1RO9h+roz/oRotCIO
+         wVwuJP66Cb+hTz5u0etFnQkM2Xi6oM3ekmmKVWEQ=
+Date:   Sun, 26 Jul 2020 11:12:09 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rohit K Bharadwaj <bharadwaj.rohit8@gmail.com>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] staging: media: atomisp: fix style of block
+ comments
+Message-ID: <20200726091209.GA451376@kroah.com>
 References: <20200726062541.11304-1-bharadwaj.rohit8@gmail.com>
+ <20200726090512.20574-1-bharadwaj.rohit8@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200726090512.20574-1-bharadwaj.rohit8@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-this patch fixes style of open brace after functions and if statements
+On Sun, Jul 26, 2020 at 02:35:10PM +0530, Rohit K Bharadwaj wrote:
+> this patch fixes the coding style of block comments.
+> 
+> Signed-off-by: Rohit K Bharadwaj <bharadwaj.rohit8@gmail.com>
+> ---
+> v3: change patch subject prefix
+> v2: split patch into sequence of patches 
+> v1: fix all coding style issues in single patch
+> 
+>  .../media/atomisp/pci/sh_css_firmware.c       | 28 +++++++++++++------
+>  1 file changed, 19 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/pci/sh_css_firmware.c b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
+> index d4ab15b6d1ac..2907aead98b7 100644
+> --- a/drivers/staging/media/atomisp/pci/sh_css_firmware.c
+> +++ b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
+> @@ -51,9 +51,12 @@ struct fw_param {
+>  
+>  static struct firmware_header *firmware_header;
+>  
+> -/* The string STR is a place holder
+> +/*
+> + * The string STR is a place holder
+>   * which will be replaced with the actual RELEASE_VERSION
+> - * during package generation. Please do not modify  */
+> + * during package generation. Please do not modify
+> + */
+> +
 
-Signed-off-by: Rohit K Bharadwaj <bharadwaj.rohit8@gmail.com>
----
-v3: change patch subject prefix
-v2: split patch into sequence of patches 
-v1: fix all coding style issues in single patch
-
- .../media/atomisp/pci/sh_css_firmware.c       | 29 +++++++++----------
- 1 file changed, 14 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_firmware.c b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-index 2907aead98b7..988785ab6c95 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_firmware.c
-@@ -81,7 +81,8 @@ char *sh_css_get_fw_version(void)
- /* Setup sp/sp1 binary */
- static int
- setup_binary(struct ia_css_fw_info *fw, const char *fw_data,
--	     struct ia_css_fw_info *sh_css_fw, unsigned int binary_id) {
-+	     struct ia_css_fw_info *sh_css_fw, unsigned int binary_id)
-+{
- 	const char *blob_data;
- 
- 	if ((!fw) || (!fw_data))
-@@ -105,7 +106,8 @@ setup_binary(struct ia_css_fw_info *fw, const char *fw_data,
- int
- sh_css_load_blob_info(const char *fw, const struct ia_css_fw_info *bi,
- 		      struct ia_css_blob_descr *bd,
--		      unsigned int index) {
-+		      unsigned int index)
-+{
- 	const char *name;
- 	const unsigned char *blob;
- 
-@@ -119,8 +121,9 @@ sh_css_load_blob_info(const char *fw, const struct ia_css_fw_info *bi,
- 	blob = (const unsigned char *)fw + bi->blob.offset;
- 
- 	/* sanity check */
--	if (bi->blob.size != bi->blob.text_size + bi->blob.icache_size + bi->blob.data_size + bi->blob.padding_size)
--	{
-+	if (bi->blob.size !=
-+		bi->blob.text_size + bi->blob.icache_size +
-+		bi->blob.data_size + bi->blob.padding_size) {
- 		/* sanity check, note the padding bytes added for section to DDR alignment */
- 		return -EINVAL;
- 	}
-@@ -131,21 +134,18 @@ sh_css_load_blob_info(const char *fw, const struct ia_css_fw_info *bi,
- 	bd->blob = blob;
- 	bd->header = *bi;
- 
--	if (bi->type == ia_css_isp_firmware || bi->type == ia_css_sp_firmware)
--	{
-+	if (bi->type == ia_css_isp_firmware || bi->type == ia_css_sp_firmware) {
- 		char *namebuffer;
- 
- 		namebuffer = kstrdup(name, GFP_KERNEL);
- 		if (!namebuffer)
- 			return -ENOMEM;
- 		bd->name = fw_minibuffer[index].name = namebuffer;
--	} else
--	{
-+	} else {
- 		bd->name = name;
- 	}
- 
--	if (bi->type == ia_css_isp_firmware)
--	{
-+	if (bi->type == ia_css_isp_firmware) {
- 		size_t paramstruct_size = sizeof(struct ia_css_memory_offsets);
- 		size_t configstruct_size = sizeof(struct ia_css_config_memory_offsets);
- 		size_t statestruct_size = sizeof(struct ia_css_state_memory_offsets);
-@@ -226,7 +226,8 @@ static const char * const fw_acc_type_name[] = {
- 
- int
- sh_css_load_firmware(struct device *dev, const char *fw_data,
--		     unsigned int fw_size) {
-+		     unsigned int fw_size)
-+{
- 	unsigned int i;
- 	struct ia_css_fw_info *binaries;
- 	struct sh_css_fw_bi_file_h *file_header;
-@@ -260,8 +261,7 @@ sh_css_load_firmware(struct device *dev, const char *fw_data,
- 
- 	sh_css_num_binaries = file_header->binary_nr;
- 	/* Only allocate memory for ISP blob info */
--	if (sh_css_num_binaries > NUM_OF_SPS)
--	{
-+	if (sh_css_num_binaries > NUM_OF_SPS) {
- 		sh_css_blob_info = kmalloc(
- 		    (sh_css_num_binaries - NUM_OF_SPS) *
- 		    sizeof(*sh_css_blob_info), GFP_KERNEL);
-@@ -276,8 +276,7 @@ sh_css_load_firmware(struct device *dev, const char *fw_data,
- 	if (!fw_minibuffer)
- 		return -ENOMEM;
- 
--	for (i = 0; i < sh_css_num_binaries; i++)
--	{
-+	for (i = 0; i < sh_css_num_binaries; i++) {
- 		struct ia_css_fw_info *bi = &binaries[i];
- 		/*
- 		 * note: the var below is made static as it is quite large;
--- 
-2.25.1
-
+Why the blank line?
