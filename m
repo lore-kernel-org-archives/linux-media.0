@@ -2,117 +2,85 @@ Return-Path: <SRS0=pJLX=BG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35FDDC433EC
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 20:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64E5FC433EC
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 21:24:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB78E20838
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 20:53:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="GO6DmSb1"
+	by mail.kernel.org (Postfix) with ESMTP id 3E034208E4
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 21:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1595885085;
+	bh=sKT9dOZLdTtnGzBRMm9NIlmWlhGrnDruKWwTGc0i87g=;
+	h=Date:From:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:
+	 List-ID:From;
+	b=pD2Ki3lCcFQBvy1sYiY6Xt6ZYDB3Z3Qk/y++G2hzUWUNqJaHOAHME9HvK48UxcKrc
+	 zMFt2YkdDHE1fOj7GiW3mGfxq33AG1C1Sn93EH6qYBp0d/U3X6H/nCeJEWekcIUSRc
+	 EXuoOO7gUxTasKLcrxxuI68iNH2AU+HIMLyduSDc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726963AbgG0UxN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Jul 2020 16:53:13 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:14236 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727811AbgG0Uvw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Jul 2020 16:51:52 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f1f3e0e0000>; Mon, 27 Jul 2020 13:50:22 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 27 Jul 2020 13:51:52 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 27 Jul 2020 13:51:52 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 27 Jul
- 2020 20:51:52 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 27 Jul 2020 20:51:52 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.168.236]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f1f3e670003>; Mon, 27 Jul 2020 13:51:51 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
-        <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
-        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-Subject: [RFC PATCH v5 03/14] i2c: tegra: Fix the error path in tegra_i2c_runtime_resume
-Date:   Mon, 27 Jul 2020 13:57:21 -0700
-Message-ID: <1595883452-17343-4-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1595883452-17343-1-git-send-email-skomatineni@nvidia.com>
-References: <1595883452-17343-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
-MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1595883022; bh=XQCuT+X5xFWbpK2llLNhsmBbg0HBAV9bHrS0xwzVjM4=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=GO6DmSb1g9D/k/gmCmeTJPzzsNel4EkC9dDMk/kfNe6Af8XUVorg3jO7zR2Faltg+
-         1Lu5YPr4JspLWeyeiR1CqD9PxqElG0jDuZ4M966m4nAJoQbu+FheCPWNn7FUB0/YgF
-         q/34dQxdGy+oPniDT0U6oN49R0d7oRVkKVlRnjNgHXkywvtmvgsvDbjWtTARnM4Lm2
-         VZWjaYf+aORvsPwzRCdFQ8aekeAnzf4oNJATCabwnSNE0v6j9YUegL+a7HzAhFwXpH
-         jlPBgHMv1JTND4BxPfIHW5XkUWDeU3jkFtAxWZHvjtnWn2jG3zMHyfN0k+LtGMIorL
-         L5zAHol9Ku5fA==
+        id S1726825AbgG0VYo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Jul 2020 17:24:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49754 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726846AbgG0VYm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 27 Jul 2020 17:24:42 -0400
+Received: from localhost (unknown [13.85.75.251])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B47CE20809;
+        Mon, 27 Jul 2020 21:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595885081;
+        bh=sKT9dOZLdTtnGzBRMm9NIlmWlhGrnDruKWwTGc0i87g=;
+        h=Date:From:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:From;
+        b=TrfApfyDkawTo5JDjIIS7XtMYH/XAsW66iLEldPQ1Xn8c3+hKCAzN8lYRbIax3X4Q
+         eiFL9Oiq7+2pVrbQ0FRxmmsagRCaaJgBcxJ5p24WoCSEnRpu6gVH3pZnrByLzftTqG
+         mNRalbwKMy+yRgPbOHeuQkMX4Qlb3MREDnhbXZZQ=
+Date:   Mon, 27 Jul 2020 21:24:40 +0000
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-media@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH] media: uvcvideo: Fix uvc_ctrl_fixup_xu_info() not having any effect
+In-Reply-To: <20200724114823.108237-1-hdegoede@redhat.com>
+References: <20200724114823.108237-1-hdegoede@redhat.com>
+Message-Id: <20200727212441.B47CE20809@mail.kernel.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tegra_i2c_runtime_resume does not disable prior enabled clocks
-properly.
+Hi
 
-This patch fixes it.
+[This is an automated email]
 
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- drivers/i2c/busses/i2c-tegra.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+This commit has been processed because it contains a -stable tag.
+The stable tag indicates that it's relevant for the following trees: all
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index c91307b9..7b93c45 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -665,18 +665,23 @@ static int __maybe_unused tegra_i2c_runtime_resume(struct device *dev)
- 	ret = clk_enable(i2c_dev->slow_clk);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to enable slow clock: %d\n", ret);
--		return ret;
-+		goto disable_fast_clk;
- 	}
- 
- 	ret = clk_enable(i2c_dev->div_clk);
- 	if (ret < 0) {
- 		dev_err(i2c_dev->dev,
- 			"Enabling div clk failed, err %d\n", ret);
--		clk_disable(i2c_dev->fast_clk);
--		return ret;
-+		goto disable_slow_clk;
- 	}
- 
- 	return 0;
-+
-+disable_slow_clk:
-+	clk_disable(i2c_dev->slow_clk);
-+disable_fast_clk:
-+	clk_disable(i2c_dev->fast_clk);
-+	return ret;
- }
- 
- static int __maybe_unused tegra_i2c_runtime_suspend(struct device *dev)
+The bot has tested the following trees: v5.7.10, v5.4.53, v4.19.134, v4.14.189, v4.9.231, v4.4.231.
+
+v5.7.10: Build OK!
+v5.4.53: Build OK!
+v4.19.134: Build OK!
+v4.14.189: Failed to apply! Possible dependencies:
+    859086ae3636 ("media: uvcvideo: Apply flags from device to actual properties")
+
+v4.9.231: Failed to apply! Possible dependencies:
+    859086ae3636 ("media: uvcvideo: Apply flags from device to actual properties")
+
+v4.4.231: Failed to apply! Possible dependencies:
+    859086ae3636 ("media: uvcvideo: Apply flags from device to actual properties")
+
+
+NOTE: The patch will not be queued to stable trees until it is upstream.
+
+How should we proceed with this patch?
+
 -- 
-2.7.4
-
+Thanks
+Sasha
