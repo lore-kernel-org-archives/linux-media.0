@@ -2,150 +2,127 @@ Return-Path: <SRS0=pJLX=BG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE692C433EC
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 14:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5B05C433E5
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 14:39:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B77D20719
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 14:37:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=vanguardiasur-com-ar.20150623.gappssmtp.com header.i=@vanguardiasur-com-ar.20150623.gappssmtp.com header.b="B8ffA7US"
+	by mail.kernel.org (Postfix) with ESMTP id AFD3320719
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 14:39:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730252AbgG0OMp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Jul 2020 10:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730247AbgG0OMn (ORCPT
+        id S1730705AbgG0Oj0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Jul 2020 10:39:26 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:39000 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732992AbgG0OjY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Jul 2020 10:12:43 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13DCC0619D4
-        for <linux-media@vger.kernel.org>; Mon, 27 Jul 2020 07:12:42 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id c2so6396928edx.8
-        for <linux-media@vger.kernel.org>; Mon, 27 Jul 2020 07:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bHapzJ0P6xUuZ32/Fm3FmLxN3+W0YiwvdWtul3bH0zc=;
-        b=B8ffA7US+1YKsKILPUPB+8nSLr6m3RTdAtBDehe3oxJyYQ7mRu0QiHt38w+fEdoQLG
-         jdtbJLjSnRSRs/U27O/03LK5W+gje6bfwur455MeP9VxwLT2oacer2EFrUSWfGQTiLPB
-         4h1da6SxVTQRL/KFHQX9UU1+yoqZj9ixBqaNUTqHfI65CDLmTa5U4K/qYpJ+TliA0tp2
-         JVZQcMqIOpnHq74+mduHT8TTmn6SyfFisCcaQWuKE/+ebwlkl0D/ua+qRPGv0qGwiZcL
-         3yq6hBbdW9Ougv+EJhJsaYgbOO5xj0GXvY97kJG3ZLX1bVQmX4PiZjuEtSHUsYJRo6n/
-         vhgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bHapzJ0P6xUuZ32/Fm3FmLxN3+W0YiwvdWtul3bH0zc=;
-        b=ePOTgTt5tINZ3HQIw2VxXjjSNzNk1k91zMPZ5u5BoGRkpnTMi8NAhs09HqhkrGNRMh
-         XWjyhKG0PhIRi1V4FjcyNX5xfpdkLgKsAqCNyQhVGrNPw4MHMfGipIcjtF6aQsd93oGJ
-         KectaJ0eZc+etG8Pew6wbRz4LnZ0f5y+OdQ/5GdYIibuW+jaGQ9irj/n4xwpqYcPcq2M
-         83Cobhta0vO1HIuTjGdJRv2DX/JpM0RrRD1guvvqouKxWW1mCoo33eHgFQY6HyN29Nbz
-         7VxM5dsBf6jhPdmQP/PQv13lBoOefIPz9DB7dGGXG6B7b/82N+GrHKDx22jvM8MXi6WS
-         WZoQ==
-X-Gm-Message-State: AOAM5316MYN1BvVRw/fBQltdYsOnJ/1YtTyZg3RWy2UsLHuxhsD/z8ib
-        qK/mvNN6b0v3KhBQNNQt0fEicIp46j66jR/N54fIXQ==
-X-Google-Smtp-Source: ABdhPJzL6g6Q0QOmH9j7dy280O/qkgraYf1W+MBlD2oMwuVrryHQjjWkm7mAfQzWBU2TtCCTk/dPSXhirg3BW3/hgPg=
-X-Received: by 2002:a05:6402:947:: with SMTP id h7mr21787651edz.213.1595859161489;
- Mon, 27 Jul 2020 07:12:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200713060842.471356-1-acourbot@chromium.org>
- <20200713060842.471356-3-acourbot@chromium.org> <CAAEAJfD8yfdTptkmXoPzrw6S=6eKr=K4yL9-5aq2JtWF7M3=7w@mail.gmail.com>
- <CAPBb6MW3AC2savGCHk8w98u1oRuZAs9m6sqz++ksJ58DGvJ5nQ@mail.gmail.com>
-In-Reply-To: <CAPBb6MW3AC2savGCHk8w98u1oRuZAs9m6sqz++ksJ58DGvJ5nQ@mail.gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Mon, 27 Jul 2020 11:12:30 -0300
-Message-ID: <CAAEAJfB1cBM-QCg1Sg6iwyQps7r6osY69p68Q-0_YzmSPhNgXw@mail.gmail.com>
-Subject: Re: [PATCH v3 02/16] dt-bindings: media: mtk-vcodec: document SCP node
+        Mon, 27 Jul 2020 10:39:24 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 070152948A2
+Message-ID: <636aab0a2be83e751a82a84ac3946afec2c87a17.camel@collabora.com>
+Subject: Re: [PATCH 08/10] media: uapi: h264: Clean slice invariants syntax
+ elements
+From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     Alexandre Courbot <acourbot@chromium.org>
-Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Date:   Mon, 27 Jul 2020 11:39:12 -0300
+In-Reply-To: <CAPBb6MVMXeTcUfb-98McYCKjh=eM=BTo2dSY=L1c6dv2jHqXcg@mail.gmail.com>
+References: <20200715202233.185680-1-ezequiel@collabora.com>
+         <20200715202233.185680-9-ezequiel@collabora.com>
+         <CAPBb6MVMXeTcUfb-98McYCKjh=eM=BTo2dSY=L1c6dv2jHqXcg@mail.gmail.com>
+Organization: Collabora
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 27 Jul 2020 at 06:06, Alexandre Courbot <acourbot@chromium.org> wrote:
->
-> On Thu, Jul 23, 2020 at 6:37 AM Ezequiel Garcia
-> <ezequiel@vanguardiasur.com.ar> wrote:
-> >
-> > On Mon, 13 Jul 2020 at 03:09, Alexandre Courbot <acourbot@chromium.org> wrote:
-> > >
-> > > The mediatek codecs can use either the VPU or the SCP as their interface
-> > > to firmware. Reflect this in the DT bindings.
-> > >
-> > > Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
-> > > Acked-by: Tiffany Lin <tiffany.lin@mediatek.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/media/mediatek-vcodec.txt | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-> > > index b6b5dde6abd8..7aef0a4fe207 100644
-> > > --- a/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-> > > +++ b/Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-> > > @@ -19,7 +19,9 @@ Required properties:
-> > >  - iommus : should point to the respective IOMMU block with master port as
-> > >    argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
-> > >    for details.
-> > > -- mediatek,vpu : the node of video processor unit
-> > > +One of the two following nodes:
-> > > +- mediatek,vpu : the node of the video processor unit, if using VPU.
-> > > +- mediatek,scp : the noode of the SCP unit, if using SCP.
-> > >
-> >
-> > This interface doesn't enforce the fact only one of the two
-> > should be present, but not both (which is the case, right?).
->
-> That's correct.
->
-> >
-> > I hope I'm not bikeshedding here, but from an interface POV,
-> > would it be cleaner to just have a single mediatek,coprocessor
-> > property, and then use of_device_is_compatible
-> > to distinguish VPU from SCP type?
->
-> From an interface point of view maybe, however doing so would
-> introduce a backward-incompatible change with the existing MT8173
-> bindings. I also feel like it is less error-prone to have the property
-> explicitly state what it is expecting at the other end of the phandle
-> (vpu or scp) instead of the more generic "coprocessor".
->
-> >
-> > Moreover, I'd argue you don't need a dt-binding change
-> > and should just keep the current mediatek-vpu property,
-> > and then rely on of_device_is_compatible.
->
-> VPU and SCP are different kinds of processors, so I'm not sure whether
-> it is desirable to use VPU interchangeably like this. Note that I'm
-> not strongly against it either, but for things like bindings I tend to
-> prefer precise language to avoid confusions.
+Hi Alexandre,
 
-Yeah, I guess that makes sense.
+Thanks a lot for the review.
 
-Not only from a language precision point of view (after all
-DT are not designed to be human readable).
+On Sat, 2020-07-25 at 23:34 +0900, Alexandre Courbot wrote:
+> On Thu, Jul 16, 2020 at 5:23 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> > The H.264 specification requires in its "Slice header semantics"
+> > section that the following values shall be the same in all slice headers:
+> > 
+> >   pic_parameter_set_id
+> >   frame_num
+> >   field_pic_flag
+> >   bottom_field_flag
+> >   idr_pic_id
+> >   pic_order_cnt_lsb
+> >   delta_pic_order_cnt_bottom
+> >   delta_pic_order_cnt[ 0 ]
+> >   delta_pic_order_cnt[ 1 ]
+> >   sp_for_switch_flag
+> >   slice_group_change_cycle
+> > 
+> > and can therefore be moved to the per-frame decode parameters control.
+> 
+> I am really not a H.264 expert, so this question may not be relevant,
 
-But as you mention, given the processors will have different compatible
-strings it would make sense to not allow overloading the property.
+All questions are welcome. I'm more than happy to discuss this patchset.
 
-In any case, I don't have a strong opinion either.
+> but are these values specified for every slice header in the
+> bitstream, or are they specified only once per frame?
+> 
+> I am asking this because it would certainly make user-space code
+> simpler if we could remain as close to the bitstream as possible. If
+> these values are specified once per slice, then factorizing them would
+> leave user-space with the burden of deciding what to do if they change
+> across slices.
+> 
+> Note that this is a double-edged sword, because it is not necessarily
+> better to leave the firmware in charge of deciding what to do in such
+> a case. :) So hopefully these are only specified once per frame in the
+> bitstream, in which case your proposal makes complete sense.
 
-Thanks,
+Frame-based hardwares accelerators such as Hantro and Rockchip VDEC
+are doing the slice header parsing themselves. Therefore, the
+driver is not really parsing these fields on each slice header.
+
+Currently, we are already using only the first slice in a frame,
+as you can see from:
+
+        if (slices[0].flags & V4L2_H264_SLICE_FLAG_FIELD_PIC)
+                reg |= G1_REG_DEC_CTRL0_PIC_FIELDMODE_E;
+
+Even if these fields are transported in the slice header,
+I think it makes sense for us to split them into the decode params
+(per-frame) control.
+
+They are really specified to be the same across all slices,
+so even I'd say if a bitstream violates this, it's likely
+either a corrupted bitstream or an encoder bug.
+
+OTOH, one thing this makes me realize is that the slice params control
+is wrongly specified as an array. Namely, this text
+should be removed:
+
+       This structure is expected to be passed as an array, with one
+       entry for each slice included in the bitstream buffer.
+
+As the API is really not defined that way.
+
+I'll remove that on next iteration.
+
+Thanks for raising this point,
 Ezequiel
+
+
