@@ -2,262 +2,197 @@ Return-Path: <SRS0=pJLX=BG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D982C433EB
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 19:44:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4333C433EB
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 20:51:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 82955208E4
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 19:44:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8046F20729
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 20:51:55 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="cxy90JDM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727088AbgG0Tn4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Jul 2020 15:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbgG0Tn4 (ORCPT
+        id S1727854AbgG0Uvy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Jul 2020 16:51:54 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:9051 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727098AbgG0Uvw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Jul 2020 15:43:56 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAD0C061794;
-        Mon, 27 Jul 2020 12:43:55 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 937F3283C24
-Message-ID: <dc7f9f199788581a4b37fc7e34466f7bd2173efb.camel@collabora.com>
-Subject: Re: [PATCH 08/10] media: uapi: h264: Clean slice invariants syntax
- elements
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reply-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Tomasz Figa <tfiga@chromium.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, kernel@collabora.com,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Jeffrey Kardatzke <jkardatzke@chromium.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Date:   Mon, 27 Jul 2020 15:43:48 -0400
-In-Reply-To: <CAAFQd5AeMcqk1MpWNeh1Vgt2rBOxjFj8Ar7=LLo80e8QKhYn3g@mail.gmail.com>
-References: <20200715202233.185680-1-ezequiel@collabora.com>
-         <20200715202233.185680-9-ezequiel@collabora.com>
-         <CAPBb6MVMXeTcUfb-98McYCKjh=eM=BTo2dSY=L1c6dv2jHqXcg@mail.gmail.com>
-         <636aab0a2be83e751a82a84ac3946afec2c87a17.camel@collabora.com>
-         <CAAFQd5DVfroAXRw+OT=EktDtVzRjPZYxnUS8daWQ5=3LLwn=SA@mail.gmail.com>
-         <e49635b95db0e295a85f1be9a3909f7f29495e3a.camel@collabora.com>
-         <CAAFQd5AeMcqk1MpWNeh1Vgt2rBOxjFj8Ar7=LLo80e8QKhYn3g@mail.gmail.com>
-Organization: Collabora
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-I2CSNZITBQto0ikavh36"
-User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
+        Mon, 27 Jul 2020 16:51:52 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f1f3e5a0000>; Mon, 27 Jul 2020 13:51:38 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 27 Jul 2020 13:51:51 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 27 Jul 2020 13:51:51 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 27 Jul
+ 2020 20:51:51 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 27 Jul 2020 20:51:51 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.168.236]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5f1f3e660004>; Mon, 27 Jul 2020 13:51:51 -0700
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
+        <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+Subject: [RFC PATCH v5 02/14] i2c: tegra: Remove NULL pointer check before clk_enable/disable/prepare/unprepare
+Date:   Mon, 27 Jul 2020 13:57:20 -0700
+Message-ID: <1595883452-17343-3-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1595883452-17343-1-git-send-email-skomatineni@nvidia.com>
+References: <1595883452-17343-1-git-send-email-skomatineni@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1595883098; bh=jD0igf8U1bTJzOqQcNuwvqEC25xsAMW3RMlh+sdfw58=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=cxy90JDMzfwqNZeqwmmIPrlt5oxjkV0qpeGd4v8E+F8v+x+kaOf0DYFjiRoeOMYZI
+         mcx4YmylJzMSqMX2L/5Nmk9QOrqsByq/OzPbLF+dV2rAEg/AN1IaXwFBrTYQL1ogqk
+         qNmrOlK6/juirbEznj7sFMXuzvYs3a49EWuN0eXgPKdsvjeAwo4no4b1aytdH5qu9/
+         HdnQ1hnDCWRe1BTlbbE4nXhslJYguMSS44JEzmjv6sMVRf9btC6Fm1QaNRzMIpRqHj
+         g5tk/I97ZjZqf9L4HfL8yrHQm1RrbBXebY1a+m4iTkshodKiqDj8yiiGx41cR1xl27
+         Pq6dBqDfSajAw==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+clk_enable, clk_disable, clk_prepare, and clk_unprepare APIs have
+implementation for checking clk pointer not NULL and clock consumers
+can safely call these APIs without NULL pointer check.
 
---=-I2CSNZITBQto0ikavh36
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+So, this patch cleans up Tegra i2c driver to remove explicit checks
+before these APIs.
 
-Le lundi 27 juillet 2020 =C3=A0 20:10 +0200, Tomasz Figa a =C3=A9crit :
-> On Mon, Jul 27, 2020 at 6:18 PM Ezequiel Garcia <ezequiel@collabora.com> =
-wrote:
-> > On Mon, 2020-07-27 at 16:52 +0200, Tomasz Figa wrote:
-> > > On Mon, Jul 27, 2020 at 4:39 PM Ezequiel Garcia <ezequiel@collabora.c=
-om> wrote:
-> > > > Hi Alexandre,
-> > > >=20
-> > > > Thanks a lot for the review.
-> > > >=20
-> > > > On Sat, 2020-07-25 at 23:34 +0900, Alexandre Courbot wrote:
-> > > > > On Thu, Jul 16, 2020 at 5:23 AM Ezequiel Garcia <ezequiel@collabo=
-ra.com> wrote:
-> > > > > > The H.264 specification requires in its "Slice header semantics=
-"
-> > > > > > section that the following values shall be the same in all slic=
-e headers:
-> > > > > >=20
-> > > > > >   pic_parameter_set_id
-> > > > > >   frame_num
-> > > > > >   field_pic_flag
-> > > > > >   bottom_field_flag
-> > > > > >   idr_pic_id
-> > > > > >   pic_order_cnt_lsb
-> > > > > >   delta_pic_order_cnt_bottom
-> > > > > >   delta_pic_order_cnt[ 0 ]
-> > > > > >   delta_pic_order_cnt[ 1 ]
-> > > > > >   sp_for_switch_flag
-> > > > > >   slice_group_change_cycle
-> > > > > >=20
-> > > > > > and can therefore be moved to the per-frame decode parameters c=
-ontrol.
-> > > > >=20
-> > > > > I am really not a H.264 expert, so this question may not be relev=
-ant,
-> > > >=20
-> > > > All questions are welcome. I'm more than happy to discuss this patc=
-hset.
-> > > >=20
-> > > > > but are these values specified for every slice header in the
-> > > > > bitstream, or are they specified only once per frame?
-> > > > >=20
-> > > > > I am asking this because it would certainly make user-space code
-> > > > > simpler if we could remain as close to the bitstream as possible.=
- If
-> > > > > these values are specified once per slice, then factorizing them =
-would
-> > > > > leave user-space with the burden of deciding what to do if they c=
-hange
-> > > > > across slices.
-> > > > >=20
-> > > > > Note that this is a double-edged sword, because it is not necessa=
-rily
-> > > > > better to leave the firmware in charge of deciding what to do in =
-such
-> > > > > a case. :) So hopefully these are only specified once per frame i=
-n the
-> > > > > bitstream, in which case your proposal makes complete sense.
-> > > >=20
-> > > > Frame-based hardwares accelerators such as Hantro and Rockchip VDEC
-> > > > are doing the slice header parsing themselves. Therefore, the
-> > > > driver is not really parsing these fields on each slice header.
-> > > >=20
-> > > > Currently, we are already using only the first slice in a frame,
-> > > > as you can see from:
-> > > >=20
-> > > >         if (slices[0].flags & V4L2_H264_SLICE_FLAG_FIELD_PIC)
-> > > >                 reg |=3D G1_REG_DEC_CTRL0_PIC_FIELDMODE_E;
-> > > >=20
-> > > > Even if these fields are transported in the slice header,
-> > > > I think it makes sense for us to split them into the decode params
-> > > > (per-frame) control.
-> > > >=20
-> > > > They are really specified to be the same across all slices,
-> > > > so even I'd say if a bitstream violates this, it's likely
-> > > > either a corrupted bitstream or an encoder bug.
-> > > >=20
-> > > > OTOH, one thing this makes me realize is that the slice params cont=
-rol
-> > > > is wrongly specified as an array.
-> > >=20
-> > > It is _not_.
-> > >=20
-> >=20
-> > We introduced the hold capture buffer specifically to support
-> > this without having a slice array.
-> >=20
-> > I don't think we have a plan to support this control properly
-> > as an array.
-> >=20
-> > If we decide to support the slice control as an array,
-> > we would have to implement a mechanism to specify the array size,
-> > which we currently don't have AFAIK.
-> >=20
->=20
-> That wasn't the conclusion when we discussed this last time on IRC.
-> +Nicolas Dufresne
->=20
-> Currently the 1-slice per buffer model is quite impractical:
-> 1) the maximum number of buffers is 32, which for some streams can be
-> less than needed to queue a single frame,
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 64 +++++++++++++++---------------------------
+ 1 file changed, 23 insertions(+), 41 deletions(-)
 
-To give more context, it seems the discussion was about being able to
-use slice decoder with a 1 poll() per frame model. Of course this will
-never be as efficient as when using a frame base decoder, but as
-current design, you can keep a list of pending request (each request is
-1 slice/buffer), and simply use memory pressure to poll a mid point and
-dequeue the remaining. An example, yo have 8 pending request, and reach
-your memory limit:
- =20
-  [R1, R2, R3, R4, R5, R6, R7, R8]
-
-As requests are in order and behaves like memory fences, you can pick
-R6, and poll() that one. When R6 is ready, you can then dequeue R1 to
-R6 without blocking. In this context, a limit of 16 or 32 buffers seems
-fair, the optimization we can do in userspace is likely sufficient. So
-I'd like to drop problem 1) from our list.
-
-> 2) even more system call overhead due to the need to repeat various
-> operations (e.g. qbuf/dqbuf) per-slice rather than per-frame,
-> 3) no way to do hardware batching for hardware which supports queuing
-> multiple slices at a time,
-> 4) waste of memory - one needs to allocate all the OUTPUT buffers
-> pessimistically to accommodate the biggest possible slice, while with
-> all-slices-per-frame 1 buffer could be just heuristically allocated to
-> be enough for the whole frame.
->=20
-> These need to be carefully evaluated, with some proper testing done to
-> confirm whether they are really a problem or not.
-
-2, 3 and 4 seems to match what the currently unimplemented API propose.
-You can mitigate 2) but having multiple slices per buffers. That came
-with a byte offset to we can program the HW as if it was separate slice
-buffers. But was limited to 16 buffers, likely a fair compromise.
-
-3) is about batching, in the only use case we know, the batching
-acceleration consist of programming the next operation on the
-completion IRQ. I already looked with the Cedrus developers if and how
-that was feasible, but we don't have a PoC yet. The optimization is
-about removing context switches between operations, which could prevent
-fully using the HW.
-
-4) is also well covered with being able to multiplex 1 buffer with
-multiple slices.
-
-To be fair, I understand why we'd like to drop this API, as none of the
-active developers here of slice decoder (cedrus) have time to engage in
-supporting this untested "optimization". It's not only about kernel
-support, but also requires userspace work. I also agree that it could
-be added later, as an extension. It could be done with 3 new controls,
-an array of slice_params and an array of slice start offset and the
-number of slices, or just one, introduce a new structure that have a
-slice_params structure embedded, num_slices and an array of
-slice_start_offset. I don't have preference myself, but I'm just
-illustrating that yes, we could drop the slice batching to avoid
-pushing untested APIs without scarifying our ability to decode a valid
-stream.
-
->=20
-> > > > Namely, this text
-> > > > should be removed:
-> > > >=20
-> > > >        This structure is expected to be passed as an array, with on=
-e
-> > > >        entry for each slice included in the bitstream buffer.
-> > > >=20
-> > > > As the API is really not defined that way.
-> > > >=20
-> > > > I'll remove that on next iteration.
-> > >=20
-> > > The v4l2_ctrl_h264_slice_params struct has more data than those that
-> > > are deemed to be the same across all the slices. A remarkable example
-> > > are the size and start_byte_offset fields.
-> >=20
-> > Not sure how this applies to this discussion.
->=20
-> These fields need to be specified for each slice in the buffer to make
-> it possible to handle multiple slices per buffer.
->=20
-> Best regards,
-> Tomasz
-
---=-I2CSNZITBQto0ikavh36
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXx8udAAKCRBxUwItrAao
-HO8iAJ9Iu/bekf0T/cMTEzaJM8oZQwJvfgCeMMAuRTuDSsg/J+CoTqXG/xOGdZE=
-=3UbG
------END PGP SIGNATURE-----
-
---=-I2CSNZITBQto0ikavh36--
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 3be1018..c91307b9 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -655,21 +655,17 @@ static int __maybe_unused tegra_i2c_runtime_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (!i2c_dev->hw->has_single_clk_source) {
+-		ret = clk_enable(i2c_dev->fast_clk);
+-		if (ret < 0) {
+-			dev_err(i2c_dev->dev,
+-				"Enabling fast clk failed, err %d\n", ret);
+-			return ret;
+-		}
++	ret = clk_enable(i2c_dev->fast_clk);
++	if (ret < 0) {
++		dev_err(i2c_dev->dev,
++			"Enabling fast clk failed, err %d\n", ret);
++		return ret;
+ 	}
+ 
+-	if (i2c_dev->slow_clk) {
+-		ret = clk_enable(i2c_dev->slow_clk);
+-		if (ret < 0) {
+-			dev_err(dev, "failed to enable slow clock: %d\n", ret);
+-			return ret;
+-		}
++	ret = clk_enable(i2c_dev->slow_clk);
++	if (ret < 0) {
++		dev_err(dev, "failed to enable slow clock: %d\n", ret);
++		return ret;
+ 	}
+ 
+ 	ret = clk_enable(i2c_dev->div_clk);
+@@ -688,12 +684,8 @@ static int __maybe_unused tegra_i2c_runtime_suspend(struct device *dev)
+ 	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+ 
+ 	clk_disable(i2c_dev->div_clk);
+-
+-	if (i2c_dev->slow_clk)
+-		clk_disable(i2c_dev->slow_clk);
+-
+-	if (!i2c_dev->hw->has_single_clk_source)
+-		clk_disable(i2c_dev->fast_clk);
++	clk_disable(i2c_dev->slow_clk);
++	clk_disable(i2c_dev->fast_clk);
+ 
+ 	return pinctrl_pm_select_idle_state(i2c_dev->dev);
+ }
+@@ -1716,20 +1708,16 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, i2c_dev);
+ 
+-	if (!i2c_dev->hw->has_single_clk_source) {
+-		ret = clk_prepare(i2c_dev->fast_clk);
+-		if (ret < 0) {
+-			dev_err(i2c_dev->dev, "Clock prepare failed %d\n", ret);
+-			return ret;
+-		}
++	ret = clk_prepare(i2c_dev->fast_clk);
++	if (ret < 0) {
++		dev_err(i2c_dev->dev, "Clock prepare failed %d\n", ret);
++		return ret;
+ 	}
+ 
+-	if (i2c_dev->slow_clk) {
+-		ret = clk_prepare(i2c_dev->slow_clk);
+-		if (ret < 0) {
+-			dev_err(dev, "failed to prepare slow clock: %d\n", ret);
+-			goto unprepare_fast_clk;
+-		}
++	ret = clk_prepare(i2c_dev->slow_clk);
++	if (ret < 0) {
++		dev_err(dev, "failed to prepare slow clock: %d\n", ret);
++		goto unprepare_fast_clk;
+ 	}
+ 
+ 	if (i2c_dev->bus_clk_rate > I2C_MAX_FAST_MODE_FREQ &&
+@@ -1843,12 +1831,10 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 	clk_unprepare(i2c_dev->div_clk);
+ 
+ unprepare_slow_clk:
+-	if (i2c_dev->is_vi)
+-		clk_unprepare(i2c_dev->slow_clk);
++	clk_unprepare(i2c_dev->slow_clk);
+ 
+ unprepare_fast_clk:
+-	if (!i2c_dev->hw->has_single_clk_source)
+-		clk_unprepare(i2c_dev->fast_clk);
++	clk_unprepare(i2c_dev->fast_clk);
+ 
+ 	return ret;
+ }
+@@ -1867,12 +1853,8 @@ static int tegra_i2c_remove(struct platform_device *pdev)
+ 		tegra_i2c_runtime_suspend(&pdev->dev);
+ 
+ 	clk_unprepare(i2c_dev->div_clk);
+-
+-	if (i2c_dev->slow_clk)
+-		clk_unprepare(i2c_dev->slow_clk);
+-
+-	if (!i2c_dev->hw->has_single_clk_source)
+-		clk_unprepare(i2c_dev->fast_clk);
++	clk_unprepare(i2c_dev->slow_clk);
++	clk_unprepare(i2c_dev->fast_clk);
+ 
+ 	tegra_i2c_release_dma(i2c_dev);
+ 	return 0;
+-- 
+2.7.4
 
