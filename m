@@ -2,289 +2,148 @@ Return-Path: <SRS0=pJLX=BG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39E32C433E4
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 13:51:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF845C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 14:06:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 185A9206E7
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 13:51:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD0BD207FC
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 14:06:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727812AbgG0Nvn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Jul 2020 09:51:43 -0400
-Received: from smtp11.smtpout.orange.fr ([80.12.242.133]:51426 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbgG0Nvm (ORCPT
+        id S1726967AbgG0OF6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Jul 2020 10:05:58 -0400
+Received: from mout.kundenserver.de ([212.227.17.13]:52043 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726222AbgG0OF6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Jul 2020 09:51:42 -0400
-Received: from localhost.localdomain ([93.23.198.229])
-        by mwinf5d90 with ME
-        id 8Drf230074xT3VZ03Drfdg; Mon, 27 Jul 2020 15:51:40 +0200
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 27 Jul 2020 15:51:40 +0200
-X-ME-IP: 93.23.198.229
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     mchehab@kernel.org, akpm@linux-foundation.org, rppt@kernel.org,
-        hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 1/2] media: bt8xx: switch from 'pci_' to 'dma_' API
-Date:   Mon, 27 Jul 2020 15:51:37 +0200
-Message-Id: <20200727135137.54702-1-christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.25.1
+        Mon, 27 Jul 2020 10:05:58 -0400
+Received: from mail-qt1-f175.google.com ([209.85.160.175]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1Mkpj7-1keMbU49JH-00mGMu; Mon, 27 Jul 2020 16:05:56 +0200
+Received: by mail-qt1-f175.google.com with SMTP id 6so12267451qtt.0;
+        Mon, 27 Jul 2020 07:05:55 -0700 (PDT)
+X-Gm-Message-State: AOAM5327FGTxxBDo5Oi5XN1wZ/q2cVIkLwoK+76IcPJJWpNTQ9+BhIyq
+        AU8iyWerlh55CfYlRr47GKRN9gqZEmoGAIZXNdY=
+X-Google-Smtp-Source: ABdhPJyLw0yS/axt0gy7Q4r8Mv5c5syAQIHggRwgMclz+d8wr5c6LKZiPDs5uhjwt61MDn3Dh4YP6VF9XZYYgL6b5rw=
+X-Received: by 2002:aed:33e7:: with SMTP id v94mr19493367qtd.18.1595858754708;
+ Mon, 27 Jul 2020 07:05:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200726220557.102300-1-yepeilin.cs@gmail.com>
+ <20200726222703.102701-1-yepeilin.cs@gmail.com> <CAK8P3a3NB2BVo9fH-Wcinrhhs-QJ=9dK59Ds83TvgLmEkRy3qA@mail.gmail.com>
+ <20200727131608.GD1913@kadam>
+In-Reply-To: <20200727131608.GD1913@kadam>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 27 Jul 2020 16:05:38 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3+9Gr6G6KDWu=iW3316O9cPH+XupBBajJaxrq20xQcyQ@mail.gmail.com>
+Message-ID: <CAK8P3a3+9Gr6G6KDWu=iW3316O9cPH+XupBBajJaxrq20xQcyQ@mail.gmail.com>
+Subject: Re: [Linux-kernel-mentees] [PATCH v3] media/v4l2-core: Fix
+ kernel-infoleak in video_put_user()
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vandana BN <bnvandana@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:uYTTDyuV42QIpGKOCNEEJ+PUI3+ux0SBsv8tF5Ho0S0vzFmKGog
+ TcyE4TgnawrR6xE72VZ+fE59OSPlVlqX4s3KcFHxZbJhXdil7/Y0WxnveLPDjl3py7pELbf
+ fRe/QCgKZhFs2bM4PgbqYWZnvVYxDxn4urGSveq0yzoAP9G2q4rY70i0HLbgR3xRDmtnnUQ
+ DbCbVasMf1h4AHE/3slYw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cYFVaI5WBYI=:98jziNKZlNXKNy+uR4ZSOI
+ 8fAVlZzVEqhLe6zvP/UeqiT3K8ahGWYRUInl4yH3WJ5d2jocEKtrAaLj81+oXo+NHeeVOxDFR
+ ISh16TPwCc0X6BQ4eaRrc5B8D3A/rU3EqZ1+74RRXkS0lUWMoW2jLW3UvC7pezD6v8NEHHaTj
+ 8691zR/eYK6qkH5qTgFzNtbNu3mxT2i1Ho9r8APionDoEGOQ3Zu0HG/2QMcs28ynnDw3pqFwQ
+ Ab1Klvkh0NzNTjRPBNlCaSSAsZ1tMOOliJgCsUmuaoDHzVFAGC6Za+NR7eehvd4dYY38oR8K8
+ XGl+uUUMiMDllcJlGQCqiISBqx4GrnNarQ3ECWdCF6dOX4Jl2yjk5I1pJSekOawhCjpNxmI42
+ VFwR3hIw5COlQ/wiUeIyrcbD8gWwaI/rqzn2Jrto1XmePRJkf4OFyoK1dByHuQU2ATP/2d5xg
+ RHxkKb8tDAqFQQhdlxqK2uDtMvzgub8YGzS/OzVdCIL23EJX2zolx4zWebLUQqstQTvbVFH8t
+ BmDTkw/Vf47E8xBO4LXL5ut4B9x0p5iDYQ6GYzZqkx344yZyS2wAjHJfjxhq7W4J3WMduLL1Y
+ s0IT7EwBZAoKDH675ikMZ2lVLyV2GnG2Ke3WwNF0c7dKv/C2kxgJHMrohlI9TcyvLmTG1C78U
+ IWZgOBtJHvcFkxwJMYxHBGV9X6tvYbBcslY5PCJqTK0vxWu3xOWishgrO4Sg6FFdZTtTCQEqt
+ LgBxb+zZztuB/F6WMQd5Q5w/1EpiwURaJgKP42+XkydtwHudzEALtVyWfqKCRaTmyHZuiFKn0
+ GzGe8viUOfiw9ypa613osJnFQWhCOoUh80TCxuzm/G5WEx1qm1D1dVOGgYHzUUwC3D+eLwDYl
+ K6c/FAfSTYLH9dIOz9s0bh9r90pKJZbAKcqbOSbRABPWoG1ncvps6VQ5CH37gUh82Ip2fQ92L
+ FMpd9xILL3vA2UyOqZfihRwOyqtmu9A1RzLsvtfUZEFYBX+P5lBKt
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The wrappers in include/linux/pci-dma-compat.h should go away.
+On Mon, Jul 27, 2020 at 3:16 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Mon, Jul 27, 2020 at 09:25:16AM +0200, Arnd Bergmann wrote:
+> > On Mon, Jul 27, 2020 at 12:28 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
+> > >
+> > > video_put_user() is copying uninitialized stack memory to userspace due
+> > > to the compiler not initializing holes in the structures declared on the
+> > > stack. Fix it by initializing `ev32` and `vb32` using memset().
+> > >
+> > > Reported-and-tested-by: syzbot+79d751604cb6f29fbf59@syzkaller.appspotmail.com
+> > > Link: https://syzkaller.appspot.com/bug?extid=79d751604cb6f29fbf59
+> > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > Signed-off-by: Peilin Ye <yepeilin.cs@gmail.com>
+> >
+> > Thanks a lot for addressing this! I now see that I actually created a similar
+> > bugfix for it back in January, but for some reason that got stuck in my
+> > backlog and I never wrote a proper description for it or sent it out to the
+> > list, sorry about that. I would hope we could find a way to have either
+> > the compiler or sparse warn if we copy uninitialized data to user space,
+> > but we now don't even check for that within the kernel any more.
+>
+> Here are my latest warnings on linux-next from Friday.
 
-The patch has been generated with the coccinelle script below and has been
-hand modified to replace GFP_ with a correct flag.
-It has been compile tested.
+Ah, I forgot you had that kind of list already, thanks for checking!
 
-When memory is allocated in 'bt878_mem_alloc()' (bt878.c), GFP_KERNEL can
-be used because it is only called from the probe function (i.e.
-'bt878_probe()') and no lock is taken.
+> block/scsi_ioctl.c:707 scsi_put_cdrom_generic_arg() warn: check that 'cgc32' doesn't leak information (struct has a hole after 'data_direction')
 
+I see no padding in this one, should be fine AFAICT. Any idea why you
+get a warning
+for this instance?
 
-When memory is allocated in 'btcx_riscmem_alloc()' (btcx-risc.c),
-GFP_KERNEL can be used because all the callers either already use
-GFP_KERNEL or are called from a probe function or are called from a
-.buf_prepare function.
+> drivers/input/misc/uinput.c:743 uinput_ff_upload_to_user() warn: check that 'ff_up_compat' doesn't leak information (struct has a hole after 'replay')
 
-The 4 callers are all in 'bttv-risc.c'.
-   - bttv_risc_packed() and bttv_risc_planar(): only called from
-        'videobuf_queue_ops''s '.buf_prepare' functions.
-        The call chains are:
+This one hs padding in it and looks broken.
 
-        .buf_prepare                     (in 'bttv-driver.c')
-           --> buffer_prepare            (in 'bttv-driver.c')
-              --> bttv_prepare_buffer
-                 --> bttv_buffer_risc
-                    --> bttv_risc_packed (x8 times)
-                    --> bttv_risc_planar (x6 times)
+> drivers/input/misc/uinput.c:958 uinput_ioctl_handler() warn: check that 'ff_up' doesn't leak information (struct has a hole after 'replay')
 
-        .buf_prepare                     (in 'bttv-vbi.c')
-           --> vbi_buffer_prepare        (in 'bttv-vbi.c')
-              --> bttv_risc_packed       (x2 times)
+hard to tell.
 
-   - bttv_risc_overlay(): already uses GFP_KERNEL
-   - bttv_risc_init_main(): only called from the 'bttv_probe()' probe
-        function and no spin_lock is taken in the between
+> drivers/firewire/core-cdev.c:463 ioctl_get_info() warn: check that 'bus_reset' doesn't leak information (struct has a hole after 'generation')
 
-@@
-@@
--    PCI_DMA_BIDIRECTIONAL
-+    DMA_BIDIRECTIONAL
+broken, trivial to fix
 
-@@
-@@
--    PCI_DMA_TODEVICE
-+    DMA_TO_DEVICE
+> drivers/scsi/megaraid/megaraid_mm.c:824 kioc_to_mimd() warn: check that 'cinfo.base' doesn't leak information
 
-@@
-@@
--    PCI_DMA_FROMDEVICE
-+    DMA_FROM_DEVICE
+Seems fine due to __packed annotation.
 
-@@
-@@
--    PCI_DMA_NONE
-+    DMA_NONE
+> drivers/gpio/gpiolib-cdev.c:473 lineevent_read() warn: check that 'ge' doesn't leak information (struct has a hole after 'id')
 
-@@
-expression e1, e2, e3;
-@@
--    pci_alloc_consistent(e1, e2, e3)
-+    dma_alloc_coherent(&e1->dev, e2, e3, GFP_)
+The driver seems to initialize the elements correctly before putting
+them into the kfifo, so there is no infoleak. However the structure layout
+of "struct gpioevent_data" is incompatible between x86-32 and x86-64
+calling conventions, so this is likely broken in x86 compat mode,
+unless user space can explicitly deal with the difference.
 
-@@
-expression e1, e2, e3;
-@@
--    pci_zalloc_consistent(e1, e2, e3)
-+    dma_alloc_coherent(&e1->dev, e2, e3, GFP_)
+> drivers/gpu/drm/i915/i915_query.c:136 query_engine_info() warn: check that 'query.num_engines' doesn't leak information
 
-@@
-expression e1, e2, e3, e4;
-@@
--    pci_free_consistent(e1, e2, e3, e4)
-+    dma_free_coherent(&e1->dev, e2, e3, e4)
+I don't think this leaks any state, as it just copies data to user space that
+it copied from there originally.
 
-@@
-expression e1, e2, e3, e4;
-@@
--    pci_map_single(e1, e2, e3, e4)
-+    dma_map_single(&e1->dev, e2, e3, e4)
+Stopping here for now.
 
-@@
-expression e1, e2, e3, e4;
-@@
--    pci_unmap_single(e1, e2, e3, e4)
-+    dma_unmap_single(&e1->dev, e2, e3, e4)
+Peilin Ye, is this something you are interested in fixing for the other drivers
+as well? I'd be happy to help review any further patches if you Cc me.
 
-@@
-expression e1, e2, e3, e4, e5;
-@@
--    pci_map_page(e1, e2, e3, e4, e5)
-+    dma_map_page(&e1->dev, e2, e3, e4, e5)
-
-@@
-expression e1, e2, e3, e4;
-@@
--    pci_unmap_page(e1, e2, e3, e4)
-+    dma_unmap_page(&e1->dev, e2, e3, e4)
-
-@@
-expression e1, e2, e3, e4;
-@@
--    pci_map_sg(e1, e2, e3, e4)
-+    dma_map_sg(&e1->dev, e2, e3, e4)
-
-@@
-expression e1, e2, e3, e4;
-@@
--    pci_unmap_sg(e1, e2, e3, e4)
-+    dma_unmap_sg(&e1->dev, e2, e3, e4)
-
-@@
-expression e1, e2, e3, e4;
-@@
--    pci_dma_sync_single_for_cpu(e1, e2, e3, e4)
-+    dma_sync_single_for_cpu(&e1->dev, e2, e3, e4)
-
-@@
-expression e1, e2, e3, e4;
-@@
--    pci_dma_sync_single_for_device(e1, e2, e3, e4)
-+    dma_sync_single_for_device(&e1->dev, e2, e3, e4)
-
-@@
-expression e1, e2, e3, e4;
-@@
--    pci_dma_sync_sg_for_cpu(e1, e2, e3, e4)
-+    dma_sync_sg_for_cpu(&e1->dev, e2, e3, e4)
-
-@@
-expression e1, e2, e3, e4;
-@@
--    pci_dma_sync_sg_for_device(e1, e2, e3, e4)
-+    dma_sync_sg_for_device(&e1->dev, e2, e3, e4)
-
-@@
-expression e1, e2;
-@@
--    pci_dma_mapping_error(e1, e2)
-+    dma_mapping_error(&e1->dev, e2)
-
-@@
-expression e1, e2;
-@@
--    pci_set_dma_mask(e1, e2)
-+    dma_set_mask(&e1->dev, e2)
-
-@@
-expression e1, e2;
-@@
--    pci_set_consistent_dma_mask(e1, e2)
-+    dma_set_coherent_mask(&e1->dev, e2)
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-If needed, see post from Christoph Hellwig on the kernel-janitors ML:
-   https://marc.info/?l=kernel-janitors&m=158745678307186&w=4
----
- drivers/media/pci/bt8xx/bt878.c       | 16 ++++++++--------
- drivers/media/pci/bt8xx/btcx-risc.c   |  4 ++--
- drivers/media/pci/bt8xx/bttv-driver.c |  2 +-
- 3 files changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/media/pci/bt8xx/bt878.c b/drivers/media/pci/bt8xx/bt878.c
-index 79ba15a9385a..78dd35c9b65d 100644
---- a/drivers/media/pci/bt8xx/bt878.c
-+++ b/drivers/media/pci/bt8xx/bt878.c
-@@ -67,14 +67,14 @@ EXPORT_SYMBOL(bt878);
- static void bt878_mem_free(struct bt878 *bt)
- {
- 	if (bt->buf_cpu) {
--		pci_free_consistent(bt->dev, bt->buf_size, bt->buf_cpu,
--				    bt->buf_dma);
-+		dma_free_coherent(&bt->dev->dev, bt->buf_size, bt->buf_cpu,
-+				  bt->buf_dma);
- 		bt->buf_cpu = NULL;
- 	}
- 
- 	if (bt->risc_cpu) {
--		pci_free_consistent(bt->dev, bt->risc_size, bt->risc_cpu,
--				    bt->risc_dma);
-+		dma_free_coherent(&bt->dev->dev, bt->risc_size, bt->risc_cpu,
-+				  bt->risc_dma);
- 		bt->risc_cpu = NULL;
- 	}
- }
-@@ -84,16 +84,16 @@ static int bt878_mem_alloc(struct bt878 *bt)
- 	if (!bt->buf_cpu) {
- 		bt->buf_size = 128 * 1024;
- 
--		bt->buf_cpu = pci_zalloc_consistent(bt->dev, bt->buf_size,
--						    &bt->buf_dma);
-+		bt->buf_cpu = dma_alloc_coherent(&bt->dev->dev, bt->buf_size,
-+						 &bt->buf_dma, GFP_KERNEL);
- 		if (!bt->buf_cpu)
- 			return -ENOMEM;
- 	}
- 
- 	if (!bt->risc_cpu) {
- 		bt->risc_size = PAGE_SIZE;
--		bt->risc_cpu = pci_zalloc_consistent(bt->dev, bt->risc_size,
--						     &bt->risc_dma);
-+		bt->risc_cpu = dma_alloc_coherent(&bt->dev->dev, bt->risc_size,
-+						  &bt->risc_dma, GFP_KERNEL);
- 		if (!bt->risc_cpu) {
- 			bt878_mem_free(bt);
- 			return -ENOMEM;
-diff --git a/drivers/media/pci/bt8xx/btcx-risc.c b/drivers/media/pci/bt8xx/btcx-risc.c
-index 51257980f539..13bb1490a568 100644
---- a/drivers/media/pci/bt8xx/btcx-risc.c
-+++ b/drivers/media/pci/bt8xx/btcx-risc.c
-@@ -48,7 +48,7 @@ void btcx_riscmem_free(struct pci_dev *pci,
- 	dprintk("btcx: riscmem free [%d] dma=%lx\n",
- 		memcnt, (unsigned long)risc->dma);
- 
--	pci_free_consistent(pci, risc->size, risc->cpu, risc->dma);
-+	dma_free_coherent(&pci->dev, risc->size, risc->cpu, risc->dma);
- 	memset(risc,0,sizeof(*risc));
- }
- 
-@@ -62,7 +62,7 @@ int btcx_riscmem_alloc(struct pci_dev *pci,
- 	if (NULL != risc->cpu && risc->size < size)
- 		btcx_riscmem_free(pci,risc);
- 	if (NULL == risc->cpu) {
--		cpu = pci_alloc_consistent(pci, size, &dma);
-+		cpu = dma_alloc_coherent(&pci->dev, size, &dma, GFP_KERNEL);
- 		if (NULL == cpu)
- 			return -ENOMEM;
- 		risc->cpu  = cpu;
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 9144f795fb93..0315fb7458b0 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -4015,7 +4015,7 @@ static int bttv_probe(struct pci_dev *dev, const struct pci_device_id *pci_id)
- 		pr_warn("%d: Can't enable device\n", btv->c.nr);
- 		return -EIO;
- 	}
--	if (pci_set_dma_mask(dev, DMA_BIT_MASK(32))) {
-+	if (dma_set_mask(&dev->dev, DMA_BIT_MASK(32))) {
- 		pr_warn("%d: No suitable DMA available\n", btv->c.nr);
- 		return -EIO;
- 	}
--- 
-2.25.1
-
+     Arnd
