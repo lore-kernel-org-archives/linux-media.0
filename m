@@ -2,147 +2,120 @@ Return-Path: <SRS0=pJLX=BG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0A45C433E4
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 21:31:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 558ECC433EB
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 22:05:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC28C2075D
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 21:31:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2FC9C2072E
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 22:05:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="cVLK0R/g"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KKrVFetT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726110AbgG0Vby (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Jul 2020 17:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47882 "EHLO
+        id S1726676AbgG0WFA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Jul 2020 18:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726194AbgG0Vbx (ORCPT
+        with ESMTP id S1726269AbgG0WFA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Jul 2020 17:31:53 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A43BC0619D2
-        for <linux-media@vger.kernel.org>; Mon, 27 Jul 2020 14:31:53 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id a5so6292725wrm.6
-        for <linux-media@vger.kernel.org>; Mon, 27 Jul 2020 14:31:53 -0700 (PDT)
+        Mon, 27 Jul 2020 18:05:00 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18204C061794;
+        Mon, 27 Jul 2020 15:05:00 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id d14so16816746qke.13;
+        Mon, 27 Jul 2020 15:05:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IbBLsev6A/k6JtTZxYPdXm24BNGReWdxszm0mfyFmjs=;
-        b=cVLK0R/gUj+gognaAVDPpAcP0p/kaqO27TPJ/4oQvPAVxTWgzIk1QMDw38zDZnYRwL
-         oEPqrbbbcE3rhwjhV7Pm1B0efa4lN6NMK/Kky5kl6lUyt4IW7cYwb/OkujsODB6S4ySc
-         /O6SRw8n2sblXDqrfhuiNO9eEB3Ehe86udljQ=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iVuPTRHNAeDbxJIJqGMzJ2wPysTPpDFSvpK97m2+rwo=;
+        b=KKrVFetTr55OQ+1m/sHURefNlPvk09O9SSfcOdgGMAm4zuxZf2zAWC0vPdDs9StyHe
+         gg5ArsycVSyP74J5m0Nsd0irvaQDUFdjymVgMbhv9dyfOVrSnBog0ABmlszMZjFpv8Qf
+         FHk7u4eIF+rXkYulvQJ6a6XYBQVHXoiZJQmIMk1WuHF9HrUI2vcCrcnpmYpQ5LmmLEwe
+         3g80DomwgA4a2yr2RnNFzlZPcwixL1rbxQV2gq0V2G6e1qkBPXNSoYDto4yKglTwBtLZ
+         Hdu3c/oSdPzw1wZLuQxdmdVkcm7y32liptBK++zRSYLp7inGClfhqzU2MlOwEaWYCkxv
+         NvWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IbBLsev6A/k6JtTZxYPdXm24BNGReWdxszm0mfyFmjs=;
-        b=t48naoUSbE0a1pjXvIpF0W5FKur3Pe4jNLXrLJtbz+DW2PDXJLLbU5//W5ZXVrUJg2
-         CTBr5XER2RtV42smfsjiM1677z/RtcqBDIZQYthQRXF4j/pY0E2KgfS0sLgzNgGooJzr
-         y3c12b2RUkNnBhBubP9Ey6M0Pq4UbNEgHtzqSZ1gPhlwzRjRFDE1islIml1/BS3JlwgY
-         p22TZbgXQBEV7NxkiXHxQMwUe0yrLb8vjsgAnystF0Soa6LL0JvLSFCOMFat08q/IM3k
-         cKHGh6wjX7dlXm9PWMSiiCqRX7sLQ8bggC/rxO8611Ktq+ze8UaxjiaZ3S7Hd81jZU8Z
-         /yDg==
-X-Gm-Message-State: AOAM5329gf6niXM+8QYlLbR0Brd3MWgdBcp2p/qUeKwVw7Er4SCbmk+y
-        1KbZrLkayv8eE5AWwVXy/i7XcvIq71U=
-X-Google-Smtp-Source: ABdhPJxu91l4eNQybKcmI4LErpte7CoyW1rnIyORt8Wxy15Rf018CY26pqWTld4+57hcv1yfORKfeQ==
-X-Received: by 2002:adf:82f6:: with SMTP id 109mr23889821wrc.25.1595885511913;
-        Mon, 27 Jul 2020 14:31:51 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id f9sm13945424wru.47.2020.07.27.14.31.50
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iVuPTRHNAeDbxJIJqGMzJ2wPysTPpDFSvpK97m2+rwo=;
+        b=tbW4Cpfom1yLmrc+UxEDyLhg0JVmUZSqpsuy12SUW44/EgC1EfLq/tsmvPzIhgElA1
+         OOLzgME3D+xjRjnDMDQ2KHnCem58Bklpg6lIp1E48oYkwOZTI2598BCoZ8gn7LIesLCF
+         Gy87Q4HU26Uan1pZ73vw9I2o5dqSHtnUssXgouZt23BNe80+wgc0ilk1KqP1s2uLJaMy
+         /NMrdi4JrUAGxeXxc/zh0X+dmMEATQDuqj2hojhnif28PHPIufBKyE49QpeqUKnBqdZM
+         MDsI2+/pxZ3GGa+JiD0XU9cS7MerxAFTpw1+9w15PjHbU82MjBJPmsZ2+Qd/Jo4gLfr2
+         TKSA==
+X-Gm-Message-State: AOAM531LzPOtJyEu1U5wAiIp3EXiI/GRKPmHX+vhH6obLJHTk79a83dQ
+        +MIfxzwEWmuVBrZLm3TCEQ==
+X-Google-Smtp-Source: ABdhPJzfxFKdzL8nQ1KA2C516wzRCtGXJoI/WM2PqHeAK/4CHI1X4r58A9z6GhvCvrBKLEDROQUrkQ==
+X-Received: by 2002:a05:620a:4ca:: with SMTP id 10mr22310620qks.306.1595887499368;
+        Mon, 27 Jul 2020 15:04:59 -0700 (PDT)
+Received: from PWN ([209.94.141.207])
+        by smtp.gmail.com with ESMTPSA id l64sm5279365qkc.21.2020.07.27.15.04.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2020 14:31:51 -0700 (PDT)
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-To:     DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@intel.com>
-Subject: [PATCH] drm/amdgpu/dc: Stop dma_resv_lock inversion in commit_tail
-Date:   Mon, 27 Jul 2020 23:30:18 +0200
-Message-Id: <20200727213017.852589-1-daniel.vetter@ffwll.ch>
-X-Mailer: git-send-email 2.27.0
+        Mon, 27 Jul 2020 15:04:58 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 18:04:56 -0400
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vandana BN <bnvandana@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [Linux-kernel-mentees] [PATCH v3] media/v4l2-core: Fix
+ kernel-infoleak in video_put_user()
+Message-ID: <20200727220456.GA328887@PWN>
+References: <20200726220557.102300-1-yepeilin.cs@gmail.com>
+ <20200726222703.102701-1-yepeilin.cs@gmail.com>
+ <CAK8P3a3NB2BVo9fH-Wcinrhhs-QJ=9dK59Ds83TvgLmEkRy3qA@mail.gmail.com>
+ <20200727131608.GD1913@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200727131608.GD1913@kadam>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Trying to grab dma_resv_lock while in commit_tail before we've done
-all the code that leads to the eventual signalling of the vblank event
-(which can be a dma_fence) is deadlock-y. Don't do that.
+On Mon, Jul 27, 2020 at 04:16:08PM +0300, Dan Carpenter wrote:
+> drivers/char/hpet.c:675 hpet_ioctl() warn: check that 'info' doesn't leak information (struct has a hole after 'hi_timer')
 
-Here the solution is easy because just grabbing locks to read
-something races anyway. We don't need to bother, READ_ONCE is
-equivalent. And avoids the locking issue.
+This one seems like a false positive.
 
-v2: Also take into account tmz_surface boolean, plus just delete the
-old code.
+drivers/char/hpet.c:670:
 
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: linux-rdma@vger.kernel.org
-Cc: amd-gfx@lists.freedesktop.org
-Cc: intel-gfx@lists.freedesktop.org
-Cc: Chris Wilson <chris@chris-wilson.co.uk>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Christian König <christian.koenig@amd.com>
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
----
-DC-folks, I think this split out patch from my series here
+	mutex_lock(&hpet_mutex);
+	err = hpet_ioctl_common(file->private_data, cmd, arg, &info);
+	mutex_unlock(&hpet_mutex);
 
-https://lore.kernel.org/dri-devel/20200707201229.472834-1-daniel.vetter@ffwll.ch/
+	if ((cmd == HPET_INFO) && !err &&
+	    (copy_to_user((void __user *)arg, &info, sizeof(info))))
+		err = -EFAULT;
 
-should be ready for review/merging. I fixed it up a bit so that it's not
-just a gross hack :-)
+`info` is only being copied to userspace when `cmd` is `HPET_INFO`.
+However, hpet_ioctl_common() is already doing memset() on `info` in
+`case HPET_INFO`:
 
-Cheers, Daniel
+drivers/char/hpet.c:612:
 
+	case HPET_INFO:
+		{
+			memset(info, 0, sizeof(*info));
+			^^^^^^
 
----
- .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 21ec64fe5527..a20b62b1f2ef 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -6959,20 +6959,13 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
- 			DRM_ERROR("Waiting for fences timed out!");
- 
- 		/*
--		 * TODO This might fail and hence better not used, wait
--		 * explicitly on fences instead
--		 * and in general should be called for
--		 * blocking commit to as per framework helpers
-+		 * We cannot reserve buffers here, which means the normal flag
-+		 * access functions don't work. Paper over this with READ_ONCE,
-+		 * but maybe the flags are invariant enough that not even that
-+		 * would be needed.
- 		 */
--		r = amdgpu_bo_reserve(abo, true);
--		if (unlikely(r != 0))
--			DRM_ERROR("failed to reserve buffer before flip\n");
--
--		amdgpu_bo_get_tiling_flags(abo, &tiling_flags);
--
--		tmz_surface = amdgpu_bo_encrypted(abo);
--
--		amdgpu_bo_unreserve(abo);
-+		tiling_flags = READ_ONCE(abo->tiling_flags);
-+		tmz_surface = READ_ONCE(abo->flags) & AMDGPU_GEM_CREATE_ENCRYPTED;
- 
- 		fill_dc_plane_info_and_addr(
- 			dm->adev, new_plane_state, tiling_flags,
--- 
-2.27.0
-
+Thank you,
+Peilin Ye
