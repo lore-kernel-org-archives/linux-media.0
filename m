@@ -1,132 +1,146 @@
-Return-Path: <SRS0=lMHH=BA=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=pJLX=BG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BEC4C433E1
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 10:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0D61C433E1
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 22:25:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 68F0520771
-	for <linux-media@archiver.kernel.org>; Tue, 21 Jul 2020 10:52:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE6EB21775
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 22:25:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="arNhpI5y"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="pTOAEWhT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729349AbgGUKwA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 21 Jul 2020 06:52:00 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:56062 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729312AbgGUKv7 (ORCPT
+        id S1726268AbgG0WZ6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Jul 2020 18:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726171AbgG0WZ5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 21 Jul 2020 06:51:59 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06LAcjeq128470;
-        Tue, 21 Jul 2020 10:51:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=PvyKfoECg1Rab+GAU63ZCDHWNoKItHwcDywMEowL0/0=;
- b=arNhpI5yyyDf49hCGFPElJ5vRRE0/vpywHNqFvNnPpbIm7+10SMWlJhm8b5eJv3/r1kY
- u4QsCdbnTM6vpEiaMdkfALoYvZ69OSft93BcfpnLwTvth7LfIgXlD1yif8pWGxfJOlu2
- uCwAxZ4+6fdlO3upuD+52heuJl3kWGRheAkbjjP+pBUDDzqoZ0nSvjGDcz+oaekWBJo4
- nrq8Wtx7en2hNKYwoHAld/LB3Q++tVMNTXdiBFm71igi0YopaP3VGmr8kFpZBC5940cC
- bKzTXMgYnbZFmIkJ2y4rsJcSOoTI08tmI9cFchSzlHpmTBL21TA7DxrGW3cKImDj6gUw ug== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 32brgrcgwb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Jul 2020 10:51:56 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06LAbxrE151527;
-        Tue, 21 Jul 2020 10:49:55 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 32dw48mbs4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jul 2020 10:49:55 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06LAnsJb017121;
-        Tue, 21 Jul 2020 10:49:54 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 21 Jul 2020 10:49:54 +0000
-Date:   Tue, 21 Jul 2020 13:49:46 +0300
-From:   <dan.carpenter@oracle.com>
-To:     <mchehab+huawei@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [bug report] media: atomisp: place all gpio parsing together
-Message-ID: <20200721104946.GA149039@mwanda>
+        Mon, 27 Jul 2020 18:25:57 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A60C061794;
+        Mon, 27 Jul 2020 15:25:57 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 828D0556;
+        Tue, 28 Jul 2020 00:25:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1595888749;
+        bh=6sT4s9bubkqih4+AYxlrcHpz/H6v+knBKo4NibbsXSY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pTOAEWhTQiSXIhFOzdRiNCRi//rtm/FxuF9bF8wPKDtNOSC/Dw6qaQLT/FSUzpI4N
+         DbqSyBCAUwpuUlfDjhLzXtJ+1ntAxcNCIoaDzBZqO3BV6YrT6yZx8+qzUSu7JQREmA
+         MBXwLtDzl6r1kfW/g0DP2Qx98OSpG7/LwaTRQNWg=
+Date:   Tue, 28 Jul 2020 01:25:41 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] media: uvcvideo: Fix uvc_ctrl_fixup_xu_info() not having
+ any effect
+Message-ID: <20200727222541.GC15448@pendragon.ideasonboard.com>
+References: <20200724114823.108237-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 bulkscore=0
- suspectscore=3 malwarescore=0 adultscore=0 phishscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007210075
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
- impostorscore=0 suspectscore=3 adultscore=0 clxscore=1015 mlxlogscore=999
- priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007210075
+In-Reply-To: <20200724114823.108237-1-hdegoede@redhat.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Mauro Carvalho Chehab,
+Hi Hans,
 
-This is a semi-automatic email about new static checker warnings.
+Thank you for the patch.
 
-The patch 79317baaaea2: "media: atomisp: place all gpio parsing 
-together" from Jun 21, 2020, leads to the following Smatch complaint:
+On Fri, Jul 24, 2020 at 01:48:23PM +0200, Hans de Goede wrote:
+> uvc_ctrl_add_info() calls uvc_ctrl_get_flags() which will override
+> the fixed-up flags set by uvc_ctrl_fixup_xu_info().
+> 
+> This commit fixes this by adding a is_xu argument to uvc_ctrl_add_info()
+> and skipping the uvc_ctrl_get_flags() call for xu ctrls.
+> 
+> Note that the xu path has already called uvc_ctrl_get_flags() from
+> uvc_ctrl_fill_xu_info() before calling uvc_ctrl_add_info().
+> 
+> This fixes the xu motor controls not working properly on a Logitech
+> 046d:08cc, and presumably also on the other Logitech models which have
+> a quirk for this in the uvc_ctrl_fixup_xu_info() function.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index e399b9fad757..4bdea5814d6a 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -1815,7 +1815,7 @@ static int uvc_ctrl_fill_xu_info(struct uvc_device *dev,
+>  }
+>  
+>  static int uvc_ctrl_add_info(struct uvc_device *dev, struct uvc_control *ctrl,
+> -	const struct uvc_control_info *info);
+> +	const struct uvc_control_info *info, bool is_xu);
+>  
+>  static int uvc_ctrl_init_xu_ctrl(struct uvc_device *dev,
+>  	struct uvc_control *ctrl)
+> @@ -1830,7 +1830,7 @@ static int uvc_ctrl_init_xu_ctrl(struct uvc_device *dev,
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	ret = uvc_ctrl_add_info(dev, ctrl, &info);
+> +	ret = uvc_ctrl_add_info(dev, ctrl, &info, true);
+>  	if (ret < 0)
+>  		uvc_trace(UVC_TRACE_CONTROL, "Failed to initialize control "
+>  			  "%pUl/%u on device %s entity %u\n", info.entity,
+> @@ -2009,7 +2009,7 @@ int uvc_ctrl_restore_values(struct uvc_device *dev)
+>   * Add control information to a given control.
+>   */
+>  static int uvc_ctrl_add_info(struct uvc_device *dev, struct uvc_control *ctrl,
+> -	const struct uvc_control_info *info)
+> +	const struct uvc_control_info *info, bool is_xu)
+>  {
+>  	int ret = 0;
+>  
+> @@ -2029,7 +2029,8 @@ static int uvc_ctrl_add_info(struct uvc_device *dev, struct uvc_control *ctrl,
+>  	 * default flag values from the uvc_ctrl array when the device doesn't
+>  	 * properly implement GET_INFO on standard controls.
+>  	 */
+> -	uvc_ctrl_get_flags(dev, ctrl, &ctrl->info);
+> +	if (!is_xu)
+> +		uvc_ctrl_get_flags(dev, ctrl, &ctrl->info);
 
-    drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c:830 gmin_v1p8_ctrl()
-    warn: variable dereferenced before check 'gs' (see line 820)
+Would it make sense to instead move this line (and the above comment) to
+uvc_ctrl_init_ctrl(), right after the uvc_ctrl_add_info() call ? If you
+would prefer keeping it here, I think is_xu should be renamed to
+update_flags (with the true/false values switched) to make it clearer.
+It would then also add a comment to uvc_ctrl_init_xu_ctrl() right before
+the call to uvc_ctrl_add_info() to state that we don't update flags to
+avoid overwriting the value set by uvc_ctrl_fixup_xu_info() in
+uvc_ctrl_fill_xu_info().
 
-drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-   814  static int gmin_v1p8_ctrl(struct v4l2_subdev *subdev, int on)
-   815  {
-   816          struct gmin_subdev *gs = find_gmin_subdev(subdev);
-   817          int ret;
-   818          int value;
-   819	
-   820		if (gs->v1p8_gpio >= 0) {
-                    ^^
-New dereference.
+What's your preference ?
 
-   821			pr_info("atomisp_gmin_platform: 1.8v power on GPIO %d\n",
-   822				gs->v1p8_gpio);
-   823			ret = gpio_request(gs->v1p8_gpio, "camera_v1p8_en");
-   824			if (!ret)
-   825				ret = gpio_direction_output(gs->v1p8_gpio, 0);
-   826			if (ret)
-   827				pr_err("V1P8 GPIO initialization failed\n");
-   828		}
-   829	
-   830		if (!gs || gs->v1p8_on == on)
-                     ^^
-Too late.
+>  
+>  	ctrl->initialized = 1;
+>  
+> @@ -2252,7 +2253,7 @@ static void uvc_ctrl_init_ctrl(struct uvc_device *dev, struct uvc_control *ctrl)
+>  	for (; info < iend; ++info) {
+>  		if (uvc_entity_match_guid(ctrl->entity, info->entity) &&
+>  		    ctrl->index == info->index) {
+> -			uvc_ctrl_add_info(dev, ctrl, info);
+> +			uvc_ctrl_add_info(dev, ctrl, info, false);
+>  			break;
+>  		 }
+>  	}
 
-   831			return 0;
-   832		gs->v1p8_on = on;
-   833  
-   834          if (gs->v1p8_gpio >= 0)
-   835                  gpio_set_value(gs->v1p8_gpio, on);
+-- 
+Regards,
 
-Could we combine this with the first "if (gs->v1p8_gpio >= 0) {"
-condition?  This code is looking pretty subtle so maybe not.
-
-   836  
-   837          if (gs->v1p8_reg) {
-   838                  regulator_set_voltage(gs->v1p8_reg, 1800000, 1800000);
-   839                  if (on)
-   840                          return regulator_enable(gs->v1p8_reg);
-   841                  else
-   842                          return regulator_disable(gs->v1p8_reg);
-   843          }
-   844  
-
-regards,
-dan carpenter
+Laurent Pinchart
