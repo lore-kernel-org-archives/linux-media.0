@@ -2,194 +2,169 @@ Return-Path: <SRS0=pJLX=BG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE5BDC433E5
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 14:31:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B89B6C43445
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 14:35:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 857C120775
-	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 14:31:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97769208E4
+	for <linux-media@archiver.kernel.org>; Mon, 27 Jul 2020 14:35:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="RFPMr7FA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nuZF0Mj0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729694AbgG0Obl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Jul 2020 10:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
+        id S1730522AbgG0OOX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Jul 2020 10:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732225AbgG0Obk (ORCPT
+        with ESMTP id S1730516AbgG0OOV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Jul 2020 10:31:40 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94C4C061794;
-        Mon, 27 Jul 2020 07:31:39 -0700 (PDT)
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A2FB39B1;
-        Mon, 27 Jul 2020 16:31:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1595860297;
-        bh=IMioECjXrO1BEPObj3Q0AqDHaxcQ3XVAMod0E8EVubw=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=RFPMr7FAJG+iVSKzZTr7FTR4hKWrXYxFeUzvPdtJ9JG69DC3iRMoua5PLdojZc6on
-         56WXwb4FrmaqhoWuLXJ/ZrVL0VW9H46NdoE8ivflmZJaQsjD1WwAgHPFWyyMxb1Ake
-         YUo2tBj8/kV1KcGfuJDArUrI1mE0a+T31cmEbkWE=
-Reply-To: kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2 0/3] media: vimc: Allow multiple capture devices to use
- the same sensor
-To:     Kaaira Gupta <kgupta@es.iitr.ac.in>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     Helen Koike <helen.koike@collabora.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        Mon, 27 Jul 2020 10:14:21 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E279C061794;
+        Mon, 27 Jul 2020 07:14:21 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id k18so12242503qtm.10;
+        Mon, 27 Jul 2020 07:14:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y9lbwhpNkXDEPrCqs4m21x/DyaLmLEGxvTObYoYswfg=;
+        b=nuZF0Mj0owgt6tEsiTXfnJ2eI2ujMyxvOF5pbIRSQUbOvAb/wtVocAFwgKr/er65gC
+         C+d5tZT5DB2J9mjk94BGMWgb/W/f0Vh23B440hN+Aq88n/FP8GewmdyNeyXWAY21tTmJ
+         t7bpomd1mNoPFxL9K6XpFtfMGuNmL1KfpMUHbjJnOUwLskuli1JzIReFdu0ImyICn0Pc
+         bHqtCJKDiGzoWZQxs7GdkkLzBpuZN00UJrdoU41KBPiXmuQleavSAW/ACB/IMRJoGSNs
+         v70CMNmIuhXeq/Q/fMM7fndWFHAhGhxWyS0imUpzLXQpQyOWhMwb6GXeQ/hKgLZ0w5gb
+         t6PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y9lbwhpNkXDEPrCqs4m21x/DyaLmLEGxvTObYoYswfg=;
+        b=iXBe/RGVofqzH9NOaPZg5Yo7QbBjIfcH5mA+Cmvnq1QR6p1lK7WzNNZhwKafyI6CjF
+         +ymPgllF9FJHO0FX8Qb4bWEPqFG9ZBuOV4z9TyEFKiQIlabzT00y/1Q9KwlAO32KgCNz
+         c2pdasyUG+e+NprBIcj5z9AIcbzxG5+fe+8EfaLz7tqbmOANsUwC0Tu3UM+lQ1I8+Wpu
+         mYv4u+Q5R/p+jKvLNQvQ64mmgVLdWBdiwLJgHY27Tkm11JmVX1TTM0ES+s0Cc9JmvtuA
+         x/Tri6jFU3Y4KU9qE3e+/en270xWm3CeS+MO5n955b7GVLU+1K5Vcmn+ybhKNMsMf9M3
+         Lh0w==
+X-Gm-Message-State: AOAM532hqKhJoBH5V9yoILZwb7wfLkbOWEmxVweiTNRmlnZHOnFhS/8X
+        ckg29mBs2mJJJW0cfIFBjA==
+X-Google-Smtp-Source: ABdhPJy1E319z1D33SixUBWRgVTxX65uy8ONSuGjV3Q4iaZunOwRcDqmSGKsYBSkw3Ql8PSuJxAW0g==
+X-Received: by 2002:ac8:5207:: with SMTP id r7mr22026332qtn.191.1595859259370;
+        Mon, 27 Jul 2020 07:14:19 -0700 (PDT)
+Received: from PWN ([209.94.141.207])
+        by smtp.gmail.com with ESMTPSA id y24sm2422196qtv.71.2020.07.27.07.14.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 07:14:18 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 10:14:16 -0400
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-References: <20200724120213.17119-1-kgupta@es.iitr.ac.in>
- <20200724121521.GA2705690@oden.dyn.berto.se>
- <20200724122104.GA18482@kaaira-HP-Pavilion-Notebook>
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Autocrypt: addr=kieran.bingham@ideasonboard.com; keydata=
- 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
- WZw01QYHU/GUV/zHJSFk
-Organization: Ideas on Board
-Message-ID: <a6f4eabf-6cd5-950b-f2e3-853370c77629@ideasonboard.com>
-Date:   Mon, 27 Jul 2020 15:31:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vandana BN <bnvandana@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [Linux-kernel-mentees] [PATCH v3] media/v4l2-core: Fix
+ kernel-infoleak in video_put_user()
+Message-ID: <20200727141416.GA306745@PWN>
+References: <20200726220557.102300-1-yepeilin.cs@gmail.com>
+ <20200726222703.102701-1-yepeilin.cs@gmail.com>
+ <CAK8P3a3NB2BVo9fH-Wcinrhhs-QJ=9dK59Ds83TvgLmEkRy3qA@mail.gmail.com>
+ <20200727131608.GD1913@kadam>
+ <CAK8P3a3+9Gr6G6KDWu=iW3316O9cPH+XupBBajJaxrq20xQcyQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200724122104.GA18482@kaaira-HP-Pavilion-Notebook>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a3+9Gr6G6KDWu=iW3316O9cPH+XupBBajJaxrq20xQcyQ@mail.gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
-
-+Dafna for the thread discussion, as she's missed from the to/cc list.
-
-
-On 24/07/2020 13:21, Kaaira Gupta wrote:
-> On Fri, Jul 24, 2020 at 02:15:21PM +0200, Niklas Söderlund wrote:
-> Hi,
+On Mon, Jul 27, 2020 at 04:05:38PM +0200, Arnd Bergmann wrote:
+> On Mon, Jul 27, 2020 at 3:16 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> >
+> > On Mon, Jul 27, 2020 at 09:25:16AM +0200, Arnd Bergmann wrote:
+> > > On Mon, Jul 27, 2020 at 12:28 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
+> > > >
+> > > > video_put_user() is copying uninitialized stack memory to userspace due
+> > > > to the compiler not initializing holes in the structures declared on the
+> > > > stack. Fix it by initializing `ev32` and `vb32` using memset().
+> > > >
+> > > > Reported-and-tested-by: syzbot+79d751604cb6f29fbf59@syzkaller.appspotmail.com
+> > > > Link: https://syzkaller.appspot.com/bug?extid=79d751604cb6f29fbf59
+> > > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > > Signed-off-by: Peilin Ye <yepeilin.cs@gmail.com>
+> > >
+> > > Thanks a lot for addressing this! I now see that I actually created a similar
+> > > bugfix for it back in January, but for some reason that got stuck in my
+> > > backlog and I never wrote a proper description for it or sent it out to the
+> > > list, sorry about that. I would hope we could find a way to have either
+> > > the compiler or sparse warn if we copy uninitialized data to user space,
+> > > but we now don't even check for that within the kernel any more.
+> >
+> > Here are my latest warnings on linux-next from Friday.
 > 
->> Hi Kaaira,
->>
->> Thanks for your work.
+> Ah, I forgot you had that kind of list already, thanks for checking!
 > 
-> Thanks for yours :D
+> > block/scsi_ioctl.c:707 scsi_put_cdrom_generic_arg() warn: check that 'cgc32' doesn't leak information (struct has a hole after 'data_direction')
 > 
->>
->> On 2020-07-24 17:32:10 +0530, Kaaira Gupta wrote:
->>> This is version 2 of the patch series posted by Niklas for allowing
->>> multiple streams in VIMC.
->>> The original series can be found here:
->>> https://patchwork.kernel.org/cover/10948831/
->>>
->>> This series adds support for two (or more) capture devices to be 
->>> connected to the same sensors and run simultaneously. Each capture device 
->>> can be started and stopped independent of each other.
->>>
->>> Patch 1/3 and 2/3 deals with solving the issues that arises once two 
->>> capture devices can be part of the same pipeline. While 3/3 allows for 
->>> two capture devices to be part of the same pipeline and thus allows for 
->>> simultaneously use.
->>
->> I'm just curious if you are aware of this series? It would replace the 
->> need for 1/3 and 2/3 of this series right?
+> I see no padding in this one, should be fine AFAICT. Any idea why you
+> get a warning
+> for this instance?
 > 
-> v3 of this series replaces the need for 1/3, but not the current version
-> (ie v4). v4 of patch 2/5 removes the stream_counter that is needed to
-> keep count of the calls to s_stream. Hence 1/3 becomes relevant again.
+> > drivers/input/misc/uinput.c:743 uinput_ff_upload_to_user() warn: check that 'ff_up_compat' doesn't leak information (struct has a hole after 'replay')
+> 
+> This one hs padding in it and looks broken.
+> 
+> > drivers/input/misc/uinput.c:958 uinput_ioctl_handler() warn: check that 'ff_up' doesn't leak information (struct has a hole after 'replay')
+> 
+> hard to tell.
+> 
+> > drivers/firewire/core-cdev.c:463 ioctl_get_info() warn: check that 'bus_reset' doesn't leak information (struct has a hole after 'generation')
+> 
+> broken, trivial to fix
+> 
+> > drivers/scsi/megaraid/megaraid_mm.c:824 kioc_to_mimd() warn: check that 'cinfo.base' doesn't leak information
+> 
+> Seems fine due to __packed annotation.
+> 
+> > drivers/gpio/gpiolib-cdev.c:473 lineevent_read() warn: check that 'ge' doesn't leak information (struct has a hole after 'id')
+> 
+> The driver seems to initialize the elements correctly before putting
+> them into the kfifo, so there is no infoleak. However the structure layout
+> of "struct gpioevent_data" is incompatible between x86-32 and x86-64
+> calling conventions, so this is likely broken in x86 compat mode,
+> unless user space can explicitly deal with the difference.
+> 
+> > drivers/gpu/drm/i915/i915_query.c:136 query_engine_info() warn: check that 'query.num_engines' doesn't leak information
+> 
+> I don't think this leaks any state, as it just copies data to user space that
+> it copied from there originally.
+> 
+> Stopping here for now.
+> 
+> Peilin Ye, is this something you are interested in fixing for the other drivers
+> as well? I'd be happy to help review any further patches if you Cc me.
 
-So the question really is, how do we best make use of the two current
-series, to achieve our goal of supporting multiple streams.
+Yes, I would like to! I will start from:
 
-Having not parsed Dafna's series yet, do we need to combine elements of
-both ? Or should we work towards starting with this series and get
-dafna's patches built on top ?
+	drivers/firewire/core-cdev.c:463
+	drivers/input/misc/uinput.c:743
 
-Or should patch 1/3 and 3/3 of this series be on top of Dafna's v4 ?
+...as you mentioned above.
 
-(It might be noteworthy to say that Kaaira has reported successful
-multiple stream operation from /this/ series and her development branch
-on libcamera).
-
-
->> 1.  https://lore.kernel.org/linux-media/20200522075522.6190-1-dafna.hirschfeld@collabora.com/
->>
->>>
->>> Changes since v1:
->>> 	- All three patches rebased on latest media-tree.
->>> 	Patch 3:
->>> 	- Search for an entity with a non-NULL pipe instead of searching
->>> 	  for sensor. This terminates the search at output itself.
->>>
->>> Kaaira Gupta (3):
->>>   media: vimc: Add usage count to subdevices
->>>   media: vimc: Serialize vimc_streamer_s_stream()
->>>   media: vimc: Join pipeline if one already exists
->>>
->>>  .../media/test-drivers/vimc/vimc-capture.c    | 35 ++++++++++++++++++-
->>>  .../media/test-drivers/vimc/vimc-debayer.c    |  8 +++++
->>>  drivers/media/test-drivers/vimc/vimc-scaler.c |  8 +++++
->>>  drivers/media/test-drivers/vimc/vimc-sensor.c |  9 ++++-
->>>  .../media/test-drivers/vimc/vimc-streamer.c   | 23 +++++++-----
->>>  5 files changed, 73 insertions(+), 10 deletions(-)
->>>
->>> -- 
->>> 2.17.1
->>>
->>
->> -- 
->> Regards,
->> Niklas Söderlund
-
--- 
-Regards
---
-Kieran
+Thank you!
+Peilin Ye
