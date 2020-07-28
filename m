@@ -2,136 +2,199 @@ Return-Path: <SRS0=EguH=BH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7779C433E0
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 09:25:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51E80C433E3
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 09:38:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFE6920672
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 09:25:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3094B20829
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 09:38:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QJTAT7FM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728233AbgG1JZv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jul 2020 05:25:51 -0400
-Received: from smtprelay0154.hostedemail.com ([216.40.44.154]:43324 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728101AbgG1JZv (ORCPT
+        id S1728072AbgG1Jit (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jul 2020 05:38:49 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:60702 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728188AbgG1Jit (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Jul 2020 05:25:51 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 36325180A815F;
-        Tue, 28 Jul 2020 09:25:50 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: bath95_350867a26f68
-X-Filterd-Recvd-Size: 3880
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf11.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 28 Jul 2020 09:25:48 +0000 (UTC)
-Message-ID: <2480b12b85f9560060cd155de222d42d40150ae7.camel@perches.com>
-Subject: Re: [PATCH 2/2] media: bt8xx: avoid a useless memset
-From:   Joe Perches <joe@perches.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        mchehab@kernel.org, akpm@linux-foundation.org, rppt@kernel.org,
-        hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Date:   Tue, 28 Jul 2020 02:25:47 -0700
-In-Reply-To: <d5759bd3-5e8a-a557-cd3e-0a2ae4d124e9@wanadoo.fr>
-References: <20200727135151.54757-1-christophe.jaillet@wanadoo.fr>
-         <0897d9bec8865859694c917f3f72ab8fd12321ff.camel@perches.com>
-         <30618c986727e5f8a9806f663b4e6f4aa80065ae.camel@perches.com>
-         <d5759bd3-5e8a-a557-cd3e-0a2ae4d124e9@wanadoo.fr>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.3-0ubuntu1 
+        Tue, 28 Jul 2020 05:38:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595929127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8nd42wB2B75Djczagy6XPy4IiHftdikBO1IfPmRtaGA=;
+        b=QJTAT7FMjl6D+Mfsf/j7uuRUMA+ndkdGV29dmcYGrCq9AuswZRGVY8lVhHZrNHY6SAhv4k
+        HBIXCVijlgcYjMVwQumctHNkg20De9TRcmEW9yKWc4vb4nGEgoCJ52sof++lXGur8DE3Wr
+        /HgkPsOjzNdBMlzGDM8ny/9uf2Z5uBE=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-235-RQWPPlroMZmfEQlgwE6c5Q-1; Tue, 28 Jul 2020 05:38:45 -0400
+X-MC-Unique: RQWPPlroMZmfEQlgwE6c5Q-1
+Received: by mail-ej1-f71.google.com with SMTP id gt10so305584ejb.13
+        for <linux-media@vger.kernel.org>; Tue, 28 Jul 2020 02:38:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8nd42wB2B75Djczagy6XPy4IiHftdikBO1IfPmRtaGA=;
+        b=K7agJnUVTatHjDTq8mQUqQAajTon1uEB4OEl6IiBGWe7t4EvfbyXPBanh2cK57LQRh
+         vwJx4XVkOqWxhFDyFAxaJe/WGPROoNCmq25fVtmynb7BDGj+fV4gPF59L+ontpZS2Fda
+         xEthYWC92dyWNHWrGwxT3A/Bm/3Hsgwp+VpG3MLDJ2IkjN+9qPDr0pX9LqlS/d+NxJ7S
+         ehWDta4On/AuyWPpU0HIlC7nNIZ7DEsIElIeX15gEQUDMp/G2g6EFEEXJEYGv9HMp6oM
+         odCDloTMbgUo2adMekDPkmK3+0vJnJ0SZ9NHxmVy/2b3+C9m0mlGcFO8UCp4f/eftCe8
+         JGPQ==
+X-Gm-Message-State: AOAM532IpCAW9fIPSI+tUw/RU9ToE6yXP71a0UBmJ390Ya7V+P8pPl/S
+        DzP+Xibx5nNiRVXrPPv//apwlbDENiKpuCTS8DB12Lh7X51mi66gMTNh8K0i+uLgJEJjzADfVrF
+        jdf1yHFbRQ6x5jZg9xoRPP5c=
+X-Received: by 2002:a05:6402:217:: with SMTP id t23mr12553613edv.224.1595929123920;
+        Tue, 28 Jul 2020 02:38:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxJoNVCmgySPilxaRNDDCDGvUaUKF5uAAZf5FZDEAcd7iyP8+uYTky2xv0wvJc6EG6o24sp8w==
+X-Received: by 2002:a05:6402:217:: with SMTP id t23mr12553590edv.224.1595929123657;
+        Tue, 28 Jul 2020 02:38:43 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id z101sm9567358ede.6.2020.07.28.02.38.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jul 2020 02:38:43 -0700 (PDT)
+Subject: Re: [PATCH] media: uvcvideo: Fix uvc_ctrl_fixup_xu_info() not having
+ any effect
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, stable@vger.kernel.org
+References: <20200724114823.108237-1-hdegoede@redhat.com>
+ <20200727222541.GC15448@pendragon.ideasonboard.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <77593cf5-c3e5-c3ea-a79f-25cb63890e57@redhat.com>
+Date:   Tue, 28 Jul 2020 11:38:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200727222541.GC15448@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 2020-07-28 at 10:05 +0200, Christophe JAILLET wrote:
-> Le 27/07/2020 à 18:16, Joe Perches a écrit :
-> > On Mon, 2020-07-27 at 09:09 -0700, Joe Perches wrote:
-> > > On Mon, 2020-07-27 at 15:51 +0200, Christophe JAILLET wrote:
-> > > > Avoid a memset after a call to 'dma_alloc_coherent()'.
-> > > > This is useless since
-> > > > commit 518a2f1925c3 ("dma-mapping: zero memory returned from dma_alloc_*")
-> > > []
-> > > > diff --git a/drivers/media/pci/bt8xx/btcx-risc.c b/drivers/media/pci/bt8xx/btcx-risc.c
-> > > []
-> > > > @@ -73,7 +73,6 @@ int btcx_riscmem_alloc(struct pci_dev *pci,
-> > > >   		dprintk("btcx: riscmem alloc [%d] dma=%lx cpu=%p size=%d\n",
-> > > >   			memcnt, (unsigned long)dma, cpu, size);
-> > > >   	}
-> > > > -	memset(risc->cpu,0,risc->size);
-> > > >   	return 0;
-> > > >   }
-> > > 
-> > > Likely NAK.
-> > > 
-> > > This is not useless as risc->cpu may be reused
-> > > and the alloc may not have been done.
-> > 
-> > Perhaps a little rewrite for clarity:
-> > ---
-> >   drivers/media/pci/bt8xx/btcx-risc.c | 24 +++++++++++++-----------
-> >   1 file changed, 13 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/drivers/media/pci/bt8xx/btcx-risc.c b/drivers/media/pci/bt8xx/btcx-risc.c
-> > index 51257980f539..311f4ca2a108 100644
-> > --- a/drivers/media/pci/bt8xx/btcx-risc.c
-> > +++ b/drivers/media/pci/bt8xx/btcx-risc.c
-> > @@ -56,24 +56,26 @@ int btcx_riscmem_alloc(struct pci_dev *pci,
-> >   		       struct btcx_riscmem *risc,
-> >   		       unsigned int size)
-> >   {
-> > -	__le32 *cpu;
-> > -	dma_addr_t dma = 0;
-> > -
-> > -	if (NULL != risc->cpu && risc->size < size)
-> > -		btcx_riscmem_free(pci,risc);
-> > -	if (NULL == risc->cpu) {
-> > -		cpu = pci_alloc_consistent(pci, size, &dma);
-> > -		if (NULL == cpu)
-> > +	if (risc->cpu && risc->size < size)
-> > +		btcx_riscmem_free(pci, risc);
-> > +
-> > +	if (risc->cpu) {
-> > +		memset(risc->cpu, 0, risc->size);
-> > +	} else {
-> > +		dma_addr_t dma = 0;
-> > +
-> > +		risc->cpu = pci_alloc_consistent(pci, size, &dma);
-> > +		if (!risc->cpu)
-> >   			return -ENOMEM;
-> > -		risc->cpu  = cpu;
-> > +
-> >   		risc->dma  = dma;
-> >   		risc->size = size;
-> >   
-> >   		memcnt++;
-> >   		dprintk("btcx: riscmem alloc [%d] dma=%lx cpu=%p size=%d\n",
-> > -			memcnt, (unsigned long)dma, cpu, size);
-> > +			memcnt, (unsigned long)dma, risc->cpu, size);
-> >   	}
-> > -	memset(risc->cpu,0,risc->size);
-> > +
-> >   	return 0;
-> >   }
-> >   
-> > 
-> > 
-> Looks good to me.
+Hi,
+
+On 7/28/20 12:25 AM, Laurent Pinchart wrote:
+> Hi Hans,
 > 
-> Just note, that this will not apply after patch 1/2 is applied, because 
-> it turns pci_alloc_consistent() into dma_alloc_coherent().
+> Thank you for the patch.
+> 
+> On Fri, Jul 24, 2020 at 01:48:23PM +0200, Hans de Goede wrote:
+>> uvc_ctrl_add_info() calls uvc_ctrl_get_flags() which will override
+>> the fixed-up flags set by uvc_ctrl_fixup_xu_info().
+>>
+>> This commit fixes this by adding a is_xu argument to uvc_ctrl_add_info()
+>> and skipping the uvc_ctrl_get_flags() call for xu ctrls.
+>>
+>> Note that the xu path has already called uvc_ctrl_get_flags() from
+>> uvc_ctrl_fill_xu_info() before calling uvc_ctrl_add_info().
+>>
+>> This fixes the xu motor controls not working properly on a Logitech
+>> 046d:08cc, and presumably also on the other Logitech models which have
+>> a quirk for this in the uvc_ctrl_fixup_xu_info() function.
+>>
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>>   drivers/media/usb/uvc/uvc_ctrl.c | 11 ++++++-----
+>>   1 file changed, 6 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+>> index e399b9fad757..4bdea5814d6a 100644
+>> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+>> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+>> @@ -1815,7 +1815,7 @@ static int uvc_ctrl_fill_xu_info(struct uvc_device *dev,
+>>   }
+>>   
+>>   static int uvc_ctrl_add_info(struct uvc_device *dev, struct uvc_control *ctrl,
+>> -	const struct uvc_control_info *info);
+>> +	const struct uvc_control_info *info, bool is_xu);
+>>   
+>>   static int uvc_ctrl_init_xu_ctrl(struct uvc_device *dev,
+>>   	struct uvc_control *ctrl)
+>> @@ -1830,7 +1830,7 @@ static int uvc_ctrl_init_xu_ctrl(struct uvc_device *dev,
+>>   	if (ret < 0)
+>>   		return ret;
+>>   
+>> -	ret = uvc_ctrl_add_info(dev, ctrl, &info);
+>> +	ret = uvc_ctrl_add_info(dev, ctrl, &info, true);
+>>   	if (ret < 0)
+>>   		uvc_trace(UVC_TRACE_CONTROL, "Failed to initialize control "
+>>   			  "%pUl/%u on device %s entity %u\n", info.entity,
+>> @@ -2009,7 +2009,7 @@ int uvc_ctrl_restore_values(struct uvc_device *dev)
+>>    * Add control information to a given control.
+>>    */
+>>   static int uvc_ctrl_add_info(struct uvc_device *dev, struct uvc_control *ctrl,
+>> -	const struct uvc_control_info *info)
+>> +	const struct uvc_control_info *info, bool is_xu)
+>>   {
+>>   	int ret = 0;
+>>   
+>> @@ -2029,7 +2029,8 @@ static int uvc_ctrl_add_info(struct uvc_device *dev, struct uvc_control *ctrl,
+>>   	 * default flag values from the uvc_ctrl array when the device doesn't
+>>   	 * properly implement GET_INFO on standard controls.
+>>   	 */
+>> -	uvc_ctrl_get_flags(dev, ctrl, &ctrl->info);
+>> +	if (!is_xu)
+>> +		uvc_ctrl_get_flags(dev, ctrl, &ctrl->info);
+> 
+> Would it make sense to instead move this line (and the above comment) to
+> uvc_ctrl_init_ctrl(), right after the uvc_ctrl_add_info() call ?
 
-Just a suggestion.
+I was thinking about the same lines, since that seems like the
+obvious / logical fix. I was thinking about doing it before the
+uvc_ctrl_add_info() call, but that will not work, because info
+is const before the call.
 
-As it's dependent on your first patch, perhaps
-you could make the appropriate change.
+Doing it after the add_info() call, as you suggest, we can pass
+&ctrl->info to the get_flags call. So yes that will work and
+is the logical thing to do.
 
+I'll spin a v2 with this change.
+
+> If you
+> would prefer keeping it here, I think is_xu should be renamed to
+> update_flags (with the true/false values switched) to make it clearer.
+> It would then also add a comment to uvc_ctrl_init_xu_ctrl() right before
+> the call to uvc_ctrl_add_info() to state that we don't update flags to
+> avoid overwriting the value set by uvc_ctrl_fixup_xu_info() in
+> uvc_ctrl_fill_xu_info().
+> 
+> What's your preference ?
+
+See above.
+
+Regards,
+
+Hans
+
+
+
+> 
+>>   
+>>   	ctrl->initialized = 1;
+>>   
+>> @@ -2252,7 +2253,7 @@ static void uvc_ctrl_init_ctrl(struct uvc_device *dev, struct uvc_control *ctrl)
+>>   	for (; info < iend; ++info) {
+>>   		if (uvc_entity_match_guid(ctrl->entity, info->entity) &&
+>>   		    ctrl->index == info->index) {
+>> -			uvc_ctrl_add_info(dev, ctrl, info);
+>> +			uvc_ctrl_add_info(dev, ctrl, info, false);
+>>   			break;
+>>   		 }
+>>   	}
+> 
 
