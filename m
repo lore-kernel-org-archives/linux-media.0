@@ -2,98 +2,85 @@ Return-Path: <SRS0=EguH=BH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5570C433E5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74795C433E4
 	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 09:48:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94AAB20829
+	by mail.kernel.org (Postfix) with ESMTP id 0152120775
 	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 09:48:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Vn3bV0Uf"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="UVMcET6I"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728473AbgG1Jsz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728472AbgG1Jsz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 28 Jul 2020 05:48:55 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:43739 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728368AbgG1Jsz (ORCPT
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:37281 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728393AbgG1Jsz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Jul 2020 05:48:55 -0400
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id 0ME7kqEDGuuXO0ME8kI7wv; Tue, 28 Jul 2020 11:48:53 +0200
+        id 0ME7kqEDGuuXO0ME9kI7x4; Tue, 28 Jul 2020 11:48:53 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1595929733; bh=F/R2I6D4OWGv2EpYENdKEVzgCxe8voM7JFf6ctmLeIs=;
+        t=1595929733; bh=B09D7nGlRQRXLulC9Lr8Yv3TFcR0/GPu9lC3G81SE50=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=Vn3bV0UfF6yajUPg+JtT45a1uZGcPxTFIILs0bEd5CPG5C1m+fykD8LLKFlT0RPJe
-         J4+jIDMb2ewG/0vI5JE+S9xvmasIEtfVbPaOkk6m8NdFPUmn8wqttkf6ng8dRu5etV
-         eb6wf0BQPGfUBdBustjQbLDv3uGrHs4x+IzJ/KIeNloXh5zl7McZyLWd5xNTbVH+ma
-         jDQ05ek8jpQo/PjGg3gUHJuxPMPMeYDSX2YCPQ8uoFSp5TjJwOvvpxVEmqs5EfQFUw
-         QoMPvp87YRvdM7ddR0zp9sKNiioCWJm1xnO9ouJ2p2587llqvreuCT6EnR2kyDkxA/
-         AemEMwmK4woYg==
+        b=UVMcET6I0rlKZ3BHP2sW7vvkcsuv0+9uiBWASuaqt4Feib3ejEK7oLFpu+Lepe3Oq
+         OeJit0r1aSPBUvEvtZEznEYKg6mOwY9K6b2nCMXU/TEJc8gdEYcoo5l977VqilrBgG
+         oKi1MdPgX5WtlII3yEtMCQewzEeuVAWcrORsr4u7Yp3W37E51/DEDSpcrZc2n4cjRh
+         dipTltgtVQOw7Qjpp+0T3/j3kSZWS+ZZy89i2KXSypOKKXJd6CFTOgBX3rBVbldQYO
+         q1d8cTF6Vg7J3eaoqZM9R+e+fGwx4nl4+jS0kQN5jko1uTCRSA4aohLkC34t9JZaAY
+         NKZylqBomqhQA==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Yunfei Dong <yunfei.dong@mediatek.com>
-Subject: [RFC PATCH 0/2] Add v4l2_ctrl_request_create()
-Date:   Tue, 28 Jul 2020 11:48:49 +0200
-Message-Id: <20200728094851.121933-1-hverkuil-cisco@xs4all.nl>
+Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [RFC PATCH 2/2] vivid: call v4l2_ctrl_request_create()
+Date:   Tue, 28 Jul 2020 11:48:51 +0200
+Message-Id: <20200728094851.121933-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200728094851.121933-1-hverkuil-cisco@xs4all.nl>
+References: <20200728094851.121933-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-CMAE-Envelope: MS4wfHzVj9eR94V8IN+XQnKBTLoYkSjzbT6H6XasTrh1RTJY3iucTWtJZyujAS+vnZI9E3dLHazurw3gRLu05k5INnO38/H6SiVdAwVT/yyfNEcfHWF+/wxF
- UxzB+4l3GC3vAMB1++uhbt+YcySSPiyYuj6XOn2Yhc6FSUkQosBoTREwGERtF0aSe3n0kIBtvKWoxbEG0tpoF/f1utfb3hfA7OwufiWATE57OQaoVm9wfWGK
- 6vLlnuAg1Z2/cs59jhIkBtkhZW2RMhrldK+QFuK/n5nLGL6zzR/NjBYxIrmeL8dL
+ UxzB+4l3GC3vAMB1++uhbt+YcySSPiyYuj6XOn2Yhc6FSUkQosBoTREwGERtF0aSe3n0kIBtvKWoxVNzKpViNg3SGJSA7sM5VJnCmhxwzlpzCW1/9wGmdXp3
+ aKJ+kJlueHWHmrCuYiJWAtlTmhs+bZqIqkmXtLWO0xUfb+yaiEJ7PRdWxPwVMwODHFMYLIMWDmJzKlRaDvtulIbF4lp2OQlbyAo/SNwgDSI=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Request API is missing a feature: if userspace did not set any controls,
-then the request object will not contain a control object (that's created
-only if the user sets a control in the request).
+Call v4l2_ctrl_request_create() from req_validate() to create the
+control request object if needed.
 
-This is fine for e.g. stateless codecs since they require that each request
-contains controls, so this is always done. And this is also the reason that
-this hasn't been a problem before, since the Request API is almost exclusively
-used by stateless codecs.
+Without this the returned request object would not have a copy of the
+controls used for the captured frame.
 
-But for e.g. vivid this means that the completed request does not contain
-any controls in the request containing the control values at the time that
-the frame was captured (or output).
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/test-drivers/vivid/vivid-core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-In addition, if a driver needs to set a status control, then that control
-won't be part of the request either.
-
-This RFC series adds a v4l2_ctrl_request_create() function that can be
-called in the req_validate() callback of the request. If the request
-doesn't contain a control object, then it will add a new one.
-
-This is an RFC for now. Hopefully this will help Yunfei Dong with the
-development of Read-Only Requests, since that should be a lot simpler with
-this new function.
-
-Also, I am not entirely happy with the name of the function and I also
-think that we might need a helper in v4l2-common.c that combines with
-function with vb2_request_validate(), thus avoiding that drivers need
-to remember to call both v4l2_ctrl_request_create() and vb2_request_validate().
-
-Regards,
-
-	Hans
-
-Hans Verkuil (2):
-  v4l2-ctrls.c: add v4l2_ctrl_request_create
-  vivid: call v4l2_ctrl_request_create()
-
- drivers/media/mc/mc-request.c                 |  3 +-
- drivers/media/test-drivers/vivid/vivid-core.c |  4 +++
- drivers/media/v4l2-core/v4l2-ctrls.c          | 35 +++++++++++++++++++
- include/media/v4l2-ctrls.h                    | 16 +++++++++
- 4 files changed, 57 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
+index f7ee37e9508d..59e155a8765e 100644
+--- a/drivers/media/test-drivers/vivid/vivid-core.c
++++ b/drivers/media/test-drivers/vivid/vivid-core.c
+@@ -783,7 +783,11 @@ static void vivid_dev_release(struct v4l2_device *v4l2_dev)
+ static int vivid_req_validate(struct media_request *req)
+ {
+ 	struct vivid_dev *dev = container_of(req->mdev, struct vivid_dev, mdev);
++	int ret;
+ 
++	ret = v4l2_ctrl_request_create(req, &dev->ctrl_hdl_vid_cap);
++	if (ret)
++		return ret;
+ 	if (dev->req_validate_error) {
+ 		dev->req_validate_error = false;
+ 		return -EINVAL;
 -- 
 2.27.0
 
