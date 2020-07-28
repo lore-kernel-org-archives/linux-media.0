@@ -2,210 +2,118 @@ Return-Path: <SRS0=EguH=BH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8332CC433EC
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 11:04:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A94E0C433E1
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 11:22:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 592FA2177B
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 11:04:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8052C2064B
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 11:22:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d13uPu0+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OvPeO7ld"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728925AbgG1LD6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jul 2020 07:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728788AbgG1LD6 (ORCPT
+        id S1729016AbgG1LWV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jul 2020 07:22:21 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48706 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728988AbgG1LWV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Jul 2020 07:03:58 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81825C061794;
-        Tue, 28 Jul 2020 04:03:57 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id f5so20634392ljj.10;
-        Tue, 28 Jul 2020 04:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jX6sjTJPEr15dOzF7TYKeW7hD2/3KOKGSVAXq2cMBEc=;
-        b=d13uPu0+A8NFdVShzGvgGo4igAAaBdTaVAmAtFt4WF3hQWPCzgOZa3msY075ut5XaJ
-         k8eWcH8d33j3q9R5BTwumU5UEfPfG5MTo6ELaMCYTqMjNlWtwJloALgvmhwktj4sniV8
-         e++cuzk30jO7afhKJycMTVt00m3AUpWl4YGo4Av4UjOXJyE+zRFn2qXnSJ0GsbX/2uQd
-         MKsWo4z2zGaowAA5XbZi69CFjkNvsCB2sbxIbEzvdoHPKd16q+8t7TjVPRZBHICf4yz2
-         296srKHU3RreyC48COtmJUgeAjyVGp1ojNLE/2Y4AIH5NH6CsIEwAXQXpqYgFpmMi3a4
-         MlDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jX6sjTJPEr15dOzF7TYKeW7hD2/3KOKGSVAXq2cMBEc=;
-        b=KXQfqZX/5M6K2GnUEIog1q4URisQFVSNogKqQv3w06XIJm6eSSAT5PFAE392l5SK8b
-         2VVNFmLPid/5yyMXNg/Fa/LIan5+ySrW0Fhz1CXh2R21ZWsxMnPgCAvrKIg/QLbCknDr
-         7olXKFAAhbJfvVEVnncweW6KxSYD21N/Dfpm/gnPtJE6e8sDhMbyqTHc0JblaWd07ZYJ
-         Ny3fqwDyTYWT/5Go+DA0SoN+0P3Pjp01lTa/hNH6/hKuh01kO+eR0ncWd5arVosY+DNO
-         MtB5yEG8bLal/uzUUB7QRZMXgF03FSj5OG/ngoRsBQBeAZLIrc0s+tOyin5BDlsXvDaB
-         PIuQ==
-X-Gm-Message-State: AOAM533mVQ7sgNXN2zS8T7NULMRtBBGY4SVdas3qYaVzefYQ2ajEfPYx
-        C8llCZulo4OhVc7dzA5tob99udjS
-X-Google-Smtp-Source: ABdhPJy21QLY/yVjHkncbE+RD0wsgXFjz+XHQdbpbJEUed+zywipzYvk8mjCf8LoQO76elRFDDdGzg==
-X-Received: by 2002:a2e:7308:: with SMTP id o8mr5524141ljc.414.1595934235729;
-        Tue, 28 Jul 2020 04:03:55 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-76-12-16.pppoe.mtu-net.ru. [91.76.12.16])
-        by smtp.googlemail.com with ESMTPSA id k25sm2905238ljk.87.2020.07.28.04.03.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jul 2020 04:03:55 -0700 (PDT)
-Subject: Re: [RFC PATCH v5 12/14] gpu: host1x: mipi: Keep MIPI clock enabled
- till calibration is done
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
-        hverkuil@xs4all.nl, sakari.ailus@iki.fi, robh+dt@kernel.org,
-        helen.koike@collabora.com
-Cc:     sboyd@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <1595883452-17343-1-git-send-email-skomatineni@nvidia.com>
- <1595883452-17343-13-git-send-email-skomatineni@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b21e3227-d0d8-5b4a-ae69-aa29551a22c3@gmail.com>
-Date:   Tue, 28 Jul 2020 14:03:54 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 28 Jul 2020 07:22:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595935339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QcKwcnIHe1V5eFZ1SVGNcadWZV+wUuaqXZ3S8T0mtXs=;
+        b=OvPeO7ldZOuSTpAPAl01Vpps49XMwg5k0wvPWAieT6+GfTJbb8P/aI6wX3jRAyKy1m17Uf
+        KImXWDYfGH2LV5fiMg9xE1f4D0I2MlMHJVzFD7klSWhim84kGmvGYv1bg8FkQ9JKpfqMtd
+        jVMli14s7NnxdYHyw/AURX7H4iloZKE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-390-tT4Kzh5uP8ixZ6FSmKxsdw-1; Tue, 28 Jul 2020 07:22:17 -0400
+X-MC-Unique: tT4Kzh5uP8ixZ6FSmKxsdw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DEFDE8015F7;
+        Tue, 28 Jul 2020 11:22:16 +0000 (UTC)
+Received: from x1.localdomain.com (ovpn-114-116.ams2.redhat.com [10.36.114.116])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 80E8D7BD60;
+        Tue, 28 Jul 2020 11:22:15 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-media@vger.kernel.org
+Subject: [PATCH v2 2/2] media: uvcvideo: Cleanup uvc_ctrl_add_info() error handling
+Date:   Tue, 28 Jul 2020 13:22:09 +0200
+Message-Id: <20200728112209.26207-2-hdegoede@redhat.com>
+In-Reply-To: <20200728112209.26207-1-hdegoede@redhat.com>
+References: <20200728112209.26207-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <1595883452-17343-13-git-send-email-skomatineni@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-27.07.2020 23:57, Sowjanya Komatineni пишет:
-> With the split of MIPI calibration into tegra_mipi_calibrate() and
-> tegra_mipi_wait(), MIPI clock is not kept enabled till the calibration
-> is done.
-> 
-> So, this patch skips disabling MIPI clock after triggering start of
-> calibration and disables it only after waiting for done status from
-> the calibration logic.
-> 
-> This patch renames tegra_mipi_calibrate() as tegra_mipi_start_calibration()
-> and tegra_mipi_wait() as tegra_mipi_finish_calibration() to be inline
-> with their usage.
-> 
-> As MIPI clock is left enabled and in case of any failures with CSI input
-> streaming tegra_mipi_finish_calibration() will not get invoked.
-> So added new API tegra_mipi_cancel_calibration() which disables MIPI clock
-> and consumer drivers can call this in such cases.
-> 
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> ---
->  drivers/gpu/drm/tegra/dsi.c |  4 ++--
->  drivers/gpu/host1x/mipi.c   | 19 ++++++++++---------
->  include/linux/host1x.h      |  5 +++--
->  3 files changed, 15 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/tegra/dsi.c b/drivers/gpu/drm/tegra/dsi.c
-> index 3820e8d..a7864e9 100644
-> --- a/drivers/gpu/drm/tegra/dsi.c
-> +++ b/drivers/gpu/drm/tegra/dsi.c
-> @@ -694,11 +694,11 @@ static int tegra_dsi_pad_calibrate(struct tegra_dsi *dsi)
->  		DSI_PAD_PREEMP_PD(0x03) | DSI_PAD_PREEMP_PU(0x3);
->  	tegra_dsi_writel(dsi, value, DSI_PAD_CONTROL_3);
->  
-> -	err = tegra_mipi_calibrate(dsi->mipi);
-> +	err = tegra_mipi_start_calibration(dsi->mipi);
->  	if (err < 0)
->  		return err;
->  
-> -	return tegra_mipi_wait(dsi->mipi);
-> +	return tegra_mipi_finish_calibration(dsi->mipi);
->  }
->  
->  static void tegra_dsi_set_timeout(struct tegra_dsi *dsi, unsigned long bclk,
-> diff --git a/drivers/gpu/host1x/mipi.c b/drivers/gpu/host1x/mipi.c
-> index e606464..b15ab6e 100644
-> --- a/drivers/gpu/host1x/mipi.c
-> +++ b/drivers/gpu/host1x/mipi.c
-> @@ -293,17 +293,19 @@ int tegra_mipi_disable(struct tegra_mipi_device *dev)
->  }
->  EXPORT_SYMBOL(tegra_mipi_disable);
->  
-> -int tegra_mipi_wait(struct tegra_mipi_device *device)
-> +void tegra_mipi_cancel_calibration(struct tegra_mipi_device *device)
-> +{
+There is only 1 error exit in uvc_ctrl_add_info(), so using goto style
+error handling is not necessary. Also the kfree(ctrl->uvc_data) on error
+is not necessary, because the only error exit is for the kzalloc() of
+ctrl->uvc_data failing.
 
-Doesn't MIPI_CAL need to be reset here?
+Remove all the error handling cruft and simply do "return -ENOMEM" on
+kzalloc() failure.
 
-> +	clk_disable(device->mipi->clk);
-> +}
-> +EXPORT_SYMBOL(tegra_mipi_cancel_calibration);
-> +
-> +int tegra_mipi_finish_calibration(struct tegra_mipi_device *device)
->  {
->  	struct tegra_mipi *mipi = device->mipi;
->  	void __iomem *status_reg = mipi->regs + (MIPI_CAL_STATUS << 2);
->  	u32 value;
->  	int err;
->  
-> -	err = clk_enable(device->mipi->clk);
-> -	if (err < 0)
-> -		return err;
-> -
->  	mutex_lock(&device->mipi->lock);
->  
->  	err = readl_relaxed_poll_timeout(status_reg, value,
-> @@ -315,9 +317,9 @@ int tegra_mipi_wait(struct tegra_mipi_device *device)
->  
->  	return err;
->  }
-> -EXPORT_SYMBOL(tegra_mipi_wait);
-> +EXPORT_SYMBOL(tegra_mipi_finish_calibration);
->  
-> -int tegra_mipi_calibrate(struct tegra_mipi_device *device)
-> +int tegra_mipi_start_calibration(struct tegra_mipi_device *device)
->  {
->  	const struct tegra_mipi_soc *soc = device->mipi->soc;
->  	unsigned int i;
-> @@ -382,11 +384,10 @@ int tegra_mipi_calibrate(struct tegra_mipi_device *device)
->  	tegra_mipi_writel(device->mipi, value, MIPI_CAL_CTRL);
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+Changes in v2:
+- new patch in v2 of this series
+---
+ drivers/media/usb/uvc/uvc_ctrl.c | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
-This function sets MIPI_CAL_CLKEN_OVR bit, does it mean that MIPI clock
-becomes always-ON?
-
-I don't see where MIPI_CAL_CLKEN_OVR is unset.
-
->  	mutex_unlock(&device->mipi->lock);
-> -	clk_disable(device->mipi->clk);
->  
->  	return 0;
->  }
-> -EXPORT_SYMBOL(tegra_mipi_calibrate);
-> +EXPORT_SYMBOL(tegra_mipi_start_calibration);
->  
->  static const struct tegra_mipi_pad tegra114_mipi_pads[] = {
->  	{ .data = MIPI_CAL_CONFIG_CSIA },
-> diff --git a/include/linux/host1x.h b/include/linux/host1x.h
-> index 20c885d..b490dda 100644
-> --- a/include/linux/host1x.h
-> +++ b/include/linux/host1x.h
-> @@ -333,7 +333,8 @@ struct tegra_mipi_device *tegra_mipi_request(struct device *device,
->  void tegra_mipi_free(struct tegra_mipi_device *device);
->  int tegra_mipi_enable(struct tegra_mipi_device *device);
->  int tegra_mipi_disable(struct tegra_mipi_device *device);
-> -int tegra_mipi_calibrate(struct tegra_mipi_device *device);
-> -int tegra_mipi_wait(struct tegra_mipi_device *device);
-> +int tegra_mipi_start_calibration(struct tegra_mipi_device *device);
-> +int tegra_mipi_finish_calibration(struct tegra_mipi_device *device);
-> +void tegra_mipi_cancel_calibration(struct tegra_mipi_device *device);
->  
->  #endif
-> 
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index b78aba991212..dbebc6083e85 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -2011,18 +2011,14 @@ int uvc_ctrl_restore_values(struct uvc_device *dev)
+ static int uvc_ctrl_add_info(struct uvc_device *dev, struct uvc_control *ctrl,
+ 	const struct uvc_control_info *info)
+ {
+-	int ret = 0;
+-
+ 	ctrl->info = *info;
+ 	INIT_LIST_HEAD(&ctrl->info.mappings);
+ 
+ 	/* Allocate an array to save control values (cur, def, max, etc.) */
+ 	ctrl->uvc_data = kzalloc(ctrl->info.size * UVC_CTRL_DATA_LAST + 1,
+ 				 GFP_KERNEL);
+-	if (ctrl->uvc_data == NULL) {
+-		ret = -ENOMEM;
+-		goto done;
+-	}
++	if (!ctrl->uvc_data)
++		return -ENOMEM;
+ 
+ 	ctrl->initialized = 1;
+ 
+@@ -2030,10 +2026,7 @@ static int uvc_ctrl_add_info(struct uvc_device *dev, struct uvc_control *ctrl,
+ 		"entity %u\n", ctrl->info.entity, ctrl->info.selector,
+ 		dev->udev->devpath, ctrl->entity->id);
+ 
+-done:
+-	if (ret < 0)
+-		kfree(ctrl->uvc_data);
+-	return ret;
++	return 0;
+ }
+ 
+ /*
+-- 
+2.26.2
 
