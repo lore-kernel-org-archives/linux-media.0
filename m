@@ -2,135 +2,120 @@ Return-Path: <SRS0=EguH=BH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37B2BC433E4
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 04:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A17EC433DF
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 06:38:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 15CA521744
-	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 04:17:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED6DC21775
+	for <linux-media@archiver.kernel.org>; Tue, 28 Jul 2020 06:38:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="EASfrngd"
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="GAqzi9pj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbgG1ERh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Jul 2020 00:17:37 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:54972 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726369AbgG1ERh (ORCPT
+        id S1727849AbgG1Gir (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Jul 2020 02:38:47 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:5216 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726802AbgG1Gir (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Jul 2020 00:17:37 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1595909856; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=hCNM+2Lv+dQQBLrGuQbA6lyFD5H/2pzjFUsxm4GPBrU=; b=EASfrngd76WsCHcGmJQWRxIs5DogMtMA07IHijgViVEBTneRREXXfCGzHA5yP8iR3V5GtGFf
- OqcZ6ODA5kCl+i1UDyljm/Y4tDJ7tsBxaEg9cRJ3TcBeTzHF1mZQuhuyXCPXkMdnkfekONAJ
- ZJhz4AUy7ruj7PaBCV5dBG7b8Tc=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 5f1fa6df70ff737ddba4a710 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 28 Jul 2020 04:17:35
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3E52BC43395; Tue, 28 Jul 2020 04:17:35 +0000 (UTC)
-Received: from [192.168.1.12] (unknown [61.3.20.126])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4FA49C433C6;
-        Tue, 28 Jul 2020 04:17:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4FA49C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [PATCH v4 4/5] arm64: dts: sdm845: Add OPP tables and
- power-domains for venus
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org, Taniya Das <tdas@codeaurora.org>
-References: <1595503612-2901-1-git-send-email-rnayak@codeaurora.org>
- <1595503612-2901-5-git-send-email-rnayak@codeaurora.org>
- <e68ff810-362a-5b99-206b-f676b204101d@linaro.org>
- <94581989-e069-55e5-6b70-919185eda33e@linaro.org>
- <e0c03ce2-136c-2c5c-6f36-bb0c69a82e2d@codeaurora.org>
- <5a8af2da-cc3f-005d-47e6-b36be1104d6a@codeaurora.org>
- <20200727153806.kgegadvghmkevch3@vireshk-mac-ubuntu>
- <159589753282.1360974.11628682178494669632@swboyd.mtv.corp.google.com>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <e08e9822-7c0c-29d7-67b2-245af66b623a@codeaurora.org>
-Date:   Tue, 28 Jul 2020 09:47:28 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 28 Jul 2020 02:38:47 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06S6R63F020671;
+        Tue, 28 Jul 2020 08:38:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=STMicroelectronics;
+ bh=WDXIytTCyT7kRrNyoWH+p3ffKvT3zxR0417p2t+OjUA=;
+ b=GAqzi9pjNwv7+TjE7xEXQKl/RrDJQPjcu8dojxSO1WXzn55Y7Q4C7hYoob2vIUgL63RE
+ dojYHNC7YKASt7huOnbb5UnMXXH0SDf3Px7QBibj+tjlws+fDMQiVyR4fjLEcvPvxvsX
+ YOFCX5yTc7K57jDHZMlsu5EkNU4P09kfBjgUBcklBdokaYs28tjuKtClPdVdEbz6PKTn
+ YLSvOAdhPFpQO9E/RNmo3nf2bLxg+CDaSm4TeQ4kBD+RggCRoy8mUJq81iaUeyBh8FtL
+ 2ldLKwXhMySI27h/hKQO2/vhN2qOV1k7zgUT1nRatQEHAjMgsWTUrG6Bo20uLlQgHxz3 lQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 32g9v9cu7k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jul 2020 08:38:34 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9B41B10002A;
+        Tue, 28 Jul 2020 08:38:33 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8BD73210F99;
+        Tue, 28 Jul 2020 08:38:33 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SFHDAG3NODE3.st.com (10.75.127.9)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 28 Jul 2020 08:38:33
+ +0200
+From:   Alain Volmat <alain.volmat@st.com>
+To:     <hugues.fruchet@st.com>, <mchehab@kernel.org>
+CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <yannick.fertre@st.com>, <hans.verkuil@cisco.com>,
+        <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <alain.volmat@st.com>
+Subject: [PATCH 2/2] media: stm32-dcmi: fix probe error path & module remove
+Date:   Tue, 28 Jul 2020 08:37:58 +0200
+Message-ID: <1595918278-9724-3-git-send-email-alain.volmat@st.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1595918278-9724-1-git-send-email-alain.volmat@st.com>
+References: <1595918278-9724-1-git-send-email-alain.volmat@st.com>
 MIME-Version: 1.0
-In-Reply-To: <159589753282.1360974.11628682178494669632@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG6NODE2.st.com (10.75.127.17) To SFHDAG3NODE3.st.com
+ (10.75.127.9)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-28_01:2020-07-27,2020-07-28 signatures=0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+This commit add missing vb2_queue_release calls with the
+probe error path and module remove.
+Missing v4l2_async_notifier_unregister is also added within
+the probe error path
 
-On 7/28/2020 6:22 AM, Stephen Boyd wrote:
-> Quoting Viresh Kumar (2020-07-27 08:38:06)
->> On 27-07-20, 17:38, Rajendra Nayak wrote:
->>> On 7/27/2020 11:23 AM, Rajendra Nayak wrote:
->>>> On 7/24/2020 7:39 PM, Stanimir Varbanov wrote:
->>>>>>> +
->>>>>>> +                opp-533000000 {
->>>>>>> +                    opp-hz = /bits/ 64 <533000000>;
->>
->> Is this the highest OPP in table ?
->>
->>>>> Actually it comes from videocc, where ftbl_video_cc_venus_clk_src
->>>>> defines 533000000 but the real calculated freq is 533000097.
->>>>
->>>> I still don't quite understand why the videocc driver returns this
->>>> frequency despite this not being in the freq table.
->>>
->>> Ok, so I see the same issue on sc7180 also. clk_round_rate() does seem to
->>> return whats in the freq table, but clk_set_rate() goes ahead and sets it
-> 
-> I'm happy to see clk_round_rate() return the actual rate that would be
-> achieved and not just the rate that is in the frequency tables. Would
-> that fix the problem? 
+Fixes: 37404f91ef8b ("[media] stm32-dcmi: STM32 DCMI camera interface driver")
+Signed-off-by: Alain Volmat <alain.volmat@st.com>
+---
+ drivers/media/platform/stm32/stm32-dcmi.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-It would, but only if I also update the OPP table to have 533000097
-instead of 533000000 (which I guess is needed anyway)
-If this is the actual frequency that's achievable, then perhaps even the clock
-freq table should have this? 533000097 and not 533000000?
-That way clk_round_rate() would return the actual rate that's achieved and
-we don't need any extra math. Isn't that the reason these freq tables exist
-anyway.
-
-> It may be that we need to make clk_round_rate() do
-> some more math on qcom platforms and actually figure out what the rate
-> is going to be instead of blindly trust the frequency that has been set
-> in the tables.
-> 
->>> to 533000097. Subsequently when we try to set a different OPP, it fails to
->>> find the 'current' OPP entry for 533000097. This sounds like an issue with the OPP
->>> framework? Should we not fall back to the highest OPP as the current OPP?
->>>
->>> Stephen/Viresh, any thoughts?
->>
->> I think we (in all frameworks generally) try to set a frequency <=
->> target frequency and so there may be a problem if the frequency is
->> larger than highest supported. IOW, you need to fix tables a bit.
->>
-> 
-> Rounding is annoying for sure.
-> 
-
+diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
+index 5e60d4c6eeeb..57830ee691be 100644
+--- a/drivers/media/platform/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/stm32/stm32-dcmi.c
+@@ -2004,7 +2004,7 @@ static int dcmi_probe(struct platform_device *pdev)
+ 
+ 	ret = dcmi_graph_init(dcmi);
+ 	if (ret < 0)
+-		goto err_media_entity_cleanup;
++		goto err_vb2_queue_release;
+ 
+ 	/* Reset device */
+ 	ret = reset_control_assert(dcmi->rstc);
+@@ -2030,7 +2030,10 @@ static int dcmi_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ err_cleanup:
++	v4l2_async_notifier_unregister(&dcmi->notifier);
+ 	v4l2_async_notifier_cleanup(&dcmi->notifier);
++err_vb2_queue_release:
++	vb2_queue_release(q);
+ err_media_entity_cleanup:
+ 	media_entity_cleanup(&dcmi->vdev->entity);
+ err_device_release:
+@@ -2052,6 +2055,7 @@ static int dcmi_remove(struct platform_device *pdev)
+ 
+ 	v4l2_async_notifier_unregister(&dcmi->notifier);
+ 	v4l2_async_notifier_cleanup(&dcmi->notifier);
++	vb2_queue_release(&dcmi->queue);
+ 	media_entity_cleanup(&dcmi->vdev->entity);
+ 	v4l2_device_unregister(&dcmi->v4l2_dev);
+ 	media_device_cleanup(&dcmi->mdev);
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+2.7.4
+
