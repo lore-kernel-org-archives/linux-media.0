@@ -2,109 +2,60 @@ Return-Path: <SRS0=lnCZ=BI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95880C433DF
-	for <linux-media@archiver.kernel.org>; Wed, 29 Jul 2020 23:32:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CD04C433DF
+	for <linux-media@archiver.kernel.org>; Wed, 29 Jul 2020 23:42:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D91B20829
-	for <linux-media@archiver.kernel.org>; Wed, 29 Jul 2020 23:32:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pRbTSRiY"
+	by mail.kernel.org (Postfix) with ESMTP id 4188E20809
+	for <linux-media@archiver.kernel.org>; Wed, 29 Jul 2020 23:42:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbgG2XcE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 Jul 2020 19:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726718AbgG2XcE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 Jul 2020 19:32:04 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E84C061794
-        for <linux-media@vger.kernel.org>; Wed, 29 Jul 2020 16:32:04 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id g10so3130286wmc.1
-        for <linux-media@vger.kernel.org>; Wed, 29 Jul 2020 16:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id;
-        bh=Shvg+pWIgqBrbjkqOE6gkiEaOhwejYOEYrruPanePCY=;
-        b=pRbTSRiYrZ7ENOVrULD1ofRvej9qNaIXwMu8u35f7+wh/dprR16hGFc2HDz10MFPrA
-         /42gJC3gNs56oiQ7Q4HEaYePiprtL/BsEjLv6ETVhXnGYsz3BkE333kp5NJERjvmBIrA
-         95VjtgR2DkguvblZSBA3IH2T3HEm3VRp+2wLdsyxEp5rhXrceQasTzKNaoiY5oaGZJAg
-         85X8RJBkkE0PBfBQZcmQRYr2cGZkBsDjpgmxJe9BNX96upgouetKR6Ce6A0K5gO5dPhM
-         fTdHJQ0THe7E8wugiP4zaGPPurIXnH24VoB2rg/N+dWbp65NrZpqa3oIvxTi8W+eylmn
-         Phog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=Shvg+pWIgqBrbjkqOE6gkiEaOhwejYOEYrruPanePCY=;
-        b=W5jqQ8/L8mh33B+K8av0LAeIXkFMN8VYEFRZN0WEc0k/AVVwgoyE2pjub/cW33i/as
-         DKpJ7GG47fNqo5G1kNaappkjKiNMbivZ6l74Sh8oBa0XGjGqfuKHlUMIm6908ERd6C9Y
-         IMtpNRhPG+uAArjqdVxryidNIECTKzcvuNnGguFjZBEh1ecrV0izDIyvuCqCzxuVtzUc
-         zOSH3PDGeH04a46l3Q/uiJ17aJ+aujvcMX2b75gsGM8znUMazUlD35uUH7gb7n5LiPk1
-         r6U1+XO3dS8Cu/dNM9/7VPR4gwc/ktCFQM5orFltvHdyzLkR2blYFMzYSVG7sENGmacE
-         LTAQ==
-X-Gm-Message-State: AOAM5327WJ//vNpu98E/+FwYFssqhcE0JCc42Zjrmqnb0Fl6UmkljF8l
-        vZ0FWmgt0hrJ0z/OUaly1LpSd29LLdQvqA==
-X-Google-Smtp-Source: ABdhPJz87sTl1gauKjHD9YHkejTPGyqI1yxAKDcBA9JWEv7u1We2F5Znhr8jghPKP7Re/qMJ+skY0g==
-X-Received: by 2002:a1c:2646:: with SMTP id m67mr11354340wmm.137.1596065522554;
-        Wed, 29 Jul 2020 16:32:02 -0700 (PDT)
-Received: from localhost.localdomain ([195.24.90.54])
-        by smtp.gmail.com with ESMTPSA id k184sm7306068wme.1.2020.07.29.16.32.01
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jul 2020 16:32:01 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for v5.9] Venus updates - part2
-Date:   Thu, 30 Jul 2020 02:31:33 +0300
-Message-Id: <20200729233133.10187-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1728052AbgG2XmK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 Jul 2020 19:42:10 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:40662 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726718AbgG2XmK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 29 Jul 2020 19:42:10 -0400
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1k0vd2-000kGb-G7; Wed, 29 Jul 2020 23:36:56 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1k0vkT-0006S6-5b; Wed, 29 Jul 2020 23:44:37 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL for v5.9] Venus updates - part2 (#20200729233133)
+Date:   Wed, 29 Jul 2020 23:44:37 +0000
+Message-Id: <20200729234437.24761-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200729233133.10187-1-stanimir.varbanov@linaro.org>
+References: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+From: builder@linuxtv.org
 
-Venus driver updates for v5.9 part2 includes:
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20200729233133.10187-1-stanimir.varbanov@linaro.org/
+Build log: https://builder.linuxtv.org/job/patchwork/61900/
+Build time: 00:04:18
+Link: https://lore.kernel.org/linux-media/20200729233133.10187-1-stanimir.varbanov@linaro.org
 
- * A runtime PM fix in venus core driver probe error path.
- * Add missing PM core_put ops in driver probe error path.
- * A new OPP tables/perf voting.
+gpg: Signature made Wed 29 Jul 2020 11:20:45 PM UTC
+gpg:                using RSA key E1558C2497CE3CCC2B5AA30F25B55FC81B7035F2
+gpg: Good signature from "Stanimir Varbanov <stanimir.varbanov@linaro.org>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 34CF E039 8A16 AD93 18FD  D5E8 A6D0 26D8 E358 14D4
+     Subkey fingerprint: E155 8C24 97CE 3CCC 2B5A  A30F 25B5 5FC8 1B70 35F2
 
-Please pull.
-
-regards,
-Stan
-
-The following changes since commit 8f2a4a9d5ff5202d0b3e3a144ebb9b67aabadd29:
-
-  media: dvbdev.h: keep * together with the type (2020-07-19 14:26:25 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-v5.9-part2
-
-for you to fetch changes up to e04afdd4ec0815d7059f923f3647fdad4b0472bf:
-
-  media: venus: core: Add support for opp tables/perf voting (2020-07-30 02:18:07 +0300)
-
-----------------------------------------------------------------
-Venus updates for v5.9 part2
-
-----------------------------------------------------------------
-Dinghao Liu (1):
-      media: venus: core: Fix runtime PM imbalance in venus_probe
-
-Rajendra Nayak (2):
-      media: venus: core: Fix error handling in probe
-      media: venus: core: Add support for opp tables/perf voting
-
- drivers/media/platform/qcom/venus/core.c       | 22 ++++--
- drivers/media/platform/qcom/venus/core.h       |  5 ++
- drivers/media/platform/qcom/venus/pm_helpers.c | 92 ++++++++++++++++++++++++--
- 3 files changed, 106 insertions(+), 13 deletions(-)
+Summary: 1 patches and/or PDF generation with issues, being 0 at build time
