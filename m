@@ -2,302 +2,92 @@ Return-Path: <SRS0=lnCZ=BI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 416B9C433E3
-	for <linux-media@archiver.kernel.org>; Wed, 29 Jul 2020 07:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3201EC433E0
+	for <linux-media@archiver.kernel.org>; Wed, 29 Jul 2020 07:35:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1CC96206D8
-	for <linux-media@archiver.kernel.org>; Wed, 29 Jul 2020 07:18:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mg.codeaurora.org header.i=@mg.codeaurora.org header.b="YK9gwc94"
+	by mail.kernel.org (Postfix) with ESMTP id 1AD182065E
+	for <linux-media@archiver.kernel.org>; Wed, 29 Jul 2020 07:35:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727961AbgG2HSE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 Jul 2020 03:18:04 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:51262 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727837AbgG2HSD (ORCPT
+        id S1726710AbgG2Hfk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 Jul 2020 03:35:40 -0400
+Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:46003 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726336AbgG2Hfk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 Jul 2020 03:18:03 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1596007082; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=2kTnzFc7G0V4XXGYI2l3CfvRi7yu22bU8/YlCLr+FcY=; b=YK9gwc94S41OqJvWf0G12Wx5QdeJudwaicKa9nbIoUdH5thOVSqsSI4tm2FVAPV3SdY6Ifey
- WDysxSOpK5IuUievF43SfK6kPYR/wnn17Q0FVYXIY63Zu/ShH4y4/lczPE4IV99JyeKTYHN0
- snIsr+DYiVcXc3+gG2+phyHRPYg=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 5f21227b1db0b33fd8c0ef65 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 29 Jul 2020 07:17:15
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id DE172C433B6; Wed, 29 Jul 2020 07:17:14 +0000 (UTC)
-Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0E94CC433A1;
-        Wed, 29 Jul 2020 07:17:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0E94CC433A1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-To:     stanimir.varbanov@linaro.org, robh+dt@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>
-Subject: [PATCH v5 3/5] media: venus: core: Add support for opp tables/perf voting
-Date:   Wed, 29 Jul 2020 12:46:43 +0530
-Message-Id: <1596007005-30425-4-git-send-email-rnayak@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1596007005-30425-1-git-send-email-rnayak@codeaurora.org>
-References: <1596007005-30425-1-git-send-email-rnayak@codeaurora.org>
+        Wed, 29 Jul 2020 03:35:40 -0400
+Received: from belgarion ([86.210.166.159])
+        by mwinf5d67 with ME
+        id 8vbW2300K3SgWc603vbbFk; Wed, 29 Jul 2020 09:35:38 +0200
+X-ME-Helo: belgarion
+X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
+X-ME-Date: Wed, 29 Jul 2020 09:35:38 +0200
+X-ME-IP: 86.210.166.159
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se,
+        kieran.bingham@ideasonboard.com, dave.stevenson@raspberrypi.com,
+        hyun.kwon@xilinx.com, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v6 1/9] media: v4l2-subdev: Introduce [get|set]_mbus_config pad ops
+References: <20200714135812.55158-1-jacopo+renesas@jmondi.org>
+        <20200714135812.55158-2-jacopo+renesas@jmondi.org>
+        <750089f9-0e7f-3b2a-ec85-38452cb64fa1@xs4all.nl>
+        <4043309.ejJDZkT8p0@z50>
+        <f60dc28c-ac30-0ddc-efb5-62b22d4cbaa7@xs4all.nl>
+X-URL:  http://belgarath.falguerolles.org/
+Date:   Wed, 29 Jul 2020 09:35:30 +0200
+In-Reply-To: <f60dc28c-ac30-0ddc-efb5-62b22d4cbaa7@xs4all.nl> (Hans Verkuil's
+        message of "Mon, 20 Jul 2020 10:48:36 +0200")
+Message-ID: <87zh7isri5.fsf@belgarion.home>
+User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support to add OPP tables and perf voting on the OPP powerdomain.
-This is needed so venus votes on the corresponding performance state
-for the OPP powerdomain along with setting the core clock rate.
+Hans Verkuil <hverkuil-cisco@xs4all.nl> writes:
 
-Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
- drivers/media/platform/qcom/venus/core.c       |  2 +
- drivers/media/platform/qcom/venus/core.h       |  5 ++
- drivers/media/platform/qcom/venus/pm_helpers.c | 92 ++++++++++++++++++++++++--
- 3 files changed, 92 insertions(+), 7 deletions(-)
+> The information on how a sensor (or similar device) is wired up is not something
+> that should be negotiated. Even if a combination is theoretically possible, it
+> may not have been tested by the board designer and in fact it might not work.
+> (Yes, that happens)
+>
+> It is just a bad design trying to negotiate this.
+I quite agree on that one (on the wiring defined by configuration).
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index bfcaba3..a3e98a5 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -525,6 +525,7 @@ static const struct venus_resources sdm845_res_v2 = {
- 	.vcodec_clks_num = 2,
- 	.vcodec_pmdomains = { "venus", "vcodec0", "vcodec1" },
- 	.vcodec_pmdomains_num = 3,
-+	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 2,
- 	.max_load = 3110400,	/* 4096x2160@90 */
- 	.hfi_version = HFI_VERSION_4XX,
-@@ -570,6 +571,7 @@ static const struct venus_resources sc7180_res = {
- 	.vcodec_clks_num = 2,
- 	.vcodec_pmdomains = { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
-+	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 1,
- 	.hfi_version = HFI_VERSION_4XX,
- 	.vmem_id = VIDC_RESOURCE_NONE,
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 7118612..b0cc544 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -62,6 +62,7 @@ struct venus_resources {
- 	unsigned int vcodec_clks_num;
- 	const char * const vcodec_pmdomains[VIDC_PMDOMAINS_NUM_MAX];
- 	unsigned int vcodec_pmdomains_num;
-+	const char **opp_pmdomain;
- 	unsigned int vcodec_num;
- 	enum hfi_version hfi_version;
- 	u32 max_load;
-@@ -145,8 +146,12 @@ struct venus_core {
- 	struct clk *vcodec1_clks[VIDC_VCODEC_CLKS_NUM_MAX];
- 	struct icc_path *video_path;
- 	struct icc_path *cpucfg_path;
-+	struct opp_table *opp_table;
-+	bool has_opp_table;
- 	struct device_link *pd_dl_venus;
- 	struct device *pmdomains[VIDC_PMDOMAINS_NUM_MAX];
-+	struct device_link *opp_dl_venus;
-+	struct device *opp_pmdomain;
- 	struct video_device *vdev_dec;
- 	struct video_device *vdev_enc;
- 	struct v4l2_device v4l2_dev;
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index abf9315..0308d20 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -9,6 +9,7 @@
- #include <linux/iopoll.h>
- #include <linux/kernel.h>
- #include <linux/pm_domain.h>
-+#include <linux/pm_opp.h>
- #include <linux/pm_runtime.h>
- #include <linux/types.h>
- #include <media/v4l2-mem2mem.h>
-@@ -66,10 +67,9 @@ static void core_clks_disable(struct venus_core *core)
- 
- static int core_clks_set_rate(struct venus_core *core, unsigned long freq)
- {
--	struct clk *clk = core->clks[0];
- 	int ret;
- 
--	ret = clk_set_rate(clk, freq);
-+	ret = dev_pm_opp_set_rate(core->dev, freq);
- 	if (ret)
- 		return ret;
- 
-@@ -740,13 +740,16 @@ static int venc_power_v4(struct device *dev, int on)
- 
- static int vcodec_domains_get(struct device *dev)
- {
-+	int ret;
-+	struct opp_table *opp_table;
-+	struct device **opp_virt_dev;
- 	struct venus_core *core = dev_get_drvdata(dev);
- 	const struct venus_resources *res = core->res;
- 	struct device *pd;
- 	unsigned int i;
- 
- 	if (!res->vcodec_pmdomains_num)
--		return -ENODEV;
-+		goto skip_pmdomains;
- 
- 	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
- 		pd = dev_pm_domain_attach_by_name(dev,
-@@ -763,7 +766,41 @@ static int vcodec_domains_get(struct device *dev)
- 	if (!core->pd_dl_venus)
- 		return -ENODEV;
- 
-+skip_pmdomains:
-+	if (!core->has_opp_table)
-+		return 0;
-+
-+	/* Attach the power domain for setting performance state */
-+	opp_table = dev_pm_opp_attach_genpd(dev, res->opp_pmdomain, &opp_virt_dev);
-+	if (IS_ERR(opp_table)) {
-+		ret = PTR_ERR(opp_table);
-+		goto opp_attach_err;
-+	}
-+
-+	core->opp_pmdomain = *opp_virt_dev;
-+	core->opp_dl_venus = device_link_add(dev, core->opp_pmdomain,
-+					     DL_FLAG_RPM_ACTIVE |
-+					     DL_FLAG_PM_RUNTIME |
-+					     DL_FLAG_STATELESS);
-+	if (!core->opp_dl_venus) {
-+		ret = -ENODEV;
-+		goto opp_dl_add_err;
-+	}
-+
- 	return 0;
-+
-+opp_dl_add_err:
-+	dev_pm_domain_detach(core->opp_pmdomain, true);
-+opp_attach_err:
-+	if (core->pd_dl_venus) {
-+		device_link_del(core->pd_dl_venus);
-+		for (i = 0; i < res->vcodec_pmdomains_num; i++) {
-+			if (IS_ERR_OR_NULL(core->pmdomains[i]))
-+				continue;
-+			dev_pm_domain_detach(core->pmdomains[i], true);
-+		}
-+	}
-+	return ret;
- }
- 
- static void vcodec_domains_put(struct device *dev)
-@@ -773,7 +810,7 @@ static void vcodec_domains_put(struct device *dev)
- 	unsigned int i;
- 
- 	if (!res->vcodec_pmdomains_num)
--		return;
-+		goto skip_pmdomains;
- 
- 	if (core->pd_dl_venus)
- 		device_link_del(core->pd_dl_venus);
-@@ -783,6 +820,15 @@ static void vcodec_domains_put(struct device *dev)
- 			continue;
- 		dev_pm_domain_detach(core->pmdomains[i], true);
- 	}
-+
-+skip_pmdomains:
-+	if (!core->has_opp_table)
-+		return;
-+
-+	if (core->opp_dl_venus)
-+		device_link_del(core->opp_dl_venus);
-+
-+	dev_pm_domain_detach(core->opp_pmdomain, true);
- }
- 
- static int core_get_v4(struct device *dev)
-@@ -811,19 +857,46 @@ static int core_get_v4(struct device *dev)
- 	if (legacy_binding)
- 		return 0;
- 
-+	core->opp_table = dev_pm_opp_set_clkname(dev, "core");
-+	if (IS_ERR(core->opp_table))
-+		return PTR_ERR(core->opp_table);
-+
-+	if (core->res->opp_pmdomain) {
-+		ret = dev_pm_opp_of_add_table(dev);
-+		if (!ret) {
-+			core->has_opp_table = true;
-+		} else if (ret != -ENODEV) {
-+			dev_err(dev, "invalid OPP table in device tree\n");
-+			dev_pm_opp_put_clkname(core->opp_table);
-+			return ret;
-+		}
-+	}
-+
- 	ret = vcodec_domains_get(dev);
--	if (ret)
-+	if (ret) {
-+		if (core->has_opp_table)
-+			dev_pm_opp_of_remove_table(dev);
-+		dev_pm_opp_put_clkname(core->opp_table);
- 		return ret;
-+	}
- 
- 	return 0;
- }
- 
- static void core_put_v4(struct device *dev)
- {
-+	struct venus_core *core = dev_get_drvdata(dev);
-+
- 	if (legacy_binding)
- 		return;
- 
- 	vcodec_domains_put(dev);
-+
-+	if (core->has_opp_table)
-+		dev_pm_opp_of_remove_table(dev);
-+	if (core->opp_table)
-+		dev_pm_opp_put_clkname(core->opp_table);
-+
- }
- 
- static int core_power_v4(struct device *dev, int on)
-@@ -831,10 +904,15 @@ static int core_power_v4(struct device *dev, int on)
- 	struct venus_core *core = dev_get_drvdata(dev);
- 	int ret = 0;
- 
--	if (on == POWER_ON)
-+	if (on == POWER_ON) {
- 		ret = core_clks_enable(core);
--	else
-+	} else {
-+		/* Drop the performance state vote */
-+		if (core->opp_pmdomain)
-+			dev_pm_opp_set_rate(dev, 0);
-+
- 		core_clks_disable(core);
-+	}
- 
- 	return ret;
- }
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+> In fact, the only values that can be set as far as I am concerned are lanes and
+> channels. I wouldn't mind if the other settings are purely read-only. The only
+> driver that actively sets this is the pxa_camera driver and I wish it didn't.
+>
+> But there are still two pxa boards that use this mechanism, so I guess we still
+> have to allow this.
+There are 4 :
+rj@belgarion:~/mio_linux/kernel/arch/arm/mach-pxa$ grep -rs pxa_set_camera * | grep -v devices.c
+ezx.c:		pxa_set_camera_info(&a780_pxacamera_platform_data);
+ezx.c:		pxa_set_camera_info(&a910_pxacamera_platform_data);
+mioa701.c:	pxa_set_camera_info(&mioa701_pxacamera_platform_data);
+palmz72.c:	pxa_set_camera_info(&palmz72_pxacamera_platform_data);
+pcm990-baseboard.c:	pxa_set_camera_info(&pcm990_pxacamera_platform_data);
 
+I wouldn't mind that the bus parameters are made "static" by forcing them in the
+platform data field (struct pxacamera_platform_data), and not doing the bus
+compatibility matching.
+
+I thing Jacopo's work is going this way, as I read that his patch takes first
+the platform data flags, and only if none are defined goes to the matchup. That
+looks very sensible to me.
+
+Cheers.
+
+--
+Robert
