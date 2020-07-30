@@ -2,70 +2,46 @@ Return-Path: <SRS0=lH1u=BJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB46BC433E1
-	for <linux-media@archiver.kernel.org>; Thu, 30 Jul 2020 08:20:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32837C433E1
+	for <linux-media@archiver.kernel.org>; Thu, 30 Jul 2020 08:38:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 954DE2074B
-	for <linux-media@archiver.kernel.org>; Thu, 30 Jul 2020 08:20:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="pE6CSjWS"
+	by mail.kernel.org (Postfix) with ESMTP id 1EE9B2082E
+	for <linux-media@archiver.kernel.org>; Thu, 30 Jul 2020 08:38:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729980AbgG3IT7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Jul 2020 04:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729446AbgG3IHZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Jul 2020 04:07:25 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565F3C0619D2
-        for <linux-media@vger.kernel.org>; Thu, 30 Jul 2020 01:07:25 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id w12so13722913iom.4
-        for <linux-media@vger.kernel.org>; Thu, 30 Jul 2020 01:07:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xk9Rc7RW0dpZR2H7aQdCd9x/8Qyf+LufFcyvFMA4TRc=;
-        b=pE6CSjWSaGf1LyVds1/RMgYF8RUGn5TZJHXjYS/z/3WaD/zI5X1T9UbxdlEfExt4ww
-         fiqw/WQL2m4SbqfCbmmkBHeRQhdJSW9DpRLqk8AR9klNEzDn7/B/DxPU58pcTa/roMhX
-         q+NiInRLqX2FCBQqSqR6dwQePoBJg1KF++pHOAaL1fbTI2Pt7YBGj0qEbkSBbQ+gLBVT
-         f1wmkKBYvpRYP+sJwr0AaAzhTNcWtqdtQ00XyCegbxhSgtCxlXIZ5LsbRBM4B2/sMoNW
-         AIdPy1KUeQ6cltA6WKnQG6UCU/dajwelb3Ze02nd0x9mlUt6DJJGOH8d6VqI6qpXvQHi
-         9byg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xk9Rc7RW0dpZR2H7aQdCd9x/8Qyf+LufFcyvFMA4TRc=;
-        b=F8iWUbv0hNB/9BkAqBTQ5C0rdQjBroFCDuFjfwleMw5MQ0Jsxt7NrRTkqrRwLwqnXz
-         Nt6a52jQHsYMGzelYU9TdGrP+NgLyPs/NE7B5czWFzs5BwNkTXShM+nmOAm7q6m7hWQ/
-         9d47jV7hcTbyAdcRz7yhx3gaI4A/dNU1x85YpvxZwy0hZOwsjrkHF1lcS+YZPnfhhhae
-         ZNx86DbhFnqgY2vv4wy0lg+HPMxe4KkOew1sTk8EzZguBadBoynvt7E4fzy0f/2EG36R
-         IQe9wkOJ8Ftx58gyvvWirLXlpj8O0x5VaHvQrpYFPVqxoB+aRbHnrbWnwgmOjYIACDpz
-         e+Ww==
-X-Gm-Message-State: AOAM533PG6m10lvmfPHLRMvXuBCjN03mMUL3GPmtSnZzTkbXeSR0ZWHP
-        SlZVzwTQlBTAoW0Ts68jokxUQxUwFY2KPFM9P1VyNQ==
-X-Google-Smtp-Source: ABdhPJxfkHJ3U7r6qBlC/pLcD5o2kytIEOIjvVwTzQ/51wksja7qhQ1JZwpuFNgqoFoF8gdCdxryLyzWjzfDs75oQlc=
-X-Received: by 2002:a02:854a:: with SMTP id g68mr2156366jai.24.1596096444677;
- Thu, 30 Jul 2020 01:07:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200726220557.102300-1-yepeilin.cs@gmail.com>
- <20200726222703.102701-1-yepeilin.cs@gmail.com> <CAK8P3a3NB2BVo9fH-Wcinrhhs-QJ=9dK59Ds83TvgLmEkRy3qA@mail.gmail.com>
- <20200727131608.GD1913@kadam> <CACRpkda7k4L+nqAYE6z2FVZF-WT2Pm3CHH_=fW24xz_u+QCMRQ@mail.gmail.com>
- <20200728130632.GI1913@kadam> <CAK8P3a3MEUYH3qG-+dxgH1Omx2gtcqSRXzKLLaAw21Xho6HAeQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3MEUYH3qG-+dxgH1Omx2gtcqSRXzKLLaAw21Xho6HAeQ@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 30 Jul 2020 10:07:13 +0200
-Message-ID: <CAMRc=MciXb152=CHAi1kfpwFuELLN55-BfNOo8hBg8Tzp4wMnQ@mail.gmail.com>
-Subject: Re: [Linux-kernel-mentees] [PATCH v3] media/v4l2-core: Fix
- kernel-infoleak in video_put_user()
+        id S1729197AbgG3Iik (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Jul 2020 04:38:40 -0400
+Received: from mga14.intel.com ([192.55.52.115]:13935 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729028AbgG3Iij (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 30 Jul 2020 04:38:39 -0400
+IronPort-SDR: 0w0WlNf6bds/SW5iPJeYGglz8WkXO143hty/WQ8FygkpV4LmrQJHsuNjQAcpk4oA7WYHdYOIxa
+ Sd+mi1qg/xaA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9697"; a="150734124"
+X-IronPort-AV: E=Sophos;i="5.75,413,1589266800"; 
+   d="scan'208";a="150734124"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2020 01:38:38 -0700
+IronPort-SDR: bu9+V7we/ln6rOtutU8VW/C7vRqStryaQhZ5FopFJpxPzgTrfnd9ppiLVy5XN+Il+YKNfCbadZ
+ hmcqCWQkAPrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,413,1589266800"; 
+   d="scan'208";a="394921540"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Jul 2020 01:38:35 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1k145B-004slM-Ry; Thu, 30 Jul 2020 11:38:33 +0300
+Date:   Thu, 30 Jul 2020 11:38:33 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Peilin Ye <yepeilin.cs@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -76,73 +52,89 @@ Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Vandana BN <bnvandana@gmail.com>,
         Ezequiel Garcia <ezequiel@collabora.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         linux-kernel-mentees@lists.linuxfoundation.org,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [Linux-kernel-mentees] [PATCH v3] media/v4l2-core: Fix
+ kernel-infoleak in video_put_user()
+Message-ID: <20200730083833.GD3703480@smile.fi.intel.com>
+References: <20200726220557.102300-1-yepeilin.cs@gmail.com>
+ <20200726222703.102701-1-yepeilin.cs@gmail.com>
+ <CAK8P3a3NB2BVo9fH-Wcinrhhs-QJ=9dK59Ds83TvgLmEkRy3qA@mail.gmail.com>
+ <20200727131608.GD1913@kadam>
+ <CACRpkda7k4L+nqAYE6z2FVZF-WT2Pm3CHH_=fW24xz_u+QCMRQ@mail.gmail.com>
+ <20200728130632.GI1913@kadam>
+ <CAK8P3a3MEUYH3qG-+dxgH1Omx2gtcqSRXzKLLaAw21Xho6HAeQ@mail.gmail.com>
+ <CAMRc=MciXb152=CHAi1kfpwFuELLN55-BfNOo8hBg8Tzp4wMnQ@mail.gmail.com>
+ <CAK8P3a1m7C0rGGEHvndhxun2TyFh-cweNnPHp-rDtu7Z=YyUKw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1m7C0rGGEHvndhxun2TyFh-cweNnPHp-rDtu7Z=YyUKw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jul 28, 2020 at 3:58 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Jul 28, 2020 at 3:06 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+On Thu, Jul 30, 2020 at 10:15:24AM +0200, Arnd Bergmann wrote:
+> On Thu, Jul 30, 2020 at 10:07 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 > >
-> > On Tue, Jul 28, 2020 at 02:22:29PM +0200, Linus Walleij wrote:
-> > > On Mon, Jul 27, 2020 at 3:17 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> > On Tue, Jul 28, 2020 at 3:58 PM Arnd Bergmann <arnd@arndb.de> wrote:
 > > >
-> > > > Here are my latest warnings on linux-next from Friday.
+> > > On Tue, Jul 28, 2020 at 3:06 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> > > Something like
 > > >
-> > > Thanks for sharing this Dan, very interesting findings.
+> > > static int lineevent_put_data(void __user *uptr, struct gpioevent_data *ge)
+> > > {
+> > > #ifdef __x86_64__
+> > >         /* i386 has no padding after 'id' */
+> > >         if (in_ia32_syscall()) {
+> > >                 struct {
+> > >                         compat_u64      timestamp __packed;
+> > >                         u32             id;
+> > >                 } compat_ge = { ge->timestamp, ge->id };
 > > >
-> > > > drivers/gpio/gpiolib-cdev.c:473 lineevent_read() warn: check that 'ge' doesn't leak information (struct has a hole after 'id')
+> > >                 if (copy_to_user(uptr, &compat_ge, sizeof(compat_ge)))
+> > >                         return -EFAULT;
 > > >
-> > > We are revamping the ABI for 64bit compatibility so we are now running
-> > > pahole on our stuff. I suppose we need to think about mending this old ABI
-> > > as well.
+> > >                 return sizeof(compat_ge);
+> > >         }
+> > > #endif
+> > >
+> > >         if (copy_to_user(uptr, ge, sizeof(*ge))
+> > >                 return -EFAULT;
+> > >
+> > >         return sizeof(*ge);
+> > > }
+> > >
+> > >        Arnd
 > >
-> > Yeah...  But this one is a false positive.  It's not super hard for me
-> > to silence it actually.  I'll take care of it.  It could be a while
-> > before I push this to the public repository though...
->
-> The lineevent_read() function still needs to be fixed to support
-> 32-bit compat mode on x86, which is independent of the warning.
->
-> Something like
->
-> static int lineevent_put_data(void __user *uptr, struct gpioevent_data *ge)
-> {
-> #ifdef __x86_64__
->         /* i386 has no padding after 'id' */
->         if (in_ia32_syscall()) {
->                 struct {
->                         compat_u64      timestamp __packed;
->                         u32             id;
->                 } compat_ge = { ge->timestamp, ge->id };
->
->                 if (copy_to_user(uptr, &compat_ge, sizeof(compat_ge)))
->                         return -EFAULT;
->
->                 return sizeof(compat_ge);
->         }
-> #endif
->
->         if (copy_to_user(uptr, ge, sizeof(*ge))
->                 return -EFAULT;
->
->         return sizeof(*ge);
-> }
->
->        Arnd
+> > Hi Arnd,
+> >
+> > Andy actually had a patch for that but since this isn't a regression
+> > (it never worked), we decided to leave it as it is and get it right in
+> > v2 API.
+> 
+> I would argue that it needs to be fixed anyway, unless you also want
+> to remove the v1 interface for native mode. If this works on 32-bit
+> kernels, on 64-bit kernels with 64-bit user space and on compat
+> 32-bit user space on 64-bit non-x86 architectures, I see no reason
+> to leave it broken specifically on x86 compat user space. There are
+> still reasons to use 32-bit x86 user space for low-memory machines
+> even though native i386 kernels are getting increasingly silly.
 
-Hi Arnd,
+It was possible to "fix" (mitigate to some extent) before libgpiod got support
+for several events in a request. Now it seems to be impossible to fix. AFAIU we
+must discard any request to more than one event in it.
 
-Andy actually had a patch for that but since this isn't a regression
-(it never worked), we decided to leave it as it is and get it right in
-v2 API.
+However I'm not an expert in compat IOCTL code (you are :-) and perhaps you may
+provide ideas better than mine.
 
-Bartosz
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
