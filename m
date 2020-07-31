@@ -2,126 +2,157 @@ Return-Path: <SRS0=vA0i=BK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5E13C433ED
-	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 09:03:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7878C433E0
+	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 09:25:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 937D520838
-	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 09:03:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="HaVarrBS"
+	by mail.kernel.org (Postfix) with ESMTP id CD64B22CA1
+	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 09:25:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732160AbgGaJDn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 Jul 2020 05:03:43 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:19125 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732030AbgGaJC5 (ORCPT
+        id S1732721AbgGaJZR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 31 Jul 2020 05:25:17 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:59301 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732711AbgGaJZO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 Jul 2020 05:02:57 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f23dde20008>; Fri, 31 Jul 2020 02:01:22 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 31 Jul 2020 02:02:56 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 31 Jul 2020 02:02:56 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 Jul
- 2020 09:02:56 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 31 Jul 2020 09:02:56 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.167.221]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f23de3f0003>; Fri, 31 Jul 2020 02:02:56 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
-        <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
-        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-Subject: [RFC PATCH v6 03/10] media: tegra-video: Update format lookup to offset based
-Date:   Fri, 31 Jul 2020 02:02:42 -0700
-Message-ID: <1596186169-18729-4-git-send-email-skomatineni@nvidia.com>
+        Fri, 31 Jul 2020 05:25:14 -0400
+X-IronPort-AV: E=Sophos;i="5.75,417,1589209200"; 
+   d="scan'208";a="53330059"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 31 Jul 2020 18:25:13 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id D0B9E400C9E4;
+        Fri, 31 Jul 2020 18:25:10 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 2/2] media: i2c: ov5640: Add support for BT656 mode
+Date:   Fri, 31 Jul 2020 10:24:47 +0100
+Message-Id: <1596187487-31403-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1596186169-18729-1-git-send-email-skomatineni@nvidia.com>
-References: <1596186169-18729-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
-MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1596186082; bh=5U56MbpoGgbizDY87xBQZF5BWeIIcAyUuev+l62V8Co=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=HaVarrBScuUl2g24Cmi3KwvpBdXdSe+Ewvyl900IBeYqVh6okqW4CbJUtefW0+Z9m
-         SRMJIR0wvaczbOF61W5yv2Y6J+lXmswak4KG0wAdv9bfKWhgsUkMd4AVT7nauGL7FU
-         vE3GlzrdceHl5Gf4ro/0c/Iu5Wmq+E88RvGLTERXTrbRund5dNyIdVSSr6xjltSxlu
-         eiR/RveZQMGpInbb2qNaNAap+D4cNh9JP1N8+Wf0+HBlKiDR+Zo/4hNuSfdKI1HXjQ
-         sPb2nZzICns5IdsVSKN9Rt2QGmD6a4tUSbpIYo38UQHbiHzthvDEdaPPYer8H1xfKJ
-         s+MhPdNT02GyA==
+In-Reply-To: <1596187487-31403-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <1596187487-31403-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Tegra VI supported video formats are more for non TPG and there
-can be multiple pixel formats for the same media bus format.
+Enable support for BT656 mode.
 
-This patch updates the helper function for format lookup based on
-mbus code from pre-defined Tegra supported format list to look from
-the specified list index offset.
-
-Offset based look up is used with sensor device graph (non TPG)
-where format enumeration can list all supported formats for the
-specific sensor mbus codes.
-
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
- drivers/staging/media/tegra-video/vi.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/media/i2c/ov5640.c | 48 +++++++++++++++++++++++++++++++---------------
+ 1 file changed, 33 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index 0197f4e..52d751f 100644
---- a/drivers/staging/media/tegra-video/vi.c
-+++ b/drivers/staging/media/tegra-video/vi.c
-@@ -53,11 +53,12 @@ to_tegra_channel_buffer(struct vb2_v4l2_buffer *vb)
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index ac305a5..2b23988 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -82,6 +82,7 @@
+ #define OV5640_REG_VFIFO_HSIZE		0x4602
+ #define OV5640_REG_VFIFO_VSIZE		0x4604
+ #define OV5640_REG_JPG_MODE_SELECT	0x4713
++#define OV5640_REG_CCIR656_CTRL00	0x4730
+ #define OV5640_REG_POLARITY_CTRL00	0x4740
+ #define OV5640_REG_MIPI_CTRL00		0x4800
+ #define OV5640_REG_DEBUG_MODE		0x4814
+@@ -1213,6 +1214,17 @@ static int ov5640_set_stream_dvp(struct ov5640_dev *sensor, bool on)
+ 	return ov5640_write_reg(sensor, OV5640_REG_SYS_CTRL0, on ? 0x2 : 0x42);
  }
  
- static int tegra_get_format_idx_by_code(struct tegra_vi *vi,
--					unsigned int code)
-+					unsigned int code,
-+					unsigned int offset)
++static int ov5640_set_stream_bt656(struct ov5640_dev *sensor, bool on)
++{
++	int ret;
++
++	ret = ov5640_write_reg(sensor, OV5640_REG_CCIR656_CTRL00, on ? 0x1 : 0x00);
++	if (ret)
++		return ret;
++
++	return ov5640_write_reg(sensor, OV5640_REG_SYS_CTRL0, on ? 0x2 : 0x42);
++}
++
+ static int ov5640_set_stream_mipi(struct ov5640_dev *sensor, bool on)
  {
- 	unsigned int i;
+ 	int ret;
+@@ -1998,18 +2010,21 @@ static int ov5640_set_power(struct ov5640_dev *sensor, bool on)
+ 			 *		datasheet and hardware, 0 is active high
+ 			 *		and 1 is active low...)
+ 			 */
+-			if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
+-				pclk_pol = 1;
+-			if (flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
+-				hsync_pol = 1;
+-			if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
+-				vsync_pol = 1;
+-
+-			ret = ov5640_write_reg(sensor, OV5640_REG_POLARITY_CTRL00,
+-					       (pclk_pol << 5) | (hsync_pol << 1) | vsync_pol);
+-
+-			if (ret)
+-				goto power_off;
++			if (sensor->ep.bus_type == V4L2_MBUS_PARALLEL) {
++				if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
++					pclk_pol = 1;
++				if (flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
++					hsync_pol = 1;
++				if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
++					vsync_pol = 1;
++
++				ret = ov5640_write_reg(sensor, OV5640_REG_POLARITY_CTRL00,
++						       (pclk_pol << 5) | (hsync_pol << 1) |
++						       vsync_pol);
++
++				if (ret)
++					goto power_off;
++			}
  
--	for (i = 0; i < vi->soc->nformats; ++i) {
-+	for (i = offset; i < vi->soc->nformats; ++i) {
- 		if (vi->soc->video_formats[i].code == code)
- 			return i;
- 	}
-@@ -598,11 +599,12 @@ static void vi_tpg_fmts_bitmap_init(struct tegra_vi_channel *chan)
- 	bitmap_zero(chan->tpg_fmts_bitmap, MAX_FORMAT_NUM);
+ 			/*
+ 			 * powerdown MIPI TX/RX PHY & disable MIPI
+@@ -2033,7 +2048,9 @@ static int ov5640_set_power(struct ov5640_dev *sensor, bool on)
+ 			 * - 4:		PCLK output enable
+ 			 * - [3:0]:	D[9:6] output enable
+ 			 */
+-			ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE01, 0x7f);
++			ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE01,
++					       sensor->ep.bus_type == V4L2_MBUS_PARALLEL ?
++					       0x7f : 0x1f);
+ 			if (ret)
+ 				goto power_off;
  
- 	index = tegra_get_format_idx_by_code(chan->vi,
--					     MEDIA_BUS_FMT_SRGGB10_1X10);
-+					     MEDIA_BUS_FMT_SRGGB10_1X10, 0);
- 	bitmap_set(chan->tpg_fmts_bitmap, index, 1);
+@@ -2047,7 +2064,6 @@ static int ov5640_set_power(struct ov5640_dev *sensor, bool on)
+ 			if (ret)
+ 				goto power_off;
+ 		}
+-
+ 	} else {
+ 		if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY) {
+ 			/* Reset MIPI bus settings to their default values. */
+@@ -2875,8 +2891,10 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
  
- 	index = tegra_get_format_idx_by_code(chan->vi,
--					     MEDIA_BUS_FMT_RGB888_1X32_PADHI);
-+					     MEDIA_BUS_FMT_RGB888_1X32_PADHI,
-+					     0);
- 	bitmap_set(chan->tpg_fmts_bitmap, index, 1);
- }
+ 		if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY)
+ 			ret = ov5640_set_stream_mipi(sensor, enable);
+-		else
++		else if (sensor->ep.bus_type == V4L2_MBUS_PARALLEL)
+ 			ret = ov5640_set_stream_dvp(sensor, enable);
++		else
++			ret = ov5640_set_stream_bt656(sensor, enable);
  
+ 		if (!ret)
+ 			sensor->streaming = enable;
 -- 
 2.7.4
 
