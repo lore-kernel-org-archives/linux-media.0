@@ -1,131 +1,136 @@
-Return-Path: <SRS0=lH1u=BJ=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=vA0i=BK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A160CC433E1
-	for <linux-media@archiver.kernel.org>; Thu, 30 Jul 2020 23:02:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 911C7C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 03:21:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B81620829
-	for <linux-media@archiver.kernel.org>; Thu, 30 Jul 2020 23:02:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67C0A2083E
+	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 03:21:06 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="X9UoXAr6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730736AbgG3XB4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Jul 2020 19:01:56 -0400
-Received: from mail-bn8nam11olkn2031.outbound.protection.outlook.com ([40.92.20.31]:37217
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730679AbgG3XBy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Jul 2020 19:01:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qn+NJ3pwYbw8TdGyGjfZ7pq19qFrBlWe9cYgBYOi4jWfdjkudrLwsN1nrIJDfS6z0ASh1LdGaJ+o0PhTaONW/8tmoo3h7xf/hV9jwr6PxgYOGdf+6nDEd0aNu2gkt7TJ/8kDsu1tmSbQ6WHb0m4vhzWA2ZALPl2VZT2j0NLwBtjsOODLN4byUfnYfdIy48EpIkhD/TSvMSq2Kxof3usD7CNZfNhkL9E2P+uEcWatdFusx92g4x/Fy3hFwXPwQYJEut5cf6bgpxIOMmfesC88afSMh4lssmAD13K/2lVRgldbFjB13rd13QuxpzSnMgM2bCm8qcxLimEvnWFh5m7gQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fzg4p0YpzGXpf7c5aJJBP2/5PAd5jC2Q8FULLAgJgeM=;
- b=VtBsHZyofX+RWAQuQ19hwYGOrvei0QyV7MW8fGwXA1Ow/o+uhpEEb5UNBrRdiSIX4UYgl7kMM5sn0gdvyDQQwcd1owsnZQ9MgVQfoi366zBMAHWX52nmKJZANuM7LVBJRdBXr4n32SzDNzdsEC5jZP5C64F5YTb3I5fCZJnfz2CeaxVN89+bpxZl9F9/rbVYH9RY975YMYdAFpr6wslCPjB9WMjW/THQN9Y9TntNFJbKw+sEBPft+lmQAAXwk1s8VWyX4Rh8NnEhCW1f+Kjzd3G2Vk1BS/Nv/ygWrayUVjdyGZKItq4Nprsa9aEsJrw2SJXpKGSI6AeNU2Oo44o63A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2a01:111:e400:3861::4c) by
- CO1NAM11HT140.eop-nam11.prod.protection.outlook.com (2a01:111:e400:3861::262)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.20; Thu, 30 Jul
- 2020 23:01:50 +0000
-Received: from BN6PR04MB0660.namprd04.prod.outlook.com
- (2a01:111:e400:3861::4a) by CO1NAM11FT027.mail.protection.outlook.com
- (2a01:111:e400:3861::224) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.20 via Frontend
- Transport; Thu, 30 Jul 2020 23:01:50 +0000
-X-IncomingTopHeaderMarker: OriginalChecksum:930056DD45444DF0AC78256E6DFA894564C3A9184EBDBD6DD92555D32A7F8682;UpperCasedChecksum:824827314BBC270D468198818A60EA385CE1CFD2F658A6645D723140B0A60A3A;SizeAsReceived:7885;Count:49
-Received: from BN6PR04MB0660.namprd04.prod.outlook.com
- ([fe80::b9c3:9bff:541d:f383]) by BN6PR04MB0660.namprd04.prod.outlook.com
- ([fe80::b9c3:9bff:541d:f383%9]) with mapi id 15.20.3239.020; Thu, 30 Jul 2020
- 23:01:50 +0000
-From:   Jonathan Bakker <xc-racer2@live.ca>
-To:     kyungmin.park@samsung.com, s.nawrocki@samsung.com,
-        mchehab@kernel.org, kgene@kernel.org, krzk@kernel.org,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        Jonathan Bakker <xc-racer2@live.ca>
-Subject: [PATCH v2 04/11] media: exynos4-is: Correct missing entity function initialization
-Date:   Thu, 30 Jul 2020 16:01:07 -0700
-Message-ID: <BN6PR04MB066098E34801126939AB0EF6A3710@BN6PR04MB0660.namprd04.prod.outlook.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200730230114.8572-1-xc-racer2@live.ca>
-References: <20200730230114.8572-1-xc-racer2@live.ca>
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MWHPR07CA0002.namprd07.prod.outlook.com
- (2603:10b6:300:116::12) To BN6PR04MB0660.namprd04.prod.outlook.com
- (2603:10b6:404:d9::21)
-X-Microsoft-Original-Message-ID: <20200730230114.8572-5-xc-racer2@live.ca>
+        id S1731271AbgGaDVC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Jul 2020 23:21:02 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:18288 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731244AbgGaDVB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 30 Jul 2020 23:21:01 -0400
+X-UUID: 16e9392bd7364aaf890b543b7096d87f-20200731
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=LweoCW7u41q+HSMVZXfqKKkgVKA1sH4ZjdqFdMsBerE=;
+        b=X9UoXAr6ouk6C9Apo5II03OS1Fx1T22FtxE+95Ff5JIDIh6WaO6FItBBJbMtfL1YxFcWfwCtA/9pwqmoG6R8VwlgdQikunxMs4Ly8fnwqppIf6S/7IqGO14NkY/y0fUwrYzh45+YNBBjK1h5XxT+8ynn7hdb59h06tv5fyc2VqY=;
+X-UUID: 16e9392bd7364aaf890b543b7096d87f-20200731
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <xia.jiang@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 129061187; Fri, 31 Jul 2020 11:20:44 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 31 Jul
+ 2020 11:20:34 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 31 Jul 2020 11:20:30 +0800
+Message-ID: <1596165602.17247.10.camel@mhfsdcap03>
+Subject: Re: [PATCH v10 22/28] media: platform: Change the call functions of
+ getting/enable/disable the jpeg's clock
+From:   Xia Jiang <xia.jiang@mediatek.com>
+To:     Tomasz Figa <tfiga@chromium.org>
+CC:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Rick Chang <rick.chang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        <srv_heupstream@mediatek.com>, <senozhatsky@chromium.org>,
+        <mojahsu@chromium.org>, <drinkcat@chromium.org>,
+        <maoguang.meng@mediatek.com>
+Date:   Fri, 31 Jul 2020 11:20:02 +0800
+In-Reply-To: <20200730163419.GA3779380@chromium.org>
+References: <20200723030451.5616-1-xia.jiang@mediatek.com>
+         <20200723030451.5616-23-xia.jiang@mediatek.com>
+         <20200730163419.GA3779380@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from jon-hp-6570b.telus (2001:569:fb68:9c00:8067:f823:1e15:7520) by MWHPR07CA0002.namprd07.prod.outlook.com (2603:10b6:300:116::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.16 via Frontend Transport; Thu, 30 Jul 2020 23:01:48 +0000
-X-Mailer: git-send-email 2.20.1
-X-Microsoft-Original-Message-ID: <20200730230114.8572-5-xc-racer2@live.ca>
-X-TMN:  [Sa45lLcPFhOwcEnF5E5Yb3IoYxNJ92gRTGfPqX30OqV8oD48i2Hvw64Ur5z4kkVg]
-X-MS-PublicTrafficType: Email
-X-IncomingHeaderCount: 49
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-Correlation-Id: 445a7fea-0c28-466a-c284-08d834dc8b06
-X-MS-TrafficTypeDiagnostic: CO1NAM11HT140:
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oFUHIckc20eIyHlThbpMTM/up2nJleScSkNxHqC9/LGKjyMh+gRQwNC29wrU9mbtrHDnYFtBbchbEtI8ac/fqdNPYi4LKks67xGVE0wYdOD42A7AWpaa72rBOBMWRDWpW7TsVwhBoe6Lx6/2ar4yVUJ0WBuJwjXa10sPQ0mUEUGicuimtJ5IXc+N1p6URPWIZljJ0KcUtUJLkPS9ahU67A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:0;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR04MB0660.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:;DIR:OUT;SFP:1901;
-X-MS-Exchange-AntiSpam-MessageData: v2HlyQ9hR2O0LjT7FhgKOJfrPChCNVvEUgoUdFMsRuuxjzSUOt57w46ismZY/yO0dxDxmU/Z1ZhA2oyfwP6HMmtBeIB9mNnwnbjKko7j0MTLqMfrum3NJK+1MQ2h6VWYMxq7pkP/bPHP0WgWRKApeEJ9PuAOBjjZeG55lDI8/lddnH3hlQrHDIbXZw7CIYhoEQXAVOjQbBE5Z/phuMLTPQ==
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 445a7fea-0c28-466a-c284-08d834dc8b06
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2020 23:01:50.6998
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1NAM11HT140
+X-TM-SNTS-SMTP: C3E134842F386A9EE67149A0D56802F68BD2E0220DD0C4A211C8A74D97BFF4552000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit bae4500399c4 ("[media] exynos4-is: Add missing entity function
-initialization") tried to suppress the warnings such as
-
-s5p-fimc-md camera: Entity type for entity FIMC.0 was not initialized!
-
-However, this missed setting for the subdev.  Set it now to avoid the
-ugly warnings on boot.
-
-Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
----
-Changes from v1:
-- Don't remove the function from the vfd entity as it is distinct
-  from the sd entity
-- Re-word commit message for above change
----
- drivers/media/platform/exynos4-is/fimc-capture.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/platform/exynos4-is/fimc-capture.c b/drivers/media/platform/exynos4-is/fimc-capture.c
-index 705f182330ca..82f051f6b816 100644
---- a/drivers/media/platform/exynos4-is/fimc-capture.c
-+++ b/drivers/media/platform/exynos4-is/fimc-capture.c
-@@ -1898,6 +1898,7 @@ int fimc_initialize_capture_subdev(struct fimc_dev *fimc)
- 		return ret;
- 
- 	sd->entity.ops = &fimc_sd_media_ops;
-+	sd->entity.function = MEDIA_ENT_F_PROC_VIDEO_SCALER;
- 	sd->internal_ops = &fimc_capture_sd_internal_ops;
- 	v4l2_set_subdevdata(sd, fimc);
- 	return 0;
--- 
-2.20.1
+T24gVGh1LCAyMDIwLTA3LTMwIGF0IDE2OjM0ICswMDAwLCBUb21hc3ogRmlnYSB3cm90ZToNCj4g
+SGkgWGlhLA0KPiANCj4gT24gVGh1LCBKdWwgMjMsIDIwMjAgYXQgMTE6MDQ6NDVBTSArMDgwMCwg
+WGlhIEppYW5nIHdyb3RlOg0KPiA+IFVzZSB0aGUgZ2VuZXJpYyBvZl9wcm9wZXJ0eV8qIGhlbHBl
+cnMgdG8gZ2V0IHRoZSBjbG9ja19udW1zIGFuZCBjbG9ja3MNCj4gPiBmcm9tIGRldmljZSB0cmVl
+Lg0KPiA+IFVzZSB0aGUgZ2VuZXJpYyBjbGtfYnVsa18qIGhlbHBlcnMgdG8gZW5hYmxlIGFuZCBk
+aXNhYmxlIGNsb2Nrcy4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBYaWEgSmlhbmcgPHhpYS5q
+aWFuZ0BtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gdjEwOiBuZXcgYWRkIHBhdGNoDQo+ID4g
+LS0tDQo+ID4gIC4uLi9tZWRpYS9wbGF0Zm9ybS9tdGstanBlZy9tdGtfanBlZ19jb3JlLmMgICB8
+IDQ3ICsrKysrKysrKysrKysrKy0tLS0NCj4gPiAgLi4uL21lZGlhL3BsYXRmb3JtL210ay1qcGVn
+L210a19qcGVnX2NvcmUuaCAgIHwgIDggKystLQ0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDQyIGlu
+c2VydGlvbnMoKyksIDEzIGRlbGV0aW9ucygtKQ0KPiA+IA0KPiANCj4gVGhhbmsgeW91IGZvciB0
+aGUgcGF0Y2guIFBsZWFzZSBzZWUgbXkgY29tbWVudHMgaW5saW5lLg0KPiANCj4gPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstanBlZy9tdGtfanBlZ19jb3JlLmMgYi9k
+cml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2NvcmUuYw0KPiA+IGluZGV4
+IDc4ODFlOWM5M2RmNy4uOTIxZWQyMWY3ZGIzIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvbWVk
+aWEvcGxhdGZvcm0vbXRrLWpwZWcvbXRrX2pwZWdfY29yZS5jDQo+ID4gKysrIGIvZHJpdmVycy9t
+ZWRpYS9wbGF0Zm9ybS9tdGstanBlZy9tdGtfanBlZ19jb3JlLmMNCj4gPiBAQCAtNzgzLDE0ICs3
+ODMsMTUgQEAgc3RhdGljIHZvaWQgbXRrX2pwZWdfY2xrX29uKHN0cnVjdCBtdGtfanBlZ19kZXYg
+KmpwZWcpDQo+ID4gIAlyZXQgPSBtdGtfc21pX2xhcmJfZ2V0KGpwZWctPmxhcmIpOw0KPiA+ICAJ
+aWYgKHJldCkNCj4gPiAgCQlkZXZfZXJyKGpwZWctPmRldiwgIm10a19zbWlfbGFyYl9nZXQgbGFy
+YnZkZWMgZmFpbCAlZFxuIiwgcmV0KTsNCj4gPiAtCWNsa19wcmVwYXJlX2VuYWJsZShqcGVnLT5j
+bGtfamRlY19zbWkpOw0KPiA+IC0JY2xrX3ByZXBhcmVfZW5hYmxlKGpwZWctPmNsa19qZGVjKTsN
+Cj4gPiArDQo+ID4gKwlyZXQgPSBjbGtfYnVsa19wcmVwYXJlX2VuYWJsZShqcGVnLT5udW1fY2xr
+cywganBlZy0+Y2xrcyk7DQo+ID4gKwlpZiAocmV0KQ0KPiA+ICsJCWRldl9lcnIoanBlZy0+ZGV2
+LCAiRmFpbGVkIHRvIG9wZW4ganBlZyBjbGs6ICVkXG4iLCByZXQpOw0KPiA+ICB9DQo+ID4gIA0K
+PiA+ICBzdGF0aWMgdm9pZCBtdGtfanBlZ19jbGtfb2ZmKHN0cnVjdCBtdGtfanBlZ19kZXYgKmpw
+ZWcpDQo+ID4gIHsNCj4gPiAtCWNsa19kaXNhYmxlX3VucHJlcGFyZShqcGVnLT5jbGtfamRlYyk7
+DQo+ID4gLQljbGtfZGlzYWJsZV91bnByZXBhcmUoanBlZy0+Y2xrX2pkZWNfc21pKTsNCj4gPiAr
+CWNsa19idWxrX2Rpc2FibGVfdW5wcmVwYXJlKGpwZWctPm51bV9jbGtzLCBqcGVnLT5jbGtzKTsN
+Cj4gPiAgCW10a19zbWlfbGFyYl9wdXQoanBlZy0+bGFyYik7DQo+ID4gIH0NCj4gPiAgDQo+ID4g
+QEAgLTkzOSw2ICs5NDAsNyBAQCBzdGF0aWMgaW50IG10a19qcGVnX2Nsa19pbml0KHN0cnVjdCBt
+dGtfanBlZ19kZXYgKmpwZWcpDQo+ID4gIHsNCj4gPiAgCXN0cnVjdCBkZXZpY2Vfbm9kZSAqbm9k
+ZTsNCj4gPiAgCXN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXY7DQo+ID4gKwlpbnQgcmV0LCBp
+Ow0KPiA+ICANCj4gPiAgCW5vZGUgPSBvZl9wYXJzZV9waGFuZGxlKGpwZWctPmRldi0+b2Zfbm9k
+ZSwgIm1lZGlhdGVrLGxhcmIiLCAwKTsNCj4gPiAgCWlmICghbm9kZSkNCj4gPiBAQCAtOTUyLDEy
+ICs5NTQsMzkgQEAgc3RhdGljIGludCBtdGtfanBlZ19jbGtfaW5pdChzdHJ1Y3QgbXRrX2pwZWdf
+ZGV2ICpqcGVnKQ0KPiA+ICANCj4gPiAgCWpwZWctPmxhcmIgPSAmcGRldi0+ZGV2Ow0KPiA+ICAN
+Cj4gPiAtCWpwZWctPmNsa19qZGVjID0gZGV2bV9jbGtfZ2V0KGpwZWctPmRldiwgImpwZ2RlYyIp
+Ow0KPiA+IC0JaWYgKElTX0VSUihqcGVnLT5jbGtfamRlYykpDQo+ID4gLQkJcmV0dXJuIFBUUl9F
+UlIoanBlZy0+Y2xrX2pkZWMpOw0KPiA+ICsJanBlZy0+bnVtX2Nsa3MgPQ0KPiA+ICsJCW9mX3By
+b3BlcnR5X2NvdW50X3N0cmluZ3MoanBlZy0+ZGV2LT5vZl9ub2RlLCAiY2xvY2stbmFtZXMiKTsN
+Cj4gPiArDQo+ID4gKwlpZiAoanBlZy0+bnVtX2Nsa3MgPiAwKSB7DQo+ID4gKwkJanBlZy0+Y2xr
+cyA9IGRldm1fa2NhbGxvYyhqcGVnLT5kZXYsIGpwZWctPm51bV9jbGtzLA0KPiA+ICsJCQkJCSAg
+c2l6ZW9mKHN0cnVjdCBjbGtfYnVsa19kYXRhKSwNCj4gPiArCQkJCQkgIEdGUF9LRVJORUwpOw0K
+PiA+ICsJCWlmICghanBlZy0+Y2xrcykNCj4gPiArCQkJcmV0dXJuIC1FTk9NRU07DQo+ID4gKwl9
+IGVsc2Ugew0KPiA+ICsJCWRldl9lcnIoJnBkZXYtPmRldiwgIkZhaWxlZCB0byBnZXQganBlZyBj
+bG9jayBjb3VudFxuIik7DQo+ID4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ID4gKwl9DQo+ID4gKw0K
+PiA+ICsJZm9yIChpID0gMDsgaSA8IGpwZWctPm51bV9jbGtzOyBpKyspIHsNCj4gPiArCQlyZXQg
+PSBvZl9wcm9wZXJ0eV9yZWFkX3N0cmluZ19pbmRleChqcGVnLT5kZXYtPm9mX25vZGUsDQo+ID4g
+KwkJCQkJCSAgICAiY2xvY2stbmFtZXMiLCBpLA0KPiA+ICsJCQkJCQkgICAgJmpwZWctPmNsa3Mt
+PmlkKTsNCj4gDQo+IFRoZSBuYW1lcyBvZiB0aGUgY2xvY2tzIG11c3QgYmUgZXhwbGljaXRseSBz
+cGVjaWZpZWQgaW4gdGhlIGRyaXZlciwgYXMgcGVyDQo+IHRoZSBEVCBiaW5kaW5ncy4NCkRlYXIg
+VG9tYXN6LA0KDQpUaGFuayB5b3UgZm9yIHlvdXIgcmVwbHkuDQpZb3UgbWVhbiB0aGF0IEkgc2hv
+dWxkIGtlZXAgdGhlIHY5IHZlcnNpb24gYWJvdXQgbmFtZXMgb2YgdGhlIGNsb2NrcyBpbg0KdGhl
+IG1hdGNoIGRhdGEuDQpUaGUgdjEwIHZlcnNpb24gYWJvdXQgdGhlIG5hbWVzIG9mIHRoZSBjbG9j
+a3MgZm9sbG93cyB0aGUgdXBzdHJlYW1lZA0KbXRrX3ZlbmMvdmRlYy5JIHRoaW5rIHRoYXQgdGhp
+cyBtZXRob2QgaXMgbW9yZSBnZW5lcmljLiBGb3IgZXhhbXBsZSx3aGVuDQpvdGhlciBwcm9qZWN0
+IGhhcyBtb3JlIGNsb2Nrcywgd2UgY2FuIGdldCB0aGUgbmFtZXMgb2YgY2xvY2tzIGZyb20gZHRz
+aQ0Kd2l0aG91dCBjaGFuZ2luZyB0aGUgZHJpdmVyIGNvZGUuDQpXaGF0IGFib3V0IHlvdXIgZnVy
+dGhlciBvcGluaW9uPyANCg0KQmVzdCBSZWdhcmRzLA0KWGlhIEppYW5nDQo+IA0KPiBCZXN0IHJl
+Z2FyZHMsDQo+IFRvbWFzeg0KDQo=
 
