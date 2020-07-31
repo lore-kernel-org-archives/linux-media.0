@@ -2,121 +2,90 @@ Return-Path: <SRS0=vA0i=BK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EAA4C433EA
-	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 21:33:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77FE4C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 22:43:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7268E21744
-	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 21:33:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="kf7dh7xB"
+	by mail.kernel.org (Postfix) with ESMTP id 4316C208E4
+	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 22:43:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1596235398;
+	bh=0y23+vE9QAKzSnR4XGWpKkc73V+yOnv6hVz4jnHTD88=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=UJx/hhOtB1ieSUcRGwUj9ppdwHjP+duPZhILiviWAEQUleNJn+nbZi2MlATgjhFzp
+	 gXkTa9ABjCcv/MdlLFh8rA8+jnSxJ5dpGj+AW+S0GXVcIrKHHVD8r9WS9aiLbYBx8K
+	 E7jJ3/DVp0iFfdFfV3W6yBXQXcCA0s/h3VlXNMOU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728960AbgGaVc3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 Jul 2020 17:32:29 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:18234 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728055AbgGaVc3 (ORCPT
+        id S1726935AbgGaWnP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 31 Jul 2020 18:43:15 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:40332 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726883AbgGaWnO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 Jul 2020 17:32:29 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f248ddf0000>; Fri, 31 Jul 2020 14:32:15 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Fri, 31 Jul 2020 14:32:28 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Fri, 31 Jul 2020 14:32:28 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 Jul
- 2020 21:32:28 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 31 Jul 2020 21:32:28 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.167.221]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f248deb0000>; Fri, 31 Jul 2020 14:32:28 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
-        <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <gregkh@linuxfoundation.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 01/10] media: tegra-video: Fix channel format alignment
-Date:   Fri, 31 Jul 2020 14:32:15 -0700
-Message-ID: <1596231144-12554-2-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1596231144-12554-1-git-send-email-skomatineni@nvidia.com>
-References: <1596231144-12554-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        Fri, 31 Jul 2020 18:43:14 -0400
+Received: by mail-io1-f67.google.com with SMTP id l17so33186304iok.7;
+        Fri, 31 Jul 2020 15:43:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1B+vyO+R8quuszNhtOVeeWCkKlu3aOesury3x/oHRpU=;
+        b=EcReuUdawrJllYwPSiyEFtFRPY/9Jg55O0PTxsB1KD6Uhp+rXnNXTY5iCZzF+fH87C
+         nkx8FGBbfdmt6aNlaPLROn1aXq0vAu0nOdjOl2/d3CtYPF6mSLN9BUqIKTcsfaLez9AL
+         0dPp3h4yZHVwuk9I5W3axbTKFvRvQJoO97rAeTlCKwq3Fd7JpJB91TBiG7U2S7uZcewr
+         UhsRppJi5nDXUAqTteVezInLiPTpM4+Qj6E5gVISVotPsf0TRw/Lm+V2wWG4Wtobf9vl
+         i7nU5osUcc3W2Vi8swR3LFfnZzey44/KwHz3r2wfTH0XZOzbStBy9lO58e/fu20q5prg
+         RoXQ==
+X-Gm-Message-State: AOAM533ZiTVqq/X0HaDNfMbWwd2nVkDsRBXZKxYpAFQCdj9e4LMOZcvL
+        w9+tEMgg0Re51gLuydAwsw==
+X-Google-Smtp-Source: ABdhPJz2Svj2E53KRDqoGx4JA4V4fWumeWvZbSTFi+n69Ey9ghRgN1SmkWE3+pqiF//EmqPn6wrunw==
+X-Received: by 2002:a05:6638:1649:: with SMTP id a9mr7746090jat.115.1596235393792;
+        Fri, 31 Jul 2020 15:43:13 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id y8sm5242818iom.26.2020.07.31.15.43.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2020 15:43:13 -0700 (PDT)
+Received: (nullmailer pid 943315 invoked by uid 1000);
+        Fri, 31 Jul 2020 22:43:10 -0000
+Date:   Fri, 31 Jul 2020 16:43:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jonathan Bakker <xc-racer2@live.ca>
+Cc:     robh+dt@kernel.org, mchehab@kernel.org, s.nawrocki@samsung.com,
+        kyungmin.park@samsung.com, linux-arm-kernel@lists.infradead.org,
+        kgene@kernel.org, krzk@kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 11/11] dt-bindings: media: Correct samsung-fimc
+ parallel port numbering
+Message-ID: <20200731224310.GA943204@bogus>
+References: <20200730230114.8572-1-xc-racer2@live.ca>
+ <BN6PR04MB0660B938349CA15DE7BCC5BBA3710@BN6PR04MB0660.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1596231135; bh=8GJbUvoTqNXQhoilqMQO06MgCPv5IgO6eahUeR7/0ig=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=kf7dh7xBvwW7kBNLqeMyPx2jK1tq4ZBEFVe9o/GJEeZoTFkcqIpKwG/HLMkAMYHIO
-         eMD1BjVDyWtpGZWSnUPdrAO0P/0iUrP+jIsJ08kawQdTDHqBQqyjUJrA9ugFXoli+H
-         osiVlxU4i8wraZxhXp1NYkDJ4xgMJEJ2gkmu7AkYPw+ClDmXbRJe5xcUdkqKBvfCD0
-         L1wfrO/T2xU+FQtNHFVhFcg3KE5BdUaja7UiZ4/0NgjDJvLJa9s0iM475CnsbNP+HE
-         ihEwfgmL5pfPDs3AHgwdFQyy64Yx8/UpIZxk4Q1/p+KxyVIjqgKoI05tEZfOID+7fR
-         YzPyry4zuUXEQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN6PR04MB0660B938349CA15DE7BCC5BBA3710@BN6PR04MB0660.namprd04.prod.outlook.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Pixel format width is mistakenly aligned to surface align bytes
-and altering width to aligned value may force sensor mode change
-other than the requested one and also cause mismatch in width
-programmed between sensor and vi which can lead to capture errors.
+On Thu, 30 Jul 2020 16:01:14 -0700, Jonathan Bakker wrote:
+> The parallel port nodes should be numbered 1 and 2, not 0 and 1
+> for A and B respectively.  The driver has always implemented 1
+> and 2 and the in-tree Goni DTS uses 1 as port A as well.  Update
+> the documentation to match this behaviour.
+> 
+> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+> ---
+> Changes from v1:
+> - New patch replacing patch modifying driver to match documentation
+> ---
+>  Documentation/devicetree/bindings/media/samsung-fimc.txt | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
 
-This patch removes width alignment and clamps width as per Tegra
-minimum and maximum limits.
-
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- drivers/staging/media/tegra-video/vi.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index 1b5e660..d621ebc 100644
---- a/drivers/staging/media/tegra-video/vi.c
-+++ b/drivers/staging/media/tegra-video/vi.c
-@@ -359,25 +359,15 @@ static void tegra_channel_fmt_align(struct tegra_vi_channel *chan,
- 				    struct v4l2_pix_format *pix,
- 				    unsigned int bpp)
- {
--	unsigned int align;
--	unsigned int min_width;
--	unsigned int max_width;
--	unsigned int width;
- 	unsigned int min_bpl;
- 	unsigned int max_bpl;
- 	unsigned int bpl;
- 
- 	/*
--	 * The transfer alignment requirements are expressed in bytes. Compute
--	 * minimum and maximum values, clamp the requested width and convert
--	 * it back to pixels. Use bytesperline to adjust the width.
-+	 * The transfer alignment requirements are expressed in bytes.
-+	 * Clamp the requested width and height to the limits.
- 	 */
--	align = lcm(SURFACE_ALIGN_BYTES, bpp);
--	min_width = roundup(TEGRA_MIN_WIDTH, align);
--	max_width = rounddown(TEGRA_MAX_WIDTH, align);
--	width = roundup(pix->width * bpp, align);
--
--	pix->width = clamp(width, min_width, max_width) / bpp;
-+	pix->width = clamp(pix->width, TEGRA_MIN_WIDTH, TEGRA_MAX_WIDTH);
- 	pix->height = clamp(pix->height, TEGRA_MIN_HEIGHT, TEGRA_MAX_HEIGHT);
- 
- 	/* Clamp the requested bytes per line value. If the maximum bytes per
--- 
-2.7.4
-
+Reviewed-by: Rob Herring <robh@kernel.org>
