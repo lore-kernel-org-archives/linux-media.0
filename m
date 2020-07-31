@@ -2,200 +2,389 @@ Return-Path: <SRS0=vA0i=BK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53593C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 12:54:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B5BBC433DF
+	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 13:03:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 220E72177B
-	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 12:54:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="M+csR49i"
+	by mail.kernel.org (Postfix) with ESMTP id 3368F21D95
+	for <linux-media@archiver.kernel.org>; Fri, 31 Jul 2020 13:03:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730024AbgGaMyk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 Jul 2020 08:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728607AbgGaMyk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 Jul 2020 08:54:40 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08611C061574
-        for <linux-media@vger.kernel.org>; Fri, 31 Jul 2020 05:54:39 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id g19so17506160ejc.9
-        for <linux-media@vger.kernel.org>; Fri, 31 Jul 2020 05:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oKmO2ZAvewEBOR4kyQ9VDj8a4Brdi56V8Gl0PxTOBWk=;
-        b=M+csR49iDfxo6UoiXSocjp8GH38x/wp8SHIku/n1gRdFm7qloMmf72l2fFrkx2nHna
-         vo9sUTwCKgwQ8pb5XQez3od4wwkP50GX0j5bBNqFwXIe4MebvxsiEKV08LeITrovK9zx
-         G2SD+Fjj4b33BOJZoNLjiQtoU3DeWwnfhzlfE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oKmO2ZAvewEBOR4kyQ9VDj8a4Brdi56V8Gl0PxTOBWk=;
-        b=GtMrOFTS61BaGOvMdP4e3Bdkj+wH+RKdMjaD9gbS1NxRfbRz9X/PpxjE6JiyoqKmUS
-         ho/GCzOmOu1IrlHoOAlKGyoAtS71g8FfE4avDd7zmiGRdgGxzSyoSVGWmI3ONuphPykR
-         5FPuR3IdG2PYOfjjD6l98Hlv7oqbomqLUQOFR5nq3vFkVzDSLWOVs8Ie09QFLmoKXS3u
-         E5xzC1LFH5GMJ+fHhaL5Lmrq2OsjA8IYN2xJyGR+chGjBC38KRefCvu/4u7tIqgbHvdz
-         iT+vRU0euCGqAfT3l8oeUM+h1cdbmfHaHDtFumuke4jNH8StRePYIlV8e3+xIfUV2dLA
-         SeJg==
-X-Gm-Message-State: AOAM5324MmlaCFJzOpu1LzEDK6QcmV7W7nTVb2/aXLYWbtjvW3F3go/Z
-        9yk43nA1v1CYvI/Q056FL6paRGo59G70aQ==
-X-Google-Smtp-Source: ABdhPJz9zDIWvBtu6Gjv+75omhOxwcs3O5f7U/gtfrtTLvMZfmRGyoeREsf15fe1XRNz/GMUqMiyig==
-X-Received: by 2002:a17:906:1403:: with SMTP id p3mr3889053ejc.106.1596200078457;
-        Fri, 31 Jul 2020 05:54:38 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id o15sm593091edr.67.2020.07.31.05.54.38
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jul 2020 05:54:38 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id 9so8439988wmj.5
-        for <linux-media@vger.kernel.org>; Fri, 31 Jul 2020 05:54:38 -0700 (PDT)
-X-Received: by 2002:a7b:cf08:: with SMTP id l8mr3555747wmg.183.1596199754613;
- Fri, 31 Jul 2020 05:49:14 -0700 (PDT)
+        id S1730217AbgGaNDU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 31 Jul 2020 09:03:20 -0400
+Received: from mga04.intel.com ([192.55.52.120]:42322 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727040AbgGaNDU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 31 Jul 2020 09:03:20 -0400
+IronPort-SDR: efZkN7KAXG8XqeWZsIGyVufBeI956XUCB55ocdlmwXKmhYJghItVZ7FbzZ7RX5dyRgt+VBUIGO
+ 6G4yxs7r+E2g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9698"; a="149235146"
+X-IronPort-AV: E=Sophos;i="5.75,418,1589266800"; 
+   d="scan'208";a="149235146"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2020 06:03:19 -0700
+IronPort-SDR: 0+MGxVhfQmnXMcMZe4RRGMF0yf/k6XE1s79cFSjdPusCH2+rC3Qx1v51Wftf31OkEjGJspoveh
+ XBxmXHIAPoGg==
+X-IronPort-AV: E=Sophos;i="5.75,418,1589266800"; 
+   d="scan'208";a="313791688"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2020 06:03:17 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 4B19320722; Fri, 31 Jul 2020 16:03:15 +0300 (EEST)
+Date:   Fri, 31 Jul 2020 16:03:15 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        linux-media@vger.kernel.org,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 1/2] media: i2c: ov5640: Enable data pins on startup for
+ DVP mode
+Message-ID: <20200731130315.GO13316@paasikivi.fi.intel.com>
+References: <1596187487-31403-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1596187487-31403-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-References: <20200723030451.5616-1-xia.jiang@mediatek.com> <20200723030451.5616-23-xia.jiang@mediatek.com>
- <20200730163419.GA3779380@chromium.org> <1596165602.17247.10.camel@mhfsdcap03>
-In-Reply-To: <1596165602.17247.10.camel@mhfsdcap03>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 31 Jul 2020 14:49:03 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5C4hpz8DR101WYQ=9xeq3=yMbtbCasAUqGPpg9fLNORgA@mail.gmail.com>
-Message-ID: <CAAFQd5C4hpz8DR101WYQ=9xeq3=yMbtbCasAUqGPpg9fLNORgA@mail.gmail.com>
-Subject: Re: [PATCH v10 22/28] media: platform: Change the call functions of
- getting/enable/disable the jpeg's clock
-To:     Xia Jiang <xia.jiang@mediatek.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rick Chang <rick.chang@mediatek.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        mojahsu@chromium.org, Nicolas Boichat <drinkcat@chromium.org>,
-        =?UTF-8?B?TWFvZ3VhbmcgTWVuZyAo5a2f5q+b5bm/KQ==?= 
-        <maoguang.meng@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1596187487-31403-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 5:20 AM Xia Jiang <xia.jiang@mediatek.com> wrote:
->
-> On Thu, 2020-07-30 at 16:34 +0000, Tomasz Figa wrote:
-> > Hi Xia,
-> >
-> > On Thu, Jul 23, 2020 at 11:04:45AM +0800, Xia Jiang wrote:
-> > > Use the generic of_property_* helpers to get the clock_nums and clocks
-> > > from device tree.
-> > > Use the generic clk_bulk_* helpers to enable and disable clocks.
-> > >
-> > > Signed-off-by: Xia Jiang <xia.jiang@mediatek.com>
-> > > ---
-> > > v10: new add patch
-> > > ---
-> > >  .../media/platform/mtk-jpeg/mtk_jpeg_core.c   | 47 +++++++++++++++----
-> > >  .../media/platform/mtk-jpeg/mtk_jpeg_core.h   |  8 ++--
-> > >  2 files changed, 42 insertions(+), 13 deletions(-)
-> > >
-> >
-> > Thank you for the patch. Please see my comments inline.
-> >
-> > > diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-> > > index 7881e9c93df7..921ed21f7db3 100644
-> > > --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-> > > +++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-> > > @@ -783,14 +783,15 @@ static void mtk_jpeg_clk_on(struct mtk_jpeg_dev *jpeg)
-> > >     ret = mtk_smi_larb_get(jpeg->larb);
-> > >     if (ret)
-> > >             dev_err(jpeg->dev, "mtk_smi_larb_get larbvdec fail %d\n", ret);
-> > > -   clk_prepare_enable(jpeg->clk_jdec_smi);
-> > > -   clk_prepare_enable(jpeg->clk_jdec);
-> > > +
-> > > +   ret = clk_bulk_prepare_enable(jpeg->num_clks, jpeg->clks);
-> > > +   if (ret)
-> > > +           dev_err(jpeg->dev, "Failed to open jpeg clk: %d\n", ret);
-> > >  }
-> > >
-> > >  static void mtk_jpeg_clk_off(struct mtk_jpeg_dev *jpeg)
-> > >  {
-> > > -   clk_disable_unprepare(jpeg->clk_jdec);
-> > > -   clk_disable_unprepare(jpeg->clk_jdec_smi);
-> > > +   clk_bulk_disable_unprepare(jpeg->num_clks, jpeg->clks);
-> > >     mtk_smi_larb_put(jpeg->larb);
-> > >  }
-> > >
-> > > @@ -939,6 +940,7 @@ static int mtk_jpeg_clk_init(struct mtk_jpeg_dev *jpeg)
-> > >  {
-> > >     struct device_node *node;
-> > >     struct platform_device *pdev;
-> > > +   int ret, i;
-> > >
-> > >     node = of_parse_phandle(jpeg->dev->of_node, "mediatek,larb", 0);
-> > >     if (!node)
-> > > @@ -952,12 +954,39 @@ static int mtk_jpeg_clk_init(struct mtk_jpeg_dev *jpeg)
-> > >
-> > >     jpeg->larb = &pdev->dev;
-> > >
-> > > -   jpeg->clk_jdec = devm_clk_get(jpeg->dev, "jpgdec");
-> > > -   if (IS_ERR(jpeg->clk_jdec))
-> > > -           return PTR_ERR(jpeg->clk_jdec);
-> > > +   jpeg->num_clks =
-> > > +           of_property_count_strings(jpeg->dev->of_node, "clock-names");
-> > > +
-> > > +   if (jpeg->num_clks > 0) {
-> > > +           jpeg->clks = devm_kcalloc(jpeg->dev, jpeg->num_clks,
-> > > +                                     sizeof(struct clk_bulk_data),
-> > > +                                     GFP_KERNEL);
-> > > +           if (!jpeg->clks)
-> > > +                   return -ENOMEM;
-> > > +   } else {
-> > > +           dev_err(&pdev->dev, "Failed to get jpeg clock count\n");
-> > > +           return -EINVAL;
-> > > +   }
-> > > +
-> > > +   for (i = 0; i < jpeg->num_clks; i++) {
-> > > +           ret = of_property_read_string_index(jpeg->dev->of_node,
-> > > +                                               "clock-names", i,
-> > > +                                               &jpeg->clks->id);
-> >
-> > The names of the clocks must be explicitly specified in the driver, as per
-> > the DT bindings.
-> Dear Tomasz,
->
-> Thank you for your reply.
-> You mean that I should keep the v9 version about names of the clocks in
-> the match data.
-> The v10 version about the names of the clocks follows the upstreamed
-> mtk_venc/vdec.I think that this method is more generic. For example,when
-> other project has more clocks, we can get the names of clocks from dtsi
-> without changing the driver code.
-> What about your further opinion?
+Hi Prabhakar,
 
-The problem with that method is that one can put any random names in
-the DT and the driver will happily accept them, without any
-correctness checking. Moreover, if the other project has more clocks,
-it already requires a different compatible string in the DT bindings,
-so the kernel needs to be changed anyway.
+Thank you for the patch.
 
-Actually this is something that needs to be fixed in the mtk_venc/vdec
-driver as well. I believe someone just overlooked it when the driver
-was being reviewed.
+On Fri, Jul 31, 2020 at 10:24:46AM +0100, Lad Prabhakar wrote:
+> During testing this sensor on iW-RainboW-G21D-Qseven platform noticed the
+> capture worked only for first run and for subsequent runs it failed.
+> 
+> This patch does the following in DVP mode:
+> 1: Enables data lines on power up
+> 2: Configures HVP lines on power up instead of configuring everytime on
+>    stream ON/OFF
+> 3: Disables MIPI interface.
+> 4: Puts the sensor in power down mode during stream OFF.
 
-Best regards,
-Tomasz
+Could you detail a little the underlying problem, the environment where it
+can be reproduced and how the patch addresses it, please?
+
+Are you using CSI-2 or the parallel interface, for instance?
+
+> 
+> Fixes: f22996db44e2d ("media: ov5640: add support of DVP parallel interface")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+>  drivers/media/i2c/ov5640.c | 253 +++++++++++++++++++++------------------------
+>  1 file changed, 120 insertions(+), 133 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> index 2fe4a7a..ac305a5 100644
+> --- a/drivers/media/i2c/ov5640.c
+> +++ b/drivers/media/i2c/ov5640.c
+> @@ -274,7 +274,7 @@ static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
+>  /* YUV422 UYVY VGA@30fps */
+>  static const struct reg_value ov5640_init_setting_30fps_VGA[] = {
+>  	{0x3103, 0x11, 0, 0}, {0x3008, 0x82, 0, 5}, {0x3008, 0x42, 0, 0},
+> -	{0x3103, 0x03, 0, 0}, {0x3017, 0x00, 0, 0}, {0x3018, 0x00, 0, 0},
+> +	{0x3103, 0x03, 0, 0},
+>  	{0x3630, 0x36, 0, 0},
+>  	{0x3631, 0x0e, 0, 0}, {0x3632, 0xe2, 0, 0}, {0x3633, 0x12, 0, 0},
+>  	{0x3621, 0xe0, 0, 0}, {0x3704, 0xa0, 0, 0}, {0x3703, 0x5a, 0, 0},
+> @@ -1210,96 +1210,7 @@ static int ov5640_set_autogain(struct ov5640_dev *sensor, bool on)
+>  
+>  static int ov5640_set_stream_dvp(struct ov5640_dev *sensor, bool on)
+>  {
+> -	int ret;
+> -	unsigned int flags = sensor->ep.bus.parallel.flags;
+> -	u8 pclk_pol = 0;
+> -	u8 hsync_pol = 0;
+> -	u8 vsync_pol = 0;
+> -
+> -	/*
+> -	 * Note about parallel port configuration.
+> -	 *
+> -	 * When configured in parallel mode, the OV5640 will
+> -	 * output 10 bits data on DVP data lines [9:0].
+> -	 * If only 8 bits data are wanted, the 8 bits data lines
+> -	 * of the camera interface must be physically connected
+> -	 * on the DVP data lines [9:2].
+> -	 *
+> -	 * Control lines polarity can be configured through
+> -	 * devicetree endpoint control lines properties.
+> -	 * If no endpoint control lines properties are set,
+> -	 * polarity will be as below:
+> -	 * - VSYNC:	active high
+> -	 * - HREF:	active low
+> -	 * - PCLK:	active low
+> -	 */
+> -
+> -	if (on) {
+> -		/*
+> -		 * configure parallel port control lines polarity
+> -		 *
+> -		 * POLARITY CTRL0
+> -		 * - [5]:	PCLK polarity (0: active low, 1: active high)
+> -		 * - [1]:	HREF polarity (0: active low, 1: active high)
+> -		 * - [0]:	VSYNC polarity (mismatch here between
+> -		 *		datasheet and hardware, 0 is active high
+> -		 *		and 1 is active low...)
+> -		 */
+> -		if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
+> -			pclk_pol = 1;
+> -		if (flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
+> -			hsync_pol = 1;
+> -		if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
+> -			vsync_pol = 1;
+> -
+> -		ret = ov5640_write_reg(sensor,
+> -				       OV5640_REG_POLARITY_CTRL00,
+> -				       (pclk_pol << 5) |
+> -				       (hsync_pol << 1) |
+> -				       vsync_pol);
+> -
+> -		if (ret)
+> -			return ret;
+> -	}
+> -
+> -	/*
+> -	 * powerdown MIPI TX/RX PHY & disable MIPI
+> -	 *
+> -	 * MIPI CONTROL 00
+> -	 * 4:	 PWDN PHY TX
+> -	 * 3:	 PWDN PHY RX
+> -	 * 2:	 MIPI enable
+> -	 */
+> -	ret = ov5640_write_reg(sensor,
+> -			       OV5640_REG_IO_MIPI_CTRL00, on ? 0x18 : 0);
+> -	if (ret)
+> -		return ret;
+> -
+> -	/*
+> -	 * enable VSYNC/HREF/PCLK DVP control lines
+> -	 * & D[9:6] DVP data lines
+> -	 *
+> -	 * PAD OUTPUT ENABLE 01
+> -	 * - 6:		VSYNC output enable
+> -	 * - 5:		HREF output enable
+> -	 * - 4:		PCLK output enable
+> -	 * - [3:0]:	D[9:6] output enable
+> -	 */
+> -	ret = ov5640_write_reg(sensor,
+> -			       OV5640_REG_PAD_OUTPUT_ENABLE01,
+> -			       on ? 0x7f : 0);
+> -	if (ret)
+> -		return ret;
+> -
+> -	/*
+> -	 * enable D[5:0] DVP data lines
+> -	 *
+> -	 * PAD OUTPUT ENABLE 02
+> -	 * - [7:2]:	D[5:0] output enable
+> -	 */
+> -	return ov5640_write_reg(sensor,
+> -				OV5640_REG_PAD_OUTPUT_ENABLE02,
+> -				on ? 0xfc : 0);
+> +	return ov5640_write_reg(sensor, OV5640_REG_SYS_CTRL0, on ? 0x2 : 0x42);
+>  }
+>  
+>  static int ov5640_set_stream_mipi(struct ov5640_dev *sensor, bool on)
+> @@ -2003,6 +1914,10 @@ static void ov5640_set_power_off(struct ov5640_dev *sensor)
+>  
+>  static int ov5640_set_power(struct ov5640_dev *sensor, bool on)
+>  {
+> +	unsigned int flags = sensor->ep.bus.parallel.flags;
+> +	u8 pclk_pol = 0;
+> +	u8 hsync_pol = 0;
+> +	u8 vsync_pol = 0;
+>  	int ret = 0;
+>  
+>  	if (on) {
+> @@ -2014,52 +1929,124 @@ static int ov5640_set_power(struct ov5640_dev *sensor, bool on)
+>  		if (ret)
+>  			goto power_off;
+>  
+> -		/* We're done here for DVP bus, while CSI-2 needs setup. */
+> -		if (sensor->ep.bus_type != V4L2_MBUS_CSI2_DPHY)
+> -			return 0;
+> +		/* CSI-2 setup. */
+> +		if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY) {
+> +			/*
+> +			 * Power up MIPI HS Tx and LS Rx; 2 data lanes mode
+> +			 *
+> +			 * 0x300e = 0x40
+> +			 * [7:5] = 010	: 2 data lanes mode (see FIXME note in
+> +			 *		  "ov5640_set_stream_mipi()")
+> +			 * [4] = 0	: Power up MIPI HS Tx
+> +			 * [3] = 0	: Power up MIPI LS Rx
+> +			 * [2] = 0	: MIPI interface disabled
+> +			 */
+> +			ret = ov5640_write_reg(sensor, OV5640_REG_IO_MIPI_CTRL00, 0x40);
+
+Please wrap lines over 80 if it can be reasonably one.
+
+> +			if (ret)
+> +				goto power_off;
+>  
+> -		/*
+> -		 * Power up MIPI HS Tx and LS Rx; 2 data lanes mode
+> -		 *
+> -		 * 0x300e = 0x40
+> -		 * [7:5] = 010	: 2 data lanes mode (see FIXME note in
+> -		 *		  "ov5640_set_stream_mipi()")
+> -		 * [4] = 0	: Power up MIPI HS Tx
+> -		 * [3] = 0	: Power up MIPI LS Rx
+> -		 * [2] = 0	: MIPI interface disabled
+> -		 */
+> -		ret = ov5640_write_reg(sensor,
+> -				       OV5640_REG_IO_MIPI_CTRL00, 0x40);
+> -		if (ret)
+> -			goto power_off;
+> +			/*
+> +			 * Gate clock and set LP11 in 'no packets mode' (idle)
+> +			 *
+> +			 * 0x4800 = 0x24
+> +			 * [5] = 1	: Gate clock when 'no packets'
+> +			 * [2] = 1	: MIPI bus in LP11 when 'no packets'
+> +			 */
+> +			ret = ov5640_write_reg(sensor, OV5640_REG_MIPI_CTRL00, 0x24);
+> +			if (ret)
+> +				goto power_off;
+>  
+> -		/*
+> -		 * Gate clock and set LP11 in 'no packets mode' (idle)
+> -		 *
+> -		 * 0x4800 = 0x24
+> -		 * [5] = 1	: Gate clock when 'no packets'
+> -		 * [2] = 1	: MIPI bus in LP11 when 'no packets'
+> -		 */
+> -		ret = ov5640_write_reg(sensor,
+> -				       OV5640_REG_MIPI_CTRL00, 0x24);
+> -		if (ret)
+> -			goto power_off;
+> +			/*
+> +			 * Set data lanes and clock in LP11 when 'sleeping'
+> +			 *
+> +			 * 0x3019 = 0x70
+> +			 * [6] = 1	: MIPI data lane 2 in LP11 when 'sleeping'
+> +			 * [5] = 1	: MIPI data lane 1 in LP11 when 'sleeping'
+> +			 * [4] = 1	: MIPI clock lane in LP11 when 'sleeping'
+> +			 */
+> +			ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT00, 0x70);
+> +			if (ret)
+> +				goto power_off;
+>  
+> -		/*
+> -		 * Set data lanes and clock in LP11 when 'sleeping'
+> -		 *
+> -		 * 0x3019 = 0x70
+> -		 * [6] = 1	: MIPI data lane 2 in LP11 when 'sleeping'
+> -		 * [5] = 1	: MIPI data lane 1 in LP11 when 'sleeping'
+> -		 * [4] = 1	: MIPI clock lane in LP11 when 'sleeping'
+> -		 */
+> -		ret = ov5640_write_reg(sensor,
+> -				       OV5640_REG_PAD_OUTPUT00, 0x70);
+> -		if (ret)
+> -			goto power_off;
+> +			/* Give lanes some time to coax into LP11 state. */
+> +			usleep_range(500, 1000);
+> +		} else {
+> +			/*
+> +			 * Note about parallel port configuration.
+> +			 *
+> +			 * When configured in parallel mode, the OV5640 will
+> +			 * output 10 bits data on DVP data lines [9:0].
+> +			 * If only 8 bits data are wanted, the 8 bits data lines
+> +			 * of the camera interface must be physically connected
+> +			 * on the DVP data lines [9:2].
+> +			 *
+> +			 * Control lines polarity can be configured through
+> +			 * devicetree endpoint control lines properties.
+> +			 * If no endpoint control lines properties are set,
+> +			 * polarity will be as below:
+> +			 * - VSYNC:	active high
+> +			 * - HREF:	active low
+> +			 * - PCLK:	active low
+> +			 */
+> +			/*
+> +			 * configure parallel port control lines polarity
+> +			 *
+> +			 * POLARITY CTRL0
+> +			 * - [5]:	PCLK polarity (0: active low, 1: active high)
+> +			 * - [1]:	HREF polarity (0: active low, 1: active high)
+> +			 * - [0]:	VSYNC polarity (mismatch here between
+> +			 *		datasheet and hardware, 0 is active high
+> +			 *		and 1 is active low...)
+> +			 */
+> +			if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
+> +				pclk_pol = 1;
+> +			if (flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
+> +				hsync_pol = 1;
+> +			if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
+> +				vsync_pol = 1;
+> +
+> +			ret = ov5640_write_reg(sensor, OV5640_REG_POLARITY_CTRL00,
+> +					       (pclk_pol << 5) | (hsync_pol << 1) | vsync_pol);
+> +
+> +			if (ret)
+> +				goto power_off;
+> +
+> +			/*
+> +			 * powerdown MIPI TX/RX PHY & disable MIPI
+> +			 *
+> +			 * MIPI CONTROL 00
+> +			 * 4:	 PWDN PHY TX
+> +			 * 3:	 PWDN PHY RX
+> +			 * 2:	 MIPI enable
+> +			 */
+> +			ret = ov5640_write_reg(sensor, OV5640_REG_IO_MIPI_CTRL00, 0x18);
+> +			if (ret)
+> +				goto power_off;
+> +
+> +			/*
+> +			 * enable VSYNC/HREF/PCLK DVP control lines
+> +			 * & D[9:6] DVP data lines
+> +			 *
+> +			 * PAD OUTPUT ENABLE 01
+> +			 * - 6:		VSYNC output enable
+> +			 * - 5:		HREF output enable
+> +			 * - 4:		PCLK output enable
+> +			 * - [3:0]:	D[9:6] output enable
+> +			 */
+> +			ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE01, 0x7f);
+> +			if (ret)
+> +				goto power_off;
+>  
+> -		/* Give lanes some time to coax into LP11 state. */
+> -		usleep_range(500, 1000);
+> +			/*
+> +			 * enable D[5:0] DVP data lines
+> +			 *
+> +			 * PAD OUTPUT ENABLE 02
+> +			 * - [7:2]:	D[5:0] output enable
+> +			 */
+> +			ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE02, 0xfc);
+> +			if (ret)
+> +				goto power_off;
+> +		}
+>  
+>  	} else {
+>  		if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY) {
+
+-- 
+Kind regards,
+
+Sakari Ailus
