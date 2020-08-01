@@ -4,35 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 495AFC433E1
-	for <linux-media@archiver.kernel.org>; Sat,  1 Aug 2020 21:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 744D1C433E0
+	for <linux-media@archiver.kernel.org>; Sat,  1 Aug 2020 21:59:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30A8A206E9
-	for <linux-media@archiver.kernel.org>; Sat,  1 Aug 2020 21:57:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B74B206E9
+	for <linux-media@archiver.kernel.org>; Sat,  1 Aug 2020 21:59:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbgHAV5G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 1 Aug 2020 17:57:06 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:58387 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726978AbgHAV5G (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 1 Aug 2020 17:57:06 -0400
+        id S1727817AbgHAV7e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 1 Aug 2020 17:59:34 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:9221 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726477AbgHAV7e (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 1 Aug 2020 17:59:34 -0400
 X-Originating-IP: 178.240.22.159
 Received: from localhost.localdomain (unknown [178.240.22.159])
         (Authenticated sender: cengiz@kernel.wtf)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id E15A71C0003;
-        Sat,  1 Aug 2020 21:56:59 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 3482B240004;
+        Sat,  1 Aug 2020 21:59:27 +0000 (UTC)
 From:   Cengiz Can <cengiz@kernel.wtf>
 To:     andy.shevchenko@gmail.com
 Cc:     cengiz@kernel.wtf, dan.carpenter@oracle.com,
         devel@driverdev.osuosl.org, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         mchehab@kernel.org, sakari.ailus@linux.intel.com
-Subject: [PATCHi v4] staging: atomisp: move null check to earlier point
-Date:   Sun,  2 Aug 2020 00:55:42 +0300
-Message-Id: <20200801215541.2554-1-cengiz@kernel.wtf>
+Subject: [PATCH v5] staging: atomisp: move null check to earlier point
+Date:   Sun,  2 Aug 2020 00:58:07 +0300
+Message-Id: <20200801215806.2659-1-cengiz@kernel.wtf>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200731083856.GF3703480@smile.fi.intel.com>
 References: <20200731083856.GF3703480@smile.fi.intel.com>
@@ -69,7 +69,7 @@ Signed-off-by: Cengiz Can <cengiz@kernel.wtf>
 ---
 
  Please do note that this change introduces a new return value to
- `gmin_v2p8_ctrl`.
+ `gmin_v2p8_ctrl()`.
 
  [NEW] - raise a WARN and return -ENODEV if there are no subdevices.
        - return result of `gpio_request` or `gpio_direction_output`.
@@ -81,6 +81,7 @@ Signed-off-by: Cengiz Can <cengiz@kernel.wtf>
  
  Patch Changelog:
    v4: Fix minor typo in commit message
+   v5: Remove typo from email subject
 
  drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
