@@ -2,146 +2,256 @@ Return-Path: <SRS0=WSgU=BN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7363FC433DF
-	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 14:32:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E49AC433E0
+	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 14:50:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 57E6320825
-	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 14:32:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17B672076C
+	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 14:50:24 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t1rTR360"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728323AbgHCOcZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Aug 2020 10:32:25 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:8624 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728258AbgHCOcW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 Aug 2020 10:32:22 -0400
-X-IronPort-AV: E=Sophos;i="5.75,430,1589209200"; 
-   d="scan'208";a="53537270"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 03 Aug 2020 23:32:20 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 6A59B42ACBDC;
-        Mon,  3 Aug 2020 23:32:17 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 3/4] media: i2c: ov5640: Add support for BT656 mode
-Date:   Mon,  3 Aug 2020 15:31:46 +0100
-Message-Id: <1596465107-14251-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1596465107-14251-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1596465107-14251-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1727995AbgHCOuW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Aug 2020 10:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728027AbgHCOrt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Aug 2020 10:47:49 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9D9C061757
+        for <linux-media@vger.kernel.org>; Mon,  3 Aug 2020 07:47:48 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id q4so18634891qvu.6
+        for <linux-media@vger.kernel.org>; Mon, 03 Aug 2020 07:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=yEtE51ZkZ89myWk79FRCGMzR6DiPPNgcqkWBItHzQ6s=;
+        b=t1rTR3609fZavoZD6hGkSsSWDr9nI1/YkdhLNf0ojphXhpqrjYtn2QmhC+W/gkvimg
+         AMTj6PP4Rr26vC5qnxMVLP8ZXj2mvSyHcLtN7NTD3GvFDmmeReFr0s4F/UMZqW82I1g+
+         Dr2Z/WzdPu1RdbA1YmGLFdz8BghYnww1NBBlSY+6I9r3aq9SpAN2yEXku55avULjgjeR
+         wbdd0+d7Js097V3esnE9Zp3yRqLvLrD/D5lAoObteLNHtFqv+wIpvThQwIPjxSfSQHJA
+         7Nvv9QfJik4hcZHlF/286VGx9pliyj8hQuAw0OzqKiZAgbFEPs15yA8D9Br8GJTj/mTJ
+         PaOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=yEtE51ZkZ89myWk79FRCGMzR6DiPPNgcqkWBItHzQ6s=;
+        b=e5XDxEfQgC+dbbntjtAx9pB6q72K83vo1ycx1bCFFO0YKrxLieMMYv1pHhitMSV9n4
+         qCoUIcg2kpeyYr4iX6vrtj/MODbp8YuI8/U2wHXWM+uyuybPyRrtqZGQyhHtmBx6WtFz
+         YLYpfMzXNZ97+dbII092FYgsPkWFRIrVANyqQkZmHwwYX0MixX7R+1WOGF03IgPtLYt8
+         awxmuUwM9BhCozs2pZphC/iPsRo2QZ4YH2WGjnRYRLFAogxWFRxRbBTlCXNDc+vjuq1c
+         W1PhTP7efHJTd2RFe1vqnXI5faqabpkHC/e3pc30jnnas5SnKl4zckf6e84I4F18t8Xq
+         H4lA==
+X-Gm-Message-State: AOAM5302XXtJsNS234dxFxT4PlG5RNOewdaiQvG6euwb1Iq0S4EsEy9U
+        AvfQiuv14sSwXKsbnpYVhnLXNAjoBRQ4nFVIMA==
+X-Google-Smtp-Source: ABdhPJw9FuulIu0ymOE9kGuQtwFH4SdlEeYnPFzJ+4tzAm9Tdqz+V6p7Q/zMMMduM+pHUwYFb/16WTJ/nRJFAJbl1A==
+X-Received: by 2002:a0c:c3d0:: with SMTP id p16mr17210039qvi.54.1596466068074;
+ Mon, 03 Aug 2020 07:47:48 -0700 (PDT)
+Date:   Mon,  3 Aug 2020 14:47:19 +0000
+In-Reply-To: <20200803144719.3184138-1-kaleshsingh@google.com>
+Message-Id: <20200803144719.3184138-3-kaleshsingh@google.com>
+Mime-Version: 1.0
+References: <20200803144719.3184138-1-kaleshsingh@google.com>
+X-Mailer: git-send-email 2.28.0.163.g6104cc2f0b6-goog
+Subject: [PATCH 2/2] dmabuf/tracing: Add dma-buf trace events
+From:   Kalesh Singh <kaleshsingh@google.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Ioannis Ilkos <ilkos@google.com>,
+        John Stultz <john.stultz@linaro.org>, kernel-team@android.com,
+        Kalesh Singh <kaleshsingh@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enable support for BT656 mode.
+Being able to analyze the per process usage of shared
+dma buffers prodives useful insights in situations where
+the system is experiencing high memory pressure. This would
+allow us to see exactly which processes are holding references
+to the shared buffer.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 ---
- drivers/media/i2c/ov5640.c | 40 +++++++++++++++++++++++++++-----------
- 1 file changed, 29 insertions(+), 11 deletions(-)
+ drivers/dma-buf/dma-buf.c      | 29 +++++++++++++
+ include/trace/events/dma_buf.h | 77 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 106 insertions(+)
+ create mode 100644 include/trace/events/dma_buf.h
 
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index ec444bee2ce9..08c67250042f 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -82,6 +82,7 @@
- #define OV5640_REG_VFIFO_HSIZE		0x4602
- #define OV5640_REG_VFIFO_VSIZE		0x4604
- #define OV5640_REG_JPG_MODE_SELECT	0x4713
-+#define OV5640_REG_CCIR656_CTRL00	0x4730
- #define OV5640_REG_POLARITY_CTRL00	0x4740
- #define OV5640_REG_MIPI_CTRL00		0x4800
- #define OV5640_REG_DEBUG_MODE		0x4814
-@@ -1216,6 +1217,18 @@ static int ov5640_set_autogain(struct ov5640_dev *sensor, bool on)
- 			      BIT(1), on ? 0 : BIT(1));
- }
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index 1ca609f66fdf..1729191ac9ca 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -29,6 +29,9 @@
+ #include <uapi/linux/dma-buf.h>
+ #include <uapi/linux/magic.h>
  
-+static int ov5640_set_stream_bt656(struct ov5640_dev *sensor, bool on)
++#define CREATE_TRACE_POINTS
++#include <trace/events/dma_buf.h>
++
+ static inline int is_dma_buf_file(struct file *);
+ 
+ struct dma_buf_list {
+@@ -110,6 +113,15 @@ static struct file_system_type dma_buf_fs_type = {
+ 	.kill_sb = kill_anon_super,
+ };
+ 
++static void dma_buf_vma_close(struct vm_area_struct *area)
 +{
-+	int ret;
-+
-+	ret = ov5640_write_reg(sensor, OV5640_REG_CCIR656_CTRL00, on ? 0x1 : 0x00);
-+	if (ret)
-+		return ret;
-+
-+	return ov5640_write_reg(sensor, OV5640_REG_SYS_CTRL0, on ?
-+				OV5640_SOFTWARE_WAKEUP : OV5640_SOFTWARE_PWDN);
++	trace_dma_buf_map_ref_dec(current, area->vm_file);
 +}
 +
- static int ov5640_set_stream_dvp(struct ov5640_dev *sensor, bool on)
++static const struct vm_operations_struct dma_buf_vm_ops = {
++	.close = dma_buf_vma_close,
++};
++
+ static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
  {
- 	return ov5640_write_reg(sensor, OV5640_REG_SYS_CTRL0, on ?
-@@ -2022,18 +2035,20 @@ static int ov5640_set_dvp(struct ov5640_dev *sensor, bool on)
- 	 *		datasheet and hardware, 0 is active high
- 	 *		and 1 is active low...)
- 	 */
--	if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
--		pclk_pol = 1;
--	if (flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
--		hsync_pol = 1;
--	if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
--		vsync_pol = 1;
-+	if (sensor->ep.bus_type == V4L2_MBUS_PARALLEL) {
-+		if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
-+			pclk_pol = 1;
-+		if (flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
-+			hsync_pol = 1;
-+		if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
-+			vsync_pol = 1;
+ 	struct dma_buf *dmabuf;
+@@ -128,6 +140,9 @@ static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
+ 	    dmabuf->size >> PAGE_SHIFT)
+ 		return -EINVAL;
  
--	ret = ov5640_write_reg(sensor, OV5640_REG_POLARITY_CTRL00,
--			       (pclk_pol << 5) | (hsync_pol << 1) | vsync_pol);
-+		ret = ov5640_write_reg(sensor, OV5640_REG_POLARITY_CTRL00,
-+				       (pclk_pol << 5) | (hsync_pol << 1) | vsync_pol);
++	trace_dma_buf_map_ref_inc(current, file);
++	vma->vm_ops = &dma_buf_vm_ops;
++
+ 	return dmabuf->ops->mmap(dmabuf, vma);
+ }
  
--	if (ret)
--		return ret;
-+		if (ret)
-+			return ret;
-+	}
+@@ -410,6 +425,17 @@ static void dma_buf_show_fdinfo(struct seq_file *m, struct file *file)
+ 	spin_unlock(&dmabuf->name_lock);
+ }
  
- 	/*
- 	 * powerdown MIPI TX/RX PHY & disable MIPI
-@@ -2057,7 +2072,8 @@ static int ov5640_set_dvp(struct ov5640_dev *sensor, bool on)
- 	 * - 4:		PCLK output enable
- 	 * - [3:0]:	D[9:6] output enable
- 	 */
--	ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE01, 0x7f);
-+	ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE01,
-+			       sensor->ep.bus_type == V4L2_MBUS_PARALLEL ? 0x7f : 0x1f);
- 	if (ret)
- 		return ret;
++static int dma_buf_flush(struct file *filp, fl_owner_t id)
++{
++	trace_dma_buf_fd_ref_dec(current, filp);
++	return 0;
++}
++
++static void dma_buf_fd_install(int fd, struct file *filp)
++{
++	trace_dma_buf_fd_ref_inc(current, filp);
++}
++
+ static const struct file_operations dma_buf_fops = {
+ 	.mmap		= dma_buf_mmap_internal,
+ 	.llseek		= dma_buf_llseek,
+@@ -417,6 +443,8 @@ static const struct file_operations dma_buf_fops = {
+ 	.unlocked_ioctl	= dma_buf_ioctl,
+ 	.compat_ioctl	= compat_ptr_ioctl,
+ 	.show_fdinfo	= dma_buf_show_fdinfo,
++	.fd_install	= dma_buf_fd_install,
++	.flush		= dma_buf_flush,
+ };
  
-@@ -2911,6 +2927,8 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
+ /*
+@@ -1177,6 +1205,7 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
+ 		if (oldfile)
+ 			fput(oldfile);
+ 	}
++
+ 	return ret;
  
- 		if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY)
- 			ret = ov5640_set_stream_mipi(sensor, enable);
-+		else if (sensor->ep.bus_type == V4L2_MBUS_BT656)
-+			ret = ov5640_set_stream_bt656(sensor, enable);
- 		else
- 			ret = ov5640_set_stream_dvp(sensor, enable);
- 
+ }
+diff --git a/include/trace/events/dma_buf.h b/include/trace/events/dma_buf.h
+new file mode 100644
+index 000000000000..05af336cd849
+--- /dev/null
++++ b/include/trace/events/dma_buf.h
+@@ -0,0 +1,77 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM dma_buf
++
++#if !defined(_TRACE_DMA_BUF_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_DMA_BUF_H
++
++#include <linux/dma-buf.h>
++#include <linux/tracepoint.h>
++#include <linux/types.h>
++
++#define UNKNOWN "<unknown>"
++
++#ifdef CREATE_TRACE_POINTS
++static inline struct dma_buf *dma_buffer(struct file *filp)
++{
++	return filp->private_data;
++}
++#endif
++
++DECLARE_EVENT_CLASS(dma_buf_ref_template,
++
++	TP_PROTO(struct task_struct *task, struct file *filp),
++
++	TP_ARGS(task,  filp),
++
++	TP_STRUCT__entry(
++		__field(u32, tgid)
++		__field(u32, pid)
++		__field(u64, size)
++		__field(s64, count)
++		__string(exp_name, dma_buffer(filp)->exp_name)
++		__string(name, dma_buffer(filp)->name ? dma_buffer(filp)->name : UNKNOWN)
++		__field(u64, i_ino)
++	),
++
++	TP_fast_assign(
++		__entry->tgid = task->tgid;
++		__entry->pid = task->pid;
++		__entry->size = dma_buffer(filp)->size;
++		__entry->count = file_count(filp);
++		__assign_str(exp_name, dma_buffer(filp)->exp_name);
++		__assign_str(name, dma_buffer(filp)->name ? dma_buffer(filp)->name : UNKNOWN);
++		__entry->i_ino = filp->f_inode->i_ino;
++	),
++
++	TP_printk("tgid=%u pid=%u size=%llu count=%lld exp_name=%s name=%s i_ino=%llu",
++		__entry->tgid,
++		__entry->pid,
++		__entry->size,
++		__entry->count,
++		__get_str(exp_name),
++		__get_str(name),
++		__entry->i_ino
++	)
++);
++
++DEFINE_EVENT(dma_buf_ref_template, dma_buf_fd_ref_inc,
++	TP_PROTO(struct task_struct *task, struct file *filp),
++	TP_ARGS(task,  filp));
++
++DEFINE_EVENT(dma_buf_ref_template, dma_buf_fd_ref_dec,
++	TP_PROTO(struct task_struct *task, struct file *filp),
++	TP_ARGS(task,  filp));
++
++DEFINE_EVENT(dma_buf_ref_template, dma_buf_map_ref_inc,
++	TP_PROTO(struct task_struct *task, struct file *filp),
++	TP_ARGS(task,  filp));
++
++DEFINE_EVENT(dma_buf_ref_template, dma_buf_map_ref_dec,
++	TP_PROTO(struct task_struct *task, struct file *filp),
++	TP_ARGS(task,  filp));
++
++#endif /* _TRACE_DMA_BUF_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
 -- 
-2.17.1
+2.28.0.163.g6104cc2f0b6-goog
 
