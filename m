@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D08AFC433E0
-	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 23:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25426C433DF
+	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 23:50:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E083A20775
-	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 23:50:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38BA320775
+	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 23:50:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728906AbgHCXuU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728911AbgHCXuU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 3 Aug 2020 19:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728890AbgHCXuU (ORCPT
+        with ESMTP id S1726913AbgHCXuU (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Mon, 3 Aug 2020 19:50:20 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F7BC061756
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E34C06174A
         for <linux-media@vger.kernel.org>; Mon,  3 Aug 2020 16:50:19 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: koike)
-        with ESMTPSA id C7A68292013
+        with ESMTPSA id BA648291EDC
 Subject: Re: [PATCH v3 05/10] media: staging: rkisp1: add capability
  V4L2_CAP_IO_MC to capture devices
 To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
@@ -35,8 +35,8 @@ Cc:     ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
 References: <20200723132014.4597-1-dafna.hirschfeld@collabora.com>
  <20200723132014.4597-6-dafna.hirschfeld@collabora.com>
 From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <54684f7f-fdef-d42e-4cdd-3028f6dc2146@collabora.com>
-Date:   Mon, 3 Aug 2020 20:50:06 -0300
+Message-ID: <bfe3f75b-0534-debe-fb30-281ded8150fc@collabora.com>
+Date:   Mon, 3 Aug 2020 20:50:05 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
