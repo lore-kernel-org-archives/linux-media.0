@@ -2,91 +2,68 @@ Return-Path: <SRS0=WSgU=BN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8435C433DF
-	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 08:37:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8FBDC433E0
+	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 09:07:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D5F7206D7
-	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 08:37:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="XHGO+GSr"
+	by mail.kernel.org (Postfix) with ESMTP id A32D42068F
+	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 09:07:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbgHCIhp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Aug 2020 04:37:45 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:45863 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725806AbgHCIhp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 3 Aug 2020 04:37:45 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id 2VyXkmYQ8uuXO2VyYkbWkn; Mon, 03 Aug 2020 10:37:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1596443863; bh=8CIU3hUg43JkAgObuiJfpcFHTu/6L78gs0gbCmmlCCY=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=XHGO+GSr/0gZ4R/U+tP7azNAFyX+Ix7dSUeTSOZoVrb/uhVBG4BRCwghGdJE3NGW7
-         Mji6Q7JsFN7w28Olk/lTtDDyhWDnFGN62SAe7NKFUQkQe1CAVAB+WqyhpXGy74XSOM
-         uJJicvlYGDiX8jman5rbU/1bfyWun/P/Ab3GhSs/SCqT5bEwohqkpNSSZlr9THl0eC
-         EFxsdSHgwjAkhErnPGelzM7nguQDVU/2rl///o8fUEElzII91Iqsc6XJLsf7mTvhTw
-         d+z5AB0aSDH3L5lcKScekigpEJO8IKrhQmSrpze2F5LYnCNbsOnuWLHKdUaGmLFH12
-         l3uud7oLQOKJQ==
-Subject: Re: [PATCH] imx219: selection compliance fixes
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.org>,
-        naush@raspberrypi.com
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        libcamera-devel@lists.libcamera.org
-References: <b580ac9d-5ae4-29ce-c81a-a1f98b1d953b@xs4all.nl>
- <20200801111903.zt2d2djusjdh27vc@uno.localdomain>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <de5d3ddd-2792-f59d-87eb-7dacd4952aa2@xs4all.nl>
-Date:   Mon, 3 Aug 2020 10:37:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726119AbgHCJHf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Aug 2020 05:07:35 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:48577 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725907AbgHCJHf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Aug 2020 05:07:35 -0400
+X-Originating-IP: 93.29.109.196
+Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 8AE664000C;
+        Mon,  3 Aug 2020 09:07:32 +0000 (UTC)
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH] media: ov5640: Correct Bit Div register in clock tree diagram
+Date:   Mon,  3 Aug 2020 11:06:58 +0200
+Message-Id: <20200803090658.10073-1-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20200801111903.zt2d2djusjdh27vc@uno.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfIRbLXgrqmNrW7UxbbFzC2SliVn72irdyapVhhFTIQOlDCwT3ahO60eQKo3U4scSgTjxYtVXyE6wQJDGiC9EBbIJuvyXd2AHJzNVwwmuPqHGIWBvX+7R
- oi6FOS3RYAIYvMG02ldhvfbbupLr1Xs/Oe/Amvnu+uFyNuH6ryI/P40FbMdNlZqU20PvMcTz5MQ8NC8bs+NG2YeIfel4XRtqLAhriUhcs8Bu8hv7WISHfUzw
- SJao/MFWbC7llYszIFiVqvOoW/5IJltf9CdIK4HwGa5R3xRjAOFR2fPgpsXoY+IQsEtcpp1QujN6WacQ/6E5f4Lb6tdxGBoaTfgDYfKOJcjjoIU9w5PiQF1f
- wRJaXRfGt0U0TRrKCo44FOZjZjngmMGy1Fy3vzm0h2037P1NCDSTeHyEbd/Cm03PnJaHSP83KrIsE/bSd/jiEK/nyHnDuh4kZFCesGgT0wOtmlaKGdaNZDct
- Nu1EpdmQG26a1uMUn925OIPqWqRoORhIsTW9U+yl8+rHC8xvi8cXzWszOU/g/VdWjAhaIjvC/ZYt5uTPha82C5pRDLJAuAm4g9LkDAVv3qrZD55CzsJm+Vws
- fLBFmCYAnYp3c0pUbCnu5m9a
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 01/08/2020 13:19, Jacopo Mondi wrote:
-> Hans: would you like to go ahead with this patch, or should I take
-> over and change the libcamera part that parses these properties in one
-> go ?
+Although the code is correct and doing the right thing, the clock diagram
+showed the wrong register for the bit divider, which had me doubting the
+understanding of the tree. Fix this to avoid doubts in the future.
 
-Feel free to take it over!
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ drivers/media/i2c/ov5640.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-
-	Hans
-
-> 
-> Thanks
->   j
-> 
->>  		sel->r.top = IMX219_PIXEL_ARRAY_TOP;
->>  		sel->r.left = IMX219_PIXEL_ARRAY_LEFT;
->>  		sel->r.width = IMX219_PIXEL_ARRAY_WIDTH;
->> --
->> 2.27.0
->>
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index 854031f0b64a..fe08a45b0426 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -751,7 +751,7 @@ static int ov5640_mod_reg(struct ov5640_dev *sensor, u16 reg,
+  *               +->| PLL Root Div | - reg 0x3037, bit 4
+  *                  +-+------------+
+  *                    |  +---------+
+- *                    +->| Bit Div | - reg 0x3035, bits 0-3
++ *                    +->| Bit Div | - reg 0x3034, bits 0-3
+  *                       +-+-------+
+  *                         |  +-------------+
+  *                         +->| SCLK Div    | - reg 0x3108, bits 0-1
+-- 
+2.26.2
 
