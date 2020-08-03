@@ -2,209 +2,220 @@ Return-Path: <SRS0=WSgU=BN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC7DC433E4
-	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 02:10:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7226CC433E0
+	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 07:34:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE256206E9
-	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 02:10:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FWUyEWCj"
+	by mail.kernel.org (Postfix) with ESMTP id 5348220738
+	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 07:34:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726321AbgHCCJx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 2 Aug 2020 22:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725840AbgHCCJw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 2 Aug 2020 22:09:52 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B92C06174A;
-        Sun,  2 Aug 2020 19:09:52 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id 77so1648690qkm.5;
-        Sun, 02 Aug 2020 19:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ndkPgBzuu3HavvJal2ZqB7UZeB0qupPxRyfTt2Dimg0=;
-        b=FWUyEWCjQKEHwM9GiwSviNlzcEXn3fJMnwj01f3uRh/FYTKs2u56nrPhloyL51EARl
-         SG0iyrN0KNUKrpveMFWRPAQGC0f+Ba3xv843q3J8cESWUdckzbp0Ck5OzS0joGn95gBf
-         O1cyD8il3KiJQ+s9kFUMAP6BiZNeHyKGkcd0+HtyXZ0m+Lhto39zBZGpy9z4C13D8WYZ
-         aL5qRTMyLPPejCylgjBgjLrWYjQzH5EeHLfIUDMUDJU9A4kkFbgsXQUeEblAWvlBCISF
-         wwNhgUxh/5vwd3KFphd6G6PvkAWUFOUoy8UznHUkSxX+OQqMqH9+qxtKXD4i4HW399yk
-         hgqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ndkPgBzuu3HavvJal2ZqB7UZeB0qupPxRyfTt2Dimg0=;
-        b=f/B9UurzvxIAjTQjgrfeqg7VCUs5ml1rAYqvt2TJacd8vNm5I8+TUvu2+BDPfuzE4m
-         xPSCRIAunMH3WZhHrtRPlnOL/sXo4WYxQjguEv6y+1iMGcAA//nvamYbpEPcDVQTlCqa
-         XcdQjf8vG6gvO0TujOmE1LjDE0A9B9W6TQeA/1iFyElm1sWTQmChLMQ92PZnm4wWRLtb
-         PX74b44g54NI7YSBOLlxK1zA2o2NRLMtokE0v7UN1BTztJGdsBMUNF7KFXVIdx0dAECy
-         ixNAR5Bh4/N/N8hlhH4l/RexV+y0pXUTEYhCf2KTOklTOTw6FNlpOE3RdsntoW4M5mGo
-         HzWQ==
-X-Gm-Message-State: AOAM532ME4j0v4LGudFtRi2j6Bu8+kn+ROEmhv6utbr7mFgdiT3lvrl0
-        RVn3iNFJCFcPkkdjShFAr57M0osPH6M=
-X-Google-Smtp-Source: ABdhPJxjv5KpSpY7yqnaZnmdkMxs60OPVyP14ztQV690EUnGQa9js2GzjGLQx+QV1EyBpkOjbIAphQ==
-X-Received: by 2002:a37:a0c9:: with SMTP id j192mr13962339qke.134.1596420589425;
-        Sun, 02 Aug 2020 19:09:49 -0700 (PDT)
-Received: from localhost.localdomain ([190.189.67.136])
-        by smtp.gmail.com with ESMTPSA id d124sm18458083qkg.65.2020.08.02.19.09.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 02 Aug 2020 19:09:48 -0700 (PDT)
-From:   Santiago Hormazabal <santiagohssl@gmail.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Santiago Hormazabal <santiagohssl@gmail.com>
-Subject: [PATCH 0/3] KT0913 FM/AM driver
-Date:   Sun,  2 Aug 2020 23:09:18 -0300
-Message-Id: <20200803020921.64151-1-santiagohssl@gmail.com>
-X-Mailer: git-send-email 2.24.1
+        id S1726246AbgHCHep (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Aug 2020 03:34:45 -0400
+Received: from mga07.intel.com ([134.134.136.100]:29521 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725951AbgHCHeo (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 3 Aug 2020 03:34:44 -0400
+IronPort-SDR: bZ1ZA1pfppM8dHrWb9ovMD2xoOumu3Tj+Ur+Cb31Uhp6xOtmVlxlsVP2jnB7O+fACw3UJES02g
+ eecDxlz4XR3g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9701"; a="216483513"
+X-IronPort-AV: E=Sophos;i="5.75,429,1589266800"; 
+   d="scan'208";a="216483513"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2020 00:34:42 -0700
+IronPort-SDR: DK1ZB4ZUGE91T42iV8DRclymgMvIWPA/+r8S9cI8XcHoQirRhs3AVmThuZxkVnoeHegws0oLMg
+ 2Hn0uVwg0HDg==
+X-IronPort-AV: E=Sophos;i="5.75,429,1589266800"; 
+   d="scan'208";a="395971159"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2020 00:34:39 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 8EB8B20760; Mon,  3 Aug 2020 10:34:37 +0300 (EEST)
+Date:   Mon, 3 Aug 2020 10:34:37 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        helen.koike@collabora.com, ezequiel@collabora.com,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        mchehab@kernel.org, tfiga@chromium.org
+Subject: Re: [PATCH 1/2] media: pixfmt-meta-rkisp1.rst: add description of
+ rkisp1 metadata formats in pixfmt-meta-rkisp1.rst
+Message-ID: <20200803073437.GU13316@paasikivi.fi.intel.com>
+References: <20200731121243.25882-1-dafna.hirschfeld@collabora.com>
+ <20200731121243.25882-2-dafna.hirschfeld@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200731121243.25882-2-dafna.hirschfeld@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-media: adds support for kt0913 FM/AM tuner chip
+Hi Dafna,
 
-Adds a driver for the KT0913 FM/AM tuner chip from KT Micro. This chip
-can be found on many low cost FM/AM radios and DVD/Home Theaters.
-The chip provides two ways of usage, a manual mode (requiring only a
-few buttons) or complete control via I2C. This driver uses the latter.
-It exposes the minimum functionality of this chip, which includes tuning
-an AM or FM station given its frequency, reading the signal strength,
-setting Stereo (only on FM) or Mono (available on AM/FM), Mute, Volume
-and Audio Gain.
-I left some TODOs on the code, like supporting the chip's hardware seek
-feature, using a RW/RO regmaps rather than a single volatile regmap,
-show the FM SNR as a RO control and the FM/AM AFC deviation as another
-RO control.
-The module I've used comes from SZZSJDZ.com, a now defunct company.
-However, it's possible to buy this chip directly from Aliexpress or
-similar sites.
-I tested this on two systems, the first one being a Raspberry Pi 4 with
-the unstable 5.x kernel, but later I moved to a Banana Pi 2 Zero where
-I used the (current at this time, 8f2a4a9) master of this repo for testing.
-I've also compiled the v4l-compliance from sources (c7f0328) and it passed
-all the tests. The output of that is at the end of this note.
+Thanks for the patchset.
 
-Note: This is the second set of patches for the driver, where I (tried to)
-address the comments that the reviewers added on the previous set.
+On Fri, Jul 31, 2020 at 02:12:42PM +0200, Dafna Hirschfeld wrote:
+> The metadata formats V4L2_META_FMT_IPU3_PARAMS, V4L2_META_FMT_IPU3_3A
+> are currently described in two files under
+> drivers/staging/media/rkisp1/Documentation/media/uapi/v4l
+> 
+> This patch moves the description to one file:
+> Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst
+> The patch also extends the description and adds the rst file to
+> toctree.
+> 
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> ---
+>  .../userspace-api/media/v4l/meta-formats.rst  |  1 +
+>  .../media/v4l/pixfmt-meta-rkisp1.rst          | 49 +++++++++++++++++++
+>  .../uapi/v4l/pixfmt-meta-rkisp1-params.rst    | 23 ---------
+>  .../uapi/v4l/pixfmt-meta-rkisp1-stat.rst      | 22 ---------
+>  4 files changed, 50 insertions(+), 45 deletions(-)
+>  create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst
+>  delete mode 100644 drivers/staging/media/rkisp1/Documentation/media/uapi/v4l/pixfmt-meta-rkisp1-params.rst
+>  delete mode 100644 drivers/staging/media/rkisp1/Documentation/media/uapi/v4l/pixfmt-meta-rkisp1-stat.rst
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
+> index 7dcc4bacbb0c..55a635534bc9 100644
+> --- a/Documentation/userspace-api/media/v4l/meta-formats.rst
+> +++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
+> @@ -21,6 +21,7 @@ These formats are used for the :ref:`metadata` interface only.
+>  
+>      pixfmt-meta-d4xx
+>      pixfmt-meta-intel-ipu3
+> +    pixfmt-meta-rkisp1
+>      pixfmt-meta-uvc
+>      pixfmt-meta-vsp1-hgo
+>      pixfmt-meta-vsp1-hgt
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst
+> new file mode 100644
+> index 000000000000..c8effdfd27bf
+> --- /dev/null
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst
+> @@ -0,0 +1,49 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +.. _v4l2-meta-fmt-params-rkisp1:
+> +.. _v4l2-meta-fmt-stat-rkisp1:
+> +
+> +*****************************************************************************
+> +V4L2_META_FMT_RK_ISP1_PARAMS ('rk1p'), V4L2_META_FMT_RK_ISP1_STAT_3A ('rk1s')
+> +*****************************************************************************
+> +
+> +.. rkisp1_stat_buffer
+> +
+> +3A and histogram statistics
+> +===========================
+> +
+> +The ISP1 device collects different statistics over an input Bayer frame.
+> +Those statistics are obtained from the :ref:`rkisp1_stats <rkisp1_stats>` metadata capture video node,
+> +using the :c:type:`v4l2_meta_format` interface. The buffer contains a single instance of
 
-v4l2-compliance SHA: c7f03287bbd64c168975e7ff3192e6fd3b507686, 32 bits, 32-bit time_t
+Please wrap lines at most at 80 characters if possible.
 
-Compliance test for kt0913-fm-am device /dev/radio0:
+> +the C structure :c:type:`rkisp1_stat_buffer` defined in ``rkisp1-config.h``.
+> +So the structure can be obtained from the buffer by:
+> +
+> +.. code-block:: c
+> +
+> +	struct rkisp1_stat_buffer *stats = (struct rkisp1_stat_buffer*) buffer;
+> +
+> +The statistics collected are Exposure, AWB (Auto-white balance), Histogram and
+> +AF (Auto-focus). See :c:type:`rkisp1_stat_buffer` for details of the statistics.
+> +
+> +.. ipu3_uapi_params
+> +
+> +Configuration parameters
+> +========================
 
-Driver Info:
-	Driver name      : kt0913-fm-am
-	Card type        : kt0913-fm-am
-	Bus info         : I2C:radio0
-	Driver version   : 5.8.0
-	Capabilities     : 0x80250000
-		Tuner
-		Radio
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x00250000
-		Tuner
-		Radio
-		Extended Pix Format
+I'd move configuration parameters before statistics --- they're first in
+the section name and are also used to calculate the statistics.
 
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-	test second /dev/radio0 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-	test invalid ioctls: OK
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK
-	test VIDIOC_LOG_STATUS: OK
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK
-	test VIDIOC_G/S_FREQUENCY: OK
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 1
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 8 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK (Not Supported)
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK (Not Supported)
-	test VIDIOC_TRY_FMT: OK (Not Supported)
-	test VIDIOC_S_FMT: OK (Not Supported)
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK (Not Supported)
-	test VIDIOC_EXPBUF: OK (Not Supported)
-	test Requests: OK (Not Supported)
-
-Total for kt0913-fm-am device /dev/radio0: 45, Succeeded: 45, Failed: 0, Warnings: 0
-
-Santiago Hormazabal (3):
-  dt-bindings: vendor-prefixes: Add KT Micro
-  media: kt0913: device tree binding
-  media: Add support for the AM/FM radio chip KT0913 from KT Micro.
-
- .../bindings/media/i2c/ktm,kt0913.yaml        |   56 +
- .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
- drivers/media/radio/Kconfig                   |   10 +
- drivers/media/radio/Makefile                  |    1 +
- drivers/media/radio/radio-kt0913.c            | 1196 +++++++++++++++++
- 5 files changed, 1265 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ktm,kt0913.yaml
- create mode 100644 drivers/media/radio/radio-kt0913.c
+> +
+> +The configuration parameters are passed to the :ref:`rkisp1_params <rkisp1_params>` metadata
+> +output video node, using the :c:type:`v4l2_meta_format` interface. The buffer contains
+> +a single instance of the C structure :c:type:`rkisp1_params_cfg` defined in
+> +``rkisp1-config.h``. So the structure can be obtained from the buffer by:
+> +
+> +.. code-block:: c
+> +
+> +	struct rkisp1_params_cfg *stats = (struct rkisp1_params_cfg*) buffer;
+> +
+> +The 3A statistics and configuration parameters described here are usually consumed
+> +and produced by dedicated user space libraries that comprise the important tuning
+> +tools using software control loop.
+> +
+> +rkisp1 uAPI data types
+> +======================
+> +
+> +.. kernel-doc:: drivers/staging/media/rkisp1/uapi/rkisp1-config.h
+> diff --git a/drivers/staging/media/rkisp1/Documentation/media/uapi/v4l/pixfmt-meta-rkisp1-params.rst b/drivers/staging/media/rkisp1/Documentation/media/uapi/v4l/pixfmt-meta-rkisp1-params.rst
+> deleted file mode 100644
+> index 32034e481357..000000000000
+> --- a/drivers/staging/media/rkisp1/Documentation/media/uapi/v4l/pixfmt-meta-rkisp1-params.rst
+> +++ /dev/null
+> @@ -1,23 +0,0 @@
+> -.. SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> -
+> -.. _v4l2-meta-fmt-rkisp1-params:
+> -
+> -============================
+> -V4L2_META_FMT_RK_ISP1_PARAMS
+> -============================
+> -
+> -Rockchip ISP1 Parameters Data
+> -
+> -Description
+> -===========
+> -
+> -This format describes input parameters for the Rockchip ISP1.
+> -
+> -It uses c-struct :c:type:`rkisp1_params_cfg`, which is defined in
+> -the ``linux/rkisp1-config.h`` header file.
+> -
+> -The parameters consist of multiple modules.
+> -The module won't be updated if the corresponding bit was not set in module_*_update.
+> -
+> -.. kernel-doc:: include/uapi/linux/rkisp1-config.h
+> -   :functions: rkisp1_params_cfg
+> diff --git a/drivers/staging/media/rkisp1/Documentation/media/uapi/v4l/pixfmt-meta-rkisp1-stat.rst b/drivers/staging/media/rkisp1/Documentation/media/uapi/v4l/pixfmt-meta-rkisp1-stat.rst
+> deleted file mode 100644
+> index 4ad303f96421..000000000000
+> --- a/drivers/staging/media/rkisp1/Documentation/media/uapi/v4l/pixfmt-meta-rkisp1-stat.rst
+> +++ /dev/null
+> @@ -1,22 +0,0 @@
+> -.. SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> -
+> -.. _v4l2-meta-fmt-rkisp1-stat:
+> -
+> -=============================
+> -V4L2_META_FMT_RK_ISP1_STAT_3A
+> -=============================
+> -
+> -
+> -Rockchip ISP1 Statistics Data
+> -
+> -Description
+> -===========
+> -
+> -This format describes image color statistics information generated by the Rockchip
+> -ISP1.
+> -
+> -It uses c-struct :c:type:`rkisp1_stat_buffer`, which is defined in
+> -the ``linux/rkisp1-config.h`` header file.
+> -
+> -.. kernel-doc:: include/uapi/linux/rkisp1-config.h
+> -   :functions: rkisp1_stat_buffer
 
 -- 
-2.24.1
+Kind regards,
 
+Sakari Ailus
