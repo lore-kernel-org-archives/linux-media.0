@@ -2,81 +2,103 @@ Return-Path: <SRS0=WSgU=BN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D40FC433E1
-	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 00:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F7DCC433E0
+	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 02:09:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7394D206E9
-	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 00:49:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 634DD206E9
+	for <linux-media@archiver.kernel.org>; Mon,  3 Aug 2020 02:09:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NiyspEtc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727920AbgHCAtG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 2 Aug 2020 20:49:06 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:37108 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726797AbgHCAtF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 2 Aug 2020 20:49:05 -0400
-Received: by mail-io1-f70.google.com with SMTP id f6so11187006ioa.4
-        for <linux-media@vger.kernel.org>; Sun, 02 Aug 2020 17:49:05 -0700 (PDT)
+        id S1726824AbgHCCJy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 2 Aug 2020 22:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725840AbgHCCJx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 2 Aug 2020 22:09:53 -0400
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E0AC06174A;
+        Sun,  2 Aug 2020 19:09:53 -0700 (PDT)
+Received: by mail-qv1-xf44.google.com with SMTP id ed14so16728533qvb.2;
+        Sun, 02 Aug 2020 19:09:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YNsoK3KOOTDKOlm423I4wyXXKHArPOY0+JN2KGnQMf0=;
+        b=NiyspEtcw7tJK0rsi4qeywBv/yPE8c2X38uRM9x1Y/9/1I+bEMEGz8CmUSg0t1zvv9
+         O0bFeUHRwQxJqpXIs89annTT8Bd73LUutcXXn+d/4UaIFEZkif7SgCyy/UqMeQYfM+7C
+         UeEBp+VykglrNyfnPUw5U1Hm7OhTaSFD1i13HQsQU4474ingNUYRrrPL1D+4uL6EzGV2
+         OLD298Ut5VaJMI+k3YeKJ74/ZTspXPjFII80R/9St8g3O3pYlZL0g4QeYxFmdmvBwCBs
+         KsxGYU/Kf1WOIt8vmQcwmMPGCgYyCILFQLgHdGH/9UtE37evyAZO08gEpkbzz8ccmj+i
+         nCQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=zjMjCpZHpZC9oX4mSp6lGsDleX+rgZUM4Hc+zQq53tE=;
-        b=rr3YnH+i/RetRbI2CZ0pXxeVqPuqKVP6tUysuHjdi0w31EfX+Ck9UUvk/kTA7bbzej
-         DW9pKz+GdCBoS83y+sXbgOJp1iIEY5a7rjlLKxN1ZGqP5doSzFi3/afS4XjRL8Zn24Ws
-         ply32y/7ulSYYmqNCgbP3wclj5Wo/nj37rY+CT8UC10BYfqi99KTaX6ZQUMfwm5XvGP3
-         YK1dxYboOvH6CUOcm8zMth3WTfJCe6pEdn+1G8TKtU2GjrbgNrgO/t2oNjip5u5cBIDg
-         uNDL2Ozf+HQQRKehO1VnHPcJjdmnjh8tvCxsB5Sb2p7CIUdplSTFu7qBSwrNIfHKbAtk
-         q1yw==
-X-Gm-Message-State: AOAM531UVD4vwnFwpy8kh3rrP12wXLnlkf8ZxMpvnmzrEoB8X1p6J2Wg
-        kj5XO2TXIzNHI07nKlaGl9s7o+KYEz9mGnOIL//NoVjp2N9v
-X-Google-Smtp-Source: ABdhPJx51fMhfJaafxHzZAN2jjWSIrSl/b5CFIul4+GGQOi4s1mKok/hTo4u9c3s4cBgSHZ/wcwXjrq3H3VFwrd210mpw03EVfqe
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YNsoK3KOOTDKOlm423I4wyXXKHArPOY0+JN2KGnQMf0=;
+        b=K6ZZIHGtdGiU+Xq6Acabe8CswdYrRbaTJRSvv5GmPCWJpiUVnJf6YAqfgC4eOwzQgu
+         xal+7aQt14oJDsob7yJlMg80ahN/MTAlbI0ZwEoWgu+DsXVk2xN71h5EVt+/0IEgaYsm
+         XZXZnW3+mJyBlwpmdOmOLnDmNrPW6VeClEJd1LNq+tveJco52fLohOV4eKULFSdVgxAz
+         AYzxlWacOfd1Sr4OQEfTVEOYhDq3BAL/v5IxhsOfCS+VbhxvsUXNC1jh+sjZeN/ZbQSH
+         Gxs4OseYmYgb7zGZQR+5Qs6HoeK4471oRueSCBTpZlTtFPM8zjuVa/vX0XEPP+pqRvcb
+         M8jg==
+X-Gm-Message-State: AOAM530JpQamALMGHWY6Ig7COvqqBkIXYy880acalHhadkCLr7/q/dtn
+        VY+mHQRkbt8y5bq2OjClb524aTSMryM=
+X-Google-Smtp-Source: ABdhPJzHPkgcs+KS6q6/ahqZxSpHuXMIkSHis9TzS5iBfgik5bjwy45gztWdoWW2pMgredDC6pvQEg==
+X-Received: by 2002:a0c:d98d:: with SMTP id y13mr14872811qvj.203.1596420592499;
+        Sun, 02 Aug 2020 19:09:52 -0700 (PDT)
+Received: from localhost.localdomain ([190.189.67.136])
+        by smtp.gmail.com with ESMTPSA id d124sm18458083qkg.65.2020.08.02.19.09.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 02 Aug 2020 19:09:52 -0700 (PDT)
+From:   Santiago Hormazabal <santiagohssl@gmail.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Santiago Hormazabal <santiagohssl@gmail.com>
+Subject: [PATCH 1/3] dt-bindings: vendor-prefixes: Add KT Micro
+Date:   Sun,  2 Aug 2020 23:09:19 -0300
+Message-Id: <20200803020921.64151-2-santiagohssl@gmail.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200803020921.64151-1-santiagohssl@gmail.com>
+References: <20200803020921.64151-1-santiagohssl@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:15d0:: with SMTP id f16mr168098iow.45.1596415744953;
- Sun, 02 Aug 2020 17:49:04 -0700 (PDT)
-Date:   Sun, 02 Aug 2020 17:49:04 -0700
-In-Reply-To: <000000000000ab11c505abeb19f5@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000064571305abee81ea@google.com>
-Subject: Re: KASAN: use-after-free Write in __sco_sock_close
-From:   syzbot <syzbot+077eca30d3cb7c02b273@syzkaller.appspotmail.com>
-To:     coreteam@netfilter.org, davem@davemloft.net,
-        devel@driverdev.osuosl.org, gregkh@linuxfoundation.org,
-        johan.hedberg@gmail.com, kaber@trash.net, kadlec@blackhole.kfki.hu,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        marcel@holtmann.org, mchehab@kernel.org, mchehab@s-opensource.com,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        pablo@netfilter.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-syzbot has bisected this issue to:
+Adds ktm as the prefix of KT Micro, Inc.
 
-commit 43ea43b9d8b27b7acd443ec59319faa3cdb8a616
-Author: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-Date:   Wed Oct 12 11:21:43 2016 +0000
+Signed-off-by: Santiago Hormazabal <santiagohssl@gmail.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-    [media] radio-bcm2048: don't ignore errors
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 8261ede298f8..34809300fddd 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -547,6 +547,8 @@ patternProperties:
+     description: Kontron S&T AG
+   "^kosagi,.*":
+     description: Sutajio Ko-Usagi PTE Ltd.
++  "^ktm,.*":
++    description: KT Micro, Inc.
+   "^kyo,.*":
+     description: Kyocera Corporation
+   "^lacie,.*":
+-- 
+2.24.1
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1036e6a4900000
-start commit:   ac3a0c84 Merge git://git.kernel.org/pub/scm/linux/kernel/g..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1236e6a4900000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1436e6a4900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e59ee776d5aa8d55
-dashboard link: https://syzkaller.appspot.com/bug?extid=077eca30d3cb7c02b273
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12cf1904900000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d52e14900000
-
-Reported-by: syzbot+077eca30d3cb7c02b273@syzkaller.appspotmail.com
-Fixes: 43ea43b9d8b2 ("[media] radio-bcm2048: don't ignore errors")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
