@@ -3,125 +3,144 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A0EFC433E1
-	for <linux-media@archiver.kernel.org>; Tue,  4 Aug 2020 05:58:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6444CC433E1
+	for <linux-media@archiver.kernel.org>; Tue,  4 Aug 2020 07:54:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CA032086A
-	for <linux-media@archiver.kernel.org>; Tue,  4 Aug 2020 05:58:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 699CC2076E
+	for <linux-media@archiver.kernel.org>; Tue,  4 Aug 2020 07:54:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j512w+pi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k9fRH+9Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729854AbgHDF60 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Aug 2020 01:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
+        id S1726198AbgHDHyH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Aug 2020 03:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726514AbgHDF60 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Aug 2020 01:58:26 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDA4C06174A;
-        Mon,  3 Aug 2020 22:58:25 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id g6so29565973ljn.11;
-        Mon, 03 Aug 2020 22:58:25 -0700 (PDT)
+        with ESMTP id S1729472AbgHDHyF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Aug 2020 03:54:05 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E479BC061756
+        for <linux-media@vger.kernel.org>; Tue,  4 Aug 2020 00:54:04 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id c19so1603007wmd.1
+        for <linux-media@vger.kernel.org>; Tue, 04 Aug 2020 00:54:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PovWtt/hyyq7GqZJhadvZnSefeeWx2retmil7K8DBl0=;
-        b=j512w+piXkOClqZwk8PPWIIwmv0LZ2ToLx2E5QqSFqoaeD8Z210SHobH0nWqZ457K6
-         37EtTc5wYusFkJcn1CXIOuJFGrldIzv38iLCWPhavlPqOmjjQ1AV7t02LJhB0llWOuD8
-         PXpY45pb4tskFB9KonqhdxBL//A0ASC5mkelYHe4BtAt7ichpEF5SingqlUZLUHVGclZ
-         rW4+Z6zePywYsuwkHH2QF+OCzTGGZGlaxmI7R+31SSUeGC9Mjpaca05Lf9QL7p5BkLpt
-         omzrh6yFiKSIOAJXpO7jP/htzke0kGvBi6eeDRCXNkiAyLhXFE2V40g3sr4dni2+dSxu
-         iDtA==
+        bh=H2zCW/kQ6aCvtur961Ynj7Bn0wcaRINKRQWdR+heL0s=;
+        b=k9fRH+9ZtxBpRHtuM9z2fdTe/S7XZeGu3Z1phZPH7Gs0CeWKZbhFlIOzGK2PgN6/X+
+         lQoCgx1WshDVTgIOSMJYgXrTNiej3IY6nqA7DU5f94tkKazD5dt9bMMBpGDDlTZVUmha
+         IePJtQUYNLAuCHnIgCjVMAHHdp8kkSn7ACsnwFI3HGJyPfr05Q6Ud0IC0YCjAnc9xEbx
+         1bzbukNJKDLg7RIW5EEfdODn7tEDv+il4TVFkWaM3OijcxhmTSRnOztPrCMjngDQ1Jng
+         j0ygWKRYwV34Hh/cTHg/Poyh0vEoy8P9c5CZxLgzJX0iXirGwH0VO/b2gFMeTlVRbw/Z
+         prAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=PovWtt/hyyq7GqZJhadvZnSefeeWx2retmil7K8DBl0=;
-        b=VrpmcQ7B/7PsxIGd9mCPxu1siXuXtuvCP5q/C5gddfAFCiDvC03qzEFMRBjIjgyImG
-         acj+m5t2mYIXf6WiBzOZY5aMPokbKii4I8PHqE4A8r0cw3G3mmVxVAd/bJIFkz6/jASY
-         w3MIPN3jgbxCzAAfLK0wnH8fkxiV1o3nv4NZsOIzpyhvxhTLfj8alj4m9sjwj+/auDra
-         1IJ8XXELtqpuVxMcgkbru115UliThRXLhzs2anVg8pltEHtLnA8Bh1TFcFChlVd6eYXI
-         2cbcF8OAYormQfK7IpWNzLqKEAoiOLH+o0qaT2WPVCnXLMuA7TJ2YL4LD5GLk6RfglkZ
-         nu6A==
-X-Gm-Message-State: AOAM533GkIzDtRH7yc4Y0DhnJL4ZRGMPCNSFeIawsZ/bVqpUFxJ9DdOc
-        nvuaH9Cx2+ypHiPStaeKEN3zAWfR
-X-Google-Smtp-Source: ABdhPJw+sd1rKTXZJUSBPB0N65PD6421E06QjDff/C5/PXiL1pCUKBh5p9a8YKXRX13MwMy3rIgcRA==
-X-Received: by 2002:a2e:b55c:: with SMTP id a28mr981400ljn.107.1596520704054;
-        Mon, 03 Aug 2020 22:58:24 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-41-50.dynamic.spd-mgts.ru. [94.29.41.50])
-        by smtp.googlemail.com with ESMTPSA id m20sm6546686lfb.72.2020.08.03.22.58.23
+        bh=H2zCW/kQ6aCvtur961Ynj7Bn0wcaRINKRQWdR+heL0s=;
+        b=HKhUxLhjfstdu1XujdnTf8Py41TQwM6Zf93/S+zMgYLUyrX/EuS1Ogxg10ZTl2FBoj
+         nMQ5yReHFxiBShGo0qLg8GHjB3pbmxSiE8Lv6cGMmk9EHPkY0gSJqs7qRIDHPp/+LDqZ
+         JMlhdqpJtvED+uSnZUAcQOgzmccceBSy8YPgWBBIvFmLQTpaZjom5kSVhbcIfzCetHWf
+         YhQPHKihrjZO54U2MARj+P4iQJAFRDEdx/vs/Fu9cH/SHLN2fCxpwzgA5Sm217vLWeRC
+         afJSBsFgrvOKgpzPWtC3hnFlEaAN5ncw7Yg/uugVDTXm5/rEJdPbwMnK40G3UQxNYo60
+         uNqQ==
+X-Gm-Message-State: AOAM530A3DCjvuAr5bgxk34rlumhOHCMrYqwOzubGui1V2RAeNi25UrH
+        t2p+HVYmPkm1Fltnk3eadM3VzoAqE0Lsng==
+X-Google-Smtp-Source: ABdhPJzsLRcRIdeD7uMwiFMA9OnMMg+wBok0W54IJT5RDIP6Gz4Wm+D58D95Zh8ZmIqWqU2tT/UtNw==
+X-Received: by 2002:a1c:f60d:: with SMTP id w13mr2970557wmc.51.1596527643385;
+        Tue, 04 Aug 2020 00:54:03 -0700 (PDT)
+Received: from [192.168.1.9] ([195.24.90.54])
+        by smtp.googlemail.com with ESMTPSA id r3sm2103516wro.1.2020.08.04.00.54.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Aug 2020 22:58:23 -0700 (PDT)
-Subject: Re: [PATCH v2 -next] media: staging: tegra-vde: Mark
- tegra_vde_runtime_suspend/resume as __maybe_unused
-To:     YueHaibing <yuehaibing@huawei.com>, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
-References: <20200803115901.44068-1-yuehaibing@huawei.com>
- <20200804014137.45444-1-yuehaibing@huawei.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <709889ed-7757-ab5b-53c9-a061ae062d08@gmail.com>
-Date:   Tue, 4 Aug 2020 08:58:22 +0300
+        Tue, 04 Aug 2020 00:54:02 -0700 (PDT)
+Subject: Re: [PATCH] media: venus: Fix reported frame intervals
+To:     Loic Poulain <loic.poulain@linaro.org>,
+        stanimir.varbanov@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org
+References: <1596464268-7382-1-git-send-email-loic.poulain@linaro.org>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <4cf40f23-1181-1543-cd5c-212ad2bb0ead@linaro.org>
+Date:   Tue, 4 Aug 2020 10:54:01 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200804014137.45444-1-yuehaibing@huawei.com>
+In-Reply-To: <1596464268-7382-1-git-send-email-loic.poulain@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-04.08.2020 04:41, YueHaibing пишет:
-> If CONFIG_PM is not set, gcc warns:
+Hi Loic,
+
+On 8/3/20 5:17 PM, Loic Poulain wrote:
+> On dragonboard-410c (apq8016) with HFI_VERSION_1XX, the reported
+> framerate is in unit of 1/65535 fps (for fine grained control).
+> So the current reported supported frame intervals is wrong (max
+> is 1/65535 fps), leading to encoding issues or format negotiation
+> failures with gstreamer.
 > 
-> drivers/staging/media/tegra-vde/vde.c:916:12:
->  warning: 'tegra_vde_runtime_suspend' defined but not used [-Wunused-function]
+> Fix that by setting the framerate numerator according the framerate
+> factor (65535).
 > 
-> Make it __maybe_unused to fix this.
+> The factor is not always the same, e.g. with db820c (apq8096) HFI
+> reports framerate in fps unit. So only apply that for HFI_VERSION_1XX.
 > 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
 > ---
-> v2: both suspend and resume functions marked
-> ---
->  drivers/staging/media/tegra-vde/vde.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/media/platform/qcom/venus/venc.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/staging/media/tegra-vde/vde.c b/drivers/staging/media/tegra-vde/vde.c
-> index a3c24d96d5b9..28845b5bafaf 100644
-> --- a/drivers/staging/media/tegra-vde/vde.c
-> +++ b/drivers/staging/media/tegra-vde/vde.c
-> @@ -913,7 +913,7 @@ static irqreturn_t tegra_vde_isr(int irq, void *data)
->  	return IRQ_HANDLED;
->  }
->  
-> -static int tegra_vde_runtime_suspend(struct device *dev)
-> +static __maybe_unused int tegra_vde_runtime_suspend(struct device *dev)
+> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+> index 9981a2a..654bbaf 100644
+> --- a/drivers/media/platform/qcom/venus/venc.c
+> +++ b/drivers/media/platform/qcom/venus/venc.c
+> @@ -575,7 +575,9 @@ static int venc_enum_frameintervals(struct file *file, void *fh,
+>  				    struct v4l2_frmivalenum *fival)
 >  {
->  	struct tegra_vde *vde = dev_get_drvdata(dev);
->  	int err;
-> @@ -929,7 +929,7 @@ static int tegra_vde_runtime_suspend(struct device *dev)
+>  	struct venus_inst *inst = to_inst(file);
+> +	enum hfi_version ver = inst->core->res->hfi_version;
+>  	const struct venus_format *fmt;
+> +	unsigned int framerate_factor = 1;
+>  
+>  	fival->type = V4L2_FRMIVAL_TYPE_STEPWISE;
+>  
+> @@ -600,11 +602,16 @@ static int venc_enum_frameintervals(struct file *file, void *fh,
+>  	    fival->height < frame_height_min(inst))
+>  		return -EINVAL;
+>  
+> -	fival->stepwise.min.numerator = 1;
+> +	if (ver == HFI_VERSION_1XX) {
+
+Could you use IS_V1(inst->core) macro instead.
+
+> +		/* framerate is reported in 1/65535 fps unit */
+
+I wonder isn't better to be consistent for all venus versions and return
+1/1 to 1/120 instead of 65535/65535 to 65535/7864320?
+
+> +		framerate_factor = (1 << 16);
+> +	}
+> +
+> +	fival->stepwise.min.numerator = framerate_factor;
+>  	fival->stepwise.min.denominator = frate_max(inst);
+> -	fival->stepwise.max.numerator = 1;
+> +	fival->stepwise.max.numerator = framerate_factor;
+>  	fival->stepwise.max.denominator = frate_min(inst);
+> -	fival->stepwise.step.numerator = 1;
+> +	fival->stepwise.step.numerator = framerate_factor;
+>  	fival->stepwise.step.denominator = frate_max(inst);
+>  
 >  	return 0;
->  }
->  
-> -static int tegra_vde_runtime_resume(struct device *dev)
-> +static __maybe_unused int tegra_vde_runtime_resume(struct device *dev)
->  {
->  	struct tegra_vde *vde = dev_get_drvdata(dev);
->  	int err;
 > 
 
-Thanks!
-
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+-- 
+regards,
+Stan
