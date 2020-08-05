@@ -2,156 +2,287 @@ Return-Path: <SRS0=lnVm=BP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15E97C433E0
-	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 19:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF0E8C433E1
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 20:01:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EAE8D20842
-	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 19:55:25 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cNVGeAky"
+	by mail.kernel.org (Postfix) with ESMTP id A119B2076E
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 20:01:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728229AbgHETzY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Aug 2020 15:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727831AbgHEQrv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 12:47:51 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A333C0A891E;
-        Wed,  5 Aug 2020 07:05:45 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id g6so35183571ljn.11;
-        Wed, 05 Aug 2020 07:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ev09fQIwwVoCVctHIyJV4BoifzLSy9cjs96TIWMwjTk=;
-        b=cNVGeAkym4a82t1dKh/mLk7LiT1I62FNbECk1sMfA46ZzG+zxPAK4lb3stMHwJb/rV
-         WWRVtEmCsbISNWfopFqtqONM27I7dFWv+eI//FBFAWQQCWLwleiBkKNfzfVzd9jmW1Tb
-         V+6lP1qFgd/v133DkeicAvG0vM7mflZVB9ncOeL7VXu439S13YBGPyvTrQ3QAFqviVd/
-         6HquEkXbMfV43y5jThSrRMnTEGGRGLnBHFRe2BdrXBqhPQ3rEpsAfk7H5kF4BG/XDGb3
-         8NYYYM+cye/RUHA1EVk1pgdQxmPTECvT9dVp740ngutHv66JxGiYINPAkY+AEHyUByrF
-         3WcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ev09fQIwwVoCVctHIyJV4BoifzLSy9cjs96TIWMwjTk=;
-        b=HKPM0CazDAvehVn+o6R3lkrfCQMW5JJGuNEPH3zl2OhUMq/JqwWGltnuLVucQzgsU4
-         1rvk3+pWoZ0U80rVPYAJWUZ4HEekrMSsZ6ZEZxOkV0q1/Q6V6dnrI1uhnSIgUsN2667A
-         x0zKbbdDW+C3+D6f1IzbQMnYqGrml5cw3jRooqc4z+hGjrBYS+HKP9OUCRw9FLGqsDpc
-         CVu1zzNlwnFrKWx49cBnpvVd1+Yuq/md7qfVg9dJWF7xARKxQZYPao/1B0xRvx8oHg6A
-         3SdMzYcyhXe1coG8wiqWU3iyWGFS5shrV1sdVo9fJV8vsvtkA4QA4rRaZTCsBPazcuCI
-         FXfw==
-X-Gm-Message-State: AOAM531zE73JdOeoCToyMHQvmbj33x34NB9vyy+SvTJTZ39DTVSMhfVP
-        g86pZ475JTgaSMRli3qNe+X4z6Bu
-X-Google-Smtp-Source: ABdhPJxUHKn3jgLLgt9PNMiup+D3HBXI8zcR+vLF4HsyQfIBRuNgWjulNBCag9k50dUroJkG40tq4w==
-X-Received: by 2002:a2e:164f:: with SMTP id 15mr1603373ljw.68.1596636342876;
-        Wed, 05 Aug 2020 07:05:42 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-41-50.dynamic.spd-mgts.ru. [94.29.41.50])
-        by smtp.googlemail.com with ESMTPSA id q20sm941582ljj.42.2020.08.05.07.05.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Aug 2020 07:05:42 -0700 (PDT)
-Subject: Re: [PATCH v8 08/10] gpu: host1x: mipi: Keep MIPI clock enabled till
- calibration is done
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     jonathanh@nvidia.com, frankc@nvidia.com, hverkuil@xs4all.nl,
-        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1596469346-937-1-git-send-email-skomatineni@nvidia.com>
- <1596469346-937-9-git-send-email-skomatineni@nvidia.com>
- <20200805134600.GA3351349@ulmo>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <103efe31-1abc-54f2-6004-490d7bb1b61a@gmail.com>
-Date:   Wed, 5 Aug 2020 17:05:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728410AbgHET77 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Aug 2020 15:59:59 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49510 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727815AbgHEQlb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 12:41:31 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id E5FA529811F
+Message-ID: <40711c2dcb4166a8984fdf2ffaa22428509755f7.camel@collabora.com>
+Subject: Re: [PATCH 08/10] media: uapi: h264: Clean slice invariants syntax
+ elements
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Alexandre Courbot <acourbot@chromium.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Date:   Wed, 05 Aug 2020 13:41:14 -0300
+In-Reply-To: <CAAFQd5BeWXUZZDZNg6u7i=kgMbXRh=KjLa7OqjFD9JgPqC7OMg@mail.gmail.com>
+References: <20200715202233.185680-1-ezequiel@collabora.com>
+         <20200715202233.185680-9-ezequiel@collabora.com>
+         <CAPBb6MVMXeTcUfb-98McYCKjh=eM=BTo2dSY=L1c6dv2jHqXcg@mail.gmail.com>
+         <636aab0a2be83e751a82a84ac3946afec2c87a17.camel@collabora.com>
+         <CAAFQd5DVfroAXRw+OT=EktDtVzRjPZYxnUS8daWQ5=3LLwn=SA@mail.gmail.com>
+         <e49635b95db0e295a85f1be9a3909f7f29495e3a.camel@collabora.com>
+         <CAAFQd5AeMcqk1MpWNeh1Vgt2rBOxjFj8Ar7=LLo80e8QKhYn3g@mail.gmail.com>
+         <dc7f9f199788581a4b37fc7e34466f7bd2173efb.camel@collabora.com>
+         <CAAFQd5BeWXUZZDZNg6u7i=kgMbXRh=KjLa7OqjFD9JgPqC7OMg@mail.gmail.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-1 
 MIME-Version: 1.0
-In-Reply-To: <20200805134600.GA3351349@ulmo>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-05.08.2020 16:46, Thierry Reding пишет:
-> On Mon, Aug 03, 2020 at 08:42:24AM -0700, Sowjanya Komatineni wrote:
->> With the split of MIPI calibration into tegra_mipi_calibrate() and
->> tegra_mipi_wait(), MIPI clock is not kept enabled till the calibration
->> is done.
->>
->> So, this patch skips disabling MIPI clock after triggering start of
->> calibration and disables it only after waiting for done status from
->> the calibration logic.
->>
->> This patch renames tegra_mipi_calibrate() as tegra_mipi_start_calibration()
->> and tegra_mipi_wait() as tegra_mipi_finish_calibration() to be inline
->> with their usage.
->>
->> As MIPI clock is left enabled and in case of any failures with CSI input
->> streaming tegra_mipi_finish_calibration() will not get invoked.
->> So added new API tegra_mipi_cancel_calibration() which disables MIPI clock
->> and consumer drivers can call this in such cases.
->>
->> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
->> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->> ---
->>  drivers/gpu/drm/tegra/dsi.c |  4 ++--
->>  drivers/gpu/host1x/mipi.c   | 19 ++++++++++---------
->>  include/linux/host1x.h      |  5 +++--
->>  3 files changed, 15 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/tegra/dsi.c b/drivers/gpu/drm/tegra/dsi.c
->> index 3820e8d..a7864e9 100644
->> --- a/drivers/gpu/drm/tegra/dsi.c
->> +++ b/drivers/gpu/drm/tegra/dsi.c
->> @@ -694,11 +694,11 @@ static int tegra_dsi_pad_calibrate(struct tegra_dsi *dsi)
->>  		DSI_PAD_PREEMP_PD(0x03) | DSI_PAD_PREEMP_PU(0x3);
->>  	tegra_dsi_writel(dsi, value, DSI_PAD_CONTROL_3);
->>  
->> -	err = tegra_mipi_calibrate(dsi->mipi);
->> +	err = tegra_mipi_start_calibration(dsi->mipi);
->>  	if (err < 0)
->>  		return err;
->>  
->> -	return tegra_mipi_wait(dsi->mipi);
->> +	return tegra_mipi_finish_calibration(dsi->mipi);
->>  }
->>  
->>  static void tegra_dsi_set_timeout(struct tegra_dsi *dsi, unsigned long bclk,
->> diff --git a/drivers/gpu/host1x/mipi.c b/drivers/gpu/host1x/mipi.c
->> index e606464..b15ab6e 100644
->> --- a/drivers/gpu/host1x/mipi.c
->> +++ b/drivers/gpu/host1x/mipi.c
->> @@ -293,17 +293,19 @@ int tegra_mipi_disable(struct tegra_mipi_device *dev)
->>  }
->>  EXPORT_SYMBOL(tegra_mipi_disable);
->>  
->> -int tegra_mipi_wait(struct tegra_mipi_device *device)
->> +void tegra_mipi_cancel_calibration(struct tegra_mipi_device *device)
->> +{
->> +	clk_disable(device->mipi->clk);
+Hi Tomasz,
+
+On Tue, 2020-08-04 at 15:35 +0200, Tomasz Figa wrote:
+> On Mon, Jul 27, 2020 at 9:43 PM Nicolas Dufresne
+> <nicolas.dufresne@collabora.com> wrote:
+> > Le lundi 27 juillet 2020 à 20:10 +0200, Tomasz Figa a écrit :
+> > > On Mon, Jul 27, 2020 at 6:18 PM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> > > > On Mon, 2020-07-27 at 16:52 +0200, Tomasz Figa wrote:
+> > > > > On Mon, Jul 27, 2020 at 4:39 PM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> > > > > > Hi Alexandre,
+> > > > > > 
+> > > > > > Thanks a lot for the review.
+> > > > > > 
+> > > > > > On Sat, 2020-07-25 at 23:34 +0900, Alexandre Courbot wrote:
+> > > > > > > On Thu, Jul 16, 2020 at 5:23 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> > > > > > > > The H.264 specification requires in its "Slice header semantics"
+> > > > > > > > section that the following values shall be the same in all slice headers:
+> > > > > > > > 
+> > > > > > > >   pic_parameter_set_id
+> > > > > > > >   frame_num
+> > > > > > > >   field_pic_flag
+> > > > > > > >   bottom_field_flag
+> > > > > > > >   idr_pic_id
+> > > > > > > >   pic_order_cnt_lsb
+> > > > > > > >   delta_pic_order_cnt_bottom
+> > > > > > > >   delta_pic_order_cnt[ 0 ]
+> > > > > > > >   delta_pic_order_cnt[ 1 ]
+> > > > > > > >   sp_for_switch_flag
+> > > > > > > >   slice_group_change_cycle
+> > > > > > > > 
+> > > > > > > > and can therefore be moved to the per-frame decode parameters control.
+> > > > > > > 
+> > > > > > > I am really not a H.264 expert, so this question may not be relevant,
+> > > > > > 
+> > > > > > All questions are welcome. I'm more than happy to discuss this patchset.
+> > > > > > 
+> > > > > > > but are these values specified for every slice header in the
+> > > > > > > bitstream, or are they specified only once per frame?
+> > > > > > > 
+> > > > > > > I am asking this because it would certainly make user-space code
+> > > > > > > simpler if we could remain as close to the bitstream as possible. If
+> > > > > > > these values are specified once per slice, then factorizing them would
+> > > > > > > leave user-space with the burden of deciding what to do if they change
+> > > > > > > across slices.
+> > > > > > > 
+> > > > > > > Note that this is a double-edged sword, because it is not necessarily
+> > > > > > > better to leave the firmware in charge of deciding what to do in such
+> > > > > > > a case. :) So hopefully these are only specified once per frame in the
+> > > > > > > bitstream, in which case your proposal makes complete sense.
+> > > > > > 
+> > > > > > Frame-based hardwares accelerators such as Hantro and Rockchip VDEC
+> > > > > > are doing the slice header parsing themselves. Therefore, the
+> > > > > > driver is not really parsing these fields on each slice header.
+> > > > > > 
+> > > > > > Currently, we are already using only the first slice in a frame,
+> > > > > > as you can see from:
+> > > > > > 
+> > > > > >         if (slices[0].flags & V4L2_H264_SLICE_FLAG_FIELD_PIC)
+> > > > > >                 reg |= G1_REG_DEC_CTRL0_PIC_FIELDMODE_E;
+> > > > > > 
+> > > > > > Even if these fields are transported in the slice header,
+> > > > > > I think it makes sense for us to split them into the decode params
+> > > > > > (per-frame) control.
+> > > > > > 
+> > > > > > They are really specified to be the same across all slices,
+> > > > > > so even I'd say if a bitstream violates this, it's likely
+> > > > > > either a corrupted bitstream or an encoder bug.
+> > > > > > 
+> > > > > > OTOH, one thing this makes me realize is that the slice params control
+> > > > > > is wrongly specified as an array.
+> > > > > 
+> > > > > It is _not_.
+> > > > > 
+> > > > 
+> > > > We introduced the hold capture buffer specifically to support
+> > > > this without having a slice array.
+> > > > 
+> > > > I don't think we have a plan to support this control properly
+> > > > as an array.
+> > > > 
+> > > > If we decide to support the slice control as an array,
+> > > > we would have to implement a mechanism to specify the array size,
+> > > > which we currently don't have AFAIK.
+> > > > 
+> > > 
+> > > That wasn't the conclusion when we discussed this last time on IRC.
+> > > +Nicolas Dufresne
+> > > 
+> > > Currently the 1-slice per buffer model is quite impractical:
+> > > 1) the maximum number of buffers is 32, which for some streams can be
+> > > less than needed to queue a single frame,
+> > 
+> > To give more context, it seems the discussion was about being able to
+> > use slice decoder with a 1 poll() per frame model. Of course this will
+> > never be as efficient as when using a frame base decoder, but as
+> > current design, you can keep a list of pending request (each request is
+> > 1 slice/buffer), and simply use memory pressure to poll a mid point and
+> > dequeue the remaining. An example, yo have 8 pending request, and reach
+> > your memory limit:
+> > 
+> >   [R1, R2, R3, R4, R5, R6, R7, R8]
+> > 
+> > As requests are in order and behaves like memory fences, you can pick
+> > R6, and poll() that one. When R6 is ready, you can then dequeue R1 to
+> > R6 without blocking. In this context, a limit of 16 or 32 buffers seems
+> > fair, the optimization we can do in userspace is likely sufficient. So
+> > I'd like to drop problem 1) from our list.
+> > 
 > 
-> Do we need to do anything with the MIPI_CAL_CTRL and MIPI_CAL_STATUS
-> registers here? We don't clear the START bit in the former when the
-> calibration has successfully finished, but I suspect that's because
-> the bit is self-clearing. But I wonder if we still need to clear it
-> upon cancellation to make sure the calibration does indeed stop.
+> Okay, I forgot about the ability to poll the requests. I guess this
+> solves a part of the problem indeed.
+> 
+> > > 2) even more system call overhead due to the need to repeat various
+> > > operations (e.g. qbuf/dqbuf) per-slice rather than per-frame,
+> > > 3) no way to do hardware batching for hardware which supports queuing
+> > > multiple slices at a time,
+> > > 4) waste of memory - one needs to allocate all the OUTPUT buffers
+> > > pessimistically to accommodate the biggest possible slice, while with
+> > > all-slices-per-frame 1 buffer could be just heuristically allocated to
+> > > be enough for the whole frame.
+> > > 
+> > > These need to be carefully evaluated, with some proper testing done to
+> > > confirm whether they are really a problem or not.
+> > 
+> > 2, 3 and 4 seems to match what the currently unimplemented API propose.
+> > You can mitigate 2) but having multiple slices per buffers. That came
+> > with a byte offset to we can program the HW as if it was separate slice
+> > buffers. But was limited to 16 buffers, likely a fair compromise.
+> > 
+> 
+> Do we have some ideas on how these problems could be addressed in the
+> future? It would be unfortunate to freeze the current API just to
+> realize that it can't be made efficient anymore and yet another API
+> would have to be invented to redo things in an efficient way.
+> 
+> With the request polling method, I guess we could solve 2) by making
+> it possible to dequeue and enqueue multiple buffers at a time. It
+> could be achieved by introducing DQBUF/QBUF variants which operate on
+> an array of buffer indexes.
+> 
+> > 3) is about batching, in the only use case we know, the batching
+> > acceleration consist of programming the next operation on the
+> > completion IRQ. I already looked with the Cedrus developers if and how
+> > that was feasible, but we don't have a PoC yet. The optimization is
+> > about removing context switches between operations, which could prevent
+> > fully using the HW.
+> 
+> Right, but still, we have to check whether the API we're going to
+> stabilize wouldn't prevent implementing it in the future.
+> 
+> One idea is to solve it opportunistically. If there are already some
+> slices queued and not being processed by the hardware yet, queuing
+> more would just join them to the existing (staging) batch. When the
+> hardware finishes its current batch, the staging batch would be closed
+> and handed to the hardware for decoding.
+> 
+> > 4) is also well covered with being able to multiplex 1 buffer with
+> > multiple slices.
+> 
+> Note that with MMAP memory type it's not possible, because 1 buffer
+> can be only queued once. However, I guess that with DMABUF, one can
+> just allocate one large buffer and queue it at different V4L2 buffer
+> indexes with different .data_offset (or whatever we introduce for
+> proper, well-defined offset handling).
+> 
+> > To be fair, I understand why we'd like to drop this API, as none of the
+> > active developers here of slice decoder (cedrus) have time to engage in
+> > supporting this untested "optimization". It's not only about kernel
+> > support, but also requires userspace work. I also agree that it could
+> > be added later, as an extension. It could be done with 3 new controls,
+> > an array of slice_params and an array of slice start offset and the
+> > number of slices, or just one, introduce a new structure that have a
+> > slice_params structure embedded, num_slices and an array of
+> > slice_start_offset. I don't have preference myself, but I'm just
+> > illustrating that yes, we could drop the slice batching to avoid
+> > pushing untested APIs without scarifying our ability to decode a valid
+> > stream.
+> 
+> Sure, that makes sense, but as I mentioned above, there are problems
+> with the existing API and if we don't want to solve them right now, we
+> at least have to make sure that the problems can be solved later after
+> stabilizing it.
+> 
 
-Apparently there is no way to explicitly stop calibration other than to
-reset MIPI calibration block, but Sowjanya says this is unnecessary.
+I think the plan is to support 1-slice per request using the current
+SLICE_PARAMS control.
 
-Perhaps having a fixed delay before disabling clock could be enough to
-ensure that calibration is stopped before the clock is disabled?
+So, next iteration of this series should clarify that the SLICE_PARAMS
+is not intended as an array, and clean the fields that were added
+when the control was first envisioned as part of an array.
+
+As you have pointed out, for slice-based hardware, pushing
+1-slice per request can be suboptimal.
+
+However, this is the current mode that is supported by Cedrus,
+which is good enough for Cedrus users. I believe there's enough
+reasons to stabilize this SLICE_PARAMS and clarify the use-case
+is for 1-slice per request.
+
+Nothing prevents to introduce a new control to support another mode,
+though. So, going forward, if we see slice-based hardware that can
+handle multiple slices per request, or, if we want to pass an entire
+frame to Cedrus to save the syscall overhead, we will have to introduce
+a new control (array-like).
+
+I believe a decent plan is along Nicolas' suggestions.
+I'd like to quote that because it totally matches what I had in mind:
+
+"""
+It could be done with 3 new controls,
+an array of slice_params and an array of slice start offset and the
+number of slices, or just one, introduce a new structure that have a
+slice_params structure embedded, num_slices and an array of
+slice_start_offset.
+"""
+
+Currently, the length of control arrays are fixed and the
+kernel rejects applications from passing a size that
+differs from the size of the array.
+ 
+Before proposing N-slices per request, we would have to introduce
+new V4L2 control semantics, to be able to pass a dynamic array
+of controls. This has been in our roadmap, so it'll happen
+sooner or later.
+
+Thanks!
+Ezequiel
+
+
