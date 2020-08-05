@@ -2,112 +2,96 @@ Return-Path: <SRS0=lnVm=BP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8BB2C433E0
-	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 17:39:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46E6EC433DF
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 17:41:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A207D22D3E
-	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 17:39:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iBRKOMud"
+	by mail.kernel.org (Postfix) with ESMTP id 30EF82075D
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 17:41:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728939AbgHERjp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Aug 2020 13:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728913AbgHERe0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 13:34:26 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE49C061575;
-        Wed,  5 Aug 2020 10:34:25 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id m15so24027311lfp.7;
-        Wed, 05 Aug 2020 10:34:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8HNwuenZ8HVoSfRFM1yr+yhY+DsPUgYL0/MOa8/jpuw=;
-        b=iBRKOMudr0THs5hTgteotC5bRZ/66USrPw3+qrK/dEZs9FSP5eKITva6gk0ucJ7i4L
-         AFAb35yJ8hLuKDaybk/amuGvLAWCnXCxxaZHsxIb5cXpjtVb0GdKhh1hskI8yinJFElG
-         eYNS1JXAFbdDNPRZ5GmEWrKB+8UQTZxbhkbNac9zlFe59Az0VOs1x/cuHuleDVe6COhB
-         5IuVxYNH58/w6iQxy7x1pM7VMxGRRwnGIqyfC/4GiEwgvTUlwVUPdjBtEZ7zeUlcq3rr
-         DqHAzIdW3RCIZbFc538fnJYC/e/HOcxmjc/B2SBMMhnPHXhOx3OF+w9bG5VZci7DQTK5
-         VbTQ==
+        id S1728943AbgHERll (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Aug 2020 13:41:41 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:43119 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728707AbgHERdc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 13:33:32 -0400
+Received: by mail-ot1-f68.google.com with SMTP id r21so23438915ota.10;
+        Wed, 05 Aug 2020 10:33:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8HNwuenZ8HVoSfRFM1yr+yhY+DsPUgYL0/MOa8/jpuw=;
-        b=Q8KbsW9YIsaj6bO4gjFitCy/Wpae9wFTt3tHhdjEegLW8wGz1yEsWN7i1Rd+kW0ujf
-         LfsvfP2VL3W5oQKWiHInhBSeOMFJgFeNLo/K7c/R8osPiA1NKECC01TQYaICyWYkRM32
-         oXdLcmf2g0Ww3PiguhWpVpQeLLgXOqfuFDUTcdD8JF26oNZuod51Qt+TA68mmBMmusZ1
-         mJHYgkySgof8v9c6v2Suu+4FWhVd4advmq5rwF4oO+jTkXtcDgVP5ZUJu9mLNzxXKt1X
-         4+inyx/bSs6bsiS/IjVGlTFyYAk5Nckm9BAHQya7y04fXXKKEj2zzC/sj+4WdJcX2xqk
-         kfEw==
-X-Gm-Message-State: AOAM533oNEW16+OLEHMjZMe2AG0cdNN8vljxnWebtggK2Y+Ozs8MO5hY
-        xRSzGna+3ogPIUAeod68mrDKaISk
-X-Google-Smtp-Source: ABdhPJyjhk8Q6HUt9Yu+pqu8UnN5oD9llj148EBGwcEGKoESer4YRNK3ivBgN2/rmEQSpgxbLQ812w==
-X-Received: by 2002:a05:6512:1182:: with SMTP id g2mr2081022lfr.126.1596648863749;
-        Wed, 05 Aug 2020 10:34:23 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-41-50.dynamic.spd-mgts.ru. [94.29.41.50])
-        by smtp.googlemail.com with ESMTPSA id x6sm1370280lff.64.2020.08.05.10.34.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Aug 2020 10:34:23 -0700 (PDT)
-Subject: Re: [PATCH v8 08/10] gpu: host1x: mipi: Keep MIPI clock enabled till
- calibration is done
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     jonathanh@nvidia.com, frankc@nvidia.com, hverkuil@xs4all.nl,
-        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1596469346-937-1-git-send-email-skomatineni@nvidia.com>
- <1596469346-937-9-git-send-email-skomatineni@nvidia.com>
- <20200805134600.GA3351349@ulmo>
- <103efe31-1abc-54f2-6004-490d7bb1b61a@gmail.com>
- <dcd58ae7-58ed-11d1-0e10-7f522b651b30@gmail.com>
- <addb92e5-7c7a-6fba-117d-c7880b2d4597@nvidia.com>
- <ed80bf2f-213f-286a-59b2-fc85e4181b3d@gmail.com>
- <6eede805-80fd-016f-22f8-b6d25f6587af@nvidia.com>
- <1c12e40e-de7f-0599-a941-82760b4c7668@gmail.com>
- <9ef0b875-e826-43e2-207e-168d2081ff6a@nvidia.com>
- <4689cfe9-e7c4-48bf-217f-3a31b59b8bda@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <0e78c5ca-c529-1e98-891d-30351c9aae81@gmail.com>
-Date:   Wed, 5 Aug 2020 20:34:22 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nGe/Je8IarDkuCxG/u56QffSTYctpnR0YPw4MQUjy6A=;
+        b=rST3AuFgwVSXUW3gEpFnjQUuP+b9s0ZTn6PGbKOKO0OK/j1Bz2VXk0llZOWxlZuVO0
+         9oIMGAghTHl7Je5+n5+2DXDu/GznsnJ4YNQOMq5PtIygh1yiaj8pArkwAmdJGmw8t7vV
+         y8yVoeNhoS3DYIqAsy4Gt6Y1yh5ITWzLCzU1shD/pXIGj70jEE7glN6xEDbz2IORtivs
+         WWjD+NIisqKh2drx89yWWNp/pgChSLiBCf9nJaimJgGRP2okuj6v03kDhH2XQucahukI
+         6ZDcExgwrTEUAt5FKxmlIh2ncsblVHaIKbyGltSkjVye87qelLo/EG/OHkS4skdvIjpS
+         +5RQ==
+X-Gm-Message-State: AOAM530uffkeniOlIrjfH8CawBS6dbRM7pQSfv6ViYuOMMS6DLOMtgfK
+        /66F6f4Ls6S2Wp3IhNdRu6md7VSYEPbJdtBJFCPm8E5j
+X-Google-Smtp-Source: ABdhPJy6BJnijQ4U9574JZCK6kDHqx7/zV93wpejrM8Eh19/YBjLybIlzjjbGdFEBSswTARB1GJ4M2QmhRRIOA+7jHM=
+X-Received: by 2002:a9d:1b0d:: with SMTP id l13mr2076468otl.145.1596625795521;
+ Wed, 05 Aug 2020 04:09:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <4689cfe9-e7c4-48bf-217f-3a31b59b8bda@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594919915-5225-7-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1594919915-5225-7-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 5 Aug 2020 13:09:43 +0200
+Message-ID: <CAMuHMdWhmQS56j4vkZhK94qQVkVhCA1eceZRNW1XipX-Sr6+8A@mail.gmail.com>
+Subject: Re: [PATCH 06/20] arm64: dts: renesas: r8a774e1: Add USB2.0 phy and
+ host (EHCI/OHCI) device nodes
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
+        dmaengine <dmaengine@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-05.08.2020 20:29, Sowjanya Komatineni пишет:
-...
-> UART_FST_MIPI_CAL is the clock used for calibration logic which is FSM
-> that goes thru sequence codes and when done waits for pads to be in
-> LP-11 to apply results.
-> 
-> MIPI_CLK is controller gate clock which is also need to be kept enabled
-> as incase if it sees LP-11 it updates registers so its recommended to
-> have this clock enabled.
-> 
-> We can cancel_calibration() in CSI only when csi/sensor stream on fails
-> and in which case there will be no LP-11 so we can unconditionally
-> disable MIPI_CLK.
-> 
+On Thu, Jul 16, 2020 at 7:19 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Add USB2.0 phy and host (EHCI/OHCI) device nodes on RZ/G2H SoC dtsi.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 
-There is no guarantee that the fail comes before the LP-11. For example,
-some odd camera driver may have a complicated enable sequence which may
-fail after enabling the hardware streaming.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.10.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
