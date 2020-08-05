@@ -2,186 +2,125 @@ Return-Path: <SRS0=lnVm=BP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73B30C433DF
-	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 19:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9686C433DF
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 19:51:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F75A21D95
-	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 19:48:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8211320842
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 19:51:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="htbIgM+V"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mPCsyVau"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728353AbgHEQ7T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Aug 2020 12:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47428 "EHLO
+        id S1728557AbgHETvN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Aug 2020 15:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728338AbgHEQ4b (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 12:56:31 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6361AC06138E;
-        Wed,  5 Aug 2020 09:47:45 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id i10so13701615ljn.2;
-        Wed, 05 Aug 2020 09:47:44 -0700 (PDT)
+        with ESMTP id S1728008AbgHEQwz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 12:52:55 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C098C0A8897
+        for <linux-media@vger.kernel.org>; Wed,  5 Aug 2020 06:55:48 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id l2so30256602wrc.7
+        for <linux-media@vger.kernel.org>; Wed, 05 Aug 2020 06:55:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jkOdBdO08EcdjYNQvO6hnKQ7g8Bc3xOIvWMLuyvy5vA=;
-        b=htbIgM+VsC4cNSRq7tGLBRyqjtHiPvTmTR/c9jJqrTUIGns5efKfFOyvdqVQis08Nf
-         MAxixMW4yT64TM8zUrkfg7lr7Flo+2N6oJ8mZF2SRPDna/pnl1WKeluYOGze94SLRNuU
-         52n8xP99cI/MUHiyub/sY+2safSk2+sc22P0KhJF0KvW0j8S6+hq5Jk57jF6SavUrMsg
-         tKIRcmP4UiIJ48J9Gbzq8a0iEnZ6bv+5UhusUDCiDmjmjN9/n1Ze84cMUmw3UxqRHRz8
-         luqZsrk/5EDDxaSwBc+FFIUwbD91Kpu0YE7/S2Pim9sUlZyGQhuecU9RW6rdoo5O5aH9
-         qfgg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ja++vUWPJ08EOA6SgZWSzzzNGHnYWDLpTD9FHTxS0rw=;
+        b=mPCsyVauudhQuP/KJCzACLzD1hGJ28aiHs4qkIVT+dJsG9lMfuT7dSoXYJbFizKZRP
+         kR2I6h/RpqcqrsXsr0WOQrAgDwfnAX/8FSgglt/yxTXrl83b60/gxayRpC2euEgFfaQN
+         aKk3SV25A7zijFrcxS9Y8ftx/QbxX1RciA4Z8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jkOdBdO08EcdjYNQvO6hnKQ7g8Bc3xOIvWMLuyvy5vA=;
-        b=HxsEM3lNTwdJMIhqFM/+uqG+Biessn6rtR/ccSeaiBBtNTKrP3os8Tk1lWLzuh9rBH
-         l/7C8EJk3245m/cBh6nZyt57y0hNTsWwqGHwvY6FEqYnif2IKmlU2LQqxCoHe1qlYHxO
-         lDpAtF+Pe9y+4uY0mFIuQCsJDqWfRd4tC5PUj416KtUSaq8UtN5FqxEDBfNsPnWA4pRa
-         /wKNQM+7zdU77i+0c/Eh+NT2LsttLqRPzmlAAY25JvmqOj7IUixogtp/2/xcjMzts2D8
-         lc8XCI75w3PXcdB6XZ/alvQKayLluIL0k8q44tvV4HvtK3hVnwrJN4QagFjlccP0j0T+
-         uDYg==
-X-Gm-Message-State: AOAM532TcQgBwagWJdx2iW0CqVcMMwJ0e5GpZSJyofTr7cwAyjFewhBV
-        AClHIQWSw6SwhJYMwiiPYVzMhVuq
-X-Google-Smtp-Source: ABdhPJz+wm2diUC/Yki4O/lySEHvpWaqyFiuJofLGCzO5ByOTvAiWxyGNmHmtvVOsOoK2X9E673njw==
-X-Received: by 2002:a2e:9d1a:: with SMTP id t26mr974947lji.297.1596646059174;
-        Wed, 05 Aug 2020 09:47:39 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-41-50.dynamic.spd-mgts.ru. [94.29.41.50])
-        by smtp.googlemail.com with ESMTPSA id i20sm1173416ljb.90.2020.08.05.09.47.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Aug 2020 09:47:38 -0700 (PDT)
-Subject: Re: [PATCH v8 08/10] gpu: host1x: mipi: Keep MIPI clock enabled till
- calibration is done
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     jonathanh@nvidia.com, frankc@nvidia.com, hverkuil@xs4all.nl,
-        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1596469346-937-1-git-send-email-skomatineni@nvidia.com>
- <1596469346-937-9-git-send-email-skomatineni@nvidia.com>
- <20200805134600.GA3351349@ulmo>
- <103efe31-1abc-54f2-6004-490d7bb1b61a@gmail.com>
- <dcd58ae7-58ed-11d1-0e10-7f522b651b30@gmail.com>
- <addb92e5-7c7a-6fba-117d-c7880b2d4597@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <ed80bf2f-213f-286a-59b2-fc85e4181b3d@gmail.com>
-Date:   Wed, 5 Aug 2020 19:47:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ja++vUWPJ08EOA6SgZWSzzzNGHnYWDLpTD9FHTxS0rw=;
+        b=qumxGxWJtRHeeWWSLW4Hm0PWr3SObJf7Jd3ySTGzVH8tr2OmwjC7zmWfE+p9qq+Nu+
+         lRRSiq6pX6ArMvmQiFSmXJJ8MFGy+ChDe9ISADZPC6xKISxbFTwHFElBFg3Sv7xPdTeH
+         bFxtD9cOTWRTCu4GnfIhJmQRJepL9Bu2qJwNHu1vR1EKolch8j7EuOO2Gt3VKD37ArxZ
+         OtWMVulLsJcJfM2JOX2LjFprjQ0vwLHXJfA5/+ovHrAbMZMUO3k+9dRXcfkonGFelHyW
+         EGUN2ZinRUz2Jsp+qCMVXfyJGZbQTIstQFlsWu5vtF9r/2+lPDLR/ly5OVpdZqeJqCT7
+         ZJ2A==
+X-Gm-Message-State: AOAM533MWKgI++BfYf/NfAhmQLPHx9X5pH7GiScWtP6I77TmUs8tdNrV
+        dYjULBsjn47tXPFotHY9FDXphw==
+X-Google-Smtp-Source: ABdhPJxYNtjsQJjSF6xJ7nBQbZo3fBriXEe6OI14ms3Hr23UwjYAMHhqsXQOBERea4H+jC1NM69TBw==
+X-Received: by 2002:a5d:5485:: with SMTP id h5mr2759249wrv.427.1596635746822;
+        Wed, 05 Aug 2020 06:55:46 -0700 (PDT)
+Received: from chromium.org (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
+        by smtp.gmail.com with ESMTPSA id p14sm3039630wrg.96.2020.08.05.06.55.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Aug 2020 06:55:46 -0700 (PDT)
+Date:   Wed, 5 Aug 2020 13:55:44 +0000
+From:   Tomasz Figa <tfiga@chromium.org>
+To:     Xia Jiang <xia.jiang@mediatek.com>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rick Chang <rick.chang@mediatek.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        srv_heupstream@mediatek.com, senozhatsky@chromium.org,
+        mojahsu@chromium.org, drinkcat@chromium.org,
+        maoguang.meng@mediatek.com
+Subject: Re: [PATCH v11 22/28] media: platform: Change the call functions of
+ getting/enable/disable the jpeg's clock
+Message-ID: <20200805135544.GA1014704@chromium.org>
+References: <20200804034102.22983-1-xia.jiang@mediatek.com>
+ <20200804034102.22983-23-xia.jiang@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <addb92e5-7c7a-6fba-117d-c7880b2d4597@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200804034102.22983-23-xia.jiang@mediatek.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-05.08.2020 19:33, Sowjanya Komatineni пишет:
+Hi Xia,
+
+On Tue, Aug 04, 2020 at 11:40:56AM +0800, Xia Jiang wrote:
+> Use the generic clk_bulk_* helpers to enable and disable clocks.
 > 
-> On 8/5/20 7:19 AM, Dmitry Osipenko wrote:
->> 05.08.2020 17:05, Dmitry Osipenko пишет:
->>> 05.08.2020 16:46, Thierry Reding пишет:
->>>> On Mon, Aug 03, 2020 at 08:42:24AM -0700, Sowjanya Komatineni wrote:
->>>>> With the split of MIPI calibration into tegra_mipi_calibrate() and
->>>>> tegra_mipi_wait(), MIPI clock is not kept enabled till the calibration
->>>>> is done.
->>>>>
->>>>> So, this patch skips disabling MIPI clock after triggering start of
->>>>> calibration and disables it only after waiting for done status from
->>>>> the calibration logic.
->>>>>
->>>>> This patch renames tegra_mipi_calibrate() as
->>>>> tegra_mipi_start_calibration()
->>>>> and tegra_mipi_wait() as tegra_mipi_finish_calibration() to be inline
->>>>> with their usage.
->>>>>
->>>>> As MIPI clock is left enabled and in case of any failures with CSI
->>>>> input
->>>>> streaming tegra_mipi_finish_calibration() will not get invoked.
->>>>> So added new API tegra_mipi_cancel_calibration() which disables
->>>>> MIPI clock
->>>>> and consumer drivers can call this in such cases.
->>>>>
->>>>> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
->>>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->>>>> ---
->>>>>   drivers/gpu/drm/tegra/dsi.c |  4 ++--
->>>>>   drivers/gpu/host1x/mipi.c   | 19 ++++++++++---------
->>>>>   include/linux/host1x.h      |  5 +++--
->>>>>   3 files changed, 15 insertions(+), 13 deletions(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/tegra/dsi.c b/drivers/gpu/drm/tegra/dsi.c
->>>>> index 3820e8d..a7864e9 100644
->>>>> --- a/drivers/gpu/drm/tegra/dsi.c
->>>>> +++ b/drivers/gpu/drm/tegra/dsi.c
->>>>> @@ -694,11 +694,11 @@ static int tegra_dsi_pad_calibrate(struct
->>>>> tegra_dsi *dsi)
->>>>>           DSI_PAD_PREEMP_PD(0x03) | DSI_PAD_PREEMP_PU(0x3);
->>>>>       tegra_dsi_writel(dsi, value, DSI_PAD_CONTROL_3);
->>>>>   -    err = tegra_mipi_calibrate(dsi->mipi);
->>>>> +    err = tegra_mipi_start_calibration(dsi->mipi);
->>>>>       if (err < 0)
->>>>>           return err;
->>>>>   -    return tegra_mipi_wait(dsi->mipi);
->>>>> +    return tegra_mipi_finish_calibration(dsi->mipi);
->>>>>   }
->>>>>     static void tegra_dsi_set_timeout(struct tegra_dsi *dsi,
->>>>> unsigned long bclk,
->>>>> diff --git a/drivers/gpu/host1x/mipi.c b/drivers/gpu/host1x/mipi.c
->>>>> index e606464..b15ab6e 100644
->>>>> --- a/drivers/gpu/host1x/mipi.c
->>>>> +++ b/drivers/gpu/host1x/mipi.c
->>>>> @@ -293,17 +293,19 @@ int tegra_mipi_disable(struct
->>>>> tegra_mipi_device *dev)
->>>>>   }
->>>>>   EXPORT_SYMBOL(tegra_mipi_disable);
->>>>>   -int tegra_mipi_wait(struct tegra_mipi_device *device)
->>>>> +void tegra_mipi_cancel_calibration(struct tegra_mipi_device *device)
->>>>> +{
->>>>> +    clk_disable(device->mipi->clk);
->>>> Do we need to do anything with the MIPI_CAL_CTRL and MIPI_CAL_STATUS
->>>> registers here? We don't clear the START bit in the former when the
->>>> calibration has successfully finished, but I suspect that's because
->>>> the bit is self-clearing. But I wonder if we still need to clear it
->>>> upon cancellation to make sure the calibration does indeed stop.
->>> Apparently there is no way to explicitly stop calibration other than to
->>> reset MIPI calibration block, but Sowjanya says this is unnecessary.
->>>
->>> Perhaps having a fixed delay before disabling clock could be enough to
->>> ensure that calibration is stopped before the clock is disabled?
->>>
->> Actually, there is a MIPI_CAL_ACTIVE bit in the status register. Maybe
->> it needs to be polled until it's unset?
-> 
-> Confirmed with HW design team during this patch update.
-> 
-> SW does not need to clear START bit and only write 1 takes effect to
-> that bit.
-> 
-> Also, no need to have delay or do any other register settings unclear as
-> its FSM and there's nothing to get stuck.
-> 
-> Also it goes thru small finite set of codes and by the time sensor
-> programming happens for enabling streaming FSM will finish its
-> calibration sequence much early and it will only wait for pads LP-11.
-> 
-> So, during cancel we only need disable MIPI clock.
+> Signed-off-by: Xia Jiang <xia.jiang@mediatek.com>
+> ---
+> v11: specify the names of the clocks in the driver
+> ---
+>  .../media/platform/mtk-jpeg/mtk_jpeg_core.c   | 28 +++++++++++++------
+>  .../media/platform/mtk-jpeg/mtk_jpeg_core.h   |  8 +++---
+>  2 files changed, 23 insertions(+), 13 deletions(-)
 > 
 
-But there is no guarantee that cancel_calibration() couldn't be invoked
-in the middle of the calibration process, hence FSM could freeze in an
-intermediate state if it's running on the disabled MIPI clock, this
-doesn't sound good.
+Thank you for the patch. It looks good to me.
+
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+
+One comment below about a thing that should be fixed in the future,
+separately from this series.
+
+> diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+> index 7881e9c93df7..47d570f32e3f 100644
+> --- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+> +++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+> @@ -783,14 +783,15 @@ static void mtk_jpeg_clk_on(struct mtk_jpeg_dev *jpeg)
+>  	ret = mtk_smi_larb_get(jpeg->larb);
+>  	if (ret)
+>  		dev_err(jpeg->dev, "mtk_smi_larb_get larbvdec fail %d\n", ret);
+> -	clk_prepare_enable(jpeg->clk_jdec_smi);
+> -	clk_prepare_enable(jpeg->clk_jdec);
+> +
+> +	ret = clk_bulk_prepare_enable(jpeg->num_clks, jpeg->clks);
+> +	if (ret)
+> +		dev_err(jpeg->dev, "Failed to open jpeg clk: %d\n", ret);
+
+The errors in this function should be propagated to the caller and
+handled properly across the whole call stack.
+
+Best regards,
+Tomasz
