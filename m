@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6B32C433E0
-	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 16:29:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E451C433E0
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 16:35:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FC0D206A2
-	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 16:29:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5331522D03
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 16:35:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725920AbgHEQ3G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Aug 2020 12:29:06 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:55592 "EHLO
+        id S1727101AbgHEQfH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Aug 2020 12:35:07 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:41552 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726350AbgHEQ1f (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 12:27:35 -0400
+        with ESMTP id S1726871AbgHEQdC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 12:33:02 -0400
 Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id F3DBC3A9C18
-        for <linux-media@vger.kernel.org>; Wed,  5 Aug 2020 10:55:14 +0000 (UTC)
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 5B67C3B0E8F
+        for <linux-media@vger.kernel.org>; Wed,  5 Aug 2020 10:55:19 +0000 (UTC)
 X-Originating-IP: 93.34.118.233
 Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id B35E2C0006;
-        Wed,  5 Aug 2020 10:53:52 +0000 (UTC)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id D167EC000F;
+        Wed,  5 Aug 2020 10:53:55 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Hans Verkuil <hverkuil@xs4all.nl>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -35,10 +35,11 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
-        libcamera-devel@lists.libcamera.org
-Subject: [PATCH 2/4] media: docs: Describe targets for sensor properties
-Date:   Wed,  5 Aug 2020 12:57:19 +0200
-Message-Id: <20200805105721.15445-3-jacopo@jmondi.org>
+        libcamera-devel@lists.libcamera.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 4/4] media: i2c: imx219: Selection compliance fixes
+Date:   Wed,  5 Aug 2020 12:57:21 +0200
+Message-Id: <20200805105721.15445-5-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200805105721.15445-1-jacopo@jmondi.org>
 References: <20200805105721.15445-1-jacopo@jmondi.org>
@@ -49,89 +50,85 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Provide a table to describe how the V4L2 selection targets can be used
-to access an image sensor pixel array properties.
+From: Hans Verkuil <hverkuil@xs4all.nl>
 
-Reference the table in the sub-device documentation.
+To comply with the intended usage of the V4L2 selection target when
+used to retrieve a sensor image properties, adjust the rectangles
+returned by the imx219 driver.
 
+The top/left crop coordinates of the TGT_CROP rectangle were set to
+(0, 0) instead of (8, 8) which is the offset from the larger physical
+pixel array rectangle. This was also a mismatch with the default values
+crop rectangle value, so this is corrected. Found with v4l2-compliance.
+
+While at it, add V4L2_SEL_TGT_CROP_BOUNDS support: CROP_DEFAULT and
+CROP_BOUNDS have the same size as the non-active pixels are not readable
+using the selection API. Found with v4l2-compliance.
+
+Fixes: e6d4ef7d58aa7 ("media: i2c: imx219: Implement get_selection")
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+[reword commit message, use macros for pixel offsets]
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- .../userspace-api/media/v4l/dev-subdev.rst    |  4 ++
- .../media/v4l/v4l2-selection-targets.rst      | 49 +++++++++++++++++++
- 2 files changed, 53 insertions(+)
+ drivers/media/i2c/imx219.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-index c47861dff9b9b..2f7da3832f458 100644
---- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
-+++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-@@ -467,6 +467,10 @@ desired image resolution. If the sub-device driver supports that, userspace
- can set the analog crop rectangle to select which portion of the pixel array
- to read out.
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index 60b23d113fc56..ff48a95b448b1 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -473,8 +473,8 @@ static const struct imx219_mode supported_modes[] = {
+ 		.width = 3280,
+ 		.height = 2464,
+ 		.crop = {
+-			.left = 0,
+-			.top = 0,
++			.left = IMX219_PIXEL_ARRAY_LEFT,
++			.top = IMX219_PIXEL_ARRAY_TOP,
+ 			.width = 3280,
+ 			.height = 2464
+ 		},
+@@ -489,8 +489,8 @@ static const struct imx219_mode supported_modes[] = {
+ 		.width = 1920,
+ 		.height = 1080,
+ 		.crop = {
+-			.left = 680,
+-			.top = 692,
++			.left = 688,
++			.top = 700,
+ 			.width = 1920,
+ 			.height = 1080
+ 		},
+@@ -505,8 +505,8 @@ static const struct imx219_mode supported_modes[] = {
+ 		.width = 1640,
+ 		.height = 1232,
+ 		.crop = {
+-			.left = 0,
+-			.top = 0,
++			.left = IMX219_PIXEL_ARRAY_LEFT,
++			.top = IMX219_PIXEL_ARRAY_TOP,
+ 			.width = 3280,
+ 			.height = 2464
+ 		},
+@@ -521,8 +521,8 @@ static const struct imx219_mode supported_modes[] = {
+ 		.width = 640,
+ 		.height = 480,
+ 		.crop = {
+-			.left = 1000,
+-			.top = 752,
++			.left = 1008,
++			.top = 760,
+ 			.width = 1280,
+ 			.height = 960
+ 		},
+@@ -1045,6 +1045,7 @@ static int imx219_get_selection(struct v4l2_subdev *sd,
+ 		return 0;
  
-+A description of each of the above mentioned targets when used to access the
-+image sensor pixel array properties is provided by
-+:ref:`v4l2-selection-targets-image-sensor-table`
-+
- 
- Types of selection targets
- --------------------------
-diff --git a/Documentation/userspace-api/media/v4l/v4l2-selection-targets.rst b/Documentation/userspace-api/media/v4l/v4l2-selection-targets.rst
-index 69f500093aa2a..632e6448b784e 100644
---- a/Documentation/userspace-api/media/v4l/v4l2-selection-targets.rst
-+++ b/Documentation/userspace-api/media/v4l/v4l2-selection-targets.rst
-@@ -76,3 +76,52 @@ of the two interfaces they are used.
- 	modified by hardware.
-       - Yes
-       - No
-+
-+
-+.. _v4l2-selection-targets-image-sensor-table:
-+
-+********************************************
-+Selection Targets For Pixel Array Properties
-+********************************************
-+
-+The V4L2 selection API can be used to retrieve the size and disposition of the
-+pixel units that compose and image sensor pixel matrix when applied to a video
-+sub-device that represents an image sensor.
-+
-+A description of the properties associated with each of the sensor pixel array
-+areas is provided by the :ref:`v4l2-subdev-pixel-array-properties` section.
-+
-+.. tabularcolumns:: |p{6.0cm}|p{1.4cm}|p{7.4cm}|p(1.4cm)|
-+
-+.. flat-table:: Selection target definitions
-+    :header-rows:  1
-+    :stub-columns: 0
-+
-+    * - Target name
-+      - id
-+      - Definition
-+      - Read/Write
-+    * - ``V4L2_SEL_TGT_CROP``
-+      - 0x0000
-+      - The analog crop rectangle. Represents the portion of the active pixel
-+        array which is processed to produce images.
-+      - RW
-+    * - ``V4L2_SEL_TGT_CROP_DEFAULT``
-+      - 0x0001
-+      - The active pixel array rectangle. It includes only active pixels and
-+        excludes other ones such as optical black pixels. Its width and height
-+        represent the maximum image resolution an image sensor can produce.
-+      - RO
-+    * - ``V4L2_SEL_TGT_CROP_BOUNDS``
-+      - 0x0002
-+      - The readable portion of the physical pixel array matrix. It includes
-+        pixels that contains valid image data and calibration pixels such as the
-+        optical black ones.
-+      - RO
-+    * - ``V4L2_SEL_TGT_NATIVE_SIZE``
-+      - 0x0003
-+      - The physical pixel array size, including readable and not readable
-+        pixels. As pixels that cannot be read from application processor are not
-+        relevant for calibration purposes, this rectangle is useful to calculate
-+        the physical properties of the image sensor.
-+      - RO
+ 	case V4L2_SEL_TGT_CROP_DEFAULT:
++	case V4L2_SEL_TGT_CROP_BOUNDS:
+ 		sel->r.top = IMX219_PIXEL_ARRAY_TOP;
+ 		sel->r.left = IMX219_PIXEL_ARRAY_LEFT;
+ 		sel->r.width = IMX219_PIXEL_ARRAY_WIDTH;
 -- 
 2.27.0
 
