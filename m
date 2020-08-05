@@ -1,175 +1,90 @@
-Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=lnVm=BP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF791C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F133BC433E0
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 16:56:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47C042086A
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:59:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAC6E22D00
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 16:56:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729687AbgHFQ7H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 12:59:07 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:40360 "EHLO
+        id S1728344AbgHEQ4q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Aug 2020 12:56:46 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:50626 "EHLO
         mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728652AbgHFQ6o (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 12:58:44 -0400
-Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 15E803A5156;
-        Thu,  6 Aug 2020 15:55:52 +0000 (UTC)
-X-Originating-IP: 93.29.109.196
-Received: from aptenodytes (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 44E35FF806;
-        Thu,  6 Aug 2020 15:50:29 +0000 (UTC)
-Date:   Thu, 6 Aug 2020 17:50:28 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Jeffrey Kardatzke <jkardatzke@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Subject: Re: [PATCH v2 08/14] media: uapi: h264: Drop SLICE_PARAMS 'size'
- field
-Message-ID: <20200806155028.GB1621078@aptenodytes>
-References: <20200806151310.98624-1-ezequiel@collabora.com>
- <20200806151310.98624-9-ezequiel@collabora.com>
+        with ESMTP id S1728150AbgHEQyb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 12:54:31 -0400
+Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 196243A860A
+        for <linux-media@vger.kernel.org>; Wed,  5 Aug 2020 10:55:12 +0000 (UTC)
+X-Originating-IP: 93.34.118.233
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id E001BC000D;
+        Wed,  5 Aug 2020 10:53:48 +0000 (UTC)
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
+        libcamera-devel@lists.libcamera.org
+Subject: 
+Date:   Wed,  5 Aug 2020 12:57:17 +0200
+Message-Id: <20200805105721.15445-1-jacopo@jmondi.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4bRzO86E/ozDv8r1"
-Content-Disposition: inline
-In-Reply-To: <20200806151310.98624-9-ezequiel@collabora.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Subject: [PATCH 0/4] media: docs: Document pixel array properties
 
---4bRzO86E/ozDv8r1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hans' patch "[PATCH] imx219: selection compliance fixes" sparkled a discussion
+on how the V4L2 selection targets have to be used in order to access an
+image sensor pixel array properties.
 
-Hi,
+The discussion shown how much under-specified that part was, so this is
+an attempt to provide a bit documentation for this.
 
-On Thu 06 Aug 20, 12:13, Ezequiel Garcia wrote:
-> The SLICE_PARAMS control is intended for slice-based
-> devices. In this mode, the OUTPUT buffer contains
-> a single slice, and so the buffer's plane payload size
-> can be used to query the slice size.
+My feeling is that we're hijacking the existing targets for this use case
+and we should probably define new ones, considering how few users we have in
+mainline of them at the moment.
 
-If we later extend the API for supporting multiple slices with dynamic array
-controls, I guess we'll need to know the size of each slice in each control
-elements. So I'd rather keep that even if it's indeed redundant with
-vb2_get_plane_payload in single-slice mode.
+On top Hans' patch with reworded commit message and minor updates.
 
-What do you think?
+For reference, we're using the V4L2 selection targets in libcamera to retrieve
+the sensor pixel array properties to be reported to applications for
+calibration purposes. The currently defined pixel properties for libcamera
+are available here:
+https://git.linuxtv.org/libcamera.git/tree/src/libcamera/property_ids.yaml#n390
 
-Paul
+Thanks
+   j
 
-> To reduce the API surface drop the size from the
-> SLICE_PARAMS control.
->=20
-> A follow-up change will remove other members in SLICE_PARAMS
-> so we don't need to add padding fields here.
->=20
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> ---
->  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 3 ---
->  drivers/staging/media/sunxi/cedrus/cedrus_h264.c          | 7 +++----
->  include/media/h264-ctrls.h                                | 3 ---
->  3 files changed, 3 insertions(+), 10 deletions(-)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/=
-Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index 427fc5727ec0..fff74b7bf32a 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -1760,9 +1760,6 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
->      :stub-columns: 0
->      :widths:       1 1 2
-> =20
-> -    * - __u32
-> -      - ``size``
-> -      -
->      * - __u32
->        - ``start_byte_offset``
->          Offset (in bytes) from the beginning of the OUTPUT buffer to the=
- start
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/s=
-taging/media/sunxi/cedrus/cedrus_h264.c
-> index a9ba78b15907..8b6f05aadbe8 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> @@ -324,17 +324,16 @@ static void cedrus_set_params(struct cedrus_ctx *ct=
-x,
->  	struct vb2_buffer *src_buf =3D &run->src->vb2_buf;
->  	struct cedrus_dev *dev =3D ctx->dev;
->  	dma_addr_t src_buf_addr;
-> -	u32 len =3D slice->size * 8;
-> +	size_t slice_bytes =3D vb2_get_plane_payload(src_buf, 0);
->  	unsigned int pic_width_in_mbs;
->  	bool mbaff_pic;
->  	u32 reg;
-> =20
-> -	cedrus_write(dev, VE_H264_VLD_LEN, len);
-> +	cedrus_write(dev, VE_H264_VLD_LEN, slice_bytes * 8);
->  	cedrus_write(dev, VE_H264_VLD_OFFSET, 0);
-> =20
->  	src_buf_addr =3D vb2_dma_contig_plane_dma_addr(src_buf, 0);
-> -	cedrus_write(dev, VE_H264_VLD_END,
-> -		     src_buf_addr + vb2_get_plane_payload(src_buf, 0));
-> +	cedrus_write(dev, VE_H264_VLD_END, src_buf_addr + slice_bytes);
->  	cedrus_write(dev, VE_H264_VLD_ADDR,
->  		     VE_H264_VLD_ADDR_VAL(src_buf_addr) |
->  		     VE_H264_VLD_ADDR_FIRST | VE_H264_VLD_ADDR_VALID |
-> diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
-> index 4f05ee265997..f74736fcfa00 100644
-> --- a/include/media/h264-ctrls.h
-> +++ b/include/media/h264-ctrls.h
-> @@ -158,9 +158,6 @@ struct v4l2_h264_reference {
->  };
-> =20
->  struct v4l2_ctrl_h264_slice_params {
-> -	/* Size in bytes, including header */
-> -	__u32 size;
-> -
->  	/* Offset in bytes to the start of slice in the OUTPUT buffer. */
->  	__u32 start_byte_offset;
-> =20
-> --=20
-> 2.27.0
->=20
+Hans Verkuil (1):
+  media: i2c: imx219: Selection compliance fixes
 
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+Jacopo Mondi (3):
+  media: docs: Describe pixel array properties
+  media: docs: Describe targets for sensor properties
+  media: docs: USe SUBDEV_G_SELECTION for sensor properties
 
---4bRzO86E/ozDv8r1
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../userspace-api/media/v4l/dev-subdev.rst    | 85 +++++++++++++++++++
+ .../media/v4l/v4l2-selection-targets.rst      | 49 +++++++++++
+ .../media/v4l/vidioc-subdev-g-selection.rst   |  4 +
+ drivers/media/i2c/imx219.c                    | 17 ++--
+ 4 files changed, 147 insertions(+), 8 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+--
+2.27.0
 
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAl8sJsQACgkQ3cLmz3+f
-v9GziAf/aWLfWuyKKjVuqFynldaS4RSWzbw6EJfK4ufM4h4s7Mv1daAa2UgJw0Vo
-zow7RsiuGlB66zWBGumoUKPpM3HHu2MQ0yed9OpzRAuNWJH+v0SBHCUbJ85b9VeH
-0XQ+VeVIewp9Vud0ddtOZlrtoKS5MXXOatJ1jUtWveTRSHKiCZXZfYizSemxfJWh
-bKVPdKM3jXsDL/Q91eRC4rKAQTlTqG9DnO2hwbW8bTZx1tFzyU+qLSyjrHtiv8mG
-/go8eJzl+Y00DoI6YDt+E6PBSFPZkFsXv3Xsm+v4ZHUO9p2WTs80Me+RkjlOTWZ+
-Sly1KTP5SiIuH11EXTOciAlKNeqCtw==
-=qVuK
------END PGP SIGNATURE-----
-
---4bRzO86E/ozDv8r1--
