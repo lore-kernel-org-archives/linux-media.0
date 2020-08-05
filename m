@@ -2,95 +2,87 @@ Return-Path: <SRS0=lnVm=BP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D115BC433DF
-	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 14:19:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC5C6C433DF
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 15:59:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCCE423120
-	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 14:19:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A868423432
+	for <linux-media@archiver.kernel.org>; Wed,  5 Aug 2020 15:59:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728502AbgHEN16 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Aug 2020 09:27:58 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46206 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726175AbgHEMfj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 08:35:39 -0400
-Received: by mail-ot1-f65.google.com with SMTP id v6so22388522ota.13;
-        Wed, 05 Aug 2020 05:30:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GhwGBb3og4FBqTm6+fj02zyv7weIuiKRDAujBvepcdQ=;
-        b=AkCTLgRFlBR2CmRvGoQAVvX/lV7KyfhK79jyxszzJlYZan2QoNuQL4Plkk855FBko4
-         lsDPi5BQimZIkERi0758l8NgsKzJVWjMDWGDgtEE0yDCsC5dWIxJdBacmwjnC5+/WFoP
-         UzlqHjUEidFs1jkxmbEHjY+06PwJuuPTtity+3gNNtackjE8jXoo5l15LGlmJibksAU3
-         2ccjfnjkUqU08hN7HzKYQzouN3CaaaNxKSY+KFBCJ0TWwqrgO1NcicezI1dseM3llfOh
-         8s2jd78BNi4SjgLk8kaOegRrXhk8K0gtBJDiFJvK8AqURBpZqxa01GlW9u5t+KrG3s3L
-         rX/A==
-X-Gm-Message-State: AOAM532s5CWbSZ1Ul2MpUJyCG45r7V7yGxAwCJktwF0kwdI9kGW3ncQv
-        YzOBX2dDcPcfesL/Gj34bor/c2EHIzGAuyTdhwqlXQir
-X-Google-Smtp-Source: ABdhPJy6Few2JSpX34d8UWs2mHs62Jj4zoFqif/HtRZNiG9fgu0Yy1ArYH3I3/SVye0G2Oxi4tcy3VslWxu2yq+qpJs=
-X-Received: by 2002:a05:6830:1b79:: with SMTP id d25mr2025587ote.107.1596625767021;
- Wed, 05 Aug 2020 04:09:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-5-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594919915-5225-5-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 5 Aug 2020 13:09:14 +0200
-Message-ID: <CAMuHMdVTBWuDVueW4OJff5kC+=PF+Q5OnKAo5-M4+7g9WB-adA@mail.gmail.com>
-Subject: Re: [PATCH 04/20] arm64: dts: renesas: r8a774e1: Add SATA controller node
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        id S1726571AbgHEP6z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Aug 2020 11:58:55 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:35866 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726210AbgHEPui (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Aug 2020 11:50:38 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1k3HZQ-0008I0-5Z; Wed, 05 Aug 2020 11:26:56 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Laura Abbott <labbott@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <christian@brauner.io>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        devel@driverdev.osuosl.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: ion: fix spelling mistake in function name "detatch" -> "detach"
+Date:   Wed,  5 Aug 2020 12:26:55 +0100
+Message-Id: <20200805112655.17696-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 7:19 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add the SATA controller node to the RZ/G2H SoC specific dtsi.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.10.
+There is a spelling mistake in the function name ion_dma_buf_detatch.
+Fix it by removing the extraneous t.
 
-Gr{oetje,eeting}s,
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/staging/android/ion/ion.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-                        Geert
-
+diff --git a/drivers/staging/android/ion/ion.c b/drivers/staging/android/ion/ion.c
+index 3c9f09506ffa..e1fe03ceb7f1 100644
+--- a/drivers/staging/android/ion/ion.c
++++ b/drivers/staging/android/ion/ion.c
+@@ -205,8 +205,8 @@ static int ion_dma_buf_attach(struct dma_buf *dmabuf,
+ 	return 0;
+ }
+ 
+-static void ion_dma_buf_detatch(struct dma_buf *dmabuf,
+-				struct dma_buf_attachment *attachment)
++static void ion_dma_buf_detach(struct dma_buf *dmabuf,
++			       struct dma_buf_attachment *attachment)
+ {
+ 	struct ion_dma_buf_attachment *a = attachment->priv;
+ 	struct ion_buffer *buffer = dmabuf->priv;
+@@ -331,7 +331,7 @@ static const struct dma_buf_ops dma_buf_ops = {
+ 	.mmap = ion_mmap,
+ 	.release = ion_dma_buf_release,
+ 	.attach = ion_dma_buf_attach,
+-	.detach = ion_dma_buf_detatch,
++	.detach = ion_dma_buf_detach,
+ 	.begin_cpu_access = ion_dma_buf_begin_cpu_access,
+ 	.end_cpu_access = ion_dma_buf_end_cpu_access,
+ };
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.27.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
