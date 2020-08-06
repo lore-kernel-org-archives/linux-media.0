@@ -2,107 +2,271 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A39F5C433E1
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:47:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A21C0C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:49:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF53B23119
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:47:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="DQTHrTBM"
+	by mail.kernel.org (Postfix) with ESMTP id 01EAA23119
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:49:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729468AbgHFQrm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 12:47:42 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:16765 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729078AbgHFQm6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 12:42:58 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f2c32ad0000>; Thu, 06 Aug 2020 09:41:17 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Thu, 06 Aug 2020 09:42:57 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Thu, 06 Aug 2020 09:42:57 -0700
-Received: from [10.2.172.190] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 6 Aug
- 2020 16:42:57 +0000
-Subject: Re: [PATCH v8 08/10] gpu: host1x: mipi: Keep MIPI clock enabled till
- calibration is done
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-CC:     <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
-        <helen.koike@collabora.com>, <gregkh@linuxfoundation.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1596469346-937-1-git-send-email-skomatineni@nvidia.com>
- <1596469346-937-9-git-send-email-skomatineni@nvidia.com>
- <20200805134600.GA3351349@ulmo>
- <103efe31-1abc-54f2-6004-490d7bb1b61a@gmail.com>
- <dcd58ae7-58ed-11d1-0e10-7f522b651b30@gmail.com>
- <addb92e5-7c7a-6fba-117d-c7880b2d4597@nvidia.com>
- <ed80bf2f-213f-286a-59b2-fc85e4181b3d@gmail.com>
- <6eede805-80fd-016f-22f8-b6d25f6587af@nvidia.com>
- <1c12e40e-de7f-0599-a941-82760b4c7668@gmail.com>
- <9ef0b875-e826-43e2-207e-168d2081ff6a@nvidia.com>
- <4689cfe9-e7c4-48bf-217f-3a31b59b8bda@nvidia.com>
- <0e78c5ca-c529-1e98-891d-30351c9aae81@gmail.com>
- <b2098a68-d02f-b406-fc57-56e3ff5d8d1a@nvidia.com>
- <309e3b66-9288-91ef-71b4-be73eacbbd62@nvidia.com>
- <fde2431a-0585-ac32-ac25-73e198aaa948@nvidia.com>
- <4025a458-fa78-924d-c84f-166f82df0f8e@gmail.com>
- <4f15d655-3d62-cf9f-82da-eae379d60fa6@nvidia.com>
- <9deaee09-c422-5694-7c19-d85354b9b703@gmail.com>
- <14793e8c-30dc-5cf5-fdf9-6f64fa433818@gmail.com>
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-Message-ID: <c9709f37-02dd-cd1a-b83f-07784365945d@nvidia.com>
-Date:   Thu, 6 Aug 2020 09:42:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729265AbgHFQsq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 12:48:46 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:42586 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729181AbgHFQsE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 12:48:04 -0400
+Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 4BD373A9E62;
+        Thu,  6 Aug 2020 15:47:30 +0000 (UTC)
+X-Originating-IP: 93.29.109.196
+Received: from aptenodytes (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B435D1C0003;
+        Thu,  6 Aug 2020 15:47:07 +0000 (UTC)
+Date:   Thu, 6 Aug 2020 17:47:07 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Subject: Re: [PATCH v2 01/14] media: uapi: h264: Update reference lists
+Message-ID: <20200806154707.GA1621078@aptenodytes>
+References: <20200806151310.98624-1-ezequiel@collabora.com>
+ <20200806151310.98624-2-ezequiel@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <14793e8c-30dc-5cf5-fdf9-6f64fa433818@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1596732077; bh=iDI3V2L85r1lv2jtVd4uBOO2hPT5n4v0tS3+rooYMIw=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=DQTHrTBM0+agMOZIqShyUnF2jKLQnF8Ry58xSDxnuepU0A+VdXYkwov3Ty0JnGiJP
-         h/0m/+nLqk/gLLvNgJIfU0GdWJybBe/jnwPDO+pYi0XNbdj5Hw8PGJaEEWmyrOnB/b
-         12ewdRLYh9wB8qhGljRRVCRmqmHA2EHDWjTM+6eyQ1uhos7sDdYGvRex7eiG/wvz0g
-         ZXkfiL0gVwGET/DJLfjaVe7oDir51HcIsAFaxg/zCRKab6libTN2H40z05dxMbHhni
-         1UNDMSruVD16Ru2YuDce2CE20ZaVAP46PbAqYPvZef7Ie+2J72TiwTbOXee78N6Y2V
-         DzyrbPOlzqiMA==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="C7zPtVaVf+AK4Oqc"
+Content-Disposition: inline
+In-Reply-To: <20200806151310.98624-2-ezequiel@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
-On 8/6/20 9:37 AM, Dmitry Osipenko wrote:
-> 06.08.2020 19:13, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->> 06.08.2020 18:59, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->> ..
->>> We cant use active status check for specific pads under calibration.
->>> This is common bit for all pads.
->> I'm not sure why this is a problem.
->>
-> IIUC, the start_calibration() should wait for the MIPI_CAL_STATUS_ACTIVE
-> and finish_calibration() should wait for MIPI_AUTO_CAL_DONE_CSIA/B.
+--C7zPtVaVf+AK4Oqc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As soon as START bit it set, FSM will set ACTIVE =3D 1
+Hi,
 
-There is no added advantage of waiting for ACTIVE to be in=20
-start_calibration()
+On Thu 06 Aug 20, 12:12, Ezequiel Garcia wrote:
+> From: Jernej Skrabec <jernej.skrabec@siol.net>
+>=20
+> When dealing with with interlaced frames, reference lists must tell if
+> each particular reference is meant for top or bottom field. This info
+> is currently not provided at all in the H264 related controls.
+>=20
+> Make reference lists hold a structure which will also hold an
+> enumerator type along index into DPB array. The enumerator must
+> be used to specify if reference is for top or bottom field.
+>=20
+> Currently the only user of these lists is Cedrus which is just compile
+> fixed here. Actual usage of will come in a following commit.
 
+Is there a particular reason we are adding this to the ref_pic_list[0-1]
+instead of the DPB entries directly?
+
+It feels nicer to avoid making the lists structs when the entries they are
+referring to are already in a struct. I think this is the approach Kwiboo t=
+ook
+when adding support for fields in references some time ago.
+
+What do you think?
+
+Cheers,
+
+Paul
+
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> ---
+> v2:
+> * As pointed out by Jonas, enum v4l2_h264_dpb_reference here.
+> ---
+>  .../media/v4l/ext-ctrls-codec.rst             | 44 ++++++++++++++++++-
+>  .../staging/media/sunxi/cedrus/cedrus_h264.c  |  6 +--
+>  include/media/h264-ctrls.h                    | 23 +++++++---
+>  3 files changed, 62 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/=
+Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index d0d506a444b1..f2b2a381369f 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -1843,10 +1843,10 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_typ=
+e -
+>      * - __u32
+>        - ``slice_group_change_cycle``
+>        -
+> -    * - __u8
+> +    * - struct :c:type:`v4l2_h264_reference`
+>        - ``ref_pic_list0[32]``
+>        - Reference picture list after applying the per-slice modifications
+> -    * - __u8
+> +    * - struct :c:type:`v4l2_h264_reference`
+>        - ``ref_pic_list1[32]``
+>        - Reference picture list after applying the per-slice modifications
+>      * - __u32
+> @@ -1926,6 +1926,46 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type=
+ -
+>        - ``chroma_offset[32][2]``
+>        -
+> =20
+> +``Picture Reference``
+> +
+> +.. c:type:: v4l2_h264_reference
+> +
+> +.. cssclass:: longtable
+> +
+> +.. flat-table:: struct v4l2_h264_reference
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +    :widths:       1 1 2
+> +
+> +    * - enum :c:type:`v4l2_h264_dpb_reference`
+> +      - ``reference``
+> +      - Specifies how the DPB entry is referenced.
+> +    * - __u8
+> +      - ``index``
+> +      - Index into the :c:type:`v4l2_ctrl_h264_decode_params`.dpb array.
+> +
+> +.. c:type:: v4l2_h264_dpb_reference
+> +
+> +.. cssclass:: longtable
+> +
+> +.. flat-table::
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +    :widths:       1 1 2
+> +
+> +    * - ``V4L2_H264_DPB_TOP_REF``
+> +      - 0x1
+> +      - The top field in field pair is used for
+> +        short-term reference.
+> +    * - ``V4L2_H264_DPB_BOTTOM_REF``
+> +      - 0x2
+> +     - The bottom field in field pair is used for
+> +        short-term reference.
+> +    * - ``V4L2_H264_DPB_FRAME_REF``
+> +      - 0x3
+> +      - The frame (or the top/bottom fields, if it's a field pair)
+> +        is used for short-term reference.
+> +
+>  ``V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS (struct)``
+>      Specifies the decode parameters (as extracted from the bitstream)
+>      for the associated H264 slice data. This includes the necessary
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/s=
+taging/media/sunxi/cedrus/cedrus_h264.c
+> index 54ee2aa423e2..cce527bbdf86 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+> @@ -166,8 +166,8 @@ static void cedrus_write_frame_list(struct cedrus_ctx=
+ *ctx,
+> =20
+>  static void _cedrus_write_ref_list(struct cedrus_ctx *ctx,
+>  				   struct cedrus_run *run,
+> -				   const u8 *ref_list, u8 num_ref,
+> -				   enum cedrus_h264_sram_off sram)
+> +				   const struct v4l2_h264_reference *ref_list,
+> +				   u8 num_ref, enum cedrus_h264_sram_off sram)
+>  {
+>  	const struct v4l2_ctrl_h264_decode_params *decode =3D run->h264.decode_=
+params;
+>  	struct vb2_queue *cap_q;
+> @@ -188,7 +188,7 @@ static void _cedrus_write_ref_list(struct cedrus_ctx =
+*ctx,
+>  		int buf_idx;
+>  		u8 dpb_idx;
+> =20
+> -		dpb_idx =3D ref_list[i];
+> +		dpb_idx =3D ref_list[i].index;
+>  		dpb =3D &decode->dpb[dpb_idx];
+> =20
+>  		if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+> diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
+> index 080fd1293c42..4c0bb7f5fb05 100644
+> --- a/include/media/h264-ctrls.h
+> +++ b/include/media/h264-ctrls.h
+> @@ -19,6 +19,8 @@
+>   */
+>  #define V4L2_H264_NUM_DPB_ENTRIES 16
+> =20
+> +#define V4L2_H264_REF_LIST_LEN (2 * V4L2_H264_NUM_DPB_ENTRIES)
+> +
+>  /* Our pixel format isn't stable at the moment */
+>  #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 =
+parsed slices */
+> =20
+> @@ -140,6 +142,19 @@ struct v4l2_h264_pred_weight_table {
+>  #define V4L2_H264_SLICE_FLAG_DIRECT_SPATIAL_MV_PRED	0x04
+>  #define V4L2_H264_SLICE_FLAG_SP_FOR_SWITCH		0x08
+> =20
+> +enum v4l2_h264_dpb_reference {
+> +	V4L2_H264_DPB_TOP_REF =3D 0x1,
+> +	V4L2_H264_DPB_BOTTOM_REF =3D 0x2,
+> +	V4L2_H264_DPB_FRAME_REF =3D 0x3,
+> +};
+> +
+> +struct v4l2_h264_reference {
+> +	enum v4l2_h264_dpb_reference fields;
+> +
+> +	/* Index into v4l2_ctrl_h264_decode_params.dpb[] */
+> +	__u8 index;
+> +};
+> +
+>  struct v4l2_ctrl_h264_slice_params {
+>  	/* Size in bytes, including header */
+>  	__u32 size;
+> @@ -178,12 +193,8 @@ struct v4l2_ctrl_h264_slice_params {
+>  	__u8 num_ref_idx_l1_active_minus1;
+>  	__u32 slice_group_change_cycle;
+> =20
+> -	/*
+> -	 * Entries on each list are indices into
+> -	 * v4l2_ctrl_h264_decode_params.dpb[].
+> -	 */
+> -	__u8 ref_pic_list0[32];
+> -	__u8 ref_pic_list1[32];
+> +	struct v4l2_h264_reference ref_pic_list0[V4L2_H264_REF_LIST_LEN];
+> +	struct v4l2_h264_reference ref_pic_list1[V4L2_H264_REF_LIST_LEN];
+> =20
+>  	__u32 flags;
+>  };
+> --=20
+> 2.27.0
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--C7zPtVaVf+AK4Oqc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAl8sJfsACgkQ3cLmz3+f
+v9G7JQf/TnWncpqO5avCsiYx8iHH1eLwDhPb6bnmWUzXT4OaXdC12feSeLbDMMg1
+LJCN8vURx+PCw7lwqV86i3gVlvePQZ+BukVOELAomGEDJP4Wrr2mrz7Z0p5encuv
+nQrzHqEdKZVi4CLXxNEsrqidJo/74vnUgeP10jtPG72+nluwXmOlACXeNJgA2/Ca
+UfHUCjy6eXVvLShfabxuej+5GP4zVWAHRtwJi8Ar3Ik/WyazhWoqCvNguA2LxgUl
+IRYWs4suJUAbR4ftreTcqEeb0bM60F7mxAik8UtnVvZd3YMgQL+4FBiA6nW+pYzu
+ZFcdsq53+2TSQY/8E1vOZrZ87qwRiw==
+=EiuI
+-----END PGP SIGNATURE-----
+
+--C7zPtVaVf+AK4Oqc--
