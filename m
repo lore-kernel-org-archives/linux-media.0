@@ -2,236 +2,135 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81A15C433DF
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90988C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:58:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D99762086A
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:56:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E462A2086A
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:58:39 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OmngnfVz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729477AbgHFQ4s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 12:56:48 -0400
-Received: from mga03.intel.com ([134.134.136.65]:48085 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729341AbgHFQ4r (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 6 Aug 2020 12:56:47 -0400
-IronPort-SDR: jFbv+7mj5SHazwlcVXHpSLvHDQ/Tg+20TdNbWggffn4Xy3TM0dFav2DRBHVGdFqe0B6u0pv1o1
- Cq0JxEm3wyjQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9704"; a="152735480"
-X-IronPort-AV: E=Sophos;i="5.75,441,1589266800"; 
-   d="scan'208";a="152735480"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2020 04:18:48 -0700
-IronPort-SDR: ieMMfsqZx0pTh7/zf3J69mjIyq0ji7rBM+oYHid+tMVHj0mpxXmAW5TwkMAyuRXtxBXWbJT+v0
- nzPzlo13hf6A==
-X-IronPort-AV: E=Sophos;i="5.75,441,1589266800"; 
-   d="scan'208";a="331196517"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2020 04:18:46 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id A6C592063B; Thu,  6 Aug 2020 01:24:47 +0300 (EEST)
-Date:   Thu, 6 Aug 2020 01:24:47 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
-        libcamera-devel@lists.libcamera.org
-Subject: Re: [PATCH 1/4] media: docs: Describe pixel array properties
-Message-ID: <20200805222447.GP13316@paasikivi.fi.intel.com>
-References: <20200805105721.15445-1-jacopo@jmondi.org>
- <20200805105721.15445-2-jacopo@jmondi.org>
+        id S1729880AbgHFQ6Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 12:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728975AbgHFQkm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 12:40:42 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D5DC00216C;
+        Thu,  6 Aug 2020 09:10:56 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id k13so26439147lfo.0;
+        Thu, 06 Aug 2020 09:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=CARAOasIFak870VufiBClJ7GzwKqbGWjQPwUf4dCREk=;
+        b=OmngnfVzaAJ9jJNJdEi4kf1hA9P2f7ak2OMok4/yWOq+hkeBgCSKcgzjtw27fGmOWn
+         3Zr8eTtteML9DsrP8N8PGLMwnxXtz2X5uWtxhQ1b1Hp0lQ3K227+u3B9Y44NmKqsDiAI
+         PoGdUJrtbj5F5PHsAbCQ/Xlg8BGF/H+5Ji8upNSdPxqYHp69l0/gw5+WAhPBzdU851Y4
+         OZngM7HgmAS0C6TzfrcDz3JJ+k9LNjkmAOqZ2kkNckw+xhrNxNuoyiHIk+KPqIxMpngc
+         uoTKka3sq9RAXGa3rl6n/LiXS1X1o1Bw47L3qLOompZl1KYCytoql8VhP2iFa6gGlKSe
+         pKDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CARAOasIFak870VufiBClJ7GzwKqbGWjQPwUf4dCREk=;
+        b=Rvn61SHyDSvs5LrCpe/XgfFQ3dEjZFqOttgbjSenDllbn2EbA24HCi3tXS7LHFkVKA
+         IpNwRX6sTVVqW8fo81W5muMITeogvfY0ca/Df1fKrGqLn/YfoZ/nO9rwQjg8HCZjVXQr
+         7MfdpUJhrbxXn1RasPv6VsbrGWNvv+xMVa66s0LlUvjzTACWpm7c3mh9aXwXWFxpz2qZ
+         RV8PG2IZTNTLsYsWprVkEF6wuQvLFqWXfQ84V+5PlbSQqHjT6vY90FMfMncdXPIUm6Lh
+         MyLqyxOW5AOy1NID9a6YJPT6QF3gYDdjKCpCy3/IdKrE6BdVeGH7yC6enWUOOleI9N8K
+         dmiw==
+X-Gm-Message-State: AOAM531GHmPIi40RDNQY+rUuoncj4bLLlHiwcWnqj8qg9a7DDmSsDT27
+        cEkOGxyyRw89HhhZF1KPf5Js9ujy
+X-Google-Smtp-Source: ABdhPJzuFA0l+OQL4YSNgzVA9hLB2nNjiEMtvYCJAZAFfYBW6wFxaQDOT3HDYMkQDm5DZYd2Vh+F6Q==
+X-Received: by 2002:ac2:5ec8:: with SMTP id d8mr4213855lfq.169.1596730253375;
+        Thu, 06 Aug 2020 09:10:53 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-41-50.dynamic.spd-mgts.ru. [94.29.41.50])
+        by smtp.googlemail.com with ESMTPSA id y1sm3096536lfb.45.2020.08.06.09.10.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Aug 2020 09:10:52 -0700 (PDT)
+Subject: Re: [PATCH v8 08/10] gpu: host1x: mipi: Keep MIPI clock enabled till
+ calibration is done
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     jonathanh@nvidia.com, frankc@nvidia.com, hverkuil@xs4all.nl,
+        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1596469346-937-1-git-send-email-skomatineni@nvidia.com>
+ <1596469346-937-9-git-send-email-skomatineni@nvidia.com>
+ <20200805134600.GA3351349@ulmo>
+ <103efe31-1abc-54f2-6004-490d7bb1b61a@gmail.com>
+ <dcd58ae7-58ed-11d1-0e10-7f522b651b30@gmail.com>
+ <addb92e5-7c7a-6fba-117d-c7880b2d4597@nvidia.com>
+ <ed80bf2f-213f-286a-59b2-fc85e4181b3d@gmail.com>
+ <6eede805-80fd-016f-22f8-b6d25f6587af@nvidia.com>
+ <1c12e40e-de7f-0599-a941-82760b4c7668@gmail.com>
+ <9ef0b875-e826-43e2-207e-168d2081ff6a@nvidia.com>
+ <4689cfe9-e7c4-48bf-217f-3a31b59b8bda@nvidia.com>
+ <0e78c5ca-c529-1e98-891d-30351c9aae81@gmail.com>
+ <b2098a68-d02f-b406-fc57-56e3ff5d8d1a@nvidia.com>
+ <309e3b66-9288-91ef-71b4-be73eacbbd62@nvidia.com>
+ <fde2431a-0585-ac32-ac25-73e198aaa948@nvidia.com>
+ <4025a458-fa78-924d-c84f-166f82df0f8e@gmail.com>
+ <4f15d655-3d62-cf9f-82da-eae379d60fa6@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <b5612e93-f1c4-4762-baa1-5d85eb1edbe1@gmail.com>
+Date:   Thu, 6 Aug 2020 19:10:51 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200805105721.15445-2-jacopo@jmondi.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <4f15d655-3d62-cf9f-82da-eae379d60fa6@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
-
-Thanks for the patchset.
-
-This improves selection documentation quite a bit. Please see my comments
-below.
-
-On Wed, Aug 05, 2020 at 12:57:18PM +0200, Jacopo Mondi wrote:
-> The V4L2 selection API are also used to access the pixel array
-> properties of an image sensor, such as the size and position of active
-> pixels and the cropped area of the pixel matrix used to produce images.
+06.08.2020 18:59, Sowjanya Komatineni пишет:
+...
+>>> Confirmed from HW designer, calibration FSM to finish takes worst case
+>>> 72uS so by the time it gets to sensor stream it will be done its
+>>> sequence and will be waiting for DONE bit.
+>>>
+>>> So disabling MIPI CAL clock on sensor stream fails is safe.
+>>
+>> 72us is quite a lot of time, what will happen if LP-11 happens before
+>> FSM finished calibration?
+>>
+>> Maybe the finish_calibration() needs to split into two parts:
+>>
+>>   1. wait for CAL_STATUS_ACTIVE before enabling sensor
+>>   2. wait for CAL_STATUS_DONE after enabling sensor
 > 
-> Currently no clear definition of the different areas that compose an
-> image sensor pixel array matrix is provided in the specification, and
-> the actual meaning of each selection target when applied to an image
-> sensor was not provided.
+> I don't think we need to split for active and done. Active will be 1 as
+> long as other pads are in calibration as well.
 > 
-> Provide in the sub-device documentation the definition of the pixel
-> matrix properties and the selection target associated to each of them.
+> We cant use active status check for specific pads under calibration.
+> This is common bit for all pads.
+
+Does hardware have a single FSM block shared by all pads or there is FSM
+per group of pads?
+
+> Unfortunately HW don't have separate status indicating when sequence is
+> done to indicate its waiting for LP11.
 > 
-> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> ---
->  .../userspace-api/media/v4l/dev-subdev.rst    | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
 > 
-> diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> index 134d2fb909fa4..c47861dff9b9b 100644
-> --- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> +++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-> @@ -386,6 +386,87 @@ requests on all selection targets, unless specifically told otherwise.
->  ``V4L2_SEL_FLAG_GE`` and ``V4L2_SEL_FLAG_LE`` flags may be used to round
->  the image size either up or down. :ref:`v4l2-selection-flags`
->  
-> +.. _v4l2-subdev-pixel-array-properties:
-> +
-> +Selection targets for image sensors properties
-> +----------------------------------------------
-> +
-> +The V4L2 selection API can be used on sub-devices that represent an image
-> +sensor to retrieve the sensor's pixel array matrix properties by using the
-> +:ref:`selection <VIDIOC_SUBDEV_G_SELECTION>` ioctls.
-> +
-> +Sub-device drivers for image sensor usually register a single source pad, but in
-> +the case they expose more, the pixel array properties can be accessed from
-> +any of them.
+> To avoid all this, will remove cancel_calibration() totally and use same
+> finish calibration even in case of stream failure then.
+> 
 
-Is this a hypothetical case or are there examples?
-
-Also note that camera sensor drivers may expose more than one sub-devices,
-only one of which represents the pixel array.
-
-> +
-> +The ``V4L2_SEL_TGT_NATIVE``, ``V4L2_SEL_TGT_CROP_BOUNDS``,
-> +``V4L2_SEL_TGT_CROP_DEFAULT`` and ``V4L2_TGT_CROP`` targets are used to retrieve
-> +the immutable properties of the several different areas that compose the sensor
-> +pixel array matrix. Each area describes a rectangle of logically adjacent pixel
-> +units. The logical disposition of pixels is defined by the sensor read-out
-> +starting point and direction, and may differ from the physical disposition of
-> +the pixel units in the pixel array matrix.
-> +
-> +Each pixel matrix portion is contained in a larger rectangle, with the most
-
-s/larger\K/ or equal/
-
-s/most//
-
-> +largest being the one that describes the pixel matrix physical size. This
-> +defines a hierarchical positional system, where each rectangle is defined
-
-s/,//
-
-> +relatively to the largest available one among the ones exposed by the
-> +sub-device driver. Each selection target and the associated pixel array portion
-> +it represents are below presented in order from the largest to the smallest one.
-> +
-> +Pixel array physical size
-> +^^^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +The image sensor chip is composed by a number of physical pixels, not all of
-> +them readable by the application processor. Invalid or unreadable lines might
-> +not be transmitted on the data bus at all, or in case on CSI-2 capable sensors
-> +they might be tagged with an invalid data type (DT) so that the receiver
-> +automatically discard them. The size of the whole pixel matrix area is
-> +retrieved using the V4L2_SEL_TGT_NATIVE target, which has its top-left corner
-> +defined as position (0, 0). All the other selection targets are defined
-> +relatively to this, larger, rectangle. The rectangle returned by
-> +V4L2_SEL_TGT_NATIVE describes an immutable property of the image sensor, it
-> +does not change at run-time and cannot be modified from userspace.
-> +
-> +Pixel array readable area
-> +^^^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +The V4L2_SEL_TGT_CROP_BOUNDS targets returns size and position of the readable
-> +area of the pixel array matrix, including pixels with valid image data and pixel
-> +used for calibration purposes, such as optical black pixels. It is not unlikely
-> +that valid pixels and optical black pixels are surrounded by non-readable rows
-> +and columns of pixels. Those does not concur in the definition of the
-
-How about: "Only pixels that can be read out are included in the
-V4L2_SEL_TGT_CROP_BOUNDS rectangle."?
-
-> +V4L2_SEL_TGT_CROP_BOUNDS rectangle. The rectangle returned by
-> +V4L2_SEL_TGT_CROP_BOUNDS describes an immutable property of the image sensor, it
-> +does not change at run-time and cannot be modified from userspace.
-> +
-> +Pixel array active area
-> +^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +The portion of the pixel array which contains valid image data is defined as the
-> +active area of the pixel matrix. The active pixel array is is accessed by mean
-
-s/accessed/described/
-
-Another word than "active" here would be great as we already have active
-and try contexts for selections.
-
-> +of the V4L2_SEL_TGT_CROP_DEFAULT target, and is contained in the larger
-
-s/the larger//
-
-> +V4L2_SEL_TGT_CROP_BOUNDS rectangle. It represents the largest possible frame
-> +resolution the sensor can produce and defines the dimension of the full
-
-s/resolution/size/
-
-> +field-of-view. The rectangle returned by V4L2_SEL_TGT_CROP_BOUNDS describes an
-
-s/-/ /g
-
-> +immutable property of the image sensor, it does not change at run-time and
-> +cannot be modified from userspace.
-> +
-> +Analog crop rectangle
-> +^^^^^^^^^^^^^^^^^^^^^
-> +
-> +The sensor driver might decide, in order to adjust the image resolution to best
-> +match the one requested by applications, to only process a part of the active
-
-s/, to\K/ instruct the hardware to/
-
-> +pixel array matrix. The selected area is read-out and processed by the image
-> +sensor on-board ISP in order to produce images of the desired size and
-> +resolution while possible maintaing the largest possible field-of-view. The
-
-s/size\K[^.]?*\./m
-
-> +cropped portion of the pixel array which is used to produce images is returned
-
-s/produce/read out/
-s/returned/configured/
-
-> +by the V4L2_SEL_TGT_CROP target and represent the only information that can
-
-s/by/using/
-
-I'd leave out the rest of the sentence after "target" above.
-
-> +change at runtime as it depends on the currently configured sensor mode and
-> +desired image resolution. If the sub-device driver supports that, userspace
-> +can set the analog crop rectangle to select which portion of the pixel array
-> +to read out.
-
-How about instead:
-
-Register list based drivers generally do not allow setting analogue crop
-rectangles.
-
-> +
->  
->  Types of selection targets
->  --------------------------
-
--- 
-Kind regards,
-
-Sakari Ailus
+What about to add 72us delay to the end of start_calibration() in order
+to ensure that FSM is finished before LP-11?
