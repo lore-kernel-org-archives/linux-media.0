@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4C41C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:36:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDDCAC433DF
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:36:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E862221E2
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:36:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4239E221E2
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:36:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730025AbgHFRg2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 13:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
+        id S1729783AbgHFRgv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 13:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730395AbgHFRfY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:35:24 -0400
+        with ESMTP id S1729232AbgHFRfX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:35:23 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266AEC0086A3;
-        Thu,  6 Aug 2020 08:19:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0D0C00869D;
+        Thu,  6 Aug 2020 08:18:46 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id CA80829959C
+        with ESMTPSA id 51EFE2972D4
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
@@ -36,10 +36,11 @@ Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Maxime Ripard <mripard@kernel.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Subject: [PATCH v2 13/14] media: cedrus: h264: Properly configure reference field
-Date:   Thu,  6 Aug 2020 12:13:09 -0300
-Message-Id: <20200806151310.98624-14-ezequiel@collabora.com>
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v2 05/14] media: uapi: h264: Increase size of 'first_mb_in_slice' field
+Date:   Thu,  6 Aug 2020 12:13:01 -0300
+Message-Id: <20200806151310.98624-6-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200806151310.98624-1-ezequiel@collabora.com>
 References: <20200806151310.98624-1-ezequiel@collabora.com>
@@ -50,48 +51,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jernej Skrabec <jernej.skrabec@siol.net>
+Slice header syntax element 'first_mb_in_slice' can point
+to the last macroblock, currently the field can only reference
+65536 macroblocks which is insufficient for 8K videos.
 
-When interlaced H264 content is being decoded, references must indicate
-which field is being referenced. Currently this was done by checking
-capture buffer flags. However, that is not correct because capture
-buffer may hold both fields.
+Although unlikely, a 8192x4320 video (where macroblocks are 16x16),
+would contain 138240 macroblocks on a frame.
 
-Fix this by checking newly introduced flags in reference lists.
+As per the H264 specification, 'first_mb_in_slice' can be up to
+PicSizeInMbs - 1, so increase the size of the field to 32-bits.
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Note that v4l2_ctrl_h264_slice_params struct will be modified
+in a follow-up commit, and so we defer its 64-bit padding.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 +-
+ include/media/h264-ctrls.h                                | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-index 8e31f81358b7..91d88a96badc 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-@@ -182,7 +182,6 @@ static void _cedrus_write_ref_list(struct cedrus_ctx *ctx,
- 	for (i = 0; i < num_ref; i++) {
- 		const struct v4l2_h264_dpb_entry *dpb;
- 		const struct cedrus_buffer *cedrus_buf;
--		const struct vb2_v4l2_buffer *ref_buf;
- 		unsigned int position;
- 		int buf_idx;
- 		u8 dpb_idx;
-@@ -197,12 +196,11 @@ static void _cedrus_write_ref_list(struct cedrus_ctx *ctx,
- 		if (buf_idx < 0)
- 			continue;
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index e4dec3f9b71a..141c9249d528 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -1774,7 +1774,7 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+     * - __u32
+       - ``header_bit_size``
+       -
+-    * - __u16
++    * - __u32
+       - ``first_mb_in_slice``
+       -
+     * - __u8
+diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
+index 54cd9bec0b23..66327ca55088 100644
+--- a/include/media/h264-ctrls.h
++++ b/include/media/h264-ctrls.h
+@@ -167,7 +167,8 @@ struct v4l2_ctrl_h264_slice_params {
+ 	/* Offset in bits to slice_data() from the beginning of this slice. */
+ 	__u32 header_bit_size;
  
--		ref_buf = to_vb2_v4l2_buffer(cap_q->bufs[buf_idx]);
--		cedrus_buf = vb2_v4l2_to_cedrus_buffer(ref_buf);
-+		cedrus_buf = vb2_to_cedrus_buffer(cap_q->bufs[buf_idx]);
- 		position = cedrus_buf->codec.h264.position;
- 
- 		sram_array[i] |= position << 1;
--		if (ref_buf->field == V4L2_FIELD_BOTTOM)
-+		if (ref_list[i].fields & V4L2_H264_DPB_BOTTOM_REF)
- 			sram_array[i] |= BIT(0);
- 	}
- 
+-	__u16 first_mb_in_slice;
++	__u32 first_mb_in_slice;
++
+ 	__u8 slice_type;
+ 	__u8 pic_parameter_set_id;
+ 	__u8 colour_plane_id;
 -- 
 2.27.0
 
