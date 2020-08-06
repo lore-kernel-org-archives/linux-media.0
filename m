@@ -2,213 +2,96 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77E55C433DF
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:15:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99112C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:15:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB41C23119
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:15:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F166223119
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:15:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730066AbgHFROZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 13:14:25 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:35152 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730195AbgHFRJ6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:09:58 -0400
-Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 1F3A23B2C0F;
-        Thu,  6 Aug 2020 14:46:57 +0000 (UTC)
-Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id CA24C100006;
-        Thu,  6 Aug 2020 14:41:30 +0000 (UTC)
-Date:   Thu, 6 Aug 2020 16:45:11 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] media: i2c: ov772x: Add support for BT656 mode
-Message-ID: <20200806144511.6ajoqyynowglnbpm@uno.localdomain>
-References: <1596454753-13612-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1596454753-13612-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1596454753-13612-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1730496AbgHFRPD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 13:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729984AbgHFRFa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:05:30 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B673C061290
+        for <linux-media@vger.kernel.org>; Thu,  6 Aug 2020 04:55:47 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id 02181299454
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
+        dafna3@gmail.com, sakari.ailus@linux.intel.com, mchehab@kernel.org,
+        laurent.pinchart@ideasonboard.com, tfiga@chromium.org
+Subject: [PATCH v2 2/4] media: staging: rkisp1: replace 3 fields 'ct_offset_*' with one array
+Date:   Thu,  6 Aug 2020 13:50:31 +0200
+Message-Id: <20200806115033.32475-3-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200806115033.32475-1-dafna.hirschfeld@collabora.com>
+References: <20200806115033.32475-1-dafna.hirschfeld@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Aug 03, 2020 at 12:39:12PM +0100, Lad Prabhakar wrote:
-> Add support to read the bus-type and enable BT656 mode if needed.
->
-> The driver defaults to parallel mode if bus-type is not specified in DT.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
->  drivers/media/i2c/ov772x.c | 40 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
->
-> diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
-> index 2cc6a678069a..2de9248e3689 100644
-> --- a/drivers/media/i2c/ov772x.c
-> +++ b/drivers/media/i2c/ov772x.c
-> @@ -31,6 +31,7 @@
->  #include <media/v4l2-ctrls.h>
->  #include <media/v4l2-device.h>
->  #include <media/v4l2-event.h>
-> +#include <media/v4l2-fwnode.h>
->  #include <media/v4l2-image-sizes.h>
->  #include <media/v4l2-subdev.h>
->
-> @@ -434,6 +435,7 @@ struct ov772x_priv {
->  #ifdef CONFIG_MEDIA_CONTROLLER
->  	struct media_pad pad;
->  #endif
-> +	struct v4l2_fwnode_endpoint ep;
->  };
->
->  /*
-> @@ -574,6 +576,7 @@ static int ov772x_s_stream(struct v4l2_subdev *sd, int enable)
->  {
->  	struct i2c_client *client = v4l2_get_subdevdata(sd);
->  	struct ov772x_priv *priv = to_ov772x(sd);
-> +	unsigned int val;
->  	int ret = 0;
->
->  	mutex_lock(&priv->lock);
-> @@ -581,6 +584,22 @@ static int ov772x_s_stream(struct v4l2_subdev *sd, int enable)
->  	if (priv->streaming == enable)
->  		goto done;
->
-> +	if (priv->ep.bus_type == V4L2_MBUS_BT656 && enable) {
-> +		ret = regmap_read(priv->regmap, COM7, &val);
-> +		if (ret)
-> +			goto done;
-> +		val |= ITU656_ON_OFF;
-> +		ret = regmap_write(priv->regmap, COM7, val);
-> +	} else if (priv->ep.bus_type == V4L2_MBUS_BT656 && !enable) {
+The struct rkisp1_cif_isp_ctk_config contains 3 fields
+ct_offset_{rgb}. Replace them with one array field 'ct_offset[3].
 
-is the !enable intentional ? (sorry I don't have access to the sensor
-manual). If not, see below:
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Acked-by: Helen Koike <helen.koike@collabora.com>
+---
+ drivers/staging/media/rkisp1/rkisp1-params.c      | 9 +++------
+ drivers/staging/media/rkisp1/uapi/rkisp1-config.h | 6 ++----
+ 2 files changed, 5 insertions(+), 10 deletions(-)
 
-> +		ret = regmap_read(priv->regmap, COM7, &val);
-> +		if (ret)
-> +			goto done;
-> +		val &= ~ITU656_ON_OFF;
-> +		ret = regmap_write(priv->regmap, COM7, val);
-> +	}
-> +	if (ret)
-> +		goto done;
+diff --git a/drivers/staging/media/rkisp1/rkisp1-params.c b/drivers/staging/media/rkisp1/rkisp1-params.c
+index 00b102eb67b6..8596ad87a860 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-params.c
++++ b/drivers/staging/media/rkisp1/rkisp1-params.c
+@@ -408,12 +408,9 @@ static void rkisp1_ctk_config(struct rkisp1_params *params,
+ 		for (j = 0; j < 3; j++)
+ 			rkisp1_write(params->rkisp1, arg->coeff[i][j],
+ 				     RKISP1_CIF_ISP_CT_COEFF_0 + 4 * k++);
+-	rkisp1_write(params->rkisp1, arg->ct_offset_r,
+-		     RKISP1_CIF_ISP_CT_OFFSET_R);
+-	rkisp1_write(params->rkisp1, arg->ct_offset_g,
+-		     RKISP1_CIF_ISP_CT_OFFSET_G);
+-	rkisp1_write(params->rkisp1, arg->ct_offset_b,
+-		     RKISP1_CIF_ISP_CT_OFFSET_B);
++	for (i = 0; i < 3; i++)
++		rkisp1_write(params->rkisp1, arg->ct_offset[i],
++			     RKISP1_CIF_ISP_CT_OFFSET_R + i * 4);
+ }
+ 
+ static void rkisp1_ctk_enable(struct rkisp1_params *params, bool en)
+diff --git a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
+index 790d56ac9310..e89ec359b537 100644
+--- a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
++++ b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
+@@ -420,13 +420,11 @@ struct rkisp1_cif_isp_bdm_config {
+  * @coeff: color correction matrix. Values are 11-bit signed fixed-point numbers with 4 bit integer
+  *		and 7 bit fractional part, ranging from -8 (0x400) to +7.992 (0x3FF). 0 is
+  *		represented by 0x000 and a coefficient value of 1 as 0x080.
+- * @ct_offset_b: offset for the crosstalk correction matrix
++ * @ct_offset: Red, Green, Blue offsets for the crosstalk correction matrix
+  */
+ struct rkisp1_cif_isp_ctk_config {
+ 	__u16 coeff[3][3];
+-	__u16 ct_offset_r;
+-	__u16 ct_offset_g;
+-	__u16 ct_offset_b;
++	__u16 ct_offset[3];
+ } __packed;
+ 
+ enum rkisp1_cif_isp_goc_mode {
+-- 
+2.17.1
 
-Could you write this as:
-
-static int ov772x_s_stream(struct v4l2_subdev *sd, int enable)
-{
-	struct i2c_client *client = v4l2_get_subdevdata(sd);
-	struct ov772x_priv *priv = to_ov772x(sd);
-	int ret = 0;
-
-	mutex_lock(&priv->lock);
-
-	if (priv->streaming == enable)
-		goto done;
-
-	if (enable) {
-		ret = regmap_read(priv->regmap, COM7, &val);
-		if (ret)
-			goto done;
-
-	        if (priv->ep.bus_type == V4L2_MBUS_BT656)
-		        val |= ITU656_ON_OFF;
-                else /* if you accept my suggestion to consider othe
-                        bus types as errors */
-		        val &= ~ITU656_ON_OFF;
-
-		ret = regmap_write(priv->regmap, COM7, val);
-		if (ret)
-			goto done;
-
-		dev_dbg(&client->dev, "format %d, win %s\n",
-			priv->cfmt->code, priv->win->name);
-	}
-
-	ret = regmap_update_bits(priv->regmap, COM2, SOFT_SLEEP_MODE,
-				 enable ? 0 : SOFT_SLEEP_MODE);
-	if (ret)
-		goto done;
-	priv->streaming = enable;
-
-done:
-	mutex_unlock(&priv->lock);
-
-	return ret;
-}
-
-
->  	ret = regmap_update_bits(priv->regmap, COM2, SOFT_SLEEP_MODE,
->  				 enable ? 0 : SOFT_SLEEP_MODE);
->  	if (ret)
-> @@ -1354,6 +1373,7 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
->
->  static int ov772x_probe(struct i2c_client *client)
->  {
-> +	struct fwnode_handle *endpoint;
->  	struct ov772x_priv	*priv;
->  	int			ret;
->  	static const struct regmap_config ov772x_regmap_config = {
-> @@ -1415,6 +1435,26 @@ static int ov772x_probe(struct i2c_client *client)
->  		goto error_clk_put;
->  	}
->
-> +	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
-> +						  NULL);
-> +	if (!endpoint) {
-> +		dev_err(&client->dev, "endpoint node not found\n");
-> +		ret = -EINVAL;
-> +		goto error_clk_put;
-> +	}
-> +
-> +	ret = v4l2_fwnode_endpoint_parse(endpoint, &priv->ep);
-> +	fwnode_handle_put(endpoint);
-> +	if (ret) {
-> +		dev_err(&client->dev, "Could not parse endpoint\n");
-> +		goto error_clk_put;
-> +	}
-> +
-> +	/* fallback to parallel mode */
-> +	if (priv->ep.bus_type != V4L2_MBUS_PARALLEL &&
-> +	    priv->ep.bus_type != V4L2_MBUS_BT656)
-> +		priv->ep.bus_type = V4L2_MBUS_PARALLEL;
-
-shouldn't this be an error ? It's either the bus type has not been
-specified on DT (which is fine, otherwise old DTB without that
-properties will fail) and the bus identification routine implemented
-in v4l2_fwnode_endpoint_parse() detected a bus type which is not
-supported, hence the DT properties are wrong, and this should be an
-error. If you plan to expand the parsing routine to support, say
-bus-width and pclk polarity please break this out to a new function.
-
-Thanks
-   j
-
-> +
->  	ret = ov772x_video_probe(priv);
->  	if (ret < 0)
->  		goto error_gpio_put;
-> --
-> 2.17.1
->
