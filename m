@@ -2,58 +2,129 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1FA1C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 18:10:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 470F9C433DF
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 18:35:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D5CA206A2
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 18:10:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CFBF206B5
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 18:35:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729150AbgHFSKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 14:10:48 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:15555 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729108AbgHFSKr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 14:10:47 -0400
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 06 Aug 2020 06:17:55 -0700
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 06 Aug 2020 06:17:53 -0700
-Received: from c-mansur-linux.qualcomm.com ([10.204.90.208])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 06 Aug 2020 18:47:39 +0530
-Received: by c-mansur-linux.qualcomm.com (Postfix, from userid 461723)
-        id 0952521C62; Thu,  6 Aug 2020 18:47:37 +0530 (IST)
-From:   Mansur Alisha Shaik <mansur@codeaurora.org>
-To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org,
-        Mansur Alisha Shaik <mansur@codeaurora.org>
-Subject: [PATCH 0/3] Venus - Handle race conditions in concurrency
-Date:   Thu,  6 Aug 2020 18:47:32 +0530
-Message-Id: <1596719855-1725-1-git-send-email-mansur@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S1728363AbgHFSfK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 14:35:10 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:59905 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728674AbgHFSej (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 14:34:39 -0400
+Received: from [192.168.1.4] (unknown [176.88.145.153])
+        (Authenticated sender: cengiz@kernel.wtf)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id A4228240008;
+        Thu,  6 Aug 2020 18:34:25 +0000 (UTC)
+From:   Cengiz Can <cengiz@kernel.wtf>
+To:     <andy.shevchenko@gmail.com>
+CC:     <dan.carpenter@oracle.com>, <devel@driverdev.osuosl.org>,
+        <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <mchehab@kernel.org>,
+        <sakari.ailus@linux.intel.com>, Cengiz Can <cengiz@kernel.wtf>
+Date:   Thu, 06 Aug 2020 21:34:22 +0300
+Message-ID: <173c50d7bb0.2bfa.85c738e3968116fc5c0dc2de74002084@kernel.wtf>
+In-Reply-To: <20200801220101.2783-1-cengiz@kernel.wtf>
+References: <20200731083856.GF3703480@smile.fi.intel.com>
+ <20200801220101.2783-1-cengiz@kernel.wtf>
+User-Agent: AquaMail/1.25.2-1672 (build: 102500008)
+Subject: Re: [PATCH v6] staging: atomisp: move null check to earlier point
+MIME-Version: 1.0
+Content-Type: text/plain; format=flowed; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The intenstion of this patchset is to handle race
-conditions during concurrency usecase.
+Hello Andy,
 
-Mansur Alisha Shaik (3):
-  venus: core: handle race condititon for core ops
-  venus: core: cancel pending work items in workqueue
-  venus: handle use after free for iommu_map/iommu_unmap
+Can I get some feedback on v6 please?
 
- drivers/media/platform/qcom/venus/core.c     |  6 +++++-
- drivers/media/platform/qcom/venus/firmware.c | 17 +++++++++++++----
- drivers/media/platform/qcom/venus/hfi.c      |  5 ++++-
- 3 files changed, 22 insertions(+), 6 deletions(-)
+I hope it suits your standards this time.
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+Thank you
+
+On August 2, 2020 01:02:22 Cengiz Can <cengiz@kernel.wtf> wrote:
+
+> `find_gmin_subdev()` that returns a pointer to `struct
+> gmin_subdev` can return NULL.
+>
+> In `gmin_v2p8_ctrl()` there's a call to this function but the
+> possibility of a NULL was not checked before its being dereferenced,
+> i.e.:
+>
+>  /* Acquired here --------v */
+>  struct gmin_subdev *gs = find_gmin_subdev(subdev);
+>
+>  /*  v------Dereferenced here */
+>  if (gs->v2p8_gpio >= 0) {
+>      ...
+>  }
+>
+> With this change we're null checking `find_gmin_subdev()` result
+> and we return an error if that's the case. We also WARN()
+> for the sake of debugging.
+>
+> Signed-off-by: Cengiz Can <cengiz@kernel.wtf>
+> Reported-by: Coverity Static Analyzer CID 1465536
+> Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+>
+> Please do note that this change introduces a new return value to
+> `gmin_v2p8_ctrl()`.
+>
+> [NEW] - raise a WARN and return -ENODEV if there are no subdevices.
+>       - return result of `gpio_request` or `gpio_direction_output`.
+>       - return 0 if GPIO is ON.
+>       - return results of `regulator_enable` or `regulator_disable`.
+>       - according to PMIC type, return result of `axp_regulator_set`
+>         or `gmin_i2c_write`.
+>       - return -EINVAL if unknown PMIC type.
+>
+> Patch Changelog:
+>   v4: Fix minor typo in commit message
+>   v5: Remove typo from email subject
+>   v6: Remove duplicate Signed-off-by tag
+>
+> drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c | 5 ++++-
+> 1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c 
+> b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+> index 0df46a1af5f0..1ad0246764a6 100644
+> --- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+> +++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+> @@ -871,6 +871,9 @@ static int gmin_v2p8_ctrl(struct v4l2_subdev *subdev, 
+> int on)
+> 	int ret;
+> 	int value;
+>
+> +	if (WARN_ON(!gs))
+> +		return -ENODEV;
+> +
+> 	if (gs->v2p8_gpio >= 0) {
+> 		pr_info("atomisp_gmin_platform: 2.8v power on GPIO %d\n",
+> 			gs->v2p8_gpio);
+> @@ -881,7 +884,7 @@ static int gmin_v2p8_ctrl(struct v4l2_subdev *subdev, 
+> int on)
+> 			pr_err("V2P8 GPIO initialization failed\n");
+> 	}
+>
+> -	if (!gs || gs->v2p8_on == on)
+> +	if (gs->v2p8_on == on)
+> 		return 0;
+> 	gs->v2p8_on = on;
+>
+> --
+> 2.27.0
+
+
 
