@@ -2,316 +2,201 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 738B3C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:25:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 136A5C433E0
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:27:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD58C23119
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:25:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65C09221E3
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:27:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a9WJfCrp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729783AbgHFRZF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 13:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S1729825AbgHFR1W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 13:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729836AbgHFRDO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:03:14 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BF2C0611E0
-        for <linux-media@vger.kernel.org>; Thu,  6 Aug 2020 04:55:47 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 0707E29945A
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
-        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com, tfiga@chromium.org
-Subject: [PATCH v2 4/4] media: staging: rkisp1: improve documentation in file rkisp1-config.h
-Date:   Thu,  6 Aug 2020 13:50:33 +0200
-Message-Id: <20200806115033.32475-5-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200806115033.32475-1-dafna.hirschfeld@collabora.com>
-References: <20200806115033.32475-1-dafna.hirschfeld@collabora.com>
+        with ESMTP id S1727057AbgHFR1U (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:27:20 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D470CC061574;
+        Thu,  6 Aug 2020 10:27:18 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id i10so17919639ljn.2;
+        Thu, 06 Aug 2020 10:27:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=aV1obyLP1kSAuWoOSd1TJKMwTZ27aQ8wVfEpw+0wGBU=;
+        b=a9WJfCrpB0mlGFNpjp3IMfO8eESkaYVXerUr07b3nryvHt7lbOBlM6Ty3pQW2Q544O
+         uUTqXruVltYm4Xm/9+qUMi8tpCWA/dePs4LvfKbLdpYyscOAy70TzTqm+ezEu8bsb/BF
+         c5I3sLn+QKgstFfFONCvce0M4QYvl8bofh0CsIl7Io8GCP0KMzaUk/uRXs6+tDT9ufm1
+         7EviczQgNP7fD0T30hHs6/6YLgLWnhHPk9J+xAK4GJbNxyCeRHPgo9B7ln9sJlL/6r88
+         F/Gf0r+jAUN9aunIRSR+SVbJQlWyHBbNynqgnOM3DI2RNT2KWf75FuJSEVdSoWs4MoAJ
+         3H4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aV1obyLP1kSAuWoOSd1TJKMwTZ27aQ8wVfEpw+0wGBU=;
+        b=jWfmdvpRKtHfvME27eeiVVdgejwUCu1576N44sd6lUKCFGik305IGfzQOmiEWeNoYL
+         fMI7Z65ftnBiu/VjLioupFI6eCakvQLKq/95hXTEhbfVlcmLQte3vq6Jn2D462w7JU7X
+         KSH6NFFw83afqfgJ4rSifIIHMRFQTP1ngGJs2ACszrx5Q8A1/IB/mtiNT9bUsoHzOwXn
+         qN2ImEY52KcpnY2qjSXzSLFclAk0WoanbPVCsTjyXc9awx4B9VKJwS7kB246dx20pTwn
+         lvJOlRcq7IuuFdWlola2SH6I2NjKyb5s5bmV2oKTsCivKTr9tTcMkWLf07i4GtI4QC6V
+         T97A==
+X-Gm-Message-State: AOAM533QiENBK8PcbuB4vm2+zHRpuPSHkguBq7SmwZjRP8Zr7/cYwU1K
+        jkol+OkNROXLyDRuBNCdCAGIQeN2
+X-Google-Smtp-Source: ABdhPJwUrsHV/vYp5HAg8LZBKkEWEoGc94/DcNh333osFJkTDq+NVE9tPWlFcJqOShjfbHUUSP/66w==
+X-Received: by 2002:a2e:b0d2:: with SMTP id g18mr4011627ljl.136.1596734836681;
+        Thu, 06 Aug 2020 10:27:16 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-41-50.dynamic.spd-mgts.ru. [94.29.41.50])
+        by smtp.googlemail.com with ESMTPSA id g4sm2974058lfh.13.2020.08.06.10.27.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Aug 2020 10:27:15 -0700 (PDT)
+Subject: Re: [PATCH v8 08/10] gpu: host1x: mipi: Keep MIPI clock enabled till
+ calibration is done
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     jonathanh@nvidia.com, frankc@nvidia.com, hverkuil@xs4all.nl,
+        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1596469346-937-1-git-send-email-skomatineni@nvidia.com>
+ <20200805134600.GA3351349@ulmo>
+ <103efe31-1abc-54f2-6004-490d7bb1b61a@gmail.com>
+ <dcd58ae7-58ed-11d1-0e10-7f522b651b30@gmail.com>
+ <addb92e5-7c7a-6fba-117d-c7880b2d4597@nvidia.com>
+ <ed80bf2f-213f-286a-59b2-fc85e4181b3d@gmail.com>
+ <6eede805-80fd-016f-22f8-b6d25f6587af@nvidia.com>
+ <1c12e40e-de7f-0599-a941-82760b4c7668@gmail.com>
+ <9ef0b875-e826-43e2-207e-168d2081ff6a@nvidia.com>
+ <4689cfe9-e7c4-48bf-217f-3a31b59b8bda@nvidia.com>
+ <0e78c5ca-c529-1e98-891d-30351c9aae81@gmail.com>
+ <b2098a68-d02f-b406-fc57-56e3ff5d8d1a@nvidia.com>
+ <309e3b66-9288-91ef-71b4-be73eacbbd62@nvidia.com>
+ <fde2431a-0585-ac32-ac25-73e198aaa948@nvidia.com>
+ <4025a458-fa78-924d-c84f-166f82df0f8e@gmail.com>
+ <4f15d655-3d62-cf9f-82da-eae379d60fa6@nvidia.com>
+ <b5612e93-f1c4-4762-baa1-5d85eb1edbe1@gmail.com>
+ <412f8c53-1aca-db31-99a1-a0ecb2081ca5@nvidia.com>
+ <61275bd6-58e7-887f-aa7d-8e60895e7b2b@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <6ff57c38-9847-42b0-643b-0d167c13779f@gmail.com>
+Date:   Thu, 6 Aug 2020 20:27:15 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <61275bd6-58e7-887f-aa7d-8e60895e7b2b@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is some missing documentation of structs and
-fields in rkisp1-config.h. This patch improves the
-documentation.
+06.08.2020 20:12, Sowjanya Komatineni пишет:
+> 
+> On 8/6/20 9:41 AM, Sowjanya Komatineni wrote:
+>>
+>> On 8/6/20 9:10 AM, Dmitry Osipenko wrote:
+>>> 06.08.2020 18:59, Sowjanya Komatineni пишет:
+>>> ...
+>>>>>> Confirmed from HW designer, calibration FSM to finish takes worst
+>>>>>> case
+>>>>>> 72uS so by the time it gets to sensor stream it will be done its
+>>>>>> sequence and will be waiting for DONE bit.
+>>>>>>
+>>>>>> So disabling MIPI CAL clock on sensor stream fails is safe.
+>>>>> 72us is quite a lot of time, what will happen if LP-11 happens before
+>>>>> FSM finished calibration?
+>>>>>
+>>>>> Maybe the finish_calibration() needs to split into two parts:
+>>>>>
+>>>>>    1. wait for CAL_STATUS_ACTIVE before enabling sensor
+>>>>>    2. wait for CAL_STATUS_DONE after enabling sensor
+>>>> I don't think we need to split for active and done. Active will be 1 as
+>>>> long as other pads are in calibration as well.
+>>>>
+>>>> We cant use active status check for specific pads under calibration.
+>>>> This is common bit for all pads.
+>>> Does hardware have a single FSM block shared by all pads or there is FSM
+>>> per group of pads?
+>>
+>> MIPI CAL status register has DONE bits for individual pads status and
+>> single ACTIVE bit.
+>>
+>> ACTIVE bit set to 1 indicates auto calibration is active which is the
+>> case even when other pads (other CSI pads from other ports streaming
+>> in case of parallel stream) are under calibration. Also DSI is shared
+>> as well.
+>>
+>> We do calibration for individual pads. So, we should not rely on
+>> ACTIVE bit.
+>>
+>>
+>> MIPI driver checks for condition ACTIVE == 1 && DONE == 1 from the
+>> beginning.
+>>
+>> But I think this also should be fixed as in case of parallel streams
+>> calibration can happen in parallel waiting for ACTIVE to be cleared
+>> makes all calibration callers to wait for longer than needed as ACTIVE
+>> is common for all pads.
+>>
+>>>
+>>>> Unfortunately HW don't have separate status indicating when sequence is
+>>>> done to indicate its waiting for LP11.
+>>>>
+>>>>
+>>>> To avoid all this, will remove cancel_calibration() totally and use
+>>>> same
+>>>> finish calibration even in case of stream failure then.
+>>>>
+>>> What about to add 72us delay to the end of start_calibration() in order
+>>> to ensure that FSM is finished before LP-11?
+>>
+>> Why we should add 72uS in start_calibration() when can use same
+>> finish_calibration() for both pass/fail cases?
+>>
+>> Only timing loose we see is in case of failure we still wait for 250ms
+>> and as this is failing case I hope should be ok.
+>>
+> Also as we don't need cancel_calibration(), keeping tegra_mipi_wait()
+> like earlier makes sense I believe as we are letting it finish going
+> thru sequence.
+> 
+> So I think below are fixes,
+> 
+> 1. Existing MIPI driver, tegra_mipi_wait() to not use status ACTIVE bit
+> to be 0 and use only DONE bit to be 1 for wait condition  as we are
+> calibrating separately for individual pads and this ACTIVE bit is common
+> for all pads where it will not be 0 in case of other parallel streams
+> which may also be under calibration.
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
----
- .../staging/media/rkisp1/uapi/rkisp1-config.h | 127 ++++++++++++++----
- 1 file changed, 103 insertions(+), 24 deletions(-)
+Yes, looks like it's a mistake of the current MIPI driver that it polls
+the ACTIVE bit.
 
-diff --git a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-index 76991b0073bb..6894ec768286 100644
---- a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-+++ b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-@@ -4,11 +4,6 @@
-  * Copyright (C) 2017 Rockchip Electronics Co., Ltd.
-  */
- 
--/*
-- * TODO: Improve documentation, mostly regarding abbreviation and hardware
-- * specificities. Reference: "REF_01 - ISP_user_manual, Rev 2.57" (not public)
-- */
--
- #ifndef _UAPI_RKISP1_CONFIG_H
- #define _UAPI_RKISP1_CONFIG_H
- 
-@@ -18,23 +13,41 @@
- #define V4L2_META_FMT_RK_ISP1_PARAMS   v4l2_fourcc('R', 'K', '1', 'P') /* Rockchip ISP1 params */
- #define V4L2_META_FMT_RK_ISP1_STAT_3A  v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A statistics */
- 
-+/* Defect Pixel Cluster Detection */
- #define RKISP1_CIF_ISP_MODULE_DPCC		BIT(0)
-+/* Black Level Subtraction */
- #define RKISP1_CIF_ISP_MODULE_BLS		BIT(1)
-+/* Sensor De-gamma */
- #define RKISP1_CIF_ISP_MODULE_SDG		BIT(2)
-+/* Histogram */
- #define RKISP1_CIF_ISP_MODULE_HST		BIT(3)
-+/* Lens Shade Control */
- #define RKISP1_CIF_ISP_MODULE_LSC		BIT(4)
-+/* Auto White Balance Gain */
- #define RKISP1_CIF_ISP_MODULE_AWB_GAIN		BIT(5)
-+/* Filter */
- #define RKISP1_CIF_ISP_MODULE_FLT		BIT(6)
-+/* Bayer Demosaic */
- #define RKISP1_CIF_ISP_MODULE_BDM		BIT(7)
-+/* Cross Talk */
- #define RKISP1_CIF_ISP_MODULE_CTK		BIT(8)
-+/* Gamma Out Curve */
- #define RKISP1_CIF_ISP_MODULE_GOC		BIT(9)
-+/* Color Processing */
- #define RKISP1_CIF_ISP_MODULE_CPROC		BIT(10)
-+/* Auto Focus Control */
- #define RKISP1_CIF_ISP_MODULE_AFC		BIT(11)
-+/* Auto White Balancing */
- #define RKISP1_CIF_ISP_MODULE_AWB		BIT(12)
-+/* Image Effect */
- #define RKISP1_CIF_ISP_MODULE_IE		BIT(13)
-+/* Auto Exposure Control */
- #define RKISP1_CIF_ISP_MODULE_AEC		BIT(14)
-+/* Wide Dynamic Range */
- #define RKISP1_CIF_ISP_MODULE_WDR		BIT(15)
-+/* Denoise Pre-Filter */
- #define RKISP1_CIF_ISP_MODULE_DPF		BIT(16)
-+/* Denoise Pre-Filter Strength */
- #define RKISP1_CIF_ISP_MODULE_DPF_STRENGTH	BIT(17)
- 
- #define RKISP1_CIF_ISP_CTK_COEFF_MAX            0x100
-@@ -84,6 +97,7 @@
-  */
- #define RKISP1_CIF_ISP_LSC_GRAD_TBL_SIZE           8
- #define RKISP1_CIF_ISP_LSC_SIZE_TBL_SIZE           8
-+
- /*
-  * The following matches the tuning process,
-  * not the max capabilities of the chip.
-@@ -158,6 +172,17 @@ enum rkisp1_cif_isp_exp_meas_mode {
- 
- /*---------- PART1: Input Parameters ------------*/
- 
-+/**
-+ * struct rkisp1_cif_isp_window -  measurement window.
-+ *
-+ * Measurements are calculated per window inside the frame.
-+ * This struct represents a window for a measurement.
-+ *
-+ * @h_offs: the horizontal offset of the window from the left of the frame in pixels.
-+ * @v_offs: the vertical offset of the window from the top of the frame in pixels.
-+ * @h_size: the horizontal size of the window in pixels
-+ * @v_size: the vertical size of the window in pixels.
-+ */
- struct rkisp1_cif_isp_window {
- 	__u16 h_offs;
- 	__u16 v_offs;
-@@ -247,10 +272,29 @@ struct rkisp1_cif_isp_dpcc_config {
- 	__u32 rnd_offs;
- } __packed;
- 
-+/**
-+ * struct rkisp1_cif_isp_gamma_corr_curve - gamma curve point definition y-axis (output).
-+ *
-+ * The reset values define a linear curve which has the same effect as bypass. Reset values are:
-+ * gamma_y[0] = 0x0000, gamma_y[1] = 0x0100, ... gamma_y[15] = 0x0f00, gamma_y[16] = 0xfff
-+ *
-+ * @gamma_y: the values for the y-axis of gamma curve points. Each value is 12 bit.
-+ */
- struct rkisp1_cif_isp_gamma_corr_curve {
- 	__u16 gamma_y[RKISP1_CIF_ISP_DEGAMMA_CURVE_SIZE];
- } __packed;
- 
-+/**
-+ * struct rkisp1_cif_isp_gamma_curve_x_axis_pnts - De-Gamma Curve definition x increments
-+ *		(sampling points). gamma_dx0 is for the lower samples (1-8), gamma_dx1 is for the
-+ *		higher samples (9-16). The reset values for both fields is 0x44444444. This means
-+ *		that each sample is 4 units away from the previous one on the x-axis.
-+ *
-+ * @gamma_dx0: gamma curve sample points definitions. Bits 0:2 for sample 1. Bit 3 unused.
-+ *		Bits 4:6 for sample 2. bit 7 unused ... Bits 28:30 for sample 8. Bit 31 unused
-+ * @gamma_dx1: gamma curve sample points definitions. Bits 0:2 for sample 9. Bit 3 unused.
-+ *		Bits 4:6 for sample 10. bit 7 unused ... Bits 28:30 for sample 16. Bit 31 unused
-+ */
- struct rkisp1_cif_isp_gamma_curve_x_axis_pnts {
- 	__u32 gamma_dx0;
- 	__u32 gamma_dx1;
-@@ -259,8 +303,10 @@ struct rkisp1_cif_isp_gamma_curve_x_axis_pnts {
- /**
-  * struct rkisp1_cif_isp_sdg_config - Configuration used by sensor degamma
-  *
-- * @curve_x: gamma curve point definition axis for x
-- * @xa_pnts: x increments
-+ * @curve_r: gamma curve point definition axis for red
-+ * @curve_g: gamma curve point definition axis for green
-+ * @curve_b: gamma curve point definition axis for blue
-+ * @xa_pnts: x axis increments
-  */
- struct rkisp1_cif_isp_sdg_config {
- 	struct rkisp1_cif_isp_gamma_corr_curve curve_r;
-@@ -272,7 +318,16 @@ struct rkisp1_cif_isp_sdg_config {
- /**
-  * struct rkisp1_cif_isp_lsc_config - Configuration used by Lens shading correction
-  *
-- * refer to REF_01 for details
-+ * @r_data_tbl: sample table red
-+ * @gr_data_tbl: sample table green (red)
-+ * @gb_data_tbl: sample table green (blue)
-+ * @b_data_tbl: sample table blue
-+ * @x_grad_tbl: gradient table x
-+ * @y_grad_tbl: gradient table y
-+ * @x_size_tbl: size table x
-+ * @y_size_tbl: size table y
-+ * @config_width: not used at the moment
-+ * @config_height: not used at the moment
-  */
- struct rkisp1_cif_isp_lsc_config {
- 	__u32 r_data_tbl[RKISP1_CIF_ISP_LSC_DATA_TBL_SIZE];
-@@ -292,6 +347,11 @@ struct rkisp1_cif_isp_lsc_config {
- /**
-  * struct rkisp1_cif_isp_ie_config - Configuration used by image effects
-  *
-+ * @effect: values from 'enum v4l2_colorfx'. Possible values are: V4L2_COLORFX_SEPIA,
-+ *		V4L2_COLORFX_SET_CBCR, V4L2_COLORFX_AQUA, V4L2_COLORFX_EMBOSS,
-+ *		V4L2_COLORFX_SKETCH,   V4L2_COLORFX_BW,   V4L2_COLORFX_NEGATIVE
-+ * @color_sel: bits 0:2 - colors bitmask (001 - blue, 010 - green, 100 - red).
-+ *		bits 8:15 - Threshold value of the RGB colors for the color selection effect.
-  * @eff_mat_1: 3x3 Matrix Coefficients for Emboss Effect 1
-  * @eff_mat_2: 3x3 Matrix Coefficients for Emboss Effect 2
-  * @eff_mat_3: 3x3 Matrix Coefficients for Emboss 3/Sketch 1
-@@ -335,8 +395,8 @@ struct rkisp1_cif_isp_cproc_config {
- /**
-  * struct rkisp1_cif_isp_awb_meas_config - Configuration used by auto white balance
-  *
-+ * @awb_mode: the awb meas mode. From enum rkisp1_cif_isp_awb_mode_type.
-  * @awb_wnd: white balance measurement window (in pixels)
-- *	     (from enum rkisp1_cif_isp_awb_mode_type)
-  * @max_y: only pixels values < max_y contribute to awb measurement, set to 0
-  *	   to disable this feature
-  * @min_y: only pixels values > min_y contribute to awb measurement
-@@ -348,6 +408,7 @@ struct rkisp1_cif_isp_cproc_config {
-  *	    (ucFrames=0 means 1 Frame)
-  * @awb_ref_cr: reference Cr value for AWB regulation, target for AWB
-  * @awb_ref_cb: reference Cb value for AWB regulation, target for AWB
-+ * @enable_ymax_cmp: enable Y_MAX compare (Not valid in RGB measurement mode.)
-  */
- struct rkisp1_cif_isp_awb_meas_config {
- 	/*
-@@ -368,7 +429,15 @@ struct rkisp1_cif_isp_awb_meas_config {
- /**
-  * struct rkisp1_cif_isp_awb_gain_config - Configuration used by auto white balance gain
-  *
-- * out_data_x = ( AWB_GEAIN_X * in_data + 128) >> 8
-+ * All fields in this struct are 10 bit, where:
-+ * 0x100h = 1, unsigned integer value, range 0 to 4 with 8 bit fractional part.
-+ *
-+ * out_data_x = ( AWB_GAIN_X * in_data + 128) >> 8
-+ *
-+ * @gain_red: gain value for red component.
-+ * @gain_green_r: gain value for green component in red line.
-+ * @gain_blue: gain value for blue component.
-+ * @gain_green_b: gain value for green component in blue line.
-  */
- struct rkisp1_cif_isp_awb_gain_config {
- 	__u16 gain_red;
-@@ -380,14 +449,24 @@ struct rkisp1_cif_isp_awb_gain_config {
- /**
-  * struct rkisp1_cif_isp_flt_config - Configuration used by ISP filtering
-  *
-- * @mode: ISP_FILT_MODE register fields (from enum rkisp1_cif_isp_flt_mode)
-- * @grn_stage1: ISP_FILT_MODE register fields
-- * @chr_h_mode: ISP_FILT_MODE register fields
-- * @chr_v_mode: ISP_FILT_MODE register fields
-+ * All 4 threshold fields (thresh_*) are 10 bits.
-+ * All 6 factor fields (fac_*) are 6 bits.
-  *
-- * refer to REF_01 for details.
-+ * @mode: ISP_FILT_MODE register fields (from enum rkisp1_cif_isp_flt_mode)
-+ * @grn_stage1: Green filter stage 1 select (range 0x0...0x8)
-+ * @chr_h_mode: Chroma filter horizontal mode
-+ * @chr_v_mode: Chroma filter vertical mode
-+ * @thresh_bl0: If thresh_bl1 < sum_grad < thresh_bl0 then fac_bl0 is selected (blurring th)
-+ * @thresh_bl1: If sum_grad < thresh_bl1 then fac_bl1 is selected (blurring th)
-+ * @thresh_sh0: If thresh_sh0 < sum_grad < thresh_sh1 then thresh_sh0 is selected (sharpening th)
-+ * @thresh_sh1: If thresh_sh1 < sum_grad then thresh_sh1 is selected (sharpening th)
-+ * @lum_weight: Parameters for luminance weight function.
-+ * @fac_sh1: filter factor for sharp1 level
-+ * @fac_sh0: filter factor for sharp0 level
-+ * @fac_mid: filter factor for mid level and for static filter mode
-+ * @fac_bl0: filter factor for blur 0 level
-+ * @fac_bl1: filter factor for blur 1 level (max blur)
-  */
--
- struct rkisp1_cif_isp_flt_config {
- 	__u32 mode;
- 	__u8 grn_stage1;
-@@ -748,8 +827,8 @@ struct rkisp1_cif_isp_ae_stat {
- /**
-  * struct rkisp1_cif_isp_af_meas_val - AF measured values
-  *
-- * @sum: sharpness, refer to REF_01 for definition
-- * @lum: luminance, refer to REF_01 for definition
-+ * @sum: sharpness value
-+ * @lum: luminance value
-  */
- struct rkisp1_cif_isp_af_meas_val {
- 	__u32 sum;
-@@ -781,12 +860,12 @@ struct rkisp1_cif_isp_hist_stat {
- } __packed;
- 
- /**
-- * struct rkisp1_stat_buffer - Rockchip ISP1 Statistics Data
-+ * struct rkisp1_cif_isp_stat - Rockchip ISP1 Statistics Data
-  *
-- * @rkisp1_cif_isp_awb_stat: statistics data for automatic white balance
-- * @rkisp1_cif_isp_ae_stat: statistics data for auto exposure
-- * @rkisp1_cif_isp_af_stat: statistics data for auto focus
-- * @rkisp1_cif_isp_hist_stat: statistics histogram data
-+ * @awb: statistics data for automatic white balance
-+ * @ae: statistics data for auto exposure
-+ * @af: statistics data for auto focus
-+ * @hist: statistics histogram data
-  */
- struct rkisp1_cif_isp_stat {
- 	struct rkisp1_cif_isp_awb_stat awb;
-@@ -798,7 +877,7 @@ struct rkisp1_cif_isp_stat {
- /**
-  * struct rkisp1_stat_buffer - Rockchip ISP1 Statistics Meta Data
-  *
-- * @meas_type: measurement types (RKISP1_CIF_ISP_STAT_ definitions)
-+ * @meas_type: measurement types (RKISP1_CIF_ISP_STAT_* definitions)
-  * @frame_id: frame ID for sync
-  * @params: statistics data
-  */
--- 
-2.17.1
+> 2. No need for separate cancel_calibration. So, probably earlier names
+> tegra_mipi_calibrate() and tegra_mipi_wait() hols good as we are waiting
+> for calibration sequence to finish irrespective of fail/pass.
 
+The new names reflect better what those functions actually do, IMO.
+
+What about to make finish_calibration() to take an additional argument
+which corresponds to the awaited HW bits? For example if it's CSIA, then
+it could be:
+
+  tegra_mipi_finish_calibration(csi_chan->mipi, MIPI_CAL_CSIA);
+
+
+Also, is it okay that DSI and CSI could change MIPI_CAL_CTRL after DSI
+or CSI already started calibration?
+
+Looking at the current start_calibration(), I think the mutex should be
+kept locked and then finish_calibration() should unlock it.
