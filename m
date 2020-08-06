@@ -2,66 +2,112 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FCC4C433E0
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 938FCC433E0
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:28:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9A8722DCC
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:28:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07C4D22DCC
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:28:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730387AbgHFR2H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 13:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729815AbgHFRBX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:01:23 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250E6C06138F
-        for <linux-media@vger.kernel.org>; Thu,  6 Aug 2020 04:55:44 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id EC441298808
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
-        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com, tfiga@chromium.org
-Subject: [PATCH v2 0/4] rkisp1: improve uapi
-Date:   Thu,  6 Aug 2020 13:50:29 +0200
-Message-Id: <20200806115033.32475-1-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
+        id S1729501AbgHFR2f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 13:28:35 -0400
+Received: from mga11.intel.com ([192.55.52.93]:4196 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729617AbgHFR20 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 6 Aug 2020 13:28:26 -0400
+IronPort-SDR: d0m3szX+C0hwHogpia8F99ESEXqvxCKSMxDKJ4T/uQARoQGqHqVwD5Yeu9TVZdR1dD1e74tyld
+ ouoWWGr8TiUg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9704"; a="150529192"
+X-IronPort-AV: E=Sophos;i="5.75,441,1589266800"; 
+   d="scan'208";a="150529192"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2020 05:55:19 -0700
+IronPort-SDR: YX3VVoSLAH25zeI826HufpuAkgBKlYI1Rzw1c6QT37yHvVX1mYKl2U2FENI2LpBDswB117SBzj
+ g0sc8ZCWTvag==
+X-IronPort-AV: E=Sophos;i="5.75,441,1589266800"; 
+   d="scan'208";a="323421183"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2020 05:55:17 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 31AF22063B; Thu,  6 Aug 2020 15:54:45 +0300 (EEST)
+Date:   Thu, 6 Aug 2020 15:54:45 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
+        libcamera-devel@lists.libcamera.org
+Subject: Re: [PATCH 1/4] media: docs: Describe pixel array properties
+Message-ID: <20200806125445.GA16270@paasikivi.fi.intel.com>
+References: <20200805105721.15445-1-jacopo@jmondi.org>
+ <20200805105721.15445-2-jacopo@jmondi.org>
+ <184f8787-ebf1-90e3-82b3-44fa66e65a84@xs4all.nl>
+ <20200806095038.tc6mmwknqdinaeth@uno.localdomain>
+ <f4e50cbb-8b25-1269-d8b9-9c81fa73b7e1@xs4all.nl>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f4e50cbb-8b25-1269-d8b9-9c81fa73b7e1@xs4all.nl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patchset groups 4 patches for the rkisp1 uapi that were previously sent separately.
+Hi Hans,
 
-change since v2:
-* the patch "media: staging: rkisp1: comment each define (RKISP1_CIF_ISP_MODULE_*), explaining what the abbreviation means"
-is merged into the patch "media: staging: rkisp1: improve documentation in file rkisp1-config.h"
+On Thu, Aug 06, 2020 at 11:58:31AM +0200, Hans Verkuil wrote:
+> On 06/08/2020 11:50, Jacopo Mondi wrote:
+> > Hi Hans,
+> > 
+> > On Thu, Aug 06, 2020 at 10:05:37AM +0200, Hans Verkuil wrote:
+> >> Hi Jacopo,
+> >>
+> >> Some review comments below:
+> >>
+> >> On 05/08/2020 12:57, Jacopo Mondi wrote:
+> >>> +Analog crop rectangle
+> >>
+> >> Why analog? It's just the crop rectangle, nothing analog about it.
+> >>
+> > 
+> > We used the 'analogCrop' term in libcamera to differentiate the
+> > cropping which happens on the sensor pixel array matrix to select the
+> > region to process and produce image from. Sensor with an on-board
+> > scaler can perform other cropping steps to implement, in example digital
+> > zoom, so we expect to have a 'digital crop' phase as well. RAW
+> > sensors, in example, will only have an analogCrop rectangle.
+> > 
+> > Quoting the libcamera definition of analog crop:
+> > 
+> >  * horizontal and vertical sizes define the portion of the pixel array which
+> >  * is read-out and provided to the sensor's internal processing pipeline, before
+> >  * any pixel sub-sampling method, such as pixel binning, skipping and averaging
+> >  * take place.
+> > 
+> > should I keep it or remove it ?
+> 
+> It's a very confusing term. Especially since this API can also be used with analog
+> video capture devices (Composite/S-Video) where the video signal actually is analog.
+> 
+> In the V4L2 API there is no such thing as 'analog crop', so please remove it.
 
-In patch "media: staging: rkisp1: improve documentation in file rkisp1-config.h":
-- remove references to REF_1,
-- add documentation to rkisp1_cif_isp_lsc_config
-- remove redundant newlines
+There isn't in the V4L2 API but I don't see why we couldn't document it
+here. Analogue crop is an established term related to raw (perhaps others,
+too?) camera sensors which describes cropping that is implemented by not
+reading parts of the pixel array.
 
-Dafna Hirschfeld (4):
-  media: staging: rkisp1: replace 9 coeff* fields with a 3x3 array
-  media: staging: rkisp1: replace 3 fields 'ct_offset_*' with one array
-  media: staging: rkisp1: rename RKISP1_CIF_ISP_STAT_AFM_FIN to
-    RKISP1_CIF_ISP_STAT_AFM
-  media: staging: rkisp1: improve documentation in file rkisp1-config.h
-
- drivers/staging/media/rkisp1/rkisp1-params.c  |  24 ++-
- drivers/staging/media/rkisp1/rkisp1-stats.c   |   2 +-
- .../staging/media/rkisp1/uapi/rkisp1-config.h | 149 +++++++++++++-----
- 3 files changed, 120 insertions(+), 55 deletions(-)
+As this documentation only applies to camera sensors, I think it's entirely
+appropriate to document this here, and using that term.
 
 -- 
-2.17.1
+Kind regards,
 
+Sakari Ailus
