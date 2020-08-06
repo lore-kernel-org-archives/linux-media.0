@@ -2,271 +2,150 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A21C0C433DF
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE26C433E0
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:50:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01EAA23119
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:49:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8CD032075D
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 16:50:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="FY9UKV4S"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729265AbgHFQsq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 12:48:46 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:42586 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729181AbgHFQsE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 12:48:04 -0400
-Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 4BD373A9E62;
-        Thu,  6 Aug 2020 15:47:30 +0000 (UTC)
-X-Originating-IP: 93.29.109.196
-Received: from aptenodytes (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B435D1C0003;
-        Thu,  6 Aug 2020 15:47:07 +0000 (UTC)
-Date:   Thu, 6 Aug 2020 17:47:07 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Jeffrey Kardatzke <jkardatzke@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Subject: Re: [PATCH v2 01/14] media: uapi: h264: Update reference lists
-Message-ID: <20200806154707.GA1621078@aptenodytes>
-References: <20200806151310.98624-1-ezequiel@collabora.com>
- <20200806151310.98624-2-ezequiel@collabora.com>
+        id S1729547AbgHFQtz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 12:49:55 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:19381 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729087AbgHFQlS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 12:41:18 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f2c329f0001>; Thu, 06 Aug 2020 09:41:03 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 06 Aug 2020 09:41:16 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 06 Aug 2020 09:41:16 -0700
+Received: from [10.2.172.190] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 6 Aug
+ 2020 16:41:15 +0000
+Subject: Re: [PATCH v8 08/10] gpu: host1x: mipi: Keep MIPI clock enabled till
+ calibration is done
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+CC:     <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
+        <helen.koike@collabora.com>, <gregkh@linuxfoundation.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1596469346-937-1-git-send-email-skomatineni@nvidia.com>
+ <1596469346-937-9-git-send-email-skomatineni@nvidia.com>
+ <20200805134600.GA3351349@ulmo>
+ <103efe31-1abc-54f2-6004-490d7bb1b61a@gmail.com>
+ <dcd58ae7-58ed-11d1-0e10-7f522b651b30@gmail.com>
+ <addb92e5-7c7a-6fba-117d-c7880b2d4597@nvidia.com>
+ <ed80bf2f-213f-286a-59b2-fc85e4181b3d@gmail.com>
+ <6eede805-80fd-016f-22f8-b6d25f6587af@nvidia.com>
+ <1c12e40e-de7f-0599-a941-82760b4c7668@gmail.com>
+ <9ef0b875-e826-43e2-207e-168d2081ff6a@nvidia.com>
+ <4689cfe9-e7c4-48bf-217f-3a31b59b8bda@nvidia.com>
+ <0e78c5ca-c529-1e98-891d-30351c9aae81@gmail.com>
+ <b2098a68-d02f-b406-fc57-56e3ff5d8d1a@nvidia.com>
+ <309e3b66-9288-91ef-71b4-be73eacbbd62@nvidia.com>
+ <fde2431a-0585-ac32-ac25-73e198aaa948@nvidia.com>
+ <4025a458-fa78-924d-c84f-166f82df0f8e@gmail.com>
+ <4f15d655-3d62-cf9f-82da-eae379d60fa6@nvidia.com>
+ <b5612e93-f1c4-4762-baa1-5d85eb1edbe1@gmail.com>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <412f8c53-1aca-db31-99a1-a0ecb2081ca5@nvidia.com>
+Date:   Thu, 6 Aug 2020 09:41:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="C7zPtVaVf+AK4Oqc"
-Content-Disposition: inline
-In-Reply-To: <20200806151310.98624-2-ezequiel@collabora.com>
+In-Reply-To: <b5612e93-f1c4-4762-baa1-5d85eb1edbe1@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1596732063; bh=aSj+An4k0jQSBKE0gQLbkgh8EUdWIyZoOObI+nTFPQ4=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=FY9UKV4S6ICiJGg4B7NbEf9KBDsvgca/RcruHvXMwH3vkmJvFd37M9kkd6NUrVePs
+         1AzoPKnCxuaJ55FLoYqhtX5CA/L9MkPR/WyhVndrEy5ivTCcuqIhRZ3NVltDZPUGSu
+         rsP80G+YfJIw0n8sAtFDcVZWKPe/TKgkWkTt3rS4He6ALc/mfL8T/kNqJCwr9RoIHc
+         nDOMWdUubUae1l1/q92P9NlLQ3DcmbWavouObFIbnESHkDSqCOPr2KT8LIaniP9ZGo
+         THX8GSRxcbqrtYIJ/ozDmzwVKYgsvYKUZJOCNpIEzLMqGnqDMfsor5d6bp9E3h7Qx6
+         1CdmL42QEtuQQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---C7zPtVaVf+AK4Oqc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 8/6/20 9:10 AM, Dmitry Osipenko wrote:
+> 06.08.2020 18:59, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> ...
+>>>> Confirmed from HW designer, calibration FSM to finish takes worst case
+>>>> 72uS so by the time it gets to sensor stream it will be done its
+>>>> sequence and will be waiting for DONE bit.
+>>>>
+>>>> So disabling MIPI CAL clock on sensor stream fails is safe.
+>>> 72us is quite a lot of time, what will happen if LP-11 happens before
+>>> FSM finished calibration?
+>>>
+>>> Maybe the finish_calibration() needs to split into two parts:
+>>>
+>>>  =C2=A0 1. wait for CAL_STATUS_ACTIVE before enabling sensor
+>>>  =C2=A0 2. wait for CAL_STATUS_DONE after enabling sensor
+>> I don't think we need to split for active and done. Active will be 1 as
+>> long as other pads are in calibration as well.
+>>
+>> We cant use active status check for specific pads under calibration.
+>> This is common bit for all pads.
+> Does hardware have a single FSM block shared by all pads or there is FSM
+> per group of pads?
 
-Hi,
+MIPI CAL status register has DONE bits for individual pads status and=20
+single ACTIVE bit.
 
-On Thu 06 Aug 20, 12:12, Ezequiel Garcia wrote:
-> From: Jernej Skrabec <jernej.skrabec@siol.net>
->=20
-> When dealing with with interlaced frames, reference lists must tell if
-> each particular reference is meant for top or bottom field. This info
-> is currently not provided at all in the H264 related controls.
->=20
-> Make reference lists hold a structure which will also hold an
-> enumerator type along index into DPB array. The enumerator must
-> be used to specify if reference is for top or bottom field.
->=20
-> Currently the only user of these lists is Cedrus which is just compile
-> fixed here. Actual usage of will come in a following commit.
+ACTIVE bit set to 1 indicates auto calibration is active which is the=20
+case even when other pads (other CSI pads from other ports streaming in=20
+case of parallel stream) are under calibration. Also DSI is shared as well.
 
-Is there a particular reason we are adding this to the ref_pic_list[0-1]
-instead of the DPB entries directly?
+We do calibration for individual pads. So, we should not rely on ACTIVE bit=
+.
 
-It feels nicer to avoid making the lists structs when the entries they are
-referring to are already in a struct. I think this is the approach Kwiboo t=
-ook
-when adding support for fields in references some time ago.
 
-What do you think?
+MIPI driver checks for condition ACTIVE =3D=3D 1 && DONE =3D=3D 1 from the=
+=20
+beginning.
 
-Cheers,
+But I think this also should be fixed as in case of parallel streams=20
+calibration can happen in parallel waiting for ACTIVE to be cleared=20
+makes all calibration callers to wait for longer than needed as ACTIVE=20
+is common for all pads.
 
-Paul
+>
+>> Unfortunately HW don't have separate status indicating when sequence is
+>> done to indicate its waiting for LP11.
+>>
+>>
+>> To avoid all this, will remove cancel_calibration() totally and use same
+>> finish calibration even in case of stream failure then.
+>>
+> What about to add 72us delay to the end of start_calibration() in order
+> to ensure that FSM is finished before LP-11?
 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> ---
-> v2:
-> * As pointed out by Jonas, enum v4l2_h264_dpb_reference here.
-> ---
->  .../media/v4l/ext-ctrls-codec.rst             | 44 ++++++++++++++++++-
->  .../staging/media/sunxi/cedrus/cedrus_h264.c  |  6 +--
->  include/media/h264-ctrls.h                    | 23 +++++++---
->  3 files changed, 62 insertions(+), 11 deletions(-)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/=
-Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index d0d506a444b1..f2b2a381369f 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -1843,10 +1843,10 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_typ=
-e -
->      * - __u32
->        - ``slice_group_change_cycle``
->        -
-> -    * - __u8
-> +    * - struct :c:type:`v4l2_h264_reference`
->        - ``ref_pic_list0[32]``
->        - Reference picture list after applying the per-slice modifications
-> -    * - __u8
-> +    * - struct :c:type:`v4l2_h264_reference`
->        - ``ref_pic_list1[32]``
->        - Reference picture list after applying the per-slice modifications
->      * - __u32
-> @@ -1926,6 +1926,46 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type=
- -
->        - ``chroma_offset[32][2]``
->        -
-> =20
-> +``Picture Reference``
-> +
-> +.. c:type:: v4l2_h264_reference
-> +
-> +.. cssclass:: longtable
-> +
-> +.. flat-table:: struct v4l2_h264_reference
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +    :widths:       1 1 2
-> +
-> +    * - enum :c:type:`v4l2_h264_dpb_reference`
-> +      - ``reference``
-> +      - Specifies how the DPB entry is referenced.
-> +    * - __u8
-> +      - ``index``
-> +      - Index into the :c:type:`v4l2_ctrl_h264_decode_params`.dpb array.
-> +
-> +.. c:type:: v4l2_h264_dpb_reference
-> +
-> +.. cssclass:: longtable
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +    :widths:       1 1 2
-> +
-> +    * - ``V4L2_H264_DPB_TOP_REF``
-> +      - 0x1
-> +      - The top field in field pair is used for
-> +        short-term reference.
-> +    * - ``V4L2_H264_DPB_BOTTOM_REF``
-> +      - 0x2
-> +     - The bottom field in field pair is used for
-> +        short-term reference.
-> +    * - ``V4L2_H264_DPB_FRAME_REF``
-> +      - 0x3
-> +      - The frame (or the top/bottom fields, if it's a field pair)
-> +        is used for short-term reference.
-> +
->  ``V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS (struct)``
->      Specifies the decode parameters (as extracted from the bitstream)
->      for the associated H264 slice data. This includes the necessary
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/s=
-taging/media/sunxi/cedrus/cedrus_h264.c
-> index 54ee2aa423e2..cce527bbdf86 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> @@ -166,8 +166,8 @@ static void cedrus_write_frame_list(struct cedrus_ctx=
- *ctx,
-> =20
->  static void _cedrus_write_ref_list(struct cedrus_ctx *ctx,
->  				   struct cedrus_run *run,
-> -				   const u8 *ref_list, u8 num_ref,
-> -				   enum cedrus_h264_sram_off sram)
-> +				   const struct v4l2_h264_reference *ref_list,
-> +				   u8 num_ref, enum cedrus_h264_sram_off sram)
->  {
->  	const struct v4l2_ctrl_h264_decode_params *decode =3D run->h264.decode_=
-params;
->  	struct vb2_queue *cap_q;
-> @@ -188,7 +188,7 @@ static void _cedrus_write_ref_list(struct cedrus_ctx =
-*ctx,
->  		int buf_idx;
->  		u8 dpb_idx;
-> =20
-> -		dpb_idx =3D ref_list[i];
-> +		dpb_idx =3D ref_list[i].index;
->  		dpb =3D &decode->dpb[dpb_idx];
-> =20
->  		if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
-> diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
-> index 080fd1293c42..4c0bb7f5fb05 100644
-> --- a/include/media/h264-ctrls.h
-> +++ b/include/media/h264-ctrls.h
-> @@ -19,6 +19,8 @@
->   */
->  #define V4L2_H264_NUM_DPB_ENTRIES 16
-> =20
-> +#define V4L2_H264_REF_LIST_LEN (2 * V4L2_H264_NUM_DPB_ENTRIES)
-> +
->  /* Our pixel format isn't stable at the moment */
->  #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 =
-parsed slices */
-> =20
-> @@ -140,6 +142,19 @@ struct v4l2_h264_pred_weight_table {
->  #define V4L2_H264_SLICE_FLAG_DIRECT_SPATIAL_MV_PRED	0x04
->  #define V4L2_H264_SLICE_FLAG_SP_FOR_SWITCH		0x08
-> =20
-> +enum v4l2_h264_dpb_reference {
-> +	V4L2_H264_DPB_TOP_REF =3D 0x1,
-> +	V4L2_H264_DPB_BOTTOM_REF =3D 0x2,
-> +	V4L2_H264_DPB_FRAME_REF =3D 0x3,
-> +};
-> +
-> +struct v4l2_h264_reference {
-> +	enum v4l2_h264_dpb_reference fields;
-> +
-> +	/* Index into v4l2_ctrl_h264_decode_params.dpb[] */
-> +	__u8 index;
-> +};
-> +
->  struct v4l2_ctrl_h264_slice_params {
->  	/* Size in bytes, including header */
->  	__u32 size;
-> @@ -178,12 +193,8 @@ struct v4l2_ctrl_h264_slice_params {
->  	__u8 num_ref_idx_l1_active_minus1;
->  	__u32 slice_group_change_cycle;
-> =20
-> -	/*
-> -	 * Entries on each list are indices into
-> -	 * v4l2_ctrl_h264_decode_params.dpb[].
-> -	 */
-> -	__u8 ref_pic_list0[32];
-> -	__u8 ref_pic_list1[32];
-> +	struct v4l2_h264_reference ref_pic_list0[V4L2_H264_REF_LIST_LEN];
-> +	struct v4l2_h264_reference ref_pic_list1[V4L2_H264_REF_LIST_LEN];
-> =20
->  	__u32 flags;
->  };
-> --=20
-> 2.27.0
->=20
+Why we should add 72uS in start_calibration() when can use same=20
+finish_calibration() for both pass/fail cases?
 
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+Only timing loose we see is in case of failure we still wait for 250ms=20
+and as this is failing case I hope should be ok.
 
---C7zPtVaVf+AK4Oqc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAl8sJfsACgkQ3cLmz3+f
-v9G7JQf/TnWncpqO5avCsiYx8iHH1eLwDhPb6bnmWUzXT4OaXdC12feSeLbDMMg1
-LJCN8vURx+PCw7lwqV86i3gVlvePQZ+BukVOELAomGEDJP4Wrr2mrz7Z0p5encuv
-nQrzHqEdKZVi4CLXxNEsrqidJo/74vnUgeP10jtPG72+nluwXmOlACXeNJgA2/Ca
-UfHUCjy6eXVvLShfabxuej+5GP4zVWAHRtwJi8Ar3Ik/WyazhWoqCvNguA2LxgUl
-IRYWs4suJUAbR4ftreTcqEeb0bM60F7mxAik8UtnVvZd3YMgQL+4FBiA6nW+pYzu
-ZFcdsq53+2TSQY/8E1vOZrZ87qwRiw==
-=EiuI
------END PGP SIGNATURE-----
-
---C7zPtVaVf+AK4Oqc--
