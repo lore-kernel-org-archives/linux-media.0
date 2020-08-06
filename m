@@ -4,109 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47BFBC433DF
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:28:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19C5BC433E0
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:35:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ABDD222DCC
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:28:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7CB20221E2
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:35:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727771AbgHFR2H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 13:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S1729851AbgHFRfX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 13:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729164AbgHFRBZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:01:25 -0400
+        with ESMTP id S1729382AbgHFRfI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:35:08 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B007C06138D
-        for <linux-media@vger.kernel.org>; Thu,  6 Aug 2020 04:50:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E085DC0086A5;
+        Thu,  6 Aug 2020 08:19:32 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id 7BBC8299453
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
-        ezequiel@collabora.com, hverkuil@xs4all.nl, kernel@collabora.com,
-        dafna3@gmail.com, sakari.ailus@linux.intel.com, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com, tfiga@chromium.org
-Subject: [PATCH v2 1/4] media: staging: rkisp1: replace 9 coeff* fields with a 3x3 array
-Date:   Thu,  6 Aug 2020 13:50:30 +0200
-Message-Id: <20200806115033.32475-2-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200806115033.32475-1-dafna.hirschfeld@collabora.com>
-References: <20200806115033.32475-1-dafna.hirschfeld@collabora.com>
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 0E7D429959A
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Subject: [PATCH v2 14/14] media: cedrus: h264: Fix frame list construction
+Date:   Thu,  6 Aug 2020 12:13:10 -0300
+Message-Id: <20200806151310.98624-15-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200806151310.98624-1-ezequiel@collabora.com>
+References: <20200806151310.98624-1-ezequiel@collabora.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The struct rkisp1_cif_isp_ctk_config has 9 fields 'coeff*' for the
-3x3 color correction matrix. Replace these fields with one 3x3
-array coeff[3][3] and document the field.
+From: Jernej Skrabec <jernej.skrabec@siol.net>
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Acked-by: Helen Koike <helen.koike@collabora.com>
+Current frame list construction algorithm assumes that decoded image
+will be output into its own buffer. That is true for progressive content
+but not for interlaced where each field is decoded separately into same
+buffer.
+
+Fix that by checking if capture buffer is listed in DPB. If it is, reuse
+it.
+
+Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
 ---
- drivers/staging/media/rkisp1/rkisp1-params.c      | 15 ++++++---------
- drivers/staging/media/rkisp1/uapi/rkisp1-config.h | 14 ++++----------
- 2 files changed, 10 insertions(+), 19 deletions(-)
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/media/rkisp1/rkisp1-params.c b/drivers/staging/media/rkisp1/rkisp1-params.c
-index 797e79de659c..00b102eb67b6 100644
---- a/drivers/staging/media/rkisp1/rkisp1-params.c
-+++ b/drivers/staging/media/rkisp1/rkisp1-params.c
-@@ -402,15 +402,12 @@ static void rkisp1_goc_config(struct rkisp1_params *params,
- static void rkisp1_ctk_config(struct rkisp1_params *params,
- 			      const struct rkisp1_cif_isp_ctk_config *arg)
- {
--	rkisp1_write(params->rkisp1, arg->coeff0, RKISP1_CIF_ISP_CT_COEFF_0);
--	rkisp1_write(params->rkisp1, arg->coeff1, RKISP1_CIF_ISP_CT_COEFF_1);
--	rkisp1_write(params->rkisp1, arg->coeff2, RKISP1_CIF_ISP_CT_COEFF_2);
--	rkisp1_write(params->rkisp1, arg->coeff3, RKISP1_CIF_ISP_CT_COEFF_3);
--	rkisp1_write(params->rkisp1, arg->coeff4, RKISP1_CIF_ISP_CT_COEFF_4);
--	rkisp1_write(params->rkisp1, arg->coeff5, RKISP1_CIF_ISP_CT_COEFF_5);
--	rkisp1_write(params->rkisp1, arg->coeff6, RKISP1_CIF_ISP_CT_COEFF_6);
--	rkisp1_write(params->rkisp1, arg->coeff7, RKISP1_CIF_ISP_CT_COEFF_7);
--	rkisp1_write(params->rkisp1, arg->coeff8, RKISP1_CIF_ISP_CT_COEFF_8);
-+	unsigned int i, j, k = 0;
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+index 91d88a96badc..7b2169d185b8 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+@@ -101,7 +101,7 @@ static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
+ 	struct cedrus_dev *dev = ctx->dev;
+ 	unsigned long used_dpbs = 0;
+ 	unsigned int position;
+-	unsigned int output = 0;
++	int output = -1;
+ 	unsigned int i;
+ 
+ 	cap_q = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
+@@ -124,6 +124,11 @@ static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
+ 		position = cedrus_buf->codec.h264.position;
+ 		used_dpbs |= BIT(position);
+ 
++		if (run->dst->vb2_buf.timestamp == dpb->reference_ts) {
++			output = position;
++			continue;
++		}
 +
-+	for (i = 0; i < 3; i++)
-+		for (j = 0; j < 3; j++)
-+			rkisp1_write(params->rkisp1, arg->coeff[i][j],
-+				     RKISP1_CIF_ISP_CT_COEFF_0 + 4 * k++);
- 	rkisp1_write(params->rkisp1, arg->ct_offset_r,
- 		     RKISP1_CIF_ISP_CT_OFFSET_R);
- 	rkisp1_write(params->rkisp1, arg->ct_offset_g,
-diff --git a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-index 8f9b061e5b6b..790d56ac9310 100644
---- a/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-+++ b/drivers/staging/media/rkisp1/uapi/rkisp1-config.h
-@@ -417,19 +417,13 @@ struct rkisp1_cif_isp_bdm_config {
- /**
-  * struct rkisp1_cif_isp_ctk_config - Configuration used by Cross Talk correction
-  *
-- * @coeff: color correction matrix
-+ * @coeff: color correction matrix. Values are 11-bit signed fixed-point numbers with 4 bit integer
-+ *		and 7 bit fractional part, ranging from -8 (0x400) to +7.992 (0x3FF). 0 is
-+ *		represented by 0x000 and a coefficient value of 1 as 0x080.
-  * @ct_offset_b: offset for the crosstalk correction matrix
-  */
- struct rkisp1_cif_isp_ctk_config {
--	__u16 coeff0;
--	__u16 coeff1;
--	__u16 coeff2;
--	__u16 coeff3;
--	__u16 coeff4;
--	__u16 coeff5;
--	__u16 coeff6;
--	__u16 coeff7;
--	__u16 coeff8;
-+	__u16 coeff[3][3];
- 	__u16 ct_offset_r;
- 	__u16 ct_offset_g;
- 	__u16 ct_offset_b;
+ 		if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+ 			continue;
+ 
+@@ -131,13 +136,11 @@ static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
+ 				    dpb->top_field_order_cnt,
+ 				    dpb->bottom_field_order_cnt,
+ 				    &pic_list[position]);
+-
+-		output = max(position, output);
+ 	}
+ 
+-	position = find_next_zero_bit(&used_dpbs, CEDRUS_H264_FRAME_NUM,
+-				      output);
+-	if (position >= CEDRUS_H264_FRAME_NUM)
++	if (output >= 0)
++		position = output;
++	else
+ 		position = find_first_zero_bit(&used_dpbs, CEDRUS_H264_FRAME_NUM);
+ 
+ 	output_buf = vb2_to_cedrus_buffer(&run->dst->vb2_buf);
 -- 
-2.17.1
+2.27.0
 
