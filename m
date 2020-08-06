@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19C5BC433E0
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:35:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59082C433E0
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:36:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CB20221E2
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:35:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B107F206B2
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:36:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729851AbgHFRfX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 13:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
+        id S1729322AbgHFRgJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 13:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729382AbgHFRfI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:35:08 -0400
+        with ESMTP id S1730411AbgHFRfY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:35:24 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E085DC0086A5;
-        Thu,  6 Aug 2020 08:19:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DB1C0086A1;
+        Thu,  6 Aug 2020 08:18:58 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 0E7D429959A
+        with ESMTPSA id A216129959B
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
@@ -36,10 +36,11 @@ Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Maxime Ripard <mripard@kernel.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Subject: [PATCH v2 14/14] media: cedrus: h264: Fix frame list construction
-Date:   Thu,  6 Aug 2020 12:13:10 -0300
-Message-Id: <20200806151310.98624-15-ezequiel@collabora.com>
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v2 08/14] media: uapi: h264: Drop SLICE_PARAMS 'size' field
+Date:   Thu,  6 Aug 2020 12:13:04 -0300
+Message-Id: <20200806151310.98624-9-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200806151310.98624-1-ezequiel@collabora.com>
 References: <20200806151310.98624-1-ezequiel@collabora.com>
@@ -50,63 +51,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jernej Skrabec <jernej.skrabec@siol.net>
+The SLICE_PARAMS control is intended for slice-based
+devices. In this mode, the OUTPUT buffer contains
+a single slice, and so the buffer's plane payload size
+can be used to query the slice size.
 
-Current frame list construction algorithm assumes that decoded image
-will be output into its own buffer. That is true for progressive content
-but not for interlaced where each field is decoded separately into same
-buffer.
+To reduce the API surface drop the size from the
+SLICE_PARAMS control.
 
-Fix that by checking if capture buffer is listed in DPB. If it is, reuse
-it.
+A follow-up change will remove other members in SLICE_PARAMS
+so we don't need to add padding fields here.
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 3 ---
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c          | 7 +++----
+ include/media/h264-ctrls.h                                | 3 ---
+ 3 files changed, 3 insertions(+), 10 deletions(-)
 
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 427fc5727ec0..fff74b7bf32a 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -1760,9 +1760,6 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+     :stub-columns: 0
+     :widths:       1 1 2
+ 
+-    * - __u32
+-      - ``size``
+-      -
+     * - __u32
+       - ``start_byte_offset``
+         Offset (in bytes) from the beginning of the OUTPUT buffer to the start
 diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-index 91d88a96badc..7b2169d185b8 100644
+index a9ba78b15907..8b6f05aadbe8 100644
 --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
 +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-@@ -101,7 +101,7 @@ static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
+@@ -324,17 +324,16 @@ static void cedrus_set_params(struct cedrus_ctx *ctx,
+ 	struct vb2_buffer *src_buf = &run->src->vb2_buf;
  	struct cedrus_dev *dev = ctx->dev;
- 	unsigned long used_dpbs = 0;
- 	unsigned int position;
--	unsigned int output = 0;
-+	int output = -1;
- 	unsigned int i;
+ 	dma_addr_t src_buf_addr;
+-	u32 len = slice->size * 8;
++	size_t slice_bytes = vb2_get_plane_payload(src_buf, 0);
+ 	unsigned int pic_width_in_mbs;
+ 	bool mbaff_pic;
+ 	u32 reg;
  
- 	cap_q = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-@@ -124,6 +124,11 @@ static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
- 		position = cedrus_buf->codec.h264.position;
- 		used_dpbs |= BIT(position);
+-	cedrus_write(dev, VE_H264_VLD_LEN, len);
++	cedrus_write(dev, VE_H264_VLD_LEN, slice_bytes * 8);
+ 	cedrus_write(dev, VE_H264_VLD_OFFSET, 0);
  
-+		if (run->dst->vb2_buf.timestamp == dpb->reference_ts) {
-+			output = position;
-+			continue;
-+		}
-+
- 		if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
- 			continue;
+ 	src_buf_addr = vb2_dma_contig_plane_dma_addr(src_buf, 0);
+-	cedrus_write(dev, VE_H264_VLD_END,
+-		     src_buf_addr + vb2_get_plane_payload(src_buf, 0));
++	cedrus_write(dev, VE_H264_VLD_END, src_buf_addr + slice_bytes);
+ 	cedrus_write(dev, VE_H264_VLD_ADDR,
+ 		     VE_H264_VLD_ADDR_VAL(src_buf_addr) |
+ 		     VE_H264_VLD_ADDR_FIRST | VE_H264_VLD_ADDR_VALID |
+diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
+index 4f05ee265997..f74736fcfa00 100644
+--- a/include/media/h264-ctrls.h
++++ b/include/media/h264-ctrls.h
+@@ -158,9 +158,6 @@ struct v4l2_h264_reference {
+ };
  
-@@ -131,13 +136,11 @@ static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
- 				    dpb->top_field_order_cnt,
- 				    dpb->bottom_field_order_cnt,
- 				    &pic_list[position]);
+ struct v4l2_ctrl_h264_slice_params {
+-	/* Size in bytes, including header */
+-	__u32 size;
 -
--		output = max(position, output);
- 	}
+ 	/* Offset in bytes to the start of slice in the OUTPUT buffer. */
+ 	__u32 start_byte_offset;
  
--	position = find_next_zero_bit(&used_dpbs, CEDRUS_H264_FRAME_NUM,
--				      output);
--	if (position >= CEDRUS_H264_FRAME_NUM)
-+	if (output >= 0)
-+		position = output;
-+	else
- 		position = find_first_zero_bit(&used_dpbs, CEDRUS_H264_FRAME_NUM);
- 
- 	output_buf = vb2_to_cedrus_buffer(&run->dst->vb2_buf);
 -- 
 2.27.0
 
