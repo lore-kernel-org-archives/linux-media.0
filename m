@@ -2,94 +2,84 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C06EAC4346B
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 11:04:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FB9EC47274
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 11:04:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B123522CF6
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 11:04:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13B0B22CA1
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 11:04:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="g3zLm8dN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728109AbgHFGWS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 02:22:18 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:65154 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726051AbgHFGWS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 02:22:18 -0400
-Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 05 Aug 2020 23:22:16 -0700
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 05 Aug 2020 23:22:15 -0700
-Received: from c-mansur-linux.qualcomm.com ([10.204.90.208])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 06 Aug 2020 11:52:01 +0530
-Received: by c-mansur-linux.qualcomm.com (Postfix, from userid 461723)
-        id D087F21C62; Thu,  6 Aug 2020 11:51:59 +0530 (IST)
-From:   Mansur Alisha Shaik <mansur@codeaurora.org>
-To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, saiprakash.ranjan@codeaurora.org,
-        Mansur Alisha Shaik <mansur@codeaurora.org>
-Subject: [PATCH V3] venus: core: add shutdown callback for venus
-Date:   Thu,  6 Aug 2020 11:51:57 +0530
-Message-Id: <1596694917-7761-1-git-send-email-mansur@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S1728418AbgHFHaH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 03:30:07 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:56711 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728298AbgHFHaG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 03:30:06 -0400
+X-UUID: 011edb3985af4447af090da0ddf01205-20200806
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=B8qaPDjKTfOIbqITwnr8BqIaksFSTvTxUkaMPB1xRYM=;
+        b=g3zLm8dNbp40J01i/yYzw2SMc2ExBI05wGquGdG69920gPZgXvfI6VXaLA4k7986fVAp+6tm4log+Wkt879Ddgof6meoYTYVz8K5CILNhXcDn/SpS/A3eKczVJuBQtHCyM77zomip9fGHzR4twHAswjPqDR572ux28X9RLZUvUM=;
+X-UUID: 011edb3985af4447af090da0ddf01205-20200806
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <frederic.chen@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1899365968; Thu, 06 Aug 2020 15:30:02 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 6 Aug 2020 15:29:59 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 6 Aug 2020 15:29:59 +0800
+From:   <frederic.chen@mediatek.com>
+To:     <hans.verkuil@cisco.com>,
+        <laurent.pinchart+renesas@ideasonboard.com>, <tfiga@chromium.org>,
+        <matthias.bgg@gmail.com>, <mchehab@kernel.org>
+CC:     <yuzhao@chromium.org>, <zwisler@chromium.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <Sean.Cheng@mediatek.com>,
+        <sj.huang@mediatek.com>, <christie.yu@mediatek.com>,
+        <frederic.chen@mediatek.com>, <linux-media@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>
+Subject: [PATCH V1] media: mc-device.c: change media_device_request_alloc to match media_ioctl_info
+Date:   Thu, 6 Aug 2020 15:29:52 +0800
+Message-ID: <20200806072952.11709-2-frederic.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20200806072952.11709-1-frederic.chen@mediatek.com>
+References: <20200806072952.11709-1-frederic.chen@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 0A052C7018DA07F1261F4C1F1DC0A8B028AFDDE8F537988F71012BDB323D49AF2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-After the SMMU translation is disabled in the
-arm-smmu shutdown callback during reboot, if
-any subsystem are still alive then IOVAs they
-are using will become PAs on bus, which may
-lead to crash.
-
-Below are the consumers of smmu from venus
-arm-smmu: consumer: aa00000.video-codec supplier=15000000.iommu
-arm-smmu: consumer: video-firmware.0 supplier=15000000.iommu
-
-So implemented shutdown callback, which detach iommu maps.
-
-Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
----
-Changes in V3:
-- Fix build errors
-
- drivers/media/platform/qcom/venus/core.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 203c653..cfe211a 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -341,6 +341,16 @@ static int venus_remove(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static void venus_core_shutdown(struct platform_device *pdev)
-+{
-+	struct venus_core *core = platform_get_drvdata(pdev);
-+	int ret;
-+
-+	ret = venus_remove(pdev);
-+	if (ret)
-+		dev_warn(core->dev, "shutdown failed %d\n", ret);
-+}
-+
- static __maybe_unused int venus_runtime_suspend(struct device *dev)
- {
- 	struct venus_core *core = dev_get_drvdata(dev);
-@@ -592,6 +602,7 @@ static struct platform_driver qcom_venus_driver = {
- 		.of_match_table = venus_dt_match,
- 		.pm = &venus_pm_ops,
- 	},
-+	.shutdown = venus_core_shutdown,
- };
- module_platform_driver(qcom_venus_driver);
- 
--- 
-2.7.4
+RnJvbTogRnJlZGVyaWMgQ2hlbiA8ZnJlZGVyaWMuY2hlbkBtZWRpYXRlay5jb20+DQoNCldlIG1v
+ZGlmaWVkIHRoZSB0eXBlIG9mIG1lZGlhX2RldmljZV9yZXF1ZXN0X2FsbG9jKCkncyBzZWNvbmQN
+CnBhcmFtZXRlciBmcm9tIGludCogdG8gdm9pZCogc28gdGhhdCBpdCBjYW4gbWF0Y2ggdGhlIGlu
+dGVyZmFjZQ0KZGVmaW5lZCBpbiBzdHJ1Y3QgbWVkaWFfaW9jdGxfaW5mby4NCg0KU2lnbmVkLW9m
+Zi1ieTogRnJlZGVyaWMgQ2hlbiA8ZnJlZGVyaWMuY2hlbkBtZWRpYXRlay5jb20+DQotLS0NCiBk
+cml2ZXJzL21lZGlhL21jL21jLWRldmljZS5jIHwgNSArKystLQ0KIDEgZmlsZSBjaGFuZ2VkLCAz
+IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL21l
+ZGlhL21jL21jLWRldmljZS5jIGIvZHJpdmVycy9tZWRpYS9tYy9tYy1kZXZpY2UuYw0KaW5kZXgg
+ZGE4MDg4MzUxMTM1Li5iYzViNWVjYjY1ODEgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL21lZGlhL21j
+L21jLWRldmljZS5jDQorKysgYi9kcml2ZXJzL21lZGlhL21jL21jLWRldmljZS5jDQpAQCAtMzcw
+LDkgKzM3MCwxMCBAQCBzdGF0aWMgbG9uZyBtZWRpYV9kZXZpY2VfZ2V0X3RvcG9sb2d5KHN0cnVj
+dCBtZWRpYV9kZXZpY2UgKm1kZXYsIHZvaWQgKmFyZykNCiAJcmV0dXJuIHJldDsNCiB9DQogDQot
+c3RhdGljIGxvbmcgbWVkaWFfZGV2aWNlX3JlcXVlc3RfYWxsb2Moc3RydWN0IG1lZGlhX2Rldmlj
+ZSAqbWRldiwNCi0JCQkJICAgICAgIGludCAqYWxsb2NfZmQpDQorc3RhdGljIGxvbmcgbWVkaWFf
+ZGV2aWNlX3JlcXVlc3RfYWxsb2Moc3RydWN0IG1lZGlhX2RldmljZSAqbWRldiwgdm9pZCAqYXJn
+KQ0KIHsNCisJaW50ICphbGxvY19mZCA9IGFyZzsNCisNCiAjaWZkZWYgQ09ORklHX01FRElBX0NP
+TlRST0xMRVJfUkVRVUVTVF9BUEkNCiAJaWYgKCFtZGV2LT5vcHMgfHwgIW1kZXYtPm9wcy0+cmVx
+X3ZhbGlkYXRlIHx8ICFtZGV2LT5vcHMtPnJlcV9xdWV1ZSkNCiAJCXJldHVybiAtRU5PVFRZOw0K
+LS0gDQoyLjE4LjANCg==
 
