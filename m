@@ -2,177 +2,206 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40A3CC433E1
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 18:52:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EABAC433E0
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 19:01:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 68373206A2
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 18:52:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76633206C3
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 19:01:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="TVW6GZDZ"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="WXxN76ry"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728370AbgHFSv7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 14:51:59 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:6689 "EHLO
+        id S1729310AbgHFTBq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 15:01:46 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:7210 "EHLO
         hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728341AbgHFSv6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 14:51:58 -0400
+        with ESMTP id S1728715AbgHFTBk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 15:01:40 -0400
 Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f2c50e90000>; Thu, 06 Aug 2020 11:50:17 -0700
+        id <B5f2c532e0000>; Thu, 06 Aug 2020 11:59:58 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 06 Aug 2020 11:51:58 -0700
+  Thu, 06 Aug 2020 12:01:39 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 06 Aug 2020 11:51:58 -0700
-Received: from [10.2.172.190] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 6 Aug
- 2020 18:51:56 +0000
-Subject: Re: [PATCH v8 08/10] gpu: host1x: mipi: Keep MIPI clock enabled till
- calibration is done
+        by hqpgpgate101.nvidia.com on Thu, 06 Aug 2020 12:01:39 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 6 Aug
+ 2020 19:01:38 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 6 Aug 2020 19:01:38 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.172.190]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5f2c53910000>; Thu, 06 Aug 2020 12:01:38 -0700
 From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-CC:     <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
         <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
-        <helen.koike@collabora.com>, <gregkh@linuxfoundation.org>,
+        <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <gregkh@linuxfoundation.org>,
         <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1596469346-937-1-git-send-email-skomatineni@nvidia.com>
- <9ef0b875-e826-43e2-207e-168d2081ff6a@nvidia.com>
- <4689cfe9-e7c4-48bf-217f-3a31b59b8bda@nvidia.com>
- <0e78c5ca-c529-1e98-891d-30351c9aae81@gmail.com>
- <b2098a68-d02f-b406-fc57-56e3ff5d8d1a@nvidia.com>
- <309e3b66-9288-91ef-71b4-be73eacbbd62@nvidia.com>
- <fde2431a-0585-ac32-ac25-73e198aaa948@nvidia.com>
- <4025a458-fa78-924d-c84f-166f82df0f8e@gmail.com>
- <4f15d655-3d62-cf9f-82da-eae379d60fa6@nvidia.com>
- <b5612e93-f1c4-4762-baa1-5d85eb1edbe1@gmail.com>
- <412f8c53-1aca-db31-99a1-a0ecb2081ca5@nvidia.com>
- <61275bd6-58e7-887f-aa7d-8e60895e7b2b@nvidia.com>
- <6ff57c38-9847-42b0-643b-0d167c13779f@gmail.com>
- <c6ef5e77-2b0a-1712-ca58-dbd8d232e1f1@nvidia.com>
- <ed79b201-85ba-f725-c5fa-fcde0761bc3d@nvidia.com>
- <26ed2841-db5d-aeb0-11c7-cbe2ddd1d76b@gmail.com>
- <eddfdaf0-818a-c4dd-e3b4-4d432af56982@nvidia.com>
- <e965076a-dc31-5774-dd27-98c992331bd2@gmail.com>
- <50aa439e-a572-ce77-9d06-e060304b9bd4@nvidia.com>
-Message-ID: <3a4be8e9-32a5-e7d8-8727-8d860368bc8e@nvidia.com>
-Date:   Thu, 6 Aug 2020 11:51:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Subject: [PATCH v9 04/10] dt-bindings: tegra: Update VI and CSI bindings with port info
+Date:   Thu, 6 Aug 2020 12:01:28 -0700
+Message-ID: <1596740494-19306-5-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1596740494-19306-1-git-send-email-skomatineni@nvidia.com>
+References: <1596740494-19306-1-git-send-email-skomatineni@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <50aa439e-a572-ce77-9d06-e060304b9bd4@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1596739817; bh=sNS7CrF9bquAWxzjW1qwHZX1tFt2IjxwG+MjH4EMj3w=;
-        h=X-PGP-Universal:Subject:From:To:CC:References:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=TVW6GZDZ9RUuNdZotheXeFv4tesHNIADrW44ms1F9qHg85GLLMeuZF0CAENhanDlF
-         /6VT6uqzGVHcnjTPky4S1fUCVnT2GIACPHnH4PSeT7pAPmhygxlYY5rPFW0j24bvSi
-         zx3s/iIohm7PW9TbHJ0bQF0CeH+J9Se9Um3bni8zBlQDXa6VQ2O3FDpo5wgqck1K5l
-         4G2bRhYE8UXakyQ8vTYiLKfzUtN8t47JOBptjUGMXrYWsHdTxg8Kpc8J7g82FWu/3h
-         DBdbMZ1bHyMl3vYM4xUnCoNsNgNQOVj7uuc6Em7jjo9O2htyibMfCd8tIPkyEI6P3r
-         2S8r+0/rFtlYA==
+        t=1596740398; bh=BnlKr3cpHbqR2/ypGaWrf+nRHayXIJrs4Q9+28+PHhQ=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=WXxN76rylGb9RBk3KMWSql+DJoSqrdSAycX4A4eOHomkO5Kc99aQNdtz87js/0t1c
+         8zaRGqj0wMWE2UFA6zYUlF5FrQxYGwzbr3yj6Bi5GULW7rxSJ66pLJHfH8tJv2t5G5
+         7073JzzTO5l0gl82BjhhNToPg2x6dpfLE7JgnIswLLjvyKHpnrqO3mg9eGiqLrLQQy
+         8NNTMHyI0/5JiG7sxQnskO0M9u0Ba06+D9mDc4rsuX/2iOaPXUJgkVKF9bEsEQsNp6
+         SXKNboYs4gErZDHQFp+waSd/5jaTtjkrbRVPZJn85ig9v7pdz1uyfRALPoBDaBcWLw
+         H7pXinLAsRPSA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Update VI and CSI bindings to add port and endpoint nodes as per
+media video-interfaces DT binding document.
 
-On 8/6/20 11:44 AM, Sowjanya Komatineni wrote:
->
-> On 8/6/20 11:18 AM, Dmitry Osipenko wrote:
->> 06.08.2020 21:07, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>> On 8/6/20 11:01 AM, Dmitry Osipenko wrote:
->>>> 06.08.2020 20:52, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>>> ...
->>>>> Right mutex_unlock should happen at end of finish_calibration.
->>>>>
->>>>> With keeping mutex locked in start, we dont have to check for=20
->>>>> active to
->>>>> be 0 to issue start as mutex will keep it locked and other pads
->>>>> calibration can only go thru when current one is done.
->>>>>
->>>>> So instead of below sequence, its simpler to do this way?
->>>>>
->>>>> start_calibration()
->>>>>
->>>>> - mutex_lock
->>>>>
->>>>> - wait for 72uS after start
->>>>>
->>>>> finish_calibration()
->>>>>
->>>>> - keep check for ACTIVE =3D 0 and DONE =3D 1
->>>> I think only the DONE bits which correspond to the mipi_device->pads
->>>> bitmask should be awaited.
->>> As next START can't be triggered when auto cal is ACTIVE, we should=20
->>> keep
->>> this in finish.
->>>
->>> As we do mutex_unlock only at end of finish, other pads calibrations
->>> dont go thru till the one in process is finished.
->>>
->>> So in this case ACTIVE applies to current selected pads that are under
->>> calibration.
->> Should be better to check only the relevant bits in order to catch bugs,
->> otherwise you may get a DONE status from the irrelevant pads.
-> tegra_mipi_device is separate for DSI and CSI channels. mutex lock=20
-> used during calibrate is device specific lock.
-> So, it will not prevent other devices to hold till on going=20
-> calibration is done unless we add wait for active bit before=20
-> triggering start.
->
-> Currently we wait for active bit at end during calibration done check=20
-> after start trigger. But when other devices go thru calibration in=20
-> parallel as lock is device specific and not common lock for all=20
-> devices it will trigger start but MIPI calibration logic ignore if=20
-> previous calibration is still in progress.
->
-> Need to serialize calibration start requests from different devices=20
-> based on ACTIVE bit.
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+---
+ .../display/tegra/nvidia,tegra20-host1x.txt        | 92 +++++++++++++++++++++-
+ 1 file changed, 90 insertions(+), 2 deletions(-)
 
-Sorry confused. MIPI driver is using common lock from tegra_mipi for all=20
-tegra_mipi_device
+diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
+index 4731921..ac63ae4a 100644
+--- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
++++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
+@@ -51,8 +51,16 @@ of the following host1x client modules:
+       - vi
+   - Tegra210:
+     - power-domains: Must include venc powergate node as vi is in VE partition.
+-  - Tegra210 has CSI part of VI sharing same host interface and register space.
+-    So, VI device node should have CSI child node.
++
++  ports (optional node)
++  vi can have optional ports node and max 6 ports are supported. Each port
++  should have single 'endpoint' child node. All port nodes are grouped under
++  ports node. Please refer to the bindings defined in
++  Documentation/devicetree/bindings/media/video-interfaces.txt
++
++  csi (required node)
++  Tegra210 has CSI part of VI sharing same host interface and register space.
++  So, VI device node should have CSI child node.
+ 
+     - csi: mipi csi interface to vi
+ 
+@@ -65,6 +73,46 @@ of the following host1x client modules:
+       - power-domains: Must include sor powergate node as csicil is in
+         SOR partition.
+ 
++      channel (optional nodes)
++      Maximum 6 channels are supported with each csi brick as either x4 or x2
++      based on hw connectivity to sensor.
++
++      Required properties:
++      - reg: csi port number. Valid port numbers are 0 through 5.
++      - nvidia,mipi-calibrate: Should contain a phandle and a specifier
++        specifying which pads are used by this CSI port and need to be
++	calibrated. See also ../display/tegra/nvidia,tegra114-mipi.txt.
++
++      Each channel node must contain 2 port nodes which can be grouped
++      under 'ports' node and each port should have a single child 'endpoint'
++      node.
++
++        ports node
++        Please refer to the bindings defined in
++        Documentation/devicetree/bindings/media/video-interfaces.txt
++
++        ports node must contain below 2 port nodes.
++        port@0 with single child 'endpoint' node always a sink.
++        port@1 with single child 'endpoint' node always a source.
++
++        port@0 (required node)
++        Required properties:
++        - reg: 0
++
++	  endpoint (required node)
++	  Required properties:
++	  - data-lanes: an array of data lane from 1 to 4. Valid array
++	    lengths are 1/2/4.
++	  - remote-endpoint: phandle to sensor 'endpoint' node.
++
++        port@1 (required node)
++        Required properties:
++        - reg: 1
++
++	  endpoint (required node)
++	  Required properties:
++	  - remote-endpoint: phandle to vi port 'endpoint' node.
++
+ - epp: encoder pre-processor
+ 
+   Required properties:
+@@ -340,6 +388,18 @@ Example:
+ 
+ 			ranges = <0x0 0x0 0x54080000 0x2000>;
+ 
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					reg = <0>;
++					imx219_vi_in0: endpoint {
++						remote-endpoint = <&imx219_csi_out0>;
++					};
++				};
++			};
++
+ 			csi@838 {
+ 				compatible = "nvidia,tegra210-csi";
+ 				reg = <0x838 0x1300>;
+@@ -362,6 +422,34 @@ Example:
+ 					 <&tegra_car TEGRA210_CLK_CSI_TPG>;
+ 				clock-names = "csi", "cilab", "cilcd", "cile", "csi_tpg";
+ 				power-domains = <&pd_sor>;
++
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				channel@0 {
++					reg = <0>;
++					nvidia,mipi-calibrate = <&mipi 0x001>;
++
++					ports {
++						#address-cells = <1>;
++						#size-cells = <0>;
++
++						port@0 {
++							reg = <0>;
++							imx219_csi_in0: endpoint {
++								data-lanes = <1 2>;
++								remote-endpoint = <&imx219_out0>;
++							};
++						};
++
++						port@1 {
++							reg = <1>;
++							imx219_csi_out0: endpoint {
++								remote-endpoint = <&imx219_vi_in0>;
++							};
++						};
++					};
++				};
+ 			};
+ 		};
+ 
+-- 
+2.7.4
 
-So should be ok as only one device start_calibration can happen at a time.
-
-But its still good to check ACTIVE is cleared and to report as error if=20
-not as ACTIVE will be cleared once set of pads enabled for this calibration=
-.
-
-Eg: CSI port can be 4 lane and all 4 pads gets enabled at same time and=20
-with this ACTIVE should still be verified to be 0 to make sure all pads=20
-calibration is done
-
->
->>>> Perhaps the start_calibration() also needs to be changed to not touch
->>>> the MIPI_CAL_CONFIG bits of the unrelated pads?
->>> Driver already takes care of programming corresponding pads config=20
->>> only.
->> It writes 0 to the config of the unrelated pads, which probably isn't
->> nice if some pads use periodic auto-calibration.
->>
->> https://elixir.bootlin.com/linux/v5.8/source/drivers/gpu/host1x/mipi.c#L=
-350=20
->>
->>
->> Although looks like auto-calibration isn't supported by the current=20
->> driver.
->
-> Yes we don't use auto-calibration.
->
-> Only common bit here is MIPI_CAL_CTRL start. All others are pad=20
-> specific currently.
->
