@@ -2,128 +2,130 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9F0DC433E0
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:19:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BD7C433E0
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:22:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12DA423119
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:19:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 783DD23119
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 17:22:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="BZ9RgeKW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lsc6cj3S"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729578AbgHFRS4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 13:18:56 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:40497 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730460AbgHFRSf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 6 Aug 2020 13:18:35 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 3fqskhfymywL53fqtk4ZKC; Thu, 06 Aug 2020 15:22:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1596720156; bh=RUNHmjWKtE61EzaljHMlZ14pOR3jiEYUObArwQ/lc5k=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=BZ9RgeKWTMhePMWLmav9dt6PJCdqwPJMPWlUU16kbG1ry0kH5WNpCwNydKllbnRBC
-         BqCbihIRJM/z5YNJ9JpCM7aAlTBW13wqhgqRNRUL5189IFCioYR3Pmfj+1BCkby+66
-         H2wbjUjwvdsdey++cqEw8b6c4ijOWikhDuta0Jr72fn3VZNC7HO9v/YocnkXzxiV9Z
-         M1Pi7LB4GtGkZHZtz8puCqNizEa8XknLRH4zUq4yFtS1Ya5d7KHBLT3HSJulhOrT0g
-         8OcrK9yGKSnZ0JpHzXLF1obtwBfEJd4cGB7jqR5735ThRlyfT47i0B1Uc+iiwIkK02
-         0YuCJ1N7ijggg==
-Subject: Re: [PATCH 1/4] media: docs: Describe pixel array properties
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
-        libcamera-devel@lists.libcamera.org
-References: <20200805105721.15445-1-jacopo@jmondi.org>
- <20200805105721.15445-2-jacopo@jmondi.org>
- <184f8787-ebf1-90e3-82b3-44fa66e65a84@xs4all.nl>
- <20200806095038.tc6mmwknqdinaeth@uno.localdomain>
- <f4e50cbb-8b25-1269-d8b9-9c81fa73b7e1@xs4all.nl>
- <20200806125445.GA16270@paasikivi.fi.intel.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <1ee9f378-8df1-7c03-2136-ce7870934443@xs4all.nl>
-Date:   Thu, 6 Aug 2020 15:22:34 +0200
+        id S1729705AbgHFRVx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 13:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730518AbgHFRPf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 13:15:35 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96871C061574;
+        Thu,  6 Aug 2020 10:15:34 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id v12so22306615ljc.10;
+        Thu, 06 Aug 2020 10:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ALTYLAQ3IF5Q6AInIrtNyU1qBePxrCmDcDyuOTeQy9Y=;
+        b=Lsc6cj3SvMXYewcgpRmsTLJWDJws5KlVPLifrBe2vi4HVkdkdGH1OCIF6qt/b0TYdb
+         fBQPjv7cXyTeNR3+T20qb8C/yyMeQvxj3NVIiI4bqRwEAsJPIMR7/9zaq7b2pGV45h8o
+         /NoWgLWNl/NiZ3AwJvq23BIswzmbukHgeqGvNTxoO05/f46YsD77+bZ1b7XohBkw35nq
+         hB8YpgpxCgZTBmXIcneCC02ZEkajficPHsvV0fDZeqw50DHGQ5/MDgbprRQEo/pYjrqY
+         7wA0IIp4TH59c4xrPUidMptTRzw2d5cxjOEIoeBxhJkLU27YDJpoh/3fijuvKru04zD+
+         A4eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ALTYLAQ3IF5Q6AInIrtNyU1qBePxrCmDcDyuOTeQy9Y=;
+        b=FON4IyIFl0RH/S2wFfNm7s/Gl2zBY9kLjhcg7fMgQq+0MxY5MQtkbhhLvl5OZNVCHr
+         1Qcn3x5F4eNcE3H4WIFPVpZalvFzk/z+tbG0pgdo4U54lGFsSHMrsDMHxNKKGzb0MGEX
+         ttK94PTbQE6rNqaW1HrA5romngYjNNwbuGo5D+vwpOdMWQvtc2dScul7+LAQDSgPqCsA
+         WIhP143Zc77XRn+JnLV1+fQEALgR25+hetnavJZiCwzFsk3FWdpFiNw7YjKktWpOB1bf
+         J1S1wzbCbTswEhhO7sEOYrJQdhbmSam6Zt/XiSRCgOd5DaGxpX1GA2GKL7Hak09e14QF
+         iUmw==
+X-Gm-Message-State: AOAM530oO/7WKTOsTqAQSRP9zFmY71M2sfTElYjzf/ecJRKism7dwYkQ
+        XenwsD2YupCLcFgfApNDj+HPYopR
+X-Google-Smtp-Source: ABdhPJw1gE+yOOHWwMRLcp4zdcZbVUSxeeiv3EB7wxlT/Df1tq89MCqwbfznDRb+nFU9xwx5yHOAYQ==
+X-Received: by 2002:a2e:92c4:: with SMTP id k4mr4458094ljh.238.1596734132840;
+        Thu, 06 Aug 2020 10:15:32 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-41-50.dynamic.spd-mgts.ru. [94.29.41.50])
+        by smtp.googlemail.com with ESMTPSA id k12sm2680295ljh.95.2020.08.06.10.15.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Aug 2020 10:15:32 -0700 (PDT)
+Subject: Re: [PATCH v8 08/10] gpu: host1x: mipi: Keep MIPI clock enabled till
+ calibration is done
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     jonathanh@nvidia.com, frankc@nvidia.com, hverkuil@xs4all.nl,
+        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1596469346-937-1-git-send-email-skomatineni@nvidia.com>
+ <20200805134600.GA3351349@ulmo>
+ <103efe31-1abc-54f2-6004-490d7bb1b61a@gmail.com>
+ <dcd58ae7-58ed-11d1-0e10-7f522b651b30@gmail.com>
+ <addb92e5-7c7a-6fba-117d-c7880b2d4597@nvidia.com>
+ <ed80bf2f-213f-286a-59b2-fc85e4181b3d@gmail.com>
+ <6eede805-80fd-016f-22f8-b6d25f6587af@nvidia.com>
+ <1c12e40e-de7f-0599-a941-82760b4c7668@gmail.com>
+ <9ef0b875-e826-43e2-207e-168d2081ff6a@nvidia.com>
+ <4689cfe9-e7c4-48bf-217f-3a31b59b8bda@nvidia.com>
+ <0e78c5ca-c529-1e98-891d-30351c9aae81@gmail.com>
+ <b2098a68-d02f-b406-fc57-56e3ff5d8d1a@nvidia.com>
+ <309e3b66-9288-91ef-71b4-be73eacbbd62@nvidia.com>
+ <fde2431a-0585-ac32-ac25-73e198aaa948@nvidia.com>
+ <4025a458-fa78-924d-c84f-166f82df0f8e@gmail.com>
+ <4f15d655-3d62-cf9f-82da-eae379d60fa6@nvidia.com>
+ <b5612e93-f1c4-4762-baa1-5d85eb1edbe1@gmail.com>
+ <412f8c53-1aca-db31-99a1-a0ecb2081ca5@nvidia.com>
+ <04413bc8-8d89-7e57-9b34-84bb11ecb008@gmail.com>
+ <60c38774-05d6-2825-bec5-be5eee9c3dea@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <55e02aa3-98cd-3570-3e54-c55a4b3687ef@gmail.com>
+Date:   Thu, 6 Aug 2020 20:15:31 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200806125445.GA16270@paasikivi.fi.intel.com>
+In-Reply-To: <60c38774-05d6-2825-bec5-be5eee9c3dea@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfBdgPbFoVgDv1u1ASPkUZgMGyJ3087RIhCO6Dqw7qrrTM8JL/KY1l310LgZT0CvwMfMz2fmw/UMt6t6dVs95bFNmEUT9dXKJjx+RyTmKzVaC7g8dV3A1
- PKP9xX03hwpzbbNsu6oX8N2pDx7vndtmYlX4S3g2QSHJ3ri2HjEsG9rDLptCSzoM+rny5u8bzKV4DF0LawKKu51QL1tPsluP4/7TzpmR51oY0zO7YvXXMMM+
- dDxkLno2uep4hq6HXC7CT3FAJl4PIovFbF/g5bOUaJiRg7/QgOJsbzQJuiyeTk9/zoFkiZdELVY17m1DSNstRBw+Z2F4geOjMGT6xn6HMKGttU0m/BhdfsNS
- se7FV9IBKUk0JCxX1a3HRoHKA/N4P19yfVtA0q+nmqG0QymITHw9M2UcYi74mSIIcqhiVLDwLUd2aMpW8pKrmvse+hzm7VT0zoOVg4kzdx/kQj/U87iRDTG+
- B7kJX4I/3sD919kYC4I+uY9vY2bICncp/QUweqCNe/5QIsn0J4Q4OR7/Znk=
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 06/08/2020 14:54, Sakari Ailus wrote:
-> Hi Hans,
+06.08.2020 19:51, Sowjanya Komatineni пишет:
+>>>> What about to add 72us delay to the end of start_calibration() in order
+>>>> to ensure that FSM is finished before LP-11?
+>>> Why we should add 72uS in start_calibration() when can use same
+>>> finish_calibration() for both pass/fail cases?
+>>>
+>>> Only timing loose we see is in case of failure we still wait for 250ms
+>>> and as this is failing case I hope should be ok.
+>>>
+>> You said that calibration settings are applied to pads on LP-11, but if
+>> LP-11 happens before FSM is finished, then what values will be applied
+>> if any?
 > 
-> On Thu, Aug 06, 2020 at 11:58:31AM +0200, Hans Verkuil wrote:
->> On 06/08/2020 11:50, Jacopo Mondi wrote:
->>> Hi Hans,
->>>
->>> On Thu, Aug 06, 2020 at 10:05:37AM +0200, Hans Verkuil wrote:
->>>> Hi Jacopo,
->>>>
->>>> Some review comments below:
->>>>
->>>> On 05/08/2020 12:57, Jacopo Mondi wrote:
->>>>> +Analog crop rectangle
->>>>
->>>> Why analog? It's just the crop rectangle, nothing analog about it.
->>>>
->>>
->>> We used the 'analogCrop' term in libcamera to differentiate the
->>> cropping which happens on the sensor pixel array matrix to select the
->>> region to process and produce image from. Sensor with an on-board
->>> scaler can perform other cropping steps to implement, in example digital
->>> zoom, so we expect to have a 'digital crop' phase as well. RAW
->>> sensors, in example, will only have an analogCrop rectangle.
->>>
->>> Quoting the libcamera definition of analog crop:
->>>
->>>  * horizontal and vertical sizes define the portion of the pixel array which
->>>  * is read-out and provided to the sensor's internal processing pipeline, before
->>>  * any pixel sub-sampling method, such as pixel binning, skipping and averaging
->>>  * take place.
->>>
->>> should I keep it or remove it ?
->>
->> It's a very confusing term. Especially since this API can also be used with analog
->> video capture devices (Composite/S-Video) where the video signal actually is analog.
->>
->> In the V4L2 API there is no such thing as 'analog crop', so please remove it.
+> No calibration logic will check for LP-11 only after finishing
+> calibration sequence codes.
 > 
-> There isn't in the V4L2 API but I don't see why we couldn't document it
-> here. Analogue crop is an established term related to raw (perhaps others,
-> too?) camera sensors which describes cropping that is implemented by not
-> reading parts of the pixel array.
-> 
-> As this documentation only applies to camera sensors, I think it's entirely
-> appropriate to document this here, and using that term.
-> 
+> After that if it sees LP-11, it will apply results to pads and DONE bit
+> will then be set to 1 indication pad results update.
 
-It's always been called just 'crop' in the V4L2 API, so renaming it suddenly
-to something else is IMHO confusing. What you can do, however, is that in the
-description of the "crop rectangle" you mention that "it is also known as
-"analog crop" in the context of camera sensors.
+Are you sure that HW doesn't use level-triggered logic for LP-11 signal?
 
-With perhaps some more extensive explanation of the term.
+> Unfortunately like I said we don't have status indication for
+> calibrating finished before waiting for LP-11.
 
-Regards,
-
-	Hans
+This is not a problem if hardware can cope with LP-11 happened at the
+time of calibration. If hardware can't cope with that, then somethings
+needs to be done about it.
