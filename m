@@ -2,106 +2,121 @@ Return-Path: <SRS0=QvgN=BQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40FE7C38158
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 11:04:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22855C433FE
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 11:05:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3117B22CAE
-	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 11:04:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D802204FD
+	for <linux-media@archiver.kernel.org>; Thu,  6 Aug 2020 11:05:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ldAGfpV+"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="sxoCuLkS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728712AbgHFHaI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Aug 2020 03:30:08 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:42930 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728334AbgHFHaH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Aug 2020 03:30:07 -0400
-X-UUID: 720e5f01ea0748e9b15c61dd3ddfae6f-20200806
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=HPY1Y8WchrDTl7dW9nXX5eI/MbrnUntKhJLM+zFG4Ko=;
-        b=ldAGfpV+ws5Wa7QwAJzZLrDKqDaDR8ozIdBSqykIHKFRRFEkFQi6wM+qWHOelZOB01TJjvtwZjrKyu/m11hOotpa9O3BJYKz33Z4UbsKuynxpieDN9ZSDDMb+G8WhFqLQDE0opBURo472+NRY0zrXnTsoiZWy+MpraCiVFVpc24=;
-X-UUID: 720e5f01ea0748e9b15c61dd3ddfae6f-20200806
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <frederic.chen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1028963311; Thu, 06 Aug 2020 15:30:01 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 6 Aug 2020 15:29:59 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 6 Aug 2020 15:29:59 +0800
-From:   <frederic.chen@mediatek.com>
-To:     <hans.verkuil@cisco.com>,
-        <laurent.pinchart+renesas@ideasonboard.com>, <tfiga@chromium.org>,
-        <matthias.bgg@gmail.com>, <mchehab@kernel.org>
-CC:     <yuzhao@chromium.org>, <zwisler@chromium.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <Sean.Cheng@mediatek.com>,
-        <sj.huang@mediatek.com>, <christie.yu@mediatek.com>,
-        <frederic.chen@mediatek.com>, <linux-media@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>
-Subject: [PATCH 0/1] media: change media_device_request_alloc to match media_ioctl_info
-Date:   Thu, 6 Aug 2020 15:29:51 +0800
-Message-ID: <20200806072952.11709-1-frederic.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S1728677AbgHFHnB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Aug 2020 03:43:01 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:52423 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727998AbgHFHm6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 6 Aug 2020 03:42:58 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id 3aY9k75OMuuXO3aYAknFvT; Thu, 06 Aug 2020 09:42:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1596699775; bh=T4xmSgXs0W8ROOKjQGmNEDC52VAJozMGJbV9msYiY78=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=sxoCuLkSAHsCrhGUN8kwQr4MgQGFYrWB2DLyVpXFkivfqUfIMRF3Axub2IzCkgVO3
+         i4/o8PgBy5XbA9siZ34LPHqyzlG0rcziTwo96agHx3GCfoNlCSVL3JTmm1Q59UeeE7
+         OaTeQHHtezPZr9n4kHLmlhmR3ZWa1Ps1M26leVB66FAyGAWIONWmxiu18PpPL3P4Jb
+         hbDYpuGX4Kg5445iP1RsVDLeLVeqpJ0oIJvA3pOWMyXA/w4nn4y5u7T+c5tWaSAZ2O
+         /uX6XofWEL7KesSYhtgBeRLO29o1RG2qiSurrhyi6Gptu5bN/hNgua/zfsmPI5z6Ay
+         k6q5TvaPBNwRg==
+Subject: Re: [PATCH V1] media: mc-device.c: change media_device_request_alloc
+ to match media_ioctl_info
+To:     frederic.chen@mediatek.com, hans.verkuil@cisco.com,
+        laurent.pinchart+renesas@ideasonboard.com, tfiga@chromium.org,
+        matthias.bgg@gmail.com, mchehab@kernel.org
+Cc:     yuzhao@chromium.org, zwisler@chromium.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, Sean.Cheng@mediatek.com,
+        sj.huang@mediatek.com, christie.yu@mediatek.com,
+        linux-media@vger.kernel.org, srv_heupstream@mediatek.com
+References: <20200806072952.11709-1-frederic.chen@mediatek.com>
+ <20200806072952.11709-2-frederic.chen@mediatek.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <4b1291c4-ee97-8ada-fa2c-3eb5ed22305b@xs4all.nl>
+Date:   Thu, 6 Aug 2020 09:42:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20200806072952.11709-2-frederic.chen@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfOrGz3rAhHZCAaKgjiDYR2ekXp4TQjOJE+TmODTu53NnUKnI2WkbUL3u96jvhjAfRgG0gtyQoephVb46g6j0p2btiGqDXzrF9+GySKl3HRFIjJtPMB7W
+ qu3P4GwP3E7L2lEI/Y0GaK8SYEI5KMI8UJB+OzAU64a/Mw067K6o4heiu8xuW46wccZIhdDSt4oRBpnDI5vEB6b2FwwlatIVYvO4PcWCxfbhABAzb1Smt2W2
+ jk/OWrU82UCFeEt7PIc0WjYCoPFdQekx0sUv2jh5G8HN52IEOTUKuR9FWYyKHaHl7Bpmu8zWxNCuW2aaU52r3BNG8/j+pQ/7bImzKoMcL/bzl2vnDQeuIU5a
+ uU/vlDwdeXOpeocMgKqdEZ3lnR3r53/rc8gKy9V96HDGGvi8IZrWs/XcG9NueXn2r2ZidwRdhYswaVyUiGuFzJhtvoeo1E4k9TCCxuAblNL6BtjjypwoxwiT
+ edaovHKNoCPOd3qCawp+IzqkCIoWp7UZZqSev+zRq38QcXn7BMmb9ysjgPJgw01mA2qVEH9ldz4u2Kc1ioZLQweayu3ulPgx+zxiC6xt11WRIBttnDsSuqNu
+ j3msTQY+9chXeMvlHUdj1X5VBosbO0r9S/nl6NkzN2Ahb4c8BADc9386LgNJnnLxVgYsouEvi5OzmLgJNLsWCmS/GOoFmu3h09Fz8zLrhwn/m1l4ioFHqS9d
+ XH8M+05eUIcY1ozUs8wGXx5/d/w7zQkLysZWZEqlHVuyJec1HZrTi8Ka/CGfzwtyt/Z9IaNlMRcLtod7hCqOoF5asPg1n/utpDN7jXenpIVSlZXYFt56uQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-KioqIEJMVVJCIEhFUkUgKioqDQpIZWxsbywNCg0KVGhpcyBwYXRjaCBpcyB0byBtb2RpZnkgbWVk
-aWFfZGV2aWNlX3JlcXVlc3RfYWxsb2MoKSBzbyB0aGF0IGl0IGNhbiBwYXNzDQpDRkkoQ29udHJv
-bCBGbG93IEludGVncml0eSkgY2hlY2suIEkgd291bGQgbGlrZSBzb21lIHJldmlldyBjb21tZW50
-cy4NCg0KbWVkaWFfZGV2aWNlX3JlcXVlc3RfYWxsb2MoKSBpcyBzYXZlZCBpbiBmbiBvZiBtZWRp
-YV9pb2N0bF9pbmZvIHN0cnVjdCwNCndoaWNoIGlzIGRlZmluZWQgYXMgbG9uZyAoKmZuKShzdHJ1
-Y3QgbWVkaWFfZGV2aWNlICpkZXYsIHZvaWQgKmFyZykuIFRoZQ0KdHlwZSBvZiB0aGUgc2Vjb25k
-IHBhcmFtZXRlciBvZiBtZWRpYV9kZXZpY2VfcmVxdWVzdF9hbGxvYygpIGlzIGludCogbm93LA0K
-YnV0IGl0IGlzIHZvaWQqIGluIGZuIG9mIG1lZGlhX2lvY3RsX2luZm8uIFdlIGdvdCBzb21lIEFC
-SSB2aW9sYXRpb24gaGVyZS4NClRoZXJlZm9yZSwgd2Ugd291bGQgbGlrZSB0byB1c2Ugdm9pZCog
-aW5zdGVhZCBvZiBpbnQqIGZvciB0aGUgc2Vjb25kDQpwYXJhbWV0ZXIgb2YgbWVkaWFfZGV2aWNl
-X3JlcXVlc3RfYWxsb2MoKS4NCg0Kc3RhdGljIGxvbmcgbWVkaWFfZGV2aWNlX3JlcXVlc3RfYWxs
-b2Moc3RydWN0IG1lZGlhX2RldmljZSAqbWRldiwNCgkJCQkgICAgICAgaW50ICphbGxvY19mZCk7
-DQoNCnN0cnVjdCBtZWRpYV9pb2N0bF9pbmZvIHsNCgl1bnNpZ25lZCBpbnQgY21kOw0KCXVuc2ln
-bmVkIHNob3J0IGZsYWdzOw0KCWxvbmcgKCpmbikoc3RydWN0IG1lZGlhX2RldmljZSAqZGV2LCB2
-b2lkICphcmcpOw0KCWxvbmcgKCphcmdfZnJvbV91c2VyKSh2b2lkICprYXJnLCB2b2lkIF9fdXNl
-ciAqdWFyZywgdW5zaWduZWQgaW50IGNtZCk7DQoJbG9uZyAoKmFyZ190b191c2VyKSh2b2lkIF9f
-dXNlciAqdWFyZywgdm9pZCAqa2FyZywgdW5zaWduZWQgaW50IGNtZCk7DQp9Ow0KDQoNCkhlcmUg
-aXMgYW4gZXhhbXBsZS4gV2l0aCBBbmRyb2lk4oCZcyBDRkkgY2hlY2tpbmcsIHdlIGdvdCB0aGUg
-Zm9sbG93aW5nIGVycm9yDQp3aXRob3V0IHRoaXMgY2hhbmdlLg0KDQpbICAgMjMuNTAyNDc3XSBt
-dGstY2FtIHNvYzpjYW1pc3A6IHNkOm10ay1jYW0gcmF3LTAgcGFkOjIgc2V0IGZvcm1hdCB3L2gv
-Y29kZSAyMzI4LzE3NDgvMHgzMDA3DQpbICAgMjMuNTE4NjkwXSBLZXJuZWwgcGFuaWMgLSBub3Qg
-c3luY2luZzogQ0ZJIGZhaWx1cmUgKHRhcmdldDogbWVkaWFfZGV2aWNlX3JlcXVlc3RfYWxsb2Mr
-MHgwLzB4NCkNClsgICAyMy41MTk4MDRdIENQVTogNyBQSUQ6IDgxOCBDb21tOiBtdGt2NGwyX3V0
-IFRhaW50ZWQ6IEcgUyAgICAgICAgIE8gICAgICA1LjQuMzktZzAyYzBhNDg1OGJlZC1kaXJ0eSAj
-NDUNClsgICAyMy41MjE1NTNdIENhbGwgdHJhY2U6DQpbICAgMjMuNTIxODY4XSAgZHVtcF9iYWNr
-dHJhY2UuY2ZpX2p0KzB4MC8weDQNClsgICAyMy41MjIzODldICBkdW1wX3N0YWNrKzB4YjgvMHgx
-MTQNClsgICAyMy41MjI4MjRdICBwYW5pYysweDE3MC8weDNlMA0KWyAgIDIzLjUyMzIxNV0gIF9f
-dWJzYW5faGFuZGxlX2NmaV9jaGVja19mYWlsX2Fib3J0KzB4MC8weDE0DQpbICAgMjMuNTIzODk2
-XSAgcGVyZl9wcm9jX3VwZGF0ZV9oYW5kbGVyKzB4MC8weGNjDQpbICAgMjMuNTI0NDYwXSAgX19j
-ZmlfY2hlY2srMHg2MTBjYy8weDY4ZWYwDQpbICAgMjMuNTI0OTU5XSAgbWVkaWFfZGV2aWNlX2lv
-Y3RsKzB4MjE4LzB4MjM4DQpbICAgMjMuNTI1NDg4XSAgbWVkaWFfZGV2aWNlX2NvbXBhdF9pb2N0
-bCsweDYwLzB4N2MNClsgICAyMy41MjYwNzJdICBtZWRpYV9jb21wYXRfaW9jdGwrMHg1OC8weDlj
-DQpbICAgMjMuNTI2NTgxXSAgX19hcm02NF9jb21wYXRfc3lzX2lvY3RsKzB4MTBjLzB4NDM0DQpb
-ICAgMjMuNTI3MTc2XSAgZWwwX3N2Y19jb21tb24rMHhiNC8weDE4Yw0KWyAgIDIzLjUyNzY1MV0g
-IGVsMF9zdmNfY29tcGF0X2hhbmRsZXIrMHgxYy8weDI4DQpbICAgMjMuNTI4MjAyXSAgZWwwX3N2
-Y19jb21wYXQrMHg4LzB4MjQNClsgICAyMy41Mjg2NTldIFNNUDogc3RvcHBpbmcgc2Vjb25kYXJ5
-IENQVXMNClsgICAyMy41MjkxNjFdIEtlcm5lbCBPZmZzZXQ6IDB4MjRiOGMwMDAwMCBmcm9tIDB4
-ZmZmZmZmYzAxMDAwMDAwMA0KWyAgIDIzLjUyOTkwNl0gUEhZU19PRkZTRVQ6IDB4ZmZmZmZmZGQw
-MDAwMDAwMA0KWyAgIDIzLjUzMDQzNF0gQ1BVIGZlYXR1cmVzOiAweDAwMDAwMDA2LDJhODBhMjM4
-DQpbICAgMjMuNTMwOTgzXSBNZW1vcnkgTGltaXQ6IG5vbmUNClBQTF9MT0dfU1RPUkU6IGNoZWNr
-IG9uY2UsIHNpZyB2YWx1ZSAweDI3LCBhZGRyIDB4MTE2MDAwLg0KDQoNCkZyZWRlcmljIENoZW4g
-KDEpOg0KICBtZWRpYTogbWMtZGV2aWNlLmM6IGNoYW5nZSBtZWRpYV9kZXZpY2VfcmVxdWVzdF9h
-bGxvYyB0byBtYXRjaA0KICAgIG1lZGlhX2lvY3RsX2luZm8NCg0KIGRyaXZlcnMvbWVkaWEvbWMv
-bWMtZGV2aWNlLmMgfCA1ICsrKy0tDQogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwg
-MiBkZWxldGlvbnMoLSkNCg0K
+On 06/08/2020 09:29, frederic.chen@mediatek.com wrote:
+> From: Frederic Chen <frederic.chen@mediatek.com>
+> 
+> We modified the type of media_device_request_alloc()'s second
+> parameter from int* to void* so that it can match the interface
+> defined in struct media_ioctl_info.
+> 
+> Signed-off-by: Frederic Chen <frederic.chen@mediatek.com>
+> ---
+>  drivers/media/mc/mc-device.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
+> index da8088351135..bc5b5ecb6581 100644
+> --- a/drivers/media/mc/mc-device.c
+> +++ b/drivers/media/mc/mc-device.c
+> @@ -370,9 +370,10 @@ static long media_device_get_topology(struct media_device *mdev, void *arg)
+>  	return ret;
+>  }
+>  
+> -static long media_device_request_alloc(struct media_device *mdev,
+> -				       int *alloc_fd)
+> +static long media_device_request_alloc(struct media_device *mdev, void *arg)
+>  {
+> +	int *alloc_fd = arg;
+> +
+>  #ifdef CONFIG_MEDIA_CONTROLLER_REQUEST_API
+>  	if (!mdev->ops || !mdev->ops->req_validate || !mdev->ops->req_queue)
+>  		return -ENOTTY;
+> 
 
+This change is fine, but the reason this wasn't noticed before is the cast in
+the MEDIA_IOC_ARG define:
+
+#define MEDIA_IOC_ARG(__cmd, func, fl, from_user, to_user)              \
+        [_IOC_NR(MEDIA_IOC_##__cmd)] = {                                \
+                .cmd = MEDIA_IOC_##__cmd,                               \
+                .fn = (long (*)(struct media_device *, void *))func,    \
+                .flags = fl,                                            \
+                .arg_from_user = from_user,                             \
+                .arg_to_user = to_user,                                 \
+        }
+
+When assigning to .fn the func is cast to a specific function prototype.
+Without that cast the compiler would have warned about the mismatch.
+
+I see no reason for that cast, so drop that cast as well.
+
+Regards,
+
+	Hans
