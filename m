@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57611C433E1
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:36:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DE6AC433DF
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:37:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 34FF622CB3
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:36:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B87322D00
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:37:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2DaAEUz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HDgkuECL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727937AbgHGIgv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Aug 2020 04:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S1728000AbgHGIhA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Aug 2020 04:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727826AbgHGIgt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Aug 2020 04:36:49 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913BDC061574;
-        Fri,  7 Aug 2020 01:36:49 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id j187so1013409qke.11;
-        Fri, 07 Aug 2020 01:36:49 -0700 (PDT)
+        with ESMTP id S1727987AbgHGIg7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Aug 2020 04:36:59 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF5FC061574;
+        Fri,  7 Aug 2020 01:36:59 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id s23so710882qtq.12;
+        Fri, 07 Aug 2020 01:36:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kPkFIcSFokKvqTTqVmcPnp2f4e3lwJk4o7y95n1MRkU=;
-        b=D2DaAEUzOKCb7TGI6DOVsPJRLnFUBxyYmyKABoBJ5taUVHtcWEA6oG0LRz2j/8hRmL
-         EnnsibjHoaQgwbOnWXA+qvy3DvRRyrJfl85MbmWEA6YwWDr9/3hflJB69GMYDLtLUEQR
-         Vsz3VMUeC8yqzASnBfwgdfNRbKb9HKWSvw/1/Iq2ZVMVTYcVYX8reKqGerD8Q4Bk6RpK
-         pP/GpgQG86JWwC2yQ8Cn7UvGEMDVM9HMjh1i+EzVVZh2PB98HuZpvh2Lzz2hGRPV/um8
-         HJWK55HE4bWroOkdVFnrgvWNQ7BylHDomHHU9aIm5QTfCgNuqgwWlJj/56JwO6PbtTIl
-         UeVw==
+        bh=hQh9vJ8qL7le/6UsFdBNNlZw71ZngpGJl8n3+9IJZGM=;
+        b=HDgkuECLCWdP831R9shd1Dd4qBzLAP3roMHtzLmA+Tz3Q8BlRrmQ7YzLbQZeNFiwUo
+         dWMB/QScPgYAkiqiW0Tt01rFcqymYC8fFc+5a2f5dS/OkyPZKKJMHCzH1xCljnPFWVgq
+         i5RORXVr2fNU2EdqBMuf4+qgzbgxU7dAtwhnhbpV2tL5iSS42i2FA9nSKBZqr0r5hFq9
+         p5z+yFpvitqwwGkTCOWPGVnuNlGqyGPxlXNiZI4j79YeUKoNmWNnlQSmGuNl3FmhF5uY
+         MA5PC+i9PFIBtkCRn9hmLrW1fNykiANjWRJiCBYxrkqN0YO6siC/gcJNipJMfFUf6tAL
+         wnOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kPkFIcSFokKvqTTqVmcPnp2f4e3lwJk4o7y95n1MRkU=;
-        b=hqOW4Ptq+Y7JbmPNLZDrmlzr1Cs2+4vRrr9Cwk0S9iajGO1w+YkUsf588aIk6Gq3Fu
-         BAYKZy2e2aeZNdEyT2lqYR2uxTgna01dOYtSN4pYX2M/9g1CPjCFICH+LIenw380R1D0
-         ksQ34oH+qsqHdLKYY6tR02KGbYncsYUNo5ZKyerfLX8Bjc8TNVLDjrTEbKfOa44SvOMo
-         sjidsh66PgSo1O0d7i7UjT/i6XJnwi0VwIcObjwVGPGXP+xiuf4MBGcIXrdQJX2WDKNr
-         /Zd/rhGwoUqEgtRjXa/NuyC563MingGnm6jXXy9D+VaFH5HRDX08f6eSk6a+s/e0FsI1
-         liVw==
-X-Gm-Message-State: AOAM532o9BLM3vPx0RHwheZIsMLjKAhaWAnp1E2yvMqnrl3lptlxQm+X
-        7XxbzNwdhOGh6H8WLPNY1z/WpHSRZO4=
-X-Google-Smtp-Source: ABdhPJwUpDiyth/4I15fdaDZ8QJARvT0XSF+0JeDhsu+7pvdxLbDnhvEMt5AL1ULfayG+rOIOQz7QQ==
-X-Received: by 2002:a05:620a:5f7:: with SMTP id z23mr13039865qkg.206.1596789408463;
-        Fri, 07 Aug 2020 01:36:48 -0700 (PDT)
+        bh=hQh9vJ8qL7le/6UsFdBNNlZw71ZngpGJl8n3+9IJZGM=;
+        b=J0LfnsWv38c0Sa1QwE6iwlgOWp9vTAuXlA88Nbkq+gpBMXmx2F2KTIwXGTqLfrP62f
+         8djJRzDFZdd7RwBIguXQUdgdfDRkitAUYsKDzn1ciD7srIQX8CoPjVzGbNZtx0gVYypt
+         hDQCPzRYHfmhtxHv9JpZarze3Jjp8OG1RHaHKGCKJPWSSk5Hh/KGrpKbeaKdwU/OtVmw
+         fCKUn1OXsLQXLZfjJt7K8YjbYqbhDHi1mKz6NJZOtM9DUA3sIRsNsSMkYQ52XkPZSyjN
+         JIJbnnmIXGDpp/vBZXf2kBRbT2VSEIJ8NBv4+epbc2M2cmll2823S399OoMC1by/yIvr
+         zXXQ==
+X-Gm-Message-State: AOAM532rH+yAKba+MtJks/3DdUohjJIjqDr7vTFlRwgdaZrJXlh+Rb2x
+        ODj7XDM66lWIdp5qdp/K04UjnVmRqXk=
+X-Google-Smtp-Source: ABdhPJxKV6/gqTIu2lJakDUq+jGgkp210KlhpKKuuiTVI9CdEfS7fgxQu1rQSdi7wXYCbG076Ilq0A==
+X-Received: by 2002:aed:3aa5:: with SMTP id o34mr13559045qte.359.1596789417960;
+        Fri, 07 Aug 2020 01:36:57 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14d:72b1:8920:da15:c0bd:33c1:e2ad])
-        by smtp.gmail.com with ESMTPSA id c42sm7846728qte.5.2020.08.07.01.36.46
+        by smtp.gmail.com with ESMTPSA id c42sm7846728qte.5.2020.08.07.01.36.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2020 01:36:47 -0700 (PDT)
+        Fri, 07 Aug 2020 01:36:57 -0700 (PDT)
 From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 X-Google-Original-From: Daniel W. S. Almeida
 To:     linux-kernel@vger.kernel.org
@@ -65,9 +65,9 @@ Cc:     skhan@linuxfoundation.org,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Subject: [PATCH 12/20] media: usb: dib0700_devices.c: remove useless if/else
-Date:   Fri,  7 Aug 2020 05:35:39 -0300
-Message-Id: <20200807083548.204360-12-dwlsalmeida@gmail.com>
+Subject: [PATCH 15/20] media: pci: cx23855-video.c: remove duplicate argument in 'or'
+Date:   Fri,  7 Aug 2020 05:35:42 -0300
+Message-Id: <20200807083548.204360-15-dwlsalmeida@gmail.com>
 X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -80,40 +80,31 @@ From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 
 Fix the following coccinelle report:
 
-drivers/media/usb/dvb-usb/dib0700_devices.c:1741:1-3:
-WARNING: possible condition with no effect (if == else)
+drivers/media/pci/cx23885/cx23885-video.c:639:24-44:
+duplicated argument to & or |
 
-Both branches are the same, so remove the if/else altogether.
+V4L2_CAP_VBI_CAPTURE appears twice, remove it.
 
 Found using - Coccinelle (http://coccinelle.lip6.fr)
 
 Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 ---
- drivers/media/usb/dvb-usb/dib0700_devices.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ drivers/media/pci/cx23885/cx23885-video.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb/dib0700_devices.c b/drivers/media/usb/dvb-usb/dib0700_devices.c
-index 4ef3fa98d20f..f027db979c90 100644
---- a/drivers/media/usb/dvb-usb/dib0700_devices.c
-+++ b/drivers/media/usb/dvb-usb/dib0700_devices.c
-@@ -1738,14 +1738,9 @@ static int dib809x_tuner_attach(struct dvb_usb_adapter *adap)
- 	struct dib0700_adapter_state *st = adap->priv;
- 	struct i2c_adapter *tun_i2c = st->dib8000_ops.get_i2c_master(adap->fe_adap[0].fe, DIBX000_I2C_INTERFACE_TUNER, 1);
- 
--	if (adap->id == 0) {
--		if (dvb_attach(dib0090_register, adap->fe_adap[0].fe, tun_i2c, &dib809x_dib0090_config) == NULL)
--			return -ENODEV;
--	} else {
--		/* FIXME: check if it is fe_adap[1] */
--		if (dvb_attach(dib0090_register, adap->fe_adap[0].fe, tun_i2c, &dib809x_dib0090_config) == NULL)
--			return -ENODEV;
--	}
-+	/* FIXME: if adap->id != 0, check if it is fe_adap[1] */
-+	if (dvb_attach(dib0090_register, adap->fe_adap[0].fe, tun_i2c, &dib809x_dib0090_config) == NULL)
-+		return -ENODEV;
- 
- 	st->set_param_save = adap->fe_adap[0].fe->ops.tuner_ops.set_params;
- 	adap->fe_adap[0].fe->ops.tuner_ops.set_params = dib8096_set_param_override;
+diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
+index 440d108b7ddd..a380e0920a21 100644
+--- a/drivers/media/pci/cx23885/cx23885-video.c
++++ b/drivers/media/pci/cx23885/cx23885-video.c
+@@ -637,7 +637,7 @@ static int vidioc_querycap(struct file *file, void  *priv,
+ 	sprintf(cap->bus_info, "PCIe:%s", pci_name(dev->pci));
+ 	cap->capabilities = V4L2_CAP_READWRITE | V4L2_CAP_STREAMING |
+ 			    V4L2_CAP_AUDIO | V4L2_CAP_VBI_CAPTURE |
+-			    V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VBI_CAPTURE |
++			    V4L2_CAP_VIDEO_CAPTURE |
+ 			    V4L2_CAP_DEVICE_CAPS;
+ 	switch (dev->board) { /* i2c device tuners */
+ 	case CX23885_BOARD_HAUPPAUGE_HVR1265_K4:
 -- 
 2.28.0
 
