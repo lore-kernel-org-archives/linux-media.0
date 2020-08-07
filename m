@@ -2,353 +2,557 @@ Return-Path: <SRS0=IBHb=BR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86644C433E0
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:39:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0519BC433E3
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:42:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59F9822CAE
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:39:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="At9Ufbe0"
+	by mail.kernel.org (Postfix) with ESMTP id CB8AF22CAE
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:42:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727865AbgHGIjq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Aug 2020 04:39:46 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:45323 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726382AbgHGIjq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 7 Aug 2020 04:39:46 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id 3xuekF5rnuuXO3xufkszm8; Fri, 07 Aug 2020 10:39:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1596789582; bh=eMMpSzp/x05VVXxKx6q3KU0DWwYmTE0vBs0szmaelP4=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=At9Ufbe0xlj89T4UL10YEDb7dkjuWbq2Fk/Dk9YGjnuKQB2pmLtLqEOa6JECxUX5s
-         zVQtKDq6s7w6eroG708gVaS6z/O8GuRhIUeex37jnCqraCCuO7AwvsAJrCfdBFtlqt
-         cNuQnxZTlxgIKnzq9LTzMnp9nGykbYSY3U6aPVPpUj8M3qrha/bJAKeJ7zE2F3VL1q
-         7OyADTqIDQ4xr6Ee0Ci0pgmdIVRJEY0IFVd+ilCCJzZuRX6n27fi8y+JmEmI617/HC
-         RQdCs7fWKIP+NTKWxe9KAFlvn+B8JwTM+WvZHItBmU0Eo7wQpP4OIvYDVvt9dF1ccr
-         8V5peRnv00W3Q==
-Subject: Re: [RFC PATCH 0/1] Add LTR controls
-To:     dikshita@codeaurora.org
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>, mchehab@kernel.org,
-        ezequiel@collabora.com, boris.brezillon@collabora.com,
-        ribalda@kernel.org, paul.kocialkowski@bootlin.com,
-        posciak@chromium.org, linux-media@vger.kernel.org,
-        stanimir.varbanov@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, vgarodia@codeaurora.org,
-        majja@codeaurora.org, linux-media-owner@vger.kernel.org
-References: <1591871121-25420-1-git-send-email-dikshita@codeaurora.org>
- <f07c4aab69d2b333c0e36c50c526c0a85322e708.camel@ndufresne.ca>
- <1a9904b6-60a5-0faa-8a5e-c9dc00802184@xs4all.nl>
- <40040141fc3027c3eb1fdebc1a0e8ade@codeaurora.org>
- <d37e4e83-b7ae-7d44-c75f-2055f11ae898@xs4all.nl>
- <dd365fe82523c4e44af4353f4f457137@codeaurora.org>
- <976be099-f003-d08f-3394-ff2dad43d7aa@xs4all.nl>
- <32881c41f811e625779f88c6da9deefb@codeaurora.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <cafda0d3-627a-b5b7-813f-66320a83781e@xs4all.nl>
-Date:   Fri, 7 Aug 2020 10:39:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727070AbgHGImd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Aug 2020 04:42:33 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:59463 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726729AbgHGImc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Aug 2020 04:42:32 -0400
+X-Originating-IP: 93.34.118.233
+Received: from uno.localdomain (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id DF906FF809;
+        Fri,  7 Aug 2020 08:42:24 +0000 (UTC)
+Date:   Fri, 7 Aug 2020 10:46:06 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        paul.kocialkowski@bootlin.com
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v2 2/4] media: i2c: ov5640: Enable data pins on poweron
+ for DVP mode
+Message-ID: <20200807084606.oqw2vwmitblbmcft@uno.localdomain>
+References: <1596465107-14251-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1596465107-14251-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200806163054.vz7t7jgm4bapzkpq@uno.localdomain>
+ <CA+V-a8tmnqRvmW1=55K7Za2DoxBR+4LD4oZMGfX14-WfBocokQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <32881c41f811e625779f88c6da9deefb@codeaurora.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfJn9sAG3LeIle/NVsi/7v2crd6bMdtZlC/SwaakcJIZWxKQ5619PGpF2AmXoY8kb4Mdce+Ty87aA4qw1yKqd3/vrlnNrujv0k3M5uTM2mtlv13t4ovX9
- oaxv9y+zM2jHyxzaoUMHT7FOQ28AyF7UeJ9pCiQPcvj1V0reG1v1rIn4A1ZY+lUaf4u6BT1EZuZNYO94HVG2E1W9x/gQJdipdIJb6gK77nuQBmmUlmw0bxvV
- +8cHd5/SWPijABVx6ZUEcpac1PUb0Mi8sVNvxRN6PJACgwqifK/hOtXido5qt4JmZCmp/ntG/uPg9yJnqKjucZaGDBCxtnypF9uig4I1riJkCiX20JzpV6Fj
- RAkbpOCKWdMTtFAgnnPN48DdUZW4/m5zKi11iXqjOqc67rgKb57bPi7MaGkqjN439mXDN27BSgd0SeIhRsEY95pQb9sCh3qmFS84QDD/PXk6PcUP90o/xlOe
- 9xzXs+2mjfu7b6i6TMQl24g982hbd7FdKg58JSkVssDa5We/CRTCzUIB7ERrfzaoBbe/jEoB55A7/iDi7tBcyZMpAXoD/0Yc0uYld90nCfrTiCHWyoTy68D2
- 65EfXdmFHQTm/M37Lc2Uz7wClAulGPicJ5D+gr2JIDyQGs8H0SISGKQlFdXev/1Jb6VMFbc6Yg+CUKwNw9UpC01bj0iBx+TPXgKXPT0iKO+XsvitIUyQ/EhC
- WzFhaDkxAc+Fm2bbcHBHO+BQpMNMg74l+HxizHKTSzQ80NzMk8h032hgTjy/phh4W1iuezaXTbmsbZxXios6DOIDHFGVKKwegxd3AnOx5HEES5baBIb9pg==
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8tmnqRvmW1=55K7Za2DoxBR+4LD4oZMGfX14-WfBocokQ@mail.gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 06/08/2020 13:05, dikshita@codeaurora.org wrote:
-> On 2020-07-22 19:56, Hans Verkuil wrote:
->> On 20/07/2020 16:33, dikshita@codeaurora.org wrote:
->>> On 2020-07-16 14:25, Hans Verkuil wrote:
->>>> On 16/06/2020 20:41, dikshita@codeaurora.org wrote:
->>>>> Hi Hans, Nicolas,
->>>>>
->>>>> Thanks for your comments.
->>>>>
->>>>> On 2020-06-12 14:41, Hans Verkuil wrote:
->>>>>> Hi Dikshita, Nicolas,
->>>>>>
->>>>>> On 11/06/2020 16:22, Nicolas Dufresne wrote:
->>>>>>> Le jeudi 11 juin 2020 à 15:55 +0530, Dikshita Agarwal a écrit :
->>>>>>>> LTR (Long Term Reference) frames are the frames that are encoded
->>>>>>>> sometime in the past
->>>>>>>> and stored in the DPB buffer list to be used as reference to encode
->>>>>>>> future frames.
->>>>>>>> One usage of LTR encoding is to reduce error propagation for video
->>>>>>>> transmission
->>>>>>>> in packet lossy networks.  For example, encoder may want to specify
->>>>>>>> some key frames as
->>>>>>>> LTR pictures and use them as reference frames for encoding. With
->>>>>>>> extra protection
->>>>>>>> selectively on these LTR frames or synchronization with the receiver
->>>>>>>> of reception of
->>>>>>>> the LTR frames during transmission, decoder can receive reference
->>>>>>>> frames more reliably
->>>>>>>> than other non-reference frames. As a result, transmission error can
->>>>>>>> be effectively
->>>>>>>> restricted within certain frames rather than propagated to future
->>>>>>>> frames.
->>>>>>>>
->>>>>>>> We are introducing below V4l2 Controls for this feature
->>>>>>>> 1. V4L2_CID_MPEG_VIDEO_LTRCOUNT
->>>>>>>>     a. This is used to query or configure the number of LTR frames.
->>>>>>>>        This is a static control and is controlled by the client.
->>>>>>>>     b. The LTR index varies from 0 to the max LTR-1.
->>>>>>>>     c. If LTR Count is more than max supported LTR count (max LTR) by
->>>>>>>> driver, it will be rejected.
->>>>>>>>     d. Auto Marking : If LTR count is non zero,
->>>>>>>>         1) first LTR count frames would be mark as LTR automatically
->>>>>>>> after
->>>>>>>>              every IDR frame (inclusive).
->>>>>>>>         2) For multilayer encoding: first LTR count base layer
->>>>>>>> reference frames starting after
->>>>>>>>            every IDR frame (inclusive) in encoding order would be
->>>>>>>> marked as LTR frames by the encoder.
->>>>>>>>         3) Auto marking of LTR due to IDR should consider following
->>>>>>>> conditions:
->>>>>>>>             1. The frame is not already set to be marked as LTR.
->>>>>>>>             2. The frame is part of the base layer in the
->>>>>>>> hierarchical layer case.
->>>>>>>>             3. The number of frames currently marked as LTR is less
->>>>>>>> than the maximum LTR frame index plus 1.
->>>>>>>>     e. Encoder needs to handle explicit Mark/Use command when encoder
->>>>>>>> is still doing "auto" marking
->>>>>>
->>>>>> I don't follow this, quite possibly due to lack of experience with
->>>>>> encoders.
->>>>>>
->>>>>> I kind of would expect to see two modes: either automatic where
->>>>>> encoders can
->>>>>> mark up to LTR_COUNT frames as long term reference, and userspace just
->>>>>> sets
->>>>>> LTR_COUNT and doesn't have to do anything else.
->>>>>>
->>>>>> Or it is manual mode where userspace explicitly marks long term
->>>>>> reference
->>>>>> frames.
->>>>>>
->>>>>> From the proposal above it looks like you can mix auto and manual
->>>>>> modes.
->>>>>>
->>>>>> BTW, how do you 'unmark' long term reference frames?
->>>>>>
->>>>>> This feature is for stateful encoders, right?
->>>>>>
->>>>>>>
->>>>>>> Perhaps we are missing a LONG_TERM_REFERENCE_MODE ? I bet some encoder
->>>>>>> can select by themself long term references and even some encoders may
->>>>>>> not let the user decide.
->>>>>>>
->>>>>>> (not huge han of LTR acronyme, but that could be fine too, assuming
->>>>>>> you
->>>>>>> add more _).
->>>>>>>
->>>>>
->>>>> Userspace sets LTR count which signifies the number of LTR frames
->>>>> encoder needs to generate or keep.
->>>>> The encoder has to build-up its internal buffer reference list (aka DBP
->>>>> list or recon buffer list).
->>>>> In order to achieve that encoder will fill It's LTR (long term
->>>>> references) list and STR (short term references) list
->>>>> by auto marking n frames as LTR frames(n is equal to LTR count) based on
->>>>> auto-marking dictated by the encoder spec.
->>>>> The client then can replace those automatically marked frames with new
->>>>> frames using V4L2_CID_MPEG_VIDEO_MARKLTRFRAME and can ask
->>>>> encoder to refer the newly marked frame for encoding the next frame
->>>>> using V4L2_CID_MPEG_VIDEO_USELTRFRAME.
->>>>>
->>>>>>>>
->>>>>>>> 2. V4L2_CID_MPEG_VIDEO_MARKLTRFRAME :
->>>>>>>>     a. This signals to mark the current frame as LTR frame. It is a
->>>>>>>> dynamic control and also provide the LTR index to be used.
->>>>>>>>     b. the LTR index provided by this control should never exceed the
->>>>>>>> max LTR-1. Else it will be rejected.
->>>>>>>
->>>>>>> The "current" frame seems a bit loose. Perhaps you wanted to use
->>>>>>> buffer
->>>>>>> flags ? A bit like what we have to signal TOP/BOTTOM fields in
->>>>>>> alternate interlacing.
->>>>>>
->>>>>> I was thinking the same thing. Using a control for this doesn't seem
->>>>>> right.
->>>>>>
->>>>>
->>>>> the client sets this to replace automatically marked frames by the
->>>>> encoder with a particular frame.
->>>>> this provides an index that ranges from 0 to LTR count-1 and then the
->>>>> particular frame will be marked with that index.
->>>>> this can be achieved through request by associating this control with a
->>>>> specific buffer to make it synchronized.
->>>>>
->>>>>>>
->>>>>>>>
->>>>>>>> 3. V4L2_CID_MPEG_VIDEO_USELTRFRAME :
->>>>>>>>     a. This specifies the LTR frame(s) to be used for encoding the
->>>>>>>> current frame. This is a dynamic control.
->>>>>>>>     b. LTR Use Bitmap : this consists of bits [0, 15]. A total of N
->>>>>>>> LSB bits of this field are valid,
->>>>>>>>        where N is the maximum number of LTRs supported. All the other
->>>>>>>> bits are invalid and should be rejected.
->>>>>>>>        The LSB corresponds to the LTR index 0. Bit N-1 from the LSB
->>>>>>>> corresponds to the LTR index max LTR-1.
->>>>>>
->>>>>> How would userspace know this? Esp. with auto marking since userspace
->>>>>> would have
->>>>>> to predict how auto marking works (if I understand this correctly).
->>>>>>
->>>>>
->>>>> Client sets LTR count which tells about the number of LTR frames
->>>>> automatically marked by the encoder.
->>>>> so client can use LTR index (0 to LTR count -1) to ask encoder to refer
->>>>> any particular
->>>>> frame (marked automatically by driver or marked by client with
->>>>> V4L2_CID_MPEG_VIDEO_MARKLTRFRAME) as a reference to encode the next
->>>>> frame.
->>>>>
->>>>>> For which HW encoder is this meant?
->>>>>>
->>>>> This is primarily meant for H264 and HEVC.
->>>>
->>>> The venus encoder?
->>> yes
->>>>
->>>> Some more questions:
->>>>
->>>> 1) How many LTR frames do h.264 and hevc allow?
->>> According to spec, MAX LTR allowed by H.264 is 15 and HEVC allows max 32 LTR frames.
->>>> 2) Given N LTR frames, is there a ordering of those frames? E.g.
->>>>    the LTR frame with index 0 is processed/used differently from
->>>>    LTR frame with index 1? Or are they all equal in that it is just a pool
->>>>    of LTR frames that the encoder can use as it wishes?
->>> they are different frames marked to be used as LTR and stored in available indices.
->>> Userspace notifies encoder which LTR frame index to use via USE LTR control.
->>
->> One more question: if a frame is marked as a LTR frame, does that mean
->> that userspace
->> can't reuse the buffer containing that frame? I assume that's the case.
->>
->> One thing that I don't like about this API is that it introduces the
->> LTR indices.
->> Would it be possible to instead use buffer indices? (i.e. the
->> v4l2_buffer index field).
->> Then you can use a buffer flag to indicate that a buffer should be an
->> LTR buffer,
->> or (for automarking) the driver can mark a buffer as an LTR buffer by
->> setting this flag
->> before returning the buffer to userspace.
->>
->> You would still need a V4L2_CID_MPEG_VIDEO_USELTRFRAME, but that can
->> be a bitmask
->> using the buffer index.
->>
->> This would avoid introducing a second method of referring to buffers
->> (LTR index),
->> and I think that V4L2_CID_MPEG_VIDEO_MARKLTRFRAME can be dropped.
->>
->> Regards,
->>
->>     Hans
-> 
-> Hi Hans,
-> LTR indices are part of the spec, we are not introducing anything new.
-> Also, there is no relation between v4l2 buffer index and LTR index. So we can't use V4l2 index as LTR index.
+Hi Prabhakar,
+   + Paul who is working with this chip on a parallel setup
 
-Ah, I think I start to understand the cause of my confusion: I thought that the
-buffers containing LTR frames had to be kept around by userspace, but instead the
-driver/HW makes copies and userspace does not need to do anything special with
-those buffers.
+On Thu, Aug 06, 2020 at 05:38:57PM +0100, Lad, Prabhakar wrote:
+> Hi Jacopo,
+>
+> Thank you for the review.
+>
+> On Thu, Aug 6, 2020 at 5:27 PM Jacopo Mondi <jacopo@jmondi.org> wrote:
+> >
+> > Hi Prabhakar,
+> >
+> > On Mon, Aug 03, 2020 at 03:31:45PM +0100, Lad Prabhakar wrote:
+> > > During testing this sensor on iW-RainboW-G21D-Qseven platform in 8-bit DVP
+> > > mode with rcar-vin bridge noticed the capture worked fine for the first run
+> > > (with yavta), but for subsequent runs the bridge driver waited for the
+> > > frame to be captured. Debugging further noticed the data lines were
+> > > enabled/disabled in stream on/off callback and dumping the register
+> > > contents 0x3017/0x3018 in ov5640_set_stream_dvp() reported the correct
+> > > values, but yet frame capturing failed.
+> >
+> > That's pretty weird, I wonder if that's not an issue in the bridge, as
+> > I expect someone tryed to capture more than 1 image in DVP mode with
+> > this driver already.
+> >
+> I did try the bridge driver with an ov7725 sensor and it works fine in
+> both the modes (DVP and BT656).
+>
+> > I didn't get from your commit message if you have been able to
+> > identify where the issue is. You said register values are correct, but
+> > did you try to plug a scope and see if data are actually put on the
+> > bus ? Does this happen with full parallel too or BT.656 only ?
+> >
+> unfortunately I didn't scope the pins, but this issue happened in both
+> the modes. And with this patch it improves handling the sensor in
+> s_stream call.
+>
 
-OK, can you post a v2?
+For the record, I tested this one with my CSI-2 setup and capture
+still works as expected.
 
-Document the controls in Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> Cheers,
+> Prabhakar
+>
+> > >
+> > > To get around this issue the following actions are performed for
+> > > parallel mode (DVP):
+> > > 1: Keeps the sensor in software power down mode and is woken up only in
+> > >    ov5640_set_stream_dvp() callback.
+> > > 2: Enables data lines in s_power callback
+> > > 3: Configures HVP lines in s_power callback instead of configuring
+> > >    everytime in ov5640_set_stream_dvp().
+> > > 4: Disables MIPI interface.
+> > >
+> > > Fixes: f22996db44e2d ("media: ov5640: add support of DVP parallel interface")
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > > ---
+> > >  drivers/media/i2c/ov5640.c | 321 ++++++++++++++++++++-----------------
+> > >  1 file changed, 172 insertions(+), 149 deletions(-)
+> > >
+> > > diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> > > index 2fe4a7ac0592..ec444bee2ce9 100644
+> > > --- a/drivers/media/i2c/ov5640.c
+> > > +++ b/drivers/media/i2c/ov5640.c
+> > > @@ -94,6 +94,9 @@
+> > >  #define OV5640_REG_SDE_CTRL5         0x5585
+> > >  #define OV5640_REG_AVG_READOUT               0x56a1
+> > >
+> > > +#define OV5640_SOFTWARE_PWDN         0x42
+> > > +#define OV5640_SOFTWARE_WAKEUP               0x02
 
-Regards,
+These two are bitmasks to apply to register 0x3008. I would place them
+below the register definition and name them:
 
-	Hans
+#define OV5640_REG_SYS_CTRL0_SW_PWDN         0x42
+#define OV5640_REG_SYS_CTRL0_SW_PWUP         0x02
 
-> 
-> below are some details about LTR from spec:
-> 
-> Regarding LTR count:
-> max_num_ref_frames specifies the maximum number of short-term and long-term reference frames, complementary reference field pairs, and non-paired reference fields that may be used by the decoding
-> process for inter prediction of any picture in the coded video sequence. The value of max_num_ref_frames shall be in the range of 0 to MaxDpbFrames (as specified in clause A.3.1 or A.3.2), inclusive.
-> max_long_term_frame_idx_plus1 minus 1 specifies the maximum value of long-term frame index allowed for long-term reference pictures (until receipt of another value of max_long_term_frame_idx_plus1).
-> The value of max_long_term_frame_idx_plus1 shall be in the range of 0 to max_num_ref_frames, inclusive.
-> 
-> 
-> Regarding LTR index which will be specified by V4L2_CID_MPEG_VIDEO_MARKLTRFRAM :
-> long_term_pic_num specifies the long-term picture number of the picture being moved to the current index in the list. When decoding a coded frame, long_term_pic_num shall be equal to a LongTermPicNum
-> assigned to one of the reference frames or complementary reference field pairs marked as "used for long-term reference".
-> long_term_frame_idx is used (with memory_management_control_operation equal to 3 or 6) to assign a long-term frame index to a picture. When the associated memory_management_control_operation is
-> processed by the decoding process, the value of long_term_frame_idx shall be in the range of 0 to MaxLongTermFrameIdx, inclusive.
-> 
-> 
-> Also As there can be multiple LTR present. We can instruct encoder to use one and/or multiple of them using V4L2_CID_MPEG_VIDEO_USELTRFRAME with the bitmask.
-> 
-> Thanks,
-> Dikshita
-> 
->>
->>>
->>> Thanks,
->>> Dikshita
->>>>
->>>> Regards,
->>>>
->>>>     Hans
->>>>
->>>>>
->>>>> Thanks,
->>>>> Dikshita
->>>>>
->>>>>>>
->>>>>>> Note, I haven't captured very well the userspace control flow, perhaps
->>>>>>> this could be enhanced through writing some documentation.
->>>>>>>
->>>>>>> As per all other generic encoder controls, we need to make sure it
->>>>>>> will
->>>>>>> be usable and flexible enough for multiple HW blocks, as it can be
->>>>>>> tedious to extend later otherwise. It is important that along with
->>>>>>> this
->>>>>>> RFC you provide some comparisons with with other HW / SW APIs in order
->>>>>>> to help justify the design decisions. I also think there should be
->>>>>>> link made V4L2_CID_MPEG_VIDEO_GOP_* , number of B-Frames etc.
->>>>>>
->>>>>> I agree with Nicolas.
->>>>>>
->>>>>> Regards,
->>>>>>
->>>>>>     Hans
->>>>>>
->>>>>>>
->>>>>>> regards,
->>>>>>> Nicolas
->>>>>>>
->>>>>>>>
->>>>>>>> Dikshita Agarwal (1):
->>>>>>>>   media: v4l2-ctrls:  add control for ltr
->>>>>>>>
->>>>>>>>  drivers/media/v4l2-core/v4l2-ctrls.c | 6 ++++++
->>>>>>>>  include/uapi/linux/v4l2-controls.h   | 4 ++++
->>>>>>>>  2 files changed, 10 insertions(+)
->>>>>>>>
->>>>>>>
+or even:
+#define OV5640_REG_SYS_CTRL0_SW_POWER(on)    (0x2 | (on ? 0x40 : 0x00))
 
+Up to you, but I would keep them close to the register definition.
+
+> > > +
+> > >  enum ov5640_mode_id {
+> > >       OV5640_MODE_QCIF_176_144 = 0,
+> > >       OV5640_MODE_QVGA_320_240,
+> > > @@ -274,7 +277,7 @@ static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
+> > >  /* YUV422 UYVY VGA@30fps */
+> > >  static const struct reg_value ov5640_init_setting_30fps_VGA[] = {
+> > >       {0x3103, 0x11, 0, 0}, {0x3008, 0x82, 0, 5}, {0x3008, 0x42, 0, 0},
+> > > -     {0x3103, 0x03, 0, 0}, {0x3017, 0x00, 0, 0}, {0x3018, 0x00, 0, 0},
+> > > +     {0x3103, 0x03, 0, 0},
+> > >       {0x3630, 0x36, 0, 0},
+
+Could you reflow this lines to not leave holes ?
+
+> > >       {0x3631, 0x0e, 0, 0}, {0x3632, 0xe2, 0, 0}, {0x3633, 0x12, 0, 0},
+> > >       {0x3621, 0xe0, 0, 0}, {0x3704, 0xa0, 0, 0}, {0x3703, 0x5a, 0, 0},
+> > > @@ -1120,6 +1123,11 @@ static int ov5640_load_regs(struct ov5640_dev *sensor,
+> > >               val = regs->val;
+> > >               mask = regs->mask;
+> > >
+> > > +             /* remain in power down mode for DVP */
+> > > +             if (regs->reg_addr == OV5640_REG_SYS_CTRL0 && val == OV5640_SOFTWARE_WAKEUP &&
+> > > +                 sensor->ep.bus_type != V4L2_MBUS_CSI2_DPHY)
+> > > +                     continue;
+> > > +
+
+I'm not yet convinced this is a good idea. This will cause the
+ov5640_set_dvp() function to be called while the chip is still in
+'software power-down' mode. I tried to do the same for CSI-2 as well
+and indeed I have LP-11 errors from the CSI-2 receiver, but then
+capture works fine (puzzling! it might indicate that register values
+as actually retained between software power up/down)
+
+This driver is such a mess I won't mind this 'special' dvp handling,
+but it really puzzles me.
+
+From what I see here the bulk of this patch is about moving the
+parallel bus configuration from s_stream() to s_power(), is this bit
+here really required for that to work or is it a leftover ? Have you
+tested it without the above hunk ?
+
+Paul, would you be able to test this series with your parallel setup
+as well ?
+
+Also, if not strictly necessary, let's try to remain in the 80 cols limit.
+
+
+> > >               if (mask)
+> > >                       ret = ov5640_mod_reg(sensor, reg_addr, mask, val);
+> > >               else
+> > > @@ -1210,96 +1218,8 @@ static int ov5640_set_autogain(struct ov5640_dev *sensor, bool on)
+> > >
+> > >  static int ov5640_set_stream_dvp(struct ov5640_dev *sensor, bool on)
+> > >  {
+> > > -     int ret;
+> > > -     unsigned int flags = sensor->ep.bus.parallel.flags;
+> > > -     u8 pclk_pol = 0;
+> > > -     u8 hsync_pol = 0;
+> > > -     u8 vsync_pol = 0;
+> > > -
+> > > -     /*
+> > > -      * Note about parallel port configuration.
+> > > -      *
+> > > -      * When configured in parallel mode, the OV5640 will
+> > > -      * output 10 bits data on DVP data lines [9:0].
+> > > -      * If only 8 bits data are wanted, the 8 bits data lines
+> > > -      * of the camera interface must be physically connected
+> > > -      * on the DVP data lines [9:2].
+> > > -      *
+> > > -      * Control lines polarity can be configured through
+> > > -      * devicetree endpoint control lines properties.
+> > > -      * If no endpoint control lines properties are set,
+> > > -      * polarity will be as below:
+> > > -      * - VSYNC:     active high
+> > > -      * - HREF:      active low
+> > > -      * - PCLK:      active low
+> > > -      */
+> > > -
+> > > -     if (on) {
+> > > -             /*
+> > > -              * configure parallel port control lines polarity
+> > > -              *
+> > > -              * POLARITY CTRL0
+> > > -              * - [5]:       PCLK polarity (0: active low, 1: active high)
+> > > -              * - [1]:       HREF polarity (0: active low, 1: active high)
+> > > -              * - [0]:       VSYNC polarity (mismatch here between
+> > > -              *              datasheet and hardware, 0 is active high
+> > > -              *              and 1 is active low...)
+> > > -              */
+> > > -             if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
+> > > -                     pclk_pol = 1;
+> > > -             if (flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
+> > > -                     hsync_pol = 1;
+> > > -             if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
+> > > -                     vsync_pol = 1;
+> > > -
+> > > -             ret = ov5640_write_reg(sensor,
+> > > -                                    OV5640_REG_POLARITY_CTRL00,
+> > > -                                    (pclk_pol << 5) |
+> > > -                                    (hsync_pol << 1) |
+> > > -                                    vsync_pol);
+> > > -
+> > > -             if (ret)
+> > > -                     return ret;
+> > > -     }
+> > > -
+> > > -     /*
+> > > -      * powerdown MIPI TX/RX PHY & disable MIPI
+> > > -      *
+> > > -      * MIPI CONTROL 00
+> > > -      * 4:    PWDN PHY TX
+> > > -      * 3:    PWDN PHY RX
+> > > -      * 2:    MIPI enable
+> > > -      */
+> > > -     ret = ov5640_write_reg(sensor,
+> > > -                            OV5640_REG_IO_MIPI_CTRL00, on ? 0x18 : 0);
+> > > -     if (ret)
+> > > -             return ret;
+> > > -
+> > > -     /*
+> > > -      * enable VSYNC/HREF/PCLK DVP control lines
+> > > -      * & D[9:6] DVP data lines
+> > > -      *
+> > > -      * PAD OUTPUT ENABLE 01
+> > > -      * - 6:         VSYNC output enable
+> > > -      * - 5:         HREF output enable
+> > > -      * - 4:         PCLK output enable
+> > > -      * - [3:0]:     D[9:6] output enable
+> > > -      */
+> > > -     ret = ov5640_write_reg(sensor,
+> > > -                            OV5640_REG_PAD_OUTPUT_ENABLE01,
+> > > -                            on ? 0x7f : 0);
+> > > -     if (ret)
+> > > -             return ret;
+> > > -
+> > > -     /*
+> > > -      * enable D[5:0] DVP data lines
+> > > -      *
+> > > -      * PAD OUTPUT ENABLE 02
+> > > -      * - [7:2]:     D[5:0] output enable
+> > > -      */
+> > > -     return ov5640_write_reg(sensor,
+> > > -                             OV5640_REG_PAD_OUTPUT_ENABLE02,
+> > > -                             on ? 0xfc : 0);
+> > > +     return ov5640_write_reg(sensor, OV5640_REG_SYS_CTRL0, on ?
+> > > +                             OV5640_SOFTWARE_WAKEUP : OV5640_SOFTWARE_PWDN);
+
+I'm surprised entering/exiting from what is called "Software power
+down" in the chip manual retains the registers state!
+
+> > >  }
+> > >
+> > >  static int ov5640_set_stream_mipi(struct ov5640_dev *sensor, bool on)
+> > > @@ -2001,6 +1921,159 @@ static void ov5640_set_power_off(struct ov5640_dev *sensor)
+> > >       clk_disable_unprepare(sensor->xclk);
+> > >  }
+> > >
+> > > +static int ov5640_set_mipi(struct ov5640_dev *sensor, bool on)
+
+Maybe 'ov5640_set_power_mipi()' ? (same for dvp)
+
+> > > +{
+> > > +     int ret = 0;
+> > > +
+> > > +     if (!on) {
+> > > +             /* Reset MIPI bus settings to their default values. */
+> > > +             ov5640_write_reg(sensor, OV5640_REG_IO_MIPI_CTRL00, 0x58);
+> > > +             ov5640_write_reg(sensor, OV5640_REG_MIPI_CTRL00, 0x04);
+> > > +             ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT00, 0x00);
+> > > +
+> > > +             return ret;
+> > > +     }
+
+I know this was there already, but I wonder if this is now necessary
+(same for the DVP counterpart).
+
+We call this from the power up/down routine, if we get here with on=1
+we are exiting from the chip powerdown mode and I expect registers to
+be restored to their default values.
+
+> > > +
+> > > +     /*
+> > > +      * Power up MIPI HS Tx and LS Rx; 2 data lanes mode
+> > > +      *
+> > > +      * 0x300e = 0x40
+> > > +      * [7:5] = 010  : 2 data lanes mode (see FIXME note in
+> > > +      *                "ov5640_set_stream_mipi()")
+> > > +      * [4] = 0      : Power up MIPI HS Tx
+> > > +      * [3] = 0      : Power up MIPI LS Rx
+> > > +      * [2] = 0      : MIPI interface disabled
+> > > +      */
+> > > +     ret = ov5640_write_reg(sensor, OV5640_REG_IO_MIPI_CTRL00, 0x40);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     /*
+> > > +      * Gate clock and set LP11 in 'no packets mode' (idle)
+> > > +      *
+> > > +      * 0x4800 = 0x24
+> > > +      * [5] = 1      : Gate clock when 'no packets'
+> > > +      * [2] = 1      : MIPI bus in LP11 when 'no packets'
+> > > +      */
+> > > +     ret = ov5640_write_reg(sensor, OV5640_REG_MIPI_CTRL00, 0x24);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     /*
+> > > +      * Set data lanes and clock in LP11 when 'sleeping'
+> > > +      *
+> > > +      * 0x3019 = 0x70
+> > > +      * [6] = 1      : MIPI data lane 2 in LP11 when 'sleeping'
+> > > +      * [5] = 1      : MIPI data lane 1 in LP11 when 'sleeping'
+> > > +      * [4] = 1      : MIPI clock lane in LP11 when 'sleeping'
+> > > +      */
+> > > +     ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT00, 0x70);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     /* Give lanes some time to coax into LP11 state. */
+> > > +     usleep_range(500, 1000);
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static int ov5640_set_dvp(struct ov5640_dev *sensor, bool on)
+> > > +{
+> > > +     unsigned int flags = sensor->ep.bus.parallel.flags;
+> > > +     u8 pclk_pol = 0;
+> > > +     u8 hsync_pol = 0;
+> > > +     u8 vsync_pol = 0;
+> > > +     int ret = 0;
+> > > +
+> > > +     if (!on) {
+> > > +             /* Reset settings to their default values. */
+> > > +             ov5640_write_reg(sensor, OV5640_REG_IO_MIPI_CTRL00, 0x58);
+> > > +             ov5640_write_reg(sensor, OV5640_REG_POLARITY_CTRL00, 0x20);
+> > > +             ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE01, 0x00);
+> > > +             ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE02, 0x00);
+> > > +
+> > > +             return ret;
+> > > +     }
+> > > +
+> > > +     /*
+> > > +      * Note about parallel port configuration.
+> > > +      *
+> > > +      * When configured in parallel mode, the OV5640 will
+> > > +      * output 10 bits data on DVP data lines [9:0].
+> > > +      * If only 8 bits data are wanted, the 8 bits data lines
+> > > +      * of the camera interface must be physically connected
+> > > +      * on the DVP data lines [9:2].
+> > > +      *
+> > > +      * Control lines polarity can be configured through
+> > > +      * devicetree endpoint control lines properties.
+> > > +      * If no endpoint control lines properties are set,
+> > > +      * polarity will be as below:
+> > > +      * - VSYNC:     active high
+> > > +      * - HREF:      active low
+> > > +      * - PCLK:      active low
+> > > +      */
+> > > +     /*
+> > > +      * configure parallel port control lines polarity
+> > > +      *
+> > > +      * POLARITY CTRL0
+> > > +      * - [5]:       PCLK polarity (0: active low, 1: active high)
+> > > +      * - [1]:       HREF polarity (0: active low, 1: active high)
+> > > +      * - [0]:       VSYNC polarity (mismatch here between
+> > > +      *              datasheet and hardware, 0 is active high
+> > > +      *              and 1 is active low...)
+> > > +      */
+> > > +     if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
+> > > +             pclk_pol = 1;
+> > > +     if (flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
+> > > +             hsync_pol = 1;
+> > > +     if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
+> > > +             vsync_pol = 1;
+> > > +
+> > > +     ret = ov5640_write_reg(sensor, OV5640_REG_POLARITY_CTRL00,
+> > > +                            (pclk_pol << 5) | (hsync_pol << 1) | vsync_pol);
+> > > +
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     /*
+> > > +      * powerdown MIPI TX/RX PHY & disable MIPI
+> > > +      *
+> > > +      * MIPI CONTROL 00
+> > > +      * 4:    PWDN PHY TX
+> > > +      * 3:    PWDN PHY RX
+> > > +      * 2:    MIPI enable
+> > > +      */
+> > > +     ret = ov5640_write_reg(sensor, OV5640_REG_IO_MIPI_CTRL00, 0x18);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     /*
+> > > +      * enable VSYNC/HREF/PCLK DVP control lines
+> > > +      * & D[9:6] DVP data lines
+> > > +      *
+> > > +      * PAD OUTPUT ENABLE 01
+> > > +      * - 6:         VSYNC output enable
+> > > +      * - 5:         HREF output enable
+> > > +      * - 4:         PCLK output enable
+> > > +      * - [3:0]:     D[9:6] output enable
+> > > +      */
+> > > +     ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE01, 0x7f);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     /*
+> > > +      * enable D[5:0] DVP data lines
+> > > +      *
+> > > +      * PAD OUTPUT ENABLE 02
+> > > +      * - [7:2]:     D[5:0] output enable
+> > > +      */
+> > > +     ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE02, 0xfc);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > >  static int ov5640_set_power(struct ov5640_dev *sensor, bool on)
+> > >  {
+> > >       int ret = 0;
+> > > @@ -2013,67 +2086,17 @@ static int ov5640_set_power(struct ov5640_dev *sensor, bool on)
+> > >               ret = ov5640_restore_mode(sensor);
+> > >               if (ret)
+> > >                       goto power_off;
+> > > +     }
+> > >
+> > > -             /* We're done here for DVP bus, while CSI-2 needs setup. */
+> > > -             if (sensor->ep.bus_type != V4L2_MBUS_CSI2_DPHY)
+> > > -                     return 0;
+> > > -
+> > > -             /*
+> > > -              * Power up MIPI HS Tx and LS Rx; 2 data lanes mode
+> > > -              *
+> > > -              * 0x300e = 0x40
+> > > -              * [7:5] = 010  : 2 data lanes mode (see FIXME note in
+> > > -              *                "ov5640_set_stream_mipi()")
+> > > -              * [4] = 0      : Power up MIPI HS Tx
+> > > -              * [3] = 0      : Power up MIPI LS Rx
+> > > -              * [2] = 0      : MIPI interface disabled
+> > > -              */
+> > > -             ret = ov5640_write_reg(sensor,
+> > > -                                    OV5640_REG_IO_MIPI_CTRL00, 0x40);
+> > > -             if (ret)
+> > > -                     goto power_off;
+> > > -
+> > > -             /*
+> > > -              * Gate clock and set LP11 in 'no packets mode' (idle)
+> > > -              *
+> > > -              * 0x4800 = 0x24
+> > > -              * [5] = 1      : Gate clock when 'no packets'
+> > > -              * [2] = 1      : MIPI bus in LP11 when 'no packets'
+> > > -              */
+> > > -             ret = ov5640_write_reg(sensor,
+> > > -                                    OV5640_REG_MIPI_CTRL00, 0x24);
+> > > -             if (ret)
+> > > -                     goto power_off;
+> > > -
+> > > -             /*
+> > > -              * Set data lanes and clock in LP11 when 'sleeping'
+> > > -              *
+> > > -              * 0x3019 = 0x70
+> > > -              * [6] = 1      : MIPI data lane 2 in LP11 when 'sleeping'
+> > > -              * [5] = 1      : MIPI data lane 1 in LP11 when 'sleeping'
+> > > -              * [4] = 1      : MIPI clock lane in LP11 when 'sleeping'
+> > > -              */
+> > > -             ret = ov5640_write_reg(sensor,
+> > > -                                    OV5640_REG_PAD_OUTPUT00, 0x70);
+> > > -             if (ret)
+> > > -                     goto power_off;
+> > > -
+> > > -             /* Give lanes some time to coax into LP11 state. */
+> > > -             usleep_range(500, 1000);
+> > > -
+> > > -     } else {
+> > > -             if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY) {
+> > > -                     /* Reset MIPI bus settings to their default values. */
+> > > -                     ov5640_write_reg(sensor,
+> > > -                                      OV5640_REG_IO_MIPI_CTRL00, 0x58);
+> > > -                     ov5640_write_reg(sensor,
+> > > -                                      OV5640_REG_MIPI_CTRL00, 0x04);
+> > > -                     ov5640_write_reg(sensor,
+> > > -                                      OV5640_REG_PAD_OUTPUT00, 0x00);
+> > > -             }
+> > > +     if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY)
+> > > +             ret = ov5640_set_mipi(sensor, on);
+> > > +     else
+> > > +             ret = ov5640_set_dvp(sensor, on);
+> > > +     if (ret)
+> > > +             goto power_off;
+
+If you agree the  if (!on) case in the two set_mipi()/set_dvp() functions
+above can be removed, this function should become
+
+                if (!on) {
+                        ov5640_set_power_off(sensor)
+                        return 0;
+                }
+
+                ....
+
+Thanks
+  j
+
+> > >
+> > > +     if (!on)
+> > >               ov5640_set_power_off(sensor);
+> > > -     }
+> > >
+> > >       return 0;
+> > >
+> > > --
+> > > 2.17.1
+> > >
