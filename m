@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D400CC433E1
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38E88C433DF
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:37:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B11FC22CAE
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:37:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1833E22CAE
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:37:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="suCZmmO7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bZw7nImC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727971AbgHGIg5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Aug 2020 04:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
+        id S1727932AbgHGIgv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Aug 2020 04:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727826AbgHGIgz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Aug 2020 04:36:55 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE5C061574;
-        Fri,  7 Aug 2020 01:36:55 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id o22so708420qtt.13;
-        Fri, 07 Aug 2020 01:36:55 -0700 (PDT)
+        with ESMTP id S1727911AbgHGIgq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Aug 2020 04:36:46 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5149EC061574;
+        Fri,  7 Aug 2020 01:36:46 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id l13so388731qvt.10;
+        Fri, 07 Aug 2020 01:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=EXGupTpGbvdG/fn/UKREirAgsAV1HujkQjqH/LC9r7g=;
-        b=suCZmmO70LGOca+M4uJziOz/IpkT24FjNgmNJfQ/EHhK1febz7DPchJGzCMl6FRJaY
-         9uTjEVUyViy4YBJY7f/ekSjeRV+0tVooPDh1HH5s2vowJ2F8+DZvYazqzSopUd/cx32s
-         bhvyBY4lYpghHPOtchdUCjT95jFQgBXAWXI++X81wn55y+rpYKRCeePq9v10J52enBnM
-         UaLj0QA7Wpyask0wRLLdbhO2poVRCjRKXkJi13dALs6iHk5f9jr2F2i3Lsxza7WqV0jl
-         ZOf816H8b2U3q8oac9lX9g371kIkNY4V7iUSFcy/1ft36I02V+jNIib9K9j7uwzP2f8T
-         81rA==
+        bh=p7yN8/UE3bmxOW+3sD/+cxzuqhvnsobCII+RkxMM1Yg=;
+        b=bZw7nImC6/ipXeOhcJmSKB+4cpDo0r3NGPtVqM6dihgN1UrZe08HuYbwuRsnME/d8o
+         sDPTUTjJkKERPTgCarXGozrCtd0if81vn94ZMSaFSB8UjvAX4cOuD/er1P0bijA14ynw
+         jg8qHynJwbiERmU9NyJ9hmvN/BLRy+mYEDP0FgY61ihN1uhA6+orGMrTpoyPF0XzCwel
+         9W6y8Hp7nLp11+Cx9Hme9PoHydhAq4mfb2jX09IOr3gAYlEdufWV9nCgCrRkfVeIcam3
+         GUT2pRaEG9UMPefZVWU0LiCdd+syTHovyMjuLIxSCLRS9SeakHnaazncPGYhE4RkMaOn
+         CJ+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=EXGupTpGbvdG/fn/UKREirAgsAV1HujkQjqH/LC9r7g=;
-        b=BJRmvF3Ii2nAqwEHcA6bDeTEwlemuQAJlc69mGx4Cmd8wiX5ZEnr3p4WJmsbwqIbE2
-         nnpzeTNRo9bgv8V45Ek9MT9mwVqxXLN3cWKpY110/Lh0tzS9JEIBYLL+Rck/noX1WApN
-         3IiZhba5LdhrtRY//Qw/CALbkIWXoK/TsrVH731PO7LOrdYJzdeR6Ndu51AxaohN9sP7
-         q0XI0ZBj5X01i02wNJgD7LKK7a958fWhKM8HL60NUzhSC52kEaMKafOIEYZkhKag+ABw
-         UwkIVkdwLe/E3INkvGs8LMvb6cA9ZsJi6XM6yM9p0wjHu/Bzv9SEmqxiktQC8WYvASUR
-         yk+g==
-X-Gm-Message-State: AOAM533J6egOV9I8DKvA2CWY3HI+h/SY1b+BN0g2MFwsMumcb2Mx50EV
-        nuGENWNOKb95fd9IJpLwiAp0ED4Pa90=
-X-Google-Smtp-Source: ABdhPJynUVAOIp/xQi+6G9Hx4cDsYO+uw4KlJRzHBupTbmTgktD5fogTSoRfrLixJwXwItQ3/yW9LQ==
-X-Received: by 2002:ac8:4117:: with SMTP id q23mr13252062qtl.186.1596789414575;
-        Fri, 07 Aug 2020 01:36:54 -0700 (PDT)
+        bh=p7yN8/UE3bmxOW+3sD/+cxzuqhvnsobCII+RkxMM1Yg=;
+        b=iMqFSd/303uit+hAQaC9EaCW/rueBERuDBWNXZrs3ST7QYScHc/aX/OHRVQarTD1Fa
+         ByIRrXDk6u4MkDeLAx5aRiPkJKYpNYQm/AnQXGKM1V6+z8Ia0nxbIrlW2eXfw28m+dkQ
+         C9uWYb5rS18ocec8aPbCbRF1RcY3+aqM27z8qrKSOvEztM7aqEG997Y3d/2Agq/3+7Jo
+         r2qtjt/Yr2fYZYZWBd0HUxNwlYI58sQkhpMwPUCGfuonM9RjPkNWPRragj8z69WwCY0p
+         C7O4L8193PkQlgvGkY3LMOgpr+0Z/yWrPLsEc+Gv9FZeBPUnS7QqfFsdw9AWpSf39RXm
+         f8ew==
+X-Gm-Message-State: AOAM532A1IF+RD/94GUXc2Lolxd2U2pX0zyJFwEc+YPwDat7duXt4yQj
+        e69zLFYDXzA16LtxwlymWzAOpTOn2Bg=
+X-Google-Smtp-Source: ABdhPJxONuOawZin2ouaz4dvQaXyVGtBCE461GSTu3Z9ZipJKIbgKfblnk7vxOYvYc5cb7KDyx7Lxg==
+X-Received: by 2002:ad4:4c0a:: with SMTP id bz10mr12947607qvb.78.1596789405238;
+        Fri, 07 Aug 2020 01:36:45 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14d:72b1:8920:da15:c0bd:33c1:e2ad])
-        by smtp.gmail.com with ESMTPSA id c42sm7846728qte.5.2020.08.07.01.36.52
+        by smtp.gmail.com with ESMTPSA id c42sm7846728qte.5.2020.08.07.01.36.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2020 01:36:54 -0700 (PDT)
+        Fri, 07 Aug 2020 01:36:44 -0700 (PDT)
 From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 X-Google-Original-From: Daniel W. S. Almeida
 To:     linux-kernel@vger.kernel.org
@@ -65,9 +65,9 @@ Cc:     skhan@linuxfoundation.org,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Subject: [PATCH 14/20] media: dvb-frontends: lgdt3306a.c: remove dead code
-Date:   Fri,  7 Aug 2020 05:35:41 -0300
-Message-Id: <20200807083548.204360-14-dwlsalmeida@gmail.com>
+Subject: [PATCH 11/20] media: pci: saa7164-core.c: replace if (cond) BUG() with BUG_ON()
+Date:   Fri,  7 Aug 2020 05:35:38 -0300
+Message-Id: <20200807083548.204360-11-dwlsalmeida@gmail.com>
 X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,60 +78,65 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 
-Fix the following coccinelle report:
+Fix the following coccinelle reports:
 
-drivers/media/dvb-frontends/lgdt3306a.c:718:5-8:
-Unneeded variable: "ret". Return "0" on line 744
+drivers/media/pci/saa7164/saa7164-core.c:579:2-5:
+WARNING: Use BUG_ON instead of if condition followed by BUG.
 
-Code was enclosed with #if 0 and thus this variable was not needed.
-Remove that code altogether.
+drivers/media/pci/saa7164/saa7164-core.c:592:3-6:
+WARNING: Use BUG_ON instead of if condition followed by BUG.
+
+drivers/media/pci/saa7164/saa7164-core.c:898:2-5:
+WARNING: Use BUG_ON instead of if condition followed by BUG.
 
 Found using - Coccinelle (http://coccinelle.lip6.fr)
 
 Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 ---
- drivers/media/dvb-frontends/lgdt3306a.c | 27 +------------------------
- 1 file changed, 1 insertion(+), 26 deletions(-)
+ drivers/media/pci/saa7164/saa7164-core.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/lgdt3306a.c b/drivers/media/dvb-frontends/lgdt3306a.c
-index d3c330e035c4..0247ef799546 100644
---- a/drivers/media/dvb-frontends/lgdt3306a.c
-+++ b/drivers/media/dvb-frontends/lgdt3306a.c
-@@ -715,33 +715,8 @@ static int lgdt3306a_spectral_inversion(struct lgdt3306a_state *state,
- 				       struct dtv_frontend_properties *p,
- 				       int inversion)
- {
--	int ret = 0;
--
- 	dbg_info("(%d)\n", inversion);
--#if 0
--	/*
--	 * FGR - spectral_inversion defaults already set for VSB and QAM;
--	 * can enable later if desired
--	 */
--
--	ret = lgdt3306a_set_inversion(state, inversion);
--
--	switch (p->modulation) {
--	case VSB_8:
--		/* Manual only for VSB */
--		ret = lgdt3306a_set_inversion_auto(state, 0);
--		break;
--	case QAM_64:
--	case QAM_256:
--	case QAM_AUTO:
--		/* Auto ok for QAM */
--		ret = lgdt3306a_set_inversion_auto(state, 1);
--		break;
--	default:
--		ret = -EINVAL;
--	}
--#endif
--	return ret;
-+	return 0;
- }
+diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+index 50293396658c..1d6f6667951c 100644
+--- a/drivers/media/pci/saa7164/saa7164-core.c
++++ b/drivers/media/pci/saa7164/saa7164-core.c
+@@ -575,8 +575,8 @@ static irqreturn_t saa7164_irq_ts(struct saa7164_port *port)
  
- static int lgdt3306a_set_if(struct lgdt3306a_state *state,
+ 	/* Find the current write point from the hardware */
+ 	wp = saa7164_readl(port->bufcounter);
+-	if (wp > (port->hwcfg.buffercount - 1))
+-		BUG();
++
++	BUG_ON(wp > (port->hwcfg.buffercount - 1));
+ 
+ 	/* Find the previous buffer to the current write point */
+ 	if (wp == 0)
+@@ -588,8 +588,8 @@ static irqreturn_t saa7164_irq_ts(struct saa7164_port *port)
+ 	/* TODO: turn this into a worker thread */
+ 	list_for_each_safe(c, n, &port->dmaqueue.list) {
+ 		buf = list_entry(c, struct saa7164_buffer, list);
+-		if (i++ > port->hwcfg.buffercount)
+-			BUG();
++		BUG_ON(i > port->hwcfg.buffercount);
++		i++;
+ 
+ 		if (buf->idx == rp) {
+ 			/* Found the buffer, deal with it */
+@@ -894,8 +894,7 @@ static int saa7164_port_init(struct saa7164_dev *dev, int portnr)
+ {
+ 	struct saa7164_port *port = NULL;
+ 
+-	if ((portnr < 0) || (portnr >= SAA7164_MAX_PORTS))
+-		BUG();
++	BUG_ON((portnr < 0) || (portnr >= SAA7164_MAX_PORTS));
+ 
+ 	port = &dev->ports[portnr];
+ 
+@@ -1566,4 +1565,3 @@ static void __exit saa7164_fini(void)
+ 
+ module_init(saa7164_init);
+ module_exit(saa7164_fini);
+-
 -- 
 2.28.0
 
