@@ -2,134 +2,247 @@ Return-Path: <SRS0=IBHb=BR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7A54C433DF
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 13:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 521CCC433DF
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 14:33:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E9B122C9F
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 13:09:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="axN4FL/C"
+	by mail.kernel.org (Postfix) with ESMTP id 22EC9221E2
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 14:33:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbgHGNJd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Aug 2020 09:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
+        id S1726186AbgHGOdd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Aug 2020 10:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgHGNJd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Aug 2020 09:09:33 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EF3C061574
-        for <linux-media@vger.kernel.org>; Fri,  7 Aug 2020 06:09:32 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id m22so2006593eje.10
-        for <linux-media@vger.kernel.org>; Fri, 07 Aug 2020 06:09:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C2XCXsmJyA7W5usz6rBfTizoWqy9Uyp5cHVW9IvGA2c=;
-        b=axN4FL/COED5Z5yRiWtsARF1hdhL5JgTJpfZqkBRCXe4tFeCxtQCgehSz7hPjibXzw
-         jwYp+AotTyirGdBNg0299qV5KbQxVHSXao/FMMViaFCst/9JCu9xJSDK31A3nNMqhJvE
-         RoyggGI4FWc+l3ItIb1XuejWp3OM4WSzgaWNM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C2XCXsmJyA7W5usz6rBfTizoWqy9Uyp5cHVW9IvGA2c=;
-        b=D0UlW4Sjp2qpmTRBsWhhBkLtYEHppoLavLXDUnoZmZiCfE6v2EzUUuTOHXQkKvD31m
-         +r0px9Fm4dFa0RZ3Y/vrmLEXLIBk7/8UGhI/ybUbtGPBR3nk6O32iN1A3h38bXJmtRWY
-         acU05vrApaThkBiu7nLS99TZjWLZEcdKWbsFgb2mQi822QDh1+hgeo2keXIBizFgwcX2
-         hRCF1V5r07650PRDxcRFN7GasJ2NpE/4aK22ZAIg1gxNC/Lsgx+F/YAZnUzrqPwXCQd4
-         BJe9sK0GHX3wcnOtwfZG4bo4M5G6I53Gjs7vllRP652QWo5dOEkjQNYNHwi+ydBDkJN0
-         Gxzg==
-X-Gm-Message-State: AOAM531iYgYF/gE1s9lj6kCSBQLQXWO9cHvoRzNYPqLN3ySMjWJRGJu3
-        gJjNGiWXVSjvQ60qqXzhza7Eu/WjFRtxKB83InrZYQ==
-X-Google-Smtp-Source: ABdhPJxrEzTPKTvRkUAnTnQZpqhKI9YTMaeAolXGnU7xz6Imi4rKSsQrGfHqItdJEg+dDbPYVlolH1F5VhxwHH1WaNw=
-X-Received: by 2002:a17:906:3850:: with SMTP id w16mr9706026ejc.205.1596805770763;
- Fri, 07 Aug 2020 06:09:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200710144520.RESEND.1.Id0f52f486e277b5af30babac8ba6b09589962a68@changeid>
- <20200710070332.GA1175842@kroah.com> <CANMq1KDcKWgyYYP_m0-WV7602g7zUbU0PPkvwXxbSTF5vFfKGQ@mail.gmail.com>
- <CANMq1KC7CgUT+neoOUZbnr8MbDgqEikqt2vn8dxAS1rpX=C2aA@mail.gmail.com>
- <20200807062809.GB979264@kroah.com> <CANMq1KD_hJ_ST3du7dcSd8GBtdL4d-C1pWbxXz8Wu8w79-2fUg@mail.gmail.com>
- <20200807100444.0f2d3c94@coco.lan>
-In-Reply-To: <20200807100444.0f2d3c94@coco.lan>
-From:   Nicolas Boichat <drinkcat@chromium.org>
-Date:   Fri, 7 Aug 2020 21:09:20 +0800
-Message-ID: <CANMq1KD1HDT75YqwyqW-wdGZGSjuq_GvGdwYNF2ZU8Cgx6HHEg@mail.gmail.com>
-Subject: Re: [RESEND PATCH] media: atomisp: Replace trace_printk by pr_info
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, lkml <linux-kernel@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
+        with ESMTP id S1725955AbgHGOdc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Aug 2020 10:33:32 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A11CC061756;
+        Fri,  7 Aug 2020 07:33:32 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 549B4299B0A
+Message-ID: <4112aad8ad439fe5b46192e7540e91da4ae8a557.camel@collabora.com>
+Subject: Re: [PATCH v2 01/14] media: uapi: h264: Update reference lists
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Date:   Fri, 07 Aug 2020 11:33:17 -0300
+In-Reply-To: <20200806154707.GA1621078@aptenodytes>
+References: <20200806151310.98624-1-ezequiel@collabora.com>
+         <20200806151310.98624-2-ezequiel@collabora.com>
+         <20200806154707.GA1621078@aptenodytes>
+Organization: Collabora
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Aug 7, 2020 at 4:04 PM Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
->
-> Em Fri, 7 Aug 2020 14:51:12 +0800
-> Nicolas Boichat <drinkcat@chromium.org> escreveu:
->
-> > On Fri, Aug 7, 2020 at 2:28 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Fri, Aug 07, 2020 at 09:50:23AM +0800, Nicolas Boichat wrote:
-> > > > On Fri, Jul 24, 2020 at 8:41 PM Nicolas Boichat <drinkcat@chromium.org> wrote:
-> > > > >
-> > > > > On Fri, Jul 10, 2020 at 3:03 PM Greg Kroah-Hartman
-> > > > > <gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > On Fri, Jul 10, 2020 at 02:45:29PM +0800, Nicolas Boichat wrote:
-> > > > > > > trace_printk should not be used in production code, replace it
-> > > > > > > call with pr_info.
-> > > > > > >
-> > > > > > > Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
-> > > > > > > ---
-> > > > > > > Sent this before as part of a series (whose 4th patch was a
-> > > > > > > change that allows to detect such trace_printk), but maybe it's
-> > > > > > > easier to get individual maintainer attention by splitting it.
-> > > > > >
-> > > > > > Mauro should take this soon:
-> > > > > >
-> > > > > > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > >
-> > > > > Mauro: did you get a chance to look at this? (and the other similar
-> > > > > patch "media: camss: vfe: Use trace_printk for debugging only")
-> > > >
-> > > > Mauro: Another gentle ping. Thanks.
-> > >
-> > > It's the middle of the merge window, maintainers can't do anything until
-> > > after 5.9-rc1 is out, sorry.
-> >
-> > Huh, wait, looks like Mauro _did_ pick it (found it in this email
-> > "[GIT PULL for v5.8-rc7] media fixes").
-> >
-> > My bad then, I was expecting an ack ,-)
->
-> Never expect acks. Kernel maintainers usually don't send them.
+On Thu, 2020-08-06 at 17:47 +0200, Paul Kocialkowski wrote:
+> Hi,
+> 
+> On Thu 06 Aug 20, 12:12, Ezequiel Garcia wrote:
+> > From: Jernej Skrabec <jernej.skrabec@siol.net>
+> > 
+> > When dealing with with interlaced frames, reference lists must tell if
+> > each particular reference is meant for top or bottom field. This info
+> > is currently not provided at all in the H264 related controls.
+> > 
+> > Make reference lists hold a structure which will also hold an
+> > enumerator type along index into DPB array. The enumerator must
+> > be used to specify if reference is for top or bottom field.
+> > 
+> > Currently the only user of these lists is Cedrus which is just compile
+> > fixed here. Actual usage of will come in a following commit.
+> 
+> Is there a particular reason we are adding this to the ref_pic_list[0-1]
+> instead of the DPB entries directly?
+> 
 
-For some reasons I'm working mainly with maintainers who do ,-) I'll
-adjust my expectations, thanks.
+I actually asked the same question to Jernej's original series.
 
-> Yet, in the case of media, you should probably have received
-> an automatic e-mail from our patchwork instance.
+Given the references are per-field, which is why there are twice
+as many references as DPB entries, the semantics proposed here
+are required for slice-based decoders.
 
-Nope, didn't receive anything. But I'm happy to blame gmail for that...
+See Nicolas' reply:
 
-Anyway, I'll ping you again after the merge window closes about
-"media: camss: vfe: Use trace_printk for debugging only" (I _think_
-that one didn't get merged). Hopefully not too many other
-trace_printks made it through the cracks in the meantime ,-)
+https://www.spinics.net/lists/arm-kernel/msg812277.html
 
-Thanks, have a good weekend,
+As Jernej's already reply, this is required to fix Cedrus.
 
->
-> Thanks,
-> Mauro
+Thanks!
+Ezequiel
+
+> Cheers,
+> 
+> Paul
+> 
+> > Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > ---
+> > v2:
+> > * As pointed out by Jonas, enum v4l2_h264_dpb_reference here.
+> > ---
+> >  .../media/v4l/ext-ctrls-codec.rst             | 44 ++++++++++++++++++-
+> >  .../staging/media/sunxi/cedrus/cedrus_h264.c  |  6 +--
+> >  include/media/h264-ctrls.h                    | 23 +++++++---
+> >  3 files changed, 62 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > index d0d506a444b1..f2b2a381369f 100644
+> > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> > @@ -1843,10 +1843,10 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+> >      * - __u32
+> >        - ``slice_group_change_cycle``
+> >        -
+> > -    * - __u8
+> > +    * - struct :c:type:`v4l2_h264_reference`
+> >        - ``ref_pic_list0[32]``
+> >        - Reference picture list after applying the per-slice modifications
+> > -    * - __u8
+> > +    * - struct :c:type:`v4l2_h264_reference`
+> >        - ``ref_pic_list1[32]``
+> >        - Reference picture list after applying the per-slice modifications
+> >      * - __u32
+> > @@ -1926,6 +1926,46 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+> >        - ``chroma_offset[32][2]``
+> >        -
+> >  
+> > +``Picture Reference``
+> > +
+> > +.. c:type:: v4l2_h264_reference
+> > +
+> > +.. cssclass:: longtable
+> > +
+> > +.. flat-table:: struct v4l2_h264_reference
+> > +    :header-rows:  0
+> > +    :stub-columns: 0
+> > +    :widths:       1 1 2
+> > +
+> > +    * - enum :c:type:`v4l2_h264_dpb_reference`
+> > +      - ``reference``
+> > +      - Specifies how the DPB entry is referenced.
+> > +    * - __u8
+> > +      - ``index``
+> > +      - Index into the :c:type:`v4l2_ctrl_h264_decode_params`.dpb array.
+> > +
+> > +.. c:type:: v4l2_h264_dpb_reference
+> > +
+> > +.. cssclass:: longtable
+> > +
+> > +.. flat-table::
+> > +    :header-rows:  0
+> > +    :stub-columns: 0
+> > +    :widths:       1 1 2
+> > +
+> > +    * - ``V4L2_H264_DPB_TOP_REF``
+> > +      - 0x1
+> > +      - The top field in field pair is used for
+> > +        short-term reference.
+> > +    * - ``V4L2_H264_DPB_BOTTOM_REF``
+> > +      - 0x2
+> > +     - The bottom field in field pair is used for
+> > +        short-term reference.
+> > +    * - ``V4L2_H264_DPB_FRAME_REF``
+> > +      - 0x3
+> > +      - The frame (or the top/bottom fields, if it's a field pair)
+> > +        is used for short-term reference.
+> > +
+> >  ``V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS (struct)``
+> >      Specifies the decode parameters (as extracted from the bitstream)
+> >      for the associated H264 slice data. This includes the necessary
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+> > index 54ee2aa423e2..cce527bbdf86 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+> > @@ -166,8 +166,8 @@ static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
+> >  
+> >  static void _cedrus_write_ref_list(struct cedrus_ctx *ctx,
+> >  				   struct cedrus_run *run,
+> > -				   const u8 *ref_list, u8 num_ref,
+> > -				   enum cedrus_h264_sram_off sram)
+> > +				   const struct v4l2_h264_reference *ref_list,
+> > +				   u8 num_ref, enum cedrus_h264_sram_off sram)
+> >  {
+> >  	const struct v4l2_ctrl_h264_decode_params *decode = run->h264.decode_params;
+> >  	struct vb2_queue *cap_q;
+> > @@ -188,7 +188,7 @@ static void _cedrus_write_ref_list(struct cedrus_ctx *ctx,
+> >  		int buf_idx;
+> >  		u8 dpb_idx;
+> >  
+> > -		dpb_idx = ref_list[i];
+> > +		dpb_idx = ref_list[i].index;
+> >  		dpb = &decode->dpb[dpb_idx];
+> >  
+> >  		if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+> > diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
+> > index 080fd1293c42..4c0bb7f5fb05 100644
+> > --- a/include/media/h264-ctrls.h
+> > +++ b/include/media/h264-ctrls.h
+> > @@ -19,6 +19,8 @@
+> >   */
+> >  #define V4L2_H264_NUM_DPB_ENTRIES 16
+> >  
+> > +#define V4L2_H264_REF_LIST_LEN (2 * V4L2_H264_NUM_DPB_ENTRIES)
+> > +
+> >  /* Our pixel format isn't stable at the moment */
+> >  #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
+> >  
+> > @@ -140,6 +142,19 @@ struct v4l2_h264_pred_weight_table {
+> >  #define V4L2_H264_SLICE_FLAG_DIRECT_SPATIAL_MV_PRED	0x04
+> >  #define V4L2_H264_SLICE_FLAG_SP_FOR_SWITCH		0x08
+> >  
+> > +enum v4l2_h264_dpb_reference {
+> > +	V4L2_H264_DPB_TOP_REF = 0x1,
+> > +	V4L2_H264_DPB_BOTTOM_REF = 0x2,
+> > +	V4L2_H264_DPB_FRAME_REF = 0x3,
+> > +};
+> > +
+> > +struct v4l2_h264_reference {
+> > +	enum v4l2_h264_dpb_reference fields;
+> > +
+> > +	/* Index into v4l2_ctrl_h264_decode_params.dpb[] */
+> > +	__u8 index;
+> > +};
+> > +
+> >  struct v4l2_ctrl_h264_slice_params {
+> >  	/* Size in bytes, including header */
+> >  	__u32 size;
+> > @@ -178,12 +193,8 @@ struct v4l2_ctrl_h264_slice_params {
+> >  	__u8 num_ref_idx_l1_active_minus1;
+> >  	__u32 slice_group_change_cycle;
+> >  
+> > -	/*
+> > -	 * Entries on each list are indices into
+> > -	 * v4l2_ctrl_h264_decode_params.dpb[].
+> > -	 */
+> > -	__u8 ref_pic_list0[32];
+> > -	__u8 ref_pic_list1[32];
+> > +	struct v4l2_h264_reference ref_pic_list0[V4L2_H264_REF_LIST_LEN];
+> > +	struct v4l2_h264_reference ref_pic_list1[V4L2_H264_REF_LIST_LEN];
+> >  
+> >  	__u32 flags;
+> >  };
+> > -- 
+> > 2.27.0
+> > 
+
+
