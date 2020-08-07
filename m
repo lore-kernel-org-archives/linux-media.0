@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75F36C433E0
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:36:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BEA2C433DF
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:36:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55C9A22CAF
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:36:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D717822CAF
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 08:36:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="udMu3s8I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vafemYzr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727807AbgHGIg1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Aug 2020 04:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S1727850AbgHGIge (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Aug 2020 04:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726511AbgHGIgZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Aug 2020 04:36:25 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBF9C061574;
-        Fri,  7 Aug 2020 01:36:25 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id c12so720642qtn.9;
-        Fri, 07 Aug 2020 01:36:25 -0700 (PDT)
+        with ESMTP id S1727837AbgHGIgd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Aug 2020 04:36:33 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549FCC061574;
+        Fri,  7 Aug 2020 01:36:33 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id d14so1005376qke.13;
+        Fri, 07 Aug 2020 01:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pCOUWfwQGCxx4xFgjgJzdmxB0Ku9U+xacNCA0bE4G4U=;
-        b=udMu3s8Ircb0KhEzwcbUl+bWG0t6TlZ4yD7XGtGLAx06W9xJG+ChSHoS8QExNhTzw+
-         xJ4cU2B2s1vrXlEqBa0CUM2m6ovQcMMDFkplruuc7N+quTmuvdopwoQLq2a1Akrs693J
-         /sfMpTSp4+TNK/b9IH59SHlRUE7tIdTKZB0FEGlIduU0pBOfierHlhK79k43s630fF5W
-         vizvvLIO0mndB1OwRDG0YMrj2BsWurDE8l+Dp3P/KFx7jZnIJ25RFDnUhyRWid5y759k
-         986bjo7xZZp/uOHCoAlM/hlhqeqMaRSN2fzjlQf664Dnk3bTyj4kJmuMftVQW3Xzl8EC
-         OcIw==
+        bh=yEXAHDd933UU5IrgghuWIRbSYw8TfxYHRTaFu8VsYYU=;
+        b=vafemYzrm3ka5M5odLoFLxlavT2sAYCa4jhehaWjzZvqmD2Vr18QBi5T0SaYILH6Si
+         Y6dEGIt/wS+FXZl0FUcwWd1vAaOvB9MliY8UV8dHKCNbEswED8xsesBIUgW6g0XYHGp8
+         uHqjeazH9BWNhPfKjVc/fQN6eKcTkMNrUcONoUT2vSyJ2j9SWK/1berbRqGXhpXU7o0R
+         vnYaScBVg0BntBkB6p9uFvyWQ2/zLbKE+T7UVi7se49RPe8RP/b8s510TMyPvVi5x3IH
+         ITfiucStGBgC2sy/towWzQovnO1xkdo9IZjVmiahDtf61AjYDa5ToNCn8jY0PEJ4emc0
+         k75Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pCOUWfwQGCxx4xFgjgJzdmxB0Ku9U+xacNCA0bE4G4U=;
-        b=bmwHRkmA7GVEW4A85ffhzPr+FNKWXqXqe0DE+HZIiTtjQic6nUPnzuVBpv/ch18vem
-         ftdkFvq7bkUtao2kf8k3Ohhyxiu3gzmWulszcHGCBilc5YBFfiWdpuq2+rKPvFvYRFUK
-         +yQM3mqW++hhSvNKE9vlb9mYoIJc7PosSqonX3yvavBxfE3Pkg/I0GjCQsYvAhuKoemx
-         FGO72YCN54jX5n7xVNGR+Oz/4bKsP3PSxsb0TNps/oxDYuiNTacxwn7sYx3jNw46Qm05
-         pCbgYUdBSjj7lPupQ71bObhhd3BN+AI0eQy5Pl20ADcZRu+YnpyM39NKRFMNFdCcyLOV
-         uDaA==
-X-Gm-Message-State: AOAM5322xVGUSG5PcIqZ/QqyyJ2YUd1BWFL3a4yXkQruG76hWaNuPjHP
-        umkkY0ou5dGjKyJObrqt9C8=
-X-Google-Smtp-Source: ABdhPJwdaoeBIf850FLeS5VojFgiOIwoQ2jg8MtkRmkfskN8YOCIayKqkj0kohLNVbJbVEly7fORdA==
-X-Received: by 2002:aed:2091:: with SMTP id 17mr12775857qtb.322.1596789384704;
-        Fri, 07 Aug 2020 01:36:24 -0700 (PDT)
+        bh=yEXAHDd933UU5IrgghuWIRbSYw8TfxYHRTaFu8VsYYU=;
+        b=phkmSIR/2taVltzJlJvhq0NuLt3V/HbCoQ+OqWzTbRFfoGeu4HCrfYj1hYDktCV27g
+         XD9UA6y46RhBJDeMKKqYIj4J/FSefPhYHmKfgqWIrIV87v592YgMTDq6/Dx0L3wrZGaL
+         zvtdWi2tnxRN+1ZLQkOVoLsbfzzTZe5vEKruI4PBvqsA9c7jFqAiBHq0aFyWFe3N6wZL
+         pJOFwPVLa2b3k5AaHIQBUKBznAh9As2kGVZgPW8FL51hnzYZCOfQSv+3/S9+3dBHuh01
+         P+5RraHlVIQkjWaKjpPZfDnSJsybs9SwMUkeSjL5ObDgttt0fX2yRsod+wYWXmY4BGa5
+         VD4g==
+X-Gm-Message-State: AOAM532JssRehcJmAcpTK71dPHo2kZ/JLavCRSOQeYESwMDfyHh4n3CY
+        fv623X02ESO1JknnY9Wo9m0=
+X-Google-Smtp-Source: ABdhPJzW5tGPPuFjuolkx44QWWpMXnhNKbECB50jaOYdAAVGeJ6NPsf+EAcQvksK+gkICvHB36VYSg==
+X-Received: by 2002:a37:9945:: with SMTP id b66mr12742782qke.51.1596789392586;
+        Fri, 07 Aug 2020 01:36:32 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14d:72b1:8920:da15:c0bd:33c1:e2ad])
-        by smtp.gmail.com with ESMTPSA id c42sm7846728qte.5.2020.08.07.01.36.22
+        by smtp.gmail.com with ESMTPSA id c42sm7846728qte.5.2020.08.07.01.36.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2020 01:36:24 -0700 (PDT)
+        Fri, 07 Aug 2020 01:36:32 -0700 (PDT)
 From:   "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 X-Google-Original-From: Daniel W. S. Almeida
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
@@ -65,9 +65,9 @@ Cc:     skhan@linuxfoundation.org,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 05/20] media: cobalt: cobalt-omnitek.c: fix comparison to bool
-Date:   Fri,  7 Aug 2020 05:35:32 -0300
-Message-Id: <20200807083548.204360-5-dwlsalmeida@gmail.com>
+Subject: [PATCH 07/20] media: vicodec: vicodec-core.c: fix assignment of 0/1 to bool variable
+Date:   Fri,  7 Aug 2020 05:35:34 -0300
+Message-Id: <20200807083548.204360-7-dwlsalmeida@gmail.com>
 X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,31 +78,36 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 
-Fix the following coccinelle report:
+Fix the following coccinelle reports:
 
-drivers/media/pci/cobalt/cobalt-omnitek.c:119:5-19:
-WARNING: Comparison to bool
+drivers/media/test-drivers/vicodec/vicodec-core.c:1674:2-21:
+WARNING: Assignment of 0/1 to bool variable
 
-By using "!cond" instead of "cond == false"
+drivers/media/test-drivers/vicodec/vicodec-core.c:1675:2-26:
+WARNING: Assignment of 0/1 to bool variable
+
+By replacing the assignment to 0 with 'false' instead.
 
 Found using - Coccinelle (http://coccinelle.lip6.fr)
 
 Signed-off-by: Daniel W. S. Almeida <dwlsalmeida@gmail.com>
 ---
- drivers/media/pci/cobalt/cobalt-omnitek.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/test-drivers/vicodec/vicodec-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/cobalt/cobalt-omnitek.c b/drivers/media/pci/cobalt/cobalt-omnitek.c
-index 4c137453e679..01b82a2e8d33 100644
---- a/drivers/media/pci/cobalt/cobalt-omnitek.c
-+++ b/drivers/media/pci/cobalt/cobalt-omnitek.c
-@@ -116,7 +116,7 @@ void omni_sg_dma_abort_channel(struct cobalt_stream *s)
- {
- 	struct cobalt *cobalt = s->cobalt;
- 
--	if (is_dma_done(s) == false)
-+	if (!is_dma_done(s))
- 		iowrite32(ABORT, CS_REG(s->dma_channel));
+diff --git a/drivers/media/test-drivers/vicodec/vicodec-core.c b/drivers/media/test-drivers/vicodec/vicodec-core.c
+index 8941d73f6611..e4a8d3a5eecd 100644
+--- a/drivers/media/test-drivers/vicodec/vicodec-core.c
++++ b/drivers/media/test-drivers/vicodec/vicodec-core.c
+@@ -1671,8 +1671,8 @@ static void vicodec_stop_streaming(struct vb2_queue *q)
+ 		ctx->comp_size = 0;
+ 		ctx->header_size = 0;
+ 		ctx->comp_magic_cnt = 0;
+-		ctx->comp_has_frame = 0;
+-		ctx->comp_has_next_frame = 0;
++		ctx->comp_has_frame = false;
++		ctx->comp_has_next_frame = false;
+ 	}
  }
  
 -- 
