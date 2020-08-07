@@ -2,29 +2,29 @@ Return-Path: <SRS0=IBHb=BR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C29B2C433E3
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 11:16:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CE2CC433E5
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 11:16:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9726B22C9F
-	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 11:16:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 660DE2075D
+	for <linux-media@archiver.kernel.org>; Fri,  7 Aug 2020 11:16:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726226AbgHGLQl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Aug 2020 07:16:41 -0400
-Received: from bin-mail-out-05.binero.net ([195.74.38.228]:13288 "EHLO
-        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726987AbgHGLQk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 7 Aug 2020 07:16:40 -0400
-X-Halon-ID: 6eb52ecf-d89f-11ea-a39b-005056917f90
+        id S1728248AbgHGLQm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 7 Aug 2020 07:16:42 -0400
+Received: from vsp-unauthed02.binero.net ([195.74.38.227]:13318 "EHLO
+        vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728091AbgHGLQm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Aug 2020 07:16:42 -0400
+X-Halon-ID: 76e1ce19-d89f-11ea-a39b-005056917f90
 Authorized-sender: niklas@soderlund.pp.se
 Received: from bismarck.berto.se (p54ac52a8.dip0.t-ipconnect.de [84.172.82.168])
         by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
-        id 6eb52ecf-d89f-11ea-a39b-005056917f90;
-        Fri, 07 Aug 2020 13:16:37 +0200 (CEST)
+        id 76e1ce19-d89f-11ea-a39b-005056917f90;
+        Fri, 07 Aug 2020 13:16:39 +0200 (CEST)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -32,10 +32,12 @@ To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
 Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH 0/2] v4l: async: Switch to endpoint node matching
-Date:   Fri,  7 Aug 2020 13:16:17 +0200
-Message-Id: <20200807111619.3664763-1-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH 2/2] rcar-csi2: Use V4L2 async helpers to create the notifier
+Date:   Fri,  7 Aug 2020 13:16:19 +0200
+Message-Id: <20200807111619.3664763-3-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200807111619.3664763-1-niklas.soderlund+renesas@ragnatech.se>
+References: <20200807111619.3664763-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -44,37 +46,102 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+The V4L2 async framework helpers now populates the async notifier with
+endpoint matching information and there is no need to do this manually
+in the R-Car CSI-2 driver, switch to using the provided helper.
 
-With the recent merger of [1] in the media-tree it is finally possible 
-to resurrect the last pieces of the work that started in 2017 :-)
-
-Patch 1/2 switches the default behavior of V4L2 async to use endpoint 
-node matching instead of device node matching. This is made possible by 
-[1] where the matching logic is already changed to allow for both 
-possibilities.
-
-Patch 2/2 removes the special case in R-Car CSI-2 driver which have 
-always used endpoint node matching since it needed to work with ADV748x 
-that register multiple sub-devices using endpoint nodes in the async 
-framework.
-
-With this small series the split between V4L2 drivers that use endpoint 
-vs device node matching is finally closed \o/.
-
-1. b98158d837efa0b2 ("media: v4l2-async: Accept endpoints and devices for fwnode matching")
-
-Niklas Söderlund (1):
-  rcar-csi2: Use V4L2 async helpers to create the notifier
-
-Sakari Ailus (1):
-  v4l: async: Use endpoint node, not device node, for fwnode match
-
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+---
  drivers/media/platform/rcar-vin/rcar-csi2.c | 48 +++++----------------
- drivers/media/v4l2-core/v4l2-async.c        |  8 +++-
- drivers/media/v4l2-core/v4l2-fwnode.c       |  2 +-
- 3 files changed, 18 insertions(+), 40 deletions(-)
+ 1 file changed, 11 insertions(+), 37 deletions(-)
 
+diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+index c6cc4f473a077899..f0067ff21d5d9d33 100644
+--- a/drivers/media/platform/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+@@ -362,7 +362,6 @@ struct rcar_csi2 {
+ 	struct media_pad pads[NR_OF_RCAR_CSI2_PAD];
+ 
+ 	struct v4l2_async_notifier notifier;
+-	struct v4l2_async_subdev asd;
+ 	struct v4l2_subdev *remote;
+ 
+ 	struct v4l2_mbus_framefmt mf;
+@@ -774,9 +773,11 @@ static const struct v4l2_async_notifier_operations rcar_csi2_notify_ops = {
+ 	.unbind = rcsi2_notify_unbind,
+ };
+ 
+-static int rcsi2_parse_v4l2(struct rcar_csi2 *priv,
+-			    struct v4l2_fwnode_endpoint *vep)
++static int rcar_csi2_parse_v4l2(struct device *dev,
++				struct v4l2_fwnode_endpoint *vep,
++				struct v4l2_async_subdev *asd)
+ {
++	struct rcar_csi2 *priv = dev_get_drvdata(dev);
+ 	unsigned int i;
+ 
+ 	/* Only port 0 endpoint 0 is valid. */
+@@ -806,53 +807,26 @@ static int rcsi2_parse_v4l2(struct rcar_csi2 *priv,
+ 		}
+ 	}
+ 
++	dev_dbg(priv->dev, "Found '%pOF'\n", to_of_node(asd->match.fwnode));
++
+ 	return 0;
+ }
+ 
+ static int rcsi2_parse_dt(struct rcar_csi2 *priv)
+ {
+-	struct device_node *ep;
+-	struct v4l2_fwnode_endpoint v4l2_ep = { .bus_type = 0 };
+ 	int ret;
+ 
+-	ep = of_graph_get_endpoint_by_regs(priv->dev->of_node, 0, 0);
+-	if (!ep) {
+-		dev_err(priv->dev, "Not connected to subdevice\n");
+-		return -EINVAL;
+-	}
+-
+-	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &v4l2_ep);
+-	if (ret) {
+-		dev_err(priv->dev, "Could not parse v4l2 endpoint\n");
+-		of_node_put(ep);
+-		return -EINVAL;
+-	}
+-
+-	ret = rcsi2_parse_v4l2(priv, &v4l2_ep);
+-	if (ret) {
+-		of_node_put(ep);
+-		return ret;
+-	}
+-
+-	priv->asd.match.fwnode =
+-		fwnode_graph_get_remote_endpoint(of_fwnode_handle(ep));
+-	priv->asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
+-
+-	of_node_put(ep);
+-
+ 	v4l2_async_notifier_init(&priv->notifier);
+ 
+-	ret = v4l2_async_notifier_add_subdev(&priv->notifier, &priv->asd);
+-	if (ret) {
+-		fwnode_handle_put(priv->asd.match.fwnode);
++	ret = v4l2_async_notifier_parse_fwnode_endpoints_by_port(
++			priv->dev, &priv->notifier,
++			sizeof(struct v4l2_async_subdev), 0,
++			rcar_csi2_parse_v4l2);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	priv->notifier.ops = &rcar_csi2_notify_ops;
+ 
+-	dev_dbg(priv->dev, "Found '%pOF'\n",
+-		to_of_node(priv->asd.match.fwnode));
+-
+ 	ret = v4l2_async_subdev_notifier_register(&priv->subdev,
+ 						  &priv->notifier);
+ 	if (ret)
 -- 
 2.28.0
 
