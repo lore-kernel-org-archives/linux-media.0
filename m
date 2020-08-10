@@ -2,120 +2,256 @@ Return-Path: <SRS0=Qguu=BU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDFCEC433E0
-	for <linux-media@archiver.kernel.org>; Mon, 10 Aug 2020 07:24:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1780C433E0
+	for <linux-media@archiver.kernel.org>; Mon, 10 Aug 2020 07:25:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8CE492073A
-	for <linux-media@archiver.kernel.org>; Mon, 10 Aug 2020 07:24:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BBB82075D
+	for <linux-media@archiver.kernel.org>; Mon, 10 Aug 2020 07:25:33 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oCBRTKJ8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725984AbgHJHYi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Aug 2020 03:24:38 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:52997 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbgHJHYh (ORCPT
+        id S1726517AbgHJHZa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Aug 2020 03:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725869AbgHJHZ3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Aug 2020 03:24:37 -0400
-X-Originating-IP: 82.52.18.94
-Received: from uno.localdomain (host-82-52-18-94.retail.telecomitalia.it [82.52.18.94])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id C0BC640008;
-        Mon, 10 Aug 2020 07:24:32 +0000 (UTC)
-Date:   Mon, 10 Aug 2020 09:28:14 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
-        libcamera-devel@lists.libcamera.org
-Subject: Re: your mail
-Message-ID: <20200810072814.vwr4ba5uv3ps7dfj@uno.localdomain>
-References: <20200805105721.15445-1-jacopo@jmondi.org>
- <20200809155311.GB5981@pendragon.ideasonboard.com>
+        Mon, 10 Aug 2020 03:25:29 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E54C061756;
+        Mon, 10 Aug 2020 00:25:29 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id q16so4659328ybk.6;
+        Mon, 10 Aug 2020 00:25:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y9XMh30ufnUqk9AdZOEkF5RT2AG6qRJ/wAGRKNthdQs=;
+        b=oCBRTKJ8e8v7sjNsv2dJ3eqL4nIJMZaDQV+Z0mvt525/tN235DcrjvbPeKQ3MIRMBr
+         7hUHCy0BYJmDIPlGoNyPs0mXeR0PTXmDKpMrgdQW6LeviN5mvllgu7NU6pdgJp+DtQjc
+         UlRObcyQi5wgN6dRwrfwqaNhtdmgjffkfGMf3YoyCEJ9/xrA/0RfYzfhl32UIGkpA9Z4
+         vDuO11KHEHoLpkLZtSgGuQJYnDz1VRjFX8BfaStIwszLCFmLbMZBoqltplVOedvVpCer
+         d3/SvSX7xGcfFHKjKaxpUlG40CxvorsZ70vo/S7OMDNtM3+IFyQwRyNE/sHonYEh5TB0
+         ZBuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y9XMh30ufnUqk9AdZOEkF5RT2AG6qRJ/wAGRKNthdQs=;
+        b=L0BYBKvatFZC22RPyRVhWw1PXNz6OVetdbpEhbJItFa4XMt717Ouk4Dklo7/mK09Au
+         nOAsrzP87TexHUXpQeQ2vKVCTtgnwH7TLfaTHbZTTrKjrg0CpGCufp2+xwXcxW496YLB
+         9urgdBUw9Md5ap5tlHSbr93ttIeMFSNnEfJA3lnsSV2oFWIaGk25uxUVM0NyFzmK4ZNE
+         1aWMf7RCdzGDNxV1eORoQnf96PGPXpDQCW9NhbWeyCxjwkFKtmkD0+DFecdpVkzB4QIx
+         xr20sF1A7SulS1Oml7hjxbi58bvLKH7rxQtjdqAfTZWG5nJmkqyCaS8PNjbBky7Kpbqj
+         8nyw==
+X-Gm-Message-State: AOAM532go8Vs6htktiz3o0XrO4CocVryturOFVyRzIZmCXNkNHYfzwPK
+        y8whW8QmLL+GsjRGaMtKumWPAwt8fE1sH/Mtbyg=
+X-Google-Smtp-Source: ABdhPJxubfKAhbBYWXOu5Hl2BLVZlOAz0iAte5nh1SSxYgW/qeVjBucdzbTC0tkBi8v/vR2viV8lpUfrSmj3LrZea7k=
+X-Received: by 2002:a25:c743:: with SMTP id w64mr35345933ybe.127.1597044328869;
+ Mon, 10 Aug 2020 00:25:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200809155311.GB5981@pendragon.ideasonboard.com>
+References: <1596454753-13612-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1596454753-13612-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com> <20200806144511.6ajoqyynowglnbpm@uno.localdomain>
+In-Reply-To: <20200806144511.6ajoqyynowglnbpm@uno.localdomain>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 10 Aug 2020 08:25:02 +0100
+Message-ID: <CA+V-a8utQjTb44wuAOS7+GVKMwvv+OpPTFZ5Ons9Tj=i0KCqzw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] media: i2c: ov772x: Add support for BT656 mode
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+Hi Jacopo,
 
-On Sun, Aug 09, 2020 at 06:53:11PM +0300, Laurent Pinchart wrote:
-> Hi Jacopo,
+Thank you for the review.
+
+On Thu, Aug 6, 2020 at 3:41 PM Jacopo Mondi <jacopo@jmondi.org> wrote:
 >
-> On Wed, Aug 05, 2020 at 12:57:17PM +0200, Jacopo Mondi wrote:
-> > Subject: [PATCH 0/4] media: docs: Document pixel array properties
+> On Mon, Aug 03, 2020 at 12:39:12PM +0100, Lad Prabhakar wrote:
+> > Add support to read the bus-type and enable BT656 mode if needed.
 > >
-> > Hans' patch "[PATCH] imx219: selection compliance fixes" sparkled a discussion
-> > on how the V4L2 selection targets have to be used in order to access an
-> > image sensor pixel array properties.
+> > The driver defaults to parallel mode if bus-type is not specified in DT.
 > >
-> > The discussion shown how much under-specified that part was, so this is
-> > an attempt to provide a bit documentation for this.
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > ---
+> >  drivers/media/i2c/ov772x.c | 40 ++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 40 insertions(+)
 > >
-> > My feeling is that we're hijacking the existing targets for this use case
-> > and we should probably define new ones, considering how few users we have in
-> > mainline of them at the moment.
+> > diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
+> > index 2cc6a678069a..2de9248e3689 100644
+> > --- a/drivers/media/i2c/ov772x.c
+> > +++ b/drivers/media/i2c/ov772x.c
+> > @@ -31,6 +31,7 @@
+> >  #include <media/v4l2-ctrls.h>
+> >  #include <media/v4l2-device.h>
+> >  #include <media/v4l2-event.h>
+> > +#include <media/v4l2-fwnode.h>
+> >  #include <media/v4l2-image-sizes.h>
+> >  #include <media/v4l2-subdev.h>
+> >
+> > @@ -434,6 +435,7 @@ struct ov772x_priv {
+> >  #ifdef CONFIG_MEDIA_CONTROLLER
+> >       struct media_pad pad;
+> >  #endif
+> > +     struct v4l2_fwnode_endpoint ep;
+> >  };
+> >
+> >  /*
+> > @@ -574,6 +576,7 @@ static int ov772x_s_stream(struct v4l2_subdev *sd, int enable)
+> >  {
+> >       struct i2c_client *client = v4l2_get_subdevdata(sd);
+> >       struct ov772x_priv *priv = to_ov772x(sd);
+> > +     unsigned int val;
+> >       int ret = 0;
+> >
+> >       mutex_lock(&priv->lock);
+> > @@ -581,6 +584,22 @@ static int ov772x_s_stream(struct v4l2_subdev *sd, int enable)
+> >       if (priv->streaming == enable)
+> >               goto done;
+> >
+> > +     if (priv->ep.bus_type == V4L2_MBUS_BT656 && enable) {
+> > +             ret = regmap_read(priv->regmap, COM7, &val);
+> > +             if (ret)
+> > +                     goto done;
+> > +             val |= ITU656_ON_OFF;
+> > +             ret = regmap_write(priv->regmap, COM7, val);
+> > +     } else if (priv->ep.bus_type == V4L2_MBUS_BT656 && !enable) {
 >
-> Do you mean you think we should create new targets instead of reusing
-> the existing ones as you do in this series ? I don't see anything really
-> wrong in reusing the existing targets, provided we document them
-> properly, and it's not too much of a hack (that is, the documented
-> purpose reasonably matches the target name), but maybe I'm missing the
-> issue.
-
-Yes, that's what I meant.
-
-To me, if you have something and you need to document it with "if
-applied to X it means Y, if applied to Z it means W etcetc" feels like
-we're abusing it. Having sensor's specific targets would make clear
-what a target represents without the ambiguities of defining the
-symbol semantic depending on the device it applies to (which means
-userspace would need to know what kind of device it's dealing with
-precisely).
-
-That said, my preference would be using a different API, but see my
-reply to your other email for that.
-
-Thanks
-  j
-
+> is the !enable intentional ? (sorry I don't have access to the sensor
+> manual). If not, see below:
 >
-> > On top Hans' patch with reworded commit message and minor updates.
-> >
-> > For reference, we're using the V4L2 selection targets in libcamera to retrieve
-> > the sensor pixel array properties to be reported to applications for
-> > calibration purposes. The currently defined pixel properties for libcamera
-> > are available here:
-> > https://git.linuxtv.org/libcamera.git/tree/src/libcamera/property_ids.yaml#n390
-> >
-> > Thanks
-> >    j
-> >
-> > Hans Verkuil (1):
-> >   media: i2c: imx219: Selection compliance fixes
-> >
-> > Jacopo Mondi (3):
-> >   media: docs: Describe pixel array properties
-> >   media: docs: Describe targets for sensor properties
-> >   media: docs: USe SUBDEV_G_SELECTION for sensor properties
-> >
-> >  .../userspace-api/media/v4l/dev-subdev.rst    | 85 +++++++++++++++++++
-> >  .../media/v4l/v4l2-selection-targets.rst      | 49 +++++++++++
-> >  .../media/v4l/vidioc-subdev-g-selection.rst   |  4 +
-> >  drivers/media/i2c/imx219.c                    | 17 ++--
-> >  4 files changed, 147 insertions(+), 8 deletions(-)
+> > +             ret = regmap_read(priv->regmap, COM7, &val);
+> > +             if (ret)
+> > +                     goto done;
+> > +             val &= ~ITU656_ON_OFF;
+> > +             ret = regmap_write(priv->regmap, COM7, val);
+> > +     }
+> > +     if (ret)
+> > +             goto done;
 >
-> --
-> Regards,
+> Could you write this as:
 >
-> Laurent Pinchart
+Agreed will do.
+
+> static int ov772x_s_stream(struct v4l2_subdev *sd, int enable)
+> {
+>         struct i2c_client *client = v4l2_get_subdevdata(sd);
+>         struct ov772x_priv *priv = to_ov772x(sd);
+>         int ret = 0;
+>
+>         mutex_lock(&priv->lock);
+>
+>         if (priv->streaming == enable)
+>                 goto done;
+>
+>         if (enable) {
+>                 ret = regmap_read(priv->regmap, COM7, &val);
+>                 if (ret)
+>                         goto done;
+>
+>                 if (priv->ep.bus_type == V4L2_MBUS_BT656)
+>                         val |= ITU656_ON_OFF;
+>                 else /* if you accept my suggestion to consider othe
+>                         bus types as errors */
+>                         val &= ~ITU656_ON_OFF;
+>
+>                 ret = regmap_write(priv->regmap, COM7, val);
+>                 if (ret)
+>                         goto done;
+>
+>                 dev_dbg(&client->dev, "format %d, win %s\n",
+>                         priv->cfmt->code, priv->win->name);
+>         }
+>
+>         ret = regmap_update_bits(priv->regmap, COM2, SOFT_SLEEP_MODE,
+>                                  enable ? 0 : SOFT_SLEEP_MODE);
+>         if (ret)
+>                 goto done;
+>         priv->streaming = enable;
+>
+> done:
+>         mutex_unlock(&priv->lock);
+>
+>         return ret;
+> }
+>
+>
+> >       ret = regmap_update_bits(priv->regmap, COM2, SOFT_SLEEP_MODE,
+> >                                enable ? 0 : SOFT_SLEEP_MODE);
+> >       if (ret)
+> > @@ -1354,6 +1373,7 @@ static const struct v4l2_subdev_ops ov772x_subdev_ops = {
+> >
+> >  static int ov772x_probe(struct i2c_client *client)
+> >  {
+> > +     struct fwnode_handle *endpoint;
+> >       struct ov772x_priv      *priv;
+> >       int                     ret;
+> >       static const struct regmap_config ov772x_regmap_config = {
+> > @@ -1415,6 +1435,26 @@ static int ov772x_probe(struct i2c_client *client)
+> >               goto error_clk_put;
+> >       }
+> >
+> > +     endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
+> > +                                               NULL);
+> > +     if (!endpoint) {
+> > +             dev_err(&client->dev, "endpoint node not found\n");
+> > +             ret = -EINVAL;
+> > +             goto error_clk_put;
+> > +     }
+> > +
+> > +     ret = v4l2_fwnode_endpoint_parse(endpoint, &priv->ep);
+> > +     fwnode_handle_put(endpoint);
+> > +     if (ret) {
+> > +             dev_err(&client->dev, "Could not parse endpoint\n");
+> > +             goto error_clk_put;
+> > +     }
+> > +
+> > +     /* fallback to parallel mode */
+> > +     if (priv->ep.bus_type != V4L2_MBUS_PARALLEL &&
+> > +         priv->ep.bus_type != V4L2_MBUS_BT656)
+> > +             priv->ep.bus_type = V4L2_MBUS_PARALLEL;
+>
+> shouldn't this be an error ? It's either the bus type has not been
+> specified on DT (which is fine, otherwise old DTB without that
+> properties will fail) and the bus identification routine implemented
+> in v4l2_fwnode_endpoint_parse() detected a bus type which is not
+> supported, hence the DT properties are wrong, and this should be an
+> error. If you plan to expand the parsing routine to support, say
+> bus-width and pclk polarity please break this out to a new function.
+>
+Agreed.
+
+Cheers,
+Prabhakar
+
+> Thanks
+>    j
+>
+> > +
+> >       ret = ov772x_video_probe(priv);
+> >       if (ret < 0)
+> >               goto error_gpio_put;
+> > --
+> > 2.17.1
+> >
