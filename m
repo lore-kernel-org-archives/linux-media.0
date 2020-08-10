@@ -2,165 +2,120 @@ Return-Path: <SRS0=Qguu=BU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFC7AC433E1
-	for <linux-media@archiver.kernel.org>; Mon, 10 Aug 2020 07:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDFCEC433E0
+	for <linux-media@archiver.kernel.org>; Mon, 10 Aug 2020 07:24:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8ABC72073A
-	for <linux-media@archiver.kernel.org>; Mon, 10 Aug 2020 07:23:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uw4kJBVy"
+	by mail.kernel.org (Postfix) with ESMTP id 8CE492073A
+	for <linux-media@archiver.kernel.org>; Mon, 10 Aug 2020 07:24:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726089AbgHJHXU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Aug 2020 03:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725857AbgHJHXT (ORCPT
+        id S1725984AbgHJHYi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Aug 2020 03:24:38 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:52997 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbgHJHYh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Aug 2020 03:23:19 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCA8C061756;
-        Mon, 10 Aug 2020 00:23:19 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id g3so1637642ybc.3;
-        Mon, 10 Aug 2020 00:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ANR7+RLPKBGxOqXxxUQUqxXFiaO4oBpzGIQRW0WVM/k=;
-        b=Uw4kJBVyINzL3H5dzKs85M7fDr0bvtu6awqtjBDuZIsjYfXLKFhgADett+saqb9aWG
-         lyKe2Q0105n9PALpQnBOd/YtWCPBlrIMiVMcnkcllbhg6fO9/pxlu9E1+jMiLBY5wyLe
-         BfRubpIMVYZHSrT/ymfkm2fVIN7zGKHGNuGOMA5snbKSpjld1Sv2i/Oovf1uId1qFImM
-         +saHUMOOHqMwf8ccSSn1nPO9oF+SiqIU28rQdNxjMID2L+db27qW0R4HzMAPi0NctH7y
-         kRBS5gsT10qOYlelQYDNd88uTHZoip41ZkxzknYpJCAe+2Kcm9404zS9/lE8ippXel0e
-         ZIQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ANR7+RLPKBGxOqXxxUQUqxXFiaO4oBpzGIQRW0WVM/k=;
-        b=FMZsQKO9JCm41Lk0fB3DwOsoFnYsckM65mYspIHuxr5q0dpW9TAEe+t5NgcT1Bb1rJ
-         yarniw1NLNbYt7GHepsAOEqf8cJ0PWLF+HdZpryiWSb9ngW7UOkIGhl9ei2v9vOyJ6ps
-         H8WQIAL0vM8PIJCZZbqLA4uIO+BK2xl2UnqQzBJ5jRkRzFw/MiKKYh5LGYbZAtrkLJ8K
-         7mGYWR4fhm8LLtgFIX1iJdd+if3Xjn+AWPwE2Q5ympDcH0P3eNMvcSnLyIMo2YnHNxRV
-         pTsSndKXvUjpDDKzLuYnXl8d2pjcjAKubIwcXoWke/wG468pFqsuQ8637l1YJsNpZBpU
-         2yiQ==
-X-Gm-Message-State: AOAM530v58M4OQPIagA3qUhz8vPi6Jw4qevrFFtG3OEeg1muZVy9s2Ah
-        2doHjzFSLUFxzYQy/naaQUjFgoZ1eM4NMvBEII0=
-X-Google-Smtp-Source: ABdhPJz9YtA5r0gyeWQ8/utyl5iTIa8cD2BpJQiEbgb1iOpQ3xsq68SsenTlc0sjjfhVV6DdyVh8fCEIeOZ5xY6D3BI=
-X-Received: by 2002:a25:6ad6:: with SMTP id f205mr38529089ybc.76.1597044198696;
- Mon, 10 Aug 2020 00:23:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <1596454753-13612-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1596454753-13612-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com> <20200806143559.ha6amfa4gq2o4jbi@uno.localdomain>
-In-Reply-To: <20200806143559.ha6amfa4gq2o4jbi@uno.localdomain>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 10 Aug 2020 08:22:52 +0100
-Message-ID: <CA+V-a8tk_KNoie0=aLBnj31RYoeHqHp8jnxqyJcPxWbkq6xTRA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: media: ov772x: Document endpoint properties
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mon, 10 Aug 2020 03:24:37 -0400
+X-Originating-IP: 82.52.18.94
+Received: from uno.localdomain (host-82-52-18-94.retail.telecomitalia.it [82.52.18.94])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id C0BC640008;
+        Mon, 10 Aug 2020 07:24:32 +0000 (UTC)
+Date:   Mon, 10 Aug 2020 09:28:14 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
+        libcamera-devel@lists.libcamera.org
+Subject: Re: your mail
+Message-ID: <20200810072814.vwr4ba5uv3ps7dfj@uno.localdomain>
+References: <20200805105721.15445-1-jacopo@jmondi.org>
+ <20200809155311.GB5981@pendragon.ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200809155311.GB5981@pendragon.ideasonboard.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Hi Laurent,
 
-Thank you for the review.
-
-On Thu, Aug 6, 2020 at 3:32 PM Jacopo Mondi <jacopo@jmondi.org> wrote:
+On Sun, Aug 09, 2020 at 06:53:11PM +0300, Laurent Pinchart wrote:
+> Hi Jacopo,
 >
-> Hi Prabhakar,
->
-> On Mon, Aug 03, 2020 at 12:39:11PM +0100, Lad Prabhakar wrote:
-> > Document endpoint properties required for parallel interface
+> On Wed, Aug 05, 2020 at 12:57:17PM +0200, Jacopo Mondi wrote:
+> > Subject: [PATCH 0/4] media: docs: Document pixel array properties
 > >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  .../devicetree/bindings/media/i2c/ov772x.txt     | 16 ++++++++++++++++
-> >  1 file changed, 16 insertions(+)
+> > Hans' patch "[PATCH] imx219: selection compliance fixes" sparkled a discussion
+> > on how the V4L2 selection targets have to be used in order to access an
+> > image sensor pixel array properties.
 > >
-> > diff --git a/Documentation/devicetree/bindings/media/i2c/ov772x.txt b/Documentation/devicetree/bindings/media/i2c/ov772x.txt
-> > index 0b3ede5b8e6a..1f4153484717 100644
-> > --- a/Documentation/devicetree/bindings/media/i2c/ov772x.txt
-> > +++ b/Documentation/devicetree/bindings/media/i2c/ov772x.txt
-> > @@ -21,6 +21,22 @@ subnode for its digital output video port, in accordance with the video
-> >  interface bindings defined in Documentation/devicetree/bindings/media/
-> >  video-interfaces.txt.
+> > The discussion shown how much under-specified that part was, so this is
+> > an attempt to provide a bit documentation for this.
 > >
-> > +Endpoint node required properties for parallel connection are:
-> > +- remote-endpoint: a phandle to the bus receiver's endpoint node.
+> > My feeling is that we're hijacking the existing targets for this use case
+> > and we should probably define new ones, considering how few users we have in
+> > mainline of them at the moment.
 >
-> we allow endpoints without a remote end connected usually. They can be
-> filled in later, in example, with an overlay.
->
-Agreed.
+> Do you mean you think we should create new targets instead of reusing
+> the existing ones as you do in this series ? I don't see anything really
+> wrong in reusing the existing targets, provided we document them
+> properly, and it's not too much of a hack (that is, the documented
+> purpose reasonably matches the target name), but maybe I'm missing the
+> issue.
 
-> > +- bus-width: shall be set to <8> for 8 bits parallel bus
-> > +          or <10> for 10 bits parallel bus
-> > +- data-shift: shall be set to <2> for 8 bits parallel bus
-> > +           (lines 9:2 are used) or <0> for 10 bits parallel bus
->
-> defining what is required or optional might be hard. I don't see the
-> driver enforcing their presence and I assume they have safe default.
-> Maybe make them optional and specify what the defaul value is ?
->
-Will do.
+Yes, that's what I meant.
+
+To me, if you have something and you need to document it with "if
+applied to X it means Y, if applied to Z it means W etcetc" feels like
+we're abusing it. Having sensor's specific targets would make clear
+what a target represents without the ambiguities of defining the
+symbol semantic depending on the device it applies to (which means
+userspace would need to know what kind of device it's dealing with
+precisely).
+
+That said, my preference would be using a different API, but see my
+reply to your other email for that.
+
+Thanks
+  j
 
 >
-> > +- hsync-active: active state of the HSYNC signal, 0/1 for LOW/HIGH respectively.
-> > +             (Not required for bus-type equal 6)
-> > +- vsync-active: active state of the VSYNC signal, 0/1 for LOW/HIGH respectively.
-> > +             (Not required for bus-type equal 6)
->
-> If they're not required, they're optional, aren't they ? :)
->
-Agreed.
-
-> > +- pclk-sample: sample data on rising (1) or falling (0) edge of the pixel clock
-> > +            signal. (Not required for bus-type equal 6)
->
-> Why the pclk polarity is does not apply to BT.656 ?
->
-No it should apply.
-
-> > +- bus-type: data bus type. Possible values are:
-> > +         5 - Parallel
-> > +         6 - Bt.656
->
-> Are we making this required, or do we expect this to be deduced
-> depending on which other properties have been specified ? Sakari it
-> seems you would like this to become a properties that has to be
-> specified most of the times, right ? (I tend to agree with that FWIW),
-> but does it impact retro-compatibility ?
->
-Agreed can be deduced from other properties. But shall wait for Sakari
-to comment.
-
-Cheers,
-Prabhakar
-
-> > +
-> >  Example:
+> > On top Hans' patch with reworded commit message and minor updates.
 > >
-> >  &i2c0 {
-> > --
-> > 2.17.1
+> > For reference, we're using the V4L2 selection targets in libcamera to retrieve
+> > the sensor pixel array properties to be reported to applications for
+> > calibration purposes. The currently defined pixel properties for libcamera
+> > are available here:
+> > https://git.linuxtv.org/libcamera.git/tree/src/libcamera/property_ids.yaml#n390
 > >
+> > Thanks
+> >    j
+> >
+> > Hans Verkuil (1):
+> >   media: i2c: imx219: Selection compliance fixes
+> >
+> > Jacopo Mondi (3):
+> >   media: docs: Describe pixel array properties
+> >   media: docs: Describe targets for sensor properties
+> >   media: docs: USe SUBDEV_G_SELECTION for sensor properties
+> >
+> >  .../userspace-api/media/v4l/dev-subdev.rst    | 85 +++++++++++++++++++
+> >  .../media/v4l/v4l2-selection-targets.rst      | 49 +++++++++++
+> >  .../media/v4l/vidioc-subdev-g-selection.rst   |  4 +
+> >  drivers/media/i2c/imx219.c                    | 17 ++--
+> >  4 files changed, 147 insertions(+), 8 deletions(-)
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
