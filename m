@@ -2,39 +2,39 @@ Return-Path: <SRS0=mj7L=BV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C46ACC433E1
-	for <linux-media@archiver.kernel.org>; Tue, 11 Aug 2020 21:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C71D7C433E3
+	for <linux-media@archiver.kernel.org>; Tue, 11 Aug 2020 21:00:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 87B592076C
-	for <linux-media@archiver.kernel.org>; Tue, 11 Aug 2020 21:00:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EB4B2076C
+	for <linux-media@archiver.kernel.org>; Tue, 11 Aug 2020 21:00:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="VuDfvATk"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="CPTCdLy+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726441AbgHKVAF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726426AbgHKVAF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 11 Aug 2020 17:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726258AbgHKVAE (ORCPT
+        with ESMTP id S1726114AbgHKVAE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 11 Aug 2020 17:00:04 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A73C061787;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA21C06174A;
         Tue, 11 Aug 2020 14:00:04 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9A51CB2A;
-        Tue, 11 Aug 2020 22:59:58 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 207029A8;
+        Tue, 11 Aug 2020 22:59:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1597179599;
-        bh=twPC8irBH20emkxMpQ1ktximhRoEn1buqhL/KJRm0XQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VuDfvATkJ0/YjuLWgTngVQMkA6qp3wUxaGjZfXsOE8CQbDN0rvISGjpHI43kzfEfO
-         KozReC4jNGaIYgt+SXQ0yeh9teUjzfSZD6z6u3e60gvqPxSPW9809lADEAT8L7WW4P
-         IrZjmIurbq80mFH6BFDQfQH+QuAczTWZu+ntAaQo=
+        s=mail; t=1597179597;
+        bh=P+TxNoMyOVakT3Sl8HDYkuGzCPw/R5R8oIg8I2+iDVI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CPTCdLy+GOS34ArakOkA9D7JHLR+M1zevuiQwBXSt9Si7uKRXSGa1WYqTHebgsYqa
+         5/s82PDsQxLfC+QUjMquLWQMK+pc5j2fr63nLuUZJb7RrRjE+BP1UYlub9ZZGg8e1K
+         fFicfkVbethSE7Iggn6gP92SF0nlQ8S5BEj/GMAA=
 From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org,
@@ -45,12 +45,10 @@ Cc:     linux-renesas-soc@vger.kernel.org,
         Ramesh Shanmugasundaram <rashanmu@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Steve Longerbeam <slongerbeam@gmail.com>
-Subject: [PATCH 2/5] media: rcar_drif: Fix fwnode reference leak when parsing DT
-Date:   Tue, 11 Aug 2020 23:59:36 +0300
-Message-Id: <20200811205939.19550-3-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH 0/5] media: Fix asd dynamic allocation
+Date:   Tue, 11 Aug 2020 23:59:34 +0300
+Message-Id: <20200811205939.19550-1-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200811205939.19550-1-laurent.pinchart+renesas@ideasonboard.com>
-References: <20200811205939.19550-1-laurent.pinchart+renesas@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -58,54 +56,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The fwnode reference corresponding to the endpoint is leaked in an error
-path of the rcar_drif_parse_subdevs() function. Fix it, and reorganize
-fwnode reference handling in the function to release references early,
-simplifying error paths.
+Hello,
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
----
- drivers/media/platform/rcar_drif.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+This small patch series addresses a bug related to the usage of
+v4l2_async_notifier_add_subdev() that is widespread among drivers.
 
-diff --git a/drivers/media/platform/rcar_drif.c b/drivers/media/platform/rcar_drif.c
-index 3d2451ac347d..3f1e5cb8b197 100644
---- a/drivers/media/platform/rcar_drif.c
-+++ b/drivers/media/platform/rcar_drif.c
-@@ -1227,28 +1227,22 @@ static int rcar_drif_parse_subdevs(struct rcar_drif_sdr *sdr)
- 	if (!ep)
- 		return 0;
- 
-+	/* Get the endpoint properties */
-+	rcar_drif_get_ep_properties(sdr, ep);
-+
- 	fwnode = fwnode_graph_get_remote_port_parent(ep);
-+	fwnode_handle_put(ep);
- 	if (!fwnode) {
- 		dev_warn(sdr->dev, "bad remote port parent\n");
--		fwnode_handle_put(ep);
- 		return -EINVAL;
- 	}
- 
- 	sdr->ep.asd.match.fwnode = fwnode;
- 	sdr->ep.asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
- 	ret = v4l2_async_notifier_add_subdev(notifier, &sdr->ep.asd);
--	if (ret) {
--		fwnode_handle_put(fwnode);
--		return ret;
--	}
--
--	/* Get the endpoint properties */
--	rcar_drif_get_ep_properties(sdr, ep);
--
- 	fwnode_handle_put(fwnode);
--	fwnode_handle_put(ep);
- 
--	return 0;
-+	return ret;
- }
- 
- /* Check if the given device is the primary bond */
+The issue is explained in 1/4, which improves the documentation of the
+v4l2_async_notifier_add_subdev() function by stating explicitly that the
+asd argument needs to be allocated dynamically. Among the 13 drivers
+that use that function, only one gets it right.
+
+The rest of the patches fix the problem in several Renesas-related
+drivers, with an unrelated fwnode reference leak fix for the rcar-drif
+driver in 2/5 that made the v4l2_async_notifier_add_subdev() fix easier
+to implement in that driver.
+
+I'm lacking hardware to test 2/5 and 3/5. Ramesh, would you be able to
+test that ? What development board do you use to test the DRIF driver ?
+I don't see any DT integration upstream.
+
+I also haven't dug up my MAX9286 development kit to test 5/5. I would
+thus appreciate if someone could test it, but worst case I can do so
+myself.
+
+Laurent Pinchart (5):
+  media: v4l2-async: Document asd allocation requirements
+  media: rcar_drif: Fix fwnode reference leak when parsing DT
+  media: rcar_drif: Allocate v4l2_async_subdev dynamically
+  media: rcar-csi2: Allocate v4l2_async_subdev dynamically
+  media: i2c: max9286: Allocate v4l2_async_subdev dynamically
+
+ drivers/media/i2c/max9286.c                 | 38 +++++++++++----------
+ drivers/media/platform/rcar-vin/rcar-csi2.c | 24 ++++++-------
+ drivers/media/platform/rcar_drif.c          | 30 +++++-----------
+ include/media/v4l2-async.h                  |  5 +--
+ 4 files changed, 42 insertions(+), 55 deletions(-)
+
 -- 
 Regards,
 
