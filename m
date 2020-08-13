@@ -2,78 +2,87 @@ Return-Path: <SRS0=DBWO=BX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52161C433DF
-	for <linux-media@archiver.kernel.org>; Thu, 13 Aug 2020 17:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A770BC433E3
+	for <linux-media@archiver.kernel.org>; Thu, 13 Aug 2020 18:35:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39E17208A9
-	for <linux-media@archiver.kernel.org>; Thu, 13 Aug 2020 17:14:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8AC832078B
+	for <linux-media@archiver.kernel.org>; Thu, 13 Aug 2020 18:35:43 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="H4oTw6Xt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgHMROK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Aug 2020 13:14:10 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:28876 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726384AbgHMROK (ORCPT
+        id S1726359AbgHMSfk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Aug 2020 14:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726167AbgHMSfk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 13 Aug 2020 13:14:10 -0400
-X-IronPort-AV: E=Sophos;i="5.76,309,1592838000"; 
-   d="scan'208";a="54312916"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 14 Aug 2020 02:14:07 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id B8D714005E0F;
-        Fri, 14 Aug 2020 02:14:05 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Thu, 13 Aug 2020 14:35:40 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFCDC061757;
+        Thu, 13 Aug 2020 11:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=R0TbUVnS+LBBcuAR5BFfn8q7iOgSSh24gcpRLah9OLo=; b=H4oTw6XtpdFTxq8jH4skOl/Obx
+        7T2pjjbWEHuXzIh6AneSVgk+JsCeOx0xxuyyOJYfF6gaq8PYVAQ7BZ61WmlbQuK4qvMJoHNdtk1jg
+        0zVgPF9bNw0X3pl5vmyCNlS4mF6hJio0o4xdaoWaHLs37972RVDYJLdOJTB9qZ4CeLofmJQso83pA
+        ouIZA9fms+mII3oTTo2TizKYpMPGggJB2uPpNS6FdRLuTwKaLwI0U7NbXFJWZ2SpTtitKheKXx1D6
+        RuaCHB/yWTgzIsMKuqxrSjnGMLTYoHhufSjtpd5iPQPhcwGpC/EoQjomZY+EfDkLWlxorTRuIanVY
+        d0/mtl+g==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k6I4c-0002EY-Od; Thu, 13 Aug 2020 18:35:35 +0000
+Subject: Re: linux-next: Tree for Aug 13 (drivers/media/i2c/max9286.c)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul <paul.kocialkowski@bootlin.com>,
-        Hugues Fruchet <hugues.fruchet@st.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: [PATCH v3 3/3] media: i2c: ov5640: Fail probe on unsupported bus_type
-Date:   Thu, 13 Aug 2020 18:13:37 +0100
-Message-Id: <20200813171337.5540-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200813171337.5540-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20200813171337.5540-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+References: <20200813165846.27887669@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <17a1c5aa-2f38-c84d-bf2d-485862dc0615@infradead.org>
+Date:   Thu, 13 Aug 2020 11:35:30 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200813165846.27887669@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fail probe if unsupported bus_type is detected.
+On 8/12/20 11:58 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> News: The merge window has opened, so please do not add any v5.10
+> related material to your linux-next included branches until after the
+> merge window closes again.
+> 
+> Changes since 20200812:
+> 
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/media/i2c/ov5640.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+on x86_64:
 
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 160d2857352a..3191e2b223c3 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -3078,6 +3078,13 @@ static int ov5640_probe(struct i2c_client *client)
- 		return ret;
- 	}
- 
-+	if (sensor->ep.bus_type != V4L2_MBUS_PARALLEL &&
-+	    sensor->ep.bus_type != V4L2_MBUS_CSI2_DPHY &&
-+	    sensor->ep.bus_type != V4L2_MBUS_BT656) {
-+		dev_err(dev, "Unsupported bus type %d\n", sensor->ep.bus_type);
-+		return -EINVAL;
-+	}
-+
- 	/* get system clock (xclk) */
- 	sensor->xclk = devm_clk_get(dev, "xclk");
- 	if (IS_ERR(sensor->xclk)) {
+# CONFIG_GPIOLIB is not set
+
+../drivers/media/i2c/max9286.c: In function 'max9286_register_gpio':
+../drivers/media/i2c/max9286.c:1033:6: error: 'struct gpio_chip' has no member named 'of_node'
+  gpio->of_node = dev->of_node;
+
+
 -- 
-2.17.1
-
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
