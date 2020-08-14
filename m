@@ -4,39 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 543C0C433DF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B83DDC433E4
 	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 16:30:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 308692074D
+	by mail.kernel.org (Postfix) with ESMTP id 903B42074D
 	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 16:30:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728362AbgHNQaY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Aug 2020 12:30:24 -0400
-Received: from mga18.intel.com ([134.134.136.126]:29793 "EHLO mga18.intel.com"
+        id S1728363AbgHNQaZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Aug 2020 12:30:25 -0400
+Received: from mga18.intel.com ([134.134.136.126]:29792 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728360AbgHNQaY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Aug 2020 12:30:24 -0400
-IronPort-SDR: /pCnGfNV/29j2qB37iwoJep8al54AoQI9xVtONzwQPwE/0l7fzlVheQs2u7/QpC7nJ5+CyVguN
- qD9Km7Wzr3mQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9713"; a="142064539"
+        id S1728129AbgHNQaX (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Aug 2020 12:30:23 -0400
+IronPort-SDR: b3ubtzdyAmHfLqHXMIDASFWKQLtZ3KqorKtg7/Wsq6FKRQD5lDn/NwHI0ZtqmHPjeBfX9CwYqd
+ sfSQj0VmTyqQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9713"; a="142064537"
 X-IronPort-AV: E=Sophos;i="5.76,312,1592895600"; 
-   d="scan'208";a="142064539"
+   d="scan'208";a="142064537"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2020 09:30:23 -0700
-IronPort-SDR: v9i+1e9iU9+a6wNkj4Ee5BIf18zUYZAZF4xMHBBl/HYYgjZkZX8i3ymlAU6Pwa7i+0JKoYEWkl
- EnUnedGy3NXA==
+IronPort-SDR: U0sBx6InpTBH3hjdaLu+/nuJbIFRW6pmLl1xxdupv0e99UMkBMqTngypihfGGkGAorokyuwsbc
+ 7X8361Qo8NNA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,312,1592895600"; 
-   d="scan'208";a="278449490"
+   d="scan'208";a="278449489"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga008.fm.intel.com with ESMTP; 14 Aug 2020 09:30:21 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 409F0456; Fri, 14 Aug 2020 19:30:18 +0300 (EEST)
+        id 341513A3; Fri, 14 Aug 2020 19:30:18 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Yong Zhi <yong.zhi@intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -45,9 +45,9 @@ To:     Yong Zhi <yong.zhi@intel.com>,
         linux-media@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 7/7] media: ipu3-cio2: Update Copyright year and fix indentation issues
-Date:   Fri, 14 Aug 2020 19:30:17 +0300
-Message-Id: <20200814163017.35001-7-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 6/7] media: ipu3-cio2: Use readl_poll_timeout() helper
+Date:   Fri, 14 Aug 2020 19:30:16 +0300
+Message-Id: <20200814163017.35001-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200814163017.35001-1-andriy.shevchenko@linux.intel.com>
 References: <20200814163017.35001-1-andriy.shevchenko@linux.intel.com>
@@ -58,43 +58,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Update Copyright year to cover the previous changes and at the same time
-address indentation issues.
+We may use special helper macro to poll IO till condition or timeout occurs.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/media/pci/intel/ipu3/ipu3-cio2.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-index 5f8ff91dbf09..8925bab8ba06 100644
+index f4175dc1501a..5f8ff91dbf09 100644
 --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
 +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (C) 2017 Intel Corporation
-+ * Copyright (C) 2017,2020 Intel Corporation
-  *
-  * Based partially on Intel IPU4 driver written by
-  *  Sakari Ailus <sakari.ailus@linux.intel.com>
-@@ -9,7 +9,6 @@
-  *  Jouni Ukkonen <jouni.ukkonen@intel.com>
-  *  Antti Laakso <antti.laakso@intel.com>
-  * et al.
-- *
-  */
+@@ -14,6 +14,7 @@
  
  #include <linux/delay.h>
-@@ -864,7 +863,7 @@ static int cio2_vb2_buf_init(struct vb2_buffer *vb)
- 		b->offset = sg->sgl->offset;
+ #include <linux/interrupt.h>
++#include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
+ #include <linux/pfn.h>
+@@ -509,7 +510,10 @@ static int cio2_hw_init(struct cio2_device *cio2, struct cio2_queue *q)
+ static void cio2_hw_exit(struct cio2_device *cio2, struct cio2_queue *q)
+ {
+ 	void __iomem *base = cio2->base;
+-	unsigned int i, maxloops = 1000;
++	void __iomem *dma = base + CIO2_REG_CDMAC0(CIO2_DMA_CHAN);
++	unsigned int i;
++	u32 value;
++	int ret;
  
- 	i = j = 0;
--	for_each_sg_dma_page (sg->sgl, &sg_iter, sg->nents, 0) {
-+	for_each_sg_dma_page(sg->sgl, &sg_iter, sg->nents, 0) {
- 		if (!pages--)
- 			break;
- 		b->lop[i][j] = PFN_DOWN(sg_page_iter_dma_address(&sg_iter));
+ 	/* Disable CSI receiver and MIPI backend devices */
+ 	writel(0, q->csi_rx_base + CIO2_REG_IRQCTRL_MASK);
+@@ -518,14 +522,9 @@ static void cio2_hw_exit(struct cio2_device *cio2, struct cio2_queue *q)
+ 	writel(0, q->csi_rx_base + CIO2_REG_MIPIBE_ENABLE);
+ 
+ 	/* Halt DMA */
+-	writel(0, base + CIO2_REG_CDMAC0(CIO2_DMA_CHAN));
+-	do {
+-		if (readl(base + CIO2_REG_CDMAC0(CIO2_DMA_CHAN)) &
+-		    CIO2_CDMAC0_DMA_HALTED)
+-			break;
+-		usleep_range(1000, 2000);
+-	} while (--maxloops);
+-	if (!maxloops)
++	writel(0, dma);
++	ret = readl_poll_timeout(dma, value, value & CIO2_CDMAC0_DMA_HALTED, 4000, 2000000);
++	if (ret)
+ 		dev_err(&cio2->pci_dev->dev,
+ 			"DMA %i can not be halted\n", CIO2_DMA_CHAN);
+ 
 -- 
 2.28.0
 
