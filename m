@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB2D9C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 13:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 101EEC433DF
+	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 13:37:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B33852068E
-	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 13:37:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED34A2068E
+	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 13:37:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728785AbgHNNhU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Aug 2020 09:37:20 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:43260 "EHLO
+        id S1728816AbgHNNh1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Aug 2020 09:37:27 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:43298 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728723AbgHNNhR (ORCPT
+        with ESMTP id S1728723AbgHNNh0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Aug 2020 09:37:17 -0400
+        Fri, 14 Aug 2020 09:37:26 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id ADDCF29A823
+        with ESMTPSA id CC63529A823
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
@@ -36,9 +36,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v3 07/19] media: uapi: h264: Increase size of DPB entry pic_num
-Date:   Fri, 14 Aug 2020 10:36:22 -0300
-Message-Id: <20200814133634.95665-8-ezequiel@collabora.com>
+Subject: [PATCH v3 09/19] media: uapi: h264: Clarify SLICE_BASED mode
+Date:   Fri, 14 Aug 2020 10:36:24 -0300
+Message-Id: <20200814133634.95665-10-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200814133634.95665-1-ezequiel@collabora.com>
 References: <20200814133634.95665-1-ezequiel@collabora.com>
@@ -49,106 +49,130 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-DPB entry PicNum maximum value is 2*MaxFrameNum for interlaced
-content (field_pic_flag=1).
+Currently, the SLICE_BASED and FRAME_BASED modes documentation
+is misleading and not matching the intended use-cases.
 
-As specified, MaxFrameNum is 2^(log2_max_frame_num_minus4 + 4)
-and log2_max_frame_num_minus4 is in the range of 0 to 12,
-which means pic_num should be a 32-bit field.
+Drop non-required fields SLICE_PARAMS 'start_byte_offset' and
+DECODE_PARAMS 'num_slices' and clarify the decoding modes in the
+documentation.
 
-The v4l2_h264_dpb_entry struct needs to be padded to avoid a hole,
-which might be also useful to allow future uAPI extensions.
+On SLICE_BASED mode, a single slice is expected per OUTPUT buffer,
+and therefore 'start_byte_offset' is not needed (since the offset
+to the slice is the start of the buffer).
+
+This mode requires the use of CAPTURE buffer holding, and so
+the number of slices shall not be required.
+
+On FRAME_BASED mode, the devices are expected to take care of slice
+parsing. Neither SLICE_PARAMS are required (and shouldn't be
+exposed by frame-based drivers), nor the number of slices.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- .../userspace-api/media/v4l/ext-ctrls-codec.rst     |  5 ++++-
- drivers/media/v4l2-core/v4l2-ctrls.c                | 13 +++++++++++++
- include/media/h264-ctrls.h                          |  3 ++-
- include/media/v4l2-h264.h                           |  2 +-
- 4 files changed, 20 insertions(+), 3 deletions(-)
+ .../media/v4l/ext-ctrls-codec.rst             | 39 +++++--------------
+ include/media/h264-ctrls.h                    |  4 --
+ 2 files changed, 10 insertions(+), 33 deletions(-)
 
 diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index d14da8325382..c0ae7fda803e 100644
+index e88c207d945b..90caf6a0d5a0 100644
 --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
 +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -2054,7 +2054,10 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-     * - __u16
-       - ``frame_num``
+@@ -1748,9 +1748,6 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+        This compound control is not yet part of the public kernel API
+        and it is expected to change.
+ 
+-       This structure is expected to be passed as an array, with one
+-       entry for each slice included in the bitstream buffer.
+-
+ .. c:type:: v4l2_ctrl_h264_slice_params
+ 
+ .. cssclass:: longtable
+@@ -1760,17 +1757,9 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+     :stub-columns: 0
+     :widths:       1 1 2
+ 
+-    * - __u32
+-      - ``start_byte_offset``
+-        Offset (in bytes) from the beginning of the OUTPUT buffer to the start
+-        of the slice. If the slice starts with a start code, then this is the
+-        offset to such start code. When operating in slice-based decoding mode
+-        (see :c:type:`v4l2_mpeg_video_h264_decode_mode`), this field should
+-        be set to 0. When operating in frame-based decoding mode, this field
+-        should be 0 for the first slice.
+     * - __u32
+       - ``header_bit_size``
+-      -
++      - Offset in bits to slice_data() from the beginning of this slice.
+     * - __u32
+       - ``first_mb_in_slice``
+       -
+@@ -1998,12 +1987,6 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+     * - struct :c:type:`v4l2_h264_dpb_entry`
+       - ``dpb[16]``
        -
 -    * - __u16
-+    * - __u8
-+      - ``reserved[2]``
-+      - Applications and drivers must set this to zero.
-+    * - __u32
-       - ``pic_num``
-       -
-     * - __s32
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 76c8dc8fb31c..b9457789fa55 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -1725,6 +1725,8 @@ static void std_log(const struct v4l2_ctrl *ctrl)
+-      - ``num_slices``
+-      - Number of slices needed to decode the current frame/field. When
+-        operating in slice-based decoding mode (see
+-        :c:type:`v4l2_mpeg_video_h264_decode_mode`), this field
+-        should always be set to one.
+     * - __u16
+       - ``nal_ref_idc``
+       - NAL reference ID value coming from the NAL Unit header
+@@ -2121,22 +2104,20 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+     * - ``V4L2_MPEG_VIDEO_H264_DECODE_MODE_SLICE_BASED``
+       - 0
+       - Decoding is done at the slice granularity.
+-        In this mode, ``num_slices`` field in struct
+-        :c:type:`v4l2_ctrl_h264_decode_params` should be set to 1,
+-        and ``start_byte_offset`` in struct
+-        :c:type:`v4l2_ctrl_h264_slice_params` should be set to 0.
+         The OUTPUT buffer must contain a single slice.
++        When this mode is selected, the ``V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS``
++        control shall be set. When multiple slices compose a frame,
++        use of ``V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF`` flag
++        is required.
+     * - ``V4L2_MPEG_VIDEO_H264_DECODE_MODE_FRAME_BASED``
+       - 1
+-      - Decoding is done at the frame granularity.
+-        In this mode, ``num_slices`` field in struct
+-        :c:type:`v4l2_ctrl_h264_decode_params` should be set to the number
+-        of slices in the frame, and ``start_byte_offset`` in struct
+-        :c:type:`v4l2_ctrl_h264_slice_params` should be set accordingly
+-        for each slice. For the first slice, ``start_byte_offset`` should
+-        be zero.
++      - Decoding is done at the frame granularity,
+         The OUTPUT buffer must contain all slices needed to decode the
+         frame. The OUTPUT buffer must also contain both fields.
++        This mode will be supported by devices that
++        parse the slice(s) header(s) in hardware. When this mode is
++        selected, the ``V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS``
++        control shall not be set.
  
- #define zero_padding(s) \
- 	memset(&(s).padding, 0, sizeof((s).padding))
-+#define zero_reserved(s) \
-+	memset(&(s).reserved, 0, sizeof((s).reserved))
- 
- /*
-  * Compound controls validation requires setting unused fields/flags to zero
-@@ -1735,6 +1737,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- {
- 	struct v4l2_ctrl_mpeg2_slice_params *p_mpeg2_slice_params;
- 	struct v4l2_ctrl_vp8_frame_header *p_vp8_frame_header;
-+	struct v4l2_ctrl_h264_decode_params *p_h264_dec_params;
- 	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
- 	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
- 	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
-@@ -1796,7 +1799,17 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	case V4L2_CTRL_TYPE_H264_SCALING_MATRIX:
- 	case V4L2_CTRL_TYPE_H264_PRED_WEIGHTS:
- 	case V4L2_CTRL_TYPE_H264_SLICE_PARAMS:
-+		break;
-+
- 	case V4L2_CTRL_TYPE_H264_DECODE_PARAMS:
-+		p_h264_dec_params = p;
-+
-+		for (i = 0; i < V4L2_H264_NUM_DPB_ENTRIES; i++) {
-+			struct v4l2_h264_dpb_entry *dpb_entry =
-+				&p_h264_dec_params->dpb[i];
-+
-+			zero_reserved(*dpb_entry);
-+		}
- 		break;
- 
- 	case V4L2_CTRL_TYPE_VP8_FRAME_HEADER:
+ ``V4L2_CID_MPEG_VIDEO_H264_START_CODE (enum)``
+     Specifies the H264 slice start code expected for each slice.
 diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
-index 4447697e9465..d178d7ad53b6 100644
+index afcae3052085..e180501e6385 100644
 --- a/include/media/h264-ctrls.h
 +++ b/include/media/h264-ctrls.h
-@@ -216,7 +216,8 @@ struct v4l2_ctrl_h264_slice_params {
- struct v4l2_h264_dpb_entry {
- 	__u64 reference_ts;
- 	__u16 frame_num;
--	__u16 pic_num;
-+	__u8 reserved[2];
-+	__u32 pic_num;
- 	/* Note that field is indicated by v4l2_buffer.field */
+@@ -165,9 +165,6 @@ struct v4l2_h264_reference {
+ };
+ 
+ struct v4l2_ctrl_h264_slice_params {
+-	/* Offset in bytes to the start of slice in the OUTPUT buffer. */
+-	__u32 start_byte_offset;
+-
+ 	/* Offset in bits to slice_data() from the beginning of this slice. */
+ 	__u32 header_bit_size;
+ 
+@@ -226,7 +223,6 @@ struct v4l2_h264_dpb_entry {
+ 
+ struct v4l2_ctrl_h264_decode_params {
+ 	struct v4l2_h264_dpb_entry dpb[V4L2_H264_NUM_DPB_ENTRIES];
+-	__u16 num_slices;
+ 	__u16 nal_ref_idc;
  	__s32 top_field_order_cnt;
  	__s32 bottom_field_order_cnt;
-diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
-index bc9ebb560ccf..1a5f26fc2a9a 100644
---- a/include/media/v4l2-h264.h
-+++ b/include/media/v4l2-h264.h
-@@ -33,7 +33,7 @@ struct v4l2_h264_reflist_builder {
- 	struct {
- 		s32 pic_order_count;
- 		int frame_num;
--		u16 pic_num;
-+		u32 pic_num;
- 		u16 longterm : 1;
- 	} refs[V4L2_H264_NUM_DPB_ENTRIES];
- 	s32 cur_pic_order_count;
 -- 
 2.27.0
 
