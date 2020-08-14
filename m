@@ -2,155 +2,143 @@ Return-Path: <SRS0=xFXP=BY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1559C433E4
-	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 09:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAC4BC433DF
+	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 11:04:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9660D204EA
-	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 09:57:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90C4C206DA
+	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 11:04:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727061AbgHNJ4y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Aug 2020 05:56:54 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:5634 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726603AbgHNJ4y (ORCPT
+        id S1727885AbgHNLEc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Aug 2020 07:04:32 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:41866 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726576AbgHNLEc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Aug 2020 05:56:54 -0400
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 14 Aug 2020 02:56:53 -0700
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Aug 2020 02:56:50 -0700
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 14 Aug 2020 15:26:30 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id 925F11AC8; Fri, 14 Aug 2020 15:26:29 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [PATCH 1/2] i2c: i2c-qcom-geni: Add tx_dma, rx_dma and xfer_len to geni_i2c_dev struct
-Date:   Fri, 14 Aug 2020 15:25:39 +0530
-Message-Id: <20200814095540.32115-2-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200814095540.32115-1-rojay@codeaurora.org>
-References: <20200814095540.32115-1-rojay@codeaurora.org>
+        Fri, 14 Aug 2020 07:04:32 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dafna)
+        with ESMTPSA id 92DAA29A87C
+Subject: Re: [PATCH 3/3] media: staging: rkisp1: params: in 'stop_streaming'
+ don't release the lock while returning buffers
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dafna Hirschfeld <dafna3@gmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>
+References: <20200625174257.22216-1-dafna.hirschfeld@collabora.com>
+ <20200625174257.22216-4-dafna.hirschfeld@collabora.com>
+ <e269f2f5-c24c-7009-e624-3545af206709@arm.com>
+ <CAAFQd5AsJG=YJC4eG6+qdt_dPyr-dwcXrmujxLaHfoe9==Es1g@mail.gmail.com>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Message-ID: <1e9097b9-ce61-448d-c00b-24f4eadb96a6@collabora.com>
+Date:   Fri, 14 Aug 2020 13:04:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAFQd5AsJG=YJC4eG6+qdt_dPyr-dwcXrmujxLaHfoe9==Es1g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adding tx_dma, rx_dma and xfer length in geni_i2c_dev struct to
-store DMA mapping data to enhance its scope. For example during
-shutdown callback to unmap DMA mapping, these new struct members
-can be used as part of geni_se_tx_dma_unprep and
-geni_se_rx_dma_unprep calls.
 
-Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
----
- drivers/i2c/busses/i2c-qcom-geni.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 7f130829bf01..53ca41f76080 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -86,6 +86,9 @@ struct geni_i2c_dev {
- 	u32 clk_freq_out;
- 	const struct geni_i2c_clk_fld *clk_fld;
- 	int suspended;
-+	dma_addr_t tx_dma;
-+	dma_addr_t rx_dma;
-+	u32 xfer_len;
- };
- 
- struct geni_i2c_err_log {
-@@ -352,12 +355,11 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev *gi2c)
- static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 				u32 m_param)
- {
--	dma_addr_t rx_dma;
- 	unsigned long time_left;
- 	void *dma_buf = NULL;
- 	struct geni_se *se = &gi2c->se;
--	size_t len = msg->len;
- 
-+	gi2c->xfer_len = msg->len;
- 	if (!of_machine_is_compatible("lenovo,yoga-c630"))
- 		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
- 
-@@ -366,9 +368,10 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	else
- 		geni_se_select_mode(se, GENI_SE_FIFO);
- 
--	writel_relaxed(len, se->base + SE_I2C_RX_TRANS_LEN);
-+	writel_relaxed(gi2c->xfer_len, se->base + SE_I2C_RX_TRANS_LEN);
- 
--	if (dma_buf && geni_se_rx_dma_prep(se, dma_buf, len, &rx_dma)) {
-+	if (dma_buf && geni_se_rx_dma_prep(se, dma_buf, gi2c->xfer_len,
-+					   &gi2c->rx_dma)) {
- 		geni_se_select_mode(se, GENI_SE_FIFO);
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
- 		dma_buf = NULL;
-@@ -384,7 +387,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	if (dma_buf) {
- 		if (gi2c->err)
- 			geni_i2c_rx_fsm_rst(gi2c);
--		geni_se_rx_dma_unprep(se, rx_dma, len);
-+		geni_se_rx_dma_unprep(se, gi2c->rx_dma, gi2c->xfer_len);
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
- 	}
- 
-@@ -394,12 +397,11 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 				u32 m_param)
- {
--	dma_addr_t tx_dma;
- 	unsigned long time_left;
- 	void *dma_buf = NULL;
- 	struct geni_se *se = &gi2c->se;
--	size_t len = msg->len;
- 
-+	gi2c->xfer_len = msg->len;
- 	if (!of_machine_is_compatible("lenovo,yoga-c630"))
- 		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
- 
-@@ -408,9 +410,10 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	else
- 		geni_se_select_mode(se, GENI_SE_FIFO);
- 
--	writel_relaxed(len, se->base + SE_I2C_TX_TRANS_LEN);
-+	writel_relaxed(gi2c->xfer_len, se->base + SE_I2C_TX_TRANS_LEN);
- 
--	if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, len, &tx_dma)) {
-+	if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, gi2c->xfer_len,
-+					   &gi2c->tx_dma)) {
- 		geni_se_select_mode(se, GENI_SE_FIFO);
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
- 		dma_buf = NULL;
-@@ -429,7 +432,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	if (dma_buf) {
- 		if (gi2c->err)
- 			geni_i2c_tx_fsm_rst(gi2c);
--		geni_se_tx_dma_unprep(se, tx_dma, len);
-+		geni_se_tx_dma_unprep(se, gi2c->tx_dma, gi2c->xfer_len);
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
- 	}
- 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+Am 26.06.20 um 16:03 schrieb Tomasz Figa:
+> On Fri, Jun 26, 2020 at 3:32 PM Robin Murphy <robin.murphy@arm.com> wrote:
+>>
+>> Hi Dafna,
+>>
+>> On 2020-06-25 18:42, Dafna Hirschfeld wrote:
+>>> In the stop_streaming callback 'rkisp1_params_vb2_stop_streaming'
+>>> there is no need to release the lock 'config_lock' and then acquire
+>>> it again at each iteration when returning all buffers.
+>>> This is because the stream is about to end and there is no need
+>>> to let the isr access a buffer.
+>>>
+>>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>>> ---
+>>>    drivers/staging/media/rkisp1/rkisp1-params.c | 7 +------
+>>>    1 file changed, 1 insertion(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/staging/media/rkisp1/rkisp1-params.c b/drivers/staging/media/rkisp1/rkisp1-params.c
+>>> index bf006dbeee2d..5169b02731f1 100644
+>>> --- a/drivers/staging/media/rkisp1/rkisp1-params.c
+>>> +++ b/drivers/staging/media/rkisp1/rkisp1-params.c
+>>> @@ -1488,19 +1488,13 @@ static void rkisp1_params_vb2_stop_streaming(struct vb2_queue *vq)
+>>>        /* stop params input firstly */
+>>>        spin_lock_irqsave(&params->config_lock, flags);
+>>>        params->is_streaming = false;
+>>> -     spin_unlock_irqrestore(&params->config_lock, flags);
+>>>
+>>>        for (i = 0; i < RKISP1_ISP_PARAMS_REQ_BUFS_MAX; i++) {
+>>> -             spin_lock_irqsave(&params->config_lock, flags);
+>>>                if (!list_empty(&params->params)) {
+>>>                        buf = list_first_entry(&params->params,
+>>>                                               struct rkisp1_buffer, queue);
+>>>                        list_del(&buf->queue);
+>>> -                     spin_unlock_irqrestore(&params->config_lock,
+>>> -                                            flags);
+>>>                } else {
+>>> -                     spin_unlock_irqrestore(&params->config_lock,
+>>> -                                            flags);
+>>>                        break;
+>>>                }
+>>
+>> Just skimming through out of idle curiosity I was going to comment that
+>> if you end up with this pattern:
+>>
+>>          if (!x) {
+>>                  //do stuff
+>>          } else {
+>>                  break;
+>>          }
+>>
+>> it would be better as:
+>>
+>>          if (x)
+>>                  break;
+>>          //do stuff
+>>
+>> However I then went and looked at the whole function and frankly it's a
+>> bit of a WTF. As best I could decipher, this whole crazy loop appears to
+>> be a baroque reinvention of:
+>>
+>>          list_for_each_entry_safe(&params->params, ..., buf) {
+>>                  list_del(&buf->queue);
+>>                  vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
+>>          }
+>>
+>> (assuming from context that the list should never contain more than
+>> RKISP1_ISP_PARAMS_REQ_BUFS_MAX entries in the first place)
+> 
+> Or if we want to avoid disabling the interrupts for the whole
+> iteration, we could use list_splice() to move all the entries of
 
+Hi, list_splice combines two lists together, I guess you meant list_cut_position
+which cut a list into two
+
+Thanks,
+Dafna
+
+> params->params to a local list_head under the spinlock, release it and
+> then loop over the local head. As a side effect, one could even drop
+> list_del() and switch to the non-safe variant of
+> list_for_each_entry().
+> 
+> Best regards,
+> Tomasz
+> 
