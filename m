@@ -7,25 +7,22 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28398C433DF
-	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 13:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA380C433DF
+	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 13:38:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B6B8208B3
-	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 13:38:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 816D520838
+	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 13:38:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728923AbgHNNiN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Aug 2020 09:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728252AbgHNNiL (ORCPT
+        id S1728888AbgHNNiC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Aug 2020 09:38:02 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:43430 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728275AbgHNNh6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Aug 2020 09:38:11 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10A6C061384;
-        Fri, 14 Aug 2020 06:38:10 -0700 (PDT)
+        Fri, 14 Aug 2020 09:37:58 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id E680329A829
+        with ESMTPSA id 68E7529A825
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
@@ -39,9 +36,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>, kernel@collabora.com,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v3 19/19] media: cedrus: Use H264_SCALING_MATRIX only when required
-Date:   Fri, 14 Aug 2020 10:36:34 -0300
-Message-Id: <20200814133634.95665-20-ezequiel@collabora.com>
+Subject: [PATCH v3 16/19] media: rkvdec: Drop unneeded per_request driver-specific control flag
+Date:   Fri, 14 Aug 2020 10:36:31 -0300
+Message-Id: <20200814133634.95665-17-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200814133634.95665-1-ezequiel@collabora.com>
 References: <20200814133634.95665-1-ezequiel@collabora.com>
@@ -52,64 +49,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Baseline, Main and Extended profiles are specified to
-not support a scaling matrix. Also, High profiles
-can optionally specify a scaling matrix, using
-SPS and PPS NAL units.
+Currently, the drivers makes no distinction between per_request
+and mandatory, as both are used in the same request validate check.
 
-To meet this expectation, applications are required to
-set the V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX control
-and set the V4L2_H264_PPS_FLAG_SCALING_MATRIX_PRESENT
-flag only when a scaling matrix is specified for a picture.
-
-Implement this on cedrus, which has hardware support for this
-case.
+The driver only cares to know if a given control is
+required to be part of a request, so only one flag is needed.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.c      | 2 +-
- drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 6 +-----
+ drivers/staging/media/rkvdec/rkvdec.h | 1 -
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-index 826324faad7e..6ebb39e0c0ce 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -76,7 +76,7 @@ static const struct cedrus_control cedrus_controls[] = {
- 			.id	= V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX,
- 		},
- 		.codec		= CEDRUS_CODEC_H264,
--		.required	= true,
-+		.required	= false,
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index 7c5129593921..cd720d726d7f 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -55,23 +55,19 @@ static const struct v4l2_ctrl_ops rkvdec_ctrl_ops = {
+ 
+ static const struct rkvdec_ctrl_desc rkvdec_h264_ctrl_descs[] = {
+ 	{
+-		.per_request = true,
+ 		.mandatory = true,
+ 		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS,
  	},
  	{
- 		.cfg = {
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-index fe041b444385..28319351e909 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-@@ -238,8 +238,12 @@ static void cedrus_write_scaling_lists(struct cedrus_ctx *ctx,
- {
- 	const struct v4l2_ctrl_h264_scaling_matrix *scaling =
- 		run->h264.scaling_matrix;
-+	const struct v4l2_ctrl_h264_pps *pps = run->h264.pps;
- 	struct cedrus_dev *dev = ctx->dev;
+-		.per_request = true,
+ 		.mandatory = true,
+ 		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_SPS,
+ 		.cfg.ops = &rkvdec_ctrl_ops,
+ 	},
+ 	{
+-		.per_request = true,
+ 		.mandatory = true,
+ 		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_PPS,
+ 	},
+ 	{
+-		.per_request = true,
+ 		.mandatory = true,
+ 		.cfg.id = V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX,
+ 	},
+@@ -615,7 +611,7 @@ static int rkvdec_request_validate(struct media_request *req)
+ 		u32 id = ctrls->ctrls[i].cfg.id;
+ 		struct v4l2_ctrl *ctrl;
  
-+	if (!(pps->flags & V4L2_H264_PPS_FLAG_SCALING_MATRIX_PRESENT))
-+		return;
-+
- 	cedrus_h264_write_sram(dev, CEDRUS_SRAM_H264_SCALING_LIST_8x8_0,
- 			       scaling->scaling_list_8x8[0],
- 			       sizeof(scaling->scaling_list_8x8[0]));
-@@ -442,6 +446,8 @@ static void cedrus_set_params(struct cedrus_ctx *ctx,
- 	reg |= (pps->second_chroma_qp_index_offset & 0x3f) << 16;
- 	reg |= (pps->chroma_qp_index_offset & 0x3f) << 8;
- 	reg |= (pps->pic_init_qp_minus26 + 26 + slice->slice_qp_delta) & 0x3f;
-+	if (pps->flags & V4L2_H264_PPS_FLAG_SCALING_MATRIX_PRESENT)
-+		reg |= VE_H264_SHS_QP_SCALING_MATRIX_DEFAULT;
- 	cedrus_write(dev, VE_H264_SHS_QP, reg);
+-		if (!ctrls->ctrls[i].per_request || !ctrls->ctrls[i].mandatory)
++		if (!ctrls->ctrls[i].mandatory)
+ 			continue;
  
- 	// clear status flags
+ 		ctrl = v4l2_ctrl_request_hdl_ctrl_find(hdl, id);
+diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
+index 2fc9f46b6910..77a137cca88e 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.h
++++ b/drivers/staging/media/rkvdec/rkvdec.h
+@@ -25,7 +25,6 @@
+ struct rkvdec_ctx;
+ 
+ struct rkvdec_ctrl_desc {
+-	u32 per_request : 1;
+ 	u32 mandatory : 1;
+ 	struct v4l2_ctrl_config cfg;
+ };
 -- 
 2.27.0
 
