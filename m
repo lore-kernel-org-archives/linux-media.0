@@ -2,193 +2,93 @@ Return-Path: <SRS0=xFXP=BY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MIME_BASE64_TEXT,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4790DC433DF
-	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 06:25:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB8FEC433E1
+	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 07:13:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 263DE20838
-	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 06:25:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAAFA22B4E
+	for <linux-media@archiver.kernel.org>; Fri, 14 Aug 2020 07:13:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dOPsv7f/"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="bW7WOJni"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726237AbgHNGZD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Aug 2020 02:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726110AbgHNGZC (ORCPT
+        id S1726787AbgHNHNZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Aug 2020 03:13:25 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:13343 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726674AbgHNHNY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Aug 2020 02:25:02 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78E1C061757
-        for <linux-media@vger.kernel.org>; Thu, 13 Aug 2020 23:25:02 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id y10so2158795plr.11
-        for <linux-media@vger.kernel.org>; Thu, 13 Aug 2020 23:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=pwDOHGKYvCi61mHFneVF0EduuTKfnrQsk03HbkNHX20=;
-        b=dOPsv7f/wEuHeXmKjjFDeLAv02B1ounW5ulazhQV8hHqRYaoJ6XQBCnvtser32aA0E
-         lgWuqqXH8kA0synMTCgHcFY7N2wuxSKoFOHOV6kqBkcKr5CSJ0fDOOolLuankz4PSiHm
-         g+oRPe6gRdVqcAEnDUy6PIBRaTLR1LZZEGpxq4/ei7DQd0f9nkuuUli4Irvpx6e132Ev
-         KKUCcTypG0YxXTabLVsyduvK5KJXFsR2GNAFoPL+SZGzbV9iiCoUhTMcAOa0EfqUFfJT
-         LfhJ8/iUXz/Nfy9Wl7PPWVm2+2qUjp++JKg7RGAM5d8BbrjLDB9TujIrQQZgqMVHr1gt
-         0Mig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=pwDOHGKYvCi61mHFneVF0EduuTKfnrQsk03HbkNHX20=;
-        b=NJcW+Spu1ylrjMuzj+ftpAMvJxTVJ6z6PAhHpzyd2tVxoO1uFOj+n1pfL3dp2V62cs
-         Ea64Bn7+qy7xwk3AvF9n4w9XAlsF+i1i8pzmOltJ63o5prM6Ig7d9/hWtGTI5WD7D1MG
-         hdcgNv7i9mshGzJ5Ftx18oik/PH7e/QXEfn8KEr8Q3g8HWLt+eCxeTbMk+MdFQh+oXk8
-         7wvu1Xu8KqBdamlRdcduIZFQjc4VNPekbRHyo5y031WzoliDMKNTse5lNjS3VgLPf4kx
-         E1bbmggDNCXYqi/Doj5gRUXojICcwIyJEHO3uIhKjmZHwXj2NFswyFUqS6W9229I2COr
-         VkGQ==
-X-Gm-Message-State: AOAM531CTvs3WV3fc6zjPQTb5mvEeVBR0uD+YuIWWnlgNc2hrA+JkrkF
-        mh0V2O6CWrYpJkVYHgrhjCTTYA==
-X-Google-Smtp-Source: ABdhPJxnGWB4G0BauuF1CXzPhUUlFpGdCXVBwviMTN5qRwfvr9KZRSe4Mu5Ey8K87w5P6jwDUx+ihA==
-X-Received: by 2002:a17:90b:1254:: with SMTP id gx20mr1133241pjb.117.1597386302081;
-        Thu, 13 Aug 2020 23:25:02 -0700 (PDT)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id z4sm7651496pfb.55.2020.08.13.23.25.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2020 23:25:01 -0700 (PDT)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Andrew F . Davis" <afd@ti.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [RFC][PATCH v2 1/2] dma-heap: Keep track of the heap device struct
-Date:   Fri, 14 Aug 2020 06:24:57 +0000
-Message-Id: <20200814062458.53049-1-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Fri, 14 Aug 2020 03:13:24 -0400
+X-UUID: 91aa3f3fd103495fb20a3b076d64903e-20200814
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=VQndAw3Wc5VGkMdTLx6vWC4Gckl+0qt4QnzB3h/4oKU=;
+        b=bW7WOJniNhAWIvAeUJru8xoDFErcpLOCKiuIcS24OW67evChGgapckGaYrZbw3AJ56Qcz/9cB99kFKXPNEKdz+ARctJ80c1cS9YwnZ/a5tlDCqU5k0oT1z5pD7MxNKyyQn850DWw99FzkLdonVg+nR1qI5kkGL05zyQ/ZGs33CY=;
+X-UUID: 91aa3f3fd103495fb20a3b076d64903e-20200814
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <xia.jiang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1632908165; Fri, 14 Aug 2020 15:13:22 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 14 Aug 2020 15:13:19 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 14 Aug 2020 15:13:18 +0800
+From:   Xia Jiang <xia.jiang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rick Chang <rick.chang@mediatek.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        <srv_heupstream@mediatek.com>, <senozhatsky@chromium.org>,
+        <mojahsu@chromium.org>, <drinkcat@chromium.org>,
+        <maoguang.meng@mediatek.com>, Xia Jiang <xia.jiang@mediatek.com>
+Subject: [PATCH v12 14/29] media: platform: Change MTK_JPEG_COMP_MAX macro definition location
+Date:   Fri, 14 Aug 2020 15:11:47 +0800
+Message-ID: <20200814071202.25067-16-xia.jiang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20200814071202.25067-1-xia.jiang@mediatek.com>
+References: <20200814071202.25067-1-xia.jiang@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Keep track of the heap device struct.
-
-This will be useful for special DMA allocations
-and actions.
-
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Andrew F. Davis <afd@ti.com>
-Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
-Cc: Liam Mark <lmark@codeaurora.org>
-Cc: Laura Abbott <labbott@kernel.org>
-Cc: Brian Starkey <Brian.Starkey@arm.com>
-Cc: Hridya Valsaraju <hridya@google.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: John Stultz <john.stultz@linaro.org>
----
- drivers/dma-buf/dma-heap.c | 33 +++++++++++++++++++++++++--------
- include/linux/dma-heap.h   |  9 +++++++++
- 2 files changed, 34 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-index afd22c9dbdcf..72c746755d89 100644
---- a/drivers/dma-buf/dma-heap.c
-+++ b/drivers/dma-buf/dma-heap.c
-@@ -30,6 +30,7 @@
-  * @heap_devt		heap device node
-  * @list		list head connecting to list of heaps
-  * @heap_cdev		heap char device
-+ * @heap_dev		heap device struct
-  *
-  * Represents a heap of memory from which buffers can be made.
-  */
-@@ -40,6 +41,7 @@ struct dma_heap {
- 	dev_t heap_devt;
- 	struct list_head list;
- 	struct cdev heap_cdev;
-+	struct device *heap_dev;
- };
- 
- static LIST_HEAD(heap_list);
-@@ -190,10 +192,21 @@ void *dma_heap_get_drvdata(struct dma_heap *heap)
- 	return heap->priv;
- }
- 
-+/**
-+ * dma_heap_get_dev() - get device struct for the heap
-+ * @heap: DMA-Heap to retrieve device struct from
-+ *
-+ * Returns:
-+ * The device struct for the heap.
-+ */
-+struct device *dma_heap_get_dev(struct dma_heap *heap)
-+{
-+	return heap->heap_dev;
-+}
-+
- struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
- {
- 	struct dma_heap *heap, *h, *err_ret;
--	struct device *dev_ret;
- 	unsigned int minor;
- 	int ret;
- 
-@@ -247,16 +260,20 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
- 		goto err1;
- 	}
- 
--	dev_ret = device_create(dma_heap_class,
--				NULL,
--				heap->heap_devt,
--				NULL,
--				heap->name);
--	if (IS_ERR(dev_ret)) {
-+	heap->heap_dev = device_create(dma_heap_class,
-+				       NULL,
-+				       heap->heap_devt,
-+				       NULL,
-+				       heap->name);
-+	if (IS_ERR(heap->heap_dev)) {
- 		pr_err("dma_heap: Unable to create device\n");
--		err_ret = ERR_CAST(dev_ret);
-+		err_ret = ERR_CAST(heap->heap_dev);
- 		goto err2;
- 	}
-+
-+	/* Make sure it doesn't disappear on us */
-+	heap->heap_dev = get_device(heap->heap_dev);
-+
- 	/* Add heap to the list */
- 	mutex_lock(&heap_list_lock);
- 	list_add(&heap->list, &heap_list);
-diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
-index 454e354d1ffb..82857e096910 100644
---- a/include/linux/dma-heap.h
-+++ b/include/linux/dma-heap.h
-@@ -50,6 +50,15 @@ struct dma_heap_export_info {
-  */
- void *dma_heap_get_drvdata(struct dma_heap *heap);
- 
-+/**
-+ * dma_heap_get_dev() - get device struct for the heap
-+ * @heap: DMA-Heap to retrieve device struct from
-+ *
-+ * Returns:
-+ * The device struct for the heap.
-+ */
-+struct device *dma_heap_get_dev(struct dma_heap *heap);
-+
- /**
-  * dma_heap_add - adds a heap to dmabuf heaps
-  * @exp_info:		information needed to register this heap
--- 
-2.17.1
+TW92ZSBNVEtfSlBFR19DT01QX01BWCBkZWZpbml0aW9uIHRvIG10a19qcGVnX2NvcmUuaCBmaWxl
+LCBiZWNhdXNlIGl0DQppcyB1c2VkIGJ5IG10a19qcGVnX2NvcmUuYyBmaWxlLg0KDQpSZXZpZXdl
+ZC1ieTogVG9tYXN6IEZpZ2EgPHRmaWdhQGNocm9taXVtLm9yZz4NClNpZ25lZC1vZmYtYnk6IFhp
+YSBKaWFuZyA8eGlhLmppYW5nQG1lZGlhdGVrLmNvbT4NCi0tLQ0KdjEyOiBubyBjaGFuZ2VzDQot
+LS0NCiBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2NvcmUuaCB8IDIg
+KysNCiBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX3JlZy5oICB8IDEg
+LQ0KIDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRp
+ZmYgLS1naXQgYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay1qcGVnL210a19qcGVnX2NvcmUu
+aCBiL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbXRrLWpwZWcvbXRrX2pwZWdfY29yZS5oDQppbmRl
+eCBjOWY1MTYyZDI5MjQuLjRkNjI0Mzg5NjNjMCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvbWVkaWEv
+cGxhdGZvcm0vbXRrLWpwZWcvbXRrX2pwZWdfY29yZS5oDQorKysgYi9kcml2ZXJzL21lZGlhL3Bs
+YXRmb3JtL210ay1qcGVnL210a19qcGVnX2NvcmUuaA0KQEAgLTE1LDYgKzE1LDggQEANCiANCiAj
+ZGVmaW5lIE1US19KUEVHX05BTUUJCSJtdGstanBlZyINCiANCisjZGVmaW5lIE1US19KUEVHX0NP
+TVBfTUFYCQkzDQorDQogI2RlZmluZSBNVEtfSlBFR19GTVRfRkxBR19ERUNfT1VUUFVUCUJJVCgw
+KQ0KICNkZWZpbmUgTVRLX0pQRUdfRk1UX0ZMQUdfREVDX0NBUFRVUkUJQklUKDEpDQogDQpkaWZm
+IC0tZ2l0IGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstanBlZy9tdGtfanBlZ19yZWcuaCBi
+L2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbXRrLWpwZWcvbXRrX2pwZWdfcmVnLmgNCmluZGV4IDI5
+NDVkYTg0MmRmYS4uMjFlYzhmOTY3OTdmIDEwMDY0NA0KLS0tIGEvZHJpdmVycy9tZWRpYS9wbGF0
+Zm9ybS9tdGstanBlZy9tdGtfanBlZ19yZWcuaA0KKysrIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9y
+bS9tdGstanBlZy9tdGtfanBlZ19yZWcuaA0KQEAgLTgsNyArOCw2IEBADQogI2lmbmRlZiBfTVRL
+X0pQRUdfUkVHX0gNCiAjZGVmaW5lIF9NVEtfSlBFR19SRUdfSA0KIA0KLSNkZWZpbmUgTVRLX0pQ
+RUdfQ09NUF9NQVgJCTMNCiAjZGVmaW5lIE1US19KUEVHX0JMT0NLX01BWAkJMTANCiAjZGVmaW5l
+IE1US19KUEVHX0RDVFNJWkUJCTgNCiANCi0tIA0KMi4xOC4wDQo=
 
